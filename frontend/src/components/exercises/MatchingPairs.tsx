@@ -55,7 +55,21 @@ export function MatchingPairs({ exercise, onAnswer, disabled }: ExerciseComponen
           ))}
         </div>
       </div>
-      <button className="btn btn-block" disabled={disabled || !allMatched} onClick={() => onAnswer(matches)}>
+      <button
+        className="btn btn-block"
+        disabled={disabled || !allMatched}
+        onClick={() =>
+          // Submit in the same [{left, right}, ...] shape every matching_pairs
+          // exercise's accepted_answers is authored in (content-side, see
+          // docs/content/overlays/**), in the exercise's own pair order -
+          // NOT the flat {left: right} shape `matches` is kept in locally for
+          // O(1) lookup/render. Sending the flat dict here compared unequal
+          // to every authored answer and made matching_pairs always grade
+          // incorrect regardless of what the learner picked (found live,
+          // 2026-07-05).
+          onAnswer(pairs.map((p) => ({ left: p.left, right: matches[p.left] })))
+        }
+      >
         Check
       </button>
     </div>

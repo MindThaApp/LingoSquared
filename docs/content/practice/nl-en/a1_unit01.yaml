@@ -14,49 +14,42 @@ tag_schema:
     person: [first, second, third]
     register: [formal, informal]
 slot_presets:
-  greeting: &greeting {language_code: en, part_of_speech: [noun, verb], agreement_tags: {semantic: greeting}}
-  time_period: &time_period {language_code: en, part_of_speech: noun, agreement_tags: {semantic: time_period}}
-  farewell: &farewell {language_code: en, part_of_speech: [noun, verb, adverb], agreement_tags: {semantic: farewell}}
+  greeting_word: &greeting_word {language_code: en, part_of_speech: noun, agreement_tags: {semantic: greeting}}
   wellbeing_answer: &wellbeing_answer {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: wellbeing_answer}}
-  politeness: &politeness {language_code: en, part_of_speech: [noun, verb, adjective, particle], agreement_tags: {semantic: politeness}}
-  identity: &identity {language_code: en, part_of_speech: [pronoun, verb], agreement_tags: {semantic: identity}}
+  thanks: &thanks {language_code: en, part_of_speech: noun, agreement_tags: {semantic: politeness}}
+  see: &see {language_code: en, part_of_speech: verb, agreement_tags: {semantic: farewell}}
+  later: &later {language_code: en, part_of_speech: adverb, agreement_tags: {semantic: farewell}}
 templates:
-  # Lesson 1: everyday greetings.
+  # Lesson 1: everyday greetings and farewells.
   - content_key: practice.nl-en.en.a1.unit01.lesson01.greeting_meaning.001
     lesson_content_key: en.a1.unit01.lesson01.everyday_greetings
     type: multiple_choice
     frame: {text: "{greeting}", language_code: en, direction: ltr}
-    slots: {greeting: *greeting}
+    slots: {greeting: *greeting_word}
     answer_derivation: {kind: slot_gloss, slot: greeting}
-    feedback_frame: {text: "{greeting} is an everyday greeting.", language_code: nl, direction: ltr}
+    feedback_frame: {text: "{greeting} is een begroeting of een afscheid.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit01.lesson01.greeting_fill.002
     lesson_content_key: en.a1.unit01.lesson01.everyday_greetings
     type: fill_in_blank
     frame: {text: "{greeting}", language_code: en, direction: ltr}
-    slots: {greeting: *greeting}
+    slots: {greeting: *greeting_word}
     answer_derivation: {kind: slot_text, slot: greeting}
-    feedback_frame: {text: "{greeting} is spelled this way in English.", language_code: nl, direction: ltr}
+    feedback_frame: {text: "Zo spel je {greeting} in het Engels.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit01.lesson01.greeting_translate.003
     lesson_content_key: en.a1.unit01.lesson01.everyday_greetings
     type: translation
     frame: {text: "{greeting}", language_code: nl, direction: ltr, slot_rendering: {greeting: english_gloss}}
-    slots: {greeting: *greeting}
+    slots: {greeting: *greeting_word}
     answer_derivation: {kind: slot_text, slot: greeting}
-    feedback_frame: {text: "The English word for {greeting} is what you just typed.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit01.lesson01.time_order.004
-    lesson_content_key: en.a1.unit01.lesson01.everyday_greetings
-    type: word_order
-    frame: {text: "{good} {time_period}", language_code: en, direction: ltr}
-    slots: {good: *greeting, time_period: *time_period}
-    answer_derivation: {kind: render_frame, frame: {text: "Good {time_period}", language_code: en, direction: ltr}}
-    feedback_frame: {text: "Good comes before the time-of-day word: Good {time_period}.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit01.lesson01.greeting_pair.005
+    feedback_frame: {text: "De Engelse vertaling is {greeting}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit01.lesson01.greeting_pair.004
     lesson_content_key: en.a1.unit01.lesson01.everyday_greetings
     type: matching_pairs
-    frame: {text: "{greeting} — {time_period}", language_code: en, direction: ltr}
-    slots: {greeting: *greeting, time_period: *time_period}
-    answer_derivation: {kind: matching_pairs, slots: [greeting, time_period]}
-    feedback_frame: {text: "Match {greeting} and {time_period} to their Dutch meanings.", language_code: nl, direction: ltr}
+    frame: {text: "Koppel de Engelse woorden aan de Nederlandse betekenissen.", language_code: nl, direction: ltr}
+    slots: {first_greeting: *greeting_word, second_greeting: *greeting_word}
+    slot_relations: [{kind: distinct, slots: [first_greeting, second_greeting]}]
+    answer_derivation: {kind: matching_pairs, slots: [first_greeting, second_greeting]}
+    feedback_frame: {text: "Je hebt twee begroetingen of afscheidswoorden gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
 
   # Lesson 3: wellbeing exchange.
   - content_key: practice.nl-en.en.a1.unit01.lesson03.wellbeing_meaning.001
@@ -65,41 +58,41 @@ templates:
     frame: {text: "{wellbeing_answer}", language_code: en, direction: ltr}
     slots: {wellbeing_answer: *wellbeing_answer}
     answer_derivation: {kind: slot_gloss, slot: wellbeing_answer}
-    feedback_frame: {text: "{wellbeing_answer} answers 'How are you?'.", language_code: nl, direction: ltr}
+    feedback_frame: {text: "{wellbeing_answer} komt voor in een antwoord op de vraag hoe het gaat.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit01.lesson03.wellbeing_fill.002
     lesson_content_key: en.a1.unit01.lesson03.wellbeing
     type: fill_in_blank
-    frame: {text: "How are you? {wellbeing_answer}, thanks.", language_code: en, direction: ltr}
+    frame: {text: "{wellbeing_answer}", language_code: en, direction: ltr}
     slots: {wellbeing_answer: *wellbeing_answer}
     answer_derivation: {kind: slot_text, slot: wellbeing_answer}
-    feedback_frame: {text: "{wellbeing_answer} is a natural reply to How are you?", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit01.lesson03.politeness_translate.004
+    feedback_frame: {text: "Zo spel je {wellbeing_answer} in het Engels.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit01.lesson03.politeness_translate.003
     lesson_content_key: en.a1.unit01.lesson03.wellbeing
     type: translation
-    frame: {text: "{politeness}", language_code: nl, direction: ltr, slot_rendering: {politeness: english_gloss}}
-    slots: {politeness: *politeness}
-    answer_derivation: {kind: slot_text, slot: politeness}
-    feedback_frame: {text: "The English word you typed is used to thank someone politely.", language_code: nl, direction: ltr}
+    frame: {text: "{thanks}", language_code: nl, direction: ltr, slot_rendering: {thanks: english_gloss}}
+    slots: {thanks: *thanks}
+    answer_derivation: {kind: slot_text, slot: thanks}
+    feedback_frame: {text: "Met {thanks} bedank je iemand.", language_code: nl, direction: ltr}
 
   # Lesson 5: friendly closings.
-  - content_key: practice.nl-en.en.a1.unit01.lesson05.farewell_meaning.001
+  - content_key: practice.nl-en.en.a1.unit01.lesson05.farewell_order.001
     lesson_content_key: en.a1.unit01.lesson05.noun_phrases_and_closings
-    type: multiple_choice
-    frame: {text: "{farewell}", language_code: en, direction: ltr}
-    slots: {farewell: *farewell}
-    answer_derivation: {kind: slot_gloss, slot: farewell}
-    feedback_frame: {text: "{farewell} is a way to close a conversation.", language_code: nl, direction: ltr}
+    type: word_order
+    frame: {text: "later you {see}", language_code: en, direction: ltr}
+    slots: {see: *see}
+    answer_derivation: {kind: render_frame, frame: {text: "{see} you later", language_code: en, direction: ltr}}
+    feedback_frame: {text: "De juiste volgorde is {see} you later.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit01.lesson05.farewell_fill.002
     lesson_content_key: en.a1.unit01.lesson05.noun_phrases_and_closings
     type: fill_in_blank
-    frame: {text: "{farewell}", language_code: en, direction: ltr}
-    slots: {farewell: *farewell}
-    answer_derivation: {kind: slot_text, slot: farewell}
-    feedback_frame: {text: "{farewell} is spelled this way in English.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit01.lesson05.farewell_pair.003
+    frame: {text: "See you {later}.", language_code: en, direction: ltr}
+    slots: {later: *later}
+    answer_derivation: {kind: slot_text, slot: later}
+    feedback_frame: {text: "De volledige zin is See you {later}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit01.lesson05.farewell_translate.003
     lesson_content_key: en.a1.unit01.lesson05.noun_phrases_and_closings
-    type: matching_pairs
-    frame: {text: "{greeting} — {farewell}", language_code: en, direction: ltr}
-    slots: {greeting: *greeting, farewell: *farewell}
-    answer_derivation: {kind: matching_pairs, slots: [greeting, farewell]}
-    feedback_frame: {text: "Match {greeting} and {farewell} to their Dutch meanings.", language_code: nl, direction: ltr}
+    type: translation
+    frame: {text: "{later}", language_code: nl, direction: ltr, slot_rendering: {later: english_gloss}}
+    slots: {later: *later}
+    answer_derivation: {kind: slot_text, slot: later}
+    feedback_frame: {text: "De Engelse vertaling is {later}.", language_code: nl, direction: ltr}

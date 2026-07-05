@@ -14,8 +14,10 @@ tag_schema:
     register: [formal, informal]
     person: [first, second, third]
 slot_presets:
-  letter: &letter {language_code: prs, part_of_speech: symbol, agreement_tags: {semantic: letter}}
-  greeting: &greeting {language_code: prs, part_of_speech: [noun, adjective, particle], agreement_tags: {semantic: greeting}}
+  # The taught letter و is stored as a particle because it is also the word
+  # "and"; the letter tag keeps this preset restricted to its script use.
+  letter: &letter {language_code: prs, part_of_speech: [symbol, particle], agreement_tags: {semantic: letter}}
+  greeting: &greeting {language_code: prs, part_of_speech: [noun, particle], agreement_tags: {semantic: greeting}}
   time_period: &time_period {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: time_period}}
   wellbeing_answer: &wellbeing_answer {language_code: prs, part_of_speech: adjective, agreement_tags: {semantic: wellbeing_answer}}
   politeness: &politeness {language_code: prs, part_of_speech: [noun, verb], agreement_tags: {semantic: politeness}}
@@ -62,7 +64,7 @@ templates:
     frame: {text: "{politeness}", language_code: en, direction: ltr, slot_rendering: {politeness: english_gloss}}
     slots: {politeness: *politeness}
     answer_derivation: {kind: slot_text, slot: politeness}
-    feedback_frame: {text: "{politeness} is used to thank someone or respond politely.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{politeness} is used in a taught polite exchange.", language_code: en, direction: ltr}
 
   # Lesson 3: time-specific greetings and farewells.
   - content_key: practice.en-prs.prs.a1.unit01.lesson03.time_fill.001
@@ -88,22 +90,22 @@ templates:
     slots: {wellbeing_answer: *wellbeing_answer}
     answer_derivation: {kind: slot_gloss, slot: wellbeing_answer}
     feedback_frame: {text: "{wellbeing_answer} answers how someone is doing.", language_code: en, direction: ltr}
-  - content_key: practice.en-prs.prs.a1.unit01.lesson04.wellbeing_fill.002
+  - content_key: practice.en-prs.prs.a1.unit01.lesson04.wellbeing_translate.002
     lesson_content_key: prs.a1.unit01.lesson04.formal_informal_small_talk
-    type: fill_in_blank
-    frame: {text: "{wellbeing_answer} استم، تشکر", language_code: prs, direction: rtl}
+    type: translation
+    frame: {text: "{wellbeing_answer}", language_code: en, direction: ltr, slot_rendering: {wellbeing_answer: english_gloss}}
     slots: {wellbeing_answer: *wellbeing_answer}
     answer_derivation: {kind: slot_text, slot: wellbeing_answer}
-    feedback_frame: {text: "{wellbeing_answer} fits before استم, thanks.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{wellbeing_answer} is a word used in the taught wellbeing answers.", language_code: en, direction: ltr}
 
   # Lesson 5: Afghan hospitality vocabulary.
   - content_key: practice.en-prs.prs.a1.unit01.lesson05.dialogue_meaning.001
     lesson_content_key: prs.a1.unit01.lesson05.afghan_hospitality
     type: multiple_choice
-    frame: {text: "{dialogue_word}", language_code: prs, direction: rtl}
-    slots: {dialogue_word: *dialogue_word}
-    answer_derivation: {kind: slot_gloss, slot: dialogue_word}
-    feedback_frame: {text: "{dialogue_word} appears in polite hospitality exchanges.", language_code: en, direction: ltr}
+    frame: {text: "{politeness}", language_code: prs, direction: rtl}
+    slots: {politeness: *politeness}
+    answer_derivation: {kind: slot_gloss, slot: politeness}
+    feedback_frame: {text: "{politeness} is used in a taught polite exchange.", language_code: en, direction: ltr}
 
   # Lesson 6: Kabul workplace first-day dialogue.
   - content_key: practice.en-prs.prs.a1.unit01.lesson06.identity_meaning.001
@@ -112,11 +114,11 @@ templates:
     frame: {text: "{identity}", language_code: prs, direction: rtl}
     slots: {identity: *identity}
     answer_derivation: {kind: slot_gloss, slot: identity}
-    feedback_frame: {text: "{identity} is used when exchanging names.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{identity} is used in the taught first-meeting dialogue.", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a1.unit01.lesson06.dialogue_translate.002
     lesson_content_key: prs.a1.unit01.lesson06.first_meeting_dialogue
     type: translation
     frame: {text: "{dialogue_word}", language_code: en, direction: ltr, slot_rendering: {dialogue_word: english_gloss}}
     slots: {dialogue_word: *dialogue_word}
     answer_derivation: {kind: slot_text, slot: dialogue_word}
-    feedback_frame: {text: "That's the workplace-dialogue word you just typed.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{dialogue_word} appears in the taught workplace dialogue.", language_code: en, direction: ltr}

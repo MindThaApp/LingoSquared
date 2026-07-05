@@ -13,9 +13,12 @@ tag_schema:
     semantic: [identity, person_name, dialogue_word]
     person: [first, second, third]
 slot_presets:
-  identity: &identity {language_code: en, part_of_speech: [pronoun, verb], agreement_tags: {semantic: identity}}
   person_name: &person_name {language_code: en, part_of_speech: proper_noun, agreement_tags: {semantic: person_name}}
-  dialogue_word: &dialogue_word {language_code: en, part_of_speech: [noun, verb, adjective], agreement_tags: {semantic: dialogue_word}}
+  identity_pronoun: &identity_pronoun {language_code: en, part_of_speech: pronoun, agreement_tags: {semantic: identity}}
+  first_identity_verb: &first_identity_verb {language_code: en, part_of_speech: verb, agreement_tags: {semantic: identity, person: first}}
+  second_identity_verb: &second_identity_verb {language_code: en, part_of_speech: verb, agreement_tags: {semantic: identity, person: second}}
+  new: &new {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: dialogue_word}}
+  work: &work {language_code: en, part_of_speech: verb, agreement_tags: {semantic: dialogue_word}}
 templates:
   # Lesson 1: names.
   - content_key: practice.nl-en.en.a1.unit02.lesson01.name_order.001
@@ -24,71 +27,78 @@ templates:
     frame: {text: "is {person_name} name My", language_code: en, direction: ltr}
     slots: {person_name: *person_name}
     answer_derivation: {kind: render_frame, frame: {text: "My name is {person_name}", language_code: en, direction: ltr}}
-    feedback_frame: {text: "My name is... is the full way to give your name.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit02.lesson01.name_pair.002
+    feedback_frame: {text: "De volledige zin is My name is {person_name}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit02.lesson01.name_fill.002
     lesson_content_key: en.a1.unit02.lesson01.exchange_names
-    type: matching_pairs
-    frame: {text: "{person_name} — {dialogue_word}", language_code: en, direction: ltr}
-    slots: {person_name: *person_name, dialogue_word: *dialogue_word}
-    answer_derivation: {kind: matching_pairs, slots: [person_name, dialogue_word]}
-    feedback_frame: {text: "Match {person_name} and {dialogue_word} to their Dutch meanings.", language_code: nl, direction: ltr}
+    type: fill_in_blank
+    frame: {text: "I'm {person_name}.", language_code: en, direction: ltr}
+    slots: {person_name: *person_name}
+    answer_derivation: {kind: slot_text, slot: person_name}
+    feedback_frame: {text: "De volledige zin is I'm {person_name}.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit02.lesson01.identity_translate.003
     lesson_content_key: en.a1.unit02.lesson01.exchange_names
     type: translation
     frame: {text: "{identity}", language_code: nl, direction: ltr, slot_rendering: {identity: english_gloss}}
-    slots: {identity: *identity}
+    slots: {identity: *identity_pronoun}
     answer_derivation: {kind: slot_text, slot: identity}
-    feedback_frame: {text: "That's the English word you just typed.", language_code: nl, direction: ltr}
+    feedback_frame: {text: "De Engelse vertaling is {identity}.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit02.lesson01.identity_meaning.004
     lesson_content_key: en.a1.unit02.lesson01.exchange_names
     type: multiple_choice
     frame: {text: "{identity}", language_code: en, direction: ltr}
-    slots: {identity: *identity}
+    slots: {identity: *identity_pronoun}
     answer_derivation: {kind: slot_gloss, slot: identity}
-    feedback_frame: {text: "{identity} is used when talking about names and identity.", language_code: nl, direction: ltr}
+    feedback_frame: {text: "{identity} komt uit een zin waarin iemand naar een naam vraagt of een naam geeft.", language_code: nl, direction: ltr}
 
   # Lesson 2: roles and membership.
-  - content_key: practice.nl-en.en.a1.unit02.lesson02.role_meaning.001
-    lesson_content_key: en.a1.unit02.lesson02.exchange_roles
-    type: multiple_choice
-    frame: {text: "{dialogue_word}", language_code: en, direction: ltr}
-    slots: {dialogue_word: *dialogue_word}
-    answer_derivation: {kind: slot_gloss, slot: dialogue_word}
-    feedback_frame: {text: "{dialogue_word} names a role or membership status.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit02.lesson02.role_fill.002
+  - content_key: practice.nl-en.en.a1.unit02.lesson02.am_fill.001
     lesson_content_key: en.a1.unit02.lesson02.exchange_roles
     type: fill_in_blank
-    frame: {text: "I am a {dialogue_word}.", language_code: en, direction: ltr}
-    slots: {dialogue_word: *dialogue_word}
-    answer_derivation: {kind: slot_text, slot: dialogue_word}
-    feedback_frame: {text: "{dialogue_word} fits after I am a.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit02.lesson02.role_translate.004
+    frame: {text: "I {am} a student.", language_code: en, direction: ltr}
+    slots: {am: *first_identity_verb}
+    answer_derivation: {kind: slot_text, slot: am}
+    feedback_frame: {text: "De volledige zin is I {am} a student.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit02.lesson02.are_fill.002
+    lesson_content_key: en.a1.unit02.lesson02.exchange_roles
+    type: fill_in_blank
+    frame: {text: "{are} you a teacher?", language_code: en, direction: ltr}
+    slots: {are: *second_identity_verb}
+    answer_derivation: {kind: slot_text, slot: are}
+    feedback_frame: {text: "In de vraag staat {are} vóór you: Are you a teacher?", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit02.lesson02.member_order.003
+    lesson_content_key: en.a1.unit02.lesson02.exchange_roles
+    type: word_order
+    frame: {text: "member a {new} you Are", language_code: en, direction: ltr}
+    slots: {new: *new}
+    answer_derivation: {kind: render_frame, frame: {text: "Are you a {new} member", language_code: en, direction: ltr}}
+    feedback_frame: {text: "De juiste volgorde is Are you a {new} member?", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit02.lesson02.new_translate.004
     lesson_content_key: en.a1.unit02.lesson02.exchange_roles
     type: translation
-    frame: {text: "{dialogue_word}", language_code: nl, direction: ltr, slot_rendering: {dialogue_word: english_gloss}}
-    slots: {dialogue_word: *dialogue_word}
-    answer_derivation: {kind: slot_text, slot: dialogue_word}
-    feedback_frame: {text: "That's the role word you just typed.", language_code: nl, direction: ltr}
+    frame: {text: "{new}", language_code: nl, direction: ltr, slot_rendering: {new: english_gloss}}
+    slots: {new: *new}
+    answer_derivation: {kind: slot_text, slot: new}
+    feedback_frame: {text: "De Engelse vertaling is {new}.", language_code: nl, direction: ltr}
 
   # Lesson 3: library dialogue.
-  - content_key: practice.nl-en.en.a1.unit02.lesson03.library_meaning.001
+  - content_key: practice.nl-en.en.a1.unit02.lesson03.library_order.001
     lesson_content_key: en.a1.unit02.lesson03.library_dialogue
-    type: multiple_choice
-    frame: {text: "{dialogue_word}", language_code: en, direction: ltr}
-    slots: {dialogue_word: *dialogue_word}
-    answer_derivation: {kind: slot_gloss, slot: dialogue_word}
-    feedback_frame: {text: "{dialogue_word} comes from the library dialogue.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit02.lesson03.name_person_pair.002
+    type: word_order
+    frame: {text: "library the at {work} I", language_code: en, direction: ltr}
+    slots: {work: *work}
+    answer_derivation: {kind: render_frame, frame: {text: "I {work} at the library", language_code: en, direction: ltr}}
+    feedback_frame: {text: "De juiste volgorde is I {work} at the library.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit02.lesson03.work_fill.002
     lesson_content_key: en.a1.unit02.lesson03.library_dialogue
-    type: matching_pairs
-    frame: {text: "{person_name} — {identity}", language_code: en, direction: ltr}
-    slots: {person_name: *person_name, identity: *identity}
-    answer_derivation: {kind: matching_pairs, slots: [person_name, identity]}
-    feedback_frame: {text: "Match {person_name} and {identity} to their Dutch meanings.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit02.lesson03.dialogue_translate.003
+    type: fill_in_blank
+    frame: {text: "I {work} at the library.", language_code: en, direction: ltr}
+    slots: {work: *work}
+    answer_derivation: {kind: slot_text, slot: work}
+    feedback_frame: {text: "De volledige zin is I {work} at the library.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit02.lesson03.work_translate.003
     lesson_content_key: en.a1.unit02.lesson03.library_dialogue
     type: translation
-    frame: {text: "{dialogue_word}", language_code: nl, direction: ltr, slot_rendering: {dialogue_word: english_gloss}}
-    slots: {dialogue_word: *dialogue_word}
-    answer_derivation: {kind: slot_text, slot: dialogue_word}
-    feedback_frame: {text: "That's the word from the library dialogue you just typed.", language_code: nl, direction: ltr}
+    frame: {text: "{work}", language_code: nl, direction: ltr, slot_rendering: {work: english_gloss}}
+    slots: {work: *work}
+    answer_derivation: {kind: slot_text, slot: work}
+    feedback_frame: {text: "De Engelse vertaling is {work}.", language_code: nl, direction: ltr}
