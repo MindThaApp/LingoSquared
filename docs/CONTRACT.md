@@ -249,9 +249,36 @@ compatible), but all new/reseeded content should include it.
   fallback until a given string has been recorded.
 
 `POST /exercises/{id}/answer` request: `{ "response": <shape depends on
-exercise type — string, string[], or pair-mapping> }`. For `flashcard`,
-`response` is exactly `"known"` or `"unknown"`; this self-report determines
-correctness and SRS scheduling rather than comparing typed text. Response:
+exercise type> }`:
+- Free-text types (`translation`, `writing_prompt`, `fill_in_blank`, etc.):
+  a plain `string`.
+- `word_order` / `listen_order`: `string[]` in the order the learner
+  arranged the word bank.
+- `matching_pairs`: `{ left: string, right: string }[]` — one entry per
+  pair, in the SAME order as the exercise's `prompt.pairs` (i.e.
+  `pairs.map(p => ({ left: p.left, right: matches[p.left] }))`, not a
+  flat `{ [left]: right }` dict). This is the exact shape every
+  `matching_pairs` exercise's content-side `accepted_answers` is
+  authored in (see `docs/content/overlays/**`) — **a flat dict here
+  will never compare equal and silently grades every match wrong**
+  (real bug, shipped and fixed 2026-07-05, see `docs/BUILD_LOG.md`
+  and the matching CLAUDE.md footgun entry).
+  **`grade()` (`app/api/router.py`) additionally canonicalizes either
+  representation** (flat `{left: right}` dict OR `{left,right}[]`, in
+  any order) for this exercise type specifically, so both the frontend's
+  documented submission shape above AND the Endless Practice engine's
+  `derive_answer()` (`app/practice/service.py`, which produces a flat
+  dict as `PracticeItem.correct_response` for `matching_pairs`) grade
+  correctly against each other — found live 2026-07-05 while verifying
+  the fix above: without this, the practice-engine path would have
+  broken the identical way, just mirrored (list submitted, flat dict
+  stored). Prefer the documented list-of-pairs shape for anything new;
+  the dict tolerance exists for robustness, not as the preferred form.
+- `flashcard`: exactly `"known"` or `"unknown"` — this self-report
+  determines correctness and SRS scheduling rather than comparing typed
+  text.
+
+Response:
 ```json
 { "correct": true, "result": "correct", "correct_response": "...", "xp_awarded": 10, "feedback": "string (optional)" }
 ```
