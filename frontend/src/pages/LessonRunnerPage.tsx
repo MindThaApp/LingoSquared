@@ -8,6 +8,7 @@ import { TeachingCardView } from "../components/TeachingCardView";
 import { ReportIssueButton } from "../components/ReportIssueButton";
 import { SpeakButton } from "../components/SpeakButton";
 import { ApiError } from "../api/client";
+import { formatCorrectResponse } from "../lib/formatAnswer";
 import type {
   AnswerResponse,
   AnswerResult,
@@ -31,13 +32,10 @@ interface MissedWord {
 const MISS_LIMIT = 2;
 
 function missedWordFromResult(exercise: Exercise, result: AnswerResult): MissedWord {
-  const answer = result.correct_response;
-  const text = Array.isArray(answer)
-    ? answer.join(" ")
-    : typeof answer === "object" && answer !== null
-      ? Object.keys(answer as Record<string, string>).join(", ")
-      : String(answer);
-  return { text, languageCode: exercise.prompt.answer_language_code };
+  return {
+    text: formatCorrectResponse(result.correct_response),
+    languageCode: exercise.prompt.answer_language_code,
+  };
 }
 
 export function LessonRunnerPage() {
@@ -194,7 +192,7 @@ export function LessonRunnerPage() {
           missCount: newMissCount,
           isConfirmation: newMissCount >= MISS_LIMIT,
           correctAnswerHint:
-            newMissCount >= MISS_LIMIT ? String(result.correct_response) : undefined,
+            newMissCount >= MISS_LIMIT ? formatCorrectResponse(result.correct_response) : undefined,
         },
       ];
     }
@@ -243,7 +241,7 @@ export function LessonRunnerPage() {
             {!reviewResult.correct && (
               <p style={{ margin: "0 0 6px", fontWeight: 400 }}>
                 {t("lesson_runner.correct_answer", {
-                  answer: String(reviewResult.correct_response),
+                  answer: formatCorrectResponse(reviewResult.correct_response),
                 })}
               </p>
             )}
@@ -317,7 +315,7 @@ export function LessonRunnerPage() {
           </p>
           {!result.correct && (
             <p style={{ margin: "0 0 6px", fontWeight: 400 }}>
-              {t("lesson_runner.correct_answer", { answer: String(result.correct_response) })}
+              {t("lesson_runner.correct_answer", { answer: formatCorrectResponse(result.correct_response) })}
             </p>
           )}
           {result.feedback && (
