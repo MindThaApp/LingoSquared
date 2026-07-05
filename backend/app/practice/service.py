@@ -147,6 +147,7 @@ def render_frame(
     frame: dict[str, Any],
     filled: dict[str, Lexeme],
     blank_slot: str | None = None,
+    default_field: str = "token",
 ) -> str:
     rendering = frame.get("slot_rendering", {})
 
@@ -154,7 +155,7 @@ def render_frame(
         name = match.group(1)
         if name == blank_slot:
             return "___"
-        field = rendering.get(name, "token")
+        field = rendering.get(name, default_field)
         return str(getattr(filled[name], field))
 
     return SLOT_RE.sub(replacement, frame["text"])
@@ -327,6 +328,24 @@ def build_prompt(
             "audio_language_code": course.target_language,
         }
     elif template.type == "word_order":
+        # Found live 2026-07-05: this branch never showed the learner
+        # anything about what phrase to build — only the generic
+        # instruction plus a shuffled word bank, with zero context. A
+        # compiled lesson's hand-authored word_order card bakes the
+        # target phrase directly into its instruction text (e.g.
+        # "Arrange the letters to build سلام."); this generated version
+        # has no equivalent, making it an unguessable puzzle for any
+        # slotted phrase the learner hasn't already memorized verbatim.
+        # Fix: render the same frame with each slot's `english_gloss`
+        # substituted for its `token` as a hint line. For a fully fixed
+        # frame (no `{slot}` placeholders at all, e.g. the letter-ramp
+        # spelling drills above) this harmlessly reproduces the exact
+        # same "reveal the phrase, test assembling/spelling it" pattern
+        # the compiled content already uses deliberately; for a genuine
+        # slotted frame it gives a real (if ungrammatical) word-by-word
+        # English cue without literally handing over the correct token
+        # order.
+        hint = render_frame(template.frame, filled, default_field="english_gloss")
         if isinstance(answer, list):
             ordered = answer
         else:
@@ -349,7 +368,8 @@ def build_prompt(
             word_bank = word_bank[1:] + word_bank[:1]
         prompt = {
             "text_blocks": [
-                _instruction_block(course, "Put the words in the correct order.")
+                _instruction_block(course, "Put the words in the correct order."),
+                _block(template.frame, hint),
             ],
             "word_bank": word_bank,
             "answer_language_code": answer_language,

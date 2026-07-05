@@ -640,3 +640,87 @@ def test_fill_in_blank_never_generates_a_blank_only_prompt(client, admin, auth):
     # unanswerable item is ever served rather than degrading gracefully in
     # some other way.
     assert response.json() == {"locked": False, "items": []}
+
+
+def word_order_hint_artifact(target="es"):
+    direction = "rtl" if target in {"fa", "prs"} else "ltr"
+    slot = {
+        "language_code": target,
+        "part_of_speech": "noun",
+        "agreement_tags": {"semantic": "word"},
+    }
+    return {
+        "artifact_type": "lingosquared.practice_templates",
+        "artifact_version": 1,
+        "source_language": "en",
+        "target_language": target,
+        "packs": [
+            {
+                "pack_key": "test.practice.word_order_hint.pack",
+                "unit_content_key": "test.practice.unit",
+                "tag_schema": {},
+                "templates": [
+                    {
+                        "content_key": "test.practice.word_order.hint",
+                        "lesson_content_key": LESSON_KEY,
+                        "type": "word_order",
+                        "frame": {
+                            "text": "{word} ahora",
+                            "language_code": target,
+                            "direction": direction,
+                        },
+                        "slots": {"word": slot},
+                        "answer_derivation": {
+                            "kind": "render_frame",
+                            "frame": {
+                                "text": "{word} ahora",
+                                "language_code": target,
+                                "direction": direction,
+                            },
+                        },
+                        "feedback_frame": {
+                            "text": "Correct.",
+                            "language_code": "en",
+                            "direction": "ltr",
+                        },
+                    }
+                ],
+            }
+        ],
+    }
+
+
+def test_word_order_prompt_includes_a_gloss_hint_not_just_the_instruction(
+    client, admin, auth
+):
+    # Real bug found 2026-07-05 (QA pass): the generated word_order prompt
+    # only ever showed the generic "Put the words in the correct order."
+    # instruction plus the shuffled word bank - zero indication anywhere
+    # of what phrase the words should form, making any slotted phrase the
+    # learner hasn't already memorized verbatim unguessable. A compiled
+    # lesson's hand-authored word_order card bakes the target phrase
+    # directly into its instruction text instead; the generated engine had
+    # no equivalent. Fixed by rendering the same frame with each slot's
+    # `english_gloss` substituted for its `token` as a second text block.
+    course_id, lesson_id = create_course_with_lexemes(target="es")
+    import_templates(client, admin, course_id, word_order_hint_artifact())
+    complete_lesson(auth, lesson_id)
+    response = client.post(
+        f"/practice/{course_id}/batch", headers=auth, json={"size": 20}
+    )
+    assert response.status_code == 200, response.text
+    word_order_items = [
+        item for item in response.json()["items"] if item["type"] == "word_order"
+    ]
+    assert word_order_items, "expected at least one generated word_order item"
+    for item in word_order_items:
+        blocks = item["prompt"]["text_blocks"]
+        assert len(blocks) == 2
+        instruction, hint = blocks
+        assert instruction["text"] == "Put the words in the correct order."
+        # The hint substitutes the slotted word's English gloss into the
+        # same frame shape ("{word} ahora" -> "<gloss> ahora") - never just
+        # the bare instruction alone, and never the literal target-language
+        # correct answer (which would trivialize the reordering task).
+        assert hint["text"].endswith(" ahora")
+        assert hint["text"] in {"one ahora", "two ahora", "three ahora", "four ahora"}
