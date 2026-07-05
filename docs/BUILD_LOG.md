@@ -4387,3 +4387,85 @@ stale "19" to the real current "24" (weather, clothing, emotions,
 communication, money/payments added 2026-07-05, verified compiling
 clean) — both were still saying 19 with no code/behavior reason to
 doubt it, just needed the number caught up.
+
+## Two more QA-pass findings addressed: word_order's missing hint (real, fixed) and the lexeme-backfill "hardcoded to en-fa" claim (stale, not actually blocking), 2026-07-05 (Session 1/CODE)
+
+The coordinator relayed two more findings from tonight's QA pass. Verified
+both directly rather than taking them as given, per standing instruction.
+
+**Finding 1, confirmed real: generated `word_order` items showed nothing
+about the target phrase.** `build_prompt()`'s `word_order` branch in
+`backend/app/practice/service.py` only ever emitted the generic "Put the
+words in the correct order." instruction — never any indication of what
+the shuffled tiles should assemble into. A compiled lesson's hand-authored
+word_order card bakes the target phrase directly into its own instruction
+text instead (e.g. "Arrange the letters to build سلام."); the generated
+engine had no equivalent, making any slotted phrase the learner hasn't
+already memorized verbatim genuinely unguessable — a different, unrelated
+bug from the fill_in_blank/matching_pairs issues already fixed in this
+same file tonight, just found by the same QA pass in the same neighborhood
+of code.
+
+**Fix**: `render_frame()` gained an optional `default_field` parameter
+(defaults to `"token"`, so every existing caller is unaffected); the
+`word_order` branch now renders `template.frame` a second time with
+`default_field="english_gloss"` as a hint text block alongside the
+instruction. For a fully fixed frame with no `{slot}` placeholders at all
+(the letter-ramp spelling drills — `frame.text` is a literal string with
+nothing to substitute) this harmlessly reproduces the same "reveal the
+phrase, test assembling/spelling it" pattern the compiled content already
+uses deliberately for that exact exercise shape. For a genuinely slotted
+frame (e.g. `"{time_period} {good_wish}"`) it substitutes each slot's
+English gloss for its token, giving a real (if ungrammatical) word-by-word
+cue without literally handing over the correct token order — the two
+cases are handled by the exact same code path, no branching needed.
+
+**Verified**: new `test_word_order_prompt_includes_a_gloss_hint_not_just_
+the_instruction` in `backend/tests/test_endless_practice.py` — imports a
+word_order template with frame `"{word} ahora"`, generates a batch, and
+checks every word_order item's prompt has exactly 2 text blocks (the
+instruction plus the hint), the hint substitutes the slotted lexeme's
+English gloss into the same frame shape, and it's never just the bare
+instruction alone. Ran against a purpose-created, uniquely-named isolated
+test database (not the shared one, same reasoning as the content-import
+fix above) — `test_endless_practice.py` 9/9 passing, full suite clean
+except the same already-known `test_checkpoint_forces_strict_orthography`
+flake. Restarted the shared local `backend-api-1` (`docker compose
+restart api`) to bring it live, then live-verified in the browser:
+registered a fresh account, played fa "Farsi A1" unit 1 lesson 1 through
+to actual completion (unlocking Endless Practice — my earlier fa
+verification session tonight had been interrupted before real
+completion, so Practice was still locked), then confirmed the feed's
+word_order cards now show the hint line ("Put the words in the correct
+order." + "م ا ل س" spelling out سلام) where before there was nothing at
+all.
+
+**Finding 2: the "lexeme-backfill pipeline is hardcoded to en-fa only"
+claim doesn't hold up against the current repo state.** Checked
+`scripts/` directly rather than trusting the report: all 6 launch-pair
+backfill scripts already exist —`backfill_lexemes.py` (en-fa, the
+original) plus `backfill_lexemes_en_nl.py`, `_en_prs.py`, `_fa_en.py`,
+`_nl_en.py`, `_prs_en.py` — matching entries already in this file from
+the practice-pool-sync lane's own earlier work extending Endless Practice
+to every launch pair. Independently corroborated live tonight: my own fa
+and nl Endless Practice sessions both generated real, gradeable items,
+which is only possible if their lexemes are genuinely populated in the
+DB — the pipeline isn't just written, it's been run for real. The report
+most likely reflected an earlier point in the night, before the last of
+these 5 sibling scripts landed, and went stale.
+
+**What's actually true, and my call on priority**: each script duplicates
+roughly 35 lines of near-identical DB-writing boilerplate (course lookup,
+lesson-to-unit/order mapping, upsert-by-token+part-of-speech loop, commit,
+summary print) — a real DRY nit, but NOT a functional blocker; the part
+that can't be shared regardless of any refactor is each script's actual
+value-add, the hand-classified glosses/part-of-speech/agreement-tags data,
+which is inherently language-specific. Judged this genuinely low priority
+relative to everything else outstanding tonight (nowhere near the severity
+of the content-import bug, which blocked ALL new content from ever
+deploying) — did not spend time extracting a shared helper module now;
+better deferred to whenever the next new language pair is actually added,
+as a natural forcing function, rather than a refactor-for-its-own-sake
+detour tonight.
+
+Committed the `word_order` fix + test alongside this entry.
