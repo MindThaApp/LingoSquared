@@ -507,6 +507,14 @@ Farsi/Dari have zero Google Cloud voices; browser `speechSynthesis` is
 the fallback (see Known limitations). ElevenLabs is no longer the
 live provider (superseded 2026-07-04) — historical account/voice
 gotchas are in `docs/BUILD_LOG.md` if ElevenLabs is ever revisited.
+**Investigated 2026-07-05 whether the public-domain FSI/Peace Corps
+audio helps here: it doesn't, directly.** The Persian FSI tapes are 24
+long, unsegmented per-unit recordings (~436 min total, one file per
+half-tape's basic sentences + drills), not per-phrase clips — no
+splicing into individual exercises without real manual editing. Only
+real use: a pronunciation-calibration reference for a human doing an
+actual fa/prs recording session, not a content or asset shortcut.
+Don't re-investigate this without new information.
 
 ## What's built and verified live
 
@@ -553,14 +561,29 @@ en→prs (A1 + A2), prs→en, plus es/fr (1 unit each, in progress).
   blocking gap for the publish-gate content-depth goal, not yet fixed
   — needs either a new "append units" admin endpoint or documented
   guidance on an existing mechanism. See `docs/BUILD_LOG.md`.
-- **The full fa course cannot currently compile end-to-end**: `fa/
-  a1_unit01_greetings.yaml` and `fa/a1_unit02_introductions.yaml` (the
-  original fa content) use the old embedded-multi-speaker-label
-  dialogue format that the compiler's newer per-speaker-turn validator
-  now rejects. Units 3/4/5 (newer) are fine; only a full compile
-  including 1+2 fails. Confirmed independently by two sessions
-  2026-07-05. Phase D2's territory (re-author the two legacy dialogue
-  cards), not yet done.
+- **Fixed 2026-07-05 (Session 2/CONTENT, Phase D2)**: the full fa
+  course now compiles end-to-end. `fa/a1_unit01_greetings.yaml`
+  lesson06 (6 combined two-speaker cards) and `fa/
+  a1_unit02_introductions.yaml` lesson06's `exchange_origins` card (1
+  combined card) used the old embedded-multi-speaker-label dialogue
+  format the compiler's per-speaker-turn validator rejects — split
+  into one `text_blocks` entry per speaker turn, with the speaker name
+  moved to the new structured `target.speaker` field (propagates
+  automatically into the compiled `text_block` — no compiler code
+  change needed, `target` is passed through as-is) instead of being
+  baked into the spoken `text` as a literal "Name:" prefix. Overlay
+  glosses/notes split to match the new per-turn content_keys. All 5
+  en-fa units (1-5) validate together, 0 errors/0 warnings. **Not yet
+  done, a separate smaller polish item**: several OTHER already-
+  existing single-turn dialogue cards (fa unit02's `arrival`/
+  `meet_mina`/`sara_name`/`ask_origin`/`pleased`/`pleased_and_enter`,
+  and all of units 04/05) still bake the speaker's name into `text`
+  as a literal prefix instead of using the structured `speaker` field
+  — they don't trip the compiler validator (single block, no newline)
+  so they're not blocking, but a real recorded/TTS voice will still
+  read the name aloud on those specific cards until they're migrated
+  the same way. Low priority vs. new content, flagging for whenever a
+  dialogue-audio pass touches those units.
 
 ## History
 
