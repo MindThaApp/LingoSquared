@@ -81,6 +81,8 @@ if [ "$RUN_CONTENT" = "1" ]; then
       echo "!! scripts/content_manifest.txt not found -- nothing to validate"
       CONTENT_OK=0
     else
+      COMPILE_SCRATCH="$(mktemp -d)"
+      trap 'rm -rf "$COMPILE_SCRATCH"' EXIT
       while IFS='|' read -r course realizations overlays; do
         [ -z "$course" ] && continue
         case "$course" in \#*) continue ;; esac
@@ -90,6 +92,21 @@ if [ "$RUN_CONTENT" = "1" ]; then
               --realization $realizations \
               --overlay $overlays; then
           echo "!! validation FAILED for $course"
+          CONTENT_OK=0
+        fi
+        # `validate` alone misses checks that only run during real assembly
+        # (e.g. validate_dialogue_teaching_card) -- confirmed 2026-07-05 when
+        # this exact gap let a compile-breaking dialogue-format bug through
+        # "0 errors, 0 warnings" in every prior verify.sh run. Always also
+        # run the real `compile` against scratch output so this class of bug
+        # can't hide behind a clean validate pass again.
+        echo "-- compiling $course (full assembly, not just validate) --"
+        # shellcheck disable=SC2086
+        if ! python scripts/compile_content.py compile \
+              --realization $realizations \
+              --overlay $overlays \
+              --out "$COMPILE_SCRATCH/${course}.json"; then
+          echo "!! COMPILE FAILED for $course (validate passed but real assembly did not)"
           CONTENT_OK=0
         fi
       done < scripts/content_manifest.txt
