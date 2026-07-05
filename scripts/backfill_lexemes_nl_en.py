@@ -170,6 +170,10 @@ EN_TARGET_TO_NL_GLOSS: dict[str, str] = {
     "hate": "haten", "calmer": "rustiger", "very": "heel", "strong": "sterk",
     "why": "waarom", "think": "denken", "prefers": "geeft de voorkeur aan",
     "thinks": "denkt",
+    # Unit 20 (making basic comparisons), added 2026-07-06.
+    "bigger": "groter", "smaller": "kleiner", "cheaper": "goedkoper",
+    "expensive": "duur", "faster": "sneller", "than": "dan", "nicer": "mooier",
+    "cheapest": "goedkoopst", "red": "rood", "car": "auto", "white": "wit",
 }
 
 UNIT_FILES = (
@@ -248,6 +252,10 @@ UNIT_FILES = (
     (
         REPO_ROOT / "docs/content/realizations/en/a1_unit19_preferences.yaml",
         REPO_ROOT / "docs/content/overlays/nl-en/a1_unit19.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit20_comparisons.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/a1_unit20.yaml",
     ),
 )
 
@@ -388,6 +396,12 @@ NL_POS: dict[str, str] = {
     "geef": "verb", "geeft": "verb", "geven": "verb", "haten": "verb",
     "hou": "verb", "rustiger": "adjective", "sterk": "adjective",
     "vinden": "verb", "voorkeur": "noun", "waarom": "adverb", "zo": "adverb",
+    # Unit 20 (making basic comparisons), added 2026-07-06.
+    "auto": "noun", "blauwe": "adjective", "duurder": "adjective",
+    "goedkoopst": "adjective", "goedkoopste": "adjective", "goedkoper": "adjective",
+    "groter": "adjective", "kleiner": "adjective", "mooier": "adjective",
+    "rode": "adjective", "sneller": "adjective", "tas": "noun", "vind": "verb",
+    "witte": "adjective",
 }
 
 NL_GLOSSES: dict[str, str] = {
@@ -534,6 +548,11 @@ NL_GLOSSES: dict[str, str] = {
     "hou": "love; hold", "rustiger": "calmer", "sterk": "strong",
     "vinden": "to find; to consider", "voorkeur": "preference", "waarom": "why",
     "zo": "so",
+    # Unit 20 (making basic comparisons), added 2026-07-06.
+    "auto": "car", "blauwe": "blue", "duurder": "more expensive",
+    "goedkoopst": "cheapest", "goedkoopste": "cheapest", "goedkoper": "cheaper",
+    "groter": "bigger", "kleiner": "smaller", "mooier": "nicer", "rode": "red",
+    "sneller": "faster", "tas": "bag", "vind": "find; consider", "witte": "white",
 }
 
 

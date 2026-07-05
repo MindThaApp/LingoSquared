@@ -156,6 +156,11 @@ EN_POS: dict[str, str] = {
     "like": "verb", "don't": "verb", "prefer": "verb", "hate": "verb",
     "calmer": "adjective", "very": "adverb", "strong": "adjective",
     "why": "adverb", "think": "verb", "prefers": "verb", "thinks": "verb",
+    # Unit 20 (making basic comparisons), added 2026-07-06.
+    "bigger": "adjective", "smaller": "adjective", "cheaper": "adjective",
+    "expensive": "adjective", "faster": "adjective", "than": "particle",
+    "nicer": "adjective", "cheapest": "adjective", "red": "adjective",
+    "car": "noun", "white": "adjective",
 }
 
 def en_agreement_tags(token: str) -> dict[str, object]:
@@ -301,6 +306,22 @@ def en_agreement_tags(token: str) -> dict[str, object]:
     # "I {item} tea/coffee." frames.
     if token in {"like", "prefer", "love", "hate"}:
         semantics.append("preference_verb_full")
+    # Unit 20: 5 one-word "-er" comparatives, verified interchangeable in
+    # "This X is {item} than that X." -- all take "than" grammatically
+    # (unlike "more expensive", a two-word phrase that doesn't fit a single
+    # slot, and unlike "cheapest", a superlative that does NOT take "than").
+    if token in {"bigger", "smaller", "cheaper", "faster", "nicer"}:
+        semantics.append("comparative_adj")
+    # "cheapest" is the only superlative introduced so far -- kept as its
+    # own single-member tag (never used for multiple_choice/listen_select,
+    # only word_order/fill_in_blank/translation, which don't need >=4
+    # candidates) rather than folded into comparative_adj, since mixing
+    # degrees would let the sampler generate "This bag is cheapest than
+    # that bag." -- superlatives never take "than".
+    if token == "cheapest":
+        semantics.append("superlative_adj")
+    if token in {"red", "white"}:
+        semantics.append("color")
 
     tags: dict[str, object] = {}
     if semantics:
