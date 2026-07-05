@@ -1,3 +1,4 @@
+import json
 from datetime import datetime
 from typing import Any, Literal
 from pydantic import BaseModel, ConfigDict, EmailStr, Field, model_validator
@@ -6,18 +7,43 @@ from app.models.entities import CEFRLevel, ExerciseType, UnitSection
 ContentIssueCategory=Literal["wrong_answer_key","mistranslation","untaught_vocabulary","audio_issue","unclear_instruction","other"]
 ContentIssueStatus=Literal["open","triaged","resolved","wontfix","duplicate"]
 
+# Security: bounds a user-supplied free-form payload's serialized size,
+# regardless of whether it's a string/list/dict, so a single request can't
+# force an unbounded-cost operation server-side (e.g. grade_answer()'s
+# Damerau-Levenshtein comparison against exercise/practice/review answers
+# allocates an O(len(response) * len(correct)) table with no length check
+# of its own - a multi-megabyte `response` string was otherwise a trivial,
+# unauthenticated-admin-not-required DoS). No legitimate answer (a word,
+# phrase, or short sentence; matching_pairs/word_order's handful of
+# tokens) comes close to this bound.
+_MAX_PAYLOAD_JSON_CHARS = 5000
+
+
+def _bounded_payload_size(value):
+    try:
+        size = len(json.dumps(value, default=str))
+    except (TypeError, ValueError):
+        size = len(str(value))
+    if size > _MAX_PAYLOAD_JSON_CHARS:
+        raise ValueError(f"payload too large (max {_MAX_PAYLOAD_JSON_CHARS} serialized characters)")
+    return value
+
 class ORM(BaseModel): model_config=ConfigDict(from_attributes=True)
 class UserOut(ORM): id:str; email:EmailStr; display_name:str
 class MeOut(UserOut): created_at:datetime
 class RegisterIn(BaseModel): email:EmailStr; password:str=Field(min_length=8,max_length=128); display_name:str|None=None; timezone:str|None=None
-class LoginIn(BaseModel): email:EmailStr; password:str; timezone:str|None=None
+class LoginIn(BaseModel): email:EmailStr; password:str=Field(max_length=128); timezone:str|None=None
 class AuthOut(BaseModel): access_token:str; token_type:Literal["bearer"]="bearer"; expires_in:int; user:UserOut
 class LanguageOut(ORM): code:str; name:str; native_name:str; script:Literal["latin","cyrillic","han","arabic"]; direction:Literal["ltr","rtl"]
 class TextBlock(BaseModel): text:str; language_code:str; direction:Literal["ltr","rtl"]; speaker:str|None=None
 class TeachingCard(BaseModel): kind:Literal["vocabulary","phrase","grammar_note","dialogue","pronunciation_note","cultural_note","reading"]; title:str|None=None; text_blocks:list[TextBlock]; note:str|None=None
 class ExerciseOut(BaseModel): id:str; type:ExerciseType; order:int; prompt:dict[str,Any]
 class LessonDetail(BaseModel): id:str; unit_id:str; title:str; teaching:list[TeachingCard]; exercises:list[ExerciseOut]
-class AnswerIn(BaseModel): response: str|list[Any]|dict[str,Any]|bool|int|float
+class AnswerIn(BaseModel):
+    response: str|list[Any]|dict[str,Any]|bool|int|float
+    @model_validator(mode="after")
+    def bounded_response(self):
+        _bounded_payload_size(self.response); return self
 class AnswerOut(BaseModel): correct:bool; result:Literal["correct","almost","incorrect"]="correct"; correct_response:Any; xp_awarded:int; feedback:str|None=None
 class LanguagePairOut(BaseModel): source_language:str; target_language:str; course_count:int
 class CourseOut(BaseModel): id:str; source_language:str; target_language:str; title:str; level:CEFRLevel; unit_count:int
@@ -33,7 +59,12 @@ class QuestOut(BaseModel): code:str; title:str; description:str; xp_reward:int; 
 class QuestsOut(BaseModel): quests:list[QuestOut]
 class ImportOut(BaseModel): imported_courses:int
 class ValidationOut(BaseModel): valid:bool; errors:list[str]
-class ContentIssueReportIn(BaseModel): category:ContentIssueCategory; description:str|None=Field(default=None,max_length=2000); learner_response:Any|None=None
+class ContentIssueReportIn(BaseModel):
+    category:ContentIssueCategory; description:str|None=Field(default=None,max_length=2000); learner_response:Any|None=None
+    @model_validator(mode="after")
+    def bounded_learner_response(self):
+        if self.learner_response is not None: _bounded_payload_size(self.learner_response)
+        return self
 class ContentIssueCreatedOut(BaseModel): id:str; status:ContentIssueStatus
 class ContentIssueUpdateIn(BaseModel):
     status:ContentIssueStatus|None=None
