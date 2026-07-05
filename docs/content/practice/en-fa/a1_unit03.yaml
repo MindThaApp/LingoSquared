@@ -1,0 +1,219 @@
+schema_version: "1.0"
+pack_key: practice.en-fa.a1.unit03
+source_language: en
+target_language: fa
+unit_content_key: fa.a1.unit03.numbers
+review:
+  status: unreviewed
+  required_next_reviewer: codex
+  notes: >-
+    Authored by the practice-pool-sync lane (fa/prs bundle), 2026-07-05,
+    to close a gap where scripts/backfill_lexemes.py already covered fa
+    units 1-4 (lexemes exist and are live-backfillable) but no practice
+    templates had ever been authored past unit02 -- units 3/4 were
+    validated-on-disk-inert with zero practice pack coverage despite
+    real lexeme data sitting ready. Matched every slot preset below
+    against the ACTUAL agreement_tags/part_of_speech backfill_lexemes.py
+    produces (read the script's fa_agreement_tags()/fa_part_of_speech()
+    source directly, not assumed) and verified with a standalone
+    slot-matching harness (scripts/_practice_slot_check.py) replicating
+    backend/app/practice/service.py's lexeme_matches() exactly -- every
+    slot has >=1 candidate, every multiple_choice/matching_pairs slot
+    used for recognition has >=3 distinct candidate values. See harness
+    output referenced in docs/BUILD_LOG.md for the run.
+
+    Deliberately did NOT build a combined "quantity" slot spanning تا
+    (the counting classifier, particle) and سیب/کتاب (the counted nouns) --
+    they share one semantic tag in the backfill script's data model, but
+    slotting تا into a "{quantity} {noun}"-shaped frame would sometimes
+    render "دو تا تا" (nonsense), the same class of bug the nl-en lane's
+    BUILD_LOG entry already documented for زدن/جin homograph collisions.
+    Kept تا as a fixed frame word wherever a quantity phrase is templated
+    and used a noun-only "counted_noun" slot (سیب/کتاب, 2 candidates) for
+    fill_in_blank/translation/word_order only -- never multiple_choice
+    (too few distinct glosses for the >=3 rule).
+
+    "age" (سال itself, 1 candidate) and "marital_status" (متأهل/مجرد
+    alone, 2 candidates) are likewise restricted to fill_in_blank/
+    translation/word_order for the same reason; not used in this unit's
+    number-focused templates but flagging the pattern for whoever
+    extends units 4+ further. Compiler validation
+    (scripts/compile_content.py practice-validate) and a real `compile`
+    run both needed before shipping -- not done as of this writing,
+    left for scripts/verify.sh at the end of this session's pass.
+tag_schema:
+  part_of_speech: [noun, adjective, verb, particle, proper_noun, pronoun, adverb, preposition]
+  agreement_tags:
+    semantic: [number, phone_number, price, dialogue_word]
+slot_presets:
+  number: &number {language_code: fa, part_of_speech: adjective, agreement_tags: {semantic: number}}
+  phone_number_word: &phone_number_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: phone_number}}
+  price_word: &price_word {language_code: fa, part_of_speech: [noun, verb], agreement_tags: {semantic: price}}
+  dialogue_word: &dialogue_word {language_code: fa, part_of_speech: [noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle], agreement_tags: {semantic: dialogue_word}}
+templates:
+  # Lesson 1: zero to ten.
+  - content_key: practice.en-fa.fa.a1.unit03.lesson01.number_gloss.001
+    lesson_content_key: fa.a1.unit03.lesson01.zero_to_ten
+    type: multiple_choice
+    frame: {text: "{number}", language_code: fa, direction: rtl}
+    slots: {number: *number}
+    answer_derivation: {kind: slot_gloss, slot: number}
+    feedback_frame: {text: "{number} is a Persian number word.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit03.lesson01.number_context_fill.002
+    lesson_content_key: fa.a1.unit03.lesson01.zero_to_ten
+    type: fill_in_blank
+    frame: {text: "عدد: {number}", language_code: fa, direction: rtl}
+    slots: {number: *number}
+    answer_derivation: {kind: slot_text, slot: number}
+    feedback_frame: {text: "عدد means number; {number} completes it.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit03.lesson01.number_translation.003
+    lesson_content_key: fa.a1.unit03.lesson01.zero_to_ten
+    type: translation
+    frame: {text: "{number}", language_code: en, direction: ltr, slot_rendering: {number: english_gloss}}
+    slots: {number: *number}
+    answer_derivation: {kind: slot_text, slot: number}
+    feedback_frame: {text: "{number} is the Persian word for this number.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit03.lesson01.number_pair.004
+    lesson_content_key: fa.a1.unit03.lesson01.zero_to_ten
+    type: matching_pairs
+    frame: {text: "{number_one}، {number_two}", language_code: fa, direction: rtl}
+    slots: {number_one: *number, number_two: *number}
+    answer_derivation: {kind: matching_pairs, slots: [number_one, number_two]}
+    slot_relations: [{kind: distinct, slots: [number_one, number_two]}]
+    feedback_frame: {text: "Match each number word to its English meaning.", language_code: en, direction: ltr}
+
+  # Lesson 2: eleven to ninety-nine (combining tens + units reuses the same number pool).
+  - content_key: practice.en-fa.fa.a1.unit03.lesson02.number_order.001
+    lesson_content_key: fa.a1.unit03.lesson02.eleven_to_ninety_nine
+    type: word_order
+    frame: {text: "{number_one} {number_two}", language_code: fa, direction: rtl}
+    slots: {number_one: *number, number_two: *number}
+    answer_derivation: {kind: ordered_slot_texts, slots: [number_one, number_two]}
+    slot_relations: [{kind: distinct, slots: [number_one, number_two]}]
+    feedback_frame: {text: "Keep {number_one} before {number_two}.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit03.lesson02.number_gloss.002
+    lesson_content_key: fa.a1.unit03.lesson02.eleven_to_ninety_nine
+    type: multiple_choice
+    frame: {text: "{number}", language_code: fa, direction: rtl}
+    slots: {number: *number}
+    answer_derivation: {kind: slot_gloss, slot: number}
+    feedback_frame: {text: "{number} is a Persian number word.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit03.lesson02.number_fill.003
+    lesson_content_key: fa.a1.unit03.lesson02.eleven_to_ninety_nine
+    type: fill_in_blank
+    frame: {text: "عدد: {number}", language_code: fa, direction: rtl}
+    slots: {number: *number}
+    answer_derivation: {kind: slot_text, slot: number}
+    feedback_frame: {text: "عدد means number; {number} completes it.", language_code: en, direction: ltr}
+
+  # Lesson 3: phone numbers.
+  - content_key: practice.en-fa.fa.a1.unit03.lesson03.phone_word_gloss.001
+    lesson_content_key: fa.a1.unit03.lesson03.phone_numbers
+    type: multiple_choice
+    frame: {text: "{phone_number_word}", language_code: fa, direction: rtl}
+    slots: {phone_number_word: *phone_number_word}
+    answer_derivation: {kind: slot_gloss, slot: phone_number_word}
+    feedback_frame: {text: "{phone_number_word} is used when talking about phone numbers.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit03.lesson03.phone_word_fill.002
+    lesson_content_key: fa.a1.unit03.lesson03.phone_numbers
+    type: fill_in_blank
+    frame: {text: "این {phone_number_word} است.", language_code: fa, direction: rtl}
+    slots: {phone_number_word: *phone_number_word}
+    answer_derivation: {kind: slot_text, slot: phone_number_word}
+    feedback_frame: {text: "{phone_number_word} fills this sentence naturally.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit03.lesson03.digit_order.003
+    lesson_content_key: fa.a1.unit03.lesson03.phone_numbers
+    type: word_order
+    frame: {text: "{number_one} {number_two} {number_three}", language_code: fa, direction: rtl}
+    slots: {number_one: *number, number_two: *number, number_three: *number}
+    answer_derivation: {kind: ordered_slot_texts, slots: [number_one, number_two, number_three]}
+    slot_relations: [{kind: distinct, slots: [number_one, number_two, number_three]}]
+    feedback_frame: {text: "Phone numbers are read one digit word at a time, in order.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit03.lesson03.phone_word_pair.004
+    lesson_content_key: fa.a1.unit03.lesson03.phone_numbers
+    type: matching_pairs
+    frame: {text: "{phone_number_word_one} — {phone_number_word_two}", language_code: fa, direction: rtl}
+    slots: {phone_number_word_one: *phone_number_word, phone_number_word_two: *phone_number_word}
+    answer_derivation: {kind: matching_pairs, slots: [phone_number_word_one, phone_number_word_two]}
+    slot_relations: [{kind: distinct, slots: [phone_number_word_one, phone_number_word_two]}]
+    feedback_frame: {text: "Match each phone-related word to its English meaning.", language_code: en, direction: ltr}
+
+  # Lesson 4: ages and quantities. Reuses the number pool (no separate
+  # slot for سال/تا/سیب/کتاب -- see pack-level review notes on why a
+  # combined quantity slot was deliberately avoided).
+  - content_key: practice.en-fa.fa.a1.unit03.lesson04.number_gloss.001
+    lesson_content_key: fa.a1.unit03.lesson04.ages_and_quantities
+    type: multiple_choice
+    frame: {text: "{number}", language_code: fa, direction: rtl}
+    slots: {number: *number}
+    answer_derivation: {kind: slot_gloss, slot: number}
+    feedback_frame: {text: "{number} can state an age or a quantity, depending on context.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit03.lesson04.age_fill.002
+    lesson_content_key: fa.a1.unit03.lesson04.ages_and_quantities
+    type: fill_in_blank
+    frame: {text: "من {number} سالمه.", language_code: fa, direction: rtl}
+    slots: {number: *number}
+    answer_derivation: {kind: slot_text, slot: number}
+    feedback_frame: {text: "{number} سالمه states an age of this many years.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit03.lesson04.quantity_translation.003
+    lesson_content_key: fa.a1.unit03.lesson04.ages_and_quantities
+    type: translation
+    frame: {text: "I'd like two apples.", language_code: en, direction: ltr}
+    slots: {number: *number}
+    answer_derivation: {kind: render_frame, frame: {text: "دو تا سیب می‌خوام", language_code: fa, direction: rtl}}
+    feedback_frame: {text: "دو تا سیب می‌خوام puts number + تا + noun before the verb.", language_code: en, direction: ltr}
+
+  # Lesson 5: prices in toman.
+  - content_key: practice.en-fa.fa.a1.unit03.lesson05.price_word_gloss.001
+    lesson_content_key: fa.a1.unit03.lesson05.prices
+    type: multiple_choice
+    frame: {text: "{price_word}", language_code: fa, direction: rtl}
+    slots: {price_word: *price_word}
+    answer_derivation: {kind: slot_gloss, slot: price_word}
+    feedback_frame: {text: "{price_word} is used when talking about prices.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit03.lesson05.price_word_fill.002
+    lesson_content_key: fa.a1.unit03.lesson05.prices
+    type: fill_in_blank
+    frame: {text: "{number} {price_word}", language_code: fa, direction: rtl}
+    slots: {number: *number, price_word: *price_word}
+    answer_derivation: {kind: slot_text, slot: price_word}
+    feedback_frame: {text: "{price_word} follows the number in a price.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit03.lesson05.price_order.003
+    lesson_content_key: fa.a1.unit03.lesson05.prices
+    type: word_order
+    frame: {text: "{number} هزار تومنه", language_code: fa, direction: rtl}
+    slots: {number: *number}
+    answer_derivation: {kind: render_frame, frame: {text: "{number} هزار تومنه", language_code: fa, direction: rtl}}
+    feedback_frame: {text: "number + هزار + تومنه states a price in thousands of toman.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit03.lesson05.price_pair.004
+    lesson_content_key: fa.a1.unit03.lesson05.prices
+    type: matching_pairs
+    frame: {text: "{price_word_one} — {price_word_two}", language_code: fa, direction: rtl}
+    slots: {price_word_one: *price_word, price_word_two: *price_word}
+    answer_derivation: {kind: matching_pairs, slots: [price_word_one, price_word_two]}
+    slot_relations: [{kind: distinct, slots: [price_word_one, price_word_two]}]
+    feedback_frame: {text: "Match each price-related word to its English meaning.", language_code: en, direction: ltr}
+
+  # Lesson 6: exchanging phone numbers (dialogue).
+  - content_key: practice.en-fa.fa.a1.unit03.lesson06.dialogue_gloss.001
+    lesson_content_key: fa.a1.unit03.lesson06.dialogue_phone_numbers
+    type: translation
+    frame: {text: "{dialogue_word}", language_code: en, direction: ltr, slot_rendering: {dialogue_word: english_gloss}}
+    slots: {dialogue_word: *dialogue_word}
+    answer_derivation: {kind: slot_text, slot: dialogue_word}
+    feedback_frame: {text: "{dialogue_word} appears in Sara and Mina's phone-number dialogue.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit03.lesson06.confirm_order.002
+    lesson_content_key: fa.a1.unit03.lesson06.dialogue_phone_numbers
+    type: word_order
+    frame: {text: "آره درسته", language_code: fa, direction: rtl}
+    slots: {dialogue_word: *dialogue_word}
+    answer_derivation: {kind: render_frame, frame: {text: "آره درسته", language_code: fa, direction: rtl}}
+    feedback_frame: {text: "آره درسته casually confirms something you just heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit03.lesson06.dialogue_pair.003
+    lesson_content_key: fa.a1.unit03.lesson06.dialogue_phone_numbers
+    type: matching_pairs
+    frame: {text: "{dialogue_word_one} — {dialogue_word_two}", language_code: fa, direction: rtl}
+    slots: {dialogue_word_one: *dialogue_word, dialogue_word_two: *dialogue_word}
+    answer_derivation: {kind: matching_pairs, slots: [dialogue_word_one, dialogue_word_two]}
+    slot_relations: [{kind: distinct, slots: [dialogue_word_one, dialogue_word_two]}]
+    feedback_frame: {text: "Match each dialogue word to its English meaning.", language_code: en, direction: ltr}

@@ -1,0 +1,169 @@
+schema_version: "1.0"
+pack_key: practice.fa-en.a1.unit03
+source_language: fa
+target_language: en
+unit_content_key: en.a1.unit03.numbers
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: >-
+    Authored by the practice-pool-sync lane (fa/prs bundle), 2026-07-05.
+    Extended scripts/backfill_lexemes_fa_en.py's UNIT_FILES to cover this
+    unit (previously only units 1-2) -- the POS/agreement-tag
+    classification for these English tokens was already added to the
+    shared scripts/_en_target_lexeme_common.py module by the nl-en lane
+    for its own nl-en unit03 pack, so only a Farsi gloss dict extension
+    was needed here, not new classification work. Verified with
+    scripts/_practice_slot_check.py (a standalone harness replicating
+    backend/app/practice/service.py's lexeme_matches() exactly, run
+    directly against backfill_lexemes_fa_en.iter_specs()'s real output,
+    no DB needed) that every slot below has >=1 candidate and every
+    multiple_choice/matching_pairs slot has >=3 distinct candidate
+    values.
+
+    Two slots ("phone_word": phone/number, 2 candidates; "age_adjective":
+    just "old", 1 candidate; "price_noun": just "dollars", 1 candidate)
+    are deliberately restricted to fill_in_blank/translation/word_order,
+    never multiple_choice/matching_pairs, per the same too-few-candidates
+    caution this lane applied to the en-fa unit03/unit04 packs. Every
+    fill_in_blank frame below has real surrounding text beyond the
+    blanked slot (AUTHORING_GUIDE §13) -- flagging that the EXISTING
+    fa-en/a1_unit01.yaml and a1_unit02.yaml packs have at least one
+    bare-slot fill_in_blank frame each (e.g. unit02's role_fill:
+    `frame: {text: "{dialogue_word}"}`) that predates §13 being written
+    and was NOT fixed here, since editing already-shipped sibling files
+    was out of this task's scope -- worth a follow-up pass.
+
+    Not yet compiler-validated or DB-verified as of this writing (left
+    for the end-of-session scripts/verify.sh run); status left
+    unreviewed pending a real fresh-context review, per project
+    convention -- this lane does not self-certify review status.
+tag_schema:
+  part_of_speech: [noun, adjective, adverb, pronoun]
+  agreement_tags:
+    semantic: [number, age_phrase, price_phrase, phone_phrase, market_dialogue, place_singular]
+slot_presets:
+  number: &number {language_code: en, part_of_speech: noun, agreement_tags: {semantic: number}}
+  age_word: &age_word {language_code: en, part_of_speech: [noun, adjective], agreement_tags: {semantic: age_phrase}}
+  age_adjective: &age_adjective {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: age_phrase}}
+  price_word: &price_word {language_code: en, part_of_speech: [noun, adverb, pronoun], agreement_tags: {semantic: price_phrase}}
+  price_noun: &price_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: price_phrase}}
+  phone_word: &phone_word {language_code: en, part_of_speech: noun, agreement_tags: {semantic: phone_phrase}}
+  market_word: &market_word {language_code: en, part_of_speech: [pronoun, noun, adjective], agreement_tags: {semantic: market_dialogue}}
+  place_singular: &place_singular {language_code: en, part_of_speech: noun, agreement_tags: {semantic: place_singular}}
+templates:
+  # Lesson 1: zero to ten.
+  - content_key: practice.fa-en.en.a1.unit03.lesson01.number_gloss.001
+    lesson_content_key: en.a1.unit03.lesson01.zero_to_ten
+    type: multiple_choice
+    frame: {text: "{number}", language_code: en, direction: ltr}
+    slots: {number: *number}
+    answer_derivation: {kind: slot_gloss, slot: number}
+    feedback_frame: {text: "معنی فارسی {number} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit03.lesson01.number_fill.002
+    lesson_content_key: en.a1.unit03.lesson01.zero_to_ten
+    type: fill_in_blank
+    frame: {text: "Number: {number}", language_code: en, direction: ltr}
+    slots: {number: *number}
+    answer_derivation: {kind: slot_text, slot: number}
+    feedback_frame: {text: "املای درست این عدد {number} است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit03.lesson01.number_translate.003
+    lesson_content_key: en.a1.unit03.lesson01.zero_to_ten
+    type: translation
+    frame: {text: "{number}", language_code: fa, direction: rtl, slot_rendering: {number: english_gloss}}
+    slots: {number: *number}
+    answer_derivation: {kind: slot_text, slot: number}
+    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این عدد فارسی است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit03.lesson01.number_pair.004
+    lesson_content_key: en.a1.unit03.lesson01.zero_to_ten
+    type: matching_pairs
+    frame: {text: "{number_one} — {number_two}", language_code: en, direction: ltr}
+    slots: {number_one: *number, number_two: *number}
+    slot_relations: [{kind: distinct, slots: [number_one, number_two]}]
+    answer_derivation: {kind: matching_pairs, slots: [number_one, number_two]}
+    feedback_frame: {text: "هر عدد را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}
+
+  # Lesson 2: eleven to one hundred (reuses the same number pool).
+  - content_key: practice.fa-en.en.a1.unit03.lesson02.number_order.001
+    lesson_content_key: en.a1.unit03.lesson02.eleven_to_hundred
+    type: word_order
+    frame: {text: "{number_one} {number_two}", language_code: en, direction: ltr}
+    slots: {number_one: *number, number_two: *number}
+    slot_relations: [{kind: distinct, slots: [number_one, number_two]}]
+    answer_derivation: {kind: ordered_slot_texts, slots: [number_one, number_two]}
+    feedback_frame: {text: "ترتیب واژه‌ها را حفظ کنید: {number_one} قبل از {number_two}.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit03.lesson02.number_gloss.002
+    lesson_content_key: en.a1.unit03.lesson02.eleven_to_hundred
+    type: multiple_choice
+    frame: {text: "{number}", language_code: en, direction: ltr}
+    slots: {number: *number}
+    answer_derivation: {kind: slot_gloss, slot: number}
+    feedback_frame: {text: "معنی فارسی {number} را انتخاب کنید.", language_code: fa, direction: rtl}
+
+  # Lesson 3: ages, prices, and phone numbers.
+  - content_key: practice.fa-en.en.a1.unit03.lesson03.age_gloss.001
+    lesson_content_key: en.a1.unit03.lesson03.ages_prices_phones
+    type: multiple_choice
+    frame: {text: "{age_word}", language_code: en, direction: ltr}
+    slots: {age_word: *age_word}
+    answer_derivation: {kind: slot_gloss, slot: age_word}
+    feedback_frame: {text: "معنی فارسی {age_word} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit03.lesson03.age_fill.002
+    lesson_content_key: en.a1.unit03.lesson03.ages_prices_phones
+    type: fill_in_blank
+    frame: {text: "I'm {number} years {age_adjective}.", language_code: en, direction: ltr}
+    slots: {number: *number, age_adjective: *age_adjective}
+    answer_derivation: {kind: slot_text, slot: age_adjective}
+    feedback_frame: {text: "برای گفتن سن، از years {age_adjective} استفاده می‌شود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit03.lesson03.price_gloss.003
+    lesson_content_key: en.a1.unit03.lesson03.ages_prices_phones
+    type: multiple_choice
+    frame: {text: "{price_word}", language_code: en, direction: ltr}
+    slots: {price_word: *price_word}
+    answer_derivation: {kind: slot_gloss, slot: price_word}
+    feedback_frame: {text: "معنی فارسی {price_word} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit03.lesson03.price_fill.004
+    lesson_content_key: en.a1.unit03.lesson03.ages_prices_phones
+    type: fill_in_blank
+    frame: {text: "It's {number} {price_noun}.", language_code: en, direction: ltr}
+    slots: {number: *number, price_noun: *price_noun}
+    answer_derivation: {kind: slot_text, slot: price_noun}
+    feedback_frame: {text: "برای بیان قیمت، عدد را قبل از {price_noun} می‌گویند.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit03.lesson03.phone_fill.005
+    lesson_content_key: en.a1.unit03.lesson03.ages_prices_phones
+    type: fill_in_blank
+    frame: {text: "What's your {phone_word}?", language_code: en, direction: ltr}
+    slots: {phone_word: *phone_word}
+    answer_derivation: {kind: slot_text, slot: phone_word}
+    feedback_frame: {text: "{phone_word} این پرسش رایج دربارهٔ تلفن را کامل می‌کند.", language_code: fa, direction: rtl}
+
+  # Lesson 4: at the market (dialogue).
+  - content_key: practice.fa-en.en.a1.unit03.lesson04.market_gloss.001
+    lesson_content_key: en.a1.unit03.lesson04.market_dialogue
+    type: multiple_choice
+    frame: {text: "{market_word}", language_code: en, direction: ltr}
+    slots: {market_word: *market_word}
+    answer_derivation: {kind: slot_gloss, slot: market_word}
+    feedback_frame: {text: "معنی فارسی {market_word} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit03.lesson04.place_fill.002
+    lesson_content_key: en.a1.unit03.lesson04.market_dialogue
+    type: fill_in_blank
+    frame: {text: "Daniel is at the {place_singular}.", language_code: en, direction: ltr}
+    slots: {place_singular: *place_singular}
+    answer_derivation: {kind: slot_text, slot: place_singular}
+    feedback_frame: {text: "{place_singular} جایی است که دنیل آنجاست.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit03.lesson04.market_pair.003
+    lesson_content_key: en.a1.unit03.lesson04.market_dialogue
+    type: matching_pairs
+    frame: {text: "{market_word_one} — {market_word_two}", language_code: en, direction: ltr}
+    slots: {market_word_one: *market_word, market_word_two: *market_word}
+    slot_relations: [{kind: distinct, slots: [market_word_one, market_word_two]}]
+    answer_derivation: {kind: matching_pairs, slots: [market_word_one, market_word_two]}
+    feedback_frame: {text: "هر واژه را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit03.lesson04.market_translate.004
+    lesson_content_key: en.a1.unit03.lesson04.market_dialogue
+    type: translation
+    frame: {text: "{market_word}", language_code: fa, direction: rtl, slot_rendering: {market_word: english_gloss}}
+    slots: {market_word: *market_word}
+    answer_derivation: {kind: slot_text, slot: market_word}
+    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژهٔ فارسی است.", language_code: fa, direction: rtl}
