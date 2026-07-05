@@ -140,6 +140,64 @@ def validation_errors(db: Session, data: ImportRequest):
     return list(dict.fromkeys(errors))
 
 
+def _import_units(db: Session, course: Course, units_data):
+    """Create units (and their lessons/teaching/exercises) under `course`.
+
+    Additive only -- callers are responsible for ensuring `units_data`
+    contains no units that already exist under `course` (matched by the
+    `(course_id, order)` unique constraint on `Unit`), so this never
+    touches or duplicates existing content.
+    """
+    for unit_data in units_data:
+        unit = Unit(
+            course_id=course.id,
+            title=unit_data.title,
+            order=unit_data.order,
+            section=unit_data.section,
+        )
+        db.add(unit)
+        db.flush()
+
+        for lesson_data in unit_data.lessons:
+            lesson = Lesson(
+                unit_id=unit.id,
+                title=lesson_data.title,
+                order=lesson_data.order,
+            )
+            db.add(lesson)
+            db.flush()
+
+            for teaching_order, card in enumerate(
+                lesson_data.teaching,
+                1,
+            ):
+                db.add(
+                    ContentItem(
+                        course_id=course.id,
+                        lesson_id=lesson.id,
+                        teaching_order=teaching_order,
+                        kind=card.kind,
+                        language_code=card.text_blocks[0].language_code,
+                        title=card.title or "",
+                        content={
+                            "text_blocks": [
+                                block.model_dump()
+                                for block in card.text_blocks
+                            ],
+                            "note": card.note,
+                        },
+                    )
+                )
+
+            for exercise_data in lesson_data.exercises:
+                db.add(
+                    Exercise(
+                        lesson_id=lesson.id,
+                        **exercise_data.model_dump(),
+                    )
+                )
+
+
 def import_content(db: Session, data: ImportRequest):
     errors = validation_errors(db, data)
     if errors:
@@ -157,14 +215,51 @@ def import_content(db: Session, data: ImportRequest):
         )
 
         if existing:
+            # Course already exists -- never delete/recreate it (that
+            # would cascade-wipe real user progress). But an existing
+            # course previously could never receive units authored
+            # AFTER its initial import either: this branch used to
+            # `continue` unconditionally, silently discarding every
+            # new unit in course_data along with it. Units are unique
+            # per (course_id, order), so any unit in course_data whose
+            # `order` isn't already present under `existing` is new
+            # content that was never imported -- append exactly those,
+            # and leave every already-present unit/lesson/exercise
+            # byte-for-byte untouched.
+            existing_orders = {
+                order
+                for (order,) in db.execute(
+                    select(Unit.order).where(
+                        Unit.course_id == existing.id
+                    )
+                )
+            }
+            new_units = [
+                unit_data
+                for unit_data in course_data.units
+                if unit_data.order not in existing_orders
+            ]
+            if not new_units:
+                logger.info(
+                    "Skipping existing course, no new units to append: "
+                    "id=%s source=%s target=%s title=%r",
+                    existing.id,
+                    existing.source_language,
+                    existing.target_language,
+                    existing.title,
+                )
+                continue
+
             logger.info(
-                "Skipping existing course without modification: "
+                "Appending %d new unit(s) to existing course: "
                 "id=%s source=%s target=%s title=%r",
+                len(new_units),
                 existing.id,
                 existing.source_language,
                 existing.target_language,
                 existing.title,
             )
+            _import_units(db, existing, new_units)
             continue
 
         course = Course(
@@ -177,54 +272,7 @@ def import_content(db: Session, data: ImportRequest):
         db.add(course)
         db.flush()
 
-        for unit_data in course_data.units:
-            unit = Unit(
-                course_id=course.id,
-                title=unit_data.title,
-                order=unit_data.order,
-                section=unit_data.section,
-            )
-            db.add(unit)
-            db.flush()
-
-            for lesson_data in unit_data.lessons:
-                lesson = Lesson(
-                    unit_id=unit.id,
-                    title=lesson_data.title,
-                    order=lesson_data.order,
-                )
-                db.add(lesson)
-                db.flush()
-
-                for teaching_order, card in enumerate(
-                    lesson_data.teaching,
-                    1,
-                ):
-                    db.add(
-                        ContentItem(
-                            course_id=course.id,
-                            lesson_id=lesson.id,
-                            teaching_order=teaching_order,
-                            kind=card.kind,
-                            language_code=card.text_blocks[0].language_code,
-                            title=card.title or "",
-                            content={
-                                "text_blocks": [
-                                    block.model_dump()
-                                    for block in card.text_blocks
-                                ],
-                                "note": card.note,
-                            },
-                        )
-                    )
-
-                for exercise_data in lesson_data.exercises:
-                    db.add(
-                        Exercise(
-                            lesson_id=lesson.id,
-                            **exercise_data.model_dump(),
-                        )
-                    )
+        _import_units(db, course, course_data.units)
 
         for item_data in course_data.content_items:
             db.add(

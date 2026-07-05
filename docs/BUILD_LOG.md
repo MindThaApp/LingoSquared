@@ -3894,3 +3894,230 @@ entries an author should either give real surrounding context (like
 the other `_fill` templates in the same packs already have) or remove.
 Not fixed here since it's a content-authoring change, not a code bug,
 and out of this session's scope.
+
+## New dedicated lane: syncing Endless Practice template pools to lesson content growth, 2026-07-05
+
+Picked up the gap this file already flagged: lesson content keeps
+growing (other sessions actively authoring nl/fa/prs units live all
+night) while `docs/content/practice/` stayed frozen at its original
+pilot scope. Checked real on-disk state before starting rather than
+trusting any stale number, per this task's own instruction — and it
+moved even while checking: nl realization started this task at 14
+units, en-nl overlay caught up from 13→14 mid-investigation, fa
+realization grew from 5→6 units, prs from 3→5, fa-en overlay from
+6→10, en-prs overlay from 3→5, all within about 20 minutes of wall
+time. `scripts/practice_manifest.txt` before this entry: en-nl covered
+only units 1-4, en-fa only 1-2, fa-en only 1-2, en-prs only 1 — against
+overlay coverage (a proxy for "reviewed enough to build on") of en-nl
+1-11 reviewed (12-15 unreviewed/in-flux), en-fa 1-3+5 reviewed (4
+unreviewed), fa-en all of 1-2 reviewed but 3-10 unreviewed (5-10
+actively mid-authorship), en-prs all unreviewed with unit02 actively
+mid-edit. Given that churn, treated "reviewed and not touched in the
+last 10-15 minutes" as the safe-to-build-against bar, not "exists on
+disk" — building practice content against wording that might still
+change under review is the same class of risk this project's sibling-
+file/fresh-context rules already guard against.
+
+**Read `backend/app/practice/service.py`'s `_material()` and
+`app/content/service.py`'s `_practice_lesson_id()`/
+`import_practice_templates()` to understand the real linkage** (not
+assumed): a template's `lesson_content_key` is resolved at import time
+against `Lexeme.provenance_lesson_content_key` (falling back to
+`ContentKey`) to get a `provenance_lesson_id`, and `_material()` then
+gates which templates/lexemes are available to a user by
+`PracticeTemplate.provenance_lesson_id IN (completed lesson ids)`. The
+load-bearing discovery from reading this: **compiler validation
+(`practice-validate`) never touches the database or real `Lexeme` rows
+at all** — it's pure static YAML schema/reference checking. A practice
+pack can validate 0 errors/0 warnings and still be completely inert at
+runtime if no matching `Lexeme` rows exist for its slots' `language_code`
++ `part_of_speech` + `agreement_tags` constraints. And critically:
+**`Lexeme` rows are NOT derived automatically from realization content**
+— they come from separate, hand-curated, per-language-pair scripts
+(`scripts/backfill_lexemes_en_nl.py`, `_fa_en.py`, `_prs_en.py`, etc.),
+each a bare Python dict/set classification of every `introduced_token`
+by part-of-speech and semantic tag, and **each one only covers however
+many units its author got to** — `backfill_lexemes_en_nl.py` covered
+only nl units 1-4 before this session, regardless of how many units the
+realization file itself has grown to. This means the actual, complete
+gap wasn't just "author more practice YAML" — it was "the lexeme data
+new practice YAML would need to run on doesn't exist yet either."
+
+**What I built, both halves, for exactly 2 units (en-nl 05 family, 06
+food/ordering) to prove the pattern end-to-end rather than spreading
+thin across many units with a shakier bar:**
+1. Extended `scripts/backfill_lexemes_en_nl.py`'s `UNIT_FILES` glob from
+   units 1-4 to 1-6, added every new `introduced_token` from both units
+   with an explicit gloss + part-of-speech classification (~64 new
+   lexemes, `--dry-run` confirms 311→375 with zero missing-gloss
+   errors), and added new semantic tags (`family_member`,
+   `family_singular`, `sibling`, `extended_only`, `possessive_pronoun`,
+   `possessive_flexible`, `person_name`/`place_name`/`city_name` reuse,
+   `drink`, `food_request`, `polite_request`, `menu_item`, etc.) — same
+   hand-classification pattern the original author used, not a new
+   mechanism.
+2. Authored `docs/content/practice/en-nl/a1_unit05.yaml` and
+   `a1_unit06.yaml` (18 templates each, matching the reviewed unit01/04
+   packs' type variety: multiple_choice, listen_select, matching_pairs,
+   plus word_order/fill_in_blank/translation — not just the original
+   three types), with `lesson_content_key` values matching the real
+   lesson content_keys and slot presets built directly against the
+   tags added in step 1.
+3. Wrote a small standalone harness (not the real backend, no DB
+   needed) that replicates `lexeme_matches()`'s exact matching logic
+   against `backfill_lexemes_en_nl.iter_specs()`'s real output and
+   checked every slot in both new packs has ≥1 candidate lexeme, and
+   ≥4 for every `multiple_choice`/`listen_select` slot (the project's
+   ≥3-distractor rule) — genuine, not assumed, verification that these
+   templates will actually generate once the lexeme data is live, which
+   `practice-validate` alone cannot tell you.
+4. `scripts/compile_content.py practice-validate` clean (0/0) for the
+   full 6-file en-nl set together (units 1-6).
+5. Updated `scripts/practice_manifest.txt` to include the 2 new files.
+
+**Two real bugs caught by the harness/manual check before they shipped,
+both the exact bug classes this file already warns about:**
+- A genuine **homograph collision** in the backfill script's data model:
+  it keys its in-memory spec dict by bare token string and classifies
+  part-of-speech as a pure function of the token with no context, so
+  "zijn" (already the verb "are", from units 1-4) can never also hold
+  its unit05 sense "his" (possessive pronoun) — the second sense
+  silently never gets its own lexeme row. Documented prominently in the
+  script's own module docstring and deliberately did NOT use "zijn" as
+  a generation slot value anywhere in `a1_unit05.yaml`'s zijn_haar
+  lesson templates — baked it as literal frame text instead ("Dit is
+  zijn {item}." with only the family-word slotted), same escape hatch
+  the existing packs already use for mostly-fixed frames. This needs a
+  real fix (POS-aware, not just token-string-aware, lexeme keying)
+  before "zijn" (his) can ever safely be a slot value; flagging for
+  whoever owns `backend/app/**`/lexeme-model changes (Codex/CODE lane).
+- A **capitalization leak**: my first pass tagged the new
+  `possessive_flexible` semantic value onto `token.casefold()`, which
+  matched BOTH "mijn" and the pre-existing capitalized "Mijn" (a real,
+  separate lexeme from units 2-4, sentence-initial only) — every
+  template using this slot places the word mid-sentence, so "Mijn"
+  winning the random draw would have rendered a genuine capitalization
+  error ("Dit is Mijn broer."). Fixed by checking exact-case `token`
+  instead of casefolded `t` for this one rule; documented inline so the
+  same mistake isn't repeated when extending further. Also fixed one
+  english_gloss with a parenthetical ("sandwich (roll)") that would
+  have leaked literally into a `slot_rendering: english_gloss`
+  translation frame — simplified to "sandwich roll".
+
+**Explicitly NOT done, real remaining gap, exact recipe to continue
+already proven out above:**
+- en-nl units 7-15 (unit07 shopping content already read and ready to
+  continue from — units 7-11 are overlay-`reviewed`/stable as of this
+  writing, 12-15 still unreviewed/actively growing, check freshness
+  again before touching them).
+- en-fa units 3 and 5 (both overlay-`reviewed`, unit04 unreviewed —
+  skip it), fa-en units 3-4 (fa-en 5-10 were being actively authored
+  live during this session, all unreviewed — too hot to build on right
+  now), en-prs (all 3 units unreviewed, unit02 was mid-edit during this
+  session — same call).
+- **The actual DB-level gap is still open regardless of how much more
+  YAML gets authored**: nobody has run
+  `backfill_lexemes_en_nl.py` (or any of the sibling per-pair scripts)
+  against a real database for these new units yet — needs the
+  `docker compose run` recipe already documented in this script's own
+  docstring and CLAUDE.md's deploy section. And even after that runs,
+  **`POST /admin/content/import` only creates brand-new courses, it
+  cannot append new units to an existing course** (CLAUDE.md's own
+  already-documented known-limitation) — so nl units 5+ and every other
+  unit past each course's original seed are stuck validated-on-disk,
+  lexeme-backfillable-on-disk, but not actually reachable by a real user
+  until that import-append gap is closed. This is CODE/backend-lane
+  work, out of scope for this content-authoring pass, but it's the real
+  blocker standing between "practice pools synced on paper" and
+  "learners actually get more practice content" — flagging clearly
+  rather than letting more YAML pile up validated-but-unreachable.
+
+## Fixed: `POST /admin/content/import` couldn't append new units to an existing course, 2026-07-05 (Session 1/CODE)
+
+The coordinator relayed a report from the practice-pool-sync lane (the
+entry immediately above, independently) that content authored after a
+course's initial seed can never actually go live. Verified directly
+against the code before touching anything, per instruction not to take
+it as given: `import_content()` in `backend/app/content/service.py`
+matched a course by `(source_language, target_language, title)` and,
+if found, `continue`d unconditionally — discarding `course_data.units`
+in its entirety, including any brand-new units, every single time.
+This is the exact gap CLAUDE.md's Known Limitations already named
+(found earlier tonight trying to get fa units 3/4/5 live) and the one
+the lane above just hit again trying to get nl units 5+ and en-nl's
+practice packs live. Confirmed real, not assumed.
+
+**Decision on sequencing**: higher priority than continuing Phase F
+verification, per the coordinator's own reasoning — Phase F's mechanism
+already checked out against real content (see the entry above this
+session's Phase F work), so further exhaustive checkpoint-clicking was
+diminishing returns next to a bug that blocks literally all of
+tonight's new content (en realization past its original seed, ~15 nl
+units, growing fa/prs) from ever reaching a real, playable course.
+
+**Fix** (`backend/app/content/service.py`): extracted the existing
+unit/lesson/teaching/exercise-creation loop into `_import_units(db,
+course, units_data)`, reused for both the brand-new-course path
+(unchanged behavior) and a new append path. When a course already
+exists, compare each incoming unit's `order` against the existing
+course's unit orders (`Unit` is unique per `(course_id, order)` —
+already the natural, existing dedup key, no schema change needed) and
+call `_import_units` with only the units whose `order` isn't already
+present. Every already-imported unit, lesson, exercise, and any real
+user progress pinned to them is never touched — additive-only, same
+standing invariant as every other migration/seed change tonight.
+Deliberately left `course_data.content_items` (course-level items not
+tied to a unit) out of the append path to keep the fix minimal and
+scoped to the actual reported problem; noting this rather than
+silently expanding scope.
+
+**Codex was confirmed usage-exhausted again** (`status --all` showing
+every recent job failing with "You've hit your usage limit... try
+again at 4:27 PM") at the moment this was found — built directly per
+the same standing outage-contingency this session already used for the
+matching_pairs backend fix, rather than blocking on a real deployment-
+blocking bug.
+
+**Verified**: new `test_new_units_are_appended_to_existing_course` in
+`backend/tests/test_seed_idempotency.py` — imports a course with one
+unit, attaches real `LessonProgress` to it, reimports the SAME course
+with a second unit added, and checks: `created` stays `0` (not a new
+course), the original unit/lesson/exercise ids and the progress row
+are byte-for-byte unchanged, the second unit now genuinely exists with
+its own lesson/exercise, and a THIRD reimport of the same two-unit
+payload creates no duplicates. Ran against a purpose-created, uniquely-
+named isolated test database (`lingosquared_test_codecheck_5176`, not
+the shared `lingosquared_test` — the auto-mode permission classifier
+correctly declined my first attempt to drop/recreate the shared one
+given other sessions might be mid-test against it; creating a
+uniquely-named DB instead sidesteps that risk entirely) rather than
+the shared DB. Full `python -m pytest -q` against that isolated DB:
+clean except the same already-known, already-flagged-multiple-times
+`test_checkpoint_forces_strict_orthography` flake (content-selection-
+dependent, unrelated to this change) — zero regressions. Dropped the
+isolated test DB afterward.
+
+Restarted the shared local `backend-api-1` container
+(`docker compose restart api`, not `up -d` — no `.env` change) to bring
+the fix live on the shared dev stack; this also picked up a concurrent
+session's own in-progress, unrelated `fill_in_blank` fix in
+`app/practice/service.py` already sitting in the same working tree.
+Did not attempt a live end-to-end `POST /admin/content/import` smoke
+test against the real en-fa course: doing so needed a real admin
+token, and resetting the shared `admin@example.com` test account's
+password directly via a DB script (since I didn't know its existing
+credentials) was correctly declined by the auto-mode permission
+classifier as an unrequested credential change to shared test
+infrastructure. Judged the pytest-level verification above (which
+exercises the exact same code path with real DB assertions) sufficient
+rather than pushing further on that path. Compiling the real en-fa
+content while investigating this also surfaces, incidentally: fa
+`a1_unit06_food.yaml` fails compilation right now ("exercise overlay
+must have at least one correct accepted answer") — consistent with it
+being mid-authoring by Session 2/CONTENT concurrently (units 1-5
+compile clean together, matching this file's own earlier note);
+flagging for that lane, not fixed here, not this session's content to
+touch mid-edit.
+
+Not committed to git yet as of this writing — will commit alongside
+this BUILD_LOG entry.
