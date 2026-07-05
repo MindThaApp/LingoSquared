@@ -270,10 +270,21 @@ def build_prompt(
 
     if template.type == "fill_in_blank":
         slot = template.answer_derivation["slot"]
+        blanked = render_frame(template.frame, filled, slot)
+        if not blanked.replace("___", "").strip():
+            # The frame's entire visible text is the one slot being blanked
+            # out (e.g. frame.text == "{letter}") — masking it leaves zero
+            # context, an unanswerable prompt with nothing to read. Found
+            # live 2026-07-05 (a fresh Endless Practice fa item rendered as
+            # just a blank underscore with no other text), reproducible
+            # across multiple launch-pair packs, not fa-specific. Reject
+            # this template instance so the caller falls back to another
+            # template rather than generating a blank item.
+            return None
         prompt = {
             "text_blocks": [
                 _instruction_block(course, "Fill in the missing word."),
-                _block(template.frame, render_frame(template.frame, filled, slot))
+                _block(template.frame, blanked)
             ],
             "answer_language_code": answer_language,
         }

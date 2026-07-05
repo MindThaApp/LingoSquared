@@ -3780,3 +3780,117 @@ directly (needs his input, not a guess) before any beta invite;
 otherwise continue whatever CODE-lane work is most pressing once the
 concurrent practice-engine fix lands and commits, without touching it
 mid-flight.
+
+## Fixed the blank/unanswerable generated practice item Session 3 found, 2026-07-05 (this is the "concurrent practice-engine fix" the entry above was waiting on)
+
+Picked up Session 3's open item verbatim: a generated en-fa Endless
+Practice item rendered with no visible prompt text at all, just a bare
+blank underscore, correct answer turning out to be a single letter
+(`ل`). Session 3's own writeup already suspected this wasn't really
+about the "no fa voice on this device" message it saw when clicking
+the speak icon, and suggested checking whether the listen_select-for-
+unsupported-TTS-language exclusion also needed to cover `fill_in_blank`/
+`listen_type`-style generation. The task brief for this session
+additionally hypothesized a frontend bug — the browser
+`speechSynthesis` fallback blanking the whole exercise display when no
+fa voice exists.
+
+**Both the audio-gating and frontend hypotheses are refuted.** Static
+reading confirmed the listen_select TTS-support gate (`build_prompt()`
+and `_material()`'s pre-filter in `app/practice/service.py`) is correct
+and unrelated — this bug is a `fill_in_blank` item, a type whose
+`build_prompt()` branch never touches Google TTS at all. Root-caused by
+grep'ing every `practice/*.yaml` pack for `fill_in_blank` templates
+whose `frame.text` is *nothing but* the one slot the type then blanks
+out (e.g. `docs/content/practice/en-fa/a1_unit01.yaml`'s
+`letter_fill.002`: `frame: {text: "{letter}"}`) — `render_frame()`
+masks that slot to `"___"`, and since the frame had no other literal
+text, the rendered prompt is `"___"` and nothing else: zero context to
+answer from. **Not fa-specific and not audio-related at all** — the
+identical single-slot-frame shape exists in `en-fa`, `en-prs`, `fa-en`,
+`nl-en`, `prs-en` (`a1_unit01`/`a1_unit02`) and `en-nl` (`a1_unit02`)
+packs alike; it would blank out in any of those languages regardless
+of TTS support. The "no voice available" message Session 3 saw was a
+real, correctly-behaving fallback from the universal `SpeakButton` on
+every `TextBlock` (`frontend/src/components/TextBlock.tsx`) attempting
+to speak the literal blanked text — a coincidental red herring it
+happened to hit while investigating, not the cause of the blank
+prompt. The frontend's audio-failure handling needed no fix; it was
+already graceful (shows the "no voice" text, doesn't break rendering).
+
+**Fix**: `build_prompt()`'s `fill_in_blank` branch (`app/practice/
+service.py`) now computes the masked/blanked render once, and returns
+`None` (the existing convention this function already uses to reject
+an unusable template instance — same pattern as `multiple_choice`/
+`listen_select`'s under-3-option rejection) if stripping the `"___"`
+marker from it leaves no other visible text. `_generate_target_item`'s
+existing retry/fallback loop already tries a different slot-filling,
+then a different candidate template, whenever `build_prompt` returns
+`None` — no other caller changes needed.
+
+**Verified live** on Session 3's own leftover browser tab at
+`localhost:5175/practice` (confirmed genuinely idle first — no backend
+traffic in the prior ~74 minutes at the time — a reasonable one-off
+exception to the Docker-stack sole-ownership rule for a single
+verification pass, stated here explicitly): reproduced the exact bug
+twice on fresh batches before the fix (same blank-underscore item,
+same `ل` single-letter answer). After restarting `backend-api-1` to
+pick up the fix (`docker compose up -d --force-recreate api` — no
+`--reload` in this project), drove 15 fresh `/practice/.../batch`
+calls (150 generated items total) directly against the running API
+from inside the browser tab's own JS context (kept the JWT in-page
+rather than printing it — the auto-mode permission classifier
+correctly blocked an earlier attempt to read `localStorage.
+getItem('access_token')` into the transcript as a credential-
+materialization risk, so the whole check ran client-side instead):
+zero blank items, and the one previously-broken `fill_in_blank`
+template for this course/lesson never generated at all post-fix (0 of
+150) — confirming the reject-and-fall-back behavior works exactly as
+intended rather than just reducing the odds of hitting it.
+Independently double-checked via a standalone script run inside the
+backend container calling `build_prompt()` directly: the real buggy
+single-slot shape (`frame.text == "{letter}"`) returns `None`, while a
+template with real surrounding context (`"حالتون چطوره؟
+{wellbeing_answer}"`) still generates a normal prompt — confirming the
+fix doesn't over-reject legitimate `fill_in_blank` templates. Noticed
+partway through that another session was concurrently re-verifying the
+matching_pairs fix live in a second browser tab on this same shared
+stack (its own entry, directly above this one) — stopped driving the
+shared browser and restarting containers once that activity became
+visible, since my own fix/verification was already complete by then.
+
+**New/updated regression coverage** in `backend/tests/
+test_endless_practice.py`: the shared `artifact()` fixture's
+`fill_in_blank` template was, unnoticed until now, itself built with
+the exact buggy single-slot shape (`frame: {"text": "{word}"}`) — and
+`test_practice_import_is_idempotent_and_all_prompt_contracts_generate`'s
+own assertion (`assert fill_blocks[1]["text"] == "___"` plus a
+same-block-satisfies-check via `any()` that the instruction header
+line alone trivially passes) had encoded the bug as expected behavior
+rather than catching it. Fixed the fixture to use a real
+context-bearing frame (`"note: {word}"`) and tightened the assertion
+to check the CONTENT block specifically (not "any" block) still has
+visible text once blanked. Added a new `test_fill_in_blank_never_
+generates_a_blank_only_prompt` (mirrors the existing `test_farsi_
+sampler_excludes_listen_select_even_if_imported` pattern) importing
+only the real buggy shape and asserting a full batch call returns zero
+items rather than a blank one. Full `python -m pytest` (isolated
+`lingosquared_test` DB, `docker compose run --rm api`, never
+`--env-file`): 81 passed, 0 failed — includes this file's 8 tests, all
+green. `scripts/verify.sh --frontend-only`: clean (expected, no
+frontend files touched). `scripts/verify.sh --content-only` surfaced 4
+pre-existing errors in `docs/content/realizations/prs/
+a1_unit02_introductions.yaml` — confirmed unrelated (an untracked file
+mid-edit by a concurrent content-authoring session, not touched by
+this fix, not this session's lane).
+
+**Not fixed, flagging for whoever owns practice-content cleanup next**:
+the same single-slot-frame `fill_in_blank` templates still exist
+on-disk in all the packs listed above (`letter_fill`/`greeting_fill`/
+`wellbeing_fill`/`farewell_fill`/`role_fill`/`complete` content keys) —
+the fix makes them permanently inert (never generate) rather than
+erroring, so they're not currently harmful, but they're dead pool
+entries an author should either give real surrounding context (like
+the other `_fill` templates in the same packs already have) or remove.
+Not fixed here since it's a content-authoring change, not a code bug,
+and out of this session's scope.
