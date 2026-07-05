@@ -182,3 +182,83 @@ especially for fa/prs where the project currently has zero TTS coverage.
 Tatoeba's CC-BY sentence corpus remains reference-only per the original
 policy (attribution tracking not built, content unreviewed) — this
 section does not change that.
+
+## 11. Cross-check facts within a lesson, not just each item in isolation
+
+A real bug shipped 2026-07-05: a "choose the cheapest item" exercise was
+keyed to Rice ($3/bag) as correct, while the same lesson's own price
+labels put Apples at $2/pound — genuinely cheaper. Both the exercise and
+the label were individually well-formed; nobody checked them *against
+each other*. This is a distinct failure mode from the ones already
+covered above (§5 checks instruction against its own answer data; this
+is checking a fact against every OTHER fact stated elsewhere in the same
+scenario). Before finalizing a lesson, list every concrete fact it
+states or implies (prices, times, quantities, names, locations) and
+verify they're mutually consistent across every exercise and teaching
+card that touches them — not just internally coherent one at a time.
+This matters most for exercises with a comparative or superlative answer
+("cheapest," "most," "first," "closest") since those are exactly the
+ones whose correctness depends on facts stated elsewhere.
+
+## 12. Author every natural multi-clause phrasing, not just one punctuation form
+
+A recurring gap found across many units in the same review pass: answers
+combining two natural clauses (e.g. "I come from Egypt. And you?") were
+often authored with only ONE joining form accepted — typically the
+period-separated version — when comma-joined and "and"-joined variants
+("I come from Egypt, and you?") are equally natural and a real learner
+would type them interchangeably. This matters more than it looks:
+Phase C's typo-tolerance only forgives distance-1 character edits, and a
+missing comma or an inserted "and" exceeds that distance, so these gaps
+silently produced the "app marked me wrong for a right answer" failure
+mode this whole review methodology exists to prevent. When authoring or
+reviewing any multi-clause `accepted_answers` list, explicitly write out
+the period-joined, comma-joined, and conjunction-joined forms (as
+`status: correct`, not `acceptable_with_note` — they're equally correct,
+not merely tolerated) rather than defaulting to a single form and
+assuming typo-tolerance will cover the rest.
+
+## 13. A blanked slot needs surrounding context, or the exercise is unanswerable
+
+A real bug shipped 2026-07-05: several `fill_in_blank` templates authored
+`frame.text` as nothing but the one token being blanked (e.g.
+`frame: {text: "{letter}"}`), so masking it left a bare `"___"` with zero
+surrounding context — not hard, *impossible*, since there was nothing
+left to reason from. This existed across six different language packs,
+confirming it's a pattern to actively guard against, not a one-off typo.
+When authoring any `fill_in_blank` item (lesson content or a practice
+template's `frame`), the frame must contain visible text *besides* the
+blanked slot — enough that a learner who already knows the target word
+can locate where it goes from context. If the natural sentence really is
+just the one word, use a `translation` or `writing_prompt` type instead
+of `fill_in_blank`.
+
+## 14. Avoid `listen_type` (and other audio-only-dependent exercise
+types) for fa/prs lesson content until real recorded audio exists
+
+A real gap found live 2026-07-05 (Dari QA pass): a `listen_type`
+exercise ("Listen and type the conventional response") gave the learner
+literally zero visual hint of the target phrase — no text anywhere in
+the DOM, no network request even attempted for audio (correct behavior,
+not a bug: fa/prs have zero Google Cloud TTS voices, so the frontend
+correctly skips the fetch), and the wrong-answer feedback's only clue
+was the answer text itself, revealed *after* the learner already failed.
+The exercise was solvable only by a learner who happened to already know
+the correct response, which defeats the point of a listening exercise.
+This is different from (and narrower than) the Endless Practice engine's
+existing `listen_select`-for-fa exclusion (a generator-side guard) — this
+is hand-authored LESSON content using `listen_type`, which has no
+equivalent guard.
+
+Until real recorded audio exists for a given fa/prs phrase (see §10 and
+`docs/BUILD_LOG.md`'s audio-manifest/Phase D notes — browser
+`speechSynthesis` fallback quality for `fa-AF` is itself uncertain, "may
+produce no sound or wrong accent"), **do not author `listen_type` (or
+any other exercise type whose only prompt is audio, e.g. bare
+`listen_select`/`listen_order` items with no text_blocks fallback) for
+fa/prs lesson content.** Use `translation`, `dialogue_response`,
+`writing_prompt`, or another type that gives the learner a real,
+visible prompt to work from instead. Once a phrase has a genuine
+recorded asset (`media_asset_key` resolves), authoring `listen_type`
+against it is fine — the gap is specifically "audio-only prompt with no
+working audio," not the exercise type itself.

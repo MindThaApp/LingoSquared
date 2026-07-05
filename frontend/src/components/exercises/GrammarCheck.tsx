@@ -6,11 +6,55 @@ import { answerScriptForExercise, scriptNeedsVirtualKeyboard } from "../../lib/s
 import { useKeyboardFocus } from "../../lib/useKeyboardFocus";
 import type { ExerciseComponentProps } from "./types";
 
+// Some grammar_check exercises are authored as a closed yes/no (or other
+// fixed-choice) question via `options` (e.g. "Does Dari run from right to
+// left?") rather than an open-ended "correct this sentence" prompt — the
+// compiled prompt has always carried `options` for these (confirmed
+// against both a fresh compile and the live-imported DB), but this
+// component never read it and always rendered a free-text input
+// regardless, showing no visible choices for a yes/no question. Render as
+// selectable options when present (same pattern as MultipleChoice), and
+// keep the original free-text correction UI as the fallback for
+// open-ended grammar_check exercises that have no `options`.
 export function GrammarCheck({ exercise, onAnswer, disabled }: ExerciseComponentProps) {
   const { t } = useTranslation();
   const [value, setValue] = useState("");
+  const [selected, setSelected] = useState<string | null>(null);
   const script = answerScriptForExercise(exercise);
   const { showKeyboard, dismissKeyboard, inputProps } = useKeyboardFocus();
+  const options = exercise.prompt.options;
+
+  if (options && options.length > 0) {
+    // No fixed "Correct the grammar in this sentence" header here — that
+    // copy is specific to the open-ended free-text mode below and is
+    // misleading for a closed question (e.g. yes/no); the actual question
+    // is already authored into the exercise's own text_blocks.
+    return (
+      <div className="exercise-shell">
+        <TextBlockList blocks={exercise.prompt.text_blocks} />
+        <div className="exercise-options">
+          {options.map((option) => (
+            <button
+              key={option}
+              type="button"
+              className={`exercise-option${selected === option ? " selected" : ""}`}
+              onClick={() => !disabled && setSelected(option)}
+              disabled={disabled}
+            >
+              {option}
+            </button>
+          ))}
+        </div>
+        <button
+          className="btn btn-block"
+          disabled={disabled || !selected}
+          onClick={() => selected && onAnswer(selected)}
+        >
+          {t("common.check")}
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="exercise-shell">

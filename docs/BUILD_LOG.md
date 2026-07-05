@@ -4676,3 +4676,1034 @@ checklist note **uncommitted** in the working tree - deliberately not
 committing without an explicit instruction to, per standing practice.
 All changes are additive-only, verified live against the rebuilt shared
 `backend-api-1`, and ready to commit as-is.
+
+## Practice-pool sync continued: nl-en units 3-8, 2026-07-05 (same lane as the earlier en-nl 05/06 entry)
+
+Continued past the earlier en-nl unit05/06 work per the coordinator's
+explicit scope split: a separate agent took en-fa/fa-en/en-prs (visible
+progress in `scripts/practice_manifest.txt`: en-fa now 1-4, fa-en 1-3,
+en-prs 1-2), this lane covers **nl-en exclusively**. Content kept
+growing throughout: en realization (shared target content for all
+three X->en directions) went 2->14 units, nl-en overlay caught up in
+lockstep, both mid-investigation.
+
+**Real architectural discovery, load-bearing for everything below**:
+`docs/content/practice/nl-en/*.yaml` templates only ever slot on
+`language_code: en` lexemes (the English target vocabulary) — the
+`Lexeme.english_gloss` field on those rows is misleadingly named: for
+an X->en course it holds the SOURCE language's translation (Dutch
+here), not English, per a documented bug this project already caught
+once ("the exercise degenerates to matching an English word against
+itself" if this rule is violated). Classification of the English
+tokens themselves (`EN_POS`/`en_agreement_tags`) lives in a file
+SHARED by all three X->en backfill scripts
+(`scripts/_en_target_lexeme_common.py`, used by nl_en/fa_en/prs_en),
+since they teach the identical English realization — only each
+script's own Dutch/Farsi/Dari gloss dict differs. Extended this shared
+file for units 3-8; the en-fa/fa-en/en-prs agent's fa-en/prs-en work
+only needs its own gloss dicts layered on top of the POS classification
+already done here, not a re-classification of the English tokens —
+flagging this explicitly so that lane doesn't duplicate it.
+
+**Delivered, both halves each time (lexeme classification + matching
+template pack), for nl-en units 3 through 8** (numbers, dates,
+telling the time, family, food/ordering, shopping) — `scripts/
+backfill_lexemes_nl_en.py` extended from 2 to 196 English + 210 Dutch
+lexemes, `docs/content/practice/nl-en/a1_unit0{3,4,5,6,7,8}.yaml`
+authored (14-16 templates each, same recognition/structured/production
+type variety as the reviewed unit01 pack: multiple_choice, listen_select,
+matching_pairs, plus word_order/fill_in_blank/translation), `scripts/
+practice_manifest.txt` updated after each unit. Every slot's real
+candidate count was checked with a standalone harness replicating the
+engine's exact `lexeme_matches()` logic against the real backfill
+script's output (not just `compile_content.py practice-validate`, which
+never touches the database or real `Lexeme` rows — a pack can validate
+0/0 clean and still be completely inert at runtime) — confirmed >=4
+candidates for every `multiple_choice`/`listen_select` slot and >=1 for
+every other slot, for all 6 units.
+
+**Several real grammar/agreement bugs caught and fixed by this
+harness-plus-manual-review process before they shipped, all the same
+underlying class (a tag pool broad enough to pass validation but narrow
+correctness checks would have missed):**
+- Unit03: did not build a slot from the 2-member `age_phrase` tag
+  (old/years) as alternatives — they're BOTH required together in
+  "years old", not interchangeable.
+- Unit04: same trap avoided for a 2-member farewell-adverb slot,
+  scoped to `part_of_speech: adverb` specifically (later/then) rather
+  than the full farewell tag (which also has noun/verb members
+  goodbye/bye/see that don't fit "Great, see you {item}.").
+  Added a narrower `city_name` tag (Dutch cities only, spelled
+  identically in English) separate from the broader `place_name` (which
+  also includes countries whose English gloss differs from the raw
+  token, e.g. Nederland -> "the Netherlands") to avoid a raw
+  untranslated Dutch word leaking into an English translation frame.
+- Unit05: excluded the functional time-telling words themselves
+  ('time'/'o'clock'/'half'/'quarter'/'past') as slot values entirely —
+  they are not interchangeable ('It's o'clock.' is not a sentence);
+  every slotted quantity in that pack's time-telling frames is the
+  number tag instead. Added `day_part_in` (morning/afternoon/evening,
+  excluding night — "in the night" is not idiomatic English) and
+  `day_part` (narrower than the pre-existing `time_period`, which
+  included "day" itself, a confusing distractor for a "which part of
+  the day" exercise).
+- Unit06: added `family_singular`/`family_collective`/`extended_family`
+  as three separate tags rather than one broad "family" tag — "This is
+  my parents." is a subject-verb number mismatch, so the collective
+  nouns (parents/siblings) are never offered in that frame.
+- Unit08: added a new, generally-reusable `count_plural` tag (the
+  established `number` tag minus "one", 21 members) for any "{item}
+  things" plural-count frame — "one" needs the singular form instead
+  and would silently produce a real grammar error if included. Added a
+  narrow `food_plural` tag (apples/eggs/tomatoes only) for "How much
+  are the {item}?", excluding unit07's food_item set (coffee/tea/water/
+  bread/soup/salad/sandwich — mass/singular nouns needing "is" not
+  "are"). `quantity_unit` (pound/dozen/bottle/bag/kilo) is deliberately
+  never slotted into a "{count} {item}" frame, since most of those
+  units need an explicit plural form not taught separately from the
+  singular.
+
+None of these would have been caught by `practice-validate` alone —
+every one required actually reasoning about what sentence the sampler
+could produce for every member of a tag pool, the same discipline this
+project's fresh-context content reviews already apply to hand-authored
+lesson content.
+
+**Still open, exact same shape as documented in the earlier en-nl
+entry**: nl-en units 9-14 (en realization/nl-en overlay both already
+exist for these, content kept growing to unit14 "communication" and
+beyond during this pass — check freshness again before continuing,
+per the standing instruction not to trust stale counts). No
+`backfill_lexemes_nl_en.py` run has actually happened against a real
+database for any of units 3-8 yet — needs the `docker compose run`
+recipe in that script's own docstring. Unlike the earlier en-nl entry,
+the admin-import "can't append units to an existing course" blocker
+Session 1/CODE has since fixed (see this file's own entry + CLAUDE.md's
+updated known-limitations section) no longer stands in the way once
+backfill is actually run — that's a genuine improvement in how close
+this content is to actually reaching a real learner.
+
+## Practice-pool-sync lane, fa/prs bundle: en-fa, fa-en, en-prs, 2026-07-05
+
+Same dedicated lane/methodology as the nl-en practice-pool-sync entries
+above (own lane, `docs/content/practice/en-nl/`, `.../overlays/en-nl/`,
+`backfill_lexemes_en_nl.py` explicitly untouched — that's a different
+session's exclusive scope), scoped instead to en-fa, fa-en, and en-prs.
+Confirmed on read: `prs-en` already has its own full backfill script
+(`scripts/backfill_lexemes_prs_en.py`) and practice pool (`docs/content/
+practice/prs-en/`, units 1-2) built by an earlier pass — its target
+language is `en` (real TTS, real practice relevance), so the task
+framing's assumption that "prs-en isn't needed" was wrong; left it
+untouched anyway since it wasn't in this lane's assigned scope and
+already has independent infrastructure, flagging for whoever picks up
+prs-en's own remaining gap (overlay already has 10 units authored,
+practice pool frozen at 2).
+
+Checked real on-disk state before starting, same discipline as the
+nl-en lane, and it kept moving during the check: a separate Farsi/Dari
+content lane was live-authoring the whole time (fa realization grew
+6→7 units, prs realization 5→7, en-prs overlay 5→7, prs-en overlay
+gained unit11, mid-session). Treated "reviewed AND not touched in the
+last ~10 minutes" as the safe-to-build-against bar. Real state at the
+time of authoring: en-fa overlay units 1-6 all reviewed and stable;
+fa-en overlay units 1-10 reviewed and stable (unit11 unreviewed, being
+authored live — skipped); en-prs overlay units 1-6 reviewed and stable
+(unit07 unreviewed, being edited live at that exact moment — skipped).
+
+**The `compile_content.py practice-validate` static-only gap (already
+documented by the nl-en lane above) reproduced here too, plus a second,
+worse layer**: `scripts/backfill_lexemes.py` (the *original* en-fa
+pilot script — misleadingly generic-named, it's actually en-fa-only)
+already covered units 1-4 in its `UNIT_FILES`/`FA_GLOSSES` classification
+(someone had extended it for units 3/4 numbers/family at some earlier
+point), but **no practice YAML had ever been authored past unit02** —
+units 3-4's lexeme data had been sitting completely unused. Separately,
+`backfill_lexemes_fa_en.py` and `backfill_lexemes_en_prs.py` were both
+still frozen at units 1-2/unit01 respectively despite their overlays
+already covering far more units.
+
+**What was built, both halves for every unit covered, exactly like the
+nl-en lane's pattern:**
+1. `docs/content/practice/en-fa/a1_unit03.yaml` (numbers) and
+   `a1_unit04.yaml` (family) — 18 and 15 templates respectively,
+   authored directly against `backfill_lexemes.py`'s *already-existing*
+   unit 3/4 lexeme classification (read `fa_agreement_tags()`/
+   `fa_part_of_speech()` source directly rather than assumed). No
+   backfill script change was needed for these two units specifically
+   — the real gap here was purely "nobody authored the practice YAML,"
+   confirmed by dry-running the unmodified script first.
+2. `scripts/backfill_lexemes_fa_en.py` extended from units 1-2 to
+   include unit03 (numbers/ages/prices/phones/market) — cheap to add
+   because the nl-en lane had *already* extended the shared
+   `scripts/_en_target_lexeme_common.py` module's `EN_POS`/
+   `en_agreement_tags()` for this exact English content (both fa-en and
+   prs-en teach the identical English realization); only a Farsi gloss
+   dict addition was needed, no new POS/tag classification work.
+   `docs/content/practice/fa-en/a1_unit03.yaml` authored to match (15
+   templates).
+3. `scripts/backfill_lexemes_en_prs.py` extended from unit01 to include
+   unit02 (name exchange, origin, occupation, introducing a third
+   person, polite titles, a gathering dialogue) — 28 genuinely new
+   tokens hand-classified directly from the real realization file (no
+   shared module to lean on here, since en-prs's target is Dari, not
+   English). `docs/content/practice/en-prs/a1_unit02.yaml` authored to
+   match (17 templates), respecting the pack's own already-stated hard
+   rule (Dari has zero TTS — no `listen_select` anywhere).
+4. Updated `scripts/practice_manifest.txt` for the three affected packs
+   only (left the concurrently-changing `nl-en`/`en-nl` lines alone).
+
+**Real bugs found and fixed while doing this, same "caught by actually
+checking the data, not just the schema" discipline the nl-en lane's
+entry documents:**
+- **`scripts/backfill_lexemes.py` was live-broken for ALL of units
+  1-4**, not just a hole in unit 3/4: the fa realization's unit04 file
+  had been fresh-context-reviewed with a fix that added a new teaching
+  phrase ("من متأهلم." — I'm married, alongside the pre-existing "من
+  مجردم." — I'm single), but the classifier's `FA_GLOSSES` dict was
+  never updated for the new token `متأهلم`. Running the unmodified
+  script (even just `--dry-run`) raised `ValueError: missing explicit
+  Farsi gloss for 'متأهلم'` — meaning the *entire* en-fa lexeme backfill
+  (not just family-unit content) had been broken since that review
+  landed, invisible to `practice-validate` or any content compiler
+  check since gloss classification lives entirely in this separate
+  Python script. Fixed by adding the gloss, the `FA_VERBS` POS entry,
+  and the `marital_status` semantic tag for this token (matching its
+  sibling `مجردم`'s existing treatment exactly).
+- **A real pre-existing tagging bug in `backfill_lexemes_en_prs.py`**:
+  `"کابل"` (Kabul, a city) was tagged `semantic: person_name` in the
+  original unit01-era code, grouped in with actual person names
+  (`حامد`, `نجیب`). Found while extending the classifier for unit02's
+  own city vocabulary (`هرات`, `مزار`, `شریف`) and needing a real
+  `city_name` tag to reuse — moved `کابل` out of `person_name` and into
+  the new `city_name` set instead, rather than leaving the bug in place
+  and merely working around it.
+- **A gender-agreement footgun caught before it shipped, not after**:
+  en-prs unit02's `title` slot (`جناب` "Mr./sir" vs. `خانم` "Ms./Mrs.")
+  has only 2 candidates — tempting to pair with a fixed name for a
+  natural-looking frame like `"{title} فریدون"`, but `جناب` is
+  male-only and `خانم` is female-only, and this course's lexeme model
+  has no gender-agreement tag on either titles or names yet. A randomly
+  filled version of that frame would render the ungrammatical `"خانم
+  فریدون"` (Ms. Faridun) roughly half the time. Same class of bug as
+  the nl-en lane's زijn/homograph caution and this lane's own "quantity"
+  slot avoidance (below) — designed around it instead by testing
+  `title` standalone (multiple_choice/translation/a name-free
+  fill_in_blank frame), never paired with a specific person_name in one
+  frame.
+- **A homograph-shaped modeling smell in en-fa unit03, avoided rather
+  than shipped**: `تا` (the counting classifier particle) and
+  `سیب`/`کتاب` (the nouns it counts) share one `quantity` semantic tag
+  in the backfill script's data model, but a `"{quantity} {noun}"`-
+  shaped frame would sometimes fill `تا` into both slots, rendering the
+  nonsense `"دو تا تا"`. Kept `تا` as fixed frame text wherever a
+  quantity phrase is templated, matching the exact caution class the
+  nl-en lane's own entry documents for `زijn`.
+
+**Verification, all four levels the task bar requires, not just a clean
+`practice-validate`:**
+1. `scripts/compile_content.py practice-validate` — 0 errors/0 warnings
+   for every pack (old and new) across all three language pairs, plus
+   `scripts/verify.sh --content-only`'s full realization+overlay
+   `validate` AND real `compile` (not validate-only) for all 7 course
+   pairs currently in `scripts/content_manifest.txt` — clean.
+2. Wrote `scripts/_practice_slot_check.py`, a standalone harness
+   (no DB, no backend import — a byte-for-byte port of `app/practice/
+   service.py`'s `lexeme_matches()`) that loads each backfill script's
+   real `iter_specs()` output and checks every template slot in every
+   pack has >=1 candidate lexeme, and every `multiple_choice`/
+   `matching_pairs` slot has enough distinct candidate values to
+   satisfy `build_prompt()`'s real `len(options) < 3` rejection rule.
+   This harness's run against the *existing, already-shipped* en-fa
+   unit01/unit02 packs (not authored by this lane) surfaced **16 real,
+   previously-invisible problems**: several `multiple_choice`/
+   `matching_pairs` templates (`greeting_meaning`, `farewell_choice`,
+   `question_meaning`, `name_word`, `iran_pair`/`england_pair`/
+   `france_pair`, `origin_marker`, etc.) whose slots have only 1-2
+   candidate lexemes — meaning these specific generated-item shapes
+   have been permanently rejected by `build_prompt()`'s minimum-option
+   check since the pilot pack shipped, silently reducing the effective
+   template pool without ever erroring. **Not fixed here** (out of this
+   lane's authoring scope — these are pre-existing files, not units this
+   lane was covering), flagging clearly for whoever owns en-fa unit01/02
+   cleanup next. All four of this lane's own new packs passed the
+   harness clean on the first real run (after the `متأهلم` fix above).
+3. **Ran the real thing end-to-end against the shared local dev stack**
+   (`backend-api-1` / `backend-db-1`, already running from a previous
+   session) rather than stopping at static checks:
+   - Compiled and `POST /admin/content/import`'d en-fa units 1-4,
+     fa-en units 1-3, and en-prs units 1-2 (using the exact same
+     admin-login recipe as `backend/tests/conftest.py`'s
+     `admin@example.com`/`password123` convention, confirmed already
+     valid on this shared stack) — confirmed the append-fix (this
+     file's own earlier entry, Session 1/CODE) works for real: `Farsi
+     A1` went from 2 to 4 real `Unit` rows, `انگلیسی A1` from 2 to 3,
+     `Dari A1` from 1 to 2, with zero disturbance to the pre-existing
+     units/lessons/exercises.
+   - Ran all three lexeme backfill scripts against this same live DB
+     (the documented `docker compose run --rm -v ... backfill_lexemes*.py`
+     recipe): 290 created/269 updated (en-fa, including the fixed
+     `متأهلم`), 35 created/54 updated (fa-en), 29 created/91 updated
+     (en-prs) — all clean, zero errors.
+   - Compiled and `POST /admin/courses/{id}/practice/import`'d all four
+     new practice packs: 41/72, 20/16, 25/11 created/updated across the
+     three pairs.
+   - Registered a fresh test account, directly inserted 46 completed
+     `LessonProgress` rows (all lessons across the imported units, real
+     schema, real required columns) so the practice engine's
+     lesson-completion gating would actually unlock the new material,
+     then hit the real `POST /practice/{course_id}/batch` endpoint
+     repeatedly against all three courses. **Confirmed real generated
+     items drawing specifically from the newly-backfilled unit
+     content** — e.g. en-fa items testing `برادر`/`دایی`/`عمه`
+     (family) and `دوازده`/`تومنه` (numbers) with correct, sensible
+     4-option distractor sets; fa-en items testing `zero`/`twenty-five`/
+     `apples`/`fifty` with correct Farsi distractor glosses; en-prs
+     items testing `فریدون`/`داکتر`/`معلم`/`مهندس`/`خانم` with correct
+     English glosses — not just the original unit01/02 pool. Also
+     specifically checked every generated `fill_in_blank` item across
+     all three pairs for the exact bug class in AUTHORING_GUIDE §13 (a
+     bare masked slot with no surrounding context): all had real
+     context (`"I'm three years ___."`, `"من از ___ استم."`, etc.),
+     zero bare-slot instances.
+   - **One more real, previously-invisible bug found only by actually
+     generating items, not by either static check**: a `matching_pairs`
+     item generated from the *existing, pre-existing* en-fa unit02
+     dialogue pack paired the proper name `نرگس` with an entire
+     multi-clause dialogue turn as the other "pair" value (`"مینا: باشه،
+     حتماً. شماره‌ام صفر، نه، یک، ...`) — because that pack's
+     `dialogue_word` slot preset includes `part_of_speech: phrase`,
+     and `backfill_lexemes.py`'s `iter_specs()` stores an entire
+     multi-token dialogue turn as one `phrase`-typed lexeme whenever a
+     teaching card's `target.text` has more than one `introduced_token`
+     and no newline. A learner-facing "drag to match" tile showing an
+     entire paragraph next to a single name is a genuinely broken
+     exercise shape. **Not fixed here** — same reasoning as the 16
+     harness-caught issues above: this is existing unit02 content, not
+     authored by this lane, flagging for whoever owns that cleanup.
+     Neither `practice-validate` nor this lane's own new
+     `_practice_slot_check.py` harness catches this specific shape
+     (both check candidate *counts*, not whether a candidate is an
+     inappropriately long phrase for a matching-tile UI) — worth adding
+     as a harness improvement if this pattern recurs.
+   - Left the test account and its `LessonProgress` rows in place on
+     the shared dev DB (additive-only, no existing user/content
+     touched, matches this project's standing seeding convention).
+
+**Explicitly not done, real remaining gap for whoever continues this
+lane:** fa-en units 4-10 (all reviewed and stable, per the freshness
+check above) and en-fa units 5-6/en-prs units 3-6 (reviewed and stable)
+still have zero practice-pack coverage and, for fa-en/en-prs, still need
+their respective backfill scripts extended further. prs-en's practice
+pool (frozen at units 1-2 despite a 10-unit overlay) is a real gap too,
+explicitly out of this pass's assigned scope per the task brief. The 16
+harness-caught en-fa unit01/02 issues and the phrase-in-matching-pairs
+bug above are real, live-verified, and unfixed.
+
+## Practice-pool sync (nl-en lane) continued through unit10, 2026-07-05
+
+Direct continuation of this file's earlier "nl-en units 3-8" entry —
+same lane, same coordinator-assigned scope (nl-en exclusively; the
+entry above this one covers the parallel en-fa/fa-en/en-prs lane).
+Extended two more units past that entry's stopping point: **nl-en
+units 9 (common places) and 10 (asking for/following directions)**,
+same both-halves treatment (English lexeme classification in the
+shared `scripts/_en_target_lexeme_common.py` + this pair's own Dutch
+glosses in `scripts/backfill_lexemes_nl_en.py`, then the matching
+`docs/content/practice/nl-en/a1_unit09.yaml`/`a1_unit10.yaml` pack),
+`scripts/practice_manifest.txt` updated after each. Backfill script now
+at 226 English + 245 Dutch lexemes (was 196/210 at the end of the
+unit08 entry). Full 10-file `nl-en` manifest set re-validated together,
+0 errors/0 warnings.
+
+**Two more real bugs of the same established class caught before
+shipping** (a tag pool broad enough to validate but narrow-correctness
+checks would have missed — same discipline as every prior unit this
+lane):
+- Unit09: the obvious 5-member `place` tag (bank/hospital/pharmacy/
+  park/restaurant) can't be slotted directly into lesson02's
+  hospital-anchored frames ("The {item} is next to/behind the
+  hospital.") — hospital is itself a pool member, so the sampler could
+  generate "The hospital is next to the hospital." Fixed with a
+  narrower `place_non_hospital` tag (4 members, hospital excluded),
+  used only in those two frames; the full `place` tag stays safe
+  everywhere else (bare-word recognition, and lesson03/04's
+  "Where is the {item}?", which has no second place to conflict with).
+- Unit10: this unit's own core vocabulary (turn/left/right/straight/
+  stop/corner/take/first/second/street) only yields 2-member tags
+  (`turn_direction`: left/right, deliberately excluding "straight"
+  since it pairs with "go" not "turn" — "Turn straight" is not
+  English; `street_ordinal`: first/second), neither large enough for
+  `multiple_choice`/`listen_select`'s >=4-candidate rule. Rather than
+  force a recognition-type template onto an unsafe pool, lessons 02
+  and 04 reuse unit09's already-verified `place` tag for a
+  `listen_select`/`multiple_choice` pair instead (thematically apt —
+  this unit's dialogues ask directions TO those same places), giving
+  the pack the same type variety as every other pack this pass without
+  inventing a new risky tag.
+
+Both packs' slot candidate counts verified with the same standalone
+`lexeme_matches()`-replicating harness used throughout this lane; both
+compiler-validate 0/0.
+
+**State at the end of this session's nl-en work**: units 3-10 done (8
+units, both halves each). Content kept growing throughout — checked
+again just now: `docs/content/realizations/en/` and
+`docs/content/overlays/nl-en/` are BOTH at 16 units already (added
+weather/clothing/emotions/communication/money/routines since the
+unit08 entry's "up to 14" note), overlay review status not re-checked
+for 11-16 this pass — check freshness again before continuing, per the
+standing instruction not to trust stale counts, exactly as this has
+happened repeatedly throughout tonight. **Exact recipe to continue is
+fully demonstrated across 8 real units now**: read the en realization
+unit + nl-en overlay unit, enumerate new `introduced_tokens`, classify
+each into `scripts/_en_target_lexeme_common.py`'s `EN_POS`/
+`en_agreement_tags` (shared — benefits fa-en/prs-en too, flag to that
+lane if still active) plus this script's own Dutch gloss dict, dry-run
+to catch missing classifications, design tag-scoped slots deliberately
+checking for the self-reference/number-agreement/interchangeability
+traps this entry and the previous one both document repeatedly, verify
+real candidate counts with the harness before writing the pack, then
+`compile_content.py practice-validate` + manifest update. Still open
+regardless of pack count: no `backfill_lexemes_nl_en.py` run has
+actually happened against a real database for any of units 3-10 yet.
+
+## Full live QA pass on Dari (en-prs / prs-en), on a genuinely fresh, fully isolated stack, 2026-07-05
+
+Picked up the task of end-to-end-verifying the en-prs compile fix
+(`bb1d7fb`, and a further Dari-specific dialogue-format fix landed by
+the content lane just before this pass started) with real live browser
+play, not just a green compiler run — per the standing verification bar,
+reading a diff or a clean `validate` pass is not verification.
+
+**Isolation approach, and why**: prs realization/overlay files were
+under heavy, active, uncommitted edits from the content-authoring lane
+for the entire duration of this pass (confirmed via `find -newer
+docs/BUILD_LOG.md`, `git status`, and repeated mtime checks before
+touching anything — `prs/a1_unit01_greetings.yaml` alone had a 300+
+line uncommitted diff in flight). Per the standing "don't build against
+a moving target" rule this file already documents elsewhere, did NOT
+run compiler/backend/frontend verification directly in the shared
+checkout. Instead: `git worktree add ../LingoSquared-qa-prs` from HEAD
+(no remote configured, so used a plain `git worktree add`, not the
+EnterWorktree tool, which defaults to basing new worktrees on
+`origin/<default-branch>` — there is no origin here), then took a
+one-time read-only `rsync` snapshot of the actual current on-disk prs/
+en-prs/en-fa/fa-en content (including untracked in-progress files) into
+that worktree so testing used the real, current, "just fixed" content
+rather than a stale committed-only subset or a live-editing target.
+Fully isolated Docker stack on ports **8031 (api) / 5454 (postgres)**,
+project name `ls2qaprs`, frontend Vite dev server on **5194** — new
+`backend/docker-compose.qa-prs.yml` + `backend/.env.qa-prs` +
+`frontend/.env.qa-prs` (all gitignored, `.env.*` already covered).
+Genuinely fresh `alembic upgrade head` from an empty DB succeeded
+clean (re-confirms the 0008-0012 defensive-migration-guard fix still
+holds). Registered a fresh admin matching this stack's own
+`ADMIN_EMAILS`, ran `python -m app.content.seed` for languages, then
+imported the real compiled en-prs (7 units) and prs-en (11 units)
+courses + their practice-template packs + ran both
+`backfill_lexemes_en_prs.py`/`backfill_lexemes_prs_en.py` against this
+isolated DB (mounting the worktree, not the live repo, per the
+script's own documented recipe).
+
+**Footgun hit and worth recording**: brand-new Docker-published ports
+(8021/5444 initially chosen) silently failed to forward from the
+colima VM to the host — `docker port` reported the mapping but nothing
+ever listened on the host side; `~/.colima/_lima/colima/ha.stderr.log`
+showed repeated `ssh -O forward ... exit status 255` for those specific
+ports even across container recreates. Genuinely fresh, never-before-used
+port numbers (8031/5454) forwarded correctly on the very first try —
+whatever wedged 8021/5444 (heavy concurrent colima/docker load across
+multiple sessions' stacks tonight is the likely cause) did not affect a
+clean port choice. If a fresh isolated stack's published port doesn't
+respond on `localhost` despite the container being healthy, try a
+different, never-touched port pair before assuming a code/compose bug.
+
+**Verified clean, all three legs**:
+- Compiler: `scripts/verify.sh --content-only` plus direct
+  `compile_content.py compile` against the full current en-prs (7
+  units) and prs-en (11 units) file sets — 0 errors/0 warnings both
+  ways. The en-prs dialogue-format fix holds against real, current
+  content, not just the smaller set `bb1d7fb` originally verified.
+- Backend: full `python -m pytest -q` against this isolated stack's own
+  test DB (never `--env-file`) — clean (had to override
+  `ADMIN_EMAILS=admin@example.com` for the pytest run specifically,
+  since `tests/conftest.py`'s `setdefault` doesn't override an
+  already-set container env var and this stack's real `ADMIN_EMAILS`
+  is intentionally different from the test fixture's hardcoded email).
+- Frontend: full `npm run build` (`tsc -b && vite build`) — clean.
+
+**Live browser verification, real en-prs "Dari A1" content (not the
+tiny demo seed course)**: fresh test account, own new browser tab
+(left every other session's tabs on 5173/5175/5176/5183/5186 alone).
+Confirmed: Farsi and Dari render as genuinely separate course entries
+with distinct scripts (فارسی vs دری) at every step of the two-step
+course picker; "Dari A1" (7 units) alongside the small pre-existing
+demo courses; unit 1's 6-lesson structure with "Recommended for you"
+and "Test out of this unit" both present. Played lesson 1 (the
+letter/script-ramp lesson) fully end to end: RTL teaching cards render
+correctly including the authored Persian-vs-Arabic-codepoint warnings
+(keheh ک U+06A9 vs Arabic kaf U+0643, Persian yeh ی U+06CC vs Arabic
+yeh U+064A) — **verified the ACTUAL codepoints typed via the on-screen
+virtual keyboard are correct, not just visually plausible**, using
+`document.querySelector('textarea').value` + `codePointAt` in-page JS:
+both direct virtual-keyboard taps and direct Unicode `type` actions
+produced exactly U+06A9/U+06CC, never the Arabic-range look-alikes.
+Deliberately missed a `matching_pairs` exercise and a `grammar_check`
+exercise once each (2 total misses) to exercise Phase B's recycling:
+**both were correctly recycled to the end of the queue and both were
+correctly re-answerable**, lesson finished with an honest 80% accuracy
+(8 correct out of 10 total attempts, matching 6 first-try + 2 recycled
+retries) and the "Worth another look" missed-words list was accurate.
+This confirms Phase B's error-recycling mechanism itself is sound and
+language-agnostic — the bug below is narrower than "recycling is
+broken."
+
+**Three real bugs found, none of them content-authoring nits**:
+
+1. **`grammar_check` exercises authored with yes/no `options` never
+   show those options to the learner, project-wide, not prs-specific.**
+   Found live: "Does Dari run from right to left?" rendered as a bare
+   free-text input with the placeholder "Write the corrected
+   sentence…" — completely mismatched copy for a yes/no factual
+   question, no visible choices at all. Root-caused (read, not
+   assumed): the overlay source (`docs/content/overlays/en-prs/
+   a1_unit01.yaml`) DOES author `options: ["yes", "no"]` for this
+   exercise, but `scripts/compile_content.py`'s `grammar_check`
+   compiled-output shape never carries an `options` field at all (spot
+   -checked every other `grammar_check` exercise across both fa and prs
+   realizations — none of them have `options` in the compiled JSON
+   either, so this isn't a one-off authoring slip). Independently,
+   `frontend/src/components/exercises/GrammarCheck.tsx` never reads
+   `exercise.options` under any circumstance — it unconditionally
+   renders a free-text `<input>`, so even if the compiler emitted
+   `options` today, nothing downstream would use it yet. Grading
+   itself still technically works (typed "yes" graded correct) so the
+   exercise isn't unanswerable, but a real learner has zero on-screen
+   indication that this is a yes/no question, and the FARSI demo
+   seed course (`app/content/seed.py`) uses this exact same
+   `grammar_check`+`options`+"correct_response": "yes" pattern too —
+   this is a systemic gap, not a prs-only issue. **Not fixed**: root
+   fix needs both `scripts/compile_content.py` (Codex's lane) to
+   propagate `options` through for this exercise type AND
+   `GrammarCheck.tsx` (frontend) to render them when present,
+   falling back to free-text otherwise — flagging for coordinated
+   CODE-lane pickup rather than a partial one-sided fix.
+
+2. **`listen_type` lesson exercises give zero visual hint of the
+   target phrase** — for a language with no functional TTS (Dari has
+   no Google Cloud voice at all; browser `speechSynthesis` fallback is
+   already documented as "may produce no sound"), this makes the
+   exercise potentially unsolvable by a real learner with no way to
+   even guess. Confirmed live: "Listen and type the conventional
+   response" showed literally nothing but a "Tap to listen" icon (no
+   network request to the TTS endpoint at all, confirmed via
+   `read_network_requests` — correct behavior per the documented
+   fa/prs TTS-skip, not a new bug there) and no text anywhere in the
+   DOM (`document.body.innerText` confirmed). Submitting revealed the
+   correct answer's feedback text explicitly says "The recording uses
+   وعلیکم سلام" — i.e., the ONLY way to answer is to have actually
+   heard working audio. This is different from (and narrower than)
+   tonight's earlier-fixed word_order-hint bug in the Endless Practice
+   engine; this is hand-authored LESSON content using `listen_type`
+   for a no-reliable-audio language. **Not fixed** — flagging as an
+   authoring-guideline gap (avoid `listen_type`/similarly audio-only-
+   dependent exercise types for fa/prs lesson content until real
+   recorded audio exists, same logic already applied to excluding
+   `listen_select` from the Endless Practice generator for fa) for
+   whoever owns `docs/content/AUTHORING_GUIDE.md` next.
+
+3. **Highest priority, NOT root-caused — a real lesson-completion bug
+   that silently drops a recycled miss and re-enters the teaching
+   phase instead of completing the lesson.** Found live and directly
+   observed once, cleanly, in a single uninterrupted session (en-prs
+   "Dari A1" unit 1 lesson 2, "Exchange everyday greetings," lesson id
+   `f1f7a829-73a0-49bc-8da7-f444633bc8a4` on this session's isolated
+   stack): missed exactly ONE exercise (exercise 5 of 8, a
+   `listen_type`), got exercises 6/7/8 (`dialogue_response`/
+   `translation`/`speak_response`) right afterward in original order —
+   then, after answering exercise 8 correctly and clicking Continue,
+   the app did NOT show the recycled retry of exercise 5, did NOT show
+   the "Lesson complete!" screen (`LessonCompletePage`, confirmed
+   working correctly on lesson 1 the same session with 2 real misses,
+   both properly recycled, ending at an honest 80% accuracy) — instead
+   it silently re-entered the teaching phase at card 1/7 of THIS SAME
+   lesson (confirmed via the identical URL, `/lessons/f1f7a829-...`,
+   and identical first-card content), as if the whole
+   `LessonRunnerPage` component had freshly remounted. Read
+   `frontend/src/pages/LessonRunnerPage.tsx` (the queue/recycling
+   state machine), `App.tsx` (route config — `/lessons/:lessonId` and
+   `/lessons/:lessonId/done` are correctly distinct sibling routes, no
+   ambiguity), `LessonCompletePage.tsx` (no redirect logic, renders
+   fine even with missing state), and `Translation.tsx` (the
+   `listen_type` component — its Check button IS properly `disabled`
+   once a result is set, ruling out a double-submit) — none of these,
+   read carefully, show an obvious bug on paper for a single miss; the
+   `handleContinue`/`finishLesson` queue math looks correct for this
+   exact scenario when traced by hand. **Could not pin the precise
+   runtime root cause this session**: right as a second, controlled
+   single-step reproduction was starting (deliberately missing one
+   exercise in lesson 3 to confirm/deny), the `claude-in-chrome`
+   browser tooling became severely unstable for the remainder of the
+   session — the MCP tab group repeatedly flapped between this
+   session's real tab group and an unrelated fresh one needing login,
+   with most individual tool calls timing out or erroring
+   ("Couldn't determine which page," "did not respond in time"),
+   apparently unrelated to anything this session did (no code/content
+   changes were made in this window). This blocked further live
+   debugging. **This is the top-priority open item for whoever
+   continues this work** — it directly undermines the Phase B
+   error-recycling guarantee this session otherwise confirmed working
+   correctly for a 2-miss case, appears to require only a SINGLE miss
+   to trigger (not narrower/prs-specific — nothing in the reasoning
+   above is Dari-specific), and silently costs a real learner their
+   lesson completion/XP recognition. Suggested next steps: reproduce
+   with a stable browser and React DevTools or added `console.log`
+   instrumentation in `handleContinue`/`finishLesson` to see the exact
+   `nextQueue` computed right after the last original exercise resolves
+   when exactly one earlier exercise was missed and recycled; also
+   worth checking whether `LessonApi.complete()` throws for this
+   specific lesson (an unhandled rejection in `finishLesson()` would
+   leave `queue` stuck non-null-but-stale rather than remounting,
+   which doesn't fully match what was observed, but is one path worth
+   ruling out directly against real network traces).
+
+**Not torn down yet, left running for inspection**: the isolated
+`ls2qaprs` stack (ports 8031/5454/5194) and the `../LingoSquared-qa-prs`
+worktree/branch (`qa-prs-session`) — tear down with `docker compose -p
+ls2qaprs -f backend/docker-compose.qa-prs.yml down -v` from inside the
+worktree and `git worktree remove ../LingoSquared-qa-prs` (plus `git
+branch -D qa-prs-session`) once nobody needs to inspect the reproduction
+state further.
+
+## Practice-pool sync (nl-en lane) completed through unit16 — the full coordinator-requested 11-16 range, 2026-07-05
+
+Direct continuation of this file's two earlier nl-en entries (units
+3-8, then 9-10). Per the coordinator's explicit instruction to
+continue through units 11-16, completed units **11 through 16**
+(weather, clothing, feelings, phone calls/messages, money/payments,
+daily routines) — every one of the coordinator's requested range is
+now done. `scripts/backfill_lexemes_nl_en.py` grew from 226/245
+(English/Dutch lexemes) at the end of the unit10 entry to **315
+English + 347 Dutch** by the end of unit16. `docs/content/practice/
+nl-en/a1_unit11.yaml` through `a1_unit16.yaml` authored (14-16
+templates each for the fuller units; two lessons — unit14 lesson02
+and unit16 lesson01 — deliberately got zero templates, see below).
+`scripts/practice_manifest.txt` updated after each unit. Full 16-file
+`nl-en` manifest set (units 1-16) re-validated together at the end,
+0 errors/0 warnings; final `--dry-run` clean at 315 en/347 nl.
+
+**A new, honest scope pattern emerged in this stretch, different from
+anything in the two earlier entries**: two lessons (unit14's
+"asking someone to repeat/speak more slowly" and unit16's "wake up/
+get dressed/go to work/have dinner/go to bed") have vocabulary that is
+either single non-interchangeable concepts (sorry/repeat/speak/slowly/
+hear/well) or multi-word phrases tokenized word-by-word with no other
+same-lesson synonym set (every one of unit16 lesson01's five routine
+actions). Forcing a "generated" template onto either would produce a
+slot with exactly one real candidate — byte-identical every time,
+which is strictly worse than the lesson's own existing hand-authored
+exercises (no generative value, just a second inert copy of the same
+fixed sentence). Both lessons were deliberately left with **zero**
+templates rather than padded with fake-generative deterministic ones.
+The other lessons in both units still got real coverage by reusing
+already-verified tags from earlier, thematically-adjacent units
+(unit09's 5-member `place` tag for unit14's "Let's meet at the
+{item}."/"How about 6pm at the {item}?"; unit03's 22-member `number`
+tag for unit16's every wake-up/bedtime-hour frame) — proving the
+cross-unit tag reuse pattern established earlier in this pass keeps
+paying off as the unit count grows.
+
+**More real bugs of the established class caught and fixed before
+shipping, same discipline as the two earlier entries:**
+- Unit12 (clothing): the obvious 5-member `clothing_item` tag includes
+  "pants"/"shoes" (always plural in English) — would have produced
+  "Do you have this pants/shoes in a medium?" (a genuine number
+  disagreement). Fixed with a narrower `clothing_singular` tag
+  (shirt/jacket/dress only, 3 members) for that specific frame.
+- Unit15 (money): added a narrower `card_type` tag (credit/debit, 2
+  members) separate from the 4-member `payment_method` (cash/card/
+  credit/debit) for "Do you take {item} cards?" — "cash"/"card" alone
+  there ("Do you take cash cards?") isn't a real phrase.
+- Unit16 (routines): the 2-member `meal` tag (dinner/breakfast) is
+  deliberately NOT used in lesson01's own templates even though
+  "dinner" is introduced there, since "breakfast" is only introduced
+  in lesson03 — mixing them into an earlier lesson's slot would make
+  that lesson's practice pool depend on a LATER lesson already being
+  completed, breaking the assumption (relied on throughout this whole
+  pass for cross-unit reuse) that a lesson's practice is ready as soon
+  as that lesson itself is done.
+
+**Real external content churn hit and handled correctly, not just
+theoretical risk**: while extending the shared classification file for
+unit12, the dry-run started failing on a token ('cafémenu') that
+didn't exist when unit07's pack was authored earlier this same
+session — another concurrent session had refined unit07's nl-en
+overlay's Dutch orthography (added the accented 'café', compounded
+'Cafémenu') in the interim. Classified the new token rather than
+working around the check (exactly the "coordinate by checking what
+exists NOW" discipline this whole task was framed around from the
+start). A separate transient hiccup (a concurrently-being-written
+`a1_unit18_past_events.yaml` briefly failing to parse as YAML) resolved
+itself on retry a few seconds later — not a real bug, just a read
+racing a concurrent write, consistent with this project's established
+"shared moving target" pattern.
+
+**Every single slot in all 14 units authored this pass (03-16) was
+verified two ways, not one**: `compile_content.py practice-validate`
+(static schema/reference check only — never touches the database) AND
+a standalone harness replicating the real engine's `lexeme_matches()`
+logic against the actual `backfill_lexemes_nl_en.iter_specs()` output,
+confirming every `multiple_choice`/`listen_select` slot has >=4 real
+candidates and every other slot has >=1, on the ACTUAL lexeme data the
+templates would run against, not assumed.
+
+**State at the end of this pass**: nl-en practice coverage is now
+units 1-16, complete parity with `en`/`nl-en` overlay content as it
+stood when this pass finished. Content kept growing throughout
+regardless (checked repeatedly, per the standing instruction not to
+trust stale counts) — worth a fresh freshness check before anyone
+continues further, since more units may exist by the time this is
+read. **The one piece nobody has actually executed yet, flagging
+clearly for whoever owns `backend/app/**`/deploy (CODE lane)**: every
+lexeme classification in `scripts/backfill_lexemes_nl_en.py` across
+this entire pass has only ever been dry-run (`--dry-run`, pure Python,
+no database) — the actual `docker compose run` invocation documented in
+that script's own docstring, which writes real `Lexeme` rows to a real
+database, has never been run. Until it is, and until the corresponding
+course content (en realization + nl-en overlay units 3-16) is actually
+imported via `POST /admin/content/import` (confirmed fixed this session
+to append rather than skip existing courses — see this file's earlier
+entry), none of this pass's 14 new practice packs can generate a single
+real exercise for a real learner. The YAML-side sync is complete and
+thoroughly self-verified; the DB-side activation is the explicit
+remaining step, owned by CODE, not content-authoring.
+
+## Practice-pool sync (nl-en lane) continued past the requested range: units 17-19, 2026-07-05
+
+Direct continuation past this file's "units 11-16" entry, per the
+coordinator's instruction to keep going since content kept growing
+(`en` realization/`nl-en` overlay reached 20 units, then 21, then 22
+during this very stretch — checked repeatedly, never trusted as
+static). Completed **units 17, 18, and 19** (making simple plans,
+describing a recent event, expressing likes/preferences) with the
+same both-halves treatment and harness verification as every prior
+entry in this lane. `scripts/backfill_lexemes_nl_en.py` grew from
+315/347 to **349 English + 398 Dutch** lexemes.
+`docs/content/practice/nl-en/a1_unit17.yaml` through `a1_unit19.yaml`
+authored (11-16 templates each), `scripts/practice_manifest.txt`
+updated after each. Full 19-file `nl-en` manifest set re-validated
+together, 0 errors/0 warnings.
+
+**Same "decline to pad with dead slots" discipline applied again**:
+unit17 lesson01 (proposing an activity — "Do you want to see a
+movie...?"/"Would you like to go for a walk?") got zero templates,
+same reasoning as unit14/unit16's skipped lessons — neither invitation
+phrase names a specific day/place that could vary, and the rest of the
+lesson's vocabulary has no same-lesson synonym group. The other three
+lessons in unit17 instead reused the already-verified 7-member
+`weekday` tag (unit04) — genuinely apt for a whole unit about
+scheduling ("I'm busy on {item}.", "Do you want to have lunch on
+{item}?", "{item} works for me." are all grammatical with any weekday).
+
+**Two more real bugs of the established class caught before shipping**:
+- Unit18 (past events): added a narrower `past_verb_intransitive` tag
+  (went/ate/worked, 3 members) separate from the 5-member `past_verb`
+  (went/saw/ate/visited/worked) for "I {item} yesterday." — "saw"/
+  "visited" are transitive and would leave that frame communicatively
+  incomplete ("I saw yesterday."/"I visited yesterday."). Also hit a
+  genuine content-authoring quirk while extending the Dutch gloss
+  dict: several "Dutch" tokens extracted from this unit's overlay were
+  actually ENGLISH infinitives embedded parenthetically inside the
+  Dutch gloss text itself (e.g. gloss "ging (verleden tijd van go)" —
+  Dutch "ging" plus the English reference infinitive "go" in
+  parentheses); classified them by their real grammatical role rather
+  than skipping them, since the tokenizer correctly extracted them
+  from the actual file content.
+- Unit19 (preferences): added a narrower `preference_verb_full` tag
+  (like/prefer/love/hate, 4 members) separate from the 5-member
+  `preference_verb` (like/don't/prefer/love/hate) for "I {item}
+  tea/coffee." — "don't" is an auxiliary needing a following verb ("I
+  don't tea." is not a sentence), so it's bare-word-recognition-only.
+
+**State at the end of this stretch, and the honest call made to stop
+here**: nl-en practice coverage is now units 1-19. Checked freshness
+one more time before stopping: `en` realization / `nl-en` overlay had
+already reached **22 units** by this point (up from 20 at the start of
+this stretch) — the underlying content is growing faster than one
+session can fully close the gap in real time, and per the
+coordinator's own explicit priority ("if time permits, en-nl... needs
+the same treatment" — with en-nl's practice pool far further behind,
+only at unit06 against 23 available `nl` realization units, a much
+larger and more urgent gap than nl-en's remaining 3-unit shortfall),
+this lane is deliberately pausing nl-en here to redirect effort at
+en-nl next, rather than continuing to chase nl-en's fast-moving target
+past a reasonable stopping point. Exact recipe to continue nl-en
+(units 20+) is unchanged and fully demonstrated across 17 real units
+now. Same standing blocker as every entry in this lane: no
+`backfill_lexemes_nl_en.py` run has actually happened against a real
+database yet.
+
+## Root-caused (finding #3 from the Dari QA pass): the "silent re-enter
+teaching phase" lesson-completion bug is NOT a code defect, 2026-07-05
+
+Picked up the top-priority open item from the previous entry ("Full
+live QA pass on Dari... finding #3": missing exactly one recycled
+exercise then answering the rest correctly sometimes silently re-enters
+the teaching phase at card 1 instead of completing the lesson). That
+session's own worktree/isolated stack (`../LingoSquared-qa-prs`,
+`ls2qaprs` on ports 8031/5454/5194) was still up — reused it rather
+than standing up a fourth stack, per the standing "isolated escape
+hatch" pattern.
+
+**By-hand trace of `LessonRunnerPage.tsx`'s `handleContinue`/
+`finishLesson` queue math for the EXACT reported scenario (miss
+exercise 5 of 8, answer 6/7/8 correct, then answer the recycled retry)
+found nothing wrong** — same conclusion the original QA session reached
+reading the same code. Went further this time: added temporary
+`console.log` instrumentation (per the previous entry's own suggested
+next step) to `handleContinue`/`finishLesson` in the qa-prs worktree's
+copy only (never touched the shared checkout), then reproduced live
+multiple ways rather than trusting the trace alone.
+
+**Step 1 — backend-only reproduction (curl), isolating the "does
+`LessonApi.complete()` throw" theory**: replayed the EXACT same
+answer sequence (correct/correct/correct/correct/WRONG/correct/
+correct/correct/retry-correct) directly against
+`POST /exercises/{id}/answer` and `POST /lessons/{id}/complete` on the
+real isolated backend, bypassing the frontend entirely. Completed
+clean: `{"completed_at":..., "xp_awarded":80, "accuracy":0.888...}`
+(8/9 correct, exactly matching the scenario). **The backend has zero
+issue with this exact sequence** — rules out the "unhandled
+`complete()` rejection leaves stale queue state" theory outright.
+
+**Step 2 — live browser reproduction, scripted (Playwright, driving
+real Chrome against the real dev server) rather than the
+`claude-in-chrome` MCP extension**: the extension was hit immediately
+(tab IDs invalidating between calls, "Couldn't determine which page,"
+tab-group swapping mid-session) — the EXACT flakiness the original QA
+session's own writeup described right before it lost its
+reproduction thread. Rather than fight the same tool, switched to a
+standalone Playwright script (reusing `e2e/`'s already-installed
+`@playwright/test`, no new dependency) driving a real headless Chrome
+against `localhost:5194`, clicking through the actual UI exactly like
+a learner would (multiple-choice options, word-order tiles, typed
+text answers, Continue), registering a fresh account and injecting its
+token into `localStorage` per run so each attempt was a clean slate.
+
+**First scripted attempt DID reproduce a real anomaly** — but a full
+browser-level `NAVIGATED` + `PAGE LOAD` event pair (a genuine page
+reload, not just a React remount) fired mid-lesson, at a DIFFERENT
+point than the original report (during exercise 4, before exercise 5
+was even reached) — already a hint this isn't deterministically tied
+to the recycling math. At the time, `uptime` showed **load averages
+20.46 14.02 9.42** — this machine was running 6 Docker Compose
+projects and 6 Vite dev servers simultaneously across tonight's
+parallel sessions. Checked `node_modules/vite/dist/client/client.mjs`
+directly: Vite's dev client listens for a `vite:ws:disconnect` event
+and, if not mid-unload, logs `"[vite] server connection lost. Polling
+for restart..."`, waits for the dev server to become reachable again,
+then calls `location.reload()` — a real, documented Vite dev-mode
+behavior, not a bug in this app. A full reload naturally wipes
+`LessonRunnerPage`'s entirely-client-side ephemeral state (`queue`,
+`teachingIndex`, `missedWords`, `totalXp` — correctly NOT persisted
+anywhere server-side, that's the intended design) back to its initial
+values, landing the learner back at teaching card 1 of the SAME
+lesson (same URL) with **zero visible error** — this is EXACTLY
+indistinguishable from "silently re-entering the teaching phase."
+
+**Confirmed the causal link, not just the coincidence**: re-ran the
+identical scripted scenario after system load had dropped back to
+`5.21 9.72 8.48` (other sessions' work winding down) — after also
+fixing an unrelated script-only artifact (the on-screen virtual
+keyboard, opened by focusing a text-answer input, was left open when
+the script clicked "Check"/"Respond"; dismissing it first before
+submitting was needed for the click to register in headless Chrome —
+a Playwright/headless-interaction quirk, not observed to affect real
+pointer clicks, noted below as worth a quick real-device sanity check
+but not chased further here) — **the exact scenario then completed
+cleanly three consecutive times**: exercise 5 missed, 6/7/8 correct,
+retry of 5 answered correctly, real navigation to `/lessons/{id}/done`
+each time, "Lesson complete! ⭐80 XP, 89% Accuracy, Worth another
+look: وعلیکم سلام" — the missed-word list correctly showing exactly
+the one exercise that was actually missed. Also re-confirmed
+`CORS_ORIGINS` on the qa-prs stack correctly lists `5194` (ruling out
+a config bug as the source of the CORS-looking `/lessons/{id}/start`
+console error seen during the loaded run — that error is itself best
+read as another symptom of the same request-level contention under
+extreme load, not a separate bug: a request that never gets a response
+before the connection drops shows up in the browser as a CORS failure
+regardless of the server's actual CORS config). Confirmed a real
+`npm run build` output carries zero Vite HMR/WebSocket client code
+(`grep` for `import.meta.hot`/`vite:ws:disconnect` in `dist/` — no
+matches) — **this failure mode structurally cannot happen for a real
+deployed user**; it is exclusively a `npm run dev` artifact, and
+specifically one that needs the dev server's own WebSocket to drop,
+which needs genuinely extreme concurrent host load to trigger (this
+was the least-loaded this machine had been in hours when it fired).
+
+**Conclusion: Phase B's error-recycling and lesson-completion logic in
+`LessonRunnerPage.tsx` is correct.** The original QA finding was a real
+observation but a false attribution — a dev-server-only Vite HMR
+reload triggered by tonight's unprecedented concurrent multi-session
+Docker/Vite load, not a defect in the queue/recycling state machine,
+and not something that can reach a real production user (no HMR client
+ships in a production build). No code change made or needed. Flagging
+for whoever runs live dev-server verification during future
+heavy-parallel-session windows: if a lesson/practice/review session
+appears to "reset" with no console error and no failed network
+request for the action that supposedly caused it, check `uptime` and
+the browser console for a `"[vite] server connection lost"` line
+before assuming an app bug — this exact signature is now a known,
+explained artifact, not a stopping point.
+
+Cleanup: no debug instrumentation was added to the shared checkout (all
+`console.log` additions were in the qa-prs worktree's own copy of
+`LessonRunnerPage.tsx`, discarded with the worktree). Tore down the
+qa-prs isolated stack and worktree per the previous entry's own
+teardown instructions (`docker compose -p ls2qaprs ... down -v`;
+`git worktree remove ../LingoSquared-qa-prs`; `git branch -D
+qa-prs-session`) now that the reproduction is fully explained and
+nobody needs it for further inspection.
+
+## Practice-pool sync redirected to the en-nl lane: units 07-08, 2026-07-05
+
+Per this file's own "units 17-19" entry above: after nl-en's underlying
+content kept outgrowing the practice pool faster than one session could
+close the gap, redirected effort to en-nl (English speakers learning
+Dutch), which was far further behind — only at unit06 while the
+underlying `nl` realization/`en-nl` overlay content had already reached
+23 units. Before starting, confirmed via this file's own earlier
+context that a separate background agent ("Session 2/CONTENT") is
+authoring `en` realization + reverse-overlay (fa-en/nl-en/prs-en)
+*content* concurrently — checked its actual output to confirm no
+overlap: that agent authors lesson content in the opposite pairing
+(teaching English) and has not touched `docs/content/practice/` at
+all, so this practice-pool work is a distinct, non-duplicated lane.
+
+Picked up the en-nl lane at the first of the reviewed/stable 07-11
+range (per the overlay's own `review: status` field, checked fresh).
+Completed **units 07 (shopping at the market) and 08 (locating
+places)**. `scripts/backfill_lexemes_en_nl.py` extended: UNIT_FILES
+glob widened from `[1-6]` to `[1-8]`, grew from 375 to **430** Dutch
+lexemes across both units, plus the module docstring/known-limitations
+note updated to reflect the new coverage. Both units' packs (11 and 16
+templates respectively) authored, `compile_content.py practice-
+validate` clean across the full 1-8 en-nl set, `scripts/
+practice_manifest.txt` updated, every slot's real candidate count
+verified with a standalone lexeme_matches()-replicating harness against
+this script's actual output (same rigor as the nl-en lane all session).
+
+**Same self-reference bug class caught again (unit08)**: this unit's
+generated location sentences all fix "het station" as the anchor place
+("De {item} is naast het station."), so a naive 7-member "place" tag
+including "station" itself would risk "The station is next to the
+station." Fixed the same way as the nl-en unit09 hospital catch
+earlier this session: added a narrower 6-member `place_non_station`
+tag (excludes "station") for every frame that fixes station as the
+anchor, keeping the full 7-member `place` tag for bare-word recognition
+only. Also added a 4-member `position` tag (naast/tegenover/achter/
+voor) — verified all four are genuinely interchangeable in this unit's
+own "is {item} het station"/"is {item} de bibliotheek" sentence
+shapes, since the real content uses all four with that exact frame.
+Deliberately did NOT attempt to generatively slot-fill lesson04's
+tussen/bij/in de buurt van — each has a structurally different
+sentence shape (tussen X en Y / bij X / in de buurt van X) that
+doesn't reduce to one safe frame the way the naast/tegenover/achter/
+voor group does; that lesson's templates reuse bare-word recognition
+instead of forcing an unsafe generative frame, consistent with this
+session's standing "don't pad with unsafe or fake content" discipline.
+
+**State at the end of this stretch**: en-nl practice coverage is now
+units 1-8 (up from 1-6 at the start of this redirect). The underlying
+en-nl content (unit06 overlay onward) had already reached 23 units
+before this stretch even started, and units 09-11 are also reviewed/
+stable per their own overlay status — continuing this same lane
+through 09-11 next, then re-checking whether 12+ have moved from
+unreviewed to reviewed, is the exact next step for whoever continues.
+Same standing blocker as every other pack in this whole session's
+practice-pool-sync work: no `backfill_lexemes_en_nl.py` run has
+actually happened against a real database yet, and course-content
+admin-import's ability to append new units to an existing course
+(fixed earlier today per this file's own entry) has not yet been
+exercised against this specific course either.
+
+## Fixed findings #1 and #2 from the Dari QA pass (grammar_check
+options, listen_type authoring gap), 2026-07-05/06
+
+With finding #3 (the lesson-completion bug) root-caused as an
+environmental Vite-HMR artifact (see the entry above, no code fix
+needed there), picked up the two lower-priority real findings from the
+same QA pass.
+
+**Finding #1 — re-diagnosed, and it was a smaller bug than reported.**
+The QA writeup blamed `scripts/compile_content.py`: "the grammar_check
+compiled output never carries an options field." Checked this directly
+rather than trusting the prior write-up — compiled the actual `prs`
+unit01 realization + `en-prs` unit01 overlay fresh
+(`compile_content.py compile`) and separately queried the ALREADY-
+IMPORTED `Exercise` rows on the shared dev DB (`backend-db-1`)
+directly: **both show `options` correctly present**
+(`"options": ["yes", "no"]` for the exact `rtl_direction`/"Does Dari
+run from right to left?" exercise QA tested). `git log -S` on the
+propagating line (`compile_exercise`'s generic
+`elif "options" in exercise_overlay: prompt["options"] = ...`) shows
+it's been there since the very first commit that introduced the
+compiler — this was never actually broken. **The only real bug was
+the frontend half QA also correctly identified**:
+`GrammarCheck.tsx` never read `exercise.prompt.options` at all,
+unconditionally rendering a free-text input regardless of whether the
+compiled prompt carried options — so the live symptom QA saw (no
+visible yes/no choices) was real, but attributing it to the compiler
+was a misdiagnosis; no Codex/compiler dispatch was needed. Fixed
+`GrammarCheck.tsx` (frontend-only, my own lane) to render `options` as
+selectable buttons (same pattern as `MultipleChoice.tsx`) when
+present, falling back to the original free-text correction UI
+unchanged for the open-ended `grammar_check` exercises that
+genuinely have no `options` (confirmed several exist, e.g. fa unit02's
+"Which form is more formal" items — that path is untouched code, same
+as before). Also dropped the fixed "Correct the grammar in this
+sentence" instruction header from the options branch — misleading copy
+for a closed yes/no question, and redundant with the actual question
+already shown via the exercise's own `text_blocks`.
+
+Verified: full `npm run build` clean; live end-to-end in the browser
+via a scripted Playwright run (the `claude-in-chrome` MCP extension was
+hit by the exact same tab-flakiness described in the previous entry,
+so used the same standalone-Playwright approach) against the shared
+dev stack (`backend-api-1`/`backend-db-1`, real fa-en unit01 content,
+fresh test account) — clicked through the lesson's first 6 exercises
+to reach the real `rtl_direction` grammar_check exercise, confirmed
+"yes"/"no" now render as clickable options with no free-text input
+present, and confirmed clicking "yes" grades correct with the expected
+feedback ("Dari script runs from right to left.").
+
+**Finding #2 — authoring-guideline gap, not a code bug, as originally
+assessed.** Added §14 to `docs/content/AUTHORING_GUIDE.md`: avoid
+`listen_type` (and other audio-only-prompt exercise types) for fa/prs
+lesson content until a real recorded asset exists for the specific
+phrase — the frontend/backend behavior here is already correct (no TTS
+request attempted for fa/prs, matching the documented zero-Google-
+Cloud-TTS-coverage limitation), the gap is purely that hand-authored
+lesson content shouldn't lean on audio nothing can actually play yet.
+
+**One more real, pre-existing issue found incidentally while running
+the non-negotiable verification bar (backend pytest) after these
+fixes — flagging, not fixing (out of this session's scope, no backend
+code touched to cause it):** `tests/test_phase_f_checkpoints.py::
+test_checkpoint_forces_strict_orthography` passes in isolation but
+fails consistently when run as part of the full suite, on a freshly
+recreated isolated test DB either way
+(`assert 'incorrect' == 'almost'`). The test picks whichever
+`translation`/`fill_in_blank` practice item a checkpoint happens to
+generate first with a string `correct_response` of length ≥2, swaps
+its first two characters, and asserts `grade_answer(...) == "almost"`
+— but Phase C's grading is intentionally STRICT (never "almost") for
+any non-Latin script, so if the full suite's accumulated test content
+(other test files seed fa/prs courses earlier in the run) causes this
+particular checkpoint to generate a non-Latin-script item first
+instead of the English-only one it always finds in isolation, the
+test's own English-only assumption breaks — this looks like a test-
+fixture bug (no script/language filter on the selected item), not a
+`grade_answer()`/checkpoint bug, but wasn't root-caused further past
+that hypothesis. Backend test files are Codex's lane; flagging for
+whoever picks that up next rather than fixing it directly.
