@@ -9,6 +9,7 @@ const KIND_KEY: Record<TeachingCard["kind"], string> = {
   dialogue: "teaching_card.dialogue",
   pronunciation_note: "teaching_card.pronunciation_note",
   cultural_note: "teaching_card.cultural_note",
+  reading: "teaching_card.reading",
 };
 
 export function TeachingCardView({ card }: { card: TeachingCard }) {
