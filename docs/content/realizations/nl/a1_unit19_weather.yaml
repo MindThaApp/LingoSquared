@@ -1,0 +1,186 @@
+schema_version: "1.0"
+realization_version: "2026.1-draft.1"
+target_language: nl
+cefr_level: A1
+generation_provenance:
+  method: adapted_from_public_domain_source
+  authoring_system: claude
+  human_reviewed: false
+  source_note: >-
+    Basic weather-condition vocabulary is scaffolded from the FSI Dutch
+    Basic Course (Foreign Service Institute, US Department of State --
+    public domain, no attribution required per docs/content/
+    AUTHORING_GUIDE.md §10). The source presents these as isolated
+    weather-word substitution drills with no continuous scenario;
+    every sentence, exercise, and the Lotte/Omar weekend-planning
+    storyline in this unit are freshly authored in modern colloquial
+    register, not copied or lightly edited from any 1960s-70s source
+    text.
+status: complete_draft
+review:
+  status: unreviewed
+  required_next_reviewer: ramin
+  notes: >-
+    Initial six-lesson Dutch weather draft (spine outcome:
+    universal.a1.weather.describe_basic_weather), continuing the
+    Lotte/Omar storyline -- they plan a weekend walk depending on the
+    forecast, reusing the Zullen we ...? plan-making pattern from
+    unit11. Cross-checked the forecast facts (sunny Saturday, rain
+    Sunday) for consistency between lesson05's reading and lesson06's
+    dialogue per AUTHORING_GUIDE §11. Every multi-clause
+    accepted_answers list authored with period/comma/conjunction-joined
+    forms per §12. Every fill_in_blank frame retains visible
+    surrounding text per §13. A fresh-context review ran and found two
+    exercises (lesson04/lesson06 "agree and suggest" responses) whose
+    accepted_answers omitted the literal exclamation/period-punctuated
+    form actually used in the teaching cards -- added. No grammar
+    errors, spine drift, jargon leaks, audio mismatches, or YAML
+    footguns found. Re-validated (0 errors/0 warnings across the full
+    nl course). Still needs Ramin's native-speaker pass before status:
+    reviewed. Audio assets are declared for generation.
+
+course:
+  realization_key: nl.a1
+  target_language_first: true
+  dialect: nl_NL_standard
+  register_policy: >-
+    Teach contemporary Standard Dutch as used in the Netherlands. Lotte
+    and Omar continue to use informal jij/je with each other.
+
+media_assets:
+  - {content_key: nl.a1.audio.weather.zonnig.01, language: nl, text: "Het is zonnig.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - {content_key: nl.a1.audio.weather.regent.01, language: nl, text: "Het regent.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - {content_key: nl.a1.audio.weather.bewolkt.01, language: nl, text: "Het is bewolkt.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - {content_key: nl.a1.audio.weather.koud.01, language: nl, text: "Het is koud vandaag.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - {content_key: nl.a1.audio.weather.warm.01, language: nl, text: "Het is warm vandaag.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - {content_key: nl.a1.audio.weather.morgen_zonnig.01, language: nl, text: "Morgen is het zonnig.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - {content_key: nl.a1.audio.weather.zullen_we_wandeling.01, language: nl, text: "Zullen we een wandeling maken?", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - {content_key: nl.a1.audio.weather.wat_voor_weer_weekend.01, language: nl, text: "Wat voor weer is het dit weekend?", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - content_key: nl.a1.audio.weather.weerbericht.01
+    language: nl
+    text: >-
+      Weerbericht: zaterdag is het zonnig en warm. Zondag regent het
+      de hele dag.
+    voice_hint: neutral_adult_clear
+    status: pending_generation
+  - content_key: nl.a1.audio.dialogue.weekend_plannen.01
+    language: nl
+    text: >-
+      Lotte: Wat voor weer is het dit weekend? Omar: Zaterdag is het
+      zonnig en warm, maar zondag regent het de hele dag. Lotte:
+      Zullen we dan zaterdag een wandeling maken? Omar: Goed idee. En
+      zondag blijven we lekker binnen. Lotte: Perfect, dan kijken we
+      een film.
+    voice_hint: two_young_adults_neutral_friendly
+    status: pending_generation
+
+units:
+  - content_key: nl.a1.unit19.weather
+    title: "Het weer"
+    section: reading_writing
+    spine_outcome_ids: [universal.a1.weather.describe_basic_weather]
+    planned_lesson_count: 6
+    lessons:
+      - content_key: nl.a1.unit19.lesson01.wat_voor_weer
+        title: "Wat voor weer is het?"
+        spine_outcome_id: universal.a1.weather.describe_basic_weather
+        teaching:
+          - {content_key: nl.a1.unit19.lesson01.teach.weer, kind: vocabulary, target: {text: "het weer", language_code: nl, direction: ltr}, introduced_tokens: [het, weer]}
+          - {content_key: nl.a1.unit19.lesson01.teach.wat_voor_weer, kind: phrase, target: {text: "Wat voor weer is het?", language_code: nl, direction: ltr}, introduced_tokens: [Wat, voor, weer, is, het]}
+          - {content_key: nl.a1.unit19.lesson01.teach.zonnig, kind: phrase, target: {text: "Het is zonnig.", language_code: nl, direction: ltr}, introduced_tokens: [Het, is, zonnig]}
+          - {content_key: nl.a1.unit19.lesson01.teach.regent, kind: phrase, target: {text: "Het regent.", language_code: nl, direction: ltr}, introduced_tokens: [Het, regent]}
+          - {content_key: nl.a1.unit19.lesson01.teach.bewolkt, kind: phrase, target: {text: "Het is bewolkt.", language_code: nl, direction: ltr}, introduced_tokens: [Het, is, bewolkt]}
+        exercises:
+          - {content_key: nl.a1.unit19.lesson01.exercise01.choose_sunny, type: multiple_choice, tested_text: "Het is zonnig", prompt: {target_blocks: [{text: "It is sunny.", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit19.lesson01.exercise02.listen_rain, type: listen_select, tested_text: "Het regent", media_asset_key: nl.a1.audio.weather.regent.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit19.lesson01.exercise03.match_conditions, type: matching_pairs, tested_text: "zonnig regent bewolkt", prompt: {target_blocks: []}, pairs: [{left: zonnig, right: sunny}, {left: regent, right: raining}, {left: bewolkt, right: cloudy}]}
+          - {content_key: nl.a1.unit19.lesson01.exercise04.order_cloudy, type: word_order, tested_text: "Het is bewolkt", prompt: {target_blocks: []}, word_bank: [bewolkt, Het, is]}
+          - {content_key: nl.a1.unit19.lesson01.exercise05.listen_order_sunny, type: listen_order, tested_text: "Het is zonnig", media_asset_key: nl.a1.audio.weather.zonnig.01, prompt: {target_blocks: []}, word_bank: [zonnig, Het, is]}
+          - {content_key: nl.a1.unit19.lesson01.exercise06.complete_rain, type: fill_in_blank, tested_text: "Het regent", prompt: {target_blocks: [{text: "Wat voor weer is het? Het ___.", language_code: nl, direction: ltr}]}}
+          - {content_key: nl.a1.unit19.lesson01.exercise07.write_sunny, type: writing_prompt, tested_text: "Het is zonnig", prompt: {target_blocks: [{text: "Write in Dutch: it is sunny.", language_code: en, direction: ltr}]}}
+
+      - content_key: nl.a1.unit19.lesson02.koud_of_warm
+        title: "Koud of warm?"
+        spine_outcome_id: universal.a1.weather.describe_basic_weather
+        teaching:
+          - {content_key: nl.a1.unit19.lesson02.teach.koud, kind: phrase, target: {text: "Het is koud vandaag.", language_code: nl, direction: ltr}, introduced_tokens: [Het, is, koud, vandaag]}
+          - {content_key: nl.a1.unit19.lesson02.teach.warm, kind: phrase, target: {text: "Het is warm vandaag.", language_code: nl, direction: ltr}, introduced_tokens: [Het, is, warm, vandaag]}
+          - {content_key: nl.a1.unit19.lesson02.teach.niet_koud, kind: phrase, target: {text: "Het is niet koud, het is warm.", language_code: nl, direction: ltr}, introduced_tokens: [Het, is, niet, koud, warm]}
+        exercises:
+          - {content_key: nl.a1.unit19.lesson02.exercise01.choose_cold, type: multiple_choice, tested_text: "Het is koud vandaag", prompt: {target_blocks: [{text: "It is cold today.", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit19.lesson02.exercise02.listen_warm, type: listen_select, tested_text: "Het is warm vandaag", media_asset_key: nl.a1.audio.weather.warm.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit19.lesson02.exercise03.match_temperatures, type: matching_pairs, tested_text: "koud warm", prompt: {target_blocks: []}, pairs: [{left: koud, right: cold}, {left: warm, right: warm}]}
+          - {content_key: nl.a1.unit19.lesson02.exercise04.order_cold, type: word_order, tested_text: "Het is koud vandaag", prompt: {target_blocks: []}, word_bank: [vandaag, Het, is, koud]}
+          - {content_key: nl.a1.unit19.lesson02.exercise05.complete_warm, type: fill_in_blank, tested_text: "Het is niet koud het is warm", prompt: {target_blocks: [{text: "Het is niet koud, het is ___.", language_code: nl, direction: ltr}]}}
+          - {content_key: nl.a1.unit19.lesson02.exercise06.translate_cold, type: translation, tested_text: "Het is koud vandaag", prompt: {target_blocks: [{text: "It is cold today.", language_code: en, direction: ltr}]}}
+
+      - content_key: nl.a1.unit19.lesson03.het_weerbericht
+        title: "Het weerbericht"
+        spine_outcome_id: universal.a1.weather.describe_basic_weather
+        teaching:
+          - {content_key: nl.a1.unit19.lesson03.teach.weerbericht, kind: vocabulary, target: {text: "het weerbericht", language_code: nl, direction: ltr}, introduced_tokens: [het, weerbericht]}
+          - {content_key: nl.a1.unit19.lesson03.teach.morgen_zonnig, kind: phrase, target: {text: "Morgen is het zonnig.", language_code: nl, direction: ltr}, introduced_tokens: [Morgen, is, het, zonnig]}
+          - {content_key: nl.a1.unit19.lesson03.teach.zaterdag_zondag, kind: phrase, target: {text: "Zaterdag is het zonnig en warm, maar zondag regent het de hele dag.", language_code: nl, direction: ltr}, introduced_tokens: [Zaterdag, is, het, zonnig, en, warm, maar, zondag, regent, de, hele, dag]}
+        exercises:
+          - {content_key: nl.a1.unit19.lesson03.exercise01.choose_tomorrow, type: multiple_choice, tested_text: "Morgen is het zonnig", prompt: {target_blocks: [{text: "Tomorrow it is sunny.", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit19.lesson03.exercise02.listen_forecast, type: listen_select, tested_text: "Morgen is het zonnig", media_asset_key: nl.a1.audio.weather.morgen_zonnig.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit19.lesson03.exercise03.match_forecast_days, type: matching_pairs, tested_text: "zaterdag zondag", prompt: {target_blocks: []}, pairs: [{left: zaterdag, right: "sunny and warm"}, {left: zondag, right: "rain all day"}]}
+          - {content_key: nl.a1.unit19.lesson03.exercise04.order_forecast_tomorrow, type: word_order, tested_text: "Morgen is het zonnig", prompt: {target_blocks: []}, word_bank: [zonnig, Morgen, is, het]}
+          - {content_key: nl.a1.unit19.lesson03.exercise05.complete_forecast, type: fill_in_blank, tested_text: "Zondag regent het de hele dag", prompt: {target_blocks: [{text: "Zondag regent het de hele ___.", language_code: nl, direction: ltr}]}}
+          - {content_key: nl.a1.unit19.lesson03.exercise06.write_forecast, type: writing_prompt, tested_text: "Zaterdag is het zonnig en warm", prompt: {target_blocks: [{text: "Write in Dutch: on Saturday it is sunny and warm.", language_code: en, direction: ltr}]}}
+
+      - content_key: nl.a1.unit19.lesson04.plannen_maken_bij_weer
+        title: "Plannen maken bij het weer"
+        spine_outcome_id: universal.a1.weather.describe_basic_weather
+        teaching:
+          - {content_key: nl.a1.unit19.lesson04.teach.wandeling, kind: vocabulary, target: {text: "de wandeling", language_code: nl, direction: ltr}, introduced_tokens: [de, wandeling]}
+          - {content_key: nl.a1.unit19.lesson04.teach.zullen_we_wandeling, kind: phrase, target: {text: "Zullen we een wandeling maken?", language_code: nl, direction: ltr}, introduced_tokens: [Zullen, we, een, wandeling, maken]}
+          - {content_key: nl.a1.unit19.lesson04.teach.binnen_blijven, kind: phrase, target: {text: "Als het regent, blijven we binnen.", language_code: nl, direction: ltr}, introduced_tokens: [Als, het, regent, blijven, we, binnen]}
+          - {content_key: nl.a1.unit19.lesson04.teach.goed_idee_laten, kind: phrase, target: {text: "Goed idee! Laten we een wandeling maken.", language_code: nl, direction: ltr}, introduced_tokens: [Goed, idee, Laten, we, een, wandeling, maken]}
+        exercises:
+          - {content_key: nl.a1.unit19.lesson04.exercise01.choose_walk_suggestion, type: multiple_choice, tested_text: "Zullen we een wandeling maken", prompt: {target_blocks: [{text: "Shall we go for a walk?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit19.lesson04.exercise02.listen_walk_suggestion, type: listen_select, tested_text: "Zullen we een wandeling maken", media_asset_key: nl.a1.audio.weather.zullen_we_wandeling.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit19.lesson04.exercise03.match_weather_plans, type: matching_pairs, tested_text: "zonnig regent", prompt: {target_blocks: []}, pairs: [{left: zonnig, right: "go for a walk"}, {left: regent, right: "stay inside"}]}
+          - {content_key: nl.a1.unit19.lesson04.exercise04.order_stay_inside, type: word_order, tested_text: "Als het regent blijven we binnen", prompt: {target_blocks: []}, word_bank: [het, Als, regent, blijven, we, binnen]}
+          - {content_key: nl.a1.unit19.lesson04.exercise05.complete_walk_suggestion, type: fill_in_blank, tested_text: "Zullen we een wandeling maken", prompt: {target_blocks: [{text: "Zullen we een ___ maken?", language_code: nl, direction: ltr}]}}
+          - {content_key: nl.a1.unit19.lesson04.exercise06.respond_walk_suggestion, type: dialogue_response, tested_text: "Goed idee laten we een wandeling maken", prompt: {target_blocks: [{text: "Het is zonnig. Zullen we een wandeling maken?", language_code: nl, direction: ltr}]}}
+
+      - content_key: nl.a1.unit19.lesson05.weerbericht_lezen
+        title: "Een weerbericht lezen"
+        spine_outcome_id: universal.a1.weather.describe_basic_weather
+        teaching:
+          - content_key: nl.a1.unit19.lesson05.teach.weerbericht_tekst
+            kind: reading
+            target:
+              text: >-
+                Weerbericht: zaterdag is het zonnig en warm. Zondag
+                regent het de hele dag.
+              language_code: nl
+              direction: ltr
+            introduced_tokens: [Weerbericht, zaterdag, is, het, zonnig, en, warm, Zondag, regent, de, hele, dag]
+        exercises:
+          - {content_key: nl.a1.unit19.lesson05.exercise01.read_saturday, type: reading_comprehension, tested_text: "zonnig en warm", prompt: {target_blocks: [{text: "What will the weather be like on Saturday?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit19.lesson05.exercise02.read_sunday, type: reading_comprehension, tested_text: "regent de hele dag", prompt: {target_blocks: [{text: "What will the weather be like on Sunday?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit19.lesson05.exercise03.read_better_day, type: reading_comprehension, tested_text: "zaterdag", prompt: {target_blocks: [{text: "Which day would be better for a walk?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit19.lesson05.exercise04.match_forecast_summary, type: matching_pairs, tested_text: "zaterdag zondag weerbericht", prompt: {target_blocks: []}, pairs: [{left: zaterdag, right: "sunny and warm"}, {left: zondag, right: "rain all day"}]}
+          - {content_key: nl.a1.unit19.lesson05.exercise05.listen_weather_report, type: listen_select, tested_text: "zondag regent het de hele dag", media_asset_key: nl.a1.audio.weather.weerbericht.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit19.lesson05.exercise06.write_forecast_summary, type: writing_prompt, tested_text: "Zaterdag is het zonnig en warm maar zondag regent het de hele dag", prompt: {target_blocks: [{text: "Write in Dutch: Saturday it is sunny and warm, but Sunday it rains all day.", language_code: en, direction: ltr}]}}
+
+      - content_key: nl.a1.unit19.lesson06.weekend_plannen
+        title: "Weekendplannen maken"
+        spine_outcome_id: universal.a1.weather.describe_basic_weather
+        teaching:
+          - {content_key: nl.a1.unit19.lesson06.teach.lotte_ask_weather, kind: dialogue, target: {text: "Lotte: Wat voor weer is het dit weekend?", language_code: nl, direction: ltr}, introduced_tokens: [Lotte, Wat, voor, weer, is, het, dit, weekend]}
+          - {content_key: nl.a1.unit19.lesson06.teach.omar_forecast, kind: dialogue, target: {text: "Omar: Zaterdag is het zonnig en warm, maar zondag regent het de hele dag.", language_code: nl, direction: ltr}, introduced_tokens: [Omar, Zaterdag, is, het, zonnig, en, warm, maar, zondag, regent, de, hele, dag]}
+          - {content_key: nl.a1.unit19.lesson06.teach.lotte_suggest_walk, kind: dialogue, target: {text: "Lotte: Zullen we dan zaterdag een wandeling maken?", language_code: nl, direction: ltr}, introduced_tokens: [Lotte, Zullen, we, dan, zaterdag, een, wandeling, maken]}
+          - {content_key: nl.a1.unit19.lesson06.teach.omar_agree, kind: dialogue, target: {text: "Omar: Goed idee. En zondag blijven we lekker binnen.", language_code: nl, direction: ltr}, introduced_tokens: [Omar, Goed, idee, En, zondag, blijven, we, lekker, binnen]}
+          - {content_key: nl.a1.unit19.lesson06.teach.lotte_closing, kind: dialogue, target: {text: "Lotte: Perfect, dan kijken we een film.", language_code: nl, direction: ltr}, introduced_tokens: [Lotte, Perfect, dan, kijken, we, een, film]}
+        exercises:
+          - {content_key: nl.a1.unit19.lesson06.exercise01.listen_ask_weather, type: listen_select, tested_text: "Wat voor weer is het dit weekend", media_asset_key: nl.a1.audio.weather.wat_voor_weer_weekend.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit19.lesson06.exercise02.comprehend_saturday, type: dialogue_comprehension, tested_text: "zonnig en warm", media_asset_key: nl.a1.audio.dialogue.weekend_plannen.01, prompt: {target_blocks: [{text: "What will the weather be like on Saturday?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit19.lesson06.exercise03.comprehend_sunday, type: dialogue_comprehension, tested_text: "regent het de hele dag", media_asset_key: nl.a1.audio.dialogue.weekend_plannen.01, prompt: {target_blocks: [{text: "What will the weather be like on Sunday?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit19.lesson06.exercise04.comprehend_plan, type: dialogue_comprehension, tested_text: "wandeling maken film kijken", media_asset_key: nl.a1.audio.dialogue.weekend_plannen.01, prompt: {target_blocks: [{text: "What do Lotte and Omar plan for Saturday and Sunday?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit19.lesson06.exercise05.order_suggest_walk, type: word_order, tested_text: "Zullen we dan zaterdag een wandeling maken", prompt: {target_blocks: []}, word_bank: [zaterdag, Zullen, we, dan, een, wandeling, maken]}
+          - {content_key: nl.a1.unit19.lesson06.exercise06.respond_agree_plan, type: dialogue_response, tested_text: "Goed idee en zondag blijven we lekker binnen", prompt: {target_blocks: [{text: "Zullen we dan zaterdag een wandeling maken?", language_code: nl, direction: ltr}]}}
+          - {content_key: nl.a1.unit19.lesson06.exercise07.listen_type_closing, type: listen_type, tested_text: "Perfect dan kijken we een film", media_asset_key: nl.a1.audio.dialogue.weekend_plannen.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit19.lesson06.exercise08.write_weekend_plan, type: writing_prompt, tested_text: "Zaterdag maken we een wandeling Zondag kijken we een film", prompt: {target_blocks: [{text: "Write two Dutch sentences: on Saturday they go for a walk, and on Sunday they watch a film.", language_code: en, direction: ltr}]}}
