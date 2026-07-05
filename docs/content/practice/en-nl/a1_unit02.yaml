@@ -5,7 +5,7 @@ target_language: nl
 unit_content_key: nl.a1.unit02.numbers
 review:
   status: unreviewed
-  fresh_context: "false"
+  fresh_context: "true"
   notes: "Codex-authored initial practice pack; requires a fresh-context review before review status can change."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
@@ -18,6 +18,7 @@ slot_presets:
   person_name: &person_name {language_code: nl, part_of_speech: proper_noun, agreement_tags: {semantic: person_name}}
   country: &country {language_code: nl, part_of_speech: proper_noun, agreement_tags: {semantic: country}}
   number: &number {language_code: nl, part_of_speech: [symbol, noun], agreement_tags: {semantic: number}}
+  number_symbol: &number_symbol {language_code: nl, part_of_speech: symbol, agreement_tags: {semantic: number}}
   weekday: &weekday {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: weekday}}
   month: &month {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: month}}
   ordinal_number: &ordinal_number {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: ordinal_number}}
@@ -25,73 +26,73 @@ slot_presets:
 templates:
   - content_key: practice.en-nl.nl.a1.unit02.lesson01.order.001
     lesson_content_key: nl.a1.unit02.lesson01.nul_tot_twaalf
-    type: word_order
-    frame: {text: "Het nummer is {item}.", language_code: nl, direction: ltr}
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
     slots: {item: *number}
-    answer_derivation: {kind: render_frame, frame: {text: "Het nummer is {item}.", language_code: nl, direction: ltr}}
-    feedback_frame: {text: "The number is {item}.", language_code: en, direction: ltr}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the number you heard.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit02.lesson01.complete.002
     lesson_content_key: nl.a1.unit02.lesson01.nul_tot_twaalf
-    type: fill_in_blank
+    type: multiple_choice
     frame:
-      text: "Het nummer is {item}."
+      text: "{item}"
       language_code: nl
       direction: ltr
       text_blocks:
-        - {text: "Complete the Dutch sentence.", language_code: en, direction: ltr}
+        - {text: "Choose the English value.", language_code: en, direction: ltr}
     slots: {item: *number}
-    answer_derivation: {kind: slot_text, slot: item}
-    feedback_frame: {text: "The number is {item}.", language_code: en, direction: ltr}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} has this numerical value.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit02.lesson01.translate.003
     lesson_content_key: nl.a1.unit02.lesson01.nul_tot_twaalf
     type: translation
     frame:
-      text: "The number is {item}."
+      text: "{item}"
       language_code: en
       direction: ltr
       slot_rendering: {item: english_gloss}
       text_blocks:
         - {text: "Translate into Dutch.", language_code: en, direction: ltr}
     slots: {item: *number}
-    answer_derivation: {kind: render_frame, frame: {text: "Het nummer is {item}.", language_code: nl, direction: ltr}}
-    feedback_frame: {text: "The number is {item}.", language_code: en, direction: ltr}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The Dutch number is {item}.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit02.lesson02.order.001
     lesson_content_key: nl.a1.unit02.lesson02.vanaf_dertien
-    type: word_order
-    frame: {text: "Dat is {item}.", language_code: nl, direction: ltr}
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
     slots: {item: *number}
-    answer_derivation: {kind: render_frame, frame: {text: "Dat is {item}.", language_code: nl, direction: ltr}}
-    feedback_frame: {text: "The number given is {item}.", language_code: en, direction: ltr}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the number you heard.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit02.lesson02.complete.002
     lesson_content_key: nl.a1.unit02.lesson02.vanaf_dertien
     type: fill_in_blank
     frame:
-      text: "Dat is {item}."
+      text: "{item}"
       language_code: nl
       direction: ltr
       text_blocks:
         - {text: "Complete the Dutch sentence.", language_code: en, direction: ltr}
     slots: {item: *number}
     answer_derivation: {kind: slot_text, slot: item}
-    feedback_frame: {text: "The number given is {item}.", language_code: en, direction: ltr}
+    feedback_frame: {text: "The missing Dutch number is {item}.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit02.lesson02.translate.003
     lesson_content_key: nl.a1.unit02.lesson02.vanaf_dertien
     type: translation
     frame:
-      text: "That is {item}."
+      text: "{item}"
       language_code: en
       direction: ltr
       slot_rendering: {item: english_gloss}
       text_blocks:
         - {text: "Translate into Dutch.", language_code: en, direction: ltr}
     slots: {item: *number}
-    answer_derivation: {kind: render_frame, frame: {text: "Dat is {item}.", language_code: nl, direction: ltr}}
-    feedback_frame: {text: "The number given is {item}.", language_code: en, direction: ltr}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The Dutch number is {item}.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit02.lesson03.order.001
     lesson_content_key: nl.a1.unit02.lesson03.telefoon_en_huisnummer
     type: word_order
     frame: {text: "Mijn huisnummer is {item}.", language_code: nl, direction: ltr}
-    slots: {item: *number}
+    slots: {item: *number_symbol}
     answer_derivation: {kind: render_frame, frame: {text: "Mijn huisnummer is {item}.", language_code: nl, direction: ltr}}
     feedback_frame: {text: "The house number is {item}.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit02.lesson03.complete.002
@@ -103,7 +104,7 @@ templates:
       direction: ltr
       text_blocks:
         - {text: "Complete the Dutch sentence.", language_code: en, direction: ltr}
-    slots: {item: *number}
+    slots: {item: *number_symbol}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "The house number is {item}.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit02.lesson03.translate.003
@@ -116,48 +117,48 @@ templates:
       slot_rendering: {item: english_gloss}
       text_blocks:
         - {text: "Translate into Dutch.", language_code: en, direction: ltr}
-    slots: {item: *number}
+    slots: {item: *number_symbol}
     answer_derivation: {kind: render_frame, frame: {text: "Mijn huisnummer is {item}.", language_code: nl, direction: ltr}}
     feedback_frame: {text: "The house number is {item}.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit02.lesson04.order.001
     lesson_content_key: nl.a1.unit02.lesson04.leeftijd_en_aantallen
     type: word_order
-    frame: {text: "Er zijn {item} mensen.", language_code: nl, direction: ltr}
-    slots: {item: *number}
-    answer_derivation: {kind: render_frame, frame: {text: "Er zijn {item} mensen.", language_code: nl, direction: ltr}}
-    feedback_frame: {text: "The quantity is {item}.", language_code: en, direction: ltr}
+    frame: {text: "Ik ben {item} jaar.", language_code: nl, direction: ltr}
+    slots: {item: *number_symbol}
+    answer_derivation: {kind: render_frame, frame: {text: "Ik ben {item} jaar.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "The speaker is {item} years old.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit02.lesson04.complete.002
     lesson_content_key: nl.a1.unit02.lesson04.leeftijd_en_aantallen
     type: fill_in_blank
     frame:
-      text: "Er zijn {item} mensen."
+      text: "Ik ben {item} jaar."
       language_code: nl
       direction: ltr
       text_blocks:
         - {text: "Complete the Dutch sentence.", language_code: en, direction: ltr}
-    slots: {item: *number}
+    slots: {item: *number_symbol}
     answer_derivation: {kind: slot_text, slot: item}
-    feedback_frame: {text: "The quantity is {item}.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{item} gives the speaker's age.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit02.lesson04.translate.003
     lesson_content_key: nl.a1.unit02.lesson04.leeftijd_en_aantallen
     type: translation
     frame:
-      text: "There are {item} people."
+      text: "I am {item} years old."
       language_code: en
       direction: ltr
       slot_rendering: {item: english_gloss}
       text_blocks:
         - {text: "Translate into Dutch.", language_code: en, direction: ltr}
-    slots: {item: *number}
-    answer_derivation: {kind: render_frame, frame: {text: "Er zijn {item} mensen.", language_code: nl, direction: ltr}}
-    feedback_frame: {text: "The quantity is {item}.", language_code: en, direction: ltr}
+    slots: {item: *number_symbol}
+    answer_derivation: {kind: render_frame, frame: {text: "Ik ben {item} jaar.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "The Dutch sentence gives the age with {item} jaar.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit02.lesson05.order.001
     lesson_content_key: nl.a1.unit02.lesson05.prijzen
     type: word_order
     frame: {text: "Dat kost {item} euro.", language_code: nl, direction: ltr}
-    slots: {item: *number}
+    slots: {item: *number_symbol}
     answer_derivation: {kind: render_frame, frame: {text: "Dat kost {item} euro.", language_code: nl, direction: ltr}}
-    feedback_frame: {text: "The price uses {item} euros.", language_code: en, direction: ltr}
+    feedback_frame: {text: "The price is {item} euro.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit02.lesson05.complete.002
     lesson_content_key: nl.a1.unit02.lesson05.prijzen
     type: fill_in_blank
@@ -167,9 +168,9 @@ templates:
       direction: ltr
       text_blocks:
         - {text: "Complete the Dutch sentence.", language_code: en, direction: ltr}
-    slots: {item: *number}
+    slots: {item: *number_symbol}
     answer_derivation: {kind: slot_text, slot: item}
-    feedback_frame: {text: "The price uses {item} euros.", language_code: en, direction: ltr}
+    feedback_frame: {text: "The price is {item} euro.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit02.lesson05.translate.003
     lesson_content_key: nl.a1.unit02.lesson05.prijzen
     type: translation
@@ -180,38 +181,38 @@ templates:
       slot_rendering: {item: english_gloss}
       text_blocks:
         - {text: "Translate into Dutch.", language_code: en, direction: ltr}
-    slots: {item: *number}
+    slots: {item: *number_symbol}
     answer_derivation: {kind: render_frame, frame: {text: "Dat kost {item} euro.", language_code: nl, direction: ltr}}
-    feedback_frame: {text: "The price uses {item} euros.", language_code: en, direction: ltr}
+    feedback_frame: {text: "The price is {item} euro.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit02.lesson06.order.001
     lesson_content_key: nl.a1.unit02.lesson06.inschrijven_bij_de_bibliotheek
     type: word_order
-    frame: {text: "De zaal is nummer {item}.", language_code: nl, direction: ltr}
-    slots: {item: *number}
-    answer_derivation: {kind: render_frame, frame: {text: "De zaal is nummer {item}.", language_code: nl, direction: ltr}}
+    frame: {text: "Het taalcafé is in zaal {item}.", language_code: nl, direction: ltr}
+    slots: {item: *number_symbol}
+    answer_derivation: {kind: render_frame, frame: {text: "Het taalcafé is in zaal {item}.", language_code: nl, direction: ltr}}
     feedback_frame: {text: "The room number is {item}.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit02.lesson06.complete.002
     lesson_content_key: nl.a1.unit02.lesson06.inschrijven_bij_de_bibliotheek
     type: fill_in_blank
     frame:
-      text: "De zaal is nummer {item}."
+      text: "Het taalcafé is in zaal {item}."
       language_code: nl
       direction: ltr
       text_blocks:
         - {text: "Complete the Dutch sentence.", language_code: en, direction: ltr}
-    slots: {item: *number}
+    slots: {item: *number_symbol}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "The room number is {item}.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit02.lesson06.translate.003
     lesson_content_key: nl.a1.unit02.lesson06.inschrijven_bij_de_bibliotheek
     type: translation
     frame:
-      text: "The room is number {item}."
+      text: "The language café is in room {item}."
       language_code: en
       direction: ltr
       slot_rendering: {item: english_gloss}
       text_blocks:
         - {text: "Translate into Dutch.", language_code: en, direction: ltr}
-    slots: {item: *number}
-    answer_derivation: {kind: render_frame, frame: {text: "De zaal is nummer {item}.", language_code: nl, direction: ltr}}
+    slots: {item: *number_symbol}
+    answer_derivation: {kind: render_frame, frame: {text: "Het taalcafé is in zaal {item}.", language_code: nl, direction: ltr}}
     feedback_frame: {text: "The room number is {item}.", language_code: en, direction: ltr}
