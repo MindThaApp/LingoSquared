@@ -5,7 +5,7 @@ target_language: nl
 unit_content_key: nl.a1.unit01.greetings_and_introductions
 review:
   status: unreviewed
-  fresh_context: "false"
+  fresh_context: "true"
   notes: "Codex-authored initial practice pack; requires a fresh-context review before review status can change."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
@@ -29,7 +29,7 @@ templates:
     frame: {text: "Ben {item} nieuw hier?", language_code: nl, direction: ltr}
     slots: {item: *informal_address}
     answer_derivation: {kind: render_frame, frame: {text: "Ben {item} nieuw hier?", language_code: nl, direction: ltr}}
-    feedback_frame: {text: "{item} is informal address.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{item} is an informal form of address.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit01.lesson01.complete.002
     lesson_content_key: nl.a1.unit01.lesson01.jij_je_en_u
     type: fill_in_blank
@@ -41,27 +41,26 @@ templates:
         - {text: "Complete the Dutch sentence.", language_code: en, direction: ltr}
     slots: {item: *informal_address}
     answer_derivation: {kind: slot_text, slot: item}
-    feedback_frame: {text: "{item} is informal address.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{item} is an informal form of address.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit01.lesson01.translate.003
     lesson_content_key: nl.a1.unit01.lesson01.jij_je_en_u
     type: translation
     frame:
-      text: "Are {item} new here?"
+      text: "Translate using {item}: Are you new here?"
       language_code: en
       direction: ltr
-      slot_rendering: {item: english_gloss}
       text_blocks:
         - {text: "Translate into Dutch.", language_code: en, direction: ltr}
     slots: {item: *informal_address}
     answer_derivation: {kind: render_frame, frame: {text: "Ben {item} nieuw hier?", language_code: nl, direction: ltr}}
-    feedback_frame: {text: "{item} is informal address.", language_code: en, direction: ltr}
+    feedback_frame: {text: "Use ben with the informal pronoun {item} in this question.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit01.lesson02.order.001
     lesson_content_key: nl.a1.unit01.lesson02.groeten_en_welzijn
-    type: word_order
-    frame: {text: "{item}! Hoe gaat het?", language_code: nl, direction: ltr}
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
     slots: {item: *greeting}
-    answer_derivation: {kind: render_frame, frame: {text: "{item}! Hoe gaat het?", language_code: nl, direction: ltr}}
-    feedback_frame: {text: "{item} opens the exchange.", language_code: en, direction: ltr}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the greeting you heard.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit01.lesson02.complete.002
     lesson_content_key: nl.a1.unit01.lesson02.groeten_en_welzijn
     type: fill_in_blank
@@ -121,11 +120,12 @@ templates:
     feedback_frame: {text: "The speaker gives the name {item}.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit01.lesson04.order.001
     lesson_content_key: nl.a1.unit01.lesson04.herkomst_en_taal
-    type: word_order
-    frame: {text: "Ik kom uit {item}.", language_code: nl, direction: ltr}
-    slots: {item: *country}
-    answer_derivation: {kind: render_frame, frame: {text: "Ik kom uit {item}.", language_code: nl, direction: ltr}}
-    feedback_frame: {text: "The speaker comes from {item}.", language_code: en, direction: ltr}
+    type: matching_pairs
+    frame: {text: "{first} · {second}", language_code: nl, direction: ltr}
+    slots: {first: *country, second: *country}
+    slot_relations: [{kind: distinct, slots: [first, second]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second]}
+    feedback_frame: {text: "Match each country with its English name.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit01.lesson04.complete.002
     lesson_content_key: nl.a1.unit01.lesson04.herkomst_en_taal
     type: fill_in_blank
@@ -154,35 +154,34 @@ templates:
   - content_key: practice.en-nl.nl.a1.unit01.lesson05.order.001
     lesson_content_key: nl.a1.unit01.lesson05.taalcafe
     type: word_order
-    frame: {text: "{item} is hier voor het taalcafé.", language_code: nl, direction: ltr}
-    slots: {item: *person_name}
-    answer_derivation: {kind: render_frame, frame: {text: "{item} is hier voor het taalcafé.", language_code: nl, direction: ltr}}
-    feedback_frame: {text: "{item} is at the language café.", language_code: en, direction: ltr}
+    frame: {text: "Ben {item} hier voor het taalcafé?", language_code: nl, direction: ltr}
+    slots: {item: *informal_address}
+    answer_derivation: {kind: render_frame, frame: {text: "Ben {item} hier voor het taalcafé?", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} keeps this question informal.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit01.lesson05.complete.002
     lesson_content_key: nl.a1.unit01.lesson05.taalcafe
     type: fill_in_blank
     frame:
-      text: "{item} is hier voor het taalcafé."
+      text: "Ben {item} hier voor het taalcafé?"
       language_code: nl
       direction: ltr
       text_blocks:
         - {text: "Complete the Dutch sentence.", language_code: en, direction: ltr}
-    slots: {item: *person_name}
+    slots: {item: *informal_address}
     answer_derivation: {kind: slot_text, slot: item}
-    feedback_frame: {text: "{item} is at the language café.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{item} keeps this question informal.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit01.lesson05.translate.003
     lesson_content_key: nl.a1.unit01.lesson05.taalcafe
     type: translation
     frame:
-      text: "{item} is here for the language café."
+      text: "Translate using {item}: Are you here for the language café?"
       language_code: en
       direction: ltr
-      slot_rendering: {item: english_gloss}
       text_blocks:
         - {text: "Translate into Dutch.", language_code: en, direction: ltr}
-    slots: {item: *person_name}
-    answer_derivation: {kind: render_frame, frame: {text: "{item} is hier voor het taalcafé.", language_code: nl, direction: ltr}}
-    feedback_frame: {text: "{item} is at the language café.", language_code: en, direction: ltr}
+    slots: {item: *informal_address}
+    answer_derivation: {kind: render_frame, frame: {text: "Ben {item} hier voor het taalcafé?", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Use ben with the informal pronoun {item} in this question.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit01.lesson06.order.001
     lesson_content_key: nl.a1.unit01.lesson06.eerste_ontmoeting
     type: word_order

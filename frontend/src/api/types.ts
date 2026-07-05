@@ -122,7 +122,12 @@ export interface Lesson {
   exercises: Exercise[];
 }
 
-export type AnswerResponse = string | string[] | Record<string, string>;
+export interface MatchingPairAnswer {
+  left: string;
+  right: string;
+}
+
+export type AnswerResponse = string | string[] | Record<string, string> | MatchingPairAnswer[];
 
 export interface AnswerResult {
   correct: boolean;
