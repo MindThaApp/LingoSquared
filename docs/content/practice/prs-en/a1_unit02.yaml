@@ -1,0 +1,94 @@
+schema_version: "1.0"
+pack_key: practice.prs-en.a1.unit02
+source_language: prs
+target_language: en
+unit_content_key: en.a1.unit02.introductions
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: "Authored directly (Codex rate-limited at authoring time), mirroring the en-fa pilot pack's schema and rigor. Dari feedback phrasing checked against the real prs-en overlay text, not derived from the fa-en pack. Needs a fresh-context review before shipping, same as any other content."
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [identity, person_name, dialogue_word]
+    person: [first, second, third]
+slot_presets:
+  identity: &identity {language_code: en, part_of_speech: [pronoun, verb], agreement_tags: {semantic: identity}}
+  person_name: &person_name {language_code: en, part_of_speech: proper_noun, agreement_tags: {semantic: person_name}}
+  dialogue_word: &dialogue_word {language_code: en, part_of_speech: [noun, verb, adjective], agreement_tags: {semantic: dialogue_word}}
+templates:
+  # Lesson 1: names.
+  - content_key: practice.prs-en.en.a1.unit02.lesson01.name_order.001
+    lesson_content_key: en.a1.unit02.lesson01.exchange_names
+    type: word_order
+    frame: {text: "is {person_name} name My", language_code: en, direction: ltr}
+    slots: {person_name: *person_name}
+    answer_derivation: {kind: render_frame, frame: {text: "My name is {person_name}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "My name is... راه روشن گفتن نام است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit02.lesson01.name_pair.002
+    lesson_content_key: en.a1.unit02.lesson01.exchange_names
+    type: matching_pairs
+    frame: {text: "{person_name} — {dialogue_word}", language_code: en, direction: ltr}
+    slots: {person_name: *person_name, dialogue_word: *dialogue_word}
+    answer_derivation: {kind: matching_pairs, slots: [person_name, dialogue_word]}
+    feedback_frame: {text: "{person_name} و {dialogue_word} را به معنای دری آن‌ها وصل کنین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit02.lesson01.identity_translate.003
+    lesson_content_key: en.a1.unit02.lesson01.exchange_names
+    type: translation
+    frame: {text: "{identity}", language_code: prs, direction: rtl, slot_rendering: {identity: english_gloss}}
+    slots: {identity: *identity}
+    answer_derivation: {kind: slot_text, slot: identity}
+    feedback_frame: {text: "معادل انگلیسی همان چیزی است که تایپ کردین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit02.lesson01.identity_meaning.004
+    lesson_content_key: en.a1.unit02.lesson01.exchange_names
+    type: multiple_choice
+    frame: {text: "{identity}", language_code: en, direction: ltr}
+    slots: {identity: *identity}
+    answer_derivation: {kind: slot_gloss, slot: identity}
+    feedback_frame: {text: "{identity} برای صحبت دربارهٔ نام و هویت استفاده می‌شود.", language_code: prs, direction: rtl}
+
+  # Lesson 2: roles and membership.
+  - content_key: practice.prs-en.en.a1.unit02.lesson02.role_meaning.001
+    lesson_content_key: en.a1.unit02.lesson02.exchange_roles
+    type: multiple_choice
+    frame: {text: "{dialogue_word}", language_code: en, direction: ltr}
+    slots: {dialogue_word: *dialogue_word}
+    answer_derivation: {kind: slot_gloss, slot: dialogue_word}
+    feedback_frame: {text: "{dialogue_word} نام یک نقش یا وضعیت عضویت است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit02.lesson02.role_fill.002
+    lesson_content_key: en.a1.unit02.lesson02.exchange_roles
+    type: fill_in_blank
+    frame: {text: "I am a {dialogue_word}.", language_code: en, direction: ltr}
+    slots: {dialogue_word: *dialogue_word}
+    answer_derivation: {kind: slot_text, slot: dialogue_word}
+    feedback_frame: {text: "{dialogue_word} پس از I am a می‌آید.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit02.lesson02.role_translate.003
+    lesson_content_key: en.a1.unit02.lesson02.exchange_roles
+    type: translation
+    frame: {text: "{dialogue_word}", language_code: prs, direction: rtl, slot_rendering: {dialogue_word: english_gloss}}
+    slots: {dialogue_word: *dialogue_word}
+    answer_derivation: {kind: slot_text, slot: dialogue_word}
+    feedback_frame: {text: "این همان واژهٔ نقش است که تایپ کردین.", language_code: prs, direction: rtl}
+
+  # Lesson 3: library dialogue.
+  - content_key: practice.prs-en.en.a1.unit02.lesson03.library_meaning.001
+    lesson_content_key: en.a1.unit02.lesson03.library_dialogue
+    type: multiple_choice
+    frame: {text: "{dialogue_word}", language_code: en, direction: ltr}
+    slots: {dialogue_word: *dialogue_word}
+    answer_derivation: {kind: slot_gloss, slot: dialogue_word}
+    feedback_frame: {text: "{dialogue_word} از گفت‌وگوی کتابخانه گرفته شده است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit02.lesson03.name_person_pair.002
+    lesson_content_key: en.a1.unit02.lesson03.library_dialogue
+    type: matching_pairs
+    frame: {text: "{person_name} — {identity}", language_code: en, direction: ltr}
+    slots: {person_name: *person_name, identity: *identity}
+    answer_derivation: {kind: matching_pairs, slots: [person_name, identity]}
+    feedback_frame: {text: "{person_name} و {identity} را به معنای دری آن‌ها وصل کنین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit02.lesson03.dialogue_translate.003
+    lesson_content_key: en.a1.unit02.lesson03.library_dialogue
+    type: translation
+    frame: {text: "{dialogue_word}", language_code: prs, direction: rtl, slot_rendering: {dialogue_word: english_gloss}}
+    slots: {dialogue_word: *dialogue_word}
+    answer_derivation: {kind: slot_text, slot: dialogue_word}
+    feedback_frame: {text: "این همان واژهٔ گفت‌وگوی کتابخانه است که تایپ کردین.", language_code: prs, direction: rtl}
