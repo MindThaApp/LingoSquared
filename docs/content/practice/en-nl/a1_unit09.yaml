@@ -1,0 +1,203 @@
+schema_version: "1.0"
+pack_key: practice.en-nl.a1.unit09
+source_language: en
+target_language: nl
+unit_content_key: nl.a1.unit09.directions
+review:
+  status: unreviewed
+  fresh_context: "false"
+  notes: "Authored 2026-07-06 by the Claude session syncing Endless Practice
+    template pools to lesson content growth (en-nl lane, continuing after
+    unit08 -- see docs/content/practice/en-nl/a1_unit08.yaml's notes for the
+    full redirect-from-nl-en context and the coordinator's 'keep going on
+    both directions' instruction for why this lane resumed here). This unit
+    (unit09, reviewed/stable) covers asking for and giving directions.
+    Extended scripts/backfill_lexemes_en_nl.py's UNIT_FILES glob to include
+    unit09 and added a 5-member 'direction_word' tag (links/rechts/linksaf/
+    rechtsaf/rechtdoor) for bare-word recognition only, plus a narrower
+    2-member 'turn_direction' tag (linksaf/rechtsaf) for a 'Sla {item}.'
+    frame -- 'rechtdoor' is deliberately excluded from that frame since it
+    idiomatically pairs with 'ga', not 'sla' ('Sla rechtdoor' is not
+    natural Dutch), the same non-interchangeable-synonym bug class caught
+    repeatedly earlier this session (e.g. nl-en's turn_direction/
+    card_type catches). Also reused this lane's existing 'place_non_station'
+    tag from unit08 (supermarkt/bibliotheek/ziekenhuis/bank/postkantoor/
+    bushalte, 6 members) for lessons 03-06's bare-word recognition, since
+    those places were already taught in unit08 and this unit's own overlay
+    explicitly says 'Recall de supermarkt from unit08' etc. -- legitimate
+    cross-unit vocabulary reuse, not a forward-reference violation. Every
+    slot's real candidate count was verified with a standalone
+    lexeme_matches()-replicating harness against this script's actual
+    output. Needs the standard fresh-context review before import. Same
+    blocking dependency as every earlier en-nl pack: backfill_lexemes_en_nl.py
+    has not actually been run against a real database yet."
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [direction_word, turn_direction, place_non_station]
+slot_presets:
+  direction_word: &direction_word {language_code: nl, part_of_speech: adverb, agreement_tags: {semantic: direction_word}}
+  turn_direction: &turn_direction {language_code: nl, part_of_speech: adverb, agreement_tags: {semantic: turn_direction}}
+  place_non_station: &place_non_station {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: place_non_station}}
+templates:
+  - content_key: practice.en-nl.nl.a1.unit09.lesson01.choose.001
+    lesson_content_key: nl.a1.unit09.lesson01.richtingswoorden
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *direction_word}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a direction word from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit09.lesson01.listen.002
+    lesson_content_key: nl.a1.unit09.lesson01.richtingswoorden
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *direction_word}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the direction word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit09.lesson01.match.003
+    lesson_content_key: nl.a1.unit09.lesson01.richtingswoorden
+    type: matching_pairs
+    frame: {text: "{first} · {second}", language_code: nl, direction: ltr}
+    slots: {first: *direction_word, second: *direction_word}
+    slot_relations: [{kind: distinct, slots: [first, second]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second]}
+    feedback_frame: {text: "Match each direction word with its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit09.lesson01.translate.004
+    lesson_content_key: nl.a1.unit09.lesson01.richtingswoorden
+    type: translation
+    frame:
+      text: "{item}"
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *direction_word}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The Dutch word is {item}.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit09.lesson02.order.001
+    lesson_content_key: nl.a1.unit09.lesson02.bevelsvormen
+    type: word_order
+    frame: {text: "Sla {item}.", language_code: nl, direction: ltr}
+    slots: {item: *turn_direction}
+    answer_derivation: {kind: render_frame, frame: {text: "Sla {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} is the direction in this command.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit09.lesson02.complete.002
+    lesson_content_key: nl.a1.unit09.lesson02.bevelsvormen
+    type: fill_in_blank
+    frame:
+      text: "Sla {item}."
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Complete the Dutch command.", language_code: en, direction: ltr}
+    slots: {item: *turn_direction}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} completes this turning command.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit09.lesson02.listen.003
+    lesson_content_key: nl.a1.unit09.lesson02.bevelsvormen
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *direction_word}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the direction word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit09.lesson03.choose.001
+    lesson_content_key: nl.a1.unit09.lesson03.de_weg_vragen
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *place_non_station}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a place word from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit09.lesson03.listen.002
+    lesson_content_key: nl.a1.unit09.lesson03.de_weg_vragen
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *place_non_station}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the place word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit09.lesson04.choose.001
+    lesson_content_key: nl.a1.unit09.lesson04.korte_route
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *place_non_station}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a place word from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit09.lesson04.order.002
+    lesson_content_key: nl.a1.unit09.lesson04.korte_route
+    type: word_order
+    frame: {text: "Sla {item} bij het station.", language_code: nl, direction: ltr}
+    slots: {item: *turn_direction}
+    answer_derivation: {kind: render_frame, frame: {text: "Sla {item} bij het station.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} is the direction in this command.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit09.lesson04.complete.003
+    lesson_content_key: nl.a1.unit09.lesson04.korte_route
+    type: fill_in_blank
+    frame:
+      text: "Sla {item} bij het station."
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Complete the Dutch command.", language_code: en, direction: ltr}
+    slots: {item: *turn_direction}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} completes this turning command.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit09.lesson05.choose.001
+    lesson_content_key: nl.a1.unit09.lesson05.route_op_de_kaart
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *place_non_station}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a place word from the map.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit09.lesson05.listen.002
+    lesson_content_key: nl.a1.unit09.lesson05.route_op_de_kaart
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *direction_word}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the direction word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit09.lesson06.listen.001
+    lesson_content_key: nl.a1.unit09.lesson06.vanaf_het_taalcafe
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *place_non_station}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the place word you heard in this dialogue.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit09.lesson06.order.002
+    lesson_content_key: nl.a1.unit09.lesson06.vanaf_het_taalcafe
+    type: word_order
+    frame: {text: "Sla {item} bij het station.", language_code: nl, direction: ltr}
+    slots: {item: *turn_direction}
+    answer_derivation: {kind: render_frame, frame: {text: "Sla {item} bij het station.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} is the direction in this command.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit09.lesson06.complete.003
+    lesson_content_key: nl.a1.unit09.lesson06.vanaf_het_taalcafe
+    type: fill_in_blank
+    frame:
+      text: "Sla {item} bij het station."
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Complete the Dutch command.", language_code: en, direction: ltr}
+    slots: {item: *turn_direction}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} completes this turning command.", language_code: en, direction: ltr}
