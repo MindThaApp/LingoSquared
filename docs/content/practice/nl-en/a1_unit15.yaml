@@ -1,0 +1,153 @@
+schema_version: "1.0"
+pack_key: practice.nl-en.a1.unit15
+source_language: nl
+target_language: en
+unit_content_key: en.a1.unit15.money
+review:
+  status: unreviewed
+  fresh_context: "false"
+  notes: "Authored 2026-07-05 by the Claude session syncing Endless Practice
+    template pools to lesson content growth (nl-en direction, per the
+    coordinator's scope split). Keyed to English target lexemes extended into
+    the shared scripts/_en_target_lexeme_common.py plus this pair's own Dutch
+    glosses added to scripts/backfill_lexemes_nl_en.py. Added a narrower
+    'card_type' tag (credit/debit, 2 members) separate from the broader
+    4-member 'payment_method' (cash/card/credit/debit) for the 'Do you take
+    {item} cards?' frame -- 'cash'/'card' alone there would be semantically
+    odd ('Do you take cash cards?' is not a real phrase), matching the same
+    narrowing discipline used throughout this pass (unit08's quantity_unit,
+    unit09's place_non_hospital, unit12's clothing_singular, etc.). Reused
+    the already-established 22-member 'number' tag (from unit03) for both
+    receipt/dialogue total-amount frames ('The total is {item} dollars.'/
+    'It's {item} dollars.'), safe with any number. Every slot's real
+    candidate count was verified with the same standalone
+    lexeme_matches()-replicating harness used for every other pack this pass.
+    The underlying en realization unit15 is itself UNREVIEWED (Codex was
+    usage-limited at authoring time) but the nl-en OVERLAY is already
+    fresh-context reviewed (status: reviewed) -- same pattern as units 3-10/13/14.
+    Needs the standard fresh-context review before import (both realization
+    and this practice pack). Same blocking DB-level gap as every other pack
+    from this pass: no backfill_lexemes_nl_en.py run has actually happened
+    against a real database yet."
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [payment_method, card_type, number]
+slot_presets:
+  payment_method: &payment_method {language_code: en, part_of_speech: noun, agreement_tags: {semantic: payment_method}}
+  card_type: &card_type {language_code: en, part_of_speech: noun, agreement_tags: {semantic: card_type}}
+  number: &number {language_code: en, part_of_speech: noun, agreement_tags: {semantic: number}}
+templates:
+  - content_key: practice.nl-en.en.a1.unit15.lesson01.payment_meaning.001
+    lesson_content_key: en.a1.unit15.lesson01.payment_words
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *payment_method}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is een betaalwoord uit deze les.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit15.lesson01.payment_listen.002
+    lesson_content_key: en.a1.unit15.lesson01.payment_words
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *payment_method}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is het woord dat je hoorde.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit15.lesson01.payment_pair.003
+    lesson_content_key: en.a1.unit15.lesson01.payment_words
+    type: matching_pairs
+    frame: {text: "Koppel de Engelse betaalwoorden aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
+    slots: {first_word: *payment_method, second_word: *payment_method}
+    slot_relations: [{kind: distinct, slots: [first_word, second_word]}]
+    answer_derivation: {kind: matching_pairs, slots: [first_word, second_word]}
+    feedback_frame: {text: "Je hebt twee betaalwoorden gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit15.lesson01.payment_translate.004
+    lesson_content_key: en.a1.unit15.lesson01.payment_words
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *payment_method}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit15.lesson02.take_cards_order.001
+    lesson_content_key: en.a1.unit15.lesson02.asking_about_payment
+    type: word_order
+    frame: {text: "Do you take {item} cards", language_code: en, direction: ltr}
+    slots: {item: *card_type}
+    answer_derivation: {kind: render_frame, frame: {text: "Do you take {item} cards", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} is het soort kaart waarnaar gevraagd wordt.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit15.lesson02.take_cards_fill.002
+    lesson_content_key: en.a1.unit15.lesson02.asking_about_payment
+    type: fill_in_blank
+    frame: {text: "Do you take {item} cards?", language_code: en, direction: ltr}
+    slots: {item: *card_type}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} is het soort kaart waarnaar gevraagd wordt.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit15.lesson02.card_type_translate.003
+    lesson_content_key: en.a1.unit15.lesson02.asking_about_payment
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *card_type}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit15.lesson02.payment_meaning.004
+    lesson_content_key: en.a1.unit15.lesson02.asking_about_payment
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *payment_method}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is een betaalwoord.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit15.lesson03.payment_meaning.001
+    lesson_content_key: en.a1.unit15.lesson03.reading_a_receipt
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *payment_method}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is een betaalwoord.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit15.lesson03.total_order.002
+    lesson_content_key: en.a1.unit15.lesson03.reading_a_receipt
+    type: word_order
+    frame: {text: "The total is {item} dollars", language_code: en, direction: ltr}
+    slots: {item: *number}
+    answer_derivation: {kind: render_frame, frame: {text: "The total is {item} dollars", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} is het totaalbedrag op de kassabon.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit15.lesson03.total_fill.003
+    lesson_content_key: en.a1.unit15.lesson03.reading_a_receipt
+    type: fill_in_blank
+    frame: {text: "The total is {item} dollars.", language_code: en, direction: ltr}
+    slots: {item: *number}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} is het totaalbedrag op de kassabon.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit15.lesson03.total_translate.004
+    lesson_content_key: en.a1.unit15.lesson03.reading_a_receipt
+    type: translation
+    frame: {text: "Het totaal is {item} dollar.", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *number}
+    answer_derivation: {kind: render_frame, frame: {text: "The total is {item} dollars", language_code: en, direction: ltr}}
+    feedback_frame: {text: "The total is {item} dollars betekent Het totaal is {item} dollar.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit15.lesson04.payment_listen.001
+    lesson_content_key: en.a1.unit15.lesson04.paying_dialogue
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *payment_method}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is het woord dat je hoorde.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit15.lesson04.its_order.002
+    lesson_content_key: en.a1.unit15.lesson04.paying_dialogue
+    type: word_order
+    frame: {text: "It's {item} dollars", language_code: en, direction: ltr}
+    slots: {item: *number}
+    answer_derivation: {kind: render_frame, frame: {text: "It's {item} dollars", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} is het bedrag in dit antwoord.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit15.lesson04.its_fill.003
+    lesson_content_key: en.a1.unit15.lesson04.paying_dialogue
+    type: fill_in_blank
+    frame: {text: "It's {item} dollars.", language_code: en, direction: ltr}
+    slots: {item: *number}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} is het bedrag in dit antwoord.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit15.lesson04.its_translate.004
+    lesson_content_key: en.a1.unit15.lesson04.paying_dialogue
+    type: translation
+    frame: {text: "Het is {item} dollar.", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *number}
+    answer_derivation: {kind: render_frame, frame: {text: "It's {item} dollars", language_code: en, direction: ltr}}
+    feedback_frame: {text: "It's {item} dollars betekent Het is {item} dollar.", language_code: nl, direction: ltr}
