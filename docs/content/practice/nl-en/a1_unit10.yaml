@@ -1,0 +1,138 @@
+schema_version: "1.0"
+pack_key: practice.nl-en.a1.unit10
+source_language: nl
+target_language: en
+unit_content_key: en.a1.unit10.directions
+review:
+  status: unreviewed
+  fresh_context: "false"
+  notes: "Authored 2026-07-05 by the Claude session syncing Endless Practice
+    template pools to lesson content growth (nl-en direction, per the
+    coordinator's scope split). Keyed to English target lexemes extended
+    into the shared scripts/_en_target_lexeme_common.py plus this pair's own
+    Dutch glosses added to scripts/backfill_lexemes_nl_en.py. This unit's
+    core direction vocabulary only yields 2-member tags (turn_direction:
+    left/right, deliberately excluding 'straight' since it pairs with 'go'
+    not 'turn' -- 'Turn straight' is not English; street_ordinal: first/
+    second), neither large enough for multiple_choice/listen_select's
+    >=4-distractor rule -- both are used only in word_order/fill_in_blank/
+    translation. To still give this pack the same recognition-type variety
+    as every other pack this pass, lessons 02 and 04 reuse unit09's
+    already-verified 5-member 'place' tag (bank/hospital/pharmacy/park/
+    restaurant) for a listen_select and a multiple_choice respectively,
+    thematically apt since this unit's dialogues ask directions TO those
+    same places. Every slot's real candidate count was verified with the
+    same standalone lexeme_matches()-replicating harness used for every
+    other pack this pass. The underlying en realization unit10 IS
+    fresh-context reviewed already; the nl-en overlay itself is still
+    unreviewed. Needs the standard fresh-context review before import. Same
+    blocking DB-level gap as every other pack from this pass: no
+    backfill_lexemes_nl_en.py run has actually happened against a real
+    database yet."
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [turn_direction, street_ordinal, place]
+slot_presets:
+  turn_direction: &turn_direction {language_code: en, part_of_speech: noun, agreement_tags: {semantic: turn_direction}}
+  street_ordinal: &street_ordinal {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: street_ordinal}}
+  place: &place {language_code: en, part_of_speech: noun, agreement_tags: {semantic: place}}
+templates:
+  - content_key: practice.nl-en.en.a1.unit10.lesson01.turn_order.001
+    lesson_content_key: en.a1.unit10.lesson01.basic_direction_words
+    type: word_order
+    frame: {text: "Turn {item}", language_code: en, direction: ltr}
+    slots: {item: *turn_direction}
+    answer_derivation: {kind: render_frame, frame: {text: "Turn {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} is de richting in deze instructie.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit10.lesson01.turn_fill.002
+    lesson_content_key: en.a1.unit10.lesson01.basic_direction_words
+    type: fill_in_blank
+    frame: {text: "Turn {item}.", language_code: en, direction: ltr}
+    slots: {item: *turn_direction}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} is de richting in deze instructie.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit10.lesson01.turn_translate.003
+    lesson_content_key: en.a1.unit10.lesson01.basic_direction_words
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *turn_direction}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit10.lesson02.route_order.001
+    lesson_content_key: en.a1.unit10.lesson02.asking_how_to_get
+    type: word_order
+    frame: {text: "Go straight, then turn {item} at the corner", language_code: en, direction: ltr}
+    slots: {item: *turn_direction}
+    answer_derivation: {kind: render_frame, frame: {text: "Go straight, then turn {item} at the corner", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} is de richting bij de hoek.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit10.lesson02.confirm_fill.002
+    lesson_content_key: en.a1.unit10.lesson02.asking_how_to_get
+    type: fill_in_blank
+    frame: {text: "Turn {item} at the corner, OK.", language_code: en, direction: ltr}
+    slots: {item: *turn_direction}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} is de richting bij de hoek.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit10.lesson02.turn_translate.003
+    lesson_content_key: en.a1.unit10.lesson02.asking_how_to_get
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *turn_direction}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit10.lesson02.place_listen.004
+    lesson_content_key: en.a1.unit10.lesson02.asking_how_to_get
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *place}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is de plaats die je hoorde.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit10.lesson03.street_order.001
+    lesson_content_key: en.a1.unit10.lesson03.reading_a_route
+    type: word_order
+    frame: {text: "Take the {item} street on the left", language_code: en, direction: ltr}
+    slots: {item: *street_ordinal}
+    answer_derivation: {kind: render_frame, frame: {text: "Take the {item} street on the left", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} is het volgnummer van deze straat.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit10.lesson03.street_fill.002
+    lesson_content_key: en.a1.unit10.lesson03.reading_a_route
+    type: fill_in_blank
+    frame: {text: "Take the {item} street on the right.", language_code: en, direction: ltr}
+    slots: {item: *street_ordinal}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} is het volgnummer van deze straat.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit10.lesson03.street_translate.003
+    lesson_content_key: en.a1.unit10.lesson03.reading_a_route
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *street_ordinal}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit10.lesson04.turn_order.001
+    lesson_content_key: en.a1.unit10.lesson04.giving_directions_dialogue
+    type: word_order
+    frame: {text: "Turn {item} at the corner, OK", language_code: en, direction: ltr}
+    slots: {item: *turn_direction}
+    answer_derivation: {kind: render_frame, frame: {text: "Turn {item} at the corner, OK", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} is de richting die Daniel herhaalt.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit10.lesson04.turn_fill.002
+    lesson_content_key: en.a1.unit10.lesson04.giving_directions_dialogue
+    type: fill_in_blank
+    frame: {text: "Go straight, then turn {item} at the corner.", language_code: en, direction: ltr}
+    slots: {item: *turn_direction}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} is de richting bij de hoek.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit10.lesson04.turn_translate.003
+    lesson_content_key: en.a1.unit10.lesson04.giving_directions_dialogue
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *turn_direction}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit10.lesson04.place_meaning.004
+    lesson_content_key: en.a1.unit10.lesson04.giving_directions_dialogue
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *place}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is de plaats waarnaar in dit gesprek gevraagd wordt.", language_code: nl, direction: ltr}

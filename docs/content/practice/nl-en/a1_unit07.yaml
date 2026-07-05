@@ -1,0 +1,136 @@
+schema_version: "1.0"
+pack_key: practice.nl-en.a1.unit07
+source_language: nl
+target_language: en
+unit_content_key: en.a1.unit07.food
+review:
+  status: unreviewed
+  fresh_context: "false"
+  notes: "Authored 2026-07-05 by the Claude session syncing Endless Practice
+    template pools to lesson content growth (nl-en direction, per the
+    coordinator's scope split). Keyed to English target lexemes extended into
+    the shared scripts/_en_target_lexeme_common.py plus this pair's own Dutch
+    glosses added to scripts/backfill_lexemes_nl_en.py. Reused the
+    already-established 'number' tag (from unit03) for lesson04's price
+    template ('That's {item} dollars.') rather than the food_item tag, to
+    avoid a minor but real redundancy risk ('I'd like a sandwich and a
+    sandwich, please.' if food_item were reused there too) -- accepted one
+    small remaining stylistic redundancy in lesson04's word_order template
+    (food_item can duplicate 'sandwich') since it is grammatical, just
+    slightly repetitive, not a correctness bug. Every slot's real candidate
+    count was verified with the same standalone lexeme_matches()-replicating
+    harness used for every other pack this pass: food_item=7, number=22, both
+    well over the >=4 threshold for multiple_choice/listen_select. The
+    underlying en realization unit07 IS fresh-context reviewed already; the
+    nl-en overlay itself is still unreviewed. Needs the standard fresh-context
+    review before import. Same blocking DB-level gap as every other pack from
+    this pass: no backfill_lexemes_nl_en.py run has actually happened against
+    a real database yet."
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [food_item, number]
+slot_presets:
+  food_item: &food_item {language_code: en, part_of_speech: noun, agreement_tags: {semantic: food_item}}
+  number: &number {language_code: en, part_of_speech: noun, agreement_tags: {semantic: number}}
+templates:
+  - content_key: practice.nl-en.en.a1.unit07.lesson01.food_meaning.001
+    lesson_content_key: en.a1.unit07.lesson01.food_drink_vocabulary
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *food_item}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is een eten- of drinkwoord uit deze les.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit07.lesson01.food_listen.002
+    lesson_content_key: en.a1.unit07.lesson01.food_drink_vocabulary
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *food_item}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is het woord dat je hoorde.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit07.lesson01.food_pair.003
+    lesson_content_key: en.a1.unit07.lesson01.food_drink_vocabulary
+    type: matching_pairs
+    frame: {text: "Koppel de Engelse woorden aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
+    slots: {first_item: *food_item, second_item: *food_item}
+    slot_relations: [{kind: distinct, slots: [first_item, second_item]}]
+    answer_derivation: {kind: matching_pairs, slots: [first_item, second_item]}
+    feedback_frame: {text: "Je hebt twee eten- of drinkwoorden gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit07.lesson01.food_translate.004
+    lesson_content_key: en.a1.unit07.lesson01.food_drink_vocabulary
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *food_item}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit07.lesson02.order_id_like.001
+    lesson_content_key: en.a1.unit07.lesson02.ordering_phrases
+    type: word_order
+    frame: {text: "I'd like a {item}, please", language_code: en, direction: ltr}
+    slots: {item: *food_item}
+    answer_derivation: {kind: render_frame, frame: {text: "I'd like a {item}, please", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} is wat er beleefd besteld wordt.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit07.lesson02.order_can_i_have_fill.002
+    lesson_content_key: en.a1.unit07.lesson02.ordering_phrases
+    type: fill_in_blank
+    frame: {text: "Can I have a {item}, please?", language_code: en, direction: ltr}
+    slots: {item: *food_item}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} is wat er beleefd gevraagd wordt.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit07.lesson02.order_translate.003
+    lesson_content_key: en.a1.unit07.lesson02.ordering_phrases
+    type: translation
+    frame: {text: "Ik wil graag een {item}, alstublieft.", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *food_item}
+    answer_derivation: {kind: render_frame, frame: {text: "I'd like a {item}, please", language_code: en, direction: ltr}}
+    feedback_frame: {text: "I'd like a {item}, please betekent Ik wil graag een {item}, alstublieft.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit07.lesson03.menu_meaning.001
+    lesson_content_key: en.a1.unit07.lesson03.reading_a_menu
+    type: multiple_choice
+    frame: {text: "{item} - $3", language_code: en, direction: ltr}
+    slots: {item: *food_item}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is het menu-item op deze prijskaart.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit07.lesson03.menu_pair.002
+    lesson_content_key: en.a1.unit07.lesson03.reading_a_menu
+    type: matching_pairs
+    frame: {text: "Koppel de menu-items aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
+    slots: {first_item: *food_item, second_item: *food_item}
+    slot_relations: [{kind: distinct, slots: [first_item, second_item]}]
+    answer_derivation: {kind: matching_pairs, slots: [first_item, second_item]}
+    feedback_frame: {text: "Je hebt twee menu-items gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit07.lesson03.menu_translate.003
+    lesson_content_key: en.a1.unit07.lesson03.reading_a_menu
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *food_item}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit07.lesson04.cafe_listen.001
+    lesson_content_key: en.a1.unit07.lesson04.cafe_dialogue
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *food_item}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is het woord dat je hoorde.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit07.lesson04.cafe_order.002
+    lesson_content_key: en.a1.unit07.lesson04.cafe_dialogue
+    type: word_order
+    frame: {text: "I'd like a {item} and a sandwich, please", language_code: en, direction: ltr}
+    slots: {item: *food_item}
+    answer_derivation: {kind: render_frame, frame: {text: "I'd like a {item} and a sandwich, please", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} is het eerste item in deze bestelling.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit07.lesson04.price_fill.003
+    lesson_content_key: en.a1.unit07.lesson04.cafe_dialogue
+    type: fill_in_blank
+    frame: {text: "That's {item} dollars.", language_code: en, direction: ltr}
+    slots: {item: *number}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} is het bedrag in dit antwoord.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit07.lesson04.price_translate.004
+    lesson_content_key: en.a1.unit07.lesson04.cafe_dialogue
+    type: translation
+    frame: {text: "Dat is {item} dollar.", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *number}
+    answer_derivation: {kind: render_frame, frame: {text: "That's {item} dollars", language_code: en, direction: ltr}}
+    feedback_frame: {text: "That's {item} dollars betekent Dat is {item} dollar.", language_code: nl, direction: ltr}
