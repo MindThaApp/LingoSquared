@@ -1,0 +1,562 @@
+schema_version: "1.0"
+spine_id: universal
+spine_version: "2026.1"
+cefr_level: A1
+status: draft
+supported_learning_path_scope:
+  hub_language: en
+  directed_paths:
+    - en-nl
+    - nl-en
+    - en-fr
+    - fr-en
+    - en-de
+    - de-en
+    - en-it
+    - it-en
+    - en-es
+    - es-en
+    - en-ru
+    - ru-en
+    - en-zh
+    - zh-en
+    - en-fa
+    - fa-en
+    - en-prs
+    - prs-en
+
+schema_notes:
+  outcomes_not_order:
+    description: >-
+      This spine defines language-independent communicative capabilities only.
+      The order of outcomes in this file is for readability and is never a
+      mandatory teaching sequence.
+    realization_rules:
+      - A target-language realization owns its unit and lesson ordering.
+      - A realization may reorder, split, combine, repeat, or reweight outcomes.
+      - A realization may teach prerequisites concurrently when pedagogically appropriate.
+      - Prerequisites express capability dependencies for teaching and assessment; they do not impose a universal unit order.
+      - A realization must document every departure from the suggested CEFR weighting, but does not require approval merely for reordering.
+
+  module_0:
+    description: >-
+      A target-language realization may define language-specific ramp modules
+      before or alongside mapped outcomes. These modules teach prerequisites
+      such as script, phonology, tones, pinyin, input methods, or sound-symbol
+      correspondence and map to no universal spine node.
+    representation:
+      spine_outcome_id: null
+      module_kind: one of [script_ramp, phonology_ramp, input_ramp, orthography_ramp]
+    examples:
+      - language: zh
+        possible_content: tones, pinyin, syllable structure, character input
+      - language: ru
+        possible_content: Cyrillic decoding and sound-symbol correspondence
+      - language: fa
+        possible_content: RTL handling, connected letter forms, short-vowel omission
+      - language: prs
+        possible_content: RTL handling, connected letter forms, Dari sound-symbol conventions
+
+  target_language_first:
+    description: >-
+      The universal spine supplies only the capability. Each target-language
+      realization independently owns scenarios, names, relationships,
+      register, culture, grammar progression, lexical selection, and dialogue.
+    invariants:
+      - Dialogues must be authored naturally for the target language and culture.
+      - Structurally identical dialogues across target languages for the same spine outcome are a validation failure.
+      - No realization may be produced by sentence-for-sentence translation of another realization.
+      - Farsi and Dari are separate realizations and must never be auto-merged.
+
+  source_overlay:
+    description: >-
+      A source-language overlay supplies direction-specific explanations,
+      accepted variants, contrastive notes, learner-error guidance, and
+      exercise distractor overrides.
+    invariants:
+      - Distractors must be reviewed for plausibility and ambiguity in each direction.
+      - Reversing an exercise does not automatically create a valid exercise in the opposite direction.
+      - Source-language overlays may replace, add, remove, or reorder distractors by stable exercise content key.
+
+  modalities:
+    allowed:
+      - reading
+      - writing
+      - listening
+      - speaking
+    interpretation: >-
+      Modalities identify how the capability must eventually be demonstrated.
+      Realizations may scaffold a modality before assessing it independently.
+
+  assessment_requirements:
+    description: >-
+      Each outcome lists minimum evidence that a realization must provide.
+      A realization may add assessments or divide one requirement across
+      multiple exercises, lessons, dialogues, or stories.
+    required_fields:
+      - id
+      - modality
+      - task
+      - success_criteria
+
+outcomes:
+  - id: universal.a1.greetings.open_close_exchange
+    topic: greetings
+    can_do: Open and close a short everyday social exchange appropriately.
+    prerequisites: []
+    modalities: [listening, speaking, reading, writing]
+    assessment_requirements:
+      - id: recognize_greeting
+        modality: listening
+        task: Recognize an appropriate greeting or farewell in a short utterance.
+        success_criteria: Selects the intended social function without seeing a transcript first.
+      - id: produce_greeting
+        modality: speaking
+        task: Produce an appropriate greeting and farewell for a supplied context.
+        success_criteria: Uses an intelligible, context-appropriate form.
+      - id: interpret_written_greeting
+        modality: reading
+        task: Interpret a short written greeting or farewell.
+        success_criteria: Identifies the intended meaning and register.
+      - id: write_greeting
+        modality: writing
+        task: Write a conventional greeting or farewell.
+        success_criteria: Produces an accepted target-language form.
+
+  - id: universal.a1.introductions.exchange_identity
+    topic: introductions
+    can_do: Exchange names and basic identity information in a short interaction.
+    prerequisites:
+      - universal.a1.greetings.open_close_exchange
+    modalities: [listening, speaking, reading, writing]
+    assessment_requirements:
+      - id: understand_name_question
+        modality: listening
+        task: Understand a common question asking for a name or identity.
+        success_criteria: Identifies what information is requested without transcript-first support.
+      - id: ask_and_answer_name
+        modality: speaking
+        task: Ask for and provide a name.
+        success_criteria: Completes both conversational turns intelligibly.
+      - id: read_basic_profile
+        modality: reading
+        task: Extract a person's name and one basic identity fact from a short profile.
+        success_criteria: Identifies the requested details accurately.
+      - id: write_self_introduction
+        modality: writing
+        task: Write a one- or two-sentence self-introduction.
+        success_criteria: Includes an accepted name and identity construction.
+
+  - id: universal.a1.numbers.use_basic_numbers
+    topic: numbers
+    can_do: Understand and use common whole numbers in basic everyday contexts.
+    prerequisites: []
+    modalities: [listening, speaking, reading, writing]
+    assessment_requirements:
+      - id: recognize_spoken_number
+        modality: listening
+        task: Identify a spoken number in an everyday context.
+        success_criteria: Selects or enters the intended number without transcript-first support.
+      - id: say_number
+        modality: speaking
+        task: Say a displayed number or simple quantity.
+        success_criteria: Produces an intelligible target-language number.
+      - id: interpret_written_number_expression
+        modality: reading
+        task: Interpret a number written in words or digits.
+        success_criteria: Maps the expression to the correct quantity.
+      - id: write_number_expression
+        modality: writing
+        task: Write a requested basic number or quantity.
+        success_criteria: Produces an accepted written form.
+
+  - id: universal.a1.dates.exchange_calendar_dates
+    topic: dates
+    can_do: Ask for, understand, and state a simple calendar date.
+    prerequisites:
+      - universal.a1.numbers.use_basic_numbers
+    modalities: [listening, speaking, reading, writing]
+    assessment_requirements:
+      - id: understand_spoken_date
+        modality: listening
+        task: Identify a date in a short announcement or exchange.
+        success_criteria: Selects the correct day, month, or complete date.
+      - id: ask_state_date
+        modality: speaking
+        task: Ask for and state a date.
+        success_criteria: Uses an intelligible and culturally appropriate date form.
+      - id: read_date
+        modality: reading
+        task: Interpret a date in a supported written convention.
+        success_criteria: Resolves the intended date without month/day ambiguity.
+      - id: write_date
+        modality: writing
+        task: Write a supplied date in an accepted convention.
+        success_criteria: Produces an unambiguous accepted form.
+
+  - id: universal.a1.time.ask_tell_time
+    topic: time
+    can_do: Ask for and tell basic clock times and parts of the day.
+    prerequisites:
+      - universal.a1.numbers.use_basic_numbers
+    modalities: [listening, speaking, reading, writing]
+    assessment_requirements:
+      - id: understand_spoken_time
+        modality: listening
+        task: Identify a time in a short exchange or announcement.
+        success_criteria: Selects the correct time without transcript-first support.
+      - id: ask_tell_time
+        modality: speaking
+        task: Ask for the time and state a supplied time.
+        success_criteria: Produces an intelligible conventional form.
+      - id: read_schedule_time
+        modality: reading
+        task: Extract a time from a simple schedule.
+        success_criteria: Identifies the requested event time accurately.
+      - id: write_time
+        modality: writing
+        task: Write a simple time expression.
+        success_criteria: Produces an accepted and unambiguous form.
+
+  - id: universal.a1.family.describe_relationships
+    topic: family
+    can_do: Identify close family members and describe simple family relationships.
+    prerequisites:
+      - universal.a1.introductions.exchange_identity
+    modalities: [listening, speaking, reading, writing]
+    assessment_requirements:
+      - id: understand_family_description
+        modality: listening
+        task: Identify people and relationships in a short family description.
+        success_criteria: Matches the people to the correct relationships.
+      - id: describe_family
+        modality: speaking
+        task: Give a short description of one or more family relationships.
+        success_criteria: Uses intelligible relationship terms and basic possessive structures.
+      - id: read_family_profile
+        modality: reading
+        task: Extract relationships from a short written profile.
+        success_criteria: Answers basic who-is-who questions accurately.
+      - id: write_family_sentence
+        modality: writing
+        task: Write simple sentences identifying family members.
+        success_criteria: Produces accepted relationship and possession forms.
+
+  - id: universal.a1.food.order_simple_meal
+    topic: food
+    can_do: Identify common food and drink and complete a simple ordering exchange.
+    prerequisites:
+      - universal.a1.greetings.open_close_exchange
+      - universal.a1.numbers.use_basic_numbers
+    modalities: [listening, speaking, reading, writing]
+    assessment_requirements:
+      - id: understand_ordering_exchange
+        modality: listening
+        task: Identify requested food, drink, or quantity in a short ordering exchange.
+        success_criteria: Selects all requested items without transcript-first support.
+      - id: place_order
+        modality: speaking
+        task: Request a common item and respond to one basic follow-up question.
+        success_criteria: Completes the exchange politely and intelligibly.
+      - id: read_basic_menu
+        modality: reading
+        task: Locate a named item and basic information on a short menu.
+        success_criteria: Selects the correct menu entry.
+      - id: write_simple_order
+        modality: writing
+        task: Write a short request for food or drink.
+        success_criteria: Produces an accepted request with a suitable item or quantity.
+
+  - id: universal.a1.shopping.ask_prices_quantities
+    topic: shopping
+    can_do: Ask about prices and quantities and understand a simple purchase exchange.
+    prerequisites:
+      - universal.a1.numbers.use_basic_numbers
+      - universal.a1.greetings.open_close_exchange
+    modalities: [listening, speaking, reading, writing]
+    assessment_requirements:
+      - id: understand_price
+        modality: listening
+        task: Identify the price or quantity stated in a short purchase exchange.
+        success_criteria: Selects the correct amount without transcript-first support.
+      - id: ask_price_quantity
+        modality: speaking
+        task: Ask for a price or quantity and respond to a basic answer.
+        success_criteria: Uses an intelligible target-language request.
+      - id: read_price_label
+        modality: reading
+        task: Interpret simple price and quantity labels.
+        success_criteria: Matches an item to the correct price or amount.
+      - id: write_purchase_request
+        modality: writing
+        task: Write a short request for an item and quantity.
+        success_criteria: Produces an accepted item-and-quantity construction.
+
+  - id: universal.a1.places.locate_common_places
+    topic: places
+    can_do: Identify and state the location of common places and facilities.
+    prerequisites: []
+    modalities: [listening, speaking, reading, writing]
+    assessment_requirements:
+      - id: understand_place_location
+        modality: listening
+        task: Identify a place and its basic location from a short utterance.
+        success_criteria: Selects the correct place or spatial relationship.
+      - id: state_location
+        modality: speaking
+        task: State where a common place or facility is located.
+        success_criteria: Uses an intelligible location expression.
+      - id: read_sign_map
+        modality: reading
+        task: Locate a common place using a simple sign or map label.
+        success_criteria: Identifies the requested location accurately.
+      - id: write_location
+        modality: writing
+        task: Write a short sentence locating a place.
+        success_criteria: Produces an accepted place and location construction.
+
+  - id: universal.a1.directions.ask_follow_basic_directions
+    topic: directions
+    can_do: Ask for and follow short directions to a nearby place.
+    prerequisites:
+      - universal.a1.places.locate_common_places
+    modalities: [listening, speaking, reading, writing]
+    assessment_requirements:
+      - id: follow_spoken_directions
+        modality: listening
+        task: Follow a short sequence of basic direction instructions.
+        success_criteria: Selects the correct destination or route.
+      - id: ask_give_directions
+        modality: speaking
+        task: Ask where a place is and give one or two basic direction steps.
+        success_criteria: Produces an intelligible request and route.
+      - id: read_directions
+        modality: reading
+        task: Follow short written directions on a simple map.
+        success_criteria: Identifies the correct route or destination.
+      - id: write_directions
+        modality: writing
+        task: Write one or two basic direction instructions.
+        success_criteria: Produces an accepted sequence with clear spatial meaning.
+
+  - id: universal.a1.routines.describe_daily_routine
+    topic: routines
+    can_do: Describe a simple daily routine using common activities and times.
+    prerequisites:
+      - universal.a1.time.ask_tell_time
+    modalities: [listening, speaking, reading, writing]
+    assessment_requirements:
+      - id: understand_routine
+        modality: listening
+        task: Identify activities and times in a short routine description.
+        success_criteria: Matches the activities to the correct times.
+      - id: describe_routine
+        modality: speaking
+        task: Describe several ordinary daily activities.
+        success_criteria: Produces an intelligible sequence using suitable time expressions.
+      - id: read_routine
+        modality: reading
+        task: Extract activities and timing from a short routine text.
+        success_criteria: Answers basic sequence and timing questions accurately.
+      - id: write_routine
+        modality: writing
+        task: Write several connected sentences about a daily routine.
+        success_criteria: Produces an accepted basic sequence of activities.
+
+  - id: universal.a1.plans.make_simple_plans
+    topic: plans
+    can_do: Propose, accept, decline, and schedule a simple near-future plan.
+    prerequisites:
+      - universal.a1.time.ask_tell_time
+      - universal.a1.dates.exchange_calendar_dates
+    modalities: [listening, speaking, reading, writing]
+    assessment_requirements:
+      - id: understand_plan
+        modality: listening
+        task: Identify the activity, date, time, or response in a planning exchange.
+        success_criteria: Extracts the requested plan details.
+      - id: negotiate_plan
+        modality: speaking
+        task: Propose a simple activity and accept or decline a response.
+        success_criteria: Completes the exchange with an intelligible outcome.
+      - id: read_invitation
+        modality: reading
+        task: Extract basic details from a short invitation or message.
+        success_criteria: Identifies activity, date, and time when present.
+      - id: write_plan_message
+        modality: writing
+        task: Write a short message proposing or confirming a plan.
+        success_criteria: Includes an accepted activity and scheduling expression.
+
+  - id: universal.a1.past_events.describe_recent_event
+    topic: past_events
+    can_do: Give a short, basic account of a recent completed event.
+    prerequisites:
+      - universal.a1.routines.describe_daily_routine
+      - universal.a1.time.ask_tell_time
+    modalities: [listening, speaking, reading, writing]
+    assessment_requirements:
+      - id: understand_recent_event
+        modality: listening
+        task: Identify what happened and one basic detail in a short account.
+        success_criteria: Selects the correct event and detail.
+      - id: describe_recent_event
+        modality: speaking
+        task: State one or more simple completed actions.
+        success_criteria: Communicates past or completed meaning intelligibly.
+      - id: read_recent_event
+        modality: reading
+        task: Extract a completed action and basic time reference from a short text.
+        success_criteria: Answers event and timing questions accurately.
+      - id: write_recent_event
+        modality: writing
+        task: Write several simple sentences about a recent event.
+        success_criteria: Produces an accepted completed-event construction.
+
+  - id: universal.a1.preferences.express_preferences
+    topic: preferences
+    can_do: Express and ask about basic likes, dislikes, wants, and choices.
+    prerequisites: []
+    modalities: [listening, speaking, reading, writing]
+    assessment_requirements:
+      - id: understand_preference
+        modality: listening
+        task: Identify a speaker's stated preference or choice.
+        success_criteria: Selects the correct preferred or rejected option.
+      - id: exchange_preferences
+        modality: speaking
+        task: Ask about and state a simple preference.
+        success_criteria: Completes both turns intelligibly.
+      - id: read_preference
+        modality: reading
+        task: Identify likes, dislikes, or choices in a short message.
+        success_criteria: Distinguishes preferred and non-preferred options.
+      - id: write_preference
+        modality: writing
+        task: Write a simple preference with a reason if supported by the realization.
+        success_criteria: Produces an accepted preference construction.
+
+  - id: universal.a1.comparisons.make_basic_comparisons
+    topic: comparisons
+    can_do: Make and understand basic comparisons between familiar people, objects, or options.
+    prerequisites:
+      - universal.a1.preferences.express_preferences
+      - universal.a1.numbers.use_basic_numbers
+    modalities: [listening, speaking, reading, writing]
+    assessment_requirements:
+      - id: understand_comparison
+        modality: listening
+        task: Identify which of two familiar options has a stated property.
+        success_criteria: Selects the correct option.
+      - id: make_comparison
+        modality: speaking
+        task: Compare two familiar items using a basic property.
+        success_criteria: Communicates the intended relationship intelligibly.
+      - id: read_comparison
+        modality: reading
+        task: Interpret a short comparison.
+        success_criteria: Identifies the compared items and relationship.
+      - id: write_comparison
+        modality: writing
+        task: Write a basic comparison between two familiar items.
+        success_criteria: Produces an accepted comparative construction.
+
+  - id: universal.a1.travel.handle_basic_journey
+    topic: travel
+    can_do: Handle basic transport information, tickets, destinations, and departure details.
+    prerequisites:
+      - universal.a1.numbers.use_basic_numbers
+      - universal.a1.time.ask_tell_time
+      - universal.a1.directions.ask_follow_basic_directions
+    modalities: [listening, speaking, reading, writing]
+    assessment_requirements:
+      - id: understand_travel_announcement
+        modality: listening
+        task: Identify a destination, platform, stop, or departure time.
+        success_criteria: Extracts the requested travel detail without transcript-first support.
+      - id: request_travel_information
+        modality: speaking
+        task: Ask for a ticket or basic journey information.
+        success_criteria: Communicates destination and requested information intelligibly.
+      - id: read_ticket_schedule
+        modality: reading
+        task: Extract basic information from a ticket or short schedule.
+        success_criteria: Identifies destination, time, or location accurately.
+      - id: write_travel_request
+        modality: writing
+        task: Write a short request or message about a journey.
+        success_criteria: Includes an accepted destination and relevant detail.
+
+  - id: universal.a1.health.describe_basic_problem
+    topic: health
+    can_do: State a basic health problem and understand simple immediate advice.
+    prerequisites:
+      - universal.a1.introductions.exchange_identity
+    modalities: [listening, speaking, reading, writing]
+    assessment_requirements:
+      - id: understand_health_problem
+        modality: listening
+        task: Identify a basic symptom or affected body area.
+        success_criteria: Selects the intended problem accurately.
+      - id: state_health_problem
+        modality: speaking
+        task: State a simple symptom or need for help.
+        success_criteria: Communicates the immediate problem intelligibly.
+      - id: read_basic_health_instruction
+        modality: reading
+        task: Interpret a short, non-diagnostic health instruction.
+        success_criteria: Identifies the requested action.
+      - id: write_health_message
+        modality: writing
+        task: Write a short message stating a basic health problem.
+        success_criteria: Produces an accepted symptom or help-request construction.
+
+  - id: universal.a1.work.describe_job
+    topic: work
+    can_do: State a basic occupation, workplace, and simple work activity.
+    prerequisites:
+      - universal.a1.introductions.exchange_identity
+      - universal.a1.routines.describe_daily_routine
+    modalities: [listening, speaking, reading, writing]
+    assessment_requirements:
+      - id: understand_work_description
+        modality: listening
+        task: Identify a person's occupation, workplace, or common activity.
+        success_criteria: Selects the correct work detail.
+      - id: describe_work
+        modality: speaking
+        task: State an occupation or describe a simple work activity.
+        success_criteria: Produces an intelligible basic description.
+      - id: read_work_profile
+        modality: reading
+        task: Extract work details from a short profile.
+        success_criteria: Identifies occupation and workplace when present.
+      - id: write_work_profile
+        modality: writing
+        task: Write several basic facts about work.
+        success_criteria: Produces accepted occupation and activity constructions.
+
+  - id: universal.a1.housing.describe_home
+    topic: housing
+    can_do: Describe a basic home, rooms, household objects, and location.
+    prerequisites:
+      - universal.a1.places.locate_common_places
+      - universal.a1.numbers.use_basic_numbers
+    modalities: [listening, speaking, reading, writing]
+    assessment_requirements:
+      - id: understand_home_description
+        modality: listening
+        task: Identify rooms, objects, quantities, or locations in a short description.
+        success_criteria: Selects the requested home detail.
+      - id: describe_home
+        modality: speaking
+        task: Give a short description of a home or room.
+        success_criteria: Uses intelligible room, object, quantity, and location language.
+      - id: read_housing_description
+        modality: reading
+        task: Extract basic facts from a short housing description.
+        success_criteria: Identifies rooms, location, or included features accurately.
+      - id: write_home_description
+        modality: writing
+        task: Write several simple sentences describing a home or room.
+        success_criteria: Produces accepted existence, quantity, and location constructions.

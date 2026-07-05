@@ -54,11 +54,28 @@ the API-provided field.
 `multiple_choice`, `translation`, `reverse_translation`, `fill_in_blank`,
 `word_order`, `matching_pairs`, `listening_placeholder`,
 `speaking_placeholder`, `dialogue_response`, `grammar_check`, `flashcard`,
-`reading_comprehension`, `writing_prompt`
+`reading_comprehension`, `writing_prompt`, `listen_select`, `listen_type`,
+`speak_response`, `listen_order`, `dialogue_comprehension`, `speak_repeat`
 
-Placeholder types (`listening_placeholder`, `speaking_placeholder`) render
-as "coming soon" in the frontend — backend still defines the schema/fields
-now so no migration is needed later.
+Placeholder types (`listening_placeholder`, `speaking_placeholder`,
+`speak_repeat` — the last has no checkable answer since the target text is
+already shown) render as "coming soon" in the frontend. The six
+`listen_*`/`speak_*`/`dialogue_comprehension` types added after the
+original MVP reuse existing frontend components by prompt shape
+(`listen_select`≈`multiple_choice`, `listen_type`≈`translation`,
+`listen_order`≈`word_order`, `dialogue_comprehension`≈`multiple_choice`,
+`speak_response`/`dialogue_response` share a component) — see
+`ExerciseRenderer.tsx` for the exact dispatch table, which is the
+authoritative mapping.
+
+`ExercisePrompt` additionally carries (all optional, additive): `audio_text`
++ `audio_language_code` (a target-language phrase to synthesize/play for
+`listen_*` types — the learner hears this before answering, it is not
+necessarily identical to any visible `text_block`), and
+`answer_language_code` (the language the learner's answer should be
+written in — drives which virtual keyboard, if any, the frontend shows;
+falls back to scanning `text_blocks` for older content compiled before
+this field existed).
 
 ## Core API endpoints (exact paths)
 
@@ -143,8 +160,10 @@ arrays of `{ "id", "title", "order", "lesson_count" }` /
 `GET /lessons/{lesson_id}` returns the full lesson **including all of its
 exercises in one payload** (frontend should not need N+1 calls per
 exercise). Each exercise's `prompt` object contains only what's needed to
-render and answer it — **never the correct answer** (grading is always
-server-side, in the `POST /exercises/{id}/answer` call). Any exercise with
+render and answer it. Graded exercise types **never expose the correct
+answer** (grading is server-side in `POST /exercises/{id}/answer`). The
+explicit exception is `flashcard`: its prompt includes `back_text_blocks`
+because the learner must reveal the back before self-reporting recall. Any exercise with
 mixed-language text (e.g. an English prompt + a Farsi answer field) exposes
 each piece of text as its own `text_block` with its own `language_code` and
 `direction`, rather than one lesson- or exercise-level direction:
@@ -154,6 +173,17 @@ each piece of text as its own `text_block` with its own `language_code` and
   "id": "uuid",
   "unit_id": "uuid",
   "title": "string",
+  "teaching": [
+    {
+      "kind": "vocabulary" | "phrase" | "grammar_note" | "dialogue" | "pronunciation_note" | "cultural_note",
+      "title": "string (optional, e.g. the grammar point's name)",
+      "text_blocks": [
+        { "text": "سلام", "language_code": "prs", "direction": "rtl" },
+        { "text": "hello", "language_code": "en", "direction": "ltr" }
+      ],
+      "note": "string (optional — usage/grammar explanation in the source language)"
+    }
+  ],
   "exercises": [
     {
       "id": "uuid",
@@ -165,34 +195,306 @@ each piece of text as its own `text_block` with its own `language_code` and
         ],
         "options": ["...multiple_choice only..."],
         "word_bank": ["...word_order only..."],
-        "pairs": ["...matching_pairs only (left/right items, shuffled, no answer key)..."]
+        "pairs": ["...matching_pairs only (left/right items, shuffled, no answer key)..."],
+        "back_text_blocks": ["...flashcard only — the back-of-card text_blocks, same shape as text_blocks, revealed client-side after the user flips the card..."]
       }
     }
   ]
 }
 ```
 
+**Teaching content (new — fixes a real pedagogy gap)**: lessons used to
+jump straight to graded exercises with no way for the learner to have
+actually encountered the word/phrase/grammar point being tested first.
+`teaching` is an ordered array presented **before** the exercises, one
+card per new vocabulary item, phrase, grammar point, or dialogue line
+introduced in this lesson — every exercise in the lesson should test
+something the learner was just shown in `teaching`, not something novel.
+Frontend renders `teaching` as a "learn" phase (present each card, TTS on
+every `text_block` same as everywhere else, learner clicks through at
+their own pace, no grading/XP here) that must complete before the
+existing exercise-answering phase begins. Legacy lessons with an empty or
+missing `teaching` array just skip straight to exercises (backwards
+compatible), but all new/reseeded content should include it.
+
+**Phase D additions (2026-07-05, additive, no breaking change):**
+
+- Every `text_block` (in `teaching` and in exercise `prompt`s) gains an
+  optional `speaker: string` field. A multi-turn `dialogue` teaching
+  card must use one `text_block` per speaker turn, each with its own
+  `speaker` value, instead of the old pattern of one block containing
+  the whole exchange as literal text with embedded "Name:" labels and
+  newlines — that pattern breaks TTS (reads straight through mid-line,
+  chokes on the embedded newline) regardless of provider. The compiler
+  rejects any NEW dialogue card whose single `text_block` contains a
+  newline plus a "Name:"-style label pattern; existing content is
+  migrated separately, not blocked by the new validator. Frontend
+  renders the speaker label itself from `speaker` and calls the speak
+  button once per turn/block, never once for the whole card.
+- `Exercise.prompt`/teaching-card entries may carry a
+  `media_asset_key: string` (already emitted by the compiler for
+  `listen_*` types and any content declaring recorded audio — see
+  `scripts/audio_manifest.py`'s `media_assets:` block). `GET /media/
+  {media_asset_key}` serves the recorded clip (long cache headers,
+  404 if not yet recorded — this is expected and not an error state,
+  most keys won't have a recording yet). `POST /admin/media/upload`
+  (admin auth, multipart: `key` + audio file) is how a recording gets
+  attached to a key.
+- Audio playback priority chain (frontend): recorded asset (if
+  `media_asset_key` present and `GET /media/{key}` resolves) → Google
+  Cloud TTS (existing quota logic, supported languages only) → browser
+  `speechSynthesis` → the existing honest "no voice available" message.
+  fa/prs have zero Google TTS coverage, so for those two languages the
+  chain is effectively recorded-asset-or-nothing-but-the-honest-
+  fallback until a given string has been recorded.
+
 `POST /exercises/{id}/answer` request: `{ "response": <shape depends on
-exercise type — string, string[], or pair-mapping> }`. Response:
+exercise type — string, string[], or pair-mapping> }`. For `flashcard`,
+`response` is exactly `"known"` or `"unknown"`; this self-report determines
+correctness and SRS scheduling rather than comparing typed text. Response:
 ```json
-{ "correct": true, "correct_response": "...", "xp_awarded": 10, "feedback": "string (optional)" }
+{ "correct": true, "result": "correct", "correct_response": "...", "xp_awarded": 10, "feedback": "string (optional)" }
 ```
+
+**Phase C additions (2026-07-05, additive, no breaking change):**
+
+- `result: "correct" | "almost" | "incorrect"` — new field alongside the
+  existing `correct` boolean (kept for backward compatibility; `correct
+  == true` iff `result != "incorrect"`, i.e. `almost` still counts as
+  correct for XP/SRS purposes). `almost` means a free-text answer was
+  within Damerau-Levenshtein distance 1 of an accepted answer and the
+  exercise/language allows typo tolerance (see `orthography_strict`
+  below) — maps to SM-2 quality 4 via `quality_for_result()` in
+  `app/review/sm2.py` (already an isolated seam from Phase A). Choice-type
+  exercises (multiple_choice, matching_pairs, word_order, etc.) never
+  produce `almost` — only free-text typed answers can.
+- Choice-type exercise prompts may include an optional
+  `feedback_by_option: { "<option string>": "<explanation>" }` map.
+  Stored inside the existing `Exercise.feedback` column (already
+  free-form; this phase encodes a JSON object into it rather than a
+  plain string — zero DB migration) and surfaced via the answer
+  response's `feedback` field when the learner's chosen wrong option has
+  a specific entry, instead of the exercise's generic feedback text.
+  Falls back to the generic `feedback` text (or nothing) when the chosen
+  option has no specific entry.
+- New content-compiler flag `orthography_strict: true | false` (per
+  exercise, author override). Default is tolerant (typo-distance-1
+  accepted as `almost`) for Latin-script target answers; default is
+  STRICT (`almost` never awarded, distance-1 is just `incorrect`) for
+  fa/prs and any non-Latin-script target answer, since single-letter
+  distinctions are frequently the tested content itself.
+  Script-introduction lessons (teaching the alphabet/script itself) are
+  always strict regardless of the flag. A same-distance edit that
+  crosses a script-purity boundary (e.g. Arabic ي vs. Persian ی) is
+  never silently forgiven as a typo even in tolerant mode — it's
+  surfaced as its own `feedback_by_option`-style explanation instead,
+  since script confusion is a distinct, more instructive error than a
+  fat-fingered typo.
 
 `POST /lessons/{id}/start` and `POST /lessons/{id}/complete` just need to
 return enough to update client state (e.g. `{ "started_at" }` /
 `{ "completed_at", "xp_awarded", "accuracy" }`) — no strict shape mandated
 beyond that.
 
-**Progress/review**
+**Progress/review** (settled as-implemented during integration — see note
+below on how these got out of sync)
 
-`GET /me/reviews` — due review items. Flat array is fine for LAN-scale
-testing; if item count could plausibly exceed ~200 for a single active
-user, use simple cursor pagination (`?cursor=...`, response includes
-`next_cursor`). Backend's call which threshold applies once real usage
-data exists; document the choice made.
+`GET /me/reviews?cursor=&limit=` — **always** returns the cursor-paginated
+wrapper shape, not a flat array:
+```json
+{ "items": [ { "id":"...", "exercise_id":"...", "due_at":"...", "mastery":0.5, "exercise": { "id":"...", "type":"...", "prompt":{...} } } ], "next_cursor": "2026-01-01T00:00:00|abc123" }
+```
+
+`GET /me/progress`:
+```json
+{
+  "lessons_started": 3, "lessons_completed": 1,
+  "lesson_progress": [ { "lesson_id":"...", "started_at":"...", "completed_at":"...", "accuracy":0.8, "xp_earned":10 } ],
+  "skill_progress": [ { "course_id":"...", "completed_lessons":1, "mastery":0.1 } ],
+  "vocabulary_progress": [ { "content_item_id":"...", "mastery":0.5 } ],
+  "grammar_progress": [ { "content_item_id":"...", "mastery":0.5 } ]
+}
+```
+
+`GET /me/streak` → `{ "streak_days": 3, "last_activity_date": "2026-07-01", "streak_freezes_available": 0, "freeze_used_today": false }`.
+There is no "longest streak" tracked — only current `streak_days`.
+`streak_freezes_available`/`freeze_used_today` are Phase E additions
+(2026-07-05): one streak freeze is earned at every 7-day streak
+milestone while none is currently banked, auto-consumed on exactly one
+missed day instead of resetting the streak, both computed in the
+user's own timezone (`User.timezone`, IANA string, UTC fallback).
+
+`GET /me/xp` → `{ "total_xp": 120, "daily_goal": 20 }`.
+
+`GET /me/achievements` → `[ { "id":"...", "code":"...", "title":"...", "description":"...", "earned": true } ]`.
+
+`GET /me/quests` (Phase E3, 2026-07-05) → `{ "quests": [ { "code":"clear_reviews", "title":"...", "description":"...", "xp_reward":10, "completed":false, "progress":0, "target":1 } ] }`.
+Server-authoritative daily nudge quests, computed live against the
+user's own local day (same timezone logic as streaks) rather than
+tracked via per-action hooks into every answer endpoint — quest
+completion is DERIVED from existing state each time this endpoint is
+called (e.g. "clear your due reviews" checks `GET /me/reviews/due`'s
+own due-count logic, "complete a lesson" checks today's `LessonProgress
+.completed_at`, "5 correct in practice" checks today's `PracticeAttempt
+.correct` count), not incrementally updated by modifying lesson/review/
+practice endpoints. XP is awarded exactly once per quest per day the
+first time it's observed complete (a small idempotent completion
+record, not re-awarded on repeat `GET` calls). Deliberately light — a
+nudge system, not a game economy — no UI/endpoint for "claiming," XP
+just lands automatically the moment the quest is satisfied.
+
+Note: this section originally only said "flat array is fine" for
+`/me/reviews` and didn't specify `/me/progress`, `/me/streak`, `/me/xp`,
+`/me/achievements` shapes at all — a real gap in the original contract.
+Backend and frontend were built in parallel against that gap and made
+different reasonable choices; the shapes above are the backend's
+as-built, tested behavior, confirmed working during integration testing on
+the Debian server, and the frontend was updated to match them.
 
 `POST /reviews/{id}/answer` — same response shape as the exercise-answer
 endpoint, plus `next_due_at`.
+
+### Lexeme review flow
+
+`GET /me/reviews/due` returns the current user's unsuspended lexeme reviews
+whose `due_at` is at or before the server's current time:
+
+```json
+{
+  "due_count": 3,
+  "by_course": [
+    { "course_id": "uuid", "due_count": 3 }
+  ]
+}
+```
+
+`POST /reviews/session` request:
+
+```json
+{ "course_id": "uuid", "size": 10 }
+```
+
+`size` must be between 1 and 20. The response contains freshly generated
+practice-engine items and intentionally has no `locked` field:
+
+```json
+{
+  "items": [
+    { "id": "uuid", "type": "multiple_choice", "prompt": {} }
+  ]
+}
+```
+
+Items are answered through the shared
+`POST /practice/items/{item_id}/answer` endpoint. Its response is identical
+to `PracticeAnswerOut`:
+
+```json
+{
+  "correct": true,
+  "correct_response": "server-held answer",
+  "xp_awarded": 5
+}
+```
+
+A review item remains single-answer: submitting the same item twice returns
+409. After answering it, `POST /reviews/items/{item_id}/retry` creates one
+fresh item for the same lexeme and review session:
+
+```json
+{
+  "items": [
+    { "id": "new-uuid", "type": "fill_in_blank", "prompt": {} }
+  ]
+}
+```
+
+The retry endpoint returns 404 for a foreign or non-review item, 409 if the
+original item has not been answered, and 409 if no valid reviewed template
+can generate the retry. A retry is cosmetic for SRS scheduling: only the
+first answer for a lexeme in a review session advances its interval.
+
+The legacy `GET /me/reviews` and `POST /reviews/{id}/answer` exercise-level
+endpoints are deprecated in favor of the lexeme review flow above. They
+remain available only for pre-existing `ReviewItem` rows; lesson answers no
+longer create new legacy review rows.
+
+### Unit checkpoint (test-out), Phase F, 2026-07-05
+
+Not the rejected placement-quiz enrollment system — assembled entirely from
+the unit's own existing reviewed exercises/practice templates (practice-engine
+generation across all ladder tiers), graded by the existing `grade()`, no new
+content authoring required.
+
+`POST /units/{unit_id}/checkpoint` generates 12-15 mixed items and returns
+them the same shape as `POST /reviews/session`'s `items` array (server-held
+answers, single-answer-per-item via the shared
+`POST /practice/items/{item_id}/answer` endpoint):
+
+```json
+{ "items": [ { "id": "uuid", "type": "multiple_choice", "prompt": {} } ] }
+```
+
+**Strict grading only for checkpoint items — no typo tolerance ("almost")
+regardless of the answer's script**, since this is a pass/fail assessment,
+not a learning exercise; `PracticeItem`s generated for a checkpoint carry
+enough context (a `source` value distinct from `"practice"`/`"review"`, e.g.
+`"checkpoint"`) for the answer endpoint to force `orthography_strict`
+behavior unconditionally.
+
+`GET /units/{unit_id}/checkpoint/result` reports the current session's
+state — call it any time after starting a session, not just once every item
+is answered:
+
+```json
+{
+  "status": "in_progress",
+  "answered_items": 9,
+  "total_items": 15,
+  "passed": null,
+  "score": null,
+  "weak_outcomes": [],
+  "checkpoint_passed": false
+}
+```
+
+Once `answered_items == total_items`, the same call scores the session
+(idempotently — repeat calls re-return the persisted result rather than
+re-scoring) and `status` becomes `"complete"`:
+
+```json
+{
+  "status": "complete",
+  "answered_items": 15,
+  "total_items": 15,
+  "passed": true,
+  "score": 0.87,
+  "weak_outcomes": ["gloss of a missed lexeme", "..."],
+  "checkpoint_passed": true
+}
+```
+
+`checkpoint_passed` reflects the unit's ALL-TIME pass state for this user
+(true forever once any attempt passes, independent of the specific session
+just scored) and is also returned per-unit on `GET /courses/{course_id}
+/units` as an additive `checkpoint_passed: bool` field — this is what
+frontend uses to turn `LevelCheckPage`'s existing honor-system "Recommended
+for you" badge into a demonstrated skip via a "Test out of Unit N" button.
+
+Passing at ≥80%: lexemes covered by the checkpoint's items enter SRS as
+consolidated if not already tracked for this user (mastery floor 0.5,
+`due_at` = scoring time + 3 days — skips the normal fresh-introduction
+ladder since a passed checkpoint already demonstrates mastery). Any lexeme
+the user already had an SRS row for is left completely untouched, never
+downgraded or reset.
+
+Failing is cheap and kind, not punitive: `weak_outcomes` lists the English
+glosses of incorrectly-answered lexemes (for the frontend to suggest the
+unit's own lessons), and a 1-hour server-side retake delay is enforced —
+`POST /units/{unit_id}/checkpoint` returns `429 checkpoint_retake_delayed`
+with a `retry_after_seconds` field (see the error-shape section above) when
+called again too soon after the same user's most recent attempt for that
+unit, race-safe under concurrent requests.
 
 ## Auth mechanism
 
@@ -205,6 +507,13 @@ decision for this phase.
 
 ```json
 { "error": { "code": "string_machine_code", "message": "human readable" } }
+```
+
+Some errors carry additional fields alongside `code`/`message` (e.g.
+`checkpoint_retake_delayed`'s `retry_after_seconds` — Phase F, 2026-07-05):
+
+```json
+{ "error": { "code": "checkpoint_retake_delayed", "message": "...", "retry_after_seconds": 3592 } }
 ```
 
 ## Environment / ports (LAN dev)
@@ -221,6 +530,22 @@ Either side may propose changes, but changes must be reflected in both the
 backend and frontend prompts before implementation starts. This file is
 the tiebreaker in any integration conflict.
 
+## Course levels
+
+`level` on `CourseOut`/`CourseDetail` is a validated CEFR value:
+`A1`, `A2`, `B1`, `B2`, `C1`, `C2` — not a free string. `GET
+/courses?source=&target=` can now return **multiple courses for the same
+pair at different levels**; frontend sorts them by level (A1 first) and
+shows each with a plain-language one-line description (not just the CEFR
+code, which most learners won't recognize) plus a "not sure? start at the
+earliest level" hint. No separate placement-test/enrollment mechanism for
+now — decided against it (see project discussion): a real placement quiz
+needs a calibrated question bank and interacts messily with existing
+per-course progress/XP and the speaking-unit unlock gate (which is scoped
+per-course). Revisit only if real usage shows learners want it. Course
+uniqueness is still `(source_language, target_language, title)` — distinct
+levels naturally get distinct titles, no schema constraint change needed.
+
 ## Integration ownership decision
 
 Codex owns the final backend+frontend integration pass (wiring the real
@@ -232,3 +557,76 @@ frontend-specific rendering/UX defects surfaced during that integration
 pass. Decided after a Codex cross-review of this doc and both build
 prompts (see docs/ review notes) — revisit if it stops working in
 practice.
+
+## Text-to-speech
+
+**Superseded 2026-07-04: ElevenLabs was replaced with Google Cloud TTS**
+(ElevenLabs never supported fa/prs at all; Google Cloud TTS turned out to
+have zero Persian/Dari voices either, so the fallback behavior below is
+unchanged, only the primary provider changed). Phase D of the current
+build program (see `docs/SONNET_BUILD_PROMPT_UPGRADES.md`) adds a third
+tier — recorded human audio for fa/prs — ahead of both.
+
+`POST /tts` (auth required — this hits a metered paid API). Request:
+```json
+{ "text": "سلام", "language_code": "fa" }
+```
+Response is one of two things, and the frontend must branch on
+`Content-Type`:
+- `audio/mpeg` — raw MP3 bytes, generated via Google Cloud TTS. Play directly.
+- `application/json` — `{ "use_browser_tts": true, "reason": "unsupported_language" | "quota_exceeded" | "provider_error" }`.
+  Frontend must fall back to the browser's built-in `speechSynthesis` API
+  with this `language_code` in this case — never treat this as a hard
+  error. If the browser itself has no voice for that language either
+  (confirmed real gap for fa/prs on most devices), the frontend shows an
+  honest `speak.no_voice_available` message instead of a silently-dead
+  button — never fail silently.
+
+Backend owns:
+- Google Cloud TTS integration (`GOOGLE_CLOUD_TTS_CREDENTIALS_JSON` env var
+  — raw service-account JSON content, not a file path — `pwdlib`-style
+  service-account auth, `ssml_gender=NEUTRAL`, no explicit voice `name`).
+- `tts_service.GOOGLE_TTS_SUPPORTED_LANGUAGES` (currently
+  `{en,nl,fr,de,it,es,ru,zh}`) is the authoritative supported-language set.
+  **Farsi (`fa`) and Dari (`prs`) have zero Google Cloud TTS voices at
+  all** — `/tts` always returns the browser-fallback JSON for these two,
+  never attempts the Google call.
+- Tracking cumulative characters synthesized per calendar month against
+  `TTS_MONTHLY_CHAR_BUDGET` (config: `tts_monthly_char_budget`, default
+  4,000,000) via a Postgres advisory-lock-guarded `TTSUsage` row,
+  preemptively returning `reason: "quota_exceeded"` once a request would
+  exceed the budget — never rely on the provider's own error response for
+  this.
+
+Frontend owns: a reusable "speak this text" control (`SpeakButton`, e.g. a
+speaker icon) attached to any `text_block`, calling `/tts` and playing the
+result via `<audio>` or `speechSynthesis`, everywhere `text_block`s are
+rendered (vocabulary, exercises, dialogues, reading passages) — not just
+one exercise type. Also: a custom on-screen keyboard (`VirtualKeyboard.tsx`)
+for non-Latin scripts on any typed-answer exercise, shown while the answer
+field has focus (per `answer_language_code`), with a dismiss control to
+fall back to the device's own keyboard.
+
+## Course sections (reading/writing vs. speaking)
+
+Every `Unit` now belongs to a section: `GET /courses/{id}/units` items gain
+a `section: "reading_writing" | "speaking"` field (default
+`"reading_writing"` for existing/legacy units) and a `locked: boolean`
+field. `reading_writing` covers vocabulary, grammar, reading, and writing
+exercise types (`grammar_check`, `reading_comprehension`, `writing_prompt`,
+`fill_in_blank`, `translation`, etc. — no new exercise types needed, this
+is purely a grouping/gating concept over the existing ones).
+`speaking` units are **locked** (backend returns 409
+`speaking_locked` on `POST /lessons/{id}/start` for a lesson in a locked
+unit) until the learner has completed a course-level threshold of
+`reading_writing` units in the same course — backend picks and documents a
+specific, reasonable default (e.g. 100% of `reading_writing` units
+completed, or a %; document whichever is chosen) rather than leaving it
+unspecified. Frontend shows locked speaking units visibly-but-disabled
+(not hidden) with a short explanation of what unlocks them, using the
+`locked` field — never infer lock state client-side from other data.
+
+Backend implementation choice: the threshold is 100%. A `reading_writing`
+unit is complete when all of its lessons are complete; all such units in the
+course must be complete. Anonymous unit listings conservatively return
+`locked: true` for speaking units because lock state is learner-specific.
