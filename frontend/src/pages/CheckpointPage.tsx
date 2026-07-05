@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { CheckpointApi } from "../api/endpoints";
 import { ApiError } from "../api/client";
 import { ExerciseRenderer } from "../components/exercises/ExerciseRenderer";
+import { formatCorrectResponse } from "../lib/formatAnswer";
 import type { AnswerResponse, CheckpointResult, PracticeAnswerResult, PracticeItem } from "../api/types";
 
 type Phase = "loading" | "blocked" | "unavailable" | "in_progress" | "scoring" | "done";
@@ -181,7 +182,7 @@ export function CheckpointPage() {
           </p>
           {!result.correct && (
             <p style={{ margin: "0 0 10px", fontWeight: 400 }}>
-              {t("checkpoint.correct_answer", { answer: String(result.correct_response) })}
+              {t("checkpoint.correct_answer", { answer: formatCorrectResponse(result.correct_response) })}
             </p>
           )}
           <button className="btn btn-block" onClick={handleContinue}>
