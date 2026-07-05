@@ -3120,6 +3120,122 @@ fa unit05 is now genuinely done (authored + reviewed), same bar as
 every other unit tonight. No further action taken after confirming
 this — pausing again as instructed.
 
+## Session 2 (CONTENT) continuation, 2026-07-05 — Phase D2 fix (fa unit01/02 dialogue split), manifest sync, nl unit13 dispatched
+
+Picked up as a direct continuation of the prior CONTENT session per the
+handoff above. Confirmed the exact pending state: `fa unit03`'s
+realization + overlay had already been edited (uncommitted) to flip
+`review: status` from `unreviewed` to `reviewed`, citing the fa unit05
+precedent (one real fresh-context review + concrete fixes is the bar,
+not a mandatory second confirmatory review) — accepted this as
+consistent with how every other unit this project has been marked
+reviewed, not re-litigated.
+
+**Fixed the real blocker flagged by two prior sessions: the full fa
+course could not compile end-to-end.** Root cause confirmed:
+`fa/a1_unit01_greetings.yaml` lesson06 (6 teaching cards, each a
+two-speaker exchange in one `text_blocks` entry separated by a literal
+newline + "Name:" label) and one card in `fa/
+a1_unit02_introductions.yaml` lesson06 (`exchange_origins`, same
+pattern) tripped the compiler's `validate_dialogue_teaching_card`
+(lands on ANY non-Latin label too — the capitalization check that lets
+it pass is meaningless for case-less scripts like Persian, so this
+wasn't Latin-specific). Fixed properly, not just to dodge the
+validator: split each into one `teaching` entry per speaker turn, and
+— checked `docs/CONTRACT.md`'s actual documented shape first — moved
+the speaker's name into a genuinely structured `target.speaker` field
+rather than leaving it as a literal "Name: " prefix baked into `text`.
+Confirmed by reading `compile_teaching_item` in `scripts/
+compile_content.py` that `target` is passed straight through into the
+compiled `text_blocks` entry with no allowlist, so `speaker` needed no
+compiler code change — it just needs to live inside `target:`, not as
+a sibling key (my first attempt put it as a sibling and it silently
+vanished from the compiled JSON — caught by actually inspecting
+compiled output, not just the validator's 0/0). Confirmed via
+`frontend/src/components/TextBlock.tsx` that the frontend already
+renders `speaker` as a separate label and speaks `text` alone — so
+this is also a real audio-quality fix (recorded/TTS voice will no
+longer read the character's name aloud on these specific cards),
+better than the existing pattern already used elsewhere in the
+project. Overlay glosses/notes split to match the new per-turn
+content_keys in both files.
+
+**Real gap found while fixing this, not yet addressed (flagged in
+CLAUDE.md, not blocking)**: several OTHER already-existing single-turn
+dialogue cards — `fa/a1_unit02_introductions.yaml`'s `arrival`/
+`meet_mina`/`sara_name`/`ask_origin`/`pleased`/`pleased_and_enter`, and
+ALL of units 04 (family) and 05 (places, my own unit) — still bake the
+speaker's name into `text` as a literal prefix instead of using the
+structured `speaker` field. They don't trip the compiler validator
+(single block, no embedded newline) so they're not blocking anything,
+but any real recorded or TTS voice will still read the character's
+name aloud on those cards. This means Phase D2 as originally scoped
+("re-author existing dialogues in the same pass") is only PARTIALLY
+done — the compile-blocking cases are fixed, the broader
+speaker-field migration across all dialogue content is a separate,
+lower-priority polish item for whenever an audio-recording pass
+touches these units.
+
+Verified via `scripts/compile_content.py`'s `validate` subcommand:
+fa unit01+02 alone (0/0), all 5 en-fa units together (0/0), and via
+`compile` that the compiled JSON's `text_blocks[0]` for every affected
+card now genuinely carries `speaker` as its own field (inspected the
+actual JSON, not just trusted the validator).
+
+**Synced `scripts/content_manifest.txt` to the real current state** —
+it was stale, still only listing the original single/double-unit
+seeds. Added fa units 03-05 to `en-fa`, added the `en-nl` (12 units)
+and `nl-en` (2 units) entries that didn't exist in the manifest at all
+despite nl being 12 units deep, and confirmed `en-prs`'s real file
+pair is unit01+unit03 (unit02 was apparently skipped/never authored
+for Dari — not investigated further, not a regression I introduced).
+Ran `./scripts/verify.sh --content-only`: every course direction AND
+every practice pack validates clean, 0 errors/0 warnings across the
+board.
+
+Updated CLAUDE.md's "Known limitations" entry for the fa
+full-course-compile bug to reflect the fix (kept the "remaining
+speaker-field migration" gap as a live, smaller known limitation
+instead of dropping it entirely).
+
+**Coordination check**: confirmed via the Codex job queue (shared
+runtime, `status --all`) that Session 3 has an actual fresh-context
+review running against `docs/content/practice/nl-en/` — consistent
+with the standing coordination note (Session 3 owns
+`docs/content/practice/**`, I don't touch it). No collision.
+
+**Dispatched two Codex background jobs (both `--fresh`, not `--resume`
+— learned mid-session that `--resume` targets the last-used thread and
+collides if another session/job has it busy; `status --all --json`
+under `"running"` is how to check what's actually in flight on the
+shared runtime before choosing which flag to use):**
+1. `task-mr7ql44f-t3qkjs` — fresh-context review + fix pass for fa
+   unit01 (greetings) and unit02 (introductions), both still genuinely
+   `status: unreviewed` from before tonight (not just the dialogue
+   fix — a full first review of everything in both files, instructed
+   to fix what it finds and flip `review: status` to `reviewed` if/once
+   clean). Not yet returned as of this entry.
+2. `task-mr7qlrry-45vqmj` — author nl unit13 (`universal.a1.preferences
+   .express_preferences`), continuing the nl reference-language build
+   past unit12. Not yet returned as of this entry.
+
+### Next steps for whoever continues this thread
+
+1. Retrieve and act on both job results above (`status <id> --json` /
+   `result <id>`) — diff against prior versions before trusting either,
+   per standing policy (never trust self-report, even Codex's).
+2. If fa unit01/02 comes back clean or fixed: re-validate the full
+   5-unit en-fa course once more, update CLAUDE.md's known-limitations
+   entry again if the review surfaced anything material.
+3. If nl unit13 comes back clean: dispatch its fresh-context review
+   (separate task, zero access to the authoring reasoning, same as
+   every other nl unit), continue toward unit14
+   (`universal.a1.comparisons.make_basic_comparisons` next, per the
+   spine) once reviewed.
+4. Continue coordinating with Session 3 on the `docs/content/
+   practice/**` cohort split — don't dispatch practice-pack work
+   without checking its latest log entry/job queue first.
+
 ## Status entry (this session) — pausing per Ramin's instruction, 2026-07-05
 
 Self-identified role this session: Phase F frontend completion, then
