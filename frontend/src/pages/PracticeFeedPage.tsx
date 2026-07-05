@@ -218,9 +218,9 @@ export function PracticeFeedPage() {
 
       {loadingMore && <div className="page-loading">{t("common.loading")}</div>}
 
-      {exhausted && items.length > 0 && (
+      {exhausted && !loadingMore && (
         <p className="muted" style={{ textAlign: "center" }}>
-          {t("practice.exhausted")}
+          {items.length > 0 ? t("practice.exhausted") : t("practice.none_yet")}
         </p>
       )}
 

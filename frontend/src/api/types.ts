@@ -105,7 +105,8 @@ export type TeachingCardKind =
   | "grammar_note"
   | "dialogue"
   | "pronunciation_note"
-  | "cultural_note";
+  | "cultural_note"
+  | "reading";
 
 export interface TeachingCard {
   kind: TeachingCardKind;
