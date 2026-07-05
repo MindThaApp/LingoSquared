@@ -3717,3 +3717,66 @@ covers only nl units 1-4 while nl teaching content now spans 12 units,
 and `en-fa` practice covers only units 1-2 while fa teaching content
 now spans 5 (2 reviewed: unit03 numbers, unit05 places) — extending
 coverage there is real, valuable, non-overlapping work once picked up.
+
+## Session 1 (CODE) picks up again post-commit 73dae0d — live re-verification of the matching_pairs fix, and a confirmed pre-beta security blocker, 2026-07-05
+
+Fresh pickup after the coordinating session verified and committed
+`73dae0d` (frontend half) plus the concurrent backend `canonical_pairs()`
+fix (`9c42e9f`, `28048ed`) that closed out the matching_pairs bug.
+Read CLAUDE.md, `docs/SONNET_BUILD_PROMPT_UPGRADES.md`, the spec's §1,
+and the tail of this file before acting. Checked `find . -newer
+docs/BUILD_LOG.md -mmin -10` first and found heavy concurrent activity
+this session isn't touching: Session 2/CONTENT authoring new units
+(en unit04/05/06/07, nl unit14, prs unit02 realizations + overlays),
+and — separately — live edits to `backend/app/practice/service.py`,
+`app/api/router.py`, `app/schemas/api.py`, `frontend/src/components/
+TeachingCardView.tsx`, and `frontend/src/api/types.ts`, plus new
+`backend/.env.qa`/`docker-compose.qa.yml` files, almost certainly the
+other agent already investigating the blank/unanswerable fa
+practice-question bug (confirmed by reading, not editing:
+`app/practice/service.py`'s uncommitted diff adds exactly the fix
+you'd expect — `build_prompt()`'s `fill_in_blank` branch now checks
+whether the rendered frame is empty after masking the tested slot and
+returns `None` so the sampler falls back to another template instead
+of generating a contextless blank). Did not touch any of those files;
+not this session's lane and already owned.
+
+**Confirmed the live server's `ADMIN_EMAILS` is still the
+`.env.example` placeholder, not Ramin's real address** — checked via
+`ssh ramin@192.168.4.4 "grep ADMIN_EMAILS .../backend/.env"`, a
+read-only check, no live-server file touched. Result:
+`ADMIN_EMAILS=admin@example.com`. This is exactly the item the
+security audit flagged as the one real pre-beta blocker, now verified
+rather than assumed. **Not fixed here** — changing it needs Ramin's
+real address of choice and, per the standing "never touch the live
+server unattended" rule, his presence; flagging to him directly rather
+than guessing an address or editing the live `.env` myself.
+
+**Live re-verified the exact `matching_pairs` repro Session 3 filed**
+(en-fa "Farsi A1" unit 1 lesson 1, the letter-matching exercise
+pairing س→s, ل→l, ا→ā, م→m) using claude-in-chrome against the local
+Docker stack (already up, unrelated to the other session's in-flight
+edits) — fresh test account, own new browser tab on port 5175 (left
+existing tabs on 5173/5175 alone; they belong to the human and/or the
+other investigating agent). Played the full lesson01 teaching-card
+sequence, then every exercise up to the matching_pairs card, then
+matched the exact same four pairs from the original bug report:
+**graded "Correct! 🎉 These four associations build سلام." on the
+first attempt** — confirms the fix holds for the precise case that was
+previously reproducibly wrong twice in a row. Also incidentally
+reconfirmed the known low-severity debug-fixture-courses issue
+("Multi-answer grading regression", "Practice test fc67d3ea-...") is
+still visible in the local course picker — unchanged, still not
+blocking, already documented in CLAUDE.md.
+
+Did not run `scripts/verify.sh` or restart/rebuild the Docker stack
+this round — the backend container has another session's uncommitted
+edit in flight (`app/practice/service.py`) and a full pytest/rebuild
+isn't needed to confirm this specific fix live; avoided disrupting
+their debugging session.
+
+**Next up**: relay the confirmed `ADMIN_EMAILS` placeholder to Ramin
+directly (needs his input, not a guess) before any beta invite;
+otherwise continue whatever CODE-lane work is most pressing once the
+concurrent practice-engine fix lands and commits, without touching it
+mid-flight.
