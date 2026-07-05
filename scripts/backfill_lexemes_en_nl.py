@@ -40,7 +40,7 @@ BACKEND_ROOT = REPO_ROOT / "backend"
 if str(BACKEND_ROOT) not in sys.path:
     sys.path.insert(0, str(BACKEND_ROOT))
 
-UNIT_FILES = tuple(sorted((REPO_ROOT / "docs/content/realizations/nl").glob("a1_unit0[1-8]_*.yaml")))
+UNIT_FILES = tuple(sorted((REPO_ROOT / "docs/content/realizations/nl").glob("a1_unit0[1-9]_*.yaml")))
 
 # Each lexical gloss is deliberately atomic. Capitalized sentence-initial forms
 # below reuse the same hand-authored gloss as their lowercase lexical form.
@@ -152,6 +152,15 @@ NL_GLOSSES.update({
     "Verkoper": "vendor", "natuurlijk": "of course", "Bedankt": "thanks",
 })
 
+# Unit 9 (asking for and giving directions), added 2026-07-06.
+NL_GLOSSES.update({
+    "links": "left", "rechts": "right", "linksaf": "to the left; turn left",
+    "rechtsaf": "to the right; turn right", "rechtdoor": "straight ahead",
+    "ga": "go", "sla": "turn", "loop": "walk", "Ga": "Go", "Sla": "Turn",
+    "Loop": "Walk", "vanaf": "from", "route": "the route", "START": "START",
+    "DOEL": "DESTINATION", "Route": "Route", "Graag": "gladly", "gedaan": "done",
+})
+
 for _token in ("Een", "Twee"):
     if _token not in NL_GLOSSES:
         NL_GLOSSES[_token] = NL_GLOSSES[_token.casefold()]
@@ -184,11 +193,11 @@ SYMBOLS = set("'s 0 00 06 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 18 19 20 21 22 
 PROPER_NOUNS = {"België", "Duitsland", "Egypte", "Lotte", "Nederland", "Noor", "Omar",
                 "Rotterdam", "Sander", "Fenna", "Jan", "Marieke", "Utrecht", "Amsterdam"}
 PRONOUNS = set("ik Ik je jij jou Jou me u Wij wij Mijn mijn Welke welke Wat wat Hoeveel hoeveel jouw haar hem iets".split())
-PREPOSITIONS = set("aan bij in met na naar om Om op Op over te tot Tot uit voor vóór per naast tegenover achter tussen van".split())
+PREPOSITIONS = set("aan bij in met na naar om Om op Op over te tot Tot uit voor vóór per naast tegenover achter tussen van vanaf".split())
 PARTICLES = set("behalve dan Dan dat Dat de De dit Dit dus een Een en En er Er geen Geen het Het Ja ja Nee nee Niet niet of ook wel maar nog Anders".split())
 ADJECTIVES = set("Belgisch beleefd Duits Engels formeel Goed hele informeel laat Leuk leuk Nederlands nieuw normaal open oud slecht volgende elke Mooi".split())
-ADVERBS = set("avonds vandaan halverwege hier hoe Hoe hoeveelste middags nachts ochtends terug vandaag Vandaag waar Waar wanneer Wanneer graag vaak natuurlijk".split())
-VERBS = set("begint ben Ben bent Bent heb Heb heet inschrijven is Is kom Kom komt Komt kost krijgen leer moet ontmoeten spreek wil wilt woon wonen Wonen woont zijn zitten Kun kun herhalen gaat drinken eten Mag mag Zie hebben neem kan Kan pinnen Kijk".split())
+ADVERBS = set("avonds vandaan halverwege hier hoe Hoe hoeveelste middags nachts ochtends terug vandaag Vandaag waar Waar wanneer Wanneer graag vaak natuurlijk links rechts linksaf rechtsaf rechtdoor Graag".split())
+VERBS = set("begint ben Ben bent Bent heb Heb heet inschrijven is Is kom Kom komt Komt kost krijgen leer moet ontmoeten spreek wil wilt woon wonen Wonen woont zijn zitten Kun kun herhalen gaat drinken eten Mag mag Zie hebben neem kan Kan pinnen Kijk ga sla loop Ga Sla Loop gedaan".split())
 PHRASES = {"Aangenaam", "Goedemiddag", "Goedemorgen", "Goedenavond", "Hallo", "Hoi", "Prima", "ziens",
            "alstublieft", "alsjeblieft", "eraan", "Bedankt"}
 NOUNS = set("Achtenveertig Dagen Inleverdatum Maanden Medewerker Nul Pauze Taalcafé Twaalf Welkom Workshop acht achtentwintig achtentwintigste achtenveertig achtste achttien achttiende april augustus avond bibliotheek bijdrage boek boeken cent dag dank datum december derde dertien dertiende dertig dertigste dinsdag donderdag drie drieëntwintigste drieënveertig eenendertigste eenentwintig eenentwintigste eenheid eerste elf elfde euro februari groep half hoofdletter huisnummer inleverdatum jaar januari juli juni keer kwart kwartier maand maandag maart mei mensen middag naam nacht negen negende negenennegentig negenentwintigste negentien negentiende negentig november nul nummer ochtend oktober rooster september stoelen taalcafé tachtig tafel telefoonnummer tien tiende tiental tijd twaalf twaalfde twee tweede tweeëndertig tweeëntwintig tweeëntwintigste tweeënveertig twintig twintigste uur veertien veertiende veertig vier vierde vierentwintigste vijf vijfde vijfentwintigste vijfenzestig vijfenzeventig vijftien vijftiende vijftig vrijdag vrijdagmiddag week woensdag workshop zaal zaterdag zes zesde zesentwintigste zestien zestiende zestig zeven zevende zevenentachtig zevenentwintigste zeventien zeventiende zeventig zondag één "
@@ -197,7 +206,8 @@ NOUNS = set("Achtenveertig Dagen Inleverdatum Maanden Medewerker Nul Pauze Taalc
               "markt winkel kraam appels peren tomaten paprika's Appels Peren Tomaten Paprika's kilo honderd gram pond stuk stuks "
               "prijskaartje Verkoper Twee "
               "station supermarkt ziekenhuis bank postkantoor bushalte buurt kaart buurtkaart BUURTKAART "
-              "Bibliotheek Ziekenhuis Postkantoor Supermarkt Bank Bushalte".split())
+              "Bibliotheek Ziekenhuis Postkantoor Supermarkt Bank Bushalte "
+              "route Route START DOEL".split())
 
 
 def nl_part_of_speech(token: str) -> str:
@@ -240,6 +250,9 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         "plaatsen": "common_place", "naast_en_tegenover": "location_position",
         "achter_en_voor": "location_position", "waar_en_meer_plaatswoorden": "location_question",
         "eenvoudige_kaart": "map_reading", "waar_is_de_bushalte": "place_dialogue",
+        "richtingswoorden": "direction_word", "bevelsvormen": "imperative_direction",
+        "de_weg_vragen": "route_question", "korte_route": "short_route",
+        "route_op_de_kaart": "route_map", "vanaf_het_taalcafe": "route_dialogue",
     }
     semantic.append(lesson_categories[unit_lesson])
     if t in {"jij", "je"}: semantic.append("informal_address")
@@ -309,6 +322,17 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     # unit's real content, which uses all 4 with the same "is ... het
     # station" sentence shape.
     if t in {"naast", "tegenover", "achter", "voor"}: semantic.append("position")
+    # Unit 9 (directions): the 5 core direction words, safe as a group for
+    # bare-word recognition only (not a single shared generative frame --
+    # "sla" idiomatically only pairs with linksaf/rechtsaf, never rechtdoor,
+    # see turn_direction below).
+    if t in {"links", "rechts", "linksaf", "rechtsaf", "rechtdoor"}:
+        semantic.append("direction_word")
+    # Narrower: only these two are attested after "Sla ___." in this unit's
+    # real content ("Sla linksaf."/"Sla rechtsaf.") -- "rechtdoor" pairs with
+    # "ga", not "sla" ("Sla rechtdoor" is not idiomatic Dutch), so it is
+    # deliberately excluded from this tag.
+    if t in {"linksaf", "rechtsaf"}: semantic.append("turn_direction")
     tags: dict[str, object] = {"semantic": list(dict.fromkeys(semantic))}
     if t in {"jij", "je"}: tags["register"] = "informal"
     elif t == "u": tags["register"] = "polite"
