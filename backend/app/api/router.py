@@ -1210,7 +1210,7 @@ def content_validate(body:ValidateRequest,user=Depends(admin_user),db:Session=De
 @router.get("/admin/content/missing-report")
 def missing(user=Depends(admin_user),db:Session=Depends(get_db)):
     kinds={k for (k,) in db.execute(select(ContentItem.kind).distinct())}; present={(a,b) for a,b in db.execute(select(Course.source_language,Course.target_language))}; codes=list(db.scalars(select(Language.code)))
-    return {"missing_language_pairs":[{"source_language":a,"target_language":b} for a in codes for b in codes if a!=b and (a,b) not in present],"missing_content_kinds":sorted({"vocabulary","phrase","grammar_note","dialogue","pronunciation_note","cultural_note"}-kinds)}
+    return {"missing_language_pairs":[{"source_language":a,"target_language":b} for a in codes for b in codes if a!=b and (a,b) not in present],"missing_content_kinds":sorted({"vocabulary","phrase","grammar_note","dialogue","pronunciation_note","cultural_note","reading"}-kinds)}
 @router.get("/admin/content/issues",response_model=list[ContentIssueOut])
 def content_issues(status:ContentIssueStatus|None=None,category:ContentIssueCategory|None=None,limit:int=Query(100,ge=1,le=200),offset:int=Query(0,ge=0),user=Depends(admin_user),db:Session=Depends(get_db)):
     q=select(ContentIssueReport); q=q.where(ContentIssueReport.status==status) if status else q; q=q.where(ContentIssueReport.category==category) if category else q
