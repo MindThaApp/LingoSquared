@@ -143,6 +143,19 @@ EN_POS: dict[str, str] = {
     "wake": "verb", "up": "particle", "dressed": "adjective", "dinner": "noun",
     "bed": "noun", "every": "adjective", "usually": "adverb", "breakfast": "noun",
     "after": "preposition",
+    # Unit 17 (making simple plans), added 2026-07-05.
+    "want": "verb", "movie": "noun", "weekend": "noun", "would": "verb",
+    "walk": "noun", "love": "verb", "busy": "adjective", "maybe": "adverb",
+    "another": "adjective", "lunch": "noun", "1pm": "noun", "works": "verb",
+    # Unit 18 (describing a recent event), added 2026-07-05.
+    "went": "verb", "saw": "verb", "ate": "verb", "visited": "verb",
+    "worked": "verb", "did": "verb", "yesterday": "noun", "together": "adverb",
+    "watched": "verb", "writer's": "noun", "s": "particle", "was": "verb",
+    "week": "noun",
+    # Unit 19 (expressing likes and preferences), added 2026-07-05.
+    "like": "verb", "don't": "verb", "prefer": "verb", "hate": "verb",
+    "calmer": "adjective", "very": "adverb", "strong": "adjective",
+    "why": "adverb", "think": "verb", "prefers": "verb", "thinks": "verb",
 }
 
 def en_agreement_tags(token: str) -> dict[str, object]:
@@ -274,6 +287,20 @@ def en_agreement_tags(token: str) -> dict[str, object]:
         semantics.append("card_type")
     if token in {"dinner", "breakfast"}:
         semantics.append("meal")
+    if token in {"went", "saw", "ate", "visited", "worked"}:
+        semantics.append("past_verb")
+    # Narrower than past_verb: only the intransitive-safe ones for "I {item}
+    # yesterday." -- "saw"/"visited" are transitive and would leave that
+    # frame feeling incomplete ("I saw yesterday." / "I visited yesterday.")
+    if token in {"went", "ate", "worked"}:
+        semantics.append("past_verb_intransitive")
+    if token in {"like", "don't", "prefer", "love", "hate"}:
+        semantics.append("preference_verb")
+    # Narrower than preference_verb: excludes "don't" (an auxiliary needing a
+    # following verb -- "I don't tea." is not a sentence), safe for
+    # "I {item} tea/coffee." frames.
+    if token in {"like", "prefer", "love", "hate"}:
+        semantics.append("preference_verb_full")
 
     tags: dict[str, object] = {}
     if semantics:

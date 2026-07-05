@@ -1,9 +1,29 @@
 #!/usr/bin/env python3
-"""Idempotently backfill target-side en-nl Dutch A1 lexemes for units 1-4.
+"""Idempotently backfill target-side en-nl Dutch A1 lexemes for units 1-7.
 
 Run with ``--dry-run`` to parse and classify content without importing the
 application or connecting to PostgreSQL.  The realization files' complete
 ``introduced_tokens`` inventories are authoritative.
+
+Extended 2026-07-05 (units 5-6, family/food; then unit 7, market shopping) to
+keep pace with new practice-template packs for those units -- see
+docs/content/practice/en-nl/a1_unit05.yaml through a1_unit07.yaml. Units 8-11
+(also reviewed/stable) are NOT yet covered here; extending this same way is
+the exact next step for whoever continues the practice-pool sync (see
+docs/BUILD_LOG.md).
+
+Known limitation surfaced while extending this (units 5-6): this script keys
+its in-memory `specs` dict by bare token string, and `nl_part_of_speech()` is
+a pure function of the token with no context -- so a genuine homograph across
+units (same spelling, different part of speech/meaning) can only ever get ONE
+classification, whichever set the token happens to sit in. Concretely: "zijn"
+already means "are" (verb, from units 1-4) and unit05 introduces "zijn"
+meaning "his" (possessive pronoun) -- the second sense silently never gets
+its own lexeme row; the token stays classified as the verb, with the verb's
+english_gloss. Practice templates must NOT rely on "zijn" (his) as a
+generation slot value until this is fixed (needs POS-aware/context-aware
+keying); bake it as literal frame text instead, same as this pack's
+a1_unit05.yaml does for its zijn_haar lesson templates.
 """
 
 from __future__ import annotations
@@ -20,7 +40,7 @@ BACKEND_ROOT = REPO_ROOT / "backend"
 if str(BACKEND_ROOT) not in sys.path:
     sys.path.insert(0, str(BACKEND_ROOT))
 
-UNIT_FILES = tuple(sorted((REPO_ROOT / "docs/content/realizations/nl").glob("a1_unit0[1-4]_*.yaml")))
+UNIT_FILES = tuple(sorted((REPO_ROOT / "docs/content/realizations/nl").glob("a1_unit0[1-8]_*.yaml")))
 
 # Each lexical gloss is deliberately atomic. Capitalized sentence-initial forms
 # below reuse the same hand-authored gloss as their lowercase lexical form.
@@ -94,6 +114,60 @@ NL_GLOSSES.update({
     "Maanden": "months", "nee": "no", "niet": "not", "waar": "where", "wij": "we",
 })
 
+# Unit 5 (family) and unit 6 (food/ordering), added 2026-07-05.
+NL_GLOSSES.update({
+    "vader": "father", "moeder": "mother", "ouders": "parents", "broer": "brother",
+    "zus": "sister", "kind": "the child", "kinderen": "the children", "een": "a; an",
+    "opa": "grandfather", "oma": "grandmother", "oom": "uncle", "tante": "aunt",
+    "neef": "male cousin; nephew", "nicht": "female cousin; niece",
+    "gezin": "family (household)", "wonen": "live; reside", "Rotterdam": "Rotterdam",
+    "hebben": "have (plural/infinitive)", "jouw": "your (emphatic)", "Dit": "this",
+    "haar": "her", "heet": "am called; are called", "Sander": "Sander (a Dutch male name)",
+    "Fenna": "Fenna (a Dutch female name)", "Jan": "Jan (a Dutch male name)",
+    "Marieke": "Marieke (a Dutch female name)", "elke": "every", "maand": "month",
+    "Heb": "have", "broers": "brothers", "zussen": "sisters", "Geen": "no; not any",
+    "Wonen": "live; reside", "Utrecht": "Utrecht", "familie": "family (relatives in general)",
+    "maar": "but", "woont": "lives; resides", "Amsterdam": "Amsterdam",
+    "Zie": "see (imperative/question form)", "hem": "him", "vaak": "often",
+    "koffie": "coffee", "thee": "tea", "water": "water", "melk": "milk", "sap": "juice",
+    "brood": "bread", "broodje": "sandwich roll", "kaas": "cheese", "appel": "apple",
+    "wil": "want", "graag": "gladly; please (with wil)", "alstublieft": "please (formal)",
+    "alsjeblieft": "please (informal)", "wilt": "want (with u, formal)",
+    "drinken": "to drink; drink", "eten": "to eat; eat", "appelsap": "apple juice",
+    "Mag": "may; can (polite)", "Menukaart": "menu", "Koffie": "coffee",
+    "Thee": "tea", "Broodje": "sandwich roll", "Appelsap": "apple juice",
+    "iets": "something", "Komt": "comes", "eraan": "on its way (part of komt eraan)",
+})
+
+# Unit 7 (shopping at the market), added 2026-07-05.
+NL_GLOSSES.update({
+    "markt": "the market", "winkel": "the shop", "kraam": "the stall",
+    "appels": "apples", "peren": "pears", "tomaten": "tomatoes", "paprika's": "bell peppers",
+    "kilo": "a kilo", "per": "per", "honderd": "hundred", "gram": "grams",
+    "pond": "a pound (500 grams)", "500": "500", "stuk": "one piece; one item",
+    "stuks": "pieces; items", "prijskaartje": "the price label",
+    "Appels": "Apples", "Peren": "Pears", "Tomaten": "Tomatoes", "Paprika's": "Bell peppers",
+    "mag": "may; can (polite)", "neem": "take", "Anders": "otherwise; anything else",
+    "nog": "still; else", "kan": "can", "Kan": "can", "pinnen": "pay by card",
+    "Verkoper": "vendor", "natuurlijk": "of course", "Bedankt": "thanks",
+})
+
+for _token in ("Een", "Twee"):
+    if _token not in NL_GLOSSES:
+        NL_GLOSSES[_token] = NL_GLOSSES[_token.casefold()]
+
+# Unit 8 (locating places), added 2026-07-05.
+NL_GLOSSES.update({
+    "station": "the station", "supermarkt": "the supermarket", "ziekenhuis": "the hospital",
+    "bank": "the bank", "postkantoor": "the post office", "bushalte": "the bus stop",
+    "naast": "next to", "tegenover": "opposite; across from", "achter": "behind",
+    "tussen": "between", "buurt": "neighbourhood; area", "van": "of; from",
+    "kaart": "the map", "buurtkaart": "the neighbourhood map",
+    "BUURTKAART": "NEIGHBOURHOOD MAP", "Bibliotheek": "Library", "Ziekenhuis": "Hospital",
+    "Postkantoor": "Post office", "Supermarkt": "Supermarket", "Bank": "Bank",
+    "Bushalte": "Bus stop", "Kijk": "look", "Mooi": "nice; good",
+})
+
 # Case variants are tokens in their own right because provenance preserves the
 # realization spelling. Their gloss is the explicit lexical gloss above.
 for _token in (
@@ -106,16 +180,24 @@ for _token in (
 for _number in "0 00 06 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 18 19 20 21 22 24 25 29 30 31 32 40 42 43 45 48 50 65 75 87 90 99 2024 2026".split():
     NL_GLOSSES[_number] = _number
 
-SYMBOLS = set("'s 0 00 06 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 18 19 20 21 22 24 25 29 30 31 32 40 42 43 45 48 50 65 75 87 90 99 2024 2026".split())
-PROPER_NOUNS = {"België", "Duitsland", "Egypte", "Lotte", "Nederland", "Noor", "Omar"}
-PRONOUNS = set("ik Ik je jij jou Jou me u Wij wij Mijn mijn Welke welke Wat wat Hoeveel hoeveel".split())
-PREPOSITIONS = set("aan bij in met na naar om Om op Op over te tot Tot uit voor vóór".split())
-PARTICLES = set("behalve dan Dan dat Dat de De dit dus en En er Er geen het Het Ja ja Nee nee Niet niet of ook wel".split())
-ADJECTIVES = set("Belgisch beleefd Duits Engels formeel Goed hele informeel laat Leuk leuk Nederlands nieuw normaal open oud slecht volgende".split())
-ADVERBS = set("avonds vandaan halverwege hier hoe Hoe hoeveelste middags nachts ochtends terug vandaag Vandaag waar Waar wanneer Wanneer".split())
-VERBS = set("begint ben Ben bent Bent heb heet inschrijven is Is kom Kom komt kost krijgen leer moet ontmoeten spreek wil woon zijn zitten Kun kun herhalen gaat".split())
-PHRASES = {"Aangenaam", "Goedemiddag", "Goedemorgen", "Goedenavond", "Hallo", "Hoi", "Prima", "ziens"}
-NOUNS = set("Achtenveertig Dagen Inleverdatum Maanden Medewerker Nul Pauze Taalcafé Twaalf Welkom Workshop acht achtentwintig achtentwintigste achtenveertig achtste achttien achttiende april augustus avond bibliotheek bijdrage boek boeken cent dag dank datum december derde dertien dertiende dertig dertigste dinsdag donderdag drie drieëntwintigste drieënveertig eenendertigste eenentwintig eenentwintigste eenheid eerste elf elfde euro februari groep half hoofdletter huisnummer inleverdatum jaar januari juli juni keer kwart kwartier maand maandag maart mei mensen middag naam nacht negen negende negenennegentig negenentwintigste negentien negentiende negentig november nul nummer ochtend oktober rooster september stoelen taalcafé tachtig tafel telefoonnummer tien tiende tiental tijd twaalf twaalfde twee tweede tweeëndertig tweeëntwintig tweeëntwintigste tweeënveertig twintig twintigste uur veertien veertiende veertig vier vierde vierentwintigste vijf vijfde vijfentwintigste vijfenzestig vijfenzeventig vijftien vijftiende vijftig vrijdag vrijdagmiddag week woensdag workshop zaal zaterdag zes zesde zesentwintigste zestien zestiende zestig zeven zevende zevenentachtig zevenentwintigste zeventien zeventiende zeventig zondag één".split())
+SYMBOLS = set("'s 0 00 06 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 18 19 20 21 22 24 25 29 30 31 32 40 42 43 45 48 50 65 75 87 90 99 500 2024 2026".split())
+PROPER_NOUNS = {"België", "Duitsland", "Egypte", "Lotte", "Nederland", "Noor", "Omar",
+                "Rotterdam", "Sander", "Fenna", "Jan", "Marieke", "Utrecht", "Amsterdam"}
+PRONOUNS = set("ik Ik je jij jou Jou me u Wij wij Mijn mijn Welke welke Wat wat Hoeveel hoeveel jouw haar hem iets".split())
+PREPOSITIONS = set("aan bij in met na naar om Om op Op over te tot Tot uit voor vóór per naast tegenover achter tussen van".split())
+PARTICLES = set("behalve dan Dan dat Dat de De dit Dit dus een Een en En er Er geen Geen het Het Ja ja Nee nee Niet niet of ook wel maar nog Anders".split())
+ADJECTIVES = set("Belgisch beleefd Duits Engels formeel Goed hele informeel laat Leuk leuk Nederlands nieuw normaal open oud slecht volgende elke Mooi".split())
+ADVERBS = set("avonds vandaan halverwege hier hoe Hoe hoeveelste middags nachts ochtends terug vandaag Vandaag waar Waar wanneer Wanneer graag vaak natuurlijk".split())
+VERBS = set("begint ben Ben bent Bent heb Heb heet inschrijven is Is kom Kom komt Komt kost krijgen leer moet ontmoeten spreek wil wilt woon wonen Wonen woont zijn zitten Kun kun herhalen gaat drinken eten Mag mag Zie hebben neem kan Kan pinnen Kijk".split())
+PHRASES = {"Aangenaam", "Goedemiddag", "Goedemorgen", "Goedenavond", "Hallo", "Hoi", "Prima", "ziens",
+           "alstublieft", "alsjeblieft", "eraan", "Bedankt"}
+NOUNS = set("Achtenveertig Dagen Inleverdatum Maanden Medewerker Nul Pauze Taalcafé Twaalf Welkom Workshop acht achtentwintig achtentwintigste achtenveertig achtste achttien achttiende april augustus avond bibliotheek bijdrage boek boeken cent dag dank datum december derde dertien dertiende dertig dertigste dinsdag donderdag drie drieëntwintigste drieënveertig eenendertigste eenentwintig eenentwintigste eenheid eerste elf elfde euro februari groep half hoofdletter huisnummer inleverdatum jaar januari juli juni keer kwart kwartier maand maandag maart mei mensen middag naam nacht negen negende negenennegentig negenentwintigste negentien negentiende negentig november nul nummer ochtend oktober rooster september stoelen taalcafé tachtig tafel telefoonnummer tien tiende tiental tijd twaalf twaalfde twee tweede tweeëndertig tweeëntwintig tweeëntwintigste tweeënveertig twintig twintigste uur veertien veertiende veertig vier vierde vierentwintigste vijf vijfde vijfentwintigste vijfenzestig vijfenzeventig vijftien vijftiende vijftig vrijdag vrijdagmiddag week woensdag workshop zaal zaterdag zes zesde zesentwintigste zestien zestiende zestig zeven zevende zevenentachtig zevenentwintigste zeventien zeventiende zeventig zondag één "
+              "vader moeder ouders broer zus kind kinderen opa oma oom tante neef nicht gezin maand familie broers zussen "
+              "koffie thee water melk sap brood broodje kaas appel appelsap Menukaart Koffie Thee Broodje Appelsap "
+              "markt winkel kraam appels peren tomaten paprika's Appels Peren Tomaten Paprika's kilo honderd gram pond stuk stuks "
+              "prijskaartje Verkoper Twee "
+              "station supermarkt ziekenhuis bank postkantoor bushalte buurt kaart buurtkaart BUURTKAART "
+              "Bibliotheek Ziekenhuis Postkantoor Supermarkt Bank Bushalte".split())
 
 
 def nl_part_of_speech(token: str) -> str:
@@ -146,16 +228,49 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         "kwartieren": "quarter_hour", "hoe_laat": "time_question",
         "digitale_tijd_en_dagdelen": "time_of_day", "rooster_lezen": "schedule",
         "afspreken_bij_het_taalcafe": "cafe_meetup_time",
+        "direct_family": "family_member", "extended_family": "extended_family_member",
+        "mijn_je": "possessive_pronoun", "zijn_haar": "possessive_pronoun",
+        "lotte_profiel": "family_profile", "taalcafe_familie_dialoog": "family_dialogue",
+        "dranken": "drink", "ik_wil_graag": "food_request",
+        "aantallen_bestellen": "polite_request", "wat_wilt_u": "food_request",
+        "menukaart": "menu_item", "taalcafe_bestelling": "food_dialogue",
+        "op_de_markt": "market_place", "prijs_vragen": "price_question",
+        "hoeveelheden": "quantity_phrase", "prijskaartjes": "price_label",
+        "kopen_en_betalen": "buying_paying", "marktgesprek": "market_dialogue",
+        "plaatsen": "common_place", "naast_en_tegenover": "location_position",
+        "achter_en_voor": "location_position", "waar_en_meer_plaatswoorden": "location_question",
+        "eenvoudige_kaart": "map_reading", "waar_is_de_bushalte": "place_dialogue",
     }
     semantic.append(lesson_categories[unit_lesson])
     if t in {"jij", "je"}: semantic.append("informal_address")
     if t == "u": semantic.append("polite_address")
     if token in {"Hallo", "Hoi", "Goedemorgen", "Goedemiddag", "Goedenavond"}: semantic.append("greeting")
     if t in {"goed", "prima", "slecht"}: semantic.append("wellbeing_answer")
-    if token in {"Lotte", "Noor", "Omar"}: semantic.append("person_name")
+    if token in {"Lotte", "Noor", "Omar", "Sander", "Fenna", "Jan", "Marieke"}: semantic.append("person_name")
     if token in {"Nederland", "België", "Duitsland", "Egypte"}: semantic.append("place_name")
+    if token in {"Rotterdam", "Utrecht", "Amsterdam"}: semantic.append("place_name")
     if t in {"nederland", "belgië", "duitsland", "egypte"}: semantic.append("country")
     if t in {"nederlands", "belgisch", "engels", "duits"}: semantic.append("language_or_nationality")
+    # Unit 5 (family): narrower tags so practice-template slots only ever
+    # combine grammatically valid words -- see the homograph note in this
+    # file's module docstring for why "zijn" (his) is deliberately excluded.
+    if t in {"broer", "zus"}: semantic.append("sibling")
+    if t in {"vader", "moeder", "broer", "zus", "kind", "opa", "oma", "oom", "tante"}:
+        semantic.append("family_singular")
+    if t in {"opa", "oma", "oom", "tante"}: semantic.append("extended_only")
+    # Exact-case check (not casefolded): the capitalized "Mijn" variant is a
+    # separate lexeme (sentence-initial only, from units 2-4) and must NOT
+    # be eligible here -- every practice-template slot using this tag places
+    # the word mid-sentence, where a capital would render as a real
+    # capitalization error (e.g. "Dit is Mijn broer.").
+    if token in {"mijn", "je", "jouw"}: semantic.append("possessive_flexible")
+    # Narrower than place_name: only Dutch city names (spelled identically in
+    # English), safe for a translation-frame slot with default token
+    # rendering. place_name also includes country names whose english_gloss
+    # differs from the raw token (Nederland -> "the Netherlands"), which
+    # would leak an untranslated Dutch word into an English frame if used
+    # the same way -- narrow this instead of reusing place_name there.
+    if token in {"Rotterdam", "Utrecht", "Amsterdam"}: semantic.append("city_name")
     number_words = set("nul één twee drie vier vijf zes zeven acht negen tien elf twaalf dertien veertien vijftien zestien zeventien achttien negentien twintig dertig veertig vijftig zestig zeventig tachtig negentig eenentwintig tweeëntwintig tweeëndertig tweeënveertig achtenveertig vijfenzeventig negenennegentig drieënveertig vijfenzestig zevenentachtig achtentwintig".split())
     if t in number_words or token in SYMBOLS and token != "'s": semantic.append("number")
     if t in {"twee", "drie", "zeven", "acht", "veertien", "achttien", "twintig"} or token in {"2", "3", "7", "8", "14", "18", "20"}: semantic.append("hour_number")
@@ -164,6 +279,36 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     if t.endswith(("de", "ste")) and t not in {"de", "zelfde"}: semantic.append("ordinal_number")
     if t in {"ochtend", "middag", "avond", "nacht", "ochtends", "middags", "avonds", "nachts", "vrijdagmiddag"}: semantic.append("time_of_day")
     if t in {"ochtend", "middag", "avond", "nacht"}: semantic.append("day_period")
+    # Unit 7 (shopping at the market): produce items are the same 4-member
+    # group across every lesson (they're literally what's for sale) --
+    # a single reusable tag, safe as both a bare-word recognition slot and
+    # embedded in "een kilo {item}" / "Dan neem ik een kilo {item},
+    # alstublieft." frames, since every member is a plural mass/count noun
+    # that collocates naturally with "kilo".
+    if t in {"appels", "peren", "tomaten", "paprika's"}: semantic.append("produce")
+    # Narrower than a generic "quantity" tag: only kilo/pond are directly
+    # attested with "tomaten" in this unit's real content ("Een pond
+    # tomaten, alstublieft."); "gram" always collocates with "honderd" (never
+    # bare "een gram"), and "stuk" pairs with a count context, not a weight
+    # phrase -- excluded to avoid an unnatural-sounding generated sentence.
+    if t in {"kilo", "pond"}: semantic.append("market_quantity")
+    # Unit 8 (locating places): a 7-member "place" tag (both lowercase and
+    # the capitalized map-label variants) for bare-word recognition, plus a
+    # narrower "place_non_station" tag excluding "station" -- every
+    # generated sentence in this unit fixes "het station" as the anchor
+    # place ("De {item} is naast het station."), so including "station"
+    # itself in the fillable slot would risk a self-referential sentence
+    # ("The station is next to the station."), same bug class as nl-en
+    # unit09's hospital self-reference catch earlier this session.
+    if t in {"station", "supermarkt", "bibliotheek", "ziekenhuis", "bank", "postkantoor", "bushalte"}:
+        semantic.append("place")
+    if t in {"supermarkt", "bibliotheek", "ziekenhuis", "bank", "postkantoor", "bushalte"}:
+        semantic.append("place_non_station")
+    # All 4 are freely interchangeable in "De X is {item} het station."/
+    # "Het X is {item} de Y." location frames -- verified against this
+    # unit's real content, which uses all 4 with the same "is ... het
+    # station" sentence shape.
+    if t in {"naast", "tegenover", "achter", "voor"}: semantic.append("position")
     tags: dict[str, object] = {"semantic": list(dict.fromkeys(semantic))}
     if t in {"jij", "je"}: tags["register"] = "informal"
     elif t == "u": tags["register"] = "polite"
