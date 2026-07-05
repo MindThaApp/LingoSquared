@@ -547,7 +547,10 @@ half-tape's basic sentences + drills), not per-phrase clips — no
 splicing into individual exercises without real manual editing. Only
 real use: a pronunciation-calibration reference for a human doing an
 actual fa/prs recording session, not a content or asset shortcut.
-Don't re-investigate this without new information.
+Don't re-investigate this without new information. **Confirmed
+separately: Peace Corps' own Persian/Dari materials have no recordings
+at all, PDF-only** — the other public-domain source is a dead end too
+for this specific need, don't re-check it either.
 
 ## What's built and verified live
 
@@ -593,16 +596,19 @@ en→prs (A1 + A2), prs→en, plus es/fr (1 unit each, in progress).
   leagues/leaderboards, gems/currency, runtime-LLM content generation,
   a placement-quiz enrollment system (self-report + checkpoint test-out,
   Phase F, is the accepted alternative).
-- **`POST /admin/content/import` only creates brand-new courses** — it
-  skips any course that already exists by `(source_language,
-  target_language, title)` rather than appending new units to it.
-  Found 2026-07-05 while trying to get new fa units 3/4/5 live: an
-  already-seeded course (e.g. "Farsi A1") silently no-ops on any
-  further import, so every unit authored beyond a course's initial
-  seed is currently stuck validated-on-disk but never live. Real
-  blocking gap for the publish-gate content-depth goal, not yet fixed
-  — needs either a new "append units" admin endpoint or documented
-  guidance on an existing mechanism. See `docs/BUILD_LOG.md`.
+- **Fixed 2026-07-05 (Session 1/CODE)**: `POST /admin/content/import`
+  used to only create brand-new courses — it skipped any course that
+  already existed by `(source_language, target_language, title)`
+  rather than appending new units to it, so every unit authored beyond
+  a course's initial seed was stuck validated-on-disk but never live
+  (found earlier the same day trying to get new fa units 3/4/5 live,
+  then hit again by the practice-pool-sync lane trying to get nl
+  units 5+ live). `import_content()` now diffs incoming units against
+  the existing course's unit `order`s (unique per course, the natural
+  dedup key already in the schema) and appends only the ones that
+  aren't already present — every already-imported unit/lesson/exercise
+  and any real user progress on them is left untouched. See
+  `docs/BUILD_LOG.md` for the fix and its test.
 - **Fixed 2026-07-05 (Session 2/CONTENT, Phase D2)**: the full fa
   course now compiles end-to-end. `fa/a1_unit01_greetings.yaml`
   lesson06 (6 combined two-speaker cards) and `fa/
