@@ -4469,3 +4469,210 @@ as a natural forcing function, rather than a refactor-for-its-own-sake
 detour tonight.
 
 Committed the `word_order` fix + test alongside this entry.
+
+## Dedicated security pass over tonight's fresh surface area (auth, admin endpoints, input validation, rate limiting, CORS, deps), 2026-07-05
+
+Ramin asked for a careful security review ahead of the beta invite,
+specifically covering the surface that landed tonight and predates the
+earlier manual security-audit pass documented above (that pass focused
+on auth/JWT/admin-gating/IDOR/path-traversal/CORS/secrets and found
+those areas clean, plus the already-escalated `ADMIN_EMAILS` placeholder
+finding — not re-litigated here, already flagged directly to Ramin).
+Read CLAUDE.md, the spec's §1 publish-gate section, and this file's tail
+first; checked `find . -newer docs/BUILD_LOG.md -mmin -10` before
+touching anything and found only content-authoring files and (later)
+`scripts/backfill_lexemes_*` in flux — nothing in `backend/app/` was
+being concurrently edited by another session, so this pass was safe to
+do directly rather than working around a hot file.
+
+**Re-verified (not just trusted) the prior pass's specific claims by
+reading the actual code, since that was this session's brief**:
+`media_asset_path()`'s regex (`[A-Za-z0-9](?:[A-Za-z0-9._-]{0,198}
+[A-Za-z0-9])?`, no `/` in the character class at all, plus an explicit
+`".." in key` rejection) makes path traversal structurally impossible
+on `/admin/media/upload` and `/media/{key}`, not just nominally checked
+- confirmed by reading the regex itself, not the docstring. All 8
+`/admin/*` routes (`media/upload`, `content/import`, `courses/{id}/
+practice/import`, `content/export`, `content/validate`, `content/
+missing-report`, `content/issues` GET+PATCH, `content/coverage`)
+consistently carry `Depends(admin_user)`, which itself requires a valid
+JWT AND `user.is_admin` - confirmed by reading `deps.py`, not by
+grepping route names. No raw SQL string interpolation anywhere in
+`backend/app/` - the only 3 `text(...)` calls (two advisory-lock
+acquisitions in `router.py`/`practice/service.py`, one in `tts.py`) all
+use bound `:key` parameters, never f-string/`%`-interpolated SQL.
+IDOR spot-checked on the newest Phase A/F endpoints specifically (the
+prior pass's own stated gap - it sampled older endpoints, not
+`checkpoint_session`/`checkpoint_result`/`review_session`): all three
+filter by `user.id`/`user_id` in their query and return a real 404 on
+a foreign resource, same pattern as everywhere else. CORS: local `.env`
+lists explicit `localhost` ports, never a wildcard, paired correctly
+with `allow_credentials=True`; read-only-checked (never modified) that
+the live server's `CORS_ORIGINS` is currently `http://localhost:5173,
+http://localhost:5174` too - **flagging for Ramin, not a code bug**:
+if real beta users will hit the API from an origin other than
+localhost (a real domain, the LAN IP, etc.), CORS will reject those
+requests by default-safe rejection, not silently allow them - so this
+needs updating to the real frontend origin before invite, but it's a
+deployment/product decision (what the real origin will be), not
+something to guess and fix unilaterally.
+
+**Real finding, fixed: an unauthenticated-severity-equivalent resource-
+exhaustion vector via any answer-submission endpoint.** `AnswerIn.
+response` (`app/schemas/api.py`) - the request body for `POST /exercises/
+{id}/answer`, `POST /review/items/{id}/answer` (i.e. `/reviews/items/
+{id}/answer` retry path via `review_answer`), and `POST /practice/items/
+{id}/answer` (also the endpoint checkpoint items grade through, per
+Phase F) - had no length/size bound at all: `str|list[Any]|dict[str,Any]
+|bool|int|float`, wide open. Traced where this reaches: `grade()` (`app/
+api/router.py`) calls `grade_answer()` (`app/review/grading.py`, Phase C)
+for any free-text exercise type, which calls `damerau_levenshtein(a, b)`
+- this allocates a full `(len(a)+1) x (len(b)+1)` Python list-of-lists
+DP table with **no length check of its own**, before doing any O(n*m)
+work. Any authenticated (non-admin) user submitting a multi-megabyte
+string as their `response` to an ordinary exercise/review/practice
+answer forces the server to allocate a table sized by that string's
+length x the (short, fixed) correct answer's length - a single request
+with a several-hundred-megabyte-string body drives Python to allocate
+a proportionally huge nested list, a real memory/CPU exhaustion risk on
+a small home-server deployment, with **no rate limiting anywhere** (the
+prior audit's own informational finding) to even slow down repeated
+attempts. This is exactly the "unbounded resource consumption" class
+Ramin's ask specifically named, and it's new since Phase C added
+`grading.py` tonight - the earlier manual audit predates this code path
+and didn't cover it.
+
+**Fix** (`backend/app/schemas/api.py`): added a shared `_bounded_payload_
+size()` helper (bounds a value's `json.dumps()`-serialized length at
+5000 chars, generous for any real word/phrase/sentence-length answer or
+a `matching_pairs`/`word_order` handful-of-tokens payload, string-shape-
+agnostic so it catches the str/list/dict cases uniformly rather than
+trying to enumerate every valid answer shape) wired into `AnswerIn` via
+a `model_validator(mode="after")` (covers all three answer endpoints in
+one place, since all three share this schema) and into `ContentIssueReportIn
+.learner_response` (same unbounded-`Any` shape, lower severity since it's
+only stored/displayed to admins rather than run through the DP algorithm,
+but cheap to close as defense-in-depth). Also closed a smaller, related
+gap: `LoginIn.password` had no `max_length` at all (unlike `RegisterIn`,
+which already caps at 128) - added the same `max_length=128` bound, since
+`verify_password()` hashes the submitted candidate with argon2 before
+comparing, and hashing cost scales with input size; no legitimate account
+can have a password longer than 128 chars in the first place (`RegisterIn`
+already enforced that at signup), so this is a strictly safe tightening,
+not a behavior change for any real user. Violations return the existing
+generic `422 validation_error` shape via the app's already-registered
+`RequestValidationError` handler - no new error-message surface, no
+stack-trace leakage.
+
+**Verified**: new `backend/tests/test_security_payload_bounds.py` - an
+oversized string `response` and an oversized list `response` to `POST
+/exercises/{id}/answer` both 422 before reaching `grade()` at all, an
+ordinary short answer still 200s (no false-positive regression), an
+oversized `LoginIn.password` 422s without ever touching the DB, and an
+oversized `learner_response` on `POST /exercises/{id}/report` 422s.
+Ran the full suite against a purpose-created, uniquely-named isolated
+test DB (not the shared `lingosquared_test`, same standing convention
+this file already documents) via `docker compose run --rm api python -m
+pytest`: 87 passed (82 pre-existing + 5 new), the same one already-
+flagged `test_checkpoint_forces_strict_orthography` flake and nothing
+else - zero regressions. Dropped the isolated DB after. Rebuilt and
+force-recreated the shared local `backend-api-1` (confirmed via a fresh
+`find -newer` check immediately before that no other session was mid-edit
+in `backend/app/` at the time) to bring the fix live, then live-curled
+the real running API with a fresh test account: an oversized `response`
+now 422s, a normal one still 200s, and an oversized login password 422s
+- confirmed on the actual server, not just in pytest.
+
+**Dependency versions checked against current CVE databases (via web
+search, since the task asked to check "if easily done") - three real,
+disclosed vulnerabilities found in pinned versions, of which two were
+cheap/safe to patch now and are fixed, one needs a bigger, riskier lift
+flagged for later rather than done under time pressure tonight:**
+- **PyJWT 2.10.1 → bumped to 2.13.0.** CVE-2026-32597: PyJWT before
+  2.12.0 doesn't reject a JWS `crit` header listing extensions it
+  doesn't understand, when RFC 7515 says it must. Practical
+  exploitability against this app specifically is low regardless of the
+  version - `decode_token()` pins `algorithms=["HS256"]` and never reads
+  or relies on any `crit`/critical-header semantics, and an attacker
+  still cannot produce a validly-signed token without `JWT_SECRET` - but
+  it's a real, easy, zero-behavior-change bump, done opportunistically.
+- **python-multipart 0.0.20 → bumped to 0.0.22.** CVE-2026-24486: a path-
+  traversal bug in python-multipart's own file-saving convenience
+  feature, but **only** when a caller opts into its `UPLOAD_DIR`/
+  `UPLOAD_KEEP_FILENAME=True` options - confirmed by reading `upload_
+  media_asset()` (`app/api/router.py`) that Lingo² never uses that
+  feature at all; it reads the multipart stream manually via FastAPI's
+  `UploadFile.read()` and writes to its own `media_asset_path(key)` -
+  the client's original filename is never consulted for the write path.
+  Not exploitable here either way, bumped opportunistically since it was
+  free.
+- **NOT fixed, flagging as the real pre-wider-launch item**: Starlette
+  0.46.2 (pulled in transitively by `fastapi==0.115.12`) is vulnerable to
+  CVE-2026-48710 ("BadHost", critical severity, publicly disclosed via an
+  OSTIF-sponsored audit, reported to affect "thousands of FastAPI
+  applications") - `request.url`/`request.url.path` gets reconstructed
+  from the raw `Host` header without RFC 9112 validation prior to
+  Starlette 1.0.1, letting a malformed `Host` header desync `request.url
+  .path` from the path the router actually dispatched to. **Checked
+  whether this app's own code is actually exploitable**: grepped for
+  every use of `request.url`/`request.headers.get("host"...)` in `app/`
+  - the only hit is `request.url_for(...)` in the media-upload response
+  (building an absolute URL string for an admin-only response, not a
+  security decision), and nothing in this codebase makes an auth/
+  routing decision by inspecting `request.url.path` itself (admin gating
+  is JWT+`is_admin` via FastAPI's real dependency injection, not path
+  string-matching) - so the specific "path-based auth bypass" exploit
+  class this CVE enables doesn't have a matching code path here today.
+  **Not fixed anyway**, because the actual fix requires upgrading
+  `starlette` to ≥1.0.1, and `fastapi==0.115.12` pins `starlette` to
+  `<0.47.0` - meaning the real fix is a FastAPI major-version bump, which
+  needs its own dedicated regression pass (FastAPI's changelog across
+  that range is not a drop-in bump) rather than something to rush through
+  under tonight's time pressure on a shared, actively-changing stack.
+  Confirmed via `pip index versions` that patched versions of all three
+  packages are available before writing any of this up, not assumed from
+  the search results alone.
+
+**Confirmed clean, no changes needed** (either matching the prior
+pass's findings on direct re-verification, or newly checked this pass):
+JWT (HS256, secret from env, no algorithm-confusion "none"-alg
+acceptance possible since `algorithms=["HS256"]` is pinned explicitly in
+`decode_token()`), password hashing (argon2 via `pwdlib`, never echoed
+back), admin-route gating (all 8, verified by reading `deps.py` +
+grepping every `/admin/*` decorator), path traversal on media (regex has
+no `/` in its character class at all - traversal isn't just checked, it's
+structurally unrepresentable), IDOR (including the newest Phase A/F
+endpoints, not just the prior pass's sample), no raw SQL anywhere, CORS
+(no wildcard, correctly paired with `allow_credentials`), no hardcoded
+API keys/private keys anywhere in `backend/app`/`frontend/src` (grepped
+common key-shape patterns), generic `500`/`422` error bodies with no
+stack-trace leakage (`app/main.py`'s exception handlers).
+
+**Flagging for Ramin specifically (product/deployment decisions, not
+code fixes)**:
+1. Live server's `CORS_ORIGINS` is currently `localhost` ports only -
+   needs to list whatever real origin(s) beta users' browsers will
+   actually load the frontend from before invite, or their requests will
+   be rejected (fails safe, but breaks the app functionally).
+2. The Starlette "BadHost" CVE (above) isn't exploitable via any code
+   path in this app today, but is a real, critical-severity,
+   publicly-known vulnerability in a core dependency that thousands of
+   other FastAPI apps are affected by - worth a dedicated FastAPI-
+   version-bump-and-regression-test pass before any wider-than-beta
+   exposure, not urgent for a small invite-only beta given the "not
+   exploitable via this app's own code" finding above.
+3. No rate limiting anywhere (login, answer submission, admin routes) -
+   already flagged informational by the prior pass, reconfirmed here;
+   reasonable to accept for a small invite-only beta, worth a line item
+   before wider public exposure.
+4. `ADMIN_EMAILS` placeholder on the live server - already escalated
+   directly to Ramin earlier, not re-flagged as new here, just noting it
+   wasn't touched or re-investigated per instruction.
+
+Left the schema fix (`app/schemas/api.py`), the new test file
+(`backend/tests/test_security_payload_bounds.py`), the dependency
+bumps (`requirements.txt`), this entry, and the matching `CLAUDE.md`
+checklist note **uncommitted** in the working tree - deliberately not
+committing without an explicit instruction to, per standing practice.
+All changes are additive-only, verified live against the rebuilt shared
+`backend-api-1`, and ready to commit as-is.
