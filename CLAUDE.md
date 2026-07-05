@@ -457,6 +457,39 @@ to the authoring reasoning) before import.
   string value** in content fields — PyYAML silently coerces these to
   booleans. Always quote (`"Yes"`). The compiler validates this now
   but don't rely on catching it after the fact.
+- **A frontend exercise component's submitted answer shape must match
+  what content is actually authored in, not what looks natural to
+  code in React state.** Found live 2026-07-05: `MatchingPairs.tsx`
+  kept its matches as a flat `Record<left,right>` and submitted that
+  directly, but every `matching_pairs` exercise's `accepted_answers`
+  across the whole content set is authored as an ARRAY of `{left,
+  right}` pair objects — the two shapes never compared equal, so
+  every matching_pairs exercise in every course/language was scored
+  wrong regardless of what the learner picked, and the wrong-answer
+  banner's `String(correct_response)` on that same array-of-objects
+  shape rendered the literal text `[object Object],[object Object]`
+  to real users. Neither half was caught by `tsc`/the build (both are
+  untyped `unknown`/loose-union payloads) or by any existing test —
+  only playing a real lesson in the browser and actually checking
+  whether a correct match graded correct surfaced it. Fixed in
+  `MatchingPairs.tsx` (submit `pairs.map(p => ({left, right}))`, same
+  order content is authored in) and via a new shared
+  `frontend/src/lib/formatAnswer.ts` used everywhere `correct_response`
+  is displayed. Lesson: whenever an exercise component's answer
+  payload shape isn't string/string[], go read what `accepted_answers`
+  actually looks like in a real content file before trusting either
+  end's assumption — don't infer the contract from one side only.
+  **Second half, same day**: the frontend fix alone wasn't sufficient —
+  the Endless Practice engine's `derive_answer()` (`app/practice/
+  service.py`) independently produces a FLAT `{token: gloss}` dict as
+  `PracticeItem.correct_response` for `matching_pairs`, and it renders/
+  grades through the exact same `MatchingPairs.tsx`/`grade()` path as
+  compiled lesson content. Fixed by making `grade()`
+  (`app/api/router.py`) canonicalize either representation (flat dict
+  or `{left,right}[]`, any order) for this exercise type before
+  comparing, rather than picking one shape as canonical — the two
+  content sources (hand-authored vs. generated) disagree on shape and
+  both need to keep working.
 
 ## Where things run
 
@@ -544,6 +577,15 @@ en→prs (A1 + A2), prs→en, plus es/fr (1 unit each, in progress).
 - Admin content import/export is API-only, no UI (intentional trim).
 - Writing prompts graded by exact string match (Phase C adds
   distance-1 typo tolerance, per-language strictness).
+- **Pre-deploy/pre-beta-invite checklist item (found in the 2026-07-05
+  security pass): confirm `ADMIN_EMAILS` on the live deployment is
+  Ramin's actual private email, not the `.env.example` placeholder
+  (`admin@example.com`), and that his account is already registered
+  under it.** `register()` grants `is_admin` at signup to whoever
+  registers first with an email literally listed in `ADMIN_EMAILS` —
+  there's no email verification anywhere (an existing, accepted, unrelated
+  limitation) closing that race. Not a code bug, a deployment step;
+  full detail in `docs/BUILD_LOG.md`'s security-audit entry.
 - No refresh tokens, password reset, or email verification.
 - No mobile app (Expo React Native is the recommended future path,
   reusing the existing JWT/JSON API as-is).

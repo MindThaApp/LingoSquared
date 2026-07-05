@@ -70,6 +70,24 @@ def is_multi_answer_response(correct):
         and set(correct)=={"canonical","accepted"}
         and isinstance(correct["accepted"],list)
     )
+def canonical_pairs(value):
+    """Canonicalize a matching_pairs answer into an order-independent set of
+    (left,right) tuples, regardless of representation. CONTRACT.md documents
+    the submitted `response` as a flat {left: right} pair-mapping (what
+    MatchingPairs.tsx sends and what the Endless Practice engine's
+    derive_answer() produces), but hand-authored lesson content's
+    accepted_answers/correct_response has historically been written as a
+    list of {"left":...,"right":...} objects instead (matching the prompt's
+    `pairs` display shape) - a real mismatch that made every compiled
+    matching_pairs exercise ungradeable-correct regardless of what the
+    learner picked. Accept either shape here so both compare equal."""
+    if isinstance(value, dict):
+        return frozenset((normalized(k), normalized(v)) for k, v in value.items())
+    if isinstance(value, list) and all(
+        isinstance(item, dict) and {"left", "right"} <= set(item) for item in value
+    ):
+        return frozenset((normalized(item["left"]), normalized(item["right"])) for item in value)
+    return None
 def display_correct_response(correct):
     if is_multi_answer_response(correct):
         return correct["canonical"]
@@ -129,6 +147,10 @@ def grade(response,correct,exercise_type=None,*,script=None,orthography_strict=N
             script=script,
             orthography_strict=orthography_strict,
         )
+    if type_value == "matching_pairs":
+        correct_pairs = canonical_pairs(correct)
+        if correct_pairs is not None:
+            return "correct" if canonical_pairs(response) == correct_pairs else "incorrect"
     return "correct" if normalized(response)==normalized(correct) else "incorrect"
 def exercise_answer(db, user, e, response):
     feedback_meta = decode_feedback(e.feedback)
