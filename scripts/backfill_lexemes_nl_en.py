@@ -156,6 +156,20 @@ EN_TARGET_TO_NL_GLOSS: dict[str, str] = {
     "wake": "wakker worden", "up": "op", "dressed": "aangekleed", "dinner": "avondeten",
     "bed": "bed", "every": "elke", "usually": "meestal", "breakfast": "ontbijt",
     "after": "na",
+    # Unit 17 (making simple plans), added 2026-07-05.
+    "want": "willen", "movie": "film", "weekend": "weekend", "would": "zou",
+    "walk": "wandeling", "love": "graag willen", "busy": "druk", "maybe": "misschien",
+    "another": "een andere", "lunch": "lunch", "1pm": "1 uur 's middags", "works": "komt uit",
+    # Unit 18 (describing a recent event), added 2026-07-05.
+    "went": "ging", "saw": "zag", "ate": "at", "visited": "bezocht",
+    "worked": "werkte", "did": "deed", "yesterday": "gisteren", "together": "samen",
+    "watched": "keek", "writer's": "van de schrijver", "s": "s (bezitsvorm)",
+    "was": "was", "week": "week",
+    # Unit 19 (expressing likes and preferences), added 2026-07-05.
+    "like": "leuk vinden", "don't": "niet leuk vinden", "prefer": "de voorkeur geven aan",
+    "hate": "haten", "calmer": "rustiger", "very": "heel", "strong": "sterk",
+    "why": "waarom", "think": "denken", "prefers": "geeft de voorkeur aan",
+    "thinks": "denkt",
 }
 
 UNIT_FILES = (
@@ -222,6 +236,18 @@ UNIT_FILES = (
     (
         REPO_ROOT / "docs/content/realizations/en/a1_unit16_routines.yaml",
         REPO_ROOT / "docs/content/overlays/nl-en/a1_unit16.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit17_plans.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/a1_unit17.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit18_past_events.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/a1_unit18.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit19_preferences.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/a1_unit19.yaml",
     ),
 )
 
@@ -342,6 +368,26 @@ NL_POS: dict[str, str] = {
     "doe": "verb", "doet": "verb", "elke": "adjective", "kleed": "verb",
     "me": "pronoun", "meestal": "adverb", "ontbijt": "noun", "wakker": "adjective",
     "word": "verb", "worden": "verb",
+    # Unit 17 (making simple plans), added 2026-07-05.
+    "andere": "adjective", "druk": "adjective", "film": "noun", "heel": "adverb",
+    "keer": "noun", "kijken": "verb", "lunchen": "verb", "mij": "pronoun",
+    "misschien": "adverb", "uit": "preposition", "wandelen": "verb",
+    "weekend": "noun", "zin": "noun",
+    # Unit 18 (describing a recent event), added 2026-07-05. Note: several of
+    # these are English infinitives embedded parenthetically inside this
+    # unit's Dutch gloss text itself (e.g. gloss "ging (verleden tijd van
+    # go)") -- classified as verbs to match their real grammatical role.
+    "at": "verb", "bezocht": "verb", "eat": "verb", "gedaan": "verb",
+    "gegeten": "verb", "gekeken": "verb", "gewerkt": "verb", "gezien": "verb",
+    "ging": "verb", "gisteren": "adverb", "go": "verb", "hebt": "verb",
+    "samen": "adverb", "see": "verb", "verleden": "noun", "visit": "verb",
+    "vorig": "adjective", "vorige": "adjective", "was": "verb", "week": "noun",
+    "werkte": "verb", "work": "verb", "zag": "verb",
+    # Unit 19 (expressing likes and preferences), added 2026-07-05.
+    "denk": "verb", "denkt": "verb", "dol": "adjective", "erg": "adverb",
+    "geef": "verb", "geeft": "verb", "geven": "verb", "haten": "verb",
+    "hou": "verb", "rustiger": "adjective", "sterk": "adjective",
+    "vinden": "verb", "voorkeur": "noun", "waarom": "adverb", "zo": "adverb",
 }
 
 NL_GLOSSES: dict[str, str] = {
@@ -469,6 +515,25 @@ NL_GLOSSES: dict[str, str] = {
     "daarna": "then; after that", "doe": "do", "doet": "does", "elke": "every",
     "kleed": "dress", "me": "myself; me", "meestal": "usually",
     "ontbijt": "breakfast", "wakker": "awake", "word": "become", "worden": "to become",
+    # Unit 17 (making simple plans), added 2026-07-05.
+    "andere": "other; another", "druk": "busy", "film": "movie", "heel": "very; quite",
+    "keer": "time; occasion", "kijken": "to watch; to see", "lunchen": "to have lunch",
+    "mij": "me", "misschien": "maybe", "uit": "out", "wandelen": "to walk",
+    "weekend": "weekend", "zin": "desire; mood",
+    # Unit 18 (describing a recent event), added 2026-07-05.
+    "at": "ate", "bezocht": "visited", "eat": "to eat", "gedaan": "done",
+    "gegeten": "eaten", "gekeken": "watched; looked", "gewerkt": "worked",
+    "gezien": "seen", "ging": "went", "gisteren": "yesterday", "go": "to go",
+    "hebt": "have", "samen": "together", "see": "to see", "verleden": "past",
+    "visit": "to visit", "vorig": "previous; last", "vorige": "previous; last",
+    "was": "was", "week": "week", "werkte": "worked", "work": "to work",
+    "zag": "saw",
+    # Unit 19 (expressing likes and preferences), added 2026-07-05.
+    "denk": "think", "denkt": "thinks", "dol": "crazy; wild", "erg": "very; quite",
+    "geef": "give", "geeft": "gives", "geven": "to give", "haten": "to hate",
+    "hou": "love; hold", "rustiger": "calmer", "sterk": "strong",
+    "vinden": "to find; to consider", "voorkeur": "preference", "waarom": "why",
+    "zo": "so",
 }
 
 
