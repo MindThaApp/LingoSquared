@@ -3718,6 +3718,192 @@ and `en-fa` practice covers only units 1-2 while fa teaching content
 now spans 5 (2 reviewed: unit03 numbers, unit05 places) — extending
 coverage there is real, valuable, non-overlapping work once picked up.
 
+## New QA/live-testing lane, 2026-07-05 — dedicated live-browser verification session
+
+Ramin added a dedicated role tonight: play the app as a real user across
+nl/fa/prs (the three launch-gate scripts), find bugs by actually using
+it (not code review), fix what's in-reach, document what isn't. Per the
+established exception for verification work, stood up a fully isolated
+second `docker compose` project rather than touch Session 1/CODE's
+shared stack: project name `ls2qa`, `backend/docker-compose.qa.yml`
+(new file) + `backend/.env.qa` (new, gitignored, copied byte-for-byte
+from the real `.env` so the already-working Google TTS service-account
+key was never hand-retyped — only the DB name/password, JWT secret,
+`ADMIN_EMAILS`, and `CORS_ORIGINS` were edited), api on **8020**, db on
+**5442**, frontend dev server on **5183** (`frontend/.env.qa`, run via
+`npm run dev -- --mode qa --port 5183 --strictPort`). A genuinely fresh
+`alembic upgrade head` on this stack succeeded cleanly through all 12
+migrations (re-confirms Instance 3's earlier from-scratch-migration fix
+is still solid). Backend pytest run against this isolated stack (proper
+dropdb/createdb recipe, never `--env-file`): **81/81 passing**. Compiled
+and imported en-fa, fa-en, prs-en, en-nl, nl-en for real live testing
+(en-prs blocked — see below); ran `backfill_lexemes.py` (en-fa only —
+see below) and imported the real en-fa Endless Practice template pack
+(72 templates) to test the generative feed with actual content, not
+just the tiny seed-course example.
+
+**Real bug found and FIXED (frontend, safe to fix directly): a whole
+13-unit nl course could not be imported on a fresh stack at all.**
+`docs/content/realizations/nl/*.yaml` uses a `kind: "reading"` teaching
+card (10 lessons across units 6-13, a reading-passage card type) that
+was never added to the backend's accepted `TeachingCard`/
+`ContentItemImport` kind `Literal` — every fresh import of the full
+en-nl course failed with a single `validation_error` covering all 10
+offending lessons at once. This is a genuinely new discovery, not a
+dup of anything already logged: it's invisible on the shared dev stack
+only because that stack's en-nl course was seeded before this content
+was authored, and `POST /admin/content/import` is create-missing-only
+(an already-documented limitation) — so it silently never got
+re-validated against the current file set. `kind` is a plain
+`String(30)` column, not a DB enum, so this needed zero migration.
+Fixed additively: added `"reading"` to the two `Literal`s in
+`backend/app/schemas/api.py` (`TeachingCard`, `ContentItemImport`) and
+to the missing-kinds set literal in `backend/app/api/router.py`'s
+`/admin/content/missing-report`; added `"reading"` to
+`TeachingCardKind` in `frontend/src/api/types.ts`, the
+`KIND_KEY` badge-label map in `TeachingCardView.tsx`, and the
+`teaching_card.reading` i18n string in `en.json`/`fa.json`/`prs.json`;
+documented the new kind in `docs/CONTRACT.md`'s teaching-card kind
+enum. Verified: re-import of the compiled en-nl course succeeded
+(`{"imported_courses":1}`), full `npm run build` green, and the actual
+reading cards render correctly in a live lesson (badge label "Reading").
+
+**Real bug found and FIXED (frontend, safe to fix directly): the
+Endless Practice feed renders a completely blank page — no locked
+message, no error, nothing — for any eligible course that has zero
+practice-template content imported.** `PracticeFeedPage.tsx`'s
+exhausted-state message was gated on `exhausted && items.length > 0`,
+so the one existing "you've practiced everything" string never fires
+on the very first load when a course is eligible (has a completed
+lesson) but no templates exist for it at all — exactly the state a
+real nl learner hits today, since (see below) the lexeme-backfill
+mechanism the practice-import pipeline depends on only exists for
+en-fa. Fixed: changed the condition to `exhausted && !loadingMore`
+and added a distinct `practice.none_yet` string (English + genuinely
+distinct-register Farsi/Dari, not a copy-paste) for the zero-items case
+so it reads honestly ("no practice drills yet") instead of the
+misleading "you've practiced everything" — Verified live: the nl
+account's `/practice` page went from a fully blank `<main>` to showing
+the correct message; full `npm run build` green.
+
+**Real bug found and FIXED (frontend CSS, safe to fix directly): the
+Check button below any `word_order` exercise's word bank silently
+shifts up and can land on "Report an issue with this exercise"
+instead, the instant the last tile is picked.** `.word-bank` (the
+tile tray) had no `min-height`, unlike its sibling `.word-answer-row`
+which already reserves 52px — so the tray collapses to 0px height
+when emptied, and the whole block below (Check, then the report link)
+jumps up by that amount. Reproduced live, twice, independently, in both
+the nl and fa word_order exercises during this session — a real user
+tapping the last tile and immediately tapping where Check *was* would
+land on the report-issue link instead. Fixed with one line: `min-height:
+52px` added to `.word-bank` in `frontend/src/index.css`, mirroring the
+existing answer-row rule. Verified: deliberately drove a word_order
+exercise to the exact empty-bank moment before and after the fix on
+the live page (screenshotted both), confirmed Check no longer moves;
+full `npm run build` green.
+
+**Real, severe bug found, NOT fixed — flagging for whoever owns
+`docs/content/realizations/prs/`: `en-prs` (Dari) fails to compile at
+all, blocking the whole course from being importable on any fresh
+stack.** `prs/a1_unit01_greetings.yaml` lesson06's dialogue card
+(`lines01_02`) still uses the old single-block embedded-"Name:"-label
+format the compiler's per-speaker-turn validator now rejects — the
+exact anti-pattern CLAUDE.md documents as already fixed for `fa`'s
+unit01/02 lesson06 specifically, but that fix was never applied to the
+parallel `prs` file. Compiler error: `dialogue teaching card must use
+one text_block per speaker turn with speaker metadata...`. Did **not**
+touch this myself: a concurrent session is actively authoring in this
+exact directory right now (an untracked, in-progress
+`prs/a1_unit02_introductions.yaml` was sitting in the working tree when
+I found this), so editing the sibling unit01 file risked a real
+collision. Fix is mechanical and already has a working precedent (the
+fa fix): split the offending card into one `text_blocks` entry per
+speaker turn with the speaker moved to the structured `target.speaker`
+field. Until this lands, **en-prs (the one genuinely RTL/native-Dari
+teaching direction) could not be live-tested this session** — I tested
+`prs-en` (Dari speakers learning English, not RTL-target) instead,
+which compiles and plays fine. Re-run the RTL/keyboard verification
+specifically on en-prs once this is fixed.
+
+**Real, severe, language-agnostic bug found in the Endless Practice
+generation engine, NOT fixed — same file/function Session 1/CODE just
+landed a closely-related fix in tonight (`c7c41d6`, "Fix blank/
+unanswerable fill_in_blank practice items"), so flagging for the same
+owner rather than fixing it myself out of that lane.**
+`backend/app/practice/service.py`'s `build_prompt()`: every generated
+exercise type except `word_order` includes the actual target-language
+text somewhere in `text_blocks` (`fill_in_blank`/`translation` show the
+rendered frame alongside the instruction; `multiple_choice` shows the
+frame; `listen_select` is gated on real TTS existing). `word_order`'s
+branch (~line 329-356) *only* ever emits the generic instruction "Put
+the words in the correct order." — it never includes
+`_block(template.frame, rendered)` the way `matching_pairs`'s branch
+does two cases later in the same function. Reproduced live in the fa
+Endless Practice feed: a real generated item showed word-bank tiles
+with zero indication of what phrase they were supposed to spell, and
+(for fa specifically, no working TTS) no audio fallback either —
+genuinely unanswerable except by brute-force permutation guessing.
+This is **not fa-specific** — every language's Endless Practice
+`word_order` items are missing this context regardless of TTS
+availability; it's a different gap from the `fill_in_blank` fix just
+committed (that one guards against an *empty* frame after blanking,
+this one is a frame that was never included at all). Fix: add the
+rendered frame text_block to `word_order`'s prompt, mirroring
+`matching_pairs`'s `_block(template.frame, rendered)` line, with the
+same "reject if the frame is empty of context" guard used for
+`fill_in_blank`. Frontend needs zero changes — `WordOrder.tsx` already
+renders whatever `text_blocks` it's given.
+
+**Confirmed (not a new bug, but worth recording precisely): the
+Endless Practice practice-import pipeline is currently only usable for
+en-fa, full stop.** `scripts/backfill_lexemes.py`'s `UNIT_FILES` is a
+hardcoded tuple of exactly the four fa realization/overlay file pairs,
+and its course lookup filters `Course.source_language == "en"`,
+`Course.target_language == "fa"` explicitly — there is no generalized,
+per-course backfill path. Since `import_practice_templates` resolves
+every template's lesson reference via `Lexeme.provenance_lesson_content_key`
+(populated only by this script), **no course other than en-fa can have
+its Endless Practice content imported at all today**, regardless of
+whether reviewed template packs already exist on disk for it (they do,
+for `en-nl`/`fa-en`/`prs-en`/`en-prs` per `scripts/practice_manifest.txt`).
+This is the concrete mechanism behind the already-known "needs
+extending to all 6 launch paths" gap in the spec doc — flagging the
+exact blocking file/function for whoever picks that work up next.
+
+**What was live-verified working correctly this session, across both
+testable launch scripts, fresh accounts, real content, on the isolated
+stack** (`qa-nl-learner@example.com`, `qa-fa-learner@example.com`):
+full lesson playthrough end-to-end on both `en-nl` and the real 5-unit
+`en-fa` (not the tiny seed course) — teaching-card pacing, every
+exercise type hit (`multiple_choice`, `listen_select` with a real
+Google TTS network call confirmed 200/`audio/mpeg`, `matching_pairs`
+post-fix on both languages, `word_order` post-fix, `fill_in_blank`,
+`translation`, typo-tolerant multi-answer grading, `true/false`-style
+grammar checks), deliberate in-lesson error recycling (missed same
+exercise twice → 2-miss "copy it" cap → resolves regardless → correct
+RTL rendering of the hint banner in fa), lesson-complete screen +
+"Worth another look" missed-word summary (correct words, correct speak
+buttons), Home screen stat/streak updates, the fa A1 script-intro
+lesson's recognition→drag→production pacing (no typing before multiple
+recognition passes), the Perso-Arabic virtual keyboard (confirmed via
+direct DOM read that clicked keys produce the exact correct Unicode,
+not just visually plausible), a full 15-item unit checkpoint on fa
+(strict grading, no teaching cards, persistent header banner, real
+generated content from the newly-backfilled lexemes), and the Endless
+Practice feed generating and correctly grading real fa content
+(recognition-tier `multiple_choice`, `matching_pairs`, and a
+`dialogue_response` free-text item typed via the virtual keyboard).
+
+Files touched this session (all on the isolated qa stack/local
+checkout, nothing deployed, nothing on the shared stack touched):
+`backend/docker-compose.qa.yml` (new), `backend/.env.qa` (new,
+gitignored), `frontend/.env.qa` (new), `backend/app/schemas/api.py`,
+`backend/app/api/router.py`, `frontend/src/api/types.ts`,
+`frontend/src/components/TeachingCardView.tsx`,
+`frontend/src/pages/PracticeFeedPage.tsx`, `frontend/src/index.css`,
+`frontend/src/i18n/locales/{en,fa,prs}.json`, `docs/CONTRACT.md`.
+
 ## Session 1 (CODE) picks up again post-commit 73dae0d — live re-verification of the matching_pairs fix, and a confirmed pre-beta security blocker, 2026-07-05
 
 Fresh pickup after the coordinating session verified and committed
@@ -4119,5 +4305,85 @@ compile clean together, matching this file's own earlier note);
 flagging for that lane, not fixed here, not this session's content to
 touch mid-edit.
 
-Not committed to git yet as of this writing — will commit alongside
-this BUILD_LOG entry.
+Committed as `5b95345` (backend fix + test + this entry + CLAUDE.md's
+known-limitations update, staged individually rather than via a broad
+`git add`, given how much concurrent unrelated work was sitting
+unstaged in this shared working tree at the time).
+
+**Update**: the coordinator relayed the same finding independently a
+second time shortly after, this time from the Farsi/Dari content lane
+approaching it from a different angle — two independent hits on the
+same root cause. Confirmed for the coordinator that this was already
+found, fixed, tested, and committed earlier in this same session
+(commit `5b95345` above) rather than re-doing the work.
+
+## Phase F (unit checkpoint) live-verified end-to-end on Dutch too, not just Farsi, 2026-07-05 (Session 1/CODE)
+
+Per the coordinator's steer: Phase F backend+frontend was already
+fully built and live-verified this session, but only against real
+en-fa content (see the Phase F entries earlier in this file) — the
+actual publish-gate requirement is working checkpoints across every
+launch pair, not just one. Confirmed `CheckpointPage.tsx` and the
+backend checkpoint endpoints already existed (not greenfield) before
+doing anything further, per instruction not to assume.
+
+Hit a real environment hazard first, worth recording: playing a fresh
+checkpoint attempt on `nl` "Dutch A1" unit 1 via the shared Vite dev
+server (port 5175) got itself blocked by its OWN 1-hour retake delay
+after only 7 of 15 items — confirmed via a direct, read-only
+`checkpoint_attempts` query that only ONE unscored attempt existed for
+that user/unit, and `CheckpointPage.tsx`'s mount effect only calls the
+start endpoint once, so something external remounted the page mid-
+session. Root cause: another concurrent session was actively saving
+edits to `frontend/src/api/types.ts`/`TeachingCardView.tsx` on the same
+dev server my tab shared, and Vite's HMR reload on their save re-ran my
+page's mount effect, re-invoking the start call into my own still-live
+cooldown. Same "shared moving target" class of hazard CLAUDE.md already
+documents for content reseeding, just via frontend HMR instead. Worked
+around it properly rather than just waiting out the hour: full
+`npm run build` + `vite preview` on port 5176 (already CORS-whitelisted,
+avoiding a backend `.env`/restart) — a static bundle immune to HMR —
+then a fresh test account against that for a clean run.
+
+**Full clean 15-item run on nl "Dutch A1" unit 1, played by hand**:
+covered `translation`, `fill_in_blank`, and `word_order` types (this
+unit's generator didn't surface `multiple_choice`/`matching_pairs` in
+this particular sample — sampling, not a gap, both already confirmed
+working on this exact unit's exercises during the interrupted first
+attempt). Confirmed `orthography_strict` firing correctly on real
+Dutch content: `jij` (strict subject pronoun) accepted while the
+unstressed `je` was rejected on one item, and the reverse held true on
+a later item testing a different lexeme in the same jij/je register
+pair — genuinely exercising the strict-grading override, not a fluke.
+Deliberately missed several items to see the fail path (not worth
+manually determining the exact accepted string for every generated
+frame): final result **60%, "Worth another pass," weak-outcomes list
+of 6 real, distinct glosses** (Noor, good evening, good morning, the
+Netherlands, you (informal, stressed), you; your (informal)) matching
+the actual wrong answers given — a genuine end-to-end trace from wrong
+answers through scoring to the rendered UI, the same shape already
+proven for fa earlier this session.
+
+**Conclusion**: Phase F's mechanism is confirmed language-agnostic in
+practice, not just in code — identical behavior (generation across
+multiple exercise types, `orthography_strict` grading, retake-delay,
+final scoring with weak-outcome glosses) now independently observed
+live on both fa and nl. Did not additionally run a full prs checkpoint
+this round (time-boxed); the mechanism itself doesn't branch on
+language beyond `orthography_strict`'s per-script default, already
+exercised by both fa (non-Latin, strict-by-default) and nl (Latin,
+tolerant-by-default-but-overridden-here), so this is reasonable
+coverage rather than a real gap — flagging prs as the one launch pair
+still not end-to-end checkpoint-verified in the browser, for whoever
+picks this up next.
+
+Housekeeping folded in alongside, per the coordinator: `CLAUDE.md`'s
+Secrets section now notes Peace Corps' own Persian/Dari materials have
+no recordings at all (PDF-only) — closes the second angle on the
+already-investigated "does public-domain audio help" question, don't
+re-check either source again. Also updated the A1 spine outcome count
+in both `CLAUDE.md` and `docs/APP_SPEC_FOR_FABLE_REVIEW.md` §1 from the
+stale "19" to the real current "24" (weather, clothing, emotions,
+communication, money/payments added 2026-07-05, verified compiling
+clean) — both were still saying 19 with no code/behavior reason to
+doubt it, just needed the number caught up.

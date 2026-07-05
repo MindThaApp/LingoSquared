@@ -90,10 +90,12 @@ Four layers, in order of authoring:
    outcomes only, not ordering — each language's realization may
    prepend its own script/phonology "module 0" (Persian/Dari alphabet,
    Chinese pinyin+tones) and reorder/split/reweight spine nodes freely.
-   **19 A1 outcomes currently defined** (greetings, introductions,
+   **24 A1 outcomes currently defined** (greetings, introductions,
    numbers, dates, time, family, food, shopping, places, directions,
    routines, plans, past events, preferences, comparisons, travel,
-   health, work, housing) — extensible, not a hard-capped list.
+   health, work, housing, weather, clothing, emotions, communication,
+   money/payments — the last 5 added 2026-07-05, verified compiling
+   clean) — extensible, not a hard-capped list.
 2. **Target-language realization** (`docs/content/realizations/<lang>/`)
    — one set per target language, reused across every X→that-language
    path (English's realization is reused across all 9 X→en paths).

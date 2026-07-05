@@ -571,8 +571,11 @@ en→prs (A1 + A2), prs→en, plus es/fr (1 unit each, in progress).
 
 ## Known limitations / accepted scope
 
-- Only ~2 of 19 A1 spine outcomes built, for a handful of 18 paths —
-  the single biggest gap; content is a genuinely multi-month build.
+- Only a handful of 24 A1 spine outcomes built, for a handful of 18
+  paths — the single biggest gap; content is a genuinely multi-month
+  build. (Spine grew from 19 to 24 on 2026-07-05: weather, clothing,
+  emotions, communication, and money/payments added, verified
+  compiling clean — see `docs/APP_SPEC_FOR_FABLE_REVIEW.md` §1.)
 - Dari's browser-TTS fallback quality is uncertain (falls back to
   `fa-AF` approximation; may produce no sound or wrong accent).
 - No native-speaker review network in general — nl is the deliberate
