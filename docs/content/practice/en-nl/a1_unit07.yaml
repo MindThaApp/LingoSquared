@@ -1,0 +1,223 @@
+schema_version: "1.0"
+pack_key: practice.en-nl.a1.unit07
+source_language: en
+target_language: nl
+unit_content_key: nl.a1.unit07.shopping
+review:
+  status: unreviewed
+  fresh_context: "false"
+  notes: "Authored 2026-07-05 by the Claude session syncing Endless Practice
+    template pools to lesson content growth, redirecting from the nl-en
+    lane (see docs/BUILD_LOG.md's nl-en units 17-19 entry for why) to this
+    much-further-behind en-nl lane, which had only reached unit06 while the
+    underlying nl realization/en-nl overlay content had already reached 23
+    units. This unit (unit07, reviewed/stable per its own overlay -- picked
+    as the first of the stable 07-11 range) covers shopping at the market.
+    Extended scripts/backfill_lexemes_en_nl.py's UNIT_FILES glob to include
+    unit07 and added a 4-member 'produce' tag (appels/peren/tomaten/
+    paprika's, both lowercase and the capitalized price-label variants --
+    8 real lexemes total) reused across every lesson in this unit, since
+    it's literally what's for sale throughout. Added a narrower
+    'market_quantity' tag (kilo/pond only, 2 members) for the 'Een {item}
+    tomaten, alstublieft.' frame -- deliberately excludes 'gram' (always
+    collocates with 'honderd', never bare 'een gram') and 'stuk' (pairs
+    with a count context, not a weight phrase), both of which would have
+    produced unnatural-sounding generated sentences. The 'Wat mag het
+    zijn?' idiom's 'zijn' is NOT used as a slot value anywhere in this
+    pack, per this script's own documented homograph limitation ('zijn'
+    already means 'are' from earlier units) -- baked as literal frame text
+    only, same as the unit05 zijn_haar precedent. Every slot's real
+    candidate count was verified with a standalone lexeme_matches()-
+    replicating harness against this script's actual output. Needs the
+    standard fresh-context review before import. Same blocking dependency
+    as every earlier en-nl pack: backfill_lexemes_en_nl.py has not actually
+    been run against a real database yet."
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [produce, market_quantity]
+slot_presets:
+  produce: &produce {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: produce}}
+  market_quantity: &market_quantity {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: market_quantity}}
+templates:
+  - content_key: practice.en-nl.nl.a1.unit07.lesson01.choose.001
+    lesson_content_key: nl.a1.unit07.lesson01.op_de_markt
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *produce}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a market produce word from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit07.lesson01.listen.002
+    lesson_content_key: nl.a1.unit07.lesson01.op_de_markt
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *produce}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the produce word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit07.lesson01.translate.003
+    lesson_content_key: nl.a1.unit07.lesson01.op_de_markt
+    type: translation
+    frame:
+      text: "{item}"
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *produce}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The Dutch word is {item}.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit07.lesson02.order.001
+    lesson_content_key: nl.a1.unit07.lesson02.prijs_vragen
+    type: word_order
+    frame: {text: "Hoeveel kost een kilo {item}?", language_code: nl, direction: ltr}
+    slots: {item: *produce}
+    answer_derivation: {kind: render_frame, frame: {text: "Hoeveel kost een kilo {item}?", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} is the produce word asked about.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit07.lesson02.complete.002
+    lesson_content_key: nl.a1.unit07.lesson02.prijs_vragen
+    type: fill_in_blank
+    frame:
+      text: "Hoeveel kost een kilo {item}?"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Complete the Dutch question.", language_code: en, direction: ltr}
+    slots: {item: *produce}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} completes this price question.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit07.lesson02.translate.003
+    lesson_content_key: nl.a1.unit07.lesson02.prijs_vragen
+    type: translation
+    frame:
+      text: "How much does a kilo of {item} cost?"
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *produce}
+    answer_derivation: {kind: render_frame, frame: {text: "Hoeveel kost een kilo {item}?", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Hoeveel kost een kilo {item}? -- how much does a kilo of {item} cost?", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit07.lesson03.order.001
+    lesson_content_key: nl.a1.unit07.lesson03.hoeveelheden
+    type: word_order
+    frame: {text: "Een {item} tomaten, alstublieft.", language_code: nl, direction: ltr}
+    slots: {item: *market_quantity}
+    answer_derivation: {kind: render_frame, frame: {text: "Een {item} tomaten, alstublieft.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} is the quantity requested.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit07.lesson03.complete.002
+    lesson_content_key: nl.a1.unit07.lesson03.hoeveelheden
+    type: fill_in_blank
+    frame:
+      text: "Een {item} tomaten, alstublieft."
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Complete the Dutch request.", language_code: en, direction: ltr}
+    slots: {item: *market_quantity}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} completes this polite request.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit07.lesson03.listen.003
+    lesson_content_key: nl.a1.unit07.lesson03.hoeveelheden
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *produce}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the produce word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit07.lesson04.choose.001
+    lesson_content_key: nl.a1.unit07.lesson04.prijskaartjes
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *produce}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a word from the price labels.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit07.lesson04.match.002
+    lesson_content_key: nl.a1.unit07.lesson04.prijskaartjes
+    type: matching_pairs
+    frame: {text: "{first} · {second}", language_code: nl, direction: ltr}
+    slots: {first: *produce, second: *produce}
+    slot_relations: [{kind: distinct, slots: [first, second]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second]}
+    feedback_frame: {text: "Match each produce word with its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit07.lesson04.translate.003
+    lesson_content_key: nl.a1.unit07.lesson04.prijskaartjes
+    type: translation
+    frame:
+      text: "{item}"
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *produce}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The Dutch word is {item}.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit07.lesson05.order.001
+    lesson_content_key: nl.a1.unit07.lesson05.kopen_en_betalen
+    type: word_order
+    frame: {text: "Dan neem ik een kilo {item}, alstublieft.", language_code: nl, direction: ltr}
+    slots: {item: *produce}
+    answer_derivation: {kind: render_frame, frame: {text: "Dan neem ik een kilo {item}, alstublieft.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} completes this purchase.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit07.lesson05.complete.002
+    lesson_content_key: nl.a1.unit07.lesson05.kopen_en_betalen
+    type: fill_in_blank
+    frame:
+      text: "Dan neem ik een kilo {item}, alstublieft."
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Complete the Dutch sentence.", language_code: en, direction: ltr}
+    slots: {item: *produce}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} completes this purchase.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit07.lesson05.translate.003
+    lesson_content_key: nl.a1.unit07.lesson05.kopen_en_betalen
+    type: translation
+    frame:
+      text: "Then I'll take a kilo of {item}, please."
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *produce}
+    answer_derivation: {kind: render_frame, frame: {text: "Dan neem ik een kilo {item}, alstublieft.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Dan neem ik een kilo {item}, alstublieft -- then I'll take a kilo of {item}, please.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit07.lesson06.listen.001
+    lesson_content_key: nl.a1.unit07.lesson06.marktgesprek
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *produce}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the produce word you heard in this dialogue.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit07.lesson06.order.002
+    lesson_content_key: nl.a1.unit07.lesson06.marktgesprek
+    type: word_order
+    frame: {text: "Dan neem ik een kilo {item}, alstublieft.", language_code: nl, direction: ltr}
+    slots: {item: *produce}
+    answer_derivation: {kind: render_frame, frame: {text: "Dan neem ik een kilo {item}, alstublieft.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} completes this purchase.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit07.lesson06.complete.003
+    lesson_content_key: nl.a1.unit07.lesson06.marktgesprek
+    type: fill_in_blank
+    frame:
+      text: "Dan neem ik een kilo {item}, alstublieft."
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Complete the Dutch sentence.", language_code: en, direction: ltr}
+    slots: {item: *produce}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} completes this purchase.", language_code: en, direction: ltr}

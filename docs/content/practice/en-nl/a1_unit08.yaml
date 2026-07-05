@@ -1,0 +1,206 @@
+schema_version: "1.0"
+pack_key: practice.en-nl.a1.unit08
+source_language: en
+target_language: nl
+unit_content_key: nl.a1.unit08.places
+review:
+  status: unreviewed
+  fresh_context: "false"
+  notes: "Authored 2026-07-05 by the Claude session syncing Endless Practice
+    template pools to lesson content growth (en-nl lane, continuing after
+    unit07 -- see docs/content/practice/en-nl/a1_unit07.yaml's notes for the
+    full redirect-from-nl-en context). This unit (unit08, reviewed/stable)
+    covers locating common places. Extended
+    scripts/backfill_lexemes_en_nl.py's UNIT_FILES glob to include unit08
+    and added a 7-member 'place' tag (station/supermarkt/bibliotheek/
+    ziekenhuis/bank/postkantoor/bushalte, both lowercase and capitalized
+    map-label variants -- 13 real lexemes) plus a narrower 6-member
+    'place_non_station' tag excluding 'station' itself, since every
+    generated sentence in this unit fixes 'het station' as the anchor place
+    ('De {item} is naast het station.') -- including 'station' in the
+    fillable slot would risk a self-referential sentence ('The station is
+    next to the station.'), the same bug class as the nl-en unit09 hospital
+    self-reference catch earlier this session. Also added a 4-member
+    'position' tag (naast/tegenover/achter/voor) verified interchangeable in
+    this unit's own 'is {item} het station'/'is {item} de bibliotheek'
+    sentence shapes -- all four are directly attested with that exact frame
+    shape in the real content. Deliberately did NOT attempt to slot-fill
+    lesson04's tussen/bij/in de buurt van -- their sentence structures
+    (tussen X en Y, bij X, in de buurt van X) are each shaped differently
+    and don't reduce to a single safe generative frame the way the 4-way
+    naast/tegenover/achter/voor group does; that lesson instead reuses the
+    place_non_station bare-word recognition slot. Every slot's real
+    candidate count was verified with a standalone lexeme_matches()-
+    replicating harness against this script's actual output. Needs the
+    standard fresh-context review before import. Same blocking dependency
+    as every earlier en-nl pack: backfill_lexemes_en_nl.py has not actually
+    been run against a real database yet."
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [place, place_non_station, position]
+slot_presets:
+  place: &place {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: place}}
+  place_non_station: &place_non_station {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: place_non_station}}
+  position: &position {language_code: nl, part_of_speech: preposition, agreement_tags: {semantic: position}}
+templates:
+  - content_key: practice.en-nl.nl.a1.unit08.lesson01.choose.001
+    lesson_content_key: nl.a1.unit08.lesson01.plaatsen
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *place}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a place word from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit08.lesson01.listen.002
+    lesson_content_key: nl.a1.unit08.lesson01.plaatsen
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *place}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the place word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit08.lesson01.translate.003
+    lesson_content_key: nl.a1.unit08.lesson01.plaatsen
+    type: translation
+    frame:
+      text: "{item}"
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *place}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The Dutch word is {item}.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit08.lesson02.order.001
+    lesson_content_key: nl.a1.unit08.lesson02.naast_en_tegenover
+    type: word_order
+    frame: {text: "De bibliotheek is {item} het station.", language_code: nl, direction: ltr}
+    slots: {item: *position}
+    answer_derivation: {kind: render_frame, frame: {text: "De bibliotheek is {item} het station.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} says where the library is relative to the station.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit08.lesson02.complete.002
+    lesson_content_key: nl.a1.unit08.lesson02.naast_en_tegenover
+    type: fill_in_blank
+    frame:
+      text: "De bibliotheek is {item} het station."
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Complete the Dutch sentence.", language_code: en, direction: ltr}
+    slots: {item: *position}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} completes this location sentence.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit08.lesson02.choose_place.003
+    lesson_content_key: nl.a1.unit08.lesson02.naast_en_tegenover
+    type: multiple_choice
+    frame:
+      text: "De {item} is naast het station."
+      language_code: nl
+      direction: ltr
+      slot_rendering: {item: token}
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *place_non_station}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a place word from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit08.lesson03.order.001
+    lesson_content_key: nl.a1.unit08.lesson03.achter_en_voor
+    type: word_order
+    frame: {text: "Het ziekenhuis is {item} de bibliotheek.", language_code: nl, direction: ltr}
+    slots: {item: *position}
+    answer_derivation: {kind: render_frame, frame: {text: "Het ziekenhuis is {item} de bibliotheek.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} says where the hospital is relative to the library.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit08.lesson03.complete.002
+    lesson_content_key: nl.a1.unit08.lesson03.achter_en_voor
+    type: fill_in_blank
+    frame:
+      text: "Het ziekenhuis is {item} de bibliotheek."
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Complete the Dutch sentence.", language_code: en, direction: ltr}
+    slots: {item: *position}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} completes this location sentence.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit08.lesson03.listen.003
+    lesson_content_key: nl.a1.unit08.lesson03.achter_en_voor
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *position}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the location word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit08.lesson04.choose.001
+    lesson_content_key: nl.a1.unit08.lesson04.waar_en_meer_plaatswoorden
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *place_non_station}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a place word from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit08.lesson04.listen.002
+    lesson_content_key: nl.a1.unit08.lesson04.waar_en_meer_plaatswoorden
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *place_non_station}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the place word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit08.lesson05.choose.001
+    lesson_content_key: nl.a1.unit08.lesson05.eenvoudige_kaart
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *place_non_station}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a place word from the map.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit08.lesson05.translate.002
+    lesson_content_key: nl.a1.unit08.lesson05.eenvoudige_kaart
+    type: translation
+    frame:
+      text: "{item}"
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *place_non_station}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The Dutch word is {item}.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit08.lesson06.listen.001
+    lesson_content_key: nl.a1.unit08.lesson06.waar_is_de_bushalte
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *place_non_station}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the place word you heard in this dialogue.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit08.lesson06.order.002
+    lesson_content_key: nl.a1.unit08.lesson06.waar_is_de_bushalte
+    type: word_order
+    frame: {text: "De bibliotheek is {item} het station.", language_code: nl, direction: ltr}
+    slots: {item: *position}
+    answer_derivation: {kind: render_frame, frame: {text: "De bibliotheek is {item} het station.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} says where the library is relative to the station.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit08.lesson06.complete.003
+    lesson_content_key: nl.a1.unit08.lesson06.waar_is_de_bushalte
+    type: fill_in_blank
+    frame:
+      text: "De bibliotheek is {item} het station."
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Complete the Dutch sentence.", language_code: en, direction: ltr}
+    slots: {item: *position}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} completes this location sentence.", language_code: en, direction: ltr}
