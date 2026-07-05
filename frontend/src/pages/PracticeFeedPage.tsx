@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { CatalogApi, PracticeApi, ProgressApi } from "../api/endpoints";
 import { ExerciseRenderer } from "../components/exercises/ExerciseRenderer";
+import { formatCorrectResponse } from "../lib/formatAnswer";
 import type {
   AnswerResponse,
   CourseDetail,
@@ -58,7 +59,7 @@ function PracticeCard({
             {result.correct
               ? t("practice.correct", { xp: result.xp_awarded })
               : t("lesson_runner.correct_answer", {
-                  answer: String(result.correct_response),
+                  answer: formatCorrectResponse(result.correct_response),
                 })}
           </p>
         </div>
