@@ -14,7 +14,7 @@ class LoginIn(BaseModel): email:EmailStr; password:str; timezone:str|None=None
 class AuthOut(BaseModel): access_token:str; token_type:Literal["bearer"]="bearer"; expires_in:int; user:UserOut
 class LanguageOut(ORM): code:str; name:str; native_name:str; script:Literal["latin","cyrillic","han","arabic"]; direction:Literal["ltr","rtl"]
 class TextBlock(BaseModel): text:str; language_code:str; direction:Literal["ltr","rtl"]; speaker:str|None=None
-class TeachingCard(BaseModel): kind:Literal["vocabulary","phrase","grammar_note","dialogue","pronunciation_note","cultural_note"]; title:str|None=None; text_blocks:list[TextBlock]; note:str|None=None
+class TeachingCard(BaseModel): kind:Literal["vocabulary","phrase","grammar_note","dialogue","pronunciation_note","cultural_note","reading"]; title:str|None=None; text_blocks:list[TextBlock]; note:str|None=None
 class ExerciseOut(BaseModel): id:str; type:ExerciseType; order:int; prompt:dict[str,Any]
 class LessonDetail(BaseModel): id:str; unit_id:str; title:str; teaching:list[TeachingCard]; exercises:list[ExerciseOut]
 class AnswerIn(BaseModel): response: str|list[Any]|dict[str,Any]|bool|int|float
@@ -68,7 +68,7 @@ class ExerciseImport(BaseModel): type:ExerciseType; order:int=Field(ge=1); promp
 class TeachingImport(TeachingCard): pass
 class LessonImport(BaseModel): title:str; order:int=Field(ge=1); teaching:list[TeachingImport]=Field(default_factory=list); exercises:list[ExerciseImport]
 class UnitImport(BaseModel): title:str; order:int=Field(ge=1); section:UnitSection=UnitSection.reading_writing; lessons:list[LessonImport]
-class ContentItemImport(BaseModel): kind:Literal["vocabulary","phrase","grammar_note","dialogue","pronunciation_note","cultural_note"]; language_code:str; title:str=""; content:dict[str,Any]
+class ContentItemImport(BaseModel): kind:Literal["vocabulary","phrase","grammar_note","dialogue","pronunciation_note","cultural_note","reading"]; language_code:str; title:str=""; content:dict[str,Any]
 class CourseImport(BaseModel):
     source_language:str
     target_language:str
