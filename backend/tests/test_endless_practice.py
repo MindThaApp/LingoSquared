@@ -156,7 +156,13 @@ def artifact(target="es", include_listen=True):
             "content_key": "test.practice.fill_in_blank",
             "lesson_content_key": LESSON_KEY,
             "type": "fill_in_blank",
-            "frame": {"text": "{word}", "language_code": target, "direction": direction},
+            # Deliberately NOT just "{word}" alone (see
+            # blank_only_fill_in_blank_artifact() below for that shape) -
+            # a frame whose entire visible text is the one slot being
+            # blanked out renders as a bare "___" with zero context, the
+            # real live bug found 2026-07-05. Real templates always have
+            # surrounding literal text; this fixture now matches that.
+            "frame": {"text": "note: {word}", "language_code": target, "direction": direction},
             "slots": {"word": slot},
             "answer_derivation": {"kind": "slot_text", "slot": "word"},
             "feedback_frame": {"text": "Correct.", "language_code": "en", "direction": "ltr"},
@@ -412,8 +418,15 @@ def test_practice_import_is_idempotent_and_all_prompt_contracts_generate(
         assert len(by_type[kind]["prompt"]["text_blocks"]) >= 2
     fill_blocks = by_type["fill_in_blank"]["prompt"]["text_blocks"]
     assert fill_blocks[0]["text"] == "Fill in the missing word."
-    assert fill_blocks[1]["text"] == "___"
-    assert any(block["text"].strip("_ .") for block in fill_blocks)
+    assert fill_blocks[1]["text"] == "note: ___"
+    # The content block itself (not just the instruction header) must
+    # retain real visible text once the blank is masked out - a frame
+    # whose ENTIRE text is the blanked slot (e.g. "{word}" alone -> "___")
+    # is the exact live bug found 2026-07-05 (a generated fa practice item
+    # rendered with nothing answerable at all). Checking fill_blocks[1]
+    # specifically, not "any block", since the instruction header always
+    # has text and would make a weaker assertion pass even with this bug.
+    assert fill_blocks[1]["text"].replace("___", "").strip()
 
 
 def test_selectable_practice_requires_two_constrained_distractors(
@@ -562,3 +575,68 @@ def test_farsi_sampler_excludes_listen_select_even_if_imported(client, admin, au
     assert response.status_code == 200, response.text
     assert response.json()["items"]
     assert all(item["type"] != "listen_select" for item in response.json()["items"])
+
+
+def blank_only_fill_in_blank_artifact(target="fa"):
+    # Reproduces the exact real-content shape found live 2026-07-05:
+    # docs/content/practice/en-fa/a1_unit01.yaml's letter_fill.002 template
+    # has frame.text == "{letter}" - nothing but the one slot that
+    # fill_in_blank then blanks out, leaving a prompt with zero visible
+    # context (just "___" and a speak button that, for fa, has no voice
+    # either - the "no audio" detail that was actually a red herring, not
+    # the root cause). The same single-slot-frame shape was also found in
+    # en-prs/fa-en/nl-en/prs-en/en-nl practice packs, so this isn't fa- or
+    # audio-specific - it's a generic fill_in_blank generation guard.
+    direction = "rtl" if target in {"fa", "prs"} else "ltr"
+    slot = {
+        "language_code": target,
+        "part_of_speech": "noun",
+        "agreement_tags": {"semantic": "word"},
+    }
+    return {
+        "artifact_type": "lingosquared.practice_templates",
+        "artifact_version": 1,
+        "source_language": "en",
+        "target_language": target,
+        "packs": [
+            {
+                "pack_key": "test.practice.blank_only.pack",
+                "unit_content_key": "test.practice.unit",
+                "tag_schema": {},
+                "templates": [
+                    {
+                        "content_key": "test.practice.fill_in_blank.blank_only",
+                        "lesson_content_key": LESSON_KEY,
+                        "type": "fill_in_blank",
+                        "frame": {
+                            "text": "{word}",
+                            "language_code": target,
+                            "direction": direction,
+                        },
+                        "slots": {"word": slot},
+                        "answer_derivation": {"kind": "slot_text", "slot": "word"},
+                        "feedback_frame": {
+                            "text": "Correct.",
+                            "language_code": "en",
+                            "direction": "ltr",
+                        },
+                    }
+                ],
+            }
+        ],
+    }
+
+
+def test_fill_in_blank_never_generates_a_blank_only_prompt(client, admin, auth):
+    course_id, lesson_id = create_course_with_lexemes(target="fa")
+    import_templates(client, admin, course_id, blank_only_fill_in_blank_artifact())
+    complete_lesson(auth, lesson_id)
+    response = client.post(
+        f"/practice/{course_id}/batch", headers=auth, json={"size": 20}
+    )
+    assert response.status_code == 200, response.text
+    # The only imported template is the blank-only shape - with the fix,
+    # build_prompt() must reject every attempt to generate from it, so no
+    # unanswerable item is ever served rather than degrading gracefully in
+    # some other way.
+    assert response.json() == {"locked": False, "items": []}
