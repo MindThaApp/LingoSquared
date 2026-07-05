@@ -1,0 +1,104 @@
+schema_version: "1.0"
+pack_key: practice.fa-en.a1.unit01
+source_language: fa
+target_language: en
+unit_content_key: en.a1.unit01.greetings
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: "Authored directly (Codex rate-limited at authoring time), mirroring the en-fa pilot pack's schema and rigor. Needs a fresh-context review before shipping, same as any other content."
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [greeting, time_period, farewell, wellbeing_question, wellbeing_answer, politeness, identity, person_name, dialogue_word]
+    person: [first, second, third]
+slot_presets:
+  greeting: &greeting {language_code: en, part_of_speech: [noun, verb], agreement_tags: {semantic: greeting}}
+  time_period: &time_period {language_code: en, part_of_speech: noun, agreement_tags: {semantic: time_period}}
+  farewell: &farewell {language_code: en, part_of_speech: [noun, verb, adverb], agreement_tags: {semantic: farewell}}
+  wellbeing_answer: &wellbeing_answer {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: wellbeing_answer}}
+  politeness: &politeness {language_code: en, part_of_speech: [noun, verb, adjective, particle], agreement_tags: {semantic: politeness}}
+  identity: &identity {language_code: en, part_of_speech: [pronoun, verb], agreement_tags: {semantic: identity}}
+templates:
+  # Lesson 1: everyday greetings.
+  - content_key: practice.fa-en.en.a1.unit01.lesson01.greeting_meaning.001
+    lesson_content_key: en.a1.unit01.lesson01.everyday_greetings
+    type: multiple_choice
+    frame: {text: "{greeting}", language_code: en, direction: ltr}
+    slots: {greeting: *greeting}
+    answer_derivation: {kind: slot_gloss, slot: greeting}
+    feedback_frame: {text: "{greeting} یک سلام روزمره است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit01.lesson01.greeting_fill.002
+    lesson_content_key: en.a1.unit01.lesson01.everyday_greetings
+    type: fill_in_blank
+    frame: {text: "{greeting}", language_code: en, direction: ltr}
+    slots: {greeting: *greeting}
+    answer_derivation: {kind: slot_text, slot: greeting}
+    feedback_frame: {text: "{greeting} به همین شکل نوشته می‌شود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit01.lesson01.greeting_translate.003
+    lesson_content_key: en.a1.unit01.lesson01.everyday_greetings
+    type: translation
+    frame: {text: "{greeting}", language_code: fa, direction: rtl, slot_rendering: {greeting: english_gloss}}
+    slots: {greeting: *greeting}
+    answer_derivation: {kind: slot_text, slot: greeting}
+    feedback_frame: {text: "معادل انگلیسی همان چیزی است که تایپ کردید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit01.lesson01.time_order.004
+    lesson_content_key: en.a1.unit01.lesson01.everyday_greetings
+    type: word_order
+    frame: {text: "{good} {time_period}", language_code: en, direction: ltr}
+    slots: {good: *greeting, time_period: *time_period}
+    answer_derivation: {kind: render_frame, frame: {text: "Good {time_period}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "Good پیش از واژهٔ زمان می‌آید: Good {time_period}.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit01.lesson01.greeting_pair.005
+    lesson_content_key: en.a1.unit01.lesson01.everyday_greetings
+    type: matching_pairs
+    frame: {text: "{greeting} — {time_period}", language_code: en, direction: ltr}
+    slots: {greeting: *greeting, time_period: *time_period}
+    answer_derivation: {kind: matching_pairs, slots: [greeting, time_period]}
+    feedback_frame: {text: "{greeting} و {time_period} را به معنی فارسی آن‌ها وصل کنید.", language_code: fa, direction: rtl}
+
+  # Lesson 3: wellbeing exchange.
+  - content_key: practice.fa-en.en.a1.unit01.lesson03.wellbeing_meaning.001
+    lesson_content_key: en.a1.unit01.lesson03.wellbeing
+    type: multiple_choice
+    frame: {text: "{wellbeing_answer}", language_code: en, direction: ltr}
+    slots: {wellbeing_answer: *wellbeing_answer}
+    answer_derivation: {kind: slot_gloss, slot: wellbeing_answer}
+    feedback_frame: {text: "{wellbeing_answer} پاسخ به How are you? است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit01.lesson03.wellbeing_fill.002
+    lesson_content_key: en.a1.unit01.lesson03.wellbeing
+    type: fill_in_blank
+    frame: {text: "How are you? {wellbeing_answer}, thanks.", language_code: en, direction: ltr}
+    slots: {wellbeing_answer: *wellbeing_answer}
+    answer_derivation: {kind: slot_text, slot: wellbeing_answer}
+    feedback_frame: {text: "{wellbeing_answer} پاسخی طبیعی به How are you? است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit01.lesson03.politeness_translate.003
+    lesson_content_key: en.a1.unit01.lesson03.wellbeing
+    type: translation
+    frame: {text: "{politeness}", language_code: fa, direction: rtl, slot_rendering: {politeness: english_gloss}}
+    slots: {politeness: *politeness}
+    answer_derivation: {kind: slot_text, slot: politeness}
+    feedback_frame: {text: "این واژه برای تشکر مؤدبانه به‌کار می‌رود.", language_code: fa, direction: rtl}
+
+  # Lesson 5: friendly closings.
+  - content_key: practice.fa-en.en.a1.unit01.lesson05.farewell_meaning.001
+    lesson_content_key: en.a1.unit01.lesson05.noun_phrases_and_closings
+    type: multiple_choice
+    frame: {text: "{farewell}", language_code: en, direction: ltr}
+    slots: {farewell: *farewell}
+    answer_derivation: {kind: slot_gloss, slot: farewell}
+    feedback_frame: {text: "{farewell} برای پایان دادن به گفت‌وگو استفاده می‌شود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit01.lesson05.farewell_fill.002
+    lesson_content_key: en.a1.unit01.lesson05.noun_phrases_and_closings
+    type: fill_in_blank
+    frame: {text: "{farewell}", language_code: en, direction: ltr}
+    slots: {farewell: *farewell}
+    answer_derivation: {kind: slot_text, slot: farewell}
+    feedback_frame: {text: "{farewell} به همین شکل نوشته می‌شود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit01.lesson05.farewell_pair.003
+    lesson_content_key: en.a1.unit01.lesson05.noun_phrases_and_closings
+    type: matching_pairs
+    frame: {text: "{greeting} — {farewell}", language_code: en, direction: ltr}
+    slots: {greeting: *greeting, farewell: *farewell}
+    answer_derivation: {kind: matching_pairs, slots: [greeting, farewell]}
+    feedback_frame: {text: "{greeting} و {farewell} را به معنی فارسی آن‌ها وصل کنید.", language_code: fa, direction: rtl}

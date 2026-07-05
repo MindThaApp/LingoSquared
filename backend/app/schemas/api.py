@@ -1,0 +1,135 @@
+from datetime import datetime
+from typing import Any, Literal
+from pydantic import BaseModel, ConfigDict, EmailStr, Field, model_validator
+from app.models.entities import CEFRLevel, ExerciseType, UnitSection
+
+ContentIssueCategory=Literal["wrong_answer_key","mistranslation","untaught_vocabulary","audio_issue","unclear_instruction","other"]
+ContentIssueStatus=Literal["open","triaged","resolved","wontfix","duplicate"]
+
+class ORM(BaseModel): model_config=ConfigDict(from_attributes=True)
+class UserOut(ORM): id:str; email:EmailStr; display_name:str
+class MeOut(UserOut): created_at:datetime
+class RegisterIn(BaseModel): email:EmailStr; password:str=Field(min_length=8,max_length=128); display_name:str|None=None; timezone:str|None=None
+class LoginIn(BaseModel): email:EmailStr; password:str; timezone:str|None=None
+class AuthOut(BaseModel): access_token:str; token_type:Literal["bearer"]="bearer"; expires_in:int; user:UserOut
+class LanguageOut(ORM): code:str; name:str; native_name:str; script:Literal["latin","cyrillic","han","arabic"]; direction:Literal["ltr","rtl"]
+class TextBlock(BaseModel): text:str; language_code:str; direction:Literal["ltr","rtl"]; speaker:str|None=None
+class TeachingCard(BaseModel): kind:Literal["vocabulary","phrase","grammar_note","dialogue","pronunciation_note","cultural_note"]; title:str|None=None; text_blocks:list[TextBlock]; note:str|None=None
+class ExerciseOut(BaseModel): id:str; type:ExerciseType; order:int; prompt:dict[str,Any]
+class LessonDetail(BaseModel): id:str; unit_id:str; title:str; teaching:list[TeachingCard]; exercises:list[ExerciseOut]
+class AnswerIn(BaseModel): response: str|list[Any]|dict[str,Any]|bool|int|float
+class AnswerOut(BaseModel): correct:bool; result:Literal["correct","almost","incorrect"]="correct"; correct_response:Any; xp_awarded:int; feedback:str|None=None
+class LanguagePairOut(BaseModel): source_language:str; target_language:str; course_count:int
+class CourseOut(BaseModel): id:str; source_language:str; target_language:str; title:str; level:CEFRLevel; unit_count:int
+class CourseDetail(CourseOut): description:str
+class UnitOut(BaseModel): id:str; title:str; order:int; lesson_count:int; section:UnitSection; locked:bool; checkpoint_passed:bool=False
+class LessonOut(BaseModel): id:str; title:str; order:int; exercise_count:int
+class StartOut(BaseModel): started_at:datetime
+class CompleteOut(BaseModel): completed_at:datetime; xp_awarded:int; accuracy:float
+class ReviewAnswerOut(AnswerOut): next_due_at:datetime
+class StreakOut(BaseModel): streak_days:int; last_activity_date:Any=None; streak_freezes_available:int=0; freeze_used_today:bool=False
+class XPOut(BaseModel): total_xp:int; daily_goal:int
+class QuestOut(BaseModel): code:str; title:str; description:str; xp_reward:int; completed:bool; progress:int; target:int
+class QuestsOut(BaseModel): quests:list[QuestOut]
+class ImportOut(BaseModel): imported_courses:int
+class ValidationOut(BaseModel): valid:bool; errors:list[str]
+class ContentIssueReportIn(BaseModel): category:ContentIssueCategory; description:str|None=Field(default=None,max_length=2000); learner_response:Any|None=None
+class ContentIssueCreatedOut(BaseModel): id:str; status:ContentIssueStatus
+class ContentIssueUpdateIn(BaseModel):
+    status:ContentIssueStatus|None=None
+    triage_notes:str|None=Field(default=None,max_length=5000)
+    duplicate_of_id:str|None=None
+
+    @model_validator(mode="after")
+    def has_update(self):
+        if not self.model_fields_set: raise ValueError("At least one update field is required")
+        if "status" in self.model_fields_set and self.status is None: raise ValueError("status cannot be null")
+        return self
+class ContentIssueOut(ORM):
+    id:str
+    reporter_user_id:str
+    exercise_id:str
+    content_release_id:str|None
+    content_key_id:str|None
+    attempt_id:str|None
+    category:str
+    description:str|None
+    learner_response:Any|None
+    client_context:dict[str,Any]
+    status:str
+    triage_notes:str|None
+    duplicate_of_id:str|None
+    created_at:datetime
+    triaged_at:datetime|None
+    resolved_at:datetime|None
+class ContentCoverageOut(BaseModel): source_language:str; target_language:str; course_count:int; total_unit_count:int; total_lesson_count:int; open_issue_count:int
+
+class ExerciseImport(BaseModel): type:ExerciseType; order:int=Field(ge=1); prompt:dict[str,Any]; correct_response:Any; feedback:str|None=None; xp:int=Field(default=10,ge=0)
+class TeachingImport(TeachingCard): pass
+class LessonImport(BaseModel): title:str; order:int=Field(ge=1); teaching:list[TeachingImport]=Field(default_factory=list); exercises:list[ExerciseImport]
+class UnitImport(BaseModel): title:str; order:int=Field(ge=1); section:UnitSection=UnitSection.reading_writing; lessons:list[LessonImport]
+class ContentItemImport(BaseModel): kind:Literal["vocabulary","phrase","grammar_note","dialogue","pronunciation_note","cultural_note"]; language_code:str; title:str=""; content:dict[str,Any]
+class CourseImport(BaseModel):
+    source_language:str
+    target_language:str
+    title:str
+    description:str=""
+    level:CEFRLevel=CEFRLevel.A1
+    units:list[UnitImport]
+    content_items:list[ContentItemImport]=[]
+
+    @model_validator(mode="after")
+    def distinct(self):
+        if self.source_language==self.target_language: raise ValueError("source_language and target_language must differ")
+        return self
+class ImportRequest(BaseModel): courses:list[CourseImport]
+class ValidateRequest(BaseModel): content:ImportRequest
+PracticeExerciseType=Literal["multiple_choice","fill_in_blank","word_order","translation","matching_pairs","listen_select"]
+class PracticeTemplateImport(BaseModel):
+    content_key:str=Field(min_length=1,max_length=255)
+    lesson_content_key:str=Field(min_length=1,max_length=255)
+    type:PracticeExerciseType
+    frame:dict[str,Any]
+    slots:dict[str,Any]
+    slot_relations:list[dict[str,Any]]=Field(default_factory=list)
+    answer_derivation:dict[str,Any]
+    feedback_frame:dict[str,Any]
+class PracticePackImport(BaseModel):
+    pack_key:str
+    unit_content_key:str
+    tag_schema:dict[str,Any]
+    templates:list[PracticeTemplateImport]
+class PracticeArtifactImport(BaseModel):
+    artifact_type:Literal["lingosquared.practice_templates"]
+    artifact_version:Literal[1]
+    source_language:str
+    target_language:str
+    packs:list[PracticePackImport]
+class PracticeImportOut(BaseModel): imported_templates:int; updated_templates:int
+class PracticeBatchIn(BaseModel): size:int=Field(default=10,ge=1,le=20)
+class PracticeItemOut(BaseModel): id:str; type:PracticeExerciseType; prompt:dict[str,Any]
+class PracticeBatchOut(BaseModel): locked:bool; items:list[PracticeItemOut]
+class PracticeAnswerOut(BaseModel): correct:bool; result:Literal["correct","almost","incorrect"]="correct"; correct_response:Any; xp_awarded:int
+class ReviewDueCourseOut(BaseModel):
+    course_id: str
+    due_count: int
+class ReviewDueOut(BaseModel):
+    due_count: int
+    by_course: list[ReviewDueCourseOut]
+class ReviewSessionIn(BaseModel):
+    course_id: str
+    size: int = Field(default=10, ge=1, le=20)
+class ReviewItemsOut(BaseModel):
+    items: list[PracticeItemOut]
+class CheckpointIn(BaseModel):
+    size: int = Field(default=15, ge=12, le=15)
+class CheckpointResultOut(BaseModel):
+    status: Literal["in_progress","complete"]
+    answered_items: int
+    total_items: int
+    passed: bool|None
+    score: float|None
+    weak_outcomes: list[str]
+    checkpoint_passed: bool
+class TTSIn(BaseModel): text:str=Field(min_length=1,max_length=5000); language_code:str
+class TTSFallback(BaseModel): use_browser_tts:Literal[True]=True; reason:Literal["unsupported_language","quota_exceeded","provider_error"]

@@ -1,0 +1,40 @@
+import os
+
+os.environ.setdefault("DATABASE_URL", "postgresql+psycopg://lingosquared:change-me@localhost:5432/lingosquared_test")
+os.environ.setdefault("JWT_SECRET", "test-secret")
+os.environ.setdefault("ADMIN_EMAILS", "admin@example.com")
+
+import pytest
+from fastapi.testclient import TestClient
+from sqlalchemy import text
+from app.db.session import engine
+from app.main import app
+from app.content.seed import main as seed
+
+@pytest.fixture(scope="session", autouse=True)
+def database():
+    with engine.begin() as conn:
+        conn.execute(text("DROP SCHEMA public CASCADE"))
+        conn.execute(text("CREATE SCHEMA public"))
+    from app.db.session import Base
+    Base.metadata.create_all(engine)
+    seed()
+    yield
+
+@pytest.fixture
+def client():
+    return TestClient(app)
+
+@pytest.fixture
+def auth(client):
+    email = f"user-{os.urandom(4).hex()}@example.com"
+    response = client.post("/auth/register", json={"email": email, "password": "password123", "display_name": "Test User"})
+    assert response.status_code == 201
+    return {"Authorization": f"Bearer {response.json()['access_token']}"}
+
+@pytest.fixture
+def admin(client):
+    response = client.post("/auth/register", json={"email": "admin@example.com", "password": "password123", "display_name": "Admin"})
+    if response.status_code == 409:
+        response = client.post("/auth/login", json={"email": "admin@example.com", "password": "password123"})
+    return {"Authorization": f"Bearer {response.json()['access_token']}"}

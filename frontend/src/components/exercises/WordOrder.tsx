@@ -1,0 +1,62 @@
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { TextBlockList } from "../TextBlock";
+import { SpeakButton } from "../SpeakButton";
+import type { ExerciseComponentProps } from "./types";
+
+// Shared by "word_order" and "listen_order" — listen_order additionally
+// carries audio_text/audio_language_code for a hidden target-language
+// phrase the learner must hear before ordering the word bank.
+export function WordOrder({ exercise, onAnswer, disabled }: ExerciseComponentProps) {
+  const { t } = useTranslation();
+  const wordBank = exercise.prompt.word_bank ?? [];
+  const [available, setAvailable] = useState<string[]>(wordBank);
+  const [chosen, setChosen] = useState<string[]>([]);
+  const { audio_text, audio_language_code, media_asset_key } = exercise.prompt;
+
+  function pick(word: string, index: number) {
+    if (disabled) return;
+    setAvailable((prev) => prev.filter((_, i) => i !== index));
+    setChosen((prev) => [...prev, word]);
+  }
+
+  function unpick(index: number) {
+    if (disabled) return;
+    const word = chosen[index];
+    setChosen((prev) => prev.filter((_, i) => i !== index));
+    setAvailable((prev) => [...prev, word]);
+  }
+
+  return (
+    <div className="exercise-shell">
+      <TextBlockList blocks={exercise.prompt.text_blocks} />
+      {audio_text && audio_language_code && (
+        <div className="exercise-audio-prompt">
+          <SpeakButton text={audio_text} languageCode={audio_language_code} mediaAssetKey={media_asset_key} />
+          <span className="muted">{t("exercise.tap_to_listen")}</span>
+        </div>
+      )}
+      <div className="word-answer-row">
+        {chosen.map((word, i) => (
+          <button key={i} className="word-chip" onClick={() => unpick(i)} disabled={disabled}>
+            {word}
+          </button>
+        ))}
+      </div>
+      <div className="word-bank">
+        {available.map((word, i) => (
+          <button key={i} className="word-chip" onClick={() => pick(word, i)} disabled={disabled}>
+            {word}
+          </button>
+        ))}
+      </div>
+      <button
+        className="btn btn-block"
+        disabled={disabled || chosen.length === 0}
+        onClick={() => onAnswer(chosen)}
+      >
+        {t("common.check")}
+      </button>
+    </div>
+  );
+}

@@ -1,0 +1,51 @@
+import { useTranslation } from "react-i18next";
+import type { ExerciseComponentProps } from "./types";
+import { MultipleChoice } from "./MultipleChoice";
+import { Translation } from "./Translation";
+import { FillInBlank } from "./FillInBlank";
+import { WordOrder } from "./WordOrder";
+import { MatchingPairs } from "./MatchingPairs";
+import { Placeholder } from "./Placeholder";
+import { DialogueResponse } from "./DialogueResponse";
+import { GrammarCheck } from "./GrammarCheck";
+import { Flashcard } from "./Flashcard";
+import { ReadingComprehension } from "./ReadingComprehension";
+import { WritingPrompt } from "./WritingPrompt";
+
+export function ExerciseRenderer(props: ExerciseComponentProps) {
+  const { t } = useTranslation();
+  switch (props.exercise.type) {
+    case "multiple_choice":
+    case "listen_select":
+    case "dialogue_comprehension":
+      return <MultipleChoice {...props} />;
+    case "translation":
+    case "reverse_translation":
+    case "listen_type":
+      return <Translation {...props} />;
+    case "fill_in_blank":
+      return <FillInBlank {...props} />;
+    case "word_order":
+    case "listen_order":
+      return <WordOrder {...props} />;
+    case "matching_pairs":
+      return <MatchingPairs {...props} />;
+    case "listening_placeholder":
+    case "speaking_placeholder":
+    case "speak_repeat":
+      return <Placeholder {...props} />;
+    case "dialogue_response":
+    case "speak_response":
+      return <DialogueResponse {...props} />;
+    case "grammar_check":
+      return <GrammarCheck {...props} />;
+    case "flashcard":
+      return <Flashcard {...props} />;
+    case "reading_comprehension":
+      return <ReadingComprehension {...props} />;
+    case "writing_prompt":
+      return <WritingPrompt {...props} />;
+    default:
+      return <p>{t("exercise.unsupported_type", { type: props.exercise.type })}</p>;
+  }
+}
