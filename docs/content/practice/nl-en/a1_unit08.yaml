@@ -1,0 +1,145 @@
+schema_version: "1.0"
+pack_key: practice.nl-en.a1.unit08
+source_language: nl
+target_language: en
+unit_content_key: en.a1.unit08.shopping
+review:
+  status: unreviewed
+  fresh_context: "false"
+  notes: "Authored 2026-07-05 by the Claude session syncing Endless Practice
+    template pools to lesson content growth (nl-en direction, per the
+    coordinator's scope split). Keyed to English target lexemes extended into
+    the shared scripts/_en_target_lexeme_common.py plus this pair's own Dutch
+    glosses added to scripts/backfill_lexemes_nl_en.py. Two grammar-agreement
+    traps deliberately avoided (same bug class caught in earlier packs this
+    pass): (1) added a new, generally-reusable 'count_plural' tag (the
+    established 'number' tag minus 'one', 21 members) for any '{item}
+    things' plural-count frame ('Can I have {item} pounds/dozen eggs,
+    please?') -- 'one' would need the singular 'pound' instead and silently
+    produce a real grammar error if included; (2) added a narrow
+    'food_plural' tag (apples/eggs/tomatoes only, 3 members) for 'How much
+    are the {item}?', deliberately excluding unit07's food_item set
+    (coffee/tea/water/bread/soup/salad/sandwich), which are mass/singular
+    nouns that would need 'is' not 'are' -- 'quantity_unit' (pound/dozen/
+    bottle/bag/kilo, 5 members) is used only for bare-word recognition and
+    translation, never slotted into a '{count} {item}' frame, since most of
+    those units need an explicit plural '-s' form that isn't taught/glossed
+    separately from the singular. Every slot's real candidate count was
+    verified with the same standalone lexeme_matches()-replicating harness
+    used for every other pack this pass. The underlying en realization
+    unit08 IS fresh-context reviewed already (and itself documents a real
+    content bug the review caught and fixed: a cheapest-item exercise keyed
+    to the wrong item); the nl-en overlay itself is still unreviewed. Needs
+    the standard fresh-context review before import. Same blocking DB-level
+    gap as every other pack from this pass: no backfill_lexemes_nl_en.py run
+    has actually happened against a real database yet."
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [quantity_unit, food_plural, count_plural, number]
+slot_presets:
+  quantity_unit: &quantity_unit {language_code: en, part_of_speech: noun, agreement_tags: {semantic: quantity_unit}}
+  food_plural: &food_plural {language_code: en, part_of_speech: noun, agreement_tags: {semantic: food_plural}}
+  count_plural: &count_plural {language_code: en, part_of_speech: noun, agreement_tags: {semantic: count_plural}}
+  number: &number {language_code: en, part_of_speech: noun, agreement_tags: {semantic: number}}
+templates:
+  - content_key: practice.nl-en.en.a1.unit08.lesson01.quantity_meaning.001
+    lesson_content_key: en.a1.unit08.lesson01.quantities
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *quantity_unit}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is een hoeveelheidswoord uit deze les.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit08.lesson01.quantity_listen.002
+    lesson_content_key: en.a1.unit08.lesson01.quantities
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *quantity_unit}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is het woord dat je hoorde.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit08.lesson01.quantity_pair.003
+    lesson_content_key: en.a1.unit08.lesson01.quantities
+    type: matching_pairs
+    frame: {text: "Koppel de Engelse woorden aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
+    slots: {first_unit: *quantity_unit, second_unit: *quantity_unit}
+    slot_relations: [{kind: distinct, slots: [first_unit, second_unit]}]
+    answer_derivation: {kind: matching_pairs, slots: [first_unit, second_unit]}
+    feedback_frame: {text: "Je hebt twee hoeveelheidswoorden gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit08.lesson01.quantity_translate.004
+    lesson_content_key: en.a1.unit08.lesson01.quantities
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *quantity_unit}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit08.lesson02.price_question_order.001
+    lesson_content_key: en.a1.unit08.lesson02.asking_prices
+    type: word_order
+    frame: {text: "How much are the {item}", language_code: en, direction: ltr}
+    slots: {item: *food_plural}
+    answer_derivation: {kind: render_frame, frame: {text: "How much are the {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} is waarnaar geprijsd wordt gevraagd.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit08.lesson02.pounds_fill.002
+    lesson_content_key: en.a1.unit08.lesson02.asking_prices
+    type: fill_in_blank
+    frame: {text: "Can I have {item} pounds, please?", language_code: en, direction: ltr}
+    slots: {item: *count_plural}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} is de gevraagde hoeveelheid.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit08.lesson02.pounds_translate.003
+    lesson_content_key: en.a1.unit08.lesson02.asking_prices
+    type: translation
+    frame: {text: "Mag ik {item} pond, alstublieft?", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *count_plural}
+    answer_derivation: {kind: render_frame, frame: {text: "Can I have {item} pounds, please", language_code: en, direction: ltr}}
+    feedback_frame: {text: "Can I have {item} pounds, please? betekent Mag ik {item} pond, alstublieft?", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit08.lesson03.label_meaning.001
+    lesson_content_key: en.a1.unit08.lesson03.reading_price_labels
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *quantity_unit}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is de eenheid op dit prijslabel.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit08.lesson03.label_pair.002
+    lesson_content_key: en.a1.unit08.lesson03.reading_price_labels
+    type: matching_pairs
+    frame: {text: "Koppel de eenheden aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
+    slots: {first_unit: *quantity_unit, second_unit: *quantity_unit}
+    slot_relations: [{kind: distinct, slots: [first_unit, second_unit]}]
+    answer_derivation: {kind: matching_pairs, slots: [first_unit, second_unit]}
+    feedback_frame: {text: "Je hebt twee eenheden gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit08.lesson03.label_translate.003
+    lesson_content_key: en.a1.unit08.lesson03.reading_price_labels
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *quantity_unit}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit08.lesson04.quantity_listen.001
+    lesson_content_key: en.a1.unit08.lesson04.market_dialogue
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *quantity_unit}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is het woord dat je hoorde.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit08.lesson04.dozen_eggs_order.002
+    lesson_content_key: en.a1.unit08.lesson04.market_dialogue
+    type: word_order
+    frame: {text: "Can I have {item} dozen eggs, please", language_code: en, direction: ltr}
+    slots: {item: *count_plural}
+    answer_derivation: {kind: render_frame, frame: {text: "Can I have {item} dozen eggs, please", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} is het aantal dozijnen eieren in dit verzoek.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit08.lesson04.total_fill.003
+    lesson_content_key: en.a1.unit08.lesson04.market_dialogue
+    type: fill_in_blank
+    frame: {text: "That's {item} dollars.", language_code: en, direction: ltr}
+    slots: {item: *number}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} is het totaalbedrag.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit08.lesson04.total_translate.004
+    lesson_content_key: en.a1.unit08.lesson04.market_dialogue
+    type: translation
+    frame: {text: "Dat is {item} dollar.", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *number}
+    answer_derivation: {kind: render_frame, frame: {text: "That's {item} dollars", language_code: en, direction: ltr}}
+    feedback_frame: {text: "That's {item} dollars betekent Dat is {item} dollar.", language_code: nl, direction: ltr}

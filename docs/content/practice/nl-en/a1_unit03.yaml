@@ -1,0 +1,153 @@
+schema_version: "1.0"
+pack_key: practice.nl-en.a1.unit03
+source_language: nl
+target_language: en
+unit_content_key: en.a1.unit03.numbers
+review:
+  status: unreviewed
+  fresh_context: "false"
+  notes: "Authored 2026-07-05 by the Claude session syncing Endless Practice
+    template pools to lesson content growth, per an explicit scope split from
+    the coordinator (a separate agent covers en-fa/fa-en/en-prs; this session
+    covers nl-en only). Keyed to English target lexemes extended into the
+    SHARED scripts/_en_target_lexeme_common.py (EN_POS/en_agreement_tags,
+    used by all three X->en backfill scripts: nl-en, fa-en, prs-en, since
+    they teach the identical English realization) plus this pair's own Dutch
+    glosses/source-side tokens added to scripts/backfill_lexemes_nl_en.py.
+    Flagging the shared-file dependency explicitly: extending fa-en/prs-en to
+    this same unit03 only needs their own gloss dicts added on top of the POS
+    classification already done here, not a re-classification of the English
+    tokens. Deliberately avoided two grammar-agreement traps while designing
+    slots: did not slot on the 2-member 'age_phrase' tag (old/years) as
+    alternatives -- they are BOTH required together in 'years old', not
+    interchangeable, so the number itself (a safe 22-member tag) is the only
+    slotted quantity in those templates; and added a narrower 'place_singular'
+    tag (market/shop only, excluding 'apples') so 'Daniel is at the {item}.'
+    can never generate the ungrammatical 'Daniel is at the apples.' Every
+    slot's real candidate count was verified with a standalone harness
+    replicating the engine's lexeme_matches() logic against the real
+    backfill_lexemes_nl_en.iter_specs() output (not just compiler validation,
+    which never touches the database) -- confirmed >=4 candidates for every
+    multiple_choice/listen_select slot and >=1 for every other slot. The
+    underlying en realization unit03 IS fresh-context reviewed already
+    (status: reviewed) but the nl-en overlay itself is still unreviewed, same
+    as every other nl-en unit past 02 -- needs the standard fresh-context
+    review before import, same bar as every other pack. Also still blocked on
+    the same DB-level gap documented for en-nl: no backfill_lexemes_nl_en.py
+    run has actually happened against a real database for unit03 yet."
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [number, age_phrase, price_phrase, phone_phrase, market_dialogue, place_singular]
+slot_presets:
+  number: &number {language_code: en, part_of_speech: noun, agreement_tags: {semantic: number}}
+  market_noun: &market_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: market_dialogue}}
+  place_singular: &place_singular {language_code: en, part_of_speech: noun, agreement_tags: {semantic: place_singular}}
+templates:
+  - content_key: practice.nl-en.en.a1.unit03.lesson01.number_meaning.001
+    lesson_content_key: en.a1.unit03.lesson01.zero_to_ten
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *number}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is het Engelse getal.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit03.lesson01.number_listen.002
+    lesson_content_key: en.a1.unit03.lesson01.zero_to_ten
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *number}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is het getal dat je hoorde.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit03.lesson01.number_pair.003
+    lesson_content_key: en.a1.unit03.lesson01.zero_to_ten
+    type: matching_pairs
+    frame: {text: "Koppel de Engelse getallen aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
+    slots: {first_number: *number, second_number: *number}
+    slot_relations: [{kind: distinct, slots: [first_number, second_number]}]
+    answer_derivation: {kind: matching_pairs, slots: [first_number, second_number]}
+    feedback_frame: {text: "Je hebt twee Engelse getallen gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit03.lesson01.number_translate.004
+    lesson_content_key: en.a1.unit03.lesson01.zero_to_ten
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *number}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit03.lesson02.number_sentence.001
+    lesson_content_key: en.a1.unit03.lesson02.eleven_to_hundred
+    type: word_order
+    frame: {text: "I have {item} dollars", language_code: en, direction: ltr}
+    slots: {item: *number}
+    answer_derivation: {kind: render_frame, frame: {text: "I have {item} dollars", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} is het getal dat hier hoort.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit03.lesson02.number_fill.002
+    lesson_content_key: en.a1.unit03.lesson02.eleven_to_hundred
+    type: fill_in_blank
+    frame: {text: "I have {item} dollars.", language_code: en, direction: ltr}
+    slots: {item: *number}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} is het getal dat hier hoort.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit03.lesson02.number_translate.003
+    lesson_content_key: en.a1.unit03.lesson02.eleven_to_hundred
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *number}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit03.lesson03.age_order.001
+    lesson_content_key: en.a1.unit03.lesson03.ages_prices_phones
+    type: word_order
+    frame: {text: "I'm {item} years old", language_code: en, direction: ltr}
+    slots: {item: *number}
+    answer_derivation: {kind: render_frame, frame: {text: "I'm {item} years old", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} is de leeftijd in dit antwoord.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit03.lesson03.price_fill.002
+    lesson_content_key: en.a1.unit03.lesson03.ages_prices_phones
+    type: fill_in_blank
+    frame: {text: "It's {item} dollars.", language_code: en, direction: ltr}
+    slots: {item: *number}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} is de prijs in dit antwoord.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit03.lesson03.age_translate.003
+    lesson_content_key: en.a1.unit03.lesson03.ages_prices_phones
+    type: translation
+    frame: {text: "Ik ben {item} jaar oud.", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *number}
+    answer_derivation: {kind: render_frame, frame: {text: "I'm {item} years old", language_code: en, direction: ltr}}
+    feedback_frame: {text: "I'm {item} years old betekent Ik ben {item} jaar oud.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit03.lesson03.price_listen.004
+    lesson_content_key: en.a1.unit03.lesson03.ages_prices_phones
+    type: listen_select
+    frame: {text: "{item} dollars", language_code: en, direction: ltr}
+    slots: {item: *number}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is het getal dat je hoorde.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit03.lesson04.market_number.001
+    lesson_content_key: en.a1.unit03.lesson04.market_dialogue
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *number}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is het getal (bijvoorbeeld voor een prijs op de markt).", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit03.lesson04.market_pair.002
+    lesson_content_key: en.a1.unit03.lesson04.market_dialogue
+    type: matching_pairs
+    frame: {text: "Koppel elk Engels woord aan zijn Nederlandse betekenis.", language_code: nl, direction: ltr}
+    slots: {first_word: *market_noun, second_word: *market_noun}
+    slot_relations: [{kind: distinct, slots: [first_word, second_word]}]
+    answer_derivation: {kind: matching_pairs, slots: [first_word, second_word]}
+    feedback_frame: {text: "Je hebt twee woorden uit het marktgesprek gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit03.lesson04.place_order.003
+    lesson_content_key: en.a1.unit03.lesson04.market_dialogue
+    type: word_order
+    frame: {text: "Daniel is at the {item}", language_code: en, direction: ltr}
+    slots: {item: *place_singular}
+    answer_derivation: {kind: render_frame, frame: {text: "Daniel is at the {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} is de plek in deze zin.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit03.lesson04.place_translate.004
+    lesson_content_key: en.a1.unit03.lesson04.market_dialogue
+    type: translation
+    frame: {text: "Daniel is bij de {item}.", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *place_singular}
+    answer_derivation: {kind: render_frame, frame: {text: "Daniel is at the {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "Daniel is at the {item} betekent Daniel is bij de {item}.", language_code: nl, direction: ltr}
