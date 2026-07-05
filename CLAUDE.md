@@ -592,6 +592,18 @@ en→prs (A1 + A2), prs→en, plus es/fr (1 unit each, in progress).
   there's no email verification anywhere (an existing, accepted, unrelated
   limitation) closing that race. Not a code bug, a deployment step;
   full detail in `docs/BUILD_LOG.md`'s security-audit entry.
+- **Second pre-deploy/pre-beta-invite checklist item (found in the
+  2026-07-05 follow-up security pass): the live server's `CORS_ORIGINS`
+  is currently `localhost` ports only** — needs to list whatever real
+  origin(s) beta users' browsers will actually load the frontend from,
+  or their requests get rejected (fails safe, but breaks the app for
+  them). A deployment/product decision (what the real origin will be),
+  not something to guess and fix unilaterally. Full detail, plus a real
+  resource-exhaustion bug found and fixed (an unbounded-size `response`
+  field on every answer-submission endpoint) and a critical, currently-
+  not-exploitable-via-this-app's-own-code Starlette CVE flagged for a
+  future dedicated FastAPI-version-bump pass, in `docs/BUILD_LOG.md`'s
+  matching entry.
 - No refresh tokens, password reset, or email verification.
 - No mobile app (Expo React Native is the recommended future path,
   reusing the existing JWT/JSON API as-is).
