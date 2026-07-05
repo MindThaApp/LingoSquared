@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { CatalogApi, ReviewApi } from "../api/endpoints";
 import { ExerciseRenderer } from "../components/exercises/ExerciseRenderer";
 import { ReportIssueButton } from "../components/ReportIssueButton";
+import { formatCorrectResponse } from "../lib/formatAnswer";
 import type { AnswerResponse, PracticeAnswerResult, PracticeItem } from "../api/types";
 
 interface CoursePickOption {
@@ -169,7 +170,7 @@ export function ReviewPage() {
           </p>
           {!result.correct && (
             <p style={{ margin: "0 0 6px", fontWeight: 400 }}>
-              {t("review.correct_answer", { answer: String(result.correct_response) })}
+              {t("review.correct_answer", { answer: formatCorrectResponse(result.correct_response) })}
             </p>
           )}
           <div style={{ display: "flex", gap: 8 }}>
