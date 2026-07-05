@@ -109,6 +109,40 @@ EN_POS: dict[str, str] = {
     "stop": "verb", "corner": "noun", "get": "verb", "minutes": "noun",
     "can't": "verb", "miss": "verb", "take": "verb", "first": "adjective",
     "street": "noun", "second": "adjective", "directions": "noun",
+    # Unit 11 (talking about the weather), added 2026-07-05.
+    "sunny": "adjective", "rainy": "adjective", "cloudy": "adjective",
+    "cold": "adjective", "hot": "adjective", "windy": "adjective",
+    "weather": "noun", "warm": "adjective", "raining": "verb", "should": "verb",
+    "umbrella": "noun", "tomorrow": "noun", "will": "verb", "be": "verb",
+    "rain": "verb", "let's": "pronoun", "idea": "noun", "but": "particle",
+    "going": "verb", "so": "adverb",
+    # Unit 12 (clothing: sizes and colors), added 2026-07-05.
+    "shirt": "noun", "pants": "noun", "shoes": "noun", "jacket": "noun",
+    "dress": "noun", "small": "adjective", "medium": "adjective",
+    "large": "adjective", "blue": "adjective", "black": "adjective",
+    "size": "noun", "color": "noun", "20": "symbol", "i'll": "pronoun",
+    "we": "pronoun",
+    # Unit 13 (talking about feelings), added 2026-07-05.
+    "happy": "adjective", "sad": "adjective", "tired": "adjective",
+    "excited": "adjective", "worried": "adjective", "feeling": "noun",
+    "little": "adjective", "because": "particle", "big": "adjective",
+    "test": "noun", "class": "noun", "almost": "adverb", "over": "adjective",
+    "last": "adjective", "year": "noun", "writer": "noun", "oh": "particle",
+    "understand": "verb",
+    # Unit 14 (phone calls and messages), added 2026-07-05.
+    "free": "adjective", "tonight": "noun", "sorry": "adjective",
+    "repeat": "verb", "speak": "verb", "more": "adverb", "slowly": "adverb",
+    "hear": "verb", "well": "adverb", "6pm": "noun", "message": "noun",
+    "suggest": "verb", "meeting": "noun", "place": "noun", "about": "preposition",
+    "that": "pronoun",
+    # Unit 15 (handling money and payments), added 2026-07-05.
+    "cash": "noun", "card": "noun", "credit": "noun", "debit": "noun",
+    "total": "noun", "cards": "noun", "pay": "verb", "tax": "noun", "10": "symbol",
+    "by": "preposition", "1": "symbol",
+    # Unit 16 (describing a daily routine), added 2026-07-05.
+    "wake": "verb", "up": "particle", "dressed": "adjective", "dinner": "noun",
+    "bed": "noun", "every": "adjective", "usually": "adverb", "breakfast": "noun",
+    "after": "preposition",
 }
 
 def en_agreement_tags(token: str) -> dict[str, object]:
@@ -216,6 +250,30 @@ def en_agreement_tags(token: str) -> dict[str, object]:
         semantics.append("turn_direction")
     if token in {"first", "second"}:
         semantics.append("street_ordinal")
+    if token in {"sunny", "rainy", "cloudy", "cold", "hot", "windy"}:
+        semantics.append("weather_condition")
+    if token in {"shirt", "pants", "shoes", "jacket", "dress"}:
+        semantics.append("clothing_item")
+    # Narrower than clothing_item: excludes "pants"/"shoes" (always plural in
+    # English), safe for "Do you have this {item} in a medium?" -- "this
+    # pants"/"this shoes" would be a real number-agreement error.
+    if token in {"shirt", "jacket", "dress"}:
+        semantics.append("clothing_singular")
+    if token in {"small", "medium", "large"}:
+        semantics.append("clothing_size")
+    if token in {"blue", "black"}:
+        semantics.append("clothing_color")
+    if token in {"happy", "sad", "tired", "excited", "worried"}:
+        semantics.append("feeling")
+    if token in {"cash", "card", "credit", "debit"}:
+        semantics.append("payment_method")
+    # Narrower than payment_method: just the two words that modify "cards"
+    # in "Do you take {item} cards?" -- "cash"/"card" alone there would be
+    # semantically odd ("Do you take cash cards?" is not a real phrase).
+    if token in {"credit", "debit"}:
+        semantics.append("card_type")
+    if token in {"dinner", "breakfast"}:
+        semantics.append("meal")
 
     tags: dict[str, object] = {}
     if semantics:

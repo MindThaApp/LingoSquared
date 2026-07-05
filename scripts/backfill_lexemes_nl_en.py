@@ -123,6 +123,39 @@ EN_TARGET_TO_NL_GLOSS: dict[str, str] = {
     "stop": "stop", "corner": "hoek", "get": "komen", "minutes": "minuten",
     "can't": "kunt niet", "miss": "missen", "take": "neem", "first": "eerste",
     "street": "straat", "second": "tweede", "directions": "route",
+    # Unit 11 (talking about the weather), added 2026-07-05.
+    "sunny": "zonnig", "rainy": "regenachtig", "cloudy": "bewolkt",
+    "cold": "koud", "hot": "heet", "windy": "winderig", "weather": "weer",
+    "warm": "warm", "raining": "regent", "should": "kunt beter",
+    "umbrella": "paraplu", "tomorrow": "morgen", "will": "zal", "be": "zijn",
+    "rain": "regenen", "let's": "laten we", "idea": "idee", "but": "maar",
+    "going": "gaat", "so": "dus",
+    # Unit 12 (clothing: sizes and colors), added 2026-07-05.
+    "shirt": "shirt/overhemd", "pants": "broek", "shoes": "schoenen",
+    "jacket": "jas/jasje", "dress": "jurk", "small": "kleine maat",
+    "medium": "middelmaat", "large": "grote maat", "blue": "blauw",
+    "black": "zwart", "size": "maat", "color": "kleur", "20": "20",
+    "i'll": "ik zal", "we": "wij",
+    # Unit 13 (talking about feelings), added 2026-07-05.
+    "happy": "blij", "sad": "verdrietig", "tired": "moe", "excited": "enthousiast/opgewonden",
+    "worried": "bezorgd", "feeling": "gevoel", "little": "beetje",
+    "because": "omdat", "big": "groot", "test": "examen/toets", "class": "les",
+    "almost": "bijna", "over": "voorbij", "last": "laatste", "year": "jaar",
+    "writer": "schrijver", "oh": "oh", "understand": "begrijpen",
+    # Unit 14 (phone calls and messages), added 2026-07-05.
+    "free": "vrij", "tonight": "vanavond", "sorry": "sorry", "repeat": "herhalen",
+    "speak": "praten", "more": "meer", "slowly": "langzamer", "hear": "horen",
+    "well": "goed", "6pm": "18.00 uur", "message": "bericht", "suggest": "voorstellen",
+    "meeting": "afspraak", "place": "plaats", "about": "wat dacht je van",
+    "that": "dat",
+    # Unit 15 (handling money and payments), added 2026-07-05.
+    "cash": "contant geld", "card": "kaart", "credit": "krediet", "debit": "debet",
+    "total": "totaalbedrag", "cards": "kaarten", "pay": "betalen", "tax": "belasting",
+    "10": "10", "by": "met", "1": "1",
+    # Unit 16 (describing a daily routine), added 2026-07-05.
+    "wake": "wakker worden", "up": "op", "dressed": "aangekleed", "dinner": "avondeten",
+    "bed": "bed", "every": "elke", "usually": "meestal", "breakfast": "ontbijt",
+    "after": "na",
 }
 
 UNIT_FILES = (
@@ -165,6 +198,30 @@ UNIT_FILES = (
     (
         REPO_ROOT / "docs/content/realizations/en/a1_unit10_directions.yaml",
         REPO_ROOT / "docs/content/overlays/nl-en/a1_unit10.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit11_weather.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/a1_unit11.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit12_clothing.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/a1_unit12.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit13_emotions.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/a1_unit13.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit14_communication.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/a1_unit14.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit15_money.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/a1_unit15.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit16_routines.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/a1_unit16.yaml",
     ),
 )
 
@@ -227,7 +284,7 @@ NL_POS: dict[str, str] = {
     # Unit 7 (food, drink, and ordering), added 2026-07-05.
     "alles": "pronoun", "alstublieft": "phrase", "anders": "adverb",
     "bestelt": "verb", "boterham": "noun", "brood": "noun", "broodje": "noun",
-    "cafe": "noun", "graag": "adverb", "groet": "verb", "hier": "adverb",
+    "cafe": "noun", "café": "noun", "cafémenu": "noun", "graag": "adverb", "groet": "verb", "hier": "adverb",
     "iets": "pronoun", "koffie": "noun", "mag": "verb", "meeneemt": "verb",
     "meenemen": "verb", "menu": "noun", "nog": "adverb", "oke": "adjective",
     "opeet": "verb", "opeten": "verb", "salade": "noun", "sandwich": "noun",
@@ -249,6 +306,42 @@ NL_POS: dict[str, str] = {
     "rechtdoor": "adverb", "rechterkant": "noun", "rechts": "noun",
     "rechtsaf": "adverb", "route": "noun", "sla": "verb", "stop": "verb",
     "straat": "noun", "tweede": "adjective",
+    # Unit 11 (talking about the weather), added 2026-07-05.
+    "beter": "adverb", "bewolkt": "adjective", "dus": "adverb", "gaan": "verb",
+    "idee": "noun", "koud": "adjective", "laten": "verb", "morgen": "noun",
+    "op": "preposition", "paraplu": "noun", "regenachtig": "adjective",
+    "regenen": "verb", "regent": "verb", "warm": "adjective", "we": "pronoun",
+    "winderig": "adjective", "wordt": "verb", "zonnig": "adjective",
+    # Unit 12 (clothing: sizes and colors), added 2026-07-05.
+    "beschikbaar": "adjective", "blauw": "adjective", "broek": "noun",
+    "grote": "adjective", "hebben": "verb", "heeft": "verb", "jas": "noun",
+    "jasje": "noun", "jurk": "noun", "kleine": "adjective", "kleur": "noun",
+    "maat": "noun", "medium": "adjective", "middelmaat": "noun",
+    "overhemd": "noun", "schoenen": "noun", "shirt": "noun", "zwart": "adjective",
+    "m": "symbol",
+    # Unit 13 (talking about feelings), added 2026-07-05.
+    "beetje": "noun", "begrijp": "verb", "bezorgd": "adjective", "bijna": "adverb",
+    "blij": "adjective", "enthousiast": "adjective", "examen": "noun",
+    "groot": "adjective", "laatste": "adjective", "les": "noun", "moe": "adjective",
+    "oh": "particle", "omdat": "particle", "opgewonden": "adjective",
+    "schrijver": "noun", "verdrietig": "adjective", "voel": "verb", "voelt": "verb",
+    "voorbij": "adjective", "zich": "pronoun",
+    # Unit 14 (phone calls and messages), added 2026-07-05.
+    "af": "particle", "afspreken": "verb", "alsjeblieft": "phrase",
+    "bericht": "noun", "dacht": "verb", "herhalen": "verb", "horen": "verb",
+    "kan": "verb", "kun": "verb", "langzamer": "adverb", "plaats": "noun",
+    "praten": "verb", "sorry": "adjective", "spreken": "verb", "stelt": "verb",
+    "tijd": "noun", "vanavond": "adverb",
+    # Unit 15 (handling money and payments), added 2026-07-05.
+    "accepteert": "verb", "accepteren": "verb", "alleen": "adverb",
+    "belasting": "noun", "betaal": "verb", "betaalpas": "noun", "contant": "noun",
+    "creditcard": "noun", "creditcards": "noun", "doen": "verb", "geld": "noun",
+    "kaart": "noun", "pinpas": "noun", "totaal": "noun", "totaalbedrag": "noun",
+    # Unit 16 (describing a daily routine), added 2026-07-05.
+    "aankleden": "verb", "avondeten": "noun", "bed": "noun", "daarna": "adverb",
+    "doe": "verb", "doet": "verb", "elke": "adjective", "kleed": "verb",
+    "me": "pronoun", "meestal": "adverb", "ontbijt": "noun", "wakker": "adjective",
+    "word": "verb", "worden": "verb",
 }
 
 NL_GLOSSES: dict[str, str] = {
@@ -314,6 +407,7 @@ NL_GLOSSES: dict[str, str] = {
     "alles": "everything; all", "alstublieft": "please (formal)",
     "anders": "else; otherwise", "bestelt": "orders", "boterham": "sandwich",
     "brood": "bread", "broodje": "(small) sandwich; roll", "cafe": "cafe",
+    "café": "cafe", "cafémenu": "cafe menu",
     "graag": "gladly", "groet": "greets", "hier": "here", "iets": "something",
     "koffie": "coffee", "mag": "may", "meeneemt": "takes away",
     "meenemen": "to take away", "menu": "menu", "nog": "still; more",
@@ -338,6 +432,43 @@ NL_GLOSSES: dict[str, str] = {
     "neem": "take", "rechtdoor": "straight", "rechterkant": "right side",
     "rechts": "right", "rechtsaf": "to the right", "route": "route",
     "sla": "turn", "stop": "stop", "straat": "street", "tweede": "second",
+    # Unit 11 (talking about the weather), added 2026-07-05.
+    "beter": "better", "bewolkt": "cloudy", "dus": "so", "gaan": "to go",
+    "idee": "idea", "koud": "cold", "laten": "let", "morgen": "tomorrow",
+    "op": "on", "paraplu": "umbrella", "regenachtig": "rainy",
+    "regenen": "to rain", "regent": "rains", "warm": "warm", "we": "we",
+    "winderig": "windy", "wordt": "becomes; will be", "zonnig": "sunny",
+    # Unit 12 (clothing: sizes and colors), added 2026-07-05.
+    "beschikbaar": "available", "blauw": "blue", "broek": "pants",
+    "grote": "big; large", "hebben": "to have", "heeft": "has", "jas": "jacket",
+    "jasje": "small jacket", "jurk": "dress", "kleine": "small", "kleur": "color",
+    "maat": "size", "medium": "medium", "middelmaat": "medium size",
+    "overhemd": "shirt (dress shirt)", "schoenen": "shoes", "shirt": "shirt",
+    "zwart": "black", "m": "size M / medium",
+    # Unit 13 (talking about feelings), added 2026-07-05.
+    "beetje": "a bit; little", "begrijp": "understand", "bezorgd": "worried",
+    "bijna": "almost", "blij": "happy", "enthousiast": "excited",
+    "examen": "test; exam", "groot": "big", "laatste": "last", "les": "class; lesson",
+    "moe": "tired", "oh": "oh", "omdat": "because", "opgewonden": "excited",
+    "schrijver": "writer", "verdrietig": "sad", "voel": "feel", "voelt": "feels",
+    "voorbij": "over; past", "zich": "oneself (reflexive)",
+    # Unit 14 (phone calls and messages), added 2026-07-05.
+    "af": "off", "afspreken": "to meet up", "alsjeblieft": "please (informal)",
+    "bericht": "message", "dacht": "thought", "herhalen": "to repeat",
+    "horen": "to hear", "kan": "can", "kun": "can", "langzamer": "more slowly",
+    "plaats": "place", "praten": "to talk", "sorry": "sorry", "spreken": "to speak",
+    "stelt": "suggests", "tijd": "time", "vanavond": "tonight",
+    # Unit 15 (handling money and payments), added 2026-07-05.
+    "accepteert": "accepts", "accepteren": "to accept", "alleen": "only",
+    "belasting": "tax", "betaal": "pay", "betaalpas": "debit card",
+    "contant": "cash", "creditcard": "credit card", "creditcards": "credit cards",
+    "doen": "to do", "geld": "money", "kaart": "card", "pinpas": "debit card",
+    "totaal": "total", "totaalbedrag": "total amount",
+    # Unit 16 (describing a daily routine), added 2026-07-05.
+    "aankleden": "to get dressed", "avondeten": "dinner", "bed": "bed",
+    "daarna": "then; after that", "doe": "do", "doet": "does", "elke": "every",
+    "kleed": "dress", "me": "myself; me", "meestal": "usually",
+    "ontbijt": "breakfast", "wakker": "awake", "word": "become", "worden": "to become",
 }
 
 
