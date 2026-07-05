@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """Idempotently backfill reviewed en-prs A1 lexemes (Dari target) from
-unit 1 (all 6 lessons: script ramp through the Kabul workplace dialogue).
+units 1-2 (unit 1: script ramp through the Kabul workplace dialogue;
+unit 2, added 2026-07-05 by the practice-pool-sync lane: name exchange,
+origin/hometown, occupation, introducing a third person, polite titles,
+and a gathering dialogue).
 
 Written directly (not via Codex -- Codex was rate-limited at authoring
 time) mirroring scripts/backfill_lexemes.py's structure and rigor.
@@ -40,6 +43,10 @@ UNIT_FILES = (
         REPO_ROOT / "docs/content/realizations/prs/a1_unit01_greetings.yaml",
         REPO_ROOT / "docs/content/overlays/en-prs/a1_unit01.yaml",
     ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a1_unit02_introductions.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a1_unit02.yaml",
+    ),
 )
 
 # Hand-classified from every introduced_token across all 6 lessons of
@@ -74,6 +81,28 @@ PRS_GLOSSES: dict[str, str] = {
     "آشنایی": "acquaintance", "با": "with", "شدم": "I became", "هم": "also",
     "همکاران": "colleagues", "را": "(object marker)", "معرفی": "introduction",
     "بسیار": "very", "این": "this", "میز": "desk; table",
+    # Unit 2 (introductions: name exchange, origin, occupation,
+    # introducing a third person, polite titles, gathering dialogue),
+    # added 2026-07-05 by the practice-pool-sync lane. Confirmed by
+    # reading docs/content/realizations/prs/a1_unit02_introductions.yaml
+    # directly -- every token below is a genuinely new introduced_token
+    # not already covered by unit 1's dict above (checked against the
+    # full unit-1 key set first to avoid silently overwriting an
+    # existing, already-reviewed gloss).
+    "بدهید": "give (polite imperative, in the 'allow me to...' construction)",
+    "اجازه": "permission", "همکارم": "my colleague",
+    "فریدون": "Faridun (name)", "نامت": "your name (informal)",
+    "هرات": "Herat (city)", "مزار": "Mazar (part of Mazar-i-Sharif)",
+    "شریف": "Sharif (part of Mazar-i-Sharif)", "افغانستان": "Afghanistan",
+    "شهر": "city", "کار": "work; job", "داکتر": "doctor",
+    "معلم": "teacher", "مهندس": "engineer", "دوکاندار": "shopkeeper",
+    "آرزو": "Arezoo (name)", "دوست": "friend", "جناب": "Mr.; sir",
+    "خانم": "Ms.; Mrs.", "نزدیک": "close; near",
+    "می‌توانید": "you can (polite)", "دوباره": "again",
+    "بگویید": "say (polite imperative)", "مهمانی": "party; gathering",
+    "لیلا": "Leila (name)", "دیدن": "seeing; to see",
+    "خوشحال": "happy; glad", "کجا": "where",
+    "کنم": "let me do; I do (subjunctive)",
 }
 
 PRS_POS: dict[str, str] = {
@@ -99,6 +128,16 @@ PRS_POS: dict[str, str] = {
     "آشنایی": "noun", "با": "preposition", "شدم": "verb", "هم": "particle",
     "همکاران": "noun", "را": "particle", "معرفی": "noun", "بسیار": "adverb",
     "این": "pronoun", "میز": "noun",
+    # Unit 2 additions, added 2026-07-05.
+    "بدهید": "verb", "اجازه": "noun", "همکارم": "noun",
+    "فریدون": "proper_noun", "نامت": "noun", "هرات": "proper_noun",
+    "مزار": "proper_noun", "شریف": "proper_noun", "افغانستان": "proper_noun",
+    "شهر": "noun", "کار": "noun", "داکتر": "noun", "معلم": "noun",
+    "مهندس": "noun", "دوکاندار": "noun", "آرزو": "proper_noun",
+    "دوست": "noun", "جناب": "noun", "خانم": "noun", "نزدیک": "adjective",
+    "می‌توانید": "verb", "دوباره": "adverb", "بگویید": "verb",
+    "مهمانی": "noun", "لیلا": "proper_noun", "دیدن": "noun",
+    "خوشحال": "adjective", "کجا": "adverb", "کنم": "verb",
 }
 
 
@@ -123,11 +162,41 @@ def prs_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         semantics.append("politeness")
     if token in {"نام", "نام‌تان", "چیست", "من", "شما", "تو", "است", "استم"}:
         semantics.append("identity")
-    if token in {"حامد", "نجیب", "کابل"}:
+    if token in {"حامد", "نجیب"}:
         semantics.append("person_name")
     if token in {"دفتر", "همکار", "همکاران", "نو", "میز", "معرفی"}:
         semantics.append("dialogue_word")
     if lesson_key.endswith("lesson06.first_meeting_dialogue"):
+        semantics.append("dialogue_word")
+    # Unit 2 additions, 2026-07-05. Also fixes a real pre-existing bug
+    # found while extending this function: "کابل" (Kabul, a CITY) was
+    # incorrectly tagged "person_name" above (now removed from that set)
+    # -- it belongs here as a proper city_name instead.
+    if token in {"فریدون", "آرزو", "لیلا"}:
+        semantics.append("person_name")
+    if token in {"کابل", "هرات", "مزار", "شریف"}:
+        semantics.append("city_name")
+    if token == "افغانستان":
+        semantics.append("country")
+    if token == "شهر":
+        semantics.append("city_word")
+    if token in {"نام", "نام‌تان", "نامت", "چیست"}:
+        semantics.append("name_word")
+    if token in {"کجا", "استین"} and lesson_key.startswith("prs.a1.unit02.lesson02"):
+        semantics.append("origin_question")
+    if token == "کار":
+        semantics.append("occupation_question")
+    if token in {"داکتر", "معلم", "مهندس", "دوکاندار"}:
+        semantics.append("occupation")
+    if token in {"جناب", "خانم"}:
+        semantics.append("title")
+    if token in {"دوست", "همکار", "همکارم", "همکاران"}:
+        semantics.append("relationship_word")
+    if token in {"اجازه", "بدهید", "معرفی", "کنم", "این"} and lesson_key.startswith("prs.a1.unit02.lesson04"):
+        semantics.append("introduction_phrase")
+    if token in {"می‌توانید", "دوباره", "بگویید", "نزدیک"}:
+        semantics.append("politeness")
+    if lesson_key.endswith("lesson06.gathering_dialogue"):
         semantics.append("dialogue_word")
 
     tags: dict[str, object] = {}
