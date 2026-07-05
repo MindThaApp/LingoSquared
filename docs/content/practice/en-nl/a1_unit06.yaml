@@ -1,0 +1,223 @@
+schema_version: "1.0"
+pack_key: practice.en-nl.a1.unit06
+source_language: en
+target_language: nl
+unit_content_key: nl.a1.unit06.food
+review:
+  status: unreviewed
+  fresh_context: "false"
+  notes: "Authored 2026-07-05 by the Claude session syncing the Endless Practice
+    template pools to lesson content that had grown past them (see a1_unit05.yaml's
+    notes for the full gap context -- same pass, same reasoning). Keyed to lexemes
+    added to scripts/backfill_lexemes_en_nl.py's unit05-06 extension. Type variety
+    matches the reviewed en-nl unit01/unit04 packs (multiple_choice, listen_select,
+    matching_pairs, plus word_order/fill_in_blank/translation). One gloss fix made
+    while authoring this: 'broodje'/'Broodje' originally glossed as 'sandwich
+    (roll)' with a parenthetical, which would have leaked literally into this
+    pack's translation-type frames via slot_rendering:english_gloss (e.g. 'I would
+    like a sandwich (roll).') -- simplified to 'sandwich roll' in the backfill
+    script. Avoided the de/het gender-article risk in the menukaart-lesson
+    templates by using the article-free 'een' (works for any singular noun
+    regardless of gender) rather than guessing 'de'/'het' per menu noun, since no
+    authoritative per-noun gender data exists in this pipeline yet. Needs the
+    standard fresh-context review before import. Same blocking dependency as
+    a1_unit05.yaml: backfill_lexemes_en_nl.py has not actually been run against a
+    real database, and course-content admin-import doesn't yet support appending
+    new units to an existing course (CLAUDE.md known limitation) -- this pack
+    validates cleanly but is not live-exercised."
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [drink, food_request, polite_request, menu_item, food_dialogue]
+slot_presets:
+  drink: &drink {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: drink}}
+  food_noun: &food_noun {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: food_request}}
+  polite_word: &polite_word {language_code: nl, part_of_speech: phrase, agreement_tags: {semantic: polite_request}}
+  menu_item: &menu_item {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: menu_item}}
+templates:
+  - content_key: practice.en-nl.nl.a1.unit06.lesson01.choose.001
+    lesson_content_key: nl.a1.unit06.lesson01.dranken
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *drink}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a drink word from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit06.lesson01.order.002
+    lesson_content_key: nl.a1.unit06.lesson01.dranken
+    type: word_order
+    frame: {text: "Ik wil graag een {item}.", language_code: nl, direction: ltr}
+    slots: {item: *drink}
+    answer_derivation: {kind: render_frame, frame: {text: "Ik wil graag een {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} completes this drink order.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit06.lesson01.translate.003
+    lesson_content_key: nl.a1.unit06.lesson01.dranken
+    type: translation
+    frame:
+      text: "I would like a {item}."
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *drink}
+    answer_derivation: {kind: render_frame, frame: {text: "Ik wil graag een {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Ik wil graag een {item} -- I would like a {item}.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit06.lesson02.listen.001
+    lesson_content_key: nl.a1.unit06.lesson02.ik_wil_graag
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *food_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the food or drink word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit06.lesson02.order.002
+    lesson_content_key: nl.a1.unit06.lesson02.ik_wil_graag
+    type: word_order
+    frame: {text: "Ik wil graag een {item}.", language_code: nl, direction: ltr}
+    slots: {item: *food_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "Ik wil graag een {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} completes this order.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit06.lesson02.translate.003
+    lesson_content_key: nl.a1.unit06.lesson02.ik_wil_graag
+    type: translation
+    frame:
+      text: "I would like a {item}."
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *food_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "Ik wil graag een {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Ik wil graag een {item} -- I would like a {item}.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit06.lesson03.order.001
+    lesson_content_key: nl.a1.unit06.lesson03.aantallen_bestellen
+    type: word_order
+    frame: {text: "Ik wil graag twee thee, {item}.", language_code: nl, direction: ltr}
+    slots: {item: *polite_word}
+    answer_derivation: {kind: render_frame, frame: {text: "Ik wil graag twee thee, {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} sets the register (formal or informal) of this order.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit06.lesson03.complete.002
+    lesson_content_key: nl.a1.unit06.lesson03.aantallen_bestellen
+    type: fill_in_blank
+    frame:
+      text: "Ik wil graag twee thee, {item}."
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Complete the Dutch sentence.", language_code: en, direction: ltr}
+    slots: {item: *polite_word}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} sets the register (formal or informal) of this order.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit06.lesson03.translate.003
+    lesson_content_key: nl.a1.unit06.lesson03.aantallen_bestellen
+    type: translation
+    frame:
+      text: "Translate using {item}: I would like two teas, please."
+      language_code: en
+      direction: ltr
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *polite_word}
+    answer_derivation: {kind: render_frame, frame: {text: "Ik wil graag twee thee, {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Ik wil graag twee thee, {item} uses the register you were asked for.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit06.lesson04.choose.001
+    lesson_content_key: nl.a1.unit06.lesson04.wat_wilt_u
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *food_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a food or drink word from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit06.lesson04.complete.002
+    lesson_content_key: nl.a1.unit06.lesson04.wat_wilt_u
+    type: fill_in_blank
+    frame:
+      text: "Mag ik een {item}, alsjeblieft?"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Complete the Dutch sentence.", language_code: en, direction: ltr}
+    slots: {item: *food_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} completes this polite request.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit06.lesson04.translate.003
+    lesson_content_key: nl.a1.unit06.lesson04.wat_wilt_u
+    type: translation
+    frame:
+      text: "May I have a {item}, please?"
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *food_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "Mag ik een {item}, alsjeblieft?", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Mag ik een {item}, alsjeblieft? -- may I have a {item}, please?", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit06.lesson05.choose.001
+    lesson_content_key: nl.a1.unit06.lesson05.menukaart
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *menu_item}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a word from the menu card.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit06.lesson05.match.002
+    lesson_content_key: nl.a1.unit06.lesson05.menukaart
+    type: matching_pairs
+    frame: {text: "{first} · {second}", language_code: nl, direction: ltr}
+    slots: {first: *menu_item, second: *menu_item}
+    slot_relations: [{kind: distinct, slots: [first, second]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second]}
+    feedback_frame: {text: "Match each menu word with its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit06.lesson05.complete.003
+    lesson_content_key: nl.a1.unit06.lesson05.menukaart
+    type: fill_in_blank
+    frame:
+      text: "Ik wil een {item}."
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Complete the Dutch sentence.", language_code: en, direction: ltr}
+    slots: {item: *menu_item}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} completes this order from the menu.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit06.lesson06.listen.001
+    lesson_content_key: nl.a1.unit06.lesson06.taalcafe_bestelling
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *food_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the food or drink word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit06.lesson06.order.002
+    lesson_content_key: nl.a1.unit06.lesson06.taalcafe_bestelling
+    type: word_order
+    frame: {text: "Ik wil graag een {item}, alstublieft.", language_code: nl, direction: ltr}
+    slots: {item: *food_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "Ik wil graag een {item}, alstublieft.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} completes this formal order.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit06.lesson06.translate.003
+    lesson_content_key: nl.a1.unit06.lesson06.taalcafe_bestelling
+    type: translation
+    frame:
+      text: "I would like a {item}, please."
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *food_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "Ik wil graag een {item}, alstublieft.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Ik wil graag een {item}, alstublieft -- I would like a {item}, please.", language_code: en, direction: ltr}

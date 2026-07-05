@@ -1,0 +1,136 @@
+schema_version: "1.0"
+pack_key: practice.nl-en.a1.unit13
+source_language: nl
+target_language: en
+unit_content_key: en.a1.unit13.emotions
+review:
+  status: unreviewed
+  fresh_context: "false"
+  notes: "Authored 2026-07-05 by the Claude session syncing Endless Practice
+    template pools to lesson content growth (nl-en direction, per the
+    coordinator's scope split). Keyed to English target lexemes extended into
+    the shared scripts/_en_target_lexeme_common.py plus this pair's own Dutch
+    glosses added to scripts/backfill_lexemes_nl_en.py. The single 5-member
+    'feeling' tag (happy/sad/tired/excited/worried, all adjectives) is safely
+    reused across all four lessons in four different frames ('I'm {item}',
+    'I'm a little {item}.', 'The writer is {item}.', 'Are you {item} too?')
+    since English feeling-adjectives don't inflect for number/gender/person
+    -- no agreement trap for this unit's core vocabulary, unlike several
+    earlier units where the obvious tag needed narrowing. Every slot's real
+    candidate count was verified with the same standalone
+    lexeme_matches()-replicating harness used for every other pack this pass.
+    Notably, unlike units 11/12, this unit's underlying en realization is
+    itself UNREVIEWED but the nl-en OVERLAY is already fresh-context reviewed
+    (status: reviewed) -- the more usual pattern from units 3-10, one step
+    more stable than 11/12. Needs the standard fresh-context review before
+    import (both the underlying realization and this practice pack -- the
+    overlay's own review doesn't cover a newly-authored practice pack). Same
+    blocking DB-level gap as every other pack from this pass: no
+    backfill_lexemes_nl_en.py run has actually happened against a real
+    database yet."
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [feeling]
+slot_presets:
+  feeling: &feeling {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: feeling}}
+templates:
+  - content_key: practice.nl-en.en.a1.unit13.lesson01.feeling_meaning.001
+    lesson_content_key: en.a1.unit13.lesson01.feeling_words
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *feeling}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is een gevoelswoord uit deze les.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit13.lesson01.feeling_listen.002
+    lesson_content_key: en.a1.unit13.lesson01.feeling_words
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *feeling}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is het woord dat je hoorde.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit13.lesson01.feeling_pair.003
+    lesson_content_key: en.a1.unit13.lesson01.feeling_words
+    type: matching_pairs
+    frame: {text: "Koppel de Engelse gevoelswoorden aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
+    slots: {first_word: *feeling, second_word: *feeling}
+    slot_relations: [{kind: distinct, slots: [first_word, second_word]}]
+    answer_derivation: {kind: matching_pairs, slots: [first_word, second_word]}
+    feedback_frame: {text: "Je hebt twee gevoelswoorden gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit13.lesson01.feeling_translate.004
+    lesson_content_key: en.a1.unit13.lesson01.feeling_words
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *feeling}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit13.lesson02.im_order.001
+    lesson_content_key: en.a1.unit13.lesson02.expressing_feelings_with_reasons
+    type: word_order
+    frame: {text: "I'm {item}", language_code: en, direction: ltr}
+    slots: {item: *feeling}
+    answer_derivation: {kind: render_frame, frame: {text: "I'm {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} is het gevoel dat wordt uitgedrukt.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit13.lesson02.little_fill.002
+    lesson_content_key: en.a1.unit13.lesson02.expressing_feelings_with_reasons
+    type: fill_in_blank
+    frame: {text: "I'm a little {item}.", language_code: en, direction: ltr}
+    slots: {item: *feeling}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} is het gevoel dat wordt uitgedrukt.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit13.lesson02.im_translate.003
+    lesson_content_key: en.a1.unit13.lesson02.expressing_feelings_with_reasons
+    type: translation
+    frame: {text: "Ik ben {item}.", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *feeling}
+    answer_derivation: {kind: render_frame, frame: {text: "I'm {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "I'm {item} betekent Ik ben {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit13.lesson03.writer_order.001
+    lesson_content_key: en.a1.unit13.lesson03.reading_a_message
+    type: word_order
+    frame: {text: "The writer is {item}", language_code: en, direction: ltr}
+    slots: {item: *feeling}
+    answer_derivation: {kind: render_frame, frame: {text: "The writer is {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} is een gevoel van de schrijver.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit13.lesson03.writer_fill.002
+    lesson_content_key: en.a1.unit13.lesson03.reading_a_message
+    type: fill_in_blank
+    frame: {text: "The writer is {item}.", language_code: en, direction: ltr}
+    slots: {item: *feeling}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} is een gevoel van de schrijver.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit13.lesson03.writer_translate.003
+    lesson_content_key: en.a1.unit13.lesson03.reading_a_message
+    type: translation
+    frame: {text: "De schrijver is {item}.", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *feeling}
+    answer_derivation: {kind: render_frame, frame: {text: "The writer is {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "The writer is {item} betekent De schrijver is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit13.lesson04.feeling_listen.001
+    lesson_content_key: en.a1.unit13.lesson04.feelings_check_dialogue
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *feeling}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is het gevoel dat je hoorde.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit13.lesson04.are_you_order.002
+    lesson_content_key: en.a1.unit13.lesson04.feelings_check_dialogue
+    type: word_order
+    frame: {text: "Are you {item} too", language_code: en, direction: ltr}
+    slots: {item: *feeling}
+    answer_derivation: {kind: render_frame, frame: {text: "Are you {item} too", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} is het gevoel waarnaar gevraagd wordt.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit13.lesson04.are_you_fill.003
+    lesson_content_key: en.a1.unit13.lesson04.feelings_check_dialogue
+    type: fill_in_blank
+    frame: {text: "Are you {item} too?", language_code: en, direction: ltr}
+    slots: {item: *feeling}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} is het gevoel waarnaar gevraagd wordt.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit13.lesson04.are_you_translate.004
+    lesson_content_key: en.a1.unit13.lesson04.feelings_check_dialogue
+    type: translation
+    frame: {text: "Ben je ook {item}?", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *feeling}
+    answer_derivation: {kind: render_frame, frame: {text: "Are you {item} too", language_code: en, direction: ltr}}
+    feedback_frame: {text: "Are you {item} too? betekent Ben je ook {item}?", language_code: nl, direction: ltr}

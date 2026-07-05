@@ -1,0 +1,159 @@
+schema_version: "1.0"
+pack_key: practice.nl-en.a1.unit12
+source_language: nl
+target_language: en
+unit_content_key: en.a1.unit12.clothing
+review:
+  status: unreviewed
+  fresh_context: "false"
+  notes: "Authored 2026-07-05 by the Claude session syncing Endless Practice
+    template pools to lesson content growth (nl-en direction, per the
+    coordinator's scope split). Keyed to English target lexemes extended into
+    the shared scripts/_en_target_lexeme_common.py plus this pair's own Dutch
+    glosses added to scripts/backfill_lexemes_nl_en.py. A number-agreement
+    trap deliberately avoided (same bug class as unit09's hospital
+    self-reference and unit08's plural-count issues): the obvious 5-member
+    'clothing_item' tag includes 'pants'/'shoes' (always plural in English),
+    which would make 'Do you have this {item} in a medium?' ungrammatical
+    ('this pants'/'this shoes'). Added a narrower 'clothing_singular' tag
+    (shirt/jacket/dress only, 3 members) for that specific frame;
+    'clothing_item' stays safe everywhere else (bare-word recognition).
+    Also hit real external content churn while extending the shared backfill
+    script: another concurrent session had refined unit07's nl-en overlay
+    Dutch orthography (added the accented 'café' and compounded
+    'Cafémenu') since this pack's own unit07 predecessor was authored earlier
+    this pass -- since scripts/backfill_lexemes_nl_en.py processes ALL units
+    1-12 every run, the dry-run correctly caught the new unclassified tokens;
+    classified them ('café'/'cafémenu', both noun, glossed 'cafe'/'cafe
+    menu') rather than working around the check. Every slot's real candidate
+    count was verified with the same standalone lexeme_matches()-replicating
+    harness used for every other pack this pass. The underlying en
+    realization unit12 is itself UNREVIEWED (same as unit11, Codex was
+    usage-limited at authoring time) -- one step lower in stability than
+    units 3-10. Needs the standard fresh-context review before import (both
+    realization and this practice pack). Same blocking DB-level gap as every
+    other pack from this pass: no backfill_lexemes_nl_en.py run has actually
+    happened against a real database yet."
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [clothing_item, clothing_singular, clothing_size, clothing_color]
+slot_presets:
+  clothing_item: &clothing_item {language_code: en, part_of_speech: noun, agreement_tags: {semantic: clothing_item}}
+  clothing_singular: &clothing_singular {language_code: en, part_of_speech: noun, agreement_tags: {semantic: clothing_singular}}
+  clothing_size: &clothing_size {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: clothing_size}}
+  clothing_color: &clothing_color {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: clothing_color}}
+templates:
+  - content_key: practice.nl-en.en.a1.unit12.lesson01.clothing_meaning.001
+    lesson_content_key: en.a1.unit12.lesson01.clothing_items
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *clothing_item}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is een kledingwoord uit deze les.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit12.lesson01.clothing_listen.002
+    lesson_content_key: en.a1.unit12.lesson01.clothing_items
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *clothing_item}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is het woord dat je hoorde.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit12.lesson01.clothing_pair.003
+    lesson_content_key: en.a1.unit12.lesson01.clothing_items
+    type: matching_pairs
+    frame: {text: "Koppel de Engelse kledingwoorden aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
+    slots: {first_item: *clothing_item, second_item: *clothing_item}
+    slot_relations: [{kind: distinct, slots: [first_item, second_item]}]
+    answer_derivation: {kind: matching_pairs, slots: [first_item, second_item]}
+    feedback_frame: {text: "Je hebt twee kledingwoorden gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit12.lesson01.clothing_translate.004
+    lesson_content_key: en.a1.unit12.lesson01.clothing_items
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *clothing_item}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit12.lesson02.size_order.001
+    lesson_content_key: en.a1.unit12.lesson02.sizes_and_colors
+    type: word_order
+    frame: {text: "Do you have this in a {item}", language_code: en, direction: ltr}
+    slots: {item: *clothing_size}
+    answer_derivation: {kind: render_frame, frame: {text: "Do you have this in a {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} is de maat waarnaar gevraagd wordt.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit12.lesson02.color_fill.002
+    lesson_content_key: en.a1.unit12.lesson02.sizes_and_colors
+    type: fill_in_blank
+    frame: {text: "Do you have it in {item}?", language_code: en, direction: ltr}
+    slots: {item: *clothing_color}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} is de kleur waarnaar gevraagd wordt.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit12.lesson02.size_translate.003
+    lesson_content_key: en.a1.unit12.lesson02.sizes_and_colors
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *clothing_size}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit12.lesson02.clothing_listen.004
+    lesson_content_key: en.a1.unit12.lesson02.sizes_and_colors
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *clothing_item}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is het kledingwoord dat je hoorde.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit12.lesson03.label_size_order.001
+    lesson_content_key: en.a1.unit12.lesson03.reading_a_label
+    type: word_order
+    frame: {text: "The shirt is a {item}", language_code: en, direction: ltr}
+    slots: {item: *clothing_size}
+    answer_derivation: {kind: render_frame, frame: {text: "The shirt is a {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} is de maat op dit label.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit12.lesson03.label_color_fill.002
+    lesson_content_key: en.a1.unit12.lesson03.reading_a_label
+    type: fill_in_blank
+    frame: {text: "It's {item}.", language_code: en, direction: ltr}
+    slots: {item: *clothing_color}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} is de kleur op dit label.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit12.lesson03.color_translate.003
+    lesson_content_key: en.a1.unit12.lesson03.reading_a_label
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *clothing_color}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit12.lesson03.clothing_meaning.004
+    lesson_content_key: en.a1.unit12.lesson03.reading_a_label
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *clothing_item}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is het kledingstuk op dit label.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit12.lesson04.clothing_listen.001
+    lesson_content_key: en.a1.unit12.lesson04.clothing_store_dialogue
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *clothing_item}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is het kledingwoord dat je hoorde.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit12.lesson04.item_size_order.002
+    lesson_content_key: en.a1.unit12.lesson04.clothing_store_dialogue
+    type: word_order
+    frame: {text: "Do you have this {item} in a medium", language_code: en, direction: ltr}
+    slots: {item: *clothing_singular}
+    answer_derivation: {kind: render_frame, frame: {text: "Do you have this {item} in a medium", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} is het kledingstuk waarnaar gevraagd wordt.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit12.lesson04.color_fill.003
+    lesson_content_key: en.a1.unit12.lesson04.clothing_store_dialogue
+    type: fill_in_blank
+    frame: {text: "Do you have it in {item}?", language_code: en, direction: ltr}
+    slots: {item: *clothing_color}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} is de kleur waarnaar gevraagd wordt.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit12.lesson04.clothing_translate.004
+    lesson_content_key: en.a1.unit12.lesson04.clothing_store_dialogue
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *clothing_item}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
