@@ -1,0 +1,147 @@
+schema_version: "1.0"
+pack_key: practice.nl-en.a1.unit06
+source_language: nl
+target_language: en
+unit_content_key: en.a1.unit06.family
+review:
+  status: unreviewed
+  fresh_context: "false"
+  notes: "Authored 2026-07-05 by the Claude session syncing Endless Practice
+    template pools to lesson content growth (nl-en direction, per the
+    coordinator's scope split). Keyed to English target lexemes extended into
+    the shared scripts/_en_target_lexeme_common.py plus this pair's own Dutch
+    glosses added to scripts/backfill_lexemes_nl_en.py. Split family
+    vocabulary into three distinct tags rather than one broad 'family' tag:
+    family_singular (mother/father/brother/sister, 4 members, safe for 'This
+    is my {item}.'), family_collective (parents/siblings, 2 members --
+    deliberately NOT used in that same frame, since 'This is my parents.' is
+    a subject-verb number mismatch), and extended_family (grandmother/
+    grandfather/aunt/uncle/cousin, 5 members, bare-word recognition only).
+    Also added a 'possessive' tag spanning my/your/his/her (4 members) --
+    unlike unit03's age_phrase pair (old/years, which are NOT interchangeable,
+    both required together), these four genuinely are safe alternatives in
+    the same syntactic slot ('This is {item} sister.'/'Is this {item}
+    family?' all read naturally with any of the four). Every slot's real
+    candidate count was verified with the same standalone
+    lexeme_matches()-replicating harness used for every other pack this pass.
+    The underlying en realization unit06 IS fresh-context reviewed already;
+    the nl-en overlay itself is still unreviewed. Needs the standard
+    fresh-context review before import. Same blocking DB-level gap as every
+    other pack from this pass: no backfill_lexemes_nl_en.py run has actually
+    happened against a real database yet."
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [family_singular, family_collective, extended_family, possessive]
+slot_presets:
+  family_singular: &family_singular {language_code: en, part_of_speech: noun, agreement_tags: {semantic: family_singular}}
+  family_collective: &family_collective {language_code: en, part_of_speech: noun, agreement_tags: {semantic: family_collective}}
+  extended_family: &extended_family {language_code: en, part_of_speech: noun, agreement_tags: {semantic: extended_family}}
+  possessive: &possessive {language_code: en, part_of_speech: pronoun, agreement_tags: {semantic: possessive}}
+templates:
+  - content_key: practice.nl-en.en.a1.unit06.lesson01.family_meaning.001
+    lesson_content_key: en.a1.unit06.lesson01.immediate_family
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *family_singular}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is een direct familielid.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit06.lesson01.family_listen.002
+    lesson_content_key: en.a1.unit06.lesson01.immediate_family
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *family_singular}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is het familielid dat je hoorde.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit06.lesson01.family_pair.003
+    lesson_content_key: en.a1.unit06.lesson01.immediate_family
+    type: matching_pairs
+    frame: {text: "Koppel de Engelse woorden aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
+    slots: {first_word: *family_singular, second_word: *family_singular}
+    slot_relations: [{kind: distinct, slots: [first_word, second_word]}]
+    answer_derivation: {kind: matching_pairs, slots: [first_word, second_word]}
+    feedback_frame: {text: "Je hebt twee familiewoorden gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit06.lesson01.family_translate.004
+    lesson_content_key: en.a1.unit06.lesson01.immediate_family
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *family_singular}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit06.lesson02.extended_meaning.001
+    lesson_content_key: en.a1.unit06.lesson02.extended_family_possessives
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *extended_family}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is een familielid uit de verdere familie.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit06.lesson02.possessive_sister_order.002
+    lesson_content_key: en.a1.unit06.lesson02.extended_family_possessives
+    type: word_order
+    frame: {text: "This is {item} sister", language_code: en, direction: ltr}
+    slots: {item: *possessive}
+    answer_derivation: {kind: render_frame, frame: {text: "This is {item} sister", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} laat zien van wie deze zus is.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit06.lesson02.possessive_sister_fill.003
+    lesson_content_key: en.a1.unit06.lesson02.extended_family_possessives
+    type: fill_in_blank
+    frame: {text: "This is {item} sister.", language_code: en, direction: ltr}
+    slots: {item: *possessive}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} laat zien van wie deze zus is.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit06.lesson02.possessive_translate.004
+    lesson_content_key: en.a1.unit06.lesson02.extended_family_possessives
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *possessive}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit06.lesson03.possessive_brother_order.001
+    lesson_content_key: en.a1.unit06.lesson03.describing_family
+    type: word_order
+    frame: {text: "This is {item} brother", language_code: en, direction: ltr}
+    slots: {item: *possessive}
+    answer_derivation: {kind: render_frame, frame: {text: "This is {item} brother", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} laat zien van wie deze broer is.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit06.lesson03.possessive_brother_fill.002
+    lesson_content_key: en.a1.unit06.lesson03.describing_family
+    type: fill_in_blank
+    frame: {text: "This is {item} brother.", language_code: en, direction: ltr}
+    slots: {item: *possessive}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} laat zien van wie deze broer is.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit06.lesson03.collective_translate.003
+    lesson_content_key: en.a1.unit06.lesson03.describing_family
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *family_collective}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit06.lesson04.family_listen.001
+    lesson_content_key: en.a1.unit06.lesson04.family_photo_dialogue
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *family_singular}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is het familielid dat je hoorde.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit06.lesson04.possessive_family_order.002
+    lesson_content_key: en.a1.unit06.lesson04.family_photo_dialogue
+    type: word_order
+    frame: {text: "Is this {item} family", language_code: en, direction: ltr}
+    slots: {item: *possessive}
+    answer_derivation: {kind: render_frame, frame: {text: "Is this {item} family", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} laat zien van wie deze familie is.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit06.lesson04.possessive_family_fill.003
+    lesson_content_key: en.a1.unit06.lesson04.family_photo_dialogue
+    type: fill_in_blank
+    frame: {text: "Is this {item} family?", language_code: en, direction: ltr}
+    slots: {item: *possessive}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} laat zien van wie deze familie is.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit06.lesson04.possessive_family_translate.004
+    lesson_content_key: en.a1.unit06.lesson04.family_photo_dialogue
+    type: translation
+    frame: {text: "Is dit {item} familie?", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *possessive}
+    answer_derivation: {kind: render_frame, frame: {text: "Is this {item} family", language_code: en, direction: ltr}}
+    feedback_frame: {text: "Is this {item} family? betekent Is dit {item} familie?", language_code: nl, direction: ltr}

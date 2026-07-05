@@ -68,6 +68,61 @@ EN_TARGET_TO_NL_GLOSS: dict[str, str] = {
     "library": "bibliotheek", "assistant": "medewerker", "daniel": "Daniel",
     "work": "werken", "at": "bij", "the": "de", "welcome": "welkom",
     "thank": "danken",
+    # Unit 3 (numbers/ages/prices/phones/market), added 2026-07-05.
+    "zero": "nul", "one": "een", "two": "twee", "three": "drie", "four": "vier",
+    "five": "vijf", "six": "zes", "seven": "zeven", "eight": "acht", "nine": "negen",
+    "ten": "tien", "eleven": "elf", "twelve": "twaalf", "thirteen": "dertien",
+    "fifteen": "vijftien", "twenty": "twintig", "twenty-one": "eenentwintig",
+    "thirty": "dertig", "forty": "veertig", "fifty": "vijftig", "hundred": "honderd",
+    "twenty-five": "vijfentwintig", "old": "oud", "years": "jaar",
+    "it's": "het is", "dollars": "dollar", "phone": "telefoon", "number": "nummer",
+    "market": "markt", "apples": "appels", "they're": "ze zijn", "ok": "oké",
+    "this": "dit", "shop": "winkel", "much": "veel",
+    # Unit 4 (days/months/calendar dates), added 2026-07-05.
+    "monday": "maandag", "tuesday": "dinsdag", "wednesday": "woensdag",
+    "thursday": "donderdag", "friday": "vrijdag", "saturday": "zaterdag",
+    "sunday": "zondag", "it": "het", "today": "vandaag", "january": "januari",
+    "march": "maart", "july": "juli", "september": "september",
+    "december": "december", "which": "welke", "month": "maand",
+    "today's": "vandaag", "date": "datum", "7th": "7", "can": "kan",
+    "also": "ook", "write": "schrijven", "as": "als", "when's": "wanneer is",
+    "birthday": "verjaardag", "3rd": "3", "opens": "gaat open", "again": "weer",
+    "open": "open", "on": "op", "great": "geweldig", "then": "dan", "9th": "9",
+    # Unit 5 (telling the time), added 2026-07-05.
+    "time": "tijd", "o'clock": "uur", "half": "half", "past": "over",
+    "quarter": "kwart", "night": "nacht", "store": "winkel", "closes": "gaat dicht",
+    "does": "doet", "close": "dicht", "in": "in",
+    # Unit 6 (family members and relationships), added 2026-07-05.
+    "mother": "moeder", "father": "vader", "brother": "broer", "sister": "zus",
+    "parents": "ouders", "siblings": "broers en zussen", "grandmother": "oma",
+    "grandfather": "opa", "aunt": "tante", "uncle": "oom", "cousin": "neef/nicht",
+    "his": "zijn", "her": "haar", "she's": "zij is", "brothers": "broers",
+    "do": "doe", "any": "een aantal", "don't": "doe niet", "only": "enig",
+    "child": "kind", "photo": "foto", "family": "familie", "who": "wie",
+    "just": "maar",
+    # Unit 7 (food, drink, and ordering), added 2026-07-05.
+    "coffee": "koffie", "tea": "thee", "water": "water", "bread": "brood",
+    "soup": "soep", "salad": "salade", "sandwich": "boterham/broodje",
+    "i'd": "ik zou", "like": "willen (graag)", "please": "alstublieft",
+    "anything": "iets", "else": "anders", "that's": "dat is", "all": "alles",
+    "for": "voor", "here": "hier", "or": "of", "go": "gaan", "menu": "menu",
+    "price": "prijs", "cafe": "cafe", "2": "2", "3": "3", "5": "5", "6": "6",
+    "sure": "zeker",
+    # Unit 8 (shopping: prices and quantities), added 2026-07-05.
+    "pound": "pond", "of": "van", "dozen": "dozijn", "eggs": "eieren",
+    "bottle": "fles", "bag": "zak", "kilo": "kilo", "tomatoes": "tomaten",
+    "rice": "rijst", "pounds": "pond", "fresh": "vers", "per": "per", "4": "4",
+    # Unit 9 (common places and locations), added 2026-07-05.
+    "bank": "bank", "hospital": "ziekenhuis", "pharmacy": "apotheek",
+    "park": "park", "restaurant": "restaurant", "next": "naast (next to)",
+    "across": "tegenover (across from)", "from": "van", "between": "tussen",
+    "behind": "achter", "front": "voor (in front of)", "where": "waar",
+    "excuse": "excuseer", "me": "mij", "far": "ver",
+    # Unit 10 (asking for and following directions), added 2026-07-05.
+    "turn": "sla af", "left": "links", "right": "rechts", "straight": "rechtdoor",
+    "stop": "stop", "corner": "hoek", "get": "komen", "minutes": "minuten",
+    "can't": "kunt niet", "miss": "missen", "take": "neem", "first": "eerste",
+    "street": "straat", "second": "tweede", "directions": "route",
 }
 
 UNIT_FILES = (
@@ -78,6 +133,38 @@ UNIT_FILES = (
     (
         REPO_ROOT / "docs/content/realizations/en/a1_unit02_introductions.yaml",
         REPO_ROOT / "docs/content/overlays/nl-en/a1_unit02.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit03_numbers.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/a1_unit03.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit04_dates.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/a1_unit04.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit05_time.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/a1_unit05.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit06_family.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/a1_unit06.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit07_food.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/a1_unit07.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit08_shopping.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/a1_unit08.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit09_places.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/a1_unit09.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit10_directions.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/a1_unit10.yaml",
     ),
 )
 
@@ -102,6 +189,66 @@ NL_POS: dict[str, str] = {
     "bibliotheekmedewerker": "noun", "daniel": "proper_noun", "werk": "verb",
     "bij": "preposition", "welkom": "adjective", "in": "preposition", "dank": "noun",
     "de": "particle", "goed": "adjective",
+    # Unit 3 (numbers/ages/prices/phones/market), added 2026-07-05.
+    "acht": "noun", "appels": "noun", "bent": "verb", "bestaat": "verb",
+    "dertien": "noun", "dertig": "noun", "dit": "pronoun", "dollar": "noun",
+    "drie": "noun", "een-twee-drie-vier": "phrase", "eenentwintig": "noun",
+    "elf": "noun", "hoeveel": "adverb", "honderd": "noun", "jaar": "noun",
+    "kost": "verb", "markt": "noun", "naar": "preposition", "negen": "noun",
+    "nul": "noun", "oud": "adjective", "prijs": "noun", "telefoonnummer": "noun",
+    "tien": "noun", "twaalf": "noun", "twee": "noun", "twintig": "noun",
+    "uw": "pronoun", "van": "preposition", "veertig": "noun", "vier": "noun",
+    "vijf": "noun", "vijf-vijf-vijf": "phrase", "vijfentwintig": "noun",
+    "vijftien": "noun", "vijftig": "noun", "vraagt": "verb", "wat": "pronoun",
+    "winkel": "noun", "zegt": "verb", "zes": "noun", "zeven": "noun",
+    # Unit 4 (days/months/calendar dates), added 2026-07-05.
+    "als": "particle", "dan": "adverb", "datum": "noun", "december": "noun",
+    "dinsdag": "noun", "donderdag": "noun", "geweldig": "adjective",
+    "januari": "noun", "juli": "noun", "kunt": "verb", "maand": "noun",
+    "maandag": "noun", "maart": "noun", "open": "adjective", "opengaat": "verb",
+    "opent": "verb", "opnieuw": "adverb", "schrijven": "verb", "september": "noun",
+    "vandaag": "noun", "verjaardag": "noun", "vrijdag": "noun", "wanneer": "adverb",
+    "weer": "adverb", "welke": "pronoun", "woensdag": "noun", "zaterdag": "noun",
+    "zondag": "noun",
+    # Unit 5 (telling the time), added 2026-07-05.
+    "avond": "noun", "avonds": "adverb", "dicht": "adjective", "half": "noun",
+    "kwart": "noun", "laat": "adverb", "middag": "noun", "nacht": "noun",
+    "ochtend": "noun", "ochtends": "adverb", "om": "preposition", "over": "preposition",
+    "s": "particle", "uur": "noun", "voor": "preposition",
+    # Unit 6 (family members and relationships), added 2026-07-05.
+    "broer": "noun", "broers": "noun", "die": "pronoun", "enig": "adjective",
+    "er": "particle", "familie": "noun", "foto": "noun", "grootmoeder": "noun",
+    "grootvader": "noun", "haar": "pronoun", "heb": "verb", "kind": "noun",
+    "lerares": "noun", "maar": "particle", "moeder": "noun", "neef": "noun",
+    "nicht": "noun", "of": "particle",
+    "oma": "noun", "oom": "noun", "opa": "noun", "ouders": "noun",
+    "tante": "noun", "vader": "noun", "wie": "pronoun", "ze": "pronoun",
+    "zijn": "pronoun", "zus": "noun", "zussen": "noun", "één": "noun",
+    # Unit 7 (food, drink, and ordering), added 2026-07-05.
+    "alles": "pronoun", "alstublieft": "phrase", "anders": "adverb",
+    "bestelt": "verb", "boterham": "noun", "brood": "noun", "broodje": "noun",
+    "cafe": "noun", "graag": "adverb", "groet": "verb", "hier": "adverb",
+    "iets": "pronoun", "koffie": "noun", "mag": "verb", "meeneemt": "verb",
+    "meenemen": "verb", "menu": "noun", "nog": "adverb", "oke": "adjective",
+    "opeet": "verb", "opeten": "verb", "salade": "noun", "sandwich": "noun",
+    "soep": "noun", "thee": "noun", "water": "noun", "wil": "verb",
+    # Unit 8 (shopping: prices and quantities), added 2026-07-05.
+    "dozijn": "noun", "eieren": "noun", "fles": "noun", "kilo": "noun",
+    "kosten": "verb", "natuurlijk": "adverb", "per": "preposition", "pond": "noun",
+    "rijst": "noun", "tomaten": "noun", "vers": "adjective", "zak": "noun",
+    # Unit 9 (common places and locations), added 2026-07-05.
+    "achter": "preposition", "apotheek": "noun", "bank": "noun",
+    "naast": "preposition", "pardon": "noun", "park": "noun",
+    "restaurant": "noun", "tegenover": "preposition", "tussen": "preposition",
+    "ver": "adjective", "vreemde": "noun", "waar": "pronoun", "weg": "noun",
+    "ziekenhuis": "noun",
+    # Unit 10 (asking for and following directions), added 2026-07-05.
+    "aan": "preposition", "eerste": "adjective", "ga": "verb", "herhaalt": "verb",
+    "hoek": "noun", "kom": "verb", "komt": "verb", "links": "noun",
+    "linksaf": "adverb", "minuten": "noun", "missen": "verb", "neem": "verb",
+    "rechtdoor": "adverb", "rechterkant": "noun", "rechts": "noun",
+    "rechtsaf": "adverb", "route": "noun", "sla": "verb", "stop": "verb",
+    "straat": "noun", "tweede": "adjective",
 }
 
 NL_GLOSSES: dict[str, str] = {
@@ -124,6 +271,73 @@ NL_GLOSSES: dict[str, str] = {
     "daniel": "Daniel (name)", "werk": "work (1st person 'werken')",
     "bij": "at; by", "welkom": "welcome", "in": "in", "dank": "thanks (short form)",
     "de": "the (common gender)", "goed": "good; well",
+    # Unit 3 (numbers/ages/prices/phones/market), added 2026-07-05.
+    "acht": "eight", "appels": "apples", "bent": "are (formal 'u bent')",
+    "bestaat": "exists", "dertien": "thirteen", "dertig": "thirty", "dit": "this",
+    "dollar": "dollar(s)", "drie": "three", "een-twee-drie-vier": "one-two-three-four",
+    "eenentwintig": "twenty-one", "elf": "eleven", "hoeveel": "how much; how many",
+    "honderd": "hundred", "jaar": "year(s)", "kost": "costs", "markt": "market",
+    "naar": "to; for", "negen": "nine", "nul": "zero", "oud": "old",
+    "prijs": "price", "telefoonnummer": "phone number", "tien": "ten",
+    "twaalf": "twelve", "twee": "two", "twintig": "twenty", "uw": "your (formal)",
+    "van": "of; from", "veertig": "forty", "vier": "four", "vijf": "five",
+    "vijf-vijf-vijf": "five-five-five", "vijfentwintig": "twenty-five",
+    "vijftien": "fifteen", "vijftig": "fifty", "vraagt": "asks", "wat": "what",
+    "winkel": "shop", "zegt": "says", "zes": "six", "zeven": "seven",
+    # Unit 4 (days/months/calendar dates), added 2026-07-05.
+    "als": "as", "dan": "then", "datum": "date", "december": "December",
+    "dinsdag": "Tuesday", "donderdag": "Thursday", "geweldig": "great",
+    "januari": "January", "juli": "July", "kunt": "can (formal 'u kunt')",
+    "maand": "month", "maandag": "Monday", "maart": "March", "open": "open",
+    "opengaat": "opens (goes open)", "opent": "opens", "opnieuw": "again",
+    "schrijven": "to write", "september": "September", "vandaag": "today",
+    "verjaardag": "birthday", "vrijdag": "Friday", "wanneer": "when",
+    "weer": "again", "welke": "which", "woensdag": "Wednesday",
+    "zaterdag": "Saturday", "zondag": "Sunday",
+    # Unit 5 (telling the time), added 2026-07-05.
+    "avond": "evening", "avonds": "in the evening ('s avonds)", "dicht": "closed",
+    "half": "half", "kwart": "quarter", "laat": "late",
+    "middag": "afternoon", "nacht": "night", "ochtend": "morning",
+    "ochtends": "in the morning ('s ochtends)", "om": "at", "over": "past",
+    "s": "fragment of 's ochtends/'s avonds", "uur": "hour; o'clock", "voor": "to",
+    # Unit 6 (family members and relationships), added 2026-07-05.
+    "broer": "brother", "broers": "brothers", "die": "that; who", "enig": "only",
+    "er": "there (of it/them)", "familie": "family", "foto": "photo",
+    "grootmoeder": "grandmother", "grootvader": "grandfather", "haar": "her",
+    "heb": "have", "kind": "child", "lerares": "teacher (female)", "maar": "but; only",
+    "moeder": "mother", "neef": "nephew; male cousin",
+    "nicht": "niece; female cousin", "of": "or", "oma": "grandmother",
+    "oom": "uncle", "opa": "grandfather", "ouders": "parents", "tante": "aunt",
+    "vader": "father", "wie": "who", "ze": "she; they", "zijn": "his",
+    "zus": "sister", "zussen": "sisters", "één": "one",
+    # Unit 7 (food, drink, and ordering), added 2026-07-05.
+    "alles": "everything; all", "alstublieft": "please (formal)",
+    "anders": "else; otherwise", "bestelt": "orders", "boterham": "sandwich",
+    "brood": "bread", "broodje": "(small) sandwich; roll", "cafe": "cafe",
+    "graag": "gladly", "groet": "greets", "hier": "here", "iets": "something",
+    "koffie": "coffee", "mag": "may", "meeneemt": "takes away",
+    "meenemen": "to take away", "menu": "menu", "nog": "still; more",
+    "oke": "okay", "opeet": "eats (here)", "opeten": "to eat (here)",
+    "salade": "salad", "sandwich": "sandwich", "soep": "soup", "thee": "tea",
+    "water": "water", "wil": "wants",
+    # Unit 8 (shopping: prices and quantities), added 2026-07-05.
+    "dozijn": "dozen", "eieren": "eggs", "fles": "bottle", "kilo": "kilo",
+    "kosten": "to cost", "natuurlijk": "of course; sure", "per": "per",
+    "pond": "pound", "rijst": "rice", "tomaten": "tomatoes", "vers": "fresh",
+    "zak": "bag",
+    # Unit 9 (common places and locations), added 2026-07-05.
+    "achter": "behind", "apotheek": "pharmacy", "bank": "bank",
+    "naast": "next to", "pardon": "excuse me", "park": "park",
+    "restaurant": "restaurant", "tegenover": "across from", "tussen": "between",
+    "ver": "far", "vreemde": "stranger", "waar": "where", "weg": "way; road",
+    "ziekenhuis": "hospital",
+    # Unit 10 (asking for and following directions), added 2026-07-05.
+    "aan": "at; on", "eerste": "first", "ga": "go", "herhaalt": "repeats",
+    "hoek": "corner", "kom": "come", "komt": "comes", "links": "left",
+    "linksaf": "to the left", "minuten": "minutes", "missen": "to miss",
+    "neem": "take", "rechtdoor": "straight", "rechterkant": "right side",
+    "rechts": "right", "rechtsaf": "to the right", "route": "route",
+    "sla": "turn", "stop": "stop", "straat": "street", "tweede": "second",
 }
 
 
@@ -149,6 +363,19 @@ def nl_agreement_tags(token: str) -> dict[str, object]:
         semantics.append("person_name")
     if token in {"bibliotheek", "bibliotheekmedewerker", "lid", "student", "leraar", "ingenieur", "nieuw", "werk"}:
         semantics.append("dialogue_word")
+    if token in {"acht", "dertien", "dertig", "drie", "eenentwintig", "elf",
+                 "honderd", "negen", "nul", "tien", "twaalf", "twee", "twintig",
+                 "veertig", "vier", "vijf", "vijfentwintig", "vijftien",
+                 "vijftig", "zes", "zeven"}:
+        semantics.append("number")
+    if token in {"oud", "jaar", "vijfentwintig"}:
+        semantics.append("age_phrase")
+    if token in {"dollar", "prijs", "kost", "hoeveel"}:
+        semantics.append("price_phrase")
+    if token in {"telefoonnummer"}:
+        semantics.append("phone_phrase")
+    if token in {"markt", "appels", "winkel", "bestaat", "vraagt", "zegt", "dit", "van", "naar"}:
+        semantics.append("market_dialogue")
 
     tags: dict[str, object] = {}
     if semantics:

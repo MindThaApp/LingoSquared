@@ -1,0 +1,140 @@
+schema_version: "1.0"
+pack_key: practice.nl-en.a1.unit04
+source_language: nl
+target_language: en
+unit_content_key: en.a1.unit04.dates
+review:
+  status: unreviewed
+  fresh_context: "false"
+  notes: "Authored 2026-07-05 by the Claude session syncing Endless Practice
+    template pools to lesson content growth (nl-en direction, per the
+    coordinator's scope split -- a separate agent covers en-fa/fa-en/en-prs).
+    Keyed to English target lexemes extended into the SHARED
+    scripts/_en_target_lexeme_common.py (also used by fa-en/prs-en's backfill
+    scripts) plus this pair's own Dutch glosses/source tokens added to
+    scripts/backfill_lexemes_nl_en.py. Deliberately scoped the farewell-tag
+    slot in lesson04 to part_of_speech: adverb only (later/then, 2 members)
+    rather than the full farewell tag (which also includes the noun/verb
+    members goodbye/bye/see) -- 'Great, see you {item}.' is only grammatical
+    with an adverb there ('see you later'/'see you then'), not with
+    goodbye/bye/see substituted in. Every slot's real candidate count was
+    verified with the same standalone lexeme_matches()-replicating harness
+    used for the earlier en-nl and nl-en unit03 packs (not just compiler
+    validation, which never touches the database): weekday=7, month=5,
+    day_ordinal=3, farewell-adverb=2, all sufficient for their exercise
+    types. The underlying en realization unit04 IS fresh-context reviewed
+    already; the nl-en overlay itself is still unreviewed, same as every
+    other nl-en unit past 02. Needs the standard fresh-context review before
+    import. Same blocking DB-level gap as every other pack from this pass:
+    no backfill_lexemes_nl_en.py run has actually happened against a real
+    database yet."
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [weekday, month, day_ordinal, farewell]
+slot_presets:
+  weekday: &weekday {language_code: en, part_of_speech: noun, agreement_tags: {semantic: weekday}}
+  month: &month {language_code: en, part_of_speech: noun, agreement_tags: {semantic: month}}
+  day_ordinal: &day_ordinal {language_code: en, part_of_speech: noun, agreement_tags: {semantic: day_ordinal}}
+  farewell_adverb: &farewell_adverb {language_code: en, part_of_speech: adverb, agreement_tags: {semantic: farewell}}
+templates:
+  - content_key: practice.nl-en.en.a1.unit04.lesson01.weekday_meaning.001
+    lesson_content_key: en.a1.unit04.lesson01.weekdays
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *weekday}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is de Engelse dag van de week.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit04.lesson01.weekday_listen.002
+    lesson_content_key: en.a1.unit04.lesson01.weekdays
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *weekday}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is de dag die je hoorde.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit04.lesson01.weekday_pair.003
+    lesson_content_key: en.a1.unit04.lesson01.weekdays
+    type: matching_pairs
+    frame: {text: "Koppel de Engelse dagen aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
+    slots: {first_day: *weekday, second_day: *weekday}
+    slot_relations: [{kind: distinct, slots: [first_day, second_day]}]
+    answer_derivation: {kind: matching_pairs, slots: [first_day, second_day]}
+    feedback_frame: {text: "Je hebt twee dagen van de week gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit04.lesson01.weekday_translate.004
+    lesson_content_key: en.a1.unit04.lesson01.weekdays
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *weekday}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit04.lesson02.month_meaning.001
+    lesson_content_key: en.a1.unit04.lesson02.months
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *month}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is de Engelse maand.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit04.lesson02.month_pair.002
+    lesson_content_key: en.a1.unit04.lesson02.months
+    type: matching_pairs
+    frame: {text: "Koppel de Engelse maanden aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
+    slots: {first_month: *month, second_month: *month}
+    slot_relations: [{kind: distinct, slots: [first_month, second_month]}]
+    answer_derivation: {kind: matching_pairs, slots: [first_month, second_month]}
+    feedback_frame: {text: "Je hebt twee maanden gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit04.lesson02.month_translate.003
+    lesson_content_key: en.a1.unit04.lesson02.months
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *month}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit04.lesson03.date_order.001
+    lesson_content_key: en.a1.unit04.lesson03.calendar_dates
+    type: word_order
+    frame: {text: "It's July {item}", language_code: en, direction: ltr}
+    slots: {item: *day_ordinal}
+    answer_derivation: {kind: render_frame, frame: {text: "It's July {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} is de dag van de maand in deze datum.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit04.lesson03.birthday_fill.002
+    lesson_content_key: en.a1.unit04.lesson03.calendar_dates
+    type: fill_in_blank
+    frame: {text: "My birthday is March {item}.", language_code: en, direction: ltr}
+    slots: {item: *day_ordinal}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} is de dag van de maand in deze verjaardag.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit04.lesson03.birthday_translate.003
+    lesson_content_key: en.a1.unit04.lesson03.calendar_dates
+    type: translation
+    frame: {text: "Mijn verjaardag is {item} maart.", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *day_ordinal}
+    answer_derivation: {kind: render_frame, frame: {text: "My birthday is March {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "My birthday is March {item} betekent Mijn verjaardag is {item} maart (in cijfers).", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit04.lesson04.reopen_listen.001
+    lesson_content_key: en.a1.unit04.lesson04.appointment_dialogue
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *weekday}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is de dag die je hoorde.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit04.lesson04.reopen_order.002
+    lesson_content_key: en.a1.unit04.lesson04.appointment_dialogue
+    type: word_order
+    frame: {text: "It opens on {item}", language_code: en, direction: ltr}
+    slots: {item: *weekday}
+    answer_derivation: {kind: render_frame, frame: {text: "It opens on {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} is de dag waarop het weer opengaat.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit04.lesson04.farewell_fill.003
+    lesson_content_key: en.a1.unit04.lesson04.appointment_dialogue
+    type: fill_in_blank
+    frame: {text: "Great, see you {item}.", language_code: en, direction: ltr}
+    slots: {item: *farewell_adverb}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} sluit dit gesprek vriendelijk af.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit04.lesson04.farewell_translate.004
+    lesson_content_key: en.a1.unit04.lesson04.appointment_dialogue
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *farewell_adverb}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
