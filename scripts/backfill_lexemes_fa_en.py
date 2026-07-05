@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 """Idempotently backfill reviewed fa-en A1 lexemes (English target) from
-the shared en realization units 1 and 2.
+the shared en realization units 1, 2, and 3 (numbers/ages/prices/phones/
+market -- added 2026-07-05 by the practice-pool-sync lane, reusing the
+EN_POS/en_agreement_tags additions the nl-en lane already made to
+_en_target_lexeme_common.py for this same unit; only the Farsi gloss
+dict needed extending here, no new POS/tag classification work).
 
 Written directly (not via Codex -- Codex was rate-limited at authoring
 time) mirroring scripts/backfill_lexemes.py's structure and rigor.
@@ -53,6 +57,10 @@ UNIT_FILES = (
         REPO_ROOT / "docs/content/realizations/en/a1_unit02_introductions.yaml",
         REPO_ROOT / "docs/content/overlays/fa-en/a1_unit02.yaml",
     ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit03_numbers.yaml",
+        REPO_ROOT / "docs/content/overlays/fa-en/a1_unit03.yaml",
+    ),
 )
 
 # Farsi gloss for each shared English target token -- hand-written for
@@ -77,6 +85,21 @@ EN_TARGET_TO_FA_GLOSS: dict[str, str] = {
     "engineer": "مهندس", "library": "کتابخانه", "assistant": "دستیار",
     "daniel": "دنیل", "work": "کار کردن", "at": "در", "the": "(حرف تعریف معین)",
     "welcome": "خوش آمدید", "thank": "تشکر کردن",
+    # Unit 3 (numbers/ages/prices/phones/market), added 2026-07-05. Atomic
+    # per-token glosses -- cross-checked against, but not copy-pasted from,
+    # the fa-en unit03 overlay's own (phrase-level) Farsi glosses.
+    "zero": "صفر", "one": "یک", "two": "دو", "three": "سه", "four": "چهار",
+    "five": "پنج", "six": "شش", "seven": "هفت", "eight": "هشت",
+    "nine": "نه (عدد)", "ten": "ده", "eleven": "یازده", "twelve": "دوازده",
+    "thirteen": "سیزده", "fifteen": "پانزده", "twenty": "بیست",
+    "twenty-one": "بیست و یک", "thirty": "سی", "forty": "چهل",
+    "fifty": "پنجاه", "hundred": "صد", "twenty-five": "بیست و پنج",
+    "old": "سال قدمت‌داشتن (در بیان سن یا قدمت)", "years": "سال (جمع)",
+    "it's": "این ... است (مخفف it is)", "dollars": "دلار (جمع)",
+    "phone": "تلفن", "number": "شماره", "market": "بازار",
+    "apples": "سیب‌ها", "they're": "آنها ... هستند (مخفف they are)",
+    "ok": "باشه؛ خب", "this": "این", "shop": "مغازه",
+    "much": "چقدر (در how much)",
 }
 
 

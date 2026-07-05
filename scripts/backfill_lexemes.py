@@ -122,7 +122,7 @@ FA_GLOSSES = {
     "نفرن": "are ... people (spoken)", "نفریم": "we are ... people (spoken)",
     "چهار": "four", "شوهر": "husband", "زن": "wife / woman", "متأهل": "married",
     "متأهلین": "are you married? (polite, spoken contraction)", "مجرد": "single (unmarried)",
-    "مجردم": "I am single", "نوه": "grandchild", "برادرم": "my brother",
+    "مجردم": "I am single", "متأهلم": "I am married", "نوه": "grandchild", "برادرم": "my brother",
     "متأهله": "is married (spoken)", "پسر": "son", "داره": "he/she has (spoken)",
     "عکس": "photo", "خانواده‌ته": "is your family('s) (spoken)", "مامانمه": "is my mom (spoken)",
     "باباهم": "is my dad too (spoken)", "آقا": "man / mister", "کیه": "who is it? (spoken)",
@@ -157,7 +157,7 @@ FA_VERBS = {
     "چنده", "سالته", "سالمه", "می‌خوام", "تومنه", "کنیم", "باشه",
     "شماره‌ام", "هشته", "بنویسم", "درسته", "یکه", "می‌زنم", "کن",
     "دارم", "ندارم", "دارد", "ندارد", "نداره", "داره", "متأهله",
-    "متأهلین", "مجردم", "خانواده‌ته", "مامانمه", "باباهم", "کیه",
+    "متأهلین", "مجردم", "متأهلم", "خانواده‌ته", "مامانمه", "باباهم", "کیه",
     "داداشمه", "پدرن", "مادرن", "نفرن", "نفریم", "داری",
 }
 FA_PHRASE_PARTS = {"بخیر", "خواهش"}
@@ -302,7 +302,7 @@ def fa_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         semantics.append("maternal_side" if token != "پدرن" else "paternal_side")
     if token in {"دارم", "ندارم", "دارد", "ندارد", "نداره", "داره", "دارید", "داری"}:
         semantics.append("possession_verb")
-    if token in {"متأهل", "مجرد", "متأهله", "متأهلین", "مجردم"}:
+    if token in {"متأهل", "مجرد", "متأهله", "متأهلین", "مجردم", "متأهلم"}:
         semantics.append("marital_status")
     if token in {"خانواده‌ی", "بزرگه", "کوچیکه", "نفرن", "نفریم", "شلوغه"}:
         semantics.append("family_description")
