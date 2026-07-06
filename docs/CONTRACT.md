@@ -175,7 +175,7 @@ each piece of text as its own `text_block` with its own `language_code` and
   "title": "string",
   "teaching": [
     {
-      "kind": "vocabulary" | "phrase" | "grammar_note" | "dialogue" | "pronunciation_note" | "cultural_note",
+      "kind": "vocabulary" | "phrase" | "grammar_note" | "dialogue" | "pronunciation_note" | "cultural_note" | "reading",
       "title": "string (optional, e.g. the grammar point's name)",
       "text_blocks": [
         { "text": "سلام", "language_code": "prs", "direction": "rtl" },
