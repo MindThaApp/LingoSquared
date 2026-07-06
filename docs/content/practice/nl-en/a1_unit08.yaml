@@ -32,16 +32,30 @@ review:
     to the wrong item); the nl-en overlay itself is still unreviewed. Needs
     the standard fresh-context review before import. Same blocking DB-level
     gap as every other pack from this pass: no backfill_lexemes_nl_en.py run
-    has actually happened against a real database yet."
+    has actually happened against a real database yet.
+    FOLLOW-UP FIX 2026-07-06: a fresh-context reviewer flagged that bare
+    'hundred' (no article, real content only ever teaches 'one hundred') was
+    reachable in lesson02/lesson04's price/quantity frames, producing
+    'Can I have hundred pounds, please?'/'That's hundred dollars.' Fixed by
+    adding 'count_plural_no_hundred' (20 members) and 'number_no_hundred' (21
+    members) to scripts/_en_target_lexeme_common.py and re-pointing
+    lesson02.pounds_fill/pounds_translate, lesson04.dozen_eggs_order (all
+    count_plural -> count_plural_no_hundred) and lesson04.total_fill/
+    total_translate (number -> number_no_hundred) to the narrower tags.
+    Re-verified with compile_content.py practice-validate (0/0) and a
+    standalone harness confirming 'hundred' is no longer reachable in any of
+    the fixed slots."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [quantity_unit, food_plural, count_plural, number]
+    semantic: [quantity_unit, food_plural, count_plural, count_plural_no_hundred, number, number_no_hundred]
 slot_presets:
   quantity_unit: &quantity_unit {language_code: en, part_of_speech: noun, agreement_tags: {semantic: quantity_unit}}
   food_plural: &food_plural {language_code: en, part_of_speech: noun, agreement_tags: {semantic: food_plural}}
   count_plural: &count_plural {language_code: en, part_of_speech: noun, agreement_tags: {semantic: count_plural}}
+  count_plural_no_hundred: &count_plural_no_hundred {language_code: en, part_of_speech: noun, agreement_tags: {semantic: count_plural_no_hundred}}
   number: &number {language_code: en, part_of_speech: noun, agreement_tags: {semantic: number}}
+  number_no_hundred: &number_no_hundred {language_code: en, part_of_speech: noun, agreement_tags: {semantic: number_no_hundred}}
 templates:
   - content_key: practice.nl-en.en.a1.unit08.lesson01.quantity_meaning.001
     lesson_content_key: en.a1.unit08.lesson01.quantities
@@ -83,14 +97,14 @@ templates:
     lesson_content_key: en.a1.unit08.lesson02.asking_prices
     type: fill_in_blank
     frame: {text: "Can I have {item} pounds, please?", language_code: en, direction: ltr}
-    slots: {item: *count_plural}
+    slots: {item: *count_plural_no_hundred}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "{item} is de gevraagde hoeveelheid.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit08.lesson02.pounds_translate.003
     lesson_content_key: en.a1.unit08.lesson02.asking_prices
     type: translation
     frame: {text: "Mag ik {item} pond, alstublieft?", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
-    slots: {item: *count_plural}
+    slots: {item: *count_plural_no_hundred}
     answer_derivation: {kind: render_frame, frame: {text: "Can I have {item} pounds, please", language_code: en, direction: ltr}}
     feedback_frame: {text: "Can I have {item} pounds, please? betekent Mag ik {item} pond, alstublieft?", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit08.lesson03.label_meaning.001
@@ -126,20 +140,20 @@ templates:
     lesson_content_key: en.a1.unit08.lesson04.market_dialogue
     type: word_order
     frame: {text: "Can I have {item} dozen eggs, please", language_code: en, direction: ltr}
-    slots: {item: *count_plural}
+    slots: {item: *count_plural_no_hundred}
     answer_derivation: {kind: render_frame, frame: {text: "Can I have {item} dozen eggs, please", language_code: en, direction: ltr}}
     feedback_frame: {text: "{item} is het aantal dozijnen eieren in dit verzoek.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit08.lesson04.total_fill.003
     lesson_content_key: en.a1.unit08.lesson04.market_dialogue
     type: fill_in_blank
     frame: {text: "That's {item} dollars.", language_code: en, direction: ltr}
-    slots: {item: *number}
+    slots: {item: *number_no_hundred}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "{item} is het totaalbedrag.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit08.lesson04.total_translate.004
     lesson_content_key: en.a1.unit08.lesson04.market_dialogue
     type: translation
     frame: {text: "Dat is {item} dollar.", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
-    slots: {item: *number}
+    slots: {item: *number_no_hundred}
     answer_derivation: {kind: render_frame, frame: {text: "That's {item} dollars", language_code: en, direction: ltr}}
     feedback_frame: {text: "That's {item} dollars betekent Dat is {item} dollar.", language_code: nl, direction: ltr}

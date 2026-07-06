@@ -1,16 +1,17 @@
 #!/usr/bin/env python3
-"""Idempotently backfill target-side en-nl Dutch A1 lexemes for units 1-7.
+"""Idempotently backfill target-side en-nl Dutch A1 lexemes for units 1-13.
 
 Run with ``--dry-run`` to parse and classify content without importing the
 application or connecting to PostgreSQL.  The realization files' complete
 ``introduced_tokens`` inventories are authoritative.
 
-Extended 2026-07-05 (units 5-6, family/food; then unit 7, market shopping) to
-keep pace with new practice-template packs for those units -- see
-docs/content/practice/en-nl/a1_unit05.yaml through a1_unit07.yaml. Units 8-11
-(also reviewed/stable) are NOT yet covered here; extending this same way is
-the exact next step for whoever continues the practice-pool sync (see
-docs/BUILD_LOG.md).
+Extended repeatedly through 2026-07-06 (most recently units 11-13: plans,
+recent events/perfect tense, preferences) to keep pace with new practice-
+template packs -- see docs/content/practice/en-nl/a1_unit01.yaml through
+a1_unit13.yaml. Units 14+ are the exact next step for whoever continues the
+practice-pool sync (see docs/BUILD_LOG.md). (Docstring corrected 2026-07-06
+after a fresh-context review pass flagged it as stale -- it previously said
+"units 1-7" long after the code had been extended well past that.)
 
 Known limitation surfaced while extending this (units 5-6): this script keys
 its in-memory `specs` dict by bare token string, and `nl_part_of_speech()` is
@@ -42,7 +43,7 @@ if str(BACKEND_ROOT) not in sys.path:
 
 UNIT_FILES = tuple(sorted(
     p for p in (REPO_ROOT / "docs/content/realizations/nl").glob("a1_unit*_*.yaml")
-    if 1 <= int(p.name[len("a1_unit"):len("a1_unit")+2]) <= 10
+    if 1 <= int(p.name[len("a1_unit"):len("a1_unit")+2]) <= 16
 ))
 
 # Each lexical gloss is deliberately atomic. Capitalized sentence-initial forms
@@ -180,6 +181,104 @@ NL_GLOSSES.update({
     "pas": "not until; only",
 })
 
+# Unit 11 (making simple plans), added 2026-07-06.
+NL_GLOSSES.update({
+    "samen": "together", "film": "the film", "gaan": "to go", "Zullen": "Shall",
+    "we": "we", "activiteit": "activity", "manier": "way; manner",
+    "stellen": "to propose (part of voorstellen)", "zin": "desire; mood",
+    "idee": "idea", "goed": "good", "plan": "the plan", "Sorry": "Sorry",
+    "want": "because", "korte": "short", "reden": "reason", "maakt": "makes",
+    "afwijzing": "decline; refusal", "vriendelijk": "friendly",
+    "afspreken": "to arrange to meet", "geeft": "gives", "afspraak": "appointment",
+    "17": "17", "bericht": "the message", "uitnodiging": "the invitation",
+    "Groet": "Regards", "zullen": "shall", "Vrijdag": "Friday", "kort": "short",
+    "staan": "to stand; to be placed", "spreken": "to speak (part of afspreken)",
+})
+
+# Unit 12 (talking about recent events, perfect tense), added 2026-07-06.
+NL_GLOSSES.update({
+    "gesprekken": "conversations", "gebruik": "use", "voltooide": "completed",
+    "gebeurtenis": "event", "meestal": "usually", "voltooid": "completed",
+    "deelwoord": "participle", "gedronken": "drank; drunk", "gegaan": "went; gone",
+    "Denk": "think", "eindpositie": "end position", "meeste": "most",
+    "werkwoorden": "verbs", "gebruiken": "to use", "gegeten": "ate; eaten",
+    "gewerkt": "worked", "kopen": "to buy", "gekocht": "bought", "Bij": "With",
+    "komen": "to come", "gekomen": "came; come", "gisteren": "yesterday",
+    "vanmorgen": "this morning", "Gisteren": "Yesterday", "Vanmorgen": "This morning",
+    "Daar": "There",
+})
+
+# Unit 13 (expressing preferences), added 2026-07-06.
+NL_GLOSSES.update({
+    "lekker": "tasty; nice", "vinden": "to find; to consider",
+    "vind": "find; consider (with ik)", "Vind": "Find; consider",
+    "tomatensoep": "tomato soup", "activiteiten": "activities",
+    "fietsen": "to cycle", "wandelen": "to walk", "winkelen": "to shop",
+    "doen": "to do", "Houden": "To love; to be fond of", "drukt": "expresses",
+    "sterke": "strong", "algemene": "general", "voorkeur": "preference",
+    "houd": "love; am fond of (with ik)", "muziek": "music", "films": "films",
+    "Zeg": "Say", "smaak": "taste", "Wil": "Want", "liever": "rather; prefer",
+    "blauwe": "blue", "trui": "sweater", "Liever": "Rather; prefer",
+    "zien": "to see", "ene": "the one", "optie": "option", "boven": "over; above",
+    "andere": "other", "kiest": "chooses", "houdt": "loves; is fond of",
+    "Hij": "He", "park": "the park", "zo": "so",
+})
+
+# Unit 14 (making comparisons), added 2026-07-06.
+NL_GLOSSES.update({
+    "vergelijkingen": "comparisons", "voeg": "add", "toe": "to (separable prefix)",
+    "bijvoeglijk": "adjectival", "naamwoord": "word; noun", "groot": "big",
+    "klein": "small", "rugzak": "the backpack", "groter": "bigger", "tas": "the bag",
+    "kleiner": "smaller", "vijfenveertig": "forty-five", "duur": "expensive",
+    "goedkoop": "cheap", "duurder": "more expensive", "goedkoper": "cheaper",
+    "Gebruik": "Use", "net": "just", "plus": "plus", "als": "as; if",
+    "dingen": "things", "gelijk": "equal", "vergelijken": "to compare",
+    "Deze": "This", "mooi": "nice-looking; pretty", "die": "that",
+    "praktisch": "practical", "superlatief": "superlative", "st": "-st (suffix)",
+    "Van": "Of", "deze": "this", "duurst": "most expensive", "beter": "better",
+    "best": "best", "onregelmatig": "irregular", "beste": "best (attributive)",
+    "keuze": "choice", "Veel": "Much; many", "meer": "more", "meest": "most",
+    "werkt": "works", "dezelfde": "the same", "lange": "long", "treinreis": "train trip",
+    "heeft": "has", "ruimte": "room; space", "Bergsport": "Bergsport",
+    "sterk": "strong", "Schoudertas": "Shoulder bag", "Stad": "City",
+    "lichter": "lighter", "minder": "less", "reis": "trip", "sterker": "stronger",
+    "grote": "big", "nodig": "necessary", "Precies": "Exactly", "precies": "exactly",
+    "mooist": "prettiest", "schoudertas": "the shoulder bag", "licht": "light (weight)",
+    "koop": "buy (with ik)", "Koop": "Buy", "vorm": "form", "koopt": "buys",
+    "zij": "she; they", "hij": "he; it",
+})
+
+# Unit 15 (traveling by train), added 2026-07-06.
+NL_GLOSSES.update({
+    "kaartje": "the ticket", "Wilt": "Would (want, formal)", "enkele": "single (one-way)",
+    "retour": "the return ticket", "balie": "the counter", "beleefde": "polite",
+    "perron": "the platform", "welk": "which", "vertrekt": "departs", "trein": "the train",
+    "vertraging": "the delay", "Let": "Pay (attention)", "plaats": "place",
+    "minuten": "minutes", "ingang": "the entrance", "uitgang": "the exit",
+    "wachtruimte": "the waiting room", "Rechtdoor": "Straight ahead",
+    "Kaartje": "Ticket", "Centraal": "Central", "Vertrek": "Departure",
+    "Aankomst": "Arrival", "Retour": "Return", "Prijs": "Price", "We": "We",
+    "moeten": "must; need to", "daar": "there", "bord": "the sign",
+    "probleem": "the problem", "O": "Oh", "al": "already", "Perron": "Platform",
+    "stappen": "to step",
+})
+
+# Unit 16 (describing a basic health problem), added 2026-07-06.
+NL_GLOSSES.update({
+    "voel": "feel (with ik)", "ziek": "sick", "hoofdpijn": "a headache",
+    "buikpijn": "a stomach ache", "scheelt": "is the matter", "keelpijn": "a sore throat",
+    "Gaat": "Goes", "koorts": "a fever", "verkouden": "having a cold", "Ziek": "Sick",
+    "bijvoeglijke": "adjectival", "naamwoorden": "words; nouns", "Koorts": "Fever",
+    "zelfstandige": "substantive (noun-like)", "apotheek": "the pharmacy",
+    "Waarmee": "With what", "helpen": "to help", "Heeft": "Has", "tegen": "for; against",
+    "tablet": "a tablet", "Neem": "Take", "Advies": "Advice", "Rust": "Rest",
+    "drink": "drink", "veel": "much; a lot", "Voel": "Feel", "dagen": "days",
+    "steeds": "still (part of nog steeds)", "huisarts": "the family doctor",
+    "Nog": "Still; not yet", "moe": "tired", "genomen": "taken", "nu": "now",
+    "rusten": "to rest", "Beterschap": "Get well soon", "Dank": "Thanks",
+    "morgen": "tomorrow",
+})
+
 for _token in ("Een", "Twee"):
     if _token not in NL_GLOSSES:
         NL_GLOSSES[_token] = NL_GLOSSES[_token.casefold()]
@@ -208,17 +307,18 @@ for _token in (
 for _number in "0 00 06 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 18 19 20 21 22 24 25 29 30 31 32 40 42 43 45 48 50 65 75 87 90 99 2024 2026".split():
     NL_GLOSSES[_number] = _number
 
-SYMBOLS = set("'s 0 00 06 07 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 18 19 20 21 22 24 25 29 30 31 32 40 42 43 45 48 50 65 75 87 90 99 500 2024 2026".split())
+SYMBOLS = set("'s 0 00 06 07 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 24 25 29 30 31 32 40 42 43 45 48 50 65 75 87 90 99 500 2024 2026".split())
 PROPER_NOUNS = {"België", "Duitsland", "Egypte", "Lotte", "Nederland", "Noor", "Omar",
-                "Rotterdam", "Sander", "Fenna", "Jan", "Marieke", "Utrecht", "Amsterdam"}
-PRONOUNS = set("ik Ik je jij jou Jou me u Wij wij Mijn mijn Welke welke Wat wat Hoeveel hoeveel jouw haar hem iets zich".split())
-PREPOSITIONS = set("aan bij in met na naar om Om op Op over te tot Tot uit voor vóór per naast tegenover achter tussen van vanaf In Na".split())
-PARTICLES = set("behalve dan Dan dat Dat de De dit Dit dus een Een en En er Er geen Geen het Het Ja ja Nee nee Niet niet of ook wel maar nog Anders af eerst Eerst pas".split())
-ADJECTIVES = set("Belgisch beleefd Duits Engels formeel Goed hele informeel laat Leuk leuk Nederlands nieuw normaal open oud slecht volgende elke Mooi gewone scheidbaar".split())
-ADVERBS = set("avonds vandaan halverwege hier hoe Hoe hoeveelste middags nachts ochtends terug vandaag Vandaag waar Waar wanneer Wanneer graag vaak natuurlijk links rechts linksaf rechtsaf rechtdoor Graag achteraan daarna Daarna eruit".split())
-VERBS = set("begint ben Ben bent Bent heb Heb heet inschrijven is Is kom Kom komt Komt kost krijgen leer moet ontmoeten spreek wil wilt woon wonen Wonen woont zijn zitten Kun kun herhalen gaat drinken eten Mag mag Zie hebben neem kan Kan pinnen Kijk ga sla loop Ga Sla Loop gedaan opstaan sta aankleden kleed ontbijten ontbijt werken werk eet afwassen was slapen slaap staat ziet".split())
+                "Rotterdam", "Sander", "Fenna", "Jan", "Marieke", "Utrecht", "Amsterdam",
+                "Bergsport", "Schoudertas", "Stad", "Centraal"}
+PRONOUNS = set("ik Ik je jij jou Jou me u Wij wij Mijn mijn Welke welke Wat wat Hoeveel hoeveel jouw haar hem iets zich we We Hij hij Deze deze die zij welk Waarmee".split())
+PREPOSITIONS = set("aan bij in met na naar om Om op Op over te tot Tot uit voor vóór per naast tegenover achter tussen van vanaf In Na Bij boven Van tegen".split())
+PARTICLES = set("behalve dan Dan dat Dat de De dit Dit dus een Een en En er Er geen Geen het Het Ja ja Nee nee Niet niet of ook wel maar nog Anders af eerst Eerst pas want als plus toe st O".split())
+ADJECTIVES = set("Belgisch beleefd Duits Engels formeel Goed goed hele informeel laat Leuk leuk Nederlands nieuw normaal open oud slecht volgende elke Mooi gewone scheidbaar korte kort vriendelijk voltooide voltooid meeste sterke algemene blauwe andere ene lekker groot klein groter kleiner duur goedkoop duurder goedkoper bijvoeglijk gelijk mooi praktisch duurst beter best onregelmatig beste meer Veel meest dezelfde lange sterk lichter sterker grote nodig mooist licht beleefde ziek verkouden Ziek bijvoeglijke zelfstandige moe".split())
+ADVERBS = set("avonds vandaan halverwege hier hoe Hoe hoeveelste middags nachts ochtends terug vandaag Vandaag waar Waar wanneer Wanneer graag vaak natuurlijk links rechts linksaf rechtsaf rechtdoor Rechtdoor Graag achteraan daarna Daarna eruit samen meestal gisteren vanmorgen Gisteren Vanmorgen Daar daar liever Liever zo net minder Precies precies al veel steeds Nog nu".split())
+VERBS = set("begint ben Ben bent Bent heb Heb heet inschrijven is Is kom Kom komt Komt kost krijgen leer moet ontmoeten spreek wil wilt woon wonen Wonen woont zijn zitten Kun kun herhalen gaat drinken eten Mag mag Zie hebben neem kan Kan pinnen Kijk ga sla loop Ga Sla Loop gedaan opstaan sta aankleden kleed ontbijten ontbijt werken werk eet afwassen was slapen slaap staat ziet gaan Zullen zullen stellen maakt afspreken geeft staan spreken gebruik gedronken gegaan Denk gebruiken gegeten gewerkt kopen gekocht komen gekomen vinden vind Vind fietsen wandelen winkelen doen Houden drukt houd Zeg Wil zien kiest houdt voeg Gebruik vergelijken werkt heeft koop Koop koopt Wilt vertrekt moeten Let stappen voel scheelt Gaat helpen Heeft Neem Rust drink Voel genomen rusten".split())
 PHRASES = {"Aangenaam", "Goedemiddag", "Goedemorgen", "Goedenavond", "Hallo", "Hoi", "Prima", "ziens",
-           "alstublieft", "alsjeblieft", "eraan", "Bedankt"}
+           "alstublieft", "alsjeblieft", "eraan", "Bedankt", "Sorry", "Groet", "Beterschap"}
 NOUNS = set("Achtenveertig Dagen Inleverdatum Maanden Medewerker Nul Pauze Taalcafé Twaalf Welkom Workshop acht achtentwintig achtentwintigste achtenveertig achtste achttien achttiende april augustus avond bibliotheek bijdrage boek boeken cent dag dank datum december derde dertien dertiende dertig dertigste dinsdag donderdag drie drieëntwintigste drieënveertig eenendertigste eenentwintig eenentwintigste eenheid eerste elf elfde euro februari groep half hoofdletter huisnummer inleverdatum jaar januari juli juni keer kwart kwartier maand maandag maart mei mensen middag naam nacht negen negende negenennegentig negenentwintigste negentien negentiende negentig november nul nummer ochtend oktober rooster september stoelen taalcafé tachtig tafel telefoonnummer tien tiende tiental tijd twaalf twaalfde twee tweede tweeëndertig tweeëntwintig tweeëntwintigste tweeënveertig twintig twintigste uur veertien veertiende veertig vier vierde vierentwintigste vijf vijfde vijfentwintigste vijfenzestig vijfenzeventig vijftien vijftiende vijftig vrijdag vrijdagmiddag week woensdag workshop zaal zaterdag zes zesde zesentwintigste zestien zestiende zestig zeven zevende zevenentachtig zevenentwintigste zeventien zeventiende zeventig zondag één "
               "vader moeder ouders broer zus kind kinderen opa oma oom tante neef nicht gezin maand familie broers zussen "
               "koffie thee water melk sap brood broodje kaas appel appelsap Menukaart Koffie Thee Broodje Appelsap "
@@ -227,7 +327,14 @@ NOUNS = set("Achtenveertig Dagen Inleverdatum Maanden Medewerker Nul Pauze Taalc
               "station supermarkt ziekenhuis bank postkantoor bushalte buurt kaart buurtkaart BUURTKAART "
               "Bibliotheek Ziekenhuis Postkantoor Supermarkt Bank Bushalte "
               "route Route START DOEL "
-              "hoofdzin deel einde werkwoord".split())
+              "hoofdzin deel einde werkwoord "
+              "film activiteit manier zin idee plan reden afwijzing afspraak bericht uitnodiging Vrijdag "
+              "gesprekken gebeurtenis deelwoord eindpositie werkwoorden "
+              "tomatensoep activiteiten voorkeur muziek films smaak trui optie park "
+              "naamwoord rugzak tas vijfenveertig dingen superlatief keuze treinreis ruimte reis vorm schoudertas vergelijkingen "
+              "kaartje retour balie perron trein vertraging plaats minuten ingang uitgang wachtruimte "
+              "Kaartje Vertrek Aankomst Retour Prijs bord probleem Perron enkele "
+              "hoofdpijn buikpijn keelpijn koorts Koorts naamwoorden apotheek tablet Advies dagen huisarts Dank morgen".split())
 
 
 def nl_part_of_speech(token: str) -> str:
@@ -276,6 +383,24 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         "dagelijkse_activiteiten": "daily_activity", "scheidbare_werkwoorden": "separable_verb_lesson",
         "activiteiten_en_tijden": "routine_time", "eerst_dan_daarna": "sequence_lesson",
         "omars_routine_lezen": "routine_reading", "een_dag_bij_het_taalcafe": "routine_dialogue",
+        "een_activiteit_voorstellen": "activity_proposal", "ja_of_nee": "accept_decline",
+        "dag_en_tijd_afspreken": "schedule_time", "een_bericht_lezen": "invitation_reading",
+        "een_plan_schrijven": "plan_writing", "lotte_en_omar_maken_een_plan": "plan_dialogue",
+        "voltooide_tijd": "past_tense_intro", "met_hebben": "hebben_perfect",
+        "met_zijn": "zijn_perfect", "wanneer_gebeurde_het": "past_event_time",
+        "een_kort_verslag_lezen": "past_reading", "lotte_en_omar_gisteren": "past_dialogue",
+        "eten_en_drinken": "taste_preference", "activiteiten": "activity_preference",
+        "houden_van": "strong_preference", "kiezen": "preference_choice",
+        "voorkeur_lezen": "preference_reading", "lotte_en_omar_kiezen": "preference_dialogue",
+        "grootte_vergelijken": "size_comparison", "prijzen_vergelijken": "price_comparison",
+        "net_zo_als": "equal_comparison", "de_beste_keuze": "superlative_choice",
+        "advertentie_lezen": "comparison_reading", "lotte_en_omar_kiezen_tas": "comparison_dialogue",
+        "een_kaartje_kopen": "ticket_purchase", "vertrektijd_en_perron": "departure_time",
+        "vertraging": "delay_announcement", "de_weg_op_het_station": "station_directions",
+        "een_kaartje_lezen": "ticket_reading", "lotte_en_omar_op_reis": "travel_dialogue",
+        "niet_lekker_voelen": "feeling_unwell", "wat_scheelt_eraan": "symptom_question",
+        "koorts_en_verkouden": "fever_cold", "bij_de_apotheek": "pharmacy_visit",
+        "advies_lezen": "health_reading", "lotte_checkt_omar": "health_dialogue",
     }
     semantic.append(lesson_categories[unit_lesson])
     if t in {"jij", "je"}: semantic.append("informal_address")
@@ -368,6 +493,76 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     # need >=4 real candidates), used only in translation/fill_in_blank
     # templates below.
     if t in {"eerst", "dan", "daarna"}: semantic.append("sequence_word")
+    # Unit 11 (making simple plans): 4-member bare-word recognition set
+    # spanning adverb/verb/noun -- deliberately recognition-only (no shared
+    # frame), since these words don't collocate uniformly (e.g. "samen"
+    # is an adverb modifying a whole proposal, "afspreken" a verb, "bericht"/
+    # "uitnodiging" nouns for different concrete things).
+    if t in {"samen", "afspreken", "bericht", "uitnodiging"}:
+        semantic.append("plan_vocab")
+    # Unit 12 (perfect tense): the two auxiliary groups must NEVER be mixed
+    # in one tag -- "Ik heb gegaan" is ungrammatical (gaan/komen take zijn,
+    # not hebben). 4-member hebben-participle group is safe for bare-word
+    # recognition (their infinitives are also tagged separately below).
+    if t in {"gedronken", "gegeten", "gewerkt", "gekocht"}: semantic.append("participle_hebben")
+    if t in {"drinken", "eten", "werken", "kopen"}: semantic.append("infinitive_hebben")
+    # Only 2 members (gaan/komen take zijn) -- kept out of multiple_choice/
+    # listen_select, used only in translation templates below.
+    if t in {"gegaan", "gekomen"}: semantic.append("participle_zijn")
+    # Only 2 members -- same reasoning, translation-only.
+    if t in {"gisteren", "vanmorgen"}: semantic.append("recent_time")
+    # Unit 13 (expressing preferences): "lekker" (food/drink) and "leuk"
+    # (activities) are grammatically distinct registers in Dutch and must
+    # never be mixed into one generative frame (real content explicitly
+    # teaches this contrast) -- kept as two separate 3-member tags, each
+    # verified safe in its own "Ik vind {item} lekker/leuk." frame.
+    if t in {"koffie", "thee", "tomatensoep"}: semantic.append("lekker_food")
+    if t in {"fietsen", "wandelen", "winkelen"}: semantic.append("activity_leuk")
+    # Broader 6-member bare-word recognition tag spanning both groups
+    # (mixed noun/verb) -- safe since recognition doesn't require shared
+    # collocation, only the two frame-specific tags above are used
+    # generatively.
+    if t in {"koffie", "thee", "tomatensoep", "fietsen", "wandelen", "winkelen"}:
+        semantic.append("preference_item")
+    # Unit 14 (making comparisons): 6-member regular comparative tag, all
+    # verified safe in "De rugzak is {item} dan de tas." (each -er/-der
+    # form takes "dan" grammatically; the real content's own advertisement
+    # actually uses lichter/sterker to describe the bag, but the frame's
+    # own subject/object choice here is a drill sentence, not a factual
+    # claim, so reversed pairings are still grammatically valid).
+    if t in {"groter", "kleiner", "duurder", "goedkoper", "lichter", "sterker"}:
+        semantic.append("comparative_adj")
+    # Only 2 members ("net zo {item} als" doesn't take -er/-st at all) --
+    # kept out of multiple_choice/listen_select, translation/fill_in_blank
+    # only.
+    if t in {"mooi", "praktisch"}: semantic.append("equal_adj")
+    # 4-member bare-word recognition only -- these superlatives are
+    # structurally too different to share one generative frame (duurst/
+    # mooist are predicative -st forms, beste is attributive, meest
+    # modifies ruimte differently) -- same discipline as this unit's
+    # sibling tags above.
+    if t in {"duurst", "mooist", "beste", "meest"}: semantic.append("superlative_word")
+    # Unit 15 (traveling by train): 6-member bare-word recognition tag
+    # spanning station/travel nouns -- no shared generative frame needed,
+    # recognition-only.
+    if t in {"kaartje", "perron", "vertraging", "ingang", "uitgang", "wachtruimte"}:
+        semantic.append("travel_noun")
+    # Narrower 3-member subset (just the station places), safe for "Waar
+    # is de {item}?" -- verified all three take "de" and fit this exact
+    # question shape, directly attested for wachtruimte in the real
+    # content.
+    if t in {"ingang", "uitgang", "wachtruimte"}: semantic.append("station_place")
+    # Unit 16 (describing a basic health problem): the core grammar point
+    # is that symptom NOUNS take hebben (Ik heb hoofdpijn.) while symptom
+    # ADJECTIVES take zijn (Ik ben ziek.) -- the real content's own
+    # zijn_note lesson makes this contrast explicit, so these two tags
+    # must NEVER be mixed (mixing would generate "Ik heb ziek."/"Ik ben
+    # hoofdpijn.", both ungrammatical), same discipline as unit12's
+    # participle_hebben/participle_zijn split.
+    if t in {"hoofdpijn", "buikpijn", "keelpijn", "koorts"}: semantic.append("symptom_hebben")
+    # Only 2 members -- kept out of multiple_choice/listen_select (which
+    # need >=4), used only in word_order/fill_in_blank/translation.
+    if t in {"ziek", "verkouden"}: semantic.append("symptom_zijn")
     tags: dict[str, object] = {"semantic": list(dict.fromkeys(semantic))}
     if t in {"jij", "je"}: tags["register"] = "informal"
     elif t == "u": tags["register"] = "polite"

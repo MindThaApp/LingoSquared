@@ -1,0 +1,188 @@
+schema_version: "1.0"
+pack_key: practice.en-nl.a1.unit13
+source_language: en
+target_language: nl
+unit_content_key: nl.a1.unit13.preferences
+review:
+  status: reviewed
+  required_next_reviewer: null
+  fresh_context: "false"
+  notes: >-
+    Original authoring notes (2026-07-06): "lekker" (food/drink) and
+    "leuk" (activities) are register-distinct and must never be mixed in
+    one generative frame -- the real content explicitly teaches this
+    contrast. Kept as two separate 3-member tags: lekker_food
+    (koffie/thee/tomatensoep) for "Ik vind {item} lekker." and
+    activity_leuk (fietsen/wandelen/winkelen) for "Ik vind {item} leuk.".
+    Also a broader 8-candidate preference_item tag for bare-word
+    recognition only.
+
+    Independent fresh-context content audit (2026-07-06): confirmed all 6
+    lesson_content_key references match real nl.a1.unit13 lessons exactly.
+    The lekker/leuk register split is real and correctly never mixed --
+    activity_leuk resolved to exactly the claimed 3 candidates
+    (fietsen/wandelen/winkelen), no contamination.
+
+    **Real bug found and fixed**: the lekker_food preset as originally
+    authored queried the shared classifier's `lekker_food` semantic tag
+    directly, which actually resolved to 5 candidates, not 3 --
+    scripts/backfill_lexemes_en_nl.py's per-word `lekker_food` check
+    casefolds the token before matching, so it silently also matched the
+    CAPITALIZED "Koffie"/"Thee" lexemes left over from unit06's menukaart
+    price-tag-label teaching content (same root cause, same bug class, as
+    unit06's already-fixed menu_item leak from the units 1-9 review pass).
+    The 4 templates embedding this slot mid-sentence
+    (lesson01.order.001/complete.002, lesson04.translate.001,
+    lesson06.order.001, frame "Ik vind {item} lekker.") could therefore
+    generate "Ik vind Koffie lekker."/"Ik vind Thee lekker." -- a real
+    capitalization error, invisible to compile_content.py practice-validate
+    (which never touches real lexeme data) and only caught by hand-reading
+    every filler the harness reported for this slot. Fixed by narrowing
+    the lekker_food preset's requested semantic value from "lekker_food" to
+    "taste_preference" (a tag the shared classifier already assigns, scoped
+    to only the tokens actually introduced in this unit's own
+    eten_en_drinken lesson) -- re-verified with the harness to resolve to
+    exactly the intended 3 lowercase candidates (koffie/thee/tomatensoep),
+    zero capitalized contamination. tag_schema's declared semantic list
+    updated to match (taste_preference in place of lekker_food). The
+    broader preference_item recognition-only tag still legitimately
+    includes the capitalized Koffie/Thee forms (8 candidates) -- this is
+    harmless there since recognition displays the isolated token as-is and
+    its english_gloss ("coffee"/"tea") is still correct; only the
+    frame-embedded generative use was the actual bug.
+
+    Re-verified after the fix: standalone harness confirms lekker_food=3,
+    activity_leuk=3, preference_item=8 (as intended); compile_content.py
+    practice-validate re-run together with units 01-13: 0 errors/0
+    warnings. No self-reference, no jargon leaks, no stray YAML booleans.
+
+    Flagging transparently (not this pass's to resolve): this unit's own
+    underlying overlay (docs/content/overlays/en-nl/a1_unit13.yaml) is
+    still review.status: unreviewed itself (same as unit12's) -- this
+    practice pack's correctness is independent of that, but the underlying
+    lesson content should be re-diffed against this pack once it gets its
+    own review pass.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [taste_preference, activity_leuk, preference_item]
+slot_presets:
+  # Fixed 2026-07-06 (fresh-context review): querying the shared classifier's
+  # `lekker_food` semantic tag directly pulled in the CAPITALIZED "Koffie"/
+  # "Thee" price-tag-label lexemes left over from unit06's menukaart lesson
+  # (scripts/backfill_lexemes_en_nl.py's `lekker_food` check casefolds the
+  # token, so it matches both cases) -- the 4 templates below embed this slot
+  # mid-sentence ("Ik vind {item} lekker."), so the capitalized variant
+  # produced a real capitalization error ("Ik vind Koffie lekker."), same bug
+  # class as unit06's already-fixed menu_item leak. Narrowed to the
+  # `taste_preference` semantic tag instead (assigned only to tokens actually
+  # introduced in this unit's own eten_en_drinken lesson) -- verified via the
+  # standalone harness to resolve to exactly the same intended 3 lowercase
+  # candidates (koffie/thee/tomatensoep) with zero capitalized contamination.
+  lekker_food: &lekker_food {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: taste_preference}}
+  activity_leuk: &activity_leuk {language_code: nl, part_of_speech: verb, agreement_tags: {semantic: activity_leuk}}
+  preference_item: &preference_item {language_code: nl, part_of_speech: [noun, verb], agreement_tags: {semantic: preference_item}}
+templates:
+  - content_key: practice.en-nl.nl.a1.unit13.lesson01.order.001
+    lesson_content_key: nl.a1.unit13.lesson01.eten_en_drinken
+    type: word_order
+    frame: {text: "Ik vind {item} lekker.", language_code: nl, direction: ltr}
+    slots: {item: *lekker_food}
+    answer_derivation: {kind: render_frame, frame: {text: "Ik vind {item} lekker.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} is the food or drink liked here.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit13.lesson01.complete.002
+    lesson_content_key: nl.a1.unit13.lesson01.eten_en_drinken
+    type: fill_in_blank
+    frame:
+      text: "Ik vind {item} lekker."
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Complete the Dutch sentence.", language_code: en, direction: ltr}
+    slots: {item: *lekker_food}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} completes this taste preference.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit13.lesson01.choose.003
+    lesson_content_key: nl.a1.unit13.lesson01.eten_en_drinken
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *preference_item}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a word from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit13.lesson02.order.001
+    lesson_content_key: nl.a1.unit13.lesson02.activiteiten
+    type: word_order
+    frame: {text: "Ik vind {item} leuk.", language_code: nl, direction: ltr}
+    slots: {item: *activity_leuk}
+    answer_derivation: {kind: render_frame, frame: {text: "Ik vind {item} leuk.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} is the activity liked here.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit13.lesson02.complete.002
+    lesson_content_key: nl.a1.unit13.lesson02.activiteiten
+    type: fill_in_blank
+    frame:
+      text: "Ik vind {item} leuk."
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Complete the Dutch sentence.", language_code: en, direction: ltr}
+    slots: {item: *activity_leuk}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} completes this activity preference.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit13.lesson02.listen.003
+    lesson_content_key: nl.a1.unit13.lesson02.activiteiten
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *preference_item}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit13.lesson03.choose.001
+    lesson_content_key: nl.a1.unit13.lesson03.houden_van
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *preference_item}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a word from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit13.lesson04.translate.001
+    lesson_content_key: nl.a1.unit13.lesson04.kiezen
+    type: translation
+    frame:
+      text: "{item}"
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *lekker_food}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The Dutch word is {item}.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit13.lesson05.listen.001
+    lesson_content_key: nl.a1.unit13.lesson05.voorkeur_lezen
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *preference_item}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard in this reading.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit13.lesson06.order.001
+    lesson_content_key: nl.a1.unit13.lesson06.lotte_en_omar_kiezen
+    type: word_order
+    frame: {text: "Ik vind {item} lekker.", language_code: nl, direction: ltr}
+    slots: {item: *lekker_food}
+    answer_derivation: {kind: render_frame, frame: {text: "Ik vind {item} lekker.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} is the food or drink liked here.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit13.lesson06.listen.002
+    lesson_content_key: nl.a1.unit13.lesson06.lotte_en_omar_kiezen
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *preference_item}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard in this dialogue.", language_code: en, direction: ltr}

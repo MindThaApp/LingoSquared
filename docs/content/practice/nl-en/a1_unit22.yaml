@@ -1,0 +1,125 @@
+schema_version: "1.0"
+pack_key: practice.nl-en.a1.unit22
+source_language: nl
+target_language: en
+unit_content_key: en.a1.unit22.health
+review:
+  status: unreviewed
+  fresh_context: "false"
+  notes: "Authored 2026-07-06 by a parallel Claude fork continuing the nl-en
+    lane of the Endless Practice template-pool sync (main session was
+    alternating between nl-en and en-nl directions this whole
+    session; Ramin had unused Claude usage headroom, so the coordinator
+    split the remaining work: this fork owns nl-en units 22-24
+    exclusively, a second parallel fork owns en-fa/fa-en/en-prs, and
+    the main session continues en-nl -- no file overlap between lanes
+    since nl-en and en-nl use entirely separate backfill scripts).
+    This unit (unit22, reviewed/stable overlay) covers describing a
+    basic health problem. Extended scripts/_en_target_lexeme_common.py
+    with 16 new English tokens (headache/stomachache/fever/cough/sore/
+    throat/wrong/feel/rest/need/doctor/look/drink/if/doesn't/better)
+    and scripts/backfill_lexemes_nl_en.py with matching Dutch glosses
+    plus 12 Dutch source-side tokens from the overlay's gloss text.
+    Added a 4-member 'symptom_noun' tag (headache/stomachache/fever/
+    cough) verified to genuinely collocate in a shared 'I have a
+    {item}.' frame (all four are directly attested with that exact
+    sentence shape in the real content) -- unlike unit21's travel_noun
+    tag from the same lane, this one IS safe for a shared generative
+    frame, not recognition-only. Deliberately excluded 'sore throat'
+    (a two-word compound symptom) from the slot-fillable tag since it
+    doesn't fit a single token. Every slot's real candidate count was
+    verified with a standalone lexeme_matches()-replicating harness
+    against this script's actual output. Needs the standard
+    fresh-context review before import. Same blocking dependency as
+    every earlier nl-en pack: backfill_lexemes_nl_en.py has not
+    actually been run against a real database yet."
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [symptom_noun]
+slot_presets:
+  symptom_noun: &symptom_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: symptom_noun}}
+templates:
+  - content_key: practice.nl-en.en.a1.unit22.lesson01.choose.001
+    lesson_content_key: en.a1.unit22.lesson01.common_symptoms
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *symptom_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is een klacht uit deze les.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit22.lesson01.listen.002
+    lesson_content_key: en.a1.unit22.lesson01.common_symptoms
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *symptom_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is het woord dat je hoorde.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit22.lesson01.match.003
+    lesson_content_key: en.a1.unit22.lesson01.common_symptoms
+    type: matching_pairs
+    frame: {text: "{first} · {second}", language_code: en, direction: ltr}
+    slots: {first: *symptom_noun, second: *symptom_noun}
+    slot_relations: [{kind: distinct, slots: [first, second]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second]}
+    feedback_frame: {text: "Verbind elke klacht met de Nederlandse betekenis.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit22.lesson01.translate.004
+    lesson_content_key: en.a1.unit22.lesson01.common_symptoms
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *symptom_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit22.lesson02.order.001
+    lesson_content_key: en.a1.unit22.lesson02.saying_whats_wrong
+    type: word_order
+    frame: {text: "I have a {item}", language_code: en, direction: ltr}
+    slots: {item: *symptom_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "I have a {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} is de klacht die wordt genoemd.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit22.lesson02.complete.002
+    lesson_content_key: en.a1.unit22.lesson02.saying_whats_wrong
+    type: fill_in_blank
+    frame:
+      text: "I have a {item}."
+      language_code: en
+      direction: ltr
+      text_blocks:
+        - {text: "Maak de Engelse zin af.", language_code: nl, direction: ltr}
+    slots: {item: *symptom_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} maakt deze zin compleet.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit22.lesson02.translate.003
+    lesson_content_key: en.a1.unit22.lesson02.saying_whats_wrong
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *symptom_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit22.lesson03.choose.001
+    lesson_content_key: en.a1.unit22.lesson03.reading_health_advice
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *symptom_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is een klacht uit deze les.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit22.lesson03.order.002
+    lesson_content_key: en.a1.unit22.lesson03.reading_health_advice
+    type: word_order
+    frame: {text: "I have a {item}", language_code: en, direction: ltr}
+    slots: {item: *symptom_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "I have a {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} is de klacht die wordt genoemd.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit22.lesson04.listen.001
+    lesson_content_key: en.a1.unit22.lesson04.feeling_sick_dialogue
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *symptom_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is het woord dat je hoorde in dit gesprek.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit22.lesson04.translate.002
+    lesson_content_key: en.a1.unit22.lesson04.feeling_sick_dialogue
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *symptom_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}

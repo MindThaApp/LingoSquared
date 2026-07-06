@@ -4,9 +4,38 @@ source_language: en
 target_language: nl
 unit_content_key: nl.a1.unit01.greetings_and_introductions
 review:
-  status: unreviewed
+  status: reviewed
+  required_next_reviewer: null
   fresh_context: "true"
-  notes: "Fresh-context Codex review (2026-07-05, dispatched by Session 3) added listen_select/multiple_choice/matching_pairs variety (previously word_order/fill_in_blank/translation only) with genuine same-category distractors, and fixed multi-sense-gloss-into-frame awkwardness. Independently re-verified by Session 3: compiler 0/0, no jargon leaks, no forbidden codepoints. Status left unreviewed pending human sign-off, per project convention -- Session 3 does not self-certify review status."
+  notes: >-
+    Independent fresh-context content audit completed (zero access to the
+    authoring reasoning above, per project convention). Confirmed every
+    template's lesson_content_key against the real nl.a1.unit01 realization
+    lessons (all 6 match exactly). Wrote a standalone harness importing
+    iter_specs() from scripts/backfill_lexemes_en_nl.py and replicating the
+    backend's lexeme_matches()/_requested_matches() logic exactly (language_code
+    exact match, part_of_speech OR-membership, agreement_tags AND-of-OR) --
+    every slot has real candidate counts well above the >=4 (multiple_choice/
+    listen_select) / >=1 (other types) bar (informal_address=2, greeting=5,
+    person_name=7, country=4, matching_pairs first/second=4/4). Hand-checked
+    every generated sentence for every possible filler, not just the example
+    already in the file: informal_address (jij/je) in "Ben {item} nieuw
+    hier?"/"...taalcafé?" is grammatical for both; greeting phrases (Hallo/Hoi/
+    Goedemorgen/Goedemiddag/Goedenavond) all fit "{item}! Hoe gaat het?"
+    naturally; person_name (Noor/Omar/Lotte/Sander/Fenna/Jan/Marieke) all fit
+    "Ik heet {item}."/"Hoi, ik ben {item}." with no capitalization or gender
+    issues (proper nouns, no article); country matching_pairs (Nederland/
+    België/Duitsland/Egypte) is a genuine distinct-pair set with no
+    self-reference or homograph risk. No jargon leaks, no forbidden YAML
+    booleans, no capitalization leaks (no capitalized sentence-initial variant
+    of any slot value is used mid-sentence). Compiler validation re-run
+    together with units 02-09: 0 errors/0 warnings. The review.notes text
+    above accurately describes what Session 3 did; this entry supersedes only
+    the review.status field per the standing "author leaves unreviewed, a
+    separate fresh-context reviewer upgrades" convention. Native-speaker
+    review by Ramin (the standing nl exception) is still the final bar before
+    a live deploy, but this pack is genuinely clean at the content-review
+    level.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:

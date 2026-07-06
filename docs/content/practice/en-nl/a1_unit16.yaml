@@ -1,0 +1,149 @@
+schema_version: "1.0"
+pack_key: practice.en-nl.a1.unit16
+source_language: en
+target_language: nl
+unit_content_key: nl.a1.unit16.health
+review:
+  status: unreviewed
+  fresh_context: "false"
+  notes: "Authored 2026-07-06 by the Claude session syncing Endless Practice
+    template pools to lesson content growth (en-nl lane, continuing after
+    unit15). This unit (unit16) covers describing a basic health problem:
+    symptoms, asking what's wrong, a pharmacy visit, and reading advice.
+    Extended scripts/backfill_lexemes_en_nl.py's UNIT_FILES numeric-range
+    filter to <=16 and added 37 new Dutch token classifications. The core
+    grammar point (the real content's own explicit zijn_note lesson) is
+    that symptom NOUNS take hebben ('Ik heb hoofdpijn.') while symptom
+    ADJECTIVES take zijn ('Ik ben ziek.') -- these two tags must NEVER be
+    mixed (mixing would generate 'Ik heb ziek.'/'Ik ben hoofdpijn.', both
+    ungrammatical), same discipline as unit12's hebben/zijn perfect-tense
+    split earlier this session. Added a 4-member 'symptom_hebben' tag
+    (hoofdpijn/buikpijn/keelpijn/koorts, 5 real candidates counting a
+    capitalized label variant) for 'Ik heb {item}.' plus bare-word
+    recognition, and a 2-member 'symptom_zijn' tag (ziek/verkouden, 3 real
+    candidates) for 'Ik ben {item}.', kept out of multiple_choice/
+    listen_select since it doesn't clear the >=4 threshold. Every slot's
+    real candidate count was verified with a standalone
+    lexeme_matches()-replicating harness against this script's actual
+    output. Needs the standard fresh-context review before import. Same
+    blocking dependency as every earlier en-nl pack: backfill_lexemes_en_nl.py
+    has not actually been run against a real database yet."
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [symptom_hebben, symptom_zijn]
+slot_presets:
+  symptom_hebben: &symptom_hebben {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: symptom_hebben}}
+  symptom_zijn: &symptom_zijn {language_code: nl, part_of_speech: adjective, agreement_tags: {semantic: symptom_zijn}}
+templates:
+  - content_key: practice.en-nl.nl.a1.unit16.lesson01.order.001
+    lesson_content_key: nl.a1.unit16.lesson01.niet_lekker_voelen
+    type: word_order
+    frame: {text: "Ik heb {item}.", language_code: nl, direction: ltr}
+    slots: {item: *symptom_hebben}
+    answer_derivation: {kind: render_frame, frame: {text: "Ik heb {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} is the symptom in this sentence.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit16.lesson01.complete.002
+    lesson_content_key: nl.a1.unit16.lesson01.niet_lekker_voelen
+    type: fill_in_blank
+    frame:
+      text: "Ik heb {item}."
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Complete the Dutch sentence.", language_code: en, direction: ltr}
+    slots: {item: *symptom_hebben}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} completes this sentence.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit16.lesson01.match.003
+    lesson_content_key: nl.a1.unit16.lesson01.niet_lekker_voelen
+    type: matching_pairs
+    frame: {text: "{first} · {second}", language_code: nl, direction: ltr}
+    slots: {first: *symptom_hebben, second: *symptom_hebben}
+    slot_relations: [{kind: distinct, slots: [first, second]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second]}
+    feedback_frame: {text: "Match each symptom word with its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit16.lesson02.choose.001
+    lesson_content_key: nl.a1.unit16.lesson02.wat_scheelt_eraan
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *symptom_hebben}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a symptom from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit16.lesson02.listen.002
+    lesson_content_key: nl.a1.unit16.lesson02.wat_scheelt_eraan
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *symptom_hebben}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit16.lesson03.order.001
+    lesson_content_key: nl.a1.unit16.lesson03.koorts_en_verkouden
+    type: word_order
+    frame: {text: "Ik ben {item}.", language_code: nl, direction: ltr}
+    slots: {item: *symptom_zijn}
+    answer_derivation: {kind: render_frame, frame: {text: "Ik ben {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} is the condition in this sentence.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit16.lesson03.complete.002
+    lesson_content_key: nl.a1.unit16.lesson03.koorts_en_verkouden
+    type: fill_in_blank
+    frame:
+      text: "Ik ben {item}."
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Complete the Dutch sentence.", language_code: en, direction: ltr}
+    slots: {item: *symptom_zijn}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} completes this sentence.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit16.lesson03.translate.003
+    lesson_content_key: nl.a1.unit16.lesson03.koorts_en_verkouden
+    type: translation
+    frame:
+      text: "{item}"
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *symptom_zijn}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The Dutch word is {item}.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit16.lesson04.choose.001
+    lesson_content_key: nl.a1.unit16.lesson04.bij_de_apotheek
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *symptom_hebben}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a symptom from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit16.lesson05.listen.001
+    lesson_content_key: nl.a1.unit16.lesson05.advies_lezen
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *symptom_hebben}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit16.lesson06.order.001
+    lesson_content_key: nl.a1.unit16.lesson06.lotte_checkt_omar
+    type: word_order
+    frame: {text: "Ik heb {item}.", language_code: nl, direction: ltr}
+    slots: {item: *symptom_hebben}
+    answer_derivation: {kind: render_frame, frame: {text: "Ik heb {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} is the symptom in this sentence.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit16.lesson06.listen.002
+    lesson_content_key: nl.a1.unit16.lesson06.lotte_checkt_omar
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *symptom_hebben}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard in this dialogue.", language_code: en, direction: ltr}
