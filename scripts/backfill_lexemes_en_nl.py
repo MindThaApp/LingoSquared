@@ -436,6 +436,19 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     if t in number_words or token in SYMBOLS and token != "'s": semantic.append("number")
     if t in {"twee", "drie", "zeven", "acht", "veertien", "achttien", "twintig"} or token in {"2", "3", "7", "8", "14", "18", "20"}: semantic.append("hour_number")
     if t in set("maandag dinsdag woensdag donderdag vrijdag zaterdag zondag".split()): semantic.append("weekday")
+    # "weekday" above is contaminated for matching_pairs use: the
+    # lesson_categories catch-all tags EVERY token introduced in the
+    # "weekdagen" lesson (including "hoofdletter"/"dag"/"Dagen", which are
+    # NOT weekday names) with the same "weekday" string, and the casefold
+    # comparison above also folds in the capitalized sentence-initial
+    # "Vrijdag" as a case-duplicate of "vrijdag" -- both already documented
+    # as a real, unfixed bug in docs/content/practice/en-nl/a1_unit11.yaml's
+    # review notes. Added here (additive only, does not change "weekday"
+    # itself, so every existing template that already reads "weekday" keeps
+    # its current behavior) so a matching_pairs preset can request a clean,
+    # exact-case, case-deduplicated 7-member pool instead.
+    if token in {"maandag", "dinsdag", "woensdag", "donderdag", "vrijdag", "zaterdag", "zondag"}:
+        semantic.append("weekday_pure")
     if t in set("januari februari maart april mei juni juli augustus september oktober november december".split()): semantic.append("month")
     if t.endswith(("de", "ste")) and t not in {"de", "zelfde"}: semantic.append("ordinal_number")
     if t in {"ochtend", "middag", "avond", "nacht", "ochtends", "middags", "avonds", "nachts", "vrijdagmiddag"}: semantic.append("time_of_day")
@@ -447,6 +460,14 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     # alstublieft." frames, since every member is a plural mass/count noun
     # that collocates naturally with "kilo".
     if t in {"appels", "peren", "tomaten", "paprika's"}: semantic.append("produce")
+    # "produce" above is casefolded, so it also matches the capitalized
+    # sentence-initial variants ("Appels", "Peren", "Tomaten", "Paprika's")
+    # as case-duplicates of the same word -- harmless for the existing
+    # bare-word/translation slots that already use "produce" (each draw is
+    # independent), but a matching_pairs slot could draw both cases of the
+    # same word into two different "pairs". Additive exact-case tag for
+    # matching_pairs use only.
+    if token in {"appels", "peren", "tomaten", "paprika's"}: semantic.append("produce_pure")
     # Narrower than a generic "quantity" tag: only kilo/pond are directly
     # attested with "tomaten" in this unit's real content ("Een pond
     # tomaten, alstublieft."); "gram" always collocates with "honderd" (never
@@ -476,6 +497,13 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     # see turn_direction below).
     if t in {"links", "rechts", "linksaf", "rechtsaf", "rechtdoor"}:
         semantic.append("direction_word")
+    # Casefolded above, so "Rechtdoor" (capitalized sentence-initial variant)
+    # is a case-duplicate of "rechtdoor" under this tag -- harmless for
+    # existing bare-word slots, but unsafe for a matching_pairs slot (could
+    # draw both cases as if they were two different pairs). Additive
+    # exact-case tag for matching_pairs use only.
+    if token in {"links", "rechts", "linksaf", "rechtsaf", "rechtdoor"}:
+        semantic.append("direction_word_pure")
     # Narrower: only these two are attested after "Sla ___." in this unit's
     # real content ("Sla linksaf."/"Sla rechtsaf.") -- "rechtdoor" pairs with
     # "ga", not "sla" ("Sla rechtdoor" is not idiomatic Dutch), so it is
@@ -547,6 +575,12 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     # recognition-only.
     if t in {"kaartje", "perron", "vertraging", "ingang", "uitgang", "wachtruimte"}:
         semantic.append("travel_noun")
+    # Casefolded above, so "Kaartje"/"Perron" (capitalized sentence-initial
+    # variants) are case-duplicates under this tag -- harmless for existing
+    # bare-word slots, unsafe for matching_pairs. Additive exact-case tag
+    # for matching_pairs use only.
+    if token in {"kaartje", "perron", "vertraging", "ingang", "uitgang", "wachtruimte"}:
+        semantic.append("travel_noun_pure")
     # Narrower 3-member subset (just the station places), safe for "Waar
     # is de {item}?" -- verified all three take "de" and fit this exact
     # question shape, directly attested for wachtruimte in the real
@@ -560,6 +594,11 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     # hoofdpijn.", both ungrammatical), same discipline as unit12's
     # participle_hebben/participle_zijn split.
     if t in {"hoofdpijn", "buikpijn", "keelpijn", "koorts"}: semantic.append("symptom_hebben")
+    # Casefolded above, so "Koorts" (capitalized sentence-initial variant) is
+    # a case-duplicate of "koorts" under this tag -- harmless for existing
+    # bare-word slots, unsafe for matching_pairs. Additive exact-case tag
+    # for matching_pairs use only.
+    if token in {"hoofdpijn", "buikpijn", "keelpijn", "koorts"}: semantic.append("symptom_hebben_pure")
     # Only 2 members -- kept out of multiple_choice/listen_select (which
     # need >=4), used only in word_order/fill_in_blank/translation.
     if t in {"ziek", "verkouden"}: semantic.append("symptom_zijn")
