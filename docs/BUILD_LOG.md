@@ -6988,3 +6988,168 @@ touched. Left `backend/app/core/rate_limit.py` (new), the `router.py`/
 `conftest.py` changes, the new test file, and the `CONTRACT.md` update
 uncommitted in the working tree, matching this repo's standing practice
 of not committing without an explicit instruction to.
+
+## Full live QA pass on Farsi (en-fa/fa-en), on a genuinely fresh, fully isolated stack, 2026-07-06
+
+Farsi had not had the same dedicated live end-to-end pass Dari got
+earlier tonight, despite `fa` having grown substantially (8 A1 units
+now, up from the 5 that existed when the last Farsi-specific entries
+were written). Confirmed via `find -newer docs/BUILD_LOG.md -mmin -N`
+and `git status` before starting, and periodically throughout, that no
+other session was touching `docs/content/practice/fa-en/`,
+`docs/content/realizations/fa/`, `docs/content/overlays/en-fa/`, or
+`backend/app/api/router.py`'s checkpoint code — other concurrent
+sessions were on fa A2/prs/es/fr content and an unrelated rate-limiting
+backend change (see the entry above), no collision.
+
+**Isolation**: `git worktree add ../LingoSquared-qa-fa` from HEAD (repo
+had no uncommitted content changes at the time, safe to branch
+directly rather than needing an `rsync` snapshot). Fresh, never-before-
+used ports (postgres 5464, api 8041, vite 5204), project name
+`ls2qafa`. `alembic upgrade head` from a genuinely empty DB succeeded
+clean (re-confirms the 0008-0012 defensive-migration-guard fix still
+holds). Port forwarding worked on the first try (the documented
+8021/5444 footgun didn't recur — these were fresh, never-used numbers).
+Registered a fresh admin + a fresh test-learner account, imported the
+real compiled en-fa (8 units) and fa-en (24 A1 + 2 A2 units, sharing the
+much larger `en` realization) course content via
+`POST /admin/content/import`, and imported both directions' Endless
+Practice template packs (en-fa 5 units' worth, fa-en all 8).
+
+**Real bug found and fixed while wiring up the practice-template
+import (ordering issue)**: importing the practice packs before running
+`backfill_lexemes.py`/`backfill_lexemes_fa_en.py` made every single
+template fail with `"lesson key '...' was not found in the course"`.
+Root-caused by reading `_practice_lesson_id()` in
+`backend/app/content/service.py`: it resolves a template's
+`lesson_content_key` primarily via `Lexeme.provenance_lesson_content_key`
+(populated only by the backfill scripts) and falls back to a
+`ContentKey` table that **no code anywhere in `app/` ever inserts a row
+into** — a fifth instance of this session's own repeated dead-
+scaffolding pattern (after `AnswerSpec`, `MediaAsset`/`Dialogue*`,
+`ExerciseAttempt.outcome`, and the `DailyQuest`/
+`UserDailyQuestProgress` models), confirmed by grepping for
+`ContentKey(` across the whole codebase — zero matches outside the
+model definition itself. Backfill-then-import (the correct order)
+resolved cleanly. **CLAUDE.md's own deploy recipe documented this
+backwards** ("practice-template admin import + the lexeme backfill, in
+that order") — fixed the wording in `CLAUDE.md` itself (now says
+backfill-then-import, with the reasoning inline) since this would
+otherwise strand the next real deploy the same way.
+
+**Real bug found and fixed in fa-en's own unit08 practice pack**: two
+templates (`quantity_listen.001`, `price_fill.002`) anchored
+`lesson_content_key` to `en.a1.unit08.lesson04.market_dialogue`, a pure
+review dialogue that introduces zero new vocabulary of its own (every
+token in its `introduced_tokens` was already taught in lessons 01-03 of
+the same unit) — so no `Lexeme` row is ever created with that lesson as
+provenance, and the lookup above can never resolve it structurally, no
+matter what order the scripts run in. Confirmed via a direct query
+against the isolated DB's `lexemes.provenance_lesson_content_key` that
+the actual tested vocabulary (`quantity_unit`, `food_plural`) anchors at
+`en.a1.unit08.lesson01.quantities` (with "apples" anchoring even
+earlier, at unit03) — repointed both templates there, a safe, no-
+forward-reference anchor. Documented in the pack's own `review.notes`
+per this project's standing convention. Re-verified: `practice-validate`
+still 0/0, and the full 8-unit fa-en practice import then succeeded.
+
+**Real bug found and fixed, backend logic — the unit-checkpoint retake
+lock blocks resuming an incomplete, never-scored attempt for a full
+hour with no way to ever finish it.** Found live: an accidental
+double-click on "Test out of this unit" started one real checkpoint
+attempt (confirmed via `GET .../checkpoint/result`: `status:
+"in_progress"`, `answered_items: 0`, real 15 items generated), then the
+second click's own `POST` hit the same 1-hour advisory-lock check and
+returned `429 checkpoint_retake_delayed` — the frontend correctly shows
+this as "Give it a little longer, retake in ~60 min," but the learner
+had never answered a single item, so there was and would be no path to
+ever complete or score that unit's checkpoint for an hour. Read
+`checkpoint_session()` in `backend/app/api/router.py`: the retry-delay
+check only looked at `latest.created_at`, never at `latest.scored_at`
+— an abandoned, unscored attempt is treated identically to a genuinely
+completed-and-failed one. `docs/CONTRACT.md`'s own documented intent
+("Failing is cheap and kind, not punitive... a 1-hour retake delay is
+enforced... when called again too soon after the same user's most
+recent attempt") frames the delay as following a real scored outcome,
+not an incomplete session — this is a real discrepancy between intent
+and implementation, not a design choice being second-guessed. **Fixed**
+(straightforward backend logic, within reach per this session's scope):
+gated the delay on `latest.scored_at is not None`, so only a genuinely
+scored attempt starts the 1-hour clock; an incomplete/abandoned attempt
+is immediately superseded by a fresh one. Restarted the isolated api
+container to pick up the change, re-verified via direct `curl` (before:
+429 on a fresh `POST`; after: a real new 15-item session generated
+immediately) and then a full live browser playthrough of all 15 items
+end-to-end: `passed: true`, `score: 0.867` (13/15, correctly above the
+≥80% bar), `weak_outcomes` correctly listing the exact 2 items missed,
+`checkpoint_passed: true` propagating to both `GET /courses/{id}/units`
+and the "Checkpoint passed ✓" badge on the real course path UI. Applied
+the identical one-line fix to the main checkout's
+`backend/app/api/router.py` (confirmed via `git log`/`git diff` that the
+unrelated same-day rate-limiting commit to this file didn't touch the
+checkpoint function, no collision) — left uncommitted, matching this
+session's standing practice.
+
+**Confirmed real, already-known gap class recurs in fa lesson content
+directly (not just prs)**: `listen_type` (e.g. unit01 lesson04's
+"Listen and type the Persian farewell") and `dialogue_comprehension`
+(e.g. unit01 lesson05's taarof exercises) both render with zero visual
+hint of the target phrase for a language with no Google Cloud TTS
+voice — confirmed via `document.body.innerText` showing nothing but the
+prompt text and a speaker icon, and `read_network_requests` confirming
+zero TTS calls attempted (correct behavior, not a bug). This is the
+exact bug class `docs/content/AUTHORING_GUIDE.md` §14 already documents
+(added after the earlier Dari QA pass's finding #2) — this pass confirms
+it's a real, currently-shipping, reachable gap in fa's own hand-authored
+lesson content too (29 `listen_type` + several `dialogue_comprehension`
+uses across the fa realization), not just a hypothetical risk. Not
+fixed (re-authoring existing content is Content lane's call per the
+guideline's own framing); flagging as confirmed-affects-fa-too for
+whoever next does a fa audio-authoring pass.
+
+**Everything else verified clean, live, no bugs found**:
+- Compiler: `compile_content.py validate` for en-fa (8 units) and fa-en
+  (24 A1 + 2 A2 units) — 0 errors/0 warnings both ways.
+- RTL rendering (teaching cards, exercise prompts, feedback banners),
+  the two-step course picker showing فارسی/دری as genuinely distinct
+  scripted entries, and the Perso-Arabic virtual keyboard — typed both
+  a full word (`خوبم`) and, specifically, the Persian/Arabic-confusable
+  letter pair (keheh `ک`/yeh `ی`) via the on-screen keyboard, then read
+  `document.querySelector('input').value` + `codePointAt` directly:
+  produced exactly U+06A9/U+06CC (correct Persian range) every time,
+  never the Arabic-range look-alikes (U+0643/U+064A).
+- All 13 exercise types fa has content for, played for real with
+  correct grading both ways (a deliberate wrong answer and a correct
+  one): `multiple_choice`, `word_order`, `matching_pairs`,
+  `grammar_check` (the earlier Dari-pass options-rendering fix holds
+  for fa content too), `listen_select`, `translation`, `writing_prompt`
+  (typo-tolerance confirmed: "salam" accepted for "salâm"),
+  `dialogue_response`, `dialogue_comprehension`, `fill_in_blank`,
+  `listen_order`, `listen_type`, and `speak_repeat` (correctly gated as
+  an always-skippable "coming soon" placeholder, matching its
+  documented not-yet-built status).
+- Phase B error-recycling and the 2-miss cap, both confirmed twice on
+  real fa content (once with exactly 1 miss, once with exactly 2 on the
+  same lesson): missed items recycle to the end of the queue, a 2nd
+  miss on the same item after recycling triggers the "copy it"
+  confirmation banner ("The answer is '...' — try typing or picking it
+  once more"), and the lesson always completes with an honest accuracy
+  percentage and a correct "Worth another look" list — never a hard
+  block, matching Phase B's documented design exactly.
+- Endless Practice for en-fa (English speakers learning Farsi, not just
+  the fa-en pilot direction): real generated items from the imported
+  template pool, correct grading both ways, `matching_pairs` XP-award
+  UI intact (no `[object Object]` regression).
+- Lesson completion end-to-end: honest XP/accuracy, correct missed-word
+  lists, real streak/day-count increments on the actual test account.
+
+**Teardown**: `docker compose -p ls2qafa -f docker-compose.qa-fa.yml
+down -v`, `git worktree remove ../LingoSquared-qa-fa`, `git branch -D
+qa-fa-session` — all done, confirmed via `docker compose ls`/`git
+worktree list` afterward. Shared `backend-api-1`/`backend-db-1` and the
+live server were never touched. Uncommitted in the working tree:
+`docs/content/practice/fa-en/a1_unit08.yaml` (the anchor fix + review
+notes), `CLAUDE.md` (backfill-before-import ordering fix),
+`backend/app/api/router.py` (the checkpoint retake-lock fix), and this
+entry — matching this session's standing practice of not committing
+without an explicit instruction to.

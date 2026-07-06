@@ -528,8 +528,19 @@ ssh ramin@192.168.4.4 "cd /home/ramin/LingoSquared/backend && \
   docker compose run --rm api sh -c 'DATABASE_URL=\$(python3 -c \"import os,re; print(re.sub(r\\\"lingosquared\$\\\", \\\"lingosquared_test\\\", os.environ[\\\"DATABASE_URL\\\"]))\") python -m pytest -q'"
 ```
 
-Practice-feature deploys additionally need the practice-template admin
-import + the lexeme backfill, in that order, after migrations.
+Practice-feature deploys additionally need the lexeme backfill THEN the
+practice-template admin import, after migrations — **this order was
+previously documented backwards here and has been corrected
+(2026-07-06, live-QA pass on fa)**: `POST /admin/courses/{id}/practice/
+import`'s lesson-key resolution (`_practice_lesson_id()` in
+`backend/app/content/service.py`) primarily matches via `Lexeme.
+provenance_lesson_content_key`, which only exists once the relevant
+`backfill_lexemes*.py` script has run against that course — importing
+practice templates first fails every single template with "lesson key
+... was not found in the course" on a genuinely fresh stack (confirmed
+live: content import → practice import → 100% failure; content import
+→ backfill → practice import → succeeds). See `docs/BUILD_LOG.md`'s
+matching entry for the reproduction.
 
 ## Secrets
 
