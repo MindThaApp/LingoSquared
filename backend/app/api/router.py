@@ -21,6 +21,7 @@ from app.services.quests import daily_quests_for
 from app.review.sm2 import schedule
 from app.review.grading import grade_answer, FREE_TEXT_EXERCISE_TYPES
 from app.services import tts as tts_service
+from app.services import stt as stt_service
 from app.practice.service import (
     generate_batch,
     generate_checkpoint,
@@ -1287,7 +1288,7 @@ def content_coverage(user=Depends(admin_user),db:Session=Depends(get_db)):
 @router.post("/tts",responses={200:{"content":{"audio/mpeg":{},"application/json":{"schema":TTSFallback.model_json_schema()}}}})
 def tts(body:TTSIn,user=Depends(current_user),db:Session=Depends(get_db)):
     if not db.get(Language,body.language_code): fail(422,"unsupported_language_code","Language code is not supported")
-    if body.language_code not in tts_service.GOOGLE_TTS_SUPPORTED_LANGUAGES:
+    if body.language_code not in tts_service.TTS_SUPPORTED_LANGUAGES:
         return JSONResponse({"use_browser_tts":True,"reason":"unsupported_language"})
     if not tts_service.reserve_characters(db,len(body.text)):
         return JSONResponse({"use_browser_tts":True,"reason":"quota_exceeded"})
@@ -1297,3 +1298,35 @@ def tts(body:TTSIn,user=Depends(current_user),db:Session=Depends(get_db)):
         return JSONResponse({"use_browser_tts":True,"reason":"provider_error"})
     db.commit()
     return Response(content=audio,media_type="audio/mpeg")
+
+@router.post("/stt/transcribe",response_model=STTOut)
+async def stt_transcribe(
+    language_code: str = Form(...),
+    audio: UploadFile = File(...),
+    user=Depends(current_user),
+):
+    # Fallback STT only — the frontend only calls this when client-side WASM
+    # Whisper isn't available (no WebAssembly threads, model failed to load,
+    # etc). Self-hosted faster-whisper, never a cloud API. Same size cap as
+    # recorded media assets — a spoken answer is a few seconds of audio, not
+    # minutes, so 5 MB is generous headroom while still bounding worst case.
+    total_bytes = 0
+    chunks: list[bytes] = []
+    while chunk := await audio.read(64 * 1024):
+        total_bytes += len(chunk)
+        if total_bytes > MAX_AUDIO_SIZE_BYTES:
+            fail(413, "audio_too_large", "Recording must not exceed 5 MB")
+        chunks.append(chunk)
+    if total_bytes == 0:
+        fail(422, "empty_audio", "Recording must not be empty")
+    audio_bytes = b"".join(chunks)
+    try:
+        transcript = stt_service.transcribe_audio(audio_bytes, language_code)
+    except Exception:
+        fail(500, "transcription_failed", "Speech-to-text transcription failed")
+    finally:
+        # Privacy default: discard raw audio immediately after transcription
+        # — never written to disk, never logged, not retained beyond this
+        # request's stack frame.
+        del audio_bytes, chunks
+    return {"transcript": transcript}
