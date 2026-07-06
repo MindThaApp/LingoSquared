@@ -7609,3 +7609,347 @@ browser verification so far (this entry included) has been on the
 forward en→X courses only; flagging this explicitly since it's easy to
 assume "checkpoints work" project-wide once one direction is proven
 and forget the reverse courses are a structurally separate case.
+
+## Corpus-wide `fill_in_blank` ambiguity audit, all 6 launch-gate
+directions, 2026-07-06 — a much bigger version of the same-day en-nl bug
+
+Dispatched alongside (not instead of) the live en-nl fix for the
+reported "fill_in_blank gave no context" bug — that fix (§17,
+`interchangeable: true` for true-synonym slots like je/jij) covers ONE
+narrow sub-case. This pass root-caused and quantified the much larger
+general case: an *open-vocabulary* slot (colors, feelings, weekdays,
+occupations, names, rooms, comparatives, verbs like/love/hate/prefer,
+...) embedded in a single fixed-text `fill_in_blank` frame with no other
+anchor is **structurally unable to tell the learner which specific pool
+member is correct**, and this is not a hypothetical — traced directly in
+`backend/app/practice/service.py`: `_material()` (line ~451) scopes a
+course's candidate lexeme pool to **every lexeme from every lesson the
+user has completed so far**, not just the template's own anchor lesson.
+A template like `nl.a1.unit01.lesson03`'s "Ik heet {item}." (person_name)
+is answerable early in the course (maybe 1 name known so far) but
+becomes genuinely ambiguous once the learner has completed enough later
+lessons that introduce more names — the exact same bug class as the
+reported en-nl report, just for "recall which different word was taught"
+instead of "tell two synonyms apart."
+
+**Tooling**: wrote `scripts/_fill_in_blank_ambiguity_check.py` (a sibling
+to `scripts/_practice_slot_check.py`, which only checks candidate
+*count*, never distinguishability) — computes each single-slot
+`fill_in_blank` template's real distinct-candidate count from the actual
+backfill-script lexeme specs (`lexeme_matches()`, byte-ported from the
+real backend function, same discipline as `_practice_slot_check.py`) and
+flags any >1 as unable-to-disambiguate-by-context. Multi-slot frames (9
+project-wide) are reported separately, not auto-flagged, since a second
+visible (unmasked) slot in the same frame can legitimately narrow the
+answer and that needs a human read, not a blind count. Referenced from
+`docs/content/AUTHORING_GUIDE.md#17`, which the concurrent en-nl-fix
+session had independently arrived at and cross-referenced by name after
+finding this script already on disk mid-session — good sign the two
+passes converged on the same root cause independently.
+
+**Findings, all 6 directions**: **251 single-slot `fill_in_blank`
+templates flagged** (en-fa 17, fa-en 52, en-prs 29, prs-en 52, en-nl 47,
+nl-en 54) out of 276 total `fill_in_blank` templates project-wide, plus
+6 multi-slot templates needing a human read (not auto-flagged). Cross-
+checked each flagged template against its own file for a sibling
+template (any non-`fill_in_blank` type) already testing the identical
+slot/lesson unambiguously (matching_pairs/word_order show the token
+directly; multiple_choice/listen_select here are all word↔gloss
+recognition on a bare token, not sentence-completion, so none of them
+share this bug) — **229 of 251 have such a sibling** (185 specifically a
+`translation` sibling), meaning the vocabulary is already safely tested
+elsewhere in the same file and the ambiguous `fill_in_blank` instance is
+pure duplicate risk with zero coverage loss if removed; **22 have no
+sibling at all** and need either real disambiguating-context authorship
+or a narrowed pool — left these as documented findings, not fixed
+(listed below).
+
+**Collision situation**: at audit time, `fa-en` (units 1-9), `prs-en`
+(most units), and `en-prs` (units 1-2) were under active, fast-moving
+concurrent edits (the matching_pairs-density retrofit + the live en-nl
+fix's own spillover), confirmed via repeated `git status`/mtime
+re-checks throughout — per the standing collision-avoidance discipline,
+**left those three directions' fixes for whoever owns that lane** (the
+audit/quantification above still stands; only the content-removal fixes
+were deferred). Also excluded any individual file in en-nl/nl-en shown
+modified in `git status` at the time (most of nl-en, and en-nl units
+01/05/06/10/12) even though not all were mid-edit that exact minute — a
+file with any uncommitted change from another session is not this
+pass's to touch.
+
+**Fixed 43 instances in genuinely untouched files** (verified via `git
+status` showing zero uncommitted changes before touching, immediately
+before writing): en-fa units 03 (4) and 04 (2); en-nl units 02 (5), 04
+(6), 08 (3), 11 (2), 13 (2), 14 (2), 15 (1), 16 (2); nl-en units 02 (1),
+10 (4), 14 (3), 16 (3), 17 (3). Fix = remove the redundant, structurally
+unanswerable `fill_in_blank` template block by exact `content_key` (a
+small surgical text-level script, not a YAML re-dump, to avoid
+reformatting anchors/comments) since each removed instance's own
+vocabulary/slot is still tested via its sibling in the same file — zero
+coverage lost, only the broken duplicate removed. Re-verified every
+touched file with the real `practice-validate` (0 errors/0 warnings
+across the full en-fa, en-nl, and nl-en packs after the edits) and
+`scripts/_practice_slot_check.py` (both touched en-fa files now `OK`,
+matching pre-existing candidate-count requirements) and confirmed via
+`stat` that no file's mtime moved again after my edit (no concurrent
+clobber). Re-ran the ambiguity checker after: 251 → 208 flagged,
+exactly the 43 fixed, no new regressions introduced.
+
+**Left unfixed, no safe sibling exists (7, all in untouched files —
+genuinely need new authoring, not mechanical removal)**:
+`en-fa/a1_unit01.yaml` `wellbeing_reply.004`; `en-fa/a1_unit02.yaml`
+`second_person.004`/`third_person.005`; `en-fa/a1_unit04.yaml`
+`family_description_fill.004`/`marital_fill.002`; `nl-en/a1_unit12.yaml`
+`color_fill.002`/`color_fill.003`.
+
+**Left unfixed, safe sibling exists but file was under active concurrent
+edit (68 across en-nl/nl-en; all of fa-en/prs-en/en-prs's ~130ish
+combined not even fully triaged for this reason)**: re-run
+`scripts/_fill_in_blank_ambiguity_check.py` once those lanes settle —
+the same mechanical removal applied here (delete the flagged
+`content_key` block; its sibling already covers the vocabulary) is
+almost certainly safe for the "has a sibling" subset, but must be
+re-triaged against whatever those concurrent passes actually leave
+behind rather than assumed unchanged.
+
+**Lesson content (`docs/content/realizations/*/`) separately audited by
+direct read, not the generative-pool mechanism above (fixed
+`correct_response`, not a growing pool) — no genuine instances found in
+this pass.** All ~87 `fill_in_blank` lesson exercises follow one
+consistent authoring template: a 5-6 exercise sequence per lesson
+(multiple_choice → listen_select → matching_pairs → word_order →
+fill_in_blank) that repeats the SAME `tested_text` fact 3-4 times
+immediately before the blank, and where a lesson introduces several
+same-category words in one block (e.g. nl unit17 lesson02 teaches
+ziekenhuis/restaurant/kantoor together), the taught collocation itself
+disambiguates (the fill_in_blank frame "Ik werk in een ___." only
+grammatically matches the "in een restaurant" collocation actually
+taught, not "in HET ziekenhuis" or "OP kantoor") — spot-checked this
+pattern across es/fr/nl/fa/prs samples, held throughout. Did not do an
+exhaustive native-level linguistic re-verification of every single
+instance (particularly fa/prs collocations, outside this session's
+fluency) given the much lower risk this scaffolding pattern confirmed
+and the time already spent on the practice-pack side, where the bug
+was actually confirmed at scale — flagging as lower-priority follow-up,
+not a clean bill of health, if anyone wants to push further.
+
+Files touched: `docs/content/practice/en-fa/a1_unit0{3,4}.yaml`,
+`docs/content/practice/en-nl/a1_unit0{2,4,8}.yaml`,
+`docs/content/practice/en-nl/a1_unit1{1,3,4,5,6}.yaml`,
+`docs/content/practice/nl-en/a1_unit0{2}.yaml`,
+`docs/content/practice/nl-en/a1_unit1{0,4,6,7}.yaml` (43 template
+removals only, nothing else in these files touched); new
+`scripts/_fill_in_blank_ambiguity_check.py` (permanent tool, same
+pattern as `_practice_slot_check.py`); this entry. Not committed, per
+this session's standing practice of leaving changes staged for
+whoever's coordinating commits.
+
+## Fixed the reported en-nl "unanswerable fill_in_blank" bug: true-synonym
+slot pools, not a bare-slot or missing-context problem, 2026-07-06
+
+**Reproduced live, on a fresh isolated stack** (`ls2fib`, ports 8060/5490,
+`backend/docker-compose.fib.yml` + `.env.fib`, gitignored like `.env.qa`/
+`.env.e2e` — genuinely fresh migration through head confirmed clean again).
+Compiled and imported the real `en-nl` unit01/05/06 lesson + practice
+content, backfilled lexemes, created a real test account, completed the
+4 real lessons behind the affected templates, and hit `POST /practice/
+{course_id}/batch` repeatedly: reproduced the user's exact report,
+`fill_in_blank` rendering "Ben ___ nieuw hier?" (and 3 sibling instances
+below) with the instruction "Complete the Dutch sentence" and zero way to
+tell which of two-or-three grammatically-identical Dutch words was meant.
+
+**Root cause, confirmed by direct read of the real content**: NOT a bare-
+slot case (§13's existing guard, already correctly firing on those) and
+not a candidate-count problem (`scripts/_practice_slot_check.py` was
+already green — every slot has enough real candidates). The exact
+template is `practice.en-nl.nl.a1.unit01.lesson01.complete.002`
+(`docs/content/practice/en-nl/a1_unit01.yaml`, `informal_address` slot =
+{je, jij}) plus 3 more instances of the identical bug class found while
+reading the same file's own review notes and its siblings:
+`lesson05.complete.002` (same file, same slot, "...taalcafé?"),
+`a1_unit05.yaml`'s `lesson03.complete.002` (`possessive_flexible` =
+{mijn, je, jouw} in "Dit is {item} broer." — the slot's own name already
+admitted the problem), and `a1_unit06.yaml`'s `lesson03.complete.002`
+(`polite_word` = {alsjeblieft, alstublieft} in "Ik wil graag twee thee,
+{item}."). In all four, real surrounding text survives masking, but every
+candidate in the slot's pool is a true register/stress synonym of the
+others with nothing else in the frame able to prefer one over another —
+each of je/jij, alsjeblieft/alstublieft, and mijn/je/jouw is equally
+correct Dutch here, yet `derive_answer()`/`build_prompt()` only ever
+marked the ONE the sampler happened to fill as correct. Distinct from
+(and narrower than) the much larger open-vocabulary case (country,
+person_name, greeting, ...) a concurrently-dispatched sibling pass
+quantified corpus-wide in the entry directly above this one — that's
+"which different word was taught," this is "tell two synonyms apart,"
+and the two passes independently converged on the same AUTHORING_
+GUIDE.md#17 by the time they cross-referenced each other.
+
+**Fix**: additive `interchangeable: true` field on a `fill_in_blank`
+template's `answer_derivation` (`{kind: slot_text, slot: item,
+interchangeable: true}`), opt-in and content-authored per template, never
+inferred automatically (an ordinary open-vocabulary slot must keep a
+single correct answer to test real recall). `build_prompt()`'s
+`fill_in_blank` branch (`backend/app/practice/service.py`) now checks
+this flag after the existing bare-slot rejection and, when set, computes
+every lexeme still matching the slot's own constraints and stores
+`correct_response` as `{"canonical": <sampled>, "accepted": [...]}` — the
+exact generic multi-answer shape `grade()`/`is_multi_answer_response()`
+(`app/api/router.py`) already handles for hand-authored content, so zero
+frontend or grading changes were needed. Applied to all 4 confirmed
+instances above. Compiler footgun collision found and fixed along the
+way: `validate_no_practice_yaml_booleans` blanket-rejected ANY YAML
+boolean anywhere in a practice pack (the existing "don't silently coerce
+a learner-facing Yes/No string" rule, over-broad for a genuine internal
+control flag) — added a small `PRACTICE_BOOLEAN_CONTROL_KEYS` allowlist
+(currently just `interchangeable`) so the footgun protection still holds
+for real learner-facing fields. New AUTHORING_GUIDE.md#17 documents the
+bug class and the flag for future authoring.
+
+**Verification**: `scripts/_practice_slot_check.py` and a full
+`practice-validate` re-run across all 16 en-nl A1 practice packs together,
+0 errors/0 warnings both before and after. New backend test
+(`test_fill_in_blank_interchangeable_accepts_any_matching_candidate`,
+`backend/tests/test_endless_practice.py`) generates a real item through
+`build_prompt()` via the actual `/practice/{course}/batch` endpoint,
+confirms `correct_response` is the multi-answer shape with every slot
+candidate listed, and confirms answering with a pool member OTHER than
+the one the sampler filled grades `"correct"` via the real `/practice/
+items/{id}/answer` endpoint. Full backend suite: 97 passed on the
+isolated `ls2fib` stack (one `test_phase_f_checkpoints.py` orthography
+test flakes on full-suite ordering — reproduced identically with this
+session's changes fully `git stash`ed out, confirmed pre-existing and
+unrelated). **Live re-verification on the real generated feed**: pulled
+5 real `/practice/{course}/batch` responses (fresh RNG draws each time)
+against the real imported en-nl unit01/05/06 content, confirmed all 45
+collected `fill_in_blank` items across the 4 fixed templates now store
+the multi-answer shape (e.g. `{"canonical": "jouw", "accepted": ["je",
+"jouw", "mijn"]}`), then hit the real answer endpoint 3 times with a
+pool member that was NOT the sampled canonical (`je` when canonical was
+`jij`, `jouw` when canonical was `mijn`, `alstublieft` when canonical was
+`alsjeblieft`) — all three graded `"correct"` with XP awarded, and a
+genuinely wrong answer (`u`, the polite pronoun, not in this informal
+pool) still correctly graded `"incorrect"`, confirming the fix accepts
+real alternates without over-broadening acceptance. Isolated stack torn
+down after verification; `.env.fib` never committed (gitignored, same as
+`.env.qa`/`.env.e2e`).
+
+Files touched: `backend/app/practice/service.py`, `backend/tests/
+test_endless_practice.py`, `scripts/compile_content.py`,
+`docs/content/AUTHORING_GUIDE.md` (#17), `docs/content/practice/en-nl/
+a1_unit0{1,5,6}.yaml`; this entry. `backend/docker-compose.fib.yml` left
+on disk (untracked, same convention as `docker-compose.e2e.yml`) as a
+ready-made isolated-stack recipe for future verification. Not committed,
+
+## Phase F (unit checkpoint) live-verified on all 3 reverse-direction
+courses (fa-en, nl-en, prs-en) — every launch-gate direction now
+checkpoint-verified, 2026-07-06 (Session 1/CODE)
+
+Closed the gap the previous entry explicitly flagged: checkpoints had
+only ever been browser-verified on the forward en→X courses (en-fa,
+en-nl, en-prs); the three reverse courses are structurally separate
+(their own units/lessons/practice pools) and had never been touched.
+Before starting, per the coordinator's steer given what the previous
+entry found: re-checked the running `backend-api-1` container's start
+time (19:34:39, after the last backend commit) — already current, no
+restart needed this time.
+
+Used the shared dev DB's existing reverse courses — `انگلیسی A1`
+(fa→en, id `46043e14-...`, unit 1 `3cd96d67-...`), `Engels A1` (nl→en,
+id `74bb0c7c-...`, unit 1 `d279e5c1-...`), `انگلیسی A1` (prs→en, id
+`6343d235-...`, unit 1 `a9afeba9-...`) — each with unit 1 material
+(3 lessons/18 exercises, 21-41 practice templates, 54-110 lexemes),
+enough for the 15-item generator. Generalized the prs-checkpoint
+Playwright script from the previous entry into a reusable driver
+(`checkpoint_generic.mjs`) parameterized by unit ID and pass/fail mode,
+then ran it live for real across all 6 remaining scenarios (pass +
+fail × 3 courses).
+
+**Housekeeping hit along the way, not a bug**: registering fresh test
+accounts via curl throughout tonight's marathon session tripped the
+new rate limiter from the CVE/rate-limiting pass (`REGISTER_RATE_LIMIT
+= 5/hour per IP`, from `ca3dd92`) — `register_rate_limited`, ~43
+minutes remaining. Correctly working as designed, not a bug; worked
+around it by reusing already-registered test accounts via `/auth/login`
+(rate-limited separately at a much more generous 10/minute) instead of
+registering fresh ones for the remaining runs.
+
+**Two real script-authoring bugs found and fixed in my OWN test
+harness, not the app** (worth recording since they're generalizable
+gotchas for anyone else scripting against `MatchingPairs`/
+`MultipleChoice`):
+1. Playwright's `hasText` string option does SUBSTRING matching, not
+   exact — `hasText: "bye"` matched the already-rendered `"goodbye"`
+   tile (a `matching-item` left over from an earlier, already-matched
+   pair in the same exercise), and separately `hasText: "s (letter)"`-
+   style option lookups could in principle collide with a
+   `"s, emphatic (letter)"` neighbor. Fixed by switching to an anchored
+   regex (`^\s*<escaped text>\s*(...)?$`) tolerant of the trailing
+   space `MatchingPairs.tsx`'s JSX always renders (`{p.left} {matches
+   ? ... : ""}` leaves a literal space even when unmatched).
+2. A DIFFERENT real edge case: one fa-en `matching_pairs` item's
+   correct_response had the SAME string on both sides of a pair
+   (`{"hi": "hoi", "later": "later"}` — "later" is used as-is in
+   informal Dutch too) — text-only matching couldn't tell the two
+   "later" tiles (one in the left/English column, one in the right/
+   Dutch column) apart. Fixed by scoping locators to the correct
+   `.matching-grid > div` column instead of matching by text across
+   the whole exercise.
+
+**A third issue, real but NOT an app bug — a React 18 StrictMode dev-
+mode artifact, same general class as this session's earlier Vite-HMR
+false alarm**: the very first prs-en pass attempt (against the `npm
+run dev` server on 5175) showed every single item graded "Correct!"
+live in the browser, yet the final scored result showed 0%. Root
+cause, confirmed via direct DB query: `CheckpointPage`'s `start()`
+effect double-fires under StrictMode (dev-only), creating TWO
+`checkpoint_attempts` rows ~60ms apart; my answers correctly went to
+whichever attempt's items were actually rendered (verified via network
+response interception + matching against on-screen prompt text), but
+`GET /checkpoint/result` scores whichever attempt is chronologically
+latest by `created_at` — and the two aren't guaranteed to be the same
+attempt, since "which effect invocation's fetch resolves and is kept"
+and "which attempt's insert commits last" are independent race
+outcomes. **This cannot happen for a real user**: StrictMode's double-
+effect-invoke is stripped from production React builds regardless of
+whether `<StrictMode>` wraps the tree in source — confirmed by
+building a real production bundle (`npm run build`) and serving it via
+`vite preview` on port 5176 (already CORS-whitelisted, same recipe an
+earlier entry this file used for an unrelated HMR collision) instead
+of the dev server: only ONE `checkpoint_attempts` row was ever created,
+and the exact same prs-en unit produced a clean, unambiguous 100%.
+Re-ran the corresponding fail scenario the same way. No code change —
+this is a dev-server-only testing artifact, not a product bug, but
+worth remembering: **checkpoint (and likely other "start a fresh
+attempt" flows) should be verified against a production build, or with
+this race explicitly accounted for, not just a StrictMode dev server,
+whenever the exact scored result matters and not just "does it render."**
+
+**Full results, all six scenarios, via real browser click-through
+across every exercise type each unit's generator produced
+(`multiple_choice`, `translation`, `matching_pairs`, `word_order`,
+`fill_in_blank` — no `listen_select`/`listen_type` appeared this pass,
+consistent with these being reverse/X→en courses so English is the
+answer-language, no TTS gating relevant here):**
+- **fa-en**: pass run 15/15 → "You tested out! 🎉 100%". Fail run
+  (5 deliberately wrong) → 10/15 = 67%, "Worth another pass... Not
+  quite there yet", weak outcomes `بعداً`/`خوشایند`/`دیدن`/`سلام
+  (خودمانی)`/`عصر` — exactly the 5 items deliberately missed.
+- **nl-en**: pass run 15/15 → 100%. Fail run (5 wrong) → 10/15 = 67%,
+  weak outcomes `avond`/`leuk`/`ochtend`/`slecht`/`zien` — exactly the
+  5 missed.
+- **prs-en**: pass run 15/15 → 100% (production build). Fail run
+  (5 wrong, production build) → 10/15 = 67%, weak outcomes `بعد از
+  چاشت`/`خداحافظ (خودمانی)`/`خوب`/`خوش`/`سلام` — exactly the 5 missed.
+
+`checkpoint_passed` re-confirmed propagating correctly to `GET
+/courses/{id}/units` for these accounts too (spot-checked, matches the
+forward-direction behavior already established).
+
+**Conclusion: Phase F is now live-verified, both pass and fail, full
+browser click-through, on all 6 launch-gate directions** (en-fa,
+en-nl, en-prs, fa-en, nl-en, prs-en) — the last remaining gap from the
+original Phase F rollout is closed. Stopped the `vite preview`
+process on 5176 afterward (dev server on 5175 remains the normal
+working surface). No app code changes this pass; only test-harness
+fixes (not committed — scratch scripts, not part of the repo).
+per this session's standing practice.
