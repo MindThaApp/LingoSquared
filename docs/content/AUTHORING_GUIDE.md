@@ -247,29 +247,47 @@ types) for fa/prs lesson content until real recorded audio exists
 A real gap found live 2026-07-05 (Dari QA pass): a `listen_type`
 exercise ("Listen and type the conventional response") gave the learner
 literally zero visual hint of the target phrase — no text anywhere in
-the DOM, no network request even attempted for audio (correct behavior,
-not a bug: fa/prs have zero Google Cloud TTS voices, so the frontend
-correctly skips the fetch), and the wrong-answer feedback's only clue
-was the answer text itself, revealed *after* the learner already failed.
-The exercise was solvable only by a learner who happened to already know
-the correct response, which defeats the point of a listening exercise.
-This is different from (and narrower than) the Endless Practice engine's
-existing `listen_select`-for-fa exclusion (a generator-side guard) — this
-is hand-authored LESSON content using `listen_type`, which has no
-equivalent guard.
+the DOM, no network request even attempted for audio (correct behavior
+at the time: fa/prs had zero TTS voices from any provider then, so the
+frontend correctly skipped the fetch), and the wrong-answer feedback's
+only clue was the answer text itself, revealed *after* the learner
+already failed. The exercise was solvable only by a learner who
+happened to already know the correct response, which defeats the point
+of a listening exercise. This was different from (and narrower than)
+the Endless Practice engine's own `listen_select`-for-fa exclusion (a
+generator-side guard) — this is hand-authored LESSON content using
+`listen_type`, which had no equivalent guard.
 
-Until real recorded audio exists for a given fa/prs phrase (see §10 and
-`docs/BUILD_LOG.md`'s audio-manifest/Phase D notes — browser
-`speechSynthesis` fallback quality for `fa-AF` is itself uncertain, "may
-produce no sound or wrong accent"), **do not author `listen_type` (or
-any other exercise type whose only prompt is audio, e.g. bare
-`listen_select`/`listen_order` items with no text_blocks fallback) for
-fa/prs lesson content.** Use `translation`, `dialogue_response`,
-`writing_prompt`, or another type that gives the learner a real,
-visible prompt to work from instead. Once a phrase has a genuine
-recorded asset (`media_asset_key` resolves), authoring `listen_type`
-against it is fine — the gap is specifically "audio-only prompt with no
-working audio," not the exercise type itself.
+**Revised 2026-07-06: this restriction is now prs-only, not fa+prs.**
+Azure Cognitive Services Speech shipped real Farsi neural voices the
+same day (see `docs/BUILD_LOG.md`'s Azure TTS entry) — `fa` now has
+working TTS via the exact same `/tts` endpoint every other listen-type
+exercise already uses (`SpeakButton`/`speak()` don't know or care which
+provider answered), so `listen_type`/`listen_select` lesson content for
+**Farsi is safe to author again**. The Endless Practice engine's own
+`listen_select` generator gate was updated to match
+(`app/practice/service.py` now checks the combined `TTS_SUPPORTED_
+LANGUAGES`, not the Google-only set) — verified live: en-fa's practice
+pool currently has zero authored `listen_select` templates (this was
+never a dormant-content bug, just a now-stale restriction), so this is
+a real, if modest, opening for new template authoring, not something
+that changes existing generated practice on its own.
+
+Until real recorded audio or a working TTS voice exists for a given
+**Dari (prs)** phrase (Dari still has zero coverage from any
+provider — see §10 and `docs/BUILD_LOG.md`'s audio-manifest/Phase D
+notes; browser `speechSynthesis` fallback quality for `fa-AF` is
+itself uncertain, "may produce no sound or wrong accent"), **do not
+author `listen_type` (or any other exercise type whose only prompt is
+audio, e.g. bare `listen_select`/`listen_order` items with no
+text_blocks fallback) for prs lesson content.** Use `translation`,
+`dialogue_response`, `writing_prompt`, or another type that gives the
+learner a real, visible prompt to work from instead. Once a phrase has
+a genuine recorded asset (`media_asset_key` resolves) or Dari gets a
+real TTS voice from some provider, authoring `listen_type`/
+`listen_select` against it is fine — the gap is specifically
+"audio-only prompt with no working audio," not the exercise type
+itself.
 
 ## 15. Mark target-language words with `*asterisks*` inside mixed-language
 explanatory text (`note`, exercise `feedback`)
