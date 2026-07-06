@@ -22,10 +22,21 @@ from app.models import (
 # covers Farsi (fa) where Google has zero Persian/Dari voices at all --
 # using the Google-only set here was stale from the day Azure shipped,
 # silently keeping fa's listen_select generation off even though fa
-# now has a real, working TTS voice. TTS_SUPPORTED_LANGUAGES is the
-# union of both providers (see app/services/tts.py); Dari (prs) has
-# zero coverage from either and is correctly still excluded.
-from app.services.tts import TTS_SUPPORTED_LANGUAGES
+# now has a real, working TTS voice.
+#
+# Not TTS_SUPPORTED_LANGUAGES either (2026-07-07, Fable audit finding):
+# that set is static language-membership, added the day a provider
+# integration merges -- it says nothing about whether that provider has
+# real credentials configured on THIS deploy target right now. fa was
+# added to it the moment Azure code landed, while azure_speech_key still
+# defaults to empty until Ramin actually provisions a key. Gating
+# generation on membership alone would let listen_select items generate
+# for fa with no real voice configured -- the exact unanswerable-audio
+# class already hit twice this project via other mechanisms.
+# tts_actually_configured() checks real credentials, not just language
+# membership; Dari (prs) has zero coverage from either provider and is
+# correctly still excluded either way.
+from app.services.tts import tts_actually_configured
 
 
 PRACTICE_XP = 5
@@ -354,7 +365,7 @@ def build_prompt(
             "options": options,
         }
     elif template.type == "listen_select":
-        if course.target_language not in TTS_SUPPORTED_LANGUAGES:
+        if not tts_actually_configured(course.target_language):
             return None
         if not isinstance(answer, str):
             return None
@@ -524,7 +535,7 @@ def _material(
             .order_by(PracticeTemplate.content_key)
         )
     )
-    if course.target_language not in TTS_SUPPORTED_LANGUAGES:
+    if not tts_actually_configured(course.target_language):
         templates = [
             template
             for template in templates
