@@ -8499,4 +8499,92 @@ locked-practice-state. Left `backend/app/core/config.py` and
 workflow) and `frontend/.env.e2e.local` (gitignored). Isolated stack
 (`ls2e2e` containers + volume) and the manually-started frontend dev
 server on 5190 torn down after — the shared `backend-api-1`/
+
+## Honest read on practice-content throughput: mostly a content-volume
+problem, but one real backend lever found and pulled, 2026-07-06
+(Session 1/CODE)
+
+Coordinator asked directly: given practice content is the real
+remaining gap across all 3 launch pairs, is there anything backend-side
+that would meaningfully unlock more throughput, or is this now purely
+content-authoring volume? Investigated rather than guessed.
+
+**What's genuinely a content-volume problem, not a backend gap**: the
+lexeme backfill scripts (`scripts/backfill_lexemes_{en_nl,en_prs,fa_en,
+nl_en,prs_en}.py` plus the original `backfill_lexemes.py`, ~4,400 lines
+combined) are each hand-authored, per-language-pair classification data
+(POS tags, gender/register agreement, gloss dictionaries) — this is
+the actual bottleneck, and it's already about as shared as it can
+reasonably be (the English-target-side classifier,
+`scripts/_en_target_lexeme_common.py`, is already reused across all
+three X→en directions per earlier entries this file documents). Given
+the standing no-runtime-LLM constraint, there's no way to backend-
+engineer around the need for real reviewed classification data per
+language — more templates and more lexemes both require real authoring
+time, not a code change.
+
+**One real, concrete backend lever found and pulled**: `app/practice/
+service.py`'s `listen_select` generation (both the per-item prompt
+builder and the template-filtering helper in `_material()`) checked
+`GOOGLE_TTS_SUPPORTED_LANGUAGES` specifically — stale since tonight's
+earlier Azure TTS addition gave Farsi (`fa`) a real working voice via
+a second provider. Fixed both call sites to check the combined
+`TTS_SUPPORTED_LANGUAGES` the `/tts` route itself already uses. Real,
+but modest and honestly reported as such: en-fa's practice pool has
+zero authored `listen_select` templates today (confirmed via `grep`
+and a live practice-batch smoke test before and after the fix — no
+change in what currently generates), so this doesn't unlock dormant
+content by itself; it removes a now-incorrect restriction and opens
+the door for the content lane to author `listen_select` templates for
+en-fa going forward. Updated `AUTHORING_GUIDE.md`'s matching
+lesson-content restriction (§14) to scope it to Dari (`prs`, still
+zero TTS coverage from any provider) instead of fa+prs.
+
+**A bigger, longer-term structural observation, not pulled as a
+lever tonight**: only 6 of 19 exercise types
+(`multiple_choice`/`fill_in_blank`/`word_order`/`translation`/
+`matching_pairs`/`listen_select`) are supported by the generative
+engine at all (`PracticeExerciseType` in `app/schemas/api.py`). Adding
+more (e.g. `reverse_translation` looks cheap — nearly identical to the
+existing `translation` branch, just reversed source/target) could add
+real generated-item variety without new templates authored in the
+existing 6 types. Didn't build this: it's genuine new engineering
+per type, and — like the TTS-gate fix above — still wouldn't produce
+a single new generated item without the content lane also authoring
+templates declaring the new type, so it's not obviously higher-value
+than just authoring more templates in the types already supported.
+Flagging as a real option if the content lanes specifically want type
+variety rather than raw volume, not claiming it as a quick win.
+
+**Real test flake fixed along the way, found by actually running the
+suite repeatedly rather than trusting one green run**: `test_
+checkpoint_forces_strict_orthography` (already flagged by another
+session earlier tonight as a known issue, per this file's own
+Whisper-STT entry) turned out to have a more precise root cause than
+originally guessed — it treated `fill_in_blank` as an interchangeable
+free-text candidate alongside `translation`, but `grade_answer()`/
+`FREE_TEXT_EXERCISE_TYPES` deliberately excludes `fill_in_blank` (its
+`correct_response` shape isn't reliably plain free text by exercise-
+type name alone), so grading a `fill_in_blank` typo always returns
+"incorrect" regardless of edit distance — nothing to do with script at
+all, despite the original hypothesis. Whichever type checkpoint
+generation happened to sample first decided the test's fate. Fixed by
+restricting selection to an actual `FREE_TEXT_EXERCISE_TYPES` member;
+verified green across 5 consecutive isolated runs. This session's own
+two new fa/prs practice tests (above) appear to have shifted execution
+order enough to make the pre-existing flake fail almost every full-
+suite run instead of occasionally — worth fixing now rather than
+leaving a flakier suite behind from my own changes.
+
+Full pytest green (100 tests). Restarted `backend-api-1` to serve the
+practice-engine fix; live-smoke-tested against real en-fa content
+(confirmed zero behavior change today, as expected given no templates
+exist yet to benefit).
+
+**Bottom line for the coordinator's question**: yes, one real, cheap,
+correct backend fix pulled (the stale TTS gate); the exercise-type-
+coverage gap is a real but non-trivial lever, offered rather than
+built; everything else — the actual hours-of-content gap — is
+authoring volume (lexemes, templates, both per-language-pair), which
+this session cannot shortcut given the no-runtime-LLM constraint.
 `backend-db-1` stack, `ls2qa`, and the live server were never touched.
