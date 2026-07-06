@@ -9,8 +9,8 @@ generation_provenance:
   authoring_system: claude
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: fresh_context_reviewer
+  status: reviewed
+  required_next_reviewer: null
   notes: >-
     Paired with prs/a2_unit09_bureaucracy.yaml's own review notes (see
     that file for the full scenario rationale). Every multi-clause
@@ -26,7 +26,30 @@ review:
     *تا آخر همین ماه*; appointment = *سه‌شنبه ساعت ده*; tracking code =
     *سه هزار و پنجاه*) against the realization file and against every
     exercise referencing them here -- consistent throughout, per §11.
-    Pending fresh-context review; left unreviewed per AUTHORING_GUIDE §9.
+    Fresh-context review completed 2026-07-06: found and fixed three
+    real bugs. (1) The tazkira_word teaching note's "distinct document
+    from Iran's *کارت ملی*, the document being updated in this unit"
+    read ambiguously -- comma placement made it sound like *کارت ملی*
+    was the document being updated, when it's actually *تذکره* --
+    reworded so the antecedent is unambiguous. (2) The notice_text
+    teaching note leaked the internal section-key jargon
+    "reading_writing register" verbatim into learner-facing text (the
+    realization's own `section: reading_writing` field) -- reworded to
+    "formal written register." (3) dialogue_response_why_change's §12
+    multi-clause accepted_answers had comma-joined and و-joined forms
+    but no genuine period-joined form (it instead had a redundant
+    no-punctuation variant already covered by distance-1 typo
+    tolerance) -- replaced with a real period-joined variant and
+    updated its feedback text to match. Also verified: content_key
+    parity (perfect both directions), zero Arabic-range kaf/yeh, zero
+    jargon-leak tokens elsewhere, zero untaught-vocabulary violations
+    (ran a Persian-Unicode tokenizer script against cumulative
+    introduced_tokens across the whole lesson sequence), every
+    exercise has a status:correct accepted answer verified via actual
+    compile (not just validate), and re-confirmed dialect authenticity
+    (شاروالی/تذکره/نمبر/بلی genuinely Afghan, no Iranian forms in any
+    learner-facing string). Final compile: 0 errors/0 warnings, valid
+    JSON output.
 
 course:
   title: Dari A2
@@ -62,7 +85,7 @@ teaching:
   prs.a2.unit09.lesson01.teach.tazkira_word:
     title: "National ID booklet"
     gloss: "national ID booklet (tazkira)"
-    note: "*تذکره* is Afghanistan's national identity booklet -- a distinct document from Iran's *کارت ملی*, the document being updated in this unit."
+    note: "*تذکره* -- the document being updated in this unit -- is Afghanistan's national identity booklet, a distinct document from Iran's *کارت ملی*."
   prs.a2.unit09.lesson01.teach.municipality_word:
     title: "Municipality"
     gloss: "municipality"
@@ -96,7 +119,7 @@ teaching:
   prs.a2.unit09.lesson03.teach.notice_text:
     title: "An office notice about changing your address"
     gloss: "To change your address, please bring your national ID booklet and a rent receipt. The registration deadline is by the end of this month."
-    note: "A short official notice, in the reading_writing register this unit is teaching."
+    note: "A short official notice, in the formal written register this unit is teaching."
   prs.a2.unit09.lesson03.teach.i_will_bring_receipt:
     title: "Say what you'll bring"
     gloss: "I'll bring the rent receipt."
@@ -179,9 +202,9 @@ exercises:
     instruction: "The clerk asks: 'Why do you need to change your address?' Answer with your reason."
     accepted_answers:
       - {value: "چون خانه‌ام را عوض کردم، باید آدرسم را عوض کنم.", status: correct}
-      - {value: "چون خانه‌ام را عوض کردم باید آدرسم را عوض کنم", status: correct}
+      - {value: "چون خانه‌ام را عوض کردم. باید آدرسم را عوض کنم.", status: correct}
       - {value: "چون خانه‌ام را عوض کردم و باید آدرسم را عوض کنم", status: correct}
-    feedback: "Joining the reason and result with a comma, no punctuation, or *و* are equally natural."
+    feedback: "Joining the reason and result with a comma, a period, or *و* are equally natural."
   prs.a2.unit09.lesson02.exercise05.write_appointment_request:
     instruction: "Write that you'd like to make an appointment to change your address."
     accepted_answers:
