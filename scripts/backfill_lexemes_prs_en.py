@@ -170,6 +170,24 @@ UNIT_FILES = (
         REPO_ROOT / "docs/content/realizations/en/a1_unit24_housing.yaml",
         REPO_ROOT / "docs/content/overlays/prs-en/a1_unit24.yaml",
     ),
+)
+
+# A2 units live in a SEPARATE course row ("انگلیسی A2", not "انگلیسی
+# A1") -- `POST /admin/content/import` matches/creates courses by
+# (source_language, target_language, title), and the A2 overlay
+# declares `course.title: انگلیسی A2`, distinct from A1's `انگلیسی A1`.
+# Real bug found live 2026-07-06/07 (Dari Endless Practice QA pass,
+# same root cause independently confirmed in the sibling
+# backfill_lexemes_en_prs.py): this used to be a single UNIT_FILES
+# tuple with a2 units 25-26 appended at continuous positions 25/26,
+# backfilled against ONE lookup of the "انگلیسی A1" course (24 units).
+# Position 25/26 don't exist in that course, so `main()` hard-failed
+# with "imported course is missing en.a2.unit25...." on every run --
+# A2 lexemes for this direction have never actually been backfillable
+# against a real database. Kept as its own tuple with LOCAL 1-based
+# ordering (looked up against the "انگلیسی A2" course separately in
+# main(), never mixed with UNIT_FILES' indices).
+UNIT_FILES_A2 = (
     (
         REPO_ROOT / "docs/content/realizations/en/a2_unit25_bureaucracy.yaml",
         REPO_ROOT / "docs/content/overlays/prs-en/a2_unit25.yaml",
@@ -195,7 +213,21 @@ EN_TARGET_TO_PRS_GLOSS: dict[str, str] = {
     "nice": "خوش", "to": "به", "meet": "آشنا شدن", "too": "هم",
     "see": "دیدن", "later": "بعداً", "have": "داشتن", "a": "(حرف تعریف نامعین)",
     "day": "روز", "what": "چه", "is": "است", "what's": "چیست",
-    "your": "تان", "name": "نام", "my": "م", "leila": "لیلا",
+    # "your"/"my" were previously glossed as bare Dari possessive SUFFIX
+    # morphemes ("تان"/"م" -- how Dari actually attaches possession to
+    # the noun, e.g. نظرم "opinion-my"), not standalone words. Real bug
+    # found live 2026-07-06/07 (Dari Endless Practice QA pass): the
+    # word_order generator substitutes this gloss into an English hint
+    # frame as if it were a free-standing word (e.g. practice pack
+    # prs-en/a2_unit26.yaml's `possessive_order` template, frame "In
+    # {item} opinion, ..."), which rendered as the genuinely confusing
+    # "In *م* opinion, the dog park is a good idea" -- a bound suffix
+    # floating alone mid-English-sentence with no word it's attached to.
+    # Fixed to match this same dict's own established, correct pattern
+    # for the identical grammatical category ("his": "مالِ او (مذکر)",
+    # "her": "مالِ او (مؤنث)" a few lines below) -- a natural standalone
+    # explanatory phrase, not the bound suffix.
+    "your": "مالِ شما", "name": "نام", "my": "مالِ من", "leila": "لیلا",
     "i": "من", "am": "استم", "student": "محصل", "teacher": "آموزگار",
     "yes": "بلی", "no": "نخیر", "new": "جدید", "member": "عضو",
     "he": "او (مذکر)", "she": "او (مؤنث)", "an": "(حرف تعریف نامعین)",
@@ -297,7 +329,12 @@ EN_TARGET_TO_PRS_GLOSS: dict[str, str] = {
     # Unit 12 (clothing: sizes and colors), added 2026-07-06.
     "shirt": "شرت؛ پیراهن", "pants": "پطلون", "shoes": "بوت",
     "jacket": "جاکت", "dress": "لباس زنانهٔ یک‌تکه", "small": "خورد",
-    "medium": "منجم؛ متوسط", "large": "کلان", "blue": "آبی", "black": "سیاه",
+    # Real mistranslation fix, found live 2026-07-06/07 (Dari Endless
+    # Practice QA pass): "medium" was glossed "منجم؛ متوسط" -- منجم means
+    # "astronomer" in Dari, unrelated to clothing size, apparently a
+    # copy/mixup with متوسط ("medium/average"), the actually-correct word
+    # already present after the semicolon. Fixed to drop the wrong term.
+    "medium": "متوسط", "large": "کلان", "blue": "آبی", "black": "سیاه",
     "size": "سایز", "color": "رنگ", "20": "بیست",
     "i'll": "من ... خواهم (مخفف I will)", "we": "ما",
     # Unit 13 (talking about feelings), added 2026-07-06.
@@ -418,9 +455,8 @@ EN_TARGET_TO_PRS_GLOSS: dict[str, str] = {
 }
 
 
-def iter_specs():
-    specs: dict[str, dict] = {}
-    for unit_order, (realization_path, _overlay_path) in enumerate(UNIT_FILES, 1):
+def _classify(files, level, specs):
+    for unit_order, (realization_path, _overlay_path) in enumerate(files, 1):
         realization = yaml.safe_load(realization_path.read_text(encoding="utf-8"))
         for lesson_order, lesson in enumerate(realization["units"][0]["lessons"], 1):
             lesson_key = lesson["content_key"]
@@ -434,9 +470,14 @@ def iter_specs():
                             f"in _en_target_lexeme_common.py (lesson {lesson_key})"
                         )
                     tags = en_agreement_tags(token)
-                    existing = specs.get(token)
+                    # Keyed by (level, token) -- A1 and A2 are separate
+                    # courses, so a bare token key would wrongly merge
+                    # an A2 occurrence into an A1 spec already seen.
+                    key = (level, token)
+                    existing = specs.get(key)
                     if existing is None:
-                        specs[token] = {
+                        specs[key] = {
+                            "level": level,
                             "unit_order": unit_order, "lesson_order": lesson_order,
                             "lesson_content_key": lesson_key, "content_key": content_key,
                             "token": token, "language_code": "en",
@@ -445,12 +486,18 @@ def iter_specs():
                             "agreement_tags": tags,
                         }
                     else:
-                        for key, value in tags.items():
-                            if key == "semantic":
-                                prior = existing["agreement_tags"].setdefault(key, [])
+                        for tag_key, value in tags.items():
+                            if tag_key == "semantic":
+                                prior = existing["agreement_tags"].setdefault(tag_key, [])
                                 prior.extend(v for v in value if v not in prior)
                             else:
-                                existing["agreement_tags"].setdefault(key, value)
+                                existing["agreement_tags"].setdefault(tag_key, value)
+
+
+def iter_specs():
+    specs: dict[tuple[str, str], dict] = {}
+    _classify(UNIT_FILES, "a1", specs)
+    _classify(UNIT_FILES_A2, "a2", specs)
     yield from specs.values()
 
 
@@ -471,26 +518,39 @@ def main() -> int:
     from app.models import Course, Lesson, Lexeme, Unit
 
     with SessionLocal() as db:
-        course = db.scalar(
-            select(Course).where(
-                Course.source_language == "prs",
-                Course.target_language == "en",
-                Course.title == "انگلیسی A1",
+        courses_by_level = {}
+        for level, title in (("a1", "انگلیسی A1"), ("a2", "انگلیسی A2")):
+            needed = any(spec["level"] == level for spec in specs)
+            course = db.scalar(
+                select(Course).where(
+                    Course.source_language == "prs",
+                    Course.target_language == "en",
+                    Course.title == title,
+                )
             )
-        )
-        if course is None:
-            print("ERROR: prs-en 'انگلیسی A1' course must be imported first", file=sys.stderr)
-            return 1
+            if course is None:
+                if needed:
+                    print(f"ERROR: prs-en {title!r} course must be imported first", file=sys.stderr)
+                    return 1
+                continue
+            courses_by_level[level] = course
 
-        lessons = {
-            (unit.order, lesson.order): lesson
-            for unit in db.scalars(select(Unit).where(Unit.course_id == course.id))
-            for lesson in db.scalars(select(Lesson).where(Lesson.unit_id == unit.id))
+        lessons_by_level = {
+            level: {
+                (unit.order, lesson.order): lesson
+                for unit in db.scalars(select(Unit).where(Unit.course_id == course.id))
+                for lesson in db.scalars(select(Lesson).where(Lesson.unit_id == unit.id))
+            }
+            for level, course in courses_by_level.items()
         }
         created = 0
         updated = 0
         for spec in specs:
-            lesson = lessons.get((spec.pop("unit_order"), spec.pop("lesson_order")))
+            level = spec.pop("level")
+            course = courses_by_level[level]
+            lesson = lessons_by_level[level].get(
+                (spec.pop("unit_order"), spec.pop("lesson_order"))
+            )
             if lesson is None:
                 print(f"ERROR: imported course is missing {spec['lesson_content_key']}", file=sys.stderr)
                 db.rollback()
