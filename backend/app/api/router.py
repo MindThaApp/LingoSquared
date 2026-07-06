@@ -110,6 +110,33 @@ def canonical_pairs(value):
     ):
         return frozenset((normalized(item["left"]), normalized(item["right"])) for item in value)
     return None
+ORDER_BASED_EXERCISE_TYPES = {"word_order", "listen_order"}
+def canonical_order_tokens(value):
+    """Canonicalize a word_order/listen_order answer into a token list,
+    regardless of whether it was authored as a single space-joined string
+    (the majority pattern across hand-authored content - e.g. correct_
+    response "Hallo met Omar") or as an explicit token list matching the
+    prompt's word_bank order (e.g. ["Hallo","met","Omar"], the shape the
+    Endless Practice engine's derive_answer() always produces for this
+    type). WordOrder.tsx always submits `response` as a list built purely
+    from tile-click order, never a string - so a plain joined-string
+    correct_response could never equal it, marking every token-for-token,
+    correctly-ordered submission wrong regardless of what was actually
+    clicked (found live 2026-07-07 from a real user report: "Hallo met
+    Omar" tiles clicked in the exact right order still graded incorrect).
+    Same class of authored-shape-vs-submitted-shape mismatch as
+    canonical_pairs()/matching_pairs above. Splitting the string on
+    whitespace (after casefolding/stripping via normalized()) also keeps
+    any punctuation attached to a token - e.g. a hypothetical "Hallo,"
+    tile - comparing correctly against a same-shaped correct string,
+    since both sides go through the identical split, not a separate
+    punctuation-stripping step."""
+    if isinstance(value, str):
+        collapsed = normalized(value)
+        return collapsed.split(" ") if collapsed else []
+    if isinstance(value, list):
+        return normalized(value)
+    return None
 def display_correct_response(correct):
     if is_multi_answer_response(correct):
         return correct["canonical"]
@@ -152,11 +179,18 @@ def grade(response,correct,exercise_type=None,*,script=None,orthography_strict=N
         if not isinstance(report,str) or report not in {"known","unknown"}:
             fail(422,"invalid_flashcard_response","Flashcard response must be 'known' or 'unknown'")
         return "correct" if report == "known" else "incorrect"
-    if is_multi_answer_response(correct):
-        normalized_response=normalized(response)
-        is_ok = any(normalized_response==normalized(item) for item in correct["accepted"])
-        return "correct" if is_ok else "incorrect"
     type_value = exercise_type_value(exercise_type)
+    order_based = type_value in ORDER_BASED_EXERCISE_TYPES
+    if is_multi_answer_response(correct):
+        if order_based:
+            response_tokens = canonical_order_tokens(response)
+            is_ok = response_tokens is not None and any(
+                response_tokens == canonical_order_tokens(item) for item in correct["accepted"]
+            )
+        else:
+            normalized_response=normalized(response)
+            is_ok = any(normalized_response==normalized(item) for item in correct["accepted"])
+        return "correct" if is_ok else "incorrect"
     free_text_eligible = (
         type_value in FREE_TEXT_EXERCISE_TYPES
         or type_value in {"fill_in_blank", "listen_order"}
@@ -173,6 +207,18 @@ def grade(response,correct,exercise_type=None,*,script=None,orthography_strict=N
         correct_pairs = canonical_pairs(correct)
         if correct_pairs is not None:
             return "correct" if canonical_pairs(response) == correct_pairs else "incorrect"
+    if order_based:
+        # word_order/listen_order's `response` is always a list (WordOrder.
+        # tsx submits tile-click order), but hand-authored correct_response
+        # is very often authored as a plain joined string instead of a
+        # token list matching word_bank - canonicalize both shapes into
+        # comparable token lists rather than picking one shape as
+        # authoritative (same pattern as canonical_pairs() above for
+        # matching_pairs). Falls through to the generic comparison below
+        # only if canonicalization can't apply (neither string nor list).
+        correct_tokens = canonical_order_tokens(correct)
+        if correct_tokens is not None:
+            return "correct" if canonical_order_tokens(response) == correct_tokens else "incorrect"
     return "correct" if normalized(response)==normalized(correct) else "incorrect"
 def exercise_answer(db, user, e, response):
     feedback_meta = decode_feedback(e.feedback)

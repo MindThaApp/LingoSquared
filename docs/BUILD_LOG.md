@@ -8944,3 +8944,94 @@ validator); `docs/content/AUTHORING_GUIDE.md` (#17 addendum documenting
 the new automatic enforcement); this entry. Not committed, per this
 session's standing practice of leaving changes staged for whoever's
 coordinating commits.
+
+## Fixed a real, live-reported `word_order` grading bug: "Hallo, met Omar" (and ~84% of all word_order/listen_order exercises corpus-wide) graded incorrect regardless of tile order, 2026-07-07
+
+Ramin reported live: a `word_order` exercise's correct answer was "Hallo,
+met Omar" — he clicked the tiles in exactly that order and it was still
+marked wrong. Investigated by reading `frontend/src/components/exercises/
+WordOrder.tsx` (submits `chosen`, a list built purely from click order,
+never a string) and `grade()` in `backend/app/api/router.py`, then
+reproducing live rather than trusting a code-only read.
+
+**Root cause, precisely**: `nl.a1.unit22.lesson01.exercise04.
+order_answer_call` (`docs/content/overlays/en-nl/a1_unit22.yaml`) has
+`word_bank: [Omar, Hallo, met]` and `accepted_answers: [{value: "Hallo met
+Omar", status: correct}]` — a plain **string**, not a token list.
+`canonical_response()` (`scripts/compile_content.py`) passes this straight
+through unchanged into `Exercise.correct_response`. But `grade()`'s
+fallback comparison was `normalized(response)==normalized(correct)`, and
+`normalized()` returns a **list** for list input (`["hallo","met","omar"]`)
+but a single **string** for string input (`"hallo met omar"`) — a list can
+never equal a string in Python, so this exercise (and any word_order/
+listen_order exercise authored the same way) was mathematically
+ungradeable-correct, independent of tile order. The parent hypothesis
+(comma-attached tokens like "Hallo," causing a tokenization mismatch)
+turned out not to apply to this specific exercise — neither the word_bank
+nor the accepted string contains a comma at all; the comma in Ramin's
+report was from the exercise's *feedback* text ("The complete phrase is
+Hallo, met Omar."), shown after the wrong-grade, not the actual answer
+key. Same underlying bug class as the `matching_pairs`
+frontend-shape-vs-authored-shape mismatch fixed 2026-07-06
+(`canonical_pairs()`), just never caught for this type.
+
+**Confirmed systemic, not a one-off**: a full-corpus scan of every
+`word_order`/`listen_order` content_key's authored `accepted_answers`/
+`correct_response` shape found **146 of 173 (~84%)** authored as a plain
+joined string rather than a token list matching `word_bank` — every one of
+those was equally broken. Only the remaining 24 (and every Endless
+Practice-generated `word_order` item, since `derive_answer()`'s
+`ordered_slot_texts` kind in `app/practice/service.py` always produces a
+list) happened to already grade correctly, which is also why an earlier
+2026-07-06 investigation of a reported `word_order` bug ("could not
+reproduce") tested an exercise that happened to be list-shaped and missed
+this entirely — the bug is content-shape-dependent, not
+report-position-dependent.
+
+**Fix, in `backend/app/api/router.py`**: new `canonical_order_tokens()`
+canonicalizes either shape (space-joined string, split on whitespace after
+`normalized()`'s casefold/strip; or an explicit list, each token
+normalized) into a comparable token list — the same pattern as
+`canonical_pairs()`. `grade()` now uses it for `word_order`/`listen_order`
+in both the plain-answer path and the multi-answer-variant path
+(`is_multi_answer_response`, previously had the identical list-vs-string
+gap for any word_order exercise with more than one accepted phrasing —
+none exist in the corpus yet, but the code path was fixed proactively and
+covered by a test). Splitting on whitespace (rather than a separate
+punctuation-stripping step) means a hypothetical future punctuation-
+attached tile (e.g. "Hallo,") still compares correctly as long as both
+sides go through the same split — verified no such tile currently exists
+anywhere in `docs/content/realizations/` via a corpus-wide regex sweep.
+
+**Live-verified end-to-end, isolated stack** (`docker-compose.woqa.yml`/
+`.env.woqa`, api on fresh port 8110, db on 5500, both removed after
+verification — not the shared dev stack): fresh `alembic upgrade head` on
+a genuinely empty DB, compiled the full real `en-nl` course (all 23 units,
+`scripts/compile_content.py`'s `compile_import_request()`) and imported it
+via the real `/admin/content/import` endpoint (not a synthetic fixture),
+found the actual exercise row in Postgres (`word_bank: ["Omar","Hallo",
+"met"]`, `correct_response: "Hallo met Omar"`), then hit `/exercises/{id}/
+answer` as a real registered user: **pre-fix**, submitting `["Hallo","met",
+"Omar"]` (the exact reported correct order) returned `"result":
+"incorrect"` — reproduced precisely. **Post-fix**, the same request returns
+`"result": "correct", "xp_awarded": 10`; a genuinely wrong order
+(`["Omar","Hallo","met"]` and `["met","Omar","Hallo"]`) still correctly
+returns `"incorrect"`. Also unit-tested `grade()` directly inside the
+container for the list-shaped correct_response case (no regression) and
+the multi-answer order-based path.
+
+**New regression tests**: `backend/tests/test_word_order_grading.py` (3
+tests — string-shaped correct_response grades correct/incorrect
+appropriately, and a list-shaped correct_response still grades correctly,
+guarding the other direction). Full backend suite green: 105 passed (102
+pre-existing + 3 new), run against the isolated stack's own test DB via
+the standard isolated dropdb/createdb recipe.
+
+Files touched: `backend/app/api/router.py` (the fix), `backend/tests/
+test_word_order_grading.py` (new regression tests), this entry. Not
+committed, per this session's standing practice of leaving changes staged
+for whoever's coordinating commits. Content itself (the 146 string-shaped
+`accepted_answers` across the corpus) was deliberately left as-is — the
+fix makes both authored shapes grade correctly, so there's no need to
+rewrite ~146 overlay files just to normalize a shape the grader now
+handles either way.
