@@ -9,9 +9,9 @@ generation_provenance:
   authoring_system: claude
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: codex
-  notes: "Authored alongside the new fa a1_unit10_dates.yaml realization (numbered unit10, not unit09, to avoid a real numbering collision with a separate concurrent session's fa/a1_unit09_time.yaml discovered mid-authoring). Follows the established en-fa overlay convention from unit08 (English instruction/correct_option/distractors/feedback, target-language Farsi accepted_answers, English glosses for recognize_* multiple_choice items to avoid the same-string visual-matching anti-pattern already fixed in units 07/08). Needs the standard fresh-context review before shipping."
+  status: reviewed
+  required_next_reviewer: null
+  notes: "Authored alongside the new fa a1_unit10_dates.yaml realization (numbered unit10, not unit09, to avoid a real numbering collision with a separate concurrent session's fa/a1_unit09_time.yaml discovered mid-authoring). Follows the established en-fa overlay convention from unit08 (English instruction/correct_option/distractors/feedback, target-language Farsi accepted_answers, English glosses for recognize_* multiple_choice items to avoid the same-string visual-matching anti-pattern already fixed in units 07/08). Needs the standard fresh-context review before shipping. AUDIO-ACCESSIBILITY RETROFIT 2026-07-06 (§14): converted the 7 listen_type/bare-listen_select exercises to match the realization's multiple_choice/translation conversion. MATCHING_PAIRS SCALE (§16) CHECK: all matching_pairs already reasonably sized -- no changes needed. Re-verified 0 remaining §14 violations, both validate and compile clean after the retrofit. FRESH-CONTEXT REVIEW 2026-07-06 (§9, zero prior access, sibling prs overlay never opened): cross-checked this overlay against its realization for content_key parity (clean, 1:1 both directions), accepted-answer correctness (every exercise has a status:correct answer, confirmed via a real compile not just validate), and an actual Python tokenizer script verifying every accepted_answers/pairs/word_bank value against cumulative introduced_tokens. Fixed to match the realization's corresponding fixes: lesson02.exercise06 (calendar_check) changed from an open-ended retype-the-sentence task that contradicted its own 'confirm this sentence is correct' instruction to a real closed yes/no question; lesson06's meeting date changed from Tuesday-the-7th to Tuesday-the-8th of Ordibehesht throughout (teach.haftom renamed teach.hashtom, exercises 03/05/07 and their feedback) to resolve a real date-arithmetic contradiction against lesson04's Thursday-the-10th; lesson06.exercise01's instruction changed from 'listen' to 'read' to match the realization's new visible transcript; lesson06.exercise03's جمعه gloss simplified from untaught-morphology Farsi to plain English; added new lesson04/lesson06 teaching entries for تاریخ and و to cover two previously-untaught tested tokens; added the missing §12 comma-joined variant to exercise08 and period-joined variant to exercise06. Re-ran validate + compile: 0 errors/0 warnings, valid JSON output confirmed."
 
 course:
   title: "Farsi A1"
@@ -84,6 +84,10 @@ teaching:
     title: "Today is Thursday, the 10th of Ordibehesht."
     gloss: "Today is Thursday, the 10th of Ordibehesht."
     note: "امروز پنجشنبه، دهم اردیبهشته combines the day name, ordinal date, and month name in one sentence, using the colloquial -e contraction (اردیبهشته = اردیبهشت است)."
+  fa.a1.unit10.lesson04.teach.tarikh_word:
+    title: "Date"
+    gloss: "date"
+    note: "*تاریخ* means 'date' -- the general word for a calendar date, as in *تاریخ جلسه* (the meeting's date)."
 
   fa.a1.unit10.lesson05.teach.which_day_meeting:
     title: "What day is the meeting?"
@@ -94,10 +98,10 @@ teaching:
     gloss: "What date of Ordibehesht is Tuesday?"
     note: "سه‌شنبه چندم اردیبهشته؟ asks for the specific numeric date of a named day."
 
-  fa.a1.unit10.lesson06.teach.haftom:
-    title: "7th"
-    gloss: "7th"
-    note: "هفتم means the 7th (of the month)."
+  fa.a1.unit10.lesson06.teach.hashtom:
+    title: "8th"
+    gloss: "8th"
+    note: "*هشتم* means the 8th (of the month)."
   fa.a1.unit10.lesson06.teach.turn01:
     title: "Reza, what day is the meeting?"
     gloss: "Reza, what day is the meeting?"
@@ -111,8 +115,8 @@ teaching:
     gloss: "What date of Ordibehesht is Tuesday?"
     note: "Maryam follows up asking for the specific numeric date."
   fa.a1.unit10.lesson06.teach.turn04:
-    title: "Tuesday is the 7th of Ordibehesht."
-    gloss: "Tuesday is the 7th of Ordibehesht."
+    title: "Tuesday is the 8th of Ordibehesht."
+    gloss: "Tuesday is the 8th of Ordibehesht."
     note: "Reza gives the specific date."
   fa.a1.unit10.lesson06.teach.turn05:
     title: "Okay, good. How about Friday, do you have time?"
@@ -126,6 +130,10 @@ teaching:
     title: "No problem, I'll see you Tuesday."
     gloss: "No problem, I'll see you Tuesday."
     note: "مشکلی نیست (no problem) politely accepts Reza's decline, and می‌بینمت means 'I'll see you' -- confirming Tuesday as the meeting day, consistent with turns 02 and 04."
+  fa.a1.unit10.lesson06.teach.va_and:
+    title: "And (joining two questions)"
+    gloss: "and"
+    note: "*و* means 'and' -- it can join two related questions into one, e.g. combining 'What day is the meeting?' and 'what date of Ordibehesht is it?' into a single question."
 
 exercises:
   fa.a1.unit10.lesson01.exercise01.recognize_shanbe:
@@ -140,12 +148,12 @@ exercises:
     distractors: ["Saturday", "Sunday", "Wednesday"]
     accepted_answers: [{value: "Friday", status: correct}]
     feedback: "جمعه means Friday, the traditional weekly day off."
-  fa.a1.unit10.lesson01.exercise03.listen_days:
-    instruction: "Listen and select the day you hear."
+  fa.a1.unit10.lesson01.exercise03.recognize_doshanbe_reading:
+    instruction: "What day does this word mean?"
     correct_option: "Monday"
     distractors: ["Saturday", "Friday", "Wednesday"]
     accepted_answers: [{value: "Monday", status: correct}]
-    feedback: "The recording lists the days of the week; دوشنبه means Monday."
+    feedback: "دوشنبه means Monday."
   fa.a1.unit10.lesson01.exercise04.match_days:
     instruction: "Match each Persian day with its English meaning."
     accepted_answers:
@@ -176,12 +184,12 @@ exercises:
     distractors: ["Farvardin (the first month)", "Ordibehesht (the second month)", "Saturday"]
     accepted_answers: [{value: "Khordad (the third month)", status: correct}]
     feedback: "خرداد is the third month."
-  fa.a1.unit10.lesson02.exercise03.listen_months:
-    instruction: "Listen and select the month you hear."
+  fa.a1.unit10.lesson02.exercise03.recognize_ordibehesht_reading:
+    instruction: "Which month does this word mean?"
     correct_option: "Ordibehesht"
     distractors: ["Farvardin", "Khordad"]
     accepted_answers: [{value: "Ordibehesht", status: correct}]
-    feedback: "The recording lists the first three months; اردیبهشت means Ordibehesht."
+    feedback: "اردیبهشت means Ordibehesht."
   fa.a1.unit10.lesson02.exercise04.match_months:
     instruction: "Match each Persian word with its meaning."
     accepted_answers:
@@ -193,8 +201,10 @@ exercises:
     feedback: "فروردین، اردیبهشت، خرداد are the first three months, in order."
   fa.a1.unit10.lesson02.exercise06.calendar_check:
     instruction: "Confirm this sentence is correct: Iran uses the Solar Hijri calendar."
-    accepted_answers: [{value: "ایران از تقویم هجری شمسی استفاده می‌کنه", status: correct}]
-    feedback: "This sentence correctly states that Iran uses the Solar Hijri calendar."
+    correct_option: "Yes"
+    distractors: ["No"]
+    accepted_answers: [{value: "Yes", status: correct}]
+    feedback: "Yes -- *ایران از تقویم هجری شمسی استفاده می‌کنه* correctly states that Iran uses the Solar Hijri calendar."
   fa.a1.unit10.lesson02.exercise07.write_farvardin:
     instruction: "Write the name of the first month of the Iranian solar calendar."
     accepted_answers: [{value: فروردین, status: correct}]
@@ -212,12 +222,12 @@ exercises:
     distractors: ["tomorrow", "yesterday", "Friday"]
     accepted_answers: [{value: "today", status: correct}]
     feedback: "امروز means today."
-  fa.a1.unit10.lesson03.exercise03.listen_what_day:
-    instruction: "Listen and select the question you hear."
-    correct_option: "امروز چندشنبه‌ست؟"
-    distractors: ["جلسه کدوم روزه؟", "سه‌شنبه چندم اردیبهشته؟"]
-    accepted_answers: [{value: "امروز چندشنبه‌ست؟", status: correct}]
-    feedback: "The speaker asks امروز چندشنبه‌ست؟"
+  fa.a1.unit10.lesson03.exercise03.recognize_what_day_reading:
+    instruction: "What does this question ask?"
+    correct_option: "What day is today?"
+    distractors: ["What day is the meeting?", "What date of Ordibehesht is Tuesday?"]
+    accepted_answers: [{value: "What day is today?", status: correct}]
+    feedback: "امروز چندشنبه‌ست؟ asks what day today is."
   fa.a1.unit10.lesson03.exercise04.match_today_phrases:
     instruction: "Match each phrase or word with its meaning."
     accepted_answers:
@@ -252,12 +262,12 @@ exercises:
     distractors: ["7th", "5th", "1st"]
     accepted_answers: [{value: "10th", status: correct}]
     feedback: "دهم means 10th."
-  fa.a1.unit10.lesson04.exercise03.listen_full_date:
-    instruction: "Listen and select the sentence you hear."
-    correct_option: "امروز پنجشنبه، دهم اردیبهشته"
-    distractors: ["سه‌شنبه هفتم اردیبهشته", "جلسه کدوم روزه؟"]
-    accepted_answers: [{value: "امروز پنجشنبه، دهم اردیبهشته", status: correct}]
-    feedback: "The speaker states امروز پنجشنبه، دهم اردیبهشته."
+  fa.a1.unit10.lesson04.exercise03.recognize_full_date_reading:
+    instruction: "What does this sentence mean?"
+    correct_option: "Today is Thursday, the 10th of Ordibehesht."
+    distractors: ["Tuesday is the 7th of Ordibehesht.", "What day is the meeting?"]
+    accepted_answers: [{value: "Today is Thursday, the 10th of Ordibehesht.", status: correct}]
+    feedback: "امروز پنجشنبه، دهم اردیبهشته means today is Thursday, the 10th of Ordibehesht."
   fa.a1.unit10.lesson04.exercise04.match_date_parts:
     instruction: "Match each Persian word with its meaning."
     accepted_answers:
@@ -267,12 +277,12 @@ exercises:
     instruction: "Arrange the words to state today's full date."
     accepted_answers: [{value: [امروز, پنجشنبه, دهم, اردیبهشته], status: correct}]
     feedback: "امروز پنجشنبه، دهم اردیبهشته states the full date in order."
-  fa.a1.unit10.lesson04.exercise06.listen_type_date:
-    instruction: "Listen and type what you hear."
+  fa.a1.unit10.lesson04.exercise06.translate_full_date:
+    instruction: "Translate into Farsi: Today is Thursday, the 10th of Ordibehesht."
     accepted_answers:
       - {value: "امروز پنجشنبه دهم اردیبهشته", status: correct}
       - {value: "امروز پنجشنبه، دهم اردیبهشته", status: correct}
-    feedback: "The recording says امروز پنجشنبه، دهم اردیبهشته."
+    feedback: "امروز پنجشنبه، دهم اردیبهشته means today is Thursday, the 10th of Ordibehesht."
   fa.a1.unit10.lesson04.exercise07.speak_give_date:
     instruction: "Someone asks what day it is today. Answer as if today is Thursday, the 10th of Ordibehesht."
     accepted_answers:
@@ -292,12 +302,12 @@ exercises:
     distractors: ["What day is the meeting?", "Today is Thursday, the 10th.", "I'm busy on Friday."]
     accepted_answers: [{value: "What date of Ordibehesht is Tuesday?", status: correct}]
     feedback: "سه‌شنبه چندم اردیبهشته؟ asks for the specific date of Tuesday."
-  fa.a1.unit10.lesson05.exercise03.listen_which_day:
-    instruction: "Listen and select the question you hear."
-    correct_option: "جلسه کدوم روزه؟"
-    distractors: ["امروز چندشنبه‌ست؟", "سه‌شنبه چندم اردیبهشته؟"]
-    accepted_answers: [{value: "جلسه کدوم روزه؟", status: correct}]
-    feedback: "The speaker asks جلسه کدوم روزه؟"
+  fa.a1.unit10.lesson05.exercise03.recognize_which_day_reading:
+    instruction: "What does this question ask?"
+    correct_option: "What day is the meeting?"
+    distractors: ["What day is today?", "What date of Ordibehesht is Tuesday?"]
+    accepted_answers: [{value: "What day is the meeting?", status: correct}]
+    feedback: "جلسه کدوم روزه؟ asks what day the meeting is."
   fa.a1.unit10.lesson05.exercise04.match_future_date_phrases:
     instruction: "Match each phrase or word with its meaning."
     accepted_answers:
@@ -321,11 +331,11 @@ exercises:
     feedback: "جلسه کدوم روزه؟ correctly asks the question."
 
   fa.a1.unit10.lesson06.exercise01.listen_context:
-    instruction: "Listen to the conversation. What day do Maryam and Reza agree to meet?"
+    instruction: "Read the conversation below. What day do Maryam and Reza agree to meet?"
     correct_option: "Tuesday"
     distractors: ["Friday", "Monday", "Wednesday"]
     accepted_answers: [{value: "Tuesday", status: correct}]
-    feedback: "They agree the meeting is on سه‌شنبه (Tuesday), the 7th of Ordibehesht."
+    feedback: "They agree the meeting is on *سه‌شنبه* (Tuesday), the 8th of Ordibehesht."
   fa.a1.unit10.lesson06.exercise02.recognize_meeting_day:
     instruction: "What day is the meeting?"
     correct_option: "سه‌شنبه"
@@ -335,33 +345,35 @@ exercises:
   fa.a1.unit10.lesson06.exercise03.match_dialogue_facts:
     instruction: "Match each topic or word with the correct fact or meaning."
     accepted_answers:
-      - {value: {"تاریخ جلسه": "سه‌شنبه، هفتم اردیبهشت", جمعه: "رضا سرش شلوغه", شنبه: Saturday, یکشنبه: Sunday, دوشنبه: Monday, چهارشنبه: Wednesday, پنجشنبه: Thursday, فروردین: Farvardin, خرداد: Khordad}, status: correct}
-    feedback: "The meeting date is سه‌شنبه، هفتم اردیبهشت (Tuesday, the 7th of Ordibehesht), and Reza is busy on جمعه (Friday) -- the rest reviews the unit's days and months."
+      - {value: {"تاریخ جلسه": "سه‌شنبه، هشتم اردیبهشت", جمعه: "Reza is busy.", شنبه: Saturday, یکشنبه: Sunday, دوشنبه: Monday, چهارشنبه: Wednesday, پنجشنبه: Thursday, فروردین: Farvardin, خرداد: Khordad}, status: correct}
+    feedback: "The meeting date is *سه‌شنبه، هشتم اردیبهشت* (Tuesday, the 8th of Ordibehesht), and Reza is busy on *جمعه* (Friday) -- the rest reviews the unit's days and months."
   fa.a1.unit10.lesson06.exercise04.order_meeting_confirmation:
     instruction: "Arrange the words for Maryam's closing confirmation."
     accepted_answers: [{value: [مشکلی, نیست, سه‌شنبه, می‌بینمت], status: correct}]
     feedback: "مشکلی نیست، سه‌شنبه می‌بینمت means 'No problem, I'll see you Tuesday.'"
-  fa.a1.unit10.lesson06.exercise05.listen_meeting_date:
-    instruction: "Listen and type the meeting's full date."
+  fa.a1.unit10.lesson06.exercise05.translate_meeting_date:
+    instruction: "Translate into Farsi: Tuesday is the 8th of Ordibehesht."
     accepted_answers:
-      - {value: "سه‌شنبه هفتم اردیبهشته", status: correct}
-      - {value: "سه‌شنبه، هفتم اردیبهشته", status: correct}
-    feedback: "The recording confirms سه‌شنبه هفتم اردیبهشته (Tuesday is the 7th of Ordibehesht)."
+      - {value: "سه‌شنبه هشتم اردیبهشته", status: correct}
+      - {value: "سه‌شنبه، هشتم اردیبهشته", status: correct}
+    feedback: "*سه‌شنبه هشتم اردیبهشته* means Tuesday is the 8th of Ordibehesht."
   fa.a1.unit10.lesson06.exercise06.dialogue_response_decline_friday:
     instruction: "Maryam asks if you have time on Friday. Decline politely, saying you're busy on Friday."
     accepted_answers:
       - {value: "نه، جمعه سرم شلوغه", status: correct}
       - {value: "نه جمعه سرم شلوغه", status: correct}
-    feedback: "نه، جمعه سرم شلوغه declines and states you're busy on Friday."
+      - {value: "نه. جمعه سرم شلوغه.", status: correct}
+    feedback: "*نه، جمعه سرم شلوغه* declines and states you're busy on Friday."
   fa.a1.unit10.lesson06.exercise07.write_meeting_summary:
     instruction: "Write a short summary stating the meeting's day and date."
     accepted_answers:
-      - {value: "جلسه سه‌شنبه هفتم اردیبهشته", status: correct}
-      - {value: "جلسه سه‌شنبه، هفتم اردیبهشته", status: correct}
-    feedback: "جلسه سه‌شنبه هفتم اردیبهشته summarizes the meeting's date."
+      - {value: "جلسه سه‌شنبه هشتم اردیبهشته", status: correct}
+      - {value: "جلسه سه‌شنبه، هشتم اردیبهشته", status: correct}
+    feedback: "*جلسه سه‌شنبه هشتم اردیبهشته* summarizes the meeting's date."
   fa.a1.unit10.lesson06.exercise08.speak_full_date_exchange:
     instruction: "Ask a colleague both what day and what date (of Ordibehesht) the meeting is."
     accepted_answers:
       - {value: "جلسه کدوم روزه؟ چندم اردیبهشته؟", status: correct}
+      - {value: "جلسه کدوم روزه، چندم اردیبهشته؟", status: correct}
       - {value: "جلسه کدوم روزه و چندم اردیبهشته؟", status: correct}
-    feedback: "This combines both questions taught in this unit -- what day, and what date of Ordibehesht -- joining them with a period or with و are equally natural."
+    feedback: "This combines both questions taught in this unit -- what day, and what date of Ordibehesht -- joining them with a period, a comma, or with *و* are equally natural."

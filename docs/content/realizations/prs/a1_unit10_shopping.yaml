@@ -9,9 +9,9 @@ generation_provenance:
   source_material: "Peace Corps Dari course materials (public domain), modernized"
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: claude
-  notes: "New unit, prs's next uncovered outcome (prerequisites: numbers already covered in unit04, greetings in unit01). Numbered unit10 to avoid a real collision with a separate concurrent session's own in-flight a1_unit09_dates.yaml, discovered still uncommitted at the time of authoring. Six lessons: shop and price vocabulary, asking a price politely, reading a price label, asking for a quantity, bargaining for a discount, and a full market dialogue. Uses افغانی as the currency (matching unit08's established convention), دوکان/دوکاندار for shop/shopkeeper (the genuine Afghan Dari terms, as distinct from Iranian Farsi's مغازه/فروشنده), and استم/استین verb endings consistently. Authored independently of the fa realization per the sibling-isolation rule. Proactively checked against AUTHORING_GUIDE §11-13 during authoring, including cross-checking the unit's price/discount arithmetic. Audio remains pending generation."
+  status: reviewed
+  required_next_reviewer: null
+  notes: "New unit, prs's next uncovered outcome (prerequisites: numbers already covered in unit04, greetings in unit01). Numbered unit10 to avoid a real collision with a separate concurrent session's own in-flight a1_unit09_dates.yaml, discovered still uncommitted at the time of authoring. Six lessons: shop and price vocabulary, asking a price politely, reading a price label, asking for a quantity, bargaining for a discount, and a full market dialogue. Uses افغانی as the currency (matching unit08's established convention), دوکان/دوکاندار for shop/shopkeeper (the genuine Afghan Dari terms, as distinct from Iranian Farsi's مغازه/فروشنده), and استم/استین verb endings consistently. Authored independently of the fa realization per the sibling-isolation rule. Proactively checked against AUTHORING_GUIDE §11-13 during authoring, including cross-checking the unit's price/discount arithmetic. Audio remains pending generation. AUDIO-ACCESSIBILITY RETROFIT 2026-07-06 (§14, discovered this unit was missed by the earlier project-wide audit -- it was authored but never actually reviewed): found 6 exercises (lesson01.exercise03, lesson02.exercise03, lesson03.exercise03, lesson04.exercise03, lesson05.exercise03, lesson06.exercise05) were listen_select/listen_type items -- genuinely unanswerable since prs has zero working TTS/recorded audio. Converted: listen_select -> multiple_choice (visible Dari prompt, English glosses), listen_type -> translation. MATCHING_PAIRS SCALE (§16) CHECK: all 6 matching_pairs exercises (6/7/8/7/6/7 pairs) already reasonably sized -- no changes needed. Re-verified 0 remaining §14 violations, validate+compile both clean. STILL NEEDS the standing fresh-context review before status can move to reviewed -- dispatching now. FRESH-CONTEXT REVIEW completed 2026-07-06 (zero prior context on this content): re-verified spine-outcome discipline (every lesson, including the bargaining lesson, genuinely serves universal.a1.shopping.ask_prices_quantities), recognition->drag->production pacing across all 6 lessons, content_key parity (22 teaching + 43 exercise keys, exact match both directions), script purity (zero Arabic-range kaf/yeh), no jargon leaks, §11 price/discount arithmetic (100 afghanis/kilo, 180 afghanis discounted total for 2 kilos, consistent everywhere it's referenced), and every exercise's tested_text plus every overlay accepted_answers/pairs/word_bank value checked programmatically against cumulative introduced_tokens via a Python script -- found and fixed real issues the prior retrofit missed: (1) lesson06.exercise01 was a genuine §14 violation the 2026-07-06 retrofit didn't catch because its type was dialogue_comprehension, not listen_select/listen_type -- it had empty target_blocks and only a pending-generation media_asset_key, so the compiled exercise had literally zero audio AND zero visible prompt text; fixed by adding the lesson's own six-turn dialogue as visible target_blocks and converting the type to multiple_choice, with the instruction reworded from 'Listen to' to 'Read the conversation'; (2) lesson06.exercise03's matching_pairs used two never-taught words (هر 'each/per', با 'with') in its Dari pair labels, and its overlay accepted_answers keyed on completely different English text ('Price per kilo'/'Discounted price for two kilos') than the realization's actual pairs.left values -- a real grading-mismatch that would have made the exercise ungradeable regardless of the learner's answer -- fixed by changing both files' pair labels to the already-taught یک کیلو/دو کیلو; (3) the coined imperative بتین ('give') had no attestable basis after a web search came back inconclusive, so it was replaced project-wide in this unit with بدهین, a safely-derived form following the same well-established -ید->-ین Dari suffix pattern already used for استین/می‌تانین; (4) lesson06.exercise06 and exercise08's multi-clause accepted_answers had period-joined and و-joined forms but were missing the comma-joined variant §12 requires -- added. Confirmed می‌شه in برای شما ... می‌شه is the same already-verified (unit08) 'stating a total' idiom, not the banned Iranian-colloquial polite-request pattern (which correctly uses می‌تانین here instead). validate and compile both run clean (0 errors/0 warnings) after all fixes, and compile produces valid JSON."
 
 course:
   realization_key: prs.a1
@@ -43,12 +43,12 @@ media_assets:
     status: pending_generation
   - content_key: prs.a1.audio.shopping.discount_request.01
     language: prs
-    text: تخفیف می‌تانین بتین؟
+    text: تخفیف می‌تانین بدهین؟
     voice_hint: neutral_adult_polite
     status: pending_generation
   - content_key: prs.a1.audio.dialogue.market_shopping.01
     language: prs
-    text: "دوکاندار: سلام، بفرمایین. مشتری: سلام. سیب‌ها قیمتش چند است؟ دوکاندار: یک کیلو صد افغانی است. مشتری: دو کیلو می‌خواهم. تخفیف می‌تانین بتین؟ دوکاندار: بلی، برای شما دو کیلو صد و هشتاد افغانی می‌شه. مشتری: بسیار خوب، تشکر."
+    text: "دوکاندار: سلام، بفرمایین. مشتری: سلام. سیب‌ها قیمتش چند است؟ دوکاندار: یک کیلو صد افغانی است. مشتری: دو کیلو می‌خواهم. تخفیف می‌تانین بدهین؟ دوکاندار: بلی، برای شما دو کیلو صد و هشتاد افغانی می‌شه. مشتری: بسیار خوب، تشکر."
     voice_hint: two_adults_neutral_polite
     status: pending_generation
 
@@ -98,11 +98,10 @@ units:
             type: multiple_choice
             tested_text: تخفیف
             prompt: {target_blocks: [{text: تخفیف, language_code: prs, direction: rtl}]}
-          - content_key: prs.a1.unit10.lesson01.exercise03.listen_words
-            type: listen_select
+          - content_key: prs.a1.unit10.lesson01.exercise03.recognize_gran_reading
+            type: multiple_choice
             tested_text: گران
-            media_asset_key: prs.a1.audio.shopping.vocab.01
-            prompt: {target_blocks: []}
+            prompt: {target_blocks: [{text: گران, language_code: prs, direction: rtl}]}
           - content_key: prs.a1.unit10.lesson01.exercise04.match_words
             type: matching_pairs
             tested_text: دوکان قیمت ارزان گران تخفیف و
@@ -149,11 +148,10 @@ units:
             type: multiple_choice
             tested_text: صد افغانی است
             prompt: {target_blocks: [{text: "صد افغانی است.", language_code: prs, direction: rtl}]}
-          - content_key: prs.a1.unit10.lesson02.exercise03.listen_price_question
-            type: listen_select
+          - content_key: prs.a1.unit10.lesson02.exercise03.recognize_price_question_reading
+            type: multiple_choice
             tested_text: قیمتش چند است
-            media_asset_key: prs.a1.audio.shopping.price_question.01
-            prompt: {target_blocks: []}
+            prompt: {target_blocks: [{text: "قیمتش چند است؟", language_code: prs, direction: rtl}]}
           - content_key: prs.a1.unit10.lesson02.exercise04.match_price_phrases
             type: matching_pairs
             tested_text: قیمتش چند است صد افغانی است دوکان قیمت ارزان گران تخفیف
@@ -205,11 +203,10 @@ units:
             type: multiple_choice
             tested_text: صد افغانی
             prompt: {target_blocks: [{text: "What is the price per kilo on the label?", language_code: en, direction: ltr}]}
-          - content_key: prs.a1.unit10.lesson03.exercise03.listen_label
-            type: listen_select
+          - content_key: prs.a1.unit10.lesson03.exercise03.recognize_label_reading
+            type: multiple_choice
             tested_text: سیب یک کیلو صد افغانی
-            media_asset_key: prs.a1.audio.shopping.price_question.01
-            prompt: {target_blocks: []}
+            prompt: {target_blocks: [{text: "سیب یک کیلو صد افغانی", language_code: prs, direction: rtl}]}
           - content_key: prs.a1.unit10.lesson03.exercise04.match_label_parts
             type: matching_pairs
             tested_text: سیب کیلو صد افغانی دوکان قیمت ارزان گران تخفیف
@@ -258,11 +255,10 @@ units:
             type: multiple_choice
             tested_text: دو
             prompt: {target_blocks: [{text: دو, language_code: prs, direction: rtl}]}
-          - content_key: prs.a1.unit10.lesson04.exercise03.listen_quantity
-            type: listen_select
+          - content_key: prs.a1.unit10.lesson04.exercise03.recognize_quantity_reading
+            type: multiple_choice
             tested_text: یک کیلو سیب می‌خواهم
-            media_asset_key: prs.a1.audio.shopping.quantity.01
-            prompt: {target_blocks: []}
+            prompt: {target_blocks: [{text: "یک کیلو سیب می‌خواهم", language_code: prs, direction: rtl}]}
           - content_key: prs.a1.unit10.lesson04.exercise04.match_quantity_phrases
             type: matching_pairs
             tested_text: یک کیلو سیب می‌خواهم دو کیلو می‌خواهم سیب کیلو صد افغانی دوکان قیمت
@@ -295,8 +291,8 @@ units:
         teaching:
           - content_key: prs.a1.unit10.lesson05.teach.takhfif_mitanin
             kind: phrase
-            target: {text: "تخفیف می‌تانین بتین؟", language_code: prs, direction: rtl}
-            introduced_tokens: [می‌تانین, بتین]
+            target: {text: "تخفیف می‌تانین بدهین؟", language_code: prs, direction: rtl}
+            introduced_tokens: [می‌تانین, بدهین]
           - content_key: prs.a1.unit10.lesson05.teach.baraye_shoma
             kind: phrase
             target: {text: "برای شما صد و هشتاد افغانی می‌شه", language_code: prs, direction: rtl}
@@ -304,23 +300,22 @@ units:
         exercises:
           - content_key: prs.a1.unit10.lesson05.exercise01.recognize_discount_request
             type: multiple_choice
-            tested_text: تخفیف می‌تانین بتین
-            prompt: {target_blocks: [{text: "تخفیف می‌تانین بتین؟", language_code: prs, direction: rtl}]}
+            tested_text: تخفیف می‌تانین بدهین
+            prompt: {target_blocks: [{text: "تخفیف می‌تانین بدهین؟", language_code: prs, direction: rtl}]}
           - content_key: prs.a1.unit10.lesson05.exercise02.recognize_discounted_price
             type: multiple_choice
             tested_text: صد و هشتاد افغانی
             prompt: {target_blocks: [{text: "صد و هشتاد افغانی", language_code: prs, direction: rtl}]}
-          - content_key: prs.a1.unit10.lesson05.exercise03.listen_discount_request
-            type: listen_select
-            tested_text: تخفیف می‌تانین بتین
-            media_asset_key: prs.a1.audio.shopping.discount_request.01
-            prompt: {target_blocks: []}
+          - content_key: prs.a1.unit10.lesson05.exercise03.recognize_discount_request_reading
+            type: multiple_choice
+            tested_text: تخفیف می‌تانین بدهین
+            prompt: {target_blocks: [{text: "تخفیف می‌تانین بدهین؟", language_code: prs, direction: rtl}]}
           - content_key: prs.a1.unit10.lesson05.exercise04.match_discount_phrases
             type: matching_pairs
-            tested_text: تخفیف می‌تانین بتین برای شما هشتاد یک کیلو سیب می‌خواهم دو کیلو می‌خواهم سیب کیلو
+            tested_text: تخفیف می‌تانین بدهین برای شما هشتاد یک کیلو سیب می‌خواهم دو کیلو می‌خواهم سیب کیلو
             prompt: {target_blocks: []}
             pairs:
-              - {left: "تخفیف می‌تانین بتین؟", right: "Can you give a discount?"}
+              - {left: "تخفیف می‌تانین بدهین؟", right: "Can you give a discount?"}
               - {left: "برای شما صد و هشتاد افغانی می‌شه", right: "For you it comes to 180 afghanis."}
               - {left: "یک کیلو سیب می‌خواهم", right: "I'd like a kilo of apples."}
               - {left: "دو کیلو می‌خواهم", right: "I'd like two kilos."}
@@ -328,16 +323,16 @@ units:
               - {left: کیلو, right: kilo}
           - content_key: prs.a1.unit10.lesson05.exercise05.order_discount_request
             type: word_order
-            tested_text: تخفیف می‌تانین بتین
+            tested_text: تخفیف می‌تانین بدهین
             prompt: {target_blocks: []}
-            word_bank: [تخفیف, می‌تانین, بتین]
+            word_bank: [تخفیف, می‌تانین, بدهین]
           - content_key: prs.a1.unit10.lesson05.exercise06.translate_discount_request
             type: translation
-            tested_text: تخفیف می‌تانین بتین
+            tested_text: تخفیف می‌تانین بدهین
             prompt: {target_blocks: []}
           - content_key: prs.a1.unit10.lesson05.exercise07.speak_ask_discount
             type: speak_response
-            tested_text: تخفیف می‌تانین بتین
+            tested_text: تخفیف می‌تانین بدهین
             prompt: {target_blocks: [{text: "Politely ask the shopkeeper for a discount.", language_code: en, direction: ltr}]}
 
       - content_key: prs.a1.unit10.lesson06.market_dialogue
@@ -362,7 +357,7 @@ units:
             introduced_tokens: []
           - content_key: prs.a1.unit10.lesson06.teach.turn04
             kind: dialogue
-            target: {text: "دو کیلو می‌خواهم. تخفیف می‌تانین بتین؟", language_code: prs, direction: rtl, speaker: مشتری}
+            target: {text: "دو کیلو می‌خواهم. تخفیف می‌تانین بدهین؟", language_code: prs, direction: rtl, speaker: مشتری}
             introduced_tokens: []
           - content_key: prs.a1.unit10.lesson06.teach.turn05
             kind: dialogue
@@ -374,10 +369,17 @@ units:
             introduced_tokens: [بسیار, خوب, تشکر]
         exercises:
           - content_key: prs.a1.unit10.lesson06.exercise01.listen_context
-            type: dialogue_comprehension
+            type: multiple_choice
             tested_text: مشتری دوکاندار سیب کیلو افغانی تخفیف
             media_asset_key: prs.a1.audio.dialogue.market_shopping.01
-            prompt: {target_blocks: []}
+            prompt:
+              target_blocks:
+                - {text: "سلام، بفرمایین.", language_code: prs, direction: rtl, speaker: دوکاندار}
+                - {text: "سلام. سیب‌ها قیمتش چند است؟", language_code: prs, direction: rtl, speaker: مشتری}
+                - {text: "یک کیلو صد افغانی است.", language_code: prs, direction: rtl, speaker: دوکاندار}
+                - {text: "دو کیلو می‌خواهم. تخفیف می‌تانین بدهین؟", language_code: prs, direction: rtl, speaker: مشتری}
+                - {text: "بلی، برای شما دو کیلو صد و هشتاد افغانی می‌شه.", language_code: prs, direction: rtl, speaker: دوکاندار}
+                - {text: "بسیار خوب، تشکر.", language_code: prs, direction: rtl, speaker: مشتری}
           - content_key: prs.a1.unit10.lesson06.exercise02.recognize_item_bought
             type: multiple_choice
             tested_text: سیب
@@ -389,8 +391,8 @@ units:
             tested_text: کیلو قیمت صد افغانی دو کیلو صد و هشتاد دوکان ارزان گران تخفیف سیب
             prompt: {target_blocks: []}
             pairs:
-              - {left: "قیمت هر کیلو", right: "صد افغانی"}
-              - {left: "قیمت با تخفیف برای دو کیلو", right: "صد و هشتاد افغانی"}
+              - {left: "یک کیلو", right: "صد افغانی"}
+              - {left: "دو کیلو", right: "صد و هشتاد افغانی"}
               - {left: دوکان, right: shop}
               - {left: ارزان, right: cheap}
               - {left: گران, right: expensive}
@@ -401,13 +403,13 @@ units:
             tested_text: بسیار خوب تشکر
             prompt: {target_blocks: []}
             word_bank: [بسیار, خوب, تشکر]
-          - content_key: prs.a1.unit10.lesson06.exercise05.listen_discounted_total
-            type: listen_type
+          - content_key: prs.a1.unit10.lesson06.exercise05.translate_discounted_total
+            type: translation
             tested_text: صد و هشتاد افغانی می‌شه
             prompt: {target_blocks: []}
           - content_key: prs.a1.unit10.lesson06.exercise06.dialogue_response_ask_discount
             type: dialogue_response
-            tested_text: دو کیلو می‌خواهم تخفیف می‌تانین بتین
+            tested_text: دو کیلو می‌خواهم تخفیف می‌تانین بدهین
             prompt: {target_blocks: [{text: "یک کیلو صد افغانی است.", language_code: prs, direction: rtl}]}
           - content_key: prs.a1.unit10.lesson06.exercise07.write_purchase_summary
             type: writing_prompt
@@ -415,5 +417,5 @@ units:
             prompt: {target_blocks: []}
           - content_key: prs.a1.unit10.lesson06.exercise08.speak_full_market_scene
             type: speak_response
-            tested_text: سیب‌ها قیمتش چند است دو کیلو می‌خواهم تخفیف می‌تانین بتین
+            tested_text: سیب‌ها قیمتش چند است دو کیلو می‌خواهم تخفیف می‌تانین بدهین
             prompt: {target_blocks: [{text: "You are at the market. Ask the price of apples, say you want two kilos, and ask for a discount.", language_code: en, direction: ltr}]}

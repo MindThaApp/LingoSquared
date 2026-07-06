@@ -39,6 +39,29 @@ review:
     is the bar, not a second confirmatory review). Audio remains pending
     generation.
 
+    AUDIO-ACCESSIBILITY RETROFIT 2026-07-06 (§14, project-wide audit):
+    found 13 exercises in this unit (lesson01.exercise03/08,
+    lesson02.exercise03/08/09, lesson03.exercise03/05,
+    lesson04.exercise03/06/07, lesson05.exercise03/06,
+    lesson06.exercise06) were listen_type/listen_order/bare-prompt
+    listen_select items -- genuinely unanswerable since fa/prs have zero
+    working TTS/recorded audio. Converted: listen_select ->
+    multiple_choice (visible Farsi prompt, English glosses for
+    single-item recognition; the number-sequence tests kept their full
+    sequence as the visible prompt, tested as one unit), listen_type ->
+    translation, listen_order -> word_order (English prompt describing
+    the target instead of audio). MATCHING_PAIRS SCALE RETROFIT (§16,
+    same day, Ramin's direct feedback): match_low/match_teens_low were
+    artificially capped well below what their own lesson had already
+    taught (lesson01 teaches all of 0-10, lesson02 teaches all of
+    11-90, but the matching exercises only tested small slices) --
+    expanded match_low 4->7 (0-6), match_high 4->5 (added عدد),
+    match_teens_low 4->7 (pooled some already-taught 0-10 numbers for
+    variety), match_teens_high 5->6, and match_tens 4->7 (30-90, all
+    already taught in the same lesson). Re-verified 0 remaining §14
+    violations via script, content_key parity intact, validate+compile
+    both clean after both retrofits.
+
 course:
   realization_key: fa.a1
   target_language_first: true
@@ -206,29 +229,32 @@ units:
             prompt:
               target_blocks:
                 - {text: "پنج", language_code: fa, direction: rtl}
-          - content_key: fa.a1.unit03.lesson01.exercise03.listen_select
-            type: listen_select
+          - content_key: fa.a1.unit03.lesson01.exercise03.recognize_zero_to_five_reading
+            type: multiple_choice
             tested_text: صفر یک دو سه چهار پنج
-            media_asset_key: fa.a1.audio.numbers_0_5.01
-            prompt: {target_blocks: []}
+            prompt: {target_blocks: [{text: "صفر، یک، دو، سه، چهار، پنج", language_code: fa, direction: rtl}]}
           - content_key: fa.a1.unit03.lesson01.exercise04.match_low
             type: matching_pairs
-            tested_text: صفر یک دو سه
+            tested_text: صفر یک دو سه چهار پنج شش
             prompt: {target_blocks: []}
             pairs:
               - {left: صفر, right: "0"}
               - {left: یک, right: "1"}
               - {left: دو, right: "2"}
               - {left: سه, right: "3"}
+              - {left: چهار, right: "4"}
+              - {left: پنج, right: "5"}
+              - {left: شش, right: "6"}
           - content_key: fa.a1.unit03.lesson01.exercise05.match_high
             type: matching_pairs
-            tested_text: هفت هشت نه ده
+            tested_text: هفت هشت نه ده عدد
             prompt: {target_blocks: []}
             pairs:
               - {left: هفت, right: "7"}
               - {left: هشت, right: "8"}
               - {left: نه, right: "9"}
               - {left: ده, right: "10"}
+              - {left: عدد, right: number}
           - content_key: fa.a1.unit03.lesson01.exercise06.order_ascending
             type: word_order
             tested_text: یک دو سه
@@ -243,10 +269,9 @@ units:
             prompt:
               target_blocks:
                 - {text: "۷ = ___", language_code: fa, direction: rtl}
-          - content_key: fa.a1.unit03.lesson01.exercise08.listen_type_nine
-            type: listen_type
+          - content_key: fa.a1.unit03.lesson01.exercise08.translate_nine
+            type: translation
             tested_text: نه
-            media_asset_key: fa.a1.audio.number_noh.01
             prompt: {target_blocks: []}
 
       - content_key: fa.a1.unit03.lesson02.eleven_to_ninety_nine
@@ -319,23 +344,25 @@ units:
             prompt:
               target_blocks:
                 - {text: "هجده", language_code: fa, direction: rtl}
-          - content_key: fa.a1.unit03.lesson02.exercise03.listen_teens
-            type: listen_select
+          - content_key: fa.a1.unit03.lesson02.exercise03.recognize_teens_reading
+            type: multiple_choice
             tested_text: یازده دوازده سیزده چهارده پانزده
-            media_asset_key: fa.a1.audio.teens_11_15.01
-            prompt: {target_blocks: []}
+            prompt: {target_blocks: [{text: "یازده، دوازده، سیزده، چهارده، پانزده", language_code: fa, direction: rtl}]}
           - content_key: fa.a1.unit03.lesson02.exercise04.match_teens_low
             type: matching_pairs
-            tested_text: یازده دوازده سیزده چهارده
+            tested_text: یازده دوازده سیزده چهارده صفر یک دو سه چهار پنج شش هفت هشت نه ده
             prompt: {target_blocks: []}
             pairs:
               - {left: یازده, right: "11"}
               - {left: دوازده, right: "12"}
               - {left: سیزده, right: "13"}
               - {left: چهارده, right: "14"}
+              - {left: صفر, right: "0"}
+              - {left: هفت, right: "7"}
+              - {left: ده, right: "10"}
           - content_key: fa.a1.unit03.lesson02.exercise05.match_teens_high
             type: matching_pairs
-            tested_text: پانزده شانزده هفده هجده نوزده
+            tested_text: پانزده شانزده هفده هجده نوزده بیست
             prompt: {target_blocks: []}
             pairs:
               - {left: پانزده, right: "15"}
@@ -343,15 +370,19 @@ units:
               - {left: هفده, right: "17"}
               - {left: هجده, right: "18"}
               - {left: نوزده, right: "19"}
+              - {left: بیست, right: "20"}
           - content_key: fa.a1.unit03.lesson02.exercise06.match_tens
             type: matching_pairs
-            tested_text: سی چهل پنجاه شصت
+            tested_text: سی چهل پنجاه شصت هفتاد هشتاد نود
             prompt: {target_blocks: []}
             pairs:
               - {left: سی, right: "30"}
               - {left: چهل, right: "40"}
               - {left: پنجاه, right: "50"}
               - {left: شصت, right: "60"}
+              - {left: هفتاد, right: "70"}
+              - {left: هشتاد, right: "80"}
+              - {left: نود, right: "90"}
           - content_key: fa.a1.unit03.lesson02.exercise07.order_combining
             type: word_order
             tested_text: بیست و پنج
@@ -359,16 +390,14 @@ units:
               target_blocks:
                 - {text: "Arrange the words for 25.", language_code: en, direction: ltr}
             word_bank: [پنج, بیست, و]
-          - content_key: fa.a1.unit03.lesson02.exercise08.listen_tens
-            type: listen_order
+          - content_key: fa.a1.unit03.lesson02.exercise08.order_tens
+            type: word_order
             tested_text: بیست سی چهل پنجاه شصت هفتاد هشتاد نود
-            media_asset_key: fa.a1.audio.tens_20_90.01
-            prompt: {target_blocks: []}
+            prompt: {target_blocks: [{text: "twenty, thirty, forty, fifty, sixty, seventy, eighty, ninety", language_code: en, direction: ltr}]}
             word_bank: [شصت, بیست, نود, چهل, هفتاد, سی, هشتاد, پنجاه]
-          - content_key: fa.a1.unit03.lesson02.exercise09.listen_type_25
-            type: listen_type
+          - content_key: fa.a1.unit03.lesson02.exercise09.translate_25
+            type: translation
             tested_text: بیست و پنج
-            media_asset_key: fa.a1.audio.bist_o_panj.01
             prompt: {target_blocks: []}
 
       - content_key: fa.a1.unit03.lesson03.phone_numbers
@@ -417,21 +446,19 @@ units:
             prompt:
               target_blocks:
                 - {text: "تلفن", language_code: fa, direction: rtl}
-          - content_key: fa.a1.unit03.lesson03.exercise03.listen_ask
-            type: listen_select
+          - content_key: fa.a1.unit03.lesson03.exercise03.recognize_ask_reading
+            type: multiple_choice
             tested_text: شماره تلفنتون چنده
-            media_asset_key: fa.a1.audio.ask_phone_number.polite.01
-            prompt: {target_blocks: []}
+            prompt: {target_blocks: [{text: "شماره تلفنتون چنده؟", language_code: fa, direction: rtl}]}
           - content_key: fa.a1.unit03.lesson03.exercise04.order_ask
             type: word_order
             tested_text: شماره تلفنتون چنده
             prompt: {target_blocks: []}
             word_bank: [چنده, شماره, تلفنتون]
-          - content_key: fa.a1.unit03.lesson03.exercise05.listen_read_digits
-            type: listen_order
+          - content_key: fa.a1.unit03.lesson03.exercise05.order_digits
+            type: word_order
             tested_text: صفر نه یک دو سه چهار پنج شش هفت هشت هشت
-            media_asset_key: fa.a1.audio.phone_number_read.01
-            prompt: {target_blocks: []}
+            prompt: {target_blocks: [{text: "0, 9, 1, 2, 3, 4, 5, 6, 7, 8, 8", language_code: en, direction: ltr}]}
             word_bank: [پنج, صفر, نه, دو, هشت, یک, هفت, سه, چهار, شش, هشت]
           - content_key: fa.a1.unit03.lesson03.exercise06.dialogue_give_number
             type: dialogue_response
@@ -509,11 +536,10 @@ units:
             prompt:
               target_blocks:
                 - {text: "دو تا سیب", language_code: fa, direction: rtl}
-          - content_key: fa.a1.unit03.lesson04.exercise03.listen_ask_age
-            type: listen_select
+          - content_key: fa.a1.unit03.lesson04.exercise03.recognize_ask_age_reading
+            type: multiple_choice
             tested_text: چند سالته
-            media_asset_key: fa.a1.audio.ask_age.informal.01
-            prompt: {target_blocks: []}
+            prompt: {target_blocks: [{text: "چند سالته؟", language_code: fa, direction: rtl}]}
           - content_key: fa.a1.unit03.lesson04.exercise04.order_age_answer
             type: word_order
             tested_text: من بیست و پنج سالمه
@@ -534,19 +560,15 @@ units:
               - {left: "شش تا سیب", right: "six apples"}
               - {left: "هفت تا کتاب", right: "seven books"}
               - {left: "هشت تا سیب", right: "eight apples"}
-          - content_key: fa.a1.unit03.lesson04.exercise06.listen_order_want
-            type: listen_order
+          - content_key: fa.a1.unit03.lesson04.exercise06.order_want
+            type: word_order
             tested_text: دو تا سیب می‌خوام
-            media_asset_key: fa.a1.audio.do_ta_sib.01
-            prompt: {target_blocks: []}
+            prompt: {target_blocks: [{text: "I'd like two apples.", language_code: en, direction: ltr}]}
             word_bank: [سیب, می‌خوام, دو, تا]
-          - content_key: fa.a1.unit03.lesson04.exercise07.listen_age_answer
-            type: listen_type
+          - content_key: fa.a1.unit03.lesson04.exercise07.translate_age_answer
+            type: translation
             tested_text: من بیست و پنج سالمه
-            media_asset_key: fa.a1.audio.man_bist_o_panj_salame.01
-            prompt:
-              target_blocks:
-                - {text: "Type the full Persian sentence you hear.", language_code: en, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: fa.a1.unit03.lesson04.exercise08.dialogue_answer_age
             type: dialogue_response
             tested_text: چند سالته سالمه
@@ -593,11 +615,10 @@ units:
             prompt:
               target_blocks:
                 - {text: "هزار", language_code: fa, direction: rtl}
-          - content_key: fa.a1.unit03.lesson05.exercise03.listen_ask_price
-            type: listen_select
+          - content_key: fa.a1.unit03.lesson05.exercise03.recognize_ask_price_reading
+            type: multiple_choice
             tested_text: این چنده
-            media_asset_key: fa.a1.audio.ask_price.01
-            prompt: {target_blocks: []}
+            prompt: {target_blocks: [{text: "این چنده؟", language_code: fa, direction: rtl}]}
           - content_key: fa.a1.unit03.lesson05.exercise04.match_prices
             type: matching_pairs
             tested_text: ده هزار تومن بیست هزار تومن سی هزار تومن چهل هزار تومن پنجاه هزار تومن شصت هزار تومن هفتاد هزار تومن هشتاد هزار تومن
@@ -618,13 +639,12 @@ units:
               target_blocks:
                 - {text: "Arrange: it's 30,000 toman.", language_code: en, direction: ltr}
             word_bank: [تومنه, سی, هزار]
-          - content_key: fa.a1.unit03.lesson05.exercise06.listen_type_price
-            type: listen_type
+          - content_key: fa.a1.unit03.lesson05.exercise06.translate_price_answer
+            type: translation
             tested_text: سی هزار تومنه
-            media_asset_key: fa.a1.audio.price_answer.01
             prompt:
               target_blocks:
-                - {text: "Type the Persian price you hear.", language_code: en, direction: ltr}
+                - {text: "It's 30,000 toman.", language_code: en, direction: ltr}
           - content_key: fa.a1.unit03.lesson05.exercise07.dialogue_ask_price
             type: dialogue_response
             tested_text: این چنده هزار تومنه
@@ -714,13 +734,12 @@ units:
               target_blocks:
                 - {text: "Arrange: yes, that's right.", language_code: en, direction: ltr}
             word_bank: [درسته, آره]
-          - content_key: fa.a1.unit03.lesson06.exercise06.listen_type_minas_number
-            type: listen_type
+          - content_key: fa.a1.unit03.lesson06.exercise06.translate_minas_number
+            type: translation
             tested_text: صفر نه یک دو سه چهار پنج شش هفت هشت هشت
-            media_asset_key: fa.a1.audio.dialogue.phone_numbers.mina_number.01
             prompt:
               target_blocks:
-                - {text: "Type Mina's phone number, one Persian word per digit.", language_code: en, direction: ltr}
+                - {text: "Write Mina's phone number in Persian words, one word per digit: 09123456788.", language_code: en, direction: ltr}
           - content_key: fa.a1.unit03.lesson06.exercise07.dialogue_give_saras_number
             type: dialogue_response
             tested_text: شماره تو چنده صفر نه یک نه هفت شش پنج چهار سه دو یکه

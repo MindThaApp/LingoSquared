@@ -11,7 +11,7 @@ generation_provenance:
 review:
   status: reviewed
   required_next_reviewer: null
-  notes: "Fresh-context review: fixed an ambiguous listen_select distractor set (lesson01.exercise03, میوه swapped for چای so 'the food word' has one unambiguous answer), and added a taught-vocabulary-only accepted answer to lesson06.exercise07.write_order_summary alongside the original fuller sentence. Verified independently authored for Iranian Farsi specifically (register notes tie back to unit01's established dialect/register conventions), no jargon leaks, no script-purity issues. Supplemental pass 2026-07-05 per AUTHORING_GUIDE §11-13: fact cross-check clean (order items consistent throughout), fill_in_blank frame has real surrounding context, and lesson06's write_order_summary's two answer forms both upgraded to status:correct (previously acceptable_with_note despite being equally valid summary styles). URGENT FOLLOW-UP 2026-07-05: a project-wide sweep using the actual `compile` command (not just `validate`, which never exercises this check) found lesson06.exercise08.speak_full_order_scene had only an `acceptable_with_note` accepted answer with no `status:correct` entry -- the compiler has no canonical answer to derive without one, crashing compilation. The instruction was already fully specified (menu, recommendation, a chicken kebab order, bill), so fixed by properly punctuating the 4-clause combined answer and upgrading to status:correct, with a second comma-and-و-joined variant per §12. Re-verified with the actual `compile` command -- now produces valid JSON end-to-end."
+  notes: "Fresh-context review: fixed an ambiguous listen_select distractor set (lesson01.exercise03, میوه swapped for چای so 'the food word' has one unambiguous answer), and added a taught-vocabulary-only accepted answer to lesson06.exercise07.write_order_summary alongside the original fuller sentence. Verified independently authored for Iranian Farsi specifically (register notes tie back to unit01's established dialect/register conventions), no jargon leaks, no script-purity issues. Supplemental pass 2026-07-05 per AUTHORING_GUIDE §11-13: fact cross-check clean (order items consistent throughout), fill_in_blank frame has real surrounding context, and lesson06's write_order_summary's two answer forms both upgraded to status:correct (previously acceptable_with_note despite being equally valid summary styles). URGENT FOLLOW-UP 2026-07-05: a project-wide sweep using the actual `compile` command (not just `validate`, which never exercises this check) found lesson06.exercise08.speak_full_order_scene had only an `acceptable_with_note` accepted answer with no `status:correct` entry -- the compiler has no canonical answer to derive without one, crashing compilation. The instruction was already fully specified (menu, recommendation, a chicken kebab order, bill), so fixed by properly punctuating the 4-clause combined answer and upgrading to status:correct, with a second comma-and-و-joined variant per §12. Re-verified with the actual `compile` command -- now produces valid JSON end-to-end. AUDIO-ACCESSIBILITY RETROFIT 2026-07-06 (§14): converted the 9 listen_type/bare-listen_select exercises to match the realization's multiple_choice/translation conversion, with English-gloss correct_option/distractors throughout. MATCHING_PAIRS SCALE (§16) CHECK: match_register (2) is a genuine narrow contrast; the rest already reasonably sized. Re-verified 0 remaining §14 violations, content_key parity intact, both validate and compile clean after the retrofit."
 
 course:
   title: Farsi A1
@@ -212,12 +212,12 @@ exercises:
     distractors: [نان, برنج, مرغ]
     accepted_answers: [{value: چای, status: correct}]
     feedback: "چای (tea) is a drink; the others are foods."
-  fa.a1.unit06.lesson01.exercise03.listen_food_words:
-    instruction: "Listen and select the food word you hear."
-    correct_option: نان
-    distractors: [قهوه, چای, آب]
-    accepted_answers: [{value: نان, status: correct}]
-    feedback: "نان (bread) is food; قهوه، چای، and آب are drinks."
+  fa.a1.unit06.lesson01.exercise03.recognize_naan_reading:
+    instruction: "What does this word mean?"
+    correct_option: bread
+    distractors: [coffee, tea, water]
+    accepted_answers: [{value: bread, status: correct}]
+    feedback: "نان means bread."
   fa.a1.unit06.lesson01.exercise04.match_food_words:
     instruction: "Match each word with its English meaning."
     accepted_answers:
@@ -251,12 +251,12 @@ exercises:
     distractors: ["a waiter you've just met", "a shopkeeper you don't know", "an elder at a formal dinner"]
     accepted_answers: [{value: "a close friend making tea at home", status: correct}]
     feedback: "می‌خوام is informal and colloquial, reserved for close, familiar contexts."
-  fa.a1.unit06.lesson02.exercise03.listen_polite_order:
-    instruction: "Listen and select the phrase you hear."
-    correct_option: "یک چای می‌خواستم، لطفاً"
-    distractors: ["یه چای می‌خوام", "منو دارید؟", "چی توصیه می‌کنید؟"]
-    accepted_answers: [{value: "یک چای می‌خواستم، لطفاً", status: correct}]
-    feedback: "The speaker says یک چای می‌خواستم، لطفاً."
+  fa.a1.unit06.lesson02.exercise03.recognize_polite_order_reading:
+    instruction: "What does this phrase mean?"
+    correct_option: "I would like a tea, please. (polite)"
+    distractors: ["I want a tea. (informal)", "Do you have a menu?", "What do you recommend?"]
+    accepted_answers: [{value: "I would like a tea, please. (polite)", status: correct}]
+    feedback: "یک چای می‌خواستم، لطفاً means I would like a tea, please (polite)."
   fa.a1.unit06.lesson02.exercise04.match_register:
     instruction: "Match each ordering verb with when to use it."
     accepted_answers:
@@ -266,11 +266,11 @@ exercises:
     instruction: "Arrange the words to politely order bread."
     accepted_answers: [{value: [یک, نان, می‌خواستم], status: correct}]
     feedback: "یک نان می‌خواستم politely orders bread."
-  fa.a1.unit06.lesson02.exercise06.listen_informal_order:
-    instruction: "Listen and type what you hear."
+  fa.a1.unit06.lesson02.exercise06.translate_informal_order:
+    instruction: "Translate into Farsi: I want a tea. (informal)"
     accepted_answers:
       - {value: "یه چای می‌خوام", status: correct}
-    feedback: "The recording says یه چای می‌خوام."
+    feedback: "یه چای می‌خوام means I want a tea (informal)."
   fa.a1.unit06.lesson02.exercise07.translate_polite_water:
     instruction: "Translate into Farsi: I'd like a water, please."
     accepted_answers:
@@ -296,12 +296,12 @@ exercises:
     distractors: ["منو دارید؟", "چی میل دارید؟", "خیلی خوشمزه بود"]
     accepted_answers: [{value: "چی توصیه می‌کنید؟", status: correct}]
     feedback: "چی توصیه می‌کنید؟ asks what the waiter suggests."
-  fa.a1.unit06.lesson03.exercise03.listen_menu_question:
-    instruction: "Listen and select the question you hear."
-    correct_option: "منو دارید؟"
-    distractors: ["چی توصیه می‌کنید؟", "صورت‌حساب رو لطف می‌کنید؟", "چی میل دارید؟"]
-    accepted_answers: [{value: "منو دارید؟", status: correct}]
-    feedback: "The speaker asks منو دارید؟"
+  fa.a1.unit06.lesson03.exercise03.recognize_menu_question_reading:
+    instruction: "What does this question ask?"
+    correct_option: "Do you have a menu?"
+    distractors: ["What do you recommend?", "Could you bring the bill?", "What would you like?"]
+    accepted_answers: [{value: "Do you have a menu?", status: correct}]
+    feedback: "منو دارید؟ asks do you have a menu."
   fa.a1.unit06.lesson03.exercise04.match_restaurant_questions:
     instruction: "Match each restaurant question or phrase with its meaning."
     accepted_answers:
@@ -311,12 +311,12 @@ exercises:
     instruction: "Arrange the words to ask what the waiter recommends."
     accepted_answers: [{value: [چی, توصیه, می‌کنید], status: correct}]
     feedback: "چی توصیه می‌کنید؟ asks for a recommendation."
-  fa.a1.unit06.lesson03.exercise06.listen_recommendation:
-    instruction: "Listen and type what you hear."
+  fa.a1.unit06.lesson03.exercise06.translate_recommendation:
+    instruction: "Translate into Farsi: What do you recommend?"
     accepted_answers:
       - {value: "چی توصیه می‌کنید؟", status: correct}
       - {value: "چی توصیه می‌کنید", status: correct}
-    feedback: "The recording says چی توصیه می‌کنید؟"
+    feedback: "چی توصیه می‌کنید؟ means what do you recommend?"
   fa.a1.unit06.lesson03.exercise07.dialogue_response_waiter:
     instruction: "A waiter asks چی میل دارید؟ You'd first like to see the menu. Respond appropriately."
     accepted_answers:
@@ -341,12 +341,12 @@ exercises:
     distractors: ["یک لیوان چای", "یک بشقاب برنج", "سه تا نان"]
     accepted_answers: [{value: "دو تا نان", status: correct}]
     feedback: "دو تا نان uses the counter تا after the number two."
-  fa.a1.unit06.lesson04.exercise03.listen_quantity_order:
-    instruction: "Listen and select the order you hear."
-    correct_option: "یک بشقاب برنج و دو تا نان"
-    distractors: ["یک لیوان چای", "دو تا نان", "یک بشقاب برنج"]
-    accepted_answers: [{value: "یک بشقاب برنج و دو تا نان", status: correct}]
-    feedback: "The recording orders یک بشقاب برنج و دو تا نان."
+  fa.a1.unit06.lesson04.exercise03.recognize_quantity_order_reading:
+    instruction: "What does this order mean?"
+    correct_option: "a plate of rice and two breads"
+    distractors: ["a glass of tea", "two breads", "a plate of rice"]
+    accepted_answers: [{value: "a plate of rice and two breads", status: correct}]
+    feedback: "یک بشقاب برنج و دو تا نان means a plate of rice and two breads."
   fa.a1.unit06.lesson04.exercise04.match_quantities:
     instruction: "Match each quantity phrase with its meaning."
     accepted_answers:
@@ -385,12 +385,12 @@ exercises:
     distractors: ["صورت‌حساب رو لطف می‌کنید؟", "چی میل دارید؟", "چشم، الان میارم"]
     accepted_answers: [{value: "خیلی خوشمزه بود", status: correct}]
     feedback: "خیلی خوشمزه بود says the meal was delicious."
-  fa.a1.unit06.lesson05.exercise03.listen_bill_request:
-    instruction: "Listen and select the phrase you hear."
-    correct_option: "صورت‌حساب رو لطف می‌کنید؟"
-    distractors: ["خیلی خوشمزه بود", "چی توصیه می‌کنید؟", "چشم، الان میارم"]
-    accepted_answers: [{value: "صورت‌حساب رو لطف می‌کنید؟", status: correct}]
-    feedback: "The speaker asks صورت‌حساب رو لطف می‌کنید؟"
+  fa.a1.unit06.lesson05.exercise03.recognize_bill_request_reading:
+    instruction: "What does this question ask?"
+    correct_option: "Could you bring the bill, please?"
+    distractors: ["It was very delicious.", "What do you recommend?", "Sure, I'll bring it now."]
+    accepted_answers: [{value: "Could you bring the bill, please?", status: correct}]
+    feedback: "صورت‌حساب رو لطف می‌کنید؟ politely asks for the bill."
   fa.a1.unit06.lesson05.exercise04.nooshe_jan_meaning:
     instruction: "When does a host or another diner say نوش جان?"
     correct_option: "to someone who is eating or about to eat"
@@ -401,11 +401,11 @@ exercises:
     instruction: "Arrange the words to say it was very delicious."
     accepted_answers: [{value: [خیلی, خوشمزه, بود], status: correct}]
     feedback: "خیلی خوشمزه بود compliments the meal."
-  fa.a1.unit06.lesson05.exercise06.listen_delicious:
-    instruction: "Listen and type what you hear."
+  fa.a1.unit06.lesson05.exercise06.translate_delicious:
+    instruction: "Translate into Farsi: It was very delicious."
     accepted_answers:
       - {value: "خیلی خوشمزه بود", status: correct}
-    feedback: "The recording says خیلی خوشمزه بود."
+    feedback: "خیلی خوشمزه بود means it was very delicious."
   fa.a1.unit06.lesson05.exercise07.dialogue_response_bill:
     instruction: "You've just complimented the meal. Now ask for the bill."
     accepted_answers:
@@ -430,8 +430,8 @@ exercises:
     accepted_answers:
       - {value: "منو دارید؟", status: correct}
     feedback: "منو دارید؟ asks to see the menu."
-  fa.a1.unit06.lesson06.exercise03.listen_recommendation_line:
-    instruction: "Listen and type the waiter's recommendation."
+  fa.a1.unit06.lesson06.exercise03.translate_recommendation_line:
+    instruction: "Translate into Farsi: The chicken kebab is very good today."
     accepted_answers:
       - {value: "جوجه‌کباب امروز خیلی خوبه", status: correct}
       - {value: "جوجه‌کباب امروز خیلی خوبه.", status: correct}

@@ -1,0 +1,514 @@
+schema_version: "1.0"
+realization_version: "2026.1-draft.1"
+target_language: fa
+cefr_level: A1
+status: complete_draft
+generation_provenance:
+  method: ai_adapted_from_public_domain_source
+  authoring_system: claude
+  source_material: "FSI Persian Basic Course (public domain), modernized"
+  human_reviewed: false
+review:
+  status: reviewed
+  required_next_reviewer: null
+  notes: >-
+    Fresh-context review, 2026-07-06. Checked spine-outcome discipline
+    against universal.a1.time.ask_tell_time's own assessment_requirements
+    (understand a spoken time, ask for + state a time, read a schedule
+    time, write a time expression) -- all covered across the six lessons,
+    no drift into unrelated grammar. Exercise pacing verified recognition
+    -> drag/matching -> production in every one of the 6 lessons (after
+    fixes below). Verified dialect authenticity against
+    fa_IR_standard_colloquial_intro: ساعت چنده؟ (contraction of چند است)
+    is the genuine everyday colloquial way to ask the time; ساعت سه و
+    نیمه and the نیمه contraction of نیم است follow the same -e/-ye
+    pattern already established in unit07/unit08 (آفتابیه، تومنه);
+    صبح/ظهر/عصر/شب is the correct natural division of the day, with ظهر
+    genuinely meaning midday/noon distinct from عصر (afternoon); قرار is
+    the natural word for an arranged appointment; یکم دیر میشه is
+    genuine casual spoken Persian for "I'll be a bit late." Nothing read
+    as invented, stilted, or translation-calqued. Cross-checked every
+    concrete fact per §11 (appointment = 4pm, confirmed afternoon not
+    morning, Negar's actual arrival = 4:15pm, reason = running a little
+    late from work) across every exercise/teaching card/dialogue turn in
+    lesson06 -- fully consistent throughout. No fill_in_blank exercises
+    exist (§13 n/a). Ran a systematic Python token-coverage script
+    (tokenizing on Persian-range letters only) checking every exercise's
+    tested_text/word_bank/pairs against cumulative introduced_tokens --
+    zero real gaps (two apparent hits were punctuation-tokenization
+    false positives, resolved). Grepped for Arabic-range kaf (U+0643) and
+    yeh (U+064A): none found, script is pure Persian range throughout.
+    No unquoted YAML booleans in learner-facing fields. No internal
+    jargon leaks found in any learner-facing string. No dated
+    FSI/Peace-Corps register remaining -- content reads as modern
+    spoken Persian. content_key parity confirmed exact both directions
+    (teaching and exercises) both before and after fixes.
+
+    Found and fixed 3 real bugs: (1) Two listen_type exercises
+    (lesson03's then-exercise06, lesson06's then-exercise05) had a bare
+    empty prompt with NO media_asset_key at all -- not just untested
+    audio, genuinely zero prompt content, violating AUTHORING_GUIDE §14
+    (no listen_type/audio-only exercises for fa without real recorded
+    audio). Converted both to `translation` type with a real English
+    prompt, renamed content_keys to translate_three_half/
+    translate_arrival_time (overlay updated to match, parity
+    reconfirmed). (2) Four multiple_choice exercises
+    (lesson02.exercise01, lesson03.exercise01, lesson05.exercise01,
+    lesson05.exercise02) displayed the exact target Farsi phrase in the
+    prompt AND repeated it verbatim as the correct_option among
+    Farsi-language distractors -- the identical "prompt literally shows
+    the correct answer" bug class already found and fixed six times
+    elsewhere in this project, confirmed via the actual compiled JSON.
+    Fixed by converting correct_option/distractors/accepted_answers to
+    English meaning-glosses (matching the already-correct
+    recognize_sobh/recognize_asr pattern within this same file), and
+    updating instructions to "What does this phrase/sentence mean?".
+    (3) §12: write_meeting_time_summary only had period-joined and
+    و-joined accepted_answers forms -- added the missing comma-joined
+    form. Also applied the AUTHORING_GUIDE §15 target-language-asterisk
+    convention to the feedback fields directly rewritten during these
+    fixes (not a blanket file-wide retrofit, which the guide doesn't
+    require for untouched content). Both `validate` and `compile`
+    re-run after fixes: 0 errors, 0 warnings, compiles clean end to
+    end -- spot-checked the actual compiled JSON for the renamed/fixed
+    exercises to confirm the fix landed correctly, not just that the
+    schema validated. Audio remains pending generation.
+
+    AUDIO-ACCESSIBILITY RETROFIT 2026-07-06 (§14, added after this
+    review completed): a project-wide audit found 5 more bare-prompt
+    listen_select exercises remained in this unit (lesson01.exercise03,
+    lesson02.exercise03, lesson03.exercise03, lesson04.exercise03,
+    lesson05.exercise03) beyond the 2 listen_type ones this review
+    already fixed. Converted all 5 to multiple_choice: added the target
+    Farsi text as a real visible prompt, converted correct_option/
+    distractors to English glosses (to avoid re-introducing the
+    prompt-shows-answer bug), renamed content_keys to
+    recognize_*_reading. Re-verified 0 remaining §14 violations via
+    script, content_key parity intact, `validate`+`compile` both clean
+    after the retrofit.
+
+    MATCHING_PAIRS SCALE RETROFIT 2026-07-06 (§16, Ramin's direct
+    feedback that 2-3 pair exercises are too small): match_time_question
+    and match_time_telling each had only ONE pair (barely a matching
+    exercise at all) -- expanded both by pooling lesson01's four time
+    words (ساعت/دقیقه/نیم/ربع, already taught) to 5 pairs each.
+    match_appointment_phrases expanded 2->6 (pooled قرار plus lesson04's
+    three parts-of-day words). Left match_time_words (4) and
+    match_parts_of_day (4) at their existing counts and
+    match_dialogue_facts (2) unchanged -- checked and no further
+    genuinely-taught, on-topic vocabulary exists to pool into these
+    without violating §16's own anti-padding rule. Re-verified
+    validate+compile clean after these additions.
+
+course:
+  realization_key: fa.a1
+  target_language_first: true
+  dialect: fa_IR_standard_colloquial_intro
+  register_policy: >-
+    Continues unit01's neutral-polite spoken register and the colloquial
+    -e/-ye contraction pattern already established (e.g. آفتابیه، گرمه).
+    Time expressions use the everyday spoken colloquial forms (ساعت چنده؟،
+    سه‌ونیمه) rather than formal written Persian time constructions.
+
+media_assets:
+  - content_key: fa.a1.audio.time.vocab.01
+    language: fa
+    text: ساعت، دقیقه، نیم، ربع
+    voice_hint: neutral_adult
+    status: pending_generation
+  - content_key: fa.a1.audio.time.question.01
+    language: fa
+    text: ساعت چنده؟
+    voice_hint: neutral_adult_polite
+    status: pending_generation
+  - content_key: fa.a1.audio.time.telling.01
+    language: fa
+    text: ساعت سه و نیمه
+    voice_hint: neutral_adult
+    status: pending_generation
+  - content_key: fa.a1.audio.time.parts_of_day.01
+    language: fa
+    text: صبح، ظهر، عصر، شب
+    voice_hint: neutral_adult
+    status: pending_generation
+  - content_key: fa.a1.audio.time.appointment.01
+    language: fa
+    text: قرار ساعت چنده؟
+    voice_hint: neutral_adult_polite
+    status: pending_generation
+  - content_key: fa.a1.audio.dialogue.meeting_time.01
+    language: fa
+    text: "نگار: قرار فردا ساعت چنده؟ آرش: فکر کنم ساعت چهاره. نگار: ساعت چهار عصر یا صبح؟ آرش: عصر. نگار: باشه، من ساعت چهار و ربع میام. آرش: چرا ربع؟ نگار: چون از سر کار یکم دیر میشه. آرش: باشه، مشکلی نیست."
+    voice_hint: two_adults_neutral_polite
+    status: pending_generation
+
+units:
+  - content_key: fa.a1.unit09.time
+    title: ساعت و زمان
+    section: speaking
+    spine_outcome_ids:
+      - universal.a1.time.ask_tell_time
+    planned_lesson_count: 6
+
+    lessons:
+      - content_key: fa.a1.unit09.lesson01.basic_time_vocabulary
+        title: کلمات پایه دربارهٔ ساعت
+        spine_outcome_id: universal.a1.time.ask_tell_time
+        teaching:
+          - content_key: fa.a1.unit09.lesson01.teach.hour_word
+            kind: vocabulary
+            target: {text: ساعت, language_code: fa, direction: rtl}
+            introduced_tokens: [ساعت]
+          - content_key: fa.a1.unit09.lesson01.teach.minute_word
+            kind: vocabulary
+            target: {text: دقیقه, language_code: fa, direction: rtl}
+            introduced_tokens: [دقیقه]
+          - content_key: fa.a1.unit09.lesson01.teach.half_word
+            kind: vocabulary
+            target: {text: نیم, language_code: fa, direction: rtl}
+            introduced_tokens: [نیم]
+          - content_key: fa.a1.unit09.lesson01.teach.quarter_word
+            kind: vocabulary
+            target: {text: ربع, language_code: fa, direction: rtl}
+            introduced_tokens: [ربع]
+          - content_key: fa.a1.unit09.lesson01.teach.va_word
+            kind: grammar_note
+            target: {text: "و (and)", language_code: fa, direction: rtl}
+            introduced_tokens: [و]
+        exercises:
+          - content_key: fa.a1.unit09.lesson01.exercise01.recognize_hour
+            type: multiple_choice
+            tested_text: ساعت
+            prompt: {target_blocks: [{text: ساعت, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit09.lesson01.exercise02.recognize_half
+            type: multiple_choice
+            tested_text: نیم
+            prompt: {target_blocks: [{text: نیم, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit09.lesson01.exercise03.recognize_rob_reading
+            type: multiple_choice
+            tested_text: ربع
+            prompt: {target_blocks: [{text: ربع, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit09.lesson01.exercise04.match_time_words
+            type: matching_pairs
+            tested_text: ساعت دقیقه نیم ربع
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: ساعت, right: "hour / clock"}
+              - {left: دقیقه, right: minute}
+              - {left: نیم, right: half}
+              - {left: ربع, right: quarter}
+          - content_key: fa.a1.unit09.lesson01.exercise05.order_time_words
+            type: word_order
+            tested_text: نیم و ربع
+            prompt: {target_blocks: []}
+            word_bank: [نیم, و, ربع]
+          - content_key: fa.a1.unit09.lesson01.exercise06.translate_quarter
+            type: translation
+            tested_text: ربع
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit09.lesson01.exercise07.write_minute
+            type: writing_prompt
+            tested_text: دقیقه
+            prompt: {target_blocks: [{text: "Write the Farsi word for minute.", language_code: en, direction: ltr}]}
+
+      - content_key: fa.a1.unit09.lesson02.asking_the_time
+        title: پرسیدن ساعت
+        spine_outcome_id: universal.a1.time.ask_tell_time
+        teaching:
+          - content_key: fa.a1.unit09.lesson02.teach.what_time_question
+            kind: phrase
+            target: {text: "ساعت چنده؟", language_code: fa, direction: rtl}
+            introduced_tokens: [ساعت, چنده]
+          - content_key: fa.a1.unit09.lesson02.teach.contraction_note
+            kind: grammar_note
+            target: {text: "چنده = چند است (محاوره‌ای)", language_code: fa, direction: rtl}
+            introduced_tokens: [چند, است]
+        exercises:
+          - content_key: fa.a1.unit09.lesson02.exercise01.recognize_what_time
+            type: multiple_choice
+            tested_text: ساعت چنده
+            prompt: {target_blocks: [{text: "ساعت چنده؟", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit09.lesson02.exercise02.recognize_chande_meaning
+            type: multiple_choice
+            tested_text: چنده
+            prompt:
+              target_blocks:
+                - {text: "What does چنده mean in this question?", language_code: en, direction: ltr}
+          - content_key: fa.a1.unit09.lesson02.exercise03.recognize_what_time_reading
+            type: multiple_choice
+            tested_text: ساعت چنده
+            prompt: {target_blocks: [{text: "ساعت چنده؟", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit09.lesson02.exercise04.match_time_question
+            type: matching_pairs
+            tested_text: ساعت چنده ساعت دقیقه نیم ربع
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "ساعت چنده؟", right: "What time is it?"}
+              - {left: ساعت, right: "hour / clock"}
+              - {left: دقیقه, right: minute}
+              - {left: نیم, right: half}
+              - {left: ربع, right: quarter}
+          - content_key: fa.a1.unit09.lesson02.exercise05.order_what_time
+            type: word_order
+            tested_text: ساعت چنده
+            prompt: {target_blocks: []}
+            word_bank: [ساعت, چنده]
+          - content_key: fa.a1.unit09.lesson02.exercise06.translate_what_time
+            type: translation
+            tested_text: ساعت چنده
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit09.lesson02.exercise07.speak_ask_time
+            type: speak_response
+            tested_text: ساعت چنده
+            prompt: {target_blocks: [{text: "Ask a friend what time it is.", language_code: en, direction: ltr}]}
+
+      - content_key: fa.a1.unit09.lesson03.telling_the_time
+        title: گفتن ساعت
+        spine_outcome_id: universal.a1.time.ask_tell_time
+        teaching:
+          - content_key: fa.a1.unit09.lesson03.teach.three_oclock_half
+            kind: phrase
+            target: {text: "ساعت سه و نیمه", language_code: fa, direction: rtl}
+            introduced_tokens: [سه, و, نیمه]
+          - content_key: fa.a1.unit09.lesson03.teach.contraction_note2
+            kind: grammar_note
+            target: {text: "نیمه = نیم است (محاوره‌ای)", language_code: fa, direction: rtl}
+            introduced_tokens: []
+        exercises:
+          - content_key: fa.a1.unit09.lesson03.exercise01.recognize_three_half
+            type: multiple_choice
+            tested_text: ساعت سه و نیمه
+            prompt: {target_blocks: [{text: "ساعت سه و نیمه", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit09.lesson03.exercise02.recognize_half_meaning
+            type: multiple_choice
+            tested_text: نیمه
+            prompt:
+              target_blocks:
+                - {text: "What does نیمه mean here?", language_code: en, direction: ltr}
+          - content_key: fa.a1.unit09.lesson03.exercise03.recognize_time_telling_reading
+            type: multiple_choice
+            tested_text: ساعت سه و نیمه
+            prompt: {target_blocks: [{text: "ساعت سه و نیمه", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit09.lesson03.exercise04.match_time_telling
+            type: matching_pairs
+            tested_text: ساعت سه و نیمه چنده ساعت دقیقه
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "ساعت سه و نیمه", right: "It's three-thirty."}
+              - {left: "ساعت چنده؟", right: "What time is it?"}
+              - {left: ساعت, right: "hour / clock"}
+              - {left: دقیقه, right: minute}
+          - content_key: fa.a1.unit09.lesson03.exercise05.order_three_half
+            type: word_order
+            tested_text: ساعت سه و نیمه
+            prompt: {target_blocks: []}
+            word_bank: [ساعت, سه, و, نیمه]
+          - content_key: fa.a1.unit09.lesson03.exercise06.translate_three_half
+            type: translation
+            tested_text: ساعت سه و نیمه
+            prompt: {target_blocks: [{text: "Translate: It's three-thirty.", language_code: en, direction: ltr}]}
+          - content_key: fa.a1.unit09.lesson03.exercise07.speak_tell_time
+            type: speak_response
+            tested_text: ساعت سه و نیمه
+            prompt: {target_blocks: [{text: "ساعت چنده؟ Answer as if it's three-thirty.", language_code: en, direction: ltr}]}
+
+      - content_key: fa.a1.unit09.lesson04.parts_of_the_day
+        title: بخش‌های روز
+        spine_outcome_id: universal.a1.time.ask_tell_time
+        teaching:
+          - content_key: fa.a1.unit09.lesson04.teach.sobh
+            kind: vocabulary
+            target: {text: صبح, language_code: fa, direction: rtl}
+            introduced_tokens: [صبح]
+          - content_key: fa.a1.unit09.lesson04.teach.zohr
+            kind: vocabulary
+            target: {text: ظهر, language_code: fa, direction: rtl}
+            introduced_tokens: [ظهر]
+          - content_key: fa.a1.unit09.lesson04.teach.asr
+            kind: vocabulary
+            target: {text: عصر, language_code: fa, direction: rtl}
+            introduced_tokens: [عصر]
+          - content_key: fa.a1.unit09.lesson04.teach.shab
+            kind: vocabulary
+            target: {text: شب, language_code: fa, direction: rtl}
+            introduced_tokens: [شب]
+        exercises:
+          - content_key: fa.a1.unit09.lesson04.exercise01.recognize_sobh
+            type: multiple_choice
+            tested_text: صبح
+            prompt: {target_blocks: [{text: صبح, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit09.lesson04.exercise02.recognize_asr
+            type: multiple_choice
+            tested_text: عصر
+            prompt: {target_blocks: [{text: عصر, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit09.lesson04.exercise03.recognize_zohr_reading
+            type: multiple_choice
+            tested_text: ظهر
+            prompt: {target_blocks: [{text: ظهر, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit09.lesson04.exercise04.match_parts_of_day
+            type: matching_pairs
+            tested_text: صبح ظهر عصر شب
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: صبح, right: morning}
+              - {left: ظهر, right: noon}
+              - {left: عصر, right: afternoon}
+              - {left: شب, right: night}
+          - content_key: fa.a1.unit09.lesson04.exercise05.order_parts_of_day
+            type: word_order
+            tested_text: صبح ظهر عصر شب
+            prompt: {target_blocks: []}
+            word_bank: [صبح, ظهر, عصر, شب]
+          - content_key: fa.a1.unit09.lesson04.exercise06.translate_night
+            type: translation
+            tested_text: شب
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit09.lesson04.exercise07.write_afternoon
+            type: writing_prompt
+            tested_text: عصر
+            prompt: {target_blocks: [{text: "Write the Farsi word for afternoon.", language_code: en, direction: ltr}]}
+
+      - content_key: fa.a1.unit09.lesson05.asking_about_an_appointment
+        title: پرسیدن دربارهٔ ساعت قرار
+        spine_outcome_id: universal.a1.time.ask_tell_time
+        teaching:
+          - content_key: fa.a1.unit09.lesson05.teach.appointment_word
+            kind: vocabulary
+            target: {text: قرار, language_code: fa, direction: rtl}
+            introduced_tokens: [قرار]
+          - content_key: fa.a1.unit09.lesson05.teach.appointment_question
+            kind: phrase
+            target: {text: "قرار ساعت چنده؟", language_code: fa, direction: rtl}
+            introduced_tokens: [قرار, ساعت, چنده]
+          - content_key: fa.a1.unit09.lesson05.teach.four_oclock
+            kind: phrase
+            target: {text: "ساعت چهار عصر", language_code: fa, direction: rtl}
+            introduced_tokens: [چهار, عصر]
+        exercises:
+          - content_key: fa.a1.unit09.lesson05.exercise01.recognize_appointment_question
+            type: multiple_choice
+            tested_text: قرار ساعت چنده
+            prompt: {target_blocks: [{text: "قرار ساعت چنده؟", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit09.lesson05.exercise02.recognize_four_afternoon
+            type: multiple_choice
+            tested_text: ساعت چهار عصر
+            prompt: {target_blocks: [{text: "ساعت چهار عصر", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit09.lesson05.exercise03.recognize_appointment_question_reading
+            type: multiple_choice
+            tested_text: قرار ساعت چنده
+            prompt: {target_blocks: [{text: "قرار ساعت چنده؟", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit09.lesson05.exercise04.match_appointment_phrases
+            type: matching_pairs
+            tested_text: قرار ساعت چنده ساعت چهار عصر قرار صبح ظهر شب
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "قرار ساعت چنده؟", right: "What time is the appointment?"}
+              - {left: "ساعت چهار عصر", right: "four o'clock in the afternoon"}
+              - {left: قرار, right: appointment}
+              - {left: صبح, right: morning}
+              - {left: ظهر, right: noon}
+              - {left: شب, right: night}
+          - content_key: fa.a1.unit09.lesson05.exercise05.order_appointment_question
+            type: word_order
+            tested_text: قرار ساعت چنده
+            prompt: {target_blocks: []}
+            word_bank: [قرار, ساعت, چنده]
+          - content_key: fa.a1.unit09.lesson05.exercise06.translate_appointment_question
+            type: translation
+            tested_text: قرار ساعت چنده
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit09.lesson05.exercise07.speak_ask_appointment
+            type: speak_response
+            tested_text: قرار ساعت چنده
+            prompt: {target_blocks: [{text: "Ask what time the appointment is.", language_code: en, direction: ltr}]}
+
+      - content_key: fa.a1.unit09.lesson06.meeting_time_dialogue
+        title: گفت‌وگو دربارهٔ ساعت قرار
+        spine_outcome_id: universal.a1.time.ask_tell_time
+        teaching:
+          - content_key: fa.a1.unit09.lesson06.teach.tomorrow_review
+            kind: vocabulary
+            target: {text: فردا, language_code: fa, direction: rtl}
+            introduced_tokens: [فردا]
+          - content_key: fa.a1.unit09.lesson06.teach.late_word
+            kind: phrase
+            target: {text: "یکم دیر میشه", language_code: fa, direction: rtl}
+            introduced_tokens: [یکم, دیر, میشه]
+          - content_key: fa.a1.unit09.lesson06.teach.turn01
+            kind: dialogue
+            target: {text: "قرار فردا ساعت چنده؟", language_code: fa, direction: rtl, speaker: نگار}
+            introduced_tokens: [قرار, فردا, ساعت, چنده, نگار]
+          - content_key: fa.a1.unit09.lesson06.teach.turn02
+            kind: dialogue
+            target: {text: "فکر کنم ساعت چهاره.", language_code: fa, direction: rtl, speaker: آرش}
+            introduced_tokens: [فکر, کنم, ساعت, چهاره, آرش]
+          - content_key: fa.a1.unit09.lesson06.teach.turn03
+            kind: dialogue
+            target: {text: "ساعت چهار عصر یا صبح؟", language_code: fa, direction: rtl, speaker: نگار}
+            introduced_tokens: [ساعت, چهار, عصر, یا, صبح]
+          - content_key: fa.a1.unit09.lesson06.teach.turn04
+            kind: dialogue
+            target: {text: "عصر.", language_code: fa, direction: rtl, speaker: آرش}
+            introduced_tokens: [عصر]
+          - content_key: fa.a1.unit09.lesson06.teach.turn05
+            kind: dialogue
+            target: {text: "باشه، من ساعت چهار و ربع میام.", language_code: fa, direction: rtl, speaker: نگار}
+            introduced_tokens: [باشه, من, ساعت, چهار, و, ربع, میام]
+          - content_key: fa.a1.unit09.lesson06.teach.turn06
+            kind: dialogue
+            target: {text: "چرا ربع؟", language_code: fa, direction: rtl, speaker: آرش}
+            introduced_tokens: [چرا, ربع]
+          - content_key: fa.a1.unit09.lesson06.teach.turn07
+            kind: dialogue
+            target: {text: "چون از سر کار یکم دیر میشه.", language_code: fa, direction: rtl, speaker: نگار}
+            introduced_tokens: [چون, از, سر, کار, یکم, دیر, میشه]
+          - content_key: fa.a1.unit09.lesson06.teach.turn08
+            kind: dialogue
+            target: {text: "باشه، مشکلی نیست.", language_code: fa, direction: rtl, speaker: آرش}
+            introduced_tokens: [باشه, مشکلی, نیست]
+        exercises:
+          - content_key: fa.a1.unit09.lesson06.exercise01.listen_context
+            type: dialogue_comprehension
+            tested_text: نگار آرش قرار ساعت چهار عصر
+            media_asset_key: fa.a1.audio.dialogue.meeting_time.01
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit09.lesson06.exercise02.recognize_meeting_time
+            type: multiple_choice
+            tested_text: چهار عصر
+            prompt:
+              target_blocks:
+                - {text: "What time is the appointment?", language_code: en, direction: ltr}
+          - content_key: fa.a1.unit09.lesson06.exercise03.match_dialogue_facts
+            type: matching_pairs
+            tested_text: قرار فردا نگار آرش چرا دیر باشه مشکلی نیست
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: قرار, right: appointment}
+              - {left: فردا, right: tomorrow}
+              - {left: نگار, right: Negar}
+              - {left: آرش, right: Arash}
+              - {left: چرا, right: why}
+              - {left: دیر, right: late}
+              - {left: باشه, right: okay}
+              - {left: "مشکلی نیست", right: "it's not a problem"}
+          - content_key: fa.a1.unit09.lesson06.exercise04.order_late_reason
+            type: word_order
+            tested_text: چون از سر کار یکم دیر میشه
+            prompt: {target_blocks: []}
+            word_bank: [چون, از, سر, کار, یکم, دیر, میشه]
+          - content_key: fa.a1.unit09.lesson06.exercise05.translate_arrival_time
+            type: translation
+            tested_text: ساعت چهار و ربع میام
+            prompt: {target_blocks: [{text: "Translate: I'll come at four-fifteen.", language_code: en, direction: ltr}]}
+          - content_key: fa.a1.unit09.lesson06.exercise06.dialogue_response_confirm
+            type: dialogue_response
+            tested_text: باشه مشکلی نیست
+            prompt: {target_blocks: [{text: "چون از سر کار یکم دیر میشه.", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit09.lesson06.exercise07.write_meeting_time_summary
+            type: writing_prompt
+            tested_text: قرار ساعت چهار عصر است من ساعت چهار و ربع میام
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit09.lesson06.exercise08.speak_full_time_exchange
+            type: speak_response
+            tested_text: قرار ساعت چنده ساعت چهار عصر
+            prompt: {target_blocks: [{text: "Ask what time the appointment is, and answer that it's four in the afternoon.", language_code: en, direction: ltr}]}

@@ -9,9 +9,9 @@ generation_provenance:
   authoring_system: claude
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: codex
-  notes: "Authored alongside the new prs a1_unit10_shopping.yaml realization (numbered unit10 to avoid colliding with a separate concurrent session's own in-flight a1_unit09_dates.yaml, still uncommitted at authoring time). Follows the established en-prs overlay convention from unit08 (English instruction/correct_option/distractors/feedback, target-language Dari accepted_answers, English glosses for recognize_* multiple_choice items to avoid the same-string visual-matching anti-pattern already fixed in units 07/08). Needs the standard fresh-context review before shipping."
+  status: reviewed
+  required_next_reviewer: null
+  notes: "Authored alongside the new prs a1_unit10_shopping.yaml realization (numbered unit10 to avoid colliding with a separate concurrent session's own in-flight a1_unit09_dates.yaml, still uncommitted at authoring time). Follows the established en-prs overlay convention from unit08 (English instruction/correct_option/distractors/feedback, target-language Dari accepted_answers, English glosses for recognize_* multiple_choice items to avoid the same-string visual-matching anti-pattern already fixed in units 07/08). Needs the standard fresh-context review before shipping. AUDIO-ACCESSIBILITY RETROFIT 2026-07-06 (§14): converted the 6 listen_select/listen_type exercises to match the realization's multiple_choice/translation conversion. MATCHING_PAIRS SCALE (§16) CHECK: all matching_pairs already reasonably sized -- no changes needed. Re-verified 0 remaining §14 violations, both validate and compile clean after the retrofit. FRESH-CONTEXT REVIEW completed 2026-07-06 (zero prior context, paired with the realization's independent review): confirmed content_key parity (22 teaching + 43 exercise keys, exact match both directions against the realization), no jargon leaks, no bare unquoted yes/no/true/false, no Arabic-range kaf/yeh, and every accepted_answers/pairs value checked programmatically against the realization's cumulative introduced_tokens. FOUND AND FIXED, matching the realization-side fixes: (1) exercise01.listen_context's instruction still said 'Listen to the conversation' although the realization now shows the full dialogue as a real visible prompt (the prior retrofit missed this exercise because its type, dialogue_comprehension, wasn't on the retrofit's listen_select/listen_type checklist, and it had zero text fallback and only pending-generation audio) -- reworded to 'Read the conversation'; (2) exercise03.match_dialogue_facts's accepted_answers keyed on English text ('Price per kilo'/'Discounted price for two kilos') that didn't match the realization's actual Dari pairs.left values at all -- a real grading-mismatch bug, since matching_pairs correctness is graded by exact left/right pair equality against what's actually displayed -- fixed by keying on the realization's now-corrected یک کیلو/دو کیلو labels with their Dari price values, keeping the dict shape byte-for-byte in sync with the realization's pairs array; (3) all accepted_answers containing بتین updated to بدهین to match the realization-wide correction of that unverified coinage; (4) exercise06.dialogue_response_ask_discount and exercise08.speak_full_market_scene were each missing a comma-joined multi-clause variant required by §12 (only period- and و-joined forms existed) -- added, all as status:correct. validate and compile both run clean (0 errors/0 warnings) after all fixes, and compile produces valid JSON."
 
 course:
   title: "Dari A1"
@@ -92,7 +92,7 @@ teaching:
   prs.a1.unit10.lesson05.teach.takhfif_mitanin:
     title: "Can you give a discount?"
     gloss: "Can you give a discount?"
-    note: "تخفیف می‌تانین بتین؟ politely asks for a lower price, using می‌تانین (you can)."
+    note: "تخفیف می‌تانین بدهین؟ politely asks for a lower price, using می‌تانین (you can)."
   prs.a1.unit10.lesson05.teach.baraye_shoma:
     title: "For you it comes to 180 afghanis."
     gloss: "For you it comes to 180 afghanis."
@@ -140,12 +140,12 @@ exercises:
     distractors: ["shop", "price", "cheap"]
     accepted_answers: [{value: "discount", status: correct}]
     feedback: "تخفیف means discount."
-  prs.a1.unit10.lesson01.exercise03.listen_words:
-    instruction: "Listen and select the word you hear."
+  prs.a1.unit10.lesson01.exercise03.recognize_gran_reading:
+    instruction: "What does this word mean?"
     correct_option: "expensive"
     distractors: ["shop", "price", "cheap"]
     accepted_answers: [{value: "expensive", status: correct}]
-    feedback: "The recording lists shopping words; گران means expensive."
+    feedback: "گران means expensive."
   prs.a1.unit10.lesson01.exercise04.match_words:
     instruction: "Match each Dari word with its meaning."
     accepted_answers:
@@ -176,12 +176,12 @@ exercises:
     distractors: ["How much is it?", "I'd like a kilo of apples.", "Very good, thank you."]
     accepted_answers: [{value: "It's one hundred afghanis.", status: correct}]
     feedback: "صد افغانی است states the price."
-  prs.a1.unit10.lesson02.exercise03.listen_price_question:
-    instruction: "Listen and select the question you hear."
-    correct_option: "قیمتش چند است؟"
-    distractors: ["تخفیف می‌تانین بتین؟", "یک کیلو سیب می‌خواهم"]
-    accepted_answers: [{value: "قیمتش چند است؟", status: correct}]
-    feedback: "The speaker asks قیمتش چند است؟"
+  prs.a1.unit10.lesson02.exercise03.recognize_price_question_reading:
+    instruction: "What does this question ask?"
+    correct_option: "What is its price?"
+    distractors: ["Can you give a discount?", "I want a kilo of apples."]
+    accepted_answers: [{value: "What is its price?", status: correct}]
+    feedback: "قیمتش چند است؟ asks what its price is."
   prs.a1.unit10.lesson02.exercise04.match_price_phrases:
     instruction: "Match each phrase or word with its meaning."
     accepted_answers:
@@ -216,12 +216,12 @@ exercises:
     distractors: ["180 afghanis", "50 afghanis", "200 afghanis"]
     accepted_answers: [{value: "100 afghanis", status: correct}]
     feedback: "The label reads صد افغانی (100 afghanis) per kilo."
-  prs.a1.unit10.lesson03.exercise03.listen_label:
-    instruction: "Listen and select the label you hear."
-    correct_option: "سیب یک کیلو صد افغانی"
-    distractors: ["قیمتش چند است؟", "دو کیلو می‌خواهم"]
-    accepted_answers: [{value: "سیب یک کیلو صد افغانی", status: correct}]
-    feedback: "The recording reads the price label: سیب یک کیلو صد افغانی."
+  prs.a1.unit10.lesson03.exercise03.recognize_label_reading:
+    instruction: "What does this price label mean?"
+    correct_option: "Apples, one kilo, 100 afghanis."
+    distractors: ["What is its price?", "I want two kilos."]
+    accepted_answers: [{value: "Apples, one kilo, 100 afghanis.", status: correct}]
+    feedback: "سیب یک کیلو صد افغانی reads: apples, one kilo, 100 afghanis."
   prs.a1.unit10.lesson03.exercise04.match_label_parts:
     instruction: "Match each part of the label with its meaning."
     accepted_answers:
@@ -254,12 +254,12 @@ exercises:
     distractors: ["one", "three", "ten"]
     accepted_answers: [{value: "two", status: correct}]
     feedback: "دو means two."
-  prs.a1.unit10.lesson04.exercise03.listen_quantity:
-    instruction: "Listen and select the sentence you hear."
-    correct_option: "یک کیلو سیب می‌خواهم"
-    distractors: ["دو کیلو می‌خواهم", "تخفیف می‌تانین بتین؟"]
-    accepted_answers: [{value: "یک کیلو سیب می‌خواهم", status: correct}]
-    feedback: "The speaker says یک کیلو سیب می‌خواهم."
+  prs.a1.unit10.lesson04.exercise03.recognize_quantity_reading:
+    instruction: "What does this sentence mean?"
+    correct_option: "I want a kilo of apples."
+    distractors: ["I want two kilos.", "Can you give a discount?"]
+    accepted_answers: [{value: "I want a kilo of apples.", status: correct}]
+    feedback: "یک کیلو سیب می‌خواهم means I want a kilo of apples."
   prs.a1.unit10.lesson04.exercise04.match_quantity_phrases:
     instruction: "Match each phrase with its meaning."
     accepted_answers:
@@ -285,43 +285,43 @@ exercises:
     correct_option: "Can you give a discount?"
     distractors: ["How much is it?", "I'd like two kilos.", "Very good, thank you."]
     accepted_answers: [{value: "Can you give a discount?", status: correct}]
-    feedback: "تخفیف می‌تانین بتین؟ politely asks for a discount."
+    feedback: "تخفیف می‌تانین بدهین؟ politely asks for a discount."
   prs.a1.unit10.lesson05.exercise02.recognize_discounted_price:
     instruction: "What does this phrase mean?"
     correct_option: "180 afghanis"
     distractors: ["100 afghanis", "200 afghanis", "80 afghanis"]
     accepted_answers: [{value: "180 afghanis", status: correct}]
     feedback: "صد و هشتاد افغانی means 180 afghanis."
-  prs.a1.unit10.lesson05.exercise03.listen_discount_request:
-    instruction: "Listen and select the question you hear."
-    correct_option: "تخفیف می‌تانین بتین؟"
-    distractors: ["قیمتش چند است؟", "دو کیلو می‌خواهم"]
-    accepted_answers: [{value: "تخفیف می‌تانین بتین؟", status: correct}]
-    feedback: "The speaker asks تخفیف می‌تانین بتین؟"
+  prs.a1.unit10.lesson05.exercise03.recognize_discount_request_reading:
+    instruction: "What does this question ask?"
+    correct_option: "Can you give a discount?"
+    distractors: ["What is its price?", "I want two kilos."]
+    accepted_answers: [{value: "Can you give a discount?", status: correct}]
+    feedback: "تخفیف می‌تانین بدهین؟ asks can you give a discount."
   prs.a1.unit10.lesson05.exercise04.match_discount_phrases:
     instruction: "Match each phrase with its meaning."
     accepted_answers:
-      - {value: {"تخفیف می‌تانین بتین؟": "Can you give a discount?", "برای شما صد و هشتاد افغانی می‌شه": "For you it comes to 180 afghanis.", "یک کیلو سیب می‌خواهم": "I'd like a kilo of apples.", "دو کیلو می‌خواهم": "I'd like two kilos.", سیب: apples, کیلو: kilo}, status: correct}
+      - {value: {"تخفیف می‌تانین بدهین؟": "Can you give a discount?", "برای شما صد و هشتاد افغانی می‌شه": "For you it comes to 180 afghanis.", "یک کیلو سیب می‌خواهم": "I'd like a kilo of apples.", "دو کیلو می‌خواهم": "I'd like two kilos.", سیب: apples, کیلو: kilo}, status: correct}
     feedback: "These cover asking for and receiving a discount, plus a review of the quantity phrases."
   prs.a1.unit10.lesson05.exercise05.order_discount_request:
     instruction: "Arrange the words to politely ask for a discount."
-    accepted_answers: [{value: [تخفیف, می‌تانین, بتین], status: correct}]
-    feedback: "تخفیف می‌تانین بتین؟ politely asks for a discount."
+    accepted_answers: [{value: [تخفیف, می‌تانین, بدهین], status: correct}]
+    feedback: "تخفیف می‌تانین بدهین؟ politely asks for a discount."
   prs.a1.unit10.lesson05.exercise06.translate_discount_request:
     instruction: "Translate into Dari: Can you give a discount?"
     accepted_answers:
-      - {value: "تخفیف می‌تانین بتین؟", status: correct}
-      - {value: "تخفیف می‌تانین بتین", status: correct}
-    feedback: "تخفیف می‌تانین بتین؟ is the natural, polite way to ask."
+      - {value: "تخفیف می‌تانین بدهین؟", status: correct}
+      - {value: "تخفیف می‌تانین بدهین", status: correct}
+    feedback: "تخفیف می‌تانین بدهین؟ is the natural, polite way to ask."
   prs.a1.unit10.lesson05.exercise07.speak_ask_discount:
     instruction: "Politely ask the shopkeeper for a discount."
     accepted_answers:
-      - {value: "تخفیف می‌تانین بتین؟", status: correct}
-      - {value: "تخفیف می‌تانین بتین", status: correct}
-    feedback: "تخفیف می‌تانین بتین؟ correctly and politely asks for a discount."
+      - {value: "تخفیف می‌تانین بدهین؟", status: correct}
+      - {value: "تخفیف می‌تانین بدهین", status: correct}
+    feedback: "تخفیف می‌تانین بدهین؟ correctly and politely asks for a discount."
 
   prs.a1.unit10.lesson06.exercise01.listen_context:
-    instruction: "Listen to the conversation. What does the customer buy, and how many kilos?"
+    instruction: "Read the conversation. What does the customer buy, and how many kilos?"
     correct_option: "two kilos of apples"
     distractors: ["one kilo of apples", "two kilos of bread", "one kilo of rice"]
     accepted_answers: [{value: "two kilos of apples", status: correct}]
@@ -333,25 +333,26 @@ exercises:
     accepted_answers: [{value: "apples", status: correct}]
     feedback: "The customer asks about سیب (apples)."
   prs.a1.unit10.lesson06.exercise03.match_dialogue_facts:
-    instruction: "Match each topic with the correct fact from the dialogue."
+    instruction: "Match each quantity with its price from the dialogue."
     accepted_answers:
-      - {value: {"Price per kilo": "100 afghanis", "Discounted price for two kilos": "180 afghanis", دوکان: shop, ارزان: cheap, گران: expensive, تخفیف: discount, سیب: apples}, status: correct}
-    feedback: "One kilo costs 100 afghanis; with the discount, two kilos comes to 180 afghanis (20 afghanis off the full 200) -- the rest reviews this unit's shopping words."
+      - {value: {"یک کیلو": "صد افغانی", "دو کیلو": "صد و هشتاد افغانی", دوکان: shop, ارزان: cheap, گران: expensive, تخفیف: discount, سیب: apples}, status: correct}
+    feedback: "یک کیلو (one kilo) costs صد افغانی (100 afghanis); دو کیلو (two kilos) with the discount comes to صد و هشتاد افغانی (180 afghanis, 20 afghanis off the full 200) -- the rest reviews this unit's shopping words."
   prs.a1.unit10.lesson06.exercise04.order_final_agreement:
     instruction: "Arrange the words for the customer's closing agreement."
     accepted_answers: [{value: [بسیار, خوب, تشکر], status: correct}]
     feedback: "بسیار خوب، تشکر means 'Very good, thank you.'"
-  prs.a1.unit10.lesson06.exercise05.listen_discounted_total:
-    instruction: "Listen and type the shopkeeper's discounted total."
+  prs.a1.unit10.lesson06.exercise05.translate_discounted_total:
+    instruction: "Translate into Dari: It comes to 180 afghanis."
     accepted_answers:
       - {value: "صد و هشتاد افغانی می‌شه", status: correct}
     feedback: "The shopkeeper says صد و هشتاد افغانی می‌شه (it comes to 180 afghanis)."
   prs.a1.unit10.lesson06.exercise06.dialogue_response_ask_discount:
     instruction: "The shopkeeper just said one kilo is 100 afghanis. Respond as the customer, asking for two kilos and requesting a discount."
     accepted_answers:
-      - {value: "دو کیلو می‌خواهم. تخفیف می‌تانین بتین؟", status: correct}
-      - {value: "دو کیلو می‌خواهم و تخفیف می‌تانین بتین؟", status: correct}
-    feedback: "دو کیلو می‌خواهم. تخفیف می‌تانین بتین؟ states the quantity and asks for a discount -- two separate moments, joined by a period or with و."
+      - {value: "دو کیلو می‌خواهم. تخفیف می‌تانین بدهین؟", status: correct}
+      - {value: "دو کیلو می‌خواهم، تخفیف می‌تانین بدهین؟", status: correct}
+      - {value: "دو کیلو می‌خواهم و تخفیف می‌تانین بدهین؟", status: correct}
+    feedback: "دو کیلو می‌خواهم. تخفیف می‌تانین بدهین؟ states the quantity and asks for a discount -- two separate moments, joined by a period, a comma, or و (and)."
   prs.a1.unit10.lesson06.exercise07.write_purchase_summary:
     instruction: "Write a short summary of the purchase: two kilos of apples for 180 afghanis."
     accepted_answers:
@@ -360,6 +361,7 @@ exercises:
   prs.a1.unit10.lesson06.exercise08.speak_full_market_scene:
     instruction: "You are at the market. Ask the price of apples, say you want two kilos, and ask for a discount."
     accepted_answers:
-      - {value: "سیب‌ها قیمتش چند است؟ دو کیلو می‌خواهم. تخفیف می‌تانین بتین؟", status: correct}
-      - {value: "سیب‌ها قیمتش چند است؟ دو کیلو می‌خواهم و تخفیف می‌تانین بتین؟", status: correct}
-    feedback: "This combines the price question, the quantity request, and the discount request taught across this unit -- joining the last two with a period or with و are equally natural."
+      - {value: "سیب‌ها قیمتش چند است؟ دو کیلو می‌خواهم. تخفیف می‌تانین بدهین؟", status: correct}
+      - {value: "سیب‌ها قیمتش چند است؟ دو کیلو می‌خواهم، تخفیف می‌تانین بدهین؟", status: correct}
+      - {value: "سیب‌ها قیمتش چند است؟ دو کیلو می‌خواهم و تخفیف می‌تانین بدهین؟", status: correct}
+    feedback: "This combines the price question, the quantity request, and the discount request taught across this unit -- joining the last two with a period, a comma, or و are equally natural."

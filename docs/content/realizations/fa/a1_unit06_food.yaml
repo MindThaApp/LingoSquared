@@ -11,7 +11,7 @@ generation_provenance:
 review:
   status: reviewed
   required_next_reviewer: null
-  notes: "Fresh-context review: fixed lesson06 exercise pacing (production items moved after recognition/drag), replaced a leftover FSI-register archaism (بسیار خب -> خیلی خب) in the dialogue, corrected a copy-paste tested_text mismatch in lesson03.exercise07, and resolved an ambiguous listen_select distractor set in lesson01.exercise03. Dialect verified as Iranian fa_IR_standard_colloquial_intro throughout, script purity confirmed (no Arabic-range codepoints), no jargon leaks, no YAML boolean footguns. Compiler validation: 0 errors/0 warnings across all fa units 01-06. Audio remains pending generation."
+  notes: "Fresh-context review: fixed lesson06 exercise pacing (production items moved after recognition/drag), replaced a leftover FSI-register archaism (بسیار خب -> خیلی خب) in the dialogue, corrected a copy-paste tested_text mismatch in lesson03.exercise07, and resolved an ambiguous listen_select distractor set in lesson01.exercise03. Dialect verified as Iranian fa_IR_standard_colloquial_intro throughout, script purity confirmed (no Arabic-range codepoints), no jargon leaks, no YAML boolean footguns. Compiler validation: 0 errors/0 warnings across all fa units 01-06. Audio remains pending generation. AUDIO-ACCESSIBILITY RETROFIT 2026-07-06 (§14, project-wide audit): found 9 exercises in this unit (lesson01.exercise03, lesson02.exercise03/06, lesson03.exercise03/06, lesson04.exercise03, lesson05.exercise03/06, lesson06.exercise03) were listen_type or bare-prompt listen_select items -- genuinely unanswerable since fa/prs have zero working TTS/recorded audio. Converted: listen_select -> multiple_choice (visible Farsi prompt, English glosses to avoid re-introducing the prompt-shows-answer bug -- the initial lesson01.exercise03 fix pass first mistakenly kept Persian-script distractors matching the prompt's own script, caught and corrected to English glosses before finalizing), listen_type -> translation. MATCHING_PAIRS SCALE (§16) CHECK: all matching_pairs exercises (7/2/5/6/6) already reasonably sized except match_register at 2, which is a genuine narrow polite/informal ordering-verb contrast with no more taught vocabulary in that specific category to pool -- left unchanged. Re-verified 0 remaining §14 violations via script, content_key parity intact, validate+compile both clean after the retrofit."
 
 course:
   realization_key: fa.a1
@@ -132,11 +132,10 @@ units:
             type: multiple_choice
             tested_text: چای قهوه آب
             prompt: {target_blocks: []}
-          - content_key: fa.a1.unit06.lesson01.exercise03.listen_food_words
-            type: listen_select
-            tested_text: نان برنج مرغ
-            media_asset_key: fa.a1.audio.food.vocab.01
-            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit06.lesson01.exercise03.recognize_naan_reading
+            type: multiple_choice
+            tested_text: نان
+            prompt: {target_blocks: [{text: نان, language_code: fa, direction: rtl}]}
           - content_key: fa.a1.unit06.lesson01.exercise04.match_food_words
             type: matching_pairs
             tested_text: نان برنج مرغ آب چای قهوه میوه
@@ -196,11 +195,10 @@ units:
             type: multiple_choice
             tested_text: یه چای می‌خوام
             prompt: {target_blocks: [{text: "یه چای می‌خوام", language_code: fa, direction: rtl}]}
-          - content_key: fa.a1.unit06.lesson02.exercise03.listen_polite_order
-            type: listen_select
+          - content_key: fa.a1.unit06.lesson02.exercise03.recognize_polite_order_reading
+            type: multiple_choice
             tested_text: یک چای می‌خواستم لطفاً
-            media_asset_key: fa.a1.audio.order.polite.01
-            prompt: {target_blocks: []}
+            prompt: {target_blocks: [{text: "یک چای می‌خواستم، لطفاً", language_code: fa, direction: rtl}]}
           - content_key: fa.a1.unit06.lesson02.exercise04.match_register
             type: matching_pairs
             tested_text: می‌خواستم می‌خوام
@@ -213,10 +211,9 @@ units:
             tested_text: یک نان می‌خواستم
             prompt: {target_blocks: []}
             word_bank: [یک, نان, می‌خواستم]
-          - content_key: fa.a1.unit06.lesson02.exercise06.listen_informal_order
-            type: listen_type
+          - content_key: fa.a1.unit06.lesson02.exercise06.translate_informal_order
+            type: translation
             tested_text: یه چای می‌خوام
-            media_asset_key: fa.a1.audio.order.informal.01
             prompt: {target_blocks: []}
           - content_key: fa.a1.unit06.lesson02.exercise07.translate_polite_water
             type: translation
@@ -268,11 +265,10 @@ units:
             type: multiple_choice
             tested_text: چی توصیه می‌کنید
             prompt: {target_blocks: [{text: "چی توصیه می‌کنید؟", language_code: fa, direction: rtl}]}
-          - content_key: fa.a1.unit06.lesson03.exercise03.listen_menu_question
-            type: listen_select
+          - content_key: fa.a1.unit06.lesson03.exercise03.recognize_menu_question_reading
+            type: multiple_choice
             tested_text: منو دارید
-            media_asset_key: fa.a1.audio.menu.question.01
-            prompt: {target_blocks: []}
+            prompt: {target_blocks: [{text: "منو دارید؟", language_code: fa, direction: rtl}]}
           - content_key: fa.a1.unit06.lesson03.exercise04.match_restaurant_questions
             type: matching_pairs
             tested_text: منو دارید چی توصیه می‌کنید چی میل دارید جوجه‌کباب امروز خیلی خوبه بله بفرمایید
@@ -288,10 +284,9 @@ units:
             tested_text: چی توصیه می‌کنید
             prompt: {target_blocks: []}
             word_bank: [چی, توصیه, می‌کنید]
-          - content_key: fa.a1.unit06.lesson03.exercise06.listen_recommendation
-            type: listen_type
+          - content_key: fa.a1.unit06.lesson03.exercise06.translate_recommendation
+            type: translation
             tested_text: چی توصیه می‌کنید
-            media_asset_key: fa.a1.audio.menu.recommend.01
             prompt: {target_blocks: []}
           - content_key: fa.a1.unit06.lesson03.exercise07.dialogue_response_waiter
             type: dialogue_response
@@ -335,11 +330,10 @@ units:
             type: multiple_choice
             tested_text: دو تا نان
             prompt: {target_blocks: [{text: "دو تا نان", language_code: fa, direction: rtl}]}
-          - content_key: fa.a1.unit06.lesson04.exercise03.listen_quantity_order
-            type: listen_select
+          - content_key: fa.a1.unit06.lesson04.exercise03.recognize_quantity_order_reading
+            type: multiple_choice
             tested_text: یک بشقاب برنج و دو تا نان
-            media_asset_key: fa.a1.audio.quantity.order.01
-            prompt: {target_blocks: []}
+            prompt: {target_blocks: [{text: "یک بشقاب برنج و دو تا نان", language_code: fa, direction: rtl}]}
           - content_key: fa.a1.unit06.lesson04.exercise04.match_quantities
             type: matching_pairs
             tested_text: یک لیوان چای دو تا نان یک بشقاب برنج یک لیوان آب سه تا نان دو تا مرغ
@@ -402,11 +396,10 @@ units:
             type: multiple_choice
             tested_text: خیلی خوشمزه بود
             prompt: {target_blocks: [{text: "خیلی خوشمزه بود", language_code: fa, direction: rtl}]}
-          - content_key: fa.a1.unit06.lesson05.exercise03.listen_bill_request
-            type: listen_select
+          - content_key: fa.a1.unit06.lesson05.exercise03.recognize_bill_request_reading
+            type: multiple_choice
             tested_text: صورت‌حساب رو لطف می‌کنید
-            media_asset_key: fa.a1.audio.bill.request.01
-            prompt: {target_blocks: []}
+            prompt: {target_blocks: [{text: "صورت‌حساب رو لطف می‌کنید؟", language_code: fa, direction: rtl}]}
           - content_key: fa.a1.unit06.lesson05.exercise04.nooshe_jan_meaning
             type: multiple_choice
             tested_text: نوش جان
@@ -418,10 +411,9 @@ units:
             tested_text: خیلی خوشمزه بود
             prompt: {target_blocks: []}
             word_bank: [خیلی, خوشمزه, بود]
-          - content_key: fa.a1.unit06.lesson05.exercise06.listen_delicious
-            type: listen_type
+          - content_key: fa.a1.unit06.lesson05.exercise06.translate_delicious
+            type: translation
             tested_text: خیلی خوشمزه بود
-            media_asset_key: fa.a1.audio.delicious.01
             prompt: {target_blocks: []}
           - content_key: fa.a1.unit06.lesson05.exercise07.dialogue_response_bill
             type: dialogue_response
@@ -506,8 +498,8 @@ units:
             type: speak_response
             tested_text: منو دارید
             prompt: {target_blocks: [{text: "چی میل دارید؟", language_code: fa, direction: rtl}]}
-          - content_key: fa.a1.unit06.lesson06.exercise03.listen_recommendation_line
-            type: listen_type
+          - content_key: fa.a1.unit06.lesson06.exercise03.translate_recommendation_line
+            type: translation
             tested_text: جوجه‌کباب امروز خیلی خوبه
             prompt: {target_blocks: []}
           - content_key: fa.a1.unit06.lesson06.exercise07.write_order_summary

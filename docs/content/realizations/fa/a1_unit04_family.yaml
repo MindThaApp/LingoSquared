@@ -50,6 +50,22 @@ review:
     with the overlay after every fix. No 1960s FSI-register leakage found
     in the adapted content. Audio remains pending generation.
 
+    AUDIO-ACCESSIBILITY RETROFIT 2026-07-06 (§14, project-wide audit):
+    found 9 exercises in this unit (lesson01.exercise05/07,
+    lesson02.exercise04, lesson03.exercise02b/05/07,
+    lesson04.exercise01/04, lesson06.exercise03) were listen_type or
+    bare-prompt listen_select items -- genuinely unanswerable since
+    fa/prs have zero working TTS/recorded audio. Converted:
+    listen_select -> multiple_choice (visible Farsi prompt, English
+    glosses), listen_type -> translation. MATCHING_PAIRS SCALE (§16)
+    CHECK: match_formal_informal (2, مادر/مامان and پدر/بابا) is a
+    genuine narrow contrast -- only parents have distinct
+    formal/informal address forms taught in this unit, no other pair
+    to pool. match_paternal (6) and match_marital_status (5) were
+    already reasonably sized. No changes needed. Re-verified 0
+    remaining §14 violations via script, content_key parity intact,
+    validate+compile both clean after the retrofit.
+
 course:
   realization_key: fa.a1
   target_language_first: true
@@ -178,11 +194,10 @@ units:
             pairs:
               - {left: مادر, right: مامان}
               - {left: پدر, right: بابا}
-          - content_key: fa.a1.unit04.lesson01.exercise05.listen_madar_pedar
-            type: listen_select
+          - content_key: fa.a1.unit04.lesson01.exercise05.recognize_madar_pedar_reading
+            type: multiple_choice
             tested_text: مادر پدر
-            media_asset_key: fa.a1.audio.madar_pedar.01
-            prompt: {target_blocks: []}
+            prompt: {target_blocks: [{text: "مادر، پدر", language_code: fa, direction: rtl}]}
           - content_key: fa.a1.unit04.lesson01.exercise05b.recognize_khahar
             type: multiple_choice
             tested_text: خواهر
@@ -192,10 +207,9 @@ units:
             tested_text: خواهر برادر
             prompt: {target_blocks: []}
             word_bank: [خواهر, برادر]
-          - content_key: fa.a1.unit04.lesson01.exercise07.listen_baradar_khahar
-            type: listen_type
+          - content_key: fa.a1.unit04.lesson01.exercise07.translate_baradar_khahar
+            type: translation
             tested_text: برادر خواهر
-            media_asset_key: fa.a1.audio.baradar_khahar.01
             prompt: {target_blocks: []}
           - content_key: fa.a1.unit04.lesson01.exercise08.write_khahar
             type: writing_prompt
@@ -244,10 +258,9 @@ units:
             tested_text: من یک برادر دارم
             prompt: {target_blocks: []}
             word_bank: [دارم, برادر, یک, من]
-          - content_key: fa.a1.unit04.lesson02.exercise04.listen_one_brother
-            type: listen_type
+          - content_key: fa.a1.unit04.lesson02.exercise04.translate_one_brother
+            type: translation
             tested_text: من یک برادر دارم
-            media_asset_key: fa.a1.audio.man_yek_baradar_daram.01
             prompt: {target_blocks: []}
           - content_key: fa.a1.unit04.lesson02.exercise05.order_no_sister
             type: word_order
@@ -308,11 +321,10 @@ units:
             type: multiple_choice
             tested_text: مادربزرگ
             prompt: {target_blocks: [{text: "مادربزرگ", language_code: fa, direction: rtl}]}
-          - content_key: fa.a1.unit04.lesson03.exercise02b.listen_aunts_uncles_recognition
-            type: listen_select
+          - content_key: fa.a1.unit04.lesson03.exercise02b.recognize_aunts_uncles_reading
+            type: multiple_choice
             tested_text: عمو عمه دایی خاله
-            media_asset_key: fa.a1.audio.amoo_amme_dayi_khale.01
-            prompt: {target_blocks: []}
+            prompt: {target_blocks: [{text: "عمو، عمه، دایی، خاله", language_code: fa, direction: rtl}]}
           - content_key: fa.a1.unit04.lesson03.exercise03.match_paternal
             type: matching_pairs
             tested_text: عمو عمه دایی خاله پدربزرگ مادربزرگ
@@ -324,20 +336,18 @@ units:
               - {left: خاله, right: maternal aunt}
               - {left: پدربزرگ, right: grandfather}
               - {left: مادربزرگ, right: grandmother}
-          - content_key: fa.a1.unit04.lesson03.exercise05.listen_grandparents
-            type: listen_select
+          - content_key: fa.a1.unit04.lesson03.exercise05.recognize_grandparents_reading
+            type: multiple_choice
             tested_text: پدربزرگ مادربزرگ
-            media_asset_key: fa.a1.audio.pedarbozorg_madarbozorg.01
-            prompt: {target_blocks: []}
+            prompt: {target_blocks: [{text: "پدربزرگ، مادربزرگ", language_code: fa, direction: rtl}]}
           - content_key: fa.a1.unit04.lesson03.exercise06.order_aunts_uncles
             type: word_order
             tested_text: عمو عمه دایی خاله
             prompt: {target_blocks: []}
             word_bank: [عمو, عمه, دایی, خاله]
-          - content_key: fa.a1.unit04.lesson03.exercise07.listen_aunts_uncles
-            type: listen_type
+          - content_key: fa.a1.unit04.lesson03.exercise07.translate_aunts_uncles
+            type: translation
             tested_text: عمو عمه دایی خاله
-            media_asset_key: fa.a1.audio.amoo_amme_dayi_khale.01
             prompt: {target_blocks: []}
           - content_key: fa.a1.unit04.lesson03.exercise08.side_check
             type: grammar_check
@@ -369,11 +379,10 @@ units:
             target: {text: "چهار نفریم: من، مامانم، بابام و داداشم.", language_code: fa, direction: rtl}
             introduced_tokens: [چهار, نفریم, مامانم, بابام, داداشم]
         exercises:
-          - content_key: fa.a1.unit04.lesson04.exercise01.listen_polite_question
-            type: listen_select
+          - content_key: fa.a1.unit04.lesson04.exercise01.recognize_polite_question_reading
+            type: multiple_choice
             tested_text: چند تا خواهر و برادر دارید
-            media_asset_key: fa.a1.audio.chand_khahar_bradar_darid.polite.01
-            prompt: {target_blocks: []}
+            prompt: {target_blocks: [{text: "چند تا خواهر و برادر دارید؟", language_code: fa, direction: rtl}]}
           - content_key: fa.a1.unit04.lesson04.exercise02.choose_meaning
             type: multiple_choice
             tested_text: چند تا خواهر و برادر دارید
@@ -387,10 +396,9 @@ units:
             type: multiple_choice
             tested_text: خانواده‌ی شما چند نفرن
             prompt: {target_blocks: [{text: "خانواده‌ی شما چند نفرن؟", language_code: fa, direction: rtl}]}
-          - content_key: fa.a1.unit04.lesson04.exercise04.listen_family_size
-            type: listen_type
+          - content_key: fa.a1.unit04.lesson04.exercise04.translate_family_size
+            type: translation
             tested_text: خانواده‌ی شما چند نفرن
-            media_asset_key: fa.a1.audio.khanevade_shoma_chandnafarand.polite.01
             prompt: {target_blocks: []}
           - content_key: fa.a1.unit04.lesson04.exercise05.reply_sibling_count
             type: dialogue_response
@@ -533,10 +541,9 @@ units:
             tested_text: آقا داداش مینا است
             media_asset_key: fa.a1.audio.dialogue.family_photo.01
             prompt: {target_blocks: []}
-          - content_key: fa.a1.unit04.lesson06.exercise03.listen_sibling_question
-            type: listen_type
+          - content_key: fa.a1.unit04.lesson06.exercise03.translate_sibling_question
+            type: translation
             tested_text: چند تا خواهر و برادر داری
-            media_asset_key: fa.a1.audio.dialogue.family_photo.sibling_question.01
             prompt: {target_blocks: []}
           - content_key: fa.a1.unit04.lesson06.exercise04.order_opposite
             type: word_order
