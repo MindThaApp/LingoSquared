@@ -17,6 +17,20 @@ class Settings(BaseSettings):
     google_cloud_tts_credentials_json: str = ""
     # Google's free tier for Standard voices is 4M characters/month.
     tts_monthly_char_budget: int = 4000000
+    # Azure Cognitive Services Speech — covers Farsi (fa), the one real
+    # gap Google's TTS leaves. Subscription key + region, same
+    # unset-by-default/graceful-degradation convention as the Google
+    # credential above: empty until a real key is provisioned, and
+    # synthesize_azure() raises (caught by the /tts route, which falls
+    # back to browser speechSynthesis) rather than crashing when unset.
+    azure_speech_key: str = ""
+    azure_speech_region: str = ""
+    # Self-hosted Whisper fallback STT (only hit when the client reports
+    # client-side WASM transcription isn't available). "tiny"/"base" keep
+    # CPU latency reasonable on a modest self-hosted box; int8 quantization
+    # trades a little accuracy for speed/memory on CPU-only inference.
+    whisper_model_size: str = "base"
+    whisper_compute_type: str = "int8"
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
     @property
