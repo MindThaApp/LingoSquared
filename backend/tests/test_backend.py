@@ -31,7 +31,7 @@ def test_all_90_ordered_pairs_constructible():
             for target in codes:
                 if source != target:
                     data = ImportRequest.model_validate(payload(source, target, f"Pair {source}-{target}"))
-                    count, errors = import_content(db, data)
+                    count, errors, counters = import_content(db, data)
                     assert count == 1 and not errors
     assert sum(1 for a in codes for b in codes if a != b) == 90
 
@@ -126,11 +126,14 @@ def test_tts_fallbacks(client, auth, monkeypatch):
     from app.services import tts as tts_service
     calls=[]
     monkeypatch.setattr(tts_service,"synthesize",lambda text,language_code: calls.append(text) or b"audio")
-    for code in ("fa","prs"):
-        response=client.post("/tts",headers=auth,json={"text":"سلام","language_code":code})
-        assert response.status_code==200
-        assert response.headers["content-type"].startswith("application/json")
-        assert response.json()=={"use_browser_tts":True,"reason":"unsupported_language"}
+    # prs still has zero coverage from any provider (Google or Azure) and
+    # must still hit the unsupported-language fallback. fa is covered now
+    # (Azure) — see test_tts_routes_farsi_to_azure_and_covered_languages_to_google
+    # for its dedicated routing coverage.
+    response=client.post("/tts",headers=auth,json={"text":"سلام","language_code":"prs"})
+    assert response.status_code==200
+    assert response.headers["content-type"].startswith("application/json")
+    assert response.json()=={"use_browser_tts":True,"reason":"unsupported_language"}
     assert calls==[]
 
     settings=get_settings(); original_budget=settings.tts_monthly_char_budget
@@ -154,6 +157,88 @@ def test_tts_fallbacks(client, auth, monkeypatch):
         with SessionLocal() as db: assert db.scalar(select(TTSUsage.characters))==5
     finally:
         settings.tts_monthly_char_budget=original_budget
+
+def test_tts_routes_farsi_to_azure_and_covered_languages_to_google(client, auth, monkeypatch):
+    from app.services import tts as tts_service
+    calls=[]
+    monkeypatch.setattr(tts_service,"synthesize_azure",lambda text,language_code: calls.append(("azure",language_code)) or b"azure-audio")
+    monkeypatch.setattr(tts_service,"synthesize_google",lambda text,language_code: calls.append(("google",language_code)) or b"google-audio")
+
+    response=client.post("/tts",headers=auth,json={"text":"سلام","language_code":"fa"})
+    assert response.status_code==200
+    assert response.headers["content-type"].startswith("audio/mpeg")
+    assert response.content==b"azure-audio"
+
+    response=client.post("/tts",headers=auth,json={"text":"hello","language_code":"en"})
+    assert response.status_code==200
+    assert response.content==b"google-audio"
+
+    # prs still has no provider at all (neither Google nor Azure) — must
+    # still fall back to the browser, never attempt either provider.
+    response=client.post("/tts",headers=auth,json={"text":"سلام","language_code":"prs"})
+    assert response.json()=={"use_browser_tts":True,"reason":"unsupported_language"}
+
+    assert calls==[("azure","fa"),("google","en")]
+
+def test_tts_azure_missing_key_falls_back_to_browser(client, auth):
+    # Default settings ship with no Azure credentials configured at all
+    # (matching the existing Google-credential-missing convention) —
+    # synthesize_azure() must raise, and the /tts route must catch it and
+    # degrade to the browser fallback rather than a 500.
+    from app.core.config import get_settings
+    settings=get_settings()
+    assert not settings.azure_speech_key and not settings.azure_speech_region
+    response=client.post("/tts",headers=auth,json={"text":"سلام","language_code":"fa"})
+    assert response.status_code==200
+    assert response.json()=={"use_browser_tts":True,"reason":"provider_error"}
+
+def test_synthesize_azure_builds_expected_request(monkeypatch):
+    from app.services import tts as tts_service
+    from app.core.config import get_settings
+    settings=get_settings()
+    original_key,original_region=settings.azure_speech_key,settings.azure_speech_region
+    try:
+        settings.azure_speech_key="test-key"
+        settings.azure_speech_region="eastus"
+        calls=[]
+        class FakeResponse:
+            def __init__(self,content=b"",text=""): self.content=content; self.text=text
+            def raise_for_status(self): pass
+        def fake_post(url,**kwargs):
+            calls.append((url,kwargs))
+            if url.endswith("/sts/v1.0/issueToken"): return FakeResponse(text="fake-token")
+            return FakeResponse(content=b"mp3-bytes")
+        monkeypatch.setattr(tts_service.httpx,"post",fake_post)
+
+        audio=tts_service.synthesize_azure("سلام","fa")
+
+        assert audio==b"mp3-bytes"
+        assert calls[0][0]=="https://eastus.api.cognitive.microsoft.com/sts/v1.0/issueToken"
+        assert calls[0][1]["headers"]["Ocp-Apim-Subscription-Key"]=="test-key"
+        assert calls[1][0]=="https://eastus.tts.speech.microsoft.com/cognitiveservices/v1"
+        assert calls[1][1]["headers"]["Authorization"]=="Bearer fake-token"
+        assert "fa-IR-DilaraNeural" in calls[1][1]["content"].decode()
+        assert "fa-IR" in calls[1][1]["content"].decode()
+    finally:
+        settings.azure_speech_key=original_key
+        settings.azure_speech_region=original_region
+
+def test_synthesize_azure_missing_credentials_raises(monkeypatch):
+    from app.services import tts as tts_service
+    from app.core.config import get_settings
+    settings=get_settings()
+    original_key,original_region=settings.azure_speech_key,settings.azure_speech_region
+    try:
+        settings.azure_speech_key=""
+        settings.azure_speech_region=""
+        try:
+            tts_service.synthesize_azure("hello","fa")
+            assert False,"expected RuntimeError"
+        except RuntimeError:
+            pass
+    finally:
+        settings.azure_speech_key=original_key
+        settings.azure_speech_region=original_region
 
 def test_speaking_units_lock_and_unlock(client, auth):
     course=client.get("/courses?source=en&target=fa").json()[0]

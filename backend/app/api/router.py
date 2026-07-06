@@ -1209,9 +1209,15 @@ def get_media_asset(key: str):
     )
 @router.post("/admin/content/import",response_model=ImportOut)
 def content_import(body:ImportRequest,user=Depends(admin_user),db:Session=Depends(get_db)):
-    count,errors=import_content(db,body)
-    if errors: fail(422,"content_invalid","; ".join(errors))
-    return {"imported_courses":count}
+    count,messages,counters=import_content(db,body)
+    # An empty `counters` dict means import_content returned before
+    # writing anything (upfront structural validation failure) - still
+    # hard-blocking, unchanged. Once past that point, `messages` are
+    # non-fatal per-item content_key-reconciliation conflicts, surfaced
+    # as `warnings` on a successful response instead of failing the
+    # whole request (the rest of the payload already committed).
+    if messages and not counters: fail(422,"content_invalid","; ".join(messages))
+    return {"imported_courses":count,"warnings":messages,**counters}
 @router.post(
     "/admin/courses/{course_id}/practice/import",
     response_model=PracticeImportOut,

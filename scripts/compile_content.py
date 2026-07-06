@@ -1072,6 +1072,9 @@ def compile_teaching_item(
         "title": item_overlay.get("title"),
         "text_blocks": blocks,
         "note": item_overlay.get("note"),
+        # Additive: lets import_content() match this exact teaching card
+        # against an already-shipped row and update it in place.
+        "content_key": item["content_key"],
     }
 
 
@@ -1192,6 +1195,12 @@ def compile_exercise(
         "correct_response": canonical_response(exercise_overlay),
         "feedback": compile_feedback(exercise_overlay, prompt, content_key),
         "xp": exercise.get("xp", 10),
+        # Additive: lets import_content() match this exact exercise
+        # against an already-shipped row and update it in place instead
+        # of silently leaving a stale copy forever (the mechanism the
+        # already-imported "w_or_v"/"y_or_long_i" jargon-leak bug needed
+        # and didn't have).
+        "content_key": content_key,
     }
 
 
@@ -1267,6 +1276,8 @@ def compile_import_request(
                         "order": lesson_order,
                         "teaching": teaching,
                         "exercises": exercises,
+                        # Additive: see the exercise-level content_key comment.
+                        "content_key": lesson_key,
                     }
                 )
 
@@ -1282,6 +1293,8 @@ def compile_import_request(
                     "order": len(compiled_units) + 1,
                     "section": unit.get("section", "reading_writing"),
                     "lessons": compiled_lessons,
+                    # Additive: see the exercise-level content_key comment.
+                    "content_key": unit["content_key"],
                 }
             )
 

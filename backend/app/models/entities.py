@@ -171,6 +171,14 @@ class Unit(Base):
         default=UnitSection.reading_writing,
         server_default="reading_writing",
     )
+    # Stable authoring key (e.g. "prs.a1.unit01"), nullable — content
+    # imported before this column existed has no recoverable key.
+    # Globally unique by construction when present (migration 0013);
+    # lets import_content() update an already-shipped unit in place by
+    # key instead of only ever matching by (course_id, order).
+    content_key: Mapped[str | None] = mapped_column(
+        String(255), nullable=True
+    )
     lessons = relationship(
         "Lesson",
         cascade="all, delete-orphan",
@@ -188,6 +196,10 @@ class Lesson(Base):
     )
     title: Mapped[str] = mapped_column(String(200))
     order: Mapped[int] = mapped_column(Integer)
+    # See Unit.content_key above — same nullable/globally-unique story.
+    content_key: Mapped[str | None] = mapped_column(
+        String(255), nullable=True
+    )
     exercises = relationship(
         "Exercise",
         cascade="all, delete-orphan",
@@ -222,6 +234,15 @@ class Exercise(Base):
     correct_response: Mapped[Any] = mapped_column(JSON)
     feedback: Mapped[str | None] = mapped_column(Text, nullable=True)
     xp: Mapped[int] = mapped_column(Integer, default=10)
+    # See Unit.content_key above — same nullable/globally-unique story.
+    # This is the field that lets a content fix (e.g. a jargon-leak or
+    # typo correction) update an already-shipped Exercise row in place
+    # (same id, so every ExerciseAttempt/ContentIssueReport/ReviewItem
+    # that references it is completely unaffected) instead of the old
+    # create-missing-only behavior silently leaving stale rows forever.
+    content_key: Mapped[str | None] = mapped_column(
+        String(255), nullable=True
+    )
 
 
 class ContentItem(Base):
@@ -251,6 +272,13 @@ class ContentItem(Base):
     language_code: Mapped[str] = mapped_column(ForeignKey("languages.code"))
     title: Mapped[str] = mapped_column(String(200), default="")
     content: Mapped[dict] = mapped_column(JSON)
+    # See Unit.content_key above — same nullable/globally-unique story.
+    # Only meaningful for lesson-scoped teaching cards (lesson_id is not
+    # null); standalone ContentItem rows (course-level reference
+    # material, lesson_id NULL) are out of scope for this update path.
+    content_key: Mapped[str | None] = mapped_column(
+        String(255), nullable=True
+    )
 
 
 class Lexeme(Base):

@@ -71,7 +71,7 @@ def create_course_with_lexemes(source="en", target="es"):
         ]
     }
     with SessionLocal() as db:
-        count, errors = import_content(db, ImportRequest.model_validate(payload))
+        count, errors, counters = import_content(db, ImportRequest.model_validate(payload))
         assert count == 1 and not errors
         course = db.scalar(select(Course).where(Course.title == title))
         lesson = db.scalar(

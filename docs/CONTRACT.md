@@ -57,12 +57,18 @@ the API-provided field.
 `reading_comprehension`, `writing_prompt`, `listen_select`, `listen_type`,
 `speak_response`, `listen_order`, `dialogue_comprehension`, `speak_repeat`
 
-Placeholder types (`listening_placeholder`, `speaking_placeholder`,
-`speak_repeat` — the last has no checkable answer since the target text is
-already shown) render as "coming soon" in the frontend. The six
-`listen_*`/`speak_*`/`dialogue_comprehension` types added after the
-original MVP reuse existing frontend components by prompt shape
-(`listen_select`≈`multiple_choice`, `listen_type`≈`translation`,
+Placeholder types (`listening_placeholder`, `speaking_placeholder`) render
+as "coming soon" in the frontend — no audio/mic pipeline exists for those
+two. **`speak_repeat` was mistakenly grouped with them until 2026-07-06**:
+real shipped content (e.g.
+`fr.a1.unit01.lesson03.exercise07_read_liaison`) proves it DOES compile
+with a genuine `correct_response`/`accepted_answers`, same as any other
+free-text exercise — the claim above that it "has no checkable answer"
+was simply wrong, not a description of a real constraint. It now has a
+real component (`SpeakRepeat.tsx`, mic + typed-fallback) — see "Speech-to-
+text" below. The six `listen_*`/`speak_*`/`dialogue_comprehension` types
+added after the original MVP reuse existing frontend components by prompt
+shape (`listen_select`≈`multiple_choice`, `listen_type`≈`translation`,
 `listen_order`≈`word_order`, `dialogue_comprehension`≈`multiple_choice`,
 `speak_response`/`dialogue_response` share a component) — see
 `ExerciseRenderer.tsx` for the exact dispatch table, which is the
@@ -103,6 +109,67 @@ says "course creation" as a test target (see BACKEND_PROMPT.md minimum
 tests), that means exercising the import/seed path end-to-end and asserting
 the resulting course/units/lessons are queryable via the GET endpoints
 above — not a REST create endpoint.
+
+### `POST /admin/content/import` — content_key-based update-in-place, 2026-07-06
+
+Every `UnitImport`/`LessonImport`/`ExerciseImport`/`TeachingCard` (via
+`TeachingImport`) gains an **optional, additive** `content_key: str |
+None` field (a stable authoring key, e.g.
+`"prs.a1.unit01.lesson01.exercise04.match_final_group"` — globally
+unique by construction, matching `PracticeTemplateImport.content_key`'s
+existing shape). `scripts/compile_content.py` now emits it on every
+unit/lesson/exercise/teaching-card in the compiled payload.
+
+**What changed, semantically:** re-importing into an already-existing
+course used to only ever *append* units whose `order` wasn't already
+present, silently leaving every previously-imported row exactly as it
+was forever — there was no way to ship a fix to already-shipped
+content. Now, for any incoming unit/lesson/exercise/teaching-card whose
+`content_key` matches an already-shipped row's `content_key`, that row
+is **updated in place** (same primary key — every `ExerciseAttempt`/
+`ContentIssueReport`/`ReviewItem`/`LessonProgress` that references it
+is completely unaffected, since none of those snapshot or re-derive
+from the row's content). Anything with no content_key match falls back
+to the original behavior unchanged: create if its `order` is free,
+otherwise leave the existing row alone.
+
+**Never deletes.** A unit/lesson/exercise/teaching-card that existed
+before but is absent from a new payload is left in place, orphaned but
+intact — real user history referencing it is never destroyed (and the
+`RESTRICT` foreign keys on `exercise_attempts`/`content_issue_reports`
+wouldn't allow deleting it anyway).
+
+**Pre-existing rows (imported before this feature shipped) have
+`content_key = NULL` forever** unless manually reconciled — this
+migration does not attempt to backfill historical content_keys, since
+there's no reliable way to recover which already-shipped row a given
+key would have corresponded to. Re-importing content that predates
+this feature behaves exactly as it did before (position-only
+create/skip), until that content is re-authored with the compiler's
+new content_key-emitting version.
+
+`ImportOut` response, additive:
+```json
+{
+  "imported_courses": 0,
+  "created_units": 2, "updated_units": 1,
+  "created_lessons": 6, "updated_lessons": 3,
+  "created_exercises": 40, "updated_exercises": 5,
+  "created_teaching_items": 12, "updated_teaching_items": 8,
+  "warnings": [
+    "unit prs.a1.unit03: lesson order 2 conflicts with an existing, unaffected lesson; skipped (content_key='prs.a1.unit03.lesson02')"
+  ]
+}
+```
+`warnings` is **non-fatal** — populated when an incoming item *does*
+carry a content_key but its `order` still collided with something
+unrelated (an author coordination conflict worth surfacing, not a
+reason to fail the whole request; everything unambiguous already
+committed by the time this is known). This is distinct from the
+existing `422 content_invalid` failure, which is raised **before**
+anything is written, for the pre-existing upfront structural
+validation checks (duplicate orders within the same payload, missing
+required blocks, etc.) — that behavior is unchanged.
 
 ## Request/response schemas (illustrative — field names are authoritative, exact types are the implementer's call within reason)
 
@@ -241,12 +308,14 @@ compatible), but all new/reseeded content should include it.
   (admin auth, multipart: `key` + audio file) is how a recording gets
   attached to a key.
 - Audio playback priority chain (frontend): recorded asset (if
-  `media_asset_key` present and `GET /media/{key}` resolves) → Google
-  Cloud TTS (existing quota logic, supported languages only) → browser
-  `speechSynthesis` → the existing honest "no voice available" message.
-  fa/prs have zero Google TTS coverage, so for those two languages the
-  chain is effectively recorded-asset-or-nothing-but-the-honest-
-  fallback until a given string has been recorded.
+  `media_asset_key` present and `GET /media/{key}` resolves) → cloud TTS
+  (Google Cloud for its 8 supported languages, Azure Cognitive Services
+  Speech for `fa` — see the Text-to-speech section below, existing quota
+  logic unchanged) → browser `speechSynthesis` → the existing honest "no
+  voice available" message. `prs` (Dari) still has zero cloud-TTS
+  coverage from either provider, so for that one language the chain is
+  effectively recorded-asset-or-nothing-but-the-honest-fallback until a
+  given string has been recorded.
 
 `POST /exercises/{id}/answer` request: `{ "response": <shape depends on
 exercise type> }`:
@@ -601,10 +670,21 @@ practice.
 
 **Superseded 2026-07-04: ElevenLabs was replaced with Google Cloud TTS**
 (ElevenLabs never supported fa/prs at all; Google Cloud TTS turned out to
-have zero Persian/Dari voices either, so the fallback behavior below is
-unchanged, only the primary provider changed). Phase D of the current
-build program (see `docs/SONNET_BUILD_PROMPT_UPGRADES.md`) adds a third
-tier — recorded human audio for fa/prs — ahead of both.
+have zero Persian/Dari voices either, so the fallback behavior below was
+unchanged at the time, only the primary provider changed). Phase D of the
+current build program (see `docs/SONNET_BUILD_PROMPT_UPGRADES.md`) adds a
+third tier — recorded human audio for fa/prs — ahead of both.
+
+**Added 2026-07-06: Azure Cognitive Services Speech as a second cloud TTS
+provider, specifically to close Google's Farsi gap.** Google Cloud TTS
+has zero Persian/Dari voices at all (confirmed against Google's own
+supported-voices list); Azure has real, licensed neural voices for Farsi
+(`fa-IR-DilaraNeural` female — the default used here — and
+`fa-IR-FaridNeural` male), confirmed against Azure's own voice gallery.
+Dari (`prs`) still has no voice on Azure either, so `prs` is unaffected
+and still falls all the way through to the browser fallback. `/tts`'s
+request/response shape is unchanged — the frontend never needs to know
+or care which provider actually generated a given `audio/mpeg` response.
 
 `POST /tts` (auth required — this hits a metered paid API). Request:
 ```json
@@ -612,7 +692,8 @@ tier — recorded human audio for fa/prs — ahead of both.
 ```
 Response is one of two things, and the frontend must branch on
 `Content-Type`:
-- `audio/mpeg` — raw MP3 bytes, generated via Google Cloud TTS. Play directly.
+- `audio/mpeg` — raw MP3 bytes, generated via Google Cloud TTS (most
+  languages) or Azure Cognitive Services Speech (`fa` only). Play directly.
 - `application/json` — `{ "use_browser_tts": true, "reason": "unsupported_language" | "quota_exceeded" | "provider_error" }`.
   Frontend must fall back to the browser's built-in `speechSynthesis` API
   with this `language_code` in this case — never treat this as a hard
@@ -625,17 +706,38 @@ Backend owns:
 - Google Cloud TTS integration (`GOOGLE_CLOUD_TTS_CREDENTIALS_JSON` env var
   — raw service-account JSON content, not a file path — `pwdlib`-style
   service-account auth, `ssml_gender=NEUTRAL`, no explicit voice `name`).
-- `tts_service.GOOGLE_TTS_SUPPORTED_LANGUAGES` (currently
-  `{en,nl,fr,de,it,es,ru,zh}`) is the authoritative supported-language set.
-  **Farsi (`fa`) and Dari (`prs`) have zero Google Cloud TTS voices at
-  all** — `/tts` always returns the browser-fallback JSON for these two,
-  never attempts the Google call.
+- Azure Cognitive Services Speech integration (`AZURE_SPEECH_KEY` +
+  `AZURE_SPEECH_REGION` env vars — a subscription key and its resource
+  region, e.g. `eastus`), via the plain REST API (`app/services/tts.py`'s
+  `synthesize_azure()`, no SDK dependency — an access token is exchanged
+  from the subscription key, then SSML is POSTed to the region's
+  `tts.speech.microsoft.com/cognitiveservices/v1` endpoint requesting
+  `fa-IR-DilaraNeural`). Same graceful-degradation convention as Google:
+  an unset/empty key or region raises, which the route catches and turns
+  into the `provider_error` browser-fallback JSON rather than a 500.
+- `tts_service.GOOGLE_TTS_SUPPORTED_LANGUAGES` (`{en,nl,fr,de,it,es,ru,zh}`)
+  and `tts_service.AZURE_TTS_SUPPORTED_LANGUAGES` (`{fa}`) are each
+  provider's own supported-language set; `tts_service.
+  TTS_SUPPORTED_LANGUAGES` (their union) is the authoritative "does /tts
+  have a real cloud voice for this language at all" set the route gates
+  on. `tts_service.synthesize(text, language_code)` dispatches to
+  whichever provider covers that language — Azure for `fa`, Google for
+  everything else it covers. **Dari (`prs`) still has zero coverage from
+  either provider** — `/tts` always returns the browser-fallback JSON for
+  `prs`, never attempts a provider call. Note: the Endless Practice
+  engine's `listen_select` generation gate (`app/practice/service.py`)
+  deliberately still checks `GOOGLE_TTS_SUPPORTED_LANGUAGES` specifically,
+  not the new union — whether to generate real-audio `listen_select`
+  practice items for `fa` now that Azure covers it is a separate,
+  not-yet-made product decision (see `docs/BUILD_LOG.md`'s Phase D4 note),
+  left untouched by this change.
 - Tracking cumulative characters synthesized per calendar month against
   `TTS_MONTHLY_CHAR_BUDGET` (config: `tts_monthly_char_budget`, default
   4,000,000) via a Postgres advisory-lock-guarded `TTSUsage` row,
   preemptively returning `reason: "quota_exceeded"` once a request would
   exceed the budget — never rely on the provider's own error response for
-  this.
+  this. This budget/usage tracking is shared across both providers (not
+  split per-provider) — it's one meter on `/tts` as a whole.
 
 Frontend owns: a reusable "speak this text" control (`SpeakButton`, e.g. a
 speaker icon) attached to any `text_block`, calling `/tts` and playing the
@@ -645,6 +747,54 @@ one exercise type. Also: a custom on-screen keyboard (`VirtualKeyboard.tsx`)
 for non-Latin scripts on any typed-answer exercise, shown while the answer
 field has focus (per `answer_language_code`), with a dismiss control to
 fall back to the device's own keyboard.
+
+## Speech-to-text (mic-based speaking exercises)
+
+Added 2026-07-06: `speak_response` and `speak_repeat` gain real mic input.
+Both compile with a genuine `correct_response`/`accepted_answers` (confirmed
+against real content — e.g. `nl.a1.unit02.lesson01.exercise08.say_seven`
+tests "zeven"; `fr.a1.unit01.lesson03.exercise07_read_liaison` tests "Vous
+êtes. Un atelier." with an unaccented variant also accepted) — the spoken
+answer is graded through the exact same `POST /exercises/{id}/answer` path
+as every other free-text exercise (`FREE_TEXT_EXERCISE_TYPES` in
+`app/review/grading.py`), just with the `response` string produced by
+transcription instead of a keyboard.
+
+**Primary path is 100% client-side and never touches the network with raw
+audio**: the frontend records via `MediaRecorder`, transcribes in-browser
+with a WASM Whisper model (Transformers.js, `Xenova/whisper-tiny`, run in a
+Web Worker), and submits the transcript text as the answer exactly like a
+typed response. The backend has no visibility into this path at all.
+
+**Fallback path**: `POST /stt/transcribe` (auth required, multipart
+form-data: `audio` file field + `language_code` form field). Only called
+when the client reports client-side transcription isn't usable (no
+WebAssembly, WASM model failed to load/download, or transcription itself
+threw). Response:
+```json
+{ "transcript": "zeven" }
+```
+Errors are the standard error shape (`docs/CONTRACT.md`'s Error shape
+section) with `code` one of `empty_audio` (413/422 — zero-byte upload),
+`audio_too_large` (413 — over 5 MB, same cap as `/admin/media/upload`; a
+few seconds of spoken audio is always far under this), or
+`transcription_failed` (500 — the Whisper call itself raised).
+
+Backend owns: `app/services/stt.py` (`faster-whisper`, self-hosted,
+CPU-only, `whisper_model_size`/`whisper_compute_type` config, lazy
+singleton model load on first request — never a cloud STT API). Dari
+(`prs`) has no distinct Whisper training language; `language_code=prs`
+hints the model with `fa` as the closest available option, a real accuracy
+caveat (transcripts may lean Farsi spelling/vocabulary) not a bug. **Raw
+audio bytes are never persisted to disk and never logged** — read into
+memory, transcribed, discarded, matching the TTS-neighboring privacy bar.
+
+Frontend owns: the mic/keyboard toggle (localStorage-persisted last choice,
+NOT an account-wide server field — silent/typed is still the default), the
+`MediaRecorder` capture + WASM transcription pipeline, and the graceful
+degrade back to typing if mic permission is denied or `getUserMedia` is
+unavailable — same "honest fallback, never silently dead" pattern as
+`SpeakButton`/`speak()`.
 
 ## Course sections (reading/writing vs. speaking)
 

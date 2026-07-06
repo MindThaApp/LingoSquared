@@ -142,7 +142,7 @@ def test_existing_course_import_is_non_destructive():
     )
 
     with SessionLocal() as db:
-        created, errors = import_content(db, request)
+        created, errors, counters = import_content(db, request)
         assert created == 1
         assert errors == []
 
@@ -169,7 +169,7 @@ def test_existing_course_import_is_non_destructive():
         progress_id = progress.id
         user_id = user.id
 
-        created, errors = import_content(db, request)
+        created, errors, counters = import_content(db, request)
         assert created == 0
         assert errors == []
 
@@ -193,7 +193,7 @@ def test_new_course_is_created_alongside_skipped_existing_course():
     )
 
     with SessionLocal() as db:
-        created, errors = import_content(db, existing_request)
+        created, errors, counters = import_content(db, existing_request)
         assert created == 1
         assert errors == []
 
@@ -208,7 +208,7 @@ def test_new_course_is_created_alongside_skipped_existing_course():
             }
         )
 
-        created, errors = import_content(db, mixed_request)
+        created, errors, counters = import_content(db, mixed_request)
         assert created == 1
         assert errors == []
 
@@ -251,7 +251,7 @@ def test_new_units_are_appended_to_existing_course():
     title = f"Growing course {uuid4()}"
 
     with SessionLocal() as db:
-        created, errors = import_content(
+        created, errors, counters = import_content(
             db, ImportRequest.model_validate({"courses": [course_payload(title)]})
         )
         assert created == 1
@@ -281,7 +281,7 @@ def test_new_units_are_appended_to_existing_course():
         # Reimport the SAME course, now with a second unit included --
         # this is exactly the "unit 2/3 authored after unit 1 already
         # shipped" scenario that was silently dropped before the fix.
-        created, errors = import_content(
+        created, errors, counters = import_content(
             db,
             ImportRequest.model_validate(
                 {"courses": [course_payload_with_second_unit(title)]}
@@ -322,7 +322,7 @@ def test_new_units_are_appended_to_existing_course():
 
         # Reimporting again with the SAME two units is a true no-op --
         # nothing new to append, no duplicate units created.
-        created, errors = import_content(
+        created, errors, counters = import_content(
             db,
             ImportRequest.model_validate(
                 {"courses": [course_payload_with_second_unit(title)]}
