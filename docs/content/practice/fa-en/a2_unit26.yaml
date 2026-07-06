@@ -46,6 +46,33 @@ review:
     Retrofit 2026-07-06 (AUTHORING_GUIDE.md §16): widened match.001 from
     2 to 4 pairs (dogpark_noun/noun, real course-wide pool=4 -- dog/park/
     playground/space), no padding with untaught words.
+
+    Depth pass 2026-07-06 (practice-pool-sync, templates-per-unit audit):
+    6 -> 13 templates. Same discipline as this unit's own notes above
+    and unit25's own depth-pass note: the only single-token vocabulary
+    safe for a shared slot is the 4-member dogpark_noun tag; the rest of
+    this unit's content is discourse-connector phrases ("I think", "in
+    my opinion", "on the other hand") that stay recognition-only, no
+    generative frame attempted. No new EN_POS/agreement_tags entries or
+    Farsi glosses were added -- every new template reuses the EXISTING
+    dogpark_noun tag (multiple_choice/listen_select/translation),
+    filling the remaining empty (lesson x exercise-type) cells of the
+    natural 4-lesson x 3-recognition-type grid (12 slots) + the existing
+    1 matching_pairs = 13, the genuine ceiling for this unit as currently
+    taught. This includes lesson01 (opinion_phrases), which previously
+    had ZERO dogpark_noun templates even though it's a perfectly valid
+    anchor (introduces 4 new lexemes of its own -- opinion/other/hand/
+    agree -- confirmed via a fresh iter_specs() dump) -- the same
+    reuse-across-lessons pattern already used for lesson02/03/04 in this
+    same pack (and for bureaucracy_noun across unit25's lessons) applies
+    equally to lesson01. Anchoring re-verified for all four lessons
+    (opinion_phrases: 4 new lexemes, giving_an_opinion_with_a_reason: 4,
+    reading_a_written_opinion: 1, opinion_dialogue: 6). Re-ran
+    compile_content.py practice-validate (0 errors/0 warnings across the
+    whole fa-en pack) and scripts/_practice_slot_check.py (fa-en
+    direction: OK, no new problems -- the 5 pre-existing problems that
+    script reports are all in en-fa unit01/unit02, unrelated to this
+    unit or direction).
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -53,6 +80,27 @@ tag_schema:
 slot_presets:
   dogpark_noun: &dogpark_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: dogpark_noun}}
 templates:
+  - content_key: practice.fa-en.en.a2.unit26.lesson01.choose.001
+    lesson_content_key: en.a2.unit26.lesson01.opinion_phrases
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *dogpark_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a2.unit26.lesson01.listen.002
+    lesson_content_key: en.a2.unit26.lesson01.opinion_phrases
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *dogpark_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "واژه‌ای که شنیدید {item} بود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a2.unit26.lesson01.translate.003
+    lesson_content_key: en.a2.unit26.lesson01.opinion_phrases
+    type: translation
+    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *dogpark_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a2.unit26.lesson02.choose.001
     lesson_content_key: en.a2.unit26.lesson02.giving_an_opinion_with_a_reason
     type: multiple_choice
@@ -67,6 +115,13 @@ templates:
     slots: {item: *dogpark_noun}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "واژه‌ای که شنیدید {item} بود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a2.unit26.lesson02.translate.003
+    lesson_content_key: en.a2.unit26.lesson02.giving_an_opinion_with_a_reason
+    type: translation
+    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *dogpark_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a2.unit26.lesson03.match.001
     lesson_content_key: en.a2.unit26.lesson03.reading_a_written_opinion
     type: matching_pairs
@@ -82,6 +137,20 @@ templates:
     slots: {item: *dogpark_noun}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a2.unit26.lesson03.choose.003
+    lesson_content_key: en.a2.unit26.lesson03.reading_a_written_opinion
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *dogpark_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a2.unit26.lesson03.listen.004
+    lesson_content_key: en.a2.unit26.lesson03.reading_a_written_opinion
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *dogpark_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "واژه‌ای که شنیدید {item} بود.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a2.unit26.lesson04.listen.001
     lesson_content_key: en.a2.unit26.lesson04.opinion_dialogue
     type: listen_select
@@ -89,6 +158,13 @@ templates:
     slots: {item: *dogpark_noun}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "واژه‌ای که در این گفتگو شنیدید {item} بود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a2.unit26.lesson04.choose.003
+    lesson_content_key: en.a2.unit26.lesson04.opinion_dialogue
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *dogpark_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a2.unit26.lesson04.translate.002
     lesson_content_key: en.a2.unit26.lesson04.opinion_dialogue
     type: translation

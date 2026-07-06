@@ -43,12 +43,40 @@ review:
     Same standing blocker as every pack in this bundle: no
     backfill_lexemes.py run has actually happened against a real
     database yet in this pass.
+
+    DEPTH PASS, added 2026-07-06 (practice-pool-sync lane, closing the
+    units 06-10 template-density audit gap -- this was the single
+    thinnest unit in the entire corpus, 3->9). Added three new tags to
+    scripts/backfill_lexemes.py's fa_agreement_tags(): "paperwork_word"
+    (اجاره‌نامه/مهلت, 2 members, matching/translation only, anchored
+    lesson03 where both are taught); and "bureaucracy_phrase", which
+    pools every genuine whole-sentence/whole-phrase lexeme this unit's
+    own four lessons introduce (iter_specs() already auto-derives one
+    phrase-level lexeme per multi-token teaching card and tags it
+    "reviewed_phrase" course-wide -- bureaucracy_phrase scopes that same
+    real data to just this unit's own lesson_key prefix, 11 real members
+    by lesson04, anchored there since that's where the pool completes).
+    Deliberately did NOT force any new multi-clause generative sentence
+    frame combining bureaucracy_word with a verb (چون/می‌خواستم/می‌شه
+    constructions remain the multi-clause A2 register/subjunctive
+    territory this pack's own earlier notes already ruled out for a
+    shared tag) -- instead added a single safe "X و X" word_order
+    template directly mirroring this unit's own realization exercise
+    (lesson01.exercise04's "مدرک و آدرس" word_bank), since و is
+    grammatical for any two of these four office nouns. Re-verified with
+    scripts/_practice_slot_check.py (paperwork_word=2, bureaucracy_
+    phrase=11, both real, all distinct) and compile_content.py
+    practice-validate (0 errors/0 warnings, full en-fa pack).
+    review.status left unreviewed -- this pass does not self-certify
+    review.
 tag_schema:
-  part_of_speech: [noun]
+  part_of_speech: [noun, phrase]
   agreement_tags:
-    semantic: [bureaucracy_word]
+    semantic: [bureaucracy_word, paperwork_word, bureaucracy_phrase]
 slot_presets:
   bureaucracy_word: &bureaucracy_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: bureaucracy_word}}
+  paperwork_word: &paperwork_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: paperwork_word}}
+  bureaucracy_phrase: &bureaucracy_phrase {language_code: fa, part_of_speech: phrase, agreement_tags: {semantic: bureaucracy_phrase}}
 templates:
   - content_key: practice.en-fa.fa.a2.unit09.lesson01.bureaucracy_choice.001
     lesson_content_key: fa.a2.unit09.lesson01.bureaucracy_vocabulary
@@ -72,3 +100,59 @@ templates:
     slots: {bureaucracy_word: *bureaucracy_word}
     answer_derivation: {kind: slot_text, slot: bureaucracy_word}
     feedback_frame: {text: "The Farsi word is {bureaucracy_word}.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a2.unit09.lesson01.bureaucracy_word_order.004
+    lesson_content_key: fa.a2.unit09.lesson01.bureaucracy_vocabulary
+    type: word_order
+    frame: {text: "{bureaucracy_word_one} و {bureaucracy_word_two}", language_code: fa, direction: rtl}
+    slots: {bureaucracy_word_one: *bureaucracy_word, bureaucracy_word_two: *bureaucracy_word}
+    slot_relations: [{kind: distinct, slots: [bureaucracy_word_one, bureaucracy_word_two]}]
+    answer_derivation: {kind: render_frame, frame: {text: "{bureaucracy_word_one} و {bureaucracy_word_two}", language_code: fa, direction: rtl}}
+    feedback_frame: {text: "و joins two office words, like مدرک و آدرس.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a2.unit09.lesson03.paperwork_match.005
+    lesson_content_key: fa.a2.unit09.lesson03.reading_the_notice
+    type: matching_pairs
+    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *paperwork_word, second: *paperwork_word}
+    slot_relations: [{kind: distinct, slots: [first, second]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a2.unit09.lesson03.paperwork_translate.006
+    lesson_content_key: fa.a2.unit09.lesson03.reading_the_notice
+    type: translation
+    frame: {text: "{paperwork_word}", language_code: en, direction: ltr, slot_rendering: {paperwork_word: english_gloss}}
+    slots: {paperwork_word: *paperwork_word}
+    answer_derivation: {kind: slot_text, slot: paperwork_word}
+    feedback_frame: {text: "The Farsi word is {paperwork_word}.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a2.unit09.lesson04.bureaucracy_phrase_choice.007
+    lesson_content_key: fa.a2.unit09.lesson04.at_the_registry_office
+    type: multiple_choice
+    frame: {text: "{bureaucracy_phrase}", language_code: fa, direction: rtl}
+    slots: {bureaucracy_phrase: *bureaucracy_phrase}
+    answer_derivation: {kind: slot_gloss, slot: bureaucracy_phrase}
+    feedback_frame: {text: "This is a phrase or sentence from this unit's registry-office scenario.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a2.unit09.lesson04.bureaucracy_phrase_match.008
+    lesson_content_key: fa.a2.unit09.lesson04.at_the_registry_office
+    type: matching_pairs
+    frame: {text: "Match each phrase with its meaning.", language_code: en, direction: ltr}
+    slots:
+      first: *bureaucracy_phrase
+      second: *bureaucracy_phrase
+      third: *bureaucracy_phrase
+      fourth: *bureaucracy_phrase
+      fifth: *bureaucracy_phrase
+      sixth: *bureaucracy_phrase
+      seventh: *bureaucracy_phrase
+      eighth: *bureaucracy_phrase
+      ninth: *bureaucracy_phrase
+      tenth: *bureaucracy_phrase
+      eleventh: *bureaucracy_phrase
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh]}
+    feedback_frame: {text: "Match each phrase to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a2.unit09.lesson04.bureaucracy_phrase_translate.009
+    lesson_content_key: fa.a2.unit09.lesson04.at_the_registry_office
+    type: translation
+    frame: {text: "{bureaucracy_phrase}", language_code: en, direction: ltr, slot_rendering: {bureaucracy_phrase: english_gloss}}
+    slots: {bureaucracy_phrase: *bureaucracy_phrase}
+    answer_derivation: {kind: slot_text, slot: bureaucracy_phrase}
+    feedback_frame: {text: "This phrase or sentence appears in this unit's registry-office scenario.", language_code: en, direction: ltr}

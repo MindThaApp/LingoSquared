@@ -39,6 +39,27 @@ review:
     warnings. Needs the standard fresh-context review before import; no
     backfill_lexemes_en_prs.py run has actually happened against a real
     database yet in this pass.
+
+    DEPTH PASS 2026-07-06 (per-unit template audit found this unit thin
+    at 7 vs unit02/03/04's 16-24): added office_word's remaining word_
+    order slot, plus paperwork_word's remaining multiple_choice (pooled
+    via office_and_paperwork, same precedent as the existing paperwork_
+    pair template) and word_order slots -- 7 -> 10 templates. This is
+    the real ceiling for this unit without inventing vocabulary or
+    extending scripts/backfill_lexemes_en_prs.py's classifier: office_
+    word and paperwork_word are the only two semantic tags this unit's
+    real vocabulary has (verified by re-reading the classifier's own A2
+    unit09 section) -- lesson02's چون/می‌شود grammatical constructions
+    and lesson04's dialogue vocabulary are deliberately untagged
+    (sentence-level patterns / dialogue-specific, per this file's own
+    prior notes above), and tagging them would need a classifier change,
+    out of scope for a practice-pack-only pass. With both tags now at 5
+    templates each (multiple_choice, fill_in_blank, translation,
+    matching_pairs, word_order), every PRACTICE_EXERCISE_TYPES member this
+    direction supports (no listen_select for prs) is covered. Re-verified:
+    scripts/_practice_slot_check.py 0 problems across the whole en-prs
+    pack; scripts/compile_content.py practice-validate for the full pack
+    -- 0 errors/0 warnings.
 tag_schema:
   part_of_speech: [noun]
   agreement_tags:
@@ -85,6 +106,19 @@ templates:
     slot_relations: [{kind: distinct, slots: [office_word_one, office_word_two, office_word_three, office_word_four, office_word_five, office_word_six, office_word_seven]}]
     answer_derivation: {kind: matching_pairs, slots: [office_word_one, office_word_two, office_word_three, office_word_four, office_word_five, office_word_six, office_word_seven]}
     feedback_frame: {text: "Match each word with its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a2.unit09.lesson01.office_order.005
+    lesson_content_key: prs.a2.unit09.lesson01.bureaucracy_vocabulary
+    # Added 2026-07-06 (practice-pool-sync depth pass): office_word's
+    # remaining PRACTICE_EXERCISE_TYPES gap (word_order), using the
+    # course-wide "این [noun] است" copula pattern already established for
+    # other noun categories (e.g. unit03's family_fill, unit02's
+    # this_is_fill) -- grammatical for all 5 office_word candidates, no
+    # invented vocabulary.
+    type: word_order
+    frame: {text: "این {office_word} است", language_code: prs, direction: rtl}
+    slots: {office_word: *office_word}
+    answer_derivation: {kind: render_frame, frame: {text: "این {office_word} است", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: این [word] است (this is ___).", language_code: en, direction: ltr}
 
   # Lesson 3: reading the notice.
   - content_key: practice.en-prs.prs.a2.unit09.lesson03.paperwork_fill.001
@@ -113,3 +147,30 @@ templates:
     slot_relations: [{kind: distinct, slots: [paperwork_word_one, paperwork_word_two, paperwork_word_three, paperwork_word_four, paperwork_word_five, paperwork_word_six, paperwork_word_seven]}]
     answer_derivation: {kind: matching_pairs, slots: [paperwork_word_one, paperwork_word_two, paperwork_word_three, paperwork_word_four, paperwork_word_five, paperwork_word_six, paperwork_word_seven]}
     feedback_frame: {text: "Match each word with its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a2.unit09.lesson03.paperwork_gloss.004
+    lesson_content_key: prs.a2.unit09.lesson03.reading_the_notice
+    # Added 2026-07-06 (practice-pool-sync depth pass): paperwork_word
+    # alone only has 2 distinct candidates (رسید/مهلت), below the >=3
+    # threshold _practice_slot_check.py enforces for multiple_choice --
+    # pooled with office_word via the office_and_paperwork preset already
+    # established above (7 distinct candidates) to make this well-formed,
+    # the same pooling this pack's own paperwork_pair template already
+    # uses. Real vocabulary only, no invented tokens.
+    type: multiple_choice
+    frame: {text: "{paperwork_word}", language_code: prs, direction: rtl}
+    slots: {paperwork_word: *office_and_paperwork}
+    answer_derivation: {kind: slot_gloss, slot: paperwork_word}
+    feedback_frame: {text: "{paperwork_word} is part of this unit's office/paperwork vocabulary.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a2.unit09.lesson03.paperwork_order.005
+    lesson_content_key: prs.a2.unit09.lesson03.reading_the_notice
+    # Added 2026-07-06, same pass: paperwork_word's remaining
+    # PRACTICE_EXERCISE_TYPES gap (word_order), same "این [noun] است"
+    # pattern as office_word's word_order above -- grammatical for both
+    # رسید and مهلت, no invented vocabulary. Kept un-pooled (paperwork_word
+    # only, not office_and_paperwork) since word_order has no minimum-
+    # candidate requirement, so pooling adds nothing here.
+    type: word_order
+    frame: {text: "این {paperwork_word} است", language_code: prs, direction: rtl}
+    slots: {paperwork_word: *paperwork_word}
+    answer_derivation: {kind: render_frame, frame: {text: "این {paperwork_word} است", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: این [word] است (this is ___).", language_code: en, direction: ltr}

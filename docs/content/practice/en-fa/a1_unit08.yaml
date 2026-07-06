@@ -46,13 +46,37 @@ review:
     Same standing blocker as every pack in this bundle: no
     backfill_lexemes.py run has actually happened against a real
     database yet in this pass.
+
+    DEPTH PASS, added 2026-07-06 (practice-pool-sync lane, closing the
+    units 06-10 template-density audit gap -- this unit went 8->16).
+    Added two new tags to scripts/backfill_lexemes.py's
+    fa_agreement_tags(): "service_role_word" (گارسون/مشتری/فروشنده, 3
+    members -- گارسون/مشتری first taught unit06, فروشنده taught here;
+    anchored HERE at lesson06's market dialogue since that's where the
+    pool of 3 genuinely completes, the same anchor-at-the-completing-unit
+    precedent this pack's own quantity_unit_word entry already
+    established) and "price_number" (سی/بیست/هشت, the 3 number words this
+    unit's own dialogue actually reuses for prices/discounts -- scoped
+    narrowly to just these 3, not the whole course-wide "number" pool, so
+    the generated item stays tied to this unit's shopping scenario;
+    anchored lesson04 where بیست/هشت appear alongside a review of سی from
+    lesson02). Also added two "X و X" word_order templates
+    (quantity_unit_word, payment_word) mirroring this unit's own
+    realization exercises (lesson01.exercise05's "قیمت و تخفیف" word_bank
+    uses همین و connector). Re-verified with scripts/_practice_slot_check.py
+    (service_role_word=3, price_number=3, both real, both >=3 for
+    multiple_choice) and compile_content.py practice-validate (0 errors/0
+    warnings, full en-fa pack). review.status left unreviewed -- this
+    pass does not self-certify review.
 tag_schema:
-  part_of_speech: [noun, adverb]
+  part_of_speech: [noun, adverb, adjective]
   agreement_tags:
-    semantic: [quantity_unit_word, payment_word, shop_word]
+    semantic: [quantity_unit_word, payment_word, shop_word, service_role_word, price_number]
 slot_presets:
   quantity_unit_word: &quantity_unit_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: quantity_unit_word}}
   payment_word: &payment_word {language_code: fa, part_of_speech: [noun, adverb], agreement_tags: {semantic: payment_word}}
+  service_role_word: &service_role_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: service_role_word}}
+  price_number: &price_number {language_code: fa, part_of_speech: adjective, agreement_tags: {semantic: price_number}}
   shop_word: &shop_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: shop_word}}
 templates:
   - content_key: practice.en-fa.fa.a1.unit08.lesson03.quantity_choice.001
@@ -114,3 +138,63 @@ templates:
     slots: {shop_word: *shop_word}
     answer_derivation: {kind: slot_text, slot: shop_word}
     feedback_frame: {text: "The Farsi word is {shop_word}.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit08.lesson06.service_role_choice.003
+    lesson_content_key: fa.a1.unit08.lesson06.market_dialogue
+    type: multiple_choice
+    frame: {text: "{service_role_word}", language_code: fa, direction: rtl}
+    slots: {service_role_word: *service_role_word}
+    answer_derivation: {kind: slot_gloss, slot: service_role_word}
+    feedback_frame: {text: "{service_role_word} names someone in a shop or restaurant scene.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit08.lesson06.service_role_match.004
+    lesson_content_key: fa.a1.unit08.lesson06.market_dialogue
+    type: matching_pairs
+    frame: {text: "Match each role word with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *service_role_word, second: *service_role_word, third: *service_role_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third]}
+    feedback_frame: {text: "Match each role word to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit08.lesson06.service_role_translate.005
+    lesson_content_key: fa.a1.unit08.lesson06.market_dialogue
+    type: translation
+    frame: {text: "{service_role_word}", language_code: en, direction: ltr, slot_rendering: {service_role_word: english_gloss}}
+    slots: {service_role_word: *service_role_word}
+    answer_derivation: {kind: slot_text, slot: service_role_word}
+    feedback_frame: {text: "The Farsi word is {service_role_word}.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit08.lesson04.price_number_choice.006
+    lesson_content_key: fa.a1.unit08.lesson04.asking_for_a_discount
+    type: multiple_choice
+    frame: {text: "{price_number}", language_code: fa, direction: rtl}
+    slots: {price_number: *price_number}
+    answer_derivation: {kind: slot_gloss, slot: price_number}
+    feedback_frame: {text: "{price_number} is a number used in this unit's price/discount talk.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit08.lesson04.price_number_match.007
+    lesson_content_key: fa.a1.unit08.lesson04.asking_for_a_discount
+    type: matching_pairs
+    frame: {text: "Match each number with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *price_number, second: *price_number, third: *price_number}
+    slot_relations: [{kind: distinct, slots: [first, second, third]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third]}
+    feedback_frame: {text: "Match each number to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit08.lesson04.price_number_translate.008
+    lesson_content_key: fa.a1.unit08.lesson04.asking_for_a_discount
+    type: translation
+    frame: {text: "{price_number}", language_code: en, direction: ltr, slot_rendering: {price_number: english_gloss}}
+    slots: {price_number: *price_number}
+    answer_derivation: {kind: slot_text, slot: price_number}
+    feedback_frame: {text: "The Farsi word is {price_number}.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit08.lesson03.quantity_unit_word_order.009
+    lesson_content_key: fa.a1.unit08.lesson03.quantities_in_shopping
+    type: word_order
+    frame: {text: "{quantity_unit_word_one} و {quantity_unit_word_two}", language_code: fa, direction: rtl}
+    slots: {quantity_unit_word_one: *quantity_unit_word, quantity_unit_word_two: *quantity_unit_word}
+    slot_relations: [{kind: distinct, slots: [quantity_unit_word_one, quantity_unit_word_two]}]
+    answer_derivation: {kind: render_frame, frame: {text: "{quantity_unit_word_one} و {quantity_unit_word_two}", language_code: fa, direction: rtl}}
+    feedback_frame: {text: "و joins two quantity words.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit08.lesson05.payment_word_order.010
+    lesson_content_key: fa.a1.unit08.lesson05.paying
+    type: word_order
+    frame: {text: "{payment_word_one} و {payment_word_two}", language_code: fa, direction: rtl}
+    slots: {payment_word_one: *payment_word, payment_word_two: *payment_word}
+    slot_relations: [{kind: distinct, slots: [payment_word_one, payment_word_two]}]
+    answer_derivation: {kind: render_frame, frame: {text: "{payment_word_one} و {payment_word_two}", language_code: fa, direction: rtl}}
+    feedback_frame: {text: "و joins two payment-related words, like قیمت و تخفیف.", language_code: en, direction: ltr}

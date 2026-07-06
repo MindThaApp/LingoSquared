@@ -463,6 +463,15 @@ def fa_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         semantics.append("payment_word")
     if lesson_key.endswith("lesson06.restaurant_dialogue"):
         semantics.append("dialogue_word")
+    # Practice-pool-depth pass, added 2026-07-06 (closing the units 06-10
+    # practice-template-depth gap): "ordering_register" is the same
+    # polite-vs-informal contrast unit06's own realization already drills
+    # in its lesson02.exercise04 match_register exercise (2 members, kept
+    # translation/matching_pairs-only, below the >=3 multiple_choice
+    # threshold, same class of narrow register pair as unit05's
+    # is_on_side).
+    if token in {"می‌خواستم", "می‌خوام"}:
+        semantics.append("ordering_register")
     # Unit 7 (weather and making plans), added 2026-07-06.
     if token in {"آفتابی", "بارونی", "ابری", "برفی"}:
         semantics.append("weather_condition")
@@ -472,14 +481,51 @@ def fa_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         semantics.append("weather_state_verb")
     if lesson_key.endswith("lesson06.weather_plan_dialogue"):
         semantics.append("dialogue_word")
+    # Practice-pool-depth pass, added 2026-07-06: "weather_time_word"
+    # (امروز/فردا, both genuinely taught/reinforced in this unit's
+    # lesson03/04/06, real content -- 2 members, matching/translation only).
+    if token in {"امروز", "فردا"}:
+        semantics.append("weather_time_word")
     # Unit 8 (shopping), added 2026-07-06.
     if lesson_key.endswith("lesson06.market_dialogue"):
         semantics.append("dialogue_word")
+    # Practice-pool-depth pass, added 2026-07-06: "service_role_word"
+    # groups the three service-interaction role nouns that recur across
+    # this course's two "ordering/paying" units (گارسون/مشتری first taught
+    # unit06, فروشنده taught here in unit08) -- anchored at unit08 (this
+    # unit) since that's where all three are genuinely available,
+    # mirroring quantity_unit_word's own already-established
+    # anchor-at-the-completing-unit precedent below. "price_number"
+    # groups the three number words unit08's own dialogue reuses for
+    # prices/discounts (سی/بیست/هشت, first taught unit03, reinforced here
+    # in lesson02/lesson04's real price/discount phrases) -- scoped
+    # narrowly to the numbers this unit's own content actually reuses,
+    # not the whole course-wide "number" pool, so the generated item
+    # stays genuinely tied to this unit's shopping scenario.
+    if token in {"گارسون", "مشتری", "فروشنده"}:
+        semantics.append("service_role_word")
+    if token in {"سی", "بیست", "هشت"}:
+        semantics.append("price_number")
     # Unit 9 (A2: bureaucracy), added 2026-07-06.
     if token in {"وقت", "مدرک", "آدرس", "قبض"}:
         semantics.append("bureaucracy_word")
     if lesson_key.startswith("fa.a2.unit09.lesson04"):
         semantics.append("dialogue_word")
+    # Practice-pool-depth pass, added 2026-07-06: "paperwork_word"
+    # (اجاره‌نامه/مهلت, 2 members, matching/translation only -- same
+    # below-threshold precedent as ordering_register/is_on_side).
+    # "bureaucracy_phrase" pools every genuine whole-sentence/whole-phrase
+    # lexeme this unit's own four lessons introduce (the same
+    # space-containing tokens iter_specs() already auto-derives and tags
+    # "reviewed_phrase" below, scoped here to just this unit's own
+    # lessons via lesson_key) -- 11 real members by lesson04, anchored
+    # there since that's where the pool completes.
+    if token in {"اجاره‌نامه", "مهلت"}:
+        semantics.append("paperwork_word")
+    if lesson_key.startswith("fa.a2.unit09") and (
+        " " in token or "،" in token or "؟" in token
+    ):
+        semantics.append("bureaucracy_phrase")
     # Unit 10 (A2: opinions), added 2026-07-06.
     if token in {"نظر", "دلیل", "دورکاری", "ترافیک", "تمرکز", "دفتر"}:
         semantics.append("opinion_word")
@@ -489,6 +535,17 @@ def fa_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         semantics.append("city_name")
     if lesson_key.startswith("fa.a2.unit10.lesson04"):
         semantics.append("dialogue_word")
+    # Practice-pool-depth pass, added 2026-07-06: "family_message_word"
+    # (پیام/خانواده, 2 members, matching/translation only). "opinion_phrase"
+    # mirrors unit09's own "bureaucracy_phrase" pattern -- every genuine
+    # whole-sentence/whole-phrase lexeme this unit's own four lessons
+    # introduce, scoped via lesson_key, 7 real members by lesson04.
+    if token in {"پیام", "خانواده"}:
+        semantics.append("family_message_word")
+    if lesson_key.startswith("fa.a2.unit10") and (
+        " " in token or "،" in token or "؟" in token
+    ):
+        semantics.append("opinion_phrase")
     if semantics:
         tags["semantic"] = list(dict.fromkeys(semantics))
     person = {

@@ -43,13 +43,38 @@ review:
     fresh-context review before import. Same standing blocker as every
     pack in this bundle: no backfill_lexemes.py run has actually happened
     against a real database yet in this pass.
+
+    DEPTH PASS, added 2026-07-06 (practice-pool-sync lane, closing the
+    units 06-10 template-density audit gap -- this unit went 5->11).
+    Added two new tags to scripts/backfill_lexemes.py's
+    fa_agreement_tags(): "family_message_word" (پیام/خانواده, 2 members,
+    matching/translation only, anchored lesson03 where both are taught)
+    and "opinion_phrase", mirroring a2_unit09's own new
+    "bureaucracy_phrase" pattern exactly -- pools every genuine
+    whole-sentence/whole-phrase lexeme this unit's own four lessons
+    introduce (already auto-derived and tagged "reviewed_phrase"
+    course-wide by iter_specs(), scoped here to just this unit's own
+    lesson_key prefix), 7 real members by lesson04, anchored there since
+    that's where the pool completes. Also added one safe "X و X"
+    word_order template (opinion_word) mirroring this unit's own
+    realization exercise (lesson01.exercise04's "نظر و دلیل" word_bank).
+    Deliberately did not force a shared frame combining opinion_word with
+    به نظر من/چون -- that construction remains the multi-clause A2
+    register territory this pack's own earlier notes already ruled out.
+    Re-verified with scripts/_practice_slot_check.py (family_message_
+    word=2, opinion_phrase=7, both real, all distinct) and
+    compile_content.py practice-validate (0 errors/0 warnings, full en-fa
+    pack). review.status left unreviewed -- this pass does not
+    self-certify review.
 tag_schema:
-  part_of_speech: [noun, proper_noun]
+  part_of_speech: [noun, proper_noun, phrase]
   agreement_tags:
-    semantic: [opinion_word, person_name]
+    semantic: [opinion_word, person_name, family_message_word, opinion_phrase]
 slot_presets:
   opinion_word: &opinion_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: opinion_word}}
   person_name: &person_name {language_code: fa, part_of_speech: proper_noun, agreement_tags: {semantic: person_name}}
+  family_message_word: &family_message_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: family_message_word}}
+  opinion_phrase: &opinion_phrase {language_code: fa, part_of_speech: phrase, agreement_tags: {semantic: opinion_phrase}}
 templates:
   - content_key: practice.en-fa.fa.a2.unit10.lesson01.opinion_choice.001
     lesson_content_key: fa.a2.unit10.lesson01.opinions_vocabulary
@@ -88,3 +113,55 @@ templates:
     slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth, seventh]}]
     answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth, seventh]}
     feedback_frame: {text: "Match each name to how it's written in Farsi.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a2.unit10.lesson01.opinion_word_order.004
+    lesson_content_key: fa.a2.unit10.lesson01.opinions_vocabulary
+    type: word_order
+    frame: {text: "{opinion_word_one} و {opinion_word_two}", language_code: fa, direction: rtl}
+    slots: {opinion_word_one: *opinion_word, opinion_word_two: *opinion_word}
+    slot_relations: [{kind: distinct, slots: [opinion_word_one, opinion_word_two]}]
+    answer_derivation: {kind: render_frame, frame: {text: "{opinion_word_one} و {opinion_word_two}", language_code: fa, direction: rtl}}
+    feedback_frame: {text: "و joins two words, like نظر و دلیل.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a2.unit10.lesson03.family_message_match.005
+    lesson_content_key: fa.a2.unit10.lesson03.reading_an_opinion_message
+    type: matching_pairs
+    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *family_message_word, second: *family_message_word}
+    slot_relations: [{kind: distinct, slots: [first, second]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a2.unit10.lesson03.family_message_translate.006
+    lesson_content_key: fa.a2.unit10.lesson03.reading_an_opinion_message
+    type: translation
+    frame: {text: "{family_message_word}", language_code: en, direction: ltr, slot_rendering: {family_message_word: english_gloss}}
+    slots: {family_message_word: *family_message_word}
+    answer_derivation: {kind: slot_text, slot: family_message_word}
+    feedback_frame: {text: "The Farsi word is {family_message_word}.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a2.unit10.lesson04.opinion_phrase_choice.007
+    lesson_content_key: fa.a2.unit10.lesson04.office_debate_dialogue
+    type: multiple_choice
+    frame: {text: "{opinion_phrase}", language_code: fa, direction: rtl}
+    slots: {opinion_phrase: *opinion_phrase}
+    answer_derivation: {kind: slot_gloss, slot: opinion_phrase}
+    feedback_frame: {text: "This is a phrase or sentence from this unit's office-debate scenario.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a2.unit10.lesson04.opinion_phrase_match.008
+    lesson_content_key: fa.a2.unit10.lesson04.office_debate_dialogue
+    type: matching_pairs
+    frame: {text: "Match each phrase with its meaning.", language_code: en, direction: ltr}
+    slots:
+      first: *opinion_phrase
+      second: *opinion_phrase
+      third: *opinion_phrase
+      fourth: *opinion_phrase
+      fifth: *opinion_phrase
+      sixth: *opinion_phrase
+      seventh: *opinion_phrase
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth, seventh]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth, seventh]}
+    feedback_frame: {text: "Match each phrase to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a2.unit10.lesson04.opinion_phrase_translate.009
+    lesson_content_key: fa.a2.unit10.lesson04.office_debate_dialogue
+    type: translation
+    frame: {text: "{opinion_phrase}", language_code: en, direction: ltr, slot_rendering: {opinion_phrase: english_gloss}}
+    slots: {opinion_phrase: *opinion_phrase}
+    answer_derivation: {kind: slot_text, slot: opinion_phrase}
+    feedback_frame: {text: "This phrase or sentence appears in this unit's office-debate scenario.", language_code: en, direction: ltr}

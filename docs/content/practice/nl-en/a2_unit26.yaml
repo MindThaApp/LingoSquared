@@ -20,7 +20,26 @@ review:
     against this script's actual output. Needs the standard
     fresh-context review before import. Same blocking dependency as
     every earlier nl-en pack: backfill_lexemes_nl_en.py has not
-    actually been run against a real database yet. 2026-07-06 matching_pairs widening (AUTHORING_GUIDE.md #16): expanded the dogpark_noun (noun) matching_pairs template from 2 to 4 pairs."
+    actually been run against a real database yet. 2026-07-06 matching_pairs widening (AUTHORING_GUIDE.md #16): expanded the dogpark_noun (noun) matching_pairs template from 2 to 4 pairs.
+    2026-07-06 depth pass (templates-per-unit audit): added 8 new templates
+    (multiple_choice/listen_select/translation against the same 4-member
+    dogpark_noun tag) so every one of this unit's 4 lessons -- including
+    lesson01, which had zero practice templates before this pass -- now
+    gets bare-word recognition + translation repetition, mirroring the
+    established pattern already reviewed in a1_unit21.yaml (travel_noun)
+    and a1_unit23.yaml (occupation_noun): reuse the same recognition-only
+    tag across every lesson for spaced repetition, not new per-lesson
+    vocabulary. Did NOT add a second matching_pairs template -- dogpark_noun's
+    real course-wide candidate pool is capped at exactly 4 tokens, so a
+    second matching_pairs against the same 4 tokens would be a
+    near-duplicate of the existing one, not new content. Did NOT attempt
+    word_order/fill_in_blank -- this unit's content is dominated by
+    multi-word discourse-connector phrases ('I think', 'on the other
+    hand') that don't reduce to a single fillable slot, same 'don't force
+    it' reasoning as the original authoring note above, re-confirmed not
+    re-litigated. 5 -> 13 templates. Every new template's real candidate
+    count re-verified with the standalone lexeme_matches()-replicating
+    harness (scripts/_practice_slot_check.py)."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -64,3 +83,59 @@ templates:
     slots: {item: *dogpark_noun}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is het woord dat je hoorde in dit gesprek.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a2.unit26.lesson01.choose.001
+    lesson_content_key: en.a2.unit26.lesson01.opinion_phrases
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *dogpark_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is een woord uit deze les.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a2.unit26.lesson01.listen.002
+    lesson_content_key: en.a2.unit26.lesson01.opinion_phrases
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *dogpark_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is het woord dat je hoorde.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a2.unit26.lesson01.translate.003
+    lesson_content_key: en.a2.unit26.lesson01.opinion_phrases
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *dogpark_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a2.unit26.lesson02.translate.003
+    lesson_content_key: en.a2.unit26.lesson02.giving_an_opinion_with_a_reason
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *dogpark_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a2.unit26.lesson03.choose.003
+    lesson_content_key: en.a2.unit26.lesson03.reading_a_written_opinion
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *dogpark_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is een woord uit deze les.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a2.unit26.lesson03.listen.004
+    lesson_content_key: en.a2.unit26.lesson03.reading_a_written_opinion
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *dogpark_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is het woord dat je hoorde.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a2.unit26.lesson04.choose.002
+    lesson_content_key: en.a2.unit26.lesson04.opinion_dialogue
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *dogpark_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is een woord uit dit gesprek.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a2.unit26.lesson04.translate.003
+    lesson_content_key: en.a2.unit26.lesson04.opinion_dialogue
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *dogpark_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}

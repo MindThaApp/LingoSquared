@@ -49,14 +49,43 @@ review:
     standard fresh-context review before import. Same standing blocker as
     every pack in this bundle: no backfill_lexemes.py run has actually
     happened against a real database yet in this pass.
+
+    DEPTH PASS, added 2026-07-06 (practice-pool-sync lane, closing the
+    units 06-10 template-density audit gap -- this unit went 9->16).
+    Added two new tags to scripts/backfill_lexemes.py's
+    fa_agreement_tags(): "ordering_register" (می‌خواستم/می‌خوام, the exact
+    2-member polite/informal contrast this unit's own realization already
+    drills in lesson02.exercise04 -- matching_pairs/translation only,
+    below the >=3 multiple_choice threshold, same class as a1_unit05's
+    is_on_side). Also added two safe generative sentence frames using
+    ALREADY-fully-covered tags plus a fixed, already-taught connector
+    word (never inventing new vocabulary): "من {food_item} می‌خوام."/
+    "من {drink_item} می‌خوام." (می‌خوام itself is real taught vocabulary
+    from this unit's own lesson02, hardcoded as frame text, not a slot --
+    grammatical for every food_item/drink_item member, verified by
+    reading each candidate) as new fill_in_blank/word_order templates,
+    and "{food_item} و {food_item}"/"{drink_item} یا {drink_item}" word_order
+    templates directly mirroring this unit's own realization exercises
+    (lesson01.exercise05's "نان و برنج و مرغ" word_bank uses و for
+    co-occurring foods; lesson01.exercise07's writing prompt "چای یا قهوه"
+    uses یا for an either/or drink choice -- both connectors already
+    taught in this unit, and both grammatical for every same-tag pairing
+    since there's no semantic clash between any two food items or any two
+    drink items). Re-verified with scripts/_practice_slot_check.py against
+    the updated iter_specs() output (all new slots have their expected
+    real candidate counts: ordering_register=2, food_item/drink_item
+    unchanged at 4/3) and compile_content.py practice-validate (0 errors/0
+    warnings, full en-fa pack). review.status left unreviewed -- this pass
+    does not self-certify review.
 tag_schema:
-  part_of_speech: [noun]
+  part_of_speech: [noun, verb]
   agreement_tags:
-    semantic: [food_item, drink_item, quantity_unit_word]
+    semantic: [food_item, drink_item, quantity_unit_word, ordering_register]
 slot_presets:
   food_item: &food_item {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: food_item}}
   drink_item: &drink_item {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: drink_item}}
   quantity_unit_word: &quantity_unit_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: quantity_unit_word}}
+  ordering_register: &ordering_register {language_code: fa, part_of_speech: verb, agreement_tags: {semantic: ordering_register}}
 templates:
   - content_key: practice.en-fa.fa.a1.unit06.lesson01.food_choice.001
     lesson_content_key: fa.a1.unit06.lesson01.food_and_drink_vocabulary
@@ -124,3 +153,55 @@ templates:
     slots: {quantity_unit_word: *quantity_unit_word}
     answer_derivation: {kind: slot_text, slot: quantity_unit_word}
     feedback_frame: {text: "The Farsi word is {quantity_unit_word}.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit06.lesson02.register_match.004
+    lesson_content_key: fa.a1.unit06.lesson02.polite_ordering_register
+    type: matching_pairs
+    frame: {text: "Match each ordering phrase with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *ordering_register, second: *ordering_register}
+    slot_relations: [{kind: distinct, slots: [first, second]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second]}
+    feedback_frame: {text: "می‌خواستم is polite (a waiter or stranger); می‌خوام is informal (a close friend).", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit06.lesson02.register_translate.005
+    lesson_content_key: fa.a1.unit06.lesson02.polite_ordering_register
+    type: translation
+    frame: {text: "{ordering_register}", language_code: en, direction: ltr, slot_rendering: {ordering_register: english_gloss}}
+    slots: {ordering_register: *ordering_register}
+    answer_derivation: {kind: slot_text, slot: ordering_register}
+    feedback_frame: {text: "{ordering_register} is the ordering-register verb form for this meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit06.lesson02.food_want_fill.006
+    lesson_content_key: fa.a1.unit06.lesson02.polite_ordering_register
+    type: fill_in_blank
+    frame: {text: "من {food_item} می‌خوام.", language_code: fa, direction: rtl}
+    slots: {food_item: *food_item}
+    answer_derivation: {kind: slot_text, slot: food_item}
+    feedback_frame: {text: "من {food_item} می‌خوام means \"I want {food_item}\" (informal).", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit06.lesson02.food_want_order.007
+    lesson_content_key: fa.a1.unit06.lesson02.polite_ordering_register
+    type: word_order
+    frame: {text: "من {food_item} می‌خوام", language_code: fa, direction: rtl}
+    slots: {food_item: *food_item}
+    answer_derivation: {kind: render_frame, frame: {text: "من {food_item} می‌خوام", language_code: fa, direction: rtl}}
+    feedback_frame: {text: "Word order: subject, food item, verb.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit06.lesson02.drink_want_fill.008
+    lesson_content_key: fa.a1.unit06.lesson02.polite_ordering_register
+    type: fill_in_blank
+    frame: {text: "من {drink_item} می‌خوام.", language_code: fa, direction: rtl}
+    slots: {drink_item: *drink_item}
+    answer_derivation: {kind: slot_text, slot: drink_item}
+    feedback_frame: {text: "من {drink_item} می‌خوام means \"I want {drink_item}\" (informal).", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit06.lesson01.food_item_order.009
+    lesson_content_key: fa.a1.unit06.lesson01.food_and_drink_vocabulary
+    type: word_order
+    frame: {text: "{food_item_one} و {food_item_two}", language_code: fa, direction: rtl}
+    slots: {food_item_one: *food_item, food_item_two: *food_item}
+    slot_relations: [{kind: distinct, slots: [food_item_one, food_item_two]}]
+    answer_derivation: {kind: render_frame, frame: {text: "{food_item_one} و {food_item_two}", language_code: fa, direction: rtl}}
+    feedback_frame: {text: "و joins two food words, like نان و برنج.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit06.lesson01.drink_item_order.010
+    lesson_content_key: fa.a1.unit06.lesson01.food_and_drink_vocabulary
+    type: word_order
+    frame: {text: "{drink_item_one} یا {drink_item_two}", language_code: fa, direction: rtl}
+    slots: {drink_item_one: *drink_item, drink_item_two: *drink_item}
+    slot_relations: [{kind: distinct, slots: [drink_item_one, drink_item_two]}]
+    answer_derivation: {kind: render_frame, frame: {text: "{drink_item_one} یا {drink_item_two}", language_code: fa, direction: rtl}}
+    feedback_frame: {text: "یا joins two drink words as an either/or choice, like چای یا قهوه.", language_code: en, direction: ltr}
