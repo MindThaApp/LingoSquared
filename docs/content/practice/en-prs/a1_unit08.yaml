@@ -48,6 +48,11 @@ slot_presets:
   food_item: &food_item {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: food_item}}
   role_word: &role_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: role_word}}
   counting_word: &counting_word {language_code: prs, part_of_speech: [noun, particle], agreement_tags: {semantic: counting_word}}
+  # counting_word alone only has 2 distinct candidates; pooled with
+  # lesson01's food_item (same unit, same dining theme) for the
+  # matching_pairs templates below to reach 7 (AUTHORING_GUIDE.md #16) --
+  # real vocabulary only.
+  food_and_counting: &food_and_counting {language_code: prs, part_of_speech: [noun, particle], agreement_tags: {semantic: [food_item, counting_word]}}
 templates:
   # Lesson 1: food and drink vocabulary.
   - content_key: practice.en-prs.prs.a1.unit08.lesson01.food_gloss.001
@@ -74,10 +79,13 @@ templates:
   - content_key: practice.en-prs.prs.a1.unit08.lesson01.food_pair.004
     lesson_content_key: prs.a1.unit08.lesson01.food_and_drink_vocabulary
     type: matching_pairs
-    frame: {text: "{food_item_one} — {food_item_two}", language_code: prs, direction: rtl}
-    slots: {food_item_one: *food_item, food_item_two: *food_item}
-    slot_relations: [{kind: distinct, slots: [food_item_one, food_item_two]}]
-    answer_derivation: {kind: matching_pairs, slots: [food_item_one, food_item_two]}
+    # Expanded 2->7 pairs 2026-07-06 (AUTHORING_GUIDE.md #16 retrofit),
+    # pooling food_item with lesson04's counting_word (food_and_counting
+    # preset above) -- verified via scripts/_practice_slot_check.py.
+    frame: {text: "{food_item_one} — {food_item_two} — {food_item_three} — {food_item_four} — {food_item_five} — {food_item_six} — {food_item_seven}", language_code: prs, direction: rtl}
+    slots: {food_item_one: *food_and_counting, food_item_two: *food_and_counting, food_item_three: *food_and_counting, food_item_four: *food_and_counting, food_item_five: *food_and_counting, food_item_six: *food_and_counting, food_item_seven: *food_and_counting}
+    slot_relations: [{kind: distinct, slots: [food_item_one, food_item_two, food_item_three, food_item_four, food_item_five, food_item_six, food_item_seven]}]
+    answer_derivation: {kind: matching_pairs, slots: [food_item_one, food_item_two, food_item_three, food_item_four, food_item_five, food_item_six, food_item_seven]}
     feedback_frame: {text: "Match each word with its English meaning.", language_code: en, direction: ltr}
 
   # Lesson 4: quantities.
@@ -98,10 +106,13 @@ templates:
   - content_key: practice.en-prs.prs.a1.unit08.lesson04.counting_pair.003
     lesson_content_key: prs.a1.unit08.lesson04.quantities
     type: matching_pairs
-    frame: {text: "{counting_word_one} — {counting_word_two}", language_code: prs, direction: rtl}
-    slots: {counting_word_one: *counting_word, counting_word_two: *counting_word}
-    slot_relations: [{kind: distinct, slots: [counting_word_one, counting_word_two]}]
-    answer_derivation: {kind: matching_pairs, slots: [counting_word_one, counting_word_two]}
+    # Expanded 2->7 pairs 2026-07-06 (AUTHORING_GUIDE.md #16 retrofit),
+    # pooling counting_word with lesson01's food_item (food_and_counting
+    # preset above) -- verified via scripts/_practice_slot_check.py.
+    frame: {text: "{counting_word_one} — {counting_word_two} — {counting_word_three} — {counting_word_four} — {counting_word_five} — {counting_word_six} — {counting_word_seven}", language_code: prs, direction: rtl}
+    slots: {counting_word_one: *food_and_counting, counting_word_two: *food_and_counting, counting_word_three: *food_and_counting, counting_word_four: *food_and_counting, counting_word_five: *food_and_counting, counting_word_six: *food_and_counting, counting_word_seven: *food_and_counting}
+    slot_relations: [{kind: distinct, slots: [counting_word_one, counting_word_two, counting_word_three, counting_word_four, counting_word_five, counting_word_six, counting_word_seven]}]
+    answer_derivation: {kind: matching_pairs, slots: [counting_word_one, counting_word_two, counting_word_three, counting_word_four, counting_word_five, counting_word_six, counting_word_seven]}
     feedback_frame: {text: "Match each counting word to its English meaning.", language_code: en, direction: ltr}
 
   # Lesson 6: the full teahouse dialogue.
@@ -122,6 +133,15 @@ templates:
   - content_key: practice.en-prs.prs.a1.unit08.lesson06.role_pair.003
     lesson_content_key: prs.a1.unit08.lesson06.restaurant_dialogue
     type: matching_pairs
+    # NOT expanded 2026-07-06 (AUTHORING_GUIDE.md #16 retrofit pass) --
+    # role_word has only 2 real distinct candidates course-wide
+    # (دکاندار/مشتری). The obvious pooling candidate, unit02's
+    # occupation (دوکاندار "shopkeeper"), is a near-duplicate spelling of
+    # this lesson's دکاندار (same word, two spellings) -- combining them
+    # would violate the no-ambiguous/confusable-near-duplicate rule
+    # (AUTHORING_GUIDE.md #3) rather than genuinely growing the pool.
+    # Left at 2; the spelling divergence itself is flagged separately for
+    # whichever lane owns units 02/06 to reconcile.
     frame: {text: "{role_word_one} — {role_word_two}", language_code: prs, direction: rtl}
     slots: {role_word_one: *role_word, role_word_two: *role_word}
     slot_relations: [{kind: distinct, slots: [role_word_one, role_word_two]}]

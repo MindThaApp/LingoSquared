@@ -50,6 +50,11 @@ slot_presets:
   direction_word: &direction_word {language_code: prs, part_of_speech: [noun, adjective], agreement_tags: {semantic: direction_word}}
   sequence_word: &sequence_word {language_code: prs, part_of_speech: adverb, agreement_tags: {semantic: sequence_word}}
   turn_verb: &turn_verb {language_code: prs, part_of_speech: verb, agreement_tags: {semantic: turn_verb}}
+  # direction_word (3) and sequence_word (2) are each too thin alone;
+  # pooled together for the matching_pairs templates below to reach 5
+  # (AUTHORING_GUIDE.md #16) -- both are used in this same unit's
+  # direction-giving dialogue, a coherent theme, real vocabulary only.
+  direction_and_sequence: &direction_and_sequence {language_code: prs, part_of_speech: [noun, adjective, adverb], agreement_tags: {semantic: [direction_word, sequence_word]}}
 templates:
   # Lesson 1: basic direction words.
   - content_key: practice.en-prs.prs.a1.unit06.lesson01.direction_gloss.001
@@ -76,10 +81,14 @@ templates:
   - content_key: practice.en-prs.prs.a1.unit06.lesson01.direction_pair.004
     lesson_content_key: prs.a1.unit06.lesson01.direction_words
     type: matching_pairs
-    frame: {text: "{direction_word_one} — {direction_word_two}", language_code: prs, direction: rtl}
-    slots: {direction_word_one: *direction_word, direction_word_two: *direction_word}
-    slot_relations: [{kind: distinct, slots: [direction_word_one, direction_word_two]}]
-    answer_derivation: {kind: matching_pairs, slots: [direction_word_one, direction_word_two]}
+    # Expanded 2->5 pairs 2026-07-06 (AUTHORING_GUIDE.md #16 retrofit),
+    # pooling direction_word with lesson03's sequence_word
+    # (direction_and_sequence preset above) -- verified via
+    # scripts/_practice_slot_check.py.
+    frame: {text: "{direction_word_one} — {direction_word_two} — {direction_word_three} — {direction_word_four} — {direction_word_five}", language_code: prs, direction: rtl}
+    slots: {direction_word_one: *direction_and_sequence, direction_word_two: *direction_and_sequence, direction_word_three: *direction_and_sequence, direction_word_four: *direction_and_sequence, direction_word_five: *direction_and_sequence}
+    slot_relations: [{kind: distinct, slots: [direction_word_one, direction_word_two, direction_word_three, direction_word_four, direction_word_five]}]
+    answer_derivation: {kind: matching_pairs, slots: [direction_word_one, direction_word_two, direction_word_three, direction_word_four, direction_word_five]}
     feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a1.unit06.lesson01.turn_verb_fill.005
     lesson_content_key: prs.a1.unit06.lesson01.direction_words
@@ -114,8 +123,12 @@ templates:
   - content_key: practice.en-prs.prs.a1.unit06.lesson03.sequence_pair.003
     lesson_content_key: prs.a1.unit06.lesson03.sequencing_directions
     type: matching_pairs
-    frame: {text: "{sequence_word_one} — {sequence_word_two}", language_code: prs, direction: rtl}
-    slots: {sequence_word_one: *sequence_word, sequence_word_two: *sequence_word}
-    slot_relations: [{kind: distinct, slots: [sequence_word_one, sequence_word_two]}]
-    answer_derivation: {kind: matching_pairs, slots: [sequence_word_one, sequence_word_two]}
+    # Expanded 2->5 pairs 2026-07-06 (AUTHORING_GUIDE.md #16 retrofit),
+    # pooling sequence_word with lesson01's direction_word
+    # (direction_and_sequence preset above) -- verified via
+    # scripts/_practice_slot_check.py.
+    frame: {text: "{sequence_word_one} — {sequence_word_two} — {sequence_word_three} — {sequence_word_four} — {sequence_word_five}", language_code: prs, direction: rtl}
+    slots: {sequence_word_one: *direction_and_sequence, sequence_word_two: *direction_and_sequence, sequence_word_three: *direction_and_sequence, sequence_word_four: *direction_and_sequence, sequence_word_five: *direction_and_sequence}
+    slot_relations: [{kind: distinct, slots: [sequence_word_one, sequence_word_two, sequence_word_three, sequence_word_four, sequence_word_five]}]
+    answer_derivation: {kind: matching_pairs, slots: [sequence_word_one, sequence_word_two, sequence_word_three, sequence_word_four, sequence_word_five]}
     feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}

@@ -59,6 +59,12 @@ slot_presets:
   person_name: &person_name {language_code: prs, part_of_speech: proper_noun, agreement_tags: {semantic: person_name}}
   city_name: &city_name {language_code: prs, part_of_speech: proper_noun, agreement_tags: {semantic: city_name}}
   country: &country {language_code: prs, part_of_speech: proper_noun, agreement_tags: {semantic: country}}
+  # city_name alone only has 4 distinct candidates course-wide; matching_pairs
+  # needs more density (AUTHORING_GUIDE.md #16), so city_pair below pools in
+  # the one taught country name too (both are place-name proper nouns, same
+  # "where someone is from" theme) -- kept as its own preset so it doesn't
+  # change the single-slot city_name exercises above.
+  city_or_country: &city_or_country {language_code: prs, part_of_speech: proper_noun, agreement_tags: {semantic: [city_name, country]}}
   occupation: &occupation {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: occupation}}
   title: &title {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: title}}
   relationship_word: &relationship_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: relationship_word}}
@@ -90,10 +96,13 @@ templates:
   - content_key: practice.en-prs.prs.a1.unit02.lesson01.person_pair.004
     lesson_content_key: prs.a1.unit02.lesson01.name_exchange
     type: matching_pairs
-    frame: {text: "{person_name_one}، {person_name_two}", language_code: prs, direction: rtl}
-    slots: {person_name_one: *person_name, person_name_two: *person_name}
-    slot_relations: [{kind: distinct, slots: [person_name_one, person_name_two]}]
-    answer_derivation: {kind: matching_pairs, slots: [person_name_one, person_name_two]}
+    # Expanded 2->10 pairs 2026-07-06 (AUTHORING_GUIDE.md #16 retrofit) --
+    # verified via scripts/_practice_slot_check.py: 10 distinct person_name
+    # candidates backfilled course-wide, exactly enough for 10 slots.
+    frame: {text: "{person_name_one}، {person_name_two}، {person_name_three}، {person_name_four}، {person_name_five}، {person_name_six}، {person_name_seven}، {person_name_eight}، {person_name_nine}، {person_name_ten}", language_code: prs, direction: rtl}
+    slots: {person_name_one: *person_name, person_name_two: *person_name, person_name_three: *person_name, person_name_four: *person_name, person_name_five: *person_name, person_name_six: *person_name, person_name_seven: *person_name, person_name_eight: *person_name, person_name_nine: *person_name, person_name_ten: *person_name}
+    slot_relations: [{kind: distinct, slots: [person_name_one, person_name_two, person_name_three, person_name_four, person_name_five, person_name_six, person_name_seven, person_name_eight, person_name_nine, person_name_ten]}]
+    answer_derivation: {kind: matching_pairs, slots: [person_name_one, person_name_two, person_name_three, person_name_four, person_name_five, person_name_six, person_name_seven, person_name_eight, person_name_nine, person_name_ten]}
     feedback_frame: {text: "Match each name to its English label.", language_code: en, direction: ltr}
 
   # Lesson 2: origin and hometown.
@@ -121,10 +130,15 @@ templates:
   - content_key: practice.en-prs.prs.a1.unit02.lesson02.city_pair.004
     lesson_content_key: prs.a1.unit02.lesson02.origin_and_hometown
     type: matching_pairs
-    frame: {text: "{city_name_one} — {city_name_two}", language_code: prs, direction: rtl}
-    slots: {city_name_one: *city_name, city_name_two: *city_name}
-    slot_relations: [{kind: distinct, slots: [city_name_one, city_name_two]}]
-    answer_derivation: {kind: matching_pairs, slots: [city_name_one, city_name_two]}
+    # Expanded 2->5 pairs 2026-07-06 (AUTHORING_GUIDE.md #16 retrofit).
+    # city_name alone only has 4 distinct real candidates; pooled in the
+    # one taught country name (city_or_country preset above) to reach 5 --
+    # verified via scripts/_practice_slot_check.py. Real vocabulary ceiling,
+    # not padded with untaught words.
+    frame: {text: "{city_name_one} — {city_name_two} — {city_name_three} — {city_name_four} — {city_name_five}", language_code: prs, direction: rtl}
+    slots: {city_name_one: *city_or_country, city_name_two: *city_or_country, city_name_three: *city_or_country, city_name_four: *city_or_country, city_name_five: *city_or_country}
+    slot_relations: [{kind: distinct, slots: [city_name_one, city_name_two, city_name_three, city_name_four, city_name_five]}]
+    answer_derivation: {kind: matching_pairs, slots: [city_name_one, city_name_two, city_name_three, city_name_four, city_name_five]}
     feedback_frame: {text: "Match each place name to its English label.", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a1.unit02.lesson02.country_translate.005
     lesson_content_key: prs.a1.unit02.lesson02.origin_and_hometown
@@ -159,10 +173,19 @@ templates:
   - content_key: practice.en-prs.prs.a1.unit02.lesson03.occupation_pair.004
     lesson_content_key: prs.a1.unit02.lesson03.occupation
     type: matching_pairs
-    frame: {text: "{occupation_one} — {occupation_two}", language_code: prs, direction: rtl}
-    slots: {occupation_one: *occupation, occupation_two: *occupation}
-    slot_relations: [{kind: distinct, slots: [occupation_one, occupation_two]}]
-    answer_derivation: {kind: matching_pairs, slots: [occupation_one, occupation_two]}
+    # Expanded 2->4 pairs 2026-07-06 (AUTHORING_GUIDE.md #16 retrofit).
+    # Real vocabulary ceiling: only 4 occupation nouns taught course-wide
+    # (verified via scripts/_practice_slot_check.py). Deliberately NOT
+    # pooled with unit06's role_word (دکاندار "shopkeeper") -- that token
+    # is a near-duplicate spelling of this lesson's own دوکاندار
+    # (also "shopkeeper"); combining them would violate the no-ambiguous/
+    # confusable-near-duplicate rule (AUTHORING_GUIDE.md #3), and the
+    # spelling divergence itself is flagged separately for the content lane
+    # that owns units 02/06 to reconcile.
+    frame: {text: "{occupation_one} — {occupation_two} — {occupation_three} — {occupation_four}", language_code: prs, direction: rtl}
+    slots: {occupation_one: *occupation, occupation_two: *occupation, occupation_three: *occupation, occupation_four: *occupation}
+    slot_relations: [{kind: distinct, slots: [occupation_one, occupation_two, occupation_three, occupation_four]}]
+    answer_derivation: {kind: matching_pairs, slots: [occupation_one, occupation_two, occupation_three, occupation_four]}
     feedback_frame: {text: "Match each job to its English label.", language_code: en, direction: ltr}
 
   # Lesson 4: introducing a third person.
@@ -245,8 +268,11 @@ templates:
   - content_key: practice.en-prs.prs.a1.unit02.lesson06.dialogue_pair.003
     lesson_content_key: prs.a1.unit02.lesson06.gathering_dialogue
     type: matching_pairs
-    frame: {text: "{dialogue_word_one} — {dialogue_word_two}", language_code: prs, direction: rtl}
-    slots: {dialogue_word_one: *dialogue_word, dialogue_word_two: *dialogue_word}
-    slot_relations: [{kind: distinct, slots: [dialogue_word_one, dialogue_word_two]}]
-    answer_derivation: {kind: matching_pairs, slots: [dialogue_word_one, dialogue_word_two]}
+    # Expanded 2->10 pairs 2026-07-06 (AUTHORING_GUIDE.md #16 retrofit) --
+    # verified via scripts/_practice_slot_check.py: 50 distinct dialogue_word
+    # candidates backfilled course-wide, comfortably supports 10 slots.
+    frame: {text: "{dialogue_word_one} — {dialogue_word_two} — {dialogue_word_three} — {dialogue_word_four} — {dialogue_word_five} — {dialogue_word_six} — {dialogue_word_seven} — {dialogue_word_eight} — {dialogue_word_nine} — {dialogue_word_ten}", language_code: prs, direction: rtl}
+    slots: {dialogue_word_one: *dialogue_word, dialogue_word_two: *dialogue_word, dialogue_word_three: *dialogue_word, dialogue_word_four: *dialogue_word, dialogue_word_five: *dialogue_word, dialogue_word_six: *dialogue_word, dialogue_word_seven: *dialogue_word, dialogue_word_eight: *dialogue_word, dialogue_word_nine: *dialogue_word, dialogue_word_ten: *dialogue_word}
+    slot_relations: [{kind: distinct, slots: [dialogue_word_one, dialogue_word_two, dialogue_word_three, dialogue_word_four, dialogue_word_five, dialogue_word_six, dialogue_word_seven, dialogue_word_eight, dialogue_word_nine, dialogue_word_ten]}]
+    answer_derivation: {kind: matching_pairs, slots: [dialogue_word_one, dialogue_word_two, dialogue_word_three, dialogue_word_four, dialogue_word_five, dialogue_word_six, dialogue_word_seven, dialogue_word_eight, dialogue_word_nine, dialogue_word_ten]}
     feedback_frame: {text: "Match each dialogue word to its English label.", language_code: en, direction: ltr}

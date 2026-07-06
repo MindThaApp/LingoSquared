@@ -11,7 +11,7 @@ generation_provenance:
 review:
   status: reviewed
   required_next_reviewer: null
-  notes: "New unit, fills the unit02 gap between unit01 (greetings) and unit03 (family). Six lessons: name exchange, hometown/origin, occupation, introducing a third person, polite titles and register, and a full gathering dialogue. Adapted from FSI/Peace Corps Dari material with an active modernization pass -- no verbatim import. Authored independently from the fa realization per the sibling-isolation rule; dialect checked against Afghan Dari usage, not assumed from Farsi. Fresh-context review completed 2026-07-05: fixed an Iranian-colloquial contraction (می‌شه -> می‌توانید) that had leaked into lesson05, a lesson05/lesson06 exercise-pacing violation (recognition/drag/production reordered), six 'insert your own name/city/job' exercises whose accepted_answers were ungradeable blank templates (replaced with concrete taught-vocabulary examples matching this project's exact-string grading), a third-person/first-person pronoun mismatch in lesson06's write_profile answer, an illogical accepted reply in lesson04's dialogue_response_introduce, and one orphaned overlay teaching key (gathering_word). Compiler validation clean (0 errors/0 warnings) after fixes. Audio remains pending generation; human native-speaker review still recommended before this ships, per project policy of no native-speaker review network for prs."
+  notes: "New unit, fills the unit02 gap between unit01 (greetings) and unit03 (family). Six lessons: name exchange, hometown/origin, occupation, introducing a third person, polite titles and register, and a full gathering dialogue. Adapted from FSI/Peace Corps Dari material with an active modernization pass -- no verbatim import. Authored independently from the fa realization per the sibling-isolation rule; dialect checked against Afghan Dari usage, not assumed from Farsi. Fresh-context review completed 2026-07-05: fixed an Iranian-colloquial contraction (می‌شه -> می‌توانید) that had leaked into lesson05, a lesson05/lesson06 exercise-pacing violation (recognition/drag/production reordered), six 'insert your own name/city/job' exercises whose accepted_answers were ungradeable blank templates (replaced with concrete taught-vocabulary examples matching this project's exact-string grading), a third-person/first-person pronoun mismatch in lesson06's write_profile answer, an illogical accepted reply in lesson04's dialogue_response_introduce, and one orphaned overlay teaching key (gathering_word). Compiler validation clean (0 errors/0 warnings) after fixes. Audio remains pending generation; human native-speaker review still recommended before this ships, per project policy of no native-speaker review network for prs. AUDIO-ACCESSIBILITY RETROFIT 2026-07-06 (§14, added after this review completed): a project-wide audit found 9 exercises in this unit (lesson01.exercise03/06, lesson02.exercise03/06, lesson03.exercise03/06, lesson04.exercise03/06, lesson06.exercise06) were listen_type or bare-prompt listen_select items -- genuinely unanswerable since fa/prs have zero working TTS/recorded audio. Converted: listen_select -> multiple_choice (added the target Dari text as a real visible prompt, English-gloss correct_option/distractors), listen_type -> translation (English instruction, same Dari accepted_answers). Re-verified 0 remaining §14 violations via script, content_key parity intact, validate+compile both clean after the retrofit. MATCHING_PAIRS SCALE RETROFIT 2026-07-06 (§16, Ramin's direct feedback): expanded match_intro_phrases 3->5 pairs (pooled دوست/همکار, the two relationship words taught earlier in the same lesson). Left match_name_forms (3), match_cities (4), match_occupations (4), match_titles_to_gender (2), and match_dialogue_facts (2) unchanged -- each is a genuine small closed set at this point in the unit (checked against every lesson's introduced_tokens up to that exercise; no further genuinely-taught, on-topic vocabulary exists to pool without violating §16's own 'don't pad with untaught or unrelated words' rule)."
 
 course:
   realization_key: prs.a1
@@ -121,11 +121,10 @@ units:
             type: multiple_choice
             tested_text: نامت چیست
             prompt: {target_blocks: [{text: "نامت چیست؟", language_code: prs, direction: rtl}]}
-          - content_key: prs.a1.unit02.lesson01.exercise03.listen_name_question
-            type: listen_select
+          - content_key: prs.a1.unit02.lesson01.exercise03.recognize_name_question_reading
+            type: multiple_choice
             tested_text: نام‌تان چیست
-            media_asset_key: prs.a1.audio.name_question.polite.01
-            prompt: {target_blocks: []}
+            prompt: {target_blocks: [{text: "نام‌تان چیست؟", language_code: prs, direction: rtl}]}
           - content_key: prs.a1.unit02.lesson01.exercise04.match_name_forms
             type: matching_pairs
             tested_text: نام‌تان نامت نام
@@ -139,10 +138,9 @@ units:
             tested_text: نام من فریدون است
             prompt: {target_blocks: []}
             word_bank: [نام, من, فریدون, است]
-          - content_key: prs.a1.unit02.lesson01.exercise06.listen_name_answer
-            type: listen_type
+          - content_key: prs.a1.unit02.lesson01.exercise06.translate_name_answer
+            type: translation
             tested_text: نام من فریدون است
-            media_asset_key: prs.a1.audio.name_answer.01
             prompt: {target_blocks: []}
           - content_key: prs.a1.unit02.lesson01.exercise07.translate_own_name
             type: translation
@@ -190,11 +188,10 @@ units:
             type: multiple_choice
             tested_text: کابل هرات مزار شریف
             prompt: {target_blocks: []}
-          - content_key: prs.a1.unit02.lesson02.exercise03.listen_origin_question
-            type: listen_select
+          - content_key: prs.a1.unit02.lesson02.exercise03.recognize_origin_question_reading
+            type: multiple_choice
             tested_text: شما از کجا استین
-            media_asset_key: prs.a1.audio.origin_question.01
-            prompt: {target_blocks: []}
+            prompt: {target_blocks: [{text: "شما از کجا استین؟", language_code: prs, direction: rtl}]}
           - content_key: prs.a1.unit02.lesson02.exercise04.match_cities
             type: matching_pairs
             tested_text: کابل هرات مزار شریف افغانستان
@@ -209,10 +206,9 @@ units:
             tested_text: من از کابل استم
             prompt: {target_blocks: []}
             word_bank: [من, از, کابل, استم]
-          - content_key: prs.a1.unit02.lesson02.exercise06.listen_origin_answer
-            type: listen_type
+          - content_key: prs.a1.unit02.lesson02.exercise06.translate_origin_answer
+            type: translation
             tested_text: من از کابل استم
-            media_asset_key: prs.a1.audio.origin_answer.01
             prompt: {target_blocks: []}
           - content_key: prs.a1.unit02.lesson02.exercise07.write_own_city
             type: writing_prompt
@@ -260,11 +256,10 @@ units:
             type: multiple_choice
             tested_text: داکتر
             prompt: {target_blocks: [{text: داکتر, language_code: prs, direction: rtl}]}
-          - content_key: prs.a1.unit02.lesson03.exercise03.listen_occupation_question
-            type: listen_select
+          - content_key: prs.a1.unit02.lesson03.exercise03.recognize_occupation_question_reading
+            type: multiple_choice
             tested_text: کار شما چیست
-            media_asset_key: prs.a1.audio.occupation_question.01
-            prompt: {target_blocks: []}
+            prompt: {target_blocks: [{text: "کار شما چیست؟", language_code: prs, direction: rtl}]}
           - content_key: prs.a1.unit02.lesson03.exercise04.match_occupations
             type: matching_pairs
             tested_text: داکتر معلم مهندس دوکاندار
@@ -279,10 +274,9 @@ units:
             tested_text: من معلم استم
             prompt: {target_blocks: []}
             word_bank: [من, معلم, استم]
-          - content_key: prs.a1.unit02.lesson03.exercise06.listen_occupation_answer
-            type: listen_type
+          - content_key: prs.a1.unit02.lesson03.exercise06.translate_occupation_answer
+            type: translation
             tested_text: من معلم استم
-            media_asset_key: prs.a1.audio.occupation_answer.01
             prompt: {target_blocks: []}
           - content_key: prs.a1.unit02.lesson03.exercise07.translate_engineer
             type: translation
@@ -330,11 +324,10 @@ units:
             type: multiple_choice
             tested_text: دوست همکار
             prompt: {target_blocks: []}
-          - content_key: prs.a1.unit02.lesson04.exercise03.listen_introduce
-            type: listen_select
+          - content_key: prs.a1.unit02.lesson04.exercise03.recognize_introduce_reading
+            type: multiple_choice
             tested_text: اجازه بدهید همکارم را معرفی کنم
-            media_asset_key: prs.a1.audio.introduce_third_person.01
-            prompt: {target_blocks: []}
+            prompt: {target_blocks: [{text: "اجازه بدهید همکارم را معرفی کنم", language_code: prs, direction: rtl}]}
           - content_key: prs.a1.unit02.lesson04.exercise04.match_intro_phrases
             type: matching_pairs
             tested_text: این است دوست همکار خوش شدم
@@ -343,15 +336,16 @@ units:
               - {left: "این همکارم آرزو است", right: "This is my colleague Arezoo."}
               - {left: "از آشنایی با شما خوش شدم", right: "Pleased to meet you."}
               - {left: "من هم خوش شدم", right: "I'm pleased too."}
+              - {left: دوست, right: friend}
+              - {left: همکار, right: colleague}
           - content_key: prs.a1.unit02.lesson04.exercise05.order_this_is
             type: word_order
             tested_text: این همکارم آرزو است
             prompt: {target_blocks: []}
             word_bank: [این, همکارم, آرزو, است]
-          - content_key: prs.a1.unit02.lesson04.exercise06.listen_pleased
-            type: listen_type
+          - content_key: prs.a1.unit02.lesson04.exercise06.translate_pleased
+            type: translation
             tested_text: از آشنایی با شما خوش شدم
-            media_asset_key: prs.a1.audio.pleased_after_intro.01
             prompt: {target_blocks: []}
           - content_key: prs.a1.unit02.lesson04.exercise07.translate_pleased_reply
             type: translation
@@ -506,8 +500,8 @@ units:
             type: speak_response
             tested_text: نام من فریدون است
             prompt: {target_blocks: [{text: "جناب، نام شما چیست؟", language_code: prs, direction: rtl}]}
-          - content_key: prs.a1.unit02.lesson06.exercise06.listen_origin_line
-            type: listen_type
+          - content_key: prs.a1.unit02.lesson06.exercise06.translate_origin_line
+            type: translation
             tested_text: من از هرات استم
             prompt: {target_blocks: []}
           - content_key: prs.a1.unit02.lesson06.exercise07.write_profile

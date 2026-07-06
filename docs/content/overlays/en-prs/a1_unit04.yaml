@@ -11,7 +11,7 @@ generation_provenance:
 review:
   status: reviewed
   required_next_reviewer: null
-  notes: "Fresh-context review completed 2026-07-05, authored independently of the fa realization per the sibling-isolation rule. Fixes made alongside the paired realization file: 9 multiple_choice exercises' prompts changed from displaying the exact correct-answer text to showing the digit instead (previously solvable by string-matching alone, defeating the point of the question), and lesson06 exercise pacing corrected to recognition->drag->production order. Dialect verified as genuinely Afghan Dari (نمبر not شماره, استم/استین forms), no jargon leaks, no script-purity issues. Compiler validation clean before and after fixes. Supplemental pass 2026-07-05 per AUTHORING_GUIDE §11-13: fact cross-check clean (ages/phone numbers internally consistent), fill_in_blank frames all have real surrounding context, and lesson06's write_ages_summary gained a و-joined variant as status:correct (previously only period-joined, and marked acceptable_with_note instead of correct). URGENT FOLLOW-UP 2026-07-05: live QA found the whole en-prs course failed to actually compile (real `compile`, not just `validate` -- `validate` never exercises the full exercise-answer-derivation check that caught this). Root cause here specifically: 3 exercises (lesson04.exercise07.speak_own_age, lesson05.exercise07.speak_own_phone_number, lesson06.exercise02.speak_own_age_reply) asked the learner to supply their own real age/phone number but had only `acceptable_with_note` accepted_answers with no `status:correct` entry -- the compiler has no canonical answer to derive without one, so compilation crashed. Same root problem as the ungradeable-blank-template bug already fixed once in unit02: rewrote all three to ask for a SPECIFIC given fact (age 30, phone 079-345-678, age 26 matching Bashir) with concrete `status:correct` answers instead of an open-ended real-world placeholder. Re-verified with the actual `compile` command -- now produces valid JSON end-to-end."
+  notes: "Fresh-context review completed 2026-07-05, authored independently of the fa realization per the sibling-isolation rule. Fixes made alongside the paired realization file: 9 multiple_choice exercises' prompts changed from displaying the exact correct-answer text to showing the digit instead (previously solvable by string-matching alone, defeating the point of the question), and lesson06 exercise pacing corrected to recognition->drag->production order. Dialect verified as genuinely Afghan Dari (نمبر not شماره, استم/استین forms), no jargon leaks, no script-purity issues. Compiler validation clean before and after fixes. Supplemental pass 2026-07-05 per AUTHORING_GUIDE §11-13: fact cross-check clean (ages/phone numbers internally consistent), fill_in_blank frames all have real surrounding context, and lesson06's write_ages_summary gained a و-joined variant as status:correct (previously only period-joined, and marked acceptable_with_note instead of correct). URGENT FOLLOW-UP 2026-07-05: live QA found the whole en-prs course failed to actually compile (real `compile`, not just `validate` -- `validate` never exercises the full exercise-answer-derivation check that caught this). Root cause here specifically: 3 exercises (lesson04.exercise07.speak_own_age, lesson05.exercise07.speak_own_phone_number, lesson06.exercise02.speak_own_age_reply) asked the learner to supply their own real age/phone number but had only `acceptable_with_note` accepted_answers with no `status:correct` entry -- the compiler has no canonical answer to derive without one, so compilation crashed. Same root problem as the ungradeable-blank-template bug already fixed once in unit02: rewrote all three to ask for a SPECIFIC given fact (age 30, phone 079-345-678, age 26 matching Bashir) with concrete `status:correct` answers instead of an open-ended real-world placeholder. Re-verified with the actual `compile` command -- now produces valid JSON end-to-end. AUDIO-ACCESSIBILITY RETROFIT 2026-07-06 (§14, added after this review completed): converted the 10 listen_type/bare-listen_select exercises' instructions/correct_option/distractors/accepted_answers to match the realization's multiple_choice/translation conversion (the 3 sequence-listening exercises simplified to single-number recognition since no audio exists) -- see that file's notes for the full list. Re-verified 0 remaining §14 violations, content_key parity intact, both validate and compile clean after the retrofit. MATCHING_PAIRS SCALE RETROFIT 2026-07-06 (§16): expanded match_teens/match_tens/match_age_phrases to match the realization's expansion (10/9/4 pairs) -- match_teens and match_tens previously used only a subset of numbers already fully taught in their own lesson. Left match_phone_vocab (3) and match_dialogue_facts (2) unchanged as genuine small closed sets."
 
 course:
   title: Dari A1
@@ -171,12 +171,12 @@ exercises:
     distractors: [هشت, نه, شش]
     accepted_answers: [{value: هفت, status: correct}]
     feedback: "هفت means seven."
-  prs.a1.unit04.lesson01.exercise03.listen_numbers:
-    instruction: "Listen and select the number you hear."
-    correct_option: سه
-    distractors: [هفت, نه, ده]
-    accepted_answers: [{value: سه, status: correct}]
-    feedback: "سه appears among the numbers in the recording."
+  prs.a1.unit04.lesson01.exercise03.recognize_seh_reading:
+    instruction: "Which number is this?"
+    correct_option: three
+    distractors: [seven, nine, ten]
+    accepted_answers: [{value: three, status: correct}]
+    feedback: "سه means three."
   prs.a1.unit04.lesson01.exercise04.match_one_to_ten:
     instruction: "Match each Dari number word with its digit."
     accepted_answers:
@@ -186,11 +186,11 @@ exercises:
     instruction: "Arrange the numbers in order from one to five."
     accepted_answers: [{value: [یک, دو, سه, چهار, پنج], status: correct}]
     feedback: "یک، دو، سه، چهار، پنج counts up to five in order."
-  prs.a1.unit04.lesson01.exercise06.listen_type_number:
-    instruction: "Listen and type the number you hear."
+  prs.a1.unit04.lesson01.exercise06.translate_number:
+    instruction: "Translate into Dari: eight."
     accepted_answers:
       - {value: هشت, status: correct}
-    feedback: "The recording says هشت (8)."
+    feedback: "هشت means eight (8)."
   prs.a1.unit04.lesson01.exercise07.write_number_word:
     instruction: "Write the Dari word for the number 10."
     accepted_answers:
@@ -209,26 +209,26 @@ exercises:
     distractors: [دوازده, نوزده, ده]
     accepted_answers: [{value: بیست, status: correct}]
     feedback: "بیست means twenty."
-  prs.a1.unit04.lesson02.exercise03.listen_teens:
-    instruction: "Listen and select the number you hear."
-    correct_option: دوازده
-    distractors: [سیزده, چهارده, یازده]
-    accepted_answers: [{value: دوازده, status: correct}]
-    feedback: "دوازده appears among the teen numbers in the recording."
+  prs.a1.unit04.lesson02.exercise03.recognize_davazdah_reading:
+    instruction: "Which number is this?"
+    correct_option: twelve
+    distractors: [thirteen, fourteen, eleven]
+    accepted_answers: [{value: twelve, status: correct}]
+    feedback: "دوازده means twelve."
   prs.a1.unit04.lesson02.exercise04.match_teens:
     instruction: "Match each Dari number word with its digit."
     accepted_answers:
-      - {value: {یازده: "11", دوازده: "12", سیزده: "13", چهارده: "14", پانزده: "15"}, status: correct}
-    feedback: "These five words cover the numbers eleven through fifteen."
+      - {value: {یازده: "11", دوازده: "12", سیزده: "13", چهارده: "14", پانزده: "15", شانزده: "16", هفده: "17", هجده: "18", نوزده: "19", بیست: "20"}, status: correct}
+    feedback: "These ten words cover the numbers eleven through twenty."
   prs.a1.unit04.lesson02.exercise05.order_teens_sequence:
     instruction: "Arrange the numbers in order: 17, 18, 19, 20."
     accepted_answers: [{value: [هفده, هجده, نوزده, بیست], status: correct}]
     feedback: "هفده، هجده، نوزده، بیست counts from seventeen to twenty."
-  prs.a1.unit04.lesson02.exercise06.listen_type_teen:
-    instruction: "Listen and type the number you hear."
+  prs.a1.unit04.lesson02.exercise06.translate_teen:
+    instruction: "Translate into Dari: sixteen."
     accepted_answers:
       - {value: شانزده, status: correct}
-    feedback: "The recording says شانزده (16)."
+    feedback: "شانزده means sixteen (16)."
   prs.a1.unit04.lesson02.exercise07.translate_eighteen:
     instruction: "Translate into Dari: eighteen."
     accepted_answers:
@@ -247,17 +247,17 @@ exercises:
     distractors: [نود, ده, هشتاد]
     accepted_answers: [{value: صد, status: correct}]
     feedback: "صد means one hundred."
-  prs.a1.unit04.lesson03.exercise03.listen_tens:
-    instruction: "Listen and select the number you hear."
-    correct_option: سی
-    distractors: [چهل, بیست, پنجاه]
-    accepted_answers: [{value: سی, status: correct}]
-    feedback: "سی appears among the tens in the recording."
+  prs.a1.unit04.lesson03.exercise03.recognize_see_reading:
+    instruction: "Which number is this?"
+    correct_option: thirty
+    distractors: [forty, twenty, fifty]
+    accepted_answers: [{value: thirty, status: correct}]
+    feedback: "سی means thirty."
   prs.a1.unit04.lesson03.exercise04.match_tens:
     instruction: "Match each Dari number word with its digit."
     accepted_answers:
-      - {value: {بیست: "20", سی: "30", چهل: "40", پنجاه: "50", صد: "100"}, status: correct}
-    feedback: "These five words cover the main tens plus one hundred."
+      - {value: {بیست: "20", سی: "30", چهل: "40", پنجاه: "50", شصت: "60", هفتاد: "70", هشتاد: "80", نود: "90", صد: "100"}, status: correct}
+    feedback: "These nine words cover every ten from twenty through one hundred."
   prs.a1.unit04.lesson03.exercise05.order_combined_number:
     instruction: "Arrange the words to say twenty-five."
     accepted_answers: [{value: [بیست, و, پنج], status: correct}]
@@ -285,26 +285,26 @@ exercises:
     distractors: ["a stranger you just met", "an elder at a formal event", "a new colleague on the first day"]
     accepted_answers: [{value: "a close friend", status: correct}]
     feedback: "The informal استی form fits only a close friend or peer, the same rule as elsewhere in this course."
-  prs.a1.unit04.lesson04.exercise03.listen_age_question:
-    instruction: "Listen and select the question you hear."
-    correct_option: "چند ساله استین؟"
-    distractors: ["چند ساله استی؟", "نمبر تلفن‌تان چند است؟", "نام‌تان چیست؟"]
-    accepted_answers: [{value: "چند ساله استین؟", status: correct}]
-    feedback: "The speaker asks چند ساله استین؟"
+  prs.a1.unit04.lesson04.exercise03.recognize_age_question_reading:
+    instruction: "What does this question ask?"
+    correct_option: "How old are you? (polite)"
+    distractors: ["How old are you? (informal)", "What is your phone number?", "What is your name?"]
+    accepted_answers: [{value: "How old are you? (polite)", status: correct}]
+    feedback: "چند ساله استین؟ asks how old you are, politely."
   prs.a1.unit04.lesson04.exercise04.match_age_phrases:
-    instruction: "Match each phrase with its meaning."
+    instruction: "Match each phrase or word with its meaning."
     accepted_answers:
-      - {value: {"چند ساله استین؟": "How old are you? (polite)", "چند ساله استی؟": "How old are you? (informal, close friend)", "بیست و پنج ساله استم": "I'm 25 years old."}, status: correct}
-    feedback: "The register split mirrors نام‌تان/نامت from the introductions unit."
+      - {value: {"چند ساله استین؟": "How old are you? (polite)", "چند ساله استی؟": "How old are you? (informal, close friend)", "بیست و پنج ساله استم": "I'm 25 years old.", سال: year}, status: correct}
+    feedback: "The register split mirrors نام‌تان/نامت from the introductions unit; سال is the standalone word for year."
   prs.a1.unit04.lesson04.exercise05.order_age_answer:
     instruction: "Arrange the words to say I'm 25 years old."
     accepted_answers: [{value: [بیست, و, پنج, ساله, استم], status: correct}]
     feedback: "بیست و پنج ساله استم states the age."
-  prs.a1.unit04.lesson04.exercise06.listen_age_answer:
-    instruction: "Listen and type what you hear."
+  prs.a1.unit04.lesson04.exercise06.translate_age_answer:
+    instruction: "Translate into Dari: I'm 25 years old."
     accepted_answers:
       - {value: "بیست و پنج ساله استم", status: correct}
-    feedback: "The recording says بیست و پنج ساله استم."
+    feedback: "بیست و پنج ساله استم means I'm 25 years old."
   prs.a1.unit04.lesson04.exercise07.speak_own_age:
     instruction: "چند ساله استین؟ Answer as if you are 30 years old."
     accepted_answers:
@@ -323,12 +323,12 @@ exercises:
     distractors: [ده, نه, یک]
     accepted_answers: [{value: صفر, status: correct}]
     feedback: "صفر means zero."
-  prs.a1.unit04.lesson05.exercise03.listen_phone_question:
-    instruction: "Listen and select the question you hear."
-    correct_option: "نمبر تلفن‌تان چند است؟"
-    distractors: ["چند ساله استین؟", "نام‌تان چیست؟", "شما از کجا استین؟"]
-    accepted_answers: [{value: "نمبر تلفن‌تان چند است؟", status: correct}]
-    feedback: "The speaker asks نمبر تلفن‌تان چند است؟"
+  prs.a1.unit04.lesson05.exercise03.recognize_phone_question_reading:
+    instruction: "What does this question ask?"
+    correct_option: "What is your phone number?"
+    distractors: ["How old are you?", "What is your name?", "Where are you from?"]
+    accepted_answers: [{value: "What is your phone number?", status: correct}]
+    feedback: "نمبر تلفن‌تان چند است؟ asks for your phone number."
   prs.a1.unit04.lesson05.exercise04.match_phone_vocab:
     instruction: "Match each word with its meaning."
     accepted_answers:
@@ -338,12 +338,12 @@ exercises:
     instruction: "Arrange the words to ask for a phone number."
     accepted_answers: [{value: [نمبر, تلفن‌تان, چند, است], status: correct}]
     feedback: "نمبر تلفن‌تان چند است؟ asks for the number."
-  prs.a1.unit04.lesson05.exercise06.listen_phone_answer:
-    instruction: "Listen and type what you hear."
+  prs.a1.unit04.lesson05.exercise06.translate_phone_answer:
+    instruction: "Translate into Dari: My phone number is 0-79-345-678."
     accepted_answers:
       - {value: "نمبر تلفنم صفر هفتاد و نه، سه چهار پنج، شش هفت هشت است", status: correct}
       - {value: "نمبر تلفنم صفر هفتاد و نه سه چهار پنج شش هفت هشت است", status: correct}
-    feedback: "The recording reads out a full phone number in grouped chunks."
+    feedback: "نمبر تلفنم صفر هفتاد و نه، سه چهار پنج، شش هفت هشت است reads out the phone number in grouped chunks."
   prs.a1.unit04.lesson05.exercise07.speak_own_phone_number:
     instruction: "نمبر تلفن‌تان چند است؟ Answer as if your phone number is 079-345-678, read out in the same grouped style as this lesson's example."
     accepted_answers:
@@ -362,8 +362,8 @@ exercises:
     accepted_answers:
       - {value: "بیست و شش ساله استم", status: correct}
     feedback: "بیست و شش ساله استم states an age of 26, the same pattern Bashir uses in the dialogue."
-  prs.a1.unit04.lesson06.exercise03.listen_ages:
-    instruction: "Listen and type Homayoun's age."
+  prs.a1.unit04.lesson06.exercise03.translate_ages:
+    instruction: "Translate into Dari: I'm 28 years old."
     accepted_answers:
       - {value: "بیست و هشت ساله استم", status: correct}
     feedback: "Homayoun says بیست و هشت ساله استم."
