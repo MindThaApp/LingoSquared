@@ -1,0 +1,217 @@
+schema_version: "1.0"
+realization_version: "2026.1-draft.1"
+target_language: nl
+cefr_level: A2
+generation_provenance:
+  method: adapted_from_public_domain_source
+  authoring_system: claude
+  human_reviewed: false
+  source_note: >-
+    The formal register pattern for a medical consultation (describing
+    a symptom's duration and severity, understanding a diagnosis and
+    treatment instructions) is scaffolded from the FSI Dutch Basic
+    Course (Foreign Service Institute, US Department of State --
+    public domain, no attribution required per docs/content/
+    AUTHORING_GUIDE.md §10). The source frames this around a
+    1960s-70s clinic visit with dated register; the specific scenario
+    (a Dutch huisarts consultation, a griepje diagnosis, a
+    voorgeschreven recept) reflects contemporary Dutch primary care
+    and is freshly authored, not translated or lightly edited from
+    the source.
+status: complete_draft
+review:
+  status: unreviewed
+  required_next_reviewer: ramin
+  notes: >-
+    Fourth Dutch A2 unit (spine outcome:
+    universal.a2.health.attend_doctor_appointment, newly added to
+    universal_spine.yaml this session), continuing the Lotte/Omar
+    storyline -- Omar's cold from unit16 hasn't improved after three
+    days (the exact threshold unit16's own reading text gave for
+    seeing the huisarts), so he now has a real consultation. The
+    specific facts (three days of headache and fever, a griepje
+    diagnosis, twice-daily pills) are stated consistently between
+    lesson02/lesson04's teaching examples, lesson05's reading, and
+    lesson06's dialogue per AUTHORING_GUIDE §11. Every multi-clause
+    accepted_answers list authored with period/comma/conjunction-joined
+    forms per §12. Every fill_in_blank frame retains visible
+    surrounding text per §13. Every listen_select/listen_order/
+    listen_type/dialogue_comprehension exercise double-checked against
+    its media_asset_key's declared text before finalizing, after two
+    audio-mismatch bugs were caught in an earlier A2 review round; the
+    lesson06 opening listen_select uses a dedicated short audio asset
+    rather than the full dialogue clip, matching the established
+    convention. A fresh-context review ran (audio fidelity held up
+    clean) and found one real gap this note's original §11 claim
+    missed: lesson04 teaches "kom over een week terug als het niet
+    beter gaat" as if the huisarts says it during the visit, but the
+    original lesson06 dialogue never included that line -- fixed by
+    adding it to the doctor's actual closing turn (dialogue audio text,
+    teaching card, and the comprehension exercise that tests the
+    doctor's instructions, all updated together). Also fixed a minor
+    mixed-language-pairing inconsistency in lesson05's matching
+    exercise (one pair kept the Dutch answer untranslated while its
+    siblings were in English). Noted but not remediated here: the
+    spine's `describe_symptom_in_detail` requirement mentions severity,
+    which this unit only asks about (hoe erg is de pijn?) without ever
+    having Omar answer it in production -- flagged for a future
+    addition, not a blocking defect. Re-validated (0 errors/0 warnings
+    across the full nl course, including the real compile step). Still
+    needs Ramin's native-speaker pass before status: reviewed. Audio
+    assets are declared for generation.
+
+course:
+  realization_key: nl.a2
+  target_language_first: true
+  dialect: nl_NL_standard
+  register_policy: >-
+    Teach contemporary Standard Dutch as used in the Netherlands. Omar
+    and the huisarts use the formal u throughout this unit, the same
+    register convention as units 24 and 26.
+
+media_assets:
+  - {content_key: nl.a2.audio.huisarts.afspraak_maken.01, language: nl, text: "Ik wil graag een afspraak maken bij de huisarts.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - {content_key: nl.a2.audio.huisarts.reden_bezoek.01, language: nl, text: "Wat is de reden van uw bezoek?", voice_hint: neutral_adult_polite, status: pending_generation}
+  - {content_key: nl.a2.audio.huisarts.wat_zijn_klachten.01, language: nl, text: "Goedemorgen, wat zijn uw klachten?", voice_hint: neutral_adult_polite, status: pending_generation}
+  - {content_key: nl.a2.audio.huisarts.drie_dagen_klachten.01, language: nl, text: "Ik heb al drie dagen hoofdpijn en koorts.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - {content_key: nl.a2.audio.huisarts.griepje_diagnose.01, language: nl, text: "U heeft waarschijnlijk een griepje. Het is niet ernstig.", voice_hint: neutral_adult_polite, status: pending_generation}
+  - {content_key: nl.a2.audio.huisarts.pillen_innemen.01, language: nl, text: "Neem de pillen twee keer per dag in en rust goed uit.", voice_hint: neutral_adult_polite, status: pending_generation}
+  - content_key: nl.a2.audio.huisarts.samenvatting.01
+    language: nl
+    text: >-
+      Diagnose: griepje. Advies: rust goed uit en drink veel water.
+      Neem de voorgeschreven pillen twee keer per dag in. Voelt u
+      zich na een week nog steeds niet beter? Maak dan een nieuwe
+      afspraak.
+    voice_hint: neutral_adult_clear
+    status: pending_generation
+  - content_key: nl.a2.audio.dialogue.huisarts_consult.01
+    language: nl
+    text: >-
+      Huisarts: Goedemorgen, wat zijn uw klachten? Omar: Ik heb al
+      drie dagen hoofdpijn en koorts. Huisarts: Dat klinkt vervelend.
+      U heeft waarschijnlijk een griepje. Omar: Is het ernstig?
+      Huisarts: Nee, het is niet ernstig. Ik schrijf u een recept
+      voor. Omar: Dank u wel, dokter. Huisarts: Neem de pillen twee
+      keer per dag in en rust goed uit. Kom over een week terug als
+      het niet beter gaat. Maakt u zich geen zorgen.
+    voice_hint: two_adults_formal_polite
+    status: pending_generation
+
+units:
+  - content_key: nl.a2.unit27.huisarts
+    title: "Op consult bij de huisarts"
+    section: reading_writing
+    spine_outcome_ids: [universal.a2.health.attend_doctor_appointment]
+    planned_lesson_count: 6
+    lessons:
+      - content_key: nl.a2.unit27.lesson01.afspraak_bij_huisarts
+        title: "Een afspraak maken bij de huisarts"
+        spine_outcome_id: universal.a2.health.attend_doctor_appointment
+        teaching:
+          - {content_key: nl.a2.unit27.lesson01.teach.huisarts, kind: vocabulary, target: {text: "de huisarts", language_code: nl, direction: ltr}, introduced_tokens: [de, huisarts]}
+          - {content_key: nl.a2.unit27.lesson01.teach.afspraak_huisarts, kind: phrase, target: {text: "Ik wil graag een afspraak maken bij de huisarts.", language_code: nl, direction: ltr}, introduced_tokens: [Ik, wil, graag, een, afspraak, maken, bij, de, huisarts]}
+          - {content_key: nl.a2.unit27.lesson01.teach.reden_bezoek, kind: phrase, target: {text: "Wat is de reden van uw bezoek?", language_code: nl, direction: ltr}, introduced_tokens: [Wat, is, de, reden, van, uw, bezoek]}
+          - {content_key: nl.a2.unit27.lesson01.teach.paar_dagen_niet_lekker, kind: phrase, target: {text: "Ik voel me al een paar dagen niet lekker.", language_code: nl, direction: ltr}, introduced_tokens: [Ik, voel, me, al, een, paar, dagen, niet, lekker]}
+        exercises:
+          - {content_key: nl.a2.unit27.lesson01.exercise01.choose_appointment_request, type: multiple_choice, tested_text: "Ik wil graag een afspraak maken bij de huisarts", prompt: {target_blocks: [{text: "I would like to make an appointment with the doctor.", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a2.unit27.lesson01.exercise02.listen_reason_question, type: listen_select, tested_text: "Wat is de reden van uw bezoek", media_asset_key: nl.a2.audio.huisarts.reden_bezoek.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a2.unit27.lesson01.exercise03.match_appointment_phrases, type: matching_pairs, tested_text: "afspraak huisarts reden bezoek", prompt: {target_blocks: []}, pairs: [{left: "de huisarts", right: "the family doctor"}, {left: "de reden van uw bezoek", right: "the reason for your visit"}]}
+          - {content_key: nl.a2.unit27.lesson01.exercise04.order_appointment_request, type: word_order, tested_text: "Ik wil graag een afspraak maken bij de huisarts", prompt: {target_blocks: []}, word_bank: [huisarts, Ik, wil, graag, een, afspraak, maken, bij, de]}
+          - {content_key: nl.a2.unit27.lesson01.exercise05.listen_order_appointment_request, type: listen_order, tested_text: "Ik wil graag een afspraak maken bij de huisarts", media_asset_key: nl.a2.audio.huisarts.afspraak_maken.01, prompt: {target_blocks: []}, word_bank: [afspraak, Ik, wil, graag, een, maken, bij, de, huisarts]}
+          - {content_key: nl.a2.unit27.lesson01.exercise06.complete_not_feeling_well, type: fill_in_blank, tested_text: "Ik voel me al een paar dagen niet lekker", prompt: {target_blocks: [{text: "Ik voel me al een paar dagen niet ___.", language_code: nl, direction: ltr}]}}
+          - {content_key: nl.a2.unit27.lesson01.exercise07.write_not_feeling_well, type: writing_prompt, tested_text: "Ik voel me al een paar dagen niet lekker", prompt: {target_blocks: [{text: "Write in Dutch: say you haven't been feeling well for a few days.", language_code: en, direction: ltr}]}}
+
+      - content_key: nl.a2.unit27.lesson02.wat_zijn_de_klachten
+        title: "Wat zijn de klachten?"
+        spine_outcome_id: universal.a2.health.attend_doctor_appointment
+        teaching:
+          - {content_key: nl.a2.unit27.lesson02.teach.klachten, kind: vocabulary, target: {text: "de klachten", language_code: nl, direction: ltr}, introduced_tokens: [de, klachten]}
+          - {content_key: nl.a2.unit27.lesson02.teach.wat_zijn_klachten, kind: phrase, target: {text: "Wat zijn uw klachten?", language_code: nl, direction: ltr}, introduced_tokens: [Wat, zijn, uw, klachten]}
+          - {content_key: nl.a2.unit27.lesson02.teach.drie_dagen_klachten, kind: phrase, target: {text: "Ik heb al drie dagen hoofdpijn en koorts.", language_code: nl, direction: ltr}, introduced_tokens: [Ik, heb, al, drie, dagen, hoofdpijn, en, koorts]}
+          - {content_key: nl.a2.unit27.lesson02.teach.hoe_erg_pijn, kind: phrase, target: {text: "Hoe erg is de pijn?", language_code: nl, direction: ltr}, introduced_tokens: [Hoe, erg, is, de, pijn]}
+        exercises:
+          - {content_key: nl.a2.unit27.lesson02.exercise01.choose_three_days_symptoms, type: multiple_choice, tested_text: "Ik heb al drie dagen hoofdpijn en koorts", prompt: {target_blocks: [{text: "I've had a headache and fever for three days.", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a2.unit27.lesson02.exercise02.listen_three_days_symptoms, type: listen_select, tested_text: "Ik heb al drie dagen hoofdpijn en koorts", media_asset_key: nl.a2.audio.huisarts.drie_dagen_klachten.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a2.unit27.lesson02.exercise03.match_symptom_questions, type: matching_pairs, tested_text: "klachten hoe erg", prompt: {target_blocks: []}, pairs: [{left: "Wat zijn uw klachten?", right: "What are your symptoms?"}, {left: "Hoe erg is de pijn?", right: "How bad is the pain?"}]}
+          - {content_key: nl.a2.unit27.lesson02.exercise04.order_three_days_symptoms, type: word_order, tested_text: "Ik heb al drie dagen hoofdpijn en koorts", prompt: {target_blocks: []}, word_bank: [dagen, Ik, heb, al, drie, hoofdpijn, en, koorts]}
+          - {content_key: nl.a2.unit27.lesson02.exercise05.complete_symptoms_question, type: fill_in_blank, tested_text: "Wat zijn uw klachten", prompt: {target_blocks: [{text: "Wat zijn uw ___?", language_code: nl, direction: ltr}]}}
+          - {content_key: nl.a2.unit27.lesson02.exercise06.respond_symptoms, type: dialogue_response, tested_text: "Ik heb al drie dagen hoofdpijn en koorts", prompt: {target_blocks: [{text: "Wat zijn uw klachten?", language_code: nl, direction: ltr}]}}
+
+      - content_key: nl.a2.unit27.lesson03.de_diagnose
+        title: "De diagnose"
+        spine_outcome_id: universal.a2.health.attend_doctor_appointment
+        teaching:
+          - {content_key: nl.a2.unit27.lesson03.teach.griepje, kind: vocabulary, target: {text: "het griepje", language_code: nl, direction: ltr}, introduced_tokens: [het, griepje]}
+          - {content_key: nl.a2.unit27.lesson03.teach.waarschijnlijk_griepje, kind: phrase, target: {text: "U heeft waarschijnlijk een griepje.", language_code: nl, direction: ltr}, introduced_tokens: [U, heeft, waarschijnlijk, een, griepje]}
+          - {content_key: nl.a2.unit27.lesson03.teach.niet_ernstig, kind: phrase, target: {text: "Het is niet ernstig.", language_code: nl, direction: ltr}, introduced_tokens: [Het, is, niet, ernstig]}
+          - {content_key: nl.a2.unit27.lesson03.teach.geen_zorgen_formeel, kind: phrase, target: {text: "Maakt u zich geen zorgen.", language_code: nl, direction: ltr}, introduced_tokens: [Maakt, u, zich, geen, zorgen]}
+        exercises:
+          - {content_key: nl.a2.unit27.lesson03.exercise01.choose_diagnosis, type: multiple_choice, tested_text: "U heeft waarschijnlijk een griepje", prompt: {target_blocks: [{text: "You probably have a mild flu.", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a2.unit27.lesson03.exercise02.listen_diagnosis, type: listen_select, tested_text: "U heeft waarschijnlijk een griepje Het is niet ernstig", media_asset_key: nl.a2.audio.huisarts.griepje_diagnose.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a2.unit27.lesson03.exercise03.match_diagnosis_words, type: matching_pairs, tested_text: "griepje ernstig geen zorgen", prompt: {target_blocks: []}, pairs: [{left: "het griepje", right: "the mild flu"}, {left: ernstig, right: serious}, {left: "geen zorgen", right: "no worries"}]}
+          - {content_key: nl.a2.unit27.lesson03.exercise04.order_not_serious, type: word_order, tested_text: "Het is niet ernstig", prompt: {target_blocks: []}, word_bank: [ernstig, Het, is, niet]}
+          - {content_key: nl.a2.unit27.lesson03.exercise05.complete_reassurance_formal, type: fill_in_blank, tested_text: "Maakt u zich geen zorgen", prompt: {target_blocks: [{text: "Maakt u zich geen ___.", language_code: nl, direction: ltr}]}}
+          - {content_key: nl.a2.unit27.lesson03.exercise06.translate_diagnosis, type: translation, tested_text: "U heeft waarschijnlijk een griepje", prompt: {target_blocks: [{text: "You probably have a mild flu.", language_code: en, direction: ltr}]}}
+
+      - content_key: nl.a2.unit27.lesson04.recept_en_advies
+        title: "Het recept en het advies"
+        spine_outcome_id: universal.a2.health.attend_doctor_appointment
+        teaching:
+          - {content_key: nl.a2.unit27.lesson04.teach.recept, kind: vocabulary, target: {text: "het recept", language_code: nl, direction: ltr}, introduced_tokens: [het, recept]}
+          - {content_key: nl.a2.unit27.lesson04.teach.schrijf_voor, kind: phrase, target: {text: "Ik schrijf u een recept voor.", language_code: nl, direction: ltr}, introduced_tokens: [Ik, schrijf, u, een, recept, voor]}
+          - {content_key: nl.a2.unit27.lesson04.teach.pillen_innemen, kind: phrase, target: {text: "Neem de pillen twee keer per dag in en rust goed uit.", language_code: nl, direction: ltr}, introduced_tokens: [Neem, de, pillen, twee, keer, per, dag, in, en, rust, goed, uit]}
+          - {content_key: nl.a2.unit27.lesson04.teach.terugkomen_als, kind: phrase, target: {text: "Kom over een week terug als het niet beter gaat.", language_code: nl, direction: ltr}, introduced_tokens: [Kom, over, een, week, terug, als, het, niet, beter, gaat]}
+          - {content_key: nl.a2.unit27.lesson04.teach.infinitives_note, kind: grammar_note, target: {text: "De pillen innemen en terugkomen zijn de infinitieven van deze twee scheidbare werkwoorden.", language_code: nl, direction: ltr}, introduced_tokens: [De, pillen, innemen, en, terugkomen, zijn, de, infinitieven, van, deze, twee, scheidbare, werkwoorden]}
+        exercises:
+          - {content_key: nl.a2.unit27.lesson04.exercise01.choose_prescribe, type: multiple_choice, tested_text: "Ik schrijf u een recept voor", prompt: {target_blocks: [{text: "I'll prescribe you something.", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a2.unit27.lesson04.exercise02.listen_take_pills, type: listen_select, tested_text: "Neem de pillen twee keer per dag in en rust goed uit", media_asset_key: nl.a2.audio.huisarts.pillen_innemen.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a2.unit27.lesson04.exercise03.match_prescription_words, type: matching_pairs, tested_text: "recept innemen terugkomen", prompt: {target_blocks: []}, pairs: [{left: "het recept", right: "the prescription"}, {left: "de pillen innemen", right: "to take the pills"}, {left: "terugkomen", right: "to come back"}]}
+          - {content_key: nl.a2.unit27.lesson04.exercise04.order_come_back_conditional, type: word_order, tested_text: "Kom over een week terug als het niet beter gaat", prompt: {target_blocks: []}, word_bank: [week, Kom, over, een, terug, als, het, niet, beter, gaat]}
+          - {content_key: nl.a2.unit27.lesson04.exercise05.complete_take_pills, type: fill_in_blank, tested_text: "Neem de pillen twee keer per dag in en rust goed uit", prompt: {target_blocks: [{text: "Neem de pillen twee keer per dag ___ en rust goed uit.", language_code: nl, direction: ltr}]}}
+          - {content_key: nl.a2.unit27.lesson04.exercise06.write_prescribe, type: writing_prompt, tested_text: "Ik schrijf u een recept voor", prompt: {target_blocks: [{text: "Write in Dutch: say you (the doctor) will prescribe them something.", language_code: en, direction: ltr}]}}
+
+      - content_key: nl.a2.unit27.lesson05.samenvatting_lezen
+        title: "Een samenvatting van het consult lezen"
+        spine_outcome_id: universal.a2.health.attend_doctor_appointment
+        teaching:
+          - content_key: nl.a2.unit27.lesson05.teach.samenvatting
+            kind: reading
+            target:
+              text: >-
+                Diagnose: griepje. Advies: rust goed uit en drink veel
+                water. Neem de voorgeschreven pillen twee keer per dag
+                in. Voelt u zich na een week nog steeds niet beter?
+                Maak dan een nieuwe afspraak.
+              language_code: nl
+              direction: ltr
+            introduced_tokens: [Diagnose, griepje, Advies, rust, goed, uit, en, drink, veel, water, Neem, de, voorgeschreven, pillen, twee, keer, per, dag, in, Voelt, u, zich, na, een, week, nog, steeds, niet, beter, Maak, dan, nieuwe, afspraak]
+        exercises:
+          - {content_key: nl.a2.unit27.lesson05.exercise01.read_diagnosis_summary, type: reading_comprehension, tested_text: "griepje", prompt: {target_blocks: [{text: "What is the diagnosis?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a2.unit27.lesson05.exercise02.read_advice_summary, type: reading_comprehension, tested_text: "rust goed uit en drink veel water", prompt: {target_blocks: [{text: "What lifestyle advice does the summary give, besides the medicine?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a2.unit27.lesson05.exercise03.read_followup, type: reading_comprehension, tested_text: "maak dan een nieuwe afspraak", prompt: {target_blocks: [{text: "What should you do if you still don't feel better after a week?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a2.unit27.lesson05.exercise04.listen_summary, type: listen_select, tested_text: "maak dan een nieuwe afspraak", media_asset_key: nl.a2.audio.huisarts.samenvatting.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a2.unit27.lesson05.exercise05.match_summary_points, type: matching_pairs, tested_text: "diagnose advies afspraak", prompt: {target_blocks: []}, pairs: [{left: Diagnose, right: "the diagnosis"}, {left: Advies, right: "rest and drink water"}, {left: "nieuwe afspraak", right: "if not better after a week"}]}
+          - {content_key: nl.a2.unit27.lesson05.exercise06.write_summary_recap, type: writing_prompt, tested_text: "Ik heb een griepje Rust goed uit en drink veel water", prompt: {target_blocks: [{text: "Write in Dutch: say you have a mild flu, and repeat the advice from the summary to rest well and drink plenty of water.", language_code: en, direction: ltr}]}}
+
+      - content_key: nl.a2.unit27.lesson06.huisarts_consult
+        title: "Omar op consult"
+        spine_outcome_id: universal.a2.health.attend_doctor_appointment
+        teaching:
+          - {content_key: nl.a2.unit27.lesson06.teach.huisarts_ask_symptoms, kind: dialogue, target: {text: "Huisarts: Goedemorgen, wat zijn uw klachten?", language_code: nl, direction: ltr}, introduced_tokens: [Huisarts, Goedemorgen, wat, zijn, uw, klachten]}
+          - {content_key: nl.a2.unit27.lesson06.teach.omar_symptoms, kind: dialogue, target: {text: "Omar: Ik heb al drie dagen hoofdpijn en koorts.", language_code: nl, direction: ltr}, introduced_tokens: [Omar, Ik, heb, al, drie, dagen, hoofdpijn, en, koorts]}
+          - {content_key: nl.a2.unit27.lesson06.teach.huisarts_react_diagnose, kind: dialogue, target: {text: "Huisarts: Dat klinkt vervelend. U heeft waarschijnlijk een griepje.", language_code: nl, direction: ltr}, introduced_tokens: [Huisarts, Dat, klinkt, vervelend, U, heeft, waarschijnlijk, een, griepje]}
+          - {content_key: nl.a2.unit27.lesson06.teach.omar_ask_serious, kind: dialogue, target: {text: "Omar: Is het ernstig?", language_code: nl, direction: ltr}, introduced_tokens: [Omar, Is, het, ernstig]}
+          - {content_key: nl.a2.unit27.lesson06.teach.huisarts_reassure_prescribe, kind: dialogue, target: {text: "Huisarts: Nee, het is niet ernstig. Ik schrijf u een recept voor.", language_code: nl, direction: ltr}, introduced_tokens: [Huisarts, Nee, het, is, niet, ernstig, Ik, schrijf, u, een, recept, voor]}
+          - {content_key: nl.a2.unit27.lesson06.teach.omar_thanks_doctor, kind: dialogue, target: {text: "Omar: Dank u wel, dokter.", language_code: nl, direction: ltr}, introduced_tokens: [Omar, Dank, u, wel, dokter]}
+          - {content_key: nl.a2.unit27.lesson06.teach.huisarts_final_instructions, kind: dialogue, target: {text: "Huisarts: Neem de pillen twee keer per dag in en rust goed uit. Kom over een week terug als het niet beter gaat. Maakt u zich geen zorgen.", language_code: nl, direction: ltr}, introduced_tokens: [Huisarts, Neem, de, pillen, twee, keer, per, dag, in, en, rust, goed, uit, Kom, over, een, week, terug, als, het, niet, beter, gaat, Maakt, u, zich, geen, zorgen]}
+          - {content_key: nl.a2.unit27.lesson06.teach.summary_grammar, kind: grammar_note, target: {text: "Omar heeft een griepje. Hij moet de pillen twee keer per dag innemen.", language_code: nl, direction: ltr}, introduced_tokens: [Omar, heeft, een, griepje, Hij, moet, de, pillen, twee, keer, per, dag, innemen]}
+        exercises:
+          - {content_key: nl.a2.unit27.lesson06.exercise01.listen_ask_symptoms, type: listen_select, tested_text: "Goedemorgen wat zijn uw klachten", media_asset_key: nl.a2.audio.huisarts.wat_zijn_klachten.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a2.unit27.lesson06.exercise02.comprehend_symptoms, type: dialogue_comprehension, tested_text: "drie dagen hoofdpijn en koorts", media_asset_key: nl.a2.audio.dialogue.huisarts_consult.01, prompt: {target_blocks: [{text: "What symptoms does Omar describe, and for how long?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a2.unit27.lesson06.exercise03.comprehend_diagnosis, type: dialogue_comprehension, tested_text: "waarschijnlijk een griepje niet ernstig", media_asset_key: nl.a2.audio.dialogue.huisarts_consult.01, prompt: {target_blocks: [{text: "What is the diagnosis, and is it serious?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a2.unit27.lesson06.exercise04.comprehend_instructions, type: dialogue_comprehension, tested_text: "pillen twee keer per dag in en rust goed uit kom over een week terug", media_asset_key: nl.a2.audio.dialogue.huisarts_consult.01, prompt: {target_blocks: [{text: "What instructions does the doctor give, including what to do if it doesn't improve?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a2.unit27.lesson06.exercise05.order_react_diagnose, type: word_order, tested_text: "U heeft waarschijnlijk een griepje", prompt: {target_blocks: []}, word_bank: [waarschijnlijk, U, heeft, een, griepje]}
+          - {content_key: nl.a2.unit27.lesson06.exercise06.respond_ask_serious, type: dialogue_response, tested_text: "Is het ernstig", prompt: {target_blocks: [{text: "U heeft waarschijnlijk een griepje.", language_code: nl, direction: ltr}]}}
+          - {content_key: nl.a2.unit27.lesson06.exercise07.listen_type_instructions, type: listen_type, tested_text: "Neem de pillen twee keer per dag in en rust goed uit", media_asset_key: nl.a2.audio.dialogue.huisarts_consult.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a2.unit27.lesson06.exercise08.write_visit_summary, type: writing_prompt, tested_text: "Omar heeft een griepje Hij moet de pillen twee keer per dag innemen", prompt: {target_blocks: [{text: "Write two Dutch sentences: Omar has a mild flu, and he needs to take the pills twice a day.", language_code: en, direction: ltr}]}}
