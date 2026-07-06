@@ -75,10 +75,13 @@ templates:
   - content_key: practice.en-prs.prs.a1.unit05.lesson01.place_pair.004
     lesson_content_key: prs.a1.unit05.lesson01.everyday_places
     type: matching_pairs
-    frame: {text: "{city_place_one} — {city_place_two}", language_code: prs, direction: rtl}
-    slots: {city_place_one: *city_place, city_place_two: *city_place}
-    slot_relations: [{kind: distinct, slots: [city_place_one, city_place_two]}]
-    answer_derivation: {kind: matching_pairs, slots: [city_place_one, city_place_two]}
+    # Expanded 2->8 pairs 2026-07-06 (AUTHORING_GUIDE.md #16 retrofit) --
+    # verified via scripts/_practice_slot_check.py: exactly 8 city_place
+    # candidates (lessons 01-02 combined), all taught, used fully.
+    frame: {text: "{city_place_one} — {city_place_two} — {city_place_three} — {city_place_four} — {city_place_five} — {city_place_six} — {city_place_seven} — {city_place_eight}", language_code: prs, direction: rtl}
+    slots: {city_place_one: *city_place, city_place_two: *city_place, city_place_three: *city_place, city_place_four: *city_place, city_place_five: *city_place, city_place_six: *city_place, city_place_seven: *city_place, city_place_eight: *city_place}
+    slot_relations: [{kind: distinct, slots: [city_place_one, city_place_two, city_place_three, city_place_four, city_place_five, city_place_six, city_place_seven, city_place_eight]}]
+    answer_derivation: {kind: matching_pairs, slots: [city_place_one, city_place_two, city_place_three, city_place_four, city_place_five, city_place_six, city_place_seven, city_place_eight]}
     feedback_frame: {text: "Match each place with its English meaning.", language_code: en, direction: ltr}
 
   # Lesson 4: near, far, here, and there.
@@ -106,8 +109,13 @@ templates:
   - content_key: practice.en-prs.prs.a1.unit05.lesson04.location_pair.004
     lesson_content_key: prs.a1.unit05.lesson04.simple_location_answers
     type: matching_pairs
-    frame: {text: "{location_word_one} — {location_word_two}", language_code: prs, direction: rtl}
-    slots: {location_word_one: *location_word, location_word_two: *location_word}
-    slot_relations: [{kind: distinct, slots: [location_word_one, location_word_two]}]
-    answer_derivation: {kind: matching_pairs, slots: [location_word_one, location_word_two]}
+    # Expanded 2->4 pairs 2026-07-06 (AUTHORING_GUIDE.md #16 retrofit).
+    # Real vocabulary ceiling: 4 distinct location_word candidates taught
+    # (verified via scripts/_practice_slot_check.py); the pack's own
+    # review notes already explain why the nearby preposition/kojast
+    # tokens aren't slot-fillable here (phrase-level, not single tokens).
+    frame: {text: "{location_word_one} — {location_word_two} — {location_word_three} — {location_word_four}", language_code: prs, direction: rtl}
+    slots: {location_word_one: *location_word, location_word_two: *location_word, location_word_three: *location_word, location_word_four: *location_word}
+    slot_relations: [{kind: distinct, slots: [location_word_one, location_word_two, location_word_three, location_word_four]}]
+    answer_derivation: {kind: matching_pairs, slots: [location_word_one, location_word_two, location_word_three, location_word_four]}
     feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}

@@ -46,6 +46,10 @@ tag_schema:
 slot_presets:
   office_word: &office_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: office_word}}
   paperwork_word: &paperwork_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: paperwork_word}}
+  # office_word (5) and paperwork_word (2) are both this same unit's
+  # "bureaucracy" theme; pooled together for the matching_pairs templates
+  # below to reach 7 (AUTHORING_GUIDE.md #16) -- real vocabulary only.
+  office_and_paperwork: &office_and_paperwork {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: [office_word, paperwork_word]}}
 templates:
   # Lesson 1: administrative vocabulary.
   - content_key: practice.en-prs.prs.a2.unit09.lesson01.office_gloss.001
@@ -72,10 +76,14 @@ templates:
   - content_key: practice.en-prs.prs.a2.unit09.lesson01.office_pair.004
     lesson_content_key: prs.a2.unit09.lesson01.bureaucracy_vocabulary
     type: matching_pairs
-    frame: {text: "{office_word_one} — {office_word_two}", language_code: prs, direction: rtl}
-    slots: {office_word_one: *office_word, office_word_two: *office_word}
-    slot_relations: [{kind: distinct, slots: [office_word_one, office_word_two]}]
-    answer_derivation: {kind: matching_pairs, slots: [office_word_one, office_word_two]}
+    # Expanded 2->7 pairs 2026-07-06 (AUTHORING_GUIDE.md #16 retrofit),
+    # pooling office_word with lesson03's paperwork_word
+    # (office_and_paperwork preset above) -- verified via
+    # scripts/_practice_slot_check.py.
+    frame: {text: "{office_word_one} — {office_word_two} — {office_word_three} — {office_word_four} — {office_word_five} — {office_word_six} — {office_word_seven}", language_code: prs, direction: rtl}
+    slots: {office_word_one: *office_and_paperwork, office_word_two: *office_and_paperwork, office_word_three: *office_and_paperwork, office_word_four: *office_and_paperwork, office_word_five: *office_and_paperwork, office_word_six: *office_and_paperwork, office_word_seven: *office_and_paperwork}
+    slot_relations: [{kind: distinct, slots: [office_word_one, office_word_two, office_word_three, office_word_four, office_word_five, office_word_six, office_word_seven]}]
+    answer_derivation: {kind: matching_pairs, slots: [office_word_one, office_word_two, office_word_three, office_word_four, office_word_five, office_word_six, office_word_seven]}
     feedback_frame: {text: "Match each word with its English meaning.", language_code: en, direction: ltr}
 
   # Lesson 3: reading the notice.
@@ -96,8 +104,12 @@ templates:
   - content_key: practice.en-prs.prs.a2.unit09.lesson03.paperwork_pair.003
     lesson_content_key: prs.a2.unit09.lesson03.reading_the_notice
     type: matching_pairs
-    frame: {text: "{paperwork_word_one} — {paperwork_word_two}", language_code: prs, direction: rtl}
-    slots: {paperwork_word_one: *paperwork_word, paperwork_word_two: *paperwork_word}
-    slot_relations: [{kind: distinct, slots: [paperwork_word_one, paperwork_word_two]}]
-    answer_derivation: {kind: matching_pairs, slots: [paperwork_word_one, paperwork_word_two]}
+    # Expanded 2->7 pairs 2026-07-06 (AUTHORING_GUIDE.md #16 retrofit),
+    # pooling paperwork_word with lesson01's office_word
+    # (office_and_paperwork preset above) -- verified via
+    # scripts/_practice_slot_check.py.
+    frame: {text: "{paperwork_word_one} — {paperwork_word_two} — {paperwork_word_three} — {paperwork_word_four} — {paperwork_word_five} — {paperwork_word_six} — {paperwork_word_seven}", language_code: prs, direction: rtl}
+    slots: {paperwork_word_one: *office_and_paperwork, paperwork_word_two: *office_and_paperwork, paperwork_word_three: *office_and_paperwork, paperwork_word_four: *office_and_paperwork, paperwork_word_five: *office_and_paperwork, paperwork_word_six: *office_and_paperwork, paperwork_word_seven: *office_and_paperwork}
+    slot_relations: [{kind: distinct, slots: [paperwork_word_one, paperwork_word_two, paperwork_word_three, paperwork_word_four, paperwork_word_five, paperwork_word_six, paperwork_word_seven]}]
+    answer_derivation: {kind: matching_pairs, slots: [paperwork_word_one, paperwork_word_two, paperwork_word_three, paperwork_word_four, paperwork_word_five, paperwork_word_six, paperwork_word_seven]}
     feedback_frame: {text: "Match each word with its English meaning.", language_code: en, direction: ltr}
