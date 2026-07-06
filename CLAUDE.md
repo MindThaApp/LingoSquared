@@ -596,6 +596,23 @@ to the authoring reasoning) before import.
 
 ## Deploying a backend change
 
+**`docs/PRE_DEPLOY_RUNBOOK.md` is the full checklist — read it before
+the first real deploy of current work to 192.168.4.4.** It covers
+pre-flight checks (including whether `alembic_version` even exists on
+the live DB — never yet checked there, only on the dev DB), required
+env vars (`ADMIN_EMAILS`, `CORS_ORIGINS`, `AZURE_SPEECH_KEY`/`_REGION`,
+`GOOGLE_CLOUD_TTS_CREDENTIALS_JSON`), a backup step (none exists
+elsewhere in this project's history), the full ordered deploy, and
+post-deploy live-smoke-test verification. **As of 2026-07-07, the live
+server has never actually been deployed to beyond its original setup**
+— every BUILD_LOG.md mention of 192.168.4.4 is either config, a
+read-only check, or an explicit "not touched" — so treat the next
+deploy as a from-scratch-equivalent, not incremental, and don't skip
+the runbook's pre-flight section.
+
+Quick-reference skeleton only (see the runbook for the complete,
+correctly-ordered version with pre/post steps):
+
 ```bash
 rsync -az --exclude='.venv' --exclude='__pycache__' --exclude='*.pyc' --exclude='.env' \
   /Users/raminazizi/dev/LingoSquared/backend/ ramin@192.168.4.4:/home/ramin/LingoSquared/backend/
@@ -603,8 +620,10 @@ rsync -az /Users/raminazizi/dev/LingoSquared/docs/ ramin@192.168.4.4:/home/ramin
 
 ssh ramin@192.168.4.4 "cd /home/ramin/LingoSquared/backend && docker compose build api"
 ssh ramin@192.168.4.4 "cd /home/ramin/LingoSquared/backend && docker compose run --rm api alembic upgrade head"
-ssh ramin@192.168.4.4 "cd /home/ramin/LingoSquared/backend && docker compose run --rm api python -m app.content.seed"
-ssh ramin@192.168.4.4 "cd /home/ramin/LingoSquared/backend && docker compose up -d api"   # easy to forget — without it the live container keeps serving the OLD image
+ssh ramin@192.168.4.4 "cd /home/ramin/LingoSquared/backend && docker compose run --rm api python -m app.content.seed"   # bootstrap only (languages/achievements/4 placeholder demo courses) — NOT the real ~131-unit content, see runbook
+ssh ramin@192.168.4.4 "cd /home/ramin/LingoSquared/backend && docker compose up -d api"   # must happen here, BEFORE the HTTP steps below — easy to forget, without it the live container keeps serving the OLD image
+# real content import (compile_content.py --> POST /admin/content/import, admin-authenticated),
+# THEN lexeme backfill, THEN practice-template admin import, in that exact order — see runbook
 ```
 
 Test suite on the server (isolated DB, never `--env-file`):
@@ -616,7 +635,7 @@ ssh ramin@192.168.4.4 "cd /home/ramin/LingoSquared/backend && \
   docker compose run --rm api sh -c 'DATABASE_URL=\$(python3 -c \"import os,re; print(re.sub(r\\\"lingosquared\$\\\", \\\"lingosquared_test\\\", os.environ[\\\"DATABASE_URL\\\"]))\") python -m pytest -q'"
 ```
 
-Practice-feature deploys additionally need the lexeme backfill THEN the
+Practice-feature deploys need the lexeme backfill THEN the
 practice-template admin import, after migrations — **this order was
 previously documented backwards here and has been corrected
 (2026-07-06, live-QA pass on fa)**: `POST /admin/courses/{id}/practice/
@@ -628,7 +647,8 @@ practice templates first fails every single template with "lesson key
 ... was not found in the course" on a genuinely fresh stack (confirmed
 live: content import → practice import → 100% failure; content import
 → backfill → practice import → succeeds). See `docs/BUILD_LOG.md`'s
-matching entry for the reproduction.
+matching entry for the reproduction, and `docs/PRE_DEPLOY_RUNBOOK.md`
+for the full corrected step sequence.
 
 ## Secrets
 
