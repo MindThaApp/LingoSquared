@@ -161,6 +161,11 @@ EN_POS: dict[str, str] = {
     "expensive": "adjective", "faster": "adjective", "than": "particle",
     "nicer": "adjective", "cheapest": "adjective", "red": "adjective",
     "car": "noun", "white": "adjective",
+    # Unit 21 (handling a basic journey/travel), added 2026-07-06.
+    "ticket": "noun", "platform": "noun", "train": "noun", "departure": "noun",
+    "arrival": "noun", "boston": "proper_noun", "way": "noun", "round": "adjective",
+    "trip": "noun", "leaves": "verb", "9:15": "symbol", "arrives": "verb",
+    "11:30": "symbol", "arrive": "verb",
 }
 
 def en_agreement_tags(token: str) -> dict[str, object]:
@@ -322,6 +327,14 @@ def en_agreement_tags(token: str) -> dict[str, object]:
         semantics.append("superlative_adj")
     if token in {"red", "white"}:
         semantics.append("color")
+    # Unit 21: 5-member bare-word recognition tag. Deliberately NOT used in
+    # any shared generative frame -- these nouns don't collocate uniformly
+    # (e.g. "I need a ticket"/"I need a train" work but "I need a platform"/
+    # "departure"/"arrival" don't), so this stays recognition-only, same
+    # discipline as en-nl unit08's place_non_station lessons that reused
+    # bare-word recognition rather than forcing a risky shared frame.
+    if token in {"ticket", "platform", "train", "departure", "arrival"}:
+        semantics.append("travel_noun")
 
     tags: dict[str, object] = {}
     if semantics:

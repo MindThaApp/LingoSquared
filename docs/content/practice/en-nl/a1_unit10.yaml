@@ -1,0 +1,155 @@
+schema_version: "1.0"
+pack_key: practice.en-nl.a1.unit10
+source_language: en
+target_language: nl
+unit_content_key: nl.a1.unit10.routines
+review:
+  status: unreviewed
+  fresh_context: "false"
+  notes: "Authored 2026-07-06 by the Claude session syncing Endless Practice
+    template pools to lesson content growth (en-nl lane, alternating with
+    nl-en per the coordinator's 'keep going on both directions'
+    instruction). This unit (unit10, reviewed/stable overlay) covers
+    describing a daily routine, including Dutch separable verbs
+    (opstaan/aankleden/afwassen split their prefix to the end of a main
+    clause). Extended scripts/backfill_lexemes_en_nl.py's UNIT_FILES
+    selection (switched from a glob-range pattern to a numeric-range
+    filter, since 'unit10' no longer matches the old single-digit
+    '[1-9]' glob) to include unit10, plus added 33 new Dutch token
+    classifications from this unit's teaching content. Added a 7-member
+    'routine_verb_infinitive' tag (opstaan/aankleden/ontbijten/werken/
+    eten/afwassen/slapen) used ONLY for bare-word recognition -- there is
+    no shared generative sentence frame across these verbs, since each
+    conjugated ik-form is irregular or structured differently (sta/kleed/
+    ontbijt/werk/eet/was/slaap, with separable ones needing their prefix
+    moved to clause-end) -- forcing a single frame would either be
+    ungrammatical or require per-verb special-casing this pipeline
+    doesn't support yet, so recognition-only is the safe choice here,
+    same discipline as nl-en unit21's travel_noun tag this same session.
+    Also added a 3-member 'sequence_word' tag (eerst/dan/daarna, 6 real
+    candidates counting case variants) used only in translation
+    templates (not multiple_choice/listen_select, which need >=4).
+    Every slot's real candidate count was verified with a standalone
+    lexeme_matches()-replicating harness against this script's actual
+    output. Needs the standard fresh-context review before import. Same
+    blocking dependency as every earlier en-nl pack: backfill_lexemes_en_nl.py
+    has not actually been run against a real database yet."
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [routine_verb_infinitive, sequence_word]
+slot_presets:
+  routine_verb_infinitive: &routine_verb_infinitive {language_code: nl, part_of_speech: verb, agreement_tags: {semantic: routine_verb_infinitive}}
+  sequence_word: &sequence_word {language_code: nl, part_of_speech: [adverb, particle], agreement_tags: {semantic: sequence_word}}
+templates:
+  - content_key: practice.en-nl.nl.a1.unit10.lesson01.choose.001
+    lesson_content_key: nl.a1.unit10.lesson01.dagelijkse_activiteiten
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *routine_verb_infinitive}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a daily-routine verb from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit10.lesson01.listen.002
+    lesson_content_key: nl.a1.unit10.lesson01.dagelijkse_activiteiten
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *routine_verb_infinitive}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the verb you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit10.lesson01.match.003
+    lesson_content_key: nl.a1.unit10.lesson01.dagelijkse_activiteiten
+    type: matching_pairs
+    frame: {text: "{first} · {second}", language_code: nl, direction: ltr}
+    slots: {first: *routine_verb_infinitive, second: *routine_verb_infinitive}
+    slot_relations: [{kind: distinct, slots: [first, second]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second]}
+    feedback_frame: {text: "Match each routine verb with its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit10.lesson01.translate.004
+    lesson_content_key: nl.a1.unit10.lesson01.dagelijkse_activiteiten
+    type: translation
+    frame:
+      text: "{item}"
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *routine_verb_infinitive}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The Dutch word is {item}.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit10.lesson02.listen.001
+    lesson_content_key: nl.a1.unit10.lesson02.scheidbare_werkwoorden
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *routine_verb_infinitive}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the verb you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit10.lesson02.translate.002
+    lesson_content_key: nl.a1.unit10.lesson02.scheidbare_werkwoorden
+    type: translation
+    frame:
+      text: "{item}"
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *routine_verb_infinitive}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The Dutch word is {item}.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit10.lesson03.choose.001
+    lesson_content_key: nl.a1.unit10.lesson03.activiteiten_en_tijden
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *routine_verb_infinitive}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a daily-routine verb from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit10.lesson04.translate.001
+    lesson_content_key: nl.a1.unit10.lesson04.eerst_dan_daarna
+    type: translation
+    frame:
+      text: "{item}"
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *sequence_word}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The Dutch word is {item}.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit10.lesson04.reverse_translate.002
+    lesson_content_key: nl.a1.unit10.lesson04.eerst_dan_daarna
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *sequence_word}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit10.lesson05.choose.001
+    lesson_content_key: nl.a1.unit10.lesson05.omars_routine_lezen
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *routine_verb_infinitive}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a verb from Omar's routine.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit10.lesson06.listen.001
+    lesson_content_key: nl.a1.unit10.lesson06.een_dag_bij_het_taalcafe
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *routine_verb_infinitive}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the verb you heard in this dialogue.", language_code: en, direction: ltr}
