@@ -239,6 +239,36 @@ practice per launch pair) — the mechanism is now fully built across
 every phase, but real full-depth content for en-nl/en-fa/en-prs is
 the actual remaining path to launch.
 
+**Real mic-based speaking exercises + STT grading — DONE, 2026-07-06,
+live-verified, a standalone task outside the phase program above.**
+`speak_response` (used to render as plain typed text despite its name)
+and `speak_repeat` (used to render `Placeholder.tsx`, an unbuilt stub)
+now have real `MediaRecorder` capture + speech-to-text, graded through
+the same free-text path as every other exercise. Client-side WASM
+Whisper is the primary path (`Transformers.js`, zero raw audio ever
+leaves the device); self-hosted `faster-whisper` (`POST
+/stt/transcribe`) is the fallback for when the client path isn't
+available — never a cloud STT API. Per-device `localStorage` mic/
+keyboard toggle, same "honest fallback, never silently dead" pattern
+as `SpeakButton`/`speak()`. **Real upstream bug found and root-caused**:
+every quantized dtype for `whisper-tiny`'s merged decoder throws at
+ONNX session-creation time in the onnxruntime-web version
+`@huggingface/transformers@4.2.0` pins (confirmed across both
+`Xenova/whisper-tiny` and `onnx-community/whisper-tiny` — not a stale-
+export issue) — fixed by pinning `dtype: "fp32"`
+(`frontend/src/workers/whisperWorker.ts`, heavily commented so it isn't
+"optimized" back to a smaller quantized dtype and silently
+reintroduces 100%-fallback-to-server). Also found and fixed: neither
+type was in `FREE_TEXT_EXERCISE_TYPES` (no typo tolerance, exact-match
+only) and `docs/CONTRACT.md` incorrectly claimed `speak_repeat` "has no
+checkable answer" (false — real shipped content proves it has genuine
+`accepted_answers`). Full detail, the live-verification method (real
+synthesized speech via macOS `say` fed through Chromium's fake-mic-
+device flags, not mocked), and the colima/`$HOME`-mount footgun hit
+while standing up an isolated test stack, all in `docs/BUILD_LOG.md`.
+**Not done**: fa/prs translations for the new UI strings (English-only
+this pass, safe fallback via i18next, normal Codex round-trip pending).
+
 `docs/APP_SPEC_FOR_FABLE_REVIEW.md` is the architecture snapshot +
 review that produced the upgrade program — read for the "why" behind
 Phase A's SRS redesign and the content-architecture rationale.
@@ -548,9 +578,24 @@ matching entry for the reproduction.
 
 TTS is Google Cloud (service-account JSON via
 `GOOGLE_CLOUD_TTS_CREDENTIALS_JSON` env var, raw JSON content not a
-file path), proxied server-side only — never sent to the frontend.
-Farsi/Dari have zero Google Cloud voices; browser `speechSynthesis` is
-the fallback (see Known limitations). ElevenLabs is no longer the
+file path) for 8 languages, proxied server-side only — never sent to
+the frontend. **Added 2026-07-06: Azure Cognitive Services Speech as a
+second provider, specifically for Farsi** — Google Cloud TTS has zero
+Persian/Dari voices at all, but Azure has real licensed neural voices
+for Farsi (`fa-IR-DilaraNeural` female, used by default;
+`fa-IR-FaridNeural` male also available). Config: `AZURE_SPEECH_KEY` +
+`AZURE_SPEECH_REGION` env vars, same unset-by-default/graceful-
+degradation convention as the Google credential (empty → `/tts`'s
+`provider_error` browser-fallback, never a crash) — **not yet set to a
+real key, this is built and tested but not yet live**; get a key from
+the Azure Portal (Cognitive Services → Speech resource) once ready to
+activate it. Implemented via the plain Azure Speech REST API in
+`backend/app/services/tts.py` (`synthesize_azure()`), not the Azure SDK
+— no new dependency, reuses the `httpx` already in `requirements.txt`.
+Dari (`prs`) still has zero coverage from either provider; browser
+`speechSynthesis` remains its only fallback (see Known limitations).
+Full detail (routing logic, why Azure over self-hosted Piper, what was
+verified) in `docs/BUILD_LOG.md`. ElevenLabs is no longer the
 live provider (superseded 2026-07-04) — historical account/voice
 gotchas are in `docs/BUILD_LOG.md` if ElevenLabs is ever revisited.
 **Investigated 2026-07-05 whether the public-domain FSI/Peace Corps
@@ -578,7 +623,10 @@ directions — en-fa, en-nl, en-prs, fa-en, nl-en, prs-en — lexeme pool +
 reviewed sentence-frame templates, zero runtime LLM calls); on-screen
 virtual keyboard for non-Latin scripts; self-reported level check with
 recommended-unit badge (not a placement system — that was explicitly
-rejected as premature).
+rejected as premature); real mic-based speaking exercises
+(`speak_response`/`speak_repeat`) with client-side WASM Whisper STT
+(self-hosted-server fallback), graded through the same free-text path
+as every other exercise type.
 
 Seeded courses (counts verified against `docs/content/realizations/`/
 `overlays/` at 2026-07-06 19:53 BST — content authoring is actively
@@ -591,6 +639,20 @@ each" was stale). ~131 units total across 8 of 18 paths.
 
 ## Known limitations / accepted scope
 
+- **STT (speak_response/speak_repeat), added 2026-07-06**: client-side
+  Whisper must run `dtype: "fp32"` (~150MB one-time browser-cached
+  download) — every quantized dtype throws a real onnxruntime-web
+  session-creation bug for this model at the currently pinned
+  `@huggingface/transformers` version (full root cause in
+  `docs/BUILD_LOG.md`; revisit if a future library/runtime version
+  fixes it upstream). Whisper sometimes transcribes spoken number
+  words as bare digits ("zeven" → "7") rather than the word form,
+  which won't match a word-form `accepted_answers` — a real accuracy
+  caveat for number-saying exercises specifically, same class as the
+  already-accepted general STT-mishearing risk, not something to chase
+  with per-language digit-to-word tables. fa/prs UI translations for
+  the new voice-answer strings aren't done yet (English fallback via
+  i18next, not broken, just untranslated).
 - **The spine outcome count is a fast-moving target this session —
   don't trust any number here without re-grepping
   `docs/content/universal_spine.yaml` first.** It grew 19→24→26→28

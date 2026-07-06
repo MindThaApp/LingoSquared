@@ -21,6 +21,16 @@ FREE_TEXT_EXERCISE_TYPES = {
     "dialogue_response",
     "listen_type",
     "grammar_check",
+    # STT transcripts (speak_response/speak_repeat, added 2026-07-06) are
+    # free-typed text same as any other free-text answer, just produced by
+    # transcription instead of a keyboard — belongs in the same typo-
+    # tolerant bucket as dialogue_response/translation. This matters more
+    # here than elsewhere: STT introduces its own transcription noise on
+    # top of normal typing variance, so the distance-1 tolerance genuinely
+    # helps avoid marking a correctly-spoken answer wrong over something
+    # like a dropped accent or a missing period.
+    "speak_response",
+    "speak_repeat",
 }
 
 # Exercise types that are always choice/selection-based and must never

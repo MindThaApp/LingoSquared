@@ -7,6 +7,7 @@ import { WordOrder } from "./WordOrder";
 import { MatchingPairs } from "./MatchingPairs";
 import { Placeholder } from "./Placeholder";
 import { DialogueResponse } from "./DialogueResponse";
+import { SpeakRepeat } from "./SpeakRepeat";
 import { GrammarCheck } from "./GrammarCheck";
 import { Flashcard } from "./Flashcard";
 import { ReadingComprehension } from "./ReadingComprehension";
@@ -32,8 +33,9 @@ export function ExerciseRenderer(props: ExerciseComponentProps) {
       return <MatchingPairs {...props} />;
     case "listening_placeholder":
     case "speaking_placeholder":
-    case "speak_repeat":
       return <Placeholder {...props} />;
+    case "speak_repeat":
+      return <SpeakRepeat {...props} />;
     case "dialogue_response":
     case "speak_response":
       return <DialogueResponse {...props} />;
