@@ -1,0 +1,126 @@
+schema_version: "1.0"
+pack_key: practice.en-fa.a1.unit06
+source_language: en
+target_language: fa
+unit_content_key: fa.a1.unit06.food
+review:
+  status: unreviewed
+  required_next_reviewer: codex
+  notes: >-
+    Authored 2026-07-06 by the practice-pool-sync lane (fa/prs bundle),
+    closing the en-fa gap noted in a1_unit05.yaml's own sibling entry
+    (scripts/backfill_lexemes.py covered fa units 1-5, but the fa
+    realization had grown to unit06/food -- with zero practice coverage).
+    Extended scripts/backfill_lexemes.py's UNIT_FILES to include units
+    06-08 and a2 units 09-10 in one pass, plus the matching FA_GLOSSES/
+    classification-set/agreement-tag additions.
+
+    Three semantic groups, all recognition-only (multiple_choice/
+    matching_pairs) plus translation, verified >=3-distinct-candidate via
+    a standalone slot-matching check against this script's real
+    iter_specs() output before authoring: "food_item" (نان/برنج/مرغ/میوه,
+    4 members, anchored lesson01), "drink_item" (چای/آب/قهوه, 3 members,
+    anchored lesson01), and "quantity_unit_word" (لیوان/بشقاب, both
+    introduced in THIS unit's lesson04, plus کیلو/نصف introduced later in
+    a1_unit08 -- deliberately anchored here at lesson04 rather than
+    duplicated in both packs, since the tag only needs >=1 real candidate
+    lexeme to exist by generation time, not that every candidate be
+    introduced in the anchor lesson itself).
+
+    Left out, matching a1_unit05's own established precedent of not
+    forcing unrelated single-candidate words into a shared tag: رستوران
+    and مشتری (lesson06, 2 members, translation-only territory but not
+    worth a dedicated tag given the proportionate scope of this pass),
+    and every lesson02/03/05/06 register/politeness phrase (می‌خواستم vs.
+    می‌خوام, منو دارید؟, صورت‌حساب رو لطف می‌کنید؟, etc.) -- these are
+    single-candidate dialogue phrases, not a natural recognition set.
+
+    Lesson-anchor check per tonight's own found-and-fixed fa-en unit08
+    bug: lesson01 and lesson04 both genuinely introduce new vocabulary
+    (confirmed by reading the realization file directly), not review-only
+    lessons -- safe anchors.
+
+    Verified with scripts/_practice_slot_check.py's lexeme_matches()/
+    check_pack() logic against this script's actual iter_specs() output
+    (ad hoc harness, not committed) -- all three groups clean, no
+    zero-candidate slots, no under-3 multiple_choice/matching_pairs
+    slots. compile_content.py practice-validate also clean (0 errors/0
+    warnings) for the full en-fa pack (units 01-06 together). Needs the
+    standard fresh-context review before import. Same standing blocker as
+    every pack in this bundle: no backfill_lexemes.py run has actually
+    happened against a real database yet in this pass.
+tag_schema:
+  part_of_speech: [noun]
+  agreement_tags:
+    semantic: [food_item, drink_item, quantity_unit_word]
+slot_presets:
+  food_item: &food_item {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: food_item}}
+  drink_item: &drink_item {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: drink_item}}
+  quantity_unit_word: &quantity_unit_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: quantity_unit_word}}
+templates:
+  - content_key: practice.en-fa.fa.a1.unit06.lesson01.food_choice.001
+    lesson_content_key: fa.a1.unit06.lesson01.food_and_drink_vocabulary
+    type: multiple_choice
+    frame: {text: "{food_item}", language_code: fa, direction: rtl}
+    slots: {food_item: *food_item}
+    answer_derivation: {kind: slot_gloss, slot: food_item}
+    feedback_frame: {text: "{food_item} is a food word from this lesson.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit06.lesson01.food_match.002
+    lesson_content_key: fa.a1.unit06.lesson01.food_and_drink_vocabulary
+    type: matching_pairs
+    frame: {text: "{first} · {second}", language_code: fa, direction: rtl}
+    slots: {first: *food_item, second: *food_item}
+    slot_relations: [{kind: distinct, slots: [first, second]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second]}
+    feedback_frame: {text: "Match each Farsi food word to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit06.lesson01.food_translate.003
+    lesson_content_key: fa.a1.unit06.lesson01.food_and_drink_vocabulary
+    type: translation
+    frame: {text: "{food_item}", language_code: en, direction: ltr, slot_rendering: {food_item: english_gloss}}
+    slots: {food_item: *food_item}
+    answer_derivation: {kind: slot_text, slot: food_item}
+    feedback_frame: {text: "The Farsi word is {food_item}.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit06.lesson01.drink_choice.001
+    lesson_content_key: fa.a1.unit06.lesson01.food_and_drink_vocabulary
+    type: multiple_choice
+    frame: {text: "{drink_item}", language_code: fa, direction: rtl}
+    slots: {drink_item: *drink_item}
+    answer_derivation: {kind: slot_gloss, slot: drink_item}
+    feedback_frame: {text: "{drink_item} is a drink word from this lesson.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit06.lesson01.drink_match.002
+    lesson_content_key: fa.a1.unit06.lesson01.food_and_drink_vocabulary
+    type: matching_pairs
+    frame: {text: "{first} · {second}", language_code: fa, direction: rtl}
+    slots: {first: *drink_item, second: *drink_item}
+    slot_relations: [{kind: distinct, slots: [first, second]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second]}
+    feedback_frame: {text: "Match each Farsi drink word to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit06.lesson01.drink_translate.003
+    lesson_content_key: fa.a1.unit06.lesson01.food_and_drink_vocabulary
+    type: translation
+    frame: {text: "{drink_item}", language_code: en, direction: ltr, slot_rendering: {drink_item: english_gloss}}
+    slots: {drink_item: *drink_item}
+    answer_derivation: {kind: slot_text, slot: drink_item}
+    feedback_frame: {text: "The Farsi word is {drink_item}.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit06.lesson04.quantity_choice.001
+    lesson_content_key: fa.a1.unit06.lesson04.quantities
+    type: multiple_choice
+    frame: {text: "{quantity_unit_word}", language_code: fa, direction: rtl}
+    slots: {quantity_unit_word: *quantity_unit_word}
+    answer_derivation: {kind: slot_gloss, slot: quantity_unit_word}
+    feedback_frame: {text: "{quantity_unit_word} is a quantity/counting word used when ordering or shopping.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit06.lesson04.quantity_match.002
+    lesson_content_key: fa.a1.unit06.lesson04.quantities
+    type: matching_pairs
+    frame: {text: "{first} · {second}", language_code: fa, direction: rtl}
+    slots: {first: *quantity_unit_word, second: *quantity_unit_word}
+    slot_relations: [{kind: distinct, slots: [first, second]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second]}
+    feedback_frame: {text: "Match each quantity word to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit06.lesson04.quantity_translate.003
+    lesson_content_key: fa.a1.unit06.lesson04.quantities
+    type: translation
+    frame: {text: "{quantity_unit_word}", language_code: en, direction: ltr, slot_rendering: {quantity_unit_word: english_gloss}}
+    slots: {quantity_unit_word: *quantity_unit_word}
+    answer_derivation: {kind: slot_text, slot: quantity_unit_word}
+    feedback_frame: {text: "The Farsi word is {quantity_unit_word}.", language_code: en, direction: ltr}

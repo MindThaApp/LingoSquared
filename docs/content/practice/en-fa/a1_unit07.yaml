@@ -1,0 +1,120 @@
+schema_version: "1.0"
+pack_key: practice.en-fa.a1.unit07
+source_language: en
+target_language: fa
+unit_content_key: fa.a1.unit07.weather
+review:
+  status: unreviewed
+  required_next_reviewer: codex
+  notes: >-
+    Authored 2026-07-06 by the practice-pool-sync lane (fa/prs bundle),
+    part of the same pass as a1_unit06.yaml/a1_unit08.yaml/a2_unit09.yaml/
+    a2_unit10.yaml -- see a1_unit06.yaml's notes for the shared
+    backfill_lexemes.py extension this pass made.
+
+    Three semantic groups, all verified >=3-distinct-candidate via a
+    standalone slot-matching check before authoring: "weather_condition"
+    (آفتابی/بارونی/ابری/برفی, 4 members, anchored lesson01),
+    "temperature_word" (گرم/سرد/خنک, 3 members, anchored lesson02), and
+    "weather_state_verb" (the colloquial -e contraction forms آفتابیه/
+    سرده/بارونیه/گرمه, 4 members, anchored lesson04 -- part_of_speech verb,
+    not adjective, matching how the realization/overlay's own review
+    notes classify these as spoken copula contractions).
+
+    Left out, matching established precedent: lesson05's چون-plus-
+    suggestion pattern (بهتره چتر ببریم / چون سرده بهتره کت بپوشیم) and
+    lesson06's full dialogue -- these are multi-clause register/reasoning
+    phrases, not a natural bare-word recognition set, and would need a
+    genuine generative sentence frame rather than a shared tag (the same
+    judgment call a1_unit05's own notes made for its colloquial "است"-
+    contraction phrases).
+
+    Lesson-anchor check per tonight's found-and-fixed fa-en unit08 bug:
+    lesson01, lesson02, and lesson04 all genuinely introduce new
+    vocabulary (confirmed by reading the realization file directly) --
+    safe anchors, none are review-only.
+
+    Verified with scripts/_practice_slot_check.py's lexeme_matches()/
+    check_pack() logic against backfill_lexemes.py's actual iter_specs()
+    output (ad hoc harness, not committed) -- clean, no zero-candidate
+    slots, no under-3 multiple_choice/matching_pairs slots.
+    compile_content.py practice-validate also clean (0 errors/0
+    warnings) for the full en-fa pack (units 01-07 together). Needs the
+    standard fresh-context review before import. Same standing blocker as
+    every pack in this bundle: no backfill_lexemes.py run has actually
+    happened against a real database yet in this pass.
+tag_schema:
+  part_of_speech: [adjective, verb]
+  agreement_tags:
+    semantic: [weather_condition, temperature_word, weather_state_verb]
+slot_presets:
+  weather_condition: &weather_condition {language_code: fa, part_of_speech: adjective, agreement_tags: {semantic: weather_condition}}
+  temperature_word: &temperature_word {language_code: fa, part_of_speech: adjective, agreement_tags: {semantic: temperature_word}}
+  weather_state_verb: &weather_state_verb {language_code: fa, part_of_speech: verb, agreement_tags: {semantic: weather_state_verb}}
+templates:
+  - content_key: practice.en-fa.fa.a1.unit07.lesson01.weather_choice.001
+    lesson_content_key: fa.a1.unit07.lesson01.weather_conditions
+    type: multiple_choice
+    frame: {text: "{weather_condition}", language_code: fa, direction: rtl}
+    slots: {weather_condition: *weather_condition}
+    answer_derivation: {kind: slot_gloss, slot: weather_condition}
+    feedback_frame: {text: "{weather_condition} is a weather word from this lesson.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit07.lesson01.weather_match.002
+    lesson_content_key: fa.a1.unit07.lesson01.weather_conditions
+    type: matching_pairs
+    frame: {text: "{first} · {second}", language_code: fa, direction: rtl}
+    slots: {first: *weather_condition, second: *weather_condition}
+    slot_relations: [{kind: distinct, slots: [first, second]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second]}
+    feedback_frame: {text: "Match each weather word to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit07.lesson01.weather_translate.003
+    lesson_content_key: fa.a1.unit07.lesson01.weather_conditions
+    type: translation
+    frame: {text: "{weather_condition}", language_code: en, direction: ltr, slot_rendering: {weather_condition: english_gloss}}
+    slots: {weather_condition: *weather_condition}
+    answer_derivation: {kind: slot_text, slot: weather_condition}
+    feedback_frame: {text: "The Farsi word is {weather_condition}.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit07.lesson02.temperature_choice.001
+    lesson_content_key: fa.a1.unit07.lesson02.temperature_words
+    type: multiple_choice
+    frame: {text: "{temperature_word}", language_code: fa, direction: rtl}
+    slots: {temperature_word: *temperature_word}
+    answer_derivation: {kind: slot_gloss, slot: temperature_word}
+    feedback_frame: {text: "{temperature_word} describes temperature.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit07.lesson02.temperature_match.002
+    lesson_content_key: fa.a1.unit07.lesson02.temperature_words
+    type: matching_pairs
+    frame: {text: "{first} · {second}", language_code: fa, direction: rtl}
+    slots: {first: *temperature_word, second: *temperature_word}
+    slot_relations: [{kind: distinct, slots: [first, second]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second]}
+    feedback_frame: {text: "Match each temperature word to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit07.lesson02.temperature_translate.003
+    lesson_content_key: fa.a1.unit07.lesson02.temperature_words
+    type: translation
+    frame: {text: "{temperature_word}", language_code: en, direction: ltr, slot_rendering: {temperature_word: english_gloss}}
+    slots: {temperature_word: *temperature_word}
+    answer_derivation: {kind: slot_text, slot: temperature_word}
+    feedback_frame: {text: "The Farsi word is {temperature_word}.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit07.lesson04.weather_state_choice.001
+    lesson_content_key: fa.a1.unit07.lesson04.describing_todays_weather
+    type: multiple_choice
+    frame: {text: "{weather_state_verb}", language_code: fa, direction: rtl}
+    slots: {weather_state_verb: *weather_state_verb}
+    answer_derivation: {kind: slot_gloss, slot: weather_state_verb}
+    feedback_frame: {text: "{weather_state_verb} is the colloquial -e contraction for describing today's weather.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit07.lesson04.weather_state_match.002
+    lesson_content_key: fa.a1.unit07.lesson04.describing_todays_weather
+    type: matching_pairs
+    frame: {text: "{first} · {second}", language_code: fa, direction: rtl}
+    slots: {first: *weather_state_verb, second: *weather_state_verb}
+    slot_relations: [{kind: distinct, slots: [first, second]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second]}
+    feedback_frame: {text: "Match each weather-state phrase to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit07.lesson04.weather_state_translate.003
+    lesson_content_key: fa.a1.unit07.lesson04.describing_todays_weather
+    type: translation
+    frame: {text: "{weather_state_verb}", language_code: en, direction: ltr, slot_rendering: {weather_state_verb: english_gloss}}
+    slots: {weather_state_verb: *weather_state_verb}
+    answer_derivation: {kind: slot_text, slot: weather_state_verb}
+    feedback_frame: {text: "The Farsi phrase is {weather_state_verb}.", language_code: en, direction: ltr}

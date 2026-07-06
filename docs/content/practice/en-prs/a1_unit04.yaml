@@ -1,0 +1,171 @@
+schema_version: "1.0"
+pack_key: practice.en-prs.a1.unit04
+source_language: en
+target_language: prs
+unit_content_key: prs.a1.unit04.numbers
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: >-
+    Authored by the practice-pool-sync lane (fa/prs bundle), 2026-07-06,
+    same pass as this bundle's a1_unit03.yaml sibling (see that file's
+    notes for the full extension rationale and verification method).
+
+    Four semantic groups: ones_number (یک..ده, 10 members),
+    teens_number (یازده..نوزده, 9 members), tens_number (بیست..صد, 9
+    members), phone_word (نمبر/تلفن/صفر, 3 members) -- all well above
+    the >=3-distinct-candidate threshold for multiple_choice/
+    matching_pairs. Deliberately left چند/سال (how many / year) and the
+    استین/استی age-question copula pair untested by a template here --
+    thin (1-2 members), and this pass prioritized the four richer,
+    better-populated groups; still taught in the lesson itself.
+
+    Every fill_in_blank frame embeds the number/phone-word slot in a
+    real Dari sentence with visible surrounding context (guide §13),
+    never a bare blanked digit alone. Every lesson_content_key anchor
+    verified against the real realization file to introduce genuinely
+    new vocabulary at that lesson. No listen_select/listen_type
+    anywhere (Dari has zero TTS coverage project-wide). No bare
+    unquoted yes/no/true/false anywhere.
+
+    Verified with a standalone throwaway script reusing
+    scripts/_practice_slot_check.py's lexeme_matches()/check_pack()
+    against scripts/backfill_lexemes_en_prs.py's real iter_specs()
+    output -- 0 problems. scripts/compile_content.py practice-validate
+    for the full en-prs pack (units 01-10 together) -- 0 errors/0
+    warnings. Needs the standard fresh-context review before import; no
+    backfill_lexemes_en_prs.py run has actually happened against a real
+    database yet in this pass.
+tag_schema:
+  part_of_speech: [noun, adjective]
+  agreement_tags:
+    semantic: [ones_number, teens_number, tens_number, phone_word]
+slot_presets:
+  ones_number: &ones_number {language_code: prs, part_of_speech: adjective, agreement_tags: {semantic: ones_number}}
+  teens_number: &teens_number {language_code: prs, part_of_speech: adjective, agreement_tags: {semantic: teens_number}}
+  tens_number: &tens_number {language_code: prs, part_of_speech: adjective, agreement_tags: {semantic: tens_number}}
+  phone_word: &phone_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: phone_word}}
+templates:
+  # Lesson 1: numbers one to ten.
+  - content_key: practice.en-prs.prs.a1.unit04.lesson01.ones_gloss.001
+    lesson_content_key: prs.a1.unit04.lesson01.numbers_one_to_ten
+    type: multiple_choice
+    frame: {text: "{ones_number}", language_code: prs, direction: rtl}
+    slots: {ones_number: *ones_number}
+    answer_derivation: {kind: slot_gloss, slot: ones_number}
+    feedback_frame: {text: "{ones_number} is a number from one to ten.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit04.lesson01.ones_fill.002
+    lesson_content_key: prs.a1.unit04.lesson01.numbers_one_to_ten
+    type: fill_in_blank
+    frame: {text: "من {ones_number} کتاب دارم.", language_code: prs, direction: rtl}
+    slots: {ones_number: *ones_number}
+    answer_derivation: {kind: slot_text, slot: ones_number}
+    feedback_frame: {text: "{ones_number} completes 'I have ___ books.'", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit04.lesson01.ones_translate.003
+    lesson_content_key: prs.a1.unit04.lesson01.numbers_one_to_ten
+    type: translation
+    frame: {text: "{ones_number}", language_code: en, direction: ltr, slot_rendering: {ones_number: english_gloss}}
+    slots: {ones_number: *ones_number}
+    answer_derivation: {kind: slot_text, slot: ones_number}
+    feedback_frame: {text: "{ones_number} is the Dari word for this number.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit04.lesson01.ones_pair.004
+    lesson_content_key: prs.a1.unit04.lesson01.numbers_one_to_ten
+    type: matching_pairs
+    frame: {text: "{ones_number_one} — {ones_number_two}", language_code: prs, direction: rtl}
+    slots: {ones_number_one: *ones_number, ones_number_two: *ones_number}
+    slot_relations: [{kind: distinct, slots: [ones_number_one, ones_number_two]}]
+    answer_derivation: {kind: matching_pairs, slots: [ones_number_one, ones_number_two]}
+    feedback_frame: {text: "Match each Dari number word to its digit.", language_code: en, direction: ltr}
+
+  # Lesson 2: numbers eleven to twenty.
+  - content_key: practice.en-prs.prs.a1.unit04.lesson02.teens_gloss.001
+    lesson_content_key: prs.a1.unit04.lesson02.numbers_eleven_to_twenty
+    type: multiple_choice
+    frame: {text: "{teens_number}", language_code: prs, direction: rtl}
+    slots: {teens_number: *teens_number}
+    answer_derivation: {kind: slot_gloss, slot: teens_number}
+    feedback_frame: {text: "{teens_number} is a number from eleven to nineteen.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit04.lesson02.teens_fill.002
+    lesson_content_key: prs.a1.unit04.lesson02.numbers_eleven_to_twenty
+    type: fill_in_blank
+    frame: {text: "او {teens_number} ساله است.", language_code: prs, direction: rtl}
+    slots: {teens_number: *teens_number}
+    answer_derivation: {kind: slot_text, slot: teens_number}
+    feedback_frame: {text: "{teens_number} completes 'he/she is ___ years old.'", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit04.lesson02.teens_translate.003
+    lesson_content_key: prs.a1.unit04.lesson02.numbers_eleven_to_twenty
+    type: translation
+    frame: {text: "{teens_number}", language_code: en, direction: ltr, slot_rendering: {teens_number: english_gloss}}
+    slots: {teens_number: *teens_number}
+    answer_derivation: {kind: slot_text, slot: teens_number}
+    feedback_frame: {text: "{teens_number} is the Dari word for this number.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit04.lesson02.teens_pair.004
+    lesson_content_key: prs.a1.unit04.lesson02.numbers_eleven_to_twenty
+    type: matching_pairs
+    frame: {text: "{teens_number_one} — {teens_number_two}", language_code: prs, direction: rtl}
+    slots: {teens_number_one: *teens_number, teens_number_two: *teens_number}
+    slot_relations: [{kind: distinct, slots: [teens_number_one, teens_number_two]}]
+    answer_derivation: {kind: matching_pairs, slots: [teens_number_one, teens_number_two]}
+    feedback_frame: {text: "Match each Dari number word to its digit.", language_code: en, direction: ltr}
+
+  # Lesson 3: tens up to a hundred.
+  - content_key: practice.en-prs.prs.a1.unit04.lesson03.tens_gloss.001
+    lesson_content_key: prs.a1.unit04.lesson03.tens
+    type: multiple_choice
+    frame: {text: "{tens_number}", language_code: prs, direction: rtl}
+    slots: {tens_number: *tens_number}
+    answer_derivation: {kind: slot_gloss, slot: tens_number}
+    feedback_frame: {text: "{tens_number} is a tens number up to a hundred.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit04.lesson03.tens_fill.002
+    lesson_content_key: prs.a1.unit04.lesson03.tens
+    type: fill_in_blank
+    frame: {text: "نمبر تلفنم با {tens_number} شروع می‌شه.", language_code: prs, direction: rtl}
+    slots: {tens_number: *tens_number}
+    answer_derivation: {kind: slot_text, slot: tens_number}
+    feedback_frame: {text: "{tens_number} completes 'my phone number starts with ___.'", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit04.lesson03.tens_translate.003
+    lesson_content_key: prs.a1.unit04.lesson03.tens
+    type: translation
+    frame: {text: "{tens_number}", language_code: en, direction: ltr, slot_rendering: {tens_number: english_gloss}}
+    slots: {tens_number: *tens_number}
+    answer_derivation: {kind: slot_text, slot: tens_number}
+    feedback_frame: {text: "{tens_number} is the Dari word for this number.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit04.lesson03.tens_pair.004
+    lesson_content_key: prs.a1.unit04.lesson03.tens
+    type: matching_pairs
+    frame: {text: "{tens_number_one} — {tens_number_two}", language_code: prs, direction: rtl}
+    slots: {tens_number_one: *tens_number, tens_number_two: *tens_number}
+    slot_relations: [{kind: distinct, slots: [tens_number_one, tens_number_two]}]
+    answer_derivation: {kind: matching_pairs, slots: [tens_number_one, tens_number_two]}
+    feedback_frame: {text: "Match each Dari number word to its digit.", language_code: en, direction: ltr}
+
+  # Lesson 5: exchanging phone numbers.
+  - content_key: practice.en-prs.prs.a1.unit04.lesson05.phone_gloss.001
+    lesson_content_key: prs.a1.unit04.lesson05.phone_numbers
+    type: multiple_choice
+    frame: {text: "{phone_word}", language_code: prs, direction: rtl}
+    slots: {phone_word: *phone_word}
+    answer_derivation: {kind: slot_gloss, slot: phone_word}
+    feedback_frame: {text: "{phone_word} is used when exchanging phone numbers.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit04.lesson05.phone_fill.002
+    lesson_content_key: prs.a1.unit04.lesson05.phone_numbers
+    type: fill_in_blank
+    frame: {text: "کلمهٔ {phone_word} در گفتگوی تلفنی به کار می‌رود.", language_code: prs, direction: rtl}
+    slots: {phone_word: *phone_word}
+    answer_derivation: {kind: slot_text, slot: phone_word}
+    feedback_frame: {text: "{phone_word} completes 'the word ___ is used in a phone conversation.'", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit04.lesson05.phone_translate.003
+    lesson_content_key: prs.a1.unit04.lesson05.phone_numbers
+    type: translation
+    frame: {text: "{phone_word}", language_code: en, direction: ltr, slot_rendering: {phone_word: english_gloss}}
+    slots: {phone_word: *phone_word}
+    answer_derivation: {kind: slot_text, slot: phone_word}
+    feedback_frame: {text: "{phone_word} is the Dari word for this.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit04.lesson05.phone_pair.004
+    lesson_content_key: prs.a1.unit04.lesson05.phone_numbers
+    type: matching_pairs
+    frame: {text: "{phone_word_one} — {phone_word_two}", language_code: prs, direction: rtl}
+    slots: {phone_word_one: *phone_word, phone_word_two: *phone_word}
+    slot_relations: [{kind: distinct, slots: [phone_word_one, phone_word_two]}]
+    answer_derivation: {kind: matching_pairs, slots: [phone_word_one, phone_word_two]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
