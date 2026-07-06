@@ -8398,3 +8398,105 @@ Farsi (inactive pending a real key, degrades safely), and Whisper STT
 for `speak_response`/`speak_repeat`. Not yet deployed to the live
 server (192.168.4.4) — that's still a separate, Ramin-present step per
 the standing deploy convention.
+
+## e2e suite actually run for the first time tonight — 2026-07-06, all 10 specs green, one real fix
+
+The opt-in Playwright suite (`scripts/verify.sh --e2e`/`--e2e-only`)
+had been sitting untouched all night while Phases A-F, the rate
+limiter, the FastAPI/Starlette CVE bump, Azure TTS, Whisper STT, and
+the `content_key` admin-import feature all landed underneath it. Stood
+up a genuinely fresh, fully isolated stack to actually run it rather
+than trust that any of that "obviously" didn't break navigation/
+teaching-card flows: new `backend/docker-compose.e2e.yml` + `backend/
+.env.e2e` (compose project `ls2e2e`, api on port **8035**, Postgres on
+**5461** — checked `docker ps`/`lsof` first, both genuinely free;
+`ls2qa` was already live on 8020/5442, the shared stack on 8000/5432),
+frontend on port **5190** via a new `frontend/.env.e2e.local` (gitignored,
+`--mode e2e`) since the suite's own hardcoded default port 5175 was
+already occupied by another session's process. Hit the exact `docker
+compose` auto-loads-`./.env`-for-variable-substitution footgun
+CLAUDE.md already warns about, from the *db* side this time, not
+`--env-file`: the compose file's `${POSTGRES_PASSWORD:-...}` interpolation
+silently pulled the value from the pre-existing shared `backend/.env`
+instead of my own `.env.e2e` (which only backs `env_file:` for the
+`api` service, a separate mechanism) — first `db`/`api` password
+mismatched and auth failed. Fixed by hardcoding the db service's
+environment values directly in the compose file instead of `${VAR}`
+interpolation, so it can't silently pick up whatever's sitting in the
+repo's real `.env`.
+
+**First real run: 5/10 passed, 5 failed**, all five on the identical
+symptom — `registerAndLand()`'s `page.waitForURL("/")` timing out right
+after clicking Register. Root-caused against the isolated backend
+directly (`curl` loop): tonight's new `REGISTER_RATE_LIMIT` (5
+requests/hour/IP, landed a few hours earlier this session) was firing —
+the suite registers one fresh account per spec, serially, all from
+`localhost`, and blew through the 5/hour ceiling right at the 6th spec.
+Confirmed with a plain curl loop: attempts 1-5 got `201`, 6 and 7 got
+`429 register_rate_limited`. This is a genuine, real conflict between
+two legitimate pieces of tonight's work (the rate limiter, verified
+correct on its own terms; the suite's per-spec fresh-account isolation
+model, also correct on its own terms) rather than either side being
+wrong — classified as the suite being stale against a new constraint,
+not a regression to work around by weakening assertions.
+
+**Fix**: made the three rate limits' request-count ceilings (not their
+window durations) configurable via `Settings`
+(`backend/app/core/config.py`: `login_rate_limit_max`/
+`register_rate_limit_max`/`answer_rate_limit_max`, defaults unchanged
+at 10/5/120) and had `router.py`'s three module-level `RateLimiter`
+constructions read from `get_settings()` instead of hardcoded
+literals. Set `LOGIN_RATE_LIMIT_MAX=1000`/`REGISTER_RATE_LIMIT_MAX=1000`
+in the new isolated-stack-only `.env.e2e` — production `backend/.env`
+and `backend/.env.qa` are untouched (verified: `grep RATE_LIMIT_MAX
+.env .env.qa` finds nothing), so this doesn't loosen the real
+brute-force/registration-abuse protection anywhere real traffic hits.
+Re-ran: **10/10 passed**, twice in a row (13.1s, then 10.6s) for a
+flakiness check.
+
+**Second, unrelated real finding mid-run**: 4 of the remaining
+failures (course-picker, both dari-course specs, lesson-teaching) were
+`net::ERR_FAILED` on every `GET /courses/{id}/units` call, traced via
+the Playwright trace's network log straight to a container-log
+`sqlalchemy.exc.ProgrammingError: column units.content_key does not
+exist`. Not a bug — a real concurrent session (see the entry
+immediately above this one) landed migration `0013_content_keys.py`
+and the matching model columns *while my isolated stack was already up
+and migrated to 0012*. Since the compose file bind-mounts the live
+repo (`volumes: .:/app`), the fix was just re-running `alembic upgrade
+head` against the already-running container — no rebuild needed, code
+is live-mounted. This is exactly the kind of thing the "check recent
+file activity before touching shared files" instruction is for, and a
+concrete example of why standing up a genuinely fresh isolated stack
+mid-session can still race a concurrently-landing migration even when
+you didn't touch anything shared yourself.
+
+**Also ran the full backend pytest suite** against the isolated stack's
+own test DB (never the shared one) since the fix touched
+`app/core/config.py`/`app/api/router.py`: first attempt showed ~30
+failures, all `403 admin_required` — self-inflicted, not a real
+finding: `.env.e2e` had set a custom `ADMIN_EMAILS=e2e-admin@example.com`,
+but `tests/conftest.py`'s admin fixture registers the hardcoded
+`admin@example.com` and only `os.environ.setdefault()`s `ADMIN_EMAILS`
+(a no-op once the env var is already injected via `env_file:`), so the
+fixture's own admin account never actually got admin rights. Fixed by
+reverting `.env.e2e`'s `ADMIN_EMAILS` to the same `admin@example.com`
+default every other env in this repo uses. Re-ran clean: **104/104
+passed**, no failures, the one previously-documented
+`test_checkpoint_forces_strict_orthography` intermittent flake didn't
+even reproduce this time.
+
+**Net for this pass**: e2e suite is green (10/10) and current against
+tonight's full stack of changes; one small, real, minimal-blast-radius
+backend fix shipped (rate limit ceilings now `Settings`-configurable,
+production defaults unchanged); zero frontend/content changes were
+needed — nothing tonight's Phases A-F/rate-limiting/CVE-bump/audio work
+actually broke navigation, course-picker, teaching-card flow, or
+locked-practice-state. Left `backend/app/core/config.py` and
+`backend/app/api/router.py`'s diffs uncommitted in the working tree
+(this repo's standing practice), same as `backend/docker-compose.e2e.yml`/
+`.env.e2e` (new, isolated-stack-only, not needed by anyone else's
+workflow) and `frontend/.env.e2e.local` (gitignored). Isolated stack
+(`ls2e2e` containers + volume) and the manually-started frontend dev
+server on 5190 torn down after — the shared `backend-api-1`/
+`backend-db-1` stack, `ls2qa`, and the live server were never touched.
