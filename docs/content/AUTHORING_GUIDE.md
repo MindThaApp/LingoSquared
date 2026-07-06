@@ -187,9 +187,84 @@ conventions in places, mismatched to newly-authored content), but is
 worth using as a pronunciation reference during any recording pass,
 especially for fa/prs where the project currently has zero TTS coverage.
 
-Tatoeba's CC-BY sentence corpus remains reference-only per the original
-policy (attribution tracking not built, content unreviewed) — this
-section does not change that.
+**Tatoeba: still reference-only — now a settled decision with data, not
+a placeholder (investigated and closed 2026-07-07).** The main corpus is
+CC-BY 2.0 FR (per-sentence contributor attribution required — tracking
+not built, deliberately: see below). A CC0 1.0 subset exists
+(`sentences_CC0.tar.bz2` on tatoeba.org/downloads, no attribution
+needed), and it was actually downloaded and measured rather than
+assumed useful: of ~559k CC0 sentences, two-thirds are Kabyle/Berber;
+the launch/near-launch languages get **Dutch 50, Spanish 37, Farsi 0,
+Dari 0** (French 14,201 and English 41,501 are the only real pools).
+So the CC0 subset is effectively empty for every language this project
+currently needs, and building CC-BY attribution infrastructure
+(schema + learner-facing credit surface + per-sentence bookkeeping)
+would buy unreviewed sentences that still require the full
+spine-fit/adaptation/fresh-context-review pipeline — the sentence text
+is the cheapest part of an exercise; slots, accepted-answer variants,
+distractors, feedback, and lexeme wiring dominate the cost. Decision:
+keep reference-only. Don't re-investigate without new information
+(e.g. the CC0 subset growing dramatically in a needed language).
+
+### Verified public-domain / open-license source map (2026-07-07)
+
+Investigated, verified, and decided in one pass — check here before
+hunting for external corpora again:
+
+- **fa**: FSI Persian Basic Course (1963, PD, `pdfinfo` Author: US
+  FSI) — in active use, the original §10 precedent.
+- **prs**: Peace Corps Dari materials (PD, PDF-only, no audio) — in
+  active use.
+- **nl**: FSI Dutch Basic Course (PD, with audio) — in active use
+  (15 of 28 nl realization units carry its provenance as of this note).
+- **es** (lane parked until nl is done — do not start early): FSI
+  Spanish Basic Course verified available, PD — 4 volumes, 55 units,
+  drills + audio, on Live Lingua / fsi-language-courses.org. Peace
+  Corps Spanish also exists. Ready to scaffold the moment es resumes.
+- **fr** (lane parked, same rule): FSI French Basic Course verified
+  available, PD — 2 volumes (~476 + 577 pp) with audio. Additionally
+  **COERLL's "Français interactif" (UT Austin) is CC BY 3.0 —
+  commercial use allowed** — a genuinely modern (not 1960s) full
+  course; usable ONLY once a real attribution credit (course-level
+  credit surface naming COERLL/UT Austin per CC BY) is actually built
+  and shipped — attribution is a hard precondition of first import,
+  not a follow-up task.
+- **FSI pattern/substitution drills** may also inform Endless Practice
+  template *frames* (they are natural sentence frames with slot
+  substitutions) — but note honestly: the frame text is the cheap
+  ~10% of a practice template; slot presets, lexeme-pool wiring, and
+  review dominate, so this is an authenticity aid, not a volume
+  multiplier.
+- Cross-language note: FSI courses were independently authored per
+  language, so scaffolding each language from its OWN FSI course does
+  not reintroduce the "structurally identical dialogues across two
+  languages" review-failure anti-pattern. Never scaffold two languages
+  from the same source's structure.
+
+**Categorically ruled out — do not import from these regardless of how
+accessible they look:**
+
+- **DLI GLOSS / Headstart2** (dliflc.edu): US-government *hosted* but
+  NOT clean — lessons embed third-party copyrighted media (news
+  articles/broadcasts) used under DoD-specific permissions;
+  DLIFLC's own media-copyright page requires copyright-owner consent
+  for reuse. Looks like FSI, isn't.
+- **Any CC-BY-SA source** — Trayectos/Hecho en Texas (es, COERLL),
+  Wikibooks, Wiktionary, Wikipedia sentences: share-alike would force
+  every derived lesson to itself be licensed BY-SA (anyone could then
+  legally copy that part of the content corpus). FSI Spanish (true PD)
+  strictly dominates Trayectos anyway.
+- **OpenSubtitles-derived corpora** (legally murky derivatives of
+  copyrighted films), **Anki shared decks** (user-uploaded, routinely
+  scraped from copyrighted textbooks/apps), and **anything from
+  commercial apps, textbooks, or proprietary courses** — categorically
+  unsafe for a shipping product, full stop.
+- **Pre-copyright-era (pre-1930) readers/phrasebooks**: legally fine,
+  pedagogically useless here — archaic register fails this guide's own
+  §3/§10 modernization bar at A1/A2.
+- **Mozilla Common Voice** (CC0 audio): unmatched crowd-read clips
+  can't be spliced to authored content — same shape as the closed FSI
+  audio investigation (see CLAUDE.md Secrets section); don't reopen.
 
 ## 11. Cross-check facts within a lesson, not just each item in isolation
 
