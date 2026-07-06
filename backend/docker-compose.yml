@@ -22,6 +22,13 @@ services:
         condition: service_healthy
     volumes:
       - .:/app
+      # faster-whisper downloads model weights from Hugging Face on first
+      # use and caches them under ~/.cache/huggingface — without a named
+      # volume here that cache lives only in the container's writable
+      # layer and re-downloads (~150MB for the "base" model) on every
+      # rebuild/recreate, not just every restart.
+      - whisper_model_cache:/root/.cache/huggingface
 volumes:
   postgres_data:
+  whisper_model_cache:
 

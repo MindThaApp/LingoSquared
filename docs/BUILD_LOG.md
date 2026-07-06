@@ -8224,3 +8224,116 @@ inside the container still reporting `0.115.12`) needs a container
 rebuild to actually deploy, and that rebuild is being deliberately
 held until the in-flight Whisper STT work also lands, so both ship in
 one coordinated rebuild rather than several partial ones.
+
+## Azure Cognitive Services Speech added as a second TTS provider (2026-07-06), built and ready but not activated
+
+Google Cloud TTS has zero Persian/Dari voices at all (re-confirmed
+against Google's own supported-voices list, same finding as the
+2026-07-04 provider research entry above). Azure Cognitive Services
+Speech has real, licensed neural voices for Farsi —
+`fa-IR-DilaraNeural` (female, used as the default) and
+`fa-IR-FaridNeural` (male) — confirmed against Azure's own voice
+gallery. This supersedes the 2026-07-04 note's tentative "self-hosted
+Piper for Farsi" direction, which was never started; Azure is a real
+managed provider with an actual licensed voice, a strictly better fit
+than standing up and quality-evaluating a self-hosted model. Dari
+(`prs`) still has no voice on Azure (or anywhere else checked so far)
+— unaffected, still browser-fallback-only.
+
+**Implementation** (`backend/app/services/tts.py`): added
+`synthesize_azure()` via the plain Azure Speech REST API — a subscription
+key is exchanged for a short-lived bearer token
+(`{region}.api.cognitive.microsoft.com/sts/v1.0/issueToken`), then SSML
+is POSTed to `{region}.tts.speech.microsoft.com/cognitiveservices/v1`
+requesting `fa-IR-DilaraNeural`, requesting MP3 output — deliberately
+NOT the Azure Speech SDK (a much heavier dependency for one REST call);
+reuses `httpx`, already a dependency, no new package needed. The
+existing Google path was renamed `synthesize_google()` unchanged, and a
+new `synthesize()` dispatches by language: `fa` → Azure, everything
+else Google already covers → Google, unchanged. New
+`AZURE_TTS_SUPPORTED_LANGUAGES = {"fa"}` and `TTS_SUPPORTED_LANGUAGES`
+(the union of Google's and Azure's sets) — `TTS_SUPPORTED_LANGUAGES` is
+now what `/tts`'s route gates on (`app/api/router.py`), replacing the
+old Google-only check, so `fa` requests now actually reach the
+synthesis dispatch instead of immediately returning the
+`unsupported_language` browser-fallback.
+
+**Config** (`app/core/config.py`): `azure_speech_key`/`azure_speech_region`,
+both default `""` — same unset-by-default, graceful-degradation
+convention as `google_cloud_tts_credentials_json`. `synthesize_azure()`
+raises `RuntimeError` if either is empty, which `/tts`'s existing
+`except Exception` catch turns into the `provider_error` browser-
+fallback response, same as an unconfigured/broken Google credential
+already does — verified this explicitly with a dedicated test, no new
+error-handling path needed. `backend/.env.example` updated to list
+`AZURE_SPEECH_KEY`/`AZURE_SPEECH_REGION` (and, incidentally, fixed a
+real pre-existing staleness bug found while there: `.env.example` still
+only listed the superseded `ELEVENLABS_*` vars and was missing
+`GOOGLE_CLOUD_TTS_CREDENTIALS_JSON`/`TTS_MONTHLY_CHAR_BUDGET` entirely —
+now lists the actual current Google + Azure vars).
+
+**Deliberately left untouched**: the Endless Practice engine's
+`listen_select` generation gate (`app/practice/service.py`, two call
+sites) still checks `GOOGLE_TTS_SUPPORTED_LANGUAGES` specifically, not
+the new `TTS_SUPPORTED_LANGUAGES` union — lifting it for `fa` now that
+Azure gives it a real voice would be a natural fast-follow, but it's a
+separate product decision (whether to start generating real-audio
+`listen_select` practice items for `fa`) with its own dedicated,
+deliberately-worded regression test
+(`test_farsi_sampler_excludes_listen_select_even_if_imported` in
+`test_endless_practice.py`) and its own history (the Phase D3 entry
+above flags "lift the zero-listen_select-for-fa restriction" as
+explicit future work, Phase D4, pending real recordings — this task
+was scoped to the TTS service integration itself, not to reopening
+that decision). Flagging for whoever picks up Phase D4 next.
+
+**Tests** (`backend/tests/test_backend.py`): the pre-existing
+`test_tts_fallbacks` asserted `fa` hit the `unsupported_language`
+fallback — no longer true, updated to only assert that for `prs` (still
+uncovered by either provider), with a comment pointing at the new
+dedicated fa/Azure test. Added: routing test (`fa` → mocked
+`synthesize_azure`, `en` → mocked `synthesize_google`, `prs` → still
+`unsupported_language`, neither provider called); a missing-credentials
+test (empty `azure_speech_key`/`azure_speech_region`, the real default,
+`/tts` for `fa` degrades to `provider_error` rather than a 500); a
+request-construction test (mocks `httpx.post`, asserts the token
+exchange happens first, the synthesize call carries the bearer token
+and `fa-IR-DilaraNeural`/`fa-IR` in its SSML body); and a direct
+missing-credentials-raises test at the `synthesize_azure()` level.
+
+**Verified**: full backend pytest suite green on a fresh, isolated
+Docker stack (own `docker compose -p ls2aztts` project, own Postgres,
+migrated 0001→0013 from empty — the shared dev stack and at least 3
+other project stacks were busy with concurrent sessions' work
+tonight), including the 4 new tests and the corrected
+`test_tts_fallbacks`. One test (`test_phase_f_checkpoints.py::
+test_checkpoint_forces_strict_orthography`) failed intermittently
+during this work and was root-caused as a **pre-existing, unrelated
+flake**, not caused by this change: it always builds an `en→es` course
+(Latin script, unaffected by anything TTS/Farsi) and picks the FIRST
+checkpoint item of type `translation` OR `fill_in_blank`, assuming
+either is gradeable via the typo-distance "almost" path — but
+`app/review/grading.py`'s `FREE_TEXT_EXERCISE_TYPES` deliberately
+excludes `fill_in_blank`, so `grade_answer()` returns `"incorrect"`
+unconditionally whenever the checkpoint's unseeded per-run RNG
+(`_batch_rng()`, seeded from fresh UUIDs every test run) happens to
+place a `fill_in_blank` item first instead of a `translation` one — a
+genuine ~coin-flip existing bug in the test's own selection logic,
+confirmed via direct instrumentation to fail/pass independent of test
+order and independent of this change (reproduces identically on a
+clean baseline with this change fully reverted). Not fixed here —
+out of scope for a TTS-provider task and belongs to whoever owns
+Phase F's tests; flagging for a future pass (fix: restrict the
+selection to `template.type == "translation"`, or check
+`exercise_type in FREE_TEXT_EXERCISE_TYPES` before picking).
+
+**Not yet done**: no real Azure key has been set anywhere (by design —
+this was built and tested entirely against a mocked/absent key, ready
+to go live the moment a real one is provisioned). To activate: get an
+Azure Speech resource (Azure Portal → Cognitive Services → Speech),
+copy its key and region, set `AZURE_SPEECH_KEY`/`AZURE_SPEECH_REGION`
+in the deploy target's `.env` (never commit the real key), redeploy per
+the usual recipe. No migration needed (no schema change), no frontend
+change needed (`/tts`'s request/response shape is unchanged — the
+frontend has never known or cared which provider generated a given
+`audio/mpeg` response).
