@@ -4,33 +4,35 @@ source_language: en
 target_language: nl
 unit_content_key: nl.a1.unit09.directions
 review:
-  status: unreviewed
+  status: reviewed
+  required_next_reviewer: null
   fresh_context: "false"
-  notes: "Authored 2026-07-06 by the Claude session syncing Endless Practice
-    template pools to lesson content growth (en-nl lane, continuing after
-    unit08 -- see docs/content/practice/en-nl/a1_unit08.yaml's notes for the
-    full redirect-from-nl-en context and the coordinator's 'keep going on
-    both directions' instruction for why this lane resumed here). This unit
-    (unit09, reviewed/stable) covers asking for and giving directions.
-    Extended scripts/backfill_lexemes_en_nl.py's UNIT_FILES glob to include
-    unit09 and added a 5-member 'direction_word' tag (links/rechts/linksaf/
-    rechtsaf/rechtdoor) for bare-word recognition only, plus a narrower
-    2-member 'turn_direction' tag (linksaf/rechtsaf) for a 'Sla {item}.'
-    frame -- 'rechtdoor' is deliberately excluded from that frame since it
-    idiomatically pairs with 'ga', not 'sla' ('Sla rechtdoor' is not
-    natural Dutch), the same non-interchangeable-synonym bug class caught
-    repeatedly earlier this session (e.g. nl-en's turn_direction/
-    card_type catches). Also reused this lane's existing 'place_non_station'
-    tag from unit08 (supermarkt/bibliotheek/ziekenhuis/bank/postkantoor/
-    bushalte, 6 members) for lessons 03-06's bare-word recognition, since
-    those places were already taught in unit08 and this unit's own overlay
-    explicitly says 'Recall de supermarkt from unit08' etc. -- legitimate
-    cross-unit vocabulary reuse, not a forward-reference violation. Every
-    slot's real candidate count was verified with a standalone
-    lexeme_matches()-replicating harness against this script's actual
-    output. Needs the standard fresh-context review before import. Same
-    blocking dependency as every earlier en-nl pack: backfill_lexemes_en_nl.py
-    has not actually been run against a real database yet."
+  notes: >-
+    Original authoring notes (2026-07-06): added a 5-member "direction_word"
+    tag for bare-word recognition and a narrower 2-member "turn_direction"
+    tag (linksaf/rechtsaf only) for "Sla {item}." -- "rechtdoor" deliberately
+    excluded since it idiomatically pairs with "ga", not "sla". Reused
+    unit08's "place_non_station" tag for lessons 03-06's bare-word
+    recognition (legitimate cross-unit vocabulary reuse, per this unit's own
+    overlay explicitly recalling "de supermarkt" etc. from unit08).
+
+    Independent fresh-context content audit confirms this pack is clean,
+    including the ONE place this unit reuses unit08's place_non_station tag
+    embedded in a de/het-sensitive way -- checked carefully given unit08's
+    own gender-agreement bug found in this same review pass, but unit09
+    only ever uses place_non_station in fully isolated "{item}" recognition
+    templates (choose/listen, lessons 03-06), never embedded with a fixed
+    article, so the de/het risk that affected unit08 does not apply here.
+    Standalone lexeme_matches()-replicating harness confirms candidate
+    counts: direction_word=5, turn_direction=2, place_non_station=12
+    (lowercase + capitalized map-label forms, both safe since always used
+    standalone). Hand-checked every filler: "Sla {item}."/"Sla {item} bij
+    het station." are grammatical for both linksaf and rechtsaf ("Sla
+    linksaf."/"Sla linksaf bij het station." etc.), and the turn_direction/
+    rechtdoor exclusion is correctly upheld (rechtdoor never appears in a
+    "Sla ___" frame anywhere in this pack). No self-reference, no
+    capitalization leaks, no jargon leaks, no stray YAML booleans. Compiler
+    validation re-run together with units 01-08: 0 errors/0 warnings.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:

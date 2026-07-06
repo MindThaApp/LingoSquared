@@ -4,34 +4,55 @@ source_language: en
 target_language: nl
 unit_content_key: nl.a1.unit07.shopping
 review:
-  status: unreviewed
+  status: reviewed
+  required_next_reviewer: null
   fresh_context: "false"
-  notes: "Authored 2026-07-05 by the Claude session syncing Endless Practice
-    template pools to lesson content growth, redirecting from the nl-en
-    lane (see docs/BUILD_LOG.md's nl-en units 17-19 entry for why) to this
-    much-further-behind en-nl lane, which had only reached unit06 while the
-    underlying nl realization/en-nl overlay content had already reached 23
-    units. This unit (unit07, reviewed/stable per its own overlay -- picked
-    as the first of the stable 07-11 range) covers shopping at the market.
-    Extended scripts/backfill_lexemes_en_nl.py's UNIT_FILES glob to include
-    unit07 and added a 4-member 'produce' tag (appels/peren/tomaten/
-    paprika's, both lowercase and the capitalized price-label variants --
-    8 real lexemes total) reused across every lesson in this unit, since
-    it's literally what's for sale throughout. Added a narrower
-    'market_quantity' tag (kilo/pond only, 2 members) for the 'Een {item}
-    tomaten, alstublieft.' frame -- deliberately excludes 'gram' (always
-    collocates with 'honderd', never bare 'een gram') and 'stuk' (pairs
-    with a count context, not a weight phrase), both of which would have
-    produced unnatural-sounding generated sentences. The 'Wat mag het
-    zijn?' idiom's 'zijn' is NOT used as a slot value anywhere in this
-    pack, per this script's own documented homograph limitation ('zijn'
-    already means 'are' from earlier units) -- baked as literal frame text
-    only, same as the unit05 zijn_haar precedent. Every slot's real
-    candidate count was verified with a standalone lexeme_matches()-
-    replicating harness against this script's actual output. Needs the
-    standard fresh-context review before import. Same blocking dependency
-    as every earlier en-nl pack: backfill_lexemes_en_nl.py has not actually
-    been run against a real database yet."
+  notes: >-
+    Original authoring notes (2026-07-05): added a "produce" tag (appels/
+    peren/tomaten/paprika's, both lowercase and the capitalized price-label
+    variants -- 8 real lexemes) reused across the unit, and a narrower
+    "market_quantity" tag (kilo/pond) for the "Een {item} tomaten,
+    alstublieft." frame. "zijn" (from "Wat mag het zijn?") correctly never
+    used as a slot value.
+
+    Independent fresh-context content audit found and fixed a real,
+    repeated bug the authoring pass introduced despite explicitly knowing
+    about the case duplication: the "produce" tag's inclusion of BOTH the
+    lowercase lesson01 forms (appels/peren/tomaten/paprika's) AND the
+    capitalized lesson04 price-tag-label forms (Appels/Peren/Tomaten/
+    Paprika's) of the exact same words meant every template that embedded
+    "{item}" mid-sentence could render a capitalized word where a lowercase
+    one belongs -- e.g. lesson02's "Hoeveel kost een kilo {item}?" could
+    generate "Hoeveel kost een kilo Appels?", and lesson05/06's "Dan neem
+    ik een kilo {item}, alstublieft." could generate "...een kilo Peren,
+    alstublieft." (capitalization leak mid-sentence, the exact bug class
+    this review was watching for -- same root cause as the project's known
+    "Mijn"-mid-sentence precedent, but NOT excluded here the way "Mijn"
+    was). Also affected the parallel English translation-prompt frames via
+    slot_rendering:english_gloss (capitalized glosses "Apples"/"Pears" mid
+    English sentence). No existing tag in scripts/backfill_lexemes_en_nl.py
+    isolates the 4 lowercase forms alone (the only shared tag besides
+    "produce" is "market_place", which also pulls in markt/winkel/kraam --
+    verified this directly against the script's real output before
+    concluding no clean tag-only fix exists within pack-YAML-only editing
+    permissions). **Fix**: restructured the 8 affected templates
+    (lesson02.order/complete/translate, lesson05.order/complete/translate,
+    lesson06.order/complete) to instead slot the already-safe, already
+    lowercase-only "market_quantity" tag (kilo/pond) for the QUANTITY word
+    while baking the specific produce noun as fixed lowercase text matching
+    the lesson's own already-taught example sentence ("appels" for
+    lesson02's "Hoeveel kost een {item} appels?", matching
+    teach.ask_apples; "peren" for lesson05/06's "Dan neem ik een {item}
+    peren, alstublieft.", matching teach.take_pears) -- both kilo and pond
+    are fully grammatical in these positions ("een pond appels/peren" is
+    natural, already-taught Dutch), eliminating the case-ambiguity risk
+    entirely while keeping genuine 2-way slot variety. The isolated-word
+    recognition templates (lesson01/03/04/06's choose/listen/match/
+    translate-single-word) were left untouched since standalone-word
+    display has no mid-sentence capitalization risk. Re-verified with the
+    standalone harness (all 8 fixed templates now resolve to exactly
+    {kilo, pond}) and the compiler (0 errors/0 warnings, run together with
+    units 01-06, 08-09).
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -75,35 +96,35 @@ templates:
   - content_key: practice.en-nl.nl.a1.unit07.lesson02.order.001
     lesson_content_key: nl.a1.unit07.lesson02.prijs_vragen
     type: word_order
-    frame: {text: "Hoeveel kost een kilo {item}?", language_code: nl, direction: ltr}
-    slots: {item: *produce}
-    answer_derivation: {kind: render_frame, frame: {text: "Hoeveel kost een kilo {item}?", language_code: nl, direction: ltr}}
-    feedback_frame: {text: "{item} is the produce word asked about.", language_code: en, direction: ltr}
+    frame: {text: "Hoeveel kost een {item} appels?", language_code: nl, direction: ltr}
+    slots: {item: *market_quantity}
+    answer_derivation: {kind: render_frame, frame: {text: "Hoeveel kost een {item} appels?", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} is the quantity asked about.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit07.lesson02.complete.002
     lesson_content_key: nl.a1.unit07.lesson02.prijs_vragen
     type: fill_in_blank
     frame:
-      text: "Hoeveel kost een kilo {item}?"
+      text: "Hoeveel kost een {item} appels?"
       language_code: nl
       direction: ltr
       text_blocks:
         - {text: "Complete the Dutch question.", language_code: en, direction: ltr}
-    slots: {item: *produce}
+    slots: {item: *market_quantity}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "{item} completes this price question.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit07.lesson02.translate.003
     lesson_content_key: nl.a1.unit07.lesson02.prijs_vragen
     type: translation
     frame:
-      text: "How much does a kilo of {item} cost?"
+      text: "How much does {item} of apples cost?"
       language_code: en
       direction: ltr
       slot_rendering: {item: english_gloss}
       text_blocks:
         - {text: "Translate into Dutch.", language_code: en, direction: ltr}
-    slots: {item: *produce}
-    answer_derivation: {kind: render_frame, frame: {text: "Hoeveel kost een kilo {item}?", language_code: nl, direction: ltr}}
-    feedback_frame: {text: "Hoeveel kost een kilo {item}? -- how much does a kilo of {item} cost?", language_code: en, direction: ltr}
+    slots: {item: *market_quantity}
+    answer_derivation: {kind: render_frame, frame: {text: "Hoeveel kost een {item} appels?", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Hoeveel kost een {item} appels? -- how much does {item} of apples cost?", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit07.lesson03.order.001
     lesson_content_key: nl.a1.unit07.lesson03.hoeveelheden
     type: word_order
@@ -166,35 +187,35 @@ templates:
   - content_key: practice.en-nl.nl.a1.unit07.lesson05.order.001
     lesson_content_key: nl.a1.unit07.lesson05.kopen_en_betalen
     type: word_order
-    frame: {text: "Dan neem ik een kilo {item}, alstublieft.", language_code: nl, direction: ltr}
-    slots: {item: *produce}
-    answer_derivation: {kind: render_frame, frame: {text: "Dan neem ik een kilo {item}, alstublieft.", language_code: nl, direction: ltr}}
-    feedback_frame: {text: "{item} completes this purchase.", language_code: en, direction: ltr}
+    frame: {text: "Dan neem ik een {item} peren, alstublieft.", language_code: nl, direction: ltr}
+    slots: {item: *market_quantity}
+    answer_derivation: {kind: render_frame, frame: {text: "Dan neem ik een {item} peren, alstublieft.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} is the quantity being bought.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit07.lesson05.complete.002
     lesson_content_key: nl.a1.unit07.lesson05.kopen_en_betalen
     type: fill_in_blank
     frame:
-      text: "Dan neem ik een kilo {item}, alstublieft."
+      text: "Dan neem ik een {item} peren, alstublieft."
       language_code: nl
       direction: ltr
       text_blocks:
         - {text: "Complete the Dutch sentence.", language_code: en, direction: ltr}
-    slots: {item: *produce}
+    slots: {item: *market_quantity}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "{item} completes this purchase.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit07.lesson05.translate.003
     lesson_content_key: nl.a1.unit07.lesson05.kopen_en_betalen
     type: translation
     frame:
-      text: "Then I'll take a kilo of {item}, please."
+      text: "Then I'll take {item} of pears, please."
       language_code: en
       direction: ltr
       slot_rendering: {item: english_gloss}
       text_blocks:
         - {text: "Translate into Dutch.", language_code: en, direction: ltr}
-    slots: {item: *produce}
-    answer_derivation: {kind: render_frame, frame: {text: "Dan neem ik een kilo {item}, alstublieft.", language_code: nl, direction: ltr}}
-    feedback_frame: {text: "Dan neem ik een kilo {item}, alstublieft -- then I'll take a kilo of {item}, please.", language_code: en, direction: ltr}
+    slots: {item: *market_quantity}
+    answer_derivation: {kind: render_frame, frame: {text: "Dan neem ik een {item} peren, alstublieft.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Dan neem ik een {item} peren, alstublieft -- then I'll take {item} of pears, please.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit07.lesson06.listen.001
     lesson_content_key: nl.a1.unit07.lesson06.marktgesprek
     type: listen_select
@@ -205,19 +226,19 @@ templates:
   - content_key: practice.en-nl.nl.a1.unit07.lesson06.order.002
     lesson_content_key: nl.a1.unit07.lesson06.marktgesprek
     type: word_order
-    frame: {text: "Dan neem ik een kilo {item}, alstublieft.", language_code: nl, direction: ltr}
-    slots: {item: *produce}
-    answer_derivation: {kind: render_frame, frame: {text: "Dan neem ik een kilo {item}, alstublieft.", language_code: nl, direction: ltr}}
-    feedback_frame: {text: "{item} completes this purchase.", language_code: en, direction: ltr}
+    frame: {text: "Dan neem ik een {item} peren, alstublieft.", language_code: nl, direction: ltr}
+    slots: {item: *market_quantity}
+    answer_derivation: {kind: render_frame, frame: {text: "Dan neem ik een {item} peren, alstublieft.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} is the quantity being bought.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit07.lesson06.complete.003
     lesson_content_key: nl.a1.unit07.lesson06.marktgesprek
     type: fill_in_blank
     frame:
-      text: "Dan neem ik een kilo {item}, alstublieft."
+      text: "Dan neem ik een {item} peren, alstublieft."
       language_code: nl
       direction: ltr
       text_blocks:
         - {text: "Complete the Dutch sentence.", language_code: en, direction: ltr}
-    slots: {item: *produce}
+    slots: {item: *market_quantity}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "{item} completes this purchase.", language_code: en, direction: ltr}

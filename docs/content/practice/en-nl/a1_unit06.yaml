@@ -4,27 +4,45 @@ source_language: en
 target_language: nl
 unit_content_key: nl.a1.unit06.food
 review:
-  status: unreviewed
+  status: reviewed
+  required_next_reviewer: null
   fresh_context: "false"
-  notes: "Authored 2026-07-05 by the Claude session syncing the Endless Practice
-    template pools to lesson content that had grown past them (see a1_unit05.yaml's
-    notes for the full gap context -- same pass, same reasoning). Keyed to lexemes
-    added to scripts/backfill_lexemes_en_nl.py's unit05-06 extension. Type variety
-    matches the reviewed en-nl unit01/unit04 packs (multiple_choice, listen_select,
-    matching_pairs, plus word_order/fill_in_blank/translation). One gloss fix made
-    while authoring this: 'broodje'/'Broodje' originally glossed as 'sandwich
-    (roll)' with a parenthetical, which would have leaked literally into this
-    pack's translation-type frames via slot_rendering:english_gloss (e.g. 'I would
-    like a sandwich (roll).') -- simplified to 'sandwich roll' in the backfill
-    script. Avoided the de/het gender-article risk in the menukaart-lesson
-    templates by using the article-free 'een' (works for any singular noun
-    regardless of gender) rather than guessing 'de'/'het' per menu noun, since no
-    authoritative per-noun gender data exists in this pipeline yet. Needs the
-    standard fresh-context review before import. Same blocking dependency as
-    a1_unit05.yaml: backfill_lexemes_en_nl.py has not actually been run against a
-    real database, and course-content admin-import doesn't yet support appending
-    new units to an existing course (CLAUDE.md known limitation) -- this pack
-    validates cleanly but is not live-exercised."
+  notes: >-
+    Original authoring notes (2026-07-05): keyed to lexemes added to
+    scripts/backfill_lexemes_en_nl.py's unit05-06 extension. One gloss fix
+    made while authoring: "broodje"/"Broodje" simplified from "sandwich
+    (roll)" to "sandwich roll" to avoid a parenthetical leaking into
+    translation frames. De/het risk was consciously avoided in most
+    templates via the article-free "een".
+
+    Independent fresh-context content audit found and fixed two real bugs
+    the authoring pass missed, both in the menukaart lesson (lesson05).
+    **Bug 1**: the "menu_item" semantic tag was assigned to EVERY token
+    introduced in that one teaching card, not just genuine food items --
+    it actually captured "Menukaart" (the word "menu" itself), "euro", and
+    the numbers "twee"/"vijftig" (from the same card's price-spelling
+    teaching item) alongside the capitalized price-tag forms of Koffie/
+    Thee/Broodje/Appelsap. lesson05.complete.003's "Ik wil een {item}."
+    could therefore generate "Ik wil een Menukaart."/"Ik wil een euro."/"Ik
+    wil een twee."/"Ik wil een vijftig." -- a capitalization leak (capital
+    mid-sentence) for the menu-card items and an ungrammatical/nonsensical
+    filler for the number/currency tokens. **Fix**: swapped all three
+    lesson05 templates (choose.001, match.002, complete.003) from the
+    over-broad "menu_item" preset to the already-defined, already-verified
+    "food_noun" preset (semantic: food_request; appel/appelsap/brood/
+    broodje/kaas/koffie, all lowercase, all genuine food/drink items,
+    already proven safe in lessons 02/04/06's identical "Ik wil(graag) een
+    {item}." frames) -- removed the now-unused "menu_item" slot preset
+    definition. Re-verified with the standalone harness: all three
+    templates now resolve to exactly 6 safe candidates, and compiler
+    validation re-run clean. Rest of the pack hand-checked and found sound:
+    drink/food_noun frames are grammatical for every filler (Dutch cafe
+    orders freely use "een + mass noun" for a serving, same as English "a
+    coffee"), polite_word (alsjeblieft/alstublieft) correctly varies
+    register in "Ik wil graag twee thee, {item}." with no
+    over/under-generation. No self-reference, no other capitalization
+    leaks, no jargon leaks, no stray YAML booleans. Compiler validation
+    re-run together with units 01-05, 07-09: 0 errors/0 warnings.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -33,7 +51,6 @@ slot_presets:
   drink: &drink {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: drink}}
   food_noun: &food_noun {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: food_request}}
   polite_word: &polite_word {language_code: nl, part_of_speech: phrase, agreement_tags: {semantic: polite_request}}
-  menu_item: &menu_item {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: menu_item}}
 templates:
   - content_key: practice.en-nl.nl.a1.unit06.lesson01.choose.001
     lesson_content_key: nl.a1.unit06.lesson01.dranken
@@ -171,14 +188,14 @@ templates:
       direction: ltr
       text_blocks:
         - {text: "Choose the English meaning.", language_code: en, direction: ltr}
-    slots: {item: *menu_item}
+    slots: {item: *food_noun}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is a word from the menu card.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit06.lesson05.match.002
     lesson_content_key: nl.a1.unit06.lesson05.menukaart
     type: matching_pairs
     frame: {text: "{first} · {second}", language_code: nl, direction: ltr}
-    slots: {first: *menu_item, second: *menu_item}
+    slots: {first: *food_noun, second: *food_noun}
     slot_relations: [{kind: distinct, slots: [first, second]}]
     answer_derivation: {kind: matching_pairs, slots: [first, second]}
     feedback_frame: {text: "Match each menu word with its English meaning.", language_code: en, direction: ltr}
@@ -191,7 +208,7 @@ templates:
       direction: ltr
       text_blocks:
         - {text: "Complete the Dutch sentence.", language_code: en, direction: ltr}
-    slots: {item: *menu_item}
+    slots: {item: *food_noun}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "{item} completes this order from the menu.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit06.lesson06.listen.001

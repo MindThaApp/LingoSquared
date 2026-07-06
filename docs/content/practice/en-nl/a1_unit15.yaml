@@ -1,0 +1,148 @@
+schema_version: "1.0"
+pack_key: practice.en-nl.a1.unit15
+source_language: en
+target_language: nl
+unit_content_key: nl.a1.unit15.travel
+review:
+  status: unreviewed
+  fresh_context: "false"
+  notes: "Authored 2026-07-06 by the Claude session syncing Endless Practice
+    template pools to lesson content growth (en-nl lane, continuing after
+    unit14). This unit (unit15) covers traveling by train: buying a ticket,
+    departure/arrival times and platforms, delay announcements, and finding
+    your way at the station. Extended scripts/backfill_lexemes_en_nl.py's
+    UNIT_FILES numeric-range filter to <=15 and added 34 new Dutch token
+    classifications. Added an 8-member 'travel_noun' tag (kaartje/perron/
+    vertraging/ingang/uitgang/wachtruimte, plus a capitalized ticket-label
+    variant) for bare-word recognition only, and a narrower 3-member
+    'station_place' tag (ingang/uitgang/wachtruimte) verified safe in a
+    'Waar is de {item}?' frame -- directly attested for wachtruimte in the
+    real content ('Waar is de wachtruimte?'), and grammatically identical
+    for the other two station-place nouns. Deliberately did not attempt a
+    shared generative frame for kaartje/perron/vertraging (a ticket, a
+    platform, and a delay don't collocate into one sentence shape) --
+    bare-word recognition only, same discipline as several earlier units
+    this session. Every slot's real candidate count was verified with a
+    standalone lexeme_matches()-replicating harness against this script's
+    actual output. Needs the standard fresh-context review before import.
+    Same blocking dependency as every earlier en-nl pack:
+    backfill_lexemes_en_nl.py has not actually been run against a real
+    database yet."
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [travel_noun, station_place]
+slot_presets:
+  travel_noun: &travel_noun {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: travel_noun}}
+  station_place: &station_place {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: station_place}}
+templates:
+  - content_key: practice.en-nl.nl.a1.unit15.lesson01.choose.001
+    lesson_content_key: nl.a1.unit15.lesson01.een_kaartje_kopen
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *travel_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a travel word from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit15.lesson01.listen.002
+    lesson_content_key: nl.a1.unit15.lesson01.een_kaartje_kopen
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *travel_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit15.lesson01.match.003
+    lesson_content_key: nl.a1.unit15.lesson01.een_kaartje_kopen
+    type: matching_pairs
+    frame: {text: "{first} · {second}", language_code: nl, direction: ltr}
+    slots: {first: *travel_noun, second: *travel_noun}
+    slot_relations: [{kind: distinct, slots: [first, second]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second]}
+    feedback_frame: {text: "Match each travel word with its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit15.lesson02.translate.001
+    lesson_content_key: nl.a1.unit15.lesson02.vertrektijd_en_perron
+    type: translation
+    frame:
+      text: "{item}"
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *travel_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The Dutch word is {item}.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit15.lesson02.listen.002
+    lesson_content_key: nl.a1.unit15.lesson02.vertrektijd_en_perron
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *travel_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit15.lesson03.choose.001
+    lesson_content_key: nl.a1.unit15.lesson03.vertraging
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *travel_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a travel word from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit15.lesson04.order.001
+    lesson_content_key: nl.a1.unit15.lesson04.de_weg_op_het_station
+    type: word_order
+    frame: {text: "Waar is de {item}?", language_code: nl, direction: ltr}
+    slots: {item: *station_place}
+    answer_derivation: {kind: render_frame, frame: {text: "Waar is de {item}?", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} is the place being asked about.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit15.lesson04.complete.002
+    lesson_content_key: nl.a1.unit15.lesson04.de_weg_op_het_station
+    type: fill_in_blank
+    frame:
+      text: "Waar is de {item}?"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Complete the Dutch question.", language_code: en, direction: ltr}
+    slots: {item: *station_place}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} completes this question.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit15.lesson04.translate.003
+    lesson_content_key: nl.a1.unit15.lesson04.de_weg_op_het_station
+    type: translation
+    frame:
+      text: "Where is the {item}?"
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *station_place}
+    answer_derivation: {kind: render_frame, frame: {text: "Waar is de {item}?", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Waar is de {item}? -- where is the {item}?", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit15.lesson05.choose.001
+    lesson_content_key: nl.a1.unit15.lesson05.een_kaartje_lezen
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *travel_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a word from the ticket.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit15.lesson06.listen.001
+    lesson_content_key: nl.a1.unit15.lesson06.lotte_en_omar_op_reis
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *travel_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard in this dialogue.", language_code: en, direction: ltr}

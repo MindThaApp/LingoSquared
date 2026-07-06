@@ -4,8 +4,8 @@ source_language: nl
 target_language: en
 unit_content_key: en.a1.unit09.places
 review:
-  status: unreviewed
-  fresh_context: "false"
+  status: reviewed
+  fresh_context: true
   notes: "Authored 2026-07-05 by the Claude session syncing Endless Practice
     template pools to lesson content growth (nl-en direction, per the
     coordinator's scope split). Keyed to English target lexemes extended into
@@ -34,7 +34,19 @@ review:
     the nl-en overlay itself is still unreviewed. Needs the standard
     fresh-context review before import. Same blocking DB-level gap as every
     other pack from this pass: no backfill_lexemes_nl_en.py run has actually
-    happened against a real database yet."
+    happened against a real database yet.
+    FRESH-CONTEXT REVIEW ADDENDUM (2026-07-06, zero access to any authoring
+    reasoning): confirmed every lesson_content_key matches the correct lesson
+    in en/a1_unit09_places.yaml; re-ran the standalone lexeme_matches()-
+    replicating harness against the real iter_specs() output (0 count
+    failures: place=5, place_non_hospital=4) and compiler practice-validate
+    (0/0). Independently verified the place_non_hospital fix actually
+    prevents the self-reference case (hospital is genuinely excluded from
+    that tag's real candidate list) and that the full 'place' tag is only
+    ever used where no second place could collide. No other self-reference,
+    agreement, or homograph issues found; does not reuse the broad
+    'number'/'count_plural' tags flagged as an open defect elsewhere.
+    Upgrading to reviewed."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:

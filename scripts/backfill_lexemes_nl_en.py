@@ -180,6 +180,25 @@ EN_TARGET_TO_NL_GLOSS: dict[str, str] = {
     "way": "manier; kant", "round": "retour (rond)", "trip": "reis",
     "leaves": "vertrekt", "9:15": "9:15", "arrives": "komt aan",
     "11:30": "11:30", "arrive": "aankomen",
+    # Unit 22 (describing a basic health problem), added 2026-07-06.
+    "headache": "hoofdpijn", "stomachache": "buikpijn", "fever": "koorts",
+    "cough": "hoest", "sore": "pijnlijk", "throat": "keel", "wrong": "mis",
+    "feel": "voelen", "rest": "rusten", "need": "moeten; nodig hebben",
+    "doctor": "dokter", "look": "eruitzien", "drink": "drinken",
+    "if": "als", "doesn't": "doet niet", "better": "beter",
+    # Unit 23 (describing a job), added 2026-07-06.
+    "nurse": "verpleegkundige", "cook": "kok", "driver": "chauffeur",
+    "patients": "patiënten", "help": "helpen", "reports": "rapporten",
+    "interesting": "interessant", "company": "bedrijf", "downtown": "in het centrum",
+    "answer": "beantwoorden", "emails": "e-mails", "sometimes": "soms",
+    "with": "met", "clients": "klanten", "job": "baan",
+    # Unit 24 (describing a home), added 2026-07-06.
+    "bedroom": "slaapkamer", "kitchen": "keuken", "bathroom": "badkamer",
+    "living": "woon-", "room": "kamer", "garden": "tuin", "many": "veel",
+    "rooms": "kamers", "there": "er", "there's": "er is", "apartment": "appartement",
+    "has": "heeft", "bedrooms": "slaapkamers", "favorite": "favoriete",
+    "tell": "vertel", "isn't": "is niet", "balcony": "balkon", "upstairs": "boven",
+    "near": "dichtbij", "easy": "makkelijk", "eat": "eten",
 }
 
 UNIT_FILES = (
@@ -266,6 +285,18 @@ UNIT_FILES = (
     (
         REPO_ROOT / "docs/content/realizations/en/a1_unit21_travel.yaml",
         REPO_ROOT / "docs/content/overlays/nl-en/a1_unit21.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit22_health.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/a1_unit22.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit23_work.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/a1_unit23.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit24_housing.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/a1_unit24.yaml",
     ),
 )
 
@@ -417,6 +448,22 @@ NL_POS: dict[str, str] = {
     "kaartje": "noun", "loketmedewerker": "noun", "perron": "noun",
     "reis": "noun", "retour": "noun", "trein": "noun", "vanaf": "preposition",
     "vertrek": "noun", "vertrekt": "verb",
+    # Unit 22 (describing a basic health problem), added 2026-07-06.
+    "buikpijn": "noun", "dokter": "noun", "drinken": "verb", "hoest": "noun",
+    "hoofdpijn": "noun", "keelpijn": "noun", "koorts": "noun", "moet": "verb",
+    "rusten": "verb", "weet": "verb", "zeker": "adjective", "ziet": "verb",
+    # Unit 23 (describing a job), added 2026-07-06.
+    "baan": "noun", "beantwoord": "verb", "bedrijf": "noun", "centrum": "noun",
+    "chauffeur": "noun", "e-mails": "noun", "help": "verb", "interessant": "adjective",
+    "klanten": "noun", "klein": "adjective", "kok": "noun", "ontmoet": "verb",
+    "patiënten": "noun", "rapporten": "noun", "schrijf": "verb", "soms": "adverb",
+    "verpleegkundige": "noun",
+    # Unit 24 (describing a home), added 2026-07-06.
+    "appartement": "noun", "badkamer": "noun", "balkon": "noun",
+    "bovenverdieping": "noun", "daar": "adverb", "eten": "verb",
+    "favoriete": "adjective", "kamer": "noun", "kamers": "noun", "keuken": "noun",
+    "makkelijk": "adjective", "slaapkamer": "noun", "slaapkamers": "noun",
+    "tuin": "noun", "vertel": "verb", "woonkamer": "noun",
 }
 
 NL_GLOSSES: dict[str, str] = {
@@ -573,6 +620,24 @@ NL_GLOSSES: dict[str, str] = {
     "kaartje": "ticket", "loketmedewerker": "ticket clerk", "perron": "platform",
     "reis": "trip; journey", "retour": "round trip", "trein": "train",
     "vanaf": "from", "vertrek": "departure", "vertrekt": "departs",
+    # Unit 22 (describing a basic health problem), added 2026-07-06.
+    "buikpijn": "stomachache", "dokter": "doctor", "drinken": "to drink",
+    "hoest": "cough", "hoofdpijn": "headache", "keelpijn": "sore throat",
+    "koorts": "fever", "moet": "must", "rusten": "to rest",
+    "weet": "know (with ik)", "zeker": "sure; certain", "ziet": "sees; looks",
+    # Unit 23 (describing a job), added 2026-07-06.
+    "baan": "job", "beantwoord": "answer (with ik)", "bedrijf": "company",
+    "centrum": "center; downtown", "chauffeur": "driver", "e-mails": "emails",
+    "help": "help (with ik)", "interessant": "interesting", "klanten": "clients",
+    "klein": "small", "kok": "cook", "ontmoet": "meet (with ik)",
+    "patiënten": "patients", "rapporten": "reports", "schrijf": "write (with ik)",
+    "soms": "sometimes", "verpleegkundige": "nurse",
+    # Unit 24 (describing a home), added 2026-07-06.
+    "appartement": "apartment", "badkamer": "bathroom", "balkon": "balcony",
+    "bovenverdieping": "upstairs (floor above)", "daar": "there", "eten": "to eat",
+    "favoriete": "favorite", "kamer": "room", "kamers": "rooms", "keuken": "kitchen",
+    "makkelijk": "easy", "slaapkamer": "bedroom", "slaapkamers": "bedrooms",
+    "tuin": "garden", "vertel": "tell (with ik)", "woonkamer": "living room",
 }
 
 
