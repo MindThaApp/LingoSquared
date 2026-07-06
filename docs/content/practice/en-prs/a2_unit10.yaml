@@ -1,0 +1,107 @@
+schema_version: "1.0"
+pack_key: practice.en-prs.a2.unit10
+source_language: en
+target_language: prs
+unit_content_key: prs.a2.unit10.opinions
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: >-
+    Authored by the practice-pool-sync lane (fa/prs bundle), 2026-07-06,
+    same pass as this bundle's a1_unit03.yaml sibling (see that file's
+    notes for the full extension rationale and verification method) --
+    this is the second and last A2-level en-prs practice pack this pass
+    adds, matching prs's own second A2 realization unit (a debate
+    between two students, پروین and احمد, about studying abroad).
+    Smaller unit (4 lessons), so a smaller template set is expected.
+
+    Two groups: opinion_word (نظر/دلیل/تحصیل/خارج/وطن, 5 members) from
+    lesson01, and person_name (پروین/احمد, 2 members -- matching_pairs/
+    translation only, reusing the same "person_name" semantic tag this
+    bundle's a1_unit07.yaml already established for فرید/همایون/لیمه;
+    tags aren't unit-scoped, so sharing the tag string across units is
+    fine, each candidate pool is filtered by its own token set anyway)
+    from lesson04's debate dialogue. Deliberately skipped the A2-level
+    sentence patterns this unit teaches (به نظر من ... چون ..., من فکر
+    نمی‌کنم) as slot fillers -- these are multi-clause constructions,
+    not atomic vocabulary, and stay taught/drilled via the lesson's own
+    exercises.
+
+    Every fill_in_blank frame embeds the slot in a real Dari sentence
+    with visible surrounding context (guide §13), each checked for
+    genuine grammatical fit across every member of its slot group (a
+    real class of bug caught and fixed in this bundle's other new packs
+    this same pass -- e.g. a mixed noun/adjective group that only made
+    sense with one specific member plugged in). No listen_select/
+    listen_type anywhere. No bare unquoted yes/no/true/false anywhere.
+
+    Verified with a standalone throwaway script reusing
+    scripts/_practice_slot_check.py's lexeme_matches()/check_pack()
+    against scripts/backfill_lexemes_en_prs.py's real iter_specs()
+    output -- 0 problems. scripts/compile_content.py practice-validate
+    for the full en-prs pack (units 01-10 together) -- 0 errors/0
+    warnings. Needs the standard fresh-context review before import; no
+    backfill_lexemes_en_prs.py run has actually happened against a real
+    database yet in this pass.
+tag_schema:
+  part_of_speech: [noun, proper_noun]
+  agreement_tags:
+    semantic: [opinion_word, person_name]
+slot_presets:
+  opinion_word: &opinion_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: opinion_word}}
+  person_name: &person_name {language_code: prs, part_of_speech: proper_noun, agreement_tags: {semantic: person_name}}
+templates:
+  # Lesson 1: opinions vocabulary.
+  - content_key: practice.en-prs.prs.a2.unit10.lesson01.opinion_gloss.001
+    lesson_content_key: prs.a2.unit10.lesson01.opinions_vocabulary
+    type: multiple_choice
+    frame: {text: "{opinion_word}", language_code: prs, direction: rtl}
+    slots: {opinion_word: *opinion_word}
+    answer_derivation: {kind: slot_gloss, slot: opinion_word}
+    feedback_frame: {text: "{opinion_word} is used when discussing opinions.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a2.unit10.lesson01.opinion_fill.002
+    lesson_content_key: prs.a2.unit10.lesson01.opinions_vocabulary
+    type: fill_in_blank
+    frame: {text: "کلمهٔ {opinion_word} در این بحث مهم است.", language_code: prs, direction: rtl}
+    slots: {opinion_word: *opinion_word}
+    answer_derivation: {kind: slot_text, slot: opinion_word}
+    feedback_frame: {text: "{opinion_word} completes 'the word ___ is important in this discussion.'", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a2.unit10.lesson01.opinion_translate.003
+    lesson_content_key: prs.a2.unit10.lesson01.opinions_vocabulary
+    type: translation
+    frame: {text: "{opinion_word}", language_code: en, direction: ltr, slot_rendering: {opinion_word: english_gloss}}
+    slots: {opinion_word: *opinion_word}
+    answer_derivation: {kind: slot_text, slot: opinion_word}
+    feedback_frame: {text: "{opinion_word} is the Dari word for this.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a2.unit10.lesson01.opinion_pair.004
+    lesson_content_key: prs.a2.unit10.lesson01.opinions_vocabulary
+    type: matching_pairs
+    frame: {text: "{opinion_word_one} — {opinion_word_two}", language_code: prs, direction: rtl}
+    slots: {opinion_word_one: *opinion_word, opinion_word_two: *opinion_word}
+    slot_relations: [{kind: distinct, slots: [opinion_word_one, opinion_word_two]}]
+    answer_derivation: {kind: matching_pairs, slots: [opinion_word_one, opinion_word_two]}
+    feedback_frame: {text: "Match each word with its English meaning.", language_code: en, direction: ltr}
+
+  # Lesson 4: the study-abroad debate dialogue (پروین and احمد).
+  - content_key: practice.en-prs.prs.a2.unit10.lesson04.name_fill.001
+    lesson_content_key: prs.a2.unit10.lesson04.study_debate_dialogue
+    type: fill_in_blank
+    frame: {text: "به نظر {person_name}، تحصیل در خارج بهتر است.", language_code: prs, direction: rtl}
+    slots: {person_name: *person_name}
+    answer_derivation: {kind: slot_text, slot: person_name}
+    feedback_frame: {text: "{person_name} completes 'in ___'s opinion, studying abroad is better.'", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a2.unit10.lesson04.name_translate.002
+    lesson_content_key: prs.a2.unit10.lesson04.study_debate_dialogue
+    type: translation
+    frame: {text: "{person_name}", language_code: en, direction: ltr, slot_rendering: {person_name: english_gloss}}
+    slots: {person_name: *person_name}
+    answer_derivation: {kind: slot_text, slot: person_name}
+    feedback_frame: {text: "{person_name} is this speaker's name in Dari.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a2.unit10.lesson04.name_pair.003
+    lesson_content_key: prs.a2.unit10.lesson04.study_debate_dialogue
+    type: matching_pairs
+    frame: {text: "{person_name_one} — {person_name_two}", language_code: prs, direction: rtl}
+    slots: {person_name_one: *person_name, person_name_two: *person_name}
+    slot_relations: [{kind: distinct, slots: [person_name_one, person_name_two]}]
+    answer_derivation: {kind: matching_pairs, slots: [person_name_one, person_name_two]}
+    feedback_frame: {text: "Match each name to its English label.", language_code: en, direction: ltr}

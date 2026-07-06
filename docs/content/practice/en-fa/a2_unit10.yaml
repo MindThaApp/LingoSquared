@@ -1,0 +1,90 @@
+schema_version: "1.0"
+pack_key: practice.en-fa.a2.unit10
+source_language: en
+target_language: fa
+unit_content_key: fa.a2.unit10.opinions
+review:
+  status: unreviewed
+  required_next_reviewer: codex
+  notes: >-
+    Authored 2026-07-06 by the practice-pool-sync lane (fa/prs bundle),
+    part of the same pass as a1_unit06.yaml/a1_unit07.yaml/a1_unit08.yaml/
+    a2_unit09.yaml -- see a1_unit06.yaml's notes for the shared
+    backfill_lexemes.py extension this pass made.
+
+    Two semantic groups, both verified >=3-distinct-candidate via a
+    standalone slot-matching check before authoring: "opinion_word"
+    (نظر/دلیل/دورکاری/ترافیک/تمرکز/دفتر, 6 members, anchored lesson01)
+    and "person_name" (a course-wide tag already established in units
+    01-02 for علی/نرگس/سارا/مینا -- this unit adds رضا (unit07),
+    نگار/آرش (this unit) to the same pool, now 7 members total; anchored
+    at THIS unit's lesson04 dialogue since that's where نگار/آرش, its
+    two newest members, are introduced).
+
+    Deliberately left out, matching this pass's established precedent for
+    multi-clause register phrases (a1_unit07/a2_unit09's notes make the
+    same call): the به نظر من ... چون ... opinion-plus-reason
+    construction, من موافق نیستم disagreement phrase, and the full
+    office-debate dialogue -- these are argumentative/reasoning
+    sentences, not a bare-word recognition set.
+
+    Lesson-anchor check per tonight's found-and-fixed fa-en unit08 bug:
+    lesson01 and lesson04 both genuinely introduce new vocabulary
+    (confirmed by reading the realization file directly) -- safe
+    anchors.
+
+    Verified with scripts/_practice_slot_check.py's lexeme_matches()/
+    check_pack() logic against backfill_lexemes.py's actual iter_specs()
+    output (ad hoc harness, not committed) -- clean, no zero-candidate
+    slots, no under-3 multiple_choice/matching_pairs slots.
+    compile_content.py practice-validate also clean (0 errors/0
+    warnings) for the full en-fa pack (all 10 units together, the full
+    current depth of the fa realization). Needs the standard
+    fresh-context review before import. Same standing blocker as every
+    pack in this bundle: no backfill_lexemes.py run has actually happened
+    against a real database yet in this pass.
+tag_schema:
+  part_of_speech: [noun, proper_noun]
+  agreement_tags:
+    semantic: [opinion_word, person_name]
+slot_presets:
+  opinion_word: &opinion_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: opinion_word}}
+  person_name: &person_name {language_code: fa, part_of_speech: proper_noun, agreement_tags: {semantic: person_name}}
+templates:
+  - content_key: practice.en-fa.fa.a2.unit10.lesson01.opinion_choice.001
+    lesson_content_key: fa.a2.unit10.lesson01.opinions_vocabulary
+    type: multiple_choice
+    frame: {text: "{opinion_word}", language_code: fa, direction: rtl}
+    slots: {opinion_word: *opinion_word}
+    answer_derivation: {kind: slot_gloss, slot: opinion_word}
+    feedback_frame: {text: "{opinion_word} is a word from this unit's opinion-sharing vocabulary.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a2.unit10.lesson01.opinion_match.002
+    lesson_content_key: fa.a2.unit10.lesson01.opinions_vocabulary
+    type: matching_pairs
+    frame: {text: "{first} · {second}", language_code: fa, direction: rtl}
+    slots: {first: *opinion_word, second: *opinion_word}
+    slot_relations: [{kind: distinct, slots: [first, second]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a2.unit10.lesson01.opinion_translate.003
+    lesson_content_key: fa.a2.unit10.lesson01.opinions_vocabulary
+    type: translation
+    frame: {text: "{opinion_word}", language_code: en, direction: ltr, slot_rendering: {opinion_word: english_gloss}}
+    slots: {opinion_word: *opinion_word}
+    answer_derivation: {kind: slot_text, slot: opinion_word}
+    feedback_frame: {text: "The Farsi word is {opinion_word}.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a2.unit10.lesson04.person_name_choice.001
+    lesson_content_key: fa.a2.unit10.lesson04.office_debate_dialogue
+    type: multiple_choice
+    frame: {text: "{person_name}", language_code: fa, direction: rtl}
+    slots: {person_name: *person_name}
+    answer_derivation: {kind: slot_gloss, slot: person_name}
+    feedback_frame: {text: "{person_name} is a name that has appeared in this course.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a2.unit10.lesson04.person_name_match.002
+    lesson_content_key: fa.a2.unit10.lesson04.office_debate_dialogue
+    type: matching_pairs
+    frame: {text: "{first} · {second}", language_code: fa, direction: rtl}
+    slots: {first: *person_name, second: *person_name}
+    slot_relations: [{kind: distinct, slots: [first, second]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second]}
+    feedback_frame: {text: "Match each name to how it's written in Farsi.", language_code: en, direction: ltr}

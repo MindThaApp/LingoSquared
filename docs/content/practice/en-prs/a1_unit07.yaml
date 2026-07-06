@@ -1,0 +1,129 @@
+schema_version: "1.0"
+pack_key: practice.en-prs.a1.unit07
+source_language: en
+target_language: prs
+unit_content_key: prs.a1.unit07.communication
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: >-
+    Authored by the practice-pool-sync lane (fa/prs bundle), 2026-07-06,
+    same pass as this bundle's a1_unit03.yaml sibling (see that file's
+    notes for the full extension rationale and verification method).
+
+    This unit's own vocabulary is mostly full phrases (کی صحبت می‌کند؟,
+    لطفاً آهسته صحبت کنید, etc.) rather than atomic nouns, so well-
+    populated single-token semantic groups are thinner here than in
+    other units. Three groups: person_name (فرید/همایون/لیمه, 3
+    members, the one genuinely well-populated group -- anchored to
+    lesson06's phone-call dialogue, where all three are real speakers),
+    phone_opening (الو/تلفن, 2 members -- matching_pairs/translation
+    only) and message_word (پیام/کوتاه, 2 members -- matching_pairs/
+    translation only). Deliberately skipped the many multi-word phrase
+    tokens (بلی بفرمایید, کی صحبت می‌کند, لطفاً آهسته صحبت کنید, etc.)
+    as slot fillers -- this project's backfill scripts only build
+    single-token lexemes, so phrase-level vocabulary stays taught in
+    the lesson itself rather than forced into an ungrammatical partial
+    slot, matching this bundle's standing precedent.
+
+    Every fill_in_blank frame embeds the slot in a real Dari sentence
+    with visible surrounding context (guide §13). Every
+    lesson_content_key anchor verified against the real realization
+    file to introduce genuinely new vocabulary. No listen_select/
+    listen_type anywhere. No bare unquoted yes/no/true/false anywhere.
+
+    Verified with a standalone throwaway script reusing
+    scripts/_practice_slot_check.py's lexeme_matches()/check_pack()
+    against scripts/backfill_lexemes_en_prs.py's real iter_specs()
+    output -- 0 problems. scripts/compile_content.py practice-validate
+    for the full en-prs pack (units 01-10 together) -- 0 errors/0
+    warnings. Needs the standard fresh-context review before import; no
+    backfill_lexemes_en_prs.py run has actually happened against a real
+    database yet in this pass.
+tag_schema:
+  part_of_speech: [noun, proper_noun, adjective, particle]
+  agreement_tags:
+    semantic: [person_name, phone_opening, message_word]
+slot_presets:
+  person_name: &person_name {language_code: prs, part_of_speech: proper_noun, agreement_tags: {semantic: person_name}}
+  phone_opening: &phone_opening {language_code: prs, part_of_speech: [noun, particle], agreement_tags: {semantic: phone_opening}}
+  message_word: &message_word {language_code: prs, part_of_speech: [noun, adjective], agreement_tags: {semantic: message_word}}
+templates:
+  # Lesson 1: answering the phone.
+  - content_key: practice.en-prs.prs.a1.unit07.lesson01.phone_open_fill.001
+    lesson_content_key: prs.a1.unit07.lesson01.answering_the_phone
+    type: fill_in_blank
+    frame: {text: "کلمهٔ {phone_opening} در تماس تلفنی استفاده می‌شود.", language_code: prs, direction: rtl}
+    slots: {phone_opening: *phone_opening}
+    answer_derivation: {kind: slot_text, slot: phone_opening}
+    feedback_frame: {text: "{phone_opening} completes 'the word ___ is used in a phone call.'", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit07.lesson01.phone_open_translate.002
+    lesson_content_key: prs.a1.unit07.lesson01.answering_the_phone
+    type: translation
+    frame: {text: "{phone_opening}", language_code: en, direction: ltr, slot_rendering: {phone_opening: english_gloss}}
+    slots: {phone_opening: *phone_opening}
+    answer_derivation: {kind: slot_text, slot: phone_opening}
+    feedback_frame: {text: "{phone_opening} is the Dari word for this.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit07.lesson01.phone_open_pair.003
+    lesson_content_key: prs.a1.unit07.lesson01.answering_the_phone
+    type: matching_pairs
+    frame: {text: "{phone_opening_one} — {phone_opening_two}", language_code: prs, direction: rtl}
+    slots: {phone_opening_one: *phone_opening, phone_opening_two: *phone_opening}
+    slot_relations: [{kind: distinct, slots: [phone_opening_one, phone_opening_two]}]
+    answer_derivation: {kind: matching_pairs, slots: [phone_opening_one, phone_opening_two]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+
+  # Lesson 4/5: leaving a message and text messages.
+  - content_key: practice.en-prs.prs.a1.unit07.lesson04.message_fill.001
+    lesson_content_key: prs.a1.unit07.lesson04.leaving_a_message
+    type: fill_in_blank
+    frame: {text: "کلمهٔ {message_word} در پیام‌رسانی به کار می‌رود.", language_code: prs, direction: rtl}
+    slots: {message_word: *message_word}
+    answer_derivation: {kind: slot_text, slot: message_word}
+    feedback_frame: {text: "{message_word} completes 'the word ___ is used in messaging.'", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit07.lesson04.message_translate.002
+    lesson_content_key: prs.a1.unit07.lesson04.leaving_a_message
+    type: translation
+    frame: {text: "{message_word}", language_code: en, direction: ltr, slot_rendering: {message_word: english_gloss}}
+    slots: {message_word: *message_word}
+    answer_derivation: {kind: slot_text, slot: message_word}
+    feedback_frame: {text: "{message_word} is the Dari word for this.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit07.lesson04.message_pair.003
+    lesson_content_key: prs.a1.unit07.lesson04.leaving_a_message
+    type: matching_pairs
+    frame: {text: "{message_word_one} — {message_word_two}", language_code: prs, direction: rtl}
+    slots: {message_word_one: *message_word, message_word_two: *message_word}
+    slot_relations: [{kind: distinct, slots: [message_word_one, message_word_two]}]
+    answer_derivation: {kind: matching_pairs, slots: [message_word_one, message_word_two]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+
+  # Lesson 6: the full phone call dialogue (Farid, Homayoun, Lima).
+  - content_key: practice.en-prs.prs.a1.unit07.lesson06.name_gloss.001
+    lesson_content_key: prs.a1.unit07.lesson06.phone_call_dialogue
+    type: multiple_choice
+    frame: {text: "{person_name}", language_code: prs, direction: rtl}
+    slots: {person_name: *person_name}
+    answer_derivation: {kind: slot_gloss, slot: person_name}
+    feedback_frame: {text: "{person_name} is a speaker in this phone call.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit07.lesson06.name_fill.002
+    lesson_content_key: prs.a1.unit07.lesson06.phone_call_dialogue
+    type: fill_in_blank
+    frame: {text: "من {person_name} استم.", language_code: prs, direction: rtl}
+    slots: {person_name: *person_name}
+    answer_derivation: {kind: slot_text, slot: person_name}
+    feedback_frame: {text: "{person_name} completes 'This is ___.'", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit07.lesson06.name_translate.003
+    lesson_content_key: prs.a1.unit07.lesson06.phone_call_dialogue
+    type: translation
+    frame: {text: "{person_name}", language_code: en, direction: ltr, slot_rendering: {person_name: english_gloss}}
+    slots: {person_name: *person_name}
+    answer_derivation: {kind: slot_text, slot: person_name}
+    feedback_frame: {text: "{person_name} is this speaker's name in Dari.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit07.lesson06.name_pair.004
+    lesson_content_key: prs.a1.unit07.lesson06.phone_call_dialogue
+    type: matching_pairs
+    frame: {text: "{person_name_one} — {person_name_two}", language_code: prs, direction: rtl}
+    slots: {person_name_one: *person_name, person_name_two: *person_name}
+    slot_relations: [{kind: distinct, slots: [person_name_one, person_name_two]}]
+    answer_derivation: {kind: matching_pairs, slots: [person_name_one, person_name_two]}
+    feedback_frame: {text: "Match each name to its English label.", language_code: en, direction: ltr}

@@ -1,0 +1,116 @@
+schema_version: "1.0"
+pack_key: practice.en-fa.a1.unit08
+source_language: en
+target_language: fa
+unit_content_key: fa.a1.unit08.shopping
+review:
+  status: unreviewed
+  required_next_reviewer: codex
+  notes: >-
+    Authored 2026-07-06 by the practice-pool-sync lane (fa/prs bundle),
+    part of the same pass as a1_unit06.yaml/a1_unit07.yaml/a2_unit09.yaml/
+    a2_unit10.yaml -- see a1_unit06.yaml's notes for the shared
+    backfill_lexemes.py extension this pass made.
+
+    "quantity_unit_word" (لیوان/بشقاب, introduced in a1_unit06.lesson04,
+    plus کیلو/نصف introduced HERE in lesson03 -- 4 members total)
+    deliberately anchored in THIS unit's pack, not a1_unit06's, even
+    though half its members were taught earlier: kept the tag's single
+    practice occurrence at the later of its two source units so every
+    member is guaranteed already-taught by the time this template can
+    surface, and to avoid authoring the identical content_key/tag pair
+    in two packs.
+
+    "payment_word" (نقدی/کارت/حساب, 3 members, part_of_speech is mixed
+    [noun, adverb] since نقدی is genuinely adverbial -- "in cash" -- while
+    کارت/حساب are nouns; the slot_preset's part_of_speech list reflects
+    this exactly like a1_unit05's direction_connector preset did for its
+    own mixed [adverb, preposition] tag). "shop_word" (مغازه/فروشنده, only
+    2 members) kept matching_pairs+translation only, no multiple_choice,
+    per the same <3-candidate rule a1_unit05's is_on_side tag already
+    established.
+
+    Lesson-anchor check per tonight's found-and-fixed fa-en unit08 bug:
+    lesson01, lesson03, and lesson05 all genuinely introduce new
+    vocabulary (confirmed by reading the realization file directly) --
+    safe anchors.
+
+    Verified with scripts/_practice_slot_check.py's lexeme_matches()/
+    check_pack() logic against backfill_lexemes.py's actual iter_specs()
+    output (ad hoc harness, not committed) -- clean, no zero-candidate
+    slots, no under-3 multiple_choice/matching_pairs slots (shop_word
+    correctly has only 2 candidates and is never used for
+    multiple_choice here). compile_content.py practice-validate also
+    clean (0 errors/0 warnings) for the full en-fa pack (units 01-08
+    together). Needs the standard fresh-context review before import.
+    Same standing blocker as every pack in this bundle: no
+    backfill_lexemes.py run has actually happened against a real
+    database yet in this pass.
+tag_schema:
+  part_of_speech: [noun, adverb]
+  agreement_tags:
+    semantic: [quantity_unit_word, payment_word, shop_word]
+slot_presets:
+  quantity_unit_word: &quantity_unit_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: quantity_unit_word}}
+  payment_word: &payment_word {language_code: fa, part_of_speech: [noun, adverb], agreement_tags: {semantic: payment_word}}
+  shop_word: &shop_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: shop_word}}
+templates:
+  - content_key: practice.en-fa.fa.a1.unit08.lesson03.quantity_choice.001
+    lesson_content_key: fa.a1.unit08.lesson03.quantities_in_shopping
+    type: multiple_choice
+    frame: {text: "{quantity_unit_word}", language_code: fa, direction: rtl}
+    slots: {quantity_unit_word: *quantity_unit_word}
+    answer_derivation: {kind: slot_gloss, slot: quantity_unit_word}
+    feedback_frame: {text: "{quantity_unit_word} is a quantity/counting word used when ordering or shopping.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit08.lesson03.quantity_match.002
+    lesson_content_key: fa.a1.unit08.lesson03.quantities_in_shopping
+    type: matching_pairs
+    frame: {text: "{first} · {second}", language_code: fa, direction: rtl}
+    slots: {first: *quantity_unit_word, second: *quantity_unit_word}
+    slot_relations: [{kind: distinct, slots: [first, second]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second]}
+    feedback_frame: {text: "Match each quantity word to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit08.lesson03.quantity_translate.003
+    lesson_content_key: fa.a1.unit08.lesson03.quantities_in_shopping
+    type: translation
+    frame: {text: "{quantity_unit_word}", language_code: en, direction: ltr, slot_rendering: {quantity_unit_word: english_gloss}}
+    slots: {quantity_unit_word: *quantity_unit_word}
+    answer_derivation: {kind: slot_text, slot: quantity_unit_word}
+    feedback_frame: {text: "The Farsi word is {quantity_unit_word}.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit08.lesson05.payment_choice.001
+    lesson_content_key: fa.a1.unit08.lesson05.paying
+    type: multiple_choice
+    frame: {text: "{payment_word}", language_code: fa, direction: rtl}
+    slots: {payment_word: *payment_word}
+    answer_derivation: {kind: slot_gloss, slot: payment_word}
+    feedback_frame: {text: "{payment_word} relates to paying for a purchase.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit08.lesson05.payment_match.002
+    lesson_content_key: fa.a1.unit08.lesson05.paying
+    type: matching_pairs
+    frame: {text: "{first} · {second}", language_code: fa, direction: rtl}
+    slots: {first: *payment_word, second: *payment_word}
+    slot_relations: [{kind: distinct, slots: [first, second]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second]}
+    feedback_frame: {text: "Match each payment word to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit08.lesson05.payment_translate.003
+    lesson_content_key: fa.a1.unit08.lesson05.paying
+    type: translation
+    frame: {text: "{payment_word}", language_code: en, direction: ltr, slot_rendering: {payment_word: english_gloss}}
+    slots: {payment_word: *payment_word}
+    answer_derivation: {kind: slot_text, slot: payment_word}
+    feedback_frame: {text: "The Farsi word is {payment_word}.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit08.lesson01.shop_match.001
+    lesson_content_key: fa.a1.unit08.lesson01.shop_vocabulary
+    type: matching_pairs
+    frame: {text: "{first} · {second}", language_code: fa, direction: rtl}
+    slots: {first: *shop_word, second: *shop_word}
+    slot_relations: [{kind: distinct, slots: [first, second]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second]}
+    feedback_frame: {text: "Match each shopping word to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit08.lesson01.shop_translate.002
+    lesson_content_key: fa.a1.unit08.lesson01.shop_vocabulary
+    type: translation
+    frame: {text: "{shop_word}", language_code: en, direction: ltr, slot_rendering: {shop_word: english_gloss}}
+    slots: {shop_word: *shop_word}
+    answer_derivation: {kind: slot_text, slot: shop_word}
+    feedback_frame: {text: "The Farsi word is {shop_word}.", language_code: en, direction: ltr}

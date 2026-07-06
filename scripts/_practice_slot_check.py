@@ -147,13 +147,7 @@ def main() -> int:
 
     run(
         "en-fa (target=fa)",
-        [
-            REPO_ROOT / "docs/content/practice/en-fa/a1_unit01.yaml",
-            REPO_ROOT / "docs/content/practice/en-fa/a1_unit02.yaml",
-            REPO_ROOT / "docs/content/practice/en-fa/a1_unit03.yaml",
-            REPO_ROOT / "docs/content/practice/en-fa/a1_unit04.yaml",
-            REPO_ROOT / "docs/content/practice/en-fa/a1_unit05.yaml",
-        ],
+        sorted((REPO_ROOT / "docs/content/practice/en-fa").glob("a*_unit*.yaml")),
         en_fa_specs,
     )
     run(
@@ -167,15 +161,30 @@ def main() -> int:
             REPO_ROOT / "docs/content/practice/fa-en/a1_unit06.yaml",
             REPO_ROOT / "docs/content/practice/fa-en/a1_unit07.yaml",
             REPO_ROOT / "docs/content/practice/fa-en/a1_unit08.yaml",
+            REPO_ROOT / "docs/content/practice/fa-en/a1_unit09.yaml",
+            REPO_ROOT / "docs/content/practice/fa-en/a1_unit10.yaml",
+            REPO_ROOT / "docs/content/practice/fa-en/a1_unit11.yaml",
+            REPO_ROOT / "docs/content/practice/fa-en/a1_unit12.yaml",
+            REPO_ROOT / "docs/content/practice/fa-en/a1_unit13.yaml",
+            REPO_ROOT / "docs/content/practice/fa-en/a1_unit14.yaml",
+            REPO_ROOT / "docs/content/practice/fa-en/a1_unit15.yaml",
+            REPO_ROOT / "docs/content/practice/fa-en/a1_unit16.yaml",
+            REPO_ROOT / "docs/content/practice/fa-en/a1_unit17.yaml",
+            REPO_ROOT / "docs/content/practice/fa-en/a1_unit18.yaml",
+            REPO_ROOT / "docs/content/practice/fa-en/a1_unit19.yaml",
+            REPO_ROOT / "docs/content/practice/fa-en/a1_unit20.yaml",
+            REPO_ROOT / "docs/content/practice/fa-en/a1_unit21.yaml",
+            REPO_ROOT / "docs/content/practice/fa-en/a1_unit22.yaml",
+            REPO_ROOT / "docs/content/practice/fa-en/a1_unit23.yaml",
+            REPO_ROOT / "docs/content/practice/fa-en/a1_unit24.yaml",
+            REPO_ROOT / "docs/content/practice/fa-en/a2_unit25.yaml",
+            REPO_ROOT / "docs/content/practice/fa-en/a2_unit26.yaml",
         ],
         fa_en_specs,
     )
     run(
         "en-prs (target=prs)",
-        [
-            REPO_ROOT / "docs/content/practice/en-prs/a1_unit01.yaml",
-            REPO_ROOT / "docs/content/practice/en-prs/a1_unit02.yaml",
-        ],
+        sorted((REPO_ROOT / "docs/content/practice/en-prs").glob("a*_unit*.yaml")),
         en_prs_specs,
     )
     run(

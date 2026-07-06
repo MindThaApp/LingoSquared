@@ -60,6 +60,26 @@ UNIT_FILES = (
         REPO_ROOT / "docs/content/realizations/fa/a1_unit05_places.yaml",
         REPO_ROOT / "docs/content/overlays/en-fa/a1_unit05.yaml",
     ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a1_unit06_food.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a1_unit06.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a1_unit07_weather.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a1_unit07.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a1_unit08_shopping.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a1_unit08.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a2_unit09_bureaucracy.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a2_unit09.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a2_unit10_opinions.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a2_unit10.yaml",
+    ),
 )
 EN_TOKEN_RE = re.compile(r"[A-Za-z]+(?:['’/-][A-Za-z]+)*")
 
@@ -144,19 +164,100 @@ FA_GLOSSES = {
     "کنار": "next to; beside", "آزادی": "Azadi (freedom; hotel name)",
     "همون": "that same one (spoken)", "رهگذر": "passer-by",
     "رستورانه": "it's the restaurant (spoken)",
+    # Unit 6 (food and ordering a meal), added 2026-07-06 by the
+    # practice-pool-sync lane.
+    "نان": "bread", "برنج": "rice", "مرغ": "chicken", "آب": "water",
+    "قهوه": "coffee", "میوه": "fruit", "یا": "or",
+    "می‌خواستم": "I'd like (polite, lit. 'I was wanting')",
+    "لطفاً": "please", "غریبه": "stranger", "گارسون": "waiter",
+    "دوست": "friend", "نزدیک": "close; near", "منو": "menu",
+    "چی": "what", "توصیه": "recommendation",
+    "می‌کنید": "you do (polite)", "میل": "desire (in 'what would you like')",
+    "جوجه‌کباب": "chicken kebab", "امروز": "today",
+    "خوبه": "is good (spoken)", "لیوان": "glass", "بشقاب": "plate",
+    "صورت‌حساب": "the bill / check", "رو": "(informal object marker)",
+    "خوشمزه": "delicious", "بود": "was",
+    "نوش": "(part of نوش جان, 'enjoy your meal')",
+    "جان": "(part of نوش جان, lit. 'dear / soul')",
+    "چشم": "right away (polite acknowledgment)",
+    "الان": "now; right away",
+    "میارم": "I bring (spoken contraction of می‌آورم)",
+    "اومدید": "you came (spoken variant of آمدید)",
+    "مشتری": "customer", "خب": "well; okay", "البته": "of course",
+    # Unit 7 (weather and making plans), added 2026-07-06.
+    "آفتابی": "sunny", "بارونی": "rainy", "ابری": "cloudy",
+    "برفی": "snowy", "گرم": "hot", "سرد": "cold", "خنک": "cool",
+    "هوا": "weather", "آفتابیه": "it's sunny (spoken)",
+    "سرده": "it's cold (spoken)", "بارونیه": "it's rainy (spoken)",
+    "چون": "because; since",
+    "بهتره": "it's better (spoken, \"we'd better\")",
+    "چتر": "umbrella", "ببریم": "let's bring; we bring (subjunctive)",
+    "کت": "coat", "بپوشیم": "let's wear (subjunctive)",
+    "فکر": "thought (in فکر کنم, 'I think')",
+    "کنم": "I do (subjunctive)", "رضا": "Reza (name)",
+    "موافقم": "I agree", "گرمه": "it's hot (spoken)",
+    "عالیه": "great; excellent (spoken)", "بریم": "let's go (subjunctive)",
+    "پارک": "park", "می‌بینمت": "I'll see you",
+    # Unit 8 (shopping: prices, quantities, and paying), added 2026-07-06.
+    "مغازه": "shop", "تخفیف": "discount", "کیلویی": "per kilo",
+    "کیلو": "kilo", "نصف": "half", "می‌دید": "you give (polite)",
+    "برات": "for you (informal)",
+    "حساب": "account; bill (in حساب کردن, 'to settle up')",
+    "نقدی": "in cash", "کارت": "card",
+    "می‌گیرید": "you take; you accept",
+    "قابلی": "(part of قابلی نداره, 'no trouble at all')",
+    "فروشنده": "shopkeeper; seller", "سیب‌ها": "the apples (plural)",
+    # Unit 9 (A2: administrative errands / bureaucracy), added 2026-07-06.
+    "وقت": "appointment; time slot", "مدرک": "document",
+    "آدرس": "address", "قبض": "utility bill", "ملی": "national",
+    "برای": "for", "تغییر": "change",
+    "بگیرم": "let me take/get (subjunctive)",
+    "خونه‌مو": "my house (object marker)",
+    "عوض": "change; exchange (in عوض کردن)", "کردم": "I did",
+    "آدرسمو": "my address (object marker)",
+    "می‌شه": "would it be possible", "بگید": "tell (polite imperative)",
+    "بیارم": "let me bring (subjunctive)",
+    "اجاره‌نامه": "lease agreement", "مهلت": "deadline",
+    "قدیم": "old", "برق": "electricity",
+    "بیارید": "bring (polite imperative)", "ثبت‌نام": "registration",
+    "آخر": "end", "همین": "this same", "ماه": "month",
+    "چه": "what; which", "کمکی": "help",
+    "دستم": "my hand (in از دستم برمیاد, 'I can help')",
+    "برمیاد": "comes; is possible (idiom part)",
+    "کارمند": "clerk; employee", "کی": "when; who", "جدید": "new",
+    "زندگی": "life; living", "پیش": "ago; before",
+    "کافیه": "is enough (spoken)", "می‌تونم": "I can",
+    "سه‌شنبه": "Tuesday", "بیام": "let me come (subjunctive)",
+    "ساعت": "hour; o'clock", "کد": "code",
+    "پیگیریتون": "your tracking (code)", "۲۲۱۴": "2214 (tracking code)",
+    # Unit 10 (A2: opinions -- remote work vs. office debate), added 2026-07-06.
+    "نظر": "opinion", "دلیل": "reason", "دورکاری": "remote work",
+    "ترافیک": "traffic", "تمرکز": "concentration", "دفتر": "office",
+    "تهران": "Tehran", "زیادی": "a lot; excessive",
+    "تلف": "wasted (in تلف می‌شه)", "پیام": "message",
+    "خانواده": "family", "بیشتر": "more", "خانواده‌م": "my family",
+    "باشم": "that I be (subjunctive)",
+    "موافق": "agree(ing) (in موافق نیستم, \"I don't agree\")",
+    "نگار": "Negar (name)", "آرش": "Arash (name)", "چرا": "why",
+    "خونه": "house; home", "همکارامو": "my colleagues (object marker)",
+    "ببینم": "let me see (subjunctive)", "می‌گیره": "it takes",
+    "عادت": "habit (in عادت دارم, \"I'm used to it\")",
 }
 
 FA_SYMBOLS = set("س ل ا م ن ت ش چ ی ه ک گ ج د ر ف و ب خ ز".split())
-FA_PROPER_NOUNS = set("علی نرگس سارا مینا ایران انگلیس فرانسه آزادی".split())
-FA_PRONOUNS = set("من تو شما او ما این همون".split())
-FA_PREPOSITIONS = set("به از با اهل بهت مثل کنار".split())
-FA_PARTICLES = set("هم ولی بله و آره پس تا یه".split())
+FA_PROPER_NOUNS = set(
+    "علی نرگس سارا مینا ایران انگلیس فرانسه آزادی رضا تهران نگار آرش".split()
+)
+FA_PRONOUNS = set("من تو شما او ما این همون چی چه کی همین".split())
+FA_PREPOSITIONS = set("به از با اهل بهت مثل کنار برای برات پیش".split())
+FA_PARTICLES = set("هم ولی بله و آره پس تا یه یا چون رو خب چشم".split())
 FA_ADVERBS = set(
     "فعلاً خیلی چطور کجا اینجا همین‌طور کجایی باهم فردا حتماً خودمونی چند "
-    "اونجا مستقیم بعد".split()
+    "اونجا مستقیم بعد لطفاً امروز الان کیلویی نقدی زیادی بیشتر چرا".split()
 )
 FA_ADJECTIVES = set(
-    "خوبی بد ایرانی انگلیسی فرانسوی بزرگه کوچیکه متأهل مجرد برعکسه شلوغه".split()
+    "خوبی بد ایرانی انگلیسی فرانسوی بزرگه کوچیکه متأهل مجرد برعکسه شلوغه "
+    "آفتابی بارونی ابری برفی گرم سرد خنک نزدیک خوشمزه ملی قدیم جدید موافق".split()
 )
 FA_NUMBERS = set(
     "صفر یک دو سه چهار پنج شش هفت هشت نه ده یازده دوازده سیزده چهارده "
@@ -174,6 +275,13 @@ FA_VERBS = {
     "متأهلین", "مجردم", "متأهلم", "خانواده‌ته", "مامانمه", "باباهم", "کیه",
     "داداشمه", "پدرن", "مادرن", "نفرن", "نفریم", "داری",
     "کجاست", "راسته", "چپه", "برید", "رستورانه",
+    # Units 6-8, added 2026-07-06.
+    "می‌خواستم", "می‌کنید", "خوبه", "بود", "میارم", "اومدید",
+    "آفتابیه", "سرده", "بارونیه", "بهتره", "ببریم", "بپوشیم", "کنم",
+    "موافقم", "گرمه", "عالیه", "بریم", "می‌بینمت", "می‌دید", "می‌گیرید",
+    # Units 9-10 (A2), added 2026-07-06.
+    "بگیرم", "کردم", "می‌شه", "بگید", "بیارم", "بیارید", "برمیاد",
+    "می‌تونم", "بیام", "کافیه", "باشم", "ببینم", "می‌گیره",
 }
 FA_PHRASE_PARTS = {"بخیر", "خواهش"}
 
@@ -340,6 +448,47 @@ def fa_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     # multiple_choice/matching_pairs, translation-only.
     if token in {"راسته", "چپه"}:
         semantics.append("is_on_side")
+    # Unit 6 (food and ordering), added 2026-07-06. 4/3/3-member recognition
+    # groups meeting the >=3-distinct-value rule for multiple_choice/
+    # matching_pairs; smaller/dialogue-specific phrases left translation-only.
+    if token in {"نان", "برنج", "مرغ", "میوه"}:
+        semantics.append("food_item")
+    if token in {"چای", "قهوه", "آب"}:
+        semantics.append("drink_item")
+    if token in {"لیوان", "بشقاب", "کیلو", "نصف"}:
+        semantics.append("quantity_unit_word")
+    if token in {"مغازه", "فروشنده"}:
+        semantics.append("shop_word")
+    if token in {"نقدی", "کارت", "حساب"}:
+        semantics.append("payment_word")
+    if lesson_key.endswith("lesson06.restaurant_dialogue"):
+        semantics.append("dialogue_word")
+    # Unit 7 (weather and making plans), added 2026-07-06.
+    if token in {"آفتابی", "بارونی", "ابری", "برفی"}:
+        semantics.append("weather_condition")
+    if token in {"گرم", "سرد", "خنک"}:
+        semantics.append("temperature_word")
+    if token in {"آفتابیه", "سرده", "بارونیه", "گرمه"}:
+        semantics.append("weather_state_verb")
+    if lesson_key.endswith("lesson06.weather_plan_dialogue"):
+        semantics.append("dialogue_word")
+    # Unit 8 (shopping), added 2026-07-06.
+    if lesson_key.endswith("lesson06.market_dialogue"):
+        semantics.append("dialogue_word")
+    # Unit 9 (A2: bureaucracy), added 2026-07-06.
+    if token in {"وقت", "مدرک", "آدرس", "قبض"}:
+        semantics.append("bureaucracy_word")
+    if lesson_key.startswith("fa.a2.unit09.lesson04"):
+        semantics.append("dialogue_word")
+    # Unit 10 (A2: opinions), added 2026-07-06.
+    if token in {"نظر", "دلیل", "دورکاری", "ترافیک", "تمرکز", "دفتر"}:
+        semantics.append("opinion_word")
+    if token in {"رضا", "نگار", "آرش"}:
+        semantics.append("person_name")
+    if token == "تهران":
+        semantics.append("city_name")
+    if lesson_key.startswith("fa.a2.unit10.lesson04"):
+        semantics.append("dialogue_word")
     if semantics:
         tags["semantic"] = list(dict.fromkeys(semantics))
     person = {

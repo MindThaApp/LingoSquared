@@ -47,6 +47,42 @@ UNIT_FILES = (
         REPO_ROOT / "docs/content/realizations/prs/a1_unit02_introductions.yaml",
         REPO_ROOT / "docs/content/overlays/en-prs/a1_unit02.yaml",
     ),
+    # Units 03-08 (A1) and a2 units 09-10, added 2026-07-06 by the
+    # practice-pool-sync lane, closing the en-prs practice-pool gap
+    # against prs's real A1+A2 realization depth (previously only units
+    # 1-2 had any practice coverage at all).
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a1_unit03_family.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a1_unit03.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a1_unit04_numbers.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a1_unit04.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a1_unit05_places.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a1_unit05.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a1_unit06_directions.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a1_unit06.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a1_unit07_communication.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a1_unit07.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a1_unit08_food.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a1_unit08.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a2_unit09_bureaucracy.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a2_unit09.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a2_unit10_opinions.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a2_unit10.yaml",
+    ),
 )
 
 # Hand-classified from every introduced_token across all 6 lessons of
@@ -103,6 +139,113 @@ PRS_GLOSSES: dict[str, str] = {
     "لیلا": "Leila (name)", "دیدن": "seeing; to see",
     "خوشحال": "happy; glad", "کجا": "where",
     "کنم": "let me do; I do (subjunctive)",
+    # Unit 3 (family and relatives), added 2026-07-06 by the
+    # practice-pool-sync lane.
+    "مادر": "mother", "پدر": "father", "برادر": "brother", "خواهر": "sister",
+    "و": "and", "این": "this", "من": "I", "او": "he / she",
+    "مادرم": "my mother", "برادرم": "my brother", "خواهرم": "my sister",
+    "است": "is", "پدرکلان": "grandfather", "مادرکلان": "grandmother",
+    "کاکا": "paternal uncle", "عمه": "paternal aunt", "ماما": "maternal uncle",
+    "خاله": "maternal aunt", "کاکایم": "my paternal uncle",
+    "عمه‌ام": "my paternal aunt", "پدری": "paternal (side)",
+    "پدرم": "my father", "مامایم": "my maternal uncle",
+    "مادری": "maternal (side)", "فامیل": "family",
+    "فامیل‌تان": "your family (polite)", "چند": "how many", "نفر": "people (counter)",
+    "ما": "we", "چهار": "four", "پنج": "five", "شش": "six", "یک": "one",
+    "دو": "two", "دارم": "I have", "تک‌فرزند": "only child", "استم": "I am",
+    "داریم": "we have", "دارین": "you have (polite)",
+    "مادر‌تان": "your mother (polite)", "جور": "well; fine",
+    "استند": "they are", "بلی": "yes", "نخیر": "no", "ندارم": "I do not have",
+    "پدر‌تان": "your father (polite)", "متأهل": "married", "مجرد": "single",
+    "شوهر": "husband", "شوهرم": "my husband", "خانم": "Ms.; Mrs.; wife",
+    "ازدواج": "marriage", "کردین": "you did (polite)", "اولاد": "children",
+    "محصل": "university student", "فرشته": "Fereshteh (name)",
+    "دارد": "he/she has", "هنوز": "yet; still", "نداریم": "we do not have",
+    "ندارد": "he/she does not have",
+    # Unit 4 (counting and numbers), added 2026-07-06.
+    "سه": "three", "هفت": "seven", "هشت": "eight", "نه": "nine", "ده": "ten",
+    "یازده": "eleven", "دوازده": "twelve", "سیزده": "thirteen",
+    "چهارده": "fourteen", "پانزده": "fifteen", "شانزده": "sixteen",
+    "هفده": "seventeen", "هجده": "eighteen", "نوزده": "nineteen",
+    "بیست": "twenty", "سی": "thirty", "چهل": "forty", "پنجاه": "fifty",
+    "شصت": "sixty", "هفتاد": "seventy", "هشتاد": "eighty", "نود": "ninety",
+    "صد": "one hundred", "سال": "year", "ساله": "years old",
+    "استین": "you are (polite)", "استی": "you are (informal)",
+    "نمبر": "number", "تلفن": "telephone", "تلفن‌تان": "your telephone (polite)",
+    "صفر": "zero", "تلفنم": "my telephone", "سلام": "hello",
+    "همایون": "Homayoun (name)", "تشکر": "thanks", "تو": "you (informal)",
+    "بشیر": "Bashir (name)", "تلفنت": "your telephone (informal)",
+    "همین": "this very; right (now)", "حالا": "now",
+    "سیف": "save (loanword, in سیف می‌کنم)", "می‌کنم": "I do",
+    # Unit 5 (important places in the city), added 2026-07-06.
+    "بازار": "market", "بانک": "bank", "مسجد": "mosque",
+    "شفاخانه": "hospital", "مکتب": "school", "دواخانه": "pharmacy",
+    "پوسته": "post (mail)", "خانه": "house", "سفارت": "embassy",
+    "میدان": "field / square", "هوایی": "aerial",
+    "کجاست": "where is (it)?", "ببخشید": "excuse me", "دور": "far",
+    "این‌جا": "here", "آن‌جا": "there", "در": "at (preposition)",
+    "کنار": "side; beside", "پشت": "behind", "مقابل": "opposite",
+    "زیاد": "much; a lot", "نیست": "is not", "مستقیم": "straight",
+    "بروید": "go (polite imperative)", "بعد": "after; then",
+    "رهگذر": "passerby", "زرمینه": "Zarmina (name)",
+    "قابلی": "worth (in \"don't mention it\")", "نداره": "doesn't have (spoken)",
+    # Unit 6 (giving directions and finding your way), added 2026-07-06.
+    "چپ": "left", "راست": "right", "بپیچید": "turn (polite imperative)",
+    "به": "to / toward", "بروم": "I go (subjunctive)",
+    "فهمیدم": "I understood", "از": "from", "روبه‌رو": "opposite / across",
+    "روبه‌روی": "across from (construct form)", "شماست": "is yours (polite)",
+    "بسیار": "very", "خوب": "good", "سهیلا": "Sohaila (name)",
+    "دکاندار": "shopkeeper", "سفر": "trip; journey", "خوش": "happy; pleasant",
+    # Unit 7 (talking on the phone), added 2026-07-06.
+    "الو": "hello (on the phone)", "کی": "who", "صحبت": "talk; speech",
+    "می‌کند": "does / is doing", "فرید": "Farid (name)", "لطفاً": "please",
+    "آهسته": "slowly", "کنید": "do (polite imperative)", "پیام": "message",
+    "می‌خواهم": "I want", "بگذارم": "let me leave / put",
+    "زنگ": "call; ring (noun)", "می‌زنم": "I make (a call)",
+    "کوتاه": "short", "فردا": "tomorrow", "جلسه": "meeting",
+    "ساعت": "hour; o'clock", "می‌رسانم": "I'll pass it along / deliver",
+    "لیمه": "Lima (name)", "برای": "for", "می‌نویسم": "I am writing",
+    "گذاشت": "left (past tense, put / leave)",
+    # Unit 8 (food and ordering a meal), added 2026-07-06.
+    "نان": "bread", "پلو": "rice pilaf", "قورمه": "meat and vegetable stew",
+    "چای": "tea", "آب": "water", "چی": "what", "تازه": "fresh", "بشقاب": "plate",
+    "تا": "counter word (pieces)", "بل": "the bill",
+    "می‌شه": "becomes / comes to (amount)", "خیلی": "very",
+    "خوش‌مزه": "delicious", "بود": "was", "چایخانه": "teahouse",
+    "آمدین": "you came (informal)", "میل": "desire / preference",
+    "مشتری": "customer", "هردو": "both", "با": "with",
+    "چشم": "of course (lit. eye, polite acknowledgment)",
+    "می‌آرم": "I'll bring", "دوصد": "two hundred", "افغانی": "Afghani (currency)",
+    # A2 unit 09 (administrative errands), added 2026-07-06.
+    "وقت": "appointment / time", "سند": "document", "آدرس": "address",
+    "تذکره": "national ID booklet", "شاروالی": "municipality",
+    "می‌خواستم": "I wanted (polite request)", "تغییر": "change",
+    "بگیرم": "let me take", "چون": "because", "خانه‌ام": "my house",
+    "را": "(object marker)", "عوض": "change (noun/verb stem)",
+    "کردم": "I did", "باید": "must", "آدرسم": "my address",
+    "می‌شود": "would it be possible; is it okay", "چه": "what",
+    "چیزی": "something / what thing", "بیاورم": "should I bring",
+    "رسید": "receipt", "کرایه": "rent", "مهلت": "deadline",
+    "بیاورید": "bring (polite imperative)", "ثبت": "registration",
+    "آخر": "end", "ماه": "month", "می‌آورم": "I bring",
+    "خدمتی": "service", "می‌توانم": "I can / may I",
+    "برایتان": "for you (polite)", "انجام": "performance; carrying out",
+    "بدهم": "let me give / do", "کارمند": "clerk; employee",
+    "کریم": "Karim (name)", "خانهٔ": "house of (construct form)",
+    "جدید": "new", "زندگی": "life; living", "می‌کنید": "you do",
+    "گذشته": "past; last", "کافی": "enough", "روز": "day",
+    "سه‌شنبه": "Tuesday", "بیایم": "may I come", "پیگیری‌تان": "your tracking (number)",
+    "هزار": "thousand",
+    # A2 unit 10 (sharing opinions), added 2026-07-06.
+    "نظر": "opinion", "دلیل": "reason", "تحصیل": "study; education",
+    "خارج": "abroad", "وطن": "homeland", "بهتر": "better",
+    "پوهنتون‌های": "universities", "فرصت": "opportunity", "بیشتر": "more",
+    "تجربهٔ": "experience of (construct form)", "کسب": "gaining; acquiring",
+    "فکر": "thought; think", "نمی‌کنم": "I don't (do)",
+    "پروین": "Parwin (name)", "احمد": "Ahmad (name)", "چرا": "why",
+    "فامیلم": "my family", "بمانم": "let me stay", "وطنم": "my homeland",
+    "کمک": "help", "درست": "correct; true", "ولی": "but", "شاید": "maybe",
+    "همین‌جا": "right here", "می‌مانم": "I stay",
 }
 
 PRS_POS: dict[str, str] = {
@@ -138,6 +281,91 @@ PRS_POS: dict[str, str] = {
     "می‌توانید": "verb", "دوباره": "adverb", "بگویید": "verb",
     "مهمانی": "noun", "لیلا": "proper_noun", "دیدن": "noun",
     "خوشحال": "adjective", "کجا": "adverb", "کنم": "verb",
+    # Unit 3 (family), added 2026-07-06.
+    "مادر": "noun", "پدر": "noun", "برادر": "noun", "خواهر": "noun",
+    "و": "particle", "این": "pronoun", "من": "pronoun", "او": "pronoun",
+    "مادرم": "noun", "برادرم": "noun", "خواهرم": "noun", "است": "verb",
+    "پدرکلان": "noun", "مادرکلان": "noun", "کاکا": "noun", "عمه": "noun",
+    "ماما": "noun", "خاله": "noun", "کاکایم": "noun", "عمه‌ام": "noun",
+    "پدری": "adjective", "پدرم": "noun", "مامایم": "noun", "مادری": "adjective",
+    "فامیل": "noun", "فامیل‌تان": "noun", "چند": "adverb", "نفر": "noun",
+    "ما": "pronoun", "چهار": "adjective", "پنج": "adjective", "شش": "adjective",
+    "یک": "adjective", "دو": "adjective", "دارم": "verb", "تک‌فرزند": "noun",
+    "استم": "verb", "داریم": "verb", "دارین": "verb", "مادر‌تان": "noun",
+    "جور": "adjective", "استند": "verb", "بلی": "particle", "نخیر": "particle",
+    "ندارم": "verb", "پدر‌تان": "noun", "متأهل": "adjective",
+    "مجرد": "adjective", "شوهر": "noun", "شوهرم": "noun", "خانم": "noun",
+    "ازدواج": "noun", "کردین": "verb", "اولاد": "noun", "محصل": "noun",
+    "فرشته": "proper_noun", "دارد": "verb", "هنوز": "adverb",
+    "نداریم": "verb", "ندارد": "verb",
+    # Unit 4 (numbers), added 2026-07-06.
+    "سه": "adjective", "هفت": "adjective", "هشت": "adjective",
+    "نه": "adjective", "ده": "adjective", "یازده": "adjective",
+    "دوازده": "adjective", "سیزده": "adjective", "چهارده": "adjective",
+    "پانزده": "adjective", "شانزده": "adjective", "هفده": "adjective",
+    "هجده": "adjective", "نوزده": "adjective", "بیست": "adjective",
+    "سی": "adjective", "چهل": "adjective", "پنجاه": "adjective",
+    "شصت": "adjective", "هفتاد": "adjective", "هشتاد": "adjective",
+    "نود": "adjective", "صد": "adjective", "سال": "noun", "ساله": "adjective",
+    "استین": "verb", "استی": "verb", "نمبر": "noun", "تلفن": "noun",
+    "تلفن‌تان": "noun", "صفر": "adjective", "تلفنم": "noun", "سلام": "noun",
+    "همایون": "proper_noun", "تشکر": "noun", "تو": "pronoun",
+    "بشیر": "proper_noun", "تلفنت": "noun", "همین": "adverb",
+    "حالا": "adverb", "سیف": "noun", "می‌کنم": "verb",
+    # Unit 5 (places), added 2026-07-06.
+    "بازار": "noun", "بانک": "noun", "مسجد": "noun", "شفاخانه": "noun",
+    "مکتب": "noun", "دواخانه": "noun", "پوسته": "noun", "خانه": "noun",
+    "سفارت": "noun", "میدان": "noun", "هوایی": "adjective",
+    "کجاست": "verb", "ببخشید": "verb", "دور": "adjective",
+    "این‌جا": "adverb", "آن‌جا": "adverb", "در": "preposition",
+    "کنار": "noun", "پشت": "preposition", "مقابل": "preposition",
+    "زیاد": "adjective", "نیست": "verb", "مستقیم": "adjective",
+    "بروید": "verb", "بعد": "adverb", "رهگذر": "noun",
+    "زرمینه": "proper_noun", "قابلی": "noun", "نداره": "verb",
+    # Unit 6 (directions), added 2026-07-06.
+    "چپ": "noun", "راست": "noun", "بپیچید": "verb", "به": "preposition",
+    "بروم": "verb", "فهمیدم": "verb", "از": "preposition",
+    "روبه‌رو": "adverb", "روبه‌روی": "preposition", "شماست": "verb",
+    "بسیار": "adverb", "خوب": "adjective", "سهیلا": "proper_noun",
+    "دکاندار": "noun", "سفر": "noun", "خوش": "adjective",
+    # Unit 7 (communication), added 2026-07-06.
+    "الو": "particle", "کی": "pronoun", "صحبت": "noun", "می‌کند": "verb",
+    "فرید": "proper_noun", "لطفاً": "adverb", "آهسته": "adverb",
+    "کنید": "verb", "پیام": "noun", "می‌خواهم": "verb", "بگذارم": "verb",
+    "زنگ": "noun", "می‌زنم": "verb", "کوتاه": "adjective", "فردا": "adverb",
+    "جلسه": "noun", "ساعت": "noun", "می‌رسانم": "verb", "لیمه": "proper_noun",
+    "برای": "preposition", "می‌نویسم": "verb", "گذاشت": "verb",
+    # Unit 8 (food), added 2026-07-06.
+    "نان": "noun", "پلو": "noun", "قورمه": "noun", "چای": "noun", "آب": "noun",
+    "چی": "pronoun", "تازه": "adjective", "بشقاب": "noun", "تا": "particle",
+    "بل": "noun", "می‌شه": "verb", "خیلی": "adverb", "خوش‌مزه": "adjective",
+    "بود": "verb", "چایخانه": "noun", "آمدین": "verb", "میل": "noun",
+    "مشتری": "noun", "هردو": "pronoun", "با": "preposition",
+    "چشم": "particle", "می‌آرم": "verb", "دوصد": "adjective",
+    "افغانی": "noun",
+    # A2 unit 09 (bureaucracy), added 2026-07-06.
+    "وقت": "noun", "سند": "noun", "آدرس": "noun", "تذکره": "noun",
+    "شاروالی": "noun", "می‌خواستم": "verb", "تغییر": "noun",
+    "بگیرم": "verb", "چون": "particle", "خانه‌ام": "noun", "را": "particle",
+    "عوض": "noun", "کردم": "verb", "باید": "verb", "آدرسم": "noun",
+    "می‌شود": "verb", "چه": "pronoun", "چیزی": "pronoun", "بیاورم": "verb",
+    "رسید": "noun", "کرایه": "noun", "مهلت": "noun", "بیاورید": "verb",
+    "ثبت": "noun", "آخر": "noun", "ماه": "noun", "می‌آورم": "verb",
+    "خدمتی": "noun", "می‌توانم": "verb", "برایتان": "preposition",
+    "انجام": "noun", "بدهم": "verb", "کارمند": "noun",
+    "کریم": "proper_noun", "خانهٔ": "noun", "جدید": "adjective",
+    "زندگی": "noun", "می‌کنید": "verb", "گذشته": "adjective",
+    "کافی": "adjective", "روز": "noun", "سه‌شنبه": "noun", "بیایم": "verb",
+    "پیگیری‌تان": "noun", "هزار": "adjective",
+    # A2 unit 10 (opinions), added 2026-07-06.
+    "نظر": "noun", "دلیل": "noun", "تحصیل": "noun", "خارج": "noun",
+    "وطن": "noun", "بهتر": "adjective", "پوهنتون‌های": "noun",
+    "فرصت": "noun", "بیشتر": "adjective", "تجربهٔ": "noun", "کسب": "noun",
+    "فکر": "noun", "نمی‌کنم": "verb", "پروین": "proper_noun",
+    "احمد": "proper_noun", "چرا": "adverb", "فامیلم": "noun",
+    "بمانم": "verb", "وطنم": "noun", "کمک": "noun", "درست": "adjective",
+    "ولی": "particle", "شاید": "adverb", "همین‌جا": "adverb",
+    "می‌مانم": "verb",
 }
 
 
@@ -198,6 +426,73 @@ def prs_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         semantics.append("politeness")
     if lesson_key.endswith("lesson06.gathering_dialogue"):
         semantics.append("dialogue_word")
+
+    # Unit 3 (family) semantic tags, added 2026-07-06 -- used by the
+    # en-prs practice pack's slot_presets, mirroring the >=3-distinct-
+    # candidate rule scripts/_practice_slot_check.py enforces.
+    if token in {"مادر", "پدر", "برادر", "خواهر"}:
+        semantics.append("immediate_family")
+    if token in {"کاکا", "عمه", "ماما", "خاله"}:
+        semantics.append("uncle_aunt")
+    if token in {"متأهل", "مجرد", "شوهر", "خانم"}:
+        semantics.append("marital_word")
+    if token in {"دارم", "داریم", "دارین"}:
+        semantics.append("have_verb")
+
+    # Unit 4 (numbers) semantic tags, added 2026-07-06.
+    if token in {"یک", "دو", "سه", "چهار", "پنج", "شش", "هفت", "هشت", "نه", "ده"}:
+        semantics.append("ones_number")
+    if token in {
+        "یازده", "دوازده", "سیزده", "چهارده", "پانزده", "شانزده",
+        "هفده", "هجده", "نوزده",
+    }:
+        semantics.append("teens_number")
+    if token in {"بیست", "سی", "چهل", "پنجاه", "شصت", "هفتاد", "هشتاد", "نود", "صد"}:
+        semantics.append("tens_number")
+    if token in {"نمبر", "تلفن", "تلفنم"}:
+        semantics.append("phone_word")
+
+    # Unit 5 (places) semantic tags, added 2026-07-06.
+    if token in {"بازار", "بانک", "مسجد", "شفاخانه", "مکتب", "دواخانه", "سفارت", "دفتر"}:
+        semantics.append("city_place")
+    if token in {"نزدیک", "دور", "این‌جا", "آن‌جا"}:
+        semantics.append("location_word")
+
+    # Unit 6 (directions) semantic tags, added 2026-07-06.
+    if token in {"مستقیم", "چپ", "راست"}:
+        semantics.append("direction_word")
+    if token in {"اول", "بعد"}:
+        semantics.append("sequence_word")
+    if token == "بپیچید":
+        semantics.append("turn_verb")
+
+    # Unit 7 (communication) semantic tags, added 2026-07-06.
+    if token in {"فرید", "همایون", "لیمه"}:
+        semantics.append("person_name")
+    if token in {"الو", "تلفن"}:
+        semantics.append("phone_opening")
+    if token in {"پیام", "کوتاه"}:
+        semantics.append("message_word")
+
+    # Unit 8 (food) semantic tags, added 2026-07-06.
+    if token in {"نان", "پلو", "قورمه", "چای", "آب"}:
+        semantics.append("food_item")
+    if token in {"دکاندار", "مشتری"}:
+        semantics.append("role_word")
+    if token in {"بشقاب", "تا"}:
+        semantics.append("counting_word")
+
+    # A2 unit 09 (bureaucracy) semantic tags, added 2026-07-06.
+    if token in {"وقت", "سند", "آدرس", "تذکره", "شاروالی"}:
+        semantics.append("office_word")
+    if token in {"رسید", "مهلت"}:
+        semantics.append("paperwork_word")
+
+    # A2 unit 10 (opinions) semantic tags, added 2026-07-06.
+    if token in {"نظر", "دلیل", "تحصیل", "خارج", "وطن"}:
+        semantics.append("opinion_word")
+    if token in {"پروین", "احمد"}:
+        semantics.append("person_name")
 
     tags: dict[str, object] = {}
     if semantics:
