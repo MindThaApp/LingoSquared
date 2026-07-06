@@ -542,6 +542,36 @@ to the authoring reasoning) before import.
   comparing, rather than picking one shape as canonical — the two
   content sources (hand-authored vs. generated) disagree on shape and
   both need to keep working.
+- **Same bug class hit `word_order`/`listen_order` too, found live
+  2026-07-07 from a real user report** ("Hallo, met Omar" tiles clicked
+  in the exact correct order still graded wrong): `WordOrder.tsx`
+  always submits `response` as a **list** (tile-click order), but
+  `canonical_response()` passes hand-authored `accepted_answers`
+  through unchanged — and a full-corpus audit found **146 of 173
+  (~84%) of all word_order/listen_order exercises** are authored as a
+  plain space-joined **string** (e.g. `"Hallo met Omar"`) rather than a
+  token list matching `word_bank`. `normalized()` returns a list for
+  list input but a string for string input, so `grade()`'s fallback
+  `normalized(response)==normalized(correct)` compared a list to a
+  string — never equal, regardless of tile order. Only the 24
+  list-authored exercises (and every Endless Practice-generated
+  `word_order` item, always list-shaped via `derive_answer()`) happened
+  to work, which is also why an earlier 2026-07-06 investigation of a
+  reported `word_order` bug concluded "could not reproduce" — it tested
+  a list-shaped exercise and missed the string-shaped majority
+  entirely. Fixed the same way as `matching_pairs`: new
+  `canonical_order_tokens()` in `app/api/router.py` canonicalizes
+  either shape (string split on whitespace, or list) into a comparable
+  token list before comparing, for both the plain-answer and
+  multi-answer-variant grading paths. Content itself was left as-is —
+  the fix handles both authored shapes, so no need to rewrite ~146
+  overlay files. Full root-cause/verification detail in
+  `docs/BUILD_LOG.md`. **General lesson reinforced**: any exercise type
+  whose frontend component submits a non-string payload needs its
+  `grade()` path checked against every shape `accepted_answers` is
+  actually authored in across the real corpus, not just one example —
+  a single successful live test with one exercise does not rule out a
+  content-shape-dependent bug.
 
 ## Where things run
 
