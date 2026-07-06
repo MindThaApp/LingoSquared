@@ -6,7 +6,7 @@ unit_content_key: fa.a1.unit01.greetings
 review:
   status: reviewed
   fresh_context: true
-  notes: "Fresh review found and resolved translation-direction, phrase-gloss, recombination, and feedback metadata defects. A targeted post-review fix removed leaked review-process language from learner-facing feedback; this was not a new full fresh-context review."
+  notes: "Fresh review found and resolved translation-direction, phrase-gloss, recombination, and feedback metadata defects. A targeted post-review fix removed leaked review-process language from learner-facing feedback; this was not a new full fresh-context review. Second targeted post-review fix, 2026-07-06: scripts/_practice_slot_check.py surfaced that 3 multiple_choice templates (greeting_meaning, farewell_choice, question_meaning) each had only 1-2 real distinct lexeme candidates against the >=3 multiple_choice/matching_pairs threshold -- these unit01/unit02-era tags were simply never extended with more vocabulary, so build_prompt() was silently rejecting these generated-item shapes every time since the pack shipped. Converted all 3 to fill_in_blank (same slot, needs only >=1 candidate, matching this file's own letter_fill.002/farewell_fill.003 precedent) rather than inventing new tagged vocabulary. Re-verified via compile_content.py practice-validate (0/0) and _practice_slot_check.py (all 3 now pass). NOT fixed, still real and open: 3 matching_pairs templates in this file (greeting_pair.006, question_pair.004, offer_pair.006) have the same underlying single-candidate-tag problem but restructuring a matching_pairs exercise needs either 2+ real vocabulary additions or a type change that changes its pedagogical shape more than a mechanical fix -- left for whoever next extends this unit's vocabulary or revisits its exercise design."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -74,12 +74,17 @@ templates:
     feedback_frame: {text: "سلام is the greeting introduced with these letters.", language_code: en, direction: ltr}
 
   # Lesson 2: everyday greetings.
-  - content_key: practice.en-fa.fa.a1.unit01.lesson02.greeting_meaning.001
+  - content_key: practice.en-fa.fa.a1.unit01.lesson02.greeting_fill.001
     lesson_content_key: fa.a1.unit01.lesson02.everyday_greetings
-    type: multiple_choice
-    frame: {text: "{greeting}", language_code: fa, direction: rtl}
+    type: fill_in_blank
+    frame:
+      text: "{greeting}"
+      language_code: fa
+      direction: rtl
+      text_blocks:
+        - {text: "Complete the everyday greeting.", language_code: en, direction: ltr}
     slots: {greeting: *greeting}
-    answer_derivation: {kind: slot_gloss, slot: greeting}
+    answer_derivation: {kind: slot_text, slot: greeting}
     feedback_frame: {text: "{greeting} is an everyday greeting.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit01.lesson02.time_greeting.002
     lesson_content_key: fa.a1.unit01.lesson02.everyday_greetings
@@ -125,12 +130,17 @@ templates:
     slots: {time_period: *time_period, good_wish: *good_wish}
     answer_derivation: {kind: render_frame, frame: {text: "{time_period} {good_wish}", language_code: fa, direction: rtl}}
     feedback_frame: {text: "The time expression comes before {good_wish}.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit01.lesson03.farewell_choice.002
+  - content_key: practice.en-fa.fa.a1.unit01.lesson03.farewell_gloss_fa.002
     lesson_content_key: fa.a1.unit01.lesson03.time_and_farewells
-    type: multiple_choice
-    frame: {text: "{farewell}", language_code: fa, direction: rtl}
+    type: fill_in_blank
+    frame:
+      text: "{farewell}"
+      language_code: fa
+      direction: rtl
+      text_blocks:
+        - {text: "Complete the way to close this exchange.", language_code: en, direction: ltr}
     slots: {farewell: *farewell}
-    answer_derivation: {kind: slot_gloss, slot: farewell}
+    answer_derivation: {kind: slot_text, slot: farewell}
     feedback_frame: {text: "{farewell} closes the exchange.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit01.lesson03.farewell_fill.003
     lesson_content_key: fa.a1.unit01.lesson03.time_and_farewells
@@ -162,12 +172,17 @@ templates:
     feedback_frame: {text: "خوش آمدید welcomes someone politely.", language_code: en, direction: ltr}
 
   # Lesson 4: register-sensitive wellbeing exchanges.
-  - content_key: practice.en-fa.fa.a1.unit01.lesson04.question_meaning.001
+  - content_key: practice.en-fa.fa.a1.unit01.lesson04.question_fill.001
     lesson_content_key: fa.a1.unit01.lesson04.formal_informal_wellbeing
-    type: multiple_choice
-    frame: {text: "{wellbeing_question}", language_code: fa, direction: rtl}
+    type: fill_in_blank
+    frame:
+      text: "{wellbeing_question}"
+      language_code: fa
+      direction: rtl
+      text_blocks:
+        - {text: "Complete the wellbeing question.", language_code: en, direction: ltr}
     slots: {wellbeing_question: *wellbeing_question}
-    answer_derivation: {kind: slot_gloss, slot: wellbeing_question}
+    answer_derivation: {kind: slot_text, slot: wellbeing_question}
     feedback_frame: {text: "{wellbeing_question} asks how someone is.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit01.lesson04.answer_meaning.002
     lesson_content_key: fa.a1.unit01.lesson04.formal_informal_wellbeing

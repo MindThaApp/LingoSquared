@@ -1,0 +1,195 @@
+schema_version: "1.0"
+pack_key: practice.prs-en.a1.unit03
+source_language: prs
+target_language: en
+unit_content_key: en.a1.unit03.numbers
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: >-
+    Authored 2026-07-06 by a fork of the practice-pool-sync lane
+    (en-fa/fa-en/en-prs gap). All English-side POS/agreement tags
+    (number/age_phrase/price_phrase/phone_phrase/market_dialogue/
+    place_singular) already exist in scripts/_en_target_lexeme_common.py
+    from the nl-en lane's own unit03 work -- only Dari glosses were
+    added to scripts/backfill_lexemes_prs_en.py (genuinely distinct from
+    the fa-en script's Farsi in several places: dollars/phone/number use
+    the Afghan Dari borrowings دالر/تیلفون/نمبر, not Farsi's
+    دلار/تلفن/شماره). Structure mirrors the sibling fa-en/a1_unit03.yaml
+    pack (same underlying English realization, same slot design), with
+    Dari feedback text and the prs-en pack's own established informal
+    verb-ending style ("کنین"). Double-checked every added Dari string
+    against a Pashto-contamination scan (a real mistake this fork almost
+    shipped while drafting the gloss dict -- caught and fixed before
+    this pack was written). Verified with scripts/_practice_slot_check.py
+    that every slot has >=1 candidate and every multiple_choice/
+    matching_pairs slot has >=3 distinct candidate values.
+
+    Fresh-context review, 2026-07-06 (separate session, zero access to
+    the authoring reasoning above, per this project's non-self-
+    certification convention): checked every lesson_content_key against
+    the real en.a1.unit03.numbers realization (all match), re-verified
+    the Pashto-vs-Dari scan across this pack, the sibling overlay, and
+    scripts/backfill_lexemes_prs_en.py's gloss dict directly (no
+    Pashto-only letters or Pashto number words found; the fork's own
+    already-fixed mistake stayed fixed), and
+    hand-rendered every possible sentence every template's slots can
+    produce (not just the one example per file). Found and fixed one
+    real bug: age_fill.002's "I'm {number} years {age_adjective}." and
+    price_fill.004's "It's {number} {price_noun}." both slotted the full
+    22-member "number" tag (which includes "one") against an already-
+    plural noun ("years"/"dollars"), so "one" produced a genuine,
+    reachable agreement error -- "I'm one years old.", "It's one
+    dollars." -- 1/22 draw each, every time it landed. Fixed by switching
+    both slots to the existing "count_plural" tag (number minus "one",
+    already defined in scripts/_en_target_lexeme_common.py for exactly
+    this reason by the nl-en lane) via a new number_plural preset;
+    re-verified with a hand-rolled slot-rendering harness that "one" no
+    longer appears in either template's candidate set.
+
+    NOT fixed, status intentionally left unreviewed: switching to
+    count_plural does not remove "hundred" from either slot, and neither
+    template's generated sentence is grammatical for that value either
+    ("I'm hundred years old.", "It's hundred dollars." -- needs "a
+    hundred" or "one hundred"). This is the same systemic, already-
+    documented-elsewhere gap the nl-en practice-pool-sync review found
+    independently in its own units 03/07/08/15 (bare "hundred" with no
+    article, needing a dedicated bounded tag or an exclude mechanism in
+    the shared scripts/_en_target_lexeme_common.py classifier) -- out of
+    this review's file-edit scope (docs/content/practice/prs-en/,
+    docs/BUILD_LOG.md, scripts/practice_manifest.txt only). Flagging for
+    whoever next does the classifier-level fix (would also benefit
+    fa-en/nl-en's own affected units, since the tag is shared). Every
+    other template in this pack rendered correctly for every candidate
+    and is otherwise clean.
+tag_schema:
+  part_of_speech: [noun, adjective, adverb, pronoun]
+  agreement_tags:
+    semantic: [number, count_plural, age_phrase, price_phrase, phone_phrase, market_dialogue, place_singular]
+slot_presets:
+  number: &number {language_code: en, part_of_speech: noun, agreement_tags: {semantic: number}}
+  # Fresh-context review fix, 2026-07-06: "number" includes "one", which
+  # is grammatically singular ("It's one dollar."/"I'm one year old.")
+  # -- embedding it into a fixed-plural frame ("It's {number} dollars."/
+  # "I'm {number} years old.") produced a real, reachable agreement error
+  # ("It's one dollars."/"I'm one years old.") for any template pairing a
+  # bare number with an already-plural noun. count_plural (the existing
+  # "number minus one" tag in scripts/_en_target_lexeme_common.py, built
+  # for exactly this reason by the nl-en lane) fixes that specific case.
+  number_plural: &number_plural {language_code: en, part_of_speech: noun, agreement_tags: {semantic: count_plural}}
+  age_word: &age_word {language_code: en, part_of_speech: [noun, adjective], agreement_tags: {semantic: age_phrase}}
+  age_adjective: &age_adjective {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: age_phrase}}
+  price_word: &price_word {language_code: en, part_of_speech: [noun, adverb, pronoun], agreement_tags: {semantic: price_phrase}}
+  price_noun: &price_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: price_phrase}}
+  phone_word: &phone_word {language_code: en, part_of_speech: noun, agreement_tags: {semantic: phone_phrase}}
+  market_word: &market_word {language_code: en, part_of_speech: [pronoun, noun, adjective], agreement_tags: {semantic: market_dialogue}}
+  place_singular: &place_singular {language_code: en, part_of_speech: noun, agreement_tags: {semantic: place_singular}}
+templates:
+  - content_key: practice.prs-en.en.a1.unit03.lesson01.number_gloss.001
+    lesson_content_key: en.a1.unit03.lesson01.zero_to_ten
+    type: multiple_choice
+    frame: {text: "{number}", language_code: en, direction: ltr}
+    slots: {number: *number}
+    answer_derivation: {kind: slot_gloss, slot: number}
+    feedback_frame: {text: "معنای دری {number} را انتخاب کنین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit03.lesson01.number_fill.002
+    lesson_content_key: en.a1.unit03.lesson01.zero_to_ten
+    type: fill_in_blank
+    frame: {text: "Number: {number}", language_code: en, direction: ltr}
+    slots: {number: *number}
+    answer_derivation: {kind: slot_text, slot: number}
+    feedback_frame: {text: "املای درست این عدد {number} است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit03.lesson01.number_translate.003
+    lesson_content_key: en.a1.unit03.lesson01.zero_to_ten
+    type: translation
+    frame: {text: "{number}", language_code: prs, direction: rtl, slot_rendering: {number: english_gloss}}
+    slots: {number: *number}
+    answer_derivation: {kind: slot_text, slot: number}
+    feedback_frame: {text: "{number} معادل انگلیسی این عدد دری است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit03.lesson01.number_pair.004
+    lesson_content_key: en.a1.unit03.lesson01.zero_to_ten
+    type: matching_pairs
+    frame: {text: "{number_one} — {number_two}", language_code: en, direction: ltr}
+    slots: {number_one: *number, number_two: *number}
+    slot_relations: [{kind: distinct, slots: [number_one, number_two]}]
+    answer_derivation: {kind: matching_pairs, slots: [number_one, number_two]}
+    feedback_frame: {text: "هر عدد را به معنای دری خودش وصل کنین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit03.lesson02.number_order.001
+    lesson_content_key: en.a1.unit03.lesson02.eleven_to_hundred
+    type: word_order
+    frame: {text: "{number_one} {number_two}", language_code: en, direction: ltr}
+    slots: {number_one: *number, number_two: *number}
+    slot_relations: [{kind: distinct, slots: [number_one, number_two]}]
+    answer_derivation: {kind: ordered_slot_texts, slots: [number_one, number_two]}
+    feedback_frame: {text: "ترتیب کلمات را حفظ کنین: {number_one} قبل از {number_two}.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit03.lesson02.number_gloss.002
+    lesson_content_key: en.a1.unit03.lesson02.eleven_to_hundred
+    type: multiple_choice
+    frame: {text: "{number}", language_code: en, direction: ltr}
+    slots: {number: *number}
+    answer_derivation: {kind: slot_gloss, slot: number}
+    feedback_frame: {text: "معنای دری {number} را انتخاب کنین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit03.lesson03.age_gloss.001
+    lesson_content_key: en.a1.unit03.lesson03.ages_prices_phones
+    type: multiple_choice
+    frame: {text: "{age_word}", language_code: en, direction: ltr}
+    slots: {age_word: *age_word}
+    answer_derivation: {kind: slot_gloss, slot: age_word}
+    feedback_frame: {text: "معنای دری {age_word} را انتخاب کنین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit03.lesson03.age_fill.002
+    lesson_content_key: en.a1.unit03.lesson03.ages_prices_phones
+    type: fill_in_blank
+    frame: {text: "I'm {number} years {age_adjective}.", language_code: en, direction: ltr}
+    slots: {number: *number_plural, age_adjective: *age_adjective}
+    answer_derivation: {kind: slot_text, slot: age_adjective}
+    feedback_frame: {text: "برای بیان سن، از years {age_adjective} استفاده می‌شه.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit03.lesson03.price_gloss.003
+    lesson_content_key: en.a1.unit03.lesson03.ages_prices_phones
+    type: multiple_choice
+    frame: {text: "{price_word}", language_code: en, direction: ltr}
+    slots: {price_word: *price_word}
+    answer_derivation: {kind: slot_gloss, slot: price_word}
+    feedback_frame: {text: "معنای دری {price_word} را انتخاب کنین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit03.lesson03.price_fill.004
+    lesson_content_key: en.a1.unit03.lesson03.ages_prices_phones
+    type: fill_in_blank
+    frame: {text: "It's {number} {price_noun}.", language_code: en, direction: ltr}
+    slots: {number: *number_plural, price_noun: *price_noun}
+    answer_derivation: {kind: slot_text, slot: price_noun}
+    feedback_frame: {text: "برای گفتن قیمت، عدد پیش از {price_noun} می‌آید.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit03.lesson03.phone_fill.005
+    lesson_content_key: en.a1.unit03.lesson03.ages_prices_phones
+    type: fill_in_blank
+    frame: {text: "What's your {phone_word}?", language_code: en, direction: ltr}
+    slots: {phone_word: *phone_word}
+    answer_derivation: {kind: slot_text, slot: phone_word}
+    feedback_frame: {text: "{phone_word} این سوال معمول دربارهٔ تیلفون را کامل می‌کنه.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit03.lesson04.market_gloss.001
+    lesson_content_key: en.a1.unit03.lesson04.market_dialogue
+    type: multiple_choice
+    frame: {text: "{market_word}", language_code: en, direction: ltr}
+    slots: {market_word: *market_word}
+    answer_derivation: {kind: slot_gloss, slot: market_word}
+    feedback_frame: {text: "معنای دری {market_word} را انتخاب کنین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit03.lesson04.place_fill.002
+    lesson_content_key: en.a1.unit03.lesson04.market_dialogue
+    type: fill_in_blank
+    frame: {text: "Daniel is at the {place_singular}.", language_code: en, direction: ltr}
+    slots: {place_singular: *place_singular}
+    answer_derivation: {kind: slot_text, slot: place_singular}
+    feedback_frame: {text: "{place_singular} جایی است که دنیل آنجاست.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit03.lesson04.market_pair.003
+    lesson_content_key: en.a1.unit03.lesson04.market_dialogue
+    type: matching_pairs
+    frame: {text: "{market_word_one} — {market_word_two}", language_code: en, direction: ltr}
+    slots: {market_word_one: *market_word, market_word_two: *market_word}
+    slot_relations: [{kind: distinct, slots: [market_word_one, market_word_two]}]
+    answer_derivation: {kind: matching_pairs, slots: [market_word_one, market_word_two]}
+    feedback_frame: {text: "هر واژه را به معنای دری خودش وصل کنین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit03.lesson04.market_translate.004
+    lesson_content_key: en.a1.unit03.lesson04.market_dialogue
+    type: translation
+    frame: {text: "{market_word}", language_code: prs, direction: rtl, slot_rendering: {market_word: english_gloss}}
+    slots: {market_word: *market_word}
+    answer_derivation: {kind: slot_text, slot: market_word}
+    feedback_frame: {text: "{market_word} معادل انگلیسی این واژهٔ دری است.", language_code: prs, direction: rtl}

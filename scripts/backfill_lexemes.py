@@ -56,6 +56,10 @@ UNIT_FILES = (
         REPO_ROOT / "docs/content/realizations/fa/a1_unit04_family.yaml",
         REPO_ROOT / "docs/content/overlays/en-fa/a1_unit04.yaml",
     ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a1_unit05_places.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a1_unit05.yaml",
+    ),
 )
 EN_TOKEN_RE = re.compile(r"[A-Za-z]+(?:['’/-][A-Za-z]+)*")
 
@@ -131,15 +135,25 @@ FA_GLOSSES = {
     "دارد": "he/she has (formal)", "ندارد": "he/she doesn't have (formal)",
     "نداره": "he/she doesn't have (spoken)", "است": "is (formal)",
     "مامانم": "my mom", "بابام": "my dad", "داداشم": "my brother",
+    # Unit 5 (places and directions), added 2026-07-06.
+    "هتل": "hotel", "رستوران": "restaurant", "دستشویی": "restroom",
+    "اونجا": "there", "کجاست": "where is (it)?", "سمت": "side",
+    "راست": "right", "چپ": "left", "راسته": "it's on the right (spoken)",
+    "چپه": "it's on the left (spoken)", "مستقیم": "straight ahead",
+    "برید": "go (polite)", "بعد": "after that; then", "یه": "a; an (spoken)",
+    "کنار": "next to; beside", "آزادی": "Azadi (freedom; hotel name)",
+    "همون": "that same one (spoken)", "رهگذر": "passer-by",
+    "رستورانه": "it's the restaurant (spoken)",
 }
 
 FA_SYMBOLS = set("س ل ا م ن ت ش چ ی ه ک گ ج د ر ف و ب خ ز".split())
-FA_PROPER_NOUNS = set("علی نرگس سارا مینا ایران انگلیس فرانسه".split())
-FA_PRONOUNS = set("من تو شما او ما این".split())
-FA_PREPOSITIONS = set("به از با اهل بهت مثل".split())
-FA_PARTICLES = set("هم ولی بله و آره پس تا".split())
+FA_PROPER_NOUNS = set("علی نرگس سارا مینا ایران انگلیس فرانسه آزادی".split())
+FA_PRONOUNS = set("من تو شما او ما این همون".split())
+FA_PREPOSITIONS = set("به از با اهل بهت مثل کنار".split())
+FA_PARTICLES = set("هم ولی بله و آره پس تا یه".split())
 FA_ADVERBS = set(
-    "فعلاً خیلی چطور کجا اینجا همین‌طور کجایی باهم فردا حتماً خودمونی چند".split()
+    "فعلاً خیلی چطور کجا اینجا همین‌طور کجایی باهم فردا حتماً خودمونی چند "
+    "اونجا مستقیم بعد".split()
 )
 FA_ADJECTIVES = set(
     "خوبی بد ایرانی انگلیسی فرانسوی بزرگه کوچیکه متأهل مجرد برعکسه شلوغه".split()
@@ -159,6 +173,7 @@ FA_VERBS = {
     "دارم", "ندارم", "دارد", "ندارد", "نداره", "داره", "متأهله",
     "متأهلین", "مجردم", "متأهلم", "خانواده‌ته", "مامانمه", "باباهم", "کیه",
     "داداشمه", "پدرن", "مادرن", "نفرن", "نفریم", "داری",
+    "کجاست", "راسته", "چپه", "برید", "رستورانه",
 }
 FA_PHRASE_PARTS = {"بخیر", "خواهش"}
 
@@ -308,6 +323,23 @@ def fa_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         semantics.append("family_description")
     if lesson_key.endswith("lesson06.dialogue_phone_numbers") or lesson_key.endswith("lesson06.family_photo_dialogue"):
         semantics.append("dialogue_word")
+    # Unit 5 (places and directions): 3-member bare-word recognition tags,
+    # exactly meeting this bundle's >=3-distinct-value multiple_choice/
+    # matching_pairs rule. Kept recognition-only (no shared generative
+    # frame): the real content's own "X {is on side}" phrasing uses
+    # colloquial contractions (راسته/چپه = "is on the right/left") that
+    # differ per word rather than a uniform "{item} است" pattern, so
+    # forcing one shared frame here would risk an unnatural sentence.
+    if token in {"هتل", "رستوران", "دستشویی"}:
+        semantics.append("place_word")
+    if token in {"سمت", "راست", "چپ"}:
+        semantics.append("direction_side")
+    if token in {"مستقیم", "بعد", "کنار"}:
+        semantics.append("direction_connector")
+    # Only 2 candidates (colloquial "است" contractions) -- kept out of
+    # multiple_choice/matching_pairs, translation-only.
+    if token in {"راسته", "چپه"}:
+        semantics.append("is_on_side")
     if semantics:
         tags["semantic"] = list(dict.fromkeys(semantics))
     person = {
