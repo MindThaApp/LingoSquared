@@ -59,8 +59,8 @@ is already solid — not a substitute for pre-launch verification.
 teaching content + ≥10 hours practice + working scored module
 checkpoints, per launch language pair.** Enough to get someone by
 day-to-day in-country, not a demo. The ≥10 practice hours are meant to
-come from the Endless Practice engine (currently fa→en-only, needs
-extending to all 6 launch paths), not hand-authored drills — and
+come from the Endless Practice engine — now extended to all 6 launch
+paths (see §6 for current template counts), not hand-authored drills — and
 "module tests with scores" means Phase F (unit checkpoint tests, see
 `docs/SONNET_BUILD_PROMPT_UPGRADES.md`) is now a hard publish-gate
 requirement, not deferred post-launch polish. See the
@@ -90,12 +90,18 @@ Four layers, in order of authoring:
    outcomes only, not ordering — each language's realization may
    prepend its own script/phonology "module 0" (Persian/Dari alphabet,
    Chinese pinyin+tones) and reorder/split/reweight spine nodes freely.
-   **24 A1 outcomes currently defined** (greetings, introductions,
-   numbers, dates, time, family, food, shopping, places, directions,
-   routines, plans, past events, preferences, comparisons, travel,
-   health, work, housing, weather, clothing, emotions, communication,
-   money/payments — the last 5 added 2026-07-05, verified compiling
-   clean) — extensible, not a hard-capped list.
+   **28 outcomes currently defined: 24 A1 + 4 A2** (A1: greetings,
+   introductions, numbers, dates, time, family, food, shopping, places,
+   directions, routines, plans, past events, preferences, comparisons,
+   travel, health, work, housing, weather, clothing, emotions,
+   communication, money/payments — the last 5 added 2026-07-05, verified
+   compiling clean; A2: bureaucracy, opinions, banking, and a second
+   health outcome, added since — verified against
+   `docs/content/universal_spine.yaml` at 2026-07-06 19:53 BST).
+   **This count is moving fast this session** — content authoring is
+   actively adding outcomes in parallel; re-grep the spine file rather
+   than trust this number if it matters. Extensible, not a hard-capped
+   list.
 2. **Target-language realization** (`docs/content/realizations/<lang>/`)
    — one set per target language, reused across every X→that-language
    path (English's realization is reused across all 9 X→en paths).
@@ -119,13 +125,20 @@ Four layers, in order of authoring:
    traps, answer-key sanity). Content keys are stable and independent
    of DB UUIDs.
 
-**Current real coverage** (not aspirational — what's actually authored
-and importable today): 6 courses exist as content — en→es (1 unit),
-en→fr (1 unit), en→fa (2 units), en→prs (1 unit), fa→en (2 units),
-prs→en (2 units, same underlying English realization as fa→en, an
-independently-authored Dari overlay). That's roughly 2 of 19 spine
-outcomes built, for 4 of 18 paths. This is intentionally still small —
-see §5 for why depth-first on fa/prs came before breadth.
+**Current real coverage** (not aspirational — checked directly against
+`docs/content/realizations/`/`overlays/` at 2026-07-06 19:53 BST; this
+was actively changing minute-to-minute while this document was being
+audited, so treat exact unit counts as a snapshot, not a fixed fact):
+8 of 18 paths exist as content, totaling ~131 units — en→es (3 units,
+A1 only), en→fr (3 units, A1 only), en→fa (11 units: 9 A1 + 2 A2),
+en→prs (11 units: 9 A1 + 2 A2), en→nl (25 units: 23 A1 + 2 A2), fa→en
+(26 units: 24 A1 + 2 A2), nl→en (26 units, same), prs→en (26 units,
+same, same underlying English realization as fa→en, an
+independently-authored Dari overlay). The English realization (shared
+by all three X→en directions) currently covers 26 of the spine's 28
+outcomes — it hasn't caught up to the newest `banking`/second-`health`
+A2 outcomes yet. See §5 for why depth-first on fa/prs came before
+breadth.
 
 ## 3. Review methodology (the actual quality-control mechanism)
 
@@ -152,17 +165,22 @@ risk tradeoff from the start, replaced by an AI cross-review process:
   the "AI review only" tradeoff, since "fix errors as noticed" requires
   a notice mechanism.
 
-**Division of labor** (followed strictly, confirmed working well this
-session): Codex authors all backend code and *all* language content —
-Ramin's explicit call, and empirically the right one; Codex has handled
-schema migrations, generation-service logic, and every language's
-prose competently, with the review pipeline catching drift when it
-happened. The executing Claude/Sonnet session owns frontend code,
+**Division of labor** (revised 2026-07-05, same day this doc was
+written — Codex's original exclusive content mandate has since been
+widened, not reversed): Codex authors all backend code, schema
+migrations, and generation-service logic, unchanged. Language content
+is now authored by **both** Codex (from-scratch generation, still all
+languages) **and** Claude (adapting public-domain FSI/Peace Corps
+source material into spine-compliant drafts — see
+`docs/content/AUTHORING_GUIDE.md` §10) — Ramin has Claude Max headroom
+to spare and wants it used for this. Both routes go through the
+identical fresh-context review + compiler validation pipeline. The
+executing Claude/Sonnet session also still owns frontend code,
 orchestration of Codex's output (extract → validate → apply), and
 end-to-end verification.
 
 **Verification bar, non-negotiable**: compiler validation green;
-backend test suite green (28 tests currently, real Postgres via
+backend test suite green (96 tests currently, real Postgres via
 docker compose, not sqlite/mocked); frontend `npm run build` — the
 *full* build, not just `tsc --noEmit` (this has caught real type
 errors twice that `--noEmit` alone missed); and live browser
@@ -176,7 +194,7 @@ just-unlocked vocabulary).
 
 ## 4. Technical shape
 
-- **Backend**: Python/FastAPI, SQLAlchemy, Postgres. 7 migrations so
+- **Backend**: Python/FastAPI, SQLAlchemy, Postgres. 12 migrations so
   far, additive-only policy (never delete/reassign exercise UUIDs;
   users are pinned to content releases; seeds are idempotent
   create-missing-only — a destructive delete-and-recreate-on-import bug
@@ -239,12 +257,17 @@ promoted from each lesson's already-taught vocabulary. At runtime, a
 deterministic seeded sampler recombines them — zero LLM calls, zero
 per-use token cost, server-authoritative answer keys, so XP can't be
 gamed. Eligibility is gated to vocabulary the learner has actually
-completed lessons for. Currently piloted on the fa→en course (2
-units, 72 reviewed templates, both live and functioning): infinite-
-scroll feed, reuses the existing `ExerciseRenderer` unchanged, smaller
-diminishing-returns XP so it supplements rather than replaces real
-lessons, zero listening cards generated for fa (the TTS gap in §4
-applies here too and is respected rather than papered over).
+completed lessons for. **Since extended past the original fa→en pilot
+to all 6 launch-gate directions** (checked directly against
+`docs/content/practice/`/`scripts/practice_manifest.txt` as of
+2026-07-06): en-fa (124 templates), en-nl (240), en-prs (36), fa-en
+(86, up from the original pilot's 72), nl-en (327), prs-en (86).
+Mechanism unchanged: infinite-scroll feed, reuses the existing
+`ExerciseRenderer` unchanged, smaller diminishing-returns XP so it
+supplements rather than replaces real lessons, zero listening cards
+generated for fa/prs (the TTS gap in §4 applies here too and is
+respected rather than papered over — confirmed still enforced in
+`app/practice/service.py`).
 
 **Free/open material research** (informational, not yet incorporated
 into the pipeline): public-domain FSI language courses and the
@@ -263,9 +286,12 @@ velocity becomes the bottleneck again.
   languages.
 - Practice-feature migrations and content exist only in local dev, not
   deployed to the live server yet.
-- Only ~2 of 19 spine outcomes are built, for 4 of 18 paths — this is
-  a genuinely multi-month build at current velocity; no finish date
-  should be inferred from anything in this document.
+- 8 of 18 paths have real content now (see §2), 3 of them (fa→en,
+  nl→en, prs→en) covering 26 of the spine's current 28 outcomes — but
+  10 paths still have zero content and none has gone past A2. Still a
+  genuinely multi-month build at current velocity to reach full A1→C2
+  breadth across all 18 paths; no finish date should be inferred from
+  anything in this document.
 - No admin UI for content authoring (curl/API-only) — an intentional
   scope trim, not an oversight, given Codex authors via files.
 - No native-speaker review network — an accepted, explicit risk
