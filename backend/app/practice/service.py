@@ -282,6 +282,32 @@ def build_prompt(
             # this template instance so the caller falls back to another
             # template rather than generating a blank item.
             return None
+        if template.answer_derivation.get("interchangeable") and isinstance(answer, str):
+            # A subtler variant of the bare-slot bug above, found live
+            # 2026-07-06: some visible text survives masking (e.g. "Ben ___
+            # nieuw hier?"), but the slot's own candidate pool is a closed
+            # set of true register/stress synonyms for the SAME referent
+            # (je/jij, alsjeblieft/alstublieft, mijn/je/jouw as "whose
+            # brother?") with nothing else in the frame able to prefer one
+            # over another — any pool member is equally correct Dutch, yet
+            # grading only accepted the one the sampler happened to fill.
+            # `interchangeable: true` is an explicit, opt-in content flag
+            # (only set on templates a reviewer has confirmed are a true
+            # synonym pool, NOT on ordinary open-vocabulary slots like
+            # country/person_name/greeting, where only one value is
+            # correct and the rest are real distractors) — when set,
+            # accept every candidate that still satisfies this slot's own
+            # constraints, using the existing generic multi-answer grading
+            # shape ({"canonical", "accepted"}) `grade()` already handles
+            # for hand-authored content.
+            constraints = template.slots[slot]
+            pool = sorted({
+                lexeme.token
+                for lexeme in lexemes
+                if lexeme_matches(lexeme, constraints)
+            })
+            if len(pool) > 1:
+                answer = {"canonical": answer, "accepted": pool}
         prompt = {
             "text_blocks": [
                 _instruction_block(course, "Fill in the missing word."),

@@ -56,9 +56,14 @@ review:
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [produce, market_quantity]
+    semantic: [produce, produce_pure, market_quantity]
 slot_presets:
   produce: &produce {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: produce}}
+  # produce_pure: exact-case (no capitalized sentence-initial duplicates),
+  # safe for matching_pairs -- see scripts/backfill_lexemes_en_nl.py's
+  # produce_pure comment. This file's OTHER templates below keep using the
+  # plain "produce" tag unchanged.
+  produce_pure: &produce_pure {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: produce_pure}}
   market_quantity: &market_quantity {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: market_quantity}}
 templates:
   - content_key: practice.en-nl.nl.a1.unit07.lesson01.choose.001
@@ -166,10 +171,10 @@ templates:
   - content_key: practice.en-nl.nl.a1.unit07.lesson04.match.002
     lesson_content_key: nl.a1.unit07.lesson04.prijskaartjes
     type: matching_pairs
-    frame: {text: "{first} · {second}", language_code: nl, direction: ltr}
-    slots: {first: *produce, second: *produce}
-    slot_relations: [{kind: distinct, slots: [first, second]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second]}
+    frame: {text: "{first} · {second} · {third} · {fourth}", language_code: nl, direction: ltr}
+    slots: {first: *produce_pure, second: *produce_pure, third: *produce_pure, fourth: *produce_pure}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth]}
     feedback_frame: {text: "Match each produce word with its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit07.lesson04.translate.003
     lesson_content_key: nl.a1.unit07.lesson04.prijskaartjes

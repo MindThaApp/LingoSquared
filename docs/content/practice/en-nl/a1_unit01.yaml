@@ -36,6 +36,22 @@ review:
     review by Ramin (the standing nl exception) is still the final bar before
     a live deploy, but this pack is genuinely clean at the content-review
     level.
+
+    **Follow-up fix, 2026-07-06 (real user report)**: the "grammatical for
+    both" finding above about informal_address (jij/je) understated the
+    problem -- grammatical for both means a `fill_in_blank` blanking
+    "Ben {item} nieuw hier?"/"...taalcafé?" is genuinely unanswerable with
+    certainty, since nothing in either frame lets a learner prefer jij
+    over je or vice versa; only one was ever marked correct per generated
+    instance, so a learner typing the other 100%-correct Dutch pronoun was
+    wrongly marked wrong. Reproduced live via a fresh Endless Practice
+    batch. Fixed by marking both `lesson01.complete.002`'s and
+    `lesson05.complete.002`'s answer_derivation `interchangeable: true` (new
+    additive, opt-in field -- backend/app/practice/service.py's
+    `build_prompt()` now accepts ANY of the slot's own constraint-matching
+    candidates as correct for such a template, via the same
+    `{"canonical","accepted"}` multi-answer shape `grade()` already
+    supports for hand-authored content). See AUTHORING_GUIDE.md#17.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -69,7 +85,12 @@ templates:
       text_blocks:
         - {text: "Complete the Dutch sentence.", language_code: en, direction: ltr}
     slots: {item: *informal_address}
-    answer_derivation: {kind: slot_text, slot: item}
+    # interchangeable: true -- "Ben ___ nieuw hier?" gives no way to tell
+    # jij (stressed) from je (unstressed) apart; both are the identical
+    # informal "you" in this exact question, so either must grade correct.
+    # Found live 2026-07-06 (real user report: unanswerable-with-certainty
+    # blank). See AUTHORING_GUIDE.md#17.
+    answer_derivation: {kind: slot_text, slot: item, interchangeable: true}
     feedback_frame: {text: "{item} is an informal form of address.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit01.lesson01.translate.003
     lesson_content_key: nl.a1.unit01.lesson01.jij_je_en_u
@@ -150,10 +171,10 @@ templates:
   - content_key: practice.en-nl.nl.a1.unit01.lesson04.match.001
     lesson_content_key: nl.a1.unit01.lesson04.herkomst_en_taal
     type: matching_pairs
-    frame: {text: "{first} · {second}", language_code: nl, direction: ltr}
-    slots: {first: *country, second: *country}
-    slot_relations: [{kind: distinct, slots: [first, second]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second]}
+    frame: {text: "{first} · {second} · {third} · {fourth}", language_code: nl, direction: ltr}
+    slots: {first: *country, second: *country, third: *country, fourth: *country}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth]}
     feedback_frame: {text: "Match each country with its English name.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit01.lesson04.complete.002
     lesson_content_key: nl.a1.unit01.lesson04.herkomst_en_taal
@@ -197,7 +218,9 @@ templates:
       text_blocks:
         - {text: "Complete the Dutch sentence.", language_code: en, direction: ltr}
     slots: {item: *informal_address}
-    answer_derivation: {kind: slot_text, slot: item}
+    # interchangeable: true -- same je/jij ambiguity as lesson01.complete.002
+    # above; see that template's comment and AUTHORING_GUIDE.md#17.
+    answer_derivation: {kind: slot_text, slot: item, interchangeable: true}
     feedback_frame: {text: "{item} keeps this question informal.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit01.lesson05.translate.003
     lesson_content_key: nl.a1.unit01.lesson05.taalcafe

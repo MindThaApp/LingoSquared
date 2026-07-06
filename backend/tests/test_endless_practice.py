@@ -642,6 +642,98 @@ def test_fill_in_blank_never_generates_a_blank_only_prompt(client, admin, auth):
     assert response.json() == {"locked": False, "items": []}
 
 
+def interchangeable_fill_in_blank_artifact(target="es"):
+    # Reproduces the real live bug found 2026-07-06 (en-nl Endless Practice,
+    # docs/content/practice/en-nl/a1_unit01.yaml's je/jij informal_address
+    # slot): real surrounding text survives masking ("nota: ___" here, "Ben
+    # ___ nieuw hier?" for real), so §13's bare-slot guard doesn't fire, but
+    # the slot's own candidate pool (uno/dos/tres/cuatro, all tagged
+    # semantic=word by create_course_with_lexemes()) has no other frame
+    # content able to prefer one over another - every candidate is equally
+    # correct Spanish here, yet only the one the sampler filled used to be
+    # accepted. AUTHORING_GUIDE.md#17's `interchangeable: true` flag opts
+    # this template into accepting any of the slot's own matches.
+    direction = "rtl" if target in {"fa", "prs"} else "ltr"
+    slot = {
+        "language_code": target,
+        "part_of_speech": "noun",
+        "agreement_tags": {"semantic": "word"},
+    }
+    return {
+        "artifact_type": "lingosquared.practice_templates",
+        "artifact_version": 1,
+        "source_language": "en",
+        "target_language": target,
+        "packs": [
+            {
+                "pack_key": "test.practice.interchangeable.pack",
+                "unit_content_key": "test.practice.unit",
+                "tag_schema": {},
+                "templates": [
+                    {
+                        "content_key": "test.practice.fill_in_blank.interchangeable",
+                        "lesson_content_key": LESSON_KEY,
+                        "type": "fill_in_blank",
+                        "frame": {
+                            "text": "nota: {word}",
+                            "language_code": target,
+                            "direction": direction,
+                        },
+                        "slots": {"word": slot},
+                        "answer_derivation": {
+                            "kind": "slot_text",
+                            "slot": "word",
+                            "interchangeable": True,
+                        },
+                        "feedback_frame": {
+                            "text": "Correct.",
+                            "language_code": "en",
+                            "direction": "ltr",
+                        },
+                    }
+                ],
+            }
+        ],
+    }
+
+
+def test_fill_in_blank_interchangeable_accepts_any_matching_candidate(
+    client, admin, auth
+):
+    course_id, lesson_id = create_course_with_lexemes(target="es")
+    import_templates(client, admin, course_id, interchangeable_fill_in_blank_artifact())
+    complete_lesson(auth, lesson_id)
+
+    response = client.post(
+        f"/practice/{course_id}/batch", headers=auth, json={"size": 1}
+    )
+    assert response.status_code == 200, response.text
+    items = response.json()["items"]
+    assert len(items) == 1
+    item_id = items[0]["id"]
+
+    with SessionLocal() as db:
+        stored = db.get(PracticeItem, item_id)
+        correct = stored.correct_response
+        # The multi-answer shape grade() (app/api/router.py) already
+        # generically supports for hand-authored content - build_prompt()
+        # now produces it too when interchangeable: true is set.
+        assert set(correct) == {"canonical", "accepted"}
+        assert correct["canonical"] in {"uno", "dos", "tres", "cuatro"}
+        assert set(correct["accepted"]) == {"uno", "dos", "tres", "cuatro"}
+        # A pool member that is NOT the one the sampler happened to fill
+        # must still grade correct - this is the actual bug being fixed.
+        other = next(t for t in correct["accepted"] if t != correct["canonical"])
+
+    response = client.post(
+        f"/practice/items/{item_id}/answer",
+        headers=auth,
+        json={"response": other},
+    )
+    assert response.status_code == 200, response.text
+    assert response.json()["result"] == "correct"
+
+
 def word_order_hint_artifact(target="es"):
     direction = "rtl" if target in {"fa", "prs"} else "ltr"
     slot = {
