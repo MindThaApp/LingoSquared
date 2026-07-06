@@ -17,7 +17,15 @@ from app.models import (
     Unit,
     UserLexemeSRS,
 )
-from app.services.tts import GOOGLE_TTS_SUPPORTED_LANGUAGES
+# Not GOOGLE_TTS_SUPPORTED_LANGUAGES specifically: this gate exists to
+# ask "can a learner actually hear this?", and since 2026-07-06 Azure
+# covers Farsi (fa) where Google has zero Persian/Dari voices at all --
+# using the Google-only set here was stale from the day Azure shipped,
+# silently keeping fa's listen_select generation off even though fa
+# now has a real, working TTS voice. TTS_SUPPORTED_LANGUAGES is the
+# union of both providers (see app/services/tts.py); Dari (prs) has
+# zero coverage from either and is correctly still excluded.
+from app.services.tts import TTS_SUPPORTED_LANGUAGES
 
 
 PRACTICE_XP = 5
@@ -336,7 +344,7 @@ def build_prompt(
             "options": options,
         }
     elif template.type == "listen_select":
-        if course.target_language not in GOOGLE_TTS_SUPPORTED_LANGUAGES:
+        if course.target_language not in TTS_SUPPORTED_LANGUAGES:
             return None
         if not isinstance(answer, str):
             return None
@@ -467,7 +475,7 @@ def _material(
             .order_by(PracticeTemplate.content_key)
         )
     )
-    if course.target_language not in GOOGLE_TTS_SUPPORTED_LANGUAGES:
+    if course.target_language not in TTS_SUPPORTED_LANGUAGES:
         templates = [
             template
             for template in templates
