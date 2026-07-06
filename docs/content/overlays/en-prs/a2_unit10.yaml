@@ -9,13 +9,14 @@ generation_provenance:
   authoring_system: claude
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: fresh_context_reviewer
+  status: reviewed
+  required_next_reviewer: null
   notes: >-
     Paired with prs/a2_unit10_opinions.yaml's own review notes (see that
     file for the full scenario rationale). Multi-clause accepted_answers
-    lists carry period/comma/او-joined forms per §12
-    (write_opinion_with_reason, dialogue_response_as_parwin). No
+    lists carry period/comma/و-joined forms per §12, where each is
+    grammatically natural (write_opinion_with_reason,
+    dialogue_response_as_parwin). No
     fill_in_blank used (§13 n/a). No listen_type/listen_select
     instructions anywhere (§14). Every note/feedback string mixing Dari
     text inline with English wraps the Dari in *asterisks* per §15.
@@ -28,6 +29,25 @@ review:
     across turns is natural conversational variation, not a
     contradiction). Pending fresh-context review; left unreviewed per
     AUTHORING_GUIDE §9.
+    Fresh-context review completed 2026-07-06 (zero access to sibling fa
+    files, per §8): re-verified §11 fact consistency, confirmed every
+    accepted_answers entry has at least one status:correct value, checked
+    every multiple_choice/reading_comprehension/dialogue_comprehension
+    exercise for the prompt-shows-answer bug (none found -- options are
+    always in the opposite script from the prompt), and confirmed
+    answer_language_code-relevant fields (translation, writing_prompt,
+    dialogue_response) are all in the correct language per §6. Found and
+    fixed one real gap via a purpose-written Python script tokenizing on
+    Persian-range Unicode only: §12 multi-clause coverage was missing the
+    period-joined accepted-answer variant on dialogue_response_which_
+    better, translate_opinion_with_reason, write_opinion_with_reason, and
+    dialogue_response_as_parwin -- added it to all four (و-joined stays
+    correctly omitted throughout: چون/ولی already carry the joining
+    function, so a literal و right before either is ungrammatical, not
+    just an untested variant). Also fixed the same "او-joined" typo in
+    these notes. Confirmed content_key parity both directions against the
+    realization file and re-ran the actual compiler (not just validate)
+    to a valid compiled JSON with 0 errors/0 warnings after the fix.
 
 course:
   title: Dari A2
@@ -171,19 +191,22 @@ exercises:
     accepted_answers:
       - {value: "به نظر من تحصیل در خارج بهتر است، چون پوهنتون‌های بهتر و فرصت کار بیشتر دارد.", status: correct}
       - {value: "به نظر من تحصیل در خارج بهتر است چون پوهنتون‌های بهتر و فرصت کار بیشتر دارد", status: correct}
-    feedback: "Joining the opinion and the reason with a comma, or with no punctuation at all, are equally natural -- *چون* already does the joining work, so it never takes an *و* in front of it."
+      - {value: "به نظر من تحصیل در خارج بهتر است. چون پوهنتون‌های بهتر و فرصت کار بیشتر دارد.", status: correct}
+    feedback: "Joining the opinion and the reason with a period, a comma, or with no punctuation at all, are all equally natural -- *چون* already does the joining work, so it never takes an *و* in front of it."
   prs.a2.unit10.lesson02.exercise04.translate_opinion_with_reason:
     instruction: "Translate into Dari: In my opinion, studying abroad is better, because it has better universities and more job opportunities."
     accepted_answers:
       - {value: "به نظر من تحصیل در خارج بهتر است، چون پوهنتون‌های بهتر و فرصت کار بیشتر دارد.", status: correct}
       - {value: "به نظر من تحصیل در خارج بهتر است چون پوهنتون‌های بهتر و فرصت کار بیشتر دارد", status: correct}
-    feedback: "*به نظر من تحصیل در خارج بهتر است، چون پوهنتون‌های بهتر و فرصت کار بیشتر دارد.* is the full opinion-plus-reason sentence."
+      - {value: "به نظر من تحصیل در خارج بهتر است. چون پوهنتون‌های بهتر و فرصت کار بیشتر دارد.", status: correct}
+    feedback: "*به نظر من تحصیل در خارج بهتر است، چون پوهنتون‌های بهتر و فرصت کار بیشتر دارد.* is the full opinion-plus-reason sentence (a period instead of a comma before *چون* is equally natural)."
   prs.a2.unit10.lesson02.exercise05.write_opinion_with_reason:
     instruction: "Write that in your opinion studying abroad is better, because it has better universities and more job opportunities."
     accepted_answers:
       - {value: "به نظر من تحصیل در خارج بهتر است، چون پوهنتون‌های بهتر و فرصت کار بیشتر دارد.", status: correct}
       - {value: "به نظر من تحصیل در خارج بهتر است چون پوهنتون‌های بهتر و فرصت کار بیشتر دارد", status: correct}
-    feedback: "*به نظر من تحصیل در خارج بهتر است، چون پوهنتون‌های بهتر و فرصت کار بیشتر دارد.* is the accepted opinion-plus-reason sentence."
+      - {value: "به نظر من تحصیل در خارج بهتر است. چون پوهنتون‌های بهتر و فرصت کار بیشتر دارد.", status: correct}
+    feedback: "*به نظر من تحصیل در خارج بهتر است، چون پوهنتون‌های بهتر و فرصت کار بیشتر دارد.* is the accepted opinion-plus-reason sentence (a period instead of a comma before *چون* is equally natural)."
 
   prs.a2.unit10.lesson03.exercise01.read_her_opinion:
     instruction: "What is the message writer's opinion about studying abroad?"
@@ -241,7 +264,8 @@ exercises:
     accepted_answers:
       - {value: "درست است، ولی به نظر من فرصت کار در خارج بیشتر است.", status: correct}
       - {value: "درست است ولی به نظر من فرصت کار در خارج بیشتر است", status: correct}
-    feedback: "*درست است، ولی...* politely concedes before restating your own point -- the comma is a light pause, not a hard requirement."
+      - {value: "درست است. ولی به نظر من فرصت کار در خارج بیشتر است.", status: correct}
+    feedback: "*درست است، ولی...* politely concedes before restating your own point -- a period, a comma, or no punctuation at all before *ولی* are all equally natural pauses, not a hard requirement."
   prs.a2.unit10.lesson04.exercise06.write_debate_summary:
     instruction: "Write down what پروین said, then what احمد said, in their own words."
     accepted_answers:

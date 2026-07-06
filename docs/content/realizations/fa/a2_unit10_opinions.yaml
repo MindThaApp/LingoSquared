@@ -8,8 +8,8 @@ generation_provenance:
   human_reviewed: false
 status: complete_draft
 review:
-  status: unreviewed
-  required_next_reviewer: fresh_context_reviewer
+  status: reviewed
+  required_next_reviewer: null
   notes: >-
     Second A2 unit for the fa realization (spine outcome: universal.a2.
     opinions.give_opinions_with_reasons). Own scenario, authored
@@ -40,6 +40,35 @@ review:
     register (هستم-family copula, colloquial contractions like بهتره/
     نمی‌کنم), deliberately never Dari forms. Pending fresh-context
     review; left unreviewed per AUTHORING_GUIDE §9.
+    FRESH-CONTEXT REVIEW 2026-07-06: verified spine discipline (single
+    outcome, no drift), exercise pacing, Iranian-dialect authenticity
+    (بهتره/می‌شه/می‌گیره/درسته/باشه contractions and همکارامو-style
+    colloquial object marking all checked against genuine spoken usage),
+    A2-appropriate complexity, script purity (grepped for Arabic kaf/yeh,
+    zero found), jargon leaks (none), §11/§12/§13/§16 compliance, and
+    content_key parity (20 teaching + 21 exercises, exact match both
+    directions) -- all clean. Ran a Python script tokenizing on
+    Persian-range Unicode characters to check every tested_text and
+    overlay accepted_answers/pairs/word_bank value against cumulative
+    introduced_tokens: zero untaught-vocabulary violations in tested/
+    produced content (a handful of common function words in
+    reading_comprehension question prompts, e.g. این/چه/یا/برای, are
+    plausible earlier-A1 vocabulary from this course's prior 9 fa A1
+    units, not unit10-specific gaps). Found and fixed a real bug only
+    visible via actual compile, not validate: 7 of 21 exercises
+    (write_remote_work, write_opinion_with_reason, write_own_reply,
+    write_debate_summary, comprehend_arash_opinion, comprehend_arash_reason,
+    recognize_who_prefers_what) had the English instruction text
+    redundantly duplicated in the realization's own prompt.target_blocks
+    on top of the overlay's identical `instruction` field, causing the
+    compiler to render it twice per exercise (the two dialogue_comprehension
+    exercises even sandwiched the Farsi context between two copies of the
+    same English question) -- fixed by emptying target_blocks for those
+    exercises so the overlay's instruction is the single source, matching
+    the pattern already used correctly by every other exercise in this
+    file; re-compiled and confirmed zero duplicate text_blocks remain.
+    Compiler validate and compile both clean (0 errors/0 warnings) after
+    the fix.
 
 course:
   realization_key: fa.a2
@@ -138,7 +167,7 @@ units:
           - content_key: fa.a2.unit10.lesson01.exercise05.write_remote_work
             type: writing_prompt
             tested_text: دورکاری
-            prompt: {target_blocks: [{text: "Write the Farsi word for remote work.", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: []}
 
       - content_key: fa.a2.unit10.lesson02.giving_an_opinion
         title: ابراز نظر
@@ -177,7 +206,7 @@ units:
           - content_key: fa.a2.unit10.lesson02.exercise05.write_opinion_with_reason
             type: writing_prompt
             tested_text: "به نظر من دورکاری بهتره چون تو ترافیک تهران وقت زیادی تلف می‌شه"
-            prompt: {target_blocks: [{text: "Write that in your opinion remote work is better, because a lot of time is wasted in Tehran traffic.", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: []}
 
       - content_key: fa.a2.unit10.lesson03.reading_an_opinion_message
         title: خواندن پیام حاوی نظر
@@ -216,7 +245,7 @@ units:
           - content_key: fa.a2.unit10.lesson03.exercise05.write_own_reply
             type: writing_prompt
             tested_text: "به نظر من دورکاری بهتره"
-            prompt: {target_blocks: [{text: "Write your own opinion: in your opinion, remote work is better.", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: []}
 
       - content_key: fa.a2.unit10.lesson04.office_debate_dialogue
         title: بحث درباره‌ی دورکاری
@@ -257,18 +286,16 @@ units:
             prompt:
               target_blocks:
                 - {text: "به نظر من دورکاری بهتره. — من موافق نیستم.", language_code: fa, direction: rtl}
-                - {text: "Does آرش agree with نگار's opinion about remote work?", language_code: en, direction: ltr}
           - content_key: fa.a2.unit10.lesson04.exercise02.comprehend_arash_reason
             type: dialogue_comprehension
             tested_text: "چون تو خونه تمرکز ندارم و دوست دارم همکارامو ببینم"
             prompt:
               target_blocks:
                 - {text: "چون تو خونه تمرکز ندارم و دوست دارم همکارامو ببینم.", language_code: fa, direction: rtl}
-                - {text: "What reasons does آرش give for preferring the office?", language_code: en, direction: ltr}
           - content_key: fa.a2.unit10.lesson04.exercise03.recognize_who_prefers_what
             type: multiple_choice
             tested_text: "نگار دورکاری آرش دفتر"
-            prompt: {target_blocks: [{text: "Who prefers remote work, and who prefers the office?", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: []}
           - content_key: fa.a2.unit10.lesson04.exercise04.order_i_dont_agree
             type: word_order
             tested_text: "من موافق نیستم"
@@ -281,4 +308,4 @@ units:
           - content_key: fa.a2.unit10.lesson04.exercise06.write_debate_summary
             type: writing_prompt
             tested_text: "به نظر من دورکاری بهتره من موافق نیستم"
-            prompt: {target_blocks: [{text: "Write down what نگار said, then what آرش said, in their own words.", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: []}

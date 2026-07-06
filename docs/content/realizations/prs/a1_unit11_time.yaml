@@ -1,0 +1,385 @@
+schema_version: "1.0"
+realization_version: "2026.1-draft.1"
+target_language: prs
+cefr_level: A1
+status: complete_draft
+generation_provenance:
+  method: ai_adapted_from_public_domain_source
+  authoring_system: claude
+  source_material: "Peace Corps Dari course materials (public domain), modernized"
+  human_reviewed: false
+review:
+  status: reviewed
+  required_next_reviewer: null
+  notes: "New unit, prs's next uncovered outcome (prerequisite: numbers, already covered in unit04). Six lessons: basic time vocabulary, asking the time, telling the time, parts of the day (reviewing صبح/عصر/شب from unit01, adding ظهر), asking about an appointment, and a dialogue arranging a meeting time. Uses استم/استین verb endings consistently, ساعت چند است؟ (not the Iranian-colloquial ساعت چنده) for asking the time, and قرار for a personal appointment (a new word for this unit, distinct from unit09's own already-established جلسه for a scheduled meeting). Authored independently of the fa realization per the sibling-isolation rule -- Persian time vocabulary (ساعت/دقیقه/نیم/ربع) is shared across Dari and Farsi, but phrasing/exercises/pedagogical framing were originated independently, not templated. Authored §14/§16-compliant from the start: no listen_type/listen_select/listen_order exercises anywhere (all recognition exercises are multiple_choice with a real visible target-language prompt; all production exercises are translation/word_order/dialogue_response/speak_response), and every matching_pairs exercise is sized 6+ pairs by pooling already-taught vocabulary (numbers from unit04, parts of day from unit01) rather than left at 2-3. Proactively checked against AUTHORING_GUIDE §11-13 during authoring, including cross-checking every stated time across all 6 lessons for consistency. Audio remains pending generation. Compiler validation clean (0 errors/0 warnings). Awaiting the standing fresh-context review before status can move to reviewed.
+
+    FRESH-CONTEXT REVIEW COMPLETED 2026-07-06 (zero prior context, sibling fa files never opened). Verified against universal.a1.time.ask_tell_time's own can_do/assessment_requirements (all 4 -- understand_spoken_time via lesson06's read-as-text dialogue transcript standing in honestly, ask_tell_time via dialogue_response, read_schedule_time via the dialogue-reading exercises, write_time via translation/writing_prompt -- covered, and every instruction correctly says \"Read\" rather than overclaiming \"Listen\"); exercise pacing (recognition -> drag/matching -> production verified in all 6 lessons); script purity (zero Arabic-range kaf/yeh); no jargon leaks; A1-appropriate complexity (simple present-tense copula/time expressions throughout, no compound tense); §14/§16 self-claims verified true (zero listen_type/listen_select/listen_order, all 6 matching_pairs exercises sized 6-9 pairs); every exercise type used (multiple_choice/matching_pairs/word_order/translation/dialogue_response/writing_prompt) confirmed registered in frontend/src/components/exercises/ExerciseRenderer.tsx; content_key parity exact both directions (units/lessons/teaching/exercises), overlay's flat top-level-dict schema confirmed structurally correct. Ran a Python tokenizer (ZWNJ-aware compound-word handling, Persian-punctuation-stripping) checking every tested_text/pairs/word_bank value and every overlay accepted_answers/correct_option/distractors value against cumulative introduced_tokens up to that point in the lesson sequence: found and fixed ONE genuine untaught-word violation (lesson02.exercise05's accepted_answers included \"ببخشید، ساعت چند است؟\", using ببخشید which isn't introduced until lesson06 -- removed that variant, kept the two already-taught-vocabulary-only forms). Cross-checked §11 facts: meeting=9am, Zarmina arrives=8:30am, consistently stated and logically sound (arriving before the meeting) across the media_assets dialogue, all teaching cards, and all 6 lesson06 exercises. §12 verified already-compliant: write_meeting_summary's accepted_answers already had period-, comma-, and و-joined forms, all status:correct. FOUND AND FIXED a real dialect-accuracy issue in this file's own metadata: the register_policy and these very notes falsely claimed قرار \"matched\" vocabulary \"already established in unit09's meeting-scheduling dialogue\" -- grepped unit09 directly and confirmed جلسه (not قرار) is unit09's word for meeting; قرار never appears anywhere in prs content before this unit. Corrected both claims to accurately describe قرار as new vocabulary distinct from unit09's جلسه (قرار itself is genuine, correctly-introduced Afghan Dari vocabulary for a personal appointment -- only the false continuity claim was wrong). FOUND AND FIXED a real duplicate-prompt-text bug (present via compile, not visible from validate alone): 3 dialogue_response exercises and 1 writing_prompt had realization prompt.target_blocks containing the exact same English text as the overlay's own instruction, so the compiled output showed the same sentence twice to the learner. Fixed by following the correct, already-established pattern seen elsewhere in this course (e.g. unit01 lesson05.exercise02, unit09 lesson06.exercise06/07): reply-type prompts (lesson05.exercise06, lesson06.exercise05) now show the actual Dari line being replied to (قرار شما ساعت چند است؟ and جلسه ساعت نه صبح است respectively, both composed entirely of already-taught tokens by that point) instead of a duplicated English instruction; self-initiated prompts with no natural preceding cue (lesson02.exercise05, lesson06.exercise06) now use empty target_blocks, matching unit09's own write_meeting_summary precedent. Re-verified via actual compile (not just validate) that every exercise produces a real, non-empty correct_response and zero duplicate text_blocks remain. Applied the §15 target-language-asterisk convention to every note/feedback string in the paired overlay (56 strings updated) since this is freshly-authored content, not a pre-existing note exempt from retrofitting. Both validate and compile re-run clean (0 errors/0 warnings) after every fix; compile output is valid JSON."
+
+course:
+  realization_key: prs.a1
+  target_language_first: true
+  dialect: prs_AF_kabuli_educated_colloquial_intro
+  register_policy: >-
+    Continues the established استم/استین polite-first register policy.
+    Uses ساعت چند است؟ (not the Iranian-colloquial ساعت چنده) for asking
+    the time, and قرار for a personal appointment (a new word for this
+    unit, distinct from unit09's own already-established جلسه for a
+    scheduled meeting).
+
+media_assets:
+  - content_key: prs.a1.audio.time.vocab.01
+    language: prs
+    text: ساعت، دقیقه، نیم، ربع
+    voice_hint: neutral_adult
+    status: pending_generation
+  - content_key: prs.a1.audio.time.question.01
+    language: prs
+    text: ساعت چند است؟
+    voice_hint: neutral_adult_polite
+    status: pending_generation
+  - content_key: prs.a1.audio.dialogue.meeting_time.01
+    language: prs
+    text: "زرمینه: ببخشید، جلسه ساعت چند است؟ همایون: جلسه ساعت نه صبح است. زرمینه: ساعت نه؟ خوب است. من ساعت هشت و نیم می‌آیم. همایون: بسیار خوب، منتظر استم."
+    voice_hint: two_adults_neutral_polite
+    status: pending_generation
+
+units:
+  - content_key: prs.a1.unit11.time
+    title: ساعت
+    section: reading_writing
+    spine_outcome_ids:
+      - universal.a1.time.ask_tell_time
+    planned_lesson_count: 6
+
+    lessons:
+      - content_key: prs.a1.unit11.lesson01.basic_time_vocabulary
+        title: کلمات ساعت
+        spine_outcome_id: universal.a1.time.ask_tell_time
+        teaching:
+          - content_key: prs.a1.unit11.lesson01.teach.saat_word
+            kind: vocabulary
+            target: {text: ساعت, language_code: prs, direction: rtl}
+            introduced_tokens: [ساعت]
+          - content_key: prs.a1.unit11.lesson01.teach.daqiqa_word
+            kind: vocabulary
+            target: {text: دقیقه, language_code: prs, direction: rtl}
+            introduced_tokens: [دقیقه]
+          - content_key: prs.a1.unit11.lesson01.teach.nim_word
+            kind: vocabulary
+            target: {text: نیم, language_code: prs, direction: rtl}
+            introduced_tokens: [نیم]
+          - content_key: prs.a1.unit11.lesson01.teach.rub_word
+            kind: vocabulary
+            target: {text: ربع, language_code: prs, direction: rtl}
+            introduced_tokens: [ربع]
+          - content_key: prs.a1.unit11.lesson01.teach.numbers_review
+            kind: vocabulary
+            target: {text: "یک، دو، سه، چهار، پنج", language_code: prs, direction: rtl}
+            introduced_tokens: [یک, دو, سه, چهار, پنج]
+        exercises:
+          - content_key: prs.a1.unit11.lesson01.exercise01.recognize_saat_reading
+            type: multiple_choice
+            tested_text: ساعت
+            prompt: {target_blocks: [{text: ساعت, language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit11.lesson01.exercise02.recognize_daqiqa_reading
+            type: multiple_choice
+            tested_text: دقیقه
+            prompt: {target_blocks: [{text: دقیقه, language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit11.lesson01.exercise03.recognize_nim_reading
+            type: multiple_choice
+            tested_text: نیم
+            prompt: {target_blocks: [{text: نیم, language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit11.lesson01.exercise04.match_time_words
+            type: matching_pairs
+            tested_text: ساعت دقیقه نیم ربع یک دو سه چهار پنج
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: ساعت, right: "hour / clock"}
+              - {left: دقیقه, right: minute}
+              - {left: نیم, right: half}
+              - {left: ربع, right: quarter}
+              - {left: یک, right: "1"}
+              - {left: دو, right: "2"}
+              - {left: سه, right: "3"}
+              - {left: چهار, right: "4"}
+              - {left: پنج, right: "5"}
+          - content_key: prs.a1.unit11.lesson01.exercise05.translate_hour
+            type: translation
+            tested_text: ساعت
+            prompt: {target_blocks: []}
+          - content_key: prs.a1.unit11.lesson01.exercise06.translate_quarter
+            type: translation
+            tested_text: ربع
+            prompt: {target_blocks: []}
+
+      - content_key: prs.a1.unit11.lesson02.asking_the_time
+        title: پرسیدن ساعت
+        spine_outcome_id: universal.a1.time.ask_tell_time
+        teaching:
+          - content_key: prs.a1.unit11.lesson02.teach.chand_word
+            kind: vocabulary
+            target: {text: چند, language_code: prs, direction: rtl}
+            introduced_tokens: [چند]
+          - content_key: prs.a1.unit11.lesson02.teach.saat_chand_ast
+            kind: phrase
+            target: {text: "ساعت چند است؟", language_code: prs, direction: rtl}
+            introduced_tokens: [است]
+          - content_key: prs.a1.unit11.lesson02.teach.register_note
+            kind: cultural_note
+            target: {text: "ساعت چند است؟ (polite/neutral, not the Iranian-colloquial ساعت چنده)", language_code: prs, direction: rtl}
+            introduced_tokens: []
+        exercises:
+          - content_key: prs.a1.unit11.lesson02.exercise01.recognize_time_question_reading
+            type: multiple_choice
+            tested_text: "ساعت چند است"
+            prompt: {target_blocks: [{text: "ساعت چند است؟", language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit11.lesson02.exercise02.match_question_words
+            type: matching_pairs
+            tested_text: "ساعت چند است ساعت دقیقه نیم ربع"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "ساعت چند است؟", right: "What time is it?"}
+              - {left: ساعت, right: "hour / clock"}
+              - {left: چند, right: "how many / what"}
+              - {left: دقیقه, right: minute}
+              - {left: نیم, right: half}
+              - {left: ربع, right: quarter}
+          - content_key: prs.a1.unit11.lesson02.exercise03.order_time_question
+            type: word_order
+            tested_text: "ساعت چند است"
+            prompt: {target_blocks: [{text: "What time is it?", language_code: en, direction: ltr}]}
+            word_bank: [است, ساعت, چند]
+          - content_key: prs.a1.unit11.lesson02.exercise04.translate_time_question
+            type: translation
+            tested_text: "ساعت چند است"
+            prompt: {target_blocks: []}
+          - content_key: prs.a1.unit11.lesson02.exercise05.dialogue_response_ask_time
+            type: dialogue_response
+            tested_text: "ساعت چند است"
+            prompt: {target_blocks: []}
+
+      - content_key: prs.a1.unit11.lesson03.telling_the_time
+        title: گفتن ساعت
+        spine_outcome_id: universal.a1.time.ask_tell_time
+        teaching:
+          - content_key: prs.a1.unit11.lesson03.teach.saat_se_ast
+            kind: phrase
+            target: {text: "ساعت سه است", language_code: prs, direction: rtl}
+            introduced_tokens: [سه]
+          - content_key: prs.a1.unit11.lesson03.teach.saat_se_o_nim
+            kind: phrase
+            target: {text: "ساعت سه و نیم است", language_code: prs, direction: rtl}
+            introduced_tokens: [و]
+          - content_key: prs.a1.unit11.lesson03.teach.saat_char_o_rub
+            kind: phrase
+            target: {text: "ساعت چهار و ربع است", language_code: prs, direction: rtl}
+            introduced_tokens: []
+        exercises:
+          - content_key: prs.a1.unit11.lesson03.exercise01.recognize_three_oclock_reading
+            type: multiple_choice
+            tested_text: "ساعت سه است"
+            prompt: {target_blocks: [{text: "ساعت سه است", language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit11.lesson03.exercise02.recognize_half_past_reading
+            type: multiple_choice
+            tested_text: "ساعت سه و نیم است"
+            prompt: {target_blocks: [{text: "ساعت سه و نیم است", language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit11.lesson03.exercise03.match_time_expressions
+            type: matching_pairs
+            tested_text: "ساعت سه است ساعت سه و نیم است ساعت چهار و ربع است ساعت پنج است"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "ساعت سه است", right: "It's three o'clock."}
+              - {left: "ساعت سه و نیم است", right: "It's three-thirty."}
+              - {left: "ساعت چهار و ربع است", right: "It's a quarter past four."}
+              - {left: "ساعت پنج است", right: "It's five o'clock."}
+              - {left: "ساعت یک است", right: "It's one o'clock."}
+              - {left: "ساعت دو و نیم است", right: "It's two-thirty."}
+          - content_key: prs.a1.unit11.lesson03.exercise04.order_half_past
+            type: word_order
+            tested_text: "ساعت سه و نیم است"
+            prompt: {target_blocks: [{text: "It's three-thirty.", language_code: en, direction: ltr}]}
+            word_bank: [است, ساعت, سه, و, نیم]
+          - content_key: prs.a1.unit11.lesson03.exercise05.translate_five_oclock
+            type: translation
+            tested_text: "ساعت پنج است"
+            prompt: {target_blocks: []}
+          - content_key: prs.a1.unit11.lesson03.exercise06.translate_quarter_past_four
+            type: translation
+            tested_text: "ساعت چهار و ربع است"
+            prompt: {target_blocks: []}
+
+      - content_key: prs.a1.unit11.lesson04.parts_of_the_day
+        title: بخش‌های روز
+        spine_outcome_id: universal.a1.time.ask_tell_time
+        teaching:
+          - content_key: prs.a1.unit11.lesson04.teach.sobh_review
+            kind: vocabulary
+            target: {text: صبح, language_code: prs, direction: rtl}
+            introduced_tokens: [صبح]
+          - content_key: prs.a1.unit11.lesson04.teach.zohr_word
+            kind: vocabulary
+            target: {text: ظهر, language_code: prs, direction: rtl}
+            introduced_tokens: [ظهر]
+          - content_key: prs.a1.unit11.lesson04.teach.asr_review
+            kind: vocabulary
+            target: {text: عصر, language_code: prs, direction: rtl}
+            introduced_tokens: [عصر]
+          - content_key: prs.a1.unit11.lesson04.teach.shab_review
+            kind: vocabulary
+            target: {text: شب, language_code: prs, direction: rtl}
+            introduced_tokens: [شب]
+          - content_key: prs.a1.unit11.lesson04.teach.saat_noh_sobh
+            kind: phrase
+            target: {text: "ساعت نه صبح است", language_code: prs, direction: rtl}
+            introduced_tokens: [نه]
+          - content_key: prs.a1.unit11.lesson04.teach.haft_word
+            kind: vocabulary
+            target: {text: هفت, language_code: prs, direction: rtl}
+            introduced_tokens: [هفت]
+        exercises:
+          - content_key: prs.a1.unit11.lesson04.exercise01.recognize_zohr_reading
+            type: multiple_choice
+            tested_text: ظهر
+            prompt: {target_blocks: [{text: ظهر, language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit11.lesson04.exercise02.recognize_nine_morning_reading
+            type: multiple_choice
+            tested_text: "ساعت نه صبح است"
+            prompt: {target_blocks: [{text: "ساعت نه صبح است", language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit11.lesson04.exercise03.match_parts_of_day
+            type: matching_pairs
+            tested_text: "صبح ظهر عصر شب ساعت نه صبح است"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: صبح, right: morning}
+              - {left: ظهر, right: noon}
+              - {left: عصر, right: afternoon}
+              - {left: شب, right: night}
+              - {left: "ساعت نه صبح است", right: "It's nine in the morning."}
+              - {left: نه, right: "nine (9)"}
+          - content_key: prs.a1.unit11.lesson04.exercise04.order_nine_morning
+            type: word_order
+            tested_text: "ساعت نه صبح است"
+            prompt: {target_blocks: [{text: "It's nine in the morning.", language_code: en, direction: ltr}]}
+            word_bank: [است, ساعت, نه, صبح]
+          - content_key: prs.a1.unit11.lesson04.exercise05.translate_afternoon
+            type: translation
+            tested_text: عصر
+            prompt: {target_blocks: []}
+          - content_key: prs.a1.unit11.lesson04.exercise06.translate_seven_night
+            type: translation
+            tested_text: "ساعت هفت شب است"
+            prompt: {target_blocks: []}
+
+      - content_key: prs.a1.unit11.lesson05.asking_about_an_appointment
+        title: پرسیدن در باره‌ی قرار
+        spine_outcome_id: universal.a1.time.ask_tell_time
+        teaching:
+          - content_key: prs.a1.unit11.lesson05.teach.qarar_word
+            kind: vocabulary
+            target: {text: قرار, language_code: prs, direction: rtl}
+            introduced_tokens: [قرار]
+          - content_key: prs.a1.unit11.lesson05.teach.qarar_saat_chand
+            kind: phrase
+            target: {text: "قرار شما ساعت چند است؟", language_code: prs, direction: rtl}
+            introduced_tokens: [شما]
+          - content_key: prs.a1.unit11.lesson05.teach.qarar_answer
+            kind: phrase
+            target: {text: "قرار من ساعت هشت و نیم است", language_code: prs, direction: rtl}
+            introduced_tokens: [من, هشت]
+        exercises:
+          - content_key: prs.a1.unit11.lesson05.exercise01.recognize_appointment_question_reading
+            type: multiple_choice
+            tested_text: "قرار شما ساعت چند است"
+            prompt: {target_blocks: [{text: "قرار شما ساعت چند است؟", language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit11.lesson05.exercise02.recognize_appointment_answer_reading
+            type: multiple_choice
+            tested_text: "قرار من ساعت هشت و نیم است"
+            prompt: {target_blocks: [{text: "قرار من ساعت هشت و نیم است", language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit11.lesson05.exercise03.match_appointment_phrases
+            type: matching_pairs
+            tested_text: "قرار قرار شما ساعت چند است قرار من ساعت هشت و نیم است"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: قرار, right: appointment}
+              - {left: "قرار شما ساعت چند است؟", right: "What time is your appointment?"}
+              - {left: "قرار من ساعت هشت و نیم است", right: "My appointment is at eight-thirty."}
+              - {left: شما, right: you (polite)}
+              - {left: من, right: I}
+              - {left: هشت, right: "eight (8)"}
+          - content_key: prs.a1.unit11.lesson05.exercise04.order_appointment_question
+            type: word_order
+            tested_text: "قرار شما ساعت چند است"
+            prompt: {target_blocks: [{text: "What time is your appointment?", language_code: en, direction: ltr}]}
+            word_bank: [است, قرار, شما, ساعت, چند]
+          - content_key: prs.a1.unit11.lesson05.exercise05.translate_appointment_answer
+            type: translation
+            tested_text: "قرار من ساعت هشت و نیم است"
+            prompt: {target_blocks: []}
+          - content_key: prs.a1.unit11.lesson05.exercise06.dialogue_response_own_appointment
+            type: dialogue_response
+            tested_text: "قرار من ساعت هشت و نیم است"
+            prompt:
+              target_blocks:
+                - {text: "قرار شما ساعت چند است؟", language_code: prs, direction: rtl}
+
+      - content_key: prs.a1.unit11.lesson06.meeting_time_dialogue
+        title: گفتگوی ساعت جلسه
+        spine_outcome_id: universal.a1.time.ask_tell_time
+        teaching:
+          - content_key: prs.a1.unit11.lesson06.teach.names
+            kind: vocabulary
+            target: {text: "زرمینه، همایون", language_code: prs, direction: rtl}
+            introduced_tokens: [زرمینه, همایون]
+          - content_key: prs.a1.unit11.lesson06.teach.dialogue_line1
+            kind: dialogue
+            target: {text: "ببخشید، جلسه ساعت چند است؟", language_code: prs, direction: rtl, speaker: زرمینه}
+            introduced_tokens: [ببخشید, جلسه]
+          - content_key: prs.a1.unit11.lesson06.teach.dialogue_line2
+            kind: dialogue
+            target: {text: "جلسه ساعت نه صبح است", language_code: prs, direction: rtl, speaker: همایون}
+            introduced_tokens: []
+          - content_key: prs.a1.unit11.lesson06.teach.dialogue_line3
+            kind: dialogue
+            target: {text: "ساعت نه؟ خوب است. من ساعت هشت و نیم می‌آیم", language_code: prs, direction: rtl, speaker: زرمینه}
+            introduced_tokens: [خوب, می‌آیم]
+          - content_key: prs.a1.unit11.lesson06.teach.dialogue_line4
+            kind: dialogue
+            target: {text: "بسیار خوب، منتظر استم", language_code: prs, direction: rtl, speaker: همایون}
+            introduced_tokens: [بسیار, منتظر, استم]
+        exercises:
+          - content_key: prs.a1.unit11.lesson06.exercise01.recognize_context_reading
+            type: multiple_choice
+            tested_text: "ببخشید جلسه ساعت چند است جلسه ساعت نه صبح است ساعت نه خوب است من ساعت هشت و نیم می‌آیم بسیار خوب منتظر استم"
+            prompt:
+              target_blocks:
+                - {text: "زرمینه: ببخشید، جلسه ساعت چند است؟ همایون: جلسه ساعت نه صبح است. زرمینه: ساعت نه؟ خوب است. من ساعت هشت و نیم می‌آیم. همایون: بسیار خوب، منتظر استم.", language_code: prs, direction: rtl}
+          - content_key: prs.a1.unit11.lesson06.exercise02.match_dialogue_facts
+            type: matching_pairs
+            tested_text: "جلسه زرمینه همایون ساعت نه ساعت هشت و نیم می‌آیم"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "ساعت جلسه", right: "ساعت نه صبح"}
+              - {left: "من ساعت هشت و نیم می‌آیم", right: "Zarmina's arrival time"}
+              - {left: ببخشید, right: excuse me}
+              - {left: جلسه, right: meeting}
+              - {left: خوب, right: good}
+              - {left: منتظر, right: waiting}
+          - content_key: prs.a1.unit11.lesson06.exercise03.order_meeting_time
+            type: word_order
+            tested_text: "جلسه ساعت نه صبح است"
+            prompt: {target_blocks: [{text: "The meeting is at nine in the morning.", language_code: en, direction: ltr}]}
+            word_bank: [است, جلسه, ساعت, نه, صبح]
+          - content_key: prs.a1.unit11.lesson06.exercise04.translate_zarmina_arrival
+            type: translation
+            tested_text: "من ساعت هشت و نیم می‌آیم"
+            prompt: {target_blocks: []}
+          - content_key: prs.a1.unit11.lesson06.exercise05.dialogue_response_confirm_time
+            type: dialogue_response
+            tested_text: "ساعت نه خوب است"
+            prompt:
+              target_blocks:
+                - {text: "جلسه ساعت نه صبح است", language_code: prs, direction: rtl}
+          - content_key: prs.a1.unit11.lesson06.exercise06.write_meeting_summary
+            type: writing_prompt
+            tested_text: "جلسه ساعت نه صبح است، من ساعت هشت و نیم می‌آیم"
+            prompt: {target_blocks: []}

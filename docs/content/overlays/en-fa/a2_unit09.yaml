@@ -9,8 +9,8 @@ generation_provenance:
   authoring_system: claude
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: fresh_context_reviewer
+  status: reviewed
+  required_next_reviewer: null
   notes: >-
     Paired with fa/a2_unit09_bureaucracy.yaml's own review notes (see
     that file for the full scenario rationale). Every multi-clause
@@ -27,6 +27,25 @@ review:
     *۲۲۱۴*) against the realization file and against every exercise
     referencing them here -- consistent throughout, per §11. Pending
     fresh-context review; left unreviewed per AUTHORING_GUIDE §9.
+    Fresh-context review completed 2026-07-06 (no sibling-direction
+    files consulted): re-verified §11 fact consistency, §12
+    multi-clause coverage, content_key parity with the realization in
+    both directions, script purity, and a no-jargon-leak sweep; ran a
+    Persian-token cumulative-coverage script confirming every
+    accepted_answers/pairs/word_bank value here is built only from
+    vocabulary already introduced by that point in the lesson
+    sequence. Found and fixed two real bugs: an internal
+    "reading_writing" section-key had leaked verbatim into the
+    lesson03 notice-text teaching card's learner-facing note (now
+    reads "formal written register"), and dialogue_response_why_
+    change's multi-clause accepted_answers list actually had a bare
+    unpunctuated variant instead of a genuine period-joined form
+    (replaced with "چون خونه‌مو عوض کردم. باید آدرسمو عوض کنم." so
+    period/comma/و-joined forms are all present as status:correct,
+    matching dialogue_response_as_sara's already-complete set).
+    Recompiled clean against the paired realization: 0 errors,
+    0 warnings, valid JSON, every exercise resolves a real
+    status:correct accepted answer.
 
 course:
   title: Farsi A2
@@ -96,7 +115,7 @@ teaching:
   fa.a2.unit09.lesson03.teach.notice_text:
     title: "An office notice about updating your address"
     gloss: "To change your address, please bring your old national ID card and a water or electricity bill. The registration deadline is by the end of this month."
-    note: "A short official notice, in the reading_writing register this unit is teaching."
+    note: "A short official notice, in the formal written register this unit is teaching."
   fa.a2.unit09.lesson03.teach.i_will_bring_bill:
     title: "Say what you'll bring"
     gloss: "I'll bring the water bill."
@@ -179,9 +198,9 @@ exercises:
     instruction: "The clerk asks: 'Why do you need to change your address?' Answer with your reason."
     accepted_answers:
       - {value: "چون خونه‌مو عوض کردم، باید آدرسمو عوض کنم.", status: correct}
-      - {value: "چون خونه‌مو عوض کردم باید آدرسمو عوض کنم", status: correct}
+      - {value: "چون خونه‌مو عوض کردم. باید آدرسمو عوض کنم.", status: correct}
       - {value: "چون خونه‌مو عوض کردم و باید آدرسمو عوض کنم", status: correct}
-    feedback: "Joining the reason and result with a comma, no punctuation, or *و* are equally natural."
+    feedback: "Joining the reason and result with a comma, a period, or *و* are equally natural."
   fa.a2.unit09.lesson02.exercise05.write_appointment_request:
     instruction: "Write that you'd like to make an appointment to change your address."
     accepted_answers:

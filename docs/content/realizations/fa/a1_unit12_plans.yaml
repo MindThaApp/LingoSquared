@@ -1,0 +1,370 @@
+schema_version: "1.0"
+realization_version: "2026.1-draft.1"
+target_language: fa
+cefr_level: A1
+status: complete_draft
+generation_provenance:
+  method: ai_adapted_from_public_domain_source
+  authoring_system: claude
+  source_material: "Peace Corps Farsi course materials (public domain), modernized"
+  human_reviewed: false
+review:
+  status: reviewed
+  required_next_reviewer: null
+  notes: "New unit, fa's next uncovered outcome (prerequisites: time and dates, already covered in unit09/unit10). Six lessons: basic plan vocabulary, proposing a plan, accepting a plan, declining a plan, reading a short invitation message, and a dialogue negotiating a plan. Uses هستم copula and the established -e contraction pattern (چطوره، باشه، عالیه) consistent with units 07-11. Authored independently of the prs realization per the sibling-isolation rule. Authored §14/§16-compliant from the start: no listen_type/listen_select/listen_order exercises anywhere (all recognition exercises are multiple_choice with a real visible target-language prompt; all production exercises are translation/word_order/dialogue_response/writing_prompt), and every matching_pairs exercise is sized 6+ pairs by re-teaching day/time vocabulary within this file (introduced_tokens are file-scoped, not shared across units, even though دوشنبه/پنجشنبه/ساعت هشت were already taught in unit09/unit10). Proactively checked against AUTHORING_GUIDE §11-13 during authoring, including cross-checking the unit's stated day/time/activity facts for consistency across all 6 lessons. Compiler validation clean (0 errors/0 warnings). Awaiting the standing fresh-context review before status can move to reviewed.
+
+    FRESH-CONTEXT REVIEW 2026-07-06 (§9, zero prior access to this content, prs sibling files never opened): verified spine-outcome discipline against universal.a1.plans.make_simple_plans's own assessment_requirements -- all 4 (understand_plan, negotiate_plan, read_invitation, write_plan_message) directly and clearly served (lesson06.exercise01 for understand_plan via reading-visible dialogue comprehension since fa audio remains pending_generation; lessons 02/03/04/06's dialogue_response exercises for negotiate_plan; lesson05.exercise02 for read_invitation; lesson05.exercise05 and lesson06.exercise06 for write_plan_message). Exercise pacing (recognition -> matching/drag -> production) verified correct in all 6 lessons. Confirmed zero listen_type/listen_select/listen_order exercises, as claimed. Ran a Python script mirroring the compiler's own TOKEN_RE tokenizer (handling ZWNJ-joined compounds and stripping punctuation) to cross-check every exercise's tested_text/pairs/word_bank AND the overlay's target-language accepted_answers against cumulative file-scoped introduced_tokens -- confirmed the claimed day/time vocabulary re-teaching is genuinely complete, zero untaught-vocabulary gaps in the originally authored content. Checked for verb-person/conjugation mismatches (the می‌آید/می‌آیم bug class caught elsewhere this session) -- none found; می‌خوای (2nd person, addressed to the listener), نمی‌تونم/می‌بینمت (1st person, spoken by the person declining/confirming) are each used consistently with their taught person throughout. Verified dialect authenticity: چطوره، باشه، عالیه، قبوله، نمی‌تونم، می‌خوای are all genuine Tehrani colloquial forms (-e copula contractions and colloquial verb forms), consistent with the register already established in unit09/unit10. Grepped for Arabic-range kaf (U+0643) and yeh (U+064A): none found, script is pure Persian range. No internal jargon leaks in any learner-facing string (broad snake_case scan of both files found only content_keys and schema field names). No unquoted YAML booleans. Checked every multiple_choice exercise for the prompt-shows-answer bug: all recognize_*/reading_comprehension_invitation/dialogue_comprehension_context exercises pair a Farsi prompt with English-gloss correct_option/distractors -- no same-script visual-matching shortcut exists anywhere. Cross-checked §11 facts (Thursday, eight at night, movies, Arash proposes, Sara accepts) across every exercise/teaching card/media_asset referencing them, including lesson05's separate written-invitation-reply exercise -- fully consistent throughout. content_key parity confirmed exact both directions (teaching, exercises, lessons) via script, both before and after the fixes below. All 8 exercise `type:` values used (multiple_choice, matching_pairs, word_order, translation, dialogue_response, writing_prompt, reading_comprehension, dialogue_comprehension) confirmed registered in frontend/src/components/exercises/ExerciseRenderer.tsx. Compiled the actual JSON (not just validate) and confirmed all 32 exercises have at least one status:correct accepted answer/correct_response. matching_pairs sizing verified: lesson01 (this unit's very first lesson) has only 4 pairs -- a genuine small closed set since no earlier same-unit vocabulary exists yet to pool from (matching the precedent already accepted in unit09's match_time_words); lessons 02-06 are all correctly sized at 6 pairs each, so the file's own claim of 'every matching_pairs exercise 6+ pairs' is not quite accurate for lesson01 specifically, now documented here.
+
+    Found and fixed two real gaps: (1) §12 multi-clause coverage was incomplete for two exercises the task specifically flagged -- lesson04.exercise06 (dialogue_response_decline, 'I'm sorry, I can't, I have things to do') had period-joined, comma-joined, and no-punctuation variants but no و-joined variant; lesson06.exercise06 (write_plan_summary) had only comma-joined and no-punctuation variants despite its own instruction explicitly inviting 'one or two sentences' (a §5 instruction/answer-data gap too) -- added a period-joined and a و-joined variant. (2) Adding the و-joined variants introduced a genuine new untaught-vocabulary bug: و ('and') was never taught anywhere in this file (tokens are file-scoped, so unit09/unit10's own و teaching cards don't carry over) -- caught by re-running the tokenizer script against my own edits, fixed by adding a new lesson04 teaching card (fa.a1.unit12.lesson04.teach.va_word, a grammar_note introducing و) before its first use, with a matching overlay teaching entry, restoring exact content_key parity. Re-ran validate + compile after every fix: 0 errors/0 warnings, valid JSON confirmed, and spot-checked the compiled output directly for both edited exercises to confirm the new accepted_answers landed correctly, not just that the schema validated."
+
+course:
+  realization_key: fa.a1
+  target_language_first: true
+  dialect: fa_IR_standard_colloquial_intro
+  register_policy: >-
+    Continues the established colloquial -e/-am contraction pattern
+    (چطوره، باشه، عالیه) and هستم copula, consistent with units 07-11.
+
+media_assets:
+  - content_key: fa.a1.audio.plans.propose.01
+    language: fa
+    text: "می‌خوای پنجشنبه بریم سینما؟"
+    voice_hint: neutral_adult
+    status: pending_generation
+  - content_key: fa.a1.audio.dialogue.making_a_plan.01
+    language: fa
+    text: "آرش: سارا، می‌خوای پنجشنبه بریم سینما؟ سارا: چه ساعتی؟ آرش: ساعت هشت شب. سارا: باشه، عالیه! قبوله. آرش: خوبه، پنجشنبه می‌بینمت."
+    voice_hint: two_adults_neutral_polite
+    status: pending_generation
+
+units:
+  - content_key: fa.a1.unit12.plans
+    title: برنامه‌ریزی
+    section: reading_writing
+    spine_outcome_ids:
+      - universal.a1.plans.make_simple_plans
+    planned_lesson_count: 6
+
+    lessons:
+      - content_key: fa.a1.unit12.lesson01.plan_vocabulary
+        title: کلمات برنامه‌ریزی
+        spine_outcome_id: universal.a1.plans.make_simple_plans
+        teaching:
+          - content_key: fa.a1.unit12.lesson01.teach.barname_word
+            kind: vocabulary
+            target: {text: برنامه, language_code: fa, direction: rtl}
+            introduced_tokens: [برنامه]
+          - content_key: fa.a1.unit12.lesson01.teach.sinama_word
+            kind: vocabulary
+            target: {text: سینما, language_code: fa, direction: rtl}
+            introduced_tokens: [سینما]
+          - content_key: fa.a1.unit12.lesson01.teach.berim_word
+            kind: vocabulary
+            target: {text: بریم, language_code: fa, direction: rtl}
+            introduced_tokens: [بریم]
+          - content_key: fa.a1.unit12.lesson01.teach.chetorast_word
+            kind: vocabulary
+            target: {text: چطوره؟, language_code: fa, direction: rtl}
+            introduced_tokens: ["چطوره؟"]
+        exercises:
+          - content_key: fa.a1.unit12.lesson01.exercise01.recognize_barname_reading
+            type: multiple_choice
+            tested_text: برنامه
+            prompt: {target_blocks: [{text: برنامه, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit12.lesson01.exercise02.recognize_sinama_reading
+            type: multiple_choice
+            tested_text: سینما
+            prompt: {target_blocks: [{text: سینما, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit12.lesson01.exercise03.match_plan_words
+            type: matching_pairs
+            tested_text: "برنامه سینما بریم چطوره"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: برنامه, right: plan}
+              - {left: سینما, right: "cinema / movies"}
+              - {left: بریم, right: "let's go"}
+              - {left: "چطوره؟", right: "How about it? / How's that?"}
+          - content_key: fa.a1.unit12.lesson01.exercise04.translate_plan
+            type: translation
+            tested_text: برنامه
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit12.lesson01.exercise05.translate_lets_go
+            type: translation
+            tested_text: بریم
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit12.lesson02.proposing_a_plan
+        title: پیشنهاد یک برنامه
+        spine_outcome_id: universal.a1.plans.make_simple_plans
+        teaching:
+          - content_key: fa.a1.unit12.lesson02.teach.mikhay_word
+            kind: vocabulary
+            target: {text: می‌خوای, language_code: fa, direction: rtl}
+            introduced_tokens: [می‌خوای]
+          - content_key: fa.a1.unit12.lesson02.teach.panjshanbe_review
+            kind: vocabulary
+            target: {text: پنجشنبه, language_code: fa, direction: rtl}
+            introduced_tokens: [پنجشنبه]
+          - content_key: fa.a1.unit12.lesson02.teach.propose_phrase
+            kind: phrase
+            target: {text: "می‌خوای پنجشنبه بریم سینما؟", language_code: fa, direction: rtl}
+            introduced_tokens: []
+        exercises:
+          - content_key: fa.a1.unit12.lesson02.exercise01.recognize_propose_reading
+            type: multiple_choice
+            tested_text: "می‌خوای پنجشنبه بریم سینما"
+            prompt: {target_blocks: [{text: "می‌خوای پنجشنبه بریم سینما؟", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit12.lesson02.exercise02.match_propose_words
+            type: matching_pairs
+            tested_text: "می‌خوای پنجشنبه بریم سینما می‌خوای پنجشنبه بریم سینما چطوره"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "می‌خوای پنجشنبه بریم سینما؟", right: "Do you want to go to the movies on Thursday?"}
+              - {left: می‌خوای, right: "do you want"}
+              - {left: پنجشنبه, right: Thursday}
+              - {left: بریم, right: "let's go"}
+              - {left: سینما, right: "cinema / movies"}
+              - {left: "چطوره؟", right: "How about it? / How's that?"}
+          - content_key: fa.a1.unit12.lesson02.exercise03.order_propose_plan
+            type: word_order
+            tested_text: "می‌خوای پنجشنبه بریم سینما"
+            prompt: {target_blocks: [{text: "Do you want to go to the movies on Thursday?", language_code: en, direction: ltr}]}
+            word_bank: [می‌خوای, پنجشنبه, بریم, سینما]
+          - content_key: fa.a1.unit12.lesson02.exercise04.translate_propose_plan
+            type: translation
+            tested_text: "می‌خوای پنجشنبه بریم سینما"
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit12.lesson02.exercise05.dialogue_response_propose
+            type: dialogue_response
+            tested_text: "می‌خوای پنجشنبه بریم سینما"
+            prompt:
+              target_blocks:
+                - {text: "Propose to a friend that you go to the movies on Thursday.", language_code: en, direction: ltr}
+
+      - content_key: fa.a1.unit12.lesson03.accepting_a_plan
+        title: قبول کردن برنامه
+        spine_outcome_id: universal.a1.plans.make_simple_plans
+        teaching:
+          - content_key: fa.a1.unit12.lesson03.teach.bashe_word
+            kind: vocabulary
+            target: {text: باشه, language_code: fa, direction: rtl}
+            introduced_tokens: [باشه]
+          - content_key: fa.a1.unit12.lesson03.teach.alie_word
+            kind: vocabulary
+            target: {text: عالیه, language_code: fa, direction: rtl}
+            introduced_tokens: [عالیه]
+          - content_key: fa.a1.unit12.lesson03.teach.ghabule_word
+            kind: vocabulary
+            target: {text: قبوله, language_code: fa, direction: rtl}
+            introduced_tokens: [قبوله]
+        exercises:
+          - content_key: fa.a1.unit12.lesson03.exercise01.recognize_bashe_reading
+            type: multiple_choice
+            tested_text: باشه
+            prompt: {target_blocks: [{text: باشه, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit12.lesson03.exercise02.recognize_ghabule_reading
+            type: multiple_choice
+            tested_text: قبوله
+            prompt: {target_blocks: [{text: قبوله, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit12.lesson03.exercise03.match_accepting_words
+            type: matching_pairs
+            tested_text: "باشه عالیه قبوله"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: باشه, right: okay}
+              - {left: عالیه, right: great}
+              - {left: قبوله, right: "it's a deal / agreed"}
+              - {left: برنامه, right: plan}
+              - {left: سینما, right: "cinema / movies"}
+              - {left: بریم, right: "let's go"}
+          - content_key: fa.a1.unit12.lesson03.exercise04.translate_okay_great
+            type: translation
+            tested_text: "باشه، عالیه"
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit12.lesson03.exercise05.dialogue_response_accept
+            type: dialogue_response
+            tested_text: "باشه، عالیه! قبوله"
+            prompt:
+              target_blocks:
+                - {text: "A friend proposed going to the movies on Thursday. Accept enthusiastically.", language_code: en, direction: ltr}
+
+      - content_key: fa.a1.unit12.lesson04.declining_a_plan
+        title: رد کردن برنامه
+        spine_outcome_id: universal.a1.plans.make_simple_plans
+        teaching:
+          - content_key: fa.a1.unit12.lesson04.teach.motasefam_word
+            kind: vocabulary
+            target: {text: متأسفم, language_code: fa, direction: rtl}
+            introduced_tokens: [متأسفم]
+          - content_key: fa.a1.unit12.lesson04.teach.nemitoonam_word
+            kind: vocabulary
+            target: {text: نمی‌تونم, language_code: fa, direction: rtl}
+            introduced_tokens: [نمی‌تونم]
+          - content_key: fa.a1.unit12.lesson04.teach.kar_daram_word
+            kind: phrase
+            target: {text: "کار دارم", language_code: fa, direction: rtl}
+            introduced_tokens: [کار, دارم]
+          - content_key: fa.a1.unit12.lesson04.teach.va_word
+            kind: grammar_note
+            target: {text: "و (and)", language_code: fa, direction: rtl}
+            introduced_tokens: [و]
+        exercises:
+          - content_key: fa.a1.unit12.lesson04.exercise01.recognize_motasefam_reading
+            type: multiple_choice
+            tested_text: متأسفم
+            prompt: {target_blocks: [{text: متأسفم, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit12.lesson04.exercise02.recognize_nemitoonam_reading
+            type: multiple_choice
+            tested_text: نمی‌تونم
+            prompt: {target_blocks: [{text: نمی‌تونم, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit12.lesson04.exercise03.match_declining_phrases
+            type: matching_pairs
+            tested_text: "متأسفم نمی‌تونم کار دارم برنامه"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: متأسفم, right: "I'm sorry"}
+              - {left: نمی‌تونم, right: "I can't"}
+              - {left: "کار دارم", right: "I have things to do"}
+              - {left: کار, right: work}
+              - {left: دارم, right: "I have"}
+              - {left: برنامه, right: plan}
+          - content_key: fa.a1.unit12.lesson04.exercise04.order_decline_plan
+            type: word_order
+            tested_text: "متأسفم نمی‌تونم کار دارم"
+            prompt: {target_blocks: [{text: "I'm sorry, I can't, I have things to do.", language_code: en, direction: ltr}]}
+            word_bank: [متأسفم, نمی‌تونم, کار, دارم]
+          - content_key: fa.a1.unit12.lesson04.exercise05.translate_decline
+            type: translation
+            tested_text: "متأسفم، نمی‌تونم"
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit12.lesson04.exercise06.dialogue_response_decline
+            type: dialogue_response
+            tested_text: "متأسفم، نمی‌تونم. کار دارم"
+            prompt:
+              target_blocks:
+                - {text: "A friend proposed going to the movies on Thursday, but you're busy. Decline politely.", language_code: en, direction: ltr}
+
+      - content_key: fa.a1.unit12.lesson05.reading_an_invitation
+        title: خواندن یک دعوت
+        spine_outcome_id: universal.a1.plans.make_simple_plans
+        teaching:
+          - content_key: fa.a1.unit12.lesson05.teach.davat_word
+            kind: vocabulary
+            target: {text: دعوت, language_code: fa, direction: rtl}
+            introduced_tokens: [دعوت]
+          - content_key: fa.a1.unit12.lesson05.teach.saat_hasht_review
+            kind: phrase
+            target: {text: "ساعت هشت شب", language_code: fa, direction: rtl}
+            introduced_tokens: [ساعت, هشت, شب]
+          - content_key: fa.a1.unit12.lesson05.teach.invitation_message
+            kind: reading
+            target: {text: "سلام! پنجشنبه ساعت هشت شب می‌خوای بریم سینما؟ منتظرم", language_code: fa, direction: rtl}
+            introduced_tokens: [سلام, منتظرم]
+          - content_key: fa.a1.unit12.lesson05.teach.mibinamet_word
+            kind: vocabulary
+            target: {text: می‌بینمت, language_code: fa, direction: rtl}
+            introduced_tokens: [می‌بینمت]
+        exercises:
+          - content_key: fa.a1.unit12.lesson05.exercise01.recognize_davat_reading
+            type: multiple_choice
+            tested_text: دعوت
+            prompt: {target_blocks: [{text: دعوت, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit12.lesson05.exercise02.reading_comprehension_invitation
+            type: reading_comprehension
+            tested_text: "پنجشنبه ساعت هشت شب سینما"
+            prompt:
+              target_blocks:
+                - {text: "سلام! پنجشنبه ساعت هشت شب می‌خوای بریم سینما؟ منتظرم", language_code: fa, direction: rtl}
+          - content_key: fa.a1.unit12.lesson05.exercise03.match_invitation_words
+            type: matching_pairs
+            tested_text: "دعوت ساعت هشت شب سلام منتظرم"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: دعوت, right: invitation}
+              - {left: "ساعت هشت شب", right: "eight o'clock at night"}
+              - {left: سلام, right: hello}
+              - {left: منتظرم, right: "I'm waiting"}
+              - {left: پنجشنبه, right: Thursday}
+              - {left: سینما, right: "cinema / movies"}
+          - content_key: fa.a1.unit12.lesson05.exercise04.translate_waiting
+            type: translation
+            tested_text: منتظرم
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit12.lesson05.exercise05.write_invitation_reply
+            type: writing_prompt
+            tested_text: "باشه، عالیه! پنجشنبه ساعت هشت شب می‌بینمت"
+            prompt:
+              target_blocks:
+                - {text: "Write a short reply accepting the invitation for Thursday at eight at night.", language_code: en, direction: ltr}
+
+      - content_key: fa.a1.unit12.lesson06.making_a_plan_dialogue
+        title: گفتگوی برنامه‌ریزی
+        spine_outcome_id: universal.a1.plans.make_simple_plans
+        teaching:
+          - content_key: fa.a1.unit12.lesson06.teach.names
+            kind: vocabulary
+            target: {text: "آرش، سارا", language_code: fa, direction: rtl}
+            introduced_tokens: [آرش, سارا]
+          - content_key: fa.a1.unit12.lesson06.teach.che_saati_word
+            kind: phrase
+            target: {text: "چه ساعتی؟", language_code: fa, direction: rtl}
+            introduced_tokens: ["چه", "ساعتی؟"]
+          - content_key: fa.a1.unit12.lesson06.teach.dialogue_line1
+            kind: dialogue
+            target: {text: "سارا، می‌خوای پنجشنبه بریم سینما؟", language_code: fa, direction: rtl, speaker: آرش}
+            introduced_tokens: []
+          - content_key: fa.a1.unit12.lesson06.teach.dialogue_line2
+            kind: dialogue
+            target: {text: "چه ساعتی؟", language_code: fa, direction: rtl, speaker: سارا}
+            introduced_tokens: []
+          - content_key: fa.a1.unit12.lesson06.teach.dialogue_line3
+            kind: dialogue
+            target: {text: "ساعت هشت شب", language_code: fa, direction: rtl, speaker: آرش}
+            introduced_tokens: []
+          - content_key: fa.a1.unit12.lesson06.teach.dialogue_line4
+            kind: dialogue
+            target: {text: "باشه، عالیه! قبوله", language_code: fa, direction: rtl, speaker: سارا}
+            introduced_tokens: []
+          - content_key: fa.a1.unit12.lesson06.teach.dialogue_line5
+            kind: dialogue
+            target: {text: "خوبه، پنجشنبه می‌بینمت", language_code: fa, direction: rtl, speaker: آرش}
+            introduced_tokens: [خوبه]
+        exercises:
+          - content_key: fa.a1.unit12.lesson06.exercise01.dialogue_comprehension_context
+            type: dialogue_comprehension
+            tested_text: "سارا می‌خوای پنجشنبه بریم سینما چه ساعتی ساعت هشت شب باشه عالیه قبوله خوبه پنجشنبه می‌بینمت"
+            prompt:
+              target_blocks:
+                - {text: "آرش: سارا، می‌خوای پنجشنبه بریم سینما؟ سارا: چه ساعتی؟ آرش: ساعت هشت شب. سارا: باشه، عالیه! قبوله. آرش: خوبه، پنجشنبه می‌بینمت.", language_code: fa, direction: rtl}
+          - content_key: fa.a1.unit12.lesson06.exercise02.match_dialogue_facts
+            type: matching_pairs
+            tested_text: "چه ساعتی سینما پنجشنبه ساعت هشت شب می‌بینمت خوبه"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "چه ساعتی؟", right: "What time?"}
+              - {left: پنجشنبه, right: Thursday}
+              - {left: "ساعت هشت شب", right: "eight o'clock at night"}
+              - {left: سینما, right: "cinema / movies"}
+              - {left: می‌بینمت, right: "I'll see you"}
+              - {left: خوبه, right: good}
+          - content_key: fa.a1.unit12.lesson06.exercise03.order_what_time
+            type: word_order
+            tested_text: "چه ساعتی"
+            prompt: {target_blocks: [{text: "What time?", language_code: en, direction: ltr}]}
+            word_bank: ["چه", "ساعتی؟"]
+          - content_key: fa.a1.unit12.lesson06.exercise04.translate_see_you_thursday
+            type: translation
+            tested_text: "پنجشنبه می‌بینمت"
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit12.lesson06.exercise05.dialogue_response_confirm_plan
+            type: dialogue_response
+            tested_text: "باشه، عالیه! قبوله"
+            prompt:
+              target_blocks:
+                - {text: "Arash just said the movie is at eight at night. Accept the plan enthusiastically.", language_code: en, direction: ltr}
+          - content_key: fa.a1.unit12.lesson06.exercise06.write_plan_summary
+            type: writing_prompt
+            tested_text: "پنجشنبه ساعت هشت شب بریم سینما"
+            prompt:
+              target_blocks:
+                - {text: "Write one or two sentences in Farsi summarizing the plan: going to the movies Thursday at eight at night.", language_code: en, direction: ltr}
