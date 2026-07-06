@@ -31,9 +31,14 @@ review:
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [symptom_hebben, symptom_zijn]
+    semantic: [symptom_hebben, symptom_hebben_pure, symptom_zijn]
 slot_presets:
   symptom_hebben: &symptom_hebben {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: symptom_hebben}}
+  # symptom_hebben_pure: exact-case (no capitalized "Koorts" duplicate),
+  # safe for matching_pairs -- see scripts/backfill_lexemes_en_nl.py's
+  # symptom_hebben_pure comment. This file's OTHER templates below keep
+  # using the plain "symptom_hebben" tag unchanged.
+  symptom_hebben_pure: &symptom_hebben_pure {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: symptom_hebben_pure}}
   symptom_zijn: &symptom_zijn {language_code: nl, part_of_speech: adjective, agreement_tags: {semantic: symptom_zijn}}
 templates:
   - content_key: practice.en-nl.nl.a1.unit16.lesson01.order.001
@@ -43,25 +48,13 @@ templates:
     slots: {item: *symptom_hebben}
     answer_derivation: {kind: render_frame, frame: {text: "Ik heb {item}.", language_code: nl, direction: ltr}}
     feedback_frame: {text: "{item} is the symptom in this sentence.", language_code: en, direction: ltr}
-  - content_key: practice.en-nl.nl.a1.unit16.lesson01.complete.002
-    lesson_content_key: nl.a1.unit16.lesson01.niet_lekker_voelen
-    type: fill_in_blank
-    frame:
-      text: "Ik heb {item}."
-      language_code: nl
-      direction: ltr
-      text_blocks:
-        - {text: "Complete the Dutch sentence.", language_code: en, direction: ltr}
-    slots: {item: *symptom_hebben}
-    answer_derivation: {kind: slot_text, slot: item}
-    feedback_frame: {text: "{item} completes this sentence.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit16.lesson01.match.003
     lesson_content_key: nl.a1.unit16.lesson01.niet_lekker_voelen
     type: matching_pairs
-    frame: {text: "{first} · {second}", language_code: nl, direction: ltr}
-    slots: {first: *symptom_hebben, second: *symptom_hebben}
-    slot_relations: [{kind: distinct, slots: [first, second]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second]}
+    frame: {text: "{first} · {second} · {third} · {fourth}", language_code: nl, direction: ltr}
+    slots: {first: *symptom_hebben_pure, second: *symptom_hebben_pure, third: *symptom_hebben_pure, fourth: *symptom_hebben_pure}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth]}
     feedback_frame: {text: "Match each symptom word with its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit16.lesson02.choose.001
     lesson_content_key: nl.a1.unit16.lesson02.wat_scheelt_eraan
@@ -89,18 +82,6 @@ templates:
     slots: {item: *symptom_zijn}
     answer_derivation: {kind: render_frame, frame: {text: "Ik ben {item}.", language_code: nl, direction: ltr}}
     feedback_frame: {text: "{item} is the condition in this sentence.", language_code: en, direction: ltr}
-  - content_key: practice.en-nl.nl.a1.unit16.lesson03.complete.002
-    lesson_content_key: nl.a1.unit16.lesson03.koorts_en_verkouden
-    type: fill_in_blank
-    frame:
-      text: "Ik ben {item}."
-      language_code: nl
-      direction: ltr
-      text_blocks:
-        - {text: "Complete the Dutch sentence.", language_code: en, direction: ltr}
-    slots: {item: *symptom_zijn}
-    answer_derivation: {kind: slot_text, slot: item}
-    feedback_frame: {text: "{item} completes this sentence.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit16.lesson03.translate.003
     lesson_content_key: nl.a1.unit16.lesson03.koorts_en_verkouden
     type: translation

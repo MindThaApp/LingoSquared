@@ -31,9 +31,14 @@ review:
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [travel_noun, station_place]
+    semantic: [travel_noun, travel_noun_pure, station_place]
 slot_presets:
   travel_noun: &travel_noun {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: travel_noun}}
+  # travel_noun_pure: exact-case (no capitalized "Kaartje"/"Perron"
+  # duplicates), safe for matching_pairs -- see scripts/
+  # backfill_lexemes_en_nl.py's travel_noun_pure comment. This file's OTHER
+  # templates below keep using the plain "travel_noun" tag unchanged.
+  travel_noun_pure: &travel_noun_pure {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: travel_noun_pure}}
   station_place: &station_place {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: station_place}}
 templates:
   - content_key: practice.en-nl.nl.a1.unit15.lesson01.choose.001
@@ -58,10 +63,10 @@ templates:
   - content_key: practice.en-nl.nl.a1.unit15.lesson01.match.003
     lesson_content_key: nl.a1.unit15.lesson01.een_kaartje_kopen
     type: matching_pairs
-    frame: {text: "{first} · {second}", language_code: nl, direction: ltr}
-    slots: {first: *travel_noun, second: *travel_noun}
-    slot_relations: [{kind: distinct, slots: [first, second]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second]}
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: nl, direction: ltr}
+    slots: {first: *travel_noun_pure, second: *travel_noun_pure, third: *travel_noun_pure, fourth: *travel_noun_pure, fifth: *travel_noun_pure, sixth: *travel_noun_pure}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
     feedback_frame: {text: "Match each travel word with its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit15.lesson02.translate.001
     lesson_content_key: nl.a1.unit15.lesson02.vertrektijd_en_perron
@@ -102,18 +107,6 @@ templates:
     slots: {item: *station_place}
     answer_derivation: {kind: render_frame, frame: {text: "Waar is de {item}?", language_code: nl, direction: ltr}}
     feedback_frame: {text: "{item} is the place being asked about.", language_code: en, direction: ltr}
-  - content_key: practice.en-nl.nl.a1.unit15.lesson04.complete.002
-    lesson_content_key: nl.a1.unit15.lesson04.de_weg_op_het_station
-    type: fill_in_blank
-    frame:
-      text: "Waar is de {item}?"
-      language_code: nl
-      direction: ltr
-      text_blocks:
-        - {text: "Complete the Dutch question.", language_code: en, direction: ltr}
-    slots: {item: *station_place}
-    answer_derivation: {kind: slot_text, slot: item}
-    feedback_frame: {text: "{item} completes this question.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit15.lesson04.translate.003
     lesson_content_key: nl.a1.unit15.lesson04.de_weg_op_het_station
     type: translation

@@ -43,6 +43,17 @@ review:
     over/under-generation. No self-reference, no other capitalization
     leaks, no jargon leaks, no stray YAML booleans. Compiler validation
     re-run together with units 01-05, 07-09: 0 errors/0 warnings.
+
+    **Follow-up fix, 2026-07-06 (real user report, same bug class found in
+    en-nl unit01's je/jij)**: this entry's own "correctly varies register
+    with no over/under-generation" claim was wrong for lesson03.complete.002
+    specifically -- "Ik wil graag twee thee, {item}." (fill_in_blank) gives
+    no way to tell which register was intended, so alsjeblieft/alstublieft
+    are both equally valid and only one was ever marked correct. Fixed via
+    the new `interchangeable: true` answer_derivation flag (AUTHORING_
+    GUIDE.md#17); the word_order/translation siblings for this same
+    lesson were already safe by construction (word_order hands you the
+    tile, translation names the register directly) and are unchanged.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -128,7 +139,11 @@ templates:
       text_blocks:
         - {text: "Complete the Dutch sentence.", language_code: en, direction: ltr}
     slots: {item: *polite_word}
-    answer_derivation: {kind: slot_text, slot: item}
+    # interchangeable: true -- found live 2026-07-06, same-class bug as the
+    # en-nl unit01 je/jij fix (AUTHORING_GUIDE.md#17): "Ik wil graag twee
+    # thee, ___." gives no way to tell informal (alsjeblieft) from polite
+    # (alstublieft) register was intended, so both must grade correct.
+    answer_derivation: {kind: slot_text, slot: item, interchangeable: true}
     feedback_frame: {text: "{item} sets the register (formal or informal) of this order.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit06.lesson03.translate.003
     lesson_content_key: nl.a1.unit06.lesson03.aantallen_bestellen
@@ -194,10 +209,10 @@ templates:
   - content_key: practice.en-nl.nl.a1.unit06.lesson05.match.002
     lesson_content_key: nl.a1.unit06.lesson05.menukaart
     type: matching_pairs
-    frame: {text: "{first} · {second}", language_code: nl, direction: ltr}
-    slots: {first: *food_noun, second: *food_noun}
-    slot_relations: [{kind: distinct, slots: [first, second]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second]}
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: nl, direction: ltr}
+    slots: {first: *food_noun, second: *food_noun, third: *food_noun, fourth: *food_noun, fifth: *food_noun, sixth: *food_noun}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
     feedback_frame: {text: "Match each menu word with its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit06.lesson05.complete.003
     lesson_content_key: nl.a1.unit06.lesson05.menukaart

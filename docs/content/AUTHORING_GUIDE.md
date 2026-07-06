@@ -323,3 +323,46 @@ across the whole course so far) rather than force an artificially
 small exercise. This applies going forward to all new authoring; a
 follow-up pass is retrofitting existing shipped `matching_pairs`
 content across all languages to the same standard.
+
+## 17. A `fill_in_blank` slot's candidates must not be true synonyms of
+each other, or mark them `interchangeable: true`
+
+A real user report, 2026-07-06 (en-nl Endless Practice): a generated
+`fill_in_blank` item rendered "Ben ___ nieuw hier?" with the instruction
+"Complete the Dutch sentence" — genuinely unanswerable with certainty,
+since the slot (`informal_address`: jij/je) is a true synonym pair, both
+meaning the exact same "informal you" in this exact question, and only
+whichever one the generator happened to sample was marked correct. This
+is narrower and subtler than §13's bare-slot bug: real surrounding text
+survives masking, but it can't disambiguate between two (or more)
+candidates that mean literally the same thing here — a distinct bug
+class from the ordinary case of an open vocabulary slot (country,
+person_name, greeting, weekday, ...) where candidates are genuinely
+*different* words and recalling the one that was actually taught is the
+whole point of the drill.
+
+**When authoring a `fill_in_blank` template (lesson content or a
+practice template), check whether the slot's full candidate pool
+contains members that are true synonyms/register-variants of each
+other with nothing else in the frame able to prefer one over another**
+(seen so far: je/jij, alsjeblieft/alstublieft, and a three-way
+mijn/je/jouw possessive case where the frame never establishes whose
+object is being discussed). If so, either rewrite the frame to add a
+real disambiguating anchor (rarely possible when the pool members are
+genuinely synonymous — there's nothing left to distinguish), or mark
+the template's `answer_derivation` with the additive `interchangeable:
+true` flag: `{kind: slot_text, slot: item, interchangeable: true}`.
+`build_prompt()` (`backend/app/practice/service.py`) then accepts ANY
+of the slot's own constraint-matching candidates as correct, using the
+same generic `{"canonical", "accepted"}` multi-answer shape `grade()`
+(`app/api/router.py`) already supports for hand-authored content — zero
+frontend changes needed. Only set this flag when you've confirmed by
+hand that every pool member really is interchangeable in that specific
+frame; it must never be used to paper over an ordinary open-vocabulary
+slot, which needs a single correct answer to keep testing real recall.
+`scripts/_fill_in_blank_ambiguity_check.py` flags every single-slot
+`fill_in_blank` template whose full course-wide candidate pool has more
+than one member (a superset — it deliberately does not distinguish true
+synonym pairs from ordinary vocabulary recall, since that judgment call
+needs a human read of the actual frame) as a starting point for that
+by-hand review.
