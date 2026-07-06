@@ -9125,3 +9125,51 @@ DELETE FROM courses WHERE title LIKE 'Idempotent course%'
   OR title LIKE 'Practice test %'
   OR title IN ('Existing mixed import', 'New mixed import');
 ```
+
+**2026-07-07, Fable, whole-course en→nl curriculum review (first-ever
+whole-course-altitude review on this project).** Dispatched per Fable's
+own audit recommendation: every course-level defect found so far had
+been found by Ramin personally, never by the review pipeline, because
+per-unit fresh-context review structurally can't see cross-lesson/
+cross-unit facts. Read all 28 en-nl units in order as one continuous
+learner journey. Findings:
+
+- **5 confirmed, learner-visible defects dispatched to the Dutch
+  content lane for fixing**: unit 28's overlay has 18 gloss fields with
+  no English translation at all (a Dutch-only unit for English
+  speakers); unit 8 teaches "naast het station" then contradicts itself
+  with "tegenover het station" in the same unit's map/dialogue; unit 4's
+  workshop time conflicts between lessons (14:45 vs 15:15); unit 3's
+  dialogue date (10 april 2024) contradicts its own lesson's taught
+  dates (2026) and is calendar-false either way; Lotte's stated
+  wake/work schedule conflicts between unit 10 and unit 17.
+- **No vocabulary cliffs found** — every exercise correctly tests only
+  previously-taught Dutch vocabulary, confirming the per-file validator
+  holds that line. But most content-noun vocabulary (months, ordinals,
+  kinship terms, weather, some medical terms) is taught once and never
+  recycled again in later lesson content (SRS/Endless Practice
+  resurface it mechanically, but the curriculum itself doesn't reuse it
+  in new contexts).
+- **Real A1→A2 seam confirmed** (unit 24 is a genuine step up: polite
+  conditional, purpose clauses, reflexive separable verbs, sustained
+  formal register, institutional vocab, all at once) but **difficulty
+  flattens/regresses in units 16-23** before that seam, back toward
+  early-A1 complexity with only topics changing.
+- **Character/scenario continuity is mostly excellent** (a real,
+  deliberately-steered storyline runs units 14-22 and into the A2 arc)
+  aside from the 3 factual contradictions above.
+- **First real, computed content-hours estimate for en-nl** (previous
+  attempts were unmeasured assertions or a disclosed-contaminated
+  timing test): teaching ≈14.5-27h (real item counts × stated
+  per-exercise-type time bands, central estimate ~19-20h) — **the ≥10h
+  teaching gate passes with real margin**. Practice ≈12-15h on a
+  conservative distinct-item estimate using the project's own
+  `lexeme_matches()` against the real lexeme pool — **passes, but only
+  for the A1 span**: A2 (units 24-28) currently has zero Endless
+  Practice templates authored at all.
+- Full prioritized fix list (P1 above + P2 pedagogy items — matching_pairs
+  scale on 63/130 lesson exercises, A2 practice-pack authoring, a few
+  more minor recycling/wording items — + P3 process notes, e.g. every
+  overlay for units 12-28 is still `status: unreviewed`) handed to the
+  Dutch content lane; not fixed in this review pass by design (the
+  value of this task was whole-course judgment, not edits).
