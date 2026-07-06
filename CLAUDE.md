@@ -265,12 +265,14 @@ substitute for pre-launch verification.
 **Publish-gate content depth: ≥10 hrs new teaching content + ≥10 hrs
 practice + working scored module checkpoints, per launch language
 pair.** Enough for real day-to-day use in-country, not a demo. The ≥10
-practice hours are meant to come from the Endless Practice engine
-(currently fa→en-only — needs extending to all 6 launch paths), not
-hand-authored drills. "Module tests with scores" = Phase F (unit
-checkpoint tests) is now a hard publish-gate requirement, not
-deferred post-launch polish. Full detail in
-`docs/APP_SPEC_FOR_FABLE_REVIEW.md` §1 and the
+practice hours are meant to come from the Endless Practice engine —
+now extended to all 6 launch paths (en-fa: 124 templates, en-nl: 240,
+en-prs: 36, fa-en: 86, nl-en: 327, prs-en: 86, per
+`scripts/practice_manifest.txt`), not hand-authored drills; actual
+hour-depth per path against the ≥10hr bar hasn't been separately
+measured. "Module tests with scores" = Phase F (unit checkpoint tests)
+is now a hard publish-gate requirement, not deferred post-launch
+polish. Full detail in `docs/APP_SPEC_FOR_FABLE_REVIEW.md` §1 and the
 `project-lingosquared-roadmap` memory file.
 
 `docs/content/AUTHORING_GUIDE.md` is binding for all content authoring
@@ -566,27 +568,43 @@ for this specific need, don't re-check it either.
 ## What's built and verified live
 
 Auth; all 10 languages (fa/prs fully separate, correct RTL + script
-metadata); courses → units → lessons → all 13 exercise types; SM-2
+metadata); courses → units → lessons → all 19 exercise types; SM-2
 review (being replaced by lexeme-level SRS, Phase A); gamification
 (XP/streak/achievements); reading/writing vs. speaking course sections
 with server-enforced unlock; CEFR levels A1–C2; teaching phase before
 exercises; in-app content-issue reporting + admin triage + coverage
-dashboard; Endless Practice generative feed (fa-en pilot, lexeme pool +
+dashboard; Endless Practice generative feed (now built for all 6 launch-gate
+directions — en-fa, en-nl, en-prs, fa-en, nl-en, prs-en — lexeme pool +
 reviewed sentence-frame templates, zero runtime LLM calls); on-screen
 virtual keyboard for non-Latin scripts; self-reported level check with
 recommended-unit badge (not a placement system — that was explicitly
 rejected as premature).
 
-Seeded courses (structure + example, not full curricula): en→fa,
-en→prs (A1 + A2), prs→en, plus es/fr (1 unit each, in progress).
+Seeded courses (counts verified against `docs/content/realizations/`/
+`overlays/` at 2026-07-06 19:53 BST — content authoring is actively
+ongoing in parallel sessions, re-check before quoting exactly): fa→en,
+nl→en, and prs→en each have 26 units (24 A1 + 2 A2, tracking the
+spine as of its last-but-one growth spurt); en→fa has 11 units (9 A1 +
+2 A2); en→prs has 11 units (9 A1 + 2 A2); en→nl has 25 units (23 A1 +
+2 A2); es/fr each have 3 units (A1 only, still in progress — "1 unit
+each" was stale). ~131 units total across 8 of 18 paths.
 
 ## Known limitations / accepted scope
 
-- Only a handful of 24 A1 spine outcomes built, for a handful of 18
-  paths — the single biggest gap; content is a genuinely multi-month
-  build. (Spine grew from 19 to 24 on 2026-07-05: weather, clothing,
-  emotions, communication, and money/payments added, verified
-  compiling clean — see `docs/APP_SPEC_FOR_FABLE_REVIEW.md` §1.)
+- **The spine outcome count is a fast-moving target this session —
+  don't trust any number here without re-grepping
+  `docs/content/universal_spine.yaml` first.** It grew 19→24→26→28
+  across 2026-07-05/06 (24 A1 + 4 A2 as of 2026-07-06 19:53 BST:
+  `bureaucracy`, `opinions`, `banking`, and a second `health` outcome
+  — added in a burst while this very file was being audited for
+  staleness, which is the exact "grew again without the docs being
+  updated" failure mode to watch for). Real coverage is well past "a
+  handful" now (see "Seeded courses" above), but the English
+  realization (used by all X→en directions) still only covers the
+  first 26 outcomes — `banking`/second-`health` aren't realized in any
+  language yet. 10 of 18 paths still have zero content and no path has
+  gone past A2 — still a genuinely multi-month build to reach full
+  A1→C2 breadth across all 18 paths.
 - Dari's browser-TTS fallback quality is uncertain (falls back to
   `fa-AF` approximation; may produce no sound or wrong accent).
 - No native-speaker review network in general — nl is the deliberate
