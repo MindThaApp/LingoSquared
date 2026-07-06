@@ -37,14 +37,22 @@ review:
     backfill_lexemes_en_prs.py run has actually happened against a real
     database yet in this pass.
 tag_schema:
-  part_of_speech: [noun, adjective]
+  part_of_speech: [noun, adjective, particle]
   agreement_tags:
-    semantic: [ones_number, teens_number, tens_number, phone_word]
+    # phone_opening/message_word declared here too (not this pack's own
+    # tags) because phone_pair pools them in from units 07 to reach 6
+    # candidates -- see the phone_and_message preset below.
+    semantic: [ones_number, teens_number, tens_number, phone_word, phone_opening, message_word]
 slot_presets:
   ones_number: &ones_number {language_code: prs, part_of_speech: adjective, agreement_tags: {semantic: ones_number}}
   teens_number: &teens_number {language_code: prs, part_of_speech: adjective, agreement_tags: {semantic: teens_number}}
   tens_number: &tens_number {language_code: prs, part_of_speech: adjective, agreement_tags: {semantic: tens_number}}
   phone_word: &phone_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: phone_word}}
+  # phone_word alone only has 3 distinct candidates; pooled with unit07's
+  # phone_opening (الو) and message_word (پیام/کوتاه) for the
+  # matching_pairs template below to reach 6 (AUTHORING_GUIDE.md #16) --
+  # coherent "phone & messaging" theme, real vocabulary only.
+  phone_and_message: &phone_and_message {language_code: prs, part_of_speech: [noun, particle, adjective], agreement_tags: {semantic: [phone_word, phone_opening, message_word]}}
 templates:
   # Lesson 1: numbers one to ten.
   - content_key: practice.en-prs.prs.a1.unit04.lesson01.ones_gloss.001
@@ -71,10 +79,13 @@ templates:
   - content_key: practice.en-prs.prs.a1.unit04.lesson01.ones_pair.004
     lesson_content_key: prs.a1.unit04.lesson01.numbers_one_to_ten
     type: matching_pairs
-    frame: {text: "{ones_number_one} — {ones_number_two}", language_code: prs, direction: rtl}
-    slots: {ones_number_one: *ones_number, ones_number_two: *ones_number}
-    slot_relations: [{kind: distinct, slots: [ones_number_one, ones_number_two]}]
-    answer_derivation: {kind: matching_pairs, slots: [ones_number_one, ones_number_two]}
+    # Expanded 2->10 pairs 2026-07-06 (AUTHORING_GUIDE.md #16 retrofit) --
+    # verified via scripts/_practice_slot_check.py: exactly 10 ones_number
+    # candidates (1-10), all taught, used fully.
+    frame: {text: "{ones_number_one} — {ones_number_two} — {ones_number_three} — {ones_number_four} — {ones_number_five} — {ones_number_six} — {ones_number_seven} — {ones_number_eight} — {ones_number_nine} — {ones_number_ten}", language_code: prs, direction: rtl}
+    slots: {ones_number_one: *ones_number, ones_number_two: *ones_number, ones_number_three: *ones_number, ones_number_four: *ones_number, ones_number_five: *ones_number, ones_number_six: *ones_number, ones_number_seven: *ones_number, ones_number_eight: *ones_number, ones_number_nine: *ones_number, ones_number_ten: *ones_number}
+    slot_relations: [{kind: distinct, slots: [ones_number_one, ones_number_two, ones_number_three, ones_number_four, ones_number_five, ones_number_six, ones_number_seven, ones_number_eight, ones_number_nine, ones_number_ten]}]
+    answer_derivation: {kind: matching_pairs, slots: [ones_number_one, ones_number_two, ones_number_three, ones_number_four, ones_number_five, ones_number_six, ones_number_seven, ones_number_eight, ones_number_nine, ones_number_ten]}
     feedback_frame: {text: "Match each Dari number word to its digit.", language_code: en, direction: ltr}
 
   # Lesson 2: numbers eleven to twenty.
@@ -102,10 +113,13 @@ templates:
   - content_key: practice.en-prs.prs.a1.unit04.lesson02.teens_pair.004
     lesson_content_key: prs.a1.unit04.lesson02.numbers_eleven_to_twenty
     type: matching_pairs
-    frame: {text: "{teens_number_one} — {teens_number_two}", language_code: prs, direction: rtl}
-    slots: {teens_number_one: *teens_number, teens_number_two: *teens_number}
-    slot_relations: [{kind: distinct, slots: [teens_number_one, teens_number_two]}]
-    answer_derivation: {kind: matching_pairs, slots: [teens_number_one, teens_number_two]}
+    # Expanded 2->9 pairs 2026-07-06 (AUTHORING_GUIDE.md #16 retrofit) --
+    # verified via scripts/_practice_slot_check.py: exactly 9 teens_number
+    # candidates (11-19), all taught, used fully.
+    frame: {text: "{teens_number_one} — {teens_number_two} — {teens_number_three} — {teens_number_four} — {teens_number_five} — {teens_number_six} — {teens_number_seven} — {teens_number_eight} — {teens_number_nine}", language_code: prs, direction: rtl}
+    slots: {teens_number_one: *teens_number, teens_number_two: *teens_number, teens_number_three: *teens_number, teens_number_four: *teens_number, teens_number_five: *teens_number, teens_number_six: *teens_number, teens_number_seven: *teens_number, teens_number_eight: *teens_number, teens_number_nine: *teens_number}
+    slot_relations: [{kind: distinct, slots: [teens_number_one, teens_number_two, teens_number_three, teens_number_four, teens_number_five, teens_number_six, teens_number_seven, teens_number_eight, teens_number_nine]}]
+    answer_derivation: {kind: matching_pairs, slots: [teens_number_one, teens_number_two, teens_number_three, teens_number_four, teens_number_five, teens_number_six, teens_number_seven, teens_number_eight, teens_number_nine]}
     feedback_frame: {text: "Match each Dari number word to its digit.", language_code: en, direction: ltr}
 
   # Lesson 3: tens up to a hundred.
@@ -133,10 +147,13 @@ templates:
   - content_key: practice.en-prs.prs.a1.unit04.lesson03.tens_pair.004
     lesson_content_key: prs.a1.unit04.lesson03.tens
     type: matching_pairs
-    frame: {text: "{tens_number_one} — {tens_number_two}", language_code: prs, direction: rtl}
-    slots: {tens_number_one: *tens_number, tens_number_two: *tens_number}
-    slot_relations: [{kind: distinct, slots: [tens_number_one, tens_number_two]}]
-    answer_derivation: {kind: matching_pairs, slots: [tens_number_one, tens_number_two]}
+    # Expanded 2->9 pairs 2026-07-06 (AUTHORING_GUIDE.md #16 retrofit) --
+    # verified via scripts/_practice_slot_check.py: exactly 9 tens_number
+    # candidates (20-100 by tens), all taught, used fully.
+    frame: {text: "{tens_number_one} — {tens_number_two} — {tens_number_three} — {tens_number_four} — {tens_number_five} — {tens_number_six} — {tens_number_seven} — {tens_number_eight} — {tens_number_nine}", language_code: prs, direction: rtl}
+    slots: {tens_number_one: *tens_number, tens_number_two: *tens_number, tens_number_three: *tens_number, tens_number_four: *tens_number, tens_number_five: *tens_number, tens_number_six: *tens_number, tens_number_seven: *tens_number, tens_number_eight: *tens_number, tens_number_nine: *tens_number}
+    slot_relations: [{kind: distinct, slots: [tens_number_one, tens_number_two, tens_number_three, tens_number_four, tens_number_five, tens_number_six, tens_number_seven, tens_number_eight, tens_number_nine]}]
+    answer_derivation: {kind: matching_pairs, slots: [tens_number_one, tens_number_two, tens_number_three, tens_number_four, tens_number_five, tens_number_six, tens_number_seven, tens_number_eight, tens_number_nine]}
     feedback_frame: {text: "Match each Dari number word to its digit.", language_code: en, direction: ltr}
 
   # Lesson 5: exchanging phone numbers.
@@ -164,8 +181,12 @@ templates:
   - content_key: practice.en-prs.prs.a1.unit04.lesson05.phone_pair.004
     lesson_content_key: prs.a1.unit04.lesson05.phone_numbers
     type: matching_pairs
-    frame: {text: "{phone_word_one} — {phone_word_two}", language_code: prs, direction: rtl}
-    slots: {phone_word_one: *phone_word, phone_word_two: *phone_word}
-    slot_relations: [{kind: distinct, slots: [phone_word_one, phone_word_two]}]
-    answer_derivation: {kind: matching_pairs, slots: [phone_word_one, phone_word_two]}
+    # Expanded 2->6 pairs 2026-07-06 (AUTHORING_GUIDE.md #16 retrofit),
+    # pooling phone_word with unit07's phone_opening/message_word
+    # (phone_and_message preset above) -- verified via
+    # scripts/_practice_slot_check.py.
+    frame: {text: "{phone_word_one} — {phone_word_two} — {phone_word_three} — {phone_word_four} — {phone_word_five} — {phone_word_six}", language_code: prs, direction: rtl}
+    slots: {phone_word_one: *phone_and_message, phone_word_two: *phone_and_message, phone_word_three: *phone_and_message, phone_word_four: *phone_and_message, phone_word_five: *phone_and_message, phone_word_six: *phone_and_message}
+    slot_relations: [{kind: distinct, slots: [phone_word_one, phone_word_two, phone_word_three, phone_word_four, phone_word_five, phone_word_six]}]
+    answer_derivation: {kind: matching_pairs, slots: [phone_word_one, phone_word_two, phone_word_three, phone_word_four, phone_word_five, phone_word_six]}
     feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}

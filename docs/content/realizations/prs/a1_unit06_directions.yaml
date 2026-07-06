@@ -11,7 +11,7 @@ generation_provenance:
 review:
   status: reviewed
   required_next_reviewer: null
-  notes: "Fresh-context review completed 2026-07-05. Confirmed spine discipline (all 6 lessons genuinely serve universal.a1.directions.ask_follow_basic_directions, no drift), exercise pacing (recognition -> drag/matching -> production held in every lesson), script purity (no Arabic-range kaf/yeh found), and content_key parity with the overlay (25 teaching + 44 exercise keys match exactly). Found and fixed one significant dialect-authenticity bug (highest-priority check): 'گرد کنید' -- used throughout as the core 'turn left/right' verb -- is not genuine Dari/Persian for giving pedestrian directions; web-verified it's a mechanical/rotational term (screw-thread and motor-rotation direction, چپ‌گرد/راست‌گرد), while a Peace-Corps-derived Dari phrasebook and multiple Persian sources confirm پیچیدن ('به چپ/راست بپیچید') is the real verb. Replaced 'گرد کنید' with 'بپیچید' everywhere (teaching items, exercises, media_assets, word_banks, accepted_answers) in both this file and the overlay. Also fixed: an awkward calque-y lesson02 title ('دادن هدایت گشتن' -> 'پیچیدن به چپ و راست'); a listen_select exercise (lesson01.exercise03) whose recorded audio listed all 4 candidate words including every distractor, making 'select what you hear' ungradeable -- narrowed audio+tested_text to the single tested word, same fix pattern already used in unit05; a tested_text bug in lesson02.exercise08 that concatenated both turn-left and turn-right phrases though only turn-right was being tested. §11 (cross-lesson fact check): the lesson06 dialogue's two-step sequence (go straight, then turn left) and its landmark facts (pharmacy after the mosque, opposite the bank) are consistent across the teaching cards, matching_pairs, word_order, and writing/speaking exercises that reference them; also reworded an instruction that called a landmark fact a 'step' inconsistently with its own matching pairs. §12 (multi-clause forms): added the missing period-joined accepted-answer variant (previously only comma- and و-joined existed) to all 4 free-text exercises combining two direction clauses. §13: no fill_in_blank exercises exist in this unit, nothing to check. Untaught-vocabulary ordering re-verified cumulatively across the whole file after the گرد کنید -> بپیچید token changes: 0 violations. Also fixed two factually-wrong overlay notes (see overlay's own review notes). Compiler validation clean (0 errors/0 warnings) after fixes. Audio remains pending generation; human native-speaker review still recommended before this ships, per project policy of no native-speaker review network for prs."
+  notes: "Fresh-context review completed 2026-07-05. Confirmed spine discipline (all 6 lessons genuinely serve universal.a1.directions.ask_follow_basic_directions, no drift), exercise pacing (recognition -> drag/matching -> production held in every lesson), script purity (no Arabic-range kaf/yeh found), and content_key parity with the overlay (25 teaching + 44 exercise keys match exactly). Found and fixed one significant dialect-authenticity bug (highest-priority check): 'گرد کنید' -- used throughout as the core 'turn left/right' verb -- is not genuine Dari/Persian for giving pedestrian directions; web-verified it's a mechanical/rotational term (screw-thread and motor-rotation direction, چپ‌گرد/راست‌گرد), while a Peace-Corps-derived Dari phrasebook and multiple Persian sources confirm پیچیدن ('به چپ/راست بپیچید') is the real verb. Replaced 'گرد کنید' with 'بپیچید' everywhere (teaching items, exercises, media_assets, word_banks, accepted_answers) in both this file and the overlay. Also fixed: an awkward calque-y lesson02 title ('دادن هدایت گشتن' -> 'پیچیدن به چپ و راست'); a listen_select exercise (lesson01.exercise03) whose recorded audio listed all 4 candidate words including every distractor, making 'select what you hear' ungradeable -- narrowed audio+tested_text to the single tested word, same fix pattern already used in unit05; a tested_text bug in lesson02.exercise08 that concatenated both turn-left and turn-right phrases though only turn-right was being tested. §11 (cross-lesson fact check): the lesson06 dialogue's two-step sequence (go straight, then turn left) and its landmark facts (pharmacy after the mosque, opposite the bank) are consistent across the teaching cards, matching_pairs, word_order, and writing/speaking exercises that reference them; also reworded an instruction that called a landmark fact a 'step' inconsistently with its own matching pairs. §12 (multi-clause forms): added the missing period-joined accepted-answer variant (previously only comma- and و-joined existed) to all 4 free-text exercises combining two direction clauses. §13: no fill_in_blank exercises exist in this unit, nothing to check. Untaught-vocabulary ordering re-verified cumulatively across the whole file after the گرد کنید -> بپیچید token changes: 0 violations. Also fixed two factually-wrong overlay notes (see overlay's own review notes). Compiler validation clean (0 errors/0 warnings) after fixes. Audio remains pending generation; human native-speaker review still recommended before this ships, per project policy of no native-speaker review network for prs. AUDIO-ACCESSIBILITY RETROFIT 2026-07-06 (§14, added after this review completed): a project-wide audit found 9 exercises in this unit (lesson01.exercise03, lesson02.exercise03/06, lesson03.exercise03/06, lesson04.exercise03, lesson05.exercise03/06, lesson06.exercise05) were listen_type or bare-prompt listen_select items -- genuinely unanswerable since fa/prs have zero working TTS/recorded audio. Converted: listen_select -> multiple_choice (added the target Dari text as a real visible prompt, English-gloss correct_option/distractors), listen_type -> translation. MATCHING_PAIRS SCALE RETROFIT (§16, same day, Ramin's direct feedback): expanded match_turn_instructions 3->7, match_sequence_words 2->6, match_asking_phrases 3->7, and match_landmark_words 2->6, all by pooling already-taught vocabulary from earlier in the unit (lesson01's 4 direction words reused across lessons02/03/04/05; lesson04's own دفتر; lesson05's own مسجد/بانک). match_direction_words (4) and match_dialogue_facts (3) left unchanged as genuine small closed sets. Re-verified 0 remaining §14 violations via script, content_key parity intact, validate+compile both clean after both retrofits."
 
 course:
   realization_key: prs.a1
@@ -103,11 +103,10 @@ units:
             type: multiple_choice
             tested_text: چپ راست
             prompt: {target_blocks: []}
-          - content_key: prs.a1.unit06.lesson01.exercise03.listen_direction_words
-            type: listen_select
+          - content_key: prs.a1.unit06.lesson01.exercise03.recognize_chap_reading
+            type: multiple_choice
             tested_text: چپ
-            media_asset_key: prs.a1.audio.directions.words.01
-            prompt: {target_blocks: []}
+            prompt: {target_blocks: [{text: چپ, language_code: prs, direction: rtl}]}
           - content_key: prs.a1.unit06.lesson01.exercise04.match_direction_words
             type: matching_pairs
             tested_text: مستقیم چپ راست بپیچید
@@ -156,28 +155,30 @@ units:
             type: multiple_choice
             tested_text: به راست بپیچید
             prompt: {target_blocks: [{text: "به راست بپیچید", language_code: prs, direction: rtl}]}
-          - content_key: prs.a1.unit06.lesson02.exercise03.listen_go_straight
-            type: listen_select
+          - content_key: prs.a1.unit06.lesson02.exercise03.recognize_go_straight_reading
+            type: multiple_choice
             tested_text: مستقیم بروید
-            media_asset_key: prs.a1.audio.directions.go_straight.01
-            prompt: {target_blocks: []}
+            prompt: {target_blocks: [{text: "مستقیم بروید", language_code: prs, direction: rtl}]}
           - content_key: prs.a1.unit06.lesson02.exercise04.match_turn_instructions
             type: matching_pairs
-            tested_text: مستقیم بروید به چپ بپیچید به راست بپیچید
+            tested_text: مستقیم بروید به چپ بپیچید به راست بپیچید مستقیم چپ راست بپیچید
             prompt: {target_blocks: []}
             pairs:
               - {left: "مستقیم بروید", right: "Go straight."}
               - {left: "به چپ بپیچید", right: "Turn left."}
               - {left: "به راست بپیچید", right: "Turn right."}
+              - {left: مستقیم, right: straight}
+              - {left: چپ, right: left}
+              - {left: راست, right: right}
+              - {left: بپیچید, right: "turn (polite imperative)"}
           - content_key: prs.a1.unit06.lesson02.exercise05.order_turn_right
             type: word_order
             tested_text: به راست بپیچید
             prompt: {target_blocks: []}
             word_bank: [به, راست, بپیچید]
-          - content_key: prs.a1.unit06.lesson02.exercise06.listen_turn_left
-            type: listen_type
+          - content_key: prs.a1.unit06.lesson02.exercise06.translate_turn_left
+            type: translation
             tested_text: به چپ بپیچید
-            media_asset_key: prs.a1.audio.directions.turn_left.01
             prompt: {target_blocks: []}
           - content_key: prs.a1.unit06.lesson02.exercise07.translate_go_straight
             type: translation
@@ -213,25 +214,28 @@ units:
             type: multiple_choice
             tested_text: بعد
             prompt: {target_blocks: [{text: بعد, language_code: prs, direction: rtl}]}
-          - content_key: prs.a1.unit06.lesson03.exercise03.listen_sequenced
-            type: listen_select
+          - content_key: prs.a1.unit06.lesson03.exercise03.recognize_sequenced_reading
+            type: multiple_choice
             tested_text: اول مستقیم بروید بعد به راست بپیچید
-            media_asset_key: prs.a1.audio.directions.sequenced.01
-            prompt: {target_blocks: []}
+            prompt: {target_blocks: [{text: "اول مستقیم بروید، بعد به راست بپیچید", language_code: prs, direction: rtl}]}
           - content_key: prs.a1.unit06.lesson03.exercise04.match_sequence_words
             type: matching_pairs
-            tested_text: اول بعد
+            tested_text: اول بعد مستقیم چپ راست بپیچید
             prompt: {target_blocks: []}
             pairs:
               - {left: اول, right: first}
               - {left: بعد, right: then}
+              - {left: مستقیم, right: straight}
+              - {left: چپ, right: left}
+              - {left: راست, right: right}
+              - {left: بپیچید, right: "turn (polite imperative)"}
           - content_key: prs.a1.unit06.lesson03.exercise05.order_sequenced_directions
             type: word_order
             tested_text: اول مستقیم بروید بعد به راست بپیچید
             prompt: {target_blocks: []}
             word_bank: [اول, مستقیم, بروید, بعد, به, راست, بپیچید]
-          - content_key: prs.a1.unit06.lesson03.exercise06.listen_type_sequence
-            type: listen_type
+          - content_key: prs.a1.unit06.lesson03.exercise06.translate_first_step
+            type: translation
             tested_text: اول مستقیم بروید
             prompt: {target_blocks: []}
           - content_key: prs.a1.unit06.lesson03.exercise07.translate_sequenced
@@ -268,19 +272,22 @@ units:
             type: multiple_choice
             tested_text: تشکر زیاد فهمیدم
             prompt: {target_blocks: [{text: "تشکر زیاد، فهمیدم", language_code: prs, direction: rtl}]}
-          - content_key: prs.a1.unit06.lesson04.exercise03.listen_polite_ask
-            type: listen_select
+          - content_key: prs.a1.unit06.lesson04.exercise03.recognize_polite_ask_reading
+            type: multiple_choice
             tested_text: می‌توانید بگویید چطور به بازار بروم
-            media_asset_key: prs.a1.audio.directions.polite_ask.01
-            prompt: {target_blocks: []}
+            prompt: {target_blocks: [{text: "می‌توانید بگویید چطور به بازار بروم؟", language_code: prs, direction: rtl}]}
           - content_key: prs.a1.unit06.lesson04.exercise04.match_asking_phrases
             type: matching_pairs
-            tested_text: می‌توانید بگویید چطور به بازار بروم ببخشید دواخانه کجاست تشکر زیاد فهمیدم
+            tested_text: می‌توانید بگویید چطور به بازار بروم ببخشید دواخانه کجاست تشکر زیاد فهمیدم دفتر مستقیم چپ راست
             prompt: {target_blocks: []}
             pairs:
               - {left: "می‌توانید بگویید چطور به بازار بروم؟", right: "Could you tell me how to get to the market?"}
               - {left: "ببخشید، دواخانه کجاست؟", right: "Excuse me, where is the pharmacy?"}
               - {left: "تشکر زیاد، فهمیدم", right: "Thanks very much, I understood."}
+              - {left: دفتر, right: office}
+              - {left: مستقیم, right: straight}
+              - {left: چپ, right: left}
+              - {left: راست, right: right}
           - content_key: prs.a1.unit06.lesson04.exercise05.order_polite_ask
             type: word_order
             tested_text: می‌توانید بگویید چطور به بازار بروم
@@ -324,25 +331,28 @@ units:
             type: multiple_choice
             tested_text: روبه‌رو
             prompt: {target_blocks: [{text: روبه‌رو, language_code: prs, direction: rtl}]}
-          - content_key: prs.a1.unit06.lesson05.exercise03.listen_landmark
-            type: listen_select
+          - content_key: prs.a1.unit06.lesson05.exercise03.recognize_landmark_reading
+            type: multiple_choice
             tested_text: بعد از مسجد بانک روبه‌روی شماست
-            media_asset_key: prs.a1.audio.directions.landmark.01
-            prompt: {target_blocks: []}
+            prompt: {target_blocks: [{text: "بعد از مسجد، بانک روبه‌روی شماست", language_code: prs, direction: rtl}]}
           - content_key: prs.a1.unit06.lesson05.exercise04.match_landmark_words
             type: matching_pairs
-            tested_text: بعد از روبه‌رو
+            tested_text: بعد از روبه‌رو اول بعد مسجد بانک
             prompt: {target_blocks: []}
             pairs:
               - {left: "بعد از", right: "after"}
               - {left: روبه‌رو, right: "across from / opposite"}
+              - {left: اول, right: first}
+              - {left: بعد, right: then}
+              - {left: مسجد, right: mosque}
+              - {left: بانک, right: bank}
           - content_key: prs.a1.unit06.lesson05.exercise05.order_landmark_sentence
             type: word_order
             tested_text: بعد از مسجد بانک روبه‌روی شماست
             prompt: {target_blocks: []}
             word_bank: [بعد, از, مسجد, بانک, روبه‌روی, شماست]
-          - content_key: prs.a1.unit06.lesson05.exercise06.listen_type_landmark
-            type: listen_type
+          - content_key: prs.a1.unit06.lesson05.exercise06.translate_landmark_bank
+            type: translation
             tested_text: بعد از مسجد بانک روبه‌روی شماست
             prompt: {target_blocks: []}
           - content_key: prs.a1.unit06.lesson05.exercise07.translate_landmark
@@ -401,8 +411,8 @@ units:
             tested_text: اول مستقیم بروید بعد به چپ بپیچید
             prompt: {target_blocks: []}
             word_bank: [اول, مستقیم, بروید, بعد, به, چپ, بپیچید]
-          - content_key: prs.a1.unit06.lesson06.exercise05.listen_directions_sequence
-            type: listen_type
+          - content_key: prs.a1.unit06.lesson06.exercise05.translate_directions_sequence
+            type: translation
             tested_text: اول مستقیم بروید
             prompt: {target_blocks: []}
           - content_key: prs.a1.unit06.lesson06.exercise06.dialogue_response_thanks

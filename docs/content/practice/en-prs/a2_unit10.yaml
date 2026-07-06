@@ -76,10 +76,13 @@ templates:
   - content_key: practice.en-prs.prs.a2.unit10.lesson01.opinion_pair.004
     lesson_content_key: prs.a2.unit10.lesson01.opinions_vocabulary
     type: matching_pairs
-    frame: {text: "{opinion_word_one} — {opinion_word_two}", language_code: prs, direction: rtl}
-    slots: {opinion_word_one: *opinion_word, opinion_word_two: *opinion_word}
-    slot_relations: [{kind: distinct, slots: [opinion_word_one, opinion_word_two]}]
-    answer_derivation: {kind: matching_pairs, slots: [opinion_word_one, opinion_word_two]}
+    # Expanded 2->5 pairs 2026-07-06 (AUTHORING_GUIDE.md #16 retrofit).
+    # Real vocabulary ceiling: 5 distinct opinion_word candidates taught
+    # (verified via scripts/_practice_slot_check.py).
+    frame: {text: "{opinion_word_one} — {opinion_word_two} — {opinion_word_three} — {opinion_word_four} — {opinion_word_five}", language_code: prs, direction: rtl}
+    slots: {opinion_word_one: *opinion_word, opinion_word_two: *opinion_word, opinion_word_three: *opinion_word, opinion_word_four: *opinion_word, opinion_word_five: *opinion_word}
+    slot_relations: [{kind: distinct, slots: [opinion_word_one, opinion_word_two, opinion_word_three, opinion_word_four, opinion_word_five]}]
+    answer_derivation: {kind: matching_pairs, slots: [opinion_word_one, opinion_word_two, opinion_word_three, opinion_word_four, opinion_word_five]}
     feedback_frame: {text: "Match each word with its English meaning.", language_code: en, direction: ltr}
 
   # Lesson 4: the study-abroad debate dialogue (پروین and احمد).
@@ -100,8 +103,12 @@ templates:
   - content_key: practice.en-prs.prs.a2.unit10.lesson04.name_pair.003
     lesson_content_key: prs.a2.unit10.lesson04.study_debate_dialogue
     type: matching_pairs
-    frame: {text: "{person_name_one} — {person_name_two}", language_code: prs, direction: rtl}
-    slots: {person_name_one: *person_name, person_name_two: *person_name}
-    slot_relations: [{kind: distinct, slots: [person_name_one, person_name_two]}]
-    answer_derivation: {kind: matching_pairs, slots: [person_name_one, person_name_two]}
+    # Expanded 2->10 pairs 2026-07-06 (AUTHORING_GUIDE.md #16 retrofit) --
+    # verified via scripts/_practice_slot_check.py: 10 distinct
+    # person_name candidates backfilled course-wide (this tag isn't
+    # unit-scoped, per this pack's own review notes).
+    frame: {text: "{person_name_one} — {person_name_two} — {person_name_three} — {person_name_four} — {person_name_five} — {person_name_six} — {person_name_seven} — {person_name_eight} — {person_name_nine} — {person_name_ten}", language_code: prs, direction: rtl}
+    slots: {person_name_one: *person_name, person_name_two: *person_name, person_name_three: *person_name, person_name_four: *person_name, person_name_five: *person_name, person_name_six: *person_name, person_name_seven: *person_name, person_name_eight: *person_name, person_name_nine: *person_name, person_name_ten: *person_name}
+    slot_relations: [{kind: distinct, slots: [person_name_one, person_name_two, person_name_three, person_name_four, person_name_five, person_name_six, person_name_seven, person_name_eight, person_name_nine, person_name_ten]}]
+    answer_derivation: {kind: matching_pairs, slots: [person_name_one, person_name_two, person_name_three, person_name_four, person_name_five, person_name_six, person_name_seven, person_name_eight, person_name_nine, person_name_ten]}
     feedback_frame: {text: "Match each name to its English label.", language_code: en, direction: ltr}

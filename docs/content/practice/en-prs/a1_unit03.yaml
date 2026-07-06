@@ -60,6 +60,11 @@ slot_presets:
   uncle_aunt: &uncle_aunt {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: uncle_aunt}}
   marital_word: &marital_word {language_code: prs, part_of_speech: [noun, adjective], agreement_tags: {semantic: marital_word}}
   have_verb: &have_verb {language_code: prs, part_of_speech: verb, agreement_tags: {semantic: have_verb}}
+  # immediate_family and uncle_aunt each only have 4 distinct candidates
+  # alone; pooled together for the matching_pairs templates below to reach
+  # 8 (AUTHORING_GUIDE.md #16) -- both are lesson01/lesson02 of this same
+  # unit, a coherent single "family members" theme, real vocabulary only.
+  family_pool: &family_pool {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: [immediate_family, uncle_aunt]}}
 templates:
   # Lesson 1: immediate family members.
   - content_key: practice.en-prs.prs.a1.unit03.lesson01.family_gloss.001
@@ -86,10 +91,13 @@ templates:
   - content_key: practice.en-prs.prs.a1.unit03.lesson01.family_pair.004
     lesson_content_key: prs.a1.unit03.lesson01.immediate_family
     type: matching_pairs
-    frame: {text: "{immediate_family_one} — {immediate_family_two}", language_code: prs, direction: rtl}
-    slots: {immediate_family_one: *immediate_family, immediate_family_two: *immediate_family}
-    slot_relations: [{kind: distinct, slots: [immediate_family_one, immediate_family_two]}]
-    answer_derivation: {kind: matching_pairs, slots: [immediate_family_one, immediate_family_two]}
+    # Expanded 2->8 pairs 2026-07-06 (AUTHORING_GUIDE.md #16 retrofit),
+    # pooling immediate_family with lesson02's uncle_aunt (family_pool
+    # preset above) -- verified via scripts/_practice_slot_check.py.
+    frame: {text: "{family_one} — {family_two} — {family_three} — {family_four} — {family_five} — {family_six} — {family_seven} — {family_eight}", language_code: prs, direction: rtl}
+    slots: {family_one: *family_pool, family_two: *family_pool, family_three: *family_pool, family_four: *family_pool, family_five: *family_pool, family_six: *family_pool, family_seven: *family_pool, family_eight: *family_pool}
+    slot_relations: [{kind: distinct, slots: [family_one, family_two, family_three, family_four, family_five, family_six, family_seven, family_eight]}]
+    answer_derivation: {kind: matching_pairs, slots: [family_one, family_two, family_three, family_four, family_five, family_six, family_seven, family_eight]}
     feedback_frame: {text: "Match each family word to its English meaning.", language_code: en, direction: ltr}
 
   # Lesson 2: paternal and maternal relatives.
@@ -117,10 +125,13 @@ templates:
   - content_key: practice.en-prs.prs.a1.unit03.lesson02.uncle_aunt_pair.004
     lesson_content_key: prs.a1.unit03.lesson02.extended_family
     type: matching_pairs
-    frame: {text: "{uncle_aunt_one} — {uncle_aunt_two}", language_code: prs, direction: rtl}
-    slots: {uncle_aunt_one: *uncle_aunt, uncle_aunt_two: *uncle_aunt}
-    slot_relations: [{kind: distinct, slots: [uncle_aunt_one, uncle_aunt_two]}]
-    answer_derivation: {kind: matching_pairs, slots: [uncle_aunt_one, uncle_aunt_two]}
+    # Expanded 2->8 pairs 2026-07-06 (AUTHORING_GUIDE.md #16 retrofit),
+    # pooling uncle_aunt with lesson01's immediate_family (family_pool
+    # preset above) -- verified via scripts/_practice_slot_check.py.
+    frame: {text: "{family_one} — {family_two} — {family_three} — {family_four} — {family_five} — {family_six} — {family_seven} — {family_eight}", language_code: prs, direction: rtl}
+    slots: {family_one: *family_pool, family_two: *family_pool, family_three: *family_pool, family_four: *family_pool, family_five: *family_pool, family_six: *family_pool, family_seven: *family_pool, family_eight: *family_pool}
+    slot_relations: [{kind: distinct, slots: [family_one, family_two, family_three, family_four, family_five, family_six, family_seven, family_eight]}]
+    answer_derivation: {kind: matching_pairs, slots: [family_one, family_two, family_three, family_four, family_five, family_six, family_seven, family_eight]}
     feedback_frame: {text: "Match each word to the exact relationship it names.", language_code: en, direction: ltr}
 
   # Lesson 3: describing family size, incl. the دارم/داریم/دارین have-forms.
@@ -148,10 +159,16 @@ templates:
   - content_key: practice.en-prs.prs.a1.unit03.lesson03.have_pair.004
     lesson_content_key: prs.a1.unit03.lesson03.family_size
     type: matching_pairs
-    frame: {text: "{have_verb_one} — {have_verb_two}", language_code: prs, direction: rtl}
-    slots: {have_verb_one: *have_verb, have_verb_two: *have_verb}
-    slot_relations: [{kind: distinct, slots: [have_verb_one, have_verb_two]}]
-    answer_derivation: {kind: matching_pairs, slots: [have_verb_one, have_verb_two]}
+    # Expanded 2->3 pairs 2026-07-06 (AUTHORING_GUIDE.md #16 retrofit).
+    # Real vocabulary ceiling: داشتن (to have) only has 3 taught
+    # conjugated forms in this course (دارم/داریم/دارین) -- a closed
+    # paradigm, not a vocab set to pool further without mixing in a
+    # different verb's conjugations (would break the "match the subject"
+    # coherence of this specific drill).
+    frame: {text: "{have_verb_one} — {have_verb_two} — {have_verb_three}", language_code: prs, direction: rtl}
+    slots: {have_verb_one: *have_verb, have_verb_two: *have_verb, have_verb_three: *have_verb}
+    slot_relations: [{kind: distinct, slots: [have_verb_one, have_verb_two, have_verb_three]}]
+    answer_derivation: {kind: matching_pairs, slots: [have_verb_one, have_verb_two, have_verb_three]}
     feedback_frame: {text: "Match each form of داشتن to its subject.", language_code: en, direction: ltr}
 
   # Lesson 5: marriage and marital status.
@@ -179,8 +196,11 @@ templates:
   - content_key: practice.en-prs.prs.a1.unit03.lesson05.marital_pair.004
     lesson_content_key: prs.a1.unit03.lesson05.marital_status
     type: matching_pairs
-    frame: {text: "{marital_word_one} — {marital_word_two}", language_code: prs, direction: rtl}
-    slots: {marital_word_one: *marital_word, marital_word_two: *marital_word}
-    slot_relations: [{kind: distinct, slots: [marital_word_one, marital_word_two]}]
-    answer_derivation: {kind: matching_pairs, slots: [marital_word_one, marital_word_two]}
+    # Expanded 2->4 pairs 2026-07-06 (AUTHORING_GUIDE.md #16 retrofit).
+    # Real vocabulary ceiling: 4 distinct marital_word candidates taught
+    # course-wide (verified via scripts/_practice_slot_check.py).
+    frame: {text: "{marital_word_one} — {marital_word_two} — {marital_word_three} — {marital_word_four}", language_code: prs, direction: rtl}
+    slots: {marital_word_one: *marital_word, marital_word_two: *marital_word, marital_word_three: *marital_word, marital_word_four: *marital_word}
+    slot_relations: [{kind: distinct, slots: [marital_word_one, marital_word_two, marital_word_three, marital_word_four]}]
+    answer_derivation: {kind: matching_pairs, slots: [marital_word_one, marital_word_two, marital_word_three, marital_word_four]}
     feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}

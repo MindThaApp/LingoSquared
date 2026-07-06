@@ -322,9 +322,19 @@ units:
             prompt: {target_blocks: [{text: نخیر، خواهر ندارم, language_code: prs, direction: rtl}]}
           - content_key: prs.a1.unit03.lesson04.exercise03.match_answers
             type: matching_pairs
-            tested_text: بلی دارم نخیر ندارم
+            # Expanded 2->4 pairs 2026-07-06 (AUTHORING_GUIDE.md #16
+            # retrofit): pooled in the standalone بلی/نخیر particles,
+            # also taught in this same lesson. Real ceiling given the
+            # compiler's no-forward-reference rule -- lesson05's متأهل
+            # and lesson06's نداریم aren't introduced yet at this point
+            # in the course, so they can't be pooled in here (tried,
+            # caught by `compile_content.py compile`'s untaught-token
+            # check, reverted).
+            tested_text: بلی نخیر دارم ندارم
             prompt: {target_blocks: []}
             pairs:
+              - {left: بلی, right: "yes"}
+              - {left: نخیر, right: "no"}
               - {left: بلی، دارم, right: "yes, I have"}
               - {left: نخیر، ندارم, right: "no, I do not have"}
           - content_key: prs.a1.unit03.lesson04.exercise04.order_question

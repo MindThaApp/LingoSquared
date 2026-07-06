@@ -43,11 +43,19 @@ review:
 tag_schema:
   part_of_speech: [noun, proper_noun, adjective, particle]
   agreement_tags:
-    semantic: [person_name, phone_opening, message_word]
+    # phone_word declared here too (not this pack's own tag) because
+    # phone_open_pair/message_pair pool it in from unit04 to reach 6
+    # candidates -- see the phone_and_message preset below.
+    semantic: [person_name, phone_opening, message_word, phone_word]
 slot_presets:
   person_name: &person_name {language_code: prs, part_of_speech: proper_noun, agreement_tags: {semantic: person_name}}
   phone_opening: &phone_opening {language_code: prs, part_of_speech: [noun, particle], agreement_tags: {semantic: phone_opening}}
   message_word: &message_word {language_code: prs, part_of_speech: [noun, adjective], agreement_tags: {semantic: message_word}}
+  # phone_opening (2) and message_word (2) are each too thin alone;
+  # pooled with unit04's phone_word (نمبر/تلفن/تلفنم) for the
+  # matching_pairs templates below to reach 6 (AUTHORING_GUIDE.md #16) --
+  # coherent "phone & messaging" theme, real vocabulary only.
+  phone_and_message: &phone_and_message {language_code: prs, part_of_speech: [noun, particle, adjective], agreement_tags: {semantic: [phone_word, phone_opening, message_word]}}
 templates:
   # Lesson 1: answering the phone.
   - content_key: practice.en-prs.prs.a1.unit07.lesson01.phone_open_fill.001
@@ -67,10 +75,14 @@ templates:
   - content_key: practice.en-prs.prs.a1.unit07.lesson01.phone_open_pair.003
     lesson_content_key: prs.a1.unit07.lesson01.answering_the_phone
     type: matching_pairs
-    frame: {text: "{phone_opening_one} — {phone_opening_two}", language_code: prs, direction: rtl}
-    slots: {phone_opening_one: *phone_opening, phone_opening_two: *phone_opening}
-    slot_relations: [{kind: distinct, slots: [phone_opening_one, phone_opening_two]}]
-    answer_derivation: {kind: matching_pairs, slots: [phone_opening_one, phone_opening_two]}
+    # Expanded 2->6 pairs 2026-07-06 (AUTHORING_GUIDE.md #16 retrofit),
+    # pooling phone_opening with unit04's phone_word and this unit's own
+    # message_word (phone_and_message preset above) -- verified via
+    # scripts/_practice_slot_check.py.
+    frame: {text: "{phone_opening_one} — {phone_opening_two} — {phone_opening_three} — {phone_opening_four} — {phone_opening_five} — {phone_opening_six}", language_code: prs, direction: rtl}
+    slots: {phone_opening_one: *phone_and_message, phone_opening_two: *phone_and_message, phone_opening_three: *phone_and_message, phone_opening_four: *phone_and_message, phone_opening_five: *phone_and_message, phone_opening_six: *phone_and_message}
+    slot_relations: [{kind: distinct, slots: [phone_opening_one, phone_opening_two, phone_opening_three, phone_opening_four, phone_opening_five, phone_opening_six]}]
+    answer_derivation: {kind: matching_pairs, slots: [phone_opening_one, phone_opening_two, phone_opening_three, phone_opening_four, phone_opening_five, phone_opening_six]}
     feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
 
   # Lesson 4/5: leaving a message and text messages.
@@ -91,10 +103,14 @@ templates:
   - content_key: practice.en-prs.prs.a1.unit07.lesson04.message_pair.003
     lesson_content_key: prs.a1.unit07.lesson04.leaving_a_message
     type: matching_pairs
-    frame: {text: "{message_word_one} — {message_word_two}", language_code: prs, direction: rtl}
-    slots: {message_word_one: *message_word, message_word_two: *message_word}
-    slot_relations: [{kind: distinct, slots: [message_word_one, message_word_two]}]
-    answer_derivation: {kind: matching_pairs, slots: [message_word_one, message_word_two]}
+    # Expanded 2->6 pairs 2026-07-06 (AUTHORING_GUIDE.md #16 retrofit),
+    # pooling message_word with unit04's phone_word and this unit's own
+    # phone_opening (phone_and_message preset above) -- verified via
+    # scripts/_practice_slot_check.py.
+    frame: {text: "{message_word_one} — {message_word_two} — {message_word_three} — {message_word_four} — {message_word_five} — {message_word_six}", language_code: prs, direction: rtl}
+    slots: {message_word_one: *phone_and_message, message_word_two: *phone_and_message, message_word_three: *phone_and_message, message_word_four: *phone_and_message, message_word_five: *phone_and_message, message_word_six: *phone_and_message}
+    slot_relations: [{kind: distinct, slots: [message_word_one, message_word_two, message_word_three, message_word_four, message_word_five, message_word_six]}]
+    answer_derivation: {kind: matching_pairs, slots: [message_word_one, message_word_two, message_word_three, message_word_four, message_word_five, message_word_six]}
     feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
 
   # Lesson 6: the full phone call dialogue (Farid, Homayoun, Lima).
@@ -122,8 +138,11 @@ templates:
   - content_key: practice.en-prs.prs.a1.unit07.lesson06.name_pair.004
     lesson_content_key: prs.a1.unit07.lesson06.phone_call_dialogue
     type: matching_pairs
-    frame: {text: "{person_name_one} — {person_name_two}", language_code: prs, direction: rtl}
-    slots: {person_name_one: *person_name, person_name_two: *person_name}
-    slot_relations: [{kind: distinct, slots: [person_name_one, person_name_two]}]
-    answer_derivation: {kind: matching_pairs, slots: [person_name_one, person_name_two]}
+    # Expanded 2->10 pairs 2026-07-06 (AUTHORING_GUIDE.md #16 retrofit) --
+    # verified via scripts/_practice_slot_check.py: 10 distinct
+    # person_name candidates backfilled course-wide.
+    frame: {text: "{person_name_one} — {person_name_two} — {person_name_three} — {person_name_four} — {person_name_five} — {person_name_six} — {person_name_seven} — {person_name_eight} — {person_name_nine} — {person_name_ten}", language_code: prs, direction: rtl}
+    slots: {person_name_one: *person_name, person_name_two: *person_name, person_name_three: *person_name, person_name_four: *person_name, person_name_five: *person_name, person_name_six: *person_name, person_name_seven: *person_name, person_name_eight: *person_name, person_name_nine: *person_name, person_name_ten: *person_name}
+    slot_relations: [{kind: distinct, slots: [person_name_one, person_name_two, person_name_three, person_name_four, person_name_five, person_name_six, person_name_seven, person_name_eight, person_name_nine, person_name_ten]}]
+    answer_derivation: {kind: matching_pairs, slots: [person_name_one, person_name_two, person_name_three, person_name_four, person_name_five, person_name_six, person_name_seven, person_name_eight, person_name_nine, person_name_ten]}
     feedback_frame: {text: "Match each name to its English label.", language_code: en, direction: ltr}

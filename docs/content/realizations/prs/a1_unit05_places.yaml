@@ -11,7 +11,7 @@ generation_provenance:
 review:
   status: reviewed
   required_next_reviewer: null
-  notes: "New unit, prs's next uncovered outcome (no prerequisites). Six lessons: everyday places vocabulary, civic/travel places, asking where something is with کجا (building on unit02's origin question), giving simple location answers (near/far/here/there), prepositions of place, and a dialogue asking for directions to a place in a Kabul neighborhood. Deliberately uses Afghan Dari-specific place vocabulary (شفاخانه, مکتب, دواخانه, میدان هوایی) rather than the Iranian Farsi equivalents, authored independently of the fa realization per the sibling-isolation rule. Adapted from Peace Corps Dari material with an active modernization pass. Fresh-context review completed 2026-07-05: verified شفاخانه/مکتب/دواخانه/میدان هوایی and تشکر زیاد/قابلی نداره against real Afghan Dari usage (all genuine, web-checked, not fabricated or overcorrected); fixed two listen_select exercises (lesson01/lesson02 exercise03) whose recorded audio listed every distractor word alongside the correct answer, making 'select what you hear' ungradeable in practice -- audio narrowed to the single tested word; fixed a lesson06 exercise-pacing violation (a listen_type production exercise sat before the lesson's matching_pairs/word_order drag items) by reordering; removed a standalone 'مستقیم بروید' (go straight) teaching card and its dedicated drill exercise that drifted toward the separate directions.ask_follow_basic_directions outcome -- the phrase still appears naturally inside the dialogue turn for scene realism, but is no longer taught/tested as its own objective under this unit's locate_common_places outcome; retargeted that exercise slot to test 'دواخانه دور نیست' (place-proximity content, squarely in scope) instead; corrected an overlay note that misattributed دفتر's prior introduction to the wrong earlier unit. Compiler validation clean (0 errors/0 warnings) after fixes. Audio remains pending generation; human native-speaker review still recommended before this ships, per project policy of no native-speaker review network for prs."
+  notes: "New unit, prs's next uncovered outcome (no prerequisites). Six lessons: everyday places vocabulary, civic/travel places, asking where something is with کجا (building on unit02's origin question), giving simple location answers (near/far/here/there), prepositions of place, and a dialogue asking for directions to a place in a Kabul neighborhood. Deliberately uses Afghan Dari-specific place vocabulary (شفاخانه, مکتب, دواخانه, میدان هوایی) rather than the Iranian Farsi equivalents, authored independently of the fa realization per the sibling-isolation rule. Adapted from Peace Corps Dari material with an active modernization pass. Fresh-context review completed 2026-07-05: verified شفاخانه/مکتب/دواخانه/میدان هوایی and تشکر زیاد/قابلی نداره against real Afghan Dari usage (all genuine, web-checked, not fabricated or overcorrected); fixed two listen_select exercises (lesson01/lesson02 exercise03) whose recorded audio listed every distractor word alongside the correct answer, making 'select what you hear' ungradeable in practice -- audio narrowed to the single tested word; fixed a lesson06 exercise-pacing violation (a listen_type production exercise sat before the lesson's matching_pairs/word_order drag items) by reordering; removed a standalone 'مستقیم بروید' (go straight) teaching card and its dedicated drill exercise that drifted toward the separate directions.ask_follow_basic_directions outcome -- the phrase still appears naturally inside the dialogue turn for scene realism, but is no longer taught/tested as its own objective under this unit's locate_common_places outcome; retargeted that exercise slot to test 'دواخانه دور نیست' (place-proximity content, squarely in scope) instead; corrected an overlay note that misattributed دفتر's prior introduction to the wrong earlier unit. Compiler validation clean (0 errors/0 warnings) after fixes. Audio remains pending generation; human native-speaker review still recommended before this ships, per project policy of no native-speaker review network for prs. AUDIO-ACCESSIBILITY RETROFIT 2026-07-06 (§14, added after this review completed): a project-wide audit found 7 exercises in this unit (lesson01.exercise03, lesson02.exercise03, lesson03.exercise03, lesson04.exercise03/06, lesson05.exercise03, lesson06.exercise05) were listen_type or bare-prompt listen_select items -- genuinely unanswerable since fa/prs have zero working TTS/recorded audio. Converted: listen_select -> multiple_choice (added the target Dari text as a real visible prompt, English-gloss correct_option/distractors), listen_type -> translation. MATCHING_PAIRS SCALE RETROFIT (§16, added same day, Ramin's direct feedback that 2-3 pair exercises are too small): expanded match_civic_places 4->10 pairs (pooled lesson01's 6 everyday places, all already taught earlier in this unit), match_where_questions 3->8 pairs (constructed 5 more '[place] کجاست؟' questions using already-taught place nouns from lesson01/lesson02 plus this lesson's own taught کجاست question form -- no untaught vocabulary introduced), match_prepositions 3->7 pairs (pooled lesson04's near/far/here/there, same spatial-vocabulary domain). Left match_everyday_places at 6 (already at the floor), match_location_words at 4, and match_dialogue_facts at 2 unchanged -- the latter two are genuine small closed sets (4 deictic location words; 2 specific facts from one dialogue) where expanding further would require padding with untaught or unrelated words, which §16 explicitly prohibits. Re-verified 0 remaining §14 violations and all new pairs use only already-taught vocabulary via script, content_key parity intact, validate+compile both clean after the retrofit."
 
 course:
   realization_key: prs.a1
@@ -113,11 +113,10 @@ units:
             type: multiple_choice
             tested_text: شفاخانه
             prompt: {target_blocks: [{text: شفاخانه, language_code: prs, direction: rtl}]}
-          - content_key: prs.a1.unit05.lesson01.exercise03.listen_places
-            type: listen_select
+          - content_key: prs.a1.unit05.lesson01.exercise03.recognize_bank_reading
+            type: multiple_choice
             tested_text: بانک
-            media_asset_key: prs.a1.audio.places.everyday.01
-            prompt: {target_blocks: []}
+            prompt: {target_blocks: [{text: بانک, language_code: prs, direction: rtl}]}
           - content_key: prs.a1.unit05.lesson01.exercise04.match_everyday_places
             type: matching_pairs
             tested_text: بازار بانک مسجد شفاخانه مکتب دواخانه
@@ -172,20 +171,25 @@ units:
             type: multiple_choice
             tested_text: میدان هوایی
             prompt: {target_blocks: [{text: "میدان هوایی", language_code: prs, direction: rtl}]}
-          - content_key: prs.a1.unit05.lesson02.exercise03.listen_civic_places
-            type: listen_select
+          - content_key: prs.a1.unit05.lesson02.exercise03.recognize_sefarat_reading
+            type: multiple_choice
             tested_text: سفارت
-            media_asset_key: prs.a1.audio.places.civic.01
-            prompt: {target_blocks: []}
+            prompt: {target_blocks: [{text: سفارت, language_code: prs, direction: rtl}]}
           - content_key: prs.a1.unit05.lesson02.exercise04.match_civic_places
             type: matching_pairs
-            tested_text: پوسته خانه سفارت میدان هوایی دفتر
+            tested_text: پوسته خانه سفارت میدان هوایی دفتر بازار بانک مسجد شفاخانه مکتب دواخانه
             prompt: {target_blocks: []}
             pairs:
               - {left: "پوسته خانه", right: "post office"}
               - {left: سفارت, right: embassy}
               - {left: "میدان هوایی", right: airport}
               - {left: دفتر, right: office}
+              - {left: بازار, right: market}
+              - {left: بانک, right: bank}
+              - {left: مسجد, right: mosque}
+              - {left: شفاخانه, right: hospital}
+              - {left: مکتب, right: school}
+              - {left: دواخانه, right: pharmacy}
           - content_key: prs.a1.unit05.lesson02.exercise05.order_post_office
             type: word_order
             tested_text: پوسته خانه
@@ -229,19 +233,23 @@ units:
             type: multiple_choice
             tested_text: ببخشید
             prompt: {target_blocks: [{text: "ببخشید، دواخانه کجاست؟", language_code: prs, direction: rtl}]}
-          - content_key: prs.a1.unit05.lesson03.exercise03.listen_where_question
-            type: listen_select
+          - content_key: prs.a1.unit05.lesson03.exercise03.recognize_where_question_reading
+            type: multiple_choice
             tested_text: بازار کجاست
-            media_asset_key: prs.a1.audio.where_is_question.01
-            prompt: {target_blocks: []}
+            prompt: {target_blocks: [{text: "بازار کجاست؟", language_code: prs, direction: rtl}]}
           - content_key: prs.a1.unit05.lesson03.exercise04.match_where_questions
             type: matching_pairs
-            tested_text: بازار کجاست شفاخانه کجاست دواخانه کجاست
+            tested_text: بازار کجاست شفاخانه کجاست دواخانه کجاست بانک کجاست مسجد کجاست مکتب کجاست سفارت کجاست دفتر کجاست
             prompt: {target_blocks: []}
             pairs:
               - {left: "بازار کجاست؟", right: "Where is the market?"}
               - {left: "شفاخانه کجاست؟", right: "Where is the hospital?"}
               - {left: "ببخشید، دواخانه کجاست؟", right: "Excuse me, where is the pharmacy?"}
+              - {left: "بانک کجاست؟", right: "Where is the bank?"}
+              - {left: "مسجد کجاست؟", right: "Where is the mosque?"}
+              - {left: "مکتب کجاست؟", right: "Where is the school?"}
+              - {left: "سفارت کجاست؟", right: "Where is the embassy?"}
+              - {left: "دفتر کجاست؟", right: "Where is the office?"}
           - content_key: prs.a1.unit05.lesson03.exercise05.order_where_question
             type: word_order
             tested_text: ببخشید دواخانه کجاست
@@ -293,11 +301,10 @@ units:
             type: multiple_choice
             tested_text: دور
             prompt: {target_blocks: [{text: دور, language_code: prs, direction: rtl}]}
-          - content_key: prs.a1.unit05.lesson04.exercise03.listen_near_answer
-            type: listen_select
+          - content_key: prs.a1.unit05.lesson04.exercise03.recognize_near_answer_reading
+            type: multiple_choice
             tested_text: بازار نزدیک است
-            media_asset_key: prs.a1.audio.location_near.01
-            prompt: {target_blocks: []}
+            prompt: {target_blocks: [{text: "بازار نزدیک است", language_code: prs, direction: rtl}]}
           - content_key: prs.a1.unit05.lesson04.exercise04.match_location_words
             type: matching_pairs
             tested_text: نزدیک دور این‌جا آن‌جا
@@ -312,10 +319,9 @@ units:
             tested_text: میدان هوایی دور است
             prompt: {target_blocks: []}
             word_bank: [میدان, هوایی, دور, است]
-          - content_key: prs.a1.unit05.lesson04.exercise06.listen_far_answer
-            type: listen_type
+          - content_key: prs.a1.unit05.lesson04.exercise06.translate_far_answer
+            type: translation
             tested_text: میدان هوایی دور است
-            media_asset_key: prs.a1.audio.location_far.01
             prompt: {target_blocks: []}
           - content_key: prs.a1.unit05.lesson04.exercise07.translate_bank_here
             type: translation
@@ -351,19 +357,22 @@ units:
             type: multiple_choice
             tested_text: مقابل
             prompt: {target_blocks: [{text: مقابل, language_code: prs, direction: rtl}]}
-          - content_key: prs.a1.unit05.lesson05.exercise03.listen_next_to_sentence
-            type: listen_select
+          - content_key: prs.a1.unit05.lesson05.exercise03.recognize_next_to_reading
+            type: multiple_choice
             tested_text: شفاخانه در کنار مسجد است
-            media_asset_key: prs.a1.audio.location_next_to.01
-            prompt: {target_blocks: []}
+            prompt: {target_blocks: [{text: "شفاخانه در کنار مسجد است", language_code: prs, direction: rtl}]}
           - content_key: prs.a1.unit05.lesson05.exercise04.match_prepositions
             type: matching_pairs
-            tested_text: در کنار پشت مقابل
+            tested_text: در کنار پشت مقابل نزدیک دور این‌جا آن‌جا
             prompt: {target_blocks: []}
             pairs:
               - {left: "در کنار", right: "next to"}
               - {left: پشت, right: behind}
               - {left: مقابل, right: opposite}
+              - {left: نزدیک, right: near}
+              - {left: دور, right: far}
+              - {left: "این‌جا", right: here}
+              - {left: "آن‌جا", right: there}
           - content_key: prs.a1.unit05.lesson05.exercise05.order_next_to_mosque
             type: word_order
             tested_text: شفاخانه در کنار مسجد است
@@ -424,8 +433,8 @@ units:
             tested_text: تشکر زیاد
             prompt: {target_blocks: []}
             word_bank: [تشکر, زیاد]
-          - content_key: prs.a1.unit05.lesson06.exercise05.listen_pharmacy_not_far
-            type: listen_type
+          - content_key: prs.a1.unit05.lesson06.exercise05.translate_pharmacy_not_far
+            type: translation
             tested_text: دواخانه دور نیست
             prompt: {target_blocks: []}
           - content_key: prs.a1.unit05.lesson06.exercise06.dialogue_response_finding
