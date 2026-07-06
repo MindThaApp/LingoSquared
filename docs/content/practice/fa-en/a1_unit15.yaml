@@ -1,0 +1,154 @@
+schema_version: "1.0"
+pack_key: practice.fa-en.a1.unit15
+source_language: fa
+target_language: en
+unit_content_key: en.a1.unit15.money
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: >-
+    Authored 2026-07-06 by the practice-pool-sync lane extending fa-en
+    coverage to units 15-20, mirroring nl-en's already-reviewed a1_unit15.yaml
+    (payment_method 4 members: cash/card/credit/debit; a narrower card_type
+    2-member tag for credit/debit specifically, since "Do you take {item}
+    cards?" is only grammatical with credit/debit, not cash/card -- "Do you
+    take cash cards?" is not a real phrase; and the already-established
+    21-member number_no_hundred tag from unit03, reused here for both
+    receipt/dialogue total-amount frames, deliberately excluding bare
+    "hundred" per the same real-content constraint nl-en's unit15 fix
+    documented). All POS/semantic-tag classification for this unit's
+    vocabulary was already present in scripts/_en_target_lexeme_common.py
+    before this pass (added earlier this session alongside nl-en's own
+    unit15 work) -- only scripts/backfill_lexemes_fa_en.py's own Farsi
+    gloss dict needed extending (cash/card/credit/debit/total/cards/pay/by/
+    tax/1/10; "take"/"sorry"/"i'll"/"we" reuse their existing Unit 10/14/12/
+    12 senses unchanged). Verified with scripts/_practice_slot_check.py
+    (adapted invocation, see docs/BUILD_LOG.md's matching entry) that every
+    slot has >=1 real candidate lexeme and every multiple_choice/
+    listen_select slot has >=4 distinct candidate values. The underlying en
+    realization unit15 and the fa-en overlay are both already reviewed
+    (overlay status: reviewed) except the realization itself, which is
+    UNREVIEWED (Codex was usage-limited at authoring time) -- needs the
+    standard fresh-context review before import.
+tag_schema:
+  part_of_speech: [noun]
+  agreement_tags:
+    semantic: [payment_method, card_type, number_no_hundred]
+slot_presets:
+  payment_method: &payment_method {language_code: en, part_of_speech: noun, agreement_tags: {semantic: payment_method}}
+  card_type: &card_type {language_code: en, part_of_speech: noun, agreement_tags: {semantic: card_type}}
+  number_no_hundred: &number_no_hundred {language_code: en, part_of_speech: noun, agreement_tags: {semantic: number_no_hundred}}
+templates:
+  - content_key: practice.fa-en.en.a1.unit15.lesson01.payment_meaning.001
+    lesson_content_key: en.a1.unit15.lesson01.payment_words
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *payment_method}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} یکی از واژه‌های پرداخت این درس است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit15.lesson01.payment_listen.002
+    lesson_content_key: en.a1.unit15.lesson01.payment_words
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *payment_method}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} واژه‌ای است که شنیدید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit15.lesson01.payment_pair.003
+    lesson_content_key: en.a1.unit15.lesson01.payment_words
+    type: matching_pairs
+    frame: {text: "{first_word} — {second_word}", language_code: en, direction: ltr}
+    slots: {first_word: *payment_method, second_word: *payment_method}
+    slot_relations: [{kind: distinct, slots: [first_word, second_word]}]
+    answer_derivation: {kind: matching_pairs, slots: [first_word, second_word]}
+    feedback_frame: {text: "دو واژهٔ پرداخت را به معنای فارسی آن‌ها وصل کردید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit15.lesson01.payment_translate.004
+    lesson_content_key: en.a1.unit15.lesson01.payment_words
+    type: translation
+    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *payment_method}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "معادل انگلیسی {item} است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit15.lesson02.take_cards_order.001
+    lesson_content_key: en.a1.unit15.lesson02.asking_about_payment
+    type: word_order
+    frame: {text: "Do you take {item} cards", language_code: en, direction: ltr}
+    slots: {item: *card_type}
+    answer_derivation: {kind: render_frame, frame: {text: "Do you take {item} cards", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} نوع کارتی است که پرسیده می‌شود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit15.lesson02.take_cards_fill.002
+    lesson_content_key: en.a1.unit15.lesson02.asking_about_payment
+    type: fill_in_blank
+    frame: {text: "Do you take {item} cards?", language_code: en, direction: ltr}
+    slots: {item: *card_type}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} نوع کارتی است که پرسیده می‌شود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit15.lesson02.card_type_translate.003
+    lesson_content_key: en.a1.unit15.lesson02.asking_about_payment
+    type: translation
+    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *card_type}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "معادل انگلیسی {item} است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit15.lesson02.payment_meaning.004
+    lesson_content_key: en.a1.unit15.lesson02.asking_about_payment
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *payment_method}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} یکی از واژه‌های پرداخت است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit15.lesson03.payment_meaning.001
+    lesson_content_key: en.a1.unit15.lesson03.reading_a_receipt
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *payment_method}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} یکی از واژه‌های پرداخت است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit15.lesson03.total_order.002
+    lesson_content_key: en.a1.unit15.lesson03.reading_a_receipt
+    type: word_order
+    frame: {text: "The total is {item} dollars", language_code: en, direction: ltr}
+    slots: {item: *number_no_hundred}
+    answer_derivation: {kind: render_frame, frame: {text: "The total is {item} dollars", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} مبلغ جمع کل روی رسید است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit15.lesson03.total_fill.003
+    lesson_content_key: en.a1.unit15.lesson03.reading_a_receipt
+    type: fill_in_blank
+    frame: {text: "The total is {item} dollars.", language_code: en, direction: ltr}
+    slots: {item: *number_no_hundred}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} مبلغ جمع کل روی رسید است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit15.lesson03.total_translate.004
+    lesson_content_key: en.a1.unit15.lesson03.reading_a_receipt
+    type: translation
+    frame: {text: "جمع کل {item} دلار است.", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *number_no_hundred}
+    answer_derivation: {kind: render_frame, frame: {text: "The total is {item} dollars", language_code: en, direction: ltr}}
+    feedback_frame: {text: "The total is {item} dollars یعنی جمع کل {item} دلار است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit15.lesson04.payment_listen.001
+    lesson_content_key: en.a1.unit15.lesson04.paying_dialogue
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *payment_method}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} واژه‌ای است که شنیدید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit15.lesson04.its_order.002
+    lesson_content_key: en.a1.unit15.lesson04.paying_dialogue
+    type: word_order
+    frame: {text: "It's {item} dollars", language_code: en, direction: ltr}
+    slots: {item: *number_no_hundred}
+    answer_derivation: {kind: render_frame, frame: {text: "It's {item} dollars", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} مبلغی است که در این پاسخ آمده.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit15.lesson04.its_fill.003
+    lesson_content_key: en.a1.unit15.lesson04.paying_dialogue
+    type: fill_in_blank
+    frame: {text: "It's {item} dollars.", language_code: en, direction: ltr}
+    slots: {item: *number_no_hundred}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} مبلغی است که در این پاسخ آمده.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit15.lesson04.its_translate.004
+    lesson_content_key: en.a1.unit15.lesson04.paying_dialogue
+    type: translation
+    frame: {text: "{item} دلار است.", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *number_no_hundred}
+    answer_derivation: {kind: render_frame, frame: {text: "It's {item} dollars", language_code: en, direction: ltr}}
+    feedback_frame: {text: "It's {item} dollars یعنی {item} دلار است.", language_code: fa, direction: rtl}

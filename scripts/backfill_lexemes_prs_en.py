@@ -77,6 +77,107 @@ UNIT_FILES = (
         REPO_ROOT / "docs/content/realizations/en/a1_unit08_shopping.yaml",
         REPO_ROOT / "docs/content/overlays/prs-en/a1_unit08.yaml",
     ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit09_places.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a1_unit09.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit10_directions.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a1_unit10.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit11_weather.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a1_unit11.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit12_clothing.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a1_unit12.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit13_emotions.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a1_unit13.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit14_communication.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a1_unit14.yaml",
+    ),
+    # Units 15-20 (money/routines/plans/past events/preferences/
+    # comparisons), added 2026-07-06 by this lane's own worker (a
+    # separate concurrent worker owns units 21-26 -- appended
+    # independently, not touched here).
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit15_money.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a1_unit15.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit16_routines.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a1_unit16.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit17_plans.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a1_unit17.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit18_past_events.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a1_unit18.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit19_preferences.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a1_unit19.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit20_comparisons.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a1_unit20.yaml",
+    ),
+    # Units 21-24 (A1: travel, health, work, housing) + 25-26 (A2:
+    # bureaucracy, opinions), added 2026-07-06 by this lane's own worker
+    # (a separate concurrent worker owns units 9-14, another owns 15-20
+    # -- appended independently, not touched here), completing prs-en's
+    # coverage of all 24 A1 + first 2 A2 spine outcomes for the shared
+    # English realization, matching nl-en/fa-en's already-full 26-unit
+    # coverage. EN_POS/en_agreement_tags for all six units' vocabulary
+    # (including travel_noun, symptom_noun, occupation_noun/occupation_a,
+    # room_noun, bureaucracy_noun, dogpark_noun) were already present in
+    # _en_target_lexeme_common.py before this change (added earlier this
+    # session alongside nl-en's own unit21-26 work) -- verified with a
+    # standalone script diffing every introduced_token across these six
+    # realization files against EN_POS's keys: zero missing. Only this
+    # script's own Dari gloss dict needed extending (107 new tokens),
+    # cross-checked against the actual prs-en overlay text for these
+    # units, same division of labor as every other unit added here. One
+    # deliberate homograph avoidance carried over from the shared
+    # module's own documented limitation: "close" already has a gloss/
+    # POS entry from unit05 (the store-hours "بند کردن"/verb sense);
+    # unit26 reintroduces "close" as an adjective (proximity: "very
+    # close to the playground"), but no new entry was added here and no
+    # practice template in this pass uses "close" as a fillable slot for
+    # that sense -- consistent with the shared module's own instruction
+    # not to force a second, conflicting entry onto an existing bare-
+    # token classification.
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit21_travel.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a1_unit21.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit22_health.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a1_unit22.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit23_work.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a1_unit23.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit24_housing.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a1_unit24.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a2_unit25_bureaucracy.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a2_unit25.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a2_unit26_opinions.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a2_unit26.yaml",
+    ),
 )
 
 # Dari gloss for each shared English target token -- hand-written for
@@ -152,7 +253,7 @@ EN_TARGET_TO_PRS_GLOSS: dict[str, str] = {
     # Unit 7 (food, drink, and ordering), added 2026-07-06.
     "coffee": "قهوه", "tea": "چای", "water": "آب", "bread": "نان",
     "soup": "شوروا", "salad": "سالاد", "sandwich": "ساندویچ",
-    "i'd": "من می‌خواهم (مخفف I would)", "like": "خواستن",
+    "i'd": "من می‌خواهم (مخفف I would)", "like": "خواستن؛ خوش داشتن (این معنای دوم در Unit 19 استعمال می‌شه)",
     "please": "لطفاً", "anything": "چیزی", "else": "دیگه",
     "that's": "دا ... است (مخفف that is)", "all": "بس", "for": "به خاطر",
     "here": "اینجا", "or": "یا", "go": "رفتن؛ بردن (بیرون‌بر)",
@@ -164,6 +265,156 @@ EN_TARGET_TO_PRS_GLOSS: dict[str, str] = {
     "kilo": "کیلو", "tomatoes": "بادنجان رومی‌ها", "pounds": "پوندها",
     "fresh": "تازه", "per": "هر",
     "4": "چهار",
+    # Unit 9 (common places and locations), added 2026-07-06. Glosses
+    # cross-checked against the prs-en overlay's own real Dari phrasing
+    # (docs/content/overlays/prs-en/a1_unit09.yaml), e.g. hospital=
+    # شفاخانه and pharmacy=دواخانه (both genuinely distinct Dari lexemes
+    # from Farsi's بیمارستان/داروخانه).
+    "bank": "بانک", "hospital": "شفاخانه", "pharmacy": "دواخانه",
+    "park": "پارک", "restaurant": "رستورانت", "next": "پهلوی (در next to)",
+    "across": "مقابل (در across from)", "from": "از",
+    "between": "بین", "behind": "عقب", "front": "پیشروی (در in front of)",
+    "where": "کجا", "far": "دور", "excuse": "ببخشین (در excuse me)",
+    "me": "مره (من را)",
+    # Unit 10 (asking for and following directions), added 2026-07-06.
+    "turn": "پیچیدن", "left": "چپ", "right": "راست", "straight": "مستقیم",
+    "stop": "توقف کردن", "corner": "کنج سرک؛ چوک", "get": "رسیدن (در get to)",
+    "minutes": "دقیقه‌ها", "can't": "نمی‌تانم؛ نمی‌تانه (نی‌تانستن)",
+    "miss": "گم کردن (در can't miss it)", "take": "گرفتن (در take the street)",
+    "first": "اول", "street": "سرک", "second": "دوم",
+    "directions": "مسیر؛ آدرس‌دهی",
+    # Unit 11 (talking about the weather), added 2026-07-06. Overlay
+    # renders both "hot" and "warm" as گرم -- kept as the overlay's own
+    # literal Dari (not a script error), since Dari doesn't lexically
+    # split hot/warm the way English does in this register.
+    "sunny": "آفتابی", "rainy": "بارانی", "cloudy": "ابری", "cold": "سرد",
+    "hot": "گرم", "windy": "بادی", "weather": "هوا", "warm": "گرم",
+    "raining": "باران باریدن", "should": "باید", "umbrella": "چتر",
+    "tomorrow": "فردا", "will": "(نشانهٔ فعل آینده)", "be": "بودن",
+    "rain": "باران", "saturday": "شنبه", "let's": "بیایید (پیشنهاد مشترک)",
+    "idea": "فکر؛ نظر", "but": "اما", "going": "می‌خواهد (آیندهٔ نزدیک)",
+    "so": "پس",
+    # Unit 12 (clothing: sizes and colors), added 2026-07-06.
+    "shirt": "شرت؛ پیراهن", "pants": "پطلون", "shoes": "بوت",
+    "jacket": "جاکت", "dress": "لباس زنانهٔ یک‌تکه", "small": "خورد",
+    "medium": "منجم؛ متوسط", "large": "کلان", "blue": "آبی", "black": "سیاه",
+    "size": "سایز", "color": "رنگ", "20": "بیست",
+    "i'll": "من ... خواهم (مخفف I will)", "we": "ما",
+    # Unit 13 (talking about feelings), added 2026-07-06.
+    "happy": "خوش", "sad": "خفه؛ غمگین", "tired": "خسته",
+    "excited": "شوق‌مند؛ هیجان‌زده", "worried": "خفه؛ پریشان",
+    "feeling": "احساس", "little": "کمی (در a little)", "because": "چون",
+    "big": "مهم؛ کلان", "test": "امتحان", "class": "صنف",
+    "almost": "تقریباً", "over": "ختم شدن (در almost over)", "year": "سال",
+    "last": "آخرین", "writer": "نویسنده", "oh": "آه", "understand": "فهمیدن",
+    # Unit 14 (phone calls and messages), added 2026-07-06.
+    "free": "وقت‌دار؛ آزاد", "tonight": "امشب", "sorry": "ببخشین",
+    "repeat": "تکرار کردن", "that": "آن؛ دا", "speak": "گپ زدن",
+    "more": "بیشتر", "slowly": "آهسته", "hear": "شنیدن",
+    "well": "خوب (در hear well)", "6pm": "ساعت شش شام",
+    "message": "پیام", "suggest": "پیشنهاد کردن", "meeting": "دیدار؛ ملاقات",
+    "place": "جای", "about": "دربارهٔ",
+    # Unit 15 (handling money and payments), added 2026-07-06. Glosses
+    # cross-checked against docs/content/overlays/prs-en/a1_unit15.yaml's
+    # own real Dari phrasing (cash=پیسهٔ نقد، credit card=کارت اعتباری،
+    # debit card=کارت بانکی -- genuinely distinct Afghan Dari usage, not
+    # a copy of the fa-en script's Farsi).
+    "cash": "پیسهٔ نقد", "card": "کارت", "credit": "اعتباری (در credit card)",
+    "debit": "بانکی؛ مستقیم (در debit card)", "total": "جمع کل",
+    "cards": "کارت‌ها", "pay": "پرداخت کردن", "tax": "مالیه",
+    "10": "ده", "by": "با (در pay by card)", "1": "یک",
+    # Unit 16 (describing a daily routine), added 2026-07-06. Overlay
+    # renders "wake up"/"get dressed"/"go to bed" as multi-word Dari
+    # phrases (بیدار شدن/کالا پوشیدن/به بستر رفتن) -- each single-token
+    # gloss below reflects only that token's own contribution.
+    "wake": "بیدار شدن (در wake up)", "up": "بیدار شدن (جزء wake up)",
+    "dressed": "کالا پوشیدن (در get dressed)", "dinner": "شب چاشت",
+    "bed": "بستر (در go to bed)", "every": "هر", "usually": "معمولاً",
+    "breakfast": "صبح‌چاشت", "after": "بعد از",
+    # Unit 17 (making simple plans), added 2026-07-06.
+    "want": "خواستن (در Do you want to)", "movie": "فلم",
+    "weekend": "آخر هفته", "would": "میل داشتن (در Would you like to)",
+    "walk": "قدم زدن", "love": "خیلی خوش شدن (در I'd love to)",
+    "busy": "مصروف", "maybe": "شاید", "another": "دیگه",
+    "lunch": "چاشت", "1pm": "ساعت یک بعد از چاشت",
+    "works": "مناسب/خوب بودن (در {day} works for me)",
+    # Unit 18 (describing a recent event), added 2026-07-06.
+    "went": "رفت (زمان گذشتهٔ go)", "saw": "دید (زمان گذشتهٔ see)",
+    "ate": "خورد (زمان گذشتهٔ eat)",
+    "visited": "به دیدن رفت (زمان گذشتهٔ visit)",
+    "worked": "کار کرد (زمان گذشتهٔ work)",
+    "did": "(فعل کمکی پرسشی گذشته، در What did you do)",
+    "yesterday": "دیروز", "together": "با هم",
+    "watched": "تماشا کرد (زمان گذشتهٔ watch)",
+    "writer's": "مالِ نویسنده", "s": "(علامت مالکیت 's)",
+    "was": "بود (زمان گذشتهٔ is/am)", "week": "هفته",
+    # Unit 19 (expressing likes and preferences), added 2026-07-06. "hate"
+    # confirmed against the overlay's own corrected Dari (نفرت داشتن، not
+    # a Farsi-style بدبین بودن).
+    "prefer": "ترجیح دادن", "hate": "نفرت داشتن", "calmer": "آرام‌تر",
+    "very": "خیلی (در very much)", "strong": "تُند (در too strong)",
+    "why": "چرا", "think": "فکر کردن",
+    "prefers": "ترجیح می‌ته (سوم شخص مفرد)",
+    "thinks": "فکر می‌کنه (سوم شخص مفرد)",
+    # Unit 20 (making basic comparisons), added 2026-07-06.
+    "bigger": "کلان‌تر", "smaller": "خُرد‌تر", "cheaper": "ارزان‌تر",
+    "expensive": "قیمتی (در more expensive: قیمتی‌تر)", "faster": "تیزتر",
+    "than": "از (در مقایسه، مثلاً X از Y ...تره)", "nicer": "قشنگ‌تر",
+    "cheapest": "ارزان‌ترین", "red": "سرخ", "car": "موتر", "white": "سفید",
+    # Units 21-24 (A1: travel, health, work, housing) + 25-26 (A2:
+    # bureaucracy, opinions), added 2026-07-06. Atomic per-token
+    # glosses -- cross-checked against, but not copy-pasted from, each
+    # unit's own (phrase-level) Dari overlay glosses
+    # (docs/content/overlays/prs-en/a1_unit21.yaml through a2_unit26.yaml).
+    "ticket": "تکت", "platform": "سکو", "train": "ریل",
+    "departure": "حرکت", "arrival": "رسیدن", "boston": "بوستون",
+    "way": "طرف (در one way یعنی یک‌طرفه)",
+    "round": "دوطرفه (در round trip)", "trip": "سفر",
+    "leaves": "حرکت می‌کنه (فعل، سوم‌شخص مفرد leave)", "9:15": "۹:۱۵",
+    "arrives": "می‌رسه (فعل، سوم‌شخص مفرد arrive)", "11:30": "۱۱:۳۰",
+    "arrive": "رسیدن (فعل)",
+    "headache": "سردردی", "stomachache": "معده‌درد", "fever": "تب",
+    "cough": "سرفه", "sore": "دردناک (در sore throat یعنی گلودردی)",
+    "throat": "گلو", "wrong": "تکلیف (در What's wrong)",
+    "feel": "احساس کردن", "rest": "استراحت کردن",
+    "need": "ضرورت داشتن", "doctor": "داکتر",
+    "look": "معلوم شدن (در look well)", "drink": "نوشیدن", "if": "اگه",
+    "doesn't": "(منفیِ فعل کمکی does)", "better": "بهتر",
+    "nurse": "نرس", "cook": "آشپز", "driver": "دریور",
+    "patients": "مریض‌ها", "help": "کمک کردن", "reports": "راپورها",
+    "interesting": "جالب", "company": "شرکت", "downtown": "مرکز شهر",
+    "answer": "جواب دادن (در answer emails)", "emails": "ایمیل‌ها",
+    "sometimes": "بعضی وقت‌ها", "with": "با", "clients": "مشتری‌ها",
+    "job": "وظیفه",
+    "bedroom": "اتاق خواب", "kitchen": "آشپزخانه", "bathroom": "تشناب",
+    "living": "نشیمن (در living room)", "room": "اتاق",
+    "garden": "باغچه", "many": "چند (در how many)", "rooms": "اتاق‌ها",
+    "there": "آنجا (در there is/there are: موجود بودن)",
+    "there's": "... هست (مخفف there is)", "apartment": "آپارتمان",
+    "has": "داره", "bedrooms": "اتاق‌خواب‌ها", "favorite": "پسندیده",
+    "tell": "گفتن", "isn't": "نیست (مخفف is not)", "balcony": "بالکن",
+    "upstairs": "منزل بالا", "near": "نزدیک", "easy": "آسان",
+    "eat": "خوردن",
+    "appointment": "ملاقات", "document": "سند",
+    "proof": "سند؛ ثبوت (در proof of residency)", "residency": "اقامت",
+    "form": "فورم", "confirmation": "تأیید",
+    "wondering": "می‌خواستم بدانم (در I was wondering)", "whether": "آیا",
+    "could": "می‌تانستم/می‌تانین", "make": "گرفتن (در make an appointment)",
+    "possible": "ممکن", "come": "آمدن", "update": "به‌روز کردن",
+    "address": "آدرس", "moved": "کوچ کدم (زمان گذشتهٔ move)",
+    "id": "تذکره؛ کارت شناسایی",
+    "utility": "خدمات شهری (در utility bill)", "bill": "بل",
+    "bring": "آوردن", "such": "مثل (در such as)",
+    "lived": "زندگی کده‌ام (زمان گذشتهٔ live)",
+    "since": "از (زمان مشخص)", "lease": "قرارداد کرایه",
+    "when": "کِی", "10am": "ساعت ۱۰ صبح", "4471": "۴۴۷۱",
+    "opinion": "نظر", "other": "دیگه (در on the other hand)",
+    "hand": "دست (در on the other hand یعنی از طرف دیگه)",
+    "agree": "موافق بودن", "dog": "سگ", "dogs": "سگ‌ها", "space": "فضا",
+    "run": "دویدن", "playground": "زمین بازی",
+    "fair": "منصفانه (در fair point)", "point": "نکته", "they": "آنها",
+    "move": "جابه‌جا کردن", "farther": "دورتر",
+    "away": "دور (در move away)",
 }
 
 

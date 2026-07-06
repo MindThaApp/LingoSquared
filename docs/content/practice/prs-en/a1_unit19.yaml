@@ -1,0 +1,158 @@
+schema_version: "1.0"
+pack_key: practice.prs-en.a1.unit19
+source_language: prs
+target_language: en
+unit_content_key: en.a1.unit19.preferences
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: >-
+    Authored 2026-07-06 by the prs-en practice-pool-sync lane extending
+    coverage to units 15-20, mirroring the sibling fa-en/a1_unit19.yaml
+    pack's structure (16 templates). Reuses the already-established
+    narrower preference_verb_full tag (like/prefer/love/hate, 4 members)
+    separate from the 5-member preference_verb (like/don't/prefer/love/
+    hate) for the "I {item} tea/coffee." frames -- "don't" is an
+    auxiliary needing a following verb ("I don't tea." is not a
+    sentence), so the full 5-member set (including the bare "don't"
+    lexeme, whose introduced_tokens entry really represents "don't like"
+    as taught) is used only for bare-word recognition, never embedded
+    in a sentence. All POS/semantic-tag classification was already
+    present in scripts/_en_target_lexeme_common.py before this pass --
+    only scripts/backfill_lexemes_prs_en.py's own Dari gloss dict needed
+    extending (prefer/hate/calmer/very/strong/why/think/prefers/
+    thinks), plus the pre-existing "like" entry was updated in place to
+    add its second sense (خوش داشتن, used here) alongside its unit07
+    sense (خواستن, "would like") -- both senses genuinely needed for the
+    same bare token, same class of reuse the overlay's own review note
+    flags for "hate" (corrected from an earlier unnatural gloss to
+    نفرت داشتن). Cross-checked against docs/content/overlays/prs-en/
+    a1_unit19.yaml's own real Dari phrasing throughout. Verified with
+    scripts/_practice_slot_check.py that every slot has >=1 real
+    candidate lexeme and every multiple_choice/listen_select slot has
+    >=4 distinct candidate values (preference_verb has 5). The
+    underlying en realization unit19 is UNREVIEWED (Codex was usage-
+    limited at authoring time); the prs-en overlay is already reviewed
+    -- the realization needs the standard fresh-context review before
+    import.
+tag_schema:
+  part_of_speech: [verb]
+  agreement_tags:
+    semantic: [preference_verb, preference_verb_full]
+slot_presets:
+  preference_verb: &preference_verb {language_code: en, part_of_speech: verb, agreement_tags: {semantic: preference_verb}}
+  preference_verb_full: &preference_verb_full {language_code: en, part_of_speech: verb, agreement_tags: {semantic: preference_verb_full}}
+templates:
+  - content_key: practice.prs-en.en.a1.unit19.lesson01.verb_meaning.001
+    lesson_content_key: en.a1.unit19.lesson01.like_and_dislike_verbs
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *preference_verb}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} فعل بیان ترجیح همی درس است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit19.lesson01.verb_listen.002
+    lesson_content_key: en.a1.unit19.lesson01.like_and_dislike_verbs
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *preference_verb}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} واژه‌ای است که شنیدین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit19.lesson01.verb_pair.003
+    lesson_content_key: en.a1.unit19.lesson01.like_and_dislike_verbs
+    type: matching_pairs
+    frame: {text: "{first_verb} — {second_verb}", language_code: en, direction: ltr}
+    slots: {first_verb: *preference_verb, second_verb: *preference_verb}
+    slot_relations: [{kind: distinct, slots: [first_verb, second_verb]}]
+    answer_derivation: {kind: matching_pairs, slots: [first_verb, second_verb]}
+    feedback_frame: {text: "دو واژهٔ ترجیح را به معنای دری آن‌ها وصل کنین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit19.lesson01.verb_translate.004
+    lesson_content_key: en.a1.unit19.lesson01.like_and_dislike_verbs
+    type: translation
+    frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *preference_verb}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} معادل انگلیسی این واژهٔ دری است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit19.lesson02.tea_order.001
+    lesson_content_key: en.a1.unit19.lesson02.asking_about_preferences
+    type: word_order
+    frame: {text: "I {item} tea", language_code: en, direction: ltr}
+    slots: {item: *preference_verb_full}
+    answer_derivation: {kind: render_frame, frame: {text: "I {item} tea", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} ترجیحی است که بیان می‌شه.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit19.lesson02.tea_fill.002
+    lesson_content_key: en.a1.unit19.lesson02.asking_about_preferences
+    type: fill_in_blank
+    frame: {text: "I {item} tea.", language_code: en, direction: ltr}
+    slots: {item: *preference_verb_full}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} ترجیحی است که بیان می‌شه.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit19.lesson02.verb_full_translate.003
+    lesson_content_key: en.a1.unit19.lesson02.asking_about_preferences
+    type: translation
+    frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *preference_verb_full}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} معادل انگلیسی این واژهٔ دری است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit19.lesson02.verb_listen.004
+    lesson_content_key: en.a1.unit19.lesson02.asking_about_preferences
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *preference_verb}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} واژه‌ای است که شنیدین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit19.lesson03.coffee_order.001
+    lesson_content_key: en.a1.unit19.lesson03.reading_a_preference_message
+    type: word_order
+    frame: {text: "I {item} coffee", language_code: en, direction: ltr}
+    slots: {item: *preference_verb_full}
+    answer_derivation: {kind: render_frame, frame: {text: "I {item} coffee", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} ترجیحی است که در همی متن بیان می‌شه.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit19.lesson03.coffee_fill.002
+    lesson_content_key: en.a1.unit19.lesson03.reading_a_preference_message
+    type: fill_in_blank
+    frame: {text: "I {item} coffee.", language_code: en, direction: ltr}
+    slots: {item: *preference_verb_full}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} ترجیحی است که در همی متن بیان می‌شه.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit19.lesson03.verb_full_translate.003
+    lesson_content_key: en.a1.unit19.lesson03.reading_a_preference_message
+    type: translation
+    frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *preference_verb_full}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} معادل انگلیسی این واژهٔ دری است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit19.lesson03.verb_meaning.004
+    lesson_content_key: en.a1.unit19.lesson03.reading_a_preference_message
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *preference_verb}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} فعل بیان ترجیح است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit19.lesson04.verb_listen.001
+    lesson_content_key: en.a1.unit19.lesson04.preference_dialogue
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *preference_verb}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} واژه‌ای است که شنیدین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit19.lesson04.tea_order.002
+    lesson_content_key: en.a1.unit19.lesson04.preference_dialogue
+    type: word_order
+    frame: {text: "I {item} tea", language_code: en, direction: ltr}
+    slots: {item: *preference_verb_full}
+    answer_derivation: {kind: render_frame, frame: {text: "I {item} tea", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} ترجیحی است که در همی گفتگو بیان می‌شه.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit19.lesson04.tea_fill.003
+    lesson_content_key: en.a1.unit19.lesson04.preference_dialogue
+    type: fill_in_blank
+    frame: {text: "I {item} tea.", language_code: en, direction: ltr}
+    slots: {item: *preference_verb_full}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} ترجیحی است که در همی گفتگو بیان می‌شه.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit19.lesson04.verb_full_translate.004
+    lesson_content_key: en.a1.unit19.lesson04.preference_dialogue
+    type: translation
+    frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *preference_verb_full}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} معادل انگلیسی این واژهٔ دری است.", language_code: prs, direction: rtl}

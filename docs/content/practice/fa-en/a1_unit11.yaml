@@ -1,0 +1,147 @@
+schema_version: "1.0"
+pack_key: practice.fa-en.a1.unit11
+source_language: fa
+target_language: en
+unit_content_key: en.a1.unit11.weather
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: >-
+    Authored 2026-07-06 by the practice-pool-sync lane extending fa-en's
+    Endless Practice pool from units 01-08 to also cover units 09-14. The
+    6-member 'weather_condition' tag (sunny/rainy/cloudy/cold/hot/windy,
+    all adjectives) is safely swappable into every frame it's used in
+    ('It's {item}', 'It will be {item} tomorrow') since English weather
+    adjectives don't inflect for number/gender -- no agreement trap here.
+    Reused two already-verified tags from earlier units for cross-lesson
+    recognition variety: 'weekday' (unit04, 7 members) for 'It will rain
+    on {item}.', and 'place' (unit09, 5 members) for 'Let's go to the
+    {item}.' -- both grammatically safe with every member. All three tags
+    already existed in scripts/_en_target_lexeme_common.py from the nl-en
+    lane's own unit11 work; no EN_POS/agreement-tag additions were needed
+    (verified by diffing every introduced_token against EN_POS). Only
+    Farsi glosses for the new tokens were added to scripts/
+    backfill_lexemes_fa_en.py. NOTE: the underlying en realization
+    unit11 itself is UNREVIEWED (Codex was usage-limited at authoring
+    time) -- flagging this since it's a step lower in stability than
+    units 3-10. Verified with scripts/_practice_slot_check.py that every
+    slot has >=1 real candidate lexeme and every multiple_choice/
+    listen_select slot has >=3 distinct candidate values (weather_
+    condition=6, weekday=7, place=5). Confirmed 0 errors/0 warnings from
+    compile_content.py practice-validate. Left unreviewed pending a
+    separate fresh-context review pass, per standing project policy.
+tag_schema:
+  part_of_speech: [noun, adjective, adverb, pronoun, verb, particle, symbol]
+  agreement_tags:
+    semantic: [weather_condition, weekday, place]
+slot_presets:
+  weather_condition: &weather_condition {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: weather_condition}}
+  weekday: &weekday {language_code: en, part_of_speech: noun, agreement_tags: {semantic: weekday}}
+  place: &place {language_code: en, part_of_speech: noun, agreement_tags: {semantic: place}}
+templates:
+  - content_key: practice.fa-en.en.a1.unit11.lesson01.weather_meaning.001
+    lesson_content_key: en.a1.unit11.lesson01.weather_words
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *weather_condition}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit11.lesson01.weather_listen.002
+    lesson_content_key: en.a1.unit11.lesson01.weather_words
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *weather_condition}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "واژه‌ای که شنیدید {item} بود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit11.lesson01.weather_pair.003
+    lesson_content_key: en.a1.unit11.lesson01.weather_words
+    type: matching_pairs
+    frame: {text: "هر واژهٔ آب‌وهوا را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}
+    slots: {first_word: *weather_condition, second_word: *weather_condition}
+    slot_relations: [{kind: distinct, slots: [first_word, second_word]}]
+    answer_derivation: {kind: matching_pairs, slots: [first_word, second_word]}
+    feedback_frame: {text: "دو واژهٔ آب‌وهوا را به معنی فارسی درست وصل کردید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit11.lesson01.weather_translate.004
+    lesson_content_key: en.a1.unit11.lesson01.weather_words
+    type: translation
+    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *weather_condition}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "معادل انگلیسی این حالت آب‌وهوا {item} است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit11.lesson02.today_order.001
+    lesson_content_key: en.a1.unit11.lesson02.describing_todays_weather
+    type: word_order
+    frame: {text: "It's {item}", language_code: en, direction: ltr}
+    slots: {item: *weather_condition}
+    answer_derivation: {kind: render_frame, frame: {text: "It's {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} آب‌وهوای امروز را توصیف می‌کند.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit11.lesson02.today_fill.002
+    lesson_content_key: en.a1.unit11.lesson02.describing_todays_weather
+    type: fill_in_blank
+    frame: {text: "It's {item} today.", language_code: en, direction: ltr}
+    slots: {item: *weather_condition}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} آب‌وهوای امروز را توصیف می‌کند.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit11.lesson02.today_translate.003
+    lesson_content_key: en.a1.unit11.lesson02.describing_todays_weather
+    type: translation
+    frame: {text: "هوا {item} است.", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *weather_condition}
+    answer_derivation: {kind: render_frame, frame: {text: "It's {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "It's {item} یعنی هوا {item} است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit11.lesson03.tomorrow_order.001
+    lesson_content_key: en.a1.unit11.lesson03.reading_a_forecast
+    type: word_order
+    frame: {text: "It will be {item} tomorrow", language_code: en, direction: ltr}
+    slots: {item: *weather_condition}
+    answer_derivation: {kind: render_frame, frame: {text: "It will be {item} tomorrow", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} آب‌وهوای پیش‌بینی‌شده برای فرداست.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit11.lesson03.rain_day_fill.002
+    lesson_content_key: en.a1.unit11.lesson03.reading_a_forecast
+    type: fill_in_blank
+    frame: {text: "It will rain on {item}.", language_code: en, direction: ltr}
+    slots: {item: *weekday}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} روزی است که بارون می‌بارد.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit11.lesson03.tomorrow_translate.003
+    lesson_content_key: en.a1.unit11.lesson03.reading_a_forecast
+    type: translation
+    frame: {text: "فردا هوا {item} خواهد بود.", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *weather_condition}
+    answer_derivation: {kind: render_frame, frame: {text: "It will be {item} tomorrow", language_code: en, direction: ltr}}
+    feedback_frame: {text: "It will be {item} tomorrow یعنی فردا هوا {item} خواهد بود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit11.lesson03.weekday_listen.004
+    lesson_content_key: en.a1.unit11.lesson03.reading_a_forecast
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *weekday}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "روزی که شنیدید {item} بود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit11.lesson04.suggest_order.001
+    lesson_content_key: en.a1.unit11.lesson04.weather_plan_dialogue
+    type: word_order
+    frame: {text: "Let's go to the {item}", language_code: en, direction: ltr}
+    slots: {item: *place}
+    answer_derivation: {kind: render_frame, frame: {text: "Let's go to the {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} مکانی است که پیشنهاد می‌شود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit11.lesson04.suggest_fill.002
+    lesson_content_key: en.a1.unit11.lesson04.weather_plan_dialogue
+    type: fill_in_blank
+    frame: {text: "Let's go to the {item}.", language_code: en, direction: ltr}
+    slots: {item: *place}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} مکانی است که پیشنهاد می‌شود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit11.lesson04.place_translate.003
+    lesson_content_key: en.a1.unit11.lesson04.weather_plan_dialogue
+    type: translation
+    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *place}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "معادل انگلیسی این مکان {item} است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit11.lesson04.weather_meaning.004
+    lesson_content_key: en.a1.unit11.lesson04.weather_plan_dialogue
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *weather_condition}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} آب‌وهوایی است که در این گفت‌وگو توصیف می‌شود.", language_code: fa, direction: rtl}

@@ -1,0 +1,117 @@
+schema_version: "1.0"
+pack_key: practice.prs-en.a1.unit14
+source_language: prs
+target_language: en
+unit_content_key: en.a1.unit14.communication
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: >-
+    Authored 2026-07-06 extending prs-en's Endless Practice pool from
+    units 01-08 to also cover units 09-14. Deliberate scope decision,
+    same as the reference fa-en/a1_unit14.yaml pack (itself following
+    the original nl-en/a1_unit14.yaml pack): lesson02 (asking someone to
+    repeat/speak slowly) gets ZERO generated templates. Its vocabulary
+    (sorry/repeat/speak/slowly/hear/well) has no multi-member synonym
+    group at all -- every word is a single, non-interchangeable concept,
+    so any "slot" would necessarily have exactly one candidate, meaning
+    the "generated" exercise would be byte-identical every time and add
+    no practice value beyond the lesson's own hand-authored exercises.
+    The other three lessons DO have genuine swappable content: lesson01
+    reuses the 2-member 'person_name' tag (Daniel/Leila, already
+    established since unit01/02) for 'Hello, this is {item}.'/'Hi, it's
+    {item}.'; lessons 03 and 04 reuse the already-verified 5-member
+    'place' tag (unit09) for 'Let's meet at the {item}.'/'How about 6pm
+    at the {item}?' -- both grammatical with any of the 5 places. Both
+    tags already existed in scripts/_en_target_lexeme_common.py; no
+    EN_POS/agreement-tag additions were needed (verified by diffing
+    every introduced_token against EN_POS directly against the real en
+    realization file). Only Dari glosses for the new tokens were added
+    to scripts/backfill_lexemes_prs_en.py, hand-derived from docs/
+    content/overlays/prs-en/a1_unit14.yaml's own real Dari phrasing.
+    Verified with scripts/_practice_slot_check.py that every slot has
+    >=1 real candidate lexeme and every multiple_choice/listen_select
+    slot has >=3 distinct candidate values (person_name=2 -- used only
+    in word_order/fill_in_blank/translation, never multiple_choice/
+    listen_select, so its 2-member count is fine; place=5). Confirmed 0
+    errors/0 warnings from compile_content.py practice-validate. Left
+    unreviewed pending a separate fresh-context review pass, per
+    standing project policy.
+tag_schema:
+  part_of_speech: [noun, adjective, adverb, pronoun, verb, particle, symbol, proper_noun]
+  agreement_tags:
+    semantic: [person_name, place]
+slot_presets:
+  person_name: &person_name {language_code: en, part_of_speech: proper_noun, agreement_tags: {semantic: person_name}}
+  place: &place {language_code: en, part_of_speech: noun, agreement_tags: {semantic: place}}
+templates:
+  - content_key: practice.prs-en.en.a1.unit14.lesson01.hello_order.001
+    lesson_content_key: en.a1.unit14.lesson01.answering_the_phone
+    type: word_order
+    frame: {text: "Hello, this is {item}", language_code: en, direction: ltr}
+    slots: {item: *person_name}
+    answer_derivation: {kind: render_frame, frame: {text: "Hello, this is {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} نامی است که خود را با آن معرفی می‌کنه.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit14.lesson01.hi_its_fill.002
+    lesson_content_key: en.a1.unit14.lesson01.answering_the_phone
+    type: fill_in_blank
+    frame: {text: "Hi, it's {item}.", language_code: en, direction: ltr}
+    slots: {item: *person_name}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} نامی است که خود را با آن معرفی می‌کنه.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit14.lesson01.hello_translate.003
+    lesson_content_key: en.a1.unit14.lesson01.answering_the_phone
+    type: translation
+    frame: {text: "الو، {item} استم.", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *person_name}
+    answer_derivation: {kind: render_frame, frame: {text: "Hello, this is {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "Hello, this is {item} یعنی الو، {item} استم.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit14.lesson03.lets_meet_order.001
+    lesson_content_key: en.a1.unit14.lesson03.reading_a_text_message
+    type: word_order
+    frame: {text: "Let's meet at the {item}", language_code: en, direction: ltr}
+    slots: {item: *place}
+    answer_derivation: {kind: render_frame, frame: {text: "Let's meet at the {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} مکان پیشنهادشده برای ملاقات است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit14.lesson03.lets_meet_fill.002
+    lesson_content_key: en.a1.unit14.lesson03.reading_a_text_message
+    type: fill_in_blank
+    frame: {text: "Let's meet at the {item}.", language_code: en, direction: ltr}
+    slots: {item: *place}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} مکان پیشنهادشده برای ملاقات است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit14.lesson03.place_translate.003
+    lesson_content_key: en.a1.unit14.lesson03.reading_a_text_message
+    type: translation
+    frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *place}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "معادل انگلیسی همی مکان {item} است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit14.lesson04.how_about_order.001
+    lesson_content_key: en.a1.unit14.lesson04.phone_call_dialogue
+    type: word_order
+    frame: {text: "How about 6pm at the {item}", language_code: en, direction: ltr}
+    slots: {item: *place}
+    answer_derivation: {kind: render_frame, frame: {text: "How about 6pm at the {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} مکان پیشنهادشده است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit14.lesson04.how_about_fill.002
+    lesson_content_key: en.a1.unit14.lesson04.phone_call_dialogue
+    type: fill_in_blank
+    frame: {text: "How about 6pm at the {item}?", language_code: en, direction: ltr}
+    slots: {item: *place}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} مکان پیشنهادشده است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit14.lesson04.place_listen.003
+    lesson_content_key: en.a1.unit14.lesson04.phone_call_dialogue
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *place}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "واژه‌ای که شنیدین {item} بود.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit14.lesson04.place_translate.004
+    lesson_content_key: en.a1.unit14.lesson04.phone_call_dialogue
+    type: translation
+    frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *place}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "معادل انگلیسی همی مکان {item} است.", language_code: prs, direction: rtl}

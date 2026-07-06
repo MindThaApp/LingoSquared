@@ -1,0 +1,127 @@
+schema_version: "1.0"
+pack_key: practice.fa-en.a1.unit16
+source_language: fa
+target_language: en
+unit_content_key: en.a1.unit16.routines
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: >-
+    Authored 2026-07-06 by the practice-pool-sync lane extending fa-en
+    coverage to units 15-20, mirroring nl-en's already-unreviewed
+    a1_unit16.yaml structure. Same deliberate scope decision as nl-en's
+    unit16 (and this lane's own unit07 for fa-en): lesson01 (wake up/get
+    dressed/go to work/have dinner/go to bed) gets ZERO generated
+    templates -- every one of its core routine actions is a multi-word
+    phrase tokenized word-by-word with no same-lesson single-token synonym
+    set to build a genuine multi-candidate slot from. The other three
+    lessons reuse the already-established 12-member hour_number tag (added
+    alongside nl-en's own unit16 work, narrower than the broad 22-member
+    number tag specifically to keep clock-hour slots in 1-12 -- "I wake up
+    at fifty every day." was a real bug the nl-en lane's fresh-context
+    review caught and fixed for this exact frame shape) for every hour
+    mentioned, the broad number tag for bare-word listen_select
+    recognition, and a 2-member meal tag (dinner/breakfast) for "I have
+    {item}." -- deliberately NOT used in lesson01 even though "dinner" is
+    introduced there, since "breakfast" is only introduced in lesson03 (same
+    reasoning nl-en documented: a lesson's own practice pool must be ready
+    as soon as that lesson alone is completed). All POS/semantic-tag
+    classification was already present in scripts/_en_target_lexeme_common.py
+    before this pass -- only scripts/backfill_lexemes_fa_en.py's own Farsi
+    gloss dict needed extending (wake/up/dressed/dinner/bed/every/usually/
+    breakfast/after; "get"/"that" reuse their existing Unit 10/14 senses
+    unchanged -- see that script's UNIT_FILES comment for why "get" is
+    deliberately never used as a fillable slot here despite the sense
+    mismatch between "get to" (Unit 10, reach) and "get dressed" (this
+    unit, become/put on)). Verified with scripts/_practice_slot_check.py
+    that every slot has >=1 real candidate lexeme and every multiple_choice/
+    listen_select slot has >=4 distinct candidate values. The underlying en
+    realization unit16 and the fa-en overlay's realization dependency are
+    both UNREVIEWED (Codex was usage-limited at authoring time) -- needs
+    the standard fresh-context review before import.
+tag_schema:
+  part_of_speech: [noun]
+  agreement_tags:
+    semantic: [number, hour_number, meal]
+slot_presets:
+  number: &number {language_code: en, part_of_speech: noun, agreement_tags: {semantic: number}}
+  hour_number: &hour_number {language_code: en, part_of_speech: noun, agreement_tags: {semantic: hour_number}}
+  meal: &meal {language_code: en, part_of_speech: noun, agreement_tags: {semantic: meal}}
+templates:
+  - content_key: practice.fa-en.en.a1.unit16.lesson02.wake_order.001
+    lesson_content_key: en.a1.unit16.lesson02.routine_with_times
+    type: word_order
+    frame: {text: "I wake up at {item} every day", language_code: en, direction: ltr}
+    slots: {item: *hour_number}
+    answer_derivation: {kind: render_frame, frame: {text: "I wake up at {item} every day", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} ساعتی است که بیدار می‌شوید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit16.lesson02.bed_fill.002
+    lesson_content_key: en.a1.unit16.lesson02.routine_with_times
+    type: fill_in_blank
+    frame: {text: "I usually go to bed at {item}.", language_code: en, direction: ltr}
+    slots: {item: *hour_number}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} ساعتی است که معمولاً می‌خوابید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit16.lesson02.wake_translate.003
+    lesson_content_key: en.a1.unit16.lesson02.routine_with_times
+    type: translation
+    frame: {text: "ساعت {item} بیدار می‌شوم.", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *hour_number}
+    answer_derivation: {kind: render_frame, frame: {text: "I wake up at {item} every day", language_code: en, direction: ltr}}
+    feedback_frame: {text: "I wake up at {item} every day یعنی ساعت {item} بیدار می‌شوم.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit16.lesson02.number_listen.004
+    lesson_content_key: en.a1.unit16.lesson02.routine_with_times
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *number}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} عددی است که شنیدید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit16.lesson03.every_day_order.001
+    lesson_content_key: en.a1.unit16.lesson03.reading_a_routine
+    type: word_order
+    frame: {text: "Every day, I wake up at {item}", language_code: en, direction: ltr}
+    slots: {item: *hour_number}
+    answer_derivation: {kind: render_frame, frame: {text: "Every day, I wake up at {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} ساعتِ این توصیف روزانه است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit16.lesson03.meal_fill.002
+    lesson_content_key: en.a1.unit16.lesson03.reading_a_routine
+    type: fill_in_blank
+    frame: {text: "I have {item}.", language_code: en, direction: ltr}
+    slots: {item: *meal}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} وعدهٔ غذایی این جمله است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit16.lesson03.meal_translate.003
+    lesson_content_key: en.a1.unit16.lesson03.reading_a_routine
+    type: translation
+    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *meal}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "معادل انگلیسی {item} است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit16.lesson04.number_listen.001
+    lesson_content_key: en.a1.unit16.lesson04.routine_dialogue
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *number}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} عددی است که شنیدید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit16.lesson04.wake_order.002
+    lesson_content_key: en.a1.unit16.lesson04.routine_dialogue
+    type: word_order
+    frame: {text: "I wake up at {item} every day", language_code: en, direction: ltr}
+    slots: {item: *hour_number}
+    answer_derivation: {kind: render_frame, frame: {text: "I wake up at {item} every day", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} ساعتی است که دنیل بیدار می‌شود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit16.lesson04.bed_fill.003
+    lesson_content_key: en.a1.unit16.lesson04.routine_dialogue
+    type: fill_in_blank
+    frame: {text: "I usually go to bed at {item}.", language_code: en, direction: ltr}
+    slots: {item: *hour_number}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} ساعتی است که دنیل معمولاً می‌خوابد.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit16.lesson04.bed_translate.004
+    lesson_content_key: en.a1.unit16.lesson04.routine_dialogue
+    type: translation
+    frame: {text: "معمولاً ساعت {item} می‌خوابم.", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *hour_number}
+    answer_derivation: {kind: render_frame, frame: {text: "I usually go to bed at {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "I usually go to bed at {item} یعنی معمولاً ساعت {item} می‌خوابم.", language_code: fa, direction: rtl}
