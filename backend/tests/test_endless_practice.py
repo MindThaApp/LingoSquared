@@ -841,5 +841,17 @@ def test_word_order_prompt_includes_a_gloss_hint_not_just_the_instruction(
         # same frame shape ("{word} ahora" -> "<gloss> ahora") - never just
         # the bare instruction alone, and never the literal target-language
         # correct answer (which would trivialize the reordering task).
+        # Updated 2026-07-06 (real user report): the substituted gloss is
+        # now wrapped in the existing single-asterisk convention
+        # (AUTHORING_GUIDE.md #15) so the frontend renders it emphasized,
+        # distinguished from the surrounding target-language frame text -
+        # previously it spliced in unmarked, producing an unreadable
+        # mixed-language run-on (e.g. "Ben you; your (informal) nieuw
+        # hier?").
         assert hint["text"].endswith(" ahora")
-        assert hint["text"] in {"one ahora", "two ahora", "three ahora", "four ahora"}
+        assert hint["text"] in {
+            "*one* ahora",
+            "*two* ahora",
+            "*three* ahora",
+            "*four* ahora",
+        }
