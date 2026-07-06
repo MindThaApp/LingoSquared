@@ -8,9 +8,32 @@ generation_provenance:
   authoring_system: codex
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: claude
-  notes: "Authentic Kabul Dari family vocabulary and educated colloquial forms; audio and human dialect review remain pending."
+  status: reviewed
+  required_next_reviewer: null
+  notes: >-
+    Fresh-context review 2026-07-05: checked spine-outcome fit (marital
+    status is within scope as spouses/family relationships), exercise
+    pacing (recognition -> drag/matching -> production in all 6 lessons),
+    dialect authenticity against shipped units 01/02/04/05 (استم/استین,
+    بلی/نخیر, کاکا/عمه paternal vs ماما/خاله maternal correctly assigned,
+    پدرکلان/مادرکلان and محصل confirmed Afghan not Iranian forms, ZWNJ
+    possessives), script purity (no Arabic-range kaf/yeh codepoints,
+    grep-verified),
+    jargon leaks (none), instruction/answer coherence, YAML boolean
+    footguns (none), and content_key parity with the overlay. Found and
+    fixed two real issues: (1) lesson03.exercise07 "describe_own" asked
+    learners to describe their OWN real family size/siblings but graded
+    by exact string match against only 3 canned answers -- an
+    unanswerable-for-most-learners bug matching a known project bug
+    class; rebounded the instruction to a specific given fact (four
+    people, one brother) and added period/comma/and-joined accepted
+    variants. (2) lesson02.exercise07 "speak_distinction" instruction
+    ("say who your... uncle... IS") was worded as if asking for a real
+    specific relative while the accepted answers are actually the
+    general kaka/mama definitional relationship -- reworded the
+    instruction to make clear it wants the relationship rule, not a
+    personal fact. Audio and native-speaker dialect review remain
+    pending (unchanged, out of scope for this pass).
 
 course:
   realization_key: prs.a1
@@ -257,7 +280,7 @@ units:
             prompt: {target_blocks: []}
           - content_key: prs.a1.unit03.lesson03.exercise07.describe_own
             type: writing_prompt
-            tested_text: فامیل من چند نفر است برادر خواهر دارم
+            tested_text: فامیل من چهار نفر است یک برادر دارم
             prompt: {target_blocks: []}
 
       - content_key: prs.a1.unit03.lesson04.ask_about_family

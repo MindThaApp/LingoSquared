@@ -1,0 +1,420 @@
+schema_version: "1.0"
+realization_version: "2026.1-draft.1"
+target_language: prs
+cefr_level: A1
+status: complete_draft
+generation_provenance:
+  method: ai_adapted_from_public_domain_source
+  authoring_system: claude
+  source_material: "Peace Corps Dari course materials (public domain), modernized"
+  human_reviewed: false
+review:
+  status: reviewed
+  required_next_reviewer: null
+  notes: "Fresh-context review completed 2026-07-05. Verified: spine-outcome discipline against universal.a1.food.order_simple_meal's can_do/assessment_requirements (understand ordering exchange, place order + respond to follow-up, read menu, write simple order -- all covered); recognition->drag/matching->production pacing in all 6 lessons; content_key parity between realization and overlay (27 teaching + 43 exercise keys, exact match both directions); every exercise's tested_text and every overlay accepted_answers/pairs/word_bank value checked programmatically against cumulative introduced_tokens within this file -- zero untaught-vocabulary issues found; script purity (no Arabic-range kaf/yeh codepoints, only Persian keheh/yeh); no bare unquoted yes/no/true/false; no fill_in_blank exercises (confirmed, as expected); no internal jargon leaks in learner-facing strings. FIXED: 8 multiple_choice exercises (lesson02.exercise01/02, lesson03.exercise01/02, lesson04.exercise01/02, lesson05.exercise01/02) where the prompt displayed the exact Dari phrase that was also the literal correct_option string, making them pure visual string-matching with zero comprehension test -- converted correct_option/distractors to English glosses (per AUTHORING_GUIDE §6, matching the already-correct pattern used by this same file's lesson01 word-meaning items and lesson05's chaikhana_meaning item) and updated accepted_answers to match. FIXED: lesson06.exercise07 write_order_summary was missing both the period-joined and the exact no-comma tested_text-matching form among its accepted_answers (§12) -- added both. FIXED: an inaccurate internal register_policy note claiming پلو is 'distinct from plain رنگ برنج' -- the real Persian/Dari term for plain rice is چلو (chelow); corrected (not learner-facing, but factually wrong) plus a stray a/an typo nearby. Actively verified (web search + reasoning) Afghan-specific claims: پلو/قورمه/چایخانه/بل(from English 'bill', consistent with Dari's English-loanword pattern vs Iranian French-loanword pattern)/افغانی are all genuine, accurate Afghan Dari usage; استم/استین and می‌خواهم used consistently wherever personal-state/want constructions would appear (none of this unit's actual content needed استم/استین, which is fine -- no inconsistency); دوصد افغانی (~$2.30) for a plate of پلو+قورمه+چای at a چایخانه is realistic (street kebabs run ~120-180 AFN, a full restaurant meal rarely exceeds $15) -- not comically low or high. Specifically checked and confirmed 'بل چند می‌شه؟' is NOT the banned Iranian-colloquial-می‌شه-for-polite-requests pattern this course's register policy targets (که م‌توانید بگویید replaces) -- چند می‌شه is a distinct, genuinely Afghan-and-Iranian-shared idiom meaning 'how much does it total,' using می‌شه as 'become' not as a request modal; left unchanged. NOT changed (flagged only): lesson01.exercise03's listen_select plays a 5-word audio (نان،پلو،قورمه،چای،آب) while 3 of its 4 multiple_choice options are also literally present in that same audio, making the 'correct' pick technically ambiguous -- but this exact pattern (listen_select over a full audio list, with distractors also present in the recording) is the established, already-shipped convention in reference unit04 (e.g. lesson01.exercise03/lesson02.exercise03/lesson03.exercise03), so left unchanged for course-wide consistency rather than unilaterally diverging unit08's design; worth a course-wide pass if this is ever revisited. Both `validate` and `compile` run clean (0 errors/0 warnings) after all fixes. Audio remains pending generation; human native-speaker review still recommended before this ships, per project policy of no native-speaker review network for prs."
+
+course:
+  realization_key: prs.a1
+  target_language_first: true
+  dialect: prs_AF_kabuli_educated_colloquial_intro
+  register_policy: >-
+    Continues the established استم/استین polite-first register policy and
+    می‌توانم (not an Iranian-leaning alternative) for polite requests. Uses
+    Afghan Dari-specific food vocabulary: نان (bread, a staple of every
+    meal), پلو (the Afghan rice pilaf dish, distinct from plain چلو rice),
+    قورمه (a general word for a cooked meat-and-vegetable stew dish, a
+    genuine Afghan culinary term), and چایخانه (teahouse/simple eatery,
+    common in Kabul) rather than assuming Iranian restaurant vocabulary.
+
+media_assets:
+  - content_key: prs.a1.audio.food.vocab.01
+    language: prs
+    text: نان، پلو، قورمه، چای، آب
+    voice_hint: neutral_adult
+    status: pending_generation
+  - content_key: prs.a1.audio.order.polite.01
+    language: prs
+    text: یک چای می‌خواهم، لطفاً
+    voice_hint: neutral_adult_polite
+    status: pending_generation
+  - content_key: prs.a1.audio.menu.question.01
+    language: prs
+    text: چی دارین؟
+    voice_hint: neutral_adult_polite
+    status: pending_generation
+  - content_key: prs.a1.audio.quantity.order.01
+    language: prs
+    text: یک بشقاب پلو و دو تا نان، لطفاً
+    voice_hint: neutral_adult
+    status: pending_generation
+  - content_key: prs.a1.audio.bill.request.01
+    language: prs
+    text: بل چند می‌شه؟
+    voice_hint: neutral_adult_polite
+    status: pending_generation
+  - content_key: prs.a1.audio.dialogue.restaurant.01
+    language: prs
+    text: "دکاندار: سلام، خوش آمدین. چی میل دارین؟ مشتری: سلام. چی دارین؟ دکاندار: پلو و قورمه داریم، هردو تازه است. مشتری: بسیار خوب، یک بشقاب پلو با قورمه می‌خواهم، و یک چای هم لطفاً. دکاندار: چشم، همین حالا می‌آرم. مشتری: (بعد از خوراک) خیلی خوش‌مزه بود. بل چند می‌شه؟ دکاندار: تشکر، دوصد افغانی می‌شه."
+    voice_hint: two_adults_neutral_polite
+    status: pending_generation
+
+units:
+  - content_key: prs.a1.unit08.food
+    title: خوراک و سفارش دادن
+    section: speaking
+    spine_outcome_ids:
+      - universal.a1.food.order_simple_meal
+    planned_lesson_count: 6
+
+    lessons:
+      - content_key: prs.a1.unit08.lesson01.food_and_drink_vocabulary
+        title: خوراک و نوشیدنی
+        spine_outcome_id: universal.a1.food.order_simple_meal
+        teaching:
+          - content_key: prs.a1.unit08.lesson01.teach.naan
+            kind: vocabulary
+            target: {text: نان, language_code: prs, direction: rtl}
+            introduced_tokens: [نان]
+          - content_key: prs.a1.unit08.lesson01.teach.palaw
+            kind: vocabulary
+            target: {text: پلو, language_code: prs, direction: rtl}
+            introduced_tokens: [پلو]
+          - content_key: prs.a1.unit08.lesson01.teach.qorma
+            kind: vocabulary
+            target: {text: قورمه, language_code: prs, direction: rtl}
+            introduced_tokens: [قورمه]
+          - content_key: prs.a1.unit08.lesson01.teach.chai_review
+            kind: vocabulary
+            target: {text: چای, language_code: prs, direction: rtl}
+            introduced_tokens: [چای]
+          - content_key: prs.a1.unit08.lesson01.teach.ab_water
+            kind: vocabulary
+            target: {text: آب, language_code: prs, direction: rtl}
+            introduced_tokens: [آب]
+          - content_key: prs.a1.unit08.lesson01.teach.va_word
+            kind: grammar_note
+            target: {text: "و (and)", language_code: prs, direction: rtl}
+            introduced_tokens: [و]
+        exercises:
+          - content_key: prs.a1.unit08.lesson01.exercise01.recognize_naan
+            type: multiple_choice
+            tested_text: نان
+            prompt: {target_blocks: [{text: نان, language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit08.lesson01.exercise02.recognize_palaw
+            type: multiple_choice
+            tested_text: پلو
+            prompt: {target_blocks: [{text: پلو, language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit08.lesson01.exercise03.listen_food_words
+            type: listen_select
+            tested_text: قورمه
+            media_asset_key: prs.a1.audio.food.vocab.01
+            prompt: {target_blocks: []}
+          - content_key: prs.a1.unit08.lesson01.exercise04.match_food_words
+            type: matching_pairs
+            tested_text: نان پلو قورمه چای آب
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: نان, right: bread}
+              - {left: پلو, right: "rice pilaf"}
+              - {left: قورمه, right: "meat and vegetable stew"}
+              - {left: چای, right: tea}
+              - {left: آب, right: water}
+          - content_key: prs.a1.unit08.lesson01.exercise05.order_food_list
+            type: word_order
+            tested_text: نان و پلو و قورمه
+            prompt: {target_blocks: []}
+            word_bank: [نان, و, پلو, و, قورمه]
+          - content_key: prs.a1.unit08.lesson01.exercise06.translate_qorma
+            type: translation
+            tested_text: قورمه
+            prompt: {target_blocks: []}
+          - content_key: prs.a1.unit08.lesson01.exercise07.write_water
+            type: writing_prompt
+            tested_text: آب
+            prompt: {target_blocks: [{text: "Write the Dari word for water.", language_code: en, direction: ltr}]}
+
+      - content_key: prs.a1.unit08.lesson02.polite_ordering
+        title: سفارش دادن به‌طور مؤدبانه
+        spine_outcome_id: universal.a1.food.order_simple_meal
+        teaching:
+          - content_key: prs.a1.unit08.lesson02.teach.mikham_chai
+            kind: phrase
+            target: {text: "یک چای می‌خواهم", language_code: prs, direction: rtl}
+            introduced_tokens: [یک, چای, می‌خواهم]
+          - content_key: prs.a1.unit08.lesson02.teach.lotfan
+            kind: vocabulary
+            target: {text: لطفاً, language_code: prs, direction: rtl}
+            introduced_tokens: [لطفاً]
+          - content_key: prs.a1.unit08.lesson02.teach.mikham_naan
+            kind: phrase
+            target: {text: "یک نان می‌خواهم", language_code: prs, direction: rtl}
+            introduced_tokens: [نان]
+        exercises:
+          - content_key: prs.a1.unit08.lesson02.exercise01.recognize_polite_order
+            type: multiple_choice
+            tested_text: یک چای می‌خواهم
+            prompt: {target_blocks: [{text: "یک چای می‌خواهم", language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit08.lesson02.exercise02.recognize_lotfan
+            type: multiple_choice
+            tested_text: لطفاً
+            prompt: {target_blocks: [{text: لطفاً, language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit08.lesson02.exercise03.listen_polite_order
+            type: listen_select
+            tested_text: یک چای می‌خواهم لطفاً
+            media_asset_key: prs.a1.audio.order.polite.01
+            prompt: {target_blocks: []}
+          - content_key: prs.a1.unit08.lesson02.exercise04.match_order_phrases
+            type: matching_pairs
+            tested_text: یک چای می‌خواهم لطفاً یک نان می‌خواهم
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "یک چای می‌خواهم", right: "I'd like a tea."}
+              - {left: لطفاً, right: please}
+              - {left: "یک نان می‌خواهم", right: "I'd like a bread."}
+          - content_key: prs.a1.unit08.lesson02.exercise05.order_polite_naan
+            type: word_order
+            tested_text: یک نان می‌خواهم
+            prompt: {target_blocks: []}
+            word_bank: [یک, نان, می‌خواهم]
+          - content_key: prs.a1.unit08.lesson02.exercise06.listen_type_polite_order
+            type: listen_type
+            tested_text: یک چای می‌خواهم لطفاً
+            prompt: {target_blocks: []}
+          - content_key: prs.a1.unit08.lesson02.exercise07.translate_water_order
+            type: translation
+            tested_text: یک آب می‌خواهم لطفاً
+            prompt: {target_blocks: []}
+
+      - content_key: prs.a1.unit08.lesson03.asking_whats_available
+        title: پرسیدن دربارهٔ خوراک موجود
+        spine_outcome_id: universal.a1.food.order_simple_meal
+        teaching:
+          - content_key: prs.a1.unit08.lesson03.teach.what_do_you_have
+            kind: phrase
+            target: {text: "چی دارین؟", language_code: prs, direction: rtl}
+            introduced_tokens: [چی, دارین]
+          - content_key: prs.a1.unit08.lesson03.teach.we_have_both
+            kind: phrase
+            target: {text: "پلو و قورمه داریم", language_code: prs, direction: rtl}
+            introduced_tokens: [داریم]
+          - content_key: prs.a1.unit08.lesson03.teach.fresh_word
+            kind: vocabulary
+            target: {text: تازه, language_code: prs, direction: rtl}
+            introduced_tokens: [تازه]
+        exercises:
+          - content_key: prs.a1.unit08.lesson03.exercise01.recognize_what_available
+            type: multiple_choice
+            tested_text: چی دارین
+            prompt: {target_blocks: [{text: "چی دارین؟", language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit08.lesson03.exercise02.recognize_fresh
+            type: multiple_choice
+            tested_text: تازه
+            prompt: {target_blocks: [{text: تازه, language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit08.lesson03.exercise03.listen_what_available
+            type: listen_select
+            tested_text: چی دارین
+            media_asset_key: prs.a1.audio.menu.question.01
+            prompt: {target_blocks: []}
+          - content_key: prs.a1.unit08.lesson03.exercise04.match_availability_phrases
+            type: matching_pairs
+            tested_text: چی دارین پلو قورمه داریم تازه
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "چی دارین؟", right: "What do you have?"}
+              - {left: "پلو و قورمه داریم", right: "We have rice pilaf and stew."}
+              - {left: تازه, right: fresh}
+          - content_key: prs.a1.unit08.lesson03.exercise05.order_what_available
+            type: word_order
+            tested_text: چی دارین
+            prompt: {target_blocks: []}
+            word_bank: [چی, دارین]
+          - content_key: prs.a1.unit08.lesson03.exercise06.translate_what_available
+            type: translation
+            tested_text: چی دارین
+            prompt: {target_blocks: []}
+          - content_key: prs.a1.unit08.lesson03.exercise07.speak_ask_available
+            type: speak_response
+            tested_text: چی دارین
+            prompt: {target_blocks: [{text: "You'd like to know what food is available. Ask the shopkeeper.", language_code: en, direction: ltr}]}
+
+      - content_key: prs.a1.unit08.lesson04.quantities
+        title: مقدار خوراک
+        spine_outcome_id: universal.a1.food.order_simple_meal
+        teaching:
+          - content_key: prs.a1.unit08.lesson04.teach.yek_boshghab
+            kind: phrase
+            target: {text: "یک بشقاب پلو", language_code: prs, direction: rtl}
+            introduced_tokens: [یک, بشقاب, پلو]
+          - content_key: prs.a1.unit08.lesson04.teach.do_ta_naan
+            kind: phrase
+            target: {text: "دو تا نان", language_code: prs, direction: rtl}
+            introduced_tokens: [دو, تا, نان]
+          - content_key: prs.a1.unit08.lesson04.teach.combined_order
+            kind: phrase
+            target: {text: "یک بشقاب پلو و دو تا نان، لطفاً", language_code: prs, direction: rtl}
+            introduced_tokens: [و, لطفاً]
+        exercises:
+          - content_key: prs.a1.unit08.lesson04.exercise01.recognize_plate_of_rice
+            type: multiple_choice
+            tested_text: یک بشقاب پلو
+            prompt: {target_blocks: [{text: "یک بشقاب پلو", language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit08.lesson04.exercise02.recognize_two_breads
+            type: multiple_choice
+            tested_text: دو تا نان
+            prompt: {target_blocks: [{text: "دو تا نان", language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit08.lesson04.exercise03.listen_quantity_order
+            type: listen_select
+            tested_text: یک بشقاب پلو و دو تا نان
+            media_asset_key: prs.a1.audio.quantity.order.01
+            prompt: {target_blocks: []}
+          - content_key: prs.a1.unit08.lesson04.exercise04.match_quantities
+            type: matching_pairs
+            tested_text: یک بشقاب پلو دو تا نان
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "یک بشقاب پلو", right: "a plate of rice pilaf"}
+              - {left: "دو تا نان", right: "two breads"}
+          - content_key: prs.a1.unit08.lesson04.exercise05.order_combined_order
+            type: word_order
+            tested_text: یک بشقاب پلو و دو تا نان لطفاً
+            prompt: {target_blocks: []}
+            word_bank: [یک, بشقاب, پلو, و, دو, تا, نان, لطفاً]
+          - content_key: prs.a1.unit08.lesson04.exercise06.listen_type_combined_order
+            type: listen_type
+            tested_text: یک بشقاب پلو و دو تا نان
+            prompt: {target_blocks: []}
+          - content_key: prs.a1.unit08.lesson04.exercise07.translate_quantity
+            type: translation
+            tested_text: یک بشقاب قورمه
+            prompt: {target_blocks: []}
+
+      - content_key: prs.a1.unit08.lesson05.restaurant_etiquette_and_bill
+        title: آداب چایخانه و پرسیدن بل
+        spine_outcome_id: universal.a1.food.order_simple_meal
+        teaching:
+          - content_key: prs.a1.unit08.lesson05.teach.bill_word
+            kind: vocabulary
+            target: {text: بل, language_code: prs, direction: rtl}
+            introduced_tokens: [بل]
+          - content_key: prs.a1.unit08.lesson05.teach.bill_request
+            kind: phrase
+            target: {text: "بل چند می‌شه؟", language_code: prs, direction: rtl}
+            introduced_tokens: [چند, می‌شه]
+          - content_key: prs.a1.unit08.lesson05.teach.khoshmaze
+            kind: phrase
+            target: {text: "خیلی خوش‌مزه بود", language_code: prs, direction: rtl}
+            introduced_tokens: [خیلی, خوش‌مزه, بود]
+          - content_key: prs.a1.unit08.lesson05.teach.chaikhana
+            kind: cultural_note
+            target: {text: چایخانه, language_code: prs, direction: rtl}
+            introduced_tokens: [چایخانه]
+        exercises:
+          - content_key: prs.a1.unit08.lesson05.exercise01.recognize_bill_request
+            type: multiple_choice
+            tested_text: بل چند می‌شه
+            prompt: {target_blocks: [{text: "بل چند می‌شه؟", language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit08.lesson05.exercise02.recognize_delicious
+            type: multiple_choice
+            tested_text: خیلی خوش‌مزه بود
+            prompt: {target_blocks: [{text: "خیلی خوش‌مزه بود", language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit08.lesson05.exercise03.listen_bill_request
+            type: listen_select
+            tested_text: بل چند می‌شه
+            media_asset_key: prs.a1.audio.bill.request.01
+            prompt: {target_blocks: []}
+          - content_key: prs.a1.unit08.lesson05.exercise04.chaikhana_meaning
+            type: multiple_choice
+            tested_text: چایخانه
+            prompt:
+              target_blocks:
+                - {text: "What is a چایخانه?", language_code: en, direction: ltr}
+          - content_key: prs.a1.unit08.lesson05.exercise05.order_delicious
+            type: word_order
+            tested_text: خیلی خوش‌مزه بود
+            prompt: {target_blocks: []}
+            word_bank: [خیلی, خوش‌مزه, بود]
+          - content_key: prs.a1.unit08.lesson05.exercise06.listen_type_bill_request
+            type: listen_type
+            tested_text: بل چند می‌شه
+            prompt: {target_blocks: []}
+          - content_key: prs.a1.unit08.lesson05.exercise07.translate_bill_request
+            type: translation
+            tested_text: بل چند می‌شه
+            prompt: {target_blocks: []}
+
+      - content_key: prs.a1.unit08.lesson06.restaurant_dialogue
+        title: گفت‌وگو در چایخانه
+        spine_outcome_id: universal.a1.food.order_simple_meal
+        teaching:
+          - content_key: prs.a1.unit08.lesson06.teach.welcome_review
+            kind: phrase
+            target: {text: "خوش آمدین", language_code: prs, direction: rtl}
+            introduced_tokens: [خوش, آمدین]
+          - content_key: prs.a1.unit08.lesson06.teach.turn01
+            kind: dialogue
+            target: {text: "سلام، خوش آمدین. چی میل دارین؟", language_code: prs, direction: rtl, speaker: دکاندار}
+            introduced_tokens: [سلام, خوش, آمدین, چی, میل, دارین, دکاندار]
+          - content_key: prs.a1.unit08.lesson06.teach.turn02
+            kind: dialogue
+            target: {text: "سلام. چی دارین؟", language_code: prs, direction: rtl, speaker: مشتری}
+            introduced_tokens: [سلام, چی, دارین, مشتری]
+          - content_key: prs.a1.unit08.lesson06.teach.turn03
+            kind: dialogue
+            target: {text: "پلو و قورمه داریم، هردو تازه است.", language_code: prs, direction: rtl, speaker: دکاندار}
+            introduced_tokens: [پلو, قورمه, داریم, هردو, تازه, است]
+          - content_key: prs.a1.unit08.lesson06.teach.turn04
+            kind: dialogue
+            target: {text: "بسیار خوب، یک بشقاب پلو با قورمه می‌خواهم، و یک چای هم لطفاً.", language_code: prs, direction: rtl, speaker: مشتری}
+            introduced_tokens: [بسیار, خوب, یک, بشقاب, پلو, با, قورمه, می‌خواهم, و, چای, هم, لطفاً]
+          - content_key: prs.a1.unit08.lesson06.teach.turn05
+            kind: dialogue
+            target: {text: "چشم، همین حالا می‌آرم.", language_code: prs, direction: rtl, speaker: دکاندار}
+            introduced_tokens: [چشم, همین, حالا, می‌آرم]
+          - content_key: prs.a1.unit08.lesson06.teach.turn06
+            kind: dialogue
+            target: {text: "خیلی خوش‌مزه بود. بل چند می‌شه؟", language_code: prs, direction: rtl, speaker: مشتری}
+            introduced_tokens: [خیلی, خوش‌مزه, بود, بل, چند, می‌شه]
+          - content_key: prs.a1.unit08.lesson06.teach.turn07
+            kind: dialogue
+            target: {text: "تشکر، دوصد افغانی می‌شه.", language_code: prs, direction: rtl, speaker: دکاندار}
+            introduced_tokens: [تشکر, دوصد, افغانی, می‌شه]
+        exercises:
+          - content_key: prs.a1.unit08.lesson06.exercise01.listen_context
+            type: dialogue_comprehension
+            tested_text: مشتری دکاندار چایخانه پلو قورمه
+            media_asset_key: prs.a1.audio.dialogue.restaurant.01
+            prompt: {target_blocks: []}
+          - content_key: prs.a1.unit08.lesson06.exercise02.recognize_what_ordered
+            type: multiple_choice
+            tested_text: پلو با قورمه
+            prompt:
+              target_blocks:
+                - {text: "What did the customer order?", language_code: en, direction: ltr}
+          - content_key: prs.a1.unit08.lesson06.exercise03.match_dialogue_facts
+            type: matching_pairs
+            tested_text: مشتری پلو قورمه بل دوصد افغانی
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: مشتری, right: "پلو با قورمه و یک چای"}
+              - {left: بل, right: "دوصد افغانی"}
+          - content_key: prs.a1.unit08.lesson06.exercise04.order_final_request
+            type: word_order
+            tested_text: بل چند می‌شه
+            prompt: {target_blocks: []}
+            word_bank: [بل, چند, می‌شه]
+          - content_key: prs.a1.unit08.lesson06.exercise05.listen_bill_amount
+            type: listen_type
+            tested_text: دوصد افغانی می‌شه
+            prompt: {target_blocks: []}
+          - content_key: prs.a1.unit08.lesson06.exercise06.dialogue_response_thanks
+            type: dialogue_response
+            tested_text: تشکر دوصد افغانی می‌شه
+            prompt: {target_blocks: [{text: "بل چند می‌شه؟", language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit08.lesson06.exercise07.write_order_summary
+            type: writing_prompt
+            tested_text: یک بشقاب پلو با قورمه می‌خواهم و یک چای هم لطفاً
+            prompt: {target_blocks: []}
+          - content_key: prs.a1.unit08.lesson06.exercise08.speak_full_order_scene
+            type: speak_response
+            tested_text: چی دارین می‌خواهم بل چند می‌شه
+            prompt: {target_blocks: [{text: "You are at a چایخانه. Ask what's available, order a meal, and then ask for the bill.", language_code: en, direction: ltr}]}

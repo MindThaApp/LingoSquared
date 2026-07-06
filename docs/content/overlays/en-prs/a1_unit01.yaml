@@ -9,8 +9,36 @@ generation_provenance:
   authoring_system: codex
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: claude
+  status: reviewed
+  required_next_reviewer: null
+  notes: >-
+    Fresh-context review completed 2026-07-05, paired with the prs
+    realization review (see that file's review notes for full detail).
+    Fixed the previously-flagged snake_case jargon leaks still present in
+    this overlay (informal_singular/polite_plural/formal_written as
+    exercise04's correct_option/distractors, the_youngest_person/
+    only_new_colleagues in exercise07's distractors, w_or_v/y_or_long_i in
+    exercise04's matching accepted_answers) plus two more of the same bug
+    class found during this pass (thank_you, good_night as bare distractor
+    values in exercises04/07 of lesson02) -- all replaced with natural
+    learner-facing phrases. No other bare snake_case tokens remain in any
+    instruction/option/distractor/accepted_answers/feedback string (full
+    sweep re-run after fixes). Verified every exercise instruction against
+    its own answer data for coherence, checked all distractor sets for
+    unintended ambiguity, and confirmed the dialect notes (تشکر preferred
+    over ممنون, استین/استم as the Afghan spoken forms, تو/استی scoped to an
+    explicit peer/close-friend context) accurately describe genuine Afghan
+    Dari usage rather than an Iranian Farsi assumption. All content_keys
+    match the realization file 1:1 (43 teaching + 50 exercise entries).
+    Compiler validation clean (0 errors/0 warnings) before and after
+    fixes. URGENT FOLLOW-UP 2026-07-05: live QA found the whole en-prs
+    course failed to actually compile (see the paired realization file's
+    updated notes for the root cause -- an old dialogue-format bug in
+    lesson06 that `validate` never exercises, only real `compile` does).
+    Split the 6 combined `lines01_02`-`lines11_12` overlay entries into 12
+    per-turn entries (`line01`-`line12`) matching the realization's new
+    keys. Re-verified with the actual `compile` command -- now produces
+    valid JSON end-to-end.
 
 course:
   title: Dari A1
@@ -188,30 +216,54 @@ teaching:
     title: "Kabul"
     gloss: "Kabul"
     note: "کابل is the capital of Afghanistan and the setting for this dialogue."
-  prs.a1.unit01.lesson06.teach.lines01_02:
-    title: "Arrive for a first day at work"
-    gloss: "Hamed says he is the new colleague; Najib welcomes him and asks his name."
-    note: "Both speakers are adult male colleagues meeting at an office in Kabul. خوش آمدین is a respectful spoken Dari counterpart of خوش آمدید."
-  prs.a1.unit01.lesson06.teach.lines03_04:
-    title: "Exchange names"
-    gloss: "Hamed gives his name, and Najib introduces himself and says he is pleased to meet him."
+  prs.a1.unit01.lesson06.teach.line01:
+    title: "Hamed introduces himself as the new colleague"
+    gloss: "Hamed says he is the new colleague."
+    note: "Both speakers are adult male colleagues meeting at an office in Kabul."
+  prs.a1.unit01.lesson06.teach.line02:
+    title: "Najib welcomes him and asks his name"
+    gloss: "Najib welcomes him and asks his name."
+    note: "خوش آمدین is a respectful spoken Dari counterpart of خوش آمدید."
+  prs.a1.unit01.lesson06.teach.line03:
+    title: "Hamed gives his name"
+    gloss: "Hamed gives his name."
+    note: "نام من حامد است is the neutral, slightly formal way to state a name, already established in this unit."
+  prs.a1.unit01.lesson06.teach.line04:
+    title: "Najib introduces himself and says he is pleased to meet him"
+    gloss: "Najib introduces himself and says he is pleased to meet him."
     note: "از آشنایی با شما خوش شدم explicitly refers to becoming acquainted, so it fits a first encounter."
-  prs.a1.unit01.lesson06.teach.lines05_06:
-    title: "Ask about personal wellbeing"
+  prs.a1.unit01.lesson06.teach.line05:
+    title: "Hamed returns the pleasure and asks how Najib is"
     gloss: "Hamed returns the pleasure and asks how Najib is."
     note: "The exchange maintains respectful شما and استین between new colleagues."
-  prs.a1.unit01.lesson06.teach.lines07_08:
-    title: "Ask after the family"
-    gloss: "Najib asks after Hamed's family, and Hamed says everyone is well."
+  prs.a1.unit01.lesson06.teach.line06:
+    title: "Najib answers"
+    gloss: "Najib says he's well, thank you."
+    note: "جور استم، تشکر answers the wellbeing question, as taught earlier in this unit."
+  prs.a1.unit01.lesson06.teach.line07:
+    title: "Najib asks after Hamed's family"
+    gloss: "Najib asks after Hamed's family."
     note: "The household inquiry extends the greeting before they turn to work."
-  prs.a1.unit01.lesson06.teach.lines09_10:
-    title: "Move into the workplace"
-    gloss: "Najib offers to introduce the other colleagues, and Hamed agrees with thanks."
+  prs.a1.unit01.lesson06.teach.line08:
+    title: "Hamed says everyone is well"
+    gloss: "Hamed says everyone is well."
+    note: "شکر، همه جور استند answers the family inquiry, as taught earlier in this unit."
+  prs.a1.unit01.lesson06.teach.line09:
+    title: "Najib offers to introduce the other colleagues"
+    gloss: "Najib offers to introduce the other colleagues."
+    note: "بفرمایید here invites Hamed to follow along, not to sit or take something."
+  prs.a1.unit01.lesson06.teach.line10:
+    title: "Hamed agrees with thanks"
+    gloss: "Hamed agrees with thanks."
     note: "بسیار خوب is introduced here as a clear affirmative response."
-  prs.a1.unit01.lesson06.teach.lines11_12:
-    title: "Show the new colleague his place"
+  prs.a1.unit01.lesson06.teach.line11:
+    title: "Najib responds warmly and identifies Hamed's desk"
     gloss: "Najib responds warmly and identifies Hamed's desk."
     note: "The dialogue ends by beginning the workday rather than repeating a home-visit farewell sequence."
+  prs.a1.unit01.lesson06.teach.line12:
+    title: "Hamed thanks him"
+    gloss: "Hamed thanks him."
+    note: "تشکر closes the exchange simply."
 
 exercises:
   prs.a1.unit01.lesson01.exercise01.recognize_sin:
@@ -234,7 +286,7 @@ exercises:
   prs.a1.unit01.lesson01.exercise04.match_final_group:
     instruction: "Match each letter with its approximate sound value."
     accepted_answers:
-      - {value: {ن: n, و: w_or_v, ه: h, ی: y_or_long_i}, status: correct}
+      - {value: {ن: n, و: "w/v", ه: h, ی: "y/long i"}, status: correct}
     feedback: "These sound values will recur throughout the unit."
   prs.a1.unit01.lesson01.exercise05.build_salam:
     instruction: "Arrange the letters to build سلام."
@@ -282,7 +334,7 @@ exercises:
   prs.a1.unit01.lesson02.exercise04.welcome_meaning:
     instruction: "Select the meaning of خوش آمدید."
     correct_option: welcome
-    distractors: [goodbye, thank_you, good_night]
+    distractors: [goodbye, "thank you", "good night"]
     accepted_answers: [{value: welcome, status: correct}]
     feedback: "خوش آمدید means welcome."
   prs.a1.unit01.lesson02.exercise05.produce_thanks:
@@ -299,7 +351,7 @@ exercises:
   prs.a1.unit01.lesson02.exercise07.goodbye_meaning:
     instruction: "Select the meaning of خدا حافظ."
     correct_option: goodbye
-    distractors: [welcome, hello, thank_you]
+    distractors: [welcome, hello, "thank you"]
     accepted_answers: [{value: goodbye, status: correct}]
     feedback: "خدا حافظ is a farewell."
   prs.a1.unit01.lesson02.exercise08.speak_exchange:
@@ -368,9 +420,9 @@ exercises:
     feedback: "شما and استین mark the polite form."
   prs.a1.unit01.lesson04.exercise02.choose_informal:
     instruction: "Which register best describes تو چطور استی؟"
-    correct_option: informal_singular
-    distractors: [polite_plural, formal_written, ceremonial]
-    accepted_answers: [{value: informal_singular, status: correct}]
+    correct_option: "informal, spoken to one person"
+    distractors: ["polite, spoken to a group", "used only in formal writing", "used only in religious ceremonies"]
+    accepted_answers: [{value: "informal, spoken to one person", status: correct}]
     feedback: "تو and استی address one person informally."
   prs.a1.unit01.lesson04.exercise03.listen_polite:
     instruction: "Listen and type the polite spoken question."
@@ -447,9 +499,9 @@ exercises:
     feedback: "بالا بفرمایید politely offers the more honored place in the room."
   prs.a1.unit01.lesson05.exercise07.etiquette_check:
     instruction: "In a group greeting, whom should a learner normally greet first?"
-    correct_option: elders
-    distractors: [the_youngest_person, nobody, only_new_colleagues]
-    accepted_answers: [{value: elders, status: correct}]
+    correct_option: "the elders"
+    distractors: ["the youngest person present", "no one in particular", "only new colleagues"]
+    accepted_answers: [{value: "the elders", status: correct}]
     feedback: "Greeting elders first is a conventional sign of respect."
   prs.a1.unit01.lesson05.exercise08.listen_extended_greeting:
     instruction: "Listen. What does the host ask about?"
