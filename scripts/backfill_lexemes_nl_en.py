@@ -174,6 +174,12 @@ EN_TARGET_TO_NL_GLOSS: dict[str, str] = {
     "bigger": "groter", "smaller": "kleiner", "cheaper": "goedkoper",
     "expensive": "duur", "faster": "sneller", "than": "dan", "nicer": "mooier",
     "cheapest": "goedkoopst", "red": "rood", "car": "auto", "white": "wit",
+    # Unit 21 (handling a basic journey/travel), added 2026-07-06.
+    "ticket": "kaartje", "platform": "perron", "train": "trein",
+    "departure": "vertrek", "arrival": "aankomst", "boston": "Boston",
+    "way": "manier; kant", "round": "retour (rond)", "trip": "reis",
+    "leaves": "vertrekt", "9:15": "9:15", "arrives": "komt aan",
+    "11:30": "11:30", "arrive": "aankomen",
 }
 
 UNIT_FILES = (
@@ -256,6 +262,10 @@ UNIT_FILES = (
     (
         REPO_ROOT / "docs/content/realizations/en/a1_unit20_comparisons.yaml",
         REPO_ROOT / "docs/content/overlays/nl-en/a1_unit20.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit21_travel.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/a1_unit21.yaml",
     ),
 )
 
@@ -402,6 +412,11 @@ NL_POS: dict[str, str] = {
     "groter": "adjective", "kleiner": "adjective", "mooier": "adjective",
     "rode": "adjective", "sneller": "adjective", "tas": "noun", "vind": "verb",
     "witte": "adjective",
+    # Unit 21 (handling a basic journey/travel), added 2026-07-06.
+    "aankomst": "noun", "boston": "proper_noun", "enkele": "adjective",
+    "kaartje": "noun", "loketmedewerker": "noun", "perron": "noun",
+    "reis": "noun", "retour": "noun", "trein": "noun", "vanaf": "preposition",
+    "vertrek": "noun", "vertrekt": "verb",
 }
 
 NL_GLOSSES: dict[str, str] = {
@@ -553,6 +568,11 @@ NL_GLOSSES: dict[str, str] = {
     "goedkoopst": "cheapest", "goedkoopste": "cheapest", "goedkoper": "cheaper",
     "groter": "bigger", "kleiner": "smaller", "mooier": "nicer", "rode": "red",
     "sneller": "faster", "tas": "bag", "vind": "find; consider", "witte": "white",
+    # Unit 21 (handling a basic journey/travel), added 2026-07-06.
+    "aankomst": "arrival", "boston": "Boston", "enkele": "single (one-way)",
+    "kaartje": "ticket", "loketmedewerker": "ticket clerk", "perron": "platform",
+    "reis": "trip; journey", "retour": "round trip", "trein": "train",
+    "vanaf": "from", "vertrek": "departure", "vertrekt": "departs",
 }
 
 

@@ -40,7 +40,10 @@ BACKEND_ROOT = REPO_ROOT / "backend"
 if str(BACKEND_ROOT) not in sys.path:
     sys.path.insert(0, str(BACKEND_ROOT))
 
-UNIT_FILES = tuple(sorted((REPO_ROOT / "docs/content/realizations/nl").glob("a1_unit0[1-9]_*.yaml")))
+UNIT_FILES = tuple(sorted(
+    p for p in (REPO_ROOT / "docs/content/realizations/nl").glob("a1_unit*_*.yaml")
+    if 1 <= int(p.name[len("a1_unit"):len("a1_unit")+2]) <= 10
+))
 
 # Each lexical gloss is deliberately atomic. Capitalized sentence-initial forms
 # below reuse the same hand-authored gloss as their lowercase lexical form.
@@ -161,6 +164,22 @@ NL_GLOSSES.update({
     "DOEL": "DESTINATION", "Route": "Route", "Graag": "gladly", "gedaan": "done",
 })
 
+# Unit 10 (describing a daily routine), added 2026-07-06.
+NL_GLOSSES.update({
+    "opstaan": "to get up", "sta": "get up (with ik)", "zich": "oneself (reflexive)",
+    "aankleden": "to get dressed", "kleed": "get dressed (with ik)",
+    "ontbijten": "to have breakfast", "ontbijt": "have breakfast (with ik)",
+    "werken": "to work", "werk": "work (with ik)", "eet": "eat (with ik)",
+    "afwassen": "to do the dishes", "was": "do the dishes (with ik)",
+    "af": "off (separable prefix)", "slapen": "to sleep", "slaap": "sleep (with ik)",
+    "In": "In", "gewone": "ordinary", "hoofdzin": "main clause", "deel": "part",
+    "einde": "end", "scheidbaar": "separable", "achteraan": "at the end",
+    "07": "07", "eerst": "first", "daarna": "after that", "Eerst": "First",
+    "Daarna": "After that", "Na": "After", "staat": "stands; is placed",
+    "werkwoord": "verb", "ziet": "sees; looks", "eruit": "out (part of 'looks like')",
+    "pas": "not until; only",
+})
+
 for _token in ("Een", "Twee"):
     if _token not in NL_GLOSSES:
         NL_GLOSSES[_token] = NL_GLOSSES[_token.casefold()]
@@ -189,15 +208,15 @@ for _token in (
 for _number in "0 00 06 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 18 19 20 21 22 24 25 29 30 31 32 40 42 43 45 48 50 65 75 87 90 99 2024 2026".split():
     NL_GLOSSES[_number] = _number
 
-SYMBOLS = set("'s 0 00 06 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 18 19 20 21 22 24 25 29 30 31 32 40 42 43 45 48 50 65 75 87 90 99 500 2024 2026".split())
+SYMBOLS = set("'s 0 00 06 07 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 18 19 20 21 22 24 25 29 30 31 32 40 42 43 45 48 50 65 75 87 90 99 500 2024 2026".split())
 PROPER_NOUNS = {"België", "Duitsland", "Egypte", "Lotte", "Nederland", "Noor", "Omar",
                 "Rotterdam", "Sander", "Fenna", "Jan", "Marieke", "Utrecht", "Amsterdam"}
-PRONOUNS = set("ik Ik je jij jou Jou me u Wij wij Mijn mijn Welke welke Wat wat Hoeveel hoeveel jouw haar hem iets".split())
-PREPOSITIONS = set("aan bij in met na naar om Om op Op over te tot Tot uit voor vóór per naast tegenover achter tussen van vanaf".split())
-PARTICLES = set("behalve dan Dan dat Dat de De dit Dit dus een Een en En er Er geen Geen het Het Ja ja Nee nee Niet niet of ook wel maar nog Anders".split())
-ADJECTIVES = set("Belgisch beleefd Duits Engels formeel Goed hele informeel laat Leuk leuk Nederlands nieuw normaal open oud slecht volgende elke Mooi".split())
-ADVERBS = set("avonds vandaan halverwege hier hoe Hoe hoeveelste middags nachts ochtends terug vandaag Vandaag waar Waar wanneer Wanneer graag vaak natuurlijk links rechts linksaf rechtsaf rechtdoor Graag".split())
-VERBS = set("begint ben Ben bent Bent heb Heb heet inschrijven is Is kom Kom komt Komt kost krijgen leer moet ontmoeten spreek wil wilt woon wonen Wonen woont zijn zitten Kun kun herhalen gaat drinken eten Mag mag Zie hebben neem kan Kan pinnen Kijk ga sla loop Ga Sla Loop gedaan".split())
+PRONOUNS = set("ik Ik je jij jou Jou me u Wij wij Mijn mijn Welke welke Wat wat Hoeveel hoeveel jouw haar hem iets zich".split())
+PREPOSITIONS = set("aan bij in met na naar om Om op Op over te tot Tot uit voor vóór per naast tegenover achter tussen van vanaf In Na".split())
+PARTICLES = set("behalve dan Dan dat Dat de De dit Dit dus een Een en En er Er geen Geen het Het Ja ja Nee nee Niet niet of ook wel maar nog Anders af eerst Eerst pas".split())
+ADJECTIVES = set("Belgisch beleefd Duits Engels formeel Goed hele informeel laat Leuk leuk Nederlands nieuw normaal open oud slecht volgende elke Mooi gewone scheidbaar".split())
+ADVERBS = set("avonds vandaan halverwege hier hoe Hoe hoeveelste middags nachts ochtends terug vandaag Vandaag waar Waar wanneer Wanneer graag vaak natuurlijk links rechts linksaf rechtsaf rechtdoor Graag achteraan daarna Daarna eruit".split())
+VERBS = set("begint ben Ben bent Bent heb Heb heet inschrijven is Is kom Kom komt Komt kost krijgen leer moet ontmoeten spreek wil wilt woon wonen Wonen woont zijn zitten Kun kun herhalen gaat drinken eten Mag mag Zie hebben neem kan Kan pinnen Kijk ga sla loop Ga Sla Loop gedaan opstaan sta aankleden kleed ontbijten ontbijt werken werk eet afwassen was slapen slaap staat ziet".split())
 PHRASES = {"Aangenaam", "Goedemiddag", "Goedemorgen", "Goedenavond", "Hallo", "Hoi", "Prima", "ziens",
            "alstublieft", "alsjeblieft", "eraan", "Bedankt"}
 NOUNS = set("Achtenveertig Dagen Inleverdatum Maanden Medewerker Nul Pauze Taalcafé Twaalf Welkom Workshop acht achtentwintig achtentwintigste achtenveertig achtste achttien achttiende april augustus avond bibliotheek bijdrage boek boeken cent dag dank datum december derde dertien dertiende dertig dertigste dinsdag donderdag drie drieëntwintigste drieënveertig eenendertigste eenentwintig eenentwintigste eenheid eerste elf elfde euro februari groep half hoofdletter huisnummer inleverdatum jaar januari juli juni keer kwart kwartier maand maandag maart mei mensen middag naam nacht negen negende negenennegentig negenentwintigste negentien negentiende negentig november nul nummer ochtend oktober rooster september stoelen taalcafé tachtig tafel telefoonnummer tien tiende tiental tijd twaalf twaalfde twee tweede tweeëndertig tweeëntwintig tweeëntwintigste tweeënveertig twintig twintigste uur veertien veertiende veertig vier vierde vierentwintigste vijf vijfde vijfentwintigste vijfenzestig vijfenzeventig vijftien vijftiende vijftig vrijdag vrijdagmiddag week woensdag workshop zaal zaterdag zes zesde zesentwintigste zestien zestiende zestig zeven zevende zevenentachtig zevenentwintigste zeventien zeventiende zeventig zondag één "
@@ -207,7 +226,8 @@ NOUNS = set("Achtenveertig Dagen Inleverdatum Maanden Medewerker Nul Pauze Taalc
               "prijskaartje Verkoper Twee "
               "station supermarkt ziekenhuis bank postkantoor bushalte buurt kaart buurtkaart BUURTKAART "
               "Bibliotheek Ziekenhuis Postkantoor Supermarkt Bank Bushalte "
-              "route Route START DOEL".split())
+              "route Route START DOEL "
+              "hoofdzin deel einde werkwoord".split())
 
 
 def nl_part_of_speech(token: str) -> str:
@@ -253,6 +273,9 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         "richtingswoorden": "direction_word", "bevelsvormen": "imperative_direction",
         "de_weg_vragen": "route_question", "korte_route": "short_route",
         "route_op_de_kaart": "route_map", "vanaf_het_taalcafe": "route_dialogue",
+        "dagelijkse_activiteiten": "daily_activity", "scheidbare_werkwoorden": "separable_verb_lesson",
+        "activiteiten_en_tijden": "routine_time", "eerst_dan_daarna": "sequence_lesson",
+        "omars_routine_lezen": "routine_reading", "een_dag_bij_het_taalcafe": "routine_dialogue",
     }
     semantic.append(lesson_categories[unit_lesson])
     if t in {"jij", "je"}: semantic.append("informal_address")
@@ -333,6 +356,18 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     # "ga", not "sla" ("Sla rechtdoor" is not idiomatic Dutch), so it is
     # deliberately excluded from this tag.
     if t in {"linksaf", "rechtsaf"}: semantic.append("turn_direction")
+    # Unit 10 (daily routine): all 7 routine-verb INFINITIVES (both
+    # separable and non-separable) are safe together for bare-word
+    # recognition only -- there's no shared sentence frame here (each
+    # conjugated ik-form is irregular/differently-structured: sta/kleed/
+    # ontbijt/werk/eet/was/slaap), so this tag is never used to fill a
+    # generative frame, only to test infinitive-to-meaning recognition.
+    if t in {"opstaan", "aankleden", "ontbijten", "werken", "eten", "afwassen", "slapen"}:
+        semantic.append("routine_verb_infinitive")
+    # Only 3 members -- kept out of multiple_choice/listen_select (which
+    # need >=4 real candidates), used only in translation/fill_in_blank
+    # templates below.
+    if t in {"eerst", "dan", "daarna"}: semantic.append("sequence_word")
     tags: dict[str, object] = {"semantic": list(dict.fromkeys(semantic))}
     if t in {"jij", "je"}: tags["register"] = "informal"
     elif t == "u": tags["register"] = "polite"
