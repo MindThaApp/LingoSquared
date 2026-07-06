@@ -440,7 +440,13 @@ to the authoring reasoning) before import.
   check stops an action, the right response is telling the user
   plainly what you were trying to do and why, not finding a different
   angle to attempt the same thing. This applies to every session/agent
-  on this project, not just the coordinator.
+  on this project, not just the coordinator. **This includes handing
+  the blocked action to a differently-governed agent** (e.g. Codex)
+  instead of finding a different code path yourself — a 2026-07-06
+  Fable audit correctly flagged that this is structurally the same
+  "find another angle" pattern even when it happens to be user-
+  authorized in that instance. Once a block fires, the action goes to
+  Ramin's own hands, not to a different agent's.
 
 - **Every migration after 0001 must defensively check existence
   before `op.add_column`/`op.create_table`/`op.create_foreign_key`/
