@@ -1,0 +1,314 @@
+schema_version: "1.0"
+overlay_version: "2026.1-draft.1"
+overlay_key: en-prs.a1.unit12
+source_language: en
+target_language: prs
+status: complete_draft
+generation_provenance:
+  method: ai_adapted_from_public_domain_source
+  authoring_system: claude
+  human_reviewed: false
+review:
+  status: reviewed
+  required_next_reviewer: null
+  notes: "Authored alongside the new prs a1_unit12_routines.yaml realization. Follows the established en-prs overlay convention from units 09-11 (English instruction/correct_option/distractors/feedback, target-language Dari accepted_answers, English glosses for recognize_* multiple_choice items to avoid the same-string visual-matching anti-pattern already fixed in units 07/08/09/10/11). Authored §14/§16-compliant from the start alongside the realization. Needs the standard fresh-context review before shipping.
+
+    FRESH-CONTEXT REVIEW COMPLETED 2026-07-06 (zero prior context, sibling fa files never opened). Confirmed the flat top-level units/lessons/teaching/exercises dict schema is structurally correct, with exact content_key parity against the paired realization in both directions (32/32 exercises, 24/24 teaching entries). Confirmed every exercise has at least one status:correct accepted answer via direct compile, not just validate. Confirmed every multiple_choice/dialogue_comprehension exercise's correct_option/distractors are in English (source language) while the prompt is Dari, so none are solvable by pure visual script-matching. FOUND AND FIXED a real YAML-footgun bug (AUTHORING_GUIDE §7): lesson06.exercise02.match_dialogue_facts's accepted_answers value had an unquoted بلی: yes, which PyYAML silently coerced to the Python boolean True -- quoted as \"yes\"; re-verified via compile that it now serializes as the string \"yes\". FOUND AND FIXED a real AUTHORING_GUIDE §12 gap: write_own_routine's accepted_answers only had comma-joined and period-joined multi-clause variants -- added the missing pure-و-joined form as status:correct (write_comparison_summary already had all three, unaffected). FOUND AND FIXED a real dialect-accuracy issue: the teaching notes for bidar_mishawam and daftar_miravam, plus the paired realization's register_policy, claimed spoken Dari simply lacks the Iranian-colloquial verb contraction (می‌شم/میرم) -- web-verified this is inaccurate (colloquial Kabuli Dari contracts these verbs too, with a distinct Afghan -om vowel, per the Encyclopaedia Iranica's Kāboli article); corrected the notes to frame the fuller می‌شوم/می‌روم forms as this course's deliberate register choice (consistent with units 01-11's استم/استین convention) rather than an absolute claim about Dari lacking a contraction. FOUND AND FIXED systemic non-compliance with AUTHORING_GUIDE §15 (target-language-asterisk convention): despite being freshly authored after §15 existed, only 1 of 56 note/feedback strings in this file used it (compare unit11's overlay, which applied it correctly throughout) -- wrapped the Dari spans in the remaining 42 mixed-language note/feedback strings that needed it (pure-English strings, e.g. the dialogue_lineN notes, correctly left unchanged). Also fixed a minor typo (\"this unit11's\" -> \"unit11's\"). Cross-referenced against the paired realization's fix for the duplicate-prompt-text bug (4 dialogue_response/writing_prompt exercises whose realization prompt.target_blocks exactly duplicated this overlay's own instruction text) -- confirmed via compile that all 4 now render correctly (no duplicate text shown to the learner). Both validate and compile re-run clean (0 errors/0 warnings) after every fix; compile output is valid JSON."
+
+course:
+  title: Dari A1
+  description: Beginner Kabul Dari for respectful everyday communication.
+
+units:
+  prs.a1.unit12.routines:
+    title: "Daily Routines"
+
+lessons:
+  prs.a1.unit12.lesson01.routine_verbs: {title: "Routine verbs"}
+  prs.a1.unit12.lesson02.describing_a_routine_with_times: {title: "Describing a routine with times"}
+  prs.a1.unit12.lesson03.parts_of_the_day_review: {title: "Parts of the day (review)"}
+  prs.a1.unit12.lesson04.reading_a_routine_text: {title: "Reading a routine text"}
+  prs.a1.unit12.lesson05.writing_your_own_routine: {title: "Writing your own routine"}
+  prs.a1.unit12.lesson06.comparing_routines_dialogue: {title: "Comparing routines (dialogue)"}
+
+teaching:
+  prs.a1.unit12.lesson01.teach.bidar_mishawam:
+    title: "I wake up"
+    gloss: "I wake up"
+    note: "*از خواب بیدار می‌شوم* literally means 'I wake up from sleep,' using the fuller, written-adjacent *می‌شوم* -- this course's established register choice (units 01-11), not a claim that spoken Dari lacks a contraction of its own."
+  prs.a1.unit12.lesson01.teach.sobhana_mikhoram:
+    title: "I eat breakfast"
+    gloss: "I eat breakfast"
+    note: "*صبحانه می‌خورم* means I eat breakfast."
+  prs.a1.unit12.lesson01.teach.daftar_miravam:
+    title: "I go to the office"
+    gloss: "I go to the office"
+    note: "*به دفتر می‌روم* uses the fuller *می‌روم*, continuing this course's established register (units 01-11)."
+  prs.a1.unit12.lesson01.teach.shab_mikhabam:
+    title: "I sleep at night"
+    gloss: "I sleep at night"
+    note: "*شب می‌خوابم* means I sleep at night."
+  prs.a1.unit12.lesson02.teach.saat_word_review:
+    title: "Hour / clock (review)"
+    gloss: "hour / clock"
+    note: "*ساعت* reviews the time word from unit11."
+  prs.a1.unit12.lesson02.teach.haft_review:
+    title: "Seven (review)"
+    gloss: "seven (7)"
+    note: "*هفت* reviews the number from unit11."
+  prs.a1.unit12.lesson02.teach.saat_haft_bidar:
+    title: "I wake up at seven."
+    gloss: "I wake up at seven."
+    note: "*ساعت هفت بیدار می‌شوم* combines the time with the routine verb."
+  prs.a1.unit12.lesson02.teach.question_chand_bidar:
+    title: "What time do you wake up?"
+    gloss: "What time do you wake up?"
+    note: "*ساعت چند بیدار می‌شوی؟* asks someone what time they wake up, using *می‌شوی* (you wake up)."
+  prs.a1.unit12.lesson03.teach.sobh_review:
+    title: "Morning (review)"
+    gloss: morning
+    note: "*صبح* reviews the word from unit01/unit11."
+  prs.a1.unit12.lesson03.teach.zohr_review:
+    title: "Noon (review)"
+    gloss: noon
+    note: "*ظهر* reviews the word from unit11."
+  prs.a1.unit12.lesson03.teach.asr_review:
+    title: "Afternoon (review)"
+    gloss: afternoon
+    note: "*عصر* reviews the word from unit01/unit11."
+  prs.a1.unit12.lesson03.teach.har_ruz_word:
+    title: "Every day"
+    gloss: "every day"
+    note: "*هر روز* means every day, useful for describing a routine."
+  prs.a1.unit12.lesson04.teach.man_word:
+    title: I
+    gloss: I
+    note: "*من* means I."
+  prs.a1.unit12.lesson04.teach.routine_text:
+    title: "Sample routine text"
+    gloss: "I wake up at seven every day. I eat breakfast and go to the office. I sleep at ten at night."
+    note: "A short first-person routine description combining this unit's vocabulary."
+  prs.a1.unit12.lesson05.teach.shash_word:
+    title: "Six (6)"
+    gloss: "six (6)"
+    note: "*شش* means six."
+  prs.a1.unit12.lesson05.teach.zud_word:
+    title: Early
+    gloss: early
+    note: "*زود* means early."
+  prs.a1.unit12.lesson06.teach.names:
+    title: "Zarmina and Homayoun"
+    gloss: "Zarmina, Homayoun"
+    note: "*زرمینه* and *همایون* are the two speakers in this lesson's dialogue."
+  prs.a1.unit12.lesson06.teach.mishavad_word:
+    title: "He/she wakes up (third person)"
+    gloss: "he/she wakes up (third person)"
+    note: "*بیدار می‌شود* is the third-person form, needed to compare two people's routines."
+  prs.a1.unit12.lesson06.teach.to_chetor_word:
+    title: "What about you?"
+    gloss: "What about you?"
+    note: "*تو چطور؟* literally asks 'you, how,' a natural way to turn a question back."
+  prs.a1.unit12.lesson06.teach.dialogue_line1:
+    title: "Homayoun, what time do you wake up?"
+    gloss: "Homayoun, what time do you wake up?"
+    note: "Zarmina opens by asking Homayoun's wake-up time."
+  prs.a1.unit12.lesson06.teach.dialogue_line2:
+    title: "I wake up at seven. What about you?"
+    gloss: "I wake up at seven. What about you?"
+    note: "Homayoun answers and turns the question back."
+  prs.a1.unit12.lesson06.teach.dialogue_line3:
+    title: "I wake up at six."
+    gloss: "I wake up at six."
+    note: "Zarmina states her own wake-up time."
+  prs.a1.unit12.lesson06.teach.dialogue_line4:
+    title: "You wake up early!"
+    gloss: "You wake up early!"
+    note: "Homayoun reacts with surprise."
+  prs.a1.unit12.lesson06.teach.dialogue_line5:
+    title: "Yes, I go to the office early."
+    gloss: "Yes, I go to the office early."
+    note: "Zarmina confirms and explains why."
+
+exercises:
+  prs.a1.unit12.lesson01.exercise01.recognize_bidar_reading:
+    instruction: "What does this sentence mean?"
+    correct_option: "I wake up."
+    distractors: ["I eat breakfast.", "I go to the office.", "I sleep at night."]
+    accepted_answers: [{value: "I wake up.", status: correct}]
+    feedback: "*از خواب بیدار می‌شوم* means I wake up."
+  prs.a1.unit12.lesson01.exercise02.recognize_daftar_reading:
+    instruction: "What does this sentence mean?"
+    correct_option: "I go to the office."
+    distractors: ["I wake up.", "I eat breakfast.", "I sleep at night."]
+    accepted_answers: [{value: "I go to the office.", status: correct}]
+    feedback: "*به دفتر می‌روم* means I go to the office."
+  prs.a1.unit12.lesson01.exercise03.match_routine_verbs:
+    instruction: "Match each word or phrase with its meaning."
+    accepted_answers:
+      - value: {"از خواب بیدار می‌شوم": "I wake up", "صبحانه می‌خورم": "I eat breakfast", "به دفتر می‌روم": "I go to the office", "شب می‌خوابم": "I sleep at night", صبحانه: breakfast, دفتر: office}
+        status: correct
+    feedback: "These four sentences are this lesson's core routine verbs."
+  prs.a1.unit12.lesson01.exercise04.order_wake_up:
+    instruction: "Arrange the words to say I wake up."
+    accepted_answers:
+      - {value: [از, خواب, بیدار, می‌شوم], status: correct}
+    feedback: "*از خواب بیدار می‌شوم* means I wake up."
+  prs.a1.unit12.lesson01.exercise05.translate_breakfast:
+    instruction: "Translate into Dari: I eat breakfast."
+    accepted_answers:
+      - {value: "صبحانه می‌خورم", status: correct}
+    feedback: "*صبحانه می‌خورم* means I eat breakfast."
+  prs.a1.unit12.lesson01.exercise06.translate_sleep:
+    instruction: "Translate into Dari: I sleep at night."
+    accepted_answers:
+      - {value: "شب می‌خوابم", status: correct}
+    feedback: "*شب می‌خوابم* means I sleep at night."
+  prs.a1.unit12.lesson02.exercise01.recognize_wake_time_reading:
+    instruction: "What does this sentence mean?"
+    correct_option: "I wake up at seven."
+    distractors: ["What time do you wake up?", "I eat breakfast.", "I go to the office."]
+    accepted_answers: [{value: "I wake up at seven.", status: correct}]
+    feedback: "*ساعت هفت بیدار می‌شوم* means I wake up at seven."
+  prs.a1.unit12.lesson02.exercise02.recognize_wake_question_reading:
+    instruction: "What does this question ask?"
+    correct_option: "What time do you wake up?"
+    distractors: ["I wake up at seven.", "What time is it?", "What time is your appointment?"]
+    accepted_answers: [{value: "What time do you wake up?", status: correct}]
+    feedback: "*ساعت چند بیدار می‌شوی؟* asks what time you wake up."
+  prs.a1.unit12.lesson02.exercise03.match_time_phrases:
+    instruction: "Match each word or phrase with its meaning."
+    accepted_answers:
+      - value: {"ساعت هفت بیدار می‌شوم": "I wake up at seven.", "ساعت چند بیدار می‌شوی؟": "What time do you wake up?", ساعت: "hour / clock", هفت: "seven (7)", چند: "how many / what", می‌شوی: "you wake up"}
+        status: correct
+    feedback: "These combine unit11's time vocabulary with this lesson's routine verbs."
+  prs.a1.unit12.lesson02.exercise04.order_wake_time:
+    instruction: "Arrange the words to say I wake up at seven."
+    accepted_answers:
+      - {value: [ساعت, هفت, بیدار, می‌شوم], status: correct}
+    feedback: "*ساعت هفت بیدار می‌شوم* means I wake up at seven."
+  prs.a1.unit12.lesson02.exercise05.translate_wake_question:
+    instruction: "Translate into Dari: What time do you wake up?"
+    accepted_answers:
+      - {value: "ساعت چند بیدار می‌شوی", status: correct}
+      - {value: "ساعت چند بیدار می‌شوی؟", status: correct}
+    feedback: "*ساعت چند بیدار می‌شوی؟* means what time do you wake up?"
+  prs.a1.unit12.lesson02.exercise06.dialogue_response_own_wake_time:
+    instruction: "Someone asks what time you wake up. Say seven o'clock."
+    accepted_answers:
+      - {value: "ساعت هفت بیدار می‌شوم", status: correct}
+      - {value: "ساعت هفت بیدار می‌شوم.", status: correct}
+    feedback: "*ساعت هفت بیدار می‌شوم* means I wake up at seven."
+  prs.a1.unit12.lesson03.exercise01.recognize_zohr_reading:
+    instruction: "What does this word mean?"
+    correct_option: noon
+    distractors: [morning, afternoon, night]
+    accepted_answers: [{value: noon, status: correct}]
+    feedback: "*ظهر* means noon."
+  prs.a1.unit12.lesson03.exercise02.recognize_har_ruz_reading:
+    instruction: "What does this phrase mean?"
+    correct_option: "every day"
+    distractors: ["every morning", "every night", "one day"]
+    accepted_answers: [{value: "every day", status: correct}]
+    feedback: "*هر روز* means every day."
+  prs.a1.unit12.lesson03.exercise03.match_parts_of_day:
+    instruction: "Match each word or phrase with its meaning."
+    accepted_answers:
+      - value: {صبح: morning, ظهر: noon, عصر: afternoon, شب: night, "هر روز": "every day", هر: every}
+        status: correct
+    feedback: "*صبح*/*ظهر*/*عصر*/*شب* review unit01/unit11; *هر روز* (every day) is new."
+  prs.a1.unit12.lesson03.exercise04.order_every_day:
+    instruction: "Arrange the words to say I eat breakfast every day."
+    accepted_answers:
+      - {value: [هر, روز, صبحانه, می‌خورم], status: correct}
+    feedback: "*هر روز صبحانه می‌خورم* means I eat breakfast every day."
+  prs.a1.unit12.lesson03.exercise05.translate_every_day:
+    instruction: "Translate into Dari: every day."
+    accepted_answers:
+      - {value: "هر روز", status: correct}
+    feedback: "*هر روز* means every day."
+  prs.a1.unit12.lesson04.exercise01.reading_comprehension_wake_time:
+    instruction: "Read the text. What time does the writer wake up?"
+    correct_option: "Seven o'clock"
+    distractors: ["Six o'clock", "Ten o'clock", "It isn't stated"]
+    accepted_answers: [{value: "Seven o'clock", status: correct}]
+    feedback: "The text says *ساعت هفت بیدار می‌شوم* -- seven o'clock."
+  prs.a1.unit12.lesson04.exercise02.match_reading_facts:
+    instruction: "Match each word or phrase with its meaning."
+    accepted_answers:
+      - value: {"ساعت هفت بیدار می‌شوم": "wake-up time", "به دفتر می‌روم": "goes to the office", "ساعت ده می‌خوابم": bedtime, من: I, و: and, ده: "ten (10)"}
+        status: correct
+    feedback: "The text describes a full daily routine from wake-up to bedtime."
+  prs.a1.unit12.lesson04.exercise03.order_and_go_to_office:
+    instruction: "Arrange the words to say I eat breakfast and go to the office."
+    accepted_answers:
+      - {value: [صبحانه, می‌خورم, و, به, دفتر, می‌روم], status: correct}
+    feedback: "*صبحانه می‌خورم و به دفتر می‌روم* means I eat breakfast and go to the office."
+  prs.a1.unit12.lesson04.exercise04.translate_ten_oclock_sleep:
+    instruction: "Translate into Dari: I sleep at ten."
+    accepted_answers:
+      - {value: "ساعت ده می‌خوابم", status: correct}
+    feedback: "*ساعت ده می‌خوابم* means I sleep at ten."
+  prs.a1.unit12.lesson05.exercise01.recognize_zud_reading:
+    instruction: "What does this word mean?"
+    correct_option: early
+    distractors: [late, every, day]
+    accepted_answers: [{value: early, status: correct}]
+    feedback: "*زود* means early."
+  prs.a1.unit12.lesson05.exercise02.match_writing_vocab:
+    instruction: "Match each word with its meaning."
+    accepted_answers:
+      - value: {زود: early, شش: "six (6)", صبحانه: breakfast, دفتر: office, هر: every, روز: day}
+        status: correct
+    feedback: "*زود* and *شش* are this lesson's new words; the rest review earlier lessons."
+  prs.a1.unit12.lesson05.exercise03.order_wake_up_early:
+    instruction: "Arrange the words to say I wake up at six."
+    accepted_answers:
+      - {value: [ساعت, شش, بیدار, می‌شوم], status: correct}
+    feedback: "*ساعت شش بیدار می‌شوم* means I wake up at six."
+  prs.a1.unit12.lesson05.exercise04.translate_early:
+    instruction: "Translate into Dari: early."
+    accepted_answers:
+      - {value: زود, status: correct}
+    feedback: "*زود* means early."
+  prs.a1.unit12.lesson05.exercise05.write_own_routine:
+    instruction: "Write two or three sentences in Dari about your own daily routine: what time you wake up, and what you do afterward."
+    accepted_answers:
+      - {value: "هر روز ساعت شش بیدار می‌شوم، صبحانه می‌خورم و به دفتر می‌روم", status: correct}
+      - {value: "هر روز ساعت شش بیدار می‌شوم. صبحانه می‌خورم و به دفتر می‌روم.", status: correct}
+      - {value: "هر روز ساعت شش بیدار می‌شوم و صبحانه می‌خورم و به دفتر می‌روم", status: correct}
+    feedback: "*هر روز ساعت شش بیدار می‌شوم، صبحانه می‌خورم و به دفتر می‌روم* is one accepted sample routine -- joining the clauses with a comma, a period, or *و* are all equally natural."
+  prs.a1.unit12.lesson06.exercise01.dialogue_comprehension_context:
+    instruction: "Read the conversation. Who wakes up earlier?"
+    correct_option: Zarmina
+    distractors: [Homayoun, "Neither, they wake up at the same time", "It isn't stated"]
+    accepted_answers: [{value: Zarmina, status: correct}]
+    feedback: "*زرمینه* wakes up at six, earlier than *همایون*'s seven."
+  prs.a1.unit12.lesson06.exercise02.match_dialogue_facts:
+    instruction: "Match each word or phrase with its meaning."
+    accepted_answers:
+      - value: {"همایون بیدار می‌شود": "ساعت هفت", "زرمینه بیدار می‌شود": "ساعت شش", "تو چطور؟": "What about you?", زود: early, بلی: "yes", دفتر: office}
+        status: correct
+    feedback: "Homayoun wakes at seven; Zarmina wakes at six."
+  prs.a1.unit12.lesson06.exercise03.order_what_about_you:
+    instruction: "Arrange the words to ask What about you?"
+    accepted_answers:
+      - {value: ["تو", "چطور؟"], status: correct}
+    feedback: "*تو چطور؟* means what about you?"
+  prs.a1.unit12.lesson06.exercise04.translate_zarmina_wake_time:
+    instruction: "Translate into Dari: I wake up at six."
+    accepted_answers:
+      - {value: "من ساعت شش بیدار می‌شوم", status: correct}
+    feedback: "*من ساعت شش بیدار می‌شوم* means I wake up at six."
+  prs.a1.unit12.lesson06.exercise05.dialogue_response_own_comparison:
+    instruction: "Homayoun asks what time you wake up. Say six o'clock."
+    accepted_answers:
+      - {value: "من ساعت شش بیدار می‌شوم", status: correct}
+      - {value: "ساعت شش بیدار می‌شوم", status: correct}
+    feedback: "*من ساعت شش بیدار می‌شوم* means I wake up at six."
+  prs.a1.unit12.lesson06.exercise06.write_comparison_summary:
+    instruction: "Write one or two sentences in Dari comparing when Homayoun and Zarmina wake up."
+    accepted_answers:
+      - {value: "همایون ساعت هفت بیدار می‌شود، زرمینه ساعت شش بیدار می‌شود", status: correct}
+      - {value: "همایون ساعت هفت بیدار می‌شود. زرمینه ساعت شش بیدار می‌شود.", status: correct}
+      - {value: "همایون ساعت هفت بیدار می‌شود و زرمینه ساعت شش بیدار می‌شود", status: correct}
+    feedback: "Joining the two facts with a comma, a period, or *و* are all equally natural."

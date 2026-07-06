@@ -1,0 +1,367 @@
+schema_version: "1.0"
+realization_version: "2026.1-draft.1"
+target_language: prs
+cefr_level: A1
+status: complete_draft
+generation_provenance:
+  method: ai_adapted_from_public_domain_source
+  authoring_system: claude
+  source_material: "Peace Corps Dari course materials (public domain), modernized"
+  human_reviewed: false
+review:
+  status: reviewed
+  required_next_reviewer: null
+  notes: "New unit, prs's next uncovered outcome (prerequisite: time, already covered in unit11). Six lessons: daily routine verbs, describing a routine with times, parts of the day (re-taught within this file since introduced_tokens are file-scoped -- reusing the same صبح/ظهر/عصر/شب established in unit01/unit11), reading a short routine text, a writing task, and a dialogue comparing two people's routines. Uses استم/استین verb endings and full, uncontracted verb forms (می‌شوم، می‌روم، not the Iranian-colloquial می‌شم/میرم), consistent with the register established in units 01-11. Authored independently of the fa realization per the sibling-isolation rule. Authored §14/§16-compliant from the start: no listen_type/listen_select/listen_order exercises anywhere, and every matching_pairs exercise is sized by re-teaching relevant vocabulary within this file (numbers/time from unit11, parts of day from unit01) rather than left at 2-3. Proactively checked against AUTHORING_GUIDE §11-13 during authoring, including cross-checking every stated time across all 6 lessons for consistency. Compiler validation clean (0 errors/0 warnings). Awaiting the standing fresh-context review before status can move to reviewed.
+
+    FRESH-CONTEXT REVIEW COMPLETED 2026-07-06 (zero prior context, sibling fa files never opened). Verified against universal.a1.routines.describe_daily_routine's own can_do/assessment_requirements (all 4 -- understand_routine via lesson06's read-as-text dialogue_comprehension honestly instructed as \"Read,\" describe_routine via dialogue_response, read_routine via lesson04's reading_comprehension, write_routine via writing_prompt/translation -- covered, matching unit11's established read-substitutes-for-listening pattern given zero prs audio); exercise pacing (recognition -> drag/matching -> production verified in all 6 lessons); script purity (zero Arabic-range kaf/yeh, grepped both files); no jargon leaks; §14/§16 self-claims verified true (zero listen_type/listen_select/listen_order; all 6 matching_pairs exercises sized exactly 6 pairs); all 8 exercise types used confirmed registered in frontend/src/components/exercises/ExerciseRenderer.tsx; content_key parity exact both directions (1 unit/6 lessons/24 teaching/32 exercises each side). Ran a Python tokenizer (ZWNJ-aware compound-word handling, Persian-punctuation-stripping) checking every tested_text/pairs/word_bank/prompt.target_blocks value in the realization AND every overlay accepted_answers/correct_option/distractors value against cumulative introduced_tokens up to that point in the lesson sequence, confirming the earlier-caught missing-teach-card fix for the third-person می‌شود form (lesson06.teach.mishavad_word) is complete with zero remaining untaught-vocabulary violations anywhere in the file. Cross-checked §11 facts: Homayoun wakes at 7, Zarmina at 6, stated consistently across the media_assets dialogue, all lesson06 teaching cards and exercises, and the final comparison-writing exercise (Zarmina correctly identified as waking earlier). §12 verified: write_comparison_summary already had all three period/comma/و-joined forms as status:correct; FOUND AND FIXED a real gap in write_own_routine, which had only the comma- and period-joined forms -- added the missing pure-و-joined variant (\"...بیدار می‌شوم و صبحانه می‌خورم و به دفتر می‌روم\") as status:correct. FOUND AND FIXED a real dialect-accuracy issue in this file's own register_policy and the paired overlay's teaching notes: the claim that spoken Dari simply lacks the Iranian-colloquial verb contraction (می‌شم/میرم) was linguistically inaccurate -- web-verified (Encyclopaedia Iranica's Kāboli article and other sources) that colloquial Kabuli Dari DOES contract these verbs too (e.g. میرم), just with a distinct Afghan -om vowel quality rather than the Iranian -am pronunciation of the same spelling. The actual authored choice (fuller می‌شوم/می‌روم forms throughout) remains linguistically defensible and was kept as-is, since it's a legitimate deliberate register choice consistent with this course's already-established استم/استین neutral/educated-colloquial convention (units 01-11) -- only the false absolute claim was corrected, not the content itself. Judged the A1-complexity question honestly: introducing 1st/2nd/3rd-person forms of بیدار شدن across the unit (1st in lesson01-02, 2nd in lesson02, 3rd only in lesson06) is a gradual, single-verb buildup spread across 6 lessons rather than a same-lesson cram, and 3rd person is genuinely load-bearing for the spine outcome's own comparison task -- judged appropriate pacing for A1, not overreach. FOUND AND FIXED a real duplicate-prompt-text bug (present via compile, not visible from validate alone), the same bug class already fixed in unit11's own review: all 4 of this file's dialogue_response/writing_prompt exercises had realization prompt.target_blocks containing the exact same English text as the overlay's own instruction, so compiled output showed the same sentence twice. Fixed via the same established pattern: reply-type prompts (lesson02.exercise06, lesson06.exercise05) now show the actual already-taught Dari question ساعت چند بیدار می‌شوی؟ being replied to instead of a duplicated English instruction; self-initiated prompts with no natural preceding cue (lesson05.exercise05, lesson06.exercise06) now use empty target_blocks, matching unit11's own precedent. FOUND AND FIXED a real YAML-footgun bug (AUTHORING_GUIDE §7): lesson06.exercise02's pairs entry {left: بلی, right: yes} had an unquoted bare \"yes\" that PyYAML silently coerced to the Python boolean True (confirmed by loading the file directly) -- quoted as \"yes\" in both this file's pairs and the paired overlay's matching accepted_answers dict value; note this specific bug class (a boolean hidden inside a nested dict value, not a bare list/scalar) is NOT caught by the compiler's own validate_no_stray_yaml_booleans check, which only recurses into lists, not dict values -- flagging as a tooling gap worth a follow-up fix in scripts/compile_content.py, separate from this content fix. Also applied the §15 target-language-asterisk convention to 42 previously-unwrapped note/feedback strings in the paired overlay (the file had almost none applied despite being freshly authored after the convention existed) and fixed a minor typo (\"this unit11's\" -> \"unit11's\") in one feedback string. Re-verified via actual compile (not just validate) that every fix took effect in the compiled JSON: بلی now compiles to the string \"yes\" not a boolean; write_own_routine's accepted list has all 3 clause-joining variants; the two self-initiated prompts compile with only their English instruction text_block (no duplicate); the two reply-type prompts compile with both the English instruction and the distinct Dari cue line, matching unit11's shipped precedent exactly. Both validate and compile re-run clean (0 errors/0 warnings) after every fix; compile output is valid JSON."
+
+course:
+  realization_key: prs.a1
+  target_language_first: true
+  dialect: prs_AF_kabuli_educated_colloquial_intro
+  register_policy: >-
+    Continues the established استم/استین polite-first register policy.
+    Uses the fuller, written-adjacent verb forms (می‌شوم، می‌روم)
+    throughout, matching units 01-11's established neutral/educated-
+    colloquial register. This is a deliberate register choice, not a
+    claim that spoken Dari lacks its own colloquial contraction: Kabuli
+    Dari does contract these verbs too (e.g. میرم), with a distinct
+    Afghan -om vowel quality rather than the Iranian -am pronunciation
+    of the same spelling.
+
+media_assets:
+  - content_key: prs.a1.audio.routines.verbs.01
+    language: prs
+    text: "از خواب بیدار می‌شوم، صبحانه می‌خورم، به دفتر می‌روم، شب می‌خوابم"
+    voice_hint: neutral_adult
+    status: pending_generation
+  - content_key: prs.a1.audio.dialogue.comparing_routines.01
+    language: prs
+    text: "زرمینه: همایون، ساعت چند بیدار می‌شوی؟ همایون: ساعت هفت بیدار می‌شوم. تو چطور؟ زرمینه: من ساعت شش بیدار می‌شوم. همایون: زود بیدار می‌شوی! زرمینه: بلی، به دفتر زود می‌روم."
+    voice_hint: two_adults_neutral_polite
+    status: pending_generation
+
+units:
+  - content_key: prs.a1.unit12.routines
+    title: کارهای روزمره
+    section: reading_writing
+    spine_outcome_ids:
+      - universal.a1.routines.describe_daily_routine
+    planned_lesson_count: 6
+
+    lessons:
+      - content_key: prs.a1.unit12.lesson01.routine_verbs
+        title: افعال کارهای روزمره
+        spine_outcome_id: universal.a1.routines.describe_daily_routine
+        teaching:
+          - content_key: prs.a1.unit12.lesson01.teach.bidar_mishawam
+            kind: phrase
+            target: {text: "از خواب بیدار می‌شوم", language_code: prs, direction: rtl}
+            introduced_tokens: [از, خواب, بیدار, می‌شوم]
+          - content_key: prs.a1.unit12.lesson01.teach.sobhana_mikhoram
+            kind: phrase
+            target: {text: "صبحانه می‌خورم", language_code: prs, direction: rtl}
+            introduced_tokens: [صبحانه, می‌خورم]
+          - content_key: prs.a1.unit12.lesson01.teach.daftar_miravam
+            kind: phrase
+            target: {text: "به دفتر می‌روم", language_code: prs, direction: rtl}
+            introduced_tokens: [به, دفتر, می‌روم]
+          - content_key: prs.a1.unit12.lesson01.teach.shab_mikhabam
+            kind: phrase
+            target: {text: "شب می‌خوابم", language_code: prs, direction: rtl}
+            introduced_tokens: [شب, می‌خوابم]
+        exercises:
+          - content_key: prs.a1.unit12.lesson01.exercise01.recognize_bidar_reading
+            type: multiple_choice
+            tested_text: "از خواب بیدار می‌شوم"
+            prompt: {target_blocks: [{text: "از خواب بیدار می‌شوم", language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit12.lesson01.exercise02.recognize_daftar_reading
+            type: multiple_choice
+            tested_text: "به دفتر می‌روم"
+            prompt: {target_blocks: [{text: "به دفتر می‌روم", language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit12.lesson01.exercise03.match_routine_verbs
+            type: matching_pairs
+            tested_text: "بیدار می‌شوم صبحانه می‌خورم به دفتر می‌روم شب می‌خوابم"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "از خواب بیدار می‌شوم", right: "I wake up"}
+              - {left: "صبحانه می‌خورم", right: "I eat breakfast"}
+              - {left: "به دفتر می‌روم", right: "I go to the office"}
+              - {left: "شب می‌خوابم", right: "I sleep at night"}
+              - {left: صبحانه, right: breakfast}
+              - {left: دفتر, right: office}
+          - content_key: prs.a1.unit12.lesson01.exercise04.order_wake_up
+            type: word_order
+            tested_text: "از خواب بیدار می‌شوم"
+            prompt: {target_blocks: [{text: "I wake up.", language_code: en, direction: ltr}]}
+            word_bank: [از, خواب, بیدار, می‌شوم]
+          - content_key: prs.a1.unit12.lesson01.exercise05.translate_breakfast
+            type: translation
+            tested_text: "صبحانه می‌خورم"
+            prompt: {target_blocks: []}
+          - content_key: prs.a1.unit12.lesson01.exercise06.translate_sleep
+            type: translation
+            tested_text: "شب می‌خوابم"
+            prompt: {target_blocks: []}
+
+      - content_key: prs.a1.unit12.lesson02.describing_a_routine_with_times
+        title: کارهای روزمره با ساعت
+        spine_outcome_id: universal.a1.routines.describe_daily_routine
+        teaching:
+          - content_key: prs.a1.unit12.lesson02.teach.saat_word_review
+            kind: vocabulary
+            target: {text: ساعت, language_code: prs, direction: rtl}
+            introduced_tokens: [ساعت]
+          - content_key: prs.a1.unit12.lesson02.teach.haft_review
+            kind: vocabulary
+            target: {text: هفت, language_code: prs, direction: rtl}
+            introduced_tokens: [هفت]
+          - content_key: prs.a1.unit12.lesson02.teach.saat_haft_bidar
+            kind: phrase
+            target: {text: "ساعت هفت بیدار می‌شوم", language_code: prs, direction: rtl}
+            introduced_tokens: []
+          - content_key: prs.a1.unit12.lesson02.teach.question_chand_bidar
+            kind: phrase
+            target: {text: "ساعت چند بیدار می‌شوی؟", language_code: prs, direction: rtl}
+            introduced_tokens: [چند, می‌شوی]
+        exercises:
+          - content_key: prs.a1.unit12.lesson02.exercise01.recognize_wake_time_reading
+            type: multiple_choice
+            tested_text: "ساعت هفت بیدار می‌شوم"
+            prompt: {target_blocks: [{text: "ساعت هفت بیدار می‌شوم", language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit12.lesson02.exercise02.recognize_wake_question_reading
+            type: multiple_choice
+            tested_text: "ساعت چند بیدار می‌شوی"
+            prompt: {target_blocks: [{text: "ساعت چند بیدار می‌شوی؟", language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit12.lesson02.exercise03.match_time_phrases
+            type: matching_pairs
+            tested_text: "ساعت هفت بیدار می‌شوم ساعت چند بیدار می‌شوی"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "ساعت هفت بیدار می‌شوم", right: "I wake up at seven."}
+              - {left: "ساعت چند بیدار می‌شوی؟", right: "What time do you wake up?"}
+              - {left: ساعت, right: "hour / clock"}
+              - {left: هفت, right: "seven (7)"}
+              - {left: چند, right: "how many / what"}
+              - {left: می‌شوی, right: "you wake up"}
+          - content_key: prs.a1.unit12.lesson02.exercise04.order_wake_time
+            type: word_order
+            tested_text: "ساعت هفت بیدار می‌شوم"
+            prompt: {target_blocks: [{text: "I wake up at seven.", language_code: en, direction: ltr}]}
+            word_bank: [ساعت, هفت, بیدار, می‌شوم]
+          - content_key: prs.a1.unit12.lesson02.exercise05.translate_wake_question
+            type: translation
+            tested_text: "ساعت چند بیدار می‌شوی"
+            prompt: {target_blocks: []}
+          - content_key: prs.a1.unit12.lesson02.exercise06.dialogue_response_own_wake_time
+            type: dialogue_response
+            tested_text: "ساعت هفت بیدار می‌شوم"
+            prompt:
+              target_blocks:
+                - {text: "ساعت چند بیدار می‌شوی؟", language_code: prs, direction: rtl}
+
+      - content_key: prs.a1.unit12.lesson03.parts_of_the_day_review
+        title: بخش‌های روز
+        spine_outcome_id: universal.a1.routines.describe_daily_routine
+        teaching:
+          - content_key: prs.a1.unit12.lesson03.teach.sobh_review
+            kind: vocabulary
+            target: {text: صبح, language_code: prs, direction: rtl}
+            introduced_tokens: [صبح]
+          - content_key: prs.a1.unit12.lesson03.teach.zohr_review
+            kind: vocabulary
+            target: {text: ظهر, language_code: prs, direction: rtl}
+            introduced_tokens: [ظهر]
+          - content_key: prs.a1.unit12.lesson03.teach.asr_review
+            kind: vocabulary
+            target: {text: عصر, language_code: prs, direction: rtl}
+            introduced_tokens: [عصر]
+          - content_key: prs.a1.unit12.lesson03.teach.har_ruz_word
+            kind: phrase
+            target: {text: "هر روز", language_code: prs, direction: rtl}
+            introduced_tokens: [هر, روز]
+        exercises:
+          - content_key: prs.a1.unit12.lesson03.exercise01.recognize_zohr_reading
+            type: multiple_choice
+            tested_text: ظهر
+            prompt: {target_blocks: [{text: ظهر, language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit12.lesson03.exercise02.recognize_har_ruz_reading
+            type: multiple_choice
+            tested_text: "هر روز"
+            prompt: {target_blocks: [{text: "هر روز", language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit12.lesson03.exercise03.match_parts_of_day
+            type: matching_pairs
+            tested_text: "صبح ظهر عصر شب هر روز"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: صبح, right: morning}
+              - {left: ظهر, right: noon}
+              - {left: عصر, right: afternoon}
+              - {left: شب, right: night}
+              - {left: "هر روز", right: "every day"}
+              - {left: هر, right: every}
+          - content_key: prs.a1.unit12.lesson03.exercise04.order_every_day
+            type: word_order
+            tested_text: "هر روز صبحانه می‌خورم"
+            prompt: {target_blocks: [{text: "I eat breakfast every day.", language_code: en, direction: ltr}]}
+            word_bank: [هر, روز, صبحانه, می‌خورم]
+          - content_key: prs.a1.unit12.lesson03.exercise05.translate_every_day
+            type: translation
+            tested_text: "هر روز"
+            prompt: {target_blocks: []}
+
+      - content_key: prs.a1.unit12.lesson04.reading_a_routine_text
+        title: خواندن یک متن روزمره
+        spine_outcome_id: universal.a1.routines.describe_daily_routine
+        teaching:
+          - content_key: prs.a1.unit12.lesson04.teach.man_word
+            kind: vocabulary
+            target: {text: من, language_code: prs, direction: rtl}
+            introduced_tokens: [من]
+          - content_key: prs.a1.unit12.lesson04.teach.routine_text
+            kind: reading
+            target: {text: "من هر روز ساعت هفت بیدار می‌شوم. صبحانه می‌خورم و به دفتر می‌روم. شب ساعت ده می‌خوابم", language_code: prs, direction: rtl}
+            introduced_tokens: [و, ده]
+        exercises:
+          - content_key: prs.a1.unit12.lesson04.exercise01.reading_comprehension_wake_time
+            type: reading_comprehension
+            tested_text: "ساعت هفت"
+            prompt:
+              target_blocks:
+                - {text: "من هر روز ساعت هفت بیدار می‌شوم. صبحانه می‌خورم و به دفتر می‌روم. شب ساعت ده می‌خوابم.", language_code: prs, direction: rtl}
+          - content_key: prs.a1.unit12.lesson04.exercise02.match_reading_facts
+            type: matching_pairs
+            tested_text: "ساعت هفت بیدار می‌شوم به دفتر می‌روم ساعت ده می‌خوابم"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "ساعت هفت بیدار می‌شوم", right: "wake-up time"}
+              - {left: "به دفتر می‌روم", right: "goes to the office"}
+              - {left: "ساعت ده می‌خوابم", right: "bedtime"}
+              - {left: من, right: I}
+              - {left: و, right: and}
+              - {left: ده, right: "ten (10)"}
+          - content_key: prs.a1.unit12.lesson04.exercise03.order_and_go_to_office
+            type: word_order
+            tested_text: "صبحانه می‌خورم و به دفتر می‌روم"
+            prompt: {target_blocks: [{text: "I eat breakfast and go to the office.", language_code: en, direction: ltr}]}
+            word_bank: [صبحانه, می‌خورم, و, به, دفتر, می‌روم]
+          - content_key: prs.a1.unit12.lesson04.exercise04.translate_ten_oclock_sleep
+            type: translation
+            tested_text: "ساعت ده می‌خوابم"
+            prompt: {target_blocks: []}
+
+      - content_key: prs.a1.unit12.lesson05.writing_your_own_routine
+        title: نوشتن کارهای روزمره خود
+        spine_outcome_id: universal.a1.routines.describe_daily_routine
+        teaching:
+          - content_key: prs.a1.unit12.lesson05.teach.shash_word
+            kind: vocabulary
+            target: {text: شش, language_code: prs, direction: rtl}
+            introduced_tokens: [شش]
+          - content_key: prs.a1.unit12.lesson05.teach.zud_word
+            kind: vocabulary
+            target: {text: زود, language_code: prs, direction: rtl}
+            introduced_tokens: [زود]
+        exercises:
+          - content_key: prs.a1.unit12.lesson05.exercise01.recognize_zud_reading
+            type: multiple_choice
+            tested_text: زود
+            prompt: {target_blocks: [{text: زود, language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit12.lesson05.exercise02.match_writing_vocab
+            type: matching_pairs
+            tested_text: "زود شش صبحانه دفتر"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: زود, right: early}
+              - {left: شش, right: "six (6)"}
+              - {left: صبحانه, right: breakfast}
+              - {left: دفتر, right: office}
+              - {left: هر, right: every}
+              - {left: روز, right: day}
+          - content_key: prs.a1.unit12.lesson05.exercise03.order_wake_up_early
+            type: word_order
+            tested_text: "ساعت شش بیدار می‌شوم"
+            prompt: {target_blocks: [{text: "I wake up at six.", language_code: en, direction: ltr}]}
+            word_bank: [ساعت, شش, بیدار, می‌شوم]
+          - content_key: prs.a1.unit12.lesson05.exercise04.translate_early
+            type: translation
+            tested_text: زود
+            prompt: {target_blocks: []}
+          - content_key: prs.a1.unit12.lesson05.exercise05.write_own_routine
+            type: writing_prompt
+            tested_text: "هر روز ساعت شش بیدار می‌شوم، صبحانه می‌خورم و به دفتر می‌روم"
+            prompt: {target_blocks: []}
+
+      - content_key: prs.a1.unit12.lesson06.comparing_routines_dialogue
+        title: گفتگوی مقایسه کارهای روزمره
+        spine_outcome_id: universal.a1.routines.describe_daily_routine
+        teaching:
+          - content_key: prs.a1.unit12.lesson06.teach.names
+            kind: vocabulary
+            target: {text: "زرمینه، همایون", language_code: prs, direction: rtl}
+            introduced_tokens: [زرمینه, همایون]
+          - content_key: prs.a1.unit12.lesson06.teach.mishavad_word
+            kind: grammar_note
+            target: {text: "بیدار می‌شود (he/she wakes up, third person)", language_code: prs, direction: rtl}
+            introduced_tokens: [می‌شود]
+          - content_key: prs.a1.unit12.lesson06.teach.to_chetor_word
+            kind: phrase
+            target: {text: "تو چطور؟", language_code: prs, direction: rtl}
+            introduced_tokens: [تو, چطور؟]
+          - content_key: prs.a1.unit12.lesson06.teach.dialogue_line1
+            kind: dialogue
+            target: {text: "همایون، ساعت چند بیدار می‌شوی؟", language_code: prs, direction: rtl, speaker: زرمینه}
+            introduced_tokens: []
+          - content_key: prs.a1.unit12.lesson06.teach.dialogue_line2
+            kind: dialogue
+            target: {text: "ساعت هفت بیدار می‌شوم. تو چطور؟", language_code: prs, direction: rtl, speaker: همایون}
+            introduced_tokens: []
+          - content_key: prs.a1.unit12.lesson06.teach.dialogue_line3
+            kind: dialogue
+            target: {text: "من ساعت شش بیدار می‌شوم", language_code: prs, direction: rtl, speaker: زرمینه}
+            introduced_tokens: []
+          - content_key: prs.a1.unit12.lesson06.teach.dialogue_line4
+            kind: dialogue
+            target: {text: "زود بیدار می‌شوی!", language_code: prs, direction: rtl, speaker: همایون}
+            introduced_tokens: []
+          - content_key: prs.a1.unit12.lesson06.teach.dialogue_line5
+            kind: dialogue
+            target: {text: "بلی، به دفتر زود می‌روم", language_code: prs, direction: rtl, speaker: زرمینه}
+            introduced_tokens: [بلی]
+        exercises:
+          - content_key: prs.a1.unit12.lesson06.exercise01.dialogue_comprehension_context
+            type: dialogue_comprehension
+            tested_text: "همایون ساعت چند بیدار می‌شوی ساعت هفت بیدار می‌شوم تو چطور من ساعت شش بیدار می‌شوم زود بیدار می‌شوی بلی به دفتر زود می‌روم"
+            prompt:
+              target_blocks:
+                - {text: "زرمینه: همایون، ساعت چند بیدار می‌شوی؟ همایون: ساعت هفت بیدار می‌شوم. تو چطور؟ زرمینه: من ساعت شش بیدار می‌شوم. همایون: زود بیدار می‌شوی! زرمینه: بلی، به دفتر زود می‌روم.", language_code: prs, direction: rtl}
+          - content_key: prs.a1.unit12.lesson06.exercise02.match_dialogue_facts
+            type: matching_pairs
+            tested_text: "زرمینه همایون ساعت هفت ساعت شش زود"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "همایون بیدار می‌شود", right: "ساعت هفت"}
+              - {left: "زرمینه بیدار می‌شود", right: "ساعت شش"}
+              - {left: "تو چطور؟", right: "What about you?"}
+              - {left: زود, right: early}
+              - {left: بلی, right: "yes"}
+              - {left: دفتر, right: office}
+          - content_key: prs.a1.unit12.lesson06.exercise03.order_what_about_you
+            type: word_order
+            tested_text: "تو چطور"
+            prompt: {target_blocks: [{text: "What about you?", language_code: en, direction: ltr}]}
+            word_bank: [تو, چطور؟]
+          - content_key: prs.a1.unit12.lesson06.exercise04.translate_zarmina_wake_time
+            type: translation
+            tested_text: "من ساعت شش بیدار می‌شوم"
+            prompt: {target_blocks: []}
+          - content_key: prs.a1.unit12.lesson06.exercise05.dialogue_response_own_comparison
+            type: dialogue_response
+            tested_text: "من ساعت شش بیدار می‌شوم"
+            prompt:
+              target_blocks:
+                - {text: "ساعت چند بیدار می‌شوی؟", language_code: prs, direction: rtl}
+          - content_key: prs.a1.unit12.lesson06.exercise06.write_comparison_summary
+            type: writing_prompt
+            tested_text: "همایون ساعت هفت بیدار می‌شود، زرمینه ساعت شش بیدار می‌شود"
+            prompt: {target_blocks: []}

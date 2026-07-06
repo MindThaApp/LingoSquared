@@ -9,8 +9,8 @@ generation_provenance:
   authoring_system: claude
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: fresh_context_reviewer
+  status: reviewed
+  required_next_reviewer: null
   notes: >-
     Paired with fa/a2_unit10_opinions.yaml's own review notes (see that
     file for the full scenario rationale). Multi-clause accepted_answers
@@ -27,6 +27,23 @@ review:
     not objective facts, so paraphrase across turns is natural
     conversational variation, not a contradiction). Pending
     fresh-context review; left unreviewed per AUTHORING_GUIDE §9.
+    FRESH-CONTEXT REVIEW 2026-07-06: confirmed content_key parity with
+    the realization in both directions (20 teaching + 21 exercise keys,
+    exact match, no orphans), accepted-answer correctness (every
+    exercise has a status:correct answer, verified via actual compiled
+    output's correct_response field, not just the validator), matching_pairs
+    authored as the flat-dict shape matching this codebase's established
+    overlay convention (confirmed against en-fa/a1_unit01.yaml), and
+    re-verified script purity (zero Arabic-range kaf/yeh) and no
+    internal-jargon leaks in any learner-facing string. Found and fixed,
+    jointly with the realization file, a real duplicate-instruction-text
+    bug caught only by running the actual compiler (not the validator):
+    7 exercises' English instruction text was appearing twice per
+    exercise in the compiled prompt.text_blocks because the realization's
+    own prompt also carried the identical text this overlay's
+    `instruction` field already supplies -- see the realization file's
+    review notes for the exact fix and re-verification. Compiler validate
+    and compile both clean (0 errors/0 warnings) after the fix.
 
 course:
   title: Farsi A2
