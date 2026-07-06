@@ -563,6 +563,17 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     # Only 2 members -- kept out of multiple_choice/listen_select (which
     # need >=4), used only in word_order/fill_in_blank/translation.
     if t in {"ziek", "verkouden"}: semantic.append("symptom_zijn")
+    # "april" is introduced in the same lesson as the ordinal-number teaching
+    # cards (the lesson combines "de vijfde april" -- ordinal + month), so
+    # the blanket lesson_categories["rangtelwoorden"] tag above wrongly also
+    # marks the month noun itself as an ordinal_number candidate. Every
+    # ordinal_number-slot frame in this unit is literally "... {item}
+    # april." -- if "item" could resolve to "april", that generates
+    # self-referential output ("Het is de april april."), same bug class as
+    # the station/hospital self-reference catches elsewhere in this file.
+    # Strip the blanket tag from any genuine month noun.
+    if "month" in semantic and "ordinal_number" in semantic:
+        semantic = [s for s in semantic if s != "ordinal_number"]
     tags: dict[str, object] = {"semantic": list(dict.fromkeys(semantic))}
     if t in {"jij", "je"}: tags["register"] = "informal"
     elif t == "u": tags["register"] = "polite"
