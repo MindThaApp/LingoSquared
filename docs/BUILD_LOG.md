@@ -6849,3 +6849,142 @@ restart) to the shared dev stack and, eventually, the live server,
 whenever asked. The live server (192.168.4.4) was NOT touched — this
 was explicitly a local verification pass only, per the standing "never
 touch the live server unattended" rule.
+
+## Basic rate limiting on the highest-value endpoints — DONE, 2026-07-06
+
+The other item both 2026-07-05 security passes flagged and explicitly
+accepted as reasonable for a small invite-only beta but worth doing
+before wider exposure: "no rate limiting anywhere (login, answer
+submission, admin routes)." Implemented for `/auth/login` (brute-force
+protection), `/auth/register` (registration-abuse prevention), and the
+three answer-submission endpoints (`/exercises/{id}/answer`, `/reviews/
+{id}/answer`, `/practice/items/{id}/answer` — the same resource-
+exhaustion-adjacent surface the 2026-07-05 pass already bounded payload
+size on). Admin routes deliberately NOT rate-limited this pass — every
+admin route already requires `is_admin` (a much smaller trust boundary
+than an anonymous login attempt), and Ramin's own admin account is the
+only real caller pre-beta; flagging as a cheap follow-up if ever opened
+to more than one admin.
+
+**Checked what already fits before building anything new, per the ask**:
+no `slowapi` or similar already in `requirements.txt`; no Redis anywhere
+in `backend/docker-compose.yml` (only `db`/`api` services); the
+Dockerfile's `CMD` runs bare `uvicorn` with no `--workers` flag, i.e. a
+single process. Given that, hand-rolled a small in-memory limiter rather
+than adding a new dependency or a Redis service just for this — genuinely
+simpler for a single-process deployment and avoids infra nobody asked
+for yet.
+
+**Built** (`backend/app/core/rate_limit.py`, new): `RateLimiter` - a
+per-key sliding-window counter (a `deque` of hit timestamps per key,
+old entries past the window popped lazily on each check), `Lock`-
+protected since FastAPI runs sync `def` route handlers in a threadpool
+(these all are), with an injectable `clock` for tests. `register_limiter
+()`/`reset_all()` track every limiter instance so tests can clear all
+state between runs. Documented directly in the module's docstring why
+this is in-memory and what would need to change (move to Redis) if this
+app is ever scaled to multiple worker processes/machines - each process
+would otherwise track independent counters and the effective limit
+would silently multiply by the process count.
+
+**Wired into `backend/app/api/router.py`**: three module-level limiter
+instances - `LOGIN_RATE_LIMIT` (10 requests/60s), `REGISTER_RATE_LIMIT`
+(5 requests/3600s), both keyed by client IP via a new `client_ip()`
+helper (`request.client.host` - correct today since there's no reverse
+proxy in front of this deployment; if one is ever added, this needs to
+switch to a trusted `X-Forwarded-For` or every user behind the proxy
+collapses into one bucket, flagging for whenever that changes) - and
+`ANSWER_RATE_LIMIT` (120 requests/60s, keyed by the already-authenticated
+`user.id`, shared across all three answer endpoints since they're the
+same resource-exhaustion-adjacent surface). A new `enforce_rate_limit()`
+helper raises via the existing `fail()` pattern this file already uses
+everywhere else (`429`, a machine `code`, a message, plus
+`retry_after_seconds` - the identical additional-field shape Phase F's
+`checkpoint_retake_delayed` already established), called as the very
+first line of `register()`, `login()`, `answer()`, `review_answer()`,
+and `practice_answer()` - deliberately before any DB/logic in each
+handler, so a failed/invalid request (wrong password, a 404 target,
+etc.) still counts against the limit, which is the correct property for
+brute-force protection specifically. Limits are hardcoded constants, not
+added to `Settings`/`.env` - deliberately, to keep this change minimal
+per the "keep it simple" ask; loose defaults, not tuned against real
+traffic, easy to make configurable later if that's ever needed.
+`docs/CONTRACT.md`'s error-shape section updated with the three new
+codes (`login_rate_limited`, `register_rate_limited`,
+`answer_rate_limited`) and their `retry_after_seconds` field, matching
+the existing `checkpoint_retake_delayed` documentation pattern.
+
+**New test file** (`backend/tests/test_rate_limiting.py`, 8 tests): the
+"actually trips" tests monkeypatch each limiter's `.limit` down to a
+small number (2-3) rather than depending on hundreds of real HTTP round-
+trips or the exact tuned values - proves the mechanism itself, decoupled
+from whatever the real limits get tuned to later. Covers: login 429s
+once exceeded, that WRONG-password attempts count toward the login
+limit too (the actual brute-force-protection property, not just
+successful logins), register 429s once exceeded, the answer endpoint
+429s once exceeded, that the answer limiter is genuinely per-account (a
+second, distinct account is unaffected by the first account's limit),
+and "normal usage under the limit is completely unaffected" for all
+three surfaces. **Necessary supporting fix in `tests/conftest.py`**: the
+rate limiters are process-wide in-memory state, shared by every test in
+the pytest session via the one imported `app` module - without
+resetting between tests, the many register/login/answer calls the
+existing suite already made throughout (the `auth`/`admin` fixtures used
+pervasively, every phase-specific test file) would have started tripping
+each other's limits well before any test intended to exercise rate
+limiting at all. Added an autouse `reset_rate_limits` fixture that clears
+every registered limiter before each test.
+
+**Verified, twice, both times isolated from the shared dev stack**:
+`find -newer docs/BUILD_LOG.md -mmin -10` at the start of this pass
+showed `backend/requirements.txt` mid-edit (2 minutes old) - a live,
+concurrent session actively bumping FastAPI (the entry immediately
+above this one, landed and committed partway through this pass). Rather
+than risk building against someone else's in-flight, not-yet-committed
+dependency change, used a genuinely separate `git worktree` at HEAD
+(placed under `$HOME` deliberately - a first attempt under the
+session's scratchpad path, which lives under `/private/tmp`, silently
+produced an EMPTY bind mount inside the container because Colima's
+default config only shares `$HOME` into the VM, not `/private/tmp` -
+`docker compose run api ls /app` came back with nothing but a stray
+`.pytest_cache` until the worktree was moved under `$HOME`, worth
+remembering for any future isolated-stack setup on this machine) with
+its own compose project name (`ratelimittest`), copied this pass's
+actual working-tree changes into it, and ran the full suite there: 96
+passed (87 pre-existing-at-last-measurement + this pass's 8 new), one
+rerun of the already-documented `test_checkpoint_forces_strict_orthography`
+flake reproduced once then passed clean on the next run - unrelated to
+this change, matches its existing documented intermittent behavior.
+Once the other session's FastAPI bump landed on `HEAD`, repeated the
+entire isolated-worktree-plus-full-suite exercise a second time against
+the new `fastapi==0.139.0`/`starlette==1.3.1` HEAD to confirm this
+pass's change works cleanly on top of that unrelated, concurrently-
+landed bump too - 96/96 passed again (same harmless `httpx`/
+`TestClient` deprecation warning the other entry already flagged, not
+this pass's concern).
+
+**Live-smoke-tested against the actual running isolated instance (real
+HTTP, not `TestClient`)**, after running migrations + content seed
+against it: fired 12 rapid `/auth/login` attempts (wrong password) -
+the first 10 got a real `401`, the 11th and 12th got a real `429`
+(`{"code":"login_rate_limited","retry_after_seconds":60}`); fired
+repeated `/auth/register` calls from the same IP until the configured
+5/hour limit rejected one (`{"code":"register_rate_limited",
+"retry_after_seconds":~3600}` - confirmed the limiter counts every
+request reaching the route, including one that had 500'd earlier for
+an unrelated reason (pre-migration), which is the correct property);
+logged in, fetched a real course/unit/lesson/exercise, and fired 121
+rapid `POST /exercises/{id}/answer` calls with a real token - exactly
+120 got `200`, the 121st got a real `429`
+(`{"code":"answer_rate_limited","retry_after_seconds":...}`). Also
+confirmed normal usage isn't affected: legitimate login/register calls
+under each limit all succeeded, and a second, distinct account's answer
+submissions were completely unaffected by the first account's limit.
+
+Both isolated stacks and worktrees were torn down after (`docker compose
+down -v`, `git worktree remove`) - the shared `backend-api-1`/
+`backend-db-1` stack and the live server (192.168.4.4) were never
+touched. Left `backend/app/core/rate_limit.py` (new), the `router.py`/
+`conftest.py` changes, the new test file, and the `CONTRACT.md` update
+uncommitted in the working tree, matching this repo's standing practice
+of not committing without an explicit instruction to.

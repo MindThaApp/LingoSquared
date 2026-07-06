@@ -10,6 +10,7 @@ from fastapi.responses import FileResponse, JSONResponse
 from sqlalchemy import func, select, text
 from sqlalchemy.orm import Session
 from app.core.config import get_settings
+from app.core.rate_limit import RateLimiter, register_limiter
 from app.core.security import create_token, hash_password, verify_password
 from app.db.session import get_db
 from app.models import *
@@ -39,6 +40,25 @@ def fail(status,code,message,**details):
         status,
         detail={"code":code,"message":message,**details},
     )
+
+# Rate limiting: per-IP for the unauthenticated auth endpoints (brute-force
+# login protection, registration-abuse prevention), per-account for the
+# answer endpoints (same resource-exhaustion-adjacent surface as the
+# AnswerIn payload-size bound above — generous enough that no real lesson
+# pace ever trips it). See app/core/rate_limit.py for why this is
+# in-memory rather than Redis-backed. Limits are deliberately loose/simple
+# per Ramin's ask, not tuned against real traffic yet.
+LOGIN_RATE_LIMIT = register_limiter(RateLimiter(limit=10, window_seconds=60))
+REGISTER_RATE_LIMIT = register_limiter(RateLimiter(limit=5, window_seconds=3600))
+ANSWER_RATE_LIMIT = register_limiter(RateLimiter(limit=120, window_seconds=60))
+
+def client_ip(request: Request) -> str:
+    return request.client.host if request.client else "unknown"
+
+def enforce_rate_limit(limiter: RateLimiter, key: str, code: str, message: str):
+    retry_after = limiter.check(key)
+    if retry_after is not None:
+        fail(429, code, message, retry_after_seconds=max(1, int(retry_after) + 1))
 
 MEDIA_ASSETS_DIR = Path(__file__).resolve().parents[2] / "media_assets"
 MAX_AUDIO_SIZE_BYTES = 5 * 1024 * 1024
@@ -227,14 +247,16 @@ def speaking_unlocked(db:Session,course_id:str,user_id:str|None) -> bool:
     return True
 
 @router.post("/auth/register",response_model=AuthOut,status_code=201)
-def register(body:RegisterIn,db:Session=Depends(get_db)):
+def register(body:RegisterIn,request:Request,db:Session=Depends(get_db)):
+    enforce_rate_limit(REGISTER_RATE_LIMIT,client_ip(request),"register_rate_limited","Too many registration attempts from this address. Please try again later.")
     email=body.email.lower()
     if db.scalar(select(User).where(User.email==email)): fail(409,"email_exists","An account with this email already exists")
     user=User(email=email,password_hash=hash_password(body.password),display_name=body.display_name or email.split("@")[0],is_admin=email in get_settings().admin_email_set,timezone=valid_timezone_or_none(body.timezone)); db.add(user); db.flush()
     db.add(UserStats(user_id=user.id,total_xp=0,streak_days=0,last_activity_date=None,daily_goal=20,hearts=5,gems=0))
     db.commit(); return auth_response(user)
 @router.post("/auth/login",response_model=AuthOut)
-def login(body:LoginIn,db:Session=Depends(get_db)):
+def login(body:LoginIn,request:Request,db:Session=Depends(get_db)):
+    enforce_rate_limit(LOGIN_RATE_LIMIT,client_ip(request),"login_rate_limited","Too many login attempts. Please wait before trying again.")
     user=db.scalar(select(User).where(User.email==body.email.lower()))
     if not user or not verify_password(body.password,user.password_hash): fail(401,"invalid_credentials","Invalid email or password")
     valid_tz=valid_timezone_or_none(body.timezone)
@@ -333,6 +355,7 @@ def start(lesson_id:str,user=Depends(current_user),db:Session=Depends(get_db)):
     db.commit(); return {"started_at":p.started_at}
 @router.post("/exercises/{exercise_id}/answer",response_model=AnswerOut)
 def answer(exercise_id:str,body:AnswerIn,user=Depends(current_user),db:Session=Depends(get_db)):
+    enforce_rate_limit(ANSWER_RATE_LIMIT,user.id,"answer_rate_limited","Too many answers submitted too quickly. Please slow down.")
     e=db.get(Exercise,exercise_id)
     if not e: fail(404,"exercise_not_found","Exercise not found")
     return exercise_answer(db,user,e,body.response)
@@ -513,6 +536,7 @@ def reviews(
     }
 @router.post("/reviews/{review_item_id}/answer",response_model=ReviewAnswerOut)
 def review_answer(review_item_id:str,body:AnswerIn,user=Depends(current_user),db:Session=Depends(get_db)):
+    enforce_rate_limit(ANSWER_RATE_LIMIT,user.id,"answer_rate_limited","Too many answers submitted too quickly. Please slow down.")
     r=db.get(ReviewItem,review_item_id)
     if not r or r.user_id!=user.id: fail(404,"review_not_found","Review item not found")
     e=db.get(Exercise,r.exercise_id)
@@ -991,6 +1015,7 @@ def practice_answer(
     user=Depends(current_user),
     db: Session = Depends(get_db),
 ):
+    enforce_rate_limit(ANSWER_RATE_LIMIT,user.id,"answer_rate_limited","Too many answers submitted too quickly. Please slow down.")
     item = db.scalar(
         select(PracticeItem)
         .where(PracticeItem.id == item_id)

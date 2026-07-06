@@ -7,6 +7,7 @@ os.environ.setdefault("ADMIN_EMAILS", "admin@example.com")
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import text
+from app.core import rate_limit
 from app.db.session import engine
 from app.main import app
 from app.content.seed import main as seed
@@ -19,6 +20,18 @@ def database():
     from app.db.session import Base
     Base.metadata.create_all(engine)
     seed()
+    yield
+
+@pytest.fixture(autouse=True)
+def reset_rate_limits():
+    # The rate limiters are process-wide in-memory state
+    # (app/core/rate_limit.py), shared across every test in this session
+    # via the single imported `app` module — without resetting between
+    # tests, the many register/login/answer calls the existing suite
+    # already makes (the `auth`/`admin` fixtures below, plus every
+    # phase-specific test file) would trip each other's limits well
+    # before any test actually intends to exercise rate limiting.
+    rate_limit.reset_all()
     yield
 
 @pytest.fixture

@@ -543,6 +543,18 @@ Some errors carry additional fields alongside `code`/`message` (e.g.
 { "error": { "code": "checkpoint_retake_delayed", "message": "...", "retry_after_seconds": 3592 } }
 ```
 
+**Rate limiting (2026-07-06 security hardening item)**: `POST /auth/login`
+(brute-force protection, 10 requests/60s per client IP — counts failed
+attempts too), `POST /auth/register` (abuse prevention, 5 requests/hour per
+client IP), and the three answer-submission endpoints (`POST /exercises/{id}
+/answer`, `POST /reviews/{id}/answer`, `POST /practice/items/{id}/answer` —
+120 requests/60s per account) all return `429` with the same additional-field
+shape when exceeded: `login_rate_limited`, `register_rate_limited`, and
+`answer_rate_limited` respectively, each with `retry_after_seconds`. In-memory
+sliding-window limiter (`app/core/rate_limit.py`), not Redis-backed — correct
+for this deployment's single-process, no-Redis stack; would need to move to a
+shared store if ever scaled to multiple worker processes.
+
 ## Environment / ports (LAN dev)
 
 - Backend API: container port 8000, host port configurable via `.env`
