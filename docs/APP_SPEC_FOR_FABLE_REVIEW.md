@@ -264,10 +264,16 @@ to all 6 launch-gate directions** (checked directly against
 (86, up from the original pilot's 72), nl-en (327), prs-en (86).
 Mechanism unchanged: infinite-scroll feed, reuses the existing
 `ExerciseRenderer` unchanged, smaller diminishing-returns XP so it
-supplements rather than replaces real lessons, zero listening cards
-generated for fa/prs (the TTS gap in §4 applies here too and is
-respected rather than papered over — confirmed still enforced in
-`app/practice/service.py`).
+supplements rather than replaces real lessons. Listening-card
+generation is gated on `tts_actually_configured()` (`app/services/
+tts.py`, fixed 2026-07-07 to check real per-provider credentials, not
+just static language membership) rather than a fa/prs-specific
+exclusion — prs still has zero coverage from either TTS provider and
+is permanently excluded either way; fa is technically eligible via
+Azure but stays excluded in practice until a real `AZURE_SPEECH_KEY`
+is provisioned (not yet done as of this writing — see CLAUDE.md's
+Secrets section). The gap is respected rather than papered over
+either way.
 
 **Free/open material research** (informational, not yet incorporated
 into the pipeline): public-domain FSI language courses and the

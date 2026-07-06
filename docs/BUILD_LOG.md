@@ -9035,3 +9035,93 @@ for whoever's coordinating commits. Content itself (the 146 string-shaped
 fix makes both authored shapes grade correctly, so there's no need to
 rewrite ~146 overlay files just to normalize a shape the grader now
 handles either way.
+
+## Web-sourced-content acceleration investigation — decided and closed, 2026-07-07
+
+Ramin asked (with explicit decision authority delegated) whether large
+amounts of legitimately-usable public-web language-learning content
+could replace/accelerate tonight's unit-by-unit hand-authoring. Full
+investigation run; answer is mostly "the safe acceleration is already
+deployed" — same honest-dead-end standard as the earlier FSI-audio and
+TTS investigations. Findings and decisions, recorded so nothing here
+gets re-investigated:
+
+1. **FSI/Peace Corps extension to more languages: already done where it
+   matters.** The §10 lane is in active use on ALL THREE launch
+   languages — nl (15 of 28 realization units carry FSI Dutch Basic
+   Course provenance), fa (10 files), prs (10 files). For the parked
+   es/fr lanes, verified tonight: FSI Spanish Basic Course (PD, 4
+   volumes, 55 units, drills + audio) and FSI French Basic Course (PD,
+   2 volumes + audio) both exist on Live Lingua/fsi-language-courses
+   .org, plus Peace Corps equivalents — recorded in §10's new source
+   map so those lanes can start the day they resume. Deliberately did
+   NOT start authoring es/fr now: plan of record parks them until nl
+   is done.
+
+2. **Tatoeba: reference-only policy CONFIRMED as final, now with
+   measured data.** Downloaded the actual CC0 export (559k sentences)
+   and counted: Dutch 50, Spanish 37, Farsi 0, Dari 0 — effectively
+   empty for every language this project needs (only fr 14,201 / en
+   41,501 have volume; two-thirds of the corpus is Kabyle/Berber). The
+   CC-BY main corpus would need real attribution infrastructure
+   (schema + learner-facing credit + bookkeeping) to import sentences
+   that still need the full spine-fit/review pipeline — and the
+   sentence text is the cheapest slice of an exercise (slot wiring,
+   accepted-answer variants, distractors, feedback dominate). Not
+   built, not worth it; §10 updated from "placeholder policy" to
+   "settled decision with data."
+
+3. **Other corpora — one real future asset, several explicit
+   rule-outs, all now in §10.** COERLL "Français interactif" (UT
+   Austin) verified CC BY 3.0, commercial use allowed — a genuinely
+   modern full French course, usable when fr resumes, with a hard
+   precondition: build the attribution credit surface BEFORE first
+   import. Ruled out categorically: DLI GLOSS/Headstart2 (US-gov
+   hosted but embeds third-party copyrighted media under DoD-only
+   permissions — looks like FSI, isn't), every CC-BY-SA source
+   (Trayectos es, Wikibooks, Wiktionary — share-alike would force
+   derived lessons to be BY-SA-licensed, i.e. freely copyable),
+   OpenSubtitles derivatives / Anki shared decks / anything from
+   commercial apps or textbooks (categorically unsafe), pre-1930 PD
+   readers (archaic register fails the §3 bar), Common Voice audio
+   (unmatched clips, same shape as the closed FSI-audio dead end).
+
+4. **Why no corpus is a big multiplier here (structural, not
+   incidental)**: this project's own quality methodology (APP_SPEC §3)
+   makes imported text subject to the identical adaptation +
+   fresh-context-review pipeline — "adaptation is not a review
+   shortcut" — and treats cross-language structural templating as a
+   validation failure. Imported sentences at best replace the ~10-20%
+   ideation slice of authoring cost while adding licensing-vetting
+   overhead. The bottleneck is and remains spine-compliant exercise
+   design + review, which is exactly what the quality bar exists to
+   protect.
+
+Also noted in §10: FSI pattern/substitution drills map naturally onto
+Endless Practice template frames (practice packs currently carry zero
+FSI provenance) — flagged honestly as an authenticity aid for frame
+authoring, not a volume accelerator, since slot presets/lexeme wiring/
+review dominate template cost.
+
+Files touched: `docs/content/AUTHORING_GUIDE.md` (§10 Tatoeba paragraph
+replaced + new verified source map subsection), this entry. No code, no
+schema, no content files, no commits (standing practice: leave staged
+for whoever coordinates commits). Nothing was committed to any source
+with unresolved legal risk.
+
+**2026-07-07, coordinator, re-verified the still-open leaked
+pytest-fixture courses from the earlier entry above.** Re-checked the
+shared dev DB directly: all 12 courses (11 "Practice test <uuid>",
+1 "Idempotent course <uuid>") are still there, still zero
+`user_course_enrollments` rows pointing at any of them (re-verified
+live, not assumed from the earlier check). Still genuinely safe to
+delete, still not run by this session — deleting data is a hard
+boundary this session holds regardless of any standing authorization,
+model, or delegation in effect. Exact, ready-to-run SQL for whoever
+executes this:
+
+```sql
+DELETE FROM courses WHERE title LIKE 'Idempotent course%'
+  OR title LIKE 'Practice test %'
+  OR title IN ('Existing mixed import', 'New mixed import');
+```
