@@ -32,11 +32,35 @@ AZURE_TTS_LOCALE={"fa":"fa-IR"}
 AZURE_TTS_VOICE_NAME={"fa":"fa-IR-DilaraNeural"}
 
 # The authoritative "does /tts have a real cloud voice for this language"
-# set — used by the route's supported-language gate and by the Endless
-# Practice engine's listen_select gate. Keep this the union of every
-# provider below rather than hardcoding a provider-specific set at each
-# call site.
+# set — used by the route's supported-language gate. NOTE: this is
+# static language-membership only, NOT proof the responsible provider
+# actually has credentials configured right now — see
+# `tts_actually_configured()` below, which the Endless Practice engine's
+# listen_select gate uses instead. A 2026-07-07 Fable audit flagged a
+# real latent trap: `fa` was added to this set once Azure was wired up,
+# but `azure_speech_key` defaults to empty, so gating generation on
+# language-membership alone would let listen_select items generate for
+# fa with no real voice configured yet — the exact unanswerable-audio
+# class already hit twice this project (Vite HMR aside), just via a
+# different mechanism each time.
 TTS_SUPPORTED_LANGUAGES=GOOGLE_TTS_SUPPORTED_LANGUAGES|AZURE_TTS_SUPPORTED_LANGUAGES
+
+def tts_actually_configured(language_code:str) -> bool:
+    """Whether this language's real provider has real credentials right
+    now, not just whether the language is nominally in a supported set.
+    Use this (not `TTS_SUPPORTED_LANGUAGES`) anywhere generating content
+    depends on TTS actually producing audio, e.g. the Endless Practice
+    listen_select gate — a language can be in `TTS_SUPPORTED_LANGUAGES`
+    (added the day a provider integration merges) while the deploy target
+    still has an empty credential, same as Google's already-established
+    "may produce no sound" browser-fallback risk, just earlier in the
+    pipeline."""
+    settings=get_settings()
+    if language_code in GOOGLE_TTS_SUPPORTED_LANGUAGES:
+        return bool(settings.google_cloud_tts_credentials_json)
+    if language_code in AZURE_TTS_SUPPORTED_LANGUAGES:
+        return bool(settings.azure_speech_key and settings.azure_speech_region)
+    return False
 
 def current_month() -> str:
     return datetime.now(timezone.utc).strftime("%Y-%m")
