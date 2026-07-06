@@ -36,9 +36,14 @@ review:
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [direction_word, turn_direction, place_non_station]
+    semantic: [direction_word, direction_word_pure, turn_direction, place_non_station]
 slot_presets:
   direction_word: &direction_word {language_code: nl, part_of_speech: adverb, agreement_tags: {semantic: direction_word}}
+  # direction_word_pure: exact-case (no capitalized "Rechtdoor" duplicate),
+  # safe for matching_pairs -- see scripts/backfill_lexemes_en_nl.py's
+  # direction_word_pure comment. This file's OTHER templates below keep
+  # using the plain "direction_word" tag unchanged.
+  direction_word_pure: &direction_word_pure {language_code: nl, part_of_speech: adverb, agreement_tags: {semantic: direction_word_pure}}
   turn_direction: &turn_direction {language_code: nl, part_of_speech: adverb, agreement_tags: {semantic: turn_direction}}
   place_non_station: &place_non_station {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: place_non_station}}
 templates:
@@ -64,10 +69,10 @@ templates:
   - content_key: practice.en-nl.nl.a1.unit09.lesson01.match.003
     lesson_content_key: nl.a1.unit09.lesson01.richtingswoorden
     type: matching_pairs
-    frame: {text: "{first} · {second}", language_code: nl, direction: ltr}
-    slots: {first: *direction_word, second: *direction_word}
-    slot_relations: [{kind: distinct, slots: [first, second]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second]}
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth}", language_code: nl, direction: ltr}
+    slots: {first: *direction_word_pure, second: *direction_word_pure, third: *direction_word_pure, fourth: *direction_word_pure, fifth: *direction_word_pure}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth]}
     feedback_frame: {text: "Match each direction word with its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit09.lesson01.translate.004
     lesson_content_key: nl.a1.unit09.lesson01.richtingswoorden

@@ -365,6 +365,17 @@ def validate_no_stray_yaml_booleans(overlay: dict[str, Any], report: Report):
                 )
 
 
+#: Keys where a real YAML boolean is the intended, correct type — internal
+#: control flags never rendered to a learner, not the "author meant to write
+#: the string Yes/No and got silently coerced" footgun this check exists for.
+#: `interchangeable` (AUTHORING_GUIDE.md#17, added 2026-07-06) opts a
+#: fill_in_blank template's answer_derivation into accepting any of its
+#: slot's own matching candidates as correct, for slots whose pool is a
+#: closed set of true synonyms (e.g. je/jij) that a single fixed answer
+#: can't fairly grade.
+PRACTICE_BOOLEAN_CONTROL_KEYS = {"interchangeable"}
+
+
 def validate_no_practice_yaml_booleans(
     pack: dict[str, Any],
     report: Report,
@@ -372,6 +383,8 @@ def validate_no_practice_yaml_booleans(
     """Apply the existing YAML-boolean footgun rule to practice content."""
     for location, value in walk(pack.get("templates", []), "practice.templates"):
         if isinstance(value, bool):
+            if location.rsplit(".", 1)[-1] in PRACTICE_BOOLEAN_CONTROL_KEYS:
+                continue
             report.error(
                 location,
                 f"parsed as YAML boolean {value!r} — quote learner-facing "

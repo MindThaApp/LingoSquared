@@ -27,7 +27,7 @@ review:
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [register_language, wellbeing, name_exchange, origin_language, cafe_small_talk, first_meeting_dialogue, number, contact_number, age_quantity, price, library_registration, weekday, month, ordinal_number, date_expression, library_date, cafe_appointment, clock_time, quarter_hour, time_question, time_of_day, schedule, cafe_meetup_time, informal_address, polite_address, greeting, wellbeing_answer, person_name, place_name, country, language_or_nationality]
+    semantic: [register_language, wellbeing, name_exchange, origin_language, cafe_small_talk, first_meeting_dialogue, number, contact_number, age_quantity, price, library_registration, weekday, weekday_pure, month, ordinal_number, date_expression, library_date, cafe_appointment, clock_time, quarter_hour, time_question, time_of_day, schedule, cafe_meetup_time, informal_address, polite_address, greeting, wellbeing_answer, person_name, place_name, country, language_or_nationality]
     register: [informal, polite]
 slot_presets:
   informal_address: &informal_address {language_code: nl, part_of_speech: pronoun, agreement_tags: {semantic: informal_address}}
@@ -36,6 +36,11 @@ slot_presets:
   country: &country {language_code: nl, part_of_speech: proper_noun, agreement_tags: {semantic: country}}
   number: &number {language_code: nl, part_of_speech: [symbol, noun], agreement_tags: {semantic: number}}
   weekday: &weekday {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: weekday}}
+  # weekday_pure: exact-case, case-deduplicated 7-member weekday set, safe
+  # for matching_pairs -- see scripts/backfill_lexemes_en_nl.py's
+  # weekday_pure comment for why the plain "weekday" tag (used by this
+  # file's OTHER, unmodified templates below) is unsafe for that purpose.
+  weekday_pure: &weekday_pure {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: weekday_pure}}
   month: &month {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: month}}
   ordinal_number: &ordinal_number {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: ordinal_number}}
   time_of_day: &time_of_day {language_code: nl, part_of_speech: [noun, adverb], agreement_tags: {semantic: time_of_day}}
@@ -43,10 +48,10 @@ templates:
   - content_key: practice.en-nl.nl.a1.unit03.lesson01.match.001
     lesson_content_key: nl.a1.unit03.lesson01.weekdagen
     type: matching_pairs
-    frame: {text: "{first} · {second}", language_code: nl, direction: ltr}
-    slots: {first: *weekday, second: *weekday}
-    slot_relations: [{kind: distinct, slots: [first, second]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second]}
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth} · {seventh}", language_code: nl, direction: ltr}
+    slots: {first: *weekday_pure, second: *weekday_pure, third: *weekday_pure, fourth: *weekday_pure, fifth: *weekday_pure, sixth: *weekday_pure, seventh: *weekday_pure}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth, seventh]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth, seventh]}
     feedback_frame: {text: "Match each Dutch weekday with its English name.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit03.lesson01.complete.002
     lesson_content_key: nl.a1.unit03.lesson01.weekdagen

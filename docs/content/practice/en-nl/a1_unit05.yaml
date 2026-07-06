@@ -43,6 +43,15 @@ review:
     prerequisite, not a content defect, and doesn't block a content review
     verdict. Compiler validation re-run together with units 01-04, 06-09: 0
     errors/0 warnings.
+
+    **Follow-up fix, 2026-07-06 (real user report, same bug class found in
+    en-nl unit01's je/jij)**: lesson03.complete.002's possessive_flexible
+    slot (mijn/je/jouw) in "Dit is {item} broer." has no context anywhere
+    in the frame to say whose brother is meant, so all three fillers are
+    equally valid Dutch and only one was ever marked correct. Fixed via
+    the new `interchangeable: true` answer_derivation flag (AUTHORING_
+    GUIDE.md#17) -- any of this slot's own matching candidates now grades
+    correct.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -106,10 +115,10 @@ templates:
   - content_key: practice.en-nl.nl.a1.unit05.lesson02.match.003
     lesson_content_key: nl.a1.unit05.lesson02.extended_family
     type: matching_pairs
-    frame: {text: "{first} · {second}", language_code: nl, direction: ltr}
-    slots: {first: *extended_only, second: *extended_only}
-    slot_relations: [{kind: distinct, slots: [first, second]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second]}
+    frame: {text: "{first} · {second} · {third} · {fourth}", language_code: nl, direction: ltr}
+    slots: {first: *extended_only, second: *extended_only, third: *extended_only, fourth: *extended_only}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth]}
     feedback_frame: {text: "Match each extended-family word with its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit05.lesson03.order.001
     lesson_content_key: nl.a1.unit05.lesson03.mijn_je
@@ -128,7 +137,12 @@ templates:
       text_blocks:
         - {text: "Complete the Dutch sentence.", language_code: en, direction: ltr}
     slots: {item: *possessive_flexible}
-    answer_derivation: {kind: slot_text, slot: item}
+    # interchangeable: true -- found live 2026-07-06 alongside the same-class
+    # en-nl unit01 je/jij bug (AUTHORING_GUIDE.md#17): "Dit is ___ broer."
+    # gives no way to tell whose brother is meant, so mijn/je/jouw (my/your/
+    # your-emphatic) are all equally valid completions here -- fittingly,
+    # this preset was already named "possessive_flexible" by its own author.
+    answer_derivation: {kind: slot_text, slot: item, interchangeable: true}
     feedback_frame: {text: "{item} can introduce whose brother this is.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit05.lesson03.translate.003
     lesson_content_key: nl.a1.unit05.lesson03.mijn_je
