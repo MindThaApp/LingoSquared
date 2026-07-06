@@ -49,9 +49,17 @@ optional-feeling (e.g. "copy this word") rather than open-ended recall.
 - **Verify the actual target dialect, not the "obvious" cognate.** Dari and
   Farsi share a script but differ in verb endings (`-ین`/`-یم` Afghan forms
   vs. `-ید`/`-یم` Iranian forms), vocabulary (`چاشت` for midday, `رستورانت`,
-  `بلی`/`نخیر`), and register. Don't assume one Persian variant's content is
-  a safe template for the other — check real usage, or explicitly flag
-  uncertainty for review rather than guessing.
+  `بلی`/`نخیر`), and register. Never reuse the actual fa/prs *text* across
+  the two — that already caused a real, shipped bug this session (Afghan
+  verb endings leaking into Iranian Farsi content).
+- **Do reuse *structure*, not text, for efficiency (explicit standing
+  policy, decided 2026-07-06).** A scenario's characters, which grammar
+  point a unit targets, its exercise-type pacing, and its spine-outcome
+  sequencing are all fair game to reuse between fa and prs — that's real,
+  legitimate time saved. What must always be authored fresh, independently,
+  per dialect: every word of the actual Farsi and actual Dari text itself.
+  Skeleton-share; never sentence-share. Verify real usage, or explicitly
+  flag uncertainty for review, rather than guessing at either dialect.
 - **Avoid machine-translation-style prose.** Concretely: no unnatural
   calques (`پیشنهاد کمک می‌دهد` instead of `پیشنهاد کمک می‌کند`), no
   redundant doubled prepositions (`هنگام ... در وقت`), no vague

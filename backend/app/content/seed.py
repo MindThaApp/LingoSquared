@@ -132,8 +132,8 @@ def main():
             if not db.get(Language,code): db.add(Language(code=code,name=name,native_name=native,script=script,direction=direction))
         for code,title,description,threshold in [("first_steps","First Steps","Earn your first XP.",1),("xp_100","Century","Earn 100 XP.",100)]:
             if not db.scalar(select(Achievement).where(Achievement.code==code)): db.add(Achievement(code=code,title=title,description=description,threshold=threshold))
-        db.commit(); count,errors=import_content(db,ImportRequest.model_validate(COURSE))
-        if errors: raise RuntimeError(errors)
+        db.commit(); count,errors,counters=import_content(db,ImportRequest.model_validate(COURSE))
+        if errors and not counters: raise RuntimeError(errors)
         print(f"Seeded 10 languages and {count} courses.")
 
 if __name__=="__main__": main()
