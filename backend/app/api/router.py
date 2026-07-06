@@ -49,9 +49,10 @@ def fail(status,code,message,**details):
 # pace ever trips it). See app/core/rate_limit.py for why this is
 # in-memory rather than Redis-backed. Limits are deliberately loose/simple
 # per Ramin's ask, not tuned against real traffic yet.
-LOGIN_RATE_LIMIT = register_limiter(RateLimiter(limit=10, window_seconds=60))
-REGISTER_RATE_LIMIT = register_limiter(RateLimiter(limit=5, window_seconds=3600))
-ANSWER_RATE_LIMIT = register_limiter(RateLimiter(limit=120, window_seconds=60))
+_rate_limit_settings = get_settings()
+LOGIN_RATE_LIMIT = register_limiter(RateLimiter(limit=_rate_limit_settings.login_rate_limit_max, window_seconds=60))
+REGISTER_RATE_LIMIT = register_limiter(RateLimiter(limit=_rate_limit_settings.register_rate_limit_max, window_seconds=3600))
+ANSWER_RATE_LIMIT = register_limiter(RateLimiter(limit=_rate_limit_settings.answer_rate_limit_max, window_seconds=60))
 
 def client_ip(request: Request) -> str:
     return request.client.host if request.client else "unknown"

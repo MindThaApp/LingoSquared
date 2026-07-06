@@ -31,6 +31,17 @@ class Settings(BaseSettings):
     # trades a little accuracy for speed/memory on CPU-only inference.
     whisper_model_size: str = "base"
     whisper_compute_type: str = "int8"
+    # Rate limit ceilings (see app/core/rate_limit.py). Defaults match the
+    # values that shipped hardcoded on 2026-07-06 -- pulled into Settings so
+    # an isolated test/CI environment (which legitimately needs to register
+    # far more than 5 accounts/hour from one IP -- the e2e suite registers a
+    # fresh user per spec) can raise them via env vars without touching the
+    # production defaults. Window durations stay hardcoded in router.py;
+    # only the request-count ceilings are configurable, since that's the
+    # dimension a test environment actually needs to move.
+    login_rate_limit_max: int = 10
+    register_rate_limit_max: int = 5
+    answer_rate_limit_max: int = 120
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
     @property

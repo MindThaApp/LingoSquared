@@ -50,6 +50,28 @@ renders both a desktop topbar nav and a mobile tabbar nav, so every nav
 link matches twice; fixed by adding `.first()` everywhere a nav link is
 targeted. Third run: **8/8 passed** in ~9s.
 
+**Re-run live, 2026-07-06**, against a genuinely fresh isolated stack,
+after a full night of unrelated backend changes (Phases A-F, rate
+limiting, FastAPI/Starlette CVE bump, Azure TTS, Whisper STT,
+`content_key` admin-import) had landed with the suite never re-run.
+**10/10 passed.** One real, generic gotcha for any future run: this
+suite registers one fresh account per spec, serially, all from the
+same IP -- **this now collides with the `REGISTER_RATE_LIMIT` (5
+registrations/hour/IP) added 2026-07-06** past the 5th spec (`curl`
+loop confirmed: attempts 1-5 got `201`, 6th+ got `429
+register_rate_limited`). `backend/app/core/config.py`'s
+`register_rate_limit_max`/`login_rate_limit_max` (defaults unchanged,
+5/10) are now `Settings`-configurable specifically so an isolated test
+stack's own `.env` can raise them without touching production. If a
+future run against a *shared* stack hits `register_rate_limited`
+partway through, this is why -- run against your own isolated stack
+with these raised, or space runs out. Full root-cause, plus an
+unrelated mid-run migration race this pass also hit (a concurrent
+session landed `0013_content_keys.py` while this stack was already
+migrated to 0012 -- fixed with a second `alembic upgrade head`, no
+rebuild needed since the compose file bind-mounts the repo), are in
+`docs/BUILD_LOG.md`'s matching entry.
+
 ## What's covered
 
 - `auth.spec.ts` -- register, logout, wrong-password error message
