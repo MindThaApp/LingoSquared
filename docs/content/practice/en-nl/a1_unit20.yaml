@@ -1,0 +1,179 @@
+schema_version: "1.0"
+pack_key: practice.en-nl.a1.unit20
+source_language: en
+target_language: nl
+unit_content_key: nl.a1.unit20.clothing
+review:
+  status: unreviewed
+  fresh_context: "false"
+  notes: "Authored 2026-07-06 by the Claude session extending the en-nl
+    Endless Practice pool to cover the real content gap flagged this
+    session: en-nl practice templates only went through unit16 while the
+    actual Dutch lesson content already goes through unit23. This file
+    covers unit20 (buying clothes): looking for a garment, stating size,
+    choosing a color, checking fit, and reading a receipt. A separate
+    parallel session covered units 17-19 (work, housing, weather) the same
+    day -- both passes share scripts/backfill_lexemes_en_nl.py, widened
+    together to cover units 17-23; this pass added the unit20-23 glosses,
+    part-of-speech classifications, lesson_categories entries, and
+    semantic tags. Added a 6-member 'clothing_noun' recognition-only tag
+    (jas/trui/broek/schoenen/maat/kleur -- schoenen is always plural with
+    no article and maat/kleur don't collocate with the other 4's 'Ik zoek
+    een X' shape, so this stays recognition-only) and a narrower 3-member
+    'clothing_item_singular' generative tag (jas/trui/broek, verified safe
+    in 'Ik zoek een {item}.'). A 2-member 'color' tag (zwart/blauw) is
+    translation/word_order-only (below the >=3-distinct floor for
+    multiple_choice/listen_select), safe in 'Ik wil de jas in het {item}.'
+    per this unit's own teaching note that color always takes 'in het'
+    regardless of the color word's own gender. A 2-member 'size_too_adj'
+    tag reuses unit14's existing klein/groot comparative-lesson adjectives
+    bare (not comparative) in this unit's own 'Het is te {item}.' pattern,
+    same translation/word_order-only discipline. Every slot's real
+    candidate count was verified with a standalone lexeme_matches()-
+    replicating harness against this script's actual output before
+    writing these templates. Needs the standard fresh-context review
+    before import. Same blocking dependency as every earlier en-nl pack:
+    backfill_lexemes_en_nl.py has not actually been run against a real
+    database yet."
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [clothing_noun, clothing_item_singular, color, size_too_adj]
+slot_presets:
+  clothing_noun: &clothing_noun {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: clothing_noun}}
+  clothing_item_singular: &clothing_item_singular {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: clothing_item_singular}}
+  color: &color {language_code: nl, part_of_speech: adjective, agreement_tags: {semantic: color}}
+  size_too_adj: &size_too_adj {language_code: nl, part_of_speech: adjective, agreement_tags: {semantic: size_too_adj}}
+templates:
+  - content_key: practice.en-nl.nl.a1.unit20.lesson01.choose.001
+    lesson_content_key: nl.a1.unit20.lesson01.ik_zoek_een_jas
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *clothing_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a clothing word from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit20.lesson01.listen.002
+    lesson_content_key: nl.a1.unit20.lesson01.ik_zoek_een_jas
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *clothing_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit20.lesson01.match.003
+    lesson_content_key: nl.a1.unit20.lesson01.ik_zoek_een_jas
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: nl, direction: ltr}
+    slots: {first: *clothing_noun, second: *clothing_noun, third: *clothing_noun, fourth: *clothing_noun, fifth: *clothing_noun, sixth: *clothing_noun}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Match each clothing word with its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit20.lesson01.order.004
+    lesson_content_key: nl.a1.unit20.lesson01.ik_zoek_een_jas
+    type: word_order
+    frame: {text: "Ik zoek een {item}.", language_code: nl, direction: ltr}
+    slots: {item: *clothing_item_singular}
+    answer_derivation: {kind: render_frame, frame: {text: "Ik zoek een {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} is what you are looking for.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit20.lesson01.translate.005
+    lesson_content_key: nl.a1.unit20.lesson01.ik_zoek_een_jas
+    type: translation
+    frame:
+      text: "I am looking for a {item}."
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *clothing_item_singular}
+    answer_derivation: {kind: render_frame, frame: {text: "Ik zoek een {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Ik zoek een {item}.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit20.lesson02.choose.001
+    lesson_content_key: nl.a1.unit20.lesson02.welke_maat
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *clothing_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a clothing word from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit20.lesson02.listen.002
+    lesson_content_key: nl.a1.unit20.lesson02.welke_maat
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *clothing_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit20.lesson03.order.001
+    lesson_content_key: nl.a1.unit20.lesson03.welke_kleur
+    type: word_order
+    frame: {text: "Ik wil de jas in het {item}.", language_code: nl, direction: ltr}
+    slots: {item: *color}
+    answer_derivation: {kind: render_frame, frame: {text: "Ik wil de jas in het {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} is the color requested.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit20.lesson03.translate.002
+    lesson_content_key: nl.a1.unit20.lesson03.welke_kleur
+    type: translation
+    frame:
+      text: "I want the coat in {item}."
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *color}
+    answer_derivation: {kind: render_frame, frame: {text: "Ik wil de jas in het {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Ik wil de jas in het {item}.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit20.lesson03.listen.003
+    lesson_content_key: nl.a1.unit20.lesson03.welke_kleur
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *clothing_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit20.lesson04.order.001
+    lesson_content_key: nl.a1.unit20.lesson04.past_het
+    type: word_order
+    frame: {text: "Het is te {item}.", language_code: nl, direction: ltr}
+    slots: {item: *size_too_adj}
+    answer_derivation: {kind: render_frame, frame: {text: "Het is te {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} describes how it fits.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit20.lesson04.translate.002
+    lesson_content_key: nl.a1.unit20.lesson04.past_het
+    type: translation
+    frame:
+      text: "It is too {item}."
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *size_too_adj}
+    answer_derivation: {kind: render_frame, frame: {text: "Het is te {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Het is te {item}.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit20.lesson05.choose.001
+    lesson_content_key: nl.a1.unit20.lesson05.bonnetje_lezen
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *clothing_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a word from the receipt.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit20.lesson06.listen.001
+    lesson_content_key: nl.a1.unit20.lesson06.winterjas_passen
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *clothing_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard in this dialogue.", language_code: en, direction: ltr}

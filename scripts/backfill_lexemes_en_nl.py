@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
-"""Idempotently backfill target-side en-nl Dutch A1 lexemes for units 1-13.
+"""Idempotently backfill target-side en-nl Dutch A1 lexemes for units 1-19+.
 
 Run with ``--dry-run`` to parse and classify content without importing the
 application or connecting to PostgreSQL.  The realization files' complete
 ``introduced_tokens`` inventories are authoritative.
 
-Extended repeatedly through 2026-07-06 (most recently units 11-13: plans,
-recent events/perfect tense, preferences) to keep pace with new practice-
-template packs -- see docs/content/practice/en-nl/a1_unit01.yaml through
-a1_unit13.yaml. Units 14+ are the exact next step for whoever continues the
-practice-pool sync (see docs/BUILD_LOG.md). (Docstring corrected 2026-07-06
-after a fresh-context review pass flagged it as stale -- it previously said
-"units 1-7" long after the code had been extended well past that.)
+Extended repeatedly through 2026-07-06 (most recently units 17-19: work/
+occupation, housing, weather, added by a parallel session -- and units 20-23:
+clothing, emotions, communication, money, added by this pass -- together
+closing the en-nl practice-pool gap behind its lesson content, which goes
+through unit23) to keep pace with new practice-template packs -- see
+docs/content/practice/en-nl/a1_unit01.yaml onward. (Docstring corrected
+2026-07-06 after a fresh-context review pass flagged it as stale -- it
+previously said "units 1-7" long after the code had been extended well past
+that.)
 
 Known limitation surfaced while extending this (units 5-6): this script keys
 its in-memory `specs` dict by bare token string, and `nl_part_of_speech()` is
@@ -43,7 +45,7 @@ if str(BACKEND_ROOT) not in sys.path:
 
 UNIT_FILES = tuple(sorted(
     p for p in (REPO_ROOT / "docs/content/realizations/nl").glob("a1_unit*_*.yaml")
-    if 1 <= int(p.name[len("a1_unit"):len("a1_unit")+2]) <= 16
+    if 1 <= int(p.name[len("a1_unit"):len("a1_unit")+2]) <= 23
 ))
 
 # Each lexical gloss is deliberately atomic. Capitalized sentence-initial forms
@@ -279,6 +281,100 @@ NL_GLOSSES.update({
     "morgen": "tomorrow",
 })
 
+# Unit 17 (work and occupation), added 2026-07-06. "werk" is already
+# classified as a VERB (ik-form of werken, from unit10's daily-routine
+# content) -- this unit also uses "werk" as a NOUN ("Wat doe je voor
+# werk?", object of "voor"), the same token/different-POS homograph
+# limitation documented in this file's module docstring (see the "zijn"
+# note). Per that established precedent, "werk" is NOT given a new
+# noun-generative tag; that question phrase is baked as literal frame
+# text in the practice template instead of using "werk" as a fillable
+# slot value.
+NL_GLOSSES.update({
+    "Elke": "Every", "Sommige": "Some", "Ze": "she", "Zij": "She",
+    "baan": "job", "begin": "start (with ik)", "benieuwd": "curious",
+    "beroep": "the occupation", "denk": "think (with ik)", "doe": "do (with je)",
+    "eigen": "own", "eigenlijk": "actually", "extra": "extra",
+    "kantoor": "office", "kok": "cook", "krijgt": "gets",
+    "later": "later", "maak": "make (with je)", "pauze": "the break",
+    "restaurant": "restaurant", "ritme": "rhythm", "stop": "stop; finish (with ik)",
+    "uren": "hours", "verpleegkundige": "nurse", "vroeg": "early",
+})
+
+# Unit 18 (housing), added 2026-07-06.
+NL_GLOSSES.update({
+    "Appartement": "Apartment", "altijd": "always", "appartement": "the apartment",
+    "badkamer": "the bathroom", "balkon": "the balcony", "fijn": "nice",
+    "gezellig": "cozy", "kamers": "rooms", "keuken": "the kitchen",
+    "klinkt": "sounds", "langs": "by (part of 'komen langs', to come by/visit)",
+    "nieuwe": "new (inflected)", "slaapkamer": "the bedroom", "slaapkamers": "bedrooms",
+    "snel": "soon; quickly", "tuin": "the garden", "welkom": "welcome",
+    "woonkamer": "the living room", "zeggen": "to say",
+})
+
+# Unit 19 (weather), added 2026-07-06.
+NL_GLOSSES.update({
+    "Als": "If", "Laten": "Let's", "Morgen": "Tomorrow", "Perfect": "Perfect",
+    "Weerbericht": "Weather forecast", "Zaterdag": "Saturday", "Zondag": "Sunday",
+    "bewolkt": "cloudy", "binnen": "inside", "blijven": "stay (with we)",
+    "kijken": "watch (with we)", "koud": "cold", "maken": "to make",
+    "regent": "is raining", "wandeling": "the walk", "warm": "warm",
+    "weekend": "the weekend", "weer": "the weather", "weerbericht": "the weather forecast",
+    "zonnig": "sunny",
+})
+
+# Unit 20 (buying clothes), added 2026-07-06.
+NL_GLOSSES.update({
+    "jas": "the coat", "trui": "the sweater", "broek": "the pants; the trousers",
+    "schoenen": "the shoes", "maat": "the size", "Welke": "Which",
+    "zwart": "black", "blauw": "blue", "past": "fits", "Past": "Fits",
+    "passen": "to try on; to fit", "klein": "small", "groot": "big",
+    "negentig": "ninety", "Winterjas": "winter coat", "kleur": "the color",
+    "warm": "warm", "zoek": "look for (with ik)", "M": "M",
+    "Natuurlijk": "Of course", "neemt": "takes (with hij/zij)",
+    "nemen": "to take",
+})
+
+# Unit 21 (expressing feelings), added 2026-07-06.
+NL_GLOSSES.update({
+    "blij": "happy", "verdrietig": "sad", "boos": "angry",
+    "omdat": "because", "regent": "rains", "zenuwachtig": "nervous",
+    "voor": "for; about", "zorgen": "worries", "Maak": "Make",
+    "Waarom": "Why", "voelt": "feels", "zich": "oneself; himself/herself",
+    "alleen": "alone", "Maar": "But", "nieuwe": "new", "baan": "job",
+    "appartement": "apartment", "beetje": "a bit", "denk": "think (with ik)",
+    "kunt": "can (with je/jij)", "eerlijk": "honest(ly)", "gezegd": "said",
+    "helpt": "helps", "vast": "surely; definitely", "trots": "proud",
+    "dienst": "shift", "heel": "very; really", "echt": "really; truly",
+})
+
+# Unit 22 (calling and texting), added 2026-07-06.
+NL_GLOSSES.update({
+    "bellen": "to call", "bel": "call (with ik)", "Met": "This is",
+    "wie": "who", "U": "You (polite)", "herhalen": "to repeat",
+    "snel": "fast; quickly", "hoor": "hear (with ik)",
+    "horen": "to hear", "sms": "the text message", "stuur": "send (with ik)",
+    "later": "later", "terug": "back", "belt": "calls",
+    "Fijn": "Nice", "fijn": "nice", "ging": "went", "dacht": "thought",
+    "betekent": "means", "spreekt": "speaks", "Spreek": "Speak",
+    "wel": "indeed; well", "vertellen": "to tell", "Zijn": "His",
+})
+
+# Unit 23 (money and paying), added 2026-07-06.
+NL_GLOSSES.update({
+    "totaal": "total", "Totaal": "Total", "pinnen": "to pay by card",
+    "contant": "cash", "betalen": "to pay", "Hier": "Here",
+    "rekening": "the bill", "Rekening": "Bill", "delen": "to split; to share",
+    "apart": "separately", "afrekenen": "to settle the bill; to pay",
+    "wisselgeld": "the change", "nodig": "needed", "vijfendertig": "thirty-five",
+    "vijfentwintig": "twenty-five", "hoofdgerechten": "main courses",
+    "koffies": "coffees", "Betaald": "Paid", "pin": "card (payment)",
+    "Zullen": "Shall", "vragen": "to ask for", "goed": "good",
+    "idee": "idea", "betaalt": "pays", "Jij": "You",
+    "hebt": "have (with jij)", "geholpen": "helped", "lief": "sweet; kind",
+    "uw": "your (formal)", "mij": "me",
+})
+
 for _token in ("Een", "Twee"):
     if _token not in NL_GLOSSES:
         NL_GLOSSES[_token] = NL_GLOSSES[_token.casefold()]
@@ -310,15 +406,15 @@ for _number in "0 00 06 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 18 19 20 21 22 24
 SYMBOLS = set("'s 0 00 06 07 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 24 25 29 30 31 32 40 42 43 45 48 50 65 75 87 90 99 500 2024 2026".split())
 PROPER_NOUNS = {"België", "Duitsland", "Egypte", "Lotte", "Nederland", "Noor", "Omar",
                 "Rotterdam", "Sander", "Fenna", "Jan", "Marieke", "Utrecht", "Amsterdam",
-                "Bergsport", "Schoudertas", "Stad", "Centraal"}
-PRONOUNS = set("ik Ik je jij jou Jou me u Wij wij Mijn mijn Welke welke Wat wat Hoeveel hoeveel jouw haar hem iets zich we We Hij hij Deze deze die zij welk Waarmee".split())
-PREPOSITIONS = set("aan bij in met na naar om Om op Op over te tot Tot uit voor vóór per naast tegenover achter tussen van vanaf In Na Bij boven Van tegen".split())
-PARTICLES = set("behalve dan Dan dat Dat de De dit Dit dus een Een en En er Er geen Geen het Het Ja ja Nee nee Niet niet of ook wel maar nog Anders af eerst Eerst pas want als plus toe st O".split())
-ADJECTIVES = set("Belgisch beleefd Duits Engels formeel Goed goed hele informeel laat Leuk leuk Nederlands nieuw normaal open oud slecht volgende elke Mooi gewone scheidbaar korte kort vriendelijk voltooide voltooid meeste sterke algemene blauwe andere ene lekker groot klein groter kleiner duur goedkoop duurder goedkoper bijvoeglijk gelijk mooi praktisch duurst beter best onregelmatig beste meer Veel meest dezelfde lange sterk lichter sterker grote nodig mooist licht beleefde ziek verkouden Ziek bijvoeglijke zelfstandige moe".split())
-ADVERBS = set("avonds vandaan halverwege hier hoe Hoe hoeveelste middags nachts ochtends terug vandaag Vandaag waar Waar wanneer Wanneer graag vaak natuurlijk links rechts linksaf rechtsaf rechtdoor Rechtdoor Graag achteraan daarna Daarna eruit samen meestal gisteren vanmorgen Gisteren Vanmorgen Daar daar liever Liever zo net minder Precies precies al veel steeds Nog nu".split())
-VERBS = set("begint ben Ben bent Bent heb Heb heet inschrijven is Is kom Kom komt Komt kost krijgen leer moet ontmoeten spreek wil wilt woon wonen Wonen woont zijn zitten Kun kun herhalen gaat drinken eten Mag mag Zie hebben neem kan Kan pinnen Kijk ga sla loop Ga Sla Loop gedaan opstaan sta aankleden kleed ontbijten ontbijt werken werk eet afwassen was slapen slaap staat ziet gaan Zullen zullen stellen maakt afspreken geeft staan spreken gebruik gedronken gegaan Denk gebruiken gegeten gewerkt kopen gekocht komen gekomen vinden vind Vind fietsen wandelen winkelen doen Houden drukt houd Zeg Wil zien kiest houdt voeg Gebruik vergelijken werkt heeft koop Koop koopt Wilt vertrekt moeten Let stappen voel scheelt Gaat helpen Heeft Neem Rust drink Voel genomen rusten".split())
+                "Bergsport", "Schoudertas", "Stad", "Centraal", "M"}
+PRONOUNS = set("ik Ik je jij jou Jou me u Wij wij Mijn mijn Welke welke Wat wat Hoeveel hoeveel jouw haar hem iets zich we We Hij hij Deze deze die zij welk Waarmee Ze Zij Jij U Zijn wie mij uw".split())
+PREPOSITIONS = set("aan bij in met na naar om Om op Op over te tot Tot uit voor vóór per naast tegenover achter tussen van vanaf In Na Bij boven Van tegen Met".split())
+PARTICLES = set("behalve dan Dan dat Dat de De dit Dit dus een Een en En er Er geen Geen het Het Ja ja Nee nee Niet niet of ook wel maar nog Anders af eerst Eerst pas want als plus toe st O langs Als Maar omdat".split())
+ADJECTIVES = set("Belgisch beleefd Duits Engels formeel Goed goed hele informeel laat Leuk leuk Nederlands nieuw normaal open oud slecht volgende elke Mooi gewone scheidbaar korte kort vriendelijk voltooide voltooid meeste sterke algemene blauwe andere ene lekker groot klein groter kleiner duur goedkoop duurder goedkoper bijvoeglijk gelijk mooi praktisch duurst beter best onregelmatig beste meer Veel meest dezelfde lange sterk lichter sterker grote nodig mooist licht beleefde ziek verkouden Ziek bijvoeglijke zelfstandige moe Elke Sommige benieuwd eigen extra vroeg fijn gezellig nieuwe welkom bewolkt koud warm zonnig Fijn blauw blij boos verdrietig zenuwachtig trots lief zwart".split())
+ADVERBS = set("avonds vandaan halverwege hier hoe Hoe hoeveelste middags nachts ochtends terug vandaag Vandaag waar Waar wanneer Wanneer graag vaak natuurlijk links rechts linksaf rechtsaf rechtdoor Rechtdoor Graag achteraan daarna Daarna eruit samen meestal gisteren vanmorgen Gisteren Vanmorgen Daar daar liever Liever zo net minder Precies precies al veel steeds Nog nu eigenlijk later altijd snel binnen Hier Natuurlijk Waarom alleen echt eerlijk heel vast apart contant".split())
+VERBS = set("begint ben Ben bent Bent heb Heb heet inschrijven is Is kom Kom komt Komt kost krijgen leer moet ontmoeten spreek wil wilt woon wonen Wonen woont zijn zitten Kun kun herhalen gaat drinken eten Mag mag Zie hebben neem kan Kan pinnen Kijk ga sla loop Ga Sla Loop gedaan opstaan sta aankleden kleed ontbijten ontbijt werken werk eet afwassen was slapen slaap staat ziet gaan Zullen zullen stellen maakt afspreken geeft staan spreken gebruik gedronken gegaan Denk gebruiken gegeten gewerkt kopen gekocht komen gekomen vinden vind Vind fietsen wandelen winkelen doen Houden drukt houd Zeg Wil zien kiest houdt voeg Gebruik vergelijken werkt heeft koop Koop koopt Wilt vertrekt moeten Let stappen voel scheelt Gaat helpen Heeft Neem Rust drink Voel genomen rusten begin denk doe krijgt maak stop zeggen klinkt Laten blijven kijken maken regent Maak Past Spreek afrekenen bel bellen belt betaalt betalen betekent dacht delen geholpen gezegd ging hebt helpt hoor horen neemt nemen passen past spreekt stuur vertellen voelt vragen zoek Betaald kunt".split())
 PHRASES = {"Aangenaam", "Goedemiddag", "Goedemorgen", "Goedenavond", "Hallo", "Hoi", "Prima", "ziens",
-           "alstublieft", "alsjeblieft", "eraan", "Bedankt", "Sorry", "Groet", "Beterschap"}
+           "alstublieft", "alsjeblieft", "eraan", "Bedankt", "Sorry", "Groet", "Beterschap", "Perfect"}
 NOUNS = set("Achtenveertig Dagen Inleverdatum Maanden Medewerker Nul Pauze Taalcafé Twaalf Welkom Workshop acht achtentwintig achtentwintigste achtenveertig achtste achttien achttiende april augustus avond bibliotheek bijdrage boek boeken cent dag dank datum december derde dertien dertiende dertig dertigste dinsdag donderdag drie drieëntwintigste drieënveertig eenendertigste eenentwintig eenentwintigste eenheid eerste elf elfde euro februari groep half hoofdletter huisnummer inleverdatum jaar januari juli juni keer kwart kwartier maand maandag maart mei mensen middag naam nacht negen negende negenennegentig negenentwintigste negentien negentiende negentig november nul nummer ochtend oktober rooster september stoelen taalcafé tachtig tafel telefoonnummer tien tiende tiental tijd twaalf twaalfde twee tweede tweeëndertig tweeëntwintig tweeëntwintigste tweeënveertig twintig twintigste uur veertien veertiende veertig vier vierde vierentwintigste vijf vijfde vijfentwintigste vijfenzestig vijfenzeventig vijftien vijftiende vijftig vrijdag vrijdagmiddag week woensdag workshop zaal zaterdag zes zesde zesentwintigste zestien zestiende zestig zeven zevende zevenentachtig zevenentwintigste zeventien zeventiende zeventig zondag één "
               "vader moeder ouders broer zus kind kinderen opa oma oom tante neef nicht gezin maand familie broers zussen "
               "koffie thee water melk sap brood broodje kaas appel appelsap Menukaart Koffie Thee Broodje Appelsap "
@@ -334,7 +430,11 @@ NOUNS = set("Achtenveertig Dagen Inleverdatum Maanden Medewerker Nul Pauze Taalc
               "naamwoord rugzak tas vijfenveertig dingen superlatief keuze treinreis ruimte reis vorm schoudertas vergelijkingen "
               "kaartje retour balie perron trein vertraging plaats minuten ingang uitgang wachtruimte "
               "Kaartje Vertrek Aankomst Retour Prijs bord probleem Perron enkele "
-              "hoofdpijn buikpijn keelpijn koorts Koorts naamwoorden apotheek tablet Advies dagen huisarts Dank morgen".split())
+              "hoofdpijn buikpijn keelpijn koorts Koorts naamwoorden apotheek tablet Advies dagen huisarts Dank morgen "
+              "baan beroep kantoor kok pauze restaurant ritme uren verpleegkundige "
+              "appartement Appartement badkamer balkon kamers keuken slaapkamer slaapkamers tuin woonkamer "
+              "Morgen Weerbericht Zaterdag Zondag wandeling weekend weer weerbericht "
+              "Rekening Totaal Winterjas broek dienst hoofdgerechten jas kleur koffies maat pin rekening schoenen sms totaal vijfendertig vijfentwintig wisselgeld zorgen beetje".split())
 
 
 def nl_part_of_speech(token: str) -> str:
@@ -401,6 +501,52 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         "niet_lekker_voelen": "feeling_unwell", "wat_scheelt_eraan": "symptom_question",
         "koorts_en_verkouden": "fever_cold", "bij_de_apotheek": "pharmacy_visit",
         "advies_lezen": "health_reading", "lotte_checkt_omar": "health_dialogue",
+        "wat_doe_je_voor_werk": "job_question", "waar_werk_je": "workplace_question",
+        "mijn_werkdag": "work_schedule", "collegas_beschrijven": "colleague_description",
+        "werkprofielen_lezen": "work_profile_reading", "werk_gesprek": "work_dialogue",
+        "mijn_appartement": "apartment_description", "hoeveel_kamers": "room_count_question",
+        "balkon_en_tuin": "housing_feature", "groot_of_klein": "room_size",
+        # NOTE: unit18's lesson05 real content_key is
+        # nl.a1.unit18.lesson05.advertentie_lezen -- its bare lesson-name
+        # segment ("advertentie_lezen") is IDENTICAL to unit14's own
+        # lesson05 ("nl.a1.unit14.lesson05.advertentie_lezen"), and this
+        # dict is keyed by that bare segment alone (see the "zijn"
+        # homograph note in this file's module docstring for the same
+        # class of same-string/different-context limitation). No new
+        # entry is added here for it -- unit18 lesson05's tokens simply
+        # inherit unit14's existing "comparison_reading" value by
+        # coincidence. Harmless: no practice template anywhere keys a
+        # slot_preset on that literal string, it is purely descriptive
+        # metadata. Flagging so a future editor doesn't mistake this for
+        # a missing entry and add a duplicate "advertentie_lezen" key,
+        # which would silently overwrite (and corrupt) unit14's mapping
+        # instead, since Python dict literals keep only the last value
+        # for a repeated key with no error.
+        "nieuw_appartement": "apartment_dialogue",
+        "wat_voor_weer": "weather_question", "koud_of_warm": "temperature_description",
+        "het_weerbericht": "weather_forecast", "plannen_maken_bij_weer": "weather_plan",
+        "weerbericht_lezen": "weather_reading", "weekend_plannen": "weekend_plan_dialogue",
+        "ik_zoek_een_jas": "clothing_item_request", "welke_maat": "clothing_size",
+        "welke_kleur": "clothing_color", "past_het": "clothing_fit",
+        # unit20's lesson05 AND unit23's lesson05 both use the exact same
+        # bare content_key suffix "bonnetje_lezen" (one unit reads a
+        # clothing receipt, the other a restaurant bill) -- same dict-
+        # keyed-by-bare-suffix collision already documented above for
+        # unit14/unit18's "advertentie_lezen". A single shared, honestly
+        # generic value ("receipt_reading") is correct for BOTH lessons
+        # (both really are "read a receipt" comprehension exercises), so
+        # this is not a corruption risk like the advertentie_lezen case --
+        # deliberately reused, not accidental.
+        "bonnetje_lezen": "receipt_reading", "winterjas_passen": "clothing_dialogue",
+        "blij_verdrietig_boos": "basic_feeling", "waarom_ben_je_blij": "feeling_reason",
+        "zenuwachtig_voor_iets": "nervous_about", "naar_gevoelens_vragen": "feeling_question",
+        "bericht_lezen": "feeling_message_reading", "eerste_dienst_gesprek": "feeling_dialogue",
+        "ik_bel_je": "phone_call_intro", "met_wie_spreek_ik": "phone_identity",
+        "kun_je_dat_herhalen": "phone_clarification", "een_sms_sturen": "text_message",
+        "sms_gesprek_lezen": "text_exchange_reading", "telefoontje_na_dienst": "phone_call_dialogue",
+        "hoeveel_kost_het": "total_price_question", "pinnen_of_contant": "payment_method",
+        "de_rekening_delen": "bill_splitting", "wisselgeld": "change_handling",
+        "rekening_vragen": "bill_dialogue",
     }
     semantic.append(lesson_categories[unit_lesson])
     if t in {"jij", "je"}: semantic.append("informal_address")
@@ -432,9 +578,13 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     # would leak an untranslated Dutch word into an English frame if used
     # the same way -- narrow this instead of reusing place_name there.
     if token in {"Rotterdam", "Utrecht", "Amsterdam"}: semantic.append("city_name")
-    number_words = set("nul één twee drie vier vijf zes zeven acht negen tien elf twaalf dertien veertien vijftien zestien zeventien achttien negentien twintig dertig veertig vijftig zestig zeventig tachtig negentig eenentwintig tweeëntwintig tweeëndertig tweeënveertig achtenveertig vijfenzeventig negenennegentig drieënveertig vijfenzestig zevenentachtig achtentwintig".split())
+    number_words = set("nul één twee drie vier vijf zes zeven acht negen tien elf twaalf dertien veertien vijftien zestien zeventien achttien negentien twintig dertig veertig vijftig zestig zeventig tachtig negentig eenentwintig tweeëntwintig tweeëndertig tweeënveertig achtenveertig vijfenzeventig negenennegentig drieënveertig vijfenzestig zevenentachtig achtentwintig vijfentwintig vijfendertig".split())
     if t in number_words or token in SYMBOLS and token != "'s": semantic.append("number")
-    if t in {"twee", "drie", "zeven", "acht", "veertien", "achttien", "twintig"} or token in {"2", "3", "7", "8", "14", "18", "20"}: semantic.append("hour_number")
+    # Extended 2026-07-06 (unit17: negen/twaalf/vijf/elf are the real
+    # clock-hour numbers this unit's schedule content actually uses --
+    # "Ik begin om negen uur."/"Ik heb pauze om twaalf uur."/"Ik stop om
+    # vijf uur."/"Ik begin later, om elf uur.").
+    if t in {"twee", "drie", "zeven", "acht", "veertien", "achttien", "twintig", "negen", "twaalf", "vijf", "elf"} or token in {"2", "3", "7", "8", "14", "18", "20"}: semantic.append("hour_number")
     if t in set("maandag dinsdag woensdag donderdag vrijdag zaterdag zondag".split()): semantic.append("weekday")
     # "weekday" above is contaminated for matching_pairs use: the
     # lesson_categories catch-all tags EVERY token introduced in the
@@ -602,6 +752,131 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     # Only 2 members -- kept out of multiple_choice/listen_select (which
     # need >=4), used only in word_order/fill_in_blank/translation.
     if t in {"ziek", "verkouden"}: semantic.append("symptom_zijn")
+    # Unit 17 (work and occupation): broad 8-member recognition-only tag
+    # (bare-word MC/listen_select/translation), safe because it's never
+    # used to fill one shared generative sentence -- restaurant/
+    # ziekenhuis/kantoor each take a different article/preposition
+    # combination (een restaurant / het ziekenhuis / op kantoor with no
+    # article at all), verified directly from this unit's real content.
+    if t in {"beroep", "kok", "verpleegkundige", "restaurant", "ziekenhuis", "kantoor", "baan", "pauze"}:
+        semantic.append("work_vocab")
+    # Exact-case variant for matching_pairs (avoids a casefold case-dup
+    # drawing e.g. both "Pauze" and "pauze" as if they were two different
+    # pairs), same convention as every other _pure tag in this file.
+    if token in {"beroep", "kok", "verpleegkundige", "restaurant", "ziekenhuis", "kantoor", "baan", "pauze"}:
+        semantic.append("work_vocab_pure")
+    # Narrower 2-member generative tag: kok/verpleegkundige both take
+    # "werken als" + the bare occupation noun with no article --
+    # verified ("Ik werk als kok."/"Ik werk als verpleegkundige."),
+    # unlike the workplace nouns above which are deliberately excluded
+    # from any shared generative frame.
+    if t in {"kok", "verpleegkundige"}: semantic.append("occupation")
+    # Narrower 2-member generative tag: begin/stop are both regular
+    # ik-form verbs sharing the identical "Ik {verb} om {hour} uur."
+    # frame shape (verified: "Ik begin om negen uur."/"Ik stop om vijf
+    # uur."). "pauze" is deliberately excluded -- its real sentence is
+    # "Ik heb pauze om {hour} uur.", built around a different verb
+    # ("heb", not the {verb} slot itself), so mixing it in would drop
+    # "heb" and generate an ungrammatical sentence.
+    if t in {"begin", "stop"}: semantic.append("schedule_verb")
+    # Unit 18 (housing): 5-member generative room tag. "een" is Dutch's
+    # single invariant indefinite article (unlike "de"/"het" for
+    # definites), so "Ik heb een {item}." is grammatically safe for all
+    # 5 members regardless of each noun's own gender -- verified: real
+    # content uses "een appartement"/"een woonkamer"/"een slaapkamer"/
+    # "een keuken"/"een badkamer".
+    if t in {"appartement", "woonkamer", "slaapkamer", "keuken", "badkamer"}:
+        semantic.append("room_word")
+    if token in {"appartement", "woonkamer", "slaapkamer", "keuken", "badkamer"}:
+        semantic.append("room_word_pure")
+    # Broader 7-member recognition-only tag (adds balkon/tuin) -- safe
+    # for bare-word MC/listen_select/translation, NOT a shared
+    # generative frame: balkon/tuin use the "Er is (geen) {item}."
+    # existential pattern, a different sentence shape from the room
+    # words' "Ik heb een {item}."
+    if t in {"appartement", "woonkamer", "slaapkamer", "keuken", "badkamer", "balkon", "tuin"}:
+        semantic.append("housing_vocab")
+    if token in {"appartement", "woonkamer", "slaapkamer", "keuken", "badkamer", "balkon", "tuin"}:
+        semantic.append("housing_vocab_pure")
+    # 3-member recognition-only tag -- groot/klein/gezellig each attach
+    # to a different subject in the real content (De woonkamer is
+    # groot./De keuken is klein./Het appartement is klein maar
+    # gezellig.), so kept out of any single shared generative frame,
+    # translation/word_order only.
+    if t in {"groot", "klein", "gezellig"}: semantic.append("home_adjective")
+    # Unit 19 (weather): 4-member generative adjective tag -- all four
+    # attach to the impersonal "Het is {item}." pattern (verified: "Het
+    # is zonnig."/"Het is bewolkt."/"Het is koud (vandaag)."/"Het is
+    # warm (vandaag)." -- dropping the optional "vandaag" leaves a
+    # still-valid standalone sentence for koud/warm).
+    if t in {"zonnig", "bewolkt", "koud", "warm"}: semantic.append("weather_adj")
+    if token in {"zonnig", "bewolkt", "koud", "warm"}: semantic.append("weather_adj_pure")
+    # Broader 8-member recognition-only tag (adds regent, a verb, plus
+    # weer/weerbericht/wandeling nouns) -- safe for bare-word MC/
+    # listen_select/translation only, NOT a shared generative frame:
+    # "regent" is impersonal "Het regent." with no adjective slot at
+    # all, a different sentence shape from the weather_adj members.
+    if t in {"zonnig", "bewolkt", "koud", "warm", "regent", "weer", "weerbericht", "wandeling"}:
+        semantic.append("weather_vocab")
+    if token in {"zonnig", "bewolkt", "koud", "warm", "regent", "weer", "weerbericht", "wandeling"}:
+        semantic.append("weather_vocab_pure")
+    # Unit 20 (buying clothes): broad 6-member recognition-only tag
+    # (bare-word MC/listen_select/matching_pairs) -- "schoenen" is always
+    # plural with no article, "maat"/"kleur" don't collocate with the
+    # other 4's "Ik zoek een {item}." shape, so this stays recognition-
+    # only, never a shared generative frame.
+    if t in {"jas", "trui", "broek", "schoenen", "maat", "kleur"}:
+        semantic.append("clothing_noun")
+    # Narrower 3-member generative tag: jas/trui/broek are each
+    # grammatical after "een" as a singular countable noun -- verified
+    # directly ("Ik zoek een jas."); "schoenen" is excluded (always
+    # plural, "Ik zoek een schoenen" is ungrammatical).
+    if t in {"jas", "trui", "broek"}: semantic.append("clothing_item_singular")
+    # Only 2 real colors taught in this unit -- kept out of
+    # multiple_choice/listen_select/matching_pairs (need >=3 distinct),
+    # used only in word_order/translation/fill_in_blank. Both take the
+    # identical "in het {item}" pattern regardless of the color word's
+    # own gender, per this unit's own teaching note.
+    if t in {"zwart", "blauw"}: semantic.append("color")
+    # "klein"/"groot" are already-existing unit14 comparative-lesson
+    # adjectives (small/big), reused here bare (not comparative) in this
+    # unit's own "Het is te {item}." pattern -- verified directly
+    # ("Het is te klein."/"Het is te groot."). Only 2 members, translation/
+    # word_order only, same discipline as several sibling 2-member tags
+    # above (equal_adj, symptom_zijn, etc.).
+    if t in {"klein", "groot"}: semantic.append("size_too_adj")
+    # Unit 21 (expressing feelings): 5-member generative adjective tag --
+    # all five are verified safe in BOTH "Ik ben {item}." and "Hij voelt
+    # zich {item}." (the real content uses "zenuwachtig"/"blij" in both
+    # shapes, and "trots" is grammatically identical: "Ik ben trots."/
+    # "Hij voelt zich trots." are both natural Dutch), plus the question
+    # frame "Waarom ben je {item}?" (real content's own lesson02 teaches
+    # exactly this shape for "blij").
+    if t in {"blij", "verdrietig", "boos", "zenuwachtig", "trots"}:
+        semantic.append("feeling_adj")
+    # Unit 22 (calling and texting): 4-member recognition-only tag
+    # spanning noun/verb ("sms" is a noun, the rest are verb infinitives)
+    # -- no shared generative frame (each collocates differently: "Ik bel
+    # je."/"Ik stuur een sms."/"Ik hoor je niet goed."/"Ik moet je iets
+    # vertellen." are all structurally different), same discipline as
+    # unit11's plan_vocab and unit17's work_vocab.
+    if t in {"bellen", "sms", "horen", "vertellen"}: semantic.append("communication_word")
+    # Unit 23 (money and paying): 5-member recognition-only verb tag
+    # (bare infinitives), also verified safe together in the polite
+    # request frame "Mag ik {item}?" -- every member is a natural answer
+    # to "what would you like to do" after "mag ik" (verified: "Mag ik
+    # pinnen?"/"Mag ik apart afrekenen?" are both real content; "betalen"/
+    # "delen"/"vragen" are grammatically identical bare-infinitive slots
+    # in the same "Mag ik ...?" shape even where not the literal unit
+    # text).
+    if t in {"betalen", "pinnen", "afrekenen", "delen", "vragen"}:
+        semantic.append("payment_verb")
+    # 3-member noun tag -- rekening/wisselgeld/totaal are the three core
+    # money nouns taught in this unit, recognition-only (each takes a
+    # different article/context: "de rekening", "het wisselgeld", "in
+    # totaal"), safe for bare-word MC/listen_select (exactly meets the
+    # >=3 distinct-gloss floor).
+    if t in {"rekening", "wisselgeld", "totaal"}: semantic.append("payment_noun")
     # "april" is introduced in the same lesson as the ordinal-number teaching
     # cards (the lesson combines "de vijfde april" -- ordinal + month), so
     # the blanket lesson_categories["rangtelwoorden"] tag above wrongly also

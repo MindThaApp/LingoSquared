@@ -1,0 +1,205 @@
+schema_version: "1.0"
+pack_key: practice.en-nl.a1.unit19
+source_language: en
+target_language: nl
+unit_content_key: nl.a1.unit19.weather
+review:
+  status: unreviewed
+  fresh_context: "false"
+  notes: "Authored 2026-07-06 by the Claude session closing the en-nl
+    practice-pool gap behind its lesson content (lesson content already
+    goes through unit23; practice templates previously stopped at
+    unit16). This unit (unit19) covers weather: describing current
+    conditions, contrasting temperatures, reading/hearing a two-day
+    forecast, and making a weekend plan around it (reusing the 'Zullen
+    we ...?' pattern from unit11). Added 20 new Dutch token
+    classifications for this unit specifically to
+    scripts/backfill_lexemes_en_nl.py.
+
+    New semantic tags: a 4-member 'weather_adj'/'weather_adj_pure'
+    (zonnig/bewolkt/koud/warm) IS safe generatively in 'Het is {item}.'
+    -- all four attach to the impersonal 'Het is ...' pattern (verified:
+    'Het is zonnig.'/'Het is bewolkt.'/'Het is koud (vandaag).'/'Het is
+    warm (vandaag).' -- dropping the optional 'vandaag' leaves a still-
+    valid standalone sentence for koud/warm), and additionally verified
+    safe in 'Morgen is het {item}.' (the real content's own fronted-
+    adverb V2 inversion pattern: 'Morgen is het zonnig.'). A broader
+    8-member 'weather_vocab'/'weather_vocab_pure' (adds regent, a verb
+    with no adjective slot, plus weer/weerbericht/wandeling nouns) is
+    recognition-only, deliberately never used inside the shared
+    generative frame since 'regent' is impersonal 'Het regent.' with a
+    different sentence shape entirely. Reused the existing broad
+    'weekday'/'weekday_pure' tags (7 members each, already built for
+    unit04) for a bare weekday-recognition drill tied to this unit's
+    forecast-by-day theme -- zero new classifier code needed for that
+    slot.
+
+    Every slot's real candidate count was verified with the repo's
+    standalone scripts/_practice_slot_check.py harness (already globs
+    en-nl) against this script's actual output; every multiple_choice/
+    listen_select slot clears the real >=3-distinct bar the backend's
+    build_prompt() actually enforces, and every matching_pairs slot has
+    >=2 distinct tokens. Needs the standard fresh-context review before
+    import. Same blocking dependency as every earlier en-nl pack:
+    backfill_lexemes_en_nl.py has not actually been run against a real
+    database yet."
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [weather_adj, weather_adj_pure, weather_vocab, weather_vocab_pure, weekday, weekday_pure]
+slot_presets:
+  weather_adj: &weather_adj {language_code: nl, part_of_speech: adjective, agreement_tags: {semantic: weather_adj}}
+  # weather_vocab spans a verb (regent) plus nouns/adjectives -- see
+  # scripts/backfill_lexemes_en_nl.py's weather_vocab comment.
+  weather_vocab: &weather_vocab {language_code: nl, part_of_speech: [verb, noun, adjective], agreement_tags: {semantic: weather_vocab}}
+  # weather_vocab_pure: exact-case, safe for matching_pairs (avoids a
+  # casefold case-duplicate slot value).
+  weather_vocab_pure: &weather_vocab_pure {language_code: nl, part_of_speech: [verb, noun, adjective], agreement_tags: {semantic: weather_vocab_pure}}
+  weekday: &weekday {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: weekday}}
+  weekday_pure: &weekday_pure {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: weekday_pure}}
+templates:
+  - content_key: practice.en-nl.nl.a1.unit19.lesson01.order.001
+    lesson_content_key: nl.a1.unit19.lesson01.wat_voor_weer
+    type: word_order
+    frame: {text: "Het is {item}.", language_code: nl, direction: ltr}
+    slots: {item: *weather_adj}
+    answer_derivation: {kind: render_frame, frame: {text: "Het is {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} describes the weather in this sentence.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit19.lesson01.choose.002
+    lesson_content_key: nl.a1.unit19.lesson01.wat_voor_weer
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *weather_vocab}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a weather word from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit19.lesson01.listen.003
+    lesson_content_key: nl.a1.unit19.lesson01.wat_voor_weer
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *weather_vocab}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit19.lesson01.match.004
+    lesson_content_key: nl.a1.unit19.lesson01.wat_voor_weer
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: nl, direction: ltr}
+    slots: {first: *weather_vocab_pure, second: *weather_vocab_pure, third: *weather_vocab_pure, fourth: *weather_vocab_pure, fifth: *weather_vocab_pure, sixth: *weather_vocab_pure}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Match each weather word with its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit19.lesson02.translate.001
+    lesson_content_key: nl.a1.unit19.lesson02.koud_of_warm
+    type: translation
+    frame:
+      text: "It is {item} today."
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *weather_adj}
+    answer_derivation: {kind: render_frame, frame: {text: "Het is {item} vandaag.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Het is {item} vandaag.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit19.lesson02.choose.002
+    lesson_content_key: nl.a1.unit19.lesson02.koud_of_warm
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *weather_vocab}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a weather word from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit19.lesson03.order.001
+    lesson_content_key: nl.a1.unit19.lesson03.het_weerbericht
+    type: word_order
+    frame: {text: "Morgen is het {item}.", language_code: nl, direction: ltr}
+    slots: {item: *weather_adj}
+    answer_derivation: {kind: render_frame, frame: {text: "Morgen is het {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} is tomorrow's forecast in this sentence.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit19.lesson03.translate.002
+    lesson_content_key: nl.a1.unit19.lesson03.het_weerbericht
+    type: translation
+    frame:
+      text: "{item}"
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *weekday}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The Dutch weekday is {item}.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit19.lesson04.choose.001
+    lesson_content_key: nl.a1.unit19.lesson04.plannen_maken_bij_weer
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *weather_vocab}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a weather word from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit19.lesson04.listen.002
+    lesson_content_key: nl.a1.unit19.lesson04.plannen_maken_bij_weer
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *weather_vocab}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit19.lesson04.match.003
+    lesson_content_key: nl.a1.unit19.lesson04.plannen_maken_bij_weer
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: nl, direction: ltr}
+    slots: {first: *weekday_pure, second: *weekday_pure, third: *weekday_pure, fourth: *weekday_pure, fifth: *weekday_pure, sixth: *weekday_pure}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Match each weekday with its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit19.lesson05.choose.001
+    lesson_content_key: nl.a1.unit19.lesson05.weerbericht_lezen
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *weather_vocab}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a word from the forecast.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit19.lesson05.translate.002
+    lesson_content_key: nl.a1.unit19.lesson05.weerbericht_lezen
+    type: translation
+    frame:
+      text: "It is {item}."
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *weather_adj}
+    answer_derivation: {kind: render_frame, frame: {text: "Het is {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Het is {item}.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit19.lesson06.listen.001
+    lesson_content_key: nl.a1.unit19.lesson06.weekend_plannen
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *weather_vocab}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a word from this dialogue.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit19.lesson06.order.002
+    lesson_content_key: nl.a1.unit19.lesson06.weekend_plannen
+    type: word_order
+    frame: {text: "Het is {item}.", language_code: nl, direction: ltr}
+    slots: {item: *weather_adj}
+    answer_derivation: {kind: render_frame, frame: {text: "Het is {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} describes the weather in this sentence.", language_code: en, direction: ltr}
