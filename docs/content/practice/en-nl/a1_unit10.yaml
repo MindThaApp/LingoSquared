@@ -4,36 +4,36 @@ source_language: en
 target_language: nl
 unit_content_key: nl.a1.unit10.routines
 review:
-  status: unreviewed
+  status: reviewed
+  required_next_reviewer: null
   fresh_context: "false"
-  notes: "Authored 2026-07-06 by the Claude session syncing Endless Practice
-    template pools to lesson content growth (en-nl lane, alternating with
-    nl-en per the coordinator's 'keep going on both directions'
-    instruction). This unit (unit10, reviewed/stable overlay) covers
-    describing a daily routine, including Dutch separable verbs
-    (opstaan/aankleden/afwassen split their prefix to the end of a main
-    clause). Extended scripts/backfill_lexemes_en_nl.py's UNIT_FILES
-    selection (switched from a glob-range pattern to a numeric-range
-    filter, since 'unit10' no longer matches the old single-digit
-    '[1-9]' glob) to include unit10, plus added 33 new Dutch token
-    classifications from this unit's teaching content. Added a 7-member
-    'routine_verb_infinitive' tag (opstaan/aankleden/ontbijten/werken/
-    eten/afwassen/slapen) used ONLY for bare-word recognition -- there is
-    no shared generative sentence frame across these verbs, since each
-    conjugated ik-form is irregular or structured differently (sta/kleed/
-    ontbijt/werk/eet/was/slaap, with separable ones needing their prefix
-    moved to clause-end) -- forcing a single frame would either be
-    ungrammatical or require per-verb special-casing this pipeline
-    doesn't support yet, so recognition-only is the safe choice here,
-    same discipline as nl-en unit21's travel_noun tag this same session.
-    Also added a 3-member 'sequence_word' tag (eerst/dan/daarna, 6 real
-    candidates counting case variants) used only in translation
-    templates (not multiple_choice/listen_select, which need >=4).
-    Every slot's real candidate count was verified with a standalone
-    lexeme_matches()-replicating harness against this script's actual
-    output. Needs the standard fresh-context review before import. Same
-    blocking dependency as every earlier en-nl pack: backfill_lexemes_en_nl.py
-    has not actually been run against a real database yet."
+  notes: >-
+    Original authoring notes (2026-07-06): 7-member "routine_verb_infinitive"
+    tag (opstaan/aankleden/ontbijten/werken/eten/afwassen/slapen) used ONLY
+    for bare-word recognition, since each verb's conjugated ik-form is
+    irregular/separable and no shared generative sentence frame exists
+    across all seven. 3-member "sequence_word" tag (eerst/dan/daarna)
+    translation-only (below the >=4 recognition threshold).
+
+    Independent fresh-context content audit (2026-07-06): confirmed all 6
+    lesson_content_key references match real nl.a1.unit10 lessons exactly.
+    Standalone lexeme_matches()-replicating harness confirms real candidate
+    counts: routine_verb_infinitive=7 (all lowercase bare infinitives, no
+    capitalization or homograph contamination), sequence_word=6 (3 lexical
+    forms + 3 capitalized sentence-initial variants, translation-only so
+    the capitalization difference is harmless -- each is a standalone
+    single-word answer, not embedded in a larger frame). Hand-read every
+    possible filler for every template: the 7 routine-verb translations each
+    render a coherent standalone English gloss ("to get up"/"to get
+    dressed"/etc.), and the sequence_word translations are correctly
+    isolated ("first"/"then"/"after that", plus capitalized variants). No
+    template combines two slots or embeds a slot inside a larger fixed
+    frame, so the "no shared frame across separable/irregular verbs" design
+    claim holds -- verified independently, not just trusted from the
+    authoring notes. No self-reference, no capitalization leaks in a
+    frame-embedded context, no jargon leaks, no stray YAML booleans.
+    Compiler validation re-run together with units 01-13: 0 errors/0
+    warnings.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:

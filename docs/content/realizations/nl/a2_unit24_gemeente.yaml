@@ -37,8 +37,21 @@ review:
     dialogue per AUTHORING_GUIDE §11. Every multi-clause
     accepted_answers list authored with period/comma/conjunction-joined
     forms per §12. Every fill_in_blank frame retains visible
-    surrounding text per §13. Pending fresh-context review and Ramin's
-    native-speaker review. Audio assets are declared for generation.
+    surrounding text per §13. A fresh-context review ran and found:
+    lesson06's opening listening exercise was wired to the wrong audio
+    asset (played "Wat heb ik nodig om me in te schrijven?" instead of
+    the official's actual greeting) -- fixed with a new dedicated
+    audio asset; lesson05's exercises had a listen_select sequenced
+    after matching_pairs, breaking the recognition-before-drag rule --
+    reordered; two lesson titles used informal "je" against this
+    unit's own stated formal-register policy ("Wat heb je nodig?",
+    "Je BSN-nummer") -- fixed to "Wat heeft u nodig?"/"Uw BSN-nummer";
+    one listening exercise's audio ran longer than what it tested --
+    tightened to match the full clip. No grammar errors, spine drift,
+    jargon leaks, or YAML footguns found otherwise. Re-validated (0
+    errors/0 warnings across the full nl course, including the real
+    compile step). Still needs Ramin's native-speaker pass before
+    status: reviewed. Audio assets are declared for generation.
 
 course:
   realization_key: nl.a2
@@ -55,6 +68,7 @@ media_assets:
   - {content_key: nl.a2.audio.gemeente.afspraak_maken.01, language: nl, text: "Ik wil graag een afspraak maken om me in te schrijven.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
   - {content_key: nl.a2.audio.gemeente.zou_schikken.01, language: nl, text: "Zou woensdag om tien uur schikken?", voice_hint: neutral_adult_polite, status: pending_generation}
   - {content_key: nl.a2.audio.gemeente.wat_heb_ik_nodig.01, language: nl, text: "Wat heb ik nodig om me in te schrijven?", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - {content_key: nl.a2.audio.gemeente.waarmee_helpen.01, language: nl, text: "Goedemiddag, waarmee kan ik u helpen?", voice_hint: neutral_adult_polite, status: pending_generation}
   - {content_key: nl.a2.audio.gemeente.paspoort_huurcontract.01, language: nl, text: "U heeft een geldig paspoort en uw huurcontract nodig.", voice_hint: neutral_adult_polite, status: pending_generation}
   - {content_key: nl.a2.audio.gemeente.sinds_wanneer.01, language: nl, text: "Sinds wanneer woont u op dit adres?", voice_hint: neutral_adult_polite, status: pending_generation}
   - {content_key: nl.a2.audio.gemeente.bsn_uitleg.01, language: nl, text: "Het BSN-nummer is uw persoonlijke nummer bij de overheid.", voice_hint: neutral_adult_polite, status: pending_generation}
@@ -102,12 +116,12 @@ units:
           - {content_key: nl.a2.unit24.lesson01.exercise02.listen_time_suggestion, type: listen_select, tested_text: "Zou woensdag om tien uur schikken", media_asset_key: nl.a2.audio.gemeente.zou_schikken.01, prompt: {target_blocks: []}}
           - {content_key: nl.a2.unit24.lesson01.exercise03.match_appointment_phrases, type: matching_pairs, tested_text: "afspraak schikken komt goed uit", prompt: {target_blocks: []}, pairs: [{left: "een afspraak maken", right: "to make an appointment"}, {left: "dat komt goed uit", right: "that works out well"}]}
           - {content_key: nl.a2.unit24.lesson01.exercise04.order_time_suggestion, type: word_order, tested_text: "Zou woensdag om tien uur schikken", prompt: {target_blocks: []}, word_bank: [tien, Zou, woensdag, om, uur, schikken]}
-          - {content_key: nl.a2.unit24.lesson01.exercise05.listen_order_appointment_request, type: listen_order, tested_text: "Ik wil graag een afspraak maken", media_asset_key: nl.a2.audio.gemeente.afspraak_maken.01, prompt: {target_blocks: []}, word_bank: [graag, Ik, wil, afspraak, een, maken]}
+          - {content_key: nl.a2.unit24.lesson01.exercise05.listen_order_appointment_request, type: listen_order, tested_text: "Ik wil graag een afspraak maken om me in te schrijven", media_asset_key: nl.a2.audio.gemeente.afspraak_maken.01, prompt: {target_blocks: []}, word_bank: [graag, Ik, wil, afspraak, een, maken, om, me, in, te, schrijven]}
           - {content_key: nl.a2.unit24.lesson01.exercise06.complete_time_suggestion, type: fill_in_blank, tested_text: "Zou woensdag om tien uur schikken", prompt: {target_blocks: [{text: "Zou woensdag om tien uur ___?", language_code: nl, direction: ltr}]}}
           - {content_key: nl.a2.unit24.lesson01.exercise07.write_appointment_request, type: writing_prompt, tested_text: "Ik wil graag een afspraak maken om me in te schrijven", prompt: {target_blocks: [{text: "Write in Dutch: say you would like to make an appointment to register.", language_code: en, direction: ltr}]}}
 
       - content_key: nl.a2.unit24.lesson02.wat_heb_je_nodig
-        title: "Wat heb je nodig?"
+        title: "Wat heeft u nodig?"
         spine_outcome_id: universal.a2.bureaucracy.register_with_authorities
         teaching:
           - {content_key: nl.a2.unit24.lesson02.teach.paspoort, kind: vocabulary, target: {text: "het paspoort", language_code: nl, direction: ltr}, introduced_tokens: [het, paspoort]}
@@ -140,7 +154,7 @@ units:
           - {content_key: nl.a2.unit24.lesson03.exercise06.respond_since_last_month, type: dialogue_response, tested_text: "Ik woon hier sinds vorige maand", prompt: {target_blocks: [{text: "Sinds wanneer woont u op dit adres?", language_code: nl, direction: ltr}]}}
 
       - content_key: nl.a2.unit24.lesson04.je_bsn_nummer
-        title: "Je BSN-nummer"
+        title: "Uw BSN-nummer"
         spine_outcome_id: universal.a2.bureaucracy.register_with_authorities
         teaching:
           - {content_key: nl.a2.unit24.lesson04.teach.bsn, kind: vocabulary, target: {text: "het BSN-nummer", language_code: nl, direction: ltr}, introduced_tokens: [het, BSN, nummer]}
@@ -177,8 +191,8 @@ units:
           - {content_key: nl.a2.unit24.lesson05.exercise01.read_required_documents, type: reading_comprehension, tested_text: "geldig paspoort huurcontract geboorteakte", prompt: {target_blocks: [{text: "Which documents does the letter list as required?", language_code: en, direction: ltr}]}}
           - {content_key: nl.a2.unit24.lesson05.exercise02.read_appointment_instruction, type: reading_comprehension, tested_text: "maak vooraf een afspraak", prompt: {target_blocks: [{text: "What must you do before your registration visit?", language_code: en, direction: ltr}]}}
           - {content_key: nl.a2.unit24.lesson05.exercise03.read_bsn_timing, type: reading_comprehension, tested_text: "binnen enkele dagen per post", prompt: {target_blocks: [{text: "How and when will you receive your BSN number?", language_code: en, direction: ltr}]}}
-          - {content_key: nl.a2.unit24.lesson05.exercise04.match_letter_points, type: matching_pairs, tested_text: "documenten afspraak BSN", prompt: {target_blocks: []}, pairs: [{left: "paspoort en huurcontract", right: "the required documents"}, {left: "vooraf een afspraak", right: "book ahead of time"}, {left: "BSN-nummer per post", right: "arrives by mail afterward"}]}
-          - {content_key: nl.a2.unit24.lesson05.exercise05.listen_letter, type: listen_select, tested_text: "binnen enkele dagen per post", media_asset_key: nl.a2.audio.gemeente.brief.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a2.unit24.lesson05.exercise04.listen_letter, type: listen_select, tested_text: "binnen enkele dagen per post", media_asset_key: nl.a2.audio.gemeente.brief.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a2.unit24.lesson05.exercise05.match_letter_points, type: matching_pairs, tested_text: "documenten afspraak BSN", prompt: {target_blocks: []}, pairs: [{left: "paspoort en huurcontract", right: "the required documents"}, {left: "vooraf een afspraak", right: "book ahead of time"}, {left: "BSN-nummer per post", right: "arrives by mail afterward"}]}
           - {content_key: nl.a2.unit24.lesson05.exercise06.write_letter_summary, type: writing_prompt, tested_text: "Ik heb een geldig paspoort en mijn huurcontract nodig", prompt: {target_blocks: [{text: "Write in Dutch: say you need a valid passport and your rental contract.", language_code: en, direction: ltr}]}}
 
       - content_key: nl.a2.unit24.lesson06.gemeente_afspraak
@@ -193,7 +207,7 @@ units:
           - {content_key: nl.a2.unit24.lesson06.teach.omar_thanks, kind: dialogue, target: {text: "Omar: Geweldig, dank u wel voor uw hulp!", language_code: nl, direction: ltr}, introduced_tokens: [Omar, Geweldig, dank, u, wel, voor, uw, hulp]}
           - {content_key: nl.a2.unit24.lesson06.teach.summary_grammar, kind: grammar_note, target: {text: "Omar heeft zich ingeschreven bij de gemeente. Hij ontvangt zijn BSN-nummer per post.", language_code: nl, direction: ltr}, introduced_tokens: [Omar, heeft, zich, ingeschreven, bij, de, gemeente, Hij, ontvangt, zijn, BSN, nummer, per, post]}
         exercises:
-          - {content_key: nl.a2.unit24.lesson06.exercise01.listen_greeting, type: listen_select, tested_text: "Goedemiddag waarmee kan ik u helpen", media_asset_key: nl.a2.audio.gemeente.wat_heb_ik_nodig.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a2.unit24.lesson06.exercise01.listen_greeting, type: listen_select, tested_text: "Goedemiddag waarmee kan ik u helpen", media_asset_key: nl.a2.audio.gemeente.waarmee_helpen.01, prompt: {target_blocks: []}}
           - {content_key: nl.a2.unit24.lesson06.exercise02.comprehend_reason, type: dialogue_comprehension, tested_text: "afspraak om me in te schrijven op mijn nieuwe adres", media_asset_key: nl.a2.audio.dialogue.gemeente_afspraak.01, prompt: {target_blocks: [{text: "Why is Omar at the gemeente?", language_code: en, direction: ltr}]}}
           - {content_key: nl.a2.unit24.lesson06.exercise03.comprehend_since_when, type: dialogue_comprehension, tested_text: "sinds vorige maand in Utrecht", media_asset_key: nl.a2.audio.dialogue.gemeente_afspraak.01, prompt: {target_blocks: [{text: "Since when has Omar lived in Utrecht?", language_code: en, direction: ltr}]}}
           - {content_key: nl.a2.unit24.lesson06.exercise04.comprehend_next_steps, type: dialogue_comprehension, tested_text: "BSN-nummer binnen een paar dagen per post", media_asset_key: nl.a2.audio.dialogue.gemeente_afspraak.01, prompt: {target_blocks: [{text: "How and when will Omar receive his BSN number?", language_code: en, direction: ltr}]}}

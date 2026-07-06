@@ -1,0 +1,122 @@
+schema_version: "1.0"
+pack_key: practice.nl-en.a1.unit24
+source_language: nl
+target_language: en
+unit_content_key: en.a1.unit24.housing
+review:
+  status: unreviewed
+  fresh_context: "false"
+  notes: "Authored 2026-07-06 by a parallel Claude fork continuing the nl-en
+    lane of the Endless Practice template-pool sync (see a1_unit22.yaml's
+    notes for the parallel-worker split context). This unit (unit24,
+    reviewed/stable overlay) covers describing a home -- it is the 24th
+    and final A1 spine outcome for the shared English realization per
+    that file's own review notes, so this completes the nl-en direction's
+    full A1 practice-pool coverage (units 1-24). Units 25-26 exist on
+    disk but are A2-level, out of scope for this stretch. Extended
+    scripts/_en_target_lexeme_common.py with 21 new English tokens
+    (bedroom/kitchen/bathroom/living/room/garden/many/rooms/there/
+    there's/apartment/has/bedrooms/favorite/tell/isn't/balcony/upstairs/
+    near/easy/eat) and scripts/backfill_lexemes_nl_en.py with matching
+    Dutch glosses plus 16 Dutch source-side tokens from the overlay's
+    gloss text. Added a 4-member 'room_noun' tag (bedroom/kitchen/
+    bathroom/garden) verified to genuinely collocate in a shared
+    'There's a {item}.' frame (the real content uses this exact shape
+    for kitchen: 'There's a small kitchen.'). Deliberately excluded
+    'living room' (a two-word compound) from the slot-fillable tag
+    since it doesn't fit a single token. Every slot's real candidate
+    count was verified with a standalone lexeme_matches()-replicating
+    harness against this script's actual output. Needs the standard
+    fresh-context review before import. Same blocking dependency as
+    every earlier nl-en pack: backfill_lexemes_nl_en.py has not
+    actually been run against a real database yet."
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [room_noun]
+slot_presets:
+  room_noun: &room_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: room_noun}}
+templates:
+  - content_key: practice.nl-en.en.a1.unit24.lesson01.choose.001
+    lesson_content_key: en.a1.unit24.lesson01.rooms_of_a_home
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *room_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is een kamer uit deze les.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit24.lesson01.listen.002
+    lesson_content_key: en.a1.unit24.lesson01.rooms_of_a_home
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *room_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is het woord dat je hoorde.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit24.lesson01.match.003
+    lesson_content_key: en.a1.unit24.lesson01.rooms_of_a_home
+    type: matching_pairs
+    frame: {text: "{first} · {second}", language_code: en, direction: ltr}
+    slots: {first: *room_noun, second: *room_noun}
+    slot_relations: [{kind: distinct, slots: [first, second]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second]}
+    feedback_frame: {text: "Verbind elke kamer met de Nederlandse betekenis.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit24.lesson01.translate.004
+    lesson_content_key: en.a1.unit24.lesson01.rooms_of_a_home
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *room_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit24.lesson02.order.001
+    lesson_content_key: en.a1.unit24.lesson02.describing_your_home
+    type: word_order
+    frame: {text: "There's a {item}", language_code: en, direction: ltr}
+    slots: {item: *room_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "There's a {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} is de genoemde kamer.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit24.lesson02.complete.002
+    lesson_content_key: en.a1.unit24.lesson02.describing_your_home
+    type: fill_in_blank
+    frame:
+      text: "There's a {item}."
+      language_code: en
+      direction: ltr
+      text_blocks:
+        - {text: "Maak de Engelse zin af.", language_code: nl, direction: ltr}
+    slots: {item: *room_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} maakt deze zin compleet.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit24.lesson02.translate.003
+    lesson_content_key: en.a1.unit24.lesson02.describing_your_home
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *room_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit24.lesson03.choose.001
+    lesson_content_key: en.a1.unit24.lesson03.reading_a_home_description
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *room_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is een kamer uit deze les.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit24.lesson04.listen.001
+    lesson_content_key: en.a1.unit24.lesson04.home_description_dialogue
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *room_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is het woord dat je hoorde in dit gesprek.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit24.lesson04.order.002
+    lesson_content_key: en.a1.unit24.lesson04.home_description_dialogue
+    type: word_order
+    frame: {text: "There's a {item}", language_code: en, direction: ltr}
+    slots: {item: *room_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "There's a {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} is de genoemde kamer.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit24.lesson04.translate.003
+    lesson_content_key: en.a1.unit24.lesson04.home_description_dialogue
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *room_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}

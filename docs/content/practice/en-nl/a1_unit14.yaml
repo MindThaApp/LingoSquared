@@ -1,0 +1,163 @@
+schema_version: "1.0"
+pack_key: practice.en-nl.a1.unit14
+source_language: en
+target_language: nl
+unit_content_key: nl.a1.unit14.comparisons
+review:
+  status: unreviewed
+  fresh_context: "false"
+  notes: "Authored 2026-07-06 by the Claude session syncing Endless Practice
+    template pools to lesson content growth (en-nl lane, continuing after
+    unit13 -- this session is now running alongside 7 additional parallel
+    workers per Ramin's request, covering bug-fixes and fresh-context
+    reviews across other directions/units; see docs/BUILD_LOG.md for the
+    full concurrent-lane context). This unit (unit14) covers making
+    comparisons: regular -er/-st comparatives/superlatives, 'net zo ...
+    als' equality, and the irregular goed/beter/best and veel/meer/meest
+    chains. Extended scripts/backfill_lexemes_en_nl.py's UNIT_FILES
+    numeric-range filter to <=14 and added 67 new Dutch token
+    classifications. Added a 6-member 'comparative_adj' tag (groter/
+    kleiner/duurder/goedkoper/lichter/sterker) verified safe in a 'De
+    rugzak is {item} dan de tas.' frame -- all six take 'dan'
+    grammatically (the real content's own advertisement happens to use
+    lichter/sterker to describe the BAG, not the backpack, but this
+    frame is a grammar drill, not a factual claim, so the reversed
+    subject/object pairing is still grammatically valid). A narrower
+    2-member 'equal_adj' tag (mooi/praktisch) is translation-only ('net
+    zo ... als' doesn't take -er/-st at all, structurally incompatible
+    with the comparative frame). A 4-member 'superlative_word' tag
+    (duurst/mooist/beste/meest) is bare-word-recognition-only -- these
+    four are structurally too different to share one generative frame
+    (duurst/mooist are predicative -st forms, beste is attributive,
+    meest modifies a noun differently) -- same discipline as several
+    earlier units this session (nl-en unit21's travel_noun, this
+    direction's own unit10 routine_verb_infinitive). Every slot's real
+    candidate count was verified with a standalone
+    lexeme_matches()-replicating harness against this script's actual
+    output. Needs the standard fresh-context review before import. Same
+    blocking dependency as every earlier en-nl pack: backfill_lexemes_en_nl.py
+    has not actually been run against a real database yet."
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [comparative_adj, equal_adj, superlative_word]
+slot_presets:
+  comparative_adj: &comparative_adj {language_code: nl, part_of_speech: adjective, agreement_tags: {semantic: comparative_adj}}
+  equal_adj: &equal_adj {language_code: nl, part_of_speech: adjective, agreement_tags: {semantic: equal_adj}}
+  superlative_word: &superlative_word {language_code: nl, part_of_speech: adjective, agreement_tags: {semantic: superlative_word}}
+templates:
+  - content_key: practice.en-nl.nl.a1.unit14.lesson01.order.001
+    lesson_content_key: nl.a1.unit14.lesson01.grootte_vergelijken
+    type: word_order
+    frame: {text: "De rugzak is {item} dan de tas.", language_code: nl, direction: ltr}
+    slots: {item: *comparative_adj}
+    answer_derivation: {kind: render_frame, frame: {text: "De rugzak is {item} dan de tas.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} is the comparative adjective in this sentence.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit14.lesson01.complete.002
+    lesson_content_key: nl.a1.unit14.lesson01.grootte_vergelijken
+    type: fill_in_blank
+    frame:
+      text: "De rugzak is {item} dan de tas."
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Complete the Dutch comparison.", language_code: en, direction: ltr}
+    slots: {item: *comparative_adj}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} completes this comparison.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit14.lesson01.choose.003
+    lesson_content_key: nl.a1.unit14.lesson01.grootte_vergelijken
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *comparative_adj}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a comparative adjective from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit14.lesson02.order.001
+    lesson_content_key: nl.a1.unit14.lesson02.prijzen_vergelijken
+    type: word_order
+    frame: {text: "De rugzak is {item} dan de tas.", language_code: nl, direction: ltr}
+    slots: {item: *comparative_adj}
+    answer_derivation: {kind: render_frame, frame: {text: "De rugzak is {item} dan de tas.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} is the comparative adjective in this sentence.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit14.lesson02.listen.002
+    lesson_content_key: nl.a1.unit14.lesson02.prijzen_vergelijken
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *comparative_adj}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit14.lesson03.translate.001
+    lesson_content_key: nl.a1.unit14.lesson03.net_zo_als
+    type: translation
+    frame:
+      text: "{item}"
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *equal_adj}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The Dutch word is {item}.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit14.lesson03.complete.002
+    lesson_content_key: nl.a1.unit14.lesson03.net_zo_als
+    type: fill_in_blank
+    frame:
+      text: "De rugzak is net zo {item} als de tas."
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Complete the Dutch sentence.", language_code: en, direction: ltr}
+    slots: {item: *equal_adj}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} completes this equal comparison.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit14.lesson04.choose.001
+    lesson_content_key: nl.a1.unit14.lesson04.de_beste_keuze
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *superlative_word}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a superlative word from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit14.lesson04.listen.002
+    lesson_content_key: nl.a1.unit14.lesson04.de_beste_keuze
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *superlative_word}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit14.lesson05.choose.001
+    lesson_content_key: nl.a1.unit14.lesson05.advertentie_lezen
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *comparative_adj}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a comparative adjective from the advertisement.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit14.lesson06.order.001
+    lesson_content_key: nl.a1.unit14.lesson06.lotte_en_omar_kiezen_tas
+    type: word_order
+    frame: {text: "De rugzak is {item} dan de tas.", language_code: nl, direction: ltr}
+    slots: {item: *comparative_adj}
+    answer_derivation: {kind: render_frame, frame: {text: "De rugzak is {item} dan de tas.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} is the comparative adjective in this sentence.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit14.lesson06.listen.002
+    lesson_content_key: nl.a1.unit14.lesson06.lotte_en_omar_kiezen_tas
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *superlative_word}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard in this dialogue.", language_code: en, direction: ltr}

@@ -4,8 +4,8 @@ source_language: nl
 target_language: en
 unit_content_key: en.a1.unit13.emotions
 review:
-  status: unreviewed
-  fresh_context: "false"
+  status: reviewed
+  fresh_context: true
   notes: "Authored 2026-07-05 by the Claude session syncing Endless Practice
     template pools to lesson content growth (nl-en direction, per the
     coordinator's scope split). Keyed to English target lexemes extended into
@@ -27,7 +27,33 @@ review:
     overlay's own review doesn't cover a newly-authored practice pack). Same
     blocking DB-level gap as every other pack from this pass: no
     backfill_lexemes_nl_en.py run has actually happened against a real
-    database yet."
+    database yet.
+    FRESH-CONTEXT REVIEW ADDENDUM (2026-07-06, zero access to any authoring
+    reasoning): confirmed every lesson_content_key matches the correct lesson
+    in en/a1_unit13_emotions.yaml; re-ran the standalone lexeme_matches()-
+    replicating harness against the real iter_specs() output (0 count
+    failures, feeling=5) and compiler practice-validate (0/0). Found and
+    fixed one real bug the harness/compiler cannot catch (a fact-consistency
+    defect, AUTHORING_GUIDE.md#11's class): lesson03's reading passage
+    (en.a1.unit13.lesson03.reading_a_message) explicitly states 'The writer
+    is worried and excited.' as a taught summary phrase, but the matching
+    practice templates (writer_order.001/writer_fill.002/
+    writer_translate.003) slotted the full 5-member feeling tag into 'The
+    writer is {item}.' -- drawing 'happy'/'sad'/'tired' would generate a
+    feedback line asserting a feeling the passage never attributes to the
+    writer (e.g. '{item} is een gevoel van de schrijver' for 'sad', when the
+    passage only ever says worried/excited), the same fact-vs-lesson-content
+    mismatch class as this project's known rice/apples price bug. Fixed by
+    genericizing the subject from 'the writer' (a specific character with
+    specific stated feelings in THIS lesson) to 'my friend' (My
+    friend/Mijn vriend), which makes no claim about any stated fact --
+    renamed to friend_order.001/friend_fill.002/friend_translate.003, same
+    slot/tag/candidate-count (still 5, still >=1 required) and same exercise
+    types, no coverage lost. Re-ran compiler practice-validate (0/0) and the
+    harness (0 count failures) after the fix. No self-reference, agreement,
+    or homograph issues found elsewhere; does not reuse the broad
+    'number'/'count_plural' tags flagged as an open defect elsewhere.
+    Upgrading to reviewed."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -85,27 +111,27 @@ templates:
     slots: {item: *feeling}
     answer_derivation: {kind: render_frame, frame: {text: "I'm {item}", language_code: en, direction: ltr}}
     feedback_frame: {text: "I'm {item} betekent Ik ben {item}.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit13.lesson03.writer_order.001
+  - content_key: practice.nl-en.en.a1.unit13.lesson03.friend_order.001
     lesson_content_key: en.a1.unit13.lesson03.reading_a_message
     type: word_order
-    frame: {text: "The writer is {item}", language_code: en, direction: ltr}
+    frame: {text: "My friend is {item}", language_code: en, direction: ltr}
     slots: {item: *feeling}
-    answer_derivation: {kind: render_frame, frame: {text: "The writer is {item}", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} is een gevoel van de schrijver.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit13.lesson03.writer_fill.002
+    answer_derivation: {kind: render_frame, frame: {text: "My friend is {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} is een gevoelswoord dat je in deze les hebt geleerd.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit13.lesson03.friend_fill.002
     lesson_content_key: en.a1.unit13.lesson03.reading_a_message
     type: fill_in_blank
-    frame: {text: "The writer is {item}.", language_code: en, direction: ltr}
+    frame: {text: "My friend is {item}.", language_code: en, direction: ltr}
     slots: {item: *feeling}
     answer_derivation: {kind: slot_text, slot: item}
-    feedback_frame: {text: "{item} is een gevoel van de schrijver.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit13.lesson03.writer_translate.003
+    feedback_frame: {text: "{item} is een gevoelswoord dat je in deze les hebt geleerd.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit13.lesson03.friend_translate.003
     lesson_content_key: en.a1.unit13.lesson03.reading_a_message
     type: translation
-    frame: {text: "De schrijver is {item}.", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    frame: {text: "Mijn vriend is {item}.", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
     slots: {item: *feeling}
-    answer_derivation: {kind: render_frame, frame: {text: "The writer is {item}", language_code: en, direction: ltr}}
-    feedback_frame: {text: "The writer is {item} betekent De schrijver is {item}.", language_code: nl, direction: ltr}
+    answer_derivation: {kind: render_frame, frame: {text: "My friend is {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "My friend is {item} betekent Mijn vriend is {item}.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit13.lesson04.feeling_listen.001
     lesson_content_key: en.a1.unit13.lesson04.feelings_check_dialogue
     type: listen_select

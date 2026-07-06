@@ -76,7 +76,19 @@ EN_POS: dict[str, str] = {
     # Unit 5 (telling the time), added 2026-07-05.
     "time": "noun", "o'clock": "noun", "half": "noun", "past": "preposition",
     "quarter": "noun", "night": "noun", "store": "noun", "closes": "verb",
-    "does": "verb", "close": "verb", "in": "preposition",
+    "does": "verb",
+    # KNOWN HOMOGRAPH LIMITATION (same class as the Dutch scripts'
+    # documented "zijn" issue): "close" is classified "verb" here (the
+    # store closes, unit05) but unit26 also introduces "close" as an
+    # ADJECTIVE ("very close to the playground"). This module can only
+    # hold one POS per bare token string. Kept as "verb" since that's
+    # the sense an existing shipped pack (fa-en unit05) depends on in
+    # its literal frame text; no unit26 practice pack exists yet in any
+    # direction, so nothing currently needs the adjective sense as a
+    # fillable slot. Whoever authors unit26 practice content must NOT
+    # rely on "close" as a slot value for the adjective sense until this
+    # gets real POS-aware/context-aware keying.
+    "close": "verb", "in": "preposition",
     # Unit 6 (family members and relationships), added 2026-07-05.
     "mother": "noun", "father": "noun", "brother": "noun", "sister": "noun",
     "parents": "noun", "siblings": "noun", "grandmother": "noun",
@@ -166,6 +178,46 @@ EN_POS: dict[str, str] = {
     "arrival": "noun", "boston": "proper_noun", "way": "noun", "round": "adjective",
     "trip": "noun", "leaves": "verb", "9:15": "symbol", "arrives": "verb",
     "11:30": "symbol", "arrive": "verb",
+    # Unit 22 (common symptoms/health), added 2026-07-06.
+    "headache": "noun", "stomachache": "noun", "fever": "noun", "cough": "noun",
+    "sore": "adjective", "throat": "noun", "rest": "verb", "need": "verb",
+    "wrong": "adjective", "feel": "verb", "doctor": "noun", "doesn't": "verb",
+    "look": "verb", "drink": "verb", "help": "verb", "better": "adjective",
+    "if": "particle",
+    # Unit 23 (describing a job), added 2026-07-06 (restored after a
+    # merge incident silently reverted this and the unit 24-26 entries
+    # below -- see docs/BUILD_LOG.md for the incident and its fix).
+    "nurse": "noun", "cook": "noun", "driver": "noun", "patients": "noun",
+    "reports": "noun", "interesting": "adjective", "company": "noun",
+    "downtown": "noun", "answer": "verb", "emails": "noun", "sometimes": "adverb",
+    "with": "preposition", "clients": "noun", "job": "noun",
+    # Unit 24 (describing a home), added 2026-07-06.
+    "bedroom": "noun", "kitchen": "noun", "bathroom": "noun", "living": "adjective",
+    "room": "noun", "garden": "noun", "many": "adjective", "rooms": "noun",
+    "there": "pronoun", "there's": "pronoun", "apartment": "noun", "has": "verb",
+    "bedrooms": "noun", "favorite": "adjective", "tell": "verb", "isn't": "verb",
+    "balcony": "noun", "upstairs": "adverb", "near": "preposition", "easy": "adjective",
+    "eat": "verb",
+    # Unit 25 (A2: registering with local authorities), added 2026-07-06.
+    "address": "noun", "appointment": "noun", "document": "noun", "proof": "noun",
+    "residency": "noun", "form": "noun", "confirmation": "noun", "was": "verb",
+    "wondering": "verb", "whether": "particle", "could": "verb", "make": "verb",
+    "an": "particle", "would": "verb", "possible": "adjective", "come": "verb",
+    "this": "pronoun", "friday": "noun", "update": "verb", "my": "pronoun",
+    "because": "particle", "moved": "verb", "last": "adjective", "month": "noun",
+    "photo": "noun", "id": "noun", "utility": "noun", "bill": "noun",
+    "your": "pronoun", "please": "adverb", "bring": "verb", "such": "preposition",
+    "as": "preposition", "you": "pronoun", "have": "verb", "lived": "verb",
+    "at": "preposition", "new": "adjective", "since": "preposition", "so": "adverb",
+    "also": "adverb", "lease": "noun", "will": "verb", "when": "adverb",
+    "yes": "particle", "10am": "symbol", "4471": "symbol", "works": "verb",
+    # Unit 26 (A2: giving opinions with reasons), added 2026-07-06.
+    "opinion": "noun", "agree": "verb", "on": "preposition", "other": "adjective",
+    "hand": "noun", "about": "preposition", "dog": "noun", "park": "noun",
+    "good": "adjective", "idea": "noun", "dogs": "noun", "space": "noun",
+    "run": "verb", "very": "adverb", "playground": "noun",
+    "fair": "adjective", "point": "noun", "they": "pronoun", "should": "verb",
+    "move": "verb", "little": "adjective", "farther": "adverb", "away": "adverb",
 }
 
 def en_agreement_tags(token: str) -> dict[str, object]:
@@ -206,6 +258,27 @@ def en_agreement_tags(token: str) -> dict[str, object]:
                  "twenty", "twenty-one", "thirty", "forty", "fifty", "hundred",
                  "twenty-five"}:
         semantics.append("number")
+    # Narrower than "number": excludes bare "hundred", which the real content
+    # only ever teaches with an article ("one hundred") -- the broad "number"
+    # tag let a price/age/total frame draw bare "hundred" and generate real,
+    # shipped nonsense like "I have hundred dollars."/"I'm hundred years
+    # old." (found via a fresh-context review pass). Use this in any frame
+    # that embeds the number mid-sentence in a price/age/total context;
+    # "number" itself stays fine for pure bare-word recognition, where no
+    # article is needed anyway.
+    if token in {"zero", "one", "two", "three", "four", "five", "six", "seven",
+                 "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fifteen",
+                 "twenty", "twenty-one", "thirty", "forty", "fifty",
+                 "twenty-five"}:
+        semantics.append("number_no_hundred")
+    # Narrower still: only one through twelve, safe for any clock-hour
+    # frame ("It's {item} o'clock."/"I wake up at {item} every day.") --
+    # the broad "number" tag let these frames draw values like "fifty" or
+    # "hundred", producing "It's fifty o'clock." (also found via the same
+    # review pass; a real 12-hour clock only ever has hours 1-12).
+    if token in {"one", "two", "three", "four", "five", "six", "seven",
+                 "eight", "nine", "ten", "eleven", "twelve"}:
+        semantics.append("hour_number")
     if token in {"old", "years", "twenty-five"}:
         semantics.append("age_phrase")
     if token in {"it's", "dollars", "much"}:
@@ -240,6 +313,40 @@ def en_agreement_tags(token: str) -> dict[str, object]:
         semantics.append("possessive")
     if token in {"coffee", "tea", "water", "bread", "soup", "salad", "sandwich"}:
         semantics.append("food_item")
+    # Narrower than food_item: excludes "sandwich" specifically, since it's
+    # used as the fixed anchor in "I'd like a {item} and a sandwich,
+    # please." -- including it in the slot would let the sampler generate
+    # "I'd like a sandwich and a sandwich, please." (self-reference, the
+    # same bug class as the well-known "hospital is next to the hospital"
+    # catch, just via an "and" conjunction instead of a fixed anchor noun;
+    # found via a fresh-context review pass).
+    if token in {"coffee", "tea", "water", "bread", "soup", "salad"}:
+        semantics.append("food_item_non_sandwich")
+    if token in {"headache", "stomachache", "fever", "cough"}:
+        # "sore"/"throat" (the two-word "sore throat" compound) are
+        # deliberately excluded -- a single-word slot can't fill a
+        # multi-word compound without producing "I have a sore." or
+        # "I have a throat.".
+        semantics.append("symptom_noun")
+    # Unit 23 (describing a job): 5-member occupation tag (includes
+    # "teacher"/"engineer", already classified since unit01, tagged
+    # additively here) for bare-word recognition. Narrower 4-member
+    # "occupation_a" EXCLUDES "engineer" -- real content shows "I'm a
+    # nurse." but "I'm an engineer." (article agreement: engineer starts
+    # with a vowel sound), so a shared "I'm a {item}." frame must never
+    # offer engineer as a candidate, or it generates "I'm a engineer."
+    if token in {"teacher", "nurse", "engineer", "cook", "driver"}:
+        semantics.append("occupation_noun")
+    if token in {"teacher", "nurse", "cook", "driver"}:
+        semantics.append("occupation_a")
+    # Unit 24 (describing a home): 4-member room tag, verified all four
+    # collocate naturally in "There's a {item}." ("There's a bedroom/
+    # kitchen/bathroom/garden." are all grammatical, and the real
+    # content uses this exact shape for kitchen). "living room" (a
+    # two-word compound) is deliberately excluded since it doesn't fit
+    # a single-token slot.
+    if token in {"bedroom", "kitchen", "bathroom", "garden"}:
+        semantics.append("room_noun")
     if token in {"zero", "two", "three", "four", "five", "six", "seven", "eight",
                  "nine", "ten", "eleven", "twelve", "thirteen", "fifteen",
                  "twenty", "twenty-one", "thirty", "forty", "fifty", "hundred",
@@ -249,6 +356,14 @@ def en_agreement_tags(token: str) -> dict[str, object]:
         # singular "pound" instead and silently produce a real grammar
         # error if included here (found while designing unit08's templates).
         semantics.append("count_plural")
+    if token in {"zero", "two", "three", "four", "five", "six", "seven", "eight",
+                 "nine", "ten", "eleven", "twelve", "thirteen", "fifteen",
+                 "twenty", "twenty-one", "thirty", "forty", "fifty",
+                 "twenty-five"}:
+        # count_plural minus bare "hundred" -- same reasoning as
+        # number_no_hundred above, for plural-count frames specifically
+        # ("Can I have {item} pounds/dozen eggs, please?").
+        semantics.append("count_plural_no_hundred")
     if token in {"pound", "dozen", "bottle", "bag", "kilo"}:
         semantics.append("quantity_unit")
     # Countable, always-plural-in-this-context food nouns, safe for "How much

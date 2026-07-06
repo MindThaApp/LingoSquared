@@ -105,16 +105,30 @@ def main() -> int:
 
     def run(label: str, pack_paths: list[Path], specs_fn) -> None:
         nonlocal total_problems
-        lexemes = [
-            {
-                "language_code": s["language_code"],
-                "part_of_speech": s["part_of_speech"],
-                "token": s["token"],
-                "english_gloss": s["english_gloss"],
-                "agreement_tags": s["agreement_tags"],
-            }
-            for s in specs_fn()
-        ]
+        try:
+            lexemes = [
+                {
+                    "language_code": s["language_code"],
+                    "part_of_speech": s["part_of_speech"],
+                    "token": s["token"],
+                    "english_gloss": s["english_gloss"],
+                    "agreement_tags": s["agreement_tags"],
+                }
+                for s in specs_fn()
+            ]
+        except Exception as exc:
+            # Don't let one broken direction hide every other direction's
+            # results -- found live 2026-07-06: backfill_lexemes_en_prs.py's
+            # own UNIT_FILES references docs/content/realizations/prs/
+            # a1_unit02_introductions.yaml, which does not exist on disk
+            # (the prs realization only has units 01 and 03) -- a real,
+            # pre-existing content/script mismatch unrelated to this run,
+            # not something a practice-pool-sync pass can fix without prs
+            # unit02 content actually being authored.
+            total_problems += 1
+            print(f"=== {label}: SPEC LOADING FAILED ===")
+            print(f"  {exc!r}")
+            return
         print(f"=== {label}: {len(lexemes)} lexemes available ===")
         for pack_path in pack_paths:
             problems = check_pack(pack_path, lexemes)
@@ -129,6 +143,7 @@ def main() -> int:
     from backfill_lexemes import iter_specs as en_fa_specs
     from backfill_lexemes_fa_en import iter_specs as fa_en_specs
     from backfill_lexemes_en_prs import iter_specs as en_prs_specs
+    from backfill_lexemes_prs_en import iter_specs as prs_en_specs
 
     run(
         "en-fa (target=fa)",
@@ -137,6 +152,7 @@ def main() -> int:
             REPO_ROOT / "docs/content/practice/en-fa/a1_unit02.yaml",
             REPO_ROOT / "docs/content/practice/en-fa/a1_unit03.yaml",
             REPO_ROOT / "docs/content/practice/en-fa/a1_unit04.yaml",
+            REPO_ROOT / "docs/content/practice/en-fa/a1_unit05.yaml",
         ],
         en_fa_specs,
     )
@@ -146,6 +162,11 @@ def main() -> int:
             REPO_ROOT / "docs/content/practice/fa-en/a1_unit01.yaml",
             REPO_ROOT / "docs/content/practice/fa-en/a1_unit02.yaml",
             REPO_ROOT / "docs/content/practice/fa-en/a1_unit03.yaml",
+            REPO_ROOT / "docs/content/practice/fa-en/a1_unit04.yaml",
+            REPO_ROOT / "docs/content/practice/fa-en/a1_unit05.yaml",
+            REPO_ROOT / "docs/content/practice/fa-en/a1_unit06.yaml",
+            REPO_ROOT / "docs/content/practice/fa-en/a1_unit07.yaml",
+            REPO_ROOT / "docs/content/practice/fa-en/a1_unit08.yaml",
         ],
         fa_en_specs,
     )
@@ -156,6 +177,11 @@ def main() -> int:
             REPO_ROOT / "docs/content/practice/en-prs/a1_unit02.yaml",
         ],
         en_prs_specs,
+    )
+    run(
+        "prs-en (target=en)",
+        sorted((REPO_ROOT / "docs/content/practice/prs-en").glob("a1_unit*.yaml")),
+        prs_en_specs,
     )
 
     print()

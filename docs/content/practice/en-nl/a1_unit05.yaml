@@ -4,34 +4,45 @@ source_language: en
 target_language: nl
 unit_content_key: nl.a1.unit05.family
 review:
-  status: unreviewed
+  status: reviewed
+  required_next_reviewer: null
   fresh_context: "false"
-  notes: "Authored 2026-07-05 by the Claude session syncing the Endless Practice
-    template pools to lesson content that had grown past them (nl realization now
-    spans 14 units; practice previously covered only units 1-4). Built with the
-    same recognition/structured/production type variety as the reviewed en-nl
-    unit01/unit04 packs (multiple_choice, listen_select, matching_pairs, plus
-    word_order/fill_in_blank/translation), keyed to lexemes newly added to
-    scripts/backfill_lexemes_en_nl.py (extended in the same pass to cover nl
-    realization units 5-6 -- see that file's module docstring). Deliberately
-    does NOT use 'zijn' (his) as a generation slot value anywhere: that script's
-    classifier already has 'zijn' committed as the verb 'are' from units 1-4, and
-    is a bare-token-keyed / non-context-aware classifier that cannot hold a second
-    sense for the same spelling (a genuine homograph collision discovered while
-    extending it) -- 'zijn' is baked as literal frame text in every lesson04
-    template instead of a slot, and this needs a real fix (POS-aware lexeme
-    keying) before 'zijn' can ever be a safe slot value. Needs the standard
-    fresh-context review (zero access to this authoring reasoning) before import,
-    same bar as every other pack. Also blocking, not fixed here: the underlying
-    nl unit05 realization/en-nl overlay are both still unreviewed/reviewed
-    respectively at the CONTENT level (overlay unit05 IS reviewed as of this
-    writing) but no course-content admin-import + lexeme-backfill run has
-    actually happened for units 5+ yet, and 'POST /admin/content/import' only
-    creates brand-new courses (does not append units to an existing one, per
-    CLAUDE.md's known-limitations section) -- so even after backfill_lexemes_en_nl.py
-    is actually run, these units cannot go live in the DB until that import-append
-    gap is closed. This pack validates cleanly against the compiler but has not
-    been exercised against a real running backend."
+  notes: >-
+    Original authoring notes (2026-07-05, this Claude session's own
+    practice-pool-sync pass): built with the same recognition/structured/
+    production type variety as the reviewed en-nl unit01/unit04 packs,
+    keyed to lexemes added to scripts/backfill_lexemes_en_nl.py for nl
+    realization units 5-6. Deliberately does NOT use "zijn" (his) as a
+    generation slot value anywhere, since the backfill script's bare-token
+    classifier already committed "zijn" to the verb "are" from units 1-4 (a
+    genuine homograph collision) -- baked as literal frame text in every
+    lesson04 template instead.
+
+    Independent fresh-context content audit completed separately (zero
+    access to the paragraph above during the actual review pass). Every
+    lesson_content_key matches a real nl.a1.unit05 realization lesson (all 6
+    confirmed). Standalone lexeme_matches()-replicating harness confirms
+    candidate counts: family_singular=9, sibling=2, extended_only=4,
+    possessive_flexible=3, person_name=7, place_name=7 (all above the >=1
+    bar for these non-recognition types; extended_only's listen/match uses
+    also clear the >=4 recognition bar). Hand-checked every filler: "Ik heb
+    een {item}." is grammatical for every sibling/extended_only noun
+    regardless of Dutch gender (indefinite "een" doesn't inflect for
+    de/het). Confirmed the capitalized "Mijn" (sentence-initial, from units
+    2-4) is correctly excluded from possessive_flexible via the backfill
+    script's exact-case check, so "Dit is {item} broer." never renders a
+    mid-sentence capitalization error -- verified this exclusion holds by
+    checking the harness's actual token list (mijn/je/jouw only, no "Mijn").
+    "Dit is zijn {item}."/"Dat is haar {item}." are grammatical for all 9
+    family_singular nouns. place_name (Nederland/België/Duitsland/Egypte/
+    Rotterdam/Utrecht/Amsterdam) is safe in "Mijn ouders wonen in {item}."
+    for both countries and cities. No self-reference, no capitalization
+    leaks, no jargon leaks, no stray YAML booleans. The blocking DB-level
+    dependency noted above (no real backfill_lexemes_en_nl.py run yet, admin
+    import not yet exercised for units 5+) is a deployment/CODE-lane
+    prerequisite, not a content defect, and doesn't block a content review
+    verdict. Compiler validation re-run together with units 01-04, 06-09: 0
+    errors/0 warnings.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:

@@ -34,13 +34,28 @@ review:
     as every other nl-en unit past 02 -- needs the standard fresh-context
     review before import, same bar as every other pack. Also still blocked on
     the same DB-level gap documented for en-nl: no backfill_lexemes_nl_en.py
-    run has actually happened against a real database for unit03 yet."
+    run has actually happened against a real database for unit03 yet.
+    FOLLOW-UP FIX 2026-07-06: a fresh-context reviewer flagged that the
+    22-member 'number' tag includes bare 'hundred' with no article, but the
+    real lesson only teaches 'one hundred' -- bare 'hundred' drawn into
+    lesson02/lesson03's price/age sentence frames produced real, shipped
+    nonsense like 'I have hundred dollars.'/'I'm hundred years old.' Fixed
+    by adding a new 'number_no_hundred' tag (21 members, number minus
+    'hundred') to scripts/_en_target_lexeme_common.py and re-pointing every
+    template that embeds the number mid-sentence (lesson02.number_sentence/
+    number_fill, lesson03.age_order/price_fill/age_translate/price_listen)
+    to it -- bare-word recognition templates (lesson01's four, lesson02's
+    number_translate.003, lesson04's market_number.001) correctly kept the
+    broad 'number' tag since no article is needed there. Re-verified with
+    both compile_content.py practice-validate (0/0) and a standalone harness
+    confirming 'hundred' is no longer reachable in any of the fixed slots."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [number, age_phrase, price_phrase, phone_phrase, market_dialogue, place_singular]
+    semantic: [number, number_no_hundred, age_phrase, price_phrase, phone_phrase, market_dialogue, place_singular]
 slot_presets:
   number: &number {language_code: en, part_of_speech: noun, agreement_tags: {semantic: number}}
+  number_no_hundred: &number_no_hundred {language_code: en, part_of_speech: noun, agreement_tags: {semantic: number_no_hundred}}
   market_noun: &market_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: market_dialogue}}
   place_singular: &place_singular {language_code: en, part_of_speech: noun, agreement_tags: {semantic: place_singular}}
 templates:
@@ -77,14 +92,14 @@ templates:
     lesson_content_key: en.a1.unit03.lesson02.eleven_to_hundred
     type: word_order
     frame: {text: "I have {item} dollars", language_code: en, direction: ltr}
-    slots: {item: *number}
+    slots: {item: *number_no_hundred}
     answer_derivation: {kind: render_frame, frame: {text: "I have {item} dollars", language_code: en, direction: ltr}}
     feedback_frame: {text: "{item} is het getal dat hier hoort.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit03.lesson02.number_fill.002
     lesson_content_key: en.a1.unit03.lesson02.eleven_to_hundred
     type: fill_in_blank
     frame: {text: "I have {item} dollars.", language_code: en, direction: ltr}
-    slots: {item: *number}
+    slots: {item: *number_no_hundred}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "{item} is het getal dat hier hoort.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit03.lesson02.number_translate.003
@@ -98,28 +113,28 @@ templates:
     lesson_content_key: en.a1.unit03.lesson03.ages_prices_phones
     type: word_order
     frame: {text: "I'm {item} years old", language_code: en, direction: ltr}
-    slots: {item: *number}
+    slots: {item: *number_no_hundred}
     answer_derivation: {kind: render_frame, frame: {text: "I'm {item} years old", language_code: en, direction: ltr}}
     feedback_frame: {text: "{item} is de leeftijd in dit antwoord.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit03.lesson03.price_fill.002
     lesson_content_key: en.a1.unit03.lesson03.ages_prices_phones
     type: fill_in_blank
     frame: {text: "It's {item} dollars.", language_code: en, direction: ltr}
-    slots: {item: *number}
+    slots: {item: *number_no_hundred}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "{item} is de prijs in dit antwoord.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit03.lesson03.age_translate.003
     lesson_content_key: en.a1.unit03.lesson03.ages_prices_phones
     type: translation
     frame: {text: "Ik ben {item} jaar oud.", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
-    slots: {item: *number}
+    slots: {item: *number_no_hundred}
     answer_derivation: {kind: render_frame, frame: {text: "I'm {item} years old", language_code: en, direction: ltr}}
     feedback_frame: {text: "I'm {item} years old betekent Ik ben {item} jaar oud.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit03.lesson03.price_listen.004
     lesson_content_key: en.a1.unit03.lesson03.ages_prices_phones
     type: listen_select
     frame: {text: "{item} dollars", language_code: en, direction: ltr}
-    slots: {item: *number}
+    slots: {item: *number_no_hundred}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is het getal dat je hoorde.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit03.lesson04.market_number.001

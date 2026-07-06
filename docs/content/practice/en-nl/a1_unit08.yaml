@@ -4,37 +4,46 @@ source_language: en
 target_language: nl
 unit_content_key: nl.a1.unit08.places
 review:
-  status: unreviewed
+  status: reviewed
+  required_next_reviewer: null
   fresh_context: "false"
-  notes: "Authored 2026-07-05 by the Claude session syncing Endless Practice
-    template pools to lesson content growth (en-nl lane, continuing after
-    unit07 -- see docs/content/practice/en-nl/a1_unit07.yaml's notes for the
-    full redirect-from-nl-en context). This unit (unit08, reviewed/stable)
-    covers locating common places. Extended
-    scripts/backfill_lexemes_en_nl.py's UNIT_FILES glob to include unit08
-    and added a 7-member 'place' tag (station/supermarkt/bibliotheek/
-    ziekenhuis/bank/postkantoor/bushalte, both lowercase and capitalized
-    map-label variants -- 13 real lexemes) plus a narrower 6-member
-    'place_non_station' tag excluding 'station' itself, since every
-    generated sentence in this unit fixes 'het station' as the anchor place
-    ('De {item} is naast het station.') -- including 'station' in the
-    fillable slot would risk a self-referential sentence ('The station is
-    next to the station.'), the same bug class as the nl-en unit09 hospital
-    self-reference catch earlier this session. Also added a 4-member
-    'position' tag (naast/tegenover/achter/voor) verified interchangeable in
-    this unit's own 'is {item} het station'/'is {item} de bibliotheek'
-    sentence shapes -- all four are directly attested with that exact frame
-    shape in the real content. Deliberately did NOT attempt to slot-fill
-    lesson04's tussen/bij/in de buurt van -- their sentence structures
-    (tussen X en Y, bij X, in de buurt van X) are each shaped differently
-    and don't reduce to a single safe generative frame the way the 4-way
-    naast/tegenover/achter/voor group does; that lesson instead reuses the
-    place_non_station bare-word recognition slot. Every slot's real
-    candidate count was verified with a standalone lexeme_matches()-
-    replicating harness against this script's actual output. Needs the
-    standard fresh-context review before import. Same blocking dependency
-    as every earlier en-nl pack: backfill_lexemes_en_nl.py has not actually
-    been run against a real database yet."
+  notes: >-
+    Original authoring notes (2026-07-05): added a "place" tag (7 members,
+    both lowercase and capitalized map-label variants) plus a narrower
+    "place_non_station" tag (6 members, excludes "station") specifically to
+    avoid a self-referential "The station is next to the station." bug in
+    "De {item} is naast het station." Also added a 4-member "position" tag
+    (naast/tegenover/achter/voor), verified interchangeable in this unit's
+    own sentence shapes.
+
+    Independent fresh-context content audit confirms the self-reference fix
+    is correct (place_non_station genuinely excludes "station", and the
+    "position" 4-way swap is grammatical in every instance: naast/
+    tegenover/achter/voor all correctly mean "next to/opposite/behind/in
+    front of" and every generated "De bibliotheek is {item} het station."/
+    "Het ziekenhuis is {item} de bibliotheek." reading is sound Dutch). But
+    found and fixed a SEPARATE real bug the authoring pass missed: lesson02.
+    choose_place.003's frame "De {item} is naast het station." hardcoded the
+    common-gender article "De" while slotting place_non_station, which
+    includes TWO neuter (het-word) nouns -- "ziekenhuis" and "postkantoor"
+    (confirmed against the unit's own realization content: "Het ziekenhuis
+    is achter de bibliotheek.", "Waar is het postkantoor?"). Two of the six
+    possible fillers therefore generated a genuine de/het gender-agreement
+    error ("De ziekenhuis is naast het station."/"De postkantoor is naast
+    het station."), the exact bug class this review was watching for. No
+    tag in scripts/backfill_lexemes_en_nl.py distinguishes de-words from
+    het-words (its own docstring/notes elsewhere in this pack acknowledge
+    no per-noun gender data exists in this pipeline yet), so a
+    gender-correct embedded fix isn't available within pack-YAML-only
+    editing permissions. **Fix**: converted this one template to an
+    isolated-word "{item}" / "Choose the English meaning." recognition
+    check (matching the safe pattern already used by lesson01.choose.001
+    and every other place_non_station usage in this pack) -- this still
+    tests the identical vocabulary with zero article/gender risk. Re-
+    verified with the standalone harness (unchanged candidate count, 6) and
+    the compiler (0 errors/0 warnings, run together with units 01-07, 09).
+    No self-reference, no capitalization leaks, no jargon leaks, no stray
+    YAML booleans elsewhere in the pack.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -99,10 +108,9 @@ templates:
     lesson_content_key: nl.a1.unit08.lesson02.naast_en_tegenover
     type: multiple_choice
     frame:
-      text: "De {item} is naast het station."
+      text: "{item}"
       language_code: nl
       direction: ltr
-      slot_rendering: {item: token}
       text_blocks:
         - {text: "Choose the English meaning.", language_code: en, direction: ltr}
     slots: {item: *place_non_station}

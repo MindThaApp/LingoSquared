@@ -5707,3 +5707,1054 @@ fixture bug (no script/language filter on the selected item), not a
 `grade_answer()`/checkpoint bug, but wasn't root-caused further past
 that hypothesis. Backend test files are Codex's lane; flagging for
 whoever picks that up next rather than fixing it directly.
+
+## Practice-pool sync continued on both directions per coordinator's request: nl-en unit20, en-nl unit09, 2026-07-06
+
+Coordinator verified and committed the prior nl-en 17-19 / en-nl 07-08
+stretch (commit `35628bb`) and asked to keep going on both directions.
+Re-checked on-disk state first (standing discipline all session): `en`
+realization now at 24 units, `nl` realization confirmed at 23, nl-en
+overlay at 24, en-nl overlay at 23 — both target-content sets still
+outgrowing the practice pools.
+
+**nl-en unit20 (making basic comparisons)**: extended
+`scripts/_en_target_lexeme_common.py` with 11 new English tokens
+(bigger/smaller/cheaper/expensive/faster/than/nicer/cheapest/red/car/
+white) and `scripts/backfill_lexemes_nl_en.py` with matching Dutch
+glosses plus 14 Dutch source-side tokens pulled from the overlay's
+gloss text. Added a 5-member `comparative_adj` tag (bigger/smaller/
+cheaper/faster/nicer), verified all five take "than" in a "This X is
+{item} than that X." frame. Deliberately kept "cheapest" (a
+superlative, does NOT take "than") in its own single-member
+`superlative_adj` tag used only in non-recognition slot types, and
+"more expensive" out entirely (two-word phrase, doesn't fit a single
+slot) — same non-interchangeable-synonym discipline as every earlier
+catch this session. Lexeme count: 360 English + 412 Dutch.
+
+**en-nl unit09 (asking for and giving directions)**: extended
+`scripts/backfill_lexemes_en_nl.py`'s UNIT_FILES glob to include
+unit09, added a 5-member `direction_word` tag (links/rechts/linksaf/
+rechtsaf/rechtdoor) for bare-word recognition, plus a narrower
+2-member `turn_direction` tag (linksaf/rechtsaf only) for a "Sla
+{item}." frame — "rechtdoor" is excluded there since it idiomatically
+pairs with "ga", not "sla" ("Sla rechtdoor" is not natural Dutch).
+Reused the existing `place_non_station` tag from unit08 for lessons
+03-06 (supermarkt/bibliotheek/ziekenhuis/bank/postkantoor/bushalte
+already taught there, and this unit's own overlay explicitly says
+"Recall de supermarkt from unit08" etc. — legitimate cross-unit reuse,
+not a forward-reference violation). Lexeme count: 448 Dutch.
+
+Both packs' every slot verified with the standing standalone
+lexeme_matches()-replicating harness against each script's actual
+output (not just `compile_content.py practice-validate`, which never
+touches real lexeme data). Full manifests re-validated end to end:
+nl-en 1-20 and en-nl 1-09, both 0 errors/0 warnings.
+`scripts/practice_manifest.txt` updated for both lines. Continuing
+this same alternating-direction approach next: nl-en unit21, en-nl
+unit10, re-checking on-disk content growth each time since other
+sessions are actively authoring both target realizations concurrently.
+Same standing blocker as every pack in this whole session's work: no
+backfill script has actually been run against a real database yet.
+
+## Practice-pool sync continued: nl-en unit21, en-nl units 10-12, plus scaling up to 6 parallel workers, 2026-07-06
+
+Continued the alternating-direction approach from the entry above.
+**nl-en unit21 (handling a basic journey/travel)**: added a 5-member
+`travel_noun` tag (ticket/platform/train/departure/arrival), bare-word
+recognition only — these nouns don't collocate into one shared
+generative frame ("I need a ticket"/"a train" work, "a platform"/
+"departure"/"arrival" don't). Lexeme count: 374 English + 424 Dutch.
+
+**en-nl unit10 (describing a daily routine)**: a 7-member
+`routine_verb_infinitive` tag (opstaan/aankleden/ontbijten/werken/
+eten/afwassen/slapen), also bare-word-recognition-only — each
+conjugated ik-form is irregular or separable, no shared sentence frame
+across all seven. Also a 3-member `sequence_word` tag (eerst/dan/
+daarna, 6 real candidates with case variants) for translation only.
+Switched `backfill_lexemes_en_nl.py`'s `UNIT_FILES` from a single-digit
+glob range to a numeric-range filter, since "unit10" no longer matches
+the old `[1-9]` pattern.
+
+**en-nl unit11 (making simple plans)**: reused the ALREADY-ESTABLISHED
+`weekday` tag (11 real candidates, from units 3-4) for a "Zullen we
+{item} koffie drinken?" frame, plus a new 4-member `plan_vocab` tag
+(samen/afspreken/bericht/uitnodiging) for bare-word recognition. Most
+of this unit's content is multi-word fixed phrases (accept/decline
+responses) that don't reduce to a safe single slot — leaned on these
+two verified-safe resources instead of forcing something risky.
+
+**en-nl unit12 (recent events, perfect tense)**: the auxiliary choice
+(hebben vs. zijn) is a hard grammar constraint on tag design —
+`participle_hebben` (gedronken/gegeten/gewerkt/gekocht) and
+`participle_zijn` (gegaan/gekomen, only 2 members) are kept strictly
+separate, since "Ik heb gegaan" is ungrammatical. Also
+`infinitive_hebben` (drinken/eten/werken/kopen) and `recent_time`
+(gisteren/vanmorgen). Deliberately did NOT attempt a generative "Ik heb
+{participle}." frame even for the 4-member hebben group, since 3 of
+the 4 participles normally need an object to sound natural — bare-word
+recognition only. Flagging: this unit's own overlay is still
+`review: status: unreviewed` itself (less stable than the last several
+units), noted in the pack's own review notes for whoever reviews next.
+
+**Scaling to 6 parallel workers, per Ramin's explicit request** (he
+noted unused Claude usage resetting soon): spawned two forked workers
+(nl-en units 22-24 continuation; en-fa/fa-en/en-prs practice-pool gap)
+plus, after a follow-up request to double further, two independent
+fresh-context review agents (nl-en units 1-21; en-nl units 1-9 — units
+still being actively authored were explicitly excluded from each
+reviewer's scope to avoid file collisions) and one project-wide
+`verify.sh` health-check agent. The health check completed clean:
+backend 88/88 pytest, full frontend build clean, all content/practice
+manifests validate 0 errors/0 warnings, no `BUILD_LOG.md`/
+`practice_manifest.txt` corruption, moderate uncommitted work with no
+secrets risk. The known `test_checkpoint_forces_strict_orthography`
+flaky-ordering issue (documented above) did not fire this run but
+remains a latent, unresolved risk per its own earlier diagnosis.
+
+Lexeme totals as of this entry: nl-en 374 English + 424 Dutch (21
+units); en-nl 542 Dutch (12 units). Both manifests re-validated clean
+end to end. Same standing blocker as every pack this session: no
+backfill script has actually been run against a real database yet —
+now flagged across three parallel authoring lanes (nl-en, en-nl, and
+whatever the en-fa/fa-en/en-prs fork produces), all waiting on the same
+CODE-owned DB-level step.
+
+## Practice-pool sync (nl-en lane) completed through unit24 — the full 24-unit A1 set, 2026-07-06 (parallel fork, merged into the main session)
+
+The nl-en continuation fork spawned in the entry above finished and
+was merged back into the main session's working tree (it ran in an
+isolated git worktree with no commits of its own, so the merge was
+done by hand: diffed the fork's worktree against the shared base
+commit, confirmed the diff was purely additive with zero overlap
+against this session's own concurrent edits to the same shared files,
+then applied it — `scripts/_en_target_lexeme_common.py` and
+`scripts/backfill_lexemes_nl_en.py` applied clean via `git apply`; the
+new `docs/content/practice/nl-en/a1_unit22-24.yaml` pack files copied
+directly; `scripts/practice_manifest.txt`'s `nl-en|` line taken from
+the fork's version (which already extended through unit24) while this
+session's own `en-nl|` line was kept as-is, since the two lines don't
+conflict).
+
+Completed **units 22 (health), 23 (work), and 24 (housing) — the 24th
+and final A1 unit**, closing out nl-en's full A1 practice-pool coverage
+(1-24). Confirmed units 25-26 are A2-level and correctly out of scope.
+Extended `_en_target_lexeme_common.py` with 52 new English tokens and
+`backfill_lexemes_nl_en.py` with matching Dutch glosses plus 45 Dutch
+source-side tokens. Two real bugs caught:
+
+- **Unit23 (occupation_noun vs. occupation_a)**: a 5-member
+  `occupation_noun` tag (teacher/nurse/engineer/cook/driver) for
+  bare-word recognition, but a narrower 4-member `occupation_a`
+  EXCLUDING "engineer" for any "I'm a {item}." generative frame — real
+  content shows "I'm a nurse." but "I'm an engineer." (article
+  agreement: engineer starts with a vowel sound), so the shared frame
+  would otherwise generate "I'm a engineer."
+- **Unit22/24 (symptom_noun, room_noun)**: both verified safe for their
+  shared frames ("I have a {item}." / "There's a {item}.") only after
+  excluding two-word compounds ("sore throat", "living room") that
+  don't fit a single-token slot — same discipline as every compound-
+  word catch earlier this session.
+
+Full nl-en manifest (1-24) re-validated clean after the merge: 0
+errors/0 warnings via `compile_content.py practice-validate`, and the
+standalone lexeme-matching harness re-run against the merged script,
+confirming the fork's own reported counts exactly: **426 English + 470
+Dutch lexemes**. nl-en's practice-pool sync is now fully caught up
+through its entire A1 scope — no further nl-en units remain until more
+A1/A2 content is authored. Same standing blocker as every pack this
+session: no `backfill_lexemes_nl_en.py` run has actually happened
+against a real database yet.
+## Practice-pool sync picks up the en-fa/fa-en/en-prs gap: fa-en and prs-en to unit08, 2026-07-06 (parallel fork)
+
+Ramin had unused Claude usage headroom and asked for more parallel
+workers; the coordinator split this session's nl-en/en-nl practice-
+pool-sync work into three simultaneous forks. This fork took the
+en-fa/fa-en/en-prs gap the same lane had originally documented earlier
+tonight before the coordinator narrowed scope down to nl-en/en-nl only.
+
+**Confirmed stale, not re-litigated**: the "lexeme-backfill pipeline
+hardcoded to en-fa" claim this file already root-caused earlier
+tonight (see the matching entry above) — all 6 backfill scripts exist
+and work. Re-verified fresh rather than trusting the old finding.
+
+**Key efficiency win**: `scripts/_en_target_lexeme_common.py`'s English
+POS/agreement-tag classification already covers units 1-21 (built by
+the parallel nl-en lane, since fa-en/prs-en/nl-en all teach against the
+identical shared `en` realization). This meant no new POS/tag
+classification work was needed for fa-en/prs-en units 4-8 — only a
+Farsi gloss dict extension (`backfill_lexemes_fa_en.py`) and a Dari
+gloss dict extension (`backfill_lexemes_prs_en.py`), then UNIT_FILES
+extended in both scripts, then packs written reusing the nl-en lane's
+already-designed tags (weekday/month/day_ordinal for unit04, day_part/
+day_part_in for unit05, family_singular/family_collective/
+extended_family/possessive for unit06, food_item for unit07,
+quantity_unit/food_plural for unit08).
+
+**fa-en**: extended from unit03 to unit08 (5 new packs). 196 English
+lexemes (up from ~85). All packs verified with
+`scripts/_practice_slot_check.py` (a pre-existing standalone harness
+built by Session 3/INFRA for exactly this fa/prs bundle — reused
+directly rather than re-deriving the nl-en lane's own one-off harness),
+which mirrors the real engine's `>=3 distinct candidates` rule for
+multiple_choice/listen_select (not `>=4` — this bundle's own
+established, correct threshold, mirroring `build_prompt()`'s actual
+`len(options) < 3` reject).
+
+**prs-en**: extended from unit02 to unit08 (unit03 was also missing,
+authored fresh; 6 new packs total). Also 196 English lexemes (same
+shared realization). **Real mistake caught and fixed before shipping**:
+while drafting the Dari gloss dict, several entries were accidentally
+written in Pashto instead of Dari (Pashto-only script letters ډ/ڼ/ږ/څ,
+and Pashto number words for 2-6) — caught via a targeted character-set
+scan before the packs were written, not after. Fixed all instances
+(pronouns/"any"/"here"/"bag"/numbers) to real Dari vocabulary,
+double-checked with the same scan showing zero Pashto-only characters
+remaining. This is the exact "Pashto leaking into Dari" bug class a
+separate QA pass earlier tonight already caught once in reviewed
+overlay content — this is a second, independent instance, caught here
+at the classification-script level before it ever reached a shipped
+pack.
+
+**New bug found, NOT fixed (out of this pass's scope, needs missing
+content)**: `scripts/backfill_lexemes_en_prs.py`'s own `UNIT_FILES`
+references `docs/content/realizations/prs/a1_unit02_introductions.yaml`,
+which does not exist on disk — the `prs` realization currently only has
+units 01 (greetings) and 03 (family); there is no unit02 at all,
+Dari-side. This means `backfill_lexemes_en_prs.py` (and this session's
+own `scripts/_practice_slot_check.py`, which already called it before
+this fork touched anything) would crash on any real run today. Made
+`_practice_slot_check.py`'s `run()` helper tolerate one direction's
+`iter_specs()` failing without hiding every other direction's results
+(a small, in-scope robustness fix), but did NOT fix the underlying
+content/script mismatch — that needs either prs unit02 content authored
+from scratch or the script's `UNIT_FILES` corrected to whatever the
+real second prs unit actually is, a content-authoring decision outside
+this pass's remit (this fork was told explicitly not to touch
+realization/overlay content files).
+
+**Also found, NOT fixed (pre-existing, out of scope for this pass)**:
+`docs/content/practice/en-fa/a1_unit01.yaml` and `a1_unit02.yaml` fail
+`scripts/_practice_slot_check.py` with 17 real problems (several slots
+with only 1 distinct candidate for multiple_choice/matching_pairs,
+below the required 3) — these are the original en-fa pilot packs,
+predating this bundle's own harness/threshold being formalized.
+Flagging for a future pass rather than expanding this fork's scope to
+fix already-shipped sibling files.
+
+Every new pack left `review: status: unreviewed` with detailed notes
+per this project's standing non-self-certification rule.
+`scripts/practice_manifest.txt`'s `fa-en|` and `prs-en|` lines updated
+(only those two lines touched, to avoid colliding with the sibling
+nl-en/en-nl forks' concurrent edits to the same file).
+`compile_content.py practice-validate` clean (0 errors/0 warnings) for
+both directions' full unit ranges. Same standing blocker as every pack
+in every lane this session: no backfill script has actually been run
+against a real database yet. en-fa (only missing unit05) and the
+en-prs content gap are the natural next steps for whoever continues
+this lane.
+
+**Merge note (main session)**: like the nl-en fork, this one ran in an
+isolated git worktree with no commits of its own. Merged by hand the
+same way: confirmed the worktree's diff against the shared base commit
+was purely additive with zero overlap against concurrent edits to the
+same shared files (`scripts/backfill_lexemes_fa_en.py`,
+`backfill_lexemes_prs_en.py`, `_practice_slot_check.py` all applied
+clean via `git apply`; new pack files copied directly;
+`practice_manifest.txt`'s `fa-en|`/`prs-en|` lines merged in, leaving
+every other line untouched). Re-validated post-merge: both directions'
+full unit ranges `practice-validate` clean when validated separately
+(validating fa-en and prs-en together in one `--pack` invocation
+throws a spurious "language pair mismatch" error — a tooling quirk of
+validating mixed target-language packs in one call, not a real content
+bug), `scripts/_practice_slot_check.py` re-run against the merged
+state confirms the exact same results the fork reported: fa-en 1-8 and
+prs-en 1-8 all `OK`, only the pre-existing en-fa 1-2 pilot packs still
+failing (unrelated to this fork's work, already flagged above).
+## Fresh-context review of en-nl practice packs, units 1-9, 2026-07-06
+
+Dispatched as a genuinely fresh-context reviewer (zero access to any
+authoring reasoning behind these packs) per this project's standing
+"author leaves `unreviewed`, a separate fresh-context session upgrades
+it" convention. Reviewed `docs/content/practice/en-nl/a1_unit01.yaml`
+through `a1_unit09.yaml` — units 10+ were explicitly out of scope
+(actively authored/worked on concurrently). All 9 units were
+`status: unreviewed` at the start.
+
+**Method**: read `CLAUDE.md`, `docs/content/AUTHORING_GUIDE.md`, and
+this file's own recent practice-pool-sync history first to calibrate
+the exact bug classes already caught repeatedly this session
+(homograph collisions, capitalization leaks, self-referential
+generated sentences, non-interchangeable synonyms sharing one tag).
+For every template in every pack: confirmed `lesson_content_key`
+against the real `nl.a1.unitNN` realization lessons (all 54 templates'
+keys matched exactly — zero mismatches). Wrote a standalone Python
+harness (not `compile_content.py practice-validate`, which never
+touches real lexeme data) importing `iter_specs()` from
+`scripts/backfill_lexemes_en_nl.py` and replicating
+`backend/app/practice/service.py`'s `lexeme_matches()`/
+`_requested_matches()` logic exactly, then ran it against every slot
+in all 9 packs — every slot cleared the >=4 (multiple_choice/
+listen_select) / >=1 (other types) real-candidate bar. Then hand-read
+every generated sentence for every possible filler a slot's tag could
+produce, not just the one example already in each file.
+
+**Units 01-05 and 09: genuinely clean, upgraded to `reviewed`.** No
+bugs found. Notably double-checked unit05's documented "zijn" (his)
+homograph exclusion (correctly baked as literal frame text, never a
+slot value) and its "Mijn" capitalization exclusion (confirmed via the
+harness's actual token output — capitalized "Mijn" never appears in
+the `possessive_flexible` candidate set). Also checked unit09's reuse
+of unit08's `place_non_station` tag carefully given what was found in
+unit08 (below) — unit09 only ever uses it in fully isolated
+recognition templates, never embedded with a fixed article, so it
+isn't affected.
+
+**Units 06, 07, and 08: found and fixed real bugs, then upgraded to
+`reviewed`** once verified clean:
+
+- **Unit06 (food)**: the `menu_item` semantic tag was assigned to
+  EVERY token introduced in the menukaart lesson's teaching cards, not
+  just genuine food items — it actually captured "Menukaart" (the word
+  "menu" itself), "euro", and the numbers "twee"/"vijftig" (from the
+  same lesson's price-spelling teaching item) alongside the
+  capitalized price-tag forms of Koffie/Thee/Broodje/Appelsap.
+  `lesson05.complete.003`'s "Ik wil een {item}." could therefore
+  generate "Ik wil een Menukaart."/"Ik wil een euro."/"Ik wil een
+  twee."/"Ik wil een vijftig." — a capitalization leak plus
+  nonsensical fillers. Fixed by swapping all three `lesson05`
+  templates from `menu_item` to the already-defined, already-safe
+  `food_noun` preset (6 genuine lowercase food/drink words, already
+  proven safe elsewhere in the same pack) and removing the now-unused
+  `menu_item` preset.
+- **Unit07 (shopping)**: the `produce` tag included both the lowercase
+  lesson01 forms (appels/peren/tomaten/paprika's) AND the capitalized
+  lesson04 price-tag-label forms of the same words — every template
+  embedding `{item}` mid-sentence (8 templates across lessons 02/05/06)
+  could render a capitalized word where a lowercase one belongs (e.g.
+  "Hoeveel kost een kilo Appels?"), plus the parallel effect in English
+  translation prompts via capitalized glosses. Confirmed no existing
+  tag isolates the 4 lowercase forms alone (the only other shared tag,
+  `market_place`, also pulls in markt/winkel/kraam). Fixed by
+  restructuring those 8 templates to slot the already lowercase-only
+  `market_quantity` tag (kilo/pond) for the *quantity* word instead,
+  baking the specific produce noun as fixed lowercase text matching
+  each lesson's own already-taught example sentence — eliminates the
+  case risk entirely while keeping real 2-way generative variety.
+- **Unit08 (places)**: `lesson02.choose_place.003`'s frame "De {item}
+  is naast het station." hardcoded the common-gender article "De"
+  while slotting `place_non_station`, which includes two neuter
+  (het-word) nouns — "ziekenhuis" and "postkantoor" (confirmed against
+  the unit's own realization content). Two of the six possible fillers
+  produced a genuine de/het gender-agreement error ("De ziekenhuis is
+  naast het station."). No tag distinguishes de-words from het-words
+  in this pipeline (no per-noun gender data exists yet, per this pack's
+  own notes). Fixed by converting this one template to an isolated-word
+  recognition check (matching the pattern already used everywhere else
+  in the pack for this exact tag), removing the article/gender risk
+  entirely while testing the identical vocabulary.
+
+All three fixes were re-verified with both the compiler
+(`practice-validate`, 0 errors/0 warnings across all 9 units together)
+and the standalone harness (all affected slots re-confirmed at their
+new, safe candidate sets) before upgrading each pack's `review.status`
+and writing real per-unit review notes (documenting exactly what was
+checked and, for 06/07/08, exactly what was found and fixed) — no
+blanket pass, each unit's notes are specific to that unit.
+
+**Not fixed, flagged only (out of this task's file-edit scope):**
+`scripts/backfill_lexemes_en_nl.py`'s own module docstring is stale —
+it says units 8-11 are "NOT yet covered here" and still describes
+itself as covering "units 1-7," but the actual code below it has long
+since been extended through unit10 (unit 8/9/10 `NL_GLOSSES`/tag
+blocks all present and working correctly, confirmed via the harness).
+Purely a doc-comment staleness issue, not a functional bug — flagging
+for whoever next touches that file, since this review's scope was
+`docs/content/practice/en-nl/`, `docs/BUILD_LOG.md`, and
+`scripts/practice_manifest.txt` only (read-only elsewhere, per the
+dispatching instructions). `scripts/practice_manifest.txt` was left
+untouched: the shared checkout already lists all of en-nl units 1-9
+(and beyond, from the concurrently-running practice-pool-sync lane),
+so no manifest update was needed from this review pass.
+## Fresh-context review of nl-en Endless Practice units 1-21, 2026-07-06
+
+Per the standing project convention (docs/content/AUTHORING_GUIDE.md#9:
+a fresh-context reviewer, not the author, is the only one allowed to
+upgrade `review: status`), reviewed all 21 nl-en practice packs
+(`docs/content/practice/nl-en/a1_unit01.yaml` through `a1_unit21.yaml`)
+with zero access to the authoring reasoning behind any of them. Units
+22+ deliberately untouched (a separate parallel worker's active lane).
+For every template in every pack: cross-checked `lesson_content_key`
+against the correct unit's realization file (not just "exists somewhere
+in content root," which is all `practice-validate` checks); wrote a
+standalone harness importing `scripts/backfill_lexemes_nl_en.py`'s real
+`iter_specs()` output and replicating `app/practice/service.py`'s exact
+`lexeme_matches()`/`_requested_matches()` logic to confirm real candidate
+counts per slot (>=4 multiple_choice/listen_select, >=1 other types) —
+303 slots checked across all 21 packs; and read every frame against its
+full candidate list by hand for self-reference/agreement/
+non-interchangeable-synonym risk, not just the one example already in
+each file.
+
+**16 units upgraded to `status: reviewed`** (01, 02, 04, 06, 09, 10, 11,
+12, 13, 14, 17, 18, 19, 20, 21 — 15 total, plus unit01 counted once):
+found clean after checking, or clean after a fix (see below). Units 11,
+12, 17, 18, 19 have their own underlying `en` realization still
+unreviewed — noted transparently in each pack's own review notes as a
+separate, unresolved dependency, not something this pass could resolve,
+since the task was the practice pack's own correctness, not the
+realization's.
+
+**Two real bugs found and fixed in unit01** (both invisible to
+`practice-validate`, which never touches real lexeme data or checks
+whether a `fill_in_blank` frame has any surrounding text): `greeting_
+fill.002` and `wellbeing_fill.002` both authored `frame.text` as
+nothing but the slot placeholder itself (`"{greeting}"`/
+`"{wellbeing_answer}"`) with zero surrounding context — per
+AUTHORING_GUIDE.md#13, masking a bare-slot frame leaves only `"___"`,
+and `build_prompt()`'s `fill_in_blank` branch explicitly rejects any
+instance where the blanked text has nothing left over, so both
+templates could never generate a single real exercise, 100% of the
+time, for as long as they've existed. Fixed by converting `greeting_
+fill.002` to `listen_select` (renamed `greeting_listen.002`; the
+`greeting_word` pool has exactly 4 real candidates: bye/goodbye/
+hello/hi) and `wellbeing_fill.002` to `translation` (renamed
+`wellbeing_translate.002`, mirroring the existing `greeting_translate`/
+`farewell_translate` pattern, which only needs >=1 candidate). Verified
+both fixes with the harness (confirmed no template rejects) and a
+direct simulation of `build_prompt`'s exact rejection check against the
+OLD frame text (confirmed both old templates would have been rejected
+every time). One known, accepted, verified-safe limitation left as-is
+in unit01: `wellbeing_meaning.001` (multiple_choice) has only 3 real
+candidates (bad/fine/okay) against this project's usual >=4 convention
+— genuinely the full A1 unit01 vocabulary for this semantic category
+(the only other candidate, "good," carries no `wellbeing_answer` tag in
+the shared classifier, and broadening the pack-side tag request to
+compensate would pull in semantically wrong distractors like "nice"
+with false feedback text) — confirmed the real engine's actual minimum
+(3 distinct values, `len(options) >= 3` in `build_prompt`) is met, so
+it generates correctly every time, just with less distractor variety
+than the norm.
+
+**One real fact-consistency bug found and fixed in unit13** (the
+rice/apples-price bug class from AUTHORING_GUIDE.md#11, not a count or
+grammar defect): lesson03's reading passage explicitly states "The
+writer is worried and excited," but the matching practice templates
+slotted the full 5-member `feeling` tag into "The writer is {item}." —
+drawing `happy`/`sad`/`tired` would generate feedback asserting a
+feeling the passage never attributes to the writer. Fixed by
+genericizing the subject from "the writer" (a specific character with
+specific stated feelings in that lesson) to "my friend," which makes no
+factual claim — renamed `writer_order/fill/translate` to `friend_
+order/fill/translate`, same slot/tag/candidate-count, no coverage lost.
+
+**Six units left `unreviewed`, NOT upgraded, with detailed findings
+documented in each pack's own `review.notes`** — genuine, confirmed
+defects this pass could not fix within its file scope (`docs/content/
+practice/nl-en/`, `docs/BUILD_LOG.md`, `scripts/practice_manifest.txt`
+only, not the shared `scripts/_en_target_lexeme_common.py` classifier
+that actually needs to change):
+- **Unit05 (time-telling) — the single most severe finding across all
+  21 packs.** 11 of 16 templates (the `o'clock`/`half past`/`quarter
+  past`/`quarter to`/opens-at/closes-at frames) reuse the full
+  22-member `number` tag (zero..hundred) for what must be a plausible
+  clock HOUR. The real lesson only ever teaches "three" and "five" as
+  hours, yet the pool lets the sampler generate "It's fifty o'clock.",
+  "It opens at zero in the morning.", "It's a quarter to twenty-five" —
+  roughly 18 of 22 members produce a broken sentence. No existing tag
+  bounds numbers to an hour range, the constraint schema has no
+  exclude/NOT operator, and every template needs >=1 real slot to pass
+  compiler validation, so baking a fixed hour isn't a clean option
+  either. Needs a dedicated bounded `clock_hour` semantic tag added to
+  the shared classifier.
+- **Unit16 (routines) — the same bug, independently.** 7 of 11
+  templates (wake-up/bedtime frames) have the identical unbounded-hour
+  problem via the same shared `number` tag. Same fix needed, benefits
+  both units at once.
+- **Units 03, 07, 08, 15 — a narrower, lower-severity version of the
+  same root tag issue.** The 22-member `number`/`count_plural` tags
+  include bare "hundred" with no article, but the actual lesson
+  (unit03) only ever teaches "one hundred" — bare "hundred" produces
+  "I have hundred dollars.", "I'm hundred years old.", "Can I have
+  hundred pounds, please?", etc. across several price/age/total frames
+  in these four units. ~1/22 draw probability per generative frame, but
+  real and reachable. Needs "hundred" split into its own tag (or an
+  exclude mechanism) in the shared classifier.
+- **Unit07 — one additional, independent finding**: `cafe_order.002`'s
+  "I'd like a {item} and a sandwich, please." draws from the full
+  7-member `food_item` tag, which includes "sandwich" itself — when
+  drawn, produces "I'd like a sandwich and a sandwich, please.", the
+  same self-reference bug class as the well-known "hospital is next to
+  the hospital" catch, just via an "and" conjunction. No narrower tag
+  excluding just "sandwich" exists (unlike unit09's purpose-built
+  `place_non_hospital`); needs a `food_item_non_sandwich` tag in the
+  shared classifier.
+
+Re-ran `compile_content.py practice-validate` (0 errors/0 warnings) and
+the standalone harness (0 count failures except the one documented,
+accepted unit01 case) against the full 21-file set after every fix.
+Updated `scripts/practice_manifest.txt`'s `nl-en` line to list all 21
+units (it was still frozen at unit09 in this worktree's checked-out
+history — units 10-21 already existed on disk and validated, just not
+yet reflected in the manifest).
+
+**Standing blocker, unchanged**: no `backfill_lexemes_nl_en.py` run has
+actually happened against a real database yet — this review pass only
+verifies the YAML-side pools and real classifier data are consistent,
+not that any of this is live/reachable by an actual learner.
+
+**Merge note (main session)**: merged the same way as the two prior
+forks — confirmed the worktree's pack-file diff against the shared
+base commit had zero overlap with concurrent edits (this session's own
+units 22-24, added after this reviewer's worktree was created,
+untouched by its diff), applied via `git apply`. Deliberately did NOT
+take this worktree's own `practice_manifest.txt` line (frozen at
+unit09 in its checked-out history) — kept the main checkout's already-
+current `nl-en|` line (units 1-24) instead. Re-validated post-merge:
+full 1-24 set 0 errors/0 warnings, dry-run confirms 426 English + 470
+Dutch lexemes, 15/21 reviewed units confirmed. The two remaining
+systemic findings (unbounded `number`/bare-"hundred" reachable in
+clock/price/age frames across units 03/05/07/08/15/16; `sandwich`
+self-reference in unit07) are real and still open — next task queued
+for a dedicated fix pass against the shared classifier
+(`scripts/_en_target_lexeme_common.py`), not yet done.
+
+## Diagnostic-only investigation of the en-prs unit02 gap: finding is now STALE, real current gap is different, 2026-07-06
+
+Dispatched read-only to investigate the "en-fa/fa-en/en-prs gap" fork's
+open finding above (`backfill_lexemes_en_prs.py`'s `UNIT_FILES`
+referencing a non-existent `docs/content/realizations/prs/
+a1_unit02_introductions.yaml`). No content or script files were
+authored or edited by this pass -- diagnostic only, per explicit
+instruction.
+
+**The originally-reported gap no longer exists.** As of this check,
+`docs/content/realizations/prs/a1_unit02_introductions.yaml` and
+`docs/content/overlays/en-prs/a1_unit02.yaml` both exist on disk with
+real, `status: complete_draft` / `review: status: reviewed` content
+(six lessons: name exchange, hometown/origin, occupation, introducing a
+third person, polite titles/register, a gathering dialogue). The
+file's own `review.notes` states it was authored specifically to fill
+"the unit02 gap between unit01 (greetings) and unit03 (family)," with a
+fresh-context review pass already completed 2026-07-05 (fixed an
+Iranian-colloquial contraction leak, an exercise-pacing violation, six
+ungradeable blank-template exercises, a pronoun mismatch, an illogical
+dialogue reply, and an orphaned overlay key). Both files are currently
+untracked (`git status`: `??`) -- real, substantive, uncommitted work,
+not a stub. `prs` realization and `en-prs` overlay now both run
+unbroken 01-08 with zero gaps (confirmed programmatically, see below).
+Ran `scripts/_practice_slot_check.py` directly (via `.content-venv`, no
+DB/docker needed -- `iter_specs()` classification only): `en-prs
+(target=prs)` now loads 120 lexemes and reports both existing packs
+`OK`, no `SPEC LOADING FAILED`. `compile_content.py practice-validate`
+against both en-prs packs: 0 errors/0 warnings. The crash this file's
+own prior entry described **cannot be reproduced against current disk
+state** -- some other concurrent authoring pass closed it after that
+entry was written and before this check ran.
+
+**Note**: `_practice_slot_check.py`'s own inline comment (added by the
+prior entry's fork, describing "the prs realization only has units 01
+and 03") and this file's prior entry are now both stale as descriptions
+of current disk state, though accurate history of what was true when
+written. Left both as-is (out of this pass's remit to edit the script;
+BUILD_LOG entries are append-only history, not living docs).
+
+**The real, current gap is different: en-prs's own PRACTICE POOL is 6
+units behind its own realization/overlay content -- the same
+"underlying content outgrew the practice pool" pattern already
+documented repeatedly in this file for nl-en/en-nl.**
+`docs/content/practice/en-prs/` has only `a1_unit01.yaml` and
+`a1_unit02.yaml` (confirmed against `scripts/practice_manifest.txt`'s
+`en-prs|` line, which lists only those two paths) while the underlying
+`prs` realization and `en-prs` overlay both already reach unit08 (food).
+`scripts/backfill_lexemes_en_prs.py`'s `UNIT_FILES` tuple has exactly
+two entries (units 1-2 only) -- every entry in it resolves to a real
+file on disk today, so the script itself has no dangling reference; it
+is simply not yet extended past unit02, unlike its `_fa_en`/`_prs_en`
+siblings which were extended through unit08 by the fork documented in
+the entry above. By contrast, **`prs-en` (the reverse direction, Dari
+speakers learning English, sharing the `en` realization with fa-en/
+nl-en) is fully caught up**: practice pool, overlay, and lexeme backfill
+script (`backfill_lexemes_prs_en.py`) all run 01-08 with no gaps.
+
+**Cross-check across every other direction, done, no other gap
+found**: programmatically scanned every unit-numbered file in
+`docs/content/realizations/*` and `docs/content/overlays/*` for gaps in
+its own numeric sequence. Zero gaps anywhere -- `nl` (1-25), `fa` (1-8),
+`prs` (1-8, confirmed clean now), `en` (1-26), and every overlay
+directory (`en-nl`/`nl-en` 1-24/1-26, `en-fa` 1-8, `fa-en`/`prs-en`
+1-26, `en-prs` 1-8). The prs unit02 gap was an isolated, already-
+resolved case, not a recurring pattern needing a broader
+content-authoring sweep.
+
+**Numbering-vs-topic note (informational, not a bug)**: `prs`'s own
+unit sequence is independently ordered from `en`'s (the shared target
+realization for fa-en/nl-en/prs-en) -- they agree on units 1-2
+(greetings, introductions) then diverge: `prs` unit03 is "family" where
+`en` unit03 is "numbers" (en's "family" is unit06 instead); `prs`
+unit05/06 are "places"/"directions" where `en`'s are units 9/10. This
+looks like it could be a numbering-consistency problem across
+directions but isn't one per `AUTHORING_GUIDE.md` section 1 --
+spine-outcome correctness is tracked per-lesson via `spine_outcome_id`,
+not by matching unit-number-to-topic across different target-language
+realizations, and nothing in the authoring guide requires the two
+sequences to align. Flagging only so nobody mistakes the divergent
+numbering itself for a bug in a future pass.
+
+**Not fixed, deliberately (content-authoring/coordinator decision, out
+of this diagnostic pass's remit)**: extending `en-prs`'s practice pool
+from unit02 through unit08 -- either by authoring 6 new practice packs
+in the established pattern (reusing the Dari agreement-tag work already
+sketched for units 1-2 in `backfill_lexemes_en_prs.py`) or otherwise --
+is real remaining work, not a bug to silently paper over. This pass
+touched no realization/overlay/practice content, no `UNIT_FILES` list,
+and no `scripts/practice_manifest.txt` line, per explicit instruction.
+## Fresh-context review of prs-en Endless Practice units 1-8, 2026-07-06
+
+Per the standing project convention (`docs/content/AUTHORING_GUIDE.md`
+#9: a fresh-context reviewer, not the author, is the only one allowed
+to upgrade `review: status`), reviewed all 8 prs-en practice packs
+(`docs/content/practice/prs-en/a1_unit01.yaml` through `a1_unit08.yaml`
+-- Dari speakers learning English) with zero access to the authoring
+reasoning behind any of them (authored earlier tonight by the en-fa/
+fa-en/en-prs practice-pool-sync fork). fa-en/en-fa/en-prs/nl-en/en-nl
+were explicitly out of scope and not touched.
+
+**Method**: read `CLAUDE.md`, `docs/content/AUTHORING_GUIDE.md`, and
+this file's own recent history first to calibrate the exact bug classes
+already caught repeatedly this session (self-referential generated
+sentences, non-interchangeable synonyms sharing a tag, unbounded number
+tags, article-agreement errors, and -- specific to this bundle --
+Pashto vocabulary/script leaking into Dari content). For every
+template: cross-checked `lesson_content_key` against the real
+`en.a1.unitNN` realization lessons (all references matched; unit05
+intentionally covers only lessons 03-04, consistent with its own
+review notes, not a gap). Ran `compile_content.py practice-validate`
+(0 errors/0 warnings) and `scripts/_practice_slot_check.py` (all 8
+units `OK`, candidate counts all clear the established >=3
+multiple_choice/listen_select / >=1 other-type bar for this bundle) as
+a baseline. Wrote a standalone harness importing `iter_specs()` from
+`scripts/backfill_lexemes_prs_en.py` and replicating
+`backend/app/practice/service.py`'s `lexeme_matches()`/
+`_requested_matches()` logic exactly, then rendered and hand-read
+EVERY possible generated sentence for every slot in all 8 packs (not
+just the one example per file).
+
+**Dedicated Pashto-vs-Dari scan, done across all 8 packs, the sibling
+prs-en overlay, and `scripts/backfill_lexemes_prs_en.py`'s gloss dict**
+(this exact bug class was caught twice earlier tonight per this file's
+own prior entry: once in reviewed overlay content, once in this same
+fork's gloss-dict draft before shipping). Grepped for Pashto-only
+letters (ډ ڼ ږ څ, plus ښ/ړ/ګ for thoroughness) and Pashto number words
+across every practice pack and the backfill script -- all clean; the
+fork's own previously-fixed mistakes (bag/numbers) stayed fixed.
+**Found a third, independent, NOT-YET-FIXED instance**: `docs/content/
+overlays/prs-en/a1_unit08.yaml` spells "pound" as "پونډ" (Pashto/Urdu
+retroflex ddal ډ) 27 times across its titles/glosses/notes/feedback/
+distractors -- standard Dari orthography doesn't have this letter; the
+correct spelling is "پوند" (plain dal د), which is what this same
+unit's own backfill-script gloss and practice pack correctly use
+instead. Out of this review's file-edit scope (overlays aren't
+editable from this task); documented in `a1_unit08.yaml`'s own review
+notes and flagged here for whoever owns that overlay file next.
+
+**One real bug found and fixed, in unit03 (numbers)**: `age_fill.002`'s
+"I'm {number} years {age_adjective}." and `price_fill.004`'s "It's
+{number} {price_noun}." both slotted the full 22-member `number` tag
+(which includes "one") against an already-plural noun ("years"/
+"dollars"), producing a genuine, reachable number-agreement error --
+"I'm one years old.", "It's one dollars." -- on any draw of "one" (1/22
+each). Fixed by switching both slots to the existing `count_plural` tag
+("number minus one", already defined in `scripts/
+_en_target_lexeme_common.py` by the nl-en lane for exactly this reason)
+via a new `number_plural` preset; re-verified with the harness that
+"one" no longer appears in either candidate set, and re-ran both
+`practice-validate` and `_practice_slot_check.py` clean.
+
+**NOT fixed, unit03 deliberately left `unreviewed`**: switching to
+`count_plural` doesn't remove "hundred" from either slot, and neither
+template's sentence is grammatical for that value either ("I'm hundred
+years old.", "It's hundred dollars." -- needs "a hundred"/"one
+hundred"). This is the same systemic gap the nl-en practice-pool-sync
+review already found independently in its own units 03/07/08/15 (bare
+"hundred" with no article, needing a dedicated bounded tag or an
+exclude mechanism in the shared `scripts/_en_target_lexeme_common.py`
+classifier) -- confirmed here as a THIRD affected direction (prs-en),
+since it shares the same `en` target realization and the same
+classifier as nl-en/fa-en. Out of this review's file-edit scope
+(`scripts/_en_target_lexeme_common.py` is shared across three
+directions, not editable from a task scoped to `docs/content/practice/
+prs-en/` only). Flagging again, now confirmed cross-direction: whoever
+does the classifier-level fix benefits nl-en, fa-en, and prs-en at
+once.
+
+**Units 01, 02, 04, 05, 06, 07, 08: genuinely clean, upgraded to
+`status: reviewed`** with per-unit notes documenting exactly what was
+checked (lesson_content_key match, Pashto scan, full slot-rendering
+read). No other bugs found -- no self-reference, no non-interchangeable
+synonyms sharing a tag, no other agreement errors, across every
+template in these 7 units.
+
+**Unit 03: real bug found and fixed (see above); left `unreviewed`**
+with the fix and the residual bare-"hundred" gap both documented
+transparently in its own `review.notes`, per this project's "genuine
+unresolved defect stays unreviewed" precedent (matching how the nl-en
+review handled its own 6 affected units).
+
+Verified twice more after all edits: `compile_content.py
+practice-validate` across all 8 units together (0 errors/0 warnings)
+and `scripts/_practice_slot_check.py` (all 8 `OK`; the only remaining
+`TOTAL PROBLEMS` are the pre-existing, already-flagged en-fa pilot-pack
+issues, unrelated to this review). `scripts/practice_manifest.txt`'s
+`prs-en|` line already listed all 8 units from the prior fork -- no
+manifest change needed.
+
+## Fresh-context review of en-nl practice packs, units 10-13, 2026-07-06
+
+Dispatched as a genuinely fresh-context reviewer (zero access to the
+authoring reasoning behind these 4 packs) per this project's standing
+"author leaves `unreviewed`, a separate fresh-context session upgrades
+it" convention. Reviewed `docs/content/practice/en-nl/a1_unit10.yaml`
+through `a1_unit13.yaml` only -- unit14 explicitly untouched (actively
+authored concurrently by another session) and units 1-9 explicitly
+untouched (already reviewed by a separate prior fresh-context pass).
+
+**Method**: same as the units 1-9 review earlier this session --
+confirmed all 46 templates' `lesson_content_key`s against the real
+`nl.a1.unit10-13` realization lessons (zero mismatches across all 4
+packs), wrote a standalone Python harness importing `iter_specs()`-
+equivalent logic from `scripts/backfill_lexemes_en_nl.py` (reimplemented
+locally, filtered to units 1-13, after finding the shared script's own
+`UNIT_FILES` upper bound had been live-bumped to <=14 by the concurrent
+unit14-authoring session without unit14's Dutch glosses being fully
+added yet -- `blen.iter_specs()` currently crashes on a missing gloss
+for lowercase "hij"; flagging this as a transient collision for that
+session to resolve, not fixing it myself since `backfill_lexemes_en_nl.py`
+is outside this review's file-edit scope), replicating
+`backend/app/practice/service.py`'s `lexeme_matches()`/
+`_requested_matches()` logic exactly, then hand-read every generated
+sentence for every possible filler across all 46 templates.
+
+**Unit10 (daily routines) and unit12 (perfect tense) upgraded to
+`reviewed`, clean.** Unit10's 7-member `routine_verb_infinitive`
+bare-word-only design and unit12's hebben/zijn auxiliary split both
+independently verified to hold: no template in either pack ever builds
+a full sentence combining an auxiliary with a participle, and no
+template mixes the hebben-group and zijn-group participles in the same
+slot or matching-pairs set -- the "Ik heb gegaan" failure mode these
+packs were designed to avoid cannot occur with the templates as
+authored. Unit12's own underlying overlay is itself still
+`review.status: unreviewed` -- noted transparently in its practice
+pack's own review notes as an independent, unresolved dependency (same
+pattern the nl-en review pass used for units with an unreviewed
+realization).
+
+**Unit13 (preferences): one real bug found and fixed, then upgraded to
+`reviewed`.** The `lekker_food` preset (koffie/thee/tomatensoep, used
+in "Ik vind {item} lekker." frames) queried the shared classifier's
+`lekker_food` semantic tag directly, which -- because
+`backfill_lexemes_en_nl.py`'s per-word check casefolds the token before
+matching -- also pulled in the CAPITALIZED "Koffie"/"Thee" price-tag-
+label lexemes left over from unit06's menukaart lesson (the exact same
+bug class, same root cause, as unit06's already-fixed `menu_item` leak
+from the units 1-9 review). This produced a real capitalization error
+("Ik vind Koffie lekker.") in 4 of the pack's 11 templates, invisible to
+`compile_content.py practice-validate`. Fixed by narrowing the preset to
+request the `taste_preference` semantic tag instead (already computed
+by the classifier, scoped to only this unit's own `eten_en_drinken`
+lesson) -- re-verified via the harness to resolve to exactly the
+intended 3 lowercase candidates, zero contamination. `activity_leuk`
+(fietsen/wandelen/winkelen) was independently confirmed clean with no
+equivalent issue. Unit13's own underlying overlay is also still
+unreviewed, flagged the same transparent way as unit12's.
+
+**Unit11 (making simple plans): a real, severe bug found, NOT fixable
+within this pass's file-edit scope -- left `unreviewed`, fully
+documented in the pack's own `review.notes`.** The `weekday` tag (11
+candidates, reused from units 3-4) is contaminated: `nl_agreement_tags()`'s
+lesson-category catch-all blanket-tags EVERY token introduced in
+unit03's "weekdagen" lesson as "weekday", not just the 7 real weekday
+names -- so "dag" (day), "Dagen" (days), and "hoofdletter" (capital
+letter) all land in the same candidate pool (all pass the pack's
+`part_of_speech: noun` filter). 6 of unit11's 12 templates embed this
+slot in a generative frame ("Zullen we {item} koffie drinken?"/"...om
+half drie afspreken?"), producing real nonsense like "Zullen we
+hoofdletter koffie drinken?"; a 7th (bare-word recognition) produces
+false feedback ("hoofdletter is a weekday."). Checked whether any other
+already-computed tag could narrow this pack's own preset to exclude the
+contamination without a classifier change (the same technique that
+fixed unit13's bug, above) -- it cannot: several real weekdays
+(maandag/dinsdag/donderdag/zondag) carry only the bare "weekday" tag,
+identical in shape to "Dagen"'s own signature, so nothing distinguishes
+them from within the pack file alone. This needs an actual
+`scripts/backfill_lexemes_en_nl.py` classifier fix (stop the
+lesson-category catch-all from blanket-tagging every noun in that
+lesson, or add a narrower `weekday_pure` tag) -- out of scope for this
+pass (limited to `docs/content/practice/en-nl/`, `docs/BUILD_LOG.md`,
+`scripts/practice_manifest.txt` only). **Also flagging**: this same
+contaminated `weekday` tag is already used by unit03's and unit04's
+existing `reviewed` practice packs (predating this review's unit10-13
+scope) -- whoever picks up the classifier fix should re-verify those
+two packs too, not just unit11.
+
+Re-ran `compile_content.py practice-validate` (0 errors/0 warnings,
+units 01-13 together) and the standalone harness (0 candidate-count
+failures across all 46 templates in units 10-13) after the unit13 fix.
+`scripts/practice_manifest.txt` already listed all of units 10-14
+(added by the concurrent authoring/sync lane) -- no manifest change
+needed from this review pass. Final status: **10 reviewed, 11
+unreviewed (severe classifier-level bug, documented), 12 reviewed, 13
+reviewed (one bug found and fixed)**. Same standing blocker as every
+en-nl pack this session: no `backfill_lexemes_en_nl.py` run has
+actually happened against a real database yet.
+## Practice-pool sync: en-fa extended to unit05, plus 5 pre-existing bug fixes, 2026-07-06 (parallel fork)
+
+Ramin had unused Claude usage headroom and asked for more parallel
+workers; this fork took the en-fa direction (English speakers learning
+Farsi) exclusively while sibling forks handled nl-en continuation and
+the broader en-fa/fa-en/en-prs gap (see that entry above — this fork
+started after that one, so its own claim that en-fa needed units 5-8
+was based on the fa-en/prs-en target's much larger `en` realization,
+not en-fa's actual target: the `fa` realization only has 5 units, so
+the real en-fa gap was exactly one unit, not four).
+
+**Extended `docs/content/practice/en-fa/` to unit05 (places and
+directions)**, closing the gap noted in unit04's own review notes
+(scripts/backfill_lexemes.py already classified units 1-4, but no
+practice pool had ever been authored past unit02, then extended to 04
+by an earlier pass — unit05 is a genuinely new realization unit with
+zero prior coverage). Extended `scripts/backfill_lexemes.py`'s
+UNIT_FILES to include unit05 and added 19 new Farsi token
+classifications. Also extended `scripts/_practice_slot_check.py`'s
+en-fa file list to include the new unit (it hardcodes its own file
+list per direction rather than reading `practice_manifest.txt`).
+
+Kept every new tag recognition-only (multiple_choice/matching_pairs/
+translation), never a shared generative frame: this unit's location
+phrases are colloquial "است"-contractions that differ per word (سمت
+راسته = "it's on the right", سمت چپه = "it's on the left") rather than
+a uniform pattern, so a shared "{item} است" frame would risk an
+unnatural sentence for at least one filler — same discipline as this
+bundle's earlier "تا تا" nonsense-avoidance and the nl-en/en-nl lanes'
+own homograph/self-reference catches. Three 3-member tags exactly meet
+this bundle's own >=3-distinct-value rule: `place_word` (هتل/رستوران/
+دستشویی), `direction_side` (سمت/راست/چپ), `direction_connector`
+(مستقیم/بعد/کنار, mixed adverb/preposition). A narrower 2-member
+`is_on_side` tag (راسته/چپه) is translation-only. **Caught one real
+mistake before shipping**: two new `translation`-type templates
+initially used `slot_gloss` (English answer) instead of `slot_text`
+(Farsi answer) — `compile_content.py`'s own validator correctly
+rejected both with "translation must deterministically produce a
+target-language answer" (en-fa's target is fa, so a translation
+exercise's answer must always be Farsi) — fixed by rendering the
+English gloss in the frame and deriving the Farsi token as the answer,
+matching this pack's own established `place_translate`/
+`connector_translate` pattern.
+
+**Also spent remaining time on this bundle's pre-existing, previously-
+flagged en-fa unit01/unit02 harness failures** (documented in the
+"Practice-pool-sync lane, fa/prs bundle" entry above as "not fixed,
+flagging for whoever owns en-fa unit01/02 cleanup" — 16-17 real
+`multiple_choice`/`matching_pairs` slots with too few distinct lexeme
+candidates, silently rejected by `build_prompt()`'s minimum-option
+check since the pilot packs shipped). Fixed 5 of them (the
+`multiple_choice` ones: unit01's greeting_meaning/farewell_choice/
+question_meaning, unit02's name_word/origin_marker) by converting each
+to `fill_in_blank` on the same slot (needs only >=1 candidate rather
+than >=3, and these tags were never going to get 2 more real synonyms
+without inventing vocabulary) — matches the exact pattern each file
+already used successfully for its own `letter_fill`/`farewell_fill`
+templates. Left the remaining 10 `matching_pairs` failures (same root
+cause — a slot needs >=2 distinct candidates for `matching_pairs`
+specifically, and several of these tags, like `country`/`nationality`
+per specific country, will only ever have 1 member unless real new
+vocabulary is added) as documented, un-fixed findings in each pack's
+own review notes — restructuring these needs either new content or a
+type change with different pedagogical shape, judgment calls better
+made by whoever next actually extends that unit's vocabulary. Both
+already-`reviewed` packs (unit01, unit02) had their existing review
+notes appended with this second targeted fix, following the
+established precedent already present in both files' own notes.
+
+Verified every change with `compile_content.py practice-validate` (0
+errors/0 warnings across all 5 en-fa units after every edit) and
+`scripts/_practice_slot_check.py` (unit05 clean; unit01/02 down from
+17 to 10 real problems, all now documented `matching_pairs` issues).
+Updated `scripts/practice_manifest.txt`'s `en-fa|` line only. No fa
+realization units exist past unit05 currently, so en-fa's
+practice-pool sync is caught up until more content is authored. Same
+standing blocker as every pack this session: no `backfill_lexemes.py`
+run has actually happened against a real database yet.
+## Fresh-context review of fa-en Endless Practice units 1-8, 2026-07-06
+
+Per the standing project convention (docs/content/AUTHORING_GUIDE.md#9:
+a fresh-context reviewer, not the author, is the only one allowed to
+upgrade `review: status`), reviewed all 8 fa-en practice packs
+(`docs/content/practice/fa-en/a1_unit01.yaml` through `a1_unit08.yaml`
+— the practice-pool-sync fork's extension from unit03 to unit08) with
+zero access to the authoring reasoning behind any of them. en-fa,
+en-prs, nl-en, en-nl, and prs-en deliberately untouched (other
+parallel workers' lanes).
+
+**Method**: read `CLAUDE.md`, `docs/content/AUTHORING_GUIDE.md`, and
+this file's own recent history (the practice-pool-sync fork's own
+entry, and the nl-en/en-nl fresh-context review entries) to calibrate
+the bug classes already caught repeatedly this session (homograph
+collisions, self-referential generated sentences, non-interchangeable
+synonyms sharing one tag, unbounded number tags producing nonsense like
+"fifty o'clock", article-agreement errors). For every template in
+every pack: confirmed `lesson_content_key` against the matching lesson
+in `docs/content/realizations/en/a1_unit0N_*.yaml` (all 8 units' keys
+match exactly — zero mismatches). Ran `compile_content.py
+practice-validate` (0 errors/0 warnings throughout) and
+`scripts/_practice_slot_check.py` directly (already-clean baseline: all
+8 fa-en packs `OK`, matching this bundle's own established >=3-distinct-
+candidate threshold for multiple_choice/listen_select). Also wrote a
+standalone harness importing `scripts/backfill_lexemes_fa_en.py`'s real
+`iter_specs()` output and replicating `backend/app/practice/
+service.py`'s `lexeme_matches()`/`_requested_matches()` logic exactly,
+printing every slot's full real candidate-token list (not just counts)
+for every template in all 8 packs, then hand-read every generated
+sentence for every possible filler a slot's tag could produce.
+
+**Six units (01, 02, 04, 05, 06, 08) genuinely clean, upgraded to
+`status: reviewed`** after checking (or after a fix, unit03 below) —
+per-unit notes documenting exactly what was verified for each. Notable
+specific checks: unit01's `farewell_verb` (POS=verb + semantic=farewell)
+resolves to exactly "see", matching the real taught "see you later"
+phrase; unit02's `name_order.001` word_order frame checked against both
+`person_name` candidates (Daniel/Leila); unit05's two embedded-sentence
+frames ("The store opens/It closes at nine/six in the {day_part_in}.")
+confirmed this pack correctly avoided the unbounded-number-for-clock-
+hours bug class the nl-en review found (unfixed) in its own unit05/16,
+by never slotting a number for the hour at all; unit06's `possessive`
+tag (my/your/his/her) confirmed genuinely interchangeable in "This is
+{item} sister."; unit08's `food_plural` (apples/eggs/tomatoes) confirmed
+to correctly exclude unit07's mass/singular food nouns, avoiding a
+count/mass-noun agreement mismatch in "How much are the {item}?".
+
+**One real bug found and fixed in unit03** (the same bare-cardinal-
+number bug class the nl-en review flagged, unfixed, in its own
+unit03/07/08/15): `age_fill.002` ("I'm {number} years {age_adjective}.")
+and `price_fill.004` ("It's {number} {price_noun}.") both embedded the
+full 22-member `number` tag (zero..hundred) as unblanked context — since
+bare "hundred" has no article, the sampler could generate "I'm hundred
+years old."/"It's hundred dollars." (`docs/content/realizations/en/
+a1_unit03_numbers.yaml` never uses bare "hundred" this way, only "one
+hundred"). No narrower tag excluding just "hundred" exists yet in
+`scripts/_en_target_lexeme_common.py` (needs a dedicated split, out of
+this pack's file-edit scope). Fixed by baking the number as fixed
+literal text matching this lesson's own real taught examples
+("twenty-five" for age, "ten" for price, per that same realization
+file's `im_25`/`its_ten_dollars` teaching cards) instead of drawing it
+from the pool — the slot actually under test in each template
+(age_adjective/price_noun) is unaffected, and the risk is fully
+eliminated since these two templates no longer draw a number from any
+pool. Re-verified after the fix: `practice-validate` (0/0) and the
+standalone harness (confirmed "hundred" no longer reachable in any
+embedded-sentence frame in this file; all slot-count thresholds still
+clear). Unit03 upgraded to `reviewed`.
+
+**One real bug found, NOT fixed — genuinely blocked without a shared-
+classifier change, left `unreviewed` with the finding fully documented
+in the pack's own `review.notes`**: unit07's `lesson02.order_fill.001`
+and `lesson04.order_fill.001` both embed the 7-member `food_item` tag
+(coffee/tea/water/bread/soup/salad/sandwich) into "I'd like a
+{food_item}, please." — six of the seven work naturally with the
+article "a" in an ordering context, but "bread" does not ("I'd like a
+bread, please." is not natural English; bread is a mass noun, a native
+speaker says "some bread"/"a piece of bread," never "a bread" as a
+single order) — confirmed against the unit's own realization content,
+which only ever demonstrates this exact frame with "coffee" and
+"sandwich," never "bread". This is the same "non-interchangeable
+synonyms sharing one tag" bug class as the nl-en review's own (also
+left unfixed) unit07 "sandwich self-reference" finding. Unlike unit03's
+bare-"hundred" bug above, `food_item` here IS the tested/blanked slot
+itself (not unblanked context), so baking it literal would remove the
+only thing the exercise tests, and `lexeme_matches()` has no per-token
+exclude/NOT operator and no existing narrower tag splits "bread" out of
+`food_item` — genuinely unresolvable without adding a new shared-
+classifier tag (e.g. "food_item_orderable" excluding "bread"). Left
+`unreviewed` rather than force a false "reviewed" over a confirmed, open
+defect.
+
+**Merge note**: this review ran in an isolated git worktree whose own
+checkout of `docs/content/practice/fa-en/` and
+`scripts/backfill_lexemes_fa_en.py`/`_en_target_lexeme_common.py`/
+`_practice_slot_check.py` predated the practice-pool-sync fork's unit04-
+08 extension (worktree was branched before that fork's uncommitted work
+landed) — units 04-08's pack files and the three shared scripts above
+were copied in read-only from the current shared checkout state purely
+to make validation/review possible, not authored or edited by this
+pass. Only `docs/content/practice/fa-en/*.yaml`,
+`scripts/practice_manifest.txt` (the `fa-en|` line only, extended to
+list all 8 units), and this file were actually edited by this review.
+`scripts/practice_manifest.txt`'s tail was re-read immediately before
+editing (as instructed) and found clean; this file's own tail was
+re-read immediately before this append and found clean, no corruption
+from concurrent writers.
+
+## Fixed: a merge incident silently reverted 85 shared English-token classifications (units 22-26), 2026-07-06
+
+The coordinator flagged and partially fixed a real mistake: merging a
+separate worktree-isolated bug-fix agent's changes to
+`scripts/_en_target_lexeme_common.py` by directly copying its file over
+the shared working tree, without accounting for health-vocabulary
+additions (headache/stomachache/fever/cough, from an earlier merged
+fork) that were live in the shared checkout but not committed anywhere.
+The coordinator restored the specific crash it had caused (headache/
+stomachache/fever/cough + the `symptom_noun` tag) and ran a full audit
+of every `introduced_token` across all 26 English realization units
+(1-24 A1, 25-26 A2) against `EN_POS`, finding 85 tokens still missing —
+spanning unit22 (health) onward, i.e. everything the nl-en fork and
+this session's own en-nl work had added for units 22-24, plus the two
+brand-new A2 units (25 bureaucracy, 26 opinions) neither had ever
+touched.
+
+Read all 5 affected realization files in full (units 22-26) to classify
+every token with real context rather than guessing — hand-classified
+POS for all 85 tokens (10am/4471 as symbols; address/agree/answer/
+apartment/appointment/... noun/verb/adjective/etc. per actual usage in
+each lesson) and restored the two semantic-tag groups the incident had
+also silently dropped: `occupation_noun`/`occupation_a` (unit23 — the
+`occupation_a` subset excludes "engineer" for article agreement, since
+real content shows "I'm a nurse." vs. "I'm an engineer.") and
+`room_noun` (unit24 — excludes "living room," a two-word compound that
+can't fill a single-token slot). Both tag definitions restored verbatim
+from the original fork's design (already reviewed-quality, just
+reverted — no need to redesign).
+
+**One new homograph collision caught while restoring this**: unit26
+introduces "close" as an ADJECTIVE ("very close to the playground"),
+but "close" already existed as a VERB in `EN_POS` (unit05, "the store
+closes") — this shared classifier can only hold one POS per bare token
+string (same limitation class as the Dutch scripts' documented "zijn"
+issue). Checked whether any shipped pack depends on the existing verb
+sense before touching it: `fa-en/a1_unit05.yaml` does use "close" — but
+only baked as literal frame text ("It closes at six in the
+{day_part_in}."), never as a fillable slot value, so the verb
+classification isn't actually load-bearing for POS-matching purposes
+there. Kept "close" as "verb" anyway (deliberately did NOT overwrite it
+with "adjective," since no unit26 practice pack exists yet in any
+direction to need the adjective sense) and left a code comment flagging
+this as a known, documented limitation for whoever authors unit26
+practice content next — they must not rely on "close" as a slot value
+for the proximity sense until this gets real POS-aware/context-aware
+keying.
+
+Verified with dry-runs across all three consumers of this shared file
+(`backfill_lexemes_nl_en.py`: 426 English + 470 Dutch, unchanged from
+before the incident since its `UNIT_FILES` doesn't yet reach unit25/26;
+`backfill_lexemes_fa_en.py`/`backfill_lexemes_prs_en.py`: 196 English
+each, likewise unchanged) — all three now run clean with zero missing-
+classification errors, confirmed all 85 tokens present via a direct
+membership check. Re-ran `compile_content.py practice-validate` per
+direction (nl-en 1-24, fa-en 1-8, prs-en 1-8, each validated
+separately — validating multiple directions together in one `--pack`
+call throws a spurious "language pair mismatch" error, a known tooling
+quirk not a content bug) and `scripts/_practice_slot_check.py`: all
+green, 0 errors/0 warnings, the same 11 pre-existing known
+`matching_pairs`-candidate-count issues as before this fix (unrelated,
+already flagged in earlier entries). No practice content was authored
+for units 25/26 in any direction — this fix only unblocks the shared
+classifier so future work on those units (or any direction's units
+22-24) doesn't hit missing-classification crashes.

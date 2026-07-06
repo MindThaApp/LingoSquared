@@ -32,13 +32,24 @@ review:
     the nl-en overlay itself is still unreviewed. Needs the standard
     fresh-context review before import. Same blocking DB-level gap as every
     other pack from this pass: no backfill_lexemes_nl_en.py run has actually
-    happened against a real database yet."
+    happened against a real database yet.
+    FOLLOW-UP FIX 2026-07-06: a fresh-context reviewer flagged that 11 of
+    this unit's templates reused the broad 22-member 'number' tag for
+    clock-hour telling, letting the sampler draw values like 'fifty' or
+    'hundred' and generate real nonsense like 'It's fifty o'clock.' (a real
+    12-hour clock only has hours one through twelve). Fixed by adding a new
+    'hour_number' tag (12 members, one-twelve only) to
+    scripts/_en_target_lexeme_common.py and re-pointing every clock-hour
+    template (all of lesson01/lesson02/lesson04's number-slotted templates)
+    to it. Re-verified with compile_content.py practice-validate (0/0) and a
+    standalone harness confirming every fixed slot now draws only 1-12."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [number, day_part, day_part_in, time_period]
+    semantic: [number, hour_number, day_part, day_part_in, time_period]
 slot_presets:
   number: &number {language_code: en, part_of_speech: noun, agreement_tags: {semantic: number}}
+  hour_number: &hour_number {language_code: en, part_of_speech: noun, agreement_tags: {semantic: hour_number}}
   day_part: &day_part {language_code: en, part_of_speech: noun, agreement_tags: {semantic: day_part}}
   day_part_in: &day_part_in {language_code: en, part_of_speech: noun, agreement_tags: {semantic: day_part_in}}
 templates:
@@ -46,56 +57,56 @@ templates:
     lesson_content_key: en.a1.unit05.lesson01.oclock_and_half
     type: word_order
     frame: {text: "It's {item} o'clock", language_code: en, direction: ltr}
-    slots: {item: *number}
+    slots: {item: *hour_number}
     answer_derivation: {kind: render_frame, frame: {text: "It's {item} o'clock", language_code: en, direction: ltr}}
     feedback_frame: {text: "{item} is het uur in deze tijdsaanduiding.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit05.lesson01.half_fill.002
     lesson_content_key: en.a1.unit05.lesson01.oclock_and_half
     type: fill_in_blank
     frame: {text: "It's half past {item}.", language_code: en, direction: ltr}
-    slots: {item: *number}
+    slots: {item: *hour_number}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "{item} is het uur waar de tijd naar verwijst.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit05.lesson01.oclock_listen.003
     lesson_content_key: en.a1.unit05.lesson01.oclock_and_half
     type: listen_select
     frame: {text: "It's {item} o'clock", language_code: en, direction: ltr}
-    slots: {item: *number}
+    slots: {item: *hour_number}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is het getal dat je hoorde.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit05.lesson01.oclock_translate.004
     lesson_content_key: en.a1.unit05.lesson01.oclock_and_half
     type: translation
     frame: {text: "Het is {item} uur.", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
-    slots: {item: *number}
+    slots: {item: *hour_number}
     answer_derivation: {kind: render_frame, frame: {text: "It's {item} o'clock", language_code: en, direction: ltr}}
     feedback_frame: {text: "It's {item} o'clock betekent Het is {item} uur.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit05.lesson02.quarter_past_order.001
     lesson_content_key: en.a1.unit05.lesson02.quarter_times
     type: word_order
     frame: {text: "It's a quarter past {item}", language_code: en, direction: ltr}
-    slots: {item: *number}
+    slots: {item: *hour_number}
     answer_derivation: {kind: render_frame, frame: {text: "It's a quarter past {item}", language_code: en, direction: ltr}}
     feedback_frame: {text: "{item} is het uur waar kwart over naar verwijst.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit05.lesson02.quarter_to_fill.002
     lesson_content_key: en.a1.unit05.lesson02.quarter_times
     type: fill_in_blank
     frame: {text: "It's a quarter to {item}.", language_code: en, direction: ltr}
-    slots: {item: *number}
+    slots: {item: *hour_number}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "{item} is het uur waar kwart voor naar verwijst.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit05.lesson02.ten_past_order.003
     lesson_content_key: en.a1.unit05.lesson02.quarter_times
     type: word_order
     frame: {text: "It's ten past {item}", language_code: en, direction: ltr}
-    slots: {item: *number}
+    slots: {item: *hour_number}
     answer_derivation: {kind: render_frame, frame: {text: "It's ten past {item}", language_code: en, direction: ltr}}
     feedback_frame: {text: "{item} is het uur waar tien over naar verwijst.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit05.lesson02.quarter_to_translate.004
     lesson_content_key: en.a1.unit05.lesson02.quarter_times
     type: translation
     frame: {text: "Het is kwart voor {item}.", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
-    slots: {item: *number}
+    slots: {item: *hour_number}
     answer_derivation: {kind: render_frame, frame: {text: "It's a quarter to {item}", language_code: en, direction: ltr}}
     feedback_frame: {text: "It's a quarter to {item} betekent Het is kwart voor {item}.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit05.lesson03.day_part_meaning.001
@@ -138,20 +149,20 @@ templates:
     lesson_content_key: en.a1.unit05.lesson04.schedule_dialogue
     type: word_order
     frame: {text: "It opens at {item} in the morning", language_code: en, direction: ltr}
-    slots: {item: *number}
+    slots: {item: *hour_number}
     answer_derivation: {kind: render_frame, frame: {text: "It opens at {item} in the morning", language_code: en, direction: ltr}}
     feedback_frame: {text: "{item} is het uur waarop de bibliotheek opengaat.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit05.lesson04.close_hour_fill.003
     lesson_content_key: en.a1.unit05.lesson04.schedule_dialogue
     type: fill_in_blank
     frame: {text: "It closes at {item} in the evening.", language_code: en, direction: ltr}
-    slots: {item: *number}
+    slots: {item: *hour_number}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "{item} is het uur waarop de bibliotheek dichtgaat.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit05.lesson04.open_hour_translate.004
     lesson_content_key: en.a1.unit05.lesson04.schedule_dialogue
     type: translation
     frame: {text: "Het gaat om {item} uur open.", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
-    slots: {item: *number}
+    slots: {item: *hour_number}
     answer_derivation: {kind: render_frame, frame: {text: "It opens at {item} in the morning", language_code: en, direction: ltr}}
     feedback_frame: {text: "It opens at {item} in the morning betekent Het gaat om {item} uur 's ochtends open.", language_code: nl, direction: ltr}

@@ -1,0 +1,209 @@
+schema_version: "1.0"
+pack_key: practice.en-nl.a1.unit11
+source_language: en
+target_language: nl
+unit_content_key: nl.a1.unit11.plans
+review:
+  status: unreviewed
+  fresh_context: "false"
+  notes: >-
+    Original authoring notes (2026-07-06): leans on the ALREADY-ESTABLISHED
+    "weekday" tag (11 real candidates, both cases, introduced in units 3-4)
+    reused for a "Zullen we {item} koffie drinken?" frame -- claimed every
+    weekday is grammatically interchangeable there; plus a new 4-member
+    "plan_vocab" tag (samen/afspreken/bericht/uitnodiging) for bare-word
+    recognition only.
+
+    **Independent fresh-context content audit (2026-07-06) found a real,
+    SEVERE bug in the "weekday" tag itself -- NOT fixed, left unreviewed,
+    documented in full below** (same standing project convention as the
+    nl-en review pass's clock-hour/bare-"hundred" findings: a genuine
+    defect that needs a scripts/backfill_lexemes_en_nl.py classifier change
+    outside this task's permitted file-edit scope, so it is flagged rather
+    than papered over).
+
+    plan_vocab is genuinely clean (4 candidates, bare-word recognition
+    only, no contamination) -- the bug is isolated to weekday.
+
+    **The bug**: scripts/backfill_lexemes_en_nl.py's nl_agreement_tags()
+    assigns the "weekday" semantic tag two ways -- (1) a correct per-word
+    check for the 7 real weekday tokens, AND (2) an unconditional
+    lesson-category catch-all that tags EVERY token introduced in unit03's
+    "weekdagen" lesson with "weekday", regardless of actual meaning. That
+    lesson's own grammar note ("Dagen krijgen normaal geen hoofdletter:
+    maandag, vrijdag") introduces "Dagen" (days, plural), "dag" (day,
+    singular), and "hoofdletter" (capital letter) alongside the real
+    weekdays -- all three are nouns, so they pass this pack's
+    part_of_speech: noun filter and land in the SAME candidate pool as the
+    7 real weekdays. Confirmed via the standalone harness: the "weekday"
+    slot resolves to 11 candidates, not 7 -- ['Dagen', 'Vrijdag', 'dag',
+    'dinsdag', 'donderdag', 'hoofdletter', 'maandag', 'vrijdag', 'woensdag',
+    'zaterdag', 'zondag'] ("Vrijdag" capitalized is a legitimate
+    sentence-initial "Friday" variant and not itself a bug). This produces
+    real, nonsensical generated Dutch: "Zullen we hoofdletter koffie
+    drinken?" ("Shall we capital-letter drink coffee?"), "Zullen we dag
+    koffie drinken?", "Zullen we Dagen koffie drinken?" -- across every
+    template using this tag in a generative frame: lesson01.order.001,
+    lesson01.complete.002, lesson03.order.001, lesson03.complete.002,
+    lesson03.translate.003, lesson06.order.001 (6 of 12 templates in this
+    pack). The 7th affected template, lesson01.choose.003 (multiple_choice,
+    bare-word recognition, not a generative frame), still produces WRONG
+    feedback text when "hoofdletter"/"dag"/"Dagen" is drawn -- its
+    feedback_frame unconditionally asserts "{item} is a weekday.", which is
+    false for all three.
+
+    **Confirmed not fixable within this pass's file-edit scope** (limited
+    to docs/content/practice/en-nl/, docs/BUILD_LOG.md,
+    scripts/practice_manifest.txt -- NOT
+    scripts/backfill_lexemes_en_nl.py): checked whether any OTHER tag
+    already computed by the classifier could narrow this pack's own
+    "weekday" preset to exclude the 3 contaminating tokens without a
+    classifier change. It cannot -- several of the real weekdays
+    (maandag/dinsdag/donderdag/zondag) carry ONLY the bare "weekday" tag
+    and nothing else, identical in shape to "Dagen"'s own single-tag
+    signature, so no combination of already-existing tags distinguishes
+    "a real weekday" from "any noun introduced in the weekdagen lesson".
+    (Contrast with unit13's lekker_food fix in this same review pass, where
+    a genuinely distinguishing "taste_preference" tag already existed and
+    made an in-scope fix possible -- that path does not exist here.)
+
+    **What a real fix needs** (for whoever next touches
+    scripts/backfill_lexemes_en_nl.py): either stop the "weekdagen" lesson
+    category from blanket-tagging every token as "weekday" (only apply it
+    to the 7 explicit weekday-name checks, which already exist and are
+    correct on their own), or add a narrower "weekday_pure" tag limited to
+    exactly the 7 weekday-name tokens for packs to request instead. This
+    also affects unit03/unit04's OWN existing "reviewed" practice packs
+    (both already use this same contaminated "weekday" tag, predating this
+    review's unit10-13 scope) -- flagging for whoever picks up the
+    classifier fix, since narrowing it will also change unit03/04's
+    candidate counts and warrants re-verifying those two packs too, not
+    just this one.
+
+    Same standing blocking dependency as every earlier en-nl pack:
+    backfill_lexemes_en_nl.py has not actually been run against a real
+    database yet.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [weekday, plan_vocab]
+slot_presets:
+  weekday: &weekday {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: weekday}}
+  plan_vocab: &plan_vocab {language_code: nl, part_of_speech: [adverb, verb, noun], agreement_tags: {semantic: plan_vocab}}
+templates:
+  - content_key: practice.en-nl.nl.a1.unit11.lesson01.order.001
+    lesson_content_key: nl.a1.unit11.lesson01.een_activiteit_voorstellen
+    type: word_order
+    frame: {text: "Zullen we {item} koffie drinken?", language_code: nl, direction: ltr}
+    slots: {item: *weekday}
+    answer_derivation: {kind: render_frame, frame: {text: "Zullen we {item} koffie drinken?", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} is the day proposed for coffee.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit11.lesson01.complete.002
+    lesson_content_key: nl.a1.unit11.lesson01.een_activiteit_voorstellen
+    type: fill_in_blank
+    frame:
+      text: "Zullen we {item} koffie drinken?"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Complete the Dutch proposal.", language_code: en, direction: ltr}
+    slots: {item: *weekday}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} completes this proposal.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit11.lesson01.choose.003
+    lesson_content_key: nl.a1.unit11.lesson01.een_activiteit_voorstellen
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *weekday}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a weekday.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit11.lesson02.listen.001
+    lesson_content_key: nl.a1.unit11.lesson02.ja_of_nee
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *plan_vocab}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit11.lesson03.order.001
+    lesson_content_key: nl.a1.unit11.lesson03.dag_en_tijd_afspreken
+    type: word_order
+    frame: {text: "Zullen we {item} om half drie afspreken?", language_code: nl, direction: ltr}
+    slots: {item: *weekday}
+    answer_derivation: {kind: render_frame, frame: {text: "Zullen we {item} om half drie afspreken?", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} is the day proposed for the meeting.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit11.lesson03.complete.002
+    lesson_content_key: nl.a1.unit11.lesson03.dag_en_tijd_afspreken
+    type: fill_in_blank
+    frame:
+      text: "Zullen we {item} om half drie afspreken?"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Complete the Dutch proposal.", language_code: en, direction: ltr}
+    slots: {item: *weekday}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} completes this proposal.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit11.lesson03.translate.003
+    lesson_content_key: nl.a1.unit11.lesson03.dag_en_tijd_afspreken
+    type: translation
+    frame:
+      text: "Shall we meet on {item} at 2:30?"
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *weekday}
+    answer_derivation: {kind: render_frame, frame: {text: "Zullen we {item} om half drie afspreken?", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Zullen we {item} om half drie afspreken? -- shall we meet on {item} at 2:30?", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit11.lesson04.choose.001
+    lesson_content_key: nl.a1.unit11.lesson04.een_bericht_lezen
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *plan_vocab}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a word from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit11.lesson05.listen.001
+    lesson_content_key: nl.a1.unit11.lesson05.een_plan_schrijven
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *plan_vocab}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit11.lesson05.translate.002
+    lesson_content_key: nl.a1.unit11.lesson05.een_plan_schrijven
+    type: translation
+    frame:
+      text: "{item}"
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *plan_vocab}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The Dutch word is {item}.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit11.lesson06.order.001
+    lesson_content_key: nl.a1.unit11.lesson06.lotte_en_omar_maken_een_plan
+    type: word_order
+    frame: {text: "Zullen we {item} koffie drinken?", language_code: nl, direction: ltr}
+    slots: {item: *weekday}
+    answer_derivation: {kind: render_frame, frame: {text: "Zullen we {item} koffie drinken?", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} is the day proposed for coffee.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit11.lesson06.listen.002
+    lesson_content_key: nl.a1.unit11.lesson06.lotte_en_omar_maken_een_plan
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *plan_vocab}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard in this dialogue.", language_code: en, direction: ltr}

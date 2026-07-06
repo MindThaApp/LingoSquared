@@ -1,0 +1,179 @@
+schema_version: "1.0"
+pack_key: practice.en-nl.a1.unit12
+source_language: en
+target_language: nl
+unit_content_key: nl.a1.unit12.past_events
+review:
+  status: reviewed
+  required_next_reviewer: null
+  fresh_context: "false"
+  notes: >-
+    Original authoring notes (2026-07-06): hebben/zijn auxiliary choice is a
+    hard constraint on tag design -- "Ik heb gegaan" is ungrammatical
+    (gaan/komen take zijn) -- so participle_hebben (gedronken/gegeten/
+    gewerkt/gekocht) and participle_zijn (gegaan/gekomen, only 2 members)
+    are kept strictly separate, matching the real content's own explicit
+    contrast lesson (met_zijn's auxiliary_contrast note). Deliberately no
+    generative "Ik heb {participle}." frame even for the hebben group,
+    since 3 of 4 participles need an object to sound natural -- bare-word
+    recognition/translation only throughout.
+
+    Independent fresh-context content audit (2026-07-06): confirmed all 6
+    lesson_content_key references match real nl.a1.unit12 lessons exactly,
+    including nl.a1.unit12.lesson03.teach.auxiliary_contrast, which does
+    genuinely read "Ik heb gewerkt, maar ik ben naar de supermarkt
+    gegaan." -- the auxiliary-split design claim is real, not just
+    asserted. Standalone lexeme_matches()-replicating harness confirms:
+    participle_hebben=4, infinitive_hebben=4, participle_zijn=2,
+    recent_time=4 (2 lexical forms + 2 capitalized sentence-initial
+    variants, translation-only so this is harmless). Audited every
+    template (12 total): NO template ever combines a hebben-group and
+    zijn-group verb in the same slot or the same matching_pairs pair set,
+    and NO template builds a full "Ik heb/ben {participle}." sentence at
+    all (every frame is a bare "{item}" recognition/translation or a
+    matching_pairs pair of same-group verbs) -- so the "Ik heb gegaan"
+    failure mode this pack was explicitly designed to avoid cannot occur
+    with the templates as authored. No self-reference, no capitalization
+    leaks, no jargon leaks, no stray YAML booleans. Compiler validation
+    re-run together with units 01-13: 0 errors/0 warnings.
+
+    Flagging transparently (not this pass's to resolve): this unit's own
+    underlying overlay (docs/content/overlays/en-nl/a1_unit12.yaml) is
+    still review.status: unreviewed itself, same as unit13's. This
+    practice pack's correctness is independent of that -- the templates
+    generate grammatically sound Dutch regardless -- but if the underlying
+    lesson content changes during its own future review pass, this pack's
+    lesson_content_key references and vocabulary should be re-diffed
+    against it.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [participle_hebben, infinitive_hebben, participle_zijn, recent_time]
+slot_presets:
+  participle_hebben: &participle_hebben {language_code: nl, part_of_speech: verb, agreement_tags: {semantic: participle_hebben}}
+  infinitive_hebben: &infinitive_hebben {language_code: nl, part_of_speech: verb, agreement_tags: {semantic: infinitive_hebben}}
+  participle_zijn: &participle_zijn {language_code: nl, part_of_speech: verb, agreement_tags: {semantic: participle_zijn}}
+  recent_time: &recent_time {language_code: nl, part_of_speech: adverb, agreement_tags: {semantic: recent_time}}
+templates:
+  - content_key: practice.en-nl.nl.a1.unit12.lesson01.choose.001
+    lesson_content_key: nl.a1.unit12.lesson01.voltooide_tijd
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *participle_hebben}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a past participle from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit12.lesson01.listen.002
+    lesson_content_key: nl.a1.unit12.lesson01.voltooide_tijd
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *participle_hebben}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the participle you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit12.lesson01.match.003
+    lesson_content_key: nl.a1.unit12.lesson01.voltooide_tijd
+    type: matching_pairs
+    frame: {text: "{first} · {second}", language_code: nl, direction: ltr}
+    slots: {first: *participle_hebben, second: *participle_hebben}
+    slot_relations: [{kind: distinct, slots: [first, second]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second]}
+    feedback_frame: {text: "Match each past participle with its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit12.lesson02.choose.001
+    lesson_content_key: nl.a1.unit12.lesson02.met_hebben
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *infinitive_hebben}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is an infinitive that uses hebben in the perfect tense.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit12.lesson02.listen.002
+    lesson_content_key: nl.a1.unit12.lesson02.met_hebben
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *participle_hebben}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the participle you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit12.lesson02.translate.003
+    lesson_content_key: nl.a1.unit12.lesson02.met_hebben
+    type: translation
+    frame:
+      text: "{item}"
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *infinitive_hebben}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The Dutch word is {item}.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit12.lesson03.translate.001
+    lesson_content_key: nl.a1.unit12.lesson03.met_zijn
+    type: translation
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+    slots: {item: *participle_zijn}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit12.lesson03.reverse_translate.002
+    lesson_content_key: nl.a1.unit12.lesson03.met_zijn
+    type: translation
+    frame:
+      text: "{item}"
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *participle_zijn}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The Dutch word is {item}.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit12.lesson04.translate.001
+    lesson_content_key: nl.a1.unit12.lesson04.wanneer_gebeurde_het
+    type: translation
+    frame:
+      text: "{item}"
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *recent_time}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The Dutch word is {item}.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit12.lesson04.reverse_translate.002
+    lesson_content_key: nl.a1.unit12.lesson04.wanneer_gebeurde_het
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *recent_time}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit12.lesson05.choose.001
+    lesson_content_key: nl.a1.unit12.lesson05.een_kort_verslag_lezen
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *participle_hebben}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a past participle from the account.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit12.lesson06.listen.001
+    lesson_content_key: nl.a1.unit12.lesson06.lotte_en_omar_gisteren
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *participle_hebben}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the participle you heard in this dialogue.", language_code: en, direction: ltr}
