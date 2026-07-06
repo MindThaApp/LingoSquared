@@ -1,0 +1,134 @@
+schema_version: "1.0"
+pack_key: practice.en-fa.a1.unit05
+source_language: en
+target_language: fa
+unit_content_key: fa.a1.unit05.places_and_directions
+review:
+  status: unreviewed
+  required_next_reviewer: codex
+  notes: >-
+    Authored 2026-07-06 by a parallel fork of the practice-pool-sync lane
+    (fa/prs bundle), closing the en-fa gap noted in this pack's own
+    a1_unit04.yaml sibling entry (scripts/backfill_lexemes.py already
+    covered fa units 1-4, but the fa realization/en-fa overlay had grown to
+    a genuinely new unit05 -- places and directions -- with zero practice
+    coverage). Extended scripts/backfill_lexemes.py's UNIT_FILES to include
+    unit05 and added 19 new Farsi token classifications plus FA_GLOSSES.
+
+    Kept every new tag recognition-only (multiple_choice/matching_pairs/
+    translation), never a shared generative sentence frame, because this
+    unit's location phrases are colloquial "است"-contractions that differ
+    per word (سمت راسته = "it's on the right", سمت چپه = "it's on the
+    left") rather than a uniform pattern -- forcing one shared frame like
+    "{item} است" would risk an ungrammatical or unnatural sentence for at
+    least one filler. Three 3-member tags exactly meet this bundle's own
+    >=3-distinct-value multiple_choice/matching_pairs rule:
+    "place_word" (هتل/رستوران/دستشویی), "direction_side" (سمت/راست/چپ),
+    "direction_connector" (مستقیم/بعد/کنار, mixed adverb/preposition).
+    A narrower 2-member "is_on_side" tag (راسته/چپه, the colloquial "است"
+    contractions themselves) is translation-only, below the >=3 threshold
+    for multiple_choice. Single-candidate tokens (برید "go", همون "that
+    same one", آزادی "Azadi", رهگذر "passer-by") are used only in
+    translation templates (>=1 candidate is sufficient there) or left as
+    fixed frame text, never forced into a shared recognition tag with
+    unrelated words.
+
+    Verified every slot's real candidate count with
+    scripts/_practice_slot_check.py (this bundle's own standing harness,
+    which mirrors build_prompt()'s real >=3-for-multiple_choice/
+    matching_pairs, >=1-for-others rejection rule) against this script's
+    actual iter_specs() output -- all clean. compile_content.py
+    practice-validate also clean (0 errors/0 warnings). Needs the standard
+    fresh-context review before import. Same standing blocker as every
+    pack in this bundle: no backfill_lexemes.py run has actually happened
+    against a real database yet in this pass.
+tag_schema:
+  part_of_speech: [noun, adjective, verb, particle, proper_noun, pronoun, adverb, preposition]
+  agreement_tags:
+    semantic: [place_word, direction_side, direction_connector, is_on_side]
+slot_presets:
+  place_word: &place_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: place_word}}
+  direction_side: &direction_side {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: direction_side}}
+  direction_connector: &direction_connector {language_code: fa, part_of_speech: [adverb, preposition], agreement_tags: {semantic: direction_connector}}
+  is_on_side: &is_on_side {language_code: fa, part_of_speech: verb, agreement_tags: {semantic: is_on_side}}
+templates:
+  - content_key: practice.en-fa.fa.a1.unit05.lesson01.place_choice.001
+    lesson_content_key: fa.a1.unit05.lesson01.hotel_restaurant
+    type: multiple_choice
+    frame: {text: "{place_word}", language_code: fa, direction: rtl}
+    slots: {place_word: *place_word}
+    answer_derivation: {kind: slot_gloss, slot: place_word}
+    feedback_frame: {text: "{place_word} names a place from this lesson.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit05.lesson01.place_match.002
+    lesson_content_key: fa.a1.unit05.lesson01.hotel_restaurant
+    type: matching_pairs
+    frame: {text: "{first} · {second}", language_code: fa, direction: rtl}
+    slots: {first: *place_word, second: *place_word}
+    slot_relations: [{kind: distinct, slots: [first, second]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second]}
+    feedback_frame: {text: "Match each Farsi place word to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit05.lesson01.place_translate.003
+    lesson_content_key: fa.a1.unit05.lesson01.hotel_restaurant
+    type: translation
+    frame: {text: "{place_word}", language_code: en, direction: ltr, slot_rendering: {place_word: english_gloss}}
+    slots: {place_word: *place_word}
+    answer_derivation: {kind: slot_text, slot: place_word}
+    feedback_frame: {text: "The Farsi word is {place_word}.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit05.lesson02.side_choice.001
+    lesson_content_key: fa.a1.unit05.lesson02.samt_rast_chap
+    type: multiple_choice
+    frame: {text: "{direction_side}", language_code: fa, direction: rtl}
+    slots: {direction_side: *direction_side}
+    answer_derivation: {kind: slot_gloss, slot: direction_side}
+    feedback_frame: {text: "{direction_side} is a direction word from this lesson.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit05.lesson02.side_match.002
+    lesson_content_key: fa.a1.unit05.lesson02.samt_rast_chap
+    type: matching_pairs
+    frame: {text: "{first} · {second}", language_code: fa, direction: rtl}
+    slots: {first: *direction_side, second: *direction_side}
+    slot_relations: [{kind: distinct, slots: [first, second]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second]}
+    feedback_frame: {text: "Match each direction word to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit05.lesson02.is_on_side_translate.003
+    lesson_content_key: fa.a1.unit05.lesson02.samt_rast_chap
+    type: translation
+    frame: {text: "{is_on_side}", language_code: en, direction: ltr, slot_rendering: {is_on_side: english_gloss}}
+    slots: {is_on_side: *is_on_side}
+    answer_derivation: {kind: slot_text, slot: is_on_side}
+    feedback_frame: {text: "{is_on_side} is a colloquial location phrase from this lesson.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit05.lesson03.connector_choice.001
+    lesson_content_key: fa.a1.unit05.lesson03.mostaghim_va_narahi
+    type: multiple_choice
+    frame: {text: "{direction_connector}", language_code: fa, direction: rtl}
+    slots: {direction_connector: *direction_connector}
+    answer_derivation: {kind: slot_gloss, slot: direction_connector}
+    feedback_frame: {text: "{direction_connector} is a direction word from this lesson.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit05.lesson03.connector_match.002
+    lesson_content_key: fa.a1.unit05.lesson03.mostaghim_va_narahi
+    type: matching_pairs
+    frame: {text: "{first} · {second}", language_code: fa, direction: rtl}
+    slots: {first: *direction_connector, second: *direction_connector}
+    slot_relations: [{kind: distinct, slots: [first, second]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit05.lesson03.connector_translate.003
+    lesson_content_key: fa.a1.unit05.lesson03.mostaghim_va_narahi
+    type: translation
+    frame: {text: "{direction_connector}", language_code: en, direction: ltr, slot_rendering: {direction_connector: english_gloss}}
+    slots: {direction_connector: *direction_connector}
+    answer_derivation: {kind: slot_text, slot: direction_connector}
+    feedback_frame: {text: "The Farsi word is {direction_connector}.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit05.lesson04.place_choice.001
+    lesson_content_key: fa.a1.unit05.lesson04.dialogue_narahi
+    type: multiple_choice
+    frame: {text: "{place_word}", language_code: fa, direction: rtl}
+    slots: {place_word: *place_word}
+    answer_derivation: {kind: slot_gloss, slot: place_word}
+    feedback_frame: {text: "{place_word} is a place word from this dialogue.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit05.lesson04.direction_translate.002
+    lesson_content_key: fa.a1.unit05.lesson04.dialogue_narahi
+    type: translation
+    frame: {text: "{direction_connector}", language_code: en, direction: ltr, slot_rendering: {direction_connector: english_gloss}}
+    slots: {direction_connector: *direction_connector}
+    answer_derivation: {kind: slot_text, slot: direction_connector}
+    feedback_frame: {text: "{direction_connector} is a direction word from this dialogue.", language_code: en, direction: ltr}

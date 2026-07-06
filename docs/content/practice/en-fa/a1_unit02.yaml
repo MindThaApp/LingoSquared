@@ -6,7 +6,7 @@ unit_content_key: fa.a1.unit02.introductions
 review:
   status: reviewed
   fresh_context: true
-  notes: "Fresh review found and resolved name morphology, country coupling, letter gloss, dialogue-slot, and answer-derivation defects. A targeted post-review fix removed leaked review-process language from learner-facing feedback; this was not a new full fresh-context review."
+  notes: "Fresh review found and resolved name morphology, country coupling, letter gloss, dialogue-slot, and answer-derivation defects. A targeted post-review fix removed leaked review-process language from learner-facing feedback; this was not a new full fresh-context review. Second targeted post-review fix, 2026-07-06: scripts/_practice_slot_check.py surfaced that 2 multiple_choice templates (name_word, origin_marker) each had only 1 real distinct lexeme candidate against the >=3 multiple_choice/matching_pairs threshold. Converted both to fill_in_blank (same slot, needs only >=1 candidate). Re-verified via compile_content.py practice-validate (0/0) and _practice_slot_check.py (both now pass). NOT fixed, still real and open: 4 matching_pairs templates in this file (name_pair.005, iran_pair.003, england_pair.004, france_pair.005, origin_pair.006 -- 5 total) have the same underlying single-candidate-tag problem (country/nationality each only have 1 member per specific country); restructuring needs either 2+ real vocabulary additions per country or a type change -- left for whoever next extends this unit's vocabulary."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -77,13 +77,18 @@ templates:
     feedback_frame: {text: "All three letters use sound labels taught in this script lesson.", language_code: en, direction: ltr}
 
   # Lesson 2: names and self-introduction.
-  - content_key: practice.en-fa.fa.a1.unit02.lesson02.name_word.001
+  - content_key: practice.en-fa.fa.a1.unit02.lesson02.name_fill.001
     lesson_content_key: fa.a1.unit02.lesson02.names
-    type: multiple_choice
-    frame: {text: "{name_word}", language_code: fa, direction: rtl}
+    type: fill_in_blank
+    frame:
+      text: "{name_word}"
+      language_code: fa
+      direction: rtl
+      text_blocks:
+        - {text: "Complete the word for 'name.'", language_code: en, direction: ltr}
     slots: {name_word: *name_word}
-    answer_derivation: {kind: slot_gloss, slot: name_word}
-    feedback_frame: {text: "{name_word} means ‘name.’", language_code: en, direction: ltr}
+    answer_derivation: {kind: slot_text, slot: name_word}
+    feedback_frame: {text: "{name_word} means 'name.'", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit02.lesson02.formal_name.002
     lesson_content_key: fa.a1.unit02.lesson02.names
     type: word_order
@@ -218,12 +223,17 @@ templates:
     feedback_frame: {text: "This country and nationality belong together.", language_code: en, direction: ltr}
 
   # Lesson 5: asking and answering about origin.
-  - content_key: practice.en-fa.fa.a1.unit02.lesson05.origin_marker.001
+  - content_key: practice.en-fa.fa.a1.unit02.lesson05.origin_fill.001
     lesson_content_key: fa.a1.unit02.lesson05.origin
-    type: multiple_choice
-    frame: {text: "{origin_marker}", language_code: fa, direction: rtl}
+    type: fill_in_blank
+    frame:
+      text: "{origin_marker}"
+      language_code: fa
+      direction: rtl
+      text_blocks:
+        - {text: "Complete the word that links a person to their place of origin.", language_code: en, direction: ltr}
     slots: {origin_marker: *origin_marker}
-    answer_derivation: {kind: slot_gloss, slot: origin_marker}
+    answer_derivation: {kind: slot_text, slot: origin_marker}
     feedback_frame: {text: "{origin_marker} links a person to a place of origin.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit02.lesson05.origin_question.002
     lesson_content_key: fa.a1.unit02.lesson05.origin

@@ -1,0 +1,94 @@
+schema_version: "1.0"
+pack_key: practice.fa-en.a1.unit07
+source_language: fa
+target_language: en
+unit_content_key: en.a1.unit07.food
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: >-
+    Authored 2026-07-06 by a fork of the practice-pool-sync lane
+    (en-fa/fa-en/en-prs gap). The food_item tag (coffee/tea/water/bread/
+    soup/salad/sandwich, 7 members) already exists in scripts/
+    _en_target_lexeme_common.py from the nl-en lane's own unit07 work --
+    only Farsi glosses were added to scripts/backfill_lexemes_fa_en.py.
+    This unit's ordering phrases/menu-reading/dialogue content is mostly
+    fixed multi-word phrases and specific prices, not further
+    slot-fillable vocabulary beyond food_item itself, so every lesson's
+    templates reuse that one tag for bare-word recognition -- consistent
+    with this lane's standing "don't force an unsafe or fake generative
+    frame" discipline when the vocabulary doesn't support one. Verified
+    with scripts/_practice_slot_check.py that every slot has >=1
+    candidate and every multiple_choice/matching_pairs slot has >=3
+    distinct candidate values.
+tag_schema:
+  part_of_speech: [noun, adjective, adverb, pronoun, verb, particle, symbol]
+  agreement_tags:
+    semantic: [food_item]
+slot_presets:
+  food_item: &food_item {language_code: en, part_of_speech: noun, agreement_tags: {semantic: food_item}}
+templates:
+  - content_key: practice.fa-en.en.a1.unit07.lesson01.food_gloss.001
+    lesson_content_key: en.a1.unit07.lesson01.food_drink_vocabulary
+    type: multiple_choice
+    frame: {text: "{food_item}", language_code: en, direction: ltr}
+    slots: {food_item: *food_item}
+    answer_derivation: {kind: slot_gloss, slot: food_item}
+    feedback_frame: {text: "معنی فارسی {food_item} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit07.lesson01.food_listen.002
+    lesson_content_key: en.a1.unit07.lesson01.food_drink_vocabulary
+    type: listen_select
+    frame: {text: "{food_item}", language_code: en, direction: ltr}
+    slots: {food_item: *food_item}
+    answer_derivation: {kind: slot_gloss, slot: food_item}
+    feedback_frame: {text: "واژه‌ای که شنیدید {food_item} بود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit07.lesson01.food_pair.003
+    lesson_content_key: en.a1.unit07.lesson01.food_drink_vocabulary
+    type: matching_pairs
+    frame: {text: "{food_one} — {food_two}", language_code: en, direction: ltr}
+    slots: {food_one: *food_item, food_two: *food_item}
+    slot_relations: [{kind: distinct, slots: [food_one, food_two]}]
+    answer_derivation: {kind: matching_pairs, slots: [food_one, food_two]}
+    feedback_frame: {text: "هر واژهٔ غذا را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit07.lesson01.food_translate.004
+    lesson_content_key: en.a1.unit07.lesson01.food_drink_vocabulary
+    type: translation
+    frame: {text: "{food_item}", language_code: fa, direction: rtl, slot_rendering: {food_item: english_gloss}}
+    slots: {food_item: *food_item}
+    answer_derivation: {kind: slot_text, slot: food_item}
+    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این غذای فارسی است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit07.lesson02.order_fill.001
+    lesson_content_key: en.a1.unit07.lesson02.ordering_phrases
+    type: fill_in_blank
+    frame: {text: "I'd like a {food_item}, please.", language_code: en, direction: ltr}
+    slots: {food_item: *food_item}
+    answer_derivation: {kind: slot_text, slot: food_item}
+    feedback_frame: {text: "{food_item} این سفارش را کامل می‌کند.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit07.lesson02.order_listen.002
+    lesson_content_key: en.a1.unit07.lesson02.ordering_phrases
+    type: listen_select
+    frame: {text: "{food_item}", language_code: en, direction: ltr}
+    slots: {food_item: *food_item}
+    answer_derivation: {kind: slot_gloss, slot: food_item}
+    feedback_frame: {text: "واژه‌ای که شنیدید {food_item} بود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit07.lesson03.food_gloss.001
+    lesson_content_key: en.a1.unit07.lesson03.reading_a_menu
+    type: multiple_choice
+    frame: {text: "{food_item}", language_code: en, direction: ltr}
+    slots: {food_item: *food_item}
+    answer_derivation: {kind: slot_gloss, slot: food_item}
+    feedback_frame: {text: "معنی فارسی {food_item} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit07.lesson04.order_fill.001
+    lesson_content_key: en.a1.unit07.lesson04.cafe_dialogue
+    type: fill_in_blank
+    frame: {text: "I'd like a {food_item}, please.", language_code: en, direction: ltr}
+    slots: {food_item: *food_item}
+    answer_derivation: {kind: slot_text, slot: food_item}
+    feedback_frame: {text: "{food_item} این سفارش را کامل می‌کند.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit07.lesson04.food_translate.002
+    lesson_content_key: en.a1.unit07.lesson04.cafe_dialogue
+    type: translation
+    frame: {text: "{food_item}", language_code: fa, direction: rtl, slot_rendering: {food_item: english_gloss}}
+    slots: {food_item: *food_item}
+    answer_derivation: {kind: slot_text, slot: food_item}
+    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این غذای فارسی است.", language_code: fa, direction: rtl}

@@ -53,6 +53,30 @@ UNIT_FILES = (
         REPO_ROOT / "docs/content/realizations/en/a1_unit02_introductions.yaml",
         REPO_ROOT / "docs/content/overlays/prs-en/a1_unit02.yaml",
     ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit03_numbers.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a1_unit03.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit04_dates.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a1_unit04.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit05_time.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a1_unit05.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit06_family.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a1_unit06.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit07_food.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a1_unit07.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit08_shopping.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a1_unit08.yaml",
+    ),
 )
 
 # Dari gloss for each shared English target token -- hand-written for
@@ -77,6 +101,69 @@ EN_TARGET_TO_PRS_GLOSS: dict[str, str] = {
     "engineer": "انجنیر", "library": "کتابخانه", "assistant": "دستیار",
     "daniel": "دنیل", "work": "کار کردن", "at": "در", "the": "(حرف تعریف معین)",
     "welcome": "خوشامد", "thank": "تشکر کردن",
+    # Unit 3 (numbers/ages/prices/phones/market), added 2026-07-06. Some
+    # real Dari-specific vocabulary here vs the fa-en script's Farsi
+    # (dollars/phone/number use the Afghan Dari borrowings دالر/تیلفون/
+    # نمبر, not Farsi's دلار/تلفن/شماره).
+    "zero": "صفر", "one": "یک", "two": "دو", "three": "سه", "four": "چهار",
+    "five": "پنج", "six": "شش", "seven": "هفت", "eight": "هشت",
+    "nine": "نه (عدد)", "ten": "ده", "eleven": "یازده", "twelve": "دوازده",
+    "thirteen": "سیزده", "fifteen": "پانزده", "twenty": "بیست",
+    "twenty-one": "بیست و یک", "thirty": "سی", "forty": "چهل",
+    "fifty": "پنجاه", "hundred": "صد", "twenty-five": "بیست و پنج",
+    "old": "سال قدمت‌داشتن (در بیان سن)", "years": "سال (جمع)",
+    "it's": "این ... است (مخفف it is)", "dollars": "دالر (جمع)",
+    "phone": "تیلفون", "number": "نمبر", "market": "بازار",
+    "apples": "سیب‌ها", "they're": "دوی ... استند (مخفف they are)",
+    "ok": "خیر است؛ باشه", "this": "این", "shop": "دکان",
+    "much": "چقدر (در how much)",
+    # Unit 4 (days/months/calendar dates), added 2026-07-06. POS/tags
+    # already shared from _en_target_lexeme_common.py (nl-en's own unit04
+    # work) -- only these Dari glosses were needed. Month names use the
+    # English-derived borrowings common in Afghan Dari (جنوری/مارچ/جولای/
+    # سپتمبر/دسمبر), genuinely distinct from Farsi's French-derived forms
+    # (ژانویه/مارس/ژوئیه/سپتامبر/دسامبر) -- not a copy of the fa-en dict.
+    "monday": "دوشنبه", "tuesday": "سه‌شنبه", "wednesday": "چهارشنبه",
+    "thursday": "پنجشنبه", "friday": "جمعه", "saturday": "شنبه",
+    "sunday": "یکشنبه", "it": "آن", "today": "امروز", "january": "جنوری",
+    "march": "مارچ", "july": "جولای", "september": "سپتمبر",
+    "december": "دسمبر", "which": "کدام", "month": "ماه",
+    "today's": "امروزِ ... (مالکیت)", "date": "تاریخ", "7th": "هفتم",
+    "can": "می‌تانم؛ می‌تانه (تانستن، فعل کمکی دری)", "also": "هم",
+    "write": "نوشتن", "as": "به حیث", "when's": "کی است (مخفف when is)",
+    "birthday": "سالگره", "3rd": "سوم", "opens": "باز می‌شه", "again": "دوباره",
+    "open": "باز", "on": "در؛ روی", "9th": "نهم", "great": "خوب است",
+    "then": "بعد",
+    # Unit 5 (telling the time), added 2026-07-06.
+    "time": "وخت", "o'clock": "بجه (ساعتِ تمام)", "half": "نیم",
+    "past": "و ... (در بیان وخت)", "quarter": "ربع", "night": "شب",
+    "store": "دکان", "in": "در", "closes": "بند می‌شه",
+    "does": "(فعل کمکی پرسشی)", "close": "بند کردن",
+    # Unit 6 (family members and relationships), added 2026-07-06.
+    "mother": "مادر", "father": "پدر", "brother": "برادر", "sister": "خواهر",
+    "parents": "والدین", "siblings": "خواهر و برادرها",
+    "grandmother": "بی‌بی", "grandfather": "بابه", "aunt": "عمه؛ خاله",
+    "uncle": "کاکا؛ ماما", "cousin": "پسرکاکا؛ دخترکاکا (و مشابه)",
+    "his": "مالِ او (مذکر)", "her": "مالِ او (مؤنث)",
+    "she's": "او ... است (مخفف she is)", "brothers": "برادران",
+    "do": "(فعل کمکی پرسشی)", "any": "هیچ", "don't": "(منفیِ فعل کمکی do)",
+    "only": "فقط", "child": "بچه", "photo": "عکس", "family": "فامیل",
+    "who": "کیا", "just": "فقط؛ همینحالا",
+    # Unit 7 (food, drink, and ordering), added 2026-07-06.
+    "coffee": "قهوه", "tea": "چای", "water": "آب", "bread": "نان",
+    "soup": "شوروا", "salad": "سالاد", "sandwich": "ساندویچ",
+    "i'd": "من می‌خواهم (مخفف I would)", "like": "خواستن",
+    "please": "لطفاً", "anything": "چیزی", "else": "دیگه",
+    "that's": "دا ... است (مخفف that is)", "all": "بس", "for": "به خاطر",
+    "here": "اینجا", "or": "یا", "go": "رفتن؛ بردن (بیرون‌بر)",
+    "menu": "مینو", "price": "قیمت", "cafe": "کیفی", "3": "سه",
+    "2": "دو", "5": "پنج", "6": "شش", "sure": "البته",
+    # Unit 8 (shopping: prices and quantities), added 2026-07-06.
+    "pound": "پوند (واحد وزن)", "of": "از", "dozen": "درجن",
+    "eggs": "تخم‌ها", "bottle": "بوتل", "bag": "کیسه", "rice": "برنج",
+    "kilo": "کیلو", "tomatoes": "بادنجان رومی‌ها", "pounds": "پوندها",
+    "fresh": "تازه", "per": "هر",
+    "4": "چهار",
 }
 
 

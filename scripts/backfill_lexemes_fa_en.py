@@ -61,6 +61,26 @@ UNIT_FILES = (
         REPO_ROOT / "docs/content/realizations/en/a1_unit03_numbers.yaml",
         REPO_ROOT / "docs/content/overlays/fa-en/a1_unit03.yaml",
     ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit04_dates.yaml",
+        REPO_ROOT / "docs/content/overlays/fa-en/a1_unit04.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit05_time.yaml",
+        REPO_ROOT / "docs/content/overlays/fa-en/a1_unit05.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit06_family.yaml",
+        REPO_ROOT / "docs/content/overlays/fa-en/a1_unit06.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit07_food.yaml",
+        REPO_ROOT / "docs/content/overlays/fa-en/a1_unit07.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit08_shopping.yaml",
+        REPO_ROOT / "docs/content/overlays/fa-en/a1_unit08.yaml",
+    ),
 )
 
 # Farsi gloss for each shared English target token -- hand-written for
@@ -100,6 +120,52 @@ EN_TARGET_TO_FA_GLOSS: dict[str, str] = {
     "apples": "سیب‌ها", "they're": "آنها ... هستند (مخفف they are)",
     "ok": "باشه؛ خب", "this": "این", "shop": "مغازه",
     "much": "چقدر (در how much)",
+    # Unit 4 (days/months/calendar dates), added 2026-07-06. POS/tags
+    # already shared from _en_target_lexeme_common.py (nl-en's own unit04
+    # work) -- only these Farsi glosses were needed.
+    "monday": "دوشنبه", "tuesday": "سه‌شنبه", "wednesday": "چهارشنبه",
+    "thursday": "پنجشنبه", "friday": "جمعه", "saturday": "شنبه",
+    "sunday": "یکشنبه", "it": "آن", "today": "امروز", "january": "ژانویه",
+    "march": "مارس", "july": "ژوئیه", "september": "سپتامبر",
+    "december": "دسامبر", "which": "کدام", "month": "ماه",
+    "today's": "امروزِ ... (مالکیت)", "date": "تاریخ", "7th": "هفتم",
+    "can": "می‌تواند؛ می‌توان", "also": "همچنین", "write": "نوشتن",
+    "as": "به عنوان", "when's": "کی است (مخفف when is)", "birthday": "تولد",
+    "3rd": "سوم", "opens": "باز می‌شود", "again": "دوباره", "open": "باز",
+    "on": "در؛ روی", "9th": "نهم", "great": "عالی", "then": "سپس",
+    # Unit 5 (telling the time), added 2026-07-06.
+    "time": "زمان", "o'clock": "ساعت (تمام)",
+    "half": "نیم", "past": "و ... (در بیان زمان، مثلاً ربع گذشته از)",
+    "quarter": "ربع", "night": "شب", "store": "مغازه",
+    "in": "در", "closes": "بسته می‌شود", "does": "(فعل کمکی پرسشی)",
+    "close": "بستن",
+    # Unit 6 (family members and relationships), added 2026-07-06.
+    "mother": "مادر", "father": "پدر", "brother": "برادر", "sister": "خواهر",
+    "parents": "والدین", "siblings": "خواهر و برادرها",
+    "grandmother": "مادربزرگ", "grandfather": "پدربزرگ",
+    "aunt": "عمه؛ خاله", "uncle": "عمو؛ دایی",
+    "cousin": "پسرعمو؛ دخترعمو (و مشابه)", "his": "مالِ او (مذکر)",
+    "her": "مالِ او (مؤنث)", "she's": "او ... است (مخفف she is)",
+    "brothers": "برادرها", "do": "(فعل کمکی پرسشی)", "any": "هیچ",
+    "don't": "(منفیِ فعل کمکی do)", "only": "فقط", "child": "بچه",
+    "photo": "عکس", "family": "خانواده", "who": "چه کسی",
+    "just": "فقط؛ تازه",
+    # Unit 7 (food, drink, and ordering), added 2026-07-06.
+    "coffee": "قهوه", "tea": "چای", "water": "آب", "bread": "نان",
+    "soup": "سوپ", "salad": "سالاد", "sandwich": "ساندویچ",
+    "i'd": "من می‌خواهم (مخفف I would)", "like": "خواستن؛ دوست داشتن",
+    "please": "لطفاً", "anything": "چیزی", "else": "دیگر",
+    "that's": "آن ... است (مخفف that is)", "all": "همه؛ همین",
+    "for": "برای", "here": "اینجا", "or": "یا",
+    "go": "رفتن؛ بردن (بیرون‌بر)", "menu": "منو", "price": "قیمت",
+    "cafe": "کافه", "3": "سه", "2": "دو", "5": "پنج", "6": "شش",
+    "sure": "البته",
+    # Unit 8 (shopping: prices and quantities), added 2026-07-06.
+    "pound": "پوند (واحد وزن)", "of": "از", "dozen": "دوجین",
+    "eggs": "تخم‌مرغ‌ها", "bottle": "بطری", "bag": "کیسه", "rice": "برنج",
+    "kilo": "کیلو", "tomatoes": "گوجه‌فرنگی‌ها", "pounds": "پوندها",
+    "fresh": "تازه", "per": "هر",
+    "4": "چهار",
 }
 
 

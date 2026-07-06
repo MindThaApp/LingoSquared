@@ -1,0 +1,112 @@
+schema_version: "1.0"
+pack_key: practice.fa-en.a1.unit06
+source_language: fa
+target_language: en
+unit_content_key: en.a1.unit06.family
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: >-
+    Authored 2026-07-06 by a fork of the practice-pool-sync lane
+    (en-fa/fa-en/en-prs gap). All English-side POS/agreement tags
+    (family_singular/family_collective/extended_family/possessive)
+    already exist in scripts/_en_target_lexeme_common.py from the nl-en
+    lane's own unit06 work -- only Farsi glosses were added to
+    scripts/backfill_lexemes_fa_en.py. The possessive tag
+    (my/your/his/her, 4 members) is used in a "This is {item} sister."
+    frame -- verified safe (all four are genuinely interchangeable
+    determiners in that slot, matching the nl-en lane's own rationale
+    for this exact tag). family_collective (parents/siblings, only 2
+    members) is kept out of multiple_choice/matching_pairs per this
+    lane's >=3-distinct-candidate threshold, used only in translation.
+    Verified with scripts/_practice_slot_check.py that every slot has
+    >=1 candidate and every multiple_choice/matching_pairs slot has
+    >=3 distinct candidate values.
+tag_schema:
+  part_of_speech: [noun, adjective, adverb, pronoun, verb, particle, symbol]
+  agreement_tags:
+    semantic: [family_singular, family_collective, extended_family, possessive]
+slot_presets:
+  family_singular: &family_singular {language_code: en, part_of_speech: noun, agreement_tags: {semantic: family_singular}}
+  family_collective: &family_collective {language_code: en, part_of_speech: noun, agreement_tags: {semantic: family_collective}}
+  extended_family: &extended_family {language_code: en, part_of_speech: noun, agreement_tags: {semantic: extended_family}}
+  possessive: &possessive {language_code: en, part_of_speech: pronoun, agreement_tags: {semantic: possessive}}
+templates:
+  - content_key: practice.fa-en.en.a1.unit06.lesson01.family_gloss.001
+    lesson_content_key: en.a1.unit06.lesson01.immediate_family
+    type: multiple_choice
+    frame: {text: "{family_singular}", language_code: en, direction: ltr}
+    slots: {family_singular: *family_singular}
+    answer_derivation: {kind: slot_gloss, slot: family_singular}
+    feedback_frame: {text: "معنی فارسی {family_singular} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit06.lesson01.family_listen.002
+    lesson_content_key: en.a1.unit06.lesson01.immediate_family
+    type: listen_select
+    frame: {text: "{family_singular}", language_code: en, direction: ltr}
+    slots: {family_singular: *family_singular}
+    answer_derivation: {kind: slot_gloss, slot: family_singular}
+    feedback_frame: {text: "واژه‌ای که شنیدید {family_singular} بود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit06.lesson01.family_pair.003
+    lesson_content_key: en.a1.unit06.lesson01.immediate_family
+    type: matching_pairs
+    frame: {text: "{family_one} — {family_two}", language_code: en, direction: ltr}
+    slots: {family_one: *family_singular, family_two: *family_singular}
+    slot_relations: [{kind: distinct, slots: [family_one, family_two]}]
+    answer_derivation: {kind: matching_pairs, slots: [family_one, family_two]}
+    feedback_frame: {text: "هر واژهٔ خانواده را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit06.lesson01.family_collective_translate.004
+    lesson_content_key: en.a1.unit06.lesson01.immediate_family
+    type: translation
+    frame: {text: "{family_collective}", language_code: fa, direction: rtl, slot_rendering: {family_collective: english_gloss}}
+    slots: {family_collective: *family_collective}
+    answer_derivation: {kind: slot_text, slot: family_collective}
+    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژهٔ فارسی است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit06.lesson02.extended_gloss.001
+    lesson_content_key: en.a1.unit06.lesson02.extended_family_possessives
+    type: multiple_choice
+    frame: {text: "{extended_family}", language_code: en, direction: ltr}
+    slots: {extended_family: *extended_family}
+    answer_derivation: {kind: slot_gloss, slot: extended_family}
+    feedback_frame: {text: "معنی فارسی {extended_family} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit06.lesson02.extended_listen.002
+    lesson_content_key: en.a1.unit06.lesson02.extended_family_possessives
+    type: listen_select
+    frame: {text: "{extended_family}", language_code: en, direction: ltr}
+    slots: {extended_family: *extended_family}
+    answer_derivation: {kind: slot_gloss, slot: extended_family}
+    feedback_frame: {text: "واژه‌ای که شنیدید {extended_family} بود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit06.lesson02.possessive_order.003
+    lesson_content_key: en.a1.unit06.lesson02.extended_family_possessives
+    type: word_order
+    frame: {text: "This is {item} sister", language_code: en, direction: ltr}
+    slots: {item: *possessive}
+    answer_derivation: {kind: render_frame, frame: {text: "This is {item} sister", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} ضمیر ملکی این جمله را کامل می‌کند.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit06.lesson02.possessive_fill.004
+    lesson_content_key: en.a1.unit06.lesson02.extended_family_possessives
+    type: fill_in_blank
+    frame: {text: "This is {item} sister.", language_code: en, direction: ltr}
+    slots: {item: *possessive}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} ضمیر ملکی درست برای این جمله است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit06.lesson03.family_translate.001
+    lesson_content_key: en.a1.unit06.lesson03.describing_family
+    type: translation
+    frame: {text: "{family_singular}", language_code: fa, direction: rtl, slot_rendering: {family_singular: english_gloss}}
+    slots: {family_singular: *family_singular}
+    answer_derivation: {kind: slot_text, slot: family_singular}
+    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژهٔ فارسی است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit06.lesson04.family_listen.001
+    lesson_content_key: en.a1.unit06.lesson04.family_photo_dialogue
+    type: listen_select
+    frame: {text: "{family_singular}", language_code: en, direction: ltr}
+    slots: {family_singular: *family_singular}
+    answer_derivation: {kind: slot_gloss, slot: family_singular}
+    feedback_frame: {text: "واژه‌ای که در این گفتگو شنیدید {family_singular} بود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit06.lesson04.extended_translate.002
+    lesson_content_key: en.a1.unit06.lesson04.family_photo_dialogue
+    type: translation
+    frame: {text: "{extended_family}", language_code: fa, direction: rtl, slot_rendering: {extended_family: english_gloss}}
+    slots: {extended_family: *extended_family}
+    answer_derivation: {kind: slot_text, slot: extended_family}
+    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژهٔ فارسی است.", language_code: fa, direction: rtl}

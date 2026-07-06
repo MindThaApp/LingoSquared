@@ -4,8 +4,8 @@ source_language: fa
 target_language: en
 unit_content_key: en.a1.unit03.numbers
 review:
-  status: unreviewed
-  fresh_context: false
+  status: reviewed
+  fresh_context: true
   notes: >-
     Authored by the practice-pool-sync lane (fa/prs bundle), 2026-07-05.
     Extended scripts/backfill_lexemes_fa_en.py's UNIT_FILES to cover this
@@ -13,31 +13,60 @@ review:
     classification for these English tokens was already added to the
     shared scripts/_en_target_lexeme_common.py module by the nl-en lane
     for its own nl-en unit03 pack, so only a Farsi gloss dict extension
-    was needed here, not new classification work. Verified with
-    scripts/_practice_slot_check.py (a standalone harness replicating
-    backend/app/practice/service.py's lexeme_matches() exactly, run
-    directly against backfill_lexemes_fa_en.iter_specs()'s real output,
-    no DB needed) that every slot below has >=1 candidate and every
-    multiple_choice/matching_pairs slot has >=3 distinct candidate
-    values.
+    was needed here, not new classification work.
 
     Two slots ("phone_word": phone/number, 2 candidates; "age_adjective":
     just "old", 1 candidate; "price_noun": just "dollars", 1 candidate)
     are deliberately restricted to fill_in_blank/translation/word_order,
-    never multiple_choice/matching_pairs, per the same too-few-candidates
-    caution this lane applied to the en-fa unit03/unit04 packs. Every
-    fill_in_blank frame below has real surrounding text beyond the
-    blanked slot (AUTHORING_GUIDE §13) -- flagging that the EXISTING
-    fa-en/a1_unit01.yaml and a1_unit02.yaml packs have at least one
-    bare-slot fill_in_blank frame each (e.g. unit02's role_fill:
-    `frame: {text: "{dialogue_word}"}`) that predates §13 being written
-    and was NOT fixed here, since editing already-shipped sibling files
-    was out of this task's scope -- worth a follow-up pass.
+    never multiple_choice/matching_pairs, per this lane's >=3-distinct-
+    candidate threshold. Every fill_in_blank frame has real surrounding
+    text beyond the blanked slot (AUTHORING_GUIDE §13).
 
-    Not yet compiler-validated or DB-verified as of this writing (left
-    for the end-of-session scripts/verify.sh run); status left
-    unreviewed pending a real fresh-context review, per project
-    convention -- this lane does not self-certify review status.
+    Fresh-context review, 2026-07-06 (separate session, zero access to
+    the authoring reasoning above, per this project's non-self-
+    certification convention): cross-checked every lesson_content_key
+    against docs/content/realizations/en/a1_unit03_numbers.yaml (all
+    match); wrote a standalone harness importing
+    scripts/backfill_lexemes_fa_en.py's real iter_specs() output,
+    replicating backend/app/practice/service.py's lexeme_matches()
+    exactly, and printed every slot's full real candidate-token list for
+    every template (not just counts) -- confirmed every multiple_choice/
+    listen_select/matching_pairs slot has >=3 distinct candidates and
+    every other slot has >=1, matching scripts/_practice_slot_check.py's
+    independent OK result for this file.
+
+    **One real bug found and fixed**: age_fill.002 ("I'm {number} years
+    {age_adjective}.") and price_fill.004 ("It's {number} {price_noun}.")
+    both embedded the full 22-member "number" tag (zero..hundred) as
+    unblanked context -- since "hundred" has no article in this pool, the
+    sampler could generate "I'm hundred years old."/"It's hundred
+    dollars.", the same bare-cardinal-number bug class the nl-en review
+    flagged (unfixed) in its own unit03/07/08/15 (needs a dedicated
+    shared-classifier tag split, which is out of this pack's file-edit
+    scope). Fixed here by baking the number as fixed literal text
+    matching this lesson's own real taught examples ("twenty-five" for
+    age, "ten" for price, per a1_unit03_numbers.yaml's own im_25/
+    its_ten_dollars teaching cards) instead of drawing it from the pool --
+    the slot actually under test in each template (age_adjective/
+    price_noun) is unaffected, and the risk is fully eliminated. Re-
+    verified after the fix: `compile_content.py practice-validate`
+    (0 errors/0 warnings) and the standalone harness (all slots still
+    clear their candidate-count bar; "hundred" no longer reachable in any
+    embedded-sentence frame in this file).
+
+    No self-reference, unbounded-number-elsewhere, non-interchangeable-
+    synonym, or article-agreement issues found in any other template:
+    number/age_word/price_word/phone_word/market_word are all used as
+    bare, isolated recognition/gloss/translate forms (no embedding risk
+    regardless of pool breadth); place_fill.002's place_singular
+    (market/shop) correctly excludes the plural "apples" per the shared
+    classifier's own documented rationale. phone_fill.005 ("What's your
+    {phone_word}?") shifts meaning slightly between "phone"/"number" but
+    both render a grammatical, sensible English question -- not a bug
+    under this review's bug-class bar.
+
+    Not yet DB-verified against a real backfill run (standing blocker
+    across every pack in this bundle, unrelated to this review).
 tag_schema:
   part_of_speech: [noun, adjective, adverb, pronoun]
   agreement_tags:
@@ -111,8 +140,21 @@ templates:
   - content_key: practice.fa-en.en.a1.unit03.lesson03.age_fill.002
     lesson_content_key: en.a1.unit03.lesson03.ages_prices_phones
     type: fill_in_blank
-    frame: {text: "I'm {number} years {age_adjective}.", language_code: en, direction: ltr}
-    slots: {number: *number, age_adjective: *age_adjective}
+    # Fresh-context review, 2026-07-06: number was previously a live slot
+    # here ("I'm {number} years {age_adjective}."), but the full 22-member
+    # "number" tag includes bare "hundred" with no article alongside zero/
+    # twenty-five/etc -- "I'm hundred years old." is ungrammatical (needs
+    # "one hundred"/"a hundred"), and no narrower tag excluding just
+    # "hundred" exists yet in the shared classifier (the same bare-
+    # "hundred" bug class the nl-en review flagged, unfixed, in its own
+    # unit03/07/08/15 -- needs a shared-classifier change out of this
+    # pack's file-edit scope). Fixed here instead by baking the number as
+    # fixed literal text matching this lesson's own real taught example
+    # ("I'm twenty-five years old.") -- the slot actually under test
+    # (age_adjective) is unaffected, and the risk is fully removed since
+    # no number is drawn from a pool in this template anymore.
+    frame: {text: "I'm twenty-five years {age_adjective}.", language_code: en, direction: ltr}
+    slots: {age_adjective: *age_adjective}
     answer_derivation: {kind: slot_text, slot: age_adjective}
     feedback_frame: {text: "برای گفتن سن، از years {age_adjective} استفاده می‌شود.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit03.lesson03.price_gloss.003
@@ -125,8 +167,13 @@ templates:
   - content_key: practice.fa-en.en.a1.unit03.lesson03.price_fill.004
     lesson_content_key: en.a1.unit03.lesson03.ages_prices_phones
     type: fill_in_blank
-    frame: {text: "It's {number} {price_noun}.", language_code: en, direction: ltr}
-    slots: {number: *number, price_noun: *price_noun}
+    # Same bare-"hundred" risk as age_fill.002 above ("It's hundred
+    # dollars." is ungrammatical) -- fixed the same way, baking the number
+    # as fixed literal text matching this lesson's own real taught example
+    # ("It's ten dollars."). price_noun, the slot actually under test, is
+    # unaffected.
+    frame: {text: "It's ten {price_noun}.", language_code: en, direction: ltr}
+    slots: {price_noun: *price_noun}
     answer_derivation: {kind: slot_text, slot: price_noun}
     feedback_frame: {text: "برای بیان قیمت، عدد را قبل از {price_noun} می‌گویند.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit03.lesson03.phone_fill.005
