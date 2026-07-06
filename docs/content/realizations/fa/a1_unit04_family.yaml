@@ -17,9 +17,38 @@ generation_provenance:
     authored in modern colloquial register, not copied or lightly
     edited from any 1960s source text.
 review:
-  status: unreviewed
-  required_next_reviewer: claude
-  notes: "New unit, six lessons. Audio remains pending generation."
+  status: reviewed
+  required_next_reviewer: null
+  notes: >-
+    Fresh-context review: verified spine-outcome discipline against
+    universal.a1.family.describe_relationships (no drift into unrelated
+    grammar); confirmed fa_IR_standard_colloquial_intro register/dialect
+    throughout, consistent with unit01 (هستم copula, Iranian names,
+    correct Persian keheh/yeh codepoints, no Dari -ین verb endings or
+    vocabulary). Fixed real bugs found: two register-mixing errors using
+    a -ین ending flagged as a Dari-style marker by this course's own
+    conventions (لسون05 "متأهلین یا مجرد؟" -> "متأهلی یا مجردی؟"; lesson06
+    "چند نفرین" clashing with the same sentence's informal خانواده‌ت ->
+    "چند نفرن" to match the established lesson04 pattern); a register-
+    mixing bug in lesson06's formal-register note that used the
+    affectionate داداش inside a "formal writing" example (-> برادرم) and
+    padded introduced_tokens with نداره that was never actually shown to
+    the learner (rewrote the note to genuinely display and teach داره/
+    نداره/دارد/ندارد); the same untaught-token-padding pattern in lesson05
+    (مجردم/متأهلین declared as introduced without ever being displayed --
+    added real "من مجردم."/"من متأهلم." teaching phrases and trimmed the
+    padding). Fixed three exercise-pacing gaps where a production/typing
+    exercise tested vocabulary with zero prior recognition-tier
+    (multiple_choice/listen_select) exposure within the lesson: lesson01
+    (خواهر), lesson03 (عمو/عمه/دایی/خاله), and lesson04 (خانواده‌ی شما چند
+    نفرن؟ / چهار نفریم, which previously had literally no exposure of any
+    kind before being required in a listen_type/dialogue_response) --
+    added one recognition exercise at each gap. Checked all MC distractor
+    sets (found no ambiguity), all free-text accepted_answers (none are
+    ungradeable blank templates), all learner-facing strings (no internal
+    jargon leaks), and cross-file content_key/introduced_tokens parity
+    with the overlay after every fix. No 1960s FSI-register leakage found
+    in the adapted content. Audio remains pending generation.
 
 course:
   realization_key: fa.a1
@@ -154,6 +183,10 @@ units:
             tested_text: مادر پدر
             media_asset_key: fa.a1.audio.madar_pedar.01
             prompt: {target_blocks: []}
+          - content_key: fa.a1.unit04.lesson01.exercise05b.recognize_khahar
+            type: multiple_choice
+            tested_text: خواهر
+            prompt: {target_blocks: [{text: "خواهر", language_code: fa, direction: rtl}]}
           - content_key: fa.a1.unit04.lesson01.exercise06.order_khahar
             type: word_order
             tested_text: خواهر برادر
@@ -275,6 +308,11 @@ units:
             type: multiple_choice
             tested_text: مادربزرگ
             prompt: {target_blocks: [{text: "مادربزرگ", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit04.lesson03.exercise02b.listen_aunts_uncles_recognition
+            type: listen_select
+            tested_text: عمو عمه دایی خاله
+            media_asset_key: fa.a1.audio.amoo_amme_dayi_khale.01
+            prompt: {target_blocks: []}
           - content_key: fa.a1.unit04.lesson03.exercise03.match_paternal
             type: matching_pairs
             tested_text: عمو عمه
@@ -348,6 +386,10 @@ units:
             tested_text: چند تا خواهر و برادر داری
             prompt: {target_blocks: []}
             word_bank: [داری, برادر, و, خواهر, تا, چند]
+          - content_key: fa.a1.unit04.lesson04.exercise03b.family_size_question_meaning
+            type: multiple_choice
+            tested_text: خانواده‌ی شما چند نفرن
+            prompt: {target_blocks: [{text: "خانواده‌ی شما چند نفرن؟", language_code: fa, direction: rtl}]}
           - content_key: fa.a1.unit04.lesson04.exercise04.listen_family_size
             type: listen_type
             tested_text: خانواده‌ی شما چند نفرن
@@ -357,6 +399,10 @@ units:
             type: dialogue_response
             tested_text: چند تا خواهر و برادر داری من یک برادر دارم
             prompt: {target_blocks: [{text: "چند تا خواهر و برادر داری؟", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit04.lesson04.exercise05b.family_size_answer_meaning
+            type: multiple_choice
+            tested_text: چهار نفریم
+            prompt: {target_blocks: [{text: "چهار نفریم.", language_code: fa, direction: rtl}]}
           - content_key: fa.a1.unit04.lesson04.exercise06.reply_family_size
             type: dialogue_response
             tested_text: خانواده‌ی شما چند نفرن چهار نفریم
@@ -389,7 +435,15 @@ units:
           - content_key: fa.a1.unit04.lesson05.teach.mojarad
             kind: vocabulary
             target: {text: "مجرد", language_code: fa, direction: rtl}
-            introduced_tokens: [مجرد, مجردم, متأهلین]
+            introduced_tokens: [مجرد]
+          - content_key: fa.a1.unit04.lesson05.teach.i_am_single
+            kind: phrase
+            target: {text: "من مجردم.", language_code: fa, direction: rtl}
+            introduced_tokens: [مجردم]
+          - content_key: fa.a1.unit04.lesson05.teach.i_am_married
+            kind: phrase
+            target: {text: "من متأهلم.", language_code: fa, direction: rtl}
+            introduced_tokens: [متأهلم]
           - content_key: fa.a1.unit04.lesson05.teach.nave
             kind: vocabulary
             target: {text: "نوه", language_code: fa, direction: rtl}
@@ -434,7 +488,7 @@ units:
           - content_key: fa.a1.unit04.lesson05.exercise08.speak_status
             type: speak_response
             tested_text: من مجردم
-            prompt: {target_blocks: [{text: "متأهلین یا مجرد؟", language_code: fa, direction: rtl}]}
+            prompt: {target_blocks: [{text: "متأهلی یا مجردی؟", language_code: fa, direction: rtl}]}
 
       - content_key: fa.a1.unit04.lesson06.family_photo_dialogue
         title: عکس خانواده
@@ -450,8 +504,8 @@ units:
             introduced_tokens: [آره, مامانمه, باباهم, مینا]
           - content_key: fa.a1.unit04.lesson06.teach.formal_register_note
             kind: grammar_note
-            target: {text: "در نوشتار رسمی: او دارد، او ندارد، او داداش است.", language_code: fa, direction: rtl}
-            introduced_tokens: [دارد, ندارد, نداره, است]
+            target: {text: "در گفتار: داره، نداره. در نوشتار رسمی: دارد، ندارد؛ او برادرم است.", language_code: fa, direction: rtl}
+            introduced_tokens: [نداره, دارد, ندارد, او, است]
           - content_key: fa.a1.unit04.lesson06.teach.who_is_he
             kind: dialogue
             target: {text: "سارا: این آقا کیه؟", language_code: fa, direction: rtl}
@@ -505,4 +559,4 @@ units:
           - content_key: fa.a1.unit04.lesson06.exercise08.speak_family_summary
             type: speak_response
             tested_text: خانواده‌ی من کوچیکه یک برادر دارم خواهر ندارم
-            prompt: {target_blocks: [{text: "دربارهٔ خانواده‌ت بگو: چند نفرین، چند تا خواهر و برادر داری؟", language_code: fa, direction: rtl}]}
+            prompt: {target_blocks: [{text: "دربارهٔ خانواده‌ت بگو: چند نفرن، چند تا خواهر و برادر داری؟", language_code: fa, direction: rtl}]}
