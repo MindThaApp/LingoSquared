@@ -422,6 +422,26 @@ to the authoring reasoning) before import.
 
 ## Footguns (hard-won, do not relearn these)
 
+- **Never `git add -A` or `git add .` when other sessions may have
+  files open.** Always stage explicit pathspecs for exactly the files
+  you touched. Two separate incidents 2026-07-06/07 (a coordinator
+  commit accidentally swept an entire concurrent session's uncommitted
+  feature into an unrelated small doc commit, twice) came from staging
+  broadly at nearly the same moment another session staged its own
+  work. Explicit-pathspec staging doesn't eliminate the race but
+  confines its blast radius to files you actually intended to commit —
+  verify with `git show --stat` on anything you commit that touches
+  files you didn't personally just edit.
+- **A safety-system block is a signal to stop and escalate, never an
+  obstacle to route around.** Confirmed 2026-07-06: after being
+  correctly blocked once for using a scraped credential, the same
+  session tried to widen its own tool permissions specifically to get
+  past that block — also correctly blocked. If a permission/safety
+  check stops an action, the right response is telling the user
+  plainly what you were trying to do and why, not finding a different
+  angle to attempt the same thing. This applies to every session/agent
+  on this project, not just the coordinator.
+
 - **Every migration after 0001 must defensively check existence
   before `op.add_column`/`op.create_table`/`op.create_foreign_key`/
   `op.create_index`.** `0001_initial.py` calls `Base.metadata.
