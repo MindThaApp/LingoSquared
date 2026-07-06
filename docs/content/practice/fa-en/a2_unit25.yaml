@@ -37,6 +37,36 @@ review:
     2 to 4 pairs (bureaucracy_noun/noun, real course-wide pool=4 --
     appointment/confirmation/document/form), no padding with untaught
     words.
+
+    Depth pass 2026-07-06 (practice-pool-sync, templates-per-unit audit):
+    8 -> 13 templates. This unit's real taught vocabulary is genuinely
+    thin for Endless Practice slot-filling -- only the 4-member
+    bureaucracy_noun tag is safe for bare-word recognition; every other
+    introduced_token is either a function word or part of a multi-word
+    A2 formal phrase ("I was wondering whether...", "Could you tell me
+    what I need to bring?") that doesn't reduce to a single fillable
+    slot without producing ungrammatical output, same discipline this
+    pack's own notes already documented above and nl-en's a2_unit25.yaml
+    established as the reference. No new EN_POS/agreement_tags entries
+    or Farsi glosses were added (none needed/allowed for this pass) --
+    every new template reuses the EXISTING bureaucracy_noun tag
+    (multiple_choice/listen_select/translation), filling the remaining
+    empty (lesson x exercise-type) cells of the natural 4-lesson x
+    3-recognition-type grid (12 slots) + the existing 1 matching_pairs =
+    13, which is the genuine ceiling for this unit as currently taught --
+    verified there is no untapped cell left (lesson02/03 now have
+    choose+listen+translate all present; lesson04 now has
+    choose+listen+translate all present; lesson01 was already complete).
+    Anchoring re-verified via a fresh iter_specs() dump grouped by
+    lesson_content_key: all four lessons still introduce real new
+    lexemes (registration_vocabulary: 6, making_a_formal_appointment: 9,
+    reading_a_registration_notice: 8, dmv_appointment_dialogue: 3), so no
+    anchor changed. Re-ran compile_content.py practice-validate (0
+    errors/0 warnings across the whole fa-en pack) and
+    scripts/_practice_slot_check.py (fa-en direction: OK, no new
+    problems -- the 5 pre-existing problems reported by that script are
+    all in en-fa unit01/unit02 matching_pairs templates, unrelated to
+    this unit or this direction).
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -80,6 +110,20 @@ templates:
     slots: {item: *bureaucracy_noun}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "واژه‌ای که شنیدید {item} بود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a2.unit25.lesson02.choose.002
+    lesson_content_key: en.a2.unit25.lesson02.making_a_formal_appointment
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *bureaucracy_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a2.unit25.lesson02.translate.003
+    lesson_content_key: en.a2.unit25.lesson02.making_a_formal_appointment
+    type: translation
+    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *bureaucracy_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a2.unit25.lesson03.listen.001
     lesson_content_key: en.a2.unit25.lesson03.reading_a_registration_notice
     type: listen_select
@@ -87,6 +131,20 @@ templates:
     slots: {item: *bureaucracy_noun}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "واژه‌ای که شنیدید {item} بود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a2.unit25.lesson03.choose.002
+    lesson_content_key: en.a2.unit25.lesson03.reading_a_registration_notice
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *bureaucracy_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a2.unit25.lesson03.translate.003
+    lesson_content_key: en.a2.unit25.lesson03.reading_a_registration_notice
+    type: translation
+    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *bureaucracy_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a2.unit25.lesson04.choose.001
     lesson_content_key: en.a2.unit25.lesson04.dmv_appointment_dialogue
     type: multiple_choice
@@ -94,6 +152,13 @@ templates:
     slots: {item: *bureaucracy_noun}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a2.unit25.lesson04.listen.003
+    lesson_content_key: en.a2.unit25.lesson04.dmv_appointment_dialogue
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *bureaucracy_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "واژه‌ای که در این گفتگو شنیدید {item} بود.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a2.unit25.lesson04.translate.002
     lesson_content_key: en.a2.unit25.lesson04.dmv_appointment_dialogue
     type: translation

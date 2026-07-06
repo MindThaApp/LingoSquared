@@ -43,6 +43,30 @@ review:
     warnings. Needs the standard fresh-context review before import; no
     backfill_lexemes_en_prs.py run has actually happened against a real
     database yet in this pass.
+
+    DEPTH PASS 2026-07-06 (per-unit template audit found this unit thin
+    at 7 vs unit02/03/04's 16-24): added opinion_word's remaining word_
+    order slot, plus person_name's remaining multiple_choice (pooled via
+    the already-unscoped *person_name preset, drawing the same real
+    10-candidate course-wide pool the existing name_pair template already
+    uses -- exactly mirrors a1_unit07.yaml's own person_name multiple_
+    choice template) and word_order (reusing a1_unit02.yaml's own "این
+    {person_name} است" frame verbatim) slots -- 7 -> 10 templates. This
+    is the real ceiling for this unit without inventing vocabulary or
+    extending scripts/backfill_lexemes_en_prs.py's classifier: opinion_
+    word and person_name are the only two semantic tags this unit's real
+    vocabulary has (verified by re-reading the classifier's own A2
+    unit10 section) -- lesson02/lesson04's به نظر من/چون/فکر نمی‌کنم
+    sentence patterns are deliberately untagged (multi-clause
+    constructions, not atomic vocabulary, per this file's own prior notes
+    above), and tagging them would need a classifier change, out of
+    scope for a practice-pack-only pass. With both tags now at 5
+    templates each (multiple_choice, fill_in_blank, translation,
+    matching_pairs, word_order), every PRACTICE_EXERCISE_TYPES member
+    this direction supports (no listen_select for prs) is covered.
+    Re-verified: scripts/_practice_slot_check.py 0 problems across the
+    whole en-prs pack; scripts/compile_content.py practice-validate for
+    the full pack -- 0 errors/0 warnings.
 tag_schema:
   part_of_speech: [noun, proper_noun]
   agreement_tags:
@@ -84,6 +108,19 @@ templates:
     slot_relations: [{kind: distinct, slots: [opinion_word_one, opinion_word_two, opinion_word_three, opinion_word_four, opinion_word_five]}]
     answer_derivation: {kind: matching_pairs, slots: [opinion_word_one, opinion_word_two, opinion_word_three, opinion_word_four, opinion_word_five]}
     feedback_frame: {text: "Match each word with its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a2.unit10.lesson01.opinion_order.005
+    lesson_content_key: prs.a2.unit10.lesson01.opinions_vocabulary
+    # Added 2026-07-06 (practice-pool-sync depth pass): opinion_word's
+    # remaining PRACTICE_EXERCISE_TYPES gap (word_order), using the
+    # course-wide "این [noun] است" copula pattern already established for
+    # other noun categories (e.g. unit03's family_fill, unit09's office_
+    # order) -- grammatical for all 5 opinion_word candidates, no
+    # invented vocabulary.
+    type: word_order
+    frame: {text: "این {opinion_word} است", language_code: prs, direction: rtl}
+    slots: {opinion_word: *opinion_word}
+    answer_derivation: {kind: render_frame, frame: {text: "این {opinion_word} است", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: این [word] است (this is ___).", language_code: en, direction: ltr}
 
   # Lesson 4: the study-abroad debate dialogue (پروین and احمد).
   - content_key: practice.en-prs.prs.a2.unit10.lesson04.name_fill.001
@@ -112,3 +149,31 @@ templates:
     slot_relations: [{kind: distinct, slots: [person_name_one, person_name_two, person_name_three, person_name_four, person_name_five, person_name_six, person_name_seven, person_name_eight, person_name_nine, person_name_ten]}]
     answer_derivation: {kind: matching_pairs, slots: [person_name_one, person_name_two, person_name_three, person_name_four, person_name_five, person_name_six, person_name_seven, person_name_eight, person_name_nine, person_name_ten]}
     feedback_frame: {text: "Match each name to its English label.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a2.unit10.lesson04.name_gloss.004
+    lesson_content_key: prs.a2.unit10.lesson04.study_debate_dialogue
+    # Added 2026-07-06 (practice-pool-sync depth pass): person_name alone
+    # only has 2 distinct candidates within this unit (پروین/احمد), below
+    # the >=3 threshold for multiple_choice -- but the *person_name preset
+    # is already unscoped (semantic tags aren't unit-scoped), so it draws
+    # the same real 10-candidate course-wide pool the name_pair template
+    # above already uses. Exactly mirrors the multiple_choice template
+    # a1_unit07.yaml's practice pack already has for this same person_name
+    # tag (same frame/derivation), just anchored to this unit's own
+    # lesson. No invented vocabulary.
+    type: multiple_choice
+    frame: {text: "{person_name}", language_code: prs, direction: rtl}
+    slots: {person_name: *person_name}
+    answer_derivation: {kind: slot_gloss, slot: person_name}
+    feedback_frame: {text: "{person_name} is a speaker in this unit's debate dialogue.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a2.unit10.lesson04.name_order.005
+    lesson_content_key: prs.a2.unit10.lesson04.study_debate_dialogue
+    # Added 2026-07-06, same pass: person_name's remaining
+    # PRACTICE_EXERCISE_TYPES gap (word_order), reusing the exact "این
+    # {person_name} است" frame a1_unit02.yaml's own person_name word_order
+    # template already established course-wide -- grammatical for every
+    # person_name candidate, no invented vocabulary.
+    type: word_order
+    frame: {text: "این {person_name} است", language_code: prs, direction: rtl}
+    slots: {person_name: *person_name}
+    answer_derivation: {kind: render_frame, frame: {text: "این {person_name} است", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: این [name] است (this is ___).", language_code: en, direction: ltr}
