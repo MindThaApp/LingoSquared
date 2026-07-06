@@ -23,6 +23,34 @@ review:
     scripts/_practice_slot_check.py that every slot has >=1 candidate
     and every multiple_choice/matching_pairs slot has >=3 distinct
     candidate values.
+
+    **Real bug found and fixed, live-QA pass on fa, 2026-07-06**: the
+    two lesson04 templates (quantity_listen.001, price_fill.002)
+    originally anchored `lesson_content_key` to
+    `en.a1.unit08.lesson04.market_dialogue` (the unit's closing review
+    dialogue). That lesson introduces zero new vocabulary of its own
+    (every token in its `introduced_tokens` -- "That's"/"eight"/
+    "dollars"/"OK"/"Sure"/"Anything"/"else"/"Yes"/"too" -- was already
+    first taught earlier), so no `Lexeme` row is ever created with that
+    lesson as `provenance_lesson_content_key`, and
+    `_practice_lesson_id()`'s lookup (backend/app/content/service.py)
+    can never resolve it -- confirmed live: `POST /admin/courses/{id}/
+    practice/import` rejected the whole 8-unit fa-en pack with
+    "lesson key 'en.a1.unit08.lesson04.market_dialogue' was not found
+    in the course" on a genuinely fresh isolated stack (backfill run
+    before import, per the correct dependency order -- CLAUDE.md's
+    documented "practice-template import + lexeme backfill, in that
+    order" is backwards from what the code actually requires; flagging
+    separately). Fixed by repointing both templates to
+    `en.a1.unit08.lesson01.quantities`, the actual first-taught anchor
+    for every token their `quantity_unit`/`food_plural` slots draw from
+    (verified directly against the isolated DB's `lexemes.
+    provenance_lesson_content_key`: bag/bottle/dozen/eggs/kilo/pound/
+    tomatoes all anchor at unit08.lesson01; "apples" anchors even
+    earlier, at unit03.lesson04 -- so lesson01 is a safe, no-forward-
+    reference anchor for both). Re-verified: `compile_content.py
+    practice-validate` still 0/0, and the full 8-unit fa-en practice
+    import now succeeds end-to-end against a fresh isolated stack.
 tag_schema:
   part_of_speech: [noun, adjective, adverb, pronoun, verb, particle, symbol]
   agreement_tags:
@@ -89,14 +117,14 @@ templates:
     answer_derivation: {kind: slot_text, slot: food_plural}
     feedback_frame: {text: "پاسخ درست، معادل انگلیسی این غذای فارسی است.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit08.lesson04.quantity_listen.001
-    lesson_content_key: en.a1.unit08.lesson04.market_dialogue
+    lesson_content_key: en.a1.unit08.lesson01.quantities
     type: listen_select
     frame: {text: "{quantity_unit}", language_code: en, direction: ltr}
     slots: {quantity_unit: *quantity_unit}
     answer_derivation: {kind: slot_gloss, slot: quantity_unit}
     feedback_frame: {text: "واژه‌ای که در این گفتگو شنیدید {quantity_unit} بود.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit08.lesson04.price_fill.002
-    lesson_content_key: en.a1.unit08.lesson04.market_dialogue
+    lesson_content_key: en.a1.unit08.lesson01.quantities
     type: fill_in_blank
     frame: {text: "How much are the {food_plural}?", language_code: en, direction: ltr}
     slots: {food_plural: *food_plural}

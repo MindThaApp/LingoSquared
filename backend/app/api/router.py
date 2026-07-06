@@ -645,7 +645,7 @@ def checkpoint_session(
         .with_for_update()
     )
     now = datetime.now(timezone.utc)
-    if latest is not None:
+    if latest is not None and latest.scored_at is not None:
         retry_at = latest.created_at + timedelta(hours=1)
         if retry_at > now:
             retry_after_seconds = max(
