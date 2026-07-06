@@ -43,13 +43,43 @@ review:
     authoring note above, re-confirmed not re-litigated. 6 -> 13 templates.
     Every new template's real candidate count re-verified with the
     standalone lexeme_matches()-replicating harness
-    (scripts/_practice_slot_check.py)."
+    (scripts/_practice_slot_check.py).
+
+    Backport of prs-en's better technique (2026-07-06, same depth-pass
+    program, following prs-en's a2_unit25.yaml as the structural reference
+    instead of re-deriving independently): rather than only reusing this
+    unit's own capped-at-4 bureaucracy_noun tag, prs-en noticed this unit's
+    own REAL taught sentences also generalize an already-classified
+    COURSE-WIDE tag from an earlier unit -- lesson02's real taught phrase
+    'Would it be possible to come this Friday?' and lesson04's real
+    dialogue line 'Friday at 10am works.' both generalize to any of the 7
+    weekdays (course-wide 'weekday' tag, 7 members, defined in unit04,
+    already safely reused by unit11/unit17's own nl-en practice packs)
+    with zero grammar loss ('Would it be possible to come this Monday?'/
+    'Monday at 10am works.' are equally grammatical). Added the same 8
+    templates prs-en added (word_order, fill_in_blank, translation, bare
+    listen_select, x2 lessons), anchored to the same two real lessons
+    (lesson02.making_a_formal_appointment, lesson04.dmv_appointment_
+    dialogue). No invented English tokens or Dutch glosses -- every
+    weekday gloss (maandag..zondag) already exists in scripts/
+    backfill_lexemes_nl_en.py's EN_TARGET_TO_NL_GLOSS, and the weekday
+    tag/POS classification is shared with prs-en/fa-en via scripts/
+    _en_target_lexeme_common.py, so neither shared file needed a change
+    (both out of scope for this pass anyway). Dutch frame/feedback text
+    follows this pack's own established convention (see a1_unit04.yaml's
+    weekday word_order/fill_in_blank/translation templates for the same
+    tag) rather than inventing new phrasing. 13 -> 21 templates. Verified
+    with scripts/_practice_slot_check.py (weekday has 7 distinct
+    course-wide candidates, well above the >=3 floor) and
+    compile_content.py practice-validate, 0 errors/0 warnings. Still needs
+    the standard fresh-context review before import."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [bureaucracy_noun]
+    semantic: [bureaucracy_noun, weekday]
 slot_presets:
   bureaucracy_noun: &bureaucracy_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: bureaucracy_noun}}
+  weekday: &weekday {language_code: en, part_of_speech: noun, agreement_tags: {semantic: weekday}}
 templates:
   - content_key: practice.nl-en.en.a2.unit25.lesson01.choose.001
     lesson_content_key: en.a2.unit25.lesson01.registration_vocabulary
@@ -143,3 +173,59 @@ templates:
     slots: {item: *bureaucracy_noun}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a2.unit25.lesson02.weekday_order.005
+    lesson_content_key: en.a2.unit25.lesson02.making_a_formal_appointment
+    type: word_order
+    frame: {text: "Would it be possible to come this {item}", language_code: en, direction: ltr}
+    slots: {item: *weekday}
+    answer_derivation: {kind: render_frame, frame: {text: "Would it be possible to come this {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} is de dag die Daniel voorstelt.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a2.unit25.lesson02.weekday_fill.006
+    lesson_content_key: en.a2.unit25.lesson02.making_a_formal_appointment
+    type: fill_in_blank
+    frame: {text: "Would it be possible to come this {item}?", language_code: en, direction: ltr}
+    slots: {item: *weekday}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} is de dag die Daniel voorstelt.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a2.unit25.lesson02.weekday_translate.007
+    lesson_content_key: en.a2.unit25.lesson02.making_a_formal_appointment
+    type: translation
+    frame: {text: "Zou het mogelijk zijn om deze {item} te komen?", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *weekday}
+    answer_derivation: {kind: render_frame, frame: {text: "Would it be possible to come this {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "Would it be possible to come this {item}? betekent Zou het mogelijk zijn om deze {item} te komen?", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a2.unit25.lesson02.weekday_listen.008
+    lesson_content_key: en.a2.unit25.lesson02.making_a_formal_appointment
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *weekday}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is de dag die je hoorde.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a2.unit25.lesson04.weekday_order.004
+    lesson_content_key: en.a2.unit25.lesson04.dmv_appointment_dialogue
+    type: word_order
+    frame: {text: "{item} at 10am works", language_code: en, direction: ltr}
+    slots: {item: *weekday}
+    answer_derivation: {kind: render_frame, frame: {text: "{item} at 10am works", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} is de dag waarop de afspraak is bevestigd.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a2.unit25.lesson04.weekday_fill.005
+    lesson_content_key: en.a2.unit25.lesson04.dmv_appointment_dialogue
+    type: fill_in_blank
+    frame: {text: "{item} at 10am works.", language_code: en, direction: ltr}
+    slots: {item: *weekday}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} is de dag waarop de afspraak is bevestigd.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a2.unit25.lesson04.weekday_translate.006
+    lesson_content_key: en.a2.unit25.lesson04.dmv_appointment_dialogue
+    type: translation
+    frame: {text: "{item} om 10 uur past.", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *weekday}
+    answer_derivation: {kind: render_frame, frame: {text: "{item} at 10am works", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} at 10am works betekent {item} om 10 uur past.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a2.unit25.lesson04.weekday_listen.007
+    lesson_content_key: en.a2.unit25.lesson04.dmv_appointment_dialogue
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *weekday}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is de dag die je in dit gesprek hoorde.", language_code: nl, direction: ltr}

@@ -67,12 +67,42 @@ review:
     problems -- the 5 pre-existing problems reported by that script are
     all in en-fa unit01/unit02 matching_pairs templates, unrelated to
     this unit or this direction).
+
+    Cross-direction technique backport (2026-07-06): the parallel
+    prs-en session working the same unit25/26 depth pass discovered a
+    better technique than the bare bureaucracy_noun-only reuse above --
+    this unit's own real taught sentences also generalize an
+    already-classified COURSE-WIDE tag from an earlier unit, not just
+    bureaucracy_noun. lesson02's real taught phrase "Would it be
+    possible to come this Friday?" and lesson04's real dialogue line
+    "Friday at 10am works." both generalize to any of the 7 weekdays
+    (course-wide 'weekday' tag, 7 members, defined in unit04) with zero
+    grammar loss -- "Would it be possible to come this Monday?"/"Monday
+    at 10am works." are equally grammatical. Backported prs-en's exact
+    8-template pattern (practice.prs-en.a2.unit25.yaml, reviewed as the
+    reference for this pass): word_order + fill_in_blank + translation +
+    bare listen_select for each of lesson02 and lesson04, anchored to
+    their own real lesson (lesson02.making_a_formal_appointment,
+    lesson04.dmv_appointment_dialogue respectively). No invented English
+    tokens or Farsi glosses -- every gloss/POS/tag (weekday's 7 members,
+    "my"/"your"/"his"/"her" n/a here) already existed in
+    scripts/_en_target_lexeme_common.py and
+    scripts/backfill_lexemes_fa_en.py's EN_TARGET_TO_FA_GLOSS dict
+    (monday/tuesday/wednesday/thursday/friday/saturday/sunday all
+    present) before this pass, so neither shared file needed a change
+    (both out of scope for this pass anyway). 13 -> 21 templates.
+    Re-verified with scripts/_practice_slot_check.py (weekday has 7
+    distinct course-wide candidates, well above the >=3
+    multiple_choice/listen_select floor) and compile_content.py
+    practice-validate, 0 errors/0 warnings. Still needs the standard
+    fresh-context review before import.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [bureaucracy_noun]
+    semantic: [bureaucracy_noun, weekday]
 slot_presets:
   bureaucracy_noun: &bureaucracy_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: bureaucracy_noun}}
+  weekday: &weekday {language_code: en, part_of_speech: noun, agreement_tags: {semantic: weekday}}
 templates:
   - content_key: practice.fa-en.en.a2.unit25.lesson01.choose.001
     lesson_content_key: en.a2.unit25.lesson01.registration_vocabulary
@@ -166,3 +196,59 @@ templates:
     slots: {item: *bureaucracy_noun}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a2.unit25.lesson02.weekday_order.004
+    lesson_content_key: en.a2.unit25.lesson02.making_a_formal_appointment
+    type: word_order
+    frame: {text: "Would it be possible to come this {item}", language_code: en, direction: ltr}
+    slots: {item: *weekday}
+    answer_derivation: {kind: render_frame, frame: {text: "Would it be possible to come this {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} روزی است که دنیل پیشنهاد می‌کند.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a2.unit25.lesson02.weekday_fill.005
+    lesson_content_key: en.a2.unit25.lesson02.making_a_formal_appointment
+    type: fill_in_blank
+    frame: {text: "Would it be possible to come this {item}?", language_code: en, direction: ltr}
+    slots: {item: *weekday}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} روزی است که دنیل پیشنهاد می‌کند.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a2.unit25.lesson02.weekday_translate.006
+    lesson_content_key: en.a2.unit25.lesson02.making_a_formal_appointment
+    type: translation
+    frame: {text: "امکانش هست {item} این هفته بیام؟", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *weekday}
+    answer_derivation: {kind: render_frame, frame: {text: "Would it be possible to come this {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "Would it be possible to come this {item}؟ یعنی امکانش هست {item} این هفته بیام؟", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a2.unit25.lesson02.weekday_listen.007
+    lesson_content_key: en.a2.unit25.lesson02.making_a_formal_appointment
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *weekday}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "روزی که شنیدید {item} بود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a2.unit25.lesson04.weekday_order.004
+    lesson_content_key: en.a2.unit25.lesson04.dmv_appointment_dialogue
+    type: word_order
+    frame: {text: "{item} at 10am works", language_code: en, direction: ltr}
+    slots: {item: *weekday}
+    answer_derivation: {kind: render_frame, frame: {text: "{item} at 10am works", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} روزی است که قرار ملاقات تأیید شد.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a2.unit25.lesson04.weekday_fill.005
+    lesson_content_key: en.a2.unit25.lesson04.dmv_appointment_dialogue
+    type: fill_in_blank
+    frame: {text: "{item} at 10am works.", language_code: en, direction: ltr}
+    slots: {item: *weekday}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} روزی است که قرار ملاقات تأیید شد.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a2.unit25.lesson04.weekday_translate.006
+    lesson_content_key: en.a2.unit25.lesson04.dmv_appointment_dialogue
+    type: translation
+    frame: {text: "{item} ساعت ده صبح خوب است.", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *weekday}
+    answer_derivation: {kind: render_frame, frame: {text: "{item} at 10am works", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} at 10am works یعنی {item} ساعت ده صبح خوب است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a2.unit25.lesson04.weekday_listen.007
+    lesson_content_key: en.a2.unit25.lesson04.dmv_appointment_dialogue
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *weekday}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "روزی که در این گفتگو شنیدید {item} بود.", language_code: fa, direction: rtl}
