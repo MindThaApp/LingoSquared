@@ -1,0 +1,99 @@
+schema_version: "1.0"
+pack_key: practice.prs-en.a2.unit25
+source_language: prs
+target_language: en
+unit_content_key: en.a2.unit25.bureaucracy
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: >-
+    Authored 2026-07-06 by the Claude session extending prs-en's practice
+    pool to units 21-26 -- this is the first A2-level unit for this
+    direction (registering with local authorities: appointments,
+    documents, formal requests). Uses fa-en's a2_unit25.yaml as the
+    structural reference: the shared 4-member 'bureaucracy_noun' tag
+    (appointment/document/form/confirmation) is used ONLY for bare-word
+    recognition, deliberately not attempting a generative frame -- this
+    unit's A2-register content is dominated by multi-word formal phrases
+    ("I was wondering whether...", "Could you tell me...") that don't
+    reduce to a safe single-token slot, same discipline fa-en/nl-en's own
+    unit25 packs documented. No new EN_POS/agreement_tags entries were
+    needed; only scripts/backfill_lexemes_prs_en.py's Dari gloss dict and
+    UNIT_FILES tuple were extended (ملاقات/سند/فورم/نمبر تأیید,
+    cross-checked against docs/content/overlays/prs-en/a2_unit25.yaml's
+    own real text -- the largest single-unit addition in this batch given
+    its A2 formal-register vocabulary).
+
+    Anchoring check (same discipline as every other pack in this batch):
+    verified via iter_specs() that every one of this unit's four lessons
+    introduces at least one new lexeme, so all four are safe
+    lesson_content_key anchors.
+
+    Every slot's real candidate count was verified with
+    scripts/_practice_slot_check.py (extended to cover prs-en units
+    21-26) and compile_content.py practice-validate. Needs the standard
+    fresh-context review before import.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [bureaucracy_noun]
+slot_presets:
+  bureaucracy_noun: &bureaucracy_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: bureaucracy_noun}}
+templates:
+  - content_key: practice.prs-en.en.a2.unit25.lesson01.choose.001
+    lesson_content_key: en.a2.unit25.lesson01.registration_vocabulary
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *bureaucracy_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی دری {item} را انتخاب کنین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a2.unit25.lesson01.listen.002
+    lesson_content_key: en.a2.unit25.lesson01.registration_vocabulary
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *bureaucracy_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "واژه‌ای که شنیدین {item} بود.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a2.unit25.lesson01.match.003
+    lesson_content_key: en.a2.unit25.lesson01.registration_vocabulary
+    type: matching_pairs
+    frame: {text: "{first} — {second}", language_code: en, direction: ltr}
+    slots: {first: *bureaucracy_noun, second: *bureaucracy_noun}
+    slot_relations: [{kind: distinct, slots: [first, second]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second]}
+    feedback_frame: {text: "هر واژه را به معنی دری خودش وصل کنین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a2.unit25.lesson01.translate.004
+    lesson_content_key: en.a2.unit25.lesson01.registration_vocabulary
+    type: translation
+    frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *bureaucracy_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "معادل انگلیسی همی واژه {item} است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a2.unit25.lesson02.listen.001
+    lesson_content_key: en.a2.unit25.lesson02.making_a_formal_appointment
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *bureaucracy_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "واژه‌ای که شنیدین {item} بود.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a2.unit25.lesson03.listen.001
+    lesson_content_key: en.a2.unit25.lesson03.reading_a_registration_notice
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *bureaucracy_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "واژه‌ای که شنیدین {item} بود.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a2.unit25.lesson04.choose.001
+    lesson_content_key: en.a2.unit25.lesson04.dmv_appointment_dialogue
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *bureaucracy_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی دری {item} را انتخاب کنین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a2.unit25.lesson04.translate.002
+    lesson_content_key: en.a2.unit25.lesson04.dmv_appointment_dialogue
+    type: translation
+    frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *bureaucracy_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "معادل انگلیسی همی واژه {item} است.", language_code: prs, direction: rtl}

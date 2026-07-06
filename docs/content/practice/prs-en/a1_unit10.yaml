@@ -1,0 +1,143 @@
+schema_version: "1.0"
+pack_key: practice.prs-en.a1.unit10
+source_language: prs
+target_language: en
+unit_content_key: en.a1.unit10.directions
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: >-
+    Authored 2026-07-06 extending prs-en's Endless Practice pool from
+    units 01-08 to also cover units 09-14. The 'turn_direction'
+    (left/right, 2 members, deliberately excludes 'straight' since it
+    pairs with 'go' not 'turn' -- "Turn straight" is not English),
+    'street_ordinal' (first/second, 2 members), and 'place'
+    (bank/hospital/pharmacy/park/restaurant, 5 members, reused from
+    unit09) tags already existed in scripts/_en_target_lexeme_common.py
+    from the nl-en/fa-en lanes' own unit10 work -- no EN_POS/agreement-
+    tag additions were needed (verified by diffing every
+    introduced_token against EN_POS directly against the real en
+    realization file). Only Dari glosses for the new tokens were added
+    to scripts/backfill_lexemes_prs_en.py, hand-derived from docs/
+    content/overlays/prs-en/a1_unit10.yaml's own real Dari phrasing
+    (e.g. corner=کنج سرک/چوک, can't miss it=حتماً پیداش می‌کنین -- an
+    idiom, not a literal translation). turn_direction/street_ordinal are
+    only 2 members each (below the >=3-distinct floor for
+    multiple_choice/listen_select), so, matching the reference fa-en/
+    a1_unit10.yaml pack exactly, they're used only in word_order/
+    fill_in_blank/translation; the 5-member 'place' tag is reused for
+    the one listen_select/multiple_choice slot in this pack (lessons
+    02/04), since these dialogues ask directions TO those same places.
+    Verified with scripts/_practice_slot_check.py that every slot has
+    >=1 real candidate lexeme and every multiple_choice/listen_select
+    slot has >=3 distinct candidate values. Confirmed 0 errors/0
+    warnings from compile_content.py practice-validate. Left unreviewed
+    pending a separate fresh-context review pass, per standing project
+    policy.
+tag_schema:
+  part_of_speech: [noun, adjective, adverb, pronoun, verb, particle, symbol]
+  agreement_tags:
+    semantic: [turn_direction, street_ordinal, place]
+slot_presets:
+  turn_direction: &turn_direction {language_code: en, part_of_speech: noun, agreement_tags: {semantic: turn_direction}}
+  street_ordinal: &street_ordinal {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: street_ordinal}}
+  place: &place {language_code: en, part_of_speech: noun, agreement_tags: {semantic: place}}
+templates:
+  - content_key: practice.prs-en.en.a1.unit10.lesson01.turn_order.001
+    lesson_content_key: en.a1.unit10.lesson01.basic_direction_words
+    type: word_order
+    frame: {text: "Turn {item}", language_code: en, direction: ltr}
+    slots: {item: *turn_direction}
+    answer_derivation: {kind: render_frame, frame: {text: "Turn {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} جهتی است که در همی هدایت گفته شده.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit10.lesson01.turn_fill.002
+    lesson_content_key: en.a1.unit10.lesson01.basic_direction_words
+    type: fill_in_blank
+    frame: {text: "Turn {item}.", language_code: en, direction: ltr}
+    slots: {item: *turn_direction}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} جهتی است که در همی هدایت گفته شده.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit10.lesson01.turn_translate.003
+    lesson_content_key: en.a1.unit10.lesson01.basic_direction_words
+    type: translation
+    frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *turn_direction}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "معادل انگلیسی همی جهت {item} است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit10.lesson02.route_order.001
+    lesson_content_key: en.a1.unit10.lesson02.asking_how_to_get
+    type: word_order
+    frame: {text: "Go straight, then turn {item} at the corner", language_code: en, direction: ltr}
+    slots: {item: *turn_direction}
+    answer_derivation: {kind: render_frame, frame: {text: "Go straight, then turn {item} at the corner", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} جهتی است که سر چوک گفته می‌شه.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit10.lesson02.confirm_fill.002
+    lesson_content_key: en.a1.unit10.lesson02.asking_how_to_get
+    type: fill_in_blank
+    frame: {text: "Turn {item} at the corner, OK.", language_code: en, direction: ltr}
+    slots: {item: *turn_direction}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} جهتی است که سر چوک گفته می‌شه.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit10.lesson02.turn_translate.003
+    lesson_content_key: en.a1.unit10.lesson02.asking_how_to_get
+    type: translation
+    frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *turn_direction}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "معادل انگلیسی همی جهت {item} است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit10.lesson02.place_listen.004
+    lesson_content_key: en.a1.unit10.lesson02.asking_how_to_get
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *place}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "واژه‌ای که شنیدین {item} بود.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit10.lesson03.street_order.001
+    lesson_content_key: en.a1.unit10.lesson03.reading_a_route
+    type: word_order
+    frame: {text: "Take the {item} street on the left", language_code: en, direction: ltr}
+    slots: {item: *street_ordinal}
+    answer_derivation: {kind: render_frame, frame: {text: "Take the {item} street on the left", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} شمارهٔ ترتیبی همی سرک است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit10.lesson03.street_fill.002
+    lesson_content_key: en.a1.unit10.lesson03.reading_a_route
+    type: fill_in_blank
+    frame: {text: "Take the {item} street on the right.", language_code: en, direction: ltr}
+    slots: {item: *street_ordinal}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} شمارهٔ ترتیبی همی سرک است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit10.lesson03.street_translate.003
+    lesson_content_key: en.a1.unit10.lesson03.reading_a_route
+    type: translation
+    frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *street_ordinal}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "معادل انگلیسی همی عدد ترتیبی {item} است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit10.lesson04.turn_order.001
+    lesson_content_key: en.a1.unit10.lesson04.giving_directions_dialogue
+    type: word_order
+    frame: {text: "Turn {item} at the corner, OK", language_code: en, direction: ltr}
+    slots: {item: *turn_direction}
+    answer_derivation: {kind: render_frame, frame: {text: "Turn {item} at the corner, OK", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} جهتی است که دنیل تکرار می‌کنه.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit10.lesson04.turn_fill.002
+    lesson_content_key: en.a1.unit10.lesson04.giving_directions_dialogue
+    type: fill_in_blank
+    frame: {text: "Go straight, then turn {item} at the corner.", language_code: en, direction: ltr}
+    slots: {item: *turn_direction}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} جهتی است که سر چوک گفته می‌شه.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit10.lesson04.turn_translate.003
+    lesson_content_key: en.a1.unit10.lesson04.giving_directions_dialogue
+    type: translation
+    frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *turn_direction}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "معادل انگلیسی همی جهت {item} است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit10.lesson04.place_meaning.004
+    lesson_content_key: en.a1.unit10.lesson04.giving_directions_dialogue
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *place}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} مکانی است که در همی گفتگو پرسیده می‌شه.", language_code: prs, direction: rtl}

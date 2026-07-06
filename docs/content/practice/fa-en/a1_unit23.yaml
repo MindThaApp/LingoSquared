@@ -1,0 +1,126 @@
+schema_version: "1.0"
+pack_key: practice.fa-en.a1.unit23
+source_language: fa
+target_language: en
+unit_content_key: en.a1.unit23.work
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: >-
+    Authored 2026-07-06 by the Claude session extending fa-en's practice
+    pool to units 21-26. Uses nl-en's a1_unit23.yaml as the structural
+    reference: the shared 5-member 'occupation_noun' tag (teacher/nurse/
+    engineer/cook/driver) for bare-word recognition, plus the narrower
+    4-member 'occupation_a' tag (excludes 'engineer') for the generative
+    "I'm a {item}." frame -- real content shows "I'm a nurse." but "I'm
+    an engineer." (engineer starts with a vowel sound), so 'engineer'
+    must never be offered as a candidate there or the sampler generates
+    "I'm a engineer." Both tags already existed in scripts/
+    _en_target_lexeme_common.py; only the Farsi gloss dict/UNIT_FILES
+    needed extending.
+
+    REAL ANCHORING BUG FOUND AND AVOIDED (same class as fa-en's own
+    a1_unit08.yaml market_dialogue incident): verified via a direct
+    iter_specs() dump, grouped by lesson_content_key, that
+    en.a1.unit23.lesson02.what_do_you_do introduces ZERO new lexemes for
+    this direction -- every one of its introduced_tokens ("What"/"do"/
+    "you"/"I'm"/"a"/"Where"/"work") was already taught in an earlier
+    unit (as far back as unit01/unit09). A template anchored there would
+    fail practice import with "lesson key ... was not found in the
+    course" on a genuinely fresh stack, exactly like the unit08 incident.
+    nl-en's own a1_unit23.yaml pack anchors its lesson02 templates
+    (order.001/complete.002) to this exact lesson_content_key -- it may
+    carry the same latent bug there (unverified for that direction, out
+    of this pass's scope, not fixed here since it's a different
+    direction's file). This pack's equivalent "I'm a {item}." templates
+    are instead anchored to lesson01 (occupation_words), which DOES
+    introduce new lexemes (nurse/cook/driver) and is a safe anchor.
+
+    Every slot's real candidate count was verified with
+    scripts/_practice_slot_check.py (extended to cover fa-en units
+    21-26) and compile_content.py practice-validate. Needs the standard
+    fresh-context review before import.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [occupation_noun, occupation_a]
+slot_presets:
+  occupation_noun: &occupation_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: occupation_noun}}
+  occupation_a: &occupation_a {language_code: en, part_of_speech: noun, agreement_tags: {semantic: occupation_a}}
+templates:
+  - content_key: practice.fa-en.en.a1.unit23.lesson01.choose.001
+    lesson_content_key: en.a1.unit23.lesson01.occupation_words
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *occupation_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit23.lesson01.listen.002
+    lesson_content_key: en.a1.unit23.lesson01.occupation_words
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *occupation_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "واژه‌ای که شنیدید {item} بود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit23.lesson01.match.003
+    lesson_content_key: en.a1.unit23.lesson01.occupation_words
+    type: matching_pairs
+    frame: {text: "{first} — {second}", language_code: en, direction: ltr}
+    slots: {first: *occupation_noun, second: *occupation_noun}
+    slot_relations: [{kind: distinct, slots: [first, second]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second]}
+    feedback_frame: {text: "هر شغل را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit23.lesson01.translate.004
+    lesson_content_key: en.a1.unit23.lesson01.occupation_words
+    type: translation
+    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *occupation_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این شغل است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit23.lesson01.order.005
+    lesson_content_key: en.a1.unit23.lesson01.occupation_words
+    type: word_order
+    frame: {text: "I'm a {item}", language_code: en, direction: ltr}
+    slots: {item: *occupation_a}
+    answer_derivation: {kind: render_frame, frame: {text: "I'm a {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} شغلی است که ذکر شد.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit23.lesson01.complete.006
+    lesson_content_key: en.a1.unit23.lesson01.occupation_words
+    type: fill_in_blank
+    frame:
+      text: "I'm a {item}."
+      language_code: en
+      direction: ltr
+      text_blocks:
+        - {text: "جملهٔ انگلیسی را کامل کنید.", language_code: fa, direction: rtl}
+    slots: {item: *occupation_a}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} این جمله را کامل می‌کند.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit23.lesson03.choose.001
+    lesson_content_key: en.a1.unit23.lesson03.reading_a_work_profile
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *occupation_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit23.lesson04.listen.001
+    lesson_content_key: en.a1.unit23.lesson04.work_profile_dialogue
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *occupation_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "واژه‌ای که در این گفتگو شنیدید {item} بود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit23.lesson04.order.002
+    lesson_content_key: en.a1.unit23.lesson04.work_profile_dialogue
+    type: word_order
+    frame: {text: "I'm a {item}", language_code: en, direction: ltr}
+    slots: {item: *occupation_a}
+    answer_derivation: {kind: render_frame, frame: {text: "I'm a {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} شغلی است که ذکر شد.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit23.lesson04.translate.003
+    lesson_content_key: en.a1.unit23.lesson04.work_profile_dialogue
+    type: translation
+    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *occupation_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این شغل است.", language_code: fa, direction: rtl}

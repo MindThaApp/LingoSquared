@@ -1,0 +1,141 @@
+schema_version: "1.0"
+pack_key: practice.fa-en.a1.unit13
+source_language: fa
+target_language: en
+unit_content_key: en.a1.unit13.emotions
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: >-
+    Authored 2026-07-06 by the practice-pool-sync lane extending fa-en's
+    Endless Practice pool from units 01-08 to also cover units 09-14. The
+    single 5-member 'feeling' tag (happy/sad/tired/excited/worried, all
+    adjectives) is safely reused across all four lessons in four
+    different frames ('I'm {item}', 'I'm a little {item}.', 'My friend
+    is {item}.', 'Are you {item} too?') since English feeling-adjectives
+    don't inflect for number/gender/person. The tag already existed in
+    scripts/_en_target_lexeme_common.py from the nl-en lane's own unit13
+    work; no EN_POS/agreement-tag additions were needed (verified by
+    diffing every introduced_token against EN_POS). Only Farsi glosses
+    for the new tokens were added to scripts/backfill_lexemes_fa_en.py.
+    Deliberately reused the SAME fact-consistency fix the nl-en reference
+    pack made (documented in its own review notes): lesson03's reading
+    passage states "The writer is worried and excited." as a specific,
+    fact-bound summary phrase -- slotting the full 5-member feeling tag
+    into a "The writer is {item}." frame would let the sampler draw
+    'happy'/'sad'/'tired', asserting a feeling the passage never
+    attributes to the writer (the rice/apples-price bug class). Used
+    "My friend is {item}." instead (a generic subject with no lesson-
+    stated feeling), same slot/tag/candidate-count, same exercise types,
+    no coverage lost. Verified with scripts/_practice_slot_check.py that
+    every slot has >=1 real candidate lexeme and every multiple_choice/
+    listen_select slot has >=3 distinct candidate values (feeling=5).
+    Confirmed 0 errors/0 warnings from compile_content.py
+    practice-validate. Left unreviewed pending a separate fresh-context
+    review pass, per standing project policy.
+tag_schema:
+  part_of_speech: [noun, adjective, adverb, pronoun, verb, particle, symbol]
+  agreement_tags:
+    semantic: [feeling]
+slot_presets:
+  feeling: &feeling {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: feeling}}
+templates:
+  - content_key: practice.fa-en.en.a1.unit13.lesson01.feeling_meaning.001
+    lesson_content_key: en.a1.unit13.lesson01.feeling_words
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *feeling}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit13.lesson01.feeling_listen.002
+    lesson_content_key: en.a1.unit13.lesson01.feeling_words
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *feeling}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "واژه‌ای که شنیدید {item} بود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit13.lesson01.feeling_pair.003
+    lesson_content_key: en.a1.unit13.lesson01.feeling_words
+    type: matching_pairs
+    frame: {text: "هر واژهٔ احساس را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}
+    slots: {first_word: *feeling, second_word: *feeling}
+    slot_relations: [{kind: distinct, slots: [first_word, second_word]}]
+    answer_derivation: {kind: matching_pairs, slots: [first_word, second_word]}
+    feedback_frame: {text: "دو واژهٔ احساس را به معنی فارسی درست وصل کردید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit13.lesson01.feeling_translate.004
+    lesson_content_key: en.a1.unit13.lesson01.feeling_words
+    type: translation
+    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *feeling}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "معادل انگلیسی این احساس {item} است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit13.lesson02.im_order.001
+    lesson_content_key: en.a1.unit13.lesson02.expressing_feelings_with_reasons
+    type: word_order
+    frame: {text: "I'm {item}", language_code: en, direction: ltr}
+    slots: {item: *feeling}
+    answer_derivation: {kind: render_frame, frame: {text: "I'm {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} احساسی است که بیان می‌شود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit13.lesson02.little_fill.002
+    lesson_content_key: en.a1.unit13.lesson02.expressing_feelings_with_reasons
+    type: fill_in_blank
+    frame: {text: "I'm a little {item}.", language_code: en, direction: ltr}
+    slots: {item: *feeling}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} احساسی است که بیان می‌شود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit13.lesson02.im_translate.003
+    lesson_content_key: en.a1.unit13.lesson02.expressing_feelings_with_reasons
+    type: translation
+    frame: {text: "من {item} هستم.", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *feeling}
+    answer_derivation: {kind: render_frame, frame: {text: "I'm {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "I'm {item} یعنی من {item} هستم.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit13.lesson03.friend_order.001
+    lesson_content_key: en.a1.unit13.lesson03.reading_a_message
+    type: word_order
+    frame: {text: "My friend is {item}", language_code: en, direction: ltr}
+    slots: {item: *feeling}
+    answer_derivation: {kind: render_frame, frame: {text: "My friend is {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} واژهٔ احساسی است که در این درس آموختید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit13.lesson03.friend_fill.002
+    lesson_content_key: en.a1.unit13.lesson03.reading_a_message
+    type: fill_in_blank
+    frame: {text: "My friend is {item}.", language_code: en, direction: ltr}
+    slots: {item: *feeling}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} واژهٔ احساسی است که در این درس آموختید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit13.lesson03.friend_translate.003
+    lesson_content_key: en.a1.unit13.lesson03.reading_a_message
+    type: translation
+    frame: {text: "دوستم {item} است.", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *feeling}
+    answer_derivation: {kind: render_frame, frame: {text: "My friend is {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "My friend is {item} یعنی دوستم {item} است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit13.lesson04.feeling_listen.001
+    lesson_content_key: en.a1.unit13.lesson04.feelings_check_dialogue
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *feeling}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "احساسی که شنیدید {item} بود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit13.lesson04.are_you_order.002
+    lesson_content_key: en.a1.unit13.lesson04.feelings_check_dialogue
+    type: word_order
+    frame: {text: "Are you {item} too", language_code: en, direction: ltr}
+    slots: {item: *feeling}
+    answer_derivation: {kind: render_frame, frame: {text: "Are you {item} too", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} احساسی است که پرسیده می‌شود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit13.lesson04.are_you_fill.003
+    lesson_content_key: en.a1.unit13.lesson04.feelings_check_dialogue
+    type: fill_in_blank
+    frame: {text: "Are you {item} too?", language_code: en, direction: ltr}
+    slots: {item: *feeling}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} احساسی است که پرسیده می‌شود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit13.lesson04.are_you_translate.004
+    lesson_content_key: en.a1.unit13.lesson04.feelings_check_dialogue
+    type: translation
+    frame: {text: "تو هم {item} هستی؟", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *feeling}
+    answer_derivation: {kind: render_frame, frame: {text: "Are you {item} too", language_code: en, direction: ltr}}
+    feedback_frame: {text: "Are you {item} too? یعنی تو هم {item} هستی؟", language_code: fa, direction: rtl}

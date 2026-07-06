@@ -1,0 +1,117 @@
+schema_version: "1.0"
+pack_key: practice.prs-en.a1.unit21
+source_language: prs
+target_language: en
+unit_content_key: en.a1.unit21.travel
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: >-
+    Authored 2026-07-06 by the Claude session extending prs-en's practice
+    pool to units 21-26 (A1: travel/health/work/housing, A2: bureaucracy/
+    opinions), alongside two parallel workers covering units 09-14 and
+    15-20 (no file overlap -- this pack only touches unit21). Uses the
+    already-built fa-en/a1_unit21.yaml pack (same shared English
+    realization, same travel_noun tag defined in scripts/
+    _en_target_lexeme_common.py: ticket/platform/train/departure/arrival,
+    5 members, recognition-only -- these nouns don't collocate uniformly
+    in a shared sentence frame, "I need a ticket"/"I need a train" work
+    but "I need a platform"/"departure"/"arrival" don't) as the
+    structural reference, with Dari (not Farsi) feedback text and
+    glosses -- Dari phrasing verified against docs/content/overlays/
+    prs-en/a1_unit21.yaml's own real text (تکت/سکو/ریل/حرکت/رسیدن), using
+    the informal Afghan Dari register (کنین/استین/می‌شه) already
+    established in prs-en's own unit01-20 packs, not a find-replace of
+    the fa-en pack's Farsi. No new EN_POS/agreement_tags entries were
+    needed (already present from the nl-en/fa-en lanes' own unit21 work);
+    only scripts/backfill_lexemes_prs_en.py's Dari gloss dict and
+    UNIT_FILES tuple were extended.
+
+    Anchoring check (same discipline as the fa-en/nl-en sibling packs):
+    verified via a direct iter_specs() dump, grouped by
+    lesson_content_key, against every lesson in this unit's own
+    realization file: all four of unit21's lessons introduce at least
+    one new lexeme, so all four are safe anchors.
+
+    Every slot's real candidate count was verified with
+    scripts/_practice_slot_check.py (extended in this same change to
+    cover prs-en units 21-26) and compile_content.py practice-validate.
+    Needs the standard fresh-context review before import.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [travel_noun]
+slot_presets:
+  travel_noun: &travel_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: travel_noun}}
+templates:
+  - content_key: practice.prs-en.en.a1.unit21.lesson01.choose.001
+    lesson_content_key: en.a1.unit21.lesson01.travel_vocabulary
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *travel_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی دری {item} را انتخاب کنین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit21.lesson01.listen.002
+    lesson_content_key: en.a1.unit21.lesson01.travel_vocabulary
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *travel_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "واژه‌ای که شنیدین {item} بود.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit21.lesson01.match.003
+    lesson_content_key: en.a1.unit21.lesson01.travel_vocabulary
+    type: matching_pairs
+    frame: {text: "{first} — {second}", language_code: en, direction: ltr}
+    slots: {first: *travel_noun, second: *travel_noun}
+    slot_relations: [{kind: distinct, slots: [first, second]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second]}
+    feedback_frame: {text: "هر واژهٔ سفر را به معنی دری خودش وصل کنین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit21.lesson01.translate.004
+    lesson_content_key: en.a1.unit21.lesson01.travel_vocabulary
+    type: translation
+    frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *travel_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "معادل انگلیسی این واژهٔ دری {item} است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit21.lesson02.listen.001
+    lesson_content_key: en.a1.unit21.lesson02.buying_a_ticket
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *travel_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "واژه‌ای که شنیدین {item} بود.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit21.lesson02.translate.002
+    lesson_content_key: en.a1.unit21.lesson02.buying_a_ticket
+    type: translation
+    frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *travel_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "معادل انگلیسی این واژهٔ دری {item} است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit21.lesson03.choose.001
+    lesson_content_key: en.a1.unit21.lesson03.reading_a_ticket
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *travel_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی دری {item} را انتخاب کنین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit21.lesson03.listen.002
+    lesson_content_key: en.a1.unit21.lesson03.reading_a_ticket
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *travel_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "واژه‌ای که شنیدین {item} بود.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit21.lesson04.listen.001
+    lesson_content_key: en.a1.unit21.lesson04.ticket_counter_dialogue
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *travel_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "واژه‌ای که در همی گفتگو شنیدین {item} بود.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit21.lesson04.translate.002
+    lesson_content_key: en.a1.unit21.lesson04.ticket_counter_dialogue
+    type: translation
+    frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *travel_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "معادل انگلیسی این واژهٔ دری {item} است.", language_code: prs, direction: rtl}

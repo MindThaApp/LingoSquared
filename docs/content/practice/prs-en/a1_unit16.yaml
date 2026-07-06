@@ -1,0 +1,124 @@
+schema_version: "1.0"
+pack_key: practice.prs-en.a1.unit16
+source_language: prs
+target_language: en
+unit_content_key: en.a1.unit16.routines
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: >-
+    Authored 2026-07-06 by the prs-en practice-pool-sync lane extending
+    coverage to units 15-20, mirroring the sibling fa-en/a1_unit16.yaml
+    pack's structure (11 templates). Same deliberate scope decision as
+    that pack: lesson01 (wake up/get dressed/go to work/have dinner/go
+    to bed) gets ZERO generated templates -- every one of its core
+    routine actions is a multi-word phrase tokenized word-by-word with
+    no same-lesson single-token synonym set to build a genuine multi-
+    candidate slot from. The other three lessons reuse the already-
+    established 12-member hour_number tag (narrower than the broad
+    22-member number tag specifically to keep clock-hour slots in 1-12)
+    for every hour mentioned, the broad number tag for bare-word
+    listen_select recognition, and a 2-member meal tag (dinner/
+    breakfast) for "I have {item}." -- deliberately NOT used in lesson01
+    even though "dinner" is introduced there, since "breakfast" is only
+    introduced in lesson03 (a lesson's own practice pool must be ready as
+    soon as that lesson alone is completed). All POS/semantic-tag
+    classification was already present in scripts/
+    _en_target_lexeme_common.py before this pass -- only scripts/
+    backfill_lexemes_prs_en.py's own Dari gloss dict needed extending
+    (wake/up/dressed/dinner/bed/every/usually/breakfast/after), cross-
+    checked against docs/content/overlays/prs-en/a1_unit16.yaml's own
+    real Dari phrasing (e.g. wake up="بیدار شدن", get dressed="کالا
+    پوشیدن", go to bed="به بستر رفتن/خوابیدن"). Verified with
+    scripts/_practice_slot_check.py that every slot has >=1 real
+    candidate lexeme and every multiple_choice/listen_select slot has
+    >=4 distinct candidate values. The underlying en realization unit16
+    is UNREVIEWED (Codex was usage-limited at authoring time); the
+    prs-en overlay is already reviewed -- the realization needs the
+    standard fresh-context review before import.
+tag_schema:
+  part_of_speech: [noun]
+  agreement_tags:
+    semantic: [number, hour_number, meal]
+slot_presets:
+  number: &number {language_code: en, part_of_speech: noun, agreement_tags: {semantic: number}}
+  hour_number: &hour_number {language_code: en, part_of_speech: noun, agreement_tags: {semantic: hour_number}}
+  meal: &meal {language_code: en, part_of_speech: noun, agreement_tags: {semantic: meal}}
+templates:
+  - content_key: practice.prs-en.en.a1.unit16.lesson02.wake_order.001
+    lesson_content_key: en.a1.unit16.lesson02.routine_with_times
+    type: word_order
+    frame: {text: "I wake up at {item} every day", language_code: en, direction: ltr}
+    slots: {item: *hour_number}
+    answer_derivation: {kind: render_frame, frame: {text: "I wake up at {item} every day", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} ساعتی است که بیدار می‌شین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit16.lesson02.bed_fill.002
+    lesson_content_key: en.a1.unit16.lesson02.routine_with_times
+    type: fill_in_blank
+    frame: {text: "I usually go to bed at {item}.", language_code: en, direction: ltr}
+    slots: {item: *hour_number}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} ساعتی است که معمولاً می‌خوابین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit16.lesson02.wake_translate.003
+    lesson_content_key: en.a1.unit16.lesson02.routine_with_times
+    type: translation
+    frame: {text: "هر روز ساعت {item} بیدار می‌شم.", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *hour_number}
+    answer_derivation: {kind: render_frame, frame: {text: "I wake up at {item} every day", language_code: en, direction: ltr}}
+    feedback_frame: {text: "I wake up at {item} every day یعنی هر روز ساعت {item} بیدار می‌شم.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit16.lesson02.number_listen.004
+    lesson_content_key: en.a1.unit16.lesson02.routine_with_times
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *number}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} عددی است که شنیدین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit16.lesson03.every_day_order.001
+    lesson_content_key: en.a1.unit16.lesson03.reading_a_routine
+    type: word_order
+    frame: {text: "Every day, I wake up at {item}", language_code: en, direction: ltr}
+    slots: {item: *hour_number}
+    answer_derivation: {kind: render_frame, frame: {text: "Every day, I wake up at {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} ساعتِ همی توصیف روزمره است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit16.lesson03.meal_fill.002
+    lesson_content_key: en.a1.unit16.lesson03.reading_a_routine
+    type: fill_in_blank
+    frame: {text: "I have {item}.", language_code: en, direction: ltr}
+    slots: {item: *meal}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} وعدهٔ غذایی همی جمله است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit16.lesson03.meal_translate.003
+    lesson_content_key: en.a1.unit16.lesson03.reading_a_routine
+    type: translation
+    frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *meal}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} معادل انگلیسی این واژهٔ دری است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit16.lesson04.number_listen.001
+    lesson_content_key: en.a1.unit16.lesson04.routine_dialogue
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *number}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} عددی است که شنیدین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit16.lesson04.wake_order.002
+    lesson_content_key: en.a1.unit16.lesson04.routine_dialogue
+    type: word_order
+    frame: {text: "I wake up at {item} every day", language_code: en, direction: ltr}
+    slots: {item: *hour_number}
+    answer_derivation: {kind: render_frame, frame: {text: "I wake up at {item} every day", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} ساعتی است که دنیل بیدار می‌شه.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit16.lesson04.bed_fill.003
+    lesson_content_key: en.a1.unit16.lesson04.routine_dialogue
+    type: fill_in_blank
+    frame: {text: "I usually go to bed at {item}.", language_code: en, direction: ltr}
+    slots: {item: *hour_number}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} ساعتی است که دنیل معمولاً می‌خوابه.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit16.lesson04.bed_translate.004
+    lesson_content_key: en.a1.unit16.lesson04.routine_dialogue
+    type: translation
+    frame: {text: "معمولاً ساعت {item} می‌خوابم.", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *hour_number}
+    answer_derivation: {kind: render_frame, frame: {text: "I usually go to bed at {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "I usually go to bed at {item} یعنی معمولاً ساعت {item} می‌خوابم.", language_code: prs, direction: rtl}
