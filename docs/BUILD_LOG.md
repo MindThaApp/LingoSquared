@@ -6758,3 +6758,94 @@ already flagged in earlier entries). No practice content was authored
 for units 25/26 in any direction — this fix only unblocks the shared
 classifier so future work on those units (or any direction's units
 22-24) doesn't hit missing-classification crashes.
+
+## FastAPI version bump (Starlette "BadHost" CVE fix) — DONE, 2026-07-06
+
+The dedicated pass flagged by the 2026-07-05 security review: `fastapi`
+bumped from `0.115.12` to the current latest stable, `0.139.0`, which
+resolves `starlette` from the vulnerable `0.46.2` (pinned `<0.47.0` by
+`fastapi==0.115.12`) to `1.3.1` — well past the `1.0.1` fix for
+CVE-2026-48710 ("BadHost"). `fastapi==0.139.0`'s own `pyproject.toml`
+declares `starlette>=0.46.0` with no upper bound, so this is a genuine
+fix, not a version-string bump that still resolves to a vulnerable
+transitive pin (confirmed by extracting the sdist and reading the
+constraint directly, not assumed from changelog text).
+
+**Changelog audit before touching anything**: read FastAPI's official
+release notes across the full `0.115.12` → `0.139.0` range (86 releases)
+for anything touching patterns this codebase actually uses (`Depends`,
+`Query`/`Path`/`Body`, `response_model`, `app.exception_handler`,
+`add_middleware`). Real breaking changes/deprecations found in that
+range: dropped Python 3.8/3.9 support (irrelevant, `Dockerfile` already
+pins `python:3.12-slim`); dropped `pydantic.v1` compat + raised the
+Pydantic floor to `>=2.9.0` (irrelevant, `pydantic` already resolves to
+`2.13.4` transitively and grepping `app/` found zero `pydantic.v1`
+imports); `Header(convert_underscores=True)` no longer accepting
+underscore headers (irrelevant, zero `Header(` usage anywhere in
+`app/`); an internal `router.routes` shape change (irrelevant, nothing
+introspects `.routes`); `ORJSONResponse`/`UJSONResponse` deprecated
+(irrelevant, unused); and the one that actually needed checking —
+**strict `Content-Type: application/json` enforcement on JSON request
+bodies as of v0.132.0**. Confirmed non-breaking here specifically:
+`frontend/src/api/client.ts` already unconditionally sets
+`Content-Type: application/json` on every request via its shared
+`headers.set(...)` call, and pytest's `TestClient(json=...)` sets it
+automatically too — so no request path in this app was ever relying on
+the previously-lenient behavior. Net assessment: despite being a 24-
+"minor"-version jump, genuinely low risk for this specific codebase's
+actual usage patterns, not a blind "latest is fine" assumption.
+
+**Verification, isolated from the shared dev stack**: reused Session
+3/INFRA's existing idle `ls2qa` Docker Compose project (`docker compose
+-p ls2qa -f docker-compose.qa.yml`, api on 8020/db on 5442) rather than
+touching Instance/Session 1's live shared `backend` stack (port 8000,
+confirmed both before and after still serving the untouched old
+`fastapi==0.115.12` image) or fighting for its lock. Rebuilt only the
+`ls2qa` api image (`docker compose -p ls2qa ... build api` — resolved
+and installed `fastapi-0.139.0`, `starlette-1.3.1`, `pydantic-2.13.4`
+cleanly, no dependency-resolution conflicts) and recreated the
+container; confirmed via `pip show` inside the running container that
+all three land at the expected versions. The `ls2qa` Postgres volume's
+existing QA data (9 courses, 3 users, from the 2026-07-05 live-testing
+session) survived the container recreate untouched (spot-checked via
+`psql` row counts before/after).
+
+Created a genuinely separate `lingosquared_test` database on that same
+`ls2qa` Postgres instance (the standard isolated dropdb/createdb
+recipe, never touching the `lingosquared_qa` database the QA data
+lives in) and ran the FULL backend pytest suite against it via `docker
+compose -p ls2qa ... run --rm -e DATABASE_URL=... api python -m
+pytest` — **96/96 passing**, zero failures, zero errors. One new,
+non-blocking deprecation warning surfaced: `StarletteDeprecationWarning:
+Using httpx with starlette.testclient is deprecated; install httpx2
+instead` — informational only (tests still pass), flagging for a future
+pass since a later Starlette release may eventually require the
+`httpx2` package for `TestClient`; not urgent, not touched here.
+
+Live-smoked the actual rebuilt, running `ls2qa-api-1` container (not
+just pytest) against real seeded content: registered a fresh account,
+logged in separately with the same credentials (both auth paths),
+listed all 9 seeded courses, drilled into the real Dutch A1 course →
+unit → lesson → a real `multiple_choice` exercise, and submitted both a
+correct and an incorrect answer — both graded correctly (`result:
+correct`/`incorrect`, right `xp_awarded`, right `feedback` text
+returned). Also spot-checked the three custom exception handlers in
+`app/main.py` still format correctly under the new Starlette: a 404
+(`HTTPException` handler → `{"error":{"code":...}}`), a 422 (bad
+register payload → `RequestValidationError` handler, correct per-field
+messages), and confirmed the CORS middleware still starts up and serves
+correctly (implicit in every successful request above).
+
+**Net result: CVE-2026-48710 is fixed** — `starlette` is now `1.3.1`,
+`1.0.1`+, no longer vulnerable — and nothing broke: full pytest green,
+every FastAPI-pattern category the codebase actually uses double-
+checked clean against the changelog, and a live smoke test across auth/
+course-listing/lesson-content/answer-grading/error-handling all passed
+against the real rebuilt container. Left `backend/requirements.txt`
+(the one-line version bump) and this entry uncommitted in the working
+tree, matching this repo's standing practice of not committing without
+an explicit instruction to — ready to commit and deploy (rebuild +
+restart) to the shared dev stack and, eventually, the live server,
+whenever asked. The live server (192.168.4.4) was NOT touched — this
+was explicitly a local verification pass only, per the standing "never
+touch the live server unattended" rule.

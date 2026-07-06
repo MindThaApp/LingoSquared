@@ -600,10 +600,21 @@ en→prs (A1 + A2), prs→en, plus es/fr (1 unit each, in progress).
   them). A deployment/product decision (what the real origin will be),
   not something to guess and fix unilaterally. Full detail, plus a real
   resource-exhaustion bug found and fixed (an unbounded-size `response`
-  field on every answer-submission endpoint) and a critical, currently-
-  not-exploitable-via-this-app's-own-code Starlette CVE flagged for a
-  future dedicated FastAPI-version-bump pass, in `docs/BUILD_LOG.md`'s
+  field on every answer-submission endpoint), in `docs/BUILD_LOG.md`'s
   matching entry.
+- **Fixed 2026-07-06**: the Starlette "BadHost" CVE (CVE-2026-48710)
+  flagged 2026-07-05 as needing a dedicated FastAPI-version-bump-and-
+  regression-test pass — done. `backend/requirements.txt`'s `fastapi`
+  bumped `0.115.12` → `0.139.0`, resolving `starlette` to `1.3.1` (past
+  the `1.0.1` fix). Changelog-audited the full version range for
+  breaking changes against this codebase's actual FastAPI usage (none
+  applied), full pytest suite green (96/96, isolated test DB), and live-
+  smoke-tested auth/course-listing/lesson-content/answer-grading/error-
+  handling against the rebuilt container — all correct. Not yet
+  deployed to the shared dev stack or the live server (192.168.4.4),
+  and not yet committed — `backend/requirements.txt` plus the matching
+  `docs/BUILD_LOG.md` entry are ready in the working tree. Full detail
+  in `docs/BUILD_LOG.md`'s matching entry.
 - No refresh tokens, password reset, or email verification.
 - No mobile app (Expo React Native is the recommended future path,
   reusing the existing JWT/JSON API as-is).
