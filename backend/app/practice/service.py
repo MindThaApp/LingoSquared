@@ -156,6 +156,7 @@ def render_frame(
     filled: dict[str, Lexeme],
     blank_slot: str | None = None,
     default_field: str = "token",
+    emphasize: bool = False,
 ) -> str:
     rendering = frame.get("slot_rendering", {})
 
@@ -164,7 +165,16 @@ def render_frame(
         if name == blank_slot:
             return "___"
         field = rendering.get(name, default_field)
-        return str(getattr(filled[name], field))
+        value = str(getattr(filled[name], field))
+        # `emphasize` wraps just the substituted span in the existing
+        # single-asterisk convention (docs/content/AUTHORING_GUIDE.md #15,
+        # `frontend/src/components/EmphasizedText.tsx`) so a mixed-language
+        # rendered frame visually distinguishes the substituted portion
+        # from the surrounding frame text, instead of reading as one
+        # undistinguished run-on line. Only the caller that substitutes a
+        # DIFFERENT language's text into the frame (word_order's English-
+        # gloss hint, below) opts in; ordinary token rendering is unaffected.
+        return f"*{value}*" if emphasize else value
 
     return SLOT_RE.sub(replacement, frame["text"])
 
@@ -379,7 +389,23 @@ def build_prompt(
         # slotted frame it gives a real (if ungrammatical) word-by-word
         # English cue without literally handing over the correct token
         # order.
-        hint = render_frame(template.frame, filled, default_field="english_gloss")
+        #
+        # Second fix, found live 2026-07-06 (real user report): the
+        # substituted English gloss(es) were spliced into the Dutch/target
+        # frame with no visual distinction at all -- e.g. frame "Ben {item}
+        # nieuw hier?" with item's gloss "you; your (informal)" rendered as
+        # the single undistinguished run-on line "Ben you; your (informal)
+        # nieuw hier?", unreadable at a glance. `emphasize=True` wraps just
+        # the substituted gloss span(s) in the existing single-asterisk
+        # convention (AUTHORING_GUIDE.md #15) so the frontend renders them
+        # italic+bold, visually separated from the surrounding target-
+        # language words, the same fix Ramin asked for directly.
+        hint = render_frame(
+            template.frame,
+            filled,
+            default_field="english_gloss",
+            emphasize=True,
+        )
         if isinstance(answer, list):
             ordered = answer
         else:
@@ -428,6 +454,29 @@ def build_prompt(
 
 def _signature(template_id: str, slots: dict[str, str]) -> tuple:
     return template_id, tuple(sorted(slots.items()))
+
+
+def _prompt_signature(prompt: dict[str, Any]) -> tuple:
+    # A slot's actual value can be masked out of the rendered prompt
+    # entirely (fill_in_blank's "___", word_order's gloss-substituted hint
+    # line) -- two DIFFERENT underlying slot fillings can then render an
+    # IDENTICAL prompt, which _signature() above can't catch since it's
+    # keyed on the abstract (template, slot values) pair, not on what the
+    # learner actually sees. Found live 2026-07-06 (real user report: "all
+    # the questions are the same") -- a fresh Endless Practice batch for a
+    # single-lesson-old nl account returned 7 of 10 items as the byte-
+    # identical "Fill in the missing word. / Ben ___ nieuw hier?" prompt
+    # (je/jij each masked away identically), because the only anti-repeat
+    # check compared the hidden slot values, which legitimately differed
+    # every time. This signature instead hashes what's actually rendered
+    # (visible text blocks, options, word bank, audio cue) so two prompts
+    # that LOOK the same to the learner are always treated as a repeat,
+    # regardless of what's hidden underneath.
+    texts = tuple(block.get("text", "") for block in prompt.get("text_blocks") or ())
+    options = tuple(sorted(prompt.get("options") or ()))
+    word_bank = tuple(sorted(prompt.get("word_bank") or ()))
+    audio = prompt.get("audio_text", "")
+    return ("visible", texts, options, word_bank, audio)
 
 
 def _tier_order(mastery: float) -> tuple[tuple[str, ...], ...]:
@@ -536,10 +585,11 @@ def _recent_signatures(
             .limit(RECENT_ITEM_LIMIT)
         )
     )
-    return {
-        _signature(item.template_id, item.filled_slots)
-        for item in recent
-    }
+    signatures: set[tuple] = set()
+    for item in recent:
+        signatures.add(_signature(item.template_id, item.filled_slots))
+        signatures.add(_prompt_signature(item.prompt))
+    return signatures
 
 
 def _generate_target_item(
@@ -596,6 +646,13 @@ def _generate_target_item(
                     continue
 
                 prompt, correct_response = built
+                visible = _prompt_signature(prompt)
+                if (
+                    visible in signatures
+                    and not allow_existing_signature
+                ):
+                    continue
+
                 item = PracticeItem(
                     user_id=user_id,
                     course_id=course.id,
@@ -614,6 +671,7 @@ def _generate_target_item(
                 db.add(item)
                 db.flush()
                 signatures.add(signature)
+                signatures.add(visible)
                 return item
 
     return None
@@ -725,7 +783,29 @@ def _generate_prioritized(
             signatures=signatures,
             source=source,
             session_id=session_id,
-            allow_existing_signature=attempts > len(fallback) * 2,
+            # Scoped to source == "practice" only. Found live 2026-07-06
+            # (real user report: "all the questions are the same") -- this
+            # padding loop used to flip allow_existing_signature=True for
+            # EVERY source once attempts passed a fixed threshold, so once
+            # a thin course's real variety ran out it mechanically filled
+            # the rest of the batch with repeats/near-repeats rather than
+            # just returning fewer items. For ad-hoc Endless Practice
+            # (source == "practice", the actual reported page), a course
+            # with only one lesson's worth of material genuinely doesn't
+            # have `size` distinct items to give yet -- returning fewer
+            # honest items is correct; padding with visible duplicates is
+            # not. Checkpoint and review keep the old threshold-based
+            # escape hatch: a checkpoint is a fixed-size scored assessment
+            # that must reach its 12-15 item minimum even on a rate-limited
+            # retake reusing the same unit's material (confirmed live --
+            # narrowing this fix to "practice" only fixed a real checkpoint-
+            # retake regression the broader version introduced, caught by
+            # the existing test_checkpoint_retake_delay_and_expiry), and a
+            # review session is likewise a fixed due-item batch, not an
+            # open-ended feed.
+            allow_existing_signature=(
+                False if source == "practice" else attempts > len(fallback) * 2
+            ),
         )
         if item is not None:
             generated.append(item)
