@@ -144,6 +144,8 @@ def main() -> int:
     from backfill_lexemes_fa_en import iter_specs as fa_en_specs
     from backfill_lexemes_en_prs import iter_specs as en_prs_specs
     from backfill_lexemes_prs_en import iter_specs as prs_en_specs
+    from backfill_lexemes_en_nl import iter_specs as en_nl_specs
+    from backfill_lexemes_nl_en import iter_specs as nl_en_specs
 
     run(
         "en-fa (target=fa)",
@@ -189,8 +191,22 @@ def main() -> int:
     )
     run(
         "prs-en (target=en)",
-        sorted((REPO_ROOT / "docs/content/practice/prs-en").glob("a1_unit*.yaml")),
+        # Glob widened from "a1_unit*.yaml" to "a*_unit*.yaml" 2026-07-06
+        # (practice-pool-sync lane extending prs-en to units 21-26, which
+        # includes the first two A2 packs, a2_unit25.yaml/a2_unit26.yaml --
+        # the old a1-only glob would have silently skipped both).
+        sorted((REPO_ROOT / "docs/content/practice/prs-en").glob("a*_unit*.yaml")),
         prs_en_specs,
+    )
+    run(
+        "en-nl (target=nl)",
+        sorted((REPO_ROOT / "docs/content/practice/en-nl").glob("a*_unit*.yaml")),
+        en_nl_specs,
+    )
+    run(
+        "nl-en (target=en)",
+        sorted((REPO_ROOT / "docs/content/practice/nl-en").glob("a*_unit*.yaml")),
+        nl_en_specs,
     )
 
     print()
