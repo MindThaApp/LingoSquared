@@ -1,0 +1,88 @@
+schema_version: "1.0"
+pack_key: practice.fa-en.a1.unit05
+source_language: fa
+target_language: en
+unit_content_key: en.a1.unit05.time
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: >-
+    Authored 2026-07-06 by a fork of the practice-pool-sync lane
+    (en-fa/fa-en/en-prs gap). This unit's actual clock-time vocabulary
+    (o'clock/half/quarter/past/to) is deliberately NOT used as a slot
+    value anywhere in this pack -- these are fixed time-telling function
+    words, not an interchangeable pool (mirrors the nl-en lane's own
+    documented caution against exactly this). Instead this pack reuses
+    the existing day_part (4-member: morning/afternoon/evening/night,
+    bare-word recognition only) and day_part_in (narrower 3-member:
+    morning/afternoon/evening, safe for an "at nine in the {item}" frame
+    since natives never say "in the night") tags already established in
+    scripts/_en_target_lexeme_common.py by the nl-en lane's own unit01/
+    unit05 work -- no new POS/tag classification needed, only Farsi
+    glosses (already added for this pack's needed tokens: time/o'clock/
+    half/past/quarter/night/store/in/closes/does/close, tracked in
+    scripts/backfill_lexemes_fa_en.py). No numeric hour-telling slot was
+    attempted since no "hour_number" tag exists yet and forcing one
+    wasn't in scope for this pass -- flagging as a follow-up rather than
+    forcing something unsafe. Verified with
+    scripts/_practice_slot_check.py that every slot has >=1 candidate
+    and every multiple_choice/matching_pairs slot has >=3 distinct
+    candidate values.
+tag_schema:
+  part_of_speech: [noun, adjective, adverb, pronoun, verb, particle, symbol]
+  agreement_tags:
+    semantic: [day_part, day_part_in]
+slot_presets:
+  day_part: &day_part {language_code: en, part_of_speech: noun, agreement_tags: {semantic: day_part}}
+  day_part_in: &day_part_in {language_code: en, part_of_speech: noun, agreement_tags: {semantic: day_part_in}}
+templates:
+  - content_key: practice.fa-en.en.a1.unit05.lesson03.daypart_gloss.001
+    lesson_content_key: en.a1.unit05.lesson03.day_parts_schedules
+    type: multiple_choice
+    frame: {text: "{day_part}", language_code: en, direction: ltr}
+    slots: {day_part: *day_part}
+    answer_derivation: {kind: slot_gloss, slot: day_part}
+    feedback_frame: {text: "معنی فارسی {day_part} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit05.lesson03.daypart_listen.002
+    lesson_content_key: en.a1.unit05.lesson03.day_parts_schedules
+    type: listen_select
+    frame: {text: "{day_part}", language_code: en, direction: ltr}
+    slots: {day_part: *day_part}
+    answer_derivation: {kind: slot_gloss, slot: day_part}
+    feedback_frame: {text: "بخشی از روز که شنیدید {day_part} بود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit05.lesson03.daypart_pair.003
+    lesson_content_key: en.a1.unit05.lesson03.day_parts_schedules
+    type: matching_pairs
+    frame: {text: "{day_part_one} — {day_part_two}", language_code: en, direction: ltr}
+    slots: {day_part_one: *day_part, day_part_two: *day_part}
+    slot_relations: [{kind: distinct, slots: [day_part_one, day_part_two]}]
+    answer_derivation: {kind: matching_pairs, slots: [day_part_one, day_part_two]}
+    feedback_frame: {text: "هر بخش از روز را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit05.lesson03.open_fill.004
+    lesson_content_key: en.a1.unit05.lesson03.day_parts_schedules
+    type: fill_in_blank
+    frame: {text: "The store opens at nine in the {day_part_in}.", language_code: en, direction: ltr}
+    slots: {day_part_in: *day_part_in}
+    answer_derivation: {kind: slot_text, slot: day_part_in}
+    feedback_frame: {text: "{day_part_in} این جمله را دربارهٔ ساعت باز شدن مغازه کامل می‌کند.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit05.lesson04.daypart_listen.001
+    lesson_content_key: en.a1.unit05.lesson04.schedule_dialogue
+    type: listen_select
+    frame: {text: "{day_part}", language_code: en, direction: ltr}
+    slots: {day_part: *day_part}
+    answer_derivation: {kind: slot_gloss, slot: day_part}
+    feedback_frame: {text: "بخشی از روز که در این گفتگو شنیدید {day_part} بود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit05.lesson04.close_fill.002
+    lesson_content_key: en.a1.unit05.lesson04.schedule_dialogue
+    type: fill_in_blank
+    frame: {text: "It closes at six in the {day_part_in}.", language_code: en, direction: ltr}
+    slots: {day_part_in: *day_part_in}
+    answer_derivation: {kind: slot_text, slot: day_part_in}
+    feedback_frame: {text: "{day_part_in} این جمله را دربارهٔ ساعت بسته شدن کتابخانه کامل می‌کند.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit05.lesson04.daypart_translate.003
+    lesson_content_key: en.a1.unit05.lesson04.schedule_dialogue
+    type: translation
+    frame: {text: "{day_part}", language_code: fa, direction: rtl, slot_rendering: {day_part: english_gloss}}
+    slots: {day_part: *day_part}
+    answer_derivation: {kind: slot_text, slot: day_part}
+    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این بخش از روز است.", language_code: fa, direction: rtl}

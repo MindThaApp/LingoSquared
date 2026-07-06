@@ -1,0 +1,104 @@
+schema_version: "1.0"
+pack_key: practice.prs-en.a1.unit07
+source_language: prs
+target_language: en
+unit_content_key: en.a1.unit07.food
+review:
+  status: reviewed
+  fresh_context: true
+  notes: >-
+    Authored 2026-07-06 by a fork of the practice-pool-sync lane
+    (en-fa/fa-en/en-prs gap). The food_item tag (7 members) already
+    exists in scripts/_en_target_lexeme_common.py -- only Dari glosses
+    were added to scripts/backfill_lexemes_prs_en.py (soup uses "شوروا",
+    the real Afghan Dari term, distinct from Farsi's "سوپ"). Mirrors
+    the sibling fa-en/a1_unit07.yaml pack's reasoning: this unit's
+    ordering/menu/dialogue content is mostly fixed phrases and specific
+    prices, not further slot-fillable vocabulary, so every lesson reuses
+    food_item for bare-word recognition rather than forcing an unsafe
+    frame. Verified with scripts/_practice_slot_check.py that every
+    slot has >=1 candidate and every multiple_choice/matching_pairs
+    slot has >=3 distinct candidate values.
+
+    Fresh-context review, 2026-07-06 (separate session, zero access to
+    the authoring reasoning above): confirmed all 4 lesson_content_key
+    values match real en.a1.unit07.food lessons. Re-scanned for
+    Pashto-only letters/vocabulary -- none found ("شوروا" confirmed
+    genuine Dari, not Pashto or Farsi "سوپ"). Deliberately checked for
+    the exact self-reference bug class the nl-en lane's own unit07 found
+    ("I'd like a {item} and a sandwich" drawing "sandwich" into its own
+    slot) -- this pack's "I'd like a {food_item}, please." frame has no
+    fixed second item, so no such risk exists here. Hand-rendered all 7
+    food_item fillers against every frame -- all grammatical. Upgraded
+    to reviewed: genuinely clean.
+tag_schema:
+  part_of_speech: [noun, adjective, adverb, pronoun, verb, particle, symbol]
+  agreement_tags:
+    semantic: [food_item]
+slot_presets:
+  food_item: &food_item {language_code: en, part_of_speech: noun, agreement_tags: {semantic: food_item}}
+templates:
+  - content_key: practice.prs-en.en.a1.unit07.lesson01.food_gloss.001
+    lesson_content_key: en.a1.unit07.lesson01.food_drink_vocabulary
+    type: multiple_choice
+    frame: {text: "{food_item}", language_code: en, direction: ltr}
+    slots: {food_item: *food_item}
+    answer_derivation: {kind: slot_gloss, slot: food_item}
+    feedback_frame: {text: "معنای دری {food_item} را انتخاب کنین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit07.lesson01.food_listen.002
+    lesson_content_key: en.a1.unit07.lesson01.food_drink_vocabulary
+    type: listen_select
+    frame: {text: "{food_item}", language_code: en, direction: ltr}
+    slots: {food_item: *food_item}
+    answer_derivation: {kind: slot_gloss, slot: food_item}
+    feedback_frame: {text: "واژه‌ای که شنیدین {food_item} بود.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit07.lesson01.food_pair.003
+    lesson_content_key: en.a1.unit07.lesson01.food_drink_vocabulary
+    type: matching_pairs
+    frame: {text: "{food_one} — {food_two}", language_code: en, direction: ltr}
+    slots: {food_one: *food_item, food_two: *food_item}
+    slot_relations: [{kind: distinct, slots: [food_one, food_two]}]
+    answer_derivation: {kind: matching_pairs, slots: [food_one, food_two]}
+    feedback_frame: {text: "هر واژهٔ خوراکه را به معنای دری خودش وصل کنین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit07.lesson01.food_translate.004
+    lesson_content_key: en.a1.unit07.lesson01.food_drink_vocabulary
+    type: translation
+    frame: {text: "{food_item}", language_code: prs, direction: rtl, slot_rendering: {food_item: english_gloss}}
+    slots: {food_item: *food_item}
+    answer_derivation: {kind: slot_text, slot: food_item}
+    feedback_frame: {text: "{food_item} معادل انگلیسی این خوراکهٔ دری است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit07.lesson02.order_fill.001
+    lesson_content_key: en.a1.unit07.lesson02.ordering_phrases
+    type: fill_in_blank
+    frame: {text: "I'd like a {food_item}, please.", language_code: en, direction: ltr}
+    slots: {food_item: *food_item}
+    answer_derivation: {kind: slot_text, slot: food_item}
+    feedback_frame: {text: "{food_item} این سفارش را کامل می‌کنه.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit07.lesson02.order_listen.002
+    lesson_content_key: en.a1.unit07.lesson02.ordering_phrases
+    type: listen_select
+    frame: {text: "{food_item}", language_code: en, direction: ltr}
+    slots: {food_item: *food_item}
+    answer_derivation: {kind: slot_gloss, slot: food_item}
+    feedback_frame: {text: "واژه‌ای که شنیدین {food_item} بود.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit07.lesson03.food_gloss.001
+    lesson_content_key: en.a1.unit07.lesson03.reading_a_menu
+    type: multiple_choice
+    frame: {text: "{food_item}", language_code: en, direction: ltr}
+    slots: {food_item: *food_item}
+    answer_derivation: {kind: slot_gloss, slot: food_item}
+    feedback_frame: {text: "معنای دری {food_item} را انتخاب کنین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit07.lesson04.order_fill.001
+    lesson_content_key: en.a1.unit07.lesson04.cafe_dialogue
+    type: fill_in_blank
+    frame: {text: "I'd like a {food_item}, please.", language_code: en, direction: ltr}
+    slots: {food_item: *food_item}
+    answer_derivation: {kind: slot_text, slot: food_item}
+    feedback_frame: {text: "{food_item} این سفارش را کامل می‌کنه.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit07.lesson04.food_translate.002
+    lesson_content_key: en.a1.unit07.lesson04.cafe_dialogue
+    type: translation
+    frame: {text: "{food_item}", language_code: prs, direction: rtl, slot_rendering: {food_item: english_gloss}}
+    slots: {food_item: *food_item}
+    answer_derivation: {kind: slot_text, slot: food_item}
+    feedback_frame: {text: "{food_item} معادل انگلیسی این خوراکهٔ دری است.", language_code: prs, direction: rtl}

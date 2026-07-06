@@ -1,0 +1,126 @@
+schema_version: "1.0"
+pack_key: practice.prs-en.a1.unit08
+source_language: prs
+target_language: en
+unit_content_key: en.a1.unit08.shopping
+review:
+  status: reviewed
+  fresh_context: true
+  notes: >-
+    Authored 2026-07-06 by a fork of the practice-pool-sync lane
+    (en-fa/fa-en/en-prs gap). quantity_unit (5 members) and food_plural
+    (3 members) tags already exist in scripts/_en_target_lexeme_common.py
+    -- only Dari glosses were added to scripts/backfill_lexemes_prs_en.py
+    (bag uses "کیسه", corrected after this fork briefly, mistakenly,
+    drafted a Pashto word there -- caught and fixed before this pack was
+    written; see the pack's own module comment in the backfill script).
+    Mirrors the sibling fa-en/a1_unit08.yaml pack's structure and
+    reasoning. Verified with scripts/_practice_slot_check.py that every
+    slot has >=1 candidate and every multiple_choice/matching_pairs
+    slot has >=3 distinct candidate values.
+
+    Fresh-context review, 2026-07-06 (separate session, zero access to
+    the authoring reasoning above): confirmed all 4 lesson_content_key
+    values match real en.a1.unit08.shopping lessons. Re-scanned THIS
+    PACK and backfill_lexemes_prs_en.py for Pashto-only letters/
+    vocabulary -- clean ("کیسه"/bag confirmed genuine Dari, matching the
+    note above; "pound"'s own gloss "پوند" here also uses the correct
+    Dari dal, not Pashto ddal). Hand-rendered every possible sentence
+    (quantity_unit's 5x5 matching grid, food_plural's "How much are the
+    {item}?" for apples/eggs/tomatoes) -- all grammatical, no
+    self-reference. This pack itself is genuinely clean, upgraded to
+    reviewed.
+
+    REAL FINDING, NOT FIXED (out of this review's file-edit scope --
+    docs/content/overlays/prs-en/ is not editable from this task):
+    docs/content/overlays/prs-en/a1_unit08.yaml spells "pound" as
+    "پونډ" (using ډ, the Pashto/Urdu retroflex ddal) 27 times throughout
+    its titles/glosses/notes/feedback/distractors -- standard Dari
+    orthography does not have this letter; the correct Dari spelling is
+    "پوند" (plain dal د), which is what this pack's own backfill-script
+    gloss correctly uses instead. This is the same Pashto-vs-Dari bug
+    class already caught twice elsewhere tonight (a reviewed overlay
+    pass, and this fork's own gloss-dict draft) -- a third, independent
+    instance, this time unfixed and still live in the shipped overlay
+    file. Flagging prominently for whoever owns docs/content/overlays/
+    prs-en/a1_unit08.yaml next: needs a repo-wide replace of پونډ -> پوند
+    in that file specifically.
+tag_schema:
+  part_of_speech: [noun, adjective, adverb, pronoun, verb, particle, symbol]
+  agreement_tags:
+    semantic: [quantity_unit, food_plural]
+slot_presets:
+  quantity_unit: &quantity_unit {language_code: en, part_of_speech: noun, agreement_tags: {semantic: quantity_unit}}
+  food_plural: &food_plural {language_code: en, part_of_speech: noun, agreement_tags: {semantic: food_plural}}
+templates:
+  - content_key: practice.prs-en.en.a1.unit08.lesson01.quantity_gloss.001
+    lesson_content_key: en.a1.unit08.lesson01.quantities
+    type: multiple_choice
+    frame: {text: "{quantity_unit}", language_code: en, direction: ltr}
+    slots: {quantity_unit: *quantity_unit}
+    answer_derivation: {kind: slot_gloss, slot: quantity_unit}
+    feedback_frame: {text: "معنای دری {quantity_unit} را انتخاب کنین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit08.lesson01.quantity_listen.002
+    lesson_content_key: en.a1.unit08.lesson01.quantities
+    type: listen_select
+    frame: {text: "{quantity_unit}", language_code: en, direction: ltr}
+    slots: {quantity_unit: *quantity_unit}
+    answer_derivation: {kind: slot_gloss, slot: quantity_unit}
+    feedback_frame: {text: "واژه‌ای که شنیدین {quantity_unit} بود.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit08.lesson01.quantity_pair.003
+    lesson_content_key: en.a1.unit08.lesson01.quantities
+    type: matching_pairs
+    frame: {text: "{quantity_one} — {quantity_two}", language_code: en, direction: ltr}
+    slots: {quantity_one: *quantity_unit, quantity_two: *quantity_unit}
+    slot_relations: [{kind: distinct, slots: [quantity_one, quantity_two]}]
+    answer_derivation: {kind: matching_pairs, slots: [quantity_one, quantity_two]}
+    feedback_frame: {text: "هر واحد اندازه‌گیری را به معنای دری خودش وصل کنین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit08.lesson01.quantity_translate.004
+    lesson_content_key: en.a1.unit08.lesson01.quantities
+    type: translation
+    frame: {text: "{quantity_unit}", language_code: prs, direction: rtl, slot_rendering: {quantity_unit: english_gloss}}
+    slots: {quantity_unit: *quantity_unit}
+    answer_derivation: {kind: slot_text, slot: quantity_unit}
+    feedback_frame: {text: "{quantity_unit} معادل انگلیسی این واژهٔ دری است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit08.lesson02.price_fill.001
+    lesson_content_key: en.a1.unit08.lesson02.asking_prices
+    type: fill_in_blank
+    frame: {text: "How much are the {food_plural}?", language_code: en, direction: ltr}
+    slots: {food_plural: *food_plural}
+    answer_derivation: {kind: slot_text, slot: food_plural}
+    feedback_frame: {text: "{food_plural} این سوال دربارهٔ قیمت را کامل می‌کنه.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit08.lesson02.food_gloss.002
+    lesson_content_key: en.a1.unit08.lesson02.asking_prices
+    type: multiple_choice
+    frame: {text: "{food_plural}", language_code: en, direction: ltr}
+    slots: {food_plural: *food_plural}
+    answer_derivation: {kind: slot_gloss, slot: food_plural}
+    feedback_frame: {text: "معنای دری {food_plural} را انتخاب کنین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit08.lesson03.quantity_gloss.001
+    lesson_content_key: en.a1.unit08.lesson03.reading_price_labels
+    type: multiple_choice
+    frame: {text: "{quantity_unit}", language_code: en, direction: ltr}
+    slots: {quantity_unit: *quantity_unit}
+    answer_derivation: {kind: slot_gloss, slot: quantity_unit}
+    feedback_frame: {text: "معنای دری {quantity_unit} را انتخاب کنین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit08.lesson03.food_translate.002
+    lesson_content_key: en.a1.unit08.lesson03.reading_price_labels
+    type: translation
+    frame: {text: "{food_plural}", language_code: prs, direction: rtl, slot_rendering: {food_plural: english_gloss}}
+    slots: {food_plural: *food_plural}
+    answer_derivation: {kind: slot_text, slot: food_plural}
+    feedback_frame: {text: "{food_plural} معادل انگلیسی این خوراکهٔ دری است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit08.lesson04.quantity_listen.001
+    lesson_content_key: en.a1.unit08.lesson04.market_dialogue
+    type: listen_select
+    frame: {text: "{quantity_unit}", language_code: en, direction: ltr}
+    slots: {quantity_unit: *quantity_unit}
+    answer_derivation: {kind: slot_gloss, slot: quantity_unit}
+    feedback_frame: {text: "واژه‌ای که در این گفتگو شنیدین {quantity_unit} بود.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit08.lesson04.price_fill.002
+    lesson_content_key: en.a1.unit08.lesson04.market_dialogue
+    type: fill_in_blank
+    frame: {text: "How much are the {food_plural}?", language_code: en, direction: ltr}
+    slots: {food_plural: *food_plural}
+    answer_derivation: {kind: slot_text, slot: food_plural}
+    feedback_frame: {text: "{food_plural} این سوال دربارهٔ قیمت را کامل می‌کنه.", language_code: prs, direction: rtl}
