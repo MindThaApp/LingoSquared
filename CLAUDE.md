@@ -693,19 +693,23 @@ each" was stale). ~131 units total across 8 of 18 paths.
   resource-exhaustion bug found and fixed (an unbounded-size `response`
   field on every answer-submission endpoint), in `docs/BUILD_LOG.md`'s
   matching entry.
-- **Fixed 2026-07-06**: the Starlette "BadHost" CVE (CVE-2026-48710)
-  flagged 2026-07-05 as needing a dedicated FastAPI-version-bump-and-
-  regression-test pass — done. `backend/requirements.txt`'s `fastapi`
-  bumped `0.115.12` → `0.139.0`, resolving `starlette` to `1.3.1` (past
-  the `1.0.1` fix). Changelog-audited the full version range for
-  breaking changes against this codebase's actual FastAPI usage (none
-  applied), full pytest suite green (96/96, isolated test DB), and live-
-  smoke-tested auth/course-listing/lesson-content/answer-grading/error-
-  handling against the rebuilt container — all correct. Not yet
-  deployed to the shared dev stack or the live server (192.168.4.4),
-  and not yet committed — `backend/requirements.txt` plus the matching
-  `docs/BUILD_LOG.md` entry are ready in the working tree. Full detail
-  in `docs/BUILD_LOG.md`'s matching entry.
+- **Fixed and DEPLOYED 2026-07-06**: the Starlette "BadHost" CVE
+  (CVE-2026-48710) flagged 2026-07-05 as needing a dedicated
+  FastAPI-version-bump-and-regression-test pass — done and live on the
+  shared dev stack. `backend/requirements.txt`'s `fastapi` bumped
+  `0.115.12` → `0.139.0`, resolving `starlette` to `1.3.1` (past the
+  `1.0.1` fix). Changelog-audited the full version range for breaking
+  changes against this codebase's actual FastAPI usage (none applied),
+  full pytest suite green, live-smoke-tested auth/course-listing/
+  lesson-content/answer-grading/error-handling. Committed, and
+  deployed to the shared dev stack's `backend-api-1` via a coordinated
+  rebuild (`docker compose build api && docker compose up -d api`)
+  alongside two other landed features (Azure TTS, Whisper STT) —
+  `pip show fastapi` on the actually-running container confirms
+  `0.139.0` live, not just committed. Still **not** deployed to the
+  live server (192.168.4.4) — that's a separate, Ramin-present step per
+  the standing deploy convention. Full detail in `docs/BUILD_LOG.md`'s
+  matching entries.
 - No refresh tokens, password reset, or email verification.
 - No mobile app (Expo React Native is the recommended future path,
   reusing the existing JWT/JSON API as-is).
