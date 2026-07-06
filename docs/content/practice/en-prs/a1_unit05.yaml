@@ -1,0 +1,113 @@
+schema_version: "1.0"
+pack_key: practice.en-prs.a1.unit05
+source_language: en
+target_language: prs
+unit_content_key: prs.a1.unit05.places
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: >-
+    Authored by the practice-pool-sync lane (fa/prs bundle), 2026-07-06,
+    same pass as this bundle's a1_unit03.yaml sibling (see that file's
+    notes for the full extension rationale and verification method).
+
+    Two semantic groups: city_place (بازار/بانک/مسجد/شفاخانه/مکتب/
+    دواخانه/سفارت/دفتر, 8 members, spanning lessons 01-02 -- these are
+    literally "places in the city," this unit's own title, so grouping
+    lesson01's everyday places with lesson02's سفارت/دفتر is a natural
+    fit, not a forced one) and location_word (نزدیک/دور/این‌جا/آن‌جا, 4
+    members) from lesson04. Deliberately skipped multi-word phrase
+    tokens as slot fillers entirely -- پوسته/خانه (post office) and
+    میدان/هوایی (airport) are taught as two-token phrases in the
+    realization, and this project's backfill scripts don't build
+    phrase-level lexemes (only single tokens), so slotting them would
+    either be ungrammatical (rendering just "پوسته" or "هوایی" alone)
+    or impossible; they remain taught in the lesson itself, just not
+    drilled via a template here, matching this bundle's en-fa/a1_unit05
+    sibling's own precedent for single-candidate/phrase tokens. Also
+    skipped the thin (2-member) پشت/مقابل preposition pair and the
+    kojast-question phrases for the same reason.
+
+    Every fill_in_blank frame embeds the slot in a real Dari sentence
+    with visible surrounding context (guide §13). Every
+    lesson_content_key anchor verified against the real realization
+    file. No listen_select/listen_type anywhere. No bare unquoted
+    yes/no/true/false anywhere.
+
+    Verified with a standalone throwaway script reusing
+    scripts/_practice_slot_check.py's lexeme_matches()/check_pack()
+    against scripts/backfill_lexemes_en_prs.py's real iter_specs()
+    output -- 0 problems. scripts/compile_content.py practice-validate
+    for the full en-prs pack (units 01-10 together) -- 0 errors/0
+    warnings. Needs the standard fresh-context review before import; no
+    backfill_lexemes_en_prs.py run has actually happened against a real
+    database yet in this pass.
+tag_schema:
+  part_of_speech: [noun, adjective, adverb]
+  agreement_tags:
+    semantic: [city_place, location_word]
+slot_presets:
+  city_place: &city_place {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: city_place}}
+  location_word: &location_word {language_code: prs, part_of_speech: [adjective, adverb], agreement_tags: {semantic: location_word}}
+templates:
+  # Lessons 1-2: everyday, civic, and travel places in the city.
+  - content_key: practice.en-prs.prs.a1.unit05.lesson01.place_gloss.001
+    lesson_content_key: prs.a1.unit05.lesson01.everyday_places
+    type: multiple_choice
+    frame: {text: "{city_place}", language_code: prs, direction: rtl}
+    slots: {city_place: *city_place}
+    answer_derivation: {kind: slot_gloss, slot: city_place}
+    feedback_frame: {text: "{city_place} names a place in the city.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit05.lesson01.place_fill.002
+    lesson_content_key: prs.a1.unit05.lesson01.everyday_places
+    type: fill_in_blank
+    frame: {text: "{city_place} کجاست؟", language_code: prs, direction: rtl}
+    slots: {city_place: *city_place}
+    answer_derivation: {kind: slot_text, slot: city_place}
+    feedback_frame: {text: "{city_place} completes 'Where is the ___?'", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit05.lesson01.place_translate.003
+    lesson_content_key: prs.a1.unit05.lesson01.everyday_places
+    type: translation
+    frame: {text: "{city_place}", language_code: en, direction: ltr, slot_rendering: {city_place: english_gloss}}
+    slots: {city_place: *city_place}
+    answer_derivation: {kind: slot_text, slot: city_place}
+    feedback_frame: {text: "{city_place} is the Dari word for this place.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit05.lesson01.place_pair.004
+    lesson_content_key: prs.a1.unit05.lesson01.everyday_places
+    type: matching_pairs
+    frame: {text: "{city_place_one} — {city_place_two}", language_code: prs, direction: rtl}
+    slots: {city_place_one: *city_place, city_place_two: *city_place}
+    slot_relations: [{kind: distinct, slots: [city_place_one, city_place_two]}]
+    answer_derivation: {kind: matching_pairs, slots: [city_place_one, city_place_two]}
+    feedback_frame: {text: "Match each place with its English meaning.", language_code: en, direction: ltr}
+
+  # Lesson 4: near, far, here, and there.
+  - content_key: practice.en-prs.prs.a1.unit05.lesson04.location_gloss.001
+    lesson_content_key: prs.a1.unit05.lesson04.simple_location_answers
+    type: multiple_choice
+    frame: {text: "{location_word}", language_code: prs, direction: rtl}
+    slots: {location_word: *location_word}
+    answer_derivation: {kind: slot_gloss, slot: location_word}
+    feedback_frame: {text: "{location_word} describes a location.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit05.lesson04.location_fill.002
+    lesson_content_key: prs.a1.unit05.lesson04.simple_location_answers
+    type: fill_in_blank
+    frame: {text: "بازار {location_word} است.", language_code: prs, direction: rtl}
+    slots: {location_word: *location_word}
+    answer_derivation: {kind: slot_text, slot: location_word}
+    feedback_frame: {text: "{location_word} completes 'the market is ___.'", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit05.lesson04.location_translate.003
+    lesson_content_key: prs.a1.unit05.lesson04.simple_location_answers
+    type: translation
+    frame: {text: "{location_word}", language_code: en, direction: ltr, slot_rendering: {location_word: english_gloss}}
+    slots: {location_word: *location_word}
+    answer_derivation: {kind: slot_text, slot: location_word}
+    feedback_frame: {text: "{location_word} is the Dari word for this.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit05.lesson04.location_pair.004
+    lesson_content_key: prs.a1.unit05.lesson04.simple_location_answers
+    type: matching_pairs
+    frame: {text: "{location_word_one} — {location_word_two}", language_code: prs, direction: rtl}
+    slots: {location_word_one: *location_word, location_word_two: *location_word}
+    slot_relations: [{kind: distinct, slots: [location_word_one, location_word_two]}]
+    answer_derivation: {kind: matching_pairs, slots: [location_word_one, location_word_two]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}

@@ -1,0 +1,129 @@
+schema_version: "1.0"
+pack_key: practice.en-prs.a1.unit08
+source_language: en
+target_language: prs
+unit_content_key: prs.a1.unit08.food
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: >-
+    Authored by the practice-pool-sync lane (fa/prs bundle), 2026-07-06,
+    same pass as this bundle's a1_unit03.yaml sibling (see that file's
+    notes for the full extension rationale and verification method).
+    Deliberately double-checked this pack's own lesson06 dialogue anchor
+    against the real anchor-bug class found and fixed live tonight in
+    the sibling fa-en direction's own unit08 pack (a template pointed at
+    a pure-review lesson with zero introduced_tokens of its own) --
+    prs.a1.unit08.lesson06.restaurant_dialogue genuinely introduces new
+    vocabulary (دکاندار, مشتری, هردو, چشم, دوصد, افغانی, etc., confirmed
+    directly against the realization file), so no equivalent bug here.
+
+    Three groups: food_item (نان/پلو/قورمه/چای/آب, 5 members) from
+    lesson01, role_word (دکاندار/مشتری, 2 members -- matching_pairs/
+    translation only) from lesson06's dialogue, and counting_word
+    (بشقاب/تا, 2 members -- matching_pairs/translation only) from
+    lesson04. Deliberately skipped بل/تازه/لطفاً/خیلی/خوش‌مزه as slot
+    fillers -- each is a genuine single-candidate token on its own
+    semantic point, matching this bundle's standing precedent of
+    leaving single-candidate vocabulary as taught-but-not-drilled
+    rather than forcing an artificial shared tag.
+
+    Every fill_in_blank frame embeds the slot in a real Dari sentence
+    with visible surrounding context (guide §13). No listen_select/
+    listen_type anywhere. No bare unquoted yes/no/true/false anywhere.
+
+    Verified with a standalone throwaway script reusing
+    scripts/_practice_slot_check.py's lexeme_matches()/check_pack()
+    against scripts/backfill_lexemes_en_prs.py's real iter_specs()
+    output -- 0 problems. scripts/compile_content.py practice-validate
+    for the full en-prs pack (units 01-10 together) -- 0 errors/0
+    warnings. Needs the standard fresh-context review before import; no
+    backfill_lexemes_en_prs.py run has actually happened against a real
+    database yet in this pass.
+tag_schema:
+  part_of_speech: [noun, particle]
+  agreement_tags:
+    semantic: [food_item, role_word, counting_word]
+slot_presets:
+  food_item: &food_item {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: food_item}}
+  role_word: &role_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: role_word}}
+  counting_word: &counting_word {language_code: prs, part_of_speech: [noun, particle], agreement_tags: {semantic: counting_word}}
+templates:
+  # Lesson 1: food and drink vocabulary.
+  - content_key: practice.en-prs.prs.a1.unit08.lesson01.food_gloss.001
+    lesson_content_key: prs.a1.unit08.lesson01.food_and_drink_vocabulary
+    type: multiple_choice
+    frame: {text: "{food_item}", language_code: prs, direction: rtl}
+    slots: {food_item: *food_item}
+    answer_derivation: {kind: slot_gloss, slot: food_item}
+    feedback_frame: {text: "{food_item} names a food or drink item.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit08.lesson01.food_fill.002
+    lesson_content_key: prs.a1.unit08.lesson01.food_and_drink_vocabulary
+    type: fill_in_blank
+    frame: {text: "یک {food_item} می‌خواهم، لطفاً.", language_code: prs, direction: rtl}
+    slots: {food_item: *food_item}
+    answer_derivation: {kind: slot_text, slot: food_item}
+    feedback_frame: {text: "{food_item} completes 'I'd like a ___, please.'", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit08.lesson01.food_translate.003
+    lesson_content_key: prs.a1.unit08.lesson01.food_and_drink_vocabulary
+    type: translation
+    frame: {text: "{food_item}", language_code: en, direction: ltr, slot_rendering: {food_item: english_gloss}}
+    slots: {food_item: *food_item}
+    answer_derivation: {kind: slot_text, slot: food_item}
+    feedback_frame: {text: "{food_item} is the Dari word for this.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit08.lesson01.food_pair.004
+    lesson_content_key: prs.a1.unit08.lesson01.food_and_drink_vocabulary
+    type: matching_pairs
+    frame: {text: "{food_item_one} — {food_item_two}", language_code: prs, direction: rtl}
+    slots: {food_item_one: *food_item, food_item_two: *food_item}
+    slot_relations: [{kind: distinct, slots: [food_item_one, food_item_two]}]
+    answer_derivation: {kind: matching_pairs, slots: [food_item_one, food_item_two]}
+    feedback_frame: {text: "Match each word with its English meaning.", language_code: en, direction: ltr}
+
+  # Lesson 4: quantities.
+  - content_key: practice.en-prs.prs.a1.unit08.lesson04.counting_fill.001
+    lesson_content_key: prs.a1.unit08.lesson04.quantities
+    type: fill_in_blank
+    frame: {text: "کلمهٔ {counting_word} برای شمردن خوراک به کار می‌رود.", language_code: prs, direction: rtl}
+    slots: {counting_word: *counting_word}
+    answer_derivation: {kind: slot_text, slot: counting_word}
+    feedback_frame: {text: "{counting_word} completes 'the word ___ is used for counting food.'", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit08.lesson04.counting_translate.002
+    lesson_content_key: prs.a1.unit08.lesson04.quantities
+    type: translation
+    frame: {text: "{counting_word}", language_code: en, direction: ltr, slot_rendering: {counting_word: english_gloss}}
+    slots: {counting_word: *counting_word}
+    answer_derivation: {kind: slot_text, slot: counting_word}
+    feedback_frame: {text: "{counting_word} is the Dari word for this.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit08.lesson04.counting_pair.003
+    lesson_content_key: prs.a1.unit08.lesson04.quantities
+    type: matching_pairs
+    frame: {text: "{counting_word_one} — {counting_word_two}", language_code: prs, direction: rtl}
+    slots: {counting_word_one: *counting_word, counting_word_two: *counting_word}
+    slot_relations: [{kind: distinct, slots: [counting_word_one, counting_word_two]}]
+    answer_derivation: {kind: matching_pairs, slots: [counting_word_one, counting_word_two]}
+    feedback_frame: {text: "Match each counting word to its English meaning.", language_code: en, direction: ltr}
+
+  # Lesson 6: the full teahouse dialogue.
+  - content_key: practice.en-prs.prs.a1.unit08.lesson06.role_fill.001
+    lesson_content_key: prs.a1.unit08.lesson06.restaurant_dialogue
+    type: fill_in_blank
+    frame: {text: "سلام، خوش آمدین. من {role_word} استم.", language_code: prs, direction: rtl}
+    slots: {role_word: *role_word}
+    answer_derivation: {kind: slot_text, slot: role_word}
+    feedback_frame: {text: "{role_word} completes 'Welcome, I'm the ___.'", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit08.lesson06.role_translate.002
+    lesson_content_key: prs.a1.unit08.lesson06.restaurant_dialogue
+    type: translation
+    frame: {text: "{role_word}", language_code: en, direction: ltr, slot_rendering: {role_word: english_gloss}}
+    slots: {role_word: *role_word}
+    answer_derivation: {kind: slot_text, slot: role_word}
+    feedback_frame: {text: "{role_word} is the Dari word for this.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit08.lesson06.role_pair.003
+    lesson_content_key: prs.a1.unit08.lesson06.restaurant_dialogue
+    type: matching_pairs
+    frame: {text: "{role_word_one} — {role_word_two}", language_code: prs, direction: rtl}
+    slots: {role_word_one: *role_word, role_word_two: *role_word}
+    slot_relations: [{kind: distinct, slots: [role_word_one, role_word_two]}]
+    answer_derivation: {kind: matching_pairs, slots: [role_word_one, role_word_two]}
+    feedback_frame: {text: "Match each role to its English meaning.", language_code: en, direction: ltr}

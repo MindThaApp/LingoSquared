@@ -1,0 +1,103 @@
+schema_version: "1.0"
+pack_key: practice.en-prs.a2.unit09
+source_language: en
+target_language: prs
+unit_content_key: prs.a2.unit09.bureaucracy
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: >-
+    Authored by the practice-pool-sync lane (fa/prs bundle), 2026-07-06,
+    same pass as this bundle's a1_unit03.yaml sibling (see that file's
+    notes for the full extension rationale and verification method) --
+    this is the first A2-level en-prs practice pack, matching prs's own
+    first A2 realization unit (registering a new address at the
+    municipality). Smaller unit (4 lessons, not 6), so a smaller
+    template set is expected and correct, not a shortcut.
+
+    Two groups: office_word (وقت/سند/آدرس/تذکره/شاروالی, 5 members) from
+    lesson01, and paperwork_word (رسید/مهلت, 2 members -- matching_pairs/
+    translation only) from lesson03. Deliberately skipped the many A2-
+    level grammatical constructions this unit teaches (چون clauses,
+    می‌شود/می‌توانم polite forms) as slot fillers -- these are sentence-
+    level patterns, not atomic vocabulary, and stay taught/drilled via
+    the lesson's own exercises rather than forced into a single-token
+    slot.
+
+    Every fill_in_blank frame embeds the slot in a real Dari sentence
+    with visible surrounding context (guide §13). Every note/feedback
+    string doesn't mix Dari inline with English (frames use separate
+    language_code blocks throughout, so §15's asterisk convention
+    doesn't apply here). No listen_select/listen_type anywhere. No bare
+    unquoted yes/no/true/false anywhere.
+
+    Verified with a standalone throwaway script reusing
+    scripts/_practice_slot_check.py's lexeme_matches()/check_pack()
+    against scripts/backfill_lexemes_en_prs.py's real iter_specs()
+    output -- 0 problems. scripts/compile_content.py practice-validate
+    for the full en-prs pack (units 01-10 together) -- 0 errors/0
+    warnings. Needs the standard fresh-context review before import; no
+    backfill_lexemes_en_prs.py run has actually happened against a real
+    database yet in this pass.
+tag_schema:
+  part_of_speech: [noun]
+  agreement_tags:
+    semantic: [office_word, paperwork_word]
+slot_presets:
+  office_word: &office_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: office_word}}
+  paperwork_word: &paperwork_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: paperwork_word}}
+templates:
+  # Lesson 1: administrative vocabulary.
+  - content_key: practice.en-prs.prs.a2.unit09.lesson01.office_gloss.001
+    lesson_content_key: prs.a2.unit09.lesson01.bureaucracy_vocabulary
+    type: multiple_choice
+    frame: {text: "{office_word}", language_code: prs, direction: rtl}
+    slots: {office_word: *office_word}
+    answer_derivation: {kind: slot_gloss, slot: office_word}
+    feedback_frame: {text: "{office_word} is used when dealing with a government office.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a2.unit09.lesson01.office_fill.002
+    lesson_content_key: prs.a2.unit09.lesson01.bureaucracy_vocabulary
+    type: fill_in_blank
+    frame: {text: "لطفاً دربارهٔ {office_word} برایم توضیح بدهید.", language_code: prs, direction: rtl}
+    slots: {office_word: *office_word}
+    answer_derivation: {kind: slot_text, slot: office_word}
+    feedback_frame: {text: "{office_word} completes 'please explain the ___ to me.'", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a2.unit09.lesson01.office_translate.003
+    lesson_content_key: prs.a2.unit09.lesson01.bureaucracy_vocabulary
+    type: translation
+    frame: {text: "{office_word}", language_code: en, direction: ltr, slot_rendering: {office_word: english_gloss}}
+    slots: {office_word: *office_word}
+    answer_derivation: {kind: slot_text, slot: office_word}
+    feedback_frame: {text: "{office_word} is the Dari word for this.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a2.unit09.lesson01.office_pair.004
+    lesson_content_key: prs.a2.unit09.lesson01.bureaucracy_vocabulary
+    type: matching_pairs
+    frame: {text: "{office_word_one} — {office_word_two}", language_code: prs, direction: rtl}
+    slots: {office_word_one: *office_word, office_word_two: *office_word}
+    slot_relations: [{kind: distinct, slots: [office_word_one, office_word_two]}]
+    answer_derivation: {kind: matching_pairs, slots: [office_word_one, office_word_two]}
+    feedback_frame: {text: "Match each word with its English meaning.", language_code: en, direction: ltr}
+
+  # Lesson 3: reading the notice.
+  - content_key: practice.en-prs.prs.a2.unit09.lesson03.paperwork_fill.001
+    lesson_content_key: prs.a2.unit09.lesson03.reading_the_notice
+    type: fill_in_blank
+    frame: {text: "کلمهٔ {paperwork_word} در این اعلامیه آمده است.", language_code: prs, direction: rtl}
+    slots: {paperwork_word: *paperwork_word}
+    answer_derivation: {kind: slot_text, slot: paperwork_word}
+    feedback_frame: {text: "{paperwork_word} completes 'the word ___ appears in this notice.'", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a2.unit09.lesson03.paperwork_translate.002
+    lesson_content_key: prs.a2.unit09.lesson03.reading_the_notice
+    type: translation
+    frame: {text: "{paperwork_word}", language_code: en, direction: ltr, slot_rendering: {paperwork_word: english_gloss}}
+    slots: {paperwork_word: *paperwork_word}
+    answer_derivation: {kind: slot_text, slot: paperwork_word}
+    feedback_frame: {text: "{paperwork_word} is the Dari word for this.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a2.unit09.lesson03.paperwork_pair.003
+    lesson_content_key: prs.a2.unit09.lesson03.reading_the_notice
+    type: matching_pairs
+    frame: {text: "{paperwork_word_one} — {paperwork_word_two}", language_code: prs, direction: rtl}
+    slots: {paperwork_word_one: *paperwork_word, paperwork_word_two: *paperwork_word}
+    slot_relations: [{kind: distinct, slots: [paperwork_word_one, paperwork_word_two]}]
+    answer_derivation: {kind: matching_pairs, slots: [paperwork_word_one, paperwork_word_two]}
+    feedback_frame: {text: "Match each word with its English meaning.", language_code: en, direction: ltr}

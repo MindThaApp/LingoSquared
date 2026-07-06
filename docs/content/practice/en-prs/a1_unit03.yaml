@@ -1,0 +1,186 @@
+schema_version: "1.0"
+pack_key: practice.en-prs.a1.unit03
+source_language: en
+target_language: prs
+unit_content_key: prs.a1.unit03.family
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: >-
+    Authored by the practice-pool-sync lane (fa/prs bundle), 2026-07-06,
+    closing the en-prs gap where the practice pool only covered units
+    01-02 despite the realization/overlay already having 8 stable A1
+    units plus 2 A2 units. Extended scripts/backfill_lexemes_en_prs.py's
+    UNIT_FILES to add units 03-08 and a2 units 09-10 in one pass,
+    hand-classifying every genuinely new introduced_token directly from
+    each real realization/overlay file pair (not guessed), reusing this
+    file's own established four-slot-shape convention (multiple_choice
+    recognition, a natural-sentence fill_in_blank per guide §13,
+    translation, matching_pairs) exactly as unit02's pack already does.
+
+    Four semantic groups, each with >=3 distinct members (verified
+    against scripts/_practice_slot_check.py's >=3-for-multiple_choice/
+    matching_pairs rule): immediate_family (مادر/پدر/برادر/خواهر),
+    uncle_aunt (کاکا/عمه/ماما/خاله -- the paternal/maternal distinction
+    this unit's own review notes call out as the key English-speaker
+    teaching point), marital_word (متأهل/مجرد/شوهر/خانم), have_verb
+    (دارم/داریم/دارین). Deliberately left the two-member پدرکلان/
+    مادرکلان "grandparent" pair untested by any template (thin,
+    below the matching_pairs-friendly threshold this pass prioritized
+    covering the richer groups instead) -- still taught in the lesson
+    itself, just not drilled here; a follow-up pass could add a
+    matching_pairs-only pair for it later.
+
+    Every fill_in_blank frame embeds the slot in a real Dari sentence
+    with visible surrounding context, never a bare blanked token alone
+    (guide §13). Every lesson_content_key anchor verified directly
+    against the real realization file to introduce genuinely new
+    vocabulary of its own (non-empty introduced_tokens) -- avoiding the
+    exact anchor-bug class found and fixed live tonight in this
+    session's fa-en QA pass (a template pointing at a pure-review
+    lesson with no Lexeme provenance). No listen_select/listen_type
+    anywhere, matching this direction's standing zero-TTS-for-Dari
+    exclusion. No bare unquoted yes/no/true/false anywhere.
+
+    Verified with a standalone throwaway script reusing
+    scripts/_practice_slot_check.py's lexeme_matches()/check_pack()
+    against scripts/backfill_lexemes_en_prs.py's real iter_specs()
+    output -- 0 problems across all templates in this pack. Also ran
+    scripts/compile_content.py practice-validate for the full en-prs
+    pack (units 01-10 together) -- 0 errors/0 warnings. Needs the
+    standard fresh-context review before import; no backfill_lexemes_
+    en_prs.py run has actually happened against a real database yet in
+    this pass.
+tag_schema:
+  part_of_speech: [noun, adjective, verb]
+  agreement_tags:
+    semantic: [immediate_family, uncle_aunt, marital_word, have_verb]
+slot_presets:
+  immediate_family: &immediate_family {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: immediate_family}}
+  uncle_aunt: &uncle_aunt {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: uncle_aunt}}
+  marital_word: &marital_word {language_code: prs, part_of_speech: [noun, adjective], agreement_tags: {semantic: marital_word}}
+  have_verb: &have_verb {language_code: prs, part_of_speech: verb, agreement_tags: {semantic: have_verb}}
+templates:
+  # Lesson 1: immediate family members.
+  - content_key: practice.en-prs.prs.a1.unit03.lesson01.family_gloss.001
+    lesson_content_key: prs.a1.unit03.lesson01.immediate_family
+    type: multiple_choice
+    frame: {text: "{immediate_family}", language_code: prs, direction: rtl}
+    slots: {immediate_family: *immediate_family}
+    answer_derivation: {kind: slot_gloss, slot: immediate_family}
+    feedback_frame: {text: "{immediate_family} names an immediate family member.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit03.lesson01.family_fill.002
+    lesson_content_key: prs.a1.unit03.lesson01.immediate_family
+    type: fill_in_blank
+    frame: {text: "این {immediate_family} من است.", language_code: prs, direction: rtl}
+    slots: {immediate_family: *immediate_family}
+    answer_derivation: {kind: slot_text, slot: immediate_family}
+    feedback_frame: {text: "{immediate_family} completes 'this is my ___.'", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit03.lesson01.family_translate.003
+    lesson_content_key: prs.a1.unit03.lesson01.immediate_family
+    type: translation
+    frame: {text: "{immediate_family}", language_code: en, direction: ltr, slot_rendering: {immediate_family: english_gloss}}
+    slots: {immediate_family: *immediate_family}
+    answer_derivation: {kind: slot_text, slot: immediate_family}
+    feedback_frame: {text: "{immediate_family} is the Dari word for this.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit03.lesson01.family_pair.004
+    lesson_content_key: prs.a1.unit03.lesson01.immediate_family
+    type: matching_pairs
+    frame: {text: "{immediate_family_one} — {immediate_family_two}", language_code: prs, direction: rtl}
+    slots: {immediate_family_one: *immediate_family, immediate_family_two: *immediate_family}
+    slot_relations: [{kind: distinct, slots: [immediate_family_one, immediate_family_two]}]
+    answer_derivation: {kind: matching_pairs, slots: [immediate_family_one, immediate_family_two]}
+    feedback_frame: {text: "Match each family word to its English meaning.", language_code: en, direction: ltr}
+
+  # Lesson 2: paternal and maternal relatives.
+  - content_key: practice.en-prs.prs.a1.unit03.lesson02.uncle_aunt_gloss.001
+    lesson_content_key: prs.a1.unit03.lesson02.extended_family
+    type: multiple_choice
+    frame: {text: "{uncle_aunt}", language_code: prs, direction: rtl}
+    slots: {uncle_aunt: *uncle_aunt}
+    answer_derivation: {kind: slot_gloss, slot: uncle_aunt}
+    feedback_frame: {text: "{uncle_aunt} identifies a specific side of the family.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit03.lesson02.uncle_aunt_fill.002
+    lesson_content_key: prs.a1.unit03.lesson02.extended_family
+    type: fill_in_blank
+    frame: {text: "او {uncle_aunt} من است.", language_code: prs, direction: rtl}
+    slots: {uncle_aunt: *uncle_aunt}
+    answer_derivation: {kind: slot_text, slot: uncle_aunt}
+    feedback_frame: {text: "{uncle_aunt} completes 'he/she is my ___.'", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit03.lesson02.uncle_aunt_translate.003
+    lesson_content_key: prs.a1.unit03.lesson02.extended_family
+    type: translation
+    frame: {text: "{uncle_aunt}", language_code: en, direction: ltr, slot_rendering: {uncle_aunt: english_gloss}}
+    slots: {uncle_aunt: *uncle_aunt}
+    answer_derivation: {kind: slot_text, slot: uncle_aunt}
+    feedback_frame: {text: "{uncle_aunt} is the Dari word for this relative.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit03.lesson02.uncle_aunt_pair.004
+    lesson_content_key: prs.a1.unit03.lesson02.extended_family
+    type: matching_pairs
+    frame: {text: "{uncle_aunt_one} — {uncle_aunt_two}", language_code: prs, direction: rtl}
+    slots: {uncle_aunt_one: *uncle_aunt, uncle_aunt_two: *uncle_aunt}
+    slot_relations: [{kind: distinct, slots: [uncle_aunt_one, uncle_aunt_two]}]
+    answer_derivation: {kind: matching_pairs, slots: [uncle_aunt_one, uncle_aunt_two]}
+    feedback_frame: {text: "Match each word to the exact relationship it names.", language_code: en, direction: ltr}
+
+  # Lesson 3: describing family size, incl. the دارم/داریم/دارین have-forms.
+  - content_key: practice.en-prs.prs.a1.unit03.lesson03.have_gloss.001
+    lesson_content_key: prs.a1.unit03.lesson03.family_size
+    type: multiple_choice
+    frame: {text: "{have_verb}", language_code: prs, direction: rtl}
+    slots: {have_verb: *have_verb}
+    answer_derivation: {kind: slot_gloss, slot: have_verb}
+    feedback_frame: {text: "{have_verb} is a form of داشتن (to have).", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit03.lesson03.have_fill.002
+    lesson_content_key: prs.a1.unit03.lesson03.family_size
+    type: fill_in_blank
+    frame: {text: "چند برادر و خواهر {have_verb}؟", language_code: prs, direction: rtl}
+    slots: {have_verb: *have_verb}
+    answer_derivation: {kind: slot_text, slot: have_verb}
+    feedback_frame: {text: "{have_verb} completes 'how many brothers and sisters do ___ have?' -- Dari drops the subject pronoun since the verb ending already shows who.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit03.lesson03.have_translate.003
+    lesson_content_key: prs.a1.unit03.lesson03.family_size
+    type: translation
+    frame: {text: "{have_verb}", language_code: en, direction: ltr, slot_rendering: {have_verb: english_gloss}}
+    slots: {have_verb: *have_verb}
+    answer_derivation: {kind: slot_text, slot: have_verb}
+    feedback_frame: {text: "{have_verb} is the Dari form for this subject.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit03.lesson03.have_pair.004
+    lesson_content_key: prs.a1.unit03.lesson03.family_size
+    type: matching_pairs
+    frame: {text: "{have_verb_one} — {have_verb_two}", language_code: prs, direction: rtl}
+    slots: {have_verb_one: *have_verb, have_verb_two: *have_verb}
+    slot_relations: [{kind: distinct, slots: [have_verb_one, have_verb_two]}]
+    answer_derivation: {kind: matching_pairs, slots: [have_verb_one, have_verb_two]}
+    feedback_frame: {text: "Match each form of داشتن to its subject.", language_code: en, direction: ltr}
+
+  # Lesson 5: marriage and marital status.
+  - content_key: practice.en-prs.prs.a1.unit03.lesson05.marital_gloss.001
+    lesson_content_key: prs.a1.unit03.lesson05.marital_status
+    type: multiple_choice
+    frame: {text: "{marital_word}", language_code: prs, direction: rtl}
+    slots: {marital_word: *marital_word}
+    answer_derivation: {kind: slot_gloss, slot: marital_word}
+    feedback_frame: {text: "{marital_word} describes marital status or a spouse.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit03.lesson05.marital_fill.002
+    lesson_content_key: prs.a1.unit03.lesson05.marital_status
+    type: fill_in_blank
+    frame: {text: "کلمهٔ {marital_word} دربارهٔ ازدواج و خانواده است.", language_code: prs, direction: rtl}
+    slots: {marital_word: *marital_word}
+    answer_derivation: {kind: slot_text, slot: marital_word}
+    feedback_frame: {text: "{marital_word} completes 'the word ___ is about marriage and family.'", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit03.lesson05.marital_translate.003
+    lesson_content_key: prs.a1.unit03.lesson05.marital_status
+    type: translation
+    frame: {text: "{marital_word}", language_code: en, direction: ltr, slot_rendering: {marital_word: english_gloss}}
+    slots: {marital_word: *marital_word}
+    answer_derivation: {kind: slot_text, slot: marital_word}
+    feedback_frame: {text: "{marital_word} is the Dari word for this.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit03.lesson05.marital_pair.004
+    lesson_content_key: prs.a1.unit03.lesson05.marital_status
+    type: matching_pairs
+    frame: {text: "{marital_word_one} — {marital_word_two}", language_code: prs, direction: rtl}
+    slots: {marital_word_one: *marital_word, marital_word_two: *marital_word}
+    slot_relations: [{kind: distinct, slots: [marital_word_one, marital_word_two]}]
+    answer_derivation: {kind: matching_pairs, slots: [marital_word_one, marital_word_two]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
