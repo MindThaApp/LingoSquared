@@ -12,7 +12,7 @@ from app.models import (
     Unit,
     UserLexemeSRS,
 )
-from app.review.grading import grade_answer
+from app.review.grading import grade_answer, FREE_TEXT_EXERCISE_TYPES
 from test_endless_practice import (
     artifact,
     create_course_with_lexemes,
@@ -130,13 +130,26 @@ def test_checkpoint_forces_strict_orthography(
 ):
     _, _, _, items = start_checkpoint(client, admin, auth)
 
+    # Real, previously-flaky bug (found live 2026-07-06, root-caused
+    # here): this used to accept `fill_in_blank` as an interchangeable
+    # candidate alongside `translation`, but grade_answer()/
+    # FREE_TEXT_EXERCISE_TYPES deliberately excludes fill_in_blank from
+    # typo tolerance (its correct_response shape isn't reliably plain
+    # free text by exercise-type name alone - see grading.py's own
+    # comment) - grade_answer(..., exercise_type="fill_in_blank", ...)
+    # always returns "incorrect" regardless of edit distance. Whenever
+    # checkpoint generation happened to sample a fill_in_blank item
+    # before a translation item, this test picked the wrong kind of
+    # candidate and failed despite nothing being broken. Restricting to
+    # an actual FREE_TEXT_EXERCISE_TYPES member fixes it at the root
+    # instead of by chance of sampling order.
     selected = None
     with SessionLocal() as db:
         for output_item in items:
             item = db.get(PracticeItem, output_item["id"])
             template = db.get(PracticeTemplate, item.template_id)
             if (
-                template.type in {"translation", "fill_in_blank"}
+                template.type in FREE_TEXT_EXERCISE_TYPES
                 and isinstance(item.correct_response, str)
                 and len(item.correct_response) >= 2
             ):
