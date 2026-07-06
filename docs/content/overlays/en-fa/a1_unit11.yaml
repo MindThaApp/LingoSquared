@@ -9,9 +9,11 @@ generation_provenance:
   authoring_system: claude
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: codex
-  notes: "Authored alongside the new fa a1_unit11_routines.yaml realization. Follows the established en-fa overlay convention from units 08-10 (English instruction/correct_option/distractors/feedback, target-language Farsi accepted_answers, English glosses for recognize_* multiple_choice items to avoid the same-string visual-matching anti-pattern already fixed in units 07/08). Needs the standard fresh-context review before shipping."
+  status: reviewed
+  required_next_reviewer: null
+  notes: "Authored alongside the new fa a1_unit11_routines.yaml realization. Follows the established en-fa overlay convention from units 08-10 (English instruction/correct_option/distractors/feedback, target-language Farsi accepted_answers, English glosses for recognize_* multiple_choice items to avoid the same-string visual-matching anti-pattern already fixed in units 07/08). Needs the standard fresh-context review before shipping. AUDIO-ACCESSIBILITY RETROFIT 2026-07-06 (§14): converted the 3 listen_select/listen_type exercises to match the realization's multiple_choice/translation conversion. MATCHING_PAIRS SCALE (§16) CHECK: match_verbs (4) is a genuine ceiling (lesson01, no earlier vocab to pool); the rest already reasonably sized. Re-verified 0 remaining §14 violations, both validate and compile clean after the retrofit.
+
+    FRESH-CONTEXT REVIEW, 2026-07-06 (paired with the same-dated review of the fa a1_unit11_routines.yaml realization): fixed a real dialect-authenticity bug (§3) shared with the realization -- میرم سرکار (glued) is actually a different word (سرکار is an honorific/boss address term) from the intended سر کار idiom for \"at/to work\"; fixed all occurrences in this file's notes/feedback/accepted_answers/pairs to use the correctly-spaced سر کار, matching unit09's own already-shipped text. Ran a Persian-Unicode-range tokenization script checking every accepted_answers/pairs/word_bank value against cumulative introduced_tokens (this unit's own plus unit09's, since unit09 precedes unit11 in course order and is unit11's own declared spine prerequisite); found and fixed two untaught-vocabulary distractors: lesson02.exercise02's تو چی؟ was used three lessons before تو/چی are taught in lesson05 (replaced with the already-taught میرم سر کار), and lesson06.exercise02's ساعت شش was never taught anywhere in the course (replaced with the already-taught ساعت چهار). Fixed 5 §12 multi-clause gaps (lesson04.exercise06, lesson06.exercise05/06/07/08) -- each was missing at least one of the three required period/comma/و-joined accepted-answer forms; all now have all three (or, for lesson06.exercise05's optional هم, a with/without variant) as status:correct. Independently re-verified the realization's §11 fact-cross-check claim (Nima wakes 7, Sara wakes 8 and sleeps 11, generic \"I\" wakes 7 and sleeps 11) across every exercise referencing these facts -- fully consistent. Applied the §15 target-language-asterisk convention to the 5 feedback strings actually rewritten during this pass. Confirmed content_key parity exact in both directions (20 teaching + 39 exercise keys, checked programmatically) and that all 39 exercises have at least one status:correct accepted answer, verified via the actual compiled JSON output (not just validate) -- 0 errors, 0 warnings, valid JSON, every fix spot-checked directly in the compiled exercise data."
 
 course:
   title: "Farsi A1"
@@ -45,7 +47,7 @@ teaching:
   fa.a1.unit11.lesson01.teach.miram_sarkar:
     title: "I go to work"
     gloss: "I go to work"
-    note: "میرم سرکار is colloquial for می‌روم سر کار."
+    note: "میرم سر کار is colloquial for می‌روم سر کار."
   fa.a1.unit11.lesson01.teach.mikhabam:
     title: "I go to sleep"
     gloss: "I go to sleep"
@@ -133,16 +135,16 @@ exercises:
     distractors: ["I wake up", "I go to work", "I eat breakfast"]
     accepted_answers: [{value: "I go to sleep", status: correct}]
     feedback: "می‌خوابم means I go to sleep."
-  fa.a1.unit11.lesson01.exercise03.listen_verbs:
-    instruction: "Listen and select the phrase you hear."
+  fa.a1.unit11.lesson01.exercise03.recognize_miram_sarkar_reading:
+    instruction: "What does this phrase mean?"
     correct_option: "I go to work"
     distractors: ["I wake up", "I eat breakfast", "I go to sleep"]
     accepted_answers: [{value: "I go to work", status: correct}]
-    feedback: "The recording lists routine verbs; میرم سرکار means I go to work."
+    feedback: "میرم سر کار means I go to work."
   fa.a1.unit11.lesson01.exercise04.match_verbs:
     instruction: "Match each Persian phrase with its meaning."
     accepted_answers:
-      - {value: {"بیدار می‌شم": "I wake up", "صبحونه می‌خورم": "I eat breakfast", "میرم سرکار": "I go to work", "می‌خوابم": "I go to sleep"}, status: correct}
+      - {value: {"بیدار می‌شم": "I wake up", "صبحونه می‌خورم": "I eat breakfast", "میرم سر کار": "I go to work", "می‌خوابم": "I go to sleep"}, status: correct}
     feedback: "These are the core routine verbs for this unit."
   fa.a1.unit11.lesson01.exercise05.order_routine_sequence:
     instruction: "Arrange the two phrases in the order they happen: wake up, then eat breakfast."
@@ -150,23 +152,23 @@ exercises:
     feedback: "You wake up first, then eat breakfast."
   fa.a1.unit11.lesson01.exercise06.translate_go_to_work:
     instruction: "Translate into Persian: I go to work."
-    accepted_answers: [{value: "میرم سرکار", status: correct}]
-    feedback: "میرم سرکار means I go to work."
+    accepted_answers: [{value: "میرم سر کار", status: correct}]
+    feedback: "میرم سر کار means I go to work."
   fa.a1.unit11.lesson01.exercise07.write_sleep:
     instruction: "Write the Persian phrase for 'I go to sleep'."
     accepted_answers: [{value: می‌خوابم, status: correct}]
     feedback: "می‌خوابم means I go to sleep."
 
-  fa.a1.unit11.lesson02.exercise01.listen_question:
-    instruction: "Listen and select the question you hear."
-    correct_option: "ساعت چند بیدار می‌شی؟"
-    distractors: ["ساعت هفت بیدار می‌شم", "هر روز"]
-    accepted_answers: [{value: "ساعت چند بیدار می‌شی؟", status: correct}]
-    feedback: "The speaker asks ساعت چند بیدار می‌شی؟"
+  fa.a1.unit11.lesson02.exercise01.recognize_wake_question_reading:
+    instruction: "What does this question ask?"
+    correct_option: "What time do you wake up?"
+    distractors: ["I wake up at seven.", "Every day"]
+    accepted_answers: [{value: "What time do you wake up?", status: correct}]
+    feedback: "ساعت چند بیدار می‌شی؟ asks what time you wake up."
   fa.a1.unit11.lesson02.exercise02.recognize_answer:
     instruction: "Someone asks what time you wake up, and you wake up at seven. What do you say?"
     correct_option: "ساعت هفت بیدار می‌شم"
-    distractors: ["ساعت چند بیدار می‌شی؟", "هر روز", "تو چی؟"]
+    distractors: ["ساعت چند بیدار می‌شی؟", "هر روز", "میرم سر کار"]
     accepted_answers: [{value: "ساعت هفت بیدار می‌شم", status: correct}]
     feedback: "ساعت هفت بیدار می‌شم means I wake up at seven."
   fa.a1.unit11.lesson02.exercise03.order_har_ruz_bidar:
@@ -206,7 +208,7 @@ exercises:
   fa.a1.unit11.lesson03.exercise03.match_day_parts:
     instruction: "Match each Persian word or phrase with its meaning."
     accepted_answers:
-      - {value: {صبح: morning, ظهر: noon, عصر: afternoon, شب: night, بعدش: "after that", "بیدار می‌شم": "I wake up", "صبحونه می‌خورم": "I eat breakfast", "میرم سرکار": "I go to work", می‌خوابم: "I go to sleep", "هر روز": "every day"}, status: correct}
+      - {value: {صبح: morning, ظهر: noon, عصر: afternoon, شب: night, بعدش: "after that", "بیدار می‌شم": "I wake up", "صبحونه می‌خورم": "I eat breakfast", "میرم سر کار": "I go to work", می‌خوابم: "I go to sleep", "هر روز": "every day"}, status: correct}
     feedback: "These are the parts of the day, reviewed from unit09, plus a review of this unit's routine verbs."
   fa.a1.unit11.lesson03.exercise04.order_night_sleep:
     instruction: "Arrange the words to say 'At night I go to sleep at eleven.'"
@@ -239,11 +241,11 @@ exercises:
     correct_option: "goes to work"
     distractors: ["wakes up", "goes to sleep", "eats breakfast again"]
     accepted_answers: [{value: "goes to work", status: correct}]
-    feedback: "The text says و میرم سرکار (and I go to work)."
+    feedback: "The text says و میرم سر کار (and I go to work)."
   fa.a1.unit11.lesson04.exercise04.order_reading_summary:
     instruction: "Arrange the words to say 'After that I eat breakfast and go to work.'"
-    accepted_answers: [{value: [بعدش, صبحونه, می‌خورم, و, میرم, سرکار], status: correct}]
-    feedback: "بعدش صبحونه می‌خورم و میرم سرکار sequences the two activities."
+    accepted_answers: [{value: [بعدش, صبحونه, می‌خورم, و, میرم, سر, کار], status: correct}]
+    feedback: "بعدش صبحونه می‌خورم و میرم سر کار sequences the two activities."
   fa.a1.unit11.lesson04.exercise05.translate_routine_text:
     instruction: "Translate into Persian: Every day I wake up at seven."
     accepted_answers:
@@ -252,9 +254,10 @@ exercises:
   fa.a1.unit11.lesson04.exercise06.write_own_routine_sentence:
     instruction: "Write two sentences describing your own morning routine, using هر روز and بعدش."
     accepted_answers:
-      - {value: "هر روز ساعت هفت بیدار می‌شم. بعدش صبحونه می‌خورم و میرم سرکار.", status: correct}
-      - {value: "هر روز ساعت هفت بیدار می‌شم و بعدش صبحونه می‌خورم و میرم سرکار.", status: correct}
-    feedback: "This connects a wake-up time with بعدش to sequence the following activities -- joining with a period or with و are equally natural."
+      - {value: "هر روز ساعت هفت بیدار می‌شم. بعدش صبحونه می‌خورم و میرم سر کار.", status: correct}
+      - {value: "هر روز ساعت هفت بیدار می‌شم، بعدش صبحونه می‌خورم و میرم سر کار.", status: correct}
+      - {value: "هر روز ساعت هفت بیدار می‌شم و بعدش صبحونه می‌خورم و میرم سر کار.", status: correct}
+    feedback: "This connects a wake-up time with *بعدش* to sequence the following activities -- joining with a period, a comma, or with *و* are all equally natural."
 
   fa.a1.unit11.lesson05.exercise01.recognize_tow_chi:
     instruction: "What does this phrase mean?"
@@ -271,7 +274,7 @@ exercises:
   fa.a1.unit11.lesson05.exercise03.match_comparison_phrases:
     instruction: "Match each phrase or word with its meaning."
     accepted_answers:
-      - {value: {"تو چی؟": "What about you?", "یه‌کم دیرتر": "A little later", "بیدار می‌شم": "I wake up", "صبحونه می‌خورم": "I eat breakfast", "میرم سرکار": "I go to work", می‌خوابم: "I go to sleep", صبح: morning, عصر: afternoon, شب: night}, status: correct}
+      - {value: {"تو چی؟": "What about you?", "یه‌کم دیرتر": "A little later", "بیدار می‌شم": "I wake up", "صبحونه می‌خورم": "I eat breakfast", "میرم سر کار": "I go to work", می‌خوابم: "I go to sleep", صبح: morning, عصر: afternoon, شب: night}, status: correct}
     feedback: "تو چی؟ and یه‌کم دیرتر are used to compare one routine with another; the rest reviews this unit's verbs and parts of the day."
   fa.a1.unit11.lesson05.exercise04.order_tow_chi:
     instruction: "Arrange the words to say 'What about you?'"
@@ -297,36 +300,42 @@ exercises:
   fa.a1.unit11.lesson06.exercise02.recognize_saras_wake_time:
     instruction: "What time does Sara wake up?"
     correct_option: "ساعت هشت"
-    distractors: ["ساعت هفت", "ساعت یازده", "ساعت شش"]
+    distractors: ["ساعت هفت", "ساعت یازده", "ساعت چهار"]
     accepted_answers: [{value: "ساعت هشت", status: correct}]
     feedback: "ساعت هشت (eight o'clock) is Sara's wake-up time."
   fa.a1.unit11.lesson06.exercise03.match_dialogue_facts:
     instruction: "Match each person's fact, phrase, or word with its meaning."
     accepted_answers:
-      - {value: {"نیما بیدار می‌شه": "ساعت هفت", "سارا بیدار می‌شه": "ساعت هشت", "سارا می‌خوابه": "ساعت یازده شب", "بیدار می‌شم": "I wake up", "صبحونه می‌خورم": "I eat breakfast", "میرم سرکار": "I go to work", "تو چی؟": "What about you?", "یه‌کم دیرتر": "A little later"}, status: correct}
+      - {value: {"نیما بیدار می‌شه": "ساعت هفت", "سارا بیدار می‌شه": "ساعت هشت", "سارا می‌خوابه": "ساعت یازده شب", "بیدار می‌شم": "I wake up", "صبحونه می‌خورم": "I eat breakfast", "میرم سر کار": "I go to work", "تو چی؟": "What about you?", "یه‌کم دیرتر": "A little later"}, status: correct}
     feedback: "Nima wakes up at seven, Sara at eight, and Sara goes to sleep at eleven at night -- the rest reviews this unit's verbs and comparison phrases."
   fa.a1.unit11.lesson06.exercise04.order_after_waking_question:
     instruction: "Arrange the words to ask 'What do you do after waking up?'"
     accepted_answers: [{value: [بعد, از, بیدار, شدن, چیکار, می‌کنی], status: correct}]
     feedback: "بعد از بیدار شدن چیکار می‌کنی؟ asks about the next step in a routine."
-  fa.a1.unit11.lesson06.exercise05.listen_type_night_routine:
-    instruction: "Listen and type what you hear."
+  fa.a1.unit11.lesson06.exercise05.translate_night_routine:
+    instruction: "Translate into Farsi: At night I usually go to sleep at eleven."
     accepted_answers:
       - {value: "شب‌ها هم معمولاً ساعت یازده می‌خوابم", status: correct}
-    feedback: "Sara says شب‌ها هم معمولاً ساعت یازده می‌خوابم (at night I usually go to sleep at eleven)."
+      - {value: "شب‌ها معمولاً ساعت یازده می‌خوابم", status: correct}
+    feedback: "Sara says شب‌ها هم معمولاً ساعت یازده می‌خوابم (at night I usually go to sleep at eleven) -- *هم* (also/too) is optional and can be dropped for a plain translation of the English prompt."
   fa.a1.unit11.lesson06.exercise06.dialogue_response_own_routine:
     instruction: "Nima just asked what you do after waking up. Answer that you eat breakfast and go to work."
     accepted_answers:
-      - {value: "صبحونه می‌خورم و میرم سرکار", status: correct}
-    feedback: "صبحونه می‌خورم و میرم سرکار means I eat breakfast and go to work."
+      - {value: "صبحونه می‌خورم و میرم سر کار", status: correct}
+      - {value: "صبحونه می‌خورم، میرم سر کار", status: correct}
+      - {value: "صبحونه می‌خورم. میرم سر کار.", status: correct}
+    feedback: "صبحونه می‌خورم و میرم سر کار means I eat breakfast and go to work -- joining the two with *و*, a comma, or a period are all equally natural."
   fa.a1.unit11.lesson06.exercise07.write_routine_summary:
     instruction: "Write a short summary of Sara's routine: what time she wakes up and what time she sleeps."
     accepted_answers:
       - {value: "سارا ساعت هشت بیدار می‌شه و ساعت یازده شب می‌خوابه", status: correct}
-    feedback: "سارا ساعت هشت بیدار می‌شه و ساعت یازده شب می‌خوابه summarizes Sara's routine, consistent with the dialogue."
+      - {value: "سارا ساعت هشت بیدار می‌شه، ساعت یازده شب می‌خوابه", status: correct}
+      - {value: "سارا ساعت هشت بیدار می‌شه. ساعت یازده شب می‌خوابه.", status: correct}
+    feedback: "سارا ساعت هشت بیدار می‌شه و ساعت یازده شب می‌خوابه summarizes Sara's routine, consistent with the dialogue -- joining the two facts with *و*, a comma, or a period are all equally natural."
   fa.a1.unit11.lesson06.exercise08.speak_full_routine_scene:
     instruction: "Describe your own daily routine: what time you wake up, what you do after that, and what time you go to sleep."
     accepted_answers:
-      - {value: "ساعت هفت بیدار می‌شم. صبحونه می‌خورم و میرم سرکار. شب‌ها ساعت یازده می‌خوابم.", status: correct}
-      - {value: "ساعت هفت بیدار می‌شم و صبحونه می‌خورم و میرم سرکار و شب‌ها ساعت یازده می‌خوابم.", status: correct}
-    feedback: "This combines all three parts of the routine taught in this unit -- joining them with periods or with و are equally natural."
+      - {value: "ساعت هفت بیدار می‌شم. صبحونه می‌خورم و میرم سر کار. شب‌ها ساعت یازده می‌خوابم.", status: correct}
+      - {value: "ساعت هفت بیدار می‌شم، صبحونه می‌خورم و میرم سر کار، شب‌ها ساعت یازده می‌خوابم.", status: correct}
+      - {value: "ساعت هفت بیدار می‌شم و صبحونه می‌خورم و میرم سر کار و شب‌ها ساعت یازده می‌خوابم.", status: correct}
+    feedback: "This combines all three parts of the routine taught in this unit -- joining them with periods, commas, or with *و* are all equally natural."

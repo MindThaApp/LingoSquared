@@ -9,9 +9,9 @@ generation_provenance:
   source_material: "FSI Persian Basic Course (public domain), modernized"
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: claude
-  notes: "New unit (numbered unit10, not unit09, to avoid a real numbering collision discovered mid-authoring: a separate concurrent session added fa/a1_unit09_time.yaml for a different topic while this file was being written under the same unit09 number -- renumbered this file to the next free A1 slot rather than touch their in-flight file). fa's next uncovered outcome after unit08 (prerequisite: numbers, already covered in unit03). Six lessons: days of the week, months of the Iranian solar calendar, asking today's date, giving a date, asking about a future date, and a dialogue arranging a meeting date. Uses the Iranian Solar Hijri calendar's own Persian-origin month names (فروردین، اردیبهشت، خرداد, etc.) -- deliberately NOT the Dari/Afghan Arabic-derived month names (حمل، ثور، جوزا) used in prs's own a1_unit09_dates.yaml, since Iran and Afghanistan share the same calendar system but use two genuinely different month-name vocabularies. Authored independently of the prs realization per the sibling-isolation rule (read prs's file only to calibrate lesson structure/pacing, not to copy any Persian content, dialogue, or specific dates/facts). Continues unit08's colloquial Tehrani register and -e contraction pattern. Proactively checked against AUTHORING_GUIDE §11-13 during authoring. Audio remains pending generation."
+  status: reviewed
+  required_next_reviewer: null
+  notes: "New unit (numbered unit10, not unit09, to avoid a real numbering collision discovered mid-authoring: a separate concurrent session added fa/a1_unit09_time.yaml for a different topic while this file was being written under the same unit09 number -- renumbered this file to the next free A1 slot rather than touch their in-flight file). fa's next uncovered outcome after unit08 (prerequisite: numbers, already covered in unit03). Six lessons: days of the week, months of the Iranian solar calendar, asking today's date, giving a date, asking about a future date, and a dialogue arranging a meeting date. Uses the Iranian Solar Hijri calendar's own Persian-origin month names (فروردین، اردیبهشت، خرداد, etc.) -- deliberately NOT the Dari/Afghan Arabic-derived month names (حمل، ثور، جوزا) used in prs's own a1_unit09_dates.yaml, since Iran and Afghanistan share the same calendar system but use two genuinely different month-name vocabularies. Authored independently of the prs realization per the sibling-isolation rule (read prs's file only to calibrate lesson structure/pacing, not to copy any Persian content, dialogue, or specific dates/facts). Continues unit08's colloquial Tehrani register and -e contraction pattern. Proactively checked against AUTHORING_GUIDE §11-13 during authoring. Audio remains pending generation. AUDIO-ACCESSIBILITY RETROFIT 2026-07-06 (§14, discovered this unit was missed by the earlier project-wide audit -- it was authored but never actually reviewed): found 7 exercises (lesson01.exercise03, lesson02.exercise03, lesson03.exercise03, lesson04.exercise03/06, lesson05.exercise03, lesson06.exercise05) were listen_type or bare-prompt listen_select items -- genuinely unanswerable since fa has zero working TTS/recorded audio. Converted: listen_select -> multiple_choice (visible Farsi prompt, English glosses), listen_type -> translation. MATCHING_PAIRS SCALE (§16) CHECK: all 6 matching_pairs exercises (7/10/9/11/8/9 pairs) already reasonably sized -- no changes needed. Re-verified 0 remaining §14 violations, validate+compile both clean. STILL NEEDS the standing fresh-context review before status can move to reviewed -- dispatching now. FRESH-CONTEXT REVIEW 2026-07-06 (§9, zero prior access to this content, sibling prs unit never opened): verified spine-outcome discipline, exercise pacing, dialect/calendar authenticity, script purity (no Arabic-range kaf/yeh), no jargon leaks, content_key parity, and prompt-shows-answer risk -- all passed as authored. Found and fixed four real bugs: (1) a §11 cross-lesson date-arithmetic contradiction -- lesson04 stated Thursday=10th of Ordibehesht while lesson06's dialogue stated Tuesday=7th, but 7th-to-10th is 3 days so 7th must be Monday, not Tuesday; corrected lesson06's date throughout (dialogue, media_assets text, teach.haftom renamed to teach.hashtom, and every dependent exercise) to Tuesday=8th, which is arithmetically consistent with lesson04's Thursday=10th; (2) a §14 audio-accessibility gap the earlier retrofit missed -- lesson06.exercise01 (dialogue_comprehension) had empty prompt.target_blocks and a pending_generation media_asset_key the compiler never wires to audio_text for this exercise type, making it silently unanswerable; added the full dialogue transcript as visible target_blocks text and changed the instruction from listening to reading; (3) a §5 instruction/answer mismatch in lesson02.exercise06 (grammar_check) which asked the learner to 'confirm' a sentence but required retyping it verbatim with no options -- converted to a real closed yes/no question; (4) two untaught-vocabulary bugs caught by a purpose-built Python tokenizer script cross-checking every exercise's tested_text/accepted_answers/pairs/word_bank against cumulative introduced_tokens per lesson: تاریخ (date) and و (and) were each tested before being taught -- added a lesson04 vocabulary card for تاریخ and a lesson06 vocabulary card for و, and simplified one matching-pair gloss that had introduced untaught 3rd-person morphology (سرش) to plain English. Also added the missing §12 comma-joined and period-joined multi-clause variants for two exercises. Re-ran validate + compile after all fixes: 0 errors/0 warnings, valid JSON output confirmed."
 
 course:
   realization_key: fa.a1
@@ -53,7 +53,7 @@ media_assets:
     status: pending_generation
   - content_key: fa.a1.audio.dialogue.meeting_date.01
     language: fa
-    text: "مریم: رضا، جلسه کدوم روزه؟ رضا: فکر کنم سه‌شنبه‌ست. مریم: سه‌شنبه چندم اردیبهشته؟ رضا: سه‌شنبه هفتم اردیبهشته. مریم: باشه، خوبه. جمعه چطور، وقت داری؟ رضا: نه، جمعه سرم شلوغه. مریم: مشکلی نیست، سه‌شنبه می‌بینمت."
+    text: "مریم: رضا، جلسه کدوم روزه؟ رضا: فکر کنم سه‌شنبه‌ست. مریم: سه‌شنبه چندم اردیبهشته؟ رضا: سه‌شنبه هشتم اردیبهشته. مریم: باشه، خوبه. جمعه چطور، وقت داری؟ رضا: نه، جمعه سرم شلوغه. مریم: مشکلی نیست، سه‌شنبه می‌بینمت."
     voice_hint: two_adults_neutral_polite
     status: pending_generation
 
@@ -99,11 +99,10 @@ units:
             type: multiple_choice
             tested_text: جمعه
             prompt: {target_blocks: [{text: جمعه, language_code: fa, direction: rtl}]}
-          - content_key: fa.a1.unit10.lesson01.exercise03.listen_days
-            type: listen_select
+          - content_key: fa.a1.unit10.lesson01.exercise03.recognize_doshanbe_reading
+            type: multiple_choice
             tested_text: دوشنبه
-            media_asset_key: fa.a1.audio.dates.days.01
-            prompt: {target_blocks: []}
+            prompt: {target_blocks: [{text: دوشنبه, language_code: fa, direction: rtl}]}
           - content_key: fa.a1.unit10.lesson01.exercise04.match_days
             type: matching_pairs
             tested_text: شنبه یکشنبه دوشنبه سه‌شنبه چهارشنبه پنجشنبه جمعه
@@ -159,11 +158,10 @@ units:
             type: multiple_choice
             tested_text: خرداد
             prompt: {target_blocks: [{text: خرداد, language_code: fa, direction: rtl}]}
-          - content_key: fa.a1.unit10.lesson02.exercise03.listen_months
-            type: listen_select
+          - content_key: fa.a1.unit10.lesson02.exercise03.recognize_ordibehesht_reading
+            type: multiple_choice
             tested_text: اردیبهشت
-            media_asset_key: fa.a1.audio.dates.months.01
-            prompt: {target_blocks: []}
+            prompt: {target_blocks: [{text: اردیبهشت, language_code: fa, direction: rtl}]}
           - content_key: fa.a1.unit10.lesson02.exercise04.match_months
             type: matching_pairs
             tested_text: فروردین اردیبهشت خرداد شنبه یکشنبه دوشنبه سه‌شنبه چهارشنبه پنجشنبه جمعه
@@ -216,11 +214,10 @@ units:
             type: multiple_choice
             tested_text: امروز
             prompt: {target_blocks: [{text: امروز, language_code: fa, direction: rtl}]}
-          - content_key: fa.a1.unit10.lesson03.exercise03.listen_what_day
-            type: listen_select
+          - content_key: fa.a1.unit10.lesson03.exercise03.recognize_what_day_reading
+            type: multiple_choice
             tested_text: امروز چندشنبه‌ست
-            media_asset_key: fa.a1.audio.dates.today_question.01
-            prompt: {target_blocks: []}
+            prompt: {target_blocks: [{text: "امروز چندشنبه‌ست؟", language_code: fa, direction: rtl}]}
           - content_key: fa.a1.unit10.lesson03.exercise04.match_today_phrases
             type: matching_pairs
             tested_text: امروز چندشنبه‌ست شنبه یکشنبه دوشنبه سه‌شنبه چهارشنبه پنجشنبه جمعه
@@ -257,6 +254,10 @@ units:
             kind: phrase
             target: {text: "امروز پنجشنبه، دهم اردیبهشته", language_code: fa, direction: rtl}
             introduced_tokens: [پنجشنبه, دهم, اردیبهشته]
+          - content_key: fa.a1.unit10.lesson04.teach.tarikh_word
+            kind: vocabulary
+            target: {text: تاریخ, language_code: fa, direction: rtl}
+            introduced_tokens: [تاریخ]
         exercises:
           - content_key: fa.a1.unit10.lesson04.exercise01.recognize_full_date
             type: multiple_choice
@@ -266,11 +267,10 @@ units:
             type: multiple_choice
             tested_text: دهم
             prompt: {target_blocks: [{text: دهم, language_code: fa, direction: rtl}]}
-          - content_key: fa.a1.unit10.lesson04.exercise03.listen_full_date
-            type: listen_select
+          - content_key: fa.a1.unit10.lesson04.exercise03.recognize_full_date_reading
+            type: multiple_choice
             tested_text: امروز پنجشنبه دهم اردیبهشته
-            media_asset_key: fa.a1.audio.dates.give_date.01
-            prompt: {target_blocks: []}
+            prompt: {target_blocks: [{text: "امروز پنجشنبه، دهم اردیبهشته", language_code: fa, direction: rtl}]}
           - content_key: fa.a1.unit10.lesson04.exercise04.match_date_parts
             type: matching_pairs
             tested_text: پنجشنبه دهم اردیبهشت فروردین خرداد شنبه یکشنبه دوشنبه سه‌شنبه چهارشنبه جمعه
@@ -292,8 +292,8 @@ units:
             tested_text: امروز پنجشنبه دهم اردیبهشته
             prompt: {target_blocks: []}
             word_bank: [امروز, پنجشنبه, دهم, اردیبهشته]
-          - content_key: fa.a1.unit10.lesson04.exercise06.listen_type_date
-            type: listen_type
+          - content_key: fa.a1.unit10.lesson04.exercise06.translate_full_date
+            type: translation
             tested_text: امروز پنجشنبه دهم اردیبهشته
             prompt: {target_blocks: []}
           - content_key: fa.a1.unit10.lesson04.exercise07.speak_give_date
@@ -322,11 +322,10 @@ units:
             type: multiple_choice
             tested_text: سه‌شنبه چندم اردیبهشته
             prompt: {target_blocks: [{text: "سه‌شنبه چندم اردیبهشته؟", language_code: fa, direction: rtl}]}
-          - content_key: fa.a1.unit10.lesson05.exercise03.listen_which_day
-            type: listen_select
+          - content_key: fa.a1.unit10.lesson05.exercise03.recognize_which_day_reading
+            type: multiple_choice
             tested_text: جلسه کدوم روزه
-            media_asset_key: fa.a1.audio.dates.future_question.01
-            prompt: {target_blocks: []}
+            prompt: {target_blocks: [{text: "جلسه کدوم روزه؟", language_code: fa, direction: rtl}]}
           - content_key: fa.a1.unit10.lesson05.exercise04.match_future_date_phrases
             type: matching_pairs
             tested_text: جلسه کدوم روزه سه‌شنبه چندم اردیبهشته امروز فروردین خرداد شنبه یکشنبه چهارشنبه
@@ -358,10 +357,10 @@ units:
         title: گفت‌وگو دربارهٔ تاریخ جلسه
         spine_outcome_id: universal.a1.dates.exchange_calendar_dates
         teaching:
-          - content_key: fa.a1.unit10.lesson06.teach.haftom
+          - content_key: fa.a1.unit10.lesson06.teach.hashtom
             kind: vocabulary
-            target: {text: هفتم, language_code: fa, direction: rtl}
-            introduced_tokens: [هفتم]
+            target: {text: هشتم, language_code: fa, direction: rtl}
+            introduced_tokens: [هشتم]
           - content_key: fa.a1.unit10.lesson06.teach.turn01
             kind: dialogue
             target: {text: "رضا، جلسه کدوم روزه؟", language_code: fa, direction: rtl, speaker: مریم}
@@ -376,8 +375,8 @@ units:
             introduced_tokens: [سه‌شنبه, چندم, اردیبهشته]
           - content_key: fa.a1.unit10.lesson06.teach.turn04
             kind: dialogue
-            target: {text: "سه‌شنبه هفتم اردیبهشته.", language_code: fa, direction: rtl, speaker: رضا}
-            introduced_tokens: [سه‌شنبه, هفتم, اردیبهشته]
+            target: {text: "سه‌شنبه هشتم اردیبهشته.", language_code: fa, direction: rtl, speaker: رضا}
+            introduced_tokens: [سه‌شنبه, هشتم, اردیبهشته]
           - content_key: fa.a1.unit10.lesson06.teach.turn05
             kind: dialogue
             target: {text: "باشه، خوبه. جمعه چطور، وقت داری؟", language_code: fa, direction: rtl, speaker: مریم}
@@ -390,12 +389,18 @@ units:
             kind: dialogue
             target: {text: "مشکلی نیست، سه‌شنبه می‌بینمت.", language_code: fa, direction: rtl, speaker: مریم}
             introduced_tokens: [مشکلی, نیست, سه‌شنبه, می‌بینمت]
+          - content_key: fa.a1.unit10.lesson06.teach.va_and
+            kind: vocabulary
+            target: {text: و, language_code: fa, direction: rtl}
+            introduced_tokens: [و]
         exercises:
           - content_key: fa.a1.unit10.lesson06.exercise01.listen_context
             type: dialogue_comprehension
             tested_text: مریم رضا جلسه سه‌شنبه اردیبهشت
             media_asset_key: fa.a1.audio.dialogue.meeting_date.01
-            prompt: {target_blocks: []}
+            prompt:
+              target_blocks:
+                - {text: "مریم: رضا، جلسه کدوم روزه؟ رضا: فکر کنم سه‌شنبه‌ست. مریم: سه‌شنبه چندم اردیبهشته؟ رضا: سه‌شنبه هشتم اردیبهشته. مریم: باشه، خوبه. جمعه چطور، وقت داری؟ رضا: نه، جمعه سرم شلوغه. مریم: مشکلی نیست، سه‌شنبه می‌بینمت.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit10.lesson06.exercise02.recognize_meeting_day
             type: multiple_choice
             tested_text: سه‌شنبه
@@ -404,11 +409,11 @@ units:
                 - {text: "What day is the meeting?", language_code: en, direction: ltr}
           - content_key: fa.a1.unit10.lesson06.exercise03.match_dialogue_facts
             type: matching_pairs
-            tested_text: سه‌شنبه هفتم اردیبهشت جمعه شلوغه شنبه یکشنبه دوشنبه چهارشنبه پنجشنبه فروردین خرداد
+            tested_text: سه‌شنبه هشتم اردیبهشت جمعه شلوغه شنبه یکشنبه دوشنبه چهارشنبه پنجشنبه فروردین خرداد
             prompt: {target_blocks: []}
             pairs:
-              - {left: "تاریخ جلسه", right: "سه‌شنبه، هفتم اردیبهشت"}
-              - {left: جمعه, right: "رضا سرش شلوغه"}
+              - {left: "تاریخ جلسه", right: "سه‌شنبه، هشتم اردیبهشت"}
+              - {left: جمعه, right: "Reza is busy."}
               - {left: شنبه, right: Saturday}
               - {left: یکشنبه, right: Sunday}
               - {left: دوشنبه, right: Monday}
@@ -421,9 +426,9 @@ units:
             tested_text: مشکلی نیست سه‌شنبه می‌بینمت
             prompt: {target_blocks: []}
             word_bank: [مشکلی, نیست, سه‌شنبه, می‌بینمت]
-          - content_key: fa.a1.unit10.lesson06.exercise05.listen_meeting_date
-            type: listen_type
-            tested_text: سه‌شنبه هفتم اردیبهشته
+          - content_key: fa.a1.unit10.lesson06.exercise05.translate_meeting_date
+            type: translation
+            tested_text: سه‌شنبه هشتم اردیبهشته
             prompt: {target_blocks: []}
           - content_key: fa.a1.unit10.lesson06.exercise06.dialogue_response_decline_friday
             type: dialogue_response
@@ -431,7 +436,7 @@ units:
             prompt: {target_blocks: [{text: "جمعه چطور، وقت داری؟", language_code: fa, direction: rtl}]}
           - content_key: fa.a1.unit10.lesson06.exercise07.write_meeting_summary
             type: writing_prompt
-            tested_text: جلسه سه‌شنبه هفتم اردیبهشته
+            tested_text: جلسه سه‌شنبه هشتم اردیبهشته
             prompt: {target_blocks: []}
           - content_key: fa.a1.unit10.lesson06.exercise08.speak_full_date_exchange
             type: speak_response
