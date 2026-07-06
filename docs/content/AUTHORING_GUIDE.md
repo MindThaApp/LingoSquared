@@ -262,3 +262,35 @@ visible prompt to work from instead. Once a phrase has a genuine
 recorded asset (`media_asset_key` resolves), authoring `listen_type`
 against it is fine — the gap is specifically "audio-only prompt with no
 working audio," not the exercise type itself.
+
+## 15. Mark target-language words with `*asterisks*` inside mixed-language
+explanatory text (`note`, exercise `feedback`)
+
+Found live 2026-07-06 (Ramin's nl A1 review): a teaching card's `note`
+routinely mixes the target language inline with the source-language
+sentence explaining it, e.g. `"Zou + infinitive is the polite
+conditional, softer than a direct statement."` or `"Om ... te +
+infinitive expresses purpose; me in te schrijven splits the separable
+verb inschrijven around the reflexive pronoun."` With no visual
+distinction, a learner can't tell at a glance which words are the
+language they're learning versus the explanation. The frontend now
+parses single-asterisk spans in any `note` or exercise `feedback`
+string (`frontend/src/components/EmphasizedText.tsx`) and renders them
+italic + bold (`.target-language-span` in `index.css`) — the exact
+same convention as Markdown italics, `*word*` or `*multi-word phrase*`.
+
+**When authoring or editing any `note` or `feedback` field that
+contains target-language text inline with source-language explanation,
+wrap every target-language word or phrase in single asterisks.** Do
+not wrap the whole sentence, only the target-language spans; don't use
+asterisks for anything else (no bold/emphasis-for-importance
+convention piggybacks on this marker, since the frontend has no way to
+distinguish intent). Plain notes with no target-language text mixed in
+(e.g. a note entirely in English, or a `grammar_note`/`reading` card's
+`target.text` block, which is already its own dedicated
+`language_code`-tagged block, not a `note`) don't need this — it's
+strictly for the inline-mixing case. Existing notes authored before
+this convention existed render unchanged (plain text, no emphasis)
+until they're touched again; retrofitting them isn't required, but
+apply the convention to any note you edit or write for any other
+reason.

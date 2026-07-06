@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { LessonApi, ReviewApi } from "../api/endpoints";
 import { ExerciseRenderer } from "../components/exercises/ExerciseRenderer";
 import { TeachingCardView } from "../components/TeachingCardView";
+import { EmphasizedText } from "../components/EmphasizedText";
 import { ReportIssueButton } from "../components/ReportIssueButton";
 import { SpeakButton } from "../components/SpeakButton";
 import { ApiError } from "../api/client";
@@ -319,7 +320,9 @@ export function LessonRunnerPage() {
             </p>
           )}
           {result.feedback && (
-            <p style={{ margin: "0 0 10px", fontWeight: 400 }}>{result.feedback}</p>
+            <p style={{ margin: "0 0 10px", fontWeight: 400 }}>
+              <EmphasizedText text={result.feedback} />
+            </p>
           )}
           <button className="btn btn-block" onClick={handleContinue}>
             {t("lesson_runner.continue")}

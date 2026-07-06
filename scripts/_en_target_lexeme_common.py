@@ -347,6 +347,15 @@ def en_agreement_tags(token: str) -> dict[str, object]:
     # a single-token slot.
     if token in {"bedroom", "kitchen", "bathroom", "garden"}:
         semantics.append("room_noun")
+    # Unit 25 (A2, registering with local authorities): 4-member bare-
+    # word recognition tag, no shared generative frame attempted --
+    # these abstract nouns don't collocate uniformly at A2 register.
+    if token in {"appointment", "document", "form", "confirmation"}:
+        semantics.append("bureaucracy_noun")
+    # Unit 26 (A2, giving opinions with reasons): 4-member bare-word
+    # recognition tag drawn from the dog-park scenario's concrete nouns.
+    if token in {"dog", "park", "playground", "space"}:
+        semantics.append("dogpark_noun")
     if token in {"zero", "two", "three", "four", "five", "six", "seven", "eight",
                  "nine", "ten", "eleven", "twelve", "thirteen", "fifteen",
                  "twenty", "twenty-one", "thirty", "forty", "fifty", "hundred",
