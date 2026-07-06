@@ -294,3 +294,32 @@ this convention existed render unchanged (plain text, no emphasis)
 until they're touched again; retrofitting them isn't required, but
 apply the convention to any note you edit or write for any other
 reason.
+
+## 16. `matching_pairs` exercises need real scale — a handful to a dozen
+pairs, not 2-3
+
+Found live 2026-07-06 (Ramin's direct feedback): existing `matching_pairs`
+exercises across every language pair are consistently tiny — 2 or 3
+pairs per exercise, the same underlying problem as §-adjacent density
+complaints about teaching-card pagination (too little content per
+interaction). Neither the frontend (`MatchingPairs.tsx`) nor the
+backend (`app/practice/service.py`) impose any hard limit — pair count
+is purely a function of how many entries the content author puts in
+`prompt.pairs` (lesson content) or how many slots a template declares
+(Endless Practice). A 2-pair matching exercise is barely a game; it
+should feel like a real puzzle.
+
+**When authoring or reviewing any `matching_pairs` exercise (lesson
+content or a practice template), use as many pairs as the unit's
+taught vocabulary genuinely supports — aim for 6-12 where the lesson
+or unit has that much real vocabulary to draw from, not the 2-3 that's
+been the default.** Don't pad with untaught or unrelated words just to
+hit a number — every pair must still be independently valid per this
+guide's existing rules (§2 dialect authenticity, no self-reference,
+distinct enough to not be confusable). When a single lesson doesn't
+have enough vocabulary on its own, pool in vocabulary already taught
+earlier in the same unit (or, for a review/practice-pool template,
+across the whole course so far) rather than force an artificially
+small exercise. This applies going forward to all new authoring; a
+follow-up pass is retrofitting existing shipped `matching_pairs`
+content across all languages to the same standard.
