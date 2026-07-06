@@ -43,14 +43,36 @@ review:
     standard fresh-context review before import. Same standing blocker as
     every pack in this bundle: no backfill_lexemes.py run has actually
     happened against a real database yet in this pass.
+
+    DEPTH PASS, added 2026-07-06 (practice-pool-sync lane, closing the
+    units 06-10 template-density audit gap -- this unit went 9->15).
+    Added "weather_time_word" (امروز/فردا, 2 members, matching/
+    translation only, same below-multiple_choice-threshold class as this
+    pack's own weather_state_verb-adjacent narrow pairs) to
+    scripts/backfill_lexemes.py's fa_agreement_tags(), anchored at
+    lesson03 where both are taught as vocabulary. New generative
+    fill_in_blank/word_order pair: "{weather_time_word} {weather_state_verb}."
+    mirrors this unit's own real taught sentences exactly (lesson04's
+    "امروز سرده"/"امروز بارونیه" pattern), verified grammatical for
+    every one of the 2x4 combinations by reading the lesson04 teaching
+    cards directly. Also added two "X یا X" word_order templates
+    (weather_condition, temperature_word) directly mirroring this unit's
+    own realization exercises (lesson01.exercise05's "آفتابی یا بارونی"
+    and lesson02.exercise05's "گرم یا سرد" -- یا is the correct connector
+    here, not و, since only one weather/temperature state is true at a
+    time). Re-verified with scripts/_practice_slot_check.py (weather_
+    time_word=2 real candidates, others unchanged) and compile_content.py
+    practice-validate (0 errors/0 warnings, full en-fa pack). review.status
+    left unreviewed -- this pass does not self-certify review.
 tag_schema:
-  part_of_speech: [adjective, verb]
+  part_of_speech: [adjective, verb, adverb]
   agreement_tags:
-    semantic: [weather_condition, temperature_word, weather_state_verb]
+    semantic: [weather_condition, temperature_word, weather_state_verb, weather_time_word]
 slot_presets:
   weather_condition: &weather_condition {language_code: fa, part_of_speech: adjective, agreement_tags: {semantic: weather_condition}}
   temperature_word: &temperature_word {language_code: fa, part_of_speech: adjective, agreement_tags: {semantic: temperature_word}}
   weather_state_verb: &weather_state_verb {language_code: fa, part_of_speech: verb, agreement_tags: {semantic: weather_state_verb}}
+  weather_time_word: &weather_time_word {language_code: fa, part_of_speech: adverb, agreement_tags: {semantic: weather_time_word}}
 templates:
   - content_key: practice.en-fa.fa.a1.unit07.lesson01.weather_choice.001
     lesson_content_key: fa.a1.unit07.lesson01.weather_conditions
@@ -118,3 +140,48 @@ templates:
     slots: {weather_state_verb: *weather_state_verb}
     answer_derivation: {kind: slot_text, slot: weather_state_verb}
     feedback_frame: {text: "The Farsi phrase is {weather_state_verb}.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit07.lesson03.weather_time_match.004
+    lesson_content_key: fa.a1.unit07.lesson03.asking_about_weather
+    type: matching_pairs
+    frame: {text: "Match each time word with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *weather_time_word, second: *weather_time_word}
+    slot_relations: [{kind: distinct, slots: [first, second]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second]}
+    feedback_frame: {text: "Match each time word to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit07.lesson03.weather_time_translate.005
+    lesson_content_key: fa.a1.unit07.lesson03.asking_about_weather
+    type: translation
+    frame: {text: "{weather_time_word}", language_code: en, direction: ltr, slot_rendering: {weather_time_word: english_gloss}}
+    slots: {weather_time_word: *weather_time_word}
+    answer_derivation: {kind: slot_text, slot: weather_time_word}
+    feedback_frame: {text: "The Farsi word is {weather_time_word}.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit07.lesson04.weather_forecast_fill.006
+    lesson_content_key: fa.a1.unit07.lesson04.describing_todays_weather
+    type: fill_in_blank
+    frame: {text: "{weather_time_word} {weather_state_verb}.", language_code: fa, direction: rtl}
+    slots: {weather_time_word: *weather_time_word, weather_state_verb: *weather_state_verb}
+    answer_derivation: {kind: slot_text, slot: weather_state_verb}
+    feedback_frame: {text: "{weather_state_verb} describes what the weather is like.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit07.lesson04.weather_forecast_order.007
+    lesson_content_key: fa.a1.unit07.lesson04.describing_todays_weather
+    type: word_order
+    frame: {text: "{weather_time_word} {weather_state_verb}", language_code: fa, direction: rtl}
+    slots: {weather_time_word: *weather_time_word, weather_state_verb: *weather_state_verb}
+    answer_derivation: {kind: render_frame, frame: {text: "{weather_time_word} {weather_state_verb}", language_code: fa, direction: rtl}}
+    feedback_frame: {text: "Word order: time word, then the weather-state verb.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit07.lesson01.weather_condition_order.008
+    lesson_content_key: fa.a1.unit07.lesson01.weather_conditions
+    type: word_order
+    frame: {text: "{weather_condition_one} یا {weather_condition_two}", language_code: fa, direction: rtl}
+    slots: {weather_condition_one: *weather_condition, weather_condition_two: *weather_condition}
+    slot_relations: [{kind: distinct, slots: [weather_condition_one, weather_condition_two]}]
+    answer_derivation: {kind: render_frame, frame: {text: "{weather_condition_one} یا {weather_condition_two}", language_code: fa, direction: rtl}}
+    feedback_frame: {text: "یا offers an either/or choice, like آفتابی یا بارونی.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit07.lesson02.temperature_word_order.009
+    lesson_content_key: fa.a1.unit07.lesson02.temperature_words
+    type: word_order
+    frame: {text: "{temperature_word_one} یا {temperature_word_two}", language_code: fa, direction: rtl}
+    slots: {temperature_word_one: *temperature_word, temperature_word_two: *temperature_word}
+    slot_relations: [{kind: distinct, slots: [temperature_word_one, temperature_word_two]}]
+    answer_derivation: {kind: render_frame, frame: {text: "{temperature_word_one} یا {temperature_word_two}", language_code: fa, direction: rtl}}
+    feedback_frame: {text: "یا offers an either/or choice, like گرم یا سرد.", language_code: en, direction: ltr}

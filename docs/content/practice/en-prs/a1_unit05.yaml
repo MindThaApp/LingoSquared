@@ -42,6 +42,28 @@ review:
     warnings. Needs the standard fresh-context review before import; no
     backfill_lexemes_en_prs.py run has actually happened against a real
     database yet in this pass.
+
+    DEPTH PASS 2026-07-06 (per-unit template audit found this unit thin
+    at 8 vs unit02/03/04's 16-24): added a word_order template for each
+    of city_place and location_word (8 -> 10 templates), the one
+    PRACTICE_EXERCISE_TYPES member (word_order) neither tag had yet.
+    This is the real ceiling for this unit without inventing vocabulary
+    or extending scripts/backfill_lexemes_en_prs.py's classifier: city_
+    place and location_word are the ONLY two semantic tags this unit's
+    real taught vocabulary supports (verified by re-reading the
+    classifier's own unit05 section) -- lesson03's کجاست questions and
+    lesson05's پشت/مقابل prepositions have no semantic tag at all in the
+    classifier (POS-only), and lesson06's dialogue words are
+    intentionally dialogue-only per this file's own prior notes above;
+    giving them one would require editing the shared backfill script,
+    out of scope for a practice-pack-only pass. Both new word_order
+    frames reuse real sentence patterns already taught verbatim
+    elsewhere in this unit ([place] این‌جا است from lesson04.exercise07;
+    میدان هوایی [location_word] است from lesson04.teach.airport_far),
+    confirmed grammatical for every candidate in each pool, not
+    invented. Re-verified: scripts/_practice_slot_check.py 0 problems
+    across the whole en-prs pack; scripts/compile_content.py
+    practice-validate for the full pack -- 0 errors/0 warnings.
 tag_schema:
   part_of_speech: [noun, adjective, adverb]
   agreement_tags:
@@ -83,6 +105,19 @@ templates:
     slot_relations: [{kind: distinct, slots: [city_place_one, city_place_two, city_place_three, city_place_four, city_place_five, city_place_six, city_place_seven, city_place_eight]}]
     answer_derivation: {kind: matching_pairs, slots: [city_place_one, city_place_two, city_place_three, city_place_four, city_place_five, city_place_six, city_place_seven, city_place_eight]}
     feedback_frame: {text: "Match each place with its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit05.lesson01.place_order.005
+    lesson_content_key: prs.a1.unit05.lesson01.everyday_places
+    # Added 2026-07-06 (practice-pool-sync depth pass): city_place already
+    # had multiple_choice/fill_in_blank/translation/matching_pairs; this
+    # adds the one remaining PRACTICE_EXERCISE_TYPES slot (word_order),
+    # reusing the real "[place] این‌جا است" pattern already taught for
+    # بانک in lesson04.exercise07 (translate_bank_here) -- grammatical for
+    # all 8 city_place candidates, no invented vocabulary.
+    type: word_order
+    frame: {text: "{city_place} این‌جا است", language_code: prs, direction: rtl}
+    slots: {city_place: *city_place}
+    answer_derivation: {kind: render_frame, frame: {text: "{city_place} این‌جا است", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: [place] این‌جا است (the place is here).", language_code: en, direction: ltr}
 
   # Lesson 4: near, far, here, and there.
   - content_key: practice.en-prs.prs.a1.unit05.lesson04.location_gloss.001
@@ -119,3 +154,15 @@ templates:
     slot_relations: [{kind: distinct, slots: [location_word_one, location_word_two, location_word_three, location_word_four]}]
     answer_derivation: {kind: matching_pairs, slots: [location_word_one, location_word_two, location_word_three, location_word_four]}
     feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit05.lesson04.location_order.005
+    lesson_content_key: prs.a1.unit05.lesson04.simple_location_answers
+    # Added 2026-07-06 (practice-pool-sync depth pass): location_word's
+    # remaining PRACTICE_EXERCISE_TYPES gap (word_order), reusing the real
+    # "میدان هوایی [location_word] است" sentence already taught verbatim
+    # in lesson04.teach.airport_far/exercise06 for دور -- grammatical for
+    # all 4 candidates (near/far/here/there), no invented vocabulary.
+    type: word_order
+    frame: {text: "میدان هوایی {location_word} است", language_code: prs, direction: rtl}
+    slots: {location_word: *location_word}
+    answer_derivation: {kind: render_frame, frame: {text: "میدان هوایی {location_word} است", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: میدان هوایی [word] است (the airport is ___).", language_code: en, direction: ltr}
