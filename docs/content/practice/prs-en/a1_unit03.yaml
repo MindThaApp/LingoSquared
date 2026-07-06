@@ -102,13 +102,6 @@ templates:
     slots: {number: *number}
     answer_derivation: {kind: slot_gloss, slot: number}
     feedback_frame: {text: "معنای دری {number} را انتخاب کنین.", language_code: prs, direction: rtl}
-  - content_key: practice.prs-en.en.a1.unit03.lesson01.number_fill.002
-    lesson_content_key: en.a1.unit03.lesson01.zero_to_ten
-    type: fill_in_blank
-    frame: {text: "Number: {number}", language_code: en, direction: ltr}
-    slots: {number: *number}
-    answer_derivation: {kind: slot_text, slot: number}
-    feedback_frame: {text: "املای درست این عدد {number} است.", language_code: prs, direction: rtl}
   - content_key: practice.prs-en.en.a1.unit03.lesson01.number_translate.003
     lesson_content_key: en.a1.unit03.lesson01.zero_to_ten
     type: translation
@@ -172,7 +165,15 @@ templates:
     type: fill_in_blank
     frame: {text: "What's your {phone_word}?", language_code: en, direction: ltr}
     slots: {phone_word: *phone_word}
-    answer_derivation: {kind: slot_text, slot: phone_word}
+    # AUTHORING_GUIDE.md #17: phone_word's 2-member pool ("number"/"phone")
+    # are true register/colloquial synonyms in this exact question --
+    # "What's your number?" and "What's your phone?" are both real,
+    # equally-correct ways to ask for a phone number, with nothing else in
+    # the frame able to prefer one over the other. Confirmed by the
+    # corpus-wide ambiguity audit (2026-07-06/07): no sibling template in
+    # this file exposes both tokens together, so marked interchangeable
+    # rather than removed.
+    answer_derivation: {kind: slot_text, slot: phone_word, interchangeable: true}
     feedback_frame: {text: "{phone_word} این سوال معمول دربارهٔ تیلفون را کامل می‌کنه.", language_code: prs, direction: rtl}
   - content_key: practice.prs-en.en.a1.unit03.lesson04.market_gloss.001
     lesson_content_key: en.a1.unit03.lesson04.market_dialogue
@@ -181,13 +182,6 @@ templates:
     slots: {market_word: *market_word}
     answer_derivation: {kind: slot_gloss, slot: market_word}
     feedback_frame: {text: "معنای دری {market_word} را انتخاب کنین.", language_code: prs, direction: rtl}
-  - content_key: practice.prs-en.en.a1.unit03.lesson04.place_fill.002
-    lesson_content_key: en.a1.unit03.lesson04.market_dialogue
-    type: fill_in_blank
-    frame: {text: "Daniel is at the {place_singular}.", language_code: en, direction: ltr}
-    slots: {place_singular: *place_singular}
-    answer_derivation: {kind: slot_text, slot: place_singular}
-    feedback_frame: {text: "{place_singular} جایی است که دنیل آنجاست.", language_code: prs, direction: rtl}
   - content_key: practice.prs-en.en.a1.unit03.lesson04.market_pair.003
     lesson_content_key: en.a1.unit03.lesson04.market_dialogue
     type: matching_pairs

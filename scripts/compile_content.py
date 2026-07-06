@@ -53,6 +53,19 @@ except ImportError:
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_SPINE = REPO_ROOT / "docs/content/universal_spine.yaml"
 
+# scripts/_fill_in_blank_ambiguity_check.py holds the real lexeme-matching
+# logic (byte-ported from backend/app/practice/service.py's lexeme_matches())
+# for AUTHORING_GUIDE.md #17's fill_in_blank ambiguity check. Reused here
+# rather than reimplemented so the standalone audit script and this
+# permanent compiler validator can never silently drift apart.
+_SCRIPTS_DIR = Path(__file__).resolve().parent
+if str(_SCRIPTS_DIR) not in sys.path:
+    sys.path.insert(0, str(_SCRIPTS_DIR))
+from _fill_in_blank_ambiguity_check import (  # noqa: E402
+    lexeme_matches as _fib_lexeme_matches,
+    load_lexemes_for_pair as _fib_load_lexemes_for_pair,
+)
+
 RTL_LANGUAGES = {"fa", "prs"}
 FORBIDDEN_PERSIAN_CODEPOINTS = {
     "\u064a": "Arabic Yeh U+064A (ي); use Persian Yeh U+06CC (ی)",
@@ -588,6 +601,11 @@ def validate_practice_packs(
     existing_keys = collect_content_keys(existing_documents or [])
     seen = dict(existing_keys)
     expected_pair: tuple[Any, Any] | None = None
+    # Cache of (source_language, target_language) -> lexeme list (or None if
+    # unmapped/failed to load) for the AUTHORING_GUIDE.md #17 ambiguity
+    # check below, so each direction's real backfill_lexemes*.py data is
+    # only loaded once per validate_practice_packs() call, not per template.
+    _ambiguity_lexeme_cache: dict[tuple[Any, Any], list[dict] | None] = {}
 
     for path, pack in packs:
         prefix = f"{path}:practice"
@@ -686,6 +704,66 @@ def validate_practice_packs(
                             f"{location}.frame.text",
                             "fill_in_blank answer slot must appear in the frame",
                         )
+                    elif not derivation.get("interchangeable"):
+                        # AUTHORING_GUIDE.md #17 corpus-wide audit
+                        # (2026-07-06/07): a fill_in_blank slot whose real
+                        # course-wide candidate pool has >1 distinct token,
+                        # with nothing else in the frame able to prefer one
+                        # over another, is structurally unanswerable with
+                        # certainty -- not a hypothetical, a real shipped
+                        # bug ("Ben ___ nieuw hier?" je/jij). Reuses the
+                        # exact lexeme_matches() port
+                        # scripts/_fill_in_blank_ambiguity_check.py already
+                        # verified against the real backend function, so
+                        # this can never silently drift from the standalone
+                        # audit tool's own judgment.
+                        pair_key = (pack.get("source_language"), pack.get("target_language"))
+                        if pair_key not in _ambiguity_lexeme_cache:
+                            try:
+                                _ambiguity_lexeme_cache[pair_key] = _fib_load_lexemes_for_pair(*pair_key)
+                            except Exception as exc:  # pragma: no cover - defensive
+                                report.warn(
+                                    prefix,
+                                    f"could not load lexeme data for ambiguity check on {pair_key!r}: {exc!r}",
+                                )
+                                _ambiguity_lexeme_cache[pair_key] = None
+                        lexemes = _ambiguity_lexeme_cache[pair_key]
+                        if lexemes is not None:
+                            blanked_slot = derivation.get("slot")
+                            constraints = slots.get(blanked_slot)
+                            if isinstance(constraints, dict):
+                                distinct_tokens = {
+                                    lx["token"]
+                                    for lx in lexemes
+                                    if _fib_lexeme_matches(lx, constraints)
+                                }
+                                if len(distinct_tokens) > 1:
+                                    if len(slots) == 1:
+                                        report.error(
+                                            f"{location}.answer_derivation",
+                                            f"fill_in_blank slot {blanked_slot!r} has "
+                                            f"{len(distinct_tokens)} distinct candidates "
+                                            f"({sorted(distinct_tokens)[:8]}"
+                                            f"{'...' if len(distinct_tokens) > 8 else ''}) and no "
+                                            "other visible text in the frame to disambiguate which "
+                                            "one is correct -- remove the duplicate if a sibling "
+                                            "template already tests this vocabulary unambiguously, "
+                                            "add real disambiguating context, mark "
+                                            "answer_derivation.interchangeable: true if every "
+                                            "candidate is a true synonym here, or use a different "
+                                            "exercise type (see AUTHORING_GUIDE.md #17)",
+                                        )
+                                    else:
+                                        report.warn(
+                                            f"{location}.answer_derivation",
+                                            f"fill_in_blank slot {blanked_slot!r} has "
+                                            f"{len(distinct_tokens)} distinct candidates with other "
+                                            f"visible slot(s) {sorted(s for s in slots if s != blanked_slot)} "
+                                            "in the same frame -- confirm by hand whether the other "
+                                            "visible slot(s) actually disambiguate the answer before "
+                                            "shipping (AUTHORING_GUIDE.md #17); not auto-failed since "
+                                            "a second visible slot can legitimately narrow the answer",
+                                        )
             if exercise_type == "translation" and isinstance(derivation, dict):
                 answer_language = None
                 if derivation.get("kind") == "slot_text":

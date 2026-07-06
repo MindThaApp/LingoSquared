@@ -392,3 +392,18 @@ than one member (a superset — it deliberately does not distinguish true
 synonym pairs from ordinary vocabulary recall, since that judgment call
 needs a human read of the actual frame) as a starting point for that
 by-hand review.
+
+**Enforced automatically since 2026-07-07: `scripts/compile_content.py`'s
+`practice-validate`/`practice-compile` now hard-fail any single-slot
+`fill_in_blank` template whose real course-wide candidate pool (computed
+via the exact `lexeme_matches()` the standalone audit script already uses,
+imported not reimplemented) has more than one distinct token and isn't
+marked `interchangeable: true`** — this is what `scripts/verify.sh`'s
+content stage runs on every check, so this bug class can no longer ship
+silently. A second visible slot in the same multi-slot frame is only
+WARNED on (not hard-failed), since it may legitimately narrow the answer
+and that judgment still needs a human read. See
+`docs/BUILD_LOG.md`'s "Corpus-wide fill_in_blank ambiguity audit, pass 2"
+entry for the sweep this closed out and how the check was verified (a real
+pre-fix instance re-validated to confirm it fails, full clean-corpus
+`verify.sh --content-only` re-run to confirm zero false positives).

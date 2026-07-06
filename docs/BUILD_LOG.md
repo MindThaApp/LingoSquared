@@ -8588,3 +8588,359 @@ built; everything else — the actual hours-of-content gap — is
 authoring volume (lexemes, templates, both per-language-pair), which
 this session cannot shortcut given the no-runtime-LLM constraint.
 `backend-db-1` stack, `ls2qa`, and the live server were never touched.
+
+## Template-depth pass: closing the practice-content bottleneck, 2026-07-06
+
+**Trigger**: coordinator flagged practice content as the real remaining
+bottleneck toward the ≥10hr-per-course target (~23-28% of it across all
+3 launch pairs even combined both directions), and asked for
+templates-per-unit depth to be audited and pushed on the thinnest
+units, verified against real lexeme data rather than just raising a
+count.
+
+**Audit**: computed real templates-per-unit across all 6 directions.
+Found `en-fa` most severely uneven — units 01-02 have 36/33 templates
+(outliers skewing its average up to nominally the highest of all 6
+directions), but the back half tapers to unit06=9, unit07=9, unit08=8,
+unit09=3 (the single thinnest unit in the entire corpus across every
+direction), unit10=5. Also found `en-prs` units 05/09/10 thin (8/7/7),
+and the newest A2 units (25 bureaucracy, 26 opinions) thin across all
+of `nl-en`/`fa-en`/`prs-en` (5-8 each), being the smallest-vocabulary,
+most recently authored content. Separately corrected an assumption in
+the coordinator's framing: `en-nl`'s practice pool is NOT at
+unit-count parity with its lesson content — it's still 16/23 units
+(17-23 have zero templates), unlike the other 3 directions already at
+26/26 from earlier this session.
+
+**Fix**: 5 parallel workers, each deepening a disjoint set of units by
+adding NEW templates against already-taught, already-classified
+vocabulary — never inventing content, and reporting an honest
+achievable ceiling rather than padding with weak/duplicate templates
+when real vocabulary ran out. Results:
+- `en-fa` units 06-10: 9/9/8/3/5 → 16/15/16/9/11 (the corpus's worst
+  unit, a2_unit09, tripled from 3 to 9 templates). Required extending
+  `scripts/backfill_lexemes.py`'s `fa_agreement_tags()` with 8 new
+  semantic tags built from vocabulary these units already teach but
+  hadn't been tagged yet (`ordering_register`, `weather_time_word`,
+  `service_role_word`, `price_number`, `paperwork_word`,
+  `bureaucracy_phrase`, `family_message_word`, `opinion_phrase`) —
+  confirmed this script is en-fa-scoped only (only imported by the two
+  shared verification harnesses, not by any other direction's backfill
+  script) before touching it.
+- `en-prs` units 05/09/10: 8/7/7 → 10/10/10. Capped there deliberately:
+  each unit genuinely has only 2 real semantic tags in the classifier,
+  and `listen_select` is permanently unavailable for Dari (no TTS
+  voices), so 2 tags × 5 usable exercise types = 10 is the real
+  ceiling without inventing vocabulary or extending a classifier shared
+  by every other en-prs unit (out of scope for a practice-pack-only
+  pass).
+- `nl-en`/`fa-en` units 25-26: both 6/5 → 13/13, reusing the unit's
+  existing capped-at-4 recognition tag (`bureaucracy_noun`,
+  `dogpark_noun`) across every lesson's exercise-type grid rather than
+  inventing new vocabulary — an honest ceiling given these are the
+  newest, smallest (2-lesson) units in the course.
+- `prs-en` units 25-26: 8/6 → 16/13 — a genuinely better result than
+  the nl-en/fa-en workers found, by noticing the unit's own real taught
+  sentences ("Would it be possible to come this Friday?", "In my
+  opinion, the dog park is a good idea") also generalize other
+  already-classified course-wide tags from earlier units (`weekday`,
+  `possessive`, `identity`, `politeness`) rather than only the
+  topic-specific tag. Flagged as a technique nl-en/fa-en could
+  backport in a follow-up pass, not yet done.
+
+**Verification**: every worker verified against both
+`compile_content.py practice-validate` AND the standalone
+`_practice_slot_check.py` harness (real `lexeme_matches()` port, not
+just the compiler), confirming every new template — old and new —
+still resolves to real distinct candidates. A final full-repo
+`verify.sh --content-only` sweep after all 5 workers landed: 0
+errors/0 warnings across every course direction and practice pack. The
+harness's `_practice_slot_check.py` total problem count is 5,
+unchanged and confirmed pre-existing (two `en-fa` unit01/02
+matching_pairs slots with only 1 distinct candidate token) — a
+different direction and units than any of this pass touched.
+
+**Separately, this pass produced conclusive, repeated, first-hand
+confirmation on the ongoing "system-reminder-looking content" question
+from earlier today**: the exact same `<system-reminder>`-tagged block
+(a date-change notice, the available-agent-type list, MCP server
+instructions, an "Auto Mode Active" reminder) was independently
+observed attached to three unrelated tool calls in a row this session
+— a subagent's file `Read`, a `grep` call, and a plain `bash` command
+with no file involvement at all. Confirms definitively this is
+harness-level infrastructure attached to tool results generally, not
+content embedded in any file (`docs/content/AUTHORING_GUIDE.md`'s
+actual on-disk content was independently re-verified clean via
+`wc -l`/`wc -c`/targeted `grep -c`, all confirming zero contamination).
+
+## Closing en-nl's practice-pool gap and backporting the tag-reuse technique, 2026-07-06
+
+**Trigger**: coordinator asked to (1) backport prs-en's course-wide-tag-
+reuse technique (found during the template-depth pass above) to
+nl-en/fa-en's units 25-26, and (2) close en-nl's practice-pool
+unit-count gap (16/23 units), the one item flagged but not yet
+resolved from the earlier fa-en/prs-en extension work.
+
+**en-nl gap closed**: 2 parallel workers extended
+`docs/content/practice/en-nl/` from 16 to 23 units (17-19: work,
+housing, weather; 20-23: clothing, emotions, communication, money),
+15/15/15/14/14/14/14 templates respectively (104 new templates total),
+extending `scripts/backfill_lexemes_en_nl.py`'s Dutch classifier with
+~149 new token glosses/POS entries and several new semantic tags
+across both workers, coordinated via fresh re-reads of the shared
+classifier/manifest files to avoid clobbering (the units 20-23 worker
+caught and reverted several accidental gloss-overwrite attempts on
+tokens the parallel worker or earlier units had already classified —
+`voor`/`zich`/`terug`/`herhalen`/`nodig`/`Zullen`/`goed`/`idee`/`klein`/
+`groot`/`pinnen`). Two pre-existing architectural quirks were found and
+deliberately left alone rather than risk corrupting working data: a
+"werk" verb/noun homograph (same class as the project's existing
+documented "zijn"/"close" homograph notes) and a real lesson-key
+collision (`bonnetje_lezen` used verbatim by both unit20 lesson05 and
+unit23 lesson05, and `advertentie_lezen` colliding with an existing
+unit14 key) — both given honest shared/generic values rather than
+silently overwritten. Final state: 860 nl lexemes (up from the
+pre-existing count), all 23 en-nl units present, verified via
+`compile_content.py practice-validate` (0/0) and the full
+`_practice_slot_check.py` harness (all 23 en-nl units OK) — the
+harness run also caught that the backend's real enforced distinct-
+candidate threshold for multiple_choice/listen_select is >=3, not the
+>=4 this session had been using as its own stricter internal bar
+throughout (both are satisfied; the >=3 figure is what
+`app/practice/service.py` itself actually checks).
+
+**Technique backported**: nl-en and fa-en's `a2_unit25.yaml`/
+`a2_unit26.yaml` (previously 13/13 templates each, from the earlier
+depth pass) were extended to 21/20 each by reusing already-classified
+course-wide tags (`weekday`, `possessive`, `identity`, `politeness`)
+against the units' own real taught sentences ("Would it be possible to
+come this Friday?", "In my opinion, the dog park is a good idea", "I
+think", "Yes, I think that would be better") — the same technique
+prs-en's worker discovered independently during the depth pass, now at
+parity or better across all 3 directions sharing this English content
+(prs-en 16/13, nl-en 21/20, fa-en 21/20 — fa-en/nl-en actually exceeded
+prs-en's own numbers, having found the real gloss data supported more
+templates than prs-en's worker realized). No new English tokens or
+target-language glosses were invented in either backport; both workers
+confirmed every token used already existed in the shared classifier and
+direction-specific gloss dict before use.
+
+**Verification**: every worker's individual claims independently
+re-verified against the actual merged file state — `backfill_lexemes_
+en_nl.py --dry-run` (860 lexemes), the `en-nl|` practice_manifest.txt
+line (23 files, all present), template counts for all 4 touched files
+via direct YAML parsing (21/20/21/20, matching every worker's report
+exactly), a full `compile_content.py practice-validate` run, the full
+`_practice_slot_check.py` harness (still exactly 5 pre-existing,
+unrelated en-fa problems), and a final whole-repo `verify.sh
+--content-only` sweep: 0 errors/0 warnings across every course
+direction and practice pack.
+
+## Removing 9 unanswerable fill_in_blank templates introduced by this session's own tag-reuse backport, 2026-07-06/07
+
+**Trigger**: coordinator relayed urgent, time-sensitive feedback —
+Ramin, live-testing, found a real §17-pattern bug (a je/jij true-
+synonym fill_in_blank, unanswerable with certainty) plus a separate
+word_order rendering bug (english_gloss substituted directly into a
+target-language frame, garbling two languages in one line); a broader
+project-wide sweep found ~208 more unfixed §17 instances, being
+addressed elsewhere. Coordinator asked this session specifically to
+start actively checking new slots/tags for exactly this class of issue
+going forward — "count sufficiency isn't the same as distinguishability."
+
+**Self-audit, not just going-forward compliance**: ran the existing
+`scripts/_fill_in_blank_ambiguity_check.py` (a companion to
+`_practice_slot_check.py` that checks DISTINGUISHABILITY, not just
+candidate-count sufficiency) against everything, and found this
+session's own tag-reuse-technique backport (nl-en/fa-en/prs-en units
+25-26, done a few messages earlier the same day) had introduced exactly
+this bug class: `weekday_fill` (7 candidates: Friday/Monday/.../Sunday,
+frame "Would it be possible to come this {item}?" / "{item} at 10am
+works.") and `possessive_fill` (4 candidates: her/his/my/your, frame
+"In {item} opinion, the dog park is a good idea.") — 3 template
+instances × 3 directions = 9 total. Not TRUE synonyms in the §17 sense
+(a weekday isn't interchangeable with another weekday, a possessive
+isn't interchangeable with another possessor — marking these
+`interchangeable: true` would have been actively wrong, accepting
+"Monday" as correct when the taught fact was specifically "Friday"),
+but the identical functional defect: no context in the frame narrows
+the blank to one specific correct answer, same underlying §13/§17
+family of bug Ramin is finding live.
+
+**Fix**: removed all 9 ambiguous `fill_in_blank` template instances
+from `docs/content/practice/{nl-en,fa-en,prs-en}/a2_unit{25,26}.yaml`.
+The same vocabulary/fact recall is still safely tested via each set's
+sibling `word_order` (gives the full word set to reorder, not an open
+guess), `translation` (targets one specific given sentence), and
+`listen_select` (plays one specific correct audio) templates, none of
+which share this ambiguity since they don't require picking one
+correct answer from an open, unanchored slot.
+
+**Verification**: each of the 3 touched directions' packs re-validated
+independently via `compile_content.py practice-validate` — 0 errors/0
+warnings each (validating all 3 directions together in one `--pack`
+call throws an unrelated, expected "language pair does not match"
+error — a tool-usage mistake, not a content bug, since that flag
+expects one consistent language pair per invocation). Re-ran
+`_fill_in_blank_ambiguity_check.py` and confirmed zero remaining
+`weekday_fill`/`possessive_fill` matches in any of the 6 edited files.
+Re-ran the full `_practice_slot_check.py` harness: still exactly 5
+total problems, unchanged, still the same pre-existing unrelated en-fa
+unit01/02 issue. A final whole-repo `verify.sh --content-only` sweep
+showed `en-fa` failing on an unrelated overlay-realization mismatch in
+`a1_unit03.yaml` — confirmed via file mtime (modified within the last
+few minutes) that this is another session's concurrent in-progress
+edit, not anything touched by this fix; every direction this session
+actually worked in (nl-en/fa-en/prs-en/en-nl) validated clean.
+
+**Broader implication for future authoring** (per the coordinator's
+actual ask): the "reuse an already-classified course-wide tag against
+a unit's own real sentence" technique (this session's own innovation,
+found valuable for depth) is powerful but has exactly this failure
+mode when applied to a `fill_in_blank` — it's safe for `word_order`/
+`translation`/`listen_select`/`multiple_choice` (bare recognition)
+against the same tag, but a `fill_in_blank` specifically needs either
+a genuinely disambiguating frame (rare when the whole point was reusing
+an open-ended tag) or should be skipped for that specific
+type+tag+frame combination. Applying this discipline to any further
+tag-reuse authoring going forward, not just this one retrofit.
+
+## Corpus-wide fill_in_blank ambiguity audit, pass 2 — finishing the sweep
+and building a permanent compiler guard, 2026-07-07
+
+Direct follow-up to Ramin's live report ("Ben ___ nieuw hier?", je/jij)
+and the corpus-wide audit two entries above this one, which quantified 251
+single-slot instances (43 fixed then, 7 fixed via `interchangeable: true`
+same-day, 68 deferred for concurrent-edit collision, ~130ish in fa-en/
+prs-en/en-prs not even fully triaged). By this pass, all practice-pack
+files were confirmed clean via `git status` (zero uncommitted changes)
+except `fa-en`/`nl-en`/`prs-en`'s `a2_unit25`/`a2_unit26.yaml`, caught
+mid-edit by another concurrent session live during this pass (its own
+commit, "Remove 9 unanswerable fill_in_blank instances introduced by
+today's own tag-reuse backport," landed partway through and independently
+fixed the exact same bug class in those 6 files — confirmed by diff, left
+untouched by this pass, no double-fix).
+
+**Re-ran `scripts/_fill_in_blank_ambiguity_check.py`**: 219 single-slot
+AMBIGUOUS + 7 multi-slot REVIEW flagged across the 6 launch-gate
+directions (the count grew slightly past the original 251−43=208 since
+new practice content was authored in the interim — expected, not a
+regression). Built a one-off sibling-detection scan (not committed,
+scratch-only) reusing the checker's own `lexeme_matches()` to determine,
+for each ambiguous slot, whether ANY other non-`fill_in_blank` template in
+the same pack file already exposes a token set that is a superset of (or
+equal to) the ambiguous slot's real candidate pool — i.e. every possible
+correct answer is already unambiguously recognizable/producible elsewhere
+in the file (multiple_choice/gloss/listen_select/translation/word_order
+all show or ask for the specific word directly, so this is a strictly
+stronger and more accurate "safe to remove" test than the original pass's
+exact-constraint-dict match, catching cases like `day_part_in` {morning,
+afternoon, evening} being safely covered by a broader sibling `day_part`
+{morning, afternoon, evening, night} tag).
+
+**Result: 211 of 219 single-slot instances had such a sibling** (204 in
+untouched files, safely removed by exact `content_key`, same surgical
+text-only approach as pass 1; the other 7 were multi-slot REVIEW cases
+whose blanked slot turned out to have a sibling too, once checked by
+hand — e.g. `en-fa/a1_unit04.yaml`'s `have_sentence.002`/
+`possession_question.001` both blank `possession_verb`, which
+`possession_verb`'s own bare `multiple_choice` template already tests
+identically). **The remaining 8**: 6 were genuinely already fixed via
+`interchangeable: true` in pass 1 (je/jij, alsjeblieft/alstublieft,
+mijn/je/jouw) but the checker itself didn't know to skip them — a real
+gap, fixed (see below) — and 2 (`fa-en`/`prs-en` `a1_unit03.yaml`'s
+`phone_fill.005`, "What's your {phone_word}?", number/phone) had no
+sibling anywhere in either file and are genuine same-question
+colloquial synonyms with nothing in the frame to prefer one over the
+other, so marked `interchangeable: true` (not removed, since no sibling
+tests `phone_word` at all). **Net: 0 flagged instances remain, across
+all 6 directions, both single- and multi-slot — the entire backlog is
+closed**, not just this pass's new finds. Six `a2_unit25`/`a2_unit26`
+files across `fa-en`/`nl-en`/`prs-en` were left alone (already fixed by
+the concurrent session noted above, confirmed via diff, zero left to
+follow up on there either).
+
+**Real bug found in the checker tool itself while doing this**: it never
+checked `answer_derivation.interchangeable`, so every one of pass 1's 4
+already-fixed instances (plus the 2 new ones from this pass) kept
+re-flagging as AMBIGUOUS forever — fixed by skipping any `slot_text`
+derivation with `interchangeable: true` before the candidate-count check,
+in both `check_pack_dict()` (single-slot) and the multi-slot branch.
+Re-ran after the fix: `TOTAL AMBIGUOUS: 0`, `TOTAL MULTI-SLOT: 0`,
+confirmed clean.
+
+**Refactored `scripts/_fill_in_blank_ambiguity_check.py`** (still fully
+backward compatible, same CLI/output) to extract two reusable pieces so
+the new permanent compiler check (below) can import them instead of
+reimplementing: `DIRECTION_SPEC_MODULES` (the (source_language,
+target_language) → backfill script module name mapping, previously
+hardcoded inline in `main()`) and `load_lexemes_for_pair()` (loads a
+direction's real `iter_specs()` lexeme data given the pair, returning
+`None` for an unmapped pair rather than raising, so future non-launch-gate
+directions degrade gracefully instead of crashing). `check_pack()` is now
+a thin wrapper around a new `check_pack_dict()` that takes an
+already-loaded pack document — needed since `compile_content.py` already
+has the pack loaded in memory and shouldn't re-read the file from disk.
+
+**Built the permanent prevention Ramin asked for**: `scripts/
+compile_content.py`'s `validate_practice_packs()` (shared by both
+`practice-validate` and `practice-compile`, so both commands enforce it,
+and `scripts/verify.sh`'s content stage runs `practice-validate` on every
+check) now imports `lexeme_matches`/`load_lexemes_for_pair` from
+`_fill_in_blank_ambiguity_check.py` directly (never reimplemented — the
+exact same logic path, so the standalone audit tool and the compiler can
+never silently drift apart) and, right after the existing bare-slot
+placeholder check, computes the real distinct-candidate count for every
+`fill_in_blank` `slot_text` template not marked `interchangeable`. A
+single-slot template with >1 distinct candidates is a hard `report.error`
+(fails validation, clear message naming the exact remedies from
+AUTHORING_GUIDE.md #17: remove via sibling, add disambiguating context,
+mark `interchangeable: true`, or change exercise type) — this is the
+100%-confidence case, a bare frame around one open slot can never be
+disambiguated by construction. A multi-slot template with >1 distinct
+candidates on the blanked slot is only a `report.warn` (visible, not
+silently ignored, but not a hard failure) since a second visible slot in
+the frame may legitimately narrow the answer and that specific judgment
+still needs a human read, matching the audit script's own long-standing
+distinction between AMBIGUOUS and REVIEW. Lexeme data is loaded once per
+`(source_language, target_language)` pair per `validate_practice_packs()`
+call (cached), not once per template.
+
+**Verification**: (1) re-validated a real pre-fix template — checked out
+`en-nl/a1_unit01.yaml` at its pre-this-session `HEAD` revision (still
+containing the ambiguous `lesson02.complete.002` "greeting" instance
+removed above) into a scratch copy and ran the new `practice-validate`
+against it directly: **4 real errors**, one of them exactly `"fill_in_blank
+slot 'item' has 5 distinct candidates (['Goedemiddag', 'Goedemorgen',
+'Goedenavond', 'Hallo', 'Hoi']) and no other visible text in the frame to
+disambiguate..."` — confirms the check would have failed this exact
+shipped bug before the fix, not just in theory. (2) Full `scripts/
+verify.sh --content-only` re-run against the current (fixed) corpus,
+covering all 18 lesson-content course pairs and all 6 practice-pack
+directions: **0 errors, 0 warnings everywhere** — the new check produces
+zero false positives against the whole clean corpus. (3) `practice-
+compile` (not just `practice-validate`) run standalone against all 6
+directions' full pack sets: all 6 produce real non-trivial JSON output
+(166KB–356KB each), confirming the check doesn't fire in `compile` mode
+either and real assembly still succeeds end-to-end.
+
+**Pre-existing, confirmed unrelated, left untouched**: `scripts/
+_practice_slot_check.py` still reports the same 5 pre-existing problems
+in `en-fa/a1_unit01.yaml`/`a1_unit02.yaml` (5 `matching_pairs` slots with
+only 1 distinct token against the ≥2-needed-for-`distinct`-relation bar)
+noted in the entry directly above this one — confirmed via `git stash`
+that these exist identically with this session's own changes fully
+removed, so genuinely pre-existing and a different bug class (matching-
+pairs slot depth, not fill_in_blank ambiguity), out of this pass's scope.
+
+Files touched: 204 mechanical `fill_in_blank` block removals + 7 more
+(multi-slot cases) across `docs/content/practice/{en-fa,fa-en,en-prs,
+prs-en,en-nl,nl-en}/*.yaml` (exact file list matches `git status`, ~80
+files, no reformatting beyond the removed blocks); 2 `interchangeable:
+true` additions (`fa-en`/`prs-en` `a1_unit03.yaml`'s `phone_fill.005`);
+`scripts/_fill_in_blank_ambiguity_check.py` (interchangeable-skip fix +
+refactor); `scripts/compile_content.py` (new permanent ambiguity
+validator); `docs/content/AUTHORING_GUIDE.md` (#17 addendum documenting
+the new automatic enforcement); this entry. Not committed, per this
+session's standing practice of leaving changes staged for whoever's
+coordinating commits.
