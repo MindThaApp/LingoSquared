@@ -1,0 +1,79 @@
+schema_version: "1.0"
+pack_key: practice.nl-en.a2.unit25
+source_language: nl
+target_language: en
+unit_content_key: en.a2.unit25.bureaucracy
+review:
+  status: unreviewed
+  fresh_context: "false"
+  notes: "Authored 2026-07-06 by the Claude session syncing Endless Practice
+    template pools to lesson content growth (nl-en lane). This is the
+    first A2-level unit for this direction (registering with local
+    authorities: appointments, documents, formal requests). Extended
+    scripts/backfill_lexemes_nl_en.py's UNIT_FILES to include units 25-26
+    and added Dutch glosses for the English tokens plus classification
+    for the Dutch source-side tokens found in this unit's overlay gloss
+    text. Added a 4-member 'bureaucracy_noun' tag (appointment/document/
+    form/confirmation, defined in the shared scripts/
+    _en_target_lexeme_common.py) used ONLY for bare-word recognition --
+    deliberately did not attempt a generative frame, since this unit's
+    A2-register content is dominated by multi-word formal phrases ('I
+    was wondering whether...', 'Could you tell me...') that don't reduce
+    to a safe single-token slot, consistent with this session's standing
+    'don't force it' discipline for vocabulary that doesn't support a
+    safe shared frame. Every slot's real candidate count was verified
+    with a standalone lexeme_matches()-replicating harness against this
+    script's actual output. Needs the standard fresh-context review
+    before import. Same blocking dependency as every earlier nl-en pack:
+    backfill_lexemes_nl_en.py has not actually been run against a real
+    database yet."
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [bureaucracy_noun]
+slot_presets:
+  bureaucracy_noun: &bureaucracy_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: bureaucracy_noun}}
+templates:
+  - content_key: practice.nl-en.en.a2.unit25.lesson01.choose.001
+    lesson_content_key: en.a2.unit25.lesson01.registration_vocabulary
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *bureaucracy_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is een woord uit deze les.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a2.unit25.lesson01.listen.002
+    lesson_content_key: en.a2.unit25.lesson01.registration_vocabulary
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *bureaucracy_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is het woord dat je hoorde.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a2.unit25.lesson01.match.003
+    lesson_content_key: en.a2.unit25.lesson01.registration_vocabulary
+    type: matching_pairs
+    frame: {text: "{first} · {second}", language_code: en, direction: ltr}
+    slots: {first: *bureaucracy_noun, second: *bureaucracy_noun}
+    slot_relations: [{kind: distinct, slots: [first, second]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second]}
+    feedback_frame: {text: "Verbind elk woord met de Nederlandse betekenis.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a2.unit25.lesson01.translate.004
+    lesson_content_key: en.a2.unit25.lesson01.registration_vocabulary
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *bureaucracy_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a2.unit25.lesson03.listen.001
+    lesson_content_key: en.a2.unit25.lesson03.reading_a_registration_notice
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *bureaucracy_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is het woord dat je hoorde.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a2.unit25.lesson04.choose.001
+    lesson_content_key: en.a2.unit25.lesson04.dmv_appointment_dialogue
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *bureaucracy_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is een woord uit dit gesprek.", language_code: nl, direction: ltr}

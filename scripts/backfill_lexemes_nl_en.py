@@ -199,6 +199,20 @@ EN_TARGET_TO_NL_GLOSS: dict[str, str] = {
     "has": "heeft", "bedrooms": "slaapkamers", "favorite": "favoriete",
     "tell": "vertel", "isn't": "is niet", "balcony": "balkon", "upstairs": "boven",
     "near": "dichtbij", "easy": "makkelijk", "eat": "eten",
+    # Unit 25 (A2: registering with local authorities), added 2026-07-06.
+    "appointment": "afspraak", "document": "document", "proof": "bewijs",
+    "residency": "woonplaats", "form": "formulier", "confirmation": "bevestiging",
+    "wondering": "vragen (zich afvragen)", "whether": "of", "could": "kon; zou kunnen",
+    "make": "maken", "possible": "mogelijk", "come": "komen", "update": "bijwerken",
+    "address": "adres", "moved": "verhuisde", "id": "identiteitsbewijs",
+    "utility": "nuts- (voorziening)", "bill": "rekening", "bring": "meenemen",
+    "such": "zoals", "lived": "woonde", "since": "sinds", "lease": "huurcontract",
+    "when": "wanneer", "10am": "10:00 uur", "4471": "4471",
+    # Unit 26 (A2: giving opinions with reasons), added 2026-07-06.
+    "opinion": "mening", "other": "andere", "hand": "kant (aan de andere kant)",
+    "agree": "het eens zijn", "dog": "hond", "dogs": "honden", "space": "ruimte",
+    "run": "rennen", "playground": "speeltuin", "fair": "redelijk", "point": "punt",
+    "they": "zij", "move": "verplaatsen", "farther": "verder", "away": "weg",
 }
 
 UNIT_FILES = (
@@ -297,6 +311,14 @@ UNIT_FILES = (
     (
         REPO_ROOT / "docs/content/realizations/en/a1_unit24_housing.yaml",
         REPO_ROOT / "docs/content/overlays/nl-en/a1_unit24.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a2_unit25_bureaucracy.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/a2_unit25.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a2_unit26_opinions.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/a2_unit26.yaml",
     ),
 )
 
@@ -464,6 +486,18 @@ NL_POS: dict[str, str] = {
     "favoriete": "adjective", "kamer": "noun", "kamers": "noun", "keuken": "noun",
     "makkelijk": "adjective", "slaapkamer": "noun", "slaapkamers": "noun",
     "tuin": "noun", "vertel": "verb", "woonkamer": "noun",
+    # Unit 25 (A2: registering with local authorities), added 2026-07-06.
+    "adres": "noun", "afspraak": "noun", "bevestigingsnummer": "noun",
+    "bewijs": "noun", "bijwerken": "verb", "breng": "verb", "deze": "pronoun",
+    "document": "noun", "energierekening": "noun", "formulier": "noun",
+    "huurcontract": "noun", "identiteitsbewijs": "noun", "komen": "verb",
+    "kon": "verb", "maken": "verb", "medewerker": "noun", "mee": "particle",
+    "mogelijk": "adjective", "nieuwe": "adjective", "past": "verb",
+    "sinds": "preposition", "verhuisd": "verb", "vertellen": "verb",
+    "vroeg": "verb", "werken": "verb", "woonplaats": "noun", "woont": "verb",
+    "zoals": "preposition", "zou": "verb",
+    # Unit 26 (A2: giving opinions with reasons), added 2026-07-06.
+    "eens": "adverb", "ermee": "adverb", "kant": "noun", "mening": "noun",
 }
 
 NL_GLOSSES: dict[str, str] = {
@@ -638,6 +672,20 @@ NL_GLOSSES: dict[str, str] = {
     "favoriete": "favorite", "kamer": "room", "kamers": "rooms", "keuken": "kitchen",
     "makkelijk": "easy", "slaapkamer": "bedroom", "slaapkamers": "bedrooms",
     "tuin": "garden", "vertel": "tell (with ik)", "woonkamer": "living room",
+    # Unit 25 (A2: registering with local authorities), added 2026-07-06.
+    "adres": "address", "afspraak": "appointment", "bevestigingsnummer": "confirmation number",
+    "bewijs": "proof", "bijwerken": "to update", "breng": "bring (with ik)",
+    "deze": "this", "document": "document", "energierekening": "energy bill",
+    "formulier": "form", "huurcontract": "lease", "identiteitsbewijs": "ID",
+    "komen": "to come", "kon": "could", "maken": "to make", "medewerker": "clerk",
+    "mee": "along (part of meebrengen)", "mogelijk": "possible", "nieuwe": "new",
+    "past": "fits; works (time)", "sinds": "since", "verhuisd": "moved",
+    "vertellen": "to tell", "vroeg": "asked (part of zich afvragen)",
+    "werken": "to work", "woonplaats": "residency; place of residence",
+    "woont": "lives", "zoals": "such as", "zou": "would",
+    # Unit 26 (A2: giving opinions with reasons), added 2026-07-06.
+    "eens": "agreed (part of het eens zijn)", "ermee": "with it",
+    "kant": "side", "mening": "opinion",
 }
 
 
