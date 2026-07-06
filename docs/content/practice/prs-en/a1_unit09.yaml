@@ -1,0 +1,139 @@
+schema_version: "1.0"
+pack_key: practice.prs-en.a1.unit09
+source_language: prs
+target_language: en
+unit_content_key: en.a1.unit09.places
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: >-
+    Authored 2026-07-06 extending prs-en's Endless Practice pool from units
+    01-08 to also cover units 09-14 (prs-en previously stopped at unit08
+    while nl-en/fa-en already had coverage through unit14+). The 'place'
+    (bank/hospital/pharmacy/park/restaurant, 5 members) and
+    'place_non_hospital' (bank/pharmacy/park/restaurant, 4 members,
+    excludes hospital to avoid the self-reference "The hospital is next
+    to the hospital" bug since hospital is the fixed anchor in lesson02's
+    next_to/behind frames) tags already existed in scripts/
+    _en_target_lexeme_common.py from the nl-en/fa-en lanes' own unit09
+    work -- verified no EN_POS/agreement-tag additions were needed for
+    any of units 09-14's vocabulary by diffing every introduced_token
+    against EN_POS directly against the real en realization files. Only
+    Dari glosses for the new tokens were added to scripts/
+    backfill_lexemes_prs_en.py (this pair's own gloss dict, hand-derived
+    from docs/content/overlays/prs-en/a1_unit09.yaml's own real Dari
+    phrasing -- e.g. hospital=شفاخانه, pharmacy=دواخانه, both genuinely
+    distinct Dari lexemes from Farsi's بیمارستان/داروخانه, not a
+    find-replace of the fa-en script's Farsi glosses). Template shapes
+    mirror the already-authored fa-en/a1_unit09.yaml pack 1:1 (same tags,
+    same frames, same lesson targeting), swapping Farsi feedback text for
+    Dari (کنین/استین/می‌شه register, not کنید/هستید/می‌شود) and Farsi/
+    English translation frames for Dari/English ones. Verified with
+    scripts/_practice_slot_check.py that every slot has >=1 real
+    candidate lexeme and every multiple_choice/listen_select slot has
+    >=3 distinct candidate values (place=5, place_non_hospital=4, both
+    well above the floor). Also confirmed 0 errors/0 warnings from
+    compile_content.py practice-validate. Left unreviewed (not
+    self-certified) per standing project policy -- needs a separate
+    fresh-context review pass before import, same as every other pack
+    from this lane.
+tag_schema:
+  part_of_speech: [noun, adjective, adverb, pronoun, verb, particle, symbol]
+  agreement_tags:
+    semantic: [place, place_non_hospital]
+slot_presets:
+  place: &place {language_code: en, part_of_speech: noun, agreement_tags: {semantic: place}}
+  place_non_hospital: &place_non_hospital {language_code: en, part_of_speech: noun, agreement_tags: {semantic: place_non_hospital}}
+templates:
+  - content_key: practice.prs-en.en.a1.unit09.lesson01.place_meaning.001
+    lesson_content_key: en.a1.unit09.lesson01.common_places
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *place}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی دری {item} را انتخاب کنین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit09.lesson01.place_listen.002
+    lesson_content_key: en.a1.unit09.lesson01.common_places
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *place}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "واژه‌ای که شنیدین {item} بود.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit09.lesson01.place_pair.003
+    lesson_content_key: en.a1.unit09.lesson01.common_places
+    type: matching_pairs
+    frame: {text: "هر مکان انگلیسی را به معنی دری خودش وصل کنین.", language_code: prs, direction: rtl}
+    slots: {first_place: *place, second_place: *place}
+    slot_relations: [{kind: distinct, slots: [first_place, second_place]}]
+    answer_derivation: {kind: matching_pairs, slots: [first_place, second_place]}
+    feedback_frame: {text: "دو مکان را به معنی دری درست وصل کردین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit09.lesson01.place_translate.004
+    lesson_content_key: en.a1.unit09.lesson01.common_places
+    type: translation
+    frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *place}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "معادل انگلیسی این مکان {item} است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit09.lesson02.next_to_order.001
+    lesson_content_key: en.a1.unit09.lesson02.location_prepositions
+    type: word_order
+    frame: {text: "The {item} is next to the hospital", language_code: en, direction: ltr}
+    slots: {item: *place_non_hospital}
+    answer_derivation: {kind: render_frame, frame: {text: "The {item} is next to the hospital", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} مکانی است که پهلوی شفاخانه قرار داره.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit09.lesson02.behind_fill.002
+    lesson_content_key: en.a1.unit09.lesson02.location_prepositions
+    type: fill_in_blank
+    frame: {text: "The {item} is behind the hospital.", language_code: en, direction: ltr}
+    slots: {item: *place_non_hospital}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} مکانی است که عقب شفاخانه قرار داره.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit09.lesson02.place_translate.003
+    lesson_content_key: en.a1.unit09.lesson02.location_prepositions
+    type: translation
+    frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *place_non_hospital}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "معادل انگلیسی این مکان {item} است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit09.lesson03.where_is_order.001
+    lesson_content_key: en.a1.unit09.lesson03.asking_where
+    type: word_order
+    frame: {text: "Where is the {item}", language_code: en, direction: ltr}
+    slots: {item: *place}
+    answer_derivation: {kind: render_frame, frame: {text: "Where is the {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} مکانی است که پرسیده می‌شه.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit09.lesson03.where_is_fill.002
+    lesson_content_key: en.a1.unit09.lesson03.asking_where
+    type: fill_in_blank
+    frame: {text: "Where is the {item}?", language_code: en, direction: ltr}
+    slots: {item: *place}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} مکانی است که پرسیده می‌شه.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit09.lesson03.place_translate.003
+    lesson_content_key: en.a1.unit09.lesson03.asking_where
+    type: translation
+    frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *place}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "معادل انگلیسی این مکان {item} است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit09.lesson04.place_listen.001
+    lesson_content_key: en.a1.unit09.lesson04.asking_directions_dialogue
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *place}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "واژه‌ای که شنیدین {item} بود.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit09.lesson04.excuse_me_order.002
+    lesson_content_key: en.a1.unit09.lesson04.asking_directions_dialogue
+    type: word_order
+    frame: {text: "Excuse me, where is the {item}", language_code: en, direction: ltr}
+    slots: {item: *place}
+    answer_derivation: {kind: render_frame, frame: {text: "Excuse me, where is the {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} مکانی است که با ادب پرسیده می‌شه.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit09.lesson04.excuse_me_fill.003
+    lesson_content_key: en.a1.unit09.lesson04.asking_directions_dialogue
+    type: fill_in_blank
+    frame: {text: "Excuse me, where is the {item}?", language_code: en, direction: ltr}
+    slots: {item: *place}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} مکانی است که با ادب پرسیده می‌شه.", language_code: prs, direction: rtl}
