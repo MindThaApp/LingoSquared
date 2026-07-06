@@ -7953,3 +7953,274 @@ process on 5176 afterward (dev server on 5175 remains the normal
 working surface). No app code changes this pass; only test-harness
 fixes (not committed — scratch scripts, not part of the repo).
 per this session's standing practice.
+
+## Real mic-based speaking exercises + STT grading — built end-to-end, 2026-07-06
+
+Genuinely new subsystem (nothing here existed before): `speak_response`
+used to render as plain typed text despite its name (no mic at all), and
+`speak_repeat` rendered `Placeholder.tsx`, an explicit unbuilt stub. Both
+now have real `MediaRecorder` capture + speech-to-text, graded through the
+exact same `POST /exercises/{id}/answer` path as every other free-text
+exercise. Architecture was pre-decided by Ramin (client-side WASM Whisper
+primary, self-hosted-server fallback, grade against `accepted_answers`,
+discard raw audio after transcription, per-device silent/out-loud toggle)
+— not re-litigated, only implemented.
+
+**Real, pre-existing doc bug found while scoping this**: `docs/CONTRACT.md`
+claimed `speak_repeat` "has no checkable answer since the target text is
+already shown," used to justify routing it to the `Placeholder` "coming
+soon" component. False — real shipped content (`fr.a1.unit01.lesson03.
+exercise07_read_liaison`, `tested_text: "vous êtes un atelier"`) compiles
+with a genuine `accepted_answers: ["Vous êtes. Un atelier.", "Vous etes.
+Un atelier."]`, same mechanism as every other free-text type. Fixed in
+CONTRACT.md; the real fix is the new `SpeakRepeat.tsx` component.
+
+**Also found while wiring in grading**: neither `speak_response` nor
+`speak_repeat` was in `app/review/grading.py`'s `FREE_TEXT_EXERCISE_TYPES`
+— they graded exact-match-only (case/whitespace-normalized), never got
+Phase C's distance-1 typo tolerance. Added both. This matters more here
+than for typed input: STT transcripts carry their own noise (dropped
+accents, Whisper's habit of appending terminal punctuation the speaker
+never actually said) on top of normal variance, so the tolerance is doing
+more real work for this exercise family than for keyboard input.
+
+**Backend (fallback STT, self-hosted, never a cloud API)**: `app/services/
+stt.py` — `faster-whisper` (CPU, `whisper_model_size`/`whisper_compute_type`
+config, lazy singleton model load), `POST /stt/transcribe` (multipart
+`audio` + `language_code`, auth required, 5MB cap reusing the existing
+`MAX_AUDIO_SIZE_BYTES` constant, raw bytes never written to disk or
+logged — read, transcribed, discarded). No system `ffmpeg` needed —
+`faster-whisper`'s PyAV dependency bundles its own decoding libs in the
+manylinux/aarch64 wheels this repo's `python:3.12-slim` Docker base
+resolves; confirmed by a clean `docker compose build` with zero apt-get
+changes. Default model bumped from an initial "tiny" to **"base"** after
+a real accuracy comparison on this exact stack: "tiny" mis-transcribed
+French "atelier" as "nettolier" and Dutch "zeven" as "Zeeven."/"7";
+"base" got both right ("Vous êtes un atelier.", correct digit-vs-word
+transcription varies by take) at ~0.8s CPU latency for a short clip —
+worth the latency given this is only the fallback path. Added a
+`whisper_model_cache` named volume (`docker-compose.yml`) so the ~150MB
+of Hugging-Face-downloaded model weights survive container
+rebuilds/recreates instead of re-downloading every time — the postgres
+volume already existed, the model cache didn't.
+
+**Real, verified accuracy caveat, not a bug**: Whisper's own training
+data leads it to transcribe some spoken number words as bare digits
+("zeven" → "7", "seven" → "7") rather than the word form — a genuine
+mismatch against word-form `accepted_answers` for number-focused
+exercises specifically. Not something to paper over with per-language
+digit-to-word tables (fragile, error-prone, explicitly out of scope per
+Ramin's "stop and report, don't force a hacky fix" instruction) — flagged
+here as a known accuracy edge case for number-saying exercises, same
+general class as the already-accepted "STT mishearing might mark a
+correct answer wrong" risk.
+
+**Frontend (primary path, 100% client-side, zero network for raw audio)**:
+`lib/useMicRecorder.ts` (MediaRecorder wrapper, feature-detects
+`getUserMedia`/`MediaRecorder` up front, `NotAllowedError`/no-device/any
+other `getUserMedia` failure all treated identically as "can't use mic"),
+`lib/decodeAudioToPcm.ts` (Web Audio API decode + resample to mono 16kHz —
+must run main-thread, `AudioContext` doesn't exist in Workers),
+`workers/whisperWorker.ts` (Transformers.js `automatic-speech-recognition`
+pipeline, `onnx-community/whisper-tiny`, runs off the main thread so WASM
+inference doesn't freeze the UI), `lib/whisperClient.ts` (feature-detects
+WebAssembly/Worker/AudioContext, spins up the worker lazily, 90s timeout
+before giving up and falling back), `api/stt.ts` (the server-fallback
+call, mirrors `api/tts.ts`'s header/base-URL conventions), `lib/
+useSpeechAnswer.ts` (orchestrates mode toggle + record + client-transcribe-
+then-server-fallback-on-failure + error surfacing), `components/
+VoiceCaptureControls.tsx` (shared mic/keyboard toggle + record button UI,
+used by both `DialogueResponse.tsx` — gated on `exercise.type ===
+"speak_response"`, its non-speaking `dialogue_response` sibling stays
+typed-only — and the new `SpeakRepeat.tsx`, replacing the old `Placeholder`
+mapping in `ExerciseRenderer.tsx`). Mode preference is `localStorage`-only
+(`lib/answerInputMode.ts`, key `answer-input-mode`), never account-wide —
+same reasoning as the existing per-device `voicePreferences.ts`. Mirrors
+`SpeakButton`/`speak()`'s established "honest fallback, never silently
+dead" pattern throughout: unsupported browser or denied permission both
+flip the mode back to typed and show a real message, never a dead mic
+button.
+
+**A real, non-trivial bug found and root-caused, not worked around with
+a guess**: the client-side path initially failed silently on every
+attempt (falling back to the server every time), discovered only by
+adding temporary diagnostic logging around the try/catch and testing
+live in a real browser with real synthesized speech (macOS `say` piped
+through Chrome's `--use-file-for-fake-audio-capture`, not a mock).
+Root cause: **every quantized dtype for `whisper-tiny`'s merged decoder
+throws at ONNX session-creation time in the onnxruntime-web version
+`@huggingface/transformers@4.2.0` pins** — `dtype: "q8"`/`"int8"` (both
+`Xenova/whisper-tiny` and `onnx-community/whisper-tiny`, ruling out a
+stale-export theory) throw `Can't create a session... Missing required
+scale ... weight_transposed_DequantizeLinear` (a MatMulNBits/QDQ graph
+bug); `dtype: "fp16"` throws a DIFFERENT session-creation error in the
+same runs (`LayerNormFusion`: "Attempting to get index by a name which
+does not exist: InsertedPrecisionFreeCast_..."). Only `dtype: "fp32"` —
+no quantization, no precision-cast fusion — creates a working session.
+Fixed by pinning `fp32` (`workers/whisperWorker.ts`'s `WHISPER_DTYPE`,
+commented heavily so nobody "optimizes" it back to a smaller quantized
+dtype and silently reintroduces 100%-fallback). Real cost: ~150MB
+one-time browser-cached download instead of quantized dtypes' ~40-75MB —
+accepted trade-off for an actually-working client-side path today; worth
+revisiting if a future `@huggingface/transformers`/onnxruntime-web
+version fixes the quantized session-creation bug upstream.
+
+**Live-verified, real browser, real audio, not mocked**: built an
+isolated stack (own `docker compose -p ls2stt` project under `~/
+ls2-stt-stack`, ports 8090/vite-5199 — NOT the shared dev stack other
+sessions were using this same night; also confirmed the earlier attempt
+at an isolated stack under `/private/tmp/...` silently mounted an EMPTY
+`/app` in the container because colima only bind-mounts `$HOME` by
+default, not `/tmp` — moved the whole scratch checkout under `$HOME`
+before it worked). Real speech generated via macOS `say` (Dutch "Xander"
+voice for "zeven", French "Thomas" voice for "Vous êtes un atelier."),
+fed into Chromium as the fake mic device via Playwright + `--use-file-
+for-fake-audio-capture`/`--use-fake-ui-for-media-stream` (real WASM
+inference, real network fetch of real model weights from Hugging Face,
+not a stub). Confirmed: (1) `speak_response`/`speak_repeat` full
+lesson flow — record → real transcription → submit → real grading
+against real `accepted_answers`, e.g. the French exercise transcribed
+correctly and scored "Correct! 🎉" with XP awarded through the standard
+endpoint; (2) the client-side path genuinely runs end-to-end with zero
+server involvement once the `fp32` fix landed (confirmed via network
+log — no `/stt/transcribe` call at all on a successful client-side run);
+(3) the server-fallback path independently verified via direct `curl`
+(real transcription, `empty_audio`/`audio_too_large`/auth-required error
+cases); (4) mic-permission-denied graceful degradation — denying
+`getUserMedia` (no fake-ui flag, no granted permission) correctly showed
+"Microphone access was denied — switched to typing," flipped back to
+the typed `<input>`, and that input accepted and would have submitted a
+normal typed answer. Backend pytest green (97/97, isolated test DB, a
+genuinely fresh `alembic upgrade head` from empty). Full frontend build
+green (`tsc -b && vite build`; the WASM runtime + worker code-split into
+their own lazily-loaded chunks — confirmed a normal typed-mode learner
+never downloads any of it). Ad-hoc Playwright verification scripts used
+for this were scratch, not committed (same practice as other sessions'
+test-harness scaffolding this file documents elsewhere).
+
+**Not done, flagged rather than guessed**: fa/prs translations for the
+~11 new UI strings (`voice_answer.*`, `exercise.speak_repeat_*`) — added
+English only this pass; `fa.json`/`prs.json` fall back to English via
+i18next's `fallbackLng`, so nothing is broken, but the normal "small
+Codex round-trip for fa/prs translations of new UI strings" pattern
+established in earlier phases hasn't happened yet for these keys.
+
+## Content-import update-in-place: `content_key`-based reconciliation,
+built directly by Session 1/CODE (Codex down until July 8th), 2026-07-06
+
+Closes a gap this same session found live while smoke-testing after the
+volume of concurrent backend changes tonight (rate limiting, FastAPI
+bump, fill_in_blank/matching_pairs fixes): `POST /admin/content/import`
+was strictly create-missing-only — re-importing into an already-shipped
+course could only ever append units whose `order` wasn't already
+present, silently leaving every previously-imported unit/lesson/
+exercise/teaching-card exactly as it was forever. Found via a live,
+reproducible jargon leak (`w_or_v`/`y_or_long_i` shown to learners in
+"Dari A1" unit 1's letter-sound matching exercise) whose SOURCE overlay
+had already been fixed (`"w/v"`/`"y/long i"`, per that file's own
+review notes) but was stuck stale in the shared dev DB — there was
+structurally no way to ship the fix.
+
+Scoped a plan first (reported back before implementing, per the
+coordinator's ask, since this touches the core import safety
+invariant), then implemented it directly since Codex is down until
+July 8th — same as the FastAPI bump/rate limiting/etc. earlier
+tonight.
+
+**What shipped**: an optional, additive `content_key: str | None` field
+on `Unit`/`Lesson`/`Exercise`/`ContentItem` (migration 0013, nullable +
+partial unique index, guarded per the standing fresh-migrate-safety
+convention) and on the matching `UnitImport`/`LessonImport`/
+`ExerciseImport`/`TeachingCard` Pydantic schemas — the exact pattern
+already proven safe by `PracticeTemplate.content_key`, not a new
+design. `scripts/compile_content.py` now emits it on every unit/
+lesson/exercise/teaching-card (it already had the key in scope at
+every one of those call sites; just wasn't threading it into the
+output before). `import_content()`/`_sync_units()` (replacing the old
+`_import_units()`) now reconciles incoming content against an existing
+course three ways: content_key match → update in place (same primary
+key, so `ExerciseAttempt`/`ContentIssueReport`/`ReviewItem`/
+`LessonProgress` are completely unaffected — none of those snapshot or
+re-derive from the row's content); no match but `order` free → create
+(today's old behavior, unchanged); no match and `order` collides →
+leave alone, with a warning only when the incoming item **did** carry
+a content_key (a keyless collision is the ordinary "already imported,
+nothing new" no-op the old code handled silently — this distinction
+mattered: the first pass warned on every keyless re-import and broke
+`test_seed_idempotency.py`'s `assert errors == []`, caught and fixed
+before this shipped). Two-phase temp-negative-order-then-final-order
+updates handle in-lesson/in-unit reordering without transiently
+tripping the `(parent_id, order)` unique constraint. Never deletes,
+even when content_key'd content is absent from a new payload — an
+orphaned row stays intact rather than destroying real user history
+(and the `RESTRICT` foreign keys wouldn't allow the delete anyway).
+`ImportOut` extended additively with `created_*`/`updated_*` counts
+per level and a non-fatal `warnings` list (distinct from the
+pre-existing upfront-validation `422 content_invalid`, which still
+blocks before anything is written). `docs/CONTRACT.md` updated with
+the full semantics and response shape before implementation, per the
+standing convention.
+
+**Verified for real, holding to the exact bar proposed in the plan**:
+- Fresh-migrate from a genuinely empty DB (0001→0013 clean — 0001's
+  `Base.metadata.create_all()` against the live ORM models already
+  creates the new columns, and 0013's own defensive
+  column/index-exists checks correctly no-op on top of that, same
+  guard pattern as 0008-0012).
+- Upgrade from an already-migrated stack (0012→0013 on the shared dev
+  DB) — clean, and idempotent on a second run.
+- Full backend pytest green, isolated test DB, multiple runs across
+  the fix-the-warning-regression iteration.
+- **A real, live re-import test exercising both paths**: imported a
+  small real (compiled) course, answered one exercise as a genuine
+  test user (creating a real `ExerciseAttempt`), edited that exact
+  exercise's `feedback`/`prompt.options` in the compiled payload
+  (simulating a real content fix) and re-imported — confirmed the
+  `Exercise` row updated in place (same id) with the new content, a
+  fresh `GET /lessons/{id}` served the updated content to a real
+  client, and the `ExerciseAttempt` row was byte-for-byte identical to
+  before (same id/response/correct/outcome/xp_awarded). Separately
+  added a genuinely new exercise (new content_key) in the same payload
+  and confirmed it was created alongside the updates
+  (`created_exercises: 1`).
+- **Checked the real-world "recompile already-shipped content" case
+  directly against the actual live "Dari A1" course**: recompiling
+  real en-prs unit01 content (now content_key-carrying) and
+  re-importing it against the existing, pre-content_key-era imported
+  rows produced exactly ONE clean, accurate warning (at the unit
+  level — the mismatch is detected before recursing into lessons/
+  exercises, so this is not a per-exercise flood) and left the real
+  course's 6 lessons/50 exercises completely untouched, confirmed via
+  direct query before and after.
+
+**Real footgun hit twice more during this same pass, matching the one
+found earlier tonight**: the persistently-running `backend-api-1`
+container doesn't pick up source edits without a restart (`uvicorn`
+has no `--reload`) — my first attempt at the live re-import test used
+stale code (missing the new counters entirely) until a restart. Also
+hit a genuine git-index race on a shared, non-worktree-isolated
+checkout: staged this entire change, then a concurrent session's own
+`git add`+`git commit` (for an unrelated `AUTHORING_GUIDE.md` edit)
+swept it into their commit (`e97229a`) before this session's own
+`git commit` ran — confirmed nothing was lost or truncated (`git show
+--stat` on that commit matches this work's expected file list and line
+counts exactly), just bundled under someone else's commit message.
+Re-ran the full pytest suite green one more time directly against
+that committed state as a final confirmation.
+
+**Explicitly not done, documented as an accepted limitation**: no
+retroactive content_key backfill for rows imported before this
+feature — the actual `w_or_v`/`y_or_long_i` jargon leak that surfaced
+this whole gap is still stale on the shared dev DB and needs either a
+manual one-off fix or a full re-authoring-triggered reimport once that
+specific course is re-compiled with a content_key-aware pipeline
+end-to-end; per the coordinator's own framing, dev-DB staleness isn't
+a live-user problem yet, so this wasn't chased further this pass.
+
+**Still pending, per the coordinator's explicit steer**: the FastAPI
+CVE fix (`fastapi==0.139.0`, committed but not yet reflected in the
+running `backend-api-1` image — confirmed via `pip show fastapi`
+inside the container still reporting `0.115.12`) needs a container
+rebuild to actually deploy, and that rebuild is being deliberately
+held until the in-flight Whisper STT work also lands, so both ship in
+one coordinated rebuild rather than several partial ones.
