@@ -1,0 +1,66 @@
+schema_version: "1.0"
+pack_key: practice.nl-en.a2.unit26
+source_language: nl
+target_language: en
+unit_content_key: en.a2.unit26.opinions
+review:
+  status: unreviewed
+  fresh_context: "false"
+  notes: "Authored 2026-07-06 by the Claude session syncing Endless Practice
+    template pools to lesson content growth (nl-en lane, continuing after
+    unit25 -- the second and final A2 unit for this direction so far).
+    This unit covers giving opinions with reasons (a dog park scenario).
+    Added a 4-member 'dogpark_noun' tag (dog/park/playground/space,
+    defined in the shared scripts/_en_target_lexeme_common.py) used ONLY
+    for bare-word recognition -- most of this unit's content is
+    multi-word discourse-connector phrases ('I think', 'in my opinion',
+    'on the other hand') that don't reduce to a safe single-token slot,
+    same discipline as unit25. Every slot's real candidate count was
+    verified with a standalone lexeme_matches()-replicating harness
+    against this script's actual output. Needs the standard
+    fresh-context review before import. Same blocking dependency as
+    every earlier nl-en pack: backfill_lexemes_nl_en.py has not
+    actually been run against a real database yet."
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [dogpark_noun]
+slot_presets:
+  dogpark_noun: &dogpark_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: dogpark_noun}}
+templates:
+  - content_key: practice.nl-en.en.a2.unit26.lesson02.choose.001
+    lesson_content_key: en.a2.unit26.lesson02.giving_an_opinion_with_a_reason
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *dogpark_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is een woord uit deze les.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a2.unit26.lesson02.listen.002
+    lesson_content_key: en.a2.unit26.lesson02.giving_an_opinion_with_a_reason
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *dogpark_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is het woord dat je hoorde.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a2.unit26.lesson03.match.001
+    lesson_content_key: en.a2.unit26.lesson03.reading_a_written_opinion
+    type: matching_pairs
+    frame: {text: "{first} · {second}", language_code: en, direction: ltr}
+    slots: {first: *dogpark_noun, second: *dogpark_noun}
+    slot_relations: [{kind: distinct, slots: [first, second]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second]}
+    feedback_frame: {text: "Verbind elk woord met de Nederlandse betekenis.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a2.unit26.lesson03.translate.002
+    lesson_content_key: en.a2.unit26.lesson03.reading_a_written_opinion
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *dogpark_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a2.unit26.lesson04.listen.001
+    lesson_content_key: en.a2.unit26.lesson04.opinion_dialogue
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *dogpark_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is het woord dat je hoorde in dit gesprek.", language_code: nl, direction: ltr}
