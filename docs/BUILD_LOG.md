@@ -7153,3 +7153,153 @@ notes), `CLAUDE.md` (backfill-before-import ordering fix),
 `backend/app/api/router.py` (the checkpoint retake-lock fix), and this
 entry — matching this session's standing practice of not committing
 without an explicit instruction to.
+
+## Cross-language content-integrity sweep, 2026-07-06: 5 known bug classes hunted across the WHOLE corpus, not just new units
+
+Tonight's content velocity across en/nl/fa/prs/es/fr surfaced 5 specific
+recurring authoring failure modes (found independently in different
+languages, suggesting systemic patterns rather than one-off mistakes).
+Rather than another single-unit fresh-context review, this pass
+pattern-matched for these 5 SPECIFIC bug classes across every committed
+realization/overlay/practice file, including files reviewed early in
+the night before some of these classes were even known. Grep/script-
+based targeted checks, not full end-to-end reads, per the task's own
+framing. Skipped `docs/content/overlays/en-prs/a1_unit09.yaml` and
+`docs/content/realizations/prs/a1_unit09_dates.yaml` throughout (in
+active uncommitted edit for the whole pass); also found (mid-pass, not
+pre-flagged) `docs/content/overlays/en-fa/a1_unit09.yaml` and
+`docs/content/realizations/fa/a1_unit09_time.yaml` under active
+concurrent authoring — left untouched, currently fails compile (an
+in-progress unit's own state, unrelated to any of the 5 bug classes,
+not this pass's to fix).
+
+**(1) Validator-gaming via dropped elided pronouns — 1 real instance
+found and fixed, in French (as originally reported), root-caused.**
+`fr.a1.unit03.lesson02.exercise04.order_jai_deux_soeurs` (word_order):
+both the realization's `word_bank` and the overlay's `correct_response`
+were `["ai", "deux", "sœurs"]` — missing the required elided subject
+"J'" entirely, so the exercise's only correct answer was the
+ungrammatical "ai deux sœurs" ("have two sisters," no subject). Root
+cause confirmed by reading the compiler: `TOKEN_RE = [\w‌]+` splits
+on apostrophes, so "J'ai" tokenizes to `{"j", "ai"}`, and
+`validate_untaught_vocabulary` resets its `taught` set independently
+PER (realization, overlay) file pair (not across units) — so even
+though "j" had been taught back in fr unit01 (via "j'habite"), unit03
+never taught it itself, and "ai" was taught but "j" would show as
+untaught the moment "J'ai" appeared in an exercise. The actual
+authoring failure was fixing this by deleting "J'" from the answer
+instead of adding it to `introduced_tokens` where it belongs — the
+literal bug class from the task. Fixed properly (not just cosmetically):
+restored "J'ai" to `word_bank`/`correct_response`/`tested_text`, and
+added `"J'ai"` to the teaching card's own `introduced_tokens` (`fr.a1.
+unit03.lesson02.teach.jai_deux_soeurs`) so unit03 genuinely teaches the
+token it tests, rather than relying on an unrelated unit's incidental
+tokenization. Found ~13 further cosmetic-only instances (same dropped
+"J'" in the internal `tested_text` field only, not in any learner-facing
+`accepted_answers`/`correct_response` — so not user-facing bugs, just
+inconsistent bookkeeping) across `fr/a1_unit02_numbers.yaml` and `fr/
+a1_unit03_family.yaml`; fixed all for consistency. **Collision note**:
+`fr/a1_unit02_numbers.yaml` was independently, concurrently being fixed
+for the exact same bug class by another session while this pass was
+running (confirmed via repeated `find -newer`/mtime checks) — both
+sessions' in-place edits targeted non-overlapping specific instances and
+merged cleanly with no data loss; re-verified via real `compile` after
+settling. No other language (en/nl/es/fa/prs) showed this specific
+apostrophe-elision failure mode — checked via a script cross-referencing
+every teaching card's elided forms against `introduced_tokens`, and the
+handful of English/Dutch teaching-card hits were all display-only
+dialogue turns (not exercises), and "I"/"it"/"c'est"-equivalent tokens
+are trivially already taught in unit01 of every course, so no live bug.
+
+**(2) Self-reference in generative practice slots (word appears as
+both fixed anchor and fillable candidate) — 0 NEW instances found; the
+2 previously-known instances (nl-en unit07 "sandwich" self-reference,
+en-nl unit07 "market_quantity" produce/quantity confusion) were already
+fixed in an earlier pass and remain fixed.** Dispatched a fork to
+mechanically replicate the real runtime `lexeme_matches()`/`iter_specs()`
+logic against every practice pack; independently cross-checked by hand
+across en-fa (5 units), en-prs (2 units), fa-en (8 units), prs-en (8
+units, including a direct read of unit09's hospital-adjacency templates
+— confirmed `place_non_hospital` is correctly used for the 3 templates
+whose frame text says "next to/behind the hospital," `place` correctly
+used everywhere else), and a spot-check of en-nl (units 1-8, including a
+direct read of unit07's already-fixed `market_quantity`/produce split).
+No unguarded literal-word-vs-slot-pool collision found anywhere in this
+sweep. (One unrelated, lower-severity structural oddity noticed in
+passing, NOT this bug class and not fixed: `en-fa/a1_unit03.yaml`'s
+`quantity_translation.003` template declares a `number` slot that never
+appears in either its prompt frame or its `render_frame` answer — both
+sides are hardcoded to "two"/"دو", so the slot is silently inert. Worth
+a follow-up cleanup pass, not a learner-facing defect.)
+
+**(3) Wrong `media_asset_key` (including audio contradicting its own
+exercise) — 2 real instances found and fixed, via a script comparing
+every exercise's `media_asset_key` against the actual declared text of
+that key in the same file's `media_assets:` block.** (a)
+`nl.a1.unit22.lesson06.exercise01.listen_open_call` (tested_text "Hallo
+met Lotte") referenced `nl.a1.audio.communication.met_wie_spreek_ik.01`
+— a completely different lesson's clip ("Met wie spreek ik?" / "Who am
+I speaking with?"), not even from the same dialogue. Fixed to reference
+the correct `nl.a1.audio.dialogue.telefoontje_na_dienst.01`, whose
+transcript genuinely opens with "Lotte: Hallo, met Lotte." (b)
+`en.a1.unit21.lesson02.exercise01.listen_ticket_request` (tested_text
+"One ticket to Boston please") referenced `en.a1.audio.travel.words.01`
+— a bare vocabulary word list ("ticket, platform, train, departure,
+arrival") from an earlier lesson, not a sentence at all. Fixed to
+reference `en.a1.audio.dialogue.buying_a_ticket.01`, whose transcript
+opens with "Daniel: One ticket to Boston, please." The script flagged
+~30 more candidates initially; all were false positives after refining
+word-level (not naive substring) comparison and manually verifying a
+sample — mostly `dialogue_comprehension` exercises correctly testing a
+fact restated in a different grammatical person/perspective than the
+literal audio line, or topic words already taught elsewhere in the same
+file via a dedicated vocabulary card (both legitimate, already-reviewed
+patterns, not audio mismatches).
+
+**(4) `accepted_answers` missing natural multi-clause phrasing variants
+(period/comma/conjunction forms) — found ~28 candidates via script,
+fixed the 9 highest-confidence/most-repeated ones; ~19 lower-confidence
+candidates (mostly open-ended "write a paragraph" prompts where
+exhaustive variant enumeration doesn't apply) left unfixed.** Fixed: the
+"[reply]. And you?"/"Et vous ?"/"¿Y tú?" tag-question pattern missing
+its comma-joined form in `fa-en/a1_unit01.yaml`, `prs-en/a1_unit01.yaml`,
+`nl-en/a1_unit01.yaml`, and `en-fr/a1_unit01.yaml` (lesson04, both
+exercises), `en-es/a1_unit01.yaml`; and the repeated Dutch two-step-
+route-instruction pair ("Ga rechtdoor tot het station. Sla rechtsaf." /
+"Loop tot de bank. Sla linksaf.") across `en-nl/a1_unit09.yaml` (5
+exercise instances, one `replace_all`), plus one instance each in
+`en-nl/a1_unit10.yaml`, `a1_unit12.yaml`, `a1_unit13.yaml` (×2, same
+`replace_all`). Deliberately left `en-nl/a1_unit15.yaml`'s "Kom, we
+stappen in. Utrecht, we komen eraan!" alone — two separate PA-style
+exclamations, not one sentence with alternate joining forms, so forcing
+a comma-join would be unnatural.
+
+**(5) Practice templates anchored to a lesson that introduces zero new
+vocabulary (can never resolve at runtime) — 0 found.** Script cross-
+referenced every practice template's `lesson_content_key` across all 8
+packs against the real cumulative `introduced_tokens` count for that
+lesson in every realization file; every anchor resolved to a lesson with
+at least one introduced token. Sanity-checked the script's own logic
+against a known-good lesson to rule out a vacuous pass.
+
+**Verification**: every fix re-verified with the real `compile` command
+(not just `validate`) for its affected course(s) — en-fr, fa-en,
+prs-en, nl-en, en-nl, en-es all individually re-compiled clean
+immediately after their respective fixes. A full-repo
+`scripts/verify.sh --content-only` sweep was also run twice more at the
+end, ~10 minutes apart, given how much concurrent authoring was
+happening simultaneously (confirmed via repeated `find -newer`/mtime
+checks throughout, per the standing collision-avoidance instruction):
+the FIRST re-run showed only `en-fa` failing, solely because of the
+in-progress `a1_unit09` (fa's time-telling unit, a different session's
+own WIP); the SECOND re-run showed `en-fa` had resolved but `en-prs`
+now failed instead, because `en-prs/a1_unit01.yaml` and `prs/
+a1_unit01_greetings.yaml` had, in the few minutes between runs, become
+a different session's active in-progress edit (mid-save inconsistency
+between the overlay and realization, not a real bug). Neither failure
+is one of this pass's 5 target bug classes, neither file was touched by
+this pass, and with multiple sessions continuously authoring content
+live, a momentarily-all-green whole-repo sweep isn't a meaningful bar
+right now — the meaningful verification is that every course THIS PASS
+actually edited compiled clean at the moment its fix landed, which all
+six did.

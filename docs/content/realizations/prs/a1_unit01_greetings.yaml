@@ -67,6 +67,21 @@ review:
     Re-verified with the actual `compile` command (not just `validate`) --
     now produces valid JSON output end-to-end.
 
+    AUDIO-ACCESSIBILITY RETROFIT 2026-07-06 (§14, added after this
+    review completed): a project-wide audit found 11 exercises in this
+    unit (lesson02.exercise01/02, lesson03.exercise01/02/04/07,
+    lesson04.exercise03/04, lesson06.exercise03/04/06) were listen_type
+    or bare-prompt listen_select items -- genuinely unanswerable since
+    fa/prs have zero working TTS/recorded audio. Converted: listen_select
+    -> multiple_choice (added the target Dari text as a real visible
+    prompt, English-gloss correct_option/distractors to avoid
+    re-introducing the prompt-shows-answer bug), listen_type ->
+    translation (English instruction, same Dari accepted_answers).
+    Re-verified 0 remaining §14 violations in this file via script,
+    content_key parity intact (49 teaching + 50 exercise keys, zero
+    mismatches either direction, reconfirmed programmatically after the
+    renames), `validate`+`compile` both clean after the retrofit.
+
 course:
   realization_key: prs.a1
   target_language_first: true
@@ -279,11 +294,10 @@ units:
             target: {text: "خدا حافظ", language_code: prs, direction: rtl}
             introduced_tokens: [خدا, حافظ]
         exercises:
-          - content_key: prs.a1.unit01.lesson02.exercise01.listen_greeting
-            type: listen_select
+          - content_key: prs.a1.unit01.lesson02.exercise01.recognize_greeting_reading
+            type: multiple_choice
             tested_text: سلام علیکم
-            media_asset_key: prs.a1.audio.salam_alaikum.polite.01
-            prompt: {target_blocks: []}
+            prompt: {target_blocks: [{text: "سلام علیکم", language_code: prs, direction: rtl}]}
           - content_key: prs.a1.unit01.lesson02.exercise04.welcome_meaning
             type: multiple_choice
             tested_text: خوش آمدید
@@ -301,10 +315,9 @@ units:
             tested_text: خواهش می‌کنم
             prompt: {target_blocks: []}
             word_bank: [خواهش, می‌کنم]
-          - content_key: prs.a1.unit01.lesson02.exercise02.listen_response
-            type: listen_type
+          - content_key: prs.a1.unit01.lesson02.exercise02.translate_response
+            type: translation
             tested_text: وعلیکم سلام
-            media_asset_key: prs.a1.audio.wa_alaikum_salam.polite.01
             prompt: {target_blocks: []}
           - content_key: prs.a1.unit01.lesson02.exercise03.reply_greeting
             type: dialogue_response
@@ -352,11 +365,10 @@ units:
             target: {text: "به امید دیدار", language_code: prs, direction: rtl}
             introduced_tokens: [به, امید, دیدار]
         exercises:
-          - content_key: prs.a1.unit01.lesson03.exercise02.listen_day
-            type: listen_select
+          - content_key: prs.a1.unit01.lesson03.exercise02.recognize_day_reading
+            type: multiple_choice
             tested_text: روز بخیر
-            media_asset_key: prs.a1.audio.rooz_bekheyr.neutral.01
-            prompt: {target_blocks: []}
+            prompt: {target_blocks: [{text: "روز بخیر", language_code: prs, direction: rtl}]}
           - content_key: prs.a1.unit01.lesson03.exercise03.evening_meaning
             type: multiple_choice
             tested_text: عصر بخیر
@@ -369,25 +381,22 @@ units:
             prompt:
               target_blocks:
                 - {text: "روز خوش", language_code: prs, direction: rtl}
-          - content_key: prs.a1.unit01.lesson03.exercise07.listen_goodbye
-            type: listen_select
+          - content_key: prs.a1.unit01.lesson03.exercise07.recognize_goodbye_reading
+            type: multiple_choice
             tested_text: خدا حافظ
-            media_asset_key: prs.a1.audio.khoda_hafez.neutral.01
-            prompt: {target_blocks: []}
+            prompt: {target_blocks: [{text: "خدا حافظ", language_code: prs, direction: rtl}]}
           - content_key: prs.a1.unit01.lesson03.exercise06.order_see_you
             type: word_order
             tested_text: به امید دیدار
             prompt: {target_blocks: []}
             word_bank: [به, امید, دیدار]
-          - content_key: prs.a1.unit01.lesson03.exercise01.listen_morning
-            type: listen_type
+          - content_key: prs.a1.unit01.lesson03.exercise01.translate_morning
+            type: translation
             tested_text: صبح بخیر
-            media_asset_key: prs.a1.audio.sobh_bekheyr.neutral.01
             prompt: {target_blocks: []}
-          - content_key: prs.a1.unit01.lesson03.exercise04.listen_night
-            type: listen_type
+          - content_key: prs.a1.unit01.lesson03.exercise04.translate_night
+            type: translation
             tested_text: شب بخیر
-            media_asset_key: prs.a1.audio.shab_bekheyr.neutral.01
             prompt: {target_blocks: []}
           - content_key: prs.a1.unit01.lesson03.exercise08.close_exchange
             type: dialogue_response
@@ -439,11 +448,10 @@ units:
             prompt:
               target_blocks:
                 - {text: "تو چطور استی؟", language_code: prs, direction: rtl}
-          - content_key: prs.a1.unit01.lesson04.exercise04.listen_informal
-            type: listen_select
+          - content_key: prs.a1.unit01.lesson04.exercise04.recognize_informal_register
+            type: multiple_choice
             tested_text: تو چطور استی
-            media_asset_key: prs.a1.audio.chetor_asti.informal.01
-            prompt: {target_blocks: []}
+            prompt: {target_blocks: [{text: "تو چطور استی؟", language_code: prs, direction: rtl}]}
           - content_key: prs.a1.unit01.lesson04.exercise08.extended_greeting
             type: dialogue_comprehension
             tested_text: همه خوب استند
@@ -455,10 +463,9 @@ units:
             tested_text: جور استم
             prompt: {target_blocks: []}
             word_bank: [جور, استم]
-          - content_key: prs.a1.unit01.lesson04.exercise03.listen_polite
-            type: listen_type
+          - content_key: prs.a1.unit01.lesson04.exercise03.translate_polite_question
+            type: translation
             tested_text: شما چطور استین
-            media_asset_key: prs.a1.audio.chetor_asten.polite.01
             prompt: {target_blocks: []}
           - content_key: prs.a1.unit01.lesson04.exercise05.reply_well
             type: dialogue_response
@@ -684,15 +691,13 @@ units:
             prompt:
               target_blocks:
                 - {text: "نجیب: سلام علیکم.", language_code: prs, direction: rtl}
-          - content_key: prs.a1.unit01.lesson06.exercise03.listen_name_question
-            type: listen_type
+          - content_key: prs.a1.unit01.lesson06.exercise03.translate_name_question
+            type: translation
             tested_text: نام‌تان چیست
-            media_asset_key: prs.a1.audio.dialogue.workplace.name_question.01
             prompt: {target_blocks: []}
-          - content_key: prs.a1.unit01.lesson06.exercise04.listen_pleased
-            type: listen_type
+          - content_key: prs.a1.unit01.lesson06.exercise04.translate_pleased
+            type: translation
             tested_text: از آشنایی با شما خوش شدم
-            media_asset_key: prs.a1.audio.dialogue.workplace.pleased.01
             prompt: {target_blocks: []}
           - content_key: prs.a1.unit01.lesson06.exercise05.speak_wellbeing
             type: speak_response
@@ -700,10 +705,9 @@ units:
             prompt:
               target_blocks:
                 - {text: "شما چطور استین؟", language_code: prs, direction: rtl}
-          - content_key: prs.a1.unit01.lesson06.exercise06.listen_family_question
-            type: listen_type
+          - content_key: prs.a1.unit01.lesson06.exercise06.translate_family_question
+            type: translation
             tested_text: فامیل‌تان جور است
-            media_asset_key: prs.a1.audio.dialogue.workplace.family_question.01
             prompt: {target_blocks: []}
           - content_key: prs.a1.unit01.lesson06.exercise07.reply_family
             type: dialogue_response
