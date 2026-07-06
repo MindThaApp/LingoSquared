@@ -36,7 +36,7 @@ class LoginIn(BaseModel): email:EmailStr; password:str=Field(max_length=128); ti
 class AuthOut(BaseModel): access_token:str; token_type:Literal["bearer"]="bearer"; expires_in:int; user:UserOut
 class LanguageOut(ORM): code:str; name:str; native_name:str; script:Literal["latin","cyrillic","han","arabic"]; direction:Literal["ltr","rtl"]
 class TextBlock(BaseModel): text:str; language_code:str; direction:Literal["ltr","rtl"]; speaker:str|None=None
-class TeachingCard(BaseModel): kind:Literal["vocabulary","phrase","grammar_note","dialogue","pronunciation_note","cultural_note","reading"]; title:str|None=None; text_blocks:list[TextBlock]; note:str|None=None
+class TeachingCard(BaseModel): kind:Literal["vocabulary","phrase","grammar_note","dialogue","pronunciation_note","cultural_note","reading"]; title:str|None=None; text_blocks:list[TextBlock]; note:str|None=None; content_key:str|None=None
 class ExerciseOut(BaseModel): id:str; type:ExerciseType; order:int; prompt:dict[str,Any]
 class LessonDetail(BaseModel): id:str; unit_id:str; title:str; teaching:list[TeachingCard]; exercises:list[ExerciseOut]
 class AnswerIn(BaseModel):
@@ -57,7 +57,26 @@ class StreakOut(BaseModel): streak_days:int; last_activity_date:Any=None; streak
 class XPOut(BaseModel): total_xp:int; daily_goal:int
 class QuestOut(BaseModel): code:str; title:str; description:str; xp_reward:int; completed:bool; progress:int; target:int
 class QuestsOut(BaseModel): quests:list[QuestOut]
-class ImportOut(BaseModel): imported_courses:int
+# updated_* counts are additive: content_key-matched rows that were
+# updated in place (existing id, existing FKs untouched) rather than
+# created. All default to 0 so any caller ignoring them sees no change
+# in behavior from before content_key-based updates existed.
+class ImportOut(BaseModel):
+    imported_courses:int
+    updated_units:int=0
+    updated_lessons:int=0
+    updated_exercises:int=0
+    updated_teaching_items:int=0
+    created_units:int=0
+    created_lessons:int=0
+    created_exercises:int=0
+    created_teaching_items:int=0
+    # Non-fatal: per-item order conflicts skipped during a content_key
+    # reconciliation (the request still succeeds -- everything else
+    # that wasn't ambiguous was already created/updated). Distinct from
+    # ValidationOut/the 422 content_invalid failure, which blocks the
+    # whole request before anything is written.
+    warnings:list[str]=[]
 class ValidationOut(BaseModel): valid:bool; errors:list[str]
 class ContentIssueReportIn(BaseModel):
     category:ContentIssueCategory; description:str|None=Field(default=None,max_length=2000); learner_response:Any|None=None
@@ -95,10 +114,17 @@ class ContentIssueOut(ORM):
     resolved_at:datetime|None
 class ContentCoverageOut(BaseModel): source_language:str; target_language:str; course_count:int; total_unit_count:int; total_lesson_count:int; open_issue_count:int
 
-class ExerciseImport(BaseModel): type:ExerciseType; order:int=Field(ge=1); prompt:dict[str,Any]; correct_response:Any; feedback:str|None=None; xp:int=Field(default=10,ge=0)
+# content_key (optional, additive): a stable authoring key (e.g.
+# "prs.a1.unit01.lesson01.exercise04.match_final_group") that, when
+# present, lets import_content() update an already-shipped row in
+# place instead of only ever matching by position. None on any of
+# these means "no stable key supplied" - the importer falls back to
+# today's position-only append/skip behavior for that item, exactly
+# as before this field existed.
+class ExerciseImport(BaseModel): type:ExerciseType; order:int=Field(ge=1); prompt:dict[str,Any]; correct_response:Any; feedback:str|None=None; xp:int=Field(default=10,ge=0); content_key:str|None=None
 class TeachingImport(TeachingCard): pass
-class LessonImport(BaseModel): title:str; order:int=Field(ge=1); teaching:list[TeachingImport]=Field(default_factory=list); exercises:list[ExerciseImport]
-class UnitImport(BaseModel): title:str; order:int=Field(ge=1); section:UnitSection=UnitSection.reading_writing; lessons:list[LessonImport]
+class LessonImport(BaseModel): title:str; order:int=Field(ge=1); teaching:list[TeachingImport]=Field(default_factory=list); exercises:list[ExerciseImport]; content_key:str|None=None
+class UnitImport(BaseModel): title:str; order:int=Field(ge=1); section:UnitSection=UnitSection.reading_writing; lessons:list[LessonImport]; content_key:str|None=None
 class ContentItemImport(BaseModel): kind:Literal["vocabulary","phrase","grammar_note","dialogue","pronunciation_note","cultural_note","reading"]; language_code:str; title:str=""; content:dict[str,Any]
 class CourseImport(BaseModel):
     source_language:str
