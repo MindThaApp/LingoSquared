@@ -8337,3 +8337,64 @@ the usual recipe. No migration needed (no schema change), no frontend
 change needed (`/tts`'s request/response shape is unchanged — the
 frontend has never known or cared which provider generated a given
 `audio/mpeg` response).
+
+## Coordinated `backend-api-1` rebuild — picks up the FastAPI CVE fix,
+content_key import, Azure TTS, and Whisper STT all at once, 2026-07-06
+(Session 1/CODE)
+
+The FastAPI/Starlette CVE fix had been committed since earlier but
+never actually deployed to the shared dev stack's running container
+(confirmed: `pip show fastapi` inside `backend-api-1` still reported
+`0.115.12` despite `requirements.txt` at HEAD already saying
+`0.139.0` — the exact "plain restart doesn't pick up a dependency
+change, only a rebuild does" distinction from this same footgun class
+found earlier tonight, one level up: THIS one genuinely needs
+`docker compose build`, not just `restart`, since it's an installed
+package version, not a source file). Deliberately held off doing this
+rebuild alone earlier today so the in-flight Whisper STT
+(`c8a8346`)/Azure TTS (`3875ce8`) work could land in the SAME rebuild
+rather than several partial ones — both committed clean with no
+collisions against this session's own `content_key` work, so did the
+rebuild now.
+
+`docker compose build api` (picked up a cached, content-identical pip-
+install layer from an earlier local build of the same
+`requirements.txt` — confirmed correct rather than stale by checking
+`pip show fastapi faster-whisper` inside the freshly-built image
+directly: `0.139.0`/`1.2.1`, both correct, before deploying it), then
+`docker compose up -d api` to actually recreate the running container
+(build alone doesn't swap it). No new migrations needed — Whisper/
+Azure TTS added zero schema; DB was already at `0013` (this session's
+own `content_key` migration) going in.
+
+**Verified after rebuild, per the standing bar**: clean startup log
+(`Application startup complete`, no errors), `pip show fastapi` on the
+now-actually-running container (not a one-off `docker compose run`)
+confirms `0.139.0` live. Smoke test: auth/login, course listing,
+languages endpoint all correct; `POST /tts` for `fa` returns a clean
+`200` with the honest `{"use_browser_tts":true,"reason":
+"provider_error"}` fallback shape (expected and correct — no real
+Azure key is configured on this dev stack, and the code is designed to
+degrade gracefully rather than crash exactly for this case); `POST
+/stt/transcribe` correctly `422`s on empty audio rather than crashing;
+re-ran this session's own `content_key` update-in-place import against
+the rebuilt container and got the same clean `updated_*`/`created_*`
+counts as before the rebuild, confirming that feature survived the
+rebuild correctly too. Full backend pytest green (one run hit the
+already-known, already-documented `test_checkpoint_forces_strict_
+orthography` flake — confirmed it's the same pre-existing content-
+order-dependent test-fixture issue, not a rebuild regression, by
+re-running immediately after and getting a clean 100% pass). Noted a
+new, benign `StarletteDeprecationWarning` in the test output
+(`httpx` with `starlette.testclient` is deprecated) — a side effect of
+the newer Starlette version the CVE fix pulled in; not a failure, no
+action needed now, worth a `httpx2` swap in a future dependency-hygiene
+pass if the warning noise becomes annoying.
+
+**All four changes are now live on the shared dev stack in one
+coordinated rebuild**: the FastAPI/Starlette CVE fix, this session's
+`content_key` admin-import update-in-place feature, Azure TTS for
+Farsi (inactive pending a real key, degrades safely), and Whisper STT
+for `speak_response`/`speak_repeat`. Not yet deployed to the live
+server (192.168.4.4) — that's still a separate, Ramin-present step per
+the standing deploy convention.
