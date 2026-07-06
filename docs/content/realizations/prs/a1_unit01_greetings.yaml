@@ -8,9 +8,64 @@ generation_provenance:
   authoring_system: codex
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: claude
-  notes: "Reworked lessons 5 and 6 around Afghan extended greetings and a Kabul workplace introduction. Audio remains pending generation."
+  status: reviewed
+  required_next_reviewer: null
+  notes: >-
+    Fresh-context review completed 2026-07-05. Confirmed the previously
+    flagged jargon leaks (informal_singular, w_or_v, the_youngest_person)
+    were still present and fixed them, plus two more of the same class found
+    during this pass (thank_you, good_night as bare distractor values) --
+    all replaced with natural learner-facing English phrases
+    (lesson01.exercise04's matching pair now reads "w/v"/"y/long i";
+    lesson04.exercise02 and lesson05.exercise07 now use full phrases like
+    "informal, spoken to one person" and "the elders" instead of snake_case
+    tokens). Fixed two "prompt literally displays the correct answer"
+    instances in lesson01 (exercise02.recognize_che and
+    exercise06.recognize_salam both showed the exact target Dari string as
+    the prompt AND as the correct multiple_choice option, making them
+    trivial visual-matching tasks instead of real sound/meaning recognition
+    -- prompts now show an English cue ("ch" / "hello") per the
+    English-cue-prompt convention already used elsewhere in this course,
+    e.g. a1_unit04_numbers.yaml). Reordered exercises in lessons 02-06 to
+    follow the recognition -> drag/matching -> production pacing the
+    AUTHORING_GUIDE requires and that sibling units 02-05 already follow
+    consistently -- lessons 02-05 previously interleaved typing/production
+    items ahead of remaining recognition items (lesson03 even opened on a
+    listen_type production exercise); lesson06 had no drag exercises so its
+    3 dialogue_comprehension (recognition) items were moved ahead of all
+    speak_response/listen_type/dialogue_response (production) items,
+    preserving their internal relative order. Lesson01's own pacing (6+
+    recognition/drag exercises before the single, last-positioned
+    writing_prompt) was already correct and unchanged in shape. Verified:
+    script purity (zero Arabic-range kaf/yeh codepoints U+0643/U+064A
+    anywhere in the file, every keheh/yeh instance is the correct
+    Persian-range U+06A9/U+06CC); dialect authenticity (استم/استین
+    Afghan forms, تشکر as primary "thank you" with ممنون only as an
+    accepted secondary variant, تو/استی informal register correctly scoped
+    to peer/close-friend context per the course's register_policy, Afghan
+    hospitality content -- اهل خانه، بالا بفرمایید، زنده باشین -- reads
+    authentic and is explained rather than asserted); no ambiguous
+    multiple-choice items (every distractor set checked against its own
+    correct_option for unintended overlap); no blank-template
+    unanswerable free-text exercises; no bare unquoted yes/no YAML
+    footguns (lesson01.exercise07 already quotes "yes"/"no" correctly);
+    every content_key in the realization has a matching overlay entry and
+    vice versa (43 teaching + 50 exercise keys, zero mismatches, re-checked
+    after all edits). Compiler validation clean before and after fixes (0
+    errors/0 warnings). Audio remains pending generation (unrelated to this
+    review). URGENT FOLLOW-UP 2026-07-05: live QA testing found the whole
+    en-prs course failed to actually COMPILE (not just validate) --
+    `scripts/compile_content.py compile` runs `validate_dialogue_teaching_card`,
+    which only fires during real compilation, not `validate`, so this had
+    been silently missed by every prior validate-only check including this
+    review. Root cause: lesson06's 6 teaching cards (`lines01_02` through
+    `lines11_12`) used the old single-text_block embedded-"Name:"-label
+    dialogue format already banned for new/edited cards. Split into 12
+    per-speaker-turn cards (`line01`-`line12`) with structured `speaker`
+    fields, following the identical pattern already used to fix this same
+    bug class in fa/a1_unit01_greetings.yaml and fa/a1_unit02_introductions.yaml.
+    Re-verified with the actual `compile` command (not just `validate`) --
+    now produces valid JSON output end-to-end.
 
 course:
   realization_key: prs.a1
@@ -150,7 +205,7 @@ units:
             tested_text: چ
             prompt:
               target_blocks:
-                - {text: "چ", language_code: prs, direction: rtl}
+                - {text: "ch", language_code: en, direction: ltr}
           - content_key: prs.a1.unit01.lesson01.exercise03.match_ke_gaf
             type: matching_pairs
             tested_text: ک گ
@@ -164,9 +219,9 @@ units:
             prompt: {target_blocks: []}
             pairs:
               - {left: ن, right: n}
-              - {left: و, right: w_or_v}
+              - {left: و, right: "w/v"}
               - {left: ه, right: h}
-              - {left: ی, right: y_or_long_i}
+              - {left: ی, right: "y/long i"}
           - content_key: prs.a1.unit01.lesson01.exercise05.build_salam
             type: word_order
             tested_text: س ل ا م
@@ -177,7 +232,7 @@ units:
             tested_text: سلام
             prompt:
               target_blocks:
-                - {text: "سلام", language_code: prs, direction: rtl}
+                - {text: "hello", language_code: en, direction: ltr}
           - content_key: prs.a1.unit01.lesson01.exercise07.rtl_direction
             type: grammar_check
             tested_text: ""
@@ -229,6 +284,23 @@ units:
             tested_text: سلام علیکم
             media_asset_key: prs.a1.audio.salam_alaikum.polite.01
             prompt: {target_blocks: []}
+          - content_key: prs.a1.unit01.lesson02.exercise04.welcome_meaning
+            type: multiple_choice
+            tested_text: خوش آمدید
+            prompt:
+              target_blocks:
+                - {text: "خوش آمدید", language_code: prs, direction: rtl}
+          - content_key: prs.a1.unit01.lesson02.exercise07.goodbye_meaning
+            type: multiple_choice
+            tested_text: خدا حافظ
+            prompt:
+              target_blocks:
+                - {text: "خدا حافظ", language_code: prs, direction: rtl}
+          - content_key: prs.a1.unit01.lesson02.exercise06.order_youre_welcome
+            type: word_order
+            tested_text: خواهش می‌کنم
+            prompt: {target_blocks: []}
+            word_bank: [خواهش, می‌کنم]
           - content_key: prs.a1.unit01.lesson02.exercise02.listen_response
             type: listen_type
             tested_text: وعلیکم سلام
@@ -240,27 +312,10 @@ units:
             prompt:
               target_blocks:
                 - {text: "سلام علیکم", language_code: prs, direction: rtl}
-          - content_key: prs.a1.unit01.lesson02.exercise04.welcome_meaning
-            type: multiple_choice
-            tested_text: خوش آمدید
-            prompt:
-              target_blocks:
-                - {text: "خوش آمدید", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit01.lesson02.exercise05.produce_thanks
             type: translation
             tested_text: تشکر
             prompt: {target_blocks: []}
-          - content_key: prs.a1.unit01.lesson02.exercise06.order_youre_welcome
-            type: word_order
-            tested_text: خواهش می‌کنم
-            prompt: {target_blocks: []}
-            word_bank: [خواهش, می‌کنم]
-          - content_key: prs.a1.unit01.lesson02.exercise07.goodbye_meaning
-            type: multiple_choice
-            tested_text: خدا حافظ
-            prompt:
-              target_blocks:
-                - {text: "خدا حافظ", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit01.lesson02.exercise08.speak_exchange
             type: speak_response
             tested_text: سلام علیکم وعلیکم سلام
@@ -297,11 +352,6 @@ units:
             target: {text: "به امید دیدار", language_code: prs, direction: rtl}
             introduced_tokens: [به, امید, دیدار]
         exercises:
-          - content_key: prs.a1.unit01.lesson03.exercise01.listen_morning
-            type: listen_type
-            tested_text: صبح بخیر
-            media_asset_key: prs.a1.audio.sobh_bekheyr.neutral.01
-            prompt: {target_blocks: []}
           - content_key: prs.a1.unit01.lesson03.exercise02.listen_day
             type: listen_select
             tested_text: روز بخیر
@@ -313,26 +363,31 @@ units:
             prompt:
               target_blocks:
                 - {text: "عصر بخیر", language_code: prs, direction: rtl}
-          - content_key: prs.a1.unit01.lesson03.exercise04.listen_night
-            type: listen_type
-            tested_text: شب بخیر
-            media_asset_key: prs.a1.audio.shab_bekheyr.neutral.01
-            prompt: {target_blocks: []}
           - content_key: prs.a1.unit01.lesson03.exercise05.choose_leave_taking
             type: multiple_choice
             tested_text: روز خوش
             prompt:
               target_blocks:
                 - {text: "روز خوش", language_code: prs, direction: rtl}
+          - content_key: prs.a1.unit01.lesson03.exercise07.listen_goodbye
+            type: listen_select
+            tested_text: خدا حافظ
+            media_asset_key: prs.a1.audio.khoda_hafez.neutral.01
+            prompt: {target_blocks: []}
           - content_key: prs.a1.unit01.lesson03.exercise06.order_see_you
             type: word_order
             tested_text: به امید دیدار
             prompt: {target_blocks: []}
             word_bank: [به, امید, دیدار]
-          - content_key: prs.a1.unit01.lesson03.exercise07.listen_goodbye
-            type: listen_select
-            tested_text: خدا حافظ
-            media_asset_key: prs.a1.audio.khoda_hafez.neutral.01
+          - content_key: prs.a1.unit01.lesson03.exercise01.listen_morning
+            type: listen_type
+            tested_text: صبح بخیر
+            media_asset_key: prs.a1.audio.sobh_bekheyr.neutral.01
+            prompt: {target_blocks: []}
+          - content_key: prs.a1.unit01.lesson03.exercise04.listen_night
+            type: listen_type
+            tested_text: شب بخیر
+            media_asset_key: prs.a1.audio.shab_bekheyr.neutral.01
             prompt: {target_blocks: []}
           - content_key: prs.a1.unit01.lesson03.exercise08.close_exchange
             type: dialogue_response
@@ -384,15 +439,26 @@ units:
             prompt:
               target_blocks:
                 - {text: "تو چطور استی؟", language_code: prs, direction: rtl}
-          - content_key: prs.a1.unit01.lesson04.exercise03.listen_polite
-            type: listen_type
-            tested_text: شما چطور استین
-            media_asset_key: prs.a1.audio.chetor_asten.polite.01
-            prompt: {target_blocks: []}
           - content_key: prs.a1.unit01.lesson04.exercise04.listen_informal
             type: listen_select
             tested_text: تو چطور استی
             media_asset_key: prs.a1.audio.chetor_asti.informal.01
+            prompt: {target_blocks: []}
+          - content_key: prs.a1.unit01.lesson04.exercise08.extended_greeting
+            type: dialogue_comprehension
+            tested_text: همه خوب استند
+            prompt:
+              target_blocks:
+                - {text: "همه خوب استند؟", language_code: prs, direction: rtl}
+          - content_key: prs.a1.unit01.lesson04.exercise06.order_healthy
+            type: word_order
+            tested_text: جور استم
+            prompt: {target_blocks: []}
+            word_bank: [جور, استم]
+          - content_key: prs.a1.unit01.lesson04.exercise03.listen_polite
+            type: listen_type
+            tested_text: شما چطور استین
+            media_asset_key: prs.a1.audio.chetor_asten.polite.01
             prompt: {target_blocks: []}
           - content_key: prs.a1.unit01.lesson04.exercise05.reply_well
             type: dialogue_response
@@ -400,23 +466,12 @@ units:
             prompt:
               target_blocks:
                 - {text: "شما چطور استین؟", language_code: prs, direction: rtl}
-          - content_key: prs.a1.unit01.lesson04.exercise06.order_healthy
-            type: word_order
-            tested_text: جور استم
-            prompt: {target_blocks: []}
-            word_bank: [جور, استم]
           - content_key: prs.a1.unit01.lesson04.exercise07.reply_and_you
             type: dialogue_response
             tested_text: و شما
             prompt:
               target_blocks:
                 - {text: "خوب استم، تشکر.", language_code: prs, direction: rtl}
-          - content_key: prs.a1.unit01.lesson04.exercise08.extended_greeting
-            type: dialogue_comprehension
-            tested_text: همه خوب استند
-            prompt:
-              target_blocks:
-                - {text: "همه خوب استند؟", language_code: prs, direction: rtl}
 
       - content_key: prs.a1.unit01.lesson05.afghan_hospitality
         title: پرسیدن از فامیل و احترام به مهمان
@@ -457,22 +512,6 @@ units:
             prompt:
               target_blocks:
                 - {text: "فامیل‌تان جور است؟", language_code: prs, direction: rtl}
-          - content_key: prs.a1.unit01.lesson05.exercise02.reply_family
-            type: dialogue_response
-            tested_text: فامیل‌تان جور است شکر همه جور استند
-            prompt:
-              target_blocks:
-                - {text: "فامیل‌تان جور است؟", language_code: prs, direction: rtl}
-          - content_key: prs.a1.unit01.lesson05.exercise03.order_household
-            type: word_order
-            tested_text: اهل خانه خوب استند
-            prompt: {target_blocks: []}
-            word_bank: [اهل, خانه, خوب, استند]
-          - content_key: prs.a1.unit01.lesson05.exercise04.order_zenda_bashin
-            type: word_order
-            tested_text: زنده باشین
-            prompt: {target_blocks: []}
-            word_bank: [زنده, باشین]
           - content_key: prs.a1.unit01.lesson05.exercise05.home_formula
             type: multiple_choice
             tested_text: خانهٔ خودتان است
@@ -496,6 +535,22 @@ units:
             tested_text: خانهٔ خودتان است فامیل‌تان جور است شکر همه جور استند بالا بفرمایید زنده باشین
             media_asset_key: prs.a1.audio.extended_greeting.family.01
             prompt: {target_blocks: []}
+          - content_key: prs.a1.unit01.lesson05.exercise03.order_household
+            type: word_order
+            tested_text: اهل خانه خوب استند
+            prompt: {target_blocks: []}
+            word_bank: [اهل, خانه, خوب, استند]
+          - content_key: prs.a1.unit01.lesson05.exercise04.order_zenda_bashin
+            type: word_order
+            tested_text: زنده باشین
+            prompt: {target_blocks: []}
+            word_bank: [زنده, باشین]
+          - content_key: prs.a1.unit01.lesson05.exercise02.reply_family
+            type: dialogue_response
+            tested_text: فامیل‌تان جور است شکر همه جور استند
+            prompt:
+              target_blocks:
+                - {text: "فامیل‌تان جور است؟", language_code: prs, direction: rtl}
 
       - content_key: prs.a1.unit01.lesson06.first_meeting_dialogue
         title: روز اول حامد در دفتر کابل
@@ -511,53 +566,117 @@ units:
             kind: vocabulary
             target: {text: کابل, language_code: prs, direction: rtl}
             introduced_tokens: [کابل]
-          - content_key: prs.a1.unit01.lesson06.teach.lines01_02
+          - content_key: prs.a1.unit01.lesson06.teach.line01
             kind: dialogue
             target:
-              text: "حامد: سلام علیکم. من همکار نو استم.\nنجیب: وعلیکم سلام. خوش آمدین. نام‌تان چیست؟"
+              text: "سلام علیکم. من همکار نو استم."
               language_code: prs
               direction: rtl
-            introduced_tokens: [حامد, سلام, علیکم, من, همکار, نو, استم, نجیب, وعلیکم, خوش, آمدین, نام‌تان, چیست]
-          - content_key: prs.a1.unit01.lesson06.teach.lines03_04
+              speaker: حامد
+            introduced_tokens: [حامد, سلام, علیکم, من, همکار, نو, استم]
+          - content_key: prs.a1.unit01.lesson06.teach.line02
             kind: dialogue
             target:
-              text: "حامد: نام من حامد است.\nنجیب: من نجیب استم. از آشنایی با شما خوش شدم."
+              text: "وعلیکم سلام. خوش آمدین. نام‌تان چیست؟"
               language_code: prs
               direction: rtl
-            introduced_tokens: [حامد, نام, من, است, نجیب, استم, از, آشنایی, با, شما, خوش, شدم]
-          - content_key: prs.a1.unit01.lesson06.teach.lines05_06
+              speaker: نجیب
+            introduced_tokens: [نجیب, وعلیکم, سلام, خوش, آمدین, نام‌تان, چیست]
+          - content_key: prs.a1.unit01.lesson06.teach.line03
             kind: dialogue
             target:
-              text: "حامد: من هم خوش شدم. شما چطور استین؟\nنجیب: جور استم، تشکر."
+              text: "نام من حامد است."
               language_code: prs
               direction: rtl
-            introduced_tokens: [حامد, من, هم, خوش, شدم, شما, چطور, استین, نجیب, جور, استم, تشکر]
-          - content_key: prs.a1.unit01.lesson06.teach.lines07_08
+              speaker: حامد
+            introduced_tokens: [نام, من, حامد, است]
+          - content_key: prs.a1.unit01.lesson06.teach.line04
             kind: dialogue
             target:
-              text: "نجیب: فامیل‌تان جور است؟\nحامد: شکر، همه جور استند."
+              text: "من نجیب استم. از آشنایی با شما خوش شدم."
               language_code: prs
               direction: rtl
-            introduced_tokens: [نجیب, فامیل‌تان, جور, است, حامد, شکر, همه, استند]
-          - content_key: prs.a1.unit01.lesson06.teach.lines09_10
+              speaker: نجیب
+            introduced_tokens: [نجیب, من, استم, از, آشنایی, با, شما, خوش, شدم]
+          - content_key: prs.a1.unit01.lesson06.teach.line05
             kind: dialogue
             target:
-              text: "نجیب: بفرمایید؛ همکاران را معرفی می‌کنم.\nحامد: بسیار خوب، تشکر."
+              text: "من هم خوش شدم. شما چطور استین؟"
               language_code: prs
               direction: rtl
-            introduced_tokens: [نجیب, بفرمایید, همکاران, را, معرفی, می‌کنم, حامد, بسیار, خوب, تشکر]
-          - content_key: prs.a1.unit01.lesson06.teach.lines11_12
+              speaker: حامد
+            introduced_tokens: [حامد, من, هم, خوش, شدم, شما, چطور, استین]
+          - content_key: prs.a1.unit01.lesson06.teach.line06
             kind: dialogue
             target:
-              text: "نجیب: زنده باشین. این میز شما است.\nحامد: تشکر."
+              text: "جور استم، تشکر."
               language_code: prs
               direction: rtl
-            introduced_tokens: [نجیب, زنده, باشین, این, میز, شما, است, حامد, تشکر]
+              speaker: نجیب
+            introduced_tokens: [نجیب, جور, استم, تشکر]
+          - content_key: prs.a1.unit01.lesson06.teach.line07
+            kind: dialogue
+            target:
+              text: "فامیل‌تان جور است؟"
+              language_code: prs
+              direction: rtl
+              speaker: نجیب
+            introduced_tokens: [نجیب, فامیل‌تان, جور, است]
+          - content_key: prs.a1.unit01.lesson06.teach.line08
+            kind: dialogue
+            target:
+              text: "شکر، همه جور استند."
+              language_code: prs
+              direction: rtl
+              speaker: حامد
+            introduced_tokens: [حامد, شکر, همه, جور, استند]
+          - content_key: prs.a1.unit01.lesson06.teach.line09
+            kind: dialogue
+            target:
+              text: "بفرمایید؛ همکاران را معرفی می‌کنم."
+              language_code: prs
+              direction: rtl
+              speaker: نجیب
+            introduced_tokens: [نجیب, بفرمایید, همکاران, را, معرفی, می‌کنم]
+          - content_key: prs.a1.unit01.lesson06.teach.line10
+            kind: dialogue
+            target:
+              text: "بسیار خوب، تشکر."
+              language_code: prs
+              direction: rtl
+              speaker: حامد
+            introduced_tokens: [حامد, بسیار, خوب, تشکر]
+          - content_key: prs.a1.unit01.lesson06.teach.line11
+            kind: dialogue
+            target:
+              text: "زنده باشین. این میز شما است."
+              language_code: prs
+              direction: rtl
+              speaker: نجیب
+            introduced_tokens: [نجیب, زنده, باشین, این, میز, شما, است]
+          - content_key: prs.a1.unit01.lesson06.teach.line12
+            kind: dialogue
+            target:
+              text: "تشکر."
+              language_code: prs
+              direction: rtl
+              speaker: حامد
+            introduced_tokens: [حامد, تشکر]
         exercises:
           - content_key: prs.a1.unit01.lesson06.exercise01.listen_context
             type: dialogue_comprehension
             tested_text: حامد همکار نو است
             media_asset_key: prs.a1.audio.dialogue.workplace_first_day.01
+            prompt: {target_blocks: []}
+          - content_key: prs.a1.unit01.lesson06.exercise08.workplace_next
+            type: dialogue_comprehension
+            tested_text: همکاران را معرفی می‌کنم
+            prompt:
+              target_blocks:
+                - {text: "بفرمایید؛ همکاران را معرفی می‌کنم.", language_code: prs, direction: rtl}
+          - content_key: prs.a1.unit01.lesson06.exercise10.dialogue_facts
+            type: dialogue_comprehension
+            tested_text: حامد نجیب دفتر کابل همکار
             prompt: {target_blocks: []}
           - content_key: prs.a1.unit01.lesson06.exercise02.speak_greeting
             type: speak_response
@@ -592,19 +711,9 @@ units:
             prompt:
               target_blocks:
                 - {text: "فامیل‌تان جور است؟", language_code: prs, direction: rtl}
-          - content_key: prs.a1.unit01.lesson06.exercise08.workplace_next
-            type: dialogue_comprehension
-            tested_text: همکاران را معرفی می‌کنم
-            prompt:
-              target_blocks:
-                - {text: "بفرمایید؛ همکاران را معرفی می‌کنم.", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit01.lesson06.exercise09.speak_identity
             type: speak_response
             tested_text: نام من حامد است من حامد استم
             prompt:
               target_blocks:
                 - {text: "نام‌تان چیست؟", language_code: prs, direction: rtl}
-          - content_key: prs.a1.unit01.lesson06.exercise10.dialogue_facts
-            type: dialogue_comprehension
-            tested_text: حامد نجیب دفتر کابل همکار
-            prompt: {target_blocks: []}

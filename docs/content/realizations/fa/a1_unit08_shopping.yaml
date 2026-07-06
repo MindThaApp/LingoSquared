@@ -1,0 +1,453 @@
+schema_version: "1.0"
+realization_version: "2026.1-draft.1"
+target_language: fa
+cefr_level: A1
+status: complete_draft
+generation_provenance:
+  method: ai_adapted_from_public_domain_source
+  authoring_system: claude
+  source_material: "FSI Persian Basic Course (public domain), modernized"
+  human_reviewed: false
+review:
+  status: reviewed
+  required_next_reviewer: null
+  notes: >-
+    Fresh-context review, 2026-07-05. Checked spine-outcome discipline
+    against universal.a1.shopping.ask_prices_quantities's own
+    assessment_requirements (understand a price/quantity, ask a
+    price/quantity + respond, read a price label, write a purchase
+    request) -- all covered across the six lessons, no drift into
+    unrelated grammar. Exercise pacing verified recognition -> drag/
+    matching -> production in every one of the 6 lessons. Verified
+    dialect authenticity: تومن (not ریال) is the correct everyday
+    spoken currency unit, این چنده؟ is a genuine colloquial price
+    question, تخفیف می‌دید؟ is genuine, ordinary Iranian bargaining
+    culture (confirmed, not rude/unusual), and the -e contractions
+    (تومنه) match unit07's established pattern. Found and fixed a real
+    bug: 10 multiple_choice "recognize_*" exercises across lessons
+    01-05 displayed the exact target Farsi phrase in the prompt AND
+    repeated it verbatim as the correct_option/distractors -- the
+    identical bug class found and fixed in unit07 (also exactly 10
+    instances there). Fixed by converting correct_option/distractors/
+    accepted_answers to English glosses, matching the unit07/unit01
+    reference pattern. Cross-checked every concrete fact per §11 (item
+    = apples, original price = 30 toman/kg, discounted price = 28
+    toman, payment = cash) across every exercise/teaching card/dialogue
+    referencing them -- fully consistent throughout. Added missing
+    §12 multi-clause joining forms: a و-joined form to
+    dialogue_response_pay and a comma-joined form to
+    write_market_summary (speak_full_market_scene's two question-mark
+    clauses correctly omit a comma form, which wouldn't be grammatical
+    there). No fill_in_blank exercises exist (§13 n/a as a type, but
+    ran a Python token-coverage script tokenizing on Persian-range
+    characters only against every exercise's tested_text/word_bank/
+    pairs and the overlay's accepted_answers/pairs/word_bank, checked
+    cumulatively lesson-by-lesson against introduced_tokens -- zero
+    gaps found on the realization side and zero on the overlay's
+    accepted_answers/pairs/word_bank; a handful of listen_select
+    distractors reference forward vocabulary, matching unit07's own
+    already-reviewed precedent for that exempt field). content_key
+    parity confirmed exact both directions (teaching and exercises).
+    Grepped for Arabic-range kaf (U+0643) and yeh (U+064A): none found.
+    No unquoted YAML booleans in learner-facing fields. No internal
+    jargon leaks found in any learner-facing string. FLAGGED, not
+    fixed (a product/curriculum-scope call, not a bug): 30 toman/kg
+    for apples (28 toman discounted) reads as an unrealistically low
+    placeholder given real-world Iranian toman pricing under ongoing
+    inflation -- real prices would plausibly be in the thousands-to-
+    tens-of-thousands-of-toman range. Left as-is because a realistic
+    price would require teaching "هزار" (thousand), which exceeds this
+    unit's numbers prerequisite scope (universal.a1.numbers.
+    use_basic_numbers) -- flagging for Ramin's awareness rather than
+    unilaterally expanding scope. Both `validate` and `compile` run
+    clean after fixes: 0 errors, 0 warnings, compiles to valid JSON.
+    Audio remains pending generation.
+
+course:
+  realization_key: fa.a1
+  target_language_first: true
+  dialect: fa_IR_standard_colloquial_intro
+  register_policy: >-
+    Continues unit01's neutral-polite spoken register and the colloquial
+    -e contraction pattern already established (e.g. گرونه = گران است,
+    ارزونه = ارزان است). Bargaining language (تخفیف می‌دید؟) reflects
+    genuine, everyday Iranian shopping culture, not an invented flourish.
+
+media_assets:
+  - content_key: fa.a1.audio.shopping.vocab.01
+    language: fa
+    text: مغازه، قیمت، تخفیف
+    voice_hint: neutral_adult
+    status: pending_generation
+  - content_key: fa.a1.audio.shopping.price_question.01
+    language: fa
+    text: این چنده؟
+    voice_hint: neutral_adult_polite
+    status: pending_generation
+  - content_key: fa.a1.audio.shopping.quantity.01
+    language: fa
+    text: یک کیلو سیب می‌خوام
+    voice_hint: neutral_adult
+    status: pending_generation
+  - content_key: fa.a1.audio.shopping.discount.01
+    language: fa
+    text: تخفیف می‌دید؟
+    voice_hint: neutral_adult_polite
+    status: pending_generation
+  - content_key: fa.a1.audio.shopping.payment.01
+    language: fa
+    text: نقدی حساب می‌کنم
+    voice_hint: neutral_adult
+    status: pending_generation
+  - content_key: fa.a1.audio.dialogue.market.01
+    language: fa
+    text: "فروشنده: سلام، بفرمایید. مشتری: سلام. این سیب‌ها چنده؟ فروشنده: کیلویی سی تومنه. مشتری: یک کیلو می‌خوام. تخفیف می‌دید؟ فروشنده: باشه، برات بیست و هشت تومن حساب می‌کنم. مشتری: ممنون. نقدی حساب می‌کنم. فروشنده: قابلی نداره، بفرمایید."
+    voice_hint: two_adults_neutral_polite
+    status: pending_generation
+
+units:
+  - content_key: fa.a1.unit08.shopping
+    title: خرید کردن
+    section: speaking
+    spine_outcome_ids:
+      - universal.a1.shopping.ask_prices_quantities
+    planned_lesson_count: 6
+
+    lessons:
+      - content_key: fa.a1.unit08.lesson01.shop_vocabulary
+        title: کلمات مربوط به مغازه
+        spine_outcome_id: universal.a1.shopping.ask_prices_quantities
+        teaching:
+          - content_key: fa.a1.unit08.lesson01.teach.shop_word
+            kind: vocabulary
+            target: {text: مغازه, language_code: fa, direction: rtl}
+            introduced_tokens: [مغازه]
+          - content_key: fa.a1.unit08.lesson01.teach.price_word
+            kind: vocabulary
+            target: {text: قیمت, language_code: fa, direction: rtl}
+            introduced_tokens: [قیمت]
+          - content_key: fa.a1.unit08.lesson01.teach.discount_word
+            kind: vocabulary
+            target: {text: تخفیف, language_code: fa, direction: rtl}
+            introduced_tokens: [تخفیف]
+          - content_key: fa.a1.unit08.lesson01.teach.apple_word
+            kind: vocabulary
+            target: {text: سیب, language_code: fa, direction: rtl}
+            introduced_tokens: [سیب]
+          - content_key: fa.a1.unit08.lesson01.teach.va_word
+            kind: grammar_note
+            target: {text: "و (and)", language_code: fa, direction: rtl}
+            introduced_tokens: [و]
+        exercises:
+          - content_key: fa.a1.unit08.lesson01.exercise01.recognize_shop
+            type: multiple_choice
+            tested_text: مغازه
+            prompt: {target_blocks: [{text: مغازه, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit08.lesson01.exercise02.recognize_price
+            type: multiple_choice
+            tested_text: قیمت
+            prompt: {target_blocks: [{text: قیمت, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit08.lesson01.exercise03.listen_shop_vocab
+            type: listen_select
+            tested_text: تخفیف
+            media_asset_key: fa.a1.audio.shopping.vocab.01
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit08.lesson01.exercise04.match_shop_words
+            type: matching_pairs
+            tested_text: مغازه قیمت تخفیف سیب
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: مغازه, right: shop}
+              - {left: قیمت, right: price}
+              - {left: تخفیف, right: discount}
+              - {left: سیب, right: apple}
+          - content_key: fa.a1.unit08.lesson01.exercise05.order_shop_words
+            type: word_order
+            tested_text: قیمت و تخفیف
+            prompt: {target_blocks: []}
+            word_bank: [قیمت, و, تخفیف]
+          - content_key: fa.a1.unit08.lesson01.exercise06.translate_discount
+            type: translation
+            tested_text: تخفیف
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit08.lesson01.exercise07.write_apple
+            type: writing_prompt
+            tested_text: سیب
+            prompt: {target_blocks: [{text: "Write the Farsi word for apple.", language_code: en, direction: ltr}]}
+
+      - content_key: fa.a1.unit08.lesson02.asking_the_price
+        title: پرسیدن قیمت
+        spine_outcome_id: universal.a1.shopping.ask_prices_quantities
+        teaching:
+          - content_key: fa.a1.unit08.lesson02.teach.how_much_this
+            kind: phrase
+            target: {text: "این چنده؟", language_code: fa, direction: rtl}
+            introduced_tokens: [این, چنده]
+          - content_key: fa.a1.unit08.lesson02.teach.per_kilo_price
+            kind: phrase
+            target: {text: "کیلویی سی تومنه", language_code: fa, direction: rtl}
+            introduced_tokens: [کیلویی, سی, تومنه]
+          - content_key: fa.a1.unit08.lesson02.teach.contraction_note
+            kind: grammar_note
+            target: {text: "تومنه = تومن است (محاوره‌ای)", language_code: fa, direction: rtl}
+            introduced_tokens: [تومن, است]
+        exercises:
+          - content_key: fa.a1.unit08.lesson02.exercise01.recognize_how_much
+            type: multiple_choice
+            tested_text: این چنده
+            prompt: {target_blocks: [{text: "این چنده؟", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit08.lesson02.exercise02.recognize_per_kilo
+            type: multiple_choice
+            tested_text: کیلویی سی تومنه
+            prompt: {target_blocks: [{text: "کیلویی سی تومنه", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit08.lesson02.exercise03.listen_how_much
+            type: listen_select
+            tested_text: این چنده
+            media_asset_key: fa.a1.audio.shopping.price_question.01
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit08.lesson02.exercise04.match_price_phrases
+            type: matching_pairs
+            tested_text: این چنده کیلویی سی تومنه
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "این چنده؟", right: "How much is this?"}
+              - {left: "کیلویی سی تومنه", right: "It's 30 toman per kilo."}
+          - content_key: fa.a1.unit08.lesson02.exercise05.order_how_much
+            type: word_order
+            tested_text: این چنده
+            prompt: {target_blocks: []}
+            word_bank: [این, چنده]
+          - content_key: fa.a1.unit08.lesson02.exercise06.listen_type_price
+            type: listen_type
+            tested_text: این چنده
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit08.lesson02.exercise07.speak_ask_price
+            type: speak_response
+            tested_text: این چنده
+            prompt: {target_blocks: [{text: "You'd like to know the price of an item. Ask the shopkeeper.", language_code: en, direction: ltr}]}
+
+      - content_key: fa.a1.unit08.lesson03.quantities_in_shopping
+        title: مقدار در خرید
+        spine_outcome_id: universal.a1.shopping.ask_prices_quantities
+        teaching:
+          - content_key: fa.a1.unit08.lesson03.teach.one_kilo
+            kind: phrase
+            target: {text: "یک کیلو سیب می‌خوام", language_code: fa, direction: rtl}
+            introduced_tokens: [یک, کیلو, سیب, می‌خوام]
+          - content_key: fa.a1.unit08.lesson03.teach.half_kilo
+            kind: phrase
+            target: {text: "نصف کیلو می‌خوام", language_code: fa, direction: rtl}
+            introduced_tokens: [نصف]
+        exercises:
+          - content_key: fa.a1.unit08.lesson03.exercise01.recognize_one_kilo
+            type: multiple_choice
+            tested_text: یک کیلو سیب می‌خوام
+            prompt: {target_blocks: [{text: "یک کیلو سیب می‌خوام", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit08.lesson03.exercise02.recognize_half_kilo
+            type: multiple_choice
+            tested_text: نصف کیلو می‌خوام
+            prompt: {target_blocks: [{text: "نصف کیلو می‌خوام", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit08.lesson03.exercise03.listen_quantity
+            type: listen_select
+            tested_text: یک کیلو سیب می‌خوام
+            media_asset_key: fa.a1.audio.shopping.quantity.01
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit08.lesson03.exercise04.match_quantity_phrases
+            type: matching_pairs
+            tested_text: یک کیلو نصف کیلو
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "یک کیلو سیب می‌خوام", right: "I want a kilo of apples."}
+              - {left: "نصف کیلو می‌خوام", right: "I want half a kilo."}
+          - content_key: fa.a1.unit08.lesson03.exercise05.order_one_kilo
+            type: word_order
+            tested_text: یک کیلو سیب می‌خوام
+            prompt: {target_blocks: []}
+            word_bank: [یک, کیلو, سیب, می‌خوام]
+          - content_key: fa.a1.unit08.lesson03.exercise06.listen_type_quantity
+            type: listen_type
+            tested_text: نصف کیلو می‌خوام
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit08.lesson03.exercise07.translate_quantity
+            type: translation
+            tested_text: نصف کیلو سیب می‌خوام
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit08.lesson04.asking_for_a_discount
+        title: پرسیدن دربارهٔ تخفیف
+        spine_outcome_id: universal.a1.shopping.ask_prices_quantities
+        teaching:
+          - content_key: fa.a1.unit08.lesson04.teach.discount_question
+            kind: phrase
+            target: {text: "تخفیف می‌دید؟", language_code: fa, direction: rtl}
+            introduced_tokens: [تخفیف, می‌دید]
+          - content_key: fa.a1.unit08.lesson04.teach.discount_offer
+            kind: phrase
+            target: {text: "برات بیست و هشت تومن حساب می‌کنم", language_code: fa, direction: rtl}
+            introduced_tokens: [برات, بیست, هشت, تومن, حساب, می‌کنم]
+        exercises:
+          - content_key: fa.a1.unit08.lesson04.exercise01.recognize_discount_question
+            type: multiple_choice
+            tested_text: تخفیف می‌دید
+            prompt: {target_blocks: [{text: "تخفیف می‌دید؟", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit08.lesson04.exercise02.recognize_discount_offer
+            type: multiple_choice
+            tested_text: برات بیست و هشت تومن حساب می‌کنم
+            prompt: {target_blocks: [{text: "برات بیست و هشت تومن حساب می‌کنم", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit08.lesson04.exercise03.listen_discount_question
+            type: listen_select
+            tested_text: تخفیف می‌دید
+            media_asset_key: fa.a1.audio.shopping.discount.01
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit08.lesson04.exercise04.match_discount_phrases
+            type: matching_pairs
+            tested_text: تخفیف می‌دید حساب می‌کنم
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "تخفیف می‌دید؟", right: "Do you give a discount?"}
+              - {left: "برات بیست و هشت تومن حساب می‌کنم", right: "I'll charge you 28 toman."}
+          - content_key: fa.a1.unit08.lesson04.exercise05.order_discount_question
+            type: word_order
+            tested_text: تخفیف می‌دید
+            prompt: {target_blocks: []}
+            word_bank: [تخفیف, می‌دید]
+          - content_key: fa.a1.unit08.lesson04.exercise06.listen_type_discount
+            type: listen_type
+            tested_text: تخفیف می‌دید
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit08.lesson04.exercise07.speak_ask_discount
+            type: speak_response
+            tested_text: تخفیف می‌دید
+            prompt: {target_blocks: [{text: "Ask the shopkeeper if they give a discount.", language_code: en, direction: ltr}]}
+
+      - content_key: fa.a1.unit08.lesson05.paying
+        title: حساب کردن
+        spine_outcome_id: universal.a1.shopping.ask_prices_quantities
+        teaching:
+          - content_key: fa.a1.unit08.lesson05.teach.pay_cash
+            kind: phrase
+            target: {text: "نقدی حساب می‌کنم", language_code: fa, direction: rtl}
+            introduced_tokens: [نقدی]
+          - content_key: fa.a1.unit08.lesson05.teach.card_question
+            kind: phrase
+            target: {text: "کارت می‌گیرید؟", language_code: fa, direction: rtl}
+            introduced_tokens: [کارت, می‌گیرید]
+        exercises:
+          - content_key: fa.a1.unit08.lesson05.exercise01.recognize_pay_cash
+            type: multiple_choice
+            tested_text: نقدی حساب می‌کنم
+            prompt: {target_blocks: [{text: "نقدی حساب می‌کنم", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit08.lesson05.exercise02.recognize_card_question
+            type: multiple_choice
+            tested_text: کارت می‌گیرید
+            prompt: {target_blocks: [{text: "کارت می‌گیرید؟", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit08.lesson05.exercise03.listen_pay_cash
+            type: listen_select
+            tested_text: نقدی حساب می‌کنم
+            media_asset_key: fa.a1.audio.shopping.payment.01
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit08.lesson05.exercise04.match_payment_phrases
+            type: matching_pairs
+            tested_text: نقدی حساب می‌کنم کارت می‌گیرید
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "نقدی حساب می‌کنم", right: "I'll pay in cash."}
+              - {left: "کارت می‌گیرید؟", right: "Do you take card?"}
+          - content_key: fa.a1.unit08.lesson05.exercise05.order_pay_cash
+            type: word_order
+            tested_text: نقدی حساب می‌کنم
+            prompt: {target_blocks: []}
+            word_bank: [نقدی, حساب, می‌کنم]
+          - content_key: fa.a1.unit08.lesson05.exercise06.listen_type_card_question
+            type: listen_type
+            tested_text: کارت می‌گیرید
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit08.lesson05.exercise07.translate_pay_cash
+            type: translation
+            tested_text: نقدی حساب می‌کنم
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit08.lesson06.market_dialogue
+        title: گفت‌وگو در بازار
+        spine_outcome_id: universal.a1.shopping.ask_prices_quantities
+        teaching:
+          - content_key: fa.a1.unit08.lesson06.teach.please_review
+            kind: phrase
+            target: {text: بفرمایید, language_code: fa, direction: rtl}
+            introduced_tokens: [بفرمایید]
+          - content_key: fa.a1.unit08.lesson06.teach.thanks_review
+            kind: phrase
+            target: {text: ممنون, language_code: fa, direction: rtl}
+            introduced_tokens: [ممنون]
+          - content_key: fa.a1.unit08.lesson06.teach.no_worries_review
+            kind: phrase
+            target: {text: "قابلی نداره", language_code: fa, direction: rtl}
+            introduced_tokens: [قابلی, نداره]
+          - content_key: fa.a1.unit08.lesson06.teach.turn01
+            kind: dialogue
+            target: {text: "سلام، بفرمایید.", language_code: fa, direction: rtl, speaker: فروشنده}
+            introduced_tokens: [سلام, بفرمایید, فروشنده]
+          - content_key: fa.a1.unit08.lesson06.teach.turn02
+            kind: dialogue
+            target: {text: "سلام. این سیب‌ها چنده؟", language_code: fa, direction: rtl, speaker: مشتری}
+            introduced_tokens: [سلام, این, سیب‌ها, چنده, مشتری]
+          - content_key: fa.a1.unit08.lesson06.teach.turn03
+            kind: dialogue
+            target: {text: "کیلویی سی تومنه.", language_code: fa, direction: rtl, speaker: فروشنده}
+            introduced_tokens: [کیلویی, سی, تومنه]
+          - content_key: fa.a1.unit08.lesson06.teach.turn04
+            kind: dialogue
+            target: {text: "یک کیلو می‌خوام. تخفیف می‌دید؟", language_code: fa, direction: rtl, speaker: مشتری}
+            introduced_tokens: [یک, کیلو, می‌خوام, تخفیف, می‌دید]
+          - content_key: fa.a1.unit08.lesson06.teach.turn05
+            kind: dialogue
+            target: {text: "باشه، برات بیست و هشت تومن حساب می‌کنم.", language_code: fa, direction: rtl, speaker: فروشنده}
+            introduced_tokens: [باشه, برات, بیست, و, هشت, تومن, حساب, می‌کنم]
+          - content_key: fa.a1.unit08.lesson06.teach.turn06
+            kind: dialogue
+            target: {text: "ممنون. نقدی حساب می‌کنم.", language_code: fa, direction: rtl, speaker: مشتری}
+            introduced_tokens: [ممنون, نقدی, حساب, می‌کنم]
+          - content_key: fa.a1.unit08.lesson06.teach.turn07
+            kind: dialogue
+            target: {text: "قابلی نداره، بفرمایید.", language_code: fa, direction: rtl, speaker: فروشنده}
+            introduced_tokens: [قابلی, نداره, بفرمایید]
+        exercises:
+          - content_key: fa.a1.unit08.lesson06.exercise01.listen_context
+            type: dialogue_comprehension
+            tested_text: مشتری فروشنده سیب تخفیف
+            media_asset_key: fa.a1.audio.dialogue.market.01
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit08.lesson06.exercise02.recognize_original_price
+            type: multiple_choice
+            tested_text: سی تومن کیلویی
+            prompt:
+              target_blocks:
+                - {text: "What was the original price per kilo, before the discount?", language_code: en, direction: ltr}
+          - content_key: fa.a1.unit08.lesson06.exercise03.match_dialogue_facts
+            type: matching_pairs
+            tested_text: کیلویی سی تومن تخفیف بیست و هشت تومن
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: کیلویی, right: "سی تومن"}
+              - {left: تخفیف, right: "بیست و هشت تومن"}
+          - content_key: fa.a1.unit08.lesson06.exercise04.order_discount_agreement
+            type: word_order
+            tested_text: باشه برات بیست و هشت تومن حساب می‌کنم
+            prompt: {target_blocks: []}
+            word_bank: [باشه, برات, بیست, و, هشت, تومن, حساب, می‌کنم]
+          - content_key: fa.a1.unit08.lesson06.exercise05.listen_final_price
+            type: listen_type
+            tested_text: بیست و هشت تومن حساب می‌کنم
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit08.lesson06.exercise06.dialogue_response_pay
+            type: dialogue_response
+            tested_text: ممنون نقدی حساب می‌کنم
+            prompt: {target_blocks: [{text: "باشه، برات بیست و هشت تومن حساب می‌کنم.", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit08.lesson06.exercise07.write_market_summary
+            type: writing_prompt
+            tested_text: یک کیلو سیب می‌خوام نقدی حساب می‌کنم
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit08.lesson06.exercise08.speak_full_market_scene
+            type: speak_response
+            tested_text: این چنده تخفیف می‌دید نقدی حساب می‌کنم
+            prompt: {target_blocks: [{text: "You are at the market. Ask the price, ask for a discount, and say you'll pay cash.", language_code: en, direction: ltr}]}

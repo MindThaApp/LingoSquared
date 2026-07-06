@@ -1,0 +1,462 @@
+schema_version: "1.0"
+realization_version: "2026.1-draft.1"
+target_language: fa
+cefr_level: A1
+status: complete_draft
+generation_provenance:
+  method: ai_adapted_from_public_domain_source
+  authoring_system: claude
+  source_material: "FSI Persian Basic Course (public domain), modernized"
+  human_reviewed: false
+review:
+  status: reviewed
+  required_next_reviewer: null
+  notes: >-
+    Fresh-context review, 2026-07-05. Checked spine-outcome discipline
+    against universal.a1.weather.describe_basic_weather's own
+    assessment_requirements (understand a forecast, describe weather +
+    suggest a plan, read a forecast, write a weather note) -- all four
+    covered across the six lessons, no drift into unrelated grammar.
+    Verified dialect authenticity against fa_IR_standard_colloquial_intro
+    (established in unit01): بارونی is a genuine colloquial pronunciation
+    of بارانی (same ا→و shift as نان/نون، تهران/تهرون), the -e copula
+    contraction (آفتابیه، سرده، بارونیه) is standard spoken Persian, and
+    the lesson06 dialogue (باشه، موافقم، فکر کنم، می‌بینمت، چون بارونیه،
+    بهتره چتر ببریم) reads as natural spoken Tehrani Persian, not a
+    translated calque. Cross-checked every weather/plan fact in lesson06
+    (today rainy, tomorrow sunny+hot, park plan is for tomorrow) across
+    its dialogue, matching_pairs, and writing exercises -- consistent.
+    Found and fixed two real bugs: (1) ten multiple_choice exercises
+    (lessons 01-05) displayed the target Farsi word/phrase in the prompt
+    AND repeated it verbatim as the correct multiple_choice option --
+    confirmed via the actual compiled JSON, not just validate -- solvable
+    by visual text-matching alone with zero comprehension required.
+    Fixed by converting correct_option/distractors to English glosses,
+    matching the already-reviewed goodbye_meaning pattern in a1_unit01.
+    (2) lesson06's exercise order placed a listen_type production/typing
+    exercise before its matching_pairs and word_order drag exercises,
+    violating AUTHORING_GUIDE §2 pacing -- reordered so recognition
+    (dialogue_comprehension, multiple_choice) precedes matching/drag
+    (matching_pairs, word_order) precedes production (listen_type,
+    dialogue_response, writing_prompt, speak_response); confirmed via
+    the compiled order. Also added missing plain-comma-joined
+    accepted_answers variants per §12 to lesson06's
+    write_weather_plan_summary and speak_full_weather_exchange. No
+    fill_in_blank exercises exist (§13 n/a). Grepped for Arabic-range
+    kaf (U+0643) and yeh (U+064A) codepoints: none found in either
+    file. No unquoted YAML booleans. content_key parity
+    reconfirmed between realization and overlay after fixes (only the
+    6 media_asset audio keys are realization-only, as expected). Every
+    accepted_answers list confirmed to have at least one status:correct
+    entry (43/43 exercises). Both `validate` and `compile` re-run after
+    fixes: 0 errors, 0 warnings, compiles clean end to end. Audio
+    remains pending generation.
+
+course:
+  realization_key: fa.a1
+  target_language_first: true
+  dialect: fa_IR_standard_colloquial_intro
+  register_policy: >-
+    Continues unit01's neutral-polite spoken register. Weather descriptions
+    use the everyday colloquial -e contraction already established in this
+    course (خوبه، خوبه‌ست pattern from unit06), e.g. آفتابیه (it's sunny),
+    سرده (it's cold), consistent with ordinary spoken Tehrani Persian.
+
+media_assets:
+  - content_key: fa.a1.audio.weather.conditions.01
+    language: fa
+    text: آفتابی، بارونی، ابری، برفی
+    voice_hint: neutral_adult
+    status: pending_generation
+  - content_key: fa.a1.audio.weather.temperature.01
+    language: fa
+    text: گرم، سرد، خنک
+    voice_hint: neutral_adult
+    status: pending_generation
+  - content_key: fa.a1.audio.weather.question.01
+    language: fa
+    text: هوا چطوره؟
+    voice_hint: neutral_adult_polite
+    status: pending_generation
+  - content_key: fa.a1.audio.weather.today_sunny.01
+    language: fa
+    text: امروز هوا آفتابیه
+    voice_hint: neutral_adult
+    status: pending_generation
+  - content_key: fa.a1.audio.weather.suggestion.01
+    language: fa
+    text: چون بارونیه، بهتره چتر ببریم
+    voice_hint: neutral_adult
+    status: pending_generation
+  - content_key: fa.a1.audio.dialogue.weather_plan.01
+    language: fa
+    text: "سارا: امروز هوا چطوره؟ رضا: بارونیه، فکر کنم. سارا: پس بهتره چتر ببریم. رضا: آره، موافقم. فردا چی؟ سارا: فردا آفتابیه و گرمه. رضا: عالیه، پس بریم پارک. سارا: باشه، فردا می‌بینمت."
+    voice_hint: two_adults_neutral_polite
+    status: pending_generation
+
+units:
+  - content_key: fa.a1.unit07.weather
+    title: هوا و برنامه‌ریزی
+    section: speaking
+    spine_outcome_ids:
+      - universal.a1.weather.describe_basic_weather
+    planned_lesson_count: 6
+
+    lessons:
+      - content_key: fa.a1.unit07.lesson01.weather_conditions
+        title: وضعیت هوا
+        spine_outcome_id: universal.a1.weather.describe_basic_weather
+        teaching:
+          - content_key: fa.a1.unit07.lesson01.teach.sunny
+            kind: vocabulary
+            target: {text: آفتابی, language_code: fa, direction: rtl}
+            introduced_tokens: [آفتابی]
+          - content_key: fa.a1.unit07.lesson01.teach.rainy
+            kind: vocabulary
+            target: {text: بارونی, language_code: fa, direction: rtl}
+            introduced_tokens: [بارونی]
+          - content_key: fa.a1.unit07.lesson01.teach.cloudy
+            kind: vocabulary
+            target: {text: ابری, language_code: fa, direction: rtl}
+            introduced_tokens: [ابری]
+          - content_key: fa.a1.unit07.lesson01.teach.snowy
+            kind: vocabulary
+            target: {text: برفی, language_code: fa, direction: rtl}
+            introduced_tokens: [برفی]
+          - content_key: fa.a1.unit07.lesson01.teach.or_word
+            kind: grammar_note
+            target: {text: "یا (or)", language_code: fa, direction: rtl}
+            introduced_tokens: [یا]
+        exercises:
+          - content_key: fa.a1.unit07.lesson01.exercise01.recognize_sunny
+            type: multiple_choice
+            tested_text: آفتابی
+            prompt: {target_blocks: [{text: آفتابی, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit07.lesson01.exercise02.recognize_rainy
+            type: multiple_choice
+            tested_text: بارونی
+            prompt: {target_blocks: [{text: بارونی, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit07.lesson01.exercise03.listen_conditions
+            type: listen_select
+            tested_text: ابری
+            media_asset_key: fa.a1.audio.weather.conditions.01
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit07.lesson01.exercise04.match_conditions
+            type: matching_pairs
+            tested_text: آفتابی بارونی ابری برفی
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: آفتابی, right: sunny}
+              - {left: بارونی, right: rainy}
+              - {left: ابری, right: cloudy}
+              - {left: برفی, right: snowy}
+          - content_key: fa.a1.unit07.lesson01.exercise05.order_conditions_list
+            type: word_order
+            tested_text: آفتابی یا بارونی
+            prompt: {target_blocks: []}
+            word_bank: [آفتابی, یا, بارونی]
+          - content_key: fa.a1.unit07.lesson01.exercise06.translate_snowy
+            type: translation
+            tested_text: برفی
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit07.lesson01.exercise07.write_cloudy
+            type: writing_prompt
+            tested_text: ابری
+            prompt: {target_blocks: [{text: "Write the Farsi word for cloudy.", language_code: en, direction: ltr}]}
+
+      - content_key: fa.a1.unit07.lesson02.temperature_words
+        title: گرم و سرد
+        spine_outcome_id: universal.a1.weather.describe_basic_weather
+        teaching:
+          - content_key: fa.a1.unit07.lesson02.teach.hot
+            kind: vocabulary
+            target: {text: گرم, language_code: fa, direction: rtl}
+            introduced_tokens: [گرم]
+          - content_key: fa.a1.unit07.lesson02.teach.cold
+            kind: vocabulary
+            target: {text: سرد, language_code: fa, direction: rtl}
+            introduced_tokens: [سرد]
+          - content_key: fa.a1.unit07.lesson02.teach.cool
+            kind: vocabulary
+            target: {text: خنک, language_code: fa, direction: rtl}
+            introduced_tokens: [خنک]
+        exercises:
+          - content_key: fa.a1.unit07.lesson02.exercise01.recognize_hot
+            type: multiple_choice
+            tested_text: گرم
+            prompt: {target_blocks: [{text: گرم, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit07.lesson02.exercise02.recognize_cold
+            type: multiple_choice
+            tested_text: سرد
+            prompt: {target_blocks: [{text: سرد, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit07.lesson02.exercise03.listen_temperature
+            type: listen_select
+            tested_text: خنک
+            media_asset_key: fa.a1.audio.weather.temperature.01
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit07.lesson02.exercise04.match_temperature
+            type: matching_pairs
+            tested_text: گرم سرد خنک
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: گرم, right: hot}
+              - {left: سرد, right: cold}
+              - {left: خنک, right: cool}
+          - content_key: fa.a1.unit07.lesson02.exercise05.order_hot_or_cold
+            type: word_order
+            tested_text: گرم یا سرد
+            prompt: {target_blocks: []}
+            word_bank: [گرم, یا, سرد]
+          - content_key: fa.a1.unit07.lesson02.exercise06.translate_cool
+            type: translation
+            tested_text: خنک
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit07.lesson02.exercise07.write_hot
+            type: writing_prompt
+            tested_text: گرم
+            prompt: {target_blocks: [{text: "Write the Farsi word for hot.", language_code: en, direction: ltr}]}
+
+      - content_key: fa.a1.unit07.lesson03.asking_about_weather
+        title: پرسیدن دربارهٔ هوا
+        spine_outcome_id: universal.a1.weather.describe_basic_weather
+        teaching:
+          - content_key: fa.a1.unit07.lesson03.teach.weather_word
+            kind: vocabulary
+            target: {text: هوا, language_code: fa, direction: rtl}
+            introduced_tokens: [هوا]
+          - content_key: fa.a1.unit07.lesson03.teach.weather_question
+            kind: phrase
+            target: {text: "هوا چطوره؟", language_code: fa, direction: rtl}
+            introduced_tokens: [چطوره]
+          - content_key: fa.a1.unit07.lesson03.teach.today_word
+            kind: vocabulary
+            target: {text: امروز, language_code: fa, direction: rtl}
+            introduced_tokens: [امروز]
+          - content_key: fa.a1.unit07.lesson03.teach.tomorrow_word
+            kind: vocabulary
+            target: {text: فردا, language_code: fa, direction: rtl}
+            introduced_tokens: [فردا]
+        exercises:
+          - content_key: fa.a1.unit07.lesson03.exercise01.recognize_weather_question
+            type: multiple_choice
+            tested_text: هوا چطوره
+            prompt: {target_blocks: [{text: "هوا چطوره؟", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit07.lesson03.exercise02.recognize_tomorrow
+            type: multiple_choice
+            tested_text: فردا
+            prompt: {target_blocks: [{text: فردا, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit07.lesson03.exercise03.listen_weather_question
+            type: listen_select
+            tested_text: هوا چطوره
+            media_asset_key: fa.a1.audio.weather.question.01
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit07.lesson03.exercise04.match_time_words
+            type: matching_pairs
+            tested_text: هوا چطوره امروز فردا
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "هوا چطوره؟", right: "How's the weather?"}
+              - {left: امروز, right: today}
+              - {left: فردا, right: tomorrow}
+          - content_key: fa.a1.unit07.lesson03.exercise05.order_weather_question
+            type: word_order
+            tested_text: هوا چطوره
+            prompt: {target_blocks: []}
+            word_bank: [هوا, چطوره]
+          - content_key: fa.a1.unit07.lesson03.exercise06.translate_weather_question
+            type: translation
+            tested_text: هوا چطوره
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit07.lesson03.exercise07.speak_weather_question
+            type: speak_response
+            tested_text: هوا چطوره
+            prompt: {target_blocks: [{text: "Ask a friend how the weather is.", language_code: en, direction: ltr}]}
+
+      - content_key: fa.a1.unit07.lesson04.describing_todays_weather
+        title: توصیف هوای امروز
+        spine_outcome_id: universal.a1.weather.describe_basic_weather
+        teaching:
+          - content_key: fa.a1.unit07.lesson04.teach.today_sunny
+            kind: phrase
+            target: {text: "امروز هوا آفتابیه", language_code: fa, direction: rtl}
+            introduced_tokens: [امروز, هوا, آفتابیه]
+          - content_key: fa.a1.unit07.lesson04.teach.today_cold
+            kind: phrase
+            target: {text: "امروز سرده", language_code: fa, direction: rtl}
+            introduced_tokens: [سرده]
+          - content_key: fa.a1.unit07.lesson04.teach.contraction_note
+            kind: grammar_note
+            target: {text: "آفتابیه = آفتابی است (محاوره‌ای)", language_code: fa, direction: rtl}
+            introduced_tokens: [است]
+          - content_key: fa.a1.unit07.lesson04.teach.today_rainy
+            kind: phrase
+            target: {text: "امروز بارونیه", language_code: fa, direction: rtl}
+            introduced_tokens: [بارونیه]
+        exercises:
+          - content_key: fa.a1.unit07.lesson04.exercise01.recognize_today_sunny
+            type: multiple_choice
+            tested_text: امروز هوا آفتابیه
+            prompt: {target_blocks: [{text: "امروز هوا آفتابیه", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit07.lesson04.exercise02.recognize_today_cold
+            type: multiple_choice
+            tested_text: امروز سرده
+            prompt: {target_blocks: [{text: "امروز سرده", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit07.lesson04.exercise03.listen_today_sunny
+            type: listen_select
+            tested_text: امروز هوا آفتابیه
+            media_asset_key: fa.a1.audio.weather.today_sunny.01
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit07.lesson04.exercise04.match_weather_sentences
+            type: matching_pairs
+            tested_text: امروز هوا آفتابیه امروز سرده
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "امروز هوا آفتابیه", right: "Today the weather is sunny."}
+              - {left: "امروز سرده", right: "Today it's cold."}
+          - content_key: fa.a1.unit07.lesson04.exercise05.order_today_sunny
+            type: word_order
+            tested_text: امروز هوا آفتابیه
+            prompt: {target_blocks: []}
+            word_bank: [امروز, هوا, آفتابیه]
+          - content_key: fa.a1.unit07.lesson04.exercise06.listen_type_today_cold
+            type: listen_type
+            tested_text: امروز سرده
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit07.lesson04.exercise07.translate_today_rainy
+            type: translation
+            tested_text: امروز بارونیه
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit07.lesson05.weather_based_suggestions
+        title: پیشنهاد بر اساس هوا
+        spine_outcome_id: universal.a1.weather.describe_basic_weather
+        teaching:
+          - content_key: fa.a1.unit07.lesson05.teach.because_word
+            kind: vocabulary
+            target: {text: چون, language_code: fa, direction: rtl}
+            introduced_tokens: [چون]
+          - content_key: fa.a1.unit07.lesson05.teach.better_to
+            kind: phrase
+            target: {text: "بهتره چتر ببریم", language_code: fa, direction: rtl}
+            introduced_tokens: [بهتره, چتر, ببریم]
+          - content_key: fa.a1.unit07.lesson05.teach.full_suggestion
+            kind: phrase
+            target: {text: "چون بارونیه، بهتره چتر ببریم", language_code: fa, direction: rtl}
+            introduced_tokens: [بارونیه]
+          - content_key: fa.a1.unit07.lesson05.teach.coat_suggestion
+            kind: phrase
+            target: {text: "چون سرده، بهتره کت بپوشیم", language_code: fa, direction: rtl}
+            introduced_tokens: [کت, بپوشیم]
+        exercises:
+          - content_key: fa.a1.unit07.lesson05.exercise01.recognize_because
+            type: multiple_choice
+            tested_text: چون
+            prompt: {target_blocks: [{text: چون, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit07.lesson05.exercise02.recognize_umbrella_suggestion
+            type: multiple_choice
+            tested_text: بهتره چتر ببریم
+            prompt: {target_blocks: [{text: "بهتره چتر ببریم", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit07.lesson05.exercise03.listen_full_suggestion
+            type: listen_select
+            tested_text: چون بارونیه بهتره چتر ببریم
+            media_asset_key: fa.a1.audio.weather.suggestion.01
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit07.lesson05.exercise04.match_suggestion_parts
+            type: matching_pairs
+            tested_text: چون بهتره چتر ببریم بارونیه
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: چون, right: because / since}
+              - {left: "بهتره چتر ببریم", right: "we'd better bring an umbrella"}
+              - {left: بارونیه, right: "it's rainy"}
+          - content_key: fa.a1.unit07.lesson05.exercise05.order_full_suggestion
+            type: word_order
+            tested_text: چون بارونیه بهتره چتر ببریم
+            prompt: {target_blocks: []}
+            word_bank: [چون, بارونیه, بهتره, چتر, ببریم]
+          - content_key: fa.a1.unit07.lesson05.exercise06.listen_type_suggestion
+            type: listen_type
+            tested_text: بهتره چتر ببریم
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit07.lesson05.exercise07.translate_suggestion
+            type: translation
+            tested_text: چون سرده، بهتره کت بپوشیم
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit07.lesson06.weather_plan_dialogue
+        title: گفت‌وگو دربارهٔ هوا و برنامه
+        spine_outcome_id: universal.a1.weather.describe_basic_weather
+        teaching:
+          - content_key: fa.a1.unit07.lesson06.teach.coat_review
+            kind: vocabulary
+            target: {text: "کت بپوشیم", language_code: fa, direction: rtl}
+            introduced_tokens: [کت, بپوشیم]
+          - content_key: fa.a1.unit07.lesson06.teach.turn01
+            kind: dialogue
+            target: {text: "امروز هوا چطوره؟", language_code: fa, direction: rtl, speaker: سارا}
+            introduced_tokens: [امروز, هوا, چطوره, سارا]
+          - content_key: fa.a1.unit07.lesson06.teach.turn02
+            kind: dialogue
+            target: {text: "بارونیه، فکر کنم.", language_code: fa, direction: rtl, speaker: رضا}
+            introduced_tokens: [بارونیه, فکر, کنم, رضا]
+          - content_key: fa.a1.unit07.lesson06.teach.turn03
+            kind: dialogue
+            target: {text: "پس بهتره چتر ببریم.", language_code: fa, direction: rtl, speaker: سارا}
+            introduced_tokens: [پس, بهتره, چتر, ببریم]
+          - content_key: fa.a1.unit07.lesson06.teach.turn04
+            kind: dialogue
+            target: {text: "آره، موافقم. فردا چی؟", language_code: fa, direction: rtl, speaker: رضا}
+            introduced_tokens: [آره, موافقم, فردا, چی]
+          - content_key: fa.a1.unit07.lesson06.teach.turn05
+            kind: dialogue
+            target: {text: "فردا آفتابیه و گرمه.", language_code: fa, direction: rtl, speaker: سارا}
+            introduced_tokens: [فردا, آفتابیه, و, گرمه]
+          - content_key: fa.a1.unit07.lesson06.teach.turn06
+            kind: dialogue
+            target: {text: "عالیه، پس بریم پارک.", language_code: fa, direction: rtl, speaker: رضا}
+            introduced_tokens: [عالیه, پس, بریم, پارک]
+          - content_key: fa.a1.unit07.lesson06.teach.turn07
+            kind: dialogue
+            target: {text: "باشه، فردا می‌بینمت.", language_code: fa, direction: rtl, speaker: سارا}
+            introduced_tokens: [باشه, فردا, می‌بینمت]
+        exercises:
+          - content_key: fa.a1.unit07.lesson06.exercise01.listen_context
+            type: dialogue_comprehension
+            tested_text: سارا رضا بارونیه آفتابیه پارک
+            media_asset_key: fa.a1.audio.dialogue.weather_plan.01
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit07.lesson06.exercise02.recognize_today_weather
+            type: multiple_choice
+            tested_text: بارونیه
+            prompt:
+              target_blocks:
+                - {text: "What does Reza say the weather is like today?", language_code: en, direction: ltr}
+          - content_key: fa.a1.unit07.lesson06.exercise04.match_dialogue_facts
+            type: matching_pairs
+            tested_text: امروز فردا بارونیه آفتابیه پارک
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "هوای امروز", right: بارونیه}
+              - {left: "هوای فردا", right: "آفتابیه و گرمه"}
+              - {left: "برنامهٔ فردا", right: "بریم پارک"}
+          - content_key: fa.a1.unit07.lesson06.exercise05.order_plan_suggestion
+            type: word_order
+            tested_text: پس بریم پارک
+            prompt: {target_blocks: []}
+            word_bank: [پس, بریم, پارک]
+          - content_key: fa.a1.unit07.lesson06.exercise03.listen_tomorrow_weather
+            type: listen_type
+            tested_text: فردا آفتابیه و گرمه
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit07.lesson06.exercise06.dialogue_response_agree
+            type: dialogue_response
+            tested_text: آره موافقم
+            prompt: {target_blocks: [{text: "پس بهتره چتر ببریم.", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit07.lesson06.exercise07.write_weather_plan_summary
+            type: writing_prompt
+            tested_text: امروز بارونیه فردا آفتابیه و گرمه بریم پارک
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit07.lesson06.exercise08.speak_full_weather_exchange
+            type: speak_response
+            tested_text: هوا چطوره آفتابیه بهتره
+            prompt: {target_blocks: [{text: "Ask a friend how the weather is, and suggest a plan based on their answer.", language_code: en, direction: ltr}]}
