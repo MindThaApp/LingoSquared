@@ -1,0 +1,348 @@
+# Pre-deploy runbook — live server (192.168.4.4)
+
+**Read this in full before touching the live server.** This is the
+consolidated checklist for the FIRST real deploy of current work to
+192.168.4.4, assembled 2026-07-07 from landmines scattered across
+~10 separate `docs/BUILD_LOG.md` entries (a 2026-07-07 Fable audit
+flagged this scatter as the largest unaddressed risk in the repo).
+`CLAUDE.md`'s "Deploying a backend change" section has the quick-
+reference command skeleton; this file is the full checklist around it
+— pre-flight checks, required env vars, ordered steps, and post-deploy
+verification. Standing rule, unchanged: **deploys happen with Ramin
+present, never unattended.**
+
+## Load-bearing fact: the live server has never been deployed to
+
+Every mention of 192.168.4.4 in `docs/BUILD_LOG.md`'s entire history
+(2026-07-02 → 2026-07-07) is either the deploy recipe itself, a
+read-only SSH check (`grep` on `.env`), or an explicit "was NOT
+touched" / "never touched the live server" statement. No entry
+describes an actual rsync/build/migrate/seed/restart cycle executed
+against it. **Treat this as a from-scratch-equivalent first deploy,
+not an incremental one** — don't assume any prior migration/seed state
+beyond whatever was there from original box setup (Debian, Docker,
+`docker-compose.yml`, an empty or near-empty Postgres). If you find
+evidence during pre-flight (below) that contradicts this — e.g.
+`alembic_version` already has real rows — stop and reconcile before
+proceeding; don't silently pick one story.
+
+## Pre-flight checks (BEFORE touching anything)
+
+Run these first, in order. All are read-only — none of them modify
+the live server.
+
+1. **Check `alembic_version` on the live DB directly.**
+   ```bash
+   ssh ramin@192.168.4.4 "cd /home/ramin/LingoSquared/backend && docker compose exec -T db psql -U lingosquared -d lingosquared -c 'SELECT * FROM alembic_version;'"
+   ```
+   - If the table **doesn't exist**: this matches the dev-DB footgun
+     found 2026-07-05 (dev DB's schema was created via
+     `Base.metadata.create_all()` instead of a real `alembic upgrade`,
+     so alembic's own version table was never created even though the
+     schema itself matched migrations through 0008). **This has never
+     been checked on live before — it is a genuine unknown, not an
+     assumed-safe case.** If it's missing and the schema already has
+     tables/columns from a prior partial setup, do NOT run `alembic
+     upgrade head` blind — first inspect what tables/columns actually
+     exist (`\dt` inside the same psql session) and `alembic stamp
+     <the real matching revision>` before upgrading, exactly like the
+     dev-DB fix. If the live DB is genuinely empty (no tables at all,
+     consistent with "never deployed to"), a fresh `alembic upgrade
+     head` from empty is the normal, safe path (verified repeatedly
+     against isolated empty DBs this project's history — 0001's
+     `create_all()` builds every table with its current shape in one
+     shot, migrations 0002+ are individually guarded to no-op safely
+     against an already-matching schema).
+   - If the table **exists with rows**: stop and figure out why —
+     this would contradict "never deployed to" and needs a real
+     explanation before proceeding, not an assumption.
+   - If this command fails outright because no `db` container is even
+     running: that's itself informative (consistent with "never
+     deployed to"). Move to step 2 to confirm, bring up just the `db`
+     service (`docker compose up -d db`) if it isn't running at all,
+     then re-run this check before doing anything else.
+
+2. **Check what's actually running.**
+   ```bash
+   ssh ramin@192.168.4.4 "cd /home/ramin/LingoSquared/backend && docker compose ps && cat backend/.env 2>/dev/null | grep -v SECRET"
+   ```
+   (Or `.env` at whatever path it actually lives — confirm the path
+   first.) Confirms whether `docker-compose.yml`/`.env` exist at all,
+   what image/tag is currently running, and gives you the current
+   values of every env var below in one shot.
+
+3. **Take a database backup before any migration**, even against a
+   possibly-empty DB — there is no documented backup/rollback step
+   anywhere in this project's history (BUILD_LOG.md only ever says
+   live-server backups are "denied in unattended mode," never that one
+   was actually taken). This is a new step, not previously documented:
+   ```bash
+   ssh ramin@192.168.4.4 "cd /home/ramin/LingoSquared/backend && docker compose exec -T db pg_dump -U lingosquared lingosquared > ~/lingosquared_pre_deploy_$(date +%Y%m%d).sql"
+   ```
+   Keep this file until the post-deploy verification below passes.
+
+4. **Confirm current env var values** (from step 2's `.env` dump, or
+   individually):
+   ```bash
+   ssh ramin@192.168.4.4 "grep -E 'ADMIN_EMAILS|CORS_ORIGINS|AZURE_SPEECH|GOOGLE_CLOUD_TTS|JWT_SECRET' /home/ramin/LingoSquared/backend/.env"
+   ```
+   As of the last read-only check (2026-07-05), `ADMIN_EMAILS` was
+   still the `.env.example` placeholder (`admin@example.com`) and
+   `CORS_ORIGINS` was `http://localhost:5173, http://localhost:5174`
+   — confirm these haven't changed since, they almost certainly
+   haven't been touched given no entry since claims otherwise. See
+   "Required environment variables" below for what each needs to
+   become before deploy.
+
+5. **Confirm no other session is mid-deploy.** Check for an
+   in-progress `git worktree`/uncommitted changes on your own working
+   tree, and ask Ramin directly if any other Claude/Codex instance
+   might be touching the live server right now — this project runs up
+   to 3 parallel sessions, and the standing rule is deploys happen
+   with Ramin present specifically to avoid two people deploying at
+   once.
+
+## Required environment variables (set/confirm before deploy)
+
+Pull the current live `.env` (step 4 above) and reconcile against this
+list before running anything. Do not guess values — anything marked
+"needs Ramin" is a real decision, not something to fill in
+unilaterally.
+
+| Variable | Current live state (last confirmed) | What it needs to be |
+|---|---|---|
+| `ADMIN_EMAILS` | `admin@example.com` (placeholder, confirmed 2026-07-05) | **Needs Ramin's real private email**, and his account must be registered under it. No email verification exists — whoever registers first with the literal listed address becomes admin, so set this *before* any beta invite goes out, and register Ramin's account immediately after. |
+| `CORS_ORIGINS` | `http://localhost:5173, http://localhost:5174` (confirmed 2026-07-05) | **Needs the real origin(s) beta users' browsers will load the frontend from** (a real domain or the LAN IP + port). Fails safe (rejects) if wrong, but breaks the app for every real user until fixed — a product decision (what the origin actually is), not something to infer. |
+| `AZURE_SPEECH_KEY` / `AZURE_SPEECH_REGION` | unset (never provisioned anywhere, dev or live) | **Needs Ramin to provision an Azure Speech resource** (Azure Portal → Cognitive Services → Speech), then set both here. Without it, `fa` TTS degrades gracefully to `provider_error`/browser fallback (no crash — `tts_actually_configured()` in `backend/app/services/tts.py` already gates the Endless Practice `listen_select` generator on real credentials, not just language support) — so this is NOT a deploy blocker, just a "fa audio won't actually work" gap until provided. |
+| `GOOGLE_CLOUD_TTS_CREDENTIALS_JSON` | presumed already set on live (predates this session) — genuinely unconfirmed whether it's present, unset, or the corrupted key from the 2026-07-04 incident (see open question #1 below) | Confirm it's present and non-empty. If TTS for the 8 Google-covered languages is silently falling back to browser speech, re-verify via the debug path in `CLAUDE.md`'s Footguns section (`json.loads` → `Credentials.from_service_account_info()` → `creds.refresh()`) rather than trusting `/tts`'s silent exception-swallowing fallback. |
+| `JWT_SECRET` | presumably already set from original setup | Confirm it's a real random secret, not the `.env.example` placeholder (`replace-with-a-long-random-secret`) — never regenerate it on a running deploy without warning Ramin first (invalidates every existing session token). |
+| `POSTGRES_PASSWORD` / `DATABASE_URL` | presumably already set | Confirm they're real values, not `.env.example` placeholders, and that `DATABASE_URL` actually matches `POSTGRES_PASSWORD`. |
+
+## Ordered deploy steps
+
+Matches `CLAUDE.md`'s existing skeleton, made complete with the
+correct step ordering and the pre/post steps above folded in.
+
+**Load-bearing correction vs. an earlier draft of this runbook**: `python
+-m app.content.seed` (step 4 below) is bootstrap-only — it creates the
+10 `Language` rows, 2 starter `Achievement`s, and 4 small hardcoded
+placeholder demo courses (`app/content/seed.py`'s `FARSI`/`EN_TO_DARI`/
+`DARI_TO_EN`/`DARI_A2` dicts). **It is NOT the real content pipeline
+and does NOT create the actual ~131-unit en-nl/en-fa/en-prs/etc.
+courses.** Confirmed by reading `scripts/backfill_lexemes*.py` directly:
+every backfill script queries the DB for the real `Course`/`Unit`/
+`Lesson` rows and hard-errors (`"ERROR: imported course is missing
+{lesson_content_key}"`) if they aren't there — so skipping the real
+content-import step (new step 7 below) leaves backfill with nothing to
+match against. The real pipeline is: compile each course direction
+locally with `scripts/compile_content.py`, then `POST` the compiled
+JSON to `/admin/content/import` (admin-authenticated). This gap wasn't
+documented anywhere in `CLAUDE.md`/`BUILD_LOG.md` — it's a finding from
+reading `backend/app/content/seed.py` and the backfill scripts' own
+DB queries directly while assembling this runbook, not a synthesis of
+an existing landmine entry.
+
+**Also corrected**: `docker compose up -d api` must happen BEFORE the
+content-import/practice-import steps, not after — this is a
+from-scratch deploy with no previously-running container to serve
+those HTTP calls against. `docker compose run --rm` (migrate, seed,
+backfill) spins up its own ephemeral container and doesn't need the
+persistent `api` service to be up, but `curl`-ing `/admin/content/import`
+or `/admin/courses/{id}/practice/import` does.
+
+```bash
+# 1. Sync code (never syncs .env — never overwrites live secrets)
+rsync -az --exclude='.venv' --exclude='__pycache__' --exclude='*.pyc' --exclude='.env' \
+  /Users/raminazizi/dev/LingoSquared/backend/ ramin@192.168.4.4:/home/ramin/LingoSquared/backend/
+rsync -az /Users/raminazizi/dev/LingoSquared/docs/ ramin@192.168.4.4:/home/ramin/LingoSquared/docs/
+
+# 2. Build the new image
+ssh ramin@192.168.4.4 "cd /home/ramin/LingoSquared/backend && docker compose build api"
+
+# 3. Migrate — after the alembic_version pre-flight check above.
+#    If alembic_version was missing and you had to stamp a revision, do that
+#    stamp here first, THEN run upgrade head.
+ssh ramin@192.168.4.4 "cd /home/ramin/LingoSquared/backend && docker compose run --rm api alembic upgrade head"
+
+# 4. Bootstrap languages/achievements/placeholder demo courses (create-missing-
+#    only, safe to re-run — does NOT wipe existing user progress; this was a
+#    real bug fixed 2026-07-05, don't regress it). This does NOT create the
+#    real course content — see step 6.
+ssh ramin@192.168.4.4 "cd /home/ramin/LingoSquared/backend && docker compose run --rm api python -m app.content.seed"
+
+# 5. Bring the server up NOW, on the new image + migrated DB — required
+#    before any of the HTTP-based admin steps below can be called at all.
+#    Requires ADMIN_EMAILS/CORS_ORIGINS/etc. already correct in the synced
+#    .env (rsync never touches .env — set these directly on the server
+#    BEFORE this step, see "Required environment variables" above).
+ssh ramin@192.168.4.4 "cd /home/ramin/LingoSquared/backend && docker compose up -d api"
+
+# 6. Register Ramin's real admin account (requires ADMIN_EMAILS to already
+#    list this email — see above) and log in to get a bearer token for every
+#    admin call below:
+curl -X POST http://192.168.4.4:8010/auth/register -H "Content-Type: application/json" \
+  -d '{"email":"<ramins-real-email>","password":"<a-real-password>"}'
+TOKEN=$(curl -s -X POST http://192.168.4.4:8010/auth/login -H "Content-Type: application/json" \
+  -d '{"email":"<ramins-real-email>","password":"<a-real-password>"}' | python3 -c "import json,sys;print(json.load(sys.stdin)['access_token'])")
+
+# 7. Compile + import the REAL course content, per direction, per
+#    scripts/content_manifest.txt (decide with Ramin which directions are
+#    in scope for this first deploy — at minimum the 6 publish-gate
+#    directions: en-fa, en-nl, en-prs, fa-en, nl-en, prs-en). For each line
+#    of content_manifest.txt in scope:
+python scripts/compile_content.py compile --realization <realizations for that course> \
+  --overlay <overlays for that course> --out /tmp/<course>.json
+curl -X POST http://192.168.4.4:8010/admin/content/import \
+  -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" \
+  --data @/tmp/<course>.json
+# Repeat for every course direction in scope. Note the en-nl-a2 manifest
+# entry is an EXTENSION of the en-nl course (same course title, later
+# units) — import the base entry first so import_content()'s append-by-
+# unit-order logic (fixed 2026-07-05) has an existing course to append to.
+
+# 8. Backfill lexemes — MUST run after step 7 (needs the real lessons to
+#    exist) and before practice-template import (step 9). Needs the full
+#    repo mounted, not just backend/ (the image only contains backend/).
+#    Run the correct backfill script(s) for every course direction actually
+#    imported in step 7: backfill_lexemes.py (en-fa, original),
+#    backfill_lexemes_en_nl.py, backfill_lexemes_en_prs.py,
+#    backfill_lexemes_fa_en.py, backfill_lexemes_nl_en.py, backfill_lexemes_prs_en.py.
+ssh ramin@192.168.4.4 "cd /home/ramin/LingoSquared/backend && docker compose run --rm -v \"\$(cd .. && pwd):/repo\" -e PYTHONPATH=/repo/backend --entrypoint python api /repo/scripts/backfill_lexemes.py"
+# repeat per launch-pair backfill script as needed
+
+# 9. Import practice templates — ONLY after step 8. Importing before backfill
+#    fails every template with "lesson key ... was not found in the course"
+#    (found live 2026-07-06; CLAUDE.md's own recipe had this backwards once,
+#    already corrected there — this file states the corrected order explicitly).
+#    Per scripts/practice_manifest.txt entry in scope, compile the pack and
+#    POST it to /admin/courses/{course_id}/practice/import (get course_id
+#    from step 7's import response or GET /courses) with the same $TOKEN.
+
+# 10. If ADMIN_EMAILS/CORS_ORIGINS/any other .env value changed AFTER step 5
+#     (e.g. you fixed a placeholder mid-deploy instead of before), re-run:
+ssh ramin@192.168.4.4 "cd /home/ramin/LingoSquared/backend && docker compose up -d api"
+#     `docker compose restart` does NOT reload .env — only `up -d`/
+#     `--force-recreate` does. If nothing changed since step 5, this is a
+#     harmless no-op.
+```
+
+Test suite on the server (isolated DB, never `--env-file` — that flag
+only affects `docker-compose.yml` variable substitution, not the
+container's real environment, and once caused the test suite to run
+against the live database):
+
+```bash
+ssh ramin@192.168.4.4 "cd /home/ramin/LingoSquared/backend && \
+  docker compose exec -T db dropdb -U lingosquared --if-exists lingosquared_test && \
+  docker compose exec -T db createdb -U lingosquared lingosquared_test && \
+  docker compose run --rm api sh -c 'DATABASE_URL=\$(python3 -c \"import os,re; print(re.sub(r\\\"lingosquared\$\\\", \\\"lingosquared_test\\\", os.environ[\\\"DATABASE_URL\\\"]))\") python -m pytest -q'"
+```
+
+## Post-deploy verification
+
+Confirm the deploy actually landed and works, using the same
+live-smoke-test pattern used for the shared dev stack's FastAPI/
+Starlette CVE fix deploy (2026-07-06) — pointed at the live URL this
+time.
+
+1. **Confirm the right image is actually running** (not just built):
+   ```bash
+   ssh ramin@192.168.4.4 "cd /home/ramin/LingoSquared/backend && docker compose exec -T api pip show fastapi | grep Version"
+   ```
+   Expect `0.139.0` (the CVE fix — confirmed on the shared dev stack
+   via this exact command, never yet confirmed live). If it still
+   shows `0.115.12`, step 5 (or the re-run in step 10) above (`docker
+   compose up -d api`) either didn't run or didn't actually recreate
+   the container — `docker compose restart` does NOT pick up a new
+   image, only `up -d` / `--force-recreate` does.
+
+2. **Smoke-test the real HTTP surface**, same pattern as the dev-stack
+   CVE verification:
+   - Register a fresh account against the live URL, then log in
+     separately with the same credentials (both auth paths).
+   - List courses (`GET /courses` or equivalent) — confirm the
+     expected launch-gate courses appear (en-nl, en-fa, en-prs and
+     their reverse directions).
+   - Drill into a real course → unit → lesson → a real exercise.
+   - Submit one **correct** and one **incorrect** answer on a graded
+     exercise — confirm `result`/`xp_awarded`/`feedback` are correct
+     for both, not just a 200.
+   - Confirm a due-review or practice-feed item generates cleanly for
+     at least one launch-gate course (proves the backfill actually
+     populated lexemes — Endless Practice items can't generate
+     without them).
+   - Trigger a 404 and a 422 (e.g. a bad exercise id, a malformed
+     register payload) — confirm the generic error-shape handlers
+     still respond correctly, no stack-trace leakage.
+
+3. **Confirm `alembic_version` now reflects the real head revision**
+   (currently `0014`) via the same psql check as pre-flight step 1 —
+   confirms the migration actually applied, not just that the command
+   exited 0.
+
+4. **Confirm ADMIN_EMAILS/CORS_ORIGINS were actually updated** (not
+   just planned) if this deploy included that decision — re-run the
+   step-4 pre-flight grep and confirm the values changed, then
+   register Ramin's real admin account and confirm `is_admin: true`
+   comes back from a real authenticated request.
+
+5. **If this deploy includes new content**, spot-check RTL rendering
+   and script-strict grading on a real fa/prs exercise in the browser
+   — this project's established bar is that reading a diff has never
+   caught its worst bugs; only playing a real lesson has.
+
+## Contradictions / open questions found while synthesizing this (need Ramin's input)
+
+1. **`GOOGLE_CLOUD_TTS_CREDENTIALS_JSON` on live was never explicitly
+   re-confirmed after the 2026-07-04 corruption incident** (a GUI
+   copy-paste mangled the key once, on whatever environment that was
+   — the entry doesn't specify live vs. dev). Since the live server
+   has apparently never been deployed to since, it's unclear whether
+   live's copy of this credential (if one was ever set there at all,
+   e.g. during original box setup) is the working one or the corrupted
+   one, or unset entirely. **Recommend explicitly testing Google TTS
+   live during post-deploy verification**, not assuming it works.
+2. **No entry ever describes the live server's *original* setup** —
+   BUILD_LOG.md starts mid-project (2026-07-02) with the live server
+   already existing (`ramin@192.168.4.4`, port 8010, `audiobookrequest`
+   on 8000). What's actually running there today (empty DB? some
+   earlier build? a stale `docker-compose.yml`?) is genuinely unknown
+   from the documentation alone — pre-flight step 2 above is the way
+   to find out for real, not an assumption this runbook can resolve on
+   paper.
+3. **No live-server rollback plan exists anywhere in this project's
+   history.** The pg_dump step above is new (added by this runbook,
+   not previously documented) — there's no prior precedent for how a
+   bad live deploy would actually be rolled back (restore from dump?
+   revert the image tag and re-run migrations down?). Worth deciding
+   explicitly with Ramin before the first real deploy, not improvised
+   under pressure if something breaks.
+4. **Whether all 6 launch-gate backfill scripts need to run on this
+   first deploy, or only the subset for content actually being
+   imported**, depends on exactly which courses/units this deploy
+   ships — not something this runbook can resolve without knowing the
+   deploy's actual content scope on the day. Confirm against
+   `scripts/practice_manifest.txt` and the actual `/admin/content/
+   import` payload being sent.
+5. **Which course directions actually get imported on this first
+   deploy is an open product decision, not something this runbook
+   picks.** `scripts/content_manifest.txt` currently has 9 entries (the
+   6 publish-gate directions plus `en-es`/`en-fr`, both explicitly
+   "park until nl is done" per `CLAUDE.md`, plus an `en-nl-a2`
+   extension). Decide with Ramin whether the first live deploy imports
+   only the 6 publish-gate directions or everything currently compiled
+   — importing extra non-launch-gate content doesn't functionally
+   break anything, but it does mean es/fr becomes visible/reachable on
+   the live server before it's meant to be beta-facing.
+6. **Real gap found while writing this runbook, not previously
+   documented anywhere**: `CLAUDE.md`'s prior "Deploying a backend
+   change" skeleton (and an earlier draft of this file) treated `python
+   -m app.content.seed` as if it were the content-seeding step. Reading
+   `backend/app/content/seed.py` directly shows it only creates
+   `Language`/`Achievement` rows and 4 tiny hardcoded placeholder demo
+   courses — never the real ~131-unit courses. The real pipeline
+   (`scripts/compile_content.py` → `POST /admin/content/import`) was
+   never in the deploy skeleton at all before this runbook. Worth
+   double-checking on deploy day that this runbook's step 7 is actually
+   followed and not skipped by habit in favor of the old, insufficient
+   `app.content.seed` step.
