@@ -1,0 +1,209 @@
+schema_version: "1.0"
+pack_key: practice.en-nl.a1.unit18
+source_language: en
+target_language: nl
+unit_content_key: nl.a1.unit18.housing
+review:
+  status: unreviewed
+  fresh_context: "false"
+  notes: "Authored 2026-07-06 by the Claude session closing the en-nl
+    practice-pool gap behind its lesson content (lesson content already
+    goes through unit23; practice templates previously stopped at
+    unit16). This unit (unit18) covers housing: naming rooms, stating a
+    room count, describing a balcony/garden, describing size/coziness,
+    and reading/hearing about Omar's new apartment in Utrecht. Added 19
+    new Dutch token classifications for this unit specifically to
+    scripts/backfill_lexemes_en_nl.py.
+
+    New semantic tags: a 5-member 'room_word'/'room_word_pure'
+    (appartement/woonkamer/slaapkamer/keuken/badkamer) IS safe
+    generatively in 'Ik heb een {item}.' -- 'een' is Dutch's single
+    invariant indefinite article (unlike de/het for definites), so
+    gender differences across these 5 nouns don't matter here, verified
+    directly against the real content's own 'Ik heb een appartement.'/
+    'Ik heb een woonkamer, een slaapkamer, een keuken en een badkamer.'
+    A broader 7-member 'housing_vocab'/'housing_vocab_pure' (adds balkon/
+    tuin) is recognition-only -- balkon/tuin use the different 'Er is
+    (geen) {item}.' existential pattern, so they are deliberately NOT
+    folded into the room_word generative frame. A 3-member
+    'home_adjective' tag (groot/klein/gezellig) is used generatively in
+    'Het appartement is {item}.' -- each of the 3 describes a different
+    subject in the real content (De woonkamer is groot./De keuken is
+    klein./Het appartement is klein maar gezellig.), but every one of
+    them is independently grammatical describing 'het appartement'
+    itself, so this is a drill sentence, not a factual claim about which
+    specific room is big/small/cozy -- same precedent as unit14's
+    comparative_adj tag and unit17's person_name x occupation drill this
+    same session. Reused the existing broad 'number' tag (dozens of
+    members, part_of_speech [symbol, noun]) for the room-count frame 'Ik
+    heb {item} slaapkamers.' -- zero new classifier code needed for that
+    slot.
+
+    Every slot's real candidate count was verified with the repo's
+    standalone scripts/_practice_slot_check.py harness (already globs
+    en-nl) against this script's actual output; every multiple_choice/
+    listen_select slot clears the real >=3-distinct bar the backend's
+    build_prompt() actually enforces, and every matching_pairs slot has
+    >=2 distinct tokens (room_word_pure's 5-slot matching_pairs uses
+    every real member available per AUTHORING_GUIDE §16's own
+    escape valve for units without a full dozen -- not padded with
+    untaught vocabulary). Needs the standard fresh-context review before
+    import. Same blocking dependency as every earlier en-nl pack:
+    backfill_lexemes_en_nl.py has not actually been run against a real
+    database yet."
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [room_word, room_word_pure, housing_vocab, housing_vocab_pure, home_adjective, number]
+slot_presets:
+  room_word: &room_word {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: room_word}}
+  # room_word_pure: exact-case (no capitalized "Appartement" duplicate),
+  # safe for matching_pairs -- see scripts/backfill_lexemes_en_nl.py's
+  # room_word_pure comment. This file's OTHER templates below keep using
+  # the plain "room_word"/"housing_vocab" tags unchanged.
+  room_word_pure: &room_word_pure {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: room_word_pure}}
+  housing_vocab: &housing_vocab {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: housing_vocab}}
+  housing_vocab_pure: &housing_vocab_pure {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: housing_vocab_pure}}
+  home_adjective: &home_adjective {language_code: nl, part_of_speech: adjective, agreement_tags: {semantic: home_adjective}}
+  number: &number {language_code: nl, part_of_speech: [symbol, noun], agreement_tags: {semantic: number}}
+templates:
+  - content_key: practice.en-nl.nl.a1.unit18.lesson01.order.001
+    lesson_content_key: nl.a1.unit18.lesson01.mijn_appartement
+    type: word_order
+    frame: {text: "Ik heb een {item}.", language_code: nl, direction: ltr}
+    slots: {item: *room_word}
+    answer_derivation: {kind: render_frame, frame: {text: "Ik heb een {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} is the noun in this sentence.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit18.lesson01.choose.002
+    lesson_content_key: nl.a1.unit18.lesson01.mijn_appartement
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *housing_vocab}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a home-related word from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit18.lesson01.listen.003
+    lesson_content_key: nl.a1.unit18.lesson01.mijn_appartement
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *housing_vocab}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit18.lesson01.match.004
+    lesson_content_key: nl.a1.unit18.lesson01.mijn_appartement
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: nl, direction: ltr}
+    slots: {first: *housing_vocab_pure, second: *housing_vocab_pure, third: *housing_vocab_pure, fourth: *housing_vocab_pure, fifth: *housing_vocab_pure, sixth: *housing_vocab_pure}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Match each home-related word with its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit18.lesson02.order.001
+    lesson_content_key: nl.a1.unit18.lesson02.hoeveel_kamers
+    type: word_order
+    frame: {text: "Ik heb {item} slaapkamers.", language_code: nl, direction: ltr}
+    slots: {item: *number}
+    answer_derivation: {kind: render_frame, frame: {text: "Ik heb {item} slaapkamers.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} states how many bedrooms.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit18.lesson02.translate.002
+    lesson_content_key: nl.a1.unit18.lesson02.hoeveel_kamers
+    type: translation
+    frame:
+      text: "I have {item} bedrooms."
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *number}
+    answer_derivation: {kind: render_frame, frame: {text: "Ik heb {item} slaapkamers.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Ik heb {item} slaapkamers.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit18.lesson03.choose.001
+    lesson_content_key: nl.a1.unit18.lesson03.balkon_en_tuin
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *housing_vocab}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a home-related word from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit18.lesson03.listen.002
+    lesson_content_key: nl.a1.unit18.lesson03.balkon_en_tuin
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *housing_vocab}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit18.lesson04.translate.001
+    lesson_content_key: nl.a1.unit18.lesson04.groot_of_klein
+    type: translation
+    frame:
+      text: "{item}"
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *home_adjective}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The Dutch word is {item}.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit18.lesson04.order.002
+    lesson_content_key: nl.a1.unit18.lesson04.groot_of_klein
+    type: word_order
+    frame: {text: "Het appartement is {item}.", language_code: nl, direction: ltr}
+    slots: {item: *home_adjective}
+    answer_derivation: {kind: render_frame, frame: {text: "Het appartement is {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} describes the apartment in this sentence.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit18.lesson04.listen.003
+    lesson_content_key: nl.a1.unit18.lesson04.groot_of_klein
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *housing_vocab}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit18.lesson05.choose.001
+    lesson_content_key: nl.a1.unit18.lesson05.advertentie_lezen
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *housing_vocab}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a word from the housing ad.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit18.lesson05.match.002
+    lesson_content_key: nl.a1.unit18.lesson05.advertentie_lezen
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth}", language_code: nl, direction: ltr}
+    slots: {first: *room_word_pure, second: *room_word_pure, third: *room_word_pure, fourth: *room_word_pure, fifth: *room_word_pure}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth]}
+    feedback_frame: {text: "Match each room word with its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit18.lesson06.listen.001
+    lesson_content_key: nl.a1.unit18.lesson06.nieuw_appartement
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *housing_vocab}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a word from this dialogue.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit18.lesson06.translate.002
+    lesson_content_key: nl.a1.unit18.lesson06.nieuw_appartement
+    type: translation
+    frame:
+      text: "The apartment is {item}."
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *home_adjective}
+    answer_derivation: {kind: render_frame, frame: {text: "Het appartement is {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Het appartement is {item}.", language_code: en, direction: ltr}

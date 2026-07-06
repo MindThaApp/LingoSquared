@@ -1,0 +1,168 @@
+schema_version: "1.0"
+pack_key: practice.en-nl.a1.unit21
+source_language: en
+target_language: nl
+unit_content_key: nl.a1.unit21.emotions
+review:
+  status: unreviewed
+  fresh_context: "false"
+  notes: "Authored 2026-07-06 by the Claude session extending the en-nl
+    Endless Practice pool to cover the real content gap flagged this
+    session: en-nl practice templates only went through unit16 while the
+    actual Dutch lesson content already goes through unit23. This file
+    covers unit21 (expressing feelings): naming basic feelings, giving a
+    reason with omdat, asking/describing feelings with voelen zich.
+    Added a 5-member 'feeling_adj' generative adjective tag (blij/
+    verdrietig/boos/zenuwachtig/trots) verified safe in THREE distinct
+    real sentence shapes from this unit's own content: 'Ik ben {item}.'
+    (lesson01), 'Hij voelt zich {item}.' (lesson04), and 'Waarom ben je
+    {item}?' (lesson02's own teaching card, reused generatively here).
+    All five feelings take all three shapes grammatically (trots is not
+    literally combined with 'Ik ben' in the source text but is
+    grammatically identical to blij/zenuwachtig there, same reasoning
+    already established for unit14's comparative_adj reversed-pairing
+    note). Every slot's real candidate count was verified with a
+    standalone lexeme_matches()-replicating harness against this script's
+    actual output before writing these templates. Needs the standard
+    fresh-context review before import. Same blocking dependency as every
+    earlier en-nl pack: backfill_lexemes_en_nl.py has not actually been
+    run against a real database yet."
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [feeling_adj]
+slot_presets:
+  feeling_adj: &feeling_adj {language_code: nl, part_of_speech: adjective, agreement_tags: {semantic: feeling_adj}}
+templates:
+  - content_key: practice.en-nl.nl.a1.unit21.lesson01.choose.001
+    lesson_content_key: nl.a1.unit21.lesson01.blij_verdrietig_boos
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *feeling_adj}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a feeling word from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit21.lesson01.listen.002
+    lesson_content_key: nl.a1.unit21.lesson01.blij_verdrietig_boos
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *feeling_adj}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit21.lesson01.match.003
+    lesson_content_key: nl.a1.unit21.lesson01.blij_verdrietig_boos
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth}", language_code: nl, direction: ltr}
+    slots: {first: *feeling_adj, second: *feeling_adj, third: *feeling_adj, fourth: *feeling_adj, fifth: *feeling_adj}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth]}
+    feedback_frame: {text: "Match each feeling word with its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit21.lesson01.order.004
+    lesson_content_key: nl.a1.unit21.lesson01.blij_verdrietig_boos
+    type: word_order
+    frame: {text: "Ik ben {item}.", language_code: nl, direction: ltr}
+    slots: {item: *feeling_adj}
+    answer_derivation: {kind: render_frame, frame: {text: "Ik ben {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} is the feeling in this sentence.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit21.lesson02.order.001
+    lesson_content_key: nl.a1.unit21.lesson02.waarom_ben_je_blij
+    type: word_order
+    frame: {text: "Waarom ben je {item}?", language_code: nl, direction: ltr}
+    slots: {item: *feeling_adj}
+    answer_derivation: {kind: render_frame, frame: {text: "Waarom ben je {item}?", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} is the feeling being asked about.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit21.lesson02.translate.002
+    lesson_content_key: nl.a1.unit21.lesson02.waarom_ben_je_blij
+    type: translation
+    frame:
+      text: "Why are you {item}?"
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *feeling_adj}
+    answer_derivation: {kind: render_frame, frame: {text: "Waarom ben je {item}?", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Waarom ben je {item}?", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit21.lesson02.listen.003
+    lesson_content_key: nl.a1.unit21.lesson02.waarom_ben_je_blij
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *feeling_adj}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit21.lesson03.choose.001
+    lesson_content_key: nl.a1.unit21.lesson03.zenuwachtig_voor_iets
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *feeling_adj}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a feeling word from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit21.lesson03.translate.002
+    lesson_content_key: nl.a1.unit21.lesson03.zenuwachtig_voor_iets
+    type: translation
+    frame:
+      text: "I am {item}."
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *feeling_adj}
+    answer_derivation: {kind: render_frame, frame: {text: "Ik ben {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Ik ben {item}.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit21.lesson04.order.001
+    lesson_content_key: nl.a1.unit21.lesson04.naar_gevoelens_vragen
+    type: word_order
+    frame: {text: "Hij voelt zich {item}.", language_code: nl, direction: ltr}
+    slots: {item: *feeling_adj}
+    answer_derivation: {kind: render_frame, frame: {text: "Hij voelt zich {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} is how he feels.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit21.lesson04.translate.002
+    lesson_content_key: nl.a1.unit21.lesson04.naar_gevoelens_vragen
+    type: translation
+    frame:
+      text: "He feels {item}."
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *feeling_adj}
+    answer_derivation: {kind: render_frame, frame: {text: "Hij voelt zich {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Hij voelt zich {item}.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit21.lesson04.listen.003
+    lesson_content_key: nl.a1.unit21.lesson04.naar_gevoelens_vragen
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *feeling_adj}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit21.lesson05.choose.001
+    lesson_content_key: nl.a1.unit21.lesson05.bericht_lezen
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *feeling_adj}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a feeling word from the message.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit21.lesson06.listen.001
+    lesson_content_key: nl.a1.unit21.lesson06.eerste_dienst_gesprek
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *feeling_adj}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard in this dialogue.", language_code: en, direction: ltr}

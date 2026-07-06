@@ -73,12 +73,55 @@ review:
     direction: OK, no new problems -- the 5 pre-existing problems that
     script reports are all in en-fa unit01/unit02, unrelated to this
     unit or direction).
+
+    Cross-direction technique backport (2026-07-06): the parallel
+    prs-en session working the same unit25/26 depth pass discovered a
+    better technique than the bare dogpark_noun-only reuse above -- this
+    unit's own real taught sentences also generalize already-classified
+    COURSE-WIDE tags from earlier units, not just dogpark_noun.
+    Backported prs-en's exact 7-template pattern
+    (practice.prs-en.a2.unit26.yaml, reviewed as the reference for this
+    pass), all anchored to real lessons, no new vocabulary or semantic
+    categories invented:
+    (1) lesson01 teaches "in my opinion" verbatim, and lesson03's real
+    reading text opens "In my opinion, the new dog park is a good
+    idea." -- the already-established 4-member 'possessive' tag (my/
+    your/his/her, defined for unit06's family lessons) generalizes that
+    exact real sentence with zero grammar loss ("In your/his/her
+    opinion, the dog park is a good idea." all hold), giving a
+    word_order + fill_in_blank pair anchored to lesson01, plus a bare
+    listen_select recognition item.
+    (2) lesson01's "I think" is real content for the already-
+    established 'identity' tag (the token "i", defined for unit01/02)
+    -- a multiple_choice + a listen_select, bare-word only.
+    (3) lesson04's real dialogue line "Yes, I think that would be
+    better." is real content for the already-established 'politeness'
+    tag (thanks/thank/nice/welcome/yes/no, defined for unit01, via the
+    token "yes") -- a multiple_choice + a listen_select, again
+    bare-word only (this pack's local politeness preset broadens the
+    part_of_speech list to [noun, verb, adjective, particle] instead of
+    unit01's noun-only version, same as prs-en's own politeness preset,
+    since politeness members actually span all four POS course-wide).
+    No invented English tokens or Farsi glosses -- every gloss/POS/tag
+    already existed in scripts/_en_target_lexeme_common.py and
+    scripts/backfill_lexemes_fa_en.py's EN_TARGET_TO_FA_GLOSS dict
+    ("my"/"your"/"his"/"her"/"i"/"yes" all already present) before this
+    pass, so neither shared file needed a change (both out of scope for
+    this pass anyway). 13 -> 20 templates. Re-verified with
+    scripts/_practice_slot_check.py (possessive has 4 distinct
+    course-wide candidates, identity and politeness both well above the
+    >=3 multiple_choice/listen_select floor) and compile_content.py
+    practice-validate, 0 errors/0 warnings. Still needs the standard
+    fresh-context review before import.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [dogpark_noun]
+    semantic: [dogpark_noun, possessive, identity, politeness]
 slot_presets:
   dogpark_noun: &dogpark_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: dogpark_noun}}
+  possessive: &possessive {language_code: en, part_of_speech: pronoun, agreement_tags: {semantic: possessive}}
+  identity: &identity {language_code: en, part_of_speech: [pronoun, verb], agreement_tags: {semantic: identity}}
+  politeness: &politeness {language_code: en, part_of_speech: [noun, verb, adjective, particle], agreement_tags: {semantic: politeness}}
 templates:
   - content_key: practice.fa-en.en.a2.unit26.lesson01.choose.001
     lesson_content_key: en.a2.unit26.lesson01.opinion_phrases
@@ -172,3 +215,52 @@ templates:
     slots: {item: *dogpark_noun}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a2.unit26.lesson01.possessive_order.004
+    lesson_content_key: en.a2.unit26.lesson01.opinion_phrases
+    type: word_order
+    frame: {text: "In {item} opinion, the dog park is a good idea", language_code: en, direction: ltr}
+    slots: {item: *possessive}
+    answer_derivation: {kind: render_frame, frame: {text: "In {item} opinion, the dog park is a good idea", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} ضمیر ملکی این جمله است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a2.unit26.lesson01.possessive_fill.005
+    lesson_content_key: en.a2.unit26.lesson01.opinion_phrases
+    type: fill_in_blank
+    frame: {text: "In {item} opinion, the dog park is a good idea.", language_code: en, direction: ltr}
+    slots: {item: *possessive}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} ضمیر ملکی درست برای این جمله است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a2.unit26.lesson01.possessive_listen.006
+    lesson_content_key: en.a2.unit26.lesson01.opinion_phrases
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *possessive}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "واژه‌ای که شنیدید {item} بود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a2.unit26.lesson01.identity_choose.007
+    lesson_content_key: en.a2.unit26.lesson01.opinion_phrases
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *identity}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a2.unit26.lesson01.identity_listen.008
+    lesson_content_key: en.a2.unit26.lesson01.opinion_phrases
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *identity}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "واژه‌ای که شنیدید {item} بود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a2.unit26.lesson04.politeness_choose.004
+    lesson_content_key: en.a2.unit26.lesson04.opinion_dialogue
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *politeness}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a2.unit26.lesson04.politeness_listen.005
+    lesson_content_key: en.a2.unit26.lesson04.opinion_dialogue
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *politeness}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "واژه‌ای که در این گفتگو شنیدید {item} بود.", language_code: fa, direction: rtl}

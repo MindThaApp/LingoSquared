@@ -39,13 +39,55 @@ review:
     it' reasoning as the original authoring note above, re-confirmed not
     re-litigated. 5 -> 13 templates. Every new template's real candidate
     count re-verified with the standalone lexeme_matches()-replicating
-    harness (scripts/_practice_slot_check.py)."
+    harness (scripts/_practice_slot_check.py).
+
+    Backport of prs-en's better technique (2026-07-06, same depth-pass
+    program, following prs-en's a2_unit26.yaml as the structural reference
+    instead of re-deriving independently): rather than only reusing this
+    unit's own capped-at-4 dogpark_noun tag, prs-en noticed this unit's
+    own REAL taught sentences also generalize already-classified
+    COURSE-WIDE tags from earlier units: (1) lesson01 teaches 'in my
+    opinion' verbatim, and lesson03's real reading text opens 'In my
+    opinion, the new dog park is a good idea.' -- the already-established
+    4-member 'possessive' tag (my/your/his/her, defined for unit06's
+    family lessons, already used identically in this pack's own
+    a1_unit06.yaml) generalizes that exact real sentence with zero grammar
+    loss ('In your/his/her opinion, the dog park is a good idea.' all
+    hold), giving a word_order + fill_in_blank pair anchored to lesson01,
+    plus a bare listen_select recognition item. (2) lesson01's 'I think'
+    is real content for the already-established 'identity' tag (defined
+    for unit01/02, reused as bare-word recognition variety the same way
+    unit11/unit17 already reuse 'weekday' in unrelated later units) -- a
+    multiple_choice + a listen_select, bare-word only. (3) lesson04's real
+    dialogue line 'Yes, I think that would be better.' is real content for
+    the already-established 'politeness' tag (thanks/thank/nice/welcome/
+    yes/no, defined for unit01) -- a multiple_choice + a listen_select,
+    again bare-word only (this pack's local politeness preset broadens the
+    part_of_speech list to [noun, verb, adjective, particle] instead of
+    unit01's noun-only 'thanks' preset, since politeness members actually
+    span all four POS course-wide and bare-word recognition doesn't depend
+    on POS uniformity, mirroring prs-en's identical local preset). No
+    invented English tokens or Dutch glosses -- every gloss/POS/tag
+    (my/your/his/her, i/i'm/am/is/are/what/what's/name, thanks/thank/
+    nice/welcome/yes/no) already exists in scripts/
+    backfill_lexemes_nl_en.py's EN_TARGET_TO_NL_GLOSS and scripts/
+    _en_target_lexeme_common.py's shared classification, so neither shared
+    file needed a change (both out of scope for this pass anyway, shared
+    with the parallel fa-en worker doing the identical task on its own
+    files). 13 -> 20 templates. Re-verified with scripts/
+    _practice_slot_check.py (possessive has 4, identity and politeness
+    each well above the >=3 multiple_choice/listen_select floor) and
+    compile_content.py practice-validate, 0 errors/0 warnings. Still needs
+    the standard fresh-context review before import."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [dogpark_noun]
+    semantic: [dogpark_noun, possessive, identity, politeness]
 slot_presets:
   dogpark_noun: &dogpark_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: dogpark_noun}}
+  possessive: &possessive {language_code: en, part_of_speech: pronoun, agreement_tags: {semantic: possessive}}
+  identity: &identity {language_code: en, part_of_speech: [pronoun, verb], agreement_tags: {semantic: identity}}
+  politeness: &politeness {language_code: en, part_of_speech: [noun, verb, adjective, particle], agreement_tags: {semantic: politeness}}
 templates:
   - content_key: practice.nl-en.en.a2.unit26.lesson02.choose.001
     lesson_content_key: en.a2.unit26.lesson02.giving_an_opinion_with_a_reason
@@ -139,3 +181,52 @@ templates:
     slots: {item: *dogpark_noun}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a2.unit26.lesson01.possessive_order.004
+    lesson_content_key: en.a2.unit26.lesson01.opinion_phrases
+    type: word_order
+    frame: {text: "In {item} opinion, the dog park is a good idea", language_code: en, direction: ltr}
+    slots: {item: *possessive}
+    answer_derivation: {kind: render_frame, frame: {text: "In {item} opinion, the dog park is a good idea", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} is het bezittelijk voornaamwoord in deze zin.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a2.unit26.lesson01.possessive_fill.005
+    lesson_content_key: en.a2.unit26.lesson01.opinion_phrases
+    type: fill_in_blank
+    frame: {text: "In {item} opinion, the dog park is a good idea.", language_code: en, direction: ltr}
+    slots: {item: *possessive}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} is het juiste bezittelijk voornaamwoord voor deze zin.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a2.unit26.lesson01.possessive_listen.006
+    lesson_content_key: en.a2.unit26.lesson01.opinion_phrases
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *possessive}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is het woord dat je hoorde.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a2.unit26.lesson01.identity_choose.007
+    lesson_content_key: en.a2.unit26.lesson01.opinion_phrases
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *identity}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is een woord uit deze les.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a2.unit26.lesson01.identity_listen.008
+    lesson_content_key: en.a2.unit26.lesson01.opinion_phrases
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *identity}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is het woord dat je hoorde.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a2.unit26.lesson04.politeness_choose.004
+    lesson_content_key: en.a2.unit26.lesson04.opinion_dialogue
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *politeness}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is een woord uit dit gesprek.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a2.unit26.lesson04.politeness_listen.005
+    lesson_content_key: en.a2.unit26.lesson04.opinion_dialogue
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *politeness}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is het woord dat je hoorde in dit gesprek.", language_code: nl, direction: ltr}

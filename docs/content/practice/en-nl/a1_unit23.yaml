@@ -1,0 +1,178 @@
+schema_version: "1.0"
+pack_key: practice.en-nl.a1.unit23
+source_language: en
+target_language: nl
+unit_content_key: nl.a1.unit23.money
+review:
+  status: unreviewed
+  fresh_context: "false"
+  notes: "Authored 2026-07-06 by the Claude session extending the en-nl
+    Endless Practice pool to cover the real content gap flagged this
+    session: en-nl practice templates only went through unit16 while the
+    actual Dutch lesson content already goes through unit23. This file
+    covers unit23 (money and paying): asking a total price, choosing card
+    or cash, splitting a bill, handling change, and reading a restaurant
+    bill. Reuses the EXISTING global 'number' semantic tag (already a
+    broad, well-established cross-unit tag; vijfentwintig/vijfendertig
+    were added to its member set as part of this pass) for 'Het kost
+    {item} euro in totaal.' -- verified every cardinal number is
+    grammatically valid stating a euro price. Added a 5-member
+    'payment_verb' tag (betalen/pinnen/afrekenen/delen/vragen) verified
+    safe in the polite request frame 'Mag ik {item}?' -- every member is
+    a natural bare-infinitive answer to 'what would you like to do' after
+    'mag ik' (pinnen/afrekenen directly attested in the real content;
+    betalen/delen/vragen grammatically identical bare-infinitive slots in
+    the same shape). A 3-member 'payment_noun' tag (rekening/wisselgeld/
+    totaal) is recognition-only (each takes a different
+    article/context), exactly meeting the >=3-distinct floor for
+    multiple_choice/listen_select. Every slot's real candidate count was
+    verified with a standalone lexeme_matches()-replicating harness
+    against this script's actual output before writing these templates.
+    Needs the standard fresh-context review before import. Same blocking
+    dependency as every earlier en-nl pack: backfill_lexemes_en_nl.py has
+    not actually been run against a real database yet."
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [number, payment_verb, payment_noun]
+slot_presets:
+  number: &number {language_code: nl, part_of_speech: [symbol, noun], agreement_tags: {semantic: number}}
+  payment_verb: &payment_verb {language_code: nl, part_of_speech: verb, agreement_tags: {semantic: payment_verb}}
+  payment_noun: &payment_noun {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: payment_noun}}
+templates:
+  - content_key: practice.en-nl.nl.a1.unit23.lesson01.translate.001
+    lesson_content_key: nl.a1.unit23.lesson01.hoeveel_kost_het
+    type: translation
+    frame:
+      text: "It costs {item} euros in total."
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *number}
+    answer_derivation: {kind: render_frame, frame: {text: "Het kost {item} euro in totaal.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Het kost {item} euro in totaal.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit23.lesson01.order.002
+    lesson_content_key: nl.a1.unit23.lesson01.hoeveel_kost_het
+    type: word_order
+    frame: {text: "Het kost {item} euro in totaal.", language_code: nl, direction: ltr}
+    slots: {item: *number}
+    answer_derivation: {kind: render_frame, frame: {text: "Het kost {item} euro in totaal.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} is the price in this sentence.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit23.lesson01.choose.003
+    lesson_content_key: nl.a1.unit23.lesson01.hoeveel_kost_het
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *payment_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a money word from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit23.lesson02.choose.001
+    lesson_content_key: nl.a1.unit23.lesson02.pinnen_of_contant
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *payment_verb}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a payment word from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit23.lesson02.listen.002
+    lesson_content_key: nl.a1.unit23.lesson02.pinnen_of_contant
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *payment_verb}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit23.lesson02.match.003
+    lesson_content_key: nl.a1.unit23.lesson02.pinnen_of_contant
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth}", language_code: nl, direction: ltr}
+    slots: {first: *payment_verb, second: *payment_verb, third: *payment_verb, fourth: *payment_verb, fifth: *payment_verb}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth]}
+    feedback_frame: {text: "Match each payment word with its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit23.lesson03.choose.001
+    lesson_content_key: nl.a1.unit23.lesson03.de_rekening_delen
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *payment_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a money word from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit23.lesson03.order.002
+    lesson_content_key: nl.a1.unit23.lesson03.de_rekening_delen
+    type: word_order
+    frame: {text: "Mag ik {item}?", language_code: nl, direction: ltr}
+    slots: {item: *payment_verb}
+    answer_derivation: {kind: render_frame, frame: {text: "Mag ik {item}?", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} is what is being asked for permission.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit23.lesson04.choose.001
+    lesson_content_key: nl.a1.unit23.lesson04.wisselgeld
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *payment_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a money word from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit23.lesson04.listen.002
+    lesson_content_key: nl.a1.unit23.lesson04.wisselgeld
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *payment_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit23.lesson05.choose.001
+    lesson_content_key: nl.a1.unit23.lesson05.bonnetje_lezen
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *payment_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a word from the bill.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit23.lesson05.translate.002
+    lesson_content_key: nl.a1.unit23.lesson05.bonnetje_lezen
+    type: translation
+    frame:
+      text: "It costs {item} euros in total."
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *number}
+    answer_derivation: {kind: render_frame, frame: {text: "Het kost {item} euro in totaal.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Het kost {item} euro in totaal.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit23.lesson06.listen.001
+    lesson_content_key: nl.a1.unit23.lesson06.rekening_vragen
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *payment_verb}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard in this dialogue.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit23.lesson06.order.002
+    lesson_content_key: nl.a1.unit23.lesson06.rekening_vragen
+    type: word_order
+    frame: {text: "Mag ik {item}?", language_code: nl, direction: ltr}
+    slots: {item: *payment_verb}
+    answer_derivation: {kind: render_frame, frame: {text: "Mag ik {item}?", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} is what is being asked for permission.", language_code: en, direction: ltr}

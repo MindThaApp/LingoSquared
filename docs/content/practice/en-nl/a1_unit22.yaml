@@ -1,0 +1,165 @@
+schema_version: "1.0"
+pack_key: practice.en-nl.a1.unit22
+source_language: en
+target_language: nl
+unit_content_key: nl.a1.unit22.communication
+review:
+  status: unreviewed
+  fresh_context: "false"
+  notes: "Authored 2026-07-06 by the Claude session extending the en-nl
+    Endless Practice pool to cover the real content gap flagged this
+    session: en-nl practice templates only went through unit16 while the
+    actual Dutch lesson content already goes through unit23. This file
+    covers unit22 (calling and texting): answering the phone with met +
+    name, asking who is speaking, asking for repetition, sending a text.
+    Little of this unit's own vocabulary shares a common generative frame
+    (most phrases are fixed idioms with no natural substitution slot), so
+    this pack leans on two tags: a 4-member 'communication_word'
+    recognition-only tag (bellen/sms/horen/vertellen -- mixed noun/verb,
+    no shared frame, same discipline as unit11's plan_vocab and unit17's
+    work_vocab) for bare-word MC/listen_select/matching_pairs, and a
+    reuse of the EXISTING global 'person_name' tag (Lotte/Noor/Omar/
+    Sander/Fenna/Jan/Marieke, 7 members, already defined by earlier units'
+    name-introduction lessons) for the 'Hallo, met {item}.'/'Hello, this
+    is {item}.' phone-identification frame this unit teaches -- verified
+    every name is grammatically interchangeable in that exact shape.
+    Every slot's real candidate count was verified with a standalone
+    lexeme_matches()-replicating harness against this script's actual
+    output before writing these templates. Needs the standard
+    fresh-context review before import. Same blocking dependency as every
+    earlier en-nl pack: backfill_lexemes_en_nl.py has not actually been
+    run against a real database yet."
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [communication_word, person_name]
+slot_presets:
+  communication_word: &communication_word {language_code: nl, part_of_speech: [noun, verb], agreement_tags: {semantic: communication_word}}
+  person_name: &person_name {language_code: nl, part_of_speech: proper_noun, agreement_tags: {semantic: person_name}}
+templates:
+  - content_key: practice.en-nl.nl.a1.unit22.lesson01.order.001
+    lesson_content_key: nl.a1.unit22.lesson01.ik_bel_je
+    type: word_order
+    frame: {text: "Hallo, met {item}.", language_code: nl, direction: ltr}
+    slots: {item: *person_name}
+    answer_derivation: {kind: render_frame, frame: {text: "Hallo, met {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} is who is speaking.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit22.lesson01.translate.002
+    lesson_content_key: nl.a1.unit22.lesson01.ik_bel_je
+    type: translation
+    frame:
+      text: "Hello, this is {item}."
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *person_name}
+    answer_derivation: {kind: render_frame, frame: {text: "Hallo, met {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Hallo, met {item}.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit22.lesson01.choose.003
+    lesson_content_key: nl.a1.unit22.lesson01.ik_bel_je
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *communication_word}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a communication word from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit22.lesson01.listen.004
+    lesson_content_key: nl.a1.unit22.lesson01.ik_bel_je
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *communication_word}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit22.lesson01.match.005
+    lesson_content_key: nl.a1.unit22.lesson01.ik_bel_je
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth}", language_code: nl, direction: ltr}
+    slots: {first: *communication_word, second: *communication_word, third: *communication_word, fourth: *communication_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth]}
+    feedback_frame: {text: "Match each word with its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit22.lesson02.order.001
+    lesson_content_key: nl.a1.unit22.lesson02.met_wie_spreek_ik
+    type: word_order
+    frame: {text: "Hallo, met {item}.", language_code: nl, direction: ltr}
+    slots: {item: *person_name}
+    answer_derivation: {kind: render_frame, frame: {text: "Hallo, met {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} is who is speaking.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit22.lesson02.listen.002
+    lesson_content_key: nl.a1.unit22.lesson02.met_wie_spreek_ik
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *communication_word}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit22.lesson03.choose.001
+    lesson_content_key: nl.a1.unit22.lesson03.kun_je_dat_herhalen
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *communication_word}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a communication word from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit22.lesson03.listen.002
+    lesson_content_key: nl.a1.unit22.lesson03.kun_je_dat_herhalen
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *communication_word}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit22.lesson04.translate.001
+    lesson_content_key: nl.a1.unit22.lesson04.een_sms_sturen
+    type: translation
+    frame:
+      text: "Hello, this is {item}."
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *person_name}
+    answer_derivation: {kind: render_frame, frame: {text: "Hallo, met {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Hallo, met {item}.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit22.lesson04.listen.002
+    lesson_content_key: nl.a1.unit22.lesson04.een_sms_sturen
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *communication_word}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit22.lesson05.choose.001
+    lesson_content_key: nl.a1.unit22.lesson05.sms_gesprek_lezen
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *communication_word}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a word from the text exchange.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit22.lesson06.listen.001
+    lesson_content_key: nl.a1.unit22.lesson06.telefoontje_na_dienst
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *communication_word}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard in this dialogue.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit22.lesson06.order.002
+    lesson_content_key: nl.a1.unit22.lesson06.telefoontje_na_dienst
+    type: word_order
+    frame: {text: "Hallo, met {item}.", language_code: nl, direction: ltr}
+    slots: {item: *person_name}
+    answer_derivation: {kind: render_frame, frame: {text: "Hallo, met {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} is who is speaking.", language_code: en, direction: ltr}
