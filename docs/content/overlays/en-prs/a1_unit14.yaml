@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: "1.1"
 overlay_version: "2026.1-draft.1"
 overlay_key: en-prs.a1.unit14
 source_language: en
@@ -13,7 +13,9 @@ review:
   required_next_reviewer: null
   notes: "Authored alongside the new prs a1_unit14_preferences.yaml realization. Follows the established en-prs overlay convention from units 01-13 (English instruction/correct_option/distractors/feedback, target-language Dari accepted_answers, English glosses for recognize_* multiple_choice items to avoid the same-string visual-matching anti-pattern). Multi-clause production exercises (write_own_preference, dialogue_response_own_preference, write_comparison_summary) carry period-joined, comma-joined, and و-joined accepted_answers variants per §12, and the two open-ended production exercises carry coffee/tea/music topic variants from the start (learned directly from the fa sibling unit's own fresh-context review, which found a disguised §17-class ambiguity when only one topic was accepted). Authored §14/§16/§17-compliant from the start alongside the realization. Needs the standard fresh-context review before shipping.
 
-    FRESH-CONTEXT REVIEW COMPLETED 2026-07-07 (zero prior context, fa sibling files never opened, paired with the realization's own matching review pass). Verified content_key parity exact both directions against the realization (1 unit/6 lessons/29 teaching/30 exercises each side) and that this file's flat top-level dicts (units/lessons/teaching/exercises keyed directly by content_key) correctly match the established overlay schema. Confirmed via direct code read of backend/app/api/router.py's grade()/is_multi_answer_response() that the generic multi-answer accepted-list grading path checks every entry, not just the first, so write_own_preference's 12-and-growing accepted variants and dialogue_response_own_preference's coffee/tea variants all genuinely grade correct, not just the first-authored one. Ran a programmatic jargon-leak check (not just grep) against every learner-facing string value (instruction/correct_option/distractors/options/feedback/title/gloss/note/word_bank/accepted_answers) -- zero snake_case leaks. Ran a real yaml.safe_load-based recursive stray-Python-bool check against every dict value in this file -- clean, only the legitimate schema booleans present. Ran a ZWNJ-aware Persian-punctuation-stripping tokenizer checking every Dari-script token in every accepted_answers/correct_option/distractors value against the paired realization's cumulative file-scoped introduced_tokens -- zero untaught-vocabulary violations. FOUND AND FIXED the missing period-joined §12 variant on translate_like_coffee_because_delicious, translate_like_music_because_interesting, write_own_preference, and dialogue_response_own_preference (added as status:correct, matching the realization-side note's detail). Re-verified via actual compile that every new accepted_answers entry appears correctly in the compiled correct_response.accepted list. Both validate and compile re-run clean (0 errors/0 warnings) after every fix; compile output is valid JSON."
+    FRESH-CONTEXT REVIEW COMPLETED 2026-07-07 (zero prior context, fa sibling files never opened, paired with the realization's own matching review pass). Verified content_key parity exact both directions against the realization (1 unit/6 lessons/29 teaching/30 exercises each side) and that this file's flat top-level dicts (units/lessons/teaching/exercises keyed directly by content_key) correctly match the established overlay schema. Confirmed via direct code read of backend/app/api/router.py's grade()/is_multi_answer_response() that the generic multi-answer accepted-list grading path checks every entry, not just the first, so write_own_preference's 12-and-growing accepted variants and dialogue_response_own_preference's coffee/tea variants all genuinely grade correct, not just the first-authored one. Ran a programmatic jargon-leak check (not just grep) against every learner-facing string value (instruction/correct_option/distractors/options/feedback/title/gloss/note/word_bank/accepted_answers) -- zero snake_case leaks. Ran a real yaml.safe_load-based recursive stray-Python-bool check against every dict value in this file -- clean, only the legitimate schema booleans present. Ran a ZWNJ-aware Persian-punctuation-stripping tokenizer checking every Dari-script token in every accepted_answers/correct_option/distractors value against the paired realization's cumulative file-scoped introduced_tokens -- zero untaught-vocabulary violations. FOUND AND FIXED the missing period-joined §12 variant on translate_like_coffee_because_delicious, translate_like_music_because_interesting, write_own_preference, and dialogue_response_own_preference (added as status:correct, matching the realization-side note's detail). Re-verified via actual compile that every new accepted_answers entry appears correctly in the compiled correct_response.accepted list. Both validate and compile re-run clean (0 errors/0 warnings) after every fix; compile output is valid JSON.
+
+    2026-07-07: AUTHORING_GUIDE.md §19 retrofit -- added example_gloss to all 12 kind:vocabulary teaching entries (1 merged card -- names -- given a positionally-matched example_gloss list), matching the new example: sentences added to the paired realization. schema_version bumped to 1.1. Pending fresh-context review."
 
 course:
   title: Dari A1
@@ -50,10 +52,12 @@ teaching:
     title: Coffee
     gloss: coffee
     note: "قهوه means coffee."
+    example_gloss: "I like coffee."
   prs.a1.unit14.lesson01.teach.chai_word:
     title: Tea
     gloss: tea
     note: "چای means tea."
+    example_gloss: "I don't like tea."
   prs.a1.unit14.lesson01.teach.doost_nadaram_phrase:
     title: "I don't like"
     gloss: "I don't like"
@@ -62,6 +66,7 @@ teaching:
     title: I
     gloss: I
     note: "من is the standalone first-person pronoun."
+    example_gloss: "I like coffee."
   prs.a1.unit14.lesson01.teach.ra_word:
     title: "(object marker)"
     gloss: "(marks the object of the verb)"
@@ -70,10 +75,12 @@ teaching:
     title: Which
     gloss: which
     note: "کدام means which (one)."
+    example_gloss: "Which one do you like?"
   prs.a1.unit14.lesson02.teach.moosiqi_word:
     title: Music
     gloss: music
     note: "موسیقی means music."
+    example_gloss: "I like music."
   prs.a1.unit14.lesson02.teach.darid_grammar:
     title: "You have/like (polite)"
     gloss: "you have / you like"
@@ -86,6 +93,7 @@ teaching:
     title: More
     gloss: more
     note: "بیشتر means more."
+    example_gloss: "I like coffee more."
   prs.a1.unit14.lesson03.teach.ya_word:
     title: Or
     gloss: or
@@ -102,10 +110,12 @@ teaching:
     title: "It's delicious"
     gloss: "it's delicious"
     note: "خوش‌مزه است is the full, uncontracted form (it is delicious) -- this course's register keeps است separate rather than contracting it."
+    example_gloss: "I like coffee because it's delicious."
   prs.a1.unit14.lesson04.teach.jaleb_ast_word:
     title: "It's interesting"
     gloss: "it's interesting"
     note: "جالب است is the full, uncontracted form (it is interesting)."
+    example_gloss: "I like music because it's interesting."
   prs.a1.unit14.lesson04.teach.va_word:
     title: And
     gloss: and
@@ -114,6 +124,7 @@ teaching:
     title: Negar
     gloss: Negar
     note: "A common Afghan female name."
+    example_gloss: "Negar likes tea."
   prs.a1.unit14.lesson05.teach.darad_grammar:
     title: "He/she likes"
     gloss: "he/she likes"
@@ -126,6 +137,7 @@ teaching:
     title: "It's warm"
     gloss: "it's warm"
     note: "گرم است is the full, uncontracted form (it is warm)."
+    example_gloss: "Negar likes tea because it's warm."
   prs.a1.unit14.lesson05.teach.reading_text:
     title: "Sample preference text"
     gloss: "Negar likes tea because it's warm. Negar doesn't like music."
@@ -134,6 +146,7 @@ teaching:
     title: "Karim and Negar"
     gloss: "Karim, Negar"
     note: "Common Afghan names used throughout this course."
+    example_gloss: ["I am Karim.", "I am Negar."]
   prs.a1.unit14.lesson06.teach.shoma_chetor_phrase:
     title: "What about you?"
     gloss: "What about you?"
@@ -142,6 +155,7 @@ teaching:
     title: "That's great"
     gloss: "that's great"
     note: "عالی است is the full, uncontracted form (it is great)."
+    example_gloss: "The coffee is great."
   prs.a1.unit14.lesson06.teach.dialogue_line1:
     title: "Karim asks"
     gloss: "Tea or coffee, which do you like more?"

@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: "1.1"
 overlay_version: "2026.1-draft.1"
 overlay_key: en-prs.a1.unit15
 source_language: en
@@ -13,7 +13,9 @@ review:
   required_next_reviewer: null
   notes: "Authored alongside the new prs a1_unit15_comparisons.yaml realization. Follows the established en-prs overlay convention from units 01-14 (English instruction/correct_option/distractors/feedback, target-language Dari accepted_answers, English glosses for recognize_* multiple_choice items). Multi-clause reason exercises (translate_this_better_because_cheaper, translate_that_worse_because_expensive) carry period-joined, comma-joined, and و-joined accepted_answers variants per §12. Both open-ended production exercises (write_own_comparison, dialogue_response_own_comparison, write_comparison_summary) carry multiple adjective/topic variants from the start, learned from the fa sibling unit's own review findings on unit14. Authored §14/§16/§17-compliant from the start alongside the realization. Needs the standard fresh-context review before shipping.
 
-    FRESH-CONTEXT REVIEW COMPLETED 2026-07-07 (zero prior context, fa sibling files never opened, paired with the realization's own matching review pass). Verified content_key parity exact both directions against the realization (1 unit/6 lessons/20 teaching/30 exercises each side) and that this file's flat top-level dicts (units/lessons/teaching/exercises keyed directly by content_key) correctly match the established overlay schema. Confirmed via direct code read of backend/app/api/router.py's grade()/is_multi_answer_response() that the generic multi-answer accepted-list grading path checks every entry, not just the first, so write_own_comparison's 8, dialogue_response_own_comparison's 4, and write_comparison_summary's 4 accepted variants all genuinely grade correct, not a disguised bug. Ran a programmatic jargon-leak check against every learner-facing string value -- zero snake_case leaks (the only matches found were in non-learner-facing metadata: status, generation_provenance.method, review.notes). Independently re-verified the pre-dispatch bali_word title/gloss Yes/yes quoting fix is correct, and ran a fresh real yaml.safe_load-based recursive stray-Python-bool check against every dict value in this file plus the paired realization -- clean both files, only the two legitimate schema booleans exist project-wide (neither present in this pair), confirming no second instance. Ran a real Python script comparing every exercise's paired realization prompt.target_blocks (language_code: en) against this file's instruction field for an exact case-insensitive match -- zero duplicate-instruction-text bugs. Ran a ZWNJ-aware, Persian-punctuation-stripping tokenizer checking every Dari-script token in every accepted_answers/correct_option/distractors value against the paired realization's cumulative file-scoped introduced_tokens -- zero untaught-vocabulary violations. Checked every multiple_choice/reading_comprehension/dialogue_comprehension exercise for the prompt-shows-answer bug -- all correct_option/distractors are English glosses against Dari-script prompts, no same-script leakage. Verified §12 multi-clause coverage genuinely present (period/comma/و-joined status:correct forms) on translate_this_better_because_cheaper, translate_that_worse_because_expensive, and write_comparison_summary; confirmed the و-joined reason-clause variants (which substitute و for چون) match unit14's own already-reviewed established convention, not a new gap. Grammar/dialect claims (X-از-Y-ADJ‌تر-است construction, از as than vs. from, بهتر/بدتر as genuine irregular comparatives, قد بلندتر است as a natural idiom, and all 5 Dari-vs-Iranian spelling pairs) independently verified via live web search, all confirmed correct. Re-ran validate and compile (not just validate): 0 errors/0 warnings both times, compile output valid JSON, and directly inspected the compiled output confirming all 30 exercises have a non-empty correct_response and the 5 multi-answer exercises compiled with the expected variant counts. No real bugs required fixing in this pair beyond the single pre-dispatch bali_word quoting fix (independently re-verified correct) -- this overlay was genuinely authored clean from the start."
+    FRESH-CONTEXT REVIEW COMPLETED 2026-07-07 (zero prior context, fa sibling files never opened, paired with the realization's own matching review pass). Verified content_key parity exact both directions against the realization (1 unit/6 lessons/20 teaching/30 exercises each side) and that this file's flat top-level dicts (units/lessons/teaching/exercises keyed directly by content_key) correctly match the established overlay schema. Confirmed via direct code read of backend/app/api/router.py's grade()/is_multi_answer_response() that the generic multi-answer accepted-list grading path checks every entry, not just the first, so write_own_comparison's 8, dialogue_response_own_comparison's 4, and write_comparison_summary's 4 accepted variants all genuinely grade correct, not a disguised bug. Ran a programmatic jargon-leak check against every learner-facing string value -- zero snake_case leaks (the only matches found were in non-learner-facing metadata: status, generation_provenance.method, review.notes). Independently re-verified the pre-dispatch bali_word title/gloss Yes/yes quoting fix is correct, and ran a fresh real yaml.safe_load-based recursive stray-Python-bool check against every dict value in this file plus the paired realization -- clean both files, only the two legitimate schema booleans exist project-wide (neither present in this pair), confirming no second instance. Ran a real Python script comparing every exercise's paired realization prompt.target_blocks (language_code: en) against this file's instruction field for an exact case-insensitive match -- zero duplicate-instruction-text bugs. Ran a ZWNJ-aware, Persian-punctuation-stripping tokenizer checking every Dari-script token in every accepted_answers/correct_option/distractors value against the paired realization's cumulative file-scoped introduced_tokens -- zero untaught-vocabulary violations. Checked every multiple_choice/reading_comprehension/dialogue_comprehension exercise for the prompt-shows-answer bug -- all correct_option/distractors are English glosses against Dari-script prompts, no same-script leakage. Verified §12 multi-clause coverage genuinely present (period/comma/و-joined status:correct forms) on translate_this_better_because_cheaper, translate_that_worse_because_expensive, and write_comparison_summary; confirmed the و-joined reason-clause variants (which substitute و for چون) match unit14's own already-reviewed established convention, not a new gap. Grammar/dialect claims (X-از-Y-ADJ‌تر-است construction, از as than vs. from, بهتر/بدتر as genuine irregular comparatives, قد بلندتر است as a natural idiom, and all 5 Dari-vs-Iranian spelling pairs) independently verified via live web search, all confirmed correct. Re-ran validate and compile (not just validate): 0 errors/0 warnings both times, compile output valid JSON, and directly inspected the compiled output confirming all 30 exercises have a non-empty correct_response and the 5 multi-answer exercises compiled with the expected variant counts. No real bugs required fixing in this pair beyond the single pre-dispatch bali_word quoting fix (independently re-verified correct) -- this overlay was genuinely authored clean from the start.
+
+    2026-07-07: AUTHORING_GUIDE.md §19 retrofit -- added example_gloss to all 12 kind:vocabulary teaching entries (2 merged cards -- the lesson03 and lesson06 names lists -- each given a positionally-matched example_gloss list), matching the new example: sentences added to the paired realization. schema_version bumped to 1.1. Pending fresh-context review."
 
 course:
   title: Dari A1
@@ -46,18 +48,22 @@ teaching:
     title: This
     gloss: this
     note: "این means this."
+    example_gloss: "This is bigger."
   prs.a1.unit15.lesson01.teach.aan_word:
     title: That
     gloss: that
     note: "آن means that -- this course's dialect uses the full form آن, not the colloquial Iranian اون."
+    example_gloss: "That is smaller."
   prs.a1.unit15.lesson01.teach.bozorgtar_ast_word:
     title: "It's bigger"
     gloss: "it's bigger"
     note: "بزرگ‌تر است is the full, uncontracted form (it is bigger) -- بزرگ‌تر است is the comparative of بزرگ (big) plus است kept as a separate word."
+    example_gloss: "This is bigger than that."
   prs.a1.unit15.lesson01.teach.koochaktar_ast_word:
     title: "It's smaller"
     gloss: "it's smaller"
     note: "کوچک‌تر است is the full form (it is smaller) -- کوچک is the standard Dari spelling (not the Iranian colloquial کوچیک)."
+    example_gloss: "That is smaller than this."
   prs.a1.unit15.lesson01.teach.az_word:
     title: Than
     gloss: than
@@ -66,14 +72,17 @@ teaching:
     title: "It's more expensive"
     gloss: "it's more expensive"
     note: "گران‌تر است is the full form (it is more expensive) -- گران is the standard Dari spelling (not the Iranian colloquial گرون)."
+    example_gloss: "This is more expensive than that."
   prs.a1.unit15.lesson02.teach.arzantar_ast_word:
     title: "It's cheaper"
     gloss: "it's cheaper"
     note: "ارزان‌تر است is the full form (it is cheaper) -- ارزان is the standard Dari spelling (not the Iranian colloquial ارزون)."
+    example_gloss: "That is cheaper than this."
   prs.a1.unit15.lesson03.teach.names:
     title: "Karim and Negar"
     gloss: "Karim, Negar"
     note: "Common Afghan names used throughout this course."
+    example_gloss: ["I am Karim.", "I am Negar."]
   prs.a1.unit15.lesson03.teach.ghad_bolandtar_phrase:
     title: "Taller"
     gloss: "taller / he's/she's taller"
@@ -82,14 +91,17 @@ teaching:
     title: "Younger"
     gloss: "younger / he's/she's younger"
     note: "جوان‌تر است is the full form (it is younger) -- جوان is the standard Dari spelling (not the Iranian colloquial جوون)."
+    example_gloss: "Negar is younger than Karim."
   prs.a1.unit15.lesson04.teach.behtar_ast_word:
     title: "It's better"
     gloss: "it's better"
     note: "بهتر است is the full form -- بهتر (better) is the irregular comparative of خوب (good)."
+    example_gloss: "This is better than that."
   prs.a1.unit15.lesson04.teach.badtar_ast_word:
     title: "It's worse"
     gloss: "it's worse"
     note: "بدتر است is the full form -- بدتر (worse) is the irregular comparative of بد (bad)."
+    example_gloss: "That is worse than this."
   prs.a1.unit15.lesson04.teach.choon_word:
     title: Because
     gloss: because
@@ -105,6 +117,7 @@ teaching:
   prs.a1.unit15.lesson06.teach.names:
     title: "Karim and Negar"
     gloss: "Karim, Negar"
+    example_gloss: ["Karim is taller.", "Negar is younger."]
   prs.a1.unit15.lesson06.teach.ama_word:
     title: But
     gloss: but
@@ -113,6 +126,7 @@ teaching:
     title: "Yes"
     gloss: "yes"
     note: "بلی is the polite/formal word for yes, consistent with this course's register."
+    example_gloss: "Yes, this is more expensive."
   prs.a1.unit15.lesson06.teach.dialogue_line1:
     title: "Karim says"
     gloss: "This is more expensive than that, but it's better."

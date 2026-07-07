@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: "1.1"
 overlay_version: "2026.1-draft.1"
 overlay_key: en-prs.a1.unit13
 source_language: en
@@ -13,7 +13,9 @@ review:
   required_next_reviewer: null
   notes: "Authored alongside the new prs a1_unit13_plans.yaml realization. Follows the established en-prs overlay convention from units 09-12 (English instruction/correct_option/distractors/feedback, target-language Dari accepted_answers, English glosses for recognize_* multiple_choice items to avoid the same-string visual-matching anti-pattern already fixed in units 07/08/09/10/11/12). Authored §14/§16/§17-compliant from the start alongside the realization. Needs the standard fresh-context review before shipping.
 
-    FRESH-CONTEXT REVIEW COMPLETED 2026-07-07 (paired with the realization's own fresh-context review, same pass -- zero prior context, fa sibling files never opened). Verified instruction<->answer-data coherence on every exercise; confirmed every recognize_* multiple_choice's correct_option/distractors are English glosses (no same-script prompt-shows-answer leakage against the Dari-script prompt); confirmed content_key parity exact both directions with the realization (1 unit/6 lessons/26 teaching/32 exercises each side); confirmed zero fill_in_blank exercises and zero bare unquoted yes/no/true/false values (a full recursive yaml.safe_load dict-value boolean scan found only the legitimate human_reviewed schema boolean). FOUND AND FIXED the same real §12 multi-clause gap the realization review found: added the missing period-joined and/or و-joined accepted_answers variants to translate_okay_great, dialogue_response_accept, translate_decline, dialogue_response_decline, write_invitation_reply, dialogue_response_confirm_plan, and write_plan_summary, plus a new teaching entry (lesson03.teach.aali_o_qabool) introducing و since it had never been taught in this unit before. Re-verified via actual compile (not just validate) that every exercise produces a real, non-empty correct_response and that the realization's paired duplicate-prompt-text fix (6 dialogue_response/writing_prompt exercises) produces no remaining duplicate text_blocks. Both validate and compile re-run clean (0 errors/0 warnings) after every fix; compile output is valid JSON."
+    FRESH-CONTEXT REVIEW COMPLETED 2026-07-07 (paired with the realization's own fresh-context review, same pass -- zero prior context, fa sibling files never opened). Verified instruction<->answer-data coherence on every exercise; confirmed every recognize_* multiple_choice's correct_option/distractors are English glosses (no same-script prompt-shows-answer leakage against the Dari-script prompt); confirmed content_key parity exact both directions with the realization (1 unit/6 lessons/26 teaching/32 exercises each side); confirmed zero fill_in_blank exercises and zero bare unquoted yes/no/true/false values (a full recursive yaml.safe_load dict-value boolean scan found only the legitimate human_reviewed schema boolean). FOUND AND FIXED the same real §12 multi-clause gap the realization review found: added the missing period-joined and/or و-joined accepted_answers variants to translate_okay_great, dialogue_response_accept, translate_decline, dialogue_response_decline, write_invitation_reply, dialogue_response_confirm_plan, and write_plan_summary, plus a new teaching entry (lesson03.teach.aali_o_qabool) introducing و since it had never been taught in this unit before. Re-verified via actual compile (not just validate) that every exercise produces a real, non-empty correct_response and that the realization's paired duplicate-prompt-text fix (6 dialogue_response/writing_prompt exercises) produces no remaining duplicate text_blocks. Both validate and compile re-run clean (0 errors/0 warnings) after every fix; compile output is valid JSON.
+
+    2026-07-07: AUTHORING_GUIDE.md §19 retrofit -- added example_gloss to all 14 kind:vocabulary teaching entries (1 merged card -- names -- given a positionally-matched example_gloss list), matching the new example: sentences added to the paired realization. schema_version bumped to 1.1. Pending fresh-context review."
 
 course:
   title: Dari A1
@@ -36,14 +38,17 @@ teaching:
     title: Plan
     gloss: plan
     note: "پلان means plan."
+    example_gloss: "I have a plan."
   prs.a1.unit13.lesson01.teach.park_word:
     title: Park
     gloss: park
     note: "پارک means park."
+    example_gloss: "I go to the park."
   prs.a1.unit13.lesson01.teach.berawim_word:
     title: "Let's go"
     gloss: "let's go"
     note: "برویم (let's go) is the subjunctive 'we go' form used for suggestions."
+    example_gloss: "Let's go to the park."
   prs.a1.unit13.lesson01.teach.chetor_ast_word:
     title: "How about it?"
     gloss: "How about it?"
@@ -52,10 +57,12 @@ teaching:
     title: "Do you want (polite)"
     gloss: "do you want (polite)"
     note: "می‌خواهین (do you want, polite) starts a proposal question."
+    example_gloss: "Do you want to go to the park?"
   prs.a1.unit13.lesson02.teach.jomeh_review:
     title: "Friday (review)"
     gloss: Friday
     note: "جمعه reviews the day name from unit09."
+    example_gloss: "Shall we go to the park on Friday?"
   prs.a1.unit13.lesson02.teach.propose_phrase:
     title: "Do you want to go to the park on Friday?"
     gloss: "Do you want to go to the park on Friday?"
@@ -64,14 +71,17 @@ teaching:
     title: Okay
     gloss: okay
     note: "خوب است means okay/good."
+    example_gloss: "Friday is fine."
   prs.a1.unit13.lesson03.teach.aali_ast_word:
     title: Great
     gloss: great
     note: "عالی است means great/excellent."
+    example_gloss: "The park is great."
   prs.a1.unit13.lesson03.teach.qabool_ast_word:
     title: "It's a deal"
     gloss: "it's a deal / agreed"
     note: "قبول است means it's accepted/agreed."
+    example_gloss: "It's a deal, let's go to the park on Friday."
   prs.a1.unit13.lesson03.teach.aali_o_qabool:
     title: "Great and it's a deal"
     gloss: "Great and it's a deal!"
@@ -80,10 +90,12 @@ teaching:
     title: "I'm sorry"
     gloss: "I'm sorry"
     note: "متأسف استم means I'm sorry, using the established استم copula."
+    example_gloss: "I'm sorry, I have things to do."
   prs.a1.unit13.lesson04.teach.nemitawanam_word:
     title: "I can't"
     gloss: "I can't"
     note: "نمی‌توانم means I can't (full uncontracted form)."
+    example_gloss: "I'm sorry, I can't."
   prs.a1.unit13.lesson04.teach.kar_daram_word:
     title: "I have things to do"
     gloss: "I have things to do"
@@ -92,6 +104,7 @@ teaching:
     title: Invitation
     gloss: invitation
     note: "دعوت means invitation."
+    example_gloss: "The invitation is nice."
   prs.a1.unit13.lesson05.teach.saat_panj_review:
     title: "Five o'clock in the afternoon"
     gloss: "five o'clock in the afternoon"
@@ -100,6 +113,7 @@ teaching:
     title: "I'm waiting"
     gloss: "I'm waiting"
     note: "منتظر استم means I'm waiting, using the established استم copula."
+    example_gloss: "I'm waiting on Friday."
   prs.a1.unit13.lesson05.teach.invitation_message:
     title: "Sample invitation message"
     gloss: "Hi! Do you want to go to the park Friday at five in the afternoon? I'm waiting to hear from you."
@@ -108,10 +122,12 @@ teaching:
     title: "I'll see you"
     gloss: "I'll see you"
     note: "شما را می‌بینم (I'll see you, polite) is a common way to close off confirming a plan."
+    example_gloss: "I'll see you Friday."
   prs.a1.unit13.lesson06.teach.names:
     title: "Farid and Negar"
     gloss: "Farid, Negar"
     note: "فرید and نگار are the two speakers in this lesson's dialogue."
+    example_gloss: ["I am Farid.", "I am Negar."]
   prs.a1.unit13.lesson06.teach.che_saat_word:
     title: "What time?"
     gloss: "What time?"

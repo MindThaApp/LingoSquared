@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: "1.1"
 overlay_version: "2026.1-draft.1"
 overlay_key: en-prs.a1.unit12
 source_language: en
@@ -13,7 +13,9 @@ review:
   required_next_reviewer: null
   notes: "Authored alongside the new prs a1_unit12_routines.yaml realization. Follows the established en-prs overlay convention from units 09-11 (English instruction/correct_option/distractors/feedback, target-language Dari accepted_answers, English glosses for recognize_* multiple_choice items to avoid the same-string visual-matching anti-pattern already fixed in units 07/08/09/10/11). Authored §14/§16-compliant from the start alongside the realization. Needs the standard fresh-context review before shipping.
 
-    FRESH-CONTEXT REVIEW COMPLETED 2026-07-06 (zero prior context, sibling fa files never opened). Confirmed the flat top-level units/lessons/teaching/exercises dict schema is structurally correct, with exact content_key parity against the paired realization in both directions (32/32 exercises, 24/24 teaching entries). Confirmed every exercise has at least one status:correct accepted answer via direct compile, not just validate. Confirmed every multiple_choice/dialogue_comprehension exercise's correct_option/distractors are in English (source language) while the prompt is Dari, so none are solvable by pure visual script-matching. FOUND AND FIXED a real YAML-footgun bug (AUTHORING_GUIDE §7): lesson06.exercise02.match_dialogue_facts's accepted_answers value had an unquoted بلی: yes, which PyYAML silently coerced to the Python boolean True -- quoted as \"yes\"; re-verified via compile that it now serializes as the string \"yes\". FOUND AND FIXED a real AUTHORING_GUIDE §12 gap: write_own_routine's accepted_answers only had comma-joined and period-joined multi-clause variants -- added the missing pure-و-joined form as status:correct (write_comparison_summary already had all three, unaffected). FOUND AND FIXED a real dialect-accuracy issue: the teaching notes for bidar_mishawam and daftar_miravam, plus the paired realization's register_policy, claimed spoken Dari simply lacks the Iranian-colloquial verb contraction (می‌شم/میرم) -- web-verified this is inaccurate (colloquial Kabuli Dari contracts these verbs too, with a distinct Afghan -om vowel, per the Encyclopaedia Iranica's Kāboli article); corrected the notes to frame the fuller می‌شوم/می‌روم forms as this course's deliberate register choice (consistent with units 01-11's استم/استین convention) rather than an absolute claim about Dari lacking a contraction. FOUND AND FIXED systemic non-compliance with AUTHORING_GUIDE §15 (target-language-asterisk convention): despite being freshly authored after §15 existed, only 1 of 56 note/feedback strings in this file used it (compare unit11's overlay, which applied it correctly throughout) -- wrapped the Dari spans in the remaining 42 mixed-language note/feedback strings that needed it (pure-English strings, e.g. the dialogue_lineN notes, correctly left unchanged). Also fixed a minor typo (\"this unit11's\" -> \"unit11's\"). Cross-referenced against the paired realization's fix for the duplicate-prompt-text bug (4 dialogue_response/writing_prompt exercises whose realization prompt.target_blocks exactly duplicated this overlay's own instruction text) -- confirmed via compile that all 4 now render correctly (no duplicate text shown to the learner). Both validate and compile re-run clean (0 errors/0 warnings) after every fix; compile output is valid JSON."
+    FRESH-CONTEXT REVIEW COMPLETED 2026-07-06 (zero prior context, sibling fa files never opened). Confirmed the flat top-level units/lessons/teaching/exercises dict schema is structurally correct, with exact content_key parity against the paired realization in both directions (32/32 exercises, 24/24 teaching entries). Confirmed every exercise has at least one status:correct accepted answer via direct compile, not just validate. Confirmed every multiple_choice/dialogue_comprehension exercise's correct_option/distractors are in English (source language) while the prompt is Dari, so none are solvable by pure visual script-matching. FOUND AND FIXED a real YAML-footgun bug (AUTHORING_GUIDE §7): lesson06.exercise02.match_dialogue_facts's accepted_answers value had an unquoted بلی: yes, which PyYAML silently coerced to the Python boolean True -- quoted as \"yes\"; re-verified via compile that it now serializes as the string \"yes\". FOUND AND FIXED a real AUTHORING_GUIDE §12 gap: write_own_routine's accepted_answers only had comma-joined and period-joined multi-clause variants -- added the missing pure-و-joined form as status:correct (write_comparison_summary already had all three, unaffected). FOUND AND FIXED a real dialect-accuracy issue: the teaching notes for bidar_mishawam and daftar_miravam, plus the paired realization's register_policy, claimed spoken Dari simply lacks the Iranian-colloquial verb contraction (می‌شم/میرم) -- web-verified this is inaccurate (colloquial Kabuli Dari contracts these verbs too, with a distinct Afghan -om vowel, per the Encyclopaedia Iranica's Kāboli article); corrected the notes to frame the fuller می‌شوم/می‌روم forms as this course's deliberate register choice (consistent with units 01-11's استم/استین convention) rather than an absolute claim about Dari lacking a contraction. FOUND AND FIXED systemic non-compliance with AUTHORING_GUIDE §15 (target-language-asterisk convention): despite being freshly authored after §15 existed, only 1 of 56 note/feedback strings in this file used it (compare unit11's overlay, which applied it correctly throughout) -- wrapped the Dari spans in the remaining 42 mixed-language note/feedback strings that needed it (pure-English strings, e.g. the dialogue_lineN notes, correctly left unchanged). Also fixed a minor typo (\"this unit11's\" -> \"unit11's\"). Cross-referenced against the paired realization's fix for the duplicate-prompt-text bug (4 dialogue_response/writing_prompt exercises whose realization prompt.target_blocks exactly duplicated this overlay's own instruction text) -- confirmed via compile that all 4 now render correctly (no duplicate text shown to the learner). Both validate and compile re-run clean (0 errors/0 warnings) after every fix; compile output is valid JSON.
+
+    2026-07-07: AUTHORING_GUIDE.md §19 retrofit -- added example_gloss to all 9 kind:vocabulary teaching entries (1 merged card -- names -- given a positionally-matched example_gloss list), matching the new example: sentences added to the paired realization. schema_version bumped to 1.1. Pending fresh-context review."
 
 course:
   title: Dari A1
@@ -52,10 +54,12 @@ teaching:
     title: "Hour / clock (review)"
     gloss: "hour / clock"
     note: "*ساعت* reviews the time word from unit11."
+    example_gloss: "I wake up at seven."
   prs.a1.unit12.lesson02.teach.haft_review:
     title: "Seven (review)"
     gloss: "seven (7)"
     note: "*هفت* reviews the number from unit11."
+    example_gloss: "I go to the office at seven."
   prs.a1.unit12.lesson02.teach.saat_haft_bidar:
     title: "I wake up at seven."
     gloss: "I wake up at seven."
@@ -68,14 +72,17 @@ teaching:
     title: "Morning (review)"
     gloss: morning
     note: "*صبح* reviews the word from unit01/unit11."
+    example_gloss: "I eat breakfast in the morning."
   prs.a1.unit12.lesson03.teach.zohr_review:
     title: "Noon (review)"
     gloss: noon
     note: "*ظهر* reviews the word from unit11."
+    example_gloss: "I go to the office at noon."
   prs.a1.unit12.lesson03.teach.asr_review:
     title: "Afternoon (review)"
     gloss: afternoon
     note: "*عصر* reviews the word from unit01/unit11."
+    example_gloss: "Every day I sleep in the afternoon."
   prs.a1.unit12.lesson03.teach.har_ruz_word:
     title: "Every day"
     gloss: "every day"
@@ -84,6 +91,7 @@ teaching:
     title: I
     gloss: I
     note: "*من* means I."
+    example_gloss: "I wake up at seven every day."
   prs.a1.unit12.lesson04.teach.routine_text:
     title: "Sample routine text"
     gloss: "I wake up at seven every day. I eat breakfast and go to the office. I sleep at ten at night."
@@ -92,14 +100,17 @@ teaching:
     title: "Six (6)"
     gloss: "six (6)"
     note: "*شش* means six."
+    example_gloss: "I wake up at six."
   prs.a1.unit12.lesson05.teach.zud_word:
     title: Early
     gloss: early
     note: "*زود* means early."
+    example_gloss: "I wake up early."
   prs.a1.unit12.lesson06.teach.names:
     title: "Zarmina and Homayoun"
     gloss: "Zarmina, Homayoun"
     note: "*زرمینه* and *همایون* are the two speakers in this lesson's dialogue."
+    example_gloss: ["I am Zarmina.", "I am Homayoun."]
   prs.a1.unit12.lesson06.teach.mishavad_word:
     title: "He/she wakes up (third person)"
     gloss: "he/she wakes up (third person)"
