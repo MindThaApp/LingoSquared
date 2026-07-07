@@ -82,6 +82,25 @@ review:
     once usage resets) reviewer per standard governance -- this AI
     review does not itself satisfy §9.
 
+    Follow-up 2026-07-07: after the same hardcoded-English-target_blocks
+    anti-pattern recurred in unit03 (having already been fixed once in
+    unit01), the coordinator asked for a targeted re-check of this unit
+    specifically, since it predates unit03's review catching the bug
+    class as recurring. Found 3 more instances that had escaped this
+    unit's own earlier review: lesson02.exercise05.write_ich_bin,
+    lesson03.exercise05.write_italien, lesson03.exercise06.write_spanien
+    all hardcoded their en-de overlay's own instruction text directly
+    into prompt.target_blocks. Confirmed each overlay's instruction
+    already carries the identical cue on its own, then emptied all 3 to
+    target_blocks: [] (matching every other exercise in the file) --
+    verified against the compiled output that prompt.text_blocks for
+    each now shows only the overlay's English instruction with no
+    duplication. A repo-wide grep confirms zero remaining
+    language_code: "en" target_blocks anywhere under
+    docs/content/realizations/de/. Re-verified clean: real compiler
+    validate+compile for en-de (0 errors/warnings), full scripts/
+    verify.sh --content-only green.
+
 course:
   realization_key: "de.a1"
   target_language_first: true
@@ -140,7 +159,7 @@ units:
           - {content_key: "de.a1.unit02.lesson02.exercise02.choose_du", type: "multiple_choice", tested_text: "du", prompt: {target_blocks: []}}
           - {content_key: "de.a1.unit02.lesson02.exercise03.listen_ich_bin_anna", type: "listen_select", tested_text: "Ich bin Anna", media_asset_key: "de.a1.audio.ich_bin_anna.neutral.01", prompt: {target_blocks: []}}
           - {content_key: "de.a1.unit02.lesson02.exercise04.order_du_bist_felix", type: "word_order", tested_text: "Du bist Felix", prompt: {target_blocks: []}, word_bank: ["bist", "Felix", "Du"]}
-          - {content_key: "de.a1.unit02.lesson02.exercise05.write_ich_bin", type: "writing_prompt", tested_text: "Ich bin Anna", prompt: {target_blocks: [{text: "Write that you are Anna: 'I am Anna.'", language_code: "en", direction: "ltr"}]}}
+          - {content_key: "de.a1.unit02.lesson02.exercise05.write_ich_bin", type: "writing_prompt", tested_text: "Ich bin Anna", prompt: {target_blocks: []}}
           - {content_key: "de.a1.unit02.lesson02.exercise06.speak_du_bist", type: "speak_response", tested_text: "Du bist Felix", prompt: {target_blocks: []}}
 
       - content_key: "de.a1.unit02.lesson03.laender"
@@ -168,8 +187,8 @@ units:
               - {left: "Italien", right: "Italy"}
               - {left: "Spanien", right: "Spain"}
               - {left: "Russland", right: "Russia"}
-          - {content_key: "de.a1.unit02.lesson03.exercise05.write_italien", type: "writing_prompt", tested_text: "Italien", prompt: {target_blocks: [{text: "Write the German name for Italy.", language_code: "en", direction: "ltr"}]}}
-          - {content_key: "de.a1.unit02.lesson03.exercise06.write_spanien", type: "writing_prompt", tested_text: "Spanien", prompt: {target_blocks: [{text: "Write the German name for Spain.", language_code: "en", direction: "ltr"}]}}
+          - {content_key: "de.a1.unit02.lesson03.exercise05.write_italien", type: "writing_prompt", tested_text: "Italien", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit02.lesson03.exercise06.write_spanien", type: "writing_prompt", tested_text: "Spanien", prompt: {target_blocks: []}}
 
       - content_key: "de.a1.unit02.lesson04.woher_kommen_sie"
         title: "Woher kommen Sie?"
