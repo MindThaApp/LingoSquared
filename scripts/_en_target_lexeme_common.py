@@ -246,6 +246,19 @@ EN_POS: dict[str, str] = {
     # it), but whoever authors a future template must NOT rely on "cold" as
     # a noun-slot candidate until this gets real POS-aware/context-aware
     # keying.
+    # Unit 29 (A2, reporting a maintenance problem), added 2026-07-07.
+    "leaking": "verb", "sink": "noun", "building": "noun", "manager": "noun",
+    "plumber": "noun", "repair": "noun",
+    # "report" is a homograph, same class as "close"/"cold" above: this
+    # unit's lesson02 introduces it first as a VERB ("I'd like to report a
+    # problem..."), but lesson03's reading text reintroduces the same bare
+    # token as a NOUN ("Your report of a leaking kitchen sink..."). Kept
+    # as "verb" (the first-established sense) since that's what this
+    # pack's own templates need; the noun sense is never used as a
+    # fillable slot value in any practice template.
+    "report": "verb", "problem": "noun", "been": "verb", "someone": "pronoun",
+    "fix": "verb", "2pm": "symbol", "4pm": "symbol", "received": "verb",
+    "6180": "symbol", "send": "verb", "home": "noun", "here's": "pronoun",
 }
 
 def en_agreement_tags(token: str) -> dict[str, object]:
@@ -526,6 +539,20 @@ def en_agreement_tags(token: str) -> dict[str, object]:
     # for other small tags (e.g. the single-member "superlative_adj").
     if token in {"worse", "better"}:
         semantics.append("condition_adjective")
+    # Unit 29 (A2, reporting a maintenance problem): 3-member bare-word
+    # recognition tag for the unit's single-token, genuinely-standalone
+    # maintenance nouns (each has its own real independent meaning --
+    # sink/plumber/repair -- unlike "building manager", a true two-word
+    # compound whose components ("building"/"manager") are deliberately
+    # left OUT of this tag and out of every semantic tag -- same
+    # discipline as "sore"/"throat" (unit22's "sore throat" compound)
+    # staying untagged, no practice template ever uses them as a fillable
+    # slot). Deliberately NOT used in any shared generative frame either
+    # (same "don't force it" reasoning as health_followup_noun/
+    # bureaucracy_noun -- "I need a {item}" reads naturally for plumber/
+    # repair but oddly for the fixture noun sink).
+    if token in {"sink", "plumber", "repair"}:
+        semantics.append("maintenance_noun")
 
     tags: dict[str, object] = {}
     if semantics:

@@ -228,6 +228,21 @@ UNIT_FILES_A2 = (
         REPO_ROOT / "docs/content/realizations/en/a2_unit28_doctor.yaml",
         REPO_ROOT / "docs/content/overlays/prs-en/a2_unit28.yaml",
     ),
+    # Unit 29 (A2: reporting a maintenance problem), added 2026-07-07 --
+    # closing the practice-pool gap for the newest A2 unit (units 25-28
+    # already had fa-en/nl-en/prs-en packs; unit29 had none). EN_POS/
+    # en_agreement_tags for this unit's vocabulary (including the new
+    # 3-member maintenance_noun tag [sink, plumber, repair]) were added to
+    # _en_target_lexeme_common.py as part of this same pass -- verified
+    # every introduced_token across this realization file against EN_POS's
+    # keys: zero missing. Only this script's own Dari gloss dict needed
+    # extending (18 new tokens, cross-checked against docs/content/
+    # overlays/prs-en/a2_unit29.yaml's own real text, not a find-replace of
+    # the fa-en script's Farsi).
+    (
+        REPO_ROOT / "docs/content/realizations/en/a2_unit29_maintenance.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a2_unit29.yaml",
+    ),
 )
 
 # Dari gloss for each shared English target token -- hand-written for
@@ -525,6 +540,23 @@ EN_TARGET_TO_PRS_GLOSS: dict[str, str] = {
     "plenty": "زیاد (در plenty of water: آب زیاد)",
     "back": "باز (در come back: باز آمدن)",
     "within": "تا (در within a week: تا یک هفته)",
+    # Unit 29 (A2: reporting a maintenance problem), added 2026-07-07.
+    # Atomic per-token glosses -- cross-checked against, but not a find-
+    # replace of, docs/content/overlays/prs-en/a2_unit29.yaml's own
+    # (phrase-level) Dari glosses. Genuinely distinct Afghan Dari
+    # vocabulary vs the fa-en script's Farsi (repair=ترمیم not تعمیر,
+    # report=خبر دادن not گزارش دادن, someone=یک کس not یک نفر, afternoon-
+    # hour phrasing follows this script's own established "بعد از چاشت"
+    # convention rather than the overlay's Farsi-influenced "بعد از ظهر").
+    # "kitchen"/"apartment"/"bathroom" reuse their existing unit24 senses
+    # unchanged (recapped, not retaught).
+    "leaking": "چکیدن", "sink": "نل", "building": "بلاک", "manager": "مدیر",
+    "plumber": "پایپ‌کار", "repair": "ترمیم", "report": "خبر دادن",
+    "problem": "مشکل", "been": "بوده (در ساختار ماضی نقلی)",
+    "someone": "یک کس؛ کسی", "fix": "ترمیم کدن",
+    "2pm": "ساعت ۲ بعد از چاشت", "4pm": "ساعت ۴ بعد از چاشت",
+    "received": "دریافت شده (است)", "6180": "۶۱۸۰", "send": "فرستادن",
+    "home": "خانه", "here's": "همینه (این است، در معرفی چیزی)",
 }
 
 
