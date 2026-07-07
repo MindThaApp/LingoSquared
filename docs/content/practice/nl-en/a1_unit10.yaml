@@ -40,7 +40,37 @@ review:
     exclusion of 'straight' from turn_direction is correct English usage.
     No self-reference, agreement, or homograph issues found; does not reuse
     the broad 'number'/'count_plural' tags flagged as an open defect
-    elsewhere. Upgrading to reviewed."
+    elsewhere. Upgrading to reviewed.
+    Depth pass, 2026-07-07 (density audit, same night as the nl-en/fa-en/prs-en
+    unit01 depth passes): unit10 was tied for shallowest in the nl-en
+    direction at 10 templates. This unit's own turn_direction/street_ordinal
+    tags remain too small (2 members each) for any new multiple_choice/
+    listen_select or safe fill_in_blank (a single-slot fill_in_blank on a
+    2-member, genuinely-non-synonymous tag like left/right would fail
+    scripts/_fill_in_blank_ambiguity_check.py's distinguishability check per
+    AUTHORING_GUIDE.md#17, and marking it interchangeable would be wrong --
+    left and right are not synonyms -- so no new fill_in_blank was added
+    anywhere in this pack). Instead, added 5 new templates (10->15) all
+    reusing this pack's own already-established, already-verified 5-member
+    place tag (bank/hospital/pharmacy/park/restaurant, thematically apt
+    since every dialogue in this unit gives directions TO one of these
+    places), zero new tags or Dutch glosses needed. lesson02
+    (asking_how_to_get) gained place_meaning (multiple_choice) and
+    place_pair (matching_pairs, 5 pairs, per AUTHORING_GUIDE.md#16) --
+    lesson02 previously had place_listen but no recognition or matching
+    variety. lesson03 (reading_a_route) gained place_listen (listen_select)
+    -- lesson03's own real content explicitly names 'the pharmacy' in its
+    route text, and previously had zero place-tag coverage at all (only
+    street_ordinal word_order/translation). lesson04
+    (giving_directions_dialogue) gained place_translate (translation) and
+    place_listen (listen_select) alongside its existing place_meaning
+    (multiple_choice), giving it the same 3-type recognition variety as
+    lesson01/lesson02 of the sibling unit09 pack. Verified with
+    scripts/_practice_slot_check.py (all touched slots at or above the
+    relevant floor) and compile_content.py practice-validate, 0 errors/0
+    warnings. Still carries this pack's own prior fresh-context review
+    status -- a fresh re-review of specifically these 5 new templates has
+    not happened yet."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -85,6 +115,21 @@ templates:
     slots: {item: *place}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is de plaats die je hoorde.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit10.lesson02.place_meaning.005
+    lesson_content_key: en.a1.unit10.lesson02.asking_how_to_get
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *place}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is een plaats uit deze les.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit10.lesson02.place_pair.006
+    lesson_content_key: en.a1.unit10.lesson02.asking_how_to_get
+    type: matching_pairs
+    frame: {text: "Koppel de Engelse plaatsen aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
+    slots: {first_place: *place, second_place: *place, third_place: *place, fourth_place: *place, fifth_place: *place}
+    slot_relations: [{kind: distinct, slots: [first_place, second_place, third_place, fourth_place, fifth_place]}]
+    answer_derivation: {kind: matching_pairs, slots: [first_place, second_place, third_place, fourth_place, fifth_place]}
+    feedback_frame: {text: "Je hebt vijf plaatsen gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit10.lesson03.street_order.001
     lesson_content_key: en.a1.unit10.lesson03.reading_a_route
     type: word_order
@@ -99,6 +144,13 @@ templates:
     slots: {item: *street_ordinal}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit10.lesson03.place_listen.004
+    lesson_content_key: en.a1.unit10.lesson03.reading_a_route
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *place}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is de plaats die je hoorde.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit10.lesson04.turn_order.001
     lesson_content_key: en.a1.unit10.lesson04.giving_directions_dialogue
     type: word_order
@@ -120,3 +172,17 @@ templates:
     slots: {item: *place}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is de plaats waarnaar in dit gesprek gevraagd wordt.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit10.lesson04.place_translate.005
+    lesson_content_key: en.a1.unit10.lesson04.giving_directions_dialogue
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *place}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit10.lesson04.place_listen.006
+    lesson_content_key: en.a1.unit10.lesson04.giving_directions_dialogue
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *place}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is de plaats die je hoorde.", language_code: nl, direction: ltr}
