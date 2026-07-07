@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: "1.1"
 overlay_version: "2026.1-draft.1"
 overlay_key: en-fa.a1.unit16
 source_language: en
@@ -13,7 +13,11 @@ review:
   required_next_reviewer: null
   notes: "Authored alongside the new fa a1_unit16_travel.yaml realization. Follows the established en-fa overlay convention from units 09-15 (English instruction/correct_option/distractors/feedback, target-language Farsi accepted_answers, English glosses for recognize_* multiple_choice items). Open-ended production exercises (write_own_travel_detail, write_travel_request, write_travel_summary) carry multiple phrasing variants from the start, learned from units 14/15's own review findings. write_travel_summary carries period-joined, comma-joined, and و-joined accepted_answers variants per §12. Authored §14/§16/§17-compliant from the start alongside the realization. Needs the standard fresh-context review before shipping.
 
-    FRESH-CONTEXT REVIEW, 2026-07-07 (paired with the realization's own review, same pass; prs sibling files never opened, per §8/§9): verified content_key parity is exact against the realization in both directions (26 teaching + 30 exercise keys after the fix below, no orphans), confirmed the overlay's flat top-level units/lessons/teaching/exercises dicts correctly match the expected schema, and confirmed every accepted_answers entry actually used by the compiler/grade() multi-answer path (checked against backend/app/api/router.py) works as intended -- verified directly in the compiled JSON output. Grepped for fill_in_blank (none), listen_type/listen_select/listen_order (none), Arabic-range kaf/yeh (none), and bare snake_case jargon leaks in any learner-facing instruction/option/feedback string (none). Wrote a real Python script comparing every exercise's realization en-language target_blocks against this file's own instruction field (case-insensitive): zero duplicates -- confirmed this unit was genuinely checked against the project-wide duplicate-instruction-text bug during authoring, not just claimed to have been. Found and fixed the same 2 real issues documented in the realization's own review notes, from the overlay side: (1) added the fa.a1.unit16.lesson06.teach.va_word teaching entry (title/gloss/note, matching the exact wording convention already used for unit14/unit15's own و teaching cards) to match the realization's newly-added و teaching card, fixing the untaught-vocabulary gap that had و appearing in this file's own lesson06.exercise05 accepted_answers before it was taught anywhere in the unit; (2) added 'بلیط به تهران می‌خوام' (without یک) as an additional accepted_answers variant to both lesson02.exercise05 (translate_ticket_request) and lesson05.exercise05 (write_travel_request), for consistency with this same file's own lesson01.exercise04 precedent that dropping یک before بلیط is an equally natural, equally accepted variant. Re-ran validate + compile after every fix: 0 errors/0 warnings, valid JSON, output spot-checked directly against the compiled exercise data to confirm both fixes landed and all 30 exercises have a genuine status:correct accepted answer."
+    FRESH-CONTEXT REVIEW, 2026-07-07 (paired with the realization's own review, same pass; prs sibling files never opened, per §8/§9): verified content_key parity is exact against the realization in both directions (26 teaching + 30 exercise keys after the fix below, no orphans), confirmed the overlay's flat top-level units/lessons/teaching/exercises dicts correctly match the expected schema, and confirmed every accepted_answers entry actually used by the compiler/grade() multi-answer path (checked against backend/app/api/router.py) works as intended -- verified directly in the compiled JSON output. Grepped for fill_in_blank (none), listen_type/listen_select/listen_order (none), Arabic-range kaf/yeh (none), and bare snake_case jargon leaks in any learner-facing instruction/option/feedback string (none). Wrote a real Python script comparing every exercise's realization en-language target_blocks against this file's own instruction field (case-insensitive): zero duplicates -- confirmed this unit was genuinely checked against the project-wide duplicate-instruction-text bug during authoring, not just claimed to have been. Found and fixed the same 2 real issues documented in the realization's own review notes, from the overlay side: (1) added the fa.a1.unit16.lesson06.teach.va_word teaching entry (title/gloss/note, matching the exact wording convention already used for unit14/unit15's own و teaching cards) to match the realization's newly-added و teaching card, fixing the untaught-vocabulary gap that had و appearing in this file's own lesson06.exercise05 accepted_answers before it was taught anywhere in the unit; (2) added 'بلیط به تهران می‌خوام' (without یک) as an additional accepted_answers variant to both lesson02.exercise05 (translate_ticket_request) and lesson05.exercise05 (write_travel_request), for consistency with this same file's own lesson01.exercise04 precedent that dropping یک before بلیط is an equally natural, equally accepted variant. Re-ran validate + compile after every fix: 0 errors/0 warnings, valid JSON, output spot-checked directly against the compiled exercise data to confirm both fixes landed and all 30 exercises have a genuine status:correct accepted answer.
+
+    2026-07-07: AUTHORING_GUIDE.md §19 retrofit -- added a real example sentence to all 11 kind:vocabulary teaching entries with example_gloss, each a natural, comprehensible-from-gloss sentence using the card's own word. schema_version bumped to 1.1. Example sentences are Claude-authored and pending fresh-context review.
+
+    2026-07-07: FRESH-CONTEXT REVIEW of the §19 retrofit examples specifically (paired with the realization's own review, same pass; supplemental check only, not a full unit re-review). Verified every example_gloss is an accurate, natural translation of its paired realization example, and none leak jargon or introduce new facts inconsistent with the unit. Fixed the overlay side of the two issues found in the realization: (1) tehran_word's example_gloss changed from \"The train goes to Tehran.\" to \"I'm going to Tehran tomorrow.\" (matching the realization's de-duplicated example); (2) forodgah_word's example_gloss (\"The airport is far.\") needed no change since the realization-side register fix (دور است -> دوره) didn't change the sentence's meaning. Re-ran validate + compile: 0 errors/0 warnings, valid JSON."
 
 course:
   title: Farsi A1
@@ -46,18 +50,22 @@ teaching:
     title: Ticket
     gloss: ticket
     note: "بلیط means ticket."
+    example_gloss: "I want a ticket."
   fa.a1.unit16.lesson01.teach.ghatar_word:
     title: Train
     gloss: train
     note: "قطار means train."
+    example_gloss: "The train goes to Tehran."
   fa.a1.unit16.lesson01.teach.otoboos_word:
     title: Bus
     gloss: bus
     note: "اتوبوس means bus."
+    example_gloss: "The bus was late."
   fa.a1.unit16.lesson01.teach.forodgah_word:
     title: Airport
     gloss: airport
     note: "فرودگاه means airport."
+    example_gloss: "The airport is far."
   fa.a1.unit16.lesson01.teach.yek_word:
     title: A/one
     gloss: "a / one"
@@ -70,6 +78,7 @@ teaching:
     title: Two
     gloss: two
     note: "دو means two."
+    example_gloss: "I want two tickets."
   fa.a1.unit16.lesson01.teach.sekooye_word:
     title: "Platform two"
     gloss: "platform two"
@@ -78,6 +87,7 @@ teaching:
     title: Tehran
     gloss: Tehran
     note: "The capital of Iran."
+    example_gloss: "I'm going to Tehran tomorrow."
   fa.a1.unit16.lesson02.teach.mikham_word:
     title: "I want"
     gloss: "I want"
@@ -94,6 +104,7 @@ teaching:
     title: Platform
     gloss: platform
     note: "سکو means platform (at a train station)."
+    example_gloss: "The train departs from platform two."
   fa.a1.unit16.lesson03.teach.harekat_mikone_phrase:
     title: "It departs"
     gloss: "it departs"
@@ -106,6 +117,7 @@ teaching:
     title: Morning
     gloss: morning
     note: "صبح means morning."
+    example_gloss: "The train departs in the morning."
   fa.a1.unit16.lesson04.teach.schedule_text:
     title: "Sample schedule text"
     gloss: "The Tehran train departs from platform two at eight in the morning."
@@ -114,10 +126,12 @@ teaching:
     title: Tomorrow
     gloss: tomorrow
     note: "فردا means tomorrow."
+    example_gloss: "I'm going tomorrow morning."
   fa.a1.unit16.lesson05.teach.bashe_word:
     title: Okay
     gloss: okay
     note: "باشه is the colloquial contraction of باشد (okay/agreed)."
+    example_gloss: "Okay, thanks."
   fa.a1.unit16.lesson05.teach.dialogue_line1:
     title: "The traveler says"
     gloss: "I want a ticket to Tehran."
@@ -134,6 +148,7 @@ teaching:
     title: Thanks
     gloss: thanks
     note: "ممنون means thanks/thank you."
+    example_gloss: "Thank you very much."
   fa.a1.unit16.lesson06.teach.khahesh_mikonam_phrase:
     title: "You're welcome"
     gloss: "you're welcome"

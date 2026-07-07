@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: "1.1"
 overlay_version: "2026.1-draft.1"
 overlay_key: en-fa.a1.unit17
 source_language: en
@@ -13,7 +13,11 @@ review:
   required_next_reviewer: null
   notes: "Authored alongside the new fa a1_unit17_health.yaml realization. Follows the established en-fa overlay convention from units 09-16 (English instruction/correct_option/distractors/feedback, target-language Farsi accepted_answers, English glosses for recognize_* multiple_choice items). Open-ended production exercises (write_own_symptom, write_health_summary) carry multiple phrasing/symptom variants from the start, learned from units 14/15/16's own review findings. write_health_summary carries period-joined, comma-joined, and و-joined accepted_answers variants per §12. Authored §14/§16/§17-compliant from the start alongside the realization. Needs the standard fresh-context review before shipping.
 
-    FRESH-CONTEXT REVIEW, 2026-07-07 (zero prior access to the authoring reasoning, prs sibling files never opened, per §8/§9): verified content_key parity exact against the realization in both directions (script-checked: 23 teaching + 30 exercise keys, plus units/lessons dicts, zero mismatches). Wrote a real duplicate-instruction-vs-target_blocks script comparing every exercise's realization en-language target_blocks against this file's own instruction field: zero exact duplicates found. Read backend/app/api/router.py's grade()/is_multi_answer_response() and confirmed via the actual compiled JSON that write_own_symptom's and write_health_summary's multi-variant accepted_answers are genuine multi-answer grading (any listed variant matches), and that translate_rest_and_drink_water/translate_headache_and_fever/write_health_summary's period/comma/و-joined §12 variants all appear correctly in the compiled correct_response.accepted. Grepped for stray YAML booleans (none) and Arabic-range kaf/yeh (none). Confirmed no internal-jargon leaks in any learner-facing instruction/correct_option/distractors/feedback/gloss/note string. Verified every multiple_choice/reading_comprehension/dialogue_comprehension exercise's correct_option/distractors are English-only against a Farsi prompt (no same-script leakage). Assessed the deliberate باید+subjunctive avoidance in favor of bare imperatives (استراحت کن، آب هم بخور) -- confirmed via reasoning and web search this is genuinely natural, warm, informal-register Persian friend-to-friend advice, not unnaturally curt; appropriate A1 simplification. Re-ran validate + compile: 0 errors/0 warnings, valid JSON."
+    FRESH-CONTEXT REVIEW, 2026-07-07 (zero prior access to the authoring reasoning, prs sibling files never opened, per §8/§9): verified content_key parity exact against the realization in both directions (script-checked: 23 teaching + 30 exercise keys, plus units/lessons dicts, zero mismatches). Wrote a real duplicate-instruction-vs-target_blocks script comparing every exercise's realization en-language target_blocks against this file's own instruction field: zero exact duplicates found. Read backend/app/api/router.py's grade()/is_multi_answer_response() and confirmed via the actual compiled JSON that write_own_symptom's and write_health_summary's multi-variant accepted_answers are genuine multi-answer grading (any listed variant matches), and that translate_rest_and_drink_water/translate_headache_and_fever/write_health_summary's period/comma/و-joined §12 variants all appear correctly in the compiled correct_response.accepted. Grepped for stray YAML booleans (none) and Arabic-range kaf/yeh (none). Confirmed no internal-jargon leaks in any learner-facing instruction/correct_option/distractors/feedback/gloss/note string. Verified every multiple_choice/reading_comprehension/dialogue_comprehension exercise's correct_option/distractors are English-only against a Farsi prompt (no same-script leakage). Assessed the deliberate باید+subjunctive avoidance in favor of bare imperatives (استراحت کن، آب هم بخور) -- confirmed via reasoning and web search this is genuinely natural, warm, informal-register Persian friend-to-friend advice, not unnaturally curt; appropriate A1 simplification. Re-ran validate + compile: 0 errors/0 warnings, valid JSON.
+
+    2026-07-07: AUTHORING_GUIDE.md §19 retrofit -- added real example sentence(s) to all 9 kind:vocabulary teaching entries with example_gloss (the merged names card given a 2-item list), each a natural, comprehensible-from-gloss sentence using the card's own word(s). schema_version bumped to 1.1. Example sentences are Claude-authored and pending fresh-context review.
+
+    2026-07-07: FRESH-CONTEXT REVIEW of the §19 retrofit examples specifically (paired with the realization's own review, same pass; supplemental check only). Verified every example_gloss accurately translates its paired realization example. Fixed the overlay side of the one issue found in the realization: fa.a1.unit17.lesson06.teach.names's example_gloss list changed from [\"Nima has a headache.\", \"Sara has a fever.\"] to [\"Nima has a headache.\", \"Sara helps Nima.\"], correcting the factual error (Sara doesn't have a fever in this unit's dialogue -- Nima has both symptoms, Sara only advises) alongside the realization's register fix. Re-ran validate + compile: 0 errors/0 warnings, valid JSON."
 
 course:
   title: Farsi A1
@@ -50,6 +54,7 @@ teaching:
     title: Headache
     gloss: headache
     note: "سردرد means headache."
+    example_gloss: "I have a headache."
   fa.a1.unit17.lesson01.teach.daram_word:
     title: "I have"
     gloss: "I have"
@@ -58,6 +63,7 @@ teaching:
     title: Fever
     gloss: fever
     note: "تب means fever."
+    example_gloss: "I have a fever."
   fa.a1.unit17.lesson02.teach.delam_dard_mikone_phrase:
     title: "My stomach hurts"
     gloss: "my stomach hurts"
@@ -66,10 +72,12 @@ teaching:
     title: "I'm tired"
     gloss: "I'm tired"
     note: "خسته‌ام is the colloquial contraction of خسته هستم (I am tired)."
+    example_gloss: "I'm tired today."
   fa.a1.unit17.lesson03.teach.komak_word:
     title: Help
     gloss: help
     note: "کمک means help."
+    example_gloss: "Can you help me?"
   fa.a1.unit17.lesson03.teach.mitooni_word:
     title: "You can"
     gloss: "you can"
@@ -82,10 +90,12 @@ teaching:
     title: Doctor
     gloss: doctor
     note: "دکتر means doctor."
+    example_gloss: "The doctor said to rest."
   fa.a1.unit17.lesson04.teach.daroo_word:
     title: Medicine
     gloss: medicine
     note: "دارو means medicine."
+    example_gloss: "Take this medicine."
   fa.a1.unit17.lesson04.teach.esterahat_kon_phrase:
     title: "Rest (command)"
     gloss: "rest"
@@ -106,6 +116,7 @@ teaching:
     title: "Nima and Sara"
     gloss: "Nima, Sara"
     note: "Common Iranian names used throughout this course."
+    example_gloss: ["Nima has a headache.", "Sara helps Nima."]
   fa.a1.unit17.lesson06.teach.ham_word:
     title: "Also/too"
     gloss: "also / too"
@@ -114,10 +125,12 @@ teaching:
     title: Okay
     gloss: okay
     note: "باشه is the colloquial contraction of باشد (okay/agreed)."
+    example_gloss: "Okay, I'll rest."
   fa.a1.unit17.lesson06.teach.mamnoon_word:
     title: Thanks
     gloss: thanks
     note: "ممنون means thanks/thank you."
+    example_gloss: "Thanks for your help."
   fa.a1.unit17.lesson06.teach.dareh_grammar:
     title: "He/she has"
     gloss: "he/she has"
