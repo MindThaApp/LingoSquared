@@ -42,6 +42,14 @@ class Settings(BaseSettings):
     login_rate_limit_max: int = 10
     register_rate_limit_max: int = 5
     answer_rate_limit_max: int = 120
+    # Web push (Phase E4) — VAPID keypair, same unset-by-default/graceful-
+    # degradation convention as the TTS credentials above: empty until
+    # provisioned (generate with `vapid --gen` from the py-vapid package,
+    # a pywebpush dependency), and /push/subscribe + the send path both
+    # fail closed (503) rather than crash when unset.
+    vapid_public_key: str = ""
+    vapid_private_key: str = ""
+    vapid_subject: str = "mailto:admin@example.com"
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
     @property

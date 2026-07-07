@@ -201,3 +201,8 @@ class TTSIn(BaseModel): text:str=Field(min_length=1,max_length=5000); language_c
 class TTSFallback(BaseModel): use_browser_tts:Literal[True]=True; reason:Literal["unsupported_language","quota_exceeded","provider_error"]
 class STTOut(BaseModel): transcript:str
 class STTError(BaseModel): error:Literal["empty_audio","audio_too_large","transcription_failed"]
+class PushSubscriptionKeysIn(BaseModel): p256dh:str=Field(min_length=1); auth:str=Field(min_length=1)
+class PushSubscribeIn(BaseModel): endpoint:str=Field(min_length=1,max_length=1024); keys:PushSubscriptionKeysIn
+class PushUnsubscribeIn(BaseModel): endpoint:str=Field(min_length=1,max_length=1024)
+class PushVapidKeyOut(BaseModel): public_key:str|None; configured:bool
+class PushNotifyOut(BaseModel): notified_users:int; notifications_sent:int

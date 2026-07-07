@@ -633,6 +633,29 @@ class QuestCompletion(Base):
     )
 
 
+class PushSubscription(Base):
+    __tablename__ = "push_subscriptions"
+    __table_args__ = (
+        UniqueConstraint("endpoint", name="uq_push_subscriptions_endpoint"),
+    )
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uid)
+    user_id: Mapped[str] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"),
+        index=True,
+    )
+    # Browser PushSubscription fields (W3C Push API) -- endpoint is globally
+    # unique per browser+device registration, not per user, since the same
+    # physical subscription can't be registered twice even across accounts.
+    endpoint: Mapped[str] = mapped_column(String(1024))
+    p256dh: Mapped[str] = mapped_column(String(255))
+    auth: Mapped[str] = mapped_column(String(255))
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        default=now,
+    )
+
+
 class ReviewItem(Base):
     __tablename__ = "review_items"
     __table_args__ = (UniqueConstraint("user_id", "exercise_id"),)
@@ -1181,34 +1204,6 @@ class UserCourseEnrollment(Base):
     started_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now)
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), default=now, onupdate=now
-    )
-
-
-class PushSubscription(Base):
-    __tablename__ = "push_subscriptions"
-
-    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uid)
-    user_id: Mapped[str] = mapped_column(
-        ForeignKey("users.id", ondelete="CASCADE")
-    )
-    endpoint: Mapped[str] = mapped_column(String(2048), unique=True)
-    p256dh: Mapped[str] = mapped_column(Text)
-    auth: Mapped[str] = mapped_column(Text)
-    expiration_time: Mapped[datetime | None] = mapped_column(
-        DateTime(timezone=True), nullable=True
-    )
-    device_id: Mapped[str | None] = mapped_column(String(36), nullable=True)
-    device_label: Mapped[str | None] = mapped_column(
-        String(200), nullable=True
-    )
-    user_agent: Mapped[str | None] = mapped_column(Text, nullable=True)
-    enabled: Mapped[bool] = mapped_column(Boolean, default=True)
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now)
-    updated_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), default=now, onupdate=now
-    )
-    last_success_at: Mapped[datetime | None] = mapped_column(
-        DateTime(timezone=True), nullable=True
     )
 
 
