@@ -7,7 +7,49 @@ generation_provenance: {method: ai_generated, authoring_system: codex, human_rev
 review:
   status: unreviewed
   required_next_reviewer: claude
-  notes: "Initial six-lesson Dutch places draft; pending fresh-context and native-speaker review. Audio assets are declared for generation. 2026-07-06: reduced excessive one-word teaching-card density — merged single-token vocabulary cards into grouped cards (lesson01: station/supermarkt/bibliotheek/ziekenhuis and bank/postkantoor/bushalte, 7→2 cards; lesson02: naast/tegenover, 2→1; lesson03: achter/voor, 2→1; lesson04: tussen/bij, 2→1; lesson05: kaart/buurtkaart, 2→1). No changes to exercises or lesson-level content_keys."
+  notes: >-
+    Initial six-lesson Dutch places draft; pending fresh-context and
+    native-speaker review. Audio assets are declared for generation.
+    2026-07-06: reduced excessive one-word teaching-card density —
+    merged single-token vocabulary cards into grouped cards (lesson01:
+    station/supermarkt/bibliotheek/ziekenhuis and bank/postkantoor/
+    bushalte, 7→2 cards; lesson02: naast/tegenover, 2→1; lesson03:
+    achter/voor, 2→1; lesson04: tussen/bij, 2→1; lesson05: kaart/
+    buurtkaart, 2→1). No changes to exercises or lesson-level
+    content_keys.
+
+    2026-07-07: a whole-course curriculum review (Fable, reading all 28
+    en-nl units as one continuous learner journey) found a real
+    cross-lesson contradiction a per-unit review can't see: lesson02
+    taught "De bibliotheek is naast het station" (library NEXT TO the
+    station) while lesson05's buurtkaart map and lesson06's dialogue
+    both establish "De bibliotheek is tegenover het station" (library
+    OPPOSITE the station) -- graded both ways in the same unit. Fixed
+    by making tegenover canon (map + dialogue already support it, left
+    untouched) and re-pointing lesson02's naast example at
+    supermarkt/station instead, which the map (Supermarkt: naast het
+    station) also independently supports. While fixing this, also
+    caught an adjacent, same-class contradiction in the same lesson
+    that wasn't separately flagged: lesson02's original tegenover
+    example was "De bank is tegenover de supermarkt," but the map says
+    "Bank: naast de supermarkt" (and the dialogue's "bij de bank" reads
+    as consistent with naast, not tegenover) -- resolved by the same
+    swap, reusing bibliotheek/station (already established as
+    tegenover by the map+dialogue) as lesson02's tegenover example
+    instead of bank/supermarkt. Renamed the affected content_keys
+    (teach.library_next → teach.supermarket_next, teach.bank_opposite →
+    teach.library_opposite, and the matching exercise/audio-asset keys)
+    since the old names would now describe the wrong sentence; grepped
+    the full docs/ tree first to confirm nothing else referenced them.
+    Re-validated/compiled clean. Also found and fixed while in this
+    file: lesson05's match_map matching_pairs exercise showed the
+    learner 6 pairs (from the realization's own pairs list) but the
+    overlay's accepted_answers only listed 4 of them (missing
+    Postkantoor and Bank) -- meaning this exercise was ungradable
+    (always scored wrong regardless of what the learner matched,
+    same bug class as the matching_pairs shape bug in CLAUDE.md's
+    footguns list). Fixed by completing the overlay's accepted_answers
+    to all 6 pairs.
 
 course:
   realization_key: nl.a1
@@ -22,8 +64,8 @@ course:
 media_assets:
   - {content_key: nl.a1.audio.places.station.01, language: nl, text: "het station", voice_hint: neutral_adult_clear, status: pending_generation}
   - {content_key: nl.a1.audio.places.bushalte.01, language: nl, text: "de bushalte", voice_hint: neutral_adult_clear, status: pending_generation}
-  - {content_key: nl.a1.audio.places.bibliotheek_naast_station.01, language: nl, text: "De bibliotheek is naast het station.", voice_hint: neutral_adult_clear, status: pending_generation}
-  - {content_key: nl.a1.audio.places.bank_tegenover_supermarkt.01, language: nl, text: "De bank is tegenover de supermarkt.", voice_hint: neutral_adult_clear, status: pending_generation}
+  - {content_key: nl.a1.audio.places.supermarkt_naast_station.01, language: nl, text: "De supermarkt is naast het station.", voice_hint: neutral_adult_clear, status: pending_generation}
+  - {content_key: nl.a1.audio.places.bibliotheek_tegenover_station.01, language: nl, text: "De bibliotheek is tegenover het station.", voice_hint: neutral_adult_clear, status: pending_generation}
   - {content_key: nl.a1.audio.places.ziekenhuis_achter_bibliotheek.01, language: nl, text: "Het ziekenhuis is achter de bibliotheek.", voice_hint: neutral_adult_clear, status: pending_generation}
   - {content_key: nl.a1.audio.places.bushalte_voor_station.01, language: nl, text: "De bushalte is voor het station.", voice_hint: neutral_adult_clear, status: pending_generation}
   - {content_key: nl.a1.audio.places.waar_is_postkantoor.01, language: nl, text: "Waar is het postkantoor?", voice_hint: neutral_young_adult_friendly, status: pending_generation}
@@ -74,15 +116,15 @@ units:
         spine_outcome_id: universal.a1.places.locate_common_places
         teaching:
           - {content_key: nl.a1.unit08.lesson02.teach.naast_tegenover, kind: vocabulary, target: {text: "naast, tegenover", language_code: nl, direction: ltr}, introduced_tokens: [naast, tegenover]}
-          - {content_key: nl.a1.unit08.lesson02.teach.library_next, kind: phrase, target: {text: "De bibliotheek is naast het station.", language_code: nl, direction: ltr}, introduced_tokens: [De, bibliotheek, is, naast, het, station]}
-          - {content_key: nl.a1.unit08.lesson02.teach.bank_opposite, kind: phrase, target: {text: "De bank is tegenover de supermarkt.", language_code: nl, direction: ltr}, introduced_tokens: [De, bank, is, tegenover, de, supermarkt]}
+          - {content_key: nl.a1.unit08.lesson02.teach.supermarket_next, kind: phrase, target: {text: "De supermarkt is naast het station.", language_code: nl, direction: ltr}, introduced_tokens: [De, supermarkt, is, naast, het, station]}
+          - {content_key: nl.a1.unit08.lesson02.teach.library_opposite, kind: phrase, target: {text: "De bibliotheek is tegenover het station.", language_code: nl, direction: ltr}, introduced_tokens: [De, bibliotheek, is, tegenover, het, station]}
         exercises:
           - {content_key: nl.a1.unit08.lesson02.exercise01.choose_naast, type: multiple_choice, tested_text: "naast", prompt: {target_blocks: [{text: "next to", language_code: en, direction: ltr}]}}
-          - {content_key: nl.a1.unit08.lesson02.exercise02.listen_library_next, type: listen_select, tested_text: "De bibliotheek is naast het station", media_asset_key: nl.a1.audio.places.bibliotheek_naast_station.01, prompt: {target_blocks: []}}
-          - {content_key: nl.a1.unit08.lesson02.exercise03.choose_opposite, type: multiple_choice, tested_text: "De bank is tegenover de supermarkt", prompt: {target_blocks: [{text: "The bank is opposite the supermarket.", language_code: en, direction: ltr}]}}
-          - {content_key: nl.a1.unit08.lesson02.exercise04.order_library_next, type: word_order, tested_text: "De bibliotheek is naast het station", prompt: {target_blocks: []}, word_bank: [De, bibliotheek, is, naast, het, station]}
-          - {content_key: nl.a1.unit08.lesson02.exercise05.listen_order_bank_opposite, type: listen_order, tested_text: "De bank is tegenover de supermarkt", media_asset_key: nl.a1.audio.places.bank_tegenover_supermarkt.01, prompt: {target_blocks: []}, word_bank: [supermarkt, tegenover, De, de, bank, is]}
-          - {content_key: nl.a1.unit08.lesson02.exercise06.speak_library_next, type: speak_response, tested_text: "De bibliotheek is naast het station", prompt: {target_blocks: [{text: "Say that the library is next to the station.", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit08.lesson02.exercise02.listen_supermarket_next, type: listen_select, tested_text: "De supermarkt is naast het station", media_asset_key: nl.a1.audio.places.supermarkt_naast_station.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit08.lesson02.exercise03.choose_opposite, type: multiple_choice, tested_text: "De bibliotheek is tegenover het station", prompt: {target_blocks: [{text: "The library is opposite the station.", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit08.lesson02.exercise04.order_supermarket_next, type: word_order, tested_text: "De supermarkt is naast het station", prompt: {target_blocks: []}, word_bank: [De, supermarkt, is, naast, het, station]}
+          - {content_key: nl.a1.unit08.lesson02.exercise05.listen_order_library_opposite, type: listen_order, tested_text: "De bibliotheek is tegenover het station", media_asset_key: nl.a1.audio.places.bibliotheek_tegenover_station.01, prompt: {target_blocks: []}, word_bank: [bibliotheek, tegenover, De, het, station, is]}
+          - {content_key: nl.a1.unit08.lesson02.exercise06.speak_supermarket_next, type: speak_response, tested_text: "De supermarkt is naast het station", prompt: {target_blocks: [{text: "Say that the supermarket is next to the station.", language_code: en, direction: ltr}]}}
 
       - content_key: nl.a1.unit08.lesson03.achter_en_voor
         title: "Achter en voor"

@@ -6,8 +6,8 @@ target_language: nl
 status: complete_draft
 generation_provenance: {method: ai_generated, authoring_system: codex, human_reviewed: false}
 review:
-  status: reviewed
-  required_next_reviewer: null
+  status: unreviewed
+  required_next_reviewer: ramin
   notes: >-
     Independent fresh-context content audit completed. Location meanings,
     answer keys, scope, pacing, explicitly taught compound words, and dedicated
@@ -18,6 +18,26 @@ review:
     (lesson01/02/03/04/05 vocabulary groupings) and applied the mixed-language
     note convention, wrapping inline Dutch words/phrases in single asterisks
     across every teaching note in this unit.
+
+    2026-07-07: status reset to unreviewed -- a whole-course curriculum
+    review (Fable) found a real cross-lesson contradiction this file's
+    prior "reviewed" certification missed (lesson02's naast/tegenover
+    examples contradicted lesson05/06's map and dialogue; see the
+    sibling realization file's review.notes for the full writeup).
+    Fixed here by mirroring every renamed content_key and corrected
+    Dutch/English text (teach.library_next → teach.supermarket_next,
+    teach.bank_opposite → teach.library_opposite, and the matching
+    exercise content_keys/instructions/correct_option/distractors/
+    feedback). Also fixed a real, separate ungradable-exercise bug
+    found while in this file: lesson05's match_map showed the learner
+    6 map-label pairs but accepted_answers only listed 4 of them
+    (missing Postkantoor and Bank), meaning 2 of the 6 correct matches
+    could never be counted -- completed to all 6 pairs, matching the
+    realization file's own pairs list exactly. Re-validated/compiled
+    clean. This file's prior review did not catch either issue since
+    both are cross-lesson/cross-field consistency bugs, not the kind a
+    single-file read reliably surfaces -- needs a fresh native-speaker
+    pass before status: reviewed again.
 
 course:
   title: "Dutch A1"
@@ -39,8 +59,8 @@ teaching:
   nl.a1.unit08.lesson01.teach.bank_postkantoor_bushalte: {title: "Bank, post office, bus stop", gloss: "the bank, the post office, the bus stop", note: "For a financial bank, Dutch uses *de bank*. Dutch writes *postkantoor* as one word — use *het*: *het postkantoor*. Dutch writes *bushalte* as one word — use *de*: *de bushalte*."}
 
   nl.a1.unit08.lesson02.teach.naast_tegenover: {title: "Next to, opposite", gloss: "next to, opposite / across from", note: "*Naast* places one thing directly beside another. *Tegenover* states that two places face each other, often across a street or open space."}
-  nl.a1.unit08.lesson02.teach.library_next: {title: "The library is next to the station", gloss: "The library is next to the station.", note: "*Naast* means directly beside: *De bibliotheek is naast het station*."}
-  nl.a1.unit08.lesson02.teach.bank_opposite: {title: "The bank is opposite the supermarket", gloss: "The bank is opposite the supermarket.", note: "Keep *de* with *supermarkt*: *tegenover de supermarkt*."}
+  nl.a1.unit08.lesson02.teach.supermarket_next: {title: "The supermarket is next to the station", gloss: "The supermarket is next to the station.", note: "*Naast* means directly beside: *De supermarkt is naast het station*."}
+  nl.a1.unit08.lesson02.teach.library_opposite: {title: "The library is opposite the station", gloss: "The library is opposite the station.", note: "Keep *het* with *station*: *tegenover het station*."}
 
   nl.a1.unit08.lesson03.teach.achter_voor: {title: "Behind, in front of", gloss: "behind, in front of", note: "*Achter* locates one place behind another. Here, *voor* means in front of — it can mean other things in other sentences."}
   nl.a1.unit08.lesson03.teach.hospital_behind: {title: "The hospital is behind the library", gloss: "The hospital is behind the library.", note: "Put *achter* before the other place: *achter de bibliotheek*."}
@@ -110,34 +130,34 @@ exercises:
     distractors: [tegenover, achter, voor]
     accepted_answers: [{value: naast, status: correct}]
     feedback: "Naast means next to."
-  nl.a1.unit08.lesson02.exercise02.listen_library_next:
-    instruction: "Listen and choose where the library is."
+  nl.a1.unit08.lesson02.exercise02.listen_supermarket_next:
+    instruction: "Listen and choose where the supermarket is."
     correct_option: "next to the station"
     distractors: ["opposite the station", "behind the station", "in front of the station"]
     accepted_answers: [{value: "next to the station", status: correct}]
-    feedback: "De bibliotheek is naast het station."
+    feedback: "De supermarkt is naast het station."
   nl.a1.unit08.lesson02.exercise03.choose_opposite:
-    instruction: "Choose the Dutch sentence that means 'The bank is opposite the supermarket.'"
-    correct_option: "De bank is tegenover de supermarkt."
-    distractors: ["De bank is naast de supermarkt.", "De bank is achter de supermarkt.", "De bank is voor de supermarkt."]
-    accepted_answers: [{value: "De bank is tegenover de supermarkt.", status: correct}]
+    instruction: "Choose the Dutch sentence that means 'The library is opposite the station.'"
+    correct_option: "De bibliotheek is tegenover het station."
+    distractors: ["De bibliotheek is naast het station.", "De bibliotheek is achter het station.", "De bibliotheek is voor het station."]
+    accepted_answers: [{value: "De bibliotheek is tegenover het station.", status: correct}]
     feedback: "Tegenover means opposite or across from."
-  nl.a1.unit08.lesson02.exercise04.order_library_next:
-    instruction: "Put the words in order to say that the library is next to the station."
-    correct_option: "De bibliotheek is naast het station"
-    accepted_answers: [{value: "De bibliotheek is naast het station", status: correct}]
-    feedback: "De bibliotheek is naast het station."
-  nl.a1.unit08.lesson02.exercise05.listen_order_bank_opposite:
+  nl.a1.unit08.lesson02.exercise04.order_supermarket_next:
+    instruction: "Put the words in order to say that the supermarket is next to the station."
+    correct_option: "De supermarkt is naast het station"
+    accepted_answers: [{value: "De supermarkt is naast het station", status: correct}]
+    feedback: "De supermarkt is naast het station."
+  nl.a1.unit08.lesson02.exercise05.listen_order_library_opposite:
     instruction: "Listen and put the words in the order you hear."
-    correct_option: "De bank is tegenover de supermarkt"
-    accepted_answers: [{value: "De bank is tegenover de supermarkt", status: correct}]
-    feedback: "De bank is tegenover de supermarkt."
-  nl.a1.unit08.lesson02.exercise06.speak_library_next:
+    correct_option: "De bibliotheek is tegenover het station"
+    accepted_answers: [{value: "De bibliotheek is tegenover het station", status: correct}]
+    feedback: "De bibliotheek is tegenover het station."
+  nl.a1.unit08.lesson02.exercise06.speak_supermarket_next:
     instruction: "Say the location in Dutch."
     accepted_answers:
-      - {value: "De bibliotheek is naast het station", status: correct}
-      - {value: "De bibliotheek is naast het station.", status: correct}
-    feedback: "De bibliotheek is naast het station."
+      - {value: "De supermarkt is naast het station", status: correct}
+      - {value: "De supermarkt is naast het station.", status: correct}
+    feedback: "De supermarkt is naast het station."
 
   nl.a1.unit08.lesson03.exercise01.choose_achter:
     instruction: "Choose the Dutch word for 'behind'."
@@ -239,7 +259,7 @@ exercises:
   nl.a1.unit08.lesson05.exercise04.match_map:
     instruction: "Match each map label to its stated location."
     accepted_answers:
-      - value: [{left: Bibliotheek, right: "tegenover het station"}, {left: Ziekenhuis, right: "achter de bibliotheek"}, {left: Supermarkt, right: "naast het station"}, {left: Bushalte, right: "voor het station"}]
+      - value: [{left: Bibliotheek, right: "tegenover het station"}, {left: Ziekenhuis, right: "achter de bibliotheek"}, {left: Supermarkt, right: "naast het station"}, {left: Bushalte, right: "voor het station"}, {left: Postkantoor, right: "tussen de bibliotheek en het ziekenhuis"}, {left: Bank, right: "naast de supermarkt"}]
         status: correct
     feedback: "Each pair reproduces one location from the map."
   nl.a1.unit08.lesson05.exercise05.write_map_location:
