@@ -1,0 +1,310 @@
+schema_version: "1.0"
+overlay_version: "2026.1-draft.1"
+overlay_key: en-prs.a1.unit15
+source_language: en
+target_language: prs
+status: complete_draft
+generation_provenance:
+  method: ai_adapted_from_public_domain_source
+  authoring_system: claude
+  human_reviewed: false
+review:
+  status: reviewed
+  required_next_reviewer: null
+  notes: "Authored alongside the new prs a1_unit15_comparisons.yaml realization. Follows the established en-prs overlay convention from units 01-14 (English instruction/correct_option/distractors/feedback, target-language Dari accepted_answers, English glosses for recognize_* multiple_choice items). Multi-clause reason exercises (translate_this_better_because_cheaper, translate_that_worse_because_expensive) carry period-joined, comma-joined, and و-joined accepted_answers variants per §12. Both open-ended production exercises (write_own_comparison, dialogue_response_own_comparison, write_comparison_summary) carry multiple adjective/topic variants from the start, learned from the fa sibling unit's own review findings on unit14. Authored §14/§16/§17-compliant from the start alongside the realization. Needs the standard fresh-context review before shipping.
+
+    FRESH-CONTEXT REVIEW COMPLETED 2026-07-07 (zero prior context, fa sibling files never opened, paired with the realization's own matching review pass). Verified content_key parity exact both directions against the realization (1 unit/6 lessons/20 teaching/30 exercises each side) and that this file's flat top-level dicts (units/lessons/teaching/exercises keyed directly by content_key) correctly match the established overlay schema. Confirmed via direct code read of backend/app/api/router.py's grade()/is_multi_answer_response() that the generic multi-answer accepted-list grading path checks every entry, not just the first, so write_own_comparison's 8, dialogue_response_own_comparison's 4, and write_comparison_summary's 4 accepted variants all genuinely grade correct, not a disguised bug. Ran a programmatic jargon-leak check against every learner-facing string value -- zero snake_case leaks (the only matches found were in non-learner-facing metadata: status, generation_provenance.method, review.notes). Independently re-verified the pre-dispatch bali_word title/gloss Yes/yes quoting fix is correct, and ran a fresh real yaml.safe_load-based recursive stray-Python-bool check against every dict value in this file plus the paired realization -- clean both files, only the two legitimate schema booleans exist project-wide (neither present in this pair), confirming no second instance. Ran a real Python script comparing every exercise's paired realization prompt.target_blocks (language_code: en) against this file's instruction field for an exact case-insensitive match -- zero duplicate-instruction-text bugs. Ran a ZWNJ-aware, Persian-punctuation-stripping tokenizer checking every Dari-script token in every accepted_answers/correct_option/distractors value against the paired realization's cumulative file-scoped introduced_tokens -- zero untaught-vocabulary violations. Checked every multiple_choice/reading_comprehension/dialogue_comprehension exercise for the prompt-shows-answer bug -- all correct_option/distractors are English glosses against Dari-script prompts, no same-script leakage. Verified §12 multi-clause coverage genuinely present (period/comma/و-joined status:correct forms) on translate_this_better_because_cheaper, translate_that_worse_because_expensive, and write_comparison_summary; confirmed the و-joined reason-clause variants (which substitute و for چون) match unit14's own already-reviewed established convention, not a new gap. Grammar/dialect claims (X-از-Y-ADJ‌تر-است construction, از as than vs. from, بهتر/بدتر as genuine irregular comparatives, قد بلندتر است as a natural idiom, and all 5 Dari-vs-Iranian spelling pairs) independently verified via live web search, all confirmed correct. Re-ran validate and compile (not just validate): 0 errors/0 warnings both times, compile output valid JSON, and directly inspected the compiled output confirming all 30 exercises have a non-empty correct_response and the 5 multi-answer exercises compiled with the expected variant counts. No real bugs required fixing in this pair beyond the single pre-dispatch bali_word quoting fix (independently re-verified correct) -- this overlay was genuinely authored clean from the start."
+
+course:
+  title: Dari A1
+  description: >-
+    Beginner Kabul Dari: basic comparisons (bigger/smaller, more/less
+    expensive, taller/younger), giving a reason for a comparison, and a
+    short reading/dialogue comparing two things.
+
+units:
+  prs.a1.unit15.comparisons:
+    title: Comparisons
+    description: Make and understand basic comparisons between familiar people, objects, or options.
+
+lessons:
+  prs.a1.unit15.lesson01.basic_comparative:
+    title: "Basic comparisons"
+  prs.a1.unit15.lesson02.comparing_prices:
+    title: "Comparing prices"
+  prs.a1.unit15.lesson03.comparing_people:
+    title: "Comparing people"
+  prs.a1.unit15.lesson04.giving_reasons:
+    title: "Giving a reason for a comparison"
+  prs.a1.unit15.lesson05.reading_a_comparison:
+    title: "Reading a comparison"
+  prs.a1.unit15.lesson06.comparisons_dialogue:
+    title: "A dialogue comparing two things"
+
+teaching:
+  prs.a1.unit15.lesson01.teach.in_word:
+    title: This
+    gloss: this
+    note: "این means this."
+  prs.a1.unit15.lesson01.teach.aan_word:
+    title: That
+    gloss: that
+    note: "آن means that -- this course's dialect uses the full form آن, not the colloquial Iranian اون."
+  prs.a1.unit15.lesson01.teach.bozorgtar_ast_word:
+    title: "It's bigger"
+    gloss: "it's bigger"
+    note: "بزرگ‌تر است is the full, uncontracted form (it is bigger) -- بزرگ‌تر است is the comparative of بزرگ (big) plus است kept as a separate word."
+  prs.a1.unit15.lesson01.teach.koochaktar_ast_word:
+    title: "It's smaller"
+    gloss: "it's smaller"
+    note: "کوچک‌تر است is the full form (it is smaller) -- کوچک is the standard Dari spelling (not the Iranian colloquial کوچیک)."
+  prs.a1.unit15.lesson01.teach.az_word:
+    title: Than
+    gloss: than
+    note: "از marks the comparison point -- X از Y بزرگ‌تر است means X is bigger than Y."
+  prs.a1.unit15.lesson02.teach.gerantar_ast_word:
+    title: "It's more expensive"
+    gloss: "it's more expensive"
+    note: "گران‌تر است is the full form (it is more expensive) -- گران is the standard Dari spelling (not the Iranian colloquial گرون)."
+  prs.a1.unit15.lesson02.teach.arzantar_ast_word:
+    title: "It's cheaper"
+    gloss: "it's cheaper"
+    note: "ارزان‌تر است is the full form (it is cheaper) -- ارزان is the standard Dari spelling (not the Iranian colloquial ارزون)."
+  prs.a1.unit15.lesson03.teach.names:
+    title: "Karim and Negar"
+    gloss: "Karim, Negar"
+    note: "Common Afghan names used throughout this course."
+  prs.a1.unit15.lesson03.teach.ghad_bolandtar_phrase:
+    title: "Taller"
+    gloss: "taller / he's/she's taller"
+    note: "قد بلندتر است literally means 'height is longer' -- قد (height) بلندتر (longer, comparative of بلند) است (is)."
+  prs.a1.unit15.lesson03.teach.javantar_ast_word:
+    title: "Younger"
+    gloss: "younger / he's/she's younger"
+    note: "جوان‌تر است is the full form (it is younger) -- جوان is the standard Dari spelling (not the Iranian colloquial جوون)."
+  prs.a1.unit15.lesson04.teach.behtar_ast_word:
+    title: "It's better"
+    gloss: "it's better"
+    note: "بهتر است is the full form -- بهتر (better) is the irregular comparative of خوب (good)."
+  prs.a1.unit15.lesson04.teach.badtar_ast_word:
+    title: "It's worse"
+    gloss: "it's worse"
+    note: "بدتر است is the full form -- بدتر (worse) is the irregular comparative of بد (bad)."
+  prs.a1.unit15.lesson04.teach.choon_word:
+    title: Because
+    gloss: because
+    note: "چون introduces a reason."
+  prs.a1.unit15.lesson04.teach.va_word:
+    title: And
+    gloss: and
+    note: "و means and, joining two clauses or items."
+  prs.a1.unit15.lesson05.teach.reading_text:
+    title: "Sample comparison text"
+    gloss: "Karim is taller than Negar. Negar is younger than Karim."
+    note: "A short third-person comparison combining this unit's vocabulary."
+  prs.a1.unit15.lesson06.teach.names:
+    title: "Karim and Negar"
+    gloss: "Karim, Negar"
+  prs.a1.unit15.lesson06.teach.ama_word:
+    title: But
+    gloss: but
+    note: "اما means but, introducing a contrast."
+  prs.a1.unit15.lesson06.teach.bali_word:
+    title: "Yes"
+    gloss: "yes"
+    note: "بلی is the polite/formal word for yes, consistent with this course's register."
+  prs.a1.unit15.lesson06.teach.dialogue_line1:
+    title: "Karim says"
+    gloss: "This is more expensive than that, but it's better."
+  prs.a1.unit15.lesson06.teach.dialogue_line2:
+    title: "Negar answers"
+    gloss: "Yes, but that's cheaper."
+
+exercises:
+  prs.a1.unit15.lesson01.exercise01.recognize_bozorgtar:
+    instruction: "What does this phrase mean?"
+    correct_option: "it's bigger"
+    distractors: ["it's smaller", this, that]
+    accepted_answers: [{value: "it's bigger", status: correct}]
+    feedback: "بزرگ‌تر است means it's bigger."
+  prs.a1.unit15.lesson01.exercise02.recognize_koochaktar:
+    instruction: "What does this phrase mean?"
+    correct_option: "it's smaller"
+    distractors: ["it's bigger", this, that]
+    accepted_answers: [{value: "it's smaller", status: correct}]
+    feedback: "کوچک‌تر است means it's smaller."
+  prs.a1.unit15.lesson01.exercise03.match_basic_vocab:
+    instruction: "Match each word or phrase with its meaning."
+    accepted_answers:
+      - value: {این: this, آن: that, "بزرگ‌تر است": "it's bigger", "کوچک‌تر است": "it's smaller"}
+        status: correct
+    feedback: "These four are this lesson's core comparison vocabulary."
+  prs.a1.unit15.lesson01.exercise04.translate_this_is_bigger:
+    instruction: "Translate into Dari: This is bigger than that."
+    accepted_answers:
+      - {value: "این از آن بزرگ‌تر است", status: correct}
+    feedback: "این از آن بزرگ‌تر است means this is bigger than that."
+  prs.a1.unit15.lesson01.exercise05.translate_that_is_smaller:
+    instruction: "Translate into Dari: That is smaller than this."
+    accepted_answers:
+      - {value: "آن از این کوچک‌تر است", status: correct}
+    feedback: "آن از این کوچک‌تر است means that is smaller than this."
+  prs.a1.unit15.lesson02.exercise01.recognize_gerantar:
+    instruction: "What does this phrase mean?"
+    correct_option: "it's more expensive"
+    distractors: ["it's cheaper", "it's bigger", "it's smaller"]
+    accepted_answers: [{value: "it's more expensive", status: correct}]
+    feedback: "گران‌تر است means it's more expensive."
+  prs.a1.unit15.lesson02.exercise02.recognize_arzantar:
+    instruction: "What does this phrase mean?"
+    correct_option: "it's cheaper"
+    distractors: ["it's more expensive", "it's bigger", "it's smaller"]
+    accepted_answers: [{value: "it's cheaper", status: correct}]
+    feedback: "ارزان‌تر است means it's cheaper."
+  prs.a1.unit15.lesson02.exercise03.match_price_vocab:
+    instruction: "Match each word or phrase with its meaning."
+    accepted_answers:
+      - value: {این: this, آن: that, "بزرگ‌تر است": "it's bigger", "کوچک‌تر است": "it's smaller", "گران‌تر است": "it's more expensive", "ارزان‌تر است": "it's cheaper"}
+        status: correct
+    feedback: "These combine lesson02's new words with lesson01's review vocabulary."
+  prs.a1.unit15.lesson02.exercise04.translate_this_is_more_expensive:
+    instruction: "Translate into Dari: This is more expensive than that."
+    accepted_answers:
+      - {value: "این از آن گران‌تر است", status: correct}
+    feedback: "این از آن گران‌تر است means this is more expensive than that."
+  prs.a1.unit15.lesson02.exercise05.translate_that_is_cheaper:
+    instruction: "Translate into Dari: That is cheaper than this."
+    accepted_answers:
+      - {value: "آن از این ارزان‌تر است", status: correct}
+    feedback: "آن از این ارزان‌تر است means that is cheaper than this."
+  prs.a1.unit15.lesson03.exercise01.recognize_bolandtar:
+    instruction: "What does this phrase mean?"
+    correct_option: taller
+    distractors: [younger, this, that]
+    accepted_answers: [{value: taller, status: correct}]
+    feedback: "قد بلندتر است means taller (literally, height is longer)."
+  prs.a1.unit15.lesson03.exercise02.recognize_javantar:
+    instruction: "What does this phrase mean?"
+    correct_option: younger
+    distractors: [taller, this, that]
+    accepted_answers: [{value: younger, status: correct}]
+    feedback: "جوان‌تر است means younger."
+  prs.a1.unit15.lesson03.exercise03.match_people_vocab:
+    instruction: "Match each word or phrase with its meaning."
+    accepted_answers:
+      - value: {کریم: Karim, نگار: Negar, قد: height, "بلندتر است": "it's/he's taller", "جوان‌تر است": "he's/she's younger", از: than}
+        status: correct
+    feedback: "These are this lesson's key words for comparing people."
+  prs.a1.unit15.lesson03.exercise04.translate_karim_taller:
+    instruction: "Translate into Dari: Karim is taller than Negar."
+    accepted_answers:
+      - {value: "کریم از نگار قد بلندتر است", status: correct}
+    feedback: "کریم از نگار قد بلندتر است means Karim is taller than Negar."
+  prs.a1.unit15.lesson03.exercise05.translate_negar_younger:
+    instruction: "Translate into Dari: Negar is younger than Karim."
+    accepted_answers:
+      - {value: "نگار از کریم جوان‌تر است", status: correct}
+    feedback: "نگار از کریم جوان‌تر است means Negar is younger than Karim."
+  prs.a1.unit15.lesson04.exercise01.recognize_behtar:
+    instruction: "What does this phrase mean?"
+    correct_option: "it's better"
+    distractors: ["it's worse", because, this]
+    accepted_answers: [{value: "it's better", status: correct}]
+    feedback: "بهتر است means it's better."
+  prs.a1.unit15.lesson04.exercise02.recognize_badtar:
+    instruction: "What does this phrase mean?"
+    correct_option: "it's worse"
+    distractors: ["it's better", because, that]
+    accepted_answers: [{value: "it's worse", status: correct}]
+    feedback: "بدتر است means it's worse."
+  prs.a1.unit15.lesson04.exercise03.match_reasons_vocab:
+    instruction: "Match each word or phrase with its meaning."
+    accepted_answers:
+      - value: {"بهتر است": "it's better", "بدتر است": "it's worse", چون: because, این: this, آن: that, "ارزان‌تر است": "it's cheaper"}
+        status: correct
+    feedback: "These combine lesson04's new words with earlier review vocabulary."
+  prs.a1.unit15.lesson04.exercise04.translate_this_better_because_cheaper:
+    instruction: "Translate into Dari: This is better than that because it's cheaper."
+    accepted_answers:
+      - {value: "این از آن بهتر است چون ارزان‌تر است", status: correct}
+      - {value: "این از آن بهتر است، چون ارزان‌تر است", status: correct}
+      - {value: "این از آن بهتر است و ارزان‌تر است", status: correct}
+      - {value: "این از آن بهتر است. چون ارزان‌تر است", status: correct}
+    feedback: "این از آن بهتر است چون ارزان‌تر است means this is better than that because it's cheaper."
+  prs.a1.unit15.lesson04.exercise05.translate_that_worse_because_expensive:
+    instruction: "Translate into Dari: That is worse than this because it's more expensive."
+    accepted_answers:
+      - {value: "آن از این بدتر است چون گران‌تر است", status: correct}
+      - {value: "آن از این بدتر است، چون گران‌تر است", status: correct}
+      - {value: "آن از این بدتر است و گران‌تر است", status: correct}
+      - {value: "آن از این بدتر است. چون گران‌تر است", status: correct}
+    feedback: "آن از این بدتر است چون گران‌تر است means that is worse than this because it's more expensive."
+  prs.a1.unit15.lesson05.exercise01.reading_comprehension_who_taller:
+    instruction: "Read the text. Who is taller?"
+    correct_option: Karim
+    distractors: [Negar, "Both the same", "It isn't stated"]
+    accepted_answers: [{value: Karim, status: correct}]
+    feedback: "The text says کریم از نگار قد بلندتر است -- Karim is taller than Negar."
+  prs.a1.unit15.lesson05.exercise02.reading_comprehension_who_younger:
+    instruction: "Read the text. Who is younger?"
+    correct_option: Negar
+    distractors: [Karim, "Both the same", "It isn't stated"]
+    accepted_answers: [{value: Negar, status: correct}]
+    feedback: "The text says نگار از کریم جوان‌تر است -- Negar is younger than Karim."
+  prs.a1.unit15.lesson05.exercise03.match_reading_vocab:
+    instruction: "Match each word or phrase with its meaning."
+    accepted_answers:
+      - value: {کریم: Karim, نگار: Negar, "بلندتر است": taller, "جوان‌تر است": younger, از: than, قد: height}
+        status: correct
+    feedback: "These are the reading text's key words."
+  prs.a1.unit15.lesson05.exercise04.translate_karim_taller_short:
+    instruction: "Translate into Dari: Karim is taller."
+    accepted_answers:
+      - {value: "کریم قد بلندتر است", status: correct}
+    feedback: "کریم قد بلندتر است means Karim is taller."
+  prs.a1.unit15.lesson05.exercise05.write_own_comparison:
+    instruction: "Write one sentence in Dari comparing two things (bigger/smaller, more expensive/cheaper, or better/worse)."
+    accepted_answers:
+      - {value: "این از آن بزرگ‌تر است", status: correct}
+      - {value: "آن از این کوچک‌تر است", status: correct}
+      - {value: "این از آن گران‌تر است", status: correct}
+      - {value: "آن از این ارزان‌تر است", status: correct}
+      - {value: "این از آن بهتر است", status: correct}
+      - {value: "آن از این بدتر است", status: correct}
+      - {value: "کریم از نگار قد بلندتر است", status: correct}
+      - {value: "نگار از کریم جوان‌تر است", status: correct}
+    feedback: "این از آن بزرگ‌تر است means this is bigger than that -- a good model answer. Any true comparison using this unit's vocabulary (smaller, more/less expensive, better/worse, taller, younger) is equally accepted."
+  prs.a1.unit15.lesson06.exercise01.dialogue_comprehension_context:
+    instruction: "Read the conversation. What does Karim say about the two things?"
+    correct_option: "One is more expensive but better"
+    distractors: ["Both are the same price", "One is cheaper and worse", "It isn't stated"]
+    accepted_answers: [{value: "One is more expensive but better", status: correct}]
+    feedback: "کریم says این از آن گران‌تر است، اما بهتر است -- this is more expensive than that, but it's better."
+  prs.a1.unit15.lesson06.exercise02.match_dialogue_facts:
+    instruction: "Match each word or phrase with its meaning."
+    accepted_answers:
+      - value: {کریم: Karim, نگار: Negar, "گران‌تر است": "it's more expensive", "بهتر است": "it's better", "ارزان‌تر است": "it's cheaper", اما: but}
+        status: correct
+    feedback: "These are the dialogue's key words and names."
+  prs.a1.unit15.lesson06.exercise03.reading_comprehension_what_karim_thinks:
+    instruction: "Read the line. Why does Karim still prefer the more expensive one?"
+    correct_option: "Because it's better"
+    distractors: ["Because it's cheaper", "Because it's bigger", "It isn't stated"]
+    accepted_answers: [{value: "Because it's better", status: correct}]
+    feedback: "کریم says اما بهتر است -- but it's better."
+  prs.a1.unit15.lesson06.exercise04.dialogue_response_own_comparison:
+    instruction: "Karim just said the expensive one is better. Say what you think -- agree it's better, or say the other one is cheaper."
+    accepted_answers:
+      - {value: "این از آن بهتر است", status: correct}
+      - {value: "بلی، این بهتر است", status: correct}
+      - {value: "آن از این ارزان‌تر است", status: correct}
+      - {value: "بلی، آن ارزان‌تر است", status: correct}
+    feedback: "این از آن بهتر است means this is better than that. Agreeing it's better, or pointing out the other is cheaper, are both accepted."
+  prs.a1.unit15.lesson06.exercise05.write_comparison_summary:
+    instruction: "Write one or two sentences in Dari summarizing the conversation: one thing is more expensive but better, the other is cheaper."
+    accepted_answers:
+      - {value: "این گران‌تر است. آن ارزان‌تر است", status: correct}
+      - {value: "این گران‌تر است، آن ارزان‌تر است", status: correct}
+      - {value: "این گران‌تر است و آن ارزان‌تر است", status: correct}
+      - {value: "این گران‌تر است اما بهتر است. آن ارزان‌تر است", status: correct}
+    feedback: "این گران‌تر است، آن ارزان‌تر است means this one is more expensive, that one is cheaper."

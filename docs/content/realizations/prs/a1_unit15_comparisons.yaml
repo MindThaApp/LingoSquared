@@ -1,0 +1,323 @@
+schema_version: "1.0"
+realization_version: "2026.1-draft.1"
+target_language: prs
+cefr_level: A1
+status: complete_draft
+generation_provenance:
+  method: ai_adapted_from_public_domain_source
+  authoring_system: claude
+  source_material: "Peace Corps Dari course materials (public domain), modernized"
+  human_reviewed: false
+review:
+  status: reviewed
+  required_next_reviewer: null
+  notes: "New unit, prs's next uncovered outcome (universal.a1.comparisons.make_basic_comparisons, prerequisites: preferences and numbers, both already covered in unit14/unit04). Six lessons: basic comparative forms (بزرگ‌تر است/کوچک‌تر است), comparing prices (گران‌تر است/ارزان‌تر است), comparing people (قد بلندتر است/جوان‌تر است), giving a reason for a comparison (بهتر است/بدتر است + چون), reading a short comparison text, and a dialogue comparing two options while making a purchase decision. Uses full, uncontracted forms throughout (comparative + است kept as two words, not fused/contracted) and standard Dari spellings (کوچک not Iranian کوچیک, گران not گرون, ارزان not ارزون, جوان not جوون) -- deliberately distinct from the fa sibling's colloquial fused-contraction register, consistent with the established استم/استین full-form register policy from units 01-14. Authored independently of the fa realization per the sibling-isolation rule. Authored §14/§16/§17-compliant from the start: no listen_type/listen_select/listen_order exercises anywhere, every matching_pairs exercise sized 6 pairs except lesson01's genuine 4-pair first-lesson ceiling, and zero fill_in_blank exercises. Both open-ended production exercises (write_own_comparison, dialogue_response_own_comparison) carry multiple adjective/topic variants from the start, learned from the fa sibling unit's own review findings on unit14. Multi-clause reason exercises include period-joined, comma-joined, and و-joined accepted variants per §12. Compiler validation clean (0 errors/0 warnings). Awaiting the standing fresh-context review before status can move to reviewed.
+
+    FRESH-CONTEXT REVIEW COMPLETED 2026-07-07 (zero prior context, fa sibling files never opened, this unit's/overlay's own authoring reasoning not consulted beyond the two files themselves). Verified against universal.a1.comparisons.make_basic_comparisons's own can_do/prerequisites/assessment_requirements in universal_spine.yaml -- all 4 covered (understand_comparison via lesson05/06's reading_comprehension/dialogue_comprehension, read-substituting-for-listening per the established zero-prs-audio §14 pattern; make_comparison via the translation/dialogue_response production exercises; read_comparison via the reading_comprehension exercises; write_comparison via the writing_prompt/translation exercises), every lesson genuinely serves the declared outcome, no drift. Exercise pacing (recognition -> drag/matching -> production) confirmed in all 6 lessons, matching unit13/14's own already-reviewed lesson06 precedent (an extra recognition-type exercise interleaved after the matching exercise, before production, in lesson06 -- not a violation, since production never precedes recognition/drag exposure). §14 verified true by grep: zero listen_type/listen_select/listen_order anywhere. §16 verified: lesson01's matching_pairs is a genuine 4-pair ceiling, lessons02-06 all exactly 6 pairs. §17 verified true by grep (zero fill_in_blank in either file) and by manually auditing every translation/dialogue_response/writing_prompt's accepted_answers, especially lesson05.exercise05/lesson06.exercise04/lesson06.exercise05, for the same underlying ambiguity in a different guise -- confirmed genuine multi-answer coverage (8, 4, and 4 accepted variants respectively), not a disguised bug, via direct code read of grade()/is_multi_answer_response() in backend/app/api/router.py confirming the generic accepted-list path checks every entry, not just the first. Grammar/dialect independently verified via live web search (not just reasoning): the X-از-Y-ADJ‌تر-است comparison construction, از as 'than' distinct from 'from', بزرگ‌تر/کوچک‌تر/گران‌تر/ارزان‌تر as regular comparatives, بهتر/بدتر as the genuine irregular/suppletive comparatives of خوب/بد, قد بلندتر است as a natural (non-calque) Dari idiom for 'taller', and all five claimed Dari-vs-Iranian-colloquial spelling pairs (کوچک/کوچیک, گران/گرون, ارزان/ارزون, جوان/جوون, آن/اون) were all confirmed correct against independent grammar/phonology sources. A1-complexity judged appropriate (3rd-person-only copula constructions, short 2-6-word phrases, familiar vocabulary, matching unit13/14's pacing). Script purity clean (zero Arabic-range kaf/yeh codepoints in either file, checked programmatically). No jargon leaks: ran a programmatic recursive check against every string value in the overlay -- the only snake_case-looking matches were in non-learner-facing metadata (status, generation_provenance.method, review.notes), zero leaks in any learner-facing field. Independently re-verified the pre-dispatch bali_word Yes/yes boolean-coercion fix is correct (both quoted, both parse as strings) and wrote and ran a fresh, real recursive yaml.safe_load-based Python script checking every dict value in both files for a stray Python bool -- found zero stray booleans anywhere (only the two legitimate schema booleans, human_reviewed/target_language_first, neither present in this pair), confirming no second instance exists. Wrote and ran a real Python script comparing every exercise's realization prompt.target_blocks (language_code: en) against that exercise's overlay instruction field for an exact case-insensitive match -- zero duplicate-instruction-text bugs found in this pair. Wrote and ran a ZWNJ-aware, Persian-punctuation-stripping Python tokenizer checking every tested_text/prompt.target_blocks(prs)/pairs.left/word_bank value and every overlay accepted_answers/correct_option/distractors Dari-script value against cumulative file-scoped introduced_tokens -- zero untaught-vocabulary violations. Checked every multiple_choice/reading_comprehension/dialogue_comprehension exercise for the prompt-shows-answer bug -- all correct_option/distractors are English glosses against Dari-script prompts, no same-script leakage. Confirmed content_key parity exact both directions (1 unit/6 lessons/20 teaching/30 exercises each side). Confirmed all 7 exercise types used (multiple_choice/matching_pairs/translation/reading_comprehension/dialogue_comprehension/dialogue_response/writing_prompt) are registered in frontend/src/components/exercises/ExerciseRenderer.tsx. Cross-checked §11 facts across every exercise/teaching card: Karim-taller/Negar-younger is stated identically in lesson03 and lesson05's reading text with no contradiction; lesson06's dialogue facts (this=more expensive but better, that=cheaper) are consistent across its comprehension, matching, dialogue-response, and summary exercises. Verified §12 multi-clause coverage: lesson04's two because-exercises and lesson06's write_comparison_summary all carry period-joined, comma-joined, and و-joined status:correct variants (the و-joined reason-clause variants substitute و for چون, e.g. 'این از آن بهتر است و ارزان‌تر است' -- confirmed this exact pattern is the established, already-reviewed convention from unit14's own fresh-context review, not a new gap). Re-ran validate and compile (not just validate) as the actual final check: 0 errors/0 warnings both times, compile output valid JSON, and directly inspected the compiled correct_response for all 30 exercises -- none empty, and the 5 multi-answer exercises (lesson04.exercise04/05, lesson05.exercise05, lesson06.exercise04/05) compiled with 4/4/8/4/4 accepted variants respectively, matching the overlay source exactly. No real bugs required fixing in this pair beyond the single pre-dispatch bali_word quoting fix (independently re-verified correct) -- this unit was genuinely authored clean from the start, proactively incorporating unit13/14's own prior review findings (multi-topic variants, §12 punctuation forms, §14/16/17 compliance) before this review ever ran."
+
+course:
+  realization_key: prs.a1
+  target_language_first: true
+  dialect: prs_AF_kabuli_educated_colloquial_intro
+  register_policy: >-
+    Continues the established استم/استین polite-first register policy and
+    full, uncontracted verb/copula forms, consistent with units 01-14.
+    Comparative adjectives keep است as a separate word (بزرگ‌تر است),
+    never fused/contracted like the fa sibling's بزرگ‌تره.
+
+media_assets:
+  - content_key: prs.a1.audio.comparisons.basic.01
+    language: prs
+    text: "این از آن بزرگ‌تر است"
+    voice_hint: neutral_adult
+    status: pending_generation
+  - content_key: prs.a1.audio.dialogue.comparisons.01
+    language: prs
+    text: "کریم: این از آن گران‌تر است، اما بهتر است. نگار: بلی، اما آن ارزان‌تر است."
+    voice_hint: two_adults_neutral_polite
+    status: pending_generation
+
+units:
+  - content_key: prs.a1.unit15.comparisons
+    title: مقایسه‌ها
+    section: reading_writing
+    spine_outcome_ids:
+      - universal.a1.comparisons.make_basic_comparisons
+    planned_lesson_count: 6
+
+    lessons:
+      - content_key: prs.a1.unit15.lesson01.basic_comparative
+        title: مقایسه‌ی ساده
+        spine_outcome_id: universal.a1.comparisons.make_basic_comparisons
+        teaching:
+          - content_key: prs.a1.unit15.lesson01.teach.in_word
+            kind: vocabulary
+            target: {text: این, language_code: prs, direction: rtl}
+            introduced_tokens: [این]
+          - content_key: prs.a1.unit15.lesson01.teach.aan_word
+            kind: vocabulary
+            target: {text: آن, language_code: prs, direction: rtl}
+            introduced_tokens: [آن]
+          - content_key: prs.a1.unit15.lesson01.teach.bozorgtar_ast_word
+            kind: vocabulary
+            target: {text: "بزرگ‌تر است", language_code: prs, direction: rtl}
+            introduced_tokens: ["بزرگ‌تر", است]
+          - content_key: prs.a1.unit15.lesson01.teach.koochaktar_ast_word
+            kind: vocabulary
+            target: {text: "کوچک‌تر است", language_code: prs, direction: rtl}
+            introduced_tokens: ["کوچک‌تر"]
+          - content_key: prs.a1.unit15.lesson01.teach.az_word
+            kind: grammar_note
+            target: {text: "از (than)", language_code: prs, direction: rtl}
+            introduced_tokens: [از]
+        exercises:
+          - content_key: prs.a1.unit15.lesson01.exercise01.recognize_bozorgtar
+            type: multiple_choice
+            tested_text: "بزرگ‌تر است"
+            prompt: {target_blocks: [{text: "بزرگ‌تر است", language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit15.lesson01.exercise02.recognize_koochaktar
+            type: multiple_choice
+            tested_text: "کوچک‌تر است"
+            prompt: {target_blocks: [{text: "کوچک‌تر است", language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit15.lesson01.exercise03.match_basic_vocab
+            type: matching_pairs
+            tested_text: "این آن بزرگ‌تر است کوچک‌تر است"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: این, right: this}
+              - {left: آن, right: that}
+              - {left: "بزرگ‌تر است", right: "it's bigger"}
+              - {left: "کوچک‌تر است", right: "it's smaller"}
+          - content_key: prs.a1.unit15.lesson01.exercise04.translate_this_is_bigger
+            type: translation
+            tested_text: "این از آن بزرگ‌تر است"
+            prompt: {target_blocks: []}
+          - content_key: prs.a1.unit15.lesson01.exercise05.translate_that_is_smaller
+            type: translation
+            tested_text: "آن از این کوچک‌تر است"
+            prompt: {target_blocks: []}
+
+      - content_key: prs.a1.unit15.lesson02.comparing_prices
+        title: مقایسه‌ی قیمت‌ها
+        spine_outcome_id: universal.a1.comparisons.make_basic_comparisons
+        teaching:
+          - content_key: prs.a1.unit15.lesson02.teach.gerantar_ast_word
+            kind: vocabulary
+            target: {text: "گران‌تر است", language_code: prs, direction: rtl}
+            introduced_tokens: ["گران‌تر"]
+          - content_key: prs.a1.unit15.lesson02.teach.arzantar_ast_word
+            kind: vocabulary
+            target: {text: "ارزان‌تر است", language_code: prs, direction: rtl}
+            introduced_tokens: ["ارزان‌تر"]
+        exercises:
+          - content_key: prs.a1.unit15.lesson02.exercise01.recognize_gerantar
+            type: multiple_choice
+            tested_text: "گران‌تر است"
+            prompt: {target_blocks: [{text: "گران‌تر است", language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit15.lesson02.exercise02.recognize_arzantar
+            type: multiple_choice
+            tested_text: "ارزان‌تر است"
+            prompt: {target_blocks: [{text: "ارزان‌تر است", language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit15.lesson02.exercise03.match_price_vocab
+            type: matching_pairs
+            tested_text: "این آن بزرگ‌تر است کوچک‌تر است گران‌تر است ارزان‌تر است"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: این, right: this}
+              - {left: آن, right: that}
+              - {left: "بزرگ‌تر است", right: "it's bigger"}
+              - {left: "کوچک‌تر است", right: "it's smaller"}
+              - {left: "گران‌تر است", right: "it's more expensive"}
+              - {left: "ارزان‌تر است", right: "it's cheaper"}
+          - content_key: prs.a1.unit15.lesson02.exercise04.translate_this_is_more_expensive
+            type: translation
+            tested_text: "این از آن گران‌تر است"
+            prompt: {target_blocks: []}
+          - content_key: prs.a1.unit15.lesson02.exercise05.translate_that_is_cheaper
+            type: translation
+            tested_text: "آن از این ارزان‌تر است"
+            prompt: {target_blocks: []}
+
+      - content_key: prs.a1.unit15.lesson03.comparing_people
+        title: مقایسه‌ی آدم‌ها
+        spine_outcome_id: universal.a1.comparisons.make_basic_comparisons
+        teaching:
+          - content_key: prs.a1.unit15.lesson03.teach.names
+            kind: vocabulary
+            target: {text: "کریم، نگار", language_code: prs, direction: rtl}
+            introduced_tokens: [کریم, نگار]
+          - content_key: prs.a1.unit15.lesson03.teach.ghad_bolandtar_phrase
+            kind: phrase
+            target: {text: "قد بلندتر است", language_code: prs, direction: rtl}
+            introduced_tokens: [قد, "بلندتر"]
+          - content_key: prs.a1.unit15.lesson03.teach.javantar_ast_word
+            kind: vocabulary
+            target: {text: "جوان‌تر است", language_code: prs, direction: rtl}
+            introduced_tokens: ["جوان‌تر"]
+        exercises:
+          - content_key: prs.a1.unit15.lesson03.exercise01.recognize_bolandtar
+            type: multiple_choice
+            tested_text: "بلندتر است"
+            prompt: {target_blocks: [{text: "بلندتر است", language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit15.lesson03.exercise02.recognize_javantar
+            type: multiple_choice
+            tested_text: "جوان‌تر است"
+            prompt: {target_blocks: [{text: "جوان‌تر است", language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit15.lesson03.exercise03.match_people_vocab
+            type: matching_pairs
+            tested_text: "کریم نگار قد بلندتر است جوان‌تر است از"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: کریم, right: Karim}
+              - {left: نگار, right: Negar}
+              - {left: قد, right: height}
+              - {left: "بلندتر است", right: "it's/he's taller"}
+              - {left: "جوان‌تر است", right: "he's/she's younger"}
+              - {left: از, right: than}
+          - content_key: prs.a1.unit15.lesson03.exercise04.translate_karim_taller
+            type: translation
+            tested_text: "کریم از نگار قد بلندتر است"
+            prompt: {target_blocks: []}
+          - content_key: prs.a1.unit15.lesson03.exercise05.translate_negar_younger
+            type: translation
+            tested_text: "نگار از کریم جوان‌تر است"
+            prompt: {target_blocks: []}
+
+      - content_key: prs.a1.unit15.lesson04.giving_reasons
+        title: دلیل آوردن برای مقایسه
+        spine_outcome_id: universal.a1.comparisons.make_basic_comparisons
+        teaching:
+          - content_key: prs.a1.unit15.lesson04.teach.behtar_ast_word
+            kind: vocabulary
+            target: {text: "بهتر است", language_code: prs, direction: rtl}
+            introduced_tokens: ["بهتر"]
+          - content_key: prs.a1.unit15.lesson04.teach.badtar_ast_word
+            kind: vocabulary
+            target: {text: "بدتر است", language_code: prs, direction: rtl}
+            introduced_tokens: ["بدتر"]
+          - content_key: prs.a1.unit15.lesson04.teach.choon_word
+            kind: grammar_note
+            target: {text: "چون (because)", language_code: prs, direction: rtl}
+            introduced_tokens: [چون]
+          - content_key: prs.a1.unit15.lesson04.teach.va_word
+            kind: grammar_note
+            target: {text: "و (and)", language_code: prs, direction: rtl}
+            introduced_tokens: [و]
+        exercises:
+          - content_key: prs.a1.unit15.lesson04.exercise01.recognize_behtar
+            type: multiple_choice
+            tested_text: "بهتر است"
+            prompt: {target_blocks: [{text: "بهتر است", language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit15.lesson04.exercise02.recognize_badtar
+            type: multiple_choice
+            tested_text: "بدتر است"
+            prompt: {target_blocks: [{text: "بدتر است", language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit15.lesson04.exercise03.match_reasons_vocab
+            type: matching_pairs
+            tested_text: "بهتر است بدتر است چون این آن ارزان‌تر است"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "بهتر است", right: "it's better"}
+              - {left: "بدتر است", right: "it's worse"}
+              - {left: چون, right: because}
+              - {left: این, right: this}
+              - {left: آن, right: that}
+              - {left: "ارزان‌تر است", right: "it's cheaper"}
+          - content_key: prs.a1.unit15.lesson04.exercise04.translate_this_better_because_cheaper
+            type: translation
+            tested_text: "این از آن بهتر است چون ارزان‌تر است"
+            prompt: {target_blocks: []}
+          - content_key: prs.a1.unit15.lesson04.exercise05.translate_that_worse_because_expensive
+            type: translation
+            tested_text: "آن از این بدتر است چون گران‌تر است"
+            prompt: {target_blocks: []}
+
+      - content_key: prs.a1.unit15.lesson05.reading_a_comparison
+        title: خواندن یک مقایسه
+        spine_outcome_id: universal.a1.comparisons.make_basic_comparisons
+        teaching:
+          - content_key: prs.a1.unit15.lesson05.teach.reading_text
+            kind: reading
+            target: {text: "کریم از نگار قد بلندتر است. نگار از کریم جوان‌تر است", language_code: prs, direction: rtl}
+            introduced_tokens: []
+        exercises:
+          - content_key: prs.a1.unit15.lesson05.exercise01.reading_comprehension_who_taller
+            type: reading_comprehension
+            tested_text: "کریم از نگار قد بلندتر است. نگار از کریم جوان‌تر است"
+            prompt: {target_blocks: [{text: "کریم از نگار قد بلندتر است. نگار از کریم جوان‌تر است", language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit15.lesson05.exercise02.reading_comprehension_who_younger
+            type: reading_comprehension
+            tested_text: "کریم از نگار قد بلندتر است. نگار از کریم جوان‌تر است"
+            prompt: {target_blocks: [{text: "کریم از نگار قد بلندتر است. نگار از کریم جوان‌تر است", language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit15.lesson05.exercise03.match_reading_vocab
+            type: matching_pairs
+            tested_text: "کریم نگار بلندتر است جوان‌تر است از قد"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: کریم, right: Karim}
+              - {left: نگار, right: Negar}
+              - {left: "بلندتر است", right: taller}
+              - {left: "جوان‌تر است", right: younger}
+              - {left: از, right: than}
+              - {left: قد, right: height}
+          - content_key: prs.a1.unit15.lesson05.exercise04.translate_karim_taller_short
+            type: translation
+            tested_text: "کریم قد بلندتر است"
+            prompt: {target_blocks: []}
+          - content_key: prs.a1.unit15.lesson05.exercise05.write_own_comparison
+            type: writing_prompt
+            tested_text: "این از آن بزرگ‌تر است"
+            prompt: {target_blocks: []}
+
+      - content_key: prs.a1.unit15.lesson06.comparisons_dialogue
+        title: گفت‌وگوی مقایسه
+        spine_outcome_id: universal.a1.comparisons.make_basic_comparisons
+        teaching:
+          - content_key: prs.a1.unit15.lesson06.teach.names
+            kind: vocabulary
+            target: {text: "کریم، نگار", language_code: prs, direction: rtl}
+            introduced_tokens: []
+          - content_key: prs.a1.unit15.lesson06.teach.ama_word
+            kind: grammar_note
+            target: {text: "اما (but)", language_code: prs, direction: rtl}
+            introduced_tokens: [اما]
+          - content_key: prs.a1.unit15.lesson06.teach.bali_word
+            kind: vocabulary
+            target: {text: بلی, language_code: prs, direction: rtl}
+            introduced_tokens: [بلی]
+          - content_key: prs.a1.unit15.lesson06.teach.dialogue_line1
+            kind: dialogue
+            target: {text: "این از آن گران‌تر است، اما بهتر است", language_code: prs, direction: rtl, speaker: کریم}
+            introduced_tokens: []
+          - content_key: prs.a1.unit15.lesson06.teach.dialogue_line2
+            kind: dialogue
+            target: {text: "بلی، اما آن ارزان‌تر است", language_code: prs, direction: rtl, speaker: نگار}
+            introduced_tokens: []
+        exercises:
+          - content_key: prs.a1.unit15.lesson06.exercise01.dialogue_comprehension_context
+            type: dialogue_comprehension
+            tested_text: "این از آن گران‌تر است اما بهتر است بلی اما آن ارزان‌تر است"
+            prompt: {target_blocks: [{text: "کریم: این از آن گران‌تر است، اما بهتر است. نگار: بلی، اما آن ارزان‌تر است.", language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit15.lesson06.exercise02.match_dialogue_facts
+            type: matching_pairs
+            tested_text: "کریم نگار گران‌تر است بهتر است ارزان‌تر است اما"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: کریم, right: Karim}
+              - {left: نگار, right: Negar}
+              - {left: "گران‌تر است", right: "it's more expensive"}
+              - {left: "بهتر است", right: "it's better"}
+              - {left: "ارزان‌تر است", right: "it's cheaper"}
+              - {left: اما, right: but}
+          - content_key: prs.a1.unit15.lesson06.exercise03.reading_comprehension_what_karim_thinks
+            type: reading_comprehension
+            tested_text: "این از آن گران‌تر است، اما بهتر است"
+            prompt: {target_blocks: [{text: "کریم: این از آن گران‌تر است، اما بهتر است", language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit15.lesson06.exercise04.dialogue_response_own_comparison
+            type: dialogue_response
+            tested_text: "این از آن بهتر است"
+            prompt: {target_blocks: [{text: "این از آن گران‌تر است، اما بهتر است", language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit15.lesson06.exercise05.write_comparison_summary
+            type: writing_prompt
+            tested_text: "این گران‌تر است آن ارزان‌تر است"
+            prompt: {target_blocks: []}

@@ -1,0 +1,310 @@
+schema_version: "1.0"
+overlay_version: "2026.1-draft.1"
+overlay_key: en-fa.a1.unit15
+source_language: en
+target_language: fa
+status: complete_draft
+generation_provenance:
+  method: ai_adapted_from_public_domain_source
+  authoring_system: claude
+  human_reviewed: false
+review:
+  status: reviewed
+  required_next_reviewer: null
+  notes: "Authored alongside the new fa a1_unit15_comparisons.yaml realization. Follows the established en-fa overlay convention from units 09-14 (English instruction/correct_option/distractors/feedback, target-language Farsi accepted_answers, English glosses for recognize_* multiple_choice items to avoid the same-string visual-matching anti-pattern). Multi-clause reason exercises (translate_this_better_because_cheaper, translate_that_worse_because_expensive) carry period-joined, comma-joined, and و-joined accepted_answers variants per §12. Both open-ended production exercises (write_own_comparison, dialogue_response_own_comparison, write_comparison_summary) carry multiple adjective/topic variants from the start, learned directly from unit14's own fresh-context review finding a disguised §17-class ambiguity when only one variant was accepted. Authored §14/§16/§17-compliant from the start alongside the realization. Needs the standard fresh-context review before shipping.
+
+    FRESH-CONTEXT REVIEW, 2026-07-07 (zero prior access to authoring reasoning, prs sibling files never opened, per §8/§9): verified spine-outcome discipline, exercise pacing, §14/§16/§17 compliance, script purity (zero Arabic-range kaf/yeh), content_key parity (20 teaching + 30 exercise keys, exact both directions), ExerciseRenderer.tsx registration for all 7 exercise types used, and no internal jargon leaks in any learner-facing string -- all confirmed clean, full detail in the matching realization file's review notes. Ran a real Python script comparing every exercise's realization prompt.target_blocks (en) against this overlay's own instruction field: zero duplicates (the recently-discovered project-wide bug did not recur here). Ran a real recursive yaml.safe_load dict-value walk checking for stray non-schema YAML booleans: none found. Read backend/app/api/router.py's grade()/is_multi_answer_response() and confirmed the multi-variant open-ended exercises (write_own_comparison, dialogue_response_own_comparison, write_comparison_summary) are genuinely, correctly multi-graded, not a disguised bug -- verified directly against the compiled JSON. Verified via web search (Persian Wikipedia style guide, Wiktionary) that only five تر forms are truly frozen/suppletive in Persian (بهتر، مهتر، کهتر، بیشتر، کمتر) and found + fixed two real issues in this file: (1) the badtare_word teaching note incorrectly called بد‌تر an 'irregular' comparative of بد -- it is actually the REGULAR +تر suffixation of the identical root, unlike the genuinely suppletive بهتر (built from a different, older root به, not خوب) -- corrected the note's wording to state this accurately; (2) an orthographic inconsistency where بدتره/بلندتره lacked the ZWNJ every other fused comparative in this course uses -- corrected to بد‌تره/بلند‌تره throughout, matching بزرگ‌تره/کوچیک‌تره/گرون‌تره/ارزون‌تره/جوون‌تره. A real Python tokenizer (ZWNJ-aware, Persian-punctuation-stripping) checking every accepted_answers value against cumulative file-scoped introduced_tokens found one genuine untaught-vocabulary gap: lesson06.exercise05.write_comparison_summary's fourth accepted variant used اما (never taught in this unit) instead of the already-taught ولی -- fixed by substitution; re-ran the tokenizer to confirm zero remaining gaps. Cross-checked §11 facts (Nima taller/Sara younger; the more-expensive-but-better vs. cheaper dialogue item) across every exercise referencing them: fully consistent. Confirmed the multi-clause exercises named in this unit's review scope (translate_this_better_because_cheaper, translate_that_worse_because_expensive, write_comparison_summary) each genuinely carry period-joined, comma-joined, and و-joined status:correct variants per §12. Re-ran validate + compile after every fix: 0 errors/0 warnings, valid JSON, and the actual compiled output was spot-checked directly to confirm every fix landed correctly (ZWNJ present in correct_response, the اما->ولی fix present in the accepted list, answer_language_code=fa resolved for every translation/writing_prompt/dialogue_response exercise, all 30 exercises carrying a genuine non-empty correct_response)."
+
+course:
+  title: Farsi A1
+  description: >-
+    Beginner Iranian Farsi: basic comparisons (bigger/smaller, more/less
+    expensive, taller/younger), giving a reason for a comparison, and a
+    short reading/dialogue comparing two things.
+
+units:
+  fa.a1.unit15.comparisons:
+    title: Comparisons
+    description: Make and understand basic comparisons between familiar people, objects, or options.
+
+lessons:
+  fa.a1.unit15.lesson01.basic_comparative:
+    title: "Basic comparisons"
+  fa.a1.unit15.lesson02.comparing_prices:
+    title: "Comparing prices"
+  fa.a1.unit15.lesson03.comparing_people:
+    title: "Comparing people"
+  fa.a1.unit15.lesson04.giving_reasons:
+    title: "Giving a reason for a comparison"
+  fa.a1.unit15.lesson05.reading_a_comparison:
+    title: "Reading a comparison"
+  fa.a1.unit15.lesson06.comparisons_dialogue:
+    title: "A dialogue comparing two things"
+
+teaching:
+  fa.a1.unit15.lesson01.teach.in_word:
+    title: This
+    gloss: this
+    note: "این means this."
+  fa.a1.unit15.lesson01.teach.oon_word:
+    title: That
+    gloss: that
+    note: "اون means that (colloquial form of آن)."
+  fa.a1.unit15.lesson01.teach.bozorgtare_word:
+    title: "It's bigger"
+    gloss: "it's bigger"
+    note: "بزرگ‌تره is the colloquial contraction of بزرگ‌تر است (it is bigger) -- بزرگ‌تر is the comparative of بزرگ (big)."
+  fa.a1.unit15.lesson01.teach.koochiktare_word:
+    title: "It's smaller"
+    gloss: "it's smaller"
+    note: "کوچیک‌تره is the colloquial contraction of کوچیک‌تر است (it is smaller)."
+  fa.a1.unit15.lesson01.teach.az_word:
+    title: Than
+    gloss: than
+    note: "از marks the comparison point -- X از Y بزرگ‌تره means X is bigger than Y."
+  fa.a1.unit15.lesson02.teach.geroontare_word:
+    title: "It's more expensive"
+    gloss: "it's more expensive"
+    note: "گرون‌تره is the colloquial contraction of گرون‌تر است -- گرون‌تر is the comparative of گرون (expensive)."
+  fa.a1.unit15.lesson02.teach.arzoontare_word:
+    title: "It's cheaper"
+    gloss: "it's cheaper"
+    note: "ارزون‌تره is the colloquial contraction of ارزون‌تر است -- ارزون‌تر is the comparative of ارزون (cheap)."
+  fa.a1.unit15.lesson03.teach.names:
+    title: "Nima and Sara"
+    gloss: "Nima, Sara"
+    note: "Common Iranian names used throughout this course."
+  fa.a1.unit15.lesson03.teach.ghad_bolandtare_phrase:
+    title: "Taller"
+    gloss: "taller / he's/she's taller"
+    note: "قد بلند‌تره literally means 'height is longer' -- قد (height) بلند‌تر (longer, comparative of بلند) است (is), contracted to -ه."
+  fa.a1.unit15.lesson03.teach.javoontare_word:
+    title: "Younger"
+    gloss: "younger / he's/she's younger"
+    note: "جوون‌تره is the colloquial contraction of جوون‌تر است -- جوون‌تر is the comparative of جوون (young)."
+  fa.a1.unit15.lesson04.teach.behtare_word:
+    title: "It's better"
+    gloss: "it's better"
+    note: "بهتره is the colloquial contraction of بهتر است -- بهتر (better) is the irregular comparative of خوب (good)."
+  fa.a1.unit15.lesson04.teach.badtare_word:
+    title: "It's worse"
+    gloss: "it's worse"
+    note: "بد‌تره is the colloquial contraction of بد‌تر است -- بد‌تر (worse) is actually the REGULAR comparative of بد (bad): same root plus the ordinary تر suffix. (Unlike بهتر, which is a true irregular/suppletive form built from a different, older root, not from خوب.)"
+  fa.a1.unit15.lesson04.teach.choon_word:
+    title: Because
+    gloss: because
+    note: "چون introduces a reason."
+  fa.a1.unit15.lesson04.teach.va_word:
+    title: And
+    gloss: and
+    note: "و means and, joining two clauses or items."
+  fa.a1.unit15.lesson05.teach.reading_text:
+    title: "Sample comparison text"
+    gloss: "Nima is taller than Sara. Sara is younger than Nima."
+    note: "A short third-person comparison combining this unit's vocabulary."
+  fa.a1.unit15.lesson06.teach.names:
+    title: "Nima and Sara"
+    gloss: "Nima, Sara"
+  fa.a1.unit15.lesson06.teach.vali_word:
+    title: But
+    gloss: but
+    note: "ولی means but, introducing a contrast."
+  fa.a1.unit15.lesson06.teach.aare_word:
+    title: Yeah
+    gloss: yeah
+    note: "آره is the colloquial form of بله (yes)."
+  fa.a1.unit15.lesson06.teach.dialogue_line1:
+    title: "Nima says"
+    gloss: "This is more expensive than that, but it's better."
+  fa.a1.unit15.lesson06.teach.dialogue_line2:
+    title: "Sara answers"
+    gloss: "Yeah, but that's cheaper."
+
+exercises:
+  fa.a1.unit15.lesson01.exercise01.recognize_bozorgtare:
+    instruction: "What does this word mean?"
+    correct_option: "it's bigger"
+    distractors: ["it's smaller", this, that]
+    accepted_answers: [{value: "it's bigger", status: correct}]
+    feedback: "بزرگ‌تره means it's bigger."
+  fa.a1.unit15.lesson01.exercise02.recognize_koochiktare:
+    instruction: "What does this word mean?"
+    correct_option: "it's smaller"
+    distractors: ["it's bigger", this, that]
+    accepted_answers: [{value: "it's smaller", status: correct}]
+    feedback: "کوچیک‌تره means it's smaller."
+  fa.a1.unit15.lesson01.exercise03.match_basic_vocab:
+    instruction: "Match each word with its meaning."
+    accepted_answers:
+      - value: {این: this, اون: that, "بزرگ‌تره": "it's bigger", "کوچیک‌تره": "it's smaller"}
+        status: correct
+    feedback: "These four are this lesson's core comparison vocabulary."
+  fa.a1.unit15.lesson01.exercise04.translate_this_is_bigger:
+    instruction: "Translate into Farsi: This is bigger than that."
+    accepted_answers:
+      - {value: "این از اون بزرگ‌تره", status: correct}
+    feedback: "این از اون بزرگ‌تره means this is bigger than that."
+  fa.a1.unit15.lesson01.exercise05.translate_that_is_smaller:
+    instruction: "Translate into Farsi: That is smaller than this."
+    accepted_answers:
+      - {value: "اون از این کوچیک‌تره", status: correct}
+    feedback: "اون از این کوچیک‌تره means that is smaller than this."
+  fa.a1.unit15.lesson02.exercise01.recognize_geroontare:
+    instruction: "What does this word mean?"
+    correct_option: "it's more expensive"
+    distractors: ["it's cheaper", "it's bigger", "it's smaller"]
+    accepted_answers: [{value: "it's more expensive", status: correct}]
+    feedback: "گرون‌تره means it's more expensive."
+  fa.a1.unit15.lesson02.exercise02.recognize_arzoontare:
+    instruction: "What does this word mean?"
+    correct_option: "it's cheaper"
+    distractors: ["it's more expensive", "it's bigger", "it's smaller"]
+    accepted_answers: [{value: "it's cheaper", status: correct}]
+    feedback: "ارزون‌تره means it's cheaper."
+  fa.a1.unit15.lesson02.exercise03.match_price_vocab:
+    instruction: "Match each word with its meaning."
+    accepted_answers:
+      - value: {این: this, اون: that, "بزرگ‌تره": "it's bigger", "کوچیک‌تره": "it's smaller", "گرون‌تره": "it's more expensive", "ارزون‌تره": "it's cheaper"}
+        status: correct
+    feedback: "These combine lesson02's new words with lesson01's review vocabulary."
+  fa.a1.unit15.lesson02.exercise04.translate_this_is_more_expensive:
+    instruction: "Translate into Farsi: This is more expensive than that."
+    accepted_answers:
+      - {value: "این از اون گرون‌تره", status: correct}
+    feedback: "این از اون گرون‌تره means this is more expensive than that."
+  fa.a1.unit15.lesson02.exercise05.translate_that_is_cheaper:
+    instruction: "Translate into Farsi: That is cheaper than this."
+    accepted_answers:
+      - {value: "اون از این ارزون‌تره", status: correct}
+    feedback: "اون از این ارزون‌تره means that is cheaper than this."
+  fa.a1.unit15.lesson03.exercise01.recognize_bolandtare:
+    instruction: "What does this word mean?"
+    correct_option: taller
+    distractors: [younger, this, that]
+    accepted_answers: [{value: taller, status: correct}]
+    feedback: "قد بلند‌تره means taller (literally, height is longer)."
+  fa.a1.unit15.lesson03.exercise02.recognize_javoontare:
+    instruction: "What does this word mean?"
+    correct_option: younger
+    distractors: [taller, this, that]
+    accepted_answers: [{value: younger, status: correct}]
+    feedback: "جوون‌تره means younger."
+  fa.a1.unit15.lesson03.exercise03.match_people_vocab:
+    instruction: "Match each word or phrase with its meaning."
+    accepted_answers:
+      - value: {نیما: Nima, سارا: Sara, قد: height, "بلند‌تره": "it's/he's taller", "جوون‌تره": "he's/she's younger", از: than}
+        status: correct
+    feedback: "These are this lesson's key words for comparing people."
+  fa.a1.unit15.lesson03.exercise04.translate_nima_taller:
+    instruction: "Translate into Farsi: Nima is taller than Sara."
+    accepted_answers:
+      - {value: "نیما از سارا قد بلند‌تره", status: correct}
+    feedback: "نیما از سارا قد بلند‌تره means Nima is taller than Sara."
+  fa.a1.unit15.lesson03.exercise05.translate_sara_younger:
+    instruction: "Translate into Farsi: Sara is younger than Nima."
+    accepted_answers:
+      - {value: "سارا از نیما جوون‌تره", status: correct}
+    feedback: "سارا از نیما جوون‌تره means Sara is younger than Nima."
+  fa.a1.unit15.lesson04.exercise01.recognize_behtare:
+    instruction: "What does this word mean?"
+    correct_option: "it's better"
+    distractors: ["it's worse", because, this]
+    accepted_answers: [{value: "it's better", status: correct}]
+    feedback: "بهتره means it's better."
+  fa.a1.unit15.lesson04.exercise02.recognize_badtare:
+    instruction: "What does this word mean?"
+    correct_option: "it's worse"
+    distractors: ["it's better", because, that]
+    accepted_answers: [{value: "it's worse", status: correct}]
+    feedback: "بد‌تره means it's worse."
+  fa.a1.unit15.lesson04.exercise03.match_reasons_vocab:
+    instruction: "Match each word or phrase with its meaning."
+    accepted_answers:
+      - value: {"بهتره": "it's better", "بد‌تره": "it's worse", چون: because, این: this, اون: that, "ارزون‌تره": "it's cheaper"}
+        status: correct
+    feedback: "These combine lesson04's new words with earlier review vocabulary."
+  fa.a1.unit15.lesson04.exercise04.translate_this_better_because_cheaper:
+    instruction: "Translate into Farsi: This is better than that because it's cheaper."
+    accepted_answers:
+      - {value: "این از اون بهتره چون ارزون‌تره", status: correct}
+      - {value: "این از اون بهتره، چون ارزون‌تره", status: correct}
+      - {value: "این از اون بهتره و ارزون‌تره", status: correct}
+      - {value: "این از اون بهتره. چون ارزون‌تره", status: correct}
+    feedback: "این از اون بهتره چون ارزون‌تره means this is better than that because it's cheaper."
+  fa.a1.unit15.lesson04.exercise05.translate_that_worse_because_expensive:
+    instruction: "Translate into Farsi: That is worse than this because it's more expensive."
+    accepted_answers:
+      - {value: "اون از این بد‌تره چون گرون‌تره", status: correct}
+      - {value: "اون از این بد‌تره، چون گرون‌تره", status: correct}
+      - {value: "اون از این بد‌تره و گرون‌تره", status: correct}
+      - {value: "اون از این بد‌تره. چون گرون‌تره", status: correct}
+    feedback: "اون از این بد‌تره چون گرون‌تره means that is worse than this because it's more expensive."
+  fa.a1.unit15.lesson05.exercise01.reading_comprehension_who_taller:
+    instruction: "Read the text. Who is taller?"
+    correct_option: Nima
+    distractors: [Sara, "Both the same", "It isn't stated"]
+    accepted_answers: [{value: Nima, status: correct}]
+    feedback: "The text says نیما از سارا قد بلند‌تره -- Nima is taller than Sara."
+  fa.a1.unit15.lesson05.exercise02.reading_comprehension_who_younger:
+    instruction: "Read the text. Who is younger?"
+    correct_option: Sara
+    distractors: [Nima, "Both the same", "It isn't stated"]
+    accepted_answers: [{value: Sara, status: correct}]
+    feedback: "The text says سارا از نیما جوون‌تره -- Sara is younger than Nima."
+  fa.a1.unit15.lesson05.exercise03.match_reading_vocab:
+    instruction: "Match each word or phrase with its meaning."
+    accepted_answers:
+      - value: {نیما: Nima, سارا: Sara, "بلند‌تره": taller, "جوون‌تره": younger, از: than, قد: height}
+        status: correct
+    feedback: "These are the reading text's key words."
+  fa.a1.unit15.lesson05.exercise04.translate_nima_taller_short:
+    instruction: "Translate into Farsi: Nima is taller."
+    accepted_answers:
+      - {value: "نیما قد بلند‌تره", status: correct}
+    feedback: "نیما قد بلند‌تره means Nima is taller."
+  fa.a1.unit15.lesson05.exercise05.write_own_comparison:
+    instruction: "Write one sentence in Farsi comparing two things (bigger/smaller, more expensive/cheaper, or better/worse)."
+    accepted_answers:
+      - {value: "این از اون بزرگ‌تره", status: correct}
+      - {value: "اون از این کوچیک‌تره", status: correct}
+      - {value: "این از اون گرون‌تره", status: correct}
+      - {value: "اون از این ارزون‌تره", status: correct}
+      - {value: "این از اون بهتره", status: correct}
+      - {value: "اون از این بد‌تره", status: correct}
+      - {value: "نیما از سارا قد بلند‌تره", status: correct}
+      - {value: "سارا از نیما جوون‌تره", status: correct}
+    feedback: "این از اون بزرگ‌تره means this is bigger than that -- a good model answer. Any true comparison using this unit's vocabulary (smaller, more/less expensive, better/worse, taller, younger) is equally accepted."
+  fa.a1.unit15.lesson06.exercise01.dialogue_comprehension_context:
+    instruction: "Read the conversation. What does Nima say about the two things?"
+    correct_option: "One is more expensive but better"
+    distractors: ["Both are the same price", "One is cheaper and worse", "It isn't stated"]
+    accepted_answers: [{value: "One is more expensive but better", status: correct}]
+    feedback: "نیما says این از اون گرون‌تره، ولی بهتره -- this is more expensive than that, but it's better."
+  fa.a1.unit15.lesson06.exercise02.match_dialogue_facts:
+    instruction: "Match each word or phrase with its meaning."
+    accepted_answers:
+      - value: {نیما: Nima, سارا: Sara, "گرون‌تره": "it's more expensive", "بهتره": "it's better", "ارزون‌تره": "it's cheaper", ولی: but}
+        status: correct
+    feedback: "These are the dialogue's key words and names."
+  fa.a1.unit15.lesson06.exercise03.reading_comprehension_what_nima_thinks:
+    instruction: "Read the line. Why does Nima still prefer the more expensive one?"
+    correct_option: "Because it's better"
+    distractors: ["Because it's cheaper", "Because it's bigger", "It isn't stated"]
+    accepted_answers: [{value: "Because it's better", status: correct}]
+    feedback: "نیما says ولی بهتره -- but it's better."
+  fa.a1.unit15.lesson06.exercise04.dialogue_response_own_comparison:
+    instruction: "Nima just said the expensive one is better. Say what you think -- agree it's better, or say the other one is cheaper."
+    accepted_answers:
+      - {value: "این از اون بهتره", status: correct}
+      - {value: "آره، این بهتره", status: correct}
+      - {value: "اون از این ارزون‌تره", status: correct}
+      - {value: "آره، اون ارزون‌تره", status: correct}
+    feedback: "این از اون بهتره means this is better than that. Agreeing it's better, or pointing out the other is cheaper, are both accepted."
+  fa.a1.unit15.lesson06.exercise05.write_comparison_summary:
+    instruction: "Write one or two sentences in Farsi summarizing the conversation: one thing is more expensive but better, the other is cheaper."
+    accepted_answers:
+      - {value: "این گرون‌تره. اون ارزون‌تره", status: correct}
+      - {value: "این گرون‌تره، اون ارزون‌تره", status: correct}
+      - {value: "این گرون‌تره و اون ارزون‌تره", status: correct}
+      - {value: "این گرون‌تره ولی بهتره. اون ارزون‌تره", status: correct}
+    feedback: "این گرون‌تره، اون ارزون‌تره means this one is more expensive, that one is cheaper."

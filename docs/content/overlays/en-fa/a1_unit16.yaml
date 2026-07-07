@@ -1,0 +1,325 @@
+schema_version: "1.0"
+overlay_version: "2026.1-draft.1"
+overlay_key: en-fa.a1.unit16
+source_language: en
+target_language: fa
+status: complete_draft
+generation_provenance:
+  method: ai_adapted_from_public_domain_source
+  authoring_system: claude
+  human_reviewed: false
+review:
+  status: reviewed
+  required_next_reviewer: null
+  notes: "Authored alongside the new fa a1_unit16_travel.yaml realization. Follows the established en-fa overlay convention from units 09-15 (English instruction/correct_option/distractors/feedback, target-language Farsi accepted_answers, English glosses for recognize_* multiple_choice items). Open-ended production exercises (write_own_travel_detail, write_travel_request, write_travel_summary) carry multiple phrasing variants from the start, learned from units 14/15's own review findings. write_travel_summary carries period-joined, comma-joined, and و-joined accepted_answers variants per §12. Authored §14/§16/§17-compliant from the start alongside the realization. Needs the standard fresh-context review before shipping.
+
+    FRESH-CONTEXT REVIEW, 2026-07-07 (paired with the realization's own review, same pass; prs sibling files never opened, per §8/§9): verified content_key parity is exact against the realization in both directions (26 teaching + 30 exercise keys after the fix below, no orphans), confirmed the overlay's flat top-level units/lessons/teaching/exercises dicts correctly match the expected schema, and confirmed every accepted_answers entry actually used by the compiler/grade() multi-answer path (checked against backend/app/api/router.py) works as intended -- verified directly in the compiled JSON output. Grepped for fill_in_blank (none), listen_type/listen_select/listen_order (none), Arabic-range kaf/yeh (none), and bare snake_case jargon leaks in any learner-facing instruction/option/feedback string (none). Wrote a real Python script comparing every exercise's realization en-language target_blocks against this file's own instruction field (case-insensitive): zero duplicates -- confirmed this unit was genuinely checked against the project-wide duplicate-instruction-text bug during authoring, not just claimed to have been. Found and fixed the same 2 real issues documented in the realization's own review notes, from the overlay side: (1) added the fa.a1.unit16.lesson06.teach.va_word teaching entry (title/gloss/note, matching the exact wording convention already used for unit14/unit15's own و teaching cards) to match the realization's newly-added و teaching card, fixing the untaught-vocabulary gap that had و appearing in this file's own lesson06.exercise05 accepted_answers before it was taught anywhere in the unit; (2) added 'بلیط به تهران می‌خوام' (without یک) as an additional accepted_answers variant to both lesson02.exercise05 (translate_ticket_request) and lesson05.exercise05 (write_travel_request), for consistency with this same file's own lesson01.exercise04 precedent that dropping یک before بلیط is an equally natural, equally accepted variant. Re-ran validate + compile after every fix: 0 errors/0 warnings, valid JSON, output spot-checked directly against the compiled exercise data to confirm both fixes landed and all 30 exercises have a genuine status:correct accepted answer."
+
+course:
+  title: Farsi A1
+  description: >-
+    Beginner Iranian Farsi: basic travel vocabulary, buying a ticket,
+    asking about departure time and platform, reading a short schedule,
+    and a dialogue at the ticket counter.
+
+units:
+  fa.a1.unit16.travel:
+    title: Travel
+    description: Handle basic transport information, tickets, destinations, and departure details.
+
+lessons:
+  fa.a1.unit16.lesson01.basic_travel_vocab:
+    title: "Basic travel vocabulary"
+  fa.a1.unit16.lesson02.buying_a_ticket:
+    title: "Buying a ticket"
+  fa.a1.unit16.lesson03.asking_departure_details:
+    title: "Asking about departure time and platform"
+  fa.a1.unit16.lesson04.reading_a_schedule:
+    title: "Reading a departure schedule"
+  fa.a1.unit16.lesson05.ticket_counter_dialogue:
+    title: "A dialogue at the ticket counter"
+  fa.a1.unit16.lesson06.confirming_travel_plans:
+    title: "Confirming travel plans"
+
+teaching:
+  fa.a1.unit16.lesson01.teach.belit_word:
+    title: Ticket
+    gloss: ticket
+    note: "بلیط means ticket."
+  fa.a1.unit16.lesson01.teach.ghatar_word:
+    title: Train
+    gloss: train
+    note: "قطار means train."
+  fa.a1.unit16.lesson01.teach.otoboos_word:
+    title: Bus
+    gloss: bus
+    note: "اتوبوس means bus."
+  fa.a1.unit16.lesson01.teach.forodgah_word:
+    title: Airport
+    gloss: airport
+    note: "فرودگاه means airport."
+  fa.a1.unit16.lesson01.teach.yek_word:
+    title: A/one
+    gloss: "a / one"
+    note: "یک means one, used here as an indefinite article (a ticket)."
+  fa.a1.unit16.lesson01.teach.az_word:
+    title: From
+    gloss: from
+    note: "از means from, marking origin (distinct from its other use as than in comparisons)."
+  fa.a1.unit16.lesson01.teach.do_word:
+    title: Two
+    gloss: two
+    note: "دو means two."
+  fa.a1.unit16.lesson01.teach.sekooye_word:
+    title: "Platform two"
+    gloss: "platform two"
+    note: "سکوی دو combines سکو (platform) with the ezafe connector -ی and دو (two)."
+  fa.a1.unit16.lesson02.teach.tehran_word:
+    title: Tehran
+    gloss: Tehran
+    note: "The capital of Iran."
+  fa.a1.unit16.lesson02.teach.mikham_word:
+    title: "I want"
+    gloss: "I want"
+    note: "می‌خوام is the colloquial contraction of می‌خواهم (I want)."
+  fa.a1.unit16.lesson02.teach.be_word:
+    title: To
+    gloss: to
+    note: "به marks the destination -- به تهران means to Tehran."
+  fa.a1.unit16.lesson02.teach.belit_be_tehran_phrase:
+    title: "I want a ticket to Tehran"
+    gloss: "I want a ticket to Tehran"
+    note: "یک بلیط به تهران می‌خوام combines this lesson's vocabulary into the standard way to request a ticket."
+  fa.a1.unit16.lesson03.teach.sekoo_word:
+    title: Platform
+    gloss: platform
+    note: "سکو means platform (at a train station)."
+  fa.a1.unit16.lesson03.teach.harekat_mikone_phrase:
+    title: "It departs"
+    gloss: "it departs"
+    note: "حرکت می‌کنه is the colloquial contraction of حرکت می‌کند (it departs/moves)."
+  fa.a1.unit16.lesson03.teach.key_word:
+    title: When
+    gloss: when
+    note: "کی means when, used to ask about time."
+  fa.a1.unit16.lesson04.teach.sobh_word:
+    title: Morning
+    gloss: morning
+    note: "صبح means morning."
+  fa.a1.unit16.lesson04.teach.schedule_text:
+    title: "Sample schedule text"
+    gloss: "The Tehran train departs from platform two at eight in the morning."
+    note: "A short factual announcement combining this unit's travel vocabulary -- since fa has no working audio, this written text stands in for a spoken station announcement."
+  fa.a1.unit16.lesson05.teach.farda_word:
+    title: Tomorrow
+    gloss: tomorrow
+    note: "فردا means tomorrow."
+  fa.a1.unit16.lesson05.teach.bashe_word:
+    title: Okay
+    gloss: okay
+    note: "باشه is the colloquial contraction of باشد (okay/agreed)."
+  fa.a1.unit16.lesson05.teach.dialogue_line1:
+    title: "The traveler says"
+    gloss: "I want a ticket to Tehran."
+  fa.a1.unit16.lesson05.teach.dialogue_line2:
+    title: "The seller asks"
+    gloss: "When do you want to go?"
+  fa.a1.unit16.lesson05.teach.dialogue_line3:
+    title: "The traveler answers"
+    gloss: "Tomorrow morning."
+  fa.a1.unit16.lesson05.teach.dialogue_line4:
+    title: "The seller confirms"
+    gloss: "Okay, the train departs from platform two at eight in the morning."
+  fa.a1.unit16.lesson06.teach.mamnoon_word:
+    title: Thanks
+    gloss: thanks
+    note: "ممنون means thanks/thank you."
+  fa.a1.unit16.lesson06.teach.khahesh_mikonam_phrase:
+    title: "You're welcome"
+    gloss: "you're welcome"
+    note: "خواهش می‌کنم is the standard polite reply to thanks."
+  fa.a1.unit16.lesson06.teach.va_word:
+    title: And
+    gloss: and
+    note: "و means and, joining two clauses or items."
+
+exercises:
+  fa.a1.unit16.lesson01.exercise01.recognize_belit:
+    instruction: "What does this word mean?"
+    correct_option: ticket
+    distractors: [train, bus, airport]
+    accepted_answers: [{value: ticket, status: correct}]
+    feedback: "بلیط means ticket."
+  fa.a1.unit16.lesson01.exercise02.recognize_ghatar:
+    instruction: "What does this word mean?"
+    correct_option: train
+    distractors: [ticket, bus, airport]
+    accepted_answers: [{value: train, status: correct}]
+    feedback: "قطار means train."
+  fa.a1.unit16.lesson01.exercise03.match_travel_vocab:
+    instruction: "Match each word with its meaning."
+    accepted_answers:
+      - value: {بلیط: ticket, قطار: train, اتوبوس: bus, فرودگاه: airport}
+        status: correct
+    feedback: "These four are this lesson's core travel vocabulary."
+  fa.a1.unit16.lesson01.exercise04.translate_a_train_ticket:
+    instruction: "Translate into Farsi: a train ticket"
+    accepted_answers:
+      - {value: "یک بلیط قطار", status: correct}
+      - {value: "بلیط قطار", status: correct}
+    feedback: "بلیط قطار means train ticket."
+  fa.a1.unit16.lesson01.exercise05.translate_the_airport:
+    instruction: "Translate into Farsi: the airport"
+    accepted_answers:
+      - {value: فرودگاه, status: correct}
+    feedback: "فرودگاه means the airport."
+  fa.a1.unit16.lesson02.exercise01.recognize_tehran:
+    instruction: "What does this word mean?"
+    correct_option: Tehran
+    distractors: [ticket, train, "I want"]
+    accepted_answers: [{value: Tehran, status: correct}]
+    feedback: "تهران means Tehran."
+  fa.a1.unit16.lesson02.exercise02.recognize_mikham:
+    instruction: "What does this word mean?"
+    correct_option: "I want"
+    distractors: [Tehran, to, ticket]
+    accepted_answers: [{value: "I want", status: correct}]
+    feedback: "می‌خوام means I want."
+  fa.a1.unit16.lesson02.exercise03.match_ticket_vocab:
+    instruction: "Match each word with its meaning."
+    accepted_answers:
+      - value: {بلیط: ticket, قطار: train, تهران: Tehran, "می‌خوام": "I want", به: to, اتوبوس: bus}
+        status: correct
+    feedback: "These combine lesson02's new words with lesson01's review vocabulary."
+  fa.a1.unit16.lesson02.exercise04.word_order_belit_be_tehran:
+    instruction: "Arrange the words to say I want a ticket to Tehran."
+    accepted_answers:
+      - {value: [یک, بلیط, به, تهران, "می‌خوام"], status: correct}
+    feedback: "یک بلیط به تهران می‌خوام means I want a ticket to Tehran."
+  fa.a1.unit16.lesson02.exercise05.translate_ticket_request:
+    instruction: "Translate into Farsi: I want a ticket to Tehran."
+    accepted_answers:
+      - {value: "یک بلیط به تهران می‌خوام", status: correct}
+      - {value: "بلیط به تهران می‌خوام", status: correct}
+    feedback: "یک بلیط به تهران می‌خوام means I want a ticket to Tehran."
+  fa.a1.unit16.lesson03.exercise01.recognize_sekoo:
+    instruction: "What does this word mean?"
+    correct_option: platform
+    distractors: [ticket, train, "it departs"]
+    accepted_answers: [{value: platform, status: correct}]
+    feedback: "سکو means platform."
+  fa.a1.unit16.lesson03.exercise02.recognize_harekat_mikone:
+    instruction: "What does this phrase mean?"
+    correct_option: "it departs"
+    distractors: [platform, when, ticket]
+    accepted_answers: [{value: "it departs", status: correct}]
+    feedback: "حرکت می‌کنه means it departs."
+  fa.a1.unit16.lesson03.exercise03.match_departure_vocab:
+    instruction: "Match each word or phrase with its meaning."
+    accepted_answers:
+      - value: {سکو: platform, "حرکت می‌کنه": "it departs", کی: when, قطار: train, تهران: Tehran, بلیط: ticket}
+        status: correct
+    feedback: "These combine lesson03's new words with earlier review vocabulary."
+  fa.a1.unit16.lesson03.exercise04.translate_when_does_it_depart:
+    instruction: "Translate into Farsi: When does the train depart?"
+    accepted_answers:
+      - {value: "قطار کی حرکت می‌کنه", status: correct}
+      - {value: "قطار کی حرکت می‌کنه؟", status: correct}
+    feedback: "قطار کی حرکت می‌کنه؟ means when does the train depart?"
+  fa.a1.unit16.lesson03.exercise05.translate_platform_two:
+    instruction: "Translate into Farsi: The train departs from platform two."
+    accepted_answers:
+      - {value: "قطار از سکوی دو حرکت می‌کنه", status: correct}
+    feedback: "قطار از سکوی دو حرکت می‌کنه means the train departs from platform two."
+  fa.a1.unit16.lesson04.exercise01.reading_comprehension_departure_time:
+    instruction: "Read the announcement. What time does the Tehran train depart?"
+    correct_option: "Eight in the morning"
+    distractors: ["Eight at night", "Two o'clock", "It isn't stated"]
+    accepted_answers: [{value: "Eight in the morning", status: correct}]
+    feedback: "The text says ساعت هشت صبح -- eight in the morning."
+  fa.a1.unit16.lesson04.exercise02.reading_comprehension_platform:
+    instruction: "Read the announcement. Which platform does it depart from?"
+    correct_option: "Platform two"
+    distractors: ["Platform eight", "Platform one", "It isn't stated"]
+    accepted_answers: [{value: "Platform two", status: correct}]
+    feedback: "The text says از سکوی دو -- from platform two."
+  fa.a1.unit16.lesson04.exercise03.match_schedule_vocab:
+    instruction: "Match each word or phrase with its meaning."
+    accepted_answers:
+      - value: {قطار: train, تهران: Tehran, "ساعت هشت": "eight o'clock", صبح: morning, سکو: platform, دو: two}
+        status: correct
+    feedback: "These are the schedule text's key words."
+  fa.a1.unit16.lesson04.exercise04.translate_train_departs_eight:
+    instruction: "Translate into Farsi: The train departs at eight in the morning."
+    accepted_answers:
+      - {value: "قطار ساعت هشت صبح حرکت می‌کنه", status: correct}
+    feedback: "قطار ساعت هشت صبح حرکت می‌کنه means the train departs at eight in the morning."
+  fa.a1.unit16.lesson04.exercise05.write_own_travel_detail:
+    instruction: "Write one sentence in Farsi giving a travel detail (a departure time and/or platform)."
+    accepted_answers:
+      - {value: "قطار ساعت هشت صبح از سکوی دو حرکت می‌کنه", status: correct}
+      - {value: "قطار ساعت هشت صبح حرکت می‌کنه", status: correct}
+      - {value: "قطار از سکوی دو حرکت می‌کنه", status: correct}
+      - {value: "قطار تهران ساعت هشت صبح حرکت می‌کنه", status: correct}
+    feedback: "قطار ساعت هشت صبح از سکوی دو حرکت می‌کنه means the train departs from platform two at eight in the morning -- a good model answer. Any true detail using this unit's vocabulary is equally accepted."
+  fa.a1.unit16.lesson05.exercise01.dialogue_comprehension_context:
+    instruction: "Read the conversation. When does the traveler want to go?"
+    correct_option: "Tomorrow morning"
+    distractors: ["Today", "Tomorrow night", "It isn't stated"]
+    accepted_answers: [{value: "Tomorrow morning", status: correct}]
+    feedback: "مسافر says فردا صبح -- tomorrow morning."
+  fa.a1.unit16.lesson05.exercise02.match_dialogue_facts:
+    instruction: "Match each word or phrase with its meaning."
+    accepted_answers:
+      - value: {تهران: Tehran, "فردا صبح": "tomorrow morning", "ساعت هشت": "eight o'clock", "سکوی دو": "platform two", بلیط: ticket, باشه: okay}
+        status: correct
+    feedback: "These are the dialogue's key words and facts."
+  fa.a1.unit16.lesson05.exercise03.reading_comprehension_when_traveling:
+    instruction: "Read the line. When does the traveler want to go?"
+    correct_option: "Tomorrow morning"
+    distractors: ["Today", "Tomorrow night", "It isn't stated"]
+    accepted_answers: [{value: "Tomorrow morning", status: correct}]
+    feedback: "فردا صبح means tomorrow morning."
+  fa.a1.unit16.lesson05.exercise04.dialogue_response_state_when:
+    instruction: "The seller asks when you want to go. Say tomorrow morning."
+    accepted_answers:
+      - {value: "فردا صبح", status: correct}
+    feedback: "فردا صبح means tomorrow morning."
+  fa.a1.unit16.lesson05.exercise05.write_travel_request:
+    instruction: "Write a short message in Farsi requesting a ticket to Tehran."
+    accepted_answers:
+      - {value: "یک بلیط به تهران می‌خوام", status: correct}
+      - {value: "یک بلیط قطار به تهران می‌خوام", status: correct}
+      - {value: "بلیط به تهران می‌خوام", status: correct}
+    feedback: "یک بلیط به تهران می‌خوام means I want a ticket to Tehran."
+  fa.a1.unit16.lesson06.exercise01.recognize_mamnoon:
+    instruction: "What does this word mean?"
+    correct_option: thanks
+    distractors: ["you're welcome", train, platform]
+    accepted_answers: [{value: thanks, status: correct}]
+    feedback: "ممنون means thanks."
+  fa.a1.unit16.lesson06.exercise02.match_final_vocab:
+    instruction: "Match each word or phrase with its meaning."
+    accepted_answers:
+      - value: {ممنون: thanks, "خواهش می‌کنم": "you're welcome", قطار: train, سکو: platform, تهران: Tehran, فردا: tomorrow}
+        status: correct
+    feedback: "These review this unit's key travel vocabulary."
+  fa.a1.unit16.lesson06.exercise03.translate_thanks_youre_welcome:
+    instruction: "Translate into Farsi: Thanks. You're welcome."
+    accepted_answers:
+      - {value: "ممنون. خواهش می‌کنم", status: correct}
+      - {value: "ممنون، خواهش می‌کنم", status: correct}
+    feedback: "ممنون. خواهش می‌کنم means thanks -- you're welcome."
+  fa.a1.unit16.lesson06.exercise04.dialogue_response_thank_seller:
+    instruction: "The seller just told you the departure details. Thank them."
+    accepted_answers:
+      - {value: ممنون, status: correct}
+    feedback: "ممنون means thanks."
+  fa.a1.unit16.lesson06.exercise05.write_travel_summary:
+    instruction: "Write one or two sentences in Farsi summarizing the travel plan: a train to Tehran, tomorrow morning at eight, from platform two."
+    accepted_answers:
+      - {value: "قطار به تهران فردا صبح ساعت هشت از سکوی دو حرکت می‌کنه", status: correct}
+      - {value: "قطار به تهران، فردا صبح، ساعت هشت، از سکوی دو حرکت می‌کنه", status: correct}
+      - {value: "قطار به تهران فردا صبح و ساعت هشت از سکوی دو حرکت می‌کنه", status: correct}
+      - {value: "قطار به تهران فردا صبح حرکت می‌کنه. از سکوی دو حرکت می‌کنه", status: correct}
+    feedback: "قطار به تهران فردا صبح ساعت هشت از سکوی دو حرکت می‌کنه means the train to Tehran departs tomorrow morning at eight from platform two."

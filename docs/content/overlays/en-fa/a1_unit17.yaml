@@ -1,0 +1,314 @@
+schema_version: "1.0"
+overlay_version: "2026.1-draft.1"
+overlay_key: en-fa.a1.unit17
+source_language: en
+target_language: fa
+status: complete_draft
+generation_provenance:
+  method: ai_adapted_from_public_domain_source
+  authoring_system: claude
+  human_reviewed: false
+review:
+  status: reviewed
+  required_next_reviewer: null
+  notes: "Authored alongside the new fa a1_unit17_health.yaml realization. Follows the established en-fa overlay convention from units 09-16 (English instruction/correct_option/distractors/feedback, target-language Farsi accepted_answers, English glosses for recognize_* multiple_choice items). Open-ended production exercises (write_own_symptom, write_health_summary) carry multiple phrasing/symptom variants from the start, learned from units 14/15/16's own review findings. write_health_summary carries period-joined, comma-joined, and و-joined accepted_answers variants per §12. Authored §14/§16/§17-compliant from the start alongside the realization. Needs the standard fresh-context review before shipping.
+
+    FRESH-CONTEXT REVIEW, 2026-07-07 (zero prior access to the authoring reasoning, prs sibling files never opened, per §8/§9): verified content_key parity exact against the realization in both directions (script-checked: 23 teaching + 30 exercise keys, plus units/lessons dicts, zero mismatches). Wrote a real duplicate-instruction-vs-target_blocks script comparing every exercise's realization en-language target_blocks against this file's own instruction field: zero exact duplicates found. Read backend/app/api/router.py's grade()/is_multi_answer_response() and confirmed via the actual compiled JSON that write_own_symptom's and write_health_summary's multi-variant accepted_answers are genuine multi-answer grading (any listed variant matches), and that translate_rest_and_drink_water/translate_headache_and_fever/write_health_summary's period/comma/و-joined §12 variants all appear correctly in the compiled correct_response.accepted. Grepped for stray YAML booleans (none) and Arabic-range kaf/yeh (none). Confirmed no internal-jargon leaks in any learner-facing instruction/correct_option/distractors/feedback/gloss/note string. Verified every multiple_choice/reading_comprehension/dialogue_comprehension exercise's correct_option/distractors are English-only against a Farsi prompt (no same-script leakage). Assessed the deliberate باید+subjunctive avoidance in favor of bare imperatives (استراحت کن، آب هم بخور) -- confirmed via reasoning and web search this is genuinely natural, warm, informal-register Persian friend-to-friend advice, not unnaturally curt; appropriate A1 simplification. Re-ran validate + compile: 0 errors/0 warnings, valid JSON."
+
+course:
+  title: Farsi A1
+  description: >-
+    Beginner Iranian Farsi: describing basic symptoms, asking for help,
+    understanding simple health advice, reading a short symptom note,
+    and a dialogue where a friend gives advice.
+
+units:
+  fa.a1.unit17.health:
+    title: Health
+    description: State a basic health problem and understand simple immediate advice.
+
+lessons:
+  fa.a1.unit17.lesson01.basic_symptoms:
+    title: "Basic symptoms"
+  fa.a1.unit17.lesson02.more_symptoms:
+    title: "More symptoms"
+  fa.a1.unit17.lesson03.asking_for_help:
+    title: "Asking for help"
+  fa.a1.unit17.lesson04.simple_advice:
+    title: "Simple health advice"
+  fa.a1.unit17.lesson05.reading_a_symptom_note:
+    title: "Reading a symptom note"
+  fa.a1.unit17.lesson06.advice_dialogue:
+    title: "A dialogue giving advice"
+
+teaching:
+  fa.a1.unit17.lesson01.teach.halam_khoob_nist_phrase:
+    title: "I don't feel well"
+    gloss: "I don't feel well"
+    note: "حالم خوب نیست literally means 'my state is not good' -- the standard way to say you don't feel well."
+  fa.a1.unit17.lesson01.teach.sardard_word:
+    title: Headache
+    gloss: headache
+    note: "سردرد means headache."
+  fa.a1.unit17.lesson01.teach.daram_word:
+    title: "I have"
+    gloss: "I have"
+    note: "دارم means I have, used with a symptom noun (سردرد دارم = I have a headache)."
+  fa.a1.unit17.lesson01.teach.tab_word:
+    title: Fever
+    gloss: fever
+    note: "تب means fever."
+  fa.a1.unit17.lesson02.teach.delam_dard_mikone_phrase:
+    title: "My stomach hurts"
+    gloss: "my stomach hurts"
+    note: "دلم درد می‌کنه literally means 'my stomach does pain' -- the colloquial way to say your stomach hurts."
+  fa.a1.unit17.lesson02.teach.khastam_word:
+    title: "I'm tired"
+    gloss: "I'm tired"
+    note: "خسته‌ام is the colloquial contraction of خسته هستم (I am tired)."
+  fa.a1.unit17.lesson03.teach.komak_word:
+    title: Help
+    gloss: help
+    note: "کمک means help."
+  fa.a1.unit17.lesson03.teach.mitooni_word:
+    title: "You can"
+    gloss: "you can"
+    note: "می‌تونی is the colloquial contraction of می‌توانی (you can), informal second person."
+  fa.a1.unit17.lesson03.teach.komakam_koni_phrase:
+    title: "Can you help me?"
+    gloss: "Can you help me?"
+    note: "می‌تونی کمکم کنی؟ combines می‌تونی (you can) with کمکم کنی (do my-help, i.e. help me)."
+  fa.a1.unit17.lesson04.teach.doctor_word:
+    title: Doctor
+    gloss: doctor
+    note: "دکتر means doctor."
+  fa.a1.unit17.lesson04.teach.daroo_word:
+    title: Medicine
+    gloss: medicine
+    note: "دارو means medicine."
+  fa.a1.unit17.lesson04.teach.esterahat_kon_phrase:
+    title: "Rest (command)"
+    gloss: "rest"
+    note: "استراحت کن is the informal imperative -- rest!"
+  fa.a1.unit17.lesson04.teach.ab_bokhor_phrase:
+    title: "Drink water (command)"
+    gloss: "drink water"
+    note: "آب بخور is the informal imperative -- drink water!"
+  fa.a1.unit17.lesson04.teach.va_word:
+    title: And
+    gloss: and
+    note: "و means and, joining two clauses or items."
+  fa.a1.unit17.lesson05.teach.reading_text:
+    title: "Sample symptom note"
+    gloss: "I have a headache and a fever. I'm tired."
+    note: "A short first-person note combining this unit's symptom vocabulary."
+  fa.a1.unit17.lesson06.teach.names:
+    title: "Nima and Sara"
+    gloss: "Nima, Sara"
+    note: "Common Iranian names used throughout this course."
+  fa.a1.unit17.lesson06.teach.ham_word:
+    title: "Also/too"
+    gloss: "also / too"
+    note: "هم means also or too, placed after the word it modifies (آب هم بخور = drink water too)."
+  fa.a1.unit17.lesson06.teach.bashe_word:
+    title: Okay
+    gloss: okay
+    note: "باشه is the colloquial contraction of باشد (okay/agreed)."
+  fa.a1.unit17.lesson06.teach.mamnoon_word:
+    title: Thanks
+    gloss: thanks
+    note: "ممنون means thanks/thank you."
+  fa.a1.unit17.lesson06.teach.dareh_grammar:
+    title: "He/she has"
+    gloss: "he/she has"
+    note: "داره is the colloquial third-person form of دارد (has) -- matches the دارم pattern in the first person."
+  fa.a1.unit17.lesson06.teach.dialogue_line1:
+    title: "Nima says"
+    gloss: "I don't feel well. I have a headache and a fever."
+  fa.a1.unit17.lesson06.teach.dialogue_line2:
+    title: "Sara advises"
+    gloss: "Rest. Drink water too."
+  fa.a1.unit17.lesson06.teach.dialogue_line3:
+    title: "Nima replies"
+    gloss: "Okay, thanks."
+
+exercises:
+  fa.a1.unit17.lesson01.exercise01.recognize_sardard:
+    instruction: "What does this word mean?"
+    correct_option: headache
+    distractors: [fever, "I have", "I don't feel well"]
+    accepted_answers: [{value: headache, status: correct}]
+    feedback: "سردرد means headache."
+  fa.a1.unit17.lesson01.exercise02.recognize_tab:
+    instruction: "What does this word mean?"
+    correct_option: fever
+    distractors: [headache, "I have", "I don't feel well"]
+    accepted_answers: [{value: fever, status: correct}]
+    feedback: "تب means fever."
+  fa.a1.unit17.lesson01.exercise03.match_basic_symptoms:
+    instruction: "Match each word or phrase with its meaning."
+    accepted_answers:
+      - value: {"حالم خوب نیست": "I don't feel well", سردرد: headache, تب: fever, دارم: "I have"}
+        status: correct
+    feedback: "These four are this lesson's core health vocabulary."
+  fa.a1.unit17.lesson01.exercise04.translate_dont_feel_well:
+    instruction: "Translate into Farsi: I don't feel well."
+    accepted_answers:
+      - {value: "حالم خوب نیست", status: correct}
+    feedback: "حالم خوب نیست means I don't feel well."
+  fa.a1.unit17.lesson01.exercise05.translate_have_headache:
+    instruction: "Translate into Farsi: I have a headache."
+    accepted_answers:
+      - {value: "سردرد دارم", status: correct}
+    feedback: "سردرد دارم means I have a headache."
+  fa.a1.unit17.lesson02.exercise01.recognize_delam_dard_mikone:
+    instruction: "What does this phrase mean?"
+    correct_option: "my stomach hurts"
+    distractors: ["I'm tired", "I have a headache", "I have a fever"]
+    accepted_answers: [{value: "my stomach hurts", status: correct}]
+    feedback: "دلم درد می‌کنه means my stomach hurts."
+  fa.a1.unit17.lesson02.exercise02.recognize_khastam:
+    instruction: "What does this word mean?"
+    correct_option: "I'm tired"
+    distractors: ["my stomach hurts", "I have a headache", "I have a fever"]
+    accepted_answers: [{value: "I'm tired", status: correct}]
+    feedback: "خسته‌ام means I'm tired."
+  fa.a1.unit17.lesson02.exercise03.match_more_symptoms:
+    instruction: "Match each word or phrase with its meaning."
+    accepted_answers:
+      - value: {"حالم خوب نیست": "I don't feel well", سردرد: headache, تب: fever, "دلم درد می‌کنه": "my stomach hurts", "خسته‌ام": "I'm tired", دارم: "I have"}
+        status: correct
+    feedback: "These combine lesson02's new words with lesson01's review vocabulary."
+  fa.a1.unit17.lesson02.exercise04.translate_stomach_hurts:
+    instruction: "Translate into Farsi: My stomach hurts."
+    accepted_answers:
+      - {value: "دلم درد می‌کنه", status: correct}
+    feedback: "دلم درد می‌کنه means my stomach hurts."
+  fa.a1.unit17.lesson02.exercise05.translate_im_tired:
+    instruction: "Translate into Farsi: I'm tired."
+    accepted_answers:
+      - {value: "خسته‌ام", status: correct}
+    feedback: "خسته‌ام means I'm tired."
+  fa.a1.unit17.lesson03.exercise01.recognize_komak:
+    instruction: "What does this word mean?"
+    correct_option: help
+    distractors: ["you can", headache, fever]
+    accepted_answers: [{value: help, status: correct}]
+    feedback: "کمک means help."
+  fa.a1.unit17.lesson03.exercise02.recognize_mitooni:
+    instruction: "What does this word mean?"
+    correct_option: "you can"
+    distractors: [help, headache, fever]
+    accepted_answers: [{value: "you can", status: correct}]
+    feedback: "می‌تونی means you can."
+  fa.a1.unit17.lesson03.exercise03.match_help_vocab:
+    instruction: "Match each word or phrase with its meaning."
+    accepted_answers:
+      - value: {کمک: help, "می‌تونی": "you can", کمکم: "help me (object)", کنی: "you do", سردرد: headache, تب: fever}
+        status: correct
+    feedback: "These combine lesson03's new words with earlier review vocabulary."
+  fa.a1.unit17.lesson03.exercise04.word_order_help_question:
+    instruction: "Arrange the words to ask Can you help me?"
+    accepted_answers:
+      - {value: ["می‌تونی", "کمکم", کنی], status: correct}
+    feedback: "می‌تونی کمکم کنی؟ means can you help me?"
+  fa.a1.unit17.lesson03.exercise05.translate_can_you_help:
+    instruction: "Translate into Farsi: Can you help me?"
+    accepted_answers:
+      - {value: "می‌تونی کمکم کنی", status: correct}
+      - {value: "می‌تونی کمکم کنی؟", status: correct}
+    feedback: "می‌تونی کمکم کنی؟ means can you help me?"
+  fa.a1.unit17.lesson04.exercise01.recognize_doctor:
+    instruction: "What does this word mean?"
+    correct_option: doctor
+    distractors: [medicine, help, headache]
+    accepted_answers: [{value: doctor, status: correct}]
+    feedback: "دکتر means doctor."
+  fa.a1.unit17.lesson04.exercise02.recognize_daroo:
+    instruction: "What does this word mean?"
+    correct_option: medicine
+    distractors: [doctor, help, headache]
+    accepted_answers: [{value: medicine, status: correct}]
+    feedback: "دارو means medicine."
+  fa.a1.unit17.lesson04.exercise03.match_advice_vocab:
+    instruction: "Match each word or phrase with its meaning."
+    accepted_answers:
+      - value: {دکتر: doctor, دارو: medicine, "استراحت کن": "rest (command)", "آب بخور": "drink water (command)", کمک: help, سردرد: headache}
+        status: correct
+    feedback: "These combine lesson04's new words with earlier review vocabulary."
+  fa.a1.unit17.lesson04.exercise04.translate_rest_and_drink_water:
+    instruction: "Translate into Farsi: Rest and drink water."
+    accepted_answers:
+      - {value: "استراحت کن و آب بخور", status: correct}
+      - {value: "استراحت کن، آب بخور", status: correct}
+      - {value: "استراحت کن. آب بخور", status: correct}
+    feedback: "استراحت کن و آب بخور means rest and drink water."
+  fa.a1.unit17.lesson04.exercise05.translate_take_medicine:
+    instruction: "Translate into Farsi: Take medicine."
+    accepted_answers:
+      - {value: "دارو بخور", status: correct}
+    feedback: "دارو بخور means take medicine (literally, drink/eat medicine)."
+  fa.a1.unit17.lesson05.exercise01.reading_comprehension_symptom_one:
+    instruction: "Read the note. What is one symptom mentioned?"
+    correct_option: Headache
+    distractors: ["Stomach ache", "Sore throat", "It isn't stated"]
+    accepted_answers: [{value: Headache, status: correct}]
+    feedback: "The note says سردرد دارم -- I have a headache."
+  fa.a1.unit17.lesson05.exercise02.reading_comprehension_symptom_two:
+    instruction: "Read the note. What is another symptom mentioned?"
+    correct_option: "Fever and tiredness"
+    distractors: ["Stomach ache", "Sore throat", "It isn't stated"]
+    accepted_answers: [{value: "Fever and tiredness", status: correct}]
+    feedback: "The note says تب دارم و خسته‌ام -- I have a fever and I'm tired."
+  fa.a1.unit17.lesson05.exercise03.match_reading_vocab:
+    instruction: "Match each word or phrase with its meaning."
+    accepted_answers:
+      - value: {سردرد: headache, تب: fever, "خسته‌ام": "I'm tired", دارم: "I have", "دلم درد می‌کنه": "my stomach hurts", "حالم خوب نیست": "I don't feel well"}
+        status: correct
+    feedback: "These are the note's key words."
+  fa.a1.unit17.lesson05.exercise04.translate_headache_and_fever:
+    instruction: "Translate into Farsi: I have a headache and a fever."
+    accepted_answers:
+      - {value: "سردرد دارم و تب دارم", status: correct}
+      - {value: "سردرد دارم، تب دارم", status: correct}
+      - {value: "سردرد دارم. تب دارم", status: correct}
+    feedback: "سردرد دارم و تب دارم means I have a headache and a fever."
+  fa.a1.unit17.lesson05.exercise05.write_own_symptom:
+    instruction: "Write one sentence in Farsi about a symptom you have."
+    accepted_answers:
+      - {value: "سردرد دارم", status: correct}
+      - {value: "تب دارم", status: correct}
+      - {value: "دلم درد می‌کنه", status: correct}
+      - {value: "خسته‌ام", status: correct}
+      - {value: "حالم خوب نیست", status: correct}
+    feedback: "سردرد دارم means I have a headache -- a good model answer. Any true symptom using this unit's vocabulary is equally accepted."
+  fa.a1.unit17.lesson06.exercise01.dialogue_comprehension_context:
+    instruction: "Read the conversation. What does Sara advise?"
+    correct_option: "Rest and drink water"
+    distractors: ["Take medicine", "See a doctor", "It isn't stated"]
+    accepted_answers: [{value: "Rest and drink water", status: correct}]
+    feedback: "سارا says استراحت کن. آب هم بخور -- rest, drink water too."
+  fa.a1.unit17.lesson06.exercise02.match_dialogue_facts:
+    instruction: "Match each word or phrase with its meaning."
+    accepted_answers:
+      - value: {نیما: Nima, سارا: Sara, سردرد: headache, تب: fever, "استراحت کن": rest, "آب هم بخور": "drink water too"}
+        status: correct
+    feedback: "These are the dialogue's key words and names."
+  fa.a1.unit17.lesson06.exercise03.reading_comprehension_what_sara_advises:
+    instruction: "Read the line. What does Sara advise?"
+    correct_option: "Rest and drink water"
+    distractors: ["Take medicine", "See a doctor", "It isn't stated"]
+    accepted_answers: [{value: "Rest and drink water", status: correct}]
+    feedback: "استراحت کن. آب هم بخور means rest, drink water too."
+  fa.a1.unit17.lesson06.exercise04.dialogue_response_state_symptom:
+    instruction: "Someone asks how you feel. Say your stomach hurts."
+    accepted_answers:
+      - {value: "دلم درد می‌کنه", status: correct}
+    feedback: "دلم درد می‌کنه means my stomach hurts."
+  fa.a1.unit17.lesson06.exercise05.write_health_summary:
+    instruction: "Write one or two sentences in Farsi summarizing Nima's problem: he has a headache and a fever."
+    accepted_answers:
+      - {value: "نیما سردرد داره و تب داره", status: correct}
+      - {value: "نیما سردرد داره، تب داره", status: correct}
+      - {value: "نیما سردرد داره. تب داره", status: correct}
+    feedback: "نیما سردرد داره و تب داره means Nima has a headache and a fever."

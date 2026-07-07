@@ -1,0 +1,360 @@
+schema_version: "1.0"
+overlay_version: "2026.1-draft.1"
+overlay_key: en-prs.a1.unit14
+source_language: en
+target_language: prs
+status: complete_draft
+generation_provenance:
+  method: ai_adapted_from_public_domain_source
+  authoring_system: claude
+  human_reviewed: false
+review:
+  status: reviewed
+  required_next_reviewer: null
+  notes: "Authored alongside the new prs a1_unit14_preferences.yaml realization. Follows the established en-prs overlay convention from units 01-13 (English instruction/correct_option/distractors/feedback, target-language Dari accepted_answers, English glosses for recognize_* multiple_choice items to avoid the same-string visual-matching anti-pattern). Multi-clause production exercises (write_own_preference, dialogue_response_own_preference, write_comparison_summary) carry period-joined, comma-joined, and و-joined accepted_answers variants per §12, and the two open-ended production exercises carry coffee/tea/music topic variants from the start (learned directly from the fa sibling unit's own fresh-context review, which found a disguised §17-class ambiguity when only one topic was accepted). Authored §14/§16/§17-compliant from the start alongside the realization. Needs the standard fresh-context review before shipping.
+
+    FRESH-CONTEXT REVIEW COMPLETED 2026-07-07 (zero prior context, fa sibling files never opened, paired with the realization's own matching review pass). Verified content_key parity exact both directions against the realization (1 unit/6 lessons/29 teaching/30 exercises each side) and that this file's flat top-level dicts (units/lessons/teaching/exercises keyed directly by content_key) correctly match the established overlay schema. Confirmed via direct code read of backend/app/api/router.py's grade()/is_multi_answer_response() that the generic multi-answer accepted-list grading path checks every entry, not just the first, so write_own_preference's 12-and-growing accepted variants and dialogue_response_own_preference's coffee/tea variants all genuinely grade correct, not just the first-authored one. Ran a programmatic jargon-leak check (not just grep) against every learner-facing string value (instruction/correct_option/distractors/options/feedback/title/gloss/note/word_bank/accepted_answers) -- zero snake_case leaks. Ran a real yaml.safe_load-based recursive stray-Python-bool check against every dict value in this file -- clean, only the legitimate schema booleans present. Ran a ZWNJ-aware Persian-punctuation-stripping tokenizer checking every Dari-script token in every accepted_answers/correct_option/distractors value against the paired realization's cumulative file-scoped introduced_tokens -- zero untaught-vocabulary violations. FOUND AND FIXED the missing period-joined §12 variant on translate_like_coffee_because_delicious, translate_like_music_because_interesting, write_own_preference, and dialogue_response_own_preference (added as status:correct, matching the realization-side note's detail). Re-verified via actual compile that every new accepted_answers entry appears correctly in the compiled correct_response.accepted list. Both validate and compile re-run clean (0 errors/0 warnings) after every fix; compile output is valid JSON."
+
+course:
+  title: Dari A1
+  description: >-
+    Beginner Kabul Dari: expressing likes and dislikes, asking about
+    preferences, choosing between options, giving simple reasons, and
+    a short reading/dialogue about two people's preferences.
+
+units:
+  prs.a1.unit14.preferences:
+    title: Preferences
+    description: Express and ask about basic likes, dislikes, and simple reasons.
+
+lessons:
+  prs.a1.unit14.lesson01.basic_likes:
+    title: "Simple likes and dislikes"
+  prs.a1.unit14.lesson02.asking_preferences:
+    title: "Asking about preferences"
+  prs.a1.unit14.lesson03.choosing_between_options:
+    title: "Choosing between two things"
+  prs.a1.unit14.lesson04.giving_reasons:
+    title: "Giving a reason"
+  prs.a1.unit14.lesson05.reading_about_preferences:
+    title: "Reading about preferences"
+  prs.a1.unit14.lesson06.preferences_dialogue:
+    title: "A dialogue about preferences"
+
+teaching:
+  prs.a1.unit14.lesson01.teach.doost_daram_phrase:
+    title: "I like"
+    gloss: "I like"
+    note: "دوست دارم literally means 'I have friendship (with it)' -- the standard way to say I like."
+  prs.a1.unit14.lesson01.teach.qahwa_word:
+    title: Coffee
+    gloss: coffee
+    note: "قهوه means coffee."
+  prs.a1.unit14.lesson01.teach.chai_word:
+    title: Tea
+    gloss: tea
+    note: "چای means tea."
+  prs.a1.unit14.lesson01.teach.doost_nadaram_phrase:
+    title: "I don't like"
+    gloss: "I don't like"
+    note: "دوست ندارم is the negative of دوست دارم."
+  prs.a1.unit14.lesson01.teach.man_word:
+    title: I
+    gloss: I
+    note: "من is the standalone first-person pronoun."
+  prs.a1.unit14.lesson01.teach.ra_word:
+    title: "(object marker)"
+    gloss: "(marks the object of the verb)"
+    note: "را is the formal object marker used with a definite direct object -- this course's dialect uses را, not the colloquial رو."
+  prs.a1.unit14.lesson02.teach.kodam_word:
+    title: Which
+    gloss: which
+    note: "کدام means which (one)."
+  prs.a1.unit14.lesson02.teach.moosiqi_word:
+    title: Music
+    gloss: music
+    note: "موسیقی means music."
+  prs.a1.unit14.lesson02.teach.darid_grammar:
+    title: "You have/like (polite)"
+    gloss: "you have / you like"
+    note: "دارید is the polite/plural second-person form of داشتن (to have), consistent with this course's استم/استین polite-first register."
+  prs.a1.unit14.lesson02.teach.kodam_ra_question:
+    title: "Which one do you like?"
+    gloss: "Which one do you like?"
+    note: "کدام را دوست دارید؟ -- را is the formal object marker (this course's dialect uses را, not the colloquial رو)."
+  prs.a1.unit14.lesson03.teach.bishtar_word:
+    title: More
+    gloss: more
+    note: "بیشتر means more."
+  prs.a1.unit14.lesson03.teach.ya_word:
+    title: Or
+    gloss: or
+    note: "یا means or, used to offer a choice between two things."
+  prs.a1.unit14.lesson03.teach.qahwa_ya_chai_question:
+    title: "Coffee or tea?"
+    gloss: "Coffee or tea?"
+    note: "قهوه یا چای؟ offers a choice between the two drinks taught in lesson01."
+  prs.a1.unit14.lesson04.teach.choon_word:
+    title: Because
+    gloss: because
+    note: "چون introduces a reason."
+  prs.a1.unit14.lesson04.teach.khoshmaza_ast_word:
+    title: "It's delicious"
+    gloss: "it's delicious"
+    note: "خوش‌مزه است is the full, uncontracted form (it is delicious) -- this course's register keeps است separate rather than contracting it."
+  prs.a1.unit14.lesson04.teach.jaleb_ast_word:
+    title: "It's interesting"
+    gloss: "it's interesting"
+    note: "جالب است is the full, uncontracted form (it is interesting)."
+  prs.a1.unit14.lesson04.teach.va_word:
+    title: And
+    gloss: and
+    note: "و means and, joining two clauses or items."
+  prs.a1.unit14.lesson05.teach.negar_name:
+    title: Negar
+    gloss: Negar
+    note: "A common Afghan female name."
+  prs.a1.unit14.lesson05.teach.darad_grammar:
+    title: "He/she likes"
+    gloss: "he/she likes"
+    note: "دارد is the full third-person form of داشتن (has) -- دوست دارد means he/she likes, matching the دوست دارم pattern in the first person."
+  prs.a1.unit14.lesson05.teach.nadarad_grammar:
+    title: "He/she doesn't like"
+    gloss: "he/she doesn't like"
+    note: "ندارد is the full third-person negative -- دوست ندارد means he/she doesn't like."
+  prs.a1.unit14.lesson05.teach.garm_ast_word:
+    title: "It's warm"
+    gloss: "it's warm"
+    note: "گرم است is the full, uncontracted form (it is warm)."
+  prs.a1.unit14.lesson05.teach.reading_text:
+    title: "Sample preference text"
+    gloss: "Negar likes tea because it's warm. Negar doesn't like music."
+    note: "A short third-person account combining this unit's preference vocabulary."
+  prs.a1.unit14.lesson06.teach.names:
+    title: "Karim and Negar"
+    gloss: "Karim, Negar"
+    note: "Common Afghan names used throughout this course."
+  prs.a1.unit14.lesson06.teach.shoma_chetor_phrase:
+    title: "What about you?"
+    gloss: "What about you?"
+    note: "شما چطور؟ is the polite way to turn a question back to the other person, consistent with the استین-family polite register."
+  prs.a1.unit14.lesson06.teach.aali_ast_word:
+    title: "That's great"
+    gloss: "that's great"
+    note: "عالی است is the full, uncontracted form (it is great)."
+  prs.a1.unit14.lesson06.teach.dialogue_line1:
+    title: "Karim asks"
+    gloss: "Tea or coffee, which do you like more?"
+  prs.a1.unit14.lesson06.teach.dialogue_line2:
+    title: "Negar answers"
+    gloss: "I like coffee more because it's delicious. What about you?"
+  prs.a1.unit14.lesson06.teach.dialogue_line3:
+    title: "Karim answers"
+    gloss: "I like tea because it's warm."
+  prs.a1.unit14.lesson06.teach.dialogue_line4:
+    title: "Negar reacts"
+    gloss: "That's great!"
+
+exercises:
+  prs.a1.unit14.lesson01.exercise01.recognize_doost_daram:
+    instruction: "What does this phrase mean?"
+    correct_option: "I like"
+    distractors: ["I don't like", coffee, tea]
+    accepted_answers: [{value: "I like", status: correct}]
+    feedback: "دوست دارم means I like."
+  prs.a1.unit14.lesson01.exercise02.recognize_qahwa:
+    instruction: "What does this word mean?"
+    correct_option: coffee
+    distractors: [tea, "I like", "I don't like"]
+    accepted_answers: [{value: coffee, status: correct}]
+    feedback: "قهوه means coffee."
+  prs.a1.unit14.lesson01.exercise03.match_likes_vocab:
+    instruction: "Match each word or phrase with its meaning."
+    accepted_answers:
+      - value: {"دوست دارم": "I like", "دوست ندارم": "I don't like", قهوه: coffee, چای: tea}
+        status: correct
+    feedback: "These four are this lesson's core preference vocabulary."
+  prs.a1.unit14.lesson01.exercise04.translate_i_like_coffee:
+    instruction: "Translate into Dari: I like coffee."
+    accepted_answers:
+      - {value: "قهوه را دوست دارم", status: correct}
+      - {value: "من قهوه را دوست دارم", status: correct}
+    feedback: "قهوه را دوست دارم means I like coffee."
+  prs.a1.unit14.lesson01.exercise05.translate_i_dont_like_tea:
+    instruction: "Translate into Dari: I don't like tea."
+    accepted_answers:
+      - {value: "چای را دوست ندارم", status: correct}
+      - {value: "من چای را دوست ندارم", status: correct}
+    feedback: "چای را دوست ندارم means I don't like tea."
+  prs.a1.unit14.lesson02.exercise01.recognize_kodam:
+    instruction: "What does this word mean?"
+    correct_option: which
+    distractors: [more, or, because]
+    accepted_answers: [{value: which, status: correct}]
+    feedback: "کدام means which."
+  prs.a1.unit14.lesson02.exercise02.recognize_moosiqi:
+    instruction: "What does this word mean?"
+    correct_option: music
+    distractors: [coffee, tea, "you have"]
+    accepted_answers: [{value: music, status: correct}]
+    feedback: "موسیقی means music."
+  prs.a1.unit14.lesson02.exercise03.match_asking_vocab:
+    instruction: "Match each word or phrase with its meaning."
+    accepted_answers:
+      - value: {کدام: which, موسیقی: music, دارید: "you have/like", "دوست دارم": "I like", قهوه: coffee, چای: tea}
+        status: correct
+    feedback: "These combine lesson02's new words with lesson01's review vocabulary."
+  prs.a1.unit14.lesson02.exercise04.word_order_kodam_question:
+    instruction: "Arrange the words to ask Which one do you like?"
+    accepted_answers:
+      - {value: [کدام, را, دوست, دارید], status: correct}
+    feedback: "کدام را دوست دارید؟ means which one do you like?"
+  prs.a1.unit14.lesson02.exercise05.translate_ask_which_one:
+    instruction: "Translate into Dari: Which one do you like?"
+    accepted_answers:
+      - {value: "کدام را دوست دارید", status: correct}
+      - {value: "کدام را دوست دارید؟", status: correct}
+    feedback: "کدام را دوست دارید؟ means which one do you like?"
+  prs.a1.unit14.lesson03.exercise01.recognize_bishtar:
+    instruction: "What does this word mean?"
+    correct_option: more
+    distractors: [or, which, because]
+    accepted_answers: [{value: more, status: correct}]
+    feedback: "بیشتر means more."
+  prs.a1.unit14.lesson03.exercise02.recognize_ya:
+    instruction: "What does this word mean?"
+    correct_option: or
+    distractors: [more, which, because]
+    accepted_answers: [{value: or, status: correct}]
+    feedback: "یا means or."
+  prs.a1.unit14.lesson03.exercise03.match_choosing_vocab:
+    instruction: "Match each word or phrase with its meaning."
+    accepted_answers:
+      - value: {بیشتر: more, یا: or, قهوه: coffee, چای: tea, "دوست دارم": "I like", کدام: which}
+        status: correct
+    feedback: "These combine lesson03's new words with earlier review vocabulary."
+  prs.a1.unit14.lesson03.exercise04.translate_i_like_coffee_more:
+    instruction: "Translate into Dari: I like coffee more."
+    accepted_answers:
+      - {value: "قهوه را بیشتر دوست دارم", status: correct}
+      - {value: "من قهوه را بیشتر دوست دارم", status: correct}
+    feedback: "قهوه را بیشتر دوست دارم means I like coffee more."
+  prs.a1.unit14.lesson03.exercise05.dialogue_response_choose_coffee:
+    instruction: "Someone asks: coffee or tea? Say you like coffee more."
+    accepted_answers:
+      - {value: "قهوه را بیشتر دوست دارم", status: correct}
+      - {value: "من قهوه را بیشتر دوست دارم", status: correct}
+    feedback: "قهوه را بیشتر دوست دارم means I like coffee more."
+  prs.a1.unit14.lesson04.exercise01.recognize_choon:
+    instruction: "What does this word mean?"
+    correct_option: because
+    distractors: [more, or, which]
+    accepted_answers: [{value: because, status: correct}]
+    feedback: "چون means because."
+  prs.a1.unit14.lesson04.exercise02.recognize_khoshmaza:
+    instruction: "What does this phrase mean?"
+    correct_option: "it's delicious"
+    distractors: ["it's interesting", "it's warm", because]
+    accepted_answers: [{value: "it's delicious", status: correct}]
+    feedback: "خوش‌مزه است means it's delicious."
+  prs.a1.unit14.lesson04.exercise03.match_reasons_vocab:
+    instruction: "Match each word or phrase with its meaning."
+    accepted_answers:
+      - value: {چون: because, "خوش‌مزه است": "it's delicious", "جالب است": "it's interesting", "دوست دارم": "I like", قهوه: coffee, موسیقی: music}
+        status: correct
+    feedback: "These combine lesson04's new words with earlier review vocabulary."
+  prs.a1.unit14.lesson04.exercise04.translate_like_coffee_because_delicious:
+    instruction: "Translate into Dari: I like coffee because it's delicious."
+    accepted_answers:
+      - {value: "قهوه را دوست دارم چون خوش‌مزه است", status: correct}
+      - {value: "قهوه را دوست دارم، چون خوش‌مزه است", status: correct}
+      - {value: "قهوه را دوست دارم و خوش‌مزه است", status: correct}
+      - {value: "قهوه را دوست دارم. چون خوش‌مزه است", status: correct}
+    feedback: "قهوه را دوست دارم چون خوش‌مزه است means I like coffee because it's delicious."
+  prs.a1.unit14.lesson04.exercise05.translate_like_music_because_interesting:
+    instruction: "Translate into Dari: I like music because it's interesting."
+    accepted_answers:
+      - {value: "موسیقی را دوست دارم چون جالب است", status: correct}
+      - {value: "موسیقی را دوست دارم، چون جالب است", status: correct}
+      - {value: "موسیقی را دوست دارم و جالب است", status: correct}
+      - {value: "موسیقی را دوست دارم. چون جالب است", status: correct}
+    feedback: "موسیقی را دوست دارم چون جالب است means I like music because it's interesting."
+  prs.a1.unit14.lesson05.exercise01.reading_comprehension_what_negar_likes:
+    instruction: "Read the text. What does Negar like?"
+    correct_option: Tea
+    distractors: [Coffee, Music, "It isn't stated"]
+    accepted_answers: [{value: Tea, status: correct}]
+    feedback: "The text says نگار چای را دوست دارد -- Negar likes tea."
+  prs.a1.unit14.lesson05.exercise02.reading_comprehension_why:
+    instruction: "Read the text. Why does Negar like tea?"
+    correct_option: "Because it's warm"
+    distractors: ["Because it's delicious", "Because it's interesting", "It isn't stated"]
+    accepted_answers: [{value: "Because it's warm", status: correct}]
+    feedback: "The text says چون گرم است -- because it's warm."
+  prs.a1.unit14.lesson05.exercise03.match_reading_vocab:
+    instruction: "Match each word or phrase with its meaning."
+    accepted_answers:
+      - value: {نگار: Negar, دارد: "he/she likes", "گرم است": "it's warm", چای: tea, چون: because, "دوست ندارد": "he/she doesn't like"}
+        status: correct
+    feedback: "These are the reading text's key words."
+  prs.a1.unit14.lesson05.exercise04.translate_negar_likes_tea:
+    instruction: "Translate into Dari: Negar likes tea."
+    accepted_answers:
+      - {value: "نگار چای را دوست دارد", status: correct}
+    feedback: "نگار چای را دوست دارد means Negar likes tea."
+  prs.a1.unit14.lesson05.exercise05.write_own_preference:
+    instruction: "Write one or two sentences in Dari about something you like and why."
+    accepted_answers:
+      - {value: "قهوه را دوست دارم چون خوش‌مزه است", status: correct}
+      - {value: "قهوه را دوست دارم، چون خوش‌مزه است", status: correct}
+      - {value: "قهوه را دوست دارم و خوش‌مزه است", status: correct}
+      - {value: "من قهوه را دوست دارم چون خوش‌مزه است", status: correct}
+      - {value: "چای را دوست دارم چون گرم است", status: correct}
+      - {value: "چای را دوست دارم، چون گرم است", status: correct}
+      - {value: "چای را دوست دارم و گرم است", status: correct}
+      - {value: "من چای را دوست دارم چون گرم است", status: correct}
+      - {value: "موسیقی را دوست دارم چون جالب است", status: correct}
+      - {value: "موسیقی را دوست دارم، چون جالب است", status: correct}
+      - {value: "موسیقی را دوست دارم و جالب است", status: correct}
+      - {value: "من موسیقی را دوست دارم چون جالب است", status: correct}
+      - {value: "قهوه را دوست دارم. چون خوش‌مزه است", status: correct}
+      - {value: "چای را دوست دارم. چون گرم است", status: correct}
+      - {value: "موسیقی را دوست دارم. چون جالب است", status: correct}
+    feedback: "قهوه را دوست دارم چون خوش‌مزه است means I like coffee because it's delicious -- a good model answer. Tea (چای... چون گرم است) or music (موسیقی... چون جالب است) with a matching reason is equally accepted."
+  prs.a1.unit14.lesson06.exercise01.dialogue_comprehension_context:
+    instruction: "Read the conversation. What does Negar like more?"
+    correct_option: Coffee
+    distractors: [Tea, Music, "It isn't stated"]
+    accepted_answers: [{value: Coffee, status: correct}]
+    feedback: "نگار says قهوه را بیشتر دوست دارم -- I like coffee more."
+  prs.a1.unit14.lesson06.exercise02.match_dialogue_facts:
+    instruction: "Match each word or phrase with its meaning."
+    accepted_answers:
+      - value: {کریم: Karim, نگار: Negar, قهوه: coffee, چای: tea, "عالی است": "that's great", "شما چطور؟": "what about you?"}
+        status: correct
+    feedback: "These are the dialogue's key words and names."
+  prs.a1.unit14.lesson06.exercise03.reading_comprehension_who_likes_what:
+    instruction: "Read the lines. What does Karim like, and why?"
+    correct_option: "Tea, because it's warm"
+    distractors: ["Coffee, because it's delicious", "Music, because it's interesting", "It isn't stated"]
+    accepted_answers: [{value: "Tea, because it's warm", status: correct}]
+    feedback: "Karim says من چای را دوست دارم چون گرم است -- I like tea because it's warm."
+  prs.a1.unit14.lesson06.exercise04.dialogue_response_own_preference:
+    instruction: "Someone asks: tea or coffee, which do you like more? Answer with your preference and a reason."
+    accepted_answers:
+      - {value: "قهوه را بیشتر دوست دارم چون خوش‌مزه است", status: correct}
+      - {value: "قهوه را بیشتر دوست دارم، چون خوش‌مزه است", status: correct}
+      - {value: "قهوه را بیشتر دوست دارم و خوش‌مزه است", status: correct}
+      - {value: "چای را بیشتر دوست دارم چون گرم است", status: correct}
+      - {value: "چای را بیشتر دوست دارم، چون گرم است", status: correct}
+      - {value: "چای را بیشتر دوست دارم و گرم است", status: correct}
+      - {value: "قهوه را بیشتر دوست دارم. چون خوش‌مزه است", status: correct}
+      - {value: "چای را بیشتر دوست دارم. چون گرم است", status: correct}
+    feedback: "قهوه را بیشتر دوست دارم چون خوش‌مزه است means I like coffee more because it's delicious -- either drink with a matching reason is accepted."
+  prs.a1.unit14.lesson06.exercise05.write_comparison_summary:
+    instruction: "Write one or two sentences in Dari comparing what Negar and Karim each prefer (Negar likes coffee, Karim likes tea)."
+    accepted_answers:
+      - {value: "نگار قهوه را دوست دارد. کریم چای را دوست دارد", status: correct}
+      - {value: "نگار قهوه را دوست دارد، کریم چای را دوست دارد", status: correct}
+      - {value: "نگار قهوه را دوست دارد و کریم چای را دوست دارد", status: correct}
+    feedback: "نگار قهوه را دوست دارد، کریم چای را دوست دارد means Negar likes coffee, Karim likes tea."

@@ -1,0 +1,319 @@
+schema_version: "1.0"
+overlay_version: "2026.1-draft.1"
+overlay_key: en-fa.a1.unit13
+source_language: en
+target_language: fa
+status: complete_draft
+generation_provenance:
+  method: ai_adapted_from_public_domain_source
+  authoring_system: claude
+  human_reviewed: false
+review:
+  status: reviewed
+  required_next_reviewer: null
+  notes: "Authored alongside the new fa a1_unit13_past_events.yaml realization. Follows the established en-fa overlay convention from units 09-12 (English instruction/correct_option/distractors/feedback, target-language Farsi accepted_answers, English glosses for recognize_* multiple_choice items to avoid the same-string visual-matching anti-pattern already fixed in units 07/08). Authored §14/§16/§17-compliant from the start alongside the realization. Needs the standard fresh-context review before shipping.
+
+    FRESH-CONTEXT REVIEW, 2026-07-07 (zero prior access to the authoring reasoning, paired with the matching realization review): verified content_key parity exact in both directions against the realization (26 teaching + 30 exercise keys, via script) and confirmed this file's flat top-level units/lessons/teaching/exercises dicts match the expected overlay schema. Confirmed every multiple_choice's correct_option/distractors are English glosses (never same-script as the Farsi prompt) -- no prompt-shows-answer risk anywhere. Confirmed zero internal-jargon leaks in any learner-facing instruction/gloss/note/feedback string (only metadata fields contain snake_case). Wrote and ran a Python yaml.safe_load recursive dict-value scan for stray non-schema Python booleans: none found. Wrote and ran a Persian-codepoint-plus-ZWNJ tokenizer script cross-checking every target-language accepted_answers value (translation/dialogue_response/writing_prompt/word_order/matching_pairs) against the realization's cumulative file-scoped introduced_tokens: zero untaught-vocabulary gaps. Found and fixed 3 real issues, all cross-verified against the actual compiled JSON output (not just schema validation): (1) lesson05.exercise04.translate_read_book was missing the equally-valid یک کتاب خوندم variant alongside کتاب خوندم -- added. (2) §12 multi-clause gaps -- lesson05.exercise05.write_own_recent_event (a 3-clause combo) was missing the all-period, all-comma, and all-و forms; lesson06.exercise05.dialogue_response_own_weekend (a 2-clause combo) was missing the comma-joined and period-joined forms -- added all of the above, applying the AUTHORING_GUIDE §15 target-language-asterisk convention to the feedback strings touched. (3) A prompt-duplication bug (not on the standing checklist, found by comparing this file's own instruction field against the realization's prompt.target_blocks): 5 exercises had the realization independently repeating this file's exact instruction text as an English target_blocks entry, which the compiler's compile_exercise() would have rendered twice to the learner via TextBlockList (no dedup in frontend/src/components/TextBlock.tsx) -- fixed on the realization side (target_blocks: [] for all 5, since this file's own instruction field already fully covers the prompt); no change needed to this overlay file itself for that fix. Re-ran validate + compile after every fix: 0 errors/0 warnings, valid JSON, output spot-checked directly."
+
+course:
+  title: Farsi A1
+  description: >-
+    Beginner Iranian Farsi: the simple past tense, describing what
+    happened yesterday, asking about a recent event, reading and
+    writing about a recent event, and a dialogue comparing two
+    people's weekends.
+
+units:
+  fa.a1.unit13.past_events:
+    title: "Past Events"
+
+lessons:
+  fa.a1.unit13.lesson01.past_tense_verbs: {title: "Past-tense verbs"}
+  fa.a1.unit13.lesson02.describing_yesterday: {title: "Describing yesterday"}
+  fa.a1.unit13.lesson03.asking_about_a_recent_event: {title: "Asking about a recent event"}
+  fa.a1.unit13.lesson04.reading_a_recent_event_text: {title: "Reading a recent-event text"}
+  fa.a1.unit13.lesson05.writing_about_a_recent_event: {title: "Writing about a recent event"}
+  fa.a1.unit13.lesson06.weekend_recap_dialogue: {title: "Weekend recap (dialogue)"}
+
+teaching:
+  fa.a1.unit13.lesson01.teach.diruz_word:
+    title: Yesterday
+    gloss: yesterday
+    note: "دیروز means yesterday."
+  fa.a1.unit13.lesson01.teach.raftam_word:
+    title: "I went"
+    gloss: "I went"
+    note: "رفتم is the simple past of رفتن (to go), first person."
+  fa.a1.unit13.lesson01.teach.khordam_word:
+    title: "I ate"
+    gloss: "I ate"
+    note: "خوردم is the simple past of خوردن (to eat), first person."
+  fa.a1.unit13.lesson01.teach.didam_word:
+    title: "I saw"
+    gloss: "I saw"
+    note: "دیدم is the simple past of دیدن (to see), first person."
+  fa.a1.unit13.lesson02.teach.sinama_word:
+    title: "Cinema / movies"
+    gloss: "cinema / movies"
+    note: "سینما means cinema or the movies."
+  fa.a1.unit13.lesson02.teach.be_word:
+    title: To
+    gloss: to
+    note: "به means to, used before a destination."
+  fa.a1.unit13.lesson02.teach.diruz_sinama_raftam:
+    title: "Yesterday I went to the cinema."
+    gloss: "Yesterday I went to the cinema."
+    note: "دیروز به سینما رفتم combines this lesson's words into a full sentence."
+  fa.a1.unit13.lesson03.teach.chikar_word:
+    title: "What (activity)"
+    gloss: "what (activity)"
+    note: "چیکار (what work/activity) is used to ask what someone did."
+  fa.a1.unit13.lesson03.teach.kardi_word:
+    title: "You did"
+    gloss: "you did"
+    note: "کردی is the simple past of کردن (to do), informal second person."
+  fa.a1.unit13.lesson03.teach.question_phrase:
+    title: "What did you do yesterday?"
+    gloss: "What did you do yesterday?"
+    note: "دیروز چیکار کردی؟ is a common colloquial way to ask what someone did yesterday."
+  fa.a1.unit13.lesson04.teach.film_word:
+    title: Movie
+    gloss: movie
+    note: "فیلم means movie/film."
+  fa.a1.unit13.lesson04.teach.khoob_word:
+    title: Good
+    gloss: good
+    note: "خوب means good."
+  fa.a1.unit13.lesson04.teach.recent_event_text:
+    title: "Sample recent-event text"
+    gloss: "Yesterday I went to the cinema. I saw a good movie. Then I ate lunch."
+    note: "A short first-person account combining this unit's past-tense vocabulary."
+  fa.a1.unit13.lesson04.teach.va_word:
+    title: And
+    gloss: and
+    note: "و means and, joining two clauses or items."
+  fa.a1.unit13.lesson05.teach.ketab_word:
+    title: Book
+    gloss: book
+    note: "کتاب means book."
+  fa.a1.unit13.lesson05.teach.khoondam_word:
+    title: "I read"
+    gloss: "I read"
+    note: "خوندم is the colloquial simple past of خواندن (to read), first person."
+  fa.a1.unit13.lesson06.teach.man_word:
+    title: I
+    gloss: I
+    note: "من is the standalone first-person pronoun, used here for emphasis (من خونه موندم -- as for me, I stayed home)."
+  fa.a1.unit13.lesson06.teach.names:
+    title: "Nima and Sara"
+    gloss: "Nima, Sara"
+    note: "نیما and سارا are the two speakers in this lesson's dialogue."
+  fa.a1.unit13.lesson06.teach.khooneh_moondam_word:
+    title: "I stayed home"
+    gloss: "I stayed home"
+    note: "خونه موندم means I stayed home, using the colloquial خونه (home)."
+  fa.a1.unit13.lesson06.teach.to_chi_word:
+    title: "What about you?"
+    gloss: "What about you?"
+    note: "تو چی؟ literally asks 'you, what,' a natural way to turn a question back."
+  fa.a1.unit13.lesson06.teach.alie_word:
+    title: Great
+    gloss: great
+    note: "عالیه uses the established -e contraction pattern (عالی است -> عالیه)."
+  fa.a1.unit13.lesson06.teach.dialogue_line1:
+    title: "What did you do yesterday?"
+    gloss: "What did you do yesterday?"
+    note: "Nima opens by asking what Sara did yesterday."
+  fa.a1.unit13.lesson06.teach.dialogue_line2:
+    title: "I went to the cinema and saw a good movie. What about you?"
+    gloss: "I went to the cinema and saw a good movie. What about you?"
+    note: "Sara answers and turns the question back."
+  fa.a1.unit13.lesson06.teach.dialogue_line3:
+    title: "I stayed home and read a book."
+    gloss: "I stayed home and read a book."
+    note: "Nima describes his own day."
+  fa.a1.unit13.lesson06.teach.dialogue_line4:
+    title: Great!
+    gloss: Great!
+    note: "Sara reacts positively to close the exchange."
+  fa.a1.unit13.lesson06.teach.third_person_past:
+    title: "He/she went, saw, did, stayed, read (third person)"
+    gloss: "he/she went, saw, did, stayed, read (third person)"
+    note: "رفت، دید، کرد، موند، خوند are the third-person simple past forms, needed to compare what Sara and Nima each did."
+
+exercises:
+  fa.a1.unit13.lesson01.exercise01.recognize_raftam_reading:
+    instruction: "What does this word mean?"
+    correct_option: "I went"
+    distractors: ["I ate", "I saw", yesterday]
+    accepted_answers: [{value: "I went", status: correct}]
+    feedback: "رفتم means I went."
+  fa.a1.unit13.lesson01.exercise02.recognize_didam_reading:
+    instruction: "What does this word mean?"
+    correct_option: "I saw"
+    distractors: ["I went", "I ate", yesterday]
+    accepted_answers: [{value: "I saw", status: correct}]
+    feedback: "دیدم means I saw."
+  fa.a1.unit13.lesson01.exercise03.match_past_verbs:
+    instruction: "Match each word with its meaning."
+    accepted_answers:
+      - value: {دیروز: yesterday, رفتم: "I went", خوردم: "I ate", دیدم: "I saw"}
+        status: correct
+    feedback: "These four words are this lesson's core past-tense vocabulary."
+  fa.a1.unit13.lesson01.exercise04.translate_yesterday:
+    instruction: "Translate into Farsi: yesterday."
+    accepted_answers:
+      - {value: دیروز, status: correct}
+    feedback: "دیروز means yesterday."
+  fa.a1.unit13.lesson01.exercise05.translate_i_saw:
+    instruction: "Translate into Farsi: I saw."
+    accepted_answers:
+      - {value: دیدم, status: correct}
+    feedback: "دیدم means I saw."
+  fa.a1.unit13.lesson02.exercise01.recognize_diruz_sinama_reading:
+    instruction: "What does this sentence mean?"
+    correct_option: "Yesterday I went to the cinema."
+    distractors: ["I saw a good movie.", "I ate lunch.", "What did you do yesterday?"]
+    accepted_answers: [{value: "Yesterday I went to the cinema.", status: correct}]
+    feedback: "دیروز به سینما رفتم means yesterday I went to the cinema."
+  fa.a1.unit13.lesson02.exercise02.match_yesterday_phrases:
+    instruction: "Match each word or phrase with its meaning."
+    accepted_answers:
+      - value: {"دیروز به سینما رفتم": "Yesterday I went to the cinema.", سینما: "cinema / movies", به: to, دیروز: yesterday, رفتم: "I went", خوردم: "I ate"}
+        status: correct
+    feedback: "دیروز به سینما رفتم combines this lesson's own new words with lesson01's review vocabulary."
+  fa.a1.unit13.lesson02.exercise03.order_yesterday_cinema:
+    instruction: "Arrange the words to say Yesterday I went to the cinema."
+    accepted_answers:
+      - {value: [دیروز, به, سینما, رفتم], status: correct}
+    feedback: "دیروز به سینما رفتم means yesterday I went to the cinema."
+  fa.a1.unit13.lesson02.exercise04.translate_yesterday_cinema:
+    instruction: "Translate into Farsi: Yesterday I went to the cinema."
+    accepted_answers:
+      - {value: "دیروز به سینما رفتم", status: correct}
+    feedback: "دیروز به سینما رفتم means yesterday I went to the cinema."
+  fa.a1.unit13.lesson02.exercise05.dialogue_response_where_yesterday:
+    instruction: "Someone asks where you went yesterday. Say you went to the cinema."
+    accepted_answers:
+      - {value: "دیروز به سینما رفتم", status: correct}
+      - {value: "به سینما رفتم", status: correct}
+    feedback: "دیروز به سینما رفتم means yesterday I went to the cinema."
+  fa.a1.unit13.lesson03.exercise01.recognize_question_reading:
+    instruction: "What does this question ask?"
+    correct_option: "What did you do yesterday?"
+    distractors: ["Where did you go?", "What time is it?", "I went to the cinema."]
+    accepted_answers: [{value: "What did you do yesterday?", status: correct}]
+    feedback: "دیروز چیکار کردی؟ asks what you did yesterday."
+  fa.a1.unit13.lesson03.exercise02.match_question_words:
+    instruction: "Match each word or phrase with its meaning."
+    accepted_answers:
+      - value: {"دیروز چیکار کردی؟": "What did you do yesterday?", چیکار: "what (activity)", کردی: "you did", دیروز: yesterday, رفتم: "I went", "به سینما": "to the cinema"}
+        status: correct
+    feedback: "چیکار کردی؟ (what did you do?) combines with دیروز to ask about yesterday specifically."
+  fa.a1.unit13.lesson03.exercise03.order_question:
+    instruction: "Arrange the words to ask What did you do yesterday?"
+    accepted_answers:
+      - {value: [دیروز, چیکار, کردی], status: correct}
+    feedback: "دیروز چیکار کردی؟ means what did you do yesterday?"
+  fa.a1.unit13.lesson03.exercise04.translate_question:
+    instruction: "Translate into Farsi: What did you do yesterday?"
+    accepted_answers:
+      - {value: "دیروز چیکار کردی", status: correct}
+      - {value: "دیروز چیکار کردی؟", status: correct}
+    feedback: "دیروز چیکار کردی؟ means what did you do yesterday?"
+  fa.a1.unit13.lesson03.exercise05.dialogue_response_ask_recent:
+    instruction: "Ask a friend what they did yesterday."
+    accepted_answers:
+      - {value: "دیروز چیکار کردی؟", status: correct}
+      - {value: "دیروز چیکار کردی", status: correct}
+    feedback: "دیروز چیکار کردی؟ asks what they did yesterday."
+  fa.a1.unit13.lesson04.exercise01.reading_comprehension_what_saw:
+    instruction: "Read the text. What did the writer see?"
+    correct_option: "A good movie"
+    distractors: ["A good book", "Lunch", "It isn't stated"]
+    accepted_answers: [{value: "A good movie", status: correct}]
+    feedback: "The text says یک فیلم خوب دیدم -- I saw a good movie."
+  fa.a1.unit13.lesson04.exercise02.match_reading_facts:
+    instruction: "Match each word or phrase with its meaning."
+    accepted_answers:
+      - value: {"یک فیلم خوب دیدم": "saw a good movie", "ناهار خوردم": "ate lunch", فیلم: movie, خوب: good, ناهار: lunch, بعد: after}
+        status: correct
+    feedback: "The text describes going to the cinema, then eating lunch afterward."
+  fa.a1.unit13.lesson04.exercise03.order_good_movie:
+    instruction: "Arrange the words to say I saw a good movie."
+    accepted_answers:
+      - {value: [یک, فیلم, خوب, دیدم], status: correct}
+    feedback: "یک فیلم خوب دیدم means I saw a good movie."
+  fa.a1.unit13.lesson04.exercise04.translate_ate_lunch:
+    instruction: "Translate into Farsi: I ate lunch."
+    accepted_answers:
+      - {value: "ناهار خوردم", status: correct}
+    feedback: "ناهار خوردم means I ate lunch."
+  fa.a1.unit13.lesson05.exercise01.recognize_khoondam_reading:
+    instruction: "What does this word mean?"
+    correct_option: "I read"
+    distractors: ["I ate", "I saw", book]
+    accepted_answers: [{value: "I read", status: correct}]
+    feedback: "خوندم means I read."
+  fa.a1.unit13.lesson05.exercise02.match_writing_vocab:
+    instruction: "Match each word with its meaning."
+    accepted_answers:
+      - value: {کتاب: book, خوندم: "I read", فیلم: movie, ناهار: lunch, دیروز: yesterday, خوب: good}
+        status: correct
+    feedback: "کتاب and خوندم are this lesson's new words; the rest review earlier lessons."
+  fa.a1.unit13.lesson05.exercise03.order_read_book:
+    instruction: "Arrange the words to say I read a good book."
+    accepted_answers:
+      - {value: [یک, کتاب, خوب, خوندم], status: correct}
+    feedback: "یک کتاب خوب خوندم means I read a good book."
+  fa.a1.unit13.lesson05.exercise04.translate_read_book:
+    instruction: "Translate into Farsi: I read a book."
+    accepted_answers:
+      - {value: "کتاب خوندم", status: correct}
+      - {value: "یک کتاب خوندم", status: correct}
+    feedback: "کتاب خوندم means I read a book."
+  fa.a1.unit13.lesson05.exercise05.write_own_recent_event:
+    instruction: "Write two or three sentences in Farsi about something you did yesterday."
+    accepted_answers:
+      - {value: "دیروز به سینما رفتم، یک فیلم خوب دیدم و ناهار خوردم", status: correct}
+      - {value: "دیروز به سینما رفتم. یک فیلم خوب دیدم و ناهار خوردم.", status: correct}
+      - {value: "دیروز به سینما رفتم. یک فیلم خوب دیدم. ناهار خوردم.", status: correct}
+      - {value: "دیروز به سینما رفتم، یک فیلم خوب دیدم، ناهار خوردم", status: correct}
+      - {value: "دیروز به سینما رفتم و یک فیلم خوب دیدم و ناهار خوردم", status: correct}
+    feedback: "دیروز به سینما رفتم، یک فیلم خوب دیدم و ناهار خوردم is one accepted sample recent event -- joining the three clauses with periods, commas, or *و* are all equally natural."
+  fa.a1.unit13.lesson06.exercise01.dialogue_comprehension_context:
+    instruction: "Read the conversation. Who went to the cinema?"
+    correct_option: Sara
+    distractors: [Nima, "Neither of them", "Both of them"]
+    accepted_answers: [{value: Sara, status: correct}]
+    feedback: "سارا says she went to the cinema; نیما stayed home."
+  fa.a1.unit13.lesson06.exercise02.match_dialogue_facts:
+    instruction: "Match each word or phrase with its meaning."
+    accepted_answers:
+      - value: {"سارا چیکار کرد": "به سینما رفت، فیلم دید", "نیما چیکار کرد": "خونه موند، کتاب خوند", "تو چی؟": "What about you?", عالیه: great, خونه: home, موندم: "I stayed"}
+        status: correct
+    feedback: "Sara went to the cinema and saw a movie; Nima stayed home and read a book."
+  fa.a1.unit13.lesson06.exercise03.order_what_about_you:
+    instruction: "Arrange the words to ask What about you?"
+    accepted_answers:
+      - {value: ["تو", "چی؟"], status: correct}
+    feedback: "تو چی؟ means what about you?"
+  fa.a1.unit13.lesson06.exercise04.translate_stayed_home:
+    instruction: "Translate into Farsi: I stayed home."
+    accepted_answers:
+      - {value: "خونه موندم", status: correct}
+    feedback: "خونه موندم means I stayed home."
+  fa.a1.unit13.lesson06.exercise05.dialogue_response_own_weekend:
+    instruction: "Nima just asked what you did yesterday. Say you stayed home and read a book."
+    accepted_answers:
+      - {value: "خونه موندم و کتاب خوندم", status: correct}
+      - {value: "خونه موندم، کتاب خوندم", status: correct}
+      - {value: "خونه موندم. کتاب خوندم.", status: correct}
+    feedback: "خونه موندم و کتاب خوندم means I stayed home and read a book -- joining the two clauses with *و*, a comma, or a period are all equally natural."
+  fa.a1.unit13.lesson06.exercise06.write_weekend_summary:
+    instruction: "Write one or two sentences in Farsi comparing what Sara and Nima did yesterday."
+    accepted_answers:
+      - {value: "سارا به سینما رفت، نیما خونه موند", status: correct}
+      - {value: "سارا به سینما رفت. نیما خونه موند.", status: correct}
+      - {value: "سارا به سینما رفت و نیما خونه موند", status: correct}
+    feedback: "Joining the two facts with a comma, a period, or *و* are all equally natural."
