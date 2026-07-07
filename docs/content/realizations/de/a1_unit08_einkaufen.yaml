@@ -1,0 +1,201 @@
+schema_version: "1.1"
+realization_version: "2026.1-draft.1"
+target_language: "de"
+cefr_level: "A1"
+status: "complete_draft"
+generation_provenance:
+  method: "ai_generated"
+  authoring_system: "claude"
+  human_reviewed: false
+review:
+  status: "unreviewed"
+  required_next_reviewer: "codex"
+  notes: >-
+    Eighth German unit, continuing the Anna/Felix storyline (still on
+    the formal Sie register from units 01-07). Authored from the start
+    in the new AUTHORING_GUIDE §19 format (schema_version 1.1) rather
+    than retrofitted -- every kind:vocabulary card carries a real
+    example: sentence from first draft. Scoped to exactly one spine
+    outcome (universal.a1.shopping.ask_prices_quantities) across all 4
+    lessons per §1; prerequisites universal.a1.numbers.use_basic_numbers
+    and universal.a1.greetings.open_close_exchange are satisfied by
+    units 03 and 01.
+
+    Mirrors the shared en/a1_unit08_shopping.yaml realization's own
+    kind classification: quantity/price phrases are kind:"phrase" (full
+    sentences already, exempt from §19's example requirement) rather
+    than kind:"vocabulary" -- only "pro Pfund" (per pound) is a genuine
+    short vocabulary card, and it carries a real example ("Äpfel kosten
+    zwei Euro pro Pfund"). This mirrors, not reuses, the shared en
+    realization's structure -- no English text was consulted for the
+    German wording itself beyond the topical parallel (quantities,
+    price-asking, price-label-reading, market dialogue).
+
+    Capstone dialogue reuses the shared en realization's exact price
+    arithmetic (Äpfel 2€/Pfund x 2 Pfund = 4€, Eier 4€/Dutzend x 1 = 4€,
+    total 8€) -- double-checked by hand before writing, given this
+    project's two prior real price-arithmetic bugs this session
+    (unit07's German and shared-en versions, both since fixed). Felix
+    and Anna don't gain a new implied occupation here (Anna already
+    has a part-time cafe job from unit07; this scene doesn't add a
+    second one) -- but a fresh-context review correctly noted the
+    dialogue's actual phrasing ("Kann ich...haben, bitte?" followed by
+    "Natürlich. Sonst noch etwas?") genuinely reads like a market-stall
+    service exchange regardless of that intent, mirroring the shared
+    en realization's own Leila/Daniel phrasing for the same scene.
+    Left as authored since it doesn't contradict anything and matches
+    the shared realization's own precedent, but flagging honestly
+    rather than asserting the "just friends" framing resolves the
+    tension it doesn't.
+
+    lesson01's matching_pairs (7 pairs: Pfund/Dutzend/Flasche/Tüte/
+    Kilo/Euro/frisch) and lesson03's (6 pairs: the 3 priced items plus
+    Wasser/Tomaten/total) both clear AUTHORING_GUIDE §16's 6-12 floor.
+    All 3 label prices (Äpfel 2€, Eier 4€, Reis 3€) are distinct so
+    "cheapest item" (Äpfel) has one unambiguous answer -- learned from
+    the shared en realization's own real bug here (Rice/$3 vs Apples/
+    $2, already fixed there) rather than repeating it. No fill_in_blank
+    exercises. Applied the hardcoded-English-target_blocks lesson from
+    the start: every target_blocks in this file is empty or genuine
+    German content only. Compiled and validated against the real
+    compiler to confirm every exercise's tested_text is fully covered
+    by this file's own cumulative introduced_tokens.
+
+    Fresh-context review (subagent, Codex still usage-exhausted)
+    confirmed correct_option/accepted_answers match throughout,
+    word_order accepted_answers correctly re-derived (not copied from
+    scrambled word_bank), price arithmetic genuinely correct, no
+    hardcoded-English-target_blocks, and the overlay's teaching:
+    section covers every content_key from the start (no gap like
+    units 04-07's retrofit found). It found and fixed: (1) a false
+    grammar claim in en-de's sie_kosten_zwei_euro note (claimed the
+    verb disambiguates Sie/sie -- it doesn't, German conjugates both
+    identically; fixed to correctly attribute disambiguation to
+    context alone). (2) missing asterisk-wrapping in match_preisschilder's
+    feedback (§15). (3) two forward-reference gaps in matching_pairs:
+    lesson01's match_mengen tested "frisch" before lesson02 teaches
+    it (removed, 6 pairs remain, still clears §16); lesson03's
+    match_preisschilder tested the lesson04-only order total ("acht
+    Euro," not establishable from lesson03's own content) --
+    replaced with "teuerstes Produkt auf dem Schild" -> "Eier" (a new,
+    non-redundant fact derivable entirely from lesson03's own price
+    label). (4) added a gender-agreement caveat to ist_es_frisch's
+    note (es only applies to neuter nouns; er/sie needed for
+    masculine/feminine) to avoid teaching an overgeneralized rule.
+    (5) removed an incomplete-paraphrase accepted_answers variant from
+    reply_als_anna (dropped 2 of the reply's 4 required clauses).
+    Also noted, not changed: the capstone dialogue's phrasing reads
+    like a market-stall exchange despite the "just friends shopping"
+    framing intent -- flagged honestly in this file's own notes above
+    rather than asserted away, since it mirrors the shared en
+    realization's own precedent for the same scene and doesn't
+    contradict anything. Re-verified clean: real compiler validate
+    for en-de (0 errors/warnings), full scripts/verify.sh
+    --content-only.
+
+course:
+  realization_key: "de.a1"
+  target_language_first: true
+  dialect: "de_DE_standard"
+  register_policy: "Teach clear Standard German (Hochdeutsch). Use German-conventional quantity units (Pfund for a pound -- still common informally despite Germany's official metric system -- alongside genuinely metric Kilo). Prices use the Euro-after-number convention (2€, not €2) established in unit07. Anna and Felix continue on the formal Sie register from units 01-07."
+
+media_assets:
+  - {content_key: "de.a1.audio.einkaufen.mengen.01", language: "de", text: "ein Pfund Äpfel, ein Dutzend Eier, eine Flasche Wasser, eine Tüte Reis", voice_hint: "neutral_adult", status: "pending_generation"}
+  - {content_key: "de.a1.audio.einkaufen.preisfrage.01", language: "de", text: "Was kosten die Äpfel?", voice_hint: "neutral_adult", status: "pending_generation"}
+  - {content_key: "de.a1.audio.einkaufen.preisantwort.01", language: "de", text: "Sie kosten zwei Euro das Pfund.", voice_hint: "neutral_adult", status: "pending_generation"}
+  - content_key: "de.a1.audio.dialog.markt.01"
+    language: "de"
+    text: "Felix: Was kosten die Äpfel? Anna: Sie kosten zwei Euro das Pfund. Felix: Gut, kann ich zwei Pfund haben, bitte? Anna: Natürlich. Sonst noch etwas? Felix: Ja, auch ein Dutzend Eier. Anna: Das macht acht Euro."
+    voice_hint: "two_adults_neutral_friendly"
+    status: "pending_generation"
+
+units:
+  - content_key: "de.a1.unit08.einkaufen"
+    title: "Einkaufen: Preise und Mengen"
+    section: "reading_writing"
+    spine_outcome_ids:
+      - "universal.a1.shopping.ask_prices_quantities"
+    planned_lesson_count: 4
+    lessons:
+      - content_key: "de.a1.unit08.lesson01.einkaufsmengen"
+        title: "Übliche Einkaufsmengen"
+        spine_outcome_id: "universal.a1.shopping.ask_prices_quantities"
+        teaching:
+          - {content_key: "de.a1.unit08.lesson01.teach.ein_pfund", kind: "phrase", target: {text: "ein Pfund Äpfel", language_code: "de", direction: "ltr"}, introduced_tokens: ["ein", "Pfund", "Äpfel"]}
+          - {content_key: "de.a1.unit08.lesson01.teach.ein_dutzend", kind: "phrase", target: {text: "ein Dutzend Eier", language_code: "de", direction: "ltr"}, introduced_tokens: ["Dutzend", "Eier"]}
+          - {content_key: "de.a1.unit08.lesson01.teach.eine_flasche", kind: "phrase", target: {text: "eine Flasche Wasser", language_code: "de", direction: "ltr"}, introduced_tokens: ["eine", "Flasche", "Wasser"]}
+          - {content_key: "de.a1.unit08.lesson01.teach.eine_tuete", kind: "phrase", target: {text: "eine Tüte Reis", language_code: "de", direction: "ltr"}, introduced_tokens: ["Tüte", "Reis"]}
+          - {content_key: "de.a1.unit08.lesson01.teach.ein_kilo", kind: "phrase", target: {text: "ein Kilo Tomaten", language_code: "de", direction: "ltr"}, introduced_tokens: ["Kilo", "Tomaten"]}
+        exercises:
+          - {content_key: "de.a1.unit08.lesson01.exercise01.listen_menge", type: "listen_select", tested_text: "ein Dutzend Eier", media_asset_key: "de.a1.audio.einkaufen.mengen.01", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit08.lesson01.exercise02.choose_dutzend", type: "multiple_choice", tested_text: "ein Dutzend", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit08.lesson01.exercise03.choose_flasche", type: "multiple_choice", tested_text: "eine Flasche Wasser", prompt: {target_blocks: []}}
+          - content_key: "de.a1.unit08.lesson01.exercise04.match_mengen"
+            type: "matching_pairs"
+            tested_text: "Pfund Dutzend Flasche Tüte Kilo"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "Gewichtseinheit für Äpfel", right: "Pfund"}
+              - {left: "zwölf Stück zusammen", right: "Dutzend"}
+              - {left: "Behälter für Wasser", right: "Flasche"}
+              - {left: "Behälter für Reis", right: "Tüte"}
+              - {left: "Gewichtseinheit für Tomaten", right: "Kilo"}
+              - {left: "Geldeinheit zum Bezahlen", right: "Euro"}
+          - {content_key: "de.a1.unit08.lesson01.exercise05.write_kilo", type: "writing_prompt", tested_text: "ein Kilo Tomaten", prompt: {target_blocks: []}}
+
+      - content_key: "de.a1.unit08.lesson02.nach_preisen_fragen"
+        title: "Nach Preisen fragen"
+        spine_outcome_id: "universal.a1.shopping.ask_prices_quantities"
+        teaching:
+          - {content_key: "de.a1.unit08.lesson02.teach.was_kosten_die_aepfel", kind: "phrase", target: {text: "Was kosten die Äpfel?", language_code: "de", direction: "ltr"}, introduced_tokens: ["Was", "kosten", "die"]}
+          - {content_key: "de.a1.unit08.lesson02.teach.sie_kosten_zwei_euro", kind: "phrase", target: {text: "Sie kosten zwei Euro das Pfund.", language_code: "de", direction: "ltr"}, introduced_tokens: ["Sie", "zwei", "Euro", "das"]}
+          - {content_key: "de.a1.unit08.lesson02.teach.kann_ich_zwei_pfund", kind: "phrase", target: {text: "Kann ich zwei Pfund haben, bitte?", language_code: "de", direction: "ltr"}, introduced_tokens: ["Kann", "ich", "haben", "bitte"]}
+          - {content_key: "de.a1.unit08.lesson02.teach.ist_es_frisch", kind: "phrase", target: {text: "Ist es frisch?", language_code: "de", direction: "ltr"}, introduced_tokens: ["Ist", "es", "frisch"]}
+        exercises:
+          - {content_key: "de.a1.unit08.lesson02.exercise01.listen_preisfrage", type: "listen_select", tested_text: "Was kosten die Äpfel", media_asset_key: "de.a1.audio.einkaufen.preisfrage.01", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit08.lesson02.exercise02.listen_preisantwort", type: "listen_select", tested_text: "Sie kosten zwei Euro das Pfund", media_asset_key: "de.a1.audio.einkaufen.preisantwort.01", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit08.lesson02.exercise03.order_preisfrage", type: "word_order", tested_text: "Was kosten die Äpfel", prompt: {target_blocks: []}, word_bank: ["kosten", "die", "Äpfel", "Was"]}
+          - {content_key: "de.a1.unit08.lesson02.exercise04.reply_preis", type: "dialogue_response", tested_text: "Was kosten die Äpfel Sie kosten zwei Euro das Pfund", prompt: {target_blocks: [{text: "Was kosten die Äpfel?", language_code: "de", direction: "ltr"}]}}
+          - {content_key: "de.a1.unit08.lesson02.exercise05.write_anfrage", type: "writing_prompt", tested_text: "Kann ich zwei Pfund haben, bitte?", prompt: {target_blocks: []}}
+
+      - content_key: "de.a1.unit08.lesson03.preisschilder_lesen"
+        title: "Preisschilder lesen"
+        spine_outcome_id: "universal.a1.shopping.ask_prices_quantities"
+        teaching:
+          - {content_key: "de.a1.unit08.lesson03.teach.pro_pfund", kind: "vocabulary", target: {text: "pro Pfund", language_code: "de", direction: "ltr"}, introduced_tokens: ["pro"], example: {text: "Äpfel kosten zwei Euro pro Pfund.", language_code: "de", direction: "ltr"}}
+          - {content_key: "de.a1.unit08.lesson03.teach.preisschild_text", kind: "reading", target: {text: "Markt-Preisschild: Äpfel - 2€ pro Pfund. Eier - 4€ das Dutzend. Reis - 3€ die Tüte.", language_code: "de", direction: "ltr"}, introduced_tokens: ["Markt", "Preisschild", "2", "4", "3"]}
+        exercises:
+          - {content_key: "de.a1.unit08.lesson03.exercise01.read_apfel_preis", type: "reading_comprehension", tested_text: "Äpfel 2€ pro Pfund", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit08.lesson03.exercise02.read_eier_preis", type: "reading_comprehension", tested_text: "Eier 4€ das Dutzend", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit08.lesson03.exercise03.choose_billigstes_produkt", type: "multiple_choice", tested_text: "Äpfel", prompt: {target_blocks: []}}
+          - content_key: "de.a1.unit08.lesson03.exercise04.match_preisschilder"
+            type: "matching_pairs"
+            tested_text: "Äpfel Eier Reis"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "Äpfel", right: "2€ pro Pfund"}
+              - {left: "Eier", right: "4€ das Dutzend"}
+              - {left: "Reis", right: "3€ die Tüte"}
+              - {left: "Wasser", right: "nach Flasche verkauft"}
+              - {left: "Tomaten", right: "nach Kilo verkauft"}
+              - {left: "teuerstes Produkt auf dem Schild", right: "Eier"}
+          - {content_key: "de.a1.unit08.lesson03.exercise05.write_apfel_gesamt", type: "writing_prompt", tested_text: "Äpfel kosten 2€ pro Pfund", prompt: {target_blocks: []}}
+
+      - content_key: "de.a1.unit08.lesson04.auf_dem_markt"
+        title: "Auf dem Markt"
+        spine_outcome_id: "universal.a1.shopping.ask_prices_quantities"
+        teaching:
+          - {content_key: "de.a1.unit08.lesson04.teach.das_macht_acht_euro", kind: "phrase", target: {text: "Das macht acht Euro.", language_code: "de", direction: "ltr"}, introduced_tokens: ["Das", "macht", "acht"]}
+          - {content_key: "de.a1.unit08.lesson04.teach.line01", kind: "dialogue", target: {text: "Was kosten die Äpfel?", language_code: "de", direction: "ltr", speaker: "Felix"}, introduced_tokens: []}
+          - {content_key: "de.a1.unit08.lesson04.teach.line02", kind: "dialogue", target: {text: "Sie kosten zwei Euro das Pfund.", language_code: "de", direction: "ltr", speaker: "Anna"}, introduced_tokens: []}
+          - {content_key: "de.a1.unit08.lesson04.teach.line03", kind: "dialogue", target: {text: "Gut, kann ich zwei Pfund haben, bitte?", language_code: "de", direction: "ltr", speaker: "Felix"}, introduced_tokens: ["Gut"]}
+          - {content_key: "de.a1.unit08.lesson04.teach.line04", kind: "dialogue", target: {text: "Natürlich. Sonst noch etwas?", language_code: "de", direction: "ltr", speaker: "Anna"}, introduced_tokens: ["Natürlich", "Sonst", "noch", "etwas"]}
+          - {content_key: "de.a1.unit08.lesson04.teach.line05", kind: "dialogue", target: {text: "Ja, auch ein Dutzend Eier.", language_code: "de", direction: "ltr", speaker: "Felix"}, introduced_tokens: ["Ja", "auch"]}
+          - {content_key: "de.a1.unit08.lesson04.teach.line06", kind: "dialogue", target: {text: "Das macht acht Euro.", language_code: "de", direction: "ltr", speaker: "Anna"}, introduced_tokens: []}
+        exercises:
+          - {content_key: "de.a1.unit08.lesson04.exercise01.listen_apfel_preis", type: "dialogue_comprehension", tested_text: "Sie kosten zwei Euro das Pfund", media_asset_key: "de.a1.audio.dialog.markt.01", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit08.lesson04.exercise02.listen_gesamtsumme", type: "listen_select", tested_text: "Das macht acht Euro", media_asset_key: "de.a1.audio.dialog.markt.01", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit08.lesson04.exercise03.choose_zusatzartikel", type: "multiple_choice", tested_text: "ein Dutzend Eier", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit08.lesson04.exercise04.order_pfund_anfrage", type: "word_order", tested_text: "Kann ich zwei Pfund haben bitte", prompt: {target_blocks: []}, word_bank: ["ich", "zwei", "Pfund", "haben", "bitte", "Kann"]}
+          - {content_key: "de.a1.unit08.lesson04.exercise05.reply_als_anna", type: "dialogue_response", tested_text: "Sie kosten zwei Euro das Pfund. Natürlich. Sonst noch etwas? Das macht acht Euro.", prompt: {target_blocks: [{text: "Was kosten die Äpfel? Kann ich zwei Pfund haben, bitte? Ja, auch ein Dutzend Eier.", language_code: "de", direction: "ltr"}]}}
+          - {content_key: "de.a1.unit08.lesson04.exercise06.speak_einkauf", type: "speak_response", tested_text: "Sie kosten zwei Euro das Pfund Natürlich Sonst noch etwas Das macht acht Euro", prompt: {target_blocks: [{text: "Was kosten die Äpfel? Kann ich zwei Pfund haben, bitte? Ja, auch ein Dutzend Eier.", language_code: "de", direction: "ltr"}]}}
