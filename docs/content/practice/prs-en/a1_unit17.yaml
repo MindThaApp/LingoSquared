@@ -33,6 +33,36 @@ review:
     realization unit17 is UNREVIEWED (Codex was usage-limited at
     authoring time); the prs-en overlay is already reviewed -- the
     realization needs the standard fresh-context review before import.
+
+    Deepened 2026-07-07 (templates-per-unit audit found this unit
+    tied-shallowest in prs-en at 8, just authored the same night).
+    weekday (7 members) is the only genuinely generative tag this unit
+    supports (confirmed above: none of this unit's other single-token
+    vocabulary -- want/movie/weekend/would/walk/love/busy/maybe/
+    another/lunch/1pm/works -- has its own semantic group). Added 3
+    new templates, all reusing weekday with exercise TYPES this unit
+    hadn't used yet (word_order/translation/listen_select already
+    existed at 2-3 lessons each; multiple_choice/matching_pairs did
+    not): a lesson03 listen_select (parity fix -- lesson02/04 already
+    had one, lesson03 didn't), a lesson04 multiple_choice (bare-word
+    Dari-gloss recognition), and a lesson04 matching_pairs using all 7
+    weekday members (AUTHORING_GUIDE.md #16 -- exactly the "6-12 real
+    pairs" range, not padded). No new EN_POS/semantic-tag or Dari-gloss
+    additions needed -- weekday was already fully classified/glossed
+    since unit04. Considered fill_in_blank for weekday (e.g. blanking
+    "I'm busy on {item}") but rejected it: all 7 weekdays are
+    genuinely grammatical in every one of this unit's real frames with
+    nothing else to disambiguate -- scripts/
+    _fill_in_blank_ambiguity_check.py (and compile_content.py's
+    hard-fail per AUTHORING_GUIDE.md #17) would correctly flag it, so
+    zero new fill_in_blank templates, matching this direction's own
+    established "zero is fine when real vocabulary can't safely
+    support one" precedent. Re-verified scripts/_practice_slot_check.py
+    (weekday still safely >=3 for the new multiple_choice, >=2 for
+    matching_pairs) and scripts/_fill_in_blank_ambiguity_check.py (zero
+    new AMBIGUOUS flags) before import. New count: 11 templates
+    (8 -> 11) -- an honest ceiling given weekday is the unit's only
+    real generative tag.
 tag_schema:
   part_of_speech: [noun]
   agreement_tags:
@@ -96,3 +126,25 @@ templates:
     slots: {item: *weekday}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} روزی است که شنیدین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit17.lesson03.weekday_listen.004
+    lesson_content_key: en.a1.unit17.lesson03.reading_an_invitation
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *weekday}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} روزی است که شنیدین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit17.lesson04.weekday_choose.005
+    lesson_content_key: en.a1.unit17.lesson04.negotiating_a_plan_dialogue
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *weekday}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی دری {item} را انتخاب کنین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit17.lesson04.weekday_match.006
+    lesson_content_key: en.a1.unit17.lesson04.negotiating_a_plan_dialogue
+    type: matching_pairs
+    frame: {text: "{first} — {second}", language_code: en, direction: ltr}
+    slots: {first: *weekday, second: *weekday, third: *weekday, fourth: *weekday, fifth: *weekday, sixth: *weekday, seventh: *weekday}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth, seventh]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth, seventh]}
+    feedback_frame: {text: "هر روز هفته را به معنی دری خودش وصل کنین.", language_code: prs, direction: rtl}
