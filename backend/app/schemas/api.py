@@ -31,8 +31,14 @@ def _bounded_payload_size(value):
 class ORM(BaseModel): model_config=ConfigDict(from_attributes=True)
 class UserOut(ORM): id:str; email:EmailStr; display_name:str
 class MeOut(UserOut): created_at:datetime
-class RegisterIn(BaseModel): email:EmailStr; password:str=Field(min_length=8,max_length=128); display_name:str|None=None; timezone:str|None=None
-class LoginIn(BaseModel): email:EmailStr; password:str=Field(max_length=128); timezone:str|None=None
+# Phase H3 (2026-07-07 integrity audit): display_name/timezone were the
+# only free-form string fields on the auth path with no length bound --
+# an unbounded display_name persists verbatim and is echoed on every
+# authenticated response for the account's lifetime. 100 comfortably
+# covers any real name; 64 comfortably covers the longest real IANA zone
+# names (e.g. "America/Argentina/ComodRivadavia", under 40 chars).
+class RegisterIn(BaseModel): email:EmailStr; password:str=Field(min_length=8,max_length=128); display_name:str|None=Field(default=None,max_length=100); timezone:str|None=Field(default=None,max_length=64)
+class LoginIn(BaseModel): email:EmailStr; password:str=Field(max_length=128); timezone:str|None=Field(default=None,max_length=64)
 class AuthOut(BaseModel): access_token:str; token_type:Literal["bearer"]="bearer"; expires_in:int; user:UserOut
 class LanguageOut(ORM): code:str; name:str; native_name:str; script:Literal["latin","cyrillic","han","arabic"]; direction:Literal["ltr","rtl"]
 class TextBlock(BaseModel): text:str; language_code:str; direction:Literal["ltr","rtl"]; speaker:str|None=None

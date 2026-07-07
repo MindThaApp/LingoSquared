@@ -10,7 +10,7 @@ from fastapi.responses import FileResponse, JSONResponse
 from sqlalchemy import func, select, text
 from sqlalchemy.orm import Session
 from app.core.config import get_settings
-from app.core.rate_limit import RateLimiter, register_limiter
+from app.core.rate_limit import DailyCharBudget, RateLimiter, register_limiter
 from app.core.security import create_token, hash_password, verify_password
 from app.db.session import get_db
 from app.models import *
@@ -54,6 +54,16 @@ _rate_limit_settings = get_settings()
 LOGIN_RATE_LIMIT = register_limiter(RateLimiter(limit=_rate_limit_settings.login_rate_limit_max, window_seconds=60))
 REGISTER_RATE_LIMIT = register_limiter(RateLimiter(limit=_rate_limit_settings.register_rate_limit_max, window_seconds=3600))
 ANSWER_RATE_LIMIT = register_limiter(RateLimiter(limit=_rate_limit_settings.answer_rate_limit_max, window_seconds=60))
+# Phase H2 (2026-07-07 integrity audit, docs/SONNET_BUILD_PROMPT_LAUNCH.md):
+# /tts, /stt/transcribe, and the three generation endpoints were completely
+# unrated. TTS additionally gets a per-account daily character budget,
+# separate from TTSUsage's account-agnostic shared monthly budget.
+TTS_RATE_LIMIT = register_limiter(RateLimiter(limit=_rate_limit_settings.tts_rate_limit_max, window_seconds=60))
+TTS_DAILY_CHAR_BUDGET = register_limiter(DailyCharBudget(daily_limit=_rate_limit_settings.tts_daily_char_cap))
+STT_RATE_LIMIT = register_limiter(RateLimiter(limit=_rate_limit_settings.stt_rate_limit_max, window_seconds=60))
+GENERATION_RATE_LIMIT = register_limiter(RateLimiter(limit=_rate_limit_settings.generation_rate_limit_max, window_seconds=60))
+# Phase H4: content-issue report endpoints never had any rate limit.
+REPORT_RATE_LIMIT = register_limiter(RateLimiter(limit=_rate_limit_settings.report_rate_limit_max, window_seconds=60))
 
 def client_ip(request: Request) -> str:
     return request.client.host if request.client else "unknown"
@@ -316,6 +326,15 @@ def speaking_unlocked(db:Session,course_id:str,user_id:str|None) -> bool:
         if completed != len(lesson_ids): return False
     return True
 
+def require_speaking_unlocked(db:Session, unit:"Unit", user) -> None:
+    # Phase H1 (2026-07-07 integrity audit): start() already ran this check;
+    # exercise_answer()/complete() didn't, letting a user enumerate a locked
+    # unit's lessons, answer every exercise by id (earning XP), and complete
+    # each lesson without ever unlocking speaking. Shared helper, 3 call
+    # sites (start, answer, complete), same check each time.
+    if unit.section==UnitSection.speaking and not user.is_admin and not speaking_unlocked(db,unit.course_id,user.id):
+        fail(409,"speaking_locked","Complete all reading and writing units before starting speaking lessons")
+
 @router.post("/auth/register",response_model=AuthOut,status_code=201)
 def register(body:RegisterIn,request:Request,db:Session=Depends(get_db)):
     enforce_rate_limit(REGISTER_RATE_LIMIT,client_ip(request),"register_rate_limited","Too many registration attempts from this address. Please try again later.")
@@ -408,8 +427,7 @@ def start(lesson_id:str,user=Depends(current_user),db:Session=Depends(get_db)):
     lesson_row=db.get(Lesson,lesson_id)
     if not lesson_row: fail(404,"lesson_not_found","Lesson not found")
     unit=db.get(Unit,lesson_row.unit_id)
-    if unit.section==UnitSection.speaking and not user.is_admin and not speaking_unlocked(db,unit.course_id,user.id):
-        fail(409,"speaking_locked","Complete all reading and writing units before starting speaking lessons")
+    require_speaking_unlocked(db,unit,user)
     p=db.scalar(select(LessonProgress).where(LessonProgress.user_id==user.id,LessonProgress.lesson_id==lesson_id)); now=datetime.now(timezone.utc)
     if not p:
         p=LessonProgress(
@@ -429,15 +447,20 @@ def answer(exercise_id:str,body:AnswerIn,user=Depends(current_user),db:Session=D
     enforce_rate_limit(ANSWER_RATE_LIMIT,user.id,"answer_rate_limited","Too many answers submitted too quickly. Please slow down.")
     e=db.get(Exercise,exercise_id)
     if not e: fail(404,"exercise_not_found","Exercise not found")
+    lesson_row=db.get(Lesson,e.lesson_id)
+    unit=db.get(Unit,lesson_row.unit_id)
+    require_speaking_unlocked(db,unit,user)
     return exercise_answer(db,user,e,body.response)
 @router.post("/exercises/{exercise_id}/report",response_model=ContentIssueCreatedOut,status_code=201)
 def report_content_issue(exercise_id:str,body:ContentIssueReportIn,request:Request,user=Depends(current_user),db:Session=Depends(get_db)):
+    enforce_rate_limit(REPORT_RATE_LIMIT,user.id,"report_rate_limited","Too many reports submitted too quickly. Please slow down.")
     if not db.get(Exercise,exercise_id): fail(404,"exercise_not_found","Exercise not found")
     issue=ContentIssueReport(reporter_user_id=user.id,exercise_id=exercise_id,category=body.category,description=body.description,learner_response=body.learner_response,client_context={"user_agent":request.headers.get("user-agent",""),"accept_language":request.headers.get("accept-language","")})
     db.add(issue); db.commit(); db.refresh(issue)
     return issue
 @router.post("/practice/items/{item_id}/report",response_model=ContentIssueCreatedOut,status_code=201)
 def report_practice_item_issue(item_id:str,body:ContentIssueReportIn,request:Request,user=Depends(current_user),db:Session=Depends(get_db)):
+    enforce_rate_limit(REPORT_RATE_LIMIT,user.id,"report_rate_limited","Too many reports submitted too quickly. Please slow down.")
     # PracticeItem-backed content (review sessions, unit checkpoints, and
     # the Endless Practice feed all generate PracticeItem rows, never
     # Exercise rows) has no report path through the endpoint above.
@@ -471,6 +494,7 @@ def complete(
 
     lesson_row = db.get(Lesson, lesson_id)
     unit = db.get(Unit, lesson_row.unit_id)
+    require_speaking_unlocked(db, unit, user)
     now = datetime.now(timezone.utc)
     first_completion = p.completed_at is None
     session_started_at = p.completed_at or p.started_at
@@ -759,6 +783,7 @@ def review_session(
     user=Depends(current_user),
     db: Session = Depends(get_db),
 ):
+    enforce_rate_limit(GENERATION_RATE_LIMIT,user.id,"generation_rate_limited","Too many generation requests too quickly. Please slow down.")
     course = db.get(Course, body.course_id)
     if not course:
         fail(404, "course_not_found", "Course not found")
@@ -796,6 +821,7 @@ def checkpoint_session(
     user=Depends(current_user),
     db: Session = Depends(get_db),
 ):
+    enforce_rate_limit(GENERATION_RATE_LIMIT,user.id,"generation_rate_limited","Too many generation requests too quickly. Please slow down.")
     unit = db.get(Unit, unit_id)
     if not unit:
         fail(404, "unit_not_found", "Unit not found")
@@ -1168,6 +1194,7 @@ def practice_batch(
     user=Depends(current_user),
     db:Session=Depends(get_db),
 ):
+    enforce_rate_limit(GENERATION_RATE_LIMIT,user.id,"generation_rate_limited","Too many generation requests too quickly. Please slow down.")
     course=db.get(Course,course_id)
     if not course: fail(404,"course_not_found","Course not found")
     locked,items=generate_batch(db,user.id,course,body.size if body else 10)
@@ -1460,9 +1487,18 @@ def content_coverage(user=Depends(admin_user),db:Session=Depends(get_db)):
 
 @router.post("/tts",responses={200:{"content":{"audio/mpeg":{},"application/json":{"schema":TTSFallback.model_json_schema()}}}})
 def tts(body:TTSIn,user=Depends(current_user),db:Session=Depends(get_db)):
+    enforce_rate_limit(TTS_RATE_LIMIT,user.id,"tts_rate_limited","Too many TTS requests too quickly. Please slow down.")
     if not db.get(Language,body.language_code): fail(422,"unsupported_language_code","Language code is not supported")
     if body.language_code not in tts_service.TTS_SUPPORTED_LANGUAGES:
         return JSONResponse({"use_browser_tts":True,"reason":"unsupported_language"})
+    # Per-account daily character budget (Phase H2), separate from the
+    # account-agnostic shared monthly budget just below -- without this, one
+    # account alone could burn the entire month's quota in ~800 requests.
+    # Same graceful-degradation shape as the shared-budget check: fall back
+    # to browser TTS rather than hard-failing, since from the frontend's
+    # perspective "out of quota" reads identically either way.
+    if not TTS_DAILY_CHAR_BUDGET.reserve(user.id,len(body.text)):
+        return JSONResponse({"use_browser_tts":True,"reason":"quota_exceeded"})
     if not tts_service.reserve_characters(db,len(body.text)):
         return JSONResponse({"use_browser_tts":True,"reason":"quota_exceeded"})
     try: audio=tts_service.synthesize(body.text,body.language_code,body.speaking_rate or 1.0)
@@ -1478,6 +1514,7 @@ async def stt_transcribe(
     audio: UploadFile = File(...),
     user=Depends(current_user),
 ):
+    enforce_rate_limit(STT_RATE_LIMIT,user.id,"stt_rate_limited","Too many transcription requests too quickly. Please slow down.")
     # Fallback STT only — the frontend only calls this when client-side WASM
     # Whisper isn't available (no WebAssembly threads, model failed to load,
     # etc). Self-hosted faster-whisper, never a cloud API. Same size cap as

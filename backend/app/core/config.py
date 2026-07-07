@@ -42,6 +42,24 @@ class Settings(BaseSettings):
     login_rate_limit_max: int = 10
     register_rate_limit_max: int = 5
     answer_rate_limit_max: int = 120
+    # Phase H2 (2026-07-07 integrity audit): the three limiters above left
+    # /tts, /stt/transcribe, and the three generation endpoints (reviews/
+    # session, practice/batch, units/checkpoint) completely unrated -- see
+    # docs/SONNET_BUILD_PROMPT_LAUNCH.md Phase H2 for the full finding.
+    tts_rate_limit_max: int = 30
+    # Per-account daily character cap for /tts, separate from the existing
+    # shared monthly budget in TTSUsage -- that budget is account-agnostic,
+    # so one account could exhaust it alone. Two orders of magnitude above
+    # any real day of use.
+    tts_daily_char_cap: int = 100000
+    stt_rate_limit_max: int = 10
+    # Shared across /reviews/session, /practice/{course_id}/batch, and
+    # /units/{unit_id}/checkpoint -- all three do the same heavy batch
+    # generation work.
+    generation_rate_limit_max: int = 20
+    # Phase H4: /exercises/{id}/report and /practice/items/{id}/report
+    # never had any rate limit at all.
+    report_rate_limit_max: int = 20
     # Web push (Phase E4) — VAPID keypair, same unset-by-default/graceful-
     # degradation convention as the TTS credentials above: empty until
     # provisioned (generate with `vapid --gen` from the py-vapid package,

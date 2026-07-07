@@ -624,6 +624,25 @@ def _practice_lesson_id(
         )
         if lesson_id:
             return lesson_id, None
+
+    # Real gap found 2026-07-07: neither of the above paths covers a lesson
+    # that produced zero Lexeme rows (e.g. a dialogue/grammar-review lesson
+    # with no `kind: vocabulary` cards for the backfill script to attach
+    # provenance to) on a course imported through the actual import_content()
+    # flow, which never writes to the ContentKey table at all -- that table
+    # is only a "newer release model" compatibility path this project
+    # doesn't use yet. Lesson.content_key itself is always populated by
+    # import_content() though, so fall back to it directly before giving up.
+    lesson_id = db.scalar(
+        select(Lesson.id)
+        .join(Unit, Unit.id == Lesson.unit_id)
+        .where(
+            Lesson.content_key == lesson_content_key,
+            Unit.course_id == course_id,
+        )
+    )
+    if lesson_id:
+        return lesson_id, None
     return None, f"lesson key {lesson_content_key!r} was not found in the course"
 
 
