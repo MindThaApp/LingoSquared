@@ -424,6 +424,8 @@ def _create_unit(
     db.flush()
     for lesson_data in unit_data.lessons:
         _create_lesson(db, unit, lesson_data, counters)
+        if counters is not None:
+            counters["created_lessons"] += 1
     return unit
 
 
