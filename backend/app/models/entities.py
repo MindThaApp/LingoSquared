@@ -172,10 +172,16 @@ class Unit(Base):
         server_default="reading_writing",
     )
     # Stable authoring key (e.g. "prs.a1.unit01"), nullable — content
-    # imported before this column existed has no recoverable key.
-    # Globally unique by construction when present (migration 0013);
-    # lets import_content() update an already-shipped unit in place by
-    # key instead of only ever matching by (course_id, order).
+    # imported before this column existed has no recoverable key. Unique
+    # PER COURSE when present (DB-level partial unique index on
+    # (course_id, content_key), migration 0015 -- NOT globally unique:
+    # 0013 originally made this a bare global unique index, but fa-en/
+    # nl-en/prs-en all realize the same underlying English target-
+    # language content and so legitimately share identical content_key
+    # values across different courses; a global constraint 500'd the
+    # very next cross-course import, fixed 2026-07-07). Lets
+    # import_content() update an already-shipped unit in place by key
+    # instead of only ever matching by (course_id, order).
     content_key: Mapped[str | None] = mapped_column(
         String(255), nullable=True
     )
@@ -196,7 +202,8 @@ class Lesson(Base):
     )
     title: Mapped[str] = mapped_column(String(200))
     order: Mapped[int] = mapped_column(Integer)
-    # See Unit.content_key above — same nullable/globally-unique story.
+    # See Unit.content_key above — nullable, unique per parent (unit_id
+    # here) not globally, migration 0015.
     content_key: Mapped[str | None] = mapped_column(
         String(255), nullable=True
     )
@@ -234,8 +241,9 @@ class Exercise(Base):
     correct_response: Mapped[Any] = mapped_column(JSON)
     feedback: Mapped[str | None] = mapped_column(Text, nullable=True)
     xp: Mapped[int] = mapped_column(Integer, default=10)
-    # See Unit.content_key above — same nullable/globally-unique story.
-    # This is the field that lets a content fix (e.g. a jargon-leak or
+    # See Unit.content_key above — nullable, unique per parent (lesson_id
+    # here) not globally, migration 0015. This is the field that lets a
+    # content fix (e.g. a jargon-leak or
     # typo correction) update an already-shipped Exercise row in place
     # (same id, so every ExerciseAttempt/ContentIssueReport/ReviewItem
     # that references it is completely unaffected) instead of the old
@@ -272,10 +280,11 @@ class ContentItem(Base):
     language_code: Mapped[str] = mapped_column(ForeignKey("languages.code"))
     title: Mapped[str] = mapped_column(String(200), default="")
     content: Mapped[dict] = mapped_column(JSON)
-    # See Unit.content_key above — same nullable/globally-unique story.
-    # Only meaningful for lesson-scoped teaching cards (lesson_id is not
-    # null); standalone ContentItem rows (course-level reference
-    # material, lesson_id NULL) are out of scope for this update path.
+    # See Unit.content_key above — nullable, unique per parent (lesson_id
+    # here) not globally, migration 0015. Only meaningful for
+    # lesson-scoped teaching cards (lesson_id is not null); standalone
+    # ContentItem rows (course-level reference material, lesson_id
+    # NULL) are out of scope for this update path.
     content_key: Mapped[str | None] = mapped_column(
         String(255), nullable=True
     )

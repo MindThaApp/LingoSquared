@@ -94,21 +94,53 @@ def _relation_holds(
     return False
 
 
+def _base_slot_candidates(
+    template: PracticeTemplate,
+    lexemes: list[Lexeme],
+) -> dict[str, list[Lexeme]]:
+    """The set of lexemes matching each of a template's slot constraints.
+
+    Pure function of (template's own slot constraints, the course-wide
+    lexeme pool) -- lexeme_matches() has no external state, so this
+    result is identical every time it's computed for the same
+    (template, lexemes) pair. Split out from fill_slots() so callers
+    generating many items in one request can compute it ONCE per
+    template and reuse it across every fill_slots() call for that
+    template, instead of re-scanning the entire lexeme pool per slot on
+    every single attempt (the real combinatorial cost behind the
+    77-second /practice/{course_id}/batch found live 2026-07-07 on
+    prs-en's largest course: 280 templates x 426 lexemes x repeated
+    per-attempt rescans added up to tens of millions of redundant
+    lexeme_matches() calls for one batch request)."""
+    return {
+        name: [item for item in lexemes if lexeme_matches(item, constraints)]
+        for name, constraints in template.slots.items()
+    }
+
+
 def fill_slots(
     template: PracticeTemplate,
     lexemes: list[Lexeme],
     rng: random.Random,
     target_lexeme: Lexeme | None = None,
+    slot_candidates: dict[str, list[Lexeme]] | None = None,
 ) -> dict[str, Lexeme] | None:
     # Smallest-domain-first backtracking makes same_tag/distinct constraints
     # reliable without embedding PostgreSQL-specific JSON predicates. When a
     # target_lexeme is given (review/practice generation for a specific due
     # lexeme), try forcing it into each slot it's eligible for before giving
     # up on this template, rather than just filling normally.
-    base_candidates = {
-        name: [item for item in lexemes if lexeme_matches(item, constraints)]
-        for name, constraints in template.slots.items()
-    }
+    #
+    # slot_candidates lets a caller pass in an already-computed
+    # _base_slot_candidates() result (see that function's docstring) to
+    # skip re-scanning the whole lexeme pool on every call; a fresh copy
+    # is made below before any mutation either way, so a cached/shared
+    # dict passed in here is never modified.
+    base_candidates = (
+        slot_candidates
+        if slot_candidates is not None
+        else _base_slot_candidates(template, lexemes)
+    )
     if any(not values for values in base_candidates.values()):
         return None
 
@@ -617,6 +649,7 @@ def _generate_target_item(
     source: str,
     session_id: str | None,
     allow_existing_signature: bool = False,
+    slot_candidate_cache: dict[str, dict[str, list]] | None = None,
 ) -> PracticeItem | None:
     for tier in _tier_order(mastery):
         candidates = [
@@ -625,6 +658,13 @@ def _generate_target_item(
         rng.shuffle(candidates)
 
         for template in candidates:
+            slot_candidates = None
+            if slot_candidate_cache is not None:
+                slot_candidates = slot_candidate_cache.get(template.id)
+                if slot_candidates is None:
+                    slot_candidates = _base_slot_candidates(template, lexemes)
+                    slot_candidate_cache[template.id] = slot_candidates
+
             # Multiple attempts permit different valid OTHER-slot fillings.
             for _ in range(max(2, len(template.slots) * 2)):
                 filled = fill_slots(
@@ -632,6 +672,7 @@ def _generate_target_item(
                     lexemes,
                     rng,
                     target_lexeme=target,
+                    slot_candidates=slot_candidates,
                 )
                 if filled is None:
                     break
@@ -718,6 +759,12 @@ def _generate_prioritized(
 
     signatures = _recent_signatures(db, user_id, course.id)
     generated: list[PracticeItem] = []
+    # Per-template slot-candidate memoization, scoped to this one
+    # generation call (a fresh course-wide lexeme pool/template set each
+    # time _generate_prioritized() is invoked, so nothing here is stale
+    # across requests) -- see _base_slot_candidates()'s docstring for
+    # why this is safe and what it fixes.
+    slot_candidate_cache: dict[str, dict[str, list]] = {}
 
     # One item per scheduled lexeme before any reinforcement repetition.
     for row in [*due_rows, *non_due_rows]:
@@ -736,6 +783,7 @@ def _generate_prioritized(
             signatures=signatures,
             source=source,
             session_id=session_id,
+            slot_candidate_cache=slot_candidate_cache,
         )
         if item is None:
             # A due lexeme must not disappear solely because its last surface
@@ -753,6 +801,7 @@ def _generate_prioritized(
                 source=source,
                 session_id=session_id,
                 allow_existing_signature=True,
+                slot_candidate_cache=slot_candidate_cache,
             )
         if item is not None:
             generated.append(item)
@@ -817,6 +866,7 @@ def _generate_prioritized(
             allow_existing_signature=(
                 False if source == "practice" else attempts > len(fallback) * 2
             ),
+            slot_candidate_cache=slot_candidate_cache,
         )
         if item is not None:
             generated.append(item)

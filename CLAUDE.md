@@ -578,6 +578,35 @@ to the authoring reasoning) before import.
   actually authored in across the real corpus, not just one example —
   a single successful live test with one exercise does not rule out a
   content-shape-dependent bug.
+- **`content_key` (units/lessons/exercises/content_items, migration
+  0013) is unique PER COURSE, never globally** — fixed 2026-07-07 via
+  migration `0015_scope_content_key_uniqueness.py` after a real
+  `IntegrityError` importing full nl-en content into a DB that already
+  had prs-en imported: fa-en/nl-en/prs-en all realize the SAME
+  underlying English target-language content
+  (`docs/content/realizations/en/*.yaml`), so their content_key values
+  are identical by construction across those courses — a global unique
+  index made the second course's import 500 the moment it tried to
+  create a unit/lesson/exercise whose content_key the first course had
+  already "claimed." `_match_by_content_key()` itself was always
+  correctly course/unit/lesson-scoped; only the DB-level index was too
+  strict. Follow `PracticeTemplate`'s existing
+  `UniqueConstraint("course_id", "content_key")` pattern for any FUTURE
+  content_key-bearing table — never a bare global unique index.
+- **`_generate_prioritized()`'s per-attempt `fill_slots()` calls used
+  to re-scan the entire course-wide lexeme pool from scratch on every
+  single attempt** — fixed 2026-07-07 after a live-QA pass measured 77s
+  on prs-en's largest course. `lexeme_matches()` is a pure function, so
+  the per-slot candidate lists are identical across every attempt
+  against the same template within one batch request; `fill_slots()`
+  now accepts a precomputed `slot_candidates` dict and
+  `_generate_prioritized()` memoizes it per-template
+  (`slot_candidate_cache`) for the life of one request. Confirmed ~25x
+  (prs-en) to ~60x (nl-en, the bigger course) faster on the same real
+  content/account/history, no change to anti-repeat dedup or SRS
+  scheduling. Any future change to the batch-generation hot path should
+  keep reusing this cache rather than reintroducing a per-attempt
+  lexeme-pool scan.
 
 ## Where things run
 
