@@ -80,7 +80,7 @@ def reserve_characters(db:Session,characters:int) -> bool:
     # back failure, so failed generations never consume the monthly budget.
     usage.characters+=characters; usage.updated_at=datetime.now(timezone.utc); return True
 
-def synthesize_google(text_value:str,language_code:str) -> bytes:
+def synthesize_google(text_value:str,language_code:str,speaking_rate:float=1.0) -> bytes:
     settings=get_settings()
     if not settings.google_cloud_tts_credentials_json:
         raise RuntimeError("Google Cloud TTS credentials are not configured")
@@ -95,7 +95,12 @@ def synthesize_google(text_value:str,language_code:str) -> bytes:
             ssml_gender=texttospeech.SsmlVoiceGender.NEUTRAL,
         ),
         audio_config=texttospeech.AudioConfig(
-            audio_encoding=texttospeech.AudioEncoding.MP3
+            audio_encoding=texttospeech.AudioEncoding.MP3,
+            # 1.0 = native speed; [0.25, 2.0] is the library's own supported
+            # range (see `google.cloud.texttospeech_v1.types.AudioConfig`'s
+            # docstring) — the /tts route validates the same bound before
+            # it ever reaches here, via TTSIn.speaking_rate.
+            speaking_rate=speaking_rate,
         ),
     )
     return response.audio_content
@@ -114,16 +119,24 @@ def _azure_access_token(settings) -> str:
     response.raise_for_status()
     return response.text
 
-def synthesize_azure(text_value:str,language_code:str) -> bytes:
+def synthesize_azure(text_value:str,language_code:str,speaking_rate:float=1.0) -> bytes:
     settings=get_settings()
     if not settings.azure_speech_key or not settings.azure_speech_region:
         raise RuntimeError("Azure Speech credentials are not configured")
     token=_azure_access_token(settings)
     locale=AZURE_TTS_LOCALE[language_code]
     voice=AZURE_TTS_VOICE_NAME[language_code]
+    # The Speech REST API has no top-level rate field the way Google's
+    # AudioConfig does — SSML's <prosody rate="..."> is the equivalent
+    # lever. Percentage form (e.g. 0.9 -> "-10%") is well-documented and
+    # avoids the ambiguity of the bare-multiplier form. Always wrapped
+    # (even at the 1.0 default -> "+0%") to keep this one code path.
+    rate_percent=f"{(speaking_rate-1.0)*100:+.0f}%"
     ssml=(
         f"<speak version='1.0' xml:lang='{locale}'>"
-        f"<voice xml:lang='{locale}' name='{voice}'>{xml_escape(text_value)}</voice>"
+        f"<voice xml:lang='{locale}' name='{voice}'>"
+        f"<prosody rate='{rate_percent}'>{xml_escape(text_value)}</prosody>"
+        f"</voice>"
         f"</speak>"
     )
     response=httpx.post(
@@ -140,10 +153,10 @@ def synthesize_azure(text_value:str,language_code:str) -> bytes:
     response.raise_for_status()
     return response.content
 
-def synthesize(text_value:str,language_code:str) -> bytes:
+def synthesize(text_value:str,language_code:str,speaking_rate:float=1.0) -> bytes:
     # Routing: Azure covers the one real gap Google leaves (fa); every
     # other already-covered language keeps using Google unchanged. Add
     # new providers here, not by replacing this dispatch.
     if language_code in AZURE_TTS_SUPPORTED_LANGUAGES:
-        return synthesize_azure(text_value,language_code)
-    return synthesize_google(text_value,language_code)
+        return synthesize_azure(text_value,language_code,speaking_rate)
+    return synthesize_google(text_value,language_code,speaking_rate)

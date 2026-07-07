@@ -744,19 +744,61 @@ or care which provider actually generated a given `audio/mpeg` response.
 
 `POST /tts` (auth required — this hits a metered paid API). Request:
 ```json
-{ "text": "سلام", "language_code": "fa" }
+{ "text": "سلام", "language_code": "fa", "speaking_rate": 0.9 }
 ```
+`speaking_rate` (added 2026-07-07, optional, default `1.0` = normal
+native speed): a multiplier passed straight through to whichever
+provider handles `language_code`, validated `0.25`–`2.0` server-side
+(422 `validation_error` outside that range) — matches
+`google-cloud-texttospeech`'s own `AudioConfig.speaking_rate` bound.
+Google's field is used as-is; Azure has no equivalent request field, so
+`synthesize_azure()` wraps the SSML in `<prosody rate="...">` (e.g.
+`0.9` → `"-10%"`) to get the same effect. **This is a per-request
+parameter only — nothing is persisted server-side.** The frontend derives
+it from a per-device, per-language `localStorage` preference
+(`frontend/src/lib/ttsSpeedPreferences.ts`, same shape/precedent as the
+existing per-language voice preference in
+`frontend/src/lib/voicePreferences.ts` and the STT mic/keyboard toggle in
+`frontend/src/lib/answerInputMode.ts`) exposed via a Settings UI
+(`SpeechSpeedSettings.tsx`, next to `VoiceSettings` on `ProfilePage`),
+restricted to a `0.75`–`1.25` slider range there (too slow feels
+unnatural, too fast defeats comprehension for a language learner) —
+**not a backend user-account field**, since `/tts` never caches
+synthesized audio across users/requests (confirmed: every call hits the
+provider fresh), so there's no shared-cache-correctness reason to push
+this server-side, and per-device is the right shape anyway (same
+reasoning as the voice preference: what sounds right depends on the
+learner, not the account).
+
 Response is one of two things, and the frontend must branch on
 `Content-Type`:
 - `audio/mpeg` — raw MP3 bytes, generated via Google Cloud TTS (most
-  languages) or Azure Cognitive Services Speech (`fa` only). Play directly.
+  languages) or Azure Cognitive Services Speech (`fa` only), already at
+  the requested `speaking_rate`. Play directly.
 - `application/json` — `{ "use_browser_tts": true, "reason": "unsupported_language" | "quota_exceeded" | "provider_error" }`.
   Frontend must fall back to the browser's built-in `speechSynthesis` API
   with this `language_code` in this case — never treat this as a hard
   error. If the browser itself has no voice for that language either
   (confirmed real gap for fa/prs on most devices), the frontend shows an
   honest `speak.no_voice_available` message instead of a silently-dead
-  button — never fail silently.
+  button — never fail silently. The browser-TTS path applies the same
+  per-language rate preference client-side via
+  `SpeechSynthesisUtterance.rate` (no request field involved at all).
+
+**Recorded human audio (`GET /media/{key}`, Phase D3) is a flat,
+fixed-speed MP3 file — the speed preference can't be threaded through
+that route at all (no synthesis step to parameterize).** The frontend
+instead applies the SAME per-language rate to recorded playback
+client-side via `HTMLMediaElement.playbackRate` on the `<audio>` element
+(`frontend/src/api/tts.ts`'s `playRecordedAsset()`) — a real browser
+feature (not a hack) that resamples playback speed with pitch
+preservation on by default in every evergreen browser, so recorded
+clips DO respect the learner's speed preference in practice, just via a
+different mechanism (client-side resampling) than the two TTS tiers
+(server-side synthesis parameter / `speechSynthesis.rate`). Document
+this distinction if it's ever revisited — it's not a limitation in
+practice, but it IS a different code path than the other two tiers and
+could silently regress independently.
 
 Backend owns:
 - Google Cloud TTS integration (`GOOGLE_CLOUD_TTS_CREDENTIALS_JSON` env var
