@@ -1,26 +1,25 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { Lock } from "lucide-react";
 import { CatalogApi } from "../api/endpoints";
 import type { UnitSummary } from "../api/types";
 import { getLevelPreference, recommendedUnitIndex } from "../lib/levelPreferences";
-
-const UNIT_ICONS = ["👋", "🔤", "🔢", "👨‍👩‍👧", "🍽️", "🛍️", "🧭", "🗓️", "✈️", "🏥", "💼", "🏠"];
+import { unitIcon } from "../lib/unitIcons";
 
 function PathNode({
   unit,
-  icon,
   recommended,
   courseId,
 }: {
   unit: UnitSummary;
-  icon: string;
   recommended?: boolean;
   courseId: string;
 }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const locked = unit.locked;
+  const Icon = unitIcon(unit.content_key);
   return (
     <div className={`path-node${locked ? " locked" : ""}`}>
       <button
@@ -32,7 +31,7 @@ function PathNode({
         }
         style={{ border: recommended ? "2px solid var(--accent)" : undefined }}
       >
-        {locked ? "🔒" : icon}
+        {locked ? <Lock size={24} /> : <Icon size={24} />}
       </button>
       <span className="path-title">{unit.title}</span>
       <span className="path-meta">
@@ -97,7 +96,6 @@ export function CourseUnitsPage() {
           <PathNode
             key={unit.id}
             unit={unit}
-            icon={UNIT_ICONS[i % UNIT_ICONS.length]}
             recommended={i === recommendedIndex}
             courseId={courseId}
           />
@@ -107,7 +105,7 @@ export function CourseUnitsPage() {
           <span className="path-section-label">{t("course_units.speaking")}</span>
         )}
         {speaking.map((unit) => (
-          <PathNode key={unit.id} unit={unit} icon="🗣️" courseId={courseId} />
+          <PathNode key={unit.id} unit={unit} courseId={courseId} />
         ))}
       </div>
     </div>
