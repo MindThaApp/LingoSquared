@@ -39,6 +39,44 @@ review:
     realization unit16 and the fa-en overlay's realization dependency are
     both UNREVIEWED (Codex was usage-limited at authoring time) -- needs
     the standard fresh-context review before import.
+
+    Deepened 2026-07-07 (templates-per-unit audit found this unit
+    tied-shallowest in fa-en at 8, alongside sibling prs-en's identical
+    unit16 tied at the same count and deepened the same night --
+    mirrored its additions here with fresh Farsi, not copied Dari).
+    Added 5 new templates, all reusing already-verified tags/vocabulary
+    with exercise TYPES this unit hadn't used yet: hour_number gained
+    multiple_choice (lesson02) and listen_select (lesson03) -- it
+    previously only had word_order/translation; number (already used
+    for listen_select twice) gained multiple_choice (lesson02); meal
+    (dinner/breakfast, only ever used for translation) gained a
+    word_order template anchored to lesson04 ("I have {item} every
+    day" -- both "I have breakfast every day." and "I have dinner
+    every day." are real, grammatical sentences; anchored to lesson04
+    like the file's own existing meal_translate, since breakfast isn't
+    introduced until lesson03, same "ready as soon as that lesson
+    alone is completed" discipline this file already documents above);
+    and hour_number gained a matching_pairs (lesson04, 8 of its 12 real
+    members, per AUTHORING_GUIDE.md #16). No new EN_POS/semantic-tag or
+    Farsi-gloss additions needed -- every tag used here was already
+    fully classified/glossed (confirmed by re-reading scripts/
+    _en_target_lexeme_common.py and scripts/backfill_lexemes_fa_en.py
+    fresh before this edit). Considered fill_in_blank for hour_number/
+    number/meal but rejected all three: hour_number/number have 12/22
+    genuinely interchangeable-in-frame candidates (e.g. "I wake up at
+    {item} every day" is grammatical for any hour), and meal's 2
+    members, while not literal synonyms, have no frame in this unit's
+    real taught sentences that visibly disambiguates breakfast from
+    dinner without also being gameable by a second independently-
+    sampled slot -- scripts/_fill_in_blank_ambiguity_check.py (and
+    compile_content.py's hard-fail per AUTHORING_GUIDE.md #17) would
+    flag any single-slot attempt at any of the three, so zero new
+    fill_in_blank templates, matching this direction's own established
+    "zero is fine" precedent. Re-verified scripts/_practice_slot_check.py
+    (all three tags still safely above the >=3/>=2 floors for their new
+    exercise types) and scripts/_fill_in_blank_ambiguity_check.py (zero
+    new AMBIGUOUS flags) before import. New count: 13 templates
+    (8 -> 13).
 tag_schema:
   part_of_speech: [noun]
   agreement_tags:
@@ -104,3 +142,39 @@ templates:
     slots: {item: *hour_number}
     answer_derivation: {kind: render_frame, frame: {text: "I usually go to bed at {item}", language_code: en, direction: ltr}}
     feedback_frame: {text: "I usually go to bed at {item} یعنی معمولاً ساعت {item} می‌خوابم.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit16.lesson02.hour_choose.005
+    lesson_content_key: en.a1.unit16.lesson02.routine_with_times
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *hour_number}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit16.lesson02.number_choose.006
+    lesson_content_key: en.a1.unit16.lesson02.routine_with_times
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *number}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit16.lesson03.hour_listen.004
+    lesson_content_key: en.a1.unit16.lesson03.reading_a_routine
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *hour_number}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} ساعتی است که شنیدید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit16.lesson04.meal_order.005
+    lesson_content_key: en.a1.unit16.lesson04.routine_dialogue
+    type: word_order
+    frame: {text: "I have {item} every day", language_code: en, direction: ltr}
+    slots: {item: *meal}
+    answer_derivation: {kind: render_frame, frame: {text: "I have {item} every day", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} وعدهٔ غذایی است که هر روز می‌خورید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit16.lesson04.hour_match.006
+    lesson_content_key: en.a1.unit16.lesson04.routine_dialogue
+    type: matching_pairs
+    frame: {text: "{first} — {second}", language_code: en, direction: ltr}
+    slots: {first: *hour_number, second: *hour_number, third: *hour_number, fourth: *hour_number, fifth: *hour_number, sixth: *hour_number, seventh: *hour_number, eighth: *hour_number}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth, seventh, eighth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth, seventh, eighth]}
+    feedback_frame: {text: "هر عدد را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}

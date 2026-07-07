@@ -124,6 +124,16 @@ UNIT_FILES = (
         REPO_ROOT / "docs/content/realizations/fa/a1_unit17_health.yaml",
         REPO_ROOT / "docs/content/overlays/en-fa/a1_unit17.yaml",
     ),
+    # Units 18-19 (Work / Housing), added 2026-07-07 -- en-fa's own A1 pack
+    # grew from 17 to 19 units with zero prior Endless Practice coverage.
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a1_unit18_work.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a1_unit18.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a1_unit19_housing.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a1_unit19.yaml",
+    ),
 )
 
 # A2 units live in a SEPARATE course row ("Farsi A2", not "Farsi A1") --
@@ -401,6 +411,27 @@ FA_GLOSSES = {
     "دکتر": "doctor", "دارو": "medicine",
     "استراحت": "rest (noun, in استراحت کن, 'rest!')",
     "بخور": "drink (imperative, in آب بخور, 'drink water!')",
+    # Unit 18 (A1: work), added 2026-07-07 (en-fa units-18-19
+    # practice-authoring pass -- the pack grew 17->19 units this session
+    # with zero prior practice coverage).
+    "شغل": "job",
+    "مهندسم": "I'm an engineer (colloquial contraction of مهندس هستم)",
+    "معلمم": "I'm a teacher (colloquial contraction of معلم هستم)",
+    "دکترم": "I'm a doctor (colloquial contraction of دکتر هستم)",
+    "شغلت": "your job",
+    "شرکت": "company", "مدرسه": "school", "بیمارستان": "hospital",
+    "در": "in / at",
+    "مهندسه": "he's/she's an engineer (colloquial, third person)",
+    "معلمه": "he's/she's a teacher (colloquial, third person)",
+    # Unit 19 (A1: housing), added 2026-07-07, same pass as unit18 above.
+    "اتاق": "room", "خواب": "sleep (in اتاق خواب, 'bedroom')",
+    "آشپزخانه": "kitchen", "حموم": "bathroom (colloquial)",
+    "تخت": "bed", "میز": "table", "صندلی": "chair",
+    "بالای": "above / on top of",
+    "تخته": "it's the bed (colloquial contraction of تخت است)",
+    "آشپزخانه‌س": "it's the kitchen (colloquial contraction of آشپزخانه است)",
+    "خونه‌ی": "house of / my house (ezafe form of خونه)",
+    "خونه‌ت": "your house (colloquial)",
 }
 
 FA_SYMBOLS = set("س ل ا م ن ت ش چ ی ه ک گ ج د ر ف و ب خ ز".split())
@@ -412,7 +443,9 @@ FA_PRONOUNS = set(
     "من تو شما او ما این همون چی چه کی همین کدوم اون".split()
     + ["چی؟"]
 )
-FA_PREPOSITIONS = set("به از با اهل بهت مثل کنار برای برات پیش".split())
+FA_PREPOSITIONS = set(
+    "به از با اهل بهت مثل کنار برای برات پیش در بالای".split()
+)
 FA_PARTICLES = set("هم ولی بله و آره پس تا یه یا چون رو خب چشم".split())
 FA_ADVERBS = set(
     "فعلاً خیلی چطور کجا اینجا همین‌طور کجایی باهم فردا حتماً خودمونی چند "
@@ -473,6 +506,14 @@ FA_VERBS = {
     "می‌خواید",
     # Unit 17 (A1: health), added 2026-07-07.
     "خسته‌ام", "می‌تونی", "کنی", "بخور",
+    # Unit 18 (A1: work), added 2026-07-07. مهندسم/معلمم/دکترم/مهندسه/معلمه
+    # are colloquial copula contractions (X + هستم/است), matching this
+    # course's own established precedent that such contractions are
+    # classified verb, not noun/adjective (see the آفتابیه/سرده/بارونیه/
+    # گرمه precedent noted above).
+    "مهندسم", "معلمم", "دکترم", "مهندسه", "معلمه",
+    # Unit 19 (A1: housing), added 2026-07-07, same precedent as above.
+    "تخته", "آشپزخانه‌س",
 }
 FA_PHRASE_PARTS = {"بخیر", "خواهش"}
 
@@ -565,7 +606,13 @@ def fa_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         semantics.append("person_name")
     if token == "اسم":
         semantics.append("name_word")
-    if token in FA_PRONOUNS:
+    # تو's unit19-lesson04 occurrence is the spatial PREPOSITION sense
+    # ("in/inside"), not the pronoun -- excluded here so that sense never
+    # picks up the pronoun tag (and, below, the pronoun's person/number
+    # metadata), matching _classify_fa's own separate-Lexeme handling for
+    # this same homograph.
+    is_too_location = token == "تو" and lesson_key == "fa.a1.unit19.lesson04.location_in_home"
+    if token in FA_PRONOUNS and not is_too_location:
         semantics.append("pronoun")
     if token in {"هستم", "هستی", "هست", "است", "هستید", "هستین", "ساراست", "ایرانیه", "ایرانی‌ام"}:
         semantics.append("copula")
@@ -959,6 +1006,76 @@ def fa_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         semantics.append("advice_word")
     if token in {"استراحت کن", "آب بخور"}:
         semantics.append("advice_phrase")
+    # Unit 18 (A1: work), added 2026-07-07 (en-fa units-18-19
+    # practice-authoring pass). "job_asking_word" (شغل/شغلت/چیه, 3
+    # members, mixed noun/noun/verb, anchored lesson02 where the pool
+    # completes) mirrors the realization's own match_asking_vocab base.
+    # "occupation_self_phrase" (مهندسم/معلمم/دکترم, 3 members, all verb
+    # per the copula-contraction precedent, anchored lesson01).
+    # "workplace_word" (شرکت/مدرسه/بیمارستان, 3 members, anchored
+    # lesson03). "workplace_grammar_word" (در/کجا, 2 members, mixed
+    # preposition/adverb, translation/matching-only -- below the
+    # multiple_choice floor, anchored lesson03). "occupation_third_
+    # person" (مهندسه/معلمه, 2 members, translation/matching-only,
+    # anchored lesson06 where معلمه completes the pair). "work_verb_form"
+    # (می‌کنم/می‌کنی/می‌کنه, 3 members -- additive on top of whatever other
+    # tags these very common tokens already carry from earlier units,
+    # since combining any of them with the fixed noun کار is always a
+    # grammatically valid "I/you/he-she work[s]," anchored lesson05
+    # where می‌کنه completes the set).
+    if token in {"شغل", "شغلت", "چیه"}:
+        semantics.append("job_asking_word")
+    if token in {"مهندسم", "معلمم", "دکترم"}:
+        semantics.append("occupation_self_phrase")
+    if token in {"شرکت", "مدرسه", "بیمارستان"}:
+        semantics.append("workplace_word")
+    if token in {"در", "کجا"} and lesson_key.startswith("fa.a1.unit18"):
+        semantics.append("workplace_grammar_word")
+    if token in {"مهندسه", "معلمه"}:
+        semantics.append("occupation_third_person")
+    if token in {"می‌کنم", "می‌کنی", "می‌کنه"}:
+        semantics.append("work_verb_form")
+    if lesson_key.endswith("lesson06.jobs_dialogue"):
+        semantics.append("dialogue_word")
+    # Unit 19 (A1: housing), added 2026-07-07, same pass as unit18 above.
+    # "room_word" (خونه/آشپزخانه/حموم/"اتاق خواب", 4 members -- the last
+    # is the auto-derived two-token phrase lexeme from lesson01's own
+    # otagh_khab_word card -- anchored lesson01) is the unit's core
+    # recognition vocabulary. "home_room_word" is a narrower additive
+    # subset EXCLUDING خونه (آشپزخانه/حموم/"اتاق خواب", 3 members) -- used
+    # by this unit's own generative "خونه‌ی من یه {home_room_word} داره"
+    # word_order template, since a خونه candidate there would render the
+    # nonsensical "my house has a house." "object_word" (تخت/میز/صندلی,
+    # 3 members, anchored lesson03). "is_location_verb" (تخته/آشپزخانه‌س,
+    # 2 members, translation/matching-only, anchored lesson04) are the
+    # colloquial copula-contracted forms naming what's at a location --
+    # deliberately NOT combined generatively with location_word below,
+    # since the correct -ه/-س suffix depends on the specific noun's own
+    # ending and can't be derived generically per candidate.
+    # "house_possessive_word" (خونه‌ی/خونه‌ت, 2 members, translation/
+    # matching-only, anchored lesson06 where خونه‌ت completes the pair).
+    if token in {"خونه", "آشپزخانه", "حموم", "اتاق خواب"}:
+        semantics.append("room_word")
+    if token in {"آشپزخانه", "حموم", "اتاق خواب"}:
+        semantics.append("home_room_word")
+    if token in {"تخت", "میز", "صندلی"}:
+        semantics.append("object_word")
+    if token in {"تخته", "آشپزخانه‌س"}:
+        semantics.append("is_location_verb")
+    if token in {"خونه‌ی", "خونه‌ت"}:
+        semantics.append("house_possessive_word")
+    # تو's spatial-preposition sense (unit19 lesson04, "in/inside") is
+    # given its own home_location_word tag alongside کنار/بالای, the 3
+    # real location words this lesson teaches together -- scoped to this
+    # lesson_key so the PRONOUN sense of تو (used throughout the course,
+    # e.g. unit18's تو چی؟) never picks this tag up. کنار/بالای get the
+    # same tag layered additively on top of whatever tags they already
+    # carry from earlier units (کنار: preposition, already established
+    # unit05; بالای: brand new this unit).
+    if token in {"تو", "کنار", "بالای"} and lesson_key == "fa.a1.unit19.lesson04.location_in_home":
+        semantics.append("home_location_word")
+    if lesson_key.endswith("lesson06.housing_dialogue"):
+        semantics.append("dialogue_word")
     if semantics:
         tags["semantic"] = list(dict.fromkeys(semantics))
     person = {
@@ -966,10 +1083,10 @@ def fa_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         "تو": "second", "شما": "second", "هستی": "second",
         "هستید": "second", "هستین": "second", "او": "third",
         "هست": "third", "است": "third", "ایرانیه": "third",
-    }.get(token)
+    }.get(token) if not is_too_location else None
     if person:
         tags["person"] = person
-    if token in {"من", "تو", "او"}:
+    if token in {"من", "تو", "او"} and not is_too_location:
         tags["number"] = "singular"
     elif token == "شما":
         tags["number"] = "polite_or_plural"
@@ -1000,6 +1117,26 @@ def _classify_fa(files, level, fa_specs, seen_en):
                         raise ValueError(f"missing explicit Farsi gloss for {token!r}")
                     tags = fa_agreement_tags(token, lesson_key)
                     key = (level, token)
+                    part_of_speech = fa_part_of_speech(token)
+                    english_gloss = FA_GLOSSES[token]
+                    # تو is genuinely two different lexemes in this course:
+                    # the informal second-person PRONOUN "you" (taught
+                    # early, used throughout, e.g. "تو چی؟" in units
+                    # 11/13/18) versus unit19's own spatial PREPOSITION
+                    # sense "in/inside" (تو آشپزخانه, "in the kitchen"),
+                    # introduced specifically by this unit's own
+                    # teach.too_word card. Same collision class as the
+                    # en-prs sibling script's already-established
+                    # و/می‌شود/کی special cases -- given its own key/POS/
+                    # gloss here instead of letting the second sense
+                    # silently share the pronoun's classification (which
+                    # would make a preposition-constrained practice slot
+                    # draw "you," or a pronoun-constrained slot draw
+                    # "in/inside").
+                    if token == "تو" and content_key.endswith("teach.too_word"):
+                        key = (level, token, "location_prep")
+                        part_of_speech = "preposition"
+                        english_gloss = "in / inside"
                     existing = fa_specs.get(key)
                     if existing is None:
                         fa_specs[key] = {
@@ -1007,8 +1144,8 @@ def _classify_fa(files, level, fa_specs, seen_en):
                             "unit_order": unit_order, "lesson_order": lesson_order,
                             "lesson_content_key": lesson_key, "content_key": content_key,
                             "token": token, "language_code": "fa",
-                            "part_of_speech": fa_part_of_speech(token),
-                            "english_gloss": FA_GLOSSES[token], "agreement_tags": tags,
+                            "part_of_speech": part_of_speech,
+                            "english_gloss": english_gloss, "agreement_tags": tags,
                         }
                     else:
                         for tag_key, value in tags.items():

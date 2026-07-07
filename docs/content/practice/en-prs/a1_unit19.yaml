@@ -1,0 +1,213 @@
+schema_version: "1.0"
+pack_key: practice.en-prs.a1.unit19
+source_language: en
+target_language: prs
+unit_content_key: prs.a1.unit19.housing
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: >-
+    Authored 2026-07-07 for the new A1 unit19 (housing) realization, same
+    pass as this bundle's a1_unit18.yaml sibling (see that file's notes
+    for the shared classifier-extension context).
+
+    New groups, all real vocabulary from this unit's own realization:
+    "room_word" (خانه/اتاق/آشپزخانه/تشناب, 4 members, anchored lesson01 --
+    خانه already glossed "house" from unit05, reused as-is; اتاق/
+    آشپزخانه/تشناب are genuinely new tokens). "home_room_word" is a
+    narrower additive subset EXCLUDING خانه (اتاق/آشپزخانه/تشناب, 3
+    members) -- used by this unit's own "این خانه یک {home_room_word}
+    دارد" generative template, since a خانه candidate there would render
+    the nonsensical "this house has a house." "object_word"
+    (میز/چوکی/تخت/کلکین, 4 members, anchored lesson02 -- میز already
+    glossed "desk; table" from unit01, reused as-is). "home_description_
+    word" (بزرگ/مقابل, 2 members, mixed adjective/preposition,
+    translation/matching-only -- below the multiple_choice floor,
+    anchored lesson05; مقابل already glossed "opposite" from unit05,
+    reused as-is; بزرگ is the only genuinely new token this unit needs).
+    Also reuses two existing course-wide groups: "ones_number"
+    (یک-ده, established unit04, 10 members) and "preference_verb"
+    (دارم/دارید/دارد/ندارم/ندارد, established unit14, 5 members --
+    covers this unit's own دارم/دارد without any new tag), and the
+    course-wide "person_name" tag (now includes both لیلا and فریدون).
+
+    Six generative word_order templates, each checked for grammaticality
+    and self-reference risk: "{room_word} دارم" (lesson01, "I have a
+    [room]" -- natural for all 4, including خانه, since a subject having
+    "a house" is a plain fact, not self-referential), "{object_word}
+    دارم" (lesson02), "{ones_number} اتاق دارم" (lesson03, reusing the
+    course-wide number pool for a housing-counting context), "{object_
+    word_one} نزدیک {object_word_two} است" (lesson03, two DISTINCT
+    object_word slots via slot_relations so the subject and reference
+    object can never be the same word -- avoids the "the table is near
+    the table" self-reference bug), "این خانه {ones_number} اتاق خواب
+    دارد" (lesson04, fixed compound noun اتاق خواب since prs has no
+    auto-phrase mechanism -- both words already individually taught),
+    "{object_word_one} مقابل {object_word_two} است" (lesson05, same
+    distinct-slot pattern as lesson03's نزدیک template), and "{person_
+    name} {ones_number} اتاق خواب دارد" (lesson06).
+
+    No listen_select/listen_type anywhere (en-prs has no TTS voices).
+    Zero fill_in_blank templates -- this unit's real vocabulary doesn't
+    support one safely, matching the standing en-prs precedent. No bare
+    unquoted yes/no/true/false anywhere.
+
+    Verified with scripts/_practice_slot_check.py (reusing
+    backfill_lexemes_en_prs.py's real iter_specs() output) -- every
+    slot has enough distinct candidates. scripts/compile_content.py
+    practice-validate for the full en-prs pack -- 0 errors/0 warnings.
+    scripts/_fill_in_blank_ambiguity_check.py -- zero AMBIGUOUS flags.
+    Needs the standard fresh-context review before import; no
+    backfill_lexemes_en_prs.py run has happened against a real database
+    yet in this pass.
+tag_schema:
+  part_of_speech: [noun, verb, adjective, preposition, proper_noun]
+  agreement_tags:
+    semantic:
+      [room_word, home_room_word, object_word, home_description_word,
+       ones_number, preference_verb, person_name]
+slot_presets:
+  room_word: &room_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: room_word}}
+  home_room_word: &home_room_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: home_room_word}}
+  object_word: &object_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: object_word}}
+  home_description_word: &home_description_word {language_code: prs, part_of_speech: [adjective, preposition], agreement_tags: {semantic: home_description_word}}
+  # Reuses the existing course-wide "ones_number" tag (established
+  # unit04: یک-ده, 10 members).
+  ones_number: &ones_number {language_code: prs, part_of_speech: adjective, agreement_tags: {semantic: ones_number}}
+  # Reuses the existing course-wide "preference_verb" tag (established
+  # unit14: دارم/دارید/دارد/ندارم/ندارد, 5 members).
+  preference_verb: &preference_verb {language_code: prs, part_of_speech: verb, agreement_tags: {semantic: preference_verb}}
+  # Reuses the existing course-wide "person_name" tag.
+  person_name: &person_name {language_code: prs, part_of_speech: proper_noun, agreement_tags: {semantic: person_name}}
+templates:
+  # Lesson 1: room words.
+  - content_key: practice.en-prs.prs.a1.unit19.lesson01.room_word_gloss.001
+    lesson_content_key: prs.a1.unit19.lesson01.room_words
+    type: multiple_choice
+    frame: {text: "{room_word}", language_code: prs, direction: rtl}
+    slots: {room_word: *room_word}
+    answer_derivation: {kind: slot_gloss, slot: room_word}
+    feedback_frame: {text: "{room_word} names a room or part of a home.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit19.lesson01.room_word_pair.002
+    lesson_content_key: prs.a1.unit19.lesson01.room_words
+    type: matching_pairs
+    frame: {text: "{word_one} — {word_two} — {word_three} — {word_four}", language_code: prs, direction: rtl}
+    slots: {word_one: *room_word, word_two: *room_word, word_three: *room_word, word_four: *room_word}
+    slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four]}]
+    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit19.lesson01.room_word_have_order.003
+    lesson_content_key: prs.a1.unit19.lesson01.room_words
+    type: word_order
+    frame: {text: "{room_word} دارم", language_code: prs, direction: rtl}
+    slots: {room_word: *room_word}
+    answer_derivation: {kind: render_frame, frame: {text: "{room_word} دارم", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: [room] دارم (I have a [room]).", language_code: en, direction: ltr}
+
+  # Lesson 2: household object words.
+  - content_key: practice.en-prs.prs.a1.unit19.lesson02.object_word_gloss.001
+    lesson_content_key: prs.a1.unit19.lesson02.object_words
+    type: multiple_choice
+    frame: {text: "{object_word}", language_code: prs, direction: rtl}
+    slots: {object_word: *object_word}
+    answer_derivation: {kind: slot_gloss, slot: object_word}
+    feedback_frame: {text: "{object_word} names a piece of household furniture.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit19.lesson02.object_word_pair.002
+    lesson_content_key: prs.a1.unit19.lesson02.object_words
+    type: matching_pairs
+    frame: {text: "{word_one} — {word_two} — {word_three} — {word_four}", language_code: prs, direction: rtl}
+    slots: {word_one: *object_word, word_two: *object_word, word_three: *object_word, word_four: *object_word}
+    slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four]}]
+    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit19.lesson02.object_word_have_order.003
+    lesson_content_key: prs.a1.unit19.lesson02.object_words
+    type: word_order
+    frame: {text: "{object_word} دارم", language_code: prs, direction: rtl}
+    slots: {object_word: *object_word}
+    answer_derivation: {kind: render_frame, frame: {text: "{object_word} دارم", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: [object] دارم (I have a [object]).", language_code: en, direction: ltr}
+
+  # Lesson 3: quantity and location.
+  - content_key: practice.en-prs.prs.a1.unit19.lesson03.number_room_order.001
+    lesson_content_key: prs.a1.unit19.lesson03.quantity_and_location
+    type: word_order
+    frame: {text: "{ones_number} اتاق دارم", language_code: prs, direction: rtl}
+    slots: {ones_number: *ones_number}
+    answer_derivation: {kind: render_frame, frame: {text: "{ones_number} اتاق دارم", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: [number] اتاق دارم (I have [number] rooms).", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit19.lesson03.object_near_order.002
+    lesson_content_key: prs.a1.unit19.lesson03.quantity_and_location
+    type: word_order
+    frame: {text: "{object_word_one} نزدیک {object_word_two} است", language_code: prs, direction: rtl}
+    slots: {object_word_one: *object_word, object_word_two: *object_word}
+    slot_relations: [{kind: distinct, slots: [object_word_one, object_word_two]}]
+    answer_derivation: {kind: render_frame, frame: {text: "{object_word_one} نزدیک {object_word_two} است", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: [object] نزدیک [object] است (the [object] is near the [object]).", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit19.lesson03.review_pair.003
+    lesson_content_key: prs.a1.unit19.lesson03.quantity_and_location
+    type: matching_pairs
+    frame: {text: "{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six} — {word_seven} — {word_eight}", language_code: prs, direction: rtl}
+    slots:
+      word_one: *room_word
+      word_two: *room_word
+      word_three: *room_word
+      word_four: *room_word
+      word_five: *object_word
+      word_six: *object_word
+      word_seven: *object_word
+      word_eight: *object_word
+    slot_relations:
+      - {kind: distinct, slots: [word_one, word_two, word_three, word_four]}
+      - {kind: distinct, slots: [word_five, word_six, word_seven, word_eight]}
+    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five, word_six, word_seven, word_eight]}
+    feedback_frame: {text: "Match each word to its English meaning -- rooms and objects together.", language_code: en, direction: ltr}
+
+  # Lesson 4: reading a home description.
+  - content_key: practice.en-prs.prs.a1.unit19.lesson04.house_bedroom_count_order.001
+    lesson_content_key: prs.a1.unit19.lesson04.reading_a_home_description
+    type: word_order
+    frame: {text: "این خانه {ones_number} اتاق خواب دارد", language_code: prs, direction: rtl}
+    slots: {ones_number: *ones_number}
+    answer_derivation: {kind: render_frame, frame: {text: "این خانه {ones_number} اتاق خواب دارد", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: این خانه [number] اتاق خواب دارد (this house has [number] bedrooms).", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit19.lesson04.preference_verb_gloss.002
+    lesson_content_key: prs.a1.unit19.lesson04.reading_a_home_description
+    type: multiple_choice
+    frame: {text: "{preference_verb}", language_code: prs, direction: rtl}
+    slots: {preference_verb: *preference_verb}
+    answer_derivation: {kind: slot_gloss, slot: preference_verb}
+    feedback_frame: {text: "{preference_verb} is used to describe what someone or something has.", language_code: en, direction: ltr}
+
+  # Lesson 5: reading a longer home description.
+  - content_key: practice.en-prs.prs.a1.unit19.lesson05.home_description_word_translate.001
+    lesson_content_key: prs.a1.unit19.lesson05.reading_a_longer_description
+    type: translation
+    frame: {text: "{home_description_word}", language_code: en, direction: ltr, slot_rendering: {home_description_word: english_gloss}}
+    slots: {home_description_word: *home_description_word}
+    answer_derivation: {kind: slot_text, slot: home_description_word}
+    feedback_frame: {text: "{home_description_word} is the Dari word for this.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit19.lesson05.object_across_order.002
+    lesson_content_key: prs.a1.unit19.lesson05.reading_a_longer_description
+    type: word_order
+    frame: {text: "{object_word_one} مقابل {object_word_two} است", language_code: prs, direction: rtl}
+    slots: {object_word_one: *object_word, object_word_two: *object_word}
+    slot_relations: [{kind: distinct, slots: [object_word_one, object_word_two]}]
+    answer_derivation: {kind: render_frame, frame: {text: "{object_word_one} مقابل {object_word_two} است", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: [object] مقابل [object] است (the [object] is across from the [object]).", language_code: en, direction: ltr}
+
+  # Lesson 6: a dialogue about someone's home.
+  - content_key: practice.en-prs.prs.a1.unit19.lesson06.person_name_gloss.001
+    lesson_content_key: prs.a1.unit19.lesson06.home_dialogue
+    type: multiple_choice
+    frame: {text: "{person_name}", language_code: prs, direction: rtl}
+    slots: {person_name: *person_name}
+    answer_derivation: {kind: slot_gloss, slot: person_name}
+    feedback_frame: {text: "{person_name} is a name used in this course.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit19.lesson06.person_bedroom_count_order.002
+    lesson_content_key: prs.a1.unit19.lesson06.home_dialogue
+    type: word_order
+    frame: {text: "{person_name} {ones_number} اتاق خواب دارد", language_code: prs, direction: rtl}
+    slots: {person_name: *person_name, ones_number: *ones_number}
+    answer_derivation: {kind: render_frame, frame: {text: "{person_name} {ones_number} اتاق خواب دارد", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: [name] [number] اتاق خواب دارد ([name] has [number] bedrooms).", language_code: en, direction: ltr}
