@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: "1.1"
 overlay_version: "2026.1-draft.1"
 overlay_key: en-prs.a1.unit11
 source_language: en
@@ -13,7 +13,9 @@ review:
   required_next_reviewer: null
   notes: "Authored alongside the new prs a1_unit11_time.yaml realization. Follows the established en-prs overlay convention from units 09/10 (English instruction/correct_option/distractors/feedback, target-language Dari accepted_answers, English glosses for recognize_* multiple_choice items to avoid the same-string visual-matching anti-pattern already fixed in units 07/08/09/10). Authored §14/§16-compliant from the start alongside the realization. Needs the standard fresh-context review before shipping.
 
-    FRESH-CONTEXT REVIEW COMPLETED 2026-07-06 (zero prior context, sibling fa files never opened). Verified every multiple_choice pairs a Dari-script prompt against English-gloss options/distractors -- zero prompt-shows-answer instances (no same-script visual-matching shortcut anywhere). Ran a Python tokenizer (ZWNJ-aware, Persian-punctuation-stripping) checking every accepted_answers/correct_option/distractors value against the realization's cumulative introduced_tokens up to that point in the lesson sequence: found and fixed ONE untaught-word violation -- lesson02.exercise05.dialogue_response_ask_time's accepted_answers included \"ببخشین، ساعت چند است؟\" using ببخشین before its lesson06 introduction; removed that variant (the two remaining forms, with and without the question mark, are both already-taught vocabulary and both status:correct). Confirmed content_key parity exact in both directions against the realization (units/lessons/teaching/exercises, zero orphans) and that this file's flat top-level-dict structure (units/lessons/teaching/exercises each keyed directly by content_key) is schema-correct. Found and fixed a real learner-facing factual error: the qarar_word teaching note claimed قرار \"match[ed] the vocabulary already used in unit09's meeting-scheduling dialogue\" -- verified directly against unit09 and confirmed جلسه, not قرار, is unit09's word for meeting (قرار never appears anywhere in prs content before this unit); corrected the note to accurately distinguish قرار (new, personal-appointment word) from جلسه (unit09's existing meeting word) instead of falsely claiming continuity. Applied the §15 target-language-asterisk convention to every note and feedback string in this file (56 strings, programmatically wrapped every Persian-range span in every note/feedback value) since this is freshly-authored content, not exempt pre-existing prose. Confirmed via actual compile (not just validate) that every exercise produces a real, non-empty correct_response, the multi-clause write_meeting_summary keeps its period-, comma-, and و-joined accepted forms all as status:correct per §12, and (working with the paired realization) that 3 dialogue_response exercises plus 1 writing_prompt no longer duplicate their own instruction text as a redundant second prompt block. Both validate and compile re-run clean (0 errors/0 warnings) after every fix; compile output is valid JSON."
+    FRESH-CONTEXT REVIEW COMPLETED 2026-07-06 (zero prior context, sibling fa files never opened). Verified every multiple_choice pairs a Dari-script prompt against English-gloss options/distractors -- zero prompt-shows-answer instances (no same-script visual-matching shortcut anywhere). Ran a Python tokenizer (ZWNJ-aware, Persian-punctuation-stripping) checking every accepted_answers/correct_option/distractors value against the realization's cumulative introduced_tokens up to that point in the lesson sequence: found and fixed ONE untaught-word violation -- lesson02.exercise05.dialogue_response_ask_time's accepted_answers included \"ببخشین، ساعت چند است؟\" using ببخشین before its lesson06 introduction; removed that variant (the two remaining forms, with and without the question mark, are both already-taught vocabulary and both status:correct). Confirmed content_key parity exact in both directions against the realization (units/lessons/teaching/exercises, zero orphans) and that this file's flat top-level-dict structure (units/lessons/teaching/exercises each keyed directly by content_key) is schema-correct. Found and fixed a real learner-facing factual error: the qarar_word teaching note claimed قرار \"match[ed] the vocabulary already used in unit09's meeting-scheduling dialogue\" -- verified directly against unit09 and confirmed جلسه, not قرار, is unit09's word for meeting (قرار never appears anywhere in prs content before this unit); corrected the note to accurately distinguish قرار (new, personal-appointment word) from جلسه (unit09's existing meeting word) instead of falsely claiming continuity. Applied the §15 target-language-asterisk convention to every note and feedback string in this file (56 strings, programmatically wrapped every Persian-range span in every note/feedback value) since this is freshly-authored content, not exempt pre-existing prose. Confirmed via actual compile (not just validate) that every exercise produces a real, non-empty correct_response, the multi-clause write_meeting_summary keeps its period-, comma-, and و-joined accepted forms all as status:correct per §12, and (working with the paired realization) that 3 dialogue_response exercises plus 1 writing_prompt no longer duplicate their own instruction text as a redundant second prompt block. Both validate and compile re-run clean (0 errors/0 warnings) after every fix; compile output is valid JSON.
+
+    2026-07-07: AUTHORING_GUIDE.md §19 retrofit -- added real example sentence(s) to all 13 kind:vocabulary teaching entries with example_gloss (2 merged cards -- the numbers list and the names list -- each given a positionally-matched list of examples), each a natural, comprehensible-from-gloss sentence using the card's own word(s), using the Afghan Dari نان چاشت (lunch) term. schema_version bumped to 1.1. Example sentences are Claude-authored and pending fresh-context review."
 
 course:
   title: Dari A1
@@ -36,26 +38,32 @@ teaching:
     title: "Hour / clock"
     gloss: "hour / clock"
     note: "*ساعت* means both hour and clock, and also marks o'clock in time expressions."
+    example_gloss: "What time is it?"
   prs.a1.unit11.lesson01.teach.daqiqa_word:
     title: Minute
     gloss: minute
     note: "*دقیقه* means minute."
+    example_gloss: "Wait five minutes."
   prs.a1.unit11.lesson01.teach.nim_word:
     title: Half
     gloss: half
     note: "*نیم* means half, used for the half-hour (e.g. *ساعت سه و نیم*, three-thirty)."
+    example_gloss: "It's half past seven."
   prs.a1.unit11.lesson01.teach.rub_word:
     title: Quarter
     gloss: quarter
     note: "*ربع* means quarter, used for quarter-hours (e.g. *ساعت چهار و ربع*, a quarter past four)."
+    example_gloss: "It's a quarter to eight."
   prs.a1.unit11.lesson01.teach.numbers_review:
     title: "Numbers 1-5 (review)"
     gloss: "one, two, three, four, five"
     note: "*یک، دو، سه، چهار، پنج* review the numbers from unit04, needed to tell the time."
+    example_gloss: ["I have one book.", "I have two brothers.", "I have three sisters.", "Four days remain.", "Wait five minutes."]
   prs.a1.unit11.lesson02.teach.chand_word:
     title: "How many / what"
     gloss: "how many / what"
     note: "*چند* combines with *ساعت* to ask the time: *ساعت چند است؟*"
+    example_gloss: "What time is it?"
   prs.a1.unit11.lesson02.teach.saat_chand_ast:
     title: "What time is it?"
     gloss: "What time is it?"
@@ -80,18 +88,22 @@ teaching:
     title: "Morning (review)"
     gloss: morning
     note: "*صبح* reviews the morning greeting from unit01 (*صبح بخیر*)."
+    example_gloss: "I wake up early in the morning."
   prs.a1.unit11.lesson04.teach.zohr_word:
     title: Noon
     gloss: noon
     note: "*ظهر* means noon -- a new word, not covered in unit01's greetings."
+    example_gloss: "I eat lunch at noon."
   prs.a1.unit11.lesson04.teach.asr_review:
     title: "Afternoon (review)"
     gloss: afternoon
     note: "*عصر* reviews the afternoon/evening greeting from unit01 (*عصر بخیر*)."
+    example_gloss: "I work in the afternoon."
   prs.a1.unit11.lesson04.teach.shab_review:
     title: "Night (review)"
     gloss: night
     note: "*شب* reviews the night greeting from unit01 (*شب بخیر*)."
+    example_gloss: "I go to sleep early at night."
   prs.a1.unit11.lesson04.teach.saat_noh_sobh:
     title: "It's nine in the morning."
     gloss: "It's nine in the morning."
@@ -100,10 +112,12 @@ teaching:
     title: "Seven (7)"
     gloss: "seven (7)"
     note: "*هفت* means seven, needed to say seven at night."
+    example_gloss: "I'll come at seven."
   prs.a1.unit11.lesson05.teach.qarar_word:
     title: Appointment
     gloss: appointment
     note: "*قرار* means appointment -- a new word for this unit's personal-appointment context, distinct from *جلسه* (meeting), already taught in unit09's meeting-scheduling dialogue."
+    example_gloss: "I have an appointment."
   prs.a1.unit11.lesson05.teach.qarar_saat_chand:
     title: "What time is your appointment?"
     gloss: "What time is your appointment?"
@@ -116,6 +130,7 @@ teaching:
     title: "Zarmina and Homayoun"
     gloss: "Zarmina, Homayoun"
     note: "*زرمینه* and *همایون* are the two speakers in this lesson's dialogue."
+    example_gloss: ["Zarmina is coming at seven.", "Homayoun is coming at eight."]
   prs.a1.unit11.lesson06.teach.dialogue_line1:
     title: "Excuse me, what time is the meeting?"
     gloss: "Excuse me, what time is the meeting?"

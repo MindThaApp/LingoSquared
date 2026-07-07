@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: "1.1"
 realization_version: "2026.1-draft.1"
 target_language: prs
 cefr_level: A1
@@ -13,7 +13,9 @@ review:
   required_next_reviewer: null
   notes: "New unit, prs's next uncovered outcome (prerequisite: numbers, already covered in unit04). Six lessons: basic time vocabulary, asking the time, telling the time, parts of the day (reviewing صبح/عصر/شب from unit01, adding ظهر), asking about an appointment, and a dialogue arranging a meeting time. Uses استم/استین verb endings consistently, ساعت چند است؟ (not the Iranian-colloquial ساعت چنده) for asking the time, and قرار for a personal appointment (a new word for this unit, distinct from unit09's own already-established جلسه for a scheduled meeting). Authored independently of the fa realization per the sibling-isolation rule -- Persian time vocabulary (ساعت/دقیقه/نیم/ربع) is shared across Dari and Farsi, but phrasing/exercises/pedagogical framing were originated independently, not templated. Authored §14/§16-compliant from the start: no listen_type/listen_select/listen_order exercises anywhere (all recognition exercises are multiple_choice with a real visible target-language prompt; all production exercises are translation/word_order/dialogue_response/speak_response), and every matching_pairs exercise is sized 6+ pairs by pooling already-taught vocabulary (numbers from unit04, parts of day from unit01) rather than left at 2-3. Proactively checked against AUTHORING_GUIDE §11-13 during authoring, including cross-checking every stated time across all 6 lessons for consistency. Audio remains pending generation. Compiler validation clean (0 errors/0 warnings). Awaiting the standing fresh-context review before status can move to reviewed.
 
-    FRESH-CONTEXT REVIEW COMPLETED 2026-07-06 (zero prior context, sibling fa files never opened). Verified against universal.a1.time.ask_tell_time's own can_do/assessment_requirements (all 4 -- understand_spoken_time via lesson06's read-as-text dialogue transcript standing in honestly, ask_tell_time via dialogue_response, read_schedule_time via the dialogue-reading exercises, write_time via translation/writing_prompt -- covered, and every instruction correctly says \"Read\" rather than overclaiming \"Listen\"); exercise pacing (recognition -> drag/matching -> production verified in all 6 lessons); script purity (zero Arabic-range kaf/yeh); no jargon leaks; A1-appropriate complexity (simple present-tense copula/time expressions throughout, no compound tense); §14/§16 self-claims verified true (zero listen_type/listen_select/listen_order, all 6 matching_pairs exercises sized 6-9 pairs); every exercise type used (multiple_choice/matching_pairs/word_order/translation/dialogue_response/writing_prompt) confirmed registered in frontend/src/components/exercises/ExerciseRenderer.tsx; content_key parity exact both directions (units/lessons/teaching/exercises), overlay's flat top-level-dict schema confirmed structurally correct. Ran a Python tokenizer (ZWNJ-aware compound-word handling, Persian-punctuation-stripping) checking every tested_text/pairs/word_bank value and every overlay accepted_answers/correct_option/distractors value against cumulative introduced_tokens up to that point in the lesson sequence: found and fixed ONE genuine untaught-word violation (lesson02.exercise05's accepted_answers included \"ببخشین، ساعت چند است؟\", using ببخشین which isn't introduced until lesson06 -- removed that variant, kept the two already-taught-vocabulary-only forms). Cross-checked §11 facts: meeting=9am, Zarmina arrives=8:30am, consistently stated and logically sound (arriving before the meeting) across the media_assets dialogue, all teaching cards, and all 6 lesson06 exercises. §12 verified already-compliant: write_meeting_summary's accepted_answers already had period-, comma-, and و-joined forms, all status:correct. FOUND AND FIXED a real dialect-accuracy issue in this file's own metadata: the register_policy and these very notes falsely claimed قرار \"matched\" vocabulary \"already established in unit09's meeting-scheduling dialogue\" -- grepped unit09 directly and confirmed جلسه (not قرار) is unit09's word for meeting; قرار never appears anywhere in prs content before this unit. Corrected both claims to accurately describe قرار as new vocabulary distinct from unit09's جلسه (قرار itself is genuine, correctly-introduced Afghan Dari vocabulary for a personal appointment -- only the false continuity claim was wrong). FOUND AND FIXED a real duplicate-prompt-text bug (present via compile, not visible from validate alone): 3 dialogue_response exercises and 1 writing_prompt had realization prompt.target_blocks containing the exact same English text as the overlay's own instruction, so the compiled output showed the same sentence twice to the learner. Fixed by following the correct, already-established pattern seen elsewhere in this course (e.g. unit01 lesson05.exercise02, unit09 lesson06.exercise06/07): reply-type prompts (lesson05.exercise06, lesson06.exercise05) now show the actual Dari line being replied to (قرار شما ساعت چند است؟ and جلسه ساعت نه صبح است respectively, both composed entirely of already-taught tokens by that point) instead of a duplicated English instruction; self-initiated prompts with no natural preceding cue (lesson02.exercise05, lesson06.exercise06) now use empty target_blocks, matching unit09's own write_meeting_summary precedent. Re-verified via actual compile (not just validate) that every exercise produces a real, non-empty correct_response and zero duplicate text_blocks remain. Applied the §15 target-language-asterisk convention to every note/feedback string in the paired overlay (56 strings updated) since this is freshly-authored content, not a pre-existing note exempt from retrofitting. Both validate and compile re-run clean (0 errors/0 warnings) after every fix; compile output is valid JSON."
+    FRESH-CONTEXT REVIEW COMPLETED 2026-07-06 (zero prior context, sibling fa files never opened). Verified against universal.a1.time.ask_tell_time's own can_do/assessment_requirements (all 4 -- understand_spoken_time via lesson06's read-as-text dialogue transcript standing in honestly, ask_tell_time via dialogue_response, read_schedule_time via the dialogue-reading exercises, write_time via translation/writing_prompt -- covered, and every instruction correctly says \"Read\" rather than overclaiming \"Listen\"); exercise pacing (recognition -> drag/matching -> production verified in all 6 lessons); script purity (zero Arabic-range kaf/yeh); no jargon leaks; A1-appropriate complexity (simple present-tense copula/time expressions throughout, no compound tense); §14/§16 self-claims verified true (zero listen_type/listen_select/listen_order, all 6 matching_pairs exercises sized 6-9 pairs); every exercise type used (multiple_choice/matching_pairs/word_order/translation/dialogue_response/writing_prompt) confirmed registered in frontend/src/components/exercises/ExerciseRenderer.tsx; content_key parity exact both directions (units/lessons/teaching/exercises), overlay's flat top-level-dict schema confirmed structurally correct. Ran a Python tokenizer (ZWNJ-aware compound-word handling, Persian-punctuation-stripping) checking every tested_text/pairs/word_bank value and every overlay accepted_answers/correct_option/distractors value against cumulative introduced_tokens up to that point in the lesson sequence: found and fixed ONE genuine untaught-word violation (lesson02.exercise05's accepted_answers included \"ببخشین، ساعت چند است؟\", using ببخشین which isn't introduced until lesson06 -- removed that variant, kept the two already-taught-vocabulary-only forms). Cross-checked §11 facts: meeting=9am, Zarmina arrives=8:30am, consistently stated and logically sound (arriving before the meeting) across the media_assets dialogue, all teaching cards, and all 6 lesson06 exercises. §12 verified already-compliant: write_meeting_summary's accepted_answers already had period-, comma-, and و-joined forms, all status:correct. FOUND AND FIXED a real dialect-accuracy issue in this file's own metadata: the register_policy and these very notes falsely claimed قرار \"matched\" vocabulary \"already established in unit09's meeting-scheduling dialogue\" -- grepped unit09 directly and confirmed جلسه (not قرار) is unit09's word for meeting; قرار never appears anywhere in prs content before this unit. Corrected both claims to accurately describe قرار as new vocabulary distinct from unit09's جلسه (قرار itself is genuine, correctly-introduced Afghan Dari vocabulary for a personal appointment -- only the false continuity claim was wrong). FOUND AND FIXED a real duplicate-prompt-text bug (present via compile, not visible from validate alone): 3 dialogue_response exercises and 1 writing_prompt had realization prompt.target_blocks containing the exact same English text as the overlay's own instruction, so the compiled output showed the same sentence twice to the learner. Fixed by following the correct, already-established pattern seen elsewhere in this course (e.g. unit01 lesson05.exercise02, unit09 lesson06.exercise06/07): reply-type prompts (lesson05.exercise06, lesson06.exercise05) now show the actual Dari line being replied to (قرار شما ساعت چند است؟ and جلسه ساعت نه صبح است respectively, both composed entirely of already-taught tokens by that point) instead of a duplicated English instruction; self-initiated prompts with no natural preceding cue (lesson02.exercise05, lesson06.exercise06) now use empty target_blocks, matching unit09's own write_meeting_summary precedent. Re-verified via actual compile (not just validate) that every exercise produces a real, non-empty correct_response and zero duplicate text_blocks remain. Applied the §15 target-language-asterisk convention to every note/feedback string in the paired overlay (56 strings updated) since this is freshly-authored content, not a pre-existing note exempt from retrofitting. Both validate and compile re-run clean (0 errors/0 warnings) after every fix; compile output is valid JSON.
+
+    2026-07-07: AUTHORING_GUIDE.md §19 retrofit -- added real example sentence(s) to all 13 kind:vocabulary teaching cards (2 merged cards -- the numbers list and the names list -- each given a positionally-matched list of examples), each a natural, comprehensible-from-gloss sentence using the card's own word(s), using the Afghan Dari نان چاشت (lunch) term. schema_version bumped to 1.1. Example sentences are Claude-authored and pending fresh-context review."
 
 course:
   realization_key: prs.a1
@@ -60,22 +62,32 @@ units:
             kind: vocabulary
             target: {text: ساعت, language_code: prs, direction: rtl}
             introduced_tokens: [ساعت]
+            example: {text: "ساعت چند است؟", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit11.lesson01.teach.daqiqa_word
             kind: vocabulary
             target: {text: دقیقه, language_code: prs, direction: rtl}
             introduced_tokens: [دقیقه]
+            example: {text: "پنج دقیقه صبر کنید.", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit11.lesson01.teach.nim_word
             kind: vocabulary
             target: {text: نیم, language_code: prs, direction: rtl}
             introduced_tokens: [نیم]
+            example: {text: "ساعت هفت و نیم است.", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit11.lesson01.teach.rub_word
             kind: vocabulary
             target: {text: ربع, language_code: prs, direction: rtl}
             introduced_tokens: [ربع]
+            example: {text: "ساعت یک ربع به هشت است.", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit11.lesson01.teach.numbers_review
             kind: vocabulary
             target: {text: "یک، دو، سه، چهار، پنج", language_code: prs, direction: rtl}
             introduced_tokens: [یک, دو, سه, چهار, پنج]
+            example:
+              - {text: "یک کتاب دارم.", language_code: prs, direction: rtl}
+              - {text: "دو برادر دارم.", language_code: prs, direction: rtl}
+              - {text: "سه خواهر دارم.", language_code: prs, direction: rtl}
+              - {text: "چهار روز مانده.", language_code: prs, direction: rtl}
+              - {text: "پنج دقیقه صبر کنید.", language_code: prs, direction: rtl}
         exercises:
           - content_key: prs.a1.unit11.lesson01.exercise01.recognize_saat_reading
             type: multiple_choice
@@ -120,6 +132,7 @@ units:
             kind: vocabulary
             target: {text: چند, language_code: prs, direction: rtl}
             introduced_tokens: [چند]
+            example: {text: "ساعت چند است؟", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit11.lesson02.teach.saat_chand_ast
             kind: phrase
             target: {text: "ساعت چند است؟", language_code: prs, direction: rtl}
@@ -216,18 +229,22 @@ units:
             kind: vocabulary
             target: {text: صبح, language_code: prs, direction: rtl}
             introduced_tokens: [صبح]
+            example: {text: "صبح زود بیدار می‌شوم.", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit11.lesson04.teach.zohr_word
             kind: vocabulary
             target: {text: ظهر, language_code: prs, direction: rtl}
             introduced_tokens: [ظهر]
+            example: {text: "ظهر نان چاشت می‌خورم.", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit11.lesson04.teach.asr_review
             kind: vocabulary
             target: {text: عصر, language_code: prs, direction: rtl}
             introduced_tokens: [عصر]
+            example: {text: "عصر کار می‌کنم.", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit11.lesson04.teach.shab_review
             kind: vocabulary
             target: {text: شب, language_code: prs, direction: rtl}
             introduced_tokens: [شب]
+            example: {text: "شب زود می‌خوابم.", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit11.lesson04.teach.saat_noh_sobh
             kind: phrase
             target: {text: "ساعت نه صبح است", language_code: prs, direction: rtl}
@@ -236,6 +253,7 @@ units:
             kind: vocabulary
             target: {text: هفت, language_code: prs, direction: rtl}
             introduced_tokens: [هفت]
+            example: {text: "ساعت هفت می‌آیم.", language_code: prs, direction: rtl}
         exercises:
           - content_key: prs.a1.unit11.lesson04.exercise01.recognize_zohr_reading
             type: multiple_choice
@@ -278,6 +296,7 @@ units:
             kind: vocabulary
             target: {text: قرار, language_code: prs, direction: rtl}
             introduced_tokens: [قرار]
+            example: {text: "من یک قرار دارم.", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit11.lesson05.teach.qarar_saat_chand
             kind: phrase
             target: {text: "قرار شما ساعت چند است؟", language_code: prs, direction: rtl}
@@ -330,6 +349,9 @@ units:
             kind: vocabulary
             target: {text: "زرمینه، همایون", language_code: prs, direction: rtl}
             introduced_tokens: [زرمینه, همایون]
+            example:
+              - {text: "زرمینه ساعت هفت می‌آید.", language_code: prs, direction: rtl}
+              - {text: "همایون ساعت هشت می‌آید.", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit11.lesson06.teach.dialogue_line1
             kind: dialogue
             target: {text: "ببخشین، جلسه ساعت چند است؟", language_code: prs, direction: rtl, speaker: زرمینه}
