@@ -67,6 +67,16 @@ review:
     content_key parity intact, validate+compile both clean after the
     retrofit.
 
+    POST-SHIP CORPUS-WIDE FIX, 2026-07-07: a project-wide sweep (prompted by
+    unit13's fresh-context reviewer flagging the same bug in units 11/12)
+    found this file also had exercises where realization prompt.target_blocks
+    duplicated the overlay's own instruction text verbatim in English -- the
+    compiler would have rendered the same sentence twice to the learner. Fixed
+    mechanically: every affected exercise's prompt set to target_blocks: [].
+    Re-verified validate+compile clean (0 errors/0 warnings) and confirmed
+    zero remaining instruction-duplicate target_blocks via a script comparing
+    every exercise's target_blocks against its overlay instruction.
+
 course:
   realization_key: fa.a1
   target_language_first: true
@@ -176,7 +186,7 @@ units:
           - content_key: fa.a1.unit07.lesson01.exercise07.write_cloudy
             type: writing_prompt
             tested_text: ابری
-            prompt: {target_blocks: [{text: "Write the Farsi word for cloudy.", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: []}
 
       - content_key: fa.a1.unit07.lesson02.temperature_words
         title: گرم و سرد
@@ -231,7 +241,7 @@ units:
           - content_key: fa.a1.unit07.lesson02.exercise07.write_hot
             type: writing_prompt
             tested_text: گرم
-            prompt: {target_blocks: [{text: "Write the Farsi word for hot.", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: []}
 
       - content_key: fa.a1.unit07.lesson03.asking_about_weather
         title: پرسیدن دربارهٔ هوا
@@ -290,7 +300,7 @@ units:
           - content_key: fa.a1.unit07.lesson03.exercise07.speak_weather_question
             type: speak_response
             tested_text: هوا چطوره
-            prompt: {target_blocks: [{text: "Ask a friend how the weather is.", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: []}
 
       - content_key: fa.a1.unit07.lesson04.describing_todays_weather
         title: توصیف هوای امروز
@@ -454,9 +464,7 @@ units:
           - content_key: fa.a1.unit07.lesson06.exercise02.recognize_today_weather
             type: multiple_choice
             tested_text: بارونیه
-            prompt:
-              target_blocks:
-                - {text: "What does Reza say the weather is like today?", language_code: en, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: fa.a1.unit07.lesson06.exercise04.match_dialogue_facts
             type: matching_pairs
             tested_text: امروز فردا بارونیه آفتابیه پارک فکر کنم آره موافقم عالیه باشه
@@ -491,4 +499,4 @@ units:
           - content_key: fa.a1.unit07.lesson06.exercise08.speak_full_weather_exchange
             type: speak_response
             tested_text: هوا چطوره آفتابیه بهتره
-            prompt: {target_blocks: [{text: "Ask a friend how the weather is, and suggest a plan based on their answer.", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: []}

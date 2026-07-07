@@ -100,6 +100,16 @@ review:
     without violating §16's own anti-padding rule. Re-verified
     validate+compile clean after these additions.
 
+    POST-SHIP CORPUS-WIDE FIX, 2026-07-07: a project-wide sweep (prompted by
+    unit13's fresh-context reviewer flagging the same bug in units 11/12)
+    found this file also had exercises where realization prompt.target_blocks
+    duplicated the overlay's own instruction text verbatim in English -- the
+    compiler would have rendered the same sentence twice to the learner. Fixed
+    mechanically: every affected exercise's prompt set to target_blocks: [].
+    Re-verified validate+compile clean (0 errors/0 warnings) and confirmed
+    zero remaining instruction-duplicate target_blocks via a script comparing
+    every exercise's target_blocks against its overlay instruction.
+
 course:
   realization_key: fa.a1
   target_language_first: true
@@ -209,7 +219,7 @@ units:
           - content_key: fa.a1.unit09.lesson01.exercise07.write_minute
             type: writing_prompt
             tested_text: دقیقه
-            prompt: {target_blocks: [{text: "Write the Farsi word for minute.", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: []}
 
       - content_key: fa.a1.unit09.lesson02.asking_the_time
         title: پرسیدن ساعت
@@ -231,9 +241,7 @@ units:
           - content_key: fa.a1.unit09.lesson02.exercise02.recognize_chande_meaning
             type: multiple_choice
             tested_text: چنده
-            prompt:
-              target_blocks:
-                - {text: "What does چنده mean in this question?", language_code: en, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: fa.a1.unit09.lesson02.exercise03.recognize_what_time_reading
             type: multiple_choice
             tested_text: ساعت چنده
@@ -260,7 +268,7 @@ units:
           - content_key: fa.a1.unit09.lesson02.exercise07.speak_ask_time
             type: speak_response
             tested_text: ساعت چنده
-            prompt: {target_blocks: [{text: "Ask a friend what time it is.", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: []}
 
       - content_key: fa.a1.unit09.lesson03.telling_the_time
         title: گفتن ساعت
@@ -282,9 +290,7 @@ units:
           - content_key: fa.a1.unit09.lesson03.exercise02.recognize_half_meaning
             type: multiple_choice
             tested_text: نیمه
-            prompt:
-              target_blocks:
-                - {text: "What does نیمه mean here?", language_code: en, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: fa.a1.unit09.lesson03.exercise03.recognize_time_telling_reading
             type: multiple_choice
             tested_text: ساعت سه و نیمه
@@ -306,11 +312,11 @@ units:
           - content_key: fa.a1.unit09.lesson03.exercise06.translate_three_half
             type: translation
             tested_text: ساعت سه و نیمه
-            prompt: {target_blocks: [{text: "Translate: It's three-thirty.", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: []}
           - content_key: fa.a1.unit09.lesson03.exercise07.speak_tell_time
             type: speak_response
             tested_text: ساعت سه و نیمه
-            prompt: {target_blocks: [{text: "ساعت چنده؟ Answer as if it's three-thirty.", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: []}
 
       - content_key: fa.a1.unit09.lesson04.parts_of_the_day
         title: بخش‌های روز
@@ -366,7 +372,7 @@ units:
           - content_key: fa.a1.unit09.lesson04.exercise07.write_afternoon
             type: writing_prompt
             tested_text: عصر
-            prompt: {target_blocks: [{text: "Write the Farsi word for afternoon.", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: []}
 
       - content_key: fa.a1.unit09.lesson05.asking_about_an_appointment
         title: پرسیدن دربارهٔ ساعت قرار
@@ -420,7 +426,7 @@ units:
           - content_key: fa.a1.unit09.lesson05.exercise07.speak_ask_appointment
             type: speak_response
             tested_text: قرار ساعت چنده
-            prompt: {target_blocks: [{text: "Ask what time the appointment is.", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: []}
 
       - content_key: fa.a1.unit09.lesson06.meeting_time_dialogue
         title: گفت‌وگو دربارهٔ ساعت قرار
@@ -475,9 +481,7 @@ units:
           - content_key: fa.a1.unit09.lesson06.exercise02.recognize_meeting_time
             type: multiple_choice
             tested_text: چهار عصر
-            prompt:
-              target_blocks:
-                - {text: "What time is the appointment?", language_code: en, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: fa.a1.unit09.lesson06.exercise03.match_dialogue_facts
             type: matching_pairs
             tested_text: قرار فردا نگار آرش چرا دیر باشه مشکلی نیست
@@ -499,7 +503,7 @@ units:
           - content_key: fa.a1.unit09.lesson06.exercise05.translate_arrival_time
             type: translation
             tested_text: ساعت چهار و ربع میام
-            prompt: {target_blocks: [{text: "Translate: I'll come at four-fifteen.", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: []}
           - content_key: fa.a1.unit09.lesson06.exercise06.dialogue_response_confirm
             type: dialogue_response
             tested_text: باشه مشکلی نیست
@@ -511,4 +515,4 @@ units:
           - content_key: fa.a1.unit09.lesson06.exercise08.speak_full_time_exchange
             type: speak_response
             tested_text: قرار ساعت چنده ساعت چهار عصر
-            prompt: {target_blocks: [{text: "Ask what time the appointment is, and answer that it's four in the afternoon.", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: []}

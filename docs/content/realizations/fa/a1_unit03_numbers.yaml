@@ -62,6 +62,16 @@ review:
     violations via script, content_key parity intact, validate+compile
     both clean after both retrofits.
 
+    POST-SHIP CORPUS-WIDE FIX, 2026-07-07: a project-wide sweep (prompted by
+    unit13's fresh-context reviewer flagging the same bug in units 11/12)
+    found this file also had exercises where realization prompt.target_blocks
+    duplicated the overlay's own instruction text verbatim in English -- the
+    compiler would have rendered the same sentence twice to the learner. Fixed
+    mechanically: every affected exercise's prompt set to target_blocks: [].
+    Re-verified validate+compile clean (0 errors/0 warnings) and confirmed
+    zero remaining instruction-duplicate target_blocks via a script comparing
+    every exercise's target_blocks against its overlay instruction.
+
 course:
   realization_key: fa.a1
   target_language_first: true
@@ -258,9 +268,7 @@ units:
           - content_key: fa.a1.unit03.lesson01.exercise06.order_ascending
             type: word_order
             tested_text: یک دو سه
-            prompt:
-              target_blocks:
-                - {text: "Arrange these from smallest to largest.", language_code: en, direction: ltr}
+            prompt: {target_blocks: []}
             word_bank: [سه, یک, دو]
           - content_key: fa.a1.unit03.lesson01.exercise07.fill_seven
             type: fill_in_blank
@@ -386,9 +394,7 @@ units:
           - content_key: fa.a1.unit03.lesson02.exercise07.order_combining
             type: word_order
             tested_text: بیست و پنج
-            prompt:
-              target_blocks:
-                - {text: "Arrange the words for 25.", language_code: en, direction: ltr}
+            prompt: {target_blocks: []}
             word_bank: [پنج, بیست, و]
           - content_key: fa.a1.unit03.lesson02.exercise08.order_tens
             type: word_order
@@ -469,9 +475,7 @@ units:
           - content_key: fa.a1.unit03.lesson03.exercise07.translate_phone_digits
             type: translation
             tested_text: صفر نه یک دو سه چهار پنج شش هفت هشت هشت
-            prompt:
-              target_blocks:
-                - {text: "Write this phone number in Persian words, one word per digit: 09123456788.", language_code: en, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: fa.a1.unit03.lesson03.exercise08.speak_number
             type: speak_response
             tested_text: صفر نه یک دو سه چهار پنج شش هفت هشت هشت
@@ -542,9 +546,7 @@ units:
           - content_key: fa.a1.unit03.lesson04.exercise04.order_age_answer
             type: word_order
             tested_text: من بیست و پنج سالمه
-            prompt:
-              target_blocks:
-                - {text: "Arrange: I am 25 years old.", language_code: en, direction: ltr}
+            prompt: {target_blocks: []}
             word_bank: [سالمه, بیست, من, پنج, و]
           - content_key: fa.a1.unit03.lesson04.exercise05.match_quantities
             type: matching_pairs
@@ -634,9 +636,7 @@ units:
           - content_key: fa.a1.unit03.lesson05.exercise05.order_price_answer
             type: word_order
             tested_text: سی هزار تومنه
-            prompt:
-              target_blocks:
-                - {text: "Arrange: it's 30,000 toman.", language_code: en, direction: ltr}
+            prompt: {target_blocks: []}
             word_bank: [تومنه, سی, هزار]
           - content_key: fa.a1.unit03.lesson05.exercise06.translate_price_answer
             type: translation
@@ -718,9 +718,7 @@ units:
           - content_key: fa.a1.unit03.lesson06.exercise03.mina_response_style
             type: multiple_choice
             tested_text: باشه حتماً
-            prompt:
-              target_blocks:
-                - {text: "How does Mina respond when Sara asks for her number?", language_code: en, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: fa.a1.unit03.lesson06.exercise04.who_calls_tomorrow
             type: dialogue_comprehension
             tested_text: مینا فردا زنگ می‌زنم بهت
@@ -729,25 +727,17 @@ units:
           - content_key: fa.a1.unit03.lesson06.exercise05.order_confirm
             type: word_order
             tested_text: آره درسته
-            prompt:
-              target_blocks:
-                - {text: "Arrange: yes, that's right.", language_code: en, direction: ltr}
+            prompt: {target_blocks: []}
             word_bank: [درسته, آره]
           - content_key: fa.a1.unit03.lesson06.exercise06.translate_minas_number
             type: translation
             tested_text: صفر نه یک دو سه چهار پنج شش هفت هشت هشت
-            prompt:
-              target_blocks:
-                - {text: "Write Mina's phone number in Persian words, one word per digit: 09123456788.", language_code: en, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: fa.a1.unit03.lesson06.exercise07.dialogue_give_saras_number
             type: dialogue_response
             tested_text: شماره تو چنده صفر نه یک نه هفت شش پنج چهار سه دو یکه
-            prompt:
-              target_blocks:
-                - {text: "Reply as Sara, giving her number: 09197654321.", language_code: en, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: fa.a1.unit03.lesson06.exercise08.speak_saras_number
             type: speak_response
             tested_text: صفر نه یک نه هفت شش پنج چهار سه دو یکه
-            prompt:
-              target_blocks:
-                - {text: "Say Sara's phone number aloud: 09197654321.", language_code: en, direction: ltr}
+            prompt: {target_blocks: []}

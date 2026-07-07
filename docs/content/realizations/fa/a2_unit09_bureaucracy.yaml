@@ -65,6 +65,16 @@ review:
     0 warnings, valid JSON output confirming every exercise has a real
     status:correct accepted answer.
 
+    POST-SHIP CORPUS-WIDE FIX, 2026-07-07: a project-wide sweep (prompted by
+    unit13's fresh-context reviewer flagging the same bug in units 11/12)
+    found this file also had exercises where realization prompt.target_blocks
+    duplicated the overlay's own instruction text verbatim in English -- the
+    compiler would have rendered the same sentence twice to the learner. Fixed
+    mechanically: every affected exercise's prompt set to target_blocks: [].
+    Re-verified validate+compile clean (0 errors/0 warnings) and confirmed
+    zero remaining instruction-duplicate target_blocks via a script comparing
+    every exercise's target_blocks against its overlay instruction.
+
 course:
   realization_key: fa.a2
   target_language_first: true
@@ -163,7 +173,7 @@ units:
           - content_key: fa.a2.unit09.lesson01.exercise05.write_national_id
             type: writing_prompt
             tested_text: "کارت ملی"
-            prompt: {target_blocks: [{text: "Write the Farsi phrase for national ID card.", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: []}
 
       - content_key: fa.a2.unit09.lesson02.making_an_appointment
         title: گرفتن وقت
@@ -202,7 +212,7 @@ units:
           - content_key: fa.a2.unit09.lesson02.exercise05.write_appointment_request
             type: writing_prompt
             tested_text: "می‌خواستم برای تغییر آدرس وقت بگیرم"
-            prompt: {target_blocks: [{text: "Write that you'd like to make an appointment to change your address.", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: []}
 
       - content_key: fa.a2.unit09.lesson03.reading_the_notice
         title: خواندن اطلاعیه
@@ -245,7 +255,7 @@ units:
           - content_key: fa.a2.unit09.lesson03.exercise05.write_will_bring_bill
             type: writing_prompt
             tested_text: "قبض آب رو میارم"
-            prompt: {target_blocks: [{text: "Write that you'll bring the water bill.", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: []}
 
       - content_key: fa.a2.unit09.lesson04.at_the_registry_office
         title: در دفتر پیشخوان دولت
@@ -283,21 +293,15 @@ units:
           - content_key: fa.a2.unit09.lesson04.exercise01.comprehend_since_when
             type: dialogue_comprehension
             tested_text: "از ماه پیش"
-            prompt:
-              target_blocks:
-                - {text: "از کی تو آدرس جدید زندگی می‌کنید؟ — از ماه پیش. می‌شه بگید چی باید بیارم؟", language_code: fa, direction: rtl}
-                - {text: "Since when has سارا lived at the new address?", language_code: en, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: fa.a2.unit09.lesson04.exercise02.comprehend_required_documents
             type: dialogue_comprehension
             tested_text: "کارت ملی قدیم و یک قبض آب یا برق"
-            prompt:
-              target_blocks:
-                - {text: "کارت ملی قدیم و یک قبض آب یا برق کافیه.", language_code: fa, direction: rtl}
-                - {text: "What does the clerk say سارا needs to bring?", language_code: en, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: fa.a2.unit09.lesson04.exercise03.recognize_appointment_day
             type: multiple_choice
             tested_text: "سه‌شنبه ساعت ده"
-            prompt: {target_blocks: [{text: "سارا's appointment is for which day and time?", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: []}
           - content_key: fa.a2.unit09.lesson04.exercise04.order_since_when_question
             type: word_order
             tested_text: "از کی تو آدرس جدید زندگی می‌کنید"
@@ -310,4 +314,4 @@ units:
           - content_key: fa.a2.unit09.lesson04.exercise06.write_registry_summary
             type: writing_prompt
             tested_text: "کارت ملی قدیم و یک قبض آب یا برق کافیه"
-            prompt: {target_blocks: [{text: "Write, quoting the clerk, what documents are enough to bring.", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: []}
