@@ -879,6 +879,202 @@ def validate_untaught_vocabulary(
                     )
 
 
+# AUTHORING_GUIDE.md #19: every `kind: vocabulary` teaching card must carry
+# at least one real example sentence (`example:` on the realization card,
+# `example_gloss:` on the overlay's teaching entry). Enforcement is gated
+# per file on `schema_version`: files at >= 1.1 hard-fail a missing
+# example; the pre-existing 1.0 corpus only warns until each file's
+# retrofit lands (and bumps that file to 1.1). Shape problems in an
+# example that IS present are always hard errors regardless of version —
+# there is no legacy content with malformed examples to grandfather in.
+VOCAB_EXAMPLE_REQUIRED_VERSION = (1, 1)
+
+
+def schema_version_tuple(document: dict[str, Any]) -> tuple[int, ...]:
+    raw = document.get("schema_version")
+    if not isinstance(raw, str):
+        return (1, 0)
+    try:
+        return tuple(int(part) for part in raw.strip().split("."))
+    except ValueError:
+        return (1, 0)
+
+
+def teaching_example_entries(item: dict[str, Any]) -> list[Any]:
+    """Normalize a teaching card's `example:` to a list (it may be a
+    single text-block mapping or a list of them)."""
+    raw = item.get("example")
+    if raw is None:
+        return []
+    return raw if isinstance(raw, list) else [raw]
+
+
+def validate_vocabulary_examples(
+    realization: dict[str, Any],
+    overlay: dict[str, Any],
+    report: Report,
+):
+    require_example = (
+        schema_version_tuple(realization) >= VOCAB_EXAMPLE_REQUIRED_VERSION
+    )
+    require_gloss = (
+        schema_version_tuple(overlay) >= VOCAB_EXAMPLE_REQUIRED_VERSION
+    )
+    target_language = realization.get("target_language")
+    teaching_overlays = overlay.get("teaching")
+    if not isinstance(teaching_overlays, dict):
+        teaching_overlays = {}
+
+    for unit_index, unit in enumerate(realization.get("units", [])):
+        for lesson_index, lesson in enumerate(unit.get("lessons", [])):
+            for teaching_index, item in enumerate(
+                lesson.get("teaching", [])
+            ):
+                if not isinstance(item, dict):
+                    continue
+                location = (
+                    f"realization.units[{unit_index}]"
+                    f".lessons[{lesson_index}].teaching[{teaching_index}]"
+                )
+                entries = teaching_example_entries(item)
+                content_key = item.get("content_key")
+                item_overlay = teaching_overlays.get(content_key)
+                if not isinstance(item_overlay, dict):
+                    item_overlay = {}
+
+                if not entries:
+                    if item_overlay.get("example_gloss") is not None:
+                        report.error(
+                            f"overlay.teaching.{content_key}.example_gloss",
+                            "has an example_gloss but the realization card "
+                            "declares no example",
+                        )
+                    if item.get("kind") == "vocabulary":
+                        message = (
+                            "vocabulary card has no example sentence "
+                            "(AUTHORING_GUIDE.md #19: add `example:` with a "
+                            "real sentence using the word, plus "
+                            "`example_gloss:` in the overlay)"
+                        )
+                        if require_example:
+                            report.error(location, message)
+                        else:
+                            report.warn(
+                                location,
+                                message + " — becomes a hard error once "
+                                "this file is retrofitted to "
+                                "schema_version 1.1",
+                            )
+                    continue
+
+                target_text = ""
+                target = item.get("target")
+                if isinstance(target, dict) and isinstance(
+                    target.get("text"), str
+                ):
+                    target_text = target["text"]
+
+                introduced: set[str] = set()
+                raw_tokens = item.get("introduced_tokens", [])
+                if isinstance(raw_tokens, list):
+                    for token in raw_tokens:
+                        if isinstance(token, str):
+                            introduced.add(token.casefold().strip())
+                            introduced.update(tokenize(token))
+
+                any_token_found = not introduced
+                for entry_index, entry in enumerate(entries):
+                    entry_location = f"{location}.example[{entry_index}]"
+                    if not isinstance(entry, dict) or not isinstance(
+                        entry.get("text"), str
+                    ) or not entry["text"].strip():
+                        report.error(
+                            entry_location,
+                            "example must be a text-block mapping with "
+                            "non-empty text, language_code, and direction",
+                        )
+                        continue
+                    text = entry["text"].strip()
+                    if entry.get("language_code") != target_language:
+                        report.error(
+                            f"{entry_location}.language_code",
+                            f"must be the target language "
+                            f"{target_language!r}, got "
+                            f"{entry.get('language_code')!r}",
+                        )
+                    if len(text.split()) < 2:
+                        report.error(
+                            entry_location,
+                            "example must be a real sentence with context "
+                            "around the word, not another bare word "
+                            f"(got {text!r})",
+                        )
+                    if (
+                        target_text
+                        and tokenize(text) == tokenize(target_text)
+                    ):
+                        report.error(
+                            entry_location,
+                            "example adds no context beyond the card's own "
+                            "target text",
+                        )
+                    example_tokens = tokenize(text)
+                    folded_text = text.casefold()
+                    if any(
+                        token in example_tokens or token in folded_text
+                        for token in introduced
+                    ):
+                        any_token_found = True
+
+                if not any_token_found:
+                    report.warn(
+                        location,
+                        "no example sentence contains any of the card's "
+                        "introduced_tokens — fine if the word appears "
+                        "inflected, otherwise the example probably doesn't "
+                        "demonstrate this card's word",
+                    )
+
+                glosses = item_overlay.get("example_gloss")
+                if glosses is None:
+                    if content_key in teaching_overlays:
+                        message = (
+                            "card has example sentence(s) but the overlay "
+                            "entry has no example_gloss "
+                            "(AUTHORING_GUIDE.md #19)"
+                        )
+                        overlay_location = (
+                            f"overlay.teaching.{content_key}"
+                        )
+                        if require_gloss:
+                            report.error(overlay_location, message)
+                        else:
+                            report.warn(
+                                overlay_location,
+                                message + " — becomes a hard error once "
+                                "this overlay is retrofitted to "
+                                "schema_version 1.1",
+                            )
+                    continue
+                gloss_list = (
+                    glosses if isinstance(glosses, list) else [glosses]
+                )
+                if len(gloss_list) != len(entries):
+                    report.error(
+                        f"overlay.teaching.{content_key}.example_gloss",
+                        f"has {len(gloss_list)} gloss(es) for "
+                        f"{len(entries)} example sentence(s); counts must "
+                        "match positionally",
+                    )
+                for gloss_index, gloss in enumerate(gloss_list):
+                    if not isinstance(gloss, str) or not gloss.strip():
+                        report.error(
+                            f"overlay.teaching.{content_key}"
+                            f".example_gloss[{gloss_index}]",
+                            "must be a non-empty string",
+                        )
+
+
 def validate_audio_references(
     realization: dict[str, Any],
     report: Report,
@@ -1145,7 +1341,7 @@ def compile_teaching_item(
             }
         )
 
-    return {
+    compiled = {
         "kind": item["kind"],
         "title": item_overlay.get("title"),
         "text_blocks": blocks,
@@ -1154,6 +1350,42 @@ def compile_teaching_item(
         # against an already-shipped row and update it in place.
         "content_key": item["content_key"],
     }
+
+    # AUTHORING_GUIDE.md #19 / CONTRACT.md "Vocabulary-example addition":
+    # each realization `example:` entry (a target-language text block)
+    # pairs positionally with an overlay `example_gloss:` string to form
+    # one compiled example — same two-block shape as the card itself.
+    # Only emitted when at least one example exists, so every pre-#19
+    # card compiles byte-identical to before (no spurious import churn).
+    example_entries = teaching_example_entries(item)
+    if example_entries:
+        raw_glosses = item_overlay.get("example_gloss")
+        if raw_glosses is None:
+            glosses: list[Any] = []
+        elif isinstance(raw_glosses, list):
+            glosses = raw_glosses
+        else:
+            glosses = [raw_glosses]
+        compiled_examples = []
+        for index, entry in enumerate(example_entries):
+            example_blocks = [copy.deepcopy(entry)]
+            gloss = glosses[index] if index < len(glosses) else None
+            if isinstance(gloss, str) and gloss.strip():
+                example_blocks.append(
+                    {
+                        "text": gloss,
+                        "language_code": source_language,
+                        "direction": (
+                            "rtl"
+                            if source_language in RTL_LANGUAGES
+                            else "ltr"
+                        ),
+                    }
+                )
+            compiled_examples.append({"text_blocks": example_blocks})
+        compiled["examples"] = compiled_examples
+
+    return compiled
 
 
 def compile_feedback(
@@ -1449,6 +1681,7 @@ def validate_documents(
     validate_overlay_references(realization, overlay, report)
     validate_no_stray_yaml_booleans(overlay, report)
     validate_untaught_vocabulary(realization, report)
+    validate_vocabulary_examples(realization, overlay, report)
     validate_audio_references(realization, report)
 
     return report

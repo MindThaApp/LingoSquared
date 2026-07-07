@@ -525,3 +525,110 @@ judgment call. Full detail, the exact 25 instances found, and how each
 was fixed (converted to a floor-free type, or removed outright when a
 sibling template in the same lesson would otherwise become a pure
 duplicate) in `docs/BUILD_LOG.md`'s "Course-scoping audit result" entry.
+
+## 19. Every `kind: vocabulary` teaching card needs an example sentence
+on the card itself — never a bare word with a gloss
+
+Direct product-owner feedback, 2026-07-07 (Ramin): teaching cards that
+are just a target-language word, an English gloss, and a one-line note
+("*medicine* bedeutet Medizin") don't teach — "if it's going to be
+single word, it needs to be with more context and gamified to engrain
+it in the person's memory." A corpus-wide survey the same day confirmed
+how pervasive this was: of 951 `kind: vocabulary` cards across all 7
+realization languages, 913 (96%) had no sentence context on the card,
+and 690 of those never had ANY later same-lesson teaching card reuse
+the word in a sentence — the word was introduced in isolation, full
+stop. Even nl, the native-reviewed reference language and by far the
+best case, left ~28% of its bare vocabulary cards with no sentence
+follow-up; every other language was 80%+ uncovered.
+
+**The rule: every `kind: vocabulary` teaching card must carry an
+`example:` field — a real, natural target-language sentence using the
+card's word — plus a matching `example_gloss:` on the overlay's
+teaching entry.** Realization side, same text-block shape as `target:`:
+
+```yaml
+- content_key: nl.a1.unit01.lesson02.teach.prima
+  kind: vocabulary
+  target: {text: "Prima", language_code: nl, direction: ltr}
+  introduced_tokens: [Prima]
+  example: {text: "Prima, en met jou?", language_code: nl, direction: ltr}
+```
+
+Overlay side, on the same content_key's teaching entry:
+
+```yaml
+nl.a1.unit01.lesson02.teach.prima: {title: "Great", gloss: "great / fine",
+  note: "…", example_gloss: "Great, and with you?"}
+```
+
+`example:` may also be a **list** of text-block mappings (with
+`example_gloss:` a positionally-matched list of strings) — use this for
+merged multi-word cards ("jij, je, u"), ideally one sentence per member
+so each word is seen in context. The compiler pairs each example with
+its gloss into the compiled card's additive `examples` array (see
+`docs/CONTRACT.md`'s "Vocabulary-example addition"), and the frontend
+renders them inside the same card with per-sentence TTS — the learner
+sees word, meaning, and real usage in one glance with zero extra
+"Next" clicks (deliberately NOT a separate follow-up card: card-count
+bloat is its own documented complaint, see the nl unit01 review note
+about merging cards).
+
+Authoring rules for the example sentence itself:
+
+- **It must be a genuinely natural sentence a speaker would say** — not
+  a dictionary frame ("This is a table"-style filler is only acceptable
+  when it really is the natural beginner sentence, e.g. for
+  demonstratives). All existing rules apply in full: dialect
+  authenticity (§3), no verbatim source-material imports (§10).
+  Asterisk-marking (§15) doesn't apply here — the example is its own
+  language-tagged block, not inline mixed text.
+- **Prefer vocabulary the learner has already been taught** (this
+  lesson or earlier), plus transparent items (names, cognates, numbers
+  already covered). The example must be comprehensible from the gloss
+  alone — it teaches context; it must not itself need a second
+  explanation. Examples do NOT feed `introduced_tokens` and never make
+  a word fair game for exercises; only `introduced_tokens` does.
+- **The sentence must actually contain the card's word** — the exact
+  surface form where the language allows it; an inflected form is fine
+  when that's what's natural (the compiler warns, not errors, when it
+  can't find the token, precisely for the inflection case — treat that
+  warning as "confirm by eye," not noise).
+- `kind: phrase`/`dialogue`/`reading` cards are exempt (they already
+  ARE sentence-level). If a "vocabulary" card's target is somehow
+  already a full sentence, it should almost certainly be `kind: phrase`
+  instead. `example:` is allowed but not required on other kinds.
+
+**Compiler enforcement, version-gated per file** (`scripts/
+compile_content.py`, `validate_vocabulary_examples`): a vocabulary card
+with no `example:` is a **warning** in files at `schema_version: "1.0"`
+(the pre-rule corpus, pending retrofit) and a **hard error** in files
+at `schema_version: "1.1"` or later. **All new realization/overlay
+files must be authored at `schema_version: "1.1"`.** Retrofitting an
+existing file means adding examples+glosses to every vocabulary card
+AND bumping that file's (and its overlay's) `schema_version` to "1.1",
+which locks the rule in mechanically for that file forever. Shape
+problems are hard errors regardless of version: a single-word
+"example," an example identical to the card's own target text, a wrong
+`language_code`, an `example_gloss` with no matching realization
+`example`, or mismatched example/gloss list lengths. Script-purity and
+direction checks apply to example blocks automatically (they walk the
+whole document). Overlay-side gloss presence is gated on the OVERLAY
+file's own `schema_version` the same way — a 1.1 realization paired
+with a still-1.0 overlay validates with warnings on the gloss side
+only, so the two sides of a direction can be retrofitted independently
+without ever hard-blocking each other.
+
+**What this rule deliberately does NOT add: a new gamification
+mechanic at the teaching moment.** The "engrain it in memory" half of
+the feedback is already served by real, shipped mechanisms — the
+lesson's own exercises begin immediately after the teaching stack and
+are required (§2) to hit the same tokens recognition-first, missed
+exercises recycle to the end of the queue (Phase B), lexeme-level SRS
+resurfaces every taught word on its own schedule (Phase A), Endless
+Practice regenerates it in fresh frames, and unit checkpoints re-test
+it (Phase F). The genuinely missing piece was context at the moment of
+introduction, which this rule fixes on the card itself. Don't bolt a
+micro-quiz onto teaching cards without new evidence it's needed — it
+would duplicate the exercise phase immediately following and worsen
+the documented click-density complaint.

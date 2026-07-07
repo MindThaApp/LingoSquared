@@ -10080,3 +10080,91 @@ still 0/0, and `_practice_content_integrity_check.py` still showing
 only the same 3 already-investigated, confirmed-benign class-A flags
 from the earlier integrity-audit entry (0 class-B) — zero regressions
 introduced by touching 4+ directions' shared content simultaneously.
+
+## Vocabulary-example teaching-card redesign (AUTHORING_GUIDE.md #19), 2026-07-07
+
+Direct Ramin feedback: bare single-word teaching cards (target word +
+gloss + one-line note, e.g. `medicine` / "*medicine* bedeutet Medizin")
+"need more context and gamification to engrain the word." Corpus survey
+before designing anything: 2,950 teaching cards across all 7 realization
+languages; 951 `kind: vocabulary`, 913 (96%) bare; 690 of those never
+reuse the word in ANY later same-lesson sentence card. nl (native-
+reviewed) was best at ~28% uncovered; en/fa/prs/de/es/fr all 80%+.
+Worst offenders: numbers/dates/family/places units (long bare-word runs).
+
+**Design chosen: card-level `example:` field, not structural
+"sentence card must follow within N cards" enforcement.** Reasons: (a)
+same-card context adds zero extra Next-clicks (card-density is its own
+documented Ramin complaint — see nl unit01's 2026-07-06 merge note);
+(b) field presence is exactly checkable, while cross-card token-reuse
+checks are brittle across inflected/RTL languages; (c) fully additive —
+`ContentItem.content` is JSON, so no migration. Full authoring rules in
+`AUTHORING_GUIDE.md` #19; wire format in `CONTRACT.md` ("Vocabulary-
+example addition"). Realization: `example:` (one text-block mapping or
+a list) on every vocabulary card; overlay: `example_gloss:` (string or
+positionally-matched list). Compiles to an additive `examples:
+[{text_blocks: [target sentence, source gloss]}]` on the compiled card.
+
+**Enforcement version-gated per file** (`validate_vocabulary_examples`
+in `scripts/compile_content.py`): missing example on a vocabulary card
+is a WARNING in `schema_version: "1.0"` files and a HARD ERROR at
+`"1.1"`+ (new files must be authored at 1.1; each retrofit bumps its
+file, locking the rule in forever). Shape problems are hard errors
+regardless of version: single-word example, example identical to the
+card's own target, wrong language_code, gloss/example count mismatch,
+example_gloss without an example. Token-not-found-in-example is a
+warning (inflection tolerance). All 8 paths negative-tested.
+
+**Deliberately NOT added: a teaching-moment gamification mechanic.**
+Reinforcement already exists at every later stage (lesson exercises
+begin immediately after the teaching stack and are recognition-first
+per #2, Phase B error recycling, Phase A lexeme SRS, Endless Practice,
+Phase F checkpoints) — the genuinely missing piece was context at
+introduction. A per-card micro-quiz would duplicate the exercise phase
+and worsen the click-density complaint; rejected in #19 itself.
+
+Changes: `scripts/compile_content.py` (validator + `compile_teaching_
+item` emit), `backend/app/schemas/api.py` (`TeachingExample`, additive
+`TeachingCard.examples` — shared import/output model), `backend/app/
+content/service.py` (store `examples` in content JSON only when
+present, so pre-existing rows stay byte-identical), `backend/app/api/
+router.py` (serialize `examples` in `GET /lessons/{id}`), frontend
+`types.ts`/`TeachingCardView.tsx`/`index.css` ("In a sentence" accent
+block, per-sentence TTS free via `TextBlockList`), locale key
+`teaching_card.example` (en/fa/prs), `AUTHORING_PROMPT_TEMPLATE.md`
+(rules baked into all 3 templates), `CONTRACT.md`. Pilot retrofit:
+`nl/a1_unit01_greetings.yaml` + `overlays/en-nl/a1_unit01.yaml` — all
+6 vocabulary cards gained examples built from the unit's own taught
+material, both files bumped to 1.1 (examples Claude-authored, pending
+fresh-context review).
+
+Verified: full `verify.sh --content-only` green (0 errors corpus-wide;
+un-retrofitted cards warn as designed, practice packs clean); backend
+pytest 123/123 green on isolated test DB; full frontend build green;
+live end-to-end on the real dev stack — compiled pilot imported via
+`POST /admin/content/import` as a temporary QA course, `GET /lessons/
+{id}` returned populated `examples` (null on non-vocabulary cards,
+backwards compatible), and a real Playwright browser run (fresh
+account, registered → course picker → unit → lesson) asserted and
+screenshotted the rendered example block, 3-example card, and
+no-block-on-phrase-cards. QA course + throwaway spec deleted after.
+
+Known dev-DB state found along the way (pre-existing, not caused by
+this change): the seeded "Dutch A1" course's lesson rows have empty
+`content_key`s (imported before migration 0013), so in-place teaching-
+card updates via content import skip with "lesson order conflicts"
+warnings — a full-content re-import path will be needed when retrofitted
+units ship to an old-seeded DB, or a small key-backfill first (an
+untracked `scripts/backfill_unit_content_keys.py` from another session
+appears to target exactly this).
+
+Retrofit plan + scope (the numbers content lanes need): 913 example
+sentences (en 171, nl 127 — 6 now done, fa 243, prs 225, de 74, es 37,
+fr 36) plus ~1,426 glosses (each realization × its consuming overlays;
+en's 171 × 4 directions dominates). Launch-gate subset first: nl + en +
+fa + prs realizations and the 6 launch overlays. Mechanical pattern-
+matching can only mine ~25% candidate sentences from existing
+same-lesson content — per-unit AI authoring with fresh-context review
+is required for the rest; the compiler's own warnings are the
+authoritative per-card worklist. Unit-by-unit, bumping each file to
+1.1 as it lands.
