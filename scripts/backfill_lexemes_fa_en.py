@@ -239,6 +239,23 @@ UNIT_FILES_A2 = (
         REPO_ROOT / "docs/content/realizations/en/a2_unit27_banking.yaml",
         REPO_ROOT / "docs/content/overlays/fa-en/a2_unit27.yaml",
     ),
+    # Unit 28 (A2: attending a doctor's appointment), added 2026-07-07
+    # (practice-pool-sync lane extending fa-en to this new unit, in
+    # parallel with the equivalent prs-en pass; nl-en's own unit28 pass is
+    # a separate concurrent worker, not touched here). EN_POS/
+    # en_agreement_tags for this unit's vocabulary (including the new
+    # health_followup_noun/condition_adjective semantic tags) were already
+    # present in _en_target_lexeme_common.py before this change (added by
+    # the concurrent nl-en lane's own unit28 pass) -- verified every
+    # introduced_token across this realization file against EN_POS's keys:
+    # zero missing. Only this script's own Farsi gloss dict needed
+    # extending (16 new tokens, cross-checked against
+    # docs/content/overlays/fa-en/a2_unit28.yaml's own real text, not
+    # copy-pasted from it).
+    (
+        REPO_ROOT / "docs/content/realizations/en/a2_unit28_doctor.yaml",
+        REPO_ROOT / "docs/content/overlays/fa-en/a2_unit28.yaml",
+    ),
 )
 
 # Farsi gloss for each shared English target token -- hand-written for
@@ -491,6 +508,25 @@ EN_TARGET_TO_FA_GLOSS: dict[str, str] = {
     "days": "روزها", "keep": "نگه داشتن", "500": "پانصد",
     "sounds": "به‌نظر می‌رسد (در that sounds good)",
     "teller": "کارمند بانک", "both": "هر دو",
+    # Unit 28 (A2: attending a doctor's appointment), added 2026-07-07.
+    # Atomic per-token glosses -- cross-checked against, but not copy-
+    # pasted from, docs/content/overlays/fa-en/a2_unit28.yaml's own
+    # (phrase-level) Farsi glosses. "appointment"/"confirmation"/"card"/
+    # "arrive"/"headache"/"sore"/"throat"/"fever"/"if"/"doesn't"/"better"/
+    # "drink"/"doctor"/"any"/"should"/"take"/"get"/"come"/"this"/"water"/
+    # "day"/"minutes"/"ten"/"five"/"number"/"today" reuse their existing
+    # senses unchanged.
+    "medicine": "دارو", "prescription": "نسخه",
+    "follow": "پیگیری (در follow-up appointment)",
+    "getting": "در حال ... شدن (فعل، در getting worse)",
+    "worse": "بدتر", "insurance": "بیمه",
+    "i've": "من ... داشته‌ام (مخفف I have)",
+    "had": "داشتم (زمان گذشتهٔ have)", "early": "زودتر",
+    "confirmed": "تأیید شده (است)", "3pm": "ساعت سهٔ بعدازظهر",
+    "7724": "۷۷۲۴", "twice": "دو بار",
+    "plenty": "به مقدار زیاد (در plenty of water)",
+    "back": "برگشتن (در come back)",
+    "within": "ظرف (در within a week یعنی ظرف یک هفته)",
 }
 
 

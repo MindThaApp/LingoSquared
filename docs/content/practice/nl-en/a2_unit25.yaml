@@ -72,7 +72,28 @@ review:
     with scripts/_practice_slot_check.py (weekday has 7 distinct
     course-wide candidates, well above the >=3 floor) and
     compile_content.py practice-validate, 0 errors/0 warnings. Still needs
-    the standard fresh-context review before import."
+    the standard fresh-context review before import.
+
+    A2-scoping correctness fix (2026-07-07): scripts/_practice_slot_check.py
+    (the standing harness) pools ALL specs from iter_specs() -- both A1
+    and A2 -- together when counting a tag's real distinct-candidate
+    count, but backend/app/practice/service.py's _material() actually
+    scopes both PracticeTemplate and Lexeme queries by course_id, and
+    'Engels A1'/'Engels A2' are separate Course rows -- so a real A2
+    enrollee only ever sees A2-scoped lexemes. A standalone A2-only-scoped
+    check (filtering iter_specs() to level=='a2') found the 'weekday'
+    course-wide tag (7 members pooled with A1) has only 1 REAL A2-scoped
+    candidate ('friday' -- the only weekday ever introduced across all
+    four A2 units 25-28) -- both lesson02.weekday_listen.008 and
+    lesson04.weekday_listen.007 (listen_select, needs >=3 distinct) could
+    never actually generate for a real A2-course user, despite passing
+    the pooled check. Fixed by converting both to type: translation
+    (bare single-word production, answer_derivation slot_text instead of
+    slot_gloss -- translation has no minimum-candidate floor, and this is
+    a genuinely different exercise from the existing full-sentence
+    weekday_translate templates in the same lessons, not a duplicate) --
+    renamed to weekday_translate_bare.008/.007 respectively. No
+    candidates invented, no A1 vocabulary pooled in as if A2-scoped."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -187,13 +208,13 @@ templates:
     slots: {item: *weekday}
     answer_derivation: {kind: render_frame, frame: {text: "Would it be possible to come this {item}", language_code: en, direction: ltr}}
     feedback_frame: {text: "Would it be possible to come this {item}? betekent Zou het mogelijk zijn om deze {item} te komen?", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a2.unit25.lesson02.weekday_listen.008
+  - content_key: practice.nl-en.en.a2.unit25.lesson02.weekday_translate_bare.008
     lesson_content_key: en.a2.unit25.lesson02.making_a_formal_appointment
-    type: listen_select
-    frame: {text: "{item}", language_code: en, direction: ltr}
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
     slots: {item: *weekday}
-    answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is de dag die je hoorde.", language_code: nl, direction: ltr}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a2.unit25.lesson04.weekday_order.004
     lesson_content_key: en.a2.unit25.lesson04.dmv_appointment_dialogue
     type: word_order
@@ -208,10 +229,10 @@ templates:
     slots: {item: *weekday}
     answer_derivation: {kind: render_frame, frame: {text: "{item} at 10am works", language_code: en, direction: ltr}}
     feedback_frame: {text: "{item} at 10am works betekent {item} om 10 uur past.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a2.unit25.lesson04.weekday_listen.007
+  - content_key: practice.nl-en.en.a2.unit25.lesson04.weekday_translate_bare.007
     lesson_content_key: en.a2.unit25.lesson04.dmv_appointment_dialogue
-    type: listen_select
-    frame: {text: "{item}", language_code: en, direction: ltr}
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
     slots: {item: *weekday}
-    answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is de dag die je in dit gesprek hoorde.", language_code: nl, direction: ltr}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}

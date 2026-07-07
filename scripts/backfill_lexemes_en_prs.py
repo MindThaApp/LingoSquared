@@ -112,6 +112,17 @@ UNIT_FILES = (
         REPO_ROOT / "docs/content/realizations/prs/a1_unit15_comparisons.yaml",
         REPO_ROOT / "docs/content/overlays/en-prs/a1_unit15.yaml",
     ),
+    # Units 16-17 (A1: travel, health), added 2026-07-07 -- the real A1
+    # realization grew 15->17 units this same night. Closes the
+    # practice-pool gap for these two specifically-new units.
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a1_unit16_travel.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a1_unit16.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a1_unit17_health.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a1_unit17.yaml",
+    ),
 )
 
 # A2 units live in a SEPARATE course row ("Dari A2", not "Dari A1") --
@@ -391,6 +402,29 @@ PRS_GLOSSES: dict[str, str] = {
     "گران‌تر": "more expensive", "ارزان‌تر": "cheaper", "قد": "height",
     "بلندتر": "taller / longer", "جوان‌تر": "younger", "بدتر": "worse",
     "اما": "but",
+    # Unit 16 (travel), added 2026-07-07. Confirmed by reading
+    # docs/content/realizations/prs/a1_unit16_travel.yaml directly --
+    # هرات/یک/از/دو/به/می‌خواهم/صبح/ساعت/هشت/فردا/بسیار/خوب/تشکر/زیاد/
+    # قابلی/نداره/سفر/خوش/و were all already glossed from earlier units,
+    # reused as-is. "کی" (already glossed "who" from unit07) is a genuine
+    # homograph here -- this unit's own sense ("when") is special-cased
+    # in _classify() below rather than overwriting the existing entry.
+    "بلیط": "ticket", "قطار": "train", "بس": "bus", "سکو": "platform",
+    "سکوی": "platform (ezafe form of سکو, used before a following noun)",
+    "حرکت": "departure; movement",
+    "مسافر": "traveler; passenger", "فروشنده": "seller; vendor",
+    # Unit 17 (health), added 2026-07-07. Confirmed by reading
+    # docs/content/realizations/prs/a1_unit17_health.yaml directly --
+    # دارم/استم/خوب/نیست/داکتر/می‌خواهم/کنید/آب/زیاد/سلام/و/تشکر/چطور/
+    # استین were all already glossed from earlier units, reused as-is.
+    # "بشیر" (already glossed "Bashir (name)" from unit04) gets its
+    # person_name tag extended below -- a real pre-existing gap, same
+    # class as زرمینه/کریم.
+    "سردرد": "headache", "تب": "fever", "دل‌درد": "stomachache",
+    "مریض": "sick; ill", "حالم": "my condition / how I feel (حال + م)",
+    "دوا": "medicine", "استراحت": "rest",
+    "بنوشید": "drink (polite imperative)",
+    "صاحب": "sir (respectful honorific, appended after a title)",
 }
 
 PRS_POS: dict[str, str] = {
@@ -548,6 +582,14 @@ PRS_POS: dict[str, str] = {
     "گران‌تر": "adjective", "ارزان‌تر": "adjective", "قد": "noun",
     "بلندتر": "adjective", "جوان‌تر": "adjective", "بدتر": "adjective",
     "اما": "particle",
+    # Unit 16 (travel), added 2026-07-07.
+    "بلیط": "noun", "قطار": "noun", "بس": "noun", "سکو": "noun",
+    "سکوی": "noun", "حرکت": "noun",
+    "مسافر": "noun", "فروشنده": "noun",
+    # Unit 17 (health), added 2026-07-07.
+    "سردرد": "noun", "تب": "noun", "دل‌درد": "noun",
+    "مریض": "adjective", "حالم": "noun",
+    "دوا": "noun", "استراحت": "noun", "بنوشید": "verb", "صاحب": "noun",
 }
 
 
@@ -618,7 +660,11 @@ def prs_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         semantics.append("occupation_question")
     if token in {"داکتر", "معلم", "مهندس", "دوکاندار"}:
         semantics.append("occupation")
-    if token in {"جناب", "خانم"}:
+    if token in {"جناب", "خانم", "صاحب"}:
+        # صاحب (unit17 health, added 2026-07-07) is a genuine third member
+        # of this same "polite address title" set -- extending the
+        # existing tuple in place rather than adding a parallel tag,
+        # since it's the identical semantic role جناب/خانم already fill.
         semantics.append("title")
     if token in {"دوست", "همکار", "همکارم", "همکاران"}:
         semantics.append("relationship_word")
@@ -681,6 +727,12 @@ def prs_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         semantics.append("food_item")
     if token in {"دکاندار", "مشتری"}:
         semantics.append("role_word")
+    if token in {"مسافر", "فروشنده"}:
+        # Unit 16 (travel)'s own dialogue-role pair (traveler/seller) --
+        # a separate tag from role_word above (that's specifically
+        # unit08's shopkeeper/customer pair); kept distinct since these
+        # are genuinely different real vocabulary, not padded.
+        semantics.append("travel_role_word")
     if token in {"بشقاب", "تا"}:
         semantics.append("counting_word")
 
@@ -822,6 +874,54 @@ def prs_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     if token == "قد":
         semantics.append("height_word")
 
+    # Unit 16 (travel) semantic tags, added 2026-07-07.
+    if token in {"بلیط", "قطار", "بس"}:
+        semantics.append("travel_noun_core")
+    if token in {"بلیط", "قطار", "بس", "سکو"}:
+        semantics.append("travel_noun")
+    if token == "حرکت":
+        semantics.append("depart_noun")
+    if token == "می‌خواهم":
+        semantics.append("want_verb")
+    if token in {"تشکر", "زیاد", "قابلی", "نداره", "سفر", "خوش"}:
+        semantics.append("travel_farewell_word")
+    if token in {"بسیار", "خوب"}:
+        semantics.append("confirmation_word")
+    if token == "فردا":
+        semantics.append("tomorrow_word")
+    if token == "سکوی":
+        semantics.append("platform_ezafe")
+    # "کی" only gets its private when_word tag for THIS unit's own "when"
+    # sense occurrence (lesson_key-scoped, mirroring the "letter"/
+    # unit12 می‌شود homograph guards above) -- unit07's "who" sense (same
+    # bare string, different meaning) must never be pulled into a
+    # when_word-constrained slot. See the matching content_key-scoped
+    # override in _classify() below, which also gives this sense its own
+    # distinct part_of_speech ("adverb" vs. the "who" sense's "pronoun")
+    # so the two senses are genuinely separate Lexeme rows.
+    if token == "کی" and lesson_key == "prs.a1.unit16.lesson03.asking_departure_details":
+        semantics.append("when_word")
+
+    # Unit 17 (health) semantic tags, added 2026-07-07.
+    if token in {"سردرد", "تب", "دل‌درد"}:
+        semantics.append("symptom_word")
+    if token in {"مریض", "خوب", "بد"}:
+        semantics.append("health_feeling_word")
+    if token in {"داکتر", "دوا"}:
+        semantics.append("seek_help_noun")
+    if token in {"استراحت", "کنید", "آب", "زیاد", "بنوشید"}:
+        semantics.append("health_advice_word")
+    if token == "حالم":
+        semantics.append("condition_word")
+    if token == "بشیر":
+        # Real pre-existing gap fixed here: بشیر was glossed (unit04, as
+        # a phone-number-exchange character) but never given the
+        # person_name tag -- this unit's dialogue is the first
+        # practice-pool use of him as a named dialogue speaker (the
+        # doctor's patient), same class of gap already fixed for
+        # زرمینه/کریم above.
+        semantics.append("person_name")
+
     tags: dict[str, object] = {}
     if semantics:
         tags["semantic"] = list(dict.fromkeys(semantics))
@@ -900,6 +1000,28 @@ def _classify(files, level, specs):
                         key = (level, token, "wakeup_third_person")
                         part_of_speech = "verb"
                         english_gloss = "he/she wakes up / becomes (third person)"
+                    # "کی" is likewise genuinely two different lexemes:
+                    # unit07's interrogative pronoun sense ("who," content_key
+                    # ...lesson02.teach.who_speaking, already the default
+                    # PRS_GLOSSES/PRS_POS entry) versus unit16's interrogative
+                    # adverb sense ("when," قطار کی حرکت می‌کند؟ -- when does
+                    # the train depart?, content_key ...lesson03.teach.
+                    # kay_word). Same collision class as و/می‌شود above --
+                    # given its own key/POS/gloss here (POS "adverb" instead
+                    # of the existing "pronoun") so a template constrained to
+                    # part_of_speech: pronoun only ever draws the "who" sense
+                    # and a template constrained to part_of_speech: adverb
+                    # only ever draws the "when" sense; the bare string is
+                    # otherwise identical, so without this split a
+                    # multiple_choice/translation/fill_in_blank slot on
+                    # either sense could non-deterministically show the
+                    # wrong gloss for whichever Lexeme got sampled. Real gap
+                    # found and fixed while authoring unit16's practice pool,
+                    # 2026-07-07.
+                    if token == "کی" and content_key.endswith("teach.kay_word"):
+                        key = (level, token, "when_sense")
+                        part_of_speech = "adverb"
+                        english_gloss = "when"
                     existing = specs.get(key)
                     if existing is None:
                         specs[key] = {

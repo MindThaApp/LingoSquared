@@ -111,6 +111,19 @@ UNIT_FILES = (
         REPO_ROOT / "docs/content/realizations/fa/a1_unit15_comparisons.yaml",
         REPO_ROOT / "docs/content/overlays/en-fa/a1_unit15.yaml",
     ),
+    # Units 16-17 (Travel / Health), added 2026-07-07 by the en-fa
+    # units-16-17 practice-authoring pass (this pack's own units grew from
+    # 15 to 17 with zero prior Endless Practice coverage). Appended after
+    # every prior lane's own tuple entries, per this file's own standing
+    # re-read-fresh-before-editing convention.
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a1_unit16_travel.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a1_unit16.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a1_unit17_health.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a1_unit17.yaml",
+    ),
 )
 
 # A2 units live in a SEPARATE course row ("Farsi A2", not "Farsi A1") --
@@ -371,6 +384,23 @@ FA_GLOSSES = {
     "اون": "that", "بزرگ‌تره": "it's bigger", "کوچیک‌تره": "it's smaller",
     "گرون‌تره": "it's more expensive", "ارزون‌تره": "it's cheaper", "قد": "height",
     "بلند‌تره": "it's/he's taller", "جوون‌تره": "he's/she's younger", "بد‌تره": "it's worse",
+    # Unit 16 (A1: travel), added 2026-07-07.
+    "بلیط": "ticket", "قطار": "train", "اتوبوس": "bus", "فرودگاه": "airport",
+    "سکو": "platform",
+    "سکوی": "platform (ezafe-linked form, as in سکوی دو 'platform two')",
+    "حرکت": "departure; movement (in حرکت می‌کنه, 'it departs')",
+    "مسافر": "traveler; passenger",
+    "می‌خواید": "you want (polite)",
+    # Unit 17 (A1: health), added 2026-07-07.
+    "حالم": "my state/condition (in حالم خوب نیست, 'I don't feel well')",
+    "سردرد": "headache", "تب": "fever",
+    "دلم": "my stomach (in دلم درد می‌کنه, 'my stomach hurts')",
+    "درد": "pain", "خسته‌ام": "I'm tired",
+    "کمک": "help", "می‌تونی": "you can (informal)",
+    "کمکم": "help me (object)", "کنی": "you do",
+    "دکتر": "doctor", "دارو": "medicine",
+    "استراحت": "rest (noun, in استراحت کن, 'rest!')",
+    "بخور": "drink (imperative, in آب بخور, 'drink water!')",
 }
 
 FA_SYMBOLS = set("س ل ا م ن ت ش چ ی ه ک گ ج د ر ف و ب خ ز".split())
@@ -439,6 +469,10 @@ FA_VERBS = {
     "خوشمزه‌ست", "جالبه",
     "بزرگ‌تره", "کوچیک‌تره", "گرون‌تره", "ارزون‌تره", "بلند‌تره", "جوون‌تره",
     "بد‌تره",
+    # Unit 16 (A1: travel), added 2026-07-07.
+    "می‌خواید",
+    # Unit 17 (A1: health), added 2026-07-07.
+    "خسته‌ام", "می‌تونی", "کنی", "بخور",
 }
 FA_PHRASE_PARTS = {"بخیر", "خواهش"}
 
@@ -866,6 +900,65 @@ def fa_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         semantics.append("demonstrative_word")
     if lesson_key.endswith("lesson06.comparisons_dialogue"):
         semantics.append("dialogue_word")
+    # Unit 16 (A1: travel), added 2026-07-07. "travel_vocab_word" pools this
+    # unit's 4 core lesson01 nouns (ticket/train/bus/airport), anchored
+    # lesson01. "transport_mode" is a narrower additive subset of just the
+    # two actual vehicles (train/bus, 2 members) -- used by this unit's own
+    # generative word_order templates below, since "ticket"/"airport" can't
+    # grammatically fill a "{X} departs..." sentence the same way.
+    # "ticket_request_word" (تهران/می‌خوام/به, 3 members, mixed proper_noun/
+    # verb/preposition, anchored lesson02) and "departure_detail_word"
+    # (سکو/حرکت/کی, 3 members, mixed noun/pronoun, anchored lesson03) are
+    # recognition-only groups, matching the established mixed-POS pattern
+    # already used by e.g. a1_unit12's own invitation_word/asking_word.
+    # "travel_confirmation_word" (فردا/باشه, 2 members, mixed adverb/verb,
+    # anchored lesson05, matching/translation-only -- below the
+    # multiple_choice threshold) and "dialogue_role_word" (مسافر/فروشنده,
+    # 2 members, both nouns naming the two dialogue participants, anchored
+    # lesson05, matching/translation-only) round out this unit's real
+    # vocabulary.
+    if token in {"بلیط", "قطار", "اتوبوس", "فرودگاه"}:
+        semantics.append("travel_vocab_word")
+    if token in {"قطار", "اتوبوس"}:
+        semantics.append("transport_mode")
+    if token in {"تهران", "می‌خوام", "به"}:
+        semantics.append("ticket_request_word")
+    if token in {"سکو", "حرکت", "کی"}:
+        semantics.append("departure_detail_word")
+    if token in {"فردا", "باشه"}:
+        semantics.append("travel_confirmation_word")
+    if token in {"مسافر", "فروشنده"}:
+        semantics.append("dialogue_role_word")
+    # Unit 17 (A1: health), added 2026-07-07. "symptom_word" pools every
+    # genuine symptom noun/phrase this unit's first two lessons teach
+    # (سردرد/تب plus the three auto-derived/single-token symptom phrases
+    # حالم خوب نیست/دلم درد می‌کنه/خسته‌ام, 5 members, mixed noun/phrase/
+    # verb, anchored lesson02 where خسته‌ام completes the pool) -- mirrors
+    # the real realization's own combined match_more_symptoms exercise,
+    # which pairs exactly this same mixed word/phrase set. "symptom_noun_
+    # word" is a narrower additive subset of just the 2 single-word
+    # physical symptoms (سردرد/تب) -- used by this unit's own generative
+    # "{symptom} دارم"/"{name} {symptom} داره" word_order templates below,
+    # since the 3 phrase-level members can't grammatically follow دارم/داره
+    # the same way. "help_word" (کمک/می‌تونی plus the auto-derived
+    # می‌تونی کمکم کنی؟ phrase, 3 members, mixed noun/verb/phrase, anchored
+    # lesson03) and "advice_word" (دکتر/دارو, 2 members noun, anchored
+    # lesson04, matching/translation-only) are recognition groups.
+    # "advice_phrase" (the 2 auto-derived imperative-advice phrases
+    # استراحت کن/آب بخور, anchored lesson04) is also generative: this
+    # unit's own word_order template below combines two distinct members
+    # with و, directly mirroring lesson04's own taught "استراحت کن و آب
+    # بخور" sentence (both orders read equally naturally as advice).
+    if token in {"سردرد", "تب", "حالم خوب نیست", "دلم درد می‌کنه", "خسته‌ام"}:
+        semantics.append("symptom_word")
+    if token in {"سردرد", "تب"}:
+        semantics.append("symptom_noun_word")
+    if token in {"کمک", "می‌تونی", "می‌تونی کمکم کنی؟"}:
+        semantics.append("help_word")
+    if token in {"دکتر", "دارو"}:
+        semantics.append("advice_word")
+    if token in {"استراحت کن", "آب بخور"}:
+        semantics.append("advice_phrase")
     if semantics:
         tags["semantic"] = list(dict.fromkeys(semantics))
     person = {

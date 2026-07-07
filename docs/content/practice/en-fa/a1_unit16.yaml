@@ -1,0 +1,221 @@
+schema_version: "1.0"
+pack_key: practice.en-fa.a1.unit16
+source_language: en
+target_language: fa
+unit_content_key: fa.a1.unit16.travel
+review:
+  status: unreviewed
+  required_next_reviewer: codex
+  notes: >-
+    Authored 2026-07-07 closing the practice-content gap for the new en-fa
+    A1 units 16-17 (Travel/Health, authored the same night with zero prior
+    Endless Practice coverage). Extended scripts/backfill_lexemes.py's
+    UNIT_FILES to include units 16-17 (appended after every prior lane's
+    own tuple entries) and added the matching FA_GLOSSES/FA_VERBS/
+    agreement-tag entries for every token these two units' realizations
+    introduce, reusing existing course-wide entries (یک/از/دو/تهران/
+    می‌خوام/به/می‌کنه/کی/صبح/ساعت/هشت/فردا/باشه/فروشنده/برید/ممنون/خواهش/
+    می‌کنم/و/کن) wherever a token was already taught in an earlier unit,
+    per this file's own no-invented-glosses standard.
+
+    Six semantic groups for this unit, all verified >=2/>=3-distinct-
+    candidate via scripts/_practice_slot_check.py: "travel_vocab_word"
+    (بلیط/قطار/اتوبوس/فرودگاه, 4 members noun, anchored lesson01),
+    "transport_mode" (قطار/اتوبوس, 2 members, a narrower additive subset of
+    travel_vocab_word used only by this unit's own generative word_order
+    templates below, since "ticket"/"airport" can't grammatically fill a
+    "{X} departs..." sentence), "ticket_request_word" (تهران/می‌خوام/به, 3
+    members mixed proper_noun/verb/preposition, anchored lesson02, a
+    recognition-only group -- same mixed-POS-group pattern already used by
+    e.g. a1_unit12's invitation_word), "departure_detail_word" (سکو/حرکت/
+    کی, 3 members mixed noun/pronoun, anchored lesson03),
+    "travel_confirmation_word" (فردا/باشه, 2 members mixed adverb/verb,
+    anchored lesson05, matching/translation-only -- below the
+    multiple_choice threshold, same class as several other units' narrow
+    pairs), and "dialogue_role_word" (مسافر/فروشنده, 2 members noun,
+    naming the dialogue's two participants, anchored lesson05, matching/
+    translation-only).
+
+    Two generative word_order templates directly mirror this unit's own
+    realization sentence patterns: (1) "{transport_mode} کی حرکت می‌کنه؟"
+    mirrors lesson03's own "قطار کی حرکت می‌کنه؟" (both train and bus read
+    naturally as the subject of a "when does it depart?" question); (2)
+    "{transport_mode} از سکو حرکت می‌کنه" mirrors lesson03's own "قطار از
+    سکوی دو حرکت می‌کنه", simplified to the bare سکو (platform, no number)
+    since the "platform two" specifics are a single fixed fact this
+    course's real content never generalizes across multiple platform
+    numbers -- both train and bus read naturally as departing "from the
+    platform."
+
+    Deliberately left out: the fixed "یک بلیط به تهران می‌خوام" sentence
+    (تهران is the only taught city_name in this course, so a slot-based
+    version would always render the exact same single sentence -- not
+    genuinely generative, same class of fixed multi-word phrase other
+    units' own notes describe leaving out) and the full lesson05/06
+    dialogue lines.
+
+    Lesson-anchor check: lesson01, lesson02, lesson03, and lesson05 each
+    genuinely introduce new vocabulary (confirmed by reading the
+    realization file directly) -- safe anchors. lesson06's own new
+    vocabulary (ممنون/خواهش می‌کنم/و) is entirely course-wide-review
+    (ممنون/خواهش می‌کنم both first taught in unit01, و first taught in
+    unit03) -- rather than re-declaring a redundant new tag for already-
+    classified tokens, lesson06 instead hosts a combined review
+    matching_pairs template pooling this unit's own travel_vocab_word (4)
+    and departure_detail_word (3) into one 7-pair exercise, the same
+    "final unit review" pattern a1_unit09's own pack already established.
+
+    Verified with scripts/_practice_slot_check.py against
+    backfill_lexemes.py's actual iter_specs() output -- clean, no
+    zero-candidate slots, no under-3 multiple_choice/matching_pairs slots
+    (travel_confirmation_word/dialogue_role_word correctly have only 2
+    candidates each and are never used for multiple_choice here).
+    scripts/_fill_in_blank_ambiguity_check.py reports zero flags (no
+    fill_in_blank templates in this pack at all -- checked whether this
+    unit's vocabulary groups could support one; every group here has
+    >=2 genuinely distinct, non-synonymous candidates with no natural
+    single-slot frame that could disambiguate them, so per the standing
+    en-fa precedent (units 03-15 all use zero fill_in_blank for the same
+    structural reason), this unit follows suit rather than authoring one
+    the compiler's own ambiguity hard-fail would reject anyway).
+    compile_content.py practice-validate clean (0 errors/0 warnings).
+    Needs the standard fresh-context review before import.
+tag_schema:
+  part_of_speech: [noun, proper_noun, verb, preposition, pronoun, adverb]
+  agreement_tags:
+    semantic: [travel_vocab_word, transport_mode, ticket_request_word, departure_detail_word, travel_confirmation_word, dialogue_role_word]
+slot_presets:
+  travel_vocab_word: &travel_vocab_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: travel_vocab_word}}
+  transport_mode: &transport_mode {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: transport_mode}}
+  ticket_request_word: &ticket_request_word {language_code: fa, part_of_speech: [proper_noun, verb, preposition], agreement_tags: {semantic: ticket_request_word}}
+  departure_detail_word: &departure_detail_word {language_code: fa, part_of_speech: [noun, pronoun], agreement_tags: {semantic: departure_detail_word}}
+  travel_confirmation_word: &travel_confirmation_word {language_code: fa, part_of_speech: [adverb, verb], agreement_tags: {semantic: travel_confirmation_word}}
+  dialogue_role_word: &dialogue_role_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: dialogue_role_word}}
+templates:
+  - content_key: practice.en-fa.fa.a1.unit16.lesson01.travel_vocab_choice.001
+    lesson_content_key: fa.a1.unit16.lesson01.basic_travel_vocab
+    type: multiple_choice
+    frame: {text: "{travel_vocab_word}", language_code: fa, direction: rtl}
+    slots: {travel_vocab_word: *travel_vocab_word}
+    answer_derivation: {kind: slot_gloss, slot: travel_vocab_word}
+    feedback_frame: {text: "{travel_vocab_word} is one of this unit's basic travel words.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit16.lesson01.travel_vocab_match.002
+    lesson_content_key: fa.a1.unit16.lesson01.basic_travel_vocab
+    type: matching_pairs
+    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *travel_vocab_word, second: *travel_vocab_word, third: *travel_vocab_word, fourth: *travel_vocab_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit16.lesson01.travel_vocab_translate.003
+    lesson_content_key: fa.a1.unit16.lesson01.basic_travel_vocab
+    type: translation
+    frame: {text: "{travel_vocab_word}", language_code: en, direction: ltr, slot_rendering: {travel_vocab_word: english_gloss}}
+    slots: {travel_vocab_word: *travel_vocab_word}
+    answer_derivation: {kind: slot_text, slot: travel_vocab_word}
+    feedback_frame: {text: "The Farsi word is {travel_vocab_word}.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit16.lesson02.ticket_request_choice.001
+    lesson_content_key: fa.a1.unit16.lesson02.buying_a_ticket
+    type: multiple_choice
+    frame: {text: "{ticket_request_word}", language_code: fa, direction: rtl}
+    slots: {ticket_request_word: *ticket_request_word}
+    answer_derivation: {kind: slot_gloss, slot: ticket_request_word}
+    feedback_frame: {text: "{ticket_request_word} is used when asking for a ticket.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit16.lesson02.ticket_request_match.002
+    lesson_content_key: fa.a1.unit16.lesson02.buying_a_ticket
+    type: matching_pairs
+    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *ticket_request_word, second: *ticket_request_word, third: *ticket_request_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit16.lesson02.ticket_request_translate.003
+    lesson_content_key: fa.a1.unit16.lesson02.buying_a_ticket
+    type: translation
+    frame: {text: "{ticket_request_word}", language_code: en, direction: ltr, slot_rendering: {ticket_request_word: english_gloss}}
+    slots: {ticket_request_word: *ticket_request_word}
+    answer_derivation: {kind: slot_text, slot: ticket_request_word}
+    feedback_frame: {text: "The Farsi word is {ticket_request_word}.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit16.lesson03.departure_detail_choice.001
+    lesson_content_key: fa.a1.unit16.lesson03.asking_departure_details
+    type: multiple_choice
+    frame: {text: "{departure_detail_word}", language_code: fa, direction: rtl}
+    slots: {departure_detail_word: *departure_detail_word}
+    answer_derivation: {kind: slot_gloss, slot: departure_detail_word}
+    feedback_frame: {text: "{departure_detail_word} is used when asking about a departure.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit16.lesson03.departure_detail_match.002
+    lesson_content_key: fa.a1.unit16.lesson03.asking_departure_details
+    type: matching_pairs
+    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *departure_detail_word, second: *departure_detail_word, third: *departure_detail_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit16.lesson03.departure_detail_translate.003
+    lesson_content_key: fa.a1.unit16.lesson03.asking_departure_details
+    type: translation
+    frame: {text: "{departure_detail_word}", language_code: en, direction: ltr, slot_rendering: {departure_detail_word: english_gloss}}
+    slots: {departure_detail_word: *departure_detail_word}
+    answer_derivation: {kind: slot_text, slot: departure_detail_word}
+    feedback_frame: {text: "The Farsi word is {departure_detail_word}.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit16.lesson03.transport_depart_time_order.004
+    lesson_content_key: fa.a1.unit16.lesson03.asking_departure_details
+    type: word_order
+    frame: {text: "{transport_mode} کی حرکت می‌کنه؟", language_code: fa, direction: rtl}
+    slots: {transport_mode: *transport_mode}
+    answer_derivation: {kind: render_frame, frame: {text: "{transport_mode} کی حرکت می‌کنه؟", language_code: fa, direction: rtl}}
+    feedback_frame: {text: "کی حرکت می‌کنه؟ asks when something departs, like قطار کی حرکت می‌کنه؟", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit16.lesson03.transport_platform_order.005
+    lesson_content_key: fa.a1.unit16.lesson03.asking_departure_details
+    type: word_order
+    frame: {text: "{transport_mode} از سکو حرکت می‌کنه", language_code: fa, direction: rtl}
+    slots: {transport_mode: *transport_mode}
+    answer_derivation: {kind: render_frame, frame: {text: "{transport_mode} از سکو حرکت می‌کنه", language_code: fa, direction: rtl}}
+    feedback_frame: {text: "از سکو حرکت می‌کنه means it departs from the platform, like قطار از سکوی دو حرکت می‌کنه (from platform two).", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit16.lesson05.travel_confirmation_match.001
+    lesson_content_key: fa.a1.unit16.lesson05.ticket_counter_dialogue
+    type: matching_pairs
+    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *travel_confirmation_word, second: *travel_confirmation_word}
+    slot_relations: [{kind: distinct, slots: [first, second]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit16.lesson05.travel_confirmation_translate.002
+    lesson_content_key: fa.a1.unit16.lesson05.ticket_counter_dialogue
+    type: translation
+    frame: {text: "{travel_confirmation_word}", language_code: en, direction: ltr, slot_rendering: {travel_confirmation_word: english_gloss}}
+    slots: {travel_confirmation_word: *travel_confirmation_word}
+    answer_derivation: {kind: slot_text, slot: travel_confirmation_word}
+    feedback_frame: {text: "The Farsi word is {travel_confirmation_word}.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit16.lesson05.dialogue_role_match.001
+    lesson_content_key: fa.a1.unit16.lesson05.ticket_counter_dialogue
+    type: matching_pairs
+    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *dialogue_role_word, second: *dialogue_role_word}
+    slot_relations: [{kind: distinct, slots: [first, second]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second]}
+    feedback_frame: {text: "These are the two participants in the ticket-counter dialogue.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit16.lesson05.dialogue_role_translate.002
+    lesson_content_key: fa.a1.unit16.lesson05.ticket_counter_dialogue
+    type: translation
+    frame: {text: "{dialogue_role_word}", language_code: en, direction: ltr, slot_rendering: {dialogue_role_word: english_gloss}}
+    slots: {dialogue_role_word: *dialogue_role_word}
+    answer_derivation: {kind: slot_text, slot: dialogue_role_word}
+    feedback_frame: {text: "The Farsi word is {dialogue_role_word}.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit16.lesson06.unit_review_match.001
+    lesson_content_key: fa.a1.unit16.lesson06.confirming_travel_plans
+    type: matching_pairs
+    frame: {text: "Match each word with its meaning -- a review of this whole unit's travel vocabulary.", language_code: en, direction: ltr}
+    slots:
+      tv1: *travel_vocab_word
+      tv2: *travel_vocab_word
+      tv3: *travel_vocab_word
+      tv4: *travel_vocab_word
+      dd1: *departure_detail_word
+      dd2: *departure_detail_word
+      dd3: *departure_detail_word
+    slot_relations:
+      - {kind: distinct, slots: [tv1, tv2, tv3, tv4]}
+      - {kind: distinct, slots: [dd1, dd2, dd3]}
+    answer_derivation: {kind: matching_pairs, slots: [tv1, tv2, tv3, tv4, dd1, dd2, dd3]}
+    feedback_frame: {text: "This reviews both the basic travel vocabulary and the departure-detail words taught in this unit.", language_code: en, direction: ltr}
