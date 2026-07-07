@@ -22,6 +22,7 @@ from app.review.sm2 import schedule
 from app.review.grading import grade_answer, FREE_TEXT_EXERCISE_TYPES
 from app.services import tts as tts_service
 from app.services import stt as stt_service
+from app.services import push as push_service
 from app.practice.service import (
     generate_batch,
     generate_checkpoint,
@@ -659,6 +660,97 @@ def lexeme_reviews_due(
             for course_id, count in grouped
         ],
     }
+
+
+@router.get("/push/vapid-public-key", response_model=PushVapidKeyOut)
+def push_vapid_public_key():
+    settings = get_settings()
+    configured = push_service.push_configured()
+    return {
+        "public_key": settings.vapid_public_key if configured else None,
+        "configured": configured,
+    }
+@router.post("/push/subscribe")
+def push_subscribe(
+    body: PushSubscribeIn,
+    user=Depends(current_user),
+    db: Session = Depends(get_db),
+):
+    if not push_service.push_configured():
+        fail(503, "push_not_configured", "Web push is not configured on this server")
+    existing = db.scalar(
+        select(PushSubscription).where(PushSubscription.endpoint == body.endpoint)
+    )
+    if existing:
+        existing.user_id = user.id
+        existing.p256dh = body.keys.p256dh
+        existing.auth = body.keys.auth
+    else:
+        db.add(
+            PushSubscription(
+                user_id=user.id,
+                endpoint=body.endpoint,
+                p256dh=body.keys.p256dh,
+                auth=body.keys.auth,
+            )
+        )
+    db.commit()
+    return {"subscribed": True}
+@router.post("/push/unsubscribe")
+def push_unsubscribe(
+    body: PushUnsubscribeIn,
+    user=Depends(current_user),
+    db: Session = Depends(get_db),
+):
+    sub = db.scalar(
+        select(PushSubscription).where(
+            PushSubscription.endpoint == body.endpoint,
+            PushSubscription.user_id == user.id,
+        )
+    )
+    if sub:
+        db.delete(sub)
+        db.commit()
+    return {"subscribed": False}
+@router.post("/admin/push/notify-due-reviews", response_model=PushNotifyOut)
+def admin_push_notify_due_reviews(
+    user=Depends(admin_user),
+    db: Session = Depends(get_db),
+):
+    """Manual trigger for the one real E4 notification case ("you have
+    due reviews"). NOT on a schedule — this project has no background
+    scheduler/cron infrastructure (no Celery/APScheduler/worker service
+    in docker-compose.yml), so autonomous periodic firing is explicitly
+    out of scope for this pass rather than inventing new infrastructure
+    to support it; see docs/BUILD_LOG.md's E4 entry. An external caller
+    (a real cron, a manually-triggered admin action, etc.) hits this
+    endpoint whenever a "reviews due" push should go out.
+    """
+    if not push_service.push_configured():
+        fail(503, "push_not_configured", "Web push is not configured on this server")
+    now = datetime.now(timezone.utc)
+    user_ids = db.scalars(
+        select(UserLexemeSRS.user_id)
+        .where(
+            UserLexemeSRS.due_at <= now,
+            UserLexemeSRS.suspended.is_(False),
+        )
+        .distinct()
+    ).all()
+    notified_users = 0
+    notifications_sent = 0
+    for uid_ in user_ids:
+        sent = push_service.send_push_to_user(
+            db,
+            uid_,
+            title="Reviews are waiting",
+            body="You have words due for review — keep your streak going.",
+            url="/review",
+        )
+        if sent:
+            notified_users += 1
+            notifications_sent += sent
+    return {"notified_users": notified_users, "notifications_sent": notifications_sent}
 
 
 @router.post("/reviews/session", response_model=ReviewItemsOut)
