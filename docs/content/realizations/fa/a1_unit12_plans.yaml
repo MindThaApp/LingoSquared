@@ -11,7 +11,7 @@ generation_provenance:
 review:
   status: reviewed
   required_next_reviewer: null
-  notes: "New unit, fa's next uncovered outcome (prerequisites: time and dates, already covered in unit09/unit10). Six lessons: basic plan vocabulary, proposing a plan, accepting a plan, declining a plan, reading a short invitation message, and a dialogue negotiating a plan. Uses هستم copula and the established -e contraction pattern (چطوره، باشه، عالیه) consistent with units 07-11. Authored independently of the prs realization per the sibling-isolation rule. Authored §14/§16-compliant from the start: no listen_type/listen_select/listen_order exercises anywhere (all recognition exercises are multiple_choice with a real visible target-language prompt; all production exercises are translation/word_order/dialogue_response/writing_prompt), and every matching_pairs exercise is sized 6+ pairs by re-teaching day/time vocabulary within this file (introduced_tokens are file-scoped, not shared across units, even though دوشنبه/پنجشنبه/ساعت هشت were already taught in unit09/unit10). Proactively checked against AUTHORING_GUIDE §11-13 during authoring, including cross-checking the unit's stated day/time/activity facts for consistency across all 6 lessons. Compiler validation clean (0 errors/0 warnings). Awaiting the standing fresh-context review before status can move to reviewed.
+  notes: "New unit, fa's next uncovered outcome (prerequisites: time and dates, already covered in unit09/unit10). Six lessons: basic plan vocabulary, proposing a plan, accepting a plan, declining a plan, reading a short invitation message, and a dialogue negotiating a plan. Uses هستم copula and the established -e contraction pattern (چطوره، باشه، عالیه) consistent with units 07-11. Authored independently of the prs realization per the sibling-isolation rule. Authored §14/§16-compliant from the start: no listen_type/listen_select/listen_order exercises anywhere (all recognition exercises are multiple_choice with a real visible target-language prompt; all production exercises are translation/word_order/dialogue_response/writing_prompt), and every matching_pairs exercise is sized 6+ pairs by re-teaching day/time vocabulary within this file (introduced_tokens are file-scoped, not shared across units, even though دوشنبه/پنجشنبه/ساعت هشت were already taught in unit09/unit10). Proactively checked against AUTHORING_GUIDE §11-13 during authoring, including cross-checking the unit's stated day/time/activity facts for consistency across all 6 lessons. Compiler validation clean (0 errors/0 warnings). Awaiting the standing fresh-context review before status can move to reviewed. POST-REVIEW FOLLOW-UP FIX, 2026-07-07: unit13's fresh-context reviewer flagged (out of scope for its own unit13-only review) that this unit still had 6 exercises where realization prompt.target_blocks duplicated this overlay's own instruction text verbatim in English (dialogue_response_propose, dialogue_response_accept, dialogue_response_decline, write_invitation_reply, dialogue_response_confirm_plan, write_plan_summary) -- fixed by emptying target_blocks for the two genuinely self-initiated prompts (dialogue_response_propose, write_plan_summary) and substituting the actual preceding Farsi cue line already taught elsewhere in this file for the four reply-type prompts (dialogue_response_accept/decline reuse lesson02's می‌خوای پنجشنبه بریم سینما؟ proposal; write_invitation_reply reuses lesson05's own written invitation text; dialogue_response_confirm_plan reuses lesson06's own dialogue_line3 ساعت هشت شب), matching the established convention from unit13's own fix. Re-verified validate+compile clean (0 errors/0 warnings) and confirmed zero remaining instruction-duplicate target_blocks via a script comparing every exercise's target_blocks against its overlay instruction.
 
     FRESH-CONTEXT REVIEW 2026-07-06 (§9, zero prior access to this content, prs sibling files never opened): verified spine-outcome discipline against universal.a1.plans.make_simple_plans's own assessment_requirements -- all 4 (understand_plan, negotiate_plan, read_invitation, write_plan_message) directly and clearly served (lesson06.exercise01 for understand_plan via reading-visible dialogue comprehension since fa audio remains pending_generation; lessons 02/03/04/06's dialogue_response exercises for negotiate_plan; lesson05.exercise02 for read_invitation; lesson05.exercise05 and lesson06.exercise06 for write_plan_message). Exercise pacing (recognition -> matching/drag -> production) verified correct in all 6 lessons. Confirmed zero listen_type/listen_select/listen_order exercises, as claimed. Ran a Python script mirroring the compiler's own TOKEN_RE tokenizer (handling ZWNJ-joined compounds and stripping punctuation) to cross-check every exercise's tested_text/pairs/word_bank AND the overlay's target-language accepted_answers against cumulative file-scoped introduced_tokens -- confirmed the claimed day/time vocabulary re-teaching is genuinely complete, zero untaught-vocabulary gaps in the originally authored content. Checked for verb-person/conjugation mismatches (the می‌آید/می‌آیم bug class caught elsewhere this session) -- none found; می‌خوای (2nd person, addressed to the listener), نمی‌تونم/می‌بینمت (1st person, spoken by the person declining/confirming) are each used consistently with their taught person throughout. Verified dialect authenticity: چطوره، باشه، عالیه، قبوله، نمی‌تونم، می‌خوای are all genuine Tehrani colloquial forms (-e copula contractions and colloquial verb forms), consistent with the register already established in unit09/unit10. Grepped for Arabic-range kaf (U+0643) and yeh (U+064A): none found, script is pure Persian range. No internal jargon leaks in any learner-facing string (broad snake_case scan of both files found only content_keys and schema field names). No unquoted YAML booleans. Checked every multiple_choice exercise for the prompt-shows-answer bug: all recognize_*/reading_comprehension_invitation/dialogue_comprehension_context exercises pair a Farsi prompt with English-gloss correct_option/distractors -- no same-script visual-matching shortcut exists anywhere. Cross-checked §11 facts (Thursday, eight at night, movies, Arash proposes, Sara accepts) across every exercise/teaching card/media_asset referencing them, including lesson05's separate written-invitation-reply exercise -- fully consistent throughout. content_key parity confirmed exact both directions (teaching, exercises, lessons) via script, both before and after the fixes below. All 8 exercise `type:` values used (multiple_choice, matching_pairs, word_order, translation, dialogue_response, writing_prompt, reading_comprehension, dialogue_comprehension) confirmed registered in frontend/src/components/exercises/ExerciseRenderer.tsx. Compiled the actual JSON (not just validate) and confirmed all 32 exercises have at least one status:correct accepted answer/correct_response. matching_pairs sizing verified: lesson01 (this unit's very first lesson) has only 4 pairs -- a genuine small closed set since no earlier same-unit vocabulary exists yet to pool from (matching the precedent already accepted in unit09's match_time_words); lessons 02-06 are all correctly sized at 6 pairs each, so the file's own claim of 'every matching_pairs exercise 6+ pairs' is not quite accurate for lesson01 specifically, now documented here.
 
@@ -137,9 +137,7 @@ units:
           - content_key: fa.a1.unit12.lesson02.exercise05.dialogue_response_propose
             type: dialogue_response
             tested_text: "می‌خوای پنجشنبه بریم سینما"
-            prompt:
-              target_blocks:
-                - {text: "Propose to a friend that you go to the movies on Thursday.", language_code: en, direction: ltr}
+            prompt: {target_blocks: []}
 
       - content_key: fa.a1.unit12.lesson03.accepting_a_plan
         title: قبول کردن برنامه
@@ -186,7 +184,7 @@ units:
             tested_text: "باشه، عالیه! قبوله"
             prompt:
               target_blocks:
-                - {text: "A friend proposed going to the movies on Thursday. Accept enthusiastically.", language_code: en, direction: ltr}
+                - {text: "می‌خوای پنجشنبه بریم سینما؟", language_code: fa, direction: rtl}
 
       - content_key: fa.a1.unit12.lesson04.declining_a_plan
         title: رد کردن برنامه
@@ -242,7 +240,7 @@ units:
             tested_text: "متأسفم، نمی‌تونم. کار دارم"
             prompt:
               target_blocks:
-                - {text: "A friend proposed going to the movies on Thursday, but you're busy. Decline politely.", language_code: en, direction: ltr}
+                - {text: "می‌خوای پنجشنبه بریم سینما؟", language_code: fa, direction: rtl}
 
       - content_key: fa.a1.unit12.lesson05.reading_an_invitation
         title: خواندن یک دعوت
@@ -295,7 +293,7 @@ units:
             tested_text: "باشه، عالیه! پنجشنبه ساعت هشت شب می‌بینمت"
             prompt:
               target_blocks:
-                - {text: "Write a short reply accepting the invitation for Thursday at eight at night.", language_code: en, direction: ltr}
+                - {text: "سلام! پنجشنبه ساعت هشت شب می‌خوای بریم سینما؟ منتظرم", language_code: fa, direction: rtl}
 
       - content_key: fa.a1.unit12.lesson06.making_a_plan_dialogue
         title: گفتگوی برنامه‌ریزی
@@ -361,10 +359,8 @@ units:
             tested_text: "باشه، عالیه! قبوله"
             prompt:
               target_blocks:
-                - {text: "Arash just said the movie is at eight at night. Accept the plan enthusiastically.", language_code: en, direction: ltr}
+                - {text: "ساعت هشت شب", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit12.lesson06.exercise06.write_plan_summary
             type: writing_prompt
             tested_text: "پنجشنبه ساعت هشت شب بریم سینما"
-            prompt:
-              target_blocks:
-                - {text: "Write one or two sentences in Farsi summarizing the plan: going to the movies Thursday at eight at night.", language_code: en, direction: ltr}
+            prompt: {target_blocks: []}

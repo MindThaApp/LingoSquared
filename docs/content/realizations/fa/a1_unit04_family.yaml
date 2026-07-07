@@ -66,6 +66,16 @@ review:
     remaining §14 violations via script, content_key parity intact,
     validate+compile both clean after the retrofit.
 
+    POST-SHIP CORPUS-WIDE FIX, 2026-07-07: a project-wide sweep (prompted by
+    unit13's fresh-context reviewer flagging the same bug in units 11/12)
+    found this file also had exercises where realization prompt.target_blocks
+    duplicated the overlay's own instruction text verbatim in English -- the
+    compiler would have rendered the same sentence twice to the learner. Fixed
+    mechanically: every affected exercise's prompt set to target_blocks: [].
+    Re-verified validate+compile clean (0 errors/0 warnings) and confirmed
+    zero remaining instruction-duplicate target_blocks via a script comparing
+    every exercise's target_blocks against its overlay instruction.
+
 course:
   realization_key: fa.a1
   target_language_first: true
@@ -252,7 +262,7 @@ units:
           - content_key: fa.a1.unit04.lesson02.exercise02.choose_one_brother
             type: multiple_choice
             tested_text: من یک برادر دارم
-            prompt: {target_blocks: [{text: "Which sentence says 'I have one brother'?", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: []}
           - content_key: fa.a1.unit04.lesson02.exercise03.order_one_brother
             type: word_order
             tested_text: من یک برادر دارم
@@ -278,7 +288,7 @@ units:
           - content_key: fa.a1.unit04.lesson02.exercise08.write_own_family
             type: writing_prompt
             tested_text: خانواده‌ی من بزرگه
-            prompt: {target_blocks: [{text: "Describe whether your family is big or small in Farsi.", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: []}
 
       - content_key: fa.a1.unit04.lesson03.extended_family
         title: خانواده‌ی بزرگ‌تر
@@ -488,11 +498,11 @@ units:
           - content_key: fa.a1.unit04.lesson05.exercise06.example_meaning
             type: multiple_choice
             tested_text: برادرم متأهله یک پسر داره
-            prompt: {target_blocks: [{text: "Which sentence means 'my brother is married; he has one son'?", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: []}
           - content_key: fa.a1.unit04.lesson05.exercise07.write_status
             type: writing_prompt
             tested_text: من مجردم
-            prompt: {target_blocks: [{text: "Write a sentence in Farsi saying you are single OR married.", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: []}
           - content_key: fa.a1.unit04.lesson05.exercise08.speak_status
             type: speak_response
             tested_text: من مجردم
