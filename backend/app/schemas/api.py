@@ -36,7 +36,11 @@ class LoginIn(BaseModel): email:EmailStr; password:str=Field(max_length=128); ti
 class AuthOut(BaseModel): access_token:str; token_type:Literal["bearer"]="bearer"; expires_in:int; user:UserOut
 class LanguageOut(ORM): code:str; name:str; native_name:str; script:Literal["latin","cyrillic","han","arabic"]; direction:Literal["ltr","rtl"]
 class TextBlock(BaseModel): text:str; language_code:str; direction:Literal["ltr","rtl"]; speaker:str|None=None
-class TeachingCard(BaseModel): kind:Literal["vocabulary","phrase","grammar_note","dialogue","pronunciation_note","cultural_note","reading"]; title:str|None=None; text_blocks:list[TextBlock]; note:str|None=None; content_key:str|None=None
+# 2026-07-07 vocabulary-example addition (CONTRACT.md, AUTHORING_GUIDE.md #19):
+# optional example sentences showing the card's word in real context —
+# additive, cards without examples serialize exactly as before.
+class TeachingExample(BaseModel): text_blocks:list[TextBlock]
+class TeachingCard(BaseModel): kind:Literal["vocabulary","phrase","grammar_note","dialogue","pronunciation_note","cultural_note","reading"]; title:str|None=None; text_blocks:list[TextBlock]; note:str|None=None; content_key:str|None=None; examples:list[TeachingExample]|None=None
 class ExerciseOut(BaseModel): id:str; type:ExerciseType; order:int; prompt:dict[str,Any]
 class LessonDetail(BaseModel): id:str; unit_id:str; title:str; teaching:list[TeachingCard]; exercises:list[ExerciseOut]
 class AnswerIn(BaseModel):
@@ -48,7 +52,7 @@ class AnswerOut(BaseModel): correct:bool; result:Literal["correct","almost","inc
 class LanguagePairOut(BaseModel): source_language:str; target_language:str; course_count:int
 class CourseOut(BaseModel): id:str; source_language:str; target_language:str; title:str; level:CEFRLevel; unit_count:int
 class CourseDetail(CourseOut): description:str
-class UnitOut(BaseModel): id:str; title:str; order:int; lesson_count:int; section:UnitSection; locked:bool; checkpoint_passed:bool=False
+class UnitOut(BaseModel): id:str; title:str; order:int; lesson_count:int; section:UnitSection; locked:bool; checkpoint_passed:bool=False; content_key:str|None=None
 class LessonOut(BaseModel): id:str; title:str; order:int; exercise_count:int
 class StartOut(BaseModel): started_at:datetime
 class CompleteOut(BaseModel): completed_at:datetime; xp_awarded:int; accuracy:float

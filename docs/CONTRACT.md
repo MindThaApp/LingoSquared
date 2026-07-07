@@ -220,7 +220,16 @@ sources of truth for unit ordering.
 
 `GET /courses/{course_id}/units` and `GET /units/{unit_id}/lessons` → flat
 arrays of `{ "id", "title", "order", "lesson_count" }` /
-`{ "id", "title", "order", "exercise_count" }`.
+`{ "id", "title", "order", "exercise_count" }`. (Units listing is actually
+richer than this — also carries `section`, `locked`, `checkpoint_passed`,
+and, added 2026-07-07, `content_key` — this doc block was already stale
+on those first three before the fourth was added; see `UnitOut` in
+`backend/app/schemas/api.py` for the authoritative current shape.)
+`content_key` is the unit's stable authoring key (e.g.
+`"en.a1.unit06.family"`, nullable for any unit imported before content_key
+tracking existed) — the frontend uses its topic slug to pick a per-unit
+icon (`frontend/src/lib/unitIcons.ts`), not just for content-import
+matching.
 
 **Lessons**
 
@@ -283,6 +292,44 @@ their own pace, no grading/XP here) that must complete before the
 existing exercise-answering phase begins. Legacy lessons with an empty or
 missing `teaching` array just skip straight to exercises (backwards
 compatible), but all new/reseeded content should include it.
+
+**Vocabulary-example addition (2026-07-07, additive, no breaking
+change)**: every teaching card may carry an optional `examples` array —
+one entry per example sentence showing the card's word used in real
+context, each the same `text_blocks` shape as the card itself
+(target-language sentence first, then an optional source-language gloss
+block):
+
+```json
+{
+  "kind": "vocabulary",
+  "title": "Great",
+  "text_blocks": [
+    { "text": "Prima", "language_code": "nl", "direction": "ltr" },
+    { "text": "great / fine", "language_code": "en", "direction": "ltr" }
+  ],
+  "note": "…",
+  "examples": [
+    {
+      "text_blocks": [
+        { "text": "Prima, en met jou?", "language_code": "nl", "direction": "ltr" },
+        { "text": "Great, and with you?", "language_code": "en", "direction": "ltr" }
+      ]
+    }
+  ]
+}
+```
+
+Authored in the realization as `example:` (a single text-block mapping,
+or a list of them) on the teaching card, plus `example_gloss:` (a string,
+or a positionally-matched list) on the overlay's teaching entry — see
+`docs/content/AUTHORING_GUIDE.md` §19 for the authoring rules and the
+compiler's enforcement (required for `kind: vocabulary` in files at
+`schema_version` ≥ 1.1; warning-only for the existing 1.0 corpus until
+the retrofit lands). Frontend renders `examples` inside the same
+teaching card (each entry's blocks through the standard `TextBlockList`,
+so per-sentence TTS comes for free); cards without `examples` render
+exactly as before.
 
 **Phase D additions (2026-07-05, additive, no breaking change):**
 
