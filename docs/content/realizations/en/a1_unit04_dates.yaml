@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: "1.1"
 realization_version: "2026.1-draft.1"
 target_language: "en"
 cefr_level: "A1"
@@ -8,9 +8,30 @@ generation_provenance:
   authoring_system: "claude"
   human_reviewed: false
 review:
-  status: "reviewed"
-  required_next_reviewer: null
-  notes: "Fresh-context review: confirmed the US month-day-year date convention is explicitly flagged as non-universal (both in course.register_policy and the fa-en overlay's numeric_form teaching note, with a concrete 7/9-vs-9/7 disambiguation example) rather than presented as the only way dates are written, which matters since this en realization is shared by fa-en/nl-en/prs-en overlays; verified spine_outcome_id (dates) matches every lesson's content; adversarial learner pass confirmed every exercise's correct answer is derivable from taught material; no jargon leaks or YAML footguns found."
+  status: "unreviewed"
+  required_next_reviewer: "codex"
+  notes: >-
+    Fresh-context review: confirmed the US month-day-year date
+    convention is explicitly flagged as non-universal (both in
+    course.register_policy and the fa-en overlay's numeric_form
+    teaching note, with a concrete 7/9-vs-9/7 disambiguation example)
+    rather than presented as the only way dates are written, which
+    matters since this en realization is shared by fa-en/nl-en/prs-en
+    overlays; verified spine_outcome_id (dates) matches every lesson's
+    content; adversarial learner pass confirmed every exercise's
+    correct answer is derivable from taught material; no jargon leaks
+    or YAML footguns found.
+
+    2026-07-07 §19 retrofit (part of the German content lane's
+    project-wide vocabulary-example rollout): added `example:` to all
+    14 kind:vocabulary cards -- "I have time on [Day]" for the 7
+    weekdays, "My birthday is in [Month]" for the 5 months (previewing
+    lesson03's own birthday content), and standalone sentences for
+    opens/again. This file is shared by fa-en/nl-en/prs-en/de-en; only
+    de-en's own overlay has matching example_gloss so far.
+    schema_version bumped to 1.1. Reverted review.status from
+    "reviewed" to "unreviewed" since this is a real content addition
+    needing its own fresh-context check.
 
 course:
   realization_key: "en.a1"
@@ -40,13 +61,13 @@ units:
         title: "Days of the week"
         spine_outcome_id: "universal.a1.dates.exchange_calendar_dates"
         teaching:
-          - {content_key: "en.a1.unit04.lesson01.teach.monday", kind: "vocabulary", target: {text: "Monday", language_code: "en", direction: "ltr"}, introduced_tokens: ["Monday"]}
-          - {content_key: "en.a1.unit04.lesson01.teach.tuesday", kind: "vocabulary", target: {text: "Tuesday", language_code: "en", direction: "ltr"}, introduced_tokens: ["Tuesday"]}
-          - {content_key: "en.a1.unit04.lesson01.teach.wednesday", kind: "vocabulary", target: {text: "Wednesday", language_code: "en", direction: "ltr"}, introduced_tokens: ["Wednesday"]}
-          - {content_key: "en.a1.unit04.lesson01.teach.thursday", kind: "vocabulary", target: {text: "Thursday", language_code: "en", direction: "ltr"}, introduced_tokens: ["Thursday"]}
-          - {content_key: "en.a1.unit04.lesson01.teach.friday", kind: "vocabulary", target: {text: "Friday", language_code: "en", direction: "ltr"}, introduced_tokens: ["Friday"]}
-          - {content_key: "en.a1.unit04.lesson01.teach.saturday", kind: "vocabulary", target: {text: "Saturday", language_code: "en", direction: "ltr"}, introduced_tokens: ["Saturday"]}
-          - {content_key: "en.a1.unit04.lesson01.teach.sunday", kind: "vocabulary", target: {text: "Sunday", language_code: "en", direction: "ltr"}, introduced_tokens: ["Sunday"]}
+          - {content_key: "en.a1.unit04.lesson01.teach.monday", kind: "vocabulary", target: {text: "Monday", language_code: "en", direction: "ltr"}, introduced_tokens: ["Monday"], example: {text: "I have time on Monday.", language_code: "en", direction: "ltr"}}
+          - {content_key: "en.a1.unit04.lesson01.teach.tuesday", kind: "vocabulary", target: {text: "Tuesday", language_code: "en", direction: "ltr"}, introduced_tokens: ["Tuesday"], example: {text: "I have time on Tuesday.", language_code: "en", direction: "ltr"}}
+          - {content_key: "en.a1.unit04.lesson01.teach.wednesday", kind: "vocabulary", target: {text: "Wednesday", language_code: "en", direction: "ltr"}, introduced_tokens: ["Wednesday"], example: {text: "I have time on Wednesday.", language_code: "en", direction: "ltr"}}
+          - {content_key: "en.a1.unit04.lesson01.teach.thursday", kind: "vocabulary", target: {text: "Thursday", language_code: "en", direction: "ltr"}, introduced_tokens: ["Thursday"], example: {text: "I have time on Thursday.", language_code: "en", direction: "ltr"}}
+          - {content_key: "en.a1.unit04.lesson01.teach.friday", kind: "vocabulary", target: {text: "Friday", language_code: "en", direction: "ltr"}, introduced_tokens: ["Friday"], example: {text: "I have time on Friday.", language_code: "en", direction: "ltr"}}
+          - {content_key: "en.a1.unit04.lesson01.teach.saturday", kind: "vocabulary", target: {text: "Saturday", language_code: "en", direction: "ltr"}, introduced_tokens: ["Saturday"], example: {text: "I have time on Saturday.", language_code: "en", direction: "ltr"}}
+          - {content_key: "en.a1.unit04.lesson01.teach.sunday", kind: "vocabulary", target: {text: "Sunday", language_code: "en", direction: "ltr"}, introduced_tokens: ["Sunday"], example: {text: "I have time on Sunday.", language_code: "en", direction: "ltr"}}
           - {content_key: "en.a1.unit04.lesson01.teach.what_day", kind: "phrase", target: {text: "What day is it today?", language_code: "en", direction: "ltr"}, introduced_tokens: ["What", "day", "is", "it", "today"]}
         exercises:
           - {content_key: "en.a1.unit04.lesson01.exercise01.listen_weekday", type: "listen_select", tested_text: "Wednesday", media_asset_key: "en.a1.audio.dates.weekdays.01", prompt: {target_blocks: []}}
@@ -62,11 +83,11 @@ units:
         title: "Months of the year"
         spine_outcome_id: "universal.a1.dates.exchange_calendar_dates"
         teaching:
-          - {content_key: "en.a1.unit04.lesson02.teach.january", kind: "vocabulary", target: {text: "January", language_code: "en", direction: "ltr"}, introduced_tokens: ["January"]}
-          - {content_key: "en.a1.unit04.lesson02.teach.march", kind: "vocabulary", target: {text: "March", language_code: "en", direction: "ltr"}, introduced_tokens: ["March"]}
-          - {content_key: "en.a1.unit04.lesson02.teach.july", kind: "vocabulary", target: {text: "July", language_code: "en", direction: "ltr"}, introduced_tokens: ["July"]}
-          - {content_key: "en.a1.unit04.lesson02.teach.september", kind: "vocabulary", target: {text: "September", language_code: "en", direction: "ltr"}, introduced_tokens: ["September"]}
-          - {content_key: "en.a1.unit04.lesson02.teach.december", kind: "vocabulary", target: {text: "December", language_code: "en", direction: "ltr"}, introduced_tokens: ["December"]}
+          - {content_key: "en.a1.unit04.lesson02.teach.january", kind: "vocabulary", target: {text: "January", language_code: "en", direction: "ltr"}, introduced_tokens: ["January"], example: {text: "My birthday is in January.", language_code: "en", direction: "ltr"}}
+          - {content_key: "en.a1.unit04.lesson02.teach.march", kind: "vocabulary", target: {text: "March", language_code: "en", direction: "ltr"}, introduced_tokens: ["March"], example: {text: "My birthday is in March.", language_code: "en", direction: "ltr"}}
+          - {content_key: "en.a1.unit04.lesson02.teach.july", kind: "vocabulary", target: {text: "July", language_code: "en", direction: "ltr"}, introduced_tokens: ["July"], example: {text: "My birthday is in July.", language_code: "en", direction: "ltr"}}
+          - {content_key: "en.a1.unit04.lesson02.teach.september", kind: "vocabulary", target: {text: "September", language_code: "en", direction: "ltr"}, introduced_tokens: ["September"], example: {text: "My birthday is in September.", language_code: "en", direction: "ltr"}}
+          - {content_key: "en.a1.unit04.lesson02.teach.december", kind: "vocabulary", target: {text: "December", language_code: "en", direction: "ltr"}, introduced_tokens: ["December"], example: {text: "My birthday is in December.", language_code: "en", direction: "ltr"}}
           - {content_key: "en.a1.unit04.lesson02.teach.which_month", kind: "phrase", target: {text: "Which month is it?", language_code: "en", direction: "ltr"}, introduced_tokens: ["Which", "month", "is", "it"]}
         exercises:
           - {content_key: "en.a1.unit04.lesson02.exercise01.listen_month", type: "listen_select", tested_text: "September", media_asset_key: "en.a1.audio.dates.months.01", prompt: {target_blocks: []}}
@@ -105,8 +126,8 @@ units:
         title: "Making an appointment: dates in context"
         spine_outcome_id: "universal.a1.dates.exchange_calendar_dates"
         teaching:
-          - {content_key: "en.a1.unit04.lesson04.teach.opens", kind: "vocabulary", target: {text: "opens", language_code: "en", direction: "ltr"}, introduced_tokens: ["opens"]}
-          - {content_key: "en.a1.unit04.lesson04.teach.again", kind: "vocabulary", target: {text: "again", language_code: "en", direction: "ltr"}, introduced_tokens: ["again"]}
+          - {content_key: "en.a1.unit04.lesson04.teach.opens", kind: "vocabulary", target: {text: "opens", language_code: "en", direction: "ltr"}, introduced_tokens: ["opens"], example: {text: "The library opens on Thursday.", language_code: "en", direction: "ltr"}}
+          - {content_key: "en.a1.unit04.lesson04.teach.again", kind: "vocabulary", target: {text: "again", language_code: "en", direction: "ltr"}, introduced_tokens: ["again"], example: {text: "See you again soon!", language_code: "en", direction: "ltr"}}
           - {content_key: "en.a1.unit04.lesson04.teach.q_date", kind: "dialogue", target: {text: "What's today's date?", language_code: "en", direction: "ltr", speaker: "Daniel"}, introduced_tokens: []}
           - {content_key: "en.a1.unit04.lesson04.teach.a_date", kind: "dialogue", target: {text: "It's Tuesday, July 7th.", language_code: "en", direction: "ltr", speaker: "Leila"}, introduced_tokens: []}
           - {content_key: "en.a1.unit04.lesson04.teach.q_library", kind: "dialogue", target: {text: "When's the library open again?", language_code: "en", direction: "ltr", speaker: "Daniel"}, introduced_tokens: ["When's", "the", "library", "open", "again"]}

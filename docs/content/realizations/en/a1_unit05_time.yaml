@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: "1.1"
 realization_version: "2026.1-draft.1"
 target_language: "en"
 cefr_level: "A1"
@@ -8,9 +8,27 @@ generation_provenance:
   authoring_system: "claude"
   human_reviewed: false
 review:
-  status: "reviewed"
-  required_next_reviewer: null
-  notes: "Fresh-context review: verified spine_outcome_id (time) matches every lesson's content; adversarial learner pass confirmed every exercise's correct answer is derivable from taught material (including the afternoon/evening day-part boundary, which is footnoted as approximate rather than absolute); confirmed the 12-hour spoken convention is presented alongside AM/PM disambiguation, not as an unexplained default; no jargon leaks or YAML footguns found."
+  status: "unreviewed"
+  required_next_reviewer: "codex"
+  notes: >-
+    Fresh-context review: verified spine_outcome_id (time) matches
+    every lesson's content; adversarial learner pass confirmed every
+    exercise's correct answer is derivable from taught material
+    (including the afternoon/evening day-part boundary, which is
+    footnoted as approximate rather than absolute); confirmed the
+    12-hour spoken convention is presented alongside AM/PM
+    disambiguation, not as an unexplained default; no jargon leaks or
+    YAML footguns found.
+
+    2026-07-07 §19 retrofit (part of the German content lane's
+    project-wide vocabulary-example rollout): added `example:` to all
+    6 kind:vocabulary cards, reusing this file's own Daniel/Leila
+    characters for the day-part greetings and simple factual sentences
+    for opens_at/closes_at. This file is shared by fa-en/nl-en/prs-en/
+    de-en; only de-en's own overlay has matching example_gloss so far.
+    schema_version bumped to 1.1. Reverted review.status from
+    "reviewed" to "unreviewed" since this is a real content addition
+    needing its own fresh-context check.
 
 course:
   realization_key: "en.a1"
@@ -82,10 +100,10 @@ units:
         title: "Parts of the day and simple schedules"
         spine_outcome_id: "universal.a1.time.ask_tell_time"
         teaching:
-          - {content_key: "en.a1.unit05.lesson03.teach.morning", kind: "vocabulary", target: {text: "morning", language_code: "en", direction: "ltr"}, introduced_tokens: ["morning"]}
-          - {content_key: "en.a1.unit05.lesson03.teach.afternoon", kind: "vocabulary", target: {text: "afternoon", language_code: "en", direction: "ltr"}, introduced_tokens: ["afternoon"]}
-          - {content_key: "en.a1.unit05.lesson03.teach.evening", kind: "vocabulary", target: {text: "evening", language_code: "en", direction: "ltr"}, introduced_tokens: ["evening"]}
-          - {content_key: "en.a1.unit05.lesson03.teach.night", kind: "vocabulary", target: {text: "night", language_code: "en", direction: "ltr"}, introduced_tokens: ["night"]}
+          - {content_key: "en.a1.unit05.lesson03.teach.morning", kind: "vocabulary", target: {text: "morning", language_code: "en", direction: "ltr"}, introduced_tokens: ["morning"], example: {text: "Good morning, Daniel!", language_code: "en", direction: "ltr"}}
+          - {content_key: "en.a1.unit05.lesson03.teach.afternoon", kind: "vocabulary", target: {text: "afternoon", language_code: "en", direction: "ltr"}, introduced_tokens: ["afternoon"], example: {text: "I work in the afternoon.", language_code: "en", direction: "ltr"}}
+          - {content_key: "en.a1.unit05.lesson03.teach.evening", kind: "vocabulary", target: {text: "evening", language_code: "en", direction: "ltr"}, introduced_tokens: ["evening"], example: {text: "Good evening, Leila!", language_code: "en", direction: "ltr"}}
+          - {content_key: "en.a1.unit05.lesson03.teach.night", kind: "vocabulary", target: {text: "night", language_code: "en", direction: "ltr"}, introduced_tokens: ["night"], example: {text: "Good night, Daniel!", language_code: "en", direction: "ltr"}}
           - {content_key: "en.a1.unit05.lesson03.teach.at_nine_am", kind: "phrase", target: {text: "The store opens at nine in the morning.", language_code: "en", direction: "ltr"}, introduced_tokens: ["The", "store", "opens", "at", "nine", "in", "the", "morning"]}
           - {content_key: "en.a1.unit05.lesson03.teach.at_six_pm", kind: "phrase", target: {text: "The store closes at six in the evening.", language_code: "en", direction: "ltr"}, introduced_tokens: ["The", "store", "closes", "at", "six", "in", "the", "evening"]}
         exercises:
@@ -105,8 +123,8 @@ units:
         title: "Library hours: a real schedule conversation"
         spine_outcome_id: "universal.a1.time.ask_tell_time"
         teaching:
-          - {content_key: "en.a1.unit05.lesson04.teach.opens_at", kind: "vocabulary", target: {text: "opens at", language_code: "en", direction: "ltr"}, introduced_tokens: ["opens", "at"]}
-          - {content_key: "en.a1.unit05.lesson04.teach.closes_at", kind: "vocabulary", target: {text: "closes at", language_code: "en", direction: "ltr"}, introduced_tokens: ["closes", "at"]}
+          - {content_key: "en.a1.unit05.lesson04.teach.opens_at", kind: "vocabulary", target: {text: "opens at", language_code: "en", direction: "ltr"}, introduced_tokens: ["opens", "at"], example: {text: "The library opens at nine.", language_code: "en", direction: "ltr"}}
+          - {content_key: "en.a1.unit05.lesson04.teach.closes_at", kind: "vocabulary", target: {text: "closes at", language_code: "en", direction: "ltr"}, introduced_tokens: ["closes", "at"], example: {text: "The library closes at six.", language_code: "en", direction: "ltr"}}
           - {content_key: "en.a1.unit05.lesson04.teach.q_open", kind: "dialogue", target: {text: "What time does the library open?", language_code: "en", direction: "ltr", speaker: "Daniel"}, introduced_tokens: ["What", "time", "does", "the", "library", "open"]}
           - {content_key: "en.a1.unit05.lesson04.teach.a_open", kind: "dialogue", target: {text: "It opens at nine in the morning.", language_code: "en", direction: "ltr", speaker: "Leila"}, introduced_tokens: ["It", "opens", "at", "nine", "in", "the", "morning"]}
           - {content_key: "en.a1.unit05.lesson04.teach.q_close", kind: "dialogue", target: {text: "And what time does it close?", language_code: "en", direction: "ltr", speaker: "Daniel"}, introduced_tokens: ["And", "what", "time", "does", "it", "close"]}

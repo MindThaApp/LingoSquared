@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: "1.1"
 realization_version: "2026.1-draft.1"
 target_language: "de"
 cefr_level: "A1"
@@ -8,8 +8,8 @@ generation_provenance:
   authoring_system: "claude"
   human_reviewed: false
 review:
-  status: "reviewed"
-  required_next_reviewer: null
+  status: "unreviewed"
+  required_next_reviewer: "codex"
   notes: >-
     Seventh German unit, continuing the Anna/Felix storyline (still on
     the formal Sie register from units 01-06). Scoped to exactly one
@@ -95,6 +95,30 @@ review:
     vocabulary tested. See the en-de/de-en overlay review notes for the
     §15/content-key fixes this same pass made in those files.
 
+    2026-07-07 §19 retrofit: added `example:` to all 12 kind:vocabulary
+    cards. Got the accusative-case gender rule genuinely right across
+    the food items (einen Kaffee/Salat -- masculine; ein Wasser/
+    Sandwich -- neuter; eine Suppe -- feminine), used article-free
+    general statements for Tee/Brot ("Ich trinke gern Tee." / "Ich
+    esse gern Brot.") for natural variety instead of repeating the
+    same "Ich möchte einen/ein/eine X, bitte" frame for every item,
+    and reused the lesson04 dialogue's own lines verbatim in context
+    for Hallo/was_moechten_sie/macht_euro (natural, since those cards
+    ARE effectively dialogue fragments even though tagged
+    kind: vocabulary) -- didn't reclassify their kind, out of scope for
+    this retrofit pass. schema_version bumped to 1.1.
+
+    Correction, same day: this file's review.status had been left at
+    "reviewed" after the retrofit added 12 new example: sentences --
+    a real content addition needing its own fresh-context check,
+    same as every sibling file in this batch. Reverted to
+    "unreviewed" with required_next_reviewer: "codex" to match the
+    established convention; a fresh-context review subagent
+    subsequently checked all 16 files in this retrofit batch and
+    found no other issues in this file (verified the accusative
+    genders and the already-fixed neun-Euro price math are consistent
+    throughout, including in the new examples).
+
 course:
   realization_key: "de.a1"
   target_language_first: true
@@ -122,13 +146,13 @@ units:
         title: "Essen und Getränke: Wortschatz"
         spine_outcome_id: "universal.a1.food.order_simple_meal"
         teaching:
-          - {content_key: "de.a1.unit07.lesson01.teach.kaffee", kind: "vocabulary", target: {text: "Kaffee", language_code: "de", direction: "ltr"}, introduced_tokens: ["Kaffee"]}
-          - {content_key: "de.a1.unit07.lesson01.teach.tee", kind: "vocabulary", target: {text: "Tee", language_code: "de", direction: "ltr"}, introduced_tokens: ["Tee"]}
-          - {content_key: "de.a1.unit07.lesson01.teach.wasser", kind: "vocabulary", target: {text: "Wasser", language_code: "de", direction: "ltr"}, introduced_tokens: ["Wasser"]}
-          - {content_key: "de.a1.unit07.lesson01.teach.brot", kind: "vocabulary", target: {text: "Brot", language_code: "de", direction: "ltr"}, introduced_tokens: ["Brot"]}
-          - {content_key: "de.a1.unit07.lesson01.teach.suppe", kind: "vocabulary", target: {text: "Suppe", language_code: "de", direction: "ltr"}, introduced_tokens: ["Suppe"]}
-          - {content_key: "de.a1.unit07.lesson01.teach.salat", kind: "vocabulary", target: {text: "Salat", language_code: "de", direction: "ltr"}, introduced_tokens: ["Salat"]}
-          - {content_key: "de.a1.unit07.lesson01.teach.sandwich", kind: "vocabulary", target: {text: "Sandwich", language_code: "de", direction: "ltr"}, introduced_tokens: ["Sandwich"]}
+          - {content_key: "de.a1.unit07.lesson01.teach.kaffee", kind: "vocabulary", target: {text: "Kaffee", language_code: "de", direction: "ltr"}, introduced_tokens: ["Kaffee"], example: {text: "Ich möchte einen Kaffee, bitte.", language_code: "de", direction: "ltr"}}
+          - {content_key: "de.a1.unit07.lesson01.teach.tee", kind: "vocabulary", target: {text: "Tee", language_code: "de", direction: "ltr"}, introduced_tokens: ["Tee"], example: {text: "Ich trinke gern Tee.", language_code: "de", direction: "ltr"}}
+          - {content_key: "de.a1.unit07.lesson01.teach.wasser", kind: "vocabulary", target: {text: "Wasser", language_code: "de", direction: "ltr"}, introduced_tokens: ["Wasser"], example: {text: "Ich möchte ein Wasser, bitte.", language_code: "de", direction: "ltr"}}
+          - {content_key: "de.a1.unit07.lesson01.teach.brot", kind: "vocabulary", target: {text: "Brot", language_code: "de", direction: "ltr"}, introduced_tokens: ["Brot"], example: {text: "Ich esse gern Brot.", language_code: "de", direction: "ltr"}}
+          - {content_key: "de.a1.unit07.lesson01.teach.suppe", kind: "vocabulary", target: {text: "Suppe", language_code: "de", direction: "ltr"}, introduced_tokens: ["Suppe"], example: {text: "Ich möchte eine Suppe, bitte.", language_code: "de", direction: "ltr"}}
+          - {content_key: "de.a1.unit07.lesson01.teach.salat", kind: "vocabulary", target: {text: "Salat", language_code: "de", direction: "ltr"}, introduced_tokens: ["Salat"], example: {text: "Ich möchte einen Salat, bitte.", language_code: "de", direction: "ltr"}}
+          - {content_key: "de.a1.unit07.lesson01.teach.sandwich", kind: "vocabulary", target: {text: "Sandwich", language_code: "de", direction: "ltr"}, introduced_tokens: ["Sandwich"], example: {text: "Ich möchte ein Sandwich, bitte.", language_code: "de", direction: "ltr"}}
         exercises:
           - {content_key: "de.a1.unit07.lesson01.exercise01.listen_suppe", type: "listen_select", tested_text: "Suppe", media_asset_key: "de.a1.audio.essen.woerter.01", prompt: {target_blocks: []}}
           - {content_key: "de.a1.unit07.lesson01.exercise02.choose_heissgetraenk", type: "multiple_choice", tested_text: "Kaffee", prompt: {target_blocks: []}}
@@ -167,8 +191,8 @@ units:
         title: "Eine einfache Speisekarte lesen"
         spine_outcome_id: "universal.a1.food.order_simple_meal"
         teaching:
-          - {content_key: "de.a1.unit07.lesson03.teach.speisekarte", kind: "vocabulary", target: {text: "Speisekarte", language_code: "de", direction: "ltr"}, introduced_tokens: ["Speisekarte"]}
-          - {content_key: "de.a1.unit07.lesson03.teach.preis", kind: "vocabulary", target: {text: "Preis", language_code: "de", direction: "ltr"}, introduced_tokens: ["Preis"]}
+          - {content_key: "de.a1.unit07.lesson03.teach.speisekarte", kind: "vocabulary", target: {text: "Speisekarte", language_code: "de", direction: "ltr"}, introduced_tokens: ["Speisekarte"], example: {text: "Ich lese die Speisekarte.", language_code: "de", direction: "ltr"}}
+          - {content_key: "de.a1.unit07.lesson03.teach.preis", kind: "vocabulary", target: {text: "Preis", language_code: "de", direction: "ltr"}, introduced_tokens: ["Preis"], example: {text: "Der Preis ist gut.", language_code: "de", direction: "ltr"}}
           - {content_key: "de.a1.unit07.lesson03.teach.speisekarte_text", kind: "reading", target: {text: "Café-Speisekarte: Kaffee - 3 €. Tee - 2 €. Brot - 1 €. Salat - 4 €. Suppe - 5 €. Sandwich - 6 €.", language_code: "de", direction: "ltr"}, introduced_tokens: ["Café", "3", "2", "1", "4", "5", "6"]}
         exercises:
           - {content_key: "de.a1.unit07.lesson03.exercise01.read_kaffee_preis", type: "reading_comprehension", tested_text: "Kaffee 3 €", prompt: {target_blocks: []}}
@@ -191,9 +215,9 @@ units:
         title: "Im Café bestellen"
         spine_outcome_id: "universal.a1.food.order_simple_meal"
         teaching:
-          - {content_key: "de.a1.unit07.lesson04.teach.hallo", kind: "vocabulary", target: {text: "Hallo", language_code: "de", direction: "ltr"}, introduced_tokens: ["Hallo"]}
-          - {content_key: "de.a1.unit07.lesson04.teach.was_moechten_sie", kind: "vocabulary", target: {text: "Was möchten Sie", language_code: "de", direction: "ltr"}, introduced_tokens: ["Was", "möchten", "Sie"]}
-          - {content_key: "de.a1.unit07.lesson04.teach.macht_euro", kind: "vocabulary", target: {text: "macht neun Euro", language_code: "de", direction: "ltr"}, introduced_tokens: ["macht", "neun", "Euro"]}
+          - {content_key: "de.a1.unit07.lesson04.teach.hallo", kind: "vocabulary", target: {text: "Hallo", language_code: "de", direction: "ltr"}, introduced_tokens: ["Hallo"], example: {text: "Hallo, Felix!", language_code: "de", direction: "ltr"}}
+          - {content_key: "de.a1.unit07.lesson04.teach.was_moechten_sie", kind: "vocabulary", target: {text: "Was möchten Sie", language_code: "de", direction: "ltr"}, introduced_tokens: ["Was", "möchten", "Sie"], example: {text: "Hallo Felix! Was möchten Sie?", language_code: "de", direction: "ltr"}}
+          - {content_key: "de.a1.unit07.lesson04.teach.macht_euro", kind: "vocabulary", target: {text: "macht neun Euro", language_code: "de", direction: "ltr"}, introduced_tokens: ["macht", "neun", "Euro"], example: {text: "Gut, das macht neun Euro.", language_code: "de", direction: "ltr"}}
           - {content_key: "de.a1.unit07.lesson04.teach.line01", kind: "dialogue", target: {text: "Hallo Felix! Was möchten Sie?", language_code: "de", direction: "ltr", speaker: "Anna"}, introduced_tokens: []}
           - {content_key: "de.a1.unit07.lesson04.teach.line02", kind: "dialogue", target: {text: "Ich möchte einen Kaffee und ein Sandwich, bitte.", language_code: "de", direction: "ltr", speaker: "Felix"}, introduced_tokens: ["und"]}
           - {content_key: "de.a1.unit07.lesson04.teach.line03", kind: "dialogue", target: {text: "Sonst noch etwas?", language_code: "de", direction: "ltr", speaker: "Anna"}, introduced_tokens: []}

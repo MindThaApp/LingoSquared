@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: "1.1"
 realization_version: "2026.1-draft.1"
 target_language: "en"
 cefr_level: "A1"
@@ -8,9 +8,35 @@ generation_provenance:
   authoring_system: "claude"
   human_reviewed: false
 review:
-  status: "reviewed"
-  required_next_reviewer: null
-  notes: "Fresh-context review: verified spine_outcome_id (food/order_simple_meal) matches every lesson and all four assessment_requirements (ordering, menu reading, writing a request) are covered; confirmed pacing and adversarial derivability against earlier units. No jargon leaks or YAML footguns found. Audio remains pending generation."
+  status: "unreviewed"
+  required_next_reviewer: "codex"
+  notes: >-
+    Fresh-context review: verified spine_outcome_id
+    (food/order_simple_meal) matches every lesson and all four
+    assessment_requirements (ordering, menu reading, writing a
+    request) are covered; confirmed pacing and adversarial
+    derivability against earlier units. No jargon leaks or YAML
+    footguns found. Audio remains pending generation.
+
+    2026-07-07 §19 retrofit (part of the German content lane's
+    project-wide vocabulary-example rollout): added `example:` to all
+    9 kind:vocabulary cards, mirroring the parallel German-side
+    examples 1:1 for consistency (coffee/tea/water/bread/soup/salad/
+    sandwich ordering phrases, menu/price statements). This file is
+    shared by fa-en/nl-en/prs-en/de-en; only de-en's own overlay has
+    matching example_gloss so far. schema_version bumped to 1.1.
+    Reverted review.status from "reviewed" to "unreviewed" since this
+    is a real content addition needing its own fresh-context check.
+
+    Real pre-existing bug found by the §19 retrofit's fresh-context
+    review (unrelated to the added examples themselves): the capstone
+    dialogue had Leila order a coffee ($3) and a sandwich ($6) --
+    $3+$6=$9 -- but Daniel's closing line said "That's six dollars,"
+    the exact price of the sandwich alone, ignoring the coffee. Fixed
+    throughout (media_assets dialogue transcript, teach.thats_x_dollars,
+    teach.closing_price, exercise02.listen_price) to "nine dollars,"
+    matching the German-side unit07's own already-fixed parallel bug
+    (Kaffee 3€ + Sandwich 6€ = neun Euro, not sechs).
 
 course:
   realization_key: "en.a1"
@@ -24,7 +50,7 @@ media_assets:
   - {content_key: "en.a1.audio.food.followup.01", language: "en", text: "Anything else? For here or to go?", voice_hint: "neutral_adult", status: "pending_generation"}
   - content_key: "en.a1.audio.dialogue.cafe.01"
     language: "en"
-    text: "Leila: Hi, I'd like a coffee and a sandwich, please. Daniel: Sure. Anything else? Leila: No, that's all, thanks. Daniel: For here or to go? Leila: For here, please. Daniel: OK, that's six dollars."
+    text: "Leila: Hi, I'd like a coffee and a sandwich, please. Daniel: Sure. Anything else? Leila: No, that's all, thanks. Daniel: For here or to go? Leila: For here, please. Daniel: OK, that's nine dollars."
     voice_hint: "two_adults_neutral_friendly"
     status: "pending_generation"
 
@@ -40,13 +66,13 @@ units:
         title: "Common food and drink"
         spine_outcome_id: "universal.a1.food.order_simple_meal"
         teaching:
-          - {content_key: "en.a1.unit07.lesson01.teach.coffee", kind: "vocabulary", target: {text: "coffee", language_code: "en", direction: "ltr"}, introduced_tokens: ["coffee"]}
-          - {content_key: "en.a1.unit07.lesson01.teach.tea", kind: "vocabulary", target: {text: "tea", language_code: "en", direction: "ltr"}, introduced_tokens: ["tea"]}
-          - {content_key: "en.a1.unit07.lesson01.teach.water", kind: "vocabulary", target: {text: "water", language_code: "en", direction: "ltr"}, introduced_tokens: ["water"]}
-          - {content_key: "en.a1.unit07.lesson01.teach.bread", kind: "vocabulary", target: {text: "bread", language_code: "en", direction: "ltr"}, introduced_tokens: ["bread"]}
-          - {content_key: "en.a1.unit07.lesson01.teach.soup", kind: "vocabulary", target: {text: "soup", language_code: "en", direction: "ltr"}, introduced_tokens: ["soup"]}
-          - {content_key: "en.a1.unit07.lesson01.teach.salad", kind: "vocabulary", target: {text: "salad", language_code: "en", direction: "ltr"}, introduced_tokens: ["salad"]}
-          - {content_key: "en.a1.unit07.lesson01.teach.sandwich", kind: "vocabulary", target: {text: "sandwich", language_code: "en", direction: "ltr"}, introduced_tokens: ["sandwich"]}
+          - {content_key: "en.a1.unit07.lesson01.teach.coffee", kind: "vocabulary", target: {text: "coffee", language_code: "en", direction: "ltr"}, introduced_tokens: ["coffee"], example: {text: "I'd like a coffee, please.", language_code: "en", direction: "ltr"}}
+          - {content_key: "en.a1.unit07.lesson01.teach.tea", kind: "vocabulary", target: {text: "tea", language_code: "en", direction: "ltr"}, introduced_tokens: ["tea"], example: {text: "I like drinking tea.", language_code: "en", direction: "ltr"}}
+          - {content_key: "en.a1.unit07.lesson01.teach.water", kind: "vocabulary", target: {text: "water", language_code: "en", direction: "ltr"}, introduced_tokens: ["water"], example: {text: "I'd like a water, please.", language_code: "en", direction: "ltr"}}
+          - {content_key: "en.a1.unit07.lesson01.teach.bread", kind: "vocabulary", target: {text: "bread", language_code: "en", direction: "ltr"}, introduced_tokens: ["bread"], example: {text: "I like eating bread.", language_code: "en", direction: "ltr"}}
+          - {content_key: "en.a1.unit07.lesson01.teach.soup", kind: "vocabulary", target: {text: "soup", language_code: "en", direction: "ltr"}, introduced_tokens: ["soup"], example: {text: "I'd like a soup, please.", language_code: "en", direction: "ltr"}}
+          - {content_key: "en.a1.unit07.lesson01.teach.salad", kind: "vocabulary", target: {text: "salad", language_code: "en", direction: "ltr"}, introduced_tokens: ["salad"], example: {text: "I'd like a salad, please.", language_code: "en", direction: "ltr"}}
+          - {content_key: "en.a1.unit07.lesson01.teach.sandwich", kind: "vocabulary", target: {text: "sandwich", language_code: "en", direction: "ltr"}, introduced_tokens: ["sandwich"], example: {text: "I'd like a sandwich, please.", language_code: "en", direction: "ltr"}}
         exercises:
           - {content_key: "en.a1.unit07.lesson01.exercise01.listen_food", type: "listen_select", tested_text: "soup", media_asset_key: "en.a1.audio.food.items.01", prompt: {target_blocks: []}}
           - content_key: "en.a1.unit07.lesson01.exercise02.choose_drink"
@@ -86,8 +112,8 @@ units:
         title: "Reading a simple menu"
         spine_outcome_id: "universal.a1.food.order_simple_meal"
         teaching:
-          - {content_key: "en.a1.unit07.lesson03.teach.menu", kind: "vocabulary", target: {text: "menu", language_code: "en", direction: "ltr"}, introduced_tokens: ["menu"]}
-          - {content_key: "en.a1.unit07.lesson03.teach.price", kind: "vocabulary", target: {text: "price", language_code: "en", direction: "ltr"}, introduced_tokens: ["price"]}
+          - {content_key: "en.a1.unit07.lesson03.teach.menu", kind: "vocabulary", target: {text: "menu", language_code: "en", direction: "ltr"}, introduced_tokens: ["menu"], example: {text: "I'm reading the menu.", language_code: "en", direction: "ltr"}}
+          - {content_key: "en.a1.unit07.lesson03.teach.price", kind: "vocabulary", target: {text: "price", language_code: "en", direction: "ltr"}, introduced_tokens: ["price"], example: {text: "The price is good.", language_code: "en", direction: "ltr"}}
           - {content_key: "en.a1.unit07.lesson03.teach.menu_text", kind: "reading", target: {text: "Cafe Menu: Coffee - $3. Tea - $2. Soup - $5. Sandwich - $6.", language_code: "en", direction: "ltr"}, introduced_tokens: ["Cafe", "Menu", "Coffee", "Tea", "Soup", "Sandwich", "3", "2", "5", "6"]}
         exercises:
           - content_key: "en.a1.unit07.lesson03.exercise01.read_coffee_price"
@@ -109,16 +135,16 @@ units:
         title: "Ordering at a cafe"
         spine_outcome_id: "universal.a1.food.order_simple_meal"
         teaching:
-          - {content_key: "en.a1.unit07.lesson04.teach.thats_x_dollars", kind: "phrase", target: {text: "That's six dollars.", language_code: "en", direction: "ltr"}, introduced_tokens: ["That's", "six", "dollars"]}
+          - {content_key: "en.a1.unit07.lesson04.teach.thats_x_dollars", kind: "phrase", target: {text: "That's nine dollars.", language_code: "en", direction: "ltr"}, introduced_tokens: ["That's", "nine", "dollars"]}
           - {content_key: "en.a1.unit07.lesson04.teach.q_order", kind: "dialogue", target: {text: "Hi, I'd like a coffee and a sandwich, please.", language_code: "en", direction: "ltr", speaker: "Leila"}, introduced_tokens: ["Hi", "I'd", "like", "a", "coffee", "and", "sandwich", "please"]}
           - {content_key: "en.a1.unit07.lesson04.teach.a_anything_else", kind: "dialogue", target: {text: "Sure. Anything else?", language_code: "en", direction: "ltr", speaker: "Daniel"}, introduced_tokens: ["Sure", "Anything", "else"]}
           - {content_key: "en.a1.unit07.lesson04.teach.reply_thats_all", kind: "dialogue", target: {text: "No, that's all, thanks.", language_code: "en", direction: "ltr", speaker: "Leila"}, introduced_tokens: ["No", "that's", "all", "thanks"]}
           - {content_key: "en.a1.unit07.lesson04.teach.q_for_here", kind: "dialogue", target: {text: "For here or to go?", language_code: "en", direction: "ltr", speaker: "Daniel"}, introduced_tokens: ["For", "here", "or", "to", "go"]}
           - {content_key: "en.a1.unit07.lesson04.teach.reply_for_here", kind: "dialogue", target: {text: "For here, please.", language_code: "en", direction: "ltr", speaker: "Leila"}, introduced_tokens: ["For", "here", "please"]}
-          - {content_key: "en.a1.unit07.lesson04.teach.closing_price", kind: "dialogue", target: {text: "OK, that's six dollars.", language_code: "en", direction: "ltr", speaker: "Daniel"}, introduced_tokens: ["OK", "that's", "six", "dollars"]}
+          - {content_key: "en.a1.unit07.lesson04.teach.closing_price", kind: "dialogue", target: {text: "OK, that's nine dollars.", language_code: "en", direction: "ltr", speaker: "Daniel"}, introduced_tokens: ["OK", "that's", "nine", "dollars"]}
         exercises:
           - {content_key: "en.a1.unit07.lesson04.exercise01.listen_order", type: "dialogue_comprehension", tested_text: "I'd like a coffee and a sandwich, please", media_asset_key: "en.a1.audio.dialogue.cafe.01", prompt: {target_blocks: []}}
-          - {content_key: "en.a1.unit07.lesson04.exercise02.listen_price", type: "listen_select", tested_text: "That's six dollars", media_asset_key: "en.a1.audio.dialogue.cafe.01", prompt: {target_blocks: []}}
+          - {content_key: "en.a1.unit07.lesson04.exercise02.listen_price", type: "listen_select", tested_text: "That's nine dollars", media_asset_key: "en.a1.audio.dialogue.cafe.01", prompt: {target_blocks: []}}
           - content_key: "en.a1.unit07.lesson04.exercise03.choose_for_here_reply"
             type: "multiple_choice"
             tested_text: "For here, please."
