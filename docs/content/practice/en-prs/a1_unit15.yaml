@@ -136,9 +136,19 @@ templates:
     answer_derivation: {kind: render_frame, frame: {text: "این از آن {comparative_adjective_one} است چون {comparative_adjective_two} است", language_code: prs, direction: rtl}}
     feedback_frame: {text: "Word order: این از آن [adjective] است چون [reason] است (this is [adjective]-er because it's [reason]).", language_code: en, direction: ltr}
 
-  # Lesson 5: reading a comparison (Karim and Negar).
+  # Lesson 3: Karim and Negar (person names) are introduced here, not in
+  # lesson05 -- lesson05 ("reading a comparison") is a pure review/reading
+  # lesson that introduces zero new vocabulary (introduced_tokens: [] on
+  # both its teaching cards, confirmed against docs/content/realizations/
+  # prs/a1_unit15_comparisons.yaml), so a template anchored there could
+  # never resolve at runtime (the same bug class as fa-en's unit23
+  # what_do_you_do finding). Re-anchored to lesson03.comparing_people,
+  # which genuinely introduces کریم/نگار (introduced_tokens: [کریم, نگار])
+  # and is already this file's own anchor for the sibling
+  # person_name_gloss.002 template above -- found and fixed during the
+  # 2026-07-07 corpus-wide self-reference/zero-vocabulary sweep.
   - content_key: practice.en-prs.prs.a1.unit15.lesson05.person_name_pair.001
-    lesson_content_key: prs.a1.unit15.lesson05.reading_a_comparison
+    lesson_content_key: prs.a1.unit15.lesson03.comparing_people
     type: matching_pairs
     # Full course-wide person_name pool, 12 distinct real candidates
     # (verified via scripts/_practice_slot_check.py) -- Karim and Negar
