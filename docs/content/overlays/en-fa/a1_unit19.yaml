@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: "1.1"
 overlay_version: "2026.1-draft.1"
 overlay_key: en-fa.a1.unit19
 source_language: en
@@ -13,7 +13,11 @@ review:
   required_next_reviewer: null
   notes: "Authored alongside the new fa a1_unit19_housing.yaml realization. Follows the established en-fa overlay convention from units 09-18 (English instruction/correct_option/distractors/feedback, target-language Farsi accepted_answers, English glosses for recognize_* multiple_choice items). Open-ended production exercises (write_own_home_description, write_home_summary) carry multiple phrasing variants from the start, learned from units 14-18's own review findings. write_home_summary carries period-joined, comma-joined, and و-joined accepted_answers variants per §12 at every clause boundary. Authored §14/§16/§17-compliant from the start alongside the realization. Needs the standard fresh-context review before shipping.
 
-    FRESH-CONTEXT REVIEW, 2026-07-07 (zero prior access to this unit's authoring reasoning, prs sibling files never opened, per §8/§9): reviewed together with the paired realization file (see its own review notes for the full checklist detail: spine-outcome/assessment-requirement coverage, exercise pacing, §16 matching_pairs sizing, script purity, jargon-leak sweep, duplicate-instruction-text script, content_key parity, frontend exercise-type registration, and the ZWNJ-aware untaught-vocabulary tokenizer -- all clean, zero fixes needed). Overlay-specific checks: independently re-derived the YAML-boolean footgun fix from scratch via a fresh recursive yaml.safe_load scan (not trusting the pre-review fix) -- confirmed lesson06.exercise03's correct_option: \"Yes\", distractors: [\"No\", ...], and accepted_answers: [{value: \"Yes\", ...}] are all correctly quoted strings, and found no second stray Yes/No/true/false instance anywhere else in this file. Verified every instruction text coheres with its own answer data (§5) -- e.g. dialogue_comprehension_context's \"How many bedrooms does Sara's house have?\" correctly matches Sara's own dialogue line, and dialogue_response_describe_home's instruction/accepted_answer pair matches the conversational context. Confirmed write_home_summary's three accepted_answers variants (period-joined, comma-joined, و-joined) are each grammatically natural and independently verified against the compiled correct_response.accepted list. Confirmed via backend/app/api/router.py's grade()/is_multi_answer_response() that write_own_home_description's and write_home_summary's multi-variant accepted_answers grade correctly as genuine multi-answer acceptance, not a single hardcoded string. Re-ran validate + compile after confirming zero issues needed fixing: 0 errors/0 warnings, valid JSON."
+    FRESH-CONTEXT REVIEW, 2026-07-07 (zero prior access to this unit's authoring reasoning, prs sibling files never opened, per §8/§9): reviewed together with the paired realization file (see its own review notes for the full checklist detail: spine-outcome/assessment-requirement coverage, exercise pacing, §16 matching_pairs sizing, script purity, jargon-leak sweep, duplicate-instruction-text script, content_key parity, frontend exercise-type registration, and the ZWNJ-aware untaught-vocabulary tokenizer -- all clean, zero fixes needed). Overlay-specific checks: independently re-derived the YAML-boolean footgun fix from scratch via a fresh recursive yaml.safe_load scan (not trusting the pre-review fix) -- confirmed lesson06.exercise03's correct_option: \"Yes\", distractors: [\"No\", ...], and accepted_answers: [{value: \"Yes\", ...}] are all correctly quoted strings, and found no second stray Yes/No/true/false instance anywhere else in this file. Verified every instruction text coheres with its own answer data (§5) -- e.g. dialogue_comprehension_context's \"How many bedrooms does Sara's house have?\" correctly matches Sara's own dialogue line, and dialogue_response_describe_home's instruction/accepted_answer pair matches the conversational context. Confirmed write_home_summary's three accepted_answers variants (period-joined, comma-joined, و-joined) are each grammatically natural and independently verified against the compiled correct_response.accepted list. Confirmed via backend/app/api/router.py's grade()/is_multi_answer_response() that write_own_home_description's and write_home_summary's multi-variant accepted_answers grade correctly as genuine multi-answer acceptance, not a single hardcoded string. Re-ran validate + compile after confirming zero issues needed fixing: 0 errors/0 warnings, valid JSON.
+
+    2026-07-07: AUTHORING_GUIDE.md §19 retrofit -- added real example sentence(s) to all 12 kind:vocabulary teaching entries with example_gloss (the merged names card given a 2-item list), each a natural, comprehensible-from-gloss sentence using the card's own word(s). schema_version bumped to 1.1. Example sentences are Claude-authored and pending fresh-context review.
+
+    2026-07-07: FRESH-CONTEXT REVIEW of the §19 retrofit examples specifically (paired with the realization's own review, same pass; supplemental check only). Verified every example_gloss accurately translates its paired realization example, including the names card's two-item list against this unit's own established facts. Fixed the overlay side of the one gloss-affecting issue found in the realization: fa.a1.unit19.lesson02.teach.do_ta_word's example_gloss changed from \"It has two bedrooms.\" (a duplicate of otagh_khab_word's own gloss) to \"It has two bathrooms.\", matching the realization's de-duplicated example; miz_word's example_gloss needed no change since its orthography-only fix (پنجره‌ست -> پنجره‌س) didn't change the sentence's meaning. Re-ran validate + compile: 0 errors/0 warnings, valid JSON."
 
 course:
   title: Farsi A1
@@ -46,18 +50,22 @@ teaching:
     title: House
     gloss: house
     note: "خونه means house/home (colloquial form of خانه)."
+    example_gloss: "My house is big."
   fa.a1.unit19.lesson01.teach.otagh_khab_word:
     title: Bedroom
     gloss: bedroom
     note: "اتاق خواب literally means 'sleep room' -- bedroom."
+    example_gloss: "It has two bedrooms."
   fa.a1.unit19.lesson01.teach.ashpazkhone_word:
     title: Kitchen
     gloss: kitchen
     note: "آشپزخانه means kitchen."
+    example_gloss: "The kitchen is big."
   fa.a1.unit19.lesson01.teach.hamoom_word:
     title: Bathroom
     gloss: bathroom
     note: "حموم means bathroom (colloquial form of حمام)."
+    example_gloss: "The bathroom is clean."
   fa.a1.unit19.lesson02.teach.chand_ta_word:
     title: "How many"
     gloss: "how many"
@@ -66,6 +74,7 @@ teaching:
     title: Two
     gloss: two
     note: "دو تا means two (of something countable)."
+    example_gloss: "It has two bathrooms."
   fa.a1.unit19.lesson02.teach.dare_word:
     title: "It has"
     gloss: "it has"
@@ -74,14 +83,17 @@ teaching:
     title: Bed
     gloss: bed
     note: "تخت means bed."
+    example_gloss: "The bed is in the bedroom."
   fa.a1.unit19.lesson03.teach.miz_word:
     title: Table
     gloss: table
     note: "میز means table."
+    example_gloss: "The table is next to the window."
   fa.a1.unit19.lesson03.teach.sandali_word:
     title: Chair
     gloss: chair
     note: "صندلی means chair."
+    example_gloss: "There's a chair next to the table."
   fa.a1.unit19.lesson03.teach.ye_word:
     title: A/one
     gloss: "a / one"
@@ -118,6 +130,7 @@ teaching:
     title: I
     gloss: I
     note: "من means I."
+    example_gloss: "My house has two bedrooms."
   fa.a1.unit19.lesson05.teach.khoonye_word:
     title: "House of / my house"
     gloss: "house of / my house"
@@ -130,6 +143,7 @@ teaching:
     title: "Nima and Sara"
     gloss: "Nima, Sara"
     note: "Common Iranian names used throughout this course."
+    example_gloss: ["Nima's house is big.", "Sara's house is small."]
   fa.a1.unit19.lesson06.teach.khoonet_chetore_phrase:
     title: "How's your house?"
     gloss: "How's your house?"
@@ -138,10 +152,12 @@ teaching:
     title: "It's good"
     gloss: "it's good"
     note: "خوبه is the colloquial contraction of خوب است (it is good)."
+    example_gloss: "This house is good."
   fa.a1.unit19.lesson06.teach.aare_word:
     title: Yeah
     gloss: yeah
     note: "آره is the colloquial form of بله (yes)."
+    example_gloss: "Yeah, it's good."
   fa.a1.unit19.lesson06.teach.dialogue_line1:
     title: "Nima asks"
     gloss: "How's your house?"

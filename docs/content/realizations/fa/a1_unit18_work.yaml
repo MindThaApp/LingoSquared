@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: "1.1"
 realization_version: "2026.1-draft.1"
 target_language: fa
 cefr_level: A1
@@ -13,7 +13,11 @@ review:
   required_next_reviewer: null
   notes: "New unit, fa's next uncovered outcome (universal.a1.work.describe_job, prerequisites: introductions/unit02 and routines/unit11, both already covered). Six lessons: basic occupation vocabulary (مهندس/معلم/دکتر), asking someone's job, workplace vocabulary (شرکت/مدرسه/بیمارستان), describing a daily work routine, reading a short work profile, and a dialogue where two people discuss their jobs. Deliberately uses در (in/at) rather than تو for 'at a workplace' throughout, to avoid a real homograph collision with تو meaning 'you' (already taught in earlier units) -- a register/clarity choice, not an error. Colloquial -e/-am contraction register maintained throughout (مهندسم، مهندسه، عالیه), هستم copula family. Authored independently of the prs realization per the sibling-isolation rule. Authored §14/§16/§17-compliant from the start: no listen_type/listen_select/listen_order exercises anywhere, every matching_pairs exercise sized 6 pairs except lesson01's genuine 4-pair first-lesson ceiling, and zero fill_in_blank exercises. NOTE ON §14 SCOPE: AUTHORING_GUIDE.md §14 was revised 2026-07-06 to permit listen_type/listen_select for fa now that Azure TTS ships real Farsi neural voices (the restriction is now prs-only) -- this unit nonetheless continues the established text-based exercise pattern used in units 01-17 for corpus consistency, pending a broader decision on whether/how to retrofit audio exercises project-wide; not a compliance gap. Multi-clause exercises include period-joined, comma-joined, and و-joined accepted variants per §12, and open-ended production exercises carry multiple accepted job/workplace variants from the start. Compiler validation clean (0 errors/0 warnings). Awaiting the standing fresh-context review before status can move to reviewed.
 
-    FRESH-CONTEXT REVIEW, 2026-07-07 (zero prior access to this unit's authoring reasoning, prs sibling files never opened, per §8/§9): confirmed spine-outcome discipline (all 6 lessons genuinely serve universal.a1.work.describe_job) and all 4 assessment_requirements covered (understand_work_description via lesson05/06's reading_comprehension/dialogue_comprehension; describe_work via the translate/dialogue_response exercises; read_work_profile via lesson05's reading pair; write_work_profile via lesson05/06's writing_prompt exercises). Verified recognition->drag/matching->production pacing in all 6 lessons. Grepped both files: zero listen_type/listen_select/listen_order/fill_in_blank exercises (§14/§17), confirming the documented deliberate all-text-based choice despite §14 now permitting fa audio content -- correctly not flagged as a gap. Verified §16 matching_pairs sizing exactly as claimed (lesson01: 4, lessons02-06: 6 each). Grepped both files for Arabic-range kaf (U+0643)/yeh (U+064A): zero found. Wrote and ran a real recursive yaml.safe_load-based Python script checking every dict value in both files for a stray non-schema Python bool: none found. Confirmed content_key parity exact in both directions via script (29 teaching + 30 exercise keys after the fix below). Confirmed all 8 exercise types used are registered in frontend/src/components/exercises/ExerciseRenderer.tsx. Wrote and ran a real duplicate-instruction-vs-target_blocks script comparing every exercise's en-language prompt.target_blocks against that exercise's overlay instruction: zero duplicates found. Read backend/app/api/router.py's grade()/is_multi_answer_response() and confirmed lesson05.exercise05 (write_own_job) and lesson06.exercise05 (write_job_summary)'s multi-variant open-ended acceptance is genuine multi-answer grading, confirmed directly in the compiled JSON (correct_response.accepted lists every authored variant) and that all 30 exercises have a genuine non-empty correct_response, with answer_language_code correctly resolving to fa for every translation/writing_prompt/dialogue_response exercise. Verified every multiple_choice/reading_comprehension/dialogue_comprehension exercise pairs a Farsi prompt with English-only correct_option/distractors -- no same-script leakage. Grepped every تو occurrence in both files and confirmed it is used exclusively as the pronoun 'you' (تو چی؟, already taught) -- never as a location preposition -- and confirmed در/یک شرکت/در یک مدرسه/در یک بیمارستان is natural, correct, idiomatic colloquial Tehrani Farsi for 'at a company/school/hospital', a genuine and well-motivated choice given the تو homograph risk, not an overcorrection. Verified every occupation/workplace verb form (مهندسم/معلمم/دکترم 1st person, مهندسه/معلمه 3rd person, کار می‌کنم/می‌کنی/می‌کنه all three persons) is correctly matched to its stated grammatical person throughout every exercise. Cross-checked §11 facts: lesson06's dialogue (Nima: engineer at a company; Sara: teacher at a school) is fully consistent with lesson05's independently-stated reading text (Nima: engineer at a company) -- same character, same facts, no contradiction. Wrote and ran a ZWNJ-aware, punctuation-stripping Python tokenizer checking every exercise's tested_text/pairs/word_bank and the overlay's Farsi-side accepted_answers against cumulative file-scoped introduced_tokens. Found and fixed one genuine gap: من ('I'), used in lesson05.exercise05's overlay accepted_answers ('من مهندسم' etc.) as an alternate fuller-sentence variant, was not yet introduced in-file at that point (only introduced later via lesson06's dialogue_line2) -- added a dedicated من vocabulary teaching card to lesson01 (both realization and overlay) and cleared the now-redundant introduced_tokens entry on lesson06's dialogue_line2; re-ran the tokenizer after the fix, zero remaining gaps. Confirmed معلمه (lesson06's 3rd-person teaching card) and its use in write_job_summary, and both کار می‌کنم (lesson03/04) and مهندسه/کار می‌کنه (lesson05), are each taught before their first tested use. Confirmed A1-appropriate complexity throughout and register consistency against units 16/17 (هستم-family copula, -e/-am contractions, نیما/سارا names, established و-joined multi-clause precedent). Re-ran validate + compile after the fix: 0 errors/0 warnings, valid JSON, and the actual compiled output was spot-checked directly to confirm the fix landed correctly and every exercise has a genuine correct answer."
+    FRESH-CONTEXT REVIEW, 2026-07-07 (zero prior access to this unit's authoring reasoning, prs sibling files never opened, per §8/§9): confirmed spine-outcome discipline (all 6 lessons genuinely serve universal.a1.work.describe_job) and all 4 assessment_requirements covered (understand_work_description via lesson05/06's reading_comprehension/dialogue_comprehension; describe_work via the translate/dialogue_response exercises; read_work_profile via lesson05's reading pair; write_work_profile via lesson05/06's writing_prompt exercises). Verified recognition->drag/matching->production pacing in all 6 lessons. Grepped both files: zero listen_type/listen_select/listen_order/fill_in_blank exercises (§14/§17), confirming the documented deliberate all-text-based choice despite §14 now permitting fa audio content -- correctly not flagged as a gap. Verified §16 matching_pairs sizing exactly as claimed (lesson01: 4, lessons02-06: 6 each). Grepped both files for Arabic-range kaf (U+0643)/yeh (U+064A): zero found. Wrote and ran a real recursive yaml.safe_load-based Python script checking every dict value in both files for a stray non-schema Python bool: none found. Confirmed content_key parity exact in both directions via script (29 teaching + 30 exercise keys after the fix below). Confirmed all 8 exercise types used are registered in frontend/src/components/exercises/ExerciseRenderer.tsx. Wrote and ran a real duplicate-instruction-vs-target_blocks script comparing every exercise's en-language prompt.target_blocks against that exercise's overlay instruction: zero duplicates found. Read backend/app/api/router.py's grade()/is_multi_answer_response() and confirmed lesson05.exercise05 (write_own_job) and lesson06.exercise05 (write_job_summary)'s multi-variant open-ended acceptance is genuine multi-answer grading, confirmed directly in the compiled JSON (correct_response.accepted lists every authored variant) and that all 30 exercises have a genuine non-empty correct_response, with answer_language_code correctly resolving to fa for every translation/writing_prompt/dialogue_response exercise. Verified every multiple_choice/reading_comprehension/dialogue_comprehension exercise pairs a Farsi prompt with English-only correct_option/distractors -- no same-script leakage. Grepped every تو occurrence in both files and confirmed it is used exclusively as the pronoun 'you' (تو چی؟, already taught) -- never as a location preposition -- and confirmed در/یک شرکت/در یک مدرسه/در یک بیمارستان is natural, correct, idiomatic colloquial Tehrani Farsi for 'at a company/school/hospital', a genuine and well-motivated choice given the تو homograph risk, not an overcorrection. Verified every occupation/workplace verb form (مهندسم/معلمم/دکترم 1st person, مهندسه/معلمه 3rd person, کار می‌کنم/می‌کنی/می‌کنه all three persons) is correctly matched to its stated grammatical person throughout every exercise. Cross-checked §11 facts: lesson06's dialogue (Nima: engineer at a company; Sara: teacher at a school) is fully consistent with lesson05's independently-stated reading text (Nima: engineer at a company) -- same character, same facts, no contradiction. Wrote and ran a ZWNJ-aware, punctuation-stripping Python tokenizer checking every exercise's tested_text/pairs/word_bank and the overlay's Farsi-side accepted_answers against cumulative file-scoped introduced_tokens. Found and fixed one genuine gap: من ('I'), used in lesson05.exercise05's overlay accepted_answers ('من مهندسم' etc.) as an alternate fuller-sentence variant, was not yet introduced in-file at that point (only introduced later via lesson06's dialogue_line2) -- added a dedicated من vocabulary teaching card to lesson01 (both realization and overlay) and cleared the now-redundant introduced_tokens entry on lesson06's dialogue_line2; re-ran the tokenizer after the fix, zero remaining gaps. Confirmed معلمه (lesson06's 3rd-person teaching card) and its use in write_job_summary, and both کار می‌کنم (lesson03/04) and مهندسه/کار می‌کنه (lesson05), are each taught before their first tested use. Confirmed A1-appropriate complexity throughout and register consistency against units 16/17 (هستم-family copula, -e/-am contractions, نیما/سارا names, established و-joined multi-clause precedent). Re-ran validate + compile after the fix: 0 errors/0 warnings, valid JSON, and the actual compiled output was spot-checked directly to confirm the fix landed correctly and every exercise has a genuine correct answer.
+
+    2026-07-07: AUTHORING_GUIDE.md §19 retrofit -- added real example sentence(s) to all 10 kind:vocabulary teaching cards (the merged names card given a 2-item list), each a natural, comprehensible-from-gloss sentence using the card's own word(s). schema_version bumped to 1.1. Example sentences are Claude-authored and pending fresh-context review.
+
+    2026-07-07: FRESH-CONTEXT REVIEW of the §19 retrofit examples specifically (zero prior access to the retrofit's own authoring reasoning, scoped narrowly to the new example/example_gloss fields, not a re-review of the unit's already-settled spine outcome/exercises/dialogue). Reviewed all 10 vocabulary cards' example sentences (11 sentences total counting the 2-item names list) for register match, target-word containment, genuine sentence structure, comprehensibility from the gloss alone, non-identity with target text, gloss accuracy, script purity (clean), and fact-consistency against this unit's own dialogue/reading (Nima: engineer at a company; Sara: teacher at a school -- confirmed both the names card's example list and every other job-related example are fully consistent with these facts, no contradictions). Found and fixed one lazy duplicate: fa.a1.unit18.lesson01.teach.man_word's example (من مهندسم) was verbatim identical to lesson01.teach.mohandesam_word's own example two cards earlier, giving the learner the same sentence twice for two different target words within the same lesson; replaced with من خوبم (I'm fine), still natural, still demonstrating من, and register-consistent (-am contraction pattern). Re-ran validate + compile after the fix: 0 errors/0 warnings, valid JSON, fix confirmed present in the compiled examples array."
 
 course:
   realization_key: fa.a1
@@ -52,22 +56,27 @@ units:
             kind: vocabulary
             target: {text: شغل, language_code: fa, direction: rtl}
             introduced_tokens: [شغل]
+            example: {text: "شغلت چیه؟", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit18.lesson01.teach.mohandesam_word
             kind: vocabulary
             target: {text: مهندسم, language_code: fa, direction: rtl}
             introduced_tokens: [مهندسم]
+            example: {text: "من مهندسم.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit18.lesson01.teach.moallemam_word
             kind: vocabulary
             target: {text: معلمم, language_code: fa, direction: rtl}
             introduced_tokens: [معلمم]
+            example: {text: "من معلمم.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit18.lesson01.teach.doctoram_word
             kind: vocabulary
             target: {text: دکترم, language_code: fa, direction: rtl}
             introduced_tokens: [دکترم]
+            example: {text: "من دکترم.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit18.lesson01.teach.man_word
             kind: vocabulary
             target: {text: من, language_code: fa, direction: rtl}
             introduced_tokens: [من]
+            example: {text: "من خوبم.", language_code: fa, direction: rtl}
         exercises:
           - content_key: fa.a1.unit18.lesson01.exercise01.recognize_mohandesam
             type: multiple_choice
@@ -149,14 +158,17 @@ units:
             kind: vocabulary
             target: {text: شرکت, language_code: fa, direction: rtl}
             introduced_tokens: [شرکت]
+            example: {text: "در یک شرکت کار می‌کنم.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit18.lesson03.teach.madrese_word
             kind: vocabulary
             target: {text: مدرسه, language_code: fa, direction: rtl}
             introduced_tokens: [مدرسه]
+            example: {text: "در یک مدرسه کار می‌کنم.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit18.lesson03.teach.bimarestan_word
             kind: vocabulary
             target: {text: بیمارستان, language_code: fa, direction: rtl}
             introduced_tokens: [بیمارستان]
+            example: {text: "در یک بیمارستان کار می‌کنم.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit18.lesson03.teach.dar_word
             kind: grammar_note
             target: {text: "در (in/at)", language_code: fa, direction: rtl}
@@ -296,6 +308,9 @@ units:
             kind: vocabulary
             target: {text: "نیما، سارا", language_code: fa, direction: rtl}
             introduced_tokens: [سارا]
+            example:
+              - {text: "نیما مهندسه.", language_code: fa, direction: rtl}
+              - {text: "سارا معلمه.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit18.lesson06.teach.to_chi_phrase
             kind: phrase
             target: {text: "تو چی؟", language_code: fa, direction: rtl}
@@ -304,6 +319,7 @@ units:
             kind: vocabulary
             target: {text: عالیه, language_code: fa, direction: rtl}
             introduced_tokens: [عالیه]
+            example: {text: "این عالیه.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit18.lesson06.teach.va_word
             kind: grammar_note
             target: {text: "و (and)", language_code: fa, direction: rtl}

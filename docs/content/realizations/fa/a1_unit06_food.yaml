@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: "1.1"
 realization_version: "2026.1-draft.1"
 target_language: fa
 cefr_level: A1
@@ -11,7 +11,11 @@ generation_provenance:
 review:
   status: reviewed
   required_next_reviewer: null
-  notes: "Fresh-context review: fixed lesson06 exercise pacing (production items moved after recognition/drag), replaced a leftover FSI-register archaism (بسیار خب -> خیلی خب) in the dialogue, corrected a copy-paste tested_text mismatch in lesson03.exercise07, and resolved an ambiguous listen_select distractor set in lesson01.exercise03. Dialect verified as Iranian fa_IR_standard_colloquial_intro throughout, script purity confirmed (no Arabic-range codepoints), no jargon leaks, no YAML boolean footguns. Compiler validation: 0 errors/0 warnings across all fa units 01-06. Audio remains pending generation. AUDIO-ACCESSIBILITY RETROFIT 2026-07-06 (§14, project-wide audit): found 9 exercises in this unit (lesson01.exercise03, lesson02.exercise03/06, lesson03.exercise03/06, lesson04.exercise03, lesson05.exercise03/06, lesson06.exercise03) were listen_type or bare-prompt listen_select items -- genuinely unanswerable since fa/prs have zero working TTS/recorded audio. Converted: listen_select -> multiple_choice (visible Farsi prompt, English glosses to avoid re-introducing the prompt-shows-answer bug -- the initial lesson01.exercise03 fix pass first mistakenly kept Persian-script distractors matching the prompt's own script, caught and corrected to English glosses before finalizing), listen_type -> translation. MATCHING_PAIRS SCALE (§16) CHECK: all matching_pairs exercises (7/2/5/6/6) already reasonably sized except match_register at 2, which is a genuine narrow polite/informal ordering-verb contrast with no more taught vocabulary in that specific category to pool -- left unchanged. Re-verified 0 remaining §14 violations via script, content_key parity intact, validate+compile both clean after the retrofit. POST-SHIP CORPUS-WIDE FIX, 2026-07-07: a project-wide sweep (prompted by unit13's fresh-context reviewer flagging the same bug in units 11/12) found this file also had exercises where realization prompt.target_blocks duplicated the overlay's own instruction text verbatim in English -- the compiler would have rendered the same sentence twice to the learner. Fixed mechanically: every affected exercise's prompt set to target_blocks: []. Re-verified validate+compile clean (0 errors/0 warnings) and confirmed zero remaining instruction-duplicate target_blocks via a script comparing every exercise's target_blocks against its overlay instruction."
+  notes: "Fresh-context review: fixed lesson06 exercise pacing (production items moved after recognition/drag), replaced a leftover FSI-register archaism (بسیار خب -> خیلی خب) in the dialogue, corrected a copy-paste tested_text mismatch in lesson03.exercise07, and resolved an ambiguous listen_select distractor set in lesson01.exercise03. Dialect verified as Iranian fa_IR_standard_colloquial_intro throughout, script purity confirmed (no Arabic-range codepoints), no jargon leaks, no YAML boolean footguns. Compiler validation: 0 errors/0 warnings across all fa units 01-06. Audio remains pending generation. AUDIO-ACCESSIBILITY RETROFIT 2026-07-06 (§14, project-wide audit): found 9 exercises in this unit (lesson01.exercise03, lesson02.exercise03/06, lesson03.exercise03/06, lesson04.exercise03, lesson05.exercise03/06, lesson06.exercise03) were listen_type or bare-prompt listen_select items -- genuinely unanswerable since fa/prs have zero working TTS/recorded audio. Converted: listen_select -> multiple_choice (visible Farsi prompt, English glosses to avoid re-introducing the prompt-shows-answer bug -- the initial lesson01.exercise03 fix pass first mistakenly kept Persian-script distractors matching the prompt's own script, caught and corrected to English glosses before finalizing), listen_type -> translation. MATCHING_PAIRS SCALE (§16) CHECK: all matching_pairs exercises (7/2/5/6/6) already reasonably sized except match_register at 2, which is a genuine narrow polite/informal ordering-verb contrast with no more taught vocabulary in that specific category to pool -- left unchanged. Re-verified 0 remaining §14 violations via script, content_key parity intact, validate+compile both clean after the retrofit. POST-SHIP CORPUS-WIDE FIX, 2026-07-07: a project-wide sweep (prompted by unit13's fresh-context reviewer flagging the same bug in units 11/12) found this file also had exercises where realization prompt.target_blocks duplicated the overlay's own instruction text verbatim in English -- the compiler would have rendered the same sentence twice to the learner. Fixed mechanically: every affected exercise's prompt set to target_blocks: []. Re-verified validate+compile clean (0 errors/0 warnings) and confirmed zero remaining instruction-duplicate target_blocks via a script comparing every exercise's target_blocks against its overlay instruction.
+
+    2026-07-07: AUTHORING_GUIDE.md §19 retrofit -- added a real example sentence to all 12 kind:vocabulary teaching cards, each a natural, comprehensible-from-gloss sentence using the card's own word. schema_version bumped to 1.1. Example sentences are Claude-authored and pending fresh-context review.
+
+    2026-07-07: §19 FRESH-CONTEXT REVIEW of the 12 example sentences added in the retrofit above (supplemental check, not a full unit re-review -- spine outcome/pacing/etc. out of scope). Checked each example for: naturalness and register match against this file's own established fa_IR_standard_colloquial_intro exercises, presence of the card's own word, genuine 2+ word sentence structure, comprehensibility from the gloss alone, non-identity with the target text, gloss translation accuracy, script purity, and cross-file fact/duplicate consistency. Found and fixed a real register-consistency bug: 5 of the 12 examples (berenj, ab, ghahve, menu_word, restaurant_word) used formal/literary forms (bare است copula, می‌خواهم, را) that clash with this file's own already-reviewed colloquial register (rو، محاوره‌ای -e contractions, می‌خوام) -- confirmed by grepping this file's own pre-existing exercises/dialogue, which never use bare است/می‌خواهم/را for these same predicates. Fixed: برنج با مرغ خوشمزه است -> خوشمزه‌ست; من آب می‌خواهم -> می‌خوام; قهوه داغ است -> داغه; منو را می‌خواهم -> منو رو می‌خوام; این رستوران خوب است -> خوبه. All other 7 examples (naan, morgh, chai, mive, lotfan, jooje_kabab, hesab_word) passed as authored -- natural, contain their target word, comprehensible from gloss, and not duplicated/contradictory elsewhere in the file. Re-ran validate+compile after fixes: 0 errors/0 warnings, compiles to valid JSON, all 12 examples present in the compiled output."
 
 course:
   realization_key: fa.a1
@@ -95,30 +99,37 @@ units:
             kind: vocabulary
             target: {text: نان, language_code: fa, direction: rtl}
             introduced_tokens: [نان]
+            example: {text: "من نان دوست دارم.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit06.lesson01.teach.berenj
             kind: vocabulary
             target: {text: برنج, language_code: fa, direction: rtl}
             introduced_tokens: [برنج]
+            example: {text: "برنج با مرغ خوشمزه‌ست.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit06.lesson01.teach.morgh
             kind: vocabulary
             target: {text: مرغ, language_code: fa, direction: rtl}
             introduced_tokens: [مرغ]
+            example: {text: "من مرغ می‌خورم.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit06.lesson01.teach.ab
             kind: vocabulary
             target: {text: آب, language_code: fa, direction: rtl}
             introduced_tokens: [آب]
+            example: {text: "من آب می‌خوام.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit06.lesson01.teach.chai
             kind: vocabulary
             target: {text: چای, language_code: fa, direction: rtl}
             introduced_tokens: [چای]
+            example: {text: "یک چای لطفاً.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit06.lesson01.teach.ghahve
             kind: vocabulary
             target: {text: قهوه, language_code: fa, direction: rtl}
             introduced_tokens: [قهوه]
+            example: {text: "قهوه داغه.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit06.lesson01.teach.mive
             kind: vocabulary
             target: {text: میوه, language_code: fa, direction: rtl}
             introduced_tokens: [میوه]
+            example: {text: "من میوه دوست دارم.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit06.lesson01.teach.va_ya
             kind: grammar_note
             target: {text: "و (and)، یا (or)", language_code: fa, direction: rtl}
@@ -174,6 +185,7 @@ units:
             kind: vocabulary
             target: {text: لطفاً, language_code: fa, direction: rtl}
             introduced_tokens: [لطفاً]
+            example: {text: "لطفاً کمکم کنید.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit06.lesson02.teach.mikham_informal
             kind: phrase
             target: {text: "یه چای می‌خوام", language_code: fa, direction: rtl}
@@ -232,6 +244,7 @@ units:
             kind: vocabulary
             target: {text: منو, language_code: fa, direction: rtl}
             introduced_tokens: [منو]
+            example: {text: "منو رو می‌خوام.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit06.lesson03.teach.menu_question
             kind: phrase
             target: {text: "منو دارید؟", language_code: fa, direction: rtl}
@@ -248,6 +261,7 @@ units:
             kind: vocabulary
             target: {text: جوجه‌کباب, language_code: fa, direction: rtl}
             introduced_tokens: [جوجه‌کباب]
+            example: {text: "جوجه‌کباب سفارش می‌دهم.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit06.lesson03.teach.khoobe
             kind: phrase
             target: {text: "جوجه‌کباب امروز خیلی خوبه", language_code: fa, direction: rtl}
@@ -371,6 +385,7 @@ units:
             kind: vocabulary
             target: {text: صورت‌حساب, language_code: fa, direction: rtl}
             introduced_tokens: [صورت‌حساب]
+            example: {text: "صورت‌حساب لطفاً.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit06.lesson05.teach.bill_request
             kind: phrase
             target: {text: "صورت‌حساب رو لطف می‌کنید؟", language_code: fa, direction: rtl}
@@ -430,6 +445,7 @@ units:
             kind: vocabulary
             target: {text: رستوران, language_code: fa, direction: rtl}
             introduced_tokens: [رستوران]
+            example: {text: "این رستوران خوبه.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit06.lesson06.teach.turn01
             kind: dialogue
             target: {text: "سلام، خوش اومدید. چی میل دارید؟", language_code: fa, direction: rtl, speaker: گارسون}

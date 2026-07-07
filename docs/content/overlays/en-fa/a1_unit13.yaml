@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: "1.1"
 overlay_version: "2026.1-draft.1"
 overlay_key: en-fa.a1.unit13
 source_language: en
@@ -13,7 +13,11 @@ review:
   required_next_reviewer: null
   notes: "Authored alongside the new fa a1_unit13_past_events.yaml realization. Follows the established en-fa overlay convention from units 09-12 (English instruction/correct_option/distractors/feedback, target-language Farsi accepted_answers, English glosses for recognize_* multiple_choice items to avoid the same-string visual-matching anti-pattern already fixed in units 07/08). Authored §14/§16/§17-compliant from the start alongside the realization. Needs the standard fresh-context review before shipping.
 
-    FRESH-CONTEXT REVIEW, 2026-07-07 (zero prior access to the authoring reasoning, paired with the matching realization review): verified content_key parity exact in both directions against the realization (26 teaching + 30 exercise keys, via script) and confirmed this file's flat top-level units/lessons/teaching/exercises dicts match the expected overlay schema. Confirmed every multiple_choice's correct_option/distractors are English glosses (never same-script as the Farsi prompt) -- no prompt-shows-answer risk anywhere. Confirmed zero internal-jargon leaks in any learner-facing instruction/gloss/note/feedback string (only metadata fields contain snake_case). Wrote and ran a Python yaml.safe_load recursive dict-value scan for stray non-schema Python booleans: none found. Wrote and ran a Persian-codepoint-plus-ZWNJ tokenizer script cross-checking every target-language accepted_answers value (translation/dialogue_response/writing_prompt/word_order/matching_pairs) against the realization's cumulative file-scoped introduced_tokens: zero untaught-vocabulary gaps. Found and fixed 3 real issues, all cross-verified against the actual compiled JSON output (not just schema validation): (1) lesson05.exercise04.translate_read_book was missing the equally-valid یک کتاب خوندم variant alongside کتاب خوندم -- added. (2) §12 multi-clause gaps -- lesson05.exercise05.write_own_recent_event (a 3-clause combo) was missing the all-period, all-comma, and all-و forms; lesson06.exercise05.dialogue_response_own_weekend (a 2-clause combo) was missing the comma-joined and period-joined forms -- added all of the above, applying the AUTHORING_GUIDE §15 target-language-asterisk convention to the feedback strings touched. (3) A prompt-duplication bug (not on the standing checklist, found by comparing this file's own instruction field against the realization's prompt.target_blocks): 5 exercises had the realization independently repeating this file's exact instruction text as an English target_blocks entry, which the compiler's compile_exercise() would have rendered twice to the learner via TextBlockList (no dedup in frontend/src/components/TextBlock.tsx) -- fixed on the realization side (target_blocks: [] for all 5, since this file's own instruction field already fully covers the prompt); no change needed to this overlay file itself for that fix. Re-ran validate + compile after every fix: 0 errors/0 warnings, valid JSON, output spot-checked directly."
+    FRESH-CONTEXT REVIEW, 2026-07-07 (zero prior access to the authoring reasoning, paired with the matching realization review): verified content_key parity exact in both directions against the realization (26 teaching + 30 exercise keys, via script) and confirmed this file's flat top-level units/lessons/teaching/exercises dicts match the expected overlay schema. Confirmed every multiple_choice's correct_option/distractors are English glosses (never same-script as the Farsi prompt) -- no prompt-shows-answer risk anywhere. Confirmed zero internal-jargon leaks in any learner-facing instruction/gloss/note/feedback string (only metadata fields contain snake_case). Wrote and ran a Python yaml.safe_load recursive dict-value scan for stray non-schema Python booleans: none found. Wrote and ran a Persian-codepoint-plus-ZWNJ tokenizer script cross-checking every target-language accepted_answers value (translation/dialogue_response/writing_prompt/word_order/matching_pairs) against the realization's cumulative file-scoped introduced_tokens: zero untaught-vocabulary gaps. Found and fixed 3 real issues, all cross-verified against the actual compiled JSON output (not just schema validation): (1) lesson05.exercise04.translate_read_book was missing the equally-valid یک کتاب خوندم variant alongside کتاب خوندم -- added. (2) §12 multi-clause gaps -- lesson05.exercise05.write_own_recent_event (a 3-clause combo) was missing the all-period, all-comma, and all-و forms; lesson06.exercise05.dialogue_response_own_weekend (a 2-clause combo) was missing the comma-joined and period-joined forms -- added all of the above, applying the AUTHORING_GUIDE §15 target-language-asterisk convention to the feedback strings touched. (3) A prompt-duplication bug (not on the standing checklist, found by comparing this file's own instruction field against the realization's prompt.target_blocks): 5 exercises had the realization independently repeating this file's exact instruction text as an English target_blocks entry, which the compiler's compile_exercise() would have rendered twice to the learner via TextBlockList (no dedup in frontend/src/components/TextBlock.tsx) -- fixed on the realization side (target_blocks: [] for all 5, since this file's own instruction field already fully covers the prompt); no change needed to this overlay file itself for that fix. Re-ran validate + compile after every fix: 0 errors/0 warnings, valid JSON, output spot-checked directly.
+
+    2026-07-07: AUTHORING_GUIDE.md §19 retrofit -- added real example sentence(s) to all 14 kind:vocabulary teaching entries with example_gloss (the merged names card given a 2-item list), each a natural, comprehensible-from-gloss sentence using the card's own word(s). schema_version bumped to 1.1. Example sentences are Claude-authored and pending fresh-context review.
+
+    2026-07-07: FRESH-CONTEXT REVIEW of the §19 retrofit examples specifically (paired with the same-dated review of the fa realization; zero prior access to the retrofit's own authoring reasoning; scoped narrowly to the new example_gloss fields). Found the same real §11-class fact-consistency bug documented in the realization's own review notes: fa.a1.unit13.lesson06.teach.names's example_gloss (\"Nima went to the cinema yesterday.\", \"Sara read a book.\") had Nima's and Sara's weekend activities backwards relative to the dialogue's own established facts. Fixed to match the realization's corrected Farsi text: [\"Nima stayed home and read a book.\", \"Sara went to the cinema yesterday.\"]. Spot-checked every other example_gloss against its paired Farsi example for accurate translation -- all sound. Re-ran validate+compile after the fix: 0 errors/0 warnings, valid JSON, output spot-checked directly."
 
 course:
   title: Farsi A1
@@ -40,22 +44,27 @@ teaching:
     title: Yesterday
     gloss: yesterday
     note: "دیروز means yesterday."
+    example_gloss: "Yesterday I went to the cinema."
   fa.a1.unit13.lesson01.teach.raftam_word:
     title: "I went"
     gloss: "I went"
     note: "رفتم is the simple past of رفتن (to go), first person."
+    example_gloss: "I went to the restaurant."
   fa.a1.unit13.lesson01.teach.khordam_word:
     title: "I ate"
     gloss: "I ate"
     note: "خوردم is the simple past of خوردن (to eat), first person."
+    example_gloss: "I ate lunch."
   fa.a1.unit13.lesson01.teach.didam_word:
     title: "I saw"
     gloss: "I saw"
     note: "دیدم is the simple past of دیدن (to see), first person."
+    example_gloss: "I saw a good movie."
   fa.a1.unit13.lesson02.teach.sinama_word:
     title: "Cinema / movies"
     gloss: "cinema / movies"
     note: "سینما means cinema or the movies."
+    example_gloss: "Yesterday I went to the cinema."
   fa.a1.unit13.lesson02.teach.be_word:
     title: To
     gloss: to
@@ -68,10 +77,12 @@ teaching:
     title: "What (activity)"
     gloss: "what (activity)"
     note: "چیکار (what work/activity) is used to ask what someone did."
+    example_gloss: "What did you do yesterday?"
   fa.a1.unit13.lesson03.teach.kardi_word:
     title: "You did"
     gloss: "you did"
     note: "کردی is the simple past of کردن (to do), informal second person."
+    example_gloss: "What did you do?"
   fa.a1.unit13.lesson03.teach.question_phrase:
     title: "What did you do yesterday?"
     gloss: "What did you do yesterday?"
@@ -80,10 +91,12 @@ teaching:
     title: Movie
     gloss: movie
     note: "فیلم means movie/film."
+    example_gloss: "I saw a good movie."
   fa.a1.unit13.lesson04.teach.khoob_word:
     title: Good
     gloss: good
     note: "خوب means good."
+    example_gloss: "The movie was good."
   fa.a1.unit13.lesson04.teach.recent_event_text:
     title: "Sample recent-event text"
     gloss: "Yesterday I went to the cinema. I saw a good movie. Then I ate lunch."
@@ -96,18 +109,22 @@ teaching:
     title: Book
     gloss: book
     note: "کتاب means book."
+    example_gloss: "I read a book."
   fa.a1.unit13.lesson05.teach.khoondam_word:
     title: "I read"
     gloss: "I read"
     note: "خوندم is the colloquial simple past of خواندن (to read), first person."
+    example_gloss: "Yesterday I read a book."
   fa.a1.unit13.lesson06.teach.man_word:
     title: I
     gloss: I
     note: "من is the standalone first-person pronoun, used here for emphasis (من خونه موندم -- as for me, I stayed home)."
+    example_gloss: "I stayed home."
   fa.a1.unit13.lesson06.teach.names:
     title: "Nima and Sara"
     gloss: "Nima, Sara"
     note: "نیما and سارا are the two speakers in this lesson's dialogue."
+    example_gloss: ["Nima stayed home and read a book.", "Sara went to the cinema yesterday."]
   fa.a1.unit13.lesson06.teach.khooneh_moondam_word:
     title: "I stayed home"
     gloss: "I stayed home"
@@ -120,6 +137,7 @@ teaching:
     title: Great
     gloss: great
     note: "عالیه uses the established -e contraction pattern (عالی است -> عالیه)."
+    example_gloss: "Great, how was it?"
   fa.a1.unit13.lesson06.teach.dialogue_line1:
     title: "What did you do yesterday?"
     gloss: "What did you do yesterday?"

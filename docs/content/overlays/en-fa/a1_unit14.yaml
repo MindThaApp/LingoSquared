@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: "1.1"
 overlay_version: "2026.1-draft.1"
 overlay_key: en-fa.a1.unit14
 source_language: en
@@ -13,7 +13,11 @@ review:
   required_next_reviewer: null
   notes: "Authored alongside the new fa a1_unit14_preferences.yaml realization. Follows the established en-fa overlay convention from units 09-13 (English instruction/correct_option/distractors/feedback, target-language Farsi accepted_answers, English glosses for recognize_* multiple_choice items to avoid the same-string visual-matching anti-pattern already fixed in units 07/08). Multi-clause production exercises (write_own_preference, dialogue_response_own_preference, write_comparison_summary) carry period-joined, comma-joined, and و-joined accepted_answers variants per §12. Authored §14/§16/§17-compliant from the start alongside the realization. Needs the standard fresh-context review before shipping.
 
-    FRESH-CONTEXT REVIEW, 2026-07-07 (paired with the realization's own review, same pass; prs sibling files never opened, per §8/§9): verified content_key parity is exact against the realization in both directions (26 teaching + 30 exercise keys, no orphans), confirmed the overlay's flat top-level units/lessons/teaching/exercises dicts correctly match the expected schema, and confirmed every accepted_answers entry actually used by the compiler/grade() multi-answer path (checked against backend/app/api/router.py) works as intended. Found and fixed the same 3 real issues documented in the realization's own review notes, from the overlay side: (1) added the fa.a1.unit14.lesson01.teach.man_word and fa.a1.unit14.lesson04.teach.va_word teaching entries (title/gloss/note) to match the realization's newly-added من/و teaching cards, fixing the untaught-vocabulary gap that had من/و appearing in this file's own accepted_answers before either was taught. (2) Updated the lesson05.teach.reading_text gloss (coffee-dislike -> music-dislike) to match the realization's fix for the genuine §11 Sara/coffee preference contradiction between lesson05 and lesson06. (3) Added tea and music variants (each with period/comma/و/من forms) to lesson05.exercise05.write_own_preference's accepted_answers, closing the disguised §17-class ambiguity where this open-ended prompt only accepted one of several equally-taught, equally-valid topics. Re-ran validate + compile after every fix: 0 errors/0 warnings, valid JSON, output spot-checked directly against the compiled exercise data."
+    FRESH-CONTEXT REVIEW, 2026-07-07 (paired with the realization's own review, same pass; prs sibling files never opened, per §8/§9): verified content_key parity is exact against the realization in both directions (26 teaching + 30 exercise keys, no orphans), confirmed the overlay's flat top-level units/lessons/teaching/exercises dicts correctly match the expected schema, and confirmed every accepted_answers entry actually used by the compiler/grade() multi-answer path (checked against backend/app/api/router.py) works as intended. Found and fixed the same 3 real issues documented in the realization's own review notes, from the overlay side: (1) added the fa.a1.unit14.lesson01.teach.man_word and fa.a1.unit14.lesson04.teach.va_word teaching entries (title/gloss/note) to match the realization's newly-added من/و teaching cards, fixing the untaught-vocabulary gap that had من/و appearing in this file's own accepted_answers before either was taught. (2) Updated the lesson05.teach.reading_text gloss (coffee-dislike -> music-dislike) to match the realization's fix for the genuine §11 Sara/coffee preference contradiction between lesson05 and lesson06. (3) Added tea and music variants (each with period/comma/و/من forms) to lesson05.exercise05.write_own_preference's accepted_answers, closing the disguised §17-class ambiguity where this open-ended prompt only accepted one of several equally-taught, equally-valid topics. Re-ran validate + compile after every fix: 0 errors/0 warnings, valid JSON, output spot-checked directly against the compiled exercise data.
+
+    2026-07-07: AUTHORING_GUIDE.md §19 retrofit -- added real example sentence(s) to all 12 kind:vocabulary teaching entries with example_gloss (the merged names card given a 2-item list), each a natural, comprehensible-from-gloss sentence using the card's own word(s). schema_version bumped to 1.1. Example sentences are Claude-authored and pending fresh-context review.
+
+    2026-07-07: FRESH-CONTEXT REVIEW of the §19 retrofit examples specifically (paired with the same-dated review of the fa realization; zero prior access to the retrofit's own authoring reasoning; scoped narrowly to the new example_gloss fields). Found the same real §11-class fact-consistency bug documented in the realization's own review notes: fa.a1.unit14.lesson06.teach.names's example_gloss (\"Nima likes coffee.\", \"Sara likes tea.\") had Nima's and Sara's drink preferences backwards relative to the dialogue's own established facts (Sara prefers coffee, Nima prefers tea). Fixed to match the realization's corrected Farsi text: [\"Nima likes tea.\", \"Sara likes coffee.\"]. Spot-checked every other example_gloss against its paired Farsi example for accurate translation -- all sound. Re-ran validate+compile after the fix: 0 errors/0 warnings, valid JSON, output spot-checked directly."
 
 course:
   title: Farsi A1
@@ -50,10 +54,12 @@ teaching:
     title: Coffee
     gloss: coffee
     note: "قهوه means coffee."
+    example_gloss: "I like coffee."
   fa.a1.unit14.lesson01.teach.chay_word:
     title: Tea
     gloss: tea
     note: "چای means tea."
+    example_gloss: "I don't like tea."
   fa.a1.unit14.lesson01.teach.doost_nadaram_phrase:
     title: "I don't like"
     gloss: "I don't like"
@@ -62,14 +68,17 @@ teaching:
     title: I
     gloss: I
     note: "من means I -- often optional since the verb ending already shows the subject, but can be added for emphasis."
+    example_gloss: "I like music."
   fa.a1.unit14.lesson02.teach.kodum_word:
     title: Which
     gloss: which
     note: "کدوم means which (one)."
+    example_gloss: "Which one do you like?"
   fa.a1.unit14.lesson02.teach.moosighi_word:
     title: Music
     gloss: music
     note: "موسیقی means music."
+    example_gloss: "I like music."
   fa.a1.unit14.lesson02.teach.mikhay_word:
     title: "You want"
     gloss: "you want"
@@ -82,6 +91,7 @@ teaching:
     title: More
     gloss: more
     note: "بیشتر means more."
+    example_gloss: "I like coffee more."
   fa.a1.unit14.lesson03.teach.ya_word:
     title: Or
     gloss: or
@@ -98,10 +108,12 @@ teaching:
     title: "It's delicious"
     gloss: "it's delicious"
     note: "خوشمزه‌ست is the colloquial contraction of خوشمزه است (it is delicious)."
+    example_gloss: "Coffee is delicious."
   fa.a1.unit14.lesson04.teach.jaleb_word:
     title: "It's interesting"
     gloss: "it's interesting"
     note: "جالبه is the colloquial contraction of جالب است (it is interesting)."
+    example_gloss: "This music is interesting."
   fa.a1.unit14.lesson04.teach.va_word:
     title: And
     gloss: and
@@ -110,6 +122,7 @@ teaching:
     title: Sara
     gloss: Sara
     note: "A common Iranian female name."
+    example_gloss: "Sara likes tea."
   fa.a1.unit14.lesson05.teach.dareh_grammar:
     title: "He/she likes"
     gloss: "he/she likes"
@@ -122,6 +135,7 @@ teaching:
     title: "It's warm"
     gloss: "it's warm"
     note: "گرمه is the colloquial contraction of گرم است (it is warm)."
+    example_gloss: "The tea is warm."
   fa.a1.unit14.lesson05.teach.reading_text:
     title: "Sample preference text"
     gloss: "Sara likes tea because it's warm. Sara doesn't like music."
@@ -130,6 +144,7 @@ teaching:
     title: "Nima and Sara"
     gloss: "Nima, Sara"
     note: "Common Iranian names used throughout this course."
+    example_gloss: ["Nima likes tea.", "Sara likes coffee."]
   fa.a1.unit14.lesson06.teach.to_chi_phrase:
     title: "What about you?"
     gloss: "What about you?"
@@ -138,6 +153,7 @@ teaching:
     title: "That's great"
     gloss: "that's great"
     note: "عالیه is the colloquial contraction of عالی است (it is great)."
+    example_gloss: "This is great."
   fa.a1.unit14.lesson06.teach.dialogue_line1:
     title: "Nima asks"
     gloss: "Tea or coffee, which do you like more?"

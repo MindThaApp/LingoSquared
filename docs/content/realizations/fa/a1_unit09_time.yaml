@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: "1.1"
 realization_version: "2026.1-draft.1"
 target_language: fa
 cefr_level: A1
@@ -110,6 +110,33 @@ review:
     zero remaining instruction-duplicate target_blocks via a script comparing
     every exercise's target_blocks against its overlay instruction.
 
+
+    2026-07-07: AUTHORING_GUIDE.md §19 retrofit -- added a real example
+    sentence to all 10 kind:vocabulary teaching cards, each a natural,
+    comprehensible-from-gloss sentence using the card's own word.
+    schema_version bumped to 1.1. Example sentences are Claude-authored and
+    pending fresh-context review.
+
+    2026-07-07: §19 FRESH-CONTEXT REVIEW of the 10 example sentences added
+    in the retrofit above (supplemental check only -- spine outcome/pacing/
+    etc. already settled and out of scope). This file's own register_policy
+    explicitly requires everyday spoken colloquial time forms (ساعت چنده؟،
+    سه‌ونیمه) rather than formal written constructions. Found 4 of the 10
+    examples violated this: hour_word (ساعت چند است؟ -> ساعت چنده؟, directly
+    contradicting the phrase this same lesson's next card teaches verbatim
+    in the correct register), half_word (ساعت هفت و نیم است -> نیمه, per
+    this file's own taught نیمه = نیم است contraction), quarter_word (ساعت
+    یک ربع به هشت است -> هشته, same -e pattern), and sobh (صبح زود بیدار
+    می‌شوم -> می‌شم, matching this file's own میشه/می‌بینمت colloquial verb
+    contractions rather than the literary می‌شوم). The other 6 examples
+    (minute_word, zohr, asr, shab, appointment_word, tomorrow_review) used
+    verbs with no established colloquial contraction (می‌خورم، می‌کنم،
+    دارم, etc.) and needed no change. Verified all 10 fixed/unchanged
+    examples contain their card's target word, are 2+ words with real
+    structure, are comprehensible from their unchanged glosses, and aren't
+    duplicated elsewhere in the file. Re-ran validate+compile after fixes:
+    0 errors/0 warnings, compiles to valid JSON, all 10 examples present in
+    the compiled output.
 course:
   realization_key: fa.a1
   target_language_first: true
@@ -169,18 +196,22 @@ units:
             kind: vocabulary
             target: {text: ساعت, language_code: fa, direction: rtl}
             introduced_tokens: [ساعت]
+            example: {text: "ساعت چنده؟", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit09.lesson01.teach.minute_word
             kind: vocabulary
             target: {text: دقیقه, language_code: fa, direction: rtl}
             introduced_tokens: [دقیقه]
+            example: {text: "پنج دقیقه صبر کن.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit09.lesson01.teach.half_word
             kind: vocabulary
             target: {text: نیم, language_code: fa, direction: rtl}
             introduced_tokens: [نیم]
+            example: {text: "ساعت هفت و نیمه.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit09.lesson01.teach.quarter_word
             kind: vocabulary
             target: {text: ربع, language_code: fa, direction: rtl}
             introduced_tokens: [ربع]
+            example: {text: "ساعت یک ربع به هشته.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit09.lesson01.teach.va_word
             kind: grammar_note
             target: {text: "و (and)", language_code: fa, direction: rtl}
@@ -326,18 +357,22 @@ units:
             kind: vocabulary
             target: {text: صبح, language_code: fa, direction: rtl}
             introduced_tokens: [صبح]
+            example: {text: "صبح زود بیدار می‌شم.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit09.lesson04.teach.zohr
             kind: vocabulary
             target: {text: ظهر, language_code: fa, direction: rtl}
             introduced_tokens: [ظهر]
+            example: {text: "ظهر ناهار می‌خورم.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit09.lesson04.teach.asr
             kind: vocabulary
             target: {text: عصر, language_code: fa, direction: rtl}
             introduced_tokens: [عصر]
+            example: {text: "عصر کار می‌کنم.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit09.lesson04.teach.shab
             kind: vocabulary
             target: {text: شب, language_code: fa, direction: rtl}
             introduced_tokens: [شب]
+            example: {text: "شب زود می‌خوابم.", language_code: fa, direction: rtl}
         exercises:
           - content_key: fa.a1.unit09.lesson04.exercise01.recognize_sobh
             type: multiple_choice
@@ -382,6 +417,7 @@ units:
             kind: vocabulary
             target: {text: قرار, language_code: fa, direction: rtl}
             introduced_tokens: [قرار]
+            example: {text: "من یک قرار دارم.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit09.lesson05.teach.appointment_question
             kind: phrase
             target: {text: "قرار ساعت چنده؟", language_code: fa, direction: rtl}
@@ -436,6 +472,7 @@ units:
             kind: vocabulary
             target: {text: فردا, language_code: fa, direction: rtl}
             introduced_tokens: [فردا]
+            example: {text: "فردا قرار دارم.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit09.lesson06.teach.late_word
             kind: phrase
             target: {text: "یکم دیر میشه", language_code: fa, direction: rtl}

@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: "1.1"
 realization_version: "2026.1-draft.1"
 target_language: fa
 cefr_level: A1
@@ -77,6 +77,34 @@ review:
     zero remaining instruction-duplicate target_blocks via a script comparing
     every exercise's target_blocks against its overlay instruction.
 
+
+    2026-07-07: AUTHORING_GUIDE.md §19 retrofit -- added a real example
+    sentence to all 12 kind:vocabulary teaching cards, each a natural,
+    comprehensible-from-gloss sentence using the card's own word.
+    schema_version bumped to 1.1. Example sentences are Claude-authored and
+    pending fresh-context review.
+
+    2026-07-07: §19 FRESH-CONTEXT REVIEW of the 12 example sentences added
+    in the retrofit above (supplemental check only -- spine outcome/pacing/
+    etc. already settled and out of scope). This file's own register_policy
+    explicitly requires the colloquial -e contraction for weather
+    descriptions (آفتابیه، سرده, etc.), and this file's own already-reviewed
+    exercises/dialogue never use a bare است for these predicates -- yet 11 of
+    the 12 newly-added examples used exactly that formal است (a direct,
+    systematic clash with this unit's own established register). Fixed all
+    11: sunny/rainy/cloudy/snowy/hot/cold/cool examples (آفتابی/بارونی/ابری/
+    برفی/گرم/سرد/خنک است -> -ه contractions), weather_word (هوا امروز چطور
+    است؟ -> چطوره؟, doubly justified since the very next card in this same
+    lesson teaches هوا چطوره؟ as the target phrase), today_word (امروز هوا
+    خوب است -> خوبه), because_word (چون سرد است -> چون سرده), and lesson06's
+    coat_review (هوا سرد است -> سرده). Only tomorrow_word's فردا می‌بینمت
+    needed no change -- already colloquial, matching the dialogue's own
+    usage. Verified every fixed example still contains its card's target
+    word, is 2+ words with real structure, is comprehensible from its
+    unchanged gloss (meaning didn't change, only register), and isn't
+    duplicated elsewhere in the file. Re-ran validate+compile after fixes:
+    0 errors/0 warnings, compiles to valid JSON, all 12 examples present in
+    the compiled output.
 course:
   realization_key: fa.a1
   target_language_first: true
@@ -136,18 +164,22 @@ units:
             kind: vocabulary
             target: {text: آفتابی, language_code: fa, direction: rtl}
             introduced_tokens: [آفتابی]
+            example: {text: "امروز هوا آفتابیه.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit07.lesson01.teach.rainy
             kind: vocabulary
             target: {text: بارونی, language_code: fa, direction: rtl}
             introduced_tokens: [بارونی]
+            example: {text: "فردا هوا بارونیه.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit07.lesson01.teach.cloudy
             kind: vocabulary
             target: {text: ابری, language_code: fa, direction: rtl}
             introduced_tokens: [ابری]
+            example: {text: "هوا ابریه.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit07.lesson01.teach.snowy
             kind: vocabulary
             target: {text: برفی, language_code: fa, direction: rtl}
             introduced_tokens: [برفی]
+            example: {text: "زمستان هوا برفیه.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit07.lesson01.teach.or_word
             kind: grammar_note
             target: {text: "یا (or)", language_code: fa, direction: rtl}
@@ -196,14 +228,17 @@ units:
             kind: vocabulary
             target: {text: گرم, language_code: fa, direction: rtl}
             introduced_tokens: [گرم]
+            example: {text: "امروز هوا گرمه.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit07.lesson02.teach.cold
             kind: vocabulary
             target: {text: سرد, language_code: fa, direction: rtl}
             introduced_tokens: [سرد]
+            example: {text: "زمستان هوا سرده.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit07.lesson02.teach.cool
             kind: vocabulary
             target: {text: خنک, language_code: fa, direction: rtl}
             introduced_tokens: [خنک]
+            example: {text: "عصرها هوا خنکه.", language_code: fa, direction: rtl}
         exercises:
           - content_key: fa.a1.unit07.lesson02.exercise01.recognize_hot
             type: multiple_choice
@@ -251,6 +286,7 @@ units:
             kind: vocabulary
             target: {text: هوا, language_code: fa, direction: rtl}
             introduced_tokens: [هوا]
+            example: {text: "هوا امروز چطوره؟", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit07.lesson03.teach.weather_question
             kind: phrase
             target: {text: "هوا چطوره؟", language_code: fa, direction: rtl}
@@ -259,10 +295,12 @@ units:
             kind: vocabulary
             target: {text: امروز, language_code: fa, direction: rtl}
             introduced_tokens: [امروز]
+            example: {text: "امروز هوا خوبه.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit07.lesson03.teach.tomorrow_word
             kind: vocabulary
             target: {text: فردا, language_code: fa, direction: rtl}
             introduced_tokens: [فردا]
+            example: {text: "فردا می‌بینمت.", language_code: fa, direction: rtl}
         exercises:
           - content_key: fa.a1.unit07.lesson03.exercise01.recognize_weather_question
             type: multiple_choice
@@ -368,6 +406,7 @@ units:
             kind: vocabulary
             target: {text: چون, language_code: fa, direction: rtl}
             introduced_tokens: [چون]
+            example: {text: "کت می‌پوشم چون سرده.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit07.lesson05.teach.better_to
             kind: phrase
             target: {text: "بهتره چتر ببریم", language_code: fa, direction: rtl}
@@ -427,6 +466,7 @@ units:
             kind: vocabulary
             target: {text: "کت بپوشیم", language_code: fa, direction: rtl}
             introduced_tokens: [کت, بپوشیم]
+            example: {text: "هوا سرده، کت بپوشیم.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit07.lesson06.teach.turn01
             kind: dialogue
             target: {text: "امروز هوا چطوره؟", language_code: fa, direction: rtl, speaker: سارا}

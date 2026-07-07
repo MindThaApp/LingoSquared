@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: "1.1"
 overlay_version: "2026.1-draft.1"
 overlay_key: en-fa.a1.unit18
 source_language: en
@@ -13,7 +13,11 @@ review:
   required_next_reviewer: null
   notes: "Authored alongside the new fa a1_unit18_work.yaml realization. Follows the established en-fa overlay convention from units 09-17 (English instruction/correct_option/distractors/feedback, target-language Farsi accepted_answers, English glosses for recognize_* multiple_choice items). Open-ended production exercises (write_own_job, write_job_summary) carry multiple phrasing variants from the start, learned from units 14-17's own review findings. write_job_summary carries period-joined, comma-joined, and و-joined accepted_answers variants per §12. Authored §14/§16/§17-compliant from the start alongside the realization. Needs the standard fresh-context review before shipping.
 
-    FRESH-CONTEXT REVIEW, 2026-07-07 (paired with the fa a1_unit18_work.yaml realization review, zero prior authoring context, prs sibling files never opened): re-verified via script that every exercise's English prompt.target_blocks (realization side) never duplicates this file's own instruction text (project-wide bug class found and fixed across 20+ fa/prs files this week) -- zero duplicates found here. Recursive yaml.safe_load bool-walk found zero stray non-schema Python booleans. Confirmed content_key parity exact against the realization in both directions (teaching and exercises dicts). Verified accepted_answers/correct_option/distractors contain no bare snake_case jargon leaks and no Arabic-range kaf/yeh. Found and fixed one genuine untaught-vocabulary gap shared with the realization: added a teaching entry for fa.a1.unit18.lesson01.teach.man_word (من, 'I') so lesson05.exercise05's 'من مهندسم/معلمم/دکترم' accepted-answer variants are taught in-file before that exercise. Confirmed lesson05.exercise05 and lesson06.exercise05's multi-answer accepted_answers lists compile into genuine {canonical, accepted} multi-answer grading via backend/app/api/router.py's grade()/is_multi_answer_response(), verified directly in the compiled JSON. Re-ran validate + compile after the fix: 0 errors/0 warnings, valid JSON."
+    FRESH-CONTEXT REVIEW, 2026-07-07 (paired with the fa a1_unit18_work.yaml realization review, zero prior authoring context, prs sibling files never opened): re-verified via script that every exercise's English prompt.target_blocks (realization side) never duplicates this file's own instruction text (project-wide bug class found and fixed across 20+ fa/prs files this week) -- zero duplicates found here. Recursive yaml.safe_load bool-walk found zero stray non-schema Python booleans. Confirmed content_key parity exact against the realization in both directions (teaching and exercises dicts). Verified accepted_answers/correct_option/distractors contain no bare snake_case jargon leaks and no Arabic-range kaf/yeh. Found and fixed one genuine untaught-vocabulary gap shared with the realization: added a teaching entry for fa.a1.unit18.lesson01.teach.man_word (من, 'I') so lesson05.exercise05's 'من مهندسم/معلمم/دکترم' accepted-answer variants are taught in-file before that exercise. Confirmed lesson05.exercise05 and lesson06.exercise05's multi-answer accepted_answers lists compile into genuine {canonical, accepted} multi-answer grading via backend/app/api/router.py's grade()/is_multi_answer_response(), verified directly in the compiled JSON. Re-ran validate + compile after the fix: 0 errors/0 warnings, valid JSON.
+
+    2026-07-07: AUTHORING_GUIDE.md §19 retrofit -- added real example sentence(s) to all 10 kind:vocabulary teaching entries with example_gloss (the merged names card given a 2-item list), each a natural, comprehensible-from-gloss sentence using the card's own word(s). schema_version bumped to 1.1. Example sentences are Claude-authored and pending fresh-context review.
+
+    2026-07-07: FRESH-CONTEXT REVIEW of the §19 retrofit examples specifically (paired with the realization's own review, same pass; supplemental check only). Verified every example_gloss accurately translates its paired realization example. Fixed the overlay side of the one issue found in the realization: fa.a1.unit18.lesson01.teach.man_word's example_gloss changed from \"I'm an engineer.\" (a duplicate of mohandesam_word's own gloss) to \"I'm fine.\", matching the realization's de-duplicated example. Re-ran validate + compile: 0 errors/0 warnings, valid JSON."
 
 course:
   title: Farsi A1
@@ -46,22 +50,27 @@ teaching:
     title: Job
     gloss: job
     note: "شغل means job/occupation."
+    example_gloss: "What's your job?"
   fa.a1.unit18.lesson01.teach.mohandesam_word:
     title: "I'm an engineer"
     gloss: "I'm an engineer"
     note: "مهندسم is the colloquial contraction of مهندس هستم (I am an engineer)."
+    example_gloss: "I'm an engineer."
   fa.a1.unit18.lesson01.teach.moallemam_word:
     title: "I'm a teacher"
     gloss: "I'm a teacher"
     note: "معلمم is the colloquial contraction of معلم هستم (I am a teacher)."
+    example_gloss: "I'm a teacher."
   fa.a1.unit18.lesson01.teach.doctoram_word:
     title: "I'm a doctor"
     gloss: "I'm a doctor"
     note: "دکترم is the colloquial contraction of دکتر هستم (I am a doctor)."
+    example_gloss: "I'm a doctor."
   fa.a1.unit18.lesson01.teach.man_word:
     title: I
     gloss: I
     note: "من means I -- review vocabulary from earlier units, usable alongside مهندسم/معلمم/دکترم as an optional fuller sentence (من مهندسم)."
+    example_gloss: "I'm fine."
   fa.a1.unit18.lesson02.teach.shoghlet_word:
     title: "Your job"
     gloss: "your job"
@@ -78,14 +87,17 @@ teaching:
     title: Company
     gloss: company
     note: "شرکت means company."
+    example_gloss: "I work at a company."
   fa.a1.unit18.lesson03.teach.madrese_word:
     title: School
     gloss: school
     note: "مدرسه means school."
+    example_gloss: "I work at a school."
   fa.a1.unit18.lesson03.teach.bimarestan_word:
     title: Hospital
     gloss: hospital
     note: "بیمارستان means hospital."
+    example_gloss: "I work at a hospital."
   fa.a1.unit18.lesson03.teach.dar_word:
     title: In/at
     gloss: "in / at"
@@ -126,6 +138,7 @@ teaching:
     title: "Nima and Sara"
     gloss: "Nima, Sara"
     note: "Common Iranian names used throughout this course."
+    example_gloss: ["Nima is an engineer.", "Sara is a teacher."]
   fa.a1.unit18.lesson06.teach.to_chi_phrase:
     title: "What about you?"
     gloss: "What about you?"
@@ -134,6 +147,7 @@ teaching:
     title: "That's great"
     gloss: "that's great"
     note: "عالیه is the colloquial contraction of عالی است (it is great)."
+    example_gloss: "This is great."
   fa.a1.unit18.lesson06.teach.va_word:
     title: And
     gloss: and
