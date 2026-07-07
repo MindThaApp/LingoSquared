@@ -1,6 +1,7 @@
 from app.review.grading import (
     damerau_levenshtein,
     grade_answer,
+    is_case_only_difference,
     is_latin_script_text,
     is_script_confusion,
 )
@@ -105,6 +106,81 @@ def test_is_latin_script_text():
     assert is_latin_script_text("hola") is True
     assert is_latin_script_text("سلام") is False
     assert is_latin_script_text("") is False
+
+
+def test_is_case_only_difference_helper():
+    assert is_case_only_difference("sie", "Sie") is True
+    assert is_case_only_difference("Sie", "Sie") is False  # identical, not "different"
+    assert is_case_only_difference("sie", "sei") is False  # different letters, not case
+
+
+def test_case_sensitive_defaults_off_existing_behavior_unchanged():
+    # No case_sensitive kwarg at all - must behave exactly as before this
+    # feature existed (the whole point of defaulting to False).
+    assert grade_answer("HOLA", "hola", exercise_type="translation") == "correct"
+    assert grade_answer("Sie", "sie", exercise_type="translation") == "correct"
+
+
+def test_case_sensitive_german_sie_vs_capital_sie():
+    # The actual reported scenario: German formal "Sie" (capital, "you"
+    # formal) vs lowercase "sie" ("she"/"they") - a real grammatical
+    # distinction. Once an exercise opts into case_sensitive, the two
+    # must grade as genuinely different answers, not interchangeable.
+    assert (
+        grade_answer(
+            "Sie", "Sie", exercise_type="translation", case_sensitive=True
+        )
+        == "correct"
+    )
+    assert (
+        grade_answer(
+            "sie", "Sie", exercise_type="translation", case_sensitive=True
+        )
+        == "incorrect"
+    )
+    assert (
+        grade_answer(
+            "Sie", "sie", exercise_type="translation", case_sensitive=True
+        )
+        == "incorrect"
+    )
+    assert (
+        grade_answer(
+            "sie", "sie", exercise_type="translation", case_sensitive=True
+        )
+        == "correct"
+    )
+
+
+def test_case_sensitive_case_only_mismatch_never_becomes_almost():
+    # Without case_sensitive at all, "sie"/"Sie" casefold to the identical
+    # string, so it's a perfect match ("correct") - the whole reason this
+    # distinction was previously ungradeable. Once case_sensitive=True
+    # stops casefolding, "sie" vs "Sie" becomes a genuine distance-1
+    # substitution - without the is_case_only_difference guard, THAT would
+    # fall straight into the existing typo-tolerance path and earn
+    # "almost" (still counted as correct for XP/SRS), silently
+    # reintroducing the exact bug case_sensitive exists to fix. Confirm it
+    # is hard-blocked to "incorrect" instead.
+    lenient = grade_answer("sie", "Sie", exercise_type="translation")
+    assert lenient == "correct"
+    assert damerau_levenshtein("sie", "Sie") == 1  # confirms it WOULD be
+    # typo-tolerance-eligible once case_sensitive stops casefolding away
+    # the difference - so the guard below is doing real work, not a no-op.
+    strict = grade_answer(
+        "sie", "Sie", exercise_type="translation", case_sensitive=True
+    )
+    assert strict == "incorrect"
+
+
+def test_case_sensitive_real_typos_still_tolerated():
+    # case_sensitive must not disable typo tolerance in general - only
+    # case-only mismatches are hard-blocked. A genuine typo with the
+    # correct case elsewhere should still earn "almost".
+    result = grade_answer(
+        "Sie geth", "Sie geht", exercise_type="translation", case_sensitive=True
+    )
+    assert result == "almost"
 
 
 def test_quality_for_result_mapping():

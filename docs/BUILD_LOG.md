@@ -9879,3 +9879,112 @@ above was re-run AFTER those edits.
 content or ran the prs lexeme backfill is still serving the old `-ید`
 forms — content re-import + backfill re-run needed for the fix to reach
 a running instance (content seeding is create-missing-only).
+
+## `case_sensitive` grading flag for German Sie/sie, 2026-07-07
+
+**The problem, as reported**: the content lane authoring German tonight
+hit a real forward-looking limitation. `app/api/router.py`'s
+`normalized()` unconditionally `.casefold()`s every string before
+comparison, and every grading path routes through it (the final
+fallback, `canonical_pairs()`, `canonical_order_tokens()`, and
+`grade_answer()`'s free-text path via its own separate `_normalize()` in
+`app/review/grading.py`). `orthography_strict` (Phase C) only ever
+controlled typo-edit-distance tolerance, never case. German's formal
+"Sie" (capital, "you" formal) vs. lowercase "sie" ("she"/"they") is a
+real grammatical distinction with no equivalent in nl/en/fa/prs content
+shipped so far — under the always-casefold comparison, an exercise
+testing it is ungradeable (both a correct-case AND a wrong-case answer
+would grade identically "correct"). The content lane correctly deferred
+teaching this specific contrast rather than ship an ungradeable
+exercise, but flagged it as real technical debt to fix before more
+German content gets authored around the gap.
+
+**Fix**: a new optional `case_sensitive: bool` flag, a sibling of
+`orthography_strict` in the exact same `Exercise.feedback` JSON blob
+(Phase C's established pattern — zero migration, same `Text` column).
+Threaded through every layer:
+- `app/review/grading.py`: `_normalize(value, *, case_sensitive=False)`
+  skips `.casefold()` when set. New `is_case_only_difference(a, b)`
+  helper (`a != b and a.casefold() == b.casefold()`) mirrors
+  `is_script_confusion()`'s existing "hard-block before the typo-
+  tolerance check" shape — without it, a case-sensitive "sie" vs "Sie"
+  comparison is a genuine distance-1 substitution that would otherwise
+  fall straight into the existing `damerau_levenshtein(...) == 1` path
+  and earn "almost" (still counted as correct for XP/SRS purposes,
+  silently reintroducing the exact bug this flag exists to fix).
+  `grade_answer()` gained a `case_sensitive` kwarg threaded into both
+  `_normalize()` calls and the new hard-block check.
+- `app/api/router.py`: `normalized()`, `canonical_pairs()`, and
+  `canonical_order_tokens()` all gained a `case_sensitive=False`
+  parameter (propagated through their own recursive/nested calls) so
+  `matching_pairs`/`word_order`/`listen_order`-type exercises can also
+  opt in, not just free-text ones. `grade()` gained the same parameter,
+  threaded to every comparison path including its `grade_answer()` call.
+  `exercise_answer()`/`review_answer()` (the two callers that resolve
+  `feedback_meta` from `Exercise.feedback`) now pass
+  `case_sensitive=bool(feedback_meta.get("case_sensitive"))`.
+  `decode_feedback()`'s docstring updated to list the new key.
+  Deliberately NOT wired into `practice_answer()` (Endless Practice's
+  generated `PracticeItem`s) — those are generated from
+  `PracticeTemplate` rows, which have no per-template metadata slot
+  analogous to `Exercise.feedback` at all (checkpoint's
+  `orthography_strict` there is a hardcoded `item.source == "checkpoint"`
+  check, not an authored field), and no German Endless Practice content
+  exists yet to make it meaningful — scoped out rather than invented a
+  new mechanism speculatively.
+- `scripts/compile_content.py`: `compile_feedback()` gained a parallel
+  `case_sensitive` overlay field (validated as bool, same error-message
+  pattern as `orthography_strict`), so authors set
+  `case_sensitive: true` on an exercise in the overlay YAML exactly
+  where `orthography_strict`/`feedback_by_option` already live.
+- `docs/CONTRACT.md`: new bullet alongside the existing
+  `orthography_strict` one, spelling out the sibling-not-replacement
+  relationship and the case-only-mismatch-never-becomes-almost
+  guarantee.
+
+**Verified**: `backend/tests/test_phase_c_grading.py` — 5 new tests
+covering the default-off behavior (existing casefold-reliant grading
+unchanged), the actual reported sie/Sie scenario in both directions,
+and specifically confirming a case-only mismatch is hard-blocked to
+"incorrect" rather than falling into "almost" (confirmed
+`damerau_levenshtein("sie","Sie") == 1`, i.e. that the guard is doing
+real work, not a no-op) while genuine typos elsewhere in the same
+string ("Sie geth" vs "Sie geht") still correctly earn "almost".
+`backend/tests/test_backend.py` — one new endpoint-level test
+(`test_case_sensitive_german_sie_vs_capital_sie`) simulating the
+minimal real scenario end-to-end: imports a genuine `en→de` exercise
+via `/admin/content/import` with `case_sensitive: true` compiled into
+its `feedback` field (prompt "you (formal)" → `correct_response`
+`"Sie"`, isolating the exact word-level distinction rather than
+sentence-initial capitalization, which is an unrelated writing
+convention), answers it via the real `/exercises/{id}/answer`
+endpoint, and confirms "Sie" grades correct while "sie" grades
+incorrect. Full backend pytest suite green, run twice fresh to confirm
+stability.
+
+**Real, separate flake found and fixed along the way**:
+`tests/test_rate_limiting.py`'s `seeded_exercise_id()` picked
+"whichever real exercise happens to sort first by UUID" with no type
+filter, then submitted a fixed plain-string response
+(`"some answer"`) regardless of what that exercise actually was — a
+real, observed failure (not hypothetical): adding the new German test
+exercise elsewhere in the suite shifted which UUID sorted first and
+it picked a `flashcard` exercise, whose handler 422s on anything other
+than exactly `"known"`/`"unknown"`, failing 3 unrelated rate-limiting
+tests and 1 payload-bounds test with no connection to this task's
+actual change (confirmed by re-running the exact same suite state
+twice more after the fix, both clean). Fixed by filtering to
+`Exercise.type == ExerciseType.translation` specifically, which accepts
+any string response with no shape requirements.
+
+**Live-verified** against the actual running shared dev stack (after
+`docker compose restart api` to pick up the source change — no
+`--reload`): imported a real minimal `en→de` course/exercise via
+`/admin/content/import` with the `case_sensitive` flag, registered a
+fresh test learner, submitted `"Sie"` (200, `result: "correct"`,
+`xp_awarded: 10`) then `"sie"` (200, `result: "incorrect"`,
+`xp_awarded: 0`, NOT `"almost"`) against the real endpoint. Test
+course/exercise/attempts removed afterward (scoped `DELETE`s by the
+test course's exact title, cascading `exercise_attempts` → `exercises`
+→ `lessons` → `units` → `courses`) — nothing left cluttering the
+shared dev DB's course list.
