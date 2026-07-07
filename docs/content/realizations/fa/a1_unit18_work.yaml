@@ -1,0 +1,358 @@
+schema_version: "1.0"
+realization_version: "2026.1-draft.1"
+target_language: fa
+cefr_level: A1
+status: complete_draft
+generation_provenance:
+  method: ai_adapted_from_public_domain_source
+  authoring_system: claude
+  source_material: "Peace Corps Farsi course materials (public domain), modernized"
+  human_reviewed: false
+review:
+  status: reviewed
+  required_next_reviewer: null
+  notes: "New unit, fa's next uncovered outcome (universal.a1.work.describe_job, prerequisites: introductions/unit02 and routines/unit11, both already covered). Six lessons: basic occupation vocabulary (مهندس/معلم/دکتر), asking someone's job, workplace vocabulary (شرکت/مدرسه/بیمارستان), describing a daily work routine, reading a short work profile, and a dialogue where two people discuss their jobs. Deliberately uses در (in/at) rather than تو for 'at a workplace' throughout, to avoid a real homograph collision with تو meaning 'you' (already taught in earlier units) -- a register/clarity choice, not an error. Colloquial -e/-am contraction register maintained throughout (مهندسم، مهندسه، عالیه), هستم copula family. Authored independently of the prs realization per the sibling-isolation rule. Authored §14/§16/§17-compliant from the start: no listen_type/listen_select/listen_order exercises anywhere, every matching_pairs exercise sized 6 pairs except lesson01's genuine 4-pair first-lesson ceiling, and zero fill_in_blank exercises. NOTE ON §14 SCOPE: AUTHORING_GUIDE.md §14 was revised 2026-07-06 to permit listen_type/listen_select for fa now that Azure TTS ships real Farsi neural voices (the restriction is now prs-only) -- this unit nonetheless continues the established text-based exercise pattern used in units 01-17 for corpus consistency, pending a broader decision on whether/how to retrofit audio exercises project-wide; not a compliance gap. Multi-clause exercises include period-joined, comma-joined, and و-joined accepted variants per §12, and open-ended production exercises carry multiple accepted job/workplace variants from the start. Compiler validation clean (0 errors/0 warnings). Awaiting the standing fresh-context review before status can move to reviewed.
+
+    FRESH-CONTEXT REVIEW, 2026-07-07 (zero prior access to this unit's authoring reasoning, prs sibling files never opened, per §8/§9): confirmed spine-outcome discipline (all 6 lessons genuinely serve universal.a1.work.describe_job) and all 4 assessment_requirements covered (understand_work_description via lesson05/06's reading_comprehension/dialogue_comprehension; describe_work via the translate/dialogue_response exercises; read_work_profile via lesson05's reading pair; write_work_profile via lesson05/06's writing_prompt exercises). Verified recognition->drag/matching->production pacing in all 6 lessons. Grepped both files: zero listen_type/listen_select/listen_order/fill_in_blank exercises (§14/§17), confirming the documented deliberate all-text-based choice despite §14 now permitting fa audio content -- correctly not flagged as a gap. Verified §16 matching_pairs sizing exactly as claimed (lesson01: 4, lessons02-06: 6 each). Grepped both files for Arabic-range kaf (U+0643)/yeh (U+064A): zero found. Wrote and ran a real recursive yaml.safe_load-based Python script checking every dict value in both files for a stray non-schema Python bool: none found. Confirmed content_key parity exact in both directions via script (29 teaching + 30 exercise keys after the fix below). Confirmed all 8 exercise types used are registered in frontend/src/components/exercises/ExerciseRenderer.tsx. Wrote and ran a real duplicate-instruction-vs-target_blocks script comparing every exercise's en-language prompt.target_blocks against that exercise's overlay instruction: zero duplicates found. Read backend/app/api/router.py's grade()/is_multi_answer_response() and confirmed lesson05.exercise05 (write_own_job) and lesson06.exercise05 (write_job_summary)'s multi-variant open-ended acceptance is genuine multi-answer grading, confirmed directly in the compiled JSON (correct_response.accepted lists every authored variant) and that all 30 exercises have a genuine non-empty correct_response, with answer_language_code correctly resolving to fa for every translation/writing_prompt/dialogue_response exercise. Verified every multiple_choice/reading_comprehension/dialogue_comprehension exercise pairs a Farsi prompt with English-only correct_option/distractors -- no same-script leakage. Grepped every تو occurrence in both files and confirmed it is used exclusively as the pronoun 'you' (تو چی؟, already taught) -- never as a location preposition -- and confirmed در/یک شرکت/در یک مدرسه/در یک بیمارستان is natural, correct, idiomatic colloquial Tehrani Farsi for 'at a company/school/hospital', a genuine and well-motivated choice given the تو homograph risk, not an overcorrection. Verified every occupation/workplace verb form (مهندسم/معلمم/دکترم 1st person, مهندسه/معلمه 3rd person, کار می‌کنم/می‌کنی/می‌کنه all three persons) is correctly matched to its stated grammatical person throughout every exercise. Cross-checked §11 facts: lesson06's dialogue (Nima: engineer at a company; Sara: teacher at a school) is fully consistent with lesson05's independently-stated reading text (Nima: engineer at a company) -- same character, same facts, no contradiction. Wrote and ran a ZWNJ-aware, punctuation-stripping Python tokenizer checking every exercise's tested_text/pairs/word_bank and the overlay's Farsi-side accepted_answers against cumulative file-scoped introduced_tokens. Found and fixed one genuine gap: من ('I'), used in lesson05.exercise05's overlay accepted_answers ('من مهندسم' etc.) as an alternate fuller-sentence variant, was not yet introduced in-file at that point (only introduced later via lesson06's dialogue_line2) -- added a dedicated من vocabulary teaching card to lesson01 (both realization and overlay) and cleared the now-redundant introduced_tokens entry on lesson06's dialogue_line2; re-ran the tokenizer after the fix, zero remaining gaps. Confirmed معلمه (lesson06's 3rd-person teaching card) and its use in write_job_summary, and both کار می‌کنم (lesson03/04) and مهندسه/کار می‌کنه (lesson05), are each taught before their first tested use. Confirmed A1-appropriate complexity throughout and register consistency against units 16/17 (هستم-family copula, -e/-am contractions, نیما/سارا names, established و-joined multi-clause precedent). Re-ran validate + compile after the fix: 0 errors/0 warnings, valid JSON, and the actual compiled output was spot-checked directly to confirm the fix landed correctly and every exercise has a genuine correct answer."
+
+course:
+  realization_key: fa.a1
+  target_language_first: true
+  dialect: fa_IR_standard_colloquial_intro
+  register_policy: >-
+    Continues the established colloquial -e/-am contraction pattern and
+    هستم copula, consistent with units 07-17.
+
+media_assets:
+  - content_key: fa.a1.audio.work.job.01
+    language: fa
+    text: "من مهندسم. در یک شرکت کار می‌کنم"
+    voice_hint: neutral_adult
+    status: pending_generation
+  - content_key: fa.a1.audio.dialogue.work.01
+    language: fa
+    text: "سارا: شغلت چیه؟ نیما: من مهندسم. در یک شرکت کار می‌کنم. تو چی؟ سارا: من معلمم. در یک مدرسه کار می‌کنم. نیما: عالیه!"
+    voice_hint: two_adults_neutral_polite
+    status: pending_generation
+
+units:
+  - content_key: fa.a1.unit18.work
+    title: کار
+    section: reading_writing
+    spine_outcome_ids:
+      - universal.a1.work.describe_job
+    planned_lesson_count: 6
+
+    lessons:
+      - content_key: fa.a1.unit18.lesson01.basic_job_vocab
+        title: واژه‌های شغل
+        spine_outcome_id: universal.a1.work.describe_job
+        teaching:
+          - content_key: fa.a1.unit18.lesson01.teach.shoghl_word
+            kind: vocabulary
+            target: {text: شغل, language_code: fa, direction: rtl}
+            introduced_tokens: [شغل]
+          - content_key: fa.a1.unit18.lesson01.teach.mohandesam_word
+            kind: vocabulary
+            target: {text: مهندسم, language_code: fa, direction: rtl}
+            introduced_tokens: [مهندسم]
+          - content_key: fa.a1.unit18.lesson01.teach.moallemam_word
+            kind: vocabulary
+            target: {text: معلمم, language_code: fa, direction: rtl}
+            introduced_tokens: [معلمم]
+          - content_key: fa.a1.unit18.lesson01.teach.doctoram_word
+            kind: vocabulary
+            target: {text: دکترم, language_code: fa, direction: rtl}
+            introduced_tokens: [دکترم]
+          - content_key: fa.a1.unit18.lesson01.teach.man_word
+            kind: vocabulary
+            target: {text: من, language_code: fa, direction: rtl}
+            introduced_tokens: [من]
+        exercises:
+          - content_key: fa.a1.unit18.lesson01.exercise01.recognize_mohandesam
+            type: multiple_choice
+            tested_text: مهندسم
+            prompt: {target_blocks: [{text: مهندسم, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit18.lesson01.exercise02.recognize_moallemam
+            type: multiple_choice
+            tested_text: معلمم
+            prompt: {target_blocks: [{text: معلمم, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit18.lesson01.exercise03.match_job_vocab
+            type: matching_pairs
+            tested_text: "شغل مهندسم معلمم دکترم"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: شغل, right: job}
+              - {left: مهندسم, right: "I'm an engineer"}
+              - {left: معلمم, right: "I'm a teacher"}
+              - {left: دکترم, right: "I'm a doctor"}
+          - content_key: fa.a1.unit18.lesson01.exercise04.translate_i_am_engineer
+            type: translation
+            tested_text: مهندسم
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit18.lesson01.exercise05.translate_i_am_teacher
+            type: translation
+            tested_text: معلمم
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit18.lesson02.asking_about_job
+        title: پرسیدن شغل
+        spine_outcome_id: universal.a1.work.describe_job
+        teaching:
+          - content_key: fa.a1.unit18.lesson02.teach.shoghlet_word
+            kind: grammar_note
+            target: {text: "شغلت (your job)", language_code: fa, direction: rtl}
+            introduced_tokens: [شغلت]
+          - content_key: fa.a1.unit18.lesson02.teach.chie_word
+            kind: grammar_note
+            target: {text: "چیه (what is, colloquial)", language_code: fa, direction: rtl}
+            introduced_tokens: [چیه]
+          - content_key: fa.a1.unit18.lesson02.teach.shoghlet_chie_question
+            kind: phrase
+            target: {text: "شغلت چیه؟", language_code: fa, direction: rtl}
+            introduced_tokens: []
+        exercises:
+          - content_key: fa.a1.unit18.lesson02.exercise01.recognize_shoghlet
+            type: multiple_choice
+            tested_text: شغلت
+            prompt: {target_blocks: [{text: شغلت, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit18.lesson02.exercise02.recognize_chie
+            type: multiple_choice
+            tested_text: چیه
+            prompt: {target_blocks: [{text: چیه, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit18.lesson02.exercise03.match_asking_vocab
+            type: matching_pairs
+            tested_text: "شغلت چیه شغل مهندسم معلمم دکترم"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: شغلت, right: "your job"}
+              - {left: چیه, right: "what is"}
+              - {left: شغل, right: job}
+              - {left: مهندسم, right: "I'm an engineer"}
+              - {left: معلمم, right: "I'm a teacher"}
+              - {left: دکترم, right: "I'm a doctor"}
+          - content_key: fa.a1.unit18.lesson02.exercise04.word_order_shoghlet_chie
+            type: word_order
+            tested_text: "شغلت چیه؟"
+            prompt: {target_blocks: [{text: "What's your job?", language_code: en, direction: ltr}]}
+            word_bank: [شغلت, چیه؟]
+          - content_key: fa.a1.unit18.lesson02.exercise05.translate_whats_your_job
+            type: translation
+            tested_text: "شغلت چیه؟"
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit18.lesson03.workplace_vocab
+        title: واژه‌های محل کار
+        spine_outcome_id: universal.a1.work.describe_job
+        teaching:
+          - content_key: fa.a1.unit18.lesson03.teach.sherkat_word
+            kind: vocabulary
+            target: {text: شرکت, language_code: fa, direction: rtl}
+            introduced_tokens: [شرکت]
+          - content_key: fa.a1.unit18.lesson03.teach.madrese_word
+            kind: vocabulary
+            target: {text: مدرسه, language_code: fa, direction: rtl}
+            introduced_tokens: [مدرسه]
+          - content_key: fa.a1.unit18.lesson03.teach.bimarestan_word
+            kind: vocabulary
+            target: {text: بیمارستان, language_code: fa, direction: rtl}
+            introduced_tokens: [بیمارستان]
+          - content_key: fa.a1.unit18.lesson03.teach.dar_word
+            kind: grammar_note
+            target: {text: "در (in/at)", language_code: fa, direction: rtl}
+            introduced_tokens: [در]
+          - content_key: fa.a1.unit18.lesson03.teach.yek_word
+            kind: grammar_note
+            target: {text: "یک (a/one)", language_code: fa, direction: rtl}
+            introduced_tokens: [یک]
+          - content_key: fa.a1.unit18.lesson03.teach.kar_mikoni_phrase
+            kind: grammar_note
+            target: {text: "کار می‌کنی (you work)", language_code: fa, direction: rtl}
+            introduced_tokens: [کار, "می‌کنی"]
+          - content_key: fa.a1.unit18.lesson03.teach.koja_word
+            kind: grammar_note
+            target: {text: "کجا (where)", language_code: fa, direction: rtl}
+            introduced_tokens: [کجا]
+          - content_key: fa.a1.unit18.lesson03.teach.kar_mikonam_word
+            kind: grammar_note
+            target: {text: "کار می‌کنم (I work)", language_code: fa, direction: rtl}
+            introduced_tokens: ["می‌کنم"]
+        exercises:
+          - content_key: fa.a1.unit18.lesson03.exercise01.recognize_sherkat
+            type: multiple_choice
+            tested_text: شرکت
+            prompt: {target_blocks: [{text: شرکت, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit18.lesson03.exercise02.recognize_bimarestan
+            type: multiple_choice
+            tested_text: بیمارستان
+            prompt: {target_blocks: [{text: بیمارستان, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit18.lesson03.exercise03.match_workplace_vocab
+            type: matching_pairs
+            tested_text: "شرکت مدرسه بیمارستان در کجا کار می‌کنی"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: شرکت, right: company}
+              - {left: مدرسه, right: school}
+              - {left: بیمارستان, right: hospital}
+              - {left: در, right: "in/at"}
+              - {left: کجا, right: where}
+              - {left: "کار می‌کنی", right: "you work"}
+          - content_key: fa.a1.unit18.lesson03.exercise04.translate_where_do_you_work
+            type: translation
+            tested_text: "کجا کار می‌کنی؟"
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit18.lesson03.exercise05.translate_work_at_hospital
+            type: translation
+            tested_text: "در یک بیمارستان کار می‌کنم"
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit18.lesson04.describing_work_routine
+        title: توصیف برنامه‌ی کاری
+        spine_outcome_id: universal.a1.work.describe_job
+        teaching:
+          - content_key: fa.a1.unit18.lesson04.teach.har_rooz_word
+            kind: phrase
+            target: {text: "هر روز", language_code: fa, direction: rtl}
+            introduced_tokens: [هر, روز]
+        exercises:
+          - content_key: fa.a1.unit18.lesson04.exercise01.recognize_har_rooz
+            type: multiple_choice
+            tested_text: "هر روز"
+            prompt: {target_blocks: [{text: "هر روز", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit18.lesson04.exercise02.recognize_kar_mikonam
+            type: multiple_choice
+            tested_text: "کار می‌کنم"
+            prompt: {target_blocks: [{text: "کار می‌کنم", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit18.lesson04.exercise03.match_routine_vocab
+            type: matching_pairs
+            tested_text: "هر روز کار می‌کنم شرکت مدرسه بیمارستان در"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "هر روز", right: "every day"}
+              - {left: "کار می‌کنم", right: "I work"}
+              - {left: شرکت, right: company}
+              - {left: مدرسه, right: school}
+              - {left: بیمارستان, right: hospital}
+              - {left: در, right: "in/at"}
+          - content_key: fa.a1.unit18.lesson04.exercise04.translate_work_every_day
+            type: translation
+            tested_text: "هر روز کار می‌کنم"
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit18.lesson04.exercise05.translate_work_school_every_day
+            type: translation
+            tested_text: "هر روز در یک مدرسه کار می‌کنم"
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit18.lesson05.reading_a_work_profile
+        title: خواندن یک معرفی شغلی
+        spine_outcome_id: universal.a1.work.describe_job
+        teaching:
+          - content_key: fa.a1.unit18.lesson05.teach.mohandese_grammar
+            kind: grammar_note
+            target: {text: "مهندسه (he/she is an engineer, colloquial 3rd person)", language_code: fa, direction: rtl}
+            introduced_tokens: [مهندسه]
+          - content_key: fa.a1.unit18.lesson05.teach.mikone_grammar
+            kind: grammar_note
+            target: {text: "کار می‌کنه (he/she works, colloquial 3rd person)", language_code: fa, direction: rtl}
+            introduced_tokens: ["می‌کنه"]
+          - content_key: fa.a1.unit18.lesson05.teach.reading_text
+            kind: reading
+            target: {text: "نیما مهندسه. در یک شرکت کار می‌کنه", language_code: fa, direction: rtl}
+            introduced_tokens: [نیما]
+        exercises:
+          - content_key: fa.a1.unit18.lesson05.exercise01.reading_comprehension_nimas_job
+            type: reading_comprehension
+            tested_text: "نیما مهندسه. در یک شرکت کار می‌کنه"
+            prompt: {target_blocks: [{text: "نیما مهندسه. در یک شرکت کار می‌کنه", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit18.lesson05.exercise02.reading_comprehension_nimas_workplace
+            type: reading_comprehension
+            tested_text: "نیما مهندسه. در یک شرکت کار می‌کنه"
+            prompt: {target_blocks: [{text: "نیما مهندسه. در یک شرکت کار می‌کنه", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit18.lesson05.exercise03.match_reading_vocab
+            type: matching_pairs
+            tested_text: "نیما مهندسه شرکت کار می‌کنه در"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: نیما, right: Nima}
+              - {left: مهندسه, right: "he's an engineer"}
+              - {left: شرکت, right: company}
+              - {left: "کار می‌کنه", right: "he works"}
+              - {left: در, right: "in/at"}
+              - {left: مدرسه, right: school}
+          - content_key: fa.a1.unit18.lesson05.exercise04.translate_nima_is_engineer
+            type: translation
+            tested_text: مهندسه
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit18.lesson05.exercise05.write_own_job
+            type: writing_prompt
+            tested_text: مهندسم
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit18.lesson06.jobs_dialogue
+        title: گفتگوی شغل‌ها
+        spine_outcome_id: universal.a1.work.describe_job
+        teaching:
+          - content_key: fa.a1.unit18.lesson06.teach.names
+            kind: vocabulary
+            target: {text: "نیما، سارا", language_code: fa, direction: rtl}
+            introduced_tokens: [سارا]
+          - content_key: fa.a1.unit18.lesson06.teach.to_chi_phrase
+            kind: phrase
+            target: {text: "تو چی؟", language_code: fa, direction: rtl}
+            introduced_tokens: ["تو", چی]
+          - content_key: fa.a1.unit18.lesson06.teach.aalie_word
+            kind: vocabulary
+            target: {text: عالیه, language_code: fa, direction: rtl}
+            introduced_tokens: [عالیه]
+          - content_key: fa.a1.unit18.lesson06.teach.va_word
+            kind: grammar_note
+            target: {text: "و (and)", language_code: fa, direction: rtl}
+            introduced_tokens: [و]
+          - content_key: fa.a1.unit18.lesson06.teach.moalleme_grammar
+            kind: grammar_note
+            target: {text: "معلمه (she/he is a teacher, colloquial 3rd person)", language_code: fa, direction: rtl}
+            introduced_tokens: [معلمه]
+          - content_key: fa.a1.unit18.lesson06.teach.dialogue_line1
+            kind: dialogue
+            target: {text: "شغلت چیه؟", language_code: fa, direction: rtl, speaker: سارا}
+            introduced_tokens: []
+          - content_key: fa.a1.unit18.lesson06.teach.dialogue_line2
+            kind: dialogue
+            target: {text: "من مهندسم. در یک شرکت کار می‌کنم. تو چی؟", language_code: fa, direction: rtl, speaker: نیما}
+            introduced_tokens: []
+          - content_key: fa.a1.unit18.lesson06.teach.dialogue_line3
+            kind: dialogue
+            target: {text: "من معلمم. در یک مدرسه کار می‌کنم", language_code: fa, direction: rtl, speaker: سارا}
+            introduced_tokens: []
+          - content_key: fa.a1.unit18.lesson06.teach.dialogue_line4
+            kind: dialogue
+            target: {text: عالیه, language_code: fa, direction: rtl, speaker: نیما}
+            introduced_tokens: []
+        exercises:
+          - content_key: fa.a1.unit18.lesson06.exercise01.dialogue_comprehension_context
+            type: dialogue_comprehension
+            tested_text: "شغلت چیه من مهندسم در یک شرکت کار می‌کنم تو چی من معلمم در یک مدرسه کار می‌کنم عالیه"
+            prompt: {target_blocks: [{text: "سارا: شغلت چیه؟ نیما: من مهندسم. در یک شرکت کار می‌کنم. تو چی؟ سارا: من معلمم. در یک مدرسه کار می‌کنم. نیما: عالیه!", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit18.lesson06.exercise02.match_dialogue_facts
+            type: matching_pairs
+            tested_text: "نیما سارا مهندسم معلمم شرکت مدرسه"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: نیما, right: Nima}
+              - {left: سارا, right: Sara}
+              - {left: مهندسم, right: "I'm an engineer"}
+              - {left: معلمم, right: "I'm a teacher"}
+              - {left: شرکت, right: company}
+              - {left: مدرسه, right: school}
+          - content_key: fa.a1.unit18.lesson06.exercise03.reading_comprehension_who_works_where
+            type: reading_comprehension
+            tested_text: "من مهندسم. در یک شرکت کار می‌کنم. من معلمم. در یک مدرسه کار می‌کنم"
+            prompt: {target_blocks: [{text: "من مهندسم. در یک شرکت کار می‌کنم. من معلمم. در یک مدرسه کار می‌کنم", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit18.lesson06.exercise04.dialogue_response_own_job
+            type: dialogue_response
+            tested_text: مهندسم
+            prompt: {target_blocks: [{text: "شغلت چیه؟", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit18.lesson06.exercise05.write_job_summary
+            type: writing_prompt
+            tested_text: "سارا معلمه نیما مهندسه"
+            prompt: {target_blocks: []}
