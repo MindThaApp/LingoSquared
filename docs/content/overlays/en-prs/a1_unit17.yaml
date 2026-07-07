@@ -1,0 +1,353 @@
+schema_version: "1.0"
+overlay_version: "2026.1-draft.1"
+overlay_key: en-prs.a1.unit17
+source_language: en
+target_language: prs
+status: complete_draft
+generation_provenance:
+  method: ai_adapted_from_public_domain_source
+  authoring_system: claude
+  human_reviewed: false
+review:
+  status: reviewed
+  required_next_reviewer: null
+  notes: "Authored alongside the new prs a1_unit17_health.yaml realization. Follows the established en-prs overlay convention from units 01-16 (English instruction/correct_option/distractors/feedback, target-language Dari accepted_answers, English glosses for recognize_* multiple_choice items). FRESH-CONTEXT REVIEW COMPLETED 2026-07-07 (same pass as the paired realization -- see that file's review notes for the full method: Codex usage-exhausted, fell back to a separate general-purpose subagent with zero access to the authoring reasoning). Two real issues found and fixed here: match_advice_vocab's accepted_answers dict expanded from 5 to 8 entries (سردرد/تب/مریض added) to match the realization's now-8-pair matching_pairs exercise; write_dialogue_summary's accepted_answers expanded from 4 to 12 entries for full period/comma/و coverage at both clause boundaries, and its instruction reworded to explicitly allow either the headache+rest or fever+water combination (previously implied only headache+rest while one accepted variant actually used fever+water, a real instruction/answer mismatch). Content_key parity, jargon leaks, script purity, and §12 coverage on the other two multi-clause exercises (write_health_message, dialogue_response_own_symptom) were all independently re-verified clean. Compiler validate+compile re-run clean (0 errors/0 warnings) after both fixes. SECOND, FULLY INDEPENDENT FRESH-CONTEXT REVIEW, 2026-07-07: re-derived every check from scratch against the paired realization (see that file's notes for full detail) -- independently confirmed both already-applied fixes (match_advice_vocab's 8-pair accepted_answers dict, write_dialogue_summary's 12-variant accepted_answers list with the broadened either-symptom-either-advice instruction) are correct and instruction-coherent, via fresh Python scripts covering stray-boolean scanning, content_key parity, duplicate-instruction-text, prompt-shows-answer same-script leakage, and file-scoped untaught-vocabulary tokenization (all clean). Independently web-verified دل‌درد and standalone تشکر as genuine natural Dari usage. Re-ran the actual compiler (validate then compile) as the final check and directly inspected compiled output: 0 errors/0 warnings, all 30 exercises have non-empty accepted answers, match_advice_vocab and write_dialogue_summary compile with the expected 8 and 12 entries respectively. No further issues found."
+
+course:
+  title: Dari A1
+  description: >-
+    Beginner Kabul Dari: basic symptoms (headache, fever, stomachache),
+    saying you feel unwell, asking for a doctor or medicine, reading a
+    short health-instruction note and a short message describing
+    symptoms, and a dialogue with a doctor.
+
+units:
+  prs.a1.unit17.health:
+    title: Health
+    description: State a basic health problem and understand simple immediate advice.
+
+lessons:
+  prs.a1.unit17.lesson01.symptom_words:
+    title: "Symptom words"
+  prs.a1.unit17.lesson02.feeling_unwell:
+    title: "Saying you feel unwell"
+  prs.a1.unit17.lesson03.asking_for_help:
+    title: "Asking for a doctor or medicine"
+  prs.a1.unit17.lesson04.reading_health_advice:
+    title: "Reading a health-instruction note"
+  prs.a1.unit17.lesson05.reading_a_health_message:
+    title: "Reading a health message"
+  prs.a1.unit17.lesson06.doctor_dialogue:
+    title: "A dialogue with the doctor"
+
+teaching:
+  prs.a1.unit17.lesson01.teach.headache_word:
+    title: Headache
+    gloss: headache
+    note: "سردرد is a compound of سر (head) and درد (pain/ache)."
+  prs.a1.unit17.lesson01.teach.fever_word:
+    title: Fever
+    gloss: fever
+    note: "تب means fever."
+  prs.a1.unit17.lesson01.teach.stomachache_word:
+    title: Stomachache
+    gloss: stomachache
+    note: "دل‌درد is a compound of دل (belly/stomach, colloquially) and درد (pain/ache)."
+  prs.a1.unit17.lesson01.teach.have_word:
+    title: "I have"
+    gloss: "I have"
+    note: "دارم is the first-person present form of داشتن (to have)."
+  prs.a1.unit17.lesson02.teach.sick_word:
+    title: Sick
+    gloss: sick
+    note: "مریض means sick or ill."
+  prs.a1.unit17.lesson02.teach.am_word:
+    title: "I am"
+    gloss: "I am"
+    note: "استم is the polite first-person copula, consistent with this course's استم/استین register."
+  prs.a1.unit17.lesson02.teach.my_condition_word:
+    title: "How I feel"
+    gloss: "how I feel / my condition"
+    note: "حالم (حال + م) literally means my condition -- حالم خوب نیست means I don't feel well."
+  prs.a1.unit17.lesson02.teach.good_word:
+    title: Good
+    gloss: good
+    note: "خوب means good or well."
+  prs.a1.unit17.lesson02.teach.not_word:
+    title: "Is not"
+    gloss: "is not"
+    note: "نیست is the negative copula -- خوب نیست means isn't good/well."
+  prs.a1.unit17.lesson03.teach.doctor_word:
+    title: Doctor
+    gloss: doctor
+    note: "داکتر is the standard Afghan Dari spelling and pronunciation for doctor (distinct from Iranian Farsi's دکتر)."
+  prs.a1.unit17.lesson03.teach.medicine_word:
+    title: Medicine
+    gloss: medicine
+    note: "دوا means medicine."
+  prs.a1.unit17.lesson03.teach.want_word:
+    title: "I want"
+    gloss: "I want"
+    note: "می‌خواهم means I want."
+  prs.a1.unit17.lesson04.teach.rest_word:
+    title: Rest
+    gloss: rest
+    note: "استراحت is the noun rest -- combined with کنید it forms the imperative Rest!"
+  prs.a1.unit17.lesson04.teach.do_word:
+    title: "Do (polite)"
+    gloss: "do (polite imperative)"
+    note: "کنید is the polite imperative of کردن (to do) -- استراحت کنید literally means do rest, i.e. Rest."
+  prs.a1.unit17.lesson04.teach.water_word:
+    title: Water
+    gloss: water
+    note: "آب means water."
+  prs.a1.unit17.lesson04.teach.a_lot_word:
+    title: "A lot"
+    gloss: "a lot / much"
+    note: "زیاد means a lot or much."
+  prs.a1.unit17.lesson04.teach.drink_word:
+    title: "Drink (polite)"
+    gloss: "drink (polite imperative)"
+    note: "بنوشید is the polite imperative of نوشیدن (to drink)."
+  prs.a1.unit17.lesson04.teach.advice_text:
+    title: "A health-instruction note"
+    gloss: "Rest. Drink lots of water."
+    note: "A short note giving two pieces of basic health advice."
+  prs.a1.unit17.lesson05.teach.hello_word:
+    title: Hello
+    gloss: hello
+    note: "سلام means hello."
+  prs.a1.unit17.lesson05.teach.and_word:
+    title: And
+    gloss: and
+    note: "و means and, joining two items or clauses."
+  prs.a1.unit17.lesson05.teach.message_text:
+    title: "A short health message"
+    gloss: "Hello. I am sick. I have a headache and a fever."
+    note: "A short first-person message describing two symptoms."
+  prs.a1.unit17.lesson06.teach.names:
+    title: "Bashir and the doctor"
+    gloss: "Bashir, the doctor"
+    note: "Bashir is a recurring character in this course; the doctor is addressed with the honorific صاحب."
+  prs.a1.unit17.lesson06.teach.how_word:
+    title: How
+    gloss: how
+    note: "چطور means how."
+  prs.a1.unit17.lesson06.teach.are_you_word:
+    title: "You are (polite)"
+    gloss: "you are"
+    note: "استین is the polite second-person copula, consistent with this course's استم/استین register."
+  prs.a1.unit17.lesson06.teach.thanks_word:
+    title: Thanks
+    gloss: thanks
+    note: "تشکر means thanks."
+  prs.a1.unit17.lesson06.teach.sir_word:
+    title: Sir
+    gloss: sir
+    note: "صاحب is a respectful honorific appended after a name or title -- داکتر صاحب means Doctor, addressed respectfully, a genuinely Afghan usage pattern."
+  prs.a1.unit17.lesson06.teach.dialogue_line1:
+    title: "The doctor greets Bashir"
+    gloss: "Hello. How are you?"
+  prs.a1.unit17.lesson06.teach.dialogue_line2:
+    title: "Bashir answers"
+    gloss: "Hello. I am sick. I have a headache and a fever."
+  prs.a1.unit17.lesson06.teach.dialogue_line3:
+    title: "The doctor advises"
+    gloss: "Rest. Drink lots of water."
+  prs.a1.unit17.lesson06.teach.dialogue_line4:
+    title: "Bashir thanks the doctor"
+    gloss: "Thank you, Doctor."
+
+exercises:
+  prs.a1.unit17.lesson01.exercise01.recognize_headache:
+    instruction: "What does this word mean?"
+    correct_option: headache
+    distractors: [fever, stomachache, doctor]
+    accepted_answers: [{value: headache, status: correct}]
+    feedback: "سردرد means headache."
+  prs.a1.unit17.lesson01.exercise02.recognize_fever:
+    instruction: "What does this word mean?"
+    correct_option: fever
+    distractors: [headache, stomachache, medicine]
+    accepted_answers: [{value: fever, status: correct}]
+    feedback: "تب means fever."
+  prs.a1.unit17.lesson01.exercise03.match_symptom_words:
+    instruction: "Match each word with its meaning."
+    accepted_answers:
+      - value: {سردرد: headache, تب: fever, دل‌درد: stomachache, دارم: "I have"}
+        status: correct
+    feedback: "These four words let you name a symptom and say you have it."
+  prs.a1.unit17.lesson01.exercise04.translate_i_have_a_headache:
+    instruction: "Translate into Dari: I have a headache."
+    accepted_answers:
+      - {value: "سردرد دارم", status: correct}
+    feedback: "سردرد دارم means I have a headache."
+  prs.a1.unit17.lesson01.exercise05.translate_i_have_a_fever:
+    instruction: "Translate into Dari: I have a fever."
+    accepted_answers:
+      - {value: "تب دارم", status: correct}
+    feedback: "تب دارم means I have a fever."
+  prs.a1.unit17.lesson02.exercise01.recognize_i_am_sick:
+    instruction: "What does this phrase mean?"
+    correct_option: "I am sick"
+    distractors: ["I have a headache", "I want a doctor", "I don't feel well"]
+    accepted_answers: [{value: "I am sick", status: correct}]
+    feedback: "مریض استم means I am sick."
+  prs.a1.unit17.lesson02.exercise02.recognize_not_feeling_well:
+    instruction: "What does this phrase mean?"
+    correct_option: "I don't feel well"
+    distractors: ["I am sick", "I have a fever", "I want medicine"]
+    accepted_answers: [{value: "I don't feel well", status: correct}]
+    feedback: "حالم خوب نیست means I don't feel well."
+  prs.a1.unit17.lesson02.exercise03.match_feeling_unwell_vocab:
+    instruction: "Match each word with its meaning."
+    accepted_answers:
+      - value: {مریض: sick, استم: "I am", حالم: "how I feel", خوب: good, نیست: "is not", سردرد: headache, تب: fever}
+        status: correct
+    feedback: "These combine lesson02's new words with lesson01's review vocabulary."
+  prs.a1.unit17.lesson02.exercise04.translate_i_am_sick:
+    instruction: "Translate into Dari: I am sick."
+    accepted_answers:
+      - {value: "مریض استم", status: correct}
+    feedback: "مریض استم means I am sick."
+  prs.a1.unit17.lesson02.exercise05.translate_dont_feel_well:
+    instruction: "Translate into Dari: I don't feel well."
+    accepted_answers:
+      - {value: "حالم خوب نیست", status: correct}
+    feedback: "حالم خوب نیست means I don't feel well."
+  prs.a1.unit17.lesson03.exercise01.recognize_doctor:
+    instruction: "What does this word mean?"
+    correct_option: doctor
+    distractors: [medicine, sick, fever]
+    accepted_answers: [{value: doctor, status: correct}]
+    feedback: "داکتر means doctor."
+  prs.a1.unit17.lesson03.exercise02.recognize_medicine:
+    instruction: "What does this word mean?"
+    correct_option: medicine
+    distractors: [doctor, headache, water]
+    accepted_answers: [{value: medicine, status: correct}]
+    feedback: "دوا means medicine."
+  prs.a1.unit17.lesson03.exercise03.match_help_vocab:
+    instruction: "Match each word with its meaning."
+    accepted_answers:
+      - value: {داکتر: doctor, دوا: medicine, می‌خواهم: "I want", مریض: sick, تب: fever, سردرد: headache}
+        status: correct
+    feedback: "These let you ask for help with a symptom."
+  prs.a1.unit17.lesson03.exercise04.translate_want_doctor:
+    instruction: "Translate into Dari: I want a doctor."
+    accepted_answers:
+      - {value: "داکتر می‌خواهم", status: correct}
+    feedback: "داکتر می‌خواهم means I want a doctor."
+  prs.a1.unit17.lesson03.exercise05.translate_want_medicine:
+    instruction: "Translate into Dari: I want medicine."
+    accepted_answers:
+      - {value: "دوا می‌خواهم", status: correct}
+    feedback: "دوا می‌خواهم means I want medicine."
+  prs.a1.unit17.lesson04.exercise01.reading_comprehension_first_instruction:
+    instruction: "Read the note. What is the first instruction?"
+    correct_option: Rest
+    distractors: ["Drink water", "Take medicine", "See a doctor"]
+    accepted_answers: [{value: Rest, status: correct}]
+    feedback: "استراحت کنید means Rest -- the note's first instruction."
+  prs.a1.unit17.lesson04.exercise02.reading_comprehension_second_instruction:
+    instruction: "Read the note. What is the second instruction?"
+    correct_option: "Drink lots of water"
+    distractors: ["Rest", "Take medicine", "See a doctor"]
+    accepted_answers: [{value: "Drink lots of water", status: correct}]
+    feedback: "آب زیاد بنوشید means Drink lots of water -- the note's second instruction."
+  prs.a1.unit17.lesson04.exercise03.match_advice_vocab:
+    instruction: "Match each word with its meaning."
+    accepted_answers:
+      - value: {استراحت: rest, کنید: "do (polite)", آب: water, زیاد: "a lot", بنوشید: "drink (polite)", سردرد: headache, تب: fever, مریض: sick}
+        status: correct
+    feedback: "These combine the note's key words with earlier review vocabulary."
+  prs.a1.unit17.lesson04.exercise04.translate_drink_water:
+    instruction: "Translate into Dari: Drink lots of water."
+    accepted_answers:
+      - {value: "آب زیاد بنوشید", status: correct}
+    feedback: "آب زیاد بنوشید means Drink lots of water."
+  prs.a1.unit17.lesson04.exercise05.write_health_advice:
+    instruction: "Write one piece of health advice in Dari (for example: rest, or drink water)."
+    accepted_answers:
+      - {value: "استراحت کنید", status: correct}
+      - {value: "آب زیاد بنوشید", status: correct}
+      - {value: "آب بنوشید", status: correct}
+    feedback: "استراحت کنید means Rest -- a good model answer. Any true piece of advice using this lesson's vocabulary is equally accepted."
+  prs.a1.unit17.lesson05.exercise01.reading_comprehension_first_symptom:
+    instruction: "Read the message. What is the first symptom mentioned?"
+    correct_option: Headache
+    distractors: [Fever, Stomachache, "It isn't stated"]
+    accepted_answers: [{value: Headache, status: correct}]
+    feedback: "The message says سردرد و تب دارم -- I have a headache and a fever. Headache is mentioned first."
+  prs.a1.unit17.lesson05.exercise02.reading_comprehension_second_symptom:
+    instruction: "Read the message. What is the second symptom mentioned?"
+    correct_option: Fever
+    distractors: [Headache, Stomachache, "It isn't stated"]
+    accepted_answers: [{value: Fever, status: correct}]
+    feedback: "The message says سردرد و تب دارم -- I have a headache and a fever. Fever is mentioned second."
+  prs.a1.unit17.lesson05.exercise03.match_message_vocab:
+    instruction: "Match each word with its meaning."
+    accepted_answers:
+      - value: {سلام: hello, مریض: sick, استم: "I am", سردرد: headache, تب: fever, و: and}
+        status: correct
+    feedback: "These are the message's key words."
+  prs.a1.unit17.lesson05.exercise04.reading_comprehension_overall_feeling:
+    instruction: "Read the message. Is the person feeling well or unwell?"
+    correct_option: Unwell
+    distractors: [Well, "It isn't stated", "Feeling great"]
+    accepted_answers: [{value: Unwell, status: correct}]
+    feedback: "The message says مریض استم -- I am sick -- so the person is feeling unwell."
+  prs.a1.unit17.lesson05.exercise05.write_health_message:
+    instruction: "Write a short message in Dari saying you are sick and stating one symptom (headache, fever, or stomachache)."
+    accepted_answers:
+      - {value: "مریض استم. سردرد دارم", status: correct}
+      - {value: "مریض استم، سردرد دارم", status: correct}
+      - {value: "مریض استم و سردرد دارم", status: correct}
+      - {value: "مریض استم. تب دارم", status: correct}
+      - {value: "مریض استم، تب دارم", status: correct}
+      - {value: "مریض استم و تب دارم", status: correct}
+      - {value: "مریض استم. دل‌درد دارم", status: correct}
+      - {value: "مریض استم، دل‌درد دارم", status: correct}
+      - {value: "مریض استم و دل‌درد دارم", status: correct}
+    feedback: "مریض استم، سردرد دارم means I am sick, I have a headache -- a good model answer. Any true symptom message using this unit's vocabulary is equally accepted, joined by a period, comma, or و."
+  prs.a1.unit17.lesson06.exercise01.dialogue_comprehension_bashirs_problem:
+    instruction: "Read the conversation. What does Bashir say is wrong with him?"
+    correct_option: "He has a headache and a fever"
+    distractors: ["He has a stomachache", "He wants medicine", "It isn't stated"]
+    accepted_answers: [{value: "He has a headache and a fever", status: correct}]
+    feedback: "بشیر says سردرد و تب دارم -- he has a headache and a fever."
+  prs.a1.unit17.lesson06.exercise02.match_dialogue_vocab:
+    instruction: "Match each word with its meaning."
+    accepted_answers:
+      - value: {چطور: how, استین: "you are", تشکر: thanks, صاحب: sir, بشیر: Bashir, داکتر: doctor}
+        status: correct
+    feedback: "These are the dialogue's key words and names."
+  prs.a1.unit17.lesson06.exercise03.reading_comprehension_doctors_advice:
+    instruction: "Read the line. What does the doctor advise?"
+    correct_option: "Rest and drink lots of water"
+    distractors: ["Take medicine", "See another doctor", "It isn't stated"]
+    accepted_answers: [{value: "Rest and drink lots of water", status: correct}]
+    feedback: "داکتر says استراحت کنید. آب زیاد بنوشید -- rest, and drink lots of water."
+  prs.a1.unit17.lesson06.exercise04.dialogue_response_own_symptom:
+    instruction: "The doctor asks 'چطور استین؟' (How are you?). Answer, saying you are sick with a stomachache."
+    accepted_answers:
+      - {value: "مریض استم. دل‌درد دارم", status: correct}
+      - {value: "مریض استم، دل‌درد دارم", status: correct}
+      - {value: "مریض استم و دل‌درد دارم", status: correct}
+    feedback: "مریض استم، دل‌درد دارم means I am sick, I have a stomachache."
+  prs.a1.unit17.lesson06.exercise05.write_dialogue_summary:
+    instruction: "Write one or two sentences in Dari summarizing the conversation: say you are sick with one of your symptoms (headache or fever), then give one piece of the doctor's advice (rest, or drink water)."
+    accepted_answers:
+      - {value: "مریض استم. سردرد دارم. استراحت کنید", status: correct}
+      - {value: "مریض استم. سردرد دارم، استراحت کنید", status: correct}
+      - {value: "مریض استم. سردرد دارم و استراحت کنید", status: correct}
+      - {value: "مریض استم، سردرد دارم. استراحت کنید", status: correct}
+      - {value: "مریض استم، سردرد دارم، استراحت کنید", status: correct}
+      - {value: "مریض استم، سردرد دارم و استراحت کنید", status: correct}
+      - {value: "مریض استم و سردرد دارم. استراحت کنید", status: correct}
+      - {value: "مریض استم و سردرد دارم، استراحت کنید", status: correct}
+      - {value: "مریض استم و سردرد دارم و استراحت کنید", status: correct}
+      - {value: "مریض استم. تب دارم. آب زیاد بنوشید", status: correct}
+      - {value: "مریض استم، تب دارم، آب زیاد بنوشید", status: correct}
+      - {value: "مریض استم و تب دارم و آب زیاد بنوشید", status: correct}
+    feedback: "مریض استم، سردرد دارم، استراحت کنید means I am sick, I have a headache, rest -- a good model summary combining a symptom with the doctor's advice. Any true combination of a symptom and a piece of advice from the conversation, joined by a period, comma, or و, is equally accepted."
