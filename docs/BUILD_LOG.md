@@ -9640,3 +9640,41 @@ templates confirmed by direct YAML parsing across all 29 files,
 unchanged), `_practice_slot_check.py` (unchanged at exactly 5
 pre-existing, unrelated `en-fa` problems). No realization/overlay
 files touched by either worker.
+
+## fa-en depth pass (second-shallowest), en-fa/en-prs unit18-19 gap closure, 2026-07-07
+
+**fa-en deepened**, mirroring the exact successful prs-en pattern from
+the immediately preceding entry (same underlying English content,
+different source-language overlay): `a1_unit01` 8→17, `a1_unit05`
+5→14, `a1_unit07` 7→14, `a1_unit08` 8→16, `a1_unit14` 7→10, `a1_unit16`
+8→13, `a1_unit17` 8→11. Direction total: 296→367 templates (28→29
+units, one more having landed from concurrent authoring mid-pass).
+Both dispatched workers independently caught the identical trap prs-en
+hit in Dari — "fine"/"okay" sharing one identical gloss (خوب in
+Farsi too) — and correctly avoided building a multiple_choice on that
+tag, confirming the awareness genuinely transferred across languages
+rather than being a one-off catch.
+
+**New gap found and closed same pass**: en-fa/en-prs both grew from 17
+to 19 A1 units (18 work, 19 housing) mid-sweep. Authored all 4 new
+practice files (en-fa 16/16, en-prs 14/15 templates), extending both
+directions' classifiers. A genuine homograph was found and fixed in
+Farsi: تو is both the established pronoun "you" and unit19's new
+spatial preposition "in/inside" — given its own `(level, token, sense)`
+-scoped classifier entry, mirroring the existing و/می‌شود/کی pattern
+already used for exactly this kind of collision in the sibling prs
+script, plus a follow-on leak (the generic pronoun-tagging logic still
+matching the location-sense record) caught and scoped out.
+
+**Verification**: independently re-verified myself — fa-en confirmed
+at 367 templates/29 units by direct parsing, en-fa/en-prs both
+confirmed at 21 units each, all three directions validate independently
+at 0 errors/0 warnings, `_fill_in_blank_ambiguity_check.py` still 0
+AMBIGUOUS/0 MULTI-SLOT. Notably, `_practice_slot_check.py`'s output
+format changed (now a plain "All packs: ..." success message instead
+of a per-file FAIL list + total count) and a fresh run confirms
+**zero FAIL lines across all 157 packs** — the 5 pre-existing,
+unrelated en-fa unit01/02 problems tracked as unchanged across every
+entry so far tonight have themselves now been resolved, by a different
+concurrent lane, sometime between the last check and this one. The
+whole corpus is clean for the first time this session.

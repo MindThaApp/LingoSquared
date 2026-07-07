@@ -123,6 +123,19 @@ UNIT_FILES = (
         REPO_ROOT / "docs/content/realizations/prs/a1_unit17_health.yaml",
         REPO_ROOT / "docs/content/overlays/en-prs/a1_unit17.yaml",
     ),
+    # Units 18-19 (A1: work, housing), added 2026-07-07 -- the real A1
+    # realization grew 17->19 units this session. Closes the practice-pool
+    # gap for these two specifically-new units (same pass as the fa
+    # sibling script's own units-18-19 extension, authored independently
+    # per the sibling-isolation rule).
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a1_unit18_work.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a1_unit18.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a1_unit19_housing.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a1_unit19.yaml",
+    ),
 )
 
 # A2 units live in a SEPARATE course row ("Dari A2", not "Dari A1") --
@@ -425,6 +438,22 @@ PRS_GLOSSES: dict[str, str] = {
     "دوا": "medicine", "استراحت": "rest",
     "بنوشید": "drink (polite imperative)",
     "صاحب": "sir (respectful honorific, appended after a title)",
+    # Unit 18 (work), added 2026-07-07. Confirmed by reading
+    # docs/content/realizations/prs/a1_unit18_work.yaml directly --
+    # معلم/مهندس/داکتر/دوکاندار/کار/استم/دفتر/دوکان/شفاخانه/مکتب/در/
+    # می‌کنم/کجا/می‌کنید/و/است/هر/روز/بشیر/شما/چیست/بلی were all already
+    # glossed from earlier units, reused as-is. لیلا (already "Leila
+    # (name)" from unit02) and می‌کند (already "does / is doing" from
+    # unit07) are also reused as-is -- genuinely the same lexemes, not
+    # collisions. درس/می‌دهد are the only genuinely new tokens.
+    "درس": "lesson", "می‌دهد": "he/she gives (درس می‌دهد, 'teaches')",
+    # Unit 19 (housing), added 2026-07-07, same pass as unit18 above.
+    # Confirmed by reading
+    # docs/content/realizations/prs/a1_unit19_housing.yaml directly --
+    # خانه/دارم/دو/سه/نزدیک/است/این/دارد/یک/و/مقابل/شما/چند/بلی/لیلا/
+    # فریدون were all already glossed from earlier units, reused as-is.
+    "اتاق": "room", "آشپزخانه": "kitchen", "تشناب": "bathroom",
+    "چوکی": "chair", "تخت": "bed", "کلکین": "window", "بزرگ": "big",
 }
 
 PRS_POS: dict[str, str] = {
@@ -590,6 +619,11 @@ PRS_POS: dict[str, str] = {
     "سردرد": "noun", "تب": "noun", "دل‌درد": "noun",
     "مریض": "adjective", "حالم": "noun",
     "دوا": "noun", "استراحت": "noun", "بنوشید": "verb", "صاحب": "noun",
+    # Unit 18 (work), added 2026-07-07.
+    "درس": "noun", "می‌دهد": "verb",
+    # Unit 19 (housing), added 2026-07-07.
+    "اتاق": "noun", "آشپزخانه": "noun", "تشناب": "noun",
+    "چوکی": "noun", "تخت": "noun", "کلکین": "noun", "بزرگ": "adjective",
 }
 
 
@@ -921,6 +955,54 @@ def prs_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         # doctor's patient), same class of gap already fixed for
         # زرمینه/کریم above.
         semantics.append("person_name")
+
+    # Unit 18 (work) semantic tags, added 2026-07-07 (en-fa/en-prs
+    # units-18-19 practice-authoring pass). "occupation_workplace"
+    # (دفتر/دوکان/شفاخانه/مکتب, 4 members, each pairing with one of the
+    # 4 already-established "occupation" members from unit02/unit10 --
+    # معلم<->مکتب, داکتر<->شفاخانه, مهندس<->دفتر, دوکاندار<->دوکان) is
+    # additive on top of each token's existing city_place/shop_word tags,
+    # anchored lesson02 where the pool completes. "work_verb_form"
+    # (می‌کنم/می‌کنید/می‌کند, 3 members -- deliberately excludes استم,
+    # since کار استم is ungrammatical) is a genuine compositional reuse,
+    # not a homograph: each token always literally means "does/do," and
+    # combining any of them with the fixed noun کار is grammatically
+    # valid regardless of which lesson first introduced them, so no
+    # lesson_key scoping is needed here (unlike the real و/می‌شود/کی
+    # homograph splits above). "teach_word" (درس/می‌دهد, 2 members,
+    # translation/matching-only -- below the multiple_choice floor)
+    # anchored lesson05.
+    if token in {"دفتر", "دوکان", "شفاخانه", "مکتب"}:
+        semantics.append("occupation_workplace")
+    if token in {"می‌کنم", "می‌کنید", "می‌کند"}:
+        semantics.append("work_verb_form")
+    if token in {"درس", "می‌دهد"}:
+        semantics.append("teach_word")
+    if lesson_key.endswith("lesson06.job_dialogue"):
+        semantics.append("dialogue_word")
+
+    # Unit 19 (housing) semantic tags, added 2026-07-07, same pass as
+    # unit18 above. "room_word" (خانه/اتاق/آشپزخانه/تشناب, 4 members,
+    # anchored lesson01) is the unit's core recognition vocabulary.
+    # "home_room_word" is a narrower additive subset EXCLUDING خانه
+    # (اتاق/آشپزخانه/تشناب, 3 members) -- used by this unit's own
+    # generative "این خانه یک {home_room_word} دارد"-style word_order
+    # template, since a خانه candidate there would render the
+    # nonsensical "this house has a house." "object_word"
+    # (میز/چوکی/تخت/کلکین, 4 members, anchored lesson02).
+    # "home_description_word" (بزرگ/مقابل, 2 members, mixed adjective/
+    # preposition, translation/matching-only -- below the
+    # multiple_choice floor) anchored lesson05.
+    if token in {"خانه", "اتاق", "آشپزخانه", "تشناب"}:
+        semantics.append("room_word")
+    if token in {"اتاق", "آشپزخانه", "تشناب"}:
+        semantics.append("home_room_word")
+    if token in {"میز", "چوکی", "تخت", "کلکین"}:
+        semantics.append("object_word")
+    if token in {"بزرگ", "مقابل"}:
+        semantics.append("home_description_word")
+    if lesson_key.endswith("lesson06.home_dialogue"):
+        semantics.append("dialogue_word")
 
     tags: dict[str, object] = {}
     if semantics:
