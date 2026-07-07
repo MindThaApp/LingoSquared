@@ -1,0 +1,182 @@
+schema_version: "1.0"
+pack_key: practice.en-nl.a2.unit24
+source_language: en
+target_language: nl
+unit_content_key: nl.a2.unit24.gemeente
+review:
+  status: unreviewed
+  fresh_context: "false"
+  notes: "Authored 2026-07-07 by the Claude session filling en-nl's A2
+    practice-pool gap: en-nl practice templates only went through unit23
+    (A1) while the actual Dutch A2 lesson content already covers units
+    24-28. This file covers unit24 (gemeente/bureaucracy: registering with
+    local authorities). Extended scripts/backfill_lexemes_en_nl.py with 6
+    new brand-new-string semantic tags scoped to this unit's own real
+    vocabulary (gemeente_vocab_noun: 8-member document/civic noun pool for
+    recognition + matching_pairs; gemeente_doc_noun: 3-member paspoort/
+    huurcontract/geboorteakte subset, verified safe in the generative frame
+    'Mag ik uw {item} zien?' -- directly attested in the real content's own
+    matching_pairs pair 'Mag ik uw paspoort zien?'; gemeente_verb: 4-member
+    recognition-only verb pool; gemeente_schikken_single/
+    gemeente_huisarts_single/gemeente_regelen_single: single-member tags
+    guaranteeing a permanently unambiguous fill_in_blank/translation slot,
+    matching this unit's own real fill_in_blank exercises verbatim --
+    'Zou woensdag om tien uur ___?' and 'U heeft het nodig voor werk, de
+    bank en de ___.'). Every tag's real course-wide candidate count was
+    verified with a standalone lexeme_matches()-replicating harness against
+    this script's actual output before writing these templates (also
+    caught and fixed two real case-duplicate contaminations live while
+    verifying -- capitalized 'Huisarts' from unit27's own realization
+    silently widening gemeente_huisarts_single to 2 members via casefold
+    comparison -- fixed by switching to an exact-case token check, same
+    class as this file's existing weekday/weekday_pure precedent).
+    Deliberately did NOT build a word_order/translation frame around the
+    unit's BSN-use list ('werk, de bank en de huisarts') using a 2-member
+    bank/huisarts tag: the frame already contains the literal fixed text
+    'de bank' before the blank, so letting the fillable slot ALSO resolve
+    to 'bank' would generate a self-referential duplicate ('...de bank en
+    de bank.'), the same bug class as this project's documented station/
+    hospital self-reference catches -- used the single-member
+    gemeente_huisarts_single tag instead (huisarts only), which cannot
+    trigger this. 13 templates across all 6 lessons: fill_in_blank x2
+    (schikken, huisarts -- both single-candidate, verified with
+    scripts/_fill_in_blank_ambiguity_check.py), multiple_choice x2,
+    listen_select x3, matching_pairs x2 (8-pair unit noun pool; 12-member
+    combined noun+verb finale pool anchored to lesson06), word_order x1,
+    translation x3. Needs the standard fresh-context review before import.
+    Blocking dependency, same as every other en-nl pack: backfill_
+    lexemes_en_nl.py has not actually been run against a real database
+    yet."
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [gemeente_vocab_noun, gemeente_doc_noun, gemeente_verb, gemeente_schikken_single, gemeente_huisarts_single, gemeente_regelen_single]
+slot_presets:
+  gemeente_vocab_noun: &gemeente_vocab_noun {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: gemeente_vocab_noun}}
+  gemeente_doc_noun: &gemeente_doc_noun {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: gemeente_doc_noun}}
+  gemeente_verb: &gemeente_verb {language_code: nl, part_of_speech: verb, agreement_tags: {semantic: gemeente_verb}}
+  gemeente_noun_or_verb: &gemeente_noun_or_verb {language_code: nl, part_of_speech: [noun, verb], agreement_tags: {semantic: [gemeente_vocab_noun, gemeente_verb]}}
+  gemeente_schikken_single: &gemeente_schikken_single {language_code: nl, part_of_speech: verb, agreement_tags: {semantic: gemeente_schikken_single}}
+  gemeente_huisarts_single: &gemeente_huisarts_single {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: gemeente_huisarts_single}}
+  gemeente_regelen_single: &gemeente_regelen_single {language_code: nl, part_of_speech: verb, agreement_tags: {semantic: gemeente_regelen_single}}
+templates:
+  - content_key: practice.en-nl.nl.a2.unit24.lesson01.fill.001
+    lesson_content_key: nl.a2.unit24.lesson01.een_afspraak_maken
+    type: fill_in_blank
+    frame: {text: "Zou woensdag om tien uur {item}?", language_code: nl, direction: ltr}
+    slots: {item: *gemeente_schikken_single}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Zou woensdag om tien uur schikken? -- would Wednesday at ten o'clock suit you?", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit24.lesson01.choose.002
+    lesson_content_key: nl.a2.unit24.lesson01.een_afspraak_maken
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *gemeente_verb}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a verb used when scheduling or handling an appointment.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit24.lesson01.listen.003
+    lesson_content_key: nl.a2.unit24.lesson01.een_afspraak_maken
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *gemeente_verb}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit24.lesson02.choose.001
+    lesson_content_key: nl.a2.unit24.lesson02.wat_heb_je_nodig
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *gemeente_vocab_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a word from this unit about registering with the gemeente.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit24.lesson02.listen.002
+    lesson_content_key: nl.a2.unit24.lesson02.wat_heb_je_nodig
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *gemeente_vocab_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit24.lesson02.match.003
+    lesson_content_key: nl.a2.unit24.lesson02.wat_heb_je_nodig
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth} · {seventh} · {eighth}", language_code: nl, direction: ltr}
+    slots: {first: *gemeente_vocab_noun, second: *gemeente_vocab_noun, third: *gemeente_vocab_noun, fourth: *gemeente_vocab_noun, fifth: *gemeente_vocab_noun, sixth: *gemeente_vocab_noun, seventh: *gemeente_vocab_noun, eighth: *gemeente_vocab_noun}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth, seventh, eighth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth, seventh, eighth]}
+    feedback_frame: {text: "Match each word with its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit24.lesson03.order.001
+    lesson_content_key: nl.a2.unit24.lesson03.bij_de_balie
+    type: word_order
+    frame: {text: "Mag ik uw {item} zien?", language_code: nl, direction: ltr}
+    slots: {item: *gemeente_doc_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "Mag ik uw {item} zien?", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} is the document being asked for.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit24.lesson03.translate.002
+    lesson_content_key: nl.a2.unit24.lesson03.bij_de_balie
+    type: translation
+    frame:
+      text: "May I see your {item}?"
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *gemeente_doc_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "Mag ik uw {item} zien?", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Mag ik uw {item} zien?", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit24.lesson03.listen.003
+    lesson_content_key: nl.a2.unit24.lesson03.bij_de_balie
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *gemeente_doc_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the document you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit24.lesson04.fill.001
+    lesson_content_key: nl.a2.unit24.lesson04.je_bsn_nummer
+    type: fill_in_blank
+    frame: {text: "U heeft het nodig voor werk, de bank en de {item}.", language_code: nl, direction: ltr}
+    slots: {item: *gemeente_huisarts_single}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "You need it for work, the bank, and the doctor.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit24.lesson04.translate.002
+    lesson_content_key: nl.a2.unit24.lesson04.je_bsn_nummer
+    type: translation
+    frame:
+      text: "With DigiD you can arrange matters online."
+      language_code: en
+      direction: ltr
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *gemeente_regelen_single}
+    answer_derivation: {kind: render_frame, frame: {text: "Met DigiD kunt u online zaken {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Met DigiD kunt u online zaken regelen.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit24.lesson05.translate.001
+    lesson_content_key: nl.a2.unit24.lesson05.brief_lezen
+    type: translation
+    frame:
+      text: "{item}"
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *gemeente_vocab_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The Dutch word is {item}.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit24.lesson06.match.001
+    lesson_content_key: nl.a2.unit24.lesson06.gemeente_afspraak
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth} · {seventh} · {eighth} · {ninth} · {tenth} · {eleventh} · {twelfth}", language_code: nl, direction: ltr}
+    slots: {first: *gemeente_noun_or_verb, second: *gemeente_noun_or_verb, third: *gemeente_noun_or_verb, fourth: *gemeente_noun_or_verb, fifth: *gemeente_noun_or_verb, sixth: *gemeente_noun_or_verb, seventh: *gemeente_noun_or_verb, eighth: *gemeente_noun_or_verb, ninth: *gemeente_noun_or_verb, tenth: *gemeente_noun_or_verb, eleventh: *gemeente_noun_or_verb, twelfth: *gemeente_noun_or_verb}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh, twelfth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh, twelfth]}
+    feedback_frame: {text: "Match each word from this unit with its English meaning.", language_code: en, direction: ltr}
