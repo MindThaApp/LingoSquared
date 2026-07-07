@@ -1,0 +1,182 @@
+schema_version: "1.1"
+realization_version: "2026.1-draft.1"
+target_language: "de"
+cefr_level: "A1"
+status: "complete_draft"
+generation_provenance:
+  method: "ai_generated"
+  authoring_system: "claude"
+  human_reviewed: false
+review:
+  status: "unreviewed"
+  required_next_reviewer: "codex"
+  notes: >-
+    Ninth German unit, continuing the Anna/Felix storyline (still on
+    the formal Sie register from units 01-08). Authored from the start
+    in the AUTHORING_GUIDE §19 format (schema_version 1.1) -- every
+    kind:vocabulary card carries a real example: sentence from first
+    draft. Scoped to exactly one spine outcome
+    (universal.a1.places.locate_common_places) across all 4 lessons
+    per §1; the spine entry itself has no prerequisites.
+
+    The single trickiest real grammar point in this unit: German's
+    location prepositions neben, zwischen, hinter, and vor are
+    "two-way" (Wechselpräpositionen) that take the DATIVE case for
+    static location (as used throughout this unit) but the accusative
+    for motion; gegenüber (von) is dative-only, with no
+    accusative/motion alternation, but has the same practical effect
+    of always needing the dative form here -- not derived as an
+    explicit rule here
+    (out of scope for a vocabulary/location unit, matching this
+    project's established pattern of teaching complex grammar as
+    correct fixed phrases rather than deriving rules prematurely, e.g.
+    Sie/du in unit01, the accusative-only-for-masculine rule in
+    unit07). Every phrase in this file uses the correct dative article
+    for its noun's gender (die Bank -> der Bank, das Krankenhaus ->
+    dem Krankenhaus, die Apotheke -> der Apotheke, der Park -> dem
+    Park, das Restaurant -> dem Restaurant), double-checked by hand
+    against real gender assignments before writing.
+
+    lesson01's matching_pairs was widened to 10 pairs (5 places + 5
+    prepositions) mirroring the shared en realization's own 10-pair
+    set, comfortably clearing AUTHORING_GUIDE §16's 6-12 floor.
+    "gegenüber von" contracts colloquially to "gegenüber vom" (von +
+    dem) in the capstone dialogue, the natural spoken form, flagged
+    explicitly since it's a genuine contraction not a typo. Reuses
+    "Entschuldigung" from unit01's polite-expressions lesson in the
+    capstone's opening line, a deliberate callback consistent with
+    this project's cross-unit vocabulary-reuse discipline. No
+    fill_in_blank exercises. Applied the hardcoded-English-
+    target_blocks lesson from the start: every target_blocks in this
+    file is empty or genuine German content only. Compiled and
+    validated against the real compiler to confirm every exercise's
+    tested_text is fully covered by this file's own cumulative
+    introduced_tokens.
+
+    Fresh-context review (subagent, Codex still usage-exhausted)
+    returned verdict: ship -- confirmed correct_option/accepted_answers
+    match throughout, word_order accepted_answers correctly re-derived
+    (not copied from scrambled word_bank), all noun genders and dative
+    forms genuinely correct standard German, "gegenüber vom" a
+    genuinely natural spoken contraction, §16 matching_pairs clears
+    the floor with 10 real pairs, no hardcoded-English-target_blocks,
+    and the overlay's teaching: section covers every content_key from
+    the start (no gap like earlier units' retrofit found). It found 4
+    minor/non-blocking issues, all fixed: (1) this file's own review
+    notes mischaracterized gegenüber as a two-way (Wechselpräposition)
+    preposition -- it's dative-only with no accusative/motion
+    alternation, though it has the same practical dative-only effect
+    here; corrected above. (2-3) two §15 asterisk-wrapping misses in
+    the overlay (das Krankenhaus, Sie/sie). (4) a missing comma/
+    conjunction-joined §12 variant on speak_wegbeschreibung, matching
+    its dialogue_response sibling. Also noted, not changed: the
+    capstone dialogue's media_assets entry bakes speaker name labels
+    into one text block ("Felix: ... Anna: ...") -- confirmed this is
+    the same pre-existing, consistent convention used across every
+    prior German unit (01-08) and the shared en realizations, likely
+    intended as a human-recording script rather than raw TTS input;
+    changing this convention project-wide is out of scope for a single
+    unit. Re-verified clean: real compiler validate for en-de (0
+    errors/warnings), full scripts/verify.sh --content-only.
+
+course:
+  realization_key: "de.a1"
+  target_language_first: true
+  dialect: "de_DE_standard"
+  register_policy: "Teach clear Standard German (Hochdeutsch). Use everyday spatial prepositions (neben, gegenüber von, zwischen, hinter, vor) in short, natural sentences with their correct dative article, rather than isolated grammar drills. Anna and Felix continue on the formal Sie register from units 01-08."
+
+media_assets:
+  - {content_key: "de.a1.audio.orte.haeufig.01", language: "de", text: "Bank, Krankenhaus, Apotheke, Park, Restaurant", voice_hint: "neutral_adult", status: "pending_generation"}
+  - {content_key: "de.a1.audio.orte.wo_frage.01", language: "de", text: "Wo ist die Bank?", voice_hint: "neutral_adult", status: "pending_generation"}
+  - {content_key: "de.a1.audio.orte.wo_antwort.01", language: "de", text: "Sie ist neben dem Park.", voice_hint: "neutral_adult", status: "pending_generation"}
+  - content_key: "de.a1.audio.dialog.wegbeschreibung.01"
+    language: "de"
+    text: "Felix: Entschuldigung, wo ist die Apotheke? Anna: Sie ist gegenüber vom Krankenhaus. Felix: Ist es weit von hier? Anna: Nein, es ist nicht weit. Sie ist zwischen der Bank und dem Park."
+    voice_hint: "two_adults_neutral_friendly"
+    status: "pending_generation"
+
+units:
+  - content_key: "de.a1.unit09.orte"
+    title: "Häufige Orte und ihre Lage"
+    section: "reading_writing"
+    spine_outcome_ids:
+      - "universal.a1.places.locate_common_places"
+    planned_lesson_count: 4
+    lessons:
+      - content_key: "de.a1.unit09.lesson01.haeufige_orte_in_der_stadt"
+        title: "Häufige Orte in der Stadt"
+        spine_outcome_id: "universal.a1.places.locate_common_places"
+        teaching:
+          - {content_key: "de.a1.unit09.lesson01.teach.bank", kind: "vocabulary", target: {text: "Bank", language_code: "de", direction: "ltr"}, introduced_tokens: ["Bank"], example: {text: "Ich muss zur Bank gehen.", language_code: "de", direction: "ltr"}}
+          - {content_key: "de.a1.unit09.lesson01.teach.krankenhaus", kind: "vocabulary", target: {text: "Krankenhaus", language_code: "de", direction: "ltr"}, introduced_tokens: ["Krankenhaus"], example: {text: "Mein Freund ist im Krankenhaus.", language_code: "de", direction: "ltr"}}
+          - {content_key: "de.a1.unit09.lesson01.teach.apotheke", kind: "vocabulary", target: {text: "Apotheke", language_code: "de", direction: "ltr"}, introduced_tokens: ["Apotheke"], example: {text: "Die Apotheke hat heute geöffnet.", language_code: "de", direction: "ltr"}}
+          - {content_key: "de.a1.unit09.lesson01.teach.park", kind: "vocabulary", target: {text: "Park", language_code: "de", direction: "ltr"}, introduced_tokens: ["Park"], example: {text: "Wir gehen gern im Park spazieren.", language_code: "de", direction: "ltr"}}
+          - {content_key: "de.a1.unit09.lesson01.teach.restaurant", kind: "vocabulary", target: {text: "Restaurant", language_code: "de", direction: "ltr"}, introduced_tokens: ["Restaurant"], example: {text: "Dieses Restaurant hat gutes Essen.", language_code: "de", direction: "ltr"}}
+        exercises:
+          - {content_key: "de.a1.unit09.lesson01.exercise01.listen_ort", type: "listen_select", tested_text: "Apotheke", media_asset_key: "de.a1.audio.orte.haeufig.01", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit09.lesson01.exercise02.choose_krankenhaus", type: "multiple_choice", tested_text: "Krankenhaus", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit09.lesson01.exercise03.choose_bank", type: "multiple_choice", tested_text: "Bank", prompt: {target_blocks: []}}
+          - content_key: "de.a1.unit09.lesson01.exercise04.match_orte"
+            type: "matching_pairs"
+            tested_text: "Bank Krankenhaus Apotheke Park Restaurant"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "Geld bekommen", right: "Bank"}
+              - {left: "einen Arzt sehen", right: "Krankenhaus"}
+              - {left: "Medikamente kaufen", right: "Apotheke"}
+              - {left: "draußen spazieren gehen", right: "Park"}
+              - {left: "eine Mahlzeit essen, die jemand anders gekocht hat", right: "Restaurant"}
+              - {left: "direkt daneben", right: "neben"}
+              - {left: "auf der gegenüberliegenden Straßenseite", right: "gegenüber von"}
+              - {left: "in der Mitte, mit je einem auf jeder Seite", right: "zwischen"}
+              - {left: "hinten, von der Straße weg", right: "hinter"}
+              - {left: "direkt davor, zur Straße hin", right: "vor"}
+          - {content_key: "de.a1.unit09.lesson01.exercise05.write_restaurant", type: "writing_prompt", tested_text: "Restaurant", prompt: {target_blocks: []}}
+
+      - content_key: "de.a1.unit09.lesson02.lageangaben"
+        title: "Sagen, wo etwas ist"
+        spine_outcome_id: "universal.a1.places.locate_common_places"
+        teaching:
+          - {content_key: "de.a1.unit09.lesson02.teach.neben", kind: "phrase", target: {text: "Die Apotheke ist neben dem Park.", language_code: "de", direction: "ltr"}, introduced_tokens: ["Die", "ist", "neben", "dem"]}
+          - {content_key: "de.a1.unit09.lesson02.teach.gegenueber_von", kind: "phrase", target: {text: "Die Apotheke ist gegenüber vom Krankenhaus.", language_code: "de", direction: "ltr"}, introduced_tokens: ["gegenüber", "vom"]}
+          - {content_key: "de.a1.unit09.lesson02.teach.zwischen", kind: "phrase", target: {text: "Die Apotheke ist zwischen der Bank und dem Park.", language_code: "de", direction: "ltr"}, introduced_tokens: ["zwischen", "der", "und"]}
+          - {content_key: "de.a1.unit09.lesson02.teach.hinter", kind: "phrase", target: {text: "Das Restaurant ist hinter der Bank.", language_code: "de", direction: "ltr"}, introduced_tokens: ["Das", "hinter"]}
+          - {content_key: "de.a1.unit09.lesson02.teach.vor", kind: "phrase", target: {text: "Der Park ist vor dem Krankenhaus.", language_code: "de", direction: "ltr"}, introduced_tokens: ["Der", "vor"]}
+        exercises:
+          - {content_key: "de.a1.unit09.lesson02.exercise01.choose_neben", type: "multiple_choice", tested_text: "Die Apotheke ist neben dem Park.", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit09.lesson02.exercise02.choose_gegenueber", type: "multiple_choice", tested_text: "Die Apotheke ist gegenüber vom Krankenhaus.", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit09.lesson02.exercise03.order_zwischen", type: "word_order", tested_text: "Die Apotheke ist zwischen der Bank und dem Park", prompt: {target_blocks: []}, word_bank: ["zwischen", "der", "Bank", "und", "dem", "Park", "Die", "Apotheke", "ist"]}
+          - {content_key: "de.a1.unit09.lesson02.exercise04.choose_hinter", type: "multiple_choice", tested_text: "Das Restaurant ist hinter der Bank.", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit09.lesson02.exercise05.write_vor", type: "writing_prompt", tested_text: "Der Park ist vor dem Krankenhaus", prompt: {target_blocks: []}}
+
+      - content_key: "de.a1.unit09.lesson03.nach_dem_ort_fragen"
+        title: "Fragen, wo etwas ist"
+        spine_outcome_id: "universal.a1.places.locate_common_places"
+        teaching:
+          - {content_key: "de.a1.unit09.lesson03.teach.wo_ist_die_bank", kind: "phrase", target: {text: "Wo ist die Bank?", language_code: "de", direction: "ltr"}, introduced_tokens: ["Wo", "ist", "die", "Bank"]}
+          - {content_key: "de.a1.unit09.lesson03.teach.sie_ist_neben", kind: "phrase", target: {text: "Sie ist neben dem Park.", language_code: "de", direction: "ltr"}, introduced_tokens: ["Sie"]}
+          - {content_key: "de.a1.unit09.lesson03.teach.ist_es_weit", kind: "phrase", target: {text: "Ist es weit von hier?", language_code: "de", direction: "ltr"}, introduced_tokens: ["Ist", "es", "weit", "von", "hier"]}
+          - {content_key: "de.a1.unit09.lesson03.teach.nicht_weit", kind: "phrase", target: {text: "Nein, es ist nicht weit.", language_code: "de", direction: "ltr"}, introduced_tokens: ["Nein", "nicht"]}
+        exercises:
+          - {content_key: "de.a1.unit09.lesson03.exercise01.listen_wo_frage", type: "listen_select", tested_text: "Wo ist die Bank", media_asset_key: "de.a1.audio.orte.wo_frage.01", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit09.lesson03.exercise02.listen_wo_antwort", type: "listen_select", tested_text: "Sie ist neben dem Park", media_asset_key: "de.a1.audio.orte.wo_antwort.01", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit09.lesson03.exercise03.order_wo_frage", type: "word_order", tested_text: "Wo ist die Bank", prompt: {target_blocks: []}, word_bank: ["ist", "die", "Bank", "Wo"]}
+          - {content_key: "de.a1.unit09.lesson03.exercise04.reply_lage", type: "dialogue_response", tested_text: "Wo ist die Bank Sie ist neben dem Park", prompt: {target_blocks: [{text: "Wo ist die Bank?", language_code: "de", direction: "ltr"}]}}
+          - {content_key: "de.a1.unit09.lesson03.exercise05.write_nicht_weit", type: "writing_prompt", tested_text: "Nein, es ist nicht weit", prompt: {target_blocks: []}}
+
+      - content_key: "de.a1.unit09.lesson04.nach_dem_weg_fragen_dialog"
+        title: "Einen Fremden nach dem Weg fragen"
+        spine_outcome_id: "universal.a1.places.locate_common_places"
+        teaching:
+          - {content_key: "de.a1.unit09.lesson04.teach.entschuldigung_wo", kind: "phrase", target: {text: "Entschuldigung, wo ist die Apotheke?", language_code: "de", direction: "ltr"}, introduced_tokens: ["Entschuldigung", "wo"]}
+          - {content_key: "de.a1.unit09.lesson04.teach.line01", kind: "dialogue", target: {text: "Entschuldigung, wo ist die Apotheke?", language_code: "de", direction: "ltr", speaker: "Felix"}, introduced_tokens: []}
+          - {content_key: "de.a1.unit09.lesson04.teach.line02", kind: "dialogue", target: {text: "Sie ist gegenüber vom Krankenhaus.", language_code: "de", direction: "ltr", speaker: "Anna"}, introduced_tokens: []}
+          - {content_key: "de.a1.unit09.lesson04.teach.line03", kind: "dialogue", target: {text: "Ist es weit von hier?", language_code: "de", direction: "ltr", speaker: "Felix"}, introduced_tokens: []}
+          - {content_key: "de.a1.unit09.lesson04.teach.line04", kind: "dialogue", target: {text: "Nein, es ist nicht weit. Sie ist zwischen der Bank und dem Park.", language_code: "de", direction: "ltr", speaker: "Anna"}, introduced_tokens: []}
+        exercises:
+          - {content_key: "de.a1.unit09.lesson04.exercise01.listen_apotheke_lage", type: "dialogue_comprehension", tested_text: "Sie ist gegenüber vom Krankenhaus", media_asset_key: "de.a1.audio.dialog.wegbeschreibung.01", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit09.lesson04.exercise02.listen_zwischen", type: "listen_select", tested_text: "Sie ist zwischen der Bank und dem Park", media_asset_key: "de.a1.audio.dialog.wegbeschreibung.01", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit09.lesson04.exercise03.choose_weit_antwort", type: "multiple_choice", tested_text: "Nein, es ist nicht weit.", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit09.lesson04.exercise04.order_entschuldigung", type: "word_order", tested_text: "Entschuldigung wo ist die Apotheke", prompt: {target_blocks: []}, word_bank: ["wo", "ist", "die", "Apotheke", "Entschuldigung"]}
+          - {content_key: "de.a1.unit09.lesson04.exercise05.reply_als_anna", type: "dialogue_response", tested_text: "Sie ist gegenüber vom Krankenhaus. Nein, es ist nicht weit. Sie ist zwischen der Bank und dem Park.", prompt: {target_blocks: [{text: "Entschuldigung, wo ist die Apotheke? Ist es weit von hier?", language_code: "de", direction: "ltr"}]}}
+          - {content_key: "de.a1.unit09.lesson04.exercise06.speak_wegbeschreibung", type: "speak_response", tested_text: "Sie ist gegenüber vom Krankenhaus Nein es ist nicht weit Sie ist zwischen der Bank und dem Park", prompt: {target_blocks: [{text: "Entschuldigung, wo ist die Apotheke? Ist es weit von hier?", language_code: "de", direction: "ltr"}]}}
