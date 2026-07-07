@@ -28,11 +28,22 @@ const KINDS_WITH_REDUNDANT_TITLE: ReadonlySet<TeachingCard["kind"]> = new Set([
 export function TeachingCardView({ card }: { card: TeachingCard }) {
   const { t } = useTranslation();
   const showTitle = card.title && !KINDS_WITH_REDUNDANT_TITLE.has(card.kind);
+  const examples = card.examples ?? [];
   return (
     <div className="card" style={{ margin: "16px 0" }}>
       <span className="badge">{t(KIND_KEY[card.kind])}</span>
       {showTitle && <h3 style={{ margin: "10px 0 8px" }}>{card.title}</h3>}
       <TextBlockList blocks={card.text_blocks} />
+      {examples.length > 0 && (
+        <div className="teaching-examples">
+          <span className="teaching-examples-label">
+            {t("teaching_card.example")}
+          </span>
+          {examples.map((example, i) => (
+            <TextBlockList blocks={example.text_blocks} key={i} />
+          ))}
+        </div>
+      )}
       {card.note && (
         <p className="muted" style={{ margin: 0 }}>
           <EmphasizedText text={card.note} />

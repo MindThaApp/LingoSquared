@@ -252,6 +252,18 @@ def _teaching_item_fields(card, course_id: str, lesson_id: str, teaching_order: 
         "content": {
             "text_blocks": [block.model_dump() for block in card.text_blocks],
             "note": card.note,
+            # 2026-07-07 vocabulary-example addition (CONTRACT.md,
+            # AUTHORING_GUIDE.md #19). Only stored when present so
+            # pre-existing cards' content JSON stays byte-identical.
+            **(
+                {
+                    "examples": [
+                        example.model_dump() for example in card.examples
+                    ]
+                }
+                if card.examples
+                else {}
+            ),
         },
         "content_key": card.content_key,
     }

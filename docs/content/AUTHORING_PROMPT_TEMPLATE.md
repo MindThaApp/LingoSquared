@@ -63,6 +63,13 @@ anything):
    expected answer's language differs from the type-based default
    (e.g. a Latin-letter transliteration exercise for a non-Latin
    target language).
+10. Every `kind: vocabulary` teaching card MUST carry an `example:`
+    field — a real, natural target-language sentence using that word
+    (same text-block shape as `target:`; a list of them for merged
+    multi-word cards). Prefer already-taught vocabulary in the
+    sentence. Author the file at `schema_version: "1.1"` — the
+    compiler hard-fails missing examples at that version. See
+    AUTHORING_GUIDE.md #19.
 {ADD: script-purity note if non-Latin — e.g. "Use Persian-range
 codepoints ک (U+06A9)/ی (U+06CC), never Arabic ك (U+0643)/ي (U+064A)"}
 
@@ -118,6 +125,12 @@ anything):
 6. YAML footguns: quote "Yes"/"No"/"True"/"False" always.
 7. Set answer_language_code explicitly wherever the expected answer's
    language differs from the type-based default.
+8. For every realization teaching card that has an `example:` sentence
+   (all `kind: vocabulary` cards in 1.1+ files), add a matching
+   `example_gloss:` on that card's overlay teaching entry — a
+   {source_name} translation of the example sentence (a positionally
+   matched list when the card has multiple examples). Author the
+   overlay at `schema_version: "1.1"`. See AUTHORING_GUIDE.md #19.
 
 Mark `review: status: unreviewed` when done — a SEPARATE fresh-context
 review task (Template 3) must run before this ships.
@@ -173,6 +186,11 @@ Check specifically, per docs/content/AUTHORING_GUIDE.md:
 8. Ambiguous items: any multiple-choice question with more than one
    technically-correct answer? Any distractor set unfairly easy or
    confusing?
+9. Vocabulary examples (AUTHORING_GUIDE.md #19): does every
+   `kind: vocabulary` card's `example:` sentence sound genuinely
+   natural (not a dictionary frame), actually use the card's word,
+   and stay comprehensible with mostly already-taught vocabulary?
+   Does the overlay's `example_gloss:` translate it faithfully?
 
 Report every issue found, however small. Do not rubber-stamp. If the
 file is genuinely clean, say so explicitly and recommend
