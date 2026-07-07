@@ -1,0 +1,214 @@
+schema_version: "1.0"
+realization_version: "2026.1-draft.1"
+target_language: "de"
+cefr_level: "A1"
+status: "complete_draft"
+generation_provenance:
+  method: "ai_generated"
+  authoring_system: "claude"
+  human_reviewed: false
+review:
+  status: "unreviewed"
+  required_next_reviewer: "codex"
+  notes: >-
+    Fourth German unit, continuing the Anna/Felix storyline (still on the
+    formal Sie register established in unit01, unbroken through units
+    02-03). Scoped to exactly one spine outcome
+    (universal.a1.dates.exchange_calendar_dates) across all 4 lessons per
+    AUTHORING_GUIDE §1; prerequisite universal.a1.numbers.use_basic_numbers
+    is satisfied by unit03. Mirrors the existing reviewed en/
+    a1_unit04_dates.yaml's 4-lesson structure (weekdays, months, stating
+    a date, an in-context appointment-style dialogue) for structural
+    parity, but with fully original German content and no shared
+    character/scene reuse.
+
+    Scoping decisions: German dates are stated with a fixed article +
+    ordinal-adjective phrase ("der siebte Juli," "der dritte März")
+    rather than deriving the full ordinal-suffix formation rule
+    (-te/-ste plus case declension) -- taught as memorized whole
+    phrases for exactly the two dates used (7th, 9th, 3rd), the same
+    scoping discipline already used for other complex grammar this
+    session (e.g. Sie/du taught as fixed usage, not derived). The
+    written full-date convention "am Donnerstag, den neunten Juli"
+    (dative weekday + accusative-declined date) is real, standard
+    German and is deliberately taught as one fixed phrase rather than
+    explained grammatically -- flagging this for whoever later authors
+    a dedicated grammar/case unit. Numeric date form is explicitly
+    flagged as day.month (7.7.), the reverse of the US month.day
+    convention the shared en realization already flags as non-
+    universal -- this unit makes the same disambiguation point from
+    the other direction. lesson02 teaches 6 months (Januar, März, Mai,
+    Juli, September, Dezember, evenly spread across the year) rather
+    than en's 5, specifically so its matching_pairs clears
+    AUTHORING_GUIDE §16's 6-12 minimum comfortably rather than landing
+    at a bare 5. lesson01's matching_pairs pools all 7 weekdays. No
+    fill_in_blank exercises, same ambiguity-avoidance discipline as
+    prior units. Added an explicit reading_comprehension exercise
+    (lesson04, reading a short "closed until..." note) after the
+    coordinator's request to specifically check for gaps like unit02's
+    earlier-found missing reading-modality coverage -- this unit's own
+    spine outcome requires a read_date assessment (interpreting a
+    written date unambiguously), so the dedicated exercise closes that
+    requirement directly rather than relying on incidental textual
+    exposure. Applied the hardcoded-English-target_blocks lesson from
+    the start this time: every target_blocks in this file is either
+    empty or genuine German target-language content (a dialogue cue or
+    the reading note itself) -- never English instruction text: a
+    repo-wide grep after authoring confirms zero
+    language_code: "en" target_blocks anywhere in this file. No sie/Sie
+    capitalization collision introduced (only capital Sie is used, no
+    third-person lowercase sie), so the case_sensitive grading flag
+    (landed 2026-07-07, CODE fix 67ed7ae) isn't needed for this unit's
+    own content, though it is now available for whichever future unit
+    finally introduces third-person sie. Compiled and validated against
+    the real compiler to confirm every exercise's tested_text is fully
+    covered by this file's own cumulative introduced_tokens.
+
+    Fresh-context review (subagent, Codex still usage-exhausted)
+    confirmed this file itself has zero hardcoded-English-target_blocks
+    instances (the twice-recurring bug class) and zero correct_option/
+    accepted_answers mismatches in either overlay. It found two blocking
+    issues, both in the overlays, not this file: (1) a pervasive §15
+    asterisk-marking gap across de-en/a1_unit04.yaml's teaching notes
+    and several exercise feedback fields, plus 4 similar spots in
+    en-de/a1_unit04.yaml -- fixed in both. (2) de-en/a1_unit04.yaml's
+    original draft had been authored while consulting the existing
+    nl-en/a1_unit04.yaml overlay (same target realization) for exercise-
+    design conventions, a real breach of CLAUDE.md's strong sibling-
+    isolation rule even without copying actual content -- remediated by
+    a full independent rewrite (draft.2) using this project's own
+    de-en/a1_unit01-03.yaml precedent instead. Minor findings also
+    fixed: a missing unpunctuated §12 variant in de-en's speak_dates.
+    One flagged gap is NOT fixable from this file or its overlays: the
+    paired en/a1_unit04_dates.yaml realization's own match_days/
+    match_months pairs (4 each) fall short of §16's 6-12 range -- this
+    is shared, already-reviewed content used by every X-en overlay
+    pairing with it (fa-en/nl-en/prs-en too), out of scope for a
+    unilateral edit here. Re-verified clean after every fix: real
+    compiler validate+compile for both en-de and de-en directions (0
+    errors/warnings), full scripts/verify.sh --content-only.
+
+course:
+  realization_key: "de.a1"
+  target_language_first: true
+  dialect: "de_DE_standard"
+  register_policy: "Teach clear Standard German (Hochdeutsch). Dates use the day.month numeric convention (7.7., not 7/7) -- flag this is the reverse of the US month.day convention taught in the shared English realization. Anna and Felix continue on the formal Sie register from units 01-03."
+
+media_assets:
+  - {content_key: "de.a1.audio.tage.wochentage.01", language: "de", text: "Montag, Dienstag, Mittwoch, Donnerstag, Freitag, Samstag, Sonntag", voice_hint: "neutral_adult", status: "pending_generation"}
+  - {content_key: "de.a1.audio.monate.01", language: "de", text: "Januar, März, Mai, Juli, September, Dezember", voice_hint: "neutral_adult", status: "pending_generation"}
+  - {content_key: "de.a1.audio.datum.frage.01", language: "de", text: "Der Wievielte ist heute?", voice_hint: "neutral_adult", status: "pending_generation"}
+  - content_key: "de.a1.audio.dialog.bibliothek.01"
+    language: "de"
+    text: "Felix: Der Wievielte ist heute? Anna: Heute ist Dienstag, der siebte Juli. Felix: Wann öffnet die Bibliothek wieder? Anna: Sie öffnet wieder am Donnerstag, den neunten Juli. Felix: Gut, bis Donnerstag."
+    voice_hint: "two_adults_neutral_friendly"
+    status: "pending_generation"
+
+units:
+  - content_key: "de.a1.unit04.daten"
+    title: "Tage, Monate und das Datum"
+    section: "reading_writing"
+    spine_outcome_ids:
+      - "universal.a1.dates.exchange_calendar_dates"
+    planned_lesson_count: 4
+    lessons:
+      - content_key: "de.a1.unit04.lesson01.wochentage"
+        title: "Die Wochentage"
+        spine_outcome_id: "universal.a1.dates.exchange_calendar_dates"
+        teaching:
+          - {content_key: "de.a1.unit04.lesson01.teach.montag", kind: "vocabulary", target: {text: "Montag", language_code: "de", direction: "ltr"}, introduced_tokens: ["Montag"]}
+          - {content_key: "de.a1.unit04.lesson01.teach.dienstag", kind: "vocabulary", target: {text: "Dienstag", language_code: "de", direction: "ltr"}, introduced_tokens: ["Dienstag"]}
+          - {content_key: "de.a1.unit04.lesson01.teach.mittwoch", kind: "vocabulary", target: {text: "Mittwoch", language_code: "de", direction: "ltr"}, introduced_tokens: ["Mittwoch"]}
+          - {content_key: "de.a1.unit04.lesson01.teach.donnerstag", kind: "vocabulary", target: {text: "Donnerstag", language_code: "de", direction: "ltr"}, introduced_tokens: ["Donnerstag"]}
+          - {content_key: "de.a1.unit04.lesson01.teach.freitag", kind: "vocabulary", target: {text: "Freitag", language_code: "de", direction: "ltr"}, introduced_tokens: ["Freitag"]}
+          - {content_key: "de.a1.unit04.lesson01.teach.samstag", kind: "vocabulary", target: {text: "Samstag", language_code: "de", direction: "ltr"}, introduced_tokens: ["Samstag"]}
+          - {content_key: "de.a1.unit04.lesson01.teach.sonntag", kind: "vocabulary", target: {text: "Sonntag", language_code: "de", direction: "ltr"}, introduced_tokens: ["Sonntag"]}
+          - {content_key: "de.a1.unit04.lesson01.teach.welcher_tag", kind: "phrase", target: {text: "Welcher Tag ist heute?", language_code: "de", direction: "ltr"}, introduced_tokens: ["Welcher", "Tag", "ist", "heute"]}
+        exercises:
+          - {content_key: "de.a1.unit04.lesson01.exercise01.listen_mittwoch", type: "listen_select", tested_text: "Mittwoch", media_asset_key: "de.a1.audio.tage.wochentage.01", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit04.lesson01.exercise02.choose_wochenende", type: "multiple_choice", tested_text: "Samstag", prompt: {target_blocks: []}}
+          - content_key: "de.a1.unit04.lesson01.exercise03.match_wochentage"
+            type: "matching_pairs"
+            tested_text: "Montag Dienstag Mittwoch Donnerstag Freitag Samstag Sonntag"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "1. Wochentag", right: "Montag"}
+              - {left: "2. Wochentag", right: "Dienstag"}
+              - {left: "3. Wochentag", right: "Mittwoch"}
+              - {left: "4. Wochentag", right: "Donnerstag"}
+              - {left: "5. Wochentag", right: "Freitag"}
+              - {left: "6. Wochentag", right: "Samstag"}
+              - {left: "7. Wochentag", right: "Sonntag"}
+          - {content_key: "de.a1.unit04.lesson01.exercise04.order_tag_frage", type: "word_order", tested_text: "Welcher Tag ist heute", prompt: {target_blocks: []}, word_bank: ["Tag", "ist", "heute", "Welcher"]}
+          - {content_key: "de.a1.unit04.lesson01.exercise05.write_freitag", type: "writing_prompt", tested_text: "Freitag", prompt: {target_blocks: []}}
+
+      - content_key: "de.a1.unit04.lesson02.monate"
+        title: "Die Monate"
+        spine_outcome_id: "universal.a1.dates.exchange_calendar_dates"
+        teaching:
+          - {content_key: "de.a1.unit04.lesson02.teach.januar", kind: "vocabulary", target: {text: "Januar", language_code: "de", direction: "ltr"}, introduced_tokens: ["Januar"]}
+          - {content_key: "de.a1.unit04.lesson02.teach.maerz", kind: "vocabulary", target: {text: "März", language_code: "de", direction: "ltr"}, introduced_tokens: ["März"]}
+          - {content_key: "de.a1.unit04.lesson02.teach.mai", kind: "vocabulary", target: {text: "Mai", language_code: "de", direction: "ltr"}, introduced_tokens: ["Mai"]}
+          - {content_key: "de.a1.unit04.lesson02.teach.juli", kind: "vocabulary", target: {text: "Juli", language_code: "de", direction: "ltr"}, introduced_tokens: ["Juli"]}
+          - {content_key: "de.a1.unit04.lesson02.teach.september", kind: "vocabulary", target: {text: "September", language_code: "de", direction: "ltr"}, introduced_tokens: ["September"]}
+          - {content_key: "de.a1.unit04.lesson02.teach.dezember", kind: "vocabulary", target: {text: "Dezember", language_code: "de", direction: "ltr"}, introduced_tokens: ["Dezember"]}
+          - {content_key: "de.a1.unit04.lesson02.teach.welcher_monat", kind: "phrase", target: {text: "Welcher Monat ist es?", language_code: "de", direction: "ltr"}, introduced_tokens: ["Monat", "es"]}
+        exercises:
+          - {content_key: "de.a1.unit04.lesson02.exercise01.listen_september", type: "listen_select", tested_text: "September", media_asset_key: "de.a1.audio.monate.01", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit04.lesson02.exercise02.choose_sommermonat", type: "multiple_choice", tested_text: "Juli", prompt: {target_blocks: []}}
+          - content_key: "de.a1.unit04.lesson02.exercise03.match_monate"
+            type: "matching_pairs"
+            tested_text: "Januar März Mai Juli September Dezember"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "1. Monat", right: "Januar"}
+              - {left: "3. Monat", right: "März"}
+              - {left: "5. Monat", right: "Mai"}
+              - {left: "7. Monat", right: "Juli"}
+              - {left: "9. Monat", right: "September"}
+              - {left: "12. Monat", right: "Dezember"}
+          - {content_key: "de.a1.unit04.lesson02.exercise04.order_monat_frage", type: "word_order", tested_text: "Welcher Monat ist es", prompt: {target_blocks: []}, word_bank: ["Monat", "ist", "es", "Welcher"]}
+          - {content_key: "de.a1.unit04.lesson02.exercise05.write_dezember", type: "writing_prompt", tested_text: "Dezember", prompt: {target_blocks: []}}
+
+      - content_key: "de.a1.unit04.lesson03.das_datum"
+        title: "Das Datum sagen"
+        spine_outcome_id: "universal.a1.dates.exchange_calendar_dates"
+        teaching:
+          - {content_key: "de.a1.unit04.lesson03.teach.wievielte", kind: "phrase", target: {text: "Der Wievielte ist heute?", language_code: "de", direction: "ltr"}, introduced_tokens: ["Der", "Wievielte"]}
+          - {content_key: "de.a1.unit04.lesson03.teach.siebte_juli", kind: "phrase", target: {text: "Heute ist der siebte Juli.", language_code: "de", direction: "ltr"}, introduced_tokens: ["siebte"]}
+          - {content_key: "de.a1.unit04.lesson03.teach.dienstag_siebte_juli", kind: "phrase", target: {text: "Heute ist Dienstag, der siebte Juli.", language_code: "de", direction: "ltr"}, introduced_tokens: []}
+          - {content_key: "de.a1.unit04.lesson03.teach.numerische_form", kind: "phrase", target: {text: "Man kann es auch als 7.7. schreiben.", language_code: "de", direction: "ltr"}, introduced_tokens: ["Man", "kann", "auch", "als", "schreiben"]}
+          - {content_key: "de.a1.unit04.lesson03.teach.geburtstag_frage", kind: "phrase", target: {text: "Wann haben Sie Geburtstag?", language_code: "de", direction: "ltr"}, introduced_tokens: ["Wann", "haben", "Sie", "Geburtstag"]}
+          - {content_key: "de.a1.unit04.lesson03.teach.geburtstag_antwort", kind: "phrase", target: {text: "Mein Geburtstag ist der dritte März.", language_code: "de", direction: "ltr"}, introduced_tokens: ["Mein", "dritte"]}
+        exercises:
+          - {content_key: "de.a1.unit04.lesson03.exercise01.listen_wievielte", type: "listen_select", tested_text: "Der Wievielte ist heute", media_asset_key: "de.a1.audio.datum.frage.01", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit04.lesson03.exercise02.choose_heutiges_datum", type: "multiple_choice", tested_text: "Heute ist Dienstag, der siebte Juli.", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit04.lesson03.exercise03.order_geburtstag_frage", type: "word_order", tested_text: "Wann haben Sie Geburtstag", prompt: {target_blocks: []}, word_bank: ["haben", "Sie", "Geburtstag", "Wann"]}
+          - {content_key: "de.a1.unit04.lesson03.exercise04.reply_geburtstag", type: "dialogue_response", tested_text: "Mein Geburtstag ist der dritte März", prompt: {target_blocks: [{text: "Wann haben Sie Geburtstag?", language_code: "de", direction: "ltr"}]}}
+          - {content_key: "de.a1.unit04.lesson03.exercise05.write_heutiges_datum", type: "writing_prompt", tested_text: "der siebte Juli", prompt: {target_blocks: []}}
+
+      - content_key: "de.a1.unit04.lesson04.im_gespraech_ueber_das_datum"
+        title: "Im Gespräch über das Datum"
+        spine_outcome_id: "universal.a1.dates.exchange_calendar_dates"
+        teaching:
+          - {content_key: "de.a1.unit04.lesson04.teach.oeffnet", kind: "vocabulary", target: {text: "öffnet", language_code: "de", direction: "ltr"}, introduced_tokens: ["öffnet"]}
+          - {content_key: "de.a1.unit04.lesson04.teach.wieder", kind: "vocabulary", target: {text: "wieder", language_code: "de", direction: "ltr"}, introduced_tokens: ["wieder"]}
+          - {content_key: "de.a1.unit04.lesson04.teach.die", kind: "vocabulary", target: {text: "die", language_code: "de", direction: "ltr"}, introduced_tokens: ["die"]}
+          - {content_key: "de.a1.unit04.lesson04.teach.bibliothek", kind: "vocabulary", target: {text: "Bibliothek", language_code: "de", direction: "ltr"}, introduced_tokens: ["Bibliothek"]}
+          - {content_key: "de.a1.unit04.lesson04.teach.am", kind: "vocabulary", target: {text: "am", language_code: "de", direction: "ltr"}, introduced_tokens: ["am"]}
+          - {content_key: "de.a1.unit04.lesson04.teach.den", kind: "vocabulary", target: {text: "den", language_code: "de", direction: "ltr"}, introduced_tokens: ["den"]}
+          - {content_key: "de.a1.unit04.lesson04.teach.neunten", kind: "vocabulary", target: {text: "neunten", language_code: "de", direction: "ltr"}, introduced_tokens: ["neunten"]}
+          - {content_key: "de.a1.unit04.lesson04.teach.line01", kind: "dialogue", target: {text: "Der Wievielte ist heute?", language_code: "de", direction: "ltr", speaker: "Felix"}, introduced_tokens: []}
+          - {content_key: "de.a1.unit04.lesson04.teach.line02", kind: "dialogue", target: {text: "Heute ist Dienstag, der siebte Juli.", language_code: "de", direction: "ltr", speaker: "Anna"}, introduced_tokens: []}
+          - {content_key: "de.a1.unit04.lesson04.teach.line03", kind: "dialogue", target: {text: "Wann öffnet die Bibliothek wieder?", language_code: "de", direction: "ltr", speaker: "Felix"}, introduced_tokens: []}
+          - {content_key: "de.a1.unit04.lesson04.teach.line04", kind: "dialogue", target: {text: "Sie öffnet wieder am Donnerstag, den neunten Juli.", language_code: "de", direction: "ltr", speaker: "Anna"}, introduced_tokens: []}
+          - {content_key: "de.a1.unit04.lesson04.teach.line05", kind: "dialogue", target: {text: "Gut, bis Donnerstag.", language_code: "de", direction: "ltr", speaker: "Felix"}, introduced_tokens: ["Gut", "bis"]}
+          - {content_key: "de.a1.unit04.lesson04.teach.notiz", kind: "reading", target: {text: "Geschlossen bis Donnerstag, den neunten Juli.", language_code: "de", direction: "ltr"}, introduced_tokens: ["Geschlossen"]}
+        exercises:
+          - {content_key: "de.a1.unit04.lesson04.exercise01.listen_heutiges_datum", type: "dialogue_comprehension", tested_text: "Heute ist Dienstag, der siebte Juli", media_asset_key: "de.a1.audio.dialog.bibliothek.01", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit04.lesson04.exercise02.listen_wiedereroeffnung", type: "listen_select", tested_text: "Sie öffnet wieder am Donnerstag, den neunten Juli", media_asset_key: "de.a1.audio.dialog.bibliothek.01", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit04.lesson04.exercise03.choose_wiedereroeffnung", type: "multiple_choice", tested_text: "Donnerstag, den neunten Juli", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit04.lesson04.exercise04.order_bibliothek_frage", type: "word_order", tested_text: "Wann öffnet die Bibliothek wieder", prompt: {target_blocks: []}, word_bank: ["öffnet", "die", "Bibliothek", "wieder", "Wann"]}
+          - {content_key: "de.a1.unit04.lesson04.exercise05.read_notiz", type: "reading_comprehension", tested_text: "Donnerstag, den neunten Juli", prompt: {target_blocks: [{text: "Geschlossen bis Donnerstag, den neunten Juli.", language_code: "de", direction: "ltr"}]}}
+          - {content_key: "de.a1.unit04.lesson04.exercise06.reply_als_anna", type: "dialogue_response", tested_text: "Heute ist Dienstag, der siebte Juli. Sie öffnet wieder am Donnerstag, den neunten Juli.", prompt: {target_blocks: [{text: "Der Wievielte ist heute? Wann öffnet die Bibliothek wieder?", language_code: "de", direction: "ltr"}]}}
+          - {content_key: "de.a1.unit04.lesson04.exercise07.speak_termine", type: "speak_response", tested_text: "Heute ist Dienstag der siebte Juli Sie öffnet wieder am Donnerstag den neunten Juli", prompt: {target_blocks: [{text: "Der Wievielte ist heute? Wann öffnet die Bibliothek wieder?", language_code: "de", direction: "ltr"}]}}
