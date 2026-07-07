@@ -36,6 +36,24 @@ review:
     Retrofit 2026-07-06 (AUTHORING_GUIDE.md §16): widened match.003 from
     2 to 5 pairs (comparative_adj/adjective, real course-wide pool=5 --
     bigger/cheaper/faster/nicer/smaller), no padding with untaught words.
+
+    **Real bug found and fixed, live-QA pass on fa, 2026-07-06/07**: the
+    two lesson04 templates (order.001, listen.002) originally anchored
+    `lesson_content_key` to `en.a1.unit20.lesson04.comparison_dialogue`,
+    the unit's closing review dialogue -- it introduces no new
+    comparative_adj vocabulary of its own ("How"/"much"/"by"/"five"/
+    "dollars"/"do"/"you"/"like"/"one"/"ten"/"and"/"fifteen"/"Okay"/"I'll"/
+    "get" only), so no `Lexeme` row is ever created with that lesson as
+    `provenance_lesson_content_key` and `_practice_lesson_id()` can never
+    resolve it (same bug class as a1_unit10.yaml/a1_unit15.yaml, all
+    three found and fixed together; confirmed live -- `POST /admin/
+    courses/{id}/practice/import` rejected the whole 24-unit fa-en A1
+    pack). Fixed by repointing both templates to
+    `en.a1.unit20.lesson01.comparative_adjectives`, the actual
+    first-taught anchor for bigger/smaller/cheaper/faster/nicer -- a
+    safe, no-forward-reference anchor. Re-verified: `compile_content.py
+    practice-validate` still 0/0, full 24-unit fa-en A1 practice import
+    now succeeds end-to-end against a fresh isolated stack.
 tag_schema:
   part_of_speech: [adjective]
   agreement_tags:
@@ -115,14 +133,14 @@ templates:
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "معادل انگلیسی {item} است.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit20.lesson04.order.001
-    lesson_content_key: en.a1.unit20.lesson04.comparison_dialogue
+    lesson_content_key: en.a1.unit20.lesson01.comparative_adjectives
     type: word_order
     frame: {text: "This bag is {item} than that bag", language_code: en, direction: ltr}
     slots: {item: *comparative_adj}
     answer_derivation: {kind: render_frame, frame: {text: "This bag is {item} than that bag", language_code: en, direction: ltr}}
     feedback_frame: {text: "{item} صفت این مقایسه است.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit20.lesson04.listen.002
-    lesson_content_key: en.a1.unit20.lesson04.comparison_dialogue
+    lesson_content_key: en.a1.unit20.lesson01.comparative_adjectives
     type: listen_select
     frame: {text: "{item}", language_code: en, direction: ltr}
     slots: {item: *comparative_adj}

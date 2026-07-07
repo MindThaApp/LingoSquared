@@ -198,6 +198,24 @@ UNIT_FILES = (
         REPO_ROOT / "docs/content/realizations/en/a1_unit24_housing.yaml",
         REPO_ROOT / "docs/content/overlays/fa-en/a1_unit24.yaml",
     ),
+)
+
+# A2 units live in a SEPARATE course row ("انگلیسی A2", not "انگلیسی A1")
+# -- `POST /admin/content/import` matches/creates courses by
+# (source_language, target_language, title), and the A2 overlay declares
+# `course.title: انگلیسی A2`, distinct from A1's `انگلیسی A1`. Real bug
+# found live 2026-07-06/07 (Farsi Endless Practice QA pass, same root
+# cause independently confirmed and already fixed in the sibling
+# backfill_lexemes_en_prs.py/backfill_lexemes_prs_en.py pair): this used
+# to be a single UNIT_FILES tuple with a2 units 25-26 appended at
+# continuous positions 25/26, backfilled against ONE lookup of the
+# "انگلیسی A1" course (24 real units) -- position 25/26 don't exist in
+# that course, so `main()` hard-failed with "imported course is missing
+# en.a2.unit25...." on every run. A2 lexemes for this direction have
+# never actually been backfillable against a real database. Kept as its
+# own tuple with LOCAL 1-based ordering (looked up against the "انگلیسی
+# A2" course separately in main(), never mixed with UNIT_FILES' indices).
+UNIT_FILES_A2 = (
     (
         REPO_ROOT / "docs/content/realizations/en/a2_unit25_bureaucracy.yaml",
         REPO_ROOT / "docs/content/overlays/fa-en/a2_unit25.yaml",
@@ -446,9 +464,8 @@ EN_TARGET_TO_FA_GLOSS: dict[str, str] = {
 }
 
 
-def iter_specs():
-    specs: dict[str, dict] = {}
-    for unit_order, (realization_path, _overlay_path) in enumerate(UNIT_FILES, 1):
+def _classify(files, level, specs):
+    for unit_order, (realization_path, _overlay_path) in enumerate(files, 1):
         realization = yaml.safe_load(realization_path.read_text(encoding="utf-8"))
         for lesson_order, lesson in enumerate(realization["units"][0]["lessons"], 1):
             lesson_key = lesson["content_key"]
@@ -462,9 +479,16 @@ def iter_specs():
                             f"in _en_target_lexeme_common.py (lesson {lesson_key})"
                         )
                     tags = en_agreement_tags(token)
-                    existing = specs.get(token)
+                    # Keyed by (level, token) -- A1 and A2 are separate
+                    # courses (separate Lexeme rows are fine/expected even
+                    # for a token spelled the same in both), so a bare
+                    # token key would wrongly merge/skip an A2 occurrence
+                    # into an A1 spec already seen.
+                    key = (level, token)
+                    existing = specs.get(key)
                     if existing is None:
-                        specs[token] = {
+                        specs[key] = {
+                            "level": level,
                             "unit_order": unit_order, "lesson_order": lesson_order,
                             "lesson_content_key": lesson_key, "content_key": content_key,
                             "token": token, "language_code": "en",
@@ -473,12 +497,18 @@ def iter_specs():
                             "agreement_tags": tags,
                         }
                     else:
-                        for key, value in tags.items():
-                            if key == "semantic":
-                                prior = existing["agreement_tags"].setdefault(key, [])
+                        for tag_key, value in tags.items():
+                            if tag_key == "semantic":
+                                prior = existing["agreement_tags"].setdefault(tag_key, [])
                                 prior.extend(v for v in value if v not in prior)
                             else:
-                                existing["agreement_tags"].setdefault(key, value)
+                                existing["agreement_tags"].setdefault(tag_key, value)
+
+
+def iter_specs():
+    specs: dict[tuple[str, str], dict] = {}
+    _classify(UNIT_FILES, "a1", specs)
+    _classify(UNIT_FILES_A2, "a2", specs)
     yield from specs.values()
 
 
@@ -499,26 +529,39 @@ def main() -> int:
     from app.models import Course, Lesson, Lexeme, Unit
 
     with SessionLocal() as db:
-        course = db.scalar(
-            select(Course).where(
-                Course.source_language == "fa",
-                Course.target_language == "en",
-                Course.title == "انگلیسی A1",
+        courses_by_level = {}
+        for level, title in (("a1", "انگلیسی A1"), ("a2", "انگلیسی A2")):
+            needed = any(spec["level"] == level for spec in specs)
+            course = db.scalar(
+                select(Course).where(
+                    Course.source_language == "fa",
+                    Course.target_language == "en",
+                    Course.title == title,
+                )
             )
-        )
-        if course is None:
-            print("ERROR: fa-en 'انگلیسی A1' course must be imported first", file=sys.stderr)
-            return 1
+            if course is None:
+                if needed:
+                    print(f"ERROR: fa-en {title!r} course must be imported first", file=sys.stderr)
+                    return 1
+                continue
+            courses_by_level[level] = course
 
-        lessons = {
-            (unit.order, lesson.order): lesson
-            for unit in db.scalars(select(Unit).where(Unit.course_id == course.id))
-            for lesson in db.scalars(select(Lesson).where(Lesson.unit_id == unit.id))
+        lessons_by_level = {
+            level: {
+                (unit.order, lesson.order): lesson
+                for unit in db.scalars(select(Unit).where(Unit.course_id == course.id))
+                for lesson in db.scalars(select(Lesson).where(Lesson.unit_id == unit.id))
+            }
+            for level, course in courses_by_level.items()
         }
         created = 0
         updated = 0
         for spec in specs:
-            lesson = lessons.get((spec.pop("unit_order"), spec.pop("lesson_order")))
+            level = spec.pop("level")
+            course = courses_by_level[level]
+            lesson = lessons_by_level[level].get(
+                (spec.pop("unit_order"), spec.pop("lesson_order"))
+            )
             if lesson is None:
                 print(f"ERROR: imported course is missing {spec['lesson_content_key']}", file=sys.stderr)
                 db.rollback()
