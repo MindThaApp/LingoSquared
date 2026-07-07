@@ -775,12 +775,44 @@ def prs_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         semantics.append("office_word")
     if token in {"رسید", "مهلت"}:
         semantics.append("paperwork_word")
+    # Added 2026-07-07 (A2 tagging-depth pass): pools every genuine
+    # whole-sentence/whole-phrase lexeme this unit's own four lessons
+    # introduce -- these are auto-derived by _classify()'s new
+    # derive_phrases=True path (only ever passed for UNIT_FILES_A2 below,
+    # so this can never touch A1's pool) exactly the same way
+    # backfill_lexemes.py's own _classify_fa() already does for fa, and
+    # this tag mirrors that script's "bureaucracy_phrase" tag for the fa
+    # sibling unit exactly -- scoped here via lesson_key prefix so it only
+    # ever picks up this unit's own derived phrases, never unit10's or any
+    # A1 unit's. This was the single biggest real gap between this script
+    # and backfill_lexemes.py's own a2_unit09 section: zero phrase-level
+    # lexemes existed here at all before this pass, versus fa's 11 real
+    # "bureaucracy_phrase" members.
+    if lesson_key.startswith("prs.a2.unit09") and (
+        " " in token or "،" in token or "؟" in token
+    ):
+        semantics.append("bureaucracy_phrase")
 
     # A2 unit 10 (opinions) semantic tags, added 2026-07-06.
     if token in {"نظر", "دلیل", "تحصیل", "خارج", "وطن"}:
         semantics.append("opinion_word")
     if token in {"پروین", "احمد"}:
         semantics.append("person_name")
+    # Added 2026-07-07 (A2 tagging-depth pass): پیام (message) and فامیل
+    # (family) are both genuinely taught in lesson03 but were never given
+    # any semantic tag at all -- mirrors backfill_lexemes.py's own
+    # "family_message_word" tag for the fa sibling unit's پیام/خانواده
+    # pair exactly (2 real members, matching_pairs/translation only,
+    # below the multiple_choice/listen_select 3-candidate floor).
+    if token in {"پیام", "فامیل"}:
+        semantics.append("family_message_word")
+    # Same "bureaucracy_phrase" pattern as unit09 above, scoped to this
+    # unit's own lesson_key prefix -- mirrors backfill_lexemes.py's own
+    # "opinion_phrase" tag for the fa sibling unit exactly.
+    if lesson_key.startswith("prs.a2.unit10") and (
+        " " in token or "،" in token or "؟" in token
+    ):
+        semantics.append("opinion_phrase")
 
     # Unit 9 (dates) semantic tags, added 2026-07-07.
     if token in {"شنبه", "یکشنبه", "دوشنبه", "سه‌شنبه", "چهارشنبه", "پنجشنبه", "جمعه"}:
@@ -1021,9 +1053,21 @@ def prs_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     return tags
 
 
-def _classify(files, level, specs):
-    for unit_order, (realization_path, _overlay_path) in enumerate(files, 1):
+def _classify(files, level, specs, derive_phrases=False):
+    # derive_phrases=True is only ever passed for UNIT_FILES_A2 (see
+    # iter_specs() below) -- added 2026-07-07 (A2 tagging-depth pass) to
+    # mirror backfill_lexemes.py's own _classify_fa() whole-phrase
+    # auto-derivation exactly (see that function's matching block for the
+    # fa sibling). Keeping this opt-in via a default-False parameter
+    # (rather than making it unconditional) guarantees A1's existing
+    # lexeme pool is byte-for-byte unchanged by this pass -- only A2 units
+    # 09/10 gain the new phrase-level lexemes.
+    for unit_order, (realization_path, overlay_path) in enumerate(files, 1):
         realization = yaml.safe_load(realization_path.read_text(encoding="utf-8"))
+        teaching_overlays = None
+        if derive_phrases:
+            overlay = yaml.safe_load(overlay_path.read_text(encoding="utf-8"))
+            teaching_overlays = overlay["teaching"]
         for lesson_order, lesson in enumerate(realization["units"][0]["lessons"], 1):
             lesson_key = lesson["content_key"]
             for item in lesson["teaching"]:
@@ -1122,11 +1166,43 @@ def _classify(files, level, specs):
                             else:
                                 existing["agreement_tags"].setdefault(tag_key, value)
 
+                # Whole-phrase lexeme auto-derivation, added 2026-07-07
+                # (A2 tagging-depth pass), A2-only via derive_phrases.
+                # Mirrors backfill_lexemes.py's own _classify_fa(): any
+                # teaching card that introduces MORE THAN ONE genuinely new
+                # token at once (i.e. actually teaches a whole phrase or
+                # sentence, not a bare word) also becomes its own separate
+                # "phrase" lexeme, keyed on the full Dari target text and
+                # glossed from the paired overlay's own teaching gloss (the
+                # realization alone has no English text). A card whose
+                # target_text spans multiple lines is skipped (never
+                # happens in this content, but matches the fa sibling's own
+                # defensive check). Real content only -- every phrase this
+                # produces is a sentence the realization already teaches
+                # verbatim; nothing is invented.
+                if derive_phrases:
+                    target_text = item.get("target", {}).get("text", "").strip()
+                    introduced = item.get("introduced_tokens", [])
+                    if len(introduced) > 1 and target_text and "\n" not in target_text:
+                        phrase_tags = prs_agreement_tags(target_text, lesson_key)
+                        phrase_gloss = teaching_overlays.get(content_key, {}).get("gloss", "")
+                        specs.setdefault(
+                            (level, target_text),
+                            {
+                                "level": level,
+                                "unit_order": unit_order, "lesson_order": lesson_order,
+                                "lesson_content_key": lesson_key, "content_key": content_key,
+                                "token": target_text, "language_code": "prs",
+                                "part_of_speech": "phrase", "english_gloss": phrase_gloss,
+                                "agreement_tags": phrase_tags,
+                            },
+                        )
+
 
 def iter_specs():
     specs: dict[tuple[str, str], dict] = {}
     _classify(UNIT_FILES, "a1", specs)
-    _classify(UNIT_FILES_A2, "a2", specs)
+    _classify(UNIT_FILES_A2, "a2", specs, derive_phrases=True)
     yield from specs.values()
 
 

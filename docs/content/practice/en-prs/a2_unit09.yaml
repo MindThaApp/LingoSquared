@@ -60,10 +60,33 @@ review:
     scripts/_practice_slot_check.py 0 problems across the whole en-prs
     pack; scripts/compile_content.py practice-validate for the full pack
     -- 0 errors/0 warnings.
+
+    TAGGING-DEPTH PASS 2026-07-07: an audit comparing this course's real
+    A2-level tagged-lexeme pool against en-fa's found this unit's own
+    en-prs backfill classifier (scripts/backfill_lexemes_en_prs.py) was
+    missing the whole-phrase auto-derivation backfill_lexemes.py's own
+    _classify_fa() already does for fa -- every teaching card that
+    introduces more than one new token at once (a real taught sentence,
+    not a bare word) also becomes its own separate "phrase" lexeme.
+    Added that derivation (A2-only, via a new derive_phrases=True opt-in
+    parameter that can never touch A1's pool) plus a new
+    "bureaucracy_phrase" tag scoping it to this unit's own lesson_key
+    prefix, mirroring fa's own "bureaucracy_phrase" tag exactly. Verified
+    via scripts/backfill_lexemes_en_prs.py's actual iter_specs() output,
+    filtered to level=='a2' per AUTHORING_GUIDE.md #18 (never trust the
+    pooled A1+A2 count): 10 real, distinct bureaucracy_phrase candidates
+    (close to fa's own 11 -- the small difference is genuine, from how
+    this unit's teaching cards chunk newly-introduced tokens per card,
+    not a gap). Added 3 new templates (multiple_choice, matching_pairs
+    over all 10, translation) anchored at lesson04 where the pool
+    completes -- 8 -> 11 templates. Re-verified: scripts/
+    _practice_slot_check.py 0 problems across the whole en-prs pack;
+    scripts/compile_content.py practice-validate for the full pack -- 0
+    errors/0 warnings.
 tag_schema:
-  part_of_speech: [noun]
+  part_of_speech: [noun, phrase]
   agreement_tags:
-    semantic: [office_word, paperwork_word]
+    semantic: [office_word, paperwork_word, bureaucracy_phrase]
 slot_presets:
   office_word: &office_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: office_word}}
   paperwork_word: &paperwork_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: paperwork_word}}
@@ -71,6 +94,10 @@ slot_presets:
   # "bureaucracy" theme; pooled together for the matching_pairs templates
   # below to reach 7 (AUTHORING_GUIDE.md #16) -- real vocabulary only.
   office_and_paperwork: &office_and_paperwork {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: [office_word, paperwork_word]}}
+  # Added 2026-07-07 (tagging-depth pass): every genuine whole-sentence/
+  # whole-phrase lexeme this unit's own four lessons introduce (10 real
+  # distinct candidates, level a2, verified via iter_specs()).
+  bureaucracy_phrase: &bureaucracy_phrase {language_code: prs, part_of_speech: phrase, agreement_tags: {semantic: bureaucracy_phrase}}
 templates:
   # Lesson 1: administrative vocabulary.
   - content_key: practice.en-prs.prs.a2.unit09.lesson01.office_gloss.001
@@ -160,3 +187,45 @@ templates:
     slots: {paperwork_word: *paperwork_word}
     answer_derivation: {kind: render_frame, frame: {text: "این {paperwork_word} است", language_code: prs, direction: rtl}}
     feedback_frame: {text: "Word order: این [word] است (this is ___).", language_code: en, direction: ltr}
+
+  # Lesson 4: at the municipality office (whole taught sentences/phrases).
+  - content_key: practice.en-prs.prs.a2.unit09.lesson04.bureaucracy_phrase_choice.001
+    lesson_content_key: prs.a2.unit09.lesson04.at_the_municipality_office
+    # Added 2026-07-07 (tagging-depth pass): bureaucracy_phrase pools
+    # every genuine whole-sentence/whole-phrase lexeme this unit's own
+    # four lessons introduce (10 real distinct candidates, level a2 --
+    # verified via scripts/backfill_lexemes_en_prs.py's iter_specs()
+    # filtered to level=='a2' per AUTHORING_GUIDE.md #18). Anchored here
+    # at lesson04 since that's where the pool completes.
+    type: multiple_choice
+    frame: {text: "{bureaucracy_phrase}", language_code: prs, direction: rtl}
+    slots: {bureaucracy_phrase: *bureaucracy_phrase}
+    answer_derivation: {kind: slot_gloss, slot: bureaucracy_phrase}
+    feedback_frame: {text: "This is a sentence or phrase from this unit's municipality-office scenario.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a2.unit09.lesson04.bureaucracy_phrase_pair.002
+    lesson_content_key: prs.a2.unit09.lesson04.at_the_municipality_office
+    type: matching_pairs
+    # 10 pairs -- the full real bureaucracy_phrase pool (AUTHORING_GUIDE.md
+    # #16), verified via scripts/_practice_slot_check.py.
+    frame: {text: "Match each sentence or phrase with its meaning.", language_code: en, direction: ltr}
+    slots:
+      first: *bureaucracy_phrase
+      second: *bureaucracy_phrase
+      third: *bureaucracy_phrase
+      fourth: *bureaucracy_phrase
+      fifth: *bureaucracy_phrase
+      sixth: *bureaucracy_phrase
+      seventh: *bureaucracy_phrase
+      eighth: *bureaucracy_phrase
+      ninth: *bureaucracy_phrase
+      tenth: *bureaucracy_phrase
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth]}
+    feedback_frame: {text: "Match each sentence or phrase to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a2.unit09.lesson04.bureaucracy_phrase_translate.003
+    lesson_content_key: prs.a2.unit09.lesson04.at_the_municipality_office
+    type: translation
+    frame: {text: "{bureaucracy_phrase}", language_code: en, direction: ltr, slot_rendering: {bureaucracy_phrase: english_gloss}}
+    slots: {bureaucracy_phrase: *bureaucracy_phrase}
+    answer_derivation: {kind: slot_text, slot: bureaucracy_phrase}
+    feedback_frame: {text: "This sentence or phrase appears in this unit's municipality-office scenario.", language_code: en, direction: ltr}
