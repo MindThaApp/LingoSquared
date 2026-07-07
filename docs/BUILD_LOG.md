@@ -9173,3 +9173,140 @@ learner journey. Findings:
   overlay for units 12-28 is still `status: unreviewed`) handed to the
   Dutch content lane; not fixed in this review pass by design (the
   value of this task was whole-course judgment, not edits).
+
+## Endless Practice batch-generation performance fix, 2026-07-07
+
+**The problem, as reported**: an adversarial live-QA pass found
+`POST /practice/{course_id}/batch` took 77 seconds for prs-en's
+largest course, confirmed via timed curl. Flagged as core practice-
+engine logic shared by all 6 launch-gate directions, too large a blast
+radius for the QA agent to fix in-pass.
+
+**Root cause, confirmed by reading `app/practice/service.py`**:
+`fill_slots()` (used by every attempt inside `_generate_target_item()`,
+which is called up to `max(size*50, len(fallback)*10)` times per batch
+request by `_generate_prioritized()`'s padding loop) recomputed its
+`base_candidates` dict — `{slot_name: [lexeme for lexeme in lexemes if
+lexeme_matches(lexeme, constraints)]}` — from scratch on EVERY single
+call, scanning the ENTIRE course-wide lexeme pool for EVERY slot of
+EVERY template tried. `lexeme_matches()` is a pure function of
+(lexeme, constraints) with no external state, so for a fixed template
+and a fixed course-wide lexeme list this result is identical every
+time it's computed — the repeated recomputation across potentially
+thousands of attempts × hundreds of templates × hundreds of lexemes
+was pure, avoidable waste, not an inherent property of the
+backtracking search itself (which is otherwise a reasonable smallest-
+domain-first approach for the same_tag/distinct slot constraints).
+
+**Reproduction**: stood up an isolated stack (`docker-compose.perf.yml`
++ `.env.perf`, ports 8151/5551, torn down after use, never committed)
+seeded with REAL compiled prs-en content at close to full depth (198
+templates after excluding a handful whose lesson-key resolution hit
+the known no-new-vocabulary-in-review-dialogue-lesson gap, 426
+lexemes — the lexeme count matches the QA report's 426 exactly), 94
+completed lessons for a real test account (426 real `UserLexemeSRS`
+rows), and several real prior `/practice/{id}/batch` calls to populate
+`_recent_signatures()`'s 50-item recency window like a real returning
+user. Timed batch calls against the pre-fix code: ~4.5-5.1s repeatedly
+— real, clearly broken, but short of the reported 77s. Suspecting
+scale was the missing variable, repeated the exact same setup against
+nl-en (262 templates, 1136 lexemes — nl-en really is the bigger course
+here, as flagged) and got **17-18 seconds repeatedly** on the pre-fix
+code, confirming the same bug scales worse than linearly with
+course/lexeme size, consistent with the reported 77s on an even larger
+or more signature-exhausted real-world case.
+
+**Fix**: `app/practice/service.py`. New `_base_slot_candidates()`
+extracts the per-slot-candidate computation out of `fill_slots()`;
+`fill_slots()` gained an optional `slot_candidates` parameter — when
+given, used directly as `base_candidates` (a fresh copy is already
+made before any mutation either way, confirmed by re-reading
+`fill_slots()`'s own candidate-copying line, so a shared/cached dict
+passed in is never corrupted across calls). `_generate_target_item()`
+gained a `slot_candidate_cache` parameter: a plain dict keyed by
+`template.id`, populated lazily on first use per template and reused
+for every subsequent attempt against that same template within the
+one generation call. `_generate_prioritized()` creates one such cache
+at the top of its own call (scoped to that one request, nothing
+stale across requests) and threads it through all three of its
+`_generate_target_item()` call sites. `generate_review_retry()`'s
+single-item call site (not part of the batch loop, no repeated-attempt
+cost to memoize) was deliberately left unchanged to keep the change's
+blast radius contained to the actual hot path.
+
+**Verified no correctness regression**: same isolated stack, same
+account/course/history, re-timed after the fix — prs-en ~4.5-5.1s →
+~0.17-0.22s (~25-30x), nl-en ~17-18s → ~0.26-0.33s (~60x). Inspected a
+full generated batch: 20/20 unique item signatures (anti-repeat dedup
+intact), realistic type distribution across matching_pairs/
+multiple_choice/word_order/translation, a real well-formed sample
+item. Answered a real generated item and confirmed
+`UserLexemeSRS.mastery`/`repetitions`/`due_at` updated correctly
+(SRS-priority logic untouched and working). Full backend pytest suite
+green (`python -m pytest -q`, isolated test DB — see the DB-collision
+note below). Restarted the shared dev stack's `backend-api-1`
+(`docker compose restart api` — no `--reload`, a plain source edit
+needs this) so the fix is actually live there, not just committed.
+
+**Real, separate bug found and fixed along the way**: importing full
+nl-en content into the same isolated DB used for the prs-en
+reproduction (to test both courses' timing without needing two
+stacks) hit a genuine `IntegrityError` on `ix_units_content_key`:
+`Key (content_key)=(en.a1.unit01.greetings) already exists`. Migration
+0013 (content_key, shipped earlier the same night) made every
+content_key column GLOBALLY unique, on the wrong assumption that
+content_key strings are unique system-wide — they aren't: fa-en,
+nl-en, and prs-en all realize the SAME underlying English target-
+language content (`docs/content/realizations/en/*.yaml`), so their
+content_key values for equivalent units/lessons/exercises are
+identical by construction, and the first course to import fresh
+content_key-bearing content after 0013 would silently "claim" every
+key, 500ing the next course's import. `_match_by_content_key()`
+itself was never wrong — every caller already scopes its `existing`
+lookup to the right parent (`course_id`/`unit_id`/`lesson_id`) before
+matching — only the DB-level index was too strict; `PracticeTemplate`
+already had the correct pattern
+(`UniqueConstraint("course_id", "content_key")`) to follow. New
+migration `0015_scope_content_key_uniqueness.py` drops each of the 4
+global partial unique indexes from 0013 and replaces them with
+composite ones scoped to each table's natural parent column
+(`course_id` for units, `unit_id` for lessons, `lesson_id` for
+exercises/content_items) — guarded/re-inspecting per the standing
+migration convention, downgrade intentionally unsupported (same
+pattern as 0014) since real post-fix data legitimately has matching
+content_key values across courses, which the old global index cannot
+represent at all. Verified directly via raw SQL on a throwaway test DB
+(`docker exec -i ... psql`, note the `-i` flag — a heredoc silently
+does nothing without it, a real mistake made and caught mid-
+verification): the exact same content_key across two different
+courses now inserts cleanly; a genuine duplicate within the same
+course still correctly raises `UniqueViolation`. Updated the four
+stale "globally unique by construction" comments in
+`app/models/entities.py` to describe the corrected per-parent scoping.
+Applied to the shared dev stack via `alembic upgrade head` (which also
+picked up 0014, already committed by another session but not yet
+applied there). Full pytest suite re-verified green after the
+migration, on a freshly created dedicated test DB.
+
+**Process note — test DB contention between concurrent sessions**: a
+pytest run partway through this task returned a cascade of unrelated
+failures (`test_phase_e3_streak_freeze.py`, `test_rate_limiting.py`,
+`test_word_order_grading.py`) that had nothing to do with this
+change — root cause was `dropdb ... lingosquared_test` failing
+("There is 1 other session using the database") because another
+concurrent session was ALSO running pytest against the same shared
+`lingosquared_test` name at that exact moment, and the subsequent
+`createdb`/pytest ran against contaminated leftover state. Worked
+around by using a uniquely-named scratch test DB
+(`lingosquared_test_perfcheck`, dropped after use) for this session's
+own verification runs instead of the shared conventional name —
+worth remembering as a real, reproducible failure mode whenever
+multiple sessions might be testing at the same time, not just a
+one-off flake.
+
+Isolated stack (`docker-compose.perf.yml`, `.env.perf`) and all scratch
+test databases (`lingosquared_test_perfcheck`,
+`lingosquared_test_perfcheck2`, `lingosquared_test_final`,
+`lingosquared_migtest`) were torn down/dropped after verification —
+nothing left running or lingering on shared infrastructure from this
+task.
