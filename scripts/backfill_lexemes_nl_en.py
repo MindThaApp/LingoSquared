@@ -257,6 +257,18 @@ EN_TARGET_TO_NL_GLOSS: dict[str, str] = {
     "early": "vroeg", "confirmed": "bevestigd", "3pm": "15.00 uur",
     "7724": "7724", "back": "terug", "within": "binnen",
     "twice": "twee keer", "plenty": "veel",
+    # Unit 29 (A2: reporting a maintenance problem), added 2026-07-07.
+    # Atomic per-token glosses -- cross-checked against, but not copy-
+    # pasted from, docs/content/overlays/nl-en/a2_unit29.yaml's own real
+    # gloss text. "kitchen"/"apartment"/"bathroom" reuse their existing
+    # unit24 senses unchanged (recapped, not retaught).
+    "leaking": "lekken", "sink": "de gootsteen", "building": "het gebouw",
+    "manager": "de beheerder", "plumber": "de loodgieter",
+    "repair": "de reparatie", "report": "melden", "problem": "het probleem",
+    "been": "geweest (in it's been -- is al ... geweest)",
+    "someone": "iemand", "fix": "repareren", "2pm": "14.00 uur",
+    "4pm": "16.00 uur", "received": "ontvangen", "6180": "6180",
+    "send": "sturen", "home": "thuis", "here's": "hier is",
 }
 
 UNIT_FILES = (
@@ -395,6 +407,21 @@ UNIT_FILES_A2 = (
     (
         REPO_ROOT / "docs/content/realizations/en/a2_unit28_doctor.yaml",
         REPO_ROOT / "docs/content/overlays/nl-en/a2_unit28.yaml",
+    ),
+    # Unit 29 (A2: reporting a maintenance problem), added 2026-07-07 --
+    # closing the practice-pool gap for the newest A2 unit (units 25-28
+    # already had fa-en/nl-en/prs-en packs; unit29 had none). EN_POS/
+    # en_agreement_tags for this unit's vocabulary (including the new
+    # 3-member maintenance_noun tag [sink, plumber, repair]) were added to
+    # _en_target_lexeme_common.py as part of this same pass -- verified
+    # every introduced_token across this realization file against EN_POS's
+    # keys: zero missing. Only this script's own Dutch (target-side)
+    # gloss dict needed extending (18 new tokens, cross-checked against
+    # docs/content/overlays/nl-en/a2_unit29.yaml's own real text, not
+    # copy-pasted from it).
+    (
+        REPO_ROOT / "docs/content/realizations/en/a2_unit29_maintenance.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/a2_unit29.yaml",
     ),
 )
 
@@ -593,6 +620,16 @@ NL_POS: dict[str, str] = {
     "flinke": "adjective", "verkoudheid": "noun", "medicijnen": "noun",
     "nemen": "verb", "gedurende": "preposition", "drink": "verb",
     "veel": "adverb", "terugkomen": "verb", "terug": "adverb",
+    # Unit 29 (A2: reporting a maintenance problem), added 2026-07-07 --
+    # Dutch words extracted from this unit's own overlay gloss text,
+    # closing the practice-pool gap alongside the fa-en/prs-en passes.
+    "gootsteen": "noun", "hartelijk": "adverb", "huismeester": "noun",
+    "iemand": "pronoun", "keukengootsteen": "noun", "lekken": "verb",
+    "lekt": "verb", "loodgieter": "noun", "melden": "verb", "mis": "adjective",
+    "ontvangen": "verb", "probleem": "noun", "reparatie": "noun",
+    "reparatienummer": "noun", "reparatieverzoek": "noun",
+    "repareren": "verb", "stuur": "verb", "thuis": "adverb",
+    "vanochtend": "adverb", "wees": "verb",
 }
 
 NL_GLOSSES: dict[str, str] = {
@@ -802,6 +839,19 @@ NL_GLOSSES: dict[str, str] = {
     "medicijnen": "medicines", "nemen": "to take",
     "gedurende": "for; during", "drink": "drink (imperative, with jij/u)",
     "veel": "much; a lot", "terugkomen": "to come back", "terug": "back",
+    # Unit 29 (A2: reporting a maintenance problem), added 2026-07-07.
+    # English glosses for the Dutch words extracted from this unit's own
+    # overlay gloss text (see the matching NL_POS block above).
+    "gootsteen": "sink", "hartelijk": "hearty; warmly (hartelijk dank)",
+    "huismeester": "building manager", "iemand": "someone",
+    "keukengootsteen": "kitchen sink", "lekken": "to leak",
+    "lekt": "leaks (3rd person 'lekken')", "loodgieter": "plumber",
+    "melden": "to report", "mis": "wrong (wat is er mis)",
+    "ontvangen": "received", "probleem": "problem", "reparatie": "repair",
+    "reparatienummer": "repair number", "reparatieverzoek": "repair request",
+    "repareren": "to repair; to fix",
+    "stuur": "send (1st person 'sturen')", "thuis": "home; at home",
+    "vanochtend": "this morning", "wees": "be (imperative 'zijn')",
 }
 
 

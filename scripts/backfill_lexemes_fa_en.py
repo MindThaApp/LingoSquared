@@ -256,6 +256,21 @@ UNIT_FILES_A2 = (
         REPO_ROOT / "docs/content/realizations/en/a2_unit28_doctor.yaml",
         REPO_ROOT / "docs/content/overlays/fa-en/a2_unit28.yaml",
     ),
+    # Unit 29 (A2: reporting a maintenance problem), added 2026-07-07 --
+    # closing the practice-pool gap for the newest A2 unit (units 25-28
+    # already had fa-en/nl-en/prs-en packs; unit29 had none). EN_POS/
+    # en_agreement_tags for this unit's vocabulary (including the new
+    # 3-member maintenance_noun tag [sink, plumber, repair]) were added to
+    # _en_target_lexeme_common.py as part of this same pass (not a
+    # concurrent lane this time) -- verified every introduced_token across
+    # this realization file against EN_POS's keys: zero missing. Only this
+    # script's own Farsi gloss dict needed extending (18 new tokens,
+    # cross-checked against docs/content/overlays/fa-en/a2_unit29.yaml's
+    # own real text, not copy-pasted from it).
+    (
+        REPO_ROOT / "docs/content/realizations/en/a2_unit29_maintenance.yaml",
+        REPO_ROOT / "docs/content/overlays/fa-en/a2_unit29.yaml",
+    ),
 )
 
 # Farsi gloss for each shared English target token -- hand-written for
@@ -527,6 +542,19 @@ EN_TARGET_TO_FA_GLOSS: dict[str, str] = {
     "plenty": "به مقدار زیاد (در plenty of water)",
     "back": "برگشتن (در come back)",
     "within": "ظرف (در within a week یعنی ظرف یک هفته)",
+    # Unit 29 (A2: reporting a maintenance problem), added 2026-07-07.
+    # Atomic per-token glosses -- cross-checked against, but not copy-
+    # pasted from, docs/content/overlays/fa-en/a2_unit29.yaml's own
+    # (phrase-level) Farsi glosses. "kitchen"/"apartment"/"bathroom" reuse
+    # their existing unit24 senses unchanged (recapped, not retaught).
+    "leaking": "چکه کردن", "sink": "سینک", "building": "ساختمان",
+    "manager": "مدیر", "plumber": "لوله‌کش", "repair": "تعمیر",
+    "report": "گزارش دادن", "problem": "مشکل",
+    "been": "بوده (فعل be در ساختار کامل، مثل has been)",
+    "someone": "یک نفر؛ کسی", "fix": "درست کردن",
+    "2pm": "ساعت ۲ بعدازظهر", "4pm": "ساعت ۴ بعدازظهر",
+    "received": "دریافت شده", "6180": "۶۱۸۰", "send": "فرستادن",
+    "home": "خونه", "here's": "اینه (مخفف this is، در معرفی چیزی)",
 }
 
 
