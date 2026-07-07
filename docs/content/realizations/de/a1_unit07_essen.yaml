@@ -1,0 +1,210 @@
+schema_version: "1.0"
+realization_version: "2026.1-draft.1"
+target_language: "de"
+cefr_level: "A1"
+status: "complete_draft"
+generation_provenance:
+  method: "ai_generated"
+  authoring_system: "claude"
+  human_reviewed: false
+review:
+  status: "reviewed"
+  required_next_reviewer: null
+  notes: >-
+    Seventh German unit, continuing the Anna/Felix storyline (still on
+    the formal Sie register from units 01-06). Scoped to exactly one
+    spine outcome (universal.a1.food.order_simple_meal) across all 4
+    lessons per AUTHORING_GUIDE §1; prerequisites
+    universal.a1.greetings.open_close_exchange and
+    universal.a1.numbers.use_basic_numbers are satisfied by units 01
+    and 03. Introduces a new realistic detail consistent with (not
+    contradicting) prior units: Anna works part-time at a cafe --
+    Felix visits her there for the capstone dialogue, giving a natural
+    barista/customer framing without inventing a third character.
+
+    The single trickiest real teaching point in this unit: German's
+    indefinite article changes for the ACCUSATIVE case (the direct
+    object of "möchte") only for MASCULINE nouns -- "der Kaffee"
+    becomes "einen Kaffee," but neuter "das Sandwich" stays "ein
+    Sandwich" and feminine "die Suppe" stays "eine Suppe" (identical to
+    their nominative forms). This is genuinely easy to over-generalize
+    (a learner might assume every "ein" becomes "einen" after a verb).
+    lesson02 deliberately teaches all three genders side by side
+    (einen Kaffee / ein Sandwich / eine Suppe) specifically so the
+    masculine-only change is visible by contrast, not asserted in
+    isolation the way unit06 contrasted mein/meine and Ihr/Ihre for the
+    same reason (grammatical gender agreement, not memorized vocabulary).
+
+    Also flagged: German cafe prices use the Euro symbol placed AFTER
+    the number with a space (3 €, not $3 or 3€) -- the reverse
+    convention from the shared en realization's "$3" placement, flagged
+    explicitly the same way unit04/05 flagged date/time convention
+    differences rather than assumed self-evident. lesson03's menu was
+    widened to 6 items (added Brot and Salat with their own prices,
+    beyond the shared en realization's 4) specifically so
+    match_speisekarte_preise clears AUTHORING_GUIDE §16's 6-12 floor
+    without inheriting the same shortfall already flagged twice this
+    session for the shared en realization's own matching_pairs
+    (unit04's match_days/match_months, unit06's match_family_words).
+    All 6 prices are distinct (1/2/3/4/5/6 EUR) specifically so
+    "cheapest item" has one unambiguous answer (Brot at 1 EUR) rather
+    than a tie. No fill_in_blank exercises, same ambiguity-avoidance
+    discipline as every prior unit. Applied the hardcoded-English-
+    target_blocks lesson from the start: every target_blocks in this
+    file is empty or genuine German content only -- a repo-wide grep
+    after authoring confirms zero language_code: "en" target_blocks
+    anywhere in this file. Compiled and validated against the real
+    compiler to confirm every exercise's tested_text is fully covered
+    by this file's own cumulative introduced_tokens.
+
+    Fresh-context review (zero access to the authoring reasoning above,
+    a genuinely separate pass, per AUTHORING_GUIDE §9): resumed after a
+    prior review pass on this same content stalled mid-fix, so every
+    finding below was re-derived from scratch, not trusted from any
+    prior self-report. Verified: register/storyline consistency against
+    units 01/06 (Sie register held throughout, no stray du/dein/informal
+    imperative; Anna's new part-time-cafe detail doesn't contradict
+    anything established for her in prior units); the accusative-case
+    teaching point (einen Kaffee / ein Sandwich / eine Suppe) is
+    demonstrated correctly across all three genders; the capstone
+    dialogue's price math is internally correct (Kaffee 3 € + Sandwich
+    6 € = das macht neun Euro); every exercise's tested_text/word_bank
+    traces to this file's own cumulative introduced_tokens (confirmed
+    both by the real compiler's 0-error validation and by hand --
+    investigated two apparent gaps, lowercase "zum" and the hyphenated
+    "Hier-Essen" compound, both tested without their own literal
+    introduced_tokens entry, but the compiler's tokenize() casefolds and
+    splits on non-word characters, so both already resolve to tokens
+    covered by "Zum"/"Hier"/"Essen" -- confirmed false positives, not
+    fixed since there's nothing to fix). Sibling-isolation held for the
+    de-en pairing (compared this content's own reply_as_leila-equivalent
+    exercise against fa-en/nl-en/prs-en's versions of the same shared en
+    realization for structural mirroring only, per the task's explicit
+    instruction not to consult them for ideas -- wording, instruction
+    phrasing, and accepted-answer variant sets all differ genuinely
+    across all four, no evidence of templating). One mild stylistic
+    observation, not fixed: Anna's capstone-dialogue "Hallo Felix!"
+    opener is casual next to unit01's deliberate Guten-Tag-only Sie-
+    register discipline (which explicitly swapped out a stray
+    "Tschüss" for consistency) -- but native speakers routinely say
+    "Hallo" to someone they otherwise address with Sie, so this reads as
+    a realistic, legitimate register mix rather than an error, and
+    "Hallo" is this lesson's own new-vocabulary teaching point
+    (de.a1.unit07.lesson04.teach.hallo) -- left as authored. No jargon
+    leaks, no bare yes/no/true/false YAML footguns, no untaught
+    vocabulary tested. See the en-de/de-en overlay review notes for the
+    §15/content-key fixes this same pass made in those files.
+
+course:
+  realization_key: "de.a1"
+  target_language_first: true
+  dialect: "de_DE_standard"
+  register_policy: "Teach clear Standard German (Hochdeutsch). The indefinite article after 'möchte' shifts to the accusative case for masculine nouns only (einen Kaffee), staying unchanged for neuter (ein Sandwich) and feminine (eine Suppe) -- flag this gender-dependent rule explicitly rather than assume learners will infer it. Cafe prices use the Euro symbol after the number with a space (3 €), the reverse of the shared English realization's '$3' placement. Anna and Felix continue on the formal Sie register from units 01-06."
+
+media_assets:
+  - {content_key: "de.a1.audio.essen.woerter.01", language: "de", text: "Kaffee, Tee, Wasser, Brot, Suppe, Salat, Sandwich", voice_hint: "neutral_adult", status: "pending_generation"}
+  - {content_key: "de.a1.audio.essen.bestellsatz.01", language: "de", text: "Ich möchte einen Kaffee, bitte.", voice_hint: "neutral_adult", status: "pending_generation"}
+  - content_key: "de.a1.audio.dialog.cafe.01"
+    language: "de"
+    text: "Anna: Hallo Felix! Was möchten Sie? Felix: Ich möchte einen Kaffee und ein Sandwich, bitte. Anna: Sonst noch etwas? Felix: Nein, das ist alles, danke. Anna: Zum Hier-Essen oder zum Mitnehmen? Felix: Zum Hier-Essen, bitte. Anna: Gut, das macht neun Euro."
+    voice_hint: "two_adults_neutral_friendly"
+    status: "pending_generation"
+
+units:
+  - content_key: "de.a1.unit07.essen"
+    title: "Essen und Bestellen"
+    section: "reading_writing"
+    spine_outcome_ids:
+      - "universal.a1.food.order_simple_meal"
+    planned_lesson_count: 4
+    lessons:
+      - content_key: "de.a1.unit07.lesson01.essen_und_getraenke_wortschatz"
+        title: "Essen und Getränke: Wortschatz"
+        spine_outcome_id: "universal.a1.food.order_simple_meal"
+        teaching:
+          - {content_key: "de.a1.unit07.lesson01.teach.kaffee", kind: "vocabulary", target: {text: "Kaffee", language_code: "de", direction: "ltr"}, introduced_tokens: ["Kaffee"]}
+          - {content_key: "de.a1.unit07.lesson01.teach.tee", kind: "vocabulary", target: {text: "Tee", language_code: "de", direction: "ltr"}, introduced_tokens: ["Tee"]}
+          - {content_key: "de.a1.unit07.lesson01.teach.wasser", kind: "vocabulary", target: {text: "Wasser", language_code: "de", direction: "ltr"}, introduced_tokens: ["Wasser"]}
+          - {content_key: "de.a1.unit07.lesson01.teach.brot", kind: "vocabulary", target: {text: "Brot", language_code: "de", direction: "ltr"}, introduced_tokens: ["Brot"]}
+          - {content_key: "de.a1.unit07.lesson01.teach.suppe", kind: "vocabulary", target: {text: "Suppe", language_code: "de", direction: "ltr"}, introduced_tokens: ["Suppe"]}
+          - {content_key: "de.a1.unit07.lesson01.teach.salat", kind: "vocabulary", target: {text: "Salat", language_code: "de", direction: "ltr"}, introduced_tokens: ["Salat"]}
+          - {content_key: "de.a1.unit07.lesson01.teach.sandwich", kind: "vocabulary", target: {text: "Sandwich", language_code: "de", direction: "ltr"}, introduced_tokens: ["Sandwich"]}
+        exercises:
+          - {content_key: "de.a1.unit07.lesson01.exercise01.listen_suppe", type: "listen_select", tested_text: "Suppe", media_asset_key: "de.a1.audio.essen.woerter.01", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit07.lesson01.exercise02.choose_heissgetraenk", type: "multiple_choice", tested_text: "Kaffee", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit07.lesson01.exercise03.choose_brot", type: "multiple_choice", tested_text: "Brot", prompt: {target_blocks: []}}
+          - content_key: "de.a1.unit07.lesson01.exercise04.match_essenswoerter"
+            type: "matching_pairs"
+            tested_text: "Kaffee Tee Wasser Brot Suppe Salat"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "heißes Getränk", right: "Kaffee"}
+              - {left: "heißes Getränk mit Blättern", right: "Tee"}
+              - {left: "Getränk ohne Geschmack", right: "Wasser"}
+              - {left: "gebackenes Essen", right: "Brot"}
+              - {left: "warme Flüssigkeit zum Essen", right: "Suppe"}
+              - {left: "meist kaltes Gemüsegericht", right: "Salat"}
+          - {content_key: "de.a1.unit07.lesson01.exercise05.write_sandwich", type: "writing_prompt", tested_text: "Sandwich", prompt: {target_blocks: []}}
+
+      - content_key: "de.a1.unit07.lesson02.hoeflich_bestellen"
+        title: "Höflich bestellen"
+        spine_outcome_id: "universal.a1.food.order_simple_meal"
+        teaching:
+          - {content_key: "de.a1.unit07.lesson02.teach.ich_moechte_einen_kaffee", kind: "phrase", target: {text: "Ich möchte einen Kaffee, bitte.", language_code: "de", direction: "ltr"}, introduced_tokens: ["Ich", "möchte", "einen", "bitte"]}
+          - {content_key: "de.a1.unit07.lesson02.teach.ich_moechte_ein_sandwich", kind: "grammar_note", target: {text: "Ich möchte ein Sandwich, bitte.", language_code: "de", direction: "ltr"}, introduced_tokens: ["ein"]}
+          - {content_key: "de.a1.unit07.lesson02.teach.ich_moechte_eine_suppe", kind: "grammar_note", target: {text: "Ich möchte eine Suppe, bitte.", language_code: "de", direction: "ltr"}, introduced_tokens: ["eine"]}
+          - {content_key: "de.a1.unit07.lesson02.teach.sonst_noch_etwas", kind: "phrase", target: {text: "Sonst noch etwas?", language_code: "de", direction: "ltr"}, introduced_tokens: ["Sonst", "noch", "etwas"]}
+          - {content_key: "de.a1.unit07.lesson02.teach.nein_das_ist_alles", kind: "phrase", target: {text: "Nein, das ist alles, danke.", language_code: "de", direction: "ltr"}, introduced_tokens: ["Nein", "das", "ist", "alles", "danke"]}
+          - {content_key: "de.a1.unit07.lesson02.teach.zum_hier_essen_oder_mitnehmen", kind: "phrase", target: {text: "Zum Hier-Essen oder zum Mitnehmen?", language_code: "de", direction: "ltr"}, introduced_tokens: ["Zum", "Hier", "Essen", "oder", "Mitnehmen"]}
+        exercises:
+          - {content_key: "de.a1.unit07.lesson02.exercise01.listen_bestellsatz", type: "listen_select", tested_text: "Ich möchte einen Kaffee, bitte", media_asset_key: "de.a1.audio.essen.bestellsatz.01", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit07.lesson02.exercise02.choose_sandwich_bestellung", type: "multiple_choice", tested_text: "Ich möchte ein Sandwich, bitte.", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit07.lesson02.exercise03.order_kaffee_bestellung", type: "word_order", tested_text: "Ich möchte einen Kaffee bitte", prompt: {target_blocks: []}, word_bank: ["möchte", "einen", "Kaffee", "bitte", "Ich"]}
+          - {content_key: "de.a1.unit07.lesson02.exercise04.reply_sonst_noch_etwas", type: "dialogue_response", tested_text: "Sonst noch etwas Nein das ist alles danke", prompt: {target_blocks: [{text: "Sonst noch etwas?", language_code: "de", direction: "ltr"}]}}
+          - {content_key: "de.a1.unit07.lesson02.exercise05.write_bestellung", type: "writing_prompt", tested_text: "Ich möchte einen Kaffee, bitte", prompt: {target_blocks: []}}
+
+      - content_key: "de.a1.unit07.lesson03.eine_einfache_speisekarte_lesen"
+        title: "Eine einfache Speisekarte lesen"
+        spine_outcome_id: "universal.a1.food.order_simple_meal"
+        teaching:
+          - {content_key: "de.a1.unit07.lesson03.teach.speisekarte", kind: "vocabulary", target: {text: "Speisekarte", language_code: "de", direction: "ltr"}, introduced_tokens: ["Speisekarte"]}
+          - {content_key: "de.a1.unit07.lesson03.teach.preis", kind: "vocabulary", target: {text: "Preis", language_code: "de", direction: "ltr"}, introduced_tokens: ["Preis"]}
+          - {content_key: "de.a1.unit07.lesson03.teach.speisekarte_text", kind: "reading", target: {text: "Café-Speisekarte: Kaffee - 3 €. Tee - 2 €. Brot - 1 €. Salat - 4 €. Suppe - 5 €. Sandwich - 6 €.", language_code: "de", direction: "ltr"}, introduced_tokens: ["Café", "3", "2", "1", "4", "5", "6"]}
+        exercises:
+          - {content_key: "de.a1.unit07.lesson03.exercise01.read_kaffee_preis", type: "reading_comprehension", tested_text: "Kaffee 3 €", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit07.lesson03.exercise02.read_suppe_preis", type: "reading_comprehension", tested_text: "Suppe 5 €", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit07.lesson03.exercise03.choose_billigstes", type: "multiple_choice", tested_text: "Brot", prompt: {target_blocks: []}}
+          - content_key: "de.a1.unit07.lesson03.exercise04.match_speisekarte_preise"
+            type: "matching_pairs"
+            tested_text: "Kaffee Tee Brot Salat Suppe Sandwich"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "Kaffee", right: "3 €"}
+              - {left: "Tee", right: "2 €"}
+              - {left: "Brot", right: "1 €"}
+              - {left: "Salat", right: "4 €"}
+              - {left: "Suppe", right: "5 €"}
+              - {left: "Sandwich", right: "6 €"}
+          - {content_key: "de.a1.unit07.lesson03.exercise05.write_speisekarte_artikel", type: "writing_prompt", tested_text: "Sandwich 6 €", prompt: {target_blocks: []}}
+
+      - content_key: "de.a1.unit07.lesson04.im_cafe_bestellen"
+        title: "Im Café bestellen"
+        spine_outcome_id: "universal.a1.food.order_simple_meal"
+        teaching:
+          - {content_key: "de.a1.unit07.lesson04.teach.hallo", kind: "vocabulary", target: {text: "Hallo", language_code: "de", direction: "ltr"}, introduced_tokens: ["Hallo"]}
+          - {content_key: "de.a1.unit07.lesson04.teach.was_moechten_sie", kind: "vocabulary", target: {text: "Was möchten Sie", language_code: "de", direction: "ltr"}, introduced_tokens: ["Was", "möchten", "Sie"]}
+          - {content_key: "de.a1.unit07.lesson04.teach.macht_euro", kind: "vocabulary", target: {text: "macht neun Euro", language_code: "de", direction: "ltr"}, introduced_tokens: ["macht", "neun", "Euro"]}
+          - {content_key: "de.a1.unit07.lesson04.teach.line01", kind: "dialogue", target: {text: "Hallo Felix! Was möchten Sie?", language_code: "de", direction: "ltr", speaker: "Anna"}, introduced_tokens: []}
+          - {content_key: "de.a1.unit07.lesson04.teach.line02", kind: "dialogue", target: {text: "Ich möchte einen Kaffee und ein Sandwich, bitte.", language_code: "de", direction: "ltr", speaker: "Felix"}, introduced_tokens: ["und"]}
+          - {content_key: "de.a1.unit07.lesson04.teach.line03", kind: "dialogue", target: {text: "Sonst noch etwas?", language_code: "de", direction: "ltr", speaker: "Anna"}, introduced_tokens: []}
+          - {content_key: "de.a1.unit07.lesson04.teach.line04", kind: "dialogue", target: {text: "Nein, das ist alles, danke.", language_code: "de", direction: "ltr", speaker: "Felix"}, introduced_tokens: []}
+          - {content_key: "de.a1.unit07.lesson04.teach.line05", kind: "dialogue", target: {text: "Zum Hier-Essen oder zum Mitnehmen?", language_code: "de", direction: "ltr", speaker: "Anna"}, introduced_tokens: []}
+          - {content_key: "de.a1.unit07.lesson04.teach.line06", kind: "dialogue", target: {text: "Zum Hier-Essen, bitte.", language_code: "de", direction: "ltr", speaker: "Felix"}, introduced_tokens: []}
+          - {content_key: "de.a1.unit07.lesson04.teach.line07", kind: "dialogue", target: {text: "Gut, das macht neun Euro.", language_code: "de", direction: "ltr", speaker: "Anna"}, introduced_tokens: ["Gut"]}
+        exercises:
+          - {content_key: "de.a1.unit07.lesson04.exercise01.listen_bestellung", type: "dialogue_comprehension", tested_text: "Ich möchte einen Kaffee und ein Sandwich, bitte", media_asset_key: "de.a1.audio.dialog.cafe.01", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit07.lesson04.exercise02.listen_preis", type: "listen_select", tested_text: "das macht neun Euro", media_asset_key: "de.a1.audio.dialog.cafe.01", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit07.lesson04.exercise03.choose_hier_essen_antwort", type: "multiple_choice", tested_text: "Zum Hier-Essen, bitte.", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit07.lesson04.exercise04.order_hier_oder_mitnehmen_frage", type: "word_order", tested_text: "Zum Hier-Essen oder zum Mitnehmen", prompt: {target_blocks: []}, word_bank: ["Hier-Essen", "oder", "zum", "Mitnehmen", "Zum"]}
+          - {content_key: "de.a1.unit07.lesson04.exercise05.reply_als_felix", type: "dialogue_response", tested_text: "Ich möchte einen Kaffee und ein Sandwich, bitte. Nein, das ist alles, danke. Zum Hier-Essen, bitte.", prompt: {target_blocks: [{text: "Was möchten Sie? Sonst noch etwas? Zum Hier-Essen oder zum Mitnehmen?", language_code: "de", direction: "ltr"}]}}
+          - {content_key: "de.a1.unit07.lesson04.exercise06.speak_bestellung", type: "speak_response", tested_text: "Ich möchte einen Kaffee und ein Sandwich bitte Nein das ist alles danke Zum Hier-Essen bitte", prompt: {target_blocks: [{text: "Was möchten Sie? Sonst noch etwas? Zum Hier-Essen oder zum Mitnehmen?", language_code: "de", direction: "ltr"}]}}
