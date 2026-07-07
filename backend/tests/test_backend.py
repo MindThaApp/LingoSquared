@@ -391,3 +391,45 @@ def test_speaking_units_lock_and_unlock(client, auth):
     refreshed=client.get(f"/courses/{course['id']}/units",headers=auth).json()
     assert next(unit for unit in refreshed if unit["section"]=="speaking")["locked"] is False
     assert client.post(f"/lessons/{speaking_lesson['id']}/start",headers=auth).status_code==200
+
+def test_speaking_lock_cannot_be_bypassed_via_answer_or_complete(client, auth):
+    # Phase H1 (2026-07-07 integrity audit): start() always checked
+    # speaking_locked, but exercise_answer()/complete() didn't -- a user
+    # could skip start() entirely, answer every exercise in a locked
+    # speaking lesson directly by id (earning XP), then complete it. This
+    # is a FRESH account (unlike test_speaking_units_lock_and_unlock's
+    # `auth` fixture user, which may have already unlocked speaking from
+    # a prior test in the same module-scoped course/content) to guarantee
+    # speaking is genuinely still locked here.
+    register = client.post("/auth/register", json={"email": "bypass-check@example.com", "password": "password123"})
+    fresh_auth = {"Authorization": f"Bearer {register.json()['access_token']}"}
+    course = client.get("/courses?source=en&target=fa").json()[0]
+    units = client.get(f"/courses/{course['id']}/units", headers=fresh_auth).json()
+    speaking = next(unit for unit in units if unit["section"] == "speaking")
+    assert speaking["locked"] is True
+    speaking_lesson = client.get(f"/units/{speaking['id']}/lessons").json()[0]
+    lesson_detail = client.get(f"/lessons/{speaking_lesson['id']}").json()
+    exercise_id = lesson_detail["exercises"][0]["id"]
+
+    answer_bypass = client.post(f"/exercises/{exercise_id}/answer", headers=fresh_auth, json={"response": "anything"})
+    assert answer_bypass.status_code == 409 and answer_bypass.json()["error"]["code"] == "speaking_locked"
+    # Confirm the fix didn't just move the hole: answer() must not have
+    # created a LessonProgress row as a side effect of the blocked attempt
+    # either (the pre-fix bug's OWN mechanism was exercise_answer()
+    # auto-creating this row with no lock check).
+    from app.models import LessonProgress, User
+    with SessionLocal() as db:
+        user_row = db.scalar(select(User).where(User.email == "bypass-check@example.com"))
+        assert db.scalar(select(LessonProgress).where(LessonProgress.user_id == user_row.id, LessonProgress.lesson_id == speaking_lesson["id"])) is None
+
+        # complete() independently checking the lock (not just relying on
+        # "no LessonProgress row exists yet") is the other half of H1 --
+        # simulate a LessonProgress row existing by whatever means (this
+        # is exactly the scenario Fable's audit described: "complete()
+        # only requires that a LessonProgress row exists") and confirm
+        # complete() itself still blocks on the lock, not just on row
+        # presence.
+        db.add(LessonProgress(user_id=user_row.id, lesson_id=speaking_lesson["id"], started_at=datetime.now(timezone.utc), completed_at=None, correct_count=0, answer_count=0, xp_earned=0))
+        db.commit()
+    complete_bypass = client.post(f"/lessons/{speaking_lesson['id']}/complete", headers=fresh_auth)
+    assert complete_bypass.status_code == 409 and complete_bypass.json()["error"]["code"] == "speaking_locked"
