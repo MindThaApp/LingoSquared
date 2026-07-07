@@ -9678,3 +9678,104 @@ unrelated en-fa unit01/02 problems tracked as unchanged across every
 entry so far tonight have themselves now been resolved, by a different
 concurrent lane, sometime between the last check and this one. The
 whole corpus is clean for the first time this session.
+
+## nl-en depth pass (now shallowest after fa-en/prs-en's fixes), 2026-07-07
+
+**Re-ran the full sweep** before this pass: all 6 directions still
+fully caught up on unit-count coverage (nl-en/fa-en/prs-en 29 units
+each, en-fa/en-prs 21 each, en-nl 28). Depth-wise, nl-en had become the
+new shallowest (11.9/unit average) precisely because fa-en's and
+prs-en's fixes earlier tonight pushed both past it — a natural
+consequence of fixing the previously-shallowest directions.
+
+**Fix**: 2 parallel workers deepened nl-en's thinnest units, mirroring
+fa-en's/prs-en's now-proven pattern (same underlying English content):
+`a1_unit01` 9→17, `a1_unit09` 10→15, `a1_unit10` 10→15, `a1_unit14`
+7→10, `a1_unit16` 8→13, `a1_unit17` 8→11. Direction total: 346→375
+templates (avg 11.9→12.9).
+
+Notable judgment calls, not just mechanical copying:
+- unit01's worker explicitly checked whether Dutch shared the Farsi/
+  Dari "fine"/"okay" identical-gloss trap from earlier tonight —
+  confirmed Dutch keeps goed/oké/slecht genuinely distinct, so no
+  workaround was needed there, but the check was done rather than
+  assumed.
+- unit10's worker recognized `turn_direction`/`street_ordinal` (2
+  members each: left/right, first/second) couldn't safely support a
+  new fill_in_blank or multiple_choice — left and right are genuinely
+  different meanings, not `interchangeable: true` candidates — and
+  used the pack's own 5-member `place` tag for the added depth
+  instead of forcing something risky onto directional vocabulary.
+- unit14/16/17's worker hit a real YAML-syntax snag: this pack's
+  `review.notes` fields are plain double-quoted scalars, not block
+  literals, so literal double quotes inside new notes text broke
+  parsing three times — fixed by switching to single quotes, matching
+  the file's own existing convention, rather than reformatting the
+  whole notes style.
+
+**Verification**: independently re-verified myself — nl-en confirmed
+at 375 templates/29 units by direct parsing, full compiler validation
+clean, `_fill_in_blank_ambiguity_check.py` still 0 AMBIGUOUS/0
+MULTI-SLOT, and `_practice_slot_check.py`'s corpus-wide "All packs"
+clean message held with zero FAIL lines anywhere — the whole-corpus
+clean state achieved in the immediately preceding entry survived this
+pass intact.
+
+## Corpus-wide practice-template integrity audit (self-reference + dead-anchor bug classes), 2026-07-07
+
+**Trigger**: with depth now tight (12-15 range) across all 6
+directions and diminishing returns on further depth-chasing, pivoted
+to a different kind of value: this project's earlier "Cross-language
+content-integrity sweep" (2026-07-06) identified 5 recurring
+authoring-failure bug classes; 2 of them are specific to Endless
+Practice templates rather than lesson content, and both had already
+surfaced independently, by accident, in different workers' ad-hoc
+catches during tonight's authoring waves (a self-reference case in
+en-nl's unit26, a dead-lesson-anchor case in fa-en's unit23) — a real
+signal that a systemic, dedicated sweep across the full corpus (not
+just tonight's new files, since older templates could have the same
+bugs and this was a first-ever dedicated check for these 2 classes)
+would find more instances nobody happened to notice.
+
+**Audit performed**: built a new reusable checker,
+`scripts/_practice_content_integrity_check.py` (kept as a permanent
+tool, following the `_practice_slot_check.py`/
+`_fill_in_blank_ambiguity_check.py` convention, since this bug class
+already recurred), checking all 157 practice files / 2056 templates
+across all 6 directions for:
+- **Dead-anchor bug**: a template's `lesson_content_key` resolving to
+  a lesson whose teaching cards' `introduced_tokens` sum to zero
+  (can never actually import/resolve at runtime).
+- **Self-reference bug**: a frame's literal (non-placeholder) text
+  colliding with one of its own slot's real candidate values,
+  reproducing the backend's exact `render_frame()`/`build_prompt()`
+  field-selection logic (byte-for-byte port from
+  `_practice_slot_check.py`'s `iter_specs()`/`lexeme_matches()`), not
+  a rough approximation.
+
+**Result: 1 real bug found and fixed, 3 mechanical flags correctly
+identified as false positives, not reflexively "fixed."** The one real
+violation: `docs/content/practice/en-prs/a1_unit15.yaml`'s
+`person_name_pair.001` was anchored to a pure reading/review lesson
+declaring zero `introduced_tokens` (same failure mode as the earlier
+fa-en catch) — re-anchored to a sibling lesson within the same file
+that genuinely introduces vocabulary, matching the pattern already
+used for its own sibling template. The 3 raw self-reference flags
+(nl-en/fa-en/prs-en's `a1_unit05.yaml` "It's ten past {item}" where
+`item` could resolve to "ten") were investigated by hand rather than
+auto-fixed: "It's ten past ten" (10:10) is a fully grammatical, correct
+English time expression, not the hospital-adjacency-style logical
+self-contradiction the bug class actually describes — left as-is,
+since removing it would only delete a valid teaching sentence for no
+real benefit. A supplementary out-of-scope pass over `feedback_frame`
+text found 10 more coincidental matches, all confirmed benign
+boilerplate, none fixed.
+
+**Verification**: independently re-verified myself after the one fix —
+`compile_content.py practice-validate` on en-prs (0 errors/0
+warnings), and a full `_practice_slot_check.py` run confirms the
+corpus-wide "All packs" clean message held with zero FAIL lines,
+matching the exact clean baseline achieved two entries prior — this
+audit's one fix introduced no regressions, and the pre-existing clean
+state has now survived three consecutive authoring/audit passes since
+it was first reached.

@@ -179,7 +179,7 @@ PRS_GLOSSES: dict[str, str] = {
     "گ": "g (letter)", "ل": "l (letter)", "م": "m (letter)", "ن": "n (letter)",
     "و": "v/o/u (letter)", "ه": "h (letter)", "ی": "y / long i (letter)",
     "سلام": "hello", "علیکم": "upon you (greeting particle)",
-    "وعلیکم": "and upon you", "خوش": "pleasant; happy", "آمدید": "you came (polite)",
+    "وعلیکم": "and upon you", "خوش": "pleasant; happy", "آمدین": "you came (polite)",
     "تشکر": "thanks", "خواهش": "request; kindness", "می‌کنم": "I do",
     "خدا": "God", "حافظ": "protector", "صبح": "morning", "بخیر": "well; good",
     "روز": "day", "عصر": "afternoon/evening", "شب": "night", "به": "to",
@@ -190,7 +190,7 @@ PRS_GLOSSES: dict[str, str] = {
     "فامیل‌تان": "your family", "است": "is", "اهل": "from; originally of",
     "خانه": "house", "شکر": "thank God; thanks", "زنده": "alive; long (may you live)",
     "باشین": "may you be (polite)", "خانهٔ": "house of", "خودتان": "yourself",
-    "بالا": "up; upstairs", "بفرمایید": "please, go ahead", "اول": "first",
+    "بالا": "up; upstairs", "بفرمایین": "please, go ahead", "اول": "first",
     "بزرگ‌ترها": "elders", "می‌کنیم": "we do", "دفتر": "office", "کابل": "Kabul",
     "حامد": "Hamed (name)", "من": "I", "همکار": "colleague", "نو": "new",
     "نجیب": "Najib (name)", "آمدین": "you came (informal, contracted)",
@@ -206,7 +206,7 @@ PRS_GLOSSES: dict[str, str] = {
     # not already covered by unit 1's dict above (checked against the
     # full unit-1 key set first to avoid silently overwriting an
     # existing, already-reviewed gloss).
-    "بدهید": "give (polite imperative, in the 'allow me to...' construction)",
+    "بدهین": "give (polite imperative, in the 'allow me to...' construction)",
     "اجازه": "permission", "همکارم": "my colleague",
     "فریدون": "Faridun (name)", "نامت": "your name (informal)",
     "هرات": "Herat (city)", "مزار": "Mazar (part of Mazar-i-Sharif)",
@@ -215,8 +215,8 @@ PRS_GLOSSES: dict[str, str] = {
     "معلم": "teacher", "مهندس": "engineer", "دوکاندار": "shopkeeper",
     "آرزو": "Arezoo (name)", "دوست": "friend", "جناب": "Mr.; sir",
     "خانم": "Ms.; Mrs.", "نزدیک": "close; near",
-    "می‌توانید": "you can (polite)", "دوباره": "again",
-    "بگویید": "say (polite imperative)", "مهمانی": "party; gathering",
+    "می‌تانین": "you can (polite)", "دوباره": "again",
+    "بگویین": "say (polite imperative)", "مهمانی": "party; gathering",
     "لیلا": "Leila (name)", "دیدن": "seeing; to see",
     "خوشحال": "happy; glad", "کجا": "where",
     "کنم": "let me do; I do (subjunctive)",
@@ -263,15 +263,15 @@ PRS_GLOSSES: dict[str, str] = {
     "شفاخانه": "hospital", "مکتب": "school", "دواخانه": "pharmacy",
     "پوسته": "post (mail)", "خانه": "house", "سفارت": "embassy",
     "میدان": "field / square", "هوایی": "aerial",
-    "کجاست": "where is (it)?", "ببخشید": "excuse me", "دور": "far",
+    "کجاست": "where is (it)?", "ببخشین": "excuse me", "دور": "far",
     "این‌جا": "here", "آن‌جا": "there", "در": "at (preposition)",
     "کنار": "side; beside", "پشت": "behind", "مقابل": "opposite",
     "زیاد": "much; a lot", "نیست": "is not", "مستقیم": "straight",
-    "بروید": "go (polite imperative)", "بعد": "after; then",
+    "بروین": "go (polite imperative)", "بعد": "after; then",
     "رهگذر": "passerby", "زرمینه": "Zarmina (name)",
     "قابلی": "worth (in \"don't mention it\")", "نداره": "doesn't have (spoken)",
     # Unit 6 (giving directions and finding your way), added 2026-07-06.
-    "چپ": "left", "راست": "right", "بپیچید": "turn (polite imperative)",
+    "چپ": "left", "راست": "right", "بپیچین": "turn (polite imperative)",
     "به": "to / toward", "بروم": "I go (subjunctive)",
     "فهمیدم": "I understood", "از": "from", "روبه‌رو": "opposite / across",
     "روبه‌روی": "across from (construct form)", "شماست": "is yours (polite)",
@@ -280,7 +280,7 @@ PRS_GLOSSES: dict[str, str] = {
     # Unit 7 (talking on the phone), added 2026-07-06.
     "الو": "hello (on the phone)", "کی": "who", "صحبت": "talk; speech",
     "می‌کند": "does / is doing", "فرید": "Farid (name)", "لطفاً": "please",
-    "آهسته": "slowly", "کنید": "do (polite imperative)", "پیام": "message",
+    "آهسته": "slowly", "کنین": "do (polite imperative)", "پیام": "message",
     "می‌خواهم": "I want", "بگذارم": "let me leave / put",
     "زنگ": "call; ring (noun)", "می‌زنم": "I make (a call)",
     "کوتاه": "short", "فردا": "tomorrow", "جلسه": "meeting",
@@ -307,13 +307,13 @@ PRS_GLOSSES: dict[str, str] = {
     "می‌شود": "would it be possible; is it okay", "چه": "what",
     "چیزی": "something / what thing", "بیاورم": "should I bring",
     "رسید": "receipt", "کرایه": "rent", "مهلت": "deadline",
-    "بیاورید": "bring (polite imperative)", "ثبت": "registration",
+    "بیارین": "bring (polite imperative)", "ثبت": "registration",
     "آخر": "end", "ماه": "month", "می‌آورم": "I bring",
     "خدمتی": "service", "می‌توانم": "I can / may I",
     "برایتان": "for you (polite)", "انجام": "performance; carrying out",
     "بدهم": "let me give / do", "کارمند": "clerk; employee",
     "کریم": "Karim (name)", "خانهٔ": "house of (construct form)",
-    "جدید": "new", "زندگی": "life; living", "می‌کنید": "you do",
+    "جدید": "new", "زندگی": "life; living", "می‌کنین": "you do",
     "گذشته": "past; last", "کافی": "enough", "روز": "day",
     "سه‌شنبه": "Tuesday", "بیایم": "may I come", "پیگیری‌تان": "your tracking (number)",
     "هزار": "thousand",
@@ -347,7 +347,7 @@ PRS_GLOSSES: dict[str, str] = {
     # reading docs/content/realizations/prs/a1_unit10_shopping.yaml
     # directly. می‌تانین/بدهین/بفرمایین are each a genuinely distinct
     # -ین-suffixed Kabul-colloquial spelling from the already-existing
-    # می‌توانید/بدهید/بفرمایید (unit02/unit01 formal forms) -- both
+    # می‌تانین/بدهین/بفرمایین (unit02/unit01 formal forms) -- both
     # spellings are real, kept as separate lexemes, not merged.
     "دوکان": "shop", "قیمت": "price", "ارزان": "cheap", "گران": "expensive",
     "تخفیف": "discount", "قیمتش": "its price", "سیب": "apple(s)",
@@ -389,7 +389,7 @@ PRS_GLOSSES: dict[str, str] = {
     # from the parallel session's units 09/11), reused as-is.
     "پلان": "plan", "پارک": "park", "برویم": "let's go (subjunctive, we)",
     "است؟": "is (it)? (question form of 'to be')",
-    "می‌خواهید": "do you want (polite)", "عالی": "great; excellent",
+    "می‌خواهین": "do you want (polite)", "عالی": "great; excellent",
     "قبول": "accepted; agreed", "متأسف": "sorry",
     "نمی‌توانم": "I can't", "دعوت": "invitation",
     "می‌بینم": "I see / I'll see", "نگار": "Negar (name)",
@@ -403,7 +403,7 @@ PRS_GLOSSES: dict[str, str] = {
     # (کدام "which" already exists in this dict from the parallel
     # session's unit09 -- reused as-is, not re-added here.)
     "قهوه": "coffee", "موسیقی": "music",
-    "دارید": "you have (polite)", "یا": "or", "جالب": "interesting",
+    "دارین": "you have (polite)", "یا": "or", "جالب": "interesting",
     "گرم": "warm",
     # Unit 15 (comparisons), added 2026-07-07. Confirmed by reading
     # docs/content/realizations/prs/a1_unit15_comparisons.yaml directly --
@@ -428,7 +428,7 @@ PRS_GLOSSES: dict[str, str] = {
     "مسافر": "traveler; passenger", "فروشنده": "seller; vendor",
     # Unit 17 (health), added 2026-07-07. Confirmed by reading
     # docs/content/realizations/prs/a1_unit17_health.yaml directly --
-    # دارم/استم/خوب/نیست/داکتر/می‌خواهم/کنید/آب/زیاد/سلام/و/تشکر/چطور/
+    # دارم/استم/خوب/نیست/داکتر/می‌خواهم/کنین/آب/زیاد/سلام/و/تشکر/چطور/
     # استین were all already glossed from earlier units, reused as-is.
     # "بشیر" (already glossed "Bashir (name)" from unit04) gets its
     # person_name tag extended below -- a real pre-existing gap, same
@@ -436,12 +436,12 @@ PRS_GLOSSES: dict[str, str] = {
     "سردرد": "headache", "تب": "fever", "دل‌درد": "stomachache",
     "مریض": "sick; ill", "حالم": "my condition / how I feel (حال + م)",
     "دوا": "medicine", "استراحت": "rest",
-    "بنوشید": "drink (polite imperative)",
+    "بنوشین": "drink (polite imperative)",
     "صاحب": "sir (respectful honorific, appended after a title)",
     # Unit 18 (work), added 2026-07-07. Confirmed by reading
     # docs/content/realizations/prs/a1_unit18_work.yaml directly --
     # معلم/مهندس/داکتر/دوکاندار/کار/استم/دفتر/دوکان/شفاخانه/مکتب/در/
-    # می‌کنم/کجا/می‌کنید/و/است/هر/روز/بشیر/شما/چیست/بلی were all already
+    # می‌کنم/کجا/می‌کنین/و/است/هر/روز/بشیر/شما/چیست/بلی were all already
     # glossed from earlier units, reused as-is. لیلا (already "Leila
     # (name)" from unit02) and می‌کند (already "does / is doing" from
     # unit07) are also reused as-is -- genuinely the same lexemes, not
@@ -463,7 +463,7 @@ PRS_POS: dict[str, str] = {
     "ف": "symbol", "ق": "symbol", "ک": "symbol", "گ": "symbol", "ل": "symbol",
     "م": "symbol", "ن": "symbol", "و": "particle", "ه": "symbol", "ی": "symbol",
     "سلام": "noun", "علیکم": "particle", "وعلیکم": "particle", "خوش": "adjective",
-    "آمدید": "verb", "تشکر": "noun", "خواهش": "noun", "می‌کنم": "verb",
+    "آمدین": "verb", "تشکر": "noun", "خواهش": "noun", "می‌کنم": "verb",
     "خدا": "noun", "حافظ": "noun", "صبح": "noun", "بخیر": "adjective",
     "روز": "noun", "عصر": "noun", "شب": "noun", "به": "preposition",
     "امید": "noun", "دیدار": "noun", "شما": "pronoun", "چطور": "adverb",
@@ -472,7 +472,7 @@ PRS_POS: dict[str, str] = {
     "همه": "pronoun", "استند": "verb", "فامیل‌تان": "noun", "است": "verb",
     "اهل": "preposition", "خانه": "noun", "شکر": "noun", "زنده": "adjective",
     "باشین": "verb", "خانهٔ": "noun", "خودتان": "pronoun", "بالا": "adverb",
-    "بفرمایید": "verb", "اول": "adverb", "بزرگ‌ترها": "noun", "می‌کنیم": "verb",
+    "بفرمایین": "verb", "اول": "adverb", "بزرگ‌ترها": "noun", "می‌کنیم": "verb",
     "دفتر": "noun", "کابل": "proper_noun", "حامد": "proper_noun", "من": "pronoun",
     "همکار": "noun", "نو": "adjective", "نجیب": "proper_noun", "آمدین": "verb",
     "نام‌تان": "noun", "چیست": "verb", "نام": "noun", "از": "preposition",
@@ -480,13 +480,13 @@ PRS_POS: dict[str, str] = {
     "همکاران": "noun", "را": "particle", "معرفی": "noun", "بسیار": "adverb",
     "این": "pronoun", "میز": "noun",
     # Unit 2 additions, added 2026-07-05.
-    "بدهید": "verb", "اجازه": "noun", "همکارم": "noun",
+    "بدهین": "verb", "اجازه": "noun", "همکارم": "noun",
     "فریدون": "proper_noun", "نامت": "noun", "هرات": "proper_noun",
     "مزار": "proper_noun", "شریف": "proper_noun", "افغانستان": "proper_noun",
     "شهر": "noun", "کار": "noun", "داکتر": "noun", "معلم": "noun",
     "مهندس": "noun", "دوکاندار": "noun", "آرزو": "proper_noun",
     "دوست": "noun", "جناب": "noun", "خانم": "noun", "نزدیک": "adjective",
-    "می‌توانید": "verb", "دوباره": "adverb", "بگویید": "verb",
+    "می‌تانین": "verb", "دوباره": "adverb", "بگویین": "verb",
     "مهمانی": "noun", "لیلا": "proper_noun", "دیدن": "noun",
     "خوشحال": "adjective", "کجا": "adverb", "کنم": "verb",
     # Unit 3 (family), added 2026-07-06.
@@ -524,14 +524,14 @@ PRS_POS: dict[str, str] = {
     "بازار": "noun", "بانک": "noun", "مسجد": "noun", "شفاخانه": "noun",
     "مکتب": "noun", "دواخانه": "noun", "پوسته": "noun", "خانه": "noun",
     "سفارت": "noun", "میدان": "noun", "هوایی": "adjective",
-    "کجاست": "verb", "ببخشید": "verb", "دور": "adjective",
+    "کجاست": "verb", "ببخشین": "verb", "دور": "adjective",
     "این‌جا": "adverb", "آن‌جا": "adverb", "در": "preposition",
     "کنار": "noun", "پشت": "preposition", "مقابل": "preposition",
     "زیاد": "adjective", "نیست": "verb", "مستقیم": "adjective",
-    "بروید": "verb", "بعد": "adverb", "رهگذر": "noun",
+    "بروین": "verb", "بعد": "adverb", "رهگذر": "noun",
     "زرمینه": "proper_noun", "قابلی": "noun", "نداره": "verb",
     # Unit 6 (directions), added 2026-07-06.
-    "چپ": "noun", "راست": "noun", "بپیچید": "verb", "به": "preposition",
+    "چپ": "noun", "راست": "noun", "بپیچین": "verb", "به": "preposition",
     "بروم": "verb", "فهمیدم": "verb", "از": "preposition",
     "روبه‌رو": "adverb", "روبه‌روی": "preposition", "شماست": "verb",
     "بسیار": "adverb", "خوب": "adjective", "سهیلا": "proper_noun",
@@ -539,7 +539,7 @@ PRS_POS: dict[str, str] = {
     # Unit 7 (communication), added 2026-07-06.
     "الو": "particle", "کی": "pronoun", "صحبت": "noun", "می‌کند": "verb",
     "فرید": "proper_noun", "لطفاً": "adverb", "آهسته": "adverb",
-    "کنید": "verb", "پیام": "noun", "می‌خواهم": "verb", "بگذارم": "verb",
+    "کنین": "verb", "پیام": "noun", "می‌خواهم": "verb", "بگذارم": "verb",
     "زنگ": "noun", "می‌زنم": "verb", "کوتاه": "adjective", "فردا": "adverb",
     "جلسه": "noun", "ساعت": "noun", "می‌رسانم": "verb", "لیمه": "proper_noun",
     "برای": "preposition", "می‌نویسم": "verb", "گذاشت": "verb",
@@ -557,12 +557,12 @@ PRS_POS: dict[str, str] = {
     "بگیرم": "verb", "چون": "particle", "خانه‌ام": "noun", "را": "particle",
     "عوض": "noun", "کردم": "verb", "باید": "verb", "آدرسم": "noun",
     "می‌شود": "verb", "چه": "pronoun", "چیزی": "pronoun", "بیاورم": "verb",
-    "رسید": "noun", "کرایه": "noun", "مهلت": "noun", "بیاورید": "verb",
+    "رسید": "noun", "کرایه": "noun", "مهلت": "noun", "بیارین": "verb",
     "ثبت": "noun", "آخر": "noun", "ماه": "noun", "می‌آورم": "verb",
     "خدمتی": "noun", "می‌توانم": "verb", "برایتان": "preposition",
     "انجام": "noun", "بدهم": "verb", "کارمند": "noun",
     "کریم": "proper_noun", "خانهٔ": "noun", "جدید": "adjective",
-    "زندگی": "noun", "می‌کنید": "verb", "گذشته": "adjective",
+    "زندگی": "noun", "می‌کنین": "verb", "گذشته": "adjective",
     "کافی": "adjective", "روز": "noun", "سه‌شنبه": "noun", "بیایم": "verb",
     "پیگیری‌تان": "noun", "هزار": "adjective",
     # A2 unit 10 (opinions), added 2026-07-06.
@@ -598,13 +598,13 @@ PRS_POS: dict[str, str] = {
     "چطور؟": "adverb",
     # Unit 13 (making plans), added 2026-07-07.
     "پلان": "noun", "پارک": "noun", "برویم": "verb", "است؟": "verb",
-    "می‌خواهید": "verb", "عالی": "adjective", "قبول": "adjective",
+    "می‌خواهین": "verb", "عالی": "adjective", "قبول": "adjective",
     "متأسف": "adjective", "نمی‌توانم": "verb", "دعوت": "noun",
     "می‌بینم": "verb", "نگار": "proper_noun",
     # Unit 14 (preferences), added 2026-07-07. (کدام already exists,
     # see the matching PRS_GLOSSES comment above.)
     "قهوه": "noun", "موسیقی": "noun",
-    "دارید": "verb", "یا": "particle", "جالب": "adjective",
+    "دارین": "verb", "یا": "particle", "جالب": "adjective",
     "گرم": "adjective",
     # Unit 15 (comparisons), added 2026-07-07.
     "آن": "pronoun", "بزرگ‌تر": "adjective", "کوچک‌تر": "adjective",
@@ -618,7 +618,7 @@ PRS_POS: dict[str, str] = {
     # Unit 17 (health), added 2026-07-07.
     "سردرد": "noun", "تب": "noun", "دل‌درد": "noun",
     "مریض": "adjective", "حالم": "noun",
-    "دوا": "noun", "استراحت": "noun", "بنوشید": "verb", "صاحب": "noun",
+    "دوا": "noun", "استراحت": "noun", "بنوشین": "verb", "صاحب": "noun",
     # Unit 18 (work), added 2026-07-07.
     "درس": "noun", "می‌دهد": "verb",
     # Unit 19 (housing), added 2026-07-07.
@@ -664,7 +664,7 @@ def prs_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         semantics.append("wellbeing_question")
     if token in {"خوب", "استم", "جور", "بد", "نیستم", "استند"}:
         semantics.append("wellbeing_answer")
-    if token in {"تشکر", "خواهش", "می‌کنم", "بفرمایید", "شکر", "بفرمایین"}:
+    if token in {"تشکر", "خواهش", "می‌کنم", "بفرمایین", "شکر", "بفرمایین"}:
         semantics.append("politeness")
     if token in {"نام", "نام‌تان", "چیست", "من", "شما", "تو", "است", "استم"}:
         semantics.append("identity")
@@ -702,9 +702,9 @@ def prs_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         semantics.append("title")
     if token in {"دوست", "همکار", "همکارم", "همکاران"}:
         semantics.append("relationship_word")
-    if token in {"اجازه", "بدهید", "معرفی", "کنم", "این"} and lesson_key.startswith("prs.a1.unit02.lesson04"):
+    if token in {"اجازه", "بدهین", "معرفی", "کنم", "این"} and lesson_key.startswith("prs.a1.unit02.lesson04"):
         semantics.append("introduction_phrase")
-    if token in {"می‌توانید", "دوباره", "بگویید", "نزدیک"}:
+    if token in {"می‌تانین", "دوباره", "بگویین", "نزدیک"}:
         semantics.append("politeness")
     if lesson_key.endswith("lesson06.gathering_dialogue"):
         semantics.append("dialogue_word")
@@ -745,7 +745,7 @@ def prs_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         semantics.append("direction_word")
     if token in {"اول", "بعد"}:
         semantics.append("sequence_word")
-    if token == "بپیچید":
+    if token == "بپیچین":
         semantics.append("turn_verb")
 
     # Unit 7 (communication) semantic tags, added 2026-07-06.
@@ -882,7 +882,7 @@ def prs_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     # Unit 13 (making plans) semantic tags, added 2026-07-07.
     if token in {"پلان", "پارک", "دعوت"}:
         semantics.append("plan_noun")
-    if token in {"برویم", "می‌خواهید", "نمی‌توانم", "می‌بینم"}:
+    if token in {"برویم", "می‌خواهین", "نمی‌توانم", "می‌بینم"}:
         semantics.append("plan_verb")
     if token in {"عالی", "قبول", "متأسف", "منتظر"}:
         semantics.append("accept_decline_word")
@@ -901,7 +901,7 @@ def prs_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         semantics.append("person_name")
 
     # Unit 14 (preferences) semantic tags, added 2026-07-07.
-    if token in {"دارم", "دارید", "دارد", "ندارم", "ندارد"}:
+    if token in {"دارم", "دارین", "دارد", "ندارم", "ندارد"}:
         semantics.append("preference_verb")
     if token in {"قهوه", "چای", "موسیقی"}:
         semantics.append("preference_topic")
@@ -975,7 +975,7 @@ def prs_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         semantics.append("health_feeling_word")
     if token in {"داکتر", "دوا"}:
         semantics.append("seek_help_noun")
-    if token in {"استراحت", "کنید", "آب", "زیاد", "بنوشید"}:
+    if token in {"استراحت", "کنین", "آب", "زیاد", "بنوشین"}:
         semantics.append("health_advice_word")
     if token == "حالم":
         semantics.append("condition_word")
@@ -995,7 +995,7 @@ def prs_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     # معلم<->مکتب, داکتر<->شفاخانه, مهندس<->دفتر, دوکاندار<->دوکان) is
     # additive on top of each token's existing city_place/shop_word tags,
     # anchored lesson02 where the pool completes. "work_verb_form"
-    # (می‌کنم/می‌کنید/می‌کند, 3 members -- deliberately excludes استم,
+    # (می‌کنم/می‌کنین/می‌کند, 3 members -- deliberately excludes استم,
     # since کار استم is ungrammatical) is a genuine compositional reuse,
     # not a homograph: each token always literally means "does/do," and
     # combining any of them with the fixed noun کار is grammatically
@@ -1006,7 +1006,7 @@ def prs_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     # anchored lesson05.
     if token in {"دفتر", "دوکان", "شفاخانه", "مکتب"}:
         semantics.append("occupation_workplace")
-    if token in {"می‌کنم", "می‌کنید", "می‌کند"}:
+    if token in {"می‌کنم", "می‌کنین", "می‌کند"}:
         semantics.append("work_verb_form")
     if token in {"درس", "می‌دهد"}:
         semantics.append("teach_word")
