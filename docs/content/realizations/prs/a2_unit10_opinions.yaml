@@ -65,6 +65,16 @@ review:
     turning و into the pronoun "he/she") in these review notes. Verified
     compile with 0 errors/0 warnings and valid JSON output post-fix.
 
+    POST-SHIP CORPUS-WIDE FIX, 2026-07-07: a project-wide sweep (prompted by
+    unit13's fresh-context reviewer flagging the same bug in units 11/12)
+    found this file also had exercises where realization prompt.target_blocks
+    duplicated the overlay's own instruction text verbatim in English -- the
+    compiler would have rendered the same sentence twice to the learner. Fixed
+    mechanically: every affected exercise's prompt set to target_blocks: [].
+    Re-verified validate+compile clean (0 errors/0 warnings) and confirmed
+    zero remaining instruction-duplicate target_blocks via a script comparing
+    every exercise's target_blocks against its overlay instruction.
+
 course:
   realization_key: prs.a2
   target_language_first: true
@@ -157,7 +167,7 @@ units:
           - content_key: prs.a2.unit10.lesson01.exercise05.write_abroad
             type: writing_prompt
             tested_text: خارج
-            prompt: {target_blocks: [{text: "Write the Dari word for abroad.", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: []}
 
       - content_key: prs.a2.unit10.lesson02.giving_an_opinion
         title: بیان نظر
@@ -196,7 +206,7 @@ units:
           - content_key: prs.a2.unit10.lesson02.exercise05.write_opinion_with_reason
             type: writing_prompt
             tested_text: "به نظر من تحصیل در خارج بهتر است چون پوهنتون‌های بهتر و فرصت کار بیشتر دارد"
-            prompt: {target_blocks: [{text: "Write that in your opinion studying abroad is better, because it has better universities and more job opportunities.", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: []}
 
       - content_key: prs.a2.unit10.lesson03.reading_an_opinion_message
         title: خواندن پیام حاوی نظر
@@ -235,7 +245,7 @@ units:
           - content_key: prs.a2.unit10.lesson03.exercise05.write_own_reply
             type: writing_prompt
             tested_text: "به نظر من تحصیل در خارج بهتر است"
-            prompt: {target_blocks: [{text: "Write your own opinion: in your opinion, studying abroad is better.", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: []}
 
       - content_key: prs.a2.unit10.lesson04.study_debate_dialogue
         title: بحث دربارهٔ تحصیل
@@ -273,21 +283,15 @@ units:
           - content_key: prs.a2.unit10.lesson04.exercise01.comprehend_ahmad_opinion
             type: dialogue_comprehension
             tested_text: "من فکر نمی‌کنم"
-            prompt:
-              target_blocks:
-                - {text: "به نظر من تحصیل در خارج بهتر است. — من فکر نمی‌کنم.", language_code: prs, direction: rtl}
-                - {text: "Does احمد agree with پروین's opinion about studying abroad?", language_code: en, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: prs.a2.unit10.lesson04.exercise02.comprehend_ahmad_reason
             type: dialogue_comprehension
             tested_text: "چون می‌خواهم نزدیک فامیلم بمانم و فکر می‌کنم می‌توانم به وطنم بیشتر کمک کنم"
-            prompt:
-              target_blocks:
-                - {text: "چون می‌خواهم نزدیک فامیلم بمانم و فکر می‌کنم می‌توانم به وطنم بیشتر کمک کنم.", language_code: prs, direction: rtl}
-                - {text: "What reasons does احمد give for wanting to stay?", language_code: en, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: prs.a2.unit10.lesson04.exercise03.recognize_who_prefers_what
             type: multiple_choice
             tested_text: "پروین خارج احمد وطن"
-            prompt: {target_blocks: [{text: "Who prefers studying abroad, and who prefers staying in the homeland?", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: []}
           - content_key: prs.a2.unit10.lesson04.exercise04.order_i_dont_think_so
             type: word_order
             tested_text: "من فکر نمی‌کنم"
@@ -300,4 +304,4 @@ units:
           - content_key: prs.a2.unit10.lesson04.exercise06.write_debate_summary
             type: writing_prompt
             tested_text: "به نظر من تحصیل در خارج بهتر است من فکر نمی‌کنم"
-            prompt: {target_blocks: [{text: "Write down what پروین said, then what احمد said, in their own words.", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: []}

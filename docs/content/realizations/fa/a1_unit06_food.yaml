@@ -11,7 +11,7 @@ generation_provenance:
 review:
   status: reviewed
   required_next_reviewer: null
-  notes: "Fresh-context review: fixed lesson06 exercise pacing (production items moved after recognition/drag), replaced a leftover FSI-register archaism (بسیار خب -> خیلی خب) in the dialogue, corrected a copy-paste tested_text mismatch in lesson03.exercise07, and resolved an ambiguous listen_select distractor set in lesson01.exercise03. Dialect verified as Iranian fa_IR_standard_colloquial_intro throughout, script purity confirmed (no Arabic-range codepoints), no jargon leaks, no YAML boolean footguns. Compiler validation: 0 errors/0 warnings across all fa units 01-06. Audio remains pending generation. AUDIO-ACCESSIBILITY RETROFIT 2026-07-06 (§14, project-wide audit): found 9 exercises in this unit (lesson01.exercise03, lesson02.exercise03/06, lesson03.exercise03/06, lesson04.exercise03, lesson05.exercise03/06, lesson06.exercise03) were listen_type or bare-prompt listen_select items -- genuinely unanswerable since fa/prs have zero working TTS/recorded audio. Converted: listen_select -> multiple_choice (visible Farsi prompt, English glosses to avoid re-introducing the prompt-shows-answer bug -- the initial lesson01.exercise03 fix pass first mistakenly kept Persian-script distractors matching the prompt's own script, caught and corrected to English glosses before finalizing), listen_type -> translation. MATCHING_PAIRS SCALE (§16) CHECK: all matching_pairs exercises (7/2/5/6/6) already reasonably sized except match_register at 2, which is a genuine narrow polite/informal ordering-verb contrast with no more taught vocabulary in that specific category to pool -- left unchanged. Re-verified 0 remaining §14 violations via script, content_key parity intact, validate+compile both clean after the retrofit."
+  notes: "Fresh-context review: fixed lesson06 exercise pacing (production items moved after recognition/drag), replaced a leftover FSI-register archaism (بسیار خب -> خیلی خب) in the dialogue, corrected a copy-paste tested_text mismatch in lesson03.exercise07, and resolved an ambiguous listen_select distractor set in lesson01.exercise03. Dialect verified as Iranian fa_IR_standard_colloquial_intro throughout, script purity confirmed (no Arabic-range codepoints), no jargon leaks, no YAML boolean footguns. Compiler validation: 0 errors/0 warnings across all fa units 01-06. Audio remains pending generation. AUDIO-ACCESSIBILITY RETROFIT 2026-07-06 (§14, project-wide audit): found 9 exercises in this unit (lesson01.exercise03, lesson02.exercise03/06, lesson03.exercise03/06, lesson04.exercise03, lesson05.exercise03/06, lesson06.exercise03) were listen_type or bare-prompt listen_select items -- genuinely unanswerable since fa/prs have zero working TTS/recorded audio. Converted: listen_select -> multiple_choice (visible Farsi prompt, English glosses to avoid re-introducing the prompt-shows-answer bug -- the initial lesson01.exercise03 fix pass first mistakenly kept Persian-script distractors matching the prompt's own script, caught and corrected to English glosses before finalizing), listen_type -> translation. MATCHING_PAIRS SCALE (§16) CHECK: all matching_pairs exercises (7/2/5/6/6) already reasonably sized except match_register at 2, which is a genuine narrow polite/informal ordering-verb contrast with no more taught vocabulary in that specific category to pool -- left unchanged. Re-verified 0 remaining §14 violations via script, content_key parity intact, validate+compile both clean after the retrofit. POST-SHIP CORPUS-WIDE FIX, 2026-07-07: a project-wide sweep (prompted by unit13's fresh-context reviewer flagging the same bug in units 11/12) found this file also had exercises where realization prompt.target_blocks duplicated the overlay's own instruction text verbatim in English -- the compiler would have rendered the same sentence twice to the learner. Fixed mechanically: every affected exercise's prompt set to target_blocks: []. Re-verified validate+compile clean (0 errors/0 warnings) and confirmed zero remaining instruction-duplicate target_blocks via a script comparing every exercise's target_blocks against its overlay instruction."
 
 course:
   realization_key: fa.a1
@@ -222,7 +222,7 @@ units:
           - content_key: fa.a1.unit06.lesson02.exercise08.speak_order
             type: speak_response
             tested_text: می‌خواستم لطفاً
-            prompt: {target_blocks: [{text: "You are ordering from a waiter you've never met. Politely ask for a coffee.", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: []}
 
       - content_key: fa.a1.unit06.lesson03.menu_and_recommendation
         title: منو و پیشنهاد گارسون
@@ -403,9 +403,7 @@ units:
           - content_key: fa.a1.unit06.lesson05.exercise04.nooshe_jan_meaning
             type: multiple_choice
             tested_text: نوش جان
-            prompt:
-              target_blocks:
-                - {text: "When does a host or another diner say نوش جان?", language_code: en, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: fa.a1.unit06.lesson05.exercise05.order_delicious
             type: word_order
             tested_text: خیلی خوشمزه بود

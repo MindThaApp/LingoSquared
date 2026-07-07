@@ -57,6 +57,16 @@ review:
     found; see the matching overlay file's review notes for the fixes
     actually made (all were on the overlay side).
 
+    POST-SHIP CORPUS-WIDE FIX, 2026-07-07: a project-wide sweep (prompted by
+    unit13's fresh-context reviewer flagging the same bug in units 11/12)
+    found this file also had exercises where realization prompt.target_blocks
+    duplicated the overlay's own instruction text verbatim in English -- the
+    compiler would have rendered the same sentence twice to the learner. Fixed
+    mechanically: every affected exercise's prompt set to target_blocks: [].
+    Re-verified validate+compile clean (0 errors/0 warnings) and confirmed
+    zero remaining instruction-duplicate target_blocks via a script comparing
+    every exercise's target_blocks against its overlay instruction.
+
 course:
   realization_key: prs.a2
   target_language_first: true
@@ -155,7 +165,7 @@ units:
           - content_key: prs.a2.unit09.lesson01.exercise05.write_tazkira
             type: writing_prompt
             tested_text: تذکره
-            prompt: {target_blocks: [{text: "Write the Dari word for the national ID booklet.", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: []}
 
       - content_key: prs.a2.unit09.lesson02.making_an_appointment
         title: وقت گرفتن
@@ -194,7 +204,7 @@ units:
           - content_key: prs.a2.unit09.lesson02.exercise05.write_appointment_request
             type: writing_prompt
             tested_text: "می‌خواستم برای تغییر آدرس وقت بگیرم"
-            prompt: {target_blocks: [{text: "Write that you'd like to make an appointment to change your address.", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: []}
 
       - content_key: prs.a2.unit09.lesson03.reading_the_notice
         title: خواندن اعلامیه
@@ -237,7 +247,7 @@ units:
           - content_key: prs.a2.unit09.lesson03.exercise05.write_will_bring_receipt
             type: writing_prompt
             tested_text: "رسید کرایه خانه را می‌آورم"
-            prompt: {target_blocks: [{text: "Write that you'll bring the rent receipt.", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: []}
 
       - content_key: prs.a2.unit09.lesson04.at_the_municipality_office
         title: در شاروالی
@@ -275,21 +285,15 @@ units:
           - content_key: prs.a2.unit09.lesson04.exercise01.comprehend_since_when
             type: dialogue_comprehension
             tested_text: "از ماه گذشته"
-            prompt:
-              target_blocks:
-                - {text: "از کی در خانهٔ جدید زندگی می‌کنید؟ — از ماه گذشته. می‌شود بگویید چه چیزی باید بیاورم؟", language_code: prs, direction: rtl}
-                - {text: "Since when has کریم lived at the new house?", language_code: en, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: prs.a2.unit09.lesson04.exercise02.comprehend_required_documents
             type: dialogue_comprehension
             tested_text: "تذکره و یک رسید کرایه خانه"
-            prompt:
-              target_blocks:
-                - {text: "تذکره و یک رسید کرایه خانه کافی است.", language_code: prs, direction: rtl}
-                - {text: "What does the clerk say کریم needs to bring?", language_code: en, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: prs.a2.unit09.lesson04.exercise03.recognize_appointment_day
             type: multiple_choice
             tested_text: "سه‌شنبه ساعت ده"
-            prompt: {target_blocks: [{text: "کریم's appointment is for which day and time?", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: []}
           - content_key: prs.a2.unit09.lesson04.exercise04.order_since_when_question
             type: word_order
             tested_text: "از کی در خانهٔ جدید زندگی می‌کنید"
@@ -302,4 +306,4 @@ units:
           - content_key: prs.a2.unit09.lesson04.exercise06.write_registry_summary
             type: writing_prompt
             tested_text: "تذکره و یک رسید کرایه خانه کافی است"
-            prompt: {target_blocks: [{text: "Write, quoting the clerk, what documents are enough to bring.", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: []}

@@ -1,0 +1,357 @@
+schema_version: "1.0"
+realization_version: "2026.1-draft.1"
+target_language: fa
+cefr_level: A1
+status: complete_draft
+generation_provenance:
+  method: ai_adapted_from_public_domain_source
+  authoring_system: claude
+  source_material: "Peace Corps Farsi course materials (public domain), modernized"
+  human_reviewed: false
+review:
+  status: reviewed
+  required_next_reviewer: null
+  notes: "New unit, fa's next uncovered outcome (universal.a1.housing.describe_home, prerequisites: places/unit05 and numbers/unit03, both already covered). Six lessons: basic room vocabulary (اتاق خواب/آشپزخانه/حمام), describing a house with numbers/quantities (چند تا اتاق خواب), household objects (تخت/میز/صندلی), location within the home (تو/کنار/بالای), reading a short housing description, and a dialogue about someone's apartment. Colloquial -e/-am contraction register maintained throughout, هستم copula family. Authored independently of the prs realization per the sibling-isolation rule. Authored §14/§16/§17-compliant from the start: no listen_type/listen_select/listen_order exercises anywhere (continuing the established text-based pattern from units 01-18 for corpus consistency, even though fa now has real TTS per §14's 2026-07-06 revision -- see unit18's own notes), every matching_pairs exercise sized 6 pairs except lesson01's genuine 4-pair first-lesson ceiling, and zero fill_in_blank exercises. Multi-clause exercises include period-joined, comma-joined, and و-joined accepted variants per §12 at every clause boundary (applying the exact lesson unit17's own review required), and open-ended production exercises carry multiple accepted room/object variants from the start. Compiler validation clean (0 errors/0 warnings). Awaiting the standing fresh-context review before status can move to reviewed.
+
+    FRESH-CONTEXT REVIEW, 2026-07-07 (zero prior access to this unit's authoring reasoning, prs sibling files never opened, per §8/§9): confirmed spine-outcome discipline (all 6 lessons genuinely serve universal.a1.housing.describe_home, no drift) and all 4 assessment_requirements covered (understand_home_description via lesson05/06's reading_comprehension/dialogue_comprehension pairs, read-substituting-for-listening per the same precedent already accepted in units 17/18's own fresh-context reviews since this unit's own audio remains pending_generation; describe_home via the translate/dialogue_response exercises; read_housing_description via lesson05's reading pair; write_home_description via lesson05/06's writing_prompt exercises). Verified recognition->drag/matching->production pacing in all 6 lessons. Grepped both files: zero listen_type/listen_select/listen_order/fill_in_blank exercises, correctly not flagged as a gap despite §14 now permitting fa audio content (a deliberate, documented corpus-consistency choice, consistent with units 17/18). Verified §16 matching_pairs sizing exactly as claimed via script (lesson01: 4, lessons02-06: 6 each). Grepped both files for Arabic-range kaf (U+0643)/yeh (U+064A): zero found. Independently re-derived the YAML-boolean footgun check: wrote a fresh recursive yaml.safe_load dict-value scan across both files from scratch (not trusting the pre-review fix) -- found only the two legitimate schema booleans (generation_provenance.human_reviewed, course.target_language_first), zero stray Yes/No/true/false in any correct_option/distractors/accepted_answers/pairs field; specifically re-confirmed lesson06.exercise03's correct_option/distractors/accepted_answers are all correctly quoted strings ('Yes'/'No'), the pre-review fix was correct and no second instance exists anywhere in either file. Confirmed content_key parity exact in both directions via script (29 teaching + 30 exercise keys, plus units/lessons dicts, zero mismatches). Confirmed all 7 exercise types used (multiple_choice, matching_pairs, translation, reading_comprehension, writing_prompt, dialogue_comprehension, dialogue_response) are registered in frontend/src/components/exercises/ExerciseRenderer.tsx. Wrote a real duplicate-instruction-vs-target_blocks script (yaml.safe_load both files, casefold compare of every exercise's en-language prompt.target_blocks against that exercise's overlay instruction): zero duplicates found -- this realization in fact carries zero language_code:en target_blocks at all in this unit, so there's no vector for that bug class here. Read backend/app/api/router.py's grade()/is_multi_answer_response() and confirmed lesson05.exercise05 (write_own_home_description) and lesson06.exercise05 (write_home_summary)'s multi-variant open-ended acceptance is genuine multi-answer grading (any accepted-list item matches, confirmed directly in the compiled JSON's correct_response.accepted arrays), and that all 30 exercises have a genuine non-empty correct_response, with answer_language_code correctly resolving to fa for translation/writing_prompt/dialogue_response exercises (reading_comprehension/dialogue_comprehension/multiple_choice correctly carry English correct_option/distractors since those render as button-choice UI with no virtual keyboard involved, per §6's explicit exemption -- confirmed against ReadingComprehension.tsx). Verified every multiple_choice/reading_comprehension/dialogue_comprehension exercise pairs a Farsi prompt with English-only correct_option/distractors -- no same-script visual-matching shortcut anywhere. Wrote a ZWNJ-aware, punctuation-stripping Python tokenizer from scratch and checked every exercise's tested_text/pairs/word_bank plus the overlay's Farsi-side accepted_answers/correct_option/distractors against cumulative file-scoped introduced_tokens, processed in lesson/card order: zero untaught-vocabulary gaps found, independently confirming the mid-authoring fixes (و moved to lesson03 before its lesson03 use; تخته/آشپزخانه‌س given their own lesson04 teaching cards as distinct fused tokens from تخت/آشپزخانه; من and خونه‌ی given lesson05 teaching cards before the lesson05 reading text uses them) are complete with no residual or newly-introduced gap. Verified the -e/-s colloquial copula-contraction rule directly: تخت (consonant-final) + است -> تخته (-e form) and آشپزخانه (vowel-final, ends in ه) + است -> آشپزخانه‌س (-s form via ZWNJ) are both correctly formed per the standard rule (-e after a consonant, -s/-ss after a vowel-final word); خونه‌ی من (ezafe -ی after the vowel-final خونه, marking possession) is natural and correctly formed. Verified every other target vocabulary item (خونه, اتاق خواب, آشپزخانه, حموم, چند تا, داره, تخت/میز/صندلی, تو/کنار/بالای, یه) is natural, correct, idiomatic colloquial Tehrani Farsi for describing a home, consistent with units 17/18's register (هستم-family copula/contraction pattern, نیما/سارا names, و taught before use as a multi-clause joiner). Cross-checked §11 facts: lesson06's Nima/Sara dialogue (Sara's house: two bedrooms, a kitchen, and a bathroom) and lesson05's anonymous first-person reading text (also two bedrooms, a kitchen, and a bathroom) are correctly two independent, unconnected examples reusing the unit's core vocabulary -- lesson05's text names no one, so there is no accidental implication they're the same house or person. Confirmed §12 multi-clause coverage: write_home_summary (lesson06, the unit's one genuine two-fact combination) carries period-joined, comma-joined, and و-joined accepted variants, all verified present in the actual compiled correct_response.accepted list; the unit's other open-ended exercises (write_own_home_description) are independent single-fact alternatives rather than one combined claim, so no additional join-forms were needed there. Confirmed A1-appropriate complexity throughout. Grepped for internal-jargon leaks (bare snake_case tokens) across every learner-facing overlay string: none found. Re-ran validate + compile after confirming zero issues needed fixing: 0 errors/0 warnings, valid JSON, and the actual compiled output was spot-checked directly (not just validate) to confirm all 30 exercises have a genuine non-empty correct_response and answer_language_code correctly resolves to fa for every translation/writing_prompt/dialogue_response exercise per §6."
+
+course:
+  realization_key: fa.a1
+  target_language_first: true
+  dialect: fa_IR_standard_colloquial_intro
+  register_policy: >-
+    Continues the established colloquial -e/-am contraction pattern and
+    هستم copula, consistent with units 07-18.
+
+media_assets:
+  - content_key: fa.a1.audio.housing.description.01
+    language: fa
+    text: "خونه‌ی من دو تا اتاق خواب داره"
+    voice_hint: neutral_adult
+    status: pending_generation
+  - content_key: fa.a1.audio.dialogue.housing.01
+    language: fa
+    text: "نیما: خونه‌ت چطوره؟ سارا: خوبه. دو تا اتاق خواب و یه آشپزخانه داره. نیما: حموم هم داره؟ سارا: آره، یه حموم هم داره."
+    voice_hint: two_adults_neutral_polite
+    status: pending_generation
+
+units:
+  - content_key: fa.a1.unit19.housing
+    title: خانه
+    section: reading_writing
+    spine_outcome_ids:
+      - universal.a1.housing.describe_home
+    planned_lesson_count: 6
+
+    lessons:
+      - content_key: fa.a1.unit19.lesson01.basic_room_vocab
+        title: واژه‌های اتاق
+        spine_outcome_id: universal.a1.housing.describe_home
+        teaching:
+          - content_key: fa.a1.unit19.lesson01.teach.khoone_word
+            kind: vocabulary
+            target: {text: خونه, language_code: fa, direction: rtl}
+            introduced_tokens: [خونه]
+          - content_key: fa.a1.unit19.lesson01.teach.otagh_khab_word
+            kind: vocabulary
+            target: {text: "اتاق خواب", language_code: fa, direction: rtl}
+            introduced_tokens: ["اتاق", خواب]
+          - content_key: fa.a1.unit19.lesson01.teach.ashpazkhone_word
+            kind: vocabulary
+            target: {text: آشپزخانه, language_code: fa, direction: rtl}
+            introduced_tokens: [آشپزخانه]
+          - content_key: fa.a1.unit19.lesson01.teach.hamoom_word
+            kind: vocabulary
+            target: {text: حموم, language_code: fa, direction: rtl}
+            introduced_tokens: [حموم]
+        exercises:
+          - content_key: fa.a1.unit19.lesson01.exercise01.recognize_otagh_khab
+            type: multiple_choice
+            tested_text: "اتاق خواب"
+            prompt: {target_blocks: [{text: "اتاق خواب", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit19.lesson01.exercise02.recognize_ashpazkhone
+            type: multiple_choice
+            tested_text: آشپزخانه
+            prompt: {target_blocks: [{text: آشپزخانه, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit19.lesson01.exercise03.match_room_vocab
+            type: matching_pairs
+            tested_text: "خونه اتاق خواب آشپزخانه حموم"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: خونه, right: house}
+              - {left: "اتاق خواب", right: bedroom}
+              - {left: آشپزخانه, right: kitchen}
+              - {left: حموم, right: bathroom}
+          - content_key: fa.a1.unit19.lesson01.exercise04.translate_house
+            type: translation
+            tested_text: خونه
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit19.lesson01.exercise05.translate_bedroom
+            type: translation
+            tested_text: "اتاق خواب"
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit19.lesson02.describing_with_numbers
+        title: توصیف با عدد
+        spine_outcome_id: universal.a1.housing.describe_home
+        teaching:
+          - content_key: fa.a1.unit19.lesson02.teach.chand_ta_word
+            kind: grammar_note
+            target: {text: "چند تا (how many)", language_code: fa, direction: rtl}
+            introduced_tokens: [چند, تا]
+          - content_key: fa.a1.unit19.lesson02.teach.do_ta_word
+            kind: vocabulary
+            target: {text: "دو تا", language_code: fa, direction: rtl}
+            introduced_tokens: [دو]
+          - content_key: fa.a1.unit19.lesson02.teach.dare_word
+            kind: grammar_note
+            target: {text: "داره (it has, colloquial)", language_code: fa, direction: rtl}
+            introduced_tokens: [داره]
+        exercises:
+          - content_key: fa.a1.unit19.lesson02.exercise01.recognize_chand_ta
+            type: multiple_choice
+            tested_text: "چند تا"
+            prompt: {target_blocks: [{text: "چند تا", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit19.lesson02.exercise02.recognize_dare
+            type: multiple_choice
+            tested_text: داره
+            prompt: {target_blocks: [{text: داره, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit19.lesson02.exercise03.match_number_vocab
+            type: matching_pairs
+            tested_text: "چند تا دو تا داره اتاق خواب آشپزخانه"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "چند تا", right: "how many"}
+              - {left: "دو تا", right: two}
+              - {left: داره, right: "it has"}
+              - {left: "اتاق خواب", right: bedroom}
+              - {left: آشپزخانه, right: kitchen}
+              - {left: حموم, right: bathroom}
+          - content_key: fa.a1.unit19.lesson02.exercise04.translate_how_many_bedrooms
+            type: translation
+            tested_text: "چند تا اتاق خواب داره؟"
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit19.lesson02.exercise05.translate_two_bedrooms
+            type: translation
+            tested_text: "دو تا اتاق خواب داره"
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit19.lesson03.household_objects
+        title: وسایل خونه
+        spine_outcome_id: universal.a1.housing.describe_home
+        teaching:
+          - content_key: fa.a1.unit19.lesson03.teach.takht_word
+            kind: vocabulary
+            target: {text: تخت, language_code: fa, direction: rtl}
+            introduced_tokens: [تخت]
+          - content_key: fa.a1.unit19.lesson03.teach.miz_word
+            kind: vocabulary
+            target: {text: میز, language_code: fa, direction: rtl}
+            introduced_tokens: [میز]
+          - content_key: fa.a1.unit19.lesson03.teach.sandali_word
+            kind: vocabulary
+            target: {text: صندلی, language_code: fa, direction: rtl}
+            introduced_tokens: [صندلی]
+          - content_key: fa.a1.unit19.lesson03.teach.ye_word
+            kind: grammar_note
+            target: {text: "یه (a/one, colloquial)", language_code: fa, direction: rtl}
+            introduced_tokens: [یه]
+          - content_key: fa.a1.unit19.lesson03.teach.va_word
+            kind: grammar_note
+            target: {text: "و (and)", language_code: fa, direction: rtl}
+            introduced_tokens: [و]
+        exercises:
+          - content_key: fa.a1.unit19.lesson03.exercise01.recognize_takht
+            type: multiple_choice
+            tested_text: تخت
+            prompt: {target_blocks: [{text: تخت, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit19.lesson03.exercise02.recognize_miz
+            type: multiple_choice
+            tested_text: میز
+            prompt: {target_blocks: [{text: میز, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit19.lesson03.exercise03.match_object_vocab
+            type: matching_pairs
+            tested_text: "تخت میز صندلی اتاق خواب داره"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: تخت, right: bed}
+              - {left: میز, right: table}
+              - {left: صندلی, right: chair}
+              - {left: "اتاق خواب", right: bedroom}
+              - {left: داره, right: "it has"}
+              - {left: "چند تا", right: "how many"}
+          - content_key: fa.a1.unit19.lesson03.exercise04.translate_a_table_and_chair
+            type: translation
+            tested_text: "یه میز و یه صندلی"
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit19.lesson03.exercise05.translate_bedroom_has_bed
+            type: translation
+            tested_text: "اتاق خواب یه تخت داره"
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit19.lesson04.location_in_home
+        title: مکان تو خونه
+        spine_outcome_id: universal.a1.housing.describe_home
+        teaching:
+          - content_key: fa.a1.unit19.lesson04.teach.too_word
+            kind: grammar_note
+            target: {text: "تو (in/inside)", language_code: fa, direction: rtl}
+            introduced_tokens: [تو]
+          - content_key: fa.a1.unit19.lesson04.teach.kenar_word
+            kind: grammar_note
+            target: {text: "کنار (next to)", language_code: fa, direction: rtl}
+            introduced_tokens: [کنار]
+          - content_key: fa.a1.unit19.lesson04.teach.balaye_word
+            kind: grammar_note
+            target: {text: "بالای (above/on top of)", language_code: fa, direction: rtl}
+            introduced_tokens: ["بالای"]
+          - content_key: fa.a1.unit19.lesson04.teach.takhte_word
+            kind: grammar_note
+            target: {text: "تخته (it's the bed, colloquial)", language_code: fa, direction: rtl}
+            introduced_tokens: [تخته]
+          - content_key: fa.a1.unit19.lesson04.teach.ashpazkhones_word
+            kind: grammar_note
+            target: {text: "آشپزخانه‌س (it's the kitchen, colloquial)", language_code: fa, direction: rtl}
+            introduced_tokens: ["آشپزخانه‌س"]
+        exercises:
+          - content_key: fa.a1.unit19.lesson04.exercise01.recognize_too
+            type: multiple_choice
+            tested_text: تو
+            prompt: {target_blocks: [{text: تو, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit19.lesson04.exercise02.recognize_kenar
+            type: multiple_choice
+            tested_text: کنار
+            prompt: {target_blocks: [{text: کنار, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit19.lesson04.exercise03.match_location_vocab
+            type: matching_pairs
+            tested_text: "تو کنار بالای تخت میز صندلی"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: تو, right: "in/inside"}
+              - {left: کنار, right: "next to"}
+              - {left: "بالای", right: "above/on top of"}
+              - {left: تخت, right: bed}
+              - {left: میز, right: table}
+              - {left: صندلی, right: chair}
+          - content_key: fa.a1.unit19.lesson04.exercise04.translate_table_next_to_bed
+            type: translation
+            tested_text: "میز کنار تخته"
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit19.lesson04.exercise05.translate_chair_in_kitchen
+            type: translation
+            tested_text: "صندلی تو آشپزخانه‌س"
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit19.lesson05.reading_a_housing_description
+        title: خواندن توصیف خونه
+        spine_outcome_id: universal.a1.housing.describe_home
+        teaching:
+          - content_key: fa.a1.unit19.lesson05.teach.ham_word
+            kind: grammar_note
+            target: {text: "هم (also/too)", language_code: fa, direction: rtl}
+            introduced_tokens: [هم]
+          - content_key: fa.a1.unit19.lesson05.teach.man_word
+            kind: vocabulary
+            target: {text: من, language_code: fa, direction: rtl}
+            introduced_tokens: [من]
+          - content_key: fa.a1.unit19.lesson05.teach.khoonye_word
+            kind: grammar_note
+            target: {text: "خونه‌ی (house of / my house, ezafe form)", language_code: fa, direction: rtl}
+            introduced_tokens: ["خونه‌ی"]
+          - content_key: fa.a1.unit19.lesson05.teach.reading_text
+            kind: reading
+            target: {text: "خونه‌ی من دو تا اتاق خواب داره. یه آشپزخانه و یه حموم هم داره", language_code: fa, direction: rtl}
+            introduced_tokens: []
+        exercises:
+          - content_key: fa.a1.unit19.lesson05.exercise01.reading_comprehension_how_many_bedrooms
+            type: reading_comprehension
+            tested_text: "خونه‌ی من دو تا اتاق خواب داره. یه آشپزخانه و یه حموم هم داره"
+            prompt: {target_blocks: [{text: "خونه‌ی من دو تا اتاق خواب داره. یه آشپزخانه و یه حموم هم داره", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit19.lesson05.exercise02.reading_comprehension_what_else
+            type: reading_comprehension
+            tested_text: "خونه‌ی من دو تا اتاق خواب داره. یه آشپزخانه و یه حموم هم داره"
+            prompt: {target_blocks: [{text: "خونه‌ی من دو تا اتاق خواب داره. یه آشپزخانه و یه حموم هم داره", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit19.lesson05.exercise03.match_reading_vocab
+            type: matching_pairs
+            tested_text: "خونه دو تا اتاق خواب آشپزخانه حموم یه"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: خونه, right: house}
+              - {left: "دو تا", right: two}
+              - {left: "اتاق خواب", right: bedroom}
+              - {left: آشپزخانه, right: kitchen}
+              - {left: حموم, right: bathroom}
+              - {left: یه, right: "a/one"}
+          - content_key: fa.a1.unit19.lesson05.exercise04.translate_house_has_two_bedrooms
+            type: translation
+            tested_text: "خونه‌ی من دو تا اتاق خواب داره"
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit19.lesson05.exercise05.write_own_home_description
+            type: writing_prompt
+            tested_text: "خونه‌ی من یه اتاق خواب داره"
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit19.lesson06.housing_dialogue
+        title: گفتگوی خونه
+        spine_outcome_id: universal.a1.housing.describe_home
+        teaching:
+          - content_key: fa.a1.unit19.lesson06.teach.names
+            kind: vocabulary
+            target: {text: "نیما، سارا", language_code: fa, direction: rtl}
+            introduced_tokens: [نیما, سارا]
+          - content_key: fa.a1.unit19.lesson06.teach.khoonet_chetore_phrase
+            kind: phrase
+            target: {text: "خونه‌ت چطوره؟", language_code: fa, direction: rtl}
+            introduced_tokens: ["خونه‌ت", چطوره]
+          - content_key: fa.a1.unit19.lesson06.teach.khoobe_word
+            kind: vocabulary
+            target: {text: خوبه, language_code: fa, direction: rtl}
+            introduced_tokens: [خوبه]
+          - content_key: fa.a1.unit19.lesson06.teach.aare_word
+            kind: vocabulary
+            target: {text: آره, language_code: fa, direction: rtl}
+            introduced_tokens: [آره]
+          - content_key: fa.a1.unit19.lesson06.teach.dialogue_line1
+            kind: dialogue
+            target: {text: "خونه‌ت چطوره؟", language_code: fa, direction: rtl, speaker: نیما}
+            introduced_tokens: []
+          - content_key: fa.a1.unit19.lesson06.teach.dialogue_line2
+            kind: dialogue
+            target: {text: "خوبه. دو تا اتاق خواب و یه آشپزخانه داره", language_code: fa, direction: rtl, speaker: سارا}
+            introduced_tokens: []
+          - content_key: fa.a1.unit19.lesson06.teach.dialogue_line3
+            kind: dialogue
+            target: {text: "حموم هم داره؟", language_code: fa, direction: rtl, speaker: نیما}
+            introduced_tokens: []
+          - content_key: fa.a1.unit19.lesson06.teach.dialogue_line4
+            kind: dialogue
+            target: {text: "آره، یه حموم هم داره", language_code: fa, direction: rtl, speaker: سارا}
+            introduced_tokens: []
+        exercises:
+          - content_key: fa.a1.unit19.lesson06.exercise01.dialogue_comprehension_context
+            type: dialogue_comprehension
+            tested_text: "خونه‌ت چطوره خوبه دو تا اتاق خواب و یه آشپزخانه داره حموم هم داره آره یه حموم هم داره"
+            prompt: {target_blocks: [{text: "نیما: خونه‌ت چطوره؟ سارا: خوبه. دو تا اتاق خواب و یه آشپزخانه داره. نیما: حموم هم داره؟ سارا: آره، یه حموم هم داره.", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit19.lesson06.exercise02.match_dialogue_facts
+            type: matching_pairs
+            tested_text: "نیما سارا اتاق خواب آشپزخانه حموم خوبه"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: نیما, right: Nima}
+              - {left: سارا, right: Sara}
+              - {left: "اتاق خواب", right: bedroom}
+              - {left: آشپزخانه, right: kitchen}
+              - {left: حموم, right: bathroom}
+              - {left: خوبه, right: "it's good"}
+          - content_key: fa.a1.unit19.lesson06.exercise03.reading_comprehension_does_it_have_bathroom
+            type: reading_comprehension
+            tested_text: "آره، یه حموم هم داره"
+            prompt: {target_blocks: [{text: "حموم هم داره؟ آره، یه حموم هم داره", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit19.lesson06.exercise04.dialogue_response_describe_home
+            type: dialogue_response
+            tested_text: "دو تا اتاق خواب داره"
+            prompt: {target_blocks: [{text: "خونه‌ت چطوره؟", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit19.lesson06.exercise05.write_home_summary
+            type: writing_prompt
+            tested_text: "خونه‌ی سارا دو تا اتاق خواب داره و یه آشپزخانه داره"
+            prompt: {target_blocks: []}

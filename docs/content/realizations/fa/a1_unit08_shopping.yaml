@@ -79,6 +79,16 @@ review:
     retrofit. This is the last of all 18 fa/prs A1 units to complete
     this retrofit.
 
+    POST-SHIP CORPUS-WIDE FIX, 2026-07-07: a project-wide sweep (prompted by
+    unit13's fresh-context reviewer flagging the same bug in units 11/12)
+    found this file also had exercises where realization prompt.target_blocks
+    duplicated the overlay's own instruction text verbatim in English -- the
+    compiler would have rendered the same sentence twice to the learner. Fixed
+    mechanically: every affected exercise's prompt set to target_blocks: [].
+    Re-verified validate+compile clean (0 errors/0 warnings) and confirmed
+    zero remaining instruction-duplicate target_blocks via a script comparing
+    every exercise's target_blocks against its overlay instruction.
+
 course:
   realization_key: fa.a1
   target_language_first: true
@@ -188,7 +198,7 @@ units:
           - content_key: fa.a1.unit08.lesson01.exercise07.write_apple
             type: writing_prompt
             tested_text: سیب
-            prompt: {target_blocks: [{text: "Write the Farsi word for apple.", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: []}
 
       - content_key: fa.a1.unit08.lesson02.asking_the_price
         title: پرسیدن قیمت
@@ -243,7 +253,7 @@ units:
           - content_key: fa.a1.unit08.lesson02.exercise07.speak_ask_price
             type: speak_response
             tested_text: این چنده
-            prompt: {target_blocks: [{text: "You'd like to know the price of an item. Ask the shopkeeper.", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: []}
 
       - content_key: fa.a1.unit08.lesson03.quantities_in_shopping
         title: مقدار در خرید
@@ -346,7 +356,7 @@ units:
           - content_key: fa.a1.unit08.lesson04.exercise07.speak_ask_discount
             type: speak_response
             tested_text: تخفیف می‌دید
-            prompt: {target_blocks: [{text: "Ask the shopkeeper if they give a discount.", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: []}
 
       - content_key: fa.a1.unit08.lesson05.paying
         title: حساب کردن
@@ -452,9 +462,7 @@ units:
           - content_key: fa.a1.unit08.lesson06.exercise02.recognize_original_price
             type: multiple_choice
             tested_text: سی تومن کیلویی
-            prompt:
-              target_blocks:
-                - {text: "What was the original price per kilo, before the discount?", language_code: en, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: fa.a1.unit08.lesson06.exercise03.match_dialogue_facts
             type: matching_pairs
             tested_text: کیلویی سی تومن تخفیف بیست و هشت تومن بفرمایید ممنون قابلی نداره فروشنده مشتری باشه
@@ -488,4 +496,4 @@ units:
           - content_key: fa.a1.unit08.lesson06.exercise08.speak_full_market_scene
             type: speak_response
             tested_text: این چنده تخفیف می‌دید نقدی حساب می‌کنم
-            prompt: {target_blocks: [{text: "You are at the market. Ask the price, ask for a discount, and say you'll pay cash.", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: []}

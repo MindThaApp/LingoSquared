@@ -11,7 +11,7 @@ generation_provenance:
 review:
   status: reviewed
   required_next_reviewer: null
-  notes: "New unit, fa's next uncovered outcome (prerequisite: universal.a1.time.ask_tell_time, covered in unit09). Numbered unit11 (unit09=time, unit10=dates already taken). Six lessons: daily routine verbs, describing a routine with times, parts of the day (reused from unit09), reading a short routine text, a fill-in style writing task, and a dialogue comparing two people's routines. Reuses unit09's time vocabulary (ساعت، صبح، ظهر، عصر، شب) and colloquial -e contraction pattern (بیدار می‌شم) exactly as established, rather than re-teaching or diverging from it. Authored independently of the prs/nl/en realizations per the sibling-isolation rule. Proactively cross-checked the routine's stated times for internal consistency across all lessons per AUTHORING_GUIDE §11. Audio remains pending generation. AUDIO-ACCESSIBILITY RETROFIT 2026-07-06 (§14, discovered this unit was missed by the earlier project-wide audit -- it was authored but never actually reviewed): found 3 exercises (lesson01.exercise03, lesson02.exercise01, lesson06.exercise05) were listen_select/listen_type items -- genuinely unanswerable since fa has zero working TTS/recorded audio. Converted: listen_select -> multiple_choice (visible Farsi prompt, English glosses), listen_type -> translation. MATCHING_PAIRS SCALE (§16) CHECK: match_verbs (4, lesson01's own routine phrases, no earlier lesson to pool from -- genuine ceiling) left unchanged; match_day_parts (10), match_comparison_phrases (9), and match_dialogue_facts (8) were already reasonably sized. Re-verified 0 remaining §14 violations, validate+compile both clean. STILL NEEDS the standing fresh-context review before status can move to reviewed -- dispatching now.
+  notes: "New unit, fa's next uncovered outcome (prerequisite: universal.a1.time.ask_tell_time, covered in unit09). Numbered unit11 (unit09=time, unit10=dates already taken). Six lessons: daily routine verbs, describing a routine with times, parts of the day (reused from unit09), reading a short routine text, a fill-in style writing task, and a dialogue comparing two people's routines. Reuses unit09's time vocabulary (ساعت، صبح، ظهر، عصر، شب) and colloquial -e contraction pattern (بیدار می‌شم) exactly as established, rather than re-teaching or diverging from it. Authored independently of the prs/nl/en realizations per the sibling-isolation rule. Proactively cross-checked the routine's stated times for internal consistency across all lessons per AUTHORING_GUIDE §11. Audio remains pending generation. AUDIO-ACCESSIBILITY RETROFIT 2026-07-06 (§14, discovered this unit was missed by the earlier project-wide audit -- it was authored but never actually reviewed): found 3 exercises (lesson01.exercise03, lesson02.exercise01, lesson06.exercise05) were listen_select/listen_type items -- genuinely unanswerable since fa has zero working TTS/recorded audio. Converted: listen_select -> multiple_choice (visible Farsi prompt, English glosses), listen_type -> translation. MATCHING_PAIRS SCALE (§16) CHECK: match_verbs (4, lesson01's own routine phrases, no earlier lesson to pool from -- genuine ceiling) left unchanged; match_day_parts (10), match_comparison_phrases (9), and match_dialogue_facts (8) were already reasonably sized. Re-verified 0 remaining §14 violations, validate+compile both clean. STILL NEEDS the standing fresh-context review before status can move to reviewed -- dispatching now. POST-REVIEW FOLLOW-UP FIX, 2026-07-07: unit13's fresh-context reviewer flagged (out of scope for its own unit13-only review) that this unit still had 13 exercises where realization prompt.target_blocks duplicated this overlay's own instruction text verbatim in English -- fixed by emptying target_blocks for self-directed/scenario prompts (write_sleep, recognize_answer, speak_ask_wake_time, write_own_wake_time, write_night_routine, write_own_routine_sentence, speak_ask_what_about_you, recognize_saras_wake_time, write_routine_summary, speak_full_routine_scene) and substituting the actual Farsi reading passage as target_blocks for the 3 reading_comprehension/multiple_choice exercises about it (read_wake_time, read_first_activity_after_waking, choose_second_activity), matching the established convention from unit13's own fix. Re-verified validate+compile clean (0 errors/0 warnings) and confirmed zero remaining instruction-duplicate target_blocks via a script comparing every exercise's target_blocks against its overlay instruction.
 
     FRESH-CONTEXT REVIEW, 2026-07-06 (zero prior access to this unit's authoring reasoning, per AUTHORING_GUIDE §9): confirmed spine-outcome discipline (every lesson genuinely serves universal.a1.routines.describe_daily_routine, no drift) and recognition->drag->production exercise pacing in all 6 lessons; grepped clean for Arabic-range kaf/yeh (script is pure Persian range); found zero internal-jargon leaks; confirmed the §14 audio-accessibility retrofit and the prompt-shows-answer retrofit were both done correctly by spot-checking the actual compiled JSON, not just the source YAML. Found and fixed one real dialect-authenticity bug (§3): میرم سرکار (glued) is a different word from the intended idiom -- سرکار as one word means an honorific/boss address term (\"sarkar khanum\"), while سر کار (two words) is the actual idiom for \"at/to work\" -- confirmed against unit09's own already-shipped, already-reviewed text, which correctly writes سر کار with a space; fixed all ~20 occurrences across both files (teaching text, tested_text, prompts, pairs, word_bank, media_assets) and correctly split the introduced_tokens/word_bank list entries into separate سر/کار tokens rather than one two-word entry, matching this file's own established single-word-per-token convention (e.g. هر/روز). Wrote and ran a Python script tokenizing on Persian-range Unicode codepoints only (excluding Arabic punctuation, which a first draft of the script wrongly included, producing false positives exactly like the ones unit09's own review notes describe) to check every exercise's tested_text and the overlay's accepted_answers/pairs/word_bank against cumulative introduced_tokens (unit09's tokens counted as legitimate prior-unit vocabulary, since unit09 precedes unit11 in this course's numbering and its outcome is unit11's own declared spine prerequisite); found and fixed one real untaught-vocabulary bug beyond the checklist's literal scope (a distractor, not accepted-answer data, but still learner-facing): lesson06.exercise02's distractor ساعت شش (six) was never taught anywhere in unit09 or unit11 -- replaced with the already-taught ساعت چهار. Also found and fixed lesson02.exercise02's distractor تو چی؟ was used three lessons before تو/چی are actually taught in lesson05 -- replaced with the already-taught میرم سر کار. Independently re-verified the unit's own §11 fact-cross-check claim by tracing every stated time across every lesson/exercise/dialogue turn (generic \"I\": wakes at 7, sleeps at 11; dialogue: Nima wakes at 7, Sara wakes at 8 (\"a little later\", correctly later than 7) and sleeps at 11) -- fully consistent, no contradictions found. Found and fixed 5 §12 multi-clause gaps: lesson04.exercise06, lesson06.exercise06, lesson06.exercise07, and lesson06.exercise08 each had only 2 of the 3 required joining forms (missing comma-joined); lesson06.exercise05's translate_night_routine had only one Farsi variant (with هم) for an English prompt that doesn't require it -- added a without-هم variant since both are equally valid translations of the given English sentence. Attempted a §16 matching_pairs expansion of match_verbs (pooling unit09's already-taught time words) but reverted it after discovering the compiler's actual untaught-vocabulary validator (validate_untaught_vocabulary in scripts/compile_content.py) checks tested_text against introduced_tokens strictly within the SAME realization file, not across files -- confirming the original note's \"genuine ceiling\" claim was correct for tested_text purposes even though unit09's vocabulary is otherwise fair game for pairs/word_bank/distractors. Removed a redundant, unused unit-level spine_outcome_id singular field (unit09's reference file only has the spine_outcome_ids list; the compiler only reads the list form for units). Applied the AUTHORING_GUIDE §15 target-language-asterisk convention to the feedback strings actually rewritten during this pass (not a blanket retrofit). Confirmed content_key parity exact in both directions (20 teaching + 39 exercise keys) via a Python script, not by eye. Re-ran both validate and the actual compile (not just validate) after every fix: 0 errors, 0 warnings, valid JSON, and spot-checked the compiled output directly for every fix (سر کار spacing, both distractor replacements, and all three joining-form variants for every §12 fix) to confirm each landed in the real compiled exercise data, not just that the schema validated."
 
@@ -114,7 +114,7 @@ units:
           - content_key: fa.a1.unit11.lesson01.exercise07.write_sleep
             type: writing_prompt
             tested_text: می‌خوابم
-            prompt: {target_blocks: [{text: "Write the Persian phrase for 'I go to sleep'.", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: []}
 
       - content_key: fa.a1.unit11.lesson02.routine_with_times
         title: برنامهٔ روزانه با ساعت
@@ -140,7 +140,7 @@ units:
           - content_key: fa.a1.unit11.lesson02.exercise02.recognize_answer
             type: multiple_choice
             tested_text: ساعت هفت بیدار می‌شم
-            prompt: {target_blocks: [{text: "Someone asks what time you wake up, and you wake up at seven. What do you say?", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: []}
           - content_key: fa.a1.unit11.lesson02.exercise03.order_har_ruz_bidar
             type: word_order
             tested_text: "هر روز ساعت هفت بیدار می‌شم"
@@ -153,11 +153,11 @@ units:
           - content_key: fa.a1.unit11.lesson02.exercise05.speak_ask_wake_time
             type: speak_response
             tested_text: ساعت چند بیدار می‌شی
-            prompt: {target_blocks: [{text: "Ask a friend what time they wake up every day.", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: []}
           - content_key: fa.a1.unit11.lesson02.exercise06.write_own_wake_time
             type: writing_prompt
             tested_text: "هر روز ساعت هفت بیدار می‌شم"
-            prompt: {target_blocks: [{text: "Write that you wake up at seven every day.", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: []}
 
       - content_key: fa.a1.unit11.lesson03.parts_of_the_day_review
         title: بخش‌های روز (مرور)
@@ -211,7 +211,7 @@ units:
           - content_key: fa.a1.unit11.lesson03.exercise06.write_night_routine
             type: writing_prompt
             tested_text: "شب‌ها ساعت یازده می‌خوابم"
-            prompt: {target_blocks: [{text: "Write that you go to sleep at eleven at night.", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: []}
 
       - content_key: fa.a1.unit11.lesson04.reading_a_routine
         title: خواندن یک برنامهٔ روزانه
@@ -225,15 +225,15 @@ units:
           - content_key: fa.a1.unit11.lesson04.exercise01.read_wake_time
             type: reading_comprehension
             tested_text: هفت
-            prompt: {target_blocks: [{text: "What time does the writer wake up?", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "هر روز ساعت هفت بیدار می‌شم. بعدش صبحونه می‌خورم و میرم سر کار.", language_code: fa, direction: rtl}]}
           - content_key: fa.a1.unit11.lesson04.exercise02.read_first_activity_after_waking
             type: reading_comprehension
             tested_text: صبحونه می‌خورم
-            prompt: {target_blocks: [{text: "What does the writer do right after waking up?", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "هر روز ساعت هفت بیدار می‌شم. بعدش صبحونه می‌خورم و میرم سر کار.", language_code: fa, direction: rtl}]}
           - content_key: fa.a1.unit11.lesson04.exercise03.choose_second_activity
             type: multiple_choice
             tested_text: میرم سر کار
-            prompt: {target_blocks: [{text: "What does the writer do after breakfast?", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "هر روز ساعت هفت بیدار می‌شم. بعدش صبحونه می‌خورم و میرم سر کار.", language_code: fa, direction: rtl}]}
           - content_key: fa.a1.unit11.lesson04.exercise04.order_reading_summary
             type: word_order
             tested_text: "بعدش صبحونه می‌خورم و میرم سر کار"
@@ -246,7 +246,7 @@ units:
           - content_key: fa.a1.unit11.lesson04.exercise06.write_own_routine_sentence
             type: writing_prompt
             tested_text: "هر روز ساعت هفت بیدار می‌شم. بعدش صبحونه می‌خورم و میرم سر کار."
-            prompt: {target_blocks: [{text: "Write two sentences describing your own morning routine, using هر روز and بعدش.", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: []}
 
       - content_key: fa.a1.unit11.lesson05.comparing_routines
         title: مقایسهٔ برنامه‌های روزانه
@@ -295,7 +295,7 @@ units:
           - content_key: fa.a1.unit11.lesson05.exercise06.speak_ask_what_about_you
             type: speak_response
             tested_text: تو چی
-            prompt: {target_blocks: [{text: "After answering what time you wake up, ask your friend the same question back.", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: []}
 
       - content_key: fa.a1.unit11.lesson06.routine_dialogue
         title: گفت‌وگو دربارهٔ برنامهٔ روزانه
@@ -334,9 +334,7 @@ units:
           - content_key: fa.a1.unit11.lesson06.exercise02.recognize_saras_wake_time
             type: multiple_choice
             tested_text: ساعت هشت
-            prompt:
-              target_blocks:
-                - {text: "What time does Sara wake up?", language_code: en, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: fa.a1.unit11.lesson06.exercise03.match_dialogue_facts
             type: matching_pairs
             tested_text: "نیما بیدار سارا بیدار سارا می‌خوابم بیدار می‌شم صبحونه می‌خورم میرم سر کار تو چی یه‌کم دیرتر"
@@ -366,8 +364,8 @@ units:
           - content_key: fa.a1.unit11.lesson06.exercise07.write_routine_summary
             type: writing_prompt
             tested_text: "سارا ساعت هشت بیدار می‌شه و ساعت یازده شب می‌خوابه"
-            prompt: {target_blocks: [{text: "Write a short summary of Sara's routine: what time she wakes up and what time she sleeps.", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: []}
           - content_key: fa.a1.unit11.lesson06.exercise08.speak_full_routine_scene
             type: speak_response
             tested_text: "ساعت هفت بیدار می‌شم صبحونه می‌خورم و میرم سر کار شب‌ها ساعت یازده می‌خوابم"
-            prompt: {target_blocks: [{text: "Describe your own daily routine: what time you wake up, what you do after that, and what time you go to sleep.", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: []}

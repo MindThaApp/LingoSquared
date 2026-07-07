@@ -36,6 +36,16 @@ review:
     کنار/همون, taught in this same lesson). Re-verified validate+compile
     clean after these additions.
 
+    POST-SHIP CORPUS-WIDE FIX, 2026-07-07: a project-wide sweep (prompted by
+    unit13's fresh-context reviewer flagging the same bug in units 11/12)
+    found this file also had exercises where realization prompt.target_blocks
+    duplicated the overlay's own instruction text verbatim in English -- the
+    compiler would have rendered the same sentence twice to the learner. Fixed
+    mechanically: every affected exercise's prompt set to target_blocks: [].
+    Re-verified validate+compile clean (0 errors/0 warnings) and confirmed
+    zero remaining instruction-duplicate target_blocks via a script comparing
+    every exercise's target_blocks against its overlay instruction.
+
 course:
   realization_key: fa.a1
   target_language_first: true
@@ -245,7 +255,7 @@ units:
           - content_key: fa.a1.unit05.lesson03.exercise06.writing_directions
             type: writing_prompt
             tested_text: مستقیم برید
-            prompt: {target_blocks: [{text: "Write one short direction instruction using مستقیم.", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: []}
 
       - content_key: fa.a1.unit05.lesson04.dialogue_narahi
         title: پیدا کردن هتل
