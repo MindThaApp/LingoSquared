@@ -73,6 +73,37 @@ delegation once usage resets (checking periodically — Codex still
 reported exhausted as of 04:49, stated reset ~5:16 AM). Full detail in
 `docs/BUILD_LOG.md`.
 
+**Phase C follow-up, 2026-07-07: `case_sensitive` grading flag.**
+`orthography_strict` only ever controlled typo-edit-distance tolerance,
+never case — every grading path unconditionally casefolds. German's
+formal "Sie" (capital, "you" formal) vs. lowercase "sie" ("she"/"they")
+is a real grammatical distinction with no equivalent in nl/en/fa/prs
+content shipped so far, and was ungradeable under the old always-
+casefold comparison (found by the content lane authoring German, which
+correctly deferred teaching this contrast rather than ship an
+ungradeable exercise). Fixed with a new `case_sensitive: bool` flag, a
+sibling of `orthography_strict` in the same `Exercise.feedback` JSON
+blob and the same overlay-authoring field in
+`scripts/compile_content.py`'s `compile_feedback()` — threaded through
+`normalized()`/`canonical_pairs()`/`canonical_order_tokens()`/`grade()`
+(`app/api/router.py`) and `grade_answer()`/`_normalize()` (`app/review/
+grading.py`). Defaults to `False` (old behavior, zero regression to any
+existing exercise). Critically, a case-only mismatch (e.g. "sie" vs
+"Sie") is hard-blocked to `incorrect` rather than falling into the
+existing distance-1 "almost" typo-tolerance path (new
+`is_case_only_difference()` helper, same shape as the existing
+Arabic/Persian `is_script_confusion()` guard) — without that, the
+mismatch would still count as correct for XP/SRS purposes, silently
+defeating the whole feature. Not yet wired into Endless Practice's
+generated `PracticeItem`s (no per-template metadata slot exists for
+it, and no German Endless Practice content exists yet to make it
+meaningful) — exercise-level only for now. Full detail, the live
+verification (real `en→de` exercise imported and answered both ways
+against the actual running dev stack), and a real unrelated test flake
+found and fixed along the way (`test_rate_limiting.py`'s
+`seeded_exercise_id()` picking an incompatible `flashcard` exercise) in
+`docs/BUILD_LOG.md`.
+
 **Phase E2 — DONE, 2026-07-05 (also built directly, same Codex-outage
 window).** Timezone-aware streaks/daily-windows: additive `User.
 timezone` (IANA string, nullable, migration 0009), `app/services/

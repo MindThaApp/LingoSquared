@@ -81,10 +81,19 @@ def media_asset_path(key: str) -> Path:
 
 def auth_response(user):
     return {"access_token":create_token(user.id),"token_type":"bearer","expires_in":get_settings().access_token_expire_seconds,"user":user}
-def normalized(v):
-    if isinstance(v,str): return " ".join(v.strip().casefold().split())
-    if isinstance(v,list): return [normalized(x) for x in v]
-    if isinstance(v,dict): return {str(k):normalized(x) for k,x in sorted(v.items())}
+def normalized(v,case_sensitive=False):
+    """Collapse whitespace and (unless case_sensitive) casefold, recursively
+    for list/dict values. case_sensitive is a 2026-07-07 addition (German's
+    formal "Sie" vs lowercase "sie"/"they" - a real grammatical distinction
+    with no equivalent in any language shipped before, unlike Dutch/
+    English/Farsi/Dari) - defaults to False so every existing call site
+    (and every exercise that hasn't opted in) keeps casefolding exactly as
+    before."""
+    if isinstance(v,str):
+        s = v.strip() if case_sensitive else v.strip().casefold()
+        return " ".join(s.split())
+    if isinstance(v,list): return [normalized(x,case_sensitive) for x in v]
+    if isinstance(v,dict): return {str(k):normalized(x,case_sensitive) for k,x in sorted(v.items())}
     return v
 def is_multi_answer_response(correct):
     return (
@@ -92,7 +101,7 @@ def is_multi_answer_response(correct):
         and set(correct)=={"canonical","accepted"}
         and isinstance(correct["accepted"],list)
     )
-def canonical_pairs(value):
+def canonical_pairs(value,case_sensitive=False):
     """Canonicalize a matching_pairs answer into an order-independent set of
     (left,right) tuples, regardless of representation. CONTRACT.md documents
     the submitted `response` as a flat {left: right} pair-mapping (what
@@ -104,14 +113,14 @@ def canonical_pairs(value):
     matching_pairs exercise ungradeable-correct regardless of what the
     learner picked. Accept either shape here so both compare equal."""
     if isinstance(value, dict):
-        return frozenset((normalized(k), normalized(v)) for k, v in value.items())
+        return frozenset((normalized(k,case_sensitive), normalized(v,case_sensitive)) for k, v in value.items())
     if isinstance(value, list) and all(
         isinstance(item, dict) and {"left", "right"} <= set(item) for item in value
     ):
-        return frozenset((normalized(item["left"]), normalized(item["right"])) for item in value)
+        return frozenset((normalized(item["left"],case_sensitive), normalized(item["right"],case_sensitive)) for item in value)
     return None
 ORDER_BASED_EXERCISE_TYPES = {"word_order", "listen_order"}
-def canonical_order_tokens(value):
+def canonical_order_tokens(value,case_sensitive=False):
     """Canonicalize a word_order/listen_order answer into a token list,
     regardless of whether it was authored as a single space-joined string
     (the majority pattern across hand-authored content - e.g. correct_
@@ -132,10 +141,10 @@ def canonical_order_tokens(value):
     since both sides go through the identical split, not a separate
     punctuation-stripping step."""
     if isinstance(value, str):
-        collapsed = normalized(value)
+        collapsed = normalized(value,case_sensitive)
         return collapsed.split(" ") if collapsed else []
     if isinstance(value, list):
-        return normalized(value)
+        return normalized(value,case_sensitive)
     return None
 def display_correct_response(correct):
     if is_multi_answer_response(correct):
@@ -143,10 +152,15 @@ def display_correct_response(correct):
     return correct
 def decode_feedback(raw):
     """Decode Exercise.feedback. Phase C stores an optional JSON object
-    ({"generic","feedback_by_option","orthography_strict"}) in the same
-    Text column that historically held a bare feedback string - decode
-    defensively so every pre-Phase-C row (plain string or None) keeps
-    behaving exactly as before."""
+    ({"generic","feedback_by_option","orthography_strict","case_sensitive"})
+    in the same Text column that historically held a bare feedback string -
+    decode defensively so every pre-Phase-C row (plain string or None) keeps
+    behaving exactly as before. case_sensitive (2026-07-07) is a sibling of
+    orthography_strict, not a replacement - orthography_strict only ever
+    controlled typo-edit-distance tolerance and never affected case, which
+    is why German's formal "Sie" vs lowercase "sie"/"they" (a real
+    grammatical distinction with no equivalent in nl/en/fa/prs) needed its
+    own opt-in flag instead."""
     if not raw:
         return {}
     try:
@@ -169,11 +183,16 @@ def resolve_script(db, language_code):
     return language.script if language else None
 def exercise_type_value(exercise_type):
     return exercise_type.value if hasattr(exercise_type, "value") else exercise_type
-def grade(response,correct,exercise_type=None,*,script=None,orthography_strict=None):
+def grade(response,correct,exercise_type=None,*,script=None,orthography_strict=None,case_sensitive=False):
     """Returns the 3-state result: 'correct' | 'almost' | 'incorrect'.
     'almost' (Phase C typo tolerance) is only ever returned for free-typed
     answers on eligible exercise types - flashcard, multi-answer, and
-    choice-type grading below always resolve straight to correct/incorrect."""
+    choice-type grading below always resolve straight to correct/incorrect.
+    case_sensitive (2026-07-07, author-set per exercise via feedback_meta,
+    same as orthography_strict) skips casefolding everywhere in this
+    function and never lets a case-only mismatch through as "almost" via
+    grade_answer() - defaults to False so every exercise that hasn't opted
+    in keeps grading exactly as before."""
     if exercise_type == ExerciseType.flashcard:
         report=normalized(response)
         if not isinstance(report,str) or report not in {"known","unknown"}:
@@ -183,13 +202,13 @@ def grade(response,correct,exercise_type=None,*,script=None,orthography_strict=N
     order_based = type_value in ORDER_BASED_EXERCISE_TYPES
     if is_multi_answer_response(correct):
         if order_based:
-            response_tokens = canonical_order_tokens(response)
+            response_tokens = canonical_order_tokens(response,case_sensitive)
             is_ok = response_tokens is not None and any(
-                response_tokens == canonical_order_tokens(item) for item in correct["accepted"]
+                response_tokens == canonical_order_tokens(item,case_sensitive) for item in correct["accepted"]
             )
         else:
-            normalized_response=normalized(response)
-            is_ok = any(normalized_response==normalized(item) for item in correct["accepted"])
+            normalized_response=normalized(response,case_sensitive)
+            is_ok = any(normalized_response==normalized(item,case_sensitive) for item in correct["accepted"])
         return "correct" if is_ok else "incorrect"
     free_text_eligible = (
         type_value in FREE_TEXT_EXERCISE_TYPES
@@ -202,11 +221,12 @@ def grade(response,correct,exercise_type=None,*,script=None,orthography_strict=N
             exercise_type=type_value,
             script=script,
             orthography_strict=orthography_strict,
+            case_sensitive=case_sensitive,
         )
     if type_value == "matching_pairs":
-        correct_pairs = canonical_pairs(correct)
+        correct_pairs = canonical_pairs(correct,case_sensitive)
         if correct_pairs is not None:
-            return "correct" if canonical_pairs(response) == correct_pairs else "incorrect"
+            return "correct" if canonical_pairs(response,case_sensitive) == correct_pairs else "incorrect"
     if order_based:
         # word_order/listen_order's `response` is always a list (WordOrder.
         # tsx submits tile-click order), but hand-authored correct_response
@@ -216,10 +236,10 @@ def grade(response,correct,exercise_type=None,*,script=None,orthography_strict=N
         # authoritative (same pattern as canonical_pairs() above for
         # matching_pairs). Falls through to the generic comparison below
         # only if canonicalization can't apply (neither string nor list).
-        correct_tokens = canonical_order_tokens(correct)
+        correct_tokens = canonical_order_tokens(correct,case_sensitive)
         if correct_tokens is not None:
-            return "correct" if canonical_order_tokens(response) == correct_tokens else "incorrect"
-    return "correct" if normalized(response)==normalized(correct) else "incorrect"
+            return "correct" if canonical_order_tokens(response,case_sensitive) == correct_tokens else "incorrect"
+    return "correct" if normalized(response,case_sensitive)==normalized(correct,case_sensitive) else "incorrect"
 def exercise_answer(db, user, e, response):
     feedback_meta = decode_feedback(e.feedback)
     script = resolve_script(db, e.prompt.get("answer_language_code"))
@@ -229,6 +249,7 @@ def exercise_answer(db, user, e, response):
         e.type,
         script=script,
         orthography_strict=feedback_meta.get("orthography_strict"),
+        case_sensitive=bool(feedback_meta.get("case_sensitive")),
     )
     correct = result != "incorrect"
     previously_correct = db.scalar(
@@ -602,7 +623,7 @@ def review_answer(review_item_id:str,body:AnswerIn,user=Depends(current_user),db
     e=db.get(Exercise,r.exercise_id)
     feedback_meta=decode_feedback(e.feedback)
     script=resolve_script(db,e.prompt.get("answer_language_code"))
-    result=grade(body.response,e.correct_response,e.type,script=script,orthography_strict=feedback_meta.get("orthography_strict"))
+    result=grade(body.response,e.correct_response,e.type,script=script,orthography_strict=feedback_meta.get("orthography_strict"),case_sensitive=bool(feedback_meta.get("case_sensitive")))
     correct=result!="incorrect"
     xp=e.xp if correct else 0
     schedule(r,result); record_activity(db,user.id,xp,user.timezone); db.commit()

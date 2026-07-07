@@ -23,12 +23,27 @@ from sqlalchemy import select
 
 from app.api import router as router_module
 from app.db.session import SessionLocal
-from app.models import Exercise
+from app.models import Exercise, ExerciseType
 
 
 def seeded_exercise_id():
+    # Must be a "translation"-type exercise specifically: these tests only
+    # care about rate-limit behavior, not answer correctness, and submit a
+    # fixed plain-string response ("some answer") regardless of what the
+    # exercise actually is - unlike `.order_by(Exercise.id)` alone (picking
+    # whichever real exercise happens to sort first by its random UUID),
+    # which can and did pick a `flashcard` exercise, whose handler 422s on
+    # anything other than exactly "known"/"unknown" - a real, observed
+    # flake (2026-07-07), not hypothetical: adding one more exercise
+    # elsewhere in the suite shifted which UUID sorts first and tripped
+    # it. `translation` accepts any string response with no shape
+    # requirements, so it's always compatible here.
     with SessionLocal() as db:
-        return db.scalar(select(Exercise.id).order_by(Exercise.id))
+        return db.scalar(
+            select(Exercise.id)
+            .where(Exercise.type == ExerciseType.translation)
+            .order_by(Exercise.id)
+        )
 
 
 # --- /auth/login ---

@@ -95,6 +95,52 @@ def test_farsi_dari_distinct_courses(client, admin):
     assert client.post("/admin/content/import", headers=admin, json=payload("prs", "en", "Dari to English")).status_code == 200
     assert client.get("/courses?source=fa&target=en").json()[0]["id"] != client.get("/courses?source=prs&target=en").json()[0]["id"]
 
+def test_case_sensitive_german_sie_vs_capital_sie(client, admin, auth):
+    # Real reported scenario, 2026-07-07: German's formal "Sie" (capital,
+    # "you" formal) vs lowercase "sie" ("she"/"they") is a genuine
+    # grammatical distinction with no equivalent in nl/en/fa/prs content
+    # authored so far - the content lane authoring German deferred
+    # teaching this specific contrast because it was ungradeable under
+    # the always-casefold comparison. This simulates the minimal exercise
+    # that distinction needs and confirms it now grades correctly both
+    # ways once case_sensitive is opted in via feedback_meta (compiled
+    # the same way scripts/compile_content.py's compile_feedback() now
+    # emits it from an overlay's `case_sensitive: true` field).
+    # Isolate the exact word-level distinction (not sentence-initial
+    # capitalization, which is a separate, unrelated writing convention):
+    # prompt asks for the formal "you", correct_response is bare "Sie".
+    import json
+    body = payload(source="en", target="de", title="German case-sensitive test")
+    exercise = body["courses"][0]["units"][0]["lessons"][0]["exercises"][0]
+    exercise["type"] = "translation"
+    exercise["prompt"] = {
+        "text_blocks": [
+            {"text": "you (formal)", "language_code": "en", "direction": "ltr"}
+        ]
+    }
+    exercise["correct_response"] = "Sie"
+    exercise["feedback"] = json.dumps({"case_sensitive": True})
+    assert client.post("/admin/content/import", headers=admin, json=body).status_code == 200
+
+    course = next(
+        c for c in client.get("/courses?source=en&target=de").json()
+        if c["title"] == "German case-sensitive test"
+    )
+    unit = client.get(f"/courses/{course['id']}/units").json()[0]
+    lesson = client.get(f"/units/{unit['id']}/lessons").json()[0]
+    detail = client.get(f"/lessons/{lesson['id']}").json()
+    exercise_id = detail["exercises"][0]["id"]
+
+    correct = client.post(f"/exercises/{exercise_id}/answer", headers=auth, json={"response": "Sie"}).json()
+    assert correct["result"] == "correct" and correct["correct"] is True
+
+    # "sie" (lowercase - "she"/"they") must NOT be accepted as the formal
+    # "Sie", and must not even earn "almost" (a bare distance-1 case
+    # substitution) - that's the entire point of case_sensitive.
+    wrong_case = client.post(f"/exercises/{exercise_id}/answer", headers=auth, json={"response": "sie"}).json()
+    assert wrong_case["result"] == "incorrect" and wrong_case["correct"] is False
+
+
 def test_seeded_dari_lessons_include_teaching(client):
     for source,target in (("en","prs"),("prs","en")):
         courses=client.get(f"/courses?source={source}&target={target}").json()

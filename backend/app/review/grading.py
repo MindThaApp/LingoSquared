@@ -59,8 +59,9 @@ ARABIC_PERSIAN_SCRIPT_PAIRS: frozenset[frozenset[str]] = frozenset(
 LATIN_RANGE_STARTS = (0x0041, 0x0061, 0x00C0, 0x0100)
 
 
-def _normalize(value: str) -> str:
-    return " ".join(value.strip().casefold().split())
+def _normalize(value: str, *, case_sensitive: bool = False) -> str:
+    folded = value if case_sensitive else value.casefold()
+    return " ".join(folded.strip().split())
 
 
 def is_latin_script_text(value: str) -> bool:
@@ -140,6 +141,22 @@ def is_script_confusion(a: str, b: str) -> bool:
     return candidate in ARABIC_PERSIAN_SCRIPT_PAIRS
 
 
+def is_case_only_difference(a: str, b: str) -> bool:
+    """True if a and b are genuinely different strings that would compare
+    equal under casefold - i.e. the ONLY thing wrong is letter case.
+
+    Used so a case_sensitive exercise (2026-07-07, added for German's
+    formal "Sie" vs lowercase "sie"/"they" - a real grammatical
+    distinction with no equivalent in any language this project shipped
+    before, unlike Dutch/English/Farsi/Dari where case never carries
+    meaning) never forgives a case-only mismatch as a distance-1 typo -
+    same "hard-block before the typo-tolerance check" shape as
+    is_script_confusion() above, just keyed on casefold-equality instead
+    of a fixed script-pair table, since ANY casing slip (not just a
+    single character) is the exact thing case_sensitive exists to catch."""
+    return a != b and a.casefold() == b.casefold()
+
+
 def grade_answer(
     response: str,
     correct: str,
@@ -147,6 +164,7 @@ def grade_answer(
     exercise_type: str,
     script: str | None = None,
     orthography_strict: bool | None = None,
+    case_sensitive: bool = False,
 ) -> Result:
     """Grade one free-text answer into correct/almost/incorrect.
 
@@ -165,9 +183,16 @@ def grade_answer(
     - A single-character substitution that crosses an Arabic/Persian
       script-purity boundary (e.g. Arabic kaf vs Persian keheh) is never
       treated as an "almost" typo, regardless of strictness settings.
+    - case_sensitive (author-set per exercise, same feedback_meta blob as
+      orthography_strict), when True, compares without casefolding and
+      never forgives a case-only mismatch (e.g. "sie" vs "Sie") as a
+      distance-1 typo either - both the exact-match and the almost-typo
+      paths respect it. Defaults to False (the historical always-
+      casefold behavior) so every exercise that doesn't opt in keeps
+      grading exactly as before.
     """
-    normalized_response = _normalize(response)
-    normalized_correct = _normalize(correct)
+    normalized_response = _normalize(response, case_sensitive=case_sensitive)
+    normalized_correct = _normalize(correct, case_sensitive=case_sensitive)
 
     if normalized_response == normalized_correct:
         return "correct"
@@ -176,6 +201,11 @@ def grade_answer(
         return "incorrect"
 
     if is_script_confusion(normalized_response, normalized_correct):
+        return "incorrect"
+
+    if case_sensitive and is_case_only_difference(
+        normalized_response, normalized_correct
+    ):
         return "incorrect"
 
     if orthography_strict is True:
