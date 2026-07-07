@@ -758,7 +758,7 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     # would leak an untranslated Dutch word into an English frame if used
     # the same way -- narrow this instead of reusing place_name there.
     if token in {"Rotterdam", "Utrecht", "Amsterdam"}: semantic.append("city_name")
-    number_words = set("nul één twee drie vier vijf zes zeven acht negen tien elf twaalf dertien veertien vijftien zestien zeventien achttien negentien twintig dertig veertig vijftig zestig zeventig tachtig negentig eenentwintig tweeëntwintig tweeëndertig tweeënveertig achtenveertig vijfenzeventig negenennegentig drieënveertig vijfenzestig zevenentachtig achtentwintig vijfentwintig vijfendertig".split())
+    number_words = set("nul één twee drie vier vijf zes zeven acht negen tien elf twaalf dertien veertien vijftien zestien zeventien achttien negentien twintig dertig veertig vijftig zestig zeventig tachtig negentig eenentwintig tweeëntwintig tweeëndertig tweeënveertig achtenveertig vijfenzeventig negenennegentig drieënveertig vijfenzestig zevenentachtig achtentwintig vijfentwintig vijfendertig vierentwintig".split())
     if t in number_words or token in SYMBOLS and token != "'s": semantic.append("number")
     # Extended 2026-07-06 (unit17: negen/twaalf/vijf/elf are the real
     # clock-hour numbers this unit's schedule content actually uses --
@@ -1057,6 +1057,98 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     # totaal"), safe for bare-word MC/listen_select (exactly meets the
     # >=3 distinct-gloss floor).
     if t in {"rekening", "wisselgeld", "totaal"}: semantic.append("payment_noun")
+    # A2 unit 27 (huisarts/health: a doctor's visit), added 2026-07-07 by the
+    # practice-template authoring pass. Narrow generative tags, each verified
+    # against the real lesson content before use in a shared frame:
+    # - medical_professional (2 members: huisarts, dokter) is safe in "Ik wil
+    #   graag een afspraak maken bij de {item}." -- "bij de huisarts" is the
+    #   real unit text; "bij de dokter" is equally natural informal Dutch
+    #   (same register as "bij de tandarts").
+    if t in {"huisarts", "dokter"}: semantic.append("medical_professional")
+    # - symptom_word (3 members: hoofdpijn, koorts, pijn) is safe in "Ik heb
+    #   {item}." -- all three are singular/mass nouns for a specific
+    #   complaint, verified natural in this exact frame ("Ik heb hoofdpijn."/
+    #   "Ik heb koorts."/"Ik heb pijn." are all idiomatic). "klachten" is
+    #   deliberately excluded -- it's the plural umbrella term the doctor
+    #   asks about (Wat zijn uw klachten?), not something a patient states
+    #   this way.
+    if t in {"hoofdpijn", "koorts", "pijn"}: semantic.append("symptom_word")
+    # - visit_noun (9 members, mixed concrete nouns from across this unit) is
+    #   recognition-only (bare-word multiple_choice/listen_select/
+    #   matching_pairs) -- no shared generative frame needed, same discipline
+    #   as unit11's plan_vocab/unit17's work_vocab/unit22's
+    #   communication_word.
+    if t in {"huisarts", "afspraak", "reden", "bezoek", "klachten", "griepje", "recept", "pillen", "dokter"}:
+        semantic.append("visit_noun")
+    # Casefolded above, so "Huisarts" (the capitalized dialogue-speaker-label
+    # variant introduced in lesson06) is a case-duplicate of "huisarts" under
+    # this tag -- harmless for existing bare-word MC/listen_select slots, but
+    # unsafe for matching_pairs (could draw both cases as if they were two
+    # different pairs). Additive exact-case tag for matching_pairs use only,
+    # same convention as every other _pure tag in this file.
+    if token in {"huisarts", "afspraak", "reden", "bezoek", "klachten", "griepje", "recept", "pillen", "dokter"}:
+        semantic.append("visit_noun_pure")
+    # - reassurance_adj (2 members: ernstig, vervelend) is safe in both
+    #   "Het is niet {item}." and "Is het {item}?" -- verified: "Het is niet
+    #   ernstig."/"Is het ernstig?" are the real unit text; "Het is niet
+    #   vervelend."/"Is het vervelend?" are equally grammatical standalone
+    #   sentences (a different but coherent meaning, "it's not
+    #   annoying"/"is it annoying?"), not a factual claim this drill needs to
+    #   preserve. Only 2 members -- kept out of multiple_choice/listen_select
+    #   (need >=3), translation/word_order only.
+    if t in {"ernstig", "vervelend"}: semantic.append("reassurance_adj")
+    # - separable_health_verb (2 members: innemen, terugkomen, both real
+    #   infinitives from this unit's own grammar-note teaching card) is
+    #   recognition-only; kept out of multiple_choice/listen_select (need
+    #   >=3), used only in matching_pairs (exactly meets the >=2
+    #   distinct-token floor).
+    if t in {"innemen", "terugkomen"}: semantic.append("separable_health_verb")
+    # A2 unit 28 (probleem melden/housing: reporting a maintenance issue),
+    # added 2026-07-07 by the same practice-template authoring pass.
+    # - housing_report_noun (6 members) is recognition-only (bare-word
+    #   multiple_choice/listen_select/matching_pairs), same discipline as
+    #   visit_noun above -- these six don't share one generative frame
+    #   (verwarming/appartement especially must never be mixed into the same
+    #   fillable slot, see heating_word below).
+    if t in {"probleem", "verwarming", "monteur", "melding", "contact", "woningcorporatie"}:
+        semantic.append("housing_report_noun")
+    # Casefolded above, so "Woningcorporatie" (the capitalized dialogue-
+    # speaker-label variant introduced in lesson06) is a case-duplicate of
+    # "woningcorporatie" under this tag -- same convention as visit_noun_pure
+    # above, additive exact-case tag for matching_pairs use only.
+    if token in {"probleem", "verwarming", "monteur", "melding", "contact", "woningcorporatie"}:
+        semantic.append("housing_report_noun_pure")
+    # - heating_word (1 member: verwarming) is the ONLY noun from this unit
+    #   safe in "De {item} werkt niet." -- "appartement" is also a noun
+    #   taught in the same lesson (de_verwarming_werkt_niet) but "De
+    #   appartement werkt niet" is nonsensical (an apartment doesn't "work"),
+    #   so it is deliberately excluded from this narrower tag even though
+    #   both share the broader housing_report_noun/lesson-category tags.
+    if t == "verwarming": semantic.append("heating_word")
+    # - technician_word (1 member: monteur) is safe in "Wanneer komt de
+    #   {item} langs?" -- the only noun this question can take.
+    if t == "monteur": semantic.append("technician_word")
+    # - arrival_time_word (1 member: morgenochtend) is safe in "De monteur
+    #   komt {item} langs." -- "gisteravond" (yesterday evening) is
+    #   grammatically parseable there but temporally contradicts the present-
+    #   tense near-future "komt", so it is deliberately excluded.
+    if t == "morgenochtend": semantic.append("arrival_time_word")
+    # - housing_time_adverb (3 members: morgenochtend, gisteravond, thuis) is
+    #   recognition-only (bare-word MC/listen_select/matching_pairs) --
+    #   mixed time/location adverbs with no shared frame, same discipline as
+    #   unit22's communication_word.
+    if t in {"morgenochtend", "gisteravond", "thuis"}: semantic.append("housing_time_adverb")
+    # - duration_number (5 members: drie, twee, negen, elf, vierentwintig --
+    #   every number token actually introduced across units 27-28's own
+    #   realization files) is safe in "Wij nemen binnen {item} uur contact
+    #   met u op." (within X hours) and as a bare-word MC/listen_select tag
+    #   (5 distinct glosses). Deliberately NOT the broader shared "number"
+    #   tag: that pool also includes a same-course token "s" (a genuine,
+    #   unrelated pre-existing tagging quirk from unit25's auto's/possessive
+    #   marker, still being authored by a parallel session as of this
+    #   writing) whose gloss is nonsensical here -- this narrower, unit
+    #   27/28-local tag avoids depending on that pool's correctness.
+    if t in {"drie", "twee", "negen", "elf", "vierentwintig"}: semantic.append("duration_number")
     # "april" is introduced in the same lesson as the ordinal-number teaching
     # cards (the lesson combines "de vijfde april" -- ordinal + month), so
     # the blanket lesson_categories["rangtelwoorden"] tag above wrongly also
@@ -1068,6 +1160,91 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     # Strip the blanket tag from any genuine month noun.
     if "month" in semantic and "ordinal_number" in semantic:
         semantic = [s for s in semantic if s != "ordinal_number"]
+
+    # A2 units 24-26 (gemeente/meningen/bankrekening) practice-template
+    # tags, added 2026-07-07. Each tag below is a brand-new, uniquely-named
+    # string assigned to exactly the listed tokens -- unlike the blanket
+    # lesson_categories tags above (contaminated across every token in a
+    # lesson, including unrelated pronouns/particles), these are narrow and
+    # safe to use directly as a generative-frame or fill_in_blank slot
+    # constraint. Every generative frame below was checked against this
+    # unit's real realization content for grammaticality (reversed-pairing
+    # convention already established by unit14's comparative_adj/unit21's
+    # feeling_adj: a member need not be literally combined with the frame
+    # in the source text as long as it's grammatically identical there).
+    #
+    # Unit 24 (gemeente/bureaucracy).
+    if t in {"paspoort", "huurcontract", "geboorteakte", "afspraak", "adres",
+             "gemeente", "documenten", "overheid"}:
+        semantic.append("gemeente_vocab_noun")
+    # 3-member subset verified safe in "Mag ik uw {item} zien?" -- directly
+    # attested for paspoort in the real content's own matching_pairs pair
+    # ("Mag ik uw paspoort zien?" -> "May I see your passport?"); huurcontract/
+    # geboorteakte are grammatically identical objects of the same verb.
+    if t in {"paspoort", "huurcontract", "geboorteakte"}:
+        semantic.append("gemeente_doc_noun")
+    if t in {"inschrijven", "schikken", "regelen", "ontvangt"}:
+        semantic.append("gemeente_verb")
+    # Single-member tags (exactly one token each, by construction) -- always
+    # safe for a fill_in_blank slot regardless of the rest of the course's
+    # lexeme pool, matching this unit's own real fill_in_blank exercises.
+    if t == "schikken":
+        semantic.append("gemeente_schikken_single")
+    # Exact-case check (not casefolded): unit27's own realization separately
+    # introduces the capitalized sentence-initial "Huisarts" (a different
+    # lexeme, same case-duplicate class documented throughout this file --
+    # see "weekday"/"weekday_pure") -- casefolding here would silently widen
+    # this tag to 2 members and break the single-candidate guarantee.
+    if token == "huisarts":
+        semantic.append("gemeente_huisarts_single")
+    if t == "regelen":
+        semantic.append("gemeente_regelen_single")
+
+    # Unit 25 (meningen/opinions).
+    if t in {"fietspad", "mening", "idee", "kant", "voetgangers", "fietsers",
+             "auto", "straat", "ruimte"}:
+        semantic.append("opinion_noun")
+    # 5-member generative adjective tag verified safe in "Volgens mij is het
+    # fietspad {item}." -- gevaarlijk/smal are directly attested there;
+    # veiliger/breder/duur are grammatically identical predicate adjectives
+    # in the same slot (reversed-pairing convention, see module note above).
+    if t in {"gevaarlijk", "smal", "veiliger", "breder", "duur"}:
+        semantic.append("opinion_adj")
+    # Exact-case (not casefolded): unrelated earlier units already introduce
+    # capitalized "Denk" (unit12, "Denk aan de eindpositie") and "Vind"
+    # (unit13, "Vind je dit lekker?") as separate lexemes -- casefolding
+    # would silently pull those in as case-duplicates of this unit's own
+    # lowercase "denk"/"vind", same class as the huisarts fix above.
+    if token in {"vind", "snap", "moeten", "wordt", "denk", "vindt", "bespaart"}:
+        semantic.append("opinion_verb")
+    if t == "gedeeltelijk":
+        semantic.append("opinion_gedeeltelijk_single")
+    if t == "veiliger":
+        semantic.append("opinion_veiliger_single")
+
+    # Unit 26 (bankrekening/banking).
+    if t in {"bankrekening", "betaalrekening", "salaris", "werkgever",
+             "identiteitsbewijs", "bankpas", "app"} or token == "Medewerker":
+        semantic.append("bank_vocab_noun")
+    # 2-member generative tag verified safe in "Ik wil graag een {item}
+    # openen." -- both are directly attested opening this way in the real
+    # content (lesson01/lesson02).
+    if t in {"bankrekening", "betaalrekening"}:
+        semantic.append("bank_account_noun")
+    # Exact-case (not casefolded): this unit's own lesson02 grammar note
+    # separately introduces capitalized sentence-initial "Storten" ("Storten
+    # is de infinitief van stort.") as a case-duplicate of lowercase
+    # "storten" -- same class as the huisarts/opinion_verb fixes above;
+    # casefolding would give this tag a near-duplicate-gloss ("To deposit"
+    # vs "to deposit") second member, confusing in a multiple_choice option
+    # list even though it's technically the same word.
+    if token in {"openen", "storten", "gebruikt", "geopend", "bankieren"}:
+        semantic.append("bank_verb")
+    if t == "openen":
+        semantic.append("bank_openen_single")
+    if t == "nodig":
+        semantic.append("bank_nodig_single")
+
     tags: dict[str, object] = {"semantic": list(dict.fromkeys(semantic))}
     if t in {"jij", "je"}: tags["register"] = "informal"
     elif t == "u": tags["register"] = "polite"

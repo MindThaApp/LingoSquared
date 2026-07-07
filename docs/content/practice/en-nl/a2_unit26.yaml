@@ -1,0 +1,176 @@
+schema_version: "1.0"
+pack_key: practice.en-nl.a2.unit26
+source_language: en
+target_language: nl
+unit_content_key: nl.a2.unit26.bankrekening
+review:
+  status: unreviewed
+  fresh_context: "false"
+  notes: "Authored 2026-07-07 by the Claude session filling en-nl's A2
+    practice-pool gap (see a2_unit24.yaml's own notes for the full
+    background). This file covers unit26 (bankrekening/banking: opening a
+    Dutch bank account). Extended scripts/backfill_lexemes_en_nl.py with 6
+    new brand-new-string semantic tags scoped to this unit's own real
+    vocabulary (bank_vocab_noun: 8-member noun pool for recognition +
+    matching_pairs; bank_account_noun: 2-member generative pool (
+    bankrekening/betaalrekening) verified safe in 'Ik wil graag een {item}
+    openen.' -- both are directly attested opening this way in the real
+    content (lesson01/lesson02); bank_verb: 5-member recognition-only verb
+    pool; bank_openen_single/bank_nodig_single: single-member tags
+    guaranteeing a permanently unambiguous fill_in_blank slot, matching
+    this unit's own real fill_in_blank exercise and grammar-note sentence
+    verbatim -- 'Ik wil graag een bankrekening ___.' and 'Ik heb een
+    geldig identiteitsbewijs en mijn BSN-nummer ___.'). Every tag's real
+    course-wide candidate count was verified with a standalone
+    lexeme_matches()-replicating harness against this script's actual
+    output before writing these templates (also caught and fixed a real
+    case-duplicate contamination live while verifying -- this unit's own
+    lesson02 grammar note separately introduces capitalized sentence-
+    initial 'Storten' ('Storten is de infinitief van stort.') as a
+    case-duplicate of lowercase 'storten', which would have silently
+    widened bank_verb to 6 members with a near-duplicate gloss ('To
+    deposit' vs 'to deposit') via casefold comparison -- fixed by
+    switching to an exact-case token check, same class as this file's
+    existing weekday/weekday_pure precedent). 13 templates across all 6
+    lessons: fill_in_blank x2 (openen, nodig -- both single-candidate,
+    verified with scripts/_fill_in_blank_ambiguity_check.py), multiple_
+    choice x2, listen_select x2, matching_pairs x2 (8-pair unit noun pool;
+    13-member combined noun+verb finale pool anchored to lesson06), word_
+    order x1, translation x3. Needs the standard fresh-context review
+    before import. Blocking dependency, same as every other en-nl pack:
+    backfill_lexemes_en_nl.py has not actually been run against a real
+    database yet."
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [bank_vocab_noun, bank_account_noun, bank_verb, bank_openen_single, bank_nodig_single]
+slot_presets:
+  bank_vocab_noun: &bank_vocab_noun {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: bank_vocab_noun}}
+  bank_account_noun: &bank_account_noun {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: bank_account_noun}}
+  bank_verb: &bank_verb {language_code: nl, part_of_speech: verb, agreement_tags: {semantic: bank_verb}}
+  bank_noun_or_verb: &bank_noun_or_verb {language_code: nl, part_of_speech: [noun, verb], agreement_tags: {semantic: [bank_vocab_noun, bank_verb]}}
+  bank_openen_single: &bank_openen_single {language_code: nl, part_of_speech: verb, agreement_tags: {semantic: bank_openen_single}}
+  bank_nodig_single: &bank_nodig_single {language_code: nl, part_of_speech: adjective, agreement_tags: {semantic: bank_nodig_single}}
+templates:
+  - content_key: practice.en-nl.nl.a2.unit26.lesson01.choose.001
+    lesson_content_key: nl.a2.unit26.lesson01.rekening_openen
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *bank_vocab_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a word from this unit about opening a bank account.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit26.lesson01.listen.002
+    lesson_content_key: nl.a2.unit26.lesson01.rekening_openen
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *bank_vocab_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit26.lesson01.match.003
+    lesson_content_key: nl.a2.unit26.lesson01.rekening_openen
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth} · {seventh} · {eighth}", language_code: nl, direction: ltr}
+    slots: {first: *bank_vocab_noun, second: *bank_vocab_noun, third: *bank_vocab_noun, fourth: *bank_vocab_noun, fifth: *bank_vocab_noun, sixth: *bank_vocab_noun, seventh: *bank_vocab_noun, eighth: *bank_vocab_noun}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth, seventh, eighth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth, seventh, eighth]}
+    feedback_frame: {text: "Match each word with its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit26.lesson01.fill.004
+    lesson_content_key: nl.a2.unit26.lesson01.rekening_openen
+    type: fill_in_blank
+    frame: {text: "Ik wil graag een bankrekening {item}.", language_code: nl, direction: ltr}
+    slots: {item: *bank_openen_single}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "I would like to open a bank account.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit26.lesson02.order.001
+    lesson_content_key: nl.a2.unit26.lesson02.betaalrekening_voor_salaris
+    type: word_order
+    frame: {text: "Ik wil graag een {item} openen.", language_code: nl, direction: ltr}
+    slots: {item: *bank_account_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "Ik wil graag een {item} openen.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} is the kind of account being opened.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit26.lesson02.translate.002
+    lesson_content_key: nl.a2.unit26.lesson02.betaalrekening_voor_salaris
+    type: translation
+    frame:
+      text: "I would like to open a {item}."
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *bank_account_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "Ik wil graag een {item} openen.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Ik wil graag een {item} openen.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit26.lesson03.choose.001
+    lesson_content_key: nl.a2.unit26.lesson03.bij_de_bank
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *bank_verb}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a verb used at the bank.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit26.lesson03.listen.002
+    lesson_content_key: nl.a2.unit26.lesson03.bij_de_bank
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *bank_verb}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit26.lesson03.match.003
+    lesson_content_key: nl.a2.unit26.lesson03.bij_de_bank
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth}", language_code: nl, direction: ltr}
+    slots: {first: *bank_verb, second: *bank_verb, third: *bank_verb, fourth: *bank_verb, fifth: *bank_verb}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth]}
+    feedback_frame: {text: "Match each verb with its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit26.lesson04.translate.001
+    lesson_content_key: nl.a2.unit26.lesson04.mijn_bankpas
+    type: translation
+    frame:
+      text: "{item}"
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *bank_vocab_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The Dutch word is {item}.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit26.lesson05.fill.001
+    lesson_content_key: nl.a2.unit26.lesson05.folder_lezen
+    type: fill_in_blank
+    frame: {text: "Ik heb een geldig identiteitsbewijs en mijn BSN-nummer {item}.", language_code: nl, direction: ltr}
+    slots: {item: *bank_nodig_single}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "I need a valid identity document and my BSN number.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit26.lesson05.translate.002
+    lesson_content_key: nl.a2.unit26.lesson05.folder_lezen
+    type: translation
+    frame:
+      text: "{item}"
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *bank_verb}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The Dutch word is {item}.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit26.lesson06.match.001
+    lesson_content_key: nl.a2.unit26.lesson06.bank_afspraak
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth} · {seventh} · {eighth} · {ninth} · {tenth} · {eleventh} · {twelfth} · {thirteenth}", language_code: nl, direction: ltr}
+    slots: {first: *bank_noun_or_verb, second: *bank_noun_or_verb, third: *bank_noun_or_verb, fourth: *bank_noun_or_verb, fifth: *bank_noun_or_verb, sixth: *bank_noun_or_verb, seventh: *bank_noun_or_verb, eighth: *bank_noun_or_verb, ninth: *bank_noun_or_verb, tenth: *bank_noun_or_verb, eleventh: *bank_noun_or_verb, twelfth: *bank_noun_or_verb, thirteenth: *bank_noun_or_verb}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh, twelfth, thirteenth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh, twelfth, thirteenth]}
+    feedback_frame: {text: "Match each word from this unit with its English meaning.", language_code: en, direction: ltr}

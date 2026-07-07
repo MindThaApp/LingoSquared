@@ -1,0 +1,205 @@
+schema_version: "1.0"
+pack_key: practice.en-nl.a2.unit28
+source_language: en
+target_language: nl
+unit_content_key: nl.a2.unit28.probleem_melden
+review:
+  status: unreviewed
+  fresh_context: "false"
+  notes: "Authored 2026-07-07, alongside the sibling a2_unit27.yaml pack --
+    see that file's review notes for the shared background (the en-nl
+    Endless Practice pool had zero A2 coverage at all before this pass).
+    This file covers unit28 (reporting a household maintenance problem:
+    stating the problem, reporting the broken heating, asking when the
+    technician will come, filing a formal report, reading a
+    confirmation).
+
+    New generative/recognition tags added to scripts/backfill_lexemes_en_
+    nl.py's nl_agreement_tags(): housing_report_noun (6 members,
+    recognition-only bare-word tag -- verwarming/appartement especially
+    must never share one fillable slot, see heating_word below) plus its
+    exact-case housing_report_noun_pure sibling for matching_pairs (the
+    capitalized lesson06-dialogue 'Woningcorporatie' speaker label is a
+    real separate token and would otherwise case-duplicate
+    'woningcorporatie' as if it were a second pair); heating_word (1
+    member: verwarming) safe in 'De {item} werkt niet.' -- deliberately
+    NOT the broader housing_report_noun tag, since 'appartement' is also
+    a noun taught in the same lesson and 'De appartement werkt niet' is
+    nonsensical (an apartment doesn't 'work'); technician_word (1
+    member: monteur) safe in 'Wanneer komt de {item} langs?';
+    arrival_time_word (1 member: morgenochtend) safe in 'De monteur komt
+    {item} langs.' -- 'gisteravond' is excluded, it's grammatically
+    parseable there but temporally contradicts the present-tense
+    near-future 'komt'; housing_time_adverb (3 members: morgenochtend/
+    gisteravond/thuis, recognition-only, mixed time/location adverbs
+    with no shared frame); duration_number (5 members: drie/twee/negen/
+    elf/vierentwintig -- every number token actually introduced across
+    units 27-28's own realization files, safe in 'Wij nemen binnen
+    {item} uur contact met u op.' and as a bare-word MC/listen_select
+    tag). duration_number is deliberately NOT the broader shared
+    'number'/'hour_number' tag: that pool also includes a same-course
+    token 's' (a genuine, unrelated pre-existing tagging quirk from
+    unit25's auto's/possessive marker, introduced by a parallel session
+    authoring units 24-26 concurrently with this pass) whose gloss is
+    nonsensical in this frame -- this narrower, unit 27/28-local tag
+    avoids depending on that pool's correctness. Also fixed a genuine
+    small gap while extending the classifier: 'vierentwintig' (twenty-
+    four, real vocabulary in this unit's 'binnen vierentwintig uur'
+    phrase) was missing from the module's number_words set entirely, so
+    it never carried the generic 'number' tag at all -- added.
+
+    Every slot's real candidate count was verified with a standalone
+    lexeme_matches()-replicating harness against this script's actual
+    updated output before writing these templates -- see
+    scripts/_practice_slot_check.py's own run for the final confirmation.
+    No fill_in_blank templates in this pack (same reasoning as the
+    sibling a2_unit27.yaml pack -- this unit's thin per-frame candidate
+    pools don't need it, render_frame/slot_gloss derivation covers every
+    template); scripts/_fill_in_blank_ambiguity_check.py was still run,
+    0 flagged. Needs the standard fresh-context review before import.
+    Same blocking dependency as every earlier en-nl pack:
+    backfill_lexemes_en_nl.py has not actually been run against a real
+    database yet."
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [housing_report_noun, housing_report_noun_pure, heating_word, technician_word, arrival_time_word, housing_time_adverb, duration_number, room_word]
+slot_presets:
+  housing_report_noun: &housing_report_noun {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: housing_report_noun}}
+  housing_report_noun_pure: &housing_report_noun_pure {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: housing_report_noun_pure}}
+  heating_word: &heating_word {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: heating_word}}
+  technician_word: &technician_word {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: technician_word}}
+  arrival_time_word: &arrival_time_word {language_code: nl, part_of_speech: adverb, agreement_tags: {semantic: arrival_time_word}}
+  housing_time_adverb: &housing_time_adverb {language_code: nl, part_of_speech: adverb, agreement_tags: {semantic: housing_time_adverb}}
+  duration_number: &duration_number {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: duration_number}}
+  room_word: &room_word {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: room_word}}
+templates:
+  - content_key: practice.en-nl.nl.a2.unit28.lesson01.choose.001
+    lesson_content_key: nl.a2.unit28.lesson01.er_is_een_probleem
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *housing_report_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a word from this unit's problem-reporting vocabulary.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit28.lesson01.listen.002
+    lesson_content_key: nl.a2.unit28.lesson01.er_is_een_probleem
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *housing_report_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit28.lesson01.match.003
+    lesson_content_key: nl.a2.unit28.lesson01.er_is_een_probleem
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth}", language_code: nl, direction: ltr}
+    slots: {first: *housing_report_noun_pure, second: *housing_report_noun_pure, third: *housing_report_noun_pure, fourth: *housing_report_noun_pure}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth]}
+    feedback_frame: {text: "Match each word with its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit28.lesson01.translate.004
+    lesson_content_key: nl.a2.unit28.lesson01.er_is_een_probleem
+    type: translation
+    frame:
+      text: "There's a problem in my {item}."
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *room_word}
+    answer_derivation: {kind: render_frame, frame: {text: "Er is een probleem in mijn {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Er is een probleem in mijn {item}.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit28.lesson01.order.005
+    lesson_content_key: nl.a2.unit28.lesson01.er_is_een_probleem
+    type: word_order
+    frame: {text: "Er is een probleem in mijn {item}.", language_code: nl, direction: ltr}
+    slots: {item: *room_word}
+    answer_derivation: {kind: render_frame, frame: {text: "Er is een probleem in mijn {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} is where the problem is.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit28.lesson02.translate.001
+    lesson_content_key: nl.a2.unit28.lesson02.de_verwarming_werkt_niet
+    type: translation
+    frame:
+      text: "I heard that {item} isn't working."
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *heating_word}
+    answer_derivation: {kind: render_frame, frame: {text: "De {item} werkt niet.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "De {item} werkt niet.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit28.lesson02.order.002
+    lesson_content_key: nl.a2.unit28.lesson02.de_verwarming_werkt_niet
+    type: word_order
+    frame: {text: "De {item} werkt niet.", language_code: nl, direction: ltr}
+    slots: {item: *heating_word}
+    answer_derivation: {kind: render_frame, frame: {text: "De {item} werkt niet.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} is what isn't working.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit28.lesson03.order.001
+    lesson_content_key: nl.a2.unit28.lesson03.wanneer_komt_de_monteur
+    type: word_order
+    frame: {text: "Wanneer komt de {item} langs?", language_code: nl, direction: ltr}
+    slots: {item: *technician_word}
+    answer_derivation: {kind: render_frame, frame: {text: "Wanneer komt de {item} langs?", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} is who is being asked about.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit28.lesson03.order.002
+    lesson_content_key: nl.a2.unit28.lesson03.wanneer_komt_de_monteur
+    type: word_order
+    frame: {text: "De monteur komt {item} langs.", language_code: nl, direction: ltr}
+    slots: {item: *arrival_time_word}
+    answer_derivation: {kind: render_frame, frame: {text: "De monteur komt {item} langs.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} is when the technician is coming.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit28.lesson04.choose.001
+    lesson_content_key: nl.a2.unit28.lesson04.een_melding_doen
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *duration_number}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a number from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit28.lesson04.order.002
+    lesson_content_key: nl.a2.unit28.lesson04.een_melding_doen
+    type: word_order
+    frame: {text: "Wij nemen binnen {item} uur contact met u op.", language_code: nl, direction: ltr}
+    slots: {item: *duration_number}
+    answer_derivation: {kind: render_frame, frame: {text: "Wij nemen binnen {item} uur contact met u op.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} is the number of hours in this sentence.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit28.lesson04.listen.003
+    lesson_content_key: nl.a2.unit28.lesson04.een_melding_doen
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *housing_report_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit28.lesson05.listen.001
+    lesson_content_key: nl.a2.unit28.lesson05.bevestiging_lezen
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *duration_number}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a number from the confirmation.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit28.lesson06.listen.001
+    lesson_content_key: nl.a2.unit28.lesson06.verwarming_melden
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *housing_report_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard in this dialogue.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit28.lesson06.match.002
+    lesson_content_key: nl.a2.unit28.lesson06.verwarming_melden
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third}", language_code: nl, direction: ltr}
+    slots: {first: *housing_time_adverb, second: *housing_time_adverb, third: *housing_time_adverb}
+    slot_relations: [{kind: distinct, slots: [first, second, third]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third]}
+    feedback_frame: {text: "Match each time/place word with its English meaning.", language_code: en, direction: ltr}
