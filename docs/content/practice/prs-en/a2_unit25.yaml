@@ -88,6 +88,30 @@ review:
     weekday_translate templates in the same lessons, not a duplicate) --
     renamed weekday_translate_bare.005/.006 respectively. No candidates
     invented, no A1 vocabulary pooled in as if A2-scoped.
+
+    Depth pass (2026-07-07, prs-en/fa-en unit25-26 parity audit): fa-en's
+    a2_unit25.yaml sibling (19 templates) has 5 template shapes this pack
+    lacked, all reusing the already-anchored bureaucracy_noun tag on
+    lessons that already carry at least one bureaucracy_noun template
+    here (so no new anchor, no new vocabulary, no new gloss dict entry):
+    lesson02.choose/lesson02.translate (lesson02 previously had only
+    listen_select for this tag), lesson03.choose/lesson03.translate
+    (lesson03 previously had only listen_select), and lesson04.listen
+    (lesson04 previously had only choose+translate). Confirmed via a
+    direct iter_specs() read of backfill_lexemes_prs_en.py (level=='a2'
+    filter) that all four of bureaucracy_noun's members (appointment/
+    document/form/confirmation) are real, already-backfilled A2-scoped
+    lexemes with 4 distinct Dari glosses -- well above the >=3 floor for
+    multiple_choice/listen_select, same count fa-en's identical English
+    realization gives that direction. 14 -> 19 templates, matching
+    fa-en's depth exactly. Every new frame/feedback_frame reuses this
+    pack's own existing bare-recognition boilerplate patterns verbatim
+    (not fa-en's Farsi) -- no new Dari text was actually needed since
+    these are bare single-token recognition drills identical in shape to
+    the pack's own pre-existing bureaucracy_noun templates. Re-verified
+    with scripts/_practice_slot_check.py (prs-en: OK) and
+    compile_content.py practice-validate, 0 errors/0 warnings. Still
+    needs the standard fresh-context review before import.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -195,3 +219,38 @@ templates:
     slots: {item: *weekday}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "معادل انگلیسی همی واژه {item} است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a2.unit25.lesson02.choose.003
+    lesson_content_key: en.a2.unit25.lesson02.making_a_formal_appointment
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *bureaucracy_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی دری {item} را انتخاب کنین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a2.unit25.lesson02.translate.006
+    lesson_content_key: en.a2.unit25.lesson02.making_a_formal_appointment
+    type: translation
+    frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *bureaucracy_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "معادل انگلیسی همی واژه {item} است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a2.unit25.lesson03.choose.002
+    lesson_content_key: en.a2.unit25.lesson03.reading_a_registration_notice
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *bureaucracy_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی دری {item} را انتخاب کنین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a2.unit25.lesson03.translate.003
+    lesson_content_key: en.a2.unit25.lesson03.reading_a_registration_notice
+    type: translation
+    frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *bureaucracy_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "معادل انگلیسی همی واژه {item} است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a2.unit25.lesson04.listen.004
+    lesson_content_key: en.a2.unit25.lesson04.dmv_appointment_dialogue
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *bureaucracy_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "واژه‌ای که در همی گفتگو شنیدین {item} بود.", language_code: prs, direction: rtl}
