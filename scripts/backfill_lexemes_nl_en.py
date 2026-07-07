@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""Idempotently backfill reviewed nl-en A1 lexemes (English target,
-Dutch source) from the shared en realization units 1 and 2.
+"""Idempotently backfill reviewed nl-en A1+A2 lexemes (English target,
+Dutch source) from the shared en realization.
 
 Written directly (not via Codex -- Codex was rate-limited at authoring
 time) mirroring scripts/backfill_lexemes.py's structure and rigor.
@@ -9,6 +9,25 @@ scripts/_en_target_lexeme_common.py (shared with backfill_lexemes_fa_en.py
 and backfill_lexemes_prs_en.py, since all three teach the identical
 English realization to different source-language speakers -- only the
 Dutch/Farsi/Dari source-side classification differs per script).
+
+**Real bug fixed 2026-07-07 (Dutch QA pass)**: A1 (units 1-24) and A2
+(units 25-27: bureaucracy/opinions/banking) import as TWO SEPARATE course
+rows ("Engels A1"/"Engels A2" -- `POST /admin/content/import` dedups by
+`(source_language, target_language, title)`), but this script used to mix
+A2 units 25/26 into the SAME `UNIT_FILES` tuple as A1 (continuous
+numbering) and look everything up against only the "Engels A1" course.
+Since "Engels A1" never actually grows to contain a unit position 25/26,
+that lookup doesn't silently misresolve (unlike the analogous fa/prs bug)
+-- it hard-fails with "ERROR: imported course is missing ..." and rolls
+back the ENTIRE backfill, A1 included, the instant A2 content is actually
+imported alongside A1. Same root cause already found and fixed for fa/prs
+in `backfill_lexemes.py`/`backfill_lexemes_fa_en.py`/
+`backfill_lexemes_prs_en.py`. Fixed by splitting A2 into its own
+`UNIT_FILES_A2` (LOCAL 1-based ordering, looked up against the separate
+"Engels A2" course) and restructuring `iter_specs()`/`main()` to classify
+and backfill each level against its own course. Also closes a real
+coverage gap found while fixing this: unit27 (banking) existed on disk but
+this script never classified it at all -- added alongside the fix.
 
 Needs both the app's DB settings/imports (in backend/) and this repo's
 docs/content/ (at the repo root). Run via docker compose from backend/,
@@ -213,6 +232,18 @@ EN_TARGET_TO_NL_GLOSS: dict[str, str] = {
     "agree": "het eens zijn", "dog": "hond", "dogs": "honden", "space": "ruimte",
     "run": "rennen", "playground": "speeltuin", "fair": "redelijk", "point": "punt",
     "they": "zij", "move": "verplaatsen", "farther": "verder", "away": "weg",
+    # Unit 27 (A2: opening a bank account), added 2026-07-07 -- part of the
+    # nl-en A2 course-routing fix (see this file's docstring). "debit"/
+    # "card"/"documents"' sibling singular "document" etc. already exist
+    # above (unit15/25); only genuinely new-to-unit27 tokens are added here.
+    "checking": "betaal- (in betaalrekening)", "account": "de rekening",
+    "monthly": "maandelijks", "fee": "de kosten", "minimum": "het minimum",
+    "balance": "het saldo", "direct": "automatisch (in automatische bijschrijving)",
+    "deposit": "de bijschrijving; storten", "documents": "documenten",
+    "you'll": "u zult", "dmv": "de RDW (vergelijkbaar Nederlands orgaan)",
+    "business": "werk- (in werkdagen)", "days": "dagen",
+    "keep": "aanhouden", "500": "500", "sounds": "klinkt",
+    "teller": "de bankmedewerker", "both": "allebei",
 }
 
 UNIT_FILES = (
@@ -312,6 +343,30 @@ UNIT_FILES = (
         REPO_ROOT / "docs/content/realizations/en/a1_unit24_housing.yaml",
         REPO_ROOT / "docs/content/overlays/nl-en/a1_unit24.yaml",
     ),
+)
+
+# A2 units (25-27: bureaucracy, opinions, banking) live in a SEPARATE course
+# row ("Engels A2", not "Engels A1") -- `POST /admin/content/import`
+# matches/creates courses by (source_language, target_language, title), and
+# every a2_unit*.yaml overlay declares `course.title: Engels A2`, distinct
+# from A1's `Engels A1`. Real bug found live 2026-07-07 (Dutch QA pass), same
+# root cause already found and fixed in backfill_lexemes.py/
+# backfill_lexemes_fa_en.py/backfill_lexemes_prs_en.py for fa/prs: this used
+# to mix units 25/26 INTO the single UNIT_FILES tuple above at continuous
+# positions 25/26, then main() looked them up against the "Engels A1"
+# course's own units -- which only ever has 24 (the real "Engels A1" course
+# never grows to contain a position 25/26), so the lookup didn't silently
+# misresolve here (unlike the fa/prs incident) -- it hard-failed with
+# "ERROR: imported course is missing ..." and rolled back the ENTIRE
+# backfill (A1 included) the moment any A2 content was actually imported
+# alongside A1, which is worse than a silent gap. Kept as its own tuple with
+# LOCAL 1-based ordering (looked up against the separate "Engels A2" course
+# in main()) -- also closes a real coverage gap found while fixing this:
+# unit27 (banking) existed on disk (docs/content/realizations/en/
+# a2_unit27_banking.yaml, docs/content/overlays/nl-en/a2_unit27.yaml,
+# scripts/content_manifest.txt's "nl-en-a2" entry) but this script never
+# classified it at all.
+UNIT_FILES_A2 = (
     (
         REPO_ROOT / "docs/content/realizations/en/a2_unit25_bureaucracy.yaml",
         REPO_ROOT / "docs/content/overlays/nl-en/a2_unit25.yaml",
@@ -319,6 +374,10 @@ UNIT_FILES = (
     (
         REPO_ROOT / "docs/content/realizations/en/a2_unit26_opinions.yaml",
         REPO_ROOT / "docs/content/overlays/nl-en/a2_unit26.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a2_unit27_banking.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/a2_unit27.yaml",
     ),
 )
 
@@ -498,6 +557,15 @@ NL_POS: dict[str, str] = {
     "zoals": "preposition", "zou": "verb",
     # Unit 26 (A2: giving opinions with reasons), added 2026-07-06.
     "eens": "adverb", "ermee": "adverb", "kant": "noun", "mening": "noun",
+    # Unit 27 (A2: opening a bank account), added 2026-07-07 -- Dutch words
+    # extracted from this unit's own overlay gloss text, part of the nl-en
+    # A2 course-routing fix (see this file's docstring).
+    "aanhoudt": "verb", "allebei": "pronoun", "automatische": "adjective",
+    "betaalrekening": "noun", "bijschrijving": "noun", "binnen": "preposition",
+    "documenten": "noun", "geen": "particle", "klinkt": "verb",
+    "krijg": "verb", "maandelijkse": "adjective", "minimumsaldo": "noun",
+    "net": "adverb", "nodig": "adjective", "openen": "verb", "rdw": "proper_noun",
+    "rekening": "noun", "werkdagen": "noun",
 }
 
 NL_GLOSSES: dict[str, str] = {
@@ -686,6 +754,16 @@ NL_GLOSSES: dict[str, str] = {
     # Unit 26 (A2: giving opinions with reasons), added 2026-07-06.
     "eens": "agreed (part of het eens zijn)", "ermee": "with it",
     "kant": "side", "mening": "opinion",
+    # Unit 27 (A2: opening a bank account), added 2026-07-07.
+    "aanhoudt": "keeps; maintains (with u, formal)", "allebei": "both",
+    "automatische": "automatic (inflected)", "betaalrekening": "payment/checking account",
+    "bijschrijving": "deposit; credit entry", "binnen": "within",
+    "documenten": "documents", "geen": "no; not any", "klinkt": "sounds",
+    "krijg": "get; receive (with ik)", "maandelijkse": "monthly (inflected)",
+    "minimumsaldo": "minimum balance", "net": "just (net als, just like)",
+    "nodig": "necessary; needed", "openen": "to open",
+    "rdw": "RDW (Dutch DMV equivalent)", "rekening": "account",
+    "werkdagen": "business days; work days",
 }
 
 
@@ -743,10 +821,15 @@ def nl_agreement_tags(token: str) -> dict[str, object]:
     return tags
 
 
-def iter_specs():
+def _classify_unit_files(unit_files, level):
+    # FRESH dicts per level/course -- Lexeme uniqueness is scoped by
+    # `Lexeme.course_id`, and "Engels A1"/"Engels A2" are two entirely
+    # separate course rows (see UNIT_FILES_A2's comment), so a token
+    # re-taught in A2 needs its own A2-scoped Lexeme row rather than
+    # silently reusing A1's.
     en_specs: dict[str, dict] = {}
     nl_specs: dict[str, dict] = {}
-    for unit_order, (realization_path, overlay_path) in enumerate(UNIT_FILES, 1):
+    for unit_order, (realization_path, overlay_path) in enumerate(unit_files, 1):
         realization = yaml.safe_load(realization_path.read_text(encoding="utf-8"))
         overlay = yaml.safe_load(overlay_path.read_text(encoding="utf-8"))
         teaching_overlays = overlay["teaching"]
@@ -767,6 +850,7 @@ def iter_specs():
                     tags = en_agreement_tags(token)
                     if existing is None:
                         en_specs[token] = {
+                            "level": level,
                             "unit_order": unit_order, "lesson_order": lesson_order,
                             "lesson_content_key": lesson_key, "content_key": content_key,
                             "token": token, "language_code": "en",
@@ -792,6 +876,7 @@ def iter_specs():
                     existing = nl_specs.get(token)
                     if existing is None:
                         nl_specs[token] = {
+                            "level": level,
                             "unit_order": unit_order, "lesson_order": lesson_order,
                             "lesson_content_key": lesson_key, "content_key": content_key,
                             "token": token, "language_code": "nl",
@@ -809,6 +894,11 @@ def iter_specs():
     yield from nl_specs.values()
 
 
+def iter_specs():
+    yield from _classify_unit_files(UNIT_FILES, "a1")
+    yield from _classify_unit_files(UNIT_FILES_A2, "a2")
+
+
 def main() -> int:
     import argparse
 
@@ -819,7 +909,9 @@ def main() -> int:
     if args.dry_run:
         en_count = sum(spec["language_code"] == "en" for spec in specs)
         nl_count = sum(spec["language_code"] == "nl" for spec in specs)
-        print(f"Lexeme backfill dry run: {en_count} en, {nl_count} nl.")
+        a1_count = sum(spec["level"] == "a1" for spec in specs)
+        a2_count = sum(spec["level"] == "a2" for spec in specs)
+        print(f"Lexeme backfill dry run: {en_count} en, {nl_count} nl ({a1_count} a1, {a2_count} a2).")
         return 0
 
     from sqlalchemy import select
@@ -828,26 +920,39 @@ def main() -> int:
     from app.models import Course, Lesson, Lexeme, Unit
 
     with SessionLocal() as db:
-        course = db.scalar(
-            select(Course).where(
-                Course.source_language == "nl",
-                Course.target_language == "en",
-                Course.title == "Engels A1",
+        courses_by_level = {}
+        for level, title in (("a1", "Engels A1"), ("a2", "Engels A2")):
+            needed = any(spec["level"] == level for spec in specs)
+            course = db.scalar(
+                select(Course).where(
+                    Course.source_language == "nl",
+                    Course.target_language == "en",
+                    Course.title == title,
+                )
             )
-        )
-        if course is None:
-            print("ERROR: nl-en 'Engels A1' course must be imported first", file=sys.stderr)
-            return 1
+            if course is None:
+                if needed:
+                    print(f"ERROR: nl-en {title!r} course must be imported first", file=sys.stderr)
+                    return 1
+                continue
+            courses_by_level[level] = course
 
-        lessons = {
-            (unit.order, lesson.order): lesson
-            for unit in db.scalars(select(Unit).where(Unit.course_id == course.id))
-            for lesson in db.scalars(select(Lesson).where(Lesson.unit_id == unit.id))
+        lessons_by_level = {
+            level: {
+                (unit.order, lesson.order): lesson
+                for unit in db.scalars(select(Unit).where(Unit.course_id == course.id))
+                for lesson in db.scalars(select(Lesson).where(Lesson.unit_id == unit.id))
+            }
+            for level, course in courses_by_level.items()
         }
         created = 0
         updated = 0
         for spec in specs:
-            lesson = lessons.get((spec.pop("unit_order"), spec.pop("lesson_order")))
+            level = spec.pop("level")
+            course = courses_by_level[level]
+            lesson = lessons_by_level[level].get(
+                (spec.pop("unit_order"), spec.pop("lesson_order"))
+            )
             if lesson is None:
                 print(f"ERROR: imported course is missing {spec['lesson_content_key']}", file=sys.stderr)
                 db.rollback()

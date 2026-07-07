@@ -218,6 +218,14 @@ EN_POS: dict[str, str] = {
     "run": "verb", "very": "adverb", "playground": "noun",
     "fair": "adjective", "point": "noun", "they": "pronoun", "should": "verb",
     "move": "verb", "little": "adjective", "farther": "adverb", "away": "adverb",
+    # Unit 27 (A2: opening a bank account), added 2026-07-07 -- part of the
+    # nl-en A2 course-routing fix (see backfill_lexemes_nl_en.py's docstring).
+    "checking": "adjective", "account": "noun", "monthly": "adjective",
+    "fee": "noun", "minimum": "adjective", "balance": "noun",
+    "direct": "adjective", "deposit": "noun", "documents": "noun",
+    "you'll": "pronoun", "dmv": "proper_noun", "business": "noun",
+    "days": "noun", "keep": "verb", "500": "symbol", "sounds": "verb",
+    "teller": "noun", "both": "pronoun",
 }
 
 def en_agreement_tags(token: str) -> dict[str, object]:
