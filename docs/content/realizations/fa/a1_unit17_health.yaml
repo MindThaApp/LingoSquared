@@ -1,0 +1,334 @@
+schema_version: "1.0"
+realization_version: "2026.1-draft.1"
+target_language: fa
+cefr_level: A1
+status: complete_draft
+generation_provenance:
+  method: ai_adapted_from_public_domain_source
+  authoring_system: claude
+  source_material: "Peace Corps Farsi course materials (public domain), modernized"
+  human_reviewed: false
+review:
+  status: reviewed
+  required_next_reviewer: null
+  notes: "New unit, fa's next uncovered outcome (universal.a1.health.describe_basic_problem, prerequisite: introductions/unit02, already covered). Six lessons: basic symptoms (سردرد/تب), more symptoms (دل درد/خسته), asking for help, simple health advice (استراحت کن/آب بخور), reading a short symptom note, and a dialogue where a friend gives basic advice. Deliberately keeps grammar simple (no subjunctive باید+verb construction) by using only imperative advice forms and already-established present-tense patterns, appropriate for A1. Colloquial -e/-am contraction register maintained throughout (خسته‌ام، ممنون), هستم copula family. Authored independently of the prs realization per the sibling-isolation rule. Authored §14/§16/§17-compliant from the start: no listen_type/listen_select/listen_order exercises anywhere, every matching_pairs exercise sized 6 pairs except lesson01's genuine 4-pair first-lesson ceiling, and zero fill_in_blank exercises. Multi-clause exercises include period-joined, comma-joined, and و-joined accepted variants per §12, and open-ended production exercises carry multiple accepted symptom variants from the start. Compiler validation clean (0 errors/0 warnings). Awaiting the standing fresh-context review before status can move to reviewed.
+
+    FRESH-CONTEXT REVIEW, 2026-07-07 (zero prior access to this unit's authoring reasoning, prs sibling files never opened, per §8/§9): confirmed spine-outcome discipline (all 6 lessons genuinely serve universal.a1.health.describe_basic_problem, no drift) and all 4 assessment_requirements covered (understand_health_problem via lesson05/06's reading_comprehension pairs plus matching_pairs recognition, read-substituting-for-listening per the same precedent already accepted in units 09-16's own fresh-context reviews since fa audio for this unit's own phrases remains pending_generation; state_health_problem via the translate/dialogue_response exercises; read_basic_health_instruction specifically via lesson06.exercise03, which precisely matches the spine's own wording -- 'read the line, identify what Sara advises'; write_health_message via lesson05/06's writing_prompt exercises). Verified recognition->drag/matching->production pacing in all 6 lessons. Grepped both files: zero listen_type/listen_select/listen_order exercises (§14) and zero fill_in_blank exercises (§17). Verified §16 matching_pairs sizing exactly as claimed (lesson01: 4, lessons02-06: 6 each). Grepped both files for Arabic-range kaf (U+0643)/yeh (U+064A): zero found. Wrote a real Python script (yaml.safe_load, recursive dict-value walk) checking every dict value in both files for a stray non-schema Python bool: none found. Confirmed content_key parity exact in both directions via script (23 teaching + 30 exercise keys, plus units/lessons dicts). Confirmed all 8 exercise types used (multiple_choice, matching_pairs, translation, word_order, reading_comprehension, writing_prompt, dialogue_comprehension, dialogue_response) are registered in frontend/src/components/exercises/ExerciseRenderer.tsx. Wrote a real duplicate-instruction-vs-target_blocks script (yaml.safe_load both files, casefold compare of every exercise's en-language target_blocks against that exercise's overlay instruction): zero duplicates found. Read backend/app/api/router.py's grade()/is_multi_answer_response() and confirmed lesson05.exercise05 (write_own_symptom) and lesson06.exercise05 (write_health_summary)'s multi-variant open-ended acceptance is genuine multi-answer grading (any accepted-list item matches), not a disguised bug -- confirmed directly in the compiled JSON that every authored variant appears in correct_response.accepted, and that all 30 exercises (24 free-text/matching plus 6 matching_pairs) have a genuine non-empty correct_response. Verified every multiple_choice/reading_comprehension/dialogue_comprehension exercise pairs a Farsi prompt with English-only correct_option/distractors -- no same-script visual-matching shortcut anywhere. Wrote a Python tokenizer (ZWNJ-aware, Persian-punctuation-stripping) and checked every exercise's tested_text/pairs/word_bank plus the overlay's Farsi-side accepted_answers against cumulative file-scoped introduced_tokens: zero untaught-vocabulary gaps found, including confirming داره (lesson06's 3rd-person grammar note) and هم (also/too) are both taught before their use in write_health_summary/the dialogue respectively. Cross-checked §11 facts: lesson06's Nima/Sara dialogue (headache+fever, rest+water advice) and lesson05's anonymous first-person reading note (headache, fever, tiredness) are correctly two independent, unconnected examples -- neither references the other, so there's no unintended implication they're the same continuous narrative. Confirmed §12 multi-clause coverage: translate_rest_and_drink_water (lesson04), translate_headache_and_fever (lesson05), and write_health_summary (lesson06) all carry period-joined, comma-joined, and و-joined accepted variants, verified present in the actual compiled correct_response.accepted lists. Assessed the deliberate باید+subjunctive avoidance: reasoned through the register directly and confirmed via web search that the bare informal imperative (استراحت کن، آب هم بخور) is genuinely how Persian speakers casually advise a friend -- bare imperatives are the standard informal-register form for peer-to-peer advice in Persian (softening particles like لطفاً are for formal/polite-register requests, not friend-to-friend care-advice), and the exchange's own باشه، ممنون reply confirms it reads as warm advice received well, not a curt command; this simplification is pedagogically correct for A1, not unnaturally curt. Verified vocabulary/grammar authenticity: حالم خوب نیست، سردرد، تب، دلم درد می‌کنه، خسته‌ام، کمک، می‌تونی کمکم کنی؟، دکتر، دارو، استراحت کن، آب بخور، and دارو خوردن (take medicine, literally eat/drink medicine, the standard colloquial construction paralleling قرص خوردن) are all natural, correct, idiomatic colloquial Tehrani Farsi, not calques or overly formal. Verified register consistency against units 15/16 (هستم-family copula, -e/-am contractions, نیما/سارا names, established و-joined multi-clause precedent) -- fully consistent. Confirmed A1-appropriate complexity throughout. Noted for the roadmap (not a blocking issue for this unit): §14 was revised 2026-07-06 to permit listen_type/listen_select content for fa now that Azure TTS ships real Farsi voices, but this unit (matching the same-day-reviewed units 15/16 precedent) still uses the reading-substitutes-for-listening pattern since this unit's own audio remains pending_generation and no sibling fa unit has added a real listen exercise yet -- a legitimate consistency choice, not a violation, but a candidate for a future pass once fa TTS-backed listen exercises become the norm across the course. Re-ran validate + compile after confirming zero issues needed fixing: 0 errors/0 warnings, valid JSON, and the actual compiled output was spot-checked directly (not just validate) to confirm all 30 exercises have a genuine non-empty correct_response and answer_language_code correctly resolves to fa for every translation/writing_prompt/dialogue_response exercise per §6."
+
+course:
+  realization_key: fa.a1
+  target_language_first: true
+  dialect: fa_IR_standard_colloquial_intro
+  register_policy: >-
+    Continues the established colloquial -e/-am contraction pattern and
+    هستم copula, consistent with units 07-16.
+
+media_assets:
+  - content_key: fa.a1.audio.health.symptoms.01
+    language: fa
+    text: "سردرد دارم و تب دارم"
+    voice_hint: neutral_adult
+    status: pending_generation
+  - content_key: fa.a1.audio.dialogue.health.01
+    language: fa
+    text: "نیما: حالم خوب نیست. سردرد دارم و تب دارم. سارا: استراحت کن. آب هم بخور. نیما: باشه، ممنون."
+    voice_hint: two_adults_neutral_polite
+    status: pending_generation
+
+units:
+  - content_key: fa.a1.unit17.health
+    title: سلامتی
+    section: reading_writing
+    spine_outcome_ids:
+      - universal.a1.health.describe_basic_problem
+    planned_lesson_count: 6
+
+    lessons:
+      - content_key: fa.a1.unit17.lesson01.basic_symptoms
+        title: علائم ساده
+        spine_outcome_id: universal.a1.health.describe_basic_problem
+        teaching:
+          - content_key: fa.a1.unit17.lesson01.teach.halam_khoob_nist_phrase
+            kind: phrase
+            target: {text: "حالم خوب نیست", language_code: fa, direction: rtl}
+            introduced_tokens: ["حالم", خوب, نیست]
+          - content_key: fa.a1.unit17.lesson01.teach.sardard_word
+            kind: vocabulary
+            target: {text: سردرد, language_code: fa, direction: rtl}
+            introduced_tokens: [سردرد]
+          - content_key: fa.a1.unit17.lesson01.teach.daram_word
+            kind: grammar_note
+            target: {text: "دارم (I have)", language_code: fa, direction: rtl}
+            introduced_tokens: [دارم]
+          - content_key: fa.a1.unit17.lesson01.teach.tab_word
+            kind: vocabulary
+            target: {text: تب, language_code: fa, direction: rtl}
+            introduced_tokens: [تب]
+        exercises:
+          - content_key: fa.a1.unit17.lesson01.exercise01.recognize_sardard
+            type: multiple_choice
+            tested_text: سردرد
+            prompt: {target_blocks: [{text: سردرد, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit17.lesson01.exercise02.recognize_tab
+            type: multiple_choice
+            tested_text: تب
+            prompt: {target_blocks: [{text: تب, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit17.lesson01.exercise03.match_basic_symptoms
+            type: matching_pairs
+            tested_text: "حالم خوب نیست سردرد تب دارم"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "حالم خوب نیست", right: "I don't feel well"}
+              - {left: سردرد, right: headache}
+              - {left: تب, right: fever}
+              - {left: دارم, right: "I have"}
+          - content_key: fa.a1.unit17.lesson01.exercise04.translate_dont_feel_well
+            type: translation
+            tested_text: "حالم خوب نیست"
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit17.lesson01.exercise05.translate_have_headache
+            type: translation
+            tested_text: "سردرد دارم"
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit17.lesson02.more_symptoms
+        title: علائم بیشتر
+        spine_outcome_id: universal.a1.health.describe_basic_problem
+        teaching:
+          - content_key: fa.a1.unit17.lesson02.teach.delam_dard_mikone_phrase
+            kind: phrase
+            target: {text: "دلم درد می‌کنه", language_code: fa, direction: rtl}
+            introduced_tokens: ["دلم", "درد", "می‌کنه"]
+          - content_key: fa.a1.unit17.lesson02.teach.khastam_word
+            kind: vocabulary
+            target: {text: "خسته‌ام", language_code: fa, direction: rtl}
+            introduced_tokens: ["خسته‌ام"]
+        exercises:
+          - content_key: fa.a1.unit17.lesson02.exercise01.recognize_delam_dard_mikone
+            type: multiple_choice
+            tested_text: "دلم درد می‌کنه"
+            prompt: {target_blocks: [{text: "دلم درد می‌کنه", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit17.lesson02.exercise02.recognize_khastam
+            type: multiple_choice
+            tested_text: "خسته‌ام"
+            prompt: {target_blocks: [{text: "خسته‌ام", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit17.lesson02.exercise03.match_more_symptoms
+            type: matching_pairs
+            tested_text: "حالم خوب نیست سردرد تب دلم درد می‌کنه خسته‌ام"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "حالم خوب نیست", right: "I don't feel well"}
+              - {left: سردرد, right: headache}
+              - {left: تب, right: fever}
+              - {left: "دلم درد می‌کنه", right: "my stomach hurts"}
+              - {left: "خسته‌ام", right: "I'm tired"}
+              - {left: دارم, right: "I have"}
+          - content_key: fa.a1.unit17.lesson02.exercise04.translate_stomach_hurts
+            type: translation
+            tested_text: "دلم درد می‌کنه"
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit17.lesson02.exercise05.translate_im_tired
+            type: translation
+            tested_text: "خسته‌ام"
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit17.lesson03.asking_for_help
+        title: کمک خواستن
+        spine_outcome_id: universal.a1.health.describe_basic_problem
+        teaching:
+          - content_key: fa.a1.unit17.lesson03.teach.komak_word
+            kind: vocabulary
+            target: {text: کمک, language_code: fa, direction: rtl}
+            introduced_tokens: [کمک]
+          - content_key: fa.a1.unit17.lesson03.teach.mitooni_word
+            kind: grammar_note
+            target: {text: "می‌تونی (you can, informal)", language_code: fa, direction: rtl}
+            introduced_tokens: ["می‌تونی"]
+          - content_key: fa.a1.unit17.lesson03.teach.komakam_koni_phrase
+            kind: phrase
+            target: {text: "می‌تونی کمکم کنی؟", language_code: fa, direction: rtl}
+            introduced_tokens: ["کمکم", کنی]
+        exercises:
+          - content_key: fa.a1.unit17.lesson03.exercise01.recognize_komak
+            type: multiple_choice
+            tested_text: کمک
+            prompt: {target_blocks: [{text: کمک, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit17.lesson03.exercise02.recognize_mitooni
+            type: multiple_choice
+            tested_text: "می‌تونی"
+            prompt: {target_blocks: [{text: "می‌تونی", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit17.lesson03.exercise03.match_help_vocab
+            type: matching_pairs
+            tested_text: "کمک می‌تونی کمکم کنی سردرد تب"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: کمک, right: help}
+              - {left: "می‌تونی", right: "you can"}
+              - {left: کمکم, right: "help me (object)"}
+              - {left: کنی, right: "you do"}
+              - {left: سردرد, right: headache}
+              - {left: تب, right: fever}
+          - content_key: fa.a1.unit17.lesson03.exercise04.word_order_help_question
+            type: word_order
+            tested_text: "می‌تونی کمکم کنی؟"
+            prompt: {target_blocks: [{text: "Can you help me?", language_code: en, direction: ltr}]}
+            word_bank: ["می‌تونی", "کمکم", کنی]
+          - content_key: fa.a1.unit17.lesson03.exercise05.translate_can_you_help
+            type: translation
+            tested_text: "می‌تونی کمکم کنی؟"
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit17.lesson04.simple_advice
+        title: توصیه‌ی ساده
+        spine_outcome_id: universal.a1.health.describe_basic_problem
+        teaching:
+          - content_key: fa.a1.unit17.lesson04.teach.doctor_word
+            kind: vocabulary
+            target: {text: دکتر, language_code: fa, direction: rtl}
+            introduced_tokens: [دکتر]
+          - content_key: fa.a1.unit17.lesson04.teach.daroo_word
+            kind: vocabulary
+            target: {text: دارو, language_code: fa, direction: rtl}
+            introduced_tokens: [دارو]
+          - content_key: fa.a1.unit17.lesson04.teach.esterahat_kon_phrase
+            kind: phrase
+            target: {text: "استراحت کن", language_code: fa, direction: rtl}
+            introduced_tokens: ["استراحت", کن]
+          - content_key: fa.a1.unit17.lesson04.teach.ab_bokhor_phrase
+            kind: phrase
+            target: {text: "آب بخور", language_code: fa, direction: rtl}
+            introduced_tokens: [آب, بخور]
+          - content_key: fa.a1.unit17.lesson04.teach.va_word
+            kind: grammar_note
+            target: {text: "و (and)", language_code: fa, direction: rtl}
+            introduced_tokens: [و]
+        exercises:
+          - content_key: fa.a1.unit17.lesson04.exercise01.recognize_doctor
+            type: multiple_choice
+            tested_text: دکتر
+            prompt: {target_blocks: [{text: دکتر, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit17.lesson04.exercise02.recognize_daroo
+            type: multiple_choice
+            tested_text: دارو
+            prompt: {target_blocks: [{text: دارو, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit17.lesson04.exercise03.match_advice_vocab
+            type: matching_pairs
+            tested_text: "دکتر دارو استراحت کن آب بخور"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: دکتر, right: doctor}
+              - {left: دارو, right: medicine}
+              - {left: "استراحت کن", right: "rest (command)"}
+              - {left: "آب بخور", right: "drink water (command)"}
+              - {left: کمک, right: help}
+              - {left: سردرد, right: headache}
+          - content_key: fa.a1.unit17.lesson04.exercise04.translate_rest_and_drink_water
+            type: translation
+            tested_text: "استراحت کن و آب بخور"
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit17.lesson04.exercise05.translate_take_medicine
+            type: translation
+            tested_text: "دارو بخور"
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit17.lesson05.reading_a_symptom_note
+        title: خواندن یک یادداشت
+        spine_outcome_id: universal.a1.health.describe_basic_problem
+        teaching:
+          - content_key: fa.a1.unit17.lesson05.teach.reading_text
+            kind: reading
+            target: {text: "سردرد دارم و تب دارم. خسته‌ام", language_code: fa, direction: rtl}
+            introduced_tokens: []
+        exercises:
+          - content_key: fa.a1.unit17.lesson05.exercise01.reading_comprehension_symptom_one
+            type: reading_comprehension
+            tested_text: "سردرد دارم و تب دارم. خسته‌ام"
+            prompt: {target_blocks: [{text: "سردرد دارم و تب دارم. خسته‌ام", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit17.lesson05.exercise02.reading_comprehension_symptom_two
+            type: reading_comprehension
+            tested_text: "سردرد دارم و تب دارم. خسته‌ام"
+            prompt: {target_blocks: [{text: "سردرد دارم و تب دارم. خسته‌ام", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit17.lesson05.exercise03.match_reading_vocab
+            type: matching_pairs
+            tested_text: "سردرد تب خسته‌ام دارم دلم درد می‌کنه"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: سردرد, right: headache}
+              - {left: تب, right: fever}
+              - {left: "خسته‌ام", right: "I'm tired"}
+              - {left: دارم, right: "I have"}
+              - {left: "دلم درد می‌کنه", right: "my stomach hurts"}
+              - {left: "حالم خوب نیست", right: "I don't feel well"}
+          - content_key: fa.a1.unit17.lesson05.exercise04.translate_headache_and_fever
+            type: translation
+            tested_text: "سردرد دارم و تب دارم"
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit17.lesson05.exercise05.write_own_symptom
+            type: writing_prompt
+            tested_text: "سردرد دارم"
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit17.lesson06.advice_dialogue
+        title: گفتگوی توصیه
+        spine_outcome_id: universal.a1.health.describe_basic_problem
+        teaching:
+          - content_key: fa.a1.unit17.lesson06.teach.names
+            kind: vocabulary
+            target: {text: "نیما، سارا", language_code: fa, direction: rtl}
+            introduced_tokens: [نیما, سارا]
+          - content_key: fa.a1.unit17.lesson06.teach.ham_word
+            kind: grammar_note
+            target: {text: "هم (also/too)", language_code: fa, direction: rtl}
+            introduced_tokens: [هم]
+          - content_key: fa.a1.unit17.lesson06.teach.bashe_word
+            kind: vocabulary
+            target: {text: باشه, language_code: fa, direction: rtl}
+            introduced_tokens: [باشه]
+          - content_key: fa.a1.unit17.lesson06.teach.mamnoon_word
+            kind: vocabulary
+            target: {text: ممنون, language_code: fa, direction: rtl}
+            introduced_tokens: [ممنون]
+          - content_key: fa.a1.unit17.lesson06.teach.dareh_grammar
+            kind: grammar_note
+            target: {text: "داره (he/she has, colloquial 3rd person)", language_code: fa, direction: rtl}
+            introduced_tokens: [داره]
+          - content_key: fa.a1.unit17.lesson06.teach.dialogue_line1
+            kind: dialogue
+            target: {text: "حالم خوب نیست. سردرد دارم و تب دارم", language_code: fa, direction: rtl, speaker: نیما}
+            introduced_tokens: []
+          - content_key: fa.a1.unit17.lesson06.teach.dialogue_line2
+            kind: dialogue
+            target: {text: "استراحت کن. آب هم بخور", language_code: fa, direction: rtl, speaker: سارا}
+            introduced_tokens: []
+          - content_key: fa.a1.unit17.lesson06.teach.dialogue_line3
+            kind: dialogue
+            target: {text: "باشه، ممنون", language_code: fa, direction: rtl, speaker: نیما}
+            introduced_tokens: []
+        exercises:
+          - content_key: fa.a1.unit17.lesson06.exercise01.dialogue_comprehension_context
+            type: dialogue_comprehension
+            tested_text: "حالم خوب نیست سردرد دارم و تب دارم استراحت کن آب هم بخور باشه ممنون"
+            prompt: {target_blocks: [{text: "نیما: حالم خوب نیست. سردرد دارم و تب دارم. سارا: استراحت کن. آب هم بخور. نیما: باشه، ممنون.", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit17.lesson06.exercise02.match_dialogue_facts
+            type: matching_pairs
+            tested_text: "نیما سارا سردرد تب استراحت کن آب هم بخور"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: نیما, right: Nima}
+              - {left: سارا, right: Sara}
+              - {left: سردرد, right: headache}
+              - {left: تب, right: fever}
+              - {left: "استراحت کن", right: "rest"}
+              - {left: "آب هم بخور", right: "drink water too"}
+          - content_key: fa.a1.unit17.lesson06.exercise03.reading_comprehension_what_sara_advises
+            type: reading_comprehension
+            tested_text: "استراحت کن. آب هم بخور"
+            prompt: {target_blocks: [{text: "استراحت کن. آب هم بخور", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit17.lesson06.exercise04.dialogue_response_state_symptom
+            type: dialogue_response
+            tested_text: "دلم درد می‌کنه"
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit17.lesson06.exercise05.write_health_summary
+            type: writing_prompt
+            tested_text: "نیما سردرد داره و تب داره"
+            prompt: {target_blocks: []}

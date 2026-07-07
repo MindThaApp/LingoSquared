@@ -1,0 +1,352 @@
+schema_version: "1.0"
+realization_version: "2026.1-draft.1"
+target_language: fa
+cefr_level: A1
+status: complete_draft
+generation_provenance:
+  method: ai_adapted_from_public_domain_source
+  authoring_system: claude
+  source_material: "Peace Corps Farsi course materials (public domain), modernized"
+  human_reviewed: false
+review:
+  status: reviewed
+  required_next_reviewer: null
+  notes: "New unit, fa's next uncovered outcome (universal.a1.travel.handle_basic_journey, prerequisites: numbers/unit03, time/unit09, directions/unit05-places_and_directions, all already covered). Six lessons: basic travel vocabulary (bilit/train/bus/airport), buying a ticket, asking about departure time and platform, reading a short schedule/announcement, a dialogue at the ticket counter, and writing a short travel request message. understand_travel_announcement's own success_criteria calls for listening 'without transcript-first support' -- since fa has zero working TTS/recorded audio, this unit follows the established read-substituting-for-listening pattern already used for the same reason in units 09/11/12/13/14/15 (a written announcement/schedule text stands in for the audio announcement). Colloquial -e/-am contraction register maintained throughout, هستم copula family. Authored independently of the prs realization per the sibling-isolation rule. Authored §14/§16/§17-compliant from the start: no listen_type/listen_select/listen_order exercises anywhere, every matching_pairs exercise sized 6 pairs except lesson01's genuine 4-pair first-lesson ceiling, and zero fill_in_blank exercises. Multi-clause exercises include period-joined, comma-joined, and و-joined accepted variants per §12, and the open-ended production exercise carries multiple accepted destination/time variants from the start, per the pattern established in unit14/unit15's own reviews. Compiler validation clean (0 errors/0 warnings). Awaiting the standing fresh-context review before status can move to reviewed.
+
+    FRESH-CONTEXT REVIEW, 2026-07-07 (zero prior access to this unit's authoring reasoning, prs sibling files never opened, per §8/§9): confirmed spine-outcome discipline (all 6 lessons genuinely serve universal.a1.travel.handle_basic_journey, no drift) and all 4 assessment_requirements covered (understand_travel_announcement via lesson04's reading_comprehension and lesson05's dialogue_comprehension -- the same read-substituting-for-listening precedent already accepted in units 09/11-15's own fresh-context reviews since audio remains pending_generation; request_travel_information via lesson02/03's translation exercises and lesson05's dialogue_response; read_ticket_schedule via lesson04's reading_comprehension pair; write_travel_request via the writing_prompt exercises in lessons 04-06), and confirmed the substituted reading/dialogue material genuinely tests extracting a travel detail (time, platform) from text, the same underlying skill the spine's listening requirement targets. Verified recognition->drag/matching->production pacing in all 6 lessons (reading_comprehension/dialogue_comprehension exercises function as recognition-tier comprehension checks, correctly placed before or alongside matching_pairs and ahead of every production exercise). Confirmed the §14 claim true (zero listen_type/listen_select/listen_order exercises, grepped) and the §17 claim true (zero fill_in_blank exercises, grepped). Verified §16 matching_pairs sizing exactly as claimed (lesson01: 4, lessons02-06: 6 each). Grepped both files for Arabic-range kaf (U+0643)/yeh (U+064A): zero found. Wrote a real Python script (yaml.safe_load, recursive dict-value walk) checking every dict value in both files for a stray non-schema Python bool: none found. Confirmed content_key parity exact in both directions (26 teaching + 30 exercise keys after the fix below) via script, and confirmed all 8 exercise types used (multiple_choice, matching_pairs, translation, word_order, reading_comprehension, writing_prompt, dialogue_comprehension, dialogue_response) are registered in frontend/src/components/exercises/ExerciseRenderer.tsx. Wrote a real duplicate-instruction-vs-target_blocks script (yaml.safe_load both files, case-insensitive compare of every exercise's en-language target_blocks against that exercise's overlay instruction): zero duplicates found -- this unit was correctly checked against the project-wide duplicate-instruction-text bug during authoring. Verified every multiple_choice/reading_comprehension/dialogue_comprehension exercise pairs a Farsi prompt with English-only correct_option/distractors -- no same-script visual-matching shortcut anywhere. Read backend/app/api/router.py's grade()/is_multi_answer_response() and confirmed lesson04.exercise05/lesson05.exercise05/lesson06.exercise05's multi-variant open-ended acceptance is genuine multi-answer grading (any accepted-list item matches), not a disguised bug -- confirmed directly in the compiled JSON that every authored variant appears in correct_response.accepted, and that all 30 exercises have a genuine non-empty correct_response. Reasoned through the vocabulary/grammar for authenticity: بلیط/قطار/اتوبوس/فرودگاه/سکو/حرکت می‌کنه/کی/می‌خوام/خواهش می‌کنم are all natural, correct, idiomatic colloquial Tehrani Farsi for train travel, not calques or overly formal; یک بلیط به تهران می‌خوام is natural, common, correctly-ordered Iranian Farsi for 'I want a ticket to Tehran'; سکوی دو is a correctly-formed ezafe construction ('platform two'); grepped every از occurrence in this unit and confirmed it is used consistently and unambiguously as 'from' (departure origin) throughout, with no 'than'-usage confusion (that usage is unit15-specific and does not appear here). Verified register consistency against units 14/15 (هستم-family copula, -e/-am contractions, colloquial می‌خوام/می‌کنه/باشه forms) -- fully consistent. Confirmed A1-appropriate complexity throughout.
+
+    Wrote a Python tokenizer (whitespace-splitting after stripping Persian punctuation، ZWNJ-aware since ZWNJ isn't whitespace) and checked every exercise's tested_text/pairs/word_bank plus the overlay's Farsi-side accepted_answers against cumulative file-scoped introduced_tokens. Found and fixed one genuine untaught-vocabulary gap: و (and), used as lesson06.exercise05's §12 و-joined multi-clause variant, was never taught anywhere in this file (unlike unit14/unit15, which both have a dedicated و teaching card) -- added a grammar_note teaching card for و in lesson06 (mirroring the exact precedent already used in unit14/unit15's own و teaching cards), in both the realization and the overlay. Re-ran the tokenizer after the fix: zero remaining gaps.
+
+    Checked lesson04.exercise05/lesson05.exercise05/lesson06.exercise05 (the three open-ended production exercises) for §17-class hidden ambiguity (whether the English cue could be satisfied by equally-valid Farsi phrasings not all listed): lesson04.exercise05 and lesson06.exercise05 already had adequate multi-variant coverage (different fact-subsets and all three §12 join forms respectively). Found and fixed one real gap: lesson02.exercise05 (translate_ticket_request) and lesson05.exercise05 (write_travel_request) only accepted 'یک بلیط به تهران می‌خوام' (with the indefinite یک), despite this same file's own lesson01.exercise04 already establishing the precedent that dropping یک before بلیط is an equally natural, equally accepted colloquial variant ('یک بلیط قطار' / 'بلیط قطار' both accepted there) -- added 'بلیط به تهران می‌خوام' (without یک) as an additional accepted variant to both exercises for consistency with that in-file precedent. Confirmed via the actual compiled JSON that both new variants appear correctly in correct_response.accepted.
+
+    Cross-checked §11 facts (ticket to Tehran, traveling tomorrow morning, train departs 8am from platform two) across every exercise/teaching card that references them (lesson04's schedule reading text, lesson05's dialogue, lesson06's summary exercise): fully consistent throughout, no contradictions found. Confirmed lesson06.exercise05 (write_travel_summary) carries period-joined, comma-joined, و-joined, and two-sentence accepted variants per §12. Re-ran validate + compile after every fix: 0 errors/0 warnings, valid JSON, and the actual compiled output was spot-checked directly (not just validate) to confirm every fix landed correctly and every exercise has a genuine correct answer."
+
+course:
+  realization_key: fa.a1
+  target_language_first: true
+  dialect: fa_IR_standard_colloquial_intro
+  register_policy: >-
+    Continues the established colloquial -e/-am contraction pattern and
+    هستم copula, consistent with units 07-15.
+
+media_assets:
+  - content_key: fa.a1.audio.travel.ticket.01
+    language: fa
+    text: "یک بلیط به تهران می‌خوام"
+    voice_hint: neutral_adult
+    status: pending_generation
+  - content_key: fa.a1.audio.dialogue.travel.01
+    language: fa
+    text: "مسافر: یک بلیط به تهران می‌خوام. فروشنده: کی می‌خواید برید؟ مسافر: فردا صبح. فروشنده: باشه، قطار ساعت هشت صبح از سکوی دو حرکت می‌کنه."
+    voice_hint: two_adults_neutral_polite
+    status: pending_generation
+
+units:
+  - content_key: fa.a1.unit16.travel
+    title: سفر
+    section: reading_writing
+    spine_outcome_ids:
+      - universal.a1.travel.handle_basic_journey
+    planned_lesson_count: 6
+
+    lessons:
+      - content_key: fa.a1.unit16.lesson01.basic_travel_vocab
+        title: واژه‌های سفر
+        spine_outcome_id: universal.a1.travel.handle_basic_journey
+        teaching:
+          - content_key: fa.a1.unit16.lesson01.teach.belit_word
+            kind: vocabulary
+            target: {text: بلیط, language_code: fa, direction: rtl}
+            introduced_tokens: [بلیط]
+          - content_key: fa.a1.unit16.lesson01.teach.ghatar_word
+            kind: vocabulary
+            target: {text: قطار, language_code: fa, direction: rtl}
+            introduced_tokens: [قطار]
+          - content_key: fa.a1.unit16.lesson01.teach.otoboos_word
+            kind: vocabulary
+            target: {text: اتوبوس, language_code: fa, direction: rtl}
+            introduced_tokens: [اتوبوس]
+          - content_key: fa.a1.unit16.lesson01.teach.forodgah_word
+            kind: vocabulary
+            target: {text: فرودگاه, language_code: fa, direction: rtl}
+            introduced_tokens: [فرودگاه]
+          - content_key: fa.a1.unit16.lesson01.teach.yek_word
+            kind: grammar_note
+            target: {text: "یک (a/one)", language_code: fa, direction: rtl}
+            introduced_tokens: [یک]
+          - content_key: fa.a1.unit16.lesson01.teach.az_word
+            kind: grammar_note
+            target: {text: "از (from)", language_code: fa, direction: rtl}
+            introduced_tokens: [از]
+          - content_key: fa.a1.unit16.lesson01.teach.do_word
+            kind: vocabulary
+            target: {text: دو, language_code: fa, direction: rtl}
+            introduced_tokens: [دو]
+          - content_key: fa.a1.unit16.lesson01.teach.sekooye_word
+            kind: grammar_note
+            target: {text: "سکوی دو (platform two)", language_code: fa, direction: rtl}
+            introduced_tokens: [سکوی]
+        exercises:
+          - content_key: fa.a1.unit16.lesson01.exercise01.recognize_belit
+            type: multiple_choice
+            tested_text: بلیط
+            prompt: {target_blocks: [{text: بلیط, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit16.lesson01.exercise02.recognize_ghatar
+            type: multiple_choice
+            tested_text: قطار
+            prompt: {target_blocks: [{text: قطار, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit16.lesson01.exercise03.match_travel_vocab
+            type: matching_pairs
+            tested_text: "بلیط قطار اتوبوس فرودگاه"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: بلیط, right: ticket}
+              - {left: قطار, right: train}
+              - {left: اتوبوس, right: bus}
+              - {left: فرودگاه, right: airport}
+          - content_key: fa.a1.unit16.lesson01.exercise04.translate_a_train_ticket
+            type: translation
+            tested_text: "یک بلیط قطار"
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit16.lesson01.exercise05.translate_the_airport
+            type: translation
+            tested_text: فرودگاه
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit16.lesson02.buying_a_ticket
+        title: خرید بلیط
+        spine_outcome_id: universal.a1.travel.handle_basic_journey
+        teaching:
+          - content_key: fa.a1.unit16.lesson02.teach.tehran_word
+            kind: vocabulary
+            target: {text: تهران, language_code: fa, direction: rtl}
+            introduced_tokens: [تهران]
+          - content_key: fa.a1.unit16.lesson02.teach.mikham_word
+            kind: grammar_note
+            target: {text: "می‌خوام (I want)", language_code: fa, direction: rtl}
+            introduced_tokens: [می‌خوام]
+          - content_key: fa.a1.unit16.lesson02.teach.be_word
+            kind: grammar_note
+            target: {text: "به (to)", language_code: fa, direction: rtl}
+            introduced_tokens: [به]
+          - content_key: fa.a1.unit16.lesson02.teach.belit_be_tehran_phrase
+            kind: phrase
+            target: {text: "یک بلیط به تهران می‌خوام", language_code: fa, direction: rtl}
+            introduced_tokens: []
+        exercises:
+          - content_key: fa.a1.unit16.lesson02.exercise01.recognize_tehran
+            type: multiple_choice
+            tested_text: تهران
+            prompt: {target_blocks: [{text: تهران, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit16.lesson02.exercise02.recognize_mikham
+            type: multiple_choice
+            tested_text: می‌خوام
+            prompt: {target_blocks: [{text: می‌خوام, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit16.lesson02.exercise03.match_ticket_vocab
+            type: matching_pairs
+            tested_text: "بلیط قطار تهران می‌خوام به"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: بلیط, right: ticket}
+              - {left: قطار, right: train}
+              - {left: تهران, right: Tehran}
+              - {left: می‌خوام, right: "I want"}
+              - {left: به, right: to}
+              - {left: اتوبوس, right: bus}
+          - content_key: fa.a1.unit16.lesson02.exercise04.word_order_belit_be_tehran
+            type: word_order
+            tested_text: "یک بلیط به تهران می‌خوام"
+            prompt: {target_blocks: [{text: "I want a ticket to Tehran.", language_code: en, direction: ltr}]}
+            word_bank: [یک, بلیط, به, تهران, می‌خوام]
+          - content_key: fa.a1.unit16.lesson02.exercise05.translate_ticket_request
+            type: translation
+            tested_text: "یک بلیط به تهران می‌خوام"
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit16.lesson03.asking_departure_details
+        title: پرسیدن زمان و سکو
+        spine_outcome_id: universal.a1.travel.handle_basic_journey
+        teaching:
+          - content_key: fa.a1.unit16.lesson03.teach.sekoo_word
+            kind: vocabulary
+            target: {text: سکو, language_code: fa, direction: rtl}
+            introduced_tokens: [سکو]
+          - content_key: fa.a1.unit16.lesson03.teach.harekat_mikone_phrase
+            kind: grammar_note
+            target: {text: "حرکت می‌کنه (it departs)", language_code: fa, direction: rtl}
+            introduced_tokens: [حرکت, می‌کنه]
+          - content_key: fa.a1.unit16.lesson03.teach.key_word
+            kind: grammar_note
+            target: {text: "کی (when)", language_code: fa, direction: rtl}
+            introduced_tokens: [کی]
+        exercises:
+          - content_key: fa.a1.unit16.lesson03.exercise01.recognize_sekoo
+            type: multiple_choice
+            tested_text: سکو
+            prompt: {target_blocks: [{text: سکو, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit16.lesson03.exercise02.recognize_harekat_mikone
+            type: multiple_choice
+            tested_text: "حرکت می‌کنه"
+            prompt: {target_blocks: [{text: "حرکت می‌کنه", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit16.lesson03.exercise03.match_departure_vocab
+            type: matching_pairs
+            tested_text: "سکو حرکت می‌کنه کی قطار تهران"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: سکو, right: platform}
+              - {left: "حرکت می‌کنه", right: "it departs"}
+              - {left: کی, right: when}
+              - {left: قطار, right: train}
+              - {left: تهران, right: Tehran}
+              - {left: بلیط, right: ticket}
+          - content_key: fa.a1.unit16.lesson03.exercise04.translate_when_does_it_depart
+            type: translation
+            tested_text: "قطار کی حرکت می‌کنه؟"
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit16.lesson03.exercise05.translate_platform_two
+            type: translation
+            tested_text: "قطار از سکوی دو حرکت می‌کنه"
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit16.lesson04.reading_a_schedule
+        title: خواندن یک برنامه‌ی حرکت
+        spine_outcome_id: universal.a1.travel.handle_basic_journey
+        teaching:
+          - content_key: fa.a1.unit16.lesson04.teach.sobh_word
+            kind: vocabulary
+            target: {text: صبح, language_code: fa, direction: rtl}
+            introduced_tokens: [صبح]
+          - content_key: fa.a1.unit16.lesson04.teach.schedule_text
+            kind: reading
+            target: {text: "قطار تهران ساعت هشت صبح از سکوی دو حرکت می‌کنه", language_code: fa, direction: rtl}
+            introduced_tokens: [ساعت, هشت, دو]
+        exercises:
+          - content_key: fa.a1.unit16.lesson04.exercise01.reading_comprehension_departure_time
+            type: reading_comprehension
+            tested_text: "قطار تهران ساعت هشت صبح از سکوی دو حرکت می‌کنه"
+            prompt: {target_blocks: [{text: "قطار تهران ساعت هشت صبح از سکوی دو حرکت می‌کنه", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit16.lesson04.exercise02.reading_comprehension_platform
+            type: reading_comprehension
+            tested_text: "قطار تهران ساعت هشت صبح از سکوی دو حرکت می‌کنه"
+            prompt: {target_blocks: [{text: "قطار تهران ساعت هشت صبح از سکوی دو حرکت می‌کنه", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit16.lesson04.exercise03.match_schedule_vocab
+            type: matching_pairs
+            tested_text: "قطار تهران ساعت هشت صبح سکو دو"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: قطار, right: train}
+              - {left: تهران, right: Tehran}
+              - {left: ساعت هشت, right: "eight o'clock"}
+              - {left: صبح, right: morning}
+              - {left: سکو, right: platform}
+              - {left: دو, right: two}
+          - content_key: fa.a1.unit16.lesson04.exercise04.translate_train_departs_eight
+            type: translation
+            tested_text: "قطار ساعت هشت صبح حرکت می‌کنه"
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit16.lesson04.exercise05.write_own_travel_detail
+            type: writing_prompt
+            tested_text: "قطار ساعت هشت صبح از سکوی دو حرکت می‌کنه"
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit16.lesson05.ticket_counter_dialogue
+        title: گفتگو در باجه‌ی بلیط
+        spine_outcome_id: universal.a1.travel.handle_basic_journey
+        teaching:
+          - content_key: fa.a1.unit16.lesson05.teach.farda_word
+            kind: vocabulary
+            target: {text: فردا, language_code: fa, direction: rtl}
+            introduced_tokens: [فردا]
+          - content_key: fa.a1.unit16.lesson05.teach.bashe_word
+            kind: vocabulary
+            target: {text: باشه, language_code: fa, direction: rtl}
+            introduced_tokens: [باشه]
+          - content_key: fa.a1.unit16.lesson05.teach.dialogue_line1
+            kind: dialogue
+            target: {text: "یک بلیط به تهران می‌خوام", language_code: fa, direction: rtl, speaker: مسافر}
+            introduced_tokens: [مسافر]
+          - content_key: fa.a1.unit16.lesson05.teach.dialogue_line2
+            kind: dialogue
+            target: {text: "کی می‌خواید برید؟", language_code: fa, direction: rtl, speaker: فروشنده}
+            introduced_tokens: [فروشنده, می‌خواید, برید]
+          - content_key: fa.a1.unit16.lesson05.teach.dialogue_line3
+            kind: dialogue
+            target: {text: "فردا صبح", language_code: fa, direction: rtl, speaker: مسافر}
+            introduced_tokens: []
+          - content_key: fa.a1.unit16.lesson05.teach.dialogue_line4
+            kind: dialogue
+            target: {text: "باشه، قطار ساعت هشت صبح از سکوی دو حرکت می‌کنه", language_code: fa, direction: rtl, speaker: فروشنده}
+            introduced_tokens: []
+        exercises:
+          - content_key: fa.a1.unit16.lesson05.exercise01.dialogue_comprehension_context
+            type: dialogue_comprehension
+            tested_text: "یک بلیط به تهران می‌خوام کی می‌خواید برید فردا صبح باشه قطار ساعت هشت صبح از سکوی دو حرکت می‌کنه"
+            prompt: {target_blocks: [{text: "مسافر: یک بلیط به تهران می‌خوام. فروشنده: کی می‌خواید برید؟ مسافر: فردا صبح. فروشنده: باشه، قطار ساعت هشت صبح از سکوی دو حرکت می‌کنه.", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit16.lesson05.exercise02.match_dialogue_facts
+            type: matching_pairs
+            tested_text: "تهران فردا صبح ساعت هشت سکو دو"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: تهران, right: Tehran}
+              - {left: "فردا صبح", right: "tomorrow morning"}
+              - {left: "ساعت هشت", right: "eight o'clock"}
+              - {left: "سکوی دو", right: "platform two"}
+              - {left: بلیط, right: ticket}
+              - {left: باشه, right: okay}
+          - content_key: fa.a1.unit16.lesson05.exercise03.reading_comprehension_when_traveling
+            type: reading_comprehension
+            tested_text: "فردا صبح"
+            prompt: {target_blocks: [{text: "کی می‌خواید برید؟ فردا صبح", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit16.lesson05.exercise04.dialogue_response_state_when
+            type: dialogue_response
+            tested_text: "فردا صبح"
+            prompt: {target_blocks: [{text: "کی می‌خواید برید؟", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit16.lesson05.exercise05.write_travel_request
+            type: writing_prompt
+            tested_text: "یک بلیط به تهران می‌خوام"
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit16.lesson06.confirming_travel_plans
+        title: تأیید برنامه‌ی سفر
+        spine_outcome_id: universal.a1.travel.handle_basic_journey
+        teaching:
+          - content_key: fa.a1.unit16.lesson06.teach.mamnoon_word
+            kind: vocabulary
+            target: {text: ممنون, language_code: fa, direction: rtl}
+            introduced_tokens: [ممنون]
+          - content_key: fa.a1.unit16.lesson06.teach.khahesh_mikonam_phrase
+            kind: phrase
+            target: {text: "خواهش می‌کنم", language_code: fa, direction: rtl}
+            introduced_tokens: ["خواهش", "می‌کنم"]
+          - content_key: fa.a1.unit16.lesson06.teach.va_word
+            kind: grammar_note
+            target: {text: "و (and)", language_code: fa, direction: rtl}
+            introduced_tokens: [و]
+        exercises:
+          - content_key: fa.a1.unit16.lesson06.exercise01.recognize_mamnoon
+            type: multiple_choice
+            tested_text: ممنون
+            prompt: {target_blocks: [{text: ممنون, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit16.lesson06.exercise02.match_final_vocab
+            type: matching_pairs
+            tested_text: "ممنون خواهش می‌کنم قطار سکو تهران فردا"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: ممنون, right: thanks}
+              - {left: "خواهش می‌کنم", right: "you're welcome"}
+              - {left: قطار, right: train}
+              - {left: سکو, right: platform}
+              - {left: تهران, right: Tehran}
+              - {left: فردا, right: tomorrow}
+          - content_key: fa.a1.unit16.lesson06.exercise03.translate_thanks_youre_welcome
+            type: translation
+            tested_text: "ممنون. خواهش می‌کنم"
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit16.lesson06.exercise04.dialogue_response_thank_seller
+            type: dialogue_response
+            tested_text: ممنون
+            prompt: {target_blocks: [{text: "باشه، قطار ساعت هشت صبح از سکوی دو حرکت می‌کنه", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit16.lesson06.exercise05.write_travel_summary
+            type: writing_prompt
+            tested_text: "قطار به تهران فردا صبح ساعت هشت از سکوی دو حرکت می‌کنه"
+            prompt: {target_blocks: []}

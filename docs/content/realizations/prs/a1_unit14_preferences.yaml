@@ -1,0 +1,360 @@
+schema_version: "1.0"
+realization_version: "2026.1-draft.1"
+target_language: prs
+cefr_level: A1
+status: complete_draft
+generation_provenance:
+  method: ai_adapted_from_public_domain_source
+  authoring_system: claude
+  source_material: "Peace Corps Dari course materials (public domain), modernized"
+  human_reviewed: false
+review:
+  status: reviewed
+  required_next_reviewer: null
+  notes: "New unit, prs's next uncovered outcome (universal.a1.preferences.express_preferences, no prerequisites). Six lessons: basic likes/dislikes (دوست دارم/دوست ندارم), asking about preferences, choosing between two options, giving a reason with چون, reading a short preference text (introducing the full-form 3rd-person دارد), and a dialogue comparing two people's preferences. Uses full, uncontracted verb forms (دوست دارید، خوش‌مزه است، جالب است، گرم است، عالی است) and the formal را object marker throughout -- deliberately NOT the fa sibling's colloquial رو/-e-contraction register -- consistent with the استم/استین full-form register policy established in units 01-13. Authored independently of the fa realization per the sibling-isolation rule. Authored §14/§16/§17-compliant from the start: no listen_type/listen_select/listen_order exercises anywhere, every matching_pairs exercise sized 6 pairs (lesson01's 4-pair ceiling is a genuine first-lesson limit, no earlier vocabulary to pool from), and zero fill_in_blank exercises -- every completion-style moment uses translation/writing_prompt with an explicit English cue and multiple accepted phrasing variants instead. Learning directly from the fa sibling unit's own fresh-context review (which found two real bugs worth pre-empting here): (1) lesson05's reading text states the character dislikes music, not coffee/tea, so it cannot contradict lesson06's dialogue where the same character prefers coffee over tea; (2) both open-ended production exercises (write_own_preference, dialogue_response_own_preference) carry coffee/tea/music variants from the start, since the English cue doesn't force one specific topic. Multi-clause production exercises include period-joined, comma-joined, and و-joined accepted variants per §12. Compiler validation clean (0 errors/0 warnings). Awaiting the standing fresh-context review before status can move to reviewed.
+
+    FRESH-CONTEXT REVIEW COMPLETED 2026-07-07 (zero prior context, fa sibling files never opened). Verified against universal.a1.preferences.express_preferences's own can_do/assessment_requirements (all 4 -- understand_preference via lesson05/lesson06's reading_comprehension/dialogue_comprehension, read-substituting-for-listening per the established zero-prs-audio pattern; exchange_preferences via the dialogue_response exercises; read_preference via the reading_comprehension exercises; write_preference via the writing_prompt/translation exercises -- all covered); exercise pacing (recognition -> drag/matching -> production confirmed in all 6 lessons); §14/§16/§17 self-claims verified true by direct grep and manual audit (zero listen_type/listen_select/listen_order; lesson01's matching_pairs is a genuine 4-pair ceiling, lessons02-06 all exactly 6 pairs; zero fill_in_blank anywhere in the file). Confirmed the pre-emptive §11 fix claim by directly reading lesson05's reading text against lesson06's dialogue: Negar dislikes music and likes tea (because it's warm) in lesson05, then in lesson06 prefers coffee over tea (because it's delicious) without ever contradicting the lesson05 statement -- liking tea while preferring coffee more, and disliking music, are mutually compatible; genuinely distinct from the fa sibling's original same-drink-liked-and-disliked bug. Verified lesson05.exercise05/lesson06.exercise04's claimed coffee/tea/music multi-topic acceptance is real (12 and 6 accepted variants respectively in the compiled output) and confirmed via direct code read of `grade()`/`is_multi_answer_response()` in backend/app/api/router.py that the generic multi-answer path iterates every entry in `accepted`, not just the first, so this is not a disguised bug. Grammar/dialect checked by hand and web-verified for the specific fa/prs divergence points named in this review's brief (کدام vs Iranian colloquial کدوم, formal را vs Dari's own colloquial ره/-a reduction vs Iranian رو, را retained with دوست داشتن even for generic nouns like coffee/tea) -- all confirmed authentic Afghan Dari, no Iranian-Farsi calques found; دارم/داری/دارد/داریم/دارید/دارند conjugation of داشتن verified regular and correctly applied to 1st/2nd-polite/3rd person throughout. Script purity clean (zero Arabic-range kaf/yeh, grepped both files). No jargon leaks (checked programmatically against every learner-facing string, not just grep). Wrote and ran a real Python script (yaml.safe_load, recursive) checking every dict value in both files for a stray Python bool -- found only the two legitimate schema booleans (human_reviewed, target_language_first). Wrote and ran a ZWNJ-aware, Persian-punctuation-stripping Python tokenizer checking every tested_text/prompt.target_blocks/pairs/word_bank value (realization) and every overlay accepted_answers/correct_option/distractors/feedback value against cumulative file-scoped introduced_tokens, including specifically confirming lesson01's را, lesson05's دارد/ندارد, and lesson06's من/شما چطور/عالی است were each taught before their first tested use -- zero untaught-vocabulary violations found. Confirmed content_key parity exact both directions (1 unit/6 lessons/29 teaching/30 exercises each side) and the overlay's flat top-level-dict schema is structurally correct. Confirmed all 8 exercise types used are registered in frontend/src/components/exercises/ExerciseRenderer.tsx. Checked every multiple_choice/reading_comprehension/dialogue_comprehension exercise for the prompt-shows-answer bug -- all correct_option/distractors are English glosses against Dari-script prompts, no same-script leakage. FOUND AND FIXED a real §5 instruction-answer-coherence bug: lesson06.exercise03 (reading_comprehension_who_likes_what) asked \"What does Karim like, and why?\" but its prompt text (\"من قهوه را بیشتر دوست دارم چون خوش‌مزه است. من چای را دوست دارم چون گرم است\") named neither Negar nor Karim, so the correct answer was undeterminable from the shown text alone -- fixed by prefixing each clause with its actual (already-taught) speaker name, نگار: and کریم:, resolving the ambiguity while keeping the original content and order. FOUND AND FIXED a real §12 gap: translate_like_coffee_because_delicious, translate_like_music_because_interesting, write_own_preference (all 3 topic variants), and dialogue_response_own_preference (both topic variants) each had comma-joined and و-joined forms but were missing the period-joined form (\"X. چون Y\", a natural stand-alone-because continuation) -- added as status:correct in the overlay; write_comparison_summary already had all three and needed no change. Judged the A1-complexity question honestly: 1st person in lesson01, 2nd-person-polite دارید in lesson02, 3rd person دارد/ندارد only in lesson05 is a gradual single-collocation buildup across 6 lessons, matching the established unit12 precedent for pacing multi-person verb introduction -- judged appropriate, not overreach. Re-verified via actual compile (not just validate) that every fix took effect: the reading_comprehension exercise's prompt and correct_response now cohere, and all 4 period-joined variants appear in the compiled correct_response.accepted lists. Both validate and compile re-run clean (0 errors/0 warnings) after every fix; compile output is valid JSON."
+
+course:
+  realization_key: prs.a1
+  target_language_first: true
+  dialect: prs_AF_kabuli_educated_colloquial_intro
+  register_policy: >-
+    Continues the established استم/استین polite-first register policy and
+    full, uncontracted verb forms (خوش‌مزه است، جالب است، گرم است، عالی است),
+    consistent with units 01-13. Uses the formal را object marker
+    throughout, distinct from the fa sibling's colloquial رو.
+
+media_assets:
+  - content_key: prs.a1.audio.preferences.likes.01
+    language: prs
+    text: "قهوه را بیشتر دوست دارم چون خوش‌مزه است"
+    voice_hint: neutral_adult
+    status: pending_generation
+  - content_key: prs.a1.audio.dialogue.preferences.01
+    language: prs
+    text: "کریم: چای یا قهوه، کدام را بیشتر دوست دارید؟ نگار: من قهوه را بیشتر دوست دارم چون خوش‌مزه است. شما چطور؟ کریم: من چای را دوست دارم چون گرم است. نگار: عالی است!"
+    voice_hint: two_adults_neutral_polite
+    status: pending_generation
+
+units:
+  - content_key: prs.a1.unit14.preferences
+    title: ترجیحات
+    section: reading_writing
+    spine_outcome_ids:
+      - universal.a1.preferences.express_preferences
+    planned_lesson_count: 6
+
+    lessons:
+      - content_key: prs.a1.unit14.lesson01.basic_likes
+        title: دوست داشتن‌های ساده
+        spine_outcome_id: universal.a1.preferences.express_preferences
+        teaching:
+          - content_key: prs.a1.unit14.lesson01.teach.doost_daram_phrase
+            kind: phrase
+            target: {text: "دوست دارم", language_code: prs, direction: rtl}
+            introduced_tokens: ["دوست", دارم]
+          - content_key: prs.a1.unit14.lesson01.teach.qahwa_word
+            kind: vocabulary
+            target: {text: قهوه, language_code: prs, direction: rtl}
+            introduced_tokens: [قهوه]
+          - content_key: prs.a1.unit14.lesson01.teach.chai_word
+            kind: vocabulary
+            target: {text: چای, language_code: prs, direction: rtl}
+            introduced_tokens: [چای]
+          - content_key: prs.a1.unit14.lesson01.teach.doost_nadaram_phrase
+            kind: phrase
+            target: {text: "دوست ندارم", language_code: prs, direction: rtl}
+            introduced_tokens: [ندارم]
+          - content_key: prs.a1.unit14.lesson01.teach.man_word
+            kind: vocabulary
+            target: {text: من, language_code: prs, direction: rtl}
+            introduced_tokens: [من]
+          - content_key: prs.a1.unit14.lesson01.teach.ra_word
+            kind: grammar_note
+            target: {text: "را (formal object marker)", language_code: prs, direction: rtl}
+            introduced_tokens: [را]
+        exercises:
+          - content_key: prs.a1.unit14.lesson01.exercise01.recognize_doost_daram
+            type: multiple_choice
+            tested_text: "دوست دارم"
+            prompt: {target_blocks: [{text: "دوست دارم", language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit14.lesson01.exercise02.recognize_qahwa
+            type: multiple_choice
+            tested_text: قهوه
+            prompt: {target_blocks: [{text: قهوه, language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit14.lesson01.exercise03.match_likes_vocab
+            type: matching_pairs
+            tested_text: "دوست دارم دوست ندارم قهوه چای"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "دوست دارم", right: "I like"}
+              - {left: "دوست ندارم", right: "I don't like"}
+              - {left: قهوه, right: coffee}
+              - {left: چای, right: tea}
+          - content_key: prs.a1.unit14.lesson01.exercise04.translate_i_like_coffee
+            type: translation
+            tested_text: "قهوه را دوست دارم"
+            prompt: {target_blocks: []}
+          - content_key: prs.a1.unit14.lesson01.exercise05.translate_i_dont_like_tea
+            type: translation
+            tested_text: "چای را دوست ندارم"
+            prompt: {target_blocks: []}
+
+      - content_key: prs.a1.unit14.lesson02.asking_preferences
+        title: پرسیدن ترجیح
+        spine_outcome_id: universal.a1.preferences.express_preferences
+        teaching:
+          - content_key: prs.a1.unit14.lesson02.teach.kodam_word
+            kind: vocabulary
+            target: {text: کدام, language_code: prs, direction: rtl}
+            introduced_tokens: [کدام]
+          - content_key: prs.a1.unit14.lesson02.teach.moosiqi_word
+            kind: vocabulary
+            target: {text: موسیقی, language_code: prs, direction: rtl}
+            introduced_tokens: [موسیقی]
+          - content_key: prs.a1.unit14.lesson02.teach.darid_grammar
+            kind: grammar_note
+            target: {text: "دارید (you have/like, polite)", language_code: prs, direction: rtl}
+            introduced_tokens: [دارید]
+          - content_key: prs.a1.unit14.lesson02.teach.kodam_ra_question
+            kind: phrase
+            target: {text: "کدام را دوست دارید؟", language_code: prs, direction: rtl}
+            introduced_tokens: []
+        exercises:
+          - content_key: prs.a1.unit14.lesson02.exercise01.recognize_kodam
+            type: multiple_choice
+            tested_text: کدام
+            prompt: {target_blocks: [{text: کدام, language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit14.lesson02.exercise02.recognize_moosiqi
+            type: multiple_choice
+            tested_text: موسیقی
+            prompt: {target_blocks: [{text: موسیقی, language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit14.lesson02.exercise03.match_asking_vocab
+            type: matching_pairs
+            tested_text: "کدام موسیقی دارید دوست دارم قهوه چای"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: کدام, right: which}
+              - {left: موسیقی, right: music}
+              - {left: دارید, right: "you have/like"}
+              - {left: "دوست دارم", right: "I like"}
+              - {left: قهوه, right: coffee}
+              - {left: چای, right: tea}
+          - content_key: prs.a1.unit14.lesson02.exercise04.word_order_kodam_question
+            type: word_order
+            tested_text: "کدام را دوست دارید"
+            prompt: {target_blocks: [{text: "Which one do you like?", language_code: en, direction: ltr}]}
+            word_bank: [کدام, را, دوست, دارید]
+          - content_key: prs.a1.unit14.lesson02.exercise05.translate_ask_which_one
+            type: translation
+            tested_text: "کدام را دوست دارید؟"
+            prompt: {target_blocks: []}
+
+      - content_key: prs.a1.unit14.lesson03.choosing_between_options
+        title: انتخاب بین دو چیز
+        spine_outcome_id: universal.a1.preferences.express_preferences
+        teaching:
+          - content_key: prs.a1.unit14.lesson03.teach.bishtar_word
+            kind: vocabulary
+            target: {text: بیشتر, language_code: prs, direction: rtl}
+            introduced_tokens: [بیشتر]
+          - content_key: prs.a1.unit14.lesson03.teach.ya_word
+            kind: grammar_note
+            target: {text: "یا (or)", language_code: prs, direction: rtl}
+            introduced_tokens: [یا]
+          - content_key: prs.a1.unit14.lesson03.teach.qahwa_ya_chai_question
+            kind: phrase
+            target: {text: "قهوه یا چای؟", language_code: prs, direction: rtl}
+            introduced_tokens: []
+        exercises:
+          - content_key: prs.a1.unit14.lesson03.exercise01.recognize_bishtar
+            type: multiple_choice
+            tested_text: بیشتر
+            prompt: {target_blocks: [{text: بیشتر, language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit14.lesson03.exercise02.recognize_ya
+            type: multiple_choice
+            tested_text: یا
+            prompt: {target_blocks: [{text: یا, language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit14.lesson03.exercise03.match_choosing_vocab
+            type: matching_pairs
+            tested_text: "بیشتر یا قهوه چای دوست دارم کدام"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: بیشتر, right: more}
+              - {left: یا, right: or}
+              - {left: قهوه, right: coffee}
+              - {left: چای, right: tea}
+              - {left: "دوست دارم", right: "I like"}
+              - {left: کدام, right: which}
+          - content_key: prs.a1.unit14.lesson03.exercise04.translate_i_like_coffee_more
+            type: translation
+            tested_text: "قهوه را بیشتر دوست دارم"
+            prompt: {target_blocks: []}
+          - content_key: prs.a1.unit14.lesson03.exercise05.dialogue_response_choose_coffee
+            type: dialogue_response
+            tested_text: "قهوه را بیشتر دوست دارم"
+            prompt: {target_blocks: [{text: "قهوه یا چای؟", language_code: prs, direction: rtl}]}
+
+      - content_key: prs.a1.unit14.lesson04.giving_reasons
+        title: دلیل آوردن
+        spine_outcome_id: universal.a1.preferences.express_preferences
+        teaching:
+          - content_key: prs.a1.unit14.lesson04.teach.choon_word
+            kind: grammar_note
+            target: {text: "چون (because)", language_code: prs, direction: rtl}
+            introduced_tokens: [چون]
+          - content_key: prs.a1.unit14.lesson04.teach.khoshmaza_ast_word
+            kind: vocabulary
+            target: {text: "خوش‌مزه است", language_code: prs, direction: rtl}
+            introduced_tokens: ["خوش‌مزه", است]
+          - content_key: prs.a1.unit14.lesson04.teach.jaleb_ast_word
+            kind: vocabulary
+            target: {text: "جالب است", language_code: prs, direction: rtl}
+            introduced_tokens: [جالب]
+          - content_key: prs.a1.unit14.lesson04.teach.va_word
+            kind: grammar_note
+            target: {text: "و (and)", language_code: prs, direction: rtl}
+            introduced_tokens: [و]
+        exercises:
+          - content_key: prs.a1.unit14.lesson04.exercise01.recognize_choon
+            type: multiple_choice
+            tested_text: چون
+            prompt: {target_blocks: [{text: چون, language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit14.lesson04.exercise02.recognize_khoshmaza
+            type: multiple_choice
+            tested_text: "خوش‌مزه است"
+            prompt: {target_blocks: [{text: "خوش‌مزه است", language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit14.lesson04.exercise03.match_reasons_vocab
+            type: matching_pairs
+            tested_text: "چون خوش‌مزه است جالب است دوست دارم قهوه موسیقی"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: چون, right: because}
+              - {left: "خوش‌مزه است", right: "it's delicious"}
+              - {left: "جالب است", right: "it's interesting"}
+              - {left: "دوست دارم", right: "I like"}
+              - {left: قهوه, right: coffee}
+              - {left: موسیقی, right: music}
+          - content_key: prs.a1.unit14.lesson04.exercise04.translate_like_coffee_because_delicious
+            type: translation
+            tested_text: "قهوه را دوست دارم چون خوش‌مزه است"
+            prompt: {target_blocks: []}
+          - content_key: prs.a1.unit14.lesson04.exercise05.translate_like_music_because_interesting
+            type: translation
+            tested_text: "موسیقی را دوست دارم چون جالب است"
+            prompt: {target_blocks: []}
+
+      - content_key: prs.a1.unit14.lesson05.reading_about_preferences
+        title: خواندن درباره‌ی ترجیحات
+        spine_outcome_id: universal.a1.preferences.express_preferences
+        teaching:
+          - content_key: prs.a1.unit14.lesson05.teach.negar_name
+            kind: vocabulary
+            target: {text: نگار, language_code: prs, direction: rtl}
+            introduced_tokens: [نگار]
+          - content_key: prs.a1.unit14.lesson05.teach.darad_grammar
+            kind: grammar_note
+            target: {text: "دوست دارد (he/she likes, full 3rd person form)", language_code: prs, direction: rtl}
+            introduced_tokens: [دارد]
+          - content_key: prs.a1.unit14.lesson05.teach.nadarad_grammar
+            kind: grammar_note
+            target: {text: "دوست ندارد (he/she doesn't like, full 3rd person form)", language_code: prs, direction: rtl}
+            introduced_tokens: [ندارد]
+          - content_key: prs.a1.unit14.lesson05.teach.garm_ast_word
+            kind: vocabulary
+            target: {text: "گرم است", language_code: prs, direction: rtl}
+            introduced_tokens: [گرم]
+          - content_key: prs.a1.unit14.lesson05.teach.reading_text
+            kind: reading
+            target: {text: "نگار چای را دوست دارد چون گرم است. نگار موسیقی را دوست ندارد", language_code: prs, direction: rtl}
+            introduced_tokens: []
+        exercises:
+          - content_key: prs.a1.unit14.lesson05.exercise01.reading_comprehension_what_negar_likes
+            type: reading_comprehension
+            tested_text: "نگار چای را دوست دارد چون گرم است. نگار موسیقی را دوست ندارد"
+            prompt: {target_blocks: [{text: "نگار چای را دوست دارد چون گرم است. نگار موسیقی را دوست ندارد", language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit14.lesson05.exercise02.reading_comprehension_why
+            type: reading_comprehension
+            tested_text: "نگار چای را دوست دارد چون گرم است. نگار موسیقی را دوست ندارد"
+            prompt: {target_blocks: [{text: "نگار چای را دوست دارد چون گرم است. نگار موسیقی را دوست ندارد", language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit14.lesson05.exercise03.match_reading_vocab
+            type: matching_pairs
+            tested_text: "نگار دارد گرم است چای چون دوست ندارد"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: نگار, right: Negar}
+              - {left: دارد, right: "he/she likes"}
+              - {left: "گرم است", right: "it's warm"}
+              - {left: چای, right: tea}
+              - {left: چون, right: because}
+              - {left: "دوست ندارد", right: "he/she doesn't like"}
+          - content_key: prs.a1.unit14.lesson05.exercise04.translate_negar_likes_tea
+            type: translation
+            tested_text: "نگار چای را دوست دارد"
+            prompt: {target_blocks: []}
+          - content_key: prs.a1.unit14.lesson05.exercise05.write_own_preference
+            type: writing_prompt
+            tested_text: "قهوه را دوست دارم چون خوش‌مزه است"
+            prompt: {target_blocks: []}
+
+      - content_key: prs.a1.unit14.lesson06.preferences_dialogue
+        title: گفت‌وگوی ترجیحات
+        spine_outcome_id: universal.a1.preferences.express_preferences
+        teaching:
+          - content_key: prs.a1.unit14.lesson06.teach.names
+            kind: vocabulary
+            target: {text: "کریم، نگار", language_code: prs, direction: rtl}
+            introduced_tokens: [کریم]
+          - content_key: prs.a1.unit14.lesson06.teach.shoma_chetor_phrase
+            kind: phrase
+            target: {text: "شما چطور؟", language_code: prs, direction: rtl}
+            introduced_tokens: ["شما", چطور]
+          - content_key: prs.a1.unit14.lesson06.teach.aali_ast_word
+            kind: vocabulary
+            target: {text: "عالی است", language_code: prs, direction: rtl}
+            introduced_tokens: [عالی]
+          - content_key: prs.a1.unit14.lesson06.teach.dialogue_line1
+            kind: dialogue
+            target: {text: "چای یا قهوه، کدام را بیشتر دوست دارید؟", language_code: prs, direction: rtl, speaker: کریم}
+            introduced_tokens: []
+          - content_key: prs.a1.unit14.lesson06.teach.dialogue_line2
+            kind: dialogue
+            target: {text: "من قهوه را بیشتر دوست دارم چون خوش‌مزه است. شما چطور؟", language_code: prs, direction: rtl, speaker: نگار}
+            introduced_tokens: []
+          - content_key: prs.a1.unit14.lesson06.teach.dialogue_line3
+            kind: dialogue
+            target: {text: "من چای را دوست دارم چون گرم است", language_code: prs, direction: rtl, speaker: کریم}
+            introduced_tokens: []
+          - content_key: prs.a1.unit14.lesson06.teach.dialogue_line4
+            kind: dialogue
+            target: {text: "عالی است", language_code: prs, direction: rtl, speaker: نگار}
+            introduced_tokens: []
+        exercises:
+          - content_key: prs.a1.unit14.lesson06.exercise01.dialogue_comprehension_context
+            type: dialogue_comprehension
+            tested_text: "چای یا قهوه، کدام را بیشتر دوست دارید؟ من قهوه را بیشتر دوست دارم چون خوش‌مزه است شما چطور من چای را دوست دارم چون گرم است عالی است"
+            prompt: {target_blocks: [{text: "چای یا قهوه، کدام را بیشتر دوست دارید؟ من قهوه را بیشتر دوست دارم چون خوش‌مزه است. شما چطور؟ من چای را دوست دارم چون گرم است. عالی است!", language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit14.lesson06.exercise02.match_dialogue_facts
+            type: matching_pairs
+            tested_text: "کریم نگار قهوه چای عالی است شما چطور"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: کریم, right: Karim}
+              - {left: نگار, right: Negar}
+              - {left: قهوه, right: coffee}
+              - {left: چای, right: tea}
+              - {left: "عالی است", right: "that's great"}
+              - {left: "شما چطور؟", right: "what about you?"}
+          - content_key: prs.a1.unit14.lesson06.exercise03.reading_comprehension_who_likes_what
+            type: reading_comprehension
+            tested_text: "نگار: من قهوه را بیشتر دوست دارم چون خوش‌مزه است. کریم: من چای را دوست دارم چون گرم است"
+            prompt: {target_blocks: [{text: "نگار: من قهوه را بیشتر دوست دارم چون خوش‌مزه است. کریم: من چای را دوست دارم چون گرم است", language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit14.lesson06.exercise04.dialogue_response_own_preference
+            type: dialogue_response
+            tested_text: "قهوه را بیشتر دوست دارم چون خوش‌مزه است"
+            prompt: {target_blocks: [{text: "چای یا قهوه، کدام را بیشتر دوست دارید؟", language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit14.lesson06.exercise05.write_comparison_summary
+            type: writing_prompt
+            tested_text: "نگار قهوه را دوست دارد کریم چای را دوست دارد"
+            prompt: {target_blocks: []}
