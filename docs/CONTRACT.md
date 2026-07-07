@@ -386,6 +386,26 @@ Response:
   surfaced as its own `feedback_by_option`-style explanation instead,
   since script confusion is a distinct, more instructive error than a
   fat-fingered typo.
+- New content-compiler flag `case_sensitive: true | false` (per
+  exercise, author override), added 2026-07-07 — a sibling of
+  `orthography_strict`, not a replacement: `orthography_strict` only
+  ever controls typo-edit-distance tolerance, never case. Default
+  (flag absent, `false`) is the historical always-casefold comparison
+  used everywhere before this flag existed. When `true`, grading
+  compares without casefolding on every path (exact match, multi-
+  answer, `matching_pairs`, `word_order`/`listen_order`, and the
+  free-text typo-tolerance path), AND a mismatch that is *purely* a
+  case difference (e.g. "sie" vs "Sie") is never forgiven as a
+  distance-1 `almost` typo either — it grades `incorrect`, same
+  "hard-block before typo-tolerance" treatment as a script-confusion
+  substitution. Added for German, where the formal "Sie" (capital,
+  "you" formal) vs. lowercase "sie" ("she"/"they") is a real
+  grammatical distinction with no equivalent in nl/en/fa/prs content
+  authored so far. Only applies to hand-authored `Exercise` rows
+  (stored in the same `Exercise.feedback` JSON blob as
+  `orthography_strict`/`feedback_by_option`) — Endless Practice's
+  generated `PracticeItem`s have no per-template equivalent yet (no
+  German Endless Practice content exists as of this writing).
 
 `POST /lessons/{id}/start` and `POST /lessons/{id}/complete` just need to
 return enough to update client state (e.g. `{ "started_at" }` /

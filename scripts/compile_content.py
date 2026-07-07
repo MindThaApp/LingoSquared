@@ -1162,17 +1162,31 @@ def compile_feedback(
     content_key: str,
 ) -> str | None:
     """Compile the overlay's feedback: field plus Phase C's optional
-    feedback_by_option/orthography_strict into Exercise.feedback.
+    feedback_by_option/orthography_strict/case_sensitive into
+    Exercise.feedback.
 
-    Backward compatible: when neither new field is present, returns the
-    bare feedback string (or None) exactly as before - a JSON object is
-    only encoded when there is Phase C metadata to carry, so every
-    pre-Phase-C overlay compiles identically to before."""
+    case_sensitive (2026-07-07) is a sibling of orthography_strict, not a
+    replacement: orthography_strict only ever controls typo-edit-distance
+    tolerance, never case. Added specifically for German, where the
+    formal "Sie" (capital, "you" formal) vs lowercase "sie" ("she"/"they")
+    is a real grammatical distinction with no equivalent in nl/en/fa/prs
+    content authored so far - without this flag, an exercise testing that
+    distinction is ungradeable (both the exact-match and the "almost"
+    typo-tolerance path would silently treat a wrong-case answer as
+    correct or near-correct). Author it per-exercise in the overlay, same
+    place as orthography_strict/feedback_by_option.
+
+    Backward compatible: when none of the three optional fields are
+    present, returns the bare feedback string (or None) exactly as
+    before - a JSON object is only encoded when there is Phase C metadata
+    to carry, so every pre-Phase-C overlay compiles identically to
+    before."""
     generic = exercise_overlay.get("feedback")
     feedback_by_option = exercise_overlay.get("feedback_by_option")
     orthography_strict = exercise_overlay.get("orthography_strict")
+    case_sensitive = exercise_overlay.get("case_sensitive")
 
-    if feedback_by_option is None and orthography_strict is None:
+    if feedback_by_option is None and orthography_strict is None and case_sensitive is None:
         return generic
 
     if feedback_by_option is not None:
@@ -1201,6 +1215,12 @@ def compile_feedback(
                 f"{content_key}.orthography_strict must be true or false"
             )
         payload["orthography_strict"] = orthography_strict
+    if case_sensitive is not None:
+        if not isinstance(case_sensitive, bool):
+            raise ValueError(
+                f"{content_key}.case_sensitive must be true or false"
+            )
+        payload["case_sensitive"] = case_sensitive
 
     return json.dumps(payload)
 
