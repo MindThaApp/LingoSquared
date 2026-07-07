@@ -10362,3 +10362,65 @@ confirmed the manifest update, and ran the full `verify.sh
 passes). nl now stands at 30 units total (24 original A1 + hobbies +
 appearance + 5 A2), continuing toward the 3,000-word beginner target
 with zero retrofit debt on any newly-authored content.
+
+## Content-depth targets researched: words + hours per CEFR tier, 2026-07-07
+
+**Trigger**: Ramin asked for the beginner/intermediate/advanced word
+targets referenced in earlier planning to actually be researched and
+turned into a concrete plan, plus whether 3 stages is even the right
+granularity.
+
+**Vocabulary research** (Milton & Alexiou's CEFR vocabulary-size study,
+the standard reference for this): A1 <1,500 · A2 1,500–2,500 · B1
+2,750–3,250 · B2 3,250–3,750 · C1 3,750–4,500 · C2 4,500–5,000 word
+families. These are word FAMILIES (count/counted/counter as one), which
+run lower than raw dictionary/inflected-form entries — this app's
+teaching cards are raw entries, so the existing "~3,000-word beginner
+(A1+A2)" target already in the roadmap memory is a reasonable superset
+of Milton's ~2,500-word-family A2 ceiling, not in conflict with it.
+Scaled forward with the same raw-word inflation: intermediate (B1+B2)
+≈5,000–6,000 raw words cumulative; advanced (C1+C2) ≈8,000–10,000+,
+the upper figure matching Paul Nation's independently-cited "~8-9k
+words for full text comprehension" research once real fluency (not
+just CEFR minimums) is the bar.
+
+**Hours research** (Cambridge English's published guided-learning-hours,
+classroom basis, cumulative from zero): A1 90–100 · A2 180–200 · B1
+350–400 · B2 500–600 · C1 700–800 · C2 1,000–1,200. **Real gap surfaced
+by this research**: the existing publish-gate bar (≥10hr teaching +
+≥10hr practice for the beginner tier) is roughly a tenth of Cambridge's
+~200hr classroom figure for genuine A2 mastery. Retrieval-practice/
+spaced-repetition research (the same literature behind this app's own
+SRS design) supports self-study being more efficient than classroom
+hours specifically for vocabulary retention, but there's no research
+basis for assuming the same efficiency multiplier applies to grammar,
+listening, or production skill — so the honest conclusion is to keep
+treating ≥10/≥10hr explicitly as a launch MINIMUM, not equivalent to
+real A1/A2 mastery, and to apply the same "ship an initial ~15-20hr
+slice once the tier below is solid, then drip-grow forever" pattern to
+every future tier rather than trying to hit Cambridge's full classroom-
+hour ceiling before ever shipping intermediate/advanced content.
+
+**Stage-granularity question**: checked ACTFL (the US CEFR-equivalent)
+for precedent — it uses 9 sublevels (Novice/Intermediate/Advanced ×
+Low/Mid/High) plus Superior/Distinguished, real evidence that finer-
+than-3-bucket staging is normal in the field. But this app's schema
+already tracks full CEFR granularity (A1–C2, 6 levels, built and
+live-verified) — "beginner/intermediate/advanced" was always just a
+3-bucket content-rollout-priority grouping (2 CEFR levels each), never
+a limit on the learner-facing level system. No schema/product change
+needed; recommendation is to plan content depth per actual CEFR level
+(the 6-way breakdown above) rather than the coarser 3-bucket framing,
+and NOT to adopt ACTFL's finer sub-leveling on top of CEFR — added
+complexity with no clear benefit for a self-directed app where CEFR is
+the globally-recognized standard.
+
+Full reasoning, all figures, and the resulting recommended per-tier
+launch pattern also written into the `project-lingosquared-roadmap`
+memory file (the durable cross-session copy Claude Code maintains
+outside this repo) so it survives context resets.
+
+Sources: [Vocabulary size and the CEFR (Milton)](https://www.wgtn.ac.nz/lals/resources/paul-nations-resources/vocabulary-lists/vocabulary-cefr-and-word-family-size/vocabulary-and-the-cefr-docx) ·
+[Guided learning hours – Cambridge English](https://support.cambridgeenglish.org/hc/en-gb/articles/202838506-Guided-learning-hours) ·
+[Enhancing human learning via spaced repetition optimization](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6410796/) ·
+[ACTFL vs CEFR framework comparison](https://www.cathoven.com/blog/comparing-actfl-the-american-standard-with-cefr-the-european-standard/)
