@@ -17,6 +17,34 @@ review:
     stands alone with no adjacent vocabulary sibling, and per-lesson
     card counts were already reasonable).
 
+    2026-07-07: a whole-course curriculum review (Fable, reading all 28
+    en-nl units as one continuous learner journey) found two real
+    cross-lesson time contradictions in this unit that a per-unit
+    review can't see: (1) lesson06's dialogue had the workshop starting
+    "om kwart over drie" (15:15) while lesson05's schedule states the
+    workshop at 14.45 ("om kwart voor drie") -- fixed by changing
+    lesson06's line to kwart voor drie, matching lesson05 exactly. (2)
+    The taalcafé's own start time drifted across the unit: lesson03
+    teaches "Hoe laat begint het taalcafé? Om kwart over twee" (14:15,
+    matching lesson05's "14.15 Welkom" schedule entry), but lesson06's
+    dialogue had Omar confirming "Om half drie, dus om veertien uur
+    dertig" (14:30) for the same question -- fixed by changing
+    lesson06's line to kwart over twee / veertien uur vijftien (14:15),
+    matching lesson03 and lesson05. Lotte's own arrival line ("Dan ben
+    ik er om kwart over twee," 14:15) would then coincide exactly with
+    the café's start once fixed, which loses the "arrives a bit early"
+    nuance and also would have made lesson06's match_dialogue_times
+    exercise show two pairs with the identical right-side value ("Lotte
+    komt" and "het taalcafé begint" both "kwart over twee") -- avoided
+    both problems by moving Lotte's arrival 15 minutes earlier to "om
+    twee uur" (14:00, already-taught vocabulary, no new tokens needed),
+    preserving the original narrative beat and giving every
+    match_dialogue_times pair a distinct value. Updated the teaching
+    cards, all affected exercises (01/02/03/04/05/06/07/08), and the
+    taalcafe_time.01 dialogue audio asset's text together, all in this
+    file; see the sibling overlay file's review.notes for the matching
+    overlay-side fixes. Re-validated/compiled clean.
+
 course:
   realization_key: nl.a1
   target_language_first: true
@@ -41,9 +69,9 @@ media_assets:
   - content_key: nl.a1.audio.dialogue.taalcafe_time.01
     language: nl
     text: >-
-      Lotte: Hoe laat begint het taalcafé vrijdag? Omar: Om half drie, dus om
-      veertien uur dertig. Lotte: En hoe laat begint de workshop? Omar: Om
-      kwart over drie. Lotte: Goed. Dan ben ik er om kwart over twee. Omar:
+      Lotte: Hoe laat begint het taalcafé vrijdag? Omar: Om kwart over twee,
+      dus om veertien uur vijftien. Lotte: En hoe laat begint de workshop?
+      Omar: Om kwart voor drie. Lotte: Goed. Dan ben ik er om twee uur. Omar:
       Prima, tot vrijdagmiddag!
     voice_hint: two_young_adults_neutral_friendly
     status: pending_generation
@@ -184,20 +212,20 @@ units:
         title: "Een tijd afspreken bij het taalcafé"
         spine_outcome_id: universal.a1.time.ask_tell_time
         teaching:
-          - {content_key: nl.a1.unit04.lesson06.teach.start_turn, kind: dialogue, target: {text: "Lotte: Hoe laat begint het taalcafé vrijdag? Omar: Om half drie, dus om veertien uur dertig.", language_code: nl, direction: ltr}, introduced_tokens: [Lotte, Hoe, laat, begint, het, taalcafé, vrijdag, Omar, Om, half, drie, dus, om, veertien, uur, dertig]}
-          - {content_key: nl.a1.unit04.lesson06.teach.workshop_turn, kind: dialogue, target: {text: "Lotte: En hoe laat begint de workshop? Omar: Om kwart over drie.", language_code: nl, direction: ltr}, introduced_tokens: [Lotte, En, hoe, laat, begint, de, workshop, Omar, Om, kwart, over, drie]}
-          - {content_key: nl.a1.unit04.lesson06.teach.arrival_turn, kind: dialogue, target: {text: "Lotte: Goed. Dan ben ik er om kwart over twee.", language_code: nl, direction: ltr}, introduced_tokens: [Lotte, Goed, Dan, ben, ik, er, om, kwart, over, twee]}
+          - {content_key: nl.a1.unit04.lesson06.teach.start_turn, kind: dialogue, target: {text: "Lotte: Hoe laat begint het taalcafé vrijdag? Omar: Om kwart over twee, dus om veertien uur vijftien.", language_code: nl, direction: ltr}, introduced_tokens: [Lotte, Hoe, laat, begint, het, taalcafé, vrijdag, Omar, Om, kwart, over, twee, dus, om, veertien, uur, vijftien]}
+          - {content_key: nl.a1.unit04.lesson06.teach.workshop_turn, kind: dialogue, target: {text: "Lotte: En hoe laat begint de workshop? Omar: Om kwart voor drie.", language_code: nl, direction: ltr}, introduced_tokens: [Lotte, En, hoe, laat, begint, de, workshop, Omar, Om, kwart, voor, drie]}
+          - {content_key: nl.a1.unit04.lesson06.teach.arrival_turn, kind: dialogue, target: {text: "Lotte: Goed. Dan ben ik er om twee uur.", language_code: nl, direction: ltr}, introduced_tokens: [Lotte, Goed, Dan, ben, ik, er, om, twee, uur]}
           - {content_key: nl.a1.unit04.lesson06.teach.close_turn, kind: dialogue, target: {text: "Omar: Prima, tot vrijdagmiddag!", language_code: nl, direction: ltr}, introduced_tokens: [Omar, Prima, tot, vrijdagmiddag]}
         exercises:
-          - {content_key: nl.a1.unit04.lesson06.exercise01.dialogue_cafe_time, type: dialogue_comprehension, tested_text: "Het taalcafé begint om half drie veertien uur dertig", media_asset_key: nl.a1.audio.dialogue.taalcafe_time.01, prompt: {target_blocks: []}}
-          - {content_key: nl.a1.unit04.lesson06.exercise02.dialogue_workshop, type: dialogue_comprehension, tested_text: "De workshop begint om kwart over drie", media_asset_key: nl.a1.audio.dialogue.taalcafe_time.01, prompt: {target_blocks: []}}
-          - {content_key: nl.a1.unit04.lesson06.exercise03.listen_arrival, type: listen_select, tested_text: "Lotte is er om kwart over twee", media_asset_key: nl.a1.audio.dialogue.taalcafe_time.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit04.lesson06.exercise01.dialogue_cafe_time, type: dialogue_comprehension, tested_text: "Het taalcafé begint om kwart over twee veertien uur vijftien", media_asset_key: nl.a1.audio.dialogue.taalcafe_time.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit04.lesson06.exercise02.dialogue_workshop, type: dialogue_comprehension, tested_text: "De workshop begint om kwart voor drie", media_asset_key: nl.a1.audio.dialogue.taalcafe_time.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit04.lesson06.exercise03.listen_arrival, type: listen_select, tested_text: "Lotte is er om twee uur", media_asset_key: nl.a1.audio.dialogue.taalcafe_time.01, prompt: {target_blocks: []}}
           - content_key: nl.a1.unit04.lesson06.exercise04.match_dialogue_times
             type: matching_pairs
-            tested_text: "Lotte taalcafé workshop kwart over twee half drie kwart over drie"
+            tested_text: "Lotte taalcafé workshop twee uur kwart over twee kwart voor drie"
             prompt: {target_blocks: []}
-            pairs: [{left: "Lotte komt", right: "kwart over twee"}, {left: "het taalcafé begint", right: "half drie"}, {left: "de workshop begint", right: "kwart over drie"}]
-          - {content_key: nl.a1.unit04.lesson06.exercise05.order_cafe_time, type: word_order, tested_text: "Het taalcafé begint om half drie", prompt: {target_blocks: []}, word_bank: [drie, begint, taalcafé, half, Het, om]}
-          - {content_key: nl.a1.unit04.lesson06.exercise06.listen_order_arrival, type: listen_order, tested_text: "Dan ben ik er om kwart over twee", media_asset_key: nl.a1.audio.dialogue.taalcafe_time.01, prompt: {target_blocks: []}, word_bank: [twee, ik, kwart, Dan, om, er, ben, over]}
-          - {content_key: nl.a1.unit04.lesson06.exercise07.reply_cafe_time, type: dialogue_response, tested_text: "Het taalcafé begint om half drie", prompt: {target_blocks: [{text: "Hoe laat begint het taalcafé vrijdag?", language_code: nl, direction: ltr}]}}
-          - {content_key: nl.a1.unit04.lesson06.exercise08.write_plan, type: writing_prompt, tested_text: "Vrijdag begint het taalcafé om half drie Ik ben er om kwart over twee", prompt: {target_blocks: []}}
+            pairs: [{left: "Lotte komt", right: "twee uur"}, {left: "het taalcafé begint", right: "kwart over twee"}, {left: "de workshop begint", right: "kwart voor drie"}]
+          - {content_key: nl.a1.unit04.lesson06.exercise05.order_cafe_time, type: word_order, tested_text: "Het taalcafé begint om kwart over twee", prompt: {target_blocks: []}, word_bank: [twee, begint, taalcafé, kwart, Het, om, over]}
+          - {content_key: nl.a1.unit04.lesson06.exercise06.listen_order_arrival, type: listen_order, tested_text: "Dan ben ik er om twee uur", media_asset_key: nl.a1.audio.dialogue.taalcafe_time.01, prompt: {target_blocks: []}, word_bank: [twee, ik, uur, Dan, om, er, ben]}
+          - {content_key: nl.a1.unit04.lesson06.exercise07.reply_cafe_time, type: dialogue_response, tested_text: "Het taalcafé begint om kwart over twee", prompt: {target_blocks: [{text: "Hoe laat begint het taalcafé vrijdag?", language_code: nl, direction: ltr}]}}
+          - {content_key: nl.a1.unit04.lesson06.exercise08.write_plan, type: writing_prompt, tested_text: "Vrijdag begint het taalcafé om kwart over twee Ik ben er om twee uur", prompt: {target_blocks: []}}
