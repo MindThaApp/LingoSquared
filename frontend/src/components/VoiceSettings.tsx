@@ -4,19 +4,7 @@ import { useTranslation } from "react-i18next";
 import { CatalogApi } from "../api/endpoints";
 import { BROWSER_TTS_LANG } from "../api/tts";
 import { getVoicePreference, setVoicePreference } from "../lib/voicePreferences";
-
-const SAMPLE_TEXT: Record<string, string> = {
-  en: "Hello, how are you?",
-  nl: "Hallo, hoe gaat het?",
-  fr: "Bonjour, comment ça va ?",
-  de: "Hallo, wie geht es dir?",
-  it: "Ciao, come stai?",
-  es: "Hola, ¿cómo estás?",
-  ru: "Привет, как дела?",
-  zh: "你好，你怎么样？",
-  fa: "سلام، حالتون چطوره؟",
-  prs: "سلام، حال شما چطور است؟",
-};
+import { SAMPLE_SPEECH_TEXT as SAMPLE_TEXT } from "../lib/sampleSpeechText";
 
 function useBrowserVoices(): SpeechSynthesisVoice[] {
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);

@@ -300,6 +300,52 @@ while standing up an isolated test stack, all in `docs/BUILD_LOG.md`.
 **Not done**: fa/prs translations for the new UI strings (English-only
 this pass, safe fallback via i18next, normal Codex round-trip pending).
 
+**Per-language TTS speech-speed setting — DONE, 2026-07-07, live-verified,
+a standalone task outside the phase program, prompted by a real Ramin
+report** ("Dutch TTS sounds too fast"). `/tts`'s request gained an
+optional `speaking_rate` (default `1.0`, validated `0.25`-`2.0` to match
+`google-cloud-texttospeech`'s own `AudioConfig.speaking_rate` bound),
+threaded into `synthesize_google()`'s `AudioConfig` directly and into
+`synthesize_azure()` via a new `<prosody rate="...">` SSML wrap (Azure's
+REST API has no equivalent top-level field). **Per-device, per-language
+`localStorage` preference, not a backend/account field**
+(`frontend/src/lib/ttsSpeedPreferences.ts`, same precedent as the
+existing per-language voice preference and the STT mic/keyboard toggle)
+— confirmed safe because `/tts` never caches synthesized audio across
+users/requests, so there's no shared-cache-correctness reason to push
+this server-side. New `SpeechSpeedSettings.tsx` on `ProfilePage` (next to
+`VoiceSettings`), a 0.75-1.25 slider scoped to languages the account has
+actually studied (derived from real `/me/progress` `skill_progress`
+course IDs, not all 10 languages). Wired into every playback tier via
+`api/tts.ts`'s `speak()` (the single chokepoint every `SpeakButton` call
+site already goes through, so teaching cards/exercises/Endless
+Practice/Review/Checkpoint all pick it up for free, no per-component
+changes needed): cloud TTS bakes the rate in server-side; browser
+`speechSynthesis` fallback sets `utterance.rate` client-side; recorded
+human audio (`GET /media/{key}`, fixed-speed flat MP3s with no synthesis
+step to parameterize) still respects the same preference via
+`HTMLMediaElement.playbackRate`, a genuine browser feature, not a hack.
+Live-verified against a real, credentialed Google Cloud TTS call on an
+isolated stack (fresh migrate, real content import, real lesson
+completion for real `skill_progress`) — measured actual output audio
+duration via `afinfo`, not just request inspection: identical Dutch text
+at `speaking_rate` 1.0 vs 0.8 produced 1.608s vs 1.992s (ratio ~1.24,
+matching the expected ~1.25 inverse-rate relationship), while an
+independent English request at 1.0 stayed at its own normal 1.464s,
+confirming per-language isolation. **Browser-UI click-through (actually
+moving the slider in a live tab) could not be completed this session** —
+`claude-in-chrome`'s interactive tools (`computer`/`read_page`/`find`/
+`javascript_tool`/`form_input`) all failed/timed out ("couldn't
+determine which page this action targets" / hung waiting on what looked
+like a stuck permission prompt in the extension side panel), while
+passive tools (`get_page_text`, `navigate`, `tabs_context_mcp`) worked
+fine throughout; `list_connected_browsers` showed only one, local browser
+already selected, so it wasn't a multi-device ambiguity. Whoever next has
+a live browser session should do a quick real click-through of the new
+Settings rows as a final visual close-out — the mechanism itself is
+verified working end-to-end against the real provider, just not
+eyeballed in a rendered page this pass.
+
 `docs/APP_SPEC_FOR_FABLE_REVIEW.md` is the architecture snapshot +
 review that produced the upgrade program — read for the "why" behind
 Phase A's SRS redesign and the content-architecture rationale.

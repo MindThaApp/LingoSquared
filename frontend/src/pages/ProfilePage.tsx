@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { ProgressApi } from "../api/endpoints";
 import { isGuestUser, useAuth } from "../auth/AuthContext";
 import { VoiceSettings } from "../components/VoiceSettings";
+import { SpeechSpeedSettings } from "../components/SpeechSpeedSettings";
 
 export function ProfilePage() {
   const { t } = useTranslation();
@@ -87,6 +88,7 @@ export function ProfilePage() {
         )}
       </div>
 
+      <SpeechSpeedSettings />
       <VoiceSettings />
 
       <button className="btn btn-secondary btn-block" onClick={logout} style={{ marginTop: 8 }}>
