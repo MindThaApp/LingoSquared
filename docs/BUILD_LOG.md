@@ -10168,3 +10168,141 @@ same-lesson content — per-unit AI authoring with fresh-context review
 is required for the rest; the compiler's own warnings are the
 authoritative per-card worklist. Unit-by-unit, bumping each file to
 1.1 as it lands.
+
+## AUTHORING_GUIDE.md §19 retrofit: nl/en-nl vocabulary example sentences, 2026-07-07
+
+**Trigger**: direct Ramin feedback — bare single-word teaching cards
+with no context "don't teach." A corpus-wide survey the same day found
+96% of vocabulary cards project-wide had no example sentence, and nl
+(the native-reviewed reference language) was the best case at "only"
+~28% uncovered. §19 landed: every `kind: vocabulary` card needs
+`example:` (realization) + `example_gloss:` (overlay), added to the
+SAME card (no card-count bloat), version-gated (warning at
+schema_version 1.0, hard error at 1.1). A pilot retrofit for nl
+a1_unit01 already existed as the reference pattern. Priority: nl/en-nl
+first (closest to the 3k-word beginner threshold, Ramin's own
+native-reviewed language), per the coordinator's vocabulary-gap
+analysis; shared English realization (fa-en/nl-en/prs-en) next.
+
+**Execution, two waves**:
+1. **Authoring** — 6 parallel workers, each using the compiler's own
+   warnings as the authoritative per-card worklist (not self-guessing),
+   covering all 28 nl realization + en-nl overlay files. Result: 138
+   vocabulary cards got real, natural Dutch example sentences +
+   English glosses; every file bumped `schema_version` "1.0"→"1.1"
+   once fully covered, locking the rule in as a hard error for that
+   file permanently. unit13 confirmed to have zero `kind: vocabulary`
+   cards at all (double-verified, not a scan gap — every card there is
+   phrase/dialogue/grammar_note/reading). Several workers found and
+   fixed small pre-existing gaps discovered strictly in service of the
+   retrofit (a completely missing overlay teaching entry for
+   "vijfendertig"/"negentig" that had nowhere to attach the new gloss —
+   added minimally, no invented fields beyond what was needed) and
+   flagged — without fixing, correctly out of scope — a live hard
+   error already present in `a1_unit09_directions.yaml` (already at
+   1.1 from earlier unrelated work, one card never retrofitted); caught
+   by a second worker's re-validation pass on the very next unit range
+   and fixed before this entry closed out.
+2. **Fresh-context review** — 3 SEPARATE workers with no memory of the
+   authoring reasoning, tasked with critically checking (not
+   rubber-stamping) every new sentence for naturalness, register
+   consistency (jij/je vs u per each unit's own policy), actual word
+   presence, gloss-alone comprehensibility, dialect authenticity, and
+   cross-unit fact consistency — the same quality bar as any other
+   authored content tonight, per the coordinator's explicit
+   instruction that this is new content, not a mechanical edit. Found
+   and fixed 4 real issues: unit02's number/age examples repeated "Ik
+   heb X euro"/"Ik ben X jaar" too monotonously across a long sequence,
+   redistributed across other already-taught nouns; unit03's 12 month
+   examples all hung on "verjaardag" (birthday), a word never taught
+   anywhere else in the course — alternated half with an
+   already-established phrase instead; unit05 introduced a one-off,
+   never-otherwise-mentioned name ("Eva") instead of reusing the
+   established cast — swapped to "mijn zus"; unit19's "weerbericht"
+   example used an un-idiomatic "hoe" question with a word not yet
+   taught in that lesson — corrected to a natural "wat" question using
+   already-taught vocabulary. Everything else across all 28 units
+   (student authored: greetings through housing/reporting-a-problem)
+   was checked specifically against known project bug classes
+   (unit08's previously-fixed place-layout contradiction, register
+   leakage into formal A2 contexts, FSI-source verbatim import risk)
+   and approved as genuinely fine — reviewers explicitly declined to
+   invent problems where none existed, and one flagged (without
+   touching, correctly out of scope) a separate pre-existing
+   map-geometry inconsistency in unit09 that predates this retrofit
+   entirely.
+
+**Verification**: every one of the 12+ workers across both waves ran
+`compile_content.py validate` per unit and `practice-validate` for
+both en-nl and nl-en packs after every change. Independently
+re-verified myself at the very end — all 28 units individually
+re-validated at schema_version 1.1 (0 errors/0 warnings each, meaning
+every single card genuinely has a compliant example, not just a
+self-report), both practice packs clean, and a full whole-repo
+`verify.sh --content-only` sweep confirming the only remaining
+"missing example" warnings anywhere in the corpus are in OTHER
+languages/directions still pending their own future retrofit (fa, prs,
+es, fr, and the shared en/ realization used by fa-en/nl-en/prs-en) —
+exactly the expected state per the coordinator's phased plan, not a
+gap in this pass. nl/en-nl's retrofit is complete and solid; next
+phase per the coordinator's plan is the shared English realization.
+
+## Volume growth: new nl unit29 (hobbies), authored in the new §19 format from the start, 2026-07-07
+
+**Trigger**: coordinator confirmed nl/en-nl's §19 retrofit is solid
+(committed cd955f0, spot-checked directly) and moved this session back
+to volume growth per the original vocabulary-gap plan — author new
+nl A1/A2 units toward the 3,000-word beginner target, in the new
+format from day one (no future retrofit needed), after checking the
+spine for the next unrealized outcome. Explicitly noted a separate
+dedicated agent is handling the shared English realization retrofit —
+not this session's concern, correctly left untouched.
+
+**Spine check, done directly rather than trusting any cached number**:
+an exact diff of every `spine_outcome_id` used across all 28 nl
+realization files against every `id:` in `universal_spine.yaml`
+confirmed nl had already realized ALL 29 existing outcomes — zero
+unrealized ones remained. To continue volume growth, a new outcome
+needed to be added first. Added
+`universal.a1.hobbies.describe_free_time_activities` (topic: hobbies,
+prerequisite: `universal.a1.preferences.express_preferences`) — a
+standard A1 CEFR topic not yet covered (the existing preferences
+outcome is general likes/dislikes, not specifically leisure
+activities). Sanity-checked per the standing delegated spine-approval
+authority: parses cleanly, no duplicate ID among the resulting 30
+outcomes, valid prerequisite reference, all 4 modalities present.
+
+**New unit authored**: `docs/content/realizations/nl/
+a1_unit29_hobbies.yaml` + `docs/content/overlays/en-nl/a1_unit29.yaml`
+— 6 lessons (hobby vocabulary, frequency adverbs with a de-word/het-
+word `elke`/`elk` agreement note, the core "what do you do in your
+free time" exchange, a 7-turn Lotte/Omar dialogue continuing the
+established storyline with a callback to unit13's shared love of
+walking, a comparison reading passage, and a wrap-up dialogue planning
+a weekend combining two taught hobbies). Both files authored at
+`schema_version: "1.1"` from the start — no retrofit needed, every
+`kind: vocabulary` card got its `example:`/`example_gloss:` the moment
+it was written. Density kept consistent with the project's own
+established fix (2-4 related words merged per card, not one-word-per-
+card). A real bug was found and fixed during this task, not just in
+review: a duplicate `success_criteria` key in the new spine entry
+itself (copy-paste residue from an unrelated formal-register outcome,
+silently overriding the correct line under PyYAML's duplicate-key
+handling) — caught and fixed under the same standing spine-authority.
+A fill_in_blank ambiguity risk was caught and avoided during authoring
+(blanking hobby verbs/frequency adverbs side-by-side would have been
+unfairly ambiguous) rather than needing a later fix.
+
+**Verification**: independently re-verified myself, not just trusting
+the worker's self-report — re-read the spine fix directly (clean,
+single `success_criteria` line), re-ran `compile_content.py validate`
+on the new unit (0 errors/0 warnings — a NEW file at 1.1 means ANY
+missing example is an immediate hard error, so this is real proof
+every card is compliant), confirmed `scripts/content_manifest.txt`'s
+`en-nl` line correctly includes the new unit, spot-checked one example
+sentence directly against the raw file after noticing what looked like
+a garbled fragment in the worker's own prose report ("nooit skip
+that") — confirmed the actual file content is completely clean, the
+garble was purely a report-writing artifact, not a real content bug —
+and ran the full `verify.sh --content-only` sweep: 0 errors/0 warnings
+throughout, content stage passes.
