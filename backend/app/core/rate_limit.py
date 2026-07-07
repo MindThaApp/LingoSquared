@@ -11,6 +11,7 @@ simple, dependency-free, and easy to test.
 """
 import time
 from collections import defaultdict, deque
+from datetime import date
 from threading import Lock
 
 
@@ -52,10 +53,46 @@ class RateLimiter:
             self._hits.clear()
 
 
-_all_limiters: list[RateLimiter] = []
+class DailyCharBudget:
+    """Per-key daily character-count budget, calendar-day granularity.
+
+    Separate from RateLimiter (which counts requests, not a variable
+    "cost" per request) -- used for /tts's per-account daily character
+    cap (Phase H2), where one request can consume anywhere from a few
+    to 5,000 characters. In-memory for the same single-process reason
+    RateLimiter is (see module docstring); resets naturally at UTC
+    midnight since `_usage` is keyed by (key, date).
+    """
+
+    def __init__(self, daily_limit: int, *, today=lambda: date.today()):
+        self.daily_limit = daily_limit
+        self._today = today
+        self._usage: dict[tuple[str, date], int] = defaultdict(int)
+        self._lock = Lock()
+
+    def reserve(self, key: str, chars: int) -> bool:
+        """Attempt to reserve `chars` against today's budget for `key`.
+
+        Returns True and records the usage if under budget, False
+        (recording nothing) if it would exceed the daily cap.
+        """
+        today = self._today()
+        with self._lock:
+            usage_key = (key, today)
+            if self._usage[usage_key] + chars > self.daily_limit:
+                return False
+            self._usage[usage_key] += chars
+            return True
+
+    def reset(self) -> None:
+        with self._lock:
+            self._usage.clear()
 
 
-def register_limiter(limiter: RateLimiter) -> RateLimiter:
+_all_limiters: list[RateLimiter | DailyCharBudget] = []
+
+
+def register_limiter(limiter: RateLimiter | DailyCharBudget) -> RateLimiter | DailyCharBudget:
     """Track a limiter so `reset_all()` (used between tests) can find it."""
     _all_limiters.append(limiter)
     return limiter
