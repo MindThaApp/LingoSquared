@@ -195,7 +195,7 @@ def practice_depth_report(db_url: str | None = None) -> dict[str, dict[str, Any]
                 if space < 20:  # arbitrary "thin" threshold for the report
                     thin_templates += 1
                 total_items += space
-            report[f"{course.source_language_code}-{course.target_language_code}"] = {
+            report[f"{course.source_language}-{course.target_language}"] = {
                 "templates": len(templates),
                 "thin_templates_under_20_variants": thin_templates,
                 "estimated_unique_items": total_items,
