@@ -1,0 +1,232 @@
+schema_version: "1.0"
+realization_version: "2026.1-draft.1"
+target_language: "de"
+cefr_level: "A1"
+status: "complete_draft"
+generation_provenance:
+  method: "ai_generated"
+  authoring_system: "claude"
+  human_reviewed: false
+review:
+  status: "unreviewed"
+  required_next_reviewer: "codex"
+  notes: >-
+    Second German (de) unit, continuing the Anna/Felix storyline from
+    unit01 (they met as neighbors in the stairwell, exchanged greetings
+    and wellbeing, but parted without exchanging names). This unit opens
+    a few days later at a bus stop -- a fresh, plausible second encounter
+    rather than an implausible instant reunion, giving the "recurring
+    characters keep running into each other" continuity texture other
+    languages' storylines already use. Scoped to exactly one spine
+    outcome (universal.a1.introductions.exchange_identity) across all 5
+    lessons per AUTHORING_GUIDE §1, matching unit01's discipline and
+    fa's clean one-outcome-per-unit precedent (no script-ramp lesson
+    needed here either, since German is Latin-script).
+
+    Deliberate A1 scoping decision: lesson02 teaches only first/second-
+    person "ich bin / du bist" (matching the spine's actual can_do --
+    "exchange names and basic identity information," which only requires
+    self-identification and asking someone else, not describing a third
+    party). Third-person er/sie ist is deliberately deferred to a later
+    grammar-focused unit: introducing "sie" (she) here would create a
+    genuine capitalization homograph with unit01's already-taught "Sie"
+    (formal you) whenever it appears sentence-initially (German
+    capitalizes every sentence-initial word regardless), which cannot be
+    cleanly demonstrated in a lesson this short without added scaffolding
+    vocabulary the spine doesn't call for. Avoiding it here is a real
+    scoping choice, not an oversight -- flagging for whoever authors the
+    later grammar unit that covers er/sie/es.
+
+    lesson03's country list (Deutschland, England, Frankreich, Italien,
+    Spanien, Russland) deliberately teaches the country NOUNS only, not
+    the gendered nationality nouns (Deutscher/Deutsche, Engländer/
+    Engländerin, etc.) or predicate-adjective forms -- "Ich komme aus
+    +country" (lesson04) is grammatically regular and gender-free, a
+    cleaner A1 first exposure than the irregular/gendered nationality
+    noun system (Franzose/Französin is genuinely irregular), which is
+    better suited to its own later unit. lesson03's matching_pairs pools
+    all 6 countries, within AUTHORING_GUIDE §16's 6-12 target (deliberately
+    widened from unit01's 4-item vocab lists specifically so this
+    exercise clears the target comfortably, not left at a bare minimum).
+    Anna is established as coming from Germany and Felix from England,
+    consistent with their being neighbors in a German-speaking city
+    (Felix as the foreign resident) -- a detail future units should not
+    contradict. No fill_in_blank exercises, same ambiguity-avoidance
+    discipline as unit01. Every multi-clause accepted-answer combination
+    was authored with period/comma/conjunction-joined variants where a
+    genuine two-clause reply exists (lesson01's name+pleasure exchange,
+    lesson04's origin+return-question exchange). Compiled and validated
+    against the real compiler to confirm every exercise's tested_text is
+    fully covered by this file's own cumulative introduced_tokens (the
+    per-file untaught-vocabulary check resets per file, so unit01's
+    already-taught du/Sie/Guten Tag/etc. are deliberately re-listed here
+    wherever actually tested). A fresh-context review (Codex was
+    usage-exhausted; a no-prior-context subagent ran the equivalent
+    review) found and this fixed: (1) a real spine-coverage gap -- no
+    exercise tested read_basic_profile (reading modality) at all, only
+    listening/speaking/writing were covered -- added lesson05.teach.
+    steckbrief (a short written "Name: Felix. Land: England." profile
+    card) plus two new reading_comprehension exercises extracting the
+    name and country from it. (2) a register inconsistency in the
+    de-en overlay (a different overlay, paired with the existing
+    en/a1_unit02_introductions.yaml, not this file) where the Daniel/
+    Leila library dialogue's teaching notes mixed du and Sie for the
+    same fictional exchange -- fixed to a consistent Sie throughout,
+    matching the exercise instruction that was already correct. (3) an
+    isolated, out-of-context gloss ("Sie ist Ingenieurin.") that was
+    itself an instance of the exact sie/Sie capitalization ambiguity
+    this unit's own scoping decision exists to avoid -- clarified with
+    an explicit referent. Re-validated and re-compiled clean (0 errors/
+    0 warnings) after every fix, including the full project scripts/
+    verify.sh --content-only. Still pending an actual human (or Codex,
+    once usage resets) reviewer per standard governance -- this AI
+    review does not itself satisfy §9.
+
+course:
+  realization_key: "de.a1"
+  target_language_first: true
+  dialect: "de_DE_standard"
+  register_policy: "Teach clear Standard German (Hochdeutsch). Continue unit01's Sie/du distinction: Anna and Felix stay on Sie throughout this unit too, since exchanging names on a second casual encounter doesn't by itself move German speakers to du -- that shift is a deliberate, separate social step, not automatic."
+
+media_assets:
+  - {content_key: "de.a1.audio.wie_heissen_sie.neutral.01", language: "de", text: "Wie heißen Sie?", voice_hint: "neutral_adult_polite", status: "pending_generation"}
+  - {content_key: "de.a1.audio.ich_heisse_anna.neutral.01", language: "de", text: "Ich heiße Anna.", voice_hint: "neutral_young_adult_friendly", status: "pending_generation"}
+  - {content_key: "de.a1.audio.ich_bin_anna.neutral.01", language: "de", text: "Ich bin Anna.", voice_hint: "neutral_young_adult_friendly", status: "pending_generation"}
+  - {content_key: "de.a1.audio.woher_kommen_sie.neutral.01", language: "de", text: "Woher kommen Sie?", voice_hint: "neutral_adult_polite", status: "pending_generation"}
+  - {content_key: "de.a1.audio.ich_komme_aus_deutschland.neutral.01", language: "de", text: "Ich komme aus Deutschland.", voice_hint: "neutral_young_adult_friendly", status: "pending_generation"}
+  - content_key: "de.a1.audio.dialogue.bushaltestelle.01"
+    language: "de"
+    text: "Felix: Guten Tag! Anna: Guten Tag! Wie heißen Sie? Felix: Ich heiße Felix. Und Sie? Anna: Ich heiße Anna. Freut mich. Felix: Ganz meinerseits. Woher kommen Sie? Anna: Ich komme aus Deutschland. Und Sie? Felix: Ich komme aus England. Anna: Auf Wiedersehen! Felix: Auf Wiedersehen!"
+    voice_hint: "two_adults_neutral_friendly"
+    status: "pending_generation"
+
+units:
+  - content_key: "de.a1.unit02.introductions"
+    title: "Sich vorstellen"
+    section: "reading_writing"
+    spine_outcome_ids:
+      - "universal.a1.introductions.exchange_identity"
+    planned_lesson_count: 5
+    lessons:
+      - content_key: "de.a1.unit02.lesson01.namen"
+        title: "Namen"
+        spine_outcome_id: "universal.a1.introductions.exchange_identity"
+        teaching:
+          - {content_key: "de.a1.unit02.lesson01.teach.wie_heissen_sie", kind: "phrase", target: {text: "Wie heißen Sie?", language_code: "de", direction: "ltr"}, introduced_tokens: ["Wie", "heißen", "Sie"]}
+          - {content_key: "de.a1.unit02.lesson01.teach.ich_heisse_anna", kind: "phrase", target: {text: "Ich heiße Anna.", language_code: "de", direction: "ltr"}, introduced_tokens: ["Ich", "heiße", "Anna"]}
+          - {content_key: "de.a1.unit02.lesson01.teach.wie_heisst_du", kind: "phrase", target: {text: "Wie heißt du?", language_code: "de", direction: "ltr"}, introduced_tokens: ["heißt", "du"]}
+          - {content_key: "de.a1.unit02.lesson01.teach.ich_heisse_felix", kind: "phrase", target: {text: "Ich heiße Felix.", language_code: "de", direction: "ltr"}, introduced_tokens: ["Felix"]}
+          - {content_key: "de.a1.unit02.lesson01.teach.freut_mich", kind: "phrase", target: {text: "Freut mich.", language_code: "de", direction: "ltr"}, introduced_tokens: ["Freut", "mich"]}
+          - {content_key: "de.a1.unit02.lesson01.teach.ganz_meinerseits", kind: "phrase", target: {text: "Ganz meinerseits.", language_code: "de", direction: "ltr"}, introduced_tokens: ["Ganz", "meinerseits"]}
+        exercises:
+          - {content_key: "de.a1.unit02.lesson01.exercise01.listen_formal_question", type: "listen_select", tested_text: "Wie heißen Sie", media_asset_key: "de.a1.audio.wie_heissen_sie.neutral.01", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit02.lesson01.exercise02.choose_informal_question", type: "multiple_choice", tested_text: "Wie heißt du", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit02.lesson01.exercise03.order_informal_question", type: "word_order", tested_text: "Wie heißt du", prompt: {target_blocks: []}, word_bank: ["heißt", "du", "Wie"]}
+          - {content_key: "de.a1.unit02.lesson01.exercise04.reply_formally", type: "dialogue_response", tested_text: "Ich heiße Anna", prompt: {target_blocks: [{text: "Wie heißen Sie?", language_code: "de", direction: "ltr"}]}}
+          - {content_key: "de.a1.unit02.lesson01.exercise05.reply_and_pleased", type: "dialogue_response", tested_text: "Ich heiße Felix Freut mich", prompt: {target_blocks: [{text: "Wie heißt du?", language_code: "de", direction: "ltr"}]}}
+          - {content_key: "de.a1.unit02.lesson01.exercise06.write_ganz_meinerseits", type: "writing_prompt", tested_text: "Ganz meinerseits", prompt: {target_blocks: [{text: "Freut mich.", language_code: "de", direction: "ltr"}]}}
+          - {content_key: "de.a1.unit02.lesson01.exercise07.listen_type_ich_heisse_anna", type: "listen_type", tested_text: "Ich heiße Anna", media_asset_key: "de.a1.audio.ich_heisse_anna.neutral.01", prompt: {target_blocks: []}}
+
+      - content_key: "de.a1.unit02.lesson02.ich_bin_du_bist"
+        title: "Ich bin... Du bist..."
+        spine_outcome_id: "universal.a1.introductions.exchange_identity"
+        teaching:
+          - {content_key: "de.a1.unit02.lesson02.teach.ich", kind: "grammar_note", target: {text: "ich", language_code: "de", direction: "ltr"}, introduced_tokens: ["ich"]}
+          - {content_key: "de.a1.unit02.lesson02.teach.du", kind: "grammar_note", target: {text: "du", language_code: "de", direction: "ltr"}, introduced_tokens: []}
+          - {content_key: "de.a1.unit02.lesson02.teach.ich_bin_anna", kind: "phrase", target: {text: "Ich bin Anna.", language_code: "de", direction: "ltr"}, introduced_tokens: ["Ich", "bin"]}
+          - {content_key: "de.a1.unit02.lesson02.teach.du_bist_felix", kind: "phrase", target: {text: "Du bist Felix.", language_code: "de", direction: "ltr"}, introduced_tokens: ["Du", "bist"]}
+        exercises:
+          - {content_key: "de.a1.unit02.lesson02.exercise01.choose_ich", type: "multiple_choice", tested_text: "ich", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit02.lesson02.exercise02.choose_du", type: "multiple_choice", tested_text: "du", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit02.lesson02.exercise03.listen_ich_bin_anna", type: "listen_select", tested_text: "Ich bin Anna", media_asset_key: "de.a1.audio.ich_bin_anna.neutral.01", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit02.lesson02.exercise04.order_du_bist_felix", type: "word_order", tested_text: "Du bist Felix", prompt: {target_blocks: []}, word_bank: ["bist", "Felix", "Du"]}
+          - {content_key: "de.a1.unit02.lesson02.exercise05.write_ich_bin", type: "writing_prompt", tested_text: "Ich bin Anna", prompt: {target_blocks: [{text: "Write that you are Anna: 'I am Anna.'", language_code: "en", direction: "ltr"}]}}
+          - {content_key: "de.a1.unit02.lesson02.exercise06.speak_du_bist", type: "speak_response", tested_text: "Du bist Felix", prompt: {target_blocks: []}}
+
+      - content_key: "de.a1.unit02.lesson03.laender"
+        title: "Länder"
+        spine_outcome_id: "universal.a1.introductions.exchange_identity"
+        teaching:
+          - {content_key: "de.a1.unit02.lesson03.teach.deutschland", kind: "vocabulary", target: {text: "Deutschland", language_code: "de", direction: "ltr"}, introduced_tokens: ["Deutschland"]}
+          - {content_key: "de.a1.unit02.lesson03.teach.england", kind: "vocabulary", target: {text: "England", language_code: "de", direction: "ltr"}, introduced_tokens: ["England"]}
+          - {content_key: "de.a1.unit02.lesson03.teach.frankreich", kind: "vocabulary", target: {text: "Frankreich", language_code: "de", direction: "ltr"}, introduced_tokens: ["Frankreich"]}
+          - {content_key: "de.a1.unit02.lesson03.teach.italien", kind: "vocabulary", target: {text: "Italien", language_code: "de", direction: "ltr"}, introduced_tokens: ["Italien"]}
+          - {content_key: "de.a1.unit02.lesson03.teach.spanien", kind: "vocabulary", target: {text: "Spanien", language_code: "de", direction: "ltr"}, introduced_tokens: ["Spanien"]}
+          - {content_key: "de.a1.unit02.lesson03.teach.russland", kind: "vocabulary", target: {text: "Russland", language_code: "de", direction: "ltr"}, introduced_tokens: ["Russland"]}
+        exercises:
+          - {content_key: "de.a1.unit02.lesson03.exercise01.listen_deutschland", type: "listen_select", tested_text: "Deutschland", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit02.lesson03.exercise02.choose_england", type: "multiple_choice", tested_text: "England", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit02.lesson03.exercise03.choose_frankreich", type: "multiple_choice", tested_text: "Frankreich", prompt: {target_blocks: []}}
+          - content_key: "de.a1.unit02.lesson03.exercise04.match_countries"
+            type: "matching_pairs"
+            tested_text: "Deutschland England Frankreich Italien Spanien Russland"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "Deutschland", right: "Germany"}
+              - {left: "England", right: "England"}
+              - {left: "Frankreich", right: "France"}
+              - {left: "Italien", right: "Italy"}
+              - {left: "Spanien", right: "Spain"}
+              - {left: "Russland", right: "Russia"}
+          - {content_key: "de.a1.unit02.lesson03.exercise05.write_italien", type: "writing_prompt", tested_text: "Italien", prompt: {target_blocks: [{text: "Write the German name for Italy.", language_code: "en", direction: "ltr"}]}}
+          - {content_key: "de.a1.unit02.lesson03.exercise06.write_spanien", type: "writing_prompt", tested_text: "Spanien", prompt: {target_blocks: [{text: "Write the German name for Spain.", language_code: "en", direction: "ltr"}]}}
+
+      - content_key: "de.a1.unit02.lesson04.woher_kommen_sie"
+        title: "Woher kommen Sie?"
+        spine_outcome_id: "universal.a1.introductions.exchange_identity"
+        teaching:
+          - {content_key: "de.a1.unit02.lesson04.teach.woher_kommen_sie", kind: "phrase", target: {text: "Woher kommen Sie?", language_code: "de", direction: "ltr"}, introduced_tokens: ["Woher", "kommen", "Sie"]}
+          - {content_key: "de.a1.unit02.lesson04.teach.ich_komme_aus_deutschland", kind: "phrase", target: {text: "Ich komme aus Deutschland.", language_code: "de", direction: "ltr"}, introduced_tokens: ["Ich", "komme", "aus", "Deutschland"]}
+          - {content_key: "de.a1.unit02.lesson04.teach.woher_kommst_du", kind: "phrase", target: {text: "Woher kommst du?", language_code: "de", direction: "ltr"}, introduced_tokens: ["kommst", "du"]}
+          - {content_key: "de.a1.unit02.lesson04.teach.ich_komme_aus_england", kind: "phrase", target: {text: "Ich komme aus England.", language_code: "de", direction: "ltr"}, introduced_tokens: ["England"]}
+          - {content_key: "de.a1.unit02.lesson04.teach.und_sie", kind: "phrase", target: {text: "Und Sie?", language_code: "de", direction: "ltr"}, introduced_tokens: ["Und"]}
+        exercises:
+          - {content_key: "de.a1.unit02.lesson04.exercise01.listen_formal_question", type: "listen_select", tested_text: "Woher kommen Sie", media_asset_key: "de.a1.audio.woher_kommen_sie.neutral.01", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit02.lesson04.exercise02.choose_informal_question", type: "multiple_choice", tested_text: "Woher kommst du", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit02.lesson04.exercise03.listen_reply", type: "listen_select", tested_text: "Ich komme aus Deutschland", media_asset_key: "de.a1.audio.ich_komme_aus_deutschland.neutral.01", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit02.lesson04.exercise04.order_formal_question", type: "word_order", tested_text: "Woher kommen Sie", prompt: {target_blocks: []}, word_bank: ["kommen", "Sie", "Woher"]}
+          - {content_key: "de.a1.unit02.lesson04.exercise05.reply_formally", type: "dialogue_response", tested_text: "Ich komme aus Deutschland Und Sie", prompt: {target_blocks: [{text: "Woher kommen Sie?", language_code: "de", direction: "ltr"}]}}
+          - {content_key: "de.a1.unit02.lesson04.exercise06.reply_informally", type: "dialogue_response", tested_text: "Ich komme aus England", prompt: {target_blocks: [{text: "Woher kommst du?", language_code: "de", direction: "ltr"}]}}
+
+      - content_key: "de.a1.unit02.lesson05.an_der_bushaltestelle"
+        title: "An der Bushaltestelle"
+        spine_outcome_id: "universal.a1.introductions.exchange_identity"
+        teaching:
+          - {content_key: "de.a1.unit02.lesson05.teach.line01", kind: "dialogue", target: {text: "Guten Tag!", language_code: "de", direction: "ltr", speaker: "Felix"}, introduced_tokens: []}
+          - {content_key: "de.a1.unit02.lesson05.teach.line02", kind: "dialogue", target: {text: "Guten Tag! Wie heißen Sie?", language_code: "de", direction: "ltr", speaker: "Anna"}, introduced_tokens: []}
+          - {content_key: "de.a1.unit02.lesson05.teach.line03", kind: "dialogue", target: {text: "Ich heiße Felix. Und Sie?", language_code: "de", direction: "ltr", speaker: "Felix"}, introduced_tokens: ["Und"]}
+          - {content_key: "de.a1.unit02.lesson05.teach.line04", kind: "dialogue", target: {text: "Ich heiße Anna. Freut mich.", language_code: "de", direction: "ltr", speaker: "Anna"}, introduced_tokens: []}
+          - {content_key: "de.a1.unit02.lesson05.teach.line05", kind: "dialogue", target: {text: "Ganz meinerseits. Woher kommen Sie?", language_code: "de", direction: "ltr", speaker: "Felix"}, introduced_tokens: []}
+          - {content_key: "de.a1.unit02.lesson05.teach.line06", kind: "dialogue", target: {text: "Ich komme aus Deutschland. Und Sie?", language_code: "de", direction: "ltr", speaker: "Anna"}, introduced_tokens: []}
+          - {content_key: "de.a1.unit02.lesson05.teach.line07", kind: "dialogue", target: {text: "Ich komme aus England.", language_code: "de", direction: "ltr", speaker: "Felix"}, introduced_tokens: []}
+          - {content_key: "de.a1.unit02.lesson05.teach.line08", kind: "dialogue", target: {text: "Auf Wiedersehen!", language_code: "de", direction: "ltr", speaker: "Anna"}, introduced_tokens: ["Auf", "Wiedersehen"]}
+          - {content_key: "de.a1.unit02.lesson05.teach.line09", kind: "dialogue", target: {text: "Auf Wiedersehen!", language_code: "de", direction: "ltr", speaker: "Felix"}, introduced_tokens: []}
+          - {content_key: "de.a1.unit02.lesson05.teach.steckbrief", kind: "reading", target: {text: "Name: Felix. Land: England.", language_code: "de", direction: "ltr"}, introduced_tokens: ["Name", "Land"]}
+        exercises:
+          - {content_key: "de.a1.unit02.lesson05.exercise01.listen_name_given", type: "dialogue_comprehension", tested_text: "Ich heiße Felix", media_asset_key: "de.a1.audio.dialogue.bushaltestelle.01", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit02.lesson05.exercise02.listen_origin_given", type: "listen_select", tested_text: "Ich komme aus Deutschland", media_asset_key: "de.a1.audio.dialogue.bushaltestelle.01", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit02.lesson05.exercise03.choose_register", type: "multiple_choice", tested_text: "Sie", prompt: {target_blocks: []}}
+          - content_key: "de.a1.unit02.lesson05.exercise04.match_unit_vocabulary"
+            type: "matching_pairs"
+            tested_text: "Deutschland England Frankreich Italien Spanien Russland Freut mich Ganz meinerseits"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "Deutschland", right: "Germany"}
+              - {left: "England", right: "England"}
+              - {left: "Frankreich", right: "France"}
+              - {left: "Italien", right: "Italy"}
+              - {left: "Spanien", right: "Spain"}
+              - {left: "Russland", right: "Russia"}
+              - {left: "Freut mich", right: "pleased to meet you"}
+              - {left: "Ganz meinerseits", right: "likewise"}
+          - {content_key: "de.a1.unit02.lesson05.exercise05.order_woher_kommen_sie", type: "word_order", tested_text: "Woher kommen Sie", prompt: {target_blocks: []}, word_bank: ["kommen", "Sie", "Woher"]}
+          - content_key: "de.a1.unit02.lesson05.exercise06.reply_as_anna"
+            type: "dialogue_response"
+            tested_text: "Ich heiße Anna Freut mich Ich komme aus Deutschland Und Sie Auf Wiedersehen"
+            prompt: {target_blocks: [{text: "Guten Tag! Wie heißen Sie? ... Ganz meinerseits. Woher kommen Sie?", language_code: "de", direction: "ltr"}]}
+          - content_key: "de.a1.unit02.lesson05.exercise07.speak_bushaltestelle_dialogue"
+            type: "speak_response"
+            tested_text: "Ich heiße Anna Freut mich Ich komme aus Deutschland Und Sie Auf Wiedersehen"
+            prompt: {target_blocks: [{text: "Guten Tag! Wie heißen Sie? ... Ganz meinerseits. Woher kommen Sie?", language_code: "de", direction: "ltr"}]}
+          - {content_key: "de.a1.unit02.lesson05.exercise08.read_profile_name", type: "reading_comprehension", tested_text: "Felix", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit02.lesson05.exercise09.read_profile_country", type: "reading_comprehension", tested_text: "England", prompt: {target_blocks: []}}
