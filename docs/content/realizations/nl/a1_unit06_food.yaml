@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: "1.1"
 realization_version: "2026.1-draft.1"
 target_language: nl
 cefr_level: A1
@@ -7,7 +7,24 @@ generation_provenance: {method: ai_generated, authoring_system: claude, human_re
 review:
   status: unreviewed
   required_next_reviewer: claude
-  notes: "Initial six-lesson Dutch food-ordering draft, authored directly by the driving Claude session (Codex was temporarily rate-limited). Still needs a genuine fresh-context review before it can be marked reviewed. Audio assets are declared for generation. 2026-07-06: reduced excessive one-word teaching-card density — merged single-token vocabulary cards into grouped cards (lesson01: koffie/thee/water/melk/sap 5→2 cards; lesson02: brood/broodje kaas/appel 3→1 card; lesson03: alstublieft/alsjeblieft 2→1 card). No changes to exercises or lesson-level content_keys."
+  notes: >-
+    Initial six-lesson Dutch food-ordering draft, authored directly by the
+    driving Claude session (Codex was temporarily rate-limited). Still needs
+    a genuine fresh-context review before it can be marked reviewed. Audio
+    assets are declared for generation. 2026-07-06: reduced excessive
+    one-word teaching-card density — merged single-token vocabulary cards
+    into grouped cards (lesson01: koffie/thee/water/melk/sap 5→2 cards;
+    lesson02: brood/broodje kaas/appel 3→1 card; lesson03: alstublieft/
+    alsjeblieft 2→1 card). No changes to exercises or lesson-level
+    content_keys.
+
+    2026-07-07: AUTHORING_GUIDE.md #19 retrofit — every vocabulary card
+    gained example sentence(s) built from this unit's own taught material
+    (minimal café-order phrasing like "Een koffie, alstublieft." and
+    forward/backward references to this unit's own phrase cards);
+    schema_version bumped to 1.1 (missing examples are now a hard compiler
+    error for this file). Example sentences are Claude-authored and
+    pending fresh-context review.
 
 course:
   realization_key: nl.a1
@@ -50,8 +67,21 @@ units:
         title: "Dranken"
         spine_outcome_id: universal.a1.food.order_simple_meal
         teaching:
-          - {content_key: nl.a1.unit06.lesson01.teach.koffie_thee_water, kind: vocabulary, target: {text: "koffie, thee, water", language_code: nl, direction: ltr}, introduced_tokens: [koffie, thee, water]}
-          - {content_key: nl.a1.unit06.lesson01.teach.melk_sap, kind: vocabulary, target: {text: "melk, sap", language_code: nl, direction: ltr}, introduced_tokens: [melk, sap]}
+          - content_key: nl.a1.unit06.lesson01.teach.koffie_thee_water
+            kind: vocabulary
+            target: {text: "koffie, thee, water", language_code: nl, direction: ltr}
+            introduced_tokens: [koffie, thee, water]
+            example:
+              - {text: "Een koffie, alstublieft.", language_code: nl, direction: ltr}
+              - {text: "Thee, alstublieft.", language_code: nl, direction: ltr}
+              - {text: "Water, alstublieft.", language_code: nl, direction: ltr}
+          - content_key: nl.a1.unit06.lesson01.teach.melk_sap
+            kind: vocabulary
+            target: {text: "melk, sap", language_code: nl, direction: ltr}
+            introduced_tokens: [melk, sap]
+            example:
+              - {text: "Melk, alstublieft.", language_code: nl, direction: ltr}
+              - {text: "Sap, alstublieft.", language_code: nl, direction: ltr}
         exercises:
           - {content_key: nl.a1.unit06.lesson01.exercise01.choose_koffie, type: multiple_choice, tested_text: "koffie", prompt: {target_blocks: [{text: "coffee", language_code: en, direction: ltr}]}}
           - {content_key: nl.a1.unit06.lesson01.exercise02.choose_water, type: multiple_choice, tested_text: "water", prompt: {target_blocks: [{text: "water", language_code: en, direction: ltr}]}}
@@ -68,7 +98,14 @@ units:
         title: "Ik wil graag"
         spine_outcome_id: universal.a1.food.order_simple_meal
         teaching:
-          - {content_key: nl.a1.unit06.lesson02.teach.brood_broodje_kaas_appel, kind: vocabulary, target: {text: "brood, broodje kaas, appel", language_code: nl, direction: ltr}, introduced_tokens: [brood, broodje, kaas, appel]}
+          - content_key: nl.a1.unit06.lesson02.teach.brood_broodje_kaas_appel
+            kind: vocabulary
+            target: {text: "brood, broodje kaas, appel", language_code: nl, direction: ltr}
+            introduced_tokens: [brood, broodje, kaas, appel]
+            example:
+              - {text: "Ik wil graag brood.", language_code: nl, direction: ltr}
+              - {text: "Ik wil graag een broodje kaas.", language_code: nl, direction: ltr}
+              - {text: "Ik wil graag een appel.", language_code: nl, direction: ltr}
           - {content_key: nl.a1.unit06.lesson02.teach.ik_wil_graag, kind: phrase, target: {text: "Ik wil graag ...", language_code: nl, direction: ltr}, introduced_tokens: [Ik, wil, graag]}
           - {content_key: nl.a1.unit06.lesson02.teach.ik_wil_graag_koffie, kind: phrase, target: {text: "Ik wil graag een koffie.", language_code: nl, direction: ltr}, introduced_tokens: [Ik, wil, graag, een, koffie]}
           - {content_key: nl.a1.unit06.lesson02.teach.ik_wil_graag_broodje, kind: phrase, target: {text: "Ik wil graag een broodje kaas.", language_code: nl, direction: ltr}, introduced_tokens: [Ik, wil, graag, een, broodje, kaas]}
@@ -84,7 +121,13 @@ units:
         title: "Aantallen bestellen"
         spine_outcome_id: universal.a1.food.order_simple_meal
         teaching:
-          - {content_key: nl.a1.unit06.lesson03.teach.alstublieft_alsjeblieft, kind: vocabulary, target: {text: "alstublieft, alsjeblieft", language_code: nl, direction: ltr}, introduced_tokens: [alstublieft, alsjeblieft]}
+          - content_key: nl.a1.unit06.lesson03.teach.alstublieft_alsjeblieft
+            kind: vocabulary
+            target: {text: "alstublieft, alsjeblieft", language_code: nl, direction: ltr}
+            introduced_tokens: [alstublieft, alsjeblieft]
+            example:
+              - {text: "Een koffie, alstublieft.", language_code: nl, direction: ltr}
+              - {text: "Een koffie, alsjeblieft.", language_code: nl, direction: ltr}
           - content_key: nl.a1.unit06.lesson03.teach.please_note
             kind: grammar_note
             target: {text: "alstublieft = formal please (with u); alsjeblieft = informal please (with jij/je)", language_code: en, direction: ltr}
@@ -108,7 +151,11 @@ units:
             kind: grammar_note
             target: {text: "wilt u (formal) but wil je (informal) — when wil comes before je or jij, it has no t", language_code: en, direction: ltr}
             introduced_tokens: [wilt, wil, u, je]
-          - {content_key: nl.a1.unit06.lesson04.teach.appelsap, kind: vocabulary, target: {text: "appelsap", language_code: nl, direction: ltr}, introduced_tokens: [appelsap]}
+          - content_key: nl.a1.unit06.lesson04.teach.appelsap
+            kind: vocabulary
+            target: {text: "appelsap", language_code: nl, direction: ltr}
+            introduced_tokens: [appelsap]
+            example: {text: "Mag ik een appelsap, alsjeblieft?", language_code: nl, direction: ltr}
           - {content_key: nl.a1.unit06.lesson04.teach.mag_ik, kind: phrase, target: {text: "Mag ik een appelsap, alsjeblieft?", language_code: nl, direction: ltr}, introduced_tokens: [Mag, ik, een, appelsap, alsjeblieft]}
         exercises:
           - {content_key: nl.a1.unit06.lesson04.exercise01.choose_wat_wilt_u, type: multiple_choice, tested_text: "Wat wilt u drinken", prompt: {target_blocks: [{text: "What would you like to drink? (formal)", language_code: en, direction: ltr}]}}
@@ -145,8 +192,16 @@ units:
         title: "Bestellen bij het taalcafé"
         spine_outcome_id: universal.a1.food.order_simple_meal
         teaching:
-          - {content_key: nl.a1.unit06.lesson06.teach.goedemiddag, kind: vocabulary, target: {text: "Goedemiddag", language_code: nl, direction: ltr}, introduced_tokens: [Goedemiddag]}
-          - {content_key: nl.a1.unit06.lesson06.teach.komt_eraan, kind: vocabulary, target: {text: "Komt eraan!", language_code: nl, direction: ltr}, introduced_tokens: [Komt, eraan]}
+          - content_key: nl.a1.unit06.lesson06.teach.goedemiddag
+            kind: vocabulary
+            target: {text: "Goedemiddag", language_code: nl, direction: ltr}
+            introduced_tokens: [Goedemiddag]
+            example: {text: "Goedemiddag, wat wilt u drinken?", language_code: nl, direction: ltr}
+          - content_key: nl.a1.unit06.lesson06.teach.komt_eraan
+            kind: vocabulary
+            target: {text: "Komt eraan!", language_code: nl, direction: ltr}
+            introduced_tokens: [Komt, eraan]
+            example: {text: "Uw koffie komt eraan!", language_code: nl, direction: ltr}
           - content_key: nl.a1.unit06.lesson06.teach.lines01_03
             kind: dialogue
             target:

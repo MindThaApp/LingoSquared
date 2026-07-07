@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: "1.1"
 realization_version: "2026.1-draft.1"
 target_language: nl
 cefr_level: A1
@@ -7,7 +7,22 @@ generation_provenance: {method: ai_generated, authoring_system: codex, human_rev
 review:
   status: unreviewed
   required_next_reviewer: claude
-  notes: "Initial six-lesson Dutch market-shopping draft; pending fresh-context and native-speaker review. Audio assets are declared for generation. 2026-07-06: reduced excessive one-word teaching-card density — merged single-token vocabulary cards into grouped cards (lesson01: markt/winkel/kraam and appels/peren/tomaten/paprika's, 7→2 cards; lesson03: gram/pond/stuk/stuks, 4→1 card). No changes to exercises or lesson-level content_keys."
+  notes: >-
+    Initial six-lesson Dutch market-shopping draft; pending fresh-context
+    and native-speaker review. Audio assets are declared for generation.
+    2026-07-06: reduced excessive one-word teaching-card density — merged
+    single-token vocabulary cards into grouped cards (lesson01: markt/
+    winkel/kraam and appels/peren/tomaten/paprika's, 7→2 cards; lesson03:
+    gram/pond/stuk/stuks, 4→1 card). No changes to exercises or
+    lesson-level content_keys.
+
+    2026-07-07: AUTHORING_GUIDE.md #19 retrofit — every vocabulary card
+    gained example sentence(s) reusing this unit's own "Ik wil graag ..."/
+    "alstublieft"/"Mag ik ...?" ordering phrases (and unit06's "Ik wil
+    graag ..." construction) so each word is seen in a natural request;
+    schema_version bumped to 1.1 (missing examples are now a hard compiler
+    error for this file). Example sentences are Claude-authored and
+    pending fresh-context review.
 
 course:
   realization_key: nl.a1
@@ -51,8 +66,23 @@ units:
         title: "Op de markt"
         spine_outcome_id: universal.a1.shopping.ask_prices_quantities
         teaching:
-          - {content_key: nl.a1.unit07.lesson01.teach.markt_winkel_kraam, kind: vocabulary, target: {text: "de markt, de winkel, de kraam", language_code: nl, direction: ltr}, introduced_tokens: [de, markt, winkel, kraam]}
-          - {content_key: nl.a1.unit07.lesson01.teach.appels_peren_tomaten_paprikas, kind: vocabulary, target: {text: "appels, peren, tomaten, paprika's", language_code: nl, direction: ltr}, introduced_tokens: [appels, peren, tomaten, "paprika's"]}
+          - content_key: nl.a1.unit07.lesson01.teach.markt_winkel_kraam
+            kind: vocabulary
+            target: {text: "de markt, de winkel, de kraam", language_code: nl, direction: ltr}
+            introduced_tokens: [de, markt, winkel, kraam]
+            example:
+              - {text: "Ik ga naar de markt.", language_code: nl, direction: ltr}
+              - {text: "Ik ga naar de winkel.", language_code: nl, direction: ltr}
+              - {text: "De kraam verkoopt appels.", language_code: nl, direction: ltr}
+          - content_key: nl.a1.unit07.lesson01.teach.appels_peren_tomaten_paprikas
+            kind: vocabulary
+            target: {text: "appels, peren, tomaten, paprika's", language_code: nl, direction: ltr}
+            introduced_tokens: [appels, peren, tomaten, "paprika's"]
+            example:
+              - {text: "Ik wil graag appels.", language_code: nl, direction: ltr}
+              - {text: "Ik wil graag peren.", language_code: nl, direction: ltr}
+              - {text: "Ik wil graag tomaten.", language_code: nl, direction: ltr}
+              - {text: "Ik wil graag paprika's.", language_code: nl, direction: ltr}
         exercises:
           - {content_key: nl.a1.unit07.lesson01.exercise01.choose_markt, type: multiple_choice, tested_text: "de markt", prompt: {target_blocks: [{text: "market", language_code: en, direction: ltr}]}}
           - {content_key: nl.a1.unit07.lesson01.exercise02.choose_appels, type: multiple_choice, tested_text: "appels", prompt: {target_blocks: [{text: "apples", language_code: en, direction: ltr}]}}
@@ -69,7 +99,11 @@ units:
         title: "Naar de prijs vragen"
         spine_outcome_id: universal.a1.shopping.ask_prices_quantities
         teaching:
-          - {content_key: nl.a1.unit07.lesson02.teach.kilo, kind: vocabulary, target: {text: "een kilo", language_code: nl, direction: ltr}, introduced_tokens: [een, kilo]}
+          - content_key: nl.a1.unit07.lesson02.teach.kilo
+            kind: vocabulary
+            target: {text: "een kilo", language_code: nl, direction: ltr}
+            introduced_tokens: [een, kilo]
+            example: {text: "Ik wil een kilo appels.", language_code: nl, direction: ltr}
           - {content_key: nl.a1.unit07.lesson02.teach.per_kilo, kind: phrase, target: {text: "per kilo", language_code: nl, direction: ltr}, introduced_tokens: [per, kilo]}
           - {content_key: nl.a1.unit07.lesson02.teach.ask_apples, kind: phrase, target: {text: "Hoeveel kost een kilo appels?", language_code: nl, direction: ltr}, introduced_tokens: [Hoeveel, kost, een, kilo, appels]}
           - {content_key: nl.a1.unit07.lesson02.teach.answer_apples, kind: phrase, target: {text: "Een kilo appels kost €2,50.", language_code: nl, direction: ltr}, introduced_tokens: [Een, kilo, appels, kost, "2", "50"]}
@@ -86,7 +120,15 @@ units:
         title: "Hoeveelheden kiezen"
         spine_outcome_id: universal.a1.shopping.ask_prices_quantities
         teaching:
-          - {content_key: nl.a1.unit07.lesson03.teach.gram_pond_stuk_stuks, kind: vocabulary, target: {text: "honderd gram, een pond, een stuk, twee stuks", language_code: nl, direction: ltr}, introduced_tokens: [honderd, gram, een, pond, "500", stuk, twee, stuks]}
+          - content_key: nl.a1.unit07.lesson03.teach.gram_pond_stuk_stuks
+            kind: vocabulary
+            target: {text: "honderd gram, een pond, een stuk, twee stuks", language_code: nl, direction: ltr}
+            introduced_tokens: [honderd, gram, een, pond, "500", stuk, twee, stuks]
+            example:
+              - {text: "Ik wil honderd gram kaas.", language_code: nl, direction: ltr}
+              - {text: "Een pond appels, alstublieft.", language_code: nl, direction: ltr}
+              - {text: "Mag ik een stuk, alstublieft?", language_code: nl, direction: ltr}
+              - {text: "Ik wil twee stuks, alstublieft.", language_code: nl, direction: ltr}
           - {content_key: nl.a1.unit07.lesson03.teach.how_much, kind: phrase, target: {text: "Hoeveel wilt u?", language_code: nl, direction: ltr}, introduced_tokens: [Hoeveel, wilt, u]}
           - {content_key: nl.a1.unit07.lesson03.teach.pond_tomatoes, kind: phrase, target: {text: "Een pond tomaten, alstublieft.", language_code: nl, direction: ltr}, introduced_tokens: [Een, pond, tomaten, alstublieft]}
         exercises:
@@ -105,7 +147,11 @@ units:
         title: "Prijskaartjes lezen"
         spine_outcome_id: universal.a1.shopping.ask_prices_quantities
         teaching:
-          - {content_key: nl.a1.unit07.lesson04.teach.prijskaartje, kind: vocabulary, target: {text: "het prijskaartje", language_code: nl, direction: ltr}, introduced_tokens: [het, prijskaartje]}
+          - content_key: nl.a1.unit07.lesson04.teach.prijskaartje
+            kind: vocabulary
+            target: {text: "het prijskaartje", language_code: nl, direction: ltr}
+            introduced_tokens: [het, prijskaartje]
+            example: {text: "Het prijskaartje zegt €2,50.", language_code: nl, direction: ltr}
           - content_key: nl.a1.unit07.lesson04.teach.market_labels
             kind: reading
             target:
