@@ -1372,7 +1372,7 @@ def tts(body:TTSIn,user=Depends(current_user),db:Session=Depends(get_db)):
         return JSONResponse({"use_browser_tts":True,"reason":"unsupported_language"})
     if not tts_service.reserve_characters(db,len(body.text)):
         return JSONResponse({"use_browser_tts":True,"reason":"quota_exceeded"})
-    try: audio=tts_service.synthesize(body.text,body.language_code)
+    try: audio=tts_service.synthesize(body.text,body.language_code,body.speaking_rate or 1.0)
     except Exception:
         db.rollback()
         return JSONResponse({"use_browser_tts":True,"reason":"provider_error"})

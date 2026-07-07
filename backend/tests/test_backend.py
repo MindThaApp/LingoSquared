@@ -171,7 +171,7 @@ def test_tts_fallbacks(client, auth, monkeypatch):
     from app.core.config import get_settings
     from app.services import tts as tts_service
     calls=[]
-    monkeypatch.setattr(tts_service,"synthesize",lambda text,language_code: calls.append(text) or b"audio")
+    monkeypatch.setattr(tts_service,"synthesize",lambda text,language_code,speaking_rate=1.0: calls.append(text) or b"audio")
     # prs still has zero coverage from any provider (Google or Azure) and
     # must still hit the unsupported-language fallback. fa is covered now
     # (Azure) — see test_tts_routes_farsi_to_azure_and_covered_languages_to_google
@@ -191,13 +191,13 @@ def test_tts_fallbacks(client, auth, monkeypatch):
 
         with SessionLocal() as db: db.execute(delete(TTSUsage)); db.commit()
         settings.tts_monthly_char_budget=100
-        def provider_error(text,language_code): raise RuntimeError("provider unavailable")
+        def provider_error(text,language_code,speaking_rate=1.0): raise RuntimeError("provider unavailable")
         monkeypatch.setattr(tts_service,"synthesize",provider_error)
         response=client.post("/tts",headers=auth,json={"text":"hello","language_code":"en"})
         assert response.json()=={"use_browser_tts":True,"reason":"provider_error"}
         with SessionLocal() as db: assert (db.scalar(select(TTSUsage.characters)) or 0)==0
 
-        monkeypatch.setattr(tts_service,"synthesize",lambda text,language_code: b"audio")
+        monkeypatch.setattr(tts_service,"synthesize",lambda text,language_code,speaking_rate=1.0: b"audio")
         response=client.post("/tts",headers=auth,json={"text":"hello","language_code":"en"})
         assert response.status_code==200 and response.headers["content-type"].startswith("audio/mpeg")
         with SessionLocal() as db: assert db.scalar(select(TTSUsage.characters))==5
@@ -207,8 +207,8 @@ def test_tts_fallbacks(client, auth, monkeypatch):
 def test_tts_routes_farsi_to_azure_and_covered_languages_to_google(client, auth, monkeypatch):
     from app.services import tts as tts_service
     calls=[]
-    monkeypatch.setattr(tts_service,"synthesize_azure",lambda text,language_code: calls.append(("azure",language_code)) or b"azure-audio")
-    monkeypatch.setattr(tts_service,"synthesize_google",lambda text,language_code: calls.append(("google",language_code)) or b"google-audio")
+    monkeypatch.setattr(tts_service,"synthesize_azure",lambda text,language_code,speaking_rate=1.0: calls.append(("azure",language_code)) or b"azure-audio")
+    monkeypatch.setattr(tts_service,"synthesize_google",lambda text,language_code,speaking_rate=1.0: calls.append(("google",language_code)) or b"google-audio")
 
     response=client.post("/tts",headers=auth,json={"text":"سلام","language_code":"fa"})
     assert response.status_code==200
@@ -282,6 +282,94 @@ def test_synthesize_azure_missing_credentials_raises(monkeypatch):
             assert False,"expected RuntimeError"
         except RuntimeError:
             pass
+    finally:
+        settings.azure_speech_key=original_key
+        settings.azure_speech_region=original_region
+
+def test_tts_speaking_rate_forwarded_and_defaults_to_normal(client, auth, monkeypatch):
+    # Added 2026-07-07 for the per-language TTS speed setting: /tts must
+    # forward speaking_rate through to tts_service.synthesize() unchanged
+    # when the caller sends one, and default to 1.0 (normal speed) when
+    # the field is omitted entirely (old clients / no preference set).
+    from app.services import tts as tts_service
+    calls=[]
+    monkeypatch.setattr(tts_service,"synthesize",lambda text,language_code,speaking_rate=1.0: calls.append(speaking_rate) or b"audio")
+
+    response=client.post("/tts",headers=auth,json={"text":"hallo","language_code":"nl","speaking_rate":0.8})
+    assert response.status_code==200 and response.headers["content-type"].startswith("audio/mpeg")
+
+    response=client.post("/tts",headers=auth,json={"text":"hello","language_code":"en"})
+    assert response.status_code==200
+
+    assert calls==[0.8,1.0]
+
+def test_tts_speaking_rate_out_of_range_rejected(client, auth):
+    # Matches google-cloud-texttospeech's own AudioConfig.speaking_rate
+    # bound ([0.25, 2.0]) — validated before ever reaching a provider call.
+    response=client.post("/tts",headers=auth,json={"text":"hello","language_code":"en","speaking_rate":3.0})
+    assert response.status_code==422 and response.json()["error"]["code"]=="validation_error"
+
+    response=client.post("/tts",headers=auth,json={"text":"hello","language_code":"en","speaking_rate":0.1})
+    assert response.status_code==422 and response.json()["error"]["code"]=="validation_error"
+
+def test_synthesize_google_passes_speaking_rate_to_audio_config(monkeypatch):
+    from app.services import tts as tts_service
+    from app.core.config import get_settings
+    settings=get_settings()
+    original=settings.google_cloud_tts_credentials_json
+    try:
+        settings.google_cloud_tts_credentials_json='{"type":"service_account"}'
+        monkeypatch.setattr(
+            tts_service.service_account.Credentials,"from_service_account_info",
+            classmethod(lambda cls,info: object()),
+        )
+        captured={}
+        class FakeResponse:
+            audio_content=b"google-mp3"
+        class FakeClient:
+            def __init__(self,credentials=None): pass
+            def synthesize_speech(self,input,voice,audio_config):
+                captured["speaking_rate"]=audio_config.speaking_rate
+                return FakeResponse()
+        monkeypatch.setattr(tts_service.texttospeech,"TextToSpeechClient",FakeClient)
+
+        audio=tts_service.synthesize_google("hallo","nl",speaking_rate=0.8)
+
+        assert audio==b"google-mp3"
+        assert captured["speaking_rate"]==0.8
+    finally:
+        settings.google_cloud_tts_credentials_json=original
+
+def test_synthesize_azure_wraps_text_in_prosody_rate(monkeypatch):
+    from app.services import tts as tts_service
+    from app.core.config import get_settings
+    settings=get_settings()
+    original_key,original_region=settings.azure_speech_key,settings.azure_speech_region
+    try:
+        settings.azure_speech_key="test-key"
+        settings.azure_speech_region="eastus"
+        calls=[]
+        class FakeResponse:
+            def __init__(self,content=b"",text=""): self.content=content; self.text=text
+            def raise_for_status(self): pass
+        def fake_post(url,**kwargs):
+            calls.append((url,kwargs))
+            if url.endswith("/sts/v1.0/issueToken"): return FakeResponse(text="fake-token")
+            return FakeResponse(content=b"mp3-bytes")
+        monkeypatch.setattr(tts_service.httpx,"post",fake_post)
+
+        audio=tts_service.synthesize_azure("سلام","fa",speaking_rate=0.8)
+
+        assert audio==b"mp3-bytes"
+        ssml=calls[1][1]["content"].decode()
+        assert "<prosody rate='-20%'>" in ssml
+        assert "سلام" in ssml
+
+        # Default rate (1.0) still wraps in prosody, just a no-op percentage —
+        # one code path regardless of whether a custom rate was requested.
+        calls.clear()
+        tts_service.synthesize_azure("سلام","fa")
+        assert "<prosody rate='+0%'>" in calls[1][1]["content"].decode()
     finally:
         settings.azure_speech_key=original_key
         settings.azure_speech_region=original_region

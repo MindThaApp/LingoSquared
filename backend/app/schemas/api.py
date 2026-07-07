@@ -193,7 +193,7 @@ class CheckpointResultOut(BaseModel):
     score: float|None
     weak_outcomes: list[str]
     checkpoint_passed: bool
-class TTSIn(BaseModel): text:str=Field(min_length=1,max_length=5000); language_code:str
+class TTSIn(BaseModel): text:str=Field(min_length=1,max_length=5000); language_code:str; speaking_rate:float|None=Field(default=None,ge=0.25,le=2.0)
 class TTSFallback(BaseModel): use_browser_tts:Literal[True]=True; reason:Literal["unsupported_language","quota_exceeded","provider_error"]
 class STTOut(BaseModel): transcript:str
 class STTError(BaseModel): error:Literal["empty_audio","audio_too_large","transcription_failed"]

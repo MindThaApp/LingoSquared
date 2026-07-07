@@ -1,5 +1,6 @@
 import type { TtsFallback } from "./types";
 import { getVoicePreference } from "../lib/voicePreferences";
+import { getSpeedPreference } from "../lib/ttsSpeedPreferences";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8000";
 
@@ -39,6 +40,10 @@ function speakInBrowser(text: string, languageCode: string): boolean {
 
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = BROWSER_TTS_LANG[languageCode] ?? languageCode;
+  // SpeechSynthesisUtterance.rate's native range is much wider (0.1-10)
+  // than the per-language speed preference we expose (0.75-1.25), so no
+  // clamping needed here — getSpeedPreference() already clamps.
+  utterance.rate = getSpeedPreference(languageCode);
 
   const preferredVoiceURI = getVoicePreference(languageCode);
   if (preferredVoiceURI) {
@@ -57,13 +62,22 @@ function speakInBrowser(text: string, languageCode: string): boolean {
 // exists. Tries the static asset first; any failure (404 - most keys
 // have no recording yet, this is expected not exceptional - or a
 // network error) falls through to the normal TTS chain unchanged.
-async function playRecordedAsset(mediaAssetKey: string): Promise<boolean> {
+//
+// Recorded clips are a flat, fixed-speed MP3 — there's no synthesis step
+// to parameterize server-side. The per-language speed preference is
+// still applied here, client-side, via HTMLMediaElement.playbackRate (a
+// real browser feature, not a hack — it resamples on the fly with pitch
+// preservation on by default in every evergreen browser), so recorded
+// audio respects the same preference as the two TTS tiers, just through
+// a different mechanism. See docs/CONTRACT.md's Text-to-speech section.
+async function playRecordedAsset(mediaAssetKey: string, languageCode: string): Promise<boolean> {
   try {
     const response = await fetch(`${BASE_URL}/media/${encodeURIComponent(mediaAssetKey)}`);
     if (!response.ok) return false;
     const blob = await response.blob();
     const url = URL.createObjectURL(blob);
     const audio = new Audio(url);
+    audio.playbackRate = getSpeedPreference(languageCode);
     audio.addEventListener("ended", () => URL.revokeObjectURL(url));
     await audio.play();
     return true;
@@ -77,7 +91,7 @@ export async function speak(
   languageCode: string,
   mediaAssetKey?: string,
 ): Promise<boolean> {
-  if (mediaAssetKey && (await playRecordedAsset(mediaAssetKey))) {
+  if (mediaAssetKey && (await playRecordedAsset(mediaAssetKey, languageCode))) {
     return true;
   }
   return speakViaTtsAndBrowser(text, languageCode);
@@ -87,13 +101,14 @@ async function speakViaTtsAndBrowser(text: string, languageCode: string): Promis
   const token = localStorage.getItem("access_token");
   const headers = new Headers({ "Content-Type": "application/json" });
   if (token) headers.set("Authorization", `Bearer ${token}`);
+  const speakingRate = getSpeedPreference(languageCode);
 
   let response: Response;
   try {
     response = await fetch(`${BASE_URL}/tts`, {
       method: "POST",
       headers,
-      body: JSON.stringify({ text, language_code: languageCode }),
+      body: JSON.stringify({ text, language_code: languageCode, speaking_rate: speakingRate }),
     });
   } catch {
     return speakInBrowser(text, languageCode);
@@ -105,6 +120,8 @@ async function speakViaTtsAndBrowser(text: string, languageCode: string): Promis
 
   const contentType = response.headers.get("content-type") ?? "";
   if (contentType.includes("audio")) {
+    // The provider already baked speakingRate into this audio — no
+    // client-side playbackRate here, or the rate would apply twice.
     const blob = await response.blob();
     const url = URL.createObjectURL(blob);
     const audio = new Audio(url);
