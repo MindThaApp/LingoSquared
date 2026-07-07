@@ -9311,6 +9311,42 @@ test databases (`lingosquared_test_perfcheck`,
 nothing left running or lingering on shared infrastructure from this
 task.
 
+## Migration 0015 re-verification + a real counter bug found, 2026-07-07
+
+Per a follow-up request: re-ran the full backend pytest suite fresh
+against the current shared-stack code state (fresh isolated test DB,
+`python -m pytest -q`) — still green, no drift. Then did the REAL
+end-to-end version of the earlier raw-SQL verification: compiled the
+FULL nl-en and prs-en courses via `scripts/compile_content.py compile`
+(both realize the same `docs/content/realizations/en/*.yaml` files,
+so their content_key values are identical by construction — the exact
+scenario 0015 fixes) and imported both back-to-back into one fresh
+schema via the real `import_content()` path (not raw SQL this time).
+Confirmed: no `IntegrityError`, both courses created cleanly (24 units/
+94 lessons/503 exercises/456 teaching items each).
+
+**Real bug found along the way**: `_create_unit()`'s per-lesson loop
+called `_create_lesson(db, unit, lesson_data, counters)` but never
+incremented `counters["created_lessons"]` — visible in this test's
+first run as `created_lessons: 0` despite the import obviously
+creating dozens of real lesson rows (exercises/teaching_items counted
+fine). This is a leftover gap in the counters-threading fix from
+earlier in the session (that fix covered `_create_lesson`'s own
+internal `created_exercises`/`created_teaching_items` increments and
+`_sync_lessons`' sibling `created_lessons` increment, but missed the
+one at `_create_unit`'s call site — the brand-new-course/brand-new-
+unit path specifically). Fixed with a one-line increment matching
+`_sync_lessons`' existing pattern (`backend/app/content/service.py`).
+No existing test asserted on `created_lessons` (grepped first), so
+nothing was masking this — it just under-reported silently on every
+brand-new-course import until now. Re-verified: same import now
+reports `created_lessons: 94` for both courses (matches the real
+lesson count), full pytest suite re-confirmed green afterward.
+
+Scratch verification script and throwaway test DBs
+(`lingosquared_verify_ck`, `lingosquared_test_verify1/2`) were removed/
+dropped after use.
+
 ## Authoring en-nl's missing A2 practice pool (units 24-28), 2026-07-07
 
 **Trigger**: a whole-course curriculum review found en-nl's A2 span had
