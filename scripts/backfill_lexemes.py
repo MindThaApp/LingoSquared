@@ -72,6 +72,41 @@ UNIT_FILES = (
         REPO_ROOT / "docs/content/realizations/fa/a1_unit08_shopping.yaml",
         REPO_ROOT / "docs/content/overlays/en-fa/a1_unit08.yaml",
     ),
+)
+
+# A2 units live in a SEPARATE course row ("Farsi A2", not "Farsi A1") --
+# `POST /admin/content/import` matches/creates courses by
+# (source_language, target_language, title), and the A2 overlay declares
+# `course.title: Farsi A2`, distinct from A1's `Farsi A1`. Real bug found
+# live 2026-07-06/07 (Farsi Endless Practice QA pass, same root cause
+# independently confirmed and already fixed in the sibling
+# backfill_lexemes_en_prs.py/backfill_lexemes_prs_en.py pair): this used
+# to be a single UNIT_FILES tuple with a2 units 9/10 appended at
+# continuous positions 9/10, backfilled against ONE lookup of the
+# "Farsi A1" course. Positions 9/10 in the real imported "Farsi A1"
+# course are actually the native a1_unit09 (Time)/a1_unit10 (Dates)
+# lessons (that course has grown to 12 real A1 units on disk since this
+# script was last touched) -- so the lookup didn't crash, it silently
+# resolved to the WRONG lesson: every A2 bureaucracy/opinions lexeme
+# this session created had its `provenance_lesson_id` FK pointing at the
+# Time/Dates lessons while its `provenance_lesson_content_key` STRING
+# correctly said "fa.a2.unit09...."/"fa.a2.unit10....". Confirmed via a
+# direct query against a genuinely fresh isolated DB. Net effect: the
+# real "Farsi A2" course has zero Lexeme rows at all (`Lexeme.course_id`
+# was always the A1 course's id), so its already-authored practice
+# templates can never generate a single item -- Endless Practice for
+# en-fa's A2 unit was completely dead, not degraded. Kept as its own
+# tuple with LOCAL 1-based ordering (looked up against the "Farsi A2"
+# course separately in main(), never mixed with UNIT_FILES' indices).
+# NOTE: this only fixes A2 (units 9-10 of this tuple, i.e. bureaucracy/
+# opinions). The real a1_unit09-12 (Time/Dates/Routines/Plans) content
+# now shipped inside the actual "Farsi A1" course has NO lexeme
+# classifier coverage in this script at all (added to lesson content
+# after this script was last extended) -- a separate, larger
+# content-authoring gap (new POS/register/agreement-tag data for ~4
+# units of vocabulary), flagged in docs/BUILD_LOG.md rather than
+# freehanded here.
+UNIT_FILES_A2 = (
     (
         REPO_ROOT / "docs/content/realizations/fa/a2_unit09_bureaucracy.yaml",
         REPO_ROOT / "docs/content/overlays/en-fa/a2_unit09.yaml",
@@ -567,10 +602,13 @@ def fa_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     return tags
 
 
-def iter_specs():
-    fa_specs: dict[str, dict] = {}
-    seen_en: set[str] = set()
-    for unit_order, (realization_path, overlay_path) in enumerate(UNIT_FILES, 1):
+def _classify_fa(files, level, fa_specs, seen_en):
+    # Keyed by (level, token) -- A1 and A2 are separate courses (separate
+    # Lexeme rows are fine/expected even for a token spelled the same in
+    # both), so a bare token key would wrongly merge/skip an A2
+    # occurrence into an A1 spec already seen (same fix as the sibling
+    # backfill_lexemes_en_prs.py).
+    for unit_order, (realization_path, overlay_path) in enumerate(files, 1):
         realization = yaml.safe_load(realization_path.read_text(encoding="utf-8"))
         overlay = yaml.safe_load(overlay_path.read_text(encoding="utf-8"))
         teaching_overlays = overlay["teaching"]
@@ -583,9 +621,11 @@ def iter_specs():
                     if token not in FA_GLOSSES:
                         raise ValueError(f"missing explicit Farsi gloss for {token!r}")
                     tags = fa_agreement_tags(token, lesson_key)
-                    existing = fa_specs.get(token)
+                    key = (level, token)
+                    existing = fa_specs.get(key)
                     if existing is None:
-                        fa_specs[token] = {
+                        fa_specs[key] = {
+                            "level": level,
                             "unit_order": unit_order, "lesson_order": lesson_order,
                             "lesson_content_key": lesson_key, "content_key": content_key,
                             "token": token, "language_code": "fa",
@@ -593,20 +633,21 @@ def iter_specs():
                             "english_gloss": FA_GLOSSES[token], "agreement_tags": tags,
                         }
                     else:
-                        for key, value in tags.items():
-                            if key == "semantic":
-                                prior = existing["agreement_tags"].setdefault(key, [])
-                                prior.extend(item for item in value if item not in prior)
+                        for tag_key, value in tags.items():
+                            if tag_key == "semantic":
+                                prior = existing["agreement_tags"].setdefault(tag_key, [])
+                                prior.extend(v for v in value if v not in prior)
                             else:
-                                existing["agreement_tags"].setdefault(key, value)
+                                existing["agreement_tags"].setdefault(tag_key, value)
 
                 target_text = item.get("target", {}).get("text", "").strip()
                 introduced = item.get("introduced_tokens", [])
                 if len(introduced) > 1 and target_text and "\n" not in target_text:
                     tags = fa_agreement_tags(target_text, lesson_key)
                     fa_specs.setdefault(
-                        target_text,
+                        (level, target_text),
                         {
+                            "level": level,
                             "unit_order": unit_order, "lesson_order": lesson_order,
                             "lesson_content_key": lesson_key, "content_key": content_key,
                             "token": target_text, "language_code": "fa",
@@ -616,10 +657,12 @@ def iter_specs():
                     )
                 for match in EN_TOKEN_RE.findall(gloss):
                     token = match.casefold().replace("’", "'")
-                    if token in seen_en:
+                    seen_key = (level, token)
+                    if seen_key in seen_en:
                         continue
-                    seen_en.add(token)
+                    seen_en.add(seen_key)
                     yield {
+                        "level": level,
                         "unit_order": unit_order,
                         "lesson_order": lesson_order,
                         "lesson_content_key": lesson_key,
@@ -630,6 +673,13 @@ def iter_specs():
                         "english_gloss": token,
                         "agreement_tags": {"semantic": ["source_gloss"]},
                     }
+
+
+def iter_specs():
+    fa_specs: dict[tuple[str, str], dict] = {}
+    seen_en: set[tuple[str, str]] = set()
+    yield from _classify_fa(UNIT_FILES, "a1", fa_specs, seen_en)
+    yield from _classify_fa(UNIT_FILES_A2, "a2", fa_specs, seen_en)
     yield from fa_specs.values()
 
 
@@ -654,26 +704,39 @@ def main() -> int:
     from app.models import Course, Lesson, Lexeme, Unit
 
     with SessionLocal() as db:
-        course = db.scalar(
-            select(Course).where(
-                Course.source_language == "en",
-                Course.target_language == "fa",
-                Course.title == "Farsi A1",
+        courses_by_level = {}
+        for level, title in (("a1", "Farsi A1"), ("a2", "Farsi A2")):
+            needed = any(spec["level"] == level for spec in specs)
+            course = db.scalar(
+                select(Course).where(
+                    Course.source_language == "en",
+                    Course.target_language == "fa",
+                    Course.title == title,
+                )
             )
-        )
-        if course is None:
-            print("ERROR: en-fa Farsi A1 course must be imported first", file=sys.stderr)
-            return 1
+            if course is None:
+                if needed:
+                    print(f"ERROR: en-fa {title!r} course must be imported first", file=sys.stderr)
+                    return 1
+                continue
+            courses_by_level[level] = course
 
-        lessons = {
-            (unit.order, lesson.order): lesson
-            for unit in db.scalars(select(Unit).where(Unit.course_id == course.id))
-            for lesson in db.scalars(select(Lesson).where(Lesson.unit_id == unit.id))
+        lessons_by_level = {
+            level: {
+                (unit.order, lesson.order): lesson
+                for unit in db.scalars(select(Unit).where(Unit.course_id == course.id))
+                for lesson in db.scalars(select(Lesson).where(Lesson.unit_id == unit.id))
+            }
+            for level, course in courses_by_level.items()
         }
         created = 0
         updated = 0
         for spec in specs:
-            lesson = lessons.get((spec.pop("unit_order"), spec.pop("lesson_order")))
+            level = spec.pop("level")
+            course = courses_by_level[level]
+            lesson = lessons_by_level[level].get(
+                (spec.pop("unit_order"), spec.pop("lesson_order"))
+            )
             if lesson is None:
                 print(
                     f"ERROR: imported course is missing {spec['lesson_content_key']}",

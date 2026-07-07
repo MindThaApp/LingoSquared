@@ -29,6 +29,32 @@ review:
     candidate values. Confirmed 0 errors/0 warnings from compile_content.py
     practice-validate. Left unreviewed pending a separate fresh-context
     review pass, per standing project policy.
+
+    **Real bug found and fixed, live-QA pass on fa, 2026-07-06/07**: the
+    three lesson04 templates (turn_order.001, turn_translate.003,
+    place_meaning.004) originally anchored `lesson_content_key` to
+    `en.a1.unit10.lesson04.giving_directions_dialogue`, the unit's closing
+    review dialogue. That lesson's only genuinely new tokens are "Excuse"/
+    "me"/"OK"/"No" -- none of the turn_direction or place vocabulary these
+    templates actually test -- so no `Lexeme` row is ever created with
+    that lesson as `provenance_lesson_content_key`, and
+    `_practice_lesson_id()` (backend/app/content/service.py) can never
+    resolve it. Confirmed live on a genuinely fresh isolated stack: `POST
+    /admin/courses/{id}/practice/import` rejected the whole 24-unit fa-en
+    A1 pack with "lesson key '...giving_directions_dialogue' was not
+    found in the course" (plus two sibling bugs in units 15/20, same
+    class, fixed alongside this one -- see those packs' own notes).
+    Fixed by repointing turn_order.001/turn_translate.003 (turn_direction
+    slot) to `en.a1.unit10.lesson01.basic_direction_words`, the actual
+    first-taught anchor for left/right/straight, and
+    place_meaning.004 (place slot, this exercise is literally "what place
+    is asked about in this dialogue") to
+    `en.a1.unit10.lesson02.asking_how_to_get`, which introduces "bank" --
+    the actual place named in the dialogue this exercise's feedback
+    refers to. Both are safe, no-forward-reference anchors within the
+    same unit. Re-verified: `compile_content.py practice-validate` still
+    0/0, and the full 24-unit fa-en A1 practice import now succeeds
+    end-to-end against a fresh isolated stack.
 tag_schema:
   part_of_speech: [noun, adjective, adverb, pronoun, verb, particle, symbol]
   agreement_tags:
@@ -88,21 +114,21 @@ templates:
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "معادل انگلیسی این عدد ترتیبی {item} است.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit10.lesson04.turn_order.001
-    lesson_content_key: en.a1.unit10.lesson04.giving_directions_dialogue
+    lesson_content_key: en.a1.unit10.lesson01.basic_direction_words
     type: word_order
     frame: {text: "Turn {item} at the corner, OK", language_code: en, direction: ltr}
     slots: {item: *turn_direction}
     answer_derivation: {kind: render_frame, frame: {text: "Turn {item} at the corner, OK", language_code: en, direction: ltr}}
     feedback_frame: {text: "{item} جهتی است که دنیل تکرار می‌کند.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit10.lesson04.turn_translate.003
-    lesson_content_key: en.a1.unit10.lesson04.giving_directions_dialogue
+    lesson_content_key: en.a1.unit10.lesson01.basic_direction_words
     type: translation
     frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
     slots: {item: *turn_direction}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "معادل انگلیسی این جهت {item} است.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit10.lesson04.place_meaning.004
-    lesson_content_key: en.a1.unit10.lesson04.giving_directions_dialogue
+    lesson_content_key: en.a1.unit10.lesson02.asking_how_to_get
     type: multiple_choice
     frame: {text: "{item}", language_code: en, direction: ltr}
     slots: {item: *place}
