@@ -34,6 +34,29 @@ review:
     Retrofit 2026-07-06 (AUTHORING_GUIDE.md §16): widened payment_pair.003
     from 2 to 4 pairs (payment_method/noun, real course-wide pool=4 --
     cash/card/credit/debit), no padding with untaught words.
+
+    **Real bug found and fixed, live-QA pass on fa, 2026-07-06/07**: the
+    three lesson04 templates (payment_listen.001, its_order.002,
+    its_translate.004) originally anchored `lesson_content_key` to
+    `en.a1.unit15.lesson04.paying_dialogue`, the unit's closing review
+    dialogue -- every one of its `introduced_tokens` ("How"/"much"/"is"/
+    "the"/"total"/"It's"/"fifteen"/"dollars"/"Yes"/"we"/"do"/"Great") was
+    already first taught earlier in the unit, so no `Lexeme` row is ever
+    created with that lesson as `provenance_lesson_content_key` and
+    `_practice_lesson_id()` can never resolve it (same bug class as
+    a1_unit10.yaml/a1_unit20.yaml, all three found and fixed together;
+    confirmed live -- `POST /admin/courses/{id}/practice/import` rejected
+    the whole 24-unit fa-en A1 pack). Fixed by repointing
+    payment_listen.001 (payment_method slot) to
+    `en.a1.unit15.lesson01.payment_words`, where cash/card/credit/debit
+    are actually introduced, and its_order.002/its_translate.004
+    (number_no_hundred slot, the "It's {item} dollars" frame) to
+    `en.a1.unit15.lesson03.reading_a_receipt` -- already the correct,
+    proven-working anchor for this exact same slot on
+    total_order.002/total_translate.004 above. Re-verified:
+    `compile_content.py practice-validate` still 0/0, full 24-unit fa-en
+    A1 practice import now succeeds end-to-end against a fresh isolated
+    stack.
 tag_schema:
   part_of_speech: [noun]
   agreement_tags:
@@ -115,21 +138,21 @@ templates:
     answer_derivation: {kind: render_frame, frame: {text: "The total is {item} dollars", language_code: en, direction: ltr}}
     feedback_frame: {text: "The total is {item} dollars یعنی جمع کل {item} دلار است.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit15.lesson04.payment_listen.001
-    lesson_content_key: en.a1.unit15.lesson04.paying_dialogue
+    lesson_content_key: en.a1.unit15.lesson01.payment_words
     type: listen_select
     frame: {text: "{item}", language_code: en, direction: ltr}
     slots: {item: *payment_method}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} واژه‌ای است که شنیدید.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit15.lesson04.its_order.002
-    lesson_content_key: en.a1.unit15.lesson04.paying_dialogue
+    lesson_content_key: en.a1.unit15.lesson03.reading_a_receipt
     type: word_order
     frame: {text: "It's {item} dollars", language_code: en, direction: ltr}
     slots: {item: *number_no_hundred}
     answer_derivation: {kind: render_frame, frame: {text: "It's {item} dollars", language_code: en, direction: ltr}}
     feedback_frame: {text: "{item} مبلغی است که در این پاسخ آمده.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit15.lesson04.its_translate.004
-    lesson_content_key: en.a1.unit15.lesson04.paying_dialogue
+    lesson_content_key: en.a1.unit15.lesson03.reading_a_receipt
     type: translation
     frame: {text: "{item} دلار است.", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
     slots: {item: *number_no_hundred}
