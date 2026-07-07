@@ -30,7 +30,22 @@ review:
     harness against this script's actual output. Needs the standard
     fresh-context review before import. Same blocking dependency as
     every earlier nl-en pack: backfill_lexemes_nl_en.py has not
-    actually been run against a real database yet. 2026-07-06 matching_pairs widening (AUTHORING_GUIDE.md #16): expanded the occupation_noun (noun) matching_pairs template from 2 to 5 pairs."
+    actually been run against a real database yet. 2026-07-06 matching_pairs widening (AUTHORING_GUIDE.md #16): expanded the occupation_noun (noun) matching_pairs template from 2 to 5 pairs.
+
+    Fixed 2026-07-07 (Dutch live-QA pass): both lesson02 templates
+    anchored lesson_content_key to en.a1.unit23.lesson02.what_do_you_do,
+    which introduces zero new lexemes (What/do/you were all already
+    taught earlier in the course) -- so no Lexeme row is ever created
+    with that lesson as provenance and _practice_lesson_id() could never
+    resolve it, confirmed via scripts/backfill_lexemes_nl_en.py's own
+    classification (the key never appears as any spec's
+    lesson_content_key). Same root cause already found and fixed for this
+    exact shared English realization in the fa-en/prs-en unit23 packs
+    earlier this session (both repointed to lesson01.occupation_words,
+    where occupation_a/occupation_noun's real tokens anchor). Applied the
+    identical fix here: repointed both order.001 and listen.003 to
+    en.a1.unit23.lesson01.occupation_words, a safe, no-forward-reference
+    anchor already used successfully above."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -69,14 +84,14 @@ templates:
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit23.lesson02.order.001
-    lesson_content_key: en.a1.unit23.lesson02.what_do_you_do
+    lesson_content_key: en.a1.unit23.lesson01.occupation_words
     type: word_order
     frame: {text: "I'm a {item}", language_code: en, direction: ltr}
     slots: {item: *occupation_a}
     answer_derivation: {kind: render_frame, frame: {text: "I'm a {item}", language_code: en, direction: ltr}}
     feedback_frame: {text: "{item} is het genoemde beroep.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit23.lesson02.listen.003
-    lesson_content_key: en.a1.unit23.lesson02.what_do_you_do
+    lesson_content_key: en.a1.unit23.lesson01.occupation_words
     type: listen_select
     frame: {text: "{item}", language_code: en, direction: ltr}
     slots: {item: *occupation_noun}
