@@ -6,7 +6,7 @@ unit_content_key: fa.a1.unit02.introductions
 review:
   status: reviewed
   fresh_context: true
-  notes: "Fresh review found and resolved name morphology, country coupling, letter gloss, dialogue-slot, and answer-derivation defects. A targeted post-review fix removed leaked review-process language from learner-facing feedback; this was not a new full fresh-context review. Second targeted post-review fix, 2026-07-06: scripts/_practice_slot_check.py surfaced that 2 multiple_choice templates (name_word, origin_marker) each had only 1 real distinct lexeme candidate against the >=3 multiple_choice/matching_pairs threshold. Converted both to fill_in_blank (same slot, needs only >=1 candidate). Re-verified via compile_content.py practice-validate (0/0) and _practice_slot_check.py (both now pass). NOT fixed, still real and open: 4 matching_pairs templates in this file (name_pair.005, iran_pair.003, england_pair.004, france_pair.005, origin_pair.006 -- 5 total) have the same underlying single-candidate-tag problem (country/nationality each only have 1 member per specific country); restructuring needs either 2+ real vocabulary additions per country or a type change -- left for whoever next extends this unit's vocabulary."
+  notes: "Fresh review found and resolved name morphology, country coupling, letter gloss, dialogue-slot, and answer-derivation defects. A targeted post-review fix removed leaked review-process language from learner-facing feedback; this was not a new full fresh-context review. Second targeted post-review fix, 2026-07-06: scripts/_practice_slot_check.py surfaced that 2 multiple_choice templates (name_word, origin_marker) each had only 1 real distinct lexeme candidate against the >=3 multiple_choice/matching_pairs threshold. Converted both to fill_in_blank (same slot, needs only >=1 candidate). Re-verified via compile_content.py practice-validate (0/0) and _practice_slot_check.py (both now pass). The iran_pair.003/england_pair.004/france_pair.005 single-country templates mentioned as open at the time of that note no longer exist in this file (removed by a later pass, superseded by lesson04's country_pair.006, which pairs each country with its own nationality via a same_tag relation across 3 country/nationality pairs). Third targeted post-review fix, 2026-07-07: the 2 matching_pairs problems _practice_slot_check.py still flagged (name_pair.005's 'name_word' slot, origin_pair.006's 'origin_marker' slot) are now fixed, without inventing vocabulary -- verified by hand against backfill_lexemes.py's iter_specs() (A1-only) that 'name_word' (اسم, the word 'name' itself) and 'origin_marker' (اهل, the 'from'-marking preposition) are each genuinely single-candidate at this course's real vocabulary depth, and both are already tested elsewhere (name_word via its own fill_in_blank per the fix above; origin_marker via origin_fill.001). Since matching_pairs needs every participating slot to itself have real headroom (>=2 distinct candidates) and neither of these two singletons can ever supply that, both were simply dropped from their respective templates rather than paired against an unrelated tag: name_pair.005 keeps its existing 7-way person_name pool unchanged (already fine on its own), origin_pair.006 keeps its existing 3-way country pool unchanged. Re-verified via _practice_slot_check.py (0 problems in this file) and compile_content.py practice-validate (0/0)."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -121,7 +121,6 @@ templates:
     type: matching_pairs
     frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
     slots:
-      name_word: *name_word
       person_name_one: *person_name
       person_name_two: *person_name
       person_name_three: *person_name
@@ -129,7 +128,7 @@ templates:
       person_name_five: *person_name
       person_name_six: *person_name
       person_name_seven: *person_name
-    answer_derivation: {kind: matching_pairs, slots: [name_word, person_name_one, person_name_two, person_name_three, person_name_four, person_name_five, person_name_six, person_name_seven]}
+    answer_derivation: {kind: matching_pairs, slots: [person_name_one, person_name_two, person_name_three, person_name_four, person_name_five, person_name_six, person_name_seven]}
     slot_relations: [{kind: distinct, slots: [person_name_one, person_name_two, person_name_three, person_name_four, person_name_five, person_name_six, person_name_seven]}]
     feedback_frame: {text: "Match each name and 'name' word to its English label.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit02.lesson03.pronoun_gloss.001
@@ -255,13 +254,12 @@ templates:
   - content_key: practice.en-fa.fa.a1.unit02.lesson05.origin_pair.006
     lesson_content_key: fa.a1.unit02.lesson05.origin
     type: matching_pairs
-    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
+    frame: {text: "Match each country with its meaning.", language_code: en, direction: ltr}
     slots:
-      origin_marker: *origin_marker
       country_one: *country
       country_two: *country
       country_three: *country
-    answer_derivation: {kind: matching_pairs, slots: [origin_marker, country_one, country_two, country_three]}
+    answer_derivation: {kind: matching_pairs, slots: [country_one, country_two, country_three]}
     slot_relations: [{kind: distinct, slots: [country_one, country_two, country_three]}]
     feedback_frame: {text: "Match the origin marker and each country to its English gloss.", language_code: en, direction: ltr}
 
