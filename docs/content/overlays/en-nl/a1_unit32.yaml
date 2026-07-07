@@ -21,6 +21,24 @@ review:
     example sentences one-for-one. Pending fresh-context review and
     Ramin's native-speaker pass.
 
+    **Same-session-family review disclosure**: this unit and its
+    realization sibling were cross-checked by a Claude worktree session
+    standing in for Codex (unavailable, usage limit) per Ramin's
+    explicit instruction -- NOT the project's normal independent
+    review pipeline. See the realization file's review notes for the
+    real issues found and fixed: (1) "sporten" was inaccurately counted
+    as new vocabulary when it was already taught in unit29's hobbies
+    lesson -- corrected in both files' text and notes; (2) lesson02's
+    fill_in_blank blanking "keer" in "Ik doe twee ___ per week aan
+    yoga" was genuinely ambiguous with "uur" (also grammatical, also
+    taught) -- converted to a translation exercise, this overlay's
+    matching entry updated; (3) lesson06's write_group_plan writing
+    prompt was missing comma-/and-joined answer variants and the yoga
+    option -- expanded here. `review.status`/`required_next_reviewer`
+    deliberately left unchanged so this unit isn't miscounted as
+    independently reviewed; a genuine fresh-context Codex (or otherwise
+    independent) pass is still owed.
+
 course:
   title: "Dutch A1"
   description: "Beginner Dutch for talking about sports and exercise: naming common sports, saying how often you do them, the doen-aan-vs-sporten distinction, and making a plan to exercise together."
@@ -49,7 +67,7 @@ teaching:
   nl.a1.unit32.lesson02.teach.lotte_yoga_freq: {title: "I do yoga twice a week", gloss: "I do yoga twice a week."}
   nl.a1.unit32.lesson02.teach.omar_voetbal_vaak: {title: "Omar often plays football", gloss: "Omar often plays football.", note: "Reuses *vaak* (often), already established for routines in an earlier unit."}
 
-  nl.a1.unit32.lesson03.teach.sporten_note: {title: "Sporten vs doen aan + sport", gloss: "Sporten is a general verb for exercising: Ik sport elke dag (I exercise every day). Doen aan + sport names the specific sport: Ik doe aan voetbal. Both are correct Dutch.", note: "Two natural, equally correct ways to talk about exercise -- one general, one specific."}
+  nl.a1.unit32.lesson03.teach.sporten_note: {title: "Sporten vs doen aan + sport", gloss: "You already know sporten from the hobbies lesson (Ik sport op zaterdag -- I exercise on Saturdays). Doen aan + sport names the specific sport: Ik doe aan voetbal. Both are correct Dutch.", note: "Sporten is reused from unit29's hobby verbs, not new -- this contrasts it with the new doen-aan-plus-sport construction, one general and one specific way to talk about exercise."}
   nl.a1.unit32.lesson03.teach.ik_sport_elke_dag: {title: "To exercise", gloss: "to exercise / do sport", example_gloss: "I exercise every day."}
   nl.a1.unit32.lesson03.teach.houden_van_sport: {title: "To love swimming", gloss: "to love swimming", example_gloss: "Fenna loves swimming."}
   nl.a1.unit32.lesson03.teach.fenna_houdt_zin: {title: "Fenna loves swimming", gloss: "Fenna loves swimming.", note: "Reuses *houden van* from an earlier unit's preferences lesson, now applied to a sport."}
@@ -134,10 +152,10 @@ exercises:
     correct_option: "Omar doet vaak aan voetbal"
     accepted_answers: [{value: "Omar doet vaak aan voetbal", status: correct}]
     feedback: "The complete sentence is Omar doet vaak aan voetbal."
-  nl.a1.unit32.lesson02.exercise06.complete_keer:
-    instruction: "Complete the sentence."
-    accepted_answers: [{value: keer, status: correct}]
-    feedback: "Ik doe twee keer per week aan yoga."
+  nl.a1.unit32.lesson02.exercise06.translate_keer_per_week:
+    instruction: "Translate into Dutch: twice a week."
+    accepted_answers: [{value: "twee keer per week", status: correct}]
+    feedback: "Twee keer per week."
   nl.a1.unit32.lesson02.exercise07.write_own_freq:
     instruction: "Write in Dutch: say you do football twice a week."
     accepted_answers: [{value: "Ik doe twee keer per week aan voetbal.", status: correct}, {value: "Ik doe twee keer per week aan voetbal", status: correct}]
@@ -294,5 +312,30 @@ exercises:
     feedback: "Ja, leuk! Ik houd van zwemmen."
   nl.a1.unit32.lesson06.exercise08.write_group_plan:
     instruction: "Write in Dutch: say what sport you do, then say you love it or prefer it."
-    accepted_answers: [{value: "Ik doe aan zwemmen. Ik houd van zwemmen.", status: correct}, {value: "Ik doe aan zwemmen Ik houd van zwemmen", status: correct}, {value: "Ik doe aan voetbal. Ik doe liever aan voetbal.", status: correct}, {value: "Ik doe aan hardlopen. Ik loop graag hard.", status: correct}]
+    accepted_answers: [
+      {value: "Ik doe aan zwemmen. Ik houd van zwemmen.", status: correct},
+      {value: "Ik doe aan zwemmen Ik houd van zwemmen", status: correct},
+      {value: "Ik doe aan zwemmen, ik houd van zwemmen.", status: correct},
+      {value: "Ik doe aan zwemmen, ik houd van zwemmen", status: correct},
+      {value: "Ik doe aan zwemmen en ik houd van zwemmen.", status: correct},
+      {value: "Ik doe aan zwemmen en ik houd van zwemmen", status: correct},
+      {value: "Ik doe aan voetbal. Ik doe liever aan voetbal.", status: correct},
+      {value: "Ik doe aan voetbal Ik doe liever aan voetbal", status: correct},
+      {value: "Ik doe aan voetbal, ik doe liever aan voetbal.", status: correct},
+      {value: "Ik doe aan voetbal, ik doe liever aan voetbal", status: correct},
+      {value: "Ik doe aan voetbal en ik doe liever aan voetbal.", status: correct},
+      {value: "Ik doe aan voetbal en ik doe liever aan voetbal", status: correct},
+      {value: "Ik doe aan hardlopen. Ik loop graag hard.", status: correct},
+      {value: "Ik doe aan hardlopen Ik loop graag hard", status: correct},
+      {value: "Ik doe aan hardlopen, ik loop graag hard.", status: correct},
+      {value: "Ik doe aan hardlopen, ik loop graag hard", status: correct},
+      {value: "Ik doe aan hardlopen en ik loop graag hard.", status: correct},
+      {value: "Ik doe aan hardlopen en ik loop graag hard", status: correct},
+      {value: "Ik doe aan yoga. Ik houd van yoga.", status: correct},
+      {value: "Ik doe aan yoga Ik houd van yoga", status: correct},
+      {value: "Ik doe aan yoga, ik houd van yoga.", status: correct},
+      {value: "Ik doe aan yoga, ik houd van yoga", status: correct},
+      {value: "Ik doe aan yoga en ik houd van yoga.", status: correct},
+      {value: "Ik doe aan yoga en ik houd van yoga", status: correct}
+    ]
     feedback: "Ik doe aan voetbal. Ik houd van voetbal."
