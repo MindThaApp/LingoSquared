@@ -43,6 +43,11 @@ export interface UnitSummary {
   section: UnitSection;
   locked: boolean;
   checkpoint_passed: boolean;
+  /** Stable authoring key, e.g. "en.a1.unit06.family" — null for units
+   * imported before content_key tracking existed. Used to derive a
+   * per-unit topical icon (see lib/unitIcons.ts); not otherwise
+   * meaningful to the frontend. */
+  content_key: string | null;
 }
 
 export interface LessonSummary {
@@ -108,11 +113,19 @@ export type TeachingCardKind =
   | "cultural_note"
   | "reading";
 
+// 2026-07-07 vocabulary-example addition (docs/CONTRACT.md): an example
+// sentence showing the card's word in real context — target-language
+// sentence first, then an optional source-language gloss block.
+export interface TeachingExample {
+  text_blocks: TextBlock[];
+}
+
 export interface TeachingCard {
   kind: TeachingCardKind;
   title?: string;
   text_blocks: TextBlock[];
   note?: string;
+  examples?: TeachingExample[] | null;
 }
 
 export interface Lesson {
