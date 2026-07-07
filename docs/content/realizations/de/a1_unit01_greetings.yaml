@@ -1,0 +1,214 @@
+schema_version: "1.0"
+realization_version: "2026.1-draft.1"
+target_language: "de"
+cefr_level: "A1"
+status: "complete_draft"
+generation_provenance:
+  method: "ai_generated"
+  authoring_system: "claude"
+  human_reviewed: false
+review:
+  status: "unreviewed"
+  required_next_reviewer: "codex"
+  notes: >-
+    First German (de) unit for this project -- opens the en<->de path.
+    Follows the established Latin-script unit01 pattern (no script-ramp
+    lesson needed, matching nl's approach; contrast fa/prs's script-intro
+    lesson01 for non-Latin scripts). Scoped to exactly one spine outcome
+    (universal.a1.greetings.open_close_exchange) across all 5 lessons per
+    AUTHORING_GUIDE §1 -- introductions (names/identity) is deliberately
+    left for a future unit02, not folded in here (unlike es/fr's own
+    unit01, which combined both outcomes; this unit follows fa's cleaner
+    one-outcome-per-unit precedent instead). Establishes a fresh
+    Anna/Felix storyline (new apartment-building neighbors meeting for
+    the first time) -- not reusing any other language's character names,
+    since this is a genuinely new course direction. The Sie/du
+    formal-informal distinction (a real German A1 grammar point with no
+    direct English equivalent) is taught explicitly in lesson03 and
+    exercised throughout; the neighbors use Sie with each other
+    throughout lesson05's dialogue since they've just met (realistic
+    register choice for strangers in German, not yet on du-terms).
+    lesson04's "Bitte" is taught with its genuine dual sense (please /
+    you're welcome) rather than oversimplified to one meaning, per
+    AUTHORING_GUIDE §3's "don't overstate absolute rules." No
+    fill_in_blank exercises -- a bare "Guten ___" blank would be
+    genuinely ambiguous among Morgen/Tag/Abend with nothing in the frame
+    to disambiguate which time of day is meant (AUTHORING_GUIDE §17),
+    so multiple_choice/word_order/dialogue_response cover this vocabulary
+    instead. lesson05's matching_pairs pools 9 distinct greeting/
+    farewell/politeness words from across the whole unit, within
+    AUTHORING_GUIDE §16's 6-12 target. Every multi-clause accepted-answer
+    concern was checked at authoring time (no two-clause answers needing
+    period/comma/conjunction variants arose -- every phrase here is a
+    single clause). Compiled and validated against the real compiler
+    (scripts/compile_content.py) to confirm every exercise's tested_text
+    is fully covered by this file's own cumulative introduced_tokens. A
+    fresh-context review (Codex was usage-exhausted; a no-prior-context
+    subagent ran the equivalent review) found and this fixed: (1) many
+    exercises' own prompt.target_blocks hardcoded an English-language
+    instruction question, duplicating the overlay's instruction field --
+    harmless for this unit's only current overlay (en-de, source=English)
+    but wrong in principle, since a realization must stay source-agnostic
+    (a hypothetical future fr-de or es-de overlay would have inherited
+    stale hardcoded English). Every affected target_blocks emptied to []
+    (or, where a real target-language cue adds value for a dialogue_
+    response/speak_response exercise, replaced with actual German cue
+    text instead of English). (2) de.a1.audio.guten_abend.neutral.01 was
+    declared but never referenced -- added lesson01.exercise07.
+    listen_evening to use it. (3) lesson05's dialogue had Felix close
+    with "Tschüss, bis bald!" (casual) despite the unit just having
+    established that Anna and Felix, as strangers who've just met, use
+    the formal Sie register throughout -- changed to "Auf Wiedersehen,
+    bis bald!" for consistency (lesson02's own reply_casual_farewell
+    exercise, a genuinely different friend-context scenario, correctly
+    keeps Tschüss). (4) lesson03's exercise01/02 (choose_formal_pronoun/
+    choose_informal_pronoun) had Ihnen/dir as distractors for a
+    nominative-form question, but both are also genuinely correct
+    formal/informal "you" forms (dative case) given the instruction
+    never restricted to the subject form -- swapped for unrelated
+    distractors. (5) lesson03.exercise08's accepted_answers was missing
+    the comma+"und" variant its sibling exercise07 (identical content)
+    already had per §12 -- added. Re-validated and re-compiled clean (0
+    errors/0 warnings) after every fix. Still pending an actual human
+    (or Codex, once usage resets) reviewer per standard governance --
+    this AI review does not itself satisfy §9.
+
+course:
+  realization_key: "de.a1"
+  target_language_first: true
+  dialect: "de_DE_standard"
+  register_policy: "Teach clear Standard German (Hochdeutsch), not Swiss/Austrian regionalisms (no Grüß Gott/Servus in this introductory unit). Sie (formal 'you') and du (informal 'you') are a new grammatical distinction with no direct English equivalent -- introduce it explicitly rather than assuming learners already grasp it, and keep the two registers clearly separated in every exercise."
+
+media_assets:
+  - {content_key: "de.a1.audio.hallo.neutral.01", language: "de", text: "Hallo", voice_hint: "neutral_adult", status: "pending_generation"}
+  - {content_key: "de.a1.audio.guten_morgen.neutral.01", language: "de", text: "Guten Morgen", voice_hint: "neutral_adult", status: "pending_generation"}
+  - {content_key: "de.a1.audio.guten_abend.neutral.01", language: "de", text: "Guten Abend", voice_hint: "neutral_adult", status: "pending_generation"}
+  - {content_key: "de.a1.audio.auf_wiedersehen.neutral.01", language: "de", text: "Auf Wiedersehen", voice_hint: "neutral_adult", status: "pending_generation"}
+  - {content_key: "de.a1.audio.gute_nacht.neutral.01", language: "de", text: "Gute Nacht", voice_hint: "neutral_adult", status: "pending_generation"}
+  - {content_key: "de.a1.audio.wie_geht_es_ihnen.neutral.01", language: "de", text: "Wie geht es Ihnen?", voice_hint: "neutral_adult_polite", status: "pending_generation"}
+  - {content_key: "de.a1.audio.wie_gehts.neutral.01", language: "de", text: "Wie geht's?", voice_hint: "neutral_young_adult_friendly", status: "pending_generation"}
+  - {content_key: "de.a1.audio.entschuldigung.neutral.01", language: "de", text: "Entschuldigung", voice_hint: "neutral_adult", status: "pending_generation"}
+  - content_key: "de.a1.audio.dialogue.treppenhaus.01"
+    language: "de"
+    text: "Anna: Guten Tag! Felix: Guten Tag! Wie geht es Ihnen? Anna: Danke, gut. Und Ihnen? Felix: Sehr gut, danke. Anna: Auf Wiedersehen! Felix: Auf Wiedersehen, bis bald!"
+    voice_hint: "two_adults_neutral_friendly"
+    status: "pending_generation"
+
+units:
+  - content_key: "de.a1.unit01.greetings"
+    title: "Begrüßungen und Verabschiedungen"
+    section: "reading_writing"
+    spine_outcome_ids:
+      - "universal.a1.greetings.open_close_exchange"
+    planned_lesson_count: 5
+    lessons:
+      - content_key: "de.a1.unit01.lesson01.hallo_und_tageszeiten"
+        title: "Hallo und Begrüßungen nach Tageszeit"
+        spine_outcome_id: "universal.a1.greetings.open_close_exchange"
+        teaching:
+          - {content_key: "de.a1.unit01.lesson01.teach.hallo", kind: "vocabulary", target: {text: "Hallo", language_code: "de", direction: "ltr"}, introduced_tokens: ["Hallo"]}
+          - {content_key: "de.a1.unit01.lesson01.teach.guten_morgen", kind: "phrase", target: {text: "Guten Morgen", language_code: "de", direction: "ltr"}, introduced_tokens: ["Guten", "Morgen"]}
+          - {content_key: "de.a1.unit01.lesson01.teach.guten_tag", kind: "phrase", target: {text: "Guten Tag", language_code: "de", direction: "ltr"}, introduced_tokens: ["Tag"]}
+          - {content_key: "de.a1.unit01.lesson01.teach.guten_abend", kind: "phrase", target: {text: "Guten Abend", language_code: "de", direction: "ltr"}, introduced_tokens: ["Abend"]}
+        exercises:
+          - {content_key: "de.a1.unit01.lesson01.exercise01.listen_hallo", type: "listen_select", tested_text: "Hallo", media_asset_key: "de.a1.audio.hallo.neutral.01", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit01.lesson01.exercise02.choose_morning", type: "multiple_choice", tested_text: "Guten Morgen", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit01.lesson01.exercise03.choose_evening", type: "multiple_choice", tested_text: "Guten Abend", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit01.lesson01.exercise07.listen_evening", type: "listen_select", tested_text: "Guten Abend", media_asset_key: "de.a1.audio.guten_abend.neutral.01", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit01.lesson01.exercise04.listen_order_morning", type: "listen_order", tested_text: "Guten Morgen", media_asset_key: "de.a1.audio.guten_morgen.neutral.01", prompt: {target_blocks: []}, word_bank: ["Morgen", "Guten"]}
+          - {content_key: "de.a1.unit01.lesson01.exercise05.order_evening", type: "word_order", tested_text: "Guten Abend", prompt: {target_blocks: []}, word_bank: ["Abend", "Guten"]}
+          - {content_key: "de.a1.unit01.lesson01.exercise06.write_tag", type: "writing_prompt", tested_text: "Guten Tag", prompt: {target_blocks: []}}
+
+      - content_key: "de.a1.unit01.lesson02.abschied"
+        title: "Sich verabschieden"
+        spine_outcome_id: "universal.a1.greetings.open_close_exchange"
+        teaching:
+          - {content_key: "de.a1.unit01.lesson02.teach.tschuss", kind: "vocabulary", target: {text: "Tschüss", language_code: "de", direction: "ltr"}, introduced_tokens: ["Tschüss"]}
+          - {content_key: "de.a1.unit01.lesson02.teach.auf_wiedersehen", kind: "phrase", target: {text: "Auf Wiedersehen", language_code: "de", direction: "ltr"}, introduced_tokens: ["Auf", "Wiedersehen"]}
+          - {content_key: "de.a1.unit01.lesson02.teach.bis_bald", kind: "phrase", target: {text: "Bis bald", language_code: "de", direction: "ltr"}, introduced_tokens: ["Bis", "bald"]}
+          - {content_key: "de.a1.unit01.lesson02.teach.bis_spater", kind: "phrase", target: {text: "Bis später", language_code: "de", direction: "ltr"}, introduced_tokens: ["später"]}
+          - {content_key: "de.a1.unit01.lesson02.teach.gute_nacht", kind: "phrase", target: {text: "Gute Nacht", language_code: "de", direction: "ltr"}, introduced_tokens: ["Gute", "Nacht"]}
+        exercises:
+          - {content_key: "de.a1.unit01.lesson02.exercise01.listen_wiedersehen", type: "listen_select", tested_text: "Auf Wiedersehen", media_asset_key: "de.a1.audio.auf_wiedersehen.neutral.01", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit01.lesson02.exercise02.choose_bedtime_farewell", type: "multiple_choice", tested_text: "Gute Nacht", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit01.lesson02.exercise03.listen_night", type: "listen_select", tested_text: "Gute Nacht", media_asset_key: "de.a1.audio.gute_nacht.neutral.01", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit01.lesson02.exercise04.order_wiedersehen", type: "word_order", tested_text: "Auf Wiedersehen", prompt: {target_blocks: []}, word_bank: ["Wiedersehen", "Auf"]}
+          - {content_key: "de.a1.unit01.lesson02.exercise05.order_bis_spater", type: "word_order", tested_text: "Bis später", prompt: {target_blocks: []}, word_bank: ["später", "Bis"]}
+          - {content_key: "de.a1.unit01.lesson02.exercise06.reply_casual_farewell", type: "dialogue_response", tested_text: "Tschüss Bis bald", prompt: {target_blocks: []}}
+
+      - content_key: "de.a1.unit01.lesson03.formell_und_informell"
+        title: "Formell und informell: Sie und du"
+        spine_outcome_id: "universal.a1.greetings.open_close_exchange"
+        teaching:
+          - {content_key: "de.a1.unit01.lesson03.teach.sie", kind: "grammar_note", target: {text: "Sie", language_code: "de", direction: "ltr"}, introduced_tokens: ["Sie"]}
+          - {content_key: "de.a1.unit01.lesson03.teach.du", kind: "grammar_note", target: {text: "du", language_code: "de", direction: "ltr"}, introduced_tokens: ["du"]}
+          - {content_key: "de.a1.unit01.lesson03.teach.wie_geht_es_ihnen", kind: "phrase", target: {text: "Wie geht es Ihnen?", language_code: "de", direction: "ltr"}, introduced_tokens: ["Wie", "geht", "es", "Ihnen"]}
+          - {content_key: "de.a1.unit01.lesson03.teach.wie_gehts", kind: "phrase", target: {text: "Wie geht's?", language_code: "de", direction: "ltr"}, introduced_tokens: ["geht's"]}
+          - {content_key: "de.a1.unit01.lesson03.teach.gut_danke", kind: "phrase", target: {text: "Gut, danke.", language_code: "de", direction: "ltr"}, introduced_tokens: ["Gut", "danke"]}
+          - {content_key: "de.a1.unit01.lesson03.teach.sehr_gut_danke", kind: "phrase", target: {text: "Sehr gut, danke.", language_code: "de", direction: "ltr"}, introduced_tokens: ["Sehr", "gut", "danke"]}
+          - {content_key: "de.a1.unit01.lesson03.teach.und_ihnen", kind: "phrase", target: {text: "Und Ihnen?", language_code: "de", direction: "ltr"}, introduced_tokens: ["Und", "Ihnen"]}
+          - {content_key: "de.a1.unit01.lesson03.teach.und_dir", kind: "phrase", target: {text: "Und dir?", language_code: "de", direction: "ltr"}, introduced_tokens: ["Und", "dir"]}
+        exercises:
+          - {content_key: "de.a1.unit01.lesson03.exercise01.choose_formal_pronoun", type: "multiple_choice", tested_text: "Sie", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit01.lesson03.exercise02.choose_informal_pronoun", type: "multiple_choice", tested_text: "du", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit01.lesson03.exercise03.listen_formal_question", type: "listen_select", tested_text: "Wie geht es Ihnen", media_asset_key: "de.a1.audio.wie_geht_es_ihnen.neutral.01", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit01.lesson03.exercise04.listen_informal_question", type: "listen_select", tested_text: "Wie geht's", media_asset_key: "de.a1.audio.wie_gehts.neutral.01", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit01.lesson03.exercise05.order_formal_question", type: "word_order", tested_text: "Wie geht es Ihnen", prompt: {target_blocks: []}, word_bank: ["geht", "es", "Ihnen", "Wie"]}
+          - {content_key: "de.a1.unit01.lesson03.exercise06.reply_formally", type: "dialogue_response", tested_text: "Gut danke Und Ihnen", prompt: {target_blocks: [{text: "Wie geht es Ihnen?", language_code: "de", direction: "ltr"}]}}
+          - {content_key: "de.a1.unit01.lesson03.exercise07.reply_informally", type: "dialogue_response", tested_text: "Sehr gut danke Und dir", prompt: {target_blocks: [{text: "Wie geht's?", language_code: "de", direction: "ltr"}]}}
+          - {content_key: "de.a1.unit01.lesson03.exercise08.speak_informal_exchange", type: "speak_response", tested_text: "Sehr gut danke Und dir", prompt: {target_blocks: [{text: "Wie geht's?", language_code: "de", direction: "ltr"}]}}
+
+      - content_key: "de.a1.unit01.lesson04.hoeflichkeit"
+        title: "Höflichkeitsausdrücke"
+        spine_outcome_id: "universal.a1.greetings.open_close_exchange"
+        teaching:
+          - {content_key: "de.a1.unit01.lesson04.teach.danke", kind: "vocabulary", target: {text: "Danke", language_code: "de", direction: "ltr"}, introduced_tokens: []}
+          - {content_key: "de.a1.unit01.lesson04.teach.bitte", kind: "vocabulary", target: {text: "Bitte", language_code: "de", direction: "ltr"}, introduced_tokens: ["Bitte"]}
+          - {content_key: "de.a1.unit01.lesson04.teach.entschuldigung", kind: "vocabulary", target: {text: "Entschuldigung", language_code: "de", direction: "ltr"}, introduced_tokens: ["Entschuldigung"]}
+          - {content_key: "de.a1.unit01.lesson04.teach.kein_problem", kind: "phrase", target: {text: "Kein Problem", language_code: "de", direction: "ltr"}, introduced_tokens: ["Kein", "Problem"]}
+          - {content_key: "de.a1.unit01.lesson04.teach.gern_geschehen", kind: "phrase", target: {text: "Gern geschehen", language_code: "de", direction: "ltr"}, introduced_tokens: ["Gern", "geschehen"]}
+        exercises:
+          - {content_key: "de.a1.unit01.lesson04.exercise01.listen_entschuldigung", type: "listen_select", tested_text: "Entschuldigung", media_asset_key: "de.a1.audio.entschuldigung.neutral.01", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit01.lesson04.exercise02.choose_please_or_welcome", type: "multiple_choice", tested_text: "Bitte", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit01.lesson04.exercise03.choose_no_problem", type: "multiple_choice", tested_text: "Kein Problem", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit01.lesson04.exercise04.order_gern_geschehen", type: "word_order", tested_text: "Gern geschehen", prompt: {target_blocks: []}, word_bank: ["geschehen", "Gern"]}
+          - {content_key: "de.a1.unit01.lesson04.exercise05.reply_to_thanks", type: "dialogue_response", tested_text: "Bitte", prompt: {target_blocks: [{text: "Danke!", language_code: "de", direction: "ltr"}]}}
+          - {content_key: "de.a1.unit01.lesson04.exercise06.write_entschuldigung", type: "writing_prompt", tested_text: "Entschuldigung", prompt: {target_blocks: []}}
+
+      - content_key: "de.a1.unit01.lesson05.im_treppenhaus"
+        title: "Im Treppenhaus"
+        spine_outcome_id: "universal.a1.greetings.open_close_exchange"
+        teaching:
+          - {content_key: "de.a1.unit01.lesson05.teach.line01", kind: "dialogue", target: {text: "Guten Tag!", language_code: "de", direction: "ltr", speaker: "Anna"}, introduced_tokens: []}
+          - {content_key: "de.a1.unit01.lesson05.teach.line02", kind: "dialogue", target: {text: "Guten Tag! Wie geht es Ihnen?", language_code: "de", direction: "ltr", speaker: "Felix"}, introduced_tokens: []}
+          - {content_key: "de.a1.unit01.lesson05.teach.line03", kind: "dialogue", target: {text: "Danke, gut. Und Ihnen?", language_code: "de", direction: "ltr", speaker: "Anna"}, introduced_tokens: []}
+          - {content_key: "de.a1.unit01.lesson05.teach.line04", kind: "dialogue", target: {text: "Sehr gut, danke.", language_code: "de", direction: "ltr", speaker: "Felix"}, introduced_tokens: []}
+          - {content_key: "de.a1.unit01.lesson05.teach.line05", kind: "dialogue", target: {text: "Auf Wiedersehen!", language_code: "de", direction: "ltr", speaker: "Anna"}, introduced_tokens: []}
+          - {content_key: "de.a1.unit01.lesson05.teach.line06", kind: "dialogue", target: {text: "Auf Wiedersehen, bis bald!", language_code: "de", direction: "ltr", speaker: "Felix"}, introduced_tokens: []}
+        exercises:
+          - {content_key: "de.a1.unit01.lesson05.exercise01.listen_greeting_used", type: "dialogue_comprehension", tested_text: "Guten Tag", media_asset_key: "de.a1.audio.dialogue.treppenhaus.01", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit01.lesson05.exercise02.listen_wellbeing_reply", type: "listen_select", tested_text: "Danke gut", media_asset_key: "de.a1.audio.dialogue.treppenhaus.01", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit01.lesson05.exercise03.choose_register", type: "multiple_choice", tested_text: "Sie", prompt: {target_blocks: []}}
+          - content_key: "de.a1.unit01.lesson05.exercise04.match_unit_vocabulary"
+            type: "matching_pairs"
+            tested_text: "Hallo Guten Morgen Guten Abend Tschüss Auf Wiedersehen Bis bald Danke Bitte Entschuldigung"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "Hallo", right: "an informal hello"}
+              - {left: "Guten Morgen", right: "good morning"}
+              - {left: "Guten Abend", right: "good evening"}
+              - {left: "Tschüss", right: "an informal goodbye"}
+              - {left: "Auf Wiedersehen", right: "a formal goodbye"}
+              - {left: "Bis bald", right: "see you soon"}
+              - {left: "Danke", right: "thank you"}
+              - {left: "Bitte", right: "please / you're welcome"}
+              - {left: "Entschuldigung", right: "excuse me"}
+          - {content_key: "de.a1.unit01.lesson05.exercise05.order_felix_reply", type: "word_order", tested_text: "Wie geht es Ihnen", prompt: {target_blocks: []}, word_bank: ["geht", "es", "Ihnen", "Wie"]}
+          - content_key: "de.a1.unit01.lesson05.exercise06.reply_as_anna"
+            type: "dialogue_response"
+            tested_text: "Danke gut Und Ihnen Auf Wiedersehen"
+            prompt: {target_blocks: [{text: "Guten Tag! Wie geht es Ihnen? ... Sehr gut, danke.", language_code: "de", direction: "ltr"}]}
+          - content_key: "de.a1.unit01.lesson05.exercise07.speak_neighbor_dialogue"
+            type: "speak_response"
+            tested_text: "Danke gut Und Ihnen Auf Wiedersehen"
+            prompt: {target_blocks: [{text: "Guten Tag! Wie geht es Ihnen? ... Sehr gut, danke.", language_code: "de", direction: "ltr"}]}
