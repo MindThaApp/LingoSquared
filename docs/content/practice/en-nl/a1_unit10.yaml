@@ -34,6 +34,21 @@ review:
     frame-embedded context, no jargon leaks, no stray YAML booleans.
     Compiler validation re-run together with units 01-13: 0 errors/0
     warnings.
+
+    **Fixed 2026-07-07 (Dutch live-QA pass)**: the 2026-07-06 audit's "all 6
+    lesson_content_key references match real lessons" check confirmed the
+    keys EXIST but missed that lesson05 (`omars_routine_lezen`) introduces
+    ZERO new lexemes (every token in it -- the full routine narration --
+    was already taught by lessons 01-04), so no Lexeme row is ever created
+    with that lesson as provenance and `_practice_lesson_id()` could never
+    resolve it -- confirmed via `scripts/backfill_lexemes_en_nl.py`'s own
+    classification (the key never appears as any spec's
+    `lesson_content_key`). Same root cause/fix pattern as the fa-en unit23
+    `what_do_you_do` fix from earlier this session. Repointed `choose.001`
+    (routine_verb_infinitive tag) to `lesson03.activiteiten_en_tijden`, the
+    closest earlier lesson already proven to resolve for the same tag (used
+    by that lesson's own template above) -- a safe, no-forward-reference
+    anchor.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -135,7 +150,7 @@ templates:
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit10.lesson05.choose.001
-    lesson_content_key: nl.a1.unit10.lesson05.omars_routine_lezen
+    lesson_content_key: nl.a1.unit10.lesson03.activiteiten_en_tijden
     type: multiple_choice
     frame:
       text: "{item}"

@@ -33,6 +33,23 @@ review:
     "Sla ___" frame anywhere in this pack). No self-reference, no
     capitalization leaks, no jargon leaks, no stray YAML booleans. Compiler
     validation re-run together with units 01-08: 0 errors/0 warnings.
+
+    **Fixed 2026-07-07 (Dutch live-QA pass)**: both lesson04 templates
+    anchored `lesson_content_key` to `nl.a1.unit09.lesson04.korte_route`,
+    which introduces ZERO new lexemes (every token in that lesson --
+    de/bank/bibliotheek/Ga/rechtdoor/tot/het/station/Sla/rechtsaf/bij/Loop/
+    De/is/tegenover -- was already taught by lessons 01-03 of this unit or
+    unit08), so no Lexeme row is ever created with that lesson as
+    provenance and `_practice_lesson_id()` could never resolve it --
+    confirmed via `scripts/backfill_lexemes_en_nl.py`'s own classification
+    (the key never appears as any spec's `lesson_content_key`). Same root
+    cause/fix pattern as the fa-en unit23 `what_do_you_do` fix from earlier
+    this session. Repointed to the closest earlier lesson already proven
+    to resolve for each template's actual slot tag: `choose.001`
+    (place_non_station) -> `lesson03.de_weg_vragen` (same tag already used
+    by that lesson's own templates above); `order.002` (turn_direction) ->
+    `lesson02.bevelsvormen` (same tag already used there too). Both are
+    safe, no-forward-reference anchors within the same unit.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -121,7 +138,7 @@ templates:
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is the place word you heard.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit09.lesson04.choose.001
-    lesson_content_key: nl.a1.unit09.lesson04.korte_route
+    lesson_content_key: nl.a1.unit09.lesson03.de_weg_vragen
     type: multiple_choice
     frame:
       text: "{item}"
@@ -133,7 +150,7 @@ templates:
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is a place word from this unit.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit09.lesson04.order.002
-    lesson_content_key: nl.a1.unit09.lesson04.korte_route
+    lesson_content_key: nl.a1.unit09.lesson02.bevelsvormen
     type: word_order
     frame: {text: "Sla {item} bij het station.", language_code: nl, direction: ltr}
     slots: {item: *turn_direction}

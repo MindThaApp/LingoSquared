@@ -45,6 +45,22 @@ review:
     lesson content changes during its own future review pass, this pack's
     lesson_content_key references and vocabulary should be re-diffed
     against it.
+
+    **Fixed 2026-07-07 (Dutch live-QA pass)**: the 2026-07-06 audit's "all 6
+    lesson_content_key references match real lessons" check confirmed the
+    keys EXIST but missed that lesson06 (`lotte_en_omar_gisteren`)
+    introduces ZERO new lexemes (every token in its dialogue -- Lotte/
+    Wat/heb/je/gisteren/gedaan/Omar/Ik/gewerkt/Daarna/ben/naar/de/
+    supermarkt/gegaan/appels/gekocht/etc. -- was already taught by lessons
+    01-05), so no Lexeme row is ever created with that lesson as
+    provenance and `_practice_lesson_id()` could never resolve it --
+    confirmed via `scripts/backfill_lexemes_en_nl.py`'s own classification
+    (the key never appears as any spec's `lesson_content_key`). Same root
+    cause/fix pattern as the fa-en unit23 `what_do_you_do` fix from earlier
+    this session. Repointed `listen.001` (participle_hebben tag) to
+    `lesson05.een_kort_verslag_lezen`, the closest earlier lesson already
+    proven to resolve for the same tag (used by that lesson's own template
+    above) -- a safe, no-forward-reference anchor.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -171,7 +187,7 @@ templates:
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is a past participle from the account.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit12.lesson06.listen.001
-    lesson_content_key: nl.a1.unit12.lesson06.lotte_en_omar_gisteren
+    lesson_content_key: nl.a1.unit12.lesson05.een_kort_verslag_lezen
     type: listen_select
     frame: {text: "{item}", language_code: nl, direction: ltr}
     slots: {item: *participle_hebben}

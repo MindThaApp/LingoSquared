@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Idempotently backfill target-side en-nl Dutch A1 lexemes for units 1-19+.
+"""Idempotently backfill target-side en-nl Dutch A1+A2 lexemes.
 
 Run with ``--dry-run`` to parse and classify content without importing the
 application or connecting to PostgreSQL.  The realization files' complete
@@ -14,6 +14,21 @@ docs/content/practice/en-nl/a1_unit01.yaml onward. (Docstring corrected
 2026-07-06 after a fresh-context review pass flagged it as stale -- it
 previously said "units 1-7" long after the code had been extended well past
 that.)
+
+**Real bug fixed 2026-07-07 (Dutch QA pass)**: this script used to have NO
+A2 handling at all -- ``UNIT_FILES`` only ever globbed ``a1_unit*.yaml``
+(<=23), so every A2 lexeme (units 24-28: bureaucracy/opinions/banking/
+health/housing) was silently never backfilled, for as long as A2 content
+has existed -- meaning Endless Practice/SRS had zero lexeme pool for any
+A2-introduced vocabulary. Root cause: "Dutch A1" and "Dutch A2" import as
+TWO SEPARATE course rows (`POST /admin/content/import` dedups by
+`(source_language, target_language, title)`, and the A2 overlay declares a
+distinct `course.title: Dutch A2`) -- same root cause already found and
+fixed for fa/prs in `backfill_lexemes.py`/`backfill_lexemes_fa_en.py`/
+`backfill_lexemes_prs_en.py`. Fixed by adding `UNIT_FILES_A2` (its own
+LOCAL 1-based unit ordering, looked up against the separate "Dutch A2"
+course) and restructuring `iter_specs()`/`main()` to classify and backfill
+each level against its own course, matching that established pattern.
 
 Known limitation surfaced while extending this (units 5-6): this script keys
 its in-memory `specs` dict by bare token string, and `nl_part_of_speech()` is
@@ -46,6 +61,25 @@ if str(BACKEND_ROOT) not in sys.path:
 UNIT_FILES = tuple(sorted(
     p for p in (REPO_ROOT / "docs/content/realizations/nl").glob("a1_unit*_*.yaml")
     if 1 <= int(p.name[len("a1_unit"):len("a1_unit")+2]) <= 23
+))
+
+# A2 units (24-28: bureaucracy, opinions, banking, health, housing) live in a
+# SEPARATE course row ("Dutch A2", not "Dutch A1") -- `POST /admin/content/
+# import` matches/creates courses by (source_language, target_language,
+# title), and every a2_unit*.yaml overlay declares `course.title: Dutch A2`,
+# distinct from A1's `Dutch A1`. Real bug found live 2026-07-07 (Dutch QA
+# pass), same root cause already found and fixed in backfill_lexemes.py/
+# backfill_lexemes_fa_en.py/backfill_lexemes_prs_en.py for fa/prs: this used
+# to have NO A2 handling at all -- UNIT_FILES above only ever globbed
+# a1_unit*.yaml (<=23), so every A2 lexeme (units 24-28) was silently never
+# backfilled, for as long as A2 content has existed. Kept as its own tuple
+# with LOCAL 1-based ordering (looked up against the "Dutch A2" course
+# separately in main(), never mixed with UNIT_FILES' indices) -- unit.order
+# is assigned per-course at compile/import time (see scripts/
+# content_manifest.txt's separate "en-nl"/"en-nl-a2" compile groups), so a2_
+# unit24 is unit.order=1 within the "Dutch A2" course, not 24.
+UNIT_FILES_A2 = tuple(sorted(
+    (REPO_ROOT / "docs/content/realizations/nl").glob("a2_unit*_*.yaml")
 ))
 
 # Each lexical gloss is deliberately atomic. Capitalized sentence-initial forms
@@ -358,6 +392,7 @@ NL_GLOSSES.update({
     "Fijn": "Nice", "fijn": "nice", "ging": "went", "dacht": "thought",
     "betekent": "means", "spreekt": "speaks", "Spreek": "Speak",
     "wel": "indeed; well", "vertellen": "to tell", "Zijn": "His",
+    "denken": "to think",
 })
 
 # Unit 23 (money and paying), added 2026-07-06.
@@ -373,6 +408,86 @@ NL_GLOSSES.update({
     "idee": "idea", "betaalt": "pays", "Jij": "You",
     "hebt": "have (with jij)", "geholpen": "helped", "lief": "sweet; kind",
     "uw": "your (formal)", "mij": "me",
+})
+
+# A2 unit 24 (gemeente/bureaucracy: registering with local authorities),
+# added 2026-07-07.
+NL_GLOSSES.update({
+    "schrijven": "write (part of 'inschrijven', to register)",
+    "Zou": "Would (conditional of zullen)", "schikken": "to suit; to be convenient",
+    "paspoort": "the passport", "huurcontract": "the rental contract",
+    "geboorteakte": "the birth certificate", "geldig": "valid",
+    "Moet": "Must; do (need to)", "meenemen": "to bring along",
+    "Sinds": "Since", "adres": "the address", "sinds": "since",
+    "vorige": "previous; last", "BSN": "the BSN (Citizen Service Number)",
+    "persoonlijke": "personal (inflected)", "overheid": "the government",
+    "DigiD": "DigiD (Dutch digital identity system)", "online": "online",
+    "zaken": "matters; affairs", "regelen": "to arrange",
+    "gemeente": "the municipality", "documenten": "documents",
+    "indien": "if", "toepassing": "application (van toepassing, applicable)",
+    "vooraf": "in advance", "inschrijving": "the registration",
+    "ontvangt": "receives", "post": "the mail; post",
+    "Ambtenaar": "Official (civil servant)", "waarmee": "with what; how",
+    "Alstublieft": "Here you go; please (formal)",
+    "Alles": "Everything", "orde": "order (in orde, in order)",
+    "paar": "a couple; a few (in 'een paar')", "Geweldig": "Great; wonderful",
+    "hulp": "the help", "ingeschreven": "registered (past participle of inschrijven)",
+})
+
+# A2 unit 25 (meningen/opinions: giving opinions with reasons), added 2026-07-07.
+NL_GLOSSES.update({
+    "fietspad": "the bike path", "mening": "the opinion",
+    "Volgens": "According to", "gevaarlijk": "dangerous", "smal": "narrow",
+    "eens": "agreed; in agreement (het eens zijn, to agree)",
+    "gedeeltelijk": "partially", "Aan": "On (aan de andere kant, on the other hand)",
+    "kant": "the side", "veiliger": "safer", "bespaart": "saves",
+    "voetgangers": "the pedestrians", "weinig": "little; not much",
+    "snap": "understand (with ik)", "fietsers": "cyclists",
+    "ze": "they; she (unstressed)", "pad": "the path", "breder": "wider",
+    "helemaal": "completely; entirely", "mee": "along; with (mee eens, in agreement)",
+    "auto": "the car", "s": "'s (possessive/plural marker, as in auto's)",
+    "straat": "the street", "Misschien": "Maybe", "wordt": "becomes",
+    "vindt": "thinks; finds (with hij/zij)",
+})
+
+# A2 unit 26 (bankrekening/banking: opening a bank account), added 2026-07-07.
+NL_GLOSSES.update({
+    "bankrekening": "the bank account", "openen": "to open",
+    "betaalrekening": "the payment/checking account", "salaris": "the salary",
+    "Uw": "Your (formal)", "werkgever": "the employer",
+    "stort": "deposits (with hij/zij)", "Storten": "To deposit",
+    "infinitief": "the infinitive", "identiteitsbewijs": "the identity document",
+    "Heeft": "Have; has (formal question form)", "bankpas": "the bank card",
+    "app": "the app", "mobiel": "mobile", "bankieren": "to bank (do banking)",
+    "gebruikt": "uses", "storten": "to deposit", "geopend": "opened",
+})
+
+# A2 unit 27 (huisarts/health: a doctor's visit), added 2026-07-07.
+NL_GLOSSES.update({
+    "bezoek": "the visit", "klachten": "symptoms; complaints", "erg": "very",
+    "pijn": "the pain", "griepje": "a mild flu; a cold", "waarschijnlijk": "probably",
+    "ernstig": "serious", "Maakt": "Make (formal imperative)",
+    "recept": "the prescription", "schrijf": "prescribe; write (with ik)",
+    "pillen": "the pills", "rust": "rest (imperative, with u)",
+    "innemen": "to take (medicine)", "terugkomen": "to come back",
+    "infinitieven": "infinitives", "scheidbare": "separable (inflected)",
+    "Diagnose": "Diagnosis", "voorgeschreven": "prescribed",
+    "Voelt": "Feel(s) (formal)", "Huisarts": "Doctor (family doctor/GP)",
+    "vervelend": "unpleasant; annoying", "dokter": "the doctor",
+})
+
+# A2 unit 28 (probleem melden/housing: reporting a maintenance issue),
+# added 2026-07-07.
+NL_GLOSSES.update({
+    "verwarming": "the heating", "monteur": "the technician; repairman",
+    "morgenochtend": "tomorrow morning", "melding": "the report; notification",
+    "vierentwintig": "twenty-four", "contact": "contact",
+    "Bevestiging": "Confirmation", "ontvangen": "received",
+    "thuis": "at home", "Bel": "Call (imperative)",
+    "woningcorporatie": "the housing corporation",
+    "Woningcorporatie": "Housing corporation",
+    "gisteravond": "last night; yesterday evening", "sturen": "to send",
+    "Tussen": "Between",
 })
 
 for _token in ("Een", "Twee"):
@@ -412,7 +527,7 @@ PREPOSITIONS = set("aan bij in met na naar om Om op Op over te tot Tot uit voor 
 PARTICLES = set("behalve dan Dan dat Dat de De dit Dit dus een Een en En er Er geen Geen het Het Ja ja Nee nee Niet niet of ook wel maar nog Anders af eerst Eerst pas want als plus toe st O langs Als Maar omdat".split())
 ADJECTIVES = set("Belgisch beleefd Duits Engels formeel Goed goed hele informeel laat Leuk leuk Nederlands nieuw normaal open oud slecht volgende elke Mooi gewone scheidbaar korte kort vriendelijk voltooide voltooid meeste sterke algemene blauwe andere ene lekker groot klein groter kleiner duur goedkoop duurder goedkoper bijvoeglijk gelijk mooi praktisch duurst beter best onregelmatig beste meer Veel meest dezelfde lange sterk lichter sterker grote nodig mooist licht beleefde ziek verkouden Ziek bijvoeglijke zelfstandige moe Elke Sommige benieuwd eigen extra vroeg fijn gezellig nieuwe welkom bewolkt koud warm zonnig Fijn blauw blij boos verdrietig zenuwachtig trots lief zwart".split())
 ADVERBS = set("avonds vandaan halverwege hier hoe Hoe hoeveelste middags nachts ochtends terug vandaag Vandaag waar Waar wanneer Wanneer graag vaak natuurlijk links rechts linksaf rechtsaf rechtdoor Rechtdoor Graag achteraan daarna Daarna eruit samen meestal gisteren vanmorgen Gisteren Vanmorgen Daar daar liever Liever zo net minder Precies precies al veel steeds Nog nu eigenlijk later altijd snel binnen Hier Natuurlijk Waarom alleen echt eerlijk heel vast apart contant".split())
-VERBS = set("begint ben Ben bent Bent heb Heb heet inschrijven is Is kom Kom komt Komt kost krijgen leer moet ontmoeten spreek wil wilt woon wonen Wonen woont zijn zitten Kun kun herhalen gaat drinken eten Mag mag Zie hebben neem kan Kan pinnen Kijk ga sla loop Ga Sla Loop gedaan opstaan sta aankleden kleed ontbijten ontbijt werken werk eet afwassen was slapen slaap staat ziet gaan Zullen zullen stellen maakt afspreken geeft staan spreken gebruik gedronken gegaan Denk gebruiken gegeten gewerkt kopen gekocht komen gekomen vinden vind Vind fietsen wandelen winkelen doen Houden drukt houd Zeg Wil zien kiest houdt voeg Gebruik vergelijken werkt heeft koop Koop koopt Wilt vertrekt moeten Let stappen voel scheelt Gaat helpen Heeft Neem Rust drink Voel genomen rusten begin denk doe krijgt maak stop zeggen klinkt Laten blijven kijken maken regent Maak Past Spreek afrekenen bel bellen belt betaalt betalen betekent dacht delen geholpen gezegd ging hebt helpt hoor horen neemt nemen passen past spreekt stuur vertellen voelt vragen zoek Betaald kunt".split())
+VERBS = set("begint ben Ben bent Bent heb Heb heet inschrijven is Is kom Kom komt Komt kost krijgen leer moet ontmoeten spreek wil wilt woon wonen Wonen woont zijn zitten Kun kun herhalen gaat drinken eten Mag mag Zie hebben neem kan Kan pinnen Kijk ga sla loop Ga Sla Loop gedaan opstaan sta aankleden kleed ontbijten ontbijt werken werk eet afwassen was slapen slaap staat ziet gaan Zullen zullen stellen maakt afspreken geeft staan spreken gebruik gedronken gegaan Denk gebruiken gegeten gewerkt kopen gekocht komen gekomen vinden vind Vind fietsen wandelen winkelen doen Houden drukt houd Zeg Wil zien kiest houdt voeg Gebruik vergelijken werkt heeft koop Koop koopt Wilt vertrekt moeten Let stappen voel scheelt Gaat helpen Heeft Neem Rust drink Voel genomen rusten begin denk doe krijgt maak stop zeggen klinkt Laten blijven kijken maken regent Maak Past Spreek afrekenen bel bellen belt betaalt betalen betekent dacht delen geholpen gezegd ging hebt helpt hoor horen neemt nemen passen past spreekt stuur vertellen voelt vragen zoek Betaald kunt denken".split())
 PHRASES = {"Aangenaam", "Goedemiddag", "Goedemorgen", "Goedenavond", "Hallo", "Hoi", "Prima", "ziens",
            "alstublieft", "alsjeblieft", "eraan", "Bedankt", "Sorry", "Groet", "Beterschap", "Perfect"}
 NOUNS = set("Achtenveertig Dagen Inleverdatum Maanden Medewerker Nul Pauze Taalcafé Twaalf Welkom Workshop acht achtentwintig achtentwintigste achtenveertig achtste achttien achttiende april augustus avond bibliotheek bijdrage boek boeken cent dag dank datum december derde dertien dertiende dertig dertigste dinsdag donderdag drie drieëntwintigste drieënveertig eenendertigste eenentwintig eenentwintigste eenheid eerste elf elfde euro februari groep half hoofdletter huisnummer inleverdatum jaar januari juli juni keer kwart kwartier maand maandag maart mei mensen middag naam nacht negen negende negenennegentig negenentwintigste negentien negentiende negentig november nul nummer ochtend oktober rooster september stoelen taalcafé tachtig tafel telefoonnummer tien tiende tiental tijd twaalf twaalfde twee tweede tweeëndertig tweeëntwintig tweeëntwintigste tweeënveertig twintig twintigste uur veertien veertiende veertig vier vierde vierentwintigste vijf vijfde vijfentwintigste vijfenzestig vijfenzeventig vijftien vijftiende vijftig vrijdag vrijdagmiddag week woensdag workshop zaal zaterdag zes zesde zesentwintigste zestien zestiende zestig zeven zevende zevenentachtig zevenentwintigste zeventien zeventiende zeventig zondag één "
@@ -435,6 +550,42 @@ NOUNS = set("Achtenveertig Dagen Inleverdatum Maanden Medewerker Nul Pauze Taalc
               "appartement Appartement badkamer balkon kamers keuken slaapkamer slaapkamers tuin woonkamer "
               "Morgen Weerbericht Zaterdag Zondag wandeling weekend weer weerbericht "
               "Rekening Totaal Winterjas broek dienst hoofdgerechten jas kleur koffies maat pin rekening schoenen sms totaal vijfendertig vijfentwintig wisselgeld zorgen beetje".split())
+
+# A2 units 24-28 (gemeente/meningen/bankrekening/huisarts/probleem melden),
+# added 2026-07-07 alongside UNIT_FILES_A2 above.
+SYMBOLS.update({"s"})
+PROPER_NOUNS.update({"BSN", "DigiD"})
+PRONOUNS.update({"Alles", "Uw", "ze", "waarmee"})
+PREPOSITIONS.update({"Sinds", "sinds", "Volgens", "Aan", "Tussen"})
+PARTICLES.update({"indien"})
+ADJECTIVES.update({
+    "geldig", "vorige", "persoonlijke", "gevaarlijk", "smal", "eens",
+    "veiliger", "breder", "weinig", "mobiel", "ernstig", "scheidbare",
+    "vervelend", "Geweldig",
+})
+ADVERBS.update({
+    "online", "vooraf", "Misschien", "helemaal", "mee", "erg",
+    "waarschijnlijk", "morgenochtend", "thuis", "gisteravond", "gedeeltelijk",
+})
+VERBS.update({
+    "schrijven", "Zou", "schikken", "Moet", "meenemen", "ontvangt", "regelen",
+    "ingeschreven", "stort", "Storten", "storten", "bankieren", "gebruikt",
+    "geopend", "Heeft", "openen", "snap", "bespaart", "wordt", "vindt",
+    "Maakt", "schrijf", "rust", "innemen", "terugkomen", "voorgeschreven",
+    "Voelt", "ontvangen", "sturen", "Bel",
+})
+PHRASES.update({"Alstublieft"})
+NOUNS.update({
+    "paspoort", "huurcontract", "geboorteakte", "adres", "overheid", "zaken",
+    "gemeente", "documenten", "toepassing", "inschrijving", "post",
+    "Ambtenaar", "orde", "paar", "hulp", "fietspad", "mening", "kant",
+    "voetgangers", "fietsers", "pad", "auto", "straat", "bankrekening",
+    "betaalrekening", "salaris", "werkgever", "infinitief",
+    "identiteitsbewijs", "bankpas", "app", "klachten", "pijn", "griepje",
+    "recept", "pillen", "infinitieven", "Diagnose", "dokter", "verwarming",
+    "monteur", "melding", "contact", "Bevestiging", "woningcorporatie",
+    "Woningcorporatie", "bezoek", "Huisarts", "vierentwintig",
+})
 
 
 def nl_part_of_speech(token: str) -> str:
@@ -547,6 +698,35 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         "hoeveel_kost_het": "total_price_question", "pinnen_of_contant": "payment_method",
         "de_rekening_delen": "bill_splitting", "wisselgeld": "change_handling",
         "rekening_vragen": "bill_dialogue",
+        # A2 unit 24 (gemeente/bureaucracy), added 2026-07-07.
+        "een_afspraak_maken": "appointment_scheduling",
+        "wat_heb_je_nodig": "document_requirements",
+        "bij_de_balie": "counter_interaction", "je_bsn_nummer": "bsn_explanation",
+        "brief_lezen": "registration_letter_reading",
+        "gemeente_afspraak": "gemeente_dialogue",
+        # A2 unit 25 (meningen/opinions), added 2026-07-07.
+        "wat_vind_je_daarvan": "opinion_question", "volgens_mij": "opinion_phrase",
+        "eens_of_niet_eens": "agreement_disagreement",
+        "aan_de_andere_kant": "counterargument",
+        "forumbericht_lezen": "opinion_reading", "fietspad_gesprek": "opinion_dialogue",
+        # A2 unit 26 (bankrekening/banking), added 2026-07-07.
+        "rekening_openen": "account_opening",
+        "betaalrekening_voor_salaris": "salary_account",
+        "bij_de_bank": "bank_counter_interaction", "mijn_bankpas": "bank_card_info",
+        "folder_lezen": "banking_reading", "bank_afspraak": "bank_dialogue",
+        # A2 unit 27 (huisarts/health), added 2026-07-07.
+        "afspraak_bij_huisarts": "doctor_appointment",
+        "wat_zijn_de_klachten": "symptom_question", "de_diagnose": "diagnosis",
+        "recept_en_advies": "prescription_advice",
+        "samenvatting_lezen": "health_summary_reading",
+        "huisarts_consult": "doctor_dialogue",
+        # A2 unit 28 (probleem melden/housing), added 2026-07-07.
+        "er_is_een_probleem": "housing_problem_report",
+        "de_verwarming_werkt_niet": "heating_problem",
+        "wanneer_komt_de_monteur": "technician_scheduling",
+        "een_melding_doen": "issue_report",
+        "bevestiging_lezen": "report_confirmation_reading",
+        "verwarming_melden": "housing_report_dialogue",
     }
     semantic.append(lesson_categories[unit_lesson])
     if t in {"jij", "je"}: semantic.append("informal_address")
@@ -894,9 +1074,13 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     return tags
 
 
-def iter_specs():
+def _classify_nl(unit_files, level):
+    # A FRESH specs dict per level/course -- Lexeme uniqueness is scoped by
+    # `Lexeme.course_id`, and "Dutch A1"/"Dutch A2" are two entirely separate
+    # course rows (see UNIT_FILES_A2's comment), so a token re-taught in A2
+    # needs its own A2-scoped Lexeme row rather than silently reusing A1's.
     specs: dict[str, dict] = {}
-    for unit_order, realization_path in enumerate(UNIT_FILES, 1):
+    for unit_order, realization_path in enumerate(unit_files, 1):
         realization = yaml.safe_load(realization_path.read_text(encoding="utf-8"))
         for lesson_order, lesson in enumerate(realization["units"][0]["lessons"], 1):
             lesson_key = lesson["content_key"]
@@ -909,6 +1093,7 @@ def iter_specs():
                     existing = specs.get(token)
                     if existing is None:
                         specs[token] = {
+                            "level": level,
                             "unit_order": unit_order, "lesson_order": lesson_order,
                             "lesson_content_key": lesson_key, "content_key": item["content_key"],
                             "token": token, "language_code": "nl", "part_of_speech": nl_part_of_speech(token),
@@ -920,13 +1105,20 @@ def iter_specs():
     yield from specs.values()
 
 
+def iter_specs():
+    yield from _classify_nl(UNIT_FILES, "a1")
+    yield from _classify_nl(UNIT_FILES_A2, "a2")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
     specs = list(iter_specs())
     if args.dry_run:
-        print(f"Lexeme backfill dry run: {len(specs)} nl.")
+        a1_count = sum(spec["level"] == "a1" for spec in specs)
+        a2_count = sum(spec["level"] == "a2" for spec in specs)
+        print(f"Lexeme backfill dry run: {len(specs)} nl ({a1_count} a1, {a2_count} a2).")
         return 0
 
     from sqlalchemy import select
@@ -934,15 +1126,39 @@ def main() -> int:
     from app.models import Course, Lesson, Lexeme, Unit
 
     with SessionLocal() as db:
-        course = db.scalar(select(Course).where(Course.source_language == "en", Course.target_language == "nl", Course.title == "Dutch A1"))
-        if course is None:
-            print("ERROR: en-nl Dutch A1 course must be imported first", file=sys.stderr)
-            return 1
-        lessons = {(unit.order, lesson.order): lesson for unit in db.scalars(select(Unit).where(Unit.course_id == course.id)) for lesson in db.scalars(select(Lesson).where(Lesson.unit_id == unit.id))}
+        courses_by_level = {}
+        for level, title in (("a1", "Dutch A1"), ("a2", "Dutch A2")):
+            needed = any(spec["level"] == level for spec in specs)
+            course = db.scalar(
+                select(Course).where(
+                    Course.source_language == "en",
+                    Course.target_language == "nl",
+                    Course.title == title,
+                )
+            )
+            if course is None:
+                if needed:
+                    print(f"ERROR: en-nl {title!r} course must be imported first", file=sys.stderr)
+                    return 1
+                continue
+            courses_by_level[level] = course
+
+        lessons_by_level = {
+            level: {
+                (unit.order, lesson.order): lesson
+                for unit in db.scalars(select(Unit).where(Unit.course_id == course.id))
+                for lesson in db.scalars(select(Lesson).where(Lesson.unit_id == unit.id))
+            }
+            for level, course in courses_by_level.items()
+        }
         created = updated = 0
         for raw_spec in specs:
             spec = dict(raw_spec)
-            lesson = lessons.get((spec.pop("unit_order"), spec.pop("lesson_order")))
+            level = spec.pop("level")
+            course = courses_by_level[level]
+            lesson = lessons_by_level[level].get(
+                (spec.pop("unit_order"), spec.pop("lesson_order"))
+            )
             if lesson is None:
                 print(f"ERROR: imported course is missing {spec['lesson_content_key']}", file=sys.stderr)
                 db.rollback(); return 1
