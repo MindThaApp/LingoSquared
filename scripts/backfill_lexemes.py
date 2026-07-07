@@ -72,6 +72,45 @@ UNIT_FILES = (
         REPO_ROOT / "docs/content/realizations/fa/a1_unit08_shopping.yaml",
         REPO_ROOT / "docs/content/overlays/en-fa/a1_unit08.yaml",
     ),
+    # Units 09-11 (Time / Dates / Routines), added 2026-07-07 by the
+    # practice-content-gap-closing pass -- see docs/BUILD_LOG.md. This
+    # closes the gap the A2-tuple comment above flagged ("the real
+    # a1_unit09-12 content ... has NO lexeme classifier coverage in this
+    # script at all"). Units 12-15 are a separate, parallel pass's lane
+    # (not added here) -- re-read this file fresh before adding them so
+    # the two passes don't clobber each other's tuple entries.
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a1_unit09_time.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a1_unit09.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a1_unit10_dates.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a1_unit10.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a1_unit11_routines.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a1_unit11.yaml",
+    ),
+    # Units 12-15 (Plans / Past Events / Preferences / Comparisons), added
+    # 2026-07-07 by the parallel practice-content-gap-closing pass (this
+    # is the OTHER lane, appended after the 09-11 lane above landed first
+    # -- re-read fresh immediately before any further edit here).
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a1_unit12_plans.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a1_unit12.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a1_unit13_past_events.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a1_unit13.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a1_unit14_preferences.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a1_unit14.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a1_unit15_comparisons.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a1_unit15.yaml",
+    ),
 )
 
 # A2 units live in a SEPARATE course row ("Farsi A2", not "Farsi A1") --
@@ -277,22 +316,83 @@ FA_GLOSSES = {
     "خونه": "house; home", "همکارامو": "my colleagues (object marker)",
     "ببینم": "let me see (subjunctive)", "می‌گیره": "it takes",
     "عادت": "habit (in عادت دارم, \"I'm used to it\")",
+    # Unit 09 (A1: time), added 2026-07-07 (practice-content-gap-closing pass).
+    "دقیقه": "minute", "نیم": "half (of an hour)", "ربع": "quarter (of an hour)",
+    "نیمه": "is half (spoken contraction of نیم است)", "ظهر": "noon",
+    "قرار": "appointment", "یکم": "a little (spoken)", "دیر": "late",
+    "میشه": "becomes; happens (spoken)",
+    "چهاره": "is four (spoken contraction of چهار است)",
+    "سر": "head; top (in سر کار, 'to/at work')", "کار": "work; job",
+    "میام": "I come; I'll come (spoken)",
+    "مشکلی": "a problem (in مشکلی نیست, 'no problem')",
+    "نیست": "is not (negative copula)",
+    # Unit 10 (A1: dates), added 2026-07-07.
+    "شنبه": "Saturday", "یکشنبه": "Sunday", "دوشنبه": "Monday",
+    "چهارشنبه": "Wednesday", "پنجشنبه": "Thursday", "جمعه": "Friday",
+    "تعطیل": "off; closed (holiday)", "هفتگیه": "is weekly (spoken)",
+    "فروردین": "Farvardin (1st Persian solar month)",
+    "اردیبهشت": "Ordibehesht (2nd Persian solar month)",
+    "خرداد": "Khordad (3rd Persian solar month)", "تقویم": "calendar",
+    "هجری": "Hijri (calendar era)", "شمسی": "solar (calendar)",
+    "استفاده": "use (in استفاده می‌کنه, 'uses')",
+    "می‌کنه": "does; uses (spoken, 3rd person)",
+    "چندشنبه‌ست": "is which day of the week? (spoken contraction)",
+    "دهم": "10th", "اردیبهشته": "is Ordibehesht (spoken contraction)",
+    "تاریخ": "date", "جلسه": "meeting", "کدوم": "which",
+    "روزه": "is (the) day (spoken contraction)",
+    "چندم": "what date/number (ordinal question)", "هشتم": "8th",
+    "مریم": "Maryam (name)", "سه‌شنبه‌ست": "is Tuesday (spoken contraction)",
+    "سرم": "my head (in سرم شلوغه, 'I'm busy')",
+    # Unit 11 (A1: routines), added 2026-07-07.
+    "بیدار": "awake", "می‌شم": "I become (spoken)", "صبحونه": "breakfast",
+    "می‌خورم": "I eat", "میرم": "I go (spoken)", "می‌خوابم": "I go to sleep",
+    "می‌شی": "you become (spoken, informal 2nd person)",
+    "هر": "every", "بعدش": "after that", "شب‌ها": "at night(s)",
+    "یه‌کم": "a little (spoken)", "دیرتر": "later", "نیما": "Nima (name)",
+    "شدن": "to become; to happen (infinitive)",
+    "چیکار": "what (activity/doing)",
+    "می‌کنی": "you do (spoken, informal 2nd person)",
+    "معمولاً": "usually", "می‌خوابه": "he/she goes to sleep (spoken, 3rd person)",
+    # Units 12-15 (A1: plans, past events, preferences, comparisons),
+    # added 2026-07-07 by the parallel practice-content-gap-closing pass.
+    # نیما/کار/چیکار/پنجشنبه/کدوم are already covered by the 09-11 lane's
+    # own additions above -- not re-declared here.
+    "برنامه": "plan", "سینما": "cinema / movies", "چطوره؟": "How about it? / How's that?",
+    "می‌خوای": "do you want", "قبوله": "it's a deal / agreed",
+    "متأسفم": "I'm sorry", "نمی‌تونم": "I can't",
+    "دعوت": "invitation", "منتظرم": "I'm waiting",
+    "ساعتی؟": "time? (o'clock, question form)",
+    "دیروز": "yesterday", "رفتم": "I went", "خوردم": "I ate", "دیدم": "I saw",
+    "کردی": "you did", "فیلم": "movie", "خوب": "good",
+    "ناهار": "lunch", "خوندم": "I read", "موندم": "I stayed",
+    "چی؟": "what?", "رفت": "he/she went", "دید": "he/she saw", "کرد": "he/she did",
+    "موند": "he/she stayed", "خوند": "he/she read",
+    "موسیقی": "music", "خوشمزه‌ست": "it's delicious", "جالبه": "it's interesting",
+    "اون": "that", "بزرگ‌تره": "it's bigger", "کوچیک‌تره": "it's smaller",
+    "گرون‌تره": "it's more expensive", "ارزون‌تره": "it's cheaper", "قد": "height",
+    "بلند‌تره": "it's/he's taller", "جوون‌تره": "he's/she's younger", "بد‌تره": "it's worse",
 }
 
 FA_SYMBOLS = set("س ل ا م ن ت ش چ ی ه ک گ ج د ر ف و ب خ ز".split())
 FA_PROPER_NOUNS = set(
-    "علی نرگس سارا مینا ایران انگلیس فرانسه آزادی رضا تهران نگار آرش".split()
+    "علی نرگس سارا مینا ایران انگلیس فرانسه آزادی رضا تهران نگار آرش "
+    "مریم نیما".split()
 )
-FA_PRONOUNS = set("من تو شما او ما این همون چی چه کی همین".split())
+FA_PRONOUNS = set(
+    "من تو شما او ما این همون چی چه کی همین کدوم اون".split()
+    + ["چی؟"]
+)
 FA_PREPOSITIONS = set("به از با اهل بهت مثل کنار برای برات پیش".split())
 FA_PARTICLES = set("هم ولی بله و آره پس تا یه یا چون رو خب چشم".split())
 FA_ADVERBS = set(
     "فعلاً خیلی چطور کجا اینجا همین‌طور کجایی باهم فردا حتماً خودمونی چند "
-    "اونجا مستقیم بعد لطفاً امروز الان کیلویی نقدی زیادی بیشتر چرا".split()
+    "اونجا مستقیم بعد لطفاً امروز الان کیلویی نقدی زیادی بیشتر چرا "
+    "یکم دیر چندم بعدش یه‌کم دیرتر چیکار معمولاً شب‌ها دیروز".split()
 )
 FA_ADJECTIVES = set(
     "خوبی بد ایرانی انگلیسی فرانسوی بزرگه کوچیکه متأهل مجرد برعکسه شلوغه "
-    "آفتابی بارونی ابری برفی گرم سرد خنک نزدیک خوشمزه ملی قدیم جدید موافق".split()
+    "آفتابی بارونی ابری برفی گرم سرد خنک نزدیک خوشمزه ملی قدیم جدید موافق "
+    "تعطیل هجری شمسی دهم هشتم بیدار هر خوب".split()
 )
 FA_NUMBERS = set(
     "صفر یک دو سه چهار پنج شش هفت هشت نه ده یازده دوازده سیزده چهارده "
@@ -317,6 +417,28 @@ FA_VERBS = {
     # Units 9-10 (A2), added 2026-07-06.
     "بگیرم", "کردم", "می‌شه", "بگید", "بیارم", "بیارید", "برمیاد",
     "می‌تونم", "بیام", "کافیه", "باشم", "ببینم", "می‌گیره",
+    # Unit 09 (A1: time), added 2026-07-07.
+    "نیمه", "میشه", "چهاره", "میام", "نیست",
+    # Unit 10 (A1: dates), added 2026-07-07.
+    "هفتگیه", "می‌کنه", "چندشنبه‌ست", "اردیبهشته", "روزه", "سه‌شنبه‌ست",
+    # Unit 11 (A1: routines), added 2026-07-07.
+    "می‌شم", "می‌خورم", "میرم", "می‌خوابم", "می‌شی", "شدن", "می‌کنی",
+    "می‌خوابه",
+    # Units 12-15 (A1: plans, past events, preferences, comparisons),
+    # added 2026-07-07 by the parallel practice-content-gap-closing pass.
+    # Colloquial -e/-ست copula-contraction predicates (خوشمزه‌ست/جالبه/
+    # the 8 comparative forms) are classified verb here, matching the
+    # already-established precedent for this exact contraction class
+    # (آفتابیه/سرده/بارونیه/گرمه/بهتره, unit07's own review notes: "part
+    # of speech verb, not adjective, matching how the realization/
+    # overlay's own review notes classify these as spoken copula
+    # contractions").
+    "چطوره؟", "می‌خوای", "قبوله", "متأسفم", "نمی‌تونم", "منتظرم",
+    "رفتم", "خوردم", "دیدم", "کردی", "خوندم", "موندم",
+    "رفت", "دید", "کرد", "موند", "خوند",
+    "خوشمزه‌ست", "جالبه",
+    "بزرگ‌تره", "کوچیک‌تره", "گرون‌تره", "ارزون‌تره", "بلند‌تره", "جوون‌تره",
+    "بد‌تره",
 }
 FA_PHRASE_PARTS = {"بخیر", "خواهش"}
 
@@ -581,6 +703,169 @@ def fa_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         " " in token or "،" in token or "؟" in token
     ):
         semantics.append("opinion_phrase")
+    # Unit 09 (A1: time), added 2026-07-07 (practice-content-gap-closing
+    # pass). "time_unit_word" (ساعت/دقیقه/نیم/ربع, 4 members, anchored
+    # lesson01) is the basic time-telling vocabulary. "day_part_word"
+    # (صبح/ظهر/عصر/شب, 4 members, anchored lesson04) is deliberately a
+    # NEW additive tag rather than widening the existing "time_period"
+    # tag (already used by en-fa's own a1_unit01.yaml pack for greeting
+    # phrases pooling صبح/عصر/شب/روز) -- adding ظهر there or pooling روز
+    # here would risk an odd combination (روز/day mixed with a specific
+    # time-of-day set), so this unit gets its own clean 4-member set
+    # instead. "appointment_word" (قرار, 1 member, translation-only,
+    # same below-multiple_choice-threshold class as other units' narrow
+    # single-word tags). "time_phrase" pools this unit's own genuine
+    # taught full-question/full-statement phrases (auto-derived by
+    # iter_specs() from multi-token teaching cards) -- kept as an
+    # explicit allow-list rather than a lesson_key-prefix+shape scope
+    # (unlike bureaucracy_phrase/opinion_phrase above) because this
+    # unit's grammar_note cards would otherwise sweep in an awkward
+    # parenthetical-laden phrase not fit for a clean practice item.
+    if token in {"ساعت", "دقیقه", "نیم", "ربع"}:
+        semantics.append("time_unit_word")
+    if token in {"صبح", "ظهر", "عصر", "شب"}:
+        semantics.append("day_part_word")
+    if token == "قرار":
+        semantics.append("appointment_word")
+    if token in {
+        "ساعت چنده؟", "ساعت سه و نیمه", "قرار ساعت چنده؟", "ساعت چهار عصر",
+    }:
+        semantics.append("time_phrase")
+    if lesson_key.startswith("fa.a1.unit09.lesson06"):
+        semantics.append("dialogue_word")
+    # Unit 10 (A1: dates), added 2026-07-07. "weekday" (7 members,
+    # anchored lesson01), "month_name" (فروردین/اردیبهشت/خرداد, 3
+    # members, anchored lesson02), "ordinal_date_word" (دهم/هشتم, 2
+    # members, matching/translation-only, same below-threshold class as
+    # a1_unit07's weather_time_word), "calendar_word" (تاریخ/جلسه, 2
+    # members, matching/translation-only), "date_phrase" (this unit's
+    # own genuine taught full-question/full-statement phrases, same
+    # explicit-allow-list approach as unit09's time_phrase above).
+    if token in {
+        "شنبه", "یکشنبه", "دوشنبه", "سه‌شنبه", "چهارشنبه", "پنجشنبه", "جمعه",
+    }:
+        semantics.append("weekday")
+    if token in {"فروردین", "اردیبهشت", "خرداد"}:
+        semantics.append("month_name")
+    if token in {"دهم", "هشتم"}:
+        semantics.append("ordinal_date_word")
+    if token in {"تاریخ", "جلسه"}:
+        semantics.append("calendar_word")
+    if token in {
+        "امروز چندشنبه‌ست؟", "امروز پنجشنبه، دهم اردیبهشته",
+        "جلسه کدوم روزه؟", "سه‌شنبه چندم اردیبهشته؟",
+    }:
+        semantics.append("date_phrase")
+    if token in {"مریم"}:
+        semantics.append("person_name")
+    if lesson_key.startswith("fa.a1.unit10.lesson06"):
+        semantics.append("dialogue_word")
+    # Unit 11 (A1: routines), added 2026-07-07. "routine_verb_phrase"
+    # (the 4 core routine verbs, all auto-derived multi-token phrases
+    # except می‌خوابم which is a single introduced_token but still a
+    # genuine member of the same closed set, anchored lesson01).
+    # "routine_connector" (هر/بعدش/یه‌کم/معمولاً/دیرتر, 5 members, the
+    # sequencing/comparison adverbs used to describe a routine --
+    # anchored lesson06, the "completing" lesson, since معمولاً isn't
+    # taught until then). "routine_phrase" pools this unit's own genuine
+    # taught full-question/full-statement phrases, same explicit-allow-
+    # list approach as units 09/10 above.
+    if token in {
+        "بیدار می‌شم", "صبحونه می‌خورم", "میرم سر کار", "می‌خوابم",
+    }:
+        semantics.append("routine_verb_phrase")
+    if token in {"هر", "بعدش", "یه‌کم", "دیرتر", "معمولاً"}:
+        semantics.append("routine_connector")
+    if token in {
+        "ساعت چند بیدار می‌شی؟", "هر روز", "شب‌ها ساعت یازده می‌خوابم",
+        "تو چی؟", "یه‌کم دیرتر",
+    }:
+        semantics.append("routine_phrase")
+    if token in {"نیما"}:
+        semantics.append("person_name")
+    if lesson_key.startswith("fa.a1.unit11.lesson06"):
+        semantics.append("dialogue_word")
+    # Unit 12 (A1: plans), added 2026-07-07 by the parallel practice-
+    # content-gap-closing pass. "plan_core_word" (برنامه/سینما/بریم, 3
+    # members, mixed noun/verb, anchored lesson01). "accept_word"
+    # (باشه/عالیه/قبوله, 3 members, anchored lesson03). "decline_word"
+    # (متأسفم/نمی‌تونم, 2 members, matching/translation-only, same
+    # below-multiple_choice-threshold class as other units' narrow
+    # pairs). "invitation_word" (دعوت/منتظرم/می‌بینمت, 3 members, mixed
+    # noun/verb, anchored lesson05).
+    if token in {"برنامه", "سینما", "بریم"}:
+        semantics.append("plan_core_word")
+    if token in {"باشه", "عالیه", "قبوله"}:
+        semantics.append("accept_word")
+    if token in {"متأسفم", "نمی‌تونم"}:
+        semantics.append("decline_word")
+    if token in {"دعوت", "منتظرم", "می‌بینمت"}:
+        semantics.append("invitation_word")
+    if lesson_key.endswith("lesson06.making_a_plan_dialogue"):
+        semantics.append("dialogue_word")
+    # Unit 13 (A1: past events), added 2026-07-07. "past_verb_first_
+    # person" (رفتم/خوردم/دیدم/خوندم, 4 members, anchored lesson05 where
+    # the pool completes). "past_verb_third_person" (رفت/دید/کرد/موند/
+    # خوند, 5 members, anchored lesson06's third_person_past grammar
+    # note). "recent_event_word" (فیلم/ناهار/خوب, 3 members, mixed noun/
+    # adjective, anchored lesson04). "recent_event_question_word"
+    # (دیروز/چیکار/کردی, 3 members, mixed adverb/pronoun/verb, anchored
+    # lesson03). "weekend_misc_word" (موندم/چی؟, 2 members, matching/
+    # translation-only).
+    if token in {"رفتم", "خوردم", "دیدم", "خوندم"}:
+        semantics.append("past_verb_first_person")
+    if token in {"رفت", "دید", "کرد", "موند", "خوند"}:
+        semantics.append("past_verb_third_person")
+    if token in {"فیلم", "ناهار", "خوب"}:
+        semantics.append("recent_event_word")
+    if token in {"دیروز", "چیکار", "کردی"}:
+        semantics.append("recent_event_question_word")
+    if token in {"موندم", "چی؟"}:
+        semantics.append("weekend_misc_word")
+    if lesson_key.endswith("lesson06.weekend_recap_dialogue"):
+        semantics.append("dialogue_word")
+    # Unit 14 (A1: preferences), added 2026-07-07. "preference_word"
+    # (قهوه/چای/موسیقی, 3 members, anchored lesson02 where موسیقی
+    # completes the pool). "preference_verb" (داره/نداره, 2 members,
+    # matching/translation-only -- the colloquial 3rd-person forms,
+    # additive to the existing broader "possession_verb" tag those two
+    # tokens already carry). "preference_reason" (خوشمزه‌ست/جالبه, 2
+    # members, matching/translation-only; گرمه deliberately excluded even
+    # though it also appears as a reason in this unit's reading, since it
+    # already belongs to unit07's own weather_state_verb set and adding
+    # it here would risk a pragmatically odd generated combination like
+    # "music is warm"). "asking_word" (کدوم/بیشتر/یا, 3 members, mixed
+    # pronoun/adverb/particle, anchored lesson03).
+    if token in {"قهوه", "چای", "موسیقی"}:
+        semantics.append("preference_word")
+    if token in {"داره", "نداره"}:
+        semantics.append("preference_verb")
+    if token in {"خوشمزه‌ست", "جالبه"}:
+        semantics.append("preference_reason")
+    if token in {"کدوم", "بیشتر", "یا"}:
+        semantics.append("asking_word")
+    if lesson_key.endswith("lesson06.preferences_dialogue"):
+        semantics.append("dialogue_word")
+    # Unit 15 (A1: comparisons), added 2026-07-07. "comparative_word"
+    # pools ALL 8 colloquial comparative forms taught across this unit
+    # (بزرگ‌تره/کوچیک‌تره/گرون‌تره/ارزون‌تره/بلند‌تره/جوون‌تره/بهتره/
+    # بد‌تره) into one set rather than fragmenting into per-lesson
+    # subgroups, since they all share the exact same "-تره/-ه" contracted
+    # comparative form and this gives a much richer >=3-candidate pool for
+    # every one of multiple_choice/matching_pairs/translation (بهتره
+    # already existed from unit07 with no semantic tag of its own -- this
+    # is a clean additive tag, no conflict). "demonstrative_word"
+    # (این/اون, 2 members, matching/translation-only -- این already
+    # exists from unit03 with unrelated tags, additive here too).
+    if token in {
+        "بزرگ‌تره", "کوچیک‌تره", "گرون‌تره", "ارزون‌تره",
+        "بلند‌تره", "جوون‌تره", "بهتره", "بد‌تره",
+    }:
+        semantics.append("comparative_word")
+    if token in {"این", "اون"}:
+        semantics.append("demonstrative_word")
+    if lesson_key.endswith("lesson06.comparisons_dialogue"):
+        semantics.append("dialogue_word")
     if semantics:
         tags["semantic"] = list(dict.fromkeys(semantics))
     person = {

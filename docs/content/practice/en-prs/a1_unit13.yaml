@@ -1,0 +1,173 @@
+schema_version: "1.0"
+pack_key: practice.en-prs.a1.unit13
+source_language: en
+target_language: prs
+unit_content_key: prs.a1.unit13.plans
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: >-
+    Authored 2026-07-07 for the new A1 unit13 (making plans)
+    realization, same pass as this bundle's a1_unit12.yaml sibling (see
+    that file's notes for the full extension context: a parallel
+    session authored units 09-11's practice pool separately, this
+    bundle only touches units 12-15).
+
+    Four new groups plus reuse of the course-wide person_name and
+    weekday_name pools: plan_noun (پلان/پارک/دعوت, 3 members),
+    plan_verb (برویم/می‌خواهید/نمی‌توانم/می‌بینم, 4 members),
+    accept_decline_word (منتظر/عالی/قبول/متأسف, 4 members -- pooled with
+    plan_noun and plan_verb for one 11-pair matching_pairs template),
+    and waiting_word (منتظر alone, a private single-candidate tag
+    layered on top of accept_decline_word, used only by this pack's own
+    fill_in_blank template). جمعه/کدام/منتظر's glosses/POS were already
+    added by the parallel session's units 09/11 work -- reused as-is,
+    not re-added; only their semantic tags needed extending here
+    (weekday_name for جمعه, person_name for نگار/کریم -- the latter two
+    fixing a real pre-existing gap, since کریم was glossed in A2 unit09
+    but never tagged person_name until this unit's own dialogue use).
+
+    The one fill_in_blank template (waiting_word/منتظر) is a real
+    single-project-wide-candidate group, verified via
+    scripts/_fill_in_blank_ambiguity_check.py. No listen_select/
+    listen_type anywhere. No bare unquoted yes/no/true/false anywhere.
+
+    Verified with scripts/_practice_slot_check.py (reusing
+    backfill_lexemes_en_prs.py's real iter_specs() output) -- every
+    slot has enough distinct candidates. scripts/compile_content.py
+    practice-validate for the full en-prs pack -- 0 errors/0 warnings.
+    Needs the standard fresh-context review before import; no
+    backfill_lexemes_en_prs.py run has happened against a real
+    database yet in this pass.
+tag_schema:
+  part_of_speech: [noun, verb, adjective, proper_noun]
+  agreement_tags:
+    semantic: [plan_noun, plan_verb, accept_decline_word, waiting_word, weekday_name, person_name]
+slot_presets:
+  plan_noun: &plan_noun {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: plan_noun}}
+  plan_verb: &plan_verb {language_code: prs, part_of_speech: verb, agreement_tags: {semantic: plan_verb}}
+  accept_decline_word: &accept_decline_word {language_code: prs, part_of_speech: adjective, agreement_tags: {semantic: accept_decline_word}}
+  waiting_word: &waiting_word {language_code: prs, part_of_speech: adjective, agreement_tags: {semantic: waiting_word}}
+  weekday_name: &weekday_name {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: weekday_name}}
+  person_name: &person_name {language_code: prs, part_of_speech: proper_noun, agreement_tags: {semantic: person_name}}
+  # plan_noun (3), plan_verb (4), and accept_decline_word (4) pool for
+  # the matching_pairs template below -- 11 distinct real tokens,
+  # AUTHORING_GUIDE.md #16. Mixed part_of_speech since the three groups
+  # span noun/verb/adjective.
+  plan_pool: &plan_pool {language_code: prs, part_of_speech: [noun, verb, adjective], agreement_tags: {semantic: [plan_noun, plan_verb, accept_decline_word]}}
+templates:
+  # Lesson 1: plan vocabulary.
+  - content_key: practice.en-prs.prs.a1.unit13.lesson01.plan_noun_gloss.001
+    lesson_content_key: prs.a1.unit13.lesson01.plan_vocabulary
+    type: multiple_choice
+    frame: {text: "{plan_noun}", language_code: prs, direction: rtl}
+    slots: {plan_noun: *plan_noun}
+    answer_derivation: {kind: slot_gloss, slot: plan_noun}
+    feedback_frame: {text: "{plan_noun} is a noun used when making a plan.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit13.lesson01.plan_noun_translate.002
+    lesson_content_key: prs.a1.unit13.lesson01.plan_vocabulary
+    type: translation
+    frame: {text: "{plan_noun}", language_code: en, direction: ltr, slot_rendering: {plan_noun: english_gloss}}
+    slots: {plan_noun: *plan_noun}
+    answer_derivation: {kind: slot_text, slot: plan_noun}
+    feedback_frame: {text: "{plan_noun} is the Dari word for this.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit13.lesson01.plan_noun_order.003
+    lesson_content_key: prs.a1.unit13.lesson01.plan_vocabulary
+    type: word_order
+    frame: {text: "{plan_noun} خوب است", language_code: prs, direction: rtl}
+    slots: {plan_noun: *plan_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "{plan_noun} خوب است", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: [noun] خوب است (the [noun] is good).", language_code: en, direction: ltr}
+
+  # Lesson 2: proposing a plan.
+  - content_key: practice.en-prs.prs.a1.unit13.lesson02.plan_verb_gloss.001
+    lesson_content_key: prs.a1.unit13.lesson02.proposing_a_plan
+    type: multiple_choice
+    frame: {text: "{plan_verb}", language_code: prs, direction: rtl}
+    slots: {plan_verb: *plan_verb}
+    answer_derivation: {kind: slot_gloss, slot: plan_verb}
+    feedback_frame: {text: "{plan_verb} is a verb used when making a plan.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit13.lesson02.plan_verb_translate.002
+    lesson_content_key: prs.a1.unit13.lesson02.proposing_a_plan
+    type: translation
+    frame: {text: "{plan_verb}", language_code: en, direction: ltr, slot_rendering: {plan_verb: english_gloss}}
+    slots: {plan_verb: *plan_verb}
+    answer_derivation: {kind: slot_text, slot: plan_verb}
+    feedback_frame: {text: "{plan_verb} is the Dari word for this.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit13.lesson02.weekday_order.003
+    lesson_content_key: prs.a1.unit13.lesson02.proposing_a_plan
+    type: word_order
+    frame: {text: "می‌خواهید {weekday_name} برویم پارک؟", language_code: prs, direction: rtl}
+    slots: {weekday_name: *weekday_name}
+    answer_derivation: {kind: render_frame, frame: {text: "می‌خواهید {weekday_name} برویم پارک؟", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: می‌خواهید [day] برویم پارک؟ (do you want to go to the park [day]?).", language_code: en, direction: ltr}
+
+  # Lesson 3: accepting a plan.
+  - content_key: practice.en-prs.prs.a1.unit13.lesson03.accept_decline_gloss.001
+    lesson_content_key: prs.a1.unit13.lesson03.accepting_a_plan
+    type: multiple_choice
+    frame: {text: "{accept_decline_word}", language_code: prs, direction: rtl}
+    slots: {accept_decline_word: *accept_decline_word}
+    answer_derivation: {kind: slot_gloss, slot: accept_decline_word}
+    feedback_frame: {text: "{accept_decline_word} is used to accept, decline, or react to a plan.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit13.lesson03.accept_decline_translate.002
+    lesson_content_key: prs.a1.unit13.lesson03.accepting_a_plan
+    type: translation
+    frame: {text: "{accept_decline_word}", language_code: en, direction: ltr, slot_rendering: {accept_decline_word: english_gloss}}
+    slots: {accept_decline_word: *accept_decline_word}
+    answer_derivation: {kind: slot_text, slot: accept_decline_word}
+    feedback_frame: {text: "{accept_decline_word} is the Dari word for this.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit13.lesson03.plan_pool_pair.003
+    lesson_content_key: prs.a1.unit13.lesson03.accepting_a_plan
+    type: matching_pairs
+    # Pools plan_noun (3) + plan_verb (4) + accept_decline_word (4) --
+    # 11 distinct real tokens across this unit's own vocabulary,
+    # AUTHORING_GUIDE.md #16.
+    frame: {text: "{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six} — {word_seven} — {word_eight} — {word_nine} — {word_ten} — {word_eleven}", language_code: prs, direction: rtl}
+    slots: {word_one: *plan_pool, word_two: *plan_pool, word_three: *plan_pool, word_four: *plan_pool, word_five: *plan_pool, word_six: *plan_pool, word_seven: *plan_pool, word_eight: *plan_pool, word_nine: *plan_pool, word_ten: *plan_pool, word_eleven: *plan_pool}
+    slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five, word_six, word_seven, word_eight, word_nine, word_ten, word_eleven]}]
+    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five, word_six, word_seven, word_eight, word_nine, word_ten, word_eleven]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+
+  # Lesson 5: reading an invitation.
+  - content_key: practice.en-prs.prs.a1.unit13.lesson05.waiting_word_fill.001
+    lesson_content_key: prs.a1.unit13.lesson05.reading_an_invitation
+    type: fill_in_blank
+    frame: {text: "{waiting_word} استم.", language_code: prs, direction: rtl}
+    slots: {waiting_word: *waiting_word}
+    answer_derivation: {kind: slot_text, slot: waiting_word}
+    feedback_frame: {text: "{waiting_word} استم means I'm waiting.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit13.lesson05.waiting_word_translate.002
+    lesson_content_key: prs.a1.unit13.lesson05.reading_an_invitation
+    type: translation
+    frame: {text: "{waiting_word}", language_code: en, direction: ltr, slot_rendering: {waiting_word: english_gloss}}
+    slots: {waiting_word: *waiting_word}
+    answer_derivation: {kind: slot_text, slot: waiting_word}
+    feedback_frame: {text: "{waiting_word} is the Dari word for this.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit13.lesson05.weekday_gloss.003
+    lesson_content_key: prs.a1.unit13.lesson05.reading_an_invitation
+    type: multiple_choice
+    frame: {text: "{weekday_name}", language_code: prs, direction: rtl}
+    slots: {weekday_name: *weekday_name}
+    answer_derivation: {kind: slot_gloss, slot: weekday_name}
+    feedback_frame: {text: "{weekday_name} names a day of the week.", language_code: en, direction: ltr}
+
+  # Lesson 6: making a plan (Farid and Negar's dialogue).
+  - content_key: practice.en-prs.prs.a1.unit13.lesson06.person_name_gloss.001
+    lesson_content_key: prs.a1.unit13.lesson06.making_a_plan_dialogue
+    type: multiple_choice
+    frame: {text: "{person_name}", language_code: prs, direction: rtl}
+    slots: {person_name: *person_name}
+    answer_derivation: {kind: slot_gloss, slot: person_name}
+    feedback_frame: {text: "{person_name} is a name used in this course.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit13.lesson06.person_name_pair.002
+    lesson_content_key: prs.a1.unit13.lesson06.making_a_plan_dialogue
+    type: matching_pairs
+    # Full course-wide person_name pool, 12 distinct real candidates
+    # (verified via scripts/_practice_slot_check.py) -- Farid and Negar
+    # are this lesson's own two speakers.
+    frame: {text: "{person_name_one} — {person_name_two} — {person_name_three} — {person_name_four} — {person_name_five} — {person_name_six} — {person_name_seven} — {person_name_eight} — {person_name_nine} — {person_name_ten} — {person_name_eleven} — {person_name_twelve}", language_code: prs, direction: rtl}
+    slots: {person_name_one: *person_name, person_name_two: *person_name, person_name_three: *person_name, person_name_four: *person_name, person_name_five: *person_name, person_name_six: *person_name, person_name_seven: *person_name, person_name_eight: *person_name, person_name_nine: *person_name, person_name_ten: *person_name, person_name_eleven: *person_name, person_name_twelve: *person_name}
+    slot_relations: [{kind: distinct, slots: [person_name_one, person_name_two, person_name_three, person_name_four, person_name_five, person_name_six, person_name_seven, person_name_eight, person_name_nine, person_name_ten, person_name_eleven, person_name_twelve]}]
+    answer_derivation: {kind: matching_pairs, slots: [person_name_one, person_name_two, person_name_three, person_name_four, person_name_five, person_name_six, person_name_seven, person_name_eight, person_name_nine, person_name_ten, person_name_eleven, person_name_twelve]}
+    feedback_frame: {text: "Match each name to its English label.", language_code: en, direction: ltr}

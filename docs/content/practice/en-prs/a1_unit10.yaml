@@ -1,0 +1,181 @@
+schema_version: "1.0"
+pack_key: practice.en-prs.a1.unit10
+source_language: en
+target_language: prs
+unit_content_key: prs.a1.unit10.shopping
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: >-
+    Authored 2026-07-07, closing the en-prs practice-pool gap for the
+    real A1 realization's new unit10 (shopping and prices: shop/price
+    vocabulary, asking a price, reading a price label, asking for a
+    quantity, bargaining for a discount, a full market dialogue -- part
+    of the same A1 8->15 growth spurt as units 09/11, authored the same
+    night; units 12-15 are a separate parallel worker's lane).
+
+    Extended two existing course-wide semantic groups with this unit's
+    genuinely new vocabulary rather than inventing redundant new ones:
+    food_item (unit08's نان/پلو/قورمه/چای/آب) gained سیب/سیب‌ها (apple(s),
+    lesson03), counting_word (unit08's بشقاب/تا) gained کیلو (kilo,
+    lesson03), and politeness (unit01/02's تشکر/خواهش/می‌کنم/بفرمایید/
+    شکر) gained بفرمایین (lesson06's "please, go ahead," a genuinely
+    distinct -ین-suffixed Kabul-colloquial spelling from the already-
+    existing -ید-suffixed بفرمایید, per the same suffix-variation pattern
+    already established for استین/می‌تانین -- confirmed against the
+    realization directly, not assumed).
+
+    Two new groups, both genuine: shop_word (دوکان/قیمت/ارزان/گران/
+    تخفیف/قیمتش, 6 members, lesson01/02) and polite_request_verb
+    (می‌تانین/بدهین, 2 members, lesson05 -- also each a genuinely
+    distinct -ین-suffixed form from the existing -ید forms می‌توانید/
+    بدهید, confirmed against the realization). polite_request_verb is
+    pooled with the (now-extended) politeness group into one
+    polite_and_request preset (8 distinct) for one matching_pairs/
+    multiple_choice pair anchored at lesson05, since both are real,
+    thematically-coherent "polite speech" vocabulary -- not a forced
+    merge.
+
+    No fill_in_blank templates: shop_word (6), food_item (7),
+    counting_word (3), and polite_and_request (8) all have 2+ real
+    distinct candidates and no single-slot frame in this unit's
+    vocabulary has a fixed disambiguating anchor beyond the tag itself,
+    per AUTHORING_GUIDE.md #17 -- zero fill_in_blank for this unit is
+    the correct, deliberate call. Two word_order templates instead reuse
+    real taught sentence shapes verbatim-generalized across their full
+    candidate pool: "{food_item} یک کیلو صد افغانی" (the exact price-
+    label shape taught in lesson03 for سیب, generalized across all
+    food_item candidates) and "یک کیلو {food_item} می‌خواهم" (the exact
+    quantity-request shape taught in lesson04) -- both checked by hand
+    for grammaticality against every food_item member.
+
+    No listen_select/listen_type anywhere (en-prs has no TTS voices).
+    No bare unquoted yes/no/true/false anywhere.
+
+    Verified with a standalone throwaway script reusing
+    scripts/_practice_slot_check.py's lexeme_matches()/check_pack()
+    against scripts/backfill_lexemes_en_prs.py's real iter_specs()
+    output (after extending that script's classifier for units 09-11)
+    -- 0 problems for this unit's own templates. Full-corpus
+    scripts/compile_content.py practice-validate and the shared
+    backfill script's own dry-run currently also depend on a separate,
+    parallel worker's still-in-progress units 12-15 additions to the
+    SAME shared backfill_lexemes_en_prs.py file -- this unit's own
+    templates were independently confirmed clean in isolation (see the
+    verification report accompanying this pack). Needs the standard
+    fresh-context review before import; no backfill_lexemes_en_prs.py
+    run has actually happened against a real database yet in this pass.
+tag_schema:
+  part_of_speech: [noun, adjective, verb, particle]
+  agreement_tags:
+    semantic: [shop_word, food_item, counting_word, polite_request_verb, politeness]
+slot_presets:
+  shop_word: &shop_word {language_code: prs, part_of_speech: [noun, adjective], agreement_tags: {semantic: shop_word}}
+  food_item: &food_item {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: food_item}}
+  counting_word: &counting_word {language_code: prs, part_of_speech: [noun, particle], agreement_tags: {semantic: counting_word}}
+  polite_request_verb: &polite_request_verb {language_code: prs, part_of_speech: verb, agreement_tags: {semantic: polite_request_verb}}
+  # polite_request_verb (2) pooled with the politeness group (now 6
+  # members after this unit's بفرمایین addition) for one matching_pairs/
+  # multiple_choice pair at 8 distinct -- coherent "polite speech" theme.
+  polite_and_request: &polite_and_request {language_code: prs, part_of_speech: [noun, verb], agreement_tags: {semantic: [politeness, polite_request_verb]}}
+templates:
+  # Lesson 1: shop and price vocabulary.
+  - content_key: practice.en-prs.prs.a1.unit10.lesson01.shop_gloss.001
+    lesson_content_key: prs.a1.unit10.lesson01.shopping_vocabulary
+    type: multiple_choice
+    frame: {text: "{shop_word}", language_code: prs, direction: rtl}
+    slots: {shop_word: *shop_word}
+    answer_derivation: {kind: slot_gloss, slot: shop_word}
+    feedback_frame: {text: "{shop_word} is a shopping word.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit10.lesson01.shop_translate.002
+    lesson_content_key: prs.a1.unit10.lesson01.shopping_vocabulary
+    type: translation
+    frame: {text: "{shop_word}", language_code: en, direction: ltr, slot_rendering: {shop_word: english_gloss}}
+    slots: {shop_word: *shop_word}
+    answer_derivation: {kind: slot_text, slot: shop_word}
+    feedback_frame: {text: "{shop_word} is the Dari word for this.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit10.lesson01.shop_pair.003
+    lesson_content_key: prs.a1.unit10.lesson01.shopping_vocabulary
+    type: matching_pairs
+    frame: {text: "{shop_word_one} — {shop_word_two} — {shop_word_three} — {shop_word_four} — {shop_word_five} — {shop_word_six}", language_code: prs, direction: rtl}
+    slots: {shop_word_one: *shop_word, shop_word_two: *shop_word, shop_word_three: *shop_word, shop_word_four: *shop_word, shop_word_five: *shop_word, shop_word_six: *shop_word}
+    slot_relations: [{kind: distinct, slots: [shop_word_one, shop_word_two, shop_word_three, shop_word_four, shop_word_five, shop_word_six]}]
+    answer_derivation: {kind: matching_pairs, slots: [shop_word_one, shop_word_two, shop_word_three, shop_word_four, shop_word_five, shop_word_six]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+
+  # Lesson 3: reading a price label (apples, kilos).
+  - content_key: practice.en-prs.prs.a1.unit10.lesson03.food_gloss.001
+    lesson_content_key: prs.a1.unit10.lesson03.reading_a_price_label
+    type: multiple_choice
+    frame: {text: "{food_item}", language_code: prs, direction: rtl}
+    slots: {food_item: *food_item}
+    answer_derivation: {kind: slot_gloss, slot: food_item}
+    feedback_frame: {text: "{food_item} names a food or drink item.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit10.lesson03.food_translate.002
+    lesson_content_key: prs.a1.unit10.lesson03.reading_a_price_label
+    type: translation
+    frame: {text: "{food_item}", language_code: en, direction: ltr, slot_rendering: {food_item: english_gloss}}
+    slots: {food_item: *food_item}
+    answer_derivation: {kind: slot_text, slot: food_item}
+    feedback_frame: {text: "{food_item} is the Dari word for this.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit10.lesson03.counting_gloss.003
+    lesson_content_key: prs.a1.unit10.lesson03.reading_a_price_label
+    type: multiple_choice
+    frame: {text: "{counting_word}", language_code: prs, direction: rtl}
+    slots: {counting_word: *counting_word}
+    answer_derivation: {kind: slot_gloss, slot: counting_word}
+    feedback_frame: {text: "{counting_word} is used to count or measure something.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit10.lesson03.counting_translate.004
+    lesson_content_key: prs.a1.unit10.lesson03.reading_a_price_label
+    type: translation
+    frame: {text: "{counting_word}", language_code: en, direction: ltr, slot_rendering: {counting_word: english_gloss}}
+    slots: {counting_word: *counting_word}
+    answer_derivation: {kind: slot_text, slot: counting_word}
+    feedback_frame: {text: "{counting_word} is the Dari word for this.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit10.lesson03.label_order.005
+    lesson_content_key: prs.a1.unit10.lesson03.reading_a_price_label
+    # Reuses the exact "[item]: one kilo, one hundred afghanis" label
+    # shape taught verbatim for سیب in this lesson, generalized across
+    # every food_item candidate.
+    type: word_order
+    frame: {text: "{food_item} یک کیلو صد افغانی", language_code: prs, direction: rtl}
+    slots: {food_item: *food_item}
+    answer_derivation: {kind: render_frame, frame: {text: "{food_item} یک کیلو صد افغانی", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: [item] یک کیلو صد افغانی (one kilo of [item] is 100 afghanis).", language_code: en, direction: ltr}
+
+  # Lesson 4: asking for a quantity.
+  - content_key: practice.en-prs.prs.a1.unit10.lesson04.quantity_order.001
+    lesson_content_key: prs.a1.unit10.lesson04.asking_for_a_quantity
+    # Reuses the exact "یک کیلو سیب می‌خواهم" shape taught in this
+    # lesson, generalized across every food_item candidate.
+    type: word_order
+    frame: {text: "یک کیلو {food_item} می‌خواهم", language_code: prs, direction: rtl}
+    slots: {food_item: *food_item}
+    answer_derivation: {kind: render_frame, frame: {text: "یک کیلو {food_item} می‌خواهم", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: یک کیلو [item] می‌خواهم (I'd like a kilo of [item]).", language_code: en, direction: ltr}
+
+  # Lesson 5: bargaining for a discount.
+  - content_key: practice.en-prs.prs.a1.unit10.lesson05.polite_request_translate.001
+    lesson_content_key: prs.a1.unit10.lesson05.bargaining_for_a_discount
+    type: translation
+    frame: {text: "{polite_request_verb}", language_code: en, direction: ltr, slot_rendering: {polite_request_verb: english_gloss}}
+    slots: {polite_request_verb: *polite_request_verb}
+    answer_derivation: {kind: slot_text, slot: polite_request_verb}
+    feedback_frame: {text: "{polite_request_verb} is the Dari word for this.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit10.lesson05.polite_gloss.002
+    lesson_content_key: prs.a1.unit10.lesson05.bargaining_for_a_discount
+    # Pools polite_request_verb with the (now بفرمایین-extended)
+    # politeness group -- 8 distinct, a coherent "polite speech" theme.
+    type: multiple_choice
+    frame: {text: "{polite_and_request}", language_code: prs, direction: rtl}
+    slots: {polite_and_request: *polite_and_request}
+    answer_derivation: {kind: slot_gloss, slot: polite_and_request}
+    feedback_frame: {text: "{polite_and_request} is used in polite speech.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit10.lesson05.polite_pair.003
+    lesson_content_key: prs.a1.unit10.lesson05.bargaining_for_a_discount
+    type: matching_pairs
+    frame: {text: "{polite_and_request_one} — {polite_and_request_two} — {polite_and_request_three} — {polite_and_request_four} — {polite_and_request_five} — {polite_and_request_six} — {polite_and_request_seven} — {polite_and_request_eight}", language_code: prs, direction: rtl}
+    slots: {polite_and_request_one: *polite_and_request, polite_and_request_two: *polite_and_request, polite_and_request_three: *polite_and_request, polite_and_request_four: *polite_and_request, polite_and_request_five: *polite_and_request, polite_and_request_six: *polite_and_request, polite_and_request_seven: *polite_and_request, polite_and_request_eight: *polite_and_request}
+    slot_relations: [{kind: distinct, slots: [polite_and_request_one, polite_and_request_two, polite_and_request_three, polite_and_request_four, polite_and_request_five, polite_and_request_six, polite_and_request_seven, polite_and_request_eight]}]
+    answer_derivation: {kind: matching_pairs, slots: [polite_and_request_one, polite_and_request_two, polite_and_request_three, polite_and_request_four, polite_and_request_five, polite_and_request_six, polite_and_request_seven, polite_and_request_eight]}
+    feedback_frame: {text: "Match each word or phrase to its English meaning.", language_code: en, direction: ltr}

@@ -196,6 +196,21 @@ UNIT_FILES_A2 = (
         REPO_ROOT / "docs/content/realizations/en/a2_unit26_opinions.yaml",
         REPO_ROOT / "docs/content/overlays/prs-en/a2_unit26.yaml",
     ),
+    # Unit 27 (A2: opening a bank account), added 2026-07-07 (practice-
+    # pool-sync lane extending prs-en to this new unit, in parallel with the
+    # equivalent fa-en pass). EN_POS/en_agreement_tags for this unit's
+    # vocabulary (including the new banking_noun/banking_adjective
+    # semantic tags) were already present in _en_target_lexeme_common.py
+    # before this change (added earlier this session alongside nl-en's own
+    # unit27 course-routing fix) -- verified every introduced_token across
+    # this realization file against EN_POS's keys: zero missing. Only this
+    # script's own Dari gloss dict needed extending (18 new tokens, cross-
+    # checked against docs/content/overlays/prs-en/a2_unit27.yaml's own
+    # real text, not a find-replace of the fa-en script's Farsi).
+    (
+        REPO_ROOT / "docs/content/realizations/en/a2_unit27_banking.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a2_unit27.yaml",
+    ),
 )
 
 # Dari gloss for each shared English target token -- hand-written for
@@ -452,6 +467,25 @@ EN_TARGET_TO_PRS_GLOSS: dict[str, str] = {
     "fair": "منصفانه (در fair point)", "point": "نکته", "they": "آنها",
     "move": "جابه‌جا کردن", "farther": "دورتر",
     "away": "دور (در move away)",
+    # Unit 27 (A2: opening a bank account), added 2026-07-07. Atomic per-
+    # token glosses -- cross-checked against, but not a find-replace of,
+    # docs/content/overlays/prs-en/a2_unit27.yaml's own (phrase-level)
+    # Dari glosses. "debit"/"card"/"i'll"-style contraction pattern reuse
+    # their existing Unit 15/12 senses unchanged. Some genuinely distinct
+    # Afghan Dari vocabulary here vs the fa-en script's Farsi (fee=معاش
+    # not کارمزد, DMV=ادارهٔ ترافیک not ادارهٔ راهنمایی و رانندگی, 500=
+    # پنجصد not پانصد -- all cross-checked against the actual prs-en
+    # overlay text, not copied from the fa-en dict).
+    "checking": "جاری (در checking account)", "account": "حساب",
+    "monthly": "ماهانه", "fee": "معاش (کارمزد بانک)", "minimum": "حداقل",
+    "balance": "مانده", "direct": "مستقیم (در direct deposit)",
+    "deposit": "واریز", "documents": "اسناد (جمع)",
+    "you'll": "شما ... ضرورت دارین (مخفف you will)",
+    "dmv": "ادارهٔ ترافیک",
+    "business": "کاری (در business days یعنی روزهای کاری)",
+    "days": "روزها", "keep": "نگه داشتن", "500": "پنجصد",
+    "sounds": "به‌نظر می‌رسه (در that sounds good)",
+    "teller": "کارمند بانک", "both": "هر دو",
 }
 
 

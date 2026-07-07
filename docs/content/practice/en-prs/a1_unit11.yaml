@@ -1,0 +1,194 @@
+schema_version: "1.0"
+pack_key: practice.en-prs.a1.unit11
+source_language: en
+target_language: prs
+unit_content_key: prs.a1.unit11.time
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: >-
+    Authored 2026-07-07, closing the en-prs practice-pool gap for the
+    real A1 realization's new unit11 (time: basic time vocabulary,
+    asking/telling the time, parts of the day, asking about an
+    appointment, a meeting-time dialogue -- part of the same A1 8->15
+    growth spurt as units 09/10, authored the same night; units 12-15
+    are a separate parallel worker's lane).
+
+    Five groups, all genuine vocabulary confirmed directly against
+    docs/content/realizations/prs/a1_unit11_time.yaml: time_unit
+    (ساعت/دقیقه/نیم/ربع, 4 members, lesson01 -- ساعت itself was already
+    a course-wide lexeme from unit07, reused, not re-added), time_of_day
+    (a NEW, narrower tag: صبح/عصر/شب/ظهر, 4 members, lesson04 --
+    deliberately excludes the existing time_period tag's روز, since
+    "day" isn't a genuine part-of-day the way morning/noon/afternoon/
+    night are, and a word_order frame generalized across all of
+    time_period's members would render nonsense like "nine o'clock day
+    is" for روز specifically), appointment_word (قرار/جلسه, 2 members --
+    قرار is this unit's new "personal appointment" word, pooled with
+    جلسه, unit07/09's existing "meeting" word, both genuinely "scheduled
+    event" nouns), meeting_verb (می‌آیم/می‌بینمت, 2 members -- می‌آیم is
+    this unit's new "I'm coming," pooled with unit09's می‌بینمت, "I'll
+    see you," both genuine meeting-arrangement verbs), and
+    state_adjective (منتظر/مصروف, 2 members -- منتظر is this unit's new
+    "waiting," pooled with unit09's مصروف, "busy," both genuine
+    scheduling-related states). The three 2-member cross-unit poolings
+    are deliberate, real vocabulary (not padding) -- each pair is
+    thematically coherent and each member is confirmed by rereading its
+    home unit's realization directly, matching AUTHORING_GUIDE.md #16's
+    documented precedent for pooling genuinely thin groups rather than
+    leaving them undrilled, and its separate precedent (unit08's
+    role_word) for leaving a real small ceiling unpooled when no
+    coherent pooling partner exists.
+
+    No fill_in_blank templates: every group here has 2+ real distinct
+    candidates and no single-slot frame in this unit's vocabulary has a
+    fixed disambiguating anchor beyond the tag itself, per
+    AUTHORING_GUIDE.md #17 -- zero fill_in_blank for this unit is the
+    correct, deliberate call. Two word_order templates instead reuse
+    real taught sentence shapes generalized across their candidate pool
+    ("ساعت نه {time_of_day} است" from lesson04's ساعت نه صبح است,
+    checked by hand for all 4 time_of_day members: ...صبح/عصر/شب/ظهر است
+    are all natural; "{appointment_word} ساعت چند است" from lesson05's
+    قرار شما ساعت چند است؟ and lesson06's جلسه ساعت چند است؟, simplified
+    to drop شما so the same frame is grammatical for both members).
+
+    No listen_select/listen_type anywhere (en-prs has no TTS voices).
+    No bare unquoted yes/no/true/false anywhere.
+
+    Verified with a standalone throwaway script reusing
+    scripts/_practice_slot_check.py's lexeme_matches()/check_pack()
+    against scripts/backfill_lexemes_en_prs.py's real iter_specs()
+    output (after extending that script's classifier for units 09-11)
+    -- 0 problems for this unit's own templates. Full-corpus
+    scripts/compile_content.py practice-validate and the shared
+    backfill script's own dry-run currently also depend on a separate,
+    parallel worker's still-in-progress units 12-15 additions to the
+    SAME shared backfill_lexemes_en_prs.py file -- this unit's own
+    templates were independently confirmed clean in isolation (see the
+    verification report accompanying this pack). Needs the standard
+    fresh-context review before import; no backfill_lexemes_en_prs.py
+    run has actually happened against a real database yet in this pass.
+tag_schema:
+  part_of_speech: [noun, verb, adjective]
+  agreement_tags:
+    semantic: [time_unit, time_of_day, appointment_word, meeting_verb, state_adjective]
+slot_presets:
+  time_unit: &time_unit {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: time_unit}}
+  time_of_day: &time_of_day {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: time_of_day}}
+  appointment_word: &appointment_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: appointment_word}}
+  meeting_verb: &meeting_verb {language_code: prs, part_of_speech: verb, agreement_tags: {semantic: meeting_verb}}
+  state_adjective: &state_adjective {language_code: prs, part_of_speech: adjective, agreement_tags: {semantic: state_adjective}}
+templates:
+  # Lesson 1: basic time vocabulary.
+  - content_key: practice.en-prs.prs.a1.unit11.lesson01.time_unit_gloss.001
+    lesson_content_key: prs.a1.unit11.lesson01.basic_time_vocabulary
+    type: multiple_choice
+    frame: {text: "{time_unit}", language_code: prs, direction: rtl}
+    slots: {time_unit: *time_unit}
+    answer_derivation: {kind: slot_gloss, slot: time_unit}
+    feedback_frame: {text: "{time_unit} is a basic time word.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit11.lesson01.time_unit_translate.002
+    lesson_content_key: prs.a1.unit11.lesson01.basic_time_vocabulary
+    type: translation
+    frame: {text: "{time_unit}", language_code: en, direction: ltr, slot_rendering: {time_unit: english_gloss}}
+    slots: {time_unit: *time_unit}
+    answer_derivation: {kind: slot_text, slot: time_unit}
+    feedback_frame: {text: "{time_unit} is the Dari word for this.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit11.lesson01.time_unit_pair.003
+    lesson_content_key: prs.a1.unit11.lesson01.basic_time_vocabulary
+    type: matching_pairs
+    frame: {text: "{time_unit_one} — {time_unit_two} — {time_unit_three} — {time_unit_four}", language_code: prs, direction: rtl}
+    slots: {time_unit_one: *time_unit, time_unit_two: *time_unit, time_unit_three: *time_unit, time_unit_four: *time_unit}
+    slot_relations: [{kind: distinct, slots: [time_unit_one, time_unit_two, time_unit_three, time_unit_four]}]
+    answer_derivation: {kind: matching_pairs, slots: [time_unit_one, time_unit_two, time_unit_three, time_unit_four]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+
+  # Lesson 4: parts of the day.
+  - content_key: practice.en-prs.prs.a1.unit11.lesson04.day_part_gloss.001
+    lesson_content_key: prs.a1.unit11.lesson04.parts_of_the_day
+    type: multiple_choice
+    frame: {text: "{time_of_day}", language_code: prs, direction: rtl}
+    slots: {time_of_day: *time_of_day}
+    answer_derivation: {kind: slot_gloss, slot: time_of_day}
+    feedback_frame: {text: "{time_of_day} names a part of the day.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit11.lesson04.day_part_translate.002
+    lesson_content_key: prs.a1.unit11.lesson04.parts_of_the_day
+    type: translation
+    frame: {text: "{time_of_day}", language_code: en, direction: ltr, slot_rendering: {time_of_day: english_gloss}}
+    slots: {time_of_day: *time_of_day}
+    answer_derivation: {kind: slot_text, slot: time_of_day}
+    feedback_frame: {text: "{time_of_day} is the Dari word for this.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit11.lesson04.day_part_pair.003
+    lesson_content_key: prs.a1.unit11.lesson04.parts_of_the_day
+    type: matching_pairs
+    frame: {text: "{time_of_day_one} — {time_of_day_two} — {time_of_day_three} — {time_of_day_four}", language_code: prs, direction: rtl}
+    slots: {time_of_day_one: *time_of_day, time_of_day_two: *time_of_day, time_of_day_three: *time_of_day, time_of_day_four: *time_of_day}
+    slot_relations: [{kind: distinct, slots: [time_of_day_one, time_of_day_two, time_of_day_three, time_of_day_four]}]
+    answer_derivation: {kind: matching_pairs, slots: [time_of_day_one, time_of_day_two, time_of_day_three, time_of_day_four]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit11.lesson04.day_part_order.004
+    lesson_content_key: prs.a1.unit11.lesson04.parts_of_the_day
+    # Reuses the exact "ساعت نه صبح است" shape taught in this lesson,
+    # generalized across every time_of_day candidate -- checked by hand:
+    # ...صبح/عصر/شب/ظهر است are all natural Dari.
+    type: word_order
+    frame: {text: "ساعت نه {time_of_day} است", language_code: prs, direction: rtl}
+    slots: {time_of_day: *time_of_day}
+    answer_derivation: {kind: render_frame, frame: {text: "ساعت نه {time_of_day} است", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: ساعت نه [part of day] است (it's nine in the [part of day]).", language_code: en, direction: ltr}
+
+  # Lesson 5: asking about a personal appointment.
+  - content_key: practice.en-prs.prs.a1.unit11.lesson05.appointment_translate.001
+    lesson_content_key: prs.a1.unit11.lesson05.asking_about_an_appointment
+    type: translation
+    frame: {text: "{appointment_word}", language_code: en, direction: ltr, slot_rendering: {appointment_word: english_gloss}}
+    slots: {appointment_word: *appointment_word}
+    answer_derivation: {kind: slot_text, slot: appointment_word}
+    feedback_frame: {text: "{appointment_word} is the Dari word for this.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit11.lesson05.appointment_pair.002
+    lesson_content_key: prs.a1.unit11.lesson05.asking_about_an_appointment
+    # 2 distinct candidates (قرار/جلسه) -- a genuine small closed set,
+    # left unpooled further per AUTHORING_GUIDE.md #16's documented
+    # precedent for real ceilings (e.g. unit08's role_word at 2).
+    type: matching_pairs
+    frame: {text: "{appointment_word_one} — {appointment_word_two}", language_code: prs, direction: rtl}
+    slots: {appointment_word_one: *appointment_word, appointment_word_two: *appointment_word}
+    slot_relations: [{kind: distinct, slots: [appointment_word_one, appointment_word_two]}]
+    answer_derivation: {kind: matching_pairs, slots: [appointment_word_one, appointment_word_two]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit11.lesson05.appointment_order.003
+    lesson_content_key: prs.a1.unit11.lesson05.asking_about_an_appointment
+    # Reuses "قرار شما ساعت چند است؟" (lesson05) / "جلسه ساعت چند است؟"
+    # (lesson06's dialogue_line1), simplified to drop شما so the same
+    # frame is grammatical for both appointment_word candidates.
+    type: word_order
+    frame: {text: "{appointment_word} ساعت چند است", language_code: prs, direction: rtl}
+    slots: {appointment_word: *appointment_word}
+    answer_derivation: {kind: render_frame, frame: {text: "{appointment_word} ساعت چند است", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: [word] ساعت چند است (what time is the [word]?).", language_code: en, direction: ltr}
+
+  # Lesson 6: the meeting-time dialogue (Zarmina and Homayoun).
+  - content_key: practice.en-prs.prs.a1.unit11.lesson06.meeting_verb_translate.001
+    lesson_content_key: prs.a1.unit11.lesson06.meeting_time_dialogue
+    type: translation
+    frame: {text: "{meeting_verb}", language_code: en, direction: ltr, slot_rendering: {meeting_verb: english_gloss}}
+    slots: {meeting_verb: *meeting_verb}
+    answer_derivation: {kind: slot_text, slot: meeting_verb}
+    feedback_frame: {text: "{meeting_verb} is the Dari word for this.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit11.lesson06.state_adjective_translate.002
+    lesson_content_key: prs.a1.unit11.lesson06.meeting_time_dialogue
+    type: translation
+    frame: {text: "{state_adjective}", language_code: en, direction: ltr, slot_rendering: {state_adjective: english_gloss}}
+    slots: {state_adjective: *state_adjective}
+    answer_derivation: {kind: slot_text, slot: state_adjective}
+    feedback_frame: {text: "{state_adjective} is the Dari word for this.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit11.lesson06.state_adjective_pair.003
+    lesson_content_key: prs.a1.unit11.lesson06.meeting_time_dialogue
+    # 2 distinct candidates (منتظر/مصروف) -- a genuine small closed set,
+    # same documented precedent as appointment_pair above.
+    type: matching_pairs
+    frame: {text: "{state_adjective_one} — {state_adjective_two}", language_code: prs, direction: rtl}
+    slots: {state_adjective_one: *state_adjective, state_adjective_two: *state_adjective}
+    slot_relations: [{kind: distinct, slots: [state_adjective_one, state_adjective_two]}]
+    answer_derivation: {kind: matching_pairs, slots: [state_adjective_one, state_adjective_two]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}

@@ -1,0 +1,194 @@
+schema_version: "1.0"
+pack_key: practice.en-fa.a1.unit10
+source_language: en
+target_language: fa
+unit_content_key: fa.a1.unit10.dates
+review:
+  status: unreviewed
+  required_next_reviewer: codex
+  notes: >-
+    Authored 2026-07-07, part of the same pass as a1_unit09.yaml/
+    a1_unit11.yaml closing the practice-content gap for A1 units 09-11 --
+    see a1_unit09.yaml's notes for the shared scripts/backfill_lexemes.py
+    UNIT_FILES/FA_GLOSSES extension this pass made.
+
+    Five semantic groups, all verified against the real iter_specs()
+    output before authoring: "weekday" (شنبه/یکشنبه/دوشنبه/سه‌شنبه/
+    چهارشنبه/پنجشنبه/جمعه, 7 members, anchored lesson01), "month_name"
+    (فروردین/اردیبهشت/خرداد, 3 members, anchored lesson02),
+    "ordinal_date_word" (دهم/هشتم, 2 members, matching/translation-only,
+    same below-multiple_choice-threshold class as a1_unit07's
+    weather_time_word -- anchored lesson06, the "completing" lesson,
+    since هشتم isn't taught until then), and "calendar_word" (تاریخ/
+    جلسه, 2 members, matching/translation-only, anchored lesson05/06
+    where both are available). "date_phrase" pools this unit's own
+    genuine taught full-question/full-statement phrases (auto-derived
+    by iter_specs() from this unit's own multi-token teaching cards:
+    امروز چندشنبه‌ست؟ / امروز پنجشنبه، دهم اردیبهشته / جلسه کدوم روزه؟ /
+    سه‌شنبه چندم اردیبهشته؟, 4 members) -- same explicit-allow-list
+    approach as a1_unit09.yaml's time_phrase, for the same reason
+    (avoids sweeping in this unit's own grammar_note/cultural_note cards'
+    awkward mixed-script auto-derived phrases).
+
+    Left out: تقویم/هجری/شمسی/استفاده (lesson02's calendar-system
+    vocabulary) -- these are a single fixed cultural-note sentence
+    (ایران از تقویم هجری شمسی استفاده می‌کنه), not independently
+    recombinable vocabulary, and don't form a natural multi-member
+    recognition set on their own.
+
+    Verified with scripts/_practice_slot_check.py's lexeme_matches()/
+    check_pack() logic against the real (updated) iter_specs() output --
+    clean, no zero-candidate slots, no under-3 multiple_choice/
+    matching_pairs slots (ordinal_date_word/calendar_word correctly have
+    only 2 candidates each and are never used for multiple_choice, only
+    matching_pairs/translation). scripts/_fill_in_blank_ambiguity_check.py:
+    zero fill_in_blank templates authored -- same reasoning as
+    a1_unit09.yaml (every multi-member group has genuinely distinct,
+    non-synonymous candidates with no natural disambiguating frame, and
+    a bare "{slot}" frame is disallowed by AUTHORING_GUIDE.md #13
+    regardless). compile_content.py practice-validate clean (0 errors/0
+    warnings) for the full en-fa pack including this new file. Needs the
+    standard fresh-context review before import.
+tag_schema:
+  part_of_speech: [noun, adjective, phrase]
+  agreement_tags:
+    semantic: [weekday, month_name, ordinal_date_word, calendar_word, date_phrase]
+slot_presets:
+  weekday: &weekday {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: weekday}}
+  month_name: &month_name {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: month_name}}
+  ordinal_date_word: &ordinal_date_word {language_code: fa, part_of_speech: adjective, agreement_tags: {semantic: ordinal_date_word}}
+  calendar_word: &calendar_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: calendar_word}}
+  date_phrase: &date_phrase {language_code: fa, part_of_speech: phrase, agreement_tags: {semantic: date_phrase}}
+templates:
+  - content_key: practice.en-fa.fa.a1.unit10.lesson01.weekday_choice.001
+    lesson_content_key: fa.a1.unit10.lesson01.days_of_the_week
+    type: multiple_choice
+    frame: {text: "{weekday}", language_code: fa, direction: rtl}
+    slots: {weekday: *weekday}
+    answer_derivation: {kind: slot_gloss, slot: weekday}
+    feedback_frame: {text: "{weekday} is one of the seven days of the week.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit10.lesson01.weekday_match.002
+    lesson_content_key: fa.a1.unit10.lesson01.days_of_the_week
+    type: matching_pairs
+    frame: {text: "Match each Persian day with its English meaning.", language_code: en, direction: ltr}
+    slots: {first: *weekday, second: *weekday, third: *weekday, fourth: *weekday, fifth: *weekday, sixth: *weekday, seventh: *weekday}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth, seventh]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth, seventh]}
+    feedback_frame: {text: "These are the seven days of the week, starting from Saturday.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit10.lesson01.weekday_translate.003
+    lesson_content_key: fa.a1.unit10.lesson01.days_of_the_week
+    type: translation
+    frame: {text: "{weekday}", language_code: en, direction: ltr, slot_rendering: {weekday: english_gloss}}
+    slots: {weekday: *weekday}
+    answer_derivation: {kind: slot_text, slot: weekday}
+    feedback_frame: {text: "The Persian word is {weekday}.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit10.lesson01.weekday_word_order.004
+    lesson_content_key: fa.a1.unit10.lesson01.days_of_the_week
+    type: word_order
+    frame: {text: "{weekday_one} و {weekday_two}", language_code: fa, direction: rtl}
+    slots: {weekday_one: *weekday, weekday_two: *weekday}
+    slot_relations: [{kind: distinct, slots: [weekday_one, weekday_two]}]
+    answer_derivation: {kind: render_frame, frame: {text: "{weekday_one} و {weekday_two}", language_code: fa, direction: rtl}}
+    feedback_frame: {text: "و joins two days of the week, like شنبه و یکشنبه.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit10.lesson02.month_choice.005
+    lesson_content_key: fa.a1.unit10.lesson02.months
+    type: multiple_choice
+    frame: {text: "{month_name}", language_code: fa, direction: rtl}
+    slots: {month_name: *month_name}
+    answer_derivation: {kind: slot_gloss, slot: month_name}
+    feedback_frame: {text: "{month_name} is one of the months of the Iranian solar year.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit10.lesson02.month_match.006
+    lesson_content_key: fa.a1.unit10.lesson02.months
+    type: matching_pairs
+    frame: {text: "Match each Persian month with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *month_name, second: *month_name, third: *month_name}
+    slot_relations: [{kind: distinct, slots: [first, second, third]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third]}
+    feedback_frame: {text: "These are the first three months of the Iranian solar year, in order.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit10.lesson02.month_translate.007
+    lesson_content_key: fa.a1.unit10.lesson02.months
+    type: translation
+    frame: {text: "{month_name}", language_code: en, direction: ltr, slot_rendering: {month_name: english_gloss}}
+    slots: {month_name: *month_name}
+    answer_derivation: {kind: slot_text, slot: month_name}
+    feedback_frame: {text: "The Persian word is {month_name}.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit10.lesson02.month_word_order.008
+    lesson_content_key: fa.a1.unit10.lesson02.months
+    type: word_order
+    frame: {text: "{month_name_one} و {month_name_two}", language_code: fa, direction: rtl}
+    slots: {month_name_one: *month_name, month_name_two: *month_name}
+    slot_relations: [{kind: distinct, slots: [month_name_one, month_name_two]}]
+    answer_derivation: {kind: render_frame, frame: {text: "{month_name_one} و {month_name_two}", language_code: fa, direction: rtl}}
+    feedback_frame: {text: "و joins two months, like فروردین و خرداد.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit10.lesson06.ordinal_date_match.009
+    lesson_content_key: fa.a1.unit10.lesson06.meeting_date_dialogue
+    type: matching_pairs
+    frame: {text: "Match each ordinal date with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *ordinal_date_word, second: *ordinal_date_word}
+    slot_relations: [{kind: distinct, slots: [first, second]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second]}
+    feedback_frame: {text: "دهم and هشتم are the ordinal date words taught in this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit10.lesson06.ordinal_date_translate.010
+    lesson_content_key: fa.a1.unit10.lesson06.meeting_date_dialogue
+    type: translation
+    frame: {text: "{ordinal_date_word}", language_code: en, direction: ltr, slot_rendering: {ordinal_date_word: english_gloss}}
+    slots: {ordinal_date_word: *ordinal_date_word}
+    answer_derivation: {kind: slot_text, slot: ordinal_date_word}
+    feedback_frame: {text: "The Persian word is {ordinal_date_word}.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit10.lesson05.calendar_word_match.011
+    lesson_content_key: fa.a1.unit10.lesson05.asking_about_a_future_date
+    type: matching_pairs
+    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *calendar_word, second: *calendar_word}
+    slot_relations: [{kind: distinct, slots: [first, second]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second]}
+    feedback_frame: {text: "تاریخ (date) and جلسه (meeting) are both used when arranging a future date.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit10.lesson05.calendar_word_translate.012
+    lesson_content_key: fa.a1.unit10.lesson05.asking_about_a_future_date
+    type: translation
+    frame: {text: "{calendar_word}", language_code: en, direction: ltr, slot_rendering: {calendar_word: english_gloss}}
+    slots: {calendar_word: *calendar_word}
+    answer_derivation: {kind: slot_text, slot: calendar_word}
+    feedback_frame: {text: "The Persian word is {calendar_word}.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit10.lesson06.date_phrase_choice.013
+    lesson_content_key: fa.a1.unit10.lesson06.meeting_date_dialogue
+    type: multiple_choice
+    frame: {text: "{date_phrase}", language_code: fa, direction: rtl}
+    slots: {date_phrase: *date_phrase}
+    answer_derivation: {kind: slot_gloss, slot: date_phrase}
+    feedback_frame: {text: "{date_phrase} is one of this unit's key date phrases.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit10.lesson06.date_phrase_match.014
+    lesson_content_key: fa.a1.unit10.lesson06.meeting_date_dialogue
+    type: matching_pairs
+    frame: {text: "Match each phrase with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *date_phrase, second: *date_phrase, third: *date_phrase, fourth: *date_phrase}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth]}
+    feedback_frame: {text: "Match each phrase to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit10.lesson06.date_phrase_translate.015
+    lesson_content_key: fa.a1.unit10.lesson06.meeting_date_dialogue
+    type: translation
+    frame: {text: "{date_phrase}", language_code: en, direction: ltr, slot_rendering: {date_phrase: english_gloss}}
+    slots: {date_phrase: *date_phrase}
+    answer_derivation: {kind: slot_text, slot: date_phrase}
+    feedback_frame: {text: "The Farsi phrase is {date_phrase}.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit10.lesson06.unit_review_match.016
+    lesson_content_key: fa.a1.unit10.lesson06.meeting_date_dialogue
+    type: matching_pairs
+    frame: {text: "Match each word with its meaning -- a review of this whole unit's days and months.", language_code: en, direction: ltr}
+    slots:
+      w1: *weekday
+      w2: *weekday
+      w3: *weekday
+      w4: *weekday
+      w5: *weekday
+      w6: *weekday
+      w7: *weekday
+      m1: *month_name
+      m2: *month_name
+      m3: *month_name
+    slot_relations:
+      - {kind: distinct, slots: [w1, w2, w3, w4, w5, w6, w7]}
+      - {kind: distinct, slots: [m1, m2, m3]}
+    answer_derivation: {kind: matching_pairs, slots: [w1, w2, w3, w4, w5, w6, w7, m1, m2, m3]}
+    feedback_frame: {text: "This reviews both the days of the week and the months of the Iranian solar year taught in this unit.", language_code: en, direction: ltr}

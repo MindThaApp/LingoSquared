@@ -75,6 +75,43 @@ UNIT_FILES = (
         REPO_ROOT / "docs/content/realizations/prs/a1_unit08_food.yaml",
         REPO_ROOT / "docs/content/overlays/en-prs/a1_unit08.yaml",
     ),
+    # Units 09-11 (A1: dates, shopping, time), added 2026-07-07 -- the
+    # real A1 realization grew 8->15 units this same night; this closes
+    # the practice-pool gap for units 09-11 specifically (a parallel
+    # session is doing 12-15 separately -- re-read this file fresh
+    # immediately before any further edit here to coordinate ordering).
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a1_unit09_dates.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a1_unit09.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a1_unit10_shopping.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a1_unit10.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a1_unit11_time.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a1_unit11.yaml",
+    ),
+    # Units 12-15 (A1: routines, plans, preferences, comparisons), added
+    # 2026-07-07 by the parallel session mentioned in the unit 09-11
+    # comment above -- closes the practice-pool gap for units 12-15
+    # specifically (units 09-11 were done separately, same night).
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a1_unit12_routines.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a1_unit12.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a1_unit13_plans.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a1_unit13.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a1_unit14_preferences.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a1_unit14.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a1_unit15_comparisons.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a1_unit15.yaml",
+    ),
 )
 
 # A2 units live in a SEPARATE course row ("Dari A2", not "Dari A1") --
@@ -266,6 +303,94 @@ PRS_GLOSSES: dict[str, str] = {
     "فامیلم": "my family", "بمانم": "let me stay", "وطنم": "my homeland",
     "کمک": "help", "درست": "correct; true", "ولی": "but", "شاید": "maybe",
     "همین‌جا": "right here", "می‌مانم": "I stay",
+    # Unit 9 (days and dates), added 2026-07-07. Confirmed by reading
+    # docs/content/realizations/prs/a1_unit09_dates.yaml directly --
+    # "بشیر" was already glossed under unit4 (reused as-is, only its
+    # semantic tag needs extending below); every other token here is
+    # genuinely new.
+    "شنبه": "Saturday", "یکشنبه": "Sunday", "دوشنبه": "Monday",
+    "چهارشنبه": "Wednesday", "پنجشنبه": "Thursday", "جمعه": "Friday",
+    "تاریخ": "date", "رخصتی": "day off / holiday", "هفته": "week",
+    "حمل": "Hamal (1st Hijri Shamsi month)",
+    "ثور": "Sawr (2nd Hijri Shamsi month)",
+    "جوزا": "Jawza (3rd Hijri Shamsi month)", "تقویم": "calendar",
+    "هجری": "Hijri", "شمسی": "solar (calendar)", "استفاده": "use",
+    "امروز": "today", "پانزدهم": "15th", "کدام": "which",
+    "چندم": "what number / which day (of the month)", "نوزدهم": "19th",
+    "مصروف": "busy", "می‌بینمت": "I'll see you",
+    "داری": "you have (informal)", "مشکل": "problem",
+    # Unit 10 (shopping and prices), added 2026-07-07. Confirmed by
+    # reading docs/content/realizations/prs/a1_unit10_shopping.yaml
+    # directly. می‌تانین/بدهین/بفرمایین are each a genuinely distinct
+    # -ین-suffixed Kabul-colloquial spelling from the already-existing
+    # می‌توانید/بدهید/بفرمایید (unit02/unit01 formal forms) -- both
+    # spellings are real, kept as separate lexemes, not merged.
+    "دوکان": "shop", "قیمت": "price", "ارزان": "cheap", "گران": "expensive",
+    "تخفیف": "discount", "قیمتش": "its price", "سیب": "apple(s)",
+    "کیلو": "kilo", "می‌تانین": "you can (polite)",
+    "بدهین": "give (polite imperative)",
+    "بفرمایین": "please, go ahead / come in (polite)",
+    "سیب‌ها": "the apples",
+    # Unit 11 (time), added 2026-07-07. Confirmed by reading
+    # docs/content/realizations/prs/a1_unit11_time.yaml directly --
+    # "ساعت"/"نه"/"صبح"/"عصر"/"شب"/"هفت"/"هشت"/"چند"/"شما"/"من"/"است"
+    # were all already glossed from earlier units, reused as-is.
+    "دقیقه": "minute", "نیم": "half", "ربع": "quarter", "ظهر": "noon",
+    "قرار": "appointment", "می‌آیم": "I'm coming / I come",
+    "منتظر": "waiting",
+    # Unit 12 (daily routines), added 2026-07-07. Confirmed by reading
+    # docs/content/realizations/prs/a1_unit12_routines.yaml directly --
+    # هفت/ده/شش/ساعت/صبح/ظهر/عصر/شب/هر/من/و/تو/بلی/چند/همایون were all
+    # already glossed from earlier units, reused as-is. زرمینه was already
+    # glossed (unit05, as a passerby character) but never given the
+    # person_name semantic tag until this unit's own dialogue -- fixed
+    # below alongside this unit's own additions.
+    "خواب": "sleep (noun)", "بیدار": "awake",
+    "می‌شوم": "I become / I wake up", "صبحانه": "breakfast",
+    "می‌خورم": "I eat", "می‌روم": "I go", "می‌خوابم": "I sleep",
+    "می‌شوی": "you wake up (informal)", "هر": "every", "زود": "early",
+    "چطور؟": "how? (turning a question back, as in 'what about you?')",
+    # می‌شود ALREADY EXISTS in this dict (A2 unit09: "would it be
+    # possible; is it okay") -- a genuine homograph, not the same
+    # lexeme: this unit's usage is the third-person indicative of
+    # "to become/wake up" (بیدار می‌شود, he/she wakes up), completely
+    # unrelated to unit09's polite-request sense. Same collision class
+    # already solved for "و" (letter vs. conjunction) below in
+    # _classify() -- given its own special-cased key/gloss/POS there
+    # instead of overwriting the shared bare-token entry.
+    # Unit 13 (making plans), added 2026-07-07. Confirmed by reading
+    # docs/content/realizations/prs/a1_unit13_plans.yaml directly --
+    # چطور/است/خوب/استم/کار/دارم/ساعت/پنج/بعد/از/ظهر/سلام/شما/را/فرید/چه
+    # were all already glossed from earlier units (جمعه/کدام/منتظر too,
+    # from the parallel session's units 09/11), reused as-is.
+    "پلان": "plan", "پارک": "park", "برویم": "let's go (subjunctive, we)",
+    "است؟": "is (it)? (question form of 'to be')",
+    "می‌خواهید": "do you want (polite)", "عالی": "great; excellent",
+    "قبول": "accepted; agreed", "متأسف": "sorry",
+    "نمی‌توانم": "I can't", "دعوت": "invitation",
+    "می‌بینم": "I see / I'll see", "نگار": "Negar (name)",
+    # Unit 14 (preferences), added 2026-07-07. Confirmed by reading
+    # docs/content/realizations/prs/a1_unit14_preferences.yaml directly --
+    # دوست/دارم/چای/ندارم/من/را/بیشتر/چون/خوش‌مزه/است/و/دارد/ندارد/شما/
+    # چطور/کریم were all already glossed from earlier units, reused as-is
+    # (their literal "have"/"friend" glosses stand; the idiomatic "like"
+    # meaning comes from the دوست دارم construction as a whole, not from
+    # any single re-glossed token).
+    # (کدام "which" already exists in this dict from the parallel
+    # session's unit09 -- reused as-is, not re-added here.)
+    "قهوه": "coffee", "موسیقی": "music",
+    "دارید": "you have (polite)", "یا": "or", "جالب": "interesting",
+    "گرم": "warm",
+    # Unit 15 (comparisons), added 2026-07-07. Confirmed by reading
+    # docs/content/realizations/prs/a1_unit15_comparisons.yaml directly --
+    # این/است/از/چون/و/بلی/بهتر/کریم/نگار were all already glossed from
+    # earlier units, reused as-is. ارزان/گران (base adjectives, unit10)
+    # are distinct tokens from this unit's own ارزان‌تر/گران‌تر comparative
+    # forms below -- not a collision, genuinely different strings.
+    "آن": "that", "بزرگ‌تر": "bigger", "کوچک‌تر": "smaller",
+    "گران‌تر": "more expensive", "ارزان‌تر": "cheaper", "قد": "height",
+    "بلندتر": "taller / longer", "جوان‌تر": "younger", "بدتر": "worse",
+    "اما": "but",
 }
 
 PRS_POS: dict[str, str] = {
@@ -386,6 +511,43 @@ PRS_POS: dict[str, str] = {
     "بمانم": "verb", "وطنم": "noun", "کمک": "noun", "درست": "adjective",
     "ولی": "particle", "شاید": "adverb", "همین‌جا": "adverb",
     "می‌مانم": "verb",
+    # Unit 9 (days and dates), added 2026-07-07.
+    "شنبه": "noun", "یکشنبه": "noun", "دوشنبه": "noun",
+    "چهارشنبه": "noun", "پنجشنبه": "noun", "جمعه": "noun",
+    "تاریخ": "noun", "رخصتی": "noun", "هفته": "noun",
+    "حمل": "noun", "ثور": "noun", "جوزا": "noun", "تقویم": "noun",
+    "هجری": "adjective", "شمسی": "adjective", "استفاده": "noun",
+    "امروز": "adverb", "پانزدهم": "adjective", "کدام": "pronoun",
+    "چندم": "adjective", "نوزدهم": "adjective", "مصروف": "adjective",
+    "می‌بینمت": "verb", "داری": "verb", "مشکل": "noun",
+    # Unit 10 (shopping and prices), added 2026-07-07.
+    "دوکان": "noun", "قیمت": "noun", "ارزان": "adjective",
+    "گران": "adjective", "تخفیف": "noun", "قیمتش": "noun",
+    "سیب": "noun", "کیلو": "noun", "می‌تانین": "verb",
+    "بدهین": "verb", "بفرمایین": "verb", "سیب‌ها": "noun",
+    # Unit 11 (time), added 2026-07-07.
+    "دقیقه": "noun", "نیم": "noun", "ربع": "noun", "ظهر": "noun",
+    "قرار": "noun", "می‌آیم": "verb", "منتظر": "adjective",
+    # Unit 12 (daily routines), added 2026-07-07.
+    "خواب": "noun", "بیدار": "adjective", "می‌شوم": "verb",
+    "صبحانه": "noun", "می‌خورم": "verb", "می‌روم": "verb",
+    "می‌خوابم": "verb", "می‌شوی": "verb", "هر": "adverb", "زود": "adverb",
+    "چطور؟": "adverb",
+    # Unit 13 (making plans), added 2026-07-07.
+    "پلان": "noun", "پارک": "noun", "برویم": "verb", "است؟": "verb",
+    "می‌خواهید": "verb", "عالی": "adjective", "قبول": "adjective",
+    "متأسف": "adjective", "نمی‌توانم": "verb", "دعوت": "noun",
+    "می‌بینم": "verb", "نگار": "proper_noun",
+    # Unit 14 (preferences), added 2026-07-07. (کدام already exists,
+    # see the matching PRS_GLOSSES comment above.)
+    "قهوه": "noun", "موسیقی": "noun",
+    "دارید": "verb", "یا": "particle", "جالب": "adjective",
+    "گرم": "adjective",
+    # Unit 15 (comparisons), added 2026-07-07.
+    "آن": "pronoun", "بزرگ‌تر": "adjective", "کوچک‌تر": "adjective",
+    "گران‌تر": "adjective", "ارزان‌تر": "adjective", "قد": "noun",
+    "بلندتر": "adjective", "جوان‌تر": "adjective", "بدتر": "adjective",
+    "اما": "particle",
 }
 
 
@@ -409,8 +571,15 @@ def prs_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         semantics.append("letter")
     if token in {"سلام", "علیکم", "وعلیکم", "خوش"}:
         semantics.append("greeting")
-    if token in {"صبح", "روز", "عصر", "شب"}:
+    if token in {"صبح", "روز", "عصر", "شب", "ظهر"}:
         semantics.append("time_period")
+    # Narrower than time_period above: excludes روز ("day," the generic
+    # noun, not a genuine "part of the day") so a template can safely
+    # generalize a taught frame like "ساعت نه {time_of_day} است" across
+    # every candidate without producing "nine o'clock day is" nonsense.
+    # Added 2026-07-07 for unit11 (time), part_of_day_word set below.
+    if token in {"صبح", "عصر", "شب", "ظهر"}:
+        semantics.append("time_of_day")
     if token in {"بخیر", "خوش"}:
         semantics.append("good_wish")
     if token in {"خدا", "حافظ", "امید", "دیدار"}:
@@ -419,7 +588,7 @@ def prs_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         semantics.append("wellbeing_question")
     if token in {"خوب", "استم", "جور", "بد", "نیستم", "استند"}:
         semantics.append("wellbeing_answer")
-    if token in {"تشکر", "خواهش", "می‌کنم", "بفرمایید", "شکر"}:
+    if token in {"تشکر", "خواهش", "می‌کنم", "بفرمایید", "شکر", "بفرمایین"}:
         semantics.append("politeness")
     if token in {"نام", "نام‌تان", "چیست", "من", "شما", "تو", "است", "استم"}:
         semantics.append("identity")
@@ -527,6 +696,132 @@ def prs_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     if token in {"پروین", "احمد"}:
         semantics.append("person_name")
 
+    # Unit 9 (dates) semantic tags, added 2026-07-07.
+    if token in {"شنبه", "یکشنبه", "دوشنبه", "سه‌شنبه", "چهارشنبه", "پنجشنبه", "جمعه"}:
+        semantics.append("weekday_name")
+    if token in {"حمل", "ثور", "جوزا"}:
+        semantics.append("month_name")
+    if token in {"پانزدهم", "نوزدهم"}:
+        semantics.append("ordinal_date")
+    if token in {"تاریخ", "تقویم", "هجری", "شمسی"}:
+        semantics.append("calendar_word")
+    if token == "بشیر":
+        semantics.append("person_name")
+    # Cross-unit pooling (unit09 + unit11, both genuine, real
+    # vocabulary): مصروف/منتظر are the two "state of a person re: a
+    # scheduled event" adjectives taught across these two units;
+    # قرار/جلسه are the two "scheduled event" nouns; می‌آیم/می‌بینمت are
+    # the two "meeting-arrangement" verbs. Each pair is real, not padded
+    # -- kept as separate 2-member groups per AUTHORING_GUIDE.md #16's
+    # documented precedent for genuine small closed sets (e.g. unit08's
+    # role_word), not force-merged into one oversized bucket.
+    if token in {"مصروف", "منتظر"}:
+        semantics.append("state_adjective")
+    if token in {"قرار", "جلسه"}:
+        semantics.append("appointment_word")
+    if token in {"می‌آیم", "می‌بینمت"}:
+        semantics.append("meeting_verb")
+
+    # Unit 10 (shopping and prices) semantic tags, added 2026-07-07.
+    if token in {"دوکان", "قیمت", "ارزان", "گران", "تخفیف", "قیمتش"}:
+        semantics.append("shop_word")
+    if token in {"سیب", "سیب‌ها"}:
+        semantics.append("food_item")
+    if token == "کیلو":
+        semantics.append("counting_word")
+    if token in {"می‌تانین", "بدهین"}:
+        semantics.append("polite_request_verb")
+
+    # Unit 11 (time) semantic tags, added 2026-07-07.
+    if token in {"ساعت", "دقیقه", "نیم", "ربع"}:
+        semantics.append("time_unit")
+
+    # Unit 12 (daily routines) semantic tags, added 2026-07-07.
+    if token in {"می‌شوم", "می‌خورم", "می‌روم", "می‌خوابم", "می‌شوی"}:
+        semantics.append("routine_verb")
+    # می‌شود gets routine_verb ONLY for its unit12 lesson06 occurrence
+    # (bare-token match would also wrongly tag A2 unit09's unrelated
+    # "would it be possible" sense of the same string) -- same
+    # lesson_key-scoped pattern already used above for "و"'s
+    # letter-vs-conjunction split.
+    if token == "می‌شود" and lesson_key == "prs.a1.unit12.lesson06.comparing_routines_dialogue":
+        semantics.append("routine_verb")
+    if token in {"خواب", "صبحانه", "دفتر", "شب"}:
+        semantics.append("routine_word")
+    if token == "هر":
+        semantics.append("every_word")
+    if token == "زود":
+        semantics.append("early_word")
+    if token == "زرمینه":
+        # Real pre-existing gap fixed here: زرمینه was glossed (unit05,
+        # as a passerby character) but never given the person_name tag
+        # any earlier unit needed -- this unit's own dialogue (زرمینه و
+        # همایون) is the first real practice-pool use of her as a named
+        # dialogue speaker, so it's fixed here alongside this unit's own
+        # additions rather than left dangling.
+        semantics.append("person_name")
+
+    # Unit 13 (making plans) semantic tags, added 2026-07-07.
+    if token in {"پلان", "پارک", "دعوت"}:
+        semantics.append("plan_noun")
+    if token in {"برویم", "می‌خواهید", "نمی‌توانم", "می‌بینم"}:
+        semantics.append("plan_verb")
+    if token in {"عالی", "قبول", "متأسف", "منتظر"}:
+        semantics.append("accept_decline_word")
+    if token == "منتظر":
+        # Private single-candidate tag (منتظر is the group's only
+        # member), layered ON TOP of the shared accept_decline_word tag
+        # above -- used by this unit's fill_in_blank template so the
+        # slot resolves to exactly one real candidate project-wide
+        # (AUTHORING_GUIDE.md #17), while accept_decline_word (4
+        # members) still serves the multiple_choice/matching_pairs
+        # templates that want the full pool.
+        semantics.append("waiting_word")
+    if token == "جمعه":
+        semantics.append("weekday_name")
+    if token == "نگار":
+        semantics.append("person_name")
+
+    # Unit 14 (preferences) semantic tags, added 2026-07-07.
+    if token in {"دارم", "دارید", "دارد", "ندارم", "ندارد"}:
+        semantics.append("preference_verb")
+    if token in {"قهوه", "چای", "موسیقی"}:
+        semantics.append("preference_topic")
+    if token in {"خوش‌مزه", "جالب", "گرم"}:
+        semantics.append("description_adjective")
+    if token == "گرم":
+        # Private single-candidate tag (this unit's fill_in_blank slot),
+        # same pattern as منتظر above -- layered on top of the shared
+        # description_adjective tag, not a replacement for it.
+        semantics.append("warm_word")
+    if token in {"کدام", "یا", "بیشتر"}:
+        semantics.append("choice_word")
+    if token == "کریم":
+        # Real pre-existing gap fixed here: کریم was glossed (A2 unit09)
+        # but never given the person_name tag -- this unit's dialogue is
+        # the first practice-pool use of him as a named dialogue
+        # speaker.
+        semantics.append("person_name")
+
+    # Unit 15 (comparisons) semantic tags, added 2026-07-07.
+    if token in {"این", "آن"}:
+        semantics.append("demonstrative_word")
+    if token in {
+        "بزرگ‌تر", "کوچک‌تر", "گران‌تر", "ارزان‌تر",
+        "بلندتر", "جوان‌تر", "بهتر", "بدتر",
+    }:
+        semantics.append("comparative_adjective")
+    # "و" excludes its lesson01 script-ramp (letter-name) occurrence --
+    # same lesson_key-scoped guard already used for the "letter" tag
+    # above, so the pure conjunction sense (and only that sense) pools
+    # with چون/اما here.
+    if token in {"چون", "اما"} or (
+        token == "و" and lesson_key != "prs.a1.unit01.lesson01.script_ramp"
+    ):
+        semantics.append("connector_word")
+    if token == "قد":
+        semantics.append("height_word")
+
     tags: dict[str, object] = {}
     if semantics:
         tags["semantic"] = list(dict.fromkeys(semantics))
@@ -590,6 +885,21 @@ def _classify(files, level, specs):
                         key = (level, token, "letter_symbol")
                         part_of_speech = "symbol"
                         english_gloss = "v/o/u (letter)"
+                    # "می‌شود" is likewise genuinely two different
+                    # lexemes: A2 unit09's polite-request sense ("would
+                    # it be possible; is it okay," a fixed idiom head)
+                    # versus this unit's plain third-person indicative
+                    # of "to become/wake up" (بیدار می‌شود, he/she wakes
+                    # up) introduced in prs.a1.unit12.lesson06's
+                    # mishavad_word grammar_note. Same collision class
+                    # as "و" above -- special-cased here instead of
+                    # letting the second-classified occurrence silently
+                    # overwrite the shared PRS_GLOSSES/PRS_POS entry for
+                    # the other course's real usage.
+                    if token == "می‌شود" and content_key.endswith("teach.mishavad_word"):
+                        key = (level, token, "wakeup_third_person")
+                        part_of_speech = "verb"
+                        english_gloss = "he/she wakes up / becomes (third person)"
                     existing = specs.get(key)
                     if existing is None:
                         specs[key] = {
