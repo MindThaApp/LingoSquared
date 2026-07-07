@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: "1.1"
 realization_version: "2026.1-draft.1"
 target_language: prs
 cefr_level: A1
@@ -13,7 +13,9 @@ review:
   required_next_reviewer: null
   notes: "New unit, prs's next uncovered outcome (prerequisites: time and dates, already covered in unit11/unit09). Six lessons: basic plan vocabulary, proposing a plan, accepting a plan, declining a plan, reading a short invitation message, and a dialogue negotiating a plan. Uses استم/استین verb endings and full, uncontracted forms (می‌خواهین، نمی‌توانم، خوب است، عالی است، قبول است -- not any Iranian-colloquial contraction), consistent with the register established in units 01-12. Authored independently of the fa realization per the sibling-isolation rule -- deliberately different scenario/names/activity/day/time from fa's own a1_unit12_plans.yaml (a park visit on Friday, not a movie on Thursday), read only to calibrate lesson structure, not copied. Authored §14/§16/§17-compliant from the start: no listen_type/listen_select/listen_order exercises anywhere, every matching_pairs exercise sized 6+ pairs by re-teaching relevant vocabulary within this file (introduced_tokens are file-scoped), and no fill_in_blank exercise with an ambiguous/arbitrary slot (all completion-style exercises use translation with an explicit English cue instead, per the AUTHORING_GUIDE §17 pattern found and fixed project-wide in fa/prs earlier this session). Proactively checked against AUTHORING_GUIDE §11-13 during authoring, including cross-checking the unit's stated day/time/activity facts for consistency. Compiler validation clean (0 errors/0 warnings). Awaiting the standing fresh-context review before status can move to reviewed.
 
-    FRESH-CONTEXT REVIEW COMPLETED 2026-07-07 (zero prior context, fa sibling files never opened). Verified against universal.a1.plans.make_simple_plans's own can_do/assessment_requirements (all 4 -- understand_plan via lesson06's dialogue_comprehension and lesson05's reading_comprehension, negotiate_plan via the propose/accept/decline dialogue_response exercises, read_invitation via lesson05, write_plan_message via lesson05's write_invitation_reply and lesson06's write_plan_summary -- covered); exercise pacing (recognition -> drag/matching -> production verified in every lesson); dialect authenticity confirmed (استم/استین forms, full uncontracted می‌خواهین/نمی‌توانم/خوب است/عالی است/قبول است, and پارک/دعوت/منتظر استم all genuine natural Dari vocabulary -- منتظر استم matches unit11's own precedent verbatim); §17 verified true by grep (zero fill_in_blank anywhere in the file outside this note's own prose) and by manually auditing every translation/dialogue_response/writing_prompt's accepted_answers for the same underlying ambiguity in a different guise -- none found, since no two taught words in this unit are true synonyms of each other. Script purity clean (zero Arabic-range kaf/yeh). No jargon leaks. §16 confirmed: lesson01's matching_pairs is a genuine 4-pair ceiling (no earlier vocabulary to pool from), lessons02-06 all sized exactly 6 pairs. Wrote and ran a real Python script (not just grep) recursively checking every dict value in both files via yaml.safe_load for a stray Python bool -- found only the two legitimate schema booleans (human_reviewed, target_language_first), no YAML footgun bug in this pair. Wrote and ran a ZWNJ-aware, Persian-punctuation-stripping Python tokenizer checking every tested_text/prompt.target_blocks/pairs/word_bank value and every overlay accepted_answers value against cumulative file-scoped introduced_tokens -- zero untaught-vocabulary violations. Confirmed content_key parity exact both directions (1 unit/6 lessons/26 teaching/32 exercises each side after this review's additions) and the overlay's flat top-level-dict schema is structurally correct. Confirmed all 8 exercise types used (multiple_choice/matching_pairs/word_order/translation/dialogue_response/writing_prompt/reading_comprehension/dialogue_comprehension) are registered in frontend/src/components/exercises/ExerciseRenderer.tsx. Checked every multiple_choice/reading_comprehension/dialogue_comprehension exercise for the prompt-shows-answer bug -- all correct_option/distractors are English glosses against Dari-script prompts, no same-script leakage. Cross-checked §11 facts (Farid proposes a park plan for Friday at five in the afternoon, Negar accepts) across every exercise and teaching card that references them, including lesson05's separately-authored written invitation message -- fully consistent. FOUND AND FIXED a real §12 gap: 6 multi-clause accepted_answers lists (lesson03's translate_okay_great and dialogue_response_accept, lesson04's translate_decline and dialogue_response_decline, lesson05's write_invitation_reply, lesson06's dialogue_response_confirm_plan and write_plan_summary) were missing a period-joined and/or و-joined variant, having only comma-joined/no-punctuation forms -- added the missing forms as status:correct. Since و ('and') had never been introduced anywhere in this file (a genuine unrelated authoring gap), added a new lesson03 teaching card (aali_o_qabool, 'عالی است و قبول است') to introduce it before any و-joined accepted answer relies on it, keeping the fix vocabulary-clean. FOUND AND FIXED a real duplicate-prompt-text bug, visible only via actual compile (not validate) and matching the exact bug class already fixed in unit11/unit12's own reviews: 6 dialogue_response/writing_prompt exercises had realization prompt.target_blocks duplicating the overlay's own English instruction text verbatim, so compiled output showed the same sentence twice. Fixed via the established pattern: reply-type prompts (lesson03.exercise05, lesson04.exercise06, lesson05.exercise05, lesson06.exercise05) now show the actual preceding Dari cue line (the proposal question, the written invitation message, or Farid's time-stating line, respectively, all composed of already-taught tokens); self-initiated prompts with no natural preceding cue (lesson02.exercise05, lesson06.exercise06) now use empty target_blocks, matching unit11/unit12's own precedent. Re-verified via actual compile that every exercise produces a real, non-empty correct_response and zero duplicate text_blocks remain. Both validate and compile re-run clean (0 errors/0 warnings) after every fix; compile output is valid JSON."
+    FRESH-CONTEXT REVIEW COMPLETED 2026-07-07 (zero prior context, fa sibling files never opened). Verified against universal.a1.plans.make_simple_plans's own can_do/assessment_requirements (all 4 -- understand_plan via lesson06's dialogue_comprehension and lesson05's reading_comprehension, negotiate_plan via the propose/accept/decline dialogue_response exercises, read_invitation via lesson05, write_plan_message via lesson05's write_invitation_reply and lesson06's write_plan_summary -- covered); exercise pacing (recognition -> drag/matching -> production verified in every lesson); dialect authenticity confirmed (استم/استین forms, full uncontracted می‌خواهین/نمی‌توانم/خوب است/عالی است/قبول است, and پارک/دعوت/منتظر استم all genuine natural Dari vocabulary -- منتظر استم matches unit11's own precedent verbatim); §17 verified true by grep (zero fill_in_blank anywhere in the file outside this note's own prose) and by manually auditing every translation/dialogue_response/writing_prompt's accepted_answers for the same underlying ambiguity in a different guise -- none found, since no two taught words in this unit are true synonyms of each other. Script purity clean (zero Arabic-range kaf/yeh). No jargon leaks. §16 confirmed: lesson01's matching_pairs is a genuine 4-pair ceiling (no earlier vocabulary to pool from), lessons02-06 all sized exactly 6 pairs. Wrote and ran a real Python script (not just grep) recursively checking every dict value in both files via yaml.safe_load for a stray Python bool -- found only the two legitimate schema booleans (human_reviewed, target_language_first), no YAML footgun bug in this pair. Wrote and ran a ZWNJ-aware, Persian-punctuation-stripping Python tokenizer checking every tested_text/prompt.target_blocks/pairs/word_bank value and every overlay accepted_answers value against cumulative file-scoped introduced_tokens -- zero untaught-vocabulary violations. Confirmed content_key parity exact both directions (1 unit/6 lessons/26 teaching/32 exercises each side after this review's additions) and the overlay's flat top-level-dict schema is structurally correct. Confirmed all 8 exercise types used (multiple_choice/matching_pairs/word_order/translation/dialogue_response/writing_prompt/reading_comprehension/dialogue_comprehension) are registered in frontend/src/components/exercises/ExerciseRenderer.tsx. Checked every multiple_choice/reading_comprehension/dialogue_comprehension exercise for the prompt-shows-answer bug -- all correct_option/distractors are English glosses against Dari-script prompts, no same-script leakage. Cross-checked §11 facts (Farid proposes a park plan for Friday at five in the afternoon, Negar accepts) across every exercise and teaching card that references them, including lesson05's separately-authored written invitation message -- fully consistent. FOUND AND FIXED a real §12 gap: 6 multi-clause accepted_answers lists (lesson03's translate_okay_great and dialogue_response_accept, lesson04's translate_decline and dialogue_response_decline, lesson05's write_invitation_reply, lesson06's dialogue_response_confirm_plan and write_plan_summary) were missing a period-joined and/or و-joined variant, having only comma-joined/no-punctuation forms -- added the missing forms as status:correct. Since و ('and') had never been introduced anywhere in this file (a genuine unrelated authoring gap), added a new lesson03 teaching card (aali_o_qabool, 'عالی است و قبول است') to introduce it before any و-joined accepted answer relies on it, keeping the fix vocabulary-clean. FOUND AND FIXED a real duplicate-prompt-text bug, visible only via actual compile (not validate) and matching the exact bug class already fixed in unit11/unit12's own reviews: 6 dialogue_response/writing_prompt exercises had realization prompt.target_blocks duplicating the overlay's own English instruction text verbatim, so compiled output showed the same sentence twice. Fixed via the established pattern: reply-type prompts (lesson03.exercise05, lesson04.exercise06, lesson05.exercise05, lesson06.exercise05) now show the actual preceding Dari cue line (the proposal question, the written invitation message, or Farid's time-stating line, respectively, all composed of already-taught tokens); self-initiated prompts with no natural preceding cue (lesson02.exercise05, lesson06.exercise06) now use empty target_blocks, matching unit11/unit12's own precedent. Re-verified via actual compile that every exercise produces a real, non-empty correct_response and zero duplicate text_blocks remain. Both validate and compile re-run clean (0 errors/0 warnings) after every fix; compile output is valid JSON.
+
+    2026-07-07: AUTHORING_GUIDE.md §19 retrofit -- added real example sentence(s) to all 14 kind:vocabulary teaching cards (1 merged card -- the names list -- given a positionally-matched list of examples), each a natural, comprehensible-from-gloss sentence built from vocabulary already taught in this same lesson or earlier in this file (per §19's own wording, same-lesson vocabulary from a later teaching card is explicitly allowed, e.g. motasef_astam_word's example previews کار دارم, taught two cards later in the same lesson04 and already exercised together as one decline formula). The names card's example uses the well-established استم copula (\"من فرید استم\" / \"من نگار استم\"), matching unit12's own precedent. schema_version bumped to 1.1. Example sentences are Claude-authored and pending fresh-context review."
 
 course:
   realization_key: prs.a1
@@ -53,14 +55,17 @@ units:
             kind: vocabulary
             target: {text: پلان, language_code: prs, direction: rtl}
             introduced_tokens: [پلان]
+            example: {text: "من یک پلان دارم", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit13.lesson01.teach.park_word
             kind: vocabulary
             target: {text: پارک, language_code: prs, direction: rtl}
             introduced_tokens: [پارک]
+            example: {text: "من به پارک می‌روم", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit13.lesson01.teach.berawim_word
             kind: vocabulary
             target: {text: برویم, language_code: prs, direction: rtl}
             introduced_tokens: [برویم]
+            example: {text: "برویم پارک", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit13.lesson01.teach.chetor_ast_word
             kind: phrase
             target: {text: "چطور است؟", language_code: prs, direction: rtl}
@@ -100,10 +105,12 @@ units:
             kind: vocabulary
             target: {text: می‌خواهین, language_code: prs, direction: rtl}
             introduced_tokens: [می‌خواهین]
+            example: {text: "می‌خواهین برویم پارک؟", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit13.lesson02.teach.jomeh_review
             kind: vocabulary
             target: {text: جمعه, language_code: prs, direction: rtl}
             introduced_tokens: [جمعه]
+            example: {text: "جمعه برویم پارک؟", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit13.lesson02.teach.propose_phrase
             kind: phrase
             target: {text: "می‌خواهین جمعه برویم پارک؟", language_code: prs, direction: rtl}
@@ -146,14 +153,17 @@ units:
             kind: vocabulary
             target: {text: "خوب است", language_code: prs, direction: rtl}
             introduced_tokens: ["خوب", "است"]
+            example: {text: "جمعه خوب است", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit13.lesson03.teach.aali_ast_word
             kind: vocabulary
             target: {text: "عالی است", language_code: prs, direction: rtl}
             introduced_tokens: [عالی]
+            example: {text: "پارک عالی است", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit13.lesson03.teach.qabool_ast_word
             kind: vocabulary
             target: {text: "قبول است", language_code: prs, direction: rtl}
             introduced_tokens: [قبول]
+            example: {text: "قبول است، جمعه برویم پارک", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit13.lesson03.teach.aali_o_qabool
             kind: phrase
             target: {text: "عالی است و قبول است", language_code: prs, direction: rtl}
@@ -197,10 +207,12 @@ units:
             kind: vocabulary
             target: {text: "متأسف استم", language_code: prs, direction: rtl}
             introduced_tokens: [متأسف, استم]
+            example: {text: "متأسف استم، کار دارم", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit13.lesson04.teach.nemitawanam_word
             kind: vocabulary
             target: {text: نمی‌توانم, language_code: prs, direction: rtl}
             introduced_tokens: [نمی‌توانم]
+            example: {text: "متأسف استم، نمی‌توانم", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit13.lesson04.teach.kar_daram_word
             kind: phrase
             target: {text: "کار دارم", language_code: prs, direction: rtl}
@@ -249,6 +261,7 @@ units:
             kind: vocabulary
             target: {text: دعوت, language_code: prs, direction: rtl}
             introduced_tokens: [دعوت]
+            example: {text: "دعوت خوب است", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit13.lesson05.teach.saat_panj_review
             kind: phrase
             target: {text: "ساعت پنج بعد از ظهر", language_code: prs, direction: rtl}
@@ -257,6 +270,7 @@ units:
             kind: vocabulary
             target: {text: "منتظر استم", language_code: prs, direction: rtl}
             introduced_tokens: [منتظر]
+            example: {text: "جمعه منتظر استم", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit13.lesson05.teach.invitation_message
             kind: reading
             target: {text: "سلام! جمعه ساعت پنج بعد از ظهر می‌خواهین برویم پارک؟ منتظر استم", language_code: prs, direction: rtl}
@@ -265,6 +279,7 @@ units:
             kind: vocabulary
             target: {text: "شما را می‌بینم", language_code: prs, direction: rtl}
             introduced_tokens: [شما, را, می‌بینم]
+            example: {text: "جمعه شما را می‌بینم", language_code: prs, direction: rtl}
         exercises:
           - content_key: prs.a1.unit13.lesson05.exercise01.recognize_dawat_reading
             type: multiple_choice
@@ -306,6 +321,9 @@ units:
             kind: vocabulary
             target: {text: "فرید، نگار", language_code: prs, direction: rtl}
             introduced_tokens: [فرید, نگار]
+            example:
+              - {text: "من فرید استم", language_code: prs, direction: rtl}
+              - {text: "من نگار استم", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit13.lesson06.teach.che_saat_word
             kind: phrase
             target: {text: "چه ساعت؟", language_code: prs, direction: rtl}

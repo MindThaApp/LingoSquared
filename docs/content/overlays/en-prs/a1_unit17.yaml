@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: "1.1"
 overlay_version: "2026.1-draft.1"
 overlay_key: en-prs.a1.unit17
 source_language: en
@@ -11,7 +11,9 @@ generation_provenance:
 review:
   status: reviewed
   required_next_reviewer: null
-  notes: "Authored alongside the new prs a1_unit17_health.yaml realization. Follows the established en-prs overlay convention from units 01-16 (English instruction/correct_option/distractors/feedback, target-language Dari accepted_answers, English glosses for recognize_* multiple_choice items). FRESH-CONTEXT REVIEW COMPLETED 2026-07-07 (same pass as the paired realization -- see that file's review notes for the full method: Codex usage-exhausted, fell back to a separate general-purpose subagent with zero access to the authoring reasoning). Two real issues found and fixed here: match_advice_vocab's accepted_answers dict expanded from 5 to 8 entries (سردرد/تب/مریض added) to match the realization's now-8-pair matching_pairs exercise; write_dialogue_summary's accepted_answers expanded from 4 to 12 entries for full period/comma/و coverage at both clause boundaries, and its instruction reworded to explicitly allow either the headache+rest or fever+water combination (previously implied only headache+rest while one accepted variant actually used fever+water, a real instruction/answer mismatch). Content_key parity, jargon leaks, script purity, and §12 coverage on the other two multi-clause exercises (write_health_message, dialogue_response_own_symptom) were all independently re-verified clean. Compiler validate+compile re-run clean (0 errors/0 warnings) after both fixes. SECOND, FULLY INDEPENDENT FRESH-CONTEXT REVIEW, 2026-07-07: re-derived every check from scratch against the paired realization (see that file's notes for full detail) -- independently confirmed both already-applied fixes (match_advice_vocab's 8-pair accepted_answers dict, write_dialogue_summary's 12-variant accepted_answers list with the broadened either-symptom-either-advice instruction) are correct and instruction-coherent, via fresh Python scripts covering stray-boolean scanning, content_key parity, duplicate-instruction-text, prompt-shows-answer same-script leakage, and file-scoped untaught-vocabulary tokenization (all clean). Independently web-verified دل‌درد and standalone تشکر as genuine natural Dari usage. Re-ran the actual compiler (validate then compile) as the final check and directly inspected compiled output: 0 errors/0 warnings, all 30 exercises have non-empty accepted answers, match_advice_vocab and write_dialogue_summary compile with the expected 8 and 12 entries respectively. No further issues found."
+  notes: "Authored alongside the new prs a1_unit17_health.yaml realization. Follows the established en-prs overlay convention from units 01-16 (English instruction/correct_option/distractors/feedback, target-language Dari accepted_answers, English glosses for recognize_* multiple_choice items). FRESH-CONTEXT REVIEW COMPLETED 2026-07-07 (same pass as the paired realization -- see that file's review notes for the full method: Codex usage-exhausted, fell back to a separate general-purpose subagent with zero access to the authoring reasoning). Two real issues found and fixed here: match_advice_vocab's accepted_answers dict expanded from 5 to 8 entries (سردرد/تب/مریض added) to match the realization's now-8-pair matching_pairs exercise; write_dialogue_summary's accepted_answers expanded from 4 to 12 entries for full period/comma/و coverage at both clause boundaries, and its instruction reworded to explicitly allow either the headache+rest or fever+water combination (previously implied only headache+rest while one accepted variant actually used fever+water, a real instruction/answer mismatch). Content_key parity, jargon leaks, script purity, and §12 coverage on the other two multi-clause exercises (write_health_message, dialogue_response_own_symptom) were all independently re-verified clean. Compiler validate+compile re-run clean (0 errors/0 warnings) after both fixes. SECOND, FULLY INDEPENDENT FRESH-CONTEXT REVIEW, 2026-07-07: re-derived every check from scratch against the paired realization (see that file's notes for full detail) -- independently confirmed both already-applied fixes (match_advice_vocab's 8-pair accepted_answers dict, write_dialogue_summary's 12-variant accepted_answers list with the broadened either-symptom-either-advice instruction) are correct and instruction-coherent, via fresh Python scripts covering stray-boolean scanning, content_key parity, duplicate-instruction-text, prompt-shows-answer same-script leakage, and file-scoped untaught-vocabulary tokenization (all clean). Independently web-verified دل‌درد and standalone تشکر as genuine natural Dari usage. Re-ran the actual compiler (validate then compile) as the final check and directly inspected compiled output: 0 errors/0 warnings, all 30 exercises have non-empty accepted answers, match_advice_vocab and write_dialogue_summary compile with the expected 8 and 12 entries respectively. No further issues found.
+
+    2026-07-07: AUTHORING_GUIDE.md §19 retrofit -- added example_gloss to all 14 kind:vocabulary teaching entries (1 merged card -- names -- given a positionally-matched example_gloss list), matching the new example: sentences added to the paired realization. schema_version bumped to 1.1. Pending fresh-context review."
 
 course:
   title: Dari A1
@@ -45,14 +47,17 @@ teaching:
     title: Headache
     gloss: headache
     note: "سردرد is a compound of سر (head) and درد (pain/ache)."
+    example_gloss: "I have a headache."
   prs.a1.unit17.lesson01.teach.fever_word:
     title: Fever
     gloss: fever
     note: "تب means fever."
+    example_gloss: "I have a fever."
   prs.a1.unit17.lesson01.teach.stomachache_word:
     title: Stomachache
     gloss: stomachache
     note: "دل‌درد is a compound of دل (belly/stomach, colloquially) and درد (pain/ache)."
+    example_gloss: "I have a stomachache."
   prs.a1.unit17.lesson01.teach.have_word:
     title: "I have"
     gloss: "I have"
@@ -61,6 +66,7 @@ teaching:
     title: Sick
     gloss: sick
     note: "مریض means sick or ill."
+    example_gloss: "I am sick."
   prs.a1.unit17.lesson02.teach.am_word:
     title: "I am"
     gloss: "I am"
@@ -73,6 +79,7 @@ teaching:
     title: Good
     gloss: good
     note: "خوب means good or well."
+    example_gloss: "I don't feel well."
   prs.a1.unit17.lesson02.teach.not_word:
     title: "Is not"
     gloss: "is not"
@@ -81,10 +88,12 @@ teaching:
     title: Doctor
     gloss: doctor
     note: "داکتر is the standard Afghan Dari spelling and pronunciation for doctor (distinct from Iranian Farsi's دکتر)."
+    example_gloss: "I want a doctor."
   prs.a1.unit17.lesson03.teach.medicine_word:
     title: Medicine
     gloss: medicine
     note: "دوا means medicine."
+    example_gloss: "I want medicine."
   prs.a1.unit17.lesson03.teach.want_word:
     title: "I want"
     gloss: "I want"
@@ -93,6 +102,7 @@ teaching:
     title: Rest
     gloss: rest
     note: "استراحت is the noun rest -- combined with کنین it forms the imperative Rest!"
+    example_gloss: "Rest."
   prs.a1.unit17.lesson04.teach.do_word:
     title: "Do (polite)"
     gloss: "do (polite imperative)"
@@ -101,10 +111,12 @@ teaching:
     title: Water
     gloss: water
     note: "آب means water."
+    example_gloss: "Drink lots of water."
   prs.a1.unit17.lesson04.teach.a_lot_word:
     title: "A lot"
     gloss: "a lot / much"
     note: "زیاد means a lot or much."
+    example_gloss: "Drink lots of water."
   prs.a1.unit17.lesson04.teach.drink_word:
     title: "Drink (polite)"
     gloss: "drink (polite imperative)"
@@ -117,6 +129,7 @@ teaching:
     title: Hello
     gloss: hello
     note: "سلام means hello."
+    example_gloss: "Hello. I am sick."
   prs.a1.unit17.lesson05.teach.and_word:
     title: And
     gloss: and
@@ -129,6 +142,7 @@ teaching:
     title: "Bashir and the doctor"
     gloss: "Bashir, the doctor"
     note: "Bashir is a recurring character in this course; the doctor is addressed with the honorific صاحب."
+    example_gloss: ["I am Bashir.", "I am the doctor."]
   prs.a1.unit17.lesson06.teach.how_word:
     title: How
     gloss: how
@@ -141,10 +155,12 @@ teaching:
     title: Thanks
     gloss: thanks
     note: "تشکر means thanks."
+    example_gloss: "Thanks, doctor."
   prs.a1.unit17.lesson06.teach.sir_word:
     title: Sir
     gloss: sir
     note: "صاحب is a respectful honorific appended after a name or title -- داکتر صاحب means Doctor, addressed respectfully, a genuinely Afghan usage pattern."
+    example_gloss: "Thanks, doctor."
   prs.a1.unit17.lesson06.teach.dialogue_line1:
     title: "The doctor greets Bashir"
     gloss: "Hello. How are you?"

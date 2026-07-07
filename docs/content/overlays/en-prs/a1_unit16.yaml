@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: "1.1"
 overlay_version: "2026.1-draft.1"
 overlay_key: en-prs.a1.unit16
 source_language: en
@@ -13,7 +13,9 @@ review:
   required_next_reviewer: null
   notes: "Authored alongside the new prs a1_unit16_travel.yaml realization. Follows the established en-prs overlay convention from units 01-15 (English instruction/correct_option/distractors/feedback, target-language Dari accepted_answers, English glosses for recognize_* multiple_choice items). Open-ended production exercises carry multiple phrasing variants from the start. write_travel_summary carries period-joined, comma-joined, and و-joined accepted_answers variants per §12. Authored §14/§16/§17-compliant from the start alongside the realization. Needs the standard fresh-context review before shipping.
 
-    FRESH-CONTEXT REVIEW COMPLETED 2026-07-07 (zero prior context, fa sibling files never opened). Full checklist run against this overlay paired with its realization: spine-outcome coverage (all 4 universal.a1.travel.handle_basic_journey assessment_requirements), exercise pacing, Dari vocabulary/grammar accuracy (بلیط/قطار/بس/میدان هوایی/سکو/حرکت می‌کند/کی/می‌خواهم/بسیار خوب/هرات/سکوی دو/از all verified natural and correctly used, میدان هوایی/تشکر زیاد/قابلی نداره/سفر خوش verified genuinely reused from unit05/unit06's own reviewed dialogues), §17 (zero fill_in_blank, every translation/dialogue_response/writing_prompt's accepted_answers audited including write_own_travel_detail and write_travel_summary), duplicate-instruction-text check (a real Python script comparing realization prompt.target_blocks(en) against this file's own instruction fields -- zero matches), §7 stray-boolean check (a real recursive yaml.safe_load script -- zero stray booleans, only the two legitimate schema booleans), untaught-vocabulary check (a ZWNJ-aware Python tokenizer against cumulative file-scoped introduced_tokens), A1-complexity, script purity (zero Arabic-range kaf/yeh), jargon-leak sweep (zero snake_case in learner-facing fields), content_key parity (exact both directions), and frontend exercise-type registration (all 8 types registered in ExerciseRenderer.tsx). FOUND AND FIXED two real bugs, both originating in this overlay: (1) write_travel_summary's و-joined variant used و without a matching teaching card anywhere in the paired realization file -- added a new teach.va_word grammar_note entry here (title: And, gloss: and) matching the realization's new lesson06 teaching card, introducing و with introduced_tokens: [و] before its first tested use; (2) write_travel_summary's period-joined accepted_answers variant ('قطار به هرات فردا صبح حرکت می‌کند. از سکوی دو حرکت می‌کند') dropped the ساعت هشت detail present in the other three variants and required by this exercise's own instruction -- corrected to 'قطار به هرات فردا صبح ساعت هشت حرکت می‌کند. از سکوی دو حرکت می‌کند' so all four variants carry the same complete fact set. Re-ran validate and compile (not just validate) after both fixes: 0 errors/0 warnings, valid JSON output, all 30 exercises' compiled correct_response confirmed non-empty, write_travel_summary's compiled accepted list directly inspected to confirm the fix took effect."
+    FRESH-CONTEXT REVIEW COMPLETED 2026-07-07 (zero prior context, fa sibling files never opened). Full checklist run against this overlay paired with its realization: spine-outcome coverage (all 4 universal.a1.travel.handle_basic_journey assessment_requirements), exercise pacing, Dari vocabulary/grammar accuracy (بلیط/قطار/بس/میدان هوایی/سکو/حرکت می‌کند/کی/می‌خواهم/بسیار خوب/هرات/سکوی دو/از all verified natural and correctly used, میدان هوایی/تشکر زیاد/قابلی نداره/سفر خوش verified genuinely reused from unit05/unit06's own reviewed dialogues), §17 (zero fill_in_blank, every translation/dialogue_response/writing_prompt's accepted_answers audited including write_own_travel_detail and write_travel_summary), duplicate-instruction-text check (a real Python script comparing realization prompt.target_blocks(en) against this file's own instruction fields -- zero matches), §7 stray-boolean check (a real recursive yaml.safe_load script -- zero stray booleans, only the two legitimate schema booleans), untaught-vocabulary check (a ZWNJ-aware Python tokenizer against cumulative file-scoped introduced_tokens), A1-complexity, script purity (zero Arabic-range kaf/yeh), jargon-leak sweep (zero snake_case in learner-facing fields), content_key parity (exact both directions), and frontend exercise-type registration (all 8 types registered in ExerciseRenderer.tsx). FOUND AND FIXED two real bugs, both originating in this overlay: (1) write_travel_summary's و-joined variant used و without a matching teaching card anywhere in the paired realization file -- added a new teach.va_word grammar_note entry here (title: And, gloss: and) matching the realization's new lesson06 teaching card, introducing و with introduced_tokens: [و] before its first tested use; (2) write_travel_summary's period-joined accepted_answers variant ('قطار به هرات فردا صبح حرکت می‌کند. از سکوی دو حرکت می‌کند') dropped the ساعت هشت detail present in the other three variants and required by this exercise's own instruction -- corrected to 'قطار به هرات فردا صبح ساعت هشت حرکت می‌کند. از سکوی دو حرکت می‌کند' so all four variants carry the same complete fact set. Re-ran validate and compile (not just validate) after both fixes: 0 errors/0 warnings, valid JSON output, all 30 exercises' compiled correct_response confirmed non-empty, write_travel_summary's compiled accepted list directly inspected to confirm the fix took effect.
+
+    2026-07-07: AUTHORING_GUIDE.md §19 retrofit -- added example_gloss to all 10 kind:vocabulary teaching entries, matching the new example: sentences added to the paired realization. schema_version bumped to 1.1. Pending fresh-context review."
 
 course:
   title: Dari A1
@@ -46,18 +48,22 @@ teaching:
     title: Ticket
     gloss: ticket
     note: "بلیط means ticket."
+    example_gloss: "I have a ticket."
   prs.a1.unit16.lesson01.teach.qatar_word:
     title: Train
     gloss: train
     note: "قطار means train."
+    example_gloss: "The train is good."
   prs.a1.unit16.lesson01.teach.bas_word:
     title: Bus
     gloss: bus
     note: "بس means bus, a common Afghan Dari usage."
+    example_gloss: "The bus is good."
   prs.a1.unit16.lesson01.teach.maidan_hawayi_word:
     title: Airport
     gloss: airport
     note: "میدان هوایی means airport -- this course's established Afghan Dari term (not the Iranian فرودگاه), consistent with unit05."
+    example_gloss: "The airport is good."
   prs.a1.unit16.lesson01.teach.yak_word:
     title: A/one
     gloss: "a / one"
@@ -70,6 +76,7 @@ teaching:
     title: Two
     gloss: two
     note: "دو means two."
+    example_gloss: "I have two tickets."
   prs.a1.unit16.lesson01.teach.sekooye_word:
     title: "Platform two"
     gloss: "platform two"
@@ -78,6 +85,7 @@ teaching:
     title: Herat
     gloss: Herat
     note: "A major city in western Afghanistan."
+    example_gloss: "I'm going to Herat."
   prs.a1.unit16.lesson02.teach.mikhaham_word:
     title: "I want"
     gloss: "I want"
@@ -94,6 +102,7 @@ teaching:
     title: Platform
     gloss: platform
     note: "سکو means platform (at a train station)."
+    example_gloss: "The train departs from platform two."
   prs.a1.unit16.lesson03.teach.harekat_mikonad_phrase:
     title: "It departs"
     gloss: "it departs"
@@ -106,6 +115,7 @@ teaching:
     title: Morning
     gloss: morning
     note: "صبح means morning."
+    example_gloss: "The train departs at eight in the morning."
   prs.a1.unit16.lesson04.teach.schedule_text:
     title: "Sample schedule text"
     gloss: "The Herat train departs from platform two at eight in the morning."
@@ -114,10 +124,12 @@ teaching:
     title: Tomorrow
     gloss: tomorrow
     note: "فردا means tomorrow."
+    example_gloss: "I'm going tomorrow morning."
   prs.a1.unit16.lesson05.teach.besyar_khoob_word:
     title: "Very good / okay"
     gloss: "very good / okay"
     note: "بسیار خوب is the full, formal way to say okay/very well, consistent with this course's register (not the colloquial باشه)."
+    example_gloss: "The train is very good."
   prs.a1.unit16.lesson05.teach.dialogue_line1:
     title: "The traveler says"
     gloss: "I want a ticket to Herat."
