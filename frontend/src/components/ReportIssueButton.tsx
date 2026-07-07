@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { LessonApi } from "../api/endpoints";
 import type { AnswerResponse, ContentIssueCategory } from "../api/types";
 
 const CATEGORY_KEY: Record<ContentIssueCategory, string> = {
@@ -12,12 +11,23 @@ const CATEGORY_KEY: Record<ContentIssueCategory, string> = {
   other: "report_issue.category.other",
 };
 
+// Reused across compiled-lesson exercises (Exercise-backed), lexeme
+// review sessions, unit checkpoints, and the Endless Practice feed
+// (all three PracticeItem-backed) - those two content sources hit
+// different report endpoints with different id shapes, so this
+// component takes the actual submit action from its caller rather than
+// building the request itself. Keeps the component reusable without
+// needing a "kind of id" prop or a fork per page.
 export function ReportIssueButton({
-  exerciseId,
   lastResponse,
+  onSubmit,
 }: {
-  exerciseId: string;
   lastResponse?: AnswerResponse;
+  onSubmit: (
+    category: ContentIssueCategory,
+    description: string | undefined,
+    lastResponse: AnswerResponse | undefined,
+  ) => Promise<unknown>;
 }) {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
@@ -29,7 +39,7 @@ export function ReportIssueButton({
   async function handleSubmit() {
     setSubmitting(true);
     try {
-      await LessonApi.reportIssue(exerciseId, category, description || undefined, lastResponse);
+      await onSubmit(category, description || undefined, lastResponse);
       setSent(true);
     } finally {
       setSubmitting(false);

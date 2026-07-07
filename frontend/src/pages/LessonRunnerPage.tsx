@@ -330,7 +330,12 @@ export function LessonRunnerPage() {
         </div>
       )}
       <div style={{ marginTop: 12, textAlign: "center" }}>
-        <ReportIssueButton exerciseId={current.exercise.id} lastResponse={lastResponse} />
+        <ReportIssueButton
+          lastResponse={lastResponse}
+          onSubmit={(category, description, response) =>
+            LessonApi.reportIssue(current.exercise.id, category, description, response)
+          }
+        />
       </div>
     </div>
   );

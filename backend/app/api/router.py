@@ -413,6 +413,18 @@ def report_content_issue(exercise_id:str,body:ContentIssueReportIn,request:Reque
     issue=ContentIssueReport(reporter_user_id=user.id,exercise_id=exercise_id,category=body.category,description=body.description,learner_response=body.learner_response,client_context={"user_agent":request.headers.get("user-agent",""),"accept_language":request.headers.get("accept-language","")})
     db.add(issue); db.commit(); db.refresh(issue)
     return issue
+@router.post("/practice/items/{item_id}/report",response_model=ContentIssueCreatedOut,status_code=201)
+def report_practice_item_issue(item_id:str,body:ContentIssueReportIn,request:Request,user=Depends(current_user),db:Session=Depends(get_db)):
+    # PracticeItem-backed content (review sessions, unit checkpoints, and
+    # the Endless Practice feed all generate PracticeItem rows, never
+    # Exercise rows) has no report path through the endpoint above.
+    # Ownership-checked the same way /practice/items/{id}/answer is:
+    # a foreign item 404s rather than leaking whether the id exists.
+    item=db.get(PracticeItem,item_id)
+    if not item or item.user_id!=user.id: fail(404,"practice_item_not_found","Practice item not found")
+    issue=ContentIssueReport(reporter_user_id=user.id,practice_item_id=item_id,category=body.category,description=body.description,learner_response=body.learner_response,client_context={"user_agent":request.headers.get("user-agent",""),"accept_language":request.headers.get("accept-language","")})
+    db.add(issue); db.commit(); db.refresh(issue)
+    return issue
 @router.post("/lessons/{lesson_id}/complete", response_model=CompleteOut)
 def complete(
     lesson_id: str,

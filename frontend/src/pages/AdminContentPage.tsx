@@ -108,7 +108,9 @@ export function AdminContentPage() {
               </span>
             </div>
             <p className="muted" style={{ fontSize: "0.85rem" }}>
-              {t("admin.exercise_label", { id: issue.exercise_id })}
+              {issue.exercise_id
+                ? t("admin.exercise_label", { id: issue.exercise_id })
+                : t("admin.practice_item_label", { id: issue.practice_item_id })}
             </p>
             {issue.description && <p style={{ margin: "0 0 8px" }}>{issue.description}</p>}
             <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>

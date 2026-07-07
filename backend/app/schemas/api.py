@@ -98,7 +98,12 @@ class ContentIssueUpdateIn(BaseModel):
 class ContentIssueOut(ORM):
     id:str
     reporter_user_id:str
-    exercise_id:str
+    # Exactly one of these two is ever set (enforced by a DB check
+    # constraint, migration 0014) - exercise_id for compiled lesson
+    # content, practice_item_id for review/checkpoint/Endless Practice
+    # generated items, which are backed by PracticeItem, not Exercise.
+    exercise_id:str|None
+    practice_item_id:str|None
     content_release_id:str|None
     content_key_id:str|None
     attempt_id:str|None

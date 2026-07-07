@@ -282,7 +282,11 @@ export interface ContentIssueReportResult {
 
 export interface ContentIssue {
   id: string;
-  exercise_id: string;
+  // Exactly one of these is set: exercise_id for compiled lesson content,
+  // practice_item_id for review/checkpoint/Endless Practice generated
+  // items (backed by PracticeItem, not Exercise).
+  exercise_id: string | null;
+  practice_item_id: string | null;
   category: ContentIssueCategory;
   description: string | null;
   status: string;

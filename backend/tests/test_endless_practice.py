@@ -565,20 +565,43 @@ def test_expired_practice_item_fails_cleanly(client, admin, auth):
     assert response.json()["error"]["code"] == "practice_item_expired"
 
 
-def test_farsi_sampler_now_includes_listen_select_since_azure_covers_it(
+def test_farsi_sampler_excludes_listen_select_without_a_configured_azure_key(
     client, admin, auth
 ):
-    # Was test_farsi_sampler_excludes_listen_select_even_if_imported until
-    # 2026-07-06: Farsi (fa) had zero TTS coverage from any provider back
-    # when that exclusion was written, so listen_select generation was
-    # correctly gated off for it. Azure Cognitive Services Speech shipped
-    # real fa voices the same day, and the practice engine's own
-    # TTS_SUPPORTED_LANGUAGES gate (app/practice/service.py) was updated
-    # to the combined Google+Azure set to match -- fa should now be able
-    # to generate listen_select items same as any Google-covered
-    # language. See test_dari_sampler_excludes_listen_select below for
-    # the still-correctly-excluded case (prs has zero coverage from
-    # either provider).
+    # 2026-07-07 (Fable audit finding): fa was added to
+    # TTS_SUPPORTED_LANGUAGES the day Azure integration code shipped, but
+    # that's static language membership, not proof a real Azure key is
+    # configured on this deploy target. app/practice/service.py's gate now
+    # checks tts_actually_configured() (app/services/tts.py), which
+    # inspects real settings.azure_speech_key/_region -- both empty by
+    # default (app/core/config.py) until Ramin actually provisions one.
+    # This is the REAL current default state and must stay excluded, or
+    # the app generates unanswerable audio-only items with no real voice.
+    course_id, lesson_id = create_course_with_lexemes(target="fa")
+    import_templates(client, admin, course_id, artifact(target="fa"))
+    complete_lesson(auth, lesson_id)
+    response = client.post(
+        f"/practice/{course_id}/batch", headers=auth, json={"size": 20}
+    )
+    assert response.status_code == 200, response.text
+    assert response.json()["items"]
+    assert all(item["type"] != "listen_select" for item in response.json()["items"])
+
+
+def test_farsi_sampler_includes_listen_select_once_azure_is_actually_configured(
+    client, admin, auth, monkeypatch
+):
+    # The other half of the finding above: fa SHOULD generate
+    # listen_select once a real Azure key is actually present, same as
+    # any Google-covered language. Mocks a real-looking credential rather
+    # than asserting on language membership alone.
+    import app.practice.service as practice_service
+
+    monkeypatch.setattr(
+        practice_service,
+        "tts_actually_configured",
+        lambda language_code: language_code == "fa",
+    )
     course_id, lesson_id = create_course_with_lexemes(target="fa")
     import_templates(client, admin, course_id, artifact(target="fa"))
     complete_lesson(auth, lesson_id)
@@ -592,7 +615,7 @@ def test_farsi_sampler_now_includes_listen_select_since_azure_covers_it(
 
 def test_dari_sampler_excludes_listen_select(client, admin, auth):
     # Dari (prs) has zero TTS coverage from either Google or Azure --
-    # unlike fa above, this exclusion is still correct today.
+    # unlike fa above, this exclusion is correct regardless of credentials.
     course_id, lesson_id = create_course_with_lexemes(target="prs")
     import_templates(client, admin, course_id, artifact(target="prs"))
     complete_lesson(auth, lesson_id)

@@ -515,6 +515,42 @@ endpoints are deprecated in favor of the lexeme review flow above. They
 remain available only for pre-existing `ReviewItem` rows; lesson answers no
 longer create new legacy review rows.
 
+### Content issue reporting for PracticeItem-backed content, 2026-07-07
+
+`POST /exercises/{exercise_id}/report` only ever recognized real `Exercise`
+rows (compiled lesson content) — but review sessions, unit checkpoints, and
+the Endless Practice feed are all backed by `PracticeItem`, a separate table
+with no relationship to `Exercise`. `ReviewPage.tsx` was passing a
+`PracticeItem.id` into that endpoint and 404ing on every report (reproduced
+live); the Endless Practice feed had no report button wired in at all.
+
+New endpoint, same request/response shape as the exercise one:
+
+```
+POST /practice/items/{item_id}/report
+{ "category": "wrong_answer_key", "description": "...", "learner_response": ... }
+→ 201 { "id": "uuid", "status": "open" }
+```
+
+404s (`practice_item_not_found`) for a foreign or nonexistent item, same
+ownership check as `POST /practice/items/{item_id}/answer`. Use this for any
+id that came from `/reviews/session`, `/practice/{course_id}/batch`, or
+`/units/{unit_id}/checkpoint` — never `/exercises/{id}/report`, which will
+404 for all of those.
+
+`ContentIssueReport.exercise_id` is now nullable; a new nullable
+`practice_item_id` FK was added (mirrors the existing nullable
+`content_key_id` secondary FK on this same table). Exactly one of
+`exercise_id`/`practice_item_id` is ever set (DB check constraint,
+migration 0014) — `GET /admin/content/issues` and `PATCH
+/admin/content/issues/{id}` are otherwise unchanged, `ContentIssueOut` just
+gained `practice_item_id` alongside the now-optional `exercise_id`. `GET
+/admin/content/coverage`'s per-course `open_issue_count` is unchanged and
+intentionally still counts only `Exercise`-linked reports (it's derived via
+the `Course → Unit → Lesson → Exercise` join, which has no equivalent path
+for PracticeItem) — PracticeItem-backed reports don't appear in that
+specific rollup yet, a known scope gap, not a regression.
+
 ### Unit checkpoint (test-out), Phase F, 2026-07-05
 
 Not the rejected placement-quiz enrollment system — assembled entirely from
