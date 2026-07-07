@@ -9779,3 +9779,103 @@ matching the exact clean baseline achieved two entries prior — this
 audit's one fix introduced no regressions, and the pre-existing clean
 state has now survived three consecutive authoring/audit passes since
 it was first reached.
+
+## Dari 2pl verb-ending split-brain fix (-ید Iranian → -ین Afghan), 2026-07-07
+
+**The bug** (flagged by tonight's Opus fa/prs corpus audit, independently
+re-verified from scratch against the then-current files rather than the
+audit summary — the corpus had grown well past the originally-flagged ~5
+files): the prs course's own `register_policy` establishes the Afghan
+"استم/استین polite-first" paradigm (2pl `-ین`), and the copula was
+uniformly Afghan throughout, but lexical 2pl verbs split by unit — some
+units correctly used `-ین` (زنده باشین، خوش آمدین، می‌تانین), others used
+Iranian `-ید` (بروید، بپیچید، می‌توانید بگویید) inside otherwise-authentic
+Afghan vocabulary. fa content uses zero `-ین`, confirming a real
+unit-by-unit authoring inconsistency, not tooling.
+
+**Dialect ruling (Fable, per the standing spine/dialect delegation):
+`-ین` is correct for ALL Afghan Dari 2pl verb forms in this course, no
+exceptions — including a2_unit09 (bureaucracy).** Reasons: (1) every
+affected unit's own register_policy simultaneously declares استم/استین
+(the `-ین` paradigm) and then used `-ید` lexical verbs — استین copula +
+کنید lexical verbs is not a real register anywhere, it's two dialects
+mixed; the policies' "full, uncontracted forms (کنید...)" wording was a
+post-hoc rationalization conflating formality with the Iranian paradigm;
+(2) the bureaucracy unit is spoken clerk dialogue — spoken Kabul Dari
+uses `-ین` even in offices (`-ید` is a written/broadcast form), and that
+unit already used باشین/استین and claimed "deliberately never Iranian
+Farsi forms"; (3) the course's own fresh-context reviews repeatedly
+blessed `-ین` forms (استین/می‌تانین/بدهین) as established convention.
+
+**Not a uniform text swap.** Per-verb conversion table, stem changes
+where Afghan differs: می‌توانید→می‌تانین (Afghan تانستن stem, the
+course's own 44x-attested form; also fixed 5x Tehrani می‌تونین in
+prs-en overlays and 1x hybrid می‌توانین), بیاورید→بیارین (colloquial
+آر stem, corpus-attested), می‌خواهید→می‌خواهین (full stem kept per the
+units' declared uncontracted-forms policy); plain suffix conversions
+for کنید/می‌کنید/بگویید/بفرمایید/بروید/ببخشید/بنوشید/بدهید/دارید/
+آمدید/بپیچید. ~756 replacements across 37 files: 16 prs realizations,
+11 en-prs overlays, 3 prs-en overlays, 10 practice packs (grading
+fields included: tested_text, accepted_answers values, word_bank,
+distractors, correct_option, introduced_tokens, media_assets text),
+plus scripts/backfill_lexemes_en_prs.py in lockstep (its gloss/POS/tag
+dicts are keyed by exact token and feed the practice lexeme pool — the
+load-bearing dependency for grading).
+
+**Tooling lesson**: the first conversion pass used a boundary class of
+the whole Arabic Unicode block, which includes Persian punctuation
+(، ؟) — ~123 occurrences adjacent to Persian punctuation (e.g. «خوش
+آمدید،») were silently missed and only caught by re-inventorying with a
+letters-only tokenizer. Any future Persian-script sweep must exclude
+U+060C/061B/061F etc. from the word-boundary class.
+
+**Deliberately NOT changed**: practice/prs-en/a1_unit09.yaml's
+metalinguistic register note (quotes کنید/هستید as "not this" examples);
+fa-en overlays' می‌تونین (legitimate Iranian colloquial in a Farsi
+overlay); 3sg forms (می‌آید، می‌گوید، بیاید) and nouns/lookalikes
+(باید، رسید، خرید، جدید، فرید...); بتین (7x, genuine Kabuli, separate
+axis). **Flagged for future native review, not fixed**: (1) پیچیدن as
+the "turn" verb is itself Iranian-leaning (Afghan speech often prefers
+دور خوردن/گشتن) — vocabulary choice, out of scope for an endings fix;
+(2) 1sg stays literary توان-stem (می‌توانم/نمی‌توانم, 55x) next to 2pl
+می‌تانین — cross-person stem asymmetry, consistent with the course's
+reviewed "full 1sg forms" register choice (unit12 review precedent) but
+worth a native's ear.
+
+**Knock-on fixes**: unified the backfill script's three conflicting
+آمدین glosses ("informal, contracted" was wrong — آمدین IS the polite
+form; the flat dict's last-wins semantics would have served the wrong
+gloss, same bug class as the documented و letter/conjunction collision);
+rewrote practice/en-prs/a1_unit10.yaml's and the backfill script's
+notes that had rationalized the -ید forms as "distinct lexemes"
+(post-merge, backfill dedups by bare token — the polite_and_request
+pool is now 10 distinct, was 8, so its 8-slot matching_pairs template
+stays fillable); rewrote the en-prs unit01 overlay note that contrasted
+خوش آمدین with the now-gone خوش آمدید.
+
+**Verification (all run against the final state)**: real compiles (not
+just validate) for en-prs, en-prs-a2, prs-en, prs-en-a2 — 0 errors/0
+warnings each; compiled JSON re-tokenized and confirmed to contain ZERO
+Iranian 2pl forms and the expected Afghan forms end-to-end;
+`_practice_slot_check.py` all packs clean (note: its matching_pairs
+check only enforces ≥2 distinct, so the unit10 pool-size question above
+was verified directly via iter_specs, not assumed from the harness);
+`_fill_in_blank_ambiguity_check.py` 0/0;
+`_practice_content_integrity_check.py` 0 class-B (3 pre-triaged class-A
+mechanical flags unchanged); full `scripts/verify.sh --content-only`
+PASS. fa content confirmed untouched (0 fa files in the diff).
+
+**Process note**: the bulk of this fix was committed mid-flight by the
+coordinator session as `ac26f8a` (bundled with its nl-en depth pass and
+the new integrity checker) while the executing session's cleanup pass
+was still pending — the same broad-staging race documented in CLAUDE.md's
+footguns. The pending cleanups (unit10 practice notes, backfill gloss
+unification/comment rewrite) landed as follow-up working-tree edits to
+docs/content/practice/en-prs/a1_unit10.yaml and
+scripts/backfill_lexemes_en_prs.py after that commit; all verification
+above was re-run AFTER those edits.
+
+**Live-DB caveat**: any dev/live stack that already imported en-prs
+content or ran the prs lexeme backfill is still serving the old `-ید`
+forms — content re-import + backfill re-run needed for the fix to reach
+a running instance (content seeding is create-missing-only).

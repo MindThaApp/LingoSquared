@@ -190,10 +190,10 @@ PRS_GLOSSES: dict[str, str] = {
     "فامیل‌تان": "your family", "است": "is", "اهل": "from; originally of",
     "خانه": "house", "شکر": "thank God; thanks", "زنده": "alive; long (may you live)",
     "باشین": "may you be (polite)", "خانهٔ": "house of", "خودتان": "yourself",
-    "بالا": "up; upstairs", "بفرمایین": "please, go ahead", "اول": "first",
+    "بالا": "up; upstairs", "بفرمایین": "please, go ahead / come in (polite)", "اول": "first",
     "بزرگ‌ترها": "elders", "می‌کنیم": "we do", "دفتر": "office", "کابل": "Kabul",
     "حامد": "Hamed (name)", "من": "I", "همکار": "colleague", "نو": "new",
-    "نجیب": "Najib (name)", "آمدین": "you came (informal, contracted)",
+    "نجیب": "Najib (name)", "آمدین": "you came (polite)",
     "نام‌تان": "your name", "چیست": "what is", "نام": "name", "از": "from",
     "آشنایی": "acquaintance", "با": "with", "شدم": "I became", "هم": "also",
     "همکاران": "colleagues", "را": "(object marker)", "معرفی": "introduction",
@@ -206,7 +206,7 @@ PRS_GLOSSES: dict[str, str] = {
     # not already covered by unit 1's dict above (checked against the
     # full unit-1 key set first to avoid silently overwriting an
     # existing, already-reviewed gloss).
-    "بدهین": "give (polite imperative, in the 'allow me to...' construction)",
+    "بدهین": "give (polite imperative)",
     "اجازه": "permission", "همکارم": "my colleague",
     "فریدون": "Faridun (name)", "نامت": "your name (informal)",
     "هرات": "Herat (city)", "مزار": "Mazar (part of Mazar-i-Sharif)",
@@ -293,7 +293,7 @@ PRS_GLOSSES: dict[str, str] = {
     "تا": "counter word (pieces)", "بل": "the bill",
     "می‌شه": "becomes / comes to (amount)", "خیلی": "very",
     "خوش‌مزه": "delicious", "بود": "was", "چایخانه": "teahouse",
-    "آمدین": "you came (informal)", "میل": "desire / preference",
+    "آمدین": "you came (polite)", "میل": "desire / preference",
     "مشتری": "customer", "هردو": "both", "با": "with",
     "چشم": "of course (lit. eye, polite acknowledgment)",
     "می‌آرم": "I'll bring", "دوصد": "two hundred", "افغانی": "Afghani (currency)",
@@ -345,10 +345,13 @@ PRS_GLOSSES: dict[str, str] = {
     "داری": "you have (informal)", "مشکل": "problem",
     # Unit 10 (shopping and prices), added 2026-07-07. Confirmed by
     # reading docs/content/realizations/prs/a1_unit10_shopping.yaml
-    # directly. می‌تانین/بدهین/بفرمایین are each a genuinely distinct
-    # -ین-suffixed Kabul-colloquial spelling from the already-existing
-    # می‌تانین/بدهین/بفرمایین (unit02/unit01 formal forms) -- both
-    # spellings are real, kept as separate lexemes, not merged.
+    # directly. HISTORY NOTE (2026-07-07 Dari 2pl fix): unit01/02/07
+    # originally used Iranian -ید spellings (بفرمایید/می‌توانید/بدهید)
+    # as separate lexemes from unit10's Afghan -ین forms; the corpus-
+    # wide -ید -> -ین conversion (see BUILD_LOG) merged each pair into
+    # the single correct Afghan form. The duplicate dict entries below
+    # are therefore intentional last-wins repeats of the same token,
+    # matching this file's per-unit-section layout convention.
     "دوکان": "shop", "قیمت": "price", "ارزان": "cheap", "گران": "expensive",
     "تخفیف": "discount", "قیمتش": "its price", "سیب": "apple(s)",
     "کیلو": "kilo", "می‌تانین": "you can (polite)",
@@ -664,7 +667,7 @@ def prs_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         semantics.append("wellbeing_question")
     if token in {"خوب", "استم", "جور", "بد", "نیستم", "استند"}:
         semantics.append("wellbeing_answer")
-    if token in {"تشکر", "خواهش", "می‌کنم", "بفرمایین", "شکر", "بفرمایین"}:
+    if token in {"تشکر", "خواهش", "می‌کنم", "بفرمایین", "شکر"}:
         semantics.append("politeness")
     if token in {"نام", "نام‌تان", "چیست", "من", "شما", "تو", "است", "استم"}:
         semantics.append("identity")
