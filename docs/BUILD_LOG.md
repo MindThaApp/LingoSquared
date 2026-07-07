@@ -10006,3 +10006,77 @@ adding more load onto an already-swapping host would likely cause more
 stalls, not faster progress -- judgment call overriding the literal
 instruction given new information. Worth a closer look (closing unused
 apps, or a reboot) if stalls recur.
+
+## Shared English A1/A2 realization: closing 29 §16 matching_pairs violations across 4 consuming directions, 2026-07-07
+
+**Trigger**: coordinator asked to close out 3 known §16 shortfalls
+(match_days/match_months in unit04, match_family_words in unit06,
+match_food_words in unit07) in `docs/content/realizations/en/*.yaml` —
+SHARED lesson content consumed by fa-en, nl-en, prs-en, and (newly)
+de-en, flagged by the German content lane rather than fixed
+unilaterally since it's shared. Coordinator explicitly asked for a
+full sweep before fixing, given the scope of "shared content used by
+4+ directions."
+
+**Sweep result: 29 real violations, not 3.** A full pass over every
+`matching_pairs` exercise in the entire shared en/ A1+A2 realization
+found nearly every one authored with only 3-5 pairs (well below §16's
+6-12 floor) — including one, `a2_unit27_banking`'s
+`match_banking_words`, that had ZERO pairs at all (a completely broken,
+non-functional exercise, not merely thin).
+
+**Fix**: 5 parallel workers fixed all 29 across units 03-27, each
+required to pool only real, already-taught vocabulary from within the
+same unit (never inventing content, never reaching across unit
+boundaries) and keep the fix synchronized across every consuming
+direction's overlay (`fa-en`/`nl-en`/`prs-en` always; `de-en` also for
+units 03-07, the only range it currently covers). Net result: 23 of 29
+exercises brought to 6-12 pairs; 6 honestly left below the floor after
+exhaustive checking confirmed the unit's real vocabulary is a genuinely
+closed set with nothing left to pool without fabricating data
+(`match_day_parts` stays at 4 — only 4 day-part words exist at all;
+`match_menu_prices` and `match_receipt_fields` stay at 4 — both are
+fixed printed price lists with no other priced item anywhere in their
+units; `match_months`/`match_symptoms`/`match_jobs` reached 5, capped
+by real vocabulary or genuine risk of semantic confusion between
+near-synonymous symptom descriptions). Independently re-swept myself
+after all 5 workers landed and confirmed exactly these same 6
+remaining below-floor cases — no others — verifying every worker's
+"genuinely capped" claim was accurate, not a shortcut.
+
+**Two real, independent, previously-undiscovered bugs found and fixed
+along the way, beyond the pair-count issue itself**:
+- `de-en/a1_unit06.yaml`'s `match_family_words` overlay had its answer-
+  key clues authored in German, while the actual displayed text (from
+  the realization, which the frontend renders verbatim per
+  `compile_content.py` — overlays never contribute to `pairs`) is
+  English. Since `MatchingPairs.tsx` submits exactly what's displayed,
+  this exercise's grading was silently broken for every German learner
+  who ever reached it — a correct submission could never match the
+  German-keyed accepted answer. Fixed by converting the overlay's
+  clues to English, matching the realization and every sibling
+  direction's overlay.
+- `a2_unit27_banking`'s overlays (fa-en/nl-en/prs-en) had a completely
+  wrong data shape for this exercise's `accepted_answers` — a flat
+  `{phrase: gloss}` dict instead of the required `{left,right}[]` list
+  — consistent with the realization itself having zero `pairs`
+  authored at all. Both sides fixed together, from scratch, using the
+  unit's own real vocabulary and existing multiple_choice prompt text
+  as the source for each pair's clue.
+
+**Verification, matching the coordinator's explicit "extremely
+thorough, every consuming direction" bar**: every worker ran the
+compiler's real `validate` command per unit per consuming direction
+(75 individual validate runs across the 5 workers, all 0 errors/0
+warnings), `practice-validate` for every affected direction, and all 3
+standing harnesses (`_practice_slot_check.py`,
+`_fill_in_blank_ambiguity_check.py`,
+`_practice_content_integrity_check.py`). Independently re-verified
+myself after all 5 landed: a full whole-repo `verify.sh
+--content-only` sweep across every course direction including en-de/
+de-en (0 errors/0 warnings throughout), `_practice_slot_check.py`'s
+"All packs" clean message held, `_fill_in_blank_ambiguity_check.py`
+still 0/0, and `_practice_content_integrity_check.py` still showing
+only the same 3 already-investigated, confirmed-benign class-A flags
+from the earlier integrity-audit entry (0 class-B) — zero regressions
+introduced by touching 4+ directions' shared content simultaneously.
