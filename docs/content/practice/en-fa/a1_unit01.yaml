@@ -6,7 +6,7 @@ unit_content_key: fa.a1.unit01.greetings
 review:
   status: reviewed
   fresh_context: true
-  notes: "Fresh review found and resolved translation-direction, phrase-gloss, recombination, and feedback metadata defects. A targeted post-review fix removed leaked review-process language from learner-facing feedback; this was not a new full fresh-context review. Second targeted post-review fix, 2026-07-06: scripts/_practice_slot_check.py surfaced that 3 multiple_choice templates (greeting_meaning, farewell_choice, question_meaning) each had only 1-2 real distinct lexeme candidates against the >=3 multiple_choice/matching_pairs threshold -- these unit01/unit02-era tags were simply never extended with more vocabulary, so build_prompt() was silently rejecting these generated-item shapes every time since the pack shipped. Converted all 3 to fill_in_blank (same slot, needs only >=1 candidate, matching this file's own letter_fill.002/farewell_fill.003 precedent) rather than inventing new tagged vocabulary. Re-verified via compile_content.py practice-validate (0/0) and _practice_slot_check.py (all 3 now pass). NOT fixed, still real and open: 3 matching_pairs templates in this file (greeting_pair.006, question_pair.004, offer_pair.006) have the same underlying single-candidate-tag problem but restructuring a matching_pairs exercise needs either 2+ real vocabulary additions or a type change that changes its pedagogical shape more than a mechanical fix -- left for whoever next extends this unit's vocabulary or revisits its exercise design."
+  notes: "Fresh review found and resolved translation-direction, phrase-gloss, recombination, and feedback metadata defects. A targeted post-review fix removed leaked review-process language from learner-facing feedback; this was not a new full fresh-context review. Second targeted post-review fix, 2026-07-06: scripts/_practice_slot_check.py surfaced that 3 multiple_choice templates (greeting_meaning, farewell_choice, question_meaning) each had only 1-2 real distinct lexeme candidates against the >=3 multiple_choice/matching_pairs threshold -- these unit01/unit02-era tags were simply never extended with more vocabulary, so build_prompt() was silently rejecting these generated-item shapes every time since the pack shipped. Converted all 3 to fill_in_blank (same slot, needs only >=1 candidate, matching this file's own letter_fill.002/farewell_fill.003 precedent) rather than inventing new tagged vocabulary. Re-verified via compile_content.py practice-validate (0/0) and _practice_slot_check.py (all 3 now pass). Third targeted post-review fix, 2026-07-07: the 3 matching_pairs templates left open above (greeting_pair.006, question_pair.004, offer_pair.006) are now fixed too, without inventing any vocabulary -- verified by hand against backfill_lexemes.py's iter_specs() (A1-only, no cross-level pooling risk: en-fa's a2_unit09/10 don't touch this vocabulary at all) that 'greeting' (سلام) and 'offered_item' (چای) are each genuinely single-candidate at this course's real vocabulary depth (سلام is the only single-token greeting; صبح/عصر بخیر are correctly modeled as separate time_period+good_wish tokens, already tested via time_greeting.002; taarof's lesson literally only teaches one offered item), and 'wellbeing_question_phrase' likewise has only 1 real candidate (حالتون چطوره؟, already tested via question_fill.001/return_question.006). Rather than pairing a 1-candidate tag against a fine one (structurally unsatisfiable -- matching_pairs needs >=N distinct candidates for N slots on a tag, and 1 can never fill >=2), each was rebuilt as a matching_pairs pooling ONLY tags with real headroom, several using each lesson's own already-tested-elsewhere vocabulary per AUTHORING_GUIDE §16: greeting_pair.006 -> closing_pair.006 (farewell x2 + politeness x4 = 6 pairs), question_pair.004 -> answer_pair.004 (wellbeing_answer x3 + politeness x4 = 7 pairs, politeness newly recapped into lesson04 from lesson02), offer_pair.006 -> politeness_pair.006 (politeness x4 alone, offered_item dropped since it's already covered by offer_order.001/offer_meaning.002). Re-verified via _practice_slot_check.py (0 problems in this file) and compile_content.py practice-validate (0/0)."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -112,13 +112,20 @@ templates:
     slots: {politeness: *politeness}
     answer_derivation: {kind: slot_gloss, slot: politeness}
     feedback_frame: {text: "{politeness} is used in this polite exchange.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit01.lesson02.greeting_pair.006
+  - content_key: practice.en-fa.fa.a1.unit01.lesson02.closing_pair.006
     lesson_content_key: fa.a1.unit01.lesson02.everyday_greetings
     type: matching_pairs
-    frame: {text: "{greeting} — {farewell}", language_code: fa, direction: rtl}
-    slots: {greeting: *greeting, farewell: *farewell}
-    answer_derivation: {kind: matching_pairs, slots: [greeting, farewell]}
-    feedback_frame: {text: "Match {greeting} and {farewell} to their meanings.", language_code: en, direction: ltr}
+    frame: {text: "Match each word or phrase with its meaning.", language_code: en, direction: ltr}
+    slots:
+      farewell_one: *farewell
+      farewell_two: *farewell
+      politeness_one: *politeness
+      politeness_two: *politeness
+      politeness_three: *politeness
+      politeness_four: *politeness
+    slot_relations: [{kind: distinct, slots: [farewell_one, farewell_two, politeness_one, politeness_two, politeness_three, politeness_four]}]
+    answer_derivation: {kind: matching_pairs, slots: [farewell_one, farewell_two, politeness_one, politeness_two, politeness_three, politeness_four]}
+    feedback_frame: {text: "Match each closing/politeness word or phrase to its meaning.", language_code: en, direction: ltr}
 
   # Lesson 3: time-specific greetings and farewells.
   - content_key: practice.en-fa.fa.a1.unit01.lesson03.time_wish.001
@@ -179,13 +186,21 @@ templates:
     slots: {wellbeing_answer: *wellbeing_answer}
     answer_derivation: {kind: slot_text, slot: wellbeing_answer}
     feedback_frame: {text: "{wellbeing_answer} is a natural response to a wellbeing question.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit01.lesson04.question_pair.004
+  - content_key: practice.en-fa.fa.a1.unit01.lesson04.answer_pair.004
     lesson_content_key: fa.a1.unit01.lesson04.formal_informal_wellbeing
     type: matching_pairs
-    frame: {text: "{wellbeing_question} — {wellbeing_answer}", language_code: fa, direction: rtl}
-    slots: {wellbeing_question: *wellbeing_question, wellbeing_answer: *wellbeing_answer}
-    answer_derivation: {kind: matching_pairs, slots: [wellbeing_question, wellbeing_answer]}
-    feedback_frame: {text: "Match the wellbeing question and response to their meanings.", language_code: en, direction: ltr}
+    frame: {text: "Match each word or phrase with its meaning.", language_code: en, direction: ltr}
+    slots:
+      wellbeing_answer_one: *wellbeing_answer
+      wellbeing_answer_two: *wellbeing_answer
+      wellbeing_answer_three: *wellbeing_answer
+      politeness_one: *politeness
+      politeness_two: *politeness
+      politeness_three: *politeness
+      politeness_four: *politeness
+    slot_relations: [{kind: distinct, slots: [wellbeing_answer_one, wellbeing_answer_two, wellbeing_answer_three, politeness_one, politeness_two, politeness_three, politeness_four]}]
+    answer_derivation: {kind: matching_pairs, slots: [wellbeing_answer_one, wellbeing_answer_two, wellbeing_answer_three, politeness_one, politeness_two, politeness_three, politeness_four]}
+    feedback_frame: {text: "Match each wellbeing-answer/politeness word or phrase to its meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit01.lesson04.answer_order.005
     lesson_content_key: fa.a1.unit01.lesson04.formal_informal_wellbeing
     type: word_order
@@ -237,13 +252,18 @@ templates:
     slots: {politeness: *politeness}
     answer_derivation: {kind: render_frame, frame: {text: "ممنون از لطف شما", language_code: fa, direction: rtl}}
     feedback_frame: {text: "ممنون از لطف شما thanks someone for their kindness.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit01.lesson05.offer_pair.006
+  - content_key: practice.en-fa.fa.a1.unit01.lesson05.politeness_pair.006
     lesson_content_key: fa.a1.unit01.lesson05.taarof_basics
     type: matching_pairs
-    frame: {text: "{offered_item} — {politeness}", language_code: fa, direction: rtl}
-    slots: {offered_item: *offered_item, politeness: *politeness}
-    answer_derivation: {kind: matching_pairs, slots: [offered_item, politeness]}
-    feedback_frame: {text: "Match the offered item and the polite expression to their meanings.", language_code: en, direction: ltr}
+    frame: {text: "Match each polite expression with its meaning.", language_code: en, direction: ltr}
+    slots:
+      politeness_one: *politeness
+      politeness_two: *politeness
+      politeness_three: *politeness
+      politeness_four: *politeness
+    slot_relations: [{kind: distinct, slots: [politeness_one, politeness_two, politeness_three, politeness_four]}]
+    answer_derivation: {kind: matching_pairs, slots: [politeness_one, politeness_two, politeness_three, politeness_four]}
+    feedback_frame: {text: "Match each taarof politeness expression to its meaning.", language_code: en, direction: ltr}
 
   # Lesson 6: reviewed first-meeting dialogue language.
   - content_key: practice.en-fa.fa.a1.unit01.lesson06.name_greeting.001
