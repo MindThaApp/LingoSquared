@@ -9405,3 +9405,68 @@ both the new A2 authoring and the earlier same-day retrofit (removing
 the 9 unanswerable weekday/possessive fill_in_blank instances) are
 holding clean together. `_practice_slot_check.py` unchanged at exactly
 5 pre-existing, unrelated `en-fa` problems.
+
+## Closing fa-en/prs-en's unit27 gap and en-fa/en-prs's 7-unit A1 gap, 2026-07-07
+
+**Trigger**: coordinator asked to check fa-en/prs-en for practice-pool
+gaps behind recent lesson-content growth, falling back to en-fa/en-prs
+if those were already covered. Investigated rather than assuming the
+framing was exact: fa-en/prs-en were each missing exactly one new unit
+(`a2_unit27_banking`, authored the same day), while en-fa/en-prs had
+actually grown from 8 to **15** A1 units each (not the "14" mentioned
+— likely a timing gap with concurrent authoring) with zero practice
+coverage for the new units 09-15 — a much larger gap than the
+coordinator's own framing suggested, caught by checking ground truth
+directly instead of trusting the secondhand count.
+
+**Fix**: 5 parallel workers — one covering fa-en's and prs-en's unit27
+gap together (16 templates each, zero fill_in_blank since the unit's
+vocabulary is dominated by multi-word banking compounds that don't
+reduce to a safe slot), and 4 splitting en-fa/en-prs's units 09-15 (2
+workers per direction). Every worker built the ambiguity-check
+discipline in from the start per the immediately preceding entries'
+fix, not as an afterthought.
+
+Results: fa-en 26→27 units, prs-en 26→27 units, en-fa 10→17 units
+(738 fa + 571 en lexemes), en-prs 10→17 units (485 prs lexemes).
+Several workers deliberately used zero `fill_in_blank` templates for
+specific units where real vocabulary couldn't safely support one
+(en-fa units 09-15 collectively used none; en-prs used a handful only
+where verified single-project-wide-candidate, explicitly avoiding it
+for unit15's comparisons content) — this is now the established
+default judgment call rather than something needing after-the-fact
+correction.
+
+Real bugs caught and fixed live during this pass, not hypothetical:
+- en-fa's units 09-11 worker: a matching_pairs template pooling a
+  1-candidate tag (`appointment_word`) into a combined slot was
+  correctly flagged by `_practice_slot_check.py` (matching_pairs needs
+  >=2 distinct candidates even when pooled with a different tag) and
+  dropped rather than shipped.
+- en-prs's units 12-15 worker: a new `connector_word` tag initially
+  caught the same token's unrelated letter-name sense from an A1
+  script-introduction lesson (same bug class as the project's existing
+  `و`-letter-vs-conjunction guard) — fixed with an identical
+  lesson_key-scoped exclusion before finalizing. Also found and fixed
+  a genuine homograph (`می‌شود`'s A2 "would it be possible" sense vs.
+  this unit's "he/she wakes up" sense) by content-key-scoping the
+  classification rather than overwriting the shared dict entry.
+- en-prs's units 09-11 worker: found and fixed 2 real pre-existing
+  gaps (بشیر and زرمینه/کریم missing their `person_name` tag despite
+  having glosses) while cross-checking vocabulary, unrelated to but
+  discovered during this task.
+
+**Verification**: every worker's individual claims independently
+re-verified against the final merged state — `backfill_lexemes_fa_en.
+py`/`backfill_lexemes_prs_en.py --dry-run` (both 555 en lexemes,
+consistent since they share the same English target vocabulary),
+`backfill_lexemes.py --dry-run` (738 fa + 571 en), `backfill_lexemes_
+en_prs.py --dry-run` (485 prs), direct file-count checks (fa-en/prs-en
+27 files each, en-fa/en-prs 17 files each), `compile_content.py
+practice-validate` run separately per direction (0 errors/0 warnings
+each — the compiler enforces one language pair per invocation, so
+combining directions in one call throws an unrelated, expected
+error), a full-project run of `_fill_in_blank_ambiguity_check.py`
+(0 AMBIGUOUS, 0 MULTI-SLOT across all 6 directions), and
+`_practice_slot_check.py` (unchanged at exactly 5 pre-existing,
+unrelated `en-fa` unit01/02 problems).

@@ -1,0 +1,176 @@
+schema_version: "1.0"
+pack_key: practice.en-fa.a1.unit09
+source_language: en
+target_language: fa
+unit_content_key: fa.a1.unit09.time
+review:
+  status: unreviewed
+  required_next_reviewer: codex
+  notes: >-
+    Authored 2026-07-07, closing the practice-content gap for A1 units
+    09-11 (Time/Dates/Routines, authored the same night, previously with
+    zero Endless Practice coverage). Extended scripts/backfill_lexemes.py's
+    UNIT_FILES to include units 09-11 (previously only 01-08 plus the
+    separately-numbered A2 units 09-10) and added the matching FA_GLOSSES/
+    classification-set/agreement-tag entries for every token these three
+    units' realizations introduce.
+
+    Four semantic groups for this unit, all verified against the real
+    iter_specs() output before authoring: "time_unit_word" (ساعت/دقیقه/
+    نیم/ربع, 4 members, anchored lesson01), "day_part_word" (صبح/ظهر/عصر/
+    شب, 4 members, anchored lesson04 -- deliberately a NEW tag rather than
+    widening the existing "time_period" tag a1_unit01.yaml's own pack
+    already uses for a greeting-phrase pool that includes روز; pooling
+    روز here or adding ظهر there would risk an odd combination), and
+    "appointment_word" (قرار, 1 member, translation-only, same below-
+    multiple_choice-threshold class as other units' narrow single-word
+    tags). "time_phrase" pools this unit's own genuine taught full-
+    question/full-statement phrases (auto-derived by iter_specs() from
+    this unit's own multi-token teaching cards: ساعت چنده؟ / ساعت سه و
+    نیمه / قرار ساعت چنده؟ / ساعت چهار عصر, 4 members) -- kept as an
+    explicit allow-list in fa_agreement_tags() rather than a lesson_key-
+    prefix+shape scope (unlike the A2 bureaucracy_phrase/opinion_phrase
+    precedent), because this unit's two grammar_note cards (the -e
+    contraction explanations) would otherwise also auto-derive as
+    "phrases" with an awkward parenthetical/mixed-script gloss not fit
+    for a clean practice item.
+
+    Verified with scripts/_practice_slot_check.py's lexeme_matches()/
+    check_pack() logic against the real (updated) iter_specs() output --
+    clean, no zero-candidate slots, no under-3 multiple_choice/
+    matching_pairs slots (appointment_word correctly has only 1 candidate
+    and is translation-only, never multiple_choice/matching_pairs, since
+    _practice_slot_check.py's matching_pairs check requires >=2 distinct
+    candidates per slot even when pooled alongside a different tag's
+    slots in the same combined template -- an earlier draft of this pack
+    tried pooling appointment_word into a combined matching_pairs
+    template with time_phrase and the slot check correctly caught it;
+    removed). scripts/_fill_in_blank_ambiguity_check.py: zero
+    fill_in_blank templates authored in this pack at all -- every
+    multi-member group here (time_unit_word, day_part_word, time_phrase)
+    has >1 genuinely distinct, non-synonymous candidate with no natural
+    single-slot frame that could disambiguate them (a bare "{slot}" frame
+    is disallowed by AUTHORING_GUIDE.md #13 regardless), so per this
+    task's own instruction, using zero fill_in_blank for this unit is the
+    right call rather than authoring one that the compiler's own
+    ambiguity hard-fail (#17) would reject anyway. compile_content.py
+    practice-validate clean (0 errors/0 warnings) for the full en-fa pack
+    including this new file. Needs the standard fresh-context review
+    before import.
+tag_schema:
+  part_of_speech: [noun, phrase]
+  agreement_tags:
+    semantic: [time_unit_word, day_part_word, appointment_word, time_phrase]
+slot_presets:
+  time_unit_word: &time_unit_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: time_unit_word}}
+  day_part_word: &day_part_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: day_part_word}}
+  appointment_word: &appointment_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: appointment_word}}
+  time_phrase: &time_phrase {language_code: fa, part_of_speech: phrase, agreement_tags: {semantic: time_phrase}}
+templates:
+  - content_key: practice.en-fa.fa.a1.unit09.lesson01.time_unit_choice.001
+    lesson_content_key: fa.a1.unit09.lesson01.basic_time_vocabulary
+    type: multiple_choice
+    frame: {text: "{time_unit_word}", language_code: fa, direction: rtl}
+    slots: {time_unit_word: *time_unit_word}
+    answer_derivation: {kind: slot_gloss, slot: time_unit_word}
+    feedback_frame: {text: "{time_unit_word} is one of the basic time-telling words from this lesson.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit09.lesson01.time_unit_match.002
+    lesson_content_key: fa.a1.unit09.lesson01.basic_time_vocabulary
+    type: matching_pairs
+    frame: {text: "Match each time word with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *time_unit_word, second: *time_unit_word, third: *time_unit_word, fourth: *time_unit_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth]}
+    feedback_frame: {text: "Match each time word to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit09.lesson01.time_unit_translate.003
+    lesson_content_key: fa.a1.unit09.lesson01.basic_time_vocabulary
+    type: translation
+    frame: {text: "{time_unit_word}", language_code: en, direction: ltr, slot_rendering: {time_unit_word: english_gloss}}
+    slots: {time_unit_word: *time_unit_word}
+    answer_derivation: {kind: slot_text, slot: time_unit_word}
+    feedback_frame: {text: "The Farsi word is {time_unit_word}.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit09.lesson01.time_unit_word_order.004
+    lesson_content_key: fa.a1.unit09.lesson01.basic_time_vocabulary
+    type: word_order
+    frame: {text: "{time_unit_word_one} و {time_unit_word_two}", language_code: fa, direction: rtl}
+    slots: {time_unit_word_one: *time_unit_word, time_unit_word_two: *time_unit_word}
+    slot_relations: [{kind: distinct, slots: [time_unit_word_one, time_unit_word_two]}]
+    answer_derivation: {kind: render_frame, frame: {text: "{time_unit_word_one} و {time_unit_word_two}", language_code: fa, direction: rtl}}
+    feedback_frame: {text: "و joins two time words, like نیم و ربع.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit09.lesson04.day_part_choice.005
+    lesson_content_key: fa.a1.unit09.lesson04.parts_of_the_day
+    type: multiple_choice
+    frame: {text: "{day_part_word}", language_code: fa, direction: rtl}
+    slots: {day_part_word: *day_part_word}
+    answer_derivation: {kind: slot_gloss, slot: day_part_word}
+    feedback_frame: {text: "{day_part_word} names a part of the day.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit09.lesson04.day_part_match.006
+    lesson_content_key: fa.a1.unit09.lesson04.parts_of_the_day
+    type: matching_pairs
+    frame: {text: "Match each part of the day with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *day_part_word, second: *day_part_word, third: *day_part_word, fourth: *day_part_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth]}
+    feedback_frame: {text: "Match each part of the day to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit09.lesson04.day_part_translate.007
+    lesson_content_key: fa.a1.unit09.lesson04.parts_of_the_day
+    type: translation
+    frame: {text: "{day_part_word}", language_code: en, direction: ltr, slot_rendering: {day_part_word: english_gloss}}
+    slots: {day_part_word: *day_part_word}
+    answer_derivation: {kind: slot_text, slot: day_part_word}
+    feedback_frame: {text: "The Farsi word is {day_part_word}.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit09.lesson04.day_part_word_order.008
+    lesson_content_key: fa.a1.unit09.lesson04.parts_of_the_day
+    type: word_order
+    frame: {text: "{day_part_word_one} و {day_part_word_two}", language_code: fa, direction: rtl}
+    slots: {day_part_word_one: *day_part_word, day_part_word_two: *day_part_word}
+    slot_relations: [{kind: distinct, slots: [day_part_word_one, day_part_word_two]}]
+    answer_derivation: {kind: render_frame, frame: {text: "{day_part_word_one} و {day_part_word_two}", language_code: fa, direction: rtl}}
+    feedback_frame: {text: "و joins two parts of the day, like صبح و عصر.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit09.lesson05.appointment_translate.009
+    lesson_content_key: fa.a1.unit09.lesson05.asking_about_an_appointment
+    type: translation
+    frame: {text: "{appointment_word}", language_code: en, direction: ltr, slot_rendering: {appointment_word: english_gloss}}
+    slots: {appointment_word: *appointment_word}
+    answer_derivation: {kind: slot_text, slot: appointment_word}
+    feedback_frame: {text: "The Farsi word is {appointment_word}.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit09.lesson06.time_phrase_choice.010
+    lesson_content_key: fa.a1.unit09.lesson06.meeting_time_dialogue
+    type: multiple_choice
+    frame: {text: "{time_phrase}", language_code: fa, direction: rtl}
+    slots: {time_phrase: *time_phrase}
+    answer_derivation: {kind: slot_gloss, slot: time_phrase}
+    feedback_frame: {text: "{time_phrase} is one of this unit's key time phrases.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit09.lesson06.time_phrase_match.011
+    lesson_content_key: fa.a1.unit09.lesson06.meeting_time_dialogue
+    type: matching_pairs
+    frame: {text: "Match each phrase with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *time_phrase, second: *time_phrase, third: *time_phrase, fourth: *time_phrase}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth]}
+    feedback_frame: {text: "Match each phrase to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit09.lesson06.time_phrase_translate.012
+    lesson_content_key: fa.a1.unit09.lesson06.meeting_time_dialogue
+    type: translation
+    frame: {text: "{time_phrase}", language_code: en, direction: ltr, slot_rendering: {time_phrase: english_gloss}}
+    slots: {time_phrase: *time_phrase}
+    answer_derivation: {kind: slot_text, slot: time_phrase}
+    feedback_frame: {text: "The Farsi phrase is {time_phrase}.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit09.lesson06.unit_review_match.013
+    lesson_content_key: fa.a1.unit09.lesson06.meeting_time_dialogue
+    type: matching_pairs
+    frame: {text: "Match each word with its meaning -- a review of this whole unit's time vocabulary.", language_code: en, direction: ltr}
+    slots:
+      tu1: *time_unit_word
+      tu2: *time_unit_word
+      tu3: *time_unit_word
+      tu4: *time_unit_word
+      dp1: *day_part_word
+      dp2: *day_part_word
+      dp3: *day_part_word
+      dp4: *day_part_word
+    slot_relations:
+      - {kind: distinct, slots: [tu1, tu2, tu3, tu4]}
+      - {kind: distinct, slots: [dp1, dp2, dp3, dp4]}
+    answer_derivation: {kind: matching_pairs, slots: [tu1, tu2, tu3, tu4, dp1, dp2, dp3, dp4]}
+    feedback_frame: {text: "This reviews both the basic time words and the parts of the day taught in this unit.", language_code: en, direction: ltr}

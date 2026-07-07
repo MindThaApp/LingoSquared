@@ -1,0 +1,180 @@
+schema_version: "1.0"
+pack_key: practice.en-fa.a1.unit11
+source_language: en
+target_language: fa
+unit_content_key: fa.a1.unit11.routines
+review:
+  status: unreviewed
+  required_next_reviewer: codex
+  notes: >-
+    Authored 2026-07-07, part of the same pass as a1_unit09.yaml/
+    a1_unit10.yaml closing the practice-content gap for A1 units 09-11 --
+    see a1_unit09.yaml's notes for the shared scripts/backfill_lexemes.py
+    UNIT_FILES/FA_GLOSSES extension this pass made.
+
+    Three semantic groups, all verified against the real iter_specs()
+    output before authoring: "routine_verb_phrase" (بیدار می‌شم/صبحونه
+    می‌خورم/میرم سر کار/می‌خوابم, 4 members -- three auto-derived
+    multi-token phrase lexemes plus می‌خوابم, which only has one
+    introduced_token but is still a genuine member of the same closed
+    set of core routine verbs, anchored lesson01) and "routine_connector"
+    (هر/بعدش/یه‌کم/دیرتر/معمولاً, 5 members, the sequencing/comparison
+    adverbs used to describe a routine -- anchored lesson06, the
+    "completing" lesson, since معمولاً isn't taught until then).
+    "routine_phrase" pools this unit's own genuine taught full-question/
+    full-statement phrases (auto-derived by iter_specs() from this
+    unit's own multi-token teaching cards: ساعت چند بیدار می‌شی؟ / هر
+    روز / شب‌ها ساعت یازده می‌خوابم / تو چی؟ / یه‌کم دیرتر, 5 members) --
+    same explicit-allow-list approach as a1_unit09.yaml's time_phrase and
+    a1_unit10.yaml's date_phrase, for the same reason (avoids sweeping in
+    lesson06's third_person_forms grammar_note card, whose auto-derived
+    phrase includes an awkward "(او)" parenthetical not fit for a clean
+    practice item).
+
+    Left out: بیدار می‌شه/می‌خوابه (lesson06's third-person verb forms) --
+    می‌شه collides in FA_GLOSSES with the unrelated existing A2
+    bureaucracy sense ("would it be possible", from می‌شه بگید) since
+    FA_GLOSSES is keyed on bare token text project-wide; reusing it here
+    for its different "becomes" sense would show a misleading gloss in a
+    generated exercise, so this 2-member set was deliberately not tagged
+    or used, matching this task's instruction that thin/messy real
+    vocabulary is better left out than forced in. This is a pre-existing
+    corpus-wide homograph limitation (also true of نه "no"/"nine" in
+    a1_unit10's dialogue), not something this pass's own additions
+    caused, and out of scope to fix here.
+
+    Verified with scripts/_practice_slot_check.py's lexeme_matches()/
+    check_pack() logic against the real (updated) iter_specs() output --
+    clean, no zero-candidate slots, no under-3 multiple_choice/
+    matching_pairs slots. scripts/_fill_in_blank_ambiguity_check.py: zero
+    fill_in_blank templates authored -- same reasoning as a1_unit09.yaml/
+    a1_unit10.yaml (every multi-member group has genuinely distinct,
+    non-synonymous candidates -- e.g. a "بعدش {routine_verb_phrase}"
+    frame would NOT safely disambiguate which of the 4 routine verbs
+    comes next, and a bare "{slot}" frame is disallowed by
+    AUTHORING_GUIDE.md #13 regardless -- and the compiler's own #17
+    ambiguity hard-fail would reject such a template anyway).
+    compile_content.py practice-validate clean (0 errors/0 warnings) for
+    the full en-fa pack including this new file. Needs the standard
+    fresh-context review before import.
+tag_schema:
+  part_of_speech: [phrase, verb, adjective, adverb, noun]
+  agreement_tags:
+    semantic: [routine_verb_phrase, routine_connector, routine_phrase, day_part_word]
+slot_presets:
+  routine_verb_phrase: &routine_verb_phrase {language_code: fa, part_of_speech: [phrase, verb], agreement_tags: {semantic: routine_verb_phrase}}
+  routine_connector: &routine_connector {language_code: fa, part_of_speech: [adjective, adverb], agreement_tags: {semantic: routine_connector}}
+  routine_phrase: &routine_phrase {language_code: fa, part_of_speech: phrase, agreement_tags: {semantic: routine_phrase}}
+  day_part_word: &day_part_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: day_part_word}}
+templates:
+  - content_key: practice.en-fa.fa.a1.unit11.lesson01.routine_verb_choice.001
+    lesson_content_key: fa.a1.unit11.lesson01.routine_verbs
+    type: multiple_choice
+    frame: {text: "{routine_verb_phrase}", language_code: fa, direction: rtl}
+    slots: {routine_verb_phrase: *routine_verb_phrase}
+    answer_derivation: {kind: slot_gloss, slot: routine_verb_phrase}
+    feedback_frame: {text: "{routine_verb_phrase} is one of the core routine verbs from this lesson.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit11.lesson01.routine_verb_match.002
+    lesson_content_key: fa.a1.unit11.lesson01.routine_verbs
+    type: matching_pairs
+    frame: {text: "Match each Persian phrase with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *routine_verb_phrase, second: *routine_verb_phrase, third: *routine_verb_phrase, fourth: *routine_verb_phrase}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth]}
+    feedback_frame: {text: "These are the core routine verbs for this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit11.lesson01.routine_verb_translate.003
+    lesson_content_key: fa.a1.unit11.lesson01.routine_verbs
+    type: translation
+    frame: {text: "{routine_verb_phrase}", language_code: en, direction: ltr, slot_rendering: {routine_verb_phrase: english_gloss}}
+    slots: {routine_verb_phrase: *routine_verb_phrase}
+    answer_derivation: {kind: slot_text, slot: routine_verb_phrase}
+    feedback_frame: {text: "The Persian phrase is {routine_verb_phrase}.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit11.lesson01.routine_verb_word_order.004
+    lesson_content_key: fa.a1.unit11.lesson01.routine_verbs
+    type: word_order
+    frame: {text: "{routine_verb_phrase_one} و {routine_verb_phrase_two}", language_code: fa, direction: rtl}
+    slots: {routine_verb_phrase_one: *routine_verb_phrase, routine_verb_phrase_two: *routine_verb_phrase}
+    slot_relations: [{kind: distinct, slots: [routine_verb_phrase_one, routine_verb_phrase_two]}]
+    answer_derivation: {kind: render_frame, frame: {text: "{routine_verb_phrase_one} و {routine_verb_phrase_two}", language_code: fa, direction: rtl}}
+    feedback_frame: {text: "و joins two routine activities, like بیدار می‌شم و صبحونه می‌خورم.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit11.lesson06.routine_connector_choice.005
+    lesson_content_key: fa.a1.unit11.lesson06.routine_dialogue
+    type: multiple_choice
+    frame: {text: "{routine_connector}", language_code: fa, direction: rtl}
+    slots: {routine_connector: *routine_connector}
+    answer_derivation: {kind: slot_gloss, slot: routine_connector}
+    feedback_frame: {text: "{routine_connector} is used to sequence or compare parts of a daily routine.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit11.lesson06.routine_connector_match.006
+    lesson_content_key: fa.a1.unit11.lesson06.routine_dialogue
+    type: matching_pairs
+    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *routine_connector, second: *routine_connector, third: *routine_connector, fourth: *routine_connector, fifth: *routine_connector}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth]}
+    feedback_frame: {text: "These words sequence and compare parts of a daily routine.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit11.lesson06.routine_connector_translate.007
+    lesson_content_key: fa.a1.unit11.lesson06.routine_dialogue
+    type: translation
+    frame: {text: "{routine_connector}", language_code: en, direction: ltr, slot_rendering: {routine_connector: english_gloss}}
+    slots: {routine_connector: *routine_connector}
+    answer_derivation: {kind: slot_text, slot: routine_connector}
+    feedback_frame: {text: "The Persian word is {routine_connector}.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit11.lesson06.routine_phrase_choice.008
+    lesson_content_key: fa.a1.unit11.lesson06.routine_dialogue
+    type: multiple_choice
+    frame: {text: "{routine_phrase}", language_code: fa, direction: rtl}
+    slots: {routine_phrase: *routine_phrase}
+    answer_derivation: {kind: slot_gloss, slot: routine_phrase}
+    feedback_frame: {text: "{routine_phrase} is one of this unit's key routine phrases.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit11.lesson06.routine_phrase_match.009
+    lesson_content_key: fa.a1.unit11.lesson06.routine_dialogue
+    type: matching_pairs
+    frame: {text: "Match each phrase with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *routine_phrase, second: *routine_phrase, third: *routine_phrase, fourth: *routine_phrase, fifth: *routine_phrase}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth]}
+    feedback_frame: {text: "Match each phrase to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit11.lesson06.routine_phrase_translate.010
+    lesson_content_key: fa.a1.unit11.lesson06.routine_dialogue
+    type: translation
+    frame: {text: "{routine_phrase}", language_code: en, direction: ltr, slot_rendering: {routine_phrase: english_gloss}}
+    slots: {routine_phrase: *routine_phrase}
+    answer_derivation: {kind: slot_text, slot: routine_phrase}
+    feedback_frame: {text: "The Farsi phrase is {routine_phrase}.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit11.lesson06.unit_review_match.011
+    lesson_content_key: fa.a1.unit11.lesson06.routine_dialogue
+    type: matching_pairs
+    frame: {text: "Match each word or phrase with its meaning -- a review of this whole unit's routine vocabulary.", language_code: en, direction: ltr}
+    slots:
+      rv1: *routine_verb_phrase
+      rv2: *routine_verb_phrase
+      rv3: *routine_verb_phrase
+      rv4: *routine_verb_phrase
+      rc1: *routine_connector
+      rc2: *routine_connector
+      rc3: *routine_connector
+      rc4: *routine_connector
+      rc5: *routine_connector
+    slot_relations:
+      - {kind: distinct, slots: [rv1, rv2, rv3, rv4]}
+      - {kind: distinct, slots: [rc1, rc2, rc3, rc4, rc5]}
+    answer_derivation: {kind: matching_pairs, slots: [rv1, rv2, rv3, rv4, rc1, rc2, rc3, rc4, rc5]}
+    feedback_frame: {text: "This reviews both the core routine verbs and the sequencing/comparison words taught in this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit11.lesson06.routine_and_day_part_match.012
+    lesson_content_key: fa.a1.unit11.lesson06.routine_dialogue
+    type: matching_pairs
+    frame: {text: "Match each word or phrase with its meaning -- routine verbs and parts of the day.", language_code: en, direction: ltr}
+    slots:
+      rv1: *routine_verb_phrase
+      rv2: *routine_verb_phrase
+      rv3: *routine_verb_phrase
+      rv4: *routine_verb_phrase
+      dp1: *day_part_word
+      dp2: *day_part_word
+      dp3: *day_part_word
+      dp4: *day_part_word
+    slot_relations:
+      - {kind: distinct, slots: [rv1, rv2, rv3, rv4]}
+      - {kind: distinct, slots: [dp1, dp2, dp3, dp4]}
+    answer_derivation: {kind: matching_pairs, slots: [rv1, rv2, rv3, rv4, dp1, dp2, dp3, dp4]}
+    feedback_frame: {text: "A daily routine is described using both these activities and the parts of the day they happen in.", language_code: en, direction: ltr}

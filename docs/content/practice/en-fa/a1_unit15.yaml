@@ -1,0 +1,157 @@
+schema_version: "1.0"
+pack_key: practice.en-fa.a1.unit15
+source_language: en
+target_language: fa
+unit_content_key: fa.a1.unit15.comparisons
+review:
+  status: unreviewed
+  required_next_reviewer: codex
+  notes: >-
+    Authored 2026-07-07 by the practice-content-gap-closing pass (en-fa
+    units 12-15), same pass as a1_unit12.yaml/a1_unit13.yaml/
+    a1_unit14.yaml -- see a1_unit12.yaml's notes for the shared
+    backfill_lexemes.py coordination with the parallel 09-11 lane.
+
+    Two semantic groups: "comparative_word" pools ALL 8 colloquial
+    comparative forms taught across this unit's four vocabulary lessons
+    (بزرگ‌تره/کوچیک‌تره/گرون‌تره/ارزون‌تره/بلند‌تره/جوون‌تره/بهتره/
+    بد‌تره) into one set rather than fragmenting into four separate
+    2-member per-lesson groups, since every member shares the exact same
+    "-تره/-ه" contracted comparative-copula form -- this gives a much
+    richer 8-candidate pool for multiple_choice/matching_pairs/
+    translation than any per-lesson subset would (بهتره already existed
+    from unit07 with no semantic tag of its own; this is a clean
+    additive tag). "demonstrative_word" (این/اون, 2 members, matching/
+    translation-only) is intentionally kept separate rather than folded
+    into comparative_word since این/اون are pronouns, not comparative
+    forms. Also reuses the existing course-wide "person_name" tag
+    (already established in units 01/02/07/09-11, now also carrying
+    نیما from the parallel 09-11 lane) for two fixed-comparative
+    sentence templates -- no new recognition triple authored for names
+    here, since person_name is already drilled by earlier units'
+    templates and this pack's own two word_order templates just reuse
+    that existing pool for a comparison-specific sentence shape.
+
+    Four generative word_order templates, all directly mirroring this
+    unit's own realization sentence patterns: (1) "{demonstrative_word}
+    از {demonstrative_word2} {comparative_word}" mirrors lesson01/02's
+    "این از اون بزرگ‌تره" pattern (all 2x8=16 combinations grammatical);
+    (2) "{comparative_word} چون {comparative_word2}" mirrors lesson04's
+    "بهتره چون ارزون‌تره" reason-giving pattern (all distinct-pair
+    combinations grammatical, e.g. بزرگ‌تره چون ارزون‌تره -- "it's
+    bigger because it's cheaper"); (3)/(4) "{person_name} از
+    {person_name2} قد بلند‌تره" / "... جوون‌تره" mirror lesson03's own
+    "نیما از سارا قد بلند‌تره" / "سارا از نیما جوون‌تره" sentences
+    exactly, generalized across the full course-wide person_name pool
+    (any two distinct taught names can be compared this way); (5) a
+    fuller 3-slot compound "{demonstrative_word} از {demonstrative_
+    word2} {comparative_word} چون {comparative_word2}" mirrors the
+    complete lesson04 sentence shape (این از اون بهتره چون ارزون‌تره)
+    with both demonstrative and comparative slots independently distinct.
+
+    This unit's real vocabulary is genuinely thinner than units 12-14
+    (comparisons only introduces ~13 new content words total, several
+    of which are near-duplicates of the same "-تره" pattern) -- 10
+    templates total here, below the usual 12-16 aim, is a deliberate
+    reflection of that thinner vocabulary rather than padding; every
+    template draws on real, distinctly-taught content.
+
+    Lesson-anchor check: lesson01, lesson03, and lesson04 each
+    genuinely introduce new vocabulary (confirmed by reading the
+    realization file directly) -- safe anchors.
+
+    Verified with scripts/_practice_slot_check.py against
+    backfill_lexemes.py's actual iter_specs() output -- clean, no
+    zero-candidate slots, no under-3 multiple_choice/matching_pairs
+    slots. scripts/_fill_in_blank_ambiguity_check.py reports zero flags
+    (no fill_in_blank templates in this pack). compile_content.py
+    practice-validate clean (0 errors/0 warnings). Needs the standard
+    fresh-context review before import.
+tag_schema:
+  part_of_speech: [verb, pronoun, proper_noun]
+  agreement_tags:
+    semantic: [comparative_word, demonstrative_word, person_name]
+slot_presets:
+  comparative_word: &comparative_word {language_code: fa, part_of_speech: verb, agreement_tags: {semantic: comparative_word}}
+  demonstrative_word: &demonstrative_word {language_code: fa, part_of_speech: pronoun, agreement_tags: {semantic: demonstrative_word}}
+  person_name: &person_name {language_code: fa, part_of_speech: proper_noun, agreement_tags: {semantic: person_name}}
+templates:
+  - content_key: practice.en-fa.fa.a1.unit15.lesson04.comparative_choice.001
+    lesson_content_key: fa.a1.unit15.lesson04.giving_reasons
+    type: multiple_choice
+    frame: {text: "{comparative_word}", language_code: fa, direction: rtl}
+    slots: {comparative_word: *comparative_word}
+    answer_derivation: {kind: slot_gloss, slot: comparative_word}
+    feedback_frame: {text: "{comparative_word} is a comparative form from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit15.lesson04.comparative_match.002
+    lesson_content_key: fa.a1.unit15.lesson04.giving_reasons
+    type: matching_pairs
+    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *comparative_word, second: *comparative_word, third: *comparative_word, fourth: *comparative_word, fifth: *comparative_word, sixth: *comparative_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Match each comparative word to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit15.lesson04.comparative_translate.003
+    lesson_content_key: fa.a1.unit15.lesson04.giving_reasons
+    type: translation
+    frame: {text: "{comparative_word}", language_code: en, direction: ltr, slot_rendering: {comparative_word: english_gloss}}
+    slots: {comparative_word: *comparative_word}
+    answer_derivation: {kind: slot_text, slot: comparative_word}
+    feedback_frame: {text: "The Farsi word is {comparative_word}.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit15.lesson01.demonstrative_match.001
+    lesson_content_key: fa.a1.unit15.lesson01.basic_comparative
+    type: matching_pairs
+    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *demonstrative_word, second: *demonstrative_word}
+    slot_relations: [{kind: distinct, slots: [first, second]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit15.lesson01.demonstrative_translate.002
+    lesson_content_key: fa.a1.unit15.lesson01.basic_comparative
+    type: translation
+    frame: {text: "{demonstrative_word}", language_code: en, direction: ltr, slot_rendering: {demonstrative_word: english_gloss}}
+    slots: {demonstrative_word: *demonstrative_word}
+    answer_derivation: {kind: slot_text, slot: demonstrative_word}
+    feedback_frame: {text: "The Farsi word is {demonstrative_word}.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit15.lesson01.basic_comparison_order.003
+    lesson_content_key: fa.a1.unit15.lesson01.basic_comparative
+    type: word_order
+    frame: {text: "{demonstrative_word_one} از {demonstrative_word_two} {comparative_word}", language_code: fa, direction: rtl}
+    slots: {demonstrative_word_one: *demonstrative_word, demonstrative_word_two: *demonstrative_word, comparative_word: *comparative_word}
+    slot_relations: [{kind: distinct, slots: [demonstrative_word_one, demonstrative_word_two]}]
+    answer_derivation: {kind: render_frame, frame: {text: "{demonstrative_word_one} از {demonstrative_word_two} {comparative_word}", language_code: fa, direction: rtl}}
+    feedback_frame: {text: "از marks the comparison point, like این از اون بزرگ‌تره.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit15.lesson04.comparative_reason_order.004
+    lesson_content_key: fa.a1.unit15.lesson04.giving_reasons
+    type: word_order
+    frame: {text: "{comparative_word_one} چون {comparative_word_two}", language_code: fa, direction: rtl}
+    slots: {comparative_word_one: *comparative_word, comparative_word_two: *comparative_word}
+    slot_relations: [{kind: distinct, slots: [comparative_word_one, comparative_word_two]}]
+    answer_derivation: {kind: render_frame, frame: {text: "{comparative_word_one} چون {comparative_word_two}", language_code: fa, direction: rtl}}
+    feedback_frame: {text: "چون gives a reason, like بهتره چون ارزون‌تره.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit15.lesson03.person_taller_order.005
+    lesson_content_key: fa.a1.unit15.lesson03.comparing_people
+    type: word_order
+    frame: {text: "{person_name_one} از {person_name_two} قد بلند‌تره", language_code: fa, direction: rtl}
+    slots: {person_name_one: *person_name, person_name_two: *person_name}
+    slot_relations: [{kind: distinct, slots: [person_name_one, person_name_two]}]
+    answer_derivation: {kind: render_frame, frame: {text: "{person_name_one} از {person_name_two} قد بلند‌تره", language_code: fa, direction: rtl}}
+    feedback_frame: {text: "قد بلند‌تره means taller, like نیما از سارا قد بلند‌تره.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit15.lesson03.person_younger_order.006
+    lesson_content_key: fa.a1.unit15.lesson03.comparing_people
+    type: word_order
+    frame: {text: "{person_name_one} از {person_name_two} جوون‌تره", language_code: fa, direction: rtl}
+    slots: {person_name_one: *person_name, person_name_two: *person_name}
+    slot_relations: [{kind: distinct, slots: [person_name_one, person_name_two]}]
+    answer_derivation: {kind: render_frame, frame: {text: "{person_name_one} از {person_name_two} جوون‌تره", language_code: fa, direction: rtl}}
+    feedback_frame: {text: "جوون‌تره means younger, like سارا از نیما جوون‌تره.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit15.lesson04.full_comparison_reason_order.007
+    lesson_content_key: fa.a1.unit15.lesson04.giving_reasons
+    type: word_order
+    frame: {text: "{demonstrative_word_one} از {demonstrative_word_two} {comparative_word_one} چون {comparative_word_two}", language_code: fa, direction: rtl}
+    slots: {demonstrative_word_one: *demonstrative_word, demonstrative_word_two: *demonstrative_word, comparative_word_one: *comparative_word, comparative_word_two: *comparative_word}
+    slot_relations:
+      - {kind: distinct, slots: [demonstrative_word_one, demonstrative_word_two]}
+      - {kind: distinct, slots: [comparative_word_one, comparative_word_two]}
+    answer_derivation: {kind: render_frame, frame: {text: "{demonstrative_word_one} از {demonstrative_word_two} {comparative_word_one} چون {comparative_word_two}", language_code: fa, direction: rtl}}
+    feedback_frame: {text: "این از اون بهتره چون ارزون‌تره means this is better than that because it's cheaper.", language_code: en, direction: ltr}

@@ -1,0 +1,179 @@
+schema_version: "1.0"
+pack_key: practice.en-prs.a1.unit15
+source_language: en
+target_language: prs
+unit_content_key: prs.a1.unit15.comparisons
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: >-
+    Authored 2026-07-07 for the new A1 unit15 (comparisons)
+    realization, same pass as this bundle's a1_unit12/13/14.yaml
+    siblings (see a1_unit12.yaml's notes for the full extension
+    context: a parallel session authored units 09-11's practice pool
+    separately, this bundle only touches units 12-15).
+
+    Two new groups plus reuse of the course-wide person_name pool:
+    comparative_adjective (بزرگ‌تر/کوچک‌تر/گران‌تر/ارزان‌تر/بلندتر/
+    جوان‌تر/بهتر/بدتر, 8 members -- this unit's own core vocabulary,
+    real vocabulary alone reaches AUTHORING_GUIDE.md #16's 6-12 range
+    with zero pooling needed) and connector_word (چون/و/اما, 3
+    members -- و required excluding its lesson01 script-ramp
+    letter-name occurrence from this new tag, the same lesson_key-
+    scoped guard the existing "letter" tag already uses, to avoid
+    silently pulling the letter sense into a connector-word drill).
+    height_word (قد alone) and demonstrative_word (این/آن) are real
+    but thin groups, used for translation only (no multiple_choice,
+    since a 1- or 2-member pool can't meet the 3-distinct threshold).
+
+    Deliberately NO fill_in_blank in this unit: comparative_adjective
+    (8 members) and connector_word (3 members) are both real
+    multi-candidate groups with no natural single-candidate subset (no
+    grammatical category like person/number splits them further, unlike
+    unit13/14's waiting_word/warm_word), so a single-slot fill_in_blank
+    against either would be genuinely ambiguous per AUTHORING_GUIDE.md
+    #17 -- relying on multiple_choice/translation/word_order/
+    matching_pairs against the same tags instead, per this task's own
+    guidance ("if real vocabulary is too thin to safely support a
+    fill_in_blank, zero for that unit is fine"). No listen_select/
+    listen_type anywhere (en-prs has no TTS voices). No bare unquoted
+    yes/no/true/false anywhere.
+
+    Verified with scripts/_practice_slot_check.py (reusing
+    backfill_lexemes_en_prs.py's real iter_specs() output) -- every
+    slot has enough distinct candidates. scripts/compile_content.py
+    practice-validate for the full en-prs pack -- 0 errors/0 warnings.
+    scripts/_fill_in_blank_ambiguity_check.py -- zero fill_in_blank
+    templates in this file, so nothing to flag. Needs the standard
+    fresh-context review before import; no backfill_lexemes_en_prs.py
+    run has happened against a real database yet in this pass.
+tag_schema:
+  part_of_speech: [noun, adjective, pronoun, particle, proper_noun]
+  agreement_tags:
+    semantic: [comparative_adjective, connector_word, demonstrative_word, height_word, person_name]
+slot_presets:
+  comparative_adjective: &comparative_adjective {language_code: prs, part_of_speech: adjective, agreement_tags: {semantic: comparative_adjective}}
+  connector_word: &connector_word {language_code: prs, part_of_speech: [particle, adjective], agreement_tags: {semantic: connector_word}}
+  demonstrative_word: &demonstrative_word {language_code: prs, part_of_speech: pronoun, agreement_tags: {semantic: demonstrative_word}}
+  height_word: &height_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: height_word}}
+  person_name: &person_name {language_code: prs, part_of_speech: proper_noun, agreement_tags: {semantic: person_name}}
+templates:
+  # Lesson 1: basic comparatives (this/that, bigger/smaller).
+  - content_key: practice.en-prs.prs.a1.unit15.lesson01.comparative_gloss.001
+    lesson_content_key: prs.a1.unit15.lesson01.basic_comparative
+    type: multiple_choice
+    frame: {text: "{comparative_adjective}", language_code: prs, direction: rtl}
+    slots: {comparative_adjective: *comparative_adjective}
+    answer_derivation: {kind: slot_gloss, slot: comparative_adjective}
+    feedback_frame: {text: "{comparative_adjective} is a comparative adjective form.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit15.lesson01.comparative_translate.002
+    lesson_content_key: prs.a1.unit15.lesson01.basic_comparative
+    type: translation
+    frame: {text: "{comparative_adjective}", language_code: en, direction: ltr, slot_rendering: {comparative_adjective: english_gloss}}
+    slots: {comparative_adjective: *comparative_adjective}
+    answer_derivation: {kind: slot_text, slot: comparative_adjective}
+    feedback_frame: {text: "{comparative_adjective} is the Dari word for this.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit15.lesson01.comparative_pair.003
+    lesson_content_key: prs.a1.unit15.lesson01.basic_comparative
+    type: matching_pairs
+    frame: {text: "{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six} — {word_seven} — {word_eight}", language_code: prs, direction: rtl}
+    slots: {word_one: *comparative_adjective, word_two: *comparative_adjective, word_three: *comparative_adjective, word_four: *comparative_adjective, word_five: *comparative_adjective, word_six: *comparative_adjective, word_seven: *comparative_adjective, word_eight: *comparative_adjective}
+    slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five, word_six, word_seven, word_eight]}]
+    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five, word_six, word_seven, word_eight]}
+    feedback_frame: {text: "Match each comparative form to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit15.lesson01.demonstrative_translate.004
+    lesson_content_key: prs.a1.unit15.lesson01.basic_comparative
+    type: translation
+    frame: {text: "{demonstrative_word}", language_code: en, direction: ltr, slot_rendering: {demonstrative_word: english_gloss}}
+    slots: {demonstrative_word: *demonstrative_word}
+    answer_derivation: {kind: slot_text, slot: demonstrative_word}
+    feedback_frame: {text: "{demonstrative_word} is the Dari word for this.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit15.lesson01.compare_order.005
+    lesson_content_key: prs.a1.unit15.lesson01.basic_comparative
+    type: word_order
+    frame: {text: "این از آن {comparative_adjective} است", language_code: prs, direction: rtl}
+    slots: {comparative_adjective: *comparative_adjective}
+    answer_derivation: {kind: render_frame, frame: {text: "این از آن {comparative_adjective} است", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: این از آن [adjective] است (this is [adjective]-er than that).", language_code: en, direction: ltr}
+
+  # Lesson 3: comparing people (height, age).
+  - content_key: practice.en-prs.prs.a1.unit15.lesson03.height_word_translate.001
+    lesson_content_key: prs.a1.unit15.lesson03.comparing_people
+    type: translation
+    frame: {text: "{height_word}", language_code: en, direction: ltr, slot_rendering: {height_word: english_gloss}}
+    slots: {height_word: *height_word}
+    answer_derivation: {kind: slot_text, slot: height_word}
+    feedback_frame: {text: "{height_word} is the Dari word for this.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit15.lesson03.person_name_gloss.002
+    lesson_content_key: prs.a1.unit15.lesson03.comparing_people
+    type: multiple_choice
+    frame: {text: "{person_name}", language_code: prs, direction: rtl}
+    slots: {person_name: *person_name}
+    answer_derivation: {kind: slot_gloss, slot: person_name}
+    feedback_frame: {text: "{person_name} is a name used in this course.", language_code: en, direction: ltr}
+
+  # Lesson 4: giving a reason for a comparison.
+  - content_key: practice.en-prs.prs.a1.unit15.lesson04.connector_word_gloss.001
+    lesson_content_key: prs.a1.unit15.lesson04.giving_reasons
+    type: multiple_choice
+    frame: {text: "{connector_word}", language_code: prs, direction: rtl}
+    slots: {connector_word: *connector_word}
+    answer_derivation: {kind: slot_gloss, slot: connector_word}
+    feedback_frame: {text: "{connector_word} joins two clauses or ideas together.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit15.lesson04.connector_word_translate.002
+    lesson_content_key: prs.a1.unit15.lesson04.giving_reasons
+    type: translation
+    frame: {text: "{connector_word}", language_code: en, direction: ltr, slot_rendering: {connector_word: english_gloss}}
+    slots: {connector_word: *connector_word}
+    answer_derivation: {kind: slot_text, slot: connector_word}
+    feedback_frame: {text: "{connector_word} is the Dari word for this.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit15.lesson04.reason_order.003
+    lesson_content_key: prs.a1.unit15.lesson04.giving_reasons
+    type: word_order
+    frame: {text: "این از آن {comparative_adjective_one} است چون {comparative_adjective_two} است", language_code: prs, direction: rtl}
+    slots: {comparative_adjective_one: *comparative_adjective, comparative_adjective_two: *comparative_adjective}
+    slot_relations: [{kind: distinct, slots: [comparative_adjective_one, comparative_adjective_two]}]
+    answer_derivation: {kind: render_frame, frame: {text: "این از آن {comparative_adjective_one} است چون {comparative_adjective_two} است", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: این از آن [adjective] است چون [reason] است (this is [adjective]-er because it's [reason]).", language_code: en, direction: ltr}
+
+  # Lesson 5: reading a comparison (Karim and Negar).
+  - content_key: practice.en-prs.prs.a1.unit15.lesson05.person_name_pair.001
+    lesson_content_key: prs.a1.unit15.lesson05.reading_a_comparison
+    type: matching_pairs
+    # Full course-wide person_name pool, 12 distinct real candidates
+    # (verified via scripts/_practice_slot_check.py) -- Karim and Negar
+    # are this lesson's own reading-text subjects.
+    frame: {text: "{person_name_one} — {person_name_two} — {person_name_three} — {person_name_four} — {person_name_five} — {person_name_six} — {person_name_seven} — {person_name_eight} — {person_name_nine} — {person_name_ten} — {person_name_eleven} — {person_name_twelve}", language_code: prs, direction: rtl}
+    slots: {person_name_one: *person_name, person_name_two: *person_name, person_name_three: *person_name, person_name_four: *person_name, person_name_five: *person_name, person_name_six: *person_name, person_name_seven: *person_name, person_name_eight: *person_name, person_name_nine: *person_name, person_name_ten: *person_name, person_name_eleven: *person_name, person_name_twelve: *person_name}
+    slot_relations: [{kind: distinct, slots: [person_name_one, person_name_two, person_name_three, person_name_four, person_name_five, person_name_six, person_name_seven, person_name_eight, person_name_nine, person_name_ten, person_name_eleven, person_name_twelve]}]
+    answer_derivation: {kind: matching_pairs, slots: [person_name_one, person_name_two, person_name_three, person_name_four, person_name_five, person_name_six, person_name_seven, person_name_eight, person_name_nine, person_name_ten, person_name_eleven, person_name_twelve]}
+    feedback_frame: {text: "Match each name to its English label.", language_code: en, direction: ltr}
+
+  # Lesson 6: a dialogue comparing two things while shopping.
+  - content_key: practice.en-prs.prs.a1.unit15.lesson06.demonstrative_and_comparative_pair.001
+    lesson_content_key: prs.a1.unit15.lesson06.comparisons_dialogue
+    type: matching_pairs
+    # Pools demonstrative_word (2) with comparative_adjective (8) -- 10
+    # distinct real tokens, AUTHORING_GUIDE.md #16.
+    frame: {text: "{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six} — {word_seven} — {word_eight} — {word_nine} — {word_ten}", language_code: prs, direction: rtl}
+    slots:
+      word_one: {language_code: prs, part_of_speech: [pronoun, adjective], agreement_tags: {semantic: [demonstrative_word, comparative_adjective]}}
+      word_two: {language_code: prs, part_of_speech: [pronoun, adjective], agreement_tags: {semantic: [demonstrative_word, comparative_adjective]}}
+      word_three: {language_code: prs, part_of_speech: [pronoun, adjective], agreement_tags: {semantic: [demonstrative_word, comparative_adjective]}}
+      word_four: {language_code: prs, part_of_speech: [pronoun, adjective], agreement_tags: {semantic: [demonstrative_word, comparative_adjective]}}
+      word_five: {language_code: prs, part_of_speech: [pronoun, adjective], agreement_tags: {semantic: [demonstrative_word, comparative_adjective]}}
+      word_six: {language_code: prs, part_of_speech: [pronoun, adjective], agreement_tags: {semantic: [demonstrative_word, comparative_adjective]}}
+      word_seven: {language_code: prs, part_of_speech: [pronoun, adjective], agreement_tags: {semantic: [demonstrative_word, comparative_adjective]}}
+      word_eight: {language_code: prs, part_of_speech: [pronoun, adjective], agreement_tags: {semantic: [demonstrative_word, comparative_adjective]}}
+      word_nine: {language_code: prs, part_of_speech: [pronoun, adjective], agreement_tags: {semantic: [demonstrative_word, comparative_adjective]}}
+      word_ten: {language_code: prs, part_of_speech: [pronoun, adjective], agreement_tags: {semantic: [demonstrative_word, comparative_adjective]}}
+    slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five, word_six, word_seven, word_eight, word_nine, word_ten]}]
+    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five, word_six, word_seven, word_eight, word_nine, word_ten]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit15.lesson06.agree_order.002
+    lesson_content_key: prs.a1.unit15.lesson06.comparisons_dialogue
+    type: word_order
+    frame: {text: "بلی، اما {comparative_adjective} است", language_code: prs, direction: rtl}
+    slots: {comparative_adjective: *comparative_adjective}
+    answer_derivation: {kind: render_frame, frame: {text: "بلی، اما {comparative_adjective} است", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: بلی، اما [adjective] است (yes, but it's [adjective]-er).", language_code: en, direction: ltr}

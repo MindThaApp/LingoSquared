@@ -467,6 +467,23 @@ def en_agreement_tags(token: str) -> dict[str, object]:
     # bare-word recognition rather than forcing a risky shared frame.
     if token in {"ticket", "platform", "train", "departure", "arrival"}:
         semantics.append("travel_noun")
+    # Unit 27 (A2, opening a bank account): 8-member bare-word recognition
+    # tag for the unit's single-token banking nouns -- verified all share
+    # POS "noun" in EN_POS. Deliberately NOT used in any shared generative
+    # frame (these abstract/concrete nouns don't collocate uniformly at A2
+    # register -- "keep a minimum {item}" only works for "balance", not
+    # "fee"/"deposit"/"teller"/etc.), same recognition-only discipline as
+    # unit25's bureaucracy_noun/unit26's dogpark_noun.
+    if token in {"account", "fee", "balance", "deposit", "business", "days",
+                 "documents", "teller"}:
+        semantics.append("banking_noun")
+    # Unit 27: 4-member bare-word recognition tag for the unit's single-
+    # token banking-related adjectives (each modifies a different noun in
+    # its own compound -- "checking account", "monthly fee", "minimum
+    # balance", "direct deposit" -- so, same as banking_noun, kept
+    # recognition-only, no shared generative frame attempted).
+    if token in {"checking", "monthly", "minimum", "direct"}:
+        semantics.append("banking_adjective")
 
     tags: dict[str, object] = {}
     if semantics:

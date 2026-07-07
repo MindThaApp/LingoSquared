@@ -181,6 +181,7 @@ def main() -> int:
             REPO_ROOT / "docs/content/practice/fa-en/a1_unit24.yaml",
             REPO_ROOT / "docs/content/practice/fa-en/a2_unit25.yaml",
             REPO_ROOT / "docs/content/practice/fa-en/a2_unit26.yaml",
+            REPO_ROOT / "docs/content/practice/fa-en/a2_unit27.yaml",
         ],
         fa_en_specs,
     )

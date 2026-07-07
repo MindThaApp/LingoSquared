@@ -1,0 +1,184 @@
+schema_version: "1.0"
+pack_key: practice.en-fa.a1.unit13
+source_language: en
+target_language: fa
+unit_content_key: fa.a1.unit13.past_events
+review:
+  status: unreviewed
+  required_next_reviewer: codex
+  notes: >-
+    Authored 2026-07-07 by the practice-content-gap-closing pass (en-fa
+    units 12-15), same pass as a1_unit12.yaml/a1_unit14.yaml/
+    a1_unit15.yaml -- see a1_unit12.yaml's notes for the shared
+    backfill_lexemes.py coordination with the parallel 09-11 lane.
+
+    Five semantic groups, all verified >=2/>=3/>=4/>=5-distinct-candidate
+    via scripts/_practice_slot_check.py: "past_verb_first_person"
+    (رفتم/خوردم/دیدم/خوندم, 4 members, anchored lesson05 where خوندم
+    completes the pool), "past_verb_third_person" (رفت/دید/کرد/موند/
+    خوند, 5 members, anchored lesson06's third_person_past grammar
+    note), "recent_event_word" (فیلم/ناهار/خوب, 3 members, mixed noun/
+    adjective, anchored lesson04), "recent_event_question_word"
+    (دیروز/چیکار/کردی, 3 members, mixed adverb/pronoun/verb, anchored
+    lesson03), and "weekend_misc_word" (موندم/چی؟, 2 members, matching/
+    translation-only).
+
+    Two generative word_order templates join two distinct members of
+    the same past-tense-person group with و (and), mirroring this
+    unit's own realization convention of و-joined past-tense clauses
+    (lesson04's "دیروز به سینما رفتم. یک فیلم خوب دیدم. بعد ناهار
+    خوردم" reading text and lesson06's "به سینما رفتم و یک فیلم خوب
+    دیدم" dialogue line) -- every one of the resulting combinations
+    (e.g. رفتم و دیدم / خوردم و خوندم / رفت و دید) is a grammatically
+    natural elliptical coordinate clause ("I went and saw ..." / "he/she
+    went and saw ..."), the same level of abstraction already accepted
+    project-wide for bare "X و X" combo templates (e.g. a1_unit08's
+    quantity_unit_word_order).
+
+    Deliberately left out: چیکار کردی؟/تو چی؟ as fixed whole-question
+    phrases (already drilled individually via
+    recent_event_question_word's own translate/mc templates covering
+    each component word) and the full lesson06 dialogue -- a
+    multi-clause dialogue, not a bare-word recognition set.
+
+    Lesson-anchor check: lesson01, lesson03, lesson04, lesson05, and
+    lesson06 each genuinely introduce new vocabulary (confirmed by
+    reading the realization file directly) -- safe anchors.
+
+    Verified with scripts/_practice_slot_check.py against
+    backfill_lexemes.py's actual iter_specs() output -- clean, no
+    zero-candidate slots, no under-3 multiple_choice/matching_pairs
+    slots. scripts/_fill_in_blank_ambiguity_check.py reports zero flags
+    (no fill_in_blank templates in this pack). compile_content.py
+    practice-validate clean (0 errors/0 warnings). Needs the standard
+    fresh-context review before import.
+tag_schema:
+  part_of_speech: [verb, noun, adjective, adverb, pronoun]
+  agreement_tags:
+    semantic: [past_verb_first_person, past_verb_third_person, recent_event_word, recent_event_question_word, weekend_misc_word]
+slot_presets:
+  past_verb_first_person: &past_verb_first_person {language_code: fa, part_of_speech: verb, agreement_tags: {semantic: past_verb_first_person}}
+  past_verb_third_person: &past_verb_third_person {language_code: fa, part_of_speech: verb, agreement_tags: {semantic: past_verb_third_person}}
+  recent_event_word: &recent_event_word {language_code: fa, part_of_speech: [noun, adjective], agreement_tags: {semantic: recent_event_word}}
+  recent_event_question_word: &recent_event_question_word {language_code: fa, part_of_speech: [adverb, pronoun, verb], agreement_tags: {semantic: recent_event_question_word}}
+  weekend_misc_word: &weekend_misc_word {language_code: fa, part_of_speech: [verb, pronoun], agreement_tags: {semantic: weekend_misc_word}}
+templates:
+  - content_key: practice.en-fa.fa.a1.unit13.lesson05.past_verb_first_choice.001
+    lesson_content_key: fa.a1.unit13.lesson05.writing_about_a_recent_event
+    type: multiple_choice
+    frame: {text: "{past_verb_first_person}", language_code: fa, direction: rtl}
+    slots: {past_verb_first_person: *past_verb_first_person}
+    answer_derivation: {kind: slot_gloss, slot: past_verb_first_person}
+    feedback_frame: {text: "{past_verb_first_person} is a first-person simple-past verb.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit13.lesson05.past_verb_first_match.002
+    lesson_content_key: fa.a1.unit13.lesson05.writing_about_a_recent_event
+    type: matching_pairs
+    frame: {text: "Match each verb with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *past_verb_first_person, second: *past_verb_first_person, third: *past_verb_first_person, fourth: *past_verb_first_person}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth]}
+    feedback_frame: {text: "Match each verb to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit13.lesson05.past_verb_first_translate.003
+    lesson_content_key: fa.a1.unit13.lesson05.writing_about_a_recent_event
+    type: translation
+    frame: {text: "{past_verb_first_person}", language_code: en, direction: ltr, slot_rendering: {past_verb_first_person: english_gloss}}
+    slots: {past_verb_first_person: *past_verb_first_person}
+    answer_derivation: {kind: slot_text, slot: past_verb_first_person}
+    feedback_frame: {text: "The Farsi verb is {past_verb_first_person}.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit13.lesson05.past_verb_first_word_order.004
+    lesson_content_key: fa.a1.unit13.lesson05.writing_about_a_recent_event
+    type: word_order
+    frame: {text: "{past_verb_first_person_one} و {past_verb_first_person_two}", language_code: fa, direction: rtl}
+    slots: {past_verb_first_person_one: *past_verb_first_person, past_verb_first_person_two: *past_verb_first_person}
+    slot_relations: [{kind: distinct, slots: [past_verb_first_person_one, past_verb_first_person_two]}]
+    answer_derivation: {kind: render_frame, frame: {text: "{past_verb_first_person_one} و {past_verb_first_person_two}", language_code: fa, direction: rtl}}
+    feedback_frame: {text: "و joins two past-tense actions, like رفتم و دیدم.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit13.lesson06.past_verb_third_choice.001
+    lesson_content_key: fa.a1.unit13.lesson06.weekend_recap_dialogue
+    type: multiple_choice
+    frame: {text: "{past_verb_third_person}", language_code: fa, direction: rtl}
+    slots: {past_verb_third_person: *past_verb_third_person}
+    answer_derivation: {kind: slot_gloss, slot: past_verb_third_person}
+    feedback_frame: {text: "{past_verb_third_person} is a third-person simple-past verb.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit13.lesson06.past_verb_third_match.002
+    lesson_content_key: fa.a1.unit13.lesson06.weekend_recap_dialogue
+    type: matching_pairs
+    frame: {text: "Match each verb with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *past_verb_third_person, second: *past_verb_third_person, third: *past_verb_third_person, fourth: *past_verb_third_person, fifth: *past_verb_third_person}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth]}
+    feedback_frame: {text: "Match each verb to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit13.lesson06.past_verb_third_translate.003
+    lesson_content_key: fa.a1.unit13.lesson06.weekend_recap_dialogue
+    type: translation
+    frame: {text: "{past_verb_third_person}", language_code: en, direction: ltr, slot_rendering: {past_verb_third_person: english_gloss}}
+    slots: {past_verb_third_person: *past_verb_third_person}
+    answer_derivation: {kind: slot_text, slot: past_verb_third_person}
+    feedback_frame: {text: "The Farsi verb is {past_verb_third_person}.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit13.lesson06.past_verb_third_word_order.004
+    lesson_content_key: fa.a1.unit13.lesson06.weekend_recap_dialogue
+    type: word_order
+    frame: {text: "{past_verb_third_person_one} و {past_verb_third_person_two}", language_code: fa, direction: rtl}
+    slots: {past_verb_third_person_one: *past_verb_third_person, past_verb_third_person_two: *past_verb_third_person}
+    slot_relations: [{kind: distinct, slots: [past_verb_third_person_one, past_verb_third_person_two]}]
+    answer_derivation: {kind: render_frame, frame: {text: "{past_verb_third_person_one} و {past_verb_third_person_two}", language_code: fa, direction: rtl}}
+    feedback_frame: {text: "و joins two past-tense actions, like رفت و دید.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit13.lesson04.recent_event_choice.001
+    lesson_content_key: fa.a1.unit13.lesson04.reading_a_recent_event_text
+    type: multiple_choice
+    frame: {text: "{recent_event_word}", language_code: fa, direction: rtl}
+    slots: {recent_event_word: *recent_event_word}
+    answer_derivation: {kind: slot_gloss, slot: recent_event_word}
+    feedback_frame: {text: "{recent_event_word} is from this unit's recent-event reading.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit13.lesson04.recent_event_match.002
+    lesson_content_key: fa.a1.unit13.lesson04.reading_a_recent_event_text
+    type: matching_pairs
+    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *recent_event_word, second: *recent_event_word, third: *recent_event_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit13.lesson04.recent_event_translate.003
+    lesson_content_key: fa.a1.unit13.lesson04.reading_a_recent_event_text
+    type: translation
+    frame: {text: "{recent_event_word}", language_code: en, direction: ltr, slot_rendering: {recent_event_word: english_gloss}}
+    slots: {recent_event_word: *recent_event_word}
+    answer_derivation: {kind: slot_text, slot: recent_event_word}
+    feedback_frame: {text: "The Farsi word is {recent_event_word}.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit13.lesson03.recent_event_question_choice.001
+    lesson_content_key: fa.a1.unit13.lesson03.asking_about_a_recent_event
+    type: multiple_choice
+    frame: {text: "{recent_event_question_word}", language_code: fa, direction: rtl}
+    slots: {recent_event_question_word: *recent_event_question_word}
+    answer_derivation: {kind: slot_gloss, slot: recent_event_question_word}
+    feedback_frame: {text: "{recent_event_question_word} is used to ask or answer about a recent event.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit13.lesson03.recent_event_question_match.002
+    lesson_content_key: fa.a1.unit13.lesson03.asking_about_a_recent_event
+    type: matching_pairs
+    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *recent_event_question_word, second: *recent_event_question_word, third: *recent_event_question_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit13.lesson03.recent_event_question_translate.003
+    lesson_content_key: fa.a1.unit13.lesson03.asking_about_a_recent_event
+    type: translation
+    frame: {text: "{recent_event_question_word}", language_code: en, direction: ltr, slot_rendering: {recent_event_question_word: english_gloss}}
+    slots: {recent_event_question_word: *recent_event_question_word}
+    answer_derivation: {kind: slot_text, slot: recent_event_question_word}
+    feedback_frame: {text: "The Farsi word is {recent_event_question_word}.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit13.lesson06.weekend_misc_match.001
+    lesson_content_key: fa.a1.unit13.lesson06.weekend_recap_dialogue
+    type: matching_pairs
+    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *weekend_misc_word, second: *weekend_misc_word}
+    slot_relations: [{kind: distinct, slots: [first, second]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit13.lesson06.weekend_misc_translate.002
+    lesson_content_key: fa.a1.unit13.lesson06.weekend_recap_dialogue
+    type: translation
+    frame: {text: "{weekend_misc_word}", language_code: en, direction: ltr, slot_rendering: {weekend_misc_word: english_gloss}}
+    slots: {weekend_misc_word: *weekend_misc_word}
+    answer_derivation: {kind: slot_text, slot: weekend_misc_word}
+    feedback_frame: {text: "The Farsi word is {weekend_misc_word}.", language_code: en, direction: ltr}
