@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { CatalogApi, PracticeApi, ProgressApi } from "../api/endpoints";
 import { ExerciseRenderer } from "../components/exercises/ExerciseRenderer";
+import { ReportIssueButton } from "../components/ReportIssueButton";
 import { formatCorrectResponse } from "../lib/formatAnswer";
 import type {
   AnswerResponse,
@@ -29,9 +30,11 @@ function PracticeCard({
   const [result, setResult] = useState<PracticeAnswerResult | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [unavailable, setUnavailable] = useState(false);
+  const [lastResponse, setLastResponse] = useState<AnswerResponse | undefined>();
 
   async function handleAnswer(response: AnswerResponse) {
     setSubmitting(true);
+    setLastResponse(response);
     try {
       const res = await PracticeApi.answer(item.id, response);
       setResult(res);
@@ -69,6 +72,17 @@ function PracticeCard({
           <p style={{ margin: 0 }}>{t("practice.item_unavailable")}</p>
         </div>
       )}
+      <div style={{ marginTop: 12, textAlign: "center" }}>
+        {/* item.id is a PracticeItem id, same table review/checkpoint
+            items use - reported through the shared practice-item report
+            endpoint, not /exercises/{id}/report. */}
+        <ReportIssueButton
+          lastResponse={lastResponse}
+          onSubmit={(category, description, response) =>
+            PracticeApi.reportIssue(item.id, category, description, response)
+          }
+        />
+      </div>
     </div>
   );
 }

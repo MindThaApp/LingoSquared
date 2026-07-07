@@ -113,6 +113,20 @@ export const ReviewApi = {
   // (same server-held-answer/expiry/single-answer semantics).
   answer: (itemId: string, response: AnswerResponse) =>
     post<PracticeAnswerResult>(`/practice/items/${itemId}/answer`, { response }),
+  // Review items are PracticeItem rows, not Exercise rows - reported
+  // through the shared practice-item report endpoint, not
+  // /exercises/{id}/report (which 404s for a PracticeItem id).
+  reportIssue: (
+    itemId: string,
+    category: ContentIssueCategory,
+    description?: string,
+    learnerResponse?: AnswerResponse,
+  ) =>
+    post<ContentIssueReportResult>(`/practice/items/${itemId}/report`, {
+      category,
+      description,
+      learner_response: learnerResponse,
+    }),
 };
 
 export const CheckpointApi = {
@@ -137,6 +151,19 @@ export const PracticeApi = {
     ),
   answer: (itemId: string, response: AnswerResponse) =>
     post<PracticeAnswerResult>(`/practice/items/${itemId}/answer`, { response }),
+  // Endless Practice items are PracticeItem rows, not Exercise rows -
+  // reported through the shared practice-item report endpoint.
+  reportIssue: (
+    itemId: string,
+    category: ContentIssueCategory,
+    description?: string,
+    learnerResponse?: AnswerResponse,
+  ) =>
+    post<ContentIssueReportResult>(`/practice/items/${itemId}/report`, {
+      category,
+      description,
+      learner_response: learnerResponse,
+    }),
 };
 
 export const AdminApi = {
