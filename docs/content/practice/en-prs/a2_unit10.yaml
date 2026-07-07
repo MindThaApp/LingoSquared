@@ -67,13 +67,46 @@ review:
     Re-verified: scripts/_practice_slot_check.py 0 problems across the
     whole en-prs pack; scripts/compile_content.py practice-validate for
     the full pack -- 0 errors/0 warnings.
+
+    TAGGING-DEPTH PASS 2026-07-07: same audit/fix as the a2_unit09.yaml
+    sibling (see that file's matching notes for the full rationale) --
+    scripts/backfill_lexemes_en_prs.py was missing backfill_lexemes.py's
+    (fa) own whole-phrase auto-derivation and two real, previously-
+    untagged word-level lexemes. Added: (1) "family_message_word"
+    (پیام/فامیل, 2 real members, lesson03 -- both already-classified
+    tokens that had never been given any semantic tag at all; mirrors
+    fa's own "family_message_word" tag for پیام/خانواده exactly), and
+    (2) "opinion_phrase" (the A2-only whole-phrase auto-derivation, same
+    mechanism as a2_unit09's "bureaucracy_phrase"), 7 real distinct
+    candidates -- an exact match to fa's own opinion_phrase count.
+    Verified both counts via scripts/backfill_lexemes_en_prs.py's actual
+    iter_specs() output filtered to level=='a2' per AUTHORING_GUIDE.md
+    #18 (never trust the pooled A1+A2 count) -- also reconfirmed
+    person_name is already correctly A2-scoped at 3 real members
+    (کریم/پروین/احمد; کریم's tag was already unconditional on the bare
+    token, not lesson-scoped, so it already applied here pre-existing,
+    no change needed). Added 5 new templates: family_message_word's
+    remaining matching_pairs/translation (below the multiple_choice
+    floor at 2 members, same as fa's own pair), plus opinion_phrase's
+    multiple_choice/matching_pairs (7 pairs)/translation, anchored at
+    lesson03/lesson04 respectively -- 8 -> 13 templates. Re-verified:
+    scripts/_practice_slot_check.py 0 problems across the whole en-prs
+    pack; scripts/compile_content.py practice-validate for the full pack
+    -- 0 errors/0 warnings.
 tag_schema:
-  part_of_speech: [noun, proper_noun]
+  part_of_speech: [noun, proper_noun, phrase]
   agreement_tags:
-    semantic: [opinion_word, person_name]
+    semantic: [opinion_word, person_name, family_message_word, opinion_phrase]
 slot_presets:
   opinion_word: &opinion_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: opinion_word}}
   person_name: &person_name {language_code: prs, part_of_speech: proper_noun, agreement_tags: {semantic: person_name}}
+  # Added 2026-07-07 (tagging-depth pass): پیام/فامیل, 2 real members,
+  # matching_pairs/translation only (below the multiple_choice floor).
+  family_message_word: &family_message_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: family_message_word}}
+  # Every genuine whole-sentence/whole-phrase lexeme this unit's own four
+  # lessons introduce (7 real distinct candidates, level a2 -- verified
+  # via iter_specs()).
+  opinion_phrase: &opinion_phrase {language_code: prs, part_of_speech: phrase, agreement_tags: {semantic: opinion_phrase}}
 templates:
   # Lesson 1: opinions vocabulary.
   - content_key: practice.en-prs.prs.a2.unit10.lesson01.opinion_gloss.001
@@ -163,3 +196,59 @@ templates:
     slots: {person_name: *person_name}
     answer_derivation: {kind: render_frame, frame: {text: "این {person_name} است", language_code: prs, direction: rtl}}
     feedback_frame: {text: "Word order: این [name] است (this is ___).", language_code: en, direction: ltr}
+
+  # Lesson 3: reading a written opinion (پیام/فامیل, added 2026-07-07).
+  - content_key: practice.en-prs.prs.a2.unit10.lesson03.family_message_pair.001
+    lesson_content_key: prs.a2.unit10.lesson03.reading_an_opinion_message
+    type: matching_pairs
+    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *family_message_word, second: *family_message_word}
+    slot_relations: [{kind: distinct, slots: [first, second]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a2.unit10.lesson03.family_message_translate.002
+    lesson_content_key: prs.a2.unit10.lesson03.reading_an_opinion_message
+    type: translation
+    frame: {text: "{family_message_word}", language_code: en, direction: ltr, slot_rendering: {family_message_word: english_gloss}}
+    slots: {family_message_word: *family_message_word}
+    answer_derivation: {kind: slot_text, slot: family_message_word}
+    feedback_frame: {text: "{family_message_word} is the Dari word for this.", language_code: en, direction: ltr}
+
+  # Lesson 4: whole taught opinion sentences/phrases, added 2026-07-07.
+  - content_key: practice.en-prs.prs.a2.unit10.lesson04.opinion_phrase_choice.006
+    lesson_content_key: prs.a2.unit10.lesson04.study_debate_dialogue
+    # opinion_phrase pools every genuine whole-sentence/whole-phrase
+    # lexeme this unit's own four lessons introduce (7 real distinct
+    # candidates, level a2 -- verified via scripts/
+    # backfill_lexemes_en_prs.py's iter_specs() filtered to level=='a2'
+    # per AUTHORING_GUIDE.md #18). Anchored here at lesson04 since that's
+    # where the pool completes.
+    type: multiple_choice
+    frame: {text: "{opinion_phrase}", language_code: prs, direction: rtl}
+    slots: {opinion_phrase: *opinion_phrase}
+    answer_derivation: {kind: slot_gloss, slot: opinion_phrase}
+    feedback_frame: {text: "This is a sentence or phrase from this unit's study-abroad debate.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a2.unit10.lesson04.opinion_phrase_pair.007
+    lesson_content_key: prs.a2.unit10.lesson04.study_debate_dialogue
+    type: matching_pairs
+    # 7 pairs -- the full real opinion_phrase pool (AUTHORING_GUIDE.md
+    # #16), verified via scripts/_practice_slot_check.py.
+    frame: {text: "Match each sentence or phrase with its meaning.", language_code: en, direction: ltr}
+    slots:
+      first: *opinion_phrase
+      second: *opinion_phrase
+      third: *opinion_phrase
+      fourth: *opinion_phrase
+      fifth: *opinion_phrase
+      sixth: *opinion_phrase
+      seventh: *opinion_phrase
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth, seventh]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth, seventh]}
+    feedback_frame: {text: "Match each sentence or phrase to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a2.unit10.lesson04.opinion_phrase_translate.008
+    lesson_content_key: prs.a2.unit10.lesson04.study_debate_dialogue
+    type: translation
+    frame: {text: "{opinion_phrase}", language_code: en, direction: ltr, slot_rendering: {opinion_phrase: english_gloss}}
+    slots: {opinion_phrase: *opinion_phrase}
+    answer_derivation: {kind: slot_text, slot: opinion_phrase}
+    feedback_frame: {text: "This sentence or phrase appears in this unit's study-abroad debate.", language_code: en, direction: ltr}
