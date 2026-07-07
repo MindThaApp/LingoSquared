@@ -9988,3 +9988,21 @@ course/exercise/attempts removed afterward (scoped `DELETE`s by the
 test course's exact title, cascading `exercise_attempts` → `exercises`
 → `lessons` → `units` → `courses`) — nothing left cluttering the
 shared dev DB's course list.
+
+**2026-07-07, coordinator, host resource pressure found (real cause of an
+agent stall).** A German-content-authoring agent stalled for 600s and was
+killed by the watchdog mid-task. Investigation (CODE lane) found the
+Docker/backend stack itself healthy (trivial CPU/memory, 9/100 DB
+connections, 126GB disk free) but the HOST MAC under severe pressure: 21
+of 22.5GB swap used (~1.5GB free), ~57MB free physical memory, load
+average 17.1 on a 14-core machine, 28 days uptime with accumulated
+background processes (Chrome, Adobe Acrobat, sync daemons, several
+`claude` CLI processes). This is host-level, not something any agent
+should fix unilaterally (killing the user's other apps or rebooting
+without asking) -- flagging for Ramin directly. Given this, the
+coordinator is deliberately NOT scaling the concurrent-agent count
+further tonight despite the standing "~10 workers" instruction, since
+adding more load onto an already-swapping host would likely cause more
+stalls, not faster progress -- judgment call overriding the literal
+instruction given new information. Worth a closer look (closing unused
+apps, or a reboot) if stalls recur.
