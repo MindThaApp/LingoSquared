@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: "1.1"
 realization_version: "2026.1-draft.1"
 target_language: prs
 cefr_level: A1
@@ -11,7 +11,9 @@ generation_provenance:
 review:
   status: reviewed
   required_next_reviewer: null
-  notes: "New unit, prs's next uncovered outcome (no prerequisites). Six lessons: numbers 1-10, 11-20, tens, asking age with chand, phone numbers, and a dialogue exchanging phone numbers and ages. Adapted from Peace Corps Dari material with an active modernization pass. Authored independently from the fa realization per the sibling-isolation rule -- Persian numerals are shared vocabulary across Dari and Farsi, but surrounding phrasing/exercises/pedagogical framing were originated independently, not templated. Fresh-context review completed 2026-07-05: fixed a lesson06 exercise-pacing violation (production items moved after drag/matching), 9 multiple_choice exercises whose prompt displayed the exact correct-answer text (defeating the point of the question -- prompts changed to show the digit instead), and a stray mixed-script typo in register_policy. Numerical accuracy, dialect (استم/استین/نمبر, not Iranian forms), script purity, and jargon-leak checks all clean. Compiler validation 0 errors/0 warnings before and after fixes, independently re-verified. Audio remains pending generation; human native-speaker review still recommended before this ships, per project policy of no native-speaker review network for prs. AUDIO-ACCESSIBILITY RETROFIT 2026-07-06 (§14, added after this review completed): a project-wide audit found 10 exercises in this unit (lesson01.exercise03/06, lesson02.exercise03/06, lesson03.exercise03, lesson04.exercise03/06, lesson05.exercise03/06, lesson06.exercise03) were listen_type or bare-prompt listen_select items -- genuinely unanswerable since fa/prs have zero working TTS/recorded audio. Converted: listen_select -> multiple_choice (added the target Dari number/phrase as a real visible prompt, English-gloss correct_option/distractors), listen_type -> translation (English instruction, same Dari accepted_answers). The 3 sequence-listening exercises (listen_numbers/listen_teens/listen_tens) originally tested recognizing one number among several spoken -- since no audio exists, simplified to single-number reading recognition (tested_text updated to match the one number actually shown/tested). Re-verified 0 remaining §14 violations via script, content_key parity intact, validate+compile both clean after the retrofit. MATCHING_PAIRS SCALE RETROFIT 2026-07-06 (§16, Ramin's direct feedback): found match_teens and match_tens each only tested a subset of numbers that were ALREADY fully taught in their own lesson's teaching cards (lesson02 teaches 11-20 but only matched 11-15; lesson03 teaches 20-100 by tens but only matched 20/30/40/50/100, skipping 60/70/80/90) -- expanded both to the complete already-taught set (match_teens 5->10 pairs, match_tens 5->9 pairs), zero new vocabulary introduced. Also expanded match_age_phrases 3->4 (added سال/year, taught earlier in the same lesson). Left match_phone_vocab (3) and match_dialogue_facts (2) unchanged as genuine small closed sets (only 3 standalone phone-related words and 2 dialogue-specific facts exist to draw from). POST-SHIP CORPUS-WIDE FIX, 2026-07-07: a project-wide sweep (prompted by unit13's fresh-context reviewer flagging the same bug in units 11/12) found this file also had exercises where realization prompt.target_blocks duplicated the overlay's own instruction text verbatim in English -- the compiler would have rendered the same sentence twice to the learner. Fixed mechanically: every affected exercise's prompt set to target_blocks: []. Re-verified validate+compile clean (0 errors/0 warnings) and confirmed zero remaining instruction-duplicate target_blocks via a script comparing every exercise's target_blocks against its overlay instruction."
+  notes: "New unit, prs's next uncovered outcome (no prerequisites). Six lessons: numbers 1-10, 11-20, tens, asking age with chand, phone numbers, and a dialogue exchanging phone numbers and ages. Adapted from Peace Corps Dari material with an active modernization pass. Authored independently from the fa realization per the sibling-isolation rule -- Persian numerals are shared vocabulary across Dari and Farsi, but surrounding phrasing/exercises/pedagogical framing were originated independently, not templated. Fresh-context review completed 2026-07-05: fixed a lesson06 exercise-pacing violation (production items moved after drag/matching), 9 multiple_choice exercises whose prompt displayed the exact correct-answer text (defeating the point of the question -- prompts changed to show the digit instead), and a stray mixed-script typo in register_policy. Numerical accuracy, dialect (استم/استین/نمبر, not Iranian forms), script purity, and jargon-leak checks all clean. Compiler validation 0 errors/0 warnings before and after fixes, independently re-verified. Audio remains pending generation; human native-speaker review still recommended before this ships, per project policy of no native-speaker review network for prs. AUDIO-ACCESSIBILITY RETROFIT 2026-07-06 (§14, added after this review completed): a project-wide audit found 10 exercises in this unit (lesson01.exercise03/06, lesson02.exercise03/06, lesson03.exercise03, lesson04.exercise03/06, lesson05.exercise03/06, lesson06.exercise03) were listen_type or bare-prompt listen_select items -- genuinely unanswerable since fa/prs have zero working TTS/recorded audio. Converted: listen_select -> multiple_choice (added the target Dari number/phrase as a real visible prompt, English-gloss correct_option/distractors), listen_type -> translation (English instruction, same Dari accepted_answers). The 3 sequence-listening exercises (listen_numbers/listen_teens/listen_tens) originally tested recognizing one number among several spoken -- since no audio exists, simplified to single-number reading recognition (tested_text updated to match the one number actually shown/tested). Re-verified 0 remaining §14 violations via script, content_key parity intact, validate+compile both clean after the retrofit. MATCHING_PAIRS SCALE RETROFIT 2026-07-06 (§16, Ramin's direct feedback): found match_teens and match_tens each only tested a subset of numbers that were ALREADY fully taught in their own lesson's teaching cards (lesson02 teaches 11-20 but only matched 11-15; lesson03 teaches 20-100 by tens but only matched 20/30/40/50/100, skipping 60/70/80/90) -- expanded both to the complete already-taught set (match_teens 5->10 pairs, match_tens 5->9 pairs), zero new vocabulary introduced. Also expanded match_age_phrases 3->4 (added سال/year, taught earlier in the same lesson). Left match_phone_vocab (3) and match_dialogue_facts (2) unchanged as genuine small closed sets (only 3 standalone phone-related words and 2 dialogue-specific facts exist to draw from). POST-SHIP CORPUS-WIDE FIX, 2026-07-07: a project-wide sweep (prompted by unit13's fresh-context reviewer flagging the same bug in units 11/12) found this file also had exercises where realization prompt.target_blocks duplicated the overlay's own instruction text verbatim in English -- the compiler would have rendered the same sentence twice to the learner. Fixed mechanically: every affected exercise's prompt set to target_blocks: []. Re-verified validate+compile clean (0 errors/0 warnings) and confirmed zero remaining instruction-duplicate target_blocks via a script comparing every exercise's target_blocks against its overlay instruction.
+
+    2026-07-07: AUTHORING_GUIDE.md §19 retrofit -- added real example sentence(s) to all 17 kind:vocabulary teaching cards (11 merged multi-number cards each given a positionally-matched list of examples, one per number), each a natural, comprehensible-from-gloss sentence using the card's own word(s), consistent with this course's full-form استم register. schema_version bumped to 1.1. Example sentences are Claude-authored and pending fresh-context review."
 
 course:
   realization_key: prs.a1
@@ -83,18 +85,32 @@ units:
             kind: vocabulary
             target: {text: "یک، دو، سه", language_code: prs, direction: rtl}
             introduced_tokens: [یک, دو, سه]
+            example:
+              - {text: "یک برادر دارم.", language_code: prs, direction: rtl}
+              - {text: "دو کتاب دارم.", language_code: prs, direction: rtl}
+              - {text: "سه خواهر دارم.", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit04.lesson01.teach.four_to_six
             kind: vocabulary
             target: {text: "چهار، پنج، شش", language_code: prs, direction: rtl}
             introduced_tokens: [چهار, پنج, شش]
+            example:
+              - {text: "چهار کتاب دارم.", language_code: prs, direction: rtl}
+              - {text: "پنج دقیقه صبر کن.", language_code: prs, direction: rtl}
+              - {text: "او شش کتاب دارد.", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit04.lesson01.teach.seven_eight
             kind: vocabulary
             target: {text: "هفت، هشت", language_code: prs, direction: rtl}
             introduced_tokens: [هفت, هشت]
+            example:
+              - {text: "هفت روز در هفته است.", language_code: prs, direction: rtl}
+              - {text: "ساعت هشت می‌آیم.", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit04.lesson01.teach.nine_ten
             kind: vocabulary
             target: {text: "نه، ده", language_code: prs, direction: rtl}
             introduced_tokens: [نه, ده]
+            example:
+              - {text: "نه نفر در صنف استند.", language_code: prs, direction: rtl}
+              - {text: "ده انگشت دارم.", language_code: prs, direction: rtl}
         exercises:
           - content_key: prs.a1.unit04.lesson01.exercise01.recognize_three
             type: multiple_choice
@@ -145,18 +161,31 @@ units:
             kind: vocabulary
             target: {text: "یازده، دوازده، سیزده", language_code: prs, direction: rtl}
             introduced_tokens: [یازده, دوازده, سیزده]
+            example:
+              - {text: "ساعت یازده صنف دارم.", language_code: prs, direction: rtl}
+              - {text: "دوازده ماه در سال است.", language_code: prs, direction: rtl}
+              - {text: "او سیزده سال دارد.", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit04.lesson02.teach.fourteen_sixteen
             kind: vocabulary
             target: {text: "چهارده، پانزده، شانزده", language_code: prs, direction: rtl}
             introduced_tokens: [چهارده, پانزده, شانزده]
+            example:
+              - {text: "چهارده روز دیگر می‌آیم.", language_code: prs, direction: rtl}
+              - {text: "او پانزده کتاب دارد.", language_code: prs, direction: rtl}
+              - {text: "او شانزده سال دارد.", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit04.lesson02.teach.seventeen_nineteen
             kind: vocabulary
             target: {text: "هفده، هجده، نوزده", language_code: prs, direction: rtl}
             introduced_tokens: [هفده, هجده, نوزده]
+            example:
+              - {text: "او هفده کتاب دارد.", language_code: prs, direction: rtl}
+              - {text: "او هجده سال دارد.", language_code: prs, direction: rtl}
+              - {text: "نوزده روز مانده.", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit04.lesson02.teach.twenty
             kind: vocabulary
             target: {text: بیست, language_code: prs, direction: rtl}
             introduced_tokens: [بیست]
+            example: {text: "بیست کتاب دارم.", language_code: prs, direction: rtl}
         exercises:
           - content_key: prs.a1.unit04.lesson02.exercise01.recognize_fifteen
             type: multiple_choice
@@ -207,18 +236,31 @@ units:
             kind: vocabulary
             target: {text: "بیست، سی، چهل", language_code: prs, direction: rtl}
             introduced_tokens: [بیست, سی, چهل]
+            example:
+              - {text: "بیست سال دارم.", language_code: prs, direction: rtl}
+              - {text: "سی روز در این ماه است.", language_code: prs, direction: rtl}
+              - {text: "او چهل سال دارد.", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit04.lesson03.teach.fifty_sixty
             kind: vocabulary
             target: {text: "پنجاه، شصت", language_code: prs, direction: rtl}
             introduced_tokens: [پنجاه, شصت]
+            example:
+              - {text: "او پنجاه کتاب دارد.", language_code: prs, direction: rtl}
+              - {text: "شصت دقیقه یک ساعت است.", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit04.lesson03.teach.seventy_eighty
             kind: vocabulary
             target: {text: "هفتاد، هشتاد", language_code: prs, direction: rtl}
             introduced_tokens: [هفتاد, هشتاد]
+            example:
+              - {text: "این کتاب هفتاد صفحه دارد.", language_code: prs, direction: rtl}
+              - {text: "او هشتاد کتاب دارد.", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit04.lesson03.teach.ninety_hundred
             kind: vocabulary
             target: {text: "نود، صد", language_code: prs, direction: rtl}
             introduced_tokens: [نود, صد]
+            example:
+              - {text: "او نود سال دارد.", language_code: prs, direction: rtl}
+              - {text: "او صد کتاب دارد.", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit04.lesson03.teach.combining_tens
             kind: grammar_note
             target: {text: "بیست و پنج (25): ده‌گان و یکان با «و»", language_code: prs, direction: rtl}
@@ -272,10 +314,12 @@ units:
             kind: vocabulary
             target: {text: چند, language_code: prs, direction: rtl}
             introduced_tokens: [چند]
+            example: {text: "چند سال داری؟", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit04.lesson04.teach.sal_word
             kind: vocabulary
             target: {text: سال, language_code: prs, direction: rtl}
             introduced_tokens: [سال]
+            example: {text: "من بیست سال دارم.", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit04.lesson04.teach.age_question_polite
             kind: phrase
             target: {text: "چند ساله استین؟", language_code: prs, direction: rtl}
@@ -332,10 +376,12 @@ units:
             kind: vocabulary
             target: {text: نمبر, language_code: prs, direction: rtl}
             introduced_tokens: [نمبر]
+            example: {text: "نمبر تلفن من این است.", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit04.lesson05.teach.telephone_word
             kind: vocabulary
             target: {text: تلفن, language_code: prs, direction: rtl}
             introduced_tokens: [تلفن]
+            example: {text: "تلفن من خراب است.", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit04.lesson05.teach.phone_question
             kind: phrase
             target: {text: "نمبر تلفن‌تان چند است؟", language_code: prs, direction: rtl}
@@ -344,6 +390,7 @@ units:
             kind: vocabulary
             target: {text: صفر, language_code: prs, direction: rtl}
             introduced_tokens: [صفر]
+            example: {text: "صفر یک عدد است.", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit04.lesson05.teach.phone_answer
             kind: phrase
             target: {text: "نمبر تلفنم صفر هفتاد و نه، سه چهار پنج، شش هفت هشت است", language_code: prs, direction: rtl}

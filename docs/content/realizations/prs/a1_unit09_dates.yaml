@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: "1.1"
 realization_version: "2026.1-draft.1"
 target_language: prs
 cefr_level: A1
@@ -11,7 +11,9 @@ generation_provenance:
 review:
   status: reviewed
   required_next_reviewer: null
-  notes: "Fresh-context review completed 2026-07-06. Checked against universal.a1.dates.exchange_calendar_dates's own can_do/assessment_requirements (all 4 modalities covered across the 6 lessons); exercise pacing (recognition -> drag/matching -> production verified in every lesson); dialect/register (استم/استین forms, مصروف استم for 'I'm busy', all consistent with unit01/04/07 conventions). Factual accuracy independently verified, not just trusted: شنبه-first/جمعه-last week structure and دوشنبه/سه‌شنبه/چهارشنبه/پنجشنبه 'second/third/fourth/fifth day' etymology are correct; حمل/ثور/جوزا as the first three Solar Hijri (Hijri Shamsi) months with حمل containing Nowruz, and the claimed approximate Gregorian correspondences, are correct. FOUND AND FIXED: (1) نزدهم used throughout for '19th' was a genuine spelling error -- confirmed against unit04's canonical spelling of 19 as نوزده (with a واو) -- corrected to نوزدهم everywhere in both files, 15 occurrences each; a first blind find/replace pass incorrectly also matched the 'نزدهم' substring inside the correctly-spelled پانزدهم (15th), corrupting it to پانوزدهم -- caught and reverted before this was finalized, re-verified with a script confirming 15 correct نوزدهم and 27 correct پانزدهم occurrences and zero corrupted/stray forms. (2) Seven multiple_choice exercises had the exact 'prompt literally shows the correct answer' bug (lesson02 exercise01/02 recognize_hamal/recognize_jawza, lesson03 exercise01 recognize_what_day, lesson04 exercise01/02 recognize_full_date/recognize_ordinal, lesson05 exercise01/02 recognize_which_day_meeting/recognize_which_date) -- each displayed the identical Dari string as both the prompt and the correct option among same-script distractors; fixed by changing each prompt to a non-leaking English-language stimulus (ordinal/gloss), the same pattern already used to fix this bug class in unit04. Ran a systematic Python token-coverage script (tokenized on Persian-range characters only, Persian punctuation excluded to avoid false positives) confirming every Dari word in every tested_text and every overlay accepted_answers/pairs/word_bank value appears in that lesson's or an earlier lesson's introduced_tokens -- zero violations found. content_key parity confirmed exact match between realization and overlay for units/lessons/teaching/exercises. Script purity clean (no Arabic-range kaf/yeh codepoints). No fill_in_blank exercises exist. No bare unquoted yes/no/true/false. No ambiguous multiple_choice distractors found. Cross-checked every concrete fact in the unit (meeting day=Monday, meeting date=19th of Hamal, Bashir busy on Friday) across every exercise/teaching card that references it -- fully consistent. Added a missing comma-joined form to lesson06 exercise08's two-clause accepted_answers per AUTHORING_GUIDE §12 (already had period- and و-joined forms). Applied the §15 asterisk convention to the handful of notes/feedback strings this review directly edited (the نوزدهم-related ones). Both `validate` and `compile` re-run clean (0 errors/0 warnings) after all fixes. AUDIO-ACCESSIBILITY RETROFIT 2026-07-06 (§14, added after this review completed): a project-wide audit found 7 exercises in this unit (lesson01.exercise03, lesson02.exercise03, lesson03.exercise03, lesson04.exercise03/06, lesson05.exercise03, lesson06.exercise05) were listen_type or bare-prompt listen_select items -- genuinely unanswerable since fa/prs have zero working TTS/recorded audio. Converted: listen_select -> multiple_choice (added the target Dari text as a real visible prompt, English-gloss correct_option/distractors to avoid re-introducing the prompt-shows-answer bug), listen_type -> translation (English instruction, same Dari accepted_answers). Re-verified 0 remaining §14 violations in this file via script, content_key parity intact, `validate`+`compile` both clean after the retrofit. Audio remains pending generation; human native-speaker review still recommended before this ships, per project policy of no native-speaker review network for prs. MATCHING_PAIRS SCALE RETROFIT 2026-07-06 (§16, Ramin's direct feedback): expanded match_today_phrases 2->5 (pooled هفته/روز/رخصتی from lesson01's weekend note), match_date_parts 3->6 (pooled شنبه/دوشنبه/ثور, day and month names already taught in lesson01/lesson02), match_future_date_phrases 2->5 (added standalone کدام/چندم/جلسه, already taught within this same lesson's phrases). match_days was already at 7. Left match_months (3, genuine ceiling -- only 3 months are taught in this unit) and match_dialogue_facts (2, genuine dialogue-specific facts) unchanged. Re-verified validate+compile clean after these additions. POST-SHIP CORPUS-WIDE FIX, 2026-07-07: a project-wide sweep (prompted by unit13's fresh-context reviewer flagging the same bug in units 11/12) found this file also had exercises where realization prompt.target_blocks duplicated the overlay's own instruction text verbatim in English -- the compiler would have rendered the same sentence twice to the learner. Fixed mechanically: every affected exercise's prompt set to target_blocks: []. Re-verified validate+compile clean (0 errors/0 warnings) and confirmed zero remaining instruction-duplicate target_blocks via a script comparing every exercise's target_blocks against its overlay instruction."
+  notes: "Fresh-context review completed 2026-07-06. Checked against universal.a1.dates.exchange_calendar_dates's own can_do/assessment_requirements (all 4 modalities covered across the 6 lessons); exercise pacing (recognition -> drag/matching -> production verified in every lesson); dialect/register (استم/استین forms, مصروف استم for 'I'm busy', all consistent with unit01/04/07 conventions). Factual accuracy independently verified, not just trusted: شنبه-first/جمعه-last week structure and دوشنبه/سه‌شنبه/چهارشنبه/پنجشنبه 'second/third/fourth/fifth day' etymology are correct; حمل/ثور/جوزا as the first three Solar Hijri (Hijri Shamsi) months with حمل containing Nowruz, and the claimed approximate Gregorian correspondences, are correct. FOUND AND FIXED: (1) نزدهم used throughout for '19th' was a genuine spelling error -- confirmed against unit04's canonical spelling of 19 as نوزده (with a واو) -- corrected to نوزدهم everywhere in both files, 15 occurrences each; a first blind find/replace pass incorrectly also matched the 'نزدهم' substring inside the correctly-spelled پانزدهم (15th), corrupting it to پانوزدهم -- caught and reverted before this was finalized, re-verified with a script confirming 15 correct نوزدهم and 27 correct پانزدهم occurrences and zero corrupted/stray forms. (2) Seven multiple_choice exercises had the exact 'prompt literally shows the correct answer' bug (lesson02 exercise01/02 recognize_hamal/recognize_jawza, lesson03 exercise01 recognize_what_day, lesson04 exercise01/02 recognize_full_date/recognize_ordinal, lesson05 exercise01/02 recognize_which_day_meeting/recognize_which_date) -- each displayed the identical Dari string as both the prompt and the correct option among same-script distractors; fixed by changing each prompt to a non-leaking English-language stimulus (ordinal/gloss), the same pattern already used to fix this bug class in unit04. Ran a systematic Python token-coverage script (tokenized on Persian-range characters only, Persian punctuation excluded to avoid false positives) confirming every Dari word in every tested_text and every overlay accepted_answers/pairs/word_bank value appears in that lesson's or an earlier lesson's introduced_tokens -- zero violations found. content_key parity confirmed exact match between realization and overlay for units/lessons/teaching/exercises. Script purity clean (no Arabic-range kaf/yeh codepoints). No fill_in_blank exercises exist. No bare unquoted yes/no/true/false. No ambiguous multiple_choice distractors found. Cross-checked every concrete fact in the unit (meeting day=Monday, meeting date=19th of Hamal, Bashir busy on Friday) across every exercise/teaching card that references it -- fully consistent. Added a missing comma-joined form to lesson06 exercise08's two-clause accepted_answers per AUTHORING_GUIDE §12 (already had period- and و-joined forms). Applied the §15 asterisk convention to the handful of notes/feedback strings this review directly edited (the نوزدهم-related ones). Both `validate` and `compile` re-run clean (0 errors/0 warnings) after all fixes. AUDIO-ACCESSIBILITY RETROFIT 2026-07-06 (§14, added after this review completed): a project-wide audit found 7 exercises in this unit (lesson01.exercise03, lesson02.exercise03, lesson03.exercise03, lesson04.exercise03/06, lesson05.exercise03, lesson06.exercise05) were listen_type or bare-prompt listen_select items -- genuinely unanswerable since fa/prs have zero working TTS/recorded audio. Converted: listen_select -> multiple_choice (added the target Dari text as a real visible prompt, English-gloss correct_option/distractors to avoid re-introducing the prompt-shows-answer bug), listen_type -> translation (English instruction, same Dari accepted_answers). Re-verified 0 remaining §14 violations in this file via script, content_key parity intact, `validate`+`compile` both clean after the retrofit. Audio remains pending generation; human native-speaker review still recommended before this ships, per project policy of no native-speaker review network for prs. MATCHING_PAIRS SCALE RETROFIT 2026-07-06 (§16, Ramin's direct feedback): expanded match_today_phrases 2->5 (pooled هفته/روز/رخصتی from lesson01's weekend note), match_date_parts 3->6 (pooled شنبه/دوشنبه/ثور, day and month names already taught in lesson01/lesson02), match_future_date_phrases 2->5 (added standalone کدام/چندم/جلسه, already taught within this same lesson's phrases). match_days was already at 7. Left match_months (3, genuine ceiling -- only 3 months are taught in this unit) and match_dialogue_facts (2, genuine dialogue-specific facts) unchanged. Re-verified validate+compile clean after these additions. POST-SHIP CORPUS-WIDE FIX, 2026-07-07: a project-wide sweep (prompted by unit13's fresh-context reviewer flagging the same bug in units 11/12) found this file also had exercises where realization prompt.target_blocks duplicated the overlay's own instruction text verbatim in English -- the compiler would have rendered the same sentence twice to the learner. Fixed mechanically: every affected exercise's prompt set to target_blocks: []. Re-verified validate+compile clean (0 errors/0 warnings) and confirmed zero remaining instruction-duplicate target_blocks via a script comparing every exercise's target_blocks against its overlay instruction.
+
+    2026-07-07: AUTHORING_GUIDE.md §19 retrofit -- added real example sentence(s) to all 10 kind:vocabulary teaching cards (3 merged day-pair cards each given a 2-item list per §19's merged-card guidance), each a natural, comprehensible-from-gloss sentence using the card's own word(s), using the Afghan solar calendar month names (حمل/ثور/جوزا) already established in this course. schema_version bumped to 1.1. Example sentences are Claude-authored and pending fresh-context review."
 
 course:
   realization_key: prs.a1
@@ -73,22 +75,33 @@ units:
             kind: vocabulary
             target: {text: "شنبه، یکشنبه", language_code: prs, direction: rtl}
             introduced_tokens: [شنبه, یکشنبه]
+            example:
+              - {text: "امروز شنبه است.", language_code: prs, direction: rtl}
+              - {text: "فردا یکشنبه است.", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit09.lesson01.teach.doshanbe_seshanbe
             kind: vocabulary
             target: {text: "دوشنبه، سه‌شنبه", language_code: prs, direction: rtl}
             introduced_tokens: [دوشنبه, سه‌شنبه]
+            example:
+              - {text: "دوشنبه صنف دارم.", language_code: prs, direction: rtl}
+              - {text: "سه‌شنبه ملاقات دارم.", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit09.lesson01.teach.chaharshanbe_panjshanbe
             kind: vocabulary
             target: {text: "چهارشنبه، پنجشنبه", language_code: prs, direction: rtl}
             introduced_tokens: [چهارشنبه, پنجشنبه]
+            example:
+              - {text: "چهارشنبه کار می‌کنم.", language_code: prs, direction: rtl}
+              - {text: "پنجشنبه شما را می‌بینم.", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit09.lesson01.teach.jomeh
             kind: vocabulary
             target: {text: جمعه, language_code: prs, direction: rtl}
             introduced_tokens: [جمعه]
+            example: {text: "جمعه رخصتی است.", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit09.lesson01.teach.tarikh_word
             kind: vocabulary
             target: {text: تاریخ, language_code: prs, direction: rtl}
             introduced_tokens: [تاریخ]
+            example: {text: "تاریخ امروز چیست؟", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit09.lesson01.teach.va_word
             kind: grammar_note
             target: {text: "و (and)", language_code: prs, direction: rtl}
@@ -144,14 +157,17 @@ units:
             kind: vocabulary
             target: {text: حمل, language_code: prs, direction: rtl}
             introduced_tokens: [حمل]
+            example: {text: "حمل ماه اول سال است.", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit09.lesson02.teach.sawr
             kind: vocabulary
             target: {text: ثور, language_code: prs, direction: rtl}
             introduced_tokens: [ثور]
+            example: {text: "در ثور هوا خوب است.", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit09.lesson02.teach.jawza
             kind: vocabulary
             target: {text: جوزا, language_code: prs, direction: rtl}
             introduced_tokens: [جوزا]
+            example: {text: "من در جوزا تولد شدم.", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit09.lesson02.teach.calendar_note
             kind: cultural_note
             target: {text: "افغانستان از تقویم هجری شمسی استفاده می‌کند", language_code: prs, direction: rtl}
@@ -205,6 +221,7 @@ units:
             kind: vocabulary
             target: {text: امروز, language_code: prs, direction: rtl}
             introduced_tokens: [امروز]
+            example: {text: "امروز چندم است؟", language_code: prs, direction: rtl}
         exercises:
           - content_key: prs.a1.unit09.lesson03.exercise01.recognize_what_day
             type: multiple_choice
@@ -345,6 +362,7 @@ units:
             kind: vocabulary
             target: {text: نوزدهم, language_code: prs, direction: rtl}
             introduced_tokens: [نوزدهم]
+            example: {text: "امروز نوزدهم است.", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit09.lesson06.teach.turn01
             kind: dialogue
             target: {text: "بشیر، جلسه کدام روز است؟", language_code: prs, direction: rtl, speaker: همایون}

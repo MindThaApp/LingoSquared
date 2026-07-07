@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: "1.1"
 overlay_version: "2026.1-draft.1"
 overlay_key: en-prs.a1.unit04
 source_language: en
@@ -11,7 +11,9 @@ generation_provenance:
 review:
   status: reviewed
   required_next_reviewer: null
-  notes: "Fresh-context review completed 2026-07-05, authored independently of the fa realization per the sibling-isolation rule. Fixes made alongside the paired realization file: 9 multiple_choice exercises' prompts changed from displaying the exact correct-answer text to showing the digit instead (previously solvable by string-matching alone, defeating the point of the question), and lesson06 exercise pacing corrected to recognition->drag->production order. Dialect verified as genuinely Afghan Dari (نمبر not شماره, استم/استین forms), no jargon leaks, no script-purity issues. Compiler validation clean before and after fixes. Supplemental pass 2026-07-05 per AUTHORING_GUIDE §11-13: fact cross-check clean (ages/phone numbers internally consistent), fill_in_blank frames all have real surrounding context, and lesson06's write_ages_summary gained a و-joined variant as status:correct (previously only period-joined, and marked acceptable_with_note instead of correct). URGENT FOLLOW-UP 2026-07-05: live QA found the whole en-prs course failed to actually compile (real `compile`, not just `validate` -- `validate` never exercises the full exercise-answer-derivation check that caught this). Root cause here specifically: 3 exercises (lesson04.exercise07.speak_own_age, lesson05.exercise07.speak_own_phone_number, lesson06.exercise02.speak_own_age_reply) asked the learner to supply their own real age/phone number but had only `acceptable_with_note` accepted_answers with no `status:correct` entry -- the compiler has no canonical answer to derive without one, so compilation crashed. Same root problem as the ungradeable-blank-template bug already fixed once in unit02: rewrote all three to ask for a SPECIFIC given fact (age 30, phone 079-345-678, age 26 matching Bashir) with concrete `status:correct` answers instead of an open-ended real-world placeholder. Re-verified with the actual `compile` command -- now produces valid JSON end-to-end. AUDIO-ACCESSIBILITY RETROFIT 2026-07-06 (§14, added after this review completed): converted the 10 listen_type/bare-listen_select exercises' instructions/correct_option/distractors/accepted_answers to match the realization's multiple_choice/translation conversion (the 3 sequence-listening exercises simplified to single-number recognition since no audio exists) -- see that file's notes for the full list. Re-verified 0 remaining §14 violations, content_key parity intact, both validate and compile clean after the retrofit. MATCHING_PAIRS SCALE RETROFIT 2026-07-06 (§16): expanded match_teens/match_tens/match_age_phrases to match the realization's expansion (10/9/4 pairs) -- match_teens and match_tens previously used only a subset of numbers already fully taught in their own lesson. Left match_phone_vocab (3) and match_dialogue_facts (2) unchanged as genuine small closed sets."
+  notes: "Fresh-context review completed 2026-07-05, authored independently of the fa realization per the sibling-isolation rule. Fixes made alongside the paired realization file: 9 multiple_choice exercises' prompts changed from displaying the exact correct-answer text to showing the digit instead (previously solvable by string-matching alone, defeating the point of the question), and lesson06 exercise pacing corrected to recognition->drag->production order. Dialect verified as genuinely Afghan Dari (نمبر not شماره, استم/استین forms), no jargon leaks, no script-purity issues. Compiler validation clean before and after fixes. Supplemental pass 2026-07-05 per AUTHORING_GUIDE §11-13: fact cross-check clean (ages/phone numbers internally consistent), fill_in_blank frames all have real surrounding context, and lesson06's write_ages_summary gained a و-joined variant as status:correct (previously only period-joined, and marked acceptable_with_note instead of correct). URGENT FOLLOW-UP 2026-07-05: live QA found the whole en-prs course failed to actually compile (real `compile`, not just `validate` -- `validate` never exercises the full exercise-answer-derivation check that caught this). Root cause here specifically: 3 exercises (lesson04.exercise07.speak_own_age, lesson05.exercise07.speak_own_phone_number, lesson06.exercise02.speak_own_age_reply) asked the learner to supply their own real age/phone number but had only `acceptable_with_note` accepted_answers with no `status:correct` entry -- the compiler has no canonical answer to derive without one, so compilation crashed. Same root problem as the ungradeable-blank-template bug already fixed once in unit02: rewrote all three to ask for a SPECIFIC given fact (age 30, phone 079-345-678, age 26 matching Bashir) with concrete `status:correct` answers instead of an open-ended real-world placeholder. Re-verified with the actual `compile` command -- now produces valid JSON end-to-end. AUDIO-ACCESSIBILITY RETROFIT 2026-07-06 (§14, added after this review completed): converted the 10 listen_type/bare-listen_select exercises' instructions/correct_option/distractors/accepted_answers to match the realization's multiple_choice/translation conversion (the 3 sequence-listening exercises simplified to single-number recognition since no audio exists) -- see that file's notes for the full list. Re-verified 0 remaining §14 violations, content_key parity intact, both validate and compile clean after the retrofit. MATCHING_PAIRS SCALE RETROFIT 2026-07-06 (§16): expanded match_teens/match_tens/match_age_phrases to match the realization's expansion (10/9/4 pairs) -- match_teens and match_tens previously used only a subset of numbers already fully taught in their own lesson. Left match_phone_vocab (3) and match_dialogue_facts (2) unchanged as genuine small closed sets.
+
+    2026-07-07: AUTHORING_GUIDE.md §19 retrofit -- added real example sentence(s) to all 17 kind:vocabulary teaching entries with example_gloss (11 merged multi-number cards each given a positionally-matched list of examples, one per number), each a natural, comprehensible-from-gloss sentence using the card's own word(s), consistent with this course's full-form استم register. schema_version bumped to 1.1. Example sentences are Claude-authored and pending fresh-context review."
 
 course:
   title: Dari A1
@@ -36,52 +38,64 @@ teaching:
     title: "One, two, three"
     gloss: "1, 2, 3"
     note: "یک، دو، سه are the basic Persian numerals shared across Dari and Farsi."
+    example_gloss: ["I have one brother.", "I have two books.", "I have three sisters."]
   prs.a1.unit04.lesson01.teach.four_to_six:
     title: "Four, five, six"
     gloss: "4, 5, 6"
     note: "چهار is the standard written form; some speakers colloquially shorten it to چار in casual speech, but this course uses the standard spelling."
+    example_gloss: ["I have four books.", "Wait five minutes.", "Six people came."]
   prs.a1.unit04.lesson01.teach.seven_eight:
     title: "Seven, eight"
     gloss: "7, 8"
     note: "هفت، هشت continue the sequence."
+    example_gloss: ["There are seven days in a week.", "I'll come at eight o'clock."]
   prs.a1.unit04.lesson01.teach.nine_ten:
     title: "Nine, ten"
     gloss: "9, 10"
     note: "نه، ده complete the numbers one through ten."
+    example_gloss: ["There are nine people in the class.", "I have ten fingers."]
 
   prs.a1.unit04.lesson02.teach.eleven_thirteen:
     title: "Eleven, twelve, thirteen"
     gloss: "11, 12, 13"
     note: "یازده، دوازده، سیزده are formed as distinct words, not simple compounds of the ones digits."
+    example_gloss: ["I have class at eleven.", "There are twelve months in a year.", "He/she is thirteen years old."]
   prs.a1.unit04.lesson02.teach.fourteen_sixteen:
     title: "Fourteen, fifteen, sixteen"
     gloss: "14, 15, 16"
     note: "چهارده، پانزده، شانزده continue the teens."
+    example_gloss: ["I'll come in fourteen more days.", "I'm fifteen minutes late.", "He/she is sixteen years old."]
   prs.a1.unit04.lesson02.teach.seventeen_nineteen:
     title: "Seventeen, eighteen, nineteen"
     gloss: "17, 18, 19"
     note: "هفده، هجده، نوزده complete the teens."
+    example_gloss: ["Seventeen people came.", "He/she is eighteen years old.", "Nineteen days remain."]
   prs.a1.unit04.lesson02.teach.twenty:
     title: "Twenty"
     gloss: "20"
     note: "بیست begins the tens, covered fully in the next lesson."
+    example_gloss: "I have twenty books."
 
   prs.a1.unit04.lesson03.teach.twenty_thirty_forty:
     title: "Twenty, thirty, forty"
     gloss: "20, 30, 40"
     note: "بیست، سی، چهل are the tens words, each a distinct form rather than a predictable pattern."
+    example_gloss: ["I am twenty years old.", "There are thirty days in this month.", "He/she is forty years old."]
   prs.a1.unit04.lesson03.teach.fifty_sixty:
     title: "Fifty, sixty"
     gloss: "50, 60"
     note: "پنجاه، شصت continue the tens."
+    example_gloss: ["Fifty people were at the meeting.", "Sixty minutes is one hour."]
   prs.a1.unit04.lesson03.teach.seventy_eighty:
     title: "Seventy, eighty"
     gloss: "70, 80"
     note: "هفتاد، هشتاد continue the tens."
+    example_gloss: ["I read seventy pages of the book.", "Eighty percent is done."]
   prs.a1.unit04.lesson03.teach.ninety_hundred:
     title: "Ninety, one hundred"
     gloss: "90, 100"
     note: "نود، صد complete the sequence up to one hundred."
+    example_gloss: ["He/she is ninety years old.", "A hundred people came."]
   prs.a1.unit04.lesson03.teach.combining_tens:
     title: "Combine tens and ones"
     gloss: "25 is literally 'twenty and five.'"
@@ -91,10 +105,12 @@ teaching:
     title: "How many / how much"
     gloss: "how many / how much"
     note: "چند introduces a question about a quantity, including age."
+    example_gloss: "How old are you?"
   prs.a1.unit04.lesson04.teach.sal_word:
     title: "Year"
     gloss: "year"
     note: "سال is used when stating age, literally 'years.'"
+    example_gloss: "I am twenty years old."
   prs.a1.unit04.lesson04.teach.age_question_polite:
     title: "Ask someone's age politely"
     gloss: "How old are you?"
@@ -112,10 +128,12 @@ teaching:
     title: "Number"
     gloss: "number"
     note: "نمبر is a widely used everyday Afghan term (from Persian/English) for a number, especially a phone number."
+    example_gloss: "This is my phone number."
   prs.a1.unit04.lesson05.teach.telephone_word:
     title: "Telephone"
     gloss: "telephone"
     note: "تلفن is the standard word for telephone."
+    example_gloss: "My phone is broken."
   prs.a1.unit04.lesson05.teach.phone_question:
     title: "Ask for a phone number"
     gloss: "What is your phone number?"
@@ -124,6 +142,7 @@ teaching:
     title: "Zero"
     gloss: "zero"
     note: "صفر is needed for reading out most Afghan phone numbers."
+    example_gloss: "Zero is a number."
   prs.a1.unit04.lesson05.teach.phone_answer:
     title: "Give your phone number"
     gloss: "My phone number is 079-345-678."

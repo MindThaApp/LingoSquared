@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: "1.1"
 overlay_version: "2026.1-draft.1"
 overlay_key: en-prs.a1.unit10
 source_language: en
@@ -11,7 +11,9 @@ generation_provenance:
 review:
   status: reviewed
   required_next_reviewer: null
-  notes: "Authored alongside the new prs a1_unit10_shopping.yaml realization (numbered unit10 to avoid colliding with a separate concurrent session's own in-flight a1_unit09_dates.yaml, still uncommitted at authoring time). Follows the established en-prs overlay convention from unit08 (English instruction/correct_option/distractors/feedback, target-language Dari accepted_answers, English glosses for recognize_* multiple_choice items to avoid the same-string visual-matching anti-pattern already fixed in units 07/08). Needs the standard fresh-context review before shipping. AUDIO-ACCESSIBILITY RETROFIT 2026-07-06 (§14): converted the 6 listen_select/listen_type exercises to match the realization's multiple_choice/translation conversion. MATCHING_PAIRS SCALE (§16) CHECK: all matching_pairs already reasonably sized -- no changes needed. Re-verified 0 remaining §14 violations, both validate and compile clean after the retrofit. FRESH-CONTEXT REVIEW completed 2026-07-06 (zero prior context, paired with the realization's independent review): confirmed content_key parity (22 teaching + 43 exercise keys, exact match both directions against the realization), no jargon leaks, no bare unquoted yes/no/true/false, no Arabic-range kaf/yeh, and every accepted_answers/pairs value checked programmatically against the realization's cumulative introduced_tokens. FOUND AND FIXED, matching the realization-side fixes: (1) exercise01.listen_context's instruction still said 'Listen to the conversation' although the realization now shows the full dialogue as a real visible prompt (the prior retrofit missed this exercise because its type, dialogue_comprehension, wasn't on the retrofit's listen_select/listen_type checklist, and it had zero text fallback and only pending-generation audio) -- reworded to 'Read the conversation'; (2) exercise03.match_dialogue_facts's accepted_answers keyed on English text ('Price per kilo'/'Discounted price for two kilos') that didn't match the realization's actual Dari pairs.left values at all -- a real grading-mismatch bug, since matching_pairs correctness is graded by exact left/right pair equality against what's actually displayed -- fixed by keying on the realization's now-corrected یک کیلو/دو کیلو labels with their Dari price values, keeping the dict shape byte-for-byte in sync with the realization's pairs array; (3) all accepted_answers containing بتین updated to بدهین to match the realization-wide correction of that unverified coinage; (4) exercise06.dialogue_response_ask_discount and exercise08.speak_full_market_scene were each missing a comma-joined multi-clause variant required by §12 (only period- and و-joined forms existed) -- added, all as status:correct. validate and compile both run clean (0 errors/0 warnings) after all fixes, and compile produces valid JSON."
+  notes: "Authored alongside the new prs a1_unit10_shopping.yaml realization (numbered unit10 to avoid colliding with a separate concurrent session's own in-flight a1_unit09_dates.yaml, still uncommitted at authoring time). Follows the established en-prs overlay convention from unit08 (English instruction/correct_option/distractors/feedback, target-language Dari accepted_answers, English glosses for recognize_* multiple_choice items to avoid the same-string visual-matching anti-pattern already fixed in units 07/08). Needs the standard fresh-context review before shipping. AUDIO-ACCESSIBILITY RETROFIT 2026-07-06 (§14): converted the 6 listen_select/listen_type exercises to match the realization's multiple_choice/translation conversion. MATCHING_PAIRS SCALE (§16) CHECK: all matching_pairs already reasonably sized -- no changes needed. Re-verified 0 remaining §14 violations, both validate and compile clean after the retrofit. FRESH-CONTEXT REVIEW completed 2026-07-06 (zero prior context, paired with the realization's independent review): confirmed content_key parity (22 teaching + 43 exercise keys, exact match both directions against the realization), no jargon leaks, no bare unquoted yes/no/true/false, no Arabic-range kaf/yeh, and every accepted_answers/pairs value checked programmatically against the realization's cumulative introduced_tokens. FOUND AND FIXED, matching the realization-side fixes: (1) exercise01.listen_context's instruction still said 'Listen to the conversation' although the realization now shows the full dialogue as a real visible prompt (the prior retrofit missed this exercise because its type, dialogue_comprehension, wasn't on the retrofit's listen_select/listen_type checklist, and it had zero text fallback and only pending-generation audio) -- reworded to 'Read the conversation'; (2) exercise03.match_dialogue_facts's accepted_answers keyed on English text ('Price per kilo'/'Discounted price for two kilos') that didn't match the realization's actual Dari pairs.left values at all -- a real grading-mismatch bug, since matching_pairs correctness is graded by exact left/right pair equality against what's actually displayed -- fixed by keying on the realization's now-corrected یک کیلو/دو کیلو labels with their Dari price values, keeping the dict shape byte-for-byte in sync with the realization's pairs array; (3) all accepted_answers containing بتین updated to بدهین to match the realization-wide correction of that unverified coinage; (4) exercise06.dialogue_response_ask_discount and exercise08.speak_full_market_scene were each missing a comma-joined multi-clause variant required by §12 (only period- and و-joined forms existed) -- added, all as status:correct. validate and compile both run clean (0 errors/0 warnings) after all fixes, and compile produces valid JSON.
+
+    2026-07-07: AUTHORING_GUIDE.md §19 retrofit -- added a real example sentence to all 9 kind:vocabulary teaching entries with example_gloss, each a natural, comprehensible-from-gloss sentence using the card's own word. schema_version bumped to 1.1. Example sentences are Claude-authored and pending fresh-context review."
 
 course:
   title: "Dari A1"
@@ -37,26 +39,32 @@ teaching:
     title: "Shop"
     gloss: "shop"
     note: "دوکان is the genuine Afghan Dari word for a small local shop, as distinct from Iranian Farsi's مغازه."
+    example_gloss: "This shop is big."
   prs.a1.unit10.lesson01.teach.qeymat:
     title: "Price"
     gloss: "price"
     note: "قیمت means price."
+    example_gloss: "What is the price of this?"
   prs.a1.unit10.lesson01.teach.arzan:
     title: "Cheap"
     gloss: "cheap"
     note: "ارزان means cheap or inexpensive."
+    example_gloss: "This is cheap."
   prs.a1.unit10.lesson01.teach.gran:
     title: "Expensive"
     gloss: "expensive"
     note: "گران is the opposite of ارزان."
+    example_gloss: "This is expensive."
   prs.a1.unit10.lesson01.teach.takhfif:
     title: "Discount"
     gloss: "discount"
     note: "تخفیف means a price discount."
+    example_gloss: "Do you have a discount?"
   prs.a1.unit10.lesson01.teach.va_word:
     title: "And"
     gloss: "and"
     note: "و is the common connecting word used to join two short statements or requests."
+    example_gloss: "I'm buying apples and bread."
 
   prs.a1.unit10.lesson02.teach.qeymatesh_chand:
     title: "How much is it?"
@@ -71,10 +79,12 @@ teaching:
     title: "Apple(s)"
     gloss: "apple(s)"
     note: "سیب means apple, used here in the plural/generic sense for a batch being sold."
+    example_gloss: "I want one kilo of apples."
   prs.a1.unit10.lesson03.teach.kilo:
     title: "Kilo"
     gloss: "kilo"
     note: "کیلو is the standard unit for selling produce by weight."
+    example_gloss: "I want one kilo of apples."
   prs.a1.unit10.lesson03.teach.label_text:
     title: "Apples: one kilo, one hundred afghanis"
     gloss: "Apples: one kilo, one hundred afghanis"
@@ -102,6 +112,7 @@ teaching:
     title: "Please, go ahead"
     gloss: "please, go ahead"
     note: "بفرمایین is a warm, polite greeting/invitation a shopkeeper uses when a customer arrives."
+    example_gloss: "Here you are, this is the price."
   prs.a1.unit10.lesson06.teach.turn01:
     title: "Hello, please come in."
     gloss: "Hello, please come in."

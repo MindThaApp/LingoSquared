@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: "1.1"
 realization_version: "2026.1-draft.1"
 target_language: prs
 cefr_level: A1
@@ -11,7 +11,9 @@ generation_provenance:
 review:
   status: reviewed
   required_next_reviewer: null
-  notes: "New unit, fills the unit02 gap between unit01 (greetings) and unit03 (family). Six lessons: name exchange, hometown/origin, occupation, introducing a third person, polite titles and register, and a full gathering dialogue. Adapted from FSI/Peace Corps Dari material with an active modernization pass -- no verbatim import. Authored independently from the fa realization per the sibling-isolation rule; dialect checked against Afghan Dari usage, not assumed from Farsi. Fresh-context review completed 2026-07-05: fixed an Iranian-colloquial contraction (می‌شه -> می‌تانین) that had leaked into lesson05, a lesson05/lesson06 exercise-pacing violation (recognition/drag/production reordered), six 'insert your own name/city/job' exercises whose accepted_answers were ungradeable blank templates (replaced with concrete taught-vocabulary examples matching this project's exact-string grading), a third-person/first-person pronoun mismatch in lesson06's write_profile answer, an illogical accepted reply in lesson04's dialogue_response_introduce, and one orphaned overlay teaching key (gathering_word). Compiler validation clean (0 errors/0 warnings) after fixes. Audio remains pending generation; human native-speaker review still recommended before this ships, per project policy of no native-speaker review network for prs. AUDIO-ACCESSIBILITY RETROFIT 2026-07-06 (§14, added after this review completed): a project-wide audit found 9 exercises in this unit (lesson01.exercise03/06, lesson02.exercise03/06, lesson03.exercise03/06, lesson04.exercise03/06, lesson06.exercise06) were listen_type or bare-prompt listen_select items -- genuinely unanswerable since fa/prs have zero working TTS/recorded audio. Converted: listen_select -> multiple_choice (added the target Dari text as a real visible prompt, English-gloss correct_option/distractors), listen_type -> translation (English instruction, same Dari accepted_answers). Re-verified 0 remaining §14 violations via script, content_key parity intact, validate+compile both clean after the retrofit. MATCHING_PAIRS SCALE RETROFIT 2026-07-06 (§16, Ramin's direct feedback): expanded match_intro_phrases 3->5 pairs (pooled دوست/همکار, the two relationship words taught earlier in the same lesson). Left match_name_forms (3), match_cities (4), match_occupations (4), match_titles_to_gender (2), and match_dialogue_facts (2) unchanged -- each is a genuine small closed set at this point in the unit (checked against every lesson's introduced_tokens up to that exercise; no further genuinely-taught, on-topic vocabulary exists to pool without violating §16's own 'don't pad with untaught or unrelated words' rule). POST-SHIP CORPUS-WIDE FIX, 2026-07-07: a project-wide sweep (prompted by unit13's fresh-context reviewer flagging the same bug in units 11/12) found this file also had exercises where realization prompt.target_blocks duplicated the overlay's own instruction text verbatim in English -- the compiler would have rendered the same sentence twice to the learner. Fixed mechanically: every affected exercise's prompt set to target_blocks: []. Re-verified validate+compile clean (0 errors/0 warnings) and confirmed zero remaining instruction-duplicate target_blocks via a script comparing every exercise's target_blocks against its overlay instruction."
+  notes: "New unit, fills the unit02 gap between unit01 (greetings) and unit03 (family). Six lessons: name exchange, hometown/origin, occupation, introducing a third person, polite titles and register, and a full gathering dialogue. Adapted from FSI/Peace Corps Dari material with an active modernization pass -- no verbatim import. Authored independently from the fa realization per the sibling-isolation rule; dialect checked against Afghan Dari usage, not assumed from Farsi. Fresh-context review completed 2026-07-05: fixed an Iranian-colloquial contraction (می‌شه -> می‌تانین) that had leaked into lesson05, a lesson05/lesson06 exercise-pacing violation (recognition/drag/production reordered), six 'insert your own name/city/job' exercises whose accepted_answers were ungradeable blank templates (replaced with concrete taught-vocabulary examples matching this project's exact-string grading), a third-person/first-person pronoun mismatch in lesson06's write_profile answer, an illogical accepted reply in lesson04's dialogue_response_introduce, and one orphaned overlay teaching key (gathering_word). Compiler validation clean (0 errors/0 warnings) after fixes. Audio remains pending generation; human native-speaker review still recommended before this ships, per project policy of no native-speaker review network for prs. AUDIO-ACCESSIBILITY RETROFIT 2026-07-06 (§14, added after this review completed): a project-wide audit found 9 exercises in this unit (lesson01.exercise03/06, lesson02.exercise03/06, lesson03.exercise03/06, lesson04.exercise03/06, lesson06.exercise06) were listen_type or bare-prompt listen_select items -- genuinely unanswerable since fa/prs have zero working TTS/recorded audio. Converted: listen_select -> multiple_choice (added the target Dari text as a real visible prompt, English-gloss correct_option/distractors), listen_type -> translation (English instruction, same Dari accepted_answers). Re-verified 0 remaining §14 violations via script, content_key parity intact, validate+compile both clean after the retrofit. MATCHING_PAIRS SCALE RETROFIT 2026-07-06 (§16, Ramin's direct feedback): expanded match_intro_phrases 3->5 pairs (pooled دوست/همکار, the two relationship words taught earlier in the same lesson). Left match_name_forms (3), match_cities (4), match_occupations (4), match_titles_to_gender (2), and match_dialogue_facts (2) unchanged -- each is a genuine small closed set at this point in the unit (checked against every lesson's introduced_tokens up to that exercise; no further genuinely-taught, on-topic vocabulary exists to pool without violating §16's own 'don't pad with untaught or unrelated words' rule). POST-SHIP CORPUS-WIDE FIX, 2026-07-07: a project-wide sweep (prompted by unit13's fresh-context reviewer flagging the same bug in units 11/12) found this file also had exercises where realization prompt.target_blocks duplicated the overlay's own instruction text verbatim in English -- the compiler would have rendered the same sentence twice to the learner. Fixed mechanically: every affected exercise's prompt set to target_blocks: []. Re-verified validate+compile clean (0 errors/0 warnings) and confirmed zero remaining instruction-duplicate target_blocks via a script comparing every exercise's target_blocks against its overlay instruction.
+
+    2026-07-07: AUTHORING_GUIDE.md §19 retrofit -- added a real example sentence to all 12 kind:vocabulary teaching cards, each a natural, comprehensible-from-gloss sentence using the card's own word, consistent with this course's full-form استم/استید register. schema_version bumped to 1.1. Example sentences are Claude-authored and pending fresh-context review."
 
 course:
   realization_key: prs.a1
@@ -108,6 +110,7 @@ units:
             kind: vocabulary
             target: {text: نام, language_code: prs, direction: rtl}
             introduced_tokens: [نام]
+            example: {text: "نام شما چیست؟", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit02.lesson01.teach.register_note
             kind: grammar_note
             target: {text: "نام‌تان به شما، نامت به دوست نزدیک", language_code: prs, direction: rtl}
@@ -175,10 +178,12 @@ units:
             kind: vocabulary
             target: {text: افغانستان, language_code: prs, direction: rtl}
             introduced_tokens: [افغانستان]
+            example: {text: "من از افغانستان استم.", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit02.lesson02.teach.city_word
             kind: vocabulary
             target: {text: شهر, language_code: prs, direction: rtl}
             introduced_tokens: [شهر]
+            example: {text: "کابل یک شهر بزرگ است.", language_code: prs, direction: rtl}
         exercises:
           - content_key: prs.a1.unit02.lesson02.exercise01.recognize_origin_question
             type: multiple_choice
@@ -231,18 +236,22 @@ units:
             kind: vocabulary
             target: {text: داکتر, language_code: prs, direction: rtl}
             introduced_tokens: [داکتر]
+            example: {text: "او داکتر است.", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit02.lesson03.teach.teacher
             kind: vocabulary
             target: {text: معلم, language_code: prs, direction: rtl}
             introduced_tokens: [معلم]
+            example: {text: "او معلم است.", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit02.lesson03.teach.engineer
             kind: vocabulary
             target: {text: مهندس, language_code: prs, direction: rtl}
             introduced_tokens: [مهندس]
+            example: {text: "او مهندس است.", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit02.lesson03.teach.shopkeeper
             kind: vocabulary
             target: {text: دوکاندار, language_code: prs, direction: rtl}
             introduced_tokens: [دوکاندار]
+            example: {text: "او دوکاندار است.", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit02.lesson03.teach.i_am_teacher
             kind: phrase
             target: {text: "من معلم استم", language_code: prs, direction: rtl}
@@ -311,10 +320,12 @@ units:
             kind: vocabulary
             target: {text: دوست, language_code: prs, direction: rtl}
             introduced_tokens: [دوست]
+            example: {text: "او دوست من است.", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit02.lesson04.teach.colleague_word
             kind: vocabulary
             target: {text: همکار, language_code: prs, direction: rtl}
             introduced_tokens: [همکار]
+            example: {text: "او همکار من است.", language_code: prs, direction: rtl}
         exercises:
           - content_key: prs.a1.unit02.lesson04.exercise01.recognize_introduce_formal
             type: multiple_choice
@@ -364,10 +375,12 @@ units:
             kind: vocabulary
             target: {text: جناب, language_code: prs, direction: rtl}
             introduced_tokens: [جناب]
+            example: {text: "جناب، بفرمایید.", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit02.lesson05.teach.title_khanom
             kind: vocabulary
             target: {text: خانم, language_code: prs, direction: rtl}
             introduced_tokens: [خانم]
+            example: {text: "خانم، بفرمایید.", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit02.lesson05.teach.title_with_name
             kind: phrase
             target: {text: "جناب فریدون", language_code: prs, direction: rtl}
@@ -430,6 +443,7 @@ units:
             kind: vocabulary
             target: {text: مهمانی, language_code: prs, direction: rtl}
             introduced_tokens: [مهمانی]
+            example: {text: "مهمانی خوب است.", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit02.lesson06.teach.turn01
             kind: dialogue
             target: {text: "سلام. نام من لیلا است. جناب، نام شما چیست؟", language_code: prs, direction: rtl, speaker: لیلا}
