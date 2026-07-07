@@ -1,0 +1,205 @@
+schema_version: "1.0"
+pack_key: practice.fa-en.a2.unit27
+source_language: fa
+target_language: en
+unit_content_key: en.a2.unit27.banking
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: >-
+    Authored 2026-07-07 by the Claude session extending fa-en's practice
+    pool to unit27 (opening a bank account), the third A2 unit for this
+    direction. Follows the same discipline as a2_unit25.yaml/a2_unit26.yaml:
+    most of this unit's real content is multi-word banking compounds
+    ("checking account", "monthly fee", "minimum balance", "direct
+    deposit") that don't reduce to a single fillable slot, so two new
+    bare-word-recognition-only semantic tags were added to
+    scripts/_en_target_lexeme_common.py -- "banking_noun" (account, fee,
+    balance, deposit, business, days, documents, teller -- all POS noun)
+    and "banking_adjective" (checking, monthly, minimum, direct -- all POS
+    adjective) -- deliberately not used in any shared generative frame,
+    same reasoning as unit25's bureaucracy_noun/unit26's dogpark_noun (these
+    nouns/adjectives don't collocate uniformly: "keep a minimum {item}"
+    only works for "balance", not "fee"/"deposit"/"teller", etc.). Only
+    scripts/backfill_lexemes_fa_en.py's Farsi gloss dict and UNIT_FILES_A2
+    tuple needed extending beyond that (18 new tokens, cross-checked
+    against docs/content/overlays/fa-en/a2_unit27.yaml's own real text).
+
+    ZERO fill_in_blank templates in this pack, a deliberate choice per
+    AUTHORING_GUIDE.md #17 and this session's own live-caught ambiguity
+    bug: this unit's real single-token vocabulary doesn't support a safe
+    single-slot fill_in_blank (every noun/adjective candidate pool here is
+    bare-recognition-only by design, and the one genuinely generative
+    frame this unit supports -- the possessive slot below -- is authored
+    as word_order instead, which doesn't share fill_in_blank's
+    ambiguity risk). Ran scripts/_fill_in_blank_ambiguity_check.py after
+    writing this pack to confirm zero AMBIGUOUS flags (there are no
+    fill_in_blank templates to flag in the first place).
+
+    One genuine generative frame identified: lesson03's real reading text
+    is "Your debit card will arrive in five to seven business days." --
+    the already-established 4-member 'possessive' tag (my/your/his/her,
+    defined for unit06's family lessons, reused identically here per this
+    session's own unit26 precedent) generalizes this exact real sentence
+    with zero grammar loss ("My/His/Her debit card will arrive in five to
+    seven business days." all hold) -- a word_order template anchored to
+    lesson03, plus a bare listen_select recognition item for the same tag.
+
+    Also reused: the already-established 'identity' tag (i/i'm/am/is/are/
+    what/what's/my/your, defined for unit01/02), anchored to lesson04
+    (real dialogue line "I have both with me. Is there a monthly fee?"),
+    bare-word recognition only, same pattern as unit26's own "I think"
+    reuse. No new EN_POS/agreement_tags entries needed for either reused
+    tag; no new Farsi glosses needed for their members (all already
+    present).
+
+    Anchoring check (same discipline as every other pack in this batch):
+    verified via iter_specs() that every one of this unit's four lessons
+    introduces at least one new lexeme (lesson01: checking/account/
+    monthly/fee/minimum/balance/direct/deposit; lesson02: documents/
+    you'll/dmv; lesson03: business/days/keep/500/sounds is lesson04 not
+    lesson03 -- see below; lesson04: teller/both/sounds), so all four are
+    safe lesson_content_key anchors. banking_noun/banking_adjective are
+    used across all four lessons as course-wide recognition tags (matching
+    unit25/unit26's own established discipline of anchoring a shared
+    course-wide tag to any lesson that itself introduces new lexemes,
+    not requiring every tag member individually to already be introduced
+    by that specific lesson).
+
+    16 templates: 5 lesson01 (banking_noun x3 + banking_adjective x2),
+    3 lesson02 (banking_noun x2 + banking_adjective x1), 4 lesson03
+    (possessive word_order + possessive listen_select + banking_noun +
+    banking_adjective), 4 lesson04 (banking_noun matching_pairs [8 pairs,
+    the full course-wide pool, per AUTHORING_GUIDE.md #16] + identity x2 +
+    banking_adjective). An honest, real-vocabulary-supported count for a
+    newer, smaller A2 unit -- no padding with untaught words.
+
+    Verified with scripts/_practice_slot_check.py (added this pack to the
+    fa-en pack-path list; banking_noun has 8 distinct course-wide
+    candidates, banking_adjective 4, possessive 4, identity well above the
+    >=3 multiple_choice/listen_select floor and >=2 matching_pairs floor)
+    and compile_content.py practice-validate, 0 errors/0 warnings. Still
+    needs the standard fresh-context review before import.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [banking_noun, banking_adjective, possessive, identity]
+slot_presets:
+  banking_noun: &banking_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: banking_noun}}
+  banking_adjective: &banking_adjective {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: banking_adjective}}
+  possessive: &possessive {language_code: en, part_of_speech: pronoun, agreement_tags: {semantic: possessive}}
+  identity: &identity {language_code: en, part_of_speech: [pronoun, verb], agreement_tags: {semantic: identity}}
+templates:
+  - content_key: practice.fa-en.en.a2.unit27.lesson01.choose.001
+    lesson_content_key: en.a2.unit27.lesson01.banking_vocabulary
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *banking_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a2.unit27.lesson01.listen.002
+    lesson_content_key: en.a2.unit27.lesson01.banking_vocabulary
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *banking_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "واژه‌ای که شنیدید {item} بود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a2.unit27.lesson01.translate.003
+    lesson_content_key: en.a2.unit27.lesson01.banking_vocabulary
+    type: translation
+    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *banking_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a2.unit27.lesson01.adj_choose.004
+    lesson_content_key: en.a2.unit27.lesson01.banking_vocabulary
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *banking_adjective}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a2.unit27.lesson01.adj_listen.005
+    lesson_content_key: en.a2.unit27.lesson01.banking_vocabulary
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *banking_adjective}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "واژه‌ای که شنیدید {item} بود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a2.unit27.lesson02.choose.001
+    lesson_content_key: en.a2.unit27.lesson02.asking_about_opening_an_account
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *banking_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a2.unit27.lesson02.listen.002
+    lesson_content_key: en.a2.unit27.lesson02.asking_about_opening_an_account
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *banking_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "واژه‌ای که شنیدید {item} بود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a2.unit27.lesson02.adj_translate.003
+    lesson_content_key: en.a2.unit27.lesson02.asking_about_opening_an_account
+    type: translation
+    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *banking_adjective}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a2.unit27.lesson03.possessive_order.001
+    lesson_content_key: en.a2.unit27.lesson03.reading_about_account_features
+    type: word_order
+    frame: {text: "{item} debit card will arrive in five to seven business days", language_code: en, direction: ltr}
+    slots: {item: *possessive}
+    answer_derivation: {kind: render_frame, frame: {text: "{item} debit card will arrive in five to seven business days", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} ضمیر ملکی این جمله است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a2.unit27.lesson03.possessive_listen.002
+    lesson_content_key: en.a2.unit27.lesson03.reading_about_account_features
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *possessive}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "واژه‌ای که شنیدید {item} بود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a2.unit27.lesson03.choose.003
+    lesson_content_key: en.a2.unit27.lesson03.reading_about_account_features
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *banking_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a2.unit27.lesson03.adj_listen.004
+    lesson_content_key: en.a2.unit27.lesson03.reading_about_account_features
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *banking_adjective}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "واژه‌ای که شنیدید {item} بود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a2.unit27.lesson04.match.001
+    lesson_content_key: en.a2.unit27.lesson04.opening_an_account_dialogue
+    type: matching_pairs
+    frame: {text: "{first} — {second}", language_code: en, direction: ltr}
+    slots: {first: *banking_noun, second: *banking_noun, third: *banking_noun, fourth: *banking_noun, fifth: *banking_noun, sixth: *banking_noun, seventh: *banking_noun, eighth: *banking_noun}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth, seventh, eighth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth, seventh, eighth]}
+    feedback_frame: {text: "هر واژه را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a2.unit27.lesson04.identity_choose.002
+    lesson_content_key: en.a2.unit27.lesson04.opening_an_account_dialogue
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *identity}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a2.unit27.lesson04.identity_listen.003
+    lesson_content_key: en.a2.unit27.lesson04.opening_an_account_dialogue
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *identity}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "واژه‌ای که در این گفتگو شنیدید {item} بود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a2.unit27.lesson04.adj_choose.004
+    lesson_content_key: en.a2.unit27.lesson04.opening_an_account_dialogue
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *banking_adjective}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}

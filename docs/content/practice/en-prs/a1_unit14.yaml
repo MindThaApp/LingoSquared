@@ -1,0 +1,186 @@
+schema_version: "1.0"
+pack_key: practice.en-prs.a1.unit14
+source_language: en
+target_language: prs
+unit_content_key: prs.a1.unit14.preferences
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: >-
+    Authored 2026-07-07 for the new A1 unit14 (preferences)
+    realization, same pass as this bundle's a1_unit12/13.yaml siblings
+    (see a1_unit12.yaml's notes for the full extension context: a
+    parallel session authored units 09-11's practice pool separately,
+    this bundle only touches units 12-15).
+
+    Four new groups plus reuse of the course-wide person_name pool:
+    preference_verb (دارم/ندارم/دارد/ندارد/دارید, 5 members -- all keep
+    their literal "have/has" glosses, since the idiomatic "like"
+    meaning comes from the دوست دارم construction as a whole, not any
+    single re-glossed token), preference_topic (قهوه/چای/موسیقی, 3
+    members -- coffee/tea/music, the three "things you can like or
+    dislike" in this unit, deliberately its own tag rather than pooled
+    into the unrelated food_item group), description_adjective
+    (خوش‌مزه/جالب/گرم, 3 members, pooled with preference_topic for one
+    6-pair matching_pairs template), and choice_word
+    (کدام/یا/بیشتر, 3 members). warm_word is a private single-candidate
+    tag layered on گرم (on top of description_adjective), used only by
+    this pack's own fill_in_blank template. نگار/کریم needed their
+    person_name semantic tag added here (a real pre-existing gap --
+    both were already glossed from earlier units but never tagged),
+    reusing the course-wide 12-member pool.
+
+    The one fill_in_blank template (warm_word/گرم) is a real
+    single-project-wide-candidate group, verified via
+    scripts/_fill_in_blank_ambiguity_check.py -- the frame also embeds
+    real disambiguating context (چای را دوست دارم چون ... است) even
+    though the constraint alone already guarantees a single candidate.
+    No listen_select/listen_type anywhere. No bare unquoted
+    yes/no/true/false anywhere.
+
+    Verified with scripts/_practice_slot_check.py (reusing
+    backfill_lexemes_en_prs.py's real iter_specs() output) -- every
+    slot has enough distinct candidates. scripts/compile_content.py
+    practice-validate for the full en-prs pack -- 0 errors/0 warnings.
+    Needs the standard fresh-context review before import; no
+    backfill_lexemes_en_prs.py run has happened against a real
+    database yet in this pass.
+tag_schema:
+  part_of_speech: [noun, verb, adjective, particle, pronoun, proper_noun]
+  agreement_tags:
+    semantic: [preference_verb, preference_topic, description_adjective, warm_word, choice_word, person_name]
+slot_presets:
+  preference_verb: &preference_verb {language_code: prs, part_of_speech: verb, agreement_tags: {semantic: preference_verb}}
+  preference_topic: &preference_topic {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: preference_topic}}
+  description_adjective: &description_adjective {language_code: prs, part_of_speech: adjective, agreement_tags: {semantic: description_adjective}}
+  warm_word: &warm_word {language_code: prs, part_of_speech: adjective, agreement_tags: {semantic: warm_word}}
+  choice_word: &choice_word {language_code: prs, part_of_speech: [pronoun, particle, adjective], agreement_tags: {semantic: choice_word}}
+  person_name: &person_name {language_code: prs, part_of_speech: proper_noun, agreement_tags: {semantic: person_name}}
+  # preference_topic (3) pools with description_adjective (3) for the
+  # matching_pairs template below -- 6 distinct real tokens,
+  # AUTHORING_GUIDE.md #16.
+  topic_and_description: &topic_and_description {language_code: prs, part_of_speech: [noun, adjective], agreement_tags: {semantic: [preference_topic, description_adjective]}}
+templates:
+  # Lesson 1: basic likes and dislikes.
+  - content_key: practice.en-prs.prs.a1.unit14.lesson01.preference_topic_gloss.001
+    lesson_content_key: prs.a1.unit14.lesson01.basic_likes
+    type: multiple_choice
+    frame: {text: "{preference_topic}", language_code: prs, direction: rtl}
+    slots: {preference_topic: *preference_topic}
+    answer_derivation: {kind: slot_gloss, slot: preference_topic}
+    feedback_frame: {text: "{preference_topic} is something you can like or dislike.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit14.lesson01.preference_topic_translate.002
+    lesson_content_key: prs.a1.unit14.lesson01.basic_likes
+    type: translation
+    frame: {text: "{preference_topic}", language_code: en, direction: ltr, slot_rendering: {preference_topic: english_gloss}}
+    slots: {preference_topic: *preference_topic}
+    answer_derivation: {kind: slot_text, slot: preference_topic}
+    feedback_frame: {text: "{preference_topic} is the Dari word for this.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit14.lesson01.topic_description_pair.003
+    lesson_content_key: prs.a1.unit14.lesson01.basic_likes
+    type: matching_pairs
+    frame: {text: "{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six}", language_code: prs, direction: rtl}
+    slots: {word_one: *topic_and_description, word_two: *topic_and_description, word_three: *topic_and_description, word_four: *topic_and_description, word_five: *topic_and_description, word_six: *topic_and_description}
+    slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}]
+    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit14.lesson01.topic_order.004
+    lesson_content_key: prs.a1.unit14.lesson01.basic_likes
+    type: word_order
+    frame: {text: "{preference_topic} را دوست دارم", language_code: prs, direction: rtl}
+    slots: {preference_topic: *preference_topic}
+    answer_derivation: {kind: render_frame, frame: {text: "{preference_topic} را دوست دارم", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: [thing] را دوست دارم (I like [thing]).", language_code: en, direction: ltr}
+
+  # Lesson 2: asking about preferences.
+  - content_key: practice.en-prs.prs.a1.unit14.lesson02.preference_verb_gloss.001
+    lesson_content_key: prs.a1.unit14.lesson02.asking_preferences
+    type: multiple_choice
+    frame: {text: "{preference_verb}", language_code: prs, direction: rtl}
+    slots: {preference_verb: *preference_verb}
+    answer_derivation: {kind: slot_gloss, slot: preference_verb}
+    feedback_frame: {text: "{preference_verb} is a form of داشتن (to have), used with دوست for 'to like.'", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit14.lesson02.preference_verb_translate.002
+    lesson_content_key: prs.a1.unit14.lesson02.asking_preferences
+    type: translation
+    frame: {text: "{preference_verb}", language_code: en, direction: ltr, slot_rendering: {preference_verb: english_gloss}}
+    slots: {preference_verb: *preference_verb}
+    answer_derivation: {kind: slot_text, slot: preference_verb}
+    feedback_frame: {text: "{preference_verb} is the Dari word for this.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit14.lesson02.choice_word_gloss.003
+    lesson_content_key: prs.a1.unit14.lesson02.asking_preferences
+    type: multiple_choice
+    frame: {text: "{choice_word}", language_code: prs, direction: rtl}
+    slots: {choice_word: *choice_word}
+    answer_derivation: {kind: slot_gloss, slot: choice_word}
+    feedback_frame: {text: "{choice_word} is used when asking about or comparing preferences.", language_code: en, direction: ltr}
+
+  # Lesson 3: choosing between two things.
+  - content_key: practice.en-prs.prs.a1.unit14.lesson03.choice_word_translate.001
+    lesson_content_key: prs.a1.unit14.lesson03.choosing_between_options
+    type: translation
+    frame: {text: "{choice_word}", language_code: en, direction: ltr, slot_rendering: {choice_word: english_gloss}}
+    slots: {choice_word: *choice_word}
+    answer_derivation: {kind: slot_text, slot: choice_word}
+    feedback_frame: {text: "{choice_word} is the Dari word for this.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit14.lesson03.topic_or_order.002
+    lesson_content_key: prs.a1.unit14.lesson03.choosing_between_options
+    type: word_order
+    frame: {text: "{preference_topic_one} یا {preference_topic_two}؟", language_code: prs, direction: rtl}
+    slots: {preference_topic_one: *preference_topic, preference_topic_two: *preference_topic}
+    slot_relations: [{kind: distinct, slots: [preference_topic_one, preference_topic_two]}]
+    answer_derivation: {kind: ordered_slot_texts, slots: [preference_topic_one, preference_topic_two]}
+    feedback_frame: {text: "Keep {preference_topic_one} before یا before {preference_topic_two}.", language_code: en, direction: ltr}
+
+  # Lesson 4: giving a reason.
+  - content_key: practice.en-prs.prs.a1.unit14.lesson04.description_adjective_translate.001
+    lesson_content_key: prs.a1.unit14.lesson04.giving_reasons
+    type: translation
+    frame: {text: "{description_adjective}", language_code: en, direction: ltr, slot_rendering: {description_adjective: english_gloss}}
+    slots: {description_adjective: *description_adjective}
+    answer_derivation: {kind: slot_text, slot: description_adjective}
+    feedback_frame: {text: "{description_adjective} is the Dari word for this.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit14.lesson04.reason_order.002
+    lesson_content_key: prs.a1.unit14.lesson04.giving_reasons
+    type: word_order
+    frame: {text: "{preference_topic} را دوست دارم چون {description_adjective} است", language_code: prs, direction: rtl}
+    slots: {preference_topic: *preference_topic, description_adjective: *description_adjective}
+    answer_derivation: {kind: render_frame, frame: {text: "{preference_topic} را دوست دارم چون {description_adjective} است", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: [thing] را دوست دارم چون [reason] است (I like [thing] because it's [reason]).", language_code: en, direction: ltr}
+
+  # Lesson 5: reading about preferences (third person).
+  - content_key: practice.en-prs.prs.a1.unit14.lesson05.warm_word_fill.001
+    lesson_content_key: prs.a1.unit14.lesson05.reading_about_preferences
+    type: fill_in_blank
+    frame: {text: "چای را دوست دارم چون {warm_word} است.", language_code: prs, direction: rtl}
+    slots: {warm_word: *warm_word}
+    answer_derivation: {kind: slot_text, slot: warm_word}
+    feedback_frame: {text: "چای را دوست دارم چون {warm_word} است means I like tea because it's warm.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit14.lesson05.preference_verb_pair.002
+    lesson_content_key: prs.a1.unit14.lesson05.reading_about_preferences
+    type: matching_pairs
+    frame: {text: "{verb_one} — {verb_two} — {verb_three} — {verb_four} — {verb_five}", language_code: prs, direction: rtl}
+    slots: {verb_one: *preference_verb, verb_two: *preference_verb, verb_three: *preference_verb, verb_four: *preference_verb, verb_five: *preference_verb}
+    slot_relations: [{kind: distinct, slots: [verb_one, verb_two, verb_three, verb_four, verb_five]}]
+    answer_derivation: {kind: matching_pairs, slots: [verb_one, verb_two, verb_three, verb_four, verb_five]}
+    feedback_frame: {text: "Match each form of داشتن (to have) to its English meaning.", language_code: en, direction: ltr}
+
+  # Lesson 6: a dialogue about preferences (Karim and Negar).
+  - content_key: practice.en-prs.prs.a1.unit14.lesson06.person_name_gloss.001
+    lesson_content_key: prs.a1.unit14.lesson06.preferences_dialogue
+    type: multiple_choice
+    frame: {text: "{person_name}", language_code: prs, direction: rtl}
+    slots: {person_name: *person_name}
+    answer_derivation: {kind: slot_gloss, slot: person_name}
+    feedback_frame: {text: "{person_name} is a name used in this course.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit14.lesson06.person_name_pair.002
+    lesson_content_key: prs.a1.unit14.lesson06.preferences_dialogue
+    type: matching_pairs
+    # Full course-wide person_name pool, 12 distinct real candidates
+    # (verified via scripts/_practice_slot_check.py) -- Karim and Negar
+    # are this lesson's own two speakers.
+    frame: {text: "{person_name_one} — {person_name_two} — {person_name_three} — {person_name_four} — {person_name_five} — {person_name_six} — {person_name_seven} — {person_name_eight} — {person_name_nine} — {person_name_ten} — {person_name_eleven} — {person_name_twelve}", language_code: prs, direction: rtl}
+    slots: {person_name_one: *person_name, person_name_two: *person_name, person_name_three: *person_name, person_name_four: *person_name, person_name_five: *person_name, person_name_six: *person_name, person_name_seven: *person_name, person_name_eight: *person_name, person_name_nine: *person_name, person_name_ten: *person_name, person_name_eleven: *person_name, person_name_twelve: *person_name}
+    slot_relations: [{kind: distinct, slots: [person_name_one, person_name_two, person_name_three, person_name_four, person_name_five, person_name_six, person_name_seven, person_name_eight, person_name_nine, person_name_ten, person_name_eleven, person_name_twelve]}]
+    answer_derivation: {kind: matching_pairs, slots: [person_name_one, person_name_two, person_name_three, person_name_four, person_name_five, person_name_six, person_name_seven, person_name_eight, person_name_nine, person_name_ten, person_name_eleven, person_name_twelve]}
+    feedback_frame: {text: "Match each name to its English label.", language_code: en, direction: ltr}

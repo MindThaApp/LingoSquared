@@ -224,6 +224,21 @@ UNIT_FILES_A2 = (
         REPO_ROOT / "docs/content/realizations/en/a2_unit26_opinions.yaml",
         REPO_ROOT / "docs/content/overlays/fa-en/a2_unit26.yaml",
     ),
+    # Unit 27 (A2: opening a bank account), added 2026-07-07 (practice-
+    # pool-sync lane extending fa-en to this new unit, in parallel with the
+    # equivalent prs-en pass). EN_POS/en_agreement_tags for this unit's
+    # vocabulary (including the new banking_noun/banking_adjective
+    # semantic tags) were already present in _en_target_lexeme_common.py
+    # before this change (added earlier this session alongside nl-en's own
+    # unit27 course-routing fix) -- verified every introduced_token across
+    # this realization file against EN_POS's keys: zero missing. Only this
+    # script's own Farsi gloss dict needed extending (18 new tokens, cross-
+    # checked against docs/content/overlays/fa-en/a2_unit27.yaml's own real
+    # text, not copy-pasted from it).
+    (
+        REPO_ROOT / "docs/content/realizations/en/a2_unit27_banking.yaml",
+        REPO_ROOT / "docs/content/overlays/fa-en/a2_unit27.yaml",
+    ),
 )
 
 # Farsi gloss for each shared English target token -- hand-written for
@@ -461,6 +476,21 @@ EN_TARGET_TO_FA_GLOSS: dict[str, str] = {
     "point": "نکته", "they": "آنها",
     "move": "جابه‌جا کردن؛ منتقل کردن", "farther": "دورتر",
     "away": "دور (در move away)",
+    # Unit 27 (A2: opening a bank account), added 2026-07-07. Atomic per-
+    # token glosses -- cross-checked against, but not copy-pasted from,
+    # docs/content/overlays/fa-en/a2_unit27.yaml's own (phrase-level)
+    # Farsi glosses. "debit"/"card"/"i'll"-style contraction pattern reuse
+    # their existing Unit 15/12 senses unchanged.
+    "checking": "جاری (در checking account)", "account": "حساب",
+    "monthly": "ماهانه", "fee": "کارمزد", "minimum": "حداقل",
+    "balance": "موجودی", "direct": "مستقیم (در direct deposit)",
+    "deposit": "واریز", "documents": "مدارک (جمع)",
+    "you'll": "شما ... خواهید (مخفف you will)",
+    "dmv": "ادارهٔ راهنمایی و رانندگی",
+    "business": "کاری (در business days یعنی روزهای کاری)",
+    "days": "روزها", "keep": "نگه داشتن", "500": "پانصد",
+    "sounds": "به‌نظر می‌رسد (در that sounds good)",
+    "teller": "کارمند بانک", "both": "هر دو",
 }
 
 

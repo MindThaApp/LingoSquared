@@ -1,0 +1,170 @@
+schema_version: "1.0"
+pack_key: practice.en-fa.a1.unit14
+source_language: en
+target_language: fa
+unit_content_key: fa.a1.unit14.preferences
+review:
+  status: unreviewed
+  required_next_reviewer: codex
+  notes: >-
+    Authored 2026-07-07 by the practice-content-gap-closing pass (en-fa
+    units 12-15), same pass as a1_unit12.yaml/a1_unit13.yaml/
+    a1_unit15.yaml -- see a1_unit12.yaml's notes for the shared
+    backfill_lexemes.py coordination with the parallel 09-11 lane.
+
+    Four semantic groups, all verified >=2/>=3-distinct-candidate via
+    scripts/_practice_slot_check.py: "preference_word" (قهوه/چای/موسیقی,
+    3 members, anchored lesson02 where موسیقی completes the pool),
+    "preference_verb" (داره/نداره, 2 members, matching/translation-only
+    -- the colloquial 3rd-person forms, additive to the existing
+    broader "possession_verb" tag those two tokens already carry from
+    unit04), "preference_reason" (خوشمزه‌ست/جالبه, 2 members, matching/
+    translation-only), and "asking_word" (کدوم/بیشتر/یا, 3 members,
+    mixed pronoun/adverb/particle, anchored lesson03).
+
+    گرمه (also a genuine "reason" in this unit's own reading/dialogue)
+    was deliberately kept OUT of preference_reason: it already belongs
+    to a1_unit07's weather_state_verb set, and pooling it here would let
+    the generative sentence template below produce a pragmatically odd
+    combination like "I like music because it's warm" -- خوشمزه‌ست/جالبه
+    both read naturally against any of the three preference_word nouns.
+
+    Three generative templates build the real taught sentence shapes
+    directly: (1) word_order "{preference_word} یا {preference_word2}"
+    mirrors lesson03's own "قهوه یا چای؟" either/or question (all 6
+    ordered combinations of the 3 preference_word members read
+    naturally as a choice-offering question); (2) word_order
+    "{preference_word} رو بیشتر دوست دارم" mirrors lesson03's own "قهوه
+    رو بیشتر دوست دارم" (all 3 combinations natural); (3) word_order
+    "{preference_word} رو دوست دارم چون {preference_reason}" mirrors
+    lesson04's own two exact taught sentences and generalizes to all
+    3x2=6 combinations -- 5 of 6 are fully natural (coffee/tea +
+    delicious, coffee/tea/music + interesting), one ("موسیقی رو دوست
+    دارم چون خوشمزه‌ست" -- I like music because it's delicious) is a
+    mildly unusual pairing but still grammatically well-formed, the same
+    class of tolerated pragmatic looseness already accepted elsewhere in
+    this course's generative "X و X" combo templates.
+
+    Deliberately left out: می‌خوای/دوست دارم/دوست ندارم as fixed
+    multi-token phrases (already drilled via the 1st-person forms in
+    earlier units; only the NEW 3rd-person داره/نداره forms are this
+    unit's own genuinely new grammar point) and the full lesson06
+    dialogue.
+
+    Lesson-anchor check: lesson01, lesson02, lesson03, lesson04, and
+    lesson05 each genuinely introduce new vocabulary (confirmed by
+    reading the realization file directly) -- safe anchors.
+
+    Verified with scripts/_practice_slot_check.py against
+    backfill_lexemes.py's actual iter_specs() output -- clean, no
+    zero-candidate slots, no under-3 multiple_choice/matching_pairs
+    slots. scripts/_fill_in_blank_ambiguity_check.py reports zero flags
+    (no fill_in_blank templates in this pack). compile_content.py
+    practice-validate clean (0 errors/0 warnings). Needs the standard
+    fresh-context review before import.
+tag_schema:
+  part_of_speech: [noun, verb, pronoun, adverb, particle]
+  agreement_tags:
+    semantic: [preference_word, preference_verb, preference_reason, asking_word]
+slot_presets:
+  preference_word: &preference_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: preference_word}}
+  preference_verb: &preference_verb {language_code: fa, part_of_speech: verb, agreement_tags: {semantic: preference_verb}}
+  preference_reason: &preference_reason {language_code: fa, part_of_speech: verb, agreement_tags: {semantic: preference_reason}}
+  asking_word: &asking_word {language_code: fa, part_of_speech: [pronoun, adverb, particle], agreement_tags: {semantic: asking_word}}
+templates:
+  - content_key: practice.en-fa.fa.a1.unit14.lesson02.preference_word_choice.001
+    lesson_content_key: fa.a1.unit14.lesson02.asking_preferences
+    type: multiple_choice
+    frame: {text: "{preference_word}", language_code: fa, direction: rtl}
+    slots: {preference_word: *preference_word}
+    answer_derivation: {kind: slot_gloss, slot: preference_word}
+    feedback_frame: {text: "{preference_word} is something you might like or dislike.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit14.lesson02.preference_word_match.002
+    lesson_content_key: fa.a1.unit14.lesson02.asking_preferences
+    type: matching_pairs
+    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *preference_word, second: *preference_word, third: *preference_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit14.lesson02.preference_word_translate.003
+    lesson_content_key: fa.a1.unit14.lesson02.asking_preferences
+    type: translation
+    frame: {text: "{preference_word}", language_code: en, direction: ltr, slot_rendering: {preference_word: english_gloss}}
+    slots: {preference_word: *preference_word}
+    answer_derivation: {kind: slot_text, slot: preference_word}
+    feedback_frame: {text: "The Farsi word is {preference_word}.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit14.lesson05.preference_verb_match.001
+    lesson_content_key: fa.a1.unit14.lesson05.reading_about_preferences
+    type: matching_pairs
+    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *preference_verb, second: *preference_verb}
+    slot_relations: [{kind: distinct, slots: [first, second]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit14.lesson05.preference_verb_translate.002
+    lesson_content_key: fa.a1.unit14.lesson05.reading_about_preferences
+    type: translation
+    frame: {text: "{preference_verb}", language_code: en, direction: ltr, slot_rendering: {preference_verb: english_gloss}}
+    slots: {preference_verb: *preference_verb}
+    answer_derivation: {kind: slot_text, slot: preference_verb}
+    feedback_frame: {text: "The Farsi word is {preference_verb}.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit14.lesson04.preference_reason_match.001
+    lesson_content_key: fa.a1.unit14.lesson04.giving_reasons
+    type: matching_pairs
+    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *preference_reason, second: *preference_reason}
+    slot_relations: [{kind: distinct, slots: [first, second]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit14.lesson04.preference_reason_translate.002
+    lesson_content_key: fa.a1.unit14.lesson04.giving_reasons
+    type: translation
+    frame: {text: "{preference_reason}", language_code: en, direction: ltr, slot_rendering: {preference_reason: english_gloss}}
+    slots: {preference_reason: *preference_reason}
+    answer_derivation: {kind: slot_text, slot: preference_reason}
+    feedback_frame: {text: "The Farsi word is {preference_reason}.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit14.lesson03.asking_word_choice.001
+    lesson_content_key: fa.a1.unit14.lesson03.choosing_between_options
+    type: multiple_choice
+    frame: {text: "{asking_word}", language_code: fa, direction: rtl}
+    slots: {asking_word: *asking_word}
+    answer_derivation: {kind: slot_gloss, slot: asking_word}
+    feedback_frame: {text: "{asking_word} is used when asking about or choosing between preferences.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit14.lesson03.asking_word_match.002
+    lesson_content_key: fa.a1.unit14.lesson03.choosing_between_options
+    type: matching_pairs
+    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *asking_word, second: *asking_word, third: *asking_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit14.lesson03.asking_word_translate.003
+    lesson_content_key: fa.a1.unit14.lesson03.choosing_between_options
+    type: translation
+    frame: {text: "{asking_word}", language_code: en, direction: ltr, slot_rendering: {asking_word: english_gloss}}
+    slots: {asking_word: *asking_word}
+    answer_derivation: {kind: slot_text, slot: asking_word}
+    feedback_frame: {text: "The Farsi word is {asking_word}.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit14.lesson03.preference_choice_question_order.004
+    lesson_content_key: fa.a1.unit14.lesson03.choosing_between_options
+    type: word_order
+    frame: {text: "{preference_word_one} یا {preference_word_two}؟", language_code: fa, direction: rtl}
+    slots: {preference_word_one: *preference_word, preference_word_two: *preference_word}
+    slot_relations: [{kind: distinct, slots: [preference_word_one, preference_word_two]}]
+    answer_derivation: {kind: render_frame, frame: {text: "{preference_word_one} یا {preference_word_two}؟", language_code: fa, direction: rtl}}
+    feedback_frame: {text: "یا offers a choice, like قهوه یا چای؟", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit14.lesson03.preference_more_order.005
+    lesson_content_key: fa.a1.unit14.lesson03.choosing_between_options
+    type: word_order
+    frame: {text: "{preference_word} رو بیشتر دوست دارم", language_code: fa, direction: rtl}
+    slots: {preference_word: *preference_word}
+    answer_derivation: {kind: render_frame, frame: {text: "{preference_word} رو بیشتر دوست دارم", language_code: fa, direction: rtl}}
+    feedback_frame: {text: "رو بیشتر دوست دارم means 'I like ... more,' as in قهوه رو بیشتر دوست دارم.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit14.lesson04.preference_reason_order.006
+    lesson_content_key: fa.a1.unit14.lesson04.giving_reasons
+    type: word_order
+    frame: {text: "{preference_word} رو دوست دارم چون {preference_reason}", language_code: fa, direction: rtl}
+    slots: {preference_word: *preference_word, preference_reason: *preference_reason}
+    answer_derivation: {kind: render_frame, frame: {text: "{preference_word} رو دوست دارم چون {preference_reason}", language_code: fa, direction: rtl}}
+    feedback_frame: {text: "چون introduces a reason, as in قهوه رو دوست دارم چون خوشمزه‌ست.", language_code: en, direction: ltr}
