@@ -1,0 +1,197 @@
+schema_version: "1.0"
+realization_version: "2026.1-draft.1"
+target_language: "de"
+cefr_level: "A1"
+status: "complete_draft"
+generation_provenance:
+  method: "ai_generated"
+  authoring_system: "claude"
+  human_reviewed: false
+review:
+  status: "unreviewed"
+  required_next_reviewer: "codex"
+  notes: >-
+    Fifth German unit, continuing the Anna/Felix storyline (still on the
+    formal Sie register between them established in units 01-04) and
+    reusing the Bibliothek setting from unit04's capstone dialogue for
+    unit05's own capstone (this time about the library's actual daily
+    opening hours, not a one-off reopening date). Scoped to exactly one
+    spine outcome (universal.a1.time.ask_tell_time) across all 4 lessons
+    per AUTHORING_GUIDE §1; prerequisite
+    universal.a1.numbers.use_basic_numbers is satisfied by unit03.
+
+    The single trickiest real teaching point in this unit: German
+    "halb vier" means HALF PAST THREE (3:30), not half past four --
+    unlike English, German names the half-hour by the hour it is
+    counting TOWARD, not the hour it just passed. This is a well-known,
+    genuine trap for English-speaking learners (a literal word-for-word
+    reading of "halb vier" naturally suggests 4:30). lesson01 teaches it
+    explicitly as its own worked example rather than folding it in
+    quietly next to "drei Uhr," and lesson01's multiple_choice exercise
+    for it (in the en-de overlay) includes both "Es ist halb fünf"
+    (4:30, an off-by-one slip in the correct direction) and "Es ist
+    halb drei" (2:30, the genuine backward/calque reading a learner
+    might reach for by treating "halb vier" like English "half four")
+    as distractors, so the exercise actually probes the direction of
+    the rule rather than just a worked example. Also flagged:
+    German commonly states OFFICIAL/schedule hours on the 24-hour clock
+    (achtzehn Uhr = 6 PM) even though everyday casual time-telling uses
+    the 12-hour convention with Viertel nach/vor -- both conventions are
+    real and co-exist, so lesson03/04's store and library hours use
+    24-hour "Uhr" times deliberately, contrasted with lesson01/02's
+    casual 12-hour phrasing, exactly the way English's shared
+    en/a1_unit05_time.yaml explicitly flags its own 12-hour-vs-AM/PM
+    convention rather than presenting one form as the only way.
+    Standard nach/vor quarter-hour phrasing was used (not the regional
+    southern-German/Austrian "viertel vier" = 3:15 form) to stay
+    unambiguous and consistent with what most learners' materials teach.
+
+    lesson03 teaches 6 day-part/time-of-day terms (Morgen, Mittag,
+    Nachmittag, Abend, Nacht, Mitternacht) rather than only the 4 the
+    shared en realization's equivalent lesson uses, specifically so its
+    matching_pairs clears AUTHORING_GUIDE §16's 6-12 target comfortably
+    (paired against approximate hour-ranges, e.g. 6-12 Uhr = Morgen).
+    lesson04's capstone dialogue reuses "sie" (lowercase, third-person,
+    referring to the feminine noun "die Bibliothek") exactly the way
+    unit04's own capstone did -- flagged there by review as a real but
+    non-blocking pedagogical note (it's ordinary correct German, not a
+    collision with the Sie/formal-you distinction, and grading is
+    unaffected since this file doesn't need the case_sensitive flag);
+    continuing the same usage here consistently rather than avoiding it
+    artificially. No fill_in_blank exercises, same ambiguity-avoidance
+    discipline as every prior unit. Applied the hardcoded-English-
+    target_blocks lesson from the start: every target_blocks in this
+    file is empty or genuine German content only -- a repo-wide grep
+    after authoring confirms zero language_code: "en" target_blocks
+    anywhere in this file. Compiled and validated against the real
+    compiler to confirm every exercise's tested_text is fully covered
+    by this file's own cumulative introduced_tokens.
+
+    Fresh-context review (subagent, Codex still usage-exhausted; the
+    review deliberately did not open any sibling-direction overlay for
+    this realization, per the standing isolation rule) confirmed this
+    file itself has zero hardcoded-English-target_blocks instances, the
+    "halb vier"/24-hour-schedule-convention claims are genuine standard
+    German, §16 matching_pairs clears the floor, and read_schild is a
+    genuinely distinct reading exercise, not a listening duplicate. It
+    found one BLOCKING issue, in de-en/a1_unit05.yaml only (not this
+    file): 3 word_order exercises had accepted_answers copied verbatim
+    from the (deliberately scrambled) word_bank/tile order instead of
+    the grammatically correct order, which would have marked a correct
+    learner answer wrong -- fixed all 3. Minor fixes also applied: a
+    §15 asterisk-marking slip (German words wrapped in asterisks inside
+    German-language prose, where only target-language English should
+    be wrapped) in de-en/a1_unit05.yaml's halb-vier explanation; a §12
+    gap in en-de/a1_unit05.yaml's speak_oeffnungszeiten (missing the
+    comma+"und" variant its typed sibling has); and the distractor-set
+    improvement described above. Re-verified clean after every fix:
+    real compiler validate+compile for both en-de and de-en directions
+    (0 errors/warnings), full scripts/verify.sh --content-only.
+
+course:
+  realization_key: "de.a1"
+  target_language_first: true
+  dialect: "de_DE_standard"
+  register_policy: "Teach clear Standard German (Hochdeutsch). Casual time-telling uses the 12-hour convention with nach/vor for quarter hours and the reversed half-hour rule (halb vier = 3:30, naming the hour it's counting toward, not the hour just passed). Official/schedule hours (store and library opening times) use the 24-hour clock (achtzehn Uhr = 6 PM) -- both conventions are real and co-exist, flag this explicitly rather than presenting only one. Anna and Felix continue on the formal Sie register from units 01-04."
+
+media_assets:
+  - {content_key: "de.a1.audio.zeit.frage.01", language: "de", text: "Wie spät ist es?", voice_hint: "neutral_adult", status: "pending_generation"}
+  - {content_key: "de.a1.audio.zeit.uhr.01", language: "de", text: "Es ist drei Uhr. Es ist halb vier. Es ist Viertel vor vier.", voice_hint: "neutral_adult", status: "pending_generation"}
+  - {content_key: "de.a1.audio.zeit.tageszeiten.01", language: "de", text: "Morgen, Mittag, Nachmittag, Abend, Nacht, Mitternacht", voice_hint: "neutral_adult", status: "pending_generation"}
+  - content_key: "de.a1.audio.dialog.bibliothekszeiten.01"
+    language: "de"
+    text: "Felix: Wann öffnet die Bibliothek? Anna: Sie öffnet um neun Uhr morgens. Felix: Und wann schließt sie? Anna: Sie schließt um achtzehn Uhr. Felix: Gut, bis dann!"
+    voice_hint: "two_adults_neutral_friendly"
+    status: "pending_generation"
+
+units:
+  - content_key: "de.a1.unit05.uhrzeit"
+    title: "Die Uhrzeit"
+    section: "reading_writing"
+    spine_outcome_ids:
+      - "universal.a1.time.ask_tell_time"
+    planned_lesson_count: 4
+    lessons:
+      - content_key: "de.a1.unit05.lesson01.volle_und_halbe_stunden"
+        title: "Volle und halbe Stunden"
+        spine_outcome_id: "universal.a1.time.ask_tell_time"
+        teaching:
+          - {content_key: "de.a1.unit05.lesson01.teach.wie_spaet", kind: "phrase", target: {text: "Wie spät ist es?", language_code: "de", direction: "ltr"}, introduced_tokens: ["Wie", "spät", "ist", "es"]}
+          - {content_key: "de.a1.unit05.lesson01.teach.drei_uhr", kind: "phrase", target: {text: "Es ist drei Uhr.", language_code: "de", direction: "ltr"}, introduced_tokens: ["Es", "ist", "drei", "Uhr"]}
+          - {content_key: "de.a1.unit05.lesson01.teach.halb_vier", kind: "grammar_note", target: {text: "Es ist halb vier.", language_code: "de", direction: "ltr"}, introduced_tokens: ["halb", "vier"]}
+          - {content_key: "de.a1.unit05.lesson01.teach.fuenf_uhr", kind: "phrase", target: {text: "Es ist fünf Uhr.", language_code: "de", direction: "ltr"}, introduced_tokens: ["fünf"]}
+        exercises:
+          - {content_key: "de.a1.unit05.lesson01.exercise01.listen_wie_spaet", type: "listen_select", tested_text: "Wie spät ist es", media_asset_key: "de.a1.audio.zeit.frage.01", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit05.lesson01.exercise02.choose_drei_uhr", type: "multiple_choice", tested_text: "Es ist drei Uhr.", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit05.lesson01.exercise03.choose_halb_vier", type: "multiple_choice", tested_text: "Es ist halb vier.", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit05.lesson01.exercise04.order_fuenf_uhr", type: "word_order", tested_text: "Es ist fünf Uhr", prompt: {target_blocks: []}, word_bank: ["Es", "ist", "fünf", "Uhr"]}
+          - {content_key: "de.a1.unit05.lesson01.exercise05.write_drei_uhr", type: "writing_prompt", tested_text: "Es ist drei Uhr", prompt: {target_blocks: []}}
+
+      - content_key: "de.a1.unit05.lesson02.viertel_nach_und_vor"
+        title: "Viertel nach und Viertel vor"
+        spine_outcome_id: "universal.a1.time.ask_tell_time"
+        teaching:
+          - {content_key: "de.a1.unit05.lesson02.teach.viertel_nach", kind: "phrase", target: {text: "Es ist Viertel nach drei.", language_code: "de", direction: "ltr"}, introduced_tokens: ["Viertel", "nach"]}
+          - {content_key: "de.a1.unit05.lesson02.teach.viertel_vor", kind: "phrase", target: {text: "Es ist Viertel vor vier.", language_code: "de", direction: "ltr"}, introduced_tokens: ["vor"]}
+          - {content_key: "de.a1.unit05.lesson02.teach.zehn_nach", kind: "phrase", target: {text: "Es ist zehn nach vier.", language_code: "de", direction: "ltr"}, introduced_tokens: ["zehn"]}
+          - {content_key: "de.a1.unit05.lesson02.teach.zehn_vor", kind: "phrase", target: {text: "Es ist zehn vor fünf.", language_code: "de", direction: "ltr"}, introduced_tokens: []}
+        exercises:
+          - {content_key: "de.a1.unit05.lesson02.exercise01.listen_viertel_vor", type: "listen_select", tested_text: "Es ist Viertel vor vier", media_asset_key: "de.a1.audio.zeit.uhr.01", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit05.lesson02.exercise02.choose_viertel_nach", type: "multiple_choice", tested_text: "Es ist Viertel nach drei.", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit05.lesson02.exercise03.choose_viertel_vor", type: "multiple_choice", tested_text: "Es ist Viertel vor vier.", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit05.lesson02.exercise04.order_zehn_nach", type: "word_order", tested_text: "Es ist zehn nach vier", prompt: {target_blocks: []}, word_bank: ["zehn", "Es", "nach", "vier", "ist"]}
+          - {content_key: "de.a1.unit05.lesson02.exercise05.write_zehn_vor", type: "writing_prompt", tested_text: "Es ist zehn vor fünf", prompt: {target_blocks: []}}
+
+      - content_key: "de.a1.unit05.lesson03.tageszeiten_und_oeffnungszeiten"
+        title: "Tageszeiten und Öffnungszeiten"
+        spine_outcome_id: "universal.a1.time.ask_tell_time"
+        teaching:
+          - {content_key: "de.a1.unit05.lesson03.teach.morgen", kind: "vocabulary", target: {text: "Morgen", language_code: "de", direction: "ltr"}, introduced_tokens: ["Morgen"]}
+          - {content_key: "de.a1.unit05.lesson03.teach.mittag", kind: "vocabulary", target: {text: "Mittag", language_code: "de", direction: "ltr"}, introduced_tokens: ["Mittag"]}
+          - {content_key: "de.a1.unit05.lesson03.teach.nachmittag", kind: "vocabulary", target: {text: "Nachmittag", language_code: "de", direction: "ltr"}, introduced_tokens: ["Nachmittag"]}
+          - {content_key: "de.a1.unit05.lesson03.teach.abend", kind: "vocabulary", target: {text: "Abend", language_code: "de", direction: "ltr"}, introduced_tokens: ["Abend"]}
+          - {content_key: "de.a1.unit05.lesson03.teach.nacht", kind: "vocabulary", target: {text: "Nacht", language_code: "de", direction: "ltr"}, introduced_tokens: ["Nacht"]}
+          - {content_key: "de.a1.unit05.lesson03.teach.mitternacht", kind: "vocabulary", target: {text: "Mitternacht", language_code: "de", direction: "ltr"}, introduced_tokens: ["Mitternacht"]}
+          - {content_key: "de.a1.unit05.lesson03.teach.achtzehn", kind: "vocabulary", target: {text: "achtzehn", language_code: "de", direction: "ltr"}, introduced_tokens: ["achtzehn"]}
+          - {content_key: "de.a1.unit05.lesson03.teach.laden_oeffnet", kind: "phrase", target: {text: "Der Laden öffnet um neun Uhr morgens.", language_code: "de", direction: "ltr"}, introduced_tokens: ["Der", "Laden", "öffnet", "um", "neun", "morgens"]}
+          - {content_key: "de.a1.unit05.lesson03.teach.laden_schliesst", kind: "phrase", target: {text: "Der Laden schließt um achtzehn Uhr.", language_code: "de", direction: "ltr"}, introduced_tokens: ["schließt"]}
+        exercises:
+          - {content_key: "de.a1.unit05.lesson03.exercise01.listen_abend", type: "listen_select", tested_text: "Abend", media_asset_key: "de.a1.audio.zeit.tageszeiten.01", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit05.lesson03.exercise02.choose_laden_oeffnet", type: "multiple_choice", tested_text: "Der Laden öffnet um neun Uhr morgens.", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit05.lesson03.exercise03.choose_laden_schliesst", type: "multiple_choice", tested_text: "Der Laden schließt um achtzehn Uhr.", prompt: {target_blocks: []}}
+          - content_key: "de.a1.unit05.lesson03.exercise04.match_tageszeiten"
+            type: "matching_pairs"
+            tested_text: "Morgen Mittag Nachmittag Abend Nacht Mitternacht"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "6-12 Uhr", right: "Morgen"}
+              - {left: "12 Uhr", right: "Mittag"}
+              - {left: "12-18 Uhr", right: "Nachmittag"}
+              - {left: "18-22 Uhr", right: "Abend"}
+              - {left: "22-24 Uhr", right: "Nacht"}
+              - {left: "0 Uhr", right: "Mitternacht"}
+          - {content_key: "de.a1.unit05.lesson03.exercise05.write_laden_oeffnet", type: "writing_prompt", tested_text: "Der Laden öffnet um neun Uhr morgens", prompt: {target_blocks: []}}
+
+      - content_key: "de.a1.unit05.lesson04.im_gespraech_ueber_die_bibliothekszeiten"
+        title: "Im Gespräch über die Bibliothekszeiten"
+        spine_outcome_id: "universal.a1.time.ask_tell_time"
+        teaching:
+          - {content_key: "de.a1.unit05.lesson04.teach.wann", kind: "vocabulary", target: {text: "Wann", language_code: "de", direction: "ltr"}, introduced_tokens: ["Wann"]}
+          - {content_key: "de.a1.unit05.lesson04.teach.oeffnet_die", kind: "vocabulary", target: {text: "öffnet die", language_code: "de", direction: "ltr"}, introduced_tokens: ["öffnet", "die"]}
+          - {content_key: "de.a1.unit05.lesson04.teach.bibliothek", kind: "vocabulary", target: {text: "Bibliothek", language_code: "de", direction: "ltr"}, introduced_tokens: ["Bibliothek"]}
+          - {content_key: "de.a1.unit05.lesson04.teach.sie_pronomen", kind: "vocabulary", target: {text: "sie", language_code: "de", direction: "ltr"}, introduced_tokens: ["sie"]}
+          - {content_key: "de.a1.unit05.lesson04.teach.dann", kind: "vocabulary", target: {text: "dann", language_code: "de", direction: "ltr"}, introduced_tokens: ["dann"]}
+          - {content_key: "de.a1.unit05.lesson04.teach.line01", kind: "dialogue", target: {text: "Wann öffnet die Bibliothek?", language_code: "de", direction: "ltr", speaker: "Felix"}, introduced_tokens: []}
+          - {content_key: "de.a1.unit05.lesson04.teach.line02", kind: "dialogue", target: {text: "Sie öffnet um neun Uhr morgens.", language_code: "de", direction: "ltr", speaker: "Anna"}, introduced_tokens: []}
+          - {content_key: "de.a1.unit05.lesson04.teach.line03", kind: "dialogue", target: {text: "Und wann schließt sie?", language_code: "de", direction: "ltr", speaker: "Felix"}, introduced_tokens: ["Und"]}
+          - {content_key: "de.a1.unit05.lesson04.teach.line04", kind: "dialogue", target: {text: "Sie schließt um achtzehn Uhr.", language_code: "de", direction: "ltr", speaker: "Anna"}, introduced_tokens: []}
+          - {content_key: "de.a1.unit05.lesson04.teach.line05", kind: "dialogue", target: {text: "Gut, bis dann!", language_code: "de", direction: "ltr", speaker: "Felix"}, introduced_tokens: ["Gut", "bis"]}
+          - {content_key: "de.a1.unit05.lesson04.teach.schild", kind: "reading", target: {text: "Öffnungszeiten: neun bis achtzehn Uhr.", language_code: "de", direction: "ltr"}, introduced_tokens: ["Öffnungszeiten"]}
+        exercises:
+          - {content_key: "de.a1.unit05.lesson04.exercise01.listen_oeffnungszeit", type: "dialogue_comprehension", tested_text: "Sie öffnet um neun Uhr morgens", media_asset_key: "de.a1.audio.dialog.bibliothekszeiten.01", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit05.lesson04.exercise02.listen_schliesszeit", type: "listen_select", tested_text: "Sie schließt um achtzehn Uhr", media_asset_key: "de.a1.audio.dialog.bibliothekszeiten.01", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit05.lesson04.exercise03.choose_oeffnungsfrage", type: "multiple_choice", tested_text: "Wann öffnet die Bibliothek", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit05.lesson04.exercise04.order_schliessfrage", type: "word_order", tested_text: "Und wann schließt sie", prompt: {target_blocks: []}, word_bank: ["Und", "wann", "schließt", "sie"]}
+          - {content_key: "de.a1.unit05.lesson04.exercise05.read_schild", type: "reading_comprehension", tested_text: "neun bis achtzehn Uhr", prompt: {target_blocks: [{text: "Öffnungszeiten: neun bis achtzehn Uhr.", language_code: "de", direction: "ltr"}]}}
+          - {content_key: "de.a1.unit05.lesson04.exercise06.reply_als_anna", type: "dialogue_response", tested_text: "Sie öffnet um neun Uhr morgens. Sie schließt um achtzehn Uhr.", prompt: {target_blocks: [{text: "Wann öffnet die Bibliothek? Und wann schließt sie?", language_code: "de", direction: "ltr"}]}}
+          - {content_key: "de.a1.unit05.lesson04.exercise07.speak_oeffnungszeiten", type: "speak_response", tested_text: "Sie öffnet um neun Uhr morgens Sie schließt um achtzehn Uhr", prompt: {target_blocks: [{text: "Wann öffnet die Bibliothek? Und wann schließt sie?", language_code: "de", direction: "ltr"}]}}
