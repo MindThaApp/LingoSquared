@@ -55,13 +55,64 @@ review:
     Retrofit 2026-07-06 (AUTHORING_GUIDE.md §16): widened quantity_pair.003
     from 2 to 5 pairs (quantity_unit/noun, real course-wide pool=5 -- bag/
     bottle/dozen/kilo/pound), no padding with untaught words.
+
+    Depth pass, 2026-07-07 (templates-per-unit density audit: fa-en unit08
+    had 8 templates, with lesson02/lesson03/lesson04 each carrying only
+    1-2 -- mirrors the sibling prs-en unit08 pack just deepened the same
+    night). Added 8 new templates, all real vocabulary. lesson02
+    (asking_prices) gained count_order (word_order, "Can I have {item}
+    pounds, please?"), count_gloss (multiple_choice), and count_translate
+    (translation) on the already-established count_plural_no_hundred tag
+    from scripts/_en_target_lexeme_common.py (two through fifty plus
+    twenty-five, excluding "one" and "hundred" -- this unit's own real
+    lesson02 content teaches "Can I have two pounds, please?", so this is
+    a direct, intended reuse of a tag from the numbers unit against this
+    unit's own real sentence, not an A1/A2 boundary crossing -- see
+    AUTHORING_GUIDE.md §18); also gained food_plural_listen
+    (listen_select) on food_plural, anchored here since "apples" is first
+    used in this lesson's own "How much are the apples?" line. lesson03
+    (reading_price_labels) gained food_plural_pair (matching_pairs, all 3
+    real food_plural members -- apples/eggs/tomatoes is the FULL
+    course-wide pool, an honest ceiling per AUTHORING_GUIDE.md §16, not
+    padded) and quantity_listen (listen_select) on quantity_unit, reusing
+    the same tag+type combination lesson01 already established, anchored
+    to this lesson's own real price-label text instead. lesson04
+    (market_dialogue) gained quantity_translate (translation) on
+    quantity_unit and food_plural_gloss (multiple_choice) on food_plural,
+    both reusing already-established tag+type combinations -- anchored to
+    lesson_content_key: en.a1.unit08.lesson01.quantities, NOT
+    lesson04.market_dialogue, matching this pack's own pre-existing
+    lesson04 template (quantity_listen.001) and its already-documented
+    real-bug fix above (market_dialogue introduces zero new tokens of its
+    own, so no Lexeme row is ever created with it as
+    provenance_lesson_content_key, and a template anchored there would
+    fail practice-template import). No new Farsi glosses needed --
+    count_plural_no_hundred/quantity_unit/food_plural were all already
+    glossed in scripts/backfill_lexemes_fa_en.py from this pack's and
+    unit03's original authoring. Only this pack's own tag_schema/
+    slot_presets needed a new count_plural_no_hundred alias (the semantic
+    tag itself already existed course-wide). Verified with
+    scripts/_practice_slot_check.py (count_plural_no_hundred: 20 distinct
+    A1 candidates, food_plural: 3, quantity_unit: 5, all above the
+    relevant floors) and compile_content.py practice-validate, 0 errors/0
+    warnings. No fill_in_blank templates added -- quantity_unit's members
+    each pair with a different fixed noun (bag of rice, bottle of water,
+    kilo of tomatoes, etc.) so a single generic "a {item} of X" frame
+    would either be ungrammatical or genuinely ambiguous depending on X,
+    and food_plural's 3 members are similarly not safely distinguishable
+    in a bare frame -- scripts/_fill_in_blank_ambiguity_check.py has
+    nothing new to flag in this pack. Review status left as
+    unreviewed/not-fresh-context, matching this pack's own pre-existing
+    status -- a fresh-context review of the whole pack (including these 8
+    new templates) has not happened yet.
 tag_schema:
   part_of_speech: [noun, adjective, adverb, pronoun, verb, particle, symbol]
   agreement_tags:
-    semantic: [quantity_unit, food_plural]
+    semantic: [quantity_unit, food_plural, count_plural_no_hundred]
 slot_presets:
   quantity_unit: &quantity_unit {language_code: en, part_of_speech: noun, agreement_tags: {semantic: quantity_unit}}
   food_plural: &food_plural {language_code: en, part_of_speech: noun, agreement_tags: {semantic: food_plural}}
+  count_plural_no_hundred: &count_plural_no_hundred {language_code: en, part_of_speech: noun, agreement_tags: {semantic: count_plural_no_hundred}}
 templates:
   - content_key: practice.fa-en.en.a1.unit08.lesson01.quantity_gloss.001
     lesson_content_key: en.a1.unit08.lesson01.quantities
@@ -99,6 +150,34 @@ templates:
     slots: {food_plural: *food_plural}
     answer_derivation: {kind: slot_gloss, slot: food_plural}
     feedback_frame: {text: "معنی فارسی {food_plural} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit08.lesson02.count_order.003
+    lesson_content_key: en.a1.unit08.lesson02.asking_prices
+    type: word_order
+    frame: {text: "Can I have {item} pounds, please?", language_code: en, direction: ltr}
+    slots: {item: *count_plural_no_hundred}
+    answer_derivation: {kind: render_frame, frame: {text: "Can I have {item} pounds, please?", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} عدد مقدار درخواستی در این جمله است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit08.lesson02.count_gloss.004
+    lesson_content_key: en.a1.unit08.lesson02.asking_prices
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *count_plural_no_hundred}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit08.lesson02.count_translate.005
+    lesson_content_key: en.a1.unit08.lesson02.asking_prices
+    type: translation
+    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *count_plural_no_hundred}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} معادل انگلیسی این عدد است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit08.lesson02.food_plural_listen.006
+    lesson_content_key: en.a1.unit08.lesson02.asking_prices
+    type: listen_select
+    frame: {text: "{food_plural}", language_code: en, direction: ltr}
+    slots: {food_plural: *food_plural}
+    answer_derivation: {kind: slot_gloss, slot: food_plural}
+    feedback_frame: {text: "واژه‌ای که شنیدید {food_plural} بود.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit08.lesson03.quantity_gloss.001
     lesson_content_key: en.a1.unit08.lesson03.reading_price_labels
     type: multiple_choice
@@ -113,6 +192,21 @@ templates:
     slots: {food_plural: *food_plural}
     answer_derivation: {kind: slot_text, slot: food_plural}
     feedback_frame: {text: "پاسخ درست، معادل انگلیسی این غذای فارسی است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit08.lesson03.food_plural_pair.003
+    lesson_content_key: en.a1.unit08.lesson03.reading_price_labels
+    type: matching_pairs
+    frame: {text: "{food_plural_one} — {food_plural_two}", language_code: en, direction: ltr}
+    slots: {food_plural_one: *food_plural, food_plural_two: *food_plural, food_plural_three: *food_plural}
+    slot_relations: [{kind: distinct, slots: [food_plural_one, food_plural_two, food_plural_three]}]
+    answer_derivation: {kind: matching_pairs, slots: [food_plural_one, food_plural_two, food_plural_three]}
+    feedback_frame: {text: "هر خوراکه را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit08.lesson03.quantity_listen.004
+    lesson_content_key: en.a1.unit08.lesson03.reading_price_labels
+    type: listen_select
+    frame: {text: "{quantity_unit}", language_code: en, direction: ltr}
+    slots: {quantity_unit: *quantity_unit}
+    answer_derivation: {kind: slot_gloss, slot: quantity_unit}
+    feedback_frame: {text: "واژه‌ای که شنیدید {quantity_unit} بود.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit08.lesson04.quantity_listen.001
     lesson_content_key: en.a1.unit08.lesson01.quantities
     type: listen_select
@@ -120,3 +214,17 @@ templates:
     slots: {quantity_unit: *quantity_unit}
     answer_derivation: {kind: slot_gloss, slot: quantity_unit}
     feedback_frame: {text: "واژه‌ای که در این گفتگو شنیدید {quantity_unit} بود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit08.lesson04.quantity_translate.002
+    lesson_content_key: en.a1.unit08.lesson01.quantities
+    type: translation
+    frame: {text: "{quantity_unit}", language_code: fa, direction: rtl, slot_rendering: {quantity_unit: english_gloss}}
+    slots: {quantity_unit: *quantity_unit}
+    answer_derivation: {kind: slot_text, slot: quantity_unit}
+    feedback_frame: {text: "{quantity_unit} معادل انگلیسی این واژهٔ فارسی است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit08.lesson04.food_plural_gloss.003
+    lesson_content_key: en.a1.unit08.lesson01.quantities
+    type: multiple_choice
+    frame: {text: "{food_plural}", language_code: en, direction: ltr}
+    slots: {food_plural: *food_plural}
+    answer_derivation: {kind: slot_gloss, slot: food_plural}
+    feedback_frame: {text: "معنی فارسی {food_plural} را انتخاب کنید.", language_code: fa, direction: rtl}

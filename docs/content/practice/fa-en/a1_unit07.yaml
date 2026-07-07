@@ -25,12 +25,50 @@ review:
     Retrofit 2026-07-06 (AUTHORING_GUIDE.md §16): widened food_pair.003
     from 2 to 7 pairs (food_item/noun, real course-wide pool=7 -- bread/
     coffee/salad/sandwich/soup/tea/water), no padding with untaught words.
+
+    Depth pass, 2026-07-07 (templates-per-unit density audit: fa-en unit07
+    had 7 templates, with lesson02/lesson03/lesson04 each carrying only 1
+    -- mirrors the sibling prs-en unit07 pack just deepened the same
+    night). Added 7 new templates, all real vocabulary. lesson02
+    (ordering_phrases) gained id_like_order and can_i_have_order
+    (word_order, "I'd like a {item}, please."/"Can I have a {item},
+    please?" -- both real taught frames from this lesson's own content,
+    hand-verified grammatical for all 7 food_item members; the frame has
+    no fixed second item, so no self-reference risk). lesson03
+    (reading_a_menu) gained food_listen (listen_select) and food_translate
+    (translation) on food_item, reusing the same tag+type combinations
+    lesson01 already established for bare-word recognition, anchored to
+    this lesson's own real menu text instead. lesson04 (cafe_dialogue)
+    gained food_gloss (multiple_choice) and food_listen (listen_select) on
+    food_item (same reuse pattern), plus order_non_sandwich (word_order,
+    "I'd like a {item} and a sandwich, please.") using the
+    food_item_non_sandwich tag -- this narrower 6-member tag (excludes
+    "sandwich" itself) already existed in
+    scripts/_en_target_lexeme_common.py, purpose-built and documented
+    there for exactly this self-reference risk (this unit's own real
+    dialogue line is "Hi, I'd like a coffee and a sandwich, please.") but
+    was never actually used by any template in this pack until now --
+    only this pack's own tag_schema/slot_presets needed the new
+    food_item_non_sandwich alias, no new classifier entries and no new
+    Farsi glosses (coffee/tea/water/bread/soup/salad were already glossed
+    in scripts/backfill_lexemes_fa_en.py from lesson01's original
+    authoring). Verified with scripts/_practice_slot_check.py (food_item:
+    7 distinct A1 candidates, food_item_non_sandwich: 6, both above the
+    relevant floors) and compile_content.py practice-validate, 0 errors/0
+    warnings. No fill_in_blank templates added (food_item's full 7-member
+    pool is genuinely ambiguous in any bare frame without a disambiguating
+    anchor, so none were attempted) -- scripts/_fill_in_blank_ambiguity_
+    check.py has nothing new to flag in this pack. Review status left as
+    unreviewed/not-fresh-context, matching this pack's own pre-existing
+    status -- a fresh-context review of the whole pack (including these 7
+    new templates) has not happened yet.
 tag_schema:
   part_of_speech: [noun, adjective, adverb, pronoun, verb, particle, symbol]
   agreement_tags:
-    semantic: [food_item]
+    semantic: [food_item, food_item_non_sandwich]
 slot_presets:
   food_item: &food_item {language_code: en, part_of_speech: noun, agreement_tags: {semantic: food_item}}
+  food_item_non_sandwich: &food_item_non_sandwich {language_code: en, part_of_speech: noun, agreement_tags: {semantic: food_item_non_sandwich}}
 templates:
   - content_key: practice.fa-en.en.a1.unit07.lesson01.food_gloss.001
     lesson_content_key: en.a1.unit07.lesson01.food_drink_vocabulary
@@ -68,6 +106,20 @@ templates:
     slots: {food_item: *food_item}
     answer_derivation: {kind: slot_gloss, slot: food_item}
     feedback_frame: {text: "واژه‌ای که شنیدید {food_item} بود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit07.lesson02.id_like_order.003
+    lesson_content_key: en.a1.unit07.lesson02.ordering_phrases
+    type: word_order
+    frame: {text: "I'd like a {food_item}, please.", language_code: en, direction: ltr}
+    slots: {food_item: *food_item}
+    answer_derivation: {kind: render_frame, frame: {text: "I'd like a {food_item}, please.", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{food_item} غذایی است که سفارش داده می‌شود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit07.lesson02.can_i_have_order.004
+    lesson_content_key: en.a1.unit07.lesson02.ordering_phrases
+    type: word_order
+    frame: {text: "Can I have a {food_item}, please?", language_code: en, direction: ltr}
+    slots: {food_item: *food_item}
+    answer_derivation: {kind: render_frame, frame: {text: "Can I have a {food_item}, please?", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{food_item} غذایی است که سفارش داده می‌شود.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit07.lesson03.food_gloss.001
     lesson_content_key: en.a1.unit07.lesson03.reading_a_menu
     type: multiple_choice
@@ -75,6 +127,20 @@ templates:
     slots: {food_item: *food_item}
     answer_derivation: {kind: slot_gloss, slot: food_item}
     feedback_frame: {text: "معنی فارسی {food_item} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit07.lesson03.food_listen.005
+    lesson_content_key: en.a1.unit07.lesson03.reading_a_menu
+    type: listen_select
+    frame: {text: "{food_item}", language_code: en, direction: ltr}
+    slots: {food_item: *food_item}
+    answer_derivation: {kind: slot_gloss, slot: food_item}
+    feedback_frame: {text: "واژه‌ای که شنیدید {food_item} بود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit07.lesson03.food_translate.006
+    lesson_content_key: en.a1.unit07.lesson03.reading_a_menu
+    type: translation
+    frame: {text: "{food_item}", language_code: fa, direction: rtl, slot_rendering: {food_item: english_gloss}}
+    slots: {food_item: *food_item}
+    answer_derivation: {kind: slot_text, slot: food_item}
+    feedback_frame: {text: "{food_item} معادل انگلیسی این غذای فارسی است.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit07.lesson04.food_translate.002
     lesson_content_key: en.a1.unit07.lesson04.cafe_dialogue
     type: translation
@@ -82,3 +148,24 @@ templates:
     slots: {food_item: *food_item}
     answer_derivation: {kind: slot_text, slot: food_item}
     feedback_frame: {text: "پاسخ درست، معادل انگلیسی این غذای فارسی است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit07.lesson04.food_gloss.003
+    lesson_content_key: en.a1.unit07.lesson04.cafe_dialogue
+    type: multiple_choice
+    frame: {text: "{food_item}", language_code: en, direction: ltr}
+    slots: {food_item: *food_item}
+    answer_derivation: {kind: slot_gloss, slot: food_item}
+    feedback_frame: {text: "معنی فارسی {food_item} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit07.lesson04.food_listen.004
+    lesson_content_key: en.a1.unit07.lesson04.cafe_dialogue
+    type: listen_select
+    frame: {text: "{food_item}", language_code: en, direction: ltr}
+    slots: {food_item: *food_item}
+    answer_derivation: {kind: slot_gloss, slot: food_item}
+    feedback_frame: {text: "واژه‌ای که در این گفتگو شنیدید {food_item} بود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit07.lesson04.order_non_sandwich.005
+    lesson_content_key: en.a1.unit07.lesson04.cafe_dialogue
+    type: word_order
+    frame: {text: "I'd like a {food_item} and a sandwich, please.", language_code: en, direction: ltr}
+    slots: {food_item: *food_item_non_sandwich}
+    answer_derivation: {kind: render_frame, frame: {text: "I'd like a {food_item} and a sandwich, please.", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{food_item} غذایی است که همراه با ساندویچ سفارش داده می‌شود.", language_code: fa, direction: rtl}
