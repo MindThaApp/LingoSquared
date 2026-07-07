@@ -1,0 +1,246 @@
+schema_version: "1.0"
+pack_key: practice.fa-en.a2.unit28
+source_language: fa
+target_language: en
+unit_content_key: en.a2.unit28.doctor
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: >-
+    Authored 2026-07-07 by the Claude session extending fa-en's practice
+    pool to unit28 (attending a doctor's appointment), the fourth A2 unit
+    for this direction. Follows the same discipline as a2_unit25.yaml/
+    a2_unit26.yaml/a2_unit27.yaml: most of this unit's real content is
+    multi-word health/appointment compounds ("follow-up appointment",
+    "insurance card", "getting worse") that don't reduce to a single
+    fillable slot. EN_POS/en_agreement_tags for this unit's vocabulary
+    (including the new 3-member health_followup_noun tag [medicine,
+    prescription, insurance] and the new 2-member condition_adjective tag
+    [worse, better]) were already present in
+    scripts/_en_target_lexeme_common.py before this pass -- added by the
+    concurrent nl-en lane's own unit28 work (a separate parallel worker,
+    not consulted beyond reading its already-committed shared-module
+    output). Verified every introduced_token across
+    docs/content/realizations/en/a2_unit28_doctor.yaml against EN_POS's
+    keys: zero missing. Only this script's own Farsi gloss dict
+    (scripts/backfill_lexemes_fa_en.py) and UNIT_FILES_A2 tuple needed
+    extending beyond that (16 new tokens, cross-checked against
+    docs/content/overlays/fa-en/a2_unit28.yaml's own real text, not
+    copy-pasted from it).
+
+    ZERO fill_in_blank templates in this pack. The unit's real single-
+    token vocabulary is dominated by either true two-word compounds
+    (follow-up appointment, insurance card, getting worse -- can't be
+    blanked as one slot) or by tags too small/cross-course-risky to trust
+    for an unforgiving single-slot fill_in_blank (health_followup_noun
+    has only 3 members and is exclusively new to this unit's own course
+    scope, so it's safe for MC/listen/translate, but a bare fill_in_blank
+    slot with only 3 candidates and no other disambiguating context in a
+    short frame felt like an unnecessary ambiguity risk for no real
+    pedagogical gain over the multiple_choice/translation forms already
+    covering the same vocabulary). Ran
+    scripts/_fill_in_blank_ambiguity_check.py after writing this pack to
+    confirm zero AMBIGUOUS flags (there are no fill_in_blank templates to
+    flag in the first place).
+
+    Two genuine generative frames identified: (1) lesson02's real phrase
+    "...and it's getting worse" generalizes with zero grammar loss to
+    "it's getting better" (both real, natural sentences describing a
+    changing symptom) -- authored as word_order against the new
+    condition_adjective tag, anchored to lesson02 (which introduces
+    "getting"/"worse" as new tokens). (2) lesson03's real reading text
+    "Your appointment is confirmed for 3pm today." generalizes with zero
+    grammar loss via the already-established 4-member 'possessive' tag
+    (my/your/his/her, defined for unit06's family lessons, reused
+    identically here per this session's own unit26/unit27 precedent) --
+    authored as word_order + a bare listen_select recognition item,
+    anchored to lesson03.
+
+    Also reused, same course-wide-recognition discipline as unit25/26/27:
+    'bureaucracy_noun' (appointment/document/form/confirmation, all
+    within the SAME A2 course since unit25 first introduced it) for
+    lesson02 (appointment)/lesson03 (confirmation)/lesson04 recognition,
+    and 'symptom_noun' (headache/stomachache/fever/cough) for lesson01/
+    lesson04 recap recognition of this unit's own reused_symptoms card.
+
+    Anchoring check (same discipline as every other pack in this batch):
+    verified via iter_specs() that every one of this unit's four lessons
+    introduces at least one new lexeme (lesson01: medicine/prescription/
+    follow/getting/worse/insurance/card [as a fresh A2-course token] plus
+    the reused_symptoms recap; lesson02: i've/had/getting/worse [as full-
+    sentence context]; lesson03: early/confirmed/3pm/7724; lesson04:
+    twice/plenty/back/within), so all four are safe lesson_content_key
+    anchors.
+
+    16 templates: 5 lesson01 (health_followup_noun x3 + symptom_noun x2),
+    3 lesson02 (bureaucracy_noun x2 + condition_adjective word_order x1),
+    4 lesson03 (possessive word_order + possessive listen_select +
+    bureaucracy_noun + health_followup_noun), 4 lesson04
+    (health_followup_noun+bureaucracy_noun matching_pairs [7 pairs, within
+    the AUTHORING_GUIDE.md #16 6-12 target] + symptom_noun + bureaucracy_
+    noun + condition_adjective translation). An honest, real-vocabulary-
+    supported count for a newer, smaller A2 unit -- no padding with
+    untaught words.
+
+    Verified with scripts/_practice_slot_check.py (added this pack to the
+    fa-en pack-path list; health_followup_noun has 3 distinct course-wide
+    candidates [safe for MC/listen since all 3 are exclusively new to
+    this unit, no cross-course-level risk], bureaucracy_noun 4, symptom_
+    noun/possessive well above the >=3 multiple_choice/listen_select
+    floor via the combined direction-wide check -- same convention this
+    session's own unit27 pack already established for its identity/
+    possessive reuse; condition_adjective deliberately kept off any MC/
+    listen_select template, matching its own 2-member design note in
+    _en_target_lexeme_common.py) and compile_content.py practice-validate,
+    0 errors/0 warnings. Still needs the standard fresh-context review
+    before import.
+
+    A2-scoping correctness fix (2026-07-07): scripts/_practice_slot_check.py
+    pools ALL specs from iter_specs() (both A1 and A2) together when
+    counting a tag's real distinct-candidate count, but
+    backend/app/practice/service.py's _material() actually scopes both
+    PracticeTemplate and Lexeme queries by course_id, and 'A1'/'A2' are
+    separate Course rows -- a real A2 enrollee only ever sees A2-scoped
+    lexemes. A standalone A2-only-scoped check (filtering iter_specs() to
+    level=='a2') found three real violations in this file, invalidating
+    the pooled-with-A1 "symptom_noun/possessive well above the >=3 floor"
+    note above: (1) lesson01.symptom_choose.004 AND
+    lesson01.symptom_listen.005 -- the 'symptom_noun' tag (headache/
+    stomachache/fever/cough, 4 members pooled with A1) has only 2 REAL
+    A2-scoped candidates (fever/headache -- stomachache/cough are never
+    introduced in any A2 unit). BOTH templates were broken (each needs
+    >=3), and converting both to translation would have produced two
+    duplicate bare-word production templates against the identical
+    2-candidate pool -- no honest additional candidate exists, so
+    symptom_choose.004 was converted to type: translation (renamed
+    symptom_translate_bare.004) and symptom_listen.005 was removed
+    outright. (2) lesson03.possessive_listen.002 -- 'possessive' (my/
+    your/his/her, 4 members pooled with A1) has only 2 REAL A2-scoped
+    candidates (my/your -- his/her never reintroduced in any A2 unit).
+    Fixed by converting to type: translation (renamed
+    possessive_translate_bare.002) -- a genuinely new exercise, not a
+    duplicate of the existing possessive_order.001 (full-sentence
+    word_order). (3) lesson04.symptom_choose.002 -- same 2-candidate
+    symptom_noun pool as (1); no sibling symptom template existed in
+    lesson04 to duplicate, so converted directly to type: translation
+    (renamed symptom_translate_bare.002). All three conversions use
+    answer_derivation slot_text instead of slot_gloss (translation has no
+    minimum-candidate floor). No candidates invented, no A1 vocabulary
+    pooled in as if A2-scoped.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [health_followup_noun, symptom_noun, bureaucracy_noun, possessive, condition_adjective]
+slot_presets:
+  health_followup_noun: &health_followup_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: health_followup_noun}}
+  symptom_noun: &symptom_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: symptom_noun}}
+  bureaucracy_noun: &bureaucracy_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: bureaucracy_noun}}
+  possessive: &possessive {language_code: en, part_of_speech: pronoun, agreement_tags: {semantic: possessive}}
+  condition_adjective: &condition_adjective {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: condition_adjective}}
+templates:
+  - content_key: practice.fa-en.en.a2.unit28.lesson01.choose.001
+    lesson_content_key: en.a2.unit28.lesson01.health_followup_vocabulary
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *health_followup_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a2.unit28.lesson01.listen.002
+    lesson_content_key: en.a2.unit28.lesson01.health_followup_vocabulary
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *health_followup_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "واژه‌ای که شنیدید {item} بود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a2.unit28.lesson01.translate.003
+    lesson_content_key: en.a2.unit28.lesson01.health_followup_vocabulary
+    type: translation
+    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *health_followup_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a2.unit28.lesson01.symptom_translate_bare.004
+    lesson_content_key: en.a2.unit28.lesson01.health_followup_vocabulary
+    type: translation
+    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *symptom_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a2.unit28.lesson02.choose.001
+    lesson_content_key: en.a2.unit28.lesson02.calling_to_make_an_appointment
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *bureaucracy_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a2.unit28.lesson02.listen.002
+    lesson_content_key: en.a2.unit28.lesson02.calling_to_make_an_appointment
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *bureaucracy_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "واژه‌ای که شنیدید {item} بود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a2.unit28.lesson02.condition_order.003
+    lesson_content_key: en.a2.unit28.lesson02.calling_to_make_an_appointment
+    type: word_order
+    frame: {text: "it's getting {item}", language_code: en, direction: ltr}
+    slots: {item: *condition_adjective}
+    answer_derivation: {kind: render_frame, frame: {text: "it's getting {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} صفت تغییر وضعیت در این جمله است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a2.unit28.lesson03.possessive_order.001
+    lesson_content_key: en.a2.unit28.lesson03.reading_an_appointment_confirmation
+    type: word_order
+    frame: {text: "{item} appointment is confirmed for 3pm today", language_code: en, direction: ltr}
+    slots: {item: *possessive}
+    answer_derivation: {kind: render_frame, frame: {text: "{item} appointment is confirmed for 3pm today", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} ضمیر ملکی این جمله است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a2.unit28.lesson03.possessive_translate_bare.002
+    lesson_content_key: en.a2.unit28.lesson03.reading_an_appointment_confirmation
+    type: translation
+    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *possessive}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a2.unit28.lesson03.choose.003
+    lesson_content_key: en.a2.unit28.lesson03.reading_an_appointment_confirmation
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *bureaucracy_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a2.unit28.lesson03.health_choose.004
+    lesson_content_key: en.a2.unit28.lesson03.reading_an_appointment_confirmation
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *health_followup_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a2.unit28.lesson04.match.001
+    lesson_content_key: en.a2.unit28.lesson04.doctor_appointment_dialogue
+    type: matching_pairs
+    frame: {text: "{first} — {second}", language_code: en, direction: ltr}
+    slots: {first: *health_followup_noun, second: *health_followup_noun, third: *health_followup_noun, fourth: *bureaucracy_noun, fifth: *bureaucracy_noun, sixth: *bureaucracy_noun, seventh: *bureaucracy_noun}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth, seventh]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth, seventh]}
+    feedback_frame: {text: "هر واژه را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a2.unit28.lesson04.symptom_translate_bare.002
+    lesson_content_key: en.a2.unit28.lesson04.doctor_appointment_dialogue
+    type: translation
+    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *symptom_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a2.unit28.lesson04.bureaucracy_listen.003
+    lesson_content_key: en.a2.unit28.lesson04.doctor_appointment_dialogue
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *bureaucracy_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "واژه‌ای که در این گفتگو شنیدید {item} بود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a2.unit28.lesson04.condition_translate.004
+    lesson_content_key: en.a2.unit28.lesson04.doctor_appointment_dialogue
+    type: translation
+    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *condition_adjective}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}

@@ -80,6 +80,24 @@ review:
     floor) and compile_content.py practice-validate, 0 errors/0
     warnings. Still needs the standard fresh-context review before
     import.
+
+    A2-scoping correctness fix (2026-07-07): scripts/_practice_slot_check.py
+    pools ALL specs from iter_specs() (both A1 and A2) together when
+    counting a tag's real distinct-candidate count, but
+    backend/app/practice/service.py's _material() actually scopes both
+    PracticeTemplate and Lexeme queries by course_id, and 'A1'/'A2' are
+    separate Course rows -- a real A2 enrollee only ever sees A2-scoped
+    lexemes. A standalone A2-only-scoped check (filtering iter_specs() to
+    level=='a2') found lesson03.possessive_listen.002 -- 'possessive'
+    (my/your/his/her, 4 members pooled with A1) has only 2 REAL
+    A2-scoped candidates (my/your -- his/her never reintroduced in any A2
+    unit 25-28), invalidating the pooled "possessive 4" note above. Fixed
+    by converting to type: translation (bare single-word production,
+    slot_text derivation instead of slot_gloss -- no minimum-candidate
+    floor), renamed possessive_translate_bare.002 -- a genuinely new
+    exercise, not a duplicate of the existing possessive_order.001
+    (full-sentence word_order). No candidates invented, no A1 vocabulary
+    pooled in as if A2-scoped.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -153,13 +171,13 @@ templates:
     slots: {item: *possessive}
     answer_derivation: {kind: render_frame, frame: {text: "{item} debit card will arrive in five to seven business days", language_code: en, direction: ltr}}
     feedback_frame: {text: "{item} ضمیر ملکی همی جمله است.", language_code: prs, direction: rtl}
-  - content_key: practice.prs-en.en.a2.unit27.lesson03.possessive_listen.002
+  - content_key: practice.prs-en.en.a2.unit27.lesson03.possessive_translate_bare.002
     lesson_content_key: en.a2.unit27.lesson03.reading_about_account_features
-    type: listen_select
-    frame: {text: "{item}", language_code: en, direction: ltr}
+    type: translation
+    frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
     slots: {item: *possessive}
-    answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "واژه‌ای که شنیدین {item} بود.", language_code: prs, direction: rtl}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "معادل انگلیسی همی واژه {item} است.", language_code: prs, direction: rtl}
   - content_key: practice.prs-en.en.a2.unit27.lesson03.choose.003
     lesson_content_key: en.a2.unit27.lesson03.reading_about_account_features
     type: multiple_choice

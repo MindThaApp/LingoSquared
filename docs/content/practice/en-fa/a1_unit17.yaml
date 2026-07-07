@@ -1,0 +1,198 @@
+schema_version: "1.0"
+pack_key: practice.en-fa.a1.unit17
+source_language: en
+target_language: fa
+unit_content_key: fa.a1.unit17.health
+review:
+  status: unreviewed
+  required_next_reviewer: codex
+  notes: >-
+    Authored 2026-07-07, same pass as a1_unit16.yaml -- see that file's
+    notes for the shared backfill_lexemes.py UNIT_FILES extension. Reuses
+    the existing course-wide "person_name" tag (علی/نرگس/سارا/مینا/رضا/
+    نگار/آرش/مریم/نیما, 9 members, established across units 01/02/07/09-11)
+    and existing course-wide "possession_verb"-tagged دارم/داره (both
+    already classified from unit01/unit04) rather than inventing new tags
+    for already-classified tokens.
+
+    Five semantic groups, all verified via scripts/_practice_slot_check.py:
+    "symptom_word" pools every genuine symptom noun/phrase this unit's
+    first two lessons teach (سردرد/تب plus the three auto-derived/single-
+    token symptom phrases حالم خوب نیست/دلم درد می‌کنه/خسته‌ام, 5 members,
+    mixed noun/phrase/verb, anchored lesson02 where خسته‌ام completes the
+    pool) -- mirrors the realization's own combined match_more_symptoms
+    exercise, which pairs this same mixed word/phrase set. "symptom_noun_
+    word" is a narrower additive subset of just the 2 single-word physical
+    symptoms (سردرد/تب) used by this unit's own generative "{symptom}
+    دارم"/"{name} {symptom} داره" word_order templates below, since the 3
+    phrase-level members can't grammatically follow دارم/داره the same way.
+    "help_word" (کمک/می‌تونی plus the auto-derived "می‌تونی کمکم کنی؟"
+    phrase, 3 members, mixed noun/verb/phrase, anchored lesson03) and
+    "advice_word" (دکتر/دارو, 2 members noun, anchored lesson04, matching/
+    translation-only -- below the multiple_choice threshold) are
+    recognition groups. "advice_phrase" (استراحت کن/آب بخور, the 2
+    auto-derived imperative-advice phrases, anchored lesson04) is also
+    generative.
+
+    Three generative templates: (1) word_order "{advice_phrase_one} و
+    {advice_phrase_two}" directly mirrors lesson04's own taught "استراحت
+    کن و آب بخور" sentence (both orders read equally naturally as advice);
+    (2) word_order "{symptom_noun_word} دارم" mirrors lesson01's own
+    "سردرد دارم"/"تب دارم" (both combinations natural, anchored lesson01
+    where دارم is first taught); (3) word_order "{person_name}
+    {symptom_noun_word} داره" mirrors lesson06's own "نیما سردرد داره"
+    (generalized across the full course-wide person_name pool x the 2
+    symptom_noun_word members = 18 combinations, all grammatical, anchored
+    lesson06 where داره -- the colloquial 3rd-person form -- is taught).
+
+    Deliberately left out: می‌تونی کمکم کنی؟ as a standalone word_order
+    target (already covered as a recognition item within help_word) and
+    the full lesson05/06 reading/dialogue text.
+
+    Lesson-anchor check: lesson01, lesson02, lesson03, lesson04, and
+    lesson06 each genuinely introduce new vocabulary or grammar
+    (confirmed by reading the realization file directly) -- safe anchors.
+    lesson06 additionally hosts a combined review matching_pairs template
+    pooling symptom_word (5) and advice_word (2) into one 7-pair exercise,
+    the same "final unit review" pattern a1_unit09's/a1_unit16's own packs
+    already established.
+
+    Verified with scripts/_practice_slot_check.py against
+    backfill_lexemes.py's actual iter_specs() output -- clean, no
+    zero-candidate slots, no under-3 multiple_choice/matching_pairs slots
+    (advice_word/advice_phrase correctly have only 2 candidates each and
+    are never used for multiple_choice here).
+    scripts/_fill_in_blank_ambiguity_check.py reports zero flags (no
+    fill_in_blank templates in this pack at all -- every group here has
+    >=2 genuinely distinct, non-synonymous candidates with no natural
+    single-slot frame that could disambiguate them, so per the standing
+    en-fa precedent this unit follows the same zero-fill_in_blank
+    approach as units 03-16 rather than authoring one the compiler's own
+    ambiguity hard-fail would reject anyway). compile_content.py
+    practice-validate clean (0 errors/0 warnings). Needs the standard
+    fresh-context review before import.
+tag_schema:
+  part_of_speech: [noun, verb, phrase, proper_noun]
+  agreement_tags:
+    semantic: [symptom_word, symptom_noun_word, help_word, advice_word, advice_phrase, person_name]
+slot_presets:
+  symptom_word: &symptom_word {language_code: fa, part_of_speech: [noun, phrase, verb], agreement_tags: {semantic: symptom_word}}
+  symptom_noun_word: &symptom_noun_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: symptom_noun_word}}
+  help_word: &help_word {language_code: fa, part_of_speech: [noun, verb, phrase], agreement_tags: {semantic: help_word}}
+  advice_word: &advice_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: advice_word}}
+  advice_phrase: &advice_phrase {language_code: fa, part_of_speech: phrase, agreement_tags: {semantic: advice_phrase}}
+  person_name: &person_name {language_code: fa, part_of_speech: proper_noun, agreement_tags: {semantic: person_name}}
+templates:
+  - content_key: practice.en-fa.fa.a1.unit17.lesson02.symptom_choice.001
+    lesson_content_key: fa.a1.unit17.lesson02.more_symptoms
+    type: multiple_choice
+    frame: {text: "{symptom_word}", language_code: fa, direction: rtl}
+    slots: {symptom_word: *symptom_word}
+    answer_derivation: {kind: slot_gloss, slot: symptom_word}
+    feedback_frame: {text: "{symptom_word} describes how someone feels.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit17.lesson02.symptom_match.002
+    lesson_content_key: fa.a1.unit17.lesson02.more_symptoms
+    type: matching_pairs
+    frame: {text: "Match each word or phrase with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *symptom_word, second: *symptom_word, third: *symptom_word, fourth: *symptom_word, fifth: *symptom_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth]}
+    feedback_frame: {text: "Match each word or phrase to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit17.lesson02.symptom_translate.003
+    lesson_content_key: fa.a1.unit17.lesson02.more_symptoms
+    type: translation
+    frame: {text: "{symptom_word}", language_code: en, direction: ltr, slot_rendering: {symptom_word: english_gloss}}
+    slots: {symptom_word: *symptom_word}
+    answer_derivation: {kind: slot_text, slot: symptom_word}
+    feedback_frame: {text: "The Farsi word or phrase is {symptom_word}.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit17.lesson01.symptom_have_order.004
+    lesson_content_key: fa.a1.unit17.lesson01.basic_symptoms
+    type: word_order
+    frame: {text: "{symptom_noun_word} دارم", language_code: fa, direction: rtl}
+    slots: {symptom_noun_word: *symptom_noun_word}
+    answer_derivation: {kind: render_frame, frame: {text: "{symptom_noun_word} دارم", language_code: fa, direction: rtl}}
+    feedback_frame: {text: "دارم means I have, as in سردرد دارم (I have a headache).", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit17.lesson03.help_choice.001
+    lesson_content_key: fa.a1.unit17.lesson03.asking_for_help
+    type: multiple_choice
+    frame: {text: "{help_word}", language_code: fa, direction: rtl}
+    slots: {help_word: *help_word}
+    answer_derivation: {kind: slot_gloss, slot: help_word}
+    feedback_frame: {text: "{help_word} is used when asking someone for help.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit17.lesson03.help_match.002
+    lesson_content_key: fa.a1.unit17.lesson03.asking_for_help
+    type: matching_pairs
+    frame: {text: "Match each word or phrase with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *help_word, second: *help_word, third: *help_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third]}
+    feedback_frame: {text: "Match each word or phrase to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit17.lesson03.help_translate.003
+    lesson_content_key: fa.a1.unit17.lesson03.asking_for_help
+    type: translation
+    frame: {text: "{help_word}", language_code: en, direction: ltr, slot_rendering: {help_word: english_gloss}}
+    slots: {help_word: *help_word}
+    answer_derivation: {kind: slot_text, slot: help_word}
+    feedback_frame: {text: "The Farsi word or phrase is {help_word}.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit17.lesson04.advice_word_match.001
+    lesson_content_key: fa.a1.unit17.lesson04.simple_advice
+    type: matching_pairs
+    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *advice_word, second: *advice_word}
+    slot_relations: [{kind: distinct, slots: [first, second]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit17.lesson04.advice_word_translate.002
+    lesson_content_key: fa.a1.unit17.lesson04.simple_advice
+    type: translation
+    frame: {text: "{advice_word}", language_code: en, direction: ltr, slot_rendering: {advice_word: english_gloss}}
+    slots: {advice_word: *advice_word}
+    answer_derivation: {kind: slot_text, slot: advice_word}
+    feedback_frame: {text: "The Farsi word is {advice_word}.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit17.lesson04.advice_phrase_match.001
+    lesson_content_key: fa.a1.unit17.lesson04.simple_advice
+    type: matching_pairs
+    frame: {text: "Match each phrase with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *advice_phrase, second: *advice_phrase}
+    slot_relations: [{kind: distinct, slots: [first, second]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second]}
+    feedback_frame: {text: "Match each phrase to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit17.lesson04.advice_phrase_translate.002
+    lesson_content_key: fa.a1.unit17.lesson04.simple_advice
+    type: translation
+    frame: {text: "{advice_phrase}", language_code: en, direction: ltr, slot_rendering: {advice_phrase: english_gloss}}
+    slots: {advice_phrase: *advice_phrase}
+    answer_derivation: {kind: slot_text, slot: advice_phrase}
+    feedback_frame: {text: "The Farsi phrase is {advice_phrase}.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit17.lesson04.advice_phrase_order.003
+    lesson_content_key: fa.a1.unit17.lesson04.simple_advice
+    type: word_order
+    frame: {text: "{advice_phrase_one} و {advice_phrase_two}", language_code: fa, direction: rtl}
+    slots: {advice_phrase_one: *advice_phrase, advice_phrase_two: *advice_phrase}
+    slot_relations: [{kind: distinct, slots: [advice_phrase_one, advice_phrase_two]}]
+    answer_derivation: {kind: render_frame, frame: {text: "{advice_phrase_one} و {advice_phrase_two}", language_code: fa, direction: rtl}}
+    feedback_frame: {text: "و joins two pieces of advice, like استراحت کن و آب بخور (rest and drink water).", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit17.lesson06.person_symptom_have_order.001
+    lesson_content_key: fa.a1.unit17.lesson06.advice_dialogue
+    type: word_order
+    frame: {text: "{person_name} {symptom_noun_word} داره", language_code: fa, direction: rtl}
+    slots: {person_name: *person_name, symptom_noun_word: *symptom_noun_word}
+    answer_derivation: {kind: render_frame, frame: {text: "{person_name} {symptom_noun_word} داره", language_code: fa, direction: rtl}}
+    feedback_frame: {text: "داره means he/she has, like نیما سردرد داره (Nima has a headache).", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit17.lesson06.unit_review_match.002
+    lesson_content_key: fa.a1.unit17.lesson06.advice_dialogue
+    type: matching_pairs
+    frame: {text: "Match each word or phrase with its meaning -- a review of this whole unit's health vocabulary.", language_code: en, direction: ltr}
+    slots:
+      sw1: *symptom_word
+      sw2: *symptom_word
+      sw3: *symptom_word
+      sw4: *symptom_word
+      sw5: *symptom_word
+      aw1: *advice_word
+      aw2: *advice_word
+    slot_relations:
+      - {kind: distinct, slots: [sw1, sw2, sw3, sw4, sw5]}
+      - {kind: distinct, slots: [aw1, aw2]}
+    answer_derivation: {kind: matching_pairs, slots: [sw1, sw2, sw3, sw4, sw5, aw1, aw2]}
+    feedback_frame: {text: "This reviews both the symptom words/phrases and the advice vocabulary taught in this unit.", language_code: en, direction: ltr}

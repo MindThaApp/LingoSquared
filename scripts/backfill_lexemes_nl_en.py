@@ -244,6 +244,19 @@ EN_TARGET_TO_NL_GLOSS: dict[str, str] = {
     "business": "werk- (in werkdagen)", "days": "dagen",
     "keep": "aanhouden", "500": "500", "sounds": "klinkt",
     "teller": "de bankmedewerker", "both": "allebei",
+    # Unit 28 (A2: attending a doctor's appointment), added 2026-07-07 --
+    # nl-en's practice-pool extension alongside unit27. "appointment"/
+    # "insurance card"-sibling "card"/"headache"/"sore"/"throat"/"fever"/
+    # "up" already have glosses above (units 25/15/22/16); only genuinely
+    # new-to-unit28 tokens are added here, cross-checked against
+    # docs/content/overlays/nl-en/a2_unit28.yaml's own real gloss text.
+    "medicine": "medicijn", "prescription": "recept",
+    "follow": "vervolg- (in follow-up appointment)",
+    "getting": "wordt (in getting worse)", "worse": "erger",
+    "insurance": "verzekering", "i've": "ik heb", "had": "gehad",
+    "early": "vroeg", "confirmed": "bevestigd", "3pm": "15.00 uur",
+    "7724": "7724", "back": "terug", "within": "binnen",
+    "twice": "twee keer", "plenty": "veel",
 }
 
 UNIT_FILES = (
@@ -378,6 +391,10 @@ UNIT_FILES_A2 = (
     (
         REPO_ROOT / "docs/content/realizations/en/a2_unit27_banking.yaml",
         REPO_ROOT / "docs/content/overlays/nl-en/a2_unit27.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a2_unit28_doctor.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/a2_unit28.yaml",
     ),
 )
 
@@ -566,6 +583,16 @@ NL_POS: dict[str, str] = {
     "krijg": "verb", "maandelijkse": "adjective", "minimumsaldo": "noun",
     "net": "adverb", "nodig": "adjective", "openen": "verb", "rdw": "proper_noun",
     "rekening": "noun", "werkdagen": "noun",
+    # Unit 28 (A2: attending a doctor's appointment), added 2026-07-07 --
+    # Dutch words extracted from this unit's own overlay gloss text, part
+    # of the nl-en A2 practice-pool extension alongside unit27.
+    "medicijn": "noun", "recept": "noun", "vervolgafspraak": "noun",
+    "erger": "adjective", "verzekeringspas": "noun", "willen": "verb",
+    "zien": "verb", "al": "adverb", "dagen": "noun", "tevoren": "adverb",
+    "aankomen": "verb", "bevestigd": "verb", "hand": "noun",
+    "flinke": "adjective", "verkoudheid": "noun", "medicijnen": "noun",
+    "nemen": "verb", "gedurende": "preposition", "drink": "verb",
+    "veel": "adverb", "terugkomen": "verb", "terug": "adverb",
 }
 
 NL_GLOSSES: dict[str, str] = {
@@ -764,6 +791,17 @@ NL_GLOSSES: dict[str, str] = {
     "nodig": "necessary; needed", "openen": "to open",
     "rdw": "RDW (Dutch DMV equivalent)", "rekening": "account",
     "werkdagen": "business days; work days",
+    # Unit 28 (A2: attending a doctor's appointment), added 2026-07-07.
+    "medicijn": "medicine", "recept": "prescription",
+    "vervolgafspraak": "follow-up appointment", "erger": "worse",
+    "verzekeringspas": "insurance card", "willen": "to want", "zien": "to see",
+    "al": "already", "dagen": "days", "tevoren": "beforehand (van tevoren)",
+    "aankomen": "to arrive", "bevestigd": "confirmed",
+    "hand": "hand (idiom: wat is er aan de hand -- what's wrong)",
+    "flinke": "bad; severe (inflected)", "verkoudheid": "a cold (illness)",
+    "medicijnen": "medicines", "nemen": "to take",
+    "gedurende": "for; during", "drink": "drink (imperative, with jij/u)",
+    "veel": "much; a lot", "terugkomen": "to come back", "terug": "back",
 }
 
 

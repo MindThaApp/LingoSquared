@@ -226,6 +226,26 @@ EN_POS: dict[str, str] = {
     "you'll": "pronoun", "dmv": "proper_noun", "business": "noun",
     "days": "noun", "keep": "verb", "500": "symbol", "sounds": "verb",
     "teller": "noun", "both": "pronoun",
+    # Unit 28 (A2: attending a doctor's appointment), added 2026-07-07 --
+    # nl-en's practice-pool extension alongside unit27. "appointment"/
+    # "card"/"headache"/"sore"/"throat"/"fever"/"up" already exist (units
+    # 25/15/22/16 respectively) -- only genuinely new-to-unit28 tokens
+    # added here.
+    "medicine": "noun", "prescription": "noun", "follow": "verb",
+    "getting": "verb", "worse": "adjective", "insurance": "noun",
+    "i've": "pronoun", "had": "verb", "early": "adverb", "confirmed": "verb",
+    "3pm": "symbol", "7724": "symbol", "back": "adverb", "within": "preposition",
+    "twice": "adverb", "plenty": "noun",
+    # KNOWN HOMOGRAPH LIMITATION (same class as "close" above): "cold" is
+    # already classified "adjective" (unit11's weather_condition sense --
+    # "It's cold today"), but unit28 also introduces "cold" as a NOUN ("You
+    # have a bad cold", an illness) via the exact same bare token. This
+    # module can only hold one POS per bare token string, so the existing
+    # "adjective" classification wins; nothing currently needs "cold" as a
+    # fillable noun slot (unit28's practice pack deliberately does not use
+    # it), but whoever authors a future template must NOT rely on "cold" as
+    # a noun-slot candidate until this gets real POS-aware/context-aware
+    # keying.
 }
 
 def en_agreement_tags(token: str) -> dict[str, object]:
@@ -484,6 +504,28 @@ def en_agreement_tags(token: str) -> dict[str, object]:
     # recognition-only, no shared generative frame attempted).
     if token in {"checking", "monthly", "minimum", "direct"}:
         semantics.append("banking_adjective")
+    # Unit 28 (A2, attending a doctor's appointment): 3-member bare-word
+    # recognition tag for the unit's single-token, genuinely-standalone
+    # nouns (each has its own real independent meaning -- medicijn/recept/
+    # verzekering -- unlike "insurance card"/"follow-up appointment", which
+    # are true two-word compounds and stay recognition-only via their own
+    # component tokens instead). Deliberately NOT used in any shared
+    # generative frame (same "don't force it" reasoning as banking_noun/
+    # bureaucracy_noun -- these three don't collocate uniformly: "I need
+    # a {item}" works for prescription but reads oddly for the mass noun
+    # medicine, and not at all for insurance alone without "card").
+    if token in {"medicine", "prescription", "insurance"}:
+        semantics.append("health_followup_noun")
+    # Unit 28: 2-member adjective tag for the unit's real comparative
+    # symptom-condition adjectives. Both are genuine, safe alternatives in
+    # "It's getting {item}." (a symptom can get either worse or better --
+    # real, grammatical, and thematically apt for a doctor's-appointment
+    # unit) -- kept small (2 members) so it's intentionally NOT used for
+    # multiple_choice/listen_select (which need >=3 distinct candidates),
+    # only word_order/translation, matching this module's own precedent
+    # for other small tags (e.g. the single-member "superlative_adj").
+    if token in {"worse", "better"}:
+        semantics.append("condition_adjective")
 
     tags: dict[str, object] = {}
     if semantics:

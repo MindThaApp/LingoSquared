@@ -211,6 +211,23 @@ UNIT_FILES_A2 = (
         REPO_ROOT / "docs/content/realizations/en/a2_unit27_banking.yaml",
         REPO_ROOT / "docs/content/overlays/prs-en/a2_unit27.yaml",
     ),
+    # Unit 28 (A2: attending a doctor's appointment), added 2026-07-07
+    # (practice-pool-sync lane extending prs-en to this new unit, in
+    # parallel with the equivalent fa-en pass; nl-en's own unit28 pass is
+    # a separate concurrent worker, not touched here). EN_POS/
+    # en_agreement_tags for this unit's vocabulary (including the new
+    # health_followup_noun/condition_adjective semantic tags) were
+    # already present in _en_target_lexeme_common.py before this change
+    # (added by the concurrent nl-en lane's own unit28 pass) -- verified
+    # every introduced_token across this realization file against
+    # EN_POS's keys: zero missing. Only this script's own Dari gloss
+    # dict needed extending (16 new tokens, cross-checked against
+    # docs/content/overlays/prs-en/a2_unit28.yaml's own real text, not a
+    # find-replace of the fa-en script's Farsi).
+    (
+        REPO_ROOT / "docs/content/realizations/en/a2_unit28_doctor.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a2_unit28.yaml",
+    ),
 )
 
 # Dari gloss for each shared English target token -- hand-written for
@@ -486,6 +503,28 @@ EN_TARGET_TO_PRS_GLOSS: dict[str, str] = {
     "days": "روزها", "keep": "نگه داشتن", "500": "پنجصد",
     "sounds": "به‌نظر می‌رسه (در that sounds good)",
     "teller": "کارمند بانک", "both": "هر دو",
+    # Unit 28 (A2: attending a doctor's appointment), added 2026-07-07.
+    # Atomic per-token glosses -- cross-checked against, but not a find-
+    # replace of, docs/content/overlays/prs-en/a2_unit28.yaml's own
+    # (phrase-level) Dari glosses. Some genuinely distinct Afghan Dari
+    # vocabulary here vs the fa-en script's Farsi (medicine=دوا not
+    # دارو, worse=خرابتر not بدتر, twice=دو مرتبه not دو بار, within=تا
+    # not ظرف -- all cross-checked against the actual prs-en overlay
+    # text). "appointment"/"confirmation"/"card"/"arrive"/"headache"/
+    # "sore"/"throat"/"fever"/"if"/"doesn't"/"better"/"drink"/"doctor"/
+    # "any"/"should"/"take"/"get"/"come"/"this"/"water"/"day"/"minutes"/
+    # "ten"/"five"/"number"/"today" reuse their existing senses unchanged.
+    "medicine": "دوا", "prescription": "نسخهٔ داکتر",
+    "follow": "پیگیری (در وقت بعدی)",
+    "getting": "شدن (فعل، در خرابتر شدن)",
+    "worse": "خرابتر", "insurance": "بیمه",
+    "i've": "... دارم (مخفف I have، همرنگ سه ورز می‌شه که ... دارم)",
+    "had": "داشتم (زمان گذشتهٔ have)", "early": "زودتر",
+    "confirmed": "تأیید شده (است)", "3pm": "ساعت سه بعد از چاشت",
+    "7724": "۷۷۲۴", "twice": "دو مرتبه",
+    "plenty": "زیاد (در plenty of water: آب زیاد)",
+    "back": "باز (در come back: باز آمدن)",
+    "within": "تا (در within a week: تا یک هفته)",
 }
 
 
