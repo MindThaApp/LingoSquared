@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: "1.1"
 realization_version: "2026.1-draft.1"
 target_language: prs
 cefr_level: A1
@@ -13,7 +13,9 @@ review:
   required_next_reviewer: null
   notes: "New unit, prs's next uncovered outcome (universal.a1.comparisons.make_basic_comparisons, prerequisites: preferences and numbers, both already covered in unit14/unit04). Six lessons: basic comparative forms (بزرگ‌تر است/کوچک‌تر است), comparing prices (گران‌تر است/ارزان‌تر است), comparing people (قد بلندتر است/جوان‌تر است), giving a reason for a comparison (بهتر است/بدتر است + چون), reading a short comparison text, and a dialogue comparing two options while making a purchase decision. Uses full, uncontracted forms throughout (comparative + است kept as two words, not fused/contracted) and standard Dari spellings (کوچک not Iranian کوچیک, گران not گرون, ارزان not ارزون, جوان not جوون) -- deliberately distinct from the fa sibling's colloquial fused-contraction register, consistent with the established استم/استین full-form register policy from units 01-14. Authored independently of the fa realization per the sibling-isolation rule. Authored §14/§16/§17-compliant from the start: no listen_type/listen_select/listen_order exercises anywhere, every matching_pairs exercise sized 6 pairs except lesson01's genuine 4-pair first-lesson ceiling, and zero fill_in_blank exercises. Both open-ended production exercises (write_own_comparison, dialogue_response_own_comparison) carry multiple adjective/topic variants from the start, learned from the fa sibling unit's own review findings on unit14. Multi-clause reason exercises include period-joined, comma-joined, and و-joined accepted variants per §12. Compiler validation clean (0 errors/0 warnings). Awaiting the standing fresh-context review before status can move to reviewed.
 
-    FRESH-CONTEXT REVIEW COMPLETED 2026-07-07 (zero prior context, fa sibling files never opened, this unit's/overlay's own authoring reasoning not consulted beyond the two files themselves). Verified against universal.a1.comparisons.make_basic_comparisons's own can_do/prerequisites/assessment_requirements in universal_spine.yaml -- all 4 covered (understand_comparison via lesson05/06's reading_comprehension/dialogue_comprehension, read-substituting-for-listening per the established zero-prs-audio §14 pattern; make_comparison via the translation/dialogue_response production exercises; read_comparison via the reading_comprehension exercises; write_comparison via the writing_prompt/translation exercises), every lesson genuinely serves the declared outcome, no drift. Exercise pacing (recognition -> drag/matching -> production) confirmed in all 6 lessons, matching unit13/14's own already-reviewed lesson06 precedent (an extra recognition-type exercise interleaved after the matching exercise, before production, in lesson06 -- not a violation, since production never precedes recognition/drag exposure). §14 verified true by grep: zero listen_type/listen_select/listen_order anywhere. §16 verified: lesson01's matching_pairs is a genuine 4-pair ceiling, lessons02-06 all exactly 6 pairs. §17 verified true by grep (zero fill_in_blank in either file) and by manually auditing every translation/dialogue_response/writing_prompt's accepted_answers, especially lesson05.exercise05/lesson06.exercise04/lesson06.exercise05, for the same underlying ambiguity in a different guise -- confirmed genuine multi-answer coverage (8, 4, and 4 accepted variants respectively), not a disguised bug, via direct code read of grade()/is_multi_answer_response() in backend/app/api/router.py confirming the generic accepted-list path checks every entry, not just the first. Grammar/dialect independently verified via live web search (not just reasoning): the X-از-Y-ADJ‌تر-است comparison construction, از as 'than' distinct from 'from', بزرگ‌تر/کوچک‌تر/گران‌تر/ارزان‌تر as regular comparatives, بهتر/بدتر as the genuine irregular/suppletive comparatives of خوب/بد, قد بلندتر است as a natural (non-calque) Dari idiom for 'taller', and all five claimed Dari-vs-Iranian-colloquial spelling pairs (کوچک/کوچیک, گران/گرون, ارزان/ارزون, جوان/جوون, آن/اون) were all confirmed correct against independent grammar/phonology sources. A1-complexity judged appropriate (3rd-person-only copula constructions, short 2-6-word phrases, familiar vocabulary, matching unit13/14's pacing). Script purity clean (zero Arabic-range kaf/yeh codepoints in either file, checked programmatically). No jargon leaks: ran a programmatic recursive check against every string value in the overlay -- the only snake_case-looking matches were in non-learner-facing metadata (status, generation_provenance.method, review.notes), zero leaks in any learner-facing field. Independently re-verified the pre-dispatch bali_word Yes/yes boolean-coercion fix is correct (both quoted, both parse as strings) and wrote and ran a fresh, real recursive yaml.safe_load-based Python script checking every dict value in both files for a stray Python bool -- found zero stray booleans anywhere (only the two legitimate schema booleans, human_reviewed/target_language_first, neither present in this pair), confirming no second instance exists. Wrote and ran a real Python script comparing every exercise's realization prompt.target_blocks (language_code: en) against that exercise's overlay instruction field for an exact case-insensitive match -- zero duplicate-instruction-text bugs found in this pair. Wrote and ran a ZWNJ-aware, Persian-punctuation-stripping Python tokenizer checking every tested_text/prompt.target_blocks(prs)/pairs.left/word_bank value and every overlay accepted_answers/correct_option/distractors Dari-script value against cumulative file-scoped introduced_tokens -- zero untaught-vocabulary violations. Checked every multiple_choice/reading_comprehension/dialogue_comprehension exercise for the prompt-shows-answer bug -- all correct_option/distractors are English glosses against Dari-script prompts, no same-script leakage. Confirmed content_key parity exact both directions (1 unit/6 lessons/20 teaching/30 exercises each side). Confirmed all 7 exercise types used (multiple_choice/matching_pairs/translation/reading_comprehension/dialogue_comprehension/dialogue_response/writing_prompt) are registered in frontend/src/components/exercises/ExerciseRenderer.tsx. Cross-checked §11 facts across every exercise/teaching card: Karim-taller/Negar-younger is stated identically in lesson03 and lesson05's reading text with no contradiction; lesson06's dialogue facts (this=more expensive but better, that=cheaper) are consistent across its comprehension, matching, dialogue-response, and summary exercises. Verified §12 multi-clause coverage: lesson04's two because-exercises and lesson06's write_comparison_summary all carry period-joined, comma-joined, and و-joined status:correct variants (the و-joined reason-clause variants substitute و for چون, e.g. 'این از آن بهتر است و ارزان‌تر است' -- confirmed this exact pattern is the established, already-reviewed convention from unit14's own fresh-context review, not a new gap). Re-ran validate and compile (not just validate) as the actual final check: 0 errors/0 warnings both times, compile output valid JSON, and directly inspected the compiled correct_response for all 30 exercises -- none empty, and the 5 multi-answer exercises (lesson04.exercise04/05, lesson05.exercise05, lesson06.exercise04/05) compiled with 4/4/8/4/4 accepted variants respectively, matching the overlay source exactly. No real bugs required fixing in this pair beyond the single pre-dispatch bali_word quoting fix (independently re-verified correct) -- this unit was genuinely authored clean from the start, proactively incorporating unit13/14's own prior review findings (multi-topic variants, §12 punctuation forms, §14/16/17 compliance) before this review ever ran."
+    FRESH-CONTEXT REVIEW COMPLETED 2026-07-07 (zero prior context, fa sibling files never opened, this unit's/overlay's own authoring reasoning not consulted beyond the two files themselves). Verified against universal.a1.comparisons.make_basic_comparisons's own can_do/prerequisites/assessment_requirements in universal_spine.yaml -- all 4 covered (understand_comparison via lesson05/06's reading_comprehension/dialogue_comprehension, read-substituting-for-listening per the established zero-prs-audio §14 pattern; make_comparison via the translation/dialogue_response production exercises; read_comparison via the reading_comprehension exercises; write_comparison via the writing_prompt/translation exercises), every lesson genuinely serves the declared outcome, no drift. Exercise pacing (recognition -> drag/matching -> production) confirmed in all 6 lessons, matching unit13/14's own already-reviewed lesson06 precedent (an extra recognition-type exercise interleaved after the matching exercise, before production, in lesson06 -- not a violation, since production never precedes recognition/drag exposure). §14 verified true by grep: zero listen_type/listen_select/listen_order anywhere. §16 verified: lesson01's matching_pairs is a genuine 4-pair ceiling, lessons02-06 all exactly 6 pairs. §17 verified true by grep (zero fill_in_blank in either file) and by manually auditing every translation/dialogue_response/writing_prompt's accepted_answers, especially lesson05.exercise05/lesson06.exercise04/lesson06.exercise05, for the same underlying ambiguity in a different guise -- confirmed genuine multi-answer coverage (8, 4, and 4 accepted variants respectively), not a disguised bug, via direct code read of grade()/is_multi_answer_response() in backend/app/api/router.py confirming the generic accepted-list path checks every entry, not just the first. Grammar/dialect independently verified via live web search (not just reasoning): the X-از-Y-ADJ‌تر-است comparison construction, از as 'than' distinct from 'from', بزرگ‌تر/کوچک‌تر/گران‌تر/ارزان‌تر as regular comparatives, بهتر/بدتر as the genuine irregular/suppletive comparatives of خوب/بد, قد بلندتر است as a natural (non-calque) Dari idiom for 'taller', and all five claimed Dari-vs-Iranian-colloquial spelling pairs (کوچک/کوچیک, گران/گرون, ارزان/ارزون, جوان/جوون, آن/اون) were all confirmed correct against independent grammar/phonology sources. A1-complexity judged appropriate (3rd-person-only copula constructions, short 2-6-word phrases, familiar vocabulary, matching unit13/14's pacing). Script purity clean (zero Arabic-range kaf/yeh codepoints in either file, checked programmatically). No jargon leaks: ran a programmatic recursive check against every string value in the overlay -- the only snake_case-looking matches were in non-learner-facing metadata (status, generation_provenance.method, review.notes), zero leaks in any learner-facing field. Independently re-verified the pre-dispatch bali_word Yes/yes boolean-coercion fix is correct (both quoted, both parse as strings) and wrote and ran a fresh, real recursive yaml.safe_load-based Python script checking every dict value in both files for a stray Python bool -- found zero stray booleans anywhere (only the two legitimate schema booleans, human_reviewed/target_language_first, neither present in this pair), confirming no second instance exists. Wrote and ran a real Python script comparing every exercise's realization prompt.target_blocks (language_code: en) against that exercise's overlay instruction field for an exact case-insensitive match -- zero duplicate-instruction-text bugs found in this pair. Wrote and ran a ZWNJ-aware, Persian-punctuation-stripping Python tokenizer checking every tested_text/prompt.target_blocks(prs)/pairs.left/word_bank value and every overlay accepted_answers/correct_option/distractors Dari-script value against cumulative file-scoped introduced_tokens -- zero untaught-vocabulary violations. Checked every multiple_choice/reading_comprehension/dialogue_comprehension exercise for the prompt-shows-answer bug -- all correct_option/distractors are English glosses against Dari-script prompts, no same-script leakage. Confirmed content_key parity exact both directions (1 unit/6 lessons/20 teaching/30 exercises each side). Confirmed all 7 exercise types used (multiple_choice/matching_pairs/translation/reading_comprehension/dialogue_comprehension/dialogue_response/writing_prompt) are registered in frontend/src/components/exercises/ExerciseRenderer.tsx. Cross-checked §11 facts across every exercise/teaching card: Karim-taller/Negar-younger is stated identically in lesson03 and lesson05's reading text with no contradiction; lesson06's dialogue facts (this=more expensive but better, that=cheaper) are consistent across its comprehension, matching, dialogue-response, and summary exercises. Verified §12 multi-clause coverage: lesson04's two because-exercises and lesson06's write_comparison_summary all carry period-joined, comma-joined, and و-joined status:correct variants (the و-joined reason-clause variants substitute و for چون, e.g. 'این از آن بهتر است و ارزان‌تر است' -- confirmed this exact pattern is the established, already-reviewed convention from unit14's own fresh-context review, not a new gap). Re-ran validate and compile (not just validate) as the actual final check: 0 errors/0 warnings both times, compile output valid JSON, and directly inspected the compiled correct_response for all 30 exercises -- none empty, and the 5 multi-answer exercises (lesson04.exercise04/05, lesson05.exercise05, lesson06.exercise04/05) compiled with 4/4/8/4/4 accepted variants respectively, matching the overlay source exactly. No real bugs required fixing in this pair beyond the single pre-dispatch bali_word quoting fix (independently re-verified correct) -- this unit was genuinely authored clean from the start, proactively incorporating unit13/14's own prior review findings (multi-topic variants, §12 punctuation forms, §14/16/17 compliance) before this review ever ran.
+
+    2026-07-07: AUTHORING_GUIDE.md §19 retrofit -- added real example sentence(s) to all 12 kind:vocabulary teaching cards (2 merged cards -- the lesson03 and lesson06 names lists -- each given a positionally-matched list of examples), each a natural, comprehensible-from-gloss sentence built from vocabulary already taught in this same lesson or earlier in this file. The lesson03 names example uses the well-established استم copula (matching units 12-14's own precedent); the lesson06 names re-display (introduced_tokens: [], a repeat card) instead reuses established comparison facts (کریم قد بلندتر است, نگار جوان‌تر است) for variety and reinforcement rather than repeating the same استم pattern. schema_version bumped to 1.1. Example sentences are Claude-authored and pending fresh-context review."
 
 course:
   realization_key: prs.a1
@@ -54,18 +56,22 @@ units:
             kind: vocabulary
             target: {text: این, language_code: prs, direction: rtl}
             introduced_tokens: [این]
+            example: {text: "این بزرگ‌تر است", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit15.lesson01.teach.aan_word
             kind: vocabulary
             target: {text: آن, language_code: prs, direction: rtl}
             introduced_tokens: [آن]
+            example: {text: "آن کوچک‌تر است", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit15.lesson01.teach.bozorgtar_ast_word
             kind: vocabulary
             target: {text: "بزرگ‌تر است", language_code: prs, direction: rtl}
             introduced_tokens: ["بزرگ‌تر", است]
+            example: {text: "این از آن بزرگ‌تر است", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit15.lesson01.teach.koochaktar_ast_word
             kind: vocabulary
             target: {text: "کوچک‌تر است", language_code: prs, direction: rtl}
             introduced_tokens: ["کوچک‌تر"]
+            example: {text: "آن از این کوچک‌تر است", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit15.lesson01.teach.az_word
             kind: grammar_note
             target: {text: "از (than)", language_code: prs, direction: rtl}
@@ -105,10 +111,12 @@ units:
             kind: vocabulary
             target: {text: "گران‌تر است", language_code: prs, direction: rtl}
             introduced_tokens: ["گران‌تر"]
+            example: {text: "این از آن گران‌تر است", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit15.lesson02.teach.arzantar_ast_word
             kind: vocabulary
             target: {text: "ارزان‌تر است", language_code: prs, direction: rtl}
             introduced_tokens: ["ارزان‌تر"]
+            example: {text: "آن از این ارزان‌تر است", language_code: prs, direction: rtl}
         exercises:
           - content_key: prs.a1.unit15.lesson02.exercise01.recognize_gerantar
             type: multiple_choice
@@ -146,6 +154,9 @@ units:
             kind: vocabulary
             target: {text: "کریم، نگار", language_code: prs, direction: rtl}
             introduced_tokens: [کریم, نگار]
+            example:
+              - {text: "من کریم استم", language_code: prs, direction: rtl}
+              - {text: "من نگار استم", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit15.lesson03.teach.ghad_bolandtar_phrase
             kind: phrase
             target: {text: "قد بلندتر است", language_code: prs, direction: rtl}
@@ -154,6 +165,7 @@ units:
             kind: vocabulary
             target: {text: "جوان‌تر است", language_code: prs, direction: rtl}
             introduced_tokens: ["جوان‌تر"]
+            example: {text: "نگار از کریم جوان‌تر است", language_code: prs, direction: rtl}
         exercises:
           - content_key: prs.a1.unit15.lesson03.exercise01.recognize_bolandtar
             type: multiple_choice
@@ -191,10 +203,12 @@ units:
             kind: vocabulary
             target: {text: "بهتر است", language_code: prs, direction: rtl}
             introduced_tokens: ["بهتر"]
+            example: {text: "این از آن بهتر است", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit15.lesson04.teach.badtar_ast_word
             kind: vocabulary
             target: {text: "بدتر است", language_code: prs, direction: rtl}
             introduced_tokens: ["بدتر"]
+            example: {text: "آن از این بدتر است", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit15.lesson04.teach.choon_word
             kind: grammar_note
             target: {text: "چون (because)", language_code: prs, direction: rtl}
@@ -277,6 +291,9 @@ units:
             kind: vocabulary
             target: {text: "کریم، نگار", language_code: prs, direction: rtl}
             introduced_tokens: []
+            example:
+              - {text: "کریم قد بلندتر است", language_code: prs, direction: rtl}
+              - {text: "نگار جوان‌تر است", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit15.lesson06.teach.ama_word
             kind: grammar_note
             target: {text: "اما (but)", language_code: prs, direction: rtl}
@@ -285,6 +302,7 @@ units:
             kind: vocabulary
             target: {text: بلی, language_code: prs, direction: rtl}
             introduced_tokens: [بلی]
+            example: {text: "بلی، این گران‌تر است", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit15.lesson06.teach.dialogue_line1
             kind: dialogue
             target: {text: "این از آن گران‌تر است، اما بهتر است", language_code: prs, direction: rtl, speaker: کریم}
