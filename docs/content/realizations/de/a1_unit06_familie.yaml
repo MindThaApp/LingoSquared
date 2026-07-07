@@ -1,0 +1,208 @@
+schema_version: "1.0"
+realization_version: "2026.1-draft.1"
+target_language: "de"
+cefr_level: "A1"
+status: "complete_draft"
+generation_provenance:
+  method: "ai_generated"
+  authoring_system: "claude"
+  human_reviewed: false
+review:
+  status: "unreviewed"
+  required_next_reviewer: "codex"
+  notes: >-
+    Sixth German unit, continuing the Anna/Felix storyline (still on
+    the formal Sie register from units 01-05). Scoped to exactly one
+    spine outcome (universal.a1.family.describe_relationships) across
+    all 4 lessons per AUTHORING_GUIDE §1; prerequisite
+    universal.a1.introductions.exchange_identity is satisfied by unit02.
+
+    The single trickiest real teaching point in this unit: German
+    possessive adjectives (mein/meine, sein/seine, Ihr/Ihre) agree with
+    the GRAMMATICAL GENDER of the noun being possessed, not the
+    possessor -- unlike English's invariant "my/his/your." "der Vater"
+    (masculine) takes "mein Vater," but "die Mutter" (feminine) takes
+    "meine Mutter." This is taught explicitly with worked examples
+    across both genders and the plural (meine Eltern), and
+    lesson02.exercise04's multiple_choice deliberately includes a
+    wrong-gender-agreement distractor ("Ihre Vater" -- Vater is
+    masculine, so this is ungrammatical) specifically to test whether
+    the agreement rule was internalized, not just the vocabulary.
+    Also flagged: German splits "cousin" into two gendered nouns
+    (Cousin = male cousin, Cousine = female cousin), unlike English's
+    single gender-neutral word -- taught as its own explicit contrast.
+
+    Deliberate scoping decision, same discipline as unit02's original
+    er/sie deferral: this unit teaches "mein/meine" (my), "sein/seine"
+    (his, third person about Felix -- no collision risk, "er"/"Er" has
+    no competing meaning), and "Ihr/Ihre" (formal "your," capitalized,
+    matching the established Sie register). It deliberately does NOT
+    introduce lowercase "ihr/ihre" (her/their) in this file, since that
+    would create the exact same capitalization homograph problem as
+    Sie/sie (Ihre Schwester = "your-formal sister" vs ihre Schwester =
+    "her sister," distinguishable only by case when not
+    sentence-initial). The CODE-lane's 2026-07-07 case_sensitive
+    grading flag (67ed7ae) now exists and could grade this correctly
+    whenever a future unit deliberately introduces the contrast with
+    proper scaffolding -- flagging this here the same way unit02
+    flagged Sie/sie for whoever eventually authors that unit, rather
+    than reaching for the flag prematurely in a unit not built around
+    demonstrating the contrast. To keep the capstone dialogue
+    contrastive without needing "her," the sister is referred to by
+    repeating the noun ("Meine Schwester ist Lehrerin") rather than
+    pronominalizing to "Sie ist Lehrerin," which would immediately
+    recreate the deferred collision.
+
+    lesson01's matching_pairs was widened to 6 pairs (adding Eltern and
+    Geschwister as their own matched concepts, not just the 4
+    individual terms) specifically to clear AUTHORING_GUIDE §16's 6-12
+    floor comfortably rather than land at the shared en realization's
+    bare 4. No fill_in_blank exercises, same ambiguity-avoidance
+    discipline as every prior unit. Applied the hardcoded-English-
+    target_blocks lesson from the start: every target_blocks in this
+    file is empty or genuine German content only -- a repo-wide grep
+    after authoring confirms zero language_code: "en" target_blocks
+    anywhere in this file. Compiled and validated against the real
+    compiler to confirm every exercise's tested_text is fully covered
+    by this file's own cumulative introduced_tokens (including plural
+    noun forms like "Schwestern"/"Brüder," which tokenize as distinct
+    tokens from their singular forms and are declared separately where
+    first tested).
+
+    Fresh-context review (subagent, Codex still usage-exhausted; the
+    review deliberately did not open any sibling-direction overlay,
+    per the standing isolation rule) confirmed all possessive-adjective
+    gender-agreement claims are genuinely correct standard German
+    (including the deliberately-wrong distractors "Ihre Vater"/"seine
+    Bruder"), the Cousin/Cousine gendered-noun split is real, zero
+    hardcoded-English-target_blocks instances, and both word_order
+    exercises' accepted_answers are correctly ordered (not copied from
+    scrambled word_bank order). It found one real BLOCKING bug in this
+    file: lesson04.exercise05.read_bildunterschrift's en-de instruction
+    ("who is named besides Anna's mother and father?") didn't match
+    its own correct answer (the full caption, which explicitly includes
+    the excluded parents) -- fixed by narrowing both the realization's
+    tested_text and the overlay's correct_option/accepted_answers to
+    just "meine Schwester," matching what the instruction actually
+    asks for; confirmed via the compiled output. Minor fixes also
+    applied in the overlays: a §15 single-quote-instead-of-asterisk
+    slip, two §12 missing conjunction-joined variants, and two
+    grammar-note wording issues (a wrong-case citation and a conflated
+    formality/gender explanation) in de-en's teaching notes. Also
+    flagged, not fixed here: the paired en/a1_unit06_family.yaml
+    realization's own match_family_words has only 4 pairs (below §16's
+    6-12 floor) -- shared, already-reviewed content used by every X-en
+    overlay pairing with it, out of scope for a unilateral edit.
+    Re-verified clean after every fix: real compiler validate+compile
+    for both en-de and de-en directions (0 errors/warnings), full
+    scripts/verify.sh --content-only.
+
+course:
+  realization_key: "de.a1"
+  target_language_first: true
+  dialect: "de_DE_standard"
+  register_policy: "Teach clear Standard German (Hochdeutsch). Possessive adjectives agree with the grammatical gender of the possessed noun (mein Vater, meine Mutter, meine Eltern) -- flag this explicitly rather than assume learners will infer it from English's invariant 'my.' German also genders 'cousin' (Cousin/Cousine) where English has one word. Anna and Felix continue on the formal Sie register from units 01-05."
+
+media_assets:
+  - {content_key: "de.a1.audio.familie.engste.01", language: "de", text: "Vater, Mutter, Bruder, Schwester, Eltern, Geschwister", voice_hint: "neutral_adult", status: "pending_generation"}
+  - {content_key: "de.a1.audio.familie.erweiterte.01", language: "de", text: "Großmutter, Großvater, Tante, Onkel, Cousin, Cousine", voice_hint: "neutral_adult", status: "pending_generation"}
+  - content_key: "de.a1.audio.dialog.familienfoto.01"
+    language: "de"
+    text: "Felix: Ist das Ihre Familie? Anna: Ja. Das ist meine Mutter und das ist mein Vater. Felix: Wer ist das? Anna: Das ist meine Schwester. Meine Schwester ist Lehrerin. Felix: Haben Sie Brüder? Anna: Nein. Ich habe nur eine Schwester."
+    voice_hint: "two_adults_neutral_friendly"
+    status: "pending_generation"
+
+units:
+  - content_key: "de.a1.unit06.familie"
+    title: "Die Familie"
+    section: "reading_writing"
+    spine_outcome_ids:
+      - "universal.a1.family.describe_relationships"
+    planned_lesson_count: 4
+    lessons:
+      - content_key: "de.a1.unit06.lesson01.engste_familie"
+        title: "Die engste Familie"
+        spine_outcome_id: "universal.a1.family.describe_relationships"
+        teaching:
+          - {content_key: "de.a1.unit06.lesson01.teach.vater", kind: "vocabulary", target: {text: "Vater", language_code: "de", direction: "ltr"}, introduced_tokens: ["Vater"]}
+          - {content_key: "de.a1.unit06.lesson01.teach.mutter", kind: "vocabulary", target: {text: "Mutter", language_code: "de", direction: "ltr"}, introduced_tokens: ["Mutter"]}
+          - {content_key: "de.a1.unit06.lesson01.teach.bruder", kind: "vocabulary", target: {text: "Bruder", language_code: "de", direction: "ltr"}, introduced_tokens: ["Bruder"]}
+          - {content_key: "de.a1.unit06.lesson01.teach.schwester", kind: "vocabulary", target: {text: "Schwester", language_code: "de", direction: "ltr"}, introduced_tokens: ["Schwester"]}
+          - {content_key: "de.a1.unit06.lesson01.teach.eltern", kind: "vocabulary", target: {text: "Eltern", language_code: "de", direction: "ltr"}, introduced_tokens: ["Eltern"]}
+          - {content_key: "de.a1.unit06.lesson01.teach.geschwister", kind: "vocabulary", target: {text: "Geschwister", language_code: "de", direction: "ltr"}, introduced_tokens: ["Geschwister"]}
+        exercises:
+          - {content_key: "de.a1.unit06.lesson01.exercise01.listen_mutter", type: "listen_select", tested_text: "Mutter", media_asset_key: "de.a1.audio.familie.engste.01", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit06.lesson01.exercise02.choose_bruder", type: "multiple_choice", tested_text: "Bruder", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit06.lesson01.exercise03.choose_eltern", type: "multiple_choice", tested_text: "Eltern", prompt: {target_blocks: []}}
+          - content_key: "de.a1.unit06.lesson01.exercise04.match_familienwoerter"
+            type: "matching_pairs"
+            tested_text: "Vater Mutter Bruder Schwester Eltern Geschwister"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "männlicher Elternteil", right: "Vater"}
+              - {left: "weiblicher Elternteil", right: "Mutter"}
+              - {left: "männliches Geschwisterteil", right: "Bruder"}
+              - {left: "weibliches Geschwisterteil", right: "Schwester"}
+              - {left: "Vater und Mutter zusammen", right: "Eltern"}
+              - {left: "Brüder und Schwestern zusammen", right: "Geschwister"}
+          - {content_key: "de.a1.unit06.lesson01.exercise05.write_geschwister", type: "writing_prompt", tested_text: "Geschwister", prompt: {target_blocks: []}}
+
+      - content_key: "de.a1.unit06.lesson02.erweiterte_familie_und_possessivpronomen"
+        title: "Erweiterte Familie und Possessivpronomen"
+        spine_outcome_id: "universal.a1.family.describe_relationships"
+        teaching:
+          - {content_key: "de.a1.unit06.lesson02.teach.grossmutter", kind: "vocabulary", target: {text: "Großmutter", language_code: "de", direction: "ltr"}, introduced_tokens: ["Großmutter"]}
+          - {content_key: "de.a1.unit06.lesson02.teach.grossvater", kind: "vocabulary", target: {text: "Großvater", language_code: "de", direction: "ltr"}, introduced_tokens: ["Großvater"]}
+          - {content_key: "de.a1.unit06.lesson02.teach.tante", kind: "vocabulary", target: {text: "Tante", language_code: "de", direction: "ltr"}, introduced_tokens: ["Tante"]}
+          - {content_key: "de.a1.unit06.lesson02.teach.onkel", kind: "vocabulary", target: {text: "Onkel", language_code: "de", direction: "ltr"}, introduced_tokens: ["Onkel"]}
+          - {content_key: "de.a1.unit06.lesson02.teach.cousin", kind: "vocabulary", target: {text: "Cousin", language_code: "de", direction: "ltr"}, introduced_tokens: ["Cousin"]}
+          - {content_key: "de.a1.unit06.lesson02.teach.cousine", kind: "vocabulary", target: {text: "Cousine", language_code: "de", direction: "ltr"}, introduced_tokens: ["Cousine"]}
+          - {content_key: "de.a1.unit06.lesson02.teach.mein_vater", kind: "grammar_note", target: {text: "mein Vater", language_code: "de", direction: "ltr"}, introduced_tokens: ["mein"]}
+          - {content_key: "de.a1.unit06.lesson02.teach.meine_mutter", kind: "grammar_note", target: {text: "meine Mutter", language_code: "de", direction: "ltr"}, introduced_tokens: ["meine"]}
+          - {content_key: "de.a1.unit06.lesson02.teach.sein_bruder", kind: "grammar_note", target: {text: "sein Bruder", language_code: "de", direction: "ltr"}, introduced_tokens: ["sein"]}
+          - {content_key: "de.a1.unit06.lesson02.teach.ihr_vater_formal", kind: "grammar_note", target: {text: "Ihr Vater", language_code: "de", direction: "ltr"}, introduced_tokens: ["Ihr"]}
+          - {content_key: "de.a1.unit06.lesson02.teach.wer_ist_ihr_vater", kind: "phrase", target: {text: "Wer ist Ihr Vater?", language_code: "de", direction: "ltr"}, introduced_tokens: ["Wer", "ist"]}
+        exercises:
+          - {content_key: "de.a1.unit06.lesson02.exercise01.listen_grossmutter", type: "listen_select", tested_text: "Großmutter", media_asset_key: "de.a1.audio.familie.erweiterte.01", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit06.lesson02.exercise02.choose_tante", type: "multiple_choice", tested_text: "Tante", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit06.lesson02.exercise03.choose_sein", type: "multiple_choice", tested_text: "sein Bruder", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit06.lesson02.exercise04.choose_ihr_formal", type: "multiple_choice", tested_text: "Ihr Vater", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit06.lesson02.exercise05.order_wer_ist_ihr_vater", type: "word_order", tested_text: "Wer ist Ihr Vater", prompt: {target_blocks: []}, word_bank: ["ist", "Ihr", "Vater", "Wer"]}
+          - {content_key: "de.a1.unit06.lesson02.exercise06.write_cousine", type: "writing_prompt", tested_text: "Cousine", prompt: {target_blocks: []}}
+
+      - content_key: "de.a1.unit06.lesson03.die_familie_beschreiben"
+        title: "Die Familie beschreiben"
+        spine_outcome_id: "universal.a1.family.describe_relationships"
+        teaching:
+          - {content_key: "de.a1.unit06.lesson03.teach.das_ist_mein_bruder", kind: "phrase", target: {text: "Das ist mein Bruder.", language_code: "de", direction: "ltr"}, introduced_tokens: ["Das", "ist"]}
+          - {content_key: "de.a1.unit06.lesson03.teach.er_ist_zwanzig", kind: "phrase", target: {text: "Er ist zwanzig Jahre alt.", language_code: "de", direction: "ltr"}, introduced_tokens: ["Er", "zwanzig", "Jahre", "alt"]}
+          - {content_key: "de.a1.unit06.lesson03.teach.ich_habe_zwei_schwestern", kind: "phrase", target: {text: "Ich habe zwei Schwestern.", language_code: "de", direction: "ltr"}, introduced_tokens: ["Ich", "habe", "zwei", "Schwestern"]}
+          - {content_key: "de.a1.unit06.lesson03.teach.haben_sie_geschwister", kind: "phrase", target: {text: "Haben Sie Geschwister?", language_code: "de", direction: "ltr"}, introduced_tokens: ["Haben", "Sie"]}
+          - {content_key: "de.a1.unit06.lesson03.teach.nein_einzelkind", kind: "phrase", target: {text: "Nein, ich habe keine Geschwister. Ich bin Einzelkind.", language_code: "de", direction: "ltr"}, introduced_tokens: ["Nein", "keine", "bin", "Einzelkind"]}
+        exercises:
+          - {content_key: "de.a1.unit06.lesson03.exercise01.choose_das_ist_mein_bruder", type: "multiple_choice", tested_text: "Das ist mein Bruder.", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit06.lesson03.exercise02.order_haben_sie_geschwister", type: "word_order", tested_text: "Haben Sie Geschwister", prompt: {target_blocks: []}, word_bank: ["Sie", "Geschwister", "Haben"]}
+          - {content_key: "de.a1.unit06.lesson03.exercise03.reply_schwestern", type: "dialogue_response", tested_text: "Haben Sie Geschwister Ich habe zwei Schwestern", prompt: {target_blocks: [{text: "Haben Sie Geschwister?", language_code: "de", direction: "ltr"}]}}
+          - {content_key: "de.a1.unit06.lesson03.exercise04.reply_einzelkind", type: "dialogue_response", tested_text: "Haben Sie Geschwister Nein ich habe keine Geschwister Ich bin Einzelkind", prompt: {target_blocks: [{text: "Haben Sie Geschwister?", language_code: "de", direction: "ltr"}]}}
+          - {content_key: "de.a1.unit06.lesson03.exercise05.write_bruder_alter", type: "writing_prompt", tested_text: "Er ist zwanzig Jahre alt", prompt: {target_blocks: []}}
+
+      - content_key: "de.a1.unit06.lesson04.im_gespraech_ueber_das_familienfoto"
+        title: "Im Gespräch über das Familienfoto"
+        spine_outcome_id: "universal.a1.family.describe_relationships"
+        teaching:
+          - {content_key: "de.a1.unit06.lesson04.teach.foto", kind: "vocabulary", target: {text: "Foto", language_code: "de", direction: "ltr"}, introduced_tokens: ["Foto"]}
+          - {content_key: "de.a1.unit06.lesson04.teach.line01", kind: "dialogue", target: {text: "Ist das Ihre Familie?", language_code: "de", direction: "ltr", speaker: "Felix"}, introduced_tokens: ["Ist", "Ihre", "Familie"]}
+          - {content_key: "de.a1.unit06.lesson04.teach.line02", kind: "dialogue", target: {text: "Ja. Das ist meine Mutter und das ist mein Vater.", language_code: "de", direction: "ltr", speaker: "Anna"}, introduced_tokens: ["Ja", "und"]}
+          - {content_key: "de.a1.unit06.lesson04.teach.line03", kind: "dialogue", target: {text: "Wer ist das?", language_code: "de", direction: "ltr", speaker: "Felix"}, introduced_tokens: ["Wer"]}
+          - {content_key: "de.a1.unit06.lesson04.teach.line04", kind: "dialogue", target: {text: "Das ist meine Schwester. Meine Schwester ist Lehrerin.", language_code: "de", direction: "ltr", speaker: "Anna"}, introduced_tokens: ["Lehrerin"]}
+          - {content_key: "de.a1.unit06.lesson04.teach.line05", kind: "dialogue", target: {text: "Haben Sie Brüder?", language_code: "de", direction: "ltr", speaker: "Felix"}, introduced_tokens: ["Brüder"]}
+          - {content_key: "de.a1.unit06.lesson04.teach.line06", kind: "dialogue", target: {text: "Nein. Ich habe nur eine Schwester.", language_code: "de", direction: "ltr", speaker: "Anna"}, introduced_tokens: ["nur", "eine"]}
+          - {content_key: "de.a1.unit06.lesson04.teach.bildunterschrift", kind: "reading", target: {text: "Meine Familie: meine Mutter, mein Vater und meine Schwester.", language_code: "de", direction: "ltr"}, introduced_tokens: []}
+        exercises:
+          - {content_key: "de.a1.unit06.lesson04.exercise01.listen_eltern_namen", type: "dialogue_comprehension", tested_text: "Das ist meine Mutter und das ist mein Vater", media_asset_key: "de.a1.audio.dialog.familienfoto.01", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit06.lesson04.exercise02.listen_schwester_beruf", type: "listen_select", tested_text: "Meine Schwester ist Lehrerin", media_asset_key: "de.a1.audio.dialog.familienfoto.01", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit06.lesson04.exercise03.choose_brueder_antwort", type: "multiple_choice", tested_text: "Nein. Ich habe nur eine Schwester.", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit06.lesson04.exercise04.order_wer_frage", type: "word_order", tested_text: "Wer ist das", prompt: {target_blocks: []}, word_bank: ["ist", "das", "Wer"]}
+          - {content_key: "de.a1.unit06.lesson04.exercise05.read_bildunterschrift", type: "reading_comprehension", tested_text: "meine Schwester", prompt: {target_blocks: [{text: "Meine Familie: meine Mutter, mein Vater und meine Schwester.", language_code: "de", direction: "ltr"}]}}
+          - {content_key: "de.a1.unit06.lesson04.exercise06.reply_als_anna", type: "dialogue_response", tested_text: "Ja. Das ist meine Mutter und das ist mein Vater. Das ist meine Schwester. Meine Schwester ist Lehrerin.", prompt: {target_blocks: [{text: "Ist das Ihre Familie? Wer ist das?", language_code: "de", direction: "ltr"}]}}
+          - {content_key: "de.a1.unit06.lesson04.exercise07.speak_familie", type: "speak_response", tested_text: "Ja Das ist meine Mutter und das ist mein Vater Das ist meine Schwester Meine Schwester ist Lehrerin", prompt: {target_blocks: [{text: "Ist das Ihre Familie? Wer ist das?", language_code: "de", direction: "ltr"}]}}
