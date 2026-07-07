@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: "1.1"
 realization_version: "2026.1-draft.1"
 target_language: nl
 cefr_level: A1
@@ -10,7 +10,37 @@ generation_provenance:
 review:
   status: unreviewed
   required_next_reviewer: claude
-  notes: "Initial six-lesson Dutch numbers draft; pending fresh-context and native-speaker review. Audio assets are declared for generation."
+  notes: >-
+    Initial six-lesson Dutch numbers draft; pending fresh-context and
+    native-speaker review. Audio assets are declared for generation.
+
+    2026-07-07: AUTHORING_GUIDE.md #19 retrofit — every vocabulary card
+    gained example sentence(s) built from this unit's own taught
+    material (or the unit's own later-lesson content, reused verbatim
+    where a matching number/date already appears, e.g. zaal
+    eenentwintig, Omar's age, the house number, and the euro/cent
+    prices); schema_version bumped to 1.1 (missing examples are now a
+    hard compiler error for this file). Example sentences are
+    Claude-authored and pending fresh-context review.
+
+    2026-07-07: fresh-context review (separate session, no access to the
+    authoring reasoning above) of the #19 retrofit's examples. Found a
+    real monotony problem: lesson01's zero-through-twelve cards used
+    "Ik heb ... euro" for 10 of their 13 examples, and lesson02's teens
+    card used "Ik ben ... jaar" for all 7 of its examples — both read as
+    a flat, repeated dictionary frame rather than natural variety, even
+    though each individual sentence was grammatically fine. Fixed by
+    redistributing the existing in-unit quantity nouns (euro, boek(en),
+    stoel(en), mens(en)) across each set so no frame repeats more than
+    3-4 times, and varying 4 of the 7 teens examples away from "jaar"
+    (keeping the "jaar" frame for 13/15/18, since 18 is a natural,
+    meaningful age to anchor on) — no new vocabulary introduced, the
+    three original later-lesson foreshadow reuses (drie boeken, zeven
+    stoelen, twaalf mensen) were left untouched. Everything else in this
+    file (the tens card's own already-varied 8 examples, the six
+    scattered individual-number examples 21/22/32/48/75/99, all
+    example/gloss pairing, register, and taught-word coverage) was
+    checked and left as-is — genuinely fine on a critical read.
 
 course:
   realization_key: nl.a1
@@ -60,9 +90,9 @@ units:
         title: "Van nul tot twaalf"
         spine_outcome_id: universal.a1.numbers.use_basic_numbers
         teaching:
-          - {content_key: nl.a1.unit02.lesson01.teach.zero_to_four, kind: vocabulary, target: {text: "0 — nul, 1 — één, 2 — twee, 3 — drie, 4 — vier", language_code: nl, direction: ltr}, introduced_tokens: ["0", nul, "1", één, "2", twee, "3", drie, "4", vier]}
-          - {content_key: nl.a1.unit02.lesson01.teach.five_to_eight, kind: vocabulary, target: {text: "5 — vijf, 6 — zes, 7 — zeven, 8 — acht", language_code: nl, direction: ltr}, introduced_tokens: ["5", vijf, "6", zes, "7", zeven, "8", acht]}
-          - {content_key: nl.a1.unit02.lesson01.teach.nine_to_twelve, kind: vocabulary, target: {text: "9 — negen, 10 — tien, 11 — elf, 12 — twaalf", language_code: nl, direction: ltr}, introduced_tokens: ["9", negen, "10", tien, "11", elf, "12", twaalf]}
+          - {content_key: nl.a1.unit02.lesson01.teach.zero_to_four, kind: vocabulary, target: {text: "0 — nul, 1 — één, 2 — twee, 3 — drie, 4 — vier", language_code: nl, direction: ltr}, introduced_tokens: ["0", nul, "1", één, "2", twee, "3", drie, "4", vier], example: [{text: "Ik heb nul euro.", language_code: nl, direction: ltr}, {text: "Ik heb één boek.", language_code: nl, direction: ltr}, {text: "Ik heb twee stoelen.", language_code: nl, direction: ltr}, {text: "Ik heb drie boeken.", language_code: nl, direction: ltr}, {text: "Er zijn vier mensen.", language_code: nl, direction: ltr}]}
+          - {content_key: nl.a1.unit02.lesson01.teach.five_to_eight, kind: vocabulary, target: {text: "5 — vijf, 6 — zes, 7 — zeven, 8 — acht", language_code: nl, direction: ltr}, introduced_tokens: ["5", vijf, "6", zes, "7", zeven, "8", acht], example: [{text: "Ik heb vijf euro.", language_code: nl, direction: ltr}, {text: "Ik heb zes boeken.", language_code: nl, direction: ltr}, {text: "Ik heb zeven stoelen.", language_code: nl, direction: ltr}, {text: "Er zijn acht mensen.", language_code: nl, direction: ltr}]}
+          - {content_key: nl.a1.unit02.lesson01.teach.nine_to_twelve, kind: vocabulary, target: {text: "9 — negen, 10 — tien, 11 — elf, 12 — twaalf", language_code: nl, direction: ltr}, introduced_tokens: ["9", negen, "10", tien, "11", elf, "12", twaalf], example: [{text: "Ik heb negen euro.", language_code: nl, direction: ltr}, {text: "Ik heb tien stoelen.", language_code: nl, direction: ltr}, {text: "Ik heb elf boeken.", language_code: nl, direction: ltr}, {text: "Er zijn twaalf mensen.", language_code: nl, direction: ltr}]}
           - {content_key: nl.a1.unit02.lesson01.teach.how_many, kind: phrase, target: {text: "Hoeveel?", language_code: nl, direction: ltr}, introduced_tokens: [Hoeveel]}
         exercises:
           - content_key: nl.a1.unit02.lesson01.exercise01.choose_eight
@@ -119,16 +149,16 @@ units:
         title: "Van dertien tot negenennegentig"
         spine_outcome_id: universal.a1.numbers.use_basic_numbers
         teaching:
-          - {content_key: nl.a1.unit02.lesson02.teach.teens, kind: vocabulary, target: {text: "13–19: dertien, veertien, vijftien, zestien, zeventien, achttien, negentien", language_code: nl, direction: ltr}, introduced_tokens: ["13", "19", dertien, veertien, vijftien, zestien, zeventien, achttien, negentien]}
-          - {content_key: nl.a1.unit02.lesson02.teach.tens, kind: vocabulary, target: {text: "20–90: twintig, dertig, veertig, vijftig, zestig, zeventig, tachtig, negentig", language_code: nl, direction: ltr}, introduced_tokens: ["20", "90", twintig, dertig, veertig, vijftig, zestig, zeventig, tachtig, negentig]}
+          - {content_key: nl.a1.unit02.lesson02.teach.teens, kind: vocabulary, target: {text: "13–19: dertien, veertien, vijftien, zestien, zeventien, achttien, negentien", language_code: nl, direction: ltr}, introduced_tokens: ["13", "19", dertien, veertien, vijftien, zestien, zeventien, achttien, negentien], example: [{text: "Ik ben dertien jaar.", language_code: nl, direction: ltr}, {text: "Ik heb veertien euro.", language_code: nl, direction: ltr}, {text: "Ik ben vijftien jaar.", language_code: nl, direction: ltr}, {text: "Ik heb zestien boeken.", language_code: nl, direction: ltr}, {text: "Er zijn zeventien mensen.", language_code: nl, direction: ltr}, {text: "Ik ben achttien jaar.", language_code: nl, direction: ltr}, {text: "Ik heb negentien stoelen.", language_code: nl, direction: ltr}]}
+          - {content_key: nl.a1.unit02.lesson02.teach.tens, kind: vocabulary, target: {text: "20–90: twintig, dertig, veertig, vijftig, zestig, zeventig, tachtig, negentig", language_code: nl, direction: ltr}, introduced_tokens: ["20", "90", twintig, dertig, veertig, vijftig, zestig, zeventig, tachtig, negentig], example: [{text: "Ik ben twintig jaar.", language_code: nl, direction: ltr}, {text: "Dat kost dertig euro.", language_code: nl, direction: ltr}, {text: "Ik heb veertig euro.", language_code: nl, direction: ltr}, {text: "Er zijn vijftig mensen.", language_code: nl, direction: ltr}, {text: "Ik ben zestig jaar.", language_code: nl, direction: ltr}, {text: "Dat kost zeventig euro.", language_code: nl, direction: ltr}, {text: "Er zijn tachtig mensen.", language_code: nl, direction: ltr}, {text: "Ik heb negentig euro.", language_code: nl, direction: ltr}]}
           - {content_key: nl.a1.unit02.lesson02.teach.inversion_rule, kind: grammar_note, target: {text: "21–99, behalve 30, 40 ...: eenheid + en + tiental", language_code: nl, direction: ltr}, introduced_tokens: ["21", "99", behalve, "30", "40", eenheid, en, tiental]}
-          - {content_key: nl.a1.unit02.lesson02.teach.twenty_one, kind: vocabulary, target: {text: "21 — eenentwintig", language_code: nl, direction: ltr}, introduced_tokens: ["21", eenentwintig]}
-          - {content_key: nl.a1.unit02.lesson02.teach.twenty_two, kind: vocabulary, target: {text: "22 — tweeëntwintig", language_code: nl, direction: ltr}, introduced_tokens: ["22", tweeëntwintig]}
-          - {content_key: nl.a1.unit02.lesson02.teach.thirty_two, kind: vocabulary, target: {text: "32 — tweeëndertig", language_code: nl, direction: ltr}, introduced_tokens: ["32", tweeëndertig]}
+          - {content_key: nl.a1.unit02.lesson02.teach.twenty_one, kind: vocabulary, target: {text: "21 — eenentwintig", language_code: nl, direction: ltr}, introduced_tokens: ["21", eenentwintig], example: {text: "Het taalcafé is in zaal eenentwintig.", language_code: nl, direction: ltr}}
+          - {content_key: nl.a1.unit02.lesson02.teach.twenty_two, kind: vocabulary, target: {text: "22 — tweeëntwintig", language_code: nl, direction: ltr}, introduced_tokens: ["22", tweeëntwintig], example: {text: "Ik ben tweeëntwintig jaar.", language_code: nl, direction: ltr}}
+          - {content_key: nl.a1.unit02.lesson02.teach.thirty_two, kind: vocabulary, target: {text: "32 — tweeëndertig", language_code: nl, direction: ltr}, introduced_tokens: ["32", tweeëndertig], example: {text: "Omar is tweeëndertig jaar.", language_code: nl, direction: ltr}}
           - {content_key: nl.a1.unit02.lesson02.teach.forty_two, kind: phrase, target: {text: "42 is tweeënveertig.", language_code: nl, direction: ltr}, introduced_tokens: ["42", is, tweeënveertig]}
-          - {content_key: nl.a1.unit02.lesson02.teach.forty_eight, kind: vocabulary, target: {text: "48 — achtenveertig", language_code: nl, direction: ltr}, introduced_tokens: ["48", achtenveertig]}
-          - {content_key: nl.a1.unit02.lesson02.teach.seventy_five, kind: vocabulary, target: {text: "75 — vijfenzeventig", language_code: nl, direction: ltr}, introduced_tokens: ["75", vijfenzeventig]}
-          - {content_key: nl.a1.unit02.lesson02.teach.ninety_nine, kind: vocabulary, target: {text: "99 — negenennegentig", language_code: nl, direction: ltr}, introduced_tokens: ["99", negenennegentig]}
+          - {content_key: nl.a1.unit02.lesson02.teach.forty_eight, kind: vocabulary, target: {text: "48 — achtenveertig", language_code: nl, direction: ltr}, introduced_tokens: ["48", achtenveertig], example: {text: "Ik woon op nummer achtenveertig.", language_code: nl, direction: ltr}}
+          - {content_key: nl.a1.unit02.lesson02.teach.seventy_five, kind: vocabulary, target: {text: "75 — vijfenzeventig", language_code: nl, direction: ltr}, introduced_tokens: ["75", vijfenzeventig], example: {text: "Dat kost vijfenzeventig cent.", language_code: nl, direction: ltr}}
+          - {content_key: nl.a1.unit02.lesson02.teach.ninety_nine, kind: vocabulary, target: {text: "99 — negenennegentig", language_code: nl, direction: ltr}, introduced_tokens: ["99", negenennegentig], example: {text: "Ik ben negenennegentig jaar.", language_code: nl, direction: ltr}}
         exercises:
           - content_key: nl.a1.unit02.lesson02.exercise01.choose_sixteen
             type: multiple_choice
@@ -286,8 +316,8 @@ units:
         title: "Prijzen in euro's"
         spine_outcome_id: universal.a1.numbers.use_basic_numbers
         teaching:
-          - {content_key: nl.a1.unit02.lesson05.teach.euro, kind: vocabulary, target: {text: "de euro", language_code: nl, direction: ltr}, introduced_tokens: [de, euro]}
-          - {content_key: nl.a1.unit02.lesson05.teach.cent, kind: vocabulary, target: {text: "de cent", language_code: nl, direction: ltr}, introduced_tokens: [de, cent]}
+          - {content_key: nl.a1.unit02.lesson05.teach.euro, kind: vocabulary, target: {text: "de euro", language_code: nl, direction: ltr}, introduced_tokens: [de, euro], example: {text: "Dat kost twee euro.", language_code: nl, direction: ltr}}
+          - {content_key: nl.a1.unit02.lesson05.teach.cent, kind: vocabulary, target: {text: "de cent", language_code: nl, direction: ltr}, introduced_tokens: [de, cent], example: {text: "Dat is vijftig cent.", language_code: nl, direction: ltr}}
           - {content_key: nl.a1.unit02.lesson05.teach.ask_price, kind: phrase, target: {text: "Hoeveel kost dit?", language_code: nl, direction: ltr}, introduced_tokens: [Hoeveel, kost, dit]}
           - {content_key: nl.a1.unit02.lesson05.teach.two_fifty, kind: phrase, target: {text: "€2,50 — twee euro vijftig", language_code: nl, direction: ltr}, introduced_tokens: ["2", "50", twee, euro, vijftig]}
           - {content_key: nl.a1.unit02.lesson05.teach.seventy_five_cents, kind: phrase, target: {text: "€0,75 — vijfenzeventig cent", language_code: nl, direction: ltr}, introduced_tokens: ["0", "75", vijfenzeventig, cent]}
