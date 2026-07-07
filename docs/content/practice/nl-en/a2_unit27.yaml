@@ -1,0 +1,214 @@
+schema_version: "1.0"
+pack_key: practice.nl-en.a2.unit27
+source_language: nl
+target_language: en
+unit_content_key: en.a2.unit27.banking
+review:
+  status: unreviewed
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-07-07 by the Claude session extending nl-en's practice
+    pool to unit27 (opening a bank account) and unit28 (attending a
+    doctor's appointment) together in one pass -- both units previously
+    had zero practice templates. Follows fa-en's already-authored
+    a2_unit27.yaml pack as the structural reference (same underlying
+    English target-language realization, only Dutch glosses/feedback text
+    differ): most of this unit's real content is multi-word banking
+    compounds ("checking account", "monthly fee", "minimum balance",
+    "direct deposit") that don't reduce to a single fillable slot, so the
+    two bare-word-recognition-only semantic tags fa-en already added to
+    scripts/_en_target_lexeme_common.py tonight are reused as-is, no
+    classifier change needed for this direction: "banking_noun" (account,
+    fee, balance, deposit, business, days, documents, teller) and
+    "banking_adjective" (checking, monthly, minimum, direct) -- both
+    deliberately not used in any shared generative frame (these nouns/
+    adjectives don't collocate uniformly: "keep a minimum {item}" only
+    works for "balance", not "fee"/"deposit"/"teller", etc., same
+    reasoning as unit25's bureaucracy_noun/unit26's dogpark_noun). Only
+    this file's own scripts/backfill_lexemes_nl_en.py Dutch-gloss
+    dict/UNIT_FILES_A2 tuple needed extending (already done alongside
+    unit28 in this same pass) -- no new classifier tags needed for unit27
+    itself, since fa-en's session already added banking_noun/
+    banking_adjective earlier tonight.
+
+    One genuine generative frame identified (same one fa-en found):
+    lesson03's real reading text is "Your debit card will arrive in five
+    to seven business days." -- the already-established 'possessive' tag
+    (my/your/his/her, defined for unit06's family lessons, reused
+    identically by this pack's own unit26) generalizes this exact real
+    sentence with zero grammar loss ("My/His/Her debit card will arrive
+    in five to seven business days." all hold) -- a word_order template
+    anchored to lesson03. Deliberately used for word_order ONLY, not
+    listen_select/multiple_choice: this pack's own empirical check (a
+    standalone iter_specs()-driven harness against this session's real
+    backfill_lexemes_nl_en.py, scoped to only the A2-course-level specs,
+    matching how Lexeme rows are actually scoped per-course at runtime --
+    see docs/BUILD_LOG.md's content_key-uniqueness-per-course entry) found
+    only 2 real A2-scoped possessive candidates (my, your -- his/her are
+    never reintroduced in any A2 unit so far), below the >=3 multiple_
+    choice/listen_select floor even though scripts/_practice_slot_check.py
+    itself reports this tag as satisfying the floor (it flattens the
+    entire a1+a2 spec list into one pool rather than modeling the real
+    per-course runtime scoping split, a pre-existing characteristic of
+    that harness noted here rather than silently relied on). A more
+    conservative choice than a2_unit26.yaml's own existing
+    possessive_listen template (which this same empirical method would
+    flag the same way) -- flagging for whoever does this pack's
+    fresh-context review, not fixed retroactively here since it's outside
+    this task's scope.
+
+    Also reused: the already-established 'identity' tag (i/i'm/am/is/are/
+    what/what's/my/your, defined for unit01/02), anchored to lesson04
+    (real dialogue line "I have both with me. Is there a monthly fee?"),
+    bare-word recognition only -- confirmed 6 real A2-scoped candidates
+    (i, is, my, what, what's, your), comfortably above the floor.
+
+    ZERO fill_in_blank templates, matching fa-en's own unit27 pack and
+    this realization's own authoring note (states zero fill_in_blank
+    exercises at all): every noun/adjective candidate pool here is
+    bare-recognition-only by design, and the one genuinely generative
+    frame (possessive) is authored as word_order, which doesn't share
+    fill_in_blank's ambiguity risk. Ran
+    scripts/_fill_in_blank_ambiguity_check.py to confirm zero AMBIGUOUS
+    flags (no fill_in_blank templates exist to flag).
+
+    16 templates: 5 lesson01 (banking_noun x3 [choose/listen/translate] +
+    banking_adjective x2 [choose/listen]), 3 lesson02 (banking_noun x2
+    [choose/listen] + banking_adjective translate), 4 lesson03
+    (possessive word_order + banking_noun choose + banking_adjective
+    listen + banking_noun translate), 4 lesson04 (banking_noun
+    matching_pairs [8 pairs, the full course-wide pool, per
+    AUTHORING_GUIDE.md #16] + identity x2 [choose/listen] +
+    banking_adjective choose). Matches fa-en's own unit27 density
+    (16 templates) exactly, adjusted only to swap the lower-confidence
+    possessive_listen slot for an extra banking_noun translate.
+
+    Verified with scripts/_practice_slot_check.py (added this pack, and
+    a2_unit28.yaml, to scripts/practice_manifest.txt's nl-en line;
+    banking_noun has 8 distinct course-wide candidates, banking_adjective
+    4, identity 6, well above the >=3 multiple_choice/listen_select floor)
+    and compile_content.py practice-validate, 0 errors/0 warnings. Still
+    needs the standard fresh-context review before import.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [banking_noun, banking_adjective, possessive, identity]
+slot_presets:
+  banking_noun: &banking_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: banking_noun}}
+  banking_adjective: &banking_adjective {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: banking_adjective}}
+  possessive: &possessive {language_code: en, part_of_speech: pronoun, agreement_tags: {semantic: possessive}}
+  identity: &identity {language_code: en, part_of_speech: [pronoun, verb], agreement_tags: {semantic: identity}}
+templates:
+  - content_key: practice.nl-en.en.a2.unit27.lesson01.choose.001
+    lesson_content_key: en.a2.unit27.lesson01.banking_vocabulary
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *banking_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is een woord uit deze les.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a2.unit27.lesson01.listen.002
+    lesson_content_key: en.a2.unit27.lesson01.banking_vocabulary
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *banking_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is het woord dat je hoorde.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a2.unit27.lesson01.translate.003
+    lesson_content_key: en.a2.unit27.lesson01.banking_vocabulary
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *banking_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a2.unit27.lesson01.adj_choose.004
+    lesson_content_key: en.a2.unit27.lesson01.banking_vocabulary
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *banking_adjective}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is een woord uit deze les.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a2.unit27.lesson01.adj_listen.005
+    lesson_content_key: en.a2.unit27.lesson01.banking_vocabulary
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *banking_adjective}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is het woord dat je hoorde.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a2.unit27.lesson02.choose.001
+    lesson_content_key: en.a2.unit27.lesson02.asking_about_opening_an_account
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *banking_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is een woord uit deze les.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a2.unit27.lesson02.listen.002
+    lesson_content_key: en.a2.unit27.lesson02.asking_about_opening_an_account
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *banking_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is het woord dat je hoorde.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a2.unit27.lesson02.adj_translate.003
+    lesson_content_key: en.a2.unit27.lesson02.asking_about_opening_an_account
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *banking_adjective}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a2.unit27.lesson03.possessive_order.001
+    lesson_content_key: en.a2.unit27.lesson03.reading_about_account_features
+    type: word_order
+    frame: {text: "{item} debit card will arrive in five to seven business days", language_code: en, direction: ltr}
+    slots: {item: *possessive}
+    answer_derivation: {kind: render_frame, frame: {text: "{item} debit card will arrive in five to seven business days", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} is het bezittelijk voornaamwoord in deze zin.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a2.unit27.lesson03.choose.002
+    lesson_content_key: en.a2.unit27.lesson03.reading_about_account_features
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *banking_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is een woord uit deze les.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a2.unit27.lesson03.adj_listen.003
+    lesson_content_key: en.a2.unit27.lesson03.reading_about_account_features
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *banking_adjective}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is het woord dat je hoorde.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a2.unit27.lesson03.translate.004
+    lesson_content_key: en.a2.unit27.lesson03.reading_about_account_features
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *banking_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a2.unit27.lesson04.match.001
+    lesson_content_key: en.a2.unit27.lesson04.opening_an_account_dialogue
+    type: matching_pairs
+    frame: {text: "{first} · {second}", language_code: en, direction: ltr}
+    slots: {first: *banking_noun, second: *banking_noun, third: *banking_noun, fourth: *banking_noun, fifth: *banking_noun, sixth: *banking_noun, seventh: *banking_noun, eighth: *banking_noun}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth, seventh, eighth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth, seventh, eighth]}
+    feedback_frame: {text: "Verbind elk woord met de Nederlandse betekenis.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a2.unit27.lesson04.identity_choose.002
+    lesson_content_key: en.a2.unit27.lesson04.opening_an_account_dialogue
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *identity}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is een woord uit dit gesprek.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a2.unit27.lesson04.identity_listen.003
+    lesson_content_key: en.a2.unit27.lesson04.opening_an_account_dialogue
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *identity}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is het woord dat je in dit gesprek hoorde.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a2.unit27.lesson04.adj_choose.004
+    lesson_content_key: en.a2.unit27.lesson04.opening_an_account_dialogue
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *banking_adjective}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is een woord uit dit gesprek.", language_code: nl, direction: ltr}

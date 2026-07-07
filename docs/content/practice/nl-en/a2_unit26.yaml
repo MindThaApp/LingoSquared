@@ -78,7 +78,40 @@ review:
     _practice_slot_check.py (possessive has 4, identity and politeness
     each well above the >=3 multiple_choice/listen_select floor) and
     compile_content.py practice-validate, 0 errors/0 warnings. Still needs
-    the standard fresh-context review before import."
+    the standard fresh-context review before import.
+
+    A2-scoping correctness fix (2026-07-07): scripts/_practice_slot_check.py
+    pools ALL specs from iter_specs() (both A1 and A2) together when
+    counting a tag's real distinct-candidate count, but
+    backend/app/practice/service.py's _material() actually scopes both
+    PracticeTemplate and Lexeme queries by course_id, and 'Engels
+    A1'/'Engels A2' are separate Course rows -- a real A2 enrollee only
+    ever sees A2-scoped lexemes. A standalone A2-only-scoped check
+    (filtering iter_specs() to level=='a2') found two real violations in
+    this file, both below the earlier-claimed 'possessive has 4 distinct
+    course-wide candidates' and 'politeness... well above the >=3 floor'
+    notes above, which were pooled-with-A1 counts, not real A2-only
+    counts: (1) lesson01.possessive_listen.006 -- the 'possessive' tag
+    (my/your/his/her, 4 members pooled with A1) has only 2 REAL
+    A2-scoped candidates (my/your -- his/her are never reintroduced in
+    any A2 unit 25-28). Fixed by converting to type: translation (bare
+    single-word production, slot_text derivation instead of slot_gloss --
+    no minimum-candidate floor), renamed possessive_translate_bare.006 --
+    a genuinely new exercise, not a duplicate of the existing
+    possessive_order.004 (full-sentence word_order). (2)
+    lesson04.politeness_choose.004 AND lesson04.politeness_listen.005 --
+    the 'politeness' tag (thanks/thank/nice/welcome/yes/no, 6 members
+    pooled with A1) has only 2 REAL A2-scoped candidates (yes from this
+    unit, no from unit27's real banking dialogue -- both still within the
+    same A2 course). BOTH templates were broken (multiple_choice and
+    listen_select each need >=3), and converting both to translation
+    would have produced two duplicate bare-word production templates
+    against the identical 2-candidate pool -- no honest additional
+    candidate exists, so politeness_choose.004 was converted to type:
+    translation (renamed politeness_translate_bare.004) and
+    politeness_listen.005 was removed outright rather than kept as dead
+    duplicate content. No candidates invented, no A1 vocabulary pooled in
+    as if A2-scoped."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -188,13 +221,13 @@ templates:
     slots: {item: *possessive}
     answer_derivation: {kind: render_frame, frame: {text: "In {item} opinion, the dog park is a good idea", language_code: en, direction: ltr}}
     feedback_frame: {text: "{item} is het bezittelijk voornaamwoord in deze zin.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a2.unit26.lesson01.possessive_listen.006
+  - content_key: practice.nl-en.en.a2.unit26.lesson01.possessive_translate_bare.006
     lesson_content_key: en.a2.unit26.lesson01.opinion_phrases
-    type: listen_select
-    frame: {text: "{item}", language_code: en, direction: ltr}
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
     slots: {item: *possessive}
-    answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is het woord dat je hoorde.", language_code: nl, direction: ltr}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a2.unit26.lesson01.identity_choose.007
     lesson_content_key: en.a2.unit26.lesson01.opinion_phrases
     type: multiple_choice
@@ -209,17 +242,10 @@ templates:
     slots: {item: *identity}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is het woord dat je hoorde.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a2.unit26.lesson04.politeness_choose.004
+  - content_key: practice.nl-en.en.a2.unit26.lesson04.politeness_translate_bare.004
     lesson_content_key: en.a2.unit26.lesson04.opinion_dialogue
-    type: multiple_choice
-    frame: {text: "{item}", language_code: en, direction: ltr}
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
     slots: {item: *politeness}
-    answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is een woord uit dit gesprek.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a2.unit26.lesson04.politeness_listen.005
-    lesson_content_key: en.a2.unit26.lesson04.opinion_dialogue
-    type: listen_select
-    frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *politeness}
-    answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is het woord dat je hoorde in dit gesprek.", language_code: nl, direction: ltr}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}

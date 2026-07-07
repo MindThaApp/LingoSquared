@@ -9470,3 +9470,126 @@ error), a full-project run of `_fill_in_blank_ambiguity_check.py`
 (0 AMBIGUOUS, 0 MULTI-SLOT across all 6 directions), and
 `_practice_slot_check.py` (unchanged at exactly 5 pre-existing,
 unrelated `en-fa` unit01/02 problems).
+
+## Second sweep: closing gaps re-opened by concurrent authoring, plus a real methodology finding, 2026-07-07
+
+**Trigger**: coordinator asked for a full sweep across all 6 directions
+comparing realization/overlay counts against practice-pack coverage,
+to catch anything like the fa-en/prs-en/en-fa/en-prs gap found in the
+immediately preceding entry. Content is being authored concurrently by
+other sessions in real time tonight — a fresh sweep found new gaps had
+already opened up again in the few minutes since the last one closed:
+`a2_unit28_doctor.yaml` newly authored (nl-en missing both 27+28,
+fa-en/prs-en missing 28), and en-fa/en-prs both grown from 15 to 17
+A1 units (units 16 travel, 17 health) with zero practice coverage.
+en-nl alone was already fully caught up.
+
+**Fix**: 4 more parallel workers closed all of it — nl-en 26→28 units,
+fa-en/prs-en 27→28 units each, en-fa/en-prs 15→17 (→19 total with
+their existing A2 units) units each. Same ambiguity-check discipline
+applied throughout; en-prs's units 16-17 worker found and fixed a
+genuine homograph (کی meaning both "who," unit07, and "when," unit16 —
+split via a content-key-scoped classifier override, the same pattern
+already established for و and می‌شود).
+
+**A real, more important finding surfaced independently by two
+separate workers in this same wave**: this project's practice-content
+verification harness, `scripts/_practice_slot_check.py`, checks
+candidate-count sufficiency for `multiple_choice`/`listen_select`
+slots by pooling ALL of `iter_specs()`'s output together — but A1 and
+A2 are genuinely separate `Course` database rows (confirmed directly
+in `backend/app/practice/service.py`'s `_material()`, which scopes
+both `PracticeTemplate` and `Lexeme` queries by `course_id`), so a real
+A2-course learner's actual candidate pool is scoped to ONLY the A2
+course's own lexemes — never pooled with A1's. This means a template
+could pass the existing harness's check while still being genuinely
+under-resourced at real runtime. One concrete instance was found (not
+yet fixed at time of discovery): `docs/content/practice/nl-en/
+a2_unit26.yaml`'s `possessive_listen` (`listen_select`) template uses
+the `possessive` tag (my/your/his/her — 4 members when A1+A2 are
+pooled), but restricted to real A2-only lexemes it may have as few as
+2 candidates, below the 3-distinct floor `listen_select` needs. This
+is exactly the kind of latent bug that "count sufficiency isn't the
+same as distinguishability" (this session's earlier fill_in_blank
+finding) generalizes to for multiple-choice-style types too — a
+different failure mode (under-resourced pool vs. unanswerable-with-
+certainty) but the same root cause: an existing verification tool
+checking something adjacent to, not identical with, real runtime
+behavior.
+
+Dispatched a dedicated audit worker to build a properly A2-course-
+scoped check (using each backfill script's existing UNIT_FILES/
+UNIT_FILES_A2 split, which already carries the exact course boundary
+needed) against every A2 pack from tonight (nl-en/fa-en/prs-en/en-nl,
+units 24-28 where applicable) and fix whatever it finds — result
+pending, to be documented in a follow-up entry once it lands.
+
+**Verification of everything closed so far this wave**: all 6
+directions' unit counts confirmed directly (nl-en/fa-en/prs-en 28,
+en-fa/en-prs 19, en-nl 28 — all fully caught up as of this check),
+every direction validated independently via `compile_content.py
+practice-validate` (0 errors/0 warnings each), the project-wide
+`_fill_in_blank_ambiguity_check.py` still reports 0 AMBIGUOUS/0
+MULTI-SLOT, and `_practice_slot_check.py` remains at exactly 5
+pre-existing, unrelated `en-fa` problems.
+
+## Course-scoping audit result: 25 real candidate-pool violations found and fixed, 2026-07-07
+
+**Result of the dedicated audit dispatched in the immediately preceding
+entry**: confirmed the methodology gap was real and significant, not
+a one-off. All four backfill scripts already tag each spec with
+`level: "a1"`/`"a2"` in `iter_specs()`'s own output (never stripped
+before yielding), so a properly A2-scoped check needed no new
+scaffolding — just filtering on that existing field, reusing
+`_practice_slot_check.py`'s own `lexeme_matches()` logic.
+
+**25 real violations found** across 9 files (0 false positives,
+several spot-checked by hand against real realization-file
+`introduced_tokens`): nl-en a2_unit25 (2, `weekday` tag has only 1 real
+A2-scoped candidate vs. 7 when pooled with A1) and a2_unit26 (3,
+`possessive` has only 2 real A2 candidates — my/your, no his/her —
+and `politeness` only 2 — yes/no); fa-en and prs-en mirrored the
+identical pattern across a2_unit25-28 (2+3+1+4 = 10 each) since they
+share the same underlying English content and were built via the same
+tag-reuse technique. en-nl's own A2 units (24-28) were confirmed
+clean — zero violations, since that pack's workers built each unit's
+templates from genuinely A2-scoped vocabulary throughout rather than
+reusing A1 tags across the course boundary.
+
+**Fix applied per violation**: converted `multiple_choice`/
+`listen_select` (both of which need >=3 distinct candidates) to
+`translation` (no minimum-candidate floor) wherever a real single
+correct answer still existed; where two templates in the same lesson
+shared the identical undersized pool, converting both would have
+produced duplicate content, so one was converted and the sibling
+removed outright (5 removals: 1 nl-en, 2 each fa-en/prs-en). No
+candidates were invented and no A1-only vocabulary was pooled in as
+real A2 material — the exact bug being fixed. Net: 20 templates
+converted, 5 removed, across
+`nl-en/a2_unit25,26`,`fa-en/a2_unit25-28`,`prs-en/a2_unit25-28`.
+
+**Verification**: re-ran the proper A2-scoped check — 0 remaining
+violations across all 16 audited files. Independently re-verified
+myself (not just trusting the worker's report): all 4 affected
+directions re-validated via `compile_content.py practice-validate`
+(0 errors/0 warnings each), the project-wide
+`_fill_in_blank_ambiguity_check.py` still 0 AMBIGUOUS/0 MULTI-SLOT,
+and `_practice_slot_check.py` unchanged at exactly the same 5
+pre-existing, unrelated `en-fa` unit01/02 problems — confirming zero
+regressions from either the fix itself or from every other
+authoring wave earlier tonight.
+
+**Standing implication for future authoring**: the "reuse an
+already-classified course-wide tag against a real sentence in a later
+unit" depth technique (this session's own innovation from earlier
+tonight, and independently reproved valuable multiple times since) is
+NOT safe for `multiple_choice`/`listen_select` when the reused tag was
+originally established in a DIFFERENT course-level (A1 vs A2) than the
+template being authored — real candidate availability must be checked
+per actual course boundary, not the combined spec list. It remains
+safe for `word_order`/`translation` (no candidate-count floor) and for
+`multiple_choice`/`listen_select` when the tag's full candidate set is
+genuinely re-established within the SAME course level. This is now
+documented here as project history; formalizing it into
+`AUTHORING_GUIDE.md` as an explicit numbered rule (mirroring §16/§17)
+is a natural next step for whoever's coordinating that document.

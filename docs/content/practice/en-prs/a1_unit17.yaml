@@ -1,0 +1,202 @@
+schema_version: "1.0"
+pack_key: practice.en-prs.a1.unit17
+source_language: en
+target_language: prs
+unit_content_key: prs.a1.unit17.health
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: >-
+    Authored 2026-07-07 for the new A1 unit17 (health) realization, same
+    pass as this bundle's a1_unit16.yaml sibling (see that file's notes
+    for the shared classifier-extension context).
+
+    New groups, all real vocabulary from this unit's own realization:
+    symptom_word (سردرد/تب/دل‌درد, 3 members), health_feeling_word
+    (مریض/خوب/بد, 3 members -- adds this unit's own مریض to two
+    already-existing adjectives from unit01's wellbeing_answer group,
+    an additive tag layered alongside the existing one, not a
+    replacement), seek_help_noun (داکتر/دوا, 2 members -- داکتر already
+    glossed/tagged occupation from unit02, reused as-is), health_advice_word
+    (استراحت/کنید/آب/زیاد/بنوشید, 5 members, mixed noun/verb/adjective --
+    کنید/آب/زیاد already existed from units 07/08/05 respectively, reused
+    as-is), and condition_word (حالم alone, a real single-candidate group
+    used for fill_in_blank).
+
+    Reused two course-wide groups as-is: greeting (سلام/علیکم/وعلیکم/خوش)
+    and wellbeing_question (چطور/استین/استی). Fixed a real pre-existing
+    gap while extending the classifier: بشیر (already glossed "Bashir
+    (name)" from unit04) had never been given the person_name tag any
+    earlier unit needed -- this unit's dialogue is the first
+    practice-pool use of him as a named speaker, same class of gap
+    already fixed for زرمینه/کریم in earlier units' passes. Also
+    extended the existing title tag (previously جناب/خانم only) to
+    include this unit's own صاحب, a genuine third member of the same
+    "polite address title" set, not a new parallel tag.
+
+    The one fill_in_blank template (condition_word/حالم) is a real
+    single-project-wide-candidate group, verified via
+    scripts/_fill_in_blank_ambiguity_check.py -- حالم is not reused
+    anywhere else in the course. The final review matching_pairs pools
+    symptom_word (3) + seek_help_noun (2) + health_advice_word (5) --
+    10 distinct real tokens, the same plan_pool-style pooling pattern as
+    a1_unit13.yaml. No listen_select/listen_type anywhere (en-prs has no
+    TTS voices). No bare unquoted yes/no/true/false anywhere.
+
+    Verified with scripts/_practice_slot_check.py (reusing
+    backfill_lexemes_en_prs.py's real iter_specs() output) -- every
+    slot has enough distinct candidates. scripts/compile_content.py
+    practice-validate for the full en-prs pack -- 0 errors/0 warnings.
+    scripts/_fill_in_blank_ambiguity_check.py -- zero AMBIGUOUS flags.
+    Needs the standard fresh-context review before import; no
+    backfill_lexemes_en_prs.py run has happened against a real database
+    yet in this pass.
+tag_schema:
+  part_of_speech: [noun, verb, adjective, adverb, particle, proper_noun]
+  agreement_tags:
+    semantic: [symptom_word, health_feeling_word, seek_help_noun, health_advice_word, condition_word, person_name, greeting, wellbeing_question]
+slot_presets:
+  symptom_word: &symptom_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: symptom_word}}
+  health_feeling_word: &health_feeling_word {language_code: prs, part_of_speech: adjective, agreement_tags: {semantic: health_feeling_word}}
+  seek_help_noun: &seek_help_noun {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: seek_help_noun}}
+  health_advice_word: &health_advice_word {language_code: prs, part_of_speech: [noun, verb, adjective], agreement_tags: {semantic: health_advice_word}}
+  condition_word: &condition_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: condition_word}}
+  # Reuses the existing course-wide person_name group (now includes بشیر).
+  person_name: &person_name {language_code: prs, part_of_speech: proper_noun, agreement_tags: {semantic: person_name}}
+  # Reuses the existing course-wide greeting group (سلام/علیکم/وعلیکم/خوش).
+  greeting: &greeting {language_code: prs, part_of_speech: [noun, particle, adjective], agreement_tags: {semantic: greeting}}
+  # Reuses the existing course-wide wellbeing_question group (چطور/استین/استی).
+  wellbeing_question: &wellbeing_question {language_code: prs, part_of_speech: [adverb, verb], agreement_tags: {semantic: wellbeing_question}}
+  # Pools symptom_word (3) + seek_help_noun (2) + health_advice_word (5)
+  # for the final review matching_pairs -- 10 distinct real tokens,
+  # AUTHORING_GUIDE.md #16.
+  health_review_pool: &health_review_pool {language_code: prs, part_of_speech: [noun, verb, adjective], agreement_tags: {semantic: [symptom_word, seek_help_noun, health_advice_word]}}
+templates:
+  # Lesson 1: symptom vocabulary.
+  - content_key: practice.en-prs.prs.a1.unit17.lesson01.symptom_word_gloss.001
+    lesson_content_key: prs.a1.unit17.lesson01.symptom_words
+    type: multiple_choice
+    frame: {text: "{symptom_word}", language_code: prs, direction: rtl}
+    slots: {symptom_word: *symptom_word}
+    answer_derivation: {kind: slot_gloss, slot: symptom_word}
+    feedback_frame: {text: "{symptom_word} names a symptom.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit17.lesson01.symptom_word_translate.002
+    lesson_content_key: prs.a1.unit17.lesson01.symptom_words
+    type: translation
+    frame: {text: "{symptom_word}", language_code: en, direction: ltr, slot_rendering: {symptom_word: english_gloss}}
+    slots: {symptom_word: *symptom_word}
+    answer_derivation: {kind: slot_text, slot: symptom_word}
+    feedback_frame: {text: "{symptom_word} is the Dari word for this.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit17.lesson01.symptom_have_order.003
+    lesson_content_key: prs.a1.unit17.lesson01.symptom_words
+    type: word_order
+    frame: {text: "{symptom_word} دارم", language_code: prs, direction: rtl}
+    slots: {symptom_word: *symptom_word}
+    answer_derivation: {kind: render_frame, frame: {text: "{symptom_word} دارم", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: [symptom] دارم (I have a [symptom]).", language_code: en, direction: ltr}
+
+  # Lesson 2: saying you feel unwell.
+  - content_key: practice.en-prs.prs.a1.unit17.lesson02.health_feeling_gloss.001
+    lesson_content_key: prs.a1.unit17.lesson02.feeling_unwell
+    type: multiple_choice
+    frame: {text: "{health_feeling_word}", language_code: prs, direction: rtl}
+    slots: {health_feeling_word: *health_feeling_word}
+    answer_derivation: {kind: slot_gloss, slot: health_feeling_word}
+    feedback_frame: {text: "{health_feeling_word} describes how someone feels.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit17.lesson02.condition_word_fill.002
+    lesson_content_key: prs.a1.unit17.lesson02.feeling_unwell
+    type: fill_in_blank
+    frame: {text: "{condition_word} خوب نیست", language_code: prs, direction: rtl}
+    slots: {condition_word: *condition_word}
+    answer_derivation: {kind: slot_text, slot: condition_word}
+    feedback_frame: {text: "حالم خوب نیست means I don't feel well.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit17.lesson02.sick_state_order.003
+    lesson_content_key: prs.a1.unit17.lesson02.feeling_unwell
+    type: word_order
+    frame: {text: "{health_feeling_word} استم", language_code: prs, direction: rtl}
+    slots: {health_feeling_word: *health_feeling_word}
+    answer_derivation: {kind: render_frame, frame: {text: "{health_feeling_word} استم", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: [feeling] استم (I am [feeling]).", language_code: en, direction: ltr}
+
+  # Lesson 3: asking for a doctor or medicine.
+  - content_key: practice.en-prs.prs.a1.unit17.lesson03.seek_help_translate.001
+    lesson_content_key: prs.a1.unit17.lesson03.asking_for_help
+    type: translation
+    frame: {text: "{seek_help_noun}", language_code: en, direction: ltr, slot_rendering: {seek_help_noun: english_gloss}}
+    slots: {seek_help_noun: *seek_help_noun}
+    answer_derivation: {kind: slot_text, slot: seek_help_noun}
+    feedback_frame: {text: "{seek_help_noun} is the Dari word for this.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit17.lesson03.seek_help_request_order.002
+    lesson_content_key: prs.a1.unit17.lesson03.asking_for_help
+    type: word_order
+    frame: {text: "{seek_help_noun} می‌خواهم", language_code: prs, direction: rtl}
+    slots: {seek_help_noun: *seek_help_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "{seek_help_noun} می‌خواهم", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: [noun] می‌خواهم (I want [noun]).", language_code: en, direction: ltr}
+
+  # Lesson 4: reading a health-instruction note.
+  - content_key: practice.en-prs.prs.a1.unit17.lesson04.health_advice_gloss.001
+    lesson_content_key: prs.a1.unit17.lesson04.reading_health_advice
+    type: multiple_choice
+    frame: {text: "{health_advice_word}", language_code: prs, direction: rtl}
+    slots: {health_advice_word: *health_advice_word}
+    answer_derivation: {kind: slot_gloss, slot: health_advice_word}
+    feedback_frame: {text: "{health_advice_word} is one of this unit's health-advice words.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit17.lesson04.health_advice_translate.002
+    lesson_content_key: prs.a1.unit17.lesson04.reading_health_advice
+    type: translation
+    frame: {text: "{health_advice_word}", language_code: en, direction: ltr, slot_rendering: {health_advice_word: english_gloss}}
+    slots: {health_advice_word: *health_advice_word}
+    answer_derivation: {kind: slot_text, slot: health_advice_word}
+    feedback_frame: {text: "{health_advice_word} is the Dari word for this.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit17.lesson04.health_advice_pair.003
+    lesson_content_key: prs.a1.unit17.lesson04.reading_health_advice
+    type: matching_pairs
+    frame: {text: "{word_one} — {word_two} — {word_three} — {word_four} — {word_five}", language_code: prs, direction: rtl}
+    slots: {word_one: *health_advice_word, word_two: *health_advice_word, word_three: *health_advice_word, word_four: *health_advice_word, word_five: *health_advice_word}
+    slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five]}]
+    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+
+  # Lesson 5: reading a health message.
+  - content_key: practice.en-prs.prs.a1.unit17.lesson05.greeting_gloss.001
+    lesson_content_key: prs.a1.unit17.lesson05.reading_a_health_message
+    type: multiple_choice
+    frame: {text: "{greeting}", language_code: prs, direction: rtl}
+    slots: {greeting: *greeting}
+    answer_derivation: {kind: slot_gloss, slot: greeting}
+    feedback_frame: {text: "{greeting} is used when greeting someone.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit17.lesson05.symptom_and_word_order.002
+    lesson_content_key: prs.a1.unit17.lesson05.reading_a_health_message
+    type: word_order
+    frame: {text: "{symptom_word_one} و {symptom_word_two}", language_code: prs, direction: rtl}
+    slots: {symptom_word_one: *symptom_word, symptom_word_two: *symptom_word}
+    slot_relations: [{kind: distinct, slots: [symptom_word_one, symptom_word_two]}]
+    answer_derivation: {kind: render_frame, frame: {text: "{symptom_word_one} و {symptom_word_two}", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: [symptom] و [symptom] ([symptom] and [symptom]).", language_code: en, direction: ltr}
+
+  # Lesson 6: a dialogue with the doctor.
+  - content_key: practice.en-prs.prs.a1.unit17.lesson06.person_name_gloss.001
+    lesson_content_key: prs.a1.unit17.lesson06.doctor_dialogue
+    type: multiple_choice
+    frame: {text: "{person_name}", language_code: prs, direction: rtl}
+    slots: {person_name: *person_name}
+    answer_derivation: {kind: slot_gloss, slot: person_name}
+    feedback_frame: {text: "{person_name} is a name used in this course.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit17.lesson06.wellbeing_question_translate.002
+    lesson_content_key: prs.a1.unit17.lesson06.doctor_dialogue
+    type: translation
+    frame: {text: "{wellbeing_question}", language_code: en, direction: ltr, slot_rendering: {wellbeing_question: english_gloss}}
+    slots: {wellbeing_question: *wellbeing_question}
+    answer_derivation: {kind: slot_text, slot: wellbeing_question}
+    feedback_frame: {text: "{wellbeing_question} is the Dari word for this.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit17.lesson06.health_review_pair.003
+    lesson_content_key: prs.a1.unit17.lesson06.doctor_dialogue
+    type: matching_pairs
+    # Pools symptom_word (3) + seek_help_noun (2) + health_advice_word
+    # (5) -- 10 distinct real tokens, AUTHORING_GUIDE.md #16.
+    frame: {text: "{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six} — {word_seven} — {word_eight} — {word_nine} — {word_ten}", language_code: prs, direction: rtl}
+    slots: {word_one: *health_review_pool, word_two: *health_review_pool, word_three: *health_review_pool, word_four: *health_review_pool, word_five: *health_review_pool, word_six: *health_review_pool, word_seven: *health_review_pool, word_eight: *health_review_pool, word_nine: *health_review_pool, word_ten: *health_review_pool}
+    slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five, word_six, word_seven, word_eight, word_nine, word_ten]}]
+    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five, word_six, word_seven, word_eight, word_nine, word_ten]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
