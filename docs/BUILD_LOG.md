@@ -10306,3 +10306,59 @@ that") — confirmed the actual file content is completely clean, the
 garble was purely a report-writing artifact, not a real content bug —
 and ran the full `verify.sh --content-only` sweep: 0 errors/0 warnings
 throughout, content stage passes.
+
+## Volume growth continued: new nl unit30 (physical appearance), 2026-07-07
+
+**Trigger**: coordinator asked to continue nl volume growth with the
+next A1/A2 unit, same as unit29 — fully §19-compliant from the start,
+checking the spine for the next sensible outcome.
+
+**Spine check**: re-verified directly (not trusting the count from the
+previous entry) that nl had closed the hobbies gap — 30 outcomes in
+spine, 30 realized, exact match. Added
+`universal.a1.appearance.describe_physical_appearance` (prerequisite:
+`universal.a1.family.describe_relationships`) — a standard A1 topic
+complementing the existing family/relationships outcome. Sanity-
+checked per the standing delegated authority: 31 total outcomes, zero
+duplicates, valid prerequisite, all 4 modalities present, and
+specifically re-counted `success_criteria:` occurrences in the new
+block (exactly 4, matching 4 assessment_requirements) to confirm the
+duplicate-key bug caught in the previous entry's spine edit wasn't
+repeated.
+
+**New unit authored**: `docs/content/realizations/nl/
+a1_unit30_appearance.yaml` + `docs/content/overlays/en-nl/
+a1_unit30.yaml` — "Uiterlijk beschrijven" (Describing appearance), 6
+lessons (height/age-impression adjectives with a grammar note
+distinguishing appearance-impression "oud" from unit02's numeric-age
+question; hair color/length with a note on the haar=hair vs. haar=her
+homonym; eye color and the core "Hoe ziet ... eruit?" question; a
+taalcafé dialogue where Lotte describes a new member so Omar can
+recognize her; a reading comparing siblings Sander/Fenna reusing
+unit14's comparative pattern; a wrap-up dialogue closing the loop when
+Omar spots and recognizes the new member from Lotte's description).
+Every fact about existing characters (Lotte, Omar, Sander, Fenna, opa)
+freshly established but cross-checked for internal consistency and
+against every fact unit05/unit29 already established — nothing
+contradicted, and no two characters share an identical
+hair-length+color combination (checked specifically since that would
+break the matching_pairs exercises' distinctness).
+
+**Risk correctly handled, not just avoided by luck**: the exact
+fill_in_blank ambiguity risk flagged when dispatching this task
+(blanking adjective-opposite pairs like lang/klein or oud/jong, which
+have no in-frame anchor to disambiguate) was resolved the same way
+unit29 resolved its own version of this risk — using `translation`
+instead, and only ever blanking structural nouns/fixed phrases with
+one sensible completion. A real bug was caught and fixed during
+authoring, not after: a writing-prompt exercise used "heb," a word
+never introduced anywhere in the unit — fixed by adding a small
+teaching card for it before the file could hard-fail on it.
+
+**Verification**: independently re-verified myself — re-ran
+`compile_content.py validate` on the new unit (0 errors/0 warnings),
+confirmed the manifest update, and ran the full `verify.sh
+--content-only` sweep (0 errors/0 warnings throughout, content stage
+passes). nl now stands at 30 units total (24 original A1 + hobbies +
+appearance + 5 A2), continuing toward the 3,000-word beginner target
+with zero retrofit debt on any newly-authored content.
