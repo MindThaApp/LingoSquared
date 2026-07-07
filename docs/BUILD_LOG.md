@@ -9593,3 +9593,50 @@ genuinely re-established within the SAME course level. This is now
 documented here as project history; formalizing it into
 `AUTHORING_GUIDE.md` as an explicit numbered rule (mirroring §16/§17)
 is a natural next step for whoever's coordinating that document.
+
+## AUTHORING_GUIDE.md §18 added; prs-en depth pass (shallowest direction), 2026-07-07
+
+**§18 added**: formalized the course-scoping finding from the immediately
+preceding entries as a numbered rule in `docs/content/AUTHORING_GUIDE.md`
+— reusing an already-classified tag across the A1/A2 course boundary
+breaks `multiple_choice`/`listen_select`'s candidate floor, since A1/A2
+are separate `Course` rows with separately-scoped lexeme pools at
+runtime; safe fix is restricting to floor-free types (`word_order`/
+`translation`) across the boundary, or filtering `iter_specs()`'s own
+`level` field before deciding to use `multiple_choice`/`listen_select`.
+
+**Depth pass**: re-ran the templates-per-unit sweep across all 6
+directions now that unit-count coverage is caught up everywhere;
+`prs-en` came out shallowest (10.6/unit average, narrowly below
+fa-en's 11.0). Dispatched 2 parallel workers to deepen its 7 thinnest
+units: `a1_unit05` (5→14, was the single thinnest unit in the whole
+direction), `a1_unit01` (8→17), `a1_unit07` (7→14), `a1_unit08`
+(8→16), `a1_unit14` (7→10), `a1_unit16` (8→13), `a1_unit17` (8→11).
+Direction total: 296→355 templates (28→29 units, one more having
+appeared from concurrent authoring mid-pass).
+
+**Real bugs caught and fixed live, not left in**:
+- A false-positive `multiple_choice` distractor pair ("fine"/"okay")
+  sharing the identical Dari gloss خوب, leaving only 2 genuinely
+  distinct options where 3 are required — removed before shipping.
+- A `politeness` slot preset POS-restricted to `noun` only, silently
+  capping its real candidate pool to a single token ("thanks") —
+  widened to match every POS the tag's semantic definition actually
+  spans (6 real candidates). This wasn't just a bug in the new
+  templates: it retroactively fixes a **pre-existing** template
+  (`politeness_translate`) that had unknowingly only ever been able to
+  generate one specific answer, despite appearing to have a healthy
+  candidate pool.
+- One worker's task briefing itself pointed at the wrong realization
+  files for units 16/17 (a decoy from a different course direction
+  sharing similar unit numbers) — the worker caught this itself by
+  checking each pack's own `unit_content_key` rather than trusting the
+  filenames given, and used the correct files.
+
+**Verification**: independently re-verified myself — 355 total
+templates confirmed by direct YAML parsing across all 29 files,
+`compile_content.py practice-validate` (0 errors/0 warnings),
+`_fill_in_blank_ambiguity_check.py` (0 AMBIGUOUS, 0 MULTI-SLOT,
+unchanged), `_practice_slot_check.py` (unchanged at exactly 5
+pre-existing, unrelated `en-fa` problems). No realization/overlay
+files touched by either worker.

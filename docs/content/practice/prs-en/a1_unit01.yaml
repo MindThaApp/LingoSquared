@@ -6,7 +6,56 @@ unit_content_key: en.a1.unit01.greetings
 review:
   status: reviewed
   fresh_context: true
-  notes: "Fresh-context Codex review (2026-07-05, dispatched by Session 3): removed ungrammatical filler frames (e.g. 'How are you? bad, thanks.', 'I am a library/engineer'), fixed an unrelated word-order slot, rebuilt mixed-category matching exercises as genuine same-category pairs, replaced unusable multiple_choice pools and tautological feedback, verified Dari terminology and Persian-range ک/ی codepoints independently (not derived from Farsi). Independently re-verified by Session 3: compiler 0/0, no jargon leaks, no forbidden Arabic-range codepoints. -- Fresh-context review, 2026-07-06 (separate session, zero access to the above authoring/verification reasoning): confirmed all 3 lesson_content_key values match real en.a1.unit01.greetings lessons; re-scanned this pack, the sibling overlay, and backfill_lexemes_prs_en.py for Pashto-only letters (ډ ڼ ږ څ) and Pashto number words -- none found; hand-rendered every possible sentence for every template's slot candidates (greeting/time_period/farewell/wellbeing_answer/politeness pools, all bare-word or 2-slot pair exercises) -- all grammatical, no self-reference, no agreement errors (e.g. 'Good day'/'Good night' both idiomatic English). Upgraded to reviewed: genuinely clean. -- matching_pairs widening retrofit (2026-07-06, AUTHORING_GUIDE.md #16): lesson01's greeting_pair template widened from 2 to 5 time_period slots (morning/afternoon/evening/day/night -- the full course-wide time_period noun pool, verified against scripts/_en_target_lexeme_common.py). lesson05's farewell_pair template intentionally LEFT at 2 slots (farewell_one/farewell_two, farewell_noun preset) -- the real course-wide pool of noun-tagged farewell tokens is only {goodbye, bye} (2 distinct), so widening further would require padding with untaught/non-noun words (see/later/then are verb/adverb, excluded by this preset's part_of_speech), which the new rule explicitly forbids."
+  notes: "Fresh-context Codex review (2026-07-05, dispatched by Session 3): removed ungrammatical filler frames (e.g. 'How are you? bad, thanks.', 'I am a library/engineer'), fixed an unrelated word-order slot, rebuilt mixed-category matching exercises as genuine same-category pairs, replaced unusable multiple_choice pools and tautological feedback, verified Dari terminology and Persian-range ک/ی codepoints independently (not derived from Farsi). Independently re-verified by Session 3: compiler 0/0, no jargon leaks, no forbidden Arabic-range codepoints. -- Fresh-context review, 2026-07-06 (separate session, zero access to the above authoring/verification reasoning): confirmed all 3 lesson_content_key values match real en.a1.unit01.greetings lessons; re-scanned this pack, the sibling overlay, and backfill_lexemes_prs_en.py for Pashto-only letters (ډ ڼ ږ څ) and Pashto number words -- none found; hand-rendered every possible sentence for every template's slot candidates (greeting/time_period/farewell/wellbeing_answer/politeness pools, all bare-word or 2-slot pair exercises) -- all grammatical, no self-reference, no agreement errors (e.g. 'Good day'/'Good night' both idiomatic English). Upgraded to reviewed: genuinely clean. -- matching_pairs widening retrofit (2026-07-06, AUTHORING_GUIDE.md #16): lesson01's greeting_pair template widened from 2 to 5 time_period slots (morning/afternoon/evening/day/night -- the full course-wide time_period noun pool, verified against scripts/_en_target_lexeme_common.py). lesson05's farewell_pair template intentionally LEFT at 2 slots (farewell_one/farewell_two, farewell_noun preset) -- the real course-wide pool of noun-tagged farewell tokens is only {goodbye, bye} (2 distinct), so widening further would require padding with untaught/non-noun words (see/later/then are verb/adverb, excluded by this preset's part_of_speech), which the new rule explicitly forbids.
+
+    Depth pass, 2026-07-07 (templates-per-unit density audit: prs-en unit01
+    was tied for shallowest in the direction at 8 templates). Added 9 new
+    templates, all real-vocabulary, zero invented words: lesson01 gained
+    greeting_listen (listen_select on the existing greeting tag, previously
+    only tested via multiple_choice/translation) and time_period_gloss
+    (multiple_choice on time_period, previously only word_order/
+    matching_pairs). lesson03 gained wellbeing_translate (translation) on
+    wellbeing_answer (previously only listen_select); politeness_gloss
+    (multiple_choice) and politeness_listen (listen_select) on politeness
+    (previously only translation); identity_choose (multiple_choice) on the
+    identity preset -- already defined in this pack's own tag_schema/
+    slot_presets since the 2026-07-06 matching_pairs retrofit but never
+    actually used by any template until now (10 real A1 candidates: am/
+    are/i/i'm/is/my/name/what/what's/your, pooled course-wide per the
+    existing matching_pairs-widening precedent in this same file -- not an
+    A1/A2 boundary crossing, see AUTHORING_GUIDE.md #18); and
+    wellbeing_question_fill (fill_in_blank, '{item} are you?'), the first
+    fill_in_blank in this pack -- the wellbeing_question tag has exactly
+    ONE real A1 candidate ('how'), so the blank is unambiguous by
+    construction (verified with scripts/_fill_in_blank_ambiguity_check.py:
+    0 AMBIGUOUS flags). lesson05 gained farewell_translate (translation)
+    and farewell_listen (listen_select) on farewell (previously only
+    multiple_choice/matching_pairs). Two real bugs caught by scripts/
+    _practice_slot_check.py during this pass, both fixed before landing:
+    (1) a first draft also added wellbeing_choose (multiple_choice,
+    slot_gloss) on wellbeing_answer -- REMOVED, since 'fine' and 'okay'
+    share the identical Dari gloss خوب, leaving only 2 distinct answer
+    options where multiple_choice needs >=3 (this pack's original
+    wellbeing_listen avoids the same trap by deriving from slot_text, not
+    slot_gloss). (2) the politeness preset's part_of_speech was originally
+    noun-only, which restricts its real candidate pool to just 'thanks' (1
+    distinct value) -- too narrow for the new politeness_gloss/
+    politeness_listen multiple_choice/listen_select templates. Widened to
+    [noun, adjective, verb, particle] (matching every POS the politeness
+    semantic tag actually spans: nice/thank/thanks/welcome/yes/no), giving
+    6 distinct real candidates/glosses -- this also incidentally improves
+    the pre-existing politeness_translate template, which had unknowingly
+    only ever been able to generate 'thanks' before this fix. No new
+    semantic tags needed in scripts/_en_target_lexeme_common.py -- every
+    tag used here already existed; only a new wellbeing_question
+    slot_preset was added to this pack's own tag_schema (the semantic tag
+    itself was already declared in this file's tag_schema list, just never
+    aliased). Verified with scripts/_practice_slot_check.py (all touched
+    slots now have real candidates at or above the relevant floor) and
+    compile_content.py practice-validate, 0 errors/0 warnings. Still
+    carries this pack's own fresh-context review status from before this
+    pass -- a fresh re-review of specifically these 9 new templates has
+    not happened yet."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -18,8 +67,9 @@ slot_presets:
   farewell: &farewell {language_code: en, part_of_speech: [noun, verb, adverb], agreement_tags: {semantic: farewell}}
   farewell_noun: &farewell_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: farewell}}
   wellbeing_answer: &wellbeing_answer {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: wellbeing_answer}}
-  politeness: &politeness {language_code: en, part_of_speech: noun, agreement_tags: {semantic: politeness}}
+  politeness: &politeness {language_code: en, part_of_speech: [noun, adjective, verb, particle], agreement_tags: {semantic: politeness}}
   identity: &identity {language_code: en, part_of_speech: [pronoun, verb], agreement_tags: {semantic: identity}}
+  wellbeing_question: &wellbeing_question {language_code: en, part_of_speech: adverb, agreement_tags: {semantic: wellbeing_question}}
 templates:
   # Lesson 1: everyday greetings.
   - content_key: practice.prs-en.en.a1.unit01.lesson01.greeting_meaning.001
@@ -51,6 +101,20 @@ templates:
     slot_relations: [{kind: distinct, slots: [time_period_one, time_period_two, time_period_three, time_period_four, time_period_five]}]
     answer_derivation: {kind: matching_pairs, slots: [time_period_one, time_period_two, time_period_three, time_period_four, time_period_five]}
     feedback_frame: {text: "{time_period_one} و {time_period_two} را به معنای دری آن‌ها وصل کنین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit01.lesson01.greeting_listen.002
+    lesson_content_key: en.a1.unit01.lesson01.everyday_greetings
+    type: listen_select
+    frame: {text: "{greeting}", language_code: en, direction: ltr}
+    slots: {greeting: *greeting}
+    answer_derivation: {kind: slot_text, slot: greeting}
+    feedback_frame: {text: "واژهٔ شنیده‌شده {greeting} است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit01.lesson01.time_period_gloss.006
+    lesson_content_key: en.a1.unit01.lesson01.everyday_greetings
+    type: multiple_choice
+    frame: {text: "{time_period}", language_code: en, direction: ltr}
+    slots: {time_period: *time_period}
+    answer_derivation: {kind: slot_gloss, slot: time_period}
+    feedback_frame: {text: "معنای دری {time_period} را انتخاب کردین.", language_code: prs, direction: rtl}
 
   # Lesson 3: wellbeing exchange.
   - content_key: practice.prs-en.en.a1.unit01.lesson03.wellbeing_listen.001
@@ -67,6 +131,46 @@ templates:
     slots: {politeness: *politeness}
     answer_derivation: {kind: slot_text, slot: politeness}
     feedback_frame: {text: "{politeness} برای تشکر مؤدبانه استفاده می‌شود.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit01.lesson03.wellbeing_translate.004
+    lesson_content_key: en.a1.unit01.lesson03.wellbeing
+    type: translation
+    frame: {text: "{wellbeing_answer}", language_code: prs, direction: rtl, slot_rendering: {wellbeing_answer: english_gloss}}
+    slots: {wellbeing_answer: *wellbeing_answer}
+    answer_derivation: {kind: slot_text, slot: wellbeing_answer}
+    feedback_frame: {text: "{wellbeing_answer} معادل انگلیسی این احساس است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit01.lesson03.politeness_gloss.005
+    lesson_content_key: en.a1.unit01.lesson03.wellbeing
+    type: multiple_choice
+    frame: {text: "{politeness}", language_code: en, direction: ltr}
+    slots: {politeness: *politeness}
+    answer_derivation: {kind: slot_gloss, slot: politeness}
+    feedback_frame: {text: "معنای دری {politeness} را انتخاب کردین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit01.lesson03.politeness_listen.006
+    lesson_content_key: en.a1.unit01.lesson03.wellbeing
+    type: listen_select
+    frame: {text: "{politeness}", language_code: en, direction: ltr}
+    slots: {politeness: *politeness}
+    answer_derivation: {kind: slot_text, slot: politeness}
+    feedback_frame: {text: "واژهٔ شنیده‌شده {politeness} است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit01.lesson03.identity_choose.007
+    lesson_content_key: en.a1.unit01.lesson03.wellbeing
+    type: multiple_choice
+    frame: {text: "{identity}", language_code: en, direction: ltr}
+    slots: {identity: *identity}
+    answer_derivation: {kind: slot_gloss, slot: identity}
+    feedback_frame: {text: "معنای دری {identity} را انتخاب کردین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit01.lesson03.wellbeing_question_fill.008
+    lesson_content_key: en.a1.unit01.lesson03.wellbeing
+    type: fill_in_blank
+    frame:
+      text: "{item} are you?"
+      language_code: en
+      direction: ltr
+      text_blocks:
+        - {text: "جملهٔ انگلیسی را تکمیل کنین.", language_code: prs, direction: rtl}
+    slots: {item: *wellbeing_question}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} واژهٔ پرسشی همی جمله است.", language_code: prs, direction: rtl}
 
   # Lesson 5: friendly closings.
   - content_key: practice.prs-en.en.a1.unit01.lesson05.farewell_meaning.001
@@ -84,3 +188,17 @@ templates:
     slot_relations: [{kind: distinct, slots: [farewell_one, farewell_two]}]
     answer_derivation: {kind: matching_pairs, slots: [farewell_one, farewell_two]}
     feedback_frame: {text: "{farewell_one} و {farewell_two} را به معنای دری آن‌ها وصل کنین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit01.lesson05.farewell_translate.002
+    lesson_content_key: en.a1.unit01.lesson05.noun_phrases_and_closings
+    type: translation
+    frame: {text: "{farewell}", language_code: prs, direction: rtl, slot_rendering: {farewell: english_gloss}}
+    slots: {farewell: *farewell}
+    answer_derivation: {kind: slot_text, slot: farewell}
+    feedback_frame: {text: "{farewell} معادل انگلیسی این عبارت خداحافظی است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit01.lesson05.farewell_listen.004
+    lesson_content_key: en.a1.unit01.lesson05.noun_phrases_and_closings
+    type: listen_select
+    frame: {text: "{farewell}", language_code: en, direction: ltr}
+    slots: {farewell: *farewell}
+    answer_derivation: {kind: slot_text, slot: farewell}
+    feedback_frame: {text: "واژهٔ شنیده‌شده {farewell} است.", language_code: prs, direction: rtl}

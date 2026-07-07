@@ -482,3 +482,46 @@ and that judgment still needs a human read. See
 entry for the sweep this closed out and how the check was verified (a real
 pre-fix instance re-validated to confirm it fails, full clean-corpus
 `verify.sh --content-only` re-run to confirm zero false positives).
+
+## 18. Reusing an already-classified tag across a course-level boundary
+(A1 → A2) breaks `multiple_choice`/`listen_select`'s candidate floor
+
+Found live 2026-07-07: a real depth-authoring technique (reusing an
+already-classified, course-wide semantic tag — e.g. `weekday`,
+`possessive`, `identity`, `politeness` — against a NEW unit's own real
+taught sentence, instead of only ever pairing a tag with the exact unit
+that first introduced it) is genuinely valuable for adding practice
+variety without inventing vocabulary. But it has one failure mode that's
+easy to miss: **A1 and A2 are separate `Course` rows in the database**
+(`backend/app/practice/service.py`'s `_material()` scopes both
+`PracticeTemplate` and `Lexeme` queries by `course_id`) — a real learner
+enrolled in the A2 course NEVER sees A1's lexemes, no matter how
+thematically continuous the two feel. `scripts/_practice_slot_check.py`
+checks candidate-count sufficiency by pooling every spec `iter_specs()`
+yields (A1 and A2 together), which is MORE PERMISSIVE than real runtime
+scoping — a tag can look like it has plenty of candidates in that pooled
+count while having far fewer (sometimes below the `multiple_choice`/
+`listen_select` 3-candidate floor) once correctly restricted to only the
+A2 course's own lexemes. A corpus-wide audit this same day found 25 real
+instances of this exact gap across nl-en/fa-en/prs-en's A2 units (an
+audit of en-nl's own A2 units, built without crossing the course
+boundary, came back completely clean — proof this is avoidable, not
+inherent to the technique).
+
+**When reusing an already-classified tag against a NEW unit's real
+sentence, check whether the tag's full candidate set was established in
+the SAME course level (A1 or A2) as the template you're authoring.** If
+yes, `multiple_choice`/`listen_select` are safe. If the tag crosses the
+A1/A2 boundary (established in A1, template being authored for A2, or
+vice versa), only use exercise types with no minimum-candidate floor —
+`word_order`, `translation` — for that specific template; don't use
+`multiple_choice`/`listen_select` unless the tag's candidates are
+independently re-established within lessons of the SAME course level the
+template belongs to. `iter_specs()` in every backfill script already
+tags each spec with `level: "a1"`/`"a2"` — filter on that field to get
+a properly-scoped candidate count before deciding, don't trust the
+pooled count from `_practice_slot_check.py` alone for this specific
+judgment call. Full detail, the exact 25 instances found, and how each
+was fixed (converted to a floor-free type, or removed outright when a
+sibling template in the same lesson would otherwise become a pure
+duplicate) in `docs/BUILD_LOG.md`'s "Course-scoping audit result" entry.
