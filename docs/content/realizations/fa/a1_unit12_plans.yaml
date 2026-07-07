@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: "1.1"
 realization_version: "2026.1-draft.1"
 target_language: fa
 cefr_level: A1
@@ -15,7 +15,11 @@ review:
 
     FRESH-CONTEXT REVIEW 2026-07-06 (§9, zero prior access to this content, prs sibling files never opened): verified spine-outcome discipline against universal.a1.plans.make_simple_plans's own assessment_requirements -- all 4 (understand_plan, negotiate_plan, read_invitation, write_plan_message) directly and clearly served (lesson06.exercise01 for understand_plan via reading-visible dialogue comprehension since fa audio remains pending_generation; lessons 02/03/04/06's dialogue_response exercises for negotiate_plan; lesson05.exercise02 for read_invitation; lesson05.exercise05 and lesson06.exercise06 for write_plan_message). Exercise pacing (recognition -> matching/drag -> production) verified correct in all 6 lessons. Confirmed zero listen_type/listen_select/listen_order exercises, as claimed. Ran a Python script mirroring the compiler's own TOKEN_RE tokenizer (handling ZWNJ-joined compounds and stripping punctuation) to cross-check every exercise's tested_text/pairs/word_bank AND the overlay's target-language accepted_answers against cumulative file-scoped introduced_tokens -- confirmed the claimed day/time vocabulary re-teaching is genuinely complete, zero untaught-vocabulary gaps in the originally authored content. Checked for verb-person/conjugation mismatches (the می‌آید/می‌آیم bug class caught elsewhere this session) -- none found; می‌خوای (2nd person, addressed to the listener), نمی‌تونم/می‌بینمت (1st person, spoken by the person declining/confirming) are each used consistently with their taught person throughout. Verified dialect authenticity: چطوره، باشه، عالیه، قبوله، نمی‌تونم، می‌خوای are all genuine Tehrani colloquial forms (-e copula contractions and colloquial verb forms), consistent with the register already established in unit09/unit10. Grepped for Arabic-range kaf (U+0643) and yeh (U+064A): none found, script is pure Persian range. No internal jargon leaks in any learner-facing string (broad snake_case scan of both files found only content_keys and schema field names). No unquoted YAML booleans. Checked every multiple_choice exercise for the prompt-shows-answer bug: all recognize_*/reading_comprehension_invitation/dialogue_comprehension_context exercises pair a Farsi prompt with English-gloss correct_option/distractors -- no same-script visual-matching shortcut exists anywhere. Cross-checked §11 facts (Thursday, eight at night, movies, Arash proposes, Sara accepts) across every exercise/teaching card/media_asset referencing them, including lesson05's separate written-invitation-reply exercise -- fully consistent throughout. content_key parity confirmed exact both directions (teaching, exercises, lessons) via script, both before and after the fixes below. All 8 exercise `type:` values used (multiple_choice, matching_pairs, word_order, translation, dialogue_response, writing_prompt, reading_comprehension, dialogue_comprehension) confirmed registered in frontend/src/components/exercises/ExerciseRenderer.tsx. Compiled the actual JSON (not just validate) and confirmed all 32 exercises have at least one status:correct accepted answer/correct_response. matching_pairs sizing verified: lesson01 (this unit's very first lesson) has only 4 pairs -- a genuine small closed set since no earlier same-unit vocabulary exists yet to pool from (matching the precedent already accepted in unit09's match_time_words); lessons 02-06 are all correctly sized at 6 pairs each, so the file's own claim of 'every matching_pairs exercise 6+ pairs' is not quite accurate for lesson01 specifically, now documented here.
 
-    Found and fixed two real gaps: (1) §12 multi-clause coverage was incomplete for two exercises the task specifically flagged -- lesson04.exercise06 (dialogue_response_decline, 'I'm sorry, I can't, I have things to do') had period-joined, comma-joined, and no-punctuation variants but no و-joined variant; lesson06.exercise06 (write_plan_summary) had only comma-joined and no-punctuation variants despite its own instruction explicitly inviting 'one or two sentences' (a §5 instruction/answer-data gap too) -- added a period-joined and a و-joined variant. (2) Adding the و-joined variants introduced a genuine new untaught-vocabulary bug: و ('and') was never taught anywhere in this file (tokens are file-scoped, so unit09/unit10's own و teaching cards don't carry over) -- caught by re-running the tokenizer script against my own edits, fixed by adding a new lesson04 teaching card (fa.a1.unit12.lesson04.teach.va_word, a grammar_note introducing و) before its first use, with a matching overlay teaching entry, restoring exact content_key parity. Re-ran validate + compile after every fix: 0 errors/0 warnings, valid JSON confirmed, and spot-checked the compiled output directly for both edited exercises to confirm the new accepted_answers landed correctly, not just that the schema validated."
+    Found and fixed two real gaps: (1) §12 multi-clause coverage was incomplete for two exercises the task specifically flagged -- lesson04.exercise06 (dialogue_response_decline, 'I'm sorry, I can't, I have things to do') had period-joined, comma-joined, and no-punctuation variants but no و-joined variant; lesson06.exercise06 (write_plan_summary) had only comma-joined and no-punctuation variants despite its own instruction explicitly inviting 'one or two sentences' (a §5 instruction/answer-data gap too) -- added a period-joined and a و-joined variant. (2) Adding the و-joined variants introduced a genuine new untaught-vocabulary bug: و ('and') was never taught anywhere in this file (tokens are file-scoped, so unit09/unit10's own و teaching cards don't carry over) -- caught by re-running the tokenizer script against my own edits, fixed by adding a new lesson04 teaching card (fa.a1.unit12.lesson04.teach.va_word, a grammar_note introducing و) before its first use, with a matching overlay teaching entry, restoring exact content_key parity. Re-ran validate + compile after every fix: 0 errors/0 warnings, valid JSON confirmed, and spot-checked the compiled output directly for both edited exercises to confirm the new accepted_answers landed correctly, not just that the schema validated.
+
+    2026-07-07: AUTHORING_GUIDE.md §19 retrofit -- added real example sentence(s) to all 14 kind:vocabulary teaching cards (the merged names card given a 2-item list), each a natural, comprehensible-from-gloss sentence using the card's own word(s). schema_version bumped to 1.1. Example sentences are Claude-authored and pending fresh-context review.
+
+    2026-07-07: FRESH-CONTEXT REVIEW of the §19 retrofit examples specifically (zero prior access to the retrofit's own authoring reasoning, scoped narrowly to the new example/example_gloss fields, not a re-review of the unit's already-settled spine outcome/exercises/dialogue). Reviewed all 14 vocabulary cards' example sentences (15 sentences total counting the 2-item names list) for register match, target-word containment, comprehensibility, non-identity with target text, gloss accuracy, script purity, and fact-consistency against this unit's own dialogue (Arash proposes Thursday 8pm cinema, Sara accepts). Found and fixed a genuine register bug (§3): 3 of the new example sentences used the formal literary copula/verb forms (است, دارد, می‌آید) instead of this file's own established colloquial -e/-am contraction register (چطوره، باشه، عالیه، قبوله) -- fixed fa.a1.unit12.lesson05.teach.davat_word's example (این یک دعوت است -> این یه دعوته) and fa.a1.unit12.lesson06.teach.names's two-item example list (آرش امروز کار دارد -> آرش امروز کار داره; سارا فردا می‌آید -> سارا فردا میاد). English glosses (course description strings, unchanged in meaning) were left as-is. Re-verified validate+compile clean (0 errors/0 warnings, valid JSON) and spot-checked the compiled output directly to confirm all 3 fixes landed in the real compiled example text."
 
 course:
   realization_key: fa.a1
@@ -54,18 +58,22 @@ units:
             kind: vocabulary
             target: {text: برنامه, language_code: fa, direction: rtl}
             introduced_tokens: [برنامه]
+            example: {text: "چه برنامه‌ای داری؟", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit12.lesson01.teach.sinama_word
             kind: vocabulary
             target: {text: سینما, language_code: fa, direction: rtl}
             introduced_tokens: [سینما]
+            example: {text: "بریم سینما؟", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit12.lesson01.teach.berim_word
             kind: vocabulary
             target: {text: بریم, language_code: fa, direction: rtl}
             introduced_tokens: [بریم]
+            example: {text: "بریم سینما.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit12.lesson01.teach.chetorast_word
             kind: vocabulary
             target: {text: چطوره؟, language_code: fa, direction: rtl}
             introduced_tokens: ["چطوره؟"]
+            example: {text: "پنجشنبه چطوره؟", language_code: fa, direction: rtl}
         exercises:
           - content_key: fa.a1.unit12.lesson01.exercise01.recognize_barname_reading
             type: multiple_choice
@@ -101,10 +109,12 @@ units:
             kind: vocabulary
             target: {text: می‌خوای, language_code: fa, direction: rtl}
             introduced_tokens: [می‌خوای]
+            example: {text: "می‌خوای بریم سینما؟", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit12.lesson02.teach.panjshanbe_review
             kind: vocabulary
             target: {text: پنجشنبه, language_code: fa, direction: rtl}
             introduced_tokens: [پنجشنبه]
+            example: {text: "پنجشنبه وقت داری؟", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit12.lesson02.teach.propose_phrase
             kind: phrase
             target: {text: "می‌خوای پنجشنبه بریم سینما؟", language_code: fa, direction: rtl}
@@ -147,14 +157,17 @@ units:
             kind: vocabulary
             target: {text: باشه, language_code: fa, direction: rtl}
             introduced_tokens: [باشه]
+            example: {text: "باشه، می‌بینمت.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit12.lesson03.teach.alie_word
             kind: vocabulary
             target: {text: عالیه, language_code: fa, direction: rtl}
             introduced_tokens: [عالیه]
+            example: {text: "عالیه، پس می‌بینمت.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit12.lesson03.teach.ghabule_word
             kind: vocabulary
             target: {text: قبوله, language_code: fa, direction: rtl}
             introduced_tokens: [قبوله]
+            example: {text: "قبوله، پنجشنبه می‌بینمت.", language_code: fa, direction: rtl}
         exercises:
           - content_key: fa.a1.unit12.lesson03.exercise01.recognize_bashe_reading
             type: multiple_choice
@@ -194,10 +207,12 @@ units:
             kind: vocabulary
             target: {text: متأسفم, language_code: fa, direction: rtl}
             introduced_tokens: [متأسفم]
+            example: {text: "متأسفم، نمی‌تونم بیام.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit12.lesson04.teach.nemitoonam_word
             kind: vocabulary
             target: {text: نمی‌تونم, language_code: fa, direction: rtl}
             introduced_tokens: [نمی‌تونم]
+            example: {text: "نمی‌تونم بیام، کار دارم.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit12.lesson04.teach.kar_daram_word
             kind: phrase
             target: {text: "کار دارم", language_code: fa, direction: rtl}
@@ -250,6 +265,7 @@ units:
             kind: vocabulary
             target: {text: دعوت, language_code: fa, direction: rtl}
             introduced_tokens: [دعوت]
+            example: {text: "این یه دعوته.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit12.lesson05.teach.saat_hasht_review
             kind: phrase
             target: {text: "ساعت هشت شب", language_code: fa, direction: rtl}
@@ -262,6 +278,7 @@ units:
             kind: vocabulary
             target: {text: می‌بینمت, language_code: fa, direction: rtl}
             introduced_tokens: [می‌بینمت]
+            example: {text: "پنجشنبه می‌بینمت.", language_code: fa, direction: rtl}
         exercises:
           - content_key: fa.a1.unit12.lesson05.exercise01.recognize_davat_reading
             type: multiple_choice
@@ -303,6 +320,9 @@ units:
             kind: vocabulary
             target: {text: "آرش، سارا", language_code: fa, direction: rtl}
             introduced_tokens: [آرش, سارا]
+            example:
+              - {text: "آرش امروز کار داره.", language_code: fa, direction: rtl}
+              - {text: "سارا فردا میاد.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit12.lesson06.teach.che_saati_word
             kind: phrase
             target: {text: "چه ساعتی؟", language_code: fa, direction: rtl}

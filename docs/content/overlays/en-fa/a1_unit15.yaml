@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: "1.1"
 overlay_version: "2026.1-draft.1"
 overlay_key: en-fa.a1.unit15
 source_language: en
@@ -13,7 +13,11 @@ review:
   required_next_reviewer: null
   notes: "Authored alongside the new fa a1_unit15_comparisons.yaml realization. Follows the established en-fa overlay convention from units 09-14 (English instruction/correct_option/distractors/feedback, target-language Farsi accepted_answers, English glosses for recognize_* multiple_choice items to avoid the same-string visual-matching anti-pattern). Multi-clause reason exercises (translate_this_better_because_cheaper, translate_that_worse_because_expensive) carry period-joined, comma-joined, and و-joined accepted_answers variants per §12. Both open-ended production exercises (write_own_comparison, dialogue_response_own_comparison, write_comparison_summary) carry multiple adjective/topic variants from the start, learned directly from unit14's own fresh-context review finding a disguised §17-class ambiguity when only one variant was accepted. Authored §14/§16/§17-compliant from the start alongside the realization. Needs the standard fresh-context review before shipping.
 
-    FRESH-CONTEXT REVIEW, 2026-07-07 (zero prior access to authoring reasoning, prs sibling files never opened, per §8/§9): verified spine-outcome discipline, exercise pacing, §14/§16/§17 compliance, script purity (zero Arabic-range kaf/yeh), content_key parity (20 teaching + 30 exercise keys, exact both directions), ExerciseRenderer.tsx registration for all 7 exercise types used, and no internal jargon leaks in any learner-facing string -- all confirmed clean, full detail in the matching realization file's review notes. Ran a real Python script comparing every exercise's realization prompt.target_blocks (en) against this overlay's own instruction field: zero duplicates (the recently-discovered project-wide bug did not recur here). Ran a real recursive yaml.safe_load dict-value walk checking for stray non-schema YAML booleans: none found. Read backend/app/api/router.py's grade()/is_multi_answer_response() and confirmed the multi-variant open-ended exercises (write_own_comparison, dialogue_response_own_comparison, write_comparison_summary) are genuinely, correctly multi-graded, not a disguised bug -- verified directly against the compiled JSON. Verified via web search (Persian Wikipedia style guide, Wiktionary) that only five تر forms are truly frozen/suppletive in Persian (بهتر، مهتر، کهتر، بیشتر، کمتر) and found + fixed two real issues in this file: (1) the badtare_word teaching note incorrectly called بد‌تر an 'irregular' comparative of بد -- it is actually the REGULAR +تر suffixation of the identical root, unlike the genuinely suppletive بهتر (built from a different, older root به, not خوب) -- corrected the note's wording to state this accurately; (2) an orthographic inconsistency where بدتره/بلندتره lacked the ZWNJ every other fused comparative in this course uses -- corrected to بد‌تره/بلند‌تره throughout, matching بزرگ‌تره/کوچیک‌تره/گرون‌تره/ارزون‌تره/جوون‌تره. A real Python tokenizer (ZWNJ-aware, Persian-punctuation-stripping) checking every accepted_answers value against cumulative file-scoped introduced_tokens found one genuine untaught-vocabulary gap: lesson06.exercise05.write_comparison_summary's fourth accepted variant used اما (never taught in this unit) instead of the already-taught ولی -- fixed by substitution; re-ran the tokenizer to confirm zero remaining gaps. Cross-checked §11 facts (Nima taller/Sara younger; the more-expensive-but-better vs. cheaper dialogue item) across every exercise referencing them: fully consistent. Confirmed the multi-clause exercises named in this unit's review scope (translate_this_better_because_cheaper, translate_that_worse_because_expensive, write_comparison_summary) each genuinely carry period-joined, comma-joined, and و-joined status:correct variants per §12. Re-ran validate + compile after every fix: 0 errors/0 warnings, valid JSON, and the actual compiled output was spot-checked directly to confirm every fix landed correctly (ZWNJ present in correct_response, the اما->ولی fix present in the accepted list, answer_language_code=fa resolved for every translation/writing_prompt/dialogue_response exercise, all 30 exercises carrying a genuine non-empty correct_response)."
+    FRESH-CONTEXT REVIEW, 2026-07-07 (zero prior access to authoring reasoning, prs sibling files never opened, per §8/§9): verified spine-outcome discipline, exercise pacing, §14/§16/§17 compliance, script purity (zero Arabic-range kaf/yeh), content_key parity (20 teaching + 30 exercise keys, exact both directions), ExerciseRenderer.tsx registration for all 7 exercise types used, and no internal jargon leaks in any learner-facing string -- all confirmed clean, full detail in the matching realization file's review notes. Ran a real Python script comparing every exercise's realization prompt.target_blocks (en) against this overlay's own instruction field: zero duplicates (the recently-discovered project-wide bug did not recur here). Ran a real recursive yaml.safe_load dict-value walk checking for stray non-schema YAML booleans: none found. Read backend/app/api/router.py's grade()/is_multi_answer_response() and confirmed the multi-variant open-ended exercises (write_own_comparison, dialogue_response_own_comparison, write_comparison_summary) are genuinely, correctly multi-graded, not a disguised bug -- verified directly against the compiled JSON. Verified via web search (Persian Wikipedia style guide, Wiktionary) that only five تر forms are truly frozen/suppletive in Persian (بهتر، مهتر، کهتر، بیشتر، کمتر) and found + fixed two real issues in this file: (1) the badtare_word teaching note incorrectly called بد‌تر an 'irregular' comparative of بد -- it is actually the REGULAR +تر suffixation of the identical root, unlike the genuinely suppletive بهتر (built from a different, older root به, not خوب) -- corrected the note's wording to state this accurately; (2) an orthographic inconsistency where بدتره/بلندتره lacked the ZWNJ every other fused comparative in this course uses -- corrected to بد‌تره/بلند‌تره throughout, matching بزرگ‌تره/کوچیک‌تره/گرون‌تره/ارزون‌تره/جوون‌تره. A real Python tokenizer (ZWNJ-aware, Persian-punctuation-stripping) checking every accepted_answers value against cumulative file-scoped introduced_tokens found one genuine untaught-vocabulary gap: lesson06.exercise05.write_comparison_summary's fourth accepted variant used اما (never taught in this unit) instead of the already-taught ولی -- fixed by substitution; re-ran the tokenizer to confirm zero remaining gaps. Cross-checked §11 facts (Nima taller/Sara younger; the more-expensive-but-better vs. cheaper dialogue item) across every exercise referencing them: fully consistent. Confirmed the multi-clause exercises named in this unit's review scope (translate_this_better_because_cheaper, translate_that_worse_because_expensive, write_comparison_summary) each genuinely carry period-joined, comma-joined, and و-joined status:correct variants per §12. Re-ran validate + compile after every fix: 0 errors/0 warnings, valid JSON, and the actual compiled output was spot-checked directly to confirm every fix landed correctly (ZWNJ present in correct_response, the اما->ولی fix present in the accepted list, answer_language_code=fa resolved for every translation/writing_prompt/dialogue_response exercise, all 30 exercises carrying a genuine non-empty correct_response).
+
+    2026-07-07: AUTHORING_GUIDE.md §19 retrofit -- added real example sentence(s) to all 12 kind:vocabulary teaching entries with example_gloss (2 merged names cards, lesson03 and lesson06, each given a 2-item list), each a natural, comprehensible-from-gloss sentence using the card's own word(s). schema_version bumped to 1.1. Example sentences are Claude-authored and pending fresh-context review.
+
+    2026-07-07: FRESH-CONTEXT REVIEW of the §19 retrofit examples specifically (paired with the same-dated review of the fa realization; zero prior access to the retrofit's own authoring reasoning; scoped narrowly to the new example_gloss fields). Spot-checked every example_gloss against its paired Farsi example for accurate translation -- all 14 (12 cards + 2 extra from the two 2-item names lists) sound; no change needed on this file's side since the realization's only fix (بلندتره -> بلند‌تره, adding the missing ZWNJ) is orthographic only and doesn't change the English meaning. Re-ran validate+compile after the realization's fix: 0 errors/0 warnings, valid JSON."
 
 course:
   title: Farsi A1
@@ -46,18 +50,22 @@ teaching:
     title: This
     gloss: this
     note: "این means this."
+    example_gloss: "This is bigger than that."
   fa.a1.unit15.lesson01.teach.oon_word:
     title: That
     gloss: that
     note: "اون means that (colloquial form of آن)."
+    example_gloss: "That is smaller than this."
   fa.a1.unit15.lesson01.teach.bozorgtare_word:
     title: "It's bigger"
     gloss: "it's bigger"
     note: "بزرگ‌تره is the colloquial contraction of بزرگ‌تر است (it is bigger) -- بزرگ‌تر is the comparative of بزرگ (big)."
+    example_gloss: "This is bigger than that."
   fa.a1.unit15.lesson01.teach.koochiktare_word:
     title: "It's smaller"
     gloss: "it's smaller"
     note: "کوچیک‌تره is the colloquial contraction of کوچیک‌تر است (it is smaller)."
+    example_gloss: "That is smaller than this."
   fa.a1.unit15.lesson01.teach.az_word:
     title: Than
     gloss: than
@@ -66,14 +74,17 @@ teaching:
     title: "It's more expensive"
     gloss: "it's more expensive"
     note: "گرون‌تره is the colloquial contraction of گرون‌تر است -- گرون‌تر is the comparative of گرون (expensive)."
+    example_gloss: "This is more expensive than that."
   fa.a1.unit15.lesson02.teach.arzoontare_word:
     title: "It's cheaper"
     gloss: "it's cheaper"
     note: "ارزون‌تره is the colloquial contraction of ارزون‌تر است -- ارزون‌تر is the comparative of ارزون (cheap)."
+    example_gloss: "That is cheaper than this."
   fa.a1.unit15.lesson03.teach.names:
     title: "Nima and Sara"
     gloss: "Nima, Sara"
     note: "Common Iranian names used throughout this course."
+    example_gloss: ["Nima is taller than Sara.", "Sara is younger than Nima."]
   fa.a1.unit15.lesson03.teach.ghad_bolandtare_phrase:
     title: "Taller"
     gloss: "taller / he's/she's taller"
@@ -82,14 +93,17 @@ teaching:
     title: "Younger"
     gloss: "younger / he's/she's younger"
     note: "جوون‌تره is the colloquial contraction of جوون‌تر است -- جوون‌تر is the comparative of جوون (young)."
+    example_gloss: "Sara is younger than Nima."
   fa.a1.unit15.lesson04.teach.behtare_word:
     title: "It's better"
     gloss: "it's better"
     note: "بهتره is the colloquial contraction of بهتر است -- بهتر (better) is the irregular comparative of خوب (good)."
+    example_gloss: "This is better than that."
   fa.a1.unit15.lesson04.teach.badtare_word:
     title: "It's worse"
     gloss: "it's worse"
     note: "بد‌تره is the colloquial contraction of بد‌تر است -- بد‌تر (worse) is actually the REGULAR comparative of بد (bad): same root plus the ordinary تر suffix. (Unlike بهتر, which is a true irregular/suppletive form built from a different, older root, not from خوب.)"
+    example_gloss: "That is worse than this."
   fa.a1.unit15.lesson04.teach.choon_word:
     title: Because
     gloss: because
@@ -105,6 +119,7 @@ teaching:
   fa.a1.unit15.lesson06.teach.names:
     title: "Nima and Sara"
     gloss: "Nima, Sara"
+    example_gloss: ["Nima said this is more expensive.", "Sara said that is cheaper."]
   fa.a1.unit15.lesson06.teach.vali_word:
     title: But
     gloss: but
@@ -113,6 +128,7 @@ teaching:
     title: Yeah
     gloss: yeah
     note: "آره is the colloquial form of بله (yes)."
+    example_gloss: "Yeah, that's right."
   fa.a1.unit15.lesson06.teach.dialogue_line1:
     title: "Nima says"
     gloss: "This is more expensive than that, but it's better."

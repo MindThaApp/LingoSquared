@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: "1.1"
 overlay_version: "2026.1-draft.1"
 overlay_key: en-fa.a1.unit12
 source_language: en
@@ -13,7 +13,11 @@ review:
   required_next_reviewer: null
   notes: "Authored alongside the new fa a1_unit12_plans.yaml realization. Follows the established en-fa overlay convention from units 09-11 (English instruction/correct_option/distractors/feedback, target-language Farsi accepted_answers, English glosses for recognize_* multiple_choice items to avoid the same-string visual-matching anti-pattern already fixed in units 07/08). Authored §14/§16-compliant from the start alongside the realization. Needs the standard fresh-context review before shipping.
 
-    FRESH-CONTEXT REVIEW 2026-07-06 (§9): reviewed together with the fa realization -- confirmed flat top-level dicts (units/lessons/teaching/exercises all keyed directly by content_key) match the documented overlay schema correctly, with exact content_key parity in both directions (script-verified, before and after fixes). Confirmed every recognize_*/reading_comprehension/dialogue_comprehension exercise's correct_option/distractors are English glosses, never the same-script Farsi text visible in the prompt (no prompt-shows-answer bug). Confirmed every exercise has at least one status:correct accepted_answers/correct_response entry via the actual compiled JSON, not just validate. Found and fixed a real §12 multi-clause gap in two exercises the task flagged: lesson04.exercise06.dialogue_response_decline was missing a و-joined variant, and lesson06.exercise06.write_plan_summary was missing both a period-joined and a و-joined variant despite its own instruction inviting 'one or two sentences.' Added both. This introduced a genuine untaught-vocabulary bug (و was never taught in this file, tokens being file-scoped) -- fixed by adding a matching fa.a1.unit12.lesson04.teach.va_word teaching entry alongside the realization's new teaching card, restoring content_key parity, then re-verified via a tokenizer cross-check script and a clean validate+compile."
+    FRESH-CONTEXT REVIEW 2026-07-06 (§9): reviewed together with the fa realization -- confirmed flat top-level dicts (units/lessons/teaching/exercises all keyed directly by content_key) match the documented overlay schema correctly, with exact content_key parity in both directions (script-verified, before and after fixes). Confirmed every recognize_*/reading_comprehension/dialogue_comprehension exercise's correct_option/distractors are English glosses, never the same-script Farsi text visible in the prompt (no prompt-shows-answer bug). Confirmed every exercise has at least one status:correct accepted_answers/correct_response entry via the actual compiled JSON, not just validate. Found and fixed a real §12 multi-clause gap in two exercises the task flagged: lesson04.exercise06.dialogue_response_decline was missing a و-joined variant, and lesson06.exercise06.write_plan_summary was missing both a period-joined and a و-joined variant despite its own instruction inviting 'one or two sentences.' Added both. This introduced a genuine untaught-vocabulary bug (و was never taught in this file, tokens being file-scoped) -- fixed by adding a matching fa.a1.unit12.lesson04.teach.va_word teaching entry alongside the realization's new teaching card, restoring content_key parity, then re-verified via a tokenizer cross-check script and a clean validate+compile.
+
+    2026-07-07: AUTHORING_GUIDE.md §19 retrofit -- added real example sentence(s) to all 14 kind:vocabulary teaching entries with example_gloss (the merged names card given a 2-item list), each a natural, comprehensible-from-gloss sentence using the card's own word(s). schema_version bumped to 1.1. Example sentences are Claude-authored and pending fresh-context review.
+
+    2026-07-07: FRESH-CONTEXT REVIEW of the §19 retrofit examples specifically (paired with the same-dated review of the fa realization; zero prior access to the retrofit's own authoring reasoning; scoped narrowly to the new example_gloss fields). Spot-checked every example_gloss against its paired Farsi example for accurate translation -- all 15 (14 cards + 1 extra from the 2-item names list) glosses accurately convey their Farsi sentence's meaning; no changes needed on this file's side since the realization-side register fixes (این یک دعوت است -> این یه دعوته; کار دارد -> کار داره; می‌آید -> میاد) didn't change the English meaning. Re-ran validate+compile after the realization's fixes: 0 errors/0 warnings, valid JSON."
 
 course:
   title: Farsi A1
@@ -38,26 +42,32 @@ teaching:
     title: Plan
     gloss: plan
     note: "برنامه means plan."
+    example_gloss: "What plans do you have?"
   fa.a1.unit12.lesson01.teach.sinama_word:
     title: "Cinema / movies"
     gloss: "cinema / movies"
     note: "سینما means cinema or the movies."
+    example_gloss: "Shall we go to the cinema?"
   fa.a1.unit12.lesson01.teach.berim_word:
     title: "Let's go"
     gloss: "let's go"
     note: "بریم (let's go) is the subjunctive 'we go' form used for suggestions."
+    example_gloss: "Let's go to the cinema."
   fa.a1.unit12.lesson01.teach.chetorast_word:
     title: "How about it?"
     gloss: "How about it? / How's that?"
     note: "چطوره؟ uses the established -e contraction pattern (چطور است -> چطوره)."
+    example_gloss: "How about Thursday?"
   fa.a1.unit12.lesson02.teach.mikhay_word:
     title: "Do you want"
     gloss: "do you want"
     note: "می‌خوای (do you want, informal) starts a proposal question."
+    example_gloss: "Do you want to go to the cinema?"
   fa.a1.unit12.lesson02.teach.panjshanbe_review:
     title: "Thursday (review)"
     gloss: Thursday
     note: "پنجشنبه reviews the day name from unit10."
+    example_gloss: "Are you free on Thursday?"
   fa.a1.unit12.lesson02.teach.propose_phrase:
     title: "Do you want to go to the movies on Thursday?"
     gloss: "Do you want to go to the movies on Thursday?"
@@ -66,22 +76,27 @@ teaching:
     title: Okay
     gloss: okay
     note: "باشه means okay, a common informal agreement word."
+    example_gloss: "Okay, see you."
   fa.a1.unit12.lesson03.teach.alie_word:
     title: Great
     gloss: great
     note: "عالیه (great) uses the established -e contraction pattern (عالی است -> عالیه)."
+    example_gloss: "Great, see you then."
   fa.a1.unit12.lesson03.teach.ghabule_word:
     title: "It's a deal"
     gloss: "it's a deal / agreed"
     note: "قبوله (it's a deal) uses the established -e contraction pattern (قبول است -> قبوله)."
+    example_gloss: "Deal, see you Thursday."
   fa.a1.unit12.lesson04.teach.motasefam_word:
     title: "I'm sorry"
     gloss: "I'm sorry"
     note: "متأسفم means I'm sorry."
+    example_gloss: "I'm sorry, I can't come."
   fa.a1.unit12.lesson04.teach.nemitoonam_word:
     title: "I can't"
     gloss: "I can't"
     note: "نمی‌تونم means I can't (colloquial for نمی‌توانم)."
+    example_gloss: "I can't come, I have work."
   fa.a1.unit12.lesson04.teach.kar_daram_word:
     title: "I have things to do"
     gloss: "I have things to do"
@@ -94,6 +109,7 @@ teaching:
     title: Invitation
     gloss: invitation
     note: "دعوت means invitation."
+    example_gloss: "This is an invitation."
   fa.a1.unit12.lesson05.teach.saat_hasht_review:
     title: "Eight o'clock at night"
     gloss: "eight o'clock at night"
@@ -106,10 +122,12 @@ teaching:
     title: "I'll see you"
     gloss: "I'll see you"
     note: "می‌بینمت (I'll see you) is a common way to close off confirming a plan."
+    example_gloss: "I'll see you Thursday."
   fa.a1.unit12.lesson06.teach.names:
     title: "Arash and Sara"
     gloss: "Arash, Sara"
     note: "آرش and سارا are the two speakers in this lesson's dialogue."
+    example_gloss: ["Arash has work today.", "Sara is coming tomorrow."]
   fa.a1.unit12.lesson06.teach.che_saati_word:
     title: "What time?"
     gloss: "What time?"

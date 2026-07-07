@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: "1.1"
 realization_version: "2026.1-draft.4"
 target_language: fa
 cefr_level: A1
@@ -10,7 +10,11 @@ generation_provenance:
 review:
   status: reviewed
   required_next_reviewer: null
-  notes: "Fresh-context review: corrected pacing, internal labels, and lesson 06 outcome metadata; dialogue turns verified. Audio remains pending. AUDIO-ACCESSIBILITY RETROFIT 2026-07-06 (§14, project-wide audit): found 10 exercises in this unit (lesson02.exercise01/02/04, lesson03.exercise02/06/08, lesson04.exercise03/04/07, lesson06.exercise04) were listen_type/listen_order/bare-prompt listen_select items -- genuinely unanswerable since fa/prs have zero working TTS/recorded audio. Converted: listen_select -> multiple_choice (added the target Farsi text as a real visible prompt, English-gloss correct_option/distractors), listen_type -> translation, listen_order -> word_order (with an English prompt instead of audio). MATCHING_PAIRS SCALE (§16) CHECK: match_letters (4) is this unit's script-intro lesson testing exactly the 4 letters taught in lesson01 (سلام's own letters) -- a genuine ceiling, nothing more to pool from the first lesson. Re-verified 0 remaining §14 violations via script, content_key parity intact, validate+compile both clean after the retrofit."
+  notes: "Fresh-context review: corrected pacing, internal labels, and lesson 06 outcome metadata; dialogue turns verified. Audio remains pending. AUDIO-ACCESSIBILITY RETROFIT 2026-07-06 (§14, project-wide audit): found 10 exercises in this unit (lesson02.exercise01/02/04, lesson03.exercise02/06/08, lesson04.exercise03/04/07, lesson06.exercise04) were listen_type/listen_order/bare-prompt listen_select items -- genuinely unanswerable since fa/prs have zero working TTS/recorded audio. Converted: listen_select -> multiple_choice (added the target Farsi text as a real visible prompt, English-gloss correct_option/distractors), listen_type -> translation, listen_order -> word_order (with an English prompt instead of audio). MATCHING_PAIRS SCALE (§16) CHECK: match_letters (4) is this unit's script-intro lesson testing exactly the 4 letters taught in lesson01 (سلام's own letters) -- a genuine ceiling, nothing more to pool from the first lesson. Re-verified 0 remaining §14 violations via script, content_key parity intact, validate+compile both clean after the retrofit.
+
+    2026-07-07: AUTHORING_GUIDE.md §19 retrofit -- added a real example sentence to all 5 kind:vocabulary teaching cards (lesson01.teach.salam_shape, lesson02.teach.salam/khodahafez/mamnoon, lesson05.teach.chai), each a natural, comprehensible-from-gloss sentence using the card's own word. schema_version bumped to 1.1 (missing examples now a hard compiler error for this file). Example sentences are Claude-authored and pending fresh-context review.
+
+    2026-07-07: Fresh-context §19 example review (this unit's 5 new example sentences only, not a full unit re-review). Checked each against: naturalness/register match to this unit's own established colloquial Tehrani forms, presence of the card's own word, real 2+-word sentence structure, gloss comprehensibility/accuracy, script purity (no Arabic-range kaf/yeh codepoints -- confirmed clean), and duplicate/consistency checks. Found and fixed 2 issues: lesson02.teach.salam's example used the informal تو-register question خوبی؟ before this unit's own register_policy introduces informal forms (lesson04) -- changed to the neutral-polite حالتون خوبه؟. lesson02.teach.mamnoon's example_gloss (\"Thank you.\") under-translated the example's از شما, making it look identical to the bare-word gloss -- example strengthened to خیلی ممنون از شما and gloss updated to match. All other 3 examples verified natural, correct, and non-duplicative. Re-validated clean (0 errors/0 warnings) after fixes."
 
 course:
   realization_key: fa.a1
@@ -127,6 +131,7 @@ units:
             kind: vocabulary
             target: {text: "سلام", language_code: fa, direction: rtl}
             introduced_tokens: [سلام]
+            example: {text: "سلام! من نیما هستم.", language_code: fa, direction: rtl}
         exercises:
           - content_key: fa.a1.unit01.lesson01.exercise01.recognize_salam
             type: multiple_choice
@@ -185,6 +190,7 @@ units:
             kind: vocabulary
             target: {text: "سلام", language_code: fa, direction: rtl}
             introduced_tokens: [سلام]
+            example: {text: "سلام، حالتون خوبه؟", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit01.lesson02.teach.sobh_bekheyr
             kind: phrase
             target: {text: "صبح بخیر", language_code: fa, direction: rtl}
@@ -197,10 +203,12 @@ units:
             kind: vocabulary
             target: {text: "خداحافظ", language_code: fa, direction: rtl}
             introduced_tokens: [خداحافظ]
+            example: {text: "خداحافظ، تا بعد!", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit01.lesson02.teach.mamnoon
             kind: vocabulary
             target: {text: "ممنون", language_code: fa, direction: rtl}
             introduced_tokens: [ممنون]
+            example: {text: "خیلی ممنون از شما.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit01.lesson02.teach.khahesh_mikonam
             kind: phrase
             target: {text: "خواهش می‌کنم", language_code: fa, direction: rtl}
@@ -407,6 +415,7 @@ units:
             kind: vocabulary
             target: {text: "چای", language_code: fa, direction: rtl}
             introduced_tokens: [چای]
+            example: {text: "بفرمایید، چای میل دارید؟", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit01.lesson05.teach.befarmaeed
             kind: phrase
             target: {text: "بفرمایید", language_code: fa, direction: rtl}

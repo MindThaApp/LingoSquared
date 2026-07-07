@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: "1.1"
 realization_version: "2026.1-draft.1"
 target_language: fa
 cefr_level: A1
@@ -23,7 +23,11 @@ review:
 
     Specifically verified lesson06.exercise04 (dialogue_response_own_preference)'s coffee/tea dual-acceptance is NOT a disguised bug: read backend/app/api/router.py's grade() and confirmed the generic multi-answer path (is_multi_answer_response(correct) -> any(normalized_response==normalized(item) for item in correct['accepted'])) genuinely accepts ANY item in the accepted list regardless of which real-world topic it represents -- the exact same mechanism every other multi-variant exercise in the corpus already relies on, not a special case. Confirmed directly in the compiled JSON output that all 6 variants (coffee x3 join-forms, tea x3 join-forms) are present in correct_response.accepted. Also reasoned through whether replacing چون with و changes the causal meaning of the because-clauses (it softens 'because' to a looser 'and'-coordination) and judged this an acceptable, genuinely natural colloquial register choice (comparable to English speakers dropping 'because' for a coordinate clause when giving a casual reason), not a fabricated mechanical insertion -- consistent with the already-established و-joined precedent in unit13.
 
-    One systemic observation NOT fixed here (out of scope for this unit specifically): §15's asterisk-wrapping convention for target-language spans inside mixed-language note/feedback strings (e.g. 'دوست دارم means I like') is not applied anywhere in this unit's overlay, but this exact same gap exists throughout the immediately-prior, already-reviewed-and-shipped unit13 overlay too (checked directly) -- reads as a systemic, pre-existing convention gap across the whole en-fa course rather than something specific to this new unit, so left unfixed here to avoid diverging from established sibling precedent; flagging for whoever next does a dedicated note/feedback formatting pass. Re-ran validate + compile after every fix: 0 errors/0 warnings, valid JSON, and the actual compiled output was spot-checked directly (not just validate) to confirm every fix landed correctly."
+    One systemic observation NOT fixed here (out of scope for this unit specifically): §15's asterisk-wrapping convention for target-language spans inside mixed-language note/feedback strings (e.g. 'دوست دارم means I like') is not applied anywhere in this unit's overlay, but this exact same gap exists throughout the immediately-prior, already-reviewed-and-shipped unit13 overlay too (checked directly) -- reads as a systemic, pre-existing convention gap across the whole en-fa course rather than something specific to this new unit, so left unfixed here to avoid diverging from established sibling precedent; flagging for whoever next does a dedicated note/feedback formatting pass. Re-ran validate + compile after every fix: 0 errors/0 warnings, valid JSON, and the actual compiled output was spot-checked directly (not just validate) to confirm every fix landed correctly.
+
+    2026-07-07: AUTHORING_GUIDE.md §19 retrofit -- added real example sentence(s) to all 12 kind:vocabulary teaching cards (the merged names card given a 2-item list), each a natural, comprehensible-from-gloss sentence using the card's own word(s). schema_version bumped to 1.1. Example sentences are Claude-authored and pending fresh-context review.
+
+    2026-07-07: FRESH-CONTEXT REVIEW of the §19 retrofit examples specifically (zero prior access to the retrofit's own authoring reasoning, scoped narrowly to the new example/example_gloss fields, not a re-review of the unit's already-settled spine outcome/exercises/dialogue). Reviewed all 12 vocabulary cards' example sentences (13 sentences total counting the 2-item names list) for register match, target-word containment, comprehensibility, non-identity with target text, gloss accuracy, script purity (clean), and fact-consistency against this unit's own dialogue (established: Sara prefers coffee over tea because it's delicious; Nima prefers tea because it's warm). Confirmed fa.a1.unit14.lesson05.teach.sara_name's example (\"سارا چای دوست داره\" -- Sara likes tea) is compatible, not contradictory -- the dialogue only establishes a relative preference (Sara likes coffee MORE than tea), so Sara can still like tea. Found and fixed a real §11-class fact-consistency bug elsewhere: fa.a1.unit14.lesson06.teach.names's 2-item example list had Nima's and Sara's drink preferences backwards -- \"نیما قهوه دوست داره\" (Nima likes coffee) and \"سارا چای دوست داره\" (Sara likes tea) directly contradicted the dialogue's own established facts (Sara prefers coffee, Nima prefers tea). Fixed by swapping while keeping each sentence positionally matched to its target name: item0 (نیما) -> \"نیما چای دوست داره\" (Nima likes tea); item1 (سارا) -> \"سارا قهوه دوست داره\" (Sara likes coffee). Re-verified validate+compile clean (0 errors/0 warnings, valid JSON) and spot-checked the compiled output directly to confirm the fix landed."
 
 course:
   realization_key: fa.a1
@@ -67,10 +71,12 @@ units:
             kind: vocabulary
             target: {text: قهوه, language_code: fa, direction: rtl}
             introduced_tokens: [قهوه]
+            example: {text: "قهوه رو دوست دارم.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit14.lesson01.teach.chay_word
             kind: vocabulary
             target: {text: چای, language_code: fa, direction: rtl}
             introduced_tokens: [چای]
+            example: {text: "چای رو دوست ندارم.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit14.lesson01.teach.doost_nadaram_phrase
             kind: phrase
             target: {text: "دوست ندارم", language_code: fa, direction: rtl}
@@ -79,6 +85,7 @@ units:
             kind: vocabulary
             target: {text: من, language_code: fa, direction: rtl}
             introduced_tokens: [من]
+            example: {text: "من موسیقی دوست دارم.", language_code: fa, direction: rtl}
         exercises:
           - content_key: fa.a1.unit14.lesson01.exercise01.recognize_doost_daram
             type: multiple_choice
@@ -114,10 +121,12 @@ units:
             kind: vocabulary
             target: {text: کدوم, language_code: fa, direction: rtl}
             introduced_tokens: [کدوم]
+            example: {text: "کدوم رو دوست داری؟", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit14.lesson02.teach.moosighi_word
             kind: vocabulary
             target: {text: موسیقی, language_code: fa, direction: rtl}
             introduced_tokens: [موسیقی]
+            example: {text: "من موسیقی دوست دارم.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit14.lesson02.teach.mikhay_word
             kind: grammar_note
             target: {text: "می‌خوای (you want, informal)", language_code: fa, direction: rtl}
@@ -164,6 +173,7 @@ units:
             kind: vocabulary
             target: {text: بیشتر, language_code: fa, direction: rtl}
             introduced_tokens: [بیشتر]
+            example: {text: "قهوه رو بیشتر دوست دارم.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit14.lesson03.teach.ya_word
             kind: grammar_note
             target: {text: "یا (or)", language_code: fa, direction: rtl}
@@ -213,10 +223,12 @@ units:
             kind: vocabulary
             target: {text: "خوشمزه‌ست", language_code: fa, direction: rtl}
             introduced_tokens: ["خوشمزه‌ست"]
+            example: {text: "قهوه خوشمزه‌ست.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit14.lesson04.teach.jaleb_word
             kind: vocabulary
             target: {text: جالبه, language_code: fa, direction: rtl}
             introduced_tokens: [جالبه]
+            example: {text: "این موسیقی جالبه.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit14.lesson04.teach.va_word
             kind: grammar_note
             target: {text: "و (and)", language_code: fa, direction: rtl}
@@ -258,6 +270,7 @@ units:
             kind: vocabulary
             target: {text: سارا, language_code: fa, direction: rtl}
             introduced_tokens: [سارا]
+            example: {text: "سارا چای دوست داره.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit14.lesson05.teach.dareh_grammar
             kind: grammar_note
             target: {text: "دوست داره (he/she likes, colloquial 3rd person)", language_code: fa, direction: rtl}
@@ -270,6 +283,7 @@ units:
             kind: vocabulary
             target: {text: گرمه, language_code: fa, direction: rtl}
             introduced_tokens: [گرمه]
+            example: {text: "چای گرمه.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit14.lesson05.teach.reading_text
             kind: reading
             target: {text: "سارا چای دوست داره چون گرمه. سارا موسیقی دوست نداره", language_code: fa, direction: rtl}
@@ -311,6 +325,9 @@ units:
             kind: vocabulary
             target: {text: "نیما، سارا", language_code: fa, direction: rtl}
             introduced_tokens: [نیما]
+            example:
+              - {text: "نیما چای دوست داره.", language_code: fa, direction: rtl}
+              - {text: "سارا قهوه دوست داره.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit14.lesson06.teach.to_chi_phrase
             kind: phrase
             target: {text: "تو چی؟", language_code: fa, direction: rtl}
@@ -319,6 +336,7 @@ units:
             kind: vocabulary
             target: {text: عالیه, language_code: fa, direction: rtl}
             introduced_tokens: [عالیه]
+            example: {text: "این عالیه.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit14.lesson06.teach.dialogue_line1
             kind: dialogue
             target: {text: "چای یا قهوه، کدوم رو بیشتر دوست داری؟", language_code: fa, direction: rtl, speaker: نیما}

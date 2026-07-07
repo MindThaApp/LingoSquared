@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: "1.1"
 realization_version: "2026.1-draft.1"
 target_language: fa
 cefr_level: A1
@@ -15,7 +15,11 @@ review:
 
     FRESH-CONTEXT REVIEW, 2026-07-07 (zero prior access to this unit's authoring reasoning, prs sibling files never opened, per §9/§8): confirmed spine-outcome discipline (all 6 lessons genuinely serve universal.a1.past_events.describe_recent_event, no drift) and all 4 assessment_requirements served (understand_recent_event via lesson06's dialogue_comprehension, describe_recent_event via the dialogue_response exercises, read_recent_event via lesson04's reading_comprehension, write_recent_event via lessons05/06's writing_prompt) -- matching the same reading-visible-dialogue-comprehension pattern already accepted in unit12's own fresh-context review, since this unit's audio remains pending_generation. Verified recognition->drag/matching->production pacing in all 6 lessons. Confirmed the §14 claim true (zero listen_type/listen_select/listen_order exercises) and the §17 claim true (zero fill_in_blank exercises, grepped). Verified §16 matching_pairs sizing exactly as claimed (lesson01: 4, a genuine ceiling matching the unit11/unit12 precedent for a unit's first lesson; lessons02-06: 6 each). Grepped both files for Arabic-range kaf (U+0643)/yeh (U+064A): zero found, script is pure Persian range. Wrote a real Python script (yaml.safe_load, recursive dict-value walk) to check every dict value in both files for a stray non-schema Python bool: none found. Wrote a second Python script tokenizing on Persian-range codepoints plus ZWNJ (U+200C), stripping Persian punctuation, to check every exercise's tested_text/word_bank/pairs and the overlay's target-language accepted_answers against cumulative file-scoped introduced_tokens: zero untaught-vocabulary gaps: confirmed و and من are each taught (lesson04, lesson06) before their first tested use, and confirmed lesson06's third-person forms (رفت/دید/کرد/موند/خوند) are taught via the grammar_note before that lesson's own exercises test them. Verified every multiple_choice exercise pairs a Farsi prompt with English-only correct_option/distractors -- no same-script visual-matching shortcut anywhere. Cross-checked the §11 facts (Sara went to the cinema and saw a good movie; Nima stayed home and read a book) across the dialogue_comprehension exercise, match_dialogue_facts, and write_weekend_summary: fully consistent. Confirmed content_key parity exact in both directions (26 teaching + 30 exercise keys) via script, and confirmed the overlay's flat top-level units/lessons/teaching/exercises dicts match the expected schema. Confirmed all 8 exercise types used (multiple_choice, matching_pairs, word_order, translation, dialogue_response, writing_prompt, reading_comprehension, dialogue_comprehension) are registered in frontend/src/components/exercises/ExerciseRenderer.tsx. Reasoned through the grammar for authenticity (1st/2nd/3rd-person past conjugation patterns, چیکار کردی؟/دیروز/تو چی؟/خونه موندم) and found it genuine, idiomatic colloquial Tehrani Farsi consistent with units 09/11/12, no calques.
 
-    Found and fixed 3 real issues. (1) §17-class accepted-answer gap beyond the literal fill_in_blank check: lesson05.exercise04.translate_read_book ('I read a book.') only accepted کتاب خوندم, but یک کتاب خوندم is an equally natural, equally correct rendering -- added as a second status:correct variant. (2) §12 multi-clause coverage gaps: lesson05.exercise05.write_own_recent_event (a 3-clause sentence) only had two mixed comma/period+و forms, missing the all-period, all-comma, and all-و forms -- added all three; lesson06.exercise05.dialogue_response_own_weekend (a 2-clause sentence) only had the و-joined form -- added comma-joined and period-joined variants (lesson06.exercise06.write_weekend_summary already correctly had all three forms). (3) A genuine prompt-duplication bug distinct from anything on the standing checklist: 5 exercises (lesson02.exercise05, lesson03.exercise05, lesson05.exercise05, lesson06.exercise05, lesson06.exercise06) had prompt.target_blocks containing an English text block byte-identical to the overlay's own instruction field -- since compile_exercise() in scripts/compile_content.py always prepends the overlay's instruction to text_blocks and then appends target_blocks, and TextBlockList (frontend/src/components/TextBlock.tsx) renders every block with no deduplication, this would have shown the exact same instruction sentence twice to the learner, each with its own SpeakButton. Fixed by setting target_blocks: [] on all 5, matching the empty-target_blocks convention this same file already uses for its translation exercises. This pattern also exists unaddressed in already-reviewed unit11 (lesson01.exercise07.write_sleep) and unit12's word_order exercises use a related-but-non-identical variant of it -- out of scope to fix here, flagging for whoever next touches those files. Re-ran validate + compile after every fix: 0 errors/0 warnings, valid JSON, and spot-checked the compiled output directly to confirm all 3 new accepted-answer additions and all 5 de-duplicated prompts landed correctly in the real compiled exercise data."
+    Found and fixed 3 real issues. (1) §17-class accepted-answer gap beyond the literal fill_in_blank check: lesson05.exercise04.translate_read_book ('I read a book.') only accepted کتاب خوندم, but یک کتاب خوندم is an equally natural, equally correct rendering -- added as a second status:correct variant. (2) §12 multi-clause coverage gaps: lesson05.exercise05.write_own_recent_event (a 3-clause sentence) only had two mixed comma/period+و forms, missing the all-period, all-comma, and all-و forms -- added all three; lesson06.exercise05.dialogue_response_own_weekend (a 2-clause sentence) only had the و-joined form -- added comma-joined and period-joined variants (lesson06.exercise06.write_weekend_summary already correctly had all three forms). (3) A genuine prompt-duplication bug distinct from anything on the standing checklist: 5 exercises (lesson02.exercise05, lesson03.exercise05, lesson05.exercise05, lesson06.exercise05, lesson06.exercise06) had prompt.target_blocks containing an English text block byte-identical to the overlay's own instruction field -- since compile_exercise() in scripts/compile_content.py always prepends the overlay's instruction to text_blocks and then appends target_blocks, and TextBlockList (frontend/src/components/TextBlock.tsx) renders every block with no deduplication, this would have shown the exact same instruction sentence twice to the learner, each with its own SpeakButton. Fixed by setting target_blocks: [] on all 5, matching the empty-target_blocks convention this same file already uses for its translation exercises. This pattern also exists unaddressed in already-reviewed unit11 (lesson01.exercise07.write_sleep) and unit12's word_order exercises use a related-but-non-identical variant of it -- out of scope to fix here, flagging for whoever next touches those files. Re-ran validate + compile after every fix: 0 errors/0 warnings, valid JSON, and spot-checked the compiled output directly to confirm all 3 new accepted-answer additions and all 5 de-duplicated prompts landed correctly in the real compiled exercise data.
+
+    2026-07-07: AUTHORING_GUIDE.md §19 retrofit -- added real example sentence(s) to all 14 kind:vocabulary teaching cards (the merged names card given a 2-item list), each a natural, comprehensible-from-gloss sentence using the card's own word(s). schema_version bumped to 1.1. Example sentences are Claude-authored and pending fresh-context review.
+
+    2026-07-07: FRESH-CONTEXT REVIEW of the §19 retrofit examples specifically (zero prior access to the retrofit's own authoring reasoning, scoped narrowly to the new example/example_gloss fields, not a re-review of the unit's already-settled spine outcome/exercises/dialogue). Reviewed all 14 vocabulary cards' example sentences (15 sentences total counting the 2-item names list) for register match, target-word containment, comprehensibility, non-identity with target text, gloss accuracy, script purity (clean), and fact-consistency against this unit's own dialogue (established: Sara went to the cinema and saw a good movie; Nima stayed home and read a book). Found and fixed a real §11-class fact-consistency bug: fa.a1.unit13.lesson06.teach.names's 2-item example list had Nima's and Sara's weekend activities backwards -- \"نیما دیروز به سینما رفت\" (Nima went to the cinema) and \"سارا کتاب خوند\" (Sara read a book) directly contradicted the dialogue's own established facts. Fixed by swapping the activities while keeping each sentence's word positionally matched to its target name: item0 (نیما) -> \"نیما خونه موند و کتاب خوند\" (Nima stayed home and read a book); item1 (سارا) -> \"سارا دیروز به سینما رفت\" (Sara went to the cinema yesterday), now consistent with the dialogue. Re-verified validate+compile clean (0 errors/0 warnings, valid JSON) and spot-checked the compiled output directly to confirm the fix landed."
 
 course:
   realization_key: fa.a1
@@ -55,18 +59,22 @@ units:
             kind: vocabulary
             target: {text: دیروز, language_code: fa, direction: rtl}
             introduced_tokens: [دیروز]
+            example: {text: "دیروز به سینما رفتم.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit13.lesson01.teach.raftam_word
             kind: vocabulary
             target: {text: رفتم, language_code: fa, direction: rtl}
             introduced_tokens: [رفتم]
+            example: {text: "به رستوران رفتم.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit13.lesson01.teach.khordam_word
             kind: vocabulary
             target: {text: خوردم, language_code: fa, direction: rtl}
             introduced_tokens: [خوردم]
+            example: {text: "ناهار خوردم.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit13.lesson01.teach.didam_word
             kind: vocabulary
             target: {text: دیدم, language_code: fa, direction: rtl}
             introduced_tokens: [دیدم]
+            example: {text: "یک فیلم خوب دیدم.", language_code: fa, direction: rtl}
         exercises:
           - content_key: fa.a1.unit13.lesson01.exercise01.recognize_raftam_reading
             type: multiple_choice
@@ -102,6 +110,7 @@ units:
             kind: vocabulary
             target: {text: سینما, language_code: fa, direction: rtl}
             introduced_tokens: [سینما]
+            example: {text: "دیروز به سینما رفتم.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit13.lesson02.teach.be_word
             kind: grammar_note
             target: {text: "به (to)", language_code: fa, direction: rtl}
@@ -148,10 +157,12 @@ units:
             kind: vocabulary
             target: {text: چیکار, language_code: fa, direction: rtl}
             introduced_tokens: [چیکار]
+            example: {text: "دیروز چیکار کردی؟", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit13.lesson03.teach.kardi_word
             kind: vocabulary
             target: {text: کردی, language_code: fa, direction: rtl}
             introduced_tokens: [کردی]
+            example: {text: "تو چیکار کردی؟", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit13.lesson03.teach.question_phrase
             kind: phrase
             target: {text: "دیروز چیکار کردی؟", language_code: fa, direction: rtl}
@@ -194,10 +205,12 @@ units:
             kind: vocabulary
             target: {text: فیلم, language_code: fa, direction: rtl}
             introduced_tokens: [فیلم]
+            example: {text: "یک فیلم خوب دیدم.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit13.lesson04.teach.khoob_word
             kind: vocabulary
             target: {text: خوب, language_code: fa, direction: rtl}
             introduced_tokens: [خوب]
+            example: {text: "فیلم خوب بود.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit13.lesson04.teach.recent_event_text
             kind: reading
             target: {text: "دیروز به سینما رفتم. یک فیلم خوب دیدم. بعد ناهار خوردم", language_code: fa, direction: rtl}
@@ -242,10 +255,12 @@ units:
             kind: vocabulary
             target: {text: کتاب, language_code: fa, direction: rtl}
             introduced_tokens: [کتاب]
+            example: {text: "یک کتاب خوندم.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit13.lesson05.teach.khoondam_word
             kind: vocabulary
             target: {text: خوندم, language_code: fa, direction: rtl}
             introduced_tokens: [خوندم]
+            example: {text: "دیروز یک کتاب خوندم.", language_code: fa, direction: rtl}
         exercises:
           - content_key: fa.a1.unit13.lesson05.exercise01.recognize_khoondam_reading
             type: multiple_choice
@@ -284,10 +299,14 @@ units:
             kind: vocabulary
             target: {text: "نیما، سارا", language_code: fa, direction: rtl}
             introduced_tokens: [نیما, سارا]
+            example:
+              - {text: "نیما خونه موند و کتاب خوند.", language_code: fa, direction: rtl}
+              - {text: "سارا دیروز به سینما رفت.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit13.lesson06.teach.man_word
             kind: vocabulary
             target: {text: من, language_code: fa, direction: rtl}
             introduced_tokens: [من]
+            example: {text: "من خونه موندم.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit13.lesson06.teach.khooneh_moondam_word
             kind: phrase
             target: {text: "خونه موندم", language_code: fa, direction: rtl}
@@ -300,6 +319,7 @@ units:
             kind: vocabulary
             target: {text: عالیه, language_code: fa, direction: rtl}
             introduced_tokens: [عالیه]
+            example: {text: "عالیه، چطور بود؟", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit13.lesson06.teach.dialogue_line1
             kind: dialogue
             target: {text: "دیروز چیکار کردی؟", language_code: fa, direction: rtl, speaker: نیما}
