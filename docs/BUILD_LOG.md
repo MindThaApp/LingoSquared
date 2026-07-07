@@ -9310,3 +9310,62 @@ test databases (`lingosquared_test_perfcheck`,
 `lingosquared_migtest`) were torn down/dropped after verification —
 nothing left running or lingering on shared infrastructure from this
 task.
+
+## Authoring en-nl's missing A2 practice pool (units 24-28), 2026-07-07
+
+**Trigger**: a whole-course curriculum review found en-nl's A2 span had
+zero Endless Practice templates at all — `docs/content/practice/
+en-nl/` stopped at unit 23 despite 5 fully-authored A2 units already
+existing (24 gemeente, 25 meningen, 26 bankrekening, 27 huisarts, 28
+probleem_melden). The ≥10hr-practice-hours launch gate was only
+passing for A1, not A2, for this direction.
+
+**Fix**: 2 parallel workers authored practice templates for all 5
+units (24-26, then 27-28), explicitly briefed with the ambiguity-check
+discipline as a mandatory step from the start (not a retrofit),
+directly following the fill_in_blank bug found and fixed in this
+session's immediately preceding entry. Results: 13/13/13/15/15
+templates (69 total), all built from real, already-taught vocabulary,
+no padding.
+
+Two real, unrelated pre-existing bugs were found and fixed along the
+way (not invented, not hypothetical): `denken` (a verb used in an A1
+unit22 grammar note) was entirely missing from `NL_GLOSSES`/`VERBS` in
+`scripts/backfill_lexemes_en_nl.py`, silently blocking the dry-run
+before either worker could even start; and a subtler classification
+bug where several of the new narrowly-scoped tags were accidentally
+picking up capitalized variants of unrelated tokens (`Huisarts`,
+`Denk`, `Vind`, `Storten`) via casefold comparison, silently widening
+what were supposed to be tightly-scoped 2-3-member tags — fixed by
+switching those specific checks to exact-case comparison, matching the
+file's own pre-existing `weekday`/`weekday_pure` precedent for exactly
+this problem.
+
+**Ambiguity discipline applied proactively, not reactively**: the
+units 24-26 worker built 6 fill_in_blank templates, each deliberately
+anchored to a brand-new single-candidate tag guaranteed unambiguous
+regardless of future course growth, and caught a self-reference risk
+before shipping (a frame containing literal "de bank" text ahead of a
+blank that could also resolve to "bank" — same bug class as this
+project's documented station/hospital self-reference catches, avoided
+by using a genuinely single-member tag instead). The units 27-28
+worker went further: judged both units' real vocabulary too thin to
+safely support ANY fill_in_blank template and used zero, relying
+entirely on word_order/translation/listen_select/multiple_choice
+instead — sidestepping the whole bug class rather than needing to
+catch it after the fact.
+
+**Verification**: independently re-verified the full merged result
+myself rather than trusting either worker's self-report —
+`backfill_lexemes_en_nl.py --dry-run` (1141 total lexemes: 860 A1 + 281
+A2), all 5 new files present and listed in `practice_manifest.txt`'s
+`en-nl|` line, direct YAML template counts matching both workers'
+reports exactly (13/13/13/15/15), a full `compile_content.py
+practice-validate` run (0 errors/0 warnings), and — the sharpest test
+given tonight's focus — a full-project run of
+`scripts/_fill_in_blank_ambiguity_check.py`: **0 AMBIGUOUS, 0
+MULTI-SLOT flags across both en-nl and nl-en combined**, confirming
+both the new A2 authoring and the earlier same-day retrofit (removing
+the 9 unanswerable weekday/possessive fill_in_blank instances) are
+holding clean together. `_practice_slot_check.py` unchanged at exactly
+5 pre-existing, unrelated `en-fa` problems.
