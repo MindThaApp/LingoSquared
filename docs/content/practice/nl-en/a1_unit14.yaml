@@ -47,7 +47,36 @@ review:
     zero-templates decision is sound (genuinely no swappable vocabulary
     there). No self-reference, agreement, or homograph issues found; does
     not reuse the broad 'number'/'count_plural' tags flagged as an open
-    defect elsewhere. Upgrading to reviewed."
+    defect elsewhere. Upgrading to reviewed.
+
+    Deepened 2026-07-07 (templates-per-unit audit found this the shallowest
+    unit in nl-en at 7, alongside sibling fa-en/prs-en's identical unit14
+    tied at the same count and deepened the same night -- mirrored their
+    additions here with fresh Dutch, not copied Farsi/Dari). person_name
+    stays at its original 2 templates -- only 2 real members, already its
+    honest ceiling per this file's own original reasoning. Added 3 new
+    templates, all reusing the already-verified 5-member 'place' tag with
+    exercise TYPES this unit hadn't used yet (word_order/translation/
+    listen_select already existed; multiple_choice/matching_pairs did not):
+    a lesson03 listen_select (parity with lesson04's), a lesson04
+    multiple_choice (bare-word Dutch-gloss recognition), and a lesson04
+    matching_pairs using all 5 place members (AUTHORING_GUIDE.md #16 -- 5
+    is the unit's honest ceiling, not padded). No new EN_POS/semantic-tag
+    or Dutch-gloss additions needed -- 'place' was already fully
+    classified/glossed since unit09/this unit's original pass (confirmed
+    by re-reading scripts/_en_target_lexeme_common.py and scripts/
+    backfill_lexemes_nl_en.py fresh before this edit). Considered a
+    fill_in_blank for 'place' (e.g. blanking 'Let's meet at the {item}')
+    but rejected it: all 5 place members are genuinely grammatical in that
+    exact frame with nothing else to disambiguate --
+    scripts/_fill_in_blank_ambiguity_check.py (and compile_content.py's
+    hard-fail per AUTHORING_GUIDE.md #17) would correctly flag it, so zero
+    new fill_in_blank templates, matching this direction's own established
+    'zero is fine when real vocabulary can't safely support one' precedent.
+    Re-verified scripts/_practice_slot_check.py (place still safely >=3 for
+    the new multiple_choice, >=2 for matching_pairs) and
+    scripts/_fill_in_blank_ambiguity_check.py (zero new AMBIGUOUS flags)
+    before import. New count: 10 templates (7 -> 10)."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -105,3 +134,25 @@ templates:
     slots: {item: *place}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit14.lesson03.place_listen.004
+    lesson_content_key: en.a1.unit14.lesson03.reading_a_text_message
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *place}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is de plaats die je hoorde.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit14.lesson04.place_choose.005
+    lesson_content_key: en.a1.unit14.lesson04.phone_call_dialogue
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *place}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Kies de Nederlandse betekenis van {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit14.lesson04.place_match.006
+    lesson_content_key: en.a1.unit14.lesson04.phone_call_dialogue
+    type: matching_pairs
+    frame: {text: "{first} — {second}", language_code: en, direction: ltr}
+    slots: {first: *place, second: *place, third: *place, fourth: *place, fifth: *place}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth]}
+    feedback_frame: {text: "Verbind elke plaats met de juiste Nederlandse betekenis.", language_code: nl, direction: ltr}

@@ -6,7 +6,7 @@ unit_content_key: en.a1.unit01.greetings
 review:
   status: reviewed
   fresh_context: true
-  notes: "Fresh-context review (2026-07-06, zero access to any authoring reasoning for this pack). Verified: every lesson_content_key matches the correct lesson in en/a1_unit01_greetings.yaml (not just any key anywhere in content root); ran a standalone harness importing scripts/backfill_lexemes_nl_en.py's iter_specs() and replicating app/practice/service.py's exact lexeme_matches()/_requested_matches() logic against every slot in every template -- all pools now meet or knowingly fall short of the >=4 (multiple_choice/listen_select) / >=1 (other types) bar; read every template's frame text against its full candidate list by hand for self-reference, agreement, and non-interchangeable-synonym risks (the bug classes this project has repeatedly caught). Found and fixed two real bugs the compiler's practice-validate cannot catch (it never touches real lexeme data or frame-text shape): (1) lesson01's greeting_fill.002 and lesson03's wellbeing_fill.002 both authored frame.text as nothing but the slot placeholder itself ('{greeting}'/'{wellbeing_answer}') with zero surrounding text -- per AUTHORING_GUIDE.md#13, masking a bare-slot frame leaves only '___', and build_prompt()'s fill_in_blank branch explicitly rejects any instance where the blanked text has nothing left, so both templates could never generate a single real exercise, 100% of the time. Fixed by converting greeting_fill.002 to listen_select (renamed greeting_listen.002; greeting_word pool has exactly the required 4 candidates: bye/goodbye/hello/hi) and wellbeing_fill.002 to translation (renamed wellbeing_translate.002, mirroring the existing greeting_translate/farewell_translate pattern; needs only >=1 candidate). One known, verified, accepted limitation left as-is rather than force-fixed: lesson03's wellbeing_meaning.001 (multiple_choice) has only 3 real candidates (bad/fine/okay) against this project's usual >=4 convention for recognition types -- this is A1 unit01's genuine full vocabulary for this semantic category (the only other candidate, 'good' from 'I'm good, thanks.', carries no wellbeing_answer tag in the shared scripts/_en_target_lexeme_common.py classifier, and broadening the pack-side tag request to compensate would pull in semantically wrong distractors like 'nice' with false feedback text) -- confirmed via the harness that all 3 glosses are distinct so the real engine's actual >=3 minimum (options dedup check in build_prompt) is met and the exercise generates correctly every time, just with less distractor variety than the norm; fixing the root cause needs a classifier-level tag change outside this review's scope (docs/content/practice/nl-en/, docs/BUILD_LOG.md, scripts/practice_manifest.txt only). No self-reference, capitalization-leak, homograph, or agreement issues found elsewhere in this pack. Re-ran compile_content.py practice-validate (0/0) and the standalone harness after both fixes to confirm. 2026-07-06 matching_pairs widening (AUTHORING_GUIDE.md #16): expanded the greeting (noun) matching_pairs template from 2 to 4 pairs."
+  notes: "Fresh-context review (2026-07-06, zero access to any authoring reasoning for this pack). Verified: every lesson_content_key matches the correct lesson in en/a1_unit01_greetings.yaml (not just any key anywhere in content root); ran a standalone harness importing scripts/backfill_lexemes_nl_en.py's iter_specs() and replicating app/practice/service.py's exact lexeme_matches()/_requested_matches() logic against every slot in every template -- all pools now meet or knowingly fall short of the >=4 (multiple_choice/listen_select) / >=1 (other types) bar; read every template's frame text against its full candidate list by hand for self-reference, agreement, and non-interchangeable-synonym risks (the bug classes this project has repeatedly caught). Found and fixed two real bugs the compiler's practice-validate cannot catch (it never touches real lexeme data or frame-text shape): (1) lesson01's greeting_fill.002 and lesson03's wellbeing_fill.002 both authored frame.text as nothing but the slot placeholder itself ('{greeting}'/'{wellbeing_answer}') with zero surrounding text -- per AUTHORING_GUIDE.md#13, masking a bare-slot frame leaves only '___', and build_prompt()'s fill_in_blank branch explicitly rejects any instance where the blanked text has nothing left, so both templates could never generate a single real exercise, 100% of the time. Fixed by converting greeting_fill.002 to listen_select (renamed greeting_listen.002; greeting_word pool has exactly the required 4 candidates: bye/goodbye/hello/hi) and wellbeing_fill.002 to translation (renamed wellbeing_translate.002, mirroring the existing greeting_translate/farewell_translate pattern; needs only >=1 candidate). One known, verified, accepted limitation left as-is rather than force-fixed: lesson03's wellbeing_meaning.001 (multiple_choice) has only 3 real candidates (bad/fine/okay) against this project's usual >=4 convention for recognition types -- this is A1 unit01's genuine full vocabulary for this semantic category (the only other candidate, 'good' from 'I'm good, thanks.', carries no wellbeing_answer tag in the shared scripts/_en_target_lexeme_common.py classifier, and broadening the pack-side tag request to compensate would pull in semantically wrong distractors like 'nice' with false feedback text) -- confirmed via the harness that all 3 glosses are distinct so the real engine's actual >=3 minimum (options dedup check in build_prompt) is met and the exercise generates correctly every time, just with less distractor variety than the norm; fixing the root cause needs a classifier-level tag change outside this review's scope (docs/content/practice/nl-en/, docs/BUILD_LOG.md, scripts/practice_manifest.txt only). No self-reference, capitalization-leak, homograph, or agreement issues found elsewhere in this pack. Re-ran compile_content.py practice-validate (0/0) and the standalone harness after both fixes to confirm. 2026-07-06 matching_pairs widening (AUTHORING_GUIDE.md #16): expanded the greeting (noun) matching_pairs template from 2 to 4 pairs. Depth pass, 2026-07-07 (density audit: nl-en unit01 was the shallowest pack in the direction at 9 templates, mirroring the same-night fa-en/prs-en unit01 depth passes which used the identical shared English-target realization/classifier -- fa-en unit01 went 8->17). Added 8 new templates (9->17), all real vocabulary already present in scripts/_en_target_lexeme_common.py's shared classifier, glossed for Dutch in scripts/backfill_lexemes_nl_en.py's existing EN_TARGET_TO_NL_GLOSS (every token needed -- morning/afternoon/evening/day/night, thanks/thank/nice/welcome/yes/no, my/your/what/what's/i'm/i/am/is/are, goodbye/bye/see/later/then -- was already present; zero new Dutch glosses needed). New slot_presets added, mirroring fa-en's a1_unit01.yaml exactly (same underlying English realization/tag_schema, only the gloss/feedback language differs): time_period ({morning,afternoon,evening,day,night}, POS noun, 5 candidates, glosses ochtend/middag/avond/dag/nacht -- all distinct), politeness ({thanks,thank,nice,welcome,yes,no}, POS [noun,verb,adjective,particle], 6 candidates, glosses bedankt/danken/leuk/welkom/ja/nee -- all distinct), identity ({my,your,what,what's,i'm,i,am,is,are}, POS [pronoun,verb] -- deliberately excludes 'name' (noun), 9 candidates, glosses mijn/jouw-of-uw/wat/wat is/ik ben/ik/ben/is/bent -- all distinct), wellbeing_question (POS adverb, exactly 1 real A1 candidate 'how' -- the blank in wellbeing_question_fill is unambiguous by construction, confirmed with scripts/_fill_in_blank_ambiguity_check.py: 0 AMBIGUOUS flags), farewell ({goodbye,bye,see,later,then}, POS [noun,verb,adverb], 5 candidates) and farewell_word (same set minus verb 'see', POS [noun,adverb], 4 candidates -- used only in the new matching_pairs template, mirroring fa-en's farewell/farewell_word split exactly). lesson01 gained time_period_gloss (multiple_choice, previously declared in this pack's own tag_schema but never used by any template). lesson03 gained politeness_gloss (multiple_choice) and politeness_listen (listen_select) on the broader politeness preset (the pre-existing politeness_translate.003, scoped only to the narrower 'thanks' preset, was left untouched); identity_choose (multiple_choice, new preset); and wellbeing_question_fill (fill_in_blank, '{item} are you?', this pack's first fill_in_blank). Checked for the exact fine/okay Dutch-gloss-collision bug class the fa-en/prs-en depth passes explicitly flagged: unlike Farsi/Dari, Dutch does NOT collapse fine/okay/bad to the same gloss (goed/oke/slecht -- all three distinct), so no rework was needed on this pack's existing wellbeing_meaning.001 (3 candidates, already reviewed and accepted) for that reason. lesson05 gained farewell_meaning (multiple_choice), farewell_pair (matching_pairs, 4 pairs on farewell_word, per AUTHORING_GUIDE.md#16), and farewell_listen (listen_select) on the broader farewell preset -- the pre-existing farewell_order.001 (word_order on 'see' alone) and farewell_translate.003 (translation on 'later' alone) were left untouched since they're already narrowly and correctly scoped. Verified with scripts/_practice_slot_check.py (all touched slots at or above the relevant floor), scripts/_fill_in_blank_ambiguity_check.py (0 new AMBIGUOUS flags), and compile_content.py practice-validate, 0 errors/0 warnings. Still carries this pack's own prior fresh-context review status -- a fresh re-review of specifically these 8 new templates has not happened yet."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -19,6 +19,12 @@ slot_presets:
   thanks: &thanks {language_code: en, part_of_speech: noun, agreement_tags: {semantic: politeness}}
   see: &see {language_code: en, part_of_speech: verb, agreement_tags: {semantic: farewell}}
   later: &later {language_code: en, part_of_speech: adverb, agreement_tags: {semantic: farewell}}
+  time_period: &time_period {language_code: en, part_of_speech: noun, agreement_tags: {semantic: time_period}}
+  politeness: &politeness {language_code: en, part_of_speech: [noun, verb, adjective, particle], agreement_tags: {semantic: politeness}}
+  identity: &identity {language_code: en, part_of_speech: [pronoun, verb], agreement_tags: {semantic: identity}}
+  wellbeing_question: &wellbeing_question {language_code: en, part_of_speech: adverb, agreement_tags: {semantic: wellbeing_question}}
+  farewell: &farewell {language_code: en, part_of_speech: [noun, verb, adverb], agreement_tags: {semantic: farewell}}
+  farewell_word: &farewell_word {language_code: en, part_of_speech: [noun, adverb], agreement_tags: {semantic: farewell}}
 templates:
   # Lesson 1: everyday greetings and farewells.
   - content_key: practice.nl-en.en.a1.unit01.lesson01.greeting_meaning.001
@@ -50,6 +56,13 @@ templates:
     slot_relations: [{kind: distinct, slots: [first_greeting, second_greeting, third_greeting, fourth_greeting]}]
     answer_derivation: {kind: matching_pairs, slots: [first_greeting, second_greeting, third_greeting, fourth_greeting]}
     feedback_frame: {text: "Je hebt twee begroetingen of afscheidswoorden gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit01.lesson01.time_period_gloss.005
+    lesson_content_key: en.a1.unit01.lesson01.everyday_greetings
+    type: multiple_choice
+    frame: {text: "{time_period}", language_code: en, direction: ltr}
+    slots: {time_period: *time_period}
+    answer_derivation: {kind: slot_gloss, slot: time_period}
+    feedback_frame: {text: "Kies de Nederlandse betekenis van {time_period}.", language_code: nl, direction: ltr}
 
   # Lesson 3: wellbeing exchange.
   - content_key: practice.nl-en.en.a1.unit01.lesson03.wellbeing_meaning.001
@@ -73,6 +86,39 @@ templates:
     slots: {thanks: *thanks}
     answer_derivation: {kind: slot_text, slot: thanks}
     feedback_frame: {text: "Met {thanks} bedank je iemand.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit01.lesson03.politeness_gloss.004
+    lesson_content_key: en.a1.unit01.lesson03.wellbeing
+    type: multiple_choice
+    frame: {text: "{politeness}", language_code: en, direction: ltr}
+    slots: {politeness: *politeness}
+    answer_derivation: {kind: slot_gloss, slot: politeness}
+    feedback_frame: {text: "Kies de Nederlandse betekenis van {politeness}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit01.lesson03.politeness_listen.005
+    lesson_content_key: en.a1.unit01.lesson03.wellbeing
+    type: listen_select
+    frame: {text: "{politeness}", language_code: en, direction: ltr}
+    slots: {politeness: *politeness}
+    answer_derivation: {kind: slot_gloss, slot: politeness}
+    feedback_frame: {text: "Je hoorde {politeness}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit01.lesson03.identity_choose.006
+    lesson_content_key: en.a1.unit01.lesson03.wellbeing
+    type: multiple_choice
+    frame: {text: "{identity}", language_code: en, direction: ltr}
+    slots: {identity: *identity}
+    answer_derivation: {kind: slot_gloss, slot: identity}
+    feedback_frame: {text: "Kies de Nederlandse betekenis van {identity}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit01.lesson03.wellbeing_question_fill.007
+    lesson_content_key: en.a1.unit01.lesson03.wellbeing
+    type: fill_in_blank
+    frame:
+      text: "{item} are you?"
+      language_code: en
+      direction: ltr
+      text_blocks:
+        - {text: "Maak de Engelse zin af.", language_code: nl, direction: ltr}
+    slots: {item: *wellbeing_question}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} is het vraagwoord in deze zin.", language_code: nl, direction: ltr}
 
   # Lesson 5: friendly closings.
   - content_key: practice.nl-en.en.a1.unit01.lesson05.farewell_order.001
@@ -89,3 +135,25 @@ templates:
     slots: {later: *later}
     answer_derivation: {kind: slot_text, slot: later}
     feedback_frame: {text: "De Engelse vertaling is {later}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit01.lesson05.farewell_meaning.004
+    lesson_content_key: en.a1.unit01.lesson05.noun_phrases_and_closings
+    type: multiple_choice
+    frame: {text: "{farewell}", language_code: en, direction: ltr}
+    slots: {farewell: *farewell}
+    answer_derivation: {kind: slot_gloss, slot: farewell}
+    feedback_frame: {text: "{farewell} is een woord om afscheid te nemen.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit01.lesson05.farewell_pair.005
+    lesson_content_key: en.a1.unit01.lesson05.noun_phrases_and_closings
+    type: matching_pairs
+    frame: {text: "Koppel de Engelse afscheidswoorden aan de Nederlandse betekenis.", language_code: nl, direction: ltr}
+    slots: {first_farewell: *farewell_word, second_farewell: *farewell_word, third_farewell: *farewell_word, fourth_farewell: *farewell_word}
+    slot_relations: [{kind: distinct, slots: [first_farewell, second_farewell, third_farewell, fourth_farewell]}]
+    answer_derivation: {kind: matching_pairs, slots: [first_farewell, second_farewell, third_farewell, fourth_farewell]}
+    feedback_frame: {text: "Je hebt vier afscheidswoorden gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit01.lesson05.farewell_listen.006
+    lesson_content_key: en.a1.unit01.lesson05.noun_phrases_and_closings
+    type: listen_select
+    frame: {text: "{farewell}", language_code: en, direction: ltr}
+    slots: {farewell: *farewell}
+    answer_derivation: {kind: slot_gloss, slot: farewell}
+    feedback_frame: {text: "Je hoorde {farewell}.", language_code: nl, direction: ltr}

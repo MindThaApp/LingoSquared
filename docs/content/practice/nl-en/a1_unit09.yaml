@@ -46,7 +46,8 @@ review:
     ever used where no second place could collide. No other self-reference,
     agreement, or homograph issues found; does not reuse the broad
     'number'/'count_plural' tags flagged as an open defect elsewhere.
-    Upgrading to reviewed. 2026-07-06 matching_pairs widening (AUTHORING_GUIDE.md #16): expanded the place (noun) matching_pairs template from 2 to 5 pairs."
+    Upgrading to reviewed. 2026-07-06 matching_pairs widening (AUTHORING_GUIDE.md #16): expanded the place (noun) matching_pairs template from 2 to 5 pairs.
+    Depth pass, 2026-07-07 (density audit, same night as the nl-en/fa-en/prs-en unit01 depth passes): unit09 was tied for shallowest in the nl-en direction at 10 templates. Added 5 new templates (10->15), all reusing the two tags this pack already established and verified (place, 5 members: bank/hospital/pharmacy/park/restaurant; place_non_hospital, 4 members: bank/pharmacy/park/restaurant) -- zero new tags, zero new Dutch glosses needed (all already in scripts/backfill_lexemes_nl_en.py's EN_TARGET_TO_NL_GLOSS since this unit's original authoring). lesson02 (location_prepositions) previously had only word_order + translation on place_non_hospital -- gained place_non_hospital_meaning (multiple_choice) and place_non_hospital_listen (listen_select), both safe at 4 candidates (meets the >=4 recognition-type floor), plus place_non_hospital_pair (matching_pairs, 4 pairs, per AUTHORING_GUIDE.md#16 -- the same 4-member pool lesson01's own place_pair already draws from a superset of, so this is a legitimate different-lesson-anchor variant, not a forced duplicate). lesson03 (asking_where) gained place_listen (listen_select) on the full place tag (5 members) -- lesson01 already established this exact tag/type combination elsewhere in the pack, reused here under a different lesson anchor the same way this pack's own lesson04 already reuses place_listen. lesson04 (asking_directions_dialogue) gained place_meaning (multiple_choice) on the full place tag, giving lesson04 a recognition-type alongside its existing listen_select/word_order. No self-reference risk in any addition (place_non_hospital already excludes 'hospital' from this pack's original design, reused unchanged; the full place tag was never anchored to a fixed place in any of these new frames -- each is a bare-word recognition frame, not a sentence embedding). Verified with scripts/_practice_slot_check.py (all touched slots at or above the relevant floor) and compile_content.py practice-validate, 0 errors/0 warnings. No fill_in_blank templates added (none of this unit's tags have a safe single-candidate or well-anchored multi-candidate fill_in_blank opportunity beyond the existing word_order templates, which stay as-is). Still carries this pack's own prior fresh-context review status -- a fresh re-review of specifically these 5 new templates has not happened yet."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -98,6 +99,28 @@ templates:
     slots: {item: *place_non_hospital}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit09.lesson02.place_non_hospital_meaning.004
+    lesson_content_key: en.a1.unit09.lesson02.location_prepositions
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *place_non_hospital}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is een plaats uit deze les.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit09.lesson02.place_non_hospital_listen.005
+    lesson_content_key: en.a1.unit09.lesson02.location_prepositions
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *place_non_hospital}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is de plaats die je hoorde.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit09.lesson02.place_non_hospital_pair.006
+    lesson_content_key: en.a1.unit09.lesson02.location_prepositions
+    type: matching_pairs
+    frame: {text: "Koppel de Engelse plaatsen aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
+    slots: {first_np_place: *place_non_hospital, second_np_place: *place_non_hospital, third_np_place: *place_non_hospital, fourth_np_place: *place_non_hospital}
+    slot_relations: [{kind: distinct, slots: [first_np_place, second_np_place, third_np_place, fourth_np_place]}]
+    answer_derivation: {kind: matching_pairs, slots: [first_np_place, second_np_place, third_np_place, fourth_np_place]}
+    feedback_frame: {text: "Je hebt vier plaatsen gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit09.lesson03.where_is_order.001
     lesson_content_key: en.a1.unit09.lesson03.asking_where
     type: word_order
@@ -112,6 +135,13 @@ templates:
     slots: {item: *place}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit09.lesson03.place_listen.004
+    lesson_content_key: en.a1.unit09.lesson03.asking_where
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *place}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is de plaats die je hoorde.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit09.lesson04.place_listen.001
     lesson_content_key: en.a1.unit09.lesson04.asking_directions_dialogue
     type: listen_select
@@ -126,3 +156,10 @@ templates:
     slots: {item: *place}
     answer_derivation: {kind: render_frame, frame: {text: "Excuse me, where is the {item}", language_code: en, direction: ltr}}
     feedback_frame: {text: "{item} is de plaats waarnaar beleefd gevraagd wordt.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit09.lesson04.place_meaning.003
+    lesson_content_key: en.a1.unit09.lesson04.asking_directions_dialogue
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *place}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is een plaats uit deze les.", language_code: nl, direction: ltr}
