@@ -1,4 +1,4 @@
-import type { Exercise, ScriptCode, TextBlock } from "../api/types";
+import type { Direction, Exercise, ScriptCode, TextBlock } from "../api/types";
 
 // Mirrors docs/CONTRACT.md's language table. Kept as a frontend lookup
 // (not derived from an API call) since it's small and fixed.
@@ -80,4 +80,18 @@ export function answerScriptForExercise(exercise: Exercise): ScriptCode | null {
     return LANGUAGE_SCRIPT[answerLanguageCode] ?? null;
   }
   return scriptFromTextBlocks(exercise.prompt.text_blocks);
+}
+
+// word_order/listen_order/matching_pairs assemble raw tokens (word_bank,
+// pairs) that carry no per-item direction of their own, unlike text_blocks
+// (see TextBlock.tsx's own comment: never inherit direction from the page).
+// A tile-click UI for these needs an explicit container `dir` or the
+// browser lays every language out LTR regardless of script -- found live
+// 2026-07-09: Farsi/Dari learners tapping tiles in the correct (right-to-
+// left) reading order still saw them stack left-to-right, because nothing
+// ever set `dir` on the answer row. Reuses the same answer_language_code
+// source of truth as answerScriptForExercise above.
+export function answerDirectionForExercise(exercise: Exercise): Direction {
+  const script = answerScriptForExercise(exercise);
+  return KEYBOARD_LAYOUTS[script ?? "latin"]?.direction ?? "ltr";
 }

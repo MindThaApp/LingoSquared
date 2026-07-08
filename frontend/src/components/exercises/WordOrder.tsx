@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { TextBlockList } from "../TextBlock";
 import { SpeakButton } from "../SpeakButton";
+import { answerDirectionForExercise } from "../../lib/scripts";
 import type { ExerciseComponentProps } from "./types";
 
 // Shared by "word_order" and "listen_order" — listen_order additionally
@@ -13,6 +14,10 @@ export function WordOrder({ exercise, onAnswer, disabled }: ExerciseComponentPro
   const [available, setAvailable] = useState<string[]>(wordBank);
   const [chosen, setChosen] = useState<string[]>([]);
   const { audio_text, audio_language_code, media_asset_key } = exercise.prompt;
+  // word_bank tokens carry no direction of their own (unlike text_blocks) --
+  // without this, an RTL answer (Farsi/Dari) still visually assembles
+  // left-to-right regardless of the order tiles were tapped in.
+  const direction = answerDirectionForExercise(exercise);
 
   function pick(word: string, index: number) {
     if (disabled) return;
@@ -36,14 +41,14 @@ export function WordOrder({ exercise, onAnswer, disabled }: ExerciseComponentPro
           <span className="muted">{t("exercise.tap_to_listen")}</span>
         </div>
       )}
-      <div className="word-answer-row">
+      <div className="word-answer-row" dir={direction}>
         {chosen.map((word, i) => (
           <button key={i} className="word-chip" onClick={() => unpick(i)} disabled={disabled}>
             {word}
           </button>
         ))}
       </div>
-      <div className="word-bank">
+      <div className="word-bank" dir={direction}>
         {available.map((word, i) => (
           <button key={i} className="word-chip" onClick={() => pick(word, i)} disabled={disabled}>
             {word}

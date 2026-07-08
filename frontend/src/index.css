@@ -400,6 +400,7 @@ button {
 }
 
 .lang-tile {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -409,15 +410,79 @@ button {
   border: 2px solid var(--border);
   border-radius: var(--radius);
   cursor: pointer;
-  transition: border-color 0.12s ease, transform 0.08s ease;
+  overflow: hidden;
+  transition: border-color 0.15s ease, transform 0.12s ease, box-shadow 0.15s ease;
 }
 
-.lang-tile:hover { transform: translateY(-2px); border-color: var(--accent); }
 .lang-tile.selected { border-color: var(--accent); background: var(--accent-soft); }
+.lang-tile:disabled:not(.lang-tile--unavailable) { opacity: 0.45; cursor: not-allowed; }
+.lang-tile:disabled:not(.lang-tile--unavailable):hover { transform: none; }
 
 .lang-tile .lang-flag { font-size: 2rem; line-height: 1; }
 .lang-tile .lang-name { font-weight: 700; color: var(--text-h); }
 .lang-tile .lang-native { font-size: 0.85rem; color: var(--text-soft); }
+
+/* -- available: the exciting, ready-to-go state -- */
+.lang-tile--available {
+  border-color: color-mix(in srgb, var(--accent) 35%, var(--border));
+  background: linear-gradient(155deg, var(--surface) 60%, var(--accent-soft) 150%);
+}
+.lang-tile--available:hover {
+  transform: translateY(-3px) scale(1.02);
+  border-color: var(--accent);
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--accent) 28%, transparent), var(--shadow);
+}
+.lang-tile--available.selected {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 30%, transparent);
+}
+
+/* -- in progress: real content, still growing -- */
+.lang-tile--in_progress {
+  border-color: color-mix(in srgb, var(--flame) 45%, var(--border));
+  background: repeating-linear-gradient(
+    135deg,
+    var(--surface),
+    var(--surface) 10px,
+    color-mix(in srgb, var(--flame) 6%, var(--surface)) 10px,
+    color-mix(in srgb, var(--flame) 6%, var(--surface)) 20px
+  );
+}
+.lang-tile--in_progress:hover {
+  transform: translateY(-2px);
+  border-color: var(--flame);
+}
+
+/* -- unavailable: coming soon, greyed and locked -- */
+.lang-tile--unavailable {
+  cursor: not-allowed;
+  background: var(--surface-2);
+  border-style: dashed;
+  filter: grayscale(0.85);
+  opacity: 0.55;
+}
+.lang-tile--unavailable:hover { transform: none; border-color: var(--border); }
+
+.lang-tile-ribbon {
+  position: absolute;
+  top: 6px;
+  inset-inline-end: 6px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  line-height: 1;
+  padding: 4px 7px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.lang-tile-ribbon--progress {
+  background: color-mix(in srgb, var(--flame) 18%, var(--surface));
+  color: var(--flame);
+  border: 1px solid color-mix(in srgb, var(--flame) 45%, transparent);
+}
+.lang-tile-ribbon--locked {
+  background: var(--surface-2);
+  color: var(--text-soft);
+  border: 1px solid var(--border);
+}
 
 .picker-steps {
   display: flex;
