@@ -839,6 +839,43 @@ to the authoring reasoning) before import.
   immediately before claiming a new unit number — never trust a log
   entry, a memory note, or another session's self-report about what
   unit number is "next," only the real files on disk right now.
+- **Any frontend component that assembles a raw, unstructured token
+  array into a click-built sequence (word_bank, and any future
+  letter-bank/tile-bank UI) needs an EXPLICIT `dir` on its own render
+  container — it does not inherit direction from anywhere else.**
+  Confirmed as a real, live bug 2026-07-09, reported directly by Ramin
+  from actual use: Farsi/Dari `word_order`/`listen_order` tile-click
+  exercises always assembled left-to-right on screen regardless of
+  script, so a learner tapping tiles in the correct RTL reading order
+  saw them stack visually backwards (grading was NEVER wrong — the
+  underlying `chosen` array was always built correctly in click order,
+  this was a pure display bug). Root cause: `word_bank`/`pairs` tokens
+  are plain `string[]`/`{left,right}[]` with no per-item direction of
+  their own, unlike `TextBlock` (which `TextBlock.tsx`'s own comment
+  already flags: "never inherit direction from the page or lesson" —
+  that discipline was applied to text_blocks but nobody extended it to
+  word_bank when `WordOrder.tsx` was built). Fixed via a new
+  `answerDirectionForExercise()` helper (`frontend/src/lib/scripts.ts`,
+  reusing the existing `answer_language_code`-based script-lookup
+  already used for the virtual keyboard) applied as `dir={direction}`
+  on both the word-bank and answer-row containers in `WordOrder.tsx` —
+  CSS flexbox's `row` direction follows the container's `dir`
+  automatically, so this one prop fixes the whole visual assembly
+  order with zero change to click-handling logic. Live-verified by
+  actually building a real Farsi word (سلام) tile-by-tile in the
+  browser post-fix. **General lesson, not just a Farsi/Dari one**: the
+  same class of bug will hit ANY future RTL-script language (this
+  project's own roadmap includes more), and potentially any other
+  non-LTR writing convention — whenever a NEW component is built that
+  renders a sequence of independently-clickable raw tokens (not
+  `TextBlock`s), explicitly check whether it needs a `dir` prop before
+  shipping, don't assume the browser "just handles" direction for
+  anything that isn't a plain text string. `MatchingPairs.tsx` was
+  checked in the same pass and does NOT have this bug — it renders two
+  fixed columns (target/English), not a sequential build, so each
+  string's own Unicode bidi rendering is sufficient there; direction
+  problems specifically arise from sequence-assembly UIs, not every
+  RTL-adjacent component.
 
 ## Where things run
 
