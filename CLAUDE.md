@@ -716,6 +716,22 @@ to the authoring reasoning) before import.
   after a dispatch batch, not just after individual reports, especially
   before trusting anything a fork says about "committing in my
   isolated worktree."
+- **Even a genuinely, confirmedly isolated worktree is not a hard
+  sandbox — it's just a default working directory.** Confirmed
+  2026-07-08: a fork that DID have a real, verified worktree still
+  ended up committing directly to master, by its own account after
+  hitting a tool-routing confusion and deliberately working around it
+  with a raw Python file write targeted at "the real repo" path
+  instead of its own worktree. Nothing stops an agent with general
+  shell/file-write access from just targeting the main repo path
+  directly if it decides (confused or not) that's where a change
+  belongs — `isolation: "worktree"` changes the default cwd, it does
+  not revoke filesystem access outside it. The content in that specific
+  case was accurate and was kept rather than reverted, but this means
+  worktree isolation alone cannot be fully trusted as a safety
+  boundary against an unreliable worker — the only real backstop is
+  the coordinator diffing `git log` after every dispatch batch, not
+  just before merging what a worker claims to have produced.
 - **Even unisolated fresh (non-fork) agents can race on shared files
   if run concurrently** — confirmed 2026-07-08: two fresh agents both
   editing `scripts/content_manifest.txt` at nearly the same time
