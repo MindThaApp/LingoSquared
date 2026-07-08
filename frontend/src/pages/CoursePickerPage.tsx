@@ -5,46 +5,91 @@ import { useTranslation } from "react-i18next";
 import { CatalogApi } from "../api/endpoints";
 import { sortByCefr } from "../lib/cefr";
 import { LANGUAGE_FLAG } from "../lib/flags";
-import type { Language } from "../api/types";
+import type { CourseSummary, Language } from "../api/types";
 
 const UI_SWITCHABLE_LANGUAGES: Record<string, string> = {
   fa: "language_switcher.farsi",
   prs: "language_switcher.dari",
 };
 
+// Below this total unit count for a path, it's real but still growing --
+// flagged "in progress" rather than shown as a fully-ready course.
+const IN_PROGRESS_UNIT_CEILING = 20;
+
+type Availability = "available" | "in_progress" | "unavailable";
+
+function classifyDepth(totalUnits: number): Availability {
+  if (totalUnits <= 0) return "unavailable";
+  if (totalUnits < IN_PROGRESS_UNIT_CEILING) return "in_progress";
+  return "available";
+}
+
+// The shared dev database accumulates disposable 1-unit fixture courses from
+// automated tests ("Pair en-it", "ContentKeyUpdateTest", etc.) -- no real
+// content has ever shipped with a single unit, so this is a safe, objective
+// way to exclude test noise without fragile title matching.
+const MIN_REAL_COURSE_UNITS = 2;
+
+/** source:target -> summed unit_count, plus each source's single best (most-developed) path. */
+function buildDepthMaps(courses: CourseSummary[] | undefined) {
+  const byPair = new Map<string, number>();
+  const bestBySource = new Map<string, number>();
+  for (const c of courses ?? []) {
+    if (c.unit_count < MIN_REAL_COURSE_UNITS) continue;
+    const key = `${c.source_language}:${c.target_language}`;
+    byPair.set(key, (byPair.get(key) ?? 0) + c.unit_count);
+  }
+  for (const [key, units] of byPair) {
+    const src = key.split(":")[0];
+    bestBySource.set(src, Math.max(bestBySource.get(src) ?? 0, units));
+  }
+  return { byPair, bestBySource };
+}
+
 function LangTile({
   lang,
   selected,
   disabled,
-  unavailable,
+  availability,
   onClick,
 }: {
   lang: Language;
   selected: boolean;
   disabled?: boolean;
-  unavailable?: boolean;
+  availability: Availability;
   onClick: () => void;
 }) {
   const { t } = useTranslation();
-  const isDisabled = disabled || unavailable;
+  const isUnavailable = availability === "unavailable";
+  const isDisabled = disabled || isUnavailable;
   return (
     <button
-      className={`lang-tile${selected ? " selected" : ""}`}
+      className={`lang-tile lang-tile--${availability}${selected ? " selected" : ""}`}
       onClick={onClick}
       disabled={isDisabled}
-      style={isDisabled ? { opacity: 0.4, cursor: "not-allowed" } : undefined}
-      title={unavailable ? t("course_picker.pair_unavailable") : undefined}
+      title={
+        availability === "unavailable"
+          ? t("course_picker.unavailable_hint")
+          : availability === "in_progress"
+            ? t("course_picker.in_progress_hint")
+            : undefined
+      }
     >
+      {availability === "in_progress" && (
+        <span className="lang-tile-ribbon lang-tile-ribbon--progress">
+          🚧 {t("course_picker.in_progress")}
+        </span>
+      )}
+      {availability === "unavailable" && (
+        <span className="lang-tile-ribbon lang-tile-ribbon--locked">
+          🔒 {t("course_picker.coming_soon")}
+        </span>
+      )}
       <span className="lang-flag">{LANGUAGE_FLAG[lang.code] ?? "🌐"}</span>
       <span className="lang-name">{lang.name}</span>
       <span className="lang-native" dir={lang.direction}>
         {lang.native_name}
       </span>
-      {unavailable && (
-        <span className="muted" style={{ fontSize: "0.75rem" }}>
-          {t("course_picker.coming_soon")}
-        </span>
-      )}
     </button>
   );
 }
@@ -83,16 +128,13 @@ export function CoursePickerPage() {
     queryFn: () => CatalogApi.languages(),
   });
 
-  const languagePairsQuery = useQuery({
-    queryKey: ["language-pairs"],
-    queryFn: () => CatalogApi.languagePairs(),
+  const allCoursesQuery = useQuery({
+    queryKey: ["courses", "all"],
+    queryFn: () => CatalogApi.allCourses(),
+    staleTime: 5 * 60 * 1000,
   });
 
-  const availableTargets = new Set(
-    (languagePairsQuery.data ?? [])
-      .filter((pair) => pair.source_language === source && pair.course_count > 0)
-      .map((pair) => pair.target_language)
-  );
+  const { byPair, bestBySource } = buildDepthMaps(allCoursesQuery.data);
 
   const coursesQuery = useQuery({
     queryKey: ["courses", source, target],
@@ -123,6 +165,7 @@ export function CoursePickerPage() {
                 key={lang.code}
                 lang={lang}
                 selected={false}
+                availability={classifyDepth(bestBySource.get(lang.code) ?? 0)}
                 onClick={() => setSource(lang.code)}
               />
             ))}
@@ -152,7 +195,11 @@ export function CoursePickerPage() {
                 lang={lang}
                 selected={false}
                 disabled={lang.code === source}
-                unavailable={lang.code !== source && !availableTargets.has(lang.code)}
+                availability={
+                  lang.code === source
+                    ? "available"
+                    : classifyDepth(byPair.get(`${source}:${lang.code}`) ?? 0)
+                }
                 onClick={() => setTarget(lang.code)}
               />
             ))}

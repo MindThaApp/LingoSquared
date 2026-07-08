@@ -58,6 +58,7 @@ export const CatalogApi = {
     get<CourseSummary[]>(
       `/courses?source=${encodeURIComponent(source)}&target=${encodeURIComponent(target)}`,
     ),
+  allCourses: () => get<CourseSummary[]>("/courses"),
   course: (courseId: string) => get<CourseDetail>(`/courses/${courseId}`),
   units: (courseId: string) =>
     get<UnitSummary[]>(`/courses/${courseId}/units`),
