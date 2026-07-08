@@ -949,14 +949,23 @@ rejected as premature); real mic-based speaking exercises
 (self-hosted-server fallback), graded through the same free-text path
 as every other exercise type.
 
-Seeded courses (counts verified against `docs/content/realizations/`/
-`overlays/` at 2026-07-06 19:53 BST — content authoring is actively
-ongoing in parallel sessions, re-check before quoting exactly): fa→en,
-nl→en, and prs→en each have 26 units (24 A1 + 2 A2, tracking the
-spine as of its last-but-one growth spurt); en→fa has 11 units (9 A1 +
-2 A2); en→prs has 11 units (9 A1 + 2 A2); en→nl has 25 units (23 A1 +
-2 A2); es/fr each have 3 units (A1 only, still in progress — "1 unit
-each" was stale). ~131 units total across 8 of 18 paths.
+Seeded courses (counts verified by direct `ls` against
+`docs/content/realizations/` at 2026-07-08 22:50 BST, after an
+overnight content-growth push — content authoring is actively ongoing
+in parallel sessions, re-check before quoting exactly, this number has
+grown fast every time it's been checked): en→nl has 37 units (nl is
+the reference language, most mature); en→fa has 26 A1/A2 units plus 1
+B1 unit (fa's first-ever intermediate content, adapted from-scratch
+since no adaptable Persian intermediate source exists); en→prs has 28
+A1/A2 units plus 1 B1 unit (prs's B1 unit adapted from a real
+newly-confirmed intermediate Dari source, ERIC ED131692); fa-en/nl-en/
+prs-en all share the same underlying English realization, now at 33
+units; es/fr each have 3 units (A1 only, still parked per the standing
+scope decision); de has 10 units (another live session's lane, not
+Session 2/CONTENT's). All of tonight's new units are still
+`status: unreviewed` drafts pending the mandatory fresh-context review
+before being considered ship-ready — real growth, not yet
+review-cleared growth.
 
 ## Known limitations / accepted scope
 
