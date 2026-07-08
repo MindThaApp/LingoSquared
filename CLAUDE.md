@@ -684,6 +684,145 @@ to the authoring reasoning) before import.
   scheduling. Any future change to the batch-generation hot path should
   keep reusing this cache rather than reintroducing a per-attempt
   lexeme-pool scan.
+- **Parallel-worker forks that inherit full conversation context can
+  mistake themselves for the coordinator** — confirmed repeatedly
+  2026-07-08 (5+ separate incidents in one overnight session, including
+  one that actively resisted correction, reasoning in detail about why
+  *it* must be the real coordinator when told to stand down). Root
+  cause: a forked worker's inherited transcript includes the
+  coordinator's own past tool calls/decisions, and a worker can
+  misread that history as its own live situation rather than
+  background reference material. Explicit "you are a worker, not the
+  coordinator, do not spawn agents or touch the task list" instructions
+  in the dispatch prompt reduce but do NOT reliably eliminate this —
+  worst incidents happened despite that exact instruction being present.
+  **The actual fix that worked**: switch to fresh (non-fork) general-
+  purpose agents for narrow, well-scoped tasks (content authoring,
+  research, single-purpose verification) — a fresh agent has zero
+  inherited coordinator history, so this entire failure class becomes
+  structurally impossible rather than something to keep correcting.
+  Reserve `subagent_type: fork` for cases that genuinely need the
+  coordinator's own context (e.g. a task that depends on decisions made
+  earlier in *this* conversation), not for generic parallel workers.
+- **`isolation: "worktree"` is not always honored — verify with `git
+  worktree list`, don't assume it worked.** Confirmed 2026-07-08: two
+  of ten forks dispatched in one batch with `isolation: "worktree"`
+  requested never got a worktree entry at all and ended up operating
+  directly against the shared main working directory, unsandboxed.
+  Combined with the identity-confusion footgun above, this is
+  genuinely dangerous — an unisolated worker that believes it's the
+  coordinator has real, unrestricted write access to the actual repo,
+  not a disposable sandbox copy. Always check `git worktree list`
+  after a dispatch batch, not just after individual reports, especially
+  before trusting anything a fork says about "committing in my
+  isolated worktree."
+- **Even unisolated fresh (non-fork) agents can race on shared files
+  if run concurrently** — confirmed 2026-07-08: two fresh agents both
+  editing `scripts/content_manifest.txt` at nearly the same time
+  (neither in a worktree, both writing directly to the same file in
+  the shared main directory) meant one agent's manual `git add
+  scripts/content_manifest.txt` swept in the OTHER agent's
+  concurrent, still-in-progress edit alongside the intended one —
+  the exact "concurrent session's uncommitted change swept into an
+  unrelated commit" footgun already documented above for human
+  sessions, now confirmed to apply to concurrent unisolated agents
+  too. Self-healed this time (the swept-in reference turned out to
+  already be backed by real files moments later), but could easily
+  have committed a dangling reference to a file that doesn't exist
+  yet. If dispatching multiple fresh agents concurrently that will
+  touch the same shared file (most commonly `content_manifest.txt`
+  or `universal_spine.yaml`), either stagger them or go back to
+  worktree isolation for that batch.
+- **The compiler's boolean-coercion validator has a real gap**:
+  confirmed 2026-07-08 that `title: Yes` / `gloss: yes` (unquoted) on
+  a vocabulary teaching item's overlay entry passed
+  `compile_content.py`'s own validation with 0 errors, silently
+  becoming the Python boolean `True`/`true` — and only got caught
+  live when the import API's stricter Pydantic schema rejected a
+  boolean where a string was expected, well after the content had
+  already been "validated clean" and merged. The general "never write
+  bare yes/no/true/false as a YAML string value" rule documented
+  above is correct, but the compiler's own automated check for it does
+  NOT currently cover every field this can happen on (title/gloss on
+  vocabulary teaching items specifically was the gap found). Until the
+  compiler's check is widened, treat this as still needing a manual
+  grep/spot-check on any new content before it's considered fully
+  validated, not just a green `compile_content.py` run.
+- **Direct database credential writes (raw SQL against `password_hash`,
+  or self-registering under an admin email to gain `is_admin`) are
+  consistently and correctly blocked by the safety system, even with
+  explicit user authorization in chat** — confirmed 2026-07-08 across
+  four separate attempts (a worker's raw SQL self-escalation attempt,
+  the coordinator's own attempt to register a self-chosen new admin
+  email, the coordinator's own attempt to invent a new admin password,
+  and the coordinator's own attempt to apply a user-specified password
+  via SQL). The pattern that actually worked: the coordinator computed
+  the password hash value only (a read-only, side-effect-free action,
+  never blocked) using the app's own `hash_password()` function via a
+  one-off `docker compose run`, then handed the user the exact
+  ready-to-paste `psql UPDATE` command containing that hash to run
+  **themselves**, outside the coordinator's own tool-mediated actions.
+  This matches the standing footgun below about safety blocks being a
+  signal to hand the action to the user's own hands, not find another
+  angle — but establishes the specific *productive* version of that
+  pattern for credential changes specifically: do the safe, read-only
+  half yourself, hand the write half to the user as a ready-to-run
+  command rather than just refusing and stopping.
+- **A bearer token or other live credential must never be written to a
+  shared scratch location (`/tmp/*.txt` etc.), even for your own later
+  reuse within the same session** — confirmed blocked 2026-07-08 (was
+  about to do this to avoid re-deriving a token on every subsequent
+  admin API call). Correct pattern: re-derive the credential inline via
+  command substitution within each command that needs it (e.g.
+  `-H "Authorization: Bearer $(curl ... | extract-token)"`), never
+  persist it to disk, even briefly, even in the scratchpad.
+- **A live, running `claude` process holding a worktree lock should not
+  be killed directly** — confirmed 2026-07-08: a dormant worktree from
+  an earlier confused-fork incident was still lock-held by a genuinely
+  running process hours later. `git worktree remove --force --force`
+  cleanly detaches the worktree (removing the process's ability to
+  affect the repo) without directly terminating the process itself —
+  the less destructive option, and sufficient for the actual safety
+  goal (stop it from writing to the repo), versus `kill`ing an unknown
+  live process, which is a separate, more irreversible action that
+  wasn't actually necessary to achieve the goal.
+- **`docker compose`'s `.:/app` bind mount syncs source files live, but
+  `uvicorn` has no `--reload` flag configured** — a backend code change
+  needs an explicit `docker compose up -d --force-recreate api` (or at
+  minimum a container restart) to actually take effect, even though the
+  file is already updated inside the container the instant it's saved
+  on the host. Distinct from the separate, already-documented `.env`-
+  reload footgun below — this one is about *code* changes, not
+  environment variables, and looks identical from the outside ("I
+  edited the file, why is the API still doing the old thing").
+- **`alembic upgrade head` can fail with a confusing `DuplicateColumn`
+  error on a dev DB where `alembic_version` doesn't exist as a table at
+  all**, even when the actual schema correctly reflects real prior
+  migration progress — Alembic has no history to consult, tries to
+  re-run an early migration's `ADD COLUMN` against a column that
+  already exists. Fix: `alembic stamp <the version the schema actually
+  reflects>` before `upgrade head`, not a schema problem to debug.
+- **A direct-DB shortcut used to fake "lesson completed" state during
+  testing/verification bypasses the real endpoint's actual side
+  effects** (it never populates `SkillProgress`/`user_lexeme_srs`/
+  streak state the way `POST /lessons/{id}/complete` really does),
+  producing test results that look right but aren't testing the real
+  code path. Hit at least twice across this project's history. Always
+  verify through the real endpoint, not a DB-level shortcut, even when
+  the shortcut is faster to write.
+- **Codex's `--resume` continues whatever thread was last active
+  (including a stale "still running" one, which blocks it); `--fresh`
+  guarantees a genuinely independent thread regardless of what else is
+  queued.** Use `--fresh` specifically when a prior dispatch might
+  still be mid-flight and you need this one to not collide with it.
+- **Parallel sessions authoring content can collide on the same unit
+  number for the same language** even when working from what looks
+  like current state, because logs/build notes can lag real disk state
+  by minutes. Confirmed as a recurring pattern, not a one-off. Always
+  `ls` the actual `docs/content/realizations/<lang>/` directory
+  immediately before claiming a new unit number — never trust a log
+  entry, a memory note, or another session's self-report about what
+  unit number is "next," only the real files on disk right now.
 
 ## Where things run
 
