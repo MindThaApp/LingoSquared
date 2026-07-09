@@ -1,0 +1,434 @@
+schema_version: "1.1"
+realization_version: "2026.1-draft.1"
+target_language: fa
+cefr_level: A1
+generation_provenance:
+  method: ai_adapted_from_public_domain_source
+  authoring_system: claude
+  source_material: >-
+    Made a real, fresh attempt at FSI Persian Basic Course source access for
+    this unit, across independent hosts, not just a repeat of the same
+    single check. Fetched the Yojik-hosted Spoken Persian Student Text PDF
+    (https://fsi-languages.yojik.eu/languages/FSI/Persian/Spoken%20Persian.PDF,
+    398 pages) and separately the Live Lingua-hosted copy
+    (https://www.livelingua.com/fsi/FSI%20-%20Spoken%20Persian.pdf) and
+    searched both for post-office/mail vocabulary (پست, نامه, تمبر, بسته,
+    پستچی). Honest result: both PDFs are page-image scans with no usable
+    text layer in this environment -- the same finding as unit33's
+    provenance note, now independently reconfirmed on a second host rather
+    than assumed to still hold. Also checked the Internet Archive item for
+    this course (archive.org/details/mike_worldmentoringacademy_03b) for an
+    OCR/text derivative; it only offers audio-format downloads (OGG/MP3),
+    no searchable text. No FSI phrase or sentence is treated as a confirmed
+    source hit for this unit; no source sentence is imported verbatim.
+    Authored from this course's established fa conventions instead: modern
+    Iranian colloquial register, recurring نیما/سارا cast, and A1
+    request/service-counter patterns already used in unit21 (money) and
+    unit29 (technology, پیام می‌فرستم) for "want to send" constructions.
+    Per the standing fa/prs authoring policy (AUTHORING_GUIDE.md #3), the
+    scenario shape (a counter request for a stamp, send vs. receive, an
+    arrival-time question) is a legitimate structural reuse of the same
+    real-world post-office script prs/a1_unit35_post.yaml already covers for
+    Dari, but every word of the actual Farsi text below was authored
+    independently for Iranian usage -- no Dari sentence, verb ending, or
+    vocabulary choice was copied.
+  human_reviewed: false
+review:
+  status: unreviewed
+  required_next_reviewer: codex_fresh_context
+  notes: >-
+    Draft authored 2026-07-09 by Claude (content-authoring worker session).
+    Realizes universal.a1.post.send_receive_mail, the next unrealized A1
+    outcome after unit33. Confirmed by grepping every
+    spine_outcome_id/spine_outcome_ids value across all
+    docs/content/realizations/fa/a1_unit*.yaml files and exact-diffing
+    against every universal.a1.* id in docs/content/universal_spine.yaml:
+    fa had realized all 34 A1 outcomes through neighborhood, with post,
+    cooking, personality, colors, seasons, emergencies, lost_items,
+    appointments, and library still missing -- post is the next one in
+    spine order. Scoped to the outcome's four assessment requirements:
+    understanding a post-office mail exchange (listening), asking for a
+    stamp or to send a letter/package (speaking), reading a short mail
+    notice (reading), and writing a short mail request (writing). Uses
+    structured speaker fields for dialogue turns; no spoken text embeds a
+    "Name:" prefix. Every vocabulary card has an example sentence per
+    schema 1.1. Already-taught words reused from earlier units (یه, رو,
+    می‌خوام, سه, etc.) are re-declared in introduced_tokens before first
+    tested use in this file because the compiler's untaught-vocabulary
+    check is per-file only. No fill_in_blank or audio-only exercise types
+    are used. Every matching_pairs exercise has 7-8 pairs. Every
+    translate-into-English exercise in the paired overlay explicitly sets
+    answer_language_code: en. Ran a recursive yaml.safe_load scan over this
+    file and its paired overlay for bare unquoted yes/no/true/false/on/off
+    values -- zero hits (see the overlay's own review note for the exact
+    scan result).
+
+course:
+  realization_key: fa.a1
+  target_language_first: true
+  dialect: fa_IR_standard_colloquial_intro
+  register_policy: >-
+    Continues the established colloquial Iranian Farsi register: رو as
+    object marker, تو-register dialogue, colloquial copula/verb
+    contractions such as می‌رسه/می‌فرسته/باشه, and یه as the colloquial
+    form of یک ("a/one"). Uses everyday Iranian post-office words:
+    پستخانه, تمبر, نامه, بسته, and می‌فرستم/می‌رسه.
+
+media_assets:
+  - content_key: fa.a1.unit34.audio.post.vocab.01
+    language: fa
+    text: "پستخانه، تمبر، نامه، بسته، می‌فرستم، می‌رسه"
+    voice_hint: neutral_adult
+    status: pending_generation
+  - content_key: fa.a1.unit34.audio.post.sentence.01
+    language: fa
+    text: "یه تمبر برای این نامه می‌خوام."
+    voice_hint: neutral_adult_friendly
+    status: pending_generation
+  - content_key: fa.a1.unit34.audio.dialogue.post.01
+    language: fa
+    text: "نیما: سلام، یه تمبر می‌خوام. سارا: برای نامه یا بسته؟ نیما: برای این نامه. سارا: باشه، سه روزه می‌رسه."
+    voice_hint: two_adults_neutral_friendly
+    status: pending_generation
+
+units:
+  - content_key: fa.a1.unit34.post
+    title: پستخانه و نامه
+    section: reading_writing
+    spine_outcome_ids:
+      - universal.a1.post.send_receive_mail
+    planned_lesson_count: 6
+
+    lessons:
+      - content_key: fa.a1.unit34.lesson01.post_words
+        title: "کلمات پستخانه"
+        spine_outcome_id: universal.a1.post.send_receive_mail
+        teaching:
+          - content_key: fa.a1.unit34.lesson01.teach.postkhane
+            kind: vocabulary
+            target: {text: پستخانه, language_code: fa, direction: rtl}
+            introduced_tokens: [پستخانه]
+            example: {text: "پستخانه نزدیکه.", language_code: fa, direction: rtl}
+          - content_key: fa.a1.unit34.lesson01.teach.stamp
+            kind: vocabulary
+            target: {text: تمبر, language_code: fa, direction: rtl}
+            introduced_tokens: [تمبر]
+            example: {text: "یه تمبر می‌خوام.", language_code: fa, direction: rtl}
+          - content_key: fa.a1.unit34.lesson01.teach.letter
+            kind: vocabulary
+            target: {text: نامه, language_code: fa, direction: rtl}
+            introduced_tokens: [نامه]
+            example: {text: "یه نامه دارم.", language_code: fa, direction: rtl}
+          - content_key: fa.a1.unit34.lesson01.teach.package
+            kind: vocabulary
+            target: {text: بسته, language_code: fa, direction: rtl}
+            introduced_tokens: [بسته]
+            example: {text: "این بسته سنگینه.", language_code: fa, direction: rtl}
+          - content_key: fa.a1.unit34.lesson01.teach.review_want_for
+            kind: grammar_note
+            target: {text: "می‌خوام (I want) / برای (for) / این (this)", language_code: fa, direction: rtl}
+            introduced_tokens: ["می‌خوام", برای, این]
+          - content_key: fa.a1.unit34.lesson01.teach.want_stamp
+            kind: phrase
+            target: {text: "یه تمبر می‌خوام.", language_code: fa, direction: rtl}
+            introduced_tokens: [یه]
+        exercises:
+          - content_key: fa.a1.unit34.lesson01.exercise01.recognize_postkhane
+            type: multiple_choice
+            tested_text: پستخانه
+            prompt: {target_blocks: [{text: پستخانه, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit34.lesson01.exercise02.recognize_stamp
+            type: multiple_choice
+            tested_text: تمبر
+            prompt: {target_blocks: [{text: تمبر, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit34.lesson01.exercise03.match_post_words
+            type: matching_pairs
+            tested_text: "پستخانه تمبر نامه بسته می‌خوام برای این یه"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: پستخانه, right: "post office"}
+              - {left: تمبر, right: stamp}
+              - {left: نامه, right: letter}
+              - {left: بسته, right: package}
+              - {left: "می‌خوام", right: "I want"}
+              - {left: برای, right: for}
+              - {left: این, right: this}
+              - {left: یه, right: "a/one"}
+          - content_key: fa.a1.unit34.lesson01.exercise04.word_order_want_stamp
+            type: word_order
+            tested_text: "یه تمبر می‌خوام"
+            prompt: {target_blocks: [{text: "I want a stamp.", language_code: en, direction: ltr}]}
+            word_bank: [یه, تمبر, "می‌خوام"]
+          - content_key: fa.a1.unit34.lesson01.exercise05.translate_want_stamp
+            type: translation
+            tested_text: "یه تمبر می‌خوام."
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit34.lesson02.send_or_receive
+        title: "می‌خوام بفرستم"
+        spine_outcome_id: universal.a1.post.send_receive_mail
+        teaching:
+          - content_key: fa.a1.unit34.lesson02.teach.send_letter
+            kind: phrase
+            target: {text: "می‌خوام این نامه رو بفرستم.", language_code: fa, direction: rtl}
+            introduced_tokens: [بفرستم, رو]
+          - content_key: fa.a1.unit34.lesson02.teach.send_package
+            kind: phrase
+            target: {text: "این بسته رو می‌فرستم.", language_code: fa, direction: rtl}
+            introduced_tokens: ["می‌فرستم"]
+          - content_key: fa.a1.unit34.lesson02.teach.letter_or_package
+            kind: grammar_note
+            target: {text: "برای نامه یا بسته؟ = For a letter or a package?", language_code: fa, direction: rtl}
+            introduced_tokens: [یا]
+          - content_key: fa.a1.unit34.lesson02.teach.review_send_receive
+            kind: grammar_note
+            target: {text: "فرستادن (to send) / گرفتن (to receive)", language_code: fa, direction: rtl}
+            introduced_tokens: [فرستادن, گرفتن]
+          - content_key: fa.a1.unit34.lesson02.teach.send_it_today
+            kind: phrase
+            target: {text: "امروز می‌فرستمش.", language_code: fa, direction: rtl}
+            introduced_tokens: [امروز, "می‌فرستمش"]
+        exercises:
+          - content_key: fa.a1.unit34.lesson02.exercise01.recognize_send_letter
+            type: multiple_choice
+            tested_text: "می‌خوام این نامه رو بفرستم"
+            prompt: {target_blocks: [{text: "می‌خوام این نامه رو بفرستم.", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit34.lesson02.exercise02.recognize_letter_or_package
+            type: multiple_choice
+            tested_text: "برای نامه یا بسته؟"
+            prompt: {target_blocks: [{text: "برای نامه یا بسته؟", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit34.lesson02.exercise03.match_send_words
+            type: matching_pairs
+            tested_text: "بفرستم می‌فرستم یا فرستادن گرفتن امروز می‌فرستمش"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: بفرستم, right: "(I) send"}
+              - {left: "می‌فرستم", right: "I'm sending"}
+              - {left: یا, right: or}
+              - {left: فرستادن, right: "to send"}
+              - {left: گرفتن, right: "to receive"}
+              - {left: امروز, right: today}
+              - {left: "می‌فرستمش", right: "I'm sending it"}
+          - content_key: fa.a1.unit34.lesson02.exercise04.word_order_send_package
+            type: word_order
+            tested_text: "این بسته رو می‌فرستم"
+            prompt: {target_blocks: [{text: "I'm sending this package.", language_code: en, direction: ltr}]}
+            word_bank: [این, بسته, رو, "می‌فرستم"]
+          - content_key: fa.a1.unit34.lesson02.exercise05.translate_send_today
+            type: translation
+            tested_text: "امروز می‌فرستمش."
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit34.lesson03.when_arrives
+        title: "کی می‌رسه؟"
+        spine_outcome_id: universal.a1.post.send_receive_mail
+        teaching:
+          - content_key: fa.a1.unit34.lesson03.teach.when_letter_arrives
+            kind: phrase
+            target: {text: "نامه کی می‌رسه؟", language_code: fa, direction: rtl}
+            introduced_tokens: [کی, "می‌رسه"]
+          - content_key: fa.a1.unit34.lesson03.teach.package_three_days
+            kind: phrase
+            target: {text: "بسته سه روزه می‌رسه.", language_code: fa, direction: rtl}
+            introduced_tokens: [سه, روزه]
+          - content_key: fa.a1.unit34.lesson03.teach.review_day_words
+            kind: grammar_note
+            target: {text: "روز (day) / فردا (tomorrow)", language_code: fa, direction: rtl}
+            introduced_tokens: [روز, فردا]
+          - content_key: fa.a1.unit34.lesson03.teach.review_late_early
+            kind: grammar_note
+            target: {text: "دیر (late) / زود (early)", language_code: fa, direction: rtl}
+            introduced_tokens: [دیر, زود]
+          - content_key: fa.a1.unit34.lesson03.teach.arrives_tomorrow
+            kind: phrase
+            target: {text: "فردا می‌رسه.", language_code: fa, direction: rtl}
+            introduced_tokens: []
+        exercises:
+          - content_key: fa.a1.unit34.lesson03.exercise01.recognize_when_letter
+            type: multiple_choice
+            tested_text: "نامه کی می‌رسه؟"
+            prompt: {target_blocks: [{text: "نامه کی می‌رسه؟", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit34.lesson03.exercise02.recognize_package_three_days
+            type: multiple_choice
+            tested_text: "بسته سه روزه می‌رسه."
+            prompt: {target_blocks: [{text: "بسته سه روزه می‌رسه.", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit34.lesson03.exercise03.match_when_words
+            type: matching_pairs
+            tested_text: "کی می‌رسه روز فردا دیر زود سه"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: کی, right: when}
+              - {left: "می‌رسه", right: "it arrives"}
+              - {left: روز, right: day}
+              - {left: فردا, right: tomorrow}
+              - {left: دیر, right: late}
+              - {left: زود, right: early}
+              - {left: سه, right: three}
+          - content_key: fa.a1.unit34.lesson03.exercise04.word_order_package_arrives
+            type: word_order
+            tested_text: "بسته سه روزه می‌رسه"
+            prompt: {target_blocks: [{text: "The package arrives in three days.", language_code: en, direction: ltr}]}
+            word_bank: [بسته, سه, روزه, "می‌رسه"]
+          - content_key: fa.a1.unit34.lesson03.exercise05.translate_arrives_tomorrow
+            type: translation
+            tested_text: "فردا می‌رسه."
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit34.lesson04.post_dialogue
+        title: "گفتگوی پستخانه"
+        spine_outcome_id: universal.a1.post.send_receive_mail
+        teaching:
+          - content_key: fa.a1.unit34.lesson04.teach.review_names
+            kind: grammar_note
+            target: {text: "نیما / سارا / سلام / باشه", language_code: fa, direction: rtl}
+            introduced_tokens: [نیما, سارا, سلام, باشه]
+          - content_key: fa.a1.unit34.lesson04.teach.dialogue_line1
+            kind: dialogue
+            target: {text: "سلام، یه تمبر می‌خوام.", language_code: fa, direction: rtl, speaker: نیما}
+            introduced_tokens: []
+          - content_key: fa.a1.unit34.lesson04.teach.dialogue_line2
+            kind: dialogue
+            target: {text: "برای نامه یا بسته؟", language_code: fa, direction: rtl, speaker: سارا}
+            introduced_tokens: []
+          - content_key: fa.a1.unit34.lesson04.teach.dialogue_line3
+            kind: dialogue
+            target: {text: "برای این نامه.", language_code: fa, direction: rtl, speaker: نیما}
+            introduced_tokens: []
+          - content_key: fa.a1.unit34.lesson04.teach.dialogue_line4
+            kind: dialogue
+            target: {text: "باشه، سه روزه می‌رسه.", language_code: fa, direction: rtl, speaker: سارا}
+            introduced_tokens: []
+        exercises:
+          - content_key: fa.a1.unit34.lesson04.exercise01.dialogue_comprehension_post
+            type: dialogue_comprehension
+            tested_text: "نیما سارا سلام یه تمبر می‌خوام برای نامه یا بسته این باشه سه روزه می‌رسه"
+            prompt: {target_blocks: [{text: "نیما می‌گه یه تمبر می‌خواد برای یه نامه. سارا می‌گه سه روزه می‌رسه.", language_code: fa, direction: rtl}]}
+            correct_option: "The letter arrives in three days."
+            distractors:
+              - "The package arrives tomorrow."
+              - "Sara wants to send a letter."
+              - "Nima is buying two stamps."
+          - content_key: fa.a1.unit34.lesson04.exercise02.recognize_for_this_letter
+            type: multiple_choice
+            tested_text: "برای این نامه."
+            prompt: {target_blocks: [{text: "برای این نامه.", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit34.lesson04.exercise03.match_dialogue_words
+            type: matching_pairs
+            tested_text: "نیما سارا سلام باشه تمبر نامه بسته"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: نیما, right: Nima}
+              - {left: سارا, right: Sara}
+              - {left: سلام, right: hello}
+              - {left: باشه, right: okay}
+              - {left: تمبر, right: stamp}
+              - {left: نامه, right: letter}
+              - {left: بسته, right: package}
+          - content_key: fa.a1.unit34.lesson04.exercise04.dialogue_response_letter_or_package
+            type: dialogue_response
+            tested_text: "برای این نامه."
+            prompt: {target_blocks: [{text: "برای نامه یا بسته؟", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit34.lesson04.exercise05.translate_okay_three_days
+            type: translation
+            tested_text: "باشه، سه روزه می‌رسه."
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit34.lesson05.reading_post
+        title: "خواندن درباره‌ی پستخانه"
+        spine_outcome_id: universal.a1.post.send_receive_mail
+        teaching:
+          - content_key: fa.a1.unit34.lesson05.teach.reading_text
+            kind: reading
+            target: {text: "نیما به پستخانه می‌ره. اون یه تمبر می‌خواد برای این نامه. تمبر رو می‌خره و نامه رو می‌فرسته. نامه سه روزه می‌رسه.", language_code: fa, direction: rtl}
+            introduced_tokens: [به, "می‌ره", اون, "می‌خواد", "می‌خره", "می‌فرسته", و]
+          - content_key: fa.a1.unit34.lesson05.teach.reading_note
+            kind: grammar_note
+            target: {text: "می‌ره / می‌خواد / می‌خره / می‌فرسته = he/she goes / wants / buys / sends", language_code: fa, direction: rtl}
+            introduced_tokens: []
+        exercises:
+          - content_key: fa.a1.unit34.lesson05.exercise01.reading_comprehension_action
+            type: reading_comprehension
+            tested_text: "نیما به پستخانه می‌ره. اون یه تمبر می‌خواد برای این نامه. تمبر رو می‌خره و نامه رو می‌فرسته. نامه سه روزه می‌رسه."
+            prompt: {target_blocks: [{text: "نیما به پستخانه می‌ره. اون یه تمبر می‌خواد برای این نامه. تمبر رو می‌خره و نامه رو می‌فرسته. نامه سه روزه می‌رسه.", language_code: fa, direction: rtl}]}
+            correct_option: "Nima buys a stamp and sends the letter."
+            distractors:
+              - "Nima buys a package for Sara."
+              - "The letter arrives today."
+              - "Nima sends the letter tomorrow."
+          - content_key: fa.a1.unit34.lesson05.exercise02.reading_comprehension_arrival
+            type: reading_comprehension
+            tested_text: "نیما به پستخانه می‌ره. اون یه تمبر می‌خواد برای این نامه. تمبر رو می‌خره و نامه رو می‌فرسته. نامه سه روزه می‌رسه."
+            prompt: {target_blocks: [{text: "نیما به پستخانه می‌ره. اون یه تمبر می‌خواد برای این نامه. تمبر رو می‌خره و نامه رو می‌فرسته. نامه سه روزه می‌رسه.", language_code: fa, direction: rtl}]}
+            correct_option: "The letter arrives in three days."
+            distractors:
+              - "The package is heavy."
+              - "Nima works at the post office."
+              - "Sara sends the package."
+          - content_key: fa.a1.unit34.lesson05.exercise03.match_reading_vocab
+            type: matching_pairs
+            tested_text: "می‌ره اون می‌خواد می‌خره می‌فرسته به و"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "می‌ره", right: "he/she goes"}
+              - {left: اون, right: "he/she"}
+              - {left: "می‌خواد", right: "he/she wants"}
+              - {left: "می‌خره", right: "he/she buys"}
+              - {left: "می‌فرسته", right: "he/she sends"}
+              - {left: به, right: to}
+              - {left: و, right: and}
+          - content_key: fa.a1.unit34.lesson05.exercise04.translate_buys_sends
+            type: translation
+            tested_text: "تمبر رو می‌خره و نامه رو می‌فرسته."
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit34.lesson05.exercise05.write_post_sentence
+            type: writing_prompt
+            tested_text: "یه تمبر می‌خوام"
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit34.lesson06.wrap_up
+        title: "جمع‌بندی پستخانه"
+        spine_outcome_id: universal.a1.post.send_receive_mail
+        teaching:
+          - content_key: fa.a1.unit34.lesson06.teach.short_message
+            kind: phrase
+            target: {text: "سلام، یه تمبر برای این نامه می‌خوام.", language_code: fa, direction: rtl}
+            introduced_tokens: []
+          - content_key: fa.a1.unit34.lesson06.teach.package_message
+            kind: phrase
+            target: {text: "بسته رو می‌فرستم. سه روزه می‌رسه.", language_code: fa, direction: rtl}
+            introduced_tokens: []
+          - content_key: fa.a1.unit34.lesson06.teach.review_post_words
+            kind: grammar_note
+            target: {text: "پستخانه / تمبر / نامه / بسته / می‌رسه", language_code: fa, direction: rtl}
+            introduced_tokens: []
+        exercises:
+          - content_key: fa.a1.unit34.lesson06.exercise01.recognize_short_message
+            type: multiple_choice
+            tested_text: "سلام، یه تمبر برای این نامه می‌خوام."
+            prompt: {target_blocks: [{text: "سلام، یه تمبر برای این نامه می‌خوام.", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit34.lesson06.exercise02.recognize_package_message
+            type: multiple_choice
+            tested_text: "بسته رو می‌فرستم. سه روزه می‌رسه."
+            prompt: {target_blocks: [{text: "بسته رو می‌فرستم. سه روزه می‌رسه.", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit34.lesson06.exercise03.match_wrap_words
+            type: matching_pairs
+            tested_text: "پستخانه تمبر نامه بسته می‌رسه فرستادن گرفتن امروز"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: پستخانه, right: "post office"}
+              - {left: تمبر, right: stamp}
+              - {left: نامه, right: letter}
+              - {left: بسته, right: package}
+              - {left: "می‌رسه", right: "it arrives"}
+              - {left: فرستادن, right: "to send"}
+              - {left: گرفتن, right: "to receive"}
+              - {left: امروز, right: today}
+          - content_key: fa.a1.unit34.lesson06.exercise04.word_order_wrap
+            type: word_order
+            tested_text: "بسته رو می‌فرستم"
+            prompt: {target_blocks: [{text: "I'm sending the package.", language_code: en, direction: ltr}]}
+            word_bank: [بسته, رو, "می‌فرستم"]
+          - content_key: fa.a1.unit34.lesson06.exercise05.write_post_message
+            type: writing_prompt
+            tested_text: "یه تمبر می‌خوام"
+            prompt: {target_blocks: []}
