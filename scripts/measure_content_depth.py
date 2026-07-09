@@ -165,7 +165,16 @@ def practice_depth_report(db_url: str | None = None) -> dict[str, dict[str, Any]
     # correctly showing which templates are thin (below the cap).
     PER_TEMPLATE_CAP = 500
 
-    report: dict[str, dict[str, Any]] = {}
+    # Aggregated by bare "{source}-{target}" direction, NOT by course id --
+    # multiple Course rows can share one direction (e.g. an A1 course and
+    # an A2 course both realizing "fa-en"), and their stats must be SUMMED
+    # here, not overwrite each other (a real bug found live 2026-07-09:
+    # fa-en/nl-en/prs-en each have both an A1 and an A2 course now, and an
+    # earlier version of this function kept only whichever course's stats
+    # were processed last). estimated_practice_hours is recomputed from
+    # the summed estimated_unique_items at the end, not summed itself, so
+    # per-course rounding doesn't compound across courses.
+    raw: dict[str, dict[str, int]] = {}
     with Session(engine) as db:
         for course in db.scalars(select(Course)):
             templates = list(
@@ -195,14 +204,28 @@ def practice_depth_report(db_url: str | None = None) -> dict[str, dict[str, Any]
                 if space < 20:  # arbitrary "thin" threshold for the report
                     thin_templates += 1
                 total_items += space
-            report[f"{course.source_language}-{course.target_language}"] = {
-                "templates": len(templates),
-                "thin_templates_under_20_variants": thin_templates,
-                "estimated_unique_items": total_items,
-                "estimated_practice_hours": round(
-                    total_items * SECONDS_PER_ITEM / 3600, 2
-                ),
-            }
+            key = f"{course.source_language}-{course.target_language}"
+            agg = raw.setdefault(
+                key,
+                {
+                    "templates": 0,
+                    "thin_templates_under_20_variants": 0,
+                    "estimated_unique_items": 0,
+                },
+            )
+            agg["templates"] += len(templates)
+            agg["thin_templates_under_20_variants"] += thin_templates
+            agg["estimated_unique_items"] += total_items
+
+    report: dict[str, dict[str, Any]] = {
+        key: {
+            **stats,
+            "estimated_practice_hours": round(
+                stats["estimated_unique_items"] * SECONDS_PER_ITEM / 3600, 2
+            ),
+        }
+        for key, stats in raw.items()
+    }
     return report
 
 
