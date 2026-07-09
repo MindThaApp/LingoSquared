@@ -4,6 +4,7 @@ import { TextBlockList } from "../TextBlock";
 import { VirtualKeyboard } from "../VirtualKeyboard";
 import { answerScriptForExercise, scriptNeedsVirtualKeyboard } from "../../lib/scripts";
 import { useKeyboardFocus } from "../../lib/useKeyboardFocus";
+import { correctOptionFromResponse, optionClassName } from "./optionHighlight";
 import type { ExerciseComponentProps } from "./types";
 
 // Some grammar_check exercises are authored as a closed yes/no (or other
@@ -16,7 +17,7 @@ import type { ExerciseComponentProps } from "./types";
 // selectable options when present (same pattern as MultipleChoice), and
 // keep the original free-text correction UI as the fallback for
 // open-ended grammar_check exercises that have no `options`.
-export function GrammarCheck({ exercise, onAnswer, disabled }: ExerciseComponentProps) {
+export function GrammarCheck({ exercise, onAnswer, disabled, gradedResult }: ExerciseComponentProps) {
   const { t } = useTranslation();
   const [value, setValue] = useState("");
   const [selected, setSelected] = useState<string | null>(null);
@@ -25,6 +26,9 @@ export function GrammarCheck({ exercise, onAnswer, disabled }: ExerciseComponent
   const options = exercise.prompt.options;
 
   if (options && options.length > 0) {
+    const correctOption = gradedResult
+      ? correctOptionFromResponse(gradedResult.correctResponse, options)
+      : null;
     // No fixed "Correct the grammar in this sentence" header here — that
     // copy is specific to the open-ended free-text mode below and is
     // misleading for a closed question (e.g. yes/no); the actual question
@@ -37,7 +41,7 @@ export function GrammarCheck({ exercise, onAnswer, disabled }: ExerciseComponent
             <button
               key={option}
               type="button"
-              className={`exercise-option${selected === option ? " selected" : ""}`}
+              className={optionClassName(option, selected, gradedResult, correctOption)}
               onClick={() => !disabled && setSelected(option)}
               disabled={disabled}
             >
