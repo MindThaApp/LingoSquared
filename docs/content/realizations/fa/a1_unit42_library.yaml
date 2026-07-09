@@ -1,0 +1,546 @@
+schema_version: "1.1"
+realization_version: "2026.1-draft.1"
+target_language: fa
+cefr_level: A1
+generation_provenance:
+  method: ai_adapted_from_public_domain_source
+  authoring_system: claude
+  source_material: >-
+    Made a real, fresh attempt at FSI Persian Basic Course source access for
+    this unit before authoring fresh, honestly disclosed either way per
+    AUTHORING_GUIDE.md #10. Firecrawl remains at 0 credits this session, so
+    used direct pdftotext extraction against the Live Lingua-hosted copy
+    (https://www.livelingua.com/fsi/FSI%20-%20Spoken%20Persian.pdf), the
+    mirror with a real Acrobat Pro DC OCR text layer per every prior unit's
+    finding this session (the DigitalOcean mirror is a JBIG2-only scan, 0
+    extractable words, not re-attempted here since that dead end is already
+    confirmed stable across units 36-41). This fetch extracted 66,717 words,
+    consistent with every prior fetch of the same file. Grepped the full
+    extracted text case-insensitively for library/book/borrow/lend/return/
+    librarian/due date/overdue/ketab/ketabkhane/qarz/amanat: found two real
+    but partial hits, neither amounting to a genuine library
+    borrow/return scenario. (1) A "Classroom Expressions" glossary entry
+    translates "library, bookstore" as the transliterated /ketabxane/ (i.e.
+    Persian کتابخونه) with zero surrounding library scenario -- just a
+    vocabulary-list line pairing the English gloss with the Persian word,
+    same shape as unit41's isolated "appointment" glossary hit. (2) A
+    genuine classroom-expressions dialogue line elsewhere in the same
+    section teaches /pas dadan/ ("to give back") with the example "Will you
+    please give me back that book" (/qorbanet, un ketabo bede pas/) -- a
+    real, usable precedent for the "return" verb, but it's a bare
+    classroom-object-handling drill (a teacher asking a student to hand a
+    book back in class), not a library checkout/due-date scenario. No
+    borrowing transaction, library card, due date, or librarian exchange of
+    any kind exists anywhere in the extracted text -- a genuine, honest dead
+    end for this specific outcome, same conclusion as unit41's own
+    appointments search. All vocabulary and dialogue in this unit is
+    authored fresh from this project's own established colloquial Iranian
+    Farsi conventions and already-shipped vocabulary (see review notes below
+    for the exact reuse chain), crediting only کتابخونه's glossary
+    precedent and پس دادن's classroom-drill precedent as real (if partial)
+    FSI grounding.
+  human_reviewed: false
+review:
+  status: unreviewed
+  required_next_reviewer: codex_fresh_context
+  notes: >-
+    Draft authored 2026-07-09 by Claude (content-authoring worker session),
+    continuing fa A1 volume growth past unit41 (appointments, merged).
+    Realizes universal.a1.library.borrow_return_item, the next unrealized A1
+    outcome after unit41 -- confirmed by an exact diff of every
+    spine_outcome_id/spine_outcome_ids value across all
+    docs/content/realizations/fa/a1_unit*.yaml files (using a real
+    yaml.safe_load recursive scan of both the unit-level spine_outcome_ids
+    list and each lesson's own spine_outcome_id field, not grep, to avoid
+    false positives from comment/prose text mentioning outcome IDs) against
+    every universal.a1.* id in docs/content/universal_spine.yaml: fa had
+    realized 42 of 49 A1 outcomes after unit41, with library the next one in
+    the spine's own declaration order (appointments -> library ->
+    waste_disposal -> accommodation -> pharmacy -> personal_care ->
+    bike_rental -> laundry) -- waste_disposal/accommodation/pharmacy/
+    personal_care/bike_rental/laundry remain unrealized after this unit.
+
+    Reuse chain (all re-declared in this file's own introduced_tokens before
+    first use, per the compiler's per-file-only untaught-vocabulary check):
+    کجاست (unit05), کتاب (unit03/13/24/37), کارت (unit08, there "payment
+    card," extended here to "library card" -- a transparent, genuine
+    extension, not a different word), دارید (units01/04/06/08/21), گرفتن's
+    family is deliberately NOT reused as a conjugated borrowing verb this
+    time (see below), می‌خوام (units03/08), کی (units16/34, "when"), می‌دم
+    (unit26, "I give/I'll give," there "غذا می‌دم" for feeding a pet),
+    سه‌شنبه (unit10), سلام/ممنون (units01/17/22), باشه (units17/22), بله
+    (unit02), بفرمایید (units01/02/06), خواهش می‌کنم (units01/05/16),
+    خداحافظ (unit01), آقای (unit40, there "آقای کریمی" a lost-and-found
+    clerk). New vocabulary genuinely introduced for the first time in the
+    whole corpus: کتابخونه (library), امانت (loan / on-loan -- used in the
+    fixed collocation کتاب امانت می‌خوام, "I want to borrow a book," lit.
+    "book [on] loan I want," parallel to unit41's وقت می‌خوام pattern), and
+    one new minor character صادقی (آقای صادقی, a librarian, kept separate
+    from the established نیما/سارا friend pair and from unit40's own آقای
+    کریمی -- a fresh surname so the two service-provider NPCs stay
+    distinct, not the same person appearing in two unrelated professions).
+    Two words are deliberately given a NEW SENSE beyond their existing
+    corpus meaning, flagged explicitly for reviewer attention: پس (already
+    taught as the discourse marker "so/then" in units 04/07/12; used here in
+    its equally common, unrelated "back" sense, as in پس دادن "to give
+    back" -- real everyday Persian polysemy, not an invented one, and
+    directly precedented by the FSI classroom-drill hit above) and تا
+    (already taught as the counting classifier "تا" in units 03/04/06/19/24;
+    used here in its equally common "until" sense, as in تا سه‌شنبه "until
+    Tuesday" -- again real polysemy, same class as unit41's own وقت
+    extension from "free time" to "appointment slot"). Both get their own
+    `kind: vocabulary` card (not silently reused) specifically because the
+    sense is new even though the surface form isn't, matching the way
+    unit41 handled وقت.
+
+    Deliberate grammar-simplicity choice, matching unit41's own explicit
+    precedent: no new verb conjugation is introduced for "to borrow."
+    گرفتن (already established as "to get/take" from unit34/41) is NOT
+    reused here as a conjugated borrowing verb (e.g. امانت می‌گیرم) to avoid
+    adding a new surface-form token for a concept the existing می‌خوام +
+    noun pattern already covers cleanly (کتاب امانت می‌خوام, exactly
+    parallel to unit41's وقت می‌خوام) -- one fewer new conjugated form for
+    an A1 unit, consistent with unit41's own reasoning for avoiding the
+    گرفتن subjunctive. Likewise این/رو (object marker) are avoided
+    throughout, matching unit41's own avoidance of them in favor of bare
+    noun+verb phrases (کتاب امانت می‌خوام rather than "این کتاب رو امانت
+    می‌خوام") -- fewer new per-file tokens for the same meaning.
+
+    Scoped to the outcome's real-world components: locating the library
+    (lesson01), requesting to borrow a specific item and confirming
+    membership/a library card (lesson02), asking/stating when it's due back
+    (lesson03), a full librarian-desk dialogue covering the whole
+    transaction start to finish (lesson04), reading a short loan-confirmation
+    note naming the item and due date (lesson05), and a wrap-up review
+    (lesson06). Register choice, explicitly noted per AUTHORING_GUIDE.md #3:
+    the librarian-desk exchange (a stranger, new minor character آقای
+    صادقی, kept separate from the established نیما/سارا friend pair) uses
+    the polite/neutral service register unit22's phone-call and unit41's
+    dentist-office precedents already established, while نیما's own lines
+    stay register-neutral -- day/place facts are kept internally consistent
+    across the whole unit per AUTHORING_GUIDE.md #11 (Tuesday, the library,
+    stated identically in the dialogue, the reading notice, and every
+    exercise that references them). Every kind:vocabulary card (کتابخونه،
+    امانت، پس، تا) has an example sentence per schema 1.1/AUTHORING_GUIDE
+    §19, built only from the card's own word plus tokens already declared
+    earlier in THIS file (no forward references -- تا's example needed
+    پس/می‌دم/سه‌شنبه, all three declared earlier in the same lesson03
+    teaching stack before تا's own card). Every matching_pairs exercise has
+    6-7 pairs per §16. No listen_type/listen_select/listen_order exercise is
+    used anywhere in this unit -- fa has real TTS per AUTHORING_GUIDE §14,
+    but this file continues the established text-based corpus-consistency
+    pattern from units 19-41, the same choice those units' own reviews made;
+    this also means the same-speaker/same-audio distractor-collision bug
+    class (found and fixed 2026-07-09 in the nl corpus, commit 148240e)
+    cannot directly apply here -- there is no listen_select exercise in
+    this file to check. Checked anyway, since lesson04's dialogue_comprehension
+    exercise is the closest analogue (a multiple-choice check tied to
+    dialogue content): its three distractors ("He wants to return a
+    book."/"He wants a library card."/"He wants directions to the
+    library.") are plausible-fact alternatives, not lines either dialogue
+    speaker (نیما or آقای صادقی) actually says anywhere in this unit's
+    dialogue -- نیما's opening line is clearly a NEW-loan request, not a
+    return of an already-held item; he never asks FOR a card (آقای صادقی
+    asks HIM); and neither speaker ever asks for or gives directions to the
+    library (that's a separate, already-answered question from lesson01).
+    Every "Translate into English" exercise in the paired overlay
+    explicitly sets answer_language_code: en. The one genuine two-clause
+    sentence tested for translation (lesson04.exercise05, "ممنون. تا
+    سه‌شنبه.") carries period-joined, comma-joined, and and-joined English
+    variants per §12; lesson05's reading-note translation and lesson06's
+    review sentence are each single label-style sentences (matching
+    unit41's own treatment of its comma-separated appointment note) with
+    paraphrase-variant accepted answers rather than clause-join variants,
+    same shape as unit41's equivalent exercises. Ran a recursive
+    yaml.safe_load scan over this file and its paired overlay for bare
+    unquoted yes/no/true/false/on/off values (including matching_pairs
+    right: values specifically, the two fields that have bitten this corpus
+    before) -- zero hits, see the overlay's own review note for the exact
+    scan result.
+
+course:
+  realization_key: fa.a1
+  target_language_first: true
+  dialect: fa_IR_standard_colloquial_intro
+  register_policy: >-
+    Continues the established colloquial Iranian Farsi register: نیما's own
+    lines stay register-neutral, while the librarian-desk exchange (a
+    stranger, new minor character آقای صادقی) uses the same polite/neutral
+    service register unit22's phone lesson and unit41's dentist-office
+    lesson already established. Reuses کارت (unit08, extended here from
+    "payment card" to "library card"), دارید (units01/04/06/08/21), کی
+    (units16/34), می‌دم (unit26), سه‌شنبه (unit10), and the full
+    greeting/politeness set (سلام/ممنون/باشه/بله/بفرمایید/خواهش
+    می‌کنم/خداحافظ) without re-teaching any of it from scratch. پس and تا
+    are each given one new, equally common sense beyond their existing
+    corpus meaning (see review notes).
+
+media_assets:
+  - content_key: fa.a1.unit42.audio.library.vocab.01
+    language: fa
+    text: "کتابخونه، کتاب، امانت"
+    voice_hint: neutral_adult
+    status: pending_generation
+  - content_key: fa.a1.unit42.audio.library.vocab.02
+    language: fa
+    text: "کارت، کی، پس، تا سه‌شنبه"
+    voice_hint: neutral_adult
+    status: pending_generation
+  - content_key: fa.a1.unit42.audio.dialogue.library_desk.01
+    language: fa
+    text: "نیما: سلام، کتاب امانت می‌خوام. آقای صادقی: باشه. کارت کتابخونه دارید؟ نیما: بله، بفرمایید. آقای صادقی: ممنون. تا سه‌شنبه. نیما: باشه، پس می‌دم. آقای صادقی: خواهش می‌کنم. نیما: ممنون، خداحافظ!"
+    voice_hint: two_adults_neutral_polite
+    status: pending_generation
+
+units:
+  - content_key: fa.a1.unit42.library
+    title: کتابخونه
+    section: reading_writing
+    spine_outcome_ids:
+      - universal.a1.library.borrow_return_item
+    planned_lesson_count: 6
+
+    lessons:
+      - content_key: fa.a1.unit42.lesson01.new_library_one
+        title: "کلمات جدید ۱"
+        spine_outcome_id: universal.a1.library.borrow_return_item
+        teaching:
+          - content_key: fa.a1.unit42.lesson01.teach.review_kojast
+            kind: grammar_note
+            target: {text: "کجاست (where is) -- already taught from unit05", language_code: fa, direction: rtl}
+            introduced_tokens: [کجاست]
+          - content_key: fa.a1.unit42.lesson01.teach.review_ketab
+            kind: grammar_note
+            target: {text: "کتاب (book) -- already taught from unit03/13/24/37", language_code: fa, direction: rtl}
+            introduced_tokens: [کتاب]
+          - content_key: fa.a1.unit42.lesson01.teach.review_mikham
+            kind: grammar_note
+            target: {text: "می‌خوام (I want) -- already taught from units 03/08", language_code: fa, direction: rtl}
+            introduced_tokens: ["می‌خوام"]
+          - content_key: fa.a1.unit42.lesson01.teach.ketabkhune
+            kind: vocabulary
+            target: {text: کتابخونه, language_code: fa, direction: rtl}
+            introduced_tokens: [کتابخونه]
+            example: {text: "کتابخونه کجاست؟", language_code: fa, direction: rtl}
+          - content_key: fa.a1.unit42.lesson01.teach.ketabkhune_kojast
+            kind: phrase
+            target: {text: "کتابخونه کجاست؟", language_code: fa, direction: rtl}
+            introduced_tokens: []
+        exercises:
+          - content_key: fa.a1.unit42.lesson01.exercise01.recognize_ketabkhune
+            type: multiple_choice
+            tested_text: کتابخونه
+            prompt: {target_blocks: [{text: کتابخونه, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit42.lesson01.exercise02.recognize_ketabkhune_kojast
+            type: multiple_choice
+            tested_text: "کتابخونه کجاست؟"
+            prompt: {target_blocks: [{text: "کتابخونه کجاست؟", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit42.lesson01.exercise03.match_library_one
+            type: matching_pairs
+            tested_text: "کتابخونه کتاب کجاست کتابخونه کجاست کتاب کجاست می‌خوام"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: کتابخونه, right: library}
+              - {left: کتاب, right: book}
+              - {left: کجاست, right: "where is"}
+              - {left: "کتابخونه کجاست؟", right: "Where is the library?"}
+              - {left: "کتاب کجاست؟", right: "Where is the book?"}
+              - {left: "می‌خوام", right: "I want"}
+          - content_key: fa.a1.unit42.lesson01.exercise04.word_order_ketabkhune_kojast
+            type: word_order
+            tested_text: "کتابخونه کجاست"
+            prompt: {target_blocks: [{text: "Where is the library?", language_code: en, direction: ltr}]}
+            word_bank: [کتابخونه, کجاست]
+          - content_key: fa.a1.unit42.lesson01.exercise05.translate_ketab_kojast
+            type: translation
+            tested_text: "کتاب کجاست؟"
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit42.lesson02.new_library_two
+        title: "کلمات جدید ۲"
+        spine_outcome_id: universal.a1.library.borrow_return_item
+        teaching:
+          - content_key: fa.a1.unit42.lesson02.teach.review_kart
+            kind: grammar_note
+            target: {text: "کارت (card) -- already taught from unit08 (there: payment card), extended here to 'library card'", language_code: fa, direction: rtl}
+            introduced_tokens: [کارت]
+          - content_key: fa.a1.unit42.lesson02.teach.review_darid
+            kind: grammar_note
+            target: {text: "دارید (do you have, formal) -- already taught from units 01/04/06/08/21", language_code: fa, direction: rtl}
+            introduced_tokens: [دارید]
+          - content_key: fa.a1.unit42.lesson02.teach.amanat
+            kind: vocabulary
+            target: {text: امانت, language_code: fa, direction: rtl}
+            introduced_tokens: [امانت]
+            example: {text: "کتاب امانت می‌خوام.", language_code: fa, direction: rtl}
+          - content_key: fa.a1.unit42.lesson02.teach.ketab_amanat_mikham
+            kind: phrase
+            target: {text: "کتاب امانت می‌خوام.", language_code: fa, direction: rtl}
+            introduced_tokens: []
+          - content_key: fa.a1.unit42.lesson02.teach.kart_ketabkhune_darid
+            kind: phrase
+            target: {text: "کارت کتابخونه دارید؟", language_code: fa, direction: rtl}
+            introduced_tokens: []
+        exercises:
+          - content_key: fa.a1.unit42.lesson02.exercise01.recognize_amanat
+            type: multiple_choice
+            tested_text: امانت
+            prompt: {target_blocks: [{text: امانت, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit42.lesson02.exercise02.recognize_kart_ketabkhune_darid
+            type: multiple_choice
+            tested_text: "کارت کتابخونه دارید؟"
+            prompt: {target_blocks: [{text: "کارت کتابخونه دارید؟", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit42.lesson02.exercise03.match_library_two
+            type: matching_pairs
+            tested_text: "امانت کارت کتاب امانت می‌خوام کارت کتابخونه دارید دارید"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: امانت, right: "loan / on loan"}
+              - {left: کارت, right: card}
+              - {left: "کتاب امانت می‌خوام.", right: "I want to borrow a book."}
+              - {left: "کارت کتابخونه دارید؟", right: "Do you have a library card?"}
+              - {left: کتابخونه, right: library}
+              - {left: "دارید؟", right: "do you have? (formal)"}
+          - content_key: fa.a1.unit42.lesson02.exercise04.word_order_ketab_amanat_mikham
+            type: word_order
+            tested_text: "کتاب امانت می‌خوام"
+            prompt: {target_blocks: [{text: "I want to borrow a book.", language_code: en, direction: ltr}]}
+            word_bank: [کتاب, امانت, "می‌خوام"]
+          - content_key: fa.a1.unit42.lesson02.exercise05.translate_kart_ketabkhune_darid
+            type: translation
+            tested_text: "کارت کتابخونه دارید؟"
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit42.lesson03.when_giving_back
+        title: "کی پس می‌دم؟"
+        spine_outcome_id: universal.a1.library.borrow_return_item
+        teaching:
+          - content_key: fa.a1.unit42.lesson03.teach.review_ki
+            kind: grammar_note
+            target: {text: "کی (when) -- already taught from unit16/34", language_code: fa, direction: rtl}
+            introduced_tokens: [کی]
+          - content_key: fa.a1.unit42.lesson03.teach.review_midam
+            kind: grammar_note
+            target: {text: "می‌دم (I give / I'll give) -- already taught from unit26 (there: غذا می‌دم, 'I feed')", language_code: fa, direction: rtl}
+            introduced_tokens: ["می‌دم"]
+          - content_key: fa.a1.unit42.lesson03.teach.review_seshanbe
+            kind: grammar_note
+            target: {text: "سه‌شنبه (Tuesday) -- already taught from unit10", language_code: fa, direction: rtl}
+            introduced_tokens: [سه‌شنبه]
+          - content_key: fa.a1.unit42.lesson03.teach.pas
+            kind: vocabulary
+            target: {text: پس, language_code: fa, direction: rtl}
+            introduced_tokens: [پس]
+            example: {text: "پس می‌دم.", language_code: fa, direction: rtl}
+          - content_key: fa.a1.unit42.lesson03.teach.ta
+            kind: vocabulary
+            target: {text: تا, language_code: fa, direction: rtl}
+            introduced_tokens: [تا]
+            example: {text: "تا سه‌شنبه پس می‌دم.", language_code: fa, direction: rtl}
+          - content_key: fa.a1.unit42.lesson03.teach.ki_pas_midam
+            kind: phrase
+            target: {text: "کی پس می‌دم؟", language_code: fa, direction: rtl}
+            introduced_tokens: []
+        exercises:
+          - content_key: fa.a1.unit42.lesson03.exercise01.recognize_pas_midam
+            type: multiple_choice
+            tested_text: "پس می‌دم."
+            prompt: {target_blocks: [{text: "پس می‌دم.", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit42.lesson03.exercise02.recognize_ki_pas_midam
+            type: multiple_choice
+            tested_text: "کی پس می‌دم؟"
+            prompt: {target_blocks: [{text: "کی پس می‌دم؟", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit42.lesson03.exercise03.match_when_return
+            type: matching_pairs
+            tested_text: "کی پس تا می‌دم پس می‌دم کی پس می‌دم تا سه‌شنبه پس می‌دم"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: کی, right: when}
+              - {left: پس, right: back}
+              - {left: تا, right: until}
+              - {left: "می‌دم", right: "I give / I'll give"}
+              - {left: "پس می‌دم.", right: "I'll give it back."}
+              - {left: "کی پس می‌دم؟", right: "When do I give it back?"}
+              - {left: "تا سه‌شنبه پس می‌دم.", right: "I'll give it back by Tuesday."}
+          - content_key: fa.a1.unit42.lesson03.exercise04.word_order_ta_seshanbe_pas_midam
+            type: word_order
+            tested_text: "تا سه‌شنبه پس می‌دم"
+            prompt: {target_blocks: [{text: "I'll give it back by Tuesday.", language_code: en, direction: ltr}]}
+            word_bank: [تا, سه‌شنبه, پس, "می‌دم"]
+          - content_key: fa.a1.unit42.lesson03.exercise05.translate_ki_pas_midam
+            type: translation
+            tested_text: "کی پس می‌دم؟"
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit42.lesson04.library_desk_dialogue
+        title: "دیالوگ: امانت گرفتن کتاب"
+        spine_outcome_id: universal.a1.library.borrow_return_item
+        teaching:
+          - content_key: fa.a1.unit42.lesson04.teach.review_salam_mamnoon
+            kind: grammar_note
+            target: {text: "سلام و ممنون -- already taught from units 01/17/22", language_code: fa, direction: rtl}
+            introduced_tokens: [سلام, ممنون]
+          - content_key: fa.a1.unit42.lesson04.teach.review_bashe_bale_befarmaeed
+            kind: grammar_note
+            target: {text: "باشه، بله، بفرمایید -- already taught from units 01/02/06/17/22", language_code: fa, direction: rtl}
+            introduced_tokens: [باشه, بله, بفرمایید]
+          - content_key: fa.a1.unit42.lesson04.teach.review_khahesh_khodahafez
+            kind: grammar_note
+            target: {text: "خواهش می‌کنم و خداحافظ -- already taught from units 01/05/16", language_code: fa, direction: rtl}
+            introduced_tokens: [خواهش, "می‌کنم", خداحافظ]
+          - content_key: fa.a1.unit42.lesson04.teach.dialogue_line1
+            kind: dialogue
+            target: {text: "سلام، کتاب امانت می‌خوام.", language_code: fa, direction: rtl, speaker: نیما}
+            introduced_tokens: [نیما]
+          - content_key: fa.a1.unit42.lesson04.teach.dialogue_line2
+            kind: dialogue
+            target: {text: "باشه. کارت کتابخونه دارید؟", language_code: fa, direction: rtl, speaker: "آقای صادقی"}
+            introduced_tokens: ["آقای", صادقی]
+          - content_key: fa.a1.unit42.lesson04.teach.dialogue_line3
+            kind: dialogue
+            target: {text: "بله، بفرمایید.", language_code: fa, direction: rtl, speaker: نیما}
+            introduced_tokens: []
+          - content_key: fa.a1.unit42.lesson04.teach.dialogue_line4
+            kind: dialogue
+            target: {text: "ممنون. تا سه‌شنبه.", language_code: fa, direction: rtl, speaker: "آقای صادقی"}
+            introduced_tokens: []
+          - content_key: fa.a1.unit42.lesson04.teach.dialogue_line5
+            kind: dialogue
+            target: {text: "باشه، پس می‌دم.", language_code: fa, direction: rtl, speaker: نیما}
+            introduced_tokens: []
+          - content_key: fa.a1.unit42.lesson04.teach.dialogue_line6
+            kind: dialogue
+            target: {text: "خواهش می‌کنم.", language_code: fa, direction: rtl, speaker: "آقای صادقی"}
+            introduced_tokens: []
+          - content_key: fa.a1.unit42.lesson04.teach.dialogue_line7
+            kind: dialogue
+            target: {text: "ممنون، خداحافظ!", language_code: fa, direction: rtl, speaker: نیما}
+            introduced_tokens: []
+        exercises:
+          - content_key: fa.a1.unit42.lesson04.exercise01.dialogue_comprehension_borrow_request
+            type: dialogue_comprehension
+            tested_text: "سلام کتاب امانت می‌خوام باشه کارت کتابخونه دارید بله بفرمایید ممنون تا سه‌شنبه باشه پس می‌دم خواهش می‌کنم ممنون خداحافظ"
+            prompt: {target_blocks: [{text: "سلام، کتاب امانت می‌خوام.", language_code: fa, direction: rtl}]}
+            correct_option: "He wants to borrow a book."
+            distractors:
+              - "He wants to return a book."
+              - "He wants a library card."
+              - "He wants directions to the library."
+          - content_key: fa.a1.unit42.lesson04.exercise02.recognize_kart_ketabkhune_darid_dialogue
+            type: multiple_choice
+            tested_text: "کارت کتابخونه دارید؟"
+            prompt: {target_blocks: [{text: "کارت کتابخونه دارید؟", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit42.lesson04.exercise03.match_dialogue_library
+            type: matching_pairs
+            tested_text: "سلام کتاب امانت می‌خوام کارت کتابخونه دارید بله بفرمایید ممنون تا سه‌شنبه باشه پس می‌دم خواهش می‌کنم"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "سلام، کتاب امانت می‌خوام.", right: "Hi, I want to borrow a book."}
+              - {left: "کارت کتابخونه دارید؟", right: "Do you have a library card?"}
+              - {left: "بله، بفرمایید.", right: "Yes, here you go."}
+              - {left: "ممنون. تا سه‌شنبه.", right: "Thanks. Until Tuesday."}
+              - {left: "باشه، پس می‌دم.", right: "Okay, I'll give it back."}
+              - {left: "خواهش می‌کنم.", right: "You're welcome."}
+              - {left: خداحافظ, right: goodbye}
+          - content_key: fa.a1.unit42.lesson04.exercise04.dialogue_response_confirm_return
+            type: dialogue_response
+            tested_text: "باشه، پس می‌دم."
+            prompt: {target_blocks: [{text: "ممنون. تا سه‌شنبه.", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit42.lesson04.exercise05.translate_mamnoon_ta_seshanbe
+            type: translation
+            tested_text: "ممنون. تا سه‌شنبه."
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit42.lesson05.reading_library_note
+        title: "خواندن یادداشت امانت کتاب"
+        spine_outcome_id: universal.a1.library.borrow_return_item
+        teaching:
+          - content_key: fa.a1.unit42.lesson05.teach.reading_text
+            kind: reading
+            target: {text: "کتاب امانت: تا سه‌شنبه، کتابخونه.", language_code: fa, direction: rtl}
+            introduced_tokens: []
+        exercises:
+          - content_key: fa.a1.unit42.lesson05.exercise01.reading_comprehension_which_day
+            type: reading_comprehension
+            tested_text: "کتاب امانت: تا سه‌شنبه، کتابخونه."
+            prompt: {target_blocks: [{text: "کتاب امانت: تا سه‌شنبه، کتابخونه.", language_code: fa, direction: rtl}]}
+            correct_option: "By Tuesday."
+            distractors:
+              - "By Thursday."
+              - "By Monday."
+              - "By Friday."
+          - content_key: fa.a1.unit42.lesson05.exercise02.reading_comprehension_where
+            type: reading_comprehension
+            tested_text: "کتاب امانت: تا سه‌شنبه، کتابخونه."
+            prompt: {target_blocks: [{text: "کتاب امانت: تا سه‌شنبه، کتابخونه.", language_code: fa, direction: rtl}]}
+            correct_option: "The library."
+            distractors:
+              - "The post office."
+              - "The dentist's office."
+              - "Home."
+          - content_key: fa.a1.unit42.lesson05.exercise03.match_reading_library
+            type: matching_pairs
+            tested_text: "کتاب امانت تا سه‌شنبه کتابخونه"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: کتاب, right: book}
+              - {left: امانت, right: "loan / on loan"}
+              - {left: تا, right: until}
+              - {left: سه‌شنبه, right: Tuesday}
+              - {left: کتابخونه, right: library}
+              - {left: "کتاب امانت", right: "book loan"}
+          - content_key: fa.a1.unit42.lesson05.exercise04.translate_reading_text
+            type: translation
+            tested_text: "کتاب امانت: تا سه‌شنبه، کتابخونه."
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit42.lesson05.exercise05.write_library_note
+            type: writing_prompt
+            tested_text: "کتاب امانت: تا سه‌شنبه، کتابخونه."
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit42.lesson06.wrap_up
+        title: "جمع‌بندی کتابخونه"
+        spine_outcome_id: universal.a1.library.borrow_return_item
+        teaching:
+          - content_key: fa.a1.unit42.lesson06.teach.review_ketab_amanat_mikham
+            kind: phrase
+            target: {text: "کتاب امانت می‌خوام. کارت کتابخونه دارید؟", language_code: fa, direction: rtl}
+            introduced_tokens: []
+          - content_key: fa.a1.unit42.lesson06.teach.review_ki_pas_midam
+            kind: phrase
+            target: {text: "کی پس می‌دم؟ تا سه‌شنبه پس می‌دم.", language_code: fa, direction: rtl}
+            introduced_tokens: []
+          - content_key: fa.a1.unit42.lesson06.teach.summary_words
+            kind: grammar_note
+            target: {text: "کتابخونه / کتاب / امانت / کارت -- کلمات این درس", language_code: fa, direction: rtl}
+            introduced_tokens: []
+        exercises:
+          - content_key: fa.a1.unit42.lesson06.exercise01.recognize_review_request
+            type: multiple_choice
+            tested_text: "کتاب امانت می‌خوام. کارت کتابخونه دارید؟"
+            prompt: {target_blocks: [{text: "کتاب امانت می‌خوام. کارت کتابخونه دارید؟", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit42.lesson06.exercise02.recognize_review_return
+            type: multiple_choice
+            tested_text: "کی پس می‌دم؟ تا سه‌شنبه پس می‌دم."
+            prompt: {target_blocks: [{text: "کی پس می‌دم؟ تا سه‌شنبه پس می‌دم.", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit42.lesson06.exercise03.match_wrap_library
+            type: matching_pairs
+            tested_text: "کتابخونه کتاب امانت کارت کی پس تا سه‌شنبه"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: کتابخونه, right: library}
+              - {left: کتاب, right: book}
+              - {left: امانت, right: "loan / on loan"}
+              - {left: کارت, right: card}
+              - {left: کی, right: when}
+              - {left: پس, right: back}
+              - {left: "تا سه‌شنبه", right: "until Tuesday"}
+          - content_key: fa.a1.unit42.lesson06.exercise04.word_order_ketab_amanat_mikham_wrap
+            type: word_order
+            tested_text: "کتاب امانت می‌خوام"
+            prompt: {target_blocks: [{text: "I want to borrow a book.", language_code: en, direction: ltr}]}
+            word_bank: [کتاب, امانت, "می‌خوام"]
+          - content_key: fa.a1.unit42.lesson06.exercise05.write_request_or_return_sentence
+            type: writing_prompt
+            tested_text: "کتاب امانت می‌خوام"
+            prompt: {target_blocks: []}
