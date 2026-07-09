@@ -1,0 +1,522 @@
+schema_version: "1.1"
+realization_version: "2026.1-draft.1"
+target_language: "hi"
+cefr_level: "A1"
+status: "complete_draft"
+generation_provenance:
+  method: "ai_generated"
+  authoring_system: "claude"
+  human_reviewed: false
+review:
+  status: "unreviewed"
+  required_next_reviewer: "codex"
+  notes: >-
+    Second Hindi unit, continuing directly from
+    hi/a1_unit01_greetings.yaml (same Priya/Arjun characters, same
+    yoga-class setting, same aap/tum register split). Spine outcome
+    confirmed via universal_spine.yaml: hi/a1_unit01 realized
+    universal.a1.greetings.open_close_exchange and
+    universal.a1.introductions.exchange_identity, so the next A1
+    outcome in spine order is universal.a1.numbers.use_basic_numbers --
+    confirmed against actual on-disk precedent from every other
+    launched language's own unit02 (nl/a1_unit02_numbers.yaml,
+    es/a1_unit02_numbers.yaml, pl/a1_unit02_numbers.yaml,
+    ro/a1_unit02_numbers.yaml all realize this exact outcome as their
+    second unit; fa/a1_unit02 is the one exception, an older unit
+    predating this project's now-settled numbers-second convention).
+    Sized to 3 lessons matching unit01's bootstrap pace, structurally
+    following the same lesson-topic split every other language's own
+    numbers unit uses (0-10, then 11-100 plus a price/quantity
+    question, then a phone-number-and-age dialogue) -- topic/pacing
+    structure only, no text or phrasing reused from any other
+    language's file, per the standing skeleton-share-not-text-share
+    policy.
+
+    Source access, re-attempted per this task's explicit instruction
+    (not just assumed to fail the same way as unit01): re-used the
+    same FSI "Hindi: An Active Introduction" PDF already downloaded for
+    unit01 (scratch copy at .../scratchpad/hi/fsi_hindi.pdf) and
+    re-ran both extraction paths specifically against this unit's own
+    topic. (1) `pdftotext -layout` against the raw PDF again returned
+    a near-empty file (143 bytes total across all 143 pages) --
+    confirms this is genuinely a pure page-image scan with no embedded
+    text layer at all, not something that varies by section. (2) A
+    fresh regex scan of the same Internet Archive OCR pass
+    (`ocr.txt`, the ABBYY FineReader 9.0 output already recovered for
+    unit01) specifically around every "number"/"count" mention in the
+    book's English framing prose (found real hits: "Large numbers are
+    said and written this way:", "Numbers are one of the more
+    difficult vocabulary problems...", "Note also the special numbers
+    1 1/2, 2 1/2" -- confirming the OCR pass DID correctly transcribe
+    the surrounding English instructional text for this exact section)
+    turned up a full-document regex scan for the Devanagari Unicode
+    block (U+0900-U+097F): zero matches anywhere in the 94KB file,
+    identical to the unit01 finding. The numbers section's own
+    Devanagari number words are simply absent from the OCR output, not
+    even as recoverable mojibake in this particular section -- a
+    strictly cleaner "not present" failure than unit01's partial
+    mojibake fragments, but still zero usable target-language text.
+    Per this task's explicit instruction, nothing from either
+    extraction attempt was used, cleaned up, or guessed at anywhere in
+    this file -- every Devanagari string below is this session's own
+    careful, correct rendering from established Modern Standard Hindi,
+    verified character-by-character (including the anusvara-vs-
+    chandrabindu convention: chandrabindu (ँ) after non-ascending
+    vowel signs as in पाँच/हाँ/कहाँ, anusvara (ं) after ascending
+    vowel signs as in नहीं/मैं/हैं/में), never OCR output, never
+    machine-translated.
+
+    A genuine, disclosed content-design consequence of authoring real
+    Hindi (rather than reusing another language's structure verbatim):
+    unlike Polish, English, or most European languages, Hindi's
+    teens and tens (11-99) are NOT compositional -- ग्यारह (11),
+    बारह (12), बीस (20), तीस (30) etc. are each their own irregular
+    lexical item, not "ten-word + unit-word" the way pl's "dwadzieścia
+    jeden" (twenty + one = 21) can be built and drilled with a
+    word_order exercise. This unit therefore does not include a
+    "build a compound number from its parts" word_order drill the way
+    other languages' numbers units do -- that would misrepresent real
+    Hindi grammar. Numbers past the ones taught here (11, 12, 15, 20,
+    30, 50, 100) are simply not introduced yet, left for a future
+    numbers-depth pass, rather than papering over the irregularity
+    with an invented compositional rule.
+
+course:
+  realization_key: hi.a1
+  target_language_first: true
+  dialect: hi_standard
+  register_policy: >-
+    Continues unit01's aap/tum split exactly, extended to two new
+    question types: asking a price (इसकी कीमत क्या है? -- "iski keemat
+    kya hai", "What is its price?") and asking someone's age (आपकी/
+    तुम्हारी उम्र क्या है? -- "aapki/tumhari umra kya hai", "What is
+    your age?"). Both कीमत (price) and उम्र (age) are grammatically
+    feminine nouns, so their possessives take the feminine oblique
+    form (इसकी, आपकी, तुम्हारी, मेरी) regardless of who is speaking or
+    being addressed -- a deliberate, simpler continuation of unit01's
+    gender-agreement teaching thread (which centered on adjectives/
+    verbs agreeing with people) now applied to agreement with a
+    feminine THING being discussed, still called out explicitly on the
+    relevant teaching cards and drilled via grammar_check exercises,
+    not glossed over as an unexplained variant spelling. Priya and
+    Arjun, already on तुम terms from unit01's closing dialogue, stay in
+    that register for this unit's own dialogue; both aap and tum
+    question forms are still taught as standalone vocabulary either
+    way, matching unit01's own precedent of teaching both registers
+    even when the embedded dialogue only demonstrates one.
+
+media_assets: []
+
+units:
+  - content_key: hi.a1.unit02.numbers
+    title: "संख्याएँ"
+    section: reading_writing
+    spine_outcome_ids:
+      - universal.a1.numbers.use_basic_numbers
+    planned_lesson_count: 3
+
+    lessons:
+      - content_key: hi.a1.unit02.lesson01.numbers_zero_to_ten
+        title: "शून्य से दस तक गिनती"
+        spine_outcome_id: universal.a1.numbers.use_basic_numbers
+        teaching:
+          - content_key: hi.a1.unit02.lesson01.teach.shoonya
+            kind: vocabulary
+            target: {text: "शून्य", language_code: hi, direction: ltr}
+            introduced_tokens: ["शून्य"]
+            example: {text: "आज तापमान शून्य है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit02.lesson01.teach.ek
+            kind: vocabulary
+            target: {text: "एक", language_code: hi, direction: ltr}
+            introduced_tokens: ["एक"]
+            example: {text: "मेरे पास एक किताब है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit02.lesson01.teach.do
+            kind: vocabulary
+            target: {text: "दो", language_code: hi, direction: ltr}
+            introduced_tokens: ["दो"]
+            example: {text: "मेरे दो भाई हैं।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit02.lesson01.teach.teen
+            kind: vocabulary
+            target: {text: "तीन", language_code: hi, direction: ltr}
+            introduced_tokens: ["तीन"]
+            example: {text: "मुझे तीन सेब चाहिए।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit02.lesson01.teach.chaar
+            kind: vocabulary
+            target: {text: "चार", language_code: hi, direction: ltr}
+            introduced_tokens: ["चार"]
+            example: {text: "मेरे चार दोस्त हैं।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit02.lesson01.teach.paanch
+            kind: vocabulary
+            target: {text: "पाँच", language_code: hi, direction: ltr}
+            introduced_tokens: ["पाँच"]
+            example: {text: "मेरे पास पाँच रुपये हैं।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit02.lesson01.teach.chhah
+            kind: vocabulary
+            target: {text: "छह", language_code: hi, direction: ltr}
+            introduced_tokens: ["छह"]
+            example: {text: "मेरे पास छह किताबें हैं।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit02.lesson01.teach.saat
+            kind: vocabulary
+            target: {text: "सात", language_code: hi, direction: ltr}
+            introduced_tokens: ["सात"]
+            example: {text: "हफ़्ते में सात दिन होते हैं।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit02.lesson01.teach.aath
+            kind: vocabulary
+            target: {text: "आठ", language_code: hi, direction: ltr}
+            introduced_tokens: ["आठ"]
+            example: {text: "इस कमरे में आठ कुर्सियाँ हैं।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit02.lesson01.teach.nau
+            kind: vocabulary
+            target: {text: "नौ", language_code: hi, direction: ltr}
+            introduced_tokens: ["नौ"]
+            example: {text: "योग क्लास सुबह नौ बजे शुरू होती है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit02.lesson01.teach.das
+            kind: vocabulary
+            target: {text: "दस", language_code: hi, direction: ltr}
+            introduced_tokens: ["दस"]
+            example: {text: "मेरे हाथ में दस उंगलियाँ हैं।", language_code: hi, direction: ltr}
+        exercises:
+          - content_key: hi.a1.unit02.lesson01.exercise01.select_do
+            type: multiple_choice
+            tested_text: "दो"
+            prompt:
+              target_blocks:
+                - {text: "दो", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit02.lesson01.exercise02.select_saat
+            type: multiple_choice
+            tested_text: "सात"
+            prompt:
+              target_blocks:
+                - {text: "सात", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit02.lesson01.exercise03.select_das
+            type: multiple_choice
+            tested_text: "दस"
+            prompt:
+              target_blocks:
+                - {text: "दस", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit02.lesson01.exercise04.match_digits_zero_to_ten
+            type: matching_pairs
+            tested_text: "शून्य एक दो तीन चार पाँच छह सात आठ नौ दस"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "शून्य", right: "0"}
+              - {left: "एक", right: "1"}
+              - {left: "दो", right: "2"}
+              - {left: "तीन", right: "3"}
+              - {left: "चार", right: "4"}
+              - {left: "पाँच", right: "5"}
+              - {left: "छह", right: "6"}
+              - {left: "सात", right: "7"}
+              - {left: "आठ", right: "8"}
+              - {left: "नौ", right: "9"}
+              - {left: "दस", right: "10"}
+          - content_key: hi.a1.unit02.lesson01.exercise05.order_count_to_three
+            type: word_order
+            tested_text: "एक दो तीन"
+            prompt: {target_blocks: []}
+            word_bank: ["दो", "एक", "तीन"]
+          - content_key: hi.a1.unit02.lesson01.exercise06.order_count_four_to_six
+            type: word_order
+            tested_text: "चार पाँच छह"
+            prompt: {target_blocks: []}
+            word_bank: ["पाँच", "चार", "छह"]
+          - content_key: hi.a1.unit02.lesson01.exercise07.order_count_eight_to_ten
+            type: word_order
+            tested_text: "आठ नौ दस"
+            prompt: {target_blocks: []}
+            word_bank: ["नौ", "आठ", "दस"]
+          - content_key: hi.a1.unit02.lesson01.exercise08.fill_week_days
+            type: fill_in_blank
+            tested_text: "सात"
+            prompt:
+              target_blocks:
+                - {text: "हफ़्ते में ___ दिन होते हैं।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit02.lesson01.exercise09.speak_count_to_ten
+            type: speak_response
+            tested_text: "शून्य एक दो तीन चार पाँच छह सात आठ नौ दस"
+            prompt:
+              target_blocks:
+                - {text: "शून्य से दस तक गिनो।", language_code: hi, direction: ltr}
+
+      - content_key: hi.a1.unit02.lesson02.numbers_and_prices
+        title: "ग्यारह से सौ तक और कीमत"
+        spine_outcome_id: universal.a1.numbers.use_basic_numbers
+        teaching:
+          - content_key: hi.a1.unit02.lesson02.teach.gyaarah
+            kind: vocabulary
+            target: {text: "ग्यारह", language_code: hi, direction: ltr}
+            introduced_tokens: ["ग्यारह"]
+            example: {text: "इस कक्षा में ग्यारह छात्र हैं।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit02.lesson02.teach.baarah
+            kind: vocabulary
+            target: {text: "बारह", language_code: hi, direction: ltr}
+            introduced_tokens: ["बारह"]
+            example: {text: "साल में बारह महीने होते हैं।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit02.lesson02.teach.pandrah
+            kind: vocabulary
+            target: {text: "पंद्रह", language_code: hi, direction: ltr}
+            introduced_tokens: ["पंद्रह"]
+            example: {text: "मुझे पंद्रह मिनट चाहिए।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit02.lesson02.teach.bees
+            kind: vocabulary
+            target: {text: "बीस", language_code: hi, direction: ltr}
+            introduced_tokens: ["बीस"]
+            example: {text: "मेरी बहन बीस साल की है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit02.lesson02.teach.tees
+            kind: vocabulary
+            target: {text: "तीस", language_code: hi, direction: ltr}
+            introduced_tokens: ["तीस"]
+            example: {text: "टिकट की कीमत तीस रुपये है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit02.lesson02.teach.pachaas
+            kind: vocabulary
+            target: {text: "पचास", language_code: hi, direction: ltr}
+            introduced_tokens: ["पचास"]
+            example: {text: "मेरे पास पचास रुपये हैं।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit02.lesson02.teach.sau
+            kind: vocabulary
+            target: {text: "सौ", language_code: hi, direction: ltr}
+            introduced_tokens: ["सौ"]
+            example: {text: "इस किताब की कीमत सौ रुपये है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit02.lesson02.teach.keemat
+            kind: vocabulary
+            target: {text: "कीमत", language_code: hi, direction: ltr}
+            introduced_tokens: ["कीमत"]
+            example: {text: "इस टिकट की कीमत क्या है?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit02.lesson02.teach.rupaye
+            kind: vocabulary
+            target: {text: "रुपये", language_code: hi, direction: ltr}
+            introduced_tokens: ["रुपये"]
+            example: {text: "यह पचास रुपये का है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit02.lesson02.teach.iski_keemat_kya_hai
+            kind: phrase
+            target: {text: "इसकी कीमत क्या है?", language_code: hi, direction: ltr}
+            introduced_tokens: ["इसकी", "क्या", "है"]
+          - content_key: hi.a1.unit02.lesson02.teach.iski_keemat_pachaas_rupaye_hai
+            kind: phrase
+            target: {text: "इसकी कीमत पचास रुपये है।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+        exercises:
+          - content_key: hi.a1.unit02.lesson02.exercise01.select_bees
+            type: multiple_choice
+            tested_text: "बीस"
+            prompt:
+              target_blocks:
+                - {text: "बीस", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit02.lesson02.exercise02.select_sau
+            type: multiple_choice
+            tested_text: "सौ"
+            prompt:
+              target_blocks:
+                - {text: "सौ", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit02.lesson02.exercise03.match_teens_and_tens
+            type: matching_pairs
+            tested_text: "ग्यारह बारह पंद्रह बीस तीस पचास सौ"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "ग्यारह", right: "11"}
+              - {left: "बारह", right: "12"}
+              - {left: "पंद्रह", right: "15"}
+              - {left: "बीस", right: "20"}
+              - {left: "तीस", right: "30"}
+              - {left: "पचास", right: "50"}
+              - {left: "सौ", right: "100"}
+          - content_key: hi.a1.unit02.lesson02.exercise04.order_price_question
+            type: word_order
+            tested_text: "इसकी कीमत क्या है"
+            prompt: {target_blocks: []}
+            word_bank: ["कीमत", "इसकी", "क्या", "है"]
+          - content_key: hi.a1.unit02.lesson02.exercise05.fill_price_fifty
+            type: fill_in_blank
+            tested_text: "पचास"
+            prompt:
+              target_blocks:
+                - {text: "इसकी कीमत ___ रुपये है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit02.lesson02.exercise06.fix_price_gender_agreement
+            type: grammar_check
+            tested_text: "इसकी कीमत क्या है"
+            prompt:
+              target_blocks:
+                - {text: "इसका कीमत क्या है?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit02.lesson02.exercise07.reply_price_hundred
+            type: dialogue_response
+            tested_text: "इसकी कीमत सौ रुपये है"
+            prompt:
+              target_blocks:
+                - {text: "इसकी कीमत क्या है?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit02.lesson02.exercise08.speak_ticket_price
+            type: speak_response
+            tested_text: "इसकी कीमत पचास रुपये है"
+            prompt:
+              target_blocks:
+                - {text: "इसकी कीमत बताओ। यह पचास रुपये की है।", language_code: hi, direction: ltr}
+
+      - content_key: hi.a1.unit02.lesson03.phone_and_age
+        title: "फ़ोन नंबर और उम्र"
+        spine_outcome_id: universal.a1.numbers.use_basic_numbers
+        teaching:
+          - content_key: hi.a1.unit02.lesson03.teach.aapka_phone_number_kya_hai
+            kind: phrase
+            target: {text: "आपका फ़ोन नंबर क्या है?", language_code: hi, direction: ltr}
+            introduced_tokens: ["आपका", "फ़ोन", "नंबर", "क्या", "है"]
+          - content_key: hi.a1.unit02.lesson03.teach.tumhara_phone_number_kya_hai
+            kind: phrase
+            target: {text: "तुम्हारा फ़ोन नंबर क्या है?", language_code: hi, direction: ltr}
+            introduced_tokens: ["तुम्हारा"]
+          - content_key: hi.a1.unit02.lesson03.teach.mera_number
+            kind: phrase
+            target: {text: "मेरा नंबर...", language_code: hi, direction: ltr}
+            introduced_tokens: ["मेरा"]
+          - content_key: hi.a1.unit02.lesson03.teach.sample_number
+            kind: phrase
+            target: {text: "छह, दो, आठ, तीन, पाँच।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a1.unit02.lesson03.teach.aapki_umra_kya_hai
+            kind: phrase
+            target: {text: "आपकी उम्र क्या है?", language_code: hi, direction: ltr}
+            introduced_tokens: ["आपकी", "उम्र"]
+          - content_key: hi.a1.unit02.lesson03.teach.tumhari_umra_kya_hai
+            kind: phrase
+            target: {text: "तुम्हारी उम्र क्या है?", language_code: hi, direction: ltr}
+            introduced_tokens: ["तुम्हारी"]
+          - content_key: hi.a1.unit02.lesson03.teach.meri_umra_tees_saal_hai
+            kind: phrase
+            target: {text: "मेरी उम्र तीस साल है।", language_code: hi, direction: ltr}
+            introduced_tokens: ["मेरी", "साल"]
+          - content_key: hi.a1.unit02.lesson03.teach.dialogue.line01
+            kind: dialogue
+            target:
+              text: "तुम्हारा फ़ोन नंबर क्या है?"
+              language_code: hi
+              direction: ltr
+              speaker: Arjun
+            introduced_tokens: []
+          - content_key: hi.a1.unit02.lesson03.teach.dialogue.line02
+            kind: dialogue
+            target:
+              text: "मेरा नंबर छह, दो, आठ, तीन, पाँच है। और तुम्हारा?"
+              language_code: hi
+              direction: ltr
+              speaker: Priya
+            introduced_tokens: ["है", "और"]
+          - content_key: hi.a1.unit02.lesson03.teach.dialogue.line03
+            kind: dialogue
+            target:
+              text: "मेरा नंबर एक, पाँच, सात, शून्य, नौ है।"
+              language_code: hi
+              direction: ltr
+              speaker: Arjun
+            introduced_tokens: []
+          - content_key: hi.a1.unit02.lesson03.teach.dialogue.line04
+            kind: dialogue
+            target:
+              text: "शुक्रिया। और तुम्हारी उम्र क्या है?"
+              language_code: hi
+              direction: ltr
+              speaker: Priya
+            introduced_tokens: ["शुक्रिया"]
+          - content_key: hi.a1.unit02.lesson03.teach.dialogue.line05
+            kind: dialogue
+            target:
+              text: "मेरी उम्र बीस साल है। और तुम्हारी?"
+              language_code: hi
+              direction: ltr
+              speaker: Arjun
+            introduced_tokens: []
+          - content_key: hi.a1.unit02.lesson03.teach.dialogue.line06
+            kind: dialogue
+            target:
+              text: "मेरी उम्र तीस साल है।"
+              language_code: hi
+              direction: ltr
+              speaker: Priya
+            introduced_tokens: []
+          - content_key: hi.a1.unit02.lesson03.teach.dialogue.line07
+            kind: dialogue
+            target:
+              text: "अच्छा! फिर मिलेंगे।"
+              language_code: hi
+              direction: ltr
+              speaker: Arjun
+            introduced_tokens: ["अच्छा", "फिर", "मिलेंगे"]
+          - content_key: hi.a1.unit02.lesson03.teach.dialogue.line08
+            kind: dialogue
+            target:
+              text: "ठीक है, फिर मिलते हैं!"
+              language_code: hi
+              direction: ltr
+              speaker: Priya
+            introduced_tokens: ["ठीक", "मिलते", "हैं"]
+        exercises:
+          - content_key: hi.a1.unit02.lesson03.exercise01.select_formal_phone_question
+            type: multiple_choice
+            tested_text: "आपका फ़ोन नंबर क्या है"
+            prompt:
+              target_blocks:
+                - {text: "आपका फ़ोन नंबर क्या है?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit02.lesson03.exercise02.select_informal_phone_question
+            type: multiple_choice
+            tested_text: "तुम्हारा फ़ोन नंबर क्या है"
+            prompt:
+              target_blocks:
+                - {text: "तुम्हारा फ़ोन नंबर क्या है?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit02.lesson03.exercise03.comprehend_priya_number
+            type: dialogue_comprehension
+            tested_text: "छह दो आठ तीन पाँच"
+            prompt:
+              target_blocks:
+                - {text: "मेरा नंबर छह, दो, आठ, तीन, पाँच है। और तुम्हारा?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit02.lesson03.exercise04.comprehend_arjun_age
+            type: dialogue_comprehension
+            tested_text: "बीस"
+            prompt:
+              target_blocks:
+                - {text: "मेरी उम्र बीस साल है। और तुम्हारी?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit02.lesson03.exercise05.order_informal_phone_question
+            type: word_order
+            tested_text: "तुम्हारा फ़ोन नंबर क्या है"
+            prompt: {target_blocks: []}
+            word_bank: ["नंबर", "तुम्हारा", "फ़ोन", "क्या", "है"]
+          - content_key: hi.a1.unit02.lesson03.exercise06.order_formal_age_question
+            type: word_order
+            tested_text: "आपकी उम्र क्या है"
+            prompt: {target_blocks: []}
+            word_bank: ["उम्र", "आपकी", "क्या", "है"]
+          - content_key: hi.a1.unit02.lesson03.exercise07.match_questions_and_answers
+            type: matching_pairs
+            tested_text: "आपका फ़ोन नंबर क्या है मेरा नंबर छह दो आठ तीन पाँच है तुम्हारी उम्र क्या है मेरी उम्र तीस साल है आपकी उम्र क्या है मेरी उम्र बीस साल है इसकी कीमत क्या है इसकी कीमत सौ रुपये है तुम्हारा फ़ोन नंबर क्या है मेरा नंबर अच्छा फिर मिलेंगे ठीक है फिर मिलते हैं"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "आपका फ़ोन नंबर क्या है?", right: "मेरा नंबर छह, दो, आठ, तीन, पाँच है।"}
+              - {left: "तुम्हारी उम्र क्या है?", right: "मेरी उम्र तीस साल है।"}
+              - {left: "आपकी उम्र क्या है?", right: "मेरी उम्र बीस साल है।"}
+              - {left: "इसकी कीमत क्या है?", right: "इसकी कीमत सौ रुपये है।"}
+              - {left: "तुम्हारा फ़ोन नंबर क्या है?", right: "मेरा नंबर..."}
+              - {left: "अच्छा! फिर मिलेंगे।", right: "ठीक है, फिर मिलते हैं!"}
+          - content_key: hi.a1.unit02.lesson03.exercise08.fill_priya_age
+            type: fill_in_blank
+            tested_text: "तीस"
+            prompt:
+              target_blocks:
+                - {text: "मेरी उम्र ___ साल है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit02.lesson03.exercise09.fix_umra_gender_agreement
+            type: grammar_check
+            tested_text: "मेरी उम्र तीस साल है"
+            prompt:
+              target_blocks:
+                - {text: "मेरा उम्र तीस साल है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit02.lesson03.exercise10.reply_own_number
+            type: dialogue_response
+            tested_text: "मेरा नंबर"
+            prompt:
+              target_blocks:
+                - {text: "तुम्हारा फ़ोन नंबर क्या है?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit02.lesson03.exercise11.write_arjun_age
+            type: writing_prompt
+            tested_text: "बीस साल"
+            prompt: {target_blocks: []}
+          - content_key: hi.a1.unit02.lesson03.exercise12.speak_own_age
+            type: speak_response
+            tested_text: "मेरी उम्र बीस साल है"
+            prompt:
+              target_blocks:
+                - {text: "अपनी उम्र बताओ: बीस साल।", language_code: hi, direction: ltr}
