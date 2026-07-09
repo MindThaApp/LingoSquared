@@ -1,0 +1,372 @@
+schema_version: "1.1"
+realization_version: "2026.1-draft.1"
+target_language: ro
+cefr_level: A1
+status: complete_draft
+generation_provenance:
+  method: ai_adapted_from_public_domain_source
+  authoring_system: claude
+  source_material: >-
+    "Basic Romanian Language Lessons" (US Peace Corps Moldova, public
+    domain), Lesson 2 "Basic Expressions" and Lesson 3 "Introductions"
+    (https://fsi-languages.yojik.eu/languages/PeaceCorps/Romanian/
+    MD_Romanian_Language_Lessons.pdf, fetched via curl + pdftotext -layout,
+    a real 4201-word extractable text layer, not a scan). This is
+    Romanian's first-ever unit for this app -- bootstrapped from scratch,
+    with fr/a1_unit01_greetings.yaml as the structural template per the
+    standing "closest existing precedent for a brand-new Latin-script
+    target language" convention. Real sourced material: the register
+    contrast (tu vs. the polite dumneavoastră form used with "faceți"),
+    the core greeting/farewell set (Bună, Salut, Bună ziua, La revedere),
+    and the name-exchange pair (Cum vă numiți? / Cum te cheamă?, Îmi pare
+    bine!). The source is Peace Corps MOLDOVA material and uses the
+    pre-1993 Moldovan/Communist-era î-everywhere spelling convention
+    (sînt, cîte) rather than the post-1993 standard Romanian orthography
+    used in Romania today (sunt, câte) -- every sourced phrase was
+    respelled to modern standard Romanian orthography before use, per
+    AUTHORING_GUIDE.md #10's "adapt, don't just reference, and never
+    import verbatim" rule; this is a spelling modernization, not a
+    dialect swap (Moldovan and standard Romanian share the same core
+    A1 vocabulary and grammar used here). Freshly authored, not sourced:
+    every example: sentence (AUTHORING_GUIDE #19), the "Ana"/"Mihai"
+    recurring names used in those examples, lesson03's short reading
+    dialogue (a new scenario combining the two lessons' material, not
+    copied from the source, which has no equivalent short dialogue),
+    and the register_choice cultural note. Authored at schema_version
+    1.1 from the start -- every kind:vocabulary card carries a real
+    example: sentence with a matching overlay example_gloss.
+  human_reviewed: false
+review:
+  status: unreviewed
+  required_next_reviewer: codex_fresh_context
+  notes: >-
+    First Romanian unit, first draft. Scoped to exactly the two spine
+    outcomes every other language's unit01 uses
+    (universal.a1.greetings.open_close_exchange,
+    universal.a1.introductions.exchange_identity), 3 lessons (bootstrap
+    size per explicit dispatch instruction, not the fuller 6-lesson
+    fr/es shape). Needs a fresh-context content review before import,
+    same as every other language's content.
+
+course:
+  realization_key: ro.a1
+  target_language_first: true
+  dialect: ro_RO_standard
+  register_policy: >-
+    Teach standard Romanian as spoken in Romania. Present dumneavoastră
+    as the safe default with unfamiliar adults and tu for friends,
+    children, and explicitly informal settings -- the same tu/polite-you
+    contrast English speakers need help with in French or Spanish, here
+    realized with dumneavoastră instead of a second singular-only
+    pronoun. Teach neutral standard pronunciation without regional
+    (Moldovan, Transylvanian, Oltenian) markers.
+
+media_assets:
+  - content_key: ro.a1.audio.buna.neutral.01
+    language: ro
+    text: "Bună!"
+    voice_hint: neutral_adult
+    status: pending_generation
+  - content_key: ro.a1.audio.salut.informal.01
+    language: ro
+    text: "Salut!"
+    voice_hint: young_adult_informal
+    status: pending_generation
+  - content_key: ro.a1.audio.ce_mai_faceti.polite.01
+    language: ro
+    text: "Ce mai faceți?"
+    voice_hint: neutral_adult_polite
+    status: pending_generation
+  - content_key: ro.a1.audio.ce_mai_faci.informal.01
+    language: ro
+    text: "Ce mai faci?"
+    voice_hint: young_adult_informal
+    status: pending_generation
+  - content_key: ro.a1.audio.cum_va_numiti.polite.01
+    language: ro
+    text: "Cum vă numiți?"
+    voice_hint: neutral_adult_polite
+    status: pending_generation
+  - content_key: ro.a1.audio.cum_te_cheama.informal.01
+    language: ro
+    text: "Cum te cheamă?"
+    voice_hint: young_adult_informal
+    status: pending_generation
+  - content_key: ro.a1.audio.dialogue.strada.01
+    language: ro
+    text: "Ana: Bună ziua! Îmi pare bine, mă numesc Ana.\nMihai: Îmi pare bine! Mă cheamă Mihai. Ce mai faceți?\nAna: Bine, mulțumesc. Și dumneavoastră?\nMihai: Bine, mulțumesc. La revedere!\nAna: La revedere!"
+    voice_hint: adult_female_and_male_neutral_polite
+    status: pending_generation
+
+units:
+  - content_key: ro.a1.unit01.greetings
+    title: "Saluturi și prime întâlniri"
+    section: reading_writing
+    spine_outcome_ids:
+      - universal.a1.greetings.open_close_exchange
+      - universal.a1.introductions.exchange_identity
+    planned_lesson_count: 3
+
+    lessons:
+      - content_key: ro.a1.unit01.lesson01.tu_dumneavoastra_greetings
+        title: "Saluturi: tu și dumneavoastră"
+        spine_outcome_id: universal.a1.greetings.open_close_exchange
+        teaching:
+          - content_key: ro.a1.unit01.lesson01.teach.buna
+            kind: vocabulary
+            target: {text: "Bună!", language_code: ro, direction: ltr}
+            introduced_tokens: [bună]
+            example: {text: "Bună, Mihai!", language_code: ro, direction: ltr}
+          - content_key: ro.a1.unit01.lesson01.teach.salut
+            kind: vocabulary
+            target: {text: "Salut!", language_code: ro, direction: ltr}
+            introduced_tokens: [salut]
+            example: {text: "Salut, Ana!", language_code: ro, direction: ltr}
+          - content_key: ro.a1.unit01.lesson01.teach.buna_ziua
+            kind: vocabulary
+            target: {text: "Bună ziua!", language_code: ro, direction: ltr}
+            introduced_tokens: [bună, ziua]
+            example: {text: "Bună ziua, Ana!", language_code: ro, direction: ltr}
+          - content_key: ro.a1.unit01.lesson01.teach.la_revedere
+            kind: vocabulary
+            target: {text: "La revedere!", language_code: ro, direction: ltr}
+            introduced_tokens: [la, revedere]
+            example: {text: "Bună ziua! La revedere!", language_code: ro, direction: ltr}
+          - content_key: ro.a1.unit01.lesson01.teach.tu
+            kind: grammar_note
+            target: {text: "tu", language_code: ro, direction: ltr}
+            introduced_tokens: [tu]
+          - content_key: ro.a1.unit01.lesson01.teach.dumneavoastra
+            kind: grammar_note
+            target: {text: "dumneavoastră", language_code: ro, direction: ltr}
+            introduced_tokens: [dumneavoastră]
+          - content_key: ro.a1.unit01.lesson01.teach.ce_mai_faceti
+            kind: phrase
+            target: {text: "Ce mai faceți?", language_code: ro, direction: ltr}
+            introduced_tokens: [ce, mai, faceți]
+          - content_key: ro.a1.unit01.lesson01.teach.ce_mai_faci
+            kind: phrase
+            target: {text: "Ce mai faci?", language_code: ro, direction: ltr}
+            introduced_tokens: [ce, mai, faci]
+          - content_key: ro.a1.unit01.lesson01.teach.bine_multumesc
+            kind: vocabulary
+            target: {text: "Bine, mulțumesc.", language_code: ro, direction: ltr}
+            introduced_tokens: [bine, mulțumesc]
+            example: {text: "Ce mai faci? Bine, mulțumesc.", language_code: ro, direction: ltr}
+          - content_key: ro.a1.unit01.lesson01.teach.register_choice
+            kind: cultural_note
+            target: {text: "Bună ziua + dumneavoastră / Salut + tu", language_code: ro, direction: ltr}
+            introduced_tokens: []
+        exercises:
+          - content_key: ro.a1.unit01.lesson01.exercise01.listen_buna
+            type: listen_select
+            tested_text: "bună"
+            media_asset_key: ro.a1.audio.buna.neutral.01
+            prompt: {target_blocks: []}
+          - content_key: ro.a1.unit01.lesson01.exercise02.choose_informal_pronoun
+            type: multiple_choice
+            tested_text: "salut tu"
+            prompt:
+              target_blocks:
+                - {text: "Salut!", language_code: ro, direction: ltr}
+          - content_key: ro.a1.unit01.lesson01.exercise04.order_polite_question
+            type: word_order
+            tested_text: "ce mai faceți"
+            prompt: {target_blocks: []}
+            word_bank: ["Ce", "mai", "faceți"]
+          - content_key: ro.a1.unit01.lesson01.exercise06.match_register
+            type: matching_pairs
+            tested_text: "bună ziua dumneavoastră salut tu"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "Bună ziua", right: "dumneavoastră"}
+              - {left: "Salut", right: "tu"}
+          - content_key: ro.a1.unit01.lesson01.exercise03.choose_polite_pronoun
+            type: grammar_check
+            tested_text: "dumneavoastră"
+            prompt:
+              target_blocks:
+                - {text: "Ce mai faceți, ___?", language_code: ro, direction: ltr}
+          - content_key: ro.a1.unit01.lesson01.exercise05.listen_informal_question
+            type: listen_type
+            tested_text: "ce mai faci"
+            media_asset_key: ro.a1.audio.ce_mai_faci.informal.01
+            prompt: {target_blocks: []}
+          - content_key: ro.a1.unit01.lesson01.exercise07.complete_farewell
+            type: fill_in_blank
+            tested_text: "la revedere"
+            prompt:
+              target_blocks:
+                - {text: "La ___!", language_code: ro, direction: ltr}
+          - content_key: ro.a1.unit01.lesson01.exercise08.speak_greeting
+            type: speak_response
+            tested_text: "bună ziua ce mai faceți la revedere"
+            prompt: {target_blocks: []}
+
+      - content_key: ro.a1.unit01.lesson02.names_introductions
+        title: "Cum te cheamă?"
+        spine_outcome_id: universal.a1.introductions.exchange_identity
+        teaching:
+          - content_key: ro.a1.unit01.lesson02.teach.ma_numesc
+            kind: vocabulary
+            target: {text: "Mă numesc Ana.", language_code: ro, direction: ltr}
+            introduced_tokens: [mă, numesc, Ana]
+            example: {text: "Bună! Mă numesc Ana.", language_code: ro, direction: ltr}
+          - content_key: ro.a1.unit01.lesson02.teach.cum_va_numiti
+            kind: phrase
+            target: {text: "Cum vă numiți?", language_code: ro, direction: ltr}
+            introduced_tokens: [cum, vă, numiți]
+          - content_key: ro.a1.unit01.lesson02.teach.ma_cheama
+            kind: vocabulary
+            target: {text: "Mă cheamă Mihai.", language_code: ro, direction: ltr}
+            introduced_tokens: [mă, cheamă, Mihai]
+            example: {text: "Salut! Mă cheamă Mihai.", language_code: ro, direction: ltr}
+          - content_key: ro.a1.unit01.lesson02.teach.cum_te_cheama
+            kind: phrase
+            target: {text: "Cum te cheamă?", language_code: ro, direction: ltr}
+            introduced_tokens: [cum, te, cheamă]
+          - content_key: ro.a1.unit01.lesson02.teach.imi_pare_bine
+            kind: vocabulary
+            target: {text: "Îmi pare bine!", language_code: ro, direction: ltr}
+            introduced_tokens: [îmi, pare, bine]
+            example: {text: "Mă cheamă Mihai. Îmi pare bine!", language_code: ro, direction: ltr}
+          - content_key: ro.a1.unit01.lesson02.teach.si_mie_imi_pare_bine
+            kind: phrase
+            target: {text: "Și mie îmi pare bine!", language_code: ro, direction: ltr}
+            introduced_tokens: [și, mie, îmi, pare, bine]
+          - content_key: ro.a1.unit01.lesson02.teach.si_dumneavoastra
+            kind: phrase
+            target: {text: "Și dumneavoastră?", language_code: ro, direction: ltr}
+            introduced_tokens: [și, dumneavoastră]
+          - content_key: ro.a1.unit01.lesson02.teach.si_tu
+            kind: phrase
+            target: {text: "Și tu?", language_code: ro, direction: ltr}
+            introduced_tokens: [și, tu]
+        exercises:
+          - content_key: ro.a1.unit01.lesson02.exercise02.listen_name_question
+            type: listen_select
+            tested_text: "cum vă numiți"
+            media_asset_key: ro.a1.audio.cum_va_numiti.polite.01
+            prompt: {target_blocks: []}
+          - content_key: ro.a1.unit01.lesson02.exercise05.choose_reply_meaning
+            type: multiple_choice
+            tested_text: "îmi pare bine"
+            prompt:
+              target_blocks:
+                - {text: "Mihai: Îmi pare bine!", language_code: ro, direction: ltr}
+          - content_key: ro.a1.unit01.lesson02.exercise01.order_self_intro
+            type: word_order
+            tested_text: "mă numesc Ana"
+            prompt: {target_blocks: []}
+            word_bank: ["Mă", "numesc", "Ana"]
+          - content_key: ro.a1.unit01.lesson02.exercise07.match_introductions
+            type: matching_pairs
+            tested_text: "cum vă numiți cum te cheamă mă numesc Ana mă cheamă Mihai"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "Cum vă numiți?", right: "Mă numesc Ana."}
+              - {left: "Cum te cheamă?", right: "Mă cheamă Mihai."}
+          - content_key: ro.a1.unit01.lesson02.exercise03.informal_name_question
+            type: dialogue_response
+            tested_text: "cum te cheamă"
+            prompt:
+              target_blocks:
+                - {text: "Salut!", language_code: ro, direction: ltr}
+          - content_key: ro.a1.unit01.lesson02.exercise04.complete_ma_cheama
+            type: fill_in_blank
+            tested_text: "mă cheamă Mihai"
+            prompt:
+              target_blocks:
+                - {text: "___ cheamă Mihai.", language_code: ro, direction: ltr}
+          - content_key: ro.a1.unit01.lesson02.exercise06.return_polite_question
+            type: dialogue_response
+            tested_text: "și dumneavoastră"
+            prompt:
+              target_blocks:
+                - {text: "Mă numesc Ana.", language_code: ro, direction: ltr}
+          - content_key: ro.a1.unit01.lesson02.exercise08.write_introduction
+            type: writing_prompt
+            tested_text: "bună mă numesc Ana îmi pare bine"
+            prompt: {target_blocks: []}
+
+      - content_key: ro.a1.unit01.lesson03.street_meeting
+        title: "O întâlnire pe stradă"
+        spine_outcome_ids:
+          - universal.a1.greetings.open_close_exchange
+          - universal.a1.introductions.exchange_identity
+        teaching:
+          - content_key: ro.a1.unit01.lesson03.teach.line01
+            kind: dialogue
+            target:
+              text: "Bună ziua! Îmi pare bine, mă numesc Ana."
+              language_code: ro
+              direction: ltr
+              speaker: Ana
+            introduced_tokens: []
+          - content_key: ro.a1.unit01.lesson03.teach.line02
+            kind: dialogue
+            target:
+              text: "Îmi pare bine! Mă cheamă Mihai. Ce mai faceți?"
+              language_code: ro
+              direction: ltr
+              speaker: Mihai
+            introduced_tokens: []
+          - content_key: ro.a1.unit01.lesson03.teach.line03
+            kind: dialogue
+            target:
+              text: "Bine, mulțumesc. Și dumneavoastră?"
+              language_code: ro
+              direction: ltr
+              speaker: Ana
+            introduced_tokens: []
+          - content_key: ro.a1.unit01.lesson03.teach.line04
+            kind: dialogue
+            target:
+              text: "Bine, mulțumesc. La revedere!"
+              language_code: ro
+              direction: ltr
+              speaker: Mihai
+            introduced_tokens: []
+          - content_key: ro.a1.unit01.lesson03.teach.line05
+            kind: dialogue
+            target:
+              text: "La revedere!"
+              language_code: ro
+              direction: ltr
+              speaker: Ana
+            introduced_tokens: []
+        exercises:
+          - content_key: ro.a1.unit01.lesson03.exercise01.role_selection
+            type: multiple_choice
+            tested_text: "Ana"
+            prompt:
+              target_blocks:
+                - {text: "Mă numesc Ana.", language_code: ro, direction: ltr}
+          - content_key: ro.a1.unit01.lesson03.exercise02.comprehend_register
+            type: dialogue_comprehension
+            tested_text: "dumneavoastră"
+            media_asset_key: ro.a1.audio.dialogue.strada.01
+            prompt: {target_blocks: []}
+          - content_key: ro.a1.unit01.lesson03.exercise03.comprehend_names
+            type: reading_comprehension
+            tested_text: "mă numesc Ana mă cheamă Mihai"
+            prompt:
+              target_blocks:
+                - {text: "Mă numesc Ana. — Mă cheamă Mihai.", language_code: ro, direction: ltr}
+          - content_key: ro.a1.unit01.lesson03.exercise05.order_closing
+            type: word_order
+            tested_text: "bine mulțumesc la revedere"
+            prompt: {target_blocks: []}
+            word_bank: ["Bine,", "mulțumesc.", "La", "revedere!"]
+          - content_key: ro.a1.unit01.lesson03.exercise04.role_response
+            type: dialogue_response
+            tested_text: "bine mulțumesc și dumneavoastră"
+            prompt:
+              target_blocks:
+                - {text: "Ce mai faceți?", language_code: ro, direction: ltr}
+          - content_key: ro.a1.unit01.lesson03.exercise06.speak_role
+            type: speak_response
+            tested_text: "bună ziua mă numesc Ana îmi pare bine la revedere"
+            prompt:
+              target_blocks:
+                - {text: "Mihai: Mă cheamă Mihai. Îmi pare bine!", language_code: ro, direction: ltr}
