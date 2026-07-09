@@ -1,0 +1,229 @@
+schema_version: "1.1"
+realization_version: "2026.1-draft.1"
+target_language: nl
+cefr_level: A1
+generation_provenance: {method: ai_generated, authoring_system: claude, human_reviewed: false}
+status: complete_draft
+review:
+  status: unreviewed
+  required_next_reviewer: claude
+  notes: >-
+    New Dutch A1 unit after unit49. A safe_load diff of every
+    spine_outcome_id/spine_outcome_ids across every
+    docs/content/realizations/nl/a1_unit*.yaml file against every A1
+    outcome id in universal_spine.yaml (45 total, confirmed by grepping
+    "id: universal.a1." in the spine file) found no unrealized A1 outcome
+    for Dutch -- all 45 were already realized. Git history was checked
+    first (git log -- docs/content/universal_spine.yaml and the nl
+    realizations directory); the most recent additions were nl unit49
+    (hotel check-in) and, in the same commit, the
+    universal.a1.accommodation.check_into_lodging spine outcome itself --
+    no other session had added a newer, still-unrealized A1 outcome. This
+    unit therefore adds a new delegated A1 spine outcome,
+    universal.a1.pharmacy.buy_basic_medicine, distinct from unit16's
+    describing a health problem (universal.a1.health.describe_basic_problem,
+    which covers naming a symptom to e.g. a doctor) and unit07's general
+    shopping/prices content: the transactional pharmacy visit itself
+    (asking a pharmacist for an over-the-counter medicine, understanding
+    dosage instructions, reading a medicine label) is a distinct,
+    practically important A1 survival topic for living in the Netherlands
+    and was not yet covered anywhere in the spine. Story continuity:
+    Monday 18 May 2026, two days after unit49's Saturday 16 May 2026
+    hotel weekend (verified with Python datetime.date(2026,5,18)
+    .strftime("%A") == "Monday"). Nina has a headache after the trip and
+    visits the apotheek for a painkiller; Omar (her established
+    taalcafe-friend and travel companion from unit49) checks in on her in
+    the closing scene, consistent with his established caring-friend role.
+    Every vocabulary teaching card includes a real example sentence with
+    a matching overlay example_gloss. Prior words (including "ik heb"/
+    "een"/basic modal-verb constructions from earlier units) are
+    re-declared as introduced_tokens at first use in this file because
+    the untaught-vocabulary validator is per-file.
+
+course:
+  realization_key: nl.a1
+  target_language_first: true
+  dialect: nl_NL_standard
+  register_policy: >-
+    Teach contemporary Standard Dutch as used in the Netherlands. Nina and
+    Omar are established taalcafe friends and use informal jij/je with
+    each other throughout. The pharmacist speaks in neutral, polite
+    service language ("u"), consistent with unit49's hotel-receptionist
+    and unit47's library-staff register.
+
+media_assets:
+  - {content_key: nl.a1.audio.apotheek.pijnstiller_kopen.01, language: nl, text: "Ik wil een pijnstiller kopen.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - {content_key: nl.a1.audio.apotheek.medicijn_innemen.01, language: nl, text: "U moet dit medicijn innemen.", voice_hint: neutral_adult_clear, status: pending_generation}
+  - {content_key: nl.a1.audio.apotheek.twee_tabletten_per_dag.01, language: nl, text: "Neem twee tabletten per dag.", voice_hint: neutral_adult_clear, status: pending_generation}
+  - content_key: nl.a1.audio.dialogue.apotheek_balie.01
+    language: nl
+    text: >-
+      Apotheker: Goedemiddag! Waar kan ik u mee helpen? Nina: Ik heb
+      hoofdpijn. Heeft u iets daartegen? Apotheker: Deze pijnstillers zijn
+      goed. Neem twee tabletten per dag. Nina: Moet ik ze met water
+      innemen? Apotheker: Ja, altijd met water.
+    voice_hint: two_young_adults_and_staff_neutral
+    status: pending_generation
+  - {content_key: nl.a1.audio.apotheek.pijnstillers_advies.01, language: nl, text: "Deze pijnstillers zijn goed. Neem twee tabletten per dag.", voice_hint: neutral_adult_clear, status: pending_generation}
+  - {content_key: nl.a1.audio.apotheek.twee_tabletten_drie_keer.01, language: nl, text: "Ik neem twee tabletten, drie keer per dag.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - content_key: nl.a1.audio.dialogue.apotheek_slot.01
+    language: nl
+    text: >-
+      Omar: Gaat het een beetje, Nina? Nina: Ja, ik heb medicijn genomen.
+      Het gaat al beter. Omar: Mooi zo! Rust maar lekker uit. Nina: Dank
+      je, Omar. Tot morgen!
+    voice_hint: two_young_adults_friendly
+    status: pending_generation
+  - {content_key: nl.a1.audio.apotheek.rust_lekker_uit.01, language: nl, text: "Rust maar lekker uit.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+
+units:
+  - content_key: nl.a1.unit50.apotheek
+    title: "Naar de apotheek: een medicijn kopen"
+    section: reading_writing
+    spine_outcome_ids: [universal.a1.pharmacy.buy_basic_medicine]
+    planned_lesson_count: 6
+    lessons:
+      - content_key: nl.a1.unit50.lesson01.ik_heb_hoofdpijn
+        title: "Ik heb hoofdpijn"
+        spine_outcome_id: universal.a1.pharmacy.buy_basic_medicine
+        teaching:
+          - content_key: nl.a1.unit50.lesson01.teach.hoofdpijn
+            kind: vocabulary
+            target: {text: "de hoofdpijn", language_code: nl, direction: ltr}
+            introduced_tokens: [de, hoofdpijn, Ik, heb, hoofdpijn]
+            example: {text: "Ik heb hoofdpijn.", language_code: nl, direction: ltr}
+          - content_key: nl.a1.unit50.lesson01.teach.pijnstiller
+            kind: vocabulary
+            target: {text: "de pijnstiller", language_code: nl, direction: ltr}
+            introduced_tokens: [de, pijnstiller, Ik, wil, een, pijnstiller, kopen]
+            example: {text: "Ik wil een pijnstiller kopen.", language_code: nl, direction: ltr}
+          - {content_key: nl.a1.unit50.lesson01.teach.iets_tegen_hoofdpijn, kind: phrase, target: {text: "Heeft u iets tegen hoofdpijn?", language_code: nl, direction: ltr}, introduced_tokens: [Heeft, u, iets, tegen, hoofdpijn]}
+        exercises:
+          - {content_key: nl.a1.unit50.lesson01.exercise01.choose_iets_tegen_hoofdpijn, type: multiple_choice, tested_text: "Heeft u iets tegen hoofdpijn", prompt: {target_blocks: [{text: "Do you have something for a headache?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit50.lesson01.exercise02.listen_pijnstiller_kopen, type: listen_select, tested_text: "Ik wil een pijnstiller kopen", media_asset_key: nl.a1.audio.apotheek.pijnstiller_kopen.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit50.lesson01.exercise03.match_hoofdpijn_pijnstiller, type: matching_pairs, tested_text: "hoofdpijn pijnstiller kopen tegen", prompt: {target_blocks: []}, pairs: [{left: hoofdpijn, right: headache}, {left: pijnstiller, right: painkiller}, {left: "de hoofdpijn", right: "the headache"}, {left: "Ik heb hoofdpijn.", right: "I have a headache."}, {left: "Ik wil een pijnstiller kopen.", right: "I want to buy a painkiller."}, {left: "Heeft u iets tegen hoofdpijn?", right: "Do you have something for a headache?"}]}
+          - {content_key: nl.a1.unit50.lesson01.exercise04.order_iets_tegen_hoofdpijn, type: word_order, tested_text: "Heeft u iets tegen hoofdpijn", prompt: {target_blocks: []}, word_bank: [Heeft, u, iets, tegen, hoofdpijn]}
+          - {content_key: nl.a1.unit50.lesson01.exercise05.listen_order_pijnstiller_kopen, type: listen_order, tested_text: "Ik wil een pijnstiller kopen", media_asset_key: nl.a1.audio.apotheek.pijnstiller_kopen.01, prompt: {target_blocks: []}, word_bank: [Ik, wil, een, pijnstiller, kopen]}
+          - {content_key: nl.a1.unit50.lesson01.exercise06.translate_de_hoofdpijn, type: translation, tested_text: "de hoofdpijn", prompt: {target_blocks: [{text: "the headache", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit50.lesson01.exercise07.respond_iets_tegen_hoofdpijn, type: dialogue_response, tested_text: "Heeft u iets tegen hoofdpijn", prompt: {target_blocks: [{text: "Say in Dutch: do you have something for a headache?", language_code: en, direction: ltr}]}}
+
+      - content_key: nl.a1.unit50.lesson02.een_tablet_innemen
+        title: "Een tablet innemen"
+        spine_outcome_id: universal.a1.pharmacy.buy_basic_medicine
+        teaching:
+          - content_key: nl.a1.unit50.lesson02.teach.tablet
+            kind: vocabulary
+            target: {text: "de tablet", language_code: nl, direction: ltr}
+            introduced_tokens: [de, tablet, Neem, een, tablet, met, water]
+            example: {text: "Neem één tablet met water.", language_code: nl, direction: ltr}
+          - content_key: nl.a1.unit50.lesson02.teach.innemen
+            kind: vocabulary
+            target: {text: innemen, language_code: nl, direction: ltr}
+            introduced_tokens: [innemen, U, moet, dit, medicijn, innemen]
+            example: {text: "U moet dit medicijn innemen.", language_code: nl, direction: ltr}
+          - {content_key: nl.a1.unit50.lesson02.teach.hoe_vaak_innemen, kind: phrase, target: {text: "Hoe vaak moet ik dit innemen?", language_code: nl, direction: ltr}, introduced_tokens: [Hoe, vaak, moet, ik, dit, innemen]}
+        exercises:
+          - {content_key: nl.a1.unit50.lesson02.exercise01.choose_hoe_vaak_innemen, type: multiple_choice, tested_text: "Hoe vaak moet ik dit innemen", prompt: {target_blocks: [{text: "How often should I take this?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit50.lesson02.exercise02.listen_medicijn_innemen, type: listen_select, tested_text: "U moet dit medicijn innemen", media_asset_key: nl.a1.audio.apotheek.medicijn_innemen.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit50.lesson02.exercise03.match_tablet_innemen, type: matching_pairs, tested_text: "tablet innemen water medicijn", prompt: {target_blocks: []}, pairs: [{left: tablet, right: tablet}, {left: innemen, right: "to take (medicine)"}, {left: "de tablet", right: "the tablet"}, {left: "Neem één tablet met water.", right: "Take one tablet with water."}, {left: "U moet dit medicijn innemen.", right: "You must take this medicine."}, {left: "Hoe vaak moet ik dit innemen?", right: "How often should I take this?"}]}
+          - {content_key: nl.a1.unit50.lesson02.exercise04.order_hoe_vaak_innemen, type: word_order, tested_text: "Hoe vaak moet ik dit innemen", prompt: {target_blocks: []}, word_bank: [Hoe, vaak, moet, ik, dit, innemen]}
+          - {content_key: nl.a1.unit50.lesson02.exercise05.listen_order_medicijn_innemen, type: listen_order, tested_text: "U moet dit medicijn innemen", media_asset_key: nl.a1.audio.apotheek.medicijn_innemen.01, prompt: {target_blocks: []}, word_bank: [U, moet, dit, medicijn, innemen]}
+          - {content_key: nl.a1.unit50.lesson02.exercise06.translate_innemen, type: translation, tested_text: innemen, prompt: {target_blocks: [{text: "to take (medicine)", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit50.lesson02.exercise07.respond_hoe_vaak_innemen, type: dialogue_response, tested_text: "Hoe vaak moet ik dit innemen", prompt: {target_blocks: [{text: "Ask in Dutch: how often should I take this?", language_code: en, direction: ltr}]}}
+
+      - content_key: nl.a1.unit50.lesson03.de_dosering_lezen
+        title: "De dosering lezen"
+        spine_outcome_id: universal.a1.pharmacy.buy_basic_medicine
+        teaching:
+          - content_key: nl.a1.unit50.lesson03.teach.dosering
+            kind: vocabulary
+            target: {text: "de dosering", language_code: nl, direction: ltr}
+            introduced_tokens: [de, dosering, Lees, de, dosering, op, de, doos]
+            example: {text: "Lees de dosering op de doos.", language_code: nl, direction: ltr}
+          - content_key: nl.a1.unit50.lesson03.teach.per_dag
+            kind: vocabulary
+            target: {text: "per dag", language_code: nl, direction: ltr}
+            introduced_tokens: [per, dag, Neem, twee, tabletten, per, dag]
+            example: {text: "Neem twee tabletten per dag.", language_code: nl, direction: ltr}
+          - {content_key: nl.a1.unit50.lesson03.teach.dosering_water, kind: phrase, target: {text: "Neem twee tabletten per dag, met water.", language_code: nl, direction: ltr}, introduced_tokens: [Neem, twee, tabletten, per, dag, met, water]}
+        exercises:
+          - {content_key: nl.a1.unit50.lesson03.exercise01.choose_dosering_water, type: multiple_choice, tested_text: "Neem twee tabletten per dag met water", prompt: {target_blocks: [{text: "Take two tablets per day, with water.", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit50.lesson03.exercise02.listen_twee_tabletten_per_dag, type: listen_select, tested_text: "Neem twee tabletten per dag", media_asset_key: nl.a1.audio.apotheek.twee_tabletten_per_dag.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit50.lesson03.exercise03.match_dosering, type: matching_pairs, tested_text: "dosering per dag doos water", prompt: {target_blocks: []}, pairs: [{left: dosering, right: dosage}, {left: "per dag", right: "per day"}, {left: "de dosering", right: "the dosage"}, {left: "Lees de dosering op de doos.", right: "Read the dosage on the box."}, {left: "Neem twee tabletten per dag.", right: "Take two tablets per day."}, {left: "Neem twee tabletten per dag, met water.", right: "Take two tablets per day, with water."}]}
+          - {content_key: nl.a1.unit50.lesson03.exercise04.order_dosering_water, type: word_order, tested_text: "Neem twee tabletten per dag met water", prompt: {target_blocks: []}, word_bank: [Neem, twee, tabletten, per, dag, met, water]}
+          - {content_key: nl.a1.unit50.lesson03.exercise05.listen_order_twee_tabletten_per_dag, type: listen_order, tested_text: "Neem twee tabletten per dag", media_asset_key: nl.a1.audio.apotheek.twee_tabletten_per_dag.01, prompt: {target_blocks: []}, word_bank: [Neem, twee, tabletten, per, dag]}
+          - {content_key: nl.a1.unit50.lesson03.exercise06.translate_de_dosering, type: translation, tested_text: "de dosering", prompt: {target_blocks: [{text: "the dosage", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit50.lesson03.exercise07.respond_dosering_water, type: dialogue_response, tested_text: "Lees de dosering op de doos", prompt: {target_blocks: [{text: "Say in Dutch: read the dosage on the box.", language_code: en, direction: ltr}]}}
+
+      - content_key: nl.a1.unit50.lesson04.bij_de_apotheek
+        title: "Bij de apotheek"
+        spine_outcome_id: universal.a1.pharmacy.buy_basic_medicine
+        teaching:
+          - {content_key: nl.a1.unit50.lesson04.teach.apotheker_groet, kind: dialogue, target: {text: "Apotheker: Goedemiddag! Waar kan ik u mee helpen?", language_code: nl, direction: ltr}, introduced_tokens: [Apotheker, Goedemiddag, Waar, kan, ik, u, mee, helpen]}
+          - {content_key: nl.a1.unit50.lesson04.teach.nina_klacht, kind: dialogue, target: {text: "Nina: Ik heb hoofdpijn. Heeft u iets daartegen?", language_code: nl, direction: ltr}, introduced_tokens: [Nina, Ik, heb, hoofdpijn, Heeft, u, iets, daartegen]}
+          - {content_key: nl.a1.unit50.lesson04.teach.apotheker_advies, kind: dialogue, target: {text: "Apotheker: Deze pijnstillers zijn goed. Neem twee tabletten per dag.", language_code: nl, direction: ltr}, introduced_tokens: [Apotheker, Deze, pijnstillers, zijn, goed, Neem, twee, tabletten, per, dag]}
+          - {content_key: nl.a1.unit50.lesson04.teach.nina_vraag_water, kind: dialogue, target: {text: "Nina: Moet ik ze met water innemen?", language_code: nl, direction: ltr}, introduced_tokens: [Nina, Moet, ik, ze, met, water, innemen]}
+          - {content_key: nl.a1.unit50.lesson04.teach.apotheker_bevestiging, kind: dialogue, target: {text: "Apotheker: Ja, altijd met water.", language_code: nl, direction: ltr}, introduced_tokens: [Apotheker, "Ja", altijd, met, water]}
+        exercises:
+          - {content_key: nl.a1.unit50.lesson04.exercise01.listen_waar_kan_ik_helpen, type: listen_select, tested_text: "Waar kan ik u mee helpen", media_asset_key: nl.a1.audio.dialogue.apotheek_balie.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit50.lesson04.exercise02.comprehend_klacht, type: dialogue_comprehension, tested_text: hoofdpijn, media_asset_key: nl.a1.audio.dialogue.apotheek_balie.01, prompt: {target_blocks: [{text: "What does Nina say is wrong?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit50.lesson04.exercise03.comprehend_aantal_tabletten, type: dialogue_comprehension, tested_text: "twee tabletten", media_asset_key: nl.a1.audio.dialogue.apotheek_balie.01, prompt: {target_blocks: [{text: "How many tablets per day does the pharmacist recommend?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit50.lesson04.exercise04.comprehend_met_water, type: dialogue_comprehension, tested_text: water, media_asset_key: nl.a1.audio.dialogue.apotheek_balie.01, prompt: {target_blocks: [{text: "What does the pharmacist say to take the tablets with?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit50.lesson04.exercise05.order_iets_tegen_hoofdpijn, type: word_order, tested_text: "Heeft u iets tegen hoofdpijn", prompt: {target_blocks: []}, word_bank: [Heeft, u, iets, tegen, hoofdpijn]}
+          - {content_key: nl.a1.unit50.lesson04.exercise06.respond_met_water, type: dialogue_response, tested_text: "Ja altijd met water", prompt: {target_blocks: [{text: "Moet ik ze met water innemen?", language_code: nl, direction: ltr}]}}
+          - {content_key: nl.a1.unit50.lesson04.exercise07.listen_type_pijnstillers_advies, type: listen_type, tested_text: "Deze pijnstillers zijn goed Neem twee tabletten per dag", media_asset_key: nl.a1.audio.apotheek.pijnstillers_advies.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit50.lesson04.exercise08.write_waar_kan_ik_helpen, type: writing_prompt, tested_text: "Waar kan ik u mee helpen", prompt: {target_blocks: [{text: "Write in Dutch: how can I help you?", language_code: en, direction: ltr}]}}
+
+      - content_key: nl.a1.unit50.lesson05.het_etiket_lezen
+        title: "Het etiket lezen"
+        spine_outcome_id: universal.a1.pharmacy.buy_basic_medicine
+        teaching:
+          - content_key: nl.a1.unit50.lesson05.teach.etiket
+            kind: vocabulary
+            target: {text: "het etiket", language_code: nl, direction: ltr}
+            introduced_tokens: [het, etiket, Ik, lees, het, etiket]
+            example: {text: "Ik lees het etiket.", language_code: nl, direction: ltr}
+          - content_key: nl.a1.unit50.lesson05.teach.label_tekst
+            kind: reading
+            target:
+              text: "Etiket: Paracetamol. Twee tabletten, drie keer per dag, met water."
+              language_code: nl
+              direction: ltr
+            introduced_tokens: [Etiket, Paracetamol, Twee, tabletten, drie, keer, per, dag, met, water]
+          - {content_key: nl.a1.unit50.lesson05.teach.twee_tabletten_drie_keer, kind: phrase, target: {text: "Ik neem twee tabletten, drie keer per dag.", language_code: nl, direction: ltr}, introduced_tokens: [Ik, neem, twee, tabletten, drie, keer, per, dag]}
+        exercises:
+          - {content_key: nl.a1.unit50.lesson05.exercise01.read_medicijn, type: reading_comprehension, tested_text: Paracetamol, prompt: {target_blocks: [{text: "According to the label, which medicine is this?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit50.lesson05.exercise02.read_aantal_tabletten, type: reading_comprehension, tested_text: "Twee tabletten", prompt: {target_blocks: [{text: "According to the label, how many tablets should you take?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit50.lesson05.exercise03.read_keer_per_dag, type: reading_comprehension, tested_text: "drie keer per dag", prompt: {target_blocks: [{text: "According to the label, how many times per day?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit50.lesson05.exercise04.match_etiket, type: matching_pairs, tested_text: "etiket paracetamol tabletten dag water", prompt: {target_blocks: []}, pairs: [{left: Etiket, right: Label}, {left: "Etiket: Paracetamol.", right: "Label: Paracetamol."}, {left: "Twee tabletten, drie keer per dag, met water.", right: "Two tablets, three times per day, with water."}, {left: "Ik lees het etiket.", right: "I'm reading the label."}, {left: etiket, right: label}, {left: "Ik neem twee tabletten, drie keer per dag.", right: "I take two tablets, three times per day."}]}
+          - {content_key: nl.a1.unit50.lesson05.exercise05.listen_twee_tabletten_drie_keer, type: listen_select, tested_text: "Ik neem twee tabletten, drie keer per dag", media_asset_key: nl.a1.audio.apotheek.twee_tabletten_drie_keer.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit50.lesson05.exercise06.write_twee_tabletten_drie_keer, type: writing_prompt, tested_text: "Ik neem twee tabletten, drie keer per dag", prompt: {target_blocks: [{text: "Write in Dutch: I take two tablets, three times per day.", language_code: en, direction: ltr}]}}
+
+      - content_key: nl.a1.unit50.lesson06.omar_vraagt_hoe_het_gaat
+        title: "Omar vraagt hoe het gaat"
+        spine_outcome_id: universal.a1.pharmacy.buy_basic_medicine
+        teaching:
+          - content_key: nl.a1.unit50.lesson06.teach.beter
+            kind: vocabulary
+            target: {text: beter, language_code: nl, direction: ltr}
+            introduced_tokens: [beter, Het, gaat, al, beter]
+            example: {text: "Het gaat al beter.", language_code: nl, direction: ltr}
+          - content_key: nl.a1.unit50.lesson06.teach.uitrusten
+            kind: vocabulary
+            target: {text: uitrusten, language_code: nl, direction: ltr}
+            introduced_tokens: [uitrusten, Rust, maar, lekker, uit]
+            example: {text: "Rust maar lekker uit.", language_code: nl, direction: ltr}
+          - {content_key: nl.a1.unit50.lesson06.teach.omar_vraag, kind: dialogue, target: {text: "Omar: Gaat het een beetje, Nina?", language_code: nl, direction: ltr}, introduced_tokens: [Omar, Gaat, het, een, beetje, Nina]}
+          - {content_key: nl.a1.unit50.lesson06.teach.nina_medicijn_genomen, kind: dialogue, target: {text: "Nina: Ja, ik heb medicijn genomen. Het gaat al beter.", language_code: nl, direction: ltr}, introduced_tokens: [Nina, "Ja", ik, heb, medicijn, genomen, Het, gaat, al, beter]}
+          - {content_key: nl.a1.unit50.lesson06.teach.omar_mooi_zo, kind: dialogue, target: {text: "Omar: Mooi zo! Rust maar lekker uit.", language_code: nl, direction: ltr}, introduced_tokens: [Omar, Mooi, zo, Rust, maar, lekker, uit]}
+          - {content_key: nl.a1.unit50.lesson06.teach.nina_tot_morgen, kind: dialogue, target: {text: "Nina: Dank je, Omar. Tot morgen!", language_code: nl, direction: ltr}, introduced_tokens: [Nina, Dank, je, Omar, Tot, morgen]}
+          - {content_key: nl.a1.unit50.lesson06.teach.gaat_al_beter_dank, kind: phrase, target: {text: "Het gaat al beter, dank je.", language_code: nl, direction: ltr}, introduced_tokens: [Het, gaat, al, beter, dank, je]}
+        exercises:
+          - {content_key: nl.a1.unit50.lesson06.exercise01.listen_medicijn_genomen, type: listen_select, tested_text: "Ja ik heb medicijn genomen Het gaat al beter", media_asset_key: nl.a1.audio.dialogue.apotheek_slot.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit50.lesson06.exercise02.comprehend_hoe_voelt, type: dialogue_comprehension, tested_text: beter, media_asset_key: nl.a1.audio.dialogue.apotheek_slot.01, prompt: {target_blocks: [{text: "How does Nina say she feels?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit50.lesson06.exercise03.comprehend_wat_genomen, type: dialogue_comprehension, tested_text: medicijn, media_asset_key: nl.a1.audio.dialogue.apotheek_slot.01, prompt: {target_blocks: [{text: "What does Nina say she took?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit50.lesson06.exercise04.match_slot, type: matching_pairs, tested_text: "beter uitrusten medicijn genomen", prompt: {target_blocks: []}, pairs: [{left: "Gaat het een beetje, Nina?", right: "Are you doing okay, Nina?"}, {left: "Ja, ik heb medicijn genomen. Het gaat al beter.", right: "Yes, I took medicine. It's already getting better."}, {left: "Rust maar lekker uit.", right: "Rest well."}, {left: "Dank je, Omar. Tot morgen!", right: "Thanks, Omar. See you tomorrow!"}, {left: beter, right: better}, {left: uitrusten, right: "to rest"}]}
+          - {content_key: nl.a1.unit50.lesson06.exercise05.order_gaat_al_beter, type: word_order, tested_text: "Het gaat al beter", prompt: {target_blocks: []}, word_bank: [Het, gaat, al, beter]}
+          - {content_key: nl.a1.unit50.lesson06.exercise06.respond_gaat_het_een_beetje, type: dialogue_response, tested_text: "Ja ik heb medicijn genomen Het gaat al beter", prompt: {target_blocks: [{text: "Gaat het een beetje, Nina?", language_code: nl, direction: ltr}]}}
+          - {content_key: nl.a1.unit50.lesson06.exercise07.listen_type_rust_lekker_uit, type: listen_type, tested_text: "Rust maar lekker uit", media_asset_key: nl.a1.audio.apotheek.rust_lekker_uit.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit50.lesson06.exercise08.write_gaat_al_beter_dank, type: writing_prompt, tested_text: "Het gaat al beter dank je", prompt: {target_blocks: [{text: "Write in Dutch: it's already getting better, thank you.", language_code: en, direction: ltr}]}}
