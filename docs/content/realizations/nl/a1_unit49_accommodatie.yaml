@@ -1,0 +1,218 @@
+schema_version: "1.1"
+realization_version: "2026.1-draft.1"
+target_language: nl
+cefr_level: A1
+generation_provenance: {method: ai_generated, authoring_system: claude, human_reviewed: false}
+status: complete_draft
+review:
+  status: unreviewed
+  required_next_reviewer: claude
+  notes: >-
+    New Dutch A1 unit after unit48. A safe_load diff of every
+    spine_outcome_id/spine_outcome_ids across every
+    docs/content/realizations/nl/a1_unit*.yaml file against every A1
+    outcome id in universal_spine.yaml (44 total, confirmed by grepping
+    "id: universal.a1." in the spine file) found no unrealized A1 outcome
+    for Dutch — all 44 were already realized. Git history was checked
+    first (git log -- docs/content/universal_spine.yaml and the nl
+    realizations directory); the most recent additions were nl unit48
+    (waste sorting) and, in the same commit, the
+    universal.a1.waste_disposal.sort_household_waste spine outcome
+    itself — no other session had added a newer, still-unrealized A1
+    outcome. This unit therefore adds a new delegated A1 spine outcome,
+    universal.a1.accommodation.check_into_lodging, distinct from
+    unit15's travel/journey/ticket content and unit18's describing one's
+    own home: checking into short-term lodging (asking about the room,
+    breakfast, wifi, the key, and the check-out time) is a common,
+    practically important A1 survival topic for living in or visiting
+    the Netherlands and was not yet covered anywhere in the spine.
+    Story continuity: Saturday 16 May 2026, the day after unit48's
+    Friday 15 May 2026 waste-sorting scene (verified with Python
+    datetime.date(2026,5,16).strftime("%A") == "Saturday"). Nina and
+    Omar take a weekend trip to Maastricht and check into a hotel;
+    Lotte reappears in the closing scene (a phone catch-up after the
+    trip), consistent with her established taalcafe-friend role from
+    units 37/38/47/48. Every vocabulary teaching card includes a real
+    example sentence with a matching overlay example_gloss. Prior words
+    (including time-telling vocabulary from unit04 and past-tense verb
+    forms from unit12) are re-declared as introduced_tokens at first use
+    in this file because the untaught-vocabulary validator is per-file.
+
+course:
+  realization_key: nl.a1
+  target_language_first: true
+  dialect: nl_NL_standard
+  register_policy: >-
+    Teach contemporary Standard Dutch as used in the Netherlands. Nina,
+    Omar, and Lotte are established taalcafe friends and use informal
+    jij/je with each other throughout. The hotel receptionist speaks in
+    neutral, polite service language ("u"), consistent with unit47's
+    library-staff register.
+
+media_assets:
+  - {content_key: nl.a1.audio.accommodatie.vanmiddag_inchecken.01, language: nl, text: "We gaan vanmiddag inchecken.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - {content_key: nl.a1.audio.accommodatie.ontbijt_acht_uur.01, language: nl, text: "Het ontbijt begint om acht uur.", voice_hint: neutral_adult_clear, status: pending_generation}
+  - {content_key: nl.a1.audio.accommodatie.wifiwachtwoord_kaart.01, language: nl, text: "Het wifiwachtwoord staat op de kaart.", voice_hint: neutral_adult_clear, status: pending_generation}
+  - content_key: nl.a1.audio.dialogue.accommodatie_balie.01
+    language: nl
+    text: >-
+      Receptionist: Goedemiddag! Heeft u een reservering? Nina: Ja, op
+      naam van Nina. Receptionist: Voor hoeveel nachten? Omar: Voor één
+      nacht. Receptionist: Hier is uw sleutel. Kamer twaalf.
+    voice_hint: two_young_adults_and_staff_neutral
+    status: pending_generation
+  - {content_key: nl.a1.audio.accommodatie.sleutel_kamer_twaalf.01, language: nl, text: "Hier is uw sleutel. Kamer twaalf.", voice_hint: neutral_adult_clear, status: pending_generation}
+  - {content_key: nl.a1.audio.accommodatie.bevestiging.01, language: nl, text: "Bevestiging: Kamer twaalf voor Nina en Omar. Eén nacht op zaterdag 16 mei. Uitchecken is om elf uur.", voice_hint: neutral_adult_clear, status: pending_generation}
+  - content_key: nl.a1.audio.dialogue.accommodatie_slot.01
+    language: nl
+    text: >-
+      Lotte: Hoe was het weekend in Maastricht? Nina: Heel leuk! We
+      hadden een mooie kamer. Omar: Het ontbijt was heerlijk. Lotte:
+      Volgende keer ga ik ook mee!
+    voice_hint: three_young_adults_friendly
+    status: pending_generation
+  - {content_key: nl.a1.audio.accommodatie.ontbijt_heerlijk.01, language: nl, text: "Het ontbijt was heerlijk.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+
+units:
+  - content_key: nl.a1.unit49.accommodatie
+    title: "Overnachten: inchecken in een hotel"
+    section: reading_writing
+    spine_outcome_ids: [universal.a1.accommodation.check_into_lodging]
+    planned_lesson_count: 6
+    lessons:
+      - content_key: nl.a1.unit49.lesson01.kamer_boeken
+        title: "Een kamer boeken"
+        spine_outcome_id: universal.a1.accommodation.check_into_lodging
+        teaching:
+          - content_key: nl.a1.unit49.lesson01.teach.kamer
+            kind: vocabulary
+            target: {text: "de kamer", language_code: nl, direction: ltr}
+            introduced_tokens: [de, kamer, Ik, wil, een, kamer, boeken]
+            example: {text: "Ik wil een kamer boeken.", language_code: nl, direction: ltr}
+          - content_key: nl.a1.unit49.lesson01.teach.inchecken
+            kind: vocabulary
+            target: {text: inchecken, language_code: nl, direction: ltr}
+            introduced_tokens: [inchecken, We, gaan, vanmiddag, inchecken]
+            example: {text: "We gaan vanmiddag inchecken.", language_code: nl, direction: ltr}
+          - {content_key: nl.a1.unit49.lesson01.teach.kamer_gereserveerd, kind: phrase, target: {text: "Ik heb een kamer gereserveerd.", language_code: nl, direction: ltr}, introduced_tokens: [Ik, heb, een, kamer, gereserveerd]}
+        exercises:
+          - {content_key: nl.a1.unit49.lesson01.exercise01.choose_kamer_gereserveerd, type: multiple_choice, tested_text: "Ik heb een kamer gereserveerd", prompt: {target_blocks: [{text: "I have reserved a room.", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit49.lesson01.exercise02.listen_vanmiddag_inchecken, type: listen_select, tested_text: "We gaan vanmiddag inchecken", media_asset_key: nl.a1.audio.accommodatie.vanmiddag_inchecken.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit49.lesson01.exercise03.match_kamer_inchecken, type: matching_pairs, tested_text: "kamer inchecken boeken gereserveerd vanmiddag", prompt: {target_blocks: []}, pairs: [{left: kamer, right: room}, {left: inchecken, right: "to check in"}, {left: "de kamer", right: "the room"}, {left: "Ik heb een kamer gereserveerd.", right: "I have reserved a room."}, {left: "We gaan vanmiddag inchecken.", right: "We're going to check in this afternoon."}, {left: boeken, right: "to book"}]}
+          - {content_key: nl.a1.unit49.lesson01.exercise04.order_kamer_gereserveerd, type: word_order, tested_text: "Ik heb een kamer gereserveerd", prompt: {target_blocks: []}, word_bank: [Ik, heb, een, kamer, gereserveerd]}
+          - {content_key: nl.a1.unit49.lesson01.exercise05.listen_order_vanmiddag_inchecken, type: listen_order, tested_text: "We gaan vanmiddag inchecken", media_asset_key: nl.a1.audio.accommodatie.vanmiddag_inchecken.01, prompt: {target_blocks: []}, word_bank: [We, gaan, vanmiddag, inchecken]}
+          - {content_key: nl.a1.unit49.lesson01.exercise06.translate_de_kamer, type: translation, tested_text: "de kamer", prompt: {target_blocks: [{text: "the room", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit49.lesson01.exercise07.respond_kamer_gereserveerd, type: dialogue_response, tested_text: "Ik heb een kamer gereserveerd", prompt: {target_blocks: [{text: "Say in Dutch: I have reserved a room.", language_code: en, direction: ltr}]}}
+
+      - content_key: nl.a1.unit49.lesson02.ontbijt_inbegrepen
+        title: "Is het ontbijt inbegrepen?"
+        spine_outcome_id: universal.a1.accommodation.check_into_lodging
+        teaching:
+          - content_key: nl.a1.unit49.lesson02.teach.ontbijt
+            kind: vocabulary
+            target: {text: "het ontbijt", language_code: nl, direction: ltr}
+            introduced_tokens: [het, ontbijt, Het, ontbijt, begint, om, acht, uur]
+            example: {text: "Het ontbijt begint om acht uur.", language_code: nl, direction: ltr}
+          - content_key: nl.a1.unit49.lesson02.teach.inbegrepen
+            kind: vocabulary
+            target: {text: inbegrepen, language_code: nl, direction: ltr}
+            introduced_tokens: [inbegrepen, Het, ontbijt, is, inbegrepen]
+            example: {text: "Het ontbijt is inbegrepen.", language_code: nl, direction: ltr}
+          - {content_key: nl.a1.unit49.lesson02.teach.ontbijt_vraag, kind: phrase, target: {text: "Is het ontbijt inbegrepen?", language_code: nl, direction: ltr}, introduced_tokens: [Is, het, ontbijt, inbegrepen]}
+        exercises:
+          - {content_key: nl.a1.unit49.lesson02.exercise01.choose_ontbijt_inbegrepen, type: multiple_choice, tested_text: "Het ontbijt is inbegrepen", prompt: {target_blocks: [{text: "Breakfast is included.", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit49.lesson02.exercise02.listen_ontbijt_acht_uur, type: listen_select, tested_text: "Het ontbijt begint om acht uur", media_asset_key: nl.a1.audio.accommodatie.ontbijt_acht_uur.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit49.lesson02.exercise03.match_ontbijt, type: matching_pairs, tested_text: "ontbijt inbegrepen acht uur", prompt: {target_blocks: []}, pairs: [{left: ontbijt, right: breakfast}, {left: inbegrepen, right: included}, {left: "het ontbijt", right: "the breakfast"}, {left: "Het ontbijt is inbegrepen.", right: "Breakfast is included."}, {left: "Het ontbijt begint om acht uur.", right: "Breakfast starts at eight o'clock."}, {left: "Is het ontbijt inbegrepen?", right: "Is breakfast included?"}]}
+          - {content_key: nl.a1.unit49.lesson02.exercise04.order_ontbijt_inbegrepen, type: word_order, tested_text: "Het ontbijt is inbegrepen", prompt: {target_blocks: []}, word_bank: [Het, ontbijt, is, inbegrepen]}
+          - {content_key: nl.a1.unit49.lesson02.exercise05.listen_order_ontbijt_acht_uur, type: listen_order, tested_text: "Het ontbijt begint om acht uur", media_asset_key: nl.a1.audio.accommodatie.ontbijt_acht_uur.01, prompt: {target_blocks: []}, word_bank: [Het, ontbijt, begint, om, acht, uur]}
+          - {content_key: nl.a1.unit49.lesson02.exercise06.translate_inbegrepen, type: translation, tested_text: inbegrepen, prompt: {target_blocks: [{text: included, language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit49.lesson02.exercise07.respond_ontbijt_vraag, type: dialogue_response, tested_text: "Is het ontbijt inbegrepen", prompt: {target_blocks: [{text: "Ask in Dutch: is breakfast included?", language_code: en, direction: ltr}]}}
+
+      - content_key: nl.a1.unit49.lesson03.sleutel_wifi
+        title: "De sleutel en het wifiwachtwoord"
+        spine_outcome_id: universal.a1.accommodation.check_into_lodging
+        teaching:
+          - content_key: nl.a1.unit49.lesson03.teach.sleutel
+            kind: vocabulary
+            target: {text: "de sleutel", language_code: nl, direction: ltr}
+            introduced_tokens: [de, sleutel, Hier, is, uw, sleutel]
+            example: {text: "Hier is uw sleutel.", language_code: nl, direction: ltr}
+          - content_key: nl.a1.unit49.lesson03.teach.wifiwachtwoord
+            kind: vocabulary
+            target: {text: "het wifiwachtwoord", language_code: nl, direction: ltr}
+            introduced_tokens: [het, wifiwachtwoord, Het, wifiwachtwoord, staat, op, de, kaart]
+            example: {text: "Het wifiwachtwoord staat op de kaart.", language_code: nl, direction: ltr}
+          - {content_key: nl.a1.unit49.lesson03.teach.wat_wifiwachtwoord, kind: phrase, target: {text: "Wat is het wifiwachtwoord?", language_code: nl, direction: ltr}, introduced_tokens: [Wat, is, het, wifiwachtwoord]}
+        exercises:
+          - {content_key: nl.a1.unit49.lesson03.exercise01.choose_hier_sleutel, type: multiple_choice, tested_text: "Hier is uw sleutel", prompt: {target_blocks: [{text: "Here is your key.", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit49.lesson03.exercise02.listen_wifiwachtwoord_kaart, type: listen_select, tested_text: "Het wifiwachtwoord staat op de kaart", media_asset_key: nl.a1.audio.accommodatie.wifiwachtwoord_kaart.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit49.lesson03.exercise03.match_sleutel_wifi, type: matching_pairs, tested_text: "sleutel wifiwachtwoord kaart", prompt: {target_blocks: []}, pairs: [{left: sleutel, right: key}, {left: wifiwachtwoord, right: "wifi password"}, {left: "de sleutel", right: "the key"}, {left: "Hier is uw sleutel.", right: "Here is your key."}, {left: "Het wifiwachtwoord staat op de kaart.", right: "The wifi password is on the card."}, {left: "Wat is het wifiwachtwoord?", right: "What is the wifi password?"}]}
+          - {content_key: nl.a1.unit49.lesson03.exercise04.order_hier_sleutel, type: word_order, tested_text: "Hier is uw sleutel", prompt: {target_blocks: []}, word_bank: [Hier, is, uw, sleutel]}
+          - {content_key: nl.a1.unit49.lesson03.exercise05.listen_order_wifiwachtwoord_kaart, type: listen_order, tested_text: "Het wifiwachtwoord staat op de kaart", media_asset_key: nl.a1.audio.accommodatie.wifiwachtwoord_kaart.01, prompt: {target_blocks: []}, word_bank: [Het, wifiwachtwoord, staat, op, de, kaart]}
+          - {content_key: nl.a1.unit49.lesson03.exercise06.translate_de_sleutel, type: translation, tested_text: "de sleutel", prompt: {target_blocks: [{text: "the key", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit49.lesson03.exercise07.respond_wat_wifiwachtwoord, type: dialogue_response, tested_text: "Wat is het wifiwachtwoord", prompt: {target_blocks: [{text: "Ask in Dutch: what is the wifi password?", language_code: en, direction: ltr}]}}
+
+      - content_key: nl.a1.unit49.lesson04.inchecken_bij_de_balie
+        title: "Inchecken bij de balie"
+        spine_outcome_id: universal.a1.accommodation.check_into_lodging
+        teaching:
+          - {content_key: nl.a1.unit49.lesson04.teach.receptionist_groet, kind: dialogue, target: {text: "Receptionist: Goedemiddag! Heeft u een reservering?", language_code: nl, direction: ltr}, introduced_tokens: [Receptionist, Goedemiddag, Heeft, u, een, reservering]}
+          - {content_key: nl.a1.unit49.lesson04.teach.nina_naam, kind: dialogue, target: {text: "Nina: Ja, op naam van Nina.", language_code: nl, direction: ltr}, introduced_tokens: [Nina, Ja, op, naam, van, Nina]}
+          - {content_key: nl.a1.unit49.lesson04.teach.receptionist_nachten, kind: dialogue, target: {text: "Receptionist: Voor hoeveel nachten?", language_code: nl, direction: ltr}, introduced_tokens: [Receptionist, Voor, hoeveel, nachten]}
+          - {content_key: nl.a1.unit49.lesson04.teach.omar_een_nacht, kind: dialogue, target: {text: "Omar: Voor één nacht.", language_code: nl, direction: ltr}, introduced_tokens: [Omar, Voor, één, nacht]}
+          - {content_key: nl.a1.unit49.lesson04.teach.receptionist_sleutel_kamer, kind: dialogue, target: {text: "Receptionist: Hier is uw sleutel. Kamer twaalf.", language_code: nl, direction: ltr}, introduced_tokens: [Receptionist, Hier, is, uw, sleutel, Kamer, twaalf]}
+        exercises:
+          - {content_key: nl.a1.unit49.lesson04.exercise01.listen_reservering, type: listen_select, tested_text: "Heeft u een reservering", media_asset_key: nl.a1.audio.dialogue.accommodatie_balie.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit49.lesson04.exercise02.comprehend_naam, type: dialogue_comprehension, tested_text: Nina, media_asset_key: nl.a1.audio.dialogue.accommodatie_balie.01, prompt: {target_blocks: [{text: "Whose name is the reservation under?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit49.lesson04.exercise03.comprehend_nachten, type: dialogue_comprehension, tested_text: "één nacht", media_asset_key: nl.a1.audio.dialogue.accommodatie_balie.01, prompt: {target_blocks: [{text: "How many nights do Nina and Omar stay?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit49.lesson04.exercise04.comprehend_kamer, type: dialogue_comprehension, tested_text: "Kamer twaalf", media_asset_key: nl.a1.audio.dialogue.accommodatie_balie.01, prompt: {target_blocks: [{text: "What room number does the receptionist give them?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit49.lesson04.exercise05.order_hier_sleutel, type: word_order, tested_text: "Hier is uw sleutel", prompt: {target_blocks: []}, word_bank: [Hier, is, uw, sleutel]}
+          - {content_key: nl.a1.unit49.lesson04.exercise06.respond_reservering, type: dialogue_response, tested_text: "Ja op naam van Nina", prompt: {target_blocks: [{text: "Heeft u een reservering?", language_code: nl, direction: ltr}]}}
+          - {content_key: nl.a1.unit49.lesson04.exercise07.listen_type_sleutel_kamer, type: listen_type, tested_text: "Hier is uw sleutel Kamer twaalf", media_asset_key: nl.a1.audio.accommodatie.sleutel_kamer_twaalf.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit49.lesson04.exercise08.write_hoeveel_nachten, type: writing_prompt, tested_text: "Voor hoeveel nachten", prompt: {target_blocks: [{text: "Write in Dutch: for how many nights?", language_code: en, direction: ltr}]}}
+
+      - content_key: nl.a1.unit49.lesson05.bevestiging_lezen
+        title: "Een bevestiging lezen"
+        spine_outcome_id: universal.a1.accommodation.check_into_lodging
+        teaching:
+          - content_key: nl.a1.unit49.lesson05.teach.bevestiging
+            kind: vocabulary
+            target: {text: "de bevestiging", language_code: nl, direction: ltr}
+            introduced_tokens: [de, bevestiging, Ik, lees, de, bevestiging]
+            example: {text: "Ik lees de bevestiging.", language_code: nl, direction: ltr}
+          - content_key: nl.a1.unit49.lesson05.teach.bon_tekst
+            kind: reading
+            target:
+              text: >-
+                Bevestiging: Kamer twaalf voor Nina en Omar. Eén nacht op
+                zaterdag 16 mei. Uitchecken is om elf uur.
+              language_code: nl
+              direction: ltr
+            introduced_tokens: [Bevestiging, Kamer, twaalf, voor, Nina, en, Omar, Eén, nacht, op, zaterdag, "16", mei, Uitchecken, is, om, elf, uur]
+          - {content_key: nl.a1.unit49.lesson05.teach.uitchecken_elf_uur, kind: phrase, target: {text: "Uitchecken is om elf uur.", language_code: nl, direction: ltr}, introduced_tokens: [Uitchecken, is, om, elf, uur]}
+        exercises:
+          - {content_key: nl.a1.unit49.lesson05.exercise01.read_kamer, type: reading_comprehension, tested_text: "Kamer twaalf", prompt: {target_blocks: [{text: "According to the confirmation, which room is reserved?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit49.lesson05.exercise02.read_datum, type: reading_comprehension, tested_text: "zaterdag 16 mei", prompt: {target_blocks: [{text: "According to the confirmation, which date is the stay?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit49.lesson05.exercise03.read_uitchecktijd, type: reading_comprehension, tested_text: "elf uur", prompt: {target_blocks: [{text: "According to the confirmation, what time is check-out?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit49.lesson05.exercise04.match_bevestiging, type: matching_pairs, tested_text: "bevestiging kamer uitchecken elf uur", prompt: {target_blocks: []}, pairs: [{left: Bevestiging, right: Confirmation}, {left: "Kamer twaalf voor Nina en Omar.", right: "Room twelve for Nina and Omar."}, {left: "Eén nacht op zaterdag 16 mei.", right: "One night on Saturday, May 16."}, {left: "Uitchecken is om elf uur.", right: "Check-out is at eleven o'clock."}, {left: uitchecken, right: "to check out"}, {left: bevestiging, right: confirmation}]}
+          - {content_key: nl.a1.unit49.lesson05.exercise05.listen_bevestiging, type: listen_select, tested_text: "Bevestiging Kamer twaalf voor Nina en Omar", media_asset_key: nl.a1.audio.accommodatie.bevestiging.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit49.lesson05.exercise06.write_uitchecktijd, type: writing_prompt, tested_text: "Uitchecken is om elf uur", prompt: {target_blocks: [{text: "Write in Dutch: check-out is at eleven o'clock.", language_code: en, direction: ltr}]}}
+
+      - content_key: nl.a1.unit49.lesson06.lotte_belt
+        title: "Lotte belt over het weekend"
+        spine_outcome_id: universal.a1.accommodation.check_into_lodging
+        teaching:
+          - {content_key: nl.a1.unit49.lesson06.teach.lotte_vraag, kind: dialogue, target: {text: "Lotte: Hoe was het weekend in Maastricht?", language_code: nl, direction: ltr}, introduced_tokens: [Lotte, Hoe, was, het, weekend, in, Maastricht]}
+          - {content_key: nl.a1.unit49.lesson06.teach.nina_leuk, kind: dialogue, target: {text: "Nina: Heel leuk! We hadden een mooie kamer.", language_code: nl, direction: ltr}, introduced_tokens: [Nina, Heel, leuk, We, hadden, een, mooie, kamer]}
+          - {content_key: nl.a1.unit49.lesson06.teach.omar_ontbijt, kind: dialogue, target: {text: "Omar: Het ontbijt was heerlijk.", language_code: nl, direction: ltr}, introduced_tokens: [Omar, Het, ontbijt, was, heerlijk]}
+          - {content_key: nl.a1.unit49.lesson06.teach.lotte_mee, kind: dialogue, target: {text: "Lotte: Volgende keer ga ik ook mee!", language_code: nl, direction: ltr}, introduced_tokens: [Lotte, Volgende, keer, ga, ik, ook, mee]}
+          - {content_key: nl.a1.unit49.lesson06.teach.mooi_weekend, kind: phrase, target: {text: "We hadden een heel mooi weekend.", language_code: nl, direction: ltr}, introduced_tokens: [We, hadden, een, heel, mooi, weekend]}
+        exercises:
+          - {content_key: nl.a1.unit49.lesson06.exercise01.listen_mooie_kamer, type: listen_select, tested_text: "Heel leuk We hadden een mooie kamer", media_asset_key: nl.a1.audio.dialogue.accommodatie_slot.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit49.lesson06.exercise02.comprehend_stad, type: dialogue_comprehension, tested_text: Maastricht, media_asset_key: nl.a1.audio.dialogue.accommodatie_slot.01, prompt: {target_blocks: [{text: "Where did Nina and Omar spend the weekend?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit49.lesson06.exercise03.comprehend_ontbijt, type: dialogue_comprehension, tested_text: heerlijk, media_asset_key: nl.a1.audio.dialogue.accommodatie_slot.01, prompt: {target_blocks: [{text: "What does Omar say about breakfast?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit49.lesson06.exercise04.match_slot, type: matching_pairs, tested_text: "weekend mooie kamer heerlijk mee", prompt: {target_blocks: []}, pairs: [{left: "Hoe was het weekend in Maastricht?", right: "How was the weekend in Maastricht?"}, {left: "We hadden een mooie kamer.", right: "We had a beautiful room."}, {left: "Het ontbijt was heerlijk.", right: "Breakfast was delicious."}, {left: "Volgende keer ga ik ook mee!", right: "Next time I'm coming too!"}, {left: heerlijk, right: delicious}, {left: weekend, right: weekend}]}
+          - {content_key: nl.a1.unit49.lesson06.exercise05.order_mooi_weekend, type: word_order, tested_text: "We hadden een heel mooi weekend", prompt: {target_blocks: []}, word_bank: [We, hadden, een, heel, mooi, weekend]}
+          - {content_key: nl.a1.unit49.lesson06.exercise06.respond_hoe_was_weekend, type: dialogue_response, tested_text: "Heel leuk We hadden een mooie kamer", prompt: {target_blocks: [{text: "Hoe was het weekend in Maastricht?", language_code: nl, direction: ltr}]}}
+          - {content_key: nl.a1.unit49.lesson06.exercise07.listen_type_ontbijt_heerlijk, type: listen_type, tested_text: "Het ontbijt was heerlijk", media_asset_key: nl.a1.audio.accommodatie.ontbijt_heerlijk.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit49.lesson06.exercise08.write_mooi_weekend, type: writing_prompt, tested_text: "We hadden een heel mooi weekend", prompt: {target_blocks: [{text: "Write in Dutch: we had a very beautiful weekend.", language_code: en, direction: ltr}]}}
