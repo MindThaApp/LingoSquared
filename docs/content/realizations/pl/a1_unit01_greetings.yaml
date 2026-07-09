@@ -1,0 +1,429 @@
+schema_version: "1.1"
+realization_version: "2026.1-draft.1"
+target_language: "pl"
+cefr_level: "A1"
+status: "complete_draft"
+generation_provenance:
+  method: "ai_generated"
+  authoring_system: "claude"
+  human_reviewed: false
+review:
+  status: "unreviewed"
+  required_next_reviewer: "codex"
+  notes: >-
+    First-ever Polish unit for this app (pl is a brand-new target
+    language). Structural template: es/a1_unit01_greetings.yaml (closest
+    precedent for bootstrapping a brand-new Latin-script target from
+    nothing). Sized to 3 lessons per explicit sizing guidance for a
+    first bootstrap unit -- not the full 6-lesson depth es eventually
+    grew to. Authored from the start in AUTHORING_GUIDE §19 format
+    (schema_version 1.1): every kind:vocabulary card carries a real
+    example: sentence. Zero listen_type/listen_select/listen_order
+    exercises anywhere in this file -- pl is not yet in either
+    GOOGLE_TTS_SUPPORTED_LANGUAGES or AZURE_TTS_SUPPORTED_LANGUAGES
+    (backend/app/services/tts.py), so per AUTHORING_GUIDE §14's general
+    principle (documented there for prs specifically, applied here to a
+    second currently-audio-less language) every exercise uses a real
+    visible text prompt instead of an audio-only one; media_assets is
+    therefore an empty list, not an oversight. dialogue_comprehension
+    exercises in lesson03 render via the same MultipleChoice component
+    as multiple_choice/listen_select (frontend/src/components/exercises/
+    ExerciseRenderer.tsx) and are given real target_blocks text instead
+    of a media_asset_key, so they work as pure reading comprehension
+    with no audio dependency.
+
+    Source: FSI Polish FAST (1992), Unit 1 "Exchanging Greetings and
+    Introductions" -- confirmed real public-domain US government
+    course text (fsi-languages.yojik.eu/languages/FSI/Polish/FAST/FSI
+    - Polish FAST.pdf, OCR'd but genuinely extractable via pdftotext
+    -layout, not scan-only). Real source vocabulary actually used here,
+    modernized per §10 (the source is 1990s diplomatic-register --
+    embassy staff introducing themselves to colleagues -- so its
+    register and scenario were adapted, not copied): dzień dobry, dobry
+    wieczór, dobranoc, do widzenia, jestem/nazywam się pattern, pan/pani
+    formal address and the associated verb-ending agreement, "Czy pan/
+    pani mówi po polsku?" (this exact question is in the source almost
+    verbatim, unit 1's own pronunciation-practice section). The source
+    course is written entirely in the formal pan/pani register (it's a
+    diplomatic-training text, addressed to adults meeting professional
+    colleagues) and never once covers informal ty-register greetings or
+    farewells -- confirmed by grep across the full 467-page OCR text,
+    zero hits for "cześć" or "jak się masz" anywhere in the document.
+    Every ty-register item in this file (ty, jak się masz, a ty, cześć,
+    pa-equivalent farewell use of cześć, jak masz na imię, mam na imię,
+    skąd jesteś) is therefore freshly authored from general knowledge of
+    modern spoken Polish, not source-derived -- disclosed honestly per
+    the standing requirement. Names (Anna Kowalska, Marek Wójcik, Ewa)
+    and the unit01.lesson03 closing dialogue scenario are freshly
+    authored; Kowalski/Kowalska and similar names appear in the FSI
+    source purely as a very common placeholder Polish surname, reused
+    here for the same reason.
+
+course:
+  realization_key: pl.a1
+  target_language_first: true
+  dialect: pl_standard
+  register_policy: >-
+    Teach standard Polish as used across Poland. Polish marks a real
+    formal/informal distinction the way German Sie/du or Spanish usted/
+    tú do, but with an extra wrinkle: the formal "you" itself splits by
+    the addressee's gender (pan for a man, pani for a woman), and formal
+    verb forms agree with pan/pani as third-person subjects ("pan jest"
+    literally "the gentleman is", not a true second-person form). Teach
+    pan/pani for an unfamiliar adult or a professionally respectful
+    register, and ty for a friend, peer, or informal setting. Don't
+    teach vy-style plural-as-formal patterns or regional forms in this
+    introductory unit.
+
+media_assets: []
+
+units:
+  - content_key: pl.a1.unit01.greetings
+    title: "Powitania i pierwsze spotkania"
+    section: reading_writing
+    spine_outcome_ids:
+      - universal.a1.greetings.open_close_exchange
+      - universal.a1.introductions.exchange_identity
+    planned_lesson_count: 3
+
+    lessons:
+      - content_key: pl.a1.unit01.lesson01.address_and_wellbeing
+        title: "Pan, pani i ty: jak zapytać, co słychać"
+        spine_outcome_id: universal.a1.greetings.open_close_exchange
+        teaching:
+          - content_key: pl.a1.unit01.lesson01.teach.pan
+            kind: grammar_note
+            target: {text: "pan", language_code: pl, direction: ltr}
+            introduced_tokens: ["pan"]
+          - content_key: pl.a1.unit01.lesson01.teach.pani
+            kind: grammar_note
+            target: {text: "pani", language_code: pl, direction: ltr}
+            introduced_tokens: ["pani"]
+          - content_key: pl.a1.unit01.lesson01.teach.ty
+            kind: grammar_note
+            target: {text: "ty", language_code: pl, direction: ltr}
+            introduced_tokens: ["ty"]
+          - content_key: pl.a1.unit01.lesson01.teach.jak_sie_pan_ma
+            kind: phrase
+            target: {text: "Jak się pan ma?", language_code: pl, direction: ltr}
+            introduced_tokens: ["Jak", "się", "pan", "ma"]
+          - content_key: pl.a1.unit01.lesson01.teach.jak_sie_pani_ma
+            kind: phrase
+            target: {text: "Jak się pani ma?", language_code: pl, direction: ltr}
+            introduced_tokens: ["Jak", "się", "pani", "ma"]
+          - content_key: pl.a1.unit01.lesson01.teach.jak_sie_masz
+            kind: phrase
+            target: {text: "Jak się masz?", language_code: pl, direction: ltr}
+            introduced_tokens: ["Jak", "się", "masz"]
+          - content_key: pl.a1.unit01.lesson01.teach.dobrze_dziekuje
+            kind: phrase
+            target: {text: "Dobrze, dziękuję.", language_code: pl, direction: ltr}
+            introduced_tokens: ["Dobrze", "dziękuję"]
+          - content_key: pl.a1.unit01.lesson01.teach.a_pan
+            kind: phrase
+            target: {text: "A pan?", language_code: pl, direction: ltr}
+            introduced_tokens: ["A", "pan"]
+          - content_key: pl.a1.unit01.lesson01.teach.a_ty
+            kind: phrase
+            target: {text: "A ty?", language_code: pl, direction: ltr}
+            introduced_tokens: ["A", "ty"]
+        exercises:
+          - content_key: pl.a1.unit01.lesson01.exercise01.select_formal_man
+            type: multiple_choice
+            tested_text: "pan"
+            prompt:
+              target_blocks:
+                - {text: "pan", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit01.lesson01.exercise02.select_formal_woman
+            type: multiple_choice
+            tested_text: "pani"
+            prompt:
+              target_blocks:
+                - {text: "pani", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit01.lesson01.exercise03.select_informal
+            type: multiple_choice
+            tested_text: "ty"
+            prompt:
+              target_blocks:
+                - {text: "ty", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit01.lesson01.exercise04.order_formal_wellbeing
+            type: word_order
+            tested_text: "Jak się pan ma"
+            prompt: {target_blocks: []}
+            word_bank: ["Jak", "się", "pan", "ma"]
+          - content_key: pl.a1.unit01.lesson01.exercise05.order_informal_wellbeing
+            type: word_order
+            tested_text: "Jak się masz"
+            prompt: {target_blocks: []}
+            word_bank: ["masz", "się", "Jak"]
+          - content_key: pl.a1.unit01.lesson01.exercise06.return_formal
+            type: dialogue_response
+            tested_text: "A pan"
+            prompt:
+              target_blocks:
+                - {text: "Dobrze, dziękuję.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit01.lesson01.exercise07.return_informal
+            type: dialogue_response
+            tested_text: "A ty"
+            prompt:
+              target_blocks:
+                - {text: "Dobrze, dziękuję.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit01.lesson01.exercise08.correct_informal_agreement
+            type: grammar_check
+            tested_text: "Jak się masz"
+            prompt:
+              target_blocks:
+                - {text: "Jak się ty ma?", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit01.lesson01.exercise09.reply_formally
+            type: dialogue_response
+            tested_text: "Jak się pan ma Dobrze dziękuję"
+            prompt:
+              target_blocks:
+                - {text: "Jak się pan ma?", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit01.lesson01.exercise10.speak_informally
+            type: speak_response
+            tested_text: "Dobrze dziękuję A ty"
+            prompt:
+              target_blocks:
+                - {text: "Jak się masz?", language_code: pl, direction: ltr}
+
+      - content_key: pl.a1.unit01.lesson02.greetings_by_time
+        title: "Powitania i pożegnania o różnych porach dnia"
+        spine_outcome_id: universal.a1.greetings.open_close_exchange
+        teaching:
+          - content_key: pl.a1.unit01.lesson02.teach.czesc
+            kind: vocabulary
+            target: {text: "Cześć", language_code: pl, direction: ltr}
+            introduced_tokens: ["Cześć"]
+            example: {text: "Cześć, jak się masz?", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit01.lesson02.teach.dzien_dobry
+            kind: phrase
+            target: {text: "Dzień dobry", language_code: pl, direction: ltr}
+            introduced_tokens: ["Dzień", "dobry"]
+          - content_key: pl.a1.unit01.lesson02.teach.dobry_wieczor
+            kind: phrase
+            target: {text: "Dobry wieczór", language_code: pl, direction: ltr}
+            introduced_tokens: ["Dobry", "wieczór"]
+          - content_key: pl.a1.unit01.lesson02.teach.dobranoc
+            kind: vocabulary
+            target: {text: "Dobranoc", language_code: pl, direction: ltr}
+            introduced_tokens: ["Dobranoc"]
+            example: {text: "Dobranoc, Piotrze!", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit01.lesson02.teach.do_widzenia
+            kind: phrase
+            target: {text: "Do widzenia", language_code: pl, direction: ltr}
+            introduced_tokens: ["Do", "widzenia"]
+          - content_key: pl.a1.unit01.lesson02.teach.do_zobaczenia
+            kind: phrase
+            target: {text: "Do zobaczenia", language_code: pl, direction: ltr}
+            introduced_tokens: ["Do", "zobaczenia"]
+          - content_key: pl.a1.unit01.lesson02.teach.milego_dnia
+            kind: phrase
+            target: {text: "Miłego dnia!", language_code: pl, direction: ltr}
+            introduced_tokens: ["Miłego", "dnia"]
+        exercises:
+          - content_key: pl.a1.unit01.lesson02.exercise01.select_hi
+            type: multiple_choice
+            tested_text: "Cześć"
+            prompt:
+              target_blocks:
+                - {text: "Cześć", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit01.lesson02.exercise02.select_evening
+            type: multiple_choice
+            tested_text: "Dobry wieczór"
+            prompt:
+              target_blocks:
+                - {text: "Dobry wieczór", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit01.lesson02.exercise03.select_night_meaning
+            type: multiple_choice
+            tested_text: "Dobranoc"
+            prompt:
+              target_blocks:
+                - {text: "Dobranoc", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit01.lesson02.exercise04.order_morning
+            type: word_order
+            tested_text: "Dzień dobry"
+            prompt: {target_blocks: []}
+            word_bank: ["dobry", "Dzień"]
+          - content_key: pl.a1.unit01.lesson02.exercise05.order_goodbye
+            type: word_order
+            tested_text: "Do widzenia"
+            prompt: {target_blocks: []}
+            word_bank: ["widzenia", "Do"]
+          - content_key: pl.a1.unit01.lesson02.exercise06.order_see_you
+            type: word_order
+            tested_text: "Do zobaczenia"
+            prompt: {target_blocks: []}
+            word_bank: ["zobaczenia", "Do"]
+          - content_key: pl.a1.unit01.lesson02.exercise07.order_nice_day
+            type: word_order
+            tested_text: "Miłego dnia"
+            prompt: {target_blocks: []}
+            word_bank: ["dnia", "Miłego"]
+          - content_key: pl.a1.unit01.lesson02.exercise08.reply_to_evening
+            type: dialogue_response
+            tested_text: "Dobry wieczór Do widzenia"
+            prompt:
+              target_blocks:
+                - {text: "Dobry wieczór!", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit01.lesson02.exercise09.speak_friendly_closing
+            type: speak_response
+            tested_text: "Do zobaczenia"
+            prompt: {target_blocks: []}
+
+      - content_key: pl.a1.unit01.lesson03.names_origin_and_smalltalk
+        title: "Imię, nazwisko i skąd jesteś"
+        spine_outcome_id: universal.a1.introductions.exchange_identity
+        teaching:
+          - content_key: pl.a1.unit01.lesson03.teach.jak_sie_pan_nazywa
+            kind: phrase
+            target: {text: "Jak się pan nazywa?", language_code: pl, direction: ltr}
+            introduced_tokens: ["Jak", "się", "pan", "nazywa"]
+          - content_key: pl.a1.unit01.lesson03.teach.jak_masz_na_imie
+            kind: phrase
+            target: {text: "Jak masz na imię?", language_code: pl, direction: ltr}
+            introduced_tokens: ["Jak", "masz", "na", "imię"]
+          - content_key: pl.a1.unit01.lesson03.teach.nazywam_sie
+            kind: phrase
+            target: {text: "Nazywam się Anna Kowalska.", language_code: pl, direction: ltr}
+            introduced_tokens: ["Nazywam", "się", "Anna", "Kowalska"]
+          - content_key: pl.a1.unit01.lesson03.teach.mam_na_imie
+            kind: phrase
+            target: {text: "Mam na imię Anna.", language_code: pl, direction: ltr}
+            introduced_tokens: ["Mam", "na", "imię", "Anna"]
+          - content_key: pl.a1.unit01.lesson03.teach.bardzo_mi_milo
+            kind: phrase
+            target: {text: "Bardzo mi miło.", language_code: pl, direction: ltr}
+            introduced_tokens: ["Bardzo", "mi", "miło"]
+          - content_key: pl.a1.unit01.lesson03.teach.skad_jestes
+            kind: phrase
+            target: {text: "Skąd jesteś?", language_code: pl, direction: ltr}
+            introduced_tokens: ["Skąd", "jesteś"]
+          - content_key: pl.a1.unit01.lesson03.teach.jestem_z
+            kind: phrase
+            target: {text: "Jestem z Kanady.", language_code: pl, direction: ltr}
+            introduced_tokens: ["Jestem", "z", "Kanady"]
+          - content_key: pl.a1.unit01.lesson03.teach.mieszkam_w
+            kind: phrase
+            target: {text: "Mieszkam w Warszawie.", language_code: pl, direction: ltr}
+            introduced_tokens: ["Mieszkam", "w", "Warszawie"]
+          - content_key: pl.a1.unit01.lesson03.teach.dialogue.line01
+            kind: dialogue
+            target:
+              text: "Dzień dobry! Jak się pan nazywa?"
+              language_code: pl
+              direction: ltr
+              speaker: Ewa
+            introduced_tokens: []
+          - content_key: pl.a1.unit01.lesson03.teach.dialogue.line02
+            kind: dialogue
+            target:
+              text: "Nazywam się Marek Wójcik. Bardzo mi miło."
+              language_code: pl
+              direction: ltr
+              speaker: Marek
+            introduced_tokens: ["Marek", "Wójcik"]
+          - content_key: pl.a1.unit01.lesson03.teach.dialogue.line03
+            kind: dialogue
+            target:
+              text: "Bardzo mi miło. Skąd pan jest?"
+              language_code: pl
+              direction: ltr
+              speaker: Ewa
+            introduced_tokens: ["jest"]
+          - content_key: pl.a1.unit01.lesson03.teach.dialogue.line04
+            kind: dialogue
+            target:
+              text: "Jestem z Kanady, ale mieszkam w Warszawie."
+              language_code: pl
+              direction: ltr
+              speaker: Marek
+            introduced_tokens: ["ale"]
+          - content_key: pl.a1.unit01.lesson03.teach.dialogue.line05
+            kind: dialogue
+            target:
+              text: "Czy pan mówi po polsku?"
+              language_code: pl
+              direction: ltr
+              speaker: Ewa
+            introduced_tokens: ["Czy", "mówi", "po", "polsku"]
+          - content_key: pl.a1.unit01.lesson03.teach.dialogue.line06
+            kind: dialogue
+            target:
+              text: "Tak, trochę. Jeszcze się uczę. Do widzenia!"
+              language_code: pl
+              direction: ltr
+              speaker: Marek
+            introduced_tokens: ["Tak", "trochę", "Jeszcze", "uczę"]
+        exercises:
+          - content_key: pl.a1.unit01.lesson03.exercise01.select_formal_name_question
+            type: multiple_choice
+            tested_text: "Jak się pan nazywa"
+            prompt:
+              target_blocks:
+                - {text: "Jak się pan nazywa?", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit01.lesson03.exercise02.select_informal_name_question
+            type: multiple_choice
+            tested_text: "Jak masz na imię"
+            prompt:
+              target_blocks:
+                - {text: "Jak masz na imię?", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit01.lesson03.exercise03.comprehend_origin
+            type: dialogue_comprehension
+            tested_text: "Kanady Warszawie"
+            prompt:
+              target_blocks:
+                - {text: "Jestem z Kanady, ale mieszkam w Warszawie.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit01.lesson03.exercise04.comprehend_language_ability
+            type: dialogue_comprehension
+            tested_text: "trochę uczę"
+            prompt:
+              target_blocks:
+                - {text: "Tak, trochę. Jeszcze się uczę.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit01.lesson03.exercise05.order_informal_origin
+            type: word_order
+            tested_text: "Skąd jesteś"
+            prompt: {target_blocks: []}
+            word_bank: ["jesteś", "Skąd"]
+          - content_key: pl.a1.unit01.lesson03.exercise06.order_from_canada
+            type: word_order
+            tested_text: "Jestem z Kanady"
+            prompt: {target_blocks: []}
+            word_bank: ["Kanady", "Jestem", "z"]
+          - content_key: pl.a1.unit01.lesson03.exercise07.order_live_warsaw
+            type: word_order
+            tested_text: "Mieszkam w Warszawie"
+            prompt: {target_blocks: []}
+            word_bank: ["Warszawie", "Mieszkam", "w"]
+          - content_key: pl.a1.unit01.lesson03.exercise08.match_questions_and_answers
+            type: matching_pairs
+            tested_text: "Jak się pan nazywa Nazywam się Anna Kowalska Jak masz na imię Mam na imię Anna Skąd jesteś Jestem z Kanady Czy pan mówi po polsku Tak trochę Jak się pan ma Dobrze dziękuję"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "Jak się pan nazywa?", right: "Nazywam się Anna Kowalska."}
+              - {left: "Jak masz na imię?", right: "Mam na imię Anna."}
+              - {left: "Skąd jesteś?", right: "Jestem z Kanady."}
+              - {left: "Czy pan mówi po polsku?", right: "Tak, trochę."}
+              - {left: "Jak się pan ma?", right: "Dobrze, dziękuję."}
+          - content_key: pl.a1.unit01.lesson03.exercise09.fill_in_first_name
+            type: fill_in_blank
+            tested_text: "Nazywam się Anna Kowalska"
+            prompt:
+              target_blocks:
+                - {text: "Nazywam się _ Kowalska.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit01.lesson03.exercise10.reply_from_canada
+            type: dialogue_response
+            tested_text: "Jestem z Kanady"
+            prompt:
+              target_blocks:
+                - {text: "Skąd jesteś?", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit01.lesson03.exercise11.reply_still_learning
+            type: dialogue_response
+            tested_text: "Tak trochę Jeszcze się uczę"
+            prompt:
+              target_blocks:
+                - {text: "Czy pan mówi po polsku?", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit01.lesson03.exercise12.speak_self_introduction
+            type: speak_response
+            tested_text: "Nazywam się Anna Kowalska Mieszkam w Warszawie"
+            prompt: {target_blocks: []}
