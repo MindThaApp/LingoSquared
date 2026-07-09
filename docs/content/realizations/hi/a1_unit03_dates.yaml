@@ -1,0 +1,542 @@
+schema_version: "1.1"
+realization_version: "2026.1-draft.1"
+target_language: "hi"
+cefr_level: "A1"
+status: "complete_draft"
+generation_provenance:
+  method: "ai_generated"
+  authoring_system: "claude"
+  human_reviewed: false
+review:
+  status: "unreviewed"
+  required_next_reviewer: "codex"
+  notes: >-
+    Third Hindi unit, continuing directly from hi/a1_unit02_numbers.yaml
+    (same Priya/Arjun characters, same yoga-class setting, same aap/tum
+    register split, same feminine-noun possessive-agreement teaching
+    thread now extended to a new feminine noun, तारीख़). Spine outcome
+    confirmed via universal_spine.yaml: hi/a1_unit02 realized
+    universal.a1.numbers.use_basic_numbers, and
+    universal.a1.dates.exchange_calendar_dates lists that exact outcome
+    as its only prerequisite -- confirmed against actual on-disk
+    precedent from every other launched language's own unit03
+    (nl/a1_unit03_dates.yaml, pl/a1_unit03_dates.yaml,
+    ro/a1_unit03_dates.yaml all realize this exact outcome as their
+    third unit, matching hi's own greetings-then-numbers-then-dates
+    sequence; es/a1_unit03_family.yaml and fa/a1_unit03_numbers.yaml are
+    both older units predating this project's now-settled
+    numbers-then-dates convention, following an older unit ordering, not
+    a counter-example). Sized to 3 lessons matching unit01/02's
+    bootstrap pace -- topic/pacing structure only (days, then months
+    plus asking the date, then a scheduling-and-birthday dialogue),
+    no text or phrasing reused from any other language's file, per the
+    standing skeleton-share-not-text-share policy.
+
+    Source access, re-attempted per this task's explicit instruction
+    (not just assumed to fail the same way as unit01/unit02): re-used
+    the same FSI "Hindi: An Active Introduction" PDF already downloaded
+    for units 01/02 (scratch copy at .../scratchpad/hi/fsi_hindi.pdf)
+    and re-ran both extraction paths specifically against this unit's
+    own topic. (1) `pdftotext -layout` against the raw PDF again
+    returned a near-empty file (143 bytes total across all 143 pages,
+    byte-for-byte identical to the unit01/unit02 result) -- confirms
+    this is genuinely a pure page-image scan with no embedded text
+    layer at all, not something that varies by section. (2) A fresh
+    grep of the same Internet Archive OCR pass (`ocr.txt`, the ABBYY
+    FineReader 9.0 output already recovered for unit01/02) specifically
+    for date/calendar/weekday English framing prose found real hits
+    confirming the OCR pass DID correctly transcribe the surrounding
+    instructional text for this exact section: "It's Tuesday.", "And
+    what date?", "Write the current date on the blackboard.", "Dates:
+    these expressions are used:", "on Sunday", "Thursdays", "last
+    week"/"last month". But a full-document regex scan of the same
+    94KB OCR file for the Devanagari Unicode block (U+0900-U+097F)
+    returns ZERO matches anywhere -- including at the exact lines
+    identified above, where the Hindi half of each example survives
+    only as unusable Latin-lookalike mojibake (e.g. the "It's
+    Tuesday." line renders as "*T T^T I 1 It's Tuesday.", the "Dates:
+    these expressions are used:" line is followed by "*rr# q^ft sifter
+    spt" with no recoverable Devanagari at all). Identical failure mode
+    to units 01/02, now confirmed a third time against this unit's own
+    specific topic rather than assumed. Per this task's explicit
+    instruction, nothing from either extraction attempt was used,
+    cleaned up, or guessed at anywhere in this file -- every Devanagari
+    string below is this session's own careful, correct rendering from
+    established Modern Standard Hindi, verified character-by-character
+    (including the anusvara-vs-chandrabindu convention: chandrabindu
+    (ँ) after non-ascending vowel signs, anusvara (ं) after ascending
+    vowel signs as in नहीं/मैं/हैं/में -- this unit's own new
+    vocabulary happens to need no new nasalization marks beyond हैं,
+    already established in unit01), never OCR output, never
+    machine-translated.
+
+    Two real calendar dates are stated together with a weekday in this
+    file (lesson03's "अगली क्लास मंगलवार, दस मार्च को है" -- "the next
+    class is Tuesday, March 10th"), so per the standing calendar-fact
+    lesson from nl/a1_unit03's own review history, the weekday/date
+    pairing was independently verified with Python's date library
+    before writing it: `datetime.date(2026, 3, 10).strftime('%A')`
+    returns "Tuesday" -- genuinely calendar-true for the same 2026
+    course-canon year nl/a1_unit03 already established, not an
+    invented pairing. No other sentence in this file combines a
+    specific weekday with a specific date/month, so no other fact
+    needed this check.
+
+    A genuine, disclosed content-design choice: Hindi dates are
+    normally stated with a cardinal number plus तारीख़/the month name
+    (आज तीन तारीख़ है, आज तीन जनवरी है), NOT with an ordinal
+    construction the way English ("the third") or Dutch (de derde)
+    are -- so unlike nl/a1_unit03's 31-card ordinal-number teaching
+    block, this unit does not teach Hindi ordinals for dates at all.
+    That is not a gap or a simplification of real Hindi grammar; it is
+    the real, natural way an ordinary date is spoken and written in
+    Hindi. Numbers 1-31 beyond what unit02 already taught (0-10, 11,
+    12, 15, 20, 30, 50, 100) are not separately introduced here either
+    -- this unit reuses only तीन and दस (both re-taught within this
+    file per the standing per-file vocabulary rule) since those are
+    the only two numbers this unit's own dates/examples actually need.
+
+course:
+  realization_key: hi.a1
+  target_language_first: true
+  dialect: hi_standard
+  register_policy: >-
+    Continues unit01/02's aap/tum split exactly. Extends the running
+    feminine-noun possessive-agreement thread (इसकी कीमत, आपकी/तुम्हारी
+    उम्र from unit02) to a new feminine noun, तारीख़ (date) -- आज
+    कितनी तारीख़ है? uses the feminine question word कितनी, never the
+    masculine कितना, called out explicitly on the relevant teaching
+    card and drilled via a grammar_check exercise. दिन (day) and
+    जन्मदिन (birthday) are both masculine, and क्लास (class, an
+    English loanword) is treated as feminine per its common everyday
+    usage (अगली क्लास, not अगला क्लास) -- also called out explicitly
+    rather than left as an unexplained variant spelling. Priya and
+    Arjun, already on तुम terms from unit01/02's dialogues, continue in
+    that register for this unit's own closing dialogue.
+
+media_assets: []
+
+units:
+  - content_key: hi.a1.unit03.dates
+    title: "दिन और तारीख़ें"
+    section: reading_writing
+    spine_outcome_ids:
+      - universal.a1.dates.exchange_calendar_dates
+    planned_lesson_count: 3
+
+    lessons:
+      - content_key: hi.a1.unit03.lesson01.days_of_week
+        title: "सप्ताह के दिन"
+        spine_outcome_id: universal.a1.dates.exchange_calendar_dates
+        teaching:
+          - content_key: hi.a1.unit03.lesson01.teach.aaj
+            kind: vocabulary
+            target: {text: "आज", language_code: hi, direction: ltr}
+            introduced_tokens: ["आज"]
+            example: {text: "आज मौसम अच्छा है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit03.lesson01.teach.somvar
+            kind: vocabulary
+            target: {text: "सोमवार", language_code: hi, direction: ltr}
+            introduced_tokens: ["सोमवार"]
+            example: {text: "योग क्लास सोमवार को है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit03.lesson01.teach.mangalvar
+            kind: vocabulary
+            target: {text: "मंगलवार", language_code: hi, direction: ltr}
+            introduced_tokens: ["मंगलवार"]
+            example: {text: "आज मंगलवार है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit03.lesson01.teach.budhvar
+            kind: vocabulary
+            target: {text: "बुधवार", language_code: hi, direction: ltr}
+            introduced_tokens: ["बुधवार"]
+            example: {text: "आज बुधवार है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit03.lesson01.teach.guruvar
+            kind: vocabulary
+            target: {text: "गुरुवार", language_code: hi, direction: ltr}
+            introduced_tokens: ["गुरुवार"]
+            example: {text: "आज गुरुवार है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit03.lesson01.teach.shukravar
+            kind: vocabulary
+            target: {text: "शुक्रवार", language_code: hi, direction: ltr}
+            introduced_tokens: ["शुक्रवार"]
+            example: {text: "शुक्रवार को योग क्लास नहीं है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit03.lesson01.teach.shanivar
+            kind: vocabulary
+            target: {text: "शनिवार", language_code: hi, direction: ltr}
+            introduced_tokens: ["शनिवार"]
+            example: {text: "आज शनिवार है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit03.lesson01.teach.ravivar
+            kind: vocabulary
+            target: {text: "रविवार", language_code: hi, direction: ltr}
+            introduced_tokens: ["रविवार"]
+            example: {text: "आज रविवार है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit03.lesson01.teach.kaun_sa_din_hai
+            kind: phrase
+            target: {text: "आज कौन सा दिन है?", language_code: hi, direction: ltr}
+            introduced_tokens: ["आज", "कौन", "सा", "दिन", "है"]
+          - content_key: hi.a1.unit03.lesson01.teach.yoga_class_monday
+            kind: phrase
+            target: {text: "योग क्लास सोमवार को है।", language_code: hi, direction: ltr}
+            introduced_tokens: ["योग", "क्लास", "सोमवार", "को", "है"]
+          - content_key: hi.a1.unit03.lesson01.teach.no_class_friday
+            kind: phrase
+            target: {text: "शुक्रवार को योग क्लास नहीं है।", language_code: hi, direction: ltr}
+            introduced_tokens: ["शुक्रवार", "को", "योग", "क्लास", "नहीं", "है"]
+        exercises:
+          - content_key: hi.a1.unit03.lesson01.exercise01.select_budhvar
+            type: multiple_choice
+            tested_text: "बुधवार"
+            prompt:
+              target_blocks:
+                - {text: "बुधवार", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit03.lesson01.exercise02.select_ravivar
+            type: multiple_choice
+            tested_text: "रविवार"
+            prompt:
+              target_blocks:
+                - {text: "रविवार", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit03.lesson01.exercise03.select_kaun_sa_din_meaning
+            type: multiple_choice
+            tested_text: "आज कौन सा दिन है"
+            prompt:
+              target_blocks:
+                - {text: "आज कौन सा दिन है?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit03.lesson01.exercise04.match_days
+            type: matching_pairs
+            tested_text: "सोमवार मंगलवार बुधवार गुरुवार शुक्रवार शनिवार रविवार"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "सोमवार", right: "Monday"}
+              - {left: "मंगलवार", right: "Tuesday"}
+              - {left: "बुधवार", right: "Wednesday"}
+              - {left: "गुरुवार", right: "Thursday"}
+              - {left: "शुक्रवार", right: "Friday"}
+              - {left: "शनिवार", right: "Saturday"}
+              - {left: "रविवार", right: "Sunday"}
+          - content_key: hi.a1.unit03.lesson01.exercise05.order_kaun_sa_din
+            type: word_order
+            tested_text: "आज कौन सा दिन है"
+            prompt: {target_blocks: []}
+            word_bank: ["कौन", "आज", "सा", "है", "दिन"]
+          - content_key: hi.a1.unit03.lesson01.exercise06.order_yoga_monday
+            type: word_order
+            tested_text: "योग क्लास सोमवार को है"
+            prompt: {target_blocks: []}
+            word_bank: ["सोमवार", "योग", "है", "को", "क्लास"]
+          - content_key: hi.a1.unit03.lesson01.exercise07.fill_yoga_day
+            type: fill_in_blank
+            tested_text: "को"
+            prompt:
+              target_blocks:
+                - {text: "योग क्लास सोमवार ___ है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit03.lesson01.exercise08.fix_missing_ko
+            type: grammar_check
+            tested_text: "शुक्रवार को योग क्लास नहीं है"
+            prompt:
+              target_blocks:
+                - {text: "शुक्रवार योग क्लास नहीं है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit03.lesson01.exercise09.reply_today_wednesday
+            type: dialogue_response
+            tested_text: "आज बुधवार है"
+            prompt:
+              target_blocks:
+                - {text: "आज कौन सा दिन है?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit03.lesson01.exercise10.speak_today_monday
+            type: speak_response
+            tested_text: "आज सोमवार है"
+            prompt:
+              target_blocks:
+                - {text: "अपने दिन के बारे में बताओ: आज सोमवार है।", language_code: hi, direction: ltr}
+
+      - content_key: hi.a1.unit03.lesson02.months_and_dates
+        title: "महीने और तारीख़ पूछना"
+        spine_outcome_id: universal.a1.dates.exchange_calendar_dates
+        teaching:
+          - content_key: hi.a1.unit03.lesson02.teach.jan_feb_mar
+            kind: vocabulary
+            target: {text: "जनवरी, फ़रवरी, मार्च", language_code: hi, direction: ltr}
+            introduced_tokens: ["जनवरी", "फ़रवरी", "मार्च"]
+            example:
+              - {text: "मेरा जन्मदिन जनवरी में है।", language_code: hi, direction: ltr}
+              - {text: "अगली छुट्टी फ़रवरी में है।", language_code: hi, direction: ltr}
+              - {text: "मेरा जन्मदिन मार्च में है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit03.lesson02.teach.apr_may_jun
+            kind: vocabulary
+            target: {text: "अप्रैल, मई, जून", language_code: hi, direction: ltr}
+            introduced_tokens: ["अप्रैल", "मई", "जून"]
+            example:
+              - {text: "अगली छुट्टी अप्रैल में है।", language_code: hi, direction: ltr}
+              - {text: "मेरा जन्मदिन मई में है।", language_code: hi, direction: ltr}
+              - {text: "अगली छुट्टी जून में है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit03.lesson02.teach.jul_aug_sep
+            kind: vocabulary
+            target: {text: "जुलाई, अगस्त, सितंबर", language_code: hi, direction: ltr}
+            introduced_tokens: ["जुलाई", "अगस्त", "सितंबर"]
+            example:
+              - {text: "मेरा जन्मदिन जुलाई में है।", language_code: hi, direction: ltr}
+              - {text: "अगली छुट्टी अगस्त में है।", language_code: hi, direction: ltr}
+              - {text: "मेरा जन्मदिन सितंबर में है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit03.lesson02.teach.oct_nov_dec
+            kind: vocabulary
+            target: {text: "अक्टूबर, नवंबर, दिसंबर", language_code: hi, direction: ltr}
+            introduced_tokens: ["अक्टूबर", "नवंबर", "दिसंबर"]
+            example:
+              - {text: "अगली छुट्टी अक्टूबर में है।", language_code: hi, direction: ltr}
+              - {text: "मेरा जन्मदिन नवंबर में है।", language_code: hi, direction: ltr}
+              - {text: "अगली छुट्टी दिसंबर में है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit03.lesson02.teach.tareekh
+            kind: vocabulary
+            target: {text: "तारीख़", language_code: hi, direction: ltr}
+            introduced_tokens: ["तारीख़"]
+            example: {text: "आज तीन तारीख़ है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit03.lesson02.teach.mein_postposition
+            kind: grammar_note
+            target: {text: "में -- महीने के नाम के साथ इस्तेमाल होता है: जनवरी में (in January)।", language_code: hi, direction: ltr}
+            introduced_tokens: ["में"]
+          - content_key: hi.a1.unit03.lesson02.teach.aaj_kitni_tareekh_hai
+            kind: phrase
+            target: {text: "आज कितनी तारीख़ है?", language_code: hi, direction: ltr}
+            introduced_tokens: ["आज", "कितनी", "तारीख़", "है"]
+          - content_key: hi.a1.unit03.lesson02.teach.aaj_teen_tareekh_hai
+            kind: phrase
+            target: {text: "आज तीन तारीख़ है।", language_code: hi, direction: ltr}
+            introduced_tokens: ["आज", "तीन", "तारीख़", "है"]
+          - content_key: hi.a1.unit03.lesson02.teach.aaj_teen_january_hai
+            kind: phrase
+            target: {text: "आज तीन जनवरी है।", language_code: hi, direction: ltr}
+            introduced_tokens: ["आज", "तीन", "जनवरी", "है"]
+        exercises:
+          - content_key: hi.a1.unit03.lesson02.exercise01.select_april
+            type: multiple_choice
+            tested_text: "अप्रैल"
+            prompt:
+              target_blocks:
+                - {text: "अप्रैल", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit03.lesson02.exercise02.select_december
+            type: multiple_choice
+            tested_text: "दिसंबर"
+            prompt:
+              target_blocks:
+                - {text: "दिसंबर", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit03.lesson02.exercise03.match_months
+            type: matching_pairs
+            tested_text: "जनवरी फ़रवरी मार्च अप्रैल मई जून जुलाई अगस्त सितंबर अक्टूबर नवंबर दिसंबर"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "जनवरी", right: "January"}
+              - {left: "फ़रवरी", right: "February"}
+              - {left: "मार्च", right: "March"}
+              - {left: "अप्रैल", right: "April"}
+              - {left: "मई", right: "May"}
+              - {left: "जून", right: "June"}
+              - {left: "जुलाई", right: "July"}
+              - {left: "अगस्त", right: "August"}
+              - {left: "सितंबर", right: "September"}
+              - {left: "अक्टूबर", right: "October"}
+              - {left: "नवंबर", right: "November"}
+              - {left: "दिसंबर", right: "December"}
+          - content_key: hi.a1.unit03.lesson02.exercise04.order_date_question
+            type: word_order
+            tested_text: "आज कितनी तारीख़ है"
+            prompt: {target_blocks: []}
+            word_bank: ["तारीख़", "आज", "कितनी", "है"]
+          - content_key: hi.a1.unit03.lesson02.exercise05.fill_date_january
+            type: fill_in_blank
+            tested_text: "तीन"
+            prompt:
+              target_blocks:
+                - {text: "आज ___ जनवरी है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit03.lesson02.exercise06.fix_tareekh_agreement
+            type: grammar_check
+            tested_text: "आज कितनी तारीख़ है"
+            prompt:
+              target_blocks:
+                - {text: "आज कितना तारीख़ है?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit03.lesson02.exercise07.reply_date
+            type: dialogue_response
+            tested_text: "आज तीन जनवरी है"
+            prompt:
+              target_blocks:
+                - {text: "आज कितनी तारीख़ है?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit03.lesson02.exercise08.speak_date
+            type: speak_response
+            tested_text: "आज तीन जनवरी है"
+            prompt:
+              target_blocks:
+                - {text: "आज की तारीख़ कहो: तीन जनवरी।", language_code: hi, direction: ltr}
+
+      - content_key: hi.a1.unit03.lesson03.next_class_and_birthday
+        title: "अगली क्लास और जन्मदिन"
+        spine_outcome_id: universal.a1.dates.exchange_calendar_dates
+        teaching:
+          - content_key: hi.a1.unit03.lesson03.teach.kab
+            kind: vocabulary
+            target: {text: "कब", language_code: hi, direction: ltr}
+            introduced_tokens: ["कब"]
+            example: {text: "अगली क्लास कब है?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit03.lesson03.teach.agli
+            kind: vocabulary
+            target: {text: "अगली", language_code: hi, direction: ltr}
+            introduced_tokens: ["अगली"]
+            example: {text: "अगली क्लास मंगलवार को है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit03.lesson03.teach.das_reprise
+            kind: vocabulary
+            target: {text: "दस", language_code: hi, direction: ltr}
+            introduced_tokens: ["दस"]
+            example: {text: "अगली क्लास दस तारीख़ को है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit03.lesson03.teach.janmadin
+            kind: vocabulary
+            target: {text: "जन्मदिन", language_code: hi, direction: ltr}
+            introduced_tokens: ["जन्मदिन"]
+            example: {text: "मेरा जन्मदिन दिसंबर में है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit03.lesson03.teach.tumhara_janmadin_kab_hai
+            kind: phrase
+            target: {text: "तुम्हारा जन्मदिन कब है?", language_code: hi, direction: ltr}
+            introduced_tokens: ["तुम्हारा", "जन्मदिन", "कब", "है"]
+          - content_key: hi.a1.unit03.lesson03.teach.mera_janmadin_january_mein_hai
+            kind: phrase
+            target: {text: "मेरा जन्मदिन जनवरी में है।", language_code: hi, direction: ltr}
+            introduced_tokens: ["मेरा", "जन्मदिन", "जनवरी", "में", "है"]
+          - content_key: hi.a1.unit03.lesson03.teach.agli_class_kab_hai
+            kind: phrase
+            target: {text: "अगली क्लास कब है?", language_code: hi, direction: ltr}
+            introduced_tokens: ["अगली", "क्लास", "कब", "है"]
+          - content_key: hi.a1.unit03.lesson03.teach.agli_class_mangalvar_das_march
+            kind: phrase
+            target: {text: "अगली क्लास मंगलवार, दस मार्च को है।", language_code: hi, direction: ltr}
+            introduced_tokens: ["अगली", "क्लास", "मंगलवार", "दस", "मार्च", "को", "है"]
+          - content_key: hi.a1.unit03.lesson03.teach.dialogue.line01
+            kind: dialogue
+            target:
+              text: "अगली योग क्लास कब है?"
+              language_code: hi
+              direction: ltr
+              speaker: Arjun
+            introduced_tokens: ["Arjun"]
+          - content_key: hi.a1.unit03.lesson03.teach.dialogue.line02
+            kind: dialogue
+            target:
+              text: "अगली क्लास मंगलवार, दस मार्च को है।"
+              language_code: hi
+              direction: ltr
+              speaker: Priya
+            introduced_tokens: ["Priya"]
+          - content_key: hi.a1.unit03.lesson03.teach.dialogue.line03
+            kind: dialogue
+            target:
+              text: "ठीक है, शुक्रिया!"
+              language_code: hi
+              direction: ltr
+              speaker: Arjun
+            introduced_tokens: ["ठीक", "है", "शुक्रिया"]
+          - content_key: hi.a1.unit03.lesson03.teach.dialogue.line04
+            kind: dialogue
+            target:
+              text: "कोई बात नहीं!"
+              language_code: hi
+              direction: ltr
+              speaker: Priya
+            introduced_tokens: ["कोई", "बात", "नहीं"]
+          - content_key: hi.a1.unit03.lesson03.teach.dialogue.line05
+            kind: dialogue
+            target:
+              text: "तुम्हारा जन्मदिन कब है?"
+              language_code: hi
+              direction: ltr
+              speaker: Arjun
+            introduced_tokens: []
+          - content_key: hi.a1.unit03.lesson03.teach.dialogue.line06
+            kind: dialogue
+            target:
+              text: "मेरा जन्मदिन जनवरी में है।"
+              language_code: hi
+              direction: ltr
+              speaker: Priya
+            introduced_tokens: []
+          - content_key: hi.a1.unit03.lesson03.teach.dialogue.line07
+            kind: dialogue
+            target:
+              text: "अच्छा! और मेरा जन्मदिन दिसंबर में है।"
+              language_code: hi
+              direction: ltr
+              speaker: Arjun
+            introduced_tokens: ["अच्छा", "और"]
+          - content_key: hi.a1.unit03.lesson03.teach.dialogue.line08
+            kind: dialogue
+            target:
+              text: "ठीक है, फिर मिलते हैं!"
+              language_code: hi
+              direction: ltr
+              speaker: Priya
+            introduced_tokens: ["फिर", "मिलते", "हैं"]
+        exercises:
+          - content_key: hi.a1.unit03.lesson03.exercise01.select_agli_class_kab
+            type: multiple_choice
+            tested_text: "अगली क्लास कब है"
+            prompt:
+              target_blocks:
+                - {text: "अगली क्लास कब है?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit03.lesson03.exercise02.select_tumhara_janmadin_kab
+            type: multiple_choice
+            tested_text: "तुम्हारा जन्मदिन कब है"
+            prompt:
+              target_blocks:
+                - {text: "तुम्हारा जन्मदिन कब है?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit03.lesson03.exercise03.comprehend_next_class_date
+            type: dialogue_comprehension
+            tested_text: "मंगलवार दस मार्च"
+            prompt:
+              target_blocks:
+                - {text: "अगली क्लास मंगलवार, दस मार्च को है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit03.lesson03.exercise04.comprehend_priya_birthday
+            type: dialogue_comprehension
+            tested_text: "जनवरी"
+            prompt:
+              target_blocks:
+                - {text: "मेरा जन्मदिन जनवरी में है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit03.lesson03.exercise05.order_agli_class_kab
+            type: word_order
+            tested_text: "अगली क्लास कब है"
+            prompt: {target_blocks: []}
+            word_bank: ["क्लास", "अगली", "है", "कब"]
+          - content_key: hi.a1.unit03.lesson03.exercise06.order_mera_janmadin
+            type: word_order
+            tested_text: "मेरा जन्मदिन जनवरी में है"
+            prompt: {target_blocks: []}
+            word_bank: ["जनवरी", "मेरा", "में", "जन्मदिन", "है"]
+          - content_key: hi.a1.unit03.lesson03.exercise07.match_questions_and_answers
+            type: matching_pairs
+            tested_text: "अगली क्लास कब है मंगलवार दस मार्च को है तुम्हारा जन्मदिन कब है मेरा जन्मदिन जनवरी में है ठीक है शुक्रिया कोई बात नहीं अच्छा और मेरा जन्मदिन दिसंबर में है ठीक है फिर मिलते हैं"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "अगली क्लास कब है?", right: "अगली क्लास मंगलवार, दस मार्च को है।"}
+              - {left: "तुम्हारा जन्मदिन कब है?", right: "मेरा जन्मदिन जनवरी में है।"}
+              - {left: "ठीक है, शुक्रिया!", right: "कोई बात नहीं!"}
+              - {left: "अच्छा! और मेरा जन्मदिन दिसंबर में है।", right: "ठीक है, फिर मिलते हैं!"}
+          - content_key: hi.a1.unit03.lesson03.exercise08.fill_next_class_date
+            type: fill_in_blank
+            tested_text: "दस"
+            prompt:
+              target_blocks:
+                - {text: "अगली क्लास मंगलवार, ___ मार्च को है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit03.lesson03.exercise09.fix_birthday_postposition
+            type: grammar_check
+            tested_text: "मेरा जन्मदिन जनवरी में है"
+            prompt:
+              target_blocks:
+                - {text: "मेरा जन्मदिन जनवरी को है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit03.lesson03.exercise10.reply_own_birthday
+            type: dialogue_response
+            tested_text: "मेरा जन्मदिन दिसंबर में है"
+            prompt:
+              target_blocks:
+                - {text: "तुम्हारा जन्मदिन कब है?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit03.lesson03.exercise11.write_next_class_date
+            type: writing_prompt
+            tested_text: "मंगलवार दस मार्च को"
+            prompt: {target_blocks: []}
+          - content_key: hi.a1.unit03.lesson03.exercise12.speak_own_birthday
+            type: speak_response
+            tested_text: "मेरा जन्मदिन जनवरी में है"
+            prompt:
+              target_blocks:
+                - {text: "अपने जन्मदिन के बारे में बताओ: मेरा जन्मदिन जनवरी में है।", language_code: hi, direction: ltr}
