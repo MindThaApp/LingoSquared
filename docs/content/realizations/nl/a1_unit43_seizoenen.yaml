@@ -1,0 +1,374 @@
+schema_version: "1.1"
+realization_version: "2026.1-draft.1"
+target_language: nl
+cefr_level: A1
+generation_provenance: {method: ai_generated, authoring_system: claude, human_reviewed: false}
+status: complete_draft
+review:
+  status: unreviewed
+  required_next_reviewer: claude
+  notes: >-
+    New A1 seasons unit (file-numbered unit43, next after unit42's colors),
+    realizing a NEW spine outcome universal.a1.seasons.describe_seasons
+    (prerequisite: universal.a1.weather.describe_basic_weather). An exact
+    spine_outcome_id diff across all 42 existing nl realization files
+    (direct `grep -oP` of every `- id: universal\.` in universal_spine.yaml
+    against every `universal\.` occurrence anywhere in
+    docs/content/realizations/nl/*.yaml, then `comm -23`, not eyeballed)
+    confirmed the only two unrealized outcomes in the WHOLE spine were the
+    two B1 outcomes (abilities, necessity) -- every single A1/A2 outcome
+    was already realized, out of scope for this A1 volume-growth task. So
+    one new sensible A1 topic was required under the standing delegated
+    spine-authority; checked git log first
+    (`git log --oneline -- docs/content/universal_spine.yaml`) and
+    confirmed the most recent spine addition was
+    universal.a1.colors.describe_colors, added in the SAME commit that
+    shipped this file's own predecessor (nl unit42) -- so no other session
+    had just added an outcome nl hadn't caught up to yet, and no commit
+    since (checked `git log --oneline -5` overall, most recent touches
+    fa/prs/de content, nothing nl or spine). "Describing the four seasons"
+    was chosen as a natural, near-universally-taught A1 topic with no
+    existing dedicated spine coverage: weather
+    (universal.a1.weather.describe_basic_weather, realized in nl unit19)
+    only covers CURRENT day-to-day conditions (zonnig/regent/bewolkt/koud/
+    warm) and a single weekend-planning scenario, never the four named
+    seasons or recurring seasonal patterns -- confirmed via direct grep
+    across the whole nl corpus that lente/zomer/herfst/winter/seizoen were
+    never taught as standalone vocabulary anywhere before this file ("winter"
+    only ever appeared baked into the compound noun "Winterjas" in unit20's
+    clothing unit, never as its own taught token). Sanity-checked the new
+    outcome via direct read after adding: no duplicate id (46 total outcomes
+    after adding, confirmed via a yaml.safe_load id-count/dedupe check),
+    valid prerequisite reference (universal.a1.weather.describe_basic_weather,
+    already realized in nl unit19), all 4 modalities present, exactly 4
+    assessment_requirements with 4 success_criteria, same shape as every
+    neighboring entry (built closely off the colors outcome's own shape,
+    the most recently-added and structurally closest entry, and reusing its
+    exact prerequisite-chaining pattern of pointing at a thematically
+    adjacent, already-realized outcome).
+
+    Continues the established Lotte/Omar/Sander/Fenna/Nina taalcafé
+    storyline three days after unit42's Saturday-2-May-2026 flower-market
+    trip: Saturday 2 May 2026 (unit42) + 3 days = Tuesday 5 May 2026
+    (calendar-true, confirmed via direct `python3 -c "import datetime;
+    print(datetime.date(2026,5,5).strftime('%A'))"` -- Tuesday,
+    independently verified against the real-world 2026 calendar, not
+    assumed). Setting is the taalcafé itself (no new location needed,
+    matching unit41's own Tuesday-taalcafé setting -- checked unit41/unit36/
+    unit38/unit39/unit40 directly for any prior claim that the taalcafé
+    meets on a fixed recurring day and found none, so a second Tuesday
+    session doesn't contradict any established fact). Naturally motivated
+    by unit42's own flower-market trip: the group is still talking about
+    the tulips/spring when the conversation turns to the four seasons more
+    generally, and lesson04's dialogue opens with Omar explicitly
+    referencing "De tulpen zijn mooi" as a direct callback. No new
+    characters introduced in lessons 01-05; Sander (already established in
+    unit41 -- has an established personality trait "grappig"/funny and a
+    Spanish course, neither touched or contradicted here) joins the group
+    for lesson06's closing scene, the same "one established character
+    arrives late" pattern unit40's own lesson06 (Sander joining the dinner
+    for its closing "Eet smakelijk, allemaal!" line) already used. Reuses
+    established facts without contradiction (checked directly against
+    unit30/32/40/41/42): Nina, Lotte, Omar, Sander, and Fenna are all
+    established taalcafé friends who use informal jij/je with each other
+    (no formal u needed, matching every prior unit's register_policy for
+    this friend group); nothing about any character's job/hobbies/schedule
+    is touched or contradicted by this conversation.
+
+    Grammar-scope check, the most important discipline decision in this
+    file: the corpus already gates 3rd-person "vindt" (opinion verb, stem
+    ends -nd + -t) to A2 (a2_unit25_meningen.yaml's dedicated grammar_note
+    for "Omar vindt het fietspad een goed idee") -- confirmed by grep
+    before writing a single sentence. Every "vind" statement in this file
+    is either 1st person ("Ik vind de zomer leuk", no -t, correct present-
+    tense stem form) or the inverted-question 2nd person ("Welk seizoen
+    vind jij mooi?", correctly NO -t because "jij" follows the verb in
+    inversion -- the same pattern unit42's own "Welke kleur wil jij?" and
+    the weather unit's "Zullen we ...?" already used without ever teaching
+    the underlying inversion rule explicitly). "vindt" appears exactly
+    once, inside lesson03's grammar_note explanatory text only ("... zegt
+    wat jij van een seizoen vindt") -- directly mirroring unit41's own
+    grammar_note precedent ("... zegt wat jij van iemand vindt"), never as
+    a testable tested_text/accepted_answers value, so it's explanatory
+    metalanguage, not new drilled production. 3rd-person narration
+    ("Nina vraagt", "Omar zegt", "Lotte zegt") reuses the already-
+    established A1 precedent for regular -t narration verbs (zegt: unit07;
+    vraagt: unit31/32/33/41's own reading/title usage) -- a different,
+    already-open pattern from the specifically-gated "vindt". No new tense,
+    no attributive adjective inflection, no separable-verb splitting
+    introduced; present tense throughout, matching unit35-42's own scope
+    discipline.
+
+    Every kind: vocabulary teaching card has a real example built only
+    from vocabulary already taught in this unit (or, for common function/
+    content words already taught in an EARLIER nl file -- de, het, is, in,
+    en, we, Ik, jij, van, een, wat, zegt, vraagt, mooi, leuk, zijn, vind,
+    Welk, nu, allemaal, vier, rustig, Nina, Lotte, Omar, Sander, tulpen,
+    zwemmen -- re-declared as review tokens on first use in THIS file per
+    the standing cross-file gotcha, since the compiler's untaught-
+    vocabulary check accumulates across an entire realization FILE, not
+    per-lesson, but resets at each new file; every one of these confirmed
+    present in an earlier nl file via direct grep before being reused
+    here, not assumed -- "zwemmen" specifically was already taught in
+    unit32/sports and "allemaal" in unit40/cooking, both genuine re-
+    declarations, not new vocabulary). Total genuinely NEW content words
+    taught: seizoen, lente, zomer, herfst, winter, schaatsen, favorieten
+    (7) -- within the established 6-10 "don't pad" range for core new
+    vocabulary; "schaatsen" (ice-skating) was deliberately chosen over
+    "skiën" for the winter activity as the more culturally authentic
+    Dutch pastime (frozen canals, a genuine national tradition) rather
+    than a ski-holiday reference, and "zwemmen" for summer was reused
+    directly from unit32 rather than inventing a new verb, both examples
+    of the established "reuse structure/vocabulary where it's already
+    real and available" efficiency policy.
+
+    Six lessons, recognition->drag->production pacing (§2): 01 teaches
+    "het seizoen"/"de lente"/"de zomer" via "In de lente is het zonnig."/
+    "In de zomer is het warm." (directly reusing unit19's zonnig/warm
+    weather vocabulary, satisfying the outcome's own "typical weather"
+    assessment requirement); 02 teaches "de herfst"/"de winter" the same
+    way plus the un-answered question phrase "Welk seizoen vind jij
+    mooi?" (recognition only, production drilled next lesson, the same
+    "introduce the question, answer it next lesson" pattern unit42's own
+    lesson02 welke_kleur_vraag used); 03 is a grammar_note on the
+    elliptical "Ik vind + seizoen + eigenschap" reply (reusing the
+    already-taught "Ik vind X Y" opinion construction from unit41 -- no
+    new grammar, just a new use of it, directly parallel to unit42's own
+    reuse of "Ik wil graag ...") plus "zwemmen"/"schaatsen" as the
+    concrete seasonal activities the outcome's "typical activity"
+    requirement needs; 04 is a dialogue (still Tuesday 5 May 2026, at the
+    taalcafé) where Nina asks what season it is, Omar names spring and
+    calls back to the tulips, then states his own favorite (summer); 05
+    is a reading recapping the conversation so far, mirroring unit19-42's
+    own "recap what happened" comprehension shape, told via direct-quote
+    narration ("Omar zegt: ...") specifically to avoid the gated 3rd-
+    person "vindt" form; 06 is the closing scene where Sander joins,
+    states his own favorite (fall) and a reason (calm), and Omar closes
+    on "Vier seizoenen, vier favorieten! Dat is leuk." -- a genuinely
+    fresh, natural Dutch closing, deliberately NOT another "Zullen we
+    ...?" callback, NOT unit41's "Welkom bij ons taalcafé!", and NOT
+    unit42's own "De tulpen maken het taalcafé mooi!" (three most recent
+    closing patterns all avoided, not just one, continuing unit42's own
+    explicit discipline on this point).
+
+    Every multi-clause open-text answer in this unit is a single
+    independent clause (no period/comma/conjunction-joined compound
+    answers were needed anywhere -- every dialogue_response/writing_prompt/
+    listen_type target is one clause), so per §12 each gets just the
+    trailing-period/no-trailing-period pair, matching unit36-42's own
+    precedent for single-clause answers; no genuinely multi-clause
+    accepted_answers list was required this unit.
+
+    Matching_pairs pairs checked for duplicate right-hand text within each
+    exercise -- no two pairs in any single exercise share identical left or
+    right text. All exercises use exactly 6 pairs, within the established
+    6-12 range (§16). Every fill_in_blank type was deliberately NOT used
+    anywhere in this unit (§13/§17 checked and consciously avoided rather
+    than force-fit) -- a blanked season slot ("In de ___ is het warm") has
+    no single mutually-exclusive correct answer given multiple seasons
+    could plausibly complete a weather frame, the exact §17 ambiguity
+    trap already flagged for unit42's colors; translation/writing_prompt/
+    dialogue_response used instead for every production check, same
+    resolution unit42 chose for the identical underlying problem.
+
+    Grepped this file and its overlay for bare unquoted yes/no/true/false/
+    ja/nee values before finalizing (the real German B1 boolean-coercion
+    bug and the vocabulary title/gloss boolean-coercion gap flagged this
+    session): this unit's dialogue and vocabulary content has no
+    occurrence of the Dutch word "ja"/"nee" at all; no bare "yes"/"no"/
+    "true"/"false" (English) appears anywhere in this file either,
+    including in any `title:`/`gloss:` field. Confirmed via a recursive
+    yaml.safe_load scan (not just text grep) of every scalar value in both
+    this file and its overlay -- the only bare-lowercase boolean-shaped
+    tokens anywhere are the two genuine YAML booleans (`human_reviewed:
+    false`, `target_language_first: true`), both correctly unquoted since
+    they ARE real booleans, not learner-facing string content.
+
+    Audio assets declared for generation. Pending fresh-context review and
+    Ramin's native-speaker pass.
+
+course:
+  realization_key: nl.a1
+  target_language_first: true
+  dialect: nl_NL_standard
+  register_policy: >-
+    Teach contemporary Standard Dutch as used in the Netherlands. Nina,
+    Lotte, Omar, and Sander are all established taalcafé friends and use
+    informal jij/je with each other throughout this unit -- no unnamed/
+    service-role character appears, so no formal u is needed anywhere in
+    this unit.
+
+media_assets:
+  - {content_key: nl.a1.audio.seizoenen.lente_zonnig.01, language: nl, text: "In de lente is het zonnig.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - {content_key: nl.a1.audio.seizoenen.zomer_warm.01, language: nl, text: "In de zomer is het warm.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - {content_key: nl.a1.audio.seizoenen.herfst_regent.01, language: nl, text: "In de herfst regent het.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - {content_key: nl.a1.audio.seizoenen.winter_koud.01, language: nl, text: "In de winter is het koud.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - {content_key: nl.a1.audio.seizoenen.zomer_zwemmen.01, language: nl, text: "In de zomer zwemmen we.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - {content_key: nl.a1.audio.seizoenen.winter_schaatsen.01, language: nl, text: "In de winter schaatsen we.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - content_key: nl.a1.audio.dialogue.seizoenen_taalcafe1.01
+    language: nl
+    text: >-
+      Nina: Welk seizoen is het nu? Omar: Het is lente! De tulpen zijn
+      mooi. Lotte: Welk seizoen vind jij mooi, Omar? Omar: Ik vind de
+      zomer leuk. In de zomer zwemmen we!
+    voice_hint: three_young_adults_neutral_friendly
+    status: pending_generation
+  - {content_key: nl.a1.audio.seizoenen.recap_tekst.01, language: nl, text: "Nina vraagt: Welk seizoen vind jij mooi?", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - content_key: nl.a1.audio.dialogue.seizoenen_taalcafe2.01
+    language: nl
+    text: >-
+      Sander: Hoi allemaal! Welk seizoen vind jij mooi, Lotte? Lotte: Ik
+      vind de winter leuk. In de winter schaatsen we. Sander: Ik vind de
+      herfst mooi. De herfst is rustig. Omar: Vier seizoenen, vier
+      favorieten! Dat is leuk.
+    voice_hint: three_young_adults_neutral_friendly
+    status: pending_generation
+  - {content_key: nl.a1.audio.seizoenen.herfst_rustig.01, language: nl, text: "De herfst is rustig.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+
+units:
+  - content_key: nl.a1.unit43.seizoenen
+    title: "Seizoenen: de vier seizoenen bij het taalcafé"
+    section: reading_writing
+    spine_outcome_ids: [universal.a1.seasons.describe_seasons]
+    planned_lesson_count: 6
+    lessons:
+      - content_key: nl.a1.unit43.lesson01.lente_en_zomer
+        title: "Lente en zomer"
+        spine_outcome_id: universal.a1.seasons.describe_seasons
+        teaching:
+          - content_key: nl.a1.unit43.lesson01.teach.seizoen
+            kind: vocabulary
+            target: {text: "het seizoen", language_code: nl, direction: ltr}
+            introduced_tokens: [het, seizoen, Welk, is, nu]
+            example: {text: "Welk seizoen is het nu?", language_code: nl, direction: ltr}
+          - content_key: nl.a1.unit43.lesson01.teach.lente
+            kind: vocabulary
+            target: {text: "de lente", language_code: nl, direction: ltr}
+            introduced_tokens: [de, lente, In, is, het, zonnig]
+            example: {text: "In de lente is het zonnig.", language_code: nl, direction: ltr}
+          - content_key: nl.a1.unit43.lesson01.teach.zomer
+            kind: vocabulary
+            target: {text: "de zomer", language_code: nl, direction: ltr}
+            introduced_tokens: [de, zomer, In, is, het, warm]
+            example: {text: "In de zomer is het warm.", language_code: nl, direction: ltr}
+          - {content_key: nl.a1.unit43.lesson01.teach.lente_zomer_phrase, kind: phrase, target: {text: "In de lente is het zonnig en in de zomer is het warm.", language_code: nl, direction: ltr}, introduced_tokens: [In, de, lente, is, het, zonnig, en, zomer, warm]}
+        exercises:
+          - {content_key: nl.a1.unit43.lesson01.exercise01.choose_lente_zonnig, type: multiple_choice, tested_text: "In de lente is het zonnig", prompt: {target_blocks: [{text: "In spring it is sunny.", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit43.lesson01.exercise02.listen_zomer_warm, type: listen_select, tested_text: "In de zomer is het warm", media_asset_key: nl.a1.audio.seizoenen.zomer_warm.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit43.lesson01.exercise03.match_lente_zomer, type: matching_pairs, tested_text: "lente zomer seizoen zonnig warm", prompt: {target_blocks: []}, pairs: [{left: lente, right: spring}, {left: zomer, right: summer}, {left: "het seizoen", right: "the season"}, {left: "In de lente is het zonnig.", right: "In spring it is sunny."}, {left: "In de zomer is het warm.", right: "In summer it is warm."}, {left: "Welk seizoen is het nu?", right: "Which season is it now?"}]}
+          - {content_key: nl.a1.unit43.lesson01.exercise04.order_lente_zonnig, type: word_order, tested_text: "In de lente is het zonnig", prompt: {target_blocks: []}, word_bank: [In, de, lente, is, het, zonnig]}
+          - {content_key: nl.a1.unit43.lesson01.exercise05.listen_order_lente_zonnig, type: listen_order, tested_text: "In de lente is het zonnig", media_asset_key: nl.a1.audio.seizoenen.lente_zonnig.01, prompt: {target_blocks: []}, word_bank: [In, de, lente, is, het, zonnig]}
+          - {content_key: nl.a1.unit43.lesson01.exercise06.translate_zomer, type: translation, tested_text: zomer, prompt: {target_blocks: [{text: summer, language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit43.lesson01.exercise07.respond_welk_seizoen_nu, type: dialogue_response, tested_text: "Het is lente", prompt: {target_blocks: [{text: "Welk seizoen is het nu?", language_code: nl, direction: ltr}]}}
+
+      - content_key: nl.a1.unit43.lesson02.herfst_en_winter
+        title: "Herfst en winter"
+        spine_outcome_id: universal.a1.seasons.describe_seasons
+        teaching:
+          - content_key: nl.a1.unit43.lesson02.teach.herfst
+            kind: vocabulary
+            target: {text: "de herfst", language_code: nl, direction: ltr}
+            introduced_tokens: [de, herfst, In, regent, het]
+            example: {text: "In de herfst regent het.", language_code: nl, direction: ltr}
+          - content_key: nl.a1.unit43.lesson02.teach.winter
+            kind: vocabulary
+            target: {text: "de winter", language_code: nl, direction: ltr}
+            introduced_tokens: [de, winter, In, is, het, koud]
+            example: {text: "In de winter is het koud.", language_code: nl, direction: ltr}
+          - {content_key: nl.a1.unit43.lesson02.teach.welk_seizoen_vind_je, kind: phrase, target: {text: "Welk seizoen vind jij mooi?", language_code: nl, direction: ltr}, introduced_tokens: [Welk, seizoen, vind, jij, mooi]}
+        exercises:
+          - {content_key: nl.a1.unit43.lesson02.exercise01.choose_herfst_regent, type: multiple_choice, tested_text: "In de herfst regent het", prompt: {target_blocks: [{text: "In fall it rains.", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit43.lesson02.exercise02.listen_winter_koud, type: listen_select, tested_text: "In de winter is het koud", media_asset_key: nl.a1.audio.seizoenen.winter_koud.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit43.lesson02.exercise03.match_herfst_winter, type: matching_pairs, tested_text: "herfst winter regent koud welk mooi", prompt: {target_blocks: []}, pairs: [{left: herfst, right: fall}, {left: winter, right: winter}, {left: "In de herfst regent het.", right: "In fall it rains."}, {left: "In de winter is het koud.", right: "In winter it is cold."}, {left: "Welk seizoen vind jij mooi?", right: "Which season do you find beautiful?"}, {left: lente, right: spring}]}
+          - {content_key: nl.a1.unit43.lesson02.exercise04.order_herfst_regent, type: word_order, tested_text: "In de herfst regent het", prompt: {target_blocks: []}, word_bank: [In, de, herfst, regent, het]}
+          - {content_key: nl.a1.unit43.lesson02.exercise05.listen_order_herfst_regent, type: listen_order, tested_text: "In de herfst regent het", media_asset_key: nl.a1.audio.seizoenen.herfst_regent.01, prompt: {target_blocks: []}, word_bank: [In, de, herfst, regent, het]}
+          - {content_key: nl.a1.unit43.lesson02.exercise06.translate_winter, type: translation, tested_text: winter, prompt: {target_blocks: [{text: winter, language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit43.lesson02.exercise07.respond_welk_seizoen_nu2, type: dialogue_response, tested_text: "Het is herfst", prompt: {target_blocks: [{text: "Welk seizoen is het nu?", language_code: nl, direction: ltr}]}}
+
+      - content_key: nl.a1.unit43.lesson03.activiteiten
+        title: "Activiteiten per seizoen"
+        spine_outcome_id: universal.a1.seasons.describe_seasons
+        teaching:
+          - content_key: nl.a1.unit43.lesson03.teach.zwemmen
+            kind: vocabulary
+            target: {text: zwemmen, language_code: nl, direction: ltr}
+            introduced_tokens: [zwemmen, In, de, zomer, we]
+            example: {text: "In de zomer zwemmen we.", language_code: nl, direction: ltr}
+          - content_key: nl.a1.unit43.lesson03.teach.ik_vind_grammar
+            kind: grammar_note
+            target: {text: "Ik vind + seizoen + eigenschap zegt wat jij van een seizoen vindt: Ik vind de zomer leuk.", language_code: nl, direction: ltr}
+            introduced_tokens: [Ik, vind, seizoen, eigenschap, zegt, wat, jij, van, een, vindt, de, zomer, leuk]
+          - content_key: nl.a1.unit43.lesson03.teach.schaatsen
+            kind: vocabulary
+            target: {text: schaatsen, language_code: nl, direction: ltr}
+            introduced_tokens: [schaatsen, In, de, winter, we]
+            example: {text: "In de winter schaatsen we.", language_code: nl, direction: ltr}
+          - {content_key: nl.a1.unit43.lesson03.teach.ik_vind_zomer_leuk, kind: phrase, target: {text: "Ik vind de zomer leuk.", language_code: nl, direction: ltr}, introduced_tokens: [Ik, vind, de, zomer, leuk]}
+        exercises:
+          - {content_key: nl.a1.unit43.lesson03.exercise01.choose_zomer_zwemmen, type: multiple_choice, tested_text: "In de zomer zwemmen we", prompt: {target_blocks: [{text: "In summer we swim.", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit43.lesson03.exercise02.listen_winter_schaatsen, type: listen_select, tested_text: "In de winter schaatsen we", media_asset_key: nl.a1.audio.seizoenen.winter_schaatsen.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit43.lesson03.exercise03.match_activiteiten, type: matching_pairs, tested_text: "zwemmen schaatsen zomer winter leuk mooi", prompt: {target_blocks: []}, pairs: [{left: zwemmen, right: "to swim"}, {left: schaatsen, right: "to skate"}, {left: "In de zomer zwemmen we.", right: "In summer we swim."}, {left: "In de winter schaatsen we.", right: "In winter we skate."}, {left: "Ik vind de zomer leuk.", right: "I like summer."}, {left: "Welk seizoen vind jij mooi?", right: "Which season do you find beautiful?"}]}
+          - {content_key: nl.a1.unit43.lesson03.exercise04.order_zomer_zwemmen, type: word_order, tested_text: "In de zomer zwemmen we", prompt: {target_blocks: []}, word_bank: [In, de, zomer, zwemmen, we]}
+          - {content_key: nl.a1.unit43.lesson03.exercise05.listen_order_zomer_zwemmen, type: listen_order, tested_text: "In de zomer zwemmen we", media_asset_key: nl.a1.audio.seizoenen.zomer_zwemmen.01, prompt: {target_blocks: []}, word_bank: [In, de, zomer, zwemmen, we]}
+          - {content_key: nl.a1.unit43.lesson03.exercise06.translate_schaatsen, type: translation, tested_text: schaatsen, prompt: {target_blocks: [{text: "to skate", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit43.lesson03.exercise07.respond_welk_seizoen_mooi, type: dialogue_response, tested_text: "Ik vind de zomer leuk", prompt: {target_blocks: [{text: "Welk seizoen vind jij mooi?", language_code: nl, direction: ltr}]}}
+
+      - content_key: nl.a1.unit43.lesson04.gesprek_bij_het_taalcafe
+        title: "Een gesprek bij het taalcafé"
+        spine_outcome_id: universal.a1.seasons.describe_seasons
+        teaching:
+          - {content_key: nl.a1.unit43.lesson04.teach.nina_welk_seizoen, kind: dialogue, target: {text: "Nina: Welk seizoen is het nu?", language_code: nl, direction: ltr}, introduced_tokens: [Nina, Welk, seizoen, is, het, nu]}
+          - {content_key: nl.a1.unit43.lesson04.teach.omar_lente_tulpen, kind: dialogue, target: {text: "Omar: Het is lente! De tulpen zijn mooi.", language_code: nl, direction: ltr}, introduced_tokens: [Omar, Het, is, lente, De, tulpen, zijn, mooi]}
+          - {content_key: nl.a1.unit43.lesson04.teach.lotte_vraagt_omar, kind: dialogue, target: {text: "Lotte: Welk seizoen vind jij mooi, Omar?", language_code: nl, direction: ltr}, introduced_tokens: [Lotte, Welk, seizoen, vind, jij, mooi, Omar]}
+          - {content_key: nl.a1.unit43.lesson04.teach.omar_antwoord_zomer, kind: dialogue, target: {text: "Omar: Ik vind de zomer leuk. In de zomer zwemmen we!", language_code: nl, direction: ltr}, introduced_tokens: [Omar, Ik, vind, de, zomer, leuk, In, zwemmen, we]}
+        exercises:
+          - {content_key: nl.a1.unit43.lesson04.exercise01.listen_nina_welk_seizoen, type: listen_select, tested_text: "Welk seizoen is het nu?", media_asset_key: nl.a1.audio.dialogue.seizoenen_taalcafe1.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit43.lesson04.exercise02.comprehend_welk_seizoen_omar, type: dialogue_comprehension, tested_text: "Het is lente", media_asset_key: nl.a1.audio.dialogue.seizoenen_taalcafe1.01, prompt: {target_blocks: [{text: "What season does Omar say it is?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit43.lesson04.exercise03.comprehend_tulpen_mooi, type: dialogue_comprehension, tested_text: "De tulpen zijn mooi", media_asset_key: nl.a1.audio.dialogue.seizoenen_taalcafe1.01, prompt: {target_blocks: [{text: "What does Omar say about the tulips?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit43.lesson04.exercise04.comprehend_omar_favoriet, type: dialogue_comprehension, tested_text: "Ik vind de zomer leuk", media_asset_key: nl.a1.audio.dialogue.seizoenen_taalcafe1.01, prompt: {target_blocks: [{text: "Which season does Omar say he likes?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit43.lesson04.exercise05.order_ik_vind_zomer_leuk, type: word_order, tested_text: "Ik vind de zomer leuk", prompt: {target_blocks: []}, word_bank: [Ik, vind, de, zomer, leuk]}
+          - {content_key: nl.a1.unit43.lesson04.exercise06.respond_lotte_vraagt_omar, type: dialogue_response, tested_text: "Ik vind de zomer leuk", prompt: {target_blocks: [{text: "Welk seizoen vind jij mooi, Omar?", language_code: nl, direction: ltr}]}}
+          - {content_key: nl.a1.unit43.lesson04.exercise07.listen_type_zomer_zwemmen, type: listen_type, tested_text: "In de zomer zwemmen we", media_asset_key: nl.a1.audio.seizoenen.zomer_zwemmen.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit43.lesson04.exercise08.write_welk_seizoen_nu, type: writing_prompt, tested_text: "Welk seizoen is het nu", prompt: {target_blocks: [{text: "Write in Dutch: ask which season it is now.", language_code: en, direction: ltr}]}}
+
+      - content_key: nl.a1.unit43.lesson05.lezen_seizoenen
+        title: "Een tekst over seizoenen lezen"
+        spine_outcome_id: universal.a1.seasons.describe_seasons
+        teaching:
+          - content_key: nl.a1.unit43.lesson05.teach.tekst
+            kind: reading
+            target:
+              text: >-
+                Het is nu lente. De tulpen zijn mooi. Nina vraagt: Welk
+                seizoen vind jij mooi? Omar zegt: Ik vind de zomer leuk.
+                In de zomer zwemmen we. Lotte zegt: Ik vind de winter
+                leuk. In de winter schaatsen we.
+              language_code: nl
+              direction: ltr
+            introduced_tokens: [Het, is, nu, lente, De, tulpen, zijn, mooi, Nina, vraagt, Welk, seizoen, vind, jij, Omar, zegt, Ik, de, zomer, leuk, In, zwemmen, we, Lotte, winter, schaatsen]
+          - {content_key: nl.a1.unit43.lesson05.teach.gesprek_leuk, kind: phrase, target: {text: "Het gesprek over de seizoenen is leuk.", language_code: nl, direction: ltr}, introduced_tokens: [Het, gesprek, over, de, seizoenen, is, leuk]}
+        exercises:
+          - {content_key: nl.a1.unit43.lesson05.exercise01.read_welk_seizoen_nu, type: reading_comprehension, tested_text: lente, prompt: {target_blocks: [{text: "According to the text, what season is it now?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit43.lesson05.exercise02.read_omar_favoriet, type: reading_comprehension, tested_text: "Ik vind de zomer leuk", prompt: {target_blocks: [{text: "According to the text, which season does Omar like?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit43.lesson05.exercise03.read_lotte_favoriet, type: reading_comprehension, tested_text: "Ik vind de winter leuk", prompt: {target_blocks: [{text: "According to the text, which season does Lotte like?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit43.lesson05.exercise04.match_seizoenen_recap, type: matching_pairs, tested_text: "lente zomer winter gesprek", prompt: {target_blocks: []}, pairs: [{left: "Het is nu lente.", right: "It is now spring."}, {left: "Ik vind de zomer leuk.", right: "I like summer."}, {left: "Ik vind de winter leuk.", right: "I like winter."}, {left: "In de zomer zwemmen we.", right: "In summer we swim."}, {left: "In de winter schaatsen we.", right: "In winter we skate."}, {left: "het gesprek", right: "the conversation"}]}
+          - {content_key: nl.a1.unit43.lesson05.exercise05.listen_recap_seizoenen, type: listen_select, tested_text: "Welk seizoen vind jij mooi", media_asset_key: nl.a1.audio.seizoenen.recap_tekst.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit43.lesson05.exercise06.write_ik_vind_winter_leuk, type: writing_prompt, tested_text: "Ik vind de winter leuk", prompt: {target_blocks: [{text: "Write in Dutch: say you like winter.", language_code: en, direction: ltr}]}}
+
+      - content_key: nl.a1.unit43.lesson06.sander_komt_erbij
+        title: "Sander komt erbij"
+        spine_outcome_id: universal.a1.seasons.describe_seasons
+        teaching:
+          - {content_key: nl.a1.unit43.lesson06.teach.sander_vraagt_lotte, kind: dialogue, target: {text: "Sander: Hoi allemaal! Welk seizoen vind jij mooi, Lotte?", language_code: nl, direction: ltr}, introduced_tokens: [Sander, Hoi, allemaal, Welk, seizoen, vind, jij, mooi, Lotte]}
+          - {content_key: nl.a1.unit43.lesson06.teach.lotte_winter, kind: dialogue, target: {text: "Lotte: Ik vind de winter leuk. In de winter schaatsen we.", language_code: nl, direction: ltr}, introduced_tokens: [Lotte, Ik, vind, de, winter, leuk, In, schaatsen, we]}
+          - {content_key: nl.a1.unit43.lesson06.teach.sander_herfst, kind: dialogue, target: {text: "Sander: Ik vind de herfst mooi. De herfst is rustig.", language_code: nl, direction: ltr}, introduced_tokens: [Sander, Ik, vind, de, herfst, mooi, De, is, rustig]}
+          - {content_key: nl.a1.unit43.lesson06.teach.omar_afsluiting, kind: dialogue, target: {text: "Omar: Vier seizoenen, vier favorieten! Dat is leuk.", language_code: nl, direction: ltr}, introduced_tokens: [Omar, Vier, seizoenen, favorieten, Dat, is, leuk]}
+        exercises:
+          - {content_key: nl.a1.unit43.lesson06.exercise01.listen_sander_vraagt_lotte, type: listen_select, tested_text: "Welk seizoen vind jij mooi, Lotte?", media_asset_key: nl.a1.audio.dialogue.seizoenen_taalcafe2.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit43.lesson06.exercise02.comprehend_lotte_favoriet, type: dialogue_comprehension, tested_text: "Ik vind de winter leuk", media_asset_key: nl.a1.audio.dialogue.seizoenen_taalcafe2.01, prompt: {target_blocks: [{text: "Which season does Lotte say she likes?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit43.lesson06.exercise03.comprehend_sander_favoriet, type: dialogue_comprehension, tested_text: "Ik vind de herfst mooi", media_asset_key: nl.a1.audio.dialogue.seizoenen_taalcafe2.01, prompt: {target_blocks: [{text: "Which season does Sander say he likes?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit43.lesson06.exercise04.comprehend_omar_afsluiting, type: dialogue_comprehension, tested_text: "Vier seizoenen vier favorieten", media_asset_key: nl.a1.audio.dialogue.seizoenen_taalcafe2.01, prompt: {target_blocks: [{text: "What does Omar say about the four seasons?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit43.lesson06.exercise05.order_ik_vind_herfst_mooi, type: word_order, tested_text: "Ik vind de herfst mooi", prompt: {target_blocks: []}, word_bank: [Ik, vind, de, herfst, mooi]}
+          - {content_key: nl.a1.unit43.lesson06.exercise06.respond_sander_vraagt_lotte, type: dialogue_response, tested_text: "Ik vind de winter leuk", prompt: {target_blocks: [{text: "Welk seizoen vind jij mooi, Lotte?", language_code: nl, direction: ltr}]}}
+          - {content_key: nl.a1.unit43.lesson06.exercise07.listen_type_herfst_rustig, type: listen_type, tested_text: "De herfst is rustig", media_asset_key: nl.a1.audio.seizoenen.herfst_rustig.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit43.lesson06.exercise08.write_ik_vind_herfst_mooi, type: writing_prompt, tested_text: "Ik vind de herfst mooi", prompt: {target_blocks: [{text: "Write in Dutch: say you find fall beautiful.", language_code: en, direction: ltr}]}}
