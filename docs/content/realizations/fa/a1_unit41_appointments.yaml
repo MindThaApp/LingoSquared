@@ -1,0 +1,550 @@
+schema_version: "1.1"
+realization_version: "2026.1-draft.1"
+target_language: fa
+cefr_level: A1
+generation_provenance:
+  method: ai_adapted_from_public_domain_source
+  authoring_system: claude
+  source_material: >-
+    Made a real, fresh attempt at FSI Persian Basic Course source access for
+    this unit before authoring fresh, honestly disclosed either way per
+    AUTHORING_GUIDE.md #10. Firecrawl remains at 0 credits this session, so
+    used direct pdftotext extraction against both known mirrors, same method
+    as units 36-40. The DigitalOcean-mirror copy
+    (https://fsi-language-courses-media.nyc3.cdn.digitaloceanspaces.com/
+    languages/Persian/General/Spoken%20Persian.pdf) re-confirmed a JBIG2-only
+    scan: pdftotext extracted 0 words, same dead end as every prior unit's
+    attempt against this mirror. The Live Lingua-hosted copy
+    (https://www.livelingua.com/fsi/FSI%20-%20Spoken%20Persian.pdf) has a real
+    Acrobat Pro DC OCR text layer, 66,717 words extractable this fetch
+    (consistent with every prior unit's fetch of the same file, confirming a
+    stable extraction, not a fluke). Grepped the full extracted text
+    case-insensitively for appointment/vaqt/vaght/waqt/qarar/ghorar/doctor/
+    dentist/clinic/reserve/reservation/schedule/randevu: found exactly one
+    genuine hit, a single isolated glossary-table entry "promise,
+    appointment, date" (transliterated hândige, i.e. Persian هماهنگی/قرار
+    family) with no surrounding scheduling scenario -- confirmed by reading
+    the surrounding ~30 lines of context, which turned out to be an unrelated
+    tailor/shopping dialogue about lining material and buttons, not an
+    appointment-making scene. "Doctor" (doktor) appears twice elsewhere in
+    the extracted text but only as an isolated vocabulary-glossary entry, no
+    surrounding clinic/appointment dialogue either time. "To reserve, to
+    retain" (line ~12442) appears in a genuine dialogue, but it's a hotel-room
+    reservation ("we have reserved a room for..."), not a service appointment.
+    This is a real, honest dead end for THIS specific outcome: no
+    appointment-making, phone-booking, or clinic-scheduling scenario exists
+    anywhere in the extracted text. All vocabulary and dialogue in this unit
+    is authored fresh from this project's own established colloquial Iranian
+    Farsi conventions and already-shipped vocabulary (see review notes below
+    for the specific reuse chain), not sourced from FSI at all.
+  human_reviewed: false
+review:
+  status: unreviewed
+  required_next_reviewer: codex_fresh_context
+  notes: >-
+    Draft authored 2026-07-09 by Claude (content-authoring worker session),
+    continuing fa A1 volume growth past unit40 (lost items, merged). Realizes
+    universal.a1.appointments.make_simple_appointment, the next unrealized A1
+    outcome after unit40 -- confirmed by an exact diff of every
+    spine_outcome_id/spine_outcome_ids value across all
+    docs/content/realizations/fa/a1_unit*.yaml files (using a real
+    yaml.safe_load recursive scan, not grep, to avoid false positives from
+    comment text) against every universal.a1.* id in
+    docs/content/universal_spine.yaml: fa had realized 41 of 48 A1 outcomes
+    (unit05 covers both places and directions in one merged unit), with
+    appointments the next one in the spine's own declaration order and
+    library/waste_disposal/accommodation/pharmacy/personal_care/bike_rental
+    still unrealized after this unit. All three prerequisites -- unit09's
+    universal.a1.time.ask_tell_time, unit10's
+    universal.a1.dates.exchange_calendar_dates, and unit22's
+    universal.a1.communication.basic_phone_contact -- already covered.
+    Notably, unit09's own lesson05 ("پرسیدن دربارهٔ ساعت قرار") already
+    introduced قرار ('appointment/date', general sense) and the phrase "قرار
+    ساعت چنده؟" ('what time is the appointment?') as part of teaching
+    time-telling, and unit10's lesson03 introduced جلسه ('meeting')/کدوم
+    ('which')/روز ('day')/خوبه ('that's good/works') as part of teaching
+    dates -- this unit reuses روز/کدوم/خوبه directly (all re-declared in
+    introduced_tokens before first use in THIS file per the compiler's
+    per-file-only untaught-vocabulary check) but deliberately does NOT reuse
+    قرار as the primary "appointment" noun, instead building around وقت
+    ('time/appointment slot', already taught in unit24's "free time" sense
+    and explicitly extended here to the appointment-slot sense, a genuine and
+    common Persian polysemy, not an invented one) and آزاد ('free/available',
+    also already taught in unit24 as part of "free time") -- this keeps the
+    unit's own vocabulary internally consistent (وقت + آزاد پair
+    consistently, "do you have an appointment slot free") rather than mixing
+    two near-synonymous appointment nouns (قرار and وقت) in the same unit,
+    while still correctly crediting قرار's unit09 precedent for register
+    reviewers. New vocabulary genuinely introduced for the first time in the
+    whole corpus: دندانپزشک ('dentist'), مطب ('doctor's/dentist's office'),
+    and the two new minor characters خانم احمدی (a dentist's-office
+    receptionist) and دکتر رضایی (the dentist, referenced by name, never
+    speaks) -- both kept separate from the established نیما/سارا friend pair,
+    same register-isolation precedent unit39/unit40 already established for
+    stranger/service-provider characters. گرفتن ('to get/take') is reused
+    from unit34's post lesson (there taught as 'to receive'; the unit's own
+    title uses the same verb in its idiomatic 'get an appointment' sense,
+    وقت گرفتن, but no lesson content here actually conjugates گرفتن beyond
+    the bare infinitive in the unit title/summary card -- every REQUEST
+    phrase in the actual teaching/exercise content uses the simpler,
+    A1-appropriate "وقت [+ service] می‌خوام" (object + می‌خوام, verb-final,
+    the exact same pattern already established by unit03's "دو تا سیب
+    می‌خوام") rather than introducing the گرفتن subjunctive (بگیرم), which
+    a2_unit09_bureaucracy.yaml already uses at the A2 level -- deliberately
+    left for that level, not duplicated here, per the recognition->drag->
+    production pacing rule and general A1 grammar-simplicity precedent
+    (unit17's own review notes document the same deliberate subjunctive
+    deferral). آزادید (formal 'are you free?') is a new but transparent
+    extension of the already-established formal -ید ending pattern
+    (هستید/بفرمایید/unit40's دیدید) applied to آزاد, flagged explicitly for
+    reviewer attention same as unit40's دیدید was. Scoped to the outcome's
+    four assessment_requirements: understanding a spoken appointment offer
+    (listening, via lesson04's dialogue plus its dialogue_comprehension
+    exercise -- day/time/place all present), requesting a simple appointment
+    and confirming an offered time (speaking/production, via translate/
+    dialogue_response/writing_prompt exercises across lessons 01-06, naming
+    the service (دندانپزشک), day (پنجشنبه), and time (ساعت چهار عصر) exactly
+    as the spine outcome's own can_do text requires), interpreting a short
+    written appointment confirmation (reading, lesson05's
+    reading_comprehension exercises against a service/day/time/place notice),
+    and writing a short appointment request/confirmation message (writing,
+    lessons05/06's writing_prompt exercises). Register choice, explicitly
+    noted per AUTHORING_GUIDE.md #3: the phone call to the dentist's office
+    (a stranger, new minor character خانم احمدی, kept separate from the
+    established نیما/سارا friend pair) uses the polite/neutral service
+    register consistent with unit22's phone-call precedent, while نیما's own
+    lines stay register-neutral -- day/time facts are kept internally
+    consistent across the whole unit per AUTHORING_GUIDE.md #11 (Thursday,
+    4pm, Dr. Rezaei's office, stated identically in the dialogue, the reading
+    notice, and every exercise that references them). Every kind:vocabulary
+    card (دندانپزشک، مطب، وقت، آزاد) has an example sentence per schema
+    1.1/AUTHORING_GUIDE §19, built only from the card's own word plus tokens
+    already declared earlier in THIS file (no forward references -- notably
+    وقت's example needed دندانپزشک/می‌خوام, both already declared in
+    lesson01, and آزاد's example needed پنجشنبه, re-declared in that same
+    card's own introduced_tokens alongside آزاد/آزادم since the compiler only
+    enforces exercises' tested_text against the cumulative taught set, not
+    example sentences against strictly-earlier cards -- verified by reading
+    the compiler's validate_untaught_vocabulary/validate_vocabulary_examples
+    source directly rather than assuming). Every matching_pairs exercise has
+    6-7 pairs per §16. No listen_type/listen_select/listen_order exercise is
+    used anywhere in this unit -- fa has real TTS per AUTHORING_GUIDE §14,
+    but this file continues the established text-based corpus-consistency
+    pattern from units 19-40, the same choice those units' own reviews made;
+    this also means the same-speaker/same-audio distractor-collision bug
+    class (found and fixed 2026-07-09 in the nl corpus, commit 148240e)
+    cannot apply here -- there is no listen_select exercise in this file to
+    check. lesson04's dialogue_comprehension exercise (the one exercise with
+    English-language distractors tied to dialogue content, "What does Nima
+    want?") was explicitly checked: its three distractors ("He wants a
+    doctor's appointment."/"He wants to cancel his appointment."/"He wants
+    directions to the clinic.") are plausible-fact alternatives, not lines
+    either dialogue speaker (نیما or خانم احمدی) actually says anywhere in
+    this unit's dialogue audio -- نیما never asks for a "doctor" (only
+    دندانپزشک, dentist, is ever requested), neither speaker ever mentions
+    canceling, and neither speaker ever asks for or gives directions to the
+    clinic. Every "Translate into English" exercise in the paired overlay
+    explicitly sets answer_language_code: en. Every multi-clause translate/
+    writing_prompt exercise (lesson04.exercise05, lesson05.exercise04/05,
+    lesson06.exercise05) carries period-joined and no-period/comma variants
+    per §12; the dialogue's own day/time/place facts are additionally
+    verified consistent with the reading lesson's confirmation notice (both
+    say Thursday, 4pm, Dr. Rezaei's office) per §11. Ran a recursive
+    yaml.safe_load scan over this file and its paired overlay for bare
+    unquoted yes/no/true/false/on/off values (including matching_pairs
+    right: values specifically, the two fields that have bitten this corpus
+    before) -- zero hits, see the overlay's own review note for the exact
+    scan result.
+
+course:
+  realization_key: fa.a1
+  target_language_first: true
+  dialect: fa_IR_standard_colloquial_intro
+  register_policy: >-
+    Continues the established colloquial Iranian Farsi register: نیما's own
+    lines stay register-neutral, while the phone call to the dentist's
+    office (a stranger, new minor character خانم احمدی) uses the same
+    polite/neutral service-call register unit22's phone lesson already
+    established. Reuses وقت/آزاد (unit24, extended here from "free time" to
+    "appointment slot"/"available"), روز/کدوم/خوبه (unit10), گرفتن (unit34,
+    "to receive," referenced only in the unit title's idiomatic sense),
+    می‌خوام (units 03/08), دکتر (unit17), کجاست (unit05), and یا (units
+    07/09/14/28) without re-teaching any of them from scratch.
+
+media_assets:
+  - content_key: fa.a1.unit41.audio.appointments.vocab.01
+    language: fa
+    text: "دندانپزشک، مطب، وقت"
+    voice_hint: neutral_adult
+    status: pending_generation
+  - content_key: fa.a1.unit41.audio.appointments.vocab.02
+    language: fa
+    text: "آزاد، کدوم روز خوبه، ساعت چند"
+    voice_hint: neutral_adult
+    status: pending_generation
+  - content_key: fa.a1.unit41.audio.dialogue.dentist_appointment.01
+    language: fa
+    text: "نیما: سلام، وقت دندانپزشک می‌خوام. خانم احمدی: باشه. کدوم روز خوبه؟ نیما: پنجشنبه آزادم. خانم احمدی: ساعت چند؟ نیما: ساعت چهار عصر. خانم احمدی: خوبه. پنجشنبه ساعت چهار عصر، مطب دکتر رضایی. نیما: ممنون!"
+    voice_hint: two_adults_neutral_polite
+    status: pending_generation
+
+units:
+  - content_key: fa.a1.unit41.appointments
+    title: وقت گرفتن
+    section: reading_writing
+    spine_outcome_ids:
+      - universal.a1.appointments.make_simple_appointment
+    planned_lesson_count: 6
+
+    lessons:
+      - content_key: fa.a1.unit41.lesson01.new_appointments_one
+        title: "کلمات جدید ۱"
+        spine_outcome_id: universal.a1.appointments.make_simple_appointment
+        teaching:
+          - content_key: fa.a1.unit41.lesson01.teach.review_mikhām
+            kind: grammar_note
+            target: {text: "می‌خوام (I want) -- already taught from units 03/08", language_code: fa, direction: rtl}
+            introduced_tokens: ["می‌خوام"]
+          - content_key: fa.a1.unit41.lesson01.teach.review_ya
+            kind: grammar_note
+            target: {text: "یا (or) -- already taught from units 07/09/14/28", language_code: fa, direction: rtl}
+            introduced_tokens: [یا]
+          - content_key: fa.a1.unit41.lesson01.teach.review_doktor
+            kind: grammar_note
+            target: {text: "دکتر (doctor) -- already taught from unit17", language_code: fa, direction: rtl}
+            introduced_tokens: [دکتر]
+          - content_key: fa.a1.unit41.lesson01.teach.review_kojast
+            kind: grammar_note
+            target: {text: "کجاست (where is) -- already taught from unit05", language_code: fa, direction: rtl}
+            introduced_tokens: [کجاست]
+          - content_key: fa.a1.unit41.lesson01.teach.dandanpezeshk
+            kind: vocabulary
+            target: {text: دندانپزشک, language_code: fa, direction: rtl}
+            introduced_tokens: [دندانپزشک]
+            example: {text: "دندانپزشک می‌خوام.", language_code: fa, direction: rtl}
+          - content_key: fa.a1.unit41.lesson01.teach.matb
+            kind: vocabulary
+            target: {text: مطب, language_code: fa, direction: rtl}
+            introduced_tokens: [مطب]
+            example: {text: "مطب دندانپزشک کجاست؟", language_code: fa, direction: rtl}
+          - content_key: fa.a1.unit41.lesson01.teach.doktor_ya_dandanpezeshk
+            kind: phrase
+            target: {text: "دکتر یا دندانپزشک؟", language_code: fa, direction: rtl}
+            introduced_tokens: []
+        exercises:
+          - content_key: fa.a1.unit41.lesson01.exercise01.recognize_dandanpezeshk
+            type: multiple_choice
+            tested_text: دندانپزشک
+            prompt: {target_blocks: [{text: دندانپزشک, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit41.lesson01.exercise02.recognize_matb
+            type: multiple_choice
+            tested_text: مطب
+            prompt: {target_blocks: [{text: مطب, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit41.lesson01.exercise03.match_appointments_one
+            type: matching_pairs
+            tested_text: "دندانپزشک مطب دکتر یا دندانپزشک دندانپزشک می‌خوام مطب دندانپزشک کجاست می‌خوام"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: دندانپزشک, right: dentist}
+              - {left: مطب, right: "doctor's office"}
+              - {left: "دکتر یا دندانپزشک؟", right: "doctor or dentist?"}
+              - {left: "دندانپزشک می‌خوام.", right: "I want a dentist."}
+              - {left: "مطب دندانپزشک کجاست؟", right: "Where is the dentist's office?"}
+              - {left: "می‌خوام", right: "I want"}
+          - content_key: fa.a1.unit41.lesson01.exercise04.word_order_dandanpezeshk_mikham
+            type: word_order
+            tested_text: "دندانپزشک می‌خوام"
+            prompt: {target_blocks: [{text: "I want a dentist.", language_code: en, direction: ltr}]}
+            word_bank: [دندانپزشک, "می‌خوام"]
+          - content_key: fa.a1.unit41.lesson01.exercise05.translate_matb_dandanpezeshk_kojast
+            type: translation
+            tested_text: "مطب دندانپزشک کجاست؟"
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit41.lesson02.new_appointments_two
+        title: "کلمات جدید ۲"
+        spine_outcome_id: universal.a1.appointments.make_simple_appointment
+        teaching:
+          - content_key: fa.a1.unit41.lesson02.teach.vaght
+            kind: vocabulary
+            target: {text: وقت, language_code: fa, direction: rtl}
+            introduced_tokens: [وقت]
+            example: {text: "وقت دندانپزشک می‌خوام.", language_code: fa, direction: rtl}
+          - content_key: fa.a1.unit41.lesson02.teach.azad
+            kind: vocabulary
+            target: {text: آزاد, language_code: fa, direction: rtl}
+            introduced_tokens: [آزاد, آزادم, پنجشنبه]
+            example: {text: "پنجشنبه آزادم.", language_code: fa, direction: rtl}
+          - content_key: fa.a1.unit41.lesson02.teach.review_gereftan
+            kind: grammar_note
+            target: {text: "گرفتن (to get/take) -- already taught from unit34's post lesson (there: 'to receive')", language_code: fa, direction: rtl}
+            introduced_tokens: [گرفتن]
+          - content_key: fa.a1.unit41.lesson02.teach.vaght_mikhām
+            kind: phrase
+            target: {text: "وقت می‌خوام", language_code: fa, direction: rtl}
+            introduced_tokens: []
+          - content_key: fa.a1.unit41.lesson02.teach.azadid_formal
+            kind: phrase
+            target: {text: "آزادید؟", language_code: fa, direction: rtl}
+            introduced_tokens: [آزادید]
+        exercises:
+          - content_key: fa.a1.unit41.lesson02.exercise01.recognize_vaght
+            type: multiple_choice
+            tested_text: وقت
+            prompt: {target_blocks: [{text: وقت, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit41.lesson02.exercise02.recognize_azad
+            type: multiple_choice
+            tested_text: آزاد
+            prompt: {target_blocks: [{text: آزاد, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit41.lesson02.exercise03.match_appointments_two
+            type: matching_pairs
+            tested_text: "وقت آزاد آزادم آزادید وقت می‌خوام وقت دندانپزشک می‌خوام"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: وقت, right: appointment}
+              - {left: آزاد, right: "free / available"}
+              - {left: آزادم, right: "I'm free"}
+              - {left: "آزادید؟", right: "Are you free? (formal)"}
+              - {left: "وقت می‌خوام", right: "I want an appointment"}
+              - {left: "وقت دندانپزشک می‌خوام.", right: "I want a dentist appointment."}
+          - content_key: fa.a1.unit41.lesson02.exercise04.word_order_panjshanbe_azadam
+            type: word_order
+            tested_text: "پنجشنبه آزادم"
+            prompt: {target_blocks: [{text: "Thursday I'm free.", language_code: en, direction: ltr}]}
+            word_bank: [پنجشنبه, آزادم]
+          - content_key: fa.a1.unit41.lesson02.exercise05.translate_vaght_dandanpezeshk_mikham
+            type: translation
+            tested_text: "وقت دندانپزشک می‌خوام."
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit41.lesson03.which_day_what_time
+        title: "کدوم روز و ساعت چند؟"
+        spine_outcome_id: universal.a1.appointments.make_simple_appointment
+        teaching:
+          - content_key: fa.a1.unit41.lesson03.teach.review_ruz_kodum
+            kind: grammar_note
+            target: {text: "روز (day) و کدوم (which) -- already taught from unit10", language_code: fa, direction: rtl}
+            introduced_tokens: [روز, کدوم]
+          - content_key: fa.a1.unit41.lesson03.teach.review_saat_chand
+            kind: grammar_note
+            target: {text: "ساعت (hour/time) و چند (what/how many) -- already taught from unit09 (ساعت چنده)، extended here to ساعت چند (what time)", language_code: fa, direction: rtl}
+            introduced_tokens: [ساعت, چند, چهار]
+          - content_key: fa.a1.unit41.lesson03.teach.review_khube
+            kind: grammar_note
+            target: {text: "خوبه (that's good / that works) -- already taught from unit06", language_code: fa, direction: rtl}
+            introduced_tokens: [خوبه]
+          - content_key: fa.a1.unit41.lesson03.teach.kodum_ruz_khube
+            kind: phrase
+            target: {text: "کدوم روز خوبه؟", language_code: fa, direction: rtl}
+            introduced_tokens: []
+          - content_key: fa.a1.unit41.lesson03.teach.saat_chand_khube
+            kind: phrase
+            target: {text: "ساعت چند خوبه؟", language_code: fa, direction: rtl}
+            introduced_tokens: []
+          - content_key: fa.a1.unit41.lesson03.teach.panjshanbe_saat_chahar_khube
+            kind: phrase
+            target: {text: "پنجشنبه ساعت چهار خوبه؟", language_code: fa, direction: rtl}
+            introduced_tokens: []
+        exercises:
+          - content_key: fa.a1.unit41.lesson03.exercise01.recognize_kodum_ruz_khube
+            type: multiple_choice
+            tested_text: "کدوم روز خوبه؟"
+            prompt: {target_blocks: [{text: "کدوم روز خوبه؟", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit41.lesson03.exercise02.recognize_saat_chand_khube
+            type: multiple_choice
+            tested_text: "ساعت چند خوبه؟"
+            prompt: {target_blocks: [{text: "ساعت چند خوبه؟", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit41.lesson03.exercise03.match_day_time
+            type: matching_pairs
+            tested_text: "روز کدوم ساعت چند خوبه کدوم روز خوبه پنجشنبه ساعت چهار خوبه"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: روز, right: day}
+              - {left: کدوم, right: which}
+              - {left: ساعت, right: "hour / time"}
+              - {left: چند, right: "what / how many"}
+              - {left: خوبه, right: "that works / that's good"}
+              - {left: "کدوم روز خوبه؟", right: "Which day works?"}
+              - {left: "پنجشنبه ساعت چهار خوبه؟", right: "Does Thursday at four work?"}
+          - content_key: fa.a1.unit41.lesson03.exercise04.word_order_kodum_ruz_khube
+            type: word_order
+            tested_text: "کدوم روز خوبه"
+            prompt: {target_blocks: [{text: "Which day works?", language_code: en, direction: ltr}]}
+            word_bank: [کدوم, روز, خوبه]
+          - content_key: fa.a1.unit41.lesson03.exercise05.translate_panjshanbe_saat_chahar_khube
+            type: translation
+            tested_text: "پنجشنبه ساعت چهار خوبه؟"
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit41.lesson04.dentist_appointment_dialogue
+        title: "دیالوگ: گرفتن وقت دندانپزشک"
+        spine_outcome_id: universal.a1.appointments.make_simple_appointment
+        teaching:
+          - content_key: fa.a1.unit41.lesson04.teach.review_salam_mamnoon
+            kind: grammar_note
+            target: {text: "سلام و ممنون -- already taught from units 01/17/22", language_code: fa, direction: rtl}
+            introduced_tokens: [سلام, ممنون]
+          - content_key: fa.a1.unit41.lesson04.teach.review_bashe
+            kind: grammar_note
+            target: {text: "باشه (okay) -- already taught from units 17/22", language_code: fa, direction: rtl}
+            introduced_tokens: [باشه]
+          - content_key: fa.a1.unit41.lesson04.teach.review_asr
+            kind: grammar_note
+            target: {text: "عصر (afternoon) -- already taught from unit09", language_code: fa, direction: rtl}
+            introduced_tokens: [عصر]
+          - content_key: fa.a1.unit41.lesson04.teach.dialogue_line1
+            kind: dialogue
+            target: {text: "سلام، وقت دندانپزشک می‌خوام.", language_code: fa, direction: rtl, speaker: نیما}
+            introduced_tokens: [نیما]
+          - content_key: fa.a1.unit41.lesson04.teach.dialogue_line2
+            kind: dialogue
+            target: {text: "باشه. کدوم روز خوبه؟", language_code: fa, direction: rtl, speaker: "خانم احمدی"}
+            introduced_tokens: ["خانم", احمدی]
+          - content_key: fa.a1.unit41.lesson04.teach.dialogue_line3
+            kind: dialogue
+            target: {text: "پنجشنبه آزادم.", language_code: fa, direction: rtl, speaker: نیما}
+            introduced_tokens: []
+          - content_key: fa.a1.unit41.lesson04.teach.dialogue_line4
+            kind: dialogue
+            target: {text: "ساعت چند؟", language_code: fa, direction: rtl, speaker: "خانم احمدی"}
+            introduced_tokens: []
+          - content_key: fa.a1.unit41.lesson04.teach.dialogue_line5
+            kind: dialogue
+            target: {text: "ساعت چهار عصر.", language_code: fa, direction: rtl, speaker: نیما}
+            introduced_tokens: []
+          - content_key: fa.a1.unit41.lesson04.teach.dialogue_line6
+            kind: dialogue
+            target: {text: "خوبه. پنجشنبه ساعت چهار عصر، مطب دکتر رضایی.", language_code: fa, direction: rtl, speaker: "خانم احمدی"}
+            introduced_tokens: [رضایی]
+          - content_key: fa.a1.unit41.lesson04.teach.dialogue_line7
+            kind: dialogue
+            target: {text: "ممنون!", language_code: fa, direction: rtl, speaker: نیما}
+            introduced_tokens: []
+        exercises:
+          - content_key: fa.a1.unit41.lesson04.exercise01.dialogue_comprehension_dentist_request
+            type: dialogue_comprehension
+            tested_text: "سلام وقت دندانپزشک می‌خوام باشه کدوم روز خوبه پنجشنبه آزادم ساعت چند ساعت چهار عصر خوبه پنجشنبه ساعت چهار عصر مطب دکتر رضایی ممنون"
+            prompt: {target_blocks: [{text: "سلام، وقت دندانپزشک می‌خوام.", language_code: fa, direction: rtl}]}
+            correct_option: "He wants a dentist's appointment."
+            distractors:
+              - "He wants a doctor's appointment."
+              - "He wants to cancel his appointment."
+              - "He wants directions to the clinic."
+          - content_key: fa.a1.unit41.lesson04.exercise02.recognize_panjshanbe_azadam
+            type: multiple_choice
+            tested_text: "پنجشنبه آزادم."
+            prompt: {target_blocks: [{text: "پنجشنبه آزادم.", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit41.lesson04.exercise03.match_dialogue_appointment
+            type: matching_pairs
+            tested_text: "سلام وقت دندانپزشک می‌خوام کدوم روز خوبه پنجشنبه آزادم ساعت چند ساعت چهار عصر مطب دکتر رضایی ممنون"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "سلام، وقت دندانپزشک می‌خوام.", right: "Hi, I want a dentist appointment."}
+              - {left: "کدوم روز خوبه؟", right: "Which day works?"}
+              - {left: "پنجشنبه آزادم.", right: "Thursday I'm free."}
+              - {left: "ساعت چند؟", right: "What time?"}
+              - {left: "ساعت چهار عصر.", right: "Four in the afternoon."}
+              - {left: "مطب دکتر رضایی", right: "Dr. Rezaei's office"}
+              - {left: ممنون, right: thanks}
+          - content_key: fa.a1.unit41.lesson04.exercise04.dialogue_response_which_day
+            type: dialogue_response
+            tested_text: "پنجشنبه آزادم."
+            prompt: {target_blocks: [{text: "باشه. کدوم روز خوبه؟", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit41.lesson04.exercise05.translate_khube_panjshanbe_matb
+            type: translation
+            tested_text: "خوبه. پنجشنبه ساعت چهار عصر، مطب دکتر رضایی."
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit41.lesson05.reading_appointment_notice
+        title: "خواندن یادداشت وقت دندانپزشک"
+        spine_outcome_id: universal.a1.appointments.make_simple_appointment
+        teaching:
+          - content_key: fa.a1.unit41.lesson05.teach.reading_text
+            kind: reading
+            target: {text: "وقت دندانپزشک: پنجشنبه، ساعت چهار عصر، مطب دکتر رضایی.", language_code: fa, direction: rtl}
+            introduced_tokens: []
+        exercises:
+          - content_key: fa.a1.unit41.lesson05.exercise01.reading_comprehension_which_day
+            type: reading_comprehension
+            tested_text: "وقت دندانپزشک: پنجشنبه، ساعت چهار عصر، مطب دکتر رضایی."
+            prompt: {target_blocks: [{text: "وقت دندانپزشک: پنجشنبه، ساعت چهار عصر، مطب دکتر رضایی.", language_code: fa, direction: rtl}]}
+            correct_option: "Thursday."
+            distractors:
+              - "Friday."
+              - "Wednesday."
+              - "Saturday."
+          - content_key: fa.a1.unit41.lesson05.exercise02.reading_comprehension_time_and_place
+            type: reading_comprehension
+            tested_text: "وقت دندانپزشک: پنجشنبه، ساعت چهار عصر، مطب دکتر رضایی."
+            prompt: {target_blocks: [{text: "وقت دندانپزشک: پنجشنبه، ساعت چهار عصر، مطب دکتر رضایی.", language_code: fa, direction: rtl}]}
+            correct_option: "4pm at Dr. Rezaei's office."
+            distractors:
+              - "4pm at the pharmacy."
+              - "10am at Dr. Rezaei's office."
+              - "4pm at home."
+          - content_key: fa.a1.unit41.lesson05.exercise03.match_reading_appointment
+            type: matching_pairs
+            tested_text: "وقت دندانپزشک پنجشنبه ساعت چهار عصر مطب مطب دکتر رضایی"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: وقت, right: appointment}
+              - {left: دندانپزشک, right: dentist}
+              - {left: پنجشنبه, right: Thursday}
+              - {left: "ساعت چهار عصر", right: "four in the afternoon"}
+              - {left: مطب, right: "office / clinic"}
+              - {left: "مطب دکتر رضایی", right: "Dr. Rezaei's office"}
+          - content_key: fa.a1.unit41.lesson05.exercise04.translate_reading_text
+            type: translation
+            tested_text: "وقت دندانپزشک: پنجشنبه، ساعت چهار عصر، مطب دکتر رضایی."
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit41.lesson05.exercise05.write_appointment_note
+            type: writing_prompt
+            tested_text: "وقت دندانپزشک: پنجشنبه، ساعت چهار عصر، مطب دکتر رضایی."
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit41.lesson06.wrap_up
+        title: "جمع‌بندی وقت گرفتن"
+        spine_outcome_id: universal.a1.appointments.make_simple_appointment
+        teaching:
+          - content_key: fa.a1.unit41.lesson06.teach.review_vaght_dandanpezeshk_azadam
+            kind: phrase
+            target: {text: "وقت دندانپزشک می‌خوام. پنجشنبه آزادم.", language_code: fa, direction: rtl}
+            introduced_tokens: []
+          - content_key: fa.a1.unit41.lesson06.teach.review_kodum_ruz_saat_chand
+            kind: phrase
+            target: {text: "کدوم روز خوبه؟ ساعت چند؟", language_code: fa, direction: rtl}
+            introduced_tokens: []
+          - content_key: fa.a1.unit41.lesson06.teach.summary_words
+            kind: grammar_note
+            target: {text: "دندانپزشک / مطب / وقت / آزاد -- کلمات این درس", language_code: fa, direction: rtl}
+            introduced_tokens: []
+        exercises:
+          - content_key: fa.a1.unit41.lesson06.exercise01.recognize_review_request
+            type: multiple_choice
+            tested_text: "وقت دندانپزشک می‌خوام. پنجشنبه آزادم."
+            prompt: {target_blocks: [{text: "وقت دندانپزشک می‌خوام. پنجشنبه آزادم.", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit41.lesson06.exercise02.recognize_review_questions
+            type: multiple_choice
+            tested_text: "کدوم روز خوبه؟ ساعت چند؟"
+            prompt: {target_blocks: [{text: "کدوم روز خوبه؟ ساعت چند؟", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit41.lesson06.exercise03.match_wrap_appointments
+            type: matching_pairs
+            tested_text: "دندانپزشک مطب وقت آزاد کدوم روز خوبه ساعت چند خوبه"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: دندانپزشک, right: dentist}
+              - {left: مطب, right: "office / clinic"}
+              - {left: وقت, right: appointment}
+              - {left: آزاد, right: "free / available"}
+              - {left: "کدوم روز خوبه؟", right: "Which day works?"}
+              - {left: "ساعت چند؟", right: "What time?"}
+              - {left: خوبه, right: "that works / that's good"}
+          - content_key: fa.a1.unit41.lesson06.exercise04.word_order_vaght_dandanpezeshk_mikham
+            type: word_order
+            tested_text: "وقت دندانپزشک می‌خوام"
+            prompt: {target_blocks: [{text: "I want a dentist appointment.", language_code: en, direction: ltr}]}
+            word_bank: [وقت, دندانپزشک, "می‌خوام"]
+          - content_key: fa.a1.unit41.lesson06.exercise05.write_request_or_confirm_sentence
+            type: writing_prompt
+            tested_text: "وقت دندانپزشک می‌خوام"
+            prompt: {target_blocks: []}
