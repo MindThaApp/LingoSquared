@@ -264,6 +264,25 @@ export interface Achievement {
   earned: boolean;
 }
 
+// Server-authoritative daily nudge quests (Phase E3) — progress is
+// computed live against existing state on every GET, and XP is only
+// ever awarded once per quest per day server-side, so polling this
+// endpoint (e.g. on every Home load) is always safe and never
+// double-pays.
+export interface Quest {
+  code: string;
+  title: string;
+  description: string;
+  xp_reward: number;
+  completed: boolean;
+  progress: number;
+  target: number;
+}
+
+export interface QuestsResult {
+  quests: Quest[];
+}
+
 export interface AuthUser {
   id: string;
   email: string;

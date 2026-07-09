@@ -21,6 +21,7 @@ import type {
   PracticeAnswerResult,
   PracticeBatchResult,
   Progress,
+  QuestsResult,
   ReviewAnswerResult,
   ReviewDueResult,
   ReviewItemsResult,
@@ -96,6 +97,10 @@ export const ProgressApi = {
   streak: () => get<Streak>("/me/streak"),
   xp: () => get<Xp>("/me/xp"),
   achievements: () => get<Achievement[]>("/me/achievements"),
+  // Progress/target are computed live server-side on every call; XP is
+  // awarded at most once per quest per day (server-enforced), so this
+  // is always safe to poll/refetch.
+  quests: () => get<QuestsResult>("/me/quests"),
 };
 
 // Lexeme-level SRS review flow (Phase A) — distinct from ProgressApi's

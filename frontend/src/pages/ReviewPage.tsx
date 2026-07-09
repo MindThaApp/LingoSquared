@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
+import { X } from "lucide-react";
 import { CatalogApi, ReviewApi } from "../api/endpoints";
 import { ExerciseRenderer } from "../components/exercises/ExerciseRenderer";
 import { ReportIssueButton } from "../components/ReportIssueButton";
+import { QuitConfirm } from "../components/QuitConfirm";
 import { formatCorrectResponse } from "../lib/formatAnswer";
 import { resultStatus } from "../lib/gradingResult";
 import type { AnswerResponse, PracticeAnswerResult, PracticeItem } from "../api/types";
@@ -16,6 +19,7 @@ interface CoursePickOption {
 
 export function ReviewPage() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [courseId, setCourseId] = useState<string | null>(null);
   const [autoPicked, setAutoPicked] = useState(false);
   const [items, setItems] = useState<PracticeItem[] | null>(null);
@@ -24,6 +28,8 @@ export function ReviewPage() {
   const [lastResponse, setLastResponse] = useState<AnswerResponse | undefined>();
   const [submitting, setSubmitting] = useState(false);
   const [reviewedCount, setReviewedCount] = useState(0);
+  const [submitError, setSubmitError] = useState(false);
+  const [showQuitConfirm, setShowQuitConfirm] = useState(false);
 
   const dueQuery = useQuery({
     queryKey: ["reviews-due"],
@@ -68,12 +74,23 @@ export function ReviewPage() {
     if (!current) return;
     setSubmitting(true);
     setLastResponse(response);
+    setSubmitError(false);
     try {
       const res = await ReviewApi.answer(current.id, response);
       setResult(res);
+    } catch {
+      setSubmitError(true);
     } finally {
       setSubmitting(false);
     }
+  }
+
+  function handleResubmit() {
+    if (lastResponse) handleAnswer(lastResponse);
+  }
+
+  function handleQuit() {
+    navigate(-1);
   }
 
   async function handleRetry() {
@@ -152,8 +169,18 @@ export function ReviewPage() {
 
   return (
     <div>
-      <div className="progress-track" style={{ marginBottom: 16 }}>
-        <div className="progress-fill" style={{ width: `${pct}%` }} />
+      <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
+        <div className="progress-track" style={{ flex: 1 }}>
+          <div className="progress-fill" style={{ width: `${pct}%` }} />
+        </div>
+        <button
+          type="button"
+          className="btn-icon-toggle"
+          aria-label={t("review.exit_label")}
+          onClick={() => setShowQuitConfirm(true)}
+        >
+          <X size={18} />
+        </button>
       </div>
       <span className="muted">
         {t("review.progress", { current: index + 1, total: items.length })}
@@ -162,11 +189,19 @@ export function ReviewPage() {
         key={current.id}
         exercise={{ id: current.id, type: current.type, order: 0, prompt: current.prompt }}
         onAnswer={handleAnswer}
-        disabled={submitting || Boolean(result)}
+        disabled={submitting || Boolean(result) || submitError}
         gradedResult={
           result ? { correct: result.correct, correctResponse: result.correct_response } : undefined
         }
       />
+      {submitError && !result && (
+        <div className="feedback-banner error">
+          <p style={{ margin: "0 0 10px" }}>{t("review.submit_error")}</p>
+          <button className="btn btn-block" onClick={handleResubmit} disabled={submitting}>
+            {t("common.retry")}
+          </button>
+        </div>
+      )}
       {result && (() => {
         const status = resultStatus(result);
         return (
@@ -205,6 +240,13 @@ export function ReviewPage() {
           }
         />
       </div>
+      {showQuitConfirm && (
+        <QuitConfirm
+          message={t("review.quit_confirm_message")}
+          onKeepGoing={() => setShowQuitConfirm(false)}
+          onQuit={handleQuit}
+        />
+      )}
     </div>
   );
 }
