@@ -1,0 +1,235 @@
+schema_version: "1.1"
+realization_version: "2026.1-draft.1"
+target_language: nl
+cefr_level: A1
+generation_provenance: {method: ai_generated, authoring_system: claude, human_reviewed: false}
+status: complete_draft
+review:
+  status: unreviewed
+  required_next_reviewer: claude
+  notes: >-
+    New Dutch A1 unit after unit50. A safe_load diff of every
+    spine_outcome_id/spine_outcome_ids across every
+    docs/content/realizations/nl/a1_unit*.yaml file against every A1
+    outcome id in universal_spine.yaml (45 total, confirmed by grepping
+    "^  - id: universal.a1." in the spine file) found no unrealized A1
+    outcome for Dutch -- all 45 were already realized. Git history was
+    checked first (git log -- docs/content/universal_spine.yaml and the
+    nl realizations directory); the most recent additions were nl unit50
+    (pharmacy) and, in the same commit, the
+    universal.a1.pharmacy.buy_basic_medicine spine outcome itself -- no
+    other session had added a newer, still-unrealized A1 outcome since.
+    This unit therefore adds a new delegated A1 spine outcome,
+    universal.a1.personal_care.get_haircut, distinct from unit20's
+    clothing purchases and unit46's generic appointment-booking
+    mechanics (naming a service, day, and time in the abstract): the
+    transactional hairdresser/barber visit itself (describing a style
+    preference, understanding a service offer, reading a salon price
+    list) is a distinct, practically important A1 survival topic for
+    living in the Netherlands and was not yet covered anywhere in the
+    spine. Story continuity: Wednesday 20 May 2026, two days after
+    unit50's Monday 18 May 2026 pharmacy visit (verified with Python
+    datetime.date(2026,5,20).strftime("%A") == "Wednesday"). Nina's hair
+    has gotten too long; she books and attends a haircut at Kapsalon
+    Bloem, and in the closing scene runs into Lotte (her established
+    taalcafe-friend from units 37/38/47/48/49), who compliments the new
+    haircut -- consistent with Lotte's recurring role and giving her a
+    reappearance after unit50 focused on Omar. Every vocabulary teaching
+    card includes a real example sentence with a matching overlay
+    example_gloss. Prior words (including "ik heb"/"een"/basic modal-verb
+    constructions and the present-perfect "ben ... geweest" pattern from
+    earlier units) are re-declared as introduced_tokens at first use in
+    this file because the untaught-vocabulary validator is per-file.
+
+course:
+  realization_key: nl.a1
+  target_language_first: true
+  dialect: nl_NL_standard
+  register_policy: >-
+    Teach contemporary Standard Dutch as used in the Netherlands. Nina and
+    Lotte are established taalcafe friends and use informal jij/je with
+    each other throughout. The hairdresser speaks in neutral, polite
+    service language ("u"), consistent with unit50's pharmacist and
+    unit49's hotel-receptionist register.
+
+media_assets:
+  - {content_key: nl.a1.audio.kapper.ik_ga_naar_de_kapper.01, language: nl, text: "Ik ga naar de kapper.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - {content_key: nl.a1.audio.kapper.ik_wil_het_graag_korter.01, language: nl, text: "Ik wil het graag korter.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - {content_key: nl.a1.audio.kapper.kom_op_tijd_voor_afspraak.01, language: nl, text: "Kom op tijd voor uw afspraak.", voice_hint: neutral_adult_clear, status: pending_generation}
+  - content_key: nl.a1.audio.dialogue.kapper_bij_de_kapper.01
+    language: nl
+    text: >-
+      Kapper: Goedemiddag! Wat kan ik voor u doen? Nina: Ik wil mijn haar
+      graag korter, alstublieft. Kapper: Prima, en wilt u hetzelfde
+      kapsel? Nina: Ja, hetzelfde kapsel, maar wel korter. Kapper: Geen
+      probleem. Neemt u plaats.
+    voice_hint: two_young_adults_and_staff_neutral
+    status: pending_generation
+  - {content_key: nl.a1.audio.kapper.prima_en_hetzelfde_kapsel.01, language: nl, text: "Prima, en wilt u hetzelfde kapsel?", voice_hint: neutral_adult_clear, status: pending_generation}
+  - {content_key: nl.a1.audio.kapper.ik_betaal_contant_of_kaart.01, language: nl, text: "Ik betaal contant of met kaart.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - content_key: nl.a1.audio.dialogue.kapper_slot.01
+    language: nl
+    text: >-
+      Lotte: Hé Nina, wat een leuk kapsel! Nina: Dank je! Ik ben net bij
+      de kapper geweest. Lotte: Het staat je goed! Nina: Dank je wel,
+      Lotte. Tot volgende week!
+    voice_hint: two_young_adults_friendly
+    status: pending_generation
+  - {content_key: nl.a1.audio.kapper.het_staat_je_goed.01, language: nl, text: "Het staat je goed!", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+
+units:
+  - content_key: nl.a1.unit51.kapper
+    title: "Naar de kapper: een knipbeurt"
+    section: reading_writing
+    spine_outcome_ids: [universal.a1.personal_care.get_haircut]
+    planned_lesson_count: 6
+    lessons:
+      - content_key: nl.a1.unit51.lesson01.mijn_haar_is_te_lang
+        title: "Mijn haar is te lang"
+        spine_outcome_id: universal.a1.personal_care.get_haircut
+        teaching:
+          - content_key: nl.a1.unit51.lesson01.teach.haar
+            kind: vocabulary
+            target: {text: "het haar", language_code: nl, direction: ltr}
+            introduced_tokens: [het, haar, Mijn, haar, is, te, lang]
+            example: {text: "Mijn haar is te lang.", language_code: nl, direction: ltr}
+          - content_key: nl.a1.unit51.lesson01.teach.kapper
+            kind: vocabulary
+            target: {text: "de kapper", language_code: nl, direction: ltr}
+            introduced_tokens: [de, kapper, Ik, ga, naar, de, kapper]
+            example: {text: "Ik ga naar de kapper.", language_code: nl, direction: ltr}
+          - {content_key: nl.a1.unit51.lesson01.teach.afspraak_maken_kapper, kind: phrase, target: {text: "Ik wil een afspraak maken bij de kapper.", language_code: nl, direction: ltr}, introduced_tokens: [Ik, wil, een, afspraak, maken, bij, de, kapper]}
+        exercises:
+          - {content_key: nl.a1.unit51.lesson01.exercise01.choose_afspraak_maken_kapper, type: multiple_choice, tested_text: "Ik wil een afspraak maken bij de kapper", prompt: {target_blocks: [{text: "I want to make an appointment at the hairdresser.", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit51.lesson01.exercise02.listen_ik_ga_naar_de_kapper, type: listen_select, tested_text: "Ik ga naar de kapper", media_asset_key: nl.a1.audio.kapper.ik_ga_naar_de_kapper.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit51.lesson01.exercise03.match_haar_kapper, type: matching_pairs, tested_text: "haar kapper afspraak maken bij", prompt: {target_blocks: []}, pairs: [{left: haar, right: hair}, {left: kapper, right: hairdresser}, {left: "het haar", right: "the hair"}, {left: "Mijn haar is te lang.", right: "My hair is too long."}, {left: "Ik ga naar de kapper.", right: "I'm going to the hairdresser."}, {left: "Ik wil een afspraak maken bij de kapper.", right: "I want to make an appointment at the hairdresser."}]}
+          - {content_key: nl.a1.unit51.lesson01.exercise04.order_afspraak_maken_kapper, type: word_order, tested_text: "Ik wil een afspraak maken bij de kapper", prompt: {target_blocks: []}, word_bank: [Ik, wil, een, afspraak, maken, bij, de, kapper]}
+          - {content_key: nl.a1.unit51.lesson01.exercise05.listen_order_ik_ga_naar_de_kapper, type: listen_order, tested_text: "Ik ga naar de kapper", media_asset_key: nl.a1.audio.kapper.ik_ga_naar_de_kapper.01, prompt: {target_blocks: []}, word_bank: [Ik, ga, naar, de, kapper]}
+          - {content_key: nl.a1.unit51.lesson01.exercise06.translate_het_haar, type: translation, tested_text: "het haar", prompt: {target_blocks: [{text: "the hair", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit51.lesson01.exercise07.respond_afspraak_maken_kapper, type: dialogue_response, tested_text: "Ik wil een afspraak maken bij de kapper", prompt: {target_blocks: [{text: "Say in Dutch: I want to make an appointment at the hairdresser.", language_code: en, direction: ltr}]}}
+
+      - content_key: nl.a1.unit51.lesson02.kunt_u_mijn_haar_knippen
+        title: "Kunt u mijn haar knippen?"
+        spine_outcome_id: universal.a1.personal_care.get_haircut
+        teaching:
+          - content_key: nl.a1.unit51.lesson02.teach.knippen
+            kind: vocabulary
+            target: {text: knippen, language_code: nl, direction: ltr}
+            introduced_tokens: [knippen, Kunt, u, mijn, haar, knippen]
+            example: {text: "Kunt u mijn haar knippen?", language_code: nl, direction: ltr}
+          - content_key: nl.a1.unit51.lesson02.teach.korter
+            kind: vocabulary
+            target: {text: korter, language_code: nl, direction: ltr}
+            introduced_tokens: [korter, Ik, wil, het, graag, korter]
+            example: {text: "Ik wil het graag korter.", language_code: nl, direction: ltr}
+          - {content_key: nl.a1.unit51.lesson02.teach.hoe_kort_wilt_u_het, kind: phrase, target: {text: "Hoe kort wilt u het?", language_code: nl, direction: ltr}, introduced_tokens: [Hoe, kort, wilt, u, het]}
+        exercises:
+          - {content_key: nl.a1.unit51.lesson02.exercise01.choose_hoe_kort_wilt_u_het, type: multiple_choice, tested_text: "Hoe kort wilt u het", prompt: {target_blocks: [{text: "How short would you like it?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit51.lesson02.exercise02.listen_ik_wil_het_graag_korter, type: listen_select, tested_text: "Ik wil het graag korter", media_asset_key: nl.a1.audio.kapper.ik_wil_het_graag_korter.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit51.lesson02.exercise03.match_knippen_korter, type: matching_pairs, tested_text: "knippen korter haar graag", prompt: {target_blocks: []}, pairs: [{left: knippen, right: "to cut (hair)"}, {left: korter, right: shorter}, {left: "Kunt u mijn haar knippen?", right: "Can you cut my hair?"}, {left: "Ik wil het graag korter.", right: "I'd like it shorter, please."}, {left: "Hoe kort wilt u het?", right: "How short would you like it?"}]}
+          - {content_key: nl.a1.unit51.lesson02.exercise04.order_hoe_kort_wilt_u_het, type: word_order, tested_text: "Hoe kort wilt u het", prompt: {target_blocks: []}, word_bank: [Hoe, kort, wilt, u, het]}
+          - {content_key: nl.a1.unit51.lesson02.exercise05.listen_order_ik_wil_het_graag_korter, type: listen_order, tested_text: "Ik wil het graag korter", media_asset_key: nl.a1.audio.kapper.ik_wil_het_graag_korter.01, prompt: {target_blocks: []}, word_bank: [Ik, wil, het, graag, korter]}
+          - {content_key: nl.a1.unit51.lesson02.exercise06.translate_korter, type: translation, tested_text: korter, prompt: {target_blocks: [{text: shorter, language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit51.lesson02.exercise07.respond_hoe_kort_wilt_u_het, type: dialogue_response, tested_text: "Ik wil het graag korter", prompt: {target_blocks: [{text: "Answer in Dutch: I'd like it shorter, please.", language_code: en, direction: ltr}]}}
+
+      - content_key: nl.a1.unit51.lesson03.een_afspraak_maken
+        title: "Een afspraak maken"
+        spine_outcome_id: universal.a1.personal_care.get_haircut
+        teaching:
+          - content_key: nl.a1.unit51.lesson03.teach.afspraak
+            kind: vocabulary
+            target: {text: "de afspraak", language_code: nl, direction: ltr}
+            introduced_tokens: [de, afspraak, Ik, heb, een, afspraak, om, drie, uur]
+            example: {text: "Ik heb een afspraak om drie uur.", language_code: nl, direction: ltr}
+          - content_key: nl.a1.unit51.lesson03.teach.op_tijd
+            kind: vocabulary
+            target: {text: "op tijd", language_code: nl, direction: ltr}
+            introduced_tokens: [op, tijd, Kom, op, tijd, voor, uw, afspraak]
+            example: {text: "Kom op tijd voor uw afspraak.", language_code: nl, direction: ltr}
+          - {content_key: nl.a1.unit51.lesson03.teach.afspraak_bij_kapper, kind: phrase, target: {text: "Ik heb een afspraak om drie uur bij de kapper.", language_code: nl, direction: ltr}, introduced_tokens: [Ik, heb, een, afspraak, om, drie, uur, bij, de, kapper]}
+        exercises:
+          - {content_key: nl.a1.unit51.lesson03.exercise01.choose_afspraak_bij_kapper, type: multiple_choice, tested_text: "Ik heb een afspraak om drie uur bij de kapper", prompt: {target_blocks: [{text: "I have an appointment at three o'clock at the hairdresser.", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit51.lesson03.exercise02.listen_kom_op_tijd_voor_afspraak, type: listen_select, tested_text: "Kom op tijd voor uw afspraak", media_asset_key: nl.a1.audio.kapper.kom_op_tijd_voor_afspraak.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit51.lesson03.exercise03.match_afspraak, type: matching_pairs, tested_text: "afspraak op tijd drie uur", prompt: {target_blocks: []}, pairs: [{left: afspraak, right: appointment}, {left: "op tijd", right: "on time"}, {left: "de afspraak", right: "the appointment"}, {left: "Ik heb een afspraak om drie uur.", right: "I have an appointment at three o'clock."}, {left: "Kom op tijd voor uw afspraak.", right: "Come on time for your appointment."}, {left: "Ik heb een afspraak om drie uur bij de kapper.", right: "I have an appointment at three o'clock at the hairdresser."}]}
+          - {content_key: nl.a1.unit51.lesson03.exercise04.order_afspraak_bij_kapper, type: word_order, tested_text: "Ik heb een afspraak om drie uur bij de kapper", prompt: {target_blocks: []}, word_bank: [Ik, heb, een, afspraak, om, drie, uur, bij, de, kapper]}
+          - {content_key: nl.a1.unit51.lesson03.exercise05.listen_order_kom_op_tijd_voor_afspraak, type: listen_order, tested_text: "Kom op tijd voor uw afspraak", media_asset_key: nl.a1.audio.kapper.kom_op_tijd_voor_afspraak.01, prompt: {target_blocks: []}, word_bank: [Kom, op, tijd, voor, uw, afspraak]}
+          - {content_key: nl.a1.unit51.lesson03.exercise06.translate_de_afspraak, type: translation, tested_text: "de afspraak", prompt: {target_blocks: [{text: "the appointment", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit51.lesson03.exercise07.respond_afspraak_bij_kapper, type: dialogue_response, tested_text: "Ik heb een afspraak om drie uur bij de kapper", prompt: {target_blocks: [{text: "Say in Dutch: I have an appointment at three o'clock at the hairdresser.", language_code: en, direction: ltr}]}}
+
+      - content_key: nl.a1.unit51.lesson04.bij_de_kapper
+        title: "Bij de kapper"
+        spine_outcome_id: universal.a1.personal_care.get_haircut
+        teaching:
+          - {content_key: nl.a1.unit51.lesson04.teach.kapper_groet, kind: dialogue, target: {text: "Kapper: Goedemiddag! Wat kan ik voor u doen?", language_code: nl, direction: ltr}, introduced_tokens: [Kapper, Goedemiddag, Wat, kan, ik, voor, u, doen]}
+          - {content_key: nl.a1.unit51.lesson04.teach.nina_wens, kind: dialogue, target: {text: "Nina: Ik wil mijn haar graag korter, alstublieft.", language_code: nl, direction: ltr}, introduced_tokens: [Nina, Ik, wil, mijn, haar, graag, korter, alstublieft]}
+          - {content_key: nl.a1.unit51.lesson04.teach.kapper_kapsel_vraag, kind: dialogue, target: {text: "Kapper: Prima, en wilt u hetzelfde kapsel?", language_code: nl, direction: ltr}, introduced_tokens: [Kapper, Prima, en, wilt, u, hetzelfde, kapsel]}
+          - {content_key: nl.a1.unit51.lesson04.teach.nina_hetzelfde_korter, kind: dialogue, target: {text: "Nina: Ja, hetzelfde kapsel, maar wel korter.", language_code: nl, direction: ltr}, introduced_tokens: [Nina, "Ja", hetzelfde, kapsel, maar, wel, korter]}
+          - {content_key: nl.a1.unit51.lesson04.teach.kapper_plaats, kind: dialogue, target: {text: "Kapper: Geen probleem. Neemt u plaats.", language_code: nl, direction: ltr}, introduced_tokens: [Kapper, Geen, probleem, Neemt, u, plaats]}
+        exercises:
+          - {content_key: nl.a1.unit51.lesson04.exercise01.listen_wat_kan_ik_voor_u_doen, type: listen_select, tested_text: "Wat kan ik voor u doen", media_asset_key: nl.a1.audio.dialogue.kapper_bij_de_kapper.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit51.lesson04.exercise02.comprehend_wens, type: dialogue_comprehension, tested_text: korter, media_asset_key: nl.a1.audio.dialogue.kapper_bij_de_kapper.01, prompt: {target_blocks: [{text: "What does Nina say she wants?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit51.lesson04.exercise03.comprehend_hetzelfde_kapsel, type: dialogue_comprehension, tested_text: hetzelfde, media_asset_key: nl.a1.audio.dialogue.kapper_bij_de_kapper.01, prompt: {target_blocks: [{text: "Does Nina want the same style or a different one?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit51.lesson04.exercise04.comprehend_plaats, type: dialogue_comprehension, tested_text: plaats, media_asset_key: nl.a1.audio.dialogue.kapper_bij_de_kapper.01, prompt: {target_blocks: [{text: "What does the hairdresser ask Nina to do at the end?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit51.lesson04.exercise05.order_nina_wens, type: word_order, tested_text: "Ik wil mijn haar graag korter", prompt: {target_blocks: []}, word_bank: [Ik, wil, mijn, haar, graag, korter]}
+          - {content_key: nl.a1.unit51.lesson04.exercise06.respond_kapsel_vraag, type: dialogue_response, tested_text: "Ja hetzelfde kapsel maar wel korter", prompt: {target_blocks: [{text: "Prima, en wilt u hetzelfde kapsel?", language_code: nl, direction: ltr}]}}
+          - {content_key: nl.a1.unit51.lesson04.exercise07.listen_type_prima_hetzelfde_kapsel, type: listen_type, tested_text: "Prima, en wilt u hetzelfde kapsel", media_asset_key: nl.a1.audio.kapper.prima_en_hetzelfde_kapsel.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit51.lesson04.exercise08.write_geen_probleem_plaats, type: writing_prompt, tested_text: "Geen probleem Neemt u plaats", prompt: {target_blocks: [{text: "Write in Dutch: no problem, please take a seat.", language_code: en, direction: ltr}]}}
+
+      - content_key: nl.a1.unit51.lesson05.de_prijslijst_lezen
+        title: "De prijslijst lezen"
+        spine_outcome_id: universal.a1.personal_care.get_haircut
+        teaching:
+          - content_key: nl.a1.unit51.lesson05.teach.prijslijst
+            kind: vocabulary
+            target: {text: "de prijslijst", language_code: nl, direction: ltr}
+            introduced_tokens: [de, prijslijst, Ik, lees, de, prijslijst]
+            example: {text: "Ik lees de prijslijst.", language_code: nl, direction: ltr}
+          - content_key: nl.a1.unit51.lesson05.teach.knipbeurt
+            kind: vocabulary
+            target: {text: "de knipbeurt", language_code: nl, direction: ltr}
+            introduced_tokens: [de, knipbeurt, Een, knipbeurt, kost, twintig, euro]
+            example: {text: "Een knipbeurt kost twintig euro.", language_code: nl, direction: ltr}
+          - content_key: nl.a1.unit51.lesson05.teach.prijslijst_tekst
+            kind: reading
+            target:
+              text: "Prijslijst: Knipbeurt €20. Wassen en knippen €25."
+              language_code: nl
+              direction: ltr
+            introduced_tokens: [Prijslijst, Knipbeurt, "20", Wassen, en, knippen, "25"]
+          - {content_key: nl.a1.unit51.lesson05.teach.betalen_contant_kaart, kind: phrase, target: {text: "Ik betaal contant of met kaart.", language_code: nl, direction: ltr}, introduced_tokens: [Ik, betaal, contant, of, met, kaart]}
+        exercises:
+          - {content_key: nl.a1.unit51.lesson05.exercise01.read_knipbeurt_prijs, type: reading_comprehension, tested_text: "Knipbeurt €20", prompt: {target_blocks: [{text: "According to the price list, what does a haircut cost?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit51.lesson05.exercise02.read_wassen_knippen_prijs, type: reading_comprehension, tested_text: "Wassen en knippen €25", prompt: {target_blocks: [{text: "According to the price list, what does a wash and cut cost?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit51.lesson05.exercise03.read_document_type, type: reading_comprehension, tested_text: Prijslijst, prompt: {target_blocks: [{text: "What kind of document is this?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit51.lesson05.exercise04.match_prijslijst, type: matching_pairs, tested_text: "prijslijst knipbeurt wassen knippen kaart", prompt: {target_blocks: []}, pairs: [{left: Prijslijst, right: "Price list"}, {left: "Prijslijst: Knipbeurt €20.", right: "Price list: Haircut €20."}, {left: "Wassen en knippen €25.", right: "Wash and cut €25."}, {left: "Ik lees de prijslijst.", right: "I'm reading the price list."}, {left: knipbeurt, right: haircut}, {left: "Ik betaal contant of met kaart.", right: "I pay cash or by card."}]}
+          - {content_key: nl.a1.unit51.lesson05.exercise05.listen_ik_betaal_contant_of_kaart, type: listen_select, tested_text: "Ik betaal contant of met kaart", media_asset_key: nl.a1.audio.kapper.ik_betaal_contant_of_kaart.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit51.lesson05.exercise06.write_betalen_contant_kaart, type: writing_prompt, tested_text: "Ik betaal contant of met kaart", prompt: {target_blocks: [{text: "Write in Dutch: I pay cash or by card.", language_code: en, direction: ltr}]}}
+
+      - content_key: nl.a1.unit51.lesson06.lotte_ziet_het_nieuwe_kapsel
+        title: "Lotte ziet het nieuwe kapsel"
+        spine_outcome_id: universal.a1.personal_care.get_haircut
+        teaching:
+          - content_key: nl.a1.unit51.lesson06.teach.kapsel
+            kind: vocabulary
+            target: {text: "het kapsel", language_code: nl, direction: ltr}
+            introduced_tokens: [het, kapsel, Wat, een, leuk, kapsel]
+            example: {text: "Wat een leuk kapsel!", language_code: nl, direction: ltr}
+          - content_key: nl.a1.unit51.lesson06.teach.staat_je_goed
+            kind: vocabulary
+            target: {text: "staat je goed", language_code: nl, direction: ltr}
+            introduced_tokens: [staat, je, goed, Het, staat, je, goed]
+            example: {text: "Het staat je goed!", language_code: nl, direction: ltr}
+          - {content_key: nl.a1.unit51.lesson06.teach.lotte_compliment, kind: dialogue, target: {text: "Lotte: Hé Nina, wat een leuk kapsel!", language_code: nl, direction: ltr}, introduced_tokens: [Lotte, "Hé", Nina, Wat, een, leuk, kapsel]}
+          - {content_key: nl.a1.unit51.lesson06.teach.nina_net_geweest, kind: dialogue, target: {text: "Nina: Dank je! Ik ben net bij de kapper geweest.", language_code: nl, direction: ltr}, introduced_tokens: [Nina, Dank, je, Ik, ben, net, bij, de, kapper, geweest]}
+          - {content_key: nl.a1.unit51.lesson06.teach.lotte_staat_goed, kind: dialogue, target: {text: "Lotte: Het staat je goed!", language_code: nl, direction: ltr}, introduced_tokens: [Lotte, Het, staat, je, goed]}
+          - {content_key: nl.a1.unit51.lesson06.teach.nina_tot_volgende_week, kind: dialogue, target: {text: "Nina: Dank je wel, Lotte. Tot volgende week!", language_code: nl, direction: ltr}, introduced_tokens: [Nina, Dank, je, wel, Lotte, Tot, volgende, week]}
+          - {content_key: nl.a1.unit51.lesson06.teach.net_bij_kapper_geweest, kind: phrase, target: {text: "Ik ben net bij de kapper geweest.", language_code: nl, direction: ltr}, introduced_tokens: [Ik, ben, net, bij, de, kapper, geweest]}
+        exercises:
+          - {content_key: nl.a1.unit51.lesson06.exercise01.listen_wat_een_leuk_kapsel, type: listen_select, tested_text: "Wat een leuk kapsel", media_asset_key: nl.a1.audio.dialogue.kapper_slot.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit51.lesson06.exercise02.comprehend_compliment, type: dialogue_comprehension, tested_text: kapsel, media_asset_key: nl.a1.audio.dialogue.kapper_slot.01, prompt: {target_blocks: [{text: "What does Lotte compliment Nina on?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit51.lesson06.exercise03.comprehend_waar_geweest, type: dialogue_comprehension, tested_text: kapper, media_asset_key: nl.a1.audio.dialogue.kapper_slot.01, prompt: {target_blocks: [{text: "Where has Nina just been?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit51.lesson06.exercise04.match_slot, type: matching_pairs, tested_text: "kapsel staat je goed geweest volgende week", prompt: {target_blocks: []}, pairs: [{left: "Hé Nina, wat een leuk kapsel!", right: "Hey Nina, what a nice haircut!"}, {left: "Dank je! Ik ben net bij de kapper geweest.", right: "Thanks! I just went to the hairdresser."}, {left: "Het staat je goed!", right: "It suits you well!"}, {left: "Dank je wel, Lotte. Tot volgende week!", right: "Thank you, Lotte. See you next week!"}, {left: kapsel, right: haircut}, {left: "staat je goed", right: "suits you well"}]}
+          - {content_key: nl.a1.unit51.lesson06.exercise05.order_staat_je_goed, type: word_order, tested_text: "Het staat je goed", prompt: {target_blocks: []}, word_bank: [Het, staat, je, goed]}
+          - {content_key: nl.a1.unit51.lesson06.exercise06.respond_wat_een_leuk_kapsel, type: dialogue_response, tested_text: "Dank je Ik ben net bij de kapper geweest", prompt: {target_blocks: [{text: "Hé Nina, wat een leuk kapsel!", language_code: nl, direction: ltr}]}}
+          - {content_key: nl.a1.unit51.lesson06.exercise07.listen_type_het_staat_je_goed, type: listen_type, tested_text: "Het staat je goed", media_asset_key: nl.a1.audio.kapper.het_staat_je_goed.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit51.lesson06.exercise08.write_dank_je_wel_tot_volgende_week, type: writing_prompt, tested_text: "Dank je wel Lotte Tot volgende week", prompt: {target_blocks: [{text: "Write in Dutch: thank you, Lotte. See you next week!", language_code: en, direction: ltr}]}}
