@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import { NavBar } from "./components/layout/NavBar";
 import { ProtectedRoute } from "./components/layout/ProtectedRoute";
 import { ErrorBoundary } from "./components/ErrorBoundary";
+import { FeedbackWidget } from "./components/FeedbackWidget";
 import { HomePage } from "./pages/HomePage";
 import { LoginPage } from "./pages/LoginPage";
 import { RegisterPage } from "./pages/RegisterPage";
@@ -127,6 +128,7 @@ function App() {
           </Routes>
         </ErrorBoundary>
       </main>
+      <FeedbackWidget />
     </div>
   );
 }

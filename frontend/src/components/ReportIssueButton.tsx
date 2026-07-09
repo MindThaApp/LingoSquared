@@ -2,7 +2,12 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import type { AnswerResponse, ContentIssueCategory } from "../api/types";
 
-const CATEGORY_KEY: Record<ContentIssueCategory, string> = {
+// Only the exercise-scoped categories are offered here -- app_bug/
+// general_feedback are FeedbackWidget's (a page has no "wrong answer key").
+const CATEGORY_KEY: Record<
+  Exclude<ContentIssueCategory, "app_bug" | "general_feedback">,
+  string
+> = {
   wrong_answer_key: "report_issue.category.wrong_answer_key",
   mistranslation: "report_issue.category.mistranslation",
   untaught_vocabulary: "report_issue.category.untaught_vocabulary",
