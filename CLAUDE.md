@@ -624,6 +624,30 @@ to the authoring reasoning) before import.
   (`null_subject`, `both_speakers` have both shipped for real), and
   internal words like "reviewed" leaking into learner-facing feedback
   text. Grep `docs/content/` periodically, don't wait to trip over it.
+- **A `listen_select` distractor must never be a line the named speaker
+  actually says elsewhere in the same dialogue audio** — confirmed as a
+  real regression 2026-07-09 by a Fable audit: nl units 36-43
+  consistently used minimal-pair distractors (correct pattern), but
+  units 44-50 (authored at overnight pace) switched to pulling
+  distractors from other lines of the same dialogue, and 6 of 15 such
+  exercises (40%) ended up genuinely unanswerable — the "wrong" option
+  was something the speaker being quizzed on also says in the same
+  clip, so both options are technically correct regardless of what the
+  learner picks. This is the same bug class the earlier W6
+  listening-integrity audit already fixed once; it regressed because
+  nothing enforces it automatically. Fixed the 6 confirmed cases
+  (commit `148240e`) but did NOT extend the scan past en-nl, and did
+  NOT fix 3 more borderline cases the same audit found defensible-but-
+  fragile (nl unit42/49/50 lesson04, where a distractor is *assembled*
+  from lines the speaker says across separate turns rather than
+  verbatim). **Standing rule for all future dialogue-audio content**:
+  a listening distractor must be something NOT said by the tested
+  speaker anywhere in that audio, full stop — verify this explicitly
+  when authoring or reviewing any `listen_select`/`dialogue_response`
+  exercise built from multi-turn dialogue audio, don't just check that
+  the distractor differs from the correct answer. Not yet enforced by
+  the compiler (a real gap, Codex lane) or the authoring guide (should
+  be added to `docs/content/AUTHORING_GUIDE.md`).
 - **Never write bare `yes`/`no`/`true`/`false`/`on`/`off` as a YAML
   string value** in content fields — PyYAML silently coerces these to
   booleans. Always quote (`"Yes"`). The compiler validates this now
