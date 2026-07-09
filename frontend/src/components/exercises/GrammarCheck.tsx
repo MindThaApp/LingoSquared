@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { TextBlockList } from "../TextBlock";
 import { VirtualKeyboard } from "../VirtualKeyboard";
-import { answerScriptForExercise, scriptNeedsVirtualKeyboard } from "../../lib/scripts";
+import { answerScriptForExercise, scriptDirection, scriptNeedsVirtualKeyboard } from "../../lib/scripts";
 import { useKeyboardFocus } from "../../lib/useKeyboardFocus";
 import { correctOptionFromResponse, optionClassName } from "./optionHighlight";
 import type { ExerciseComponentProps } from "./types";
@@ -71,7 +71,7 @@ export function GrammarCheck({ exercise, onAnswer, disabled, gradedResult }: Exe
           onChange={(e) => setValue(e.target.value)}
           disabled={disabled}
           placeholder={t("exercise.grammar_check_placeholder")}
-          dir={script === "arabic" ? "rtl" : undefined}
+          dir={scriptDirection(script)}
           {...inputProps}
         />
       </div>

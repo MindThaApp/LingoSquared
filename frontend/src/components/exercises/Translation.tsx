@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { TextBlockList } from "../TextBlock";
 import { VirtualKeyboard } from "../VirtualKeyboard";
 import { SpeakButton } from "../SpeakButton";
-import { answerScriptForExercise, scriptNeedsVirtualKeyboard } from "../../lib/scripts";
+import { answerScriptForExercise, scriptDirection, scriptNeedsVirtualKeyboard } from "../../lib/scripts";
 import { useKeyboardFocus } from "../../lib/useKeyboardFocus";
 import type { ExerciseComponentProps } from "./types";
 
@@ -33,7 +33,7 @@ export function Translation({ exercise, onAnswer, disabled }: ExerciseComponentP
           onChange={(e) => setValue(e.target.value)}
           disabled={disabled}
           placeholder={t("exercise.translation_placeholder")}
-          dir={script === "arabic" ? "rtl" : undefined}
+          dir={scriptDirection(script)}
           {...inputProps}
         />
       </div>
