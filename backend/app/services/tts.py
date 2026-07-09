@@ -36,8 +36,6 @@ GOOGLE_TTS_VOICE_NAME={
     "de":"de-DE-Neural2-G","it":"it-IT-Neural2-A","es":"es-ES-Neural2-A",
     "ru":"ru-RU-Wavenet-C","zh":"cmn-CN-Wavenet-A",
     "pl":"pl-PL-Wavenet-F","ro":"ro-RO-Wavenet-B",
-    # TODO: Placeholder only -- not yet verified against this project's
-    # real texttospeech.list_voices() output the way the entries above were.
     "hi":"hi-IN-Neural2-A",
 }
 
