@@ -70,7 +70,10 @@ class CEFRLevel(str, enum.Enum):
 class Language(Base):
     __tablename__ = "languages"
     __table_args__ = (
-        CheckConstraint("script IN ('latin','cyrillic','han','arabic')"),
+        CheckConstraint(
+            "script IN ('latin','cyrillic','han','arabic','devanagari')",
+            name="ck_languages_script",
+        ),
         CheckConstraint("direction IN ('ltr','rtl')"),
     )
 

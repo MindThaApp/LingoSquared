@@ -13,11 +13,12 @@ from app.models import TTSUsage
 # Google's own supported-voices list. Those two languages always fall
 # back to Azure (fa only, see below) or the browser (prs, still no
 # real-voice provider found anywhere).
-GOOGLE_TTS_SUPPORTED_LANGUAGES={"en","nl","fr","de","it","es","ru","zh"}
+GOOGLE_TTS_SUPPORTED_LANGUAGES={"en","nl","fr","de","it","es","ru","zh","pl","ro","hi"}
 
 GOOGLE_TTS_LANGUAGE_CODE={
     "en":"en-US","nl":"nl-NL","fr":"fr-FR","de":"de-DE",
     "it":"it-IT","es":"es-ES","ru":"ru-RU","zh":"cmn-CN",
+    "pl":"pl-PL","ro":"ro-RO","hi":"hi-IN",
 }
 
 # Without an explicit voice `name`, Google Cloud TTS resolves language_code
@@ -27,13 +28,17 @@ GOOGLE_TTS_LANGUAGE_CODE={
 # Confirmed live 2026-07-09 via a real texttospeech.list_voices() call
 # against this project's actual credentials (not guessed from training
 # data, which can be stale/wrong about what's currently offered) — every
-# name below is real and currently available. Neural2 doesn't cover
-# nl/ru/zh yet, so those three fall back to WaveNet (still far more
-# natural than Standard).
+# non-TODO name below is real and currently available. Neural2 doesn't
+# cover nl/ru/zh/pl/ro yet, so those five fall back to WaveNet (still
+# far more natural than Standard).
 GOOGLE_TTS_VOICE_NAME={
     "en":"en-US-Neural2-C","nl":"nl-NL-Wavenet-F","fr":"fr-FR-Neural2-F",
     "de":"de-DE-Neural2-G","it":"it-IT-Neural2-A","es":"es-ES-Neural2-A",
     "ru":"ru-RU-Wavenet-C","zh":"cmn-CN-Wavenet-A",
+    "pl":"pl-PL-Wavenet-F","ro":"ro-RO-Wavenet-B",
+    # TODO: Placeholder only -- not yet verified against this project's
+    # real texttospeech.list_voices() output the way the entries above were.
+    "hi":"hi-IN-Neural2-A",
 }
 
 # Azure Cognitive Services Speech covers the one real gap Google leaves:

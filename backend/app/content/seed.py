@@ -4,7 +4,7 @@ from app.models import Language, Achievement
 from app.schemas.api import ImportRequest
 from app.content.service import import_content
 
-LANGUAGES=[("en","English","English","latin","ltr"),("nl","Dutch","Nederlands","latin","ltr"),("fr","French","Français","latin","ltr"),("de","German","Deutsch","latin","ltr"),("it","Italian","Italiano","latin","ltr"),("es","Spanish","Español","latin","ltr"),("ru","Russian","Русский","cyrillic","ltr"),("zh","Chinese (Mandarin, Simplified)","简体中文","han","ltr"),("fa","Farsi","فارسی","arabic","rtl"),("prs","Dari","دری","arabic","rtl")]
+LANGUAGES=[("en","English","English","latin","ltr"),("nl","Dutch","Nederlands","latin","ltr"),("fr","French","Français","latin","ltr"),("de","German","Deutsch","latin","ltr"),("it","Italian","Italiano","latin","ltr"),("es","Spanish","Español","latin","ltr"),("ru","Russian","Русский","cyrillic","ltr"),("zh","Chinese (Mandarin, Simplified)","简体中文","han","ltr"),("fa","Farsi","فارسی","arabic","rtl"),("prs","Dari","دری","arabic","rtl"),("pl","Polish","Polski","latin","ltr"),("ro","Romanian","Română","latin","ltr"),("hi","Hindi","हिन्दी","devanagari","ltr")]
 
 def block(text,language_code):
     return {"text":text,"language_code":language_code,"direction":"rtl" if language_code in {"fa","prs"} else "ltr"}
