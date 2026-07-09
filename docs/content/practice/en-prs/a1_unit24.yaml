@@ -1,0 +1,234 @@
+schema_version: "1.0"
+pack_key: practice.en-prs.a1.unit24
+source_language: en
+target_language: prs
+unit_content_key: prs.a1.unit24.transportation
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: >-
+    Authored 2026-07-09, same practice-pool depth-extension pass as this
+    bundle's a1_unit20.yaml/a1_unit21.yaml/a1_unit22.yaml/a1_unit23.yaml
+    siblings (see a1_unit20.yaml's notes for the shared pass context) --
+    the last unit in this pass.
+
+    New groups, all real vocabulary from this unit's own realization:
+    "transport_mode_word" (بس/تکسی/موتر/دوچرخه, 4 members, completes
+    lesson01 -- بس is a REUSED existing lexeme from unit16 travel,
+    genuinely the same word "bus") is the unit's core vehicle
+    vocabulary, all combining grammatically with با ... می‌روم ("I go by
+    X"). "on_foot_word" (پیاده, 1 member) is kept SEPARATE from
+    transport_mode_word since it's an adverb, not a vehicle noun, and
+    combines differently in a sentence (پیاده می‌روم, no با) --
+    composing پیاده into transport_mode_word's "با {X} می‌روم" frame
+    would produce the ungrammatical "با پیاده می‌روم." "go_verb_present"
+    (می‌روم/می‌روی/می‌رود, 3 members, completes lesson05) is the "go" verb
+    paradigm across 1st/2nd/3rd person -- three distinct glosses.
+    "you_go_verb"/"go_verb_third" are private single-candidate subsets
+    layered on top, same pattern as this pass's unit20 go_verb/eat_verb.
+    "speed_adjective" (تیز/تیزتر, 2 members) is a genuine small closed
+    set (comparative and base form, not padded). "ticket_word"
+    (تکت/ایستگاه, 2 members) and "ticket_only" (تکت, 1 member --
+    additive subset, since "ایستگاه چند است؟" would be nonsensical,
+    stations don't have a price the way tickets do) round out the set.
+    "buy_verb" (می‌خرم, 1 member) is REUSED as-is from this pass's own
+    a1_unit21.yaml.
+
+    Checked for the "fine"/"okay" gloss-collision trap: transport_mode_
+    word's 4 glosses (bus/taxi/car/bicycle) and go_verb_present's 3
+    (I go/you go/he-she goes) are all genuinely distinct. Checked POS
+    uniformity: all 4 transport_mode_word members are POS noun; all 3
+    go_verb_present members are POS verb.
+
+    Word_order templates checked for grammaticality: "با {transport_
+    mode_word} می‌روم" (lesson01, matches the real taught "با بس
+    می‌روم"/"با تکسی می‌روم" pattern generalized across all 4 vehicles),
+    "چطور {you_go_verb}" (lesson02, single-candidate می‌روی, matches
+    "چطور می‌روی؟" exactly), "{ticket_only} چند است" (lesson03, single-
+    candidate تکت, matches "تکت چند است؟" exactly), "تکسی {speed_
+    comparative_only} است" (lesson04, single-candidate تیزتر, matches
+    "تکسی تیزتر است" exactly), "{person_name} با {transport_mode_word}
+    {go_verb_third}" (lesson05, uses the full course-wide person_name
+    pool with the single-candidate 3rd-person می‌رود, matches "زرمینه با
+    تکسی می‌رود" generalized), and "من هر روز {on_foot_word} یا با
+    {transport_mode_word} می‌روم" (lesson06, matches the real wrap-up
+    sentence "من هر روز پیاده یا با بس می‌روم" generalized across all 4
+    vehicles).
+
+    No listen_select/listen_type anywhere (en-prs has no TTS voices).
+    Zero fill_in_blank templates -- this unit's real vocabulary doesn't
+    need one beyond what translation/word_order already safely cover.
+
+    Verified with scripts/_practice_slot_check.py (reusing
+    backfill_lexemes_en_prs.py's real iter_specs() output) -- every
+    slot has enough distinct candidates. scripts/compile_content.py
+    practice-validate for the full en-prs pack -- 0 errors/0 warnings.
+    Needs the standard fresh-context review before import; no
+    backfill_lexemes_en_prs.py run has happened against a real database
+    yet in this pass.
+tag_schema:
+  part_of_speech: [noun, verb, adjective, adverb, proper_noun]
+  agreement_tags:
+    semantic:
+      [transport_mode_word, on_foot_word, go_verb_present, you_go_verb,
+       go_verb_third, speed_adjective, speed_comparative_only,
+       ticket_word, ticket_only, buy_verb, person_name]
+slot_presets:
+  transport_mode_word: &transport_mode_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: transport_mode_word}}
+  on_foot_word: &on_foot_word {language_code: prs, part_of_speech: adverb, agreement_tags: {semantic: on_foot_word}}
+  go_verb_present: &go_verb_present {language_code: prs, part_of_speech: verb, agreement_tags: {semantic: go_verb_present}}
+  you_go_verb: &you_go_verb {language_code: prs, part_of_speech: verb, agreement_tags: {semantic: you_go_verb}}
+  go_verb_third: &go_verb_third {language_code: prs, part_of_speech: verb, agreement_tags: {semantic: go_verb_third}}
+  speed_adjective: &speed_adjective {language_code: prs, part_of_speech: adjective, agreement_tags: {semantic: speed_adjective}}
+  speed_comparative_only: &speed_comparative_only {language_code: prs, part_of_speech: adjective, agreement_tags: {semantic: speed_comparative_only}}
+  ticket_word: &ticket_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: ticket_word}}
+  ticket_only: &ticket_only {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: ticket_only}}
+  # Reuses "buy_verb" (می‌خرم), established in this pass's own
+  # a1_unit21.yaml (genuinely the same word, not a new entry).
+  buy_verb: &buy_verb {language_code: prs, part_of_speech: verb, agreement_tags: {semantic: buy_verb}}
+  # Union of transport_mode_word (4) + on_foot_word (1) for the final
+  # review matching_pairs -- 5 distinct real tokens. Unlike a per-slot
+  # split (which would give the single on_foot_word slot only 1
+  # candidate, below the >=2 floor _practice_slot_check.py enforces for
+  # every matching_pairs slot), every word_N slot below draws from this
+  # SAME shared 5-member pool, matching the health_review_pool/money_
+  # review_pool pattern.
+  transport_review_pool: &transport_review_pool {language_code: prs, part_of_speech: [noun, adverb], agreement_tags: {semantic: [transport_mode_word, on_foot_word]}}
+  # Reuses the existing course-wide "person_name" group.
+  person_name: &person_name {language_code: prs, part_of_speech: proper_noun, agreement_tags: {semantic: person_name}}
+templates:
+  # Lesson 1: transport vocabulary.
+  - content_key: practice.en-prs.prs.a1.unit24.lesson01.transport_word_gloss.001
+    lesson_content_key: prs.a1.unit24.lesson01.transport_vocabulary
+    type: multiple_choice
+    frame: {text: "{transport_mode_word}", language_code: prs, direction: rtl}
+    slots: {transport_mode_word: *transport_mode_word}
+    answer_derivation: {kind: slot_gloss, slot: transport_mode_word}
+    feedback_frame: {text: "{transport_mode_word} names a way to get around town.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit24.lesson01.transport_word_pair.002
+    lesson_content_key: prs.a1.unit24.lesson01.transport_vocabulary
+    type: matching_pairs
+    frame: {text: "{word_one} — {word_two} — {word_three} — {word_four}", language_code: prs, direction: rtl}
+    slots: {word_one: *transport_mode_word, word_two: *transport_mode_word, word_three: *transport_mode_word, word_four: *transport_mode_word}
+    slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four]}]
+    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit24.lesson01.go_by_order.003
+    lesson_content_key: prs.a1.unit24.lesson01.transport_vocabulary
+    type: word_order
+    frame: {text: "با {transport_mode_word} می‌روم", language_code: prs, direction: rtl}
+    slots: {transport_mode_word: *transport_mode_word}
+    answer_derivation: {kind: render_frame, frame: {text: "با {transport_mode_word} می‌روم", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: با [vehicle] می‌روم (I go by [vehicle]).", language_code: en, direction: ltr}
+
+  # Lesson 2: how you go.
+  - content_key: practice.en-prs.prs.a1.unit24.lesson02.on_foot_translate.001
+    lesson_content_key: prs.a1.unit24.lesson02.how_you_go
+    type: translation
+    frame: {text: "{on_foot_word}", language_code: en, direction: ltr, slot_rendering: {on_foot_word: english_gloss}}
+    slots: {on_foot_word: *on_foot_word}
+    answer_derivation: {kind: slot_text, slot: on_foot_word}
+    feedback_frame: {text: "{on_foot_word} is the Dari word for this.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit24.lesson02.how_go_order.002
+    lesson_content_key: prs.a1.unit24.lesson02.how_you_go
+    type: word_order
+    frame: {text: "چطور {you_go_verb}", language_code: prs, direction: rtl}
+    slots: {you_go_verb: *you_go_verb}
+    answer_derivation: {kind: render_frame, frame: {text: "چطور {you_go_verb}", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: چطور می‌روی (how do you go?).", language_code: en, direction: ltr}
+
+  # Lesson 3: buying a ticket.
+  - content_key: practice.en-prs.prs.a1.unit24.lesson03.ticket_word_translate.001
+    lesson_content_key: prs.a1.unit24.lesson03.buying_a_ticket
+    type: translation
+    frame: {text: "{ticket_word}", language_code: en, direction: ltr, slot_rendering: {ticket_word: english_gloss}}
+    slots: {ticket_word: *ticket_word}
+    answer_derivation: {kind: slot_text, slot: ticket_word}
+    feedback_frame: {text: "{ticket_word} is the Dari word for this.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit24.lesson03.ticket_price_order.002
+    lesson_content_key: prs.a1.unit24.lesson03.buying_a_ticket
+    type: word_order
+    frame: {text: "{ticket_only} چند است", language_code: prs, direction: rtl}
+    slots: {ticket_only: *ticket_only}
+    answer_derivation: {kind: render_frame, frame: {text: "{ticket_only} چند است", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: تکت چند است (how much is the ticket?).", language_code: en, direction: ltr}
+
+  # Lesson 4: commute dialogue.
+  - content_key: practice.en-prs.prs.a1.unit24.lesson04.speed_adjective_translate.001
+    lesson_content_key: prs.a1.unit24.lesson04.commute_dialogue
+    type: translation
+    frame: {text: "{speed_adjective}", language_code: en, direction: ltr, slot_rendering: {speed_adjective: english_gloss}}
+    slots: {speed_adjective: *speed_adjective}
+    answer_derivation: {kind: slot_text, slot: speed_adjective}
+    feedback_frame: {text: "{speed_adjective} is the Dari word for this.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit24.lesson04.taxi_faster_order.002
+    lesson_content_key: prs.a1.unit24.lesson04.commute_dialogue
+    type: word_order
+    frame: {text: "تکسی {speed_comparative_only} است", language_code: prs, direction: rtl}
+    slots: {speed_comparative_only: *speed_comparative_only}
+    answer_derivation: {kind: render_frame, frame: {text: "تکسی {speed_comparative_only} است", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: تکسی تیزتر است (the taxi is faster).", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit24.lesson04.speed_pair.003
+    lesson_content_key: prs.a1.unit24.lesson04.commute_dialogue
+    type: matching_pairs
+    frame: {text: "{word_one} — {word_two}", language_code: prs, direction: rtl}
+    slots: {word_one: *speed_adjective, word_two: *speed_adjective}
+    slot_relations: [{kind: distinct, slots: [word_one, word_two]}]
+    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+
+  # Lesson 5: reading about commuting.
+  - content_key: practice.en-prs.prs.a1.unit24.lesson05.go_verb_gloss.001
+    lesson_content_key: prs.a1.unit24.lesson05.reading_commute
+    type: multiple_choice
+    frame: {text: "{go_verb_present}", language_code: prs, direction: rtl}
+    slots: {go_verb_present: *go_verb_present}
+    answer_derivation: {kind: slot_gloss, slot: go_verb_present}
+    feedback_frame: {text: "{go_verb_present} is a form of the verb 'to go.'", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit24.lesson05.person_transport_order.002
+    lesson_content_key: prs.a1.unit24.lesson05.reading_commute
+    type: word_order
+    frame: {text: "{person_name} با {transport_mode_word} {go_verb_third}", language_code: prs, direction: rtl}
+    slots: {person_name: *person_name, transport_mode_word: *transport_mode_word, go_verb_third: *go_verb_third}
+    answer_derivation: {kind: render_frame, frame: {text: "{person_name} با {transport_mode_word} {go_verb_third}", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: [name] با [vehicle] می‌رود ([name] goes by [vehicle]).", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit24.lesson05.transport_word_translate.003
+    lesson_content_key: prs.a1.unit24.lesson05.reading_commute
+    type: translation
+    frame: {text: "{transport_mode_word}", language_code: en, direction: ltr, slot_rendering: {transport_mode_word: english_gloss}}
+    slots: {transport_mode_word: *transport_mode_word}
+    answer_derivation: {kind: slot_text, slot: transport_mode_word}
+    feedback_frame: {text: "{transport_mode_word} is the Dari word for this.", language_code: en, direction: ltr}
+
+  # Lesson 6: wrap-up.
+  - content_key: practice.en-prs.prs.a1.unit24.lesson06.transport_review_pair.001
+    lesson_content_key: prs.a1.unit24.lesson06.wrap_up
+    # Pools transport_mode_word (4) + on_foot_word (1) -- 5 distinct
+    # real tokens, all drawn from the shared union preset so every slot
+    # independently has >=2 candidates (AUTHORING_GUIDE.md #16).
+    type: matching_pairs
+    frame: {text: "{word_one} — {word_two} — {word_three} — {word_four} — {word_five}", language_code: prs, direction: rtl}
+    slots:
+      word_one: *transport_review_pool
+      word_two: *transport_review_pool
+      word_three: *transport_review_pool
+      word_four: *transport_review_pool
+      word_five: *transport_review_pool
+    slot_relations:
+      - {kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five]}
+    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five]}
+    feedback_frame: {text: "Match each word to its English meaning -- transportation.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit24.lesson06.daily_commute_order.002
+    lesson_content_key: prs.a1.unit24.lesson06.wrap_up
+    type: word_order
+    frame: {text: "من هر روز {on_foot_word} یا با {transport_mode_word} می‌روم", language_code: prs, direction: rtl}
+    slots: {on_foot_word: *on_foot_word, transport_mode_word: *transport_mode_word}
+    answer_derivation: {kind: render_frame, frame: {text: "من هر روز {on_foot_word} یا با {transport_mode_word} می‌روم", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: من هر روز پیاده یا با [vehicle] می‌روم (I go on foot or by [vehicle] every day).", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit24.lesson06.buy_ticket_translate.003
+    lesson_content_key: prs.a1.unit24.lesson06.wrap_up
+    type: translation
+    frame: {text: "{buy_verb}", language_code: en, direction: ltr, slot_rendering: {buy_verb: english_gloss}}
+    slots: {buy_verb: *buy_verb}
+    answer_derivation: {kind: slot_text, slot: buy_verb}
+    feedback_frame: {text: "{buy_verb} is the Dari word for this.", language_code: en, direction: ltr}
