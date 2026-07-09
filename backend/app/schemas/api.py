@@ -4,7 +4,7 @@ from typing import Any, Literal
 from pydantic import BaseModel, ConfigDict, EmailStr, Field, model_validator
 from app.models.entities import CEFRLevel, ExerciseType, UnitSection
 
-ContentIssueCategory=Literal["wrong_answer_key","mistranslation","untaught_vocabulary","audio_issue","unclear_instruction","other"]
+ContentIssueCategory=Literal["wrong_answer_key","mistranslation","untaught_vocabulary","audio_issue","unclear_instruction","app_bug","general_feedback","other"]
 ContentIssueStatus=Literal["open","triaged","resolved","wontfix","duplicate"]
 
 # Security: bounds a user-supplied free-form payload's serialized size,
@@ -94,6 +94,16 @@ class ContentIssueReportIn(BaseModel):
     def bounded_learner_response(self):
         if self.learner_response is not None: _bounded_payload_size(self.learner_response)
         return self
+class GeneralFeedbackIn(BaseModel):
+    category:ContentIssueCategory
+    description:str|None=Field(default=None,max_length=2000)
+    page_path:str=Field(max_length=255)
+    client_context:dict[str,Any]=Field(default_factory=dict)
+
+    @model_validator(mode="after")
+    def bounded_client_context(self):
+        _bounded_payload_size(self.client_context)
+        return self
 class ContentIssueCreatedOut(BaseModel): id:str; status:ContentIssueStatus
 class ContentIssueUpdateIn(BaseModel):
     status:ContentIssueStatus|None=None
@@ -107,13 +117,12 @@ class ContentIssueUpdateIn(BaseModel):
         return self
 class ContentIssueOut(ORM):
     id:str
-    reporter_user_id:str
-    # Exactly one of these two is ever set (enforced by a DB check
-    # constraint, migration 0014) - exercise_id for compiled lesson
-    # content, practice_item_id for review/checkpoint/Endless Practice
-    # generated items, which are backed by PracticeItem, not Exercise.
+    reporter_user_id:str|None
+    # At most one of these two is set (enforced by a DB check
+    # constraint). Page-level feedback legitimately has neither id.
     exercise_id:str|None
     practice_item_id:str|None
+    page_path:str|None
     content_release_id:str|None
     content_key_id:str|None
     attempt_id:str|None
