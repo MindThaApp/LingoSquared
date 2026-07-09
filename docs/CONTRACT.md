@@ -618,6 +618,69 @@ the `Course → Unit → Lesson → Exercise` join, which has no equivalent path
 for PracticeItem) — PracticeItem-backed reports don't appear in that
 specific rollup yet, a known scope gap, not a regression.
 
+### General app/page feedback (not content-issue-specific), 2026-07-09
+
+Every existing report path (`POST /exercises/{id}/report`, `POST
+/practice/items/{id}/report`) requires a real `Exercise`/`PracticeItem` id —
+there was no way to report a problem with the app itself (a broken button, a
+confusing screen, a login failure) or leave general feedback from a page
+that isn't an exercise. Also: this app is meant to be usable in at least
+three deployment shapes (Ramin's home server, a locally-run clone someone
+starts via a shortcut, and eventually a hosted public domain) — a report
+mechanism that only writes to whatever backend instance happens to be
+running locally would silently lose all feedback from the "everyone runs
+their own local copy" shape, since nobody but that one person would ever
+see it. This endpoint is deliberately unauthenticated (feedback about a
+broken login page has to work without being logged in) and the frontend is
+expected to point it at one fixed, centrally-reachable backend regardless of
+which backend instance is serving the rest of the app (see
+`VITE_FEEDBACK_API_URL` below) — that's a deployment/config concern, not
+something this endpoint itself needs to know about.
+
+```
+POST /feedback
+{ "page_path": "/lessons/abc123", "category": "app_bug", "description": "The next button does nothing", "client_context": {...} }
+→ 201 { "id": "uuid", "status": "open" }
+```
+
+- No auth required. If a valid bearer token is present, `reporter_user_id`
+  is set from it; otherwise the report is anonymous (`reporter_user_id`
+  null). `ContentIssueReport.reporter_user_id` is now nullable for this
+  reason — every existing exercise/practice-item report path is unaffected
+  (a logged-in user is required to reach a lesson/practice item at all, so
+  those two paths always populate it in practice).
+- `category` gains two new values on top of the existing set
+  (`wrong_answer_key`/`mistranslation`/`untaught_vocabulary`/`audio_issue`/
+  `unclear_instruction`/`other`): `app_bug` (something is broken) and
+  `general_feedback` (a suggestion/comment, nothing broken). Plain `String`
+  column, not a DB enum — Pydantic validates the allowed set, same as
+  today.
+- New nullable `page_path: str` column (the frontend route path at
+  submission time, e.g. `/lessons/abc123` or `/home` — not a full URL, no
+  query string/PII). `exercise_id`/`practice_item_id`/`page_path` are
+  mutually exclusive-ish in practice (a page-level report has neither id
+  set) but the DB check constraint only enforces "at most one of
+  exercise_id/practice_item_id" (relaxed from "exactly one" — migration
+  needed), it does not require `page_path` specifically; that's an
+  application-level convention, not a DB-level one.
+- `GET /admin/content/issues` and `PATCH /admin/content/issues/{id}` are
+  unchanged in shape — `ContentIssueOut` gains `page_path` alongside the
+  existing nullable `exercise_id`/`practice_item_id`. A page-level report
+  (both ids null) is a legitimate row, not an error case.
+- `GET /admin/content/coverage`'s per-course `open_issue_count` is
+  unaffected (page-level reports have no course to roll up into, same
+  known-scope-gap precedent as the PracticeItem entry above).
+
+Frontend: `VITE_FEEDBACK_API_URL` is a new, separate env var (falls back to
+the existing `VITE_API_BASE_URL` when unset, which is correct for the
+"single shared backend" deployment shapes — home server or hosted domain).
+It only needs to be set to something different in the "many independent
+local installs" shape, and only once Ramin has a real, stable,
+internet-reachable URL for one canonical collector backend (e.g. a tunnel
+or DNS record pointed at his home server, or the eventual hosted domain) —
+until then, local installs' feedback stays local to that install, which is
+a known limitation of that deployment shape, not a bug in this mechanism.
+
 ### Unit checkpoint (test-out), Phase F, 2026-07-05
 
 Not the rejected placement-quiz enrollment system — assembled entirely from
