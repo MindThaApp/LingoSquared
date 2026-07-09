@@ -1,0 +1,495 @@
+schema_version: "1.1"
+realization_version: "2026.1-draft.1"
+target_language: "hi"
+cefr_level: "A1"
+status: "complete_draft"
+generation_provenance:
+  method: "ai_generated"
+  authoring_system: "claude"
+  human_reviewed: false
+review:
+  status: "unreviewed"
+  required_next_reviewer: "codex"
+  notes: >-
+    First-ever Hindi unit for this app (hi is a brand-new target
+    language: Devanagari script, ltr, Language row + Google Cloud TTS
+    hi-IN-Neural2-A + a real InScript-derived virtual keyboard already
+    live). Structural template: es/a1_unit01_greetings.yaml (the
+    original brand-new-target-language bootstrap precedent) and, even
+    more closely, pl/a1_unit01_greetings.yaml (the most recent
+    brand-new-language bootstrap, same 3-lesson sizing, same
+    schema_version 1.1 §19 vocabulary-example format from the start,
+    same "audio-less language, avoid listen_type/listen_select/
+    listen_order" precaution -- applied here to hi for the same reason:
+    hi is configured for Google Cloud TTS but no real hi TTS audio has
+    been synthesized/verified live in this session, so every exercise
+    uses a real visible text prompt instead of an audio-only one;
+    media_assets is therefore an empty list, not an oversight).
+
+    Source access, disclosed honestly: a genuine public-domain source
+    was located and downloaded -- FSI "Hindi: An Active Introduction"
+    (D.N. Sharma & James W. Stone, 1970, jointly published with the
+    Peace Corps; confirmed real PD US-government work via pdfinfo
+    Author: "Foreign Service Institute") --
+    https://fsi-languages.yojik.eu/languages/FSI/Hindi/Fsi-HindiActiveIntroduction-StudentText.pdf.
+    Two independent extraction attempts both failed to recover usable
+    Devanagari text, confirming this is a genuine OCR-unreliability
+    case per the standing guidance, not a "didn't try hard enough"
+    gap: (1) raw `pdftotext -layout` against the source PDF returned
+    zero characters -- it is a pure page-image scan with no embedded
+    text layer or fonts at all (`pdffonts` returns an empty table).
+    (2) The Internet Archive mirror's own ABBYY FineReader 9.0 OCR
+    pass (https://archive.org/details/Fsi-Hindi-AnActiveIntroduction,
+    `_djvu.txt`) DID cleanly recover the book's English framing/
+    instructional prose (verified: front matter, preface, introduction
+    all extract as clean readable English), but a regex scan of the
+    full 94KB OCR output for the Devanagari Unicode block (U+0900-
+    U+097F) returns ZERO matches anywhere in the document -- the OCR
+    engine silently dropped every Devanagari passage rather than
+    transcribing it, and where a facing-page Devanagari line partially
+    survived it came through as unusable mojibake (e.g. the Unit 1
+    material renders as "91 ¥TT", "WTT t ?", "3Tf?", "^Tff f |" --
+    Latin-lookalike glyph substitutions with no recoverable meaning).
+    This is a strictly worse case than "garbled but salvageable" --
+    the actual target-language content is either silently absent or
+    actively corrupted, never usable. Per this task's explicit
+    instruction, this content was NOT used, cleaned up, or guessed at.
+    Peace Corps Hindi materials were not independently re-checked this
+    pass: they were already flagged going in as agriculture-focused
+    (Peace Corps volunteer training for India, not a greetings-first
+    general course) and, since this exact scan family/era (Peace
+    Corps + FSI Hindi were co-published, per this PDF's own preface)
+    already conclusively demonstrated the Devanagari-OCR failure mode,
+    re-spending budget to confirm the same failure a second time was
+    judged low-value versus authoring time.
+
+    Consequently, this file is FRESHLY AUTHORED from established,
+    uncontroversial Modern Standard Hindi (the FSI source's own
+    register: Khari Boli/Delhi-standard, the same variety taught in
+    virtually every introductory Hindi course), not adapted from any
+    source text -- disclosed honestly per the standing requirement,
+    matching the precedent already set by pl/a1_unit01's ty-register
+    content (also freshly authored where its own FSI source didn't
+    cover it). Every phrase here (namaste/namaskar, aap/tum address,
+    kaise/kaisi gender-agreeing "how are you", aapka/tumhara naam kya
+    hai, milkar khushi hui / accha laga) is extremely well-established
+    A1 Hindi taught in essentially every real course; nothing here is
+    a novel or uncertain construction. The actual Devanagari script
+    text is this session's own careful, correct rendering (verified
+    character-by-character against known standard spellings,
+    including the anusvara-vs-chandrabindu convention: chandrabindu
+    (ँ) after non-ascending vowel signs as in हूँ/हाँ/कहाँ, anusvara
+    (ं) after ascending vowel signs as in मैं/हैं/में/मिलेंगे) --
+    never OCR output, never machine-translated.
+
+course:
+  realization_key: hi.a1
+  target_language_first: true
+  dialect: hi_standard
+  register_policy: >-
+    Teach Modern Standard Hindi (Khari Boli, the Delhi-based standard
+    taught nationally and used in media/education) as spoken across
+    India. Hindi marks a real three-way address distinction --
+    आप (aap, formal/respectful), तुम (tum, informal/familiar), and
+    तू (tu, intimate -- reserved for very close family, God, or as a
+    genuine insult depending on tone). This introductory unit teaches
+    only आप and तुम, the two forms a learner actually needs day to
+    day; तू is deliberately out of scope, the same discipline the es
+    and pl bootstrap units applied to their own most-marked/least-
+    useful register forms (vos/vosotros, vy-plural). A second, equally
+    important real grammatical feature taught here: Hindi adjectives
+    and many verb forms agree with the GENDER of either the subject or
+    the addressee depending on the construction (अच्छा/अच्छी,
+    चाहता/चाहती, करता/करती, मेरा/मेरी, तुम्हारा/तुम्हारी) -- English
+    has no equivalent, so every gender-agreeing form taught here is
+    called out explicitly rather than presented as an unexplained
+    variant spelling.
+
+media_assets: []
+
+units:
+  - content_key: hi.a1.unit01.greetings
+    title: "नमस्ते और पहली मुलाक़ात"
+    section: reading_writing
+    spine_outcome_ids:
+      - universal.a1.greetings.open_close_exchange
+      - universal.a1.introductions.exchange_identity
+    planned_lesson_count: 3
+
+    lessons:
+      - content_key: hi.a1.unit01.lesson01.aap_and_tum
+        title: "आप और तुम: हाल पूछना"
+        spine_outcome_id: universal.a1.greetings.open_close_exchange
+        teaching:
+          - content_key: hi.a1.unit01.lesson01.teach.aap
+            kind: grammar_note
+            target: {text: "आप", language_code: hi, direction: ltr}
+            introduced_tokens: ["आप"]
+          - content_key: hi.a1.unit01.lesson01.teach.tum
+            kind: grammar_note
+            target: {text: "तुम", language_code: hi, direction: ltr}
+            introduced_tokens: ["तुम"]
+          - content_key: hi.a1.unit01.lesson01.teach.aap_kaise_hain
+            kind: phrase
+            target: {text: "आप कैसे हैं?", language_code: hi, direction: ltr}
+            introduced_tokens: ["आप", "कैसे", "हैं"]
+          - content_key: hi.a1.unit01.lesson01.teach.aap_kaisi_hain
+            kind: phrase
+            target: {text: "आप कैसी हैं?", language_code: hi, direction: ltr}
+            introduced_tokens: ["आप", "कैसी", "हैं"]
+          - content_key: hi.a1.unit01.lesson01.teach.tum_kaise_ho
+            kind: phrase
+            target: {text: "तुम कैसे हो?", language_code: hi, direction: ltr}
+            introduced_tokens: ["तुम", "कैसे", "हो"]
+          - content_key: hi.a1.unit01.lesson01.teach.main_theek_hoon
+            kind: phrase
+            target: {text: "मैं ठीक हूँ, शुक्रिया।", language_code: hi, direction: ltr}
+            introduced_tokens: ["मैं", "ठीक", "हूँ", "शुक्रिया"]
+          - content_key: hi.a1.unit01.lesson01.teach.aur_aap
+            kind: phrase
+            target: {text: "और आप?", language_code: hi, direction: ltr}
+            introduced_tokens: ["और", "आप"]
+          - content_key: hi.a1.unit01.lesson01.teach.aur_tum
+            kind: phrase
+            target: {text: "और तुम?", language_code: hi, direction: ltr}
+            introduced_tokens: ["और", "तुम"]
+        exercises:
+          - content_key: hi.a1.unit01.lesson01.exercise01.select_aap
+            type: multiple_choice
+            tested_text: "आप"
+            prompt:
+              target_blocks:
+                - {text: "आप", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit01.lesson01.exercise02.select_tum
+            type: multiple_choice
+            tested_text: "तुम"
+            prompt:
+              target_blocks:
+                - {text: "तुम", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit01.lesson01.exercise03.select_aap_kaisi_hain_meaning
+            type: multiple_choice
+            tested_text: "आप कैसी हैं"
+            prompt:
+              target_blocks:
+                - {text: "आप कैसी हैं?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit01.lesson01.exercise04.order_aap_kaise_hain
+            type: word_order
+            tested_text: "आप कैसे हैं"
+            prompt: {target_blocks: []}
+            word_bank: ["हैं", "आप", "कैसे"]
+          - content_key: hi.a1.unit01.lesson01.exercise05.order_tum_kaise_ho
+            type: word_order
+            tested_text: "तुम कैसे हो"
+            prompt: {target_blocks: []}
+            word_bank: ["हो", "तुम", "कैसे"]
+          - content_key: hi.a1.unit01.lesson01.exercise06.return_formal
+            type: dialogue_response
+            tested_text: "और आप"
+            prompt:
+              target_blocks:
+                - {text: "मैं ठीक हूँ, शुक्रिया।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit01.lesson01.exercise07.return_informal
+            type: dialogue_response
+            tested_text: "और तुम"
+            prompt:
+              target_blocks:
+                - {text: "मैं ठीक हूँ, शुक्रिया।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit01.lesson01.exercise08.correct_informal_agreement
+            type: grammar_check
+            tested_text: "तुम कैसे हो"
+            prompt:
+              target_blocks:
+                - {text: "तुम कैसे हैं?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit01.lesson01.exercise09.reply_formally
+            type: dialogue_response
+            tested_text: "आप कैसे हैं मैं ठीक हूँ शुक्रिया"
+            prompt:
+              target_blocks:
+                - {text: "आप कैसे हैं?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit01.lesson01.exercise10.speak_informally
+            type: speak_response
+            tested_text: "मैं ठीक हूँ शुक्रिया और तुम"
+            prompt:
+              target_blocks:
+                - {text: "तुम कैसे हो?", language_code: hi, direction: ltr}
+
+      - content_key: hi.a1.unit01.lesson02.greetings_and_farewells
+        title: "अभिवादन और विदाई"
+        spine_outcome_id: universal.a1.greetings.open_close_exchange
+        teaching:
+          - content_key: hi.a1.unit01.lesson02.teach.namaste
+            kind: vocabulary
+            target: {text: "नमस्ते", language_code: hi, direction: ltr}
+            introduced_tokens: ["नमस्ते"]
+            example: {text: "नमस्ते! आप कैसे हैं?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit01.lesson02.teach.namaskar
+            kind: vocabulary
+            target: {text: "नमस्कार", language_code: hi, direction: ltr}
+            introduced_tokens: ["नमस्कार"]
+            example: {text: "नमस्कार! और आप?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit01.lesson02.teach.phir_milenge
+            kind: phrase
+            target: {text: "फिर मिलेंगे", language_code: hi, direction: ltr}
+            introduced_tokens: ["फिर", "मिलेंगे"]
+          - content_key: hi.a1.unit01.lesson02.teach.alvida
+            kind: vocabulary
+            target: {text: "अलविदा", language_code: hi, direction: ltr}
+            introduced_tokens: ["अलविदा"]
+            example: {text: "अलविदा! फिर मिलेंगे।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit01.lesson02.teach.phir_milte_hain
+            kind: phrase
+            target: {text: "फिर मिलते हैं", language_code: hi, direction: ltr}
+            introduced_tokens: ["फिर", "मिलते", "हैं"]
+          - content_key: hi.a1.unit01.lesson02.teach.shubh_ratri
+            kind: phrase
+            target: {text: "शुभ रात्रि", language_code: hi, direction: ltr}
+            introduced_tokens: ["शुभ", "रात्रि"]
+          - content_key: hi.a1.unit01.lesson02.teach.shubh_din
+            kind: phrase
+            target: {text: "आपका दिन अच्छा रहे", language_code: hi, direction: ltr}
+            introduced_tokens: ["आपका", "दिन", "अच्छा", "रहे"]
+        exercises:
+          - content_key: hi.a1.unit01.lesson02.exercise01.select_namaste
+            type: multiple_choice
+            tested_text: "नमस्ते"
+            prompt:
+              target_blocks:
+                - {text: "नमस्ते", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit01.lesson02.exercise02.select_alvida
+            type: multiple_choice
+            tested_text: "अलविदा"
+            prompt:
+              target_blocks:
+                - {text: "अलविदा", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit01.lesson02.exercise03.select_shubh_ratri_meaning
+            type: multiple_choice
+            tested_text: "शुभ रात्रि"
+            prompt:
+              target_blocks:
+                - {text: "शुभ रात्रि", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit01.lesson02.exercise04.order_phir_milenge
+            type: word_order
+            tested_text: "फिर मिलेंगे"
+            prompt: {target_blocks: []}
+            word_bank: ["मिलेंगे", "फिर"]
+          - content_key: hi.a1.unit01.lesson02.exercise05.order_shubh_ratri
+            type: word_order
+            tested_text: "शुभ रात्रि"
+            prompt: {target_blocks: []}
+            word_bank: ["रात्रि", "शुभ"]
+          - content_key: hi.a1.unit01.lesson02.exercise06.order_phir_milte_hain
+            type: word_order
+            tested_text: "फिर मिलते हैं"
+            prompt: {target_blocks: []}
+            word_bank: ["मिलते", "फिर", "हैं"]
+          - content_key: hi.a1.unit01.lesson02.exercise07.order_shubh_din
+            type: word_order
+            tested_text: "आपका दिन अच्छा रहे"
+            prompt: {target_blocks: []}
+            word_bank: ["दिन", "आपका", "रहे", "अच्छा"]
+          - content_key: hi.a1.unit01.lesson02.exercise08.reply_to_namaskar
+            type: dialogue_response
+            tested_text: "नमस्कार और आप"
+            prompt:
+              target_blocks:
+                - {text: "नमस्कार! आप कैसे हैं?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit01.lesson02.exercise09.reply_with_goodbye
+            type: dialogue_response
+            tested_text: "अलविदा फिर मिलेंगे"
+            prompt: {target_blocks: []}
+          - content_key: hi.a1.unit01.lesson02.exercise10.speak_friendly_closing
+            type: speak_response
+            tested_text: "फिर मिलते हैं"
+            prompt: {target_blocks: []}
+
+      - content_key: hi.a1.unit01.lesson03.names_origin_and_dialogue
+        title: "नाम, देश और योग क्लास में पहली मुलाक़ात"
+        spine_outcome_ids:
+          - universal.a1.introductions.exchange_identity
+          - universal.a1.greetings.open_close_exchange
+        teaching:
+          - content_key: hi.a1.unit01.lesson03.teach.aapka_naam_kya_hai
+            kind: phrase
+            target: {text: "आपका नाम क्या है?", language_code: hi, direction: ltr}
+            introduced_tokens: ["आपका", "नाम", "क्या", "है"]
+          - content_key: hi.a1.unit01.lesson03.teach.tumhara_naam_kya_hai
+            kind: phrase
+            target: {text: "तुम्हारा नाम क्या है?", language_code: hi, direction: ltr}
+            introduced_tokens: ["तुम्हारा", "नाम", "क्या", "है"]
+          - content_key: hi.a1.unit01.lesson03.teach.mera_naam_priya_hai
+            kind: phrase
+            target: {text: "मेरा नाम प्रिया है।", language_code: hi, direction: ltr}
+            introduced_tokens: ["मेरा", "नाम", "प्रिया", "है"]
+          - content_key: hi.a1.unit01.lesson03.teach.aapse_milkar_khushi_hui
+            kind: phrase
+            target: {text: "आपसे मिलकर खुशी हुई।", language_code: hi, direction: ltr}
+            introduced_tokens: ["आपसे", "मिलकर", "खुशी", "हुई"]
+          - content_key: hi.a1.unit01.lesson03.teach.mujhe_bhi
+            kind: phrase
+            target: {text: "मुझे भी।", language_code: hi, direction: ltr}
+            introduced_tokens: ["मुझे", "भी"]
+          - content_key: hi.a1.unit01.lesson03.teach.aap_kahan_se_hain
+            kind: phrase
+            target: {text: "आप कहाँ से हैं?", language_code: hi, direction: ltr}
+            introduced_tokens: ["आप", "कहाँ", "से", "हैं"]
+          - content_key: hi.a1.unit01.lesson03.teach.main_bharat_se_hoon
+            kind: phrase
+            target: {text: "मैं भारत से हूँ।", language_code: hi, direction: ltr}
+            introduced_tokens: ["मैं", "भारत", "से", "हूँ"]
+          - content_key: hi.a1.unit01.lesson03.teach.tum_kahan_se_ho
+            kind: phrase
+            target: {text: "तुम कहाँ से हो?", language_code: hi, direction: ltr}
+            introduced_tokens: ["तुम", "कहाँ", "से", "हो"]
+          - content_key: hi.a1.unit01.lesson03.teach.dialogue.line01
+            kind: dialogue
+            target:
+              text: "नमस्ते! क्या यह तुम्हारी पहली बार है?"
+              language_code: hi
+              direction: ltr
+              speaker: Priya
+            introduced_tokens: ["Priya", "नमस्ते", "क्या", "यह", "तुम्हारी", "पहली", "बार"]
+          - content_key: hi.a1.unit01.lesson03.teach.dialogue.line02
+            kind: dialogue
+            target:
+              text: "हाँ, यह मेरी पहली बार है। मैं योग सीखना चाहता हूँ।"
+              language_code: hi
+              direction: ltr
+              speaker: Arjun
+            introduced_tokens: ["Arjun", "हाँ", "यह", "मेरी", "पहली", "बार", "मैं", "योग", "सीखना", "चाहता", "हूँ"]
+          - content_key: hi.a1.unit01.lesson03.teach.dialogue.line03
+            kind: dialogue
+            target:
+              text: "मुझे भी! मेरा नाम प्रिया है। तुम्हारा नाम क्या है?"
+              language_code: hi
+              direction: ltr
+              speaker: Priya
+            introduced_tokens: ["मुझे", "भी", "मेरा", "नाम", "प्रिया", "है", "तुम्हारा", "क्या"]
+          - content_key: hi.a1.unit01.lesson03.teach.dialogue.line04
+            kind: dialogue
+            target:
+              text: "मेरा नाम अर्जुन है। तुमसे मिलकर अच्छा लगा।"
+              language_code: hi
+              direction: ltr
+              speaker: Arjun
+            introduced_tokens: ["मेरा", "नाम", "अर्जुन", "है", "तुमसे", "मिलकर", "अच्छा", "लगा"]
+          - content_key: hi.a1.unit01.lesson03.teach.dialogue.line05
+            kind: dialogue
+            target:
+              text: "मुझे भी अच्छा लगा। तुम कहाँ से हो?"
+              language_code: hi
+              direction: ltr
+              speaker: Priya
+            introduced_tokens: ["मुझे", "भी", "अच्छा", "लगा", "तुम", "कहाँ", "से", "हो"]
+          - content_key: hi.a1.unit01.lesson03.teach.dialogue.line06
+            kind: dialogue
+            target:
+              text: "मैं भारत से हूँ, लेकिन अभी लंदन में रहता हूँ। तुम कहाँ से हो?"
+              language_code: hi
+              direction: ltr
+              speaker: Arjun
+            introduced_tokens: ["मैं", "भारत", "से", "हूँ", "लेकिन", "अभी", "लंदन", "में", "रहता", "तुम", "कहाँ", "हो"]
+          - content_key: hi.a1.unit01.lesson03.teach.dialogue.line07
+            kind: dialogue
+            target:
+              text: "मैं अमेरिका से हूँ। मैं भी योग सीखना चाहती हूँ।"
+              language_code: hi
+              direction: ltr
+              speaker: Priya
+            introduced_tokens: ["मैं", "अमेरिका", "से", "हूँ", "भी", "योग", "सीखना", "चाहती"]
+          - content_key: hi.a1.unit01.lesson03.teach.dialogue.line08
+            kind: dialogue
+            target:
+              text: "अच्छा! क्या तुम योग करती हो?"
+              language_code: hi
+              direction: ltr
+              speaker: Arjun
+            introduced_tokens: ["अच्छा", "क्या", "तुम", "योग", "करती", "हो"]
+          - content_key: hi.a1.unit01.lesson03.teach.dialogue.line09
+            kind: dialogue
+            target:
+              text: "नहीं, यह मेरी पहली बार है। मैं अभी सीख रही हूँ।"
+              language_code: hi
+              direction: ltr
+              speaker: Priya
+            introduced_tokens: ["नहीं", "यह", "मेरी", "पहली", "बार", "है", "मैं", "अभी", "सीख", "रही", "हूँ"]
+          - content_key: hi.a1.unit01.lesson03.teach.dialogue.line10
+            kind: dialogue
+            target:
+              text: "ठीक है, चलो शुरू करते हैं। फिर मिलते हैं!"
+              language_code: hi
+              direction: ltr
+              speaker: Arjun
+            introduced_tokens: ["ठीक", "है", "चलो", "शुरू", "करते", "हैं", "फिर", "मिलते"]
+        exercises:
+          - content_key: hi.a1.unit01.lesson03.exercise01.select_formal_name_question
+            type: multiple_choice
+            tested_text: "आपका नाम क्या है"
+            prompt:
+              target_blocks:
+                - {text: "आपका नाम क्या है?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit01.lesson03.exercise02.select_informal_name_question
+            type: multiple_choice
+            tested_text: "तुम्हारा नाम क्या है"
+            prompt:
+              target_blocks:
+                - {text: "तुम्हारा नाम क्या है?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit01.lesson03.exercise03.comprehend_origin
+            type: dialogue_comprehension
+            tested_text: "भारत लंदन अमेरिका"
+            prompt:
+              target_blocks:
+                - {text: "मैं भारत से हूँ, लेकिन अभी लंदन में रहता हूँ।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit01.lesson03.exercise04.comprehend_still_learning
+            type: dialogue_comprehension
+            tested_text: "पहली बार सीख रही हूँ"
+            prompt:
+              target_blocks:
+                - {text: "नहीं, यह मेरी पहली बार है। मैं अभी सीख रही हूँ।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit01.lesson03.exercise05.order_informal_origin_question
+            type: word_order
+            tested_text: "तुम कहाँ से हो"
+            prompt: {target_blocks: []}
+            word_bank: ["कहाँ", "तुम", "से", "हो"]
+          - content_key: hi.a1.unit01.lesson03.exercise06.order_from_india
+            type: word_order
+            tested_text: "मैं भारत से हूँ"
+            prompt: {target_blocks: []}
+            word_bank: ["भारत", "मैं", "से", "हूँ"]
+          - content_key: hi.a1.unit01.lesson03.exercise07.order_meet_you_informal
+            type: word_order
+            tested_text: "तुमसे मिलकर अच्छा लगा"
+            prompt: {target_blocks: []}
+            word_bank: ["मिलकर", "तुमसे", "अच्छा", "लगा"]
+          - content_key: hi.a1.unit01.lesson03.exercise08.match_questions_and_answers
+            type: matching_pairs
+            tested_text: "आपका नाम क्या है मेरा नाम प्रिया है तुम्हारा नाम क्या है मेरा नाम अर्जुन है आप कहाँ से हैं मैं भारत से हूँ तुम कहाँ से हो मैं अमेरिका से हूँ आप कैसे हैं मैं ठीक हूँ शुक्रिया क्या यह तुम्हारी पहली बार है हाँ यह मेरी पहली बार है"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "आपका नाम क्या है?", right: "मेरा नाम प्रिया है।"}
+              - {left: "तुम्हारा नाम क्या है?", right: "मेरा नाम अर्जुन है।"}
+              - {left: "आप कहाँ से हैं?", right: "मैं भारत से हूँ।"}
+              - {left: "तुम कहाँ से हो?", right: "मैं अमेरिका से हूँ।"}
+              - {left: "आप कैसे हैं?", right: "मैं ठीक हूँ, शुक्रिया।"}
+              - {left: "क्या यह तुम्हारी पहली बार है?", right: "हाँ, यह मेरी पहली बार है।"}
+          - content_key: hi.a1.unit01.lesson03.exercise09.fill_in_first_name
+            type: fill_in_blank
+            tested_text: "मेरा नाम प्रिया है"
+            prompt:
+              target_blocks:
+                - {text: "मेरा नाम _ है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit01.lesson03.exercise10.reply_from_india
+            type: dialogue_response
+            tested_text: "मैं भारत से हूँ"
+            prompt:
+              target_blocks:
+                - {text: "आप कहाँ से हैं?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit01.lesson03.exercise11.reply_still_learning
+            type: dialogue_response
+            tested_text: "यह मेरी पहली बार है मैं अभी सीख रही हूँ"
+            prompt:
+              target_blocks:
+                - {text: "क्या तुम योग करती हो?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit01.lesson03.exercise12.speak_self_introduction
+            type: speak_response
+            tested_text: "मेरा नाम प्रिया है मैं अमेरिका से हूँ"
+            prompt: {target_blocks: []}
