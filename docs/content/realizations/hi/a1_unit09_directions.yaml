@@ -1,0 +1,692 @@
+schema_version: "1.1"
+realization_version: "2026.1-draft.1"
+target_language: "hi"
+cefr_level: "A1"
+status: "complete_draft"
+generation_provenance:
+  method: "ai_generated"
+  authoring_system: "claude"
+  human_reviewed: false
+review:
+  status: "unreviewed"
+  required_next_reviewer: "codex"
+  notes: >-
+    Ninth Hindi unit, continuing directly from hi/a1_unit08_places.yaml
+    (same Priya/Arjun characters, still on तुम terms with each other).
+    Spine outcome confirmed via a direct read of universal_spine.yaml
+    (not just assumed from other languages): hi/a1_unit08 realized
+    universal.a1.places.locate_common_places (line 295), and the very
+    next outcome entry in file order is universal.a1.directions.
+    ask_follow_basic_directions (line 318, "Ask for and follow short
+    directions to a nearby place"), whose own declared prerequisite
+    (line 321-322) is exactly universal.a1.places.locate_common_places
+    -- i.e. unit08 itself. Cross-checked against nl/a1_unit09_directions.
+    yaml, pl/a1_unit09_directions.yaml, and ro/a1_unit09_directions.yaml
+    (confirmed present via `ls`), which all three independently realize
+    this exact same outcome as THEIR unit09, immediately after their own
+    unit08 places units -- matching hi's own unit01-08 sequence, which
+    has independently tracked the same topic order as those three
+    languages throughout. Sized to 3 lessons matching unit01-08's
+    bootstrap pace (nl's own unit09 runs 4-5 lessons at native-review
+    depth; hi stays at this course's own established 3-lesson pace, not
+    copying nl's lesson count). Topic/pacing structure only reused from
+    nl/pl/ro at a skeletal level (this is a directions unit, roughly:
+    straight/left/right -> "how do I get to X" + sequencing -> a
+    dialogue combining both), no text or phrasing from any other
+    language's file, per the standing skeleton-share-not-text-share
+    policy.
+
+    Lesson breakdown: lesson01 opens with two compact REVIEW vocabulary
+    cards bundling unit08-originated words this unit reuses heavily
+    (place nouns: घर is NOT reused, but बैंक/स्कूल/अस्पताल/पार्क/
+    स्टेशन/डाकघर are; function words: है/कहाँ/यहाँ/वहाँ/से/के/ठीक) --
+    a deliberate structural choice, not padding: `validate_untaught_
+    vocabulary` resets its taught-token set PER FILE (the same footgun
+    unit08's own notes already flag), so every one of these words needed
+    re-listing in THIS file's own introduced_tokens before any exercise
+    could test them, and two compact "remember these" cards read more
+    honestly than scattering re-listings awkwardly across otherwise-new
+    vocabulary cards. Lesson01 then teaches सीधे/बाएँ/दाएँ (straight/
+    left/right) and जाओ/मुड़ो (go!/turn!, तुम-imperatives), with a
+    grammar_note flagging the shared "-ओ" तुम-imperative ending against
+    two words already taught in EARLIER units (बताओ from unit07, गिनो
+    from unit02) -- continuing this course's established "flag the real
+    pattern explicitly" discipline (unit01's aap/tum split, unit04's
+    बजा/बजे exception, unit06's चाहिए/स्वादिष्ट notes, unit07's कितने
+    का/की and सस्ता/महंगा notes, unit08's सामने/पीछे inverse-viewpoint
+    note). Lesson02 teaches the core "how do I get there" question
+    (मैं ... कैसे जाऊँ?, first-person subjunctive, idiomatically correct
+    for this exact question -- distinct from the तुम-imperative side
+    taught in lesson01), तक (re-taught here; already existed in unit02's
+    counting context "शून्य से दस तक", now reused in its equally-real
+    spatial "up to a place" sense) and पहले/फिर as a two-step direction-
+    sequencing pair, with its own grammar_note. Lesson03 combines
+    everything into a real Priya/Arjun dialogue: Arjun asks the way to
+    the post office, then the park, reusing unit08's own established
+    neighborhood facts (डाकघर बैंक के पास है; पार्क स्कूल के पीछे है)
+    as the ACTUAL routes Priya gives -- directly satisfying AUTHORING_
+    GUIDE §11 (facts must stay consistent with what the same course
+    already established elsewhere, not just internally consistent
+    within this one file). Introduces three genuinely new content words
+    within the dialogue (नुक्कड़ "street corner", बस "just/only", and
+    the two-token idiom समझ गया "understood/got it"), comparable in
+    scope to unit08's own dialogue-internal introductions (थोड़ा, तो,
+    सही).
+
+    Disclosed decision -- हि's first-ever audio/listening exercises:
+    units 01-08 have used zero listen_select/listen_type/listen_order
+    exercises so far. This unit deliberately breaks that pattern, for a
+    specific, non-arbitrary reason: hi has full, confirmed working
+    Google Cloud TTS (`hi-IN-Neural2-A`, in `GOOGLE_TTS_SUPPORTED_
+    LANGUAGES` in `backend/app/services/tts.py`) -- unlike prs, which
+    AUTHORING_GUIDE.md §14 explicitly restricts from audio-only exercise
+    types because it has NO working TTS voice from any provider. That
+    restriction is prs-specific and never applied to hi in the first
+    place; hi units 01-08 simply never happened to use the type, not
+    because of any content or infrastructure gap. This unit's own spine
+    outcome's very first assessment_requirement (`follow_spoken_
+    directions`, listening modality, "Follow a short sequence of basic
+    direction instructions") is explicitly a LISTENING skill that no
+    prior hi unit exercise type actually covers -- multiple_choice/
+    matching_pairs/fill_in_blank/dialogue_response/speak_response are
+    reading/writing/speaking, none of them listening. Added exactly
+    THREE listen_select exercises (one per lesson: lesson01.exercise05,
+    lesson02.exercise04, lesson03.exercise06), each a standalone,
+    single-utterance clip (never sourced from the multi-turn lesson03
+    dialogue audio) with its own `media_asset_key` registered below in
+    `media_assets:` (status `pending_generation`, same convention as
+    every other TTS-capable language's corpus -- e.g. de/nl/ro all
+    declare `media_asset_key`s this same way well before a real
+    recording exists; the frontend's SpeakButton priority chain falls
+    through to live Google TTS synthesis in the meantime, which for hi
+    genuinely works today, unlike prs). Deliberately did NOT add
+    listen_type or listen_order this pass, and deliberately did NOT
+    build any listen_select against the lesson03 dialogue's own
+    multi-turn audio (which does not exist as a single registered asset
+    here at all) -- kept to the lower-risk, single-utterance recognition
+    tier for hi's first-ever exposure to this exercise family, per
+    AUTHORING_GUIDE §2's pacing discipline applied to a brand-new
+    modality, not just brand-new vocabulary.
+
+    Same-speaker-distractor check (the nl unit44-50 regression class):
+    performed explicitly. The three listen_select exercises are each a
+    single non-dialogue utterance with no other speaker/other lines in
+    the same clip, so the "distractor must not be something the same
+    speaker also says elsewhere in this audio" bug class structurally
+    cannot occur here -- there is no "elsewhere in this audio" for a
+    standalone phrase. The two dialogue_comprehension exercises in
+    lesson03 (exercise04/05) are TEXT reading-comprehension (the learner
+    reads the actual dialogue line, no audio/`media_asset_key` involved
+    at all, exactly matching unit08's own dialogue_comprehension
+    pattern) -- the audio-specific same-speaker rule doesn't literally
+    apply to a non-audio exercise type, but distractors were still
+    checked by hand to ensure they are not themselves also true for the
+    question asked (exercise04 "where does Priya say to turn left"
+    correct="at the bank's corner" distractors=["behind the school",
+    "near the post office"] -- both are real facts Priya states
+    elsewhere in the SAME dialogue, but neither answers THIS question,
+    so no ambiguity; exercise05 mirrors this with the park/behind-school
+    fact as correct and the other two facts as distractors).
+
+    Nasalization/spelling discipline, disclosed per unit07/08 precedent:
+    बाएँ (left) and दाएँ (right) both use चंद्रबिंदु ँ after their final
+    independent vowel ए, the same non-ascending-vowel-sign rule already
+    established for यहाँ/वहाँ/कहाँ (unit01) and reused unchanged by
+    unit08 -- ए itself has no ascender, so चंद्रबिंदु applies, matching
+    the real, standard published spelling of these two extremely common
+    direction words. जाऊँ (subjunctive "I go/should go", used in "...
+    कैसे जाऊँ?") is spelled with चंद्रबिंदु for the identical reason
+    (its final matra ू has no ascender). नुक्कड़ (street corner) and
+    सड़क-class words use the retroflex nukta ड़ correctly, no
+    nasalization involved. No new spelling AMBIGUITY was hit this unit
+    (unlike unit07's महंगा case) -- every nasalized word here either
+    reuses an already-established spelling verbatim (यहाँ, वहाँ, कहाँ,
+    के, है) or follows the same settled non-ascending-vowel rule
+    (बाएँ, दाएँ, जाऊँ) with no competing rule to reconcile.
+
+    Disclosed lexical-ambiguity decision: बस (taught this unit as "just
+    / only", e.g. "बस थोड़ा और जाओ") is also a common Hindi loanword
+    meaning "bus" (the vehicle). That second sense is NEVER taught
+    anywhere in this course, so within this course's own actual taught
+    vocabulary there is no real ambiguity for a learner -- flagging
+    explicitly per this task's "disclose non-obvious spelling/lexical
+    decisions" instruction, not because it's an actual bug. बस was kept
+    (rather than substituting the less colloquial सिर्फ़) because it is
+    the more natural, more colloquial choice for this exact
+    direction-giving register, matching AUTHORING_GUIDE §3's preference
+    for authentic spoken phrasing over a technically-safer but stiffer
+    alternative.
+
+    Untaught-vocabulary validator footgun (already documented by
+    unit07/08, re-confirmed live during this unit's authoring): every
+    unit08-originated word reused here (बैंक, स्कूल, अस्पताल, पार्क,
+    स्टेशन, डाकघर, है, कहाँ, यहाँ, वहाँ, से, के, ठीक, पास, पीछे, बहुत,
+    शुक्रिया, अच्छा, कोई, बात, नहीं, मिलेंगे, थोड़ा, फिर) was re-added
+    to this file's own introduced_tokens at its first point of use here,
+    confirmed necessary since `validate_untaught_vocabulary`'s `taught`
+    set is declared fresh per realization file (see unit08's own notes
+    for the mechanism). One correction to how conservatively this was
+    applied, worth recording for whoever authors unit10: a close code
+    read of `validate_untaught_vocabulary` in `scripts/compile_
+    content.py` (lines ~823-872) confirms it ONLY checks each
+    exercise's own `tested_text` against the cumulative taught set --
+    it does NOT check teaching-card `target`/`example` text, nor any
+    exercise's `prompt.target_blocks`/`word_bank`/`pairs` values
+    directly. This unit still re-lists conservatively (matching
+    unit08's own cautious style, and keeping the file genuinely
+    self-contained for a human fresh-context reviewer) rather than
+    exploiting that narrower actual scope, but a future unit under real
+    time pressure could legitimately rely on the narrower documented
+    behavior for anything that only ever appears in prompt/dialogue
+    context and is never itself the tested answer.
+
+    Source access, re-attempted per this task's explicit instruction
+    (not just assumed to fail the same way as units 01-08): a fresh
+    `firecrawl search "FSI Hindi Active Introduction directions map
+    giving instructions"` failed outright with the same HTTP 402
+    (payment/quota) error every prior unit this session has hit --
+    quota still has not reset, fully disclosed rather than silently
+    skipped. Fell back to the same PDF/OCR path used for units 01-08,
+    re-fetched fresh into this session's own scratchpad (a fresh Claude
+    session has an isolated scratchpad, so the file could not simply be
+    reused from a prior session) from the same archive.org item
+    (`Fsi-Hindi-AnActiveIntroduction`, confirmed 143 pages, matching
+    every prior unit's own count). (1) `pdftotext -layout` against the
+    raw PDF returned a near-empty 143-byte file, and `pdffonts` returned
+    a completely empty table -- confirming this is still a pure
+    page-image scan with no embedded text layer, a ninth confirmation of
+    the same fact across this whole session's worth of hi units. (2) A
+    fresh regex scan (Python, not eyeballed) of the Internet Archive's
+    own OCR pass (`_djvu.txt`) for the Devanagari Unicode block
+    (U+0900-U+097F) returned ZERO matches anywhere in the 94KB document
+    -- confirmed programmatically, not just "looked empty." (3) A fresh
+    grep of the same OCR file for direction-topic English framing this
+    time found genuine, directly on-topic incidental corroboration:
+    "Each student should take a turn at the map", "Please show us on the
+    map", "The streets are wide", "There was an unpaved road near our
+    office", "About ten women were standing on the road" -- real hits
+    squarely on this unit's own topic (turning, maps, streets, roads).
+    Despite this, every Hindi-script line in the same OCR output remains
+    unusable Latin-lookalike mojibake (e.g. "^>T *TT*T ^PTT t ?", "Sfaf ^
+    I", "?Tf5TT fT^r TK"), confirmed by eye to be garbage, not readable
+    Devanagari-as-Latin-transliteration -- matching the exact failure
+    mode confirmed eight times over across units 01-08, now a ninth time
+    against this unit's own topic. Per this task's explicit instruction,
+    nothing from either extraction attempt -- neither any mojibake
+    fragment nor any wording of the recovered English framing prose --
+    was used, cleaned up, transcribed, or guessed at anywhere in this
+    file. Every Devanagari string below is this session's own careful,
+    correct rendering of established Modern Standard Hindi, verified
+    character-by-character.
+
+course:
+  realization_key: hi.a1
+  target_language_first: true
+  dialect: hi_standard
+  register_policy: >-
+    Continues unit01-08's aap/tum split. This unit's dialogue (lesson03)
+    stays entirely in तुम between Priya and Arjun, matching unit08 --
+    no new stranger character is introduced here, so there is no fresh
+    aap exchange to demonstrate; the aap-with-strangers pattern already
+    established via unit07's दुकानदार remains the standing precedent for
+    any future unit that introduces another stranger. The तुम-form
+    imperative (जाओ, मुड़ो) is the natural register for two friends
+    giving each other directions and is used throughout; gender
+    agreement is not touched by any new vocabulary this unit introduces
+    (सीधे/बाएँ/दाएँ/जाओ/मुड़ो/तक/पहले/फिर/नुक्कड़/बस are all invariant
+    function/adverb/imperative forms with no gender inflection at this
+    A1 level).
+
+media_assets:
+  - {content_key: hi.a1.audio.directions.baaen_muro.01, language: hi, text: "बाएँ मुड़ो।", voice_hint: neutral_adult_clear, status: pending_generation}
+  - {content_key: hi.a1.audio.directions.bank_tak_seedhe_jao.01, language: hi, text: "बैंक तक सीधे जाओ।", voice_hint: neutral_adult_clear, status: pending_generation}
+  - {content_key: hi.a1.audio.directions.dakghar_kaise_jaun.01, language: hi, text: "डाकघर कैसे जाऊँ?", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+
+units:
+  - content_key: hi.a1.unit09.directions
+    title: "दिशाएँ"
+    section: reading_writing
+    spine_outcome_ids:
+      - universal.a1.directions.ask_follow_basic_directions
+    planned_lesson_count: 3
+
+    lessons:
+      - content_key: hi.a1.unit09.lesson01.seedhe_baaen_daaen
+        title: "सीधे, बाएँ, दाएँ"
+        spine_outcome_id: universal.a1.directions.ask_follow_basic_directions
+        teaching:
+          - content_key: hi.a1.unit09.lesson01.teach.review_places
+            kind: vocabulary
+            target: {text: "बैंक, स्कूल, अस्पताल, पार्क, स्टेशन, डाकघर", language_code: hi, direction: ltr}
+            introduced_tokens: ["बैंक", "स्कूल", "अस्पताल", "पार्क", "स्टेशन", "डाकघर"]
+            example:
+              - {text: "बैंक यहाँ है।", language_code: hi, direction: ltr}
+              - {text: "डाकघर बैंक के पास है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit09.lesson01.teach.review_function_words
+            kind: vocabulary
+            target: {text: "है, कहाँ, यहाँ, वहाँ, से, के, ठीक", language_code: hi, direction: ltr}
+            introduced_tokens: ["है", "कहाँ", "यहाँ", "वहाँ", "से", "के", "ठीक"]
+            example:
+              - {text: "बैंक कहाँ है?", language_code: hi, direction: ltr}
+              - {text: "पार्क वहाँ है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit09.lesson01.teach.seedhe_baaen_daaen
+            kind: vocabulary
+            target: {text: "सीधे, बाएँ, दाएँ", language_code: hi, direction: ltr}
+            introduced_tokens: ["सीधे", "बाएँ", "दाएँ"]
+            example:
+              - {text: "सीधे जाओ।", language_code: hi, direction: ltr}
+              - {text: "बाएँ मुड़ो।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit09.lesson01.teach.jao_muro
+            kind: vocabulary
+            target: {text: "जाओ, मुड़ो", language_code: hi, direction: ltr}
+            introduced_tokens: ["जाओ", "मुड़ो"]
+            example:
+              - {text: "सीधे जाओ।", language_code: hi, direction: ltr}
+              - {text: "दाएँ मुड़ो।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit09.lesson01.teach.yahan_se_seedhe_jao
+            kind: phrase
+            target: {text: "यहाँ से सीधे जाओ।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a1.unit09.lesson01.teach.baaen_muro_phrase
+            kind: phrase
+            target: {text: "बाएँ मुड़ो।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a1.unit09.lesson01.teach.daaen_muro_phrase
+            kind: phrase
+            target: {text: "दाएँ मुड़ो।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a1.unit09.lesson01.teach.imperative_note
+            kind: grammar_note
+            target: {text: "'जाओ' और 'मुड़ो' तुम-रूप के आदेश हैं, जैसे 'बताओ' और 'गिनो' -- ये सब '-ओ' पर खत्म होते हैं।", language_code: hi, direction: ltr}
+            introduced_tokens: ["बताओ", "गिनो"]
+        exercises:
+          - content_key: hi.a1.unit09.lesson01.exercise01.select_seedhe_meaning
+            type: multiple_choice
+            tested_text: "सीधे"
+            prompt:
+              target_blocks:
+                - {text: "सीधे", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit09.lesson01.exercise02.select_baaen_meaning
+            type: multiple_choice
+            tested_text: "बाएँ"
+            prompt:
+              target_blocks:
+                - {text: "बाएँ", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit09.lesson01.exercise03.select_daaen_meaning
+            type: multiple_choice
+            tested_text: "दाएँ"
+            prompt:
+              target_blocks:
+                - {text: "दाएँ", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit09.lesson01.exercise04.select_muro_meaning
+            type: multiple_choice
+            tested_text: "मुड़ो"
+            prompt:
+              target_blocks:
+                - {text: "मुड़ो", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit09.lesson01.exercise05.listen_baaen_muro
+            type: listen_select
+            tested_text: "बाएँ मुड़ो"
+            media_asset_key: hi.a1.audio.directions.baaen_muro.01
+            prompt: {target_blocks: []}
+          - content_key: hi.a1.unit09.lesson01.exercise06.match_direction_words
+            type: matching_pairs
+            tested_text: "बैंक स्कूल अस्पताल पार्क स्टेशन डाकघर सीधे बाएँ दाएँ जाओ मुड़ो"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "बैंक", right: "bank"}
+              - {left: "स्कूल", right: "school"}
+              - {left: "अस्पताल", right: "hospital"}
+              - {left: "पार्क", right: "park"}
+              - {left: "स्टेशन", right: "station"}
+              - {left: "डाकघर", right: "post office"}
+              - {left: "सीधे", right: "straight ahead"}
+              - {left: "बाएँ", right: "left"}
+              - {left: "दाएँ", right: "right"}
+              - {left: "जाओ", right: "go!"}
+              - {left: "मुड़ो", right: "turn!"}
+          - content_key: hi.a1.unit09.lesson01.exercise07.order_yahan_se_seedhe_jao
+            type: word_order
+            tested_text: "यहाँ से सीधे जाओ"
+            prompt: {target_blocks: []}
+            word_bank: ["सीधे", "यहाँ", "जाओ", "से"]
+          - content_key: hi.a1.unit09.lesson01.exercise08.order_bank_daaen_hai
+            type: word_order
+            tested_text: "बैंक दाएँ है"
+            prompt: {target_blocks: []}
+            word_bank: ["है", "बैंक", "दाएँ"]
+          - content_key: hi.a1.unit09.lesson01.exercise09.fill_bank_daaen_muro
+            type: fill_in_blank
+            tested_text: "दाएँ"
+            prompt:
+              target_blocks:
+                - {text: "बैंक दाएँ है। ___ मुड़ो।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit09.lesson01.exercise10.fill_yahan_se_seedhe
+            type: fill_in_blank
+            tested_text: "सीधे"
+            prompt:
+              target_blocks:
+                - {text: "स्कूल कहाँ है? यहाँ से ___ जाओ।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit09.lesson01.exercise11.reply_bank_kahan_hai
+            type: dialogue_response
+            tested_text: "यहाँ से सीधे जाओ"
+            prompt:
+              target_blocks:
+                - {text: "बैंक कहाँ है?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit09.lesson01.exercise12.speak_aspatal_direction
+            type: speak_response
+            tested_text: "दाएँ मुड़ो"
+            prompt:
+              target_blocks:
+                - {text: "बताओ, अस्पताल कहाँ है?", language_code: hi, direction: ltr}
+
+      - content_key: hi.a1.unit09.lesson02.yahan_se_kaise_jaun
+        title: "कैसे जाऊँ?"
+        spine_outcome_id: universal.a1.directions.ask_follow_basic_directions
+        teaching:
+          - content_key: hi.a1.unit09.lesson02.teach.bank_kaise_jaun
+            kind: phrase
+            target: {text: "बैंक कैसे जाऊँ?", language_code: hi, direction: ltr}
+            introduced_tokens: ["कैसे", "जाऊँ"]
+          - content_key: hi.a1.unit09.lesson02.teach.tak
+            kind: vocabulary
+            target: {text: "तक", language_code: hi, direction: ltr}
+            introduced_tokens: ["तक"]
+            example: {text: "बैंक तक सीधे जाओ।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit09.lesson02.teach.bank_tak_seedhe_jao
+            kind: phrase
+            target: {text: "बैंक तक सीधे जाओ।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a1.unit09.lesson02.teach.pahle_phir
+            kind: vocabulary
+            target: {text: "पहले, फिर", language_code: hi, direction: ltr}
+            introduced_tokens: ["पहले", "फिर"]
+            example:
+              - {text: "पहले सीधे जाओ।", language_code: hi, direction: ltr}
+              - {text: "फिर बाएँ मुड़ो।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit09.lesson02.teach.pahle_seedhe_phir_baaen
+            kind: phrase
+            target: {text: "पहले सीधे जाओ, फिर बाएँ मुड़ो।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a1.unit09.lesson02.teach.pahle_phir_note
+            kind: grammar_note
+            target: {text: "'पहले' और 'फिर' दो कदमों को जोड़ते हैं -- पहला काम 'पहले' के साथ, दूसरा काम 'फिर' के साथ, जैसे 'पहले सीधे जाओ, फिर बाएँ मुड़ो।'", language_code: hi, direction: ltr}
+            introduced_tokens: []
+        exercises:
+          - content_key: hi.a1.unit09.lesson02.exercise01.select_tak_meaning
+            type: multiple_choice
+            tested_text: "तक"
+            prompt:
+              target_blocks:
+                - {text: "तक", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit09.lesson02.exercise02.select_pahle_meaning
+            type: multiple_choice
+            tested_text: "पहले"
+            prompt:
+              target_blocks:
+                - {text: "पहले", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit09.lesson02.exercise03.select_phir_meaning
+            type: multiple_choice
+            tested_text: "फिर"
+            prompt:
+              target_blocks:
+                - {text: "फिर", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit09.lesson02.exercise04.listen_bank_tak_seedhe_jao
+            type: listen_select
+            tested_text: "बैंक तक सीधे जाओ"
+            media_asset_key: hi.a1.audio.directions.bank_tak_seedhe_jao.01
+            prompt: {target_blocks: []}
+          - content_key: hi.a1.unit09.lesson02.exercise05.match_direction_review
+            type: matching_pairs
+            tested_text: "कैसे जाऊँ तक पहले फिर सीधे बाएँ दाएँ"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "कैसे", right: "how"}
+              - {left: "जाऊँ", right: "(should I) go"}
+              - {left: "तक", right: "until / up to"}
+              - {left: "पहले", right: "first"}
+              - {left: "फिर", right: "then"}
+              - {left: "सीधे", right: "straight ahead"}
+              - {left: "बाएँ", right: "left"}
+              - {left: "दाएँ", right: "right"}
+          - content_key: hi.a1.unit09.lesson02.exercise06.order_bank_kaise_jaun
+            type: word_order
+            tested_text: "बैंक कैसे जाऊँ"
+            prompt: {target_blocks: []}
+            word_bank: ["जाऊँ", "बैंक", "कैसे"]
+          - content_key: hi.a1.unit09.lesson02.exercise07.order_pahle_seedhe_phir_baaen
+            type: word_order
+            tested_text: "पहले सीधे जाओ फिर बाएँ मुड़ो"
+            prompt: {target_blocks: []}
+            word_bank: ["फिर", "सीधे", "मुड़ो", "पहले", "बाएँ", "जाओ"]
+          - content_key: hi.a1.unit09.lesson02.exercise08.fill_bank_tak_seedhe
+            type: fill_in_blank
+            tested_text: "तक"
+            prompt:
+              target_blocks:
+                - {text: "बैंक ___ सीधे जाओ।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit09.lesson02.exercise09.fill_pahle_seedhe
+            type: fill_in_blank
+            tested_text: "पहले"
+            prompt:
+              target_blocks:
+                - {text: "___ सीधे जाओ, फिर बाएँ मुड़ो।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit09.lesson02.exercise10.fix_missing_tak
+            type: grammar_check
+            tested_text: "बैंक तक सीधे जाओ"
+            prompt:
+              target_blocks:
+                - {text: "बैंक सीधे जाओ।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit09.lesson02.exercise11.reply_bank_kaise_jaun
+            type: dialogue_response
+            tested_text: "पहले सीधे जाओ, फिर बाएँ मुड़ो"
+            prompt:
+              target_blocks:
+                - {text: "बैंक कैसे जाऊँ?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit09.lesson02.exercise12.speak_school_direction
+            type: speak_response
+            tested_text: "सीधे जाओ"
+            prompt:
+              target_blocks:
+                - {text: "बताओ, स्कूल कैसे जाऊँ?", language_code: hi, direction: ltr}
+
+      - content_key: hi.a1.unit09.lesson03.priya_arjun_rasta_poochna
+        title: "प्रिया और अर्जुन: रास्ता पूछना"
+        spine_outcome_id: universal.a1.directions.ask_follow_basic_directions
+        teaching:
+          - content_key: hi.a1.unit09.lesson03.teach.nukkad
+            kind: vocabulary
+            target: {text: "नुक्कड़", language_code: hi, direction: ltr}
+            introduced_tokens: ["नुक्कड़", "पर", "पास", "पीछे"]
+            example:
+              - {text: "बैंक नुक्कड़ पर है।", language_code: hi, direction: ltr}
+              - {text: "पार्क स्कूल के पीछे है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit09.lesson03.teach.bas
+            kind: vocabulary
+            target: {text: "बस", language_code: hi, direction: ltr}
+            introduced_tokens: ["बस", "थोड़ा", "और"]
+            example: {text: "बस थोड़ा और जाओ।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit09.lesson03.teach.samajh_gaya
+            kind: vocabulary
+            target: {text: "समझ, गया", language_code: hi, direction: ltr}
+            introduced_tokens: ["समझ", "गया", "मैं"]
+            example: {text: "मैं समझ गया।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit09.lesson03.teach.accha_bahut_shukriya
+            kind: phrase
+            target: {text: "अच्छा! बहुत शुक्रिया!", language_code: hi, direction: ltr}
+            introduced_tokens: ["अच्छा", "बहुत", "शुक्रिया"]
+          - content_key: hi.a1.unit09.lesson03.teach.koi_baat_nahin_phir_milenge
+            kind: phrase
+            target: {text: "कोई बात नहीं! फिर मिलेंगे।", language_code: hi, direction: ltr}
+            introduced_tokens: ["कोई", "बात", "नहीं", "मिलेंगे"]
+          - content_key: hi.a1.unit09.lesson03.teach.dialogue.line01
+            kind: dialogue
+            target:
+              text: "प्रिया, डाकघर कैसे जाऊँ?"
+              language_code: hi
+              direction: ltr
+              speaker: Arjun
+            introduced_tokens: []
+          - content_key: hi.a1.unit09.lesson03.teach.dialogue.line02
+            kind: dialogue
+            target:
+              text: "यहाँ से पहले सीधे जाओ।"
+              language_code: hi
+              direction: ltr
+              speaker: Priya
+            introduced_tokens: []
+          - content_key: hi.a1.unit09.lesson03.teach.dialogue.line03
+            kind: dialogue
+            target:
+              text: "ठीक है। फिर?"
+              language_code: hi
+              direction: ltr
+              speaker: Arjun
+            introduced_tokens: []
+          - content_key: hi.a1.unit09.lesson03.teach.dialogue.line04
+            kind: dialogue
+            target:
+              text: "फिर बैंक के नुक्कड़ पर बाएँ मुड़ो।"
+              language_code: hi
+              direction: ltr
+              speaker: Priya
+            introduced_tokens: []
+          - content_key: hi.a1.unit09.lesson03.teach.dialogue.line05
+            kind: dialogue
+            target:
+              text: "बाएँ। ठीक है, और फिर?"
+              language_code: hi
+              direction: ltr
+              speaker: Arjun
+            introduced_tokens: []
+          - content_key: hi.a1.unit09.lesson03.teach.dialogue.line06
+            kind: dialogue
+            target:
+              text: "बस थोड़ा और जाओ -- डाकघर वहाँ है, बैंक के पास।"
+              language_code: hi
+              direction: ltr
+              speaker: Priya
+            introduced_tokens: []
+          - content_key: hi.a1.unit09.lesson03.teach.dialogue.line07
+            kind: dialogue
+            target:
+              text: "समझ गया। अच्छा, पार्क कैसे जाऊँ?"
+              language_code: hi
+              direction: ltr
+              speaker: Arjun
+            introduced_tokens: []
+          - content_key: hi.a1.unit09.lesson03.teach.dialogue.line08
+            kind: dialogue
+            target:
+              text: "पार्क? पहले सीधे जाओ, फिर दाएँ मुड़ो -- पार्क स्कूल के पीछे है।"
+              language_code: hi
+              direction: ltr
+              speaker: Priya
+            introduced_tokens: []
+          - content_key: hi.a1.unit09.lesson03.teach.dialogue.line09
+            kind: dialogue
+            target:
+              text: "समझ गया। बहुत शुक्रिया, प्रिया!"
+              language_code: hi
+              direction: ltr
+              speaker: Arjun
+            introduced_tokens: []
+          - content_key: hi.a1.unit09.lesson03.teach.dialogue.line10
+            kind: dialogue
+            target:
+              text: "कोई बात नहीं! फिर मिलेंगे।"
+              language_code: hi
+              direction: ltr
+              speaker: Priya
+            introduced_tokens: []
+        exercises:
+          - content_key: hi.a1.unit09.lesson03.exercise01.select_nukkad_meaning
+            type: multiple_choice
+            tested_text: "नुक्कड़"
+            prompt:
+              target_blocks:
+                - {text: "नुक्कड़", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit09.lesson03.exercise02.select_bas_meaning
+            type: multiple_choice
+            tested_text: "बस"
+            prompt:
+              target_blocks:
+                - {text: "बस", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit09.lesson03.exercise03.select_samajh_gaya_meaning
+            type: multiple_choice
+            tested_text: "समझ गया"
+            prompt:
+              target_blocks:
+                - {text: "समझ गया", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit09.lesson03.exercise04.comprehend_left_turn_location
+            type: dialogue_comprehension
+            tested_text: "बैंक के नुक्कड़ पर"
+            prompt:
+              target_blocks:
+                - {text: "फिर बैंक के नुक्कड़ पर बाएँ मुड़ो।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit09.lesson03.exercise05.comprehend_park_location
+            type: dialogue_comprehension
+            tested_text: "स्कूल के पीछे"
+            prompt:
+              target_blocks:
+                - {text: "पार्क? पहले सीधे जाओ, फिर दाएँ मुड़ो -- पार्क स्कूल के पीछे है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit09.lesson03.exercise06.listen_dakghar_kaise_jaun
+            type: listen_select
+            tested_text: "डाकघर कैसे जाऊँ"
+            media_asset_key: hi.a1.audio.directions.dakghar_kaise_jaun.01
+            prompt: {target_blocks: []}
+          - content_key: hi.a1.unit09.lesson03.exercise07.order_bank_nukkad_baaen_muro
+            type: word_order
+            tested_text: "बैंक के नुक्कड़ पर बाएँ मुड़ो"
+            prompt: {target_blocks: []}
+            word_bank: ["मुड़ो", "बैंक", "पर", "बाएँ", "के", "नुक्कड़"]
+          - content_key: hi.a1.unit09.lesson03.exercise08.order_park_school_ke_peeche_hai
+            type: word_order
+            tested_text: "पार्क स्कूल के पीछे है"
+            prompt: {target_blocks: []}
+            word_bank: ["के", "पार्क", "है", "पीछे", "स्कूल"]
+          - content_key: hi.a1.unit09.lesson03.exercise09.match_directions_review
+            type: matching_pairs
+            tested_text: "सीधे बाएँ दाएँ जाओ मुड़ो तक पहले फिर नुक्कड़ बस"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "सीधे", right: "straight ahead"}
+              - {left: "बाएँ", right: "left"}
+              - {left: "दाएँ", right: "right"}
+              - {left: "जाओ", right: "go!"}
+              - {left: "मुड़ो", right: "turn!"}
+              - {left: "तक", right: "until / up to"}
+              - {left: "पहले", right: "first"}
+              - {left: "फिर", right: "then"}
+              - {left: "नुक्कड़", right: "street corner"}
+              - {left: "बस", right: "just / only"}
+          - content_key: hi.a1.unit09.lesson03.exercise10.fill_bas_thoda_aur
+            type: fill_in_blank
+            tested_text: "बस"
+            prompt:
+              target_blocks:
+                - {text: "___ थोड़ा और जाओ -- डाकघर वहाँ है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit09.lesson03.exercise11.fix_missing_ke_nukkad
+            type: grammar_check
+            tested_text: "फिर बैंक के नुक्कड़ पर बाएँ मुड़ो"
+            prompt:
+              target_blocks:
+                - {text: "फिर बैंक नुक्कड़ पर बाएँ मुड़ो।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit09.lesson03.exercise12.reply_dakghar_kaise_jaun
+            type: dialogue_response
+            tested_text: "पहले सीधे जाओ, फिर बैंक के नुक्कड़ पर बाएँ मुड़ो"
+            prompt:
+              target_blocks:
+                - {text: "डाकघर कैसे जाऊँ?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit09.lesson03.exercise13.write_directions
+            type: writing_prompt
+            tested_text: "पहले सीधे जाओ, फिर बाएँ मुड़ो"
+            prompt:
+              target_blocks:
+                - {text: "बैंक कैसे जाऊँ? दिशा लिखो।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit09.lesson03.exercise14.speak_park_direction
+            type: speak_response
+            tested_text: "पहले सीधे जाओ, फिर दाएँ मुड़ो"
+            prompt:
+              target_blocks:
+                - {text: "बताओ, पार्क कैसे जाऊँ?", language_code: hi, direction: ltr}
