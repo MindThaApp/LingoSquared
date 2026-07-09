@@ -1,7 +1,7 @@
 // Types mirror /Users/raminazizi/dev/LingoSquared/docs/CONTRACT.md exactly.
 // Keep this file in sync with the contract; do not invent fields it doesn't define.
 
-export type ScriptCode = "latin" | "cyrillic" | "han" | "arabic";
+export type ScriptCode = "latin" | "cyrillic" | "han" | "arabic" | "devanagari";
 export type Direction = "ltr" | "rtl";
 
 export interface Language {

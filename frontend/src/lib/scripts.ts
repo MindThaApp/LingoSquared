@@ -13,6 +13,9 @@ export const LANGUAGE_SCRIPT: Record<string, ScriptCode> = {
   zh: "han",
   fa: "arabic",
   prs: "arabic",
+  pl: "latin",
+  ro: "latin",
+  hi: "devanagari",
 };
 
 // Traditional Perso-Arabic alphabet order — shared by Farsi and Dari.
@@ -21,6 +24,40 @@ const PERSO_ARABIC_LETTERS = [
   "د", "ذ", "ر", "ز", "ژ", "س", "ش", "ص", "ض",
   "ط", "ظ", "ع", "غ", "ف", "ق", "ک", "گ", "ل",
   "م", "ن", "و", "ه", "ی",
+];
+
+// Devanagari (Hindi) characters, ordered per the InScript standard — India's
+// official government Devanagari keyboard (Bureau of Indian Standards; the
+// layout every major OS's built-in Hindi input ships), NOT a guessed
+// alphabetical list: independent vowels (svar, used word-initially) first,
+// then their dependent forms (matras, attached after a consonant — InScript's
+// defining design principle is splitting vowels/matras onto one hand and
+// consonants onto the other), then consonants (vyanjan) in traditional varga
+// (class) order, then the common nukta consonants InScript assigns to
+// shifted keys for Persian/Arabic loanword sounds (ज़/फ़/ड़ etc., frequent in
+// real Hindi text), then the standalone marks (anusvara/visarga/
+// chandrabindu/virama). Cross-checked against two independent InScript
+// references (jptyping.com/inscript-keyboard, rajbhasha.net) which agreed on
+// every key checked. Devanagari genuinely needs separate independent-vowel
+// and matra glyphs — unlike Perso-Arabic, where one letter form suffices —
+// so a naive single-alphabet guess here would have been wrong.
+const DEVANAGARI_LETTERS = [
+  // Independent vowels (svar)
+  "अ", "आ", "इ", "ई", "उ", "ऊ", "ऋ", "ए", "ऐ", "ओ", "औ",
+  // Dependent vowel signs (matras)
+  "ा", "ि", "ी", "ु", "ू", "ृ", "े", "ै", "ो", "ौ",
+  // Consonants (vyanjan), traditional varga order
+  "क", "ख", "ग", "घ", "ङ",
+  "च", "छ", "ज", "झ", "ञ",
+  "ट", "ठ", "ड", "ढ", "ण",
+  "त", "थ", "द", "ध", "न",
+  "प", "फ", "ब", "भ", "म",
+  "य", "र", "ल", "व",
+  "श", "ष", "स", "ह",
+  // Nukta consonants for common loanword sounds
+  "क़", "ख़", "ग़", "ज़", "ड़", "ढ़", "फ़",
+  // Standalone marks: anusvara, visarga, chandrabindu, virama/halant
+  "ं", "ः", "ँ", "्",
 ];
 
 export interface KeyboardLayout {
@@ -46,6 +83,11 @@ export const KEYBOARD_LAYOUTS: Partial<Record<ScriptCode, KeyboardLayout>> = {
     direction: "rtl",
     rows: chunk(PERSO_ARABIC_LETTERS, ROW_SIZE),
     hasZwnj: true,
+  },
+  devanagari: {
+    // Unlike Perso-Arabic-family scripts, Devanagari reads left-to-right.
+    direction: "ltr",
+    rows: chunk(DEVANAGARI_LETTERS, ROW_SIZE),
   },
 };
 
@@ -92,6 +134,20 @@ export function answerScriptForExercise(exercise: Exercise): ScriptCode | null {
 // ever set `dir` on the answer row. Reuses the same answer_language_code
 // source of truth as answerScriptForExercise above.
 export function answerDirectionForExercise(exercise: Exercise): Direction {
-  const script = answerScriptForExercise(exercise);
+  return scriptDirection(answerScriptForExercise(exercise));
+}
+
+// General script -> reading direction, for any component that already has a
+// `script` (not a whole exercise) and needs to set an explicit `dir` rather
+// than assume only the Perso-Arabic family is ever RTL — every free-text
+// exercise input (Translation/WritingPrompt/FillInBlank/GrammarCheck/
+// SpeakRepeat/DialogueResponse) used to hardcode `script === "arabic"`
+// directly, which happened to still render correctly for a new LTR script
+// like Devanagari (falls through to the `undefined`/browser-default case)
+// but was the same "only checked against one script family" trap the
+// word_bank RTL footgun above warns about — fixed 2026-07-09 while adding
+// Devanagari so it no longer silently depends on Arabic being the only
+// non-Latin script that's ever RTL.
+export function scriptDirection(script: ScriptCode | null): Direction {
   return KEYBOARD_LAYOUTS[script ?? "latin"]?.direction ?? "ltr";
 }
