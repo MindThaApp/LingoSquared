@@ -1,0 +1,447 @@
+schema_version: "1.1"
+realization_version: "2026.1-draft.1"
+target_language: prs
+cefr_level: A1
+generation_provenance:
+  method: ai_adapted_from_public_domain_source
+  authoring_system: claude
+  source_material: "Firecrawl was unavailable this session (credits exhausted), so real, direct WebFetch access was used instead. WebFetch on the DLI Dari course's own index page (fsi-languages.yojik.eu/languages/DLI/DLI-Dari.html) confirmed -- as prior units already found for other topics -- that the index lists only semester/lesson-group PDF filenames with no per-lesson topic titles, and a second WebFetch asking specifically about emergency/police/fire/ambulance/help/accident content in the visible index confirmed no filename or title references any of those topics. Per this session's task instructions, three Semester 1 student-textbook PDFs adjacent to already-used ranges were downloaded via curl (DLI-Dari-Semester1-s21-24.pdf, s25-28.pdf, s29-32.pdf) and run through `pdftotext -layout` -- extraction succeeded cleanly on all three (the same working method confirmed for this course's PDFs in unit39's session), yielding real, searchable Dari/English text. None of the three lesson ranges contains a dedicated emergency-reporting lesson or dialogue (lessons 29-32's police content is a traffic-stop/vehicle-search scenario, not a citizen reporting an emergency), but their shared cumulative course glossary (repeated near-identically across all three books) was searched and found to genuinely contain: امبولانس (ambulance), کمک (help, already an established review word from unit07), the full sentence می‌تانین مه ره کمک کنین؟ (Can you help me?, used directly in lesson02 below), شفاخانه/شفاخانهء مرکزی (hospital/central hospital, already established review words from units 05 and 18), پولیس (police/policeman, appeared with two different Yeh-codepoint OCR renderings across the PDFs -- standard Persian-range codepoints used here per AUTHORING_GUIDE.md #3), مامموریت پولیس (police station, not used in this unit -- it appeared only inside the more advanced traffic-stop scenario, out of scope for an A1 unit), and زخمی / مجروح (injured, two real synonyms -- زخمی was chosen as the primary taught word) plus خون‌ریزی (bleeding). Genuinely NOT found anywhere in the located glossary or lesson text: a word for fire or fire brigade, or any dedicated emergency-reporting dialogue/scenario. آتش (fire) and اطفائیه (fire brigade) are therefore authored from established standard Afghan Dari usage (اطفائیه is the everyday Kabul term for the fire department, e.g. in local news coverage), NOT sourced from the located DLI material -- flagged here honestly, the same way unit24's موتر/تکت and unit39's خزان register choices were flagged. This unit's scenario, dialogue, and reading passage are authored fresh from already-established in-course conventions (unit07's می‌تانین/کمک/تلفن, unit17's می‌خواهم/دارم, unit12's زود, unit32's می‌آید/تشکر زیاد, unit29/unit18/unit30's می‌کند, unit24's شهر, unit03's نفر, and the established Homayoun/Zarmina dialogue throughline from units 20/21/22/25/27/37/38/39), extended with the new vocabulary above, modernized current spoken Kabul Dari register throughout, not a translation of any single source."
+  human_reviewed: false
+review:
+  status: unreviewed
+  required_next_reviewer: codex_fresh_context
+  notes: "New en-prs A1 unit after unit39 (seasons). An exact diff of every spine_outcome_id used in docs/content/realizations/prs/a1_unit*.yaml (plus a2_unit09/10 and b1_unit01) against every outcome id in docs/content/universal_spine.yaml found universal.a1.emergencies.handle_basic_emergency as the next unrealized A1 outcome (immediately after seasons in spine file order; both prerequisites -- universal.a1.communication.basic_phone_contact [unit07] and universal.a1.health.describe_basic_problem [unit17] -- are already realized). This unit covers recognizing a basic emergency, asking for help, and stating which kind of help is needed (police/ambulance/fire brigade), matching all four of the outcome's own assessment_requirements: understand_emergency_announcement (listening substituted with reading-based multiple_choice recognition per the established no-prs-audio pattern, AUTHORING_GUIDE.md #14), request_help (speaking substituted the same way this whole corpus substitutes it -- production exercises: translation/writing_prompt), read_emergency_notice (lesson05's reading passage), and write_emergency_message (writing_prompt exercises stating the emergency and the help needed). Six lessons: emergency-type vocabulary (اضطراری/پولیس/امبولانس/آتش/اطفائیه), asking for help including the real DLI-sourced phrase می‌تانین مه ره کمک کنین؟ plus the polite imperatives زنگ بزنین/بیایین, describing an injury (زخمی/خون‌ریزی, both DLI-confirmed), a Homayoun/Zarmina emergency dialogue (continuing their established throughline from units 20/21/22/25/27/37/38/39), a third-person reading passage recapping the same scenario, and a wrap-up contrasting a need with a limitation using اما plus a formal direct question -- mirroring unit39's own wrap-up shape. Re-declares all review vocabulary in-file before first exercise use because the compiler's taught-vocabulary check is per-file, including words taught in earlier units (کمک/می‌تانین/تلفن from unit07, می‌خواهم/دارم from unit17, این/است from early units, زود from unit12, به/در from early and unit12 units, او from unit38, کنین from unit17/unit21, می‌آید/تشکر زیاد from unit32, می‌کند from unit18/unit29/unit30, یک/نفر from unit04/unit03, شهر from unit24, شما from unit02, ندارم/اما from unit03/unit14/unit28/unit32/unit39). Uses او for he/she only; no Pashto هغه/هغوی -- double-checked against the known Pashto-vs-Dari pronoun bug. All multi-clause translate/write answers that combine two natural sentences without an explicit single conjunction (lesson02's DLI phrase, lesson04's line4) carry period- and comma-joined accepted-answer variants per AUTHORING_GUIDE.md #12; the one اما-joined contrast sentence (lesson06) uses a single canonical comma-اما form only, matching unit32/unit39's own established precedent that this construction has exactly one natural conjunction reading. No listen_type/listen_select/listen_order items are authored for prs (AUTHORING_GUIDE.md #14, zero prs audio/TTS coverage exists) -- listening-modality assessment coverage is provided via reading-based multiple_choice recognition instead. Matching-pairs exercises use seven pairs each (AUTHORING_GUIDE.md #16). Every vocabulary teaching card has a real example sentence for schema_version 1.1 (AUTHORING_GUIDE.md #19); grammar_note/phrase/dialogue/reading cards are exempt and correctly carry no example field. Every literal ASCII ? and Persian ؟ inside an inline flow-mapping pair (matching_pairs left/right, distractors) is inside a quoted string. A recursive yaml.safe_load boolean-coercion scan (not just grep) was run over both this file and its overlay -- zero stray Python bools found beyond the two legitimate schema fields (human_reviewed, target_language_first); no bare Yes/No/True/False/On/Off values exist anywhere in this unit's content (no gloss in this unit happens to be one of those words). Authored independently of the fa realization per the sibling-isolation rule (fa/a1_unit* files were never opened while authoring this file, and en-prs is the only direction this task covers -- prs-en was not touched)."
+
+course:
+  realization_key: prs.a1
+  target_language_first: true
+  dialect: prs_AF_kabuli_educated_colloquial_intro
+  register_policy: >-
+    Continues the established استم/استین polite-first, full-uncontracted
+    Dari register (units 01-39). This unit's core sentences are mostly
+    urgent 1st-person statements (می‌خواهم), 3rd-person state descriptions
+    (است/دارد/می‌کند/می‌آید), and plain polite imperatives (زنگ بزنین/
+    بیایین/کنین) rather than 2nd-person conjugated forms -- an emergency
+    exclamation or command doesn't need to pick تو vs شما the way a
+    conversational question does, so none is forced in artificially. The
+    Homayoun/Zarmina dialogue (lesson04) continues their established
+    informal تو-register friendship from units 20/21/22/25/27/37/38/39,
+    but (matching that same precedent) uses no 2nd-person verb forms at
+    all -- only 1st-person می‌خواهم/زنگ می‌زنم and 3rd-person است/دارد/
+    می‌آید, since an emergency exchange here is interjections and
+    statements, not a question to the other person. اطفائیه (fire
+    brigade) is a deliberate Afghan-Dari-specific vocabulary choice
+    (the everyday Kabul term), not sourced from the DLI material located
+    this session -- flagged the same way unit24's موتر/تکت and unit39's
+    خزان register choices were flagged.
+
+media_assets:
+  - content_key: prs.a1.unit40.audio.vocab.01
+    language: prs
+    text: "اضطراری، پولیس، امبولانس، آتش، اطفائیه"
+    voice_hint: neutral_adult
+    status: pending_generation
+  - content_key: prs.a1.unit40.audio.dialogue.emergency.01
+    language: prs
+    text: "همایون: زرمینه، کمک! کمک! زرمینه: چه؟ همایون: او زخمی است! خون‌ریزی دارد! زرمینه: امبولانس می‌خواهم. زنگ می‌زنم! همایون: تشکر زیاد! زرمینه: امبولانس زود می‌آید."
+    voice_hint: two_adults_neutral_polite
+    status: pending_generation
+
+units:
+  - content_key: prs.a1.unit40.emergencies
+    title: کمک اضطراری
+    section: reading_writing
+    spine_outcome_ids:
+      - universal.a1.emergencies.handle_basic_emergency
+    planned_lesson_count: 6
+
+    lessons:
+      - content_key: prs.a1.unit40.lesson01.emergency_types
+        title: کمک اضطراری
+        spine_outcome_id: universal.a1.emergencies.handle_basic_emergency
+        teaching:
+          - content_key: prs.a1.unit40.lesson01.teach.review_help_want
+            kind: grammar_note
+            target: {text: "کمک (help) / می‌خواهم (I want)", language_code: prs, direction: rtl}
+            introduced_tokens: [کمک, "می‌خواهم"]
+          - content_key: prs.a1.unit40.lesson01.teach.review_this_is
+            kind: grammar_note
+            target: {text: "این (this) / است (is)", language_code: prs, direction: rtl}
+            introduced_tokens: [این, است]
+          - content_key: prs.a1.unit40.lesson01.teach.emergency_word
+            kind: vocabulary
+            target: {text: اضطراری, language_code: prs, direction: rtl}
+            introduced_tokens: [اضطراری]
+            example: {text: "این اضطراری است.", language_code: prs, direction: rtl}
+          - content_key: prs.a1.unit40.lesson01.teach.police_word
+            kind: vocabulary
+            target: {text: پولیس, language_code: prs, direction: rtl}
+            introduced_tokens: [پولیس]
+            example: {text: "پولیس می‌خواهم.", language_code: prs, direction: rtl}
+          - content_key: prs.a1.unit40.lesson01.teach.ambulance_word
+            kind: vocabulary
+            target: {text: امبولانس, language_code: prs, direction: rtl}
+            introduced_tokens: [امبولانس]
+            example: {text: "امبولانس می‌خواهم.", language_code: prs, direction: rtl}
+          - content_key: prs.a1.unit40.lesson01.teach.fire_word
+            kind: vocabulary
+            target: {text: آتش, language_code: prs, direction: rtl}
+            introduced_tokens: [آتش]
+            example: {text: "آتش است.", language_code: prs, direction: rtl}
+          - content_key: prs.a1.unit40.lesson01.teach.fire_brigade_word
+            kind: vocabulary
+            target: {text: اطفائیه, language_code: prs, direction: rtl}
+            introduced_tokens: [اطفائیه]
+            example: {text: "اطفائیه می‌خواهم.", language_code: prs, direction: rtl}
+          - content_key: prs.a1.unit40.lesson01.teach.emergency_help_phrase
+            kind: phrase
+            target: {text: "این اضطراری است! پولیس می‌خواهم!", language_code: prs, direction: rtl}
+            introduced_tokens: []
+        exercises:
+          - content_key: prs.a1.unit40.lesson01.exercise01.recognize_police
+            type: multiple_choice
+            tested_text: پولیس
+            prompt: {target_blocks: [{text: پولیس, language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit40.lesson01.exercise02.recognize_ambulance
+            type: multiple_choice
+            tested_text: امبولانس
+            prompt: {target_blocks: [{text: امبولانس, language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit40.lesson01.exercise03.recognize_emergency_phrase
+            type: multiple_choice
+            tested_text: "این اضطراری است! پولیس می‌خواهم!"
+            prompt: {target_blocks: [{text: "این اضطراری است! پولیس می‌خواهم!", language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit40.lesson01.exercise04.match_emergency_words
+            type: matching_pairs
+            tested_text: "اضطراری پولیس امبولانس آتش اطفائیه این اضطراری است آتش است"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: اضطراری, right: emergency}
+              - {left: پولیس, right: police}
+              - {left: امبولانس, right: ambulance}
+              - {left: آتش, right: fire}
+              - {left: اطفائیه, right: "fire brigade"}
+              - {left: "این اضطراری است.", right: "This is an emergency."}
+              - {left: "آتش است.", right: "There is a fire."}
+          - content_key: prs.a1.unit40.lesson01.exercise05.order_ambulance_want
+            type: word_order
+            tested_text: "امبولانس می‌خواهم"
+            prompt: {target_blocks: []}
+            word_bank: [امبولانس, "می‌خواهم"]
+          - content_key: prs.a1.unit40.lesson01.exercise06.translate_fire_brigade
+            type: translation
+            tested_text: اطفائیه
+            prompt: {target_blocks: []}
+          - content_key: prs.a1.unit40.lesson01.exercise07.write_fire
+            type: writing_prompt
+            tested_text: آتش
+            prompt: {target_blocks: []}
+
+      - content_key: prs.a1.unit40.lesson02.asking_for_help
+        title: کمک خواستن
+        spine_outcome_id: universal.a1.emergencies.handle_basic_emergency
+        teaching:
+          - content_key: prs.a1.unit40.lesson02.teach.review_can_you_do
+            kind: grammar_note
+            target: {text: "می‌تانین (can you) / کنین (do -- polite imperative) / به (to/for) / زود (quickly)", language_code: prs, direction: rtl}
+            introduced_tokens: ["می‌تانین", کنین, به, زود]
+          - content_key: prs.a1.unit40.lesson02.teach.mera_word
+            kind: vocabulary
+            target: {text: "مه ره", language_code: prs, direction: rtl}
+            introduced_tokens: ["مه ره"]
+            example: {text: "می‌تانین مه ره کمک کنین؟", language_code: prs, direction: rtl}
+          - content_key: prs.a1.unit40.lesson02.teach.can_you_help_me_phrase
+            kind: phrase
+            target: {text: "می‌تانین مه ره کمک کنین؟", language_code: prs, direction: rtl}
+            introduced_tokens: []
+          - content_key: prs.a1.unit40.lesson02.teach.call_word
+            kind: vocabulary
+            target: {text: "زنگ بزنین", language_code: prs, direction: rtl}
+            introduced_tokens: ["زنگ بزنین"]
+            example: {text: "به پولیس زنگ بزنین!", language_code: prs, direction: rtl}
+          - content_key: prs.a1.unit40.lesson02.teach.come_word
+            kind: vocabulary
+            target: {text: بیایین, language_code: prs, direction: rtl}
+            introduced_tokens: [بیایین]
+            example: {text: "زود بیایین!", language_code: prs, direction: rtl}
+          - content_key: prs.a1.unit40.lesson02.teach.call_ambulance_phrase
+            kind: phrase
+            target: {text: "به امبولانس زنگ بزنین!", language_code: prs, direction: rtl}
+            introduced_tokens: []
+        exercises:
+          - content_key: prs.a1.unit40.lesson02.exercise01.recognize_can_you_help_me
+            type: multiple_choice
+            tested_text: "می‌تانین مه ره کمک کنین؟"
+            prompt: {target_blocks: [{text: "می‌تانین مه ره کمک کنین؟", language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit40.lesson02.exercise02.recognize_call_police
+            type: multiple_choice
+            tested_text: "به پولیس زنگ بزنین!"
+            prompt: {target_blocks: [{text: "به پولیس زنگ بزنین!", language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit40.lesson02.exercise03.recognize_come_quickly
+            type: multiple_choice
+            tested_text: "زود بیایین!"
+            prompt: {target_blocks: [{text: "زود بیایین!", language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit40.lesson02.exercise04.match_asking_for_help
+            type: matching_pairs
+            tested_text: "مه ره زنگ بزنین بیایین می‌تانین مه ره کمک کنین به پولیس زنگ بزنین به امبولانس زنگ بزنین زود بیایین"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "مه ره", right: me}
+              - {left: "زنگ بزنین", right: "call! (imperative)"}
+              - {left: بیایین, right: "come! (imperative)"}
+              - {left: "می‌تانین مه ره کمک کنین؟", right: "Can you help me?"}
+              - {left: "به پولیس زنگ بزنین!", right: "Call the police!"}
+              - {left: "به امبولانس زنگ بزنین!", right: "Call the ambulance!"}
+              - {left: "زود بیایین!", right: "Come quickly!"}
+          - content_key: prs.a1.unit40.lesson02.exercise05.order_come_quickly
+            type: word_order
+            tested_text: "زود بیایین"
+            prompt: {target_blocks: []}
+            word_bank: [زود, بیایین]
+          - content_key: prs.a1.unit40.lesson02.exercise06.translate_call_police
+            type: translation
+            tested_text: "به پولیس زنگ بزنین!"
+            prompt: {target_blocks: []}
+          - content_key: prs.a1.unit40.lesson02.exercise07.write_can_you_help_me
+            type: writing_prompt
+            tested_text: "می‌تانین مه ره کمک کنین؟"
+            prompt: {target_blocks: []}
+
+      - content_key: prs.a1.unit40.lesson03.describing_the_emergency
+        title: زخمی و خون‌ریزی
+        spine_outcome_id: universal.a1.emergencies.handle_basic_emergency
+        teaching:
+          - content_key: prs.a1.unit40.lesson03.teach.review_he_she_has
+            kind: grammar_note
+            target: {text: "او (he/she) / دارد (he/she has)", language_code: prs, direction: rtl}
+            introduced_tokens: [او, دارد]
+          - content_key: prs.a1.unit40.lesson03.teach.injured_word
+            kind: vocabulary
+            target: {text: زخمی, language_code: prs, direction: rtl}
+            introduced_tokens: [زخمی]
+            example: {text: "او زخمی است.", language_code: prs, direction: rtl}
+          - content_key: prs.a1.unit40.lesson03.teach.bleeding_word
+            kind: vocabulary
+            target: {text: "خون‌ریزی", language_code: prs, direction: rtl}
+            introduced_tokens: ["خون‌ریزی"]
+            example: {text: "او خون‌ریزی دارد.", language_code: prs, direction: rtl}
+          - content_key: prs.a1.unit40.lesson03.teach.injured_ambulance_phrase
+            kind: phrase
+            target: {text: "او زخمی است! امبولانس می‌خواهم!", language_code: prs, direction: rtl}
+            introduced_tokens: []
+          - content_key: prs.a1.unit40.lesson03.teach.bleeding_come_quickly_phrase
+            kind: phrase
+            target: {text: "او خون‌ریزی دارد! زود بیایین!", language_code: prs, direction: rtl}
+            introduced_tokens: []
+        exercises:
+          - content_key: prs.a1.unit40.lesson03.exercise01.recognize_injured
+            type: multiple_choice
+            tested_text: زخمی
+            prompt: {target_blocks: [{text: زخمی, language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit40.lesson03.exercise02.recognize_bleeding
+            type: multiple_choice
+            tested_text: "خون‌ریزی"
+            prompt: {target_blocks: [{text: "خون‌ریزی", language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit40.lesson03.exercise03.recognize_injured_ambulance
+            type: multiple_choice
+            tested_text: "او زخمی است! امبولانس می‌خواهم!"
+            prompt: {target_blocks: [{text: "او زخمی است! امبولانس می‌خواهم!", language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit40.lesson03.exercise04.match_injury_words
+            type: matching_pairs
+            tested_text: "زخمی خون‌ریزی او دارد او زخمی است او خون‌ریزی دارد او زخمی است امبولانس می‌خواهم"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: زخمی, right: injured}
+              - {left: "خون‌ریزی", right: bleeding}
+              - {left: او, right: "he/she"}
+              - {left: دارد, right: "he/she has"}
+              - {left: "او زخمی است.", right: "He/she is injured."}
+              - {left: "او خون‌ریزی دارد.", right: "He/she is bleeding."}
+              - {left: "او زخمی است! امبولانس می‌خواهم!", right: "He/she is injured! I need an ambulance!"}
+          - content_key: prs.a1.unit40.lesson03.exercise05.order_he_is_injured
+            type: word_order
+            tested_text: "او زخمی است"
+            prompt: {target_blocks: []}
+            word_bank: [او, زخمی, است]
+          - content_key: prs.a1.unit40.lesson03.exercise06.translate_bleeding
+            type: translation
+            tested_text: "او خون‌ریزی دارد."
+            prompt: {target_blocks: []}
+          - content_key: prs.a1.unit40.lesson03.exercise07.write_injured
+            type: writing_prompt
+            tested_text: "او زخمی است"
+            prompt: {target_blocks: []}
+
+      - content_key: prs.a1.unit40.lesson04.emergency_dialogue
+        title: گفتگوی اضطراری
+        spine_outcome_id: universal.a1.emergencies.handle_basic_emergency
+        teaching:
+          - content_key: prs.a1.unit40.lesson04.teach.review_dialogue_words
+            kind: grammar_note
+            target: {text: "چه (what) / می‌آید (he/she comes) / زنگ می‌زنم (I call) / تشکر زیاد (thanks a lot)", language_code: prs, direction: rtl}
+            introduced_tokens: [چه, "می‌آید", "زنگ می‌زنم", "تشکر زیاد"]
+          - content_key: prs.a1.unit40.lesson04.teach.dialogue_line1
+            kind: dialogue
+            target: {text: "زرمینه، کمک! کمک!", language_code: prs, direction: rtl, speaker: همایون}
+            introduced_tokens: [زرمینه, همایون]
+          - content_key: prs.a1.unit40.lesson04.teach.dialogue_line2
+            kind: dialogue
+            target: {text: "چه؟", language_code: prs, direction: rtl, speaker: زرمینه}
+            introduced_tokens: []
+          - content_key: prs.a1.unit40.lesson04.teach.dialogue_line3
+            kind: dialogue
+            target: {text: "او زخمی است! خون‌ریزی دارد!", language_code: prs, direction: rtl, speaker: همایون}
+            introduced_tokens: []
+          - content_key: prs.a1.unit40.lesson04.teach.dialogue_line4
+            kind: dialogue
+            target: {text: "امبولانس می‌خواهم. زنگ می‌زنم!", language_code: prs, direction: rtl, speaker: زرمینه}
+            introduced_tokens: []
+          - content_key: prs.a1.unit40.lesson04.teach.dialogue_line5
+            kind: dialogue
+            target: {text: "تشکر زیاد!", language_code: prs, direction: rtl, speaker: همایون}
+            introduced_tokens: []
+          - content_key: prs.a1.unit40.lesson04.teach.dialogue_line6
+            kind: dialogue
+            target: {text: "امبولانس زود می‌آید.", language_code: prs, direction: rtl, speaker: زرمینه}
+            introduced_tokens: []
+        exercises:
+          - content_key: prs.a1.unit40.lesson04.exercise01.dialogue_help_help
+            type: multiple_choice
+            tested_text: "زرمینه، کمک! کمک!"
+            prompt: {target_blocks: [{text: "زرمینه، کمک! کمک!", language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit40.lesson04.exercise02.dialogue_ambulance_call
+            type: multiple_choice
+            tested_text: "امبولانس می‌خواهم. زنگ می‌زنم!"
+            prompt: {target_blocks: [{text: "امبولانس می‌خواهم. زنگ می‌زنم!", language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit40.lesson04.exercise03.dialogue_ambulance_coming
+            type: multiple_choice
+            tested_text: "امبولانس زود می‌آید."
+            prompt: {target_blocks: [{text: "امبولانس زود می‌آید.", language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit40.lesson04.exercise04.match_dialogue_words
+            type: matching_pairs
+            tested_text: "می‌آید تشکر زیاد چه زرمینه کمک او زخمی است خون‌ریزی دارد امبولانس می‌خواهم زنگ می‌زنم امبولانس زود می‌آید"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "می‌آید", right: "he/she comes"}
+              - {left: "تشکر زیاد", right: "thanks a lot"}
+              - {left: چه, right: what}
+              - {left: "زرمینه، کمک! کمک!", right: "Zarmina, help! Help!"}
+              - {left: "او زخمی است! خون‌ریزی دارد!", right: "He/she is injured! He/she is bleeding!"}
+              - {left: "امبولانس می‌خواهم. زنگ می‌زنم!", right: "I need an ambulance. I'm calling!"}
+              - {left: "امبولانس زود می‌آید.", right: "The ambulance is coming quickly."}
+          - content_key: prs.a1.unit40.lesson04.exercise05.order_ambulance_coming_quickly
+            type: word_order
+            tested_text: "امبولانس زود می‌آید"
+            prompt: {target_blocks: []}
+            word_bank: [امبولانس, زود, "می‌آید"]
+          - content_key: prs.a1.unit40.lesson04.exercise06.translate_ambulance_calling
+            type: translation
+            tested_text: "امبولانس می‌خواهم. زنگ می‌زنم."
+            prompt: {target_blocks: []}
+          - content_key: prs.a1.unit40.lesson04.exercise07.write_need_ambulance
+            type: writing_prompt
+            tested_text: "امبولانس می‌خواهم"
+            prompt: {target_blocks: []}
+
+      - content_key: prs.a1.unit40.lesson05.emergency_reading
+        title: خواندن دربارهٔ کمک اضطراری
+        spine_outcome_id: universal.a1.emergencies.handle_basic_emergency
+        teaching:
+          - content_key: prs.a1.unit40.lesson05.teach.review_reading_words
+            kind: grammar_note
+            target: {text: "یک (one) / نفر (person) / شهر (city) / می‌کند (he/she does) / در (in/at)", language_code: prs, direction: rtl}
+            introduced_tokens: [یک, نفر, شهر, "می‌کند", در]
+          - content_key: prs.a1.unit40.lesson05.teach.reading_passage
+            kind: reading
+            target: {text: "در شهر یک نفر زخمی است. او خون‌ریزی دارد. همایون کمک می‌کند. امبولانس می‌آید.", language_code: prs, direction: rtl}
+            introduced_tokens: []
+        exercises:
+          - content_key: prs.a1.unit40.lesson05.exercise01.reading_who_helps
+            type: multiple_choice
+            tested_text: "در شهر یک نفر زخمی است. او خون‌ریزی دارد. همایون کمک می‌کند. امبولانس می‌آید."
+            prompt:
+              target_blocks:
+                - {text: "در شهر یک نفر زخمی است. او خون‌ریزی دارد. همایون کمک می‌کند. امبولانس می‌آید.", language_code: prs, direction: rtl}
+          - content_key: prs.a1.unit40.lesson05.exercise02.recognize_he_is_bleeding
+            type: multiple_choice
+            tested_text: "او خون‌ریزی دارد."
+            prompt: {target_blocks: [{text: "او خون‌ریزی دارد.", language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit40.lesson05.exercise03.recognize_ambulance_comes
+            type: multiple_choice
+            tested_text: "امبولانس می‌آید."
+            prompt: {target_blocks: [{text: "امبولانس می‌آید.", language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit40.lesson05.exercise04.match_reading_words
+            type: matching_pairs
+            tested_text: "یک نفر شهر در شهر یک نفر زخمی است او خون‌ریزی دارد همایون کمک می‌کند امبولانس می‌آید"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: یک, right: one}
+              - {left: نفر, right: person}
+              - {left: شهر, right: city}
+              - {left: "در شهر یک نفر زخمی است.", right: "In the city a person is injured."}
+              - {left: "او خون‌ریزی دارد.", right: "He/she is bleeding."}
+              - {left: "همایون کمک می‌کند.", right: "Homayoun helps."}
+              - {left: "امبولانس می‌آید.", right: "The ambulance comes."}
+          - content_key: prs.a1.unit40.lesson05.exercise05.order_homayoun_helps
+            type: word_order
+            tested_text: "همایون کمک می‌کند"
+            prompt: {target_blocks: []}
+            word_bank: [همایون, کمک, "می‌کند"]
+          - content_key: prs.a1.unit40.lesson05.exercise06.translate_ambulance_comes
+            type: translation
+            tested_text: "امبولانس می‌آید."
+            prompt: {target_blocks: []}
+          - content_key: prs.a1.unit40.lesson05.exercise07.write_he_is_bleeding
+            type: writing_prompt
+            tested_text: "او خون‌ریزی دارد"
+            prompt: {target_blocks: []}
+
+      - content_key: prs.a1.unit40.lesson06.wrap_up
+        title: جمع‌بندی
+        spine_outcome_id: universal.a1.emergencies.handle_basic_emergency
+        teaching:
+          - content_key: prs.a1.unit40.lesson06.teach.review_wrap_up_words
+            kind: grammar_note
+            target: {text: "تلفن (telephone) / ندارم (I don't have) / اما (but) / شما (you, formal)", language_code: prs, direction: rtl}
+            introduced_tokens: [تلفن, ندارم, اما, شما]
+          - content_key: prs.a1.unit40.lesson06.teach.contrast_phrase
+            kind: phrase
+            target: {text: "کمک می‌خواهم، اما تلفن ندارم.", language_code: prs, direction: rtl}
+            introduced_tokens: []
+          - content_key: prs.a1.unit40.lesson06.teach.formal_question_phrase
+            kind: phrase
+            target: {text: "شما می‌تانین کمک کنین؟", language_code: prs, direction: rtl}
+            introduced_tokens: []
+        exercises:
+          - content_key: prs.a1.unit40.lesson06.exercise01.recognize_contrast
+            type: multiple_choice
+            tested_text: "کمک می‌خواهم، اما تلفن ندارم."
+            prompt: {target_blocks: [{text: "کمک می‌خواهم، اما تلفن ندارم.", language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit40.lesson06.exercise02.recognize_formal_question
+            type: multiple_choice
+            tested_text: "شما می‌تانین کمک کنین؟"
+            prompt: {target_blocks: [{text: "شما می‌تانین کمک کنین؟", language_code: prs, direction: rtl}]}
+          - content_key: prs.a1.unit40.lesson06.exercise03.match_wrap_up
+            type: matching_pairs
+            tested_text: "تلفن ندارم اما کمک می‌خواهم اما تلفن ندارم شما می‌تانین کمک کنین"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: تلفن, right: telephone}
+              - {left: ندارم, right: "I don't have"}
+              - {left: اما, right: but}
+              - {left: "می‌خواهم", right: "I want / I need"}
+              - {left: کمک, right: help}
+              - {left: "کمک می‌خواهم، اما تلفن ندارم.", right: "I need help, but I don't have a phone."}
+              - {left: "شما می‌تانین کمک کنین؟", right: "Can you help?"}
+          - content_key: prs.a1.unit40.lesson06.exercise04.order_no_phone
+            type: word_order
+            tested_text: "تلفن ندارم"
+            prompt: {target_blocks: []}
+            word_bank: [تلفن, ندارم]
+          - content_key: prs.a1.unit40.lesson06.exercise05.translate_formal_question
+            type: translation
+            tested_text: "شما می‌تانین کمک کنین؟"
+            prompt: {target_blocks: []}
+          - content_key: prs.a1.unit40.lesson06.exercise06.write_contrast
+            type: writing_prompt
+            tested_text: "کمک می‌خواهم، اما تلفن ندارم"
+            prompt: {target_blocks: []}
