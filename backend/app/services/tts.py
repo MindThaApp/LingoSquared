@@ -20,6 +20,22 @@ GOOGLE_TTS_LANGUAGE_CODE={
     "it":"it-IT","es":"es-ES","ru":"ru-RU","zh":"cmn-CN",
 }
 
+# Without an explicit voice `name`, Google Cloud TTS resolves language_code
+# + ssml_gender to WHATEVER voice it defaults to for that combination —
+# frequently an old, low-quality "Standard" voice, not the much more
+# natural Neural2/WaveNet tiers Google also offers for the same language.
+# Confirmed live 2026-07-09 via a real texttospeech.list_voices() call
+# against this project's actual credentials (not guessed from training
+# data, which can be stale/wrong about what's currently offered) — every
+# name below is real and currently available. Neural2 doesn't cover
+# nl/ru/zh yet, so those three fall back to WaveNet (still far more
+# natural than Standard).
+GOOGLE_TTS_VOICE_NAME={
+    "en":"en-US-Neural2-C","nl":"nl-NL-Wavenet-F","fr":"fr-FR-Neural2-F",
+    "de":"de-DE-Neural2-G","it":"it-IT-Neural2-A","es":"es-ES-Neural2-A",
+    "ru":"ru-RU-Wavenet-C","zh":"cmn-CN-Wavenet-A",
+}
+
 # Azure Cognitive Services Speech covers the one real gap Google leaves:
 # Farsi (fa). Confirmed real, licensed neural voices exist —
 # fa-IR-DilaraNeural (female, used as the default here) and
@@ -92,7 +108,7 @@ def synthesize_google(text_value:str,language_code:str,speaking_rate:float=1.0) 
         input=texttospeech.SynthesisInput(text=text_value),
         voice=texttospeech.VoiceSelectionParams(
             language_code=GOOGLE_TTS_LANGUAGE_CODE[language_code],
-            ssml_gender=texttospeech.SsmlVoiceGender.NEUTRAL,
+            name=GOOGLE_TTS_VOICE_NAME[language_code],
         ),
         audio_config=texttospeech.AudioConfig(
             audio_encoding=texttospeech.AudioEncoding.MP3,
