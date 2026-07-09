@@ -5,6 +5,7 @@ import { CheckpointApi } from "../api/endpoints";
 import { ApiError } from "../api/client";
 import { ExerciseRenderer } from "../components/exercises/ExerciseRenderer";
 import { formatCorrectResponse } from "../lib/formatAnswer";
+import { resultStatus } from "../lib/gradingResult";
 import type { AnswerResponse, CheckpointResult, PracticeAnswerResult, PracticeItem } from "../api/types";
 
 type Phase = "loading" | "blocked" | "unavailable" | "in_progress" | "scoring" | "done";
@@ -174,22 +175,30 @@ export function CheckpointPage() {
         exercise={{ id: current.id, type: current.type, order: 0, prompt: current.prompt }}
         onAnswer={handleAnswer}
         disabled={submitting || Boolean(result)}
+        gradedResult={
+          result ? { correct: result.correct, correctResponse: result.correct_response } : undefined
+        }
       />
-      {result && (
-        <div className={`feedback-banner ${result.correct ? "correct" : "incorrect"}`}>
-          <p style={{ margin: "0 0 6px" }}>
-            {result.correct ? t("checkpoint.correct") : t("checkpoint.incorrect")}
-          </p>
-          {!result.correct && (
-            <p style={{ margin: "0 0 10px", fontWeight: 400 }}>
-              {t("checkpoint.correct_answer", { answer: formatCorrectResponse(result.correct_response) })}
+      {result && (() => {
+        const status = resultStatus(result);
+        return (
+          <div className={`feedback-banner ${status}`}>
+            <p style={{ margin: "0 0 6px" }}>
+              {status === "correct" && t("checkpoint.correct")}
+              {status === "almost" && t("checkpoint.almost")}
+              {status === "incorrect" && t("checkpoint.incorrect")}
             </p>
-          )}
-          <button className="btn btn-block" onClick={handleContinue}>
-            {t("checkpoint.continue")}
-          </button>
-        </div>
-      )}
+            {status !== "correct" && (
+              <p style={{ margin: "0 0 10px", fontWeight: 400 }}>
+                {t("checkpoint.correct_answer", { answer: formatCorrectResponse(result.correct_response) })}
+              </p>
+            )}
+            <button className="btn btn-block" onClick={handleContinue}>
+              {t("checkpoint.continue")}
+            </button>
+          </div>
+        );
+      })()}
     </div>
   );
 }

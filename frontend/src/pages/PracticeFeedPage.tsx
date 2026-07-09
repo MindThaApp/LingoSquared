@@ -5,6 +5,7 @@ import { CatalogApi, PracticeApi, ProgressApi } from "../api/endpoints";
 import { ExerciseRenderer } from "../components/exercises/ExerciseRenderer";
 import { ReportIssueButton } from "../components/ReportIssueButton";
 import { formatCorrectResponse } from "../lib/formatAnswer";
+import { resultStatus } from "../lib/gradingResult";
 import type {
   AnswerResponse,
   CourseDetail,
@@ -55,18 +56,29 @@ function PracticeCard({
         exercise={{ id: item.id, type: item.type, order: 0, prompt: item.prompt }}
         onAnswer={handleAnswer}
         disabled={submitting || Boolean(result) || unavailable}
+        gradedResult={
+          result ? { correct: result.correct, correctResponse: result.correct_response } : undefined
+        }
       />
-      {result && (
-        <div className={`feedback-banner ${result.correct ? "correct" : "incorrect"}`}>
-          <p style={{ margin: 0 }}>
-            {result.correct
-              ? t("practice.correct", { xp: result.xp_awarded })
-              : t("lesson_runner.correct_answer", {
+      {result && (() => {
+        const status = resultStatus(result);
+        return (
+          <div className={`feedback-banner ${status}`}>
+            <p style={{ margin: 0 }}>
+              {status === "correct" && t("practice.correct", { xp: result.xp_awarded })}
+              {status === "almost" &&
+                t("practice.almost", {
+                  xp: result.xp_awarded,
                   answer: formatCorrectResponse(result.correct_response),
                 })}
-          </p>
-        </div>
-      )}
+              {status === "incorrect" &&
+                t("lesson_runner.correct_answer", {
+                  answer: formatCorrectResponse(result.correct_response),
+                })}
+            </p>
+          </div>
+        );
+      })()}
       {unavailable && (
         <div className="feedback-banner">
           <p style={{ margin: 0 }}>{t("practice.item_unavailable")}</p>

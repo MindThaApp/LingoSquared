@@ -1,12 +1,16 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { TextBlockList } from "../TextBlock";
+import { correctOptionFromResponse, optionClassName } from "./optionHighlight";
 import type { ExerciseComponentProps } from "./types";
 
-export function ReadingComprehension({ exercise, onAnswer, disabled }: ExerciseComponentProps) {
+export function ReadingComprehension({ exercise, onAnswer, disabled, gradedResult }: ExerciseComponentProps) {
   const { t } = useTranslation();
   const [selected, setSelected] = useState<string | null>(null);
   const options = exercise.prompt.options ?? [];
+  const correctOption = gradedResult
+    ? correctOptionFromResponse(gradedResult.correctResponse, options)
+    : null;
 
   return (
     <div className="exercise-shell">
@@ -17,7 +21,7 @@ export function ReadingComprehension({ exercise, onAnswer, disabled }: ExerciseC
         {options.map((option) => (
           <button
             key={option}
-            className={`exercise-option${selected === option ? " selected" : ""}`}
+            className={optionClassName(option, selected, gradedResult, correctOption)}
             disabled={disabled}
             onClick={() => setSelected(option)}
           >
