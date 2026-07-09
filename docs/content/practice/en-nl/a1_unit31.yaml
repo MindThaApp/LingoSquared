@@ -1,0 +1,221 @@
+schema_version: "1.0"
+pack_key: practice.en-nl.a1.unit31
+source_language: en
+target_language: nl
+unit_content_key: nl.a1.unit31.animals
+review:
+  status: unreviewed
+  fresh_context: "false"
+  notes: "Authored 2026-07-09 by the practice-template depth-closing pass
+    (same pass as a1_unit29.yaml/a1_unit30.yaml -- see a1_unit29.yaml's
+    review.notes for the full manifest-gap context). This file covers
+    unit31 (animals and pets). Extended scripts/backfill_lexemes_en_nl.py
+    with 5 new semantic tags scoped to this unit's own real vocabulary
+    (pet_noun: 4-member hond/kat/vis/vogel, verified safe generatively in
+    'Ik heb een {item}.' via translation ONLY -- the English side
+    disambiguates which pet is meant, never a bare Dutch fill_in_blank on
+    this pool, matching this unit's own real realization file's
+    review.notes, which explicitly flagged blanking any animal noun
+    directly as genuinely ambiguous; pet_noun_plural: 4-member honden/
+    katten/vissen/vogels, verified safe in 'Ik houd van {item}.' (all four
+    grammatical there); pet_care_verb: 3-member bare-infinitive
+    recognition-only pool uitlaten/geven/spelen, no shared generative
+    frame since each takes a different object/preposition per this unit's
+    own doc, same discipline as unit10's routine_verb_infinitive/unit17's
+    work_vocab; animal_elke_single/animal_van_single: single-member tags
+    reusing already-classified tokens (elke from unit29, van from unit8)
+    for this unit's own real fill_in_blank resolutions -- 'Ik laat de hond
+    ___ dag uit.'/'Ik houd ___ dieren.' -- matching the realization file's
+    own choice verbatim). Real, live bug caught and fixed while building
+    this: a first draft casefolded pet_care_verb's token match, which
+    silently pulled in this unit's own capitalized sentence-initial
+    'Uitlaten' (from its lesson02 grammar note) as a case-duplicate second
+    member -- fixed with an exact-case token check, same convention as
+    a1_unit30.yaml's identical age_adj catch in this same pass. Every
+    generative frame's literal text was checked against its own slot's
+    candidate set for self-reference (none found -- 'Ik heb een {item}.'/
+    'Ik houd van {item}.' share no literal word with pet_noun/
+    pet_noun_plural's own members). Real course-wide candidate counts
+    verified with a standalone lexeme_matches()-replicating harness before
+    writing these templates. 17 templates across all 6 lessons:
+    multiple_choice x4, listen_select x4, matching_pairs x1 (8-pair
+    pet_noun+pet_noun_plural pool anchored lesson05), fill_in_blank x2
+    (both single-candidate), word_order x2, translation x4. Needs the
+    standard fresh-context review before import. Blocking dependency, same
+    as every other en-nl pack: backfill_lexemes_en_nl.py has not actually
+    been run against a real database yet."
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [pet_noun, pet_noun_plural, pet_care_verb, animal_elke_single, animal_van_single]
+slot_presets:
+  pet_noun: &pet_noun {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: pet_noun}}
+  pet_noun_plural: &pet_noun_plural {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: pet_noun_plural}}
+  pet_care_verb: &pet_care_verb {language_code: nl, part_of_speech: verb, agreement_tags: {semantic: pet_care_verb}}
+  animal_elke_single: &animal_elke_single {language_code: nl, part_of_speech: adjective, agreement_tags: {semantic: animal_elke_single}}
+  animal_van_single: &animal_van_single {language_code: nl, part_of_speech: preposition, agreement_tags: {semantic: animal_van_single}}
+templates:
+  - content_key: practice.en-nl.nl.a1.unit31.lesson01.choose.001
+    lesson_content_key: nl.a1.unit31.lesson01.huisdieren_woorden
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *pet_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a pet noun from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit31.lesson01.listen.002
+    lesson_content_key: nl.a1.unit31.lesson01.huisdieren_woorden
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *pet_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit31.lesson01.translate.003
+    lesson_content_key: nl.a1.unit31.lesson01.huisdieren_woorden
+    type: translation
+    frame:
+      text: "I have a {item}."
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *pet_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "Ik heb een {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Ik heb een {item}.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit31.lesson01.order.004
+    lesson_content_key: nl.a1.unit31.lesson01.huisdieren_woorden
+    type: word_order
+    frame: {text: "Ik heb een {item}.", language_code: nl, direction: ltr}
+    slots: {item: *pet_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "Ik heb een {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Ik heb een {item}. -- I have a {item}.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit31.lesson02.choose.001
+    lesson_content_key: nl.a1.unit31.lesson02.zorg_voor_huisdieren
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *pet_care_verb}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a pet-care verb from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit31.lesson02.listen.002
+    lesson_content_key: nl.a1.unit31.lesson02.zorg_voor_huisdieren
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *pet_care_verb}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit31.lesson02.translate.003
+    lesson_content_key: nl.a1.unit31.lesson02.zorg_voor_huisdieren
+    type: translation
+    frame:
+      text: "{item}"
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *pet_care_verb}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The Dutch word is {item}.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit31.lesson02.fill.004
+    lesson_content_key: nl.a1.unit31.lesson02.zorg_voor_huisdieren
+    type: fill_in_blank
+    frame: {text: "Ik laat de hond {item} dag uit.", language_code: nl, direction: ltr}
+    slots: {item: *animal_elke_single}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Ik laat de hond elke dag uit. -- I walk the dog every day.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit31.lesson03.choose.001
+    lesson_content_key: nl.a1.unit31.lesson03.van_dieren_houden
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *pet_noun_plural}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the plural of a pet noun from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit31.lesson03.listen.002
+    lesson_content_key: nl.a1.unit31.lesson03.van_dieren_houden
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *pet_noun_plural}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit31.lesson03.translate.003
+    lesson_content_key: nl.a1.unit31.lesson03.van_dieren_houden
+    type: translation
+    frame:
+      text: "I love {item}."
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *pet_noun_plural}
+    answer_derivation: {kind: render_frame, frame: {text: "Ik houd van {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Ik houd van {item}.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit31.lesson03.fill.004
+    lesson_content_key: nl.a1.unit31.lesson03.van_dieren_houden
+    type: fill_in_blank
+    frame: {text: "Ik houd {item} dieren.", language_code: nl, direction: ltr}
+    slots: {item: *animal_van_single}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Ik houd van dieren. -- I love animals.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit31.lesson04.listen.001
+    lesson_content_key: nl.a1.unit31.lesson04.taalcafe_lottes_hond
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *pet_care_verb}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit31.lesson04.order.002
+    lesson_content_key: nl.a1.unit31.lesson04.taalcafe_lottes_hond
+    type: word_order
+    frame: {text: "Ik houd van {item}.", language_code: nl, direction: ltr}
+    slots: {item: *pet_noun_plural}
+    answer_derivation: {kind: render_frame, frame: {text: "Ik houd van {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Ik houd van {item}. -- I love {item}.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit31.lesson05.match.001
+    lesson_content_key: nl.a1.unit31.lesson05.omar_fenna_sander_dieren
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth} · {seventh} · {eighth}", language_code: nl, direction: ltr}
+    slots: {first: *pet_noun, second: *pet_noun, third: *pet_noun, fourth: *pet_noun, fifth: *pet_noun_plural, sixth: *pet_noun_plural, seventh: *pet_noun_plural, eighth: *pet_noun_plural}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth]}, {kind: distinct, slots: [fifth, sixth, seventh, eighth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth, seventh, eighth]}
+    feedback_frame: {text: "Match each animal word from this unit with its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit31.lesson06.translate.001
+    lesson_content_key: nl.a1.unit31.lesson06.taalcafe_ninas_vogel
+    type: translation
+    frame:
+      text: "I have a {item}."
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *pet_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "Ik heb een {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Ik heb een {item}.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit31.lesson06.choose.002
+    lesson_content_key: nl.a1.unit31.lesson06.taalcafe_ninas_vogel
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *pet_care_verb}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a pet-care verb from this unit.", language_code: en, direction: ltr}

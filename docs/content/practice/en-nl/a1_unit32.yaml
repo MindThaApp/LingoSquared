@@ -1,0 +1,191 @@
+schema_version: "1.0"
+pack_key: practice.en-nl.a1.unit32
+source_language: en
+target_language: nl
+unit_content_key: nl.a1.unit32.sporten
+review:
+  status: unreviewed
+  fresh_context: "false"
+  notes: "Authored 2026-07-09 by the practice-template depth-closing pass
+    (same pass as a1_unit29-31.yaml -- see a1_unit29.yaml's review.notes
+    for the full manifest-gap context). This file covers unit32 (sports
+    and exercise). Extended scripts/backfill_lexemes_en_nl.py with 2 new
+    semantic tags scoped to this unit's own real vocabulary (sport_noun:
+    4-member voetbal/yoga/hardlopen/zwemmen -- hardlopen/zwemmen classified
+    as NOUNS since every real use in this unit is as the object of aan/van
+    (doen aan hardlopen, houden van zwemmen), the infinitive-as-gerund
+    pattern Dutch uses after prepositions, matching how hardlopen is also
+    used as a bare subject ('Hardlopen is niet scheidbaar') -- verified
+    safe generatively in 'Ik doe aan {item}.'/'Ik houd van {item}.' via
+    translation ONLY, matching this unit's own real realization file's
+    review.notes, which explicitly avoided any bare Dutch fill_in_blank on
+    this pool and even converted an original fill_in_blank draft to
+    translation for the identical ambiguity reason on its 'keer' frame;
+    sport_dicht_single: single-member tag for this unit's own real
+    fill_in_blank, 'In het park, ___ bij mijn huis.' -> dicht). Also
+    REUSES a1_unit29.yaml's already-classified freq_adverb tag
+    (altijd/vaak/soms/nooit) against this unit's own real sentence 'Ik doe
+    {item} aan voetbal.' (verified grammatical for all four: 'Ik doe
+    altijd/vaak/soms/nooit aan voetbal.') -- safe course-wide reuse since
+    both units are the SAME A1 course (AUTHORING_GUIDE.md #18's A1/A2
+    course-boundary caveat does not apply here). Real, live bug caught and
+    fixed while building this: a first draft of sport_noun casefolded the
+    token match, which silently pulled in this unit's own capitalized
+    subject-position 'Hardlopen' (from its lesson04 grammar note) as a
+    case-duplicate 5th member -- fixed with an exact-case token check,
+    same convention as a1_unit30.yaml/a1_unit31.yaml's identical catches
+    earlier in this same pass. Every generative frame's literal text was
+    checked against its own slot's candidate set for self-reference (none
+    found). Real course-wide candidate counts verified with a standalone
+    lexeme_matches()-replicating harness before writing these templates.
+    15 templates across all 6 lessons: multiple_choice x2, listen_select
+    x3, matching_pairs x1 (8-pair sport_noun+freq_adverb combined pool,
+    same combined-slot-preset technique as a2_unit24's
+    gemeente_noun_or_verb, anchored lesson05), fill_in_blank x1
+    (single-candidate), word_order x3, translation x5. Needs the standard
+    fresh-context review before import. Blocking dependency, same as every
+    other en-nl pack: backfill_lexemes_en_nl.py has not actually been run
+    against a real database yet."
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [sport_noun, freq_adverb, sport_dicht_single]
+slot_presets:
+  sport_noun: &sport_noun {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: sport_noun}}
+  freq_adverb: &freq_adverb {language_code: nl, part_of_speech: adverb, agreement_tags: {semantic: freq_adverb}}
+  sport_dicht_single: &sport_dicht_single {language_code: nl, part_of_speech: adjective, agreement_tags: {semantic: sport_dicht_single}}
+  sport_or_freq: &sport_or_freq {language_code: nl, part_of_speech: [noun, adverb], agreement_tags: {semantic: [sport_noun, freq_adverb]}}
+templates:
+  - content_key: practice.en-nl.nl.a1.unit32.lesson01.choose.001
+    lesson_content_key: nl.a1.unit32.lesson01.sport_woorden
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *sport_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a sport from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit32.lesson01.listen.002
+    lesson_content_key: nl.a1.unit32.lesson01.sport_woorden
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *sport_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit32.lesson01.translate.003
+    lesson_content_key: nl.a1.unit32.lesson01.sport_woorden
+    type: translation
+    frame:
+      text: "I do {item}."
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *sport_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "Ik doe aan {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Ik doe aan {item}.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit32.lesson01.order.004
+    lesson_content_key: nl.a1.unit32.lesson01.sport_woorden
+    type: word_order
+    frame: {text: "Ik doe aan {item}.", language_code: nl, direction: ltr}
+    slots: {item: *sport_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "Ik doe aan {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Ik doe aan {item}. -- I do {item}.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit32.lesson02.translate.001
+    lesson_content_key: nl.a1.unit32.lesson02.hoe_vaak_sport_je
+    type: translation
+    frame:
+      text: "I {item} do football."
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *freq_adverb}
+    answer_derivation: {kind: render_frame, frame: {text: "Ik doe {item} aan voetbal.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Ik doe {item} aan voetbal.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit32.lesson02.order.002
+    lesson_content_key: nl.a1.unit32.lesson02.hoe_vaak_sport_je
+    type: word_order
+    frame: {text: "Ik doe {item} aan voetbal.", language_code: nl, direction: ltr}
+    slots: {item: *freq_adverb}
+    answer_derivation: {kind: render_frame, frame: {text: "Ik doe {item} aan voetbal.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Ik doe {item} aan voetbal. -- I {item} do football.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit32.lesson02.choose.003
+    lesson_content_key: nl.a1.unit32.lesson02.hoe_vaak_sport_je
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *freq_adverb}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a frequency word.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit32.lesson03.listen.001
+    lesson_content_key: nl.a1.unit32.lesson03.ik_sport_graag
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *sport_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit32.lesson03.translate.002
+    lesson_content_key: nl.a1.unit32.lesson03.ik_sport_graag
+    type: translation
+    frame:
+      text: "I love {item}."
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *sport_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "Ik houd van {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Ik houd van {item}.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit32.lesson04.listen.001
+    lesson_content_key: nl.a1.unit32.lesson04.taalcafe_sander_hardlopen
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *sport_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit32.lesson04.fill.002
+    lesson_content_key: nl.a1.unit32.lesson04.taalcafe_sander_hardlopen
+    type: fill_in_blank
+    frame: {text: "In het park, {item} bij mijn huis.", language_code: nl, direction: ltr}
+    slots: {item: *sport_dicht_single}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "In het park, dicht bij mijn huis. -- In the park, close to my house.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit32.lesson05.match.001
+    lesson_content_key: nl.a1.unit32.lesson05.lotte_fenna_sport
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth} · {seventh} · {eighth}", language_code: nl, direction: ltr}
+    slots: {first: *sport_or_freq, second: *sport_or_freq, third: *sport_or_freq, fourth: *sport_or_freq, fifth: *sport_or_freq, sixth: *sport_or_freq, seventh: *sport_or_freq, eighth: *sport_or_freq}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth, seventh, eighth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth, seventh, eighth]}
+    feedback_frame: {text: "Match each word from this unit with its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit32.lesson06.translate.001
+    lesson_content_key: nl.a1.unit32.lesson06.taalcafe_samen_sporten
+    type: translation
+    frame:
+      text: "I love {item}."
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *sport_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "Ik houd van {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Ik houd van {item}.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit32.lesson06.order.002
+    lesson_content_key: nl.a1.unit32.lesson06.taalcafe_samen_sporten
+    type: word_order
+    frame: {text: "Ik doe {item} aan voetbal.", language_code: nl, direction: ltr}
+    slots: {item: *freq_adverb}
+    answer_derivation: {kind: render_frame, frame: {text: "Ik doe {item} aan voetbal.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Ik doe {item} aan voetbal. -- I {item} do football.", language_code: en, direction: ltr}
