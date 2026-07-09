@@ -15,10 +15,13 @@ def test_auth_register_login_me(client):
 
 def test_language_seed_and_rtl(client):
     rows = client.get("/languages").json()
-    assert len(rows) == 10
+    assert len(rows) == 13
     by_code = {item["code"]: item for item in rows}
     assert by_code["fa"]["script"] == "arabic" and by_code["fa"]["direction"] == "rtl"
     assert by_code["prs"]["direction"] == "rtl"
+    assert by_code["pl"]["script"] == "latin" and by_code["pl"]["direction"] == "ltr"
+    assert by_code["ro"]["script"] == "latin" and by_code["ro"]["direction"] == "ltr"
+    assert by_code["hi"]["script"] == "devanagari" and by_code["hi"]["direction"] == "ltr"
 
 def payload(source="en", target="es", title="Test course"):
     direction = "rtl" if source in ("fa", "prs") else "ltr"
