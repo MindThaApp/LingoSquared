@@ -1,0 +1,483 @@
+schema_version: "1.1"
+realization_version: "2026.1-draft.1"
+target_language: "pl"
+cefr_level: "A1"
+status: "complete_draft"
+generation_provenance:
+  method: "ai_generated"
+  authoring_system: "claude"
+  human_reviewed: false
+review:
+  status: "unreviewed"
+  required_next_reviewer: "codex"
+  notes: >-
+    Ninth Polish unit, continuing directly from pl/a1_unit08_places.yaml
+    (same Ewa/Marek pair, same 3-lesson bootstrap pace as units01-08).
+    Realizes universal.a1.directions.ask_follow_basic_directions -- confirmed
+    the next A1 outcome in spine order via docs/content/universal_spine.yaml
+    (id + can_do text read directly: "Ask for and follow short directions to
+    a nearby place," prerequisite universal.a1.places.locate_common_places,
+    i.e. unit08). This is also the exact outcome unit08's own review notes
+    already flagged as "the very next spine outcome and its own future
+    unit," so no ambiguity in ordering. Checked nl/a1_unit09_directions.yaml
+    purely to confirm topic identity (a "directions" unit, linksaf/rechtdoor/
+    rechtsaf turn-by-turn content) -- confirming scope only, not for any
+    sentence text, character, or lesson-structure reuse; nl's file has grown
+    to 6 lessons with real audio assets and a fresh-context review pass
+    already completed, which this file deliberately does NOT match in size,
+    per the standing "3-lesson bootstrap pace" instruction for this course.
+    No `ro` realization directory exists in this project at all (checked
+    `docs/content/realizations/` directly), so no ro cross-check was
+    possible or attempted.
+
+    Authored from the start in AUTHORING_GUIDE §19 format (schema_version
+    1.1): every kind:vocabulary card carries a real example sentence. Zero
+    listen_type/listen_select/listen_order exercises anywhere in this file,
+    matching unit01-08's own established choice -- media_assets is an empty
+    list, not an oversight (same rationale as unit08: a future dedicated
+    audio-authoring pass is a real, cheap opportunity now that pl has live
+    Google Cloud TTS, but this file stays consistent with the precedent
+    every prior pl unit has set). Because there is no dialogue AUDIO in this
+    file, the AUTHORING_GUIDE same-speaker-distractor bug class (a
+    listen_select/listen_order distractor that's something the tested
+    speaker also says elsewhere in the SAME audio clip) is not directly
+    applicable -- explicitly checked and confirmed N/A for that reason.
+    The analogous risk for lesson03's two `dialogue_comprehension` exercises
+    (text-based, not audio) was still checked by hand: exercise03 asks how
+    to get to the park (correct: "prosto, potem na lewo") with distractors
+    "na prawo, potem prosto" (this IS what Marek says elsewhere in the same
+    dialogue -- but about the BANK, a different question, so it is a
+    genuinely wrong answer to THIS question, the same safe cross-reference
+    pattern unit08's own reviewed lesson03 already uses) and "na lewo, potem
+    prosto" (an invented wrong permutation, stated nowhere); exercise04
+    (about the bank) mirrors this the other way. Neither exercise's
+    distractor set makes both options simultaneously true for the place
+    actually being asked about.
+
+    Grammar-scope decision, disclosed up front per unit07/unit08's own
+    precedent for narrowing A1 case/verb-form exposure deliberately rather
+    than by omission:
+    (1) Every direction-giving sentence in this unit uses "Proszę +
+    bezokolicznik" (please + infinitive) -- e.g. "Proszę iść prosto,"
+    "Proszę skręcić na prawo" -- and the Polish IMPERATIVE mood (skręć!,
+    idź!) is never taught or tested anywhere in this file. This is a
+    deliberate simplification: "Proszę + infinitive" is independently
+    confirmed by the source material (see below) as the natural, idiomatic
+    way Poles actually give directions to a stranger, so it isn't a
+    watered-down substitute for "the real grammar" -- it's the genuinely
+    correct register for this scenario, and it has the added A1-friendly
+    property of being invariant regardless of whether the person being
+    addressed is a stranger or a friend (no separate ty/pan-pani imperative
+    forms to teach). lesson01's teach.prosze_bezokolicznik grammar_note
+    makes this explicit.
+    (2) "Jak dojść do + [miejsce]?" reuses ONLY the genitive-singular
+    masculine -u pattern unit08 already established (bank -> banku, hotel
+    -> hotelu, park -> parku) with the new preposition "do" -- no new
+    noun-case pattern is introduced. lesson03's dialogue destinations are
+    therefore deliberately restricted to bank and park (both already
+    case-scoped from unit08), never apteka/poczta/restauracja (feminine
+    nouns with a different, untaught genitive pattern -- poczty/apteki --
+    same reasoning unit08 itself already used to avoid mixing declension
+    patterns in one unit).
+    (3) Several real constructions from the source's own "Getting Around on
+    Foot" dialogue were deliberately dropped to keep this unit's case/verb
+    exposure narrow: "tą ulicą" (instrumental case, "along this street"),
+    "do skrzyżowania"/"do świateł" (genitive forms of skrzyżowanie/światła,
+    a different neuter declension pattern from the masculine -u pattern
+    this unit reuses), and "w pierwszą ulicę" (ordinal number + accusative
+    case). None of these appear anywhere in this file's vocabulary or
+    exercises -- this unit's direction vocabulary is deliberately limited
+    to prosto/na prawo/na lewo/skręcić/iść/dojść/tam/potem/ulica/rozumiem.
+
+    Cross-file vocabulary note (confirmed every prior unit hit this too):
+    every word this file reuses from unit08 (Przepraszam, Dziękuję, bardzo,
+    Proszę, A, bank, park, and their genitive forms banku/parku, jest) is
+    re-declared via this file's OWN introduced_tokens before being tested in
+    this file's own exercises -- the compiler validates untaught vocabulary
+    per realization FILE, not per course. As unit08 itself already found,
+    the nominative and genitive forms of the same noun are distinct tokens
+    to the compiler's tokenizer and are each declared separately at first
+    use here too (bank/banku, park/parku both declared via lesson01's
+    teach.jak_dojsc_note).
+
+    Source: FSI Polish FAST (1992) -- confirmed real public-domain US
+    government course text, same cached copy as unit02-08
+    (.firecrawl/fsi-polish-fast.pdf / .txt). This unit's "Getting Around on
+    Foot" chapter (the cached .txt, roughly lines 2480-2740) is a genuine,
+    substantial direction-giving dialogue and directly confirms, verbatim
+    in the source's own vocabulary list and dialogue: "jak dojść (na/do)"
+    (how to get to), "proszę iść prosto" (please go straight -- the exact
+    phrase "Proszę iść prosto" appears as a literal substring, e.g. "Proszę
+    iść prosto tą ulicą do Świętokrzyskiej"), "proszę skręcić na prawo" /
+    "proszę skręcić na lewo" (please turn right / please turn left --
+    exact substrings, e.g. "Tam proszę skręcić na prawo," "Tam proszę
+    skręcić na lewo"), "tam" (there), "potem" (then, later -- source gloss:
+    "potem -- then, later"), and "rozumiem" (I understand -- source gloss:
+    "rozumiem -- I understand," also used in the dialogue itself: "Rozumiem,
+    na prawo"). "ulica" (street) and the bare verbs "iść"/"dojść" are also
+    directly source-attested throughout the same passage (ulica Szpitalna,
+    ulica Świętokrzyska, dojść do skrzyżowania). Adapted here into a fresh
+    Ewa/Marek bank-and-park scene per §10, never copied verbatim -- the
+    source's own scene is a tourist asking a passerby for a specific street
+    (Krakowskie Przedmieście) with a longer, more complex route.
+
+    Honestly disclosed as NOT source-confirmed, freely authored from
+    general knowledge of modern spoken Polish (same standard as every prior
+    unit's disclosed gaps): bare "prawo"/"lewo" as standalone nouns
+    (the source only demonstrates the fused phrases "na prawo"/"na lewo,"
+    never the bare nouns alone as a vocabulary item) -- ordinary, common
+    A1-transparent Polish nouns, freely authored as their own vocabulary
+    card so the fused phrase can be built up from parts the learner has
+    each seen individually. Likewise, "Jak dojść do + [common noun]?"
+    (bank/hotel/park) is a freely authored generalization from general
+    Polish grammar: the source's own directly-confirmed "jak dojść"
+    example pairs it with a proper street name via "na" ("jak dojść na
+    Krakowskie Przedmieście"), not a common noun via "do" -- extending the
+    idiom to "do + genitive common noun" for this unit's bank/park
+    scenario is correct, ordinary Polish, just not the specific
+    construction directly attested in the passage checked.
+
+    Cross-checked against this file's own earlier lessons per AUTHORING_
+    GUIDE §11: the park's route (straight, then turn left; "Park jest
+    tam") and the bank's route (turn right, then straight; "Bank jest na
+    prawo") are stated once, in lesson03's teaching dialogue, and reused
+    identically -- never contradicted -- in every matching exercise that
+    tests either route (lesson03 exercises 02-04, 06-07, 09-10). No place
+    is ever given two different locations or routes across the file.
+
+course:
+  realization_key: pl.a1
+  target_language_first: true
+  dialect: pl_standard
+  register_policy: >-
+    Continue unit01-08's register split: Ewa and Marek use the informal
+    ty-register with each other. This unit's core new construction, Proszę
+    + bezokolicznik (please + infinitive), is deliberately register-neutral
+    -- it gives directions the same way regardless of who's being
+    addressed, so no new formal/informal distinction is introduced by this
+    unit. Lesson03's dialogue still opens with Przepraszam as a polite
+    attention-getting habit before asking a practical question, matching
+    unit08's established precedent, even though Ewa and Marek already know
+    each other.
+
+media_assets: []
+
+units:
+  - content_key: pl.a1.unit09.directions
+    title: "Jak dojść?"
+    section: reading_writing
+    spine_outcome_ids:
+      - universal.a1.directions.ask_follow_basic_directions
+    planned_lesson_count: 3
+
+    lessons:
+      - content_key: pl.a1.unit09.lesson01.jak_dojsc
+        title: "Jak dojść?"
+        spine_outcome_id: universal.a1.directions.ask_follow_basic_directions
+        teaching:
+          - content_key: pl.a1.unit09.lesson01.teach.isc_dojsc
+            kind: vocabulary
+            target: {text: "iść, dojść", language_code: pl, direction: ltr}
+            introduced_tokens: ["iść", "dojść"]
+            example:
+              - {text: "Proszę iść prosto.", language_code: pl, direction: ltr}
+              - {text: "Jak dojść do banku?", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit09.lesson01.teach.prosto
+            kind: vocabulary
+            target: {text: "prosto", language_code: pl, direction: ltr}
+            introduced_tokens: ["prosto"]
+            example:
+              {text: "Proszę iść prosto do parku.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit09.lesson01.teach.tam_potem
+            kind: vocabulary
+            target: {text: "tam, potem", language_code: pl, direction: ltr}
+            introduced_tokens: ["tam", "potem", "jest"]
+            example:
+              - {text: "Bank jest tam.", language_code: pl, direction: ltr}
+              - {text: "Potem proszę iść prosto.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit09.lesson01.teach.prosze_bezokolicznik
+            kind: grammar_note
+            target: {text: "Proszę + bezokolicznik -- Proszę (please) plus a verb in the infinitive (bezokolicznik) is the everyday polite way to give a direction, without needing a separate command (imperative) form. It works the same whether you're speaking to a stranger or a friend: Proszę iść prosto.", language_code: pl, direction: ltr}
+            introduced_tokens: ["Proszę"]
+          - content_key: pl.a1.unit09.lesson01.teach.jak_dojsc_note
+            kind: grammar_note
+            target: {text: "Jak dojść do + [miejsce]? -- Jak (how) plus dojść (to get to) pyta o drogę: Jak dojść do banku? Jak dojść do hotelu? Jak dojść do parku? Rzeczownik po do ma tę samą końcówkę dopełniacza (-u), co po obok/naprzeciwko z poprzedniej lekcji: bank -> banku, hotel -> hotelu, park -> parku.", language_code: pl, direction: ltr}
+            introduced_tokens: ["Jak", "do", "bank", "banku", "hotel", "hotelu", "park", "parku"]
+          - content_key: pl.a1.unit09.lesson01.teach.jak_dojsc_do_banku
+            kind: phrase
+            target: {text: "Jak dojść do banku?", language_code: pl, direction: ltr}
+            introduced_tokens: []
+        exercises:
+          - content_key: pl.a1.unit09.lesson01.exercise01.select_prosto
+            type: multiple_choice
+            tested_text: "prosto"
+            prompt:
+              target_blocks:
+                - {text: "prosto", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit09.lesson01.exercise02.select_dojsc
+            type: multiple_choice
+            tested_text: "dojść"
+            prompt:
+              target_blocks:
+                - {text: "dojść", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit09.lesson01.exercise03.select_tam
+            type: multiple_choice
+            tested_text: "tam"
+            prompt:
+              target_blocks:
+                - {text: "tam", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit09.lesson01.exercise04.match_direction_vocabulary
+            type: matching_pairs
+            tested_text: "iść dojść prosto tam potem"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "iść", right: "to go"}
+              - {left: "dojść", right: "to get to"}
+              - {left: "prosto", right: "straight ahead"}
+              - {left: "tam", right: "there"}
+              - {left: "potem", right: "then"}
+          - content_key: pl.a1.unit09.lesson01.exercise05.order_jak_dojsc_do_banku
+            type: word_order
+            tested_text: "Jak dojść do banku"
+            prompt: {target_blocks: []}
+            word_bank: ["dojść", "Jak", "banku", "do"]
+          - content_key: pl.a1.unit09.lesson01.exercise06.order_prosze_isc_prosto
+            type: word_order
+            tested_text: "Proszę iść prosto"
+            prompt: {target_blocks: []}
+            word_bank: ["prosto", "Proszę", "iść"]
+          - content_key: pl.a1.unit09.lesson01.exercise07.fill_jak
+            type: fill_in_blank
+            tested_text: "Jak"
+            prompt:
+              target_blocks:
+                - {text: "___ dojść do hotelu?", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit09.lesson01.exercise08.fix_word_order
+            type: grammar_check
+            tested_text: "Jak dojść do parku"
+            prompt:
+              target_blocks:
+                - {text: "Dojść jak do parku?", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit09.lesson01.exercise09.speak_jak_dojsc_do_banku
+            type: speak_response
+            tested_text: "Jak dojść do banku"
+            prompt: {target_blocks: []}
+
+      - content_key: pl.a1.unit09.lesson02.na_prawo_na_lewo
+        title: "Na prawo, na lewo"
+        spine_outcome_id: universal.a1.directions.ask_follow_basic_directions
+        teaching:
+          - content_key: pl.a1.unit09.lesson02.teach.prawo_lewo
+            kind: vocabulary
+            target: {text: "prawo, lewo", language_code: pl, direction: ltr}
+            introduced_tokens: ["prawo", "lewo", "na"]
+            example:
+              - {text: "Bank jest na prawo.", language_code: pl, direction: ltr}
+              - {text: "Park jest na lewo.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit09.lesson02.teach.skrecic
+            kind: vocabulary
+            target: {text: "skręcić", language_code: pl, direction: ltr}
+            introduced_tokens: ["skręcić"]
+            example:
+              {text: "Proszę skręcić na prawo.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit09.lesson02.teach.skrecic_na_lewo
+            kind: phrase
+            target: {text: "Proszę skręcić na lewo.", language_code: pl, direction: ltr}
+            introduced_tokens: []
+          - content_key: pl.a1.unit09.lesson02.teach.ulica
+            kind: vocabulary
+            target: {text: "ulica", language_code: pl, direction: ltr}
+            introduced_tokens: ["ulica"]
+            example:
+              {text: "Ulica jest tam.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit09.lesson02.teach.multi_step_note
+            kind: grammar_note
+            target: {text: "Proszę iść prosto, potem skręcić na prawo. -- Kilka wskazówek można połączyć przecinkiem i słowem potem (then): najpierw jedna czynność, potem następna.", language_code: pl, direction: ltr}
+            introduced_tokens: []
+        exercises:
+          - content_key: pl.a1.unit09.lesson02.exercise01.select_prawo
+            type: multiple_choice
+            tested_text: "prawo"
+            prompt:
+              target_blocks:
+                - {text: "prawo", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit09.lesson02.exercise02.select_lewo
+            type: multiple_choice
+            tested_text: "lewo"
+            prompt:
+              target_blocks:
+                - {text: "lewo", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit09.lesson02.exercise03.select_skrecic
+            type: multiple_choice
+            tested_text: "skręcić"
+            prompt:
+              target_blocks:
+                - {text: "skręcić", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit09.lesson02.exercise04.match_direction_words
+            type: matching_pairs
+            tested_text: "prawo lewo skręcić ulica potem tam"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "prawo", right: "right"}
+              - {left: "lewo", right: "left"}
+              - {left: "skręcić", right: "to turn"}
+              - {left: "ulica", right: "street"}
+              - {left: "potem", right: "then"}
+              - {left: "tam", right: "there"}
+          - content_key: pl.a1.unit09.lesson02.exercise05.order_skrecic_na_prawo
+            type: word_order
+            tested_text: "Proszę skręcić na prawo"
+            prompt: {target_blocks: []}
+            word_bank: ["na", "Proszę", "prawo", "skręcić"]
+          - content_key: pl.a1.unit09.lesson02.exercise06.order_skrecic_na_lewo
+            type: word_order
+            tested_text: "Proszę skręcić na lewo"
+            prompt: {target_blocks: []}
+            word_bank: ["skręcić", "Proszę", "lewo", "na"]
+          - content_key: pl.a1.unit09.lesson02.exercise07.fill_skrecic
+            type: fill_in_blank
+            tested_text: "skręcić"
+            prompt:
+              target_blocks:
+                - {text: "Proszę ___ na prawo.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit09.lesson02.exercise08.fix_broken_order
+            type: grammar_check
+            tested_text: "Proszę skręcić na prawo"
+            prompt:
+              target_blocks:
+                - {text: "Na prawo skręcić proszę.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit09.lesson02.exercise09.speak_skrecic_na_lewo
+            type: speak_response
+            tested_text: "Proszę skręcić na lewo"
+            prompt: {target_blocks: []}
+
+      - content_key: pl.a1.unit09.lesson03.jak_dojsc_do_parku
+        title: "Jak dojść do parku?"
+        spine_outcome_id: universal.a1.directions.ask_follow_basic_directions
+        teaching:
+          - content_key: pl.a1.unit09.lesson03.teach.rozumiem
+            kind: vocabulary
+            target: {text: "rozumiem", language_code: pl, direction: ltr}
+            introduced_tokens: ["rozumiem"]
+            example:
+              {text: "Rozumiem, dziękuję.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit09.lesson03.teach.dialogue.line01
+            kind: dialogue
+            target:
+              text: "Przepraszam, jak dojść do parku?"
+              language_code: pl
+              direction: ltr
+              speaker: Ewa
+            introduced_tokens: ["Przepraszam"]
+          - content_key: pl.a1.unit09.lesson03.teach.dialogue.line02
+            kind: dialogue
+            target:
+              text: "Proszę iść prosto, potem skręcić na lewo. Park jest tam."
+              language_code: pl
+              direction: ltr
+              speaker: Marek
+            introduced_tokens: []
+          - content_key: pl.a1.unit09.lesson03.teach.dialogue.line03
+            kind: dialogue
+            target:
+              text: "Rozumiem! A jak dojść do banku?"
+              language_code: pl
+              direction: ltr
+              speaker: Ewa
+            introduced_tokens: ["A"]
+          - content_key: pl.a1.unit09.lesson03.teach.dialogue.line04
+            kind: dialogue
+            target:
+              text: "Proszę skręcić na prawo, potem iść prosto. Bank jest na prawo."
+              language_code: pl
+              direction: ltr
+              speaker: Marek
+            introduced_tokens: []
+          - content_key: pl.a1.unit09.lesson03.teach.dialogue.line05
+            kind: dialogue
+            target:
+              text: "Dziękuję bardzo!"
+              language_code: pl
+              direction: ltr
+              speaker: Ewa
+            introduced_tokens: ["Dziękuję", "bardzo"]
+          - content_key: pl.a1.unit09.lesson03.teach.dialogue.line06
+            kind: dialogue
+            target:
+              text: "Proszę bardzo!"
+              language_code: pl
+              direction: ltr
+              speaker: Marek
+            introduced_tokens: []
+        exercises:
+          - content_key: pl.a1.unit09.lesson03.exercise01.select_przepraszam_jak_dojsc
+            type: multiple_choice
+            tested_text: "Przepraszam jak dojść do parku"
+            prompt:
+              target_blocks:
+                - {text: "Przepraszam, jak dojść do parku?", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit09.lesson03.exercise02.select_park_directions
+            type: multiple_choice
+            tested_text: "Proszę iść prosto potem skręcić na lewo Park jest tam"
+            prompt:
+              target_blocks:
+                - {text: "Proszę iść prosto, potem skręcić na lewo. Park jest tam.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit09.lesson03.exercise03.comprehend_park_directions
+            type: dialogue_comprehension
+            tested_text: "prosto potem na lewo"
+            prompt:
+              target_blocks:
+                - {text: "Proszę iść prosto, potem skręcić na lewo. Park jest tam.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit09.lesson03.exercise04.comprehend_bank_directions
+            type: dialogue_comprehension
+            tested_text: "na prawo potem prosto"
+            prompt:
+              target_blocks:
+                - {text: "Proszę skręcić na prawo, potem iść prosto. Bank jest na prawo.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit09.lesson03.exercise05.match_direction_vocabulary_full
+            type: matching_pairs
+            tested_text: "iść dojść prosto tam potem prawo lewo skręcić ulica rozumiem"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "iść", right: "to go"}
+              - {left: "dojść", right: "to get to"}
+              - {left: "prosto", right: "straight ahead"}
+              - {left: "tam", right: "there"}
+              - {left: "potem", right: "then"}
+              - {left: "prawo", right: "right"}
+              - {left: "lewo", right: "left"}
+              - {left: "skręcić", right: "to turn"}
+              - {left: "ulica", right: "street"}
+              - {left: "rozumiem", right: "I understand"}
+          - content_key: pl.a1.unit09.lesson03.exercise06.order_przepraszam_jak_dojsc_do_parku
+            type: word_order
+            tested_text: "Przepraszam jak dojść do parku"
+            prompt: {target_blocks: []}
+            word_bank: ["jak", "Przepraszam", "parku", "dojść", "do"]
+          - content_key: pl.a1.unit09.lesson03.exercise07.order_bank_directions
+            type: word_order
+            tested_text: "Proszę skręcić na prawo potem iść prosto"
+            prompt: {target_blocks: []}
+            word_bank: ["na", "Proszę", "prosto", "prawo", "iść", "potem", "skręcić"]
+          - content_key: pl.a1.unit09.lesson03.exercise08.fill_rozumiem
+            type: fill_in_blank
+            tested_text: "Rozumiem"
+            prompt:
+              target_blocks:
+                - {text: "___! A jak dojść do banku?", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit09.lesson03.exercise09.fix_park_directions
+            type: grammar_check
+            tested_text: "Proszę iść prosto potem skręcić na lewo"
+            prompt:
+              target_blocks:
+                - {text: "Prosto proszę iść, na lewo potem skręcić.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit09.lesson03.exercise10.reply_jak_dojsc_do_banku
+            type: dialogue_response
+            tested_text: "Proszę skręcić na prawo potem iść prosto Bank jest na prawo"
+            prompt:
+              target_blocks:
+                - {text: "A jak dojść do banku?", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit09.lesson03.exercise11.speak_rozumiem
+            type: speak_response
+            tested_text: "Rozumiem"
+            prompt: {target_blocks: []}
