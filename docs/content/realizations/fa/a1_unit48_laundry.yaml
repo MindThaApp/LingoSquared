@@ -1,0 +1,549 @@
+schema_version: "1.1"
+realization_version: "2026.1-draft.1"
+target_language: fa
+cefr_level: A1
+generation_provenance:
+  method: ai_adapted_from_public_domain_source
+  authoring_system: claude
+  source_material: >-
+    Made a real, fresh attempt at FSI Persian Basic Course source access for
+    this unit before authoring fresh, honestly disclosed either way per
+    AUTHORING_GUIDE.md #10. Tried `firecrawl search "FSI Persian Basic
+    Course laundry launderette wash clothes"` first, per the standing
+    instruction to re-check Firecrawl quota fresh even though it was
+    reported exhausted in every earlier round this session -- it returned
+    `Error: Request failed with status code 402` (payment required),
+    confirming the account genuinely remains at 0 credits, not a stale
+    report. Fell back to a cached local `pdftotext -layout` extraction of
+    the same Live Lingua-hosted FSI Spoken Persian PDF every prior fa unit
+    this session has used (found at this session's own scratchpad path,
+    66,445 words -- close to, though not byte-identical to, the 66,717
+    figure recorded in unit47's provenance; treated as the same underlying
+    source text rather than re-fetched, per the standing instruction to
+    reuse the cached extraction rather than re-download). Grepped the full
+    extracted text case-insensitively for laundry/launderette/laundromat/
+    "wash clothes"/"dry clean"/"wash cycle": zero hits for any of those.
+    A broader grep for "clean"/"washing"/"lebas" (Persian for clothes, this
+    extraction is Latin-transliterated, not Persian-script) surfaced a
+    genuine but different scenario around lines 34600-34950: a tailor/
+    dry-goods-shop exchange ("daram miram kot-o shalvaram-o az khayyati
+    begiram" -- "I'm going to get my coat and pants from the tailor's",
+    "parceharo entexab konam" -- "to choose the fabrics") -- clothing-
+    adjacent but about a TAILOR (خیاط), not a laundry/dry-cleaning service,
+    and no wash-cycle, pickup-time, or laundry-price material exists
+    anywhere in the extracted text. This is a genuine dead end of the same
+    shape as units 44-47's own source searches: the FSI course has no
+    laundry-service material, not an extraction failure. All laundry
+    vocabulary and the full dialogue in this unit (خشکشویی, فوری, and the
+    customer-shop-owner exchange) is authored fresh from this project's own
+    established colloquial Iranian Farsi conventions and already-shipped
+    vocabulary (see review notes below for the exact reuse chain).
+  human_reviewed: false
+review:
+  status: unreviewed
+  required_next_reviewer: codex_fresh_context
+  notes: >-
+    Draft authored 2026-07-10 by Claude (content-authoring worker session),
+    continuing fa A1 volume growth past unit47 (bike_rental). Realizes
+    universal.a1.laundry.use_launderette -- confirmed as the correct next
+    unrealized A1 outcome for fa by diffing every spine_outcome_id already
+    used across every docs/content/realizations/fa/a1_unit*.yaml file
+    (grep -o "spine_outcome_id: universal\.[a-z0-9_.]*" per file,
+    deduplicated) against universal.a1.* ids in
+    docs/content/universal_spine.yaml's own declaration order: fa has
+    realized every A1 outcome through unit47 (bike_rental) with zero gaps,
+    and universal.a1.laundry.use_launderette is the very next A1 id
+    declared in the spine immediately after bike_rental.rent_a_bicycle, so
+    this unit covers it in fa's own established sequence. Prerequisite
+    outcomes (money.handle_basic_money_matters/unit21,
+    household.describe_chores/unit32) are both already realized in this
+    course, so no prerequisite gap blocks this unit.
+
+    Scenario choice, per AUTHORING_GUIDE.md #3 (verify actual dialect
+    usage, don't assume the Western "self-service coin launderette"
+    default): self-service coin launderettes are uncommon in Iran; the
+    real everyday equivalent is a خشکشویی (a drop-off laundry/dry-cleaning
+    shop that also does regular wash-and-fold, not just dry cleaning),
+    which fits the spine outcome's own "ask about wash cycles and cost, and
+    understand pickup instructions" assessment requirements naturally as a
+    drop-off/pickup service rather than a self-service machine -- this is
+    the dialect-authentic choice, not a Western-scenario transplant.
+
+    Reuse chain (all re-declared in this file's own introduced_tokens
+    before first use, per the compiler's per-file-only untaught-vocabulary
+    check, which validates each exercise's tested_text against tokens
+    introduced anywhere earlier in the SAME file's document order) --
+    confirmed with a real grep of every prior fa a1_unit*.yaml file's
+    introduced_tokens declarations, not by eye: لباس‌ها "clothes" (unit32,
+    reused in its already-established plural form, no new sense), این
+    "this" (units03/04/08/15/20/26), می‌رم "I go" (unit16/24), به "to"
+    (unit16/21), رو (the colloquial object marker, unit32), می‌خوام "I
+    want" (unit03), چقدر "how much" (unit21/28), می‌شه "it comes to /
+    costs" (unit11/35), ده "ten" (unit03), هزار "thousand" (unit03/21),
+    تومن "toman" (unit03/21), کِی "when" (unit34/42), فردا "tomorrow"
+    (unit09), ظهر "noon" (unit09), خوبه "good, that's fine" (unit06/10/
+    12/19), بله "yes" (unit20/21), می‌گیرم "I get it / I'll pick it up"
+    (unit29/34/41 -- the same established "receive/take" verb reused here
+    in its natural "pick up a finished service item" sense, not a new
+    meaning), سلام/ممنون (units01/17/22/45/46/47), خانم "Ms." (unit41),
+    باشه (units01/02/06/17/22/45/46/47). New vocabulary genuinely
+    introduced for the first time in the whole corpus: خشکشویی
+    (laundry/dry-cleaning shop) and فوری (express/urgent service) --
+    exactly 2 new words, matching unit47's own lean 2-new-word count. No
+    new verb-conjugation pattern is introduced -- every verb form used
+    (می‌رم, می‌خوام, می‌شه, می‌گیرم) was already established by an earlier
+    unit; only the two nouns خشکشویی and فوری are new.
+
+    Register/character choice, per AUTHORING_GUIDE.md #3: نیما (the
+    established recurring character) is the laundry-drop-off customer,
+    keeping his usual informal register, a natural continuation of his
+    established "visits a service provider and states a need" role from
+    units 17 (health), 41 (appointments), 44 (accommodation), 45
+    (pharmacy), 46 (barbershop), and 47 (bike rental). A NEW
+    formal-register character, خانم کاظمی, is introduced as the laundry
+    shop owner -- distinct from unit40/42/44's آقای کریمی, unit41's خانم
+    احمدی, unit42's آقای صادقی, unit45's خانم رضایی, unit46's آقای نوری,
+    and unit47's آقای مرادی (confirmed via a real regex-equivalent scan of
+    every آقای/خانم name already used across the fa corpus -- کریمی،
+    احمدی، صادقی، رضایی، نوری، مرادی -- zero collision with کاظمی); she
+    speaks in neutral polite service language, consistent with the
+    receptionist/librarian/hotel-clerk/pharmacist/barber/bike-shop-owner
+    register units 41/42/44/45/46/47 already established for this course's
+    other service-encounter characters, while نیما keeps the same informal
+    register he uses everywhere else in the corpus. This also continues the
+    course's deliberate gender balance among service-encounter characters
+    (خانم احمدی, خانم رضایی, and now خانم کاظمی alongside the several آقای
+    characters), not a coincidence.
+
+    Facts are kept internally consistent across the whole unit per
+    AUTHORING_GUIDE.md #11: the price (ده هزار تومن, "10,000 toman") and
+    the pickup time (فردا ظهر, "tomorrow noon") are stated identically in
+    the dialogue (lesson04), the shop-sign reading text (lesson05), and the
+    wrap-up review (lesson06), and never contradicted anywhere else in the
+    unit. Every kind:vocabulary teaching card (خشکشویی, and the character
+    card خانم کاظمی) has an example sentence per schema 1.1/AUTHORING_
+    GUIDE §19, built only from the card's own word plus tokens already
+    declared earlier in THIS file (no forward references); فوری's example
+    sentence similarly only uses already-established tokens. Every
+    matching_pairs exercise has 6-8 pairs per §16 (lesson01: 6, lesson02:
+    7, lesson03: 8, lesson04: 7 dialogue-line pairs matching the dialogue's
+    own 7 turns, lesson05: 6, lesson06: 6). No listen_type/listen_select/
+    listen_order exercise is used anywhere in this unit -- fa has real
+    Azure TTS per AUTHORING_GUIDE §14 (this restriction is prs-only, not
+    fa+prs), but this file continues the established text-based
+    corpus-consistency pattern from units 19-47, the same choice those
+    units' own reviews made, rather than introducing audio exercises to
+    only this one unit out of step with its immediate neighbors -- the
+    spine outcome's own "listening" assessment requirement (identify wash
+    cycle/cost/pickup time in a short exchange) is covered via the
+    dialogue_comprehension exercise's comprehension-of-the-exchange task,
+    the same interpretation units 41/42/44/45/46/47 already established for
+    their own "listening" assessment coverage without a literal audio
+    exercise type. This also means the same-speaker/same-audio
+    distractor-collision bug class (found and fixed 2026-07-09 in the nl
+    corpus, commit 148240e) cannot directly apply here -- there is no
+    listen_select exercise in this file to check. Checked anyway, per the
+    standing instruction to list every line each speaker says before
+    writing any distractor: نیما says "سلام خانم کاظمی. این لباس‌ها رو
+    فوری می‌خوام."/"بله، خوبه. چقدر می‌شه؟"/"باشه. کِی می‌گیرم؟"/"ممنون!";
+    خانم کاظمی says "سلام نیما. فردا ظهر خوبه؟"/"ده هزار تومن می‌شه."/
+    "فردا ظهر." -- lesson04's dialogue_comprehension exercise asks what
+    نیما wants to know, with distractors ("He wants to know if they also
+    do dry cleaning."/"He wants to know if the shop is open on
+    Fridays."/"He wants to know if he needs an appointment.") that are
+    plausible-fact alternatives, NOT lines either speaker actually says or
+    facts either speaker actually states anywhere in this unit's dialogue
+    -- dry cleaning, Friday hours, and appointments are never mentioned by
+    either character, so there is no cross-exercise collision. The
+    dialogue_response exercise (lesson04) accepts نیما's own actual next
+    line ("بله، خوبه.", with the full turn "بله، خوبه. چقدر می‌شه؟" also
+    accepted), not a distractor set, so the same-speaker-collision question
+    doesn't apply to it. Every "Translate into English" exercise in the
+    paired overlay explicitly sets answer_language_code: en. No exercise in
+    this unit tests a genuine two-clause sentence joined by "and"/comma
+    (§12) -- every multi-sentence teaching/review line (lesson04 dialogue
+    line 1 and line 4, lesson06's price/pickup review) is authored as two
+    separate short sentences, matching how units 34/45/46/47 already treat
+    their own two-sentence notes, with paraphrase-variant accepted answers
+    rather than clause-join variants. Ran a recursive scan (grep for bare,
+    unquoted yes/no/true/false/on/off tokens as YAML scalar values, plus a
+    full yaml.safe_load parse of both this file and its paired overlay
+    confirming every value that loaded is a str/list/dict, never a Python
+    bool anywhere in a learner-facing field) for bare unquoted yes/no/
+    true/false/on/off values (including matching_pairs right: values
+    specifically) -- zero hits, see the overlay's own review note for the
+    exact scan result. Ran a Persian-vs-Arabic codepoint scan (grep for
+    Arabic kaf U+0643 and Arabic yeh U+064A across both files) -- zero
+    hits, all keheh/yeh in this file use the correct Persian-range
+    codepoints (U+06A9/U+06CC).
+
+course:
+  realization_key: fa.a1
+  target_language_first: true
+  dialect: fa_IR_standard_colloquial_intro
+  register_policy: >-
+    Continues the established colloquial Iranian Farsi register: نیما (the
+    established recurring character) keeps his usual informal register as
+    the laundry-drop-off customer. خانم کاظمی, a new formal-register
+    laundry shop owner, speaks with neutral polite service language,
+    consistent with the register units 41/42/44/45/46/47 already
+    established for this course's other service-encounter characters.
+    Reuses لباس‌ها (unit32), این (unit03/04/08/15/20/26), می‌رم (unit16/
+    24), به (unit16/21), رو (unit32), می‌خوام (unit03), چقدر (unit21/28),
+    می‌شه (unit11/35), ده/هزار/تومن (unit03/21), کِی (unit34/42), فردا/ظهر
+    (unit09), خوبه (unit06/10/12/19), بله (unit20/21), می‌گیرم (unit29/34/
+    41), سلام/ممنون (units01/17/22/45/46/47), خانم (unit41), and باشه
+    (units01/02/06/17/22/45/46/47) without re-teaching any of it from
+    scratch. No word is given a new sense beyond its existing corpus
+    meaning in this unit -- می‌گیرم keeps its established "get/receive"
+    sense (already used for post-office/appointment contexts), here as
+    "pick up a finished service item," not a new meaning.
+
+media_assets:
+  - content_key: fa.a1.unit48.audio.laundry.vocab.01
+    language: fa
+    text: "خشکشویی، فوری، لباس‌ها"
+    voice_hint: neutral_adult
+    status: pending_generation
+  - content_key: fa.a1.unit48.audio.dialogue.laundry.01
+    language: fa
+    text: "نیما: سلام خانم کاظمی. این لباس‌ها رو فوری می‌خوام. خانم کاظمی: سلام نیما. فردا ظهر خوبه؟ نیما: بله، خوبه. چقدر می‌شه؟ خانم کاظمی: ده هزار تومن می‌شه. نیما: باشه. کِی می‌گیرم؟ خانم کاظمی: فردا ظهر. نیما: ممنون!"
+    voice_hint: two_adults_neutral_friendly
+    status: pending_generation
+
+units:
+  - content_key: fa.a1.unit48.laundry
+    title: خشکشویی
+    section: reading_writing
+    spine_outcome_ids:
+      - universal.a1.laundry.use_launderette
+    planned_lesson_count: 6
+
+    lessons:
+      - content_key: fa.a1.unit48.lesson01.new_laundry_one
+        title: "کلمات جدید ۱"
+        spine_outcome_id: universal.a1.laundry.use_launderette
+        teaching:
+          - content_key: fa.a1.unit48.lesson01.teach.review_labasha_in
+            kind: grammar_note
+            target: {text: "لباس‌ها (clothes) -- already taught from unit32 / این (this) -- already taught from unit03/04/08", language_code: fa, direction: rtl}
+            introduced_tokens: ["لباس‌ها", این]
+          - content_key: fa.a1.unit48.lesson01.teach.review_miram_be
+            kind: grammar_note
+            target: {text: "می‌رم (I go) -- already taught from unit16/24 / به (to) -- already taught from unit16/21", language_code: fa, direction: rtl}
+            introduced_tokens: ["می‌رم", به]
+          - content_key: fa.a1.unit48.lesson01.teach.khoshkshuyi
+            kind: vocabulary
+            target: {text: خشکشویی, language_code: fa, direction: rtl}
+            introduced_tokens: [خشکشویی]
+            example: {text: "می‌رم به خشکشویی.", language_code: fa, direction: rtl}
+        exercises:
+          - content_key: fa.a1.unit48.lesson01.exercise01.recognize_khoshkshuyi
+            type: multiple_choice
+            tested_text: خشکشویی
+            prompt: {target_blocks: [{text: خشکشویی, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit48.lesson01.exercise02.recognize_miram_be_khoshkshuyi
+            type: multiple_choice
+            tested_text: "می‌رم به خشکشویی."
+            prompt: {target_blocks: [{text: "می‌رم به خشکشویی.", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit48.lesson01.exercise03.match_laundry_one
+            type: matching_pairs
+            tested_text: "خشکشویی لباس‌ها این می‌رم به می‌رم به خشکشویی"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: خشکشویی, right: "laundry shop"}
+              - {left: "لباس‌ها", right: clothes}
+              - {left: این, right: this}
+              - {left: "می‌رم", right: "I go"}
+              - {left: به, right: to}
+              - {left: "می‌رم به خشکشویی.", right: "I go to the laundry shop."}
+          - content_key: fa.a1.unit48.lesson01.exercise04.word_order_miram_be_khoshkshuyi
+            type: word_order
+            tested_text: "می‌رم به خشکشویی"
+            prompt: {target_blocks: [{text: "I go to the laundry shop.", language_code: en, direction: ltr}]}
+            word_bank: ["می‌رم", به, خشکشویی]
+          - content_key: fa.a1.unit48.lesson01.exercise05.translate_labasha_khoshkshuyi
+            type: translation
+            tested_text: "لباس‌ها خشکشویی"
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit48.lesson02.new_laundry_two
+        title: "کلمات جدید ۲"
+        spine_outcome_id: universal.a1.laundry.use_launderette
+        teaching:
+          - content_key: fa.a1.unit48.lesson02.teach.review_ro_mikhaam
+            kind: grammar_note
+            target: {text: "رو (object marker) -- already taught from unit32 / می‌خوام (I want) -- already taught from unit03", language_code: fa, direction: rtl}
+            introduced_tokens: [رو, "می‌خوام"]
+          - content_key: fa.a1.unit48.lesson02.teach.review_cheghadr_mishe
+            kind: grammar_note
+            target: {text: "چقدر (how much) -- already taught from unit21/28 / می‌شه (it comes to / costs) -- already taught from unit11/35", language_code: fa, direction: rtl}
+            introduced_tokens: [چقدر, "می‌شه"]
+          - content_key: fa.a1.unit48.lesson02.teach.review_dah_hezar_toman
+            kind: grammar_note
+            target: {text: "ده (ten) -- already taught from unit03 / هزار (thousand), تومن (toman) -- already taught from unit03/21", language_code: fa, direction: rtl}
+            introduced_tokens: [ده, هزار, تومن]
+          - content_key: fa.a1.unit48.lesson02.teach.foori
+            kind: vocabulary
+            target: {text: فوری, language_code: fa, direction: rtl}
+            introduced_tokens: [فوری]
+            example: {text: "این لباس‌ها رو فوری می‌خوام.", language_code: fa, direction: rtl}
+        exercises:
+          - content_key: fa.a1.unit48.lesson02.exercise01.recognize_foori
+            type: multiple_choice
+            tested_text: فوری
+            prompt: {target_blocks: [{text: فوری, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit48.lesson02.exercise02.recognize_in_labasha_ro_foori_mikhaam
+            type: multiple_choice
+            tested_text: "این لباس‌ها رو فوری می‌خوام."
+            prompt: {target_blocks: [{text: "این لباس‌ها رو فوری می‌خوام.", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit48.lesson02.exercise03.match_laundry_two
+            type: matching_pairs
+            tested_text: "فوری رو چقدر می‌شه ده هزار تومن"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: فوری, right: express}
+              - {left: رو, right: "(object marker)"}
+              - {left: چقدر, right: "how much"}
+              - {left: "می‌شه", right: "it comes to"}
+              - {left: ده, right: ten}
+              - {left: هزار, right: thousand}
+              - {left: تومن, right: toman}
+          - content_key: fa.a1.unit48.lesson02.exercise04.word_order_in_labasha_ro_foori_mikhaam
+            type: word_order
+            tested_text: "این لباس‌ها رو فوری می‌خوام"
+            prompt: {target_blocks: [{text: "I want these clothes express.", language_code: en, direction: ltr}]}
+            word_bank: [این, "لباس‌ها", رو, فوری, "می‌خوام"]
+          - content_key: fa.a1.unit48.lesson02.exercise05.translate_cheghadr_mishe
+            type: translation
+            tested_text: "چقدر می‌شه؟"
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit48.lesson03.ready_and_pickup
+        title: "آماده شدن و تحویل گرفتن"
+        spine_outcome_id: universal.a1.laundry.use_launderette
+        teaching:
+          - content_key: fa.a1.unit48.lesson03.teach.review_key_farda_zohr
+            kind: grammar_note
+            target: {text: "کِی (when) -- already taught from unit34/42 / فردا (tomorrow), ظهر (noon) -- already taught from unit09", language_code: fa, direction: rtl}
+            introduced_tokens: [کِی, فردا, ظهر]
+          - content_key: fa.a1.unit48.lesson03.teach.review_khoobe_baleh
+            kind: grammar_note
+            target: {text: "خوبه (good, that's fine) -- already taught from unit06/10/12/19 / بله (yes) -- already taught from unit20/21", language_code: fa, direction: rtl}
+            introduced_tokens: [خوبه, بله]
+          - content_key: fa.a1.unit48.lesson03.teach.review_migiram
+            kind: grammar_note
+            target: {text: "می‌گیرم (I get it / I'll pick it up) -- already taught from unit29/34/41", language_code: fa, direction: rtl}
+            introduced_tokens: ["می‌گیرم"]
+          - content_key: fa.a1.unit48.lesson03.teach.farda_zohr_khoobe
+            kind: phrase
+            target: {text: "فردا ظهر خوبه؟", language_code: fa, direction: rtl}
+            introduced_tokens: ["فردا ظهر خوبه؟"]
+          - content_key: fa.a1.unit48.lesson03.teach.key_migiram
+            kind: phrase
+            target: {text: "کِی می‌گیرم؟", language_code: fa, direction: rtl}
+            introduced_tokens: ["کِی می‌گیرم؟"]
+        exercises:
+          - content_key: fa.a1.unit48.lesson03.exercise01.recognize_farda_zohr_khoobe
+            type: multiple_choice
+            tested_text: "فردا ظهر خوبه؟"
+            prompt: {target_blocks: [{text: "فردا ظهر خوبه؟", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit48.lesson03.exercise02.recognize_key_migiram
+            type: multiple_choice
+            tested_text: "کِی می‌گیرم؟"
+            prompt: {target_blocks: [{text: "کِی می‌گیرم؟", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit48.lesson03.exercise03.match_ready_and_pickup
+            type: matching_pairs
+            tested_text: "کِی فردا ظهر خوبه بله می‌گیرم فردا ظهر خوبه کِی می‌گیرم"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: کِی, right: when}
+              - {left: فردا, right: tomorrow}
+              - {left: ظهر, right: noon}
+              - {left: خوبه, right: "good, that's fine"}
+              - {left: بله, right: "yes"}
+              - {left: "می‌گیرم", right: "I get it / I'll pick it up"}
+              - {left: "فردا ظهر خوبه؟", right: "Is tomorrow noon good?"}
+              - {left: "کِی می‌گیرم؟", right: "When do I pick it up?"}
+          - content_key: fa.a1.unit48.lesson03.exercise04.word_order_key_migiram
+            type: word_order
+            tested_text: "کِی می‌گیرم"
+            prompt: {target_blocks: [{text: "When do I pick it up?", language_code: en, direction: ltr}]}
+            word_bank: [کِی, "می‌گیرم"]
+          - content_key: fa.a1.unit48.lesson03.exercise05.translate_farda_zohr_khoobe
+            type: translation
+            tested_text: "فردا ظهر خوبه؟"
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit48.lesson04.laundry_dialogue
+        title: "دیالوگ: خشکشویی"
+        spine_outcome_id: universal.a1.laundry.use_launderette
+        teaching:
+          - content_key: fa.a1.unit48.lesson04.teach.review_salam_mamnoon
+            kind: grammar_note
+            target: {text: "سلام و ممنون -- already taught from units 01/17/22/45/46/47", language_code: fa, direction: rtl}
+            introduced_tokens: [سلام, ممنون]
+          - content_key: fa.a1.unit48.lesson04.teach.review_khanoom_bashe
+            kind: grammar_note
+            target: {text: "خانم (Ms.) -- already taught from unit41 / باشه (okay) -- already taught from units 01/02/06/17/22/45/46/47", language_code: fa, direction: rtl}
+            introduced_tokens: [خانم, باشه]
+          - content_key: fa.a1.unit48.lesson04.teach.character_kazemi
+            kind: vocabulary
+            target: {text: "خانم کاظمی", language_code: fa, direction: rtl}
+            introduced_tokens: [کاظمی, نیما]
+            example: {text: "خانم کاظمی خشکشویی داره.", language_code: fa, direction: rtl}
+          - content_key: fa.a1.unit48.lesson04.teach.dialogue_line1
+            kind: dialogue
+            target: {text: "سلام خانم کاظمی. این لباس‌ها رو فوری می‌خوام.", language_code: fa, direction: rtl, speaker: نیما}
+            introduced_tokens: []
+          - content_key: fa.a1.unit48.lesson04.teach.dialogue_line2
+            kind: dialogue
+            target: {text: "سلام نیما. فردا ظهر خوبه؟", language_code: fa, direction: rtl, speaker: "خانم کاظمی"}
+            introduced_tokens: []
+          - content_key: fa.a1.unit48.lesson04.teach.dialogue_line3
+            kind: dialogue
+            target: {text: "بله، خوبه. چقدر می‌شه؟", language_code: fa, direction: rtl, speaker: نیما}
+            introduced_tokens: []
+          - content_key: fa.a1.unit48.lesson04.teach.dialogue_line4
+            kind: dialogue
+            target: {text: "ده هزار تومن می‌شه.", language_code: fa, direction: rtl, speaker: "خانم کاظمی"}
+            introduced_tokens: []
+          - content_key: fa.a1.unit48.lesson04.teach.dialogue_line5
+            kind: dialogue
+            target: {text: "باشه. کِی می‌گیرم؟", language_code: fa, direction: rtl, speaker: نیما}
+            introduced_tokens: []
+          - content_key: fa.a1.unit48.lesson04.teach.dialogue_line6
+            kind: dialogue
+            target: {text: "فردا ظهر.", language_code: fa, direction: rtl, speaker: "خانم کاظمی"}
+            introduced_tokens: []
+          - content_key: fa.a1.unit48.lesson04.teach.dialogue_line7
+            kind: dialogue
+            target: {text: "ممنون!", language_code: fa, direction: rtl, speaker: نیما}
+            introduced_tokens: []
+        exercises:
+          - content_key: fa.a1.unit48.lesson04.exercise01.dialogue_comprehension_price
+            type: dialogue_comprehension
+            tested_text: "سلام خانم کاظمی این لباس‌ها رو فوری می‌خوام سلام نیما فردا ظهر خوبه بله خوبه چقدر می‌شه ده هزار تومن می‌شه باشه کِی می‌گیرم فردا ظهر ممنون"
+            prompt: {target_blocks: [{text: "چقدر می‌شه؟", language_code: fa, direction: rtl}]}
+            correct_option: "He wants to know how much it costs."
+            distractors:
+              - "He wants to know if they also do dry cleaning."
+              - "He wants to know if the shop is open on Fridays."
+              - "He wants to know if he needs an appointment."
+          - content_key: fa.a1.unit48.lesson04.exercise02.recognize_dialogue_line4
+            type: multiple_choice
+            tested_text: "ده هزار تومن می‌شه."
+            prompt: {target_blocks: [{text: "ده هزار تومن می‌شه.", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit48.lesson04.exercise03.match_dialogue_laundry
+            type: matching_pairs
+            tested_text: "سلام خانم کاظمی این لباس‌ها رو فوری می‌خوام سلام نیما فردا ظهر خوبه بله خوبه چقدر می‌شه ده هزار تومن می‌شه باشه کِی می‌گیرم فردا ظهر ممنون"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "سلام خانم کاظمی. این لباس‌ها رو فوری می‌خوام.", right: "Hi Ms. Kazemi. I want these clothes express."}
+              - {left: "سلام نیما. فردا ظهر خوبه؟", right: "Hi Nima. Is tomorrow noon good?"}
+              - {left: "بله، خوبه. چقدر می‌شه؟", right: "Yes, that's good. How much does it come to?"}
+              - {left: "ده هزار تومن می‌شه.", right: "It comes to 10,000 toman."}
+              - {left: "باشه. کِی می‌گیرم؟", right: "Okay. When do I pick it up?"}
+              - {left: "فردا ظهر.", right: "Tomorrow noon."}
+              - {left: "ممنون!", right: "Thanks!"}
+          - content_key: fa.a1.unit48.lesson04.exercise04.dialogue_response_confirm
+            type: dialogue_response
+            tested_text: "بله، خوبه."
+            prompt: {target_blocks: [{text: "فردا ظهر خوبه؟", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit48.lesson04.exercise05.translate_dialogue_line5
+            type: translation
+            tested_text: "باشه. کِی می‌گیرم؟"
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit48.lesson05.reading_laundry_sign
+        title: "خواندن تابلوی خشکشویی"
+        spine_outcome_id: universal.a1.laundry.use_launderette
+        teaching:
+          - content_key: fa.a1.unit48.lesson05.teach.reading_text
+            kind: reading
+            target: {text: "خشکشویی کاظمی: لباس‌ها فوری، ده هزار تومن.", language_code: fa, direction: rtl}
+            introduced_tokens: []
+        exercises:
+          - content_key: fa.a1.unit48.lesson05.exercise01.reading_comprehension_service
+            type: reading_comprehension
+            tested_text: "خشکشویی کاظمی: لباس‌ها فوری، ده هزار تومن."
+            prompt: {target_blocks: [{text: "خشکشویی کاظمی: لباس‌ها فوری، ده هزار تومن.", language_code: fa, direction: rtl}]}
+            correct_option: "Laundry / dry-cleaning service."
+            distractors:
+              - "Furniture repair."
+              - "House cleaning."
+              - "Shoe repair."
+          - content_key: fa.a1.unit48.lesson05.exercise02.reading_comprehension_price
+            type: reading_comprehension
+            tested_text: "خشکشویی کاظمی: لباس‌ها فوری، ده هزار تومن."
+            prompt: {target_blocks: [{text: "خشکشویی کاظمی: لباس‌ها فوری، ده هزار تومن.", language_code: fa, direction: rtl}]}
+            correct_option: "10,000 toman."
+            distractors:
+              - "1,000 toman."
+              - "100,000 toman."
+              - "It's free."
+          - content_key: fa.a1.unit48.lesson05.exercise03.match_reading_laundry_sign
+            type: matching_pairs
+            tested_text: "خشکشویی کاظمی لباس‌ها فوری هزار تومن"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: خشکشویی, right: "laundry shop"}
+              - {left: کاظمی, right: Kazemi}
+              - {left: "لباس‌ها", right: clothes}
+              - {left: فوری, right: express}
+              - {left: هزار, right: thousand}
+              - {left: تومن, right: toman}
+          - content_key: fa.a1.unit48.lesson05.exercise04.translate_reading_laundry_sign
+            type: translation
+            tested_text: "خشکشویی کاظمی: لباس‌ها فوری، ده هزار تومن."
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit48.lesson05.exercise05.write_laundry_sign
+            type: writing_prompt
+            tested_text: "خشکشویی کاظمی: لباس‌ها فوری، ده هزار تومن."
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit48.lesson06.wrap_up
+        title: "جمع‌بندی خشکشویی"
+        spine_outcome_id: universal.a1.laundry.use_launderette
+        teaching:
+          - content_key: fa.a1.unit48.lesson06.teach.review_request
+            kind: phrase
+            target: {text: "این لباس‌ها رو فوری می‌خوام.", language_code: fa, direction: rtl}
+            introduced_tokens: []
+          - content_key: fa.a1.unit48.lesson06.teach.review_price_pickup
+            kind: phrase
+            target: {text: "ده هزار تومن می‌شه. فردا ظهر می‌گیرم.", language_code: fa, direction: rtl}
+            introduced_tokens: []
+          - content_key: fa.a1.unit48.lesson06.teach.summary_words
+            kind: grammar_note
+            target: {text: "خشکشویی / فوری / لباس‌ها / چقدر می‌شه؟ / کِی می‌گیرم؟ -- کلمات این درس", language_code: fa, direction: rtl}
+            introduced_tokens: []
+        exercises:
+          - content_key: fa.a1.unit48.lesson06.exercise01.recognize_review_request
+            type: multiple_choice
+            tested_text: "این لباس‌ها رو فوری می‌خوام."
+            prompt: {target_blocks: [{text: "این لباس‌ها رو فوری می‌خوام.", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit48.lesson06.exercise02.recognize_review_price_pickup
+            type: multiple_choice
+            tested_text: "ده هزار تومن می‌شه. فردا ظهر می‌گیرم."
+            prompt: {target_blocks: [{text: "ده هزار تومن می‌شه. فردا ظهر می‌گیرم.", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit48.lesson06.exercise03.match_wrap_laundry
+            type: matching_pairs
+            tested_text: "خشکشویی فوری لباس‌ها چقدر می‌شه کِی می‌گیرم"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: خشکشویی, right: "laundry shop"}
+              - {left: فوری, right: express}
+              - {left: "لباس‌ها", right: clothes}
+              - {left: چقدر, right: "how much"}
+              - {left: "می‌شه", right: "it comes to"}
+              - {left: "کِی می‌گیرم؟", right: "When do I pick it up?"}
+          - content_key: fa.a1.unit48.lesson06.exercise04.word_order_in_labasha_foori
+            type: word_order
+            tested_text: "این لباس‌ها فوری"
+            prompt: {target_blocks: [{text: "These clothes, express.", language_code: en, direction: ltr}]}
+            word_bank: [این, "لباس‌ها", فوری]
+          - content_key: fa.a1.unit48.lesson06.exercise05.write_laundry_message
+            type: writing_prompt
+            tested_text: "این لباس‌ها رو فوری می‌خوام"
+            prompt: {target_blocks: []}
