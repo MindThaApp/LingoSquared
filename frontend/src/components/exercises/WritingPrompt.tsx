@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { TextBlockList } from "../TextBlock";
 import { VirtualKeyboard } from "../VirtualKeyboard";
-import { answerScriptForExercise, scriptNeedsVirtualKeyboard } from "../../lib/scripts";
+import { answerScriptForExercise, scriptDirection, scriptNeedsVirtualKeyboard } from "../../lib/scripts";
 import { useKeyboardFocus } from "../../lib/useKeyboardFocus";
 import type { ExerciseComponentProps } from "./types";
 
@@ -22,7 +22,7 @@ export function WritingPrompt({ exercise, onAnswer, disabled }: ExerciseComponen
           disabled={disabled}
           rows={4}
           placeholder={t("exercise.writing_placeholder")}
-          dir={script === "arabic" ? "rtl" : undefined}
+          dir={scriptDirection(script)}
           {...inputProps}
         />
       </div>

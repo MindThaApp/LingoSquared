@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { TextBlockList } from "../TextBlock";
 import { VirtualKeyboard } from "../VirtualKeyboard";
 import { VoiceCaptureControls } from "../VoiceCaptureControls";
-import { answerScriptForExercise, scriptNeedsVirtualKeyboard } from "../../lib/scripts";
+import { answerScriptForExercise, scriptDirection, scriptNeedsVirtualKeyboard } from "../../lib/scripts";
 import { useKeyboardFocus } from "../../lib/useKeyboardFocus";
 import type { ExerciseComponentProps } from "./types";
 
@@ -39,7 +39,7 @@ export function DialogueResponse({ exercise, onAnswer, disabled }: ExerciseCompo
           onChange={(e) => setValue(e.target.value)}
           disabled={disabled}
           placeholder={t("exercise.type_your_reply")}
-          dir={script === "arabic" ? "rtl" : undefined}
+          dir={scriptDirection(script)}
           {...inputProps}
         />
       </div>
