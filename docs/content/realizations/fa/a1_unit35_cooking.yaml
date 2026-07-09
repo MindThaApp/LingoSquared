@@ -1,0 +1,464 @@
+schema_version: "1.1"
+realization_version: "2026.1-draft.1"
+target_language: fa
+cefr_level: A1
+generation_provenance:
+  method: ai_adapted_from_public_domain_source
+  authoring_system: claude
+  source_material: >-
+    Made a real, fresh attempt at FSI Persian Basic Course source access for
+    this unit before falling back to established conventions. Fetched the
+    Yojik host's Persian directory listing
+    (https://fsi-languages.yojik.eu/languages/FSI/Persian/) directly: it
+    offers only the same "Spoken Persian.PDF" already confirmed
+    (units 33/34's provenance notes) to be a page-image scan with no usable
+    text layer, 24 audio tapes (not text), and a second document, "A Reader
+    in Modern Persian.pdf" -- attempted to fetch that one too, but at 91MB it
+    exceeds Firecrawl's processable file-size limit and could not be
+    retrieved at all. Separately retried the Live Lingua-hosted copy of
+    Spoken Persian
+    (https://www.livelingua.com/fsi/FSI%20-%20Spoken%20Persian.pdf); the
+    fetch itself failed outright (connection reset) rather than returning
+    scannable-but-unusable content. A general web search
+    ("FSI Persian Basic Course lesson transcript text kitchen OR cooking OR
+    غذا") returned no FSI Persian cooking-lesson transcript or text
+    derivative anywhere -- only unrelated Dari/Turkish/Tajik course PDFs and
+    modern third-party vocabulary blogs (not public-domain source material,
+    not used). No FSI phrase or sentence is treated as a confirmed source hit
+    for this unit; no source sentence is imported verbatim. Authored instead
+    from this course's established fa conventions: modern Iranian colloquial
+    register, the recurring نیما/سارا cast, already-taught food vocabulary
+    from unit06 (برنج, نان, مرغ, خوشمزه) and already-taught kitchen vocabulary
+    from unit19 (آشپزخانه), plus authentic Iranian home-cooking vocabulary
+    (پیاز, نمک, روغن, خرد کردن, ریختن, سرخ کردن) and a real Iranian dish name
+    (قرمه‌سبزی, ghormeh sabzi) for register authenticity. Per the standing
+    fa/prs authoring policy (AUTHORING_GUIDE.md #3), the scenario shape (core
+    ingredient/action vocabulary, step-by-step cooking instructions with
+    اول/بعد, a two-speaker kitchen dialogue, a short third-person reading) is
+    a legitimate structural reuse of the same real-world cooking-unit shape
+    prs/a1_unit36_cooking.yaml already covers for Dari, but every word of the
+    actual Farsi text below -- including the dish name, ingredients, and verb
+    forms -- was authored independently for Iranian usage; no Dari sentence,
+    verb ending, or vocabulary choice was copied.
+  human_reviewed: false
+review:
+  status: unreviewed
+  required_next_reviewer: codex_fresh_context
+  notes: >-
+    Draft authored 2026-07-09 by Claude (content-authoring worker session).
+    Realizes universal.a1.cooking.prepare_simple_meal, the next unrealized A1
+    outcome after unit34 (post). Confirmed by grepping every
+    spine_outcome_id/spine_outcome_ids value across all
+    docs/content/realizations/fa/a1_unit*.yaml files and exact-diffing
+    against every universal.a1.* id in docs/content/universal_spine.yaml: fa
+    had realized all 35 A1 outcomes through post, with cooking, personality,
+    colors, seasons, emergencies, lost_items, and appointments still missing
+    (library was added to the spine by a concurrent session mid-task, still
+    uncommitted at authoring time, and is not counted against this unit's
+    scope) -- cooking is the next one in spine order. Scoped to the outcome's
+    four assessment requirements: understanding a cooking exchange
+    (listening), describing cooking actions and giving simple step-by-step
+    instructions (speaking), reading a short passage about someone cooking
+    (reading), and writing a short cooking-related sentence (writing). Uses
+    structured speaker fields for dialogue turns; no spoken text embeds a
+    "Name:" prefix. Every vocabulary card has an example sentence per schema
+    1.1. Already-taught words reused from earlier units (آشپزخانه, برنج,
+    لطفاً, می‌خوام, این, etc.) are re-declared in introduced_tokens before
+    first tested use in this file because the compiler's untaught-vocabulary
+    check is per-file only. No fill_in_blank or audio-only exercise types are
+    used (fa has real TTS per AUTHORING_GUIDE.md #14, but this file continues
+    the established text-based corpus-consistency pattern from units 19-34,
+    same choice those units' own reviews made). Every matching_pairs
+    exercise has 7-8 pairs. Every translate-into-English exercise in the
+    paired overlay explicitly sets answer_language_code: en. Ran a recursive
+    yaml.safe_load scan over this file and its paired overlay for bare
+    unquoted yes/no/true/false/on/off values -- zero hits (see the overlay's
+    own review note for the exact scan result).
+
+course:
+  realization_key: fa.a1
+  target_language_first: true
+  dialect: fa_IR_standard_colloquial_intro
+  register_policy: >-
+    Continues the established colloquial Iranian Farsi register: رو as
+    object marker, تو-register dialogue, colloquial copula/verb contractions
+    such as می‌پزه/می‌ریزه/باشه, and یه as the colloquial form of یک
+    ("a/one"). Uses everyday Iranian home-cooking words: آشپزی, پیاز, نمک,
+    روغن, and a real home-cooked dish name, قرمه‌سبزی, for authenticity.
+
+media_assets:
+  - content_key: fa.a1.unit35.audio.cooking.vocab.01
+    language: fa
+    text: "آشپزی، پیاز، نمک، روغن، خرد می‌کنم، می‌ریزم، می‌پزم"
+    voice_hint: neutral_adult
+    status: pending_generation
+  - content_key: fa.a1.unit35.audio.cooking.sentence.01
+    language: fa
+    text: "اول پیاز رو خرد می‌کنم، بعد تو روغن سرخش می‌کنم."
+    voice_hint: neutral_adult_friendly
+    status: pending_generation
+  - content_key: fa.a1.unit35.audio.dialogue.cooking.01
+    language: fa
+    text: "نیما: سلام، چی می‌پزی؟ سارا: قرمه‌سبزی می‌پزم. نیما: کمک می‌خوای؟ سارا: آره، لطفاً پیاز رو خرد کن. نیما: باشه. سارا: مرسی، غذا خیلی خوشمزه می‌شه."
+    voice_hint: two_adults_neutral_friendly
+    status: pending_generation
+
+units:
+  - content_key: fa.a1.unit35.cooking
+    title: آشپزی و پختن غذا
+    section: reading_writing
+    spine_outcome_ids:
+      - universal.a1.cooking.prepare_simple_meal
+    planned_lesson_count: 6
+
+    lessons:
+      - content_key: fa.a1.unit35.lesson01.cooking_words
+        title: "کلمات آشپزی"
+        spine_outcome_id: universal.a1.cooking.prepare_simple_meal
+        teaching:
+          - content_key: fa.a1.unit35.lesson01.teach.ashpazi
+            kind: vocabulary
+            target: {text: آشپزی, language_code: fa, direction: rtl}
+            introduced_tokens: [آشپزی]
+            example: {text: "آشپزی رو دوست دارم.", language_code: fa, direction: rtl}
+          - content_key: fa.a1.unit35.lesson01.teach.piaz
+            kind: vocabulary
+            target: {text: پیاز, language_code: fa, direction: rtl}
+            introduced_tokens: [پیاز]
+            example: {text: "یه پیاز می‌خوام.", language_code: fa, direction: rtl}
+          - content_key: fa.a1.unit35.lesson01.teach.namak
+            kind: vocabulary
+            target: {text: نمک, language_code: fa, direction: rtl}
+            introduced_tokens: [نمک]
+            example: {text: "نمک رو رد کن.", language_code: fa, direction: rtl}
+          - content_key: fa.a1.unit35.lesson01.teach.roghan
+            kind: vocabulary
+            target: {text: روغن, language_code: fa, direction: rtl}
+            introduced_tokens: [روغن]
+            example: {text: "روغن تو ماهیتابه‌ست.", language_code: fa, direction: rtl}
+          - content_key: fa.a1.unit35.lesson01.teach.review_want_kitchen
+            kind: grammar_note
+            target: {text: "می‌خوام (I want) / آشپزخانه (kitchen) / یه (a/one)", language_code: fa, direction: rtl}
+            introduced_tokens: ["می‌خوام", آشپزخانه, یه]
+          - content_key: fa.a1.unit35.lesson01.teach.want_cook
+            kind: phrase
+            target: {text: "می‌خوام آشپزی کنم.", language_code: fa, direction: rtl}
+            introduced_tokens: [کنم]
+        exercises:
+          - content_key: fa.a1.unit35.lesson01.exercise01.recognize_ashpazi
+            type: multiple_choice
+            tested_text: آشپزی
+            prompt: {target_blocks: [{text: آشپزی, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit35.lesson01.exercise02.recognize_piaz
+            type: multiple_choice
+            tested_text: پیاز
+            prompt: {target_blocks: [{text: پیاز, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit35.lesson01.exercise03.match_cooking_words
+            type: matching_pairs
+            tested_text: "آشپزی پیاز نمک روغن می‌خوام آشپزخانه یه کنم"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: آشپزی, right: cooking}
+              - {left: پیاز, right: onion}
+              - {left: نمک, right: salt}
+              - {left: روغن, right: oil}
+              - {left: "می‌خوام", right: "I want"}
+              - {left: آشپزخانه, right: kitchen}
+              - {left: یه, right: "a/one"}
+              - {left: "می‌خوام آشپزی کنم.", right: "I want to cook."}
+          - content_key: fa.a1.unit35.lesson01.exercise04.word_order_want_cook
+            type: word_order
+            tested_text: "می‌خوام آشپزی کنم"
+            prompt: {target_blocks: [{text: "I want to cook.", language_code: en, direction: ltr}]}
+            word_bank: ["می‌خوام", آشپزی, کنم]
+          - content_key: fa.a1.unit35.lesson01.exercise05.translate_want_onion
+            type: translation
+            tested_text: "یه پیاز می‌خوام."
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit35.lesson02.cooking_actions
+        title: "کارهای آشپزی"
+        spine_outcome_id: universal.a1.cooking.prepare_simple_meal
+        teaching:
+          - content_key: fa.a1.unit35.lesson02.teach.chop_onion
+            kind: phrase
+            target: {text: "پیاز رو خرد می‌کنم.", language_code: fa, direction: rtl}
+            introduced_tokens: [رو, "خرد می‌کنم"]
+          - content_key: fa.a1.unit35.lesson02.teach.pour_oil
+            kind: phrase
+            target: {text: "روغن رو می‌ریزم.", language_code: fa, direction: rtl}
+            introduced_tokens: ["می‌ریزم"]
+          - content_key: fa.a1.unit35.lesson02.teach.fry_onion
+            kind: phrase
+            target: {text: "پیاز رو سرخ می‌کنم.", language_code: fa, direction: rtl}
+            introduced_tokens: ["سرخ می‌کنم"]
+          - content_key: fa.a1.unit35.lesson02.teach.review_chop_fry
+            kind: grammar_note
+            target: {text: "خرد کردن (to chop) / سرخ کردن (to fry) / ریختن (to pour)", language_code: fa, direction: rtl}
+            introduced_tokens: ["خرد کردن", "سرخ کردن", ریختن]
+          - content_key: fa.a1.unit35.lesson02.teach.add_salt
+            kind: phrase
+            target: {text: "نمک می‌ریزم.", language_code: fa, direction: rtl}
+            introduced_tokens: []
+        exercises:
+          - content_key: fa.a1.unit35.lesson02.exercise01.recognize_chop_onion
+            type: multiple_choice
+            tested_text: "پیاز رو خرد می‌کنم."
+            prompt: {target_blocks: [{text: "پیاز رو خرد می‌کنم.", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit35.lesson02.exercise02.recognize_fry_onion
+            type: multiple_choice
+            tested_text: "پیاز رو سرخ می‌کنم."
+            prompt: {target_blocks: [{text: "پیاز رو سرخ می‌کنم.", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit35.lesson02.exercise03.match_action_words
+            type: matching_pairs
+            tested_text: "خرد می‌کنم می‌ریزم سرخ می‌کنم خرد کردن سرخ کردن ریختن نمک می‌ریزم"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "خرد می‌کنم", right: "I chop"}
+              - {left: "می‌ریزم", right: "I pour"}
+              - {left: "سرخ می‌کنم", right: "I fry"}
+              - {left: "خرد کردن", right: "to chop"}
+              - {left: "سرخ کردن", right: "to fry"}
+              - {left: ریختن, right: "to pour"}
+              - {left: "نمک می‌ریزم.", right: "I add salt."}
+          - content_key: fa.a1.unit35.lesson02.exercise04.word_order_pour_oil
+            type: word_order
+            tested_text: "روغن رو می‌ریزم"
+            prompt: {target_blocks: [{text: "I'm pouring the oil.", language_code: en, direction: ltr}]}
+            word_bank: [روغن, رو, "می‌ریزم"]
+          - content_key: fa.a1.unit35.lesson02.exercise05.translate_fry_onion
+            type: translation
+            tested_text: "پیاز رو سرخ می‌کنم."
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit35.lesson03.cooking_steps
+        title: "مراحل پختن"
+        spine_outcome_id: universal.a1.cooking.prepare_simple_meal
+        teaching:
+          - content_key: fa.a1.unit35.lesson03.teach.review_first_then
+            kind: grammar_note
+            target: {text: "اول (first) / بعد (then)", language_code: fa, direction: rtl}
+            introduced_tokens: [اول, بعد]
+          - content_key: fa.a1.unit35.lesson03.teach.first_chop
+            kind: phrase
+            target: {text: "اول پیاز رو خرد می‌کنم.", language_code: fa, direction: rtl}
+            introduced_tokens: []
+          - content_key: fa.a1.unit35.lesson03.teach.then_fry
+            kind: phrase
+            target: {text: "بعد تو روغن سرخش می‌کنم.", language_code: fa, direction: rtl}
+            introduced_tokens: [تو, سرخش]
+          - content_key: fa.a1.unit35.lesson03.teach.review_slow_ready
+            kind: grammar_note
+            target: {text: "آروم (slowly) / آماده (ready)", language_code: fa, direction: rtl}
+            introduced_tokens: [آروم, آماده]
+          - content_key: fa.a1.unit35.lesson03.teach.slow_cook
+            kind: phrase
+            target: {text: "غذا آروم می‌پزه.", language_code: fa, direction: rtl}
+            introduced_tokens: [غذا, "می‌پزه"]
+          - content_key: fa.a1.unit35.lesson03.teach.almost_ready
+            kind: phrase
+            target: {text: "تقریباً آماده‌ست.", language_code: fa, direction: rtl}
+            introduced_tokens: ["تقریباً", "آماده‌ست"]
+        exercises:
+          - content_key: fa.a1.unit35.lesson03.exercise01.recognize_first_chop
+            type: multiple_choice
+            tested_text: "اول پیاز رو خرد می‌کنم."
+            prompt: {target_blocks: [{text: "اول پیاز رو خرد می‌کنم.", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit35.lesson03.exercise02.recognize_then_fry
+            type: multiple_choice
+            tested_text: "بعد تو روغن سرخش می‌کنم."
+            prompt: {target_blocks: [{text: "بعد تو روغن سرخش می‌کنم.", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit35.lesson03.exercise03.match_step_words
+            type: matching_pairs
+            tested_text: "اول بعد آروم آماده غذا می‌پزه تقریباً آماده‌ست"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: اول, right: first}
+              - {left: بعد, right: then}
+              - {left: آروم, right: slowly}
+              - {left: آماده, right: ready}
+              - {left: غذا, right: food}
+              - {left: "می‌پزه", right: "it cooks"}
+              - {left: "تقریباً آماده‌ست.", right: "It's almost ready."}
+          - content_key: fa.a1.unit35.lesson03.exercise04.word_order_slow_cook
+            type: word_order
+            tested_text: "غذا آروم می‌پزه"
+            prompt: {target_blocks: [{text: "The food cooks slowly.", language_code: en, direction: ltr}]}
+            word_bank: [غذا, آروم, "می‌پزه"]
+          - content_key: fa.a1.unit35.lesson03.exercise05.translate_almost_ready
+            type: translation
+            tested_text: "تقریباً آماده‌ست."
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit35.lesson04.cooking_dialogue
+        title: "گفتگوی آشپزخانه"
+        spine_outcome_id: universal.a1.cooking.prepare_simple_meal
+        teaching:
+          - content_key: fa.a1.unit35.lesson04.teach.review_dialogue_words
+            kind: grammar_note
+            target: {text: "نیما / سارا / سلام / باشه / مرسی", language_code: fa, direction: rtl}
+            introduced_tokens: [نیما, سارا, سلام, باشه, مرسی]
+          - content_key: fa.a1.unit35.lesson04.teach.dish_name
+            kind: vocabulary
+            target: {text: قرمه‌سبزی, language_code: fa, direction: rtl}
+            introduced_tokens: [قرمه‌سبزی]
+            example: {text: "قرمه‌سبزی می‌پزم.", language_code: fa, direction: rtl}
+          - content_key: fa.a1.unit35.lesson04.teach.dialogue_line1
+            kind: dialogue
+            target: {text: "سلام، چی می‌پزی؟", language_code: fa, direction: rtl, speaker: نیما}
+            introduced_tokens: ["می‌پزی", چی]
+          - content_key: fa.a1.unit35.lesson04.teach.dialogue_line2
+            kind: dialogue
+            target: {text: "قرمه‌سبزی می‌پزم.", language_code: fa, direction: rtl, speaker: سارا}
+            introduced_tokens: ["می‌پزم"]
+          - content_key: fa.a1.unit35.lesson04.teach.dialogue_line3
+            kind: dialogue
+            target: {text: "کمک می‌خوای؟", language_code: fa, direction: rtl, speaker: نیما}
+            introduced_tokens: [کمک, "می‌خوای"]
+          - content_key: fa.a1.unit35.lesson04.teach.dialogue_line4
+            kind: dialogue
+            target: {text: "آره، لطفاً پیاز رو خرد کن.", language_code: fa, direction: rtl, speaker: سارا}
+            introduced_tokens: [آره, لطفاً, کن]
+          - content_key: fa.a1.unit35.lesson04.teach.dialogue_line5
+            kind: dialogue
+            target: {text: "باشه.", language_code: fa, direction: rtl, speaker: نیما}
+            introduced_tokens: []
+          - content_key: fa.a1.unit35.lesson04.teach.dialogue_line6
+            kind: dialogue
+            target: {text: "مرسی، غذا خیلی خوشمزه می‌شه.", language_code: fa, direction: rtl, speaker: سارا}
+            introduced_tokens: [خیلی, خوشمزه, "می‌شه"]
+        exercises:
+          - content_key: fa.a1.unit35.lesson04.exercise01.dialogue_comprehension_cooking
+            type: dialogue_comprehension
+            tested_text: "نیما سارا سلام چی می‌پزی قرمه‌سبزی می‌پزم کمک می‌خوای آره لطفاً پیاز رو خرد کن باشه مرسی غذا خیلی خوشمزه می‌شه"
+            prompt: {target_blocks: [{text: "نیما می‌پرسه سارا چی می‌پزه. سارا می‌گه قرمه‌سبزی می‌پزه و از نیما کمک می‌خواد.", language_code: fa, direction: rtl}]}
+            correct_option: "Sara is cooking ghormeh sabzi and asks Nima to chop the onion."
+            distractors:
+              - "Nima is cooking ghormeh sabzi alone."
+              - "Sara asks Nima to buy onions."
+              - "Nima doesn't want to help."
+          - content_key: fa.a1.unit35.lesson04.exercise02.recognize_ask_for_help
+            type: multiple_choice
+            tested_text: "کمک می‌خوای؟"
+            prompt: {target_blocks: [{text: "کمک می‌خوای؟", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit35.lesson04.exercise03.match_dialogue_words
+            type: matching_pairs
+            tested_text: "نیما سارا سلام باشه مرسی کمک آره لطفاً"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: نیما, right: Nima}
+              - {left: سارا, right: Sara}
+              - {left: سلام, right: hello}
+              - {left: باشه, right: okay}
+              - {left: مرسی, right: thanks}
+              - {left: کمک, right: help}
+              - {left: آره, right: "yeah"}
+              - {left: "لطفاً", right: please}
+          - content_key: fa.a1.unit35.lesson04.exercise04.dialogue_response_chop_onion
+            type: dialogue_response
+            tested_text: "آره، لطفاً پیاز رو خرد کن."
+            prompt: {target_blocks: [{text: "کمک می‌خوای؟", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit35.lesson04.exercise05.translate_delicious
+            type: translation
+            tested_text: "غذا خیلی خوشمزه می‌شه."
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit35.lesson05.reading_cooking
+        title: "خواندن درباره‌ی آشپزی"
+        spine_outcome_id: universal.a1.cooking.prepare_simple_meal
+        teaching:
+          - content_key: fa.a1.unit35.lesson05.teach.reading_text
+            kind: reading
+            target: {text: "سارا تو آشپزخانه‌ست. اون قرمه‌سبزی می‌پزه. اول پیاز رو خرد می‌کنه، بعد تو روغن سرخش می‌کنه. نمک هم می‌ریزه. غذا آروم می‌پزه و خیلی خوشمزه می‌شه.", language_code: fa, direction: rtl}
+            introduced_tokens: ["آشپزخانه‌ست", اون, "می‌کنه", "می‌ریزه", "می‌شه", هم, و]
+          - content_key: fa.a1.unit35.lesson05.teach.reading_note
+            kind: grammar_note
+            target: {text: "می‌پزه / می‌کنه / می‌ریزه / می‌شه = he/she cooks / does / pours / becomes", language_code: fa, direction: rtl}
+            introduced_tokens: []
+        exercises:
+          - content_key: fa.a1.unit35.lesson05.exercise01.reading_comprehension_action
+            type: reading_comprehension
+            tested_text: "سارا تو آشپزخانه‌ست. اون قرمه‌سبزی می‌پزه. اول پیاز رو خرد می‌کنه، بعد تو روغن سرخش می‌کنه. نمک هم می‌ریزه. غذا آروم می‌پزه و خیلی خوشمزه می‌شه."
+            prompt: {target_blocks: [{text: "سارا تو آشپزخانه‌ست. اون قرمه‌سبزی می‌پزه. اول پیاز رو خرد می‌کنه، بعد تو روغن سرخش می‌کنه. نمک هم می‌ریزه. غذا آروم می‌پزه و خیلی خوشمزه می‌شه.", language_code: fa, direction: rtl}]}
+            correct_option: "Sara chops the onion first, then fries it in oil."
+            distractors:
+              - "Sara fries the onion first, then chops it."
+              - "Nima cooks the ghormeh sabzi."
+              - "Sara adds salt before chopping the onion."
+          - content_key: fa.a1.unit35.lesson05.exercise02.reading_comprehension_result
+            type: reading_comprehension
+            tested_text: "سارا تو آشپزخانه‌ست. اون قرمه‌سبزی می‌پزه. اول پیاز رو خرد می‌کنه، بعد تو روغن سرخش می‌کنه. نمک هم می‌ریزه. غذا آروم می‌پزه و خیلی خوشمزه می‌شه."
+            prompt: {target_blocks: [{text: "سارا تو آشپزخانه‌ست. اون قرمه‌سبزی می‌پزه. اول پیاز رو خرد می‌کنه، بعد تو روغن سرخش می‌کنه. نمک هم می‌ریزه. غذا آروم می‌پزه و خیلی خوشمزه می‌شه.", language_code: fa, direction: rtl}]}
+            correct_option: "The food cooks slowly and turns out very delicious."
+            distractors:
+              - "The food cooks quickly and turns out salty."
+              - "Sara doesn't add salt."
+              - "Nima helps Sara cook."
+          - content_key: fa.a1.unit35.lesson05.exercise03.match_reading_vocab
+            type: matching_pairs
+            tested_text: "اون می‌کنه می‌ریزه می‌شه هم می‌پزه آماده"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: اون, right: "he/she"}
+              - {left: "می‌کنه", right: "he/she does"}
+              - {left: "می‌ریزه", right: "he/she pours"}
+              - {left: "می‌شه", right: "it becomes"}
+              - {left: هم, right: also}
+              - {left: "می‌پزه", right: "he/she cooks"}
+              - {left: "سارا تو آشپزخانه‌ست.", right: "Sara is in the kitchen."}
+          - content_key: fa.a1.unit35.lesson05.exercise04.translate_reading_summary
+            type: translation
+            tested_text: "غذا آروم می‌پزه و خیلی خوشمزه می‌شه."
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit35.lesson05.exercise05.write_cooking_sentence
+            type: writing_prompt
+            tested_text: "می‌خوام آشپزی کنم"
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit35.lesson06.wrap_up
+        title: "جمع‌بندی آشپزی"
+        spine_outcome_id: universal.a1.cooking.prepare_simple_meal
+        teaching:
+          - content_key: fa.a1.unit35.lesson06.teach.like_but_time
+            kind: phrase
+            target: {text: "آشپزی رو دوست دارم، ولی وقت ندارم.", language_code: fa, direction: rtl}
+            introduced_tokens: ["دوست دارم", ولی, "وقت ندارم"]
+          - content_key: fa.a1.unit35.lesson06.teach.service_request
+            kind: phrase
+            target: {text: "لطفاً غذا رو بپز.", language_code: fa, direction: rtl}
+            introduced_tokens: [بپز]
+          - content_key: fa.a1.unit35.lesson06.teach.review_cook_words
+            kind: grammar_note
+            target: {text: "آشپزی / پیاز / نمک / روغن / می‌پزه", language_code: fa, direction: rtl}
+            introduced_tokens: []
+        exercises:
+          - content_key: fa.a1.unit35.lesson06.exercise01.recognize_like_cooking
+            type: multiple_choice
+            tested_text: "آشپزی رو دوست دارم، ولی وقت ندارم."
+            prompt: {target_blocks: [{text: "آشپزی رو دوست دارم، ولی وقت ندارم.", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit35.lesson06.exercise02.recognize_cook_request
+            type: multiple_choice
+            tested_text: "لطفاً غذا رو بپز."
+            prompt: {target_blocks: [{text: "لطفاً غذا رو بپز.", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit35.lesson06.exercise03.match_wrap_words
+            type: matching_pairs
+            tested_text: "آشپزی پیاز نمک روغن می‌پزه دوست دارم ولی وقت ندارم"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: آشپزی, right: cooking}
+              - {left: پیاز, right: onion}
+              - {left: نمک, right: salt}
+              - {left: روغن, right: oil}
+              - {left: "می‌پزه", right: "it cooks"}
+              - {left: "دوست دارم", right: "I like"}
+              - {left: ولی, right: but}
+              - {left: "وقت ندارم", right: "I don't have time"}
+          - content_key: fa.a1.unit35.lesson06.exercise04.word_order_cook_request
+            type: word_order
+            tested_text: "لطفاً غذا رو بپز"
+            prompt: {target_blocks: [{text: "Please cook the food.", language_code: en, direction: ltr}]}
+            word_bank: ["لطفاً", غذا, رو, بپز]
+          - content_key: fa.a1.unit35.lesson06.exercise05.write_wrap_sentence
+            type: writing_prompt
+            tested_text: "آشپزی رو دوست دارم"
+            prompt: {target_blocks: []}
