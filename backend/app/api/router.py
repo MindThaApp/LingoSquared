@@ -15,7 +15,7 @@ from app.core.security import create_token, hash_password, verify_password
 from app.db.session import get_db
 from app.models import *
 from app.schemas.api import *
-from app.api.deps import current_user, optional_current_user, admin_user
+from app.api.deps import current_user, optional_current_user, lenient_current_user, admin_user
 from app.services.progress import activity_day_bounds, record_activity, resolve_user_tz, stats_for, valid_timezone_or_none
 from app.services.quests import daily_quests_for
 from app.review.sm2 import schedule
@@ -469,6 +469,11 @@ def report_practice_item_issue(item_id:str,body:ContentIssueReportIn,request:Req
     item=db.get(PracticeItem,item_id)
     if not item or item.user_id!=user.id: fail(404,"practice_item_not_found","Practice item not found")
     issue=ContentIssueReport(reporter_user_id=user.id,practice_item_id=item_id,category=body.category,description=body.description,learner_response=body.learner_response,client_context={"user_agent":request.headers.get("user-agent",""),"accept_language":request.headers.get("accept-language","")})
+    db.add(issue); db.commit(); db.refresh(issue)
+    return issue
+@router.post("/feedback",response_model=ContentIssueCreatedOut,status_code=201)
+def report_general_feedback(body:GeneralFeedbackIn,user=Depends(lenient_current_user),db:Session=Depends(get_db)):
+    issue=ContentIssueReport(reporter_user_id=user.id if user else None,exercise_id=None,practice_item_id=None,page_path=body.page_path,category=body.category,description=body.description,client_context=body.client_context)
     db.add(issue); db.commit(); db.refresh(issue)
     return issue
 @router.post("/lessons/{lesson_id}/complete", response_model=CompleteOut)

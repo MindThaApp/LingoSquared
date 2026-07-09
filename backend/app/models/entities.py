@@ -1086,20 +1086,20 @@ class ExerciseObjective(Base):
 class ContentIssueReport(Base):
     __tablename__ = "content_issue_reports"
     __table_args__ = (
-        # Exactly one of exercise_id/practice_item_id must be set. Review,
-        # checkpoint, and Endless Practice content is all backed by
-        # PracticeItem (never Exercise) — see POST /practice/items/{id}/report
-        # in app/api/router.py. num_nonnulls() is Postgres-specific but this
-        # project is Postgres-only (see db/session.py).
+        # At most one of exercise_id/practice_item_id may be set. General
+        # app/page feedback uses neither id and stores page_path instead.
+        # num_nonnulls() is Postgres-specific but this project is
+        # Postgres-only (see db/session.py).
         CheckConstraint(
-            "num_nonnulls(exercise_id, practice_item_id) = 1",
-            name="ck_content_issue_reports_exactly_one_target",
+            "num_nonnulls(exercise_id, practice_item_id) <= 1",
+            name="ck_content_issue_reports_at_most_one_target",
         ),
     )
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uid)
-    reporter_user_id: Mapped[str] = mapped_column(
-        ForeignKey("users.id", ondelete="CASCADE")
+    reporter_user_id: Mapped[str | None] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"),
+        nullable=True,
     )
     exercise_id: Mapped[str | None] = mapped_column(
         ForeignKey("exercises.id", ondelete="RESTRICT"),
@@ -1121,6 +1121,7 @@ class ContentIssueReport(Base):
         ForeignKey("exercise_attempts.id", ondelete="SET NULL"),
         nullable=True,
     )
+    page_path: Mapped[str | None] = mapped_column(String(255), nullable=True)
     category: Mapped[str] = mapped_column(String(50))
     description: Mapped[str | None] = mapped_column(Text, nullable=True)
     learner_response: Mapped[Any | None] = mapped_column(JSON, nullable=True)

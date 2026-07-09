@@ -9,7 +9,7 @@ endpoint and 404ing every single time; the Endless Practice feed had no
 report button wired in at all. Fixed by making `ContentIssueReport.
 exercise_id` nullable, adding a nullable `practice_item_id` FK (mirrors
 the existing nullable `content_key_id` secondary FK), a DB check
-constraint enforcing exactly one of the two is set, and a new
+constraint enforcing at most one of the two is set, and a new
 `POST /practice/items/{item_id}/report` endpoint.
 """
 
@@ -201,12 +201,12 @@ def test_report_practice_item_rejects_nonexistent_item(client, auth):
     assert response.json()["error"]["code"] == "practice_item_not_found"
 
 
-def test_content_issue_report_requires_exactly_one_target(client, admin, auth):
-    # DB-level guard (migration 0014's check constraint), exercised
-    # directly at the ORM layer since no endpoint can construct either
-    # invalid shape. Both ids used below are real, valid FK targets -
-    # this isolates the check constraint specifically, not an incidental
-    # FK violation.
+def test_content_issue_report_requires_at_most_one_item_target(client, admin, auth):
+    # DB-level guard, exercised directly at the ORM layer since no
+    # endpoint can construct the invalid "both ids" shape. Both ids used
+    # below are real, valid FK targets - this isolates the check
+    # constraint specifically, not an incidental FK violation. The new
+    # page-feedback shape deliberately allows neither id to be set.
     course_id, lesson_id = create_course_with_lexemes()
     import_templates(client, admin, course_id, artifact(include_listen=False))
     complete_via_api(client, auth, lesson_id)
@@ -229,13 +229,13 @@ def test_content_issue_report_requires_exactly_one_target(client, admin, auth):
 
     with SessionLocal() as db:
         neither = ContentIssueReport(
-            reporter_user_id=user_id(auth),
-            category="other",
+            reporter_user_id=None,
+            page_path="/home",
+            category="general_feedback",
         )
         db.add(neither)
-        with pytest.raises(IntegrityError):
-            db.commit()
-        db.rollback()
+        db.commit()
+        assert neither.id is not None
 
 
 def test_admin_issue_listing_shows_both_exercise_and_practice_item_reports(
