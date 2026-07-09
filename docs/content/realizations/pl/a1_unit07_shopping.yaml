@@ -1,0 +1,521 @@
+schema_version: "1.1"
+realization_version: "2026.1-draft.1"
+target_language: "pl"
+cefr_level: "A1"
+status: "complete_draft"
+generation_provenance:
+  method: "ai_generated"
+  authoring_system: "claude"
+  human_reviewed: false
+review:
+  status: "unreviewed"
+  required_next_reviewer: "codex"
+  notes: >-
+    Seventh Polish unit, continuing directly from pl/a1_unit06_food.yaml
+    (same Ewa protagonist, same formal pan/pani register in service
+    encounters, same 3-lesson bootstrap pace -- task instructions
+    explicitly asked to match units 01-06's size, not nl's later-grown
+    6-lesson depth for its own shopping unit). Realizes
+    universal.a1.shopping.ask_prices_quantities -- confirmed the next A1
+    outcome in spine order after food.order_simple_meal via
+    docs/content/universal_spine.yaml's own linear ordering (greetings ->
+    introductions -> numbers -> dates -> time -> family -> food ->
+    shopping -> ...), matching this file's own unit06 notes. Checked
+    nl/a1_unit07_shopping.yaml (also realizes this exact outcome as its
+    own unit07, a market-shopping scene) purely to confirm the
+    topic/outcome match, not for any sentence text, character, or
+    scenario reuse -- nl's file has since grown to 6 lessons with real
+    audio assets, which this file deliberately does NOT match in size,
+    per the standing "3-lesson bootstrap pace" instruction for this
+    course; only the topic identity was confirmed. fa/a1_unit07 realizes
+    a different outcome (weather) as its own unit07 -- language packs are
+    not required to hit the same spine outcome at the same unit number,
+    so this was expected, not a discrepancy to resolve.
+
+    Authored from the start in AUTHORING_GUIDE §19 format (schema_version
+    1.1): every kind:vocabulary card carries a real example sentence.
+    Zero listen_type/listen_select/listen_order exercises anywhere in
+    this file, matching unit01-06's own established choice for this
+    corpus -- pl has real Google Cloud TTS (pl-PL-Wavenet-F) live, so
+    audio-dependent exercises are no longer blocked by AUTHORING_GUIDE
+    §14's concern, but this file stays consistent with the precedent
+    unit01-06 already set (every exercise uses a real visible text
+    prompt) rather than introducing the first audio-dependent exercise
+    unilaterally in the same pass as new vocabulary -- a future dedicated
+    audio-authoring pass remains a real, cheap opportunity now that TTS is
+    wired. media_assets is therefore an empty list, not an oversight.
+    lesson03's dialogue_comprehension exercises render via the same
+    MultipleChoice component as multiple_choice/listen_select
+    (frontend/src/components/exercises/ExerciseRenderer.tsx) and are
+    given real target_blocks text instead of a media_asset_key, matching
+    unit01-06's own pattern.
+
+    Cross-file vocabulary note (confirmed every prior unit hit this
+    too): every word this file reuses from unit01/02/06 (Dzień dobry, Co,
+    pani, A, ale, Dobrze, Proszę, bardzo) is re-declared via this file's
+    OWN introduced_tokens before being tested in this file's own
+    exercises -- the compiler validates untaught vocabulary per
+    realization FILE, not per course, so no cross-file credit is given
+    even for words already taught in an earlier unit of the same course.
+    All Polish inflected surface forms (banany, bananów, pomidory,
+    pomidorów, ziemniaków) are treated by the compiler's tokenizer as
+    distinct tokens from their base/dictionary form and were each
+    declared separately at first use, same discipline unit06 already
+    applied to kawa/kawę and zupa/zupę.
+
+    Source: FSI Polish FAST (1992) -- confirmed real public-domain US
+    government course text, same cached copy as unit02-06
+    (.firecrawl/fsi-polish-fast.pdf / .txt). Real source vocabulary and
+    a real source dialogue scene directly confirmed and used here,
+    modernized per §10 (adapted into fresh sentences and current
+    round-number post-1995-redenomination złoty prices, never copied
+    verbatim): the produce-market unit (pp.156-163, "Seeing It" /
+    "Taking It Apart") directly confirms banany (bananas), pomidory
+    (tomatoes), tanio (cheap), drogo (expensive), kupić (to buy), trochę
+    (a bit), warto (worth it), weźmie/wezmę (future of wziąć, take),
+    więcej (more), razem (together/total), dla (for), and pani płaci
+    (you pay) as real source vocabulary, and its own worked dialogue
+    ("A ile kosztują banany?" / "Dwanaście tysięcy złotych kilo,
+    pomidory dziesięć." / "Trochę drogo." / "Drogo, ale kupić warto. To
+    ile pani weźmie?" / "Proszę bardzo: banany ... Razem ...") directly
+    confirms both this unit's "Ile kosztują + plural noun?" question
+    pattern and the source's own idiomatic elliptical price-per-kilo
+    construction ("[liczba] złotych kilo", adapted here to modern
+    round prices like "Pięć złotych kilo" rather than the source's own
+    pre-redenomination four/five-digit figures); a separate substitution
+    drill (p.417-418, "Follow the patterns... kilo, słoik, główkę")
+    directly confirms ziemniak (potato), ogórek (cucumber), grejpfrut
+    (grapefruit), cebula (onion), and the exact "Proszę kilo
+    ziemniaków."/"Proszę pół kilo sera." genitive-after-kilo construction
+    this unit's lesson02 grammar note teaches (adapted here to the three
+    regular masculine -ów nouns banan/pomidor/ziemniak rather than the
+    source's own mixed masculine/feminine set, a deliberate A1
+    simplification disclosed below); a further drill (p.15846 area)
+    independently confirms kilogram + genitive with pomarańcz(y) (oranges)
+    as its own real example, confirming pomarańcza as real source
+    vocabulary; mandarynka (tangerine) is confirmed via the same
+    exercise's own "kilogram mandarynek" prompt line. "Poproszę" (a more
+    polite future-tense variant of proszę) is directly confirmed via "Za
+    kawior dziękuję, nie wezmę. Poproszę tylko o dwa kilo pomidorów..."
+    (p.7053 area) in the same market-scene family, used here the same
+    way -- a polite ordering opener before a kilo quantity.
+
+    Honestly disclosed as NOT source-confirmed, freely authored from
+    general knowledge of modern spoken Polish (same standard as every
+    prior unit's disclosed gaps): "świeże" (fresh) as its own standalone
+    taught vocabulary card is a natural, ordinary A1 adjective a market
+    vendor would use, though the source itself only ever uses it
+    adjoined to a noun ("pomidory świeże") rather than teaching it in
+    isolation; the specific modern round-number złoty prices in this
+    unit (5 złotych/kilo for bananas, 8 złotych/kilo for tomatoes, 9
+    złotych total) are freely authored post-1995-redenomination figures,
+    since the source's own prices are in the pre-1995 currency (tens of
+    thousands of złotych per item) and would be actively misleading if
+    reused as-is -- this is the modernization pass §10 requires, not a
+    disclosed gap in the ordinary sense, but flagged here for
+    transparency about where the specific numbers came from. The
+    genitive-after-"kilo" grammar note is deliberately narrowed to only
+    the three regular masculine-inanimate -ów nouns already taught in
+    this unit (banan, pomidor, ziemniak) rather than also covering
+    feminine mass nouns like the source's own "cebuli"/"sera" (genitive
+    singular, a different declension pattern entirely) -- an intentional
+    A1 scope decision to keep one consistent, teachable rule rather than
+    exposing two different genitive patterns in the same lesson; cebula
+    itself is therefore taught in lesson01 only as a plain vocabulary
+    item, never tested in the genitive. The whole lesson03 Ewa/vendor
+    market scene and its specific facts (bananas cost 5 złotych a kilo,
+    tomatoes cost 8 złotych a kilo, Ewa buys a kilo of bananas and half a
+    kilo of tomatoes for 9 złotych total) are original, freshly authored,
+    continuing the established Ewa narration register (a market errand
+    is Ewa's own, following the same single-protagonist framing unit02's
+    shopping scene and unit06's restaurant scene already used).
+
+    Cross-checked against unit01/02/06 per AUTHORING_GUIDE §11: this
+    unit's facts (bananas cost 5 złotych/kilo; tomatoes cost 8
+    złotych/kilo; Ewa buys 1 kilo of bananas and 1/2 kilo of tomatoes;
+    the total is 9 złotych = 5 + 4) are arithmetically consistent and
+    stated the same way across every teaching card and exercise in
+    lesson03 -- exercise09's grammar-check correction ("Pomidory
+    kosztują osiem złotych kilo") reuses the exact same tomato price
+    established in the dialogue rather than inventing a new figure, and
+    the kosztuje/kosztują singular/plural verb-agreement grammar note
+    from lesson01 is used identically (same distinction, same reasoning)
+    everywhere it reappears in lesson03's dialogue and exercises.
+
+course:
+  realization_key: pl.a1
+  target_language_first: true
+  dialect: pl_standard
+  register_policy: >-
+    Continue unit01-06's register split exactly: Ewa stays in the formal
+    pan/pani register when speaking with the market vendor in lesson03's
+    scene (a genuine service-encounter context, the same register choice
+    the source's own market dialogue uses throughout), while lesson01/
+    lesson02's teaching cards and grammar notes are register-neutral
+    (kosztować/poproszę are used identically regardless of who is being
+    addressed).
+
+media_assets: []
+
+units:
+  - content_key: pl.a1.unit07.shopping
+    title: "Zakupy na targu"
+    section: reading_writing
+    spine_outcome_ids:
+      - universal.a1.shopping.ask_prices_quantities
+    planned_lesson_count: 3
+
+    lessons:
+      - content_key: pl.a1.unit07.lesson01.owoce_i_warzywa
+        title: "Owoce i warzywa"
+        spine_outcome_id: universal.a1.shopping.ask_prices_quantities
+        teaching:
+          - content_key: pl.a1.unit07.lesson01.teach.banan
+            kind: vocabulary
+            target: {text: "banan", language_code: pl, direction: ltr}
+            introduced_tokens: ["banan"]
+            example:
+              {text: "To jest banan.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit07.lesson01.teach.pomidor_ogorek
+            kind: vocabulary
+            target: {text: "pomidor, ogórek", language_code: pl, direction: ltr}
+            introduced_tokens: ["pomidor", "ogórek"]
+            example:
+              - {text: "To jest pomidor.", language_code: pl, direction: ltr}
+              - {text: "To jest ogórek.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit07.lesson01.teach.ziemniak_cebula
+            kind: vocabulary
+            target: {text: "ziemniak, cebula", language_code: pl, direction: ltr}
+            introduced_tokens: ["ziemniak", "cebula"]
+            example:
+              - {text: "To jest ziemniak.", language_code: pl, direction: ltr}
+              - {text: "To jest cebula.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit07.lesson01.teach.tanio_drogo
+            kind: vocabulary
+            target: {text: "tanio, drogo", language_code: pl, direction: ltr}
+            introduced_tokens: ["tanio", "drogo"]
+            example:
+              - {text: "To jest tanio.", language_code: pl, direction: ltr}
+              - {text: "To jest drogo.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit07.lesson01.teach.kosztuje_kosztuja_note
+            kind: grammar_note
+            target: {text: "Kosztować: kosztuje (liczba pojedyncza), kosztują (liczba mnoga) -- Banan kosztuje tanio. Banany kosztują tanio.", language_code: pl, direction: ltr}
+            introduced_tokens: ["Kosztować", "kosztuje", "kosztują", "Banany"]
+          - content_key: pl.a1.unit07.lesson01.teach.ile_kosztuje_banan
+            kind: phrase
+            target: {text: "Ile kosztuje banan?", language_code: pl, direction: ltr}
+            introduced_tokens: ["Ile"]
+        exercises:
+          - content_key: pl.a1.unit07.lesson01.exercise01.select_banan
+            type: multiple_choice
+            tested_text: "banan"
+            prompt:
+              target_blocks:
+                - {text: "banan", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit07.lesson01.exercise02.select_pomidor
+            type: multiple_choice
+            tested_text: "pomidor"
+            prompt:
+              target_blocks:
+                - {text: "pomidor", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit07.lesson01.exercise03.select_ziemniak
+            type: multiple_choice
+            tested_text: "ziemniak"
+            prompt:
+              target_blocks:
+                - {text: "ziemniak", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit07.lesson01.exercise04.match_produce_words
+            type: matching_pairs
+            tested_text: "banan pomidor ogórek ziemniak cebula tanio drogo"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "banan", right: "banana"}
+              - {left: "pomidor", right: "tomato"}
+              - {left: "ogórek", right: "cucumber"}
+              - {left: "ziemniak", right: "potato"}
+              - {left: "cebula", right: "onion"}
+              - {left: "tanio", right: "cheap"}
+              - {left: "drogo", right: "expensive"}
+          - content_key: pl.a1.unit07.lesson01.exercise05.order_ile_kosztuje_banan
+            type: word_order
+            tested_text: "Ile kosztuje banan"
+            prompt: {target_blocks: []}
+            word_bank: ["kosztuje", "Ile", "banan"]
+          - content_key: pl.a1.unit07.lesson01.exercise06.order_ile_kosztuja_banany
+            type: word_order
+            tested_text: "Ile kosztują banany"
+            prompt: {target_blocks: []}
+            word_bank: ["kosztują", "banany", "Ile"]
+          - content_key: pl.a1.unit07.lesson01.exercise07.fill_kosztuje
+            type: fill_in_blank
+            tested_text: "kosztuje"
+            prompt:
+              target_blocks:
+                - {text: "Banan ___ drogo.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit07.lesson01.exercise08.fix_kosztuje_agreement
+            type: grammar_check
+            tested_text: "Banany kosztują tanio"
+            prompt:
+              target_blocks:
+                - {text: "Banany kosztuje tanio.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit07.lesson01.exercise09.speak_ile_kosztuje_pomidor
+            type: speak_response
+            tested_text: "Ile kosztuje pomidor"
+            prompt: {target_blocks: []}
+
+      - content_key: pl.a1.unit07.lesson02.kilogram_prosze
+        title: "Kilogram, proszę"
+        spine_outcome_id: universal.a1.shopping.ask_prices_quantities
+        teaching:
+          - content_key: pl.a1.unit07.lesson02.teach.grejpfrut
+            kind: vocabulary
+            target: {text: "grejpfrut", language_code: pl, direction: ltr}
+            introduced_tokens: ["grejpfrut"]
+            example:
+              {text: "To jest grejpfrut.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit07.lesson02.teach.mandarynka_pomarancza
+            kind: vocabulary
+            target: {text: "mandarynka, pomarańcza", language_code: pl, direction: ltr}
+            introduced_tokens: ["mandarynka", "pomarańcza"]
+            example:
+              - {text: "To jest mandarynka.", language_code: pl, direction: ltr}
+              - {text: "To jest pomarańcza.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit07.lesson02.teach.kilo_pol_kilo
+            kind: vocabulary
+            target: {text: "kilo, pół kilo", language_code: pl, direction: ltr}
+            introduced_tokens: ["kilo", "pół"]
+            example:
+              - {text: "Proszę kilo pomidorów.", language_code: pl, direction: ltr}
+              - {text: "Proszę pół kilo bananów.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit07.lesson02.teach.poprosze
+            kind: vocabulary
+            target: {text: "Poproszę", language_code: pl, direction: ltr}
+            introduced_tokens: ["Poproszę"]
+            example:
+              {text: "Poproszę grejpfrut.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit07.lesson02.teach.genitive_ow_note
+            kind: grammar_note
+            target: {text: "Dopełniacz liczby mnogiej po 'kilo': banan -> bananów, pomidor -> pomidorów, ziemniak -> ziemniaków.", language_code: pl, direction: ltr}
+            introduced_tokens: ["bananów", "pomidorów", "ziemniaków"]
+          - content_key: pl.a1.unit07.lesson02.teach.poprosze_kilo_pomidorow
+            kind: phrase
+            target: {text: "Poproszę kilo pomidorów.", language_code: pl, direction: ltr}
+            introduced_tokens: []
+        exercises:
+          - content_key: pl.a1.unit07.lesson02.exercise01.select_grejpfrut
+            type: multiple_choice
+            tested_text: "grejpfrut"
+            prompt:
+              target_blocks:
+                - {text: "grejpfrut", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit07.lesson02.exercise02.select_mandarynka
+            type: multiple_choice
+            tested_text: "mandarynka"
+            prompt:
+              target_blocks:
+                - {text: "mandarynka", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit07.lesson02.exercise03.select_pomarancza
+            type: multiple_choice
+            tested_text: "pomarańcza"
+            prompt:
+              target_blocks:
+                - {text: "pomarańcza", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit07.lesson02.exercise04.match_more_produce_words
+            type: matching_pairs
+            tested_text: "grejpfrut mandarynka pomarańcza kilo pół poproszę banan pomidor"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "grejpfrut", right: "grapefruit"}
+              - {left: "mandarynka", right: "tangerine"}
+              - {left: "pomarańcza", right: "orange"}
+              - {left: "kilo", right: "kilogram"}
+              - {left: "pół", right: "half"}
+              - {left: "poproszę", right: "I'd like / please"}
+              - {left: "banan", right: "banana"}
+              - {left: "pomidor", right: "tomato"}
+          - content_key: pl.a1.unit07.lesson02.exercise05.order_poprosze_kilo_pomidorow
+            type: word_order
+            tested_text: "Poproszę kilo pomidorów"
+            prompt: {target_blocks: []}
+            word_bank: ["kilo", "Poproszę", "pomidorów"]
+          - content_key: pl.a1.unit07.lesson02.exercise06.order_pol_kilo_bananow
+            type: word_order
+            tested_text: "pół kilo bananów"
+            prompt: {target_blocks: []}
+            word_bank: ["kilo", "pół", "bananów"]
+          - content_key: pl.a1.unit07.lesson02.exercise07.fill_genitive_pomidorow
+            type: fill_in_blank
+            tested_text: "pomidorów"
+            prompt:
+              target_blocks:
+                - {text: "Poproszę kilo ___.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit07.lesson02.exercise08.fix_genitive_ending
+            type: grammar_check
+            tested_text: "Poproszę kilo bananów"
+            prompt:
+              target_blocks:
+                - {text: "Poproszę kilo banany.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit07.lesson02.exercise09.speak_pol_kilo_ziemniakow
+            type: speak_response
+            tested_text: "Poproszę pół kilo ziemniaków"
+            prompt: {target_blocks: []}
+
+      - content_key: pl.a1.unit07.lesson03.na_targu
+        title: "Na targu"
+        spine_outcome_id: universal.a1.shopping.ask_prices_quantities
+        teaching:
+          - content_key: pl.a1.unit07.lesson03.teach.dla
+            kind: vocabulary
+            target: {text: "dla", language_code: pl, direction: ltr}
+            introduced_tokens: ["dla"]
+            example:
+              {text: "To dla pani.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit07.lesson03.teach.swieze_bardzo
+            kind: vocabulary
+            target: {text: "świeże, bardzo", language_code: pl, direction: ltr}
+            introduced_tokens: ["świeże", "bardzo"]
+            example:
+              - {text: "Pomidory są świeże.", language_code: pl, direction: ltr}
+              - {text: "Bardzo tanio!", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit07.lesson03.teach.trochę
+            kind: vocabulary
+            target: {text: "trochę", language_code: pl, direction: ltr}
+            introduced_tokens: ["trochę"]
+            example:
+              {text: "Trochę drogo.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit07.lesson03.teach.razem
+            kind: vocabulary
+            target: {text: "razem", language_code: pl, direction: ltr}
+            introduced_tokens: ["razem"]
+            example:
+              {text: "Razem dziesięć złotych.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit07.lesson03.teach.co_dla_pani
+            kind: phrase
+            target: {text: "Co dla pani?", language_code: pl, direction: ltr}
+            introduced_tokens: ["Co", "pani"]
+          - content_key: pl.a1.unit07.lesson03.teach.dialogue.line01
+            kind: dialogue
+            target:
+              text: "Dzień dobry! Co dla pani?"
+              language_code: pl
+              direction: ltr
+              speaker: Sprzedawca
+            introduced_tokens: ["Dzień", "dobry"]
+          - content_key: pl.a1.unit07.lesson03.teach.dialogue.line02
+            kind: dialogue
+            target:
+              text: "Ile kosztują banany?"
+              language_code: pl
+              direction: ltr
+              speaker: Ewa
+            introduced_tokens: []
+          - content_key: pl.a1.unit07.lesson03.teach.dialogue.line03
+            kind: dialogue
+            target:
+              text: "Pięć złotych kilo, bardzo świeże."
+              language_code: pl
+              direction: ltr
+              speaker: Sprzedawca
+            introduced_tokens: ["Pięć", "złotych"]
+          - content_key: pl.a1.unit07.lesson03.teach.dialogue.line04
+            kind: dialogue
+            target:
+              text: "Dobrze, poproszę kilo bananów."
+              language_code: pl
+              direction: ltr
+              speaker: Ewa
+            introduced_tokens: ["Dobrze"]
+          - content_key: pl.a1.unit07.lesson03.teach.dialogue.line05
+            kind: dialogue
+            target:
+              text: "A pomidory? Osiem złotych kilo."
+              language_code: pl
+              direction: ltr
+              speaker: Sprzedawca
+            introduced_tokens: ["A", "Osiem", "pomidory"]
+          - content_key: pl.a1.unit07.lesson03.teach.dialogue.line06
+            kind: dialogue
+            target:
+              text: "Trochę drogo, ale poproszę pół kilo."
+              language_code: pl
+              direction: ltr
+              speaker: Ewa
+            introduced_tokens: ["ale"]
+          - content_key: pl.a1.unit07.lesson03.teach.dialogue.line07
+            kind: dialogue
+            target:
+              text: "Proszę bardzo. Razem dziewięć złotych."
+              language_code: pl
+              direction: ltr
+              speaker: Sprzedawca
+            introduced_tokens: ["Proszę", "dziewięć"]
+        exercises:
+          - content_key: pl.a1.unit07.lesson03.exercise01.select_what_would_you_like
+            type: multiple_choice
+            tested_text: "Co dla pani"
+            prompt:
+              target_blocks:
+                - {text: "Co dla pani?", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit07.lesson03.exercise02.select_banana_price
+            type: multiple_choice
+            tested_text: "Pięć złotych kilo bardzo świeże"
+            prompt:
+              target_blocks:
+                - {text: "Pięć złotych kilo, bardzo świeże.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit07.lesson03.exercise03.comprehend_tomato_price
+            type: dialogue_comprehension
+            tested_text: "osiem złotych"
+            prompt:
+              target_blocks:
+                - {text: "A pomidory? Osiem złotych kilo.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit07.lesson03.exercise04.comprehend_total
+            type: dialogue_comprehension
+            tested_text: "dziewięć złotych"
+            prompt:
+              target_blocks:
+                - {text: "Proszę bardzo. Razem dziewięć złotych.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit07.lesson03.exercise05.match_market_vocabulary
+            type: matching_pairs
+            tested_text: "dla świeże bardzo trochę razem dziewięć osiem pięć"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "dla", right: "for"}
+              - {left: "świeże", right: "fresh"}
+              - {left: "bardzo", right: "very"}
+              - {left: "trochę", right: "a bit"}
+              - {left: "razem", right: "total / together"}
+              - {left: "dziewięć", right: "nine"}
+              - {left: "osiem", right: "eight"}
+              - {left: "pięć", right: "five"}
+          - content_key: pl.a1.unit07.lesson03.exercise06.order_co_dla_pani
+            type: word_order
+            tested_text: "Co dla pani"
+            prompt: {target_blocks: []}
+            word_bank: ["dla", "Co", "pani"]
+          - content_key: pl.a1.unit07.lesson03.exercise07.order_poprosze_kilo_bananow
+            type: word_order
+            tested_text: "Poproszę kilo bananów"
+            prompt: {target_blocks: []}
+            word_bank: ["kilo", "Poproszę", "bananów"]
+          - content_key: pl.a1.unit07.lesson03.exercise08.fill_total
+            type: fill_in_blank
+            tested_text: "dziewięć"
+            prompt:
+              target_blocks:
+                - {text: "Razem ___ złotych.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit07.lesson03.exercise09.fix_verb_agreement
+            type: grammar_check
+            tested_text: "Pomidory kosztują osiem złotych kilo"
+            prompt:
+              target_blocks:
+                - {text: "Pomidory kosztuje osiem złotych kilo.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit07.lesson03.exercise10.reply_ile_kosztuja_pomidory
+            type: dialogue_response
+            tested_text: "Osiem złotych kilo"
+            prompt:
+              target_blocks:
+                - {text: "Ile kosztują pomidory?", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit07.lesson03.exercise11.speak_trochę_drogo_pol_kilo
+            type: speak_response
+            tested_text: "Trochę drogo ale poproszę pół kilo"
+            prompt: {target_blocks: []}
