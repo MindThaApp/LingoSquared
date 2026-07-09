@@ -1,0 +1,601 @@
+schema_version: "1.1"
+realization_version: "2026.1-draft.1"
+target_language: "hi"
+cefr_level: "A1"
+status: "complete_draft"
+generation_provenance:
+  method: "ai_generated"
+  authoring_system: "claude"
+  human_reviewed: false
+review:
+  status: "unreviewed"
+  required_next_reviewer: "codex"
+  notes: >-
+    Eighth Hindi unit, continuing directly from hi/a1_unit07_shopping.yaml
+    (same Priya/Arjun characters, still on तुम terms with each other).
+    Spine outcome confirmed via a direct read of universal_spine.yaml
+    (not just assumed from other languages): hi/a1_unit07 realized
+    universal.a1.shopping.ask_prices_quantities (line 270), and the very
+    next outcome entry in file order is universal.a1.places.
+    locate_common_places (line 295, "Identify and state the location of
+    common places and facilities") -- confirmed as the correct next
+    outcome by additionally checking nl/a1_unit08_places.yaml,
+    pl/a1_unit08_places.yaml, and ro/a1_unit08_places.yaml, which all
+    three independently realize this exact same outcome as THEIR
+    unit08, immediately after their own unit07 shopping units --
+    matching hi's own unit01-07 sequence, which has independently
+    tracked the same greetings/numbers/dates/time/family/food/shopping
+    order as those three languages throughout (as unit07's own notes
+    already established, fa's own ordering diverges and was correctly
+    NOT used as a precedent). Sized to 3 lessons matching unit01-07's
+    bootstrap pace. Topic/pacing structure only reused from nl/pl/ro,
+    no text or phrasing from any other language's file, per the
+    standing skeleton-share-not-text-share policy: lesson01 teaches six
+    common-place nouns (घर/स्कूल/अस्पताल/बैंक/पार्क/स्टेशन, deliberately
+    all masculine so this unit stays focused on the spatial outcome
+    rather than reopening the gender-agreement point already taught
+    extensively in units 01/05/07) plus the कहाँ है? question (reusing
+    कहाँ, already formally introduced in unit01) and the यहाँ/वहाँ
+    (here/there) deictic pair; lesson02 teaches पास/दूर (near/far) and
+    के सामने/के पीछे (in front of/behind) as a second, parallel
+    postposition pattern; lesson03 combines everything into a real
+    Priya/Arjun dialogue about where things are in their neighborhood,
+    introducing डाकघर (post office) plus तीन small new function words
+    (थोड़ा "a bit", तो "so/then", सही "right/correct") directly within
+    dialogue lines, the same precedent unit07 used for तीस (thirty).
+
+    One deliberate structural design choice, disclosed for whoever
+    reviews next: lessons 02-03 describe a single, internally consistent
+    small "neighborhood map" rather than independent unrelated example
+    sentences, specifically to satisfy AUTHORING_GUIDE §11 (cross-check
+    facts within a unit, not just within one exercise) -- बैंक and डाकघर
+    are established as the "near" cluster (डाकघर बैंक के पास है),
+    स्टेशन and अस्पताल as the "far" cluster (अस्पताल स्टेशन के सामने
+    है, and स्टेशन itself is दूर, so अस्पताल being right in front of it
+    is consistently "थोड़ा दूर" too -- an earlier draft of this dialogue
+    had Priya call the hospital पास right after confirming the station
+    it's next to is दूर, a real self-contradiction caught and fixed
+    before finalizing, not shipped), and पार्क/स्कूल are deliberately
+    given as INVERSE statements of the same one fact (पार्क स्कूल के
+    पीछे है = स्कूल पार्क के सामने है), which doubles as a genuine,
+    disclosed grammar point: सामने and पीछे are opposites describing the
+    same real relationship from two viewpoints, called out explicitly on
+    its own grammar_note card in lesson02, continuing this course's
+    established "flag the real pattern explicitly" discipline (unit01's
+    aap/tum split, unit04's बजा/बजे exception, unit06's चाहिए/स्वादिष्ट
+    notes, unit07's कितने का/की and सस्ता/महंगा notes).
+
+    A second, smaller disclosed decision: पास appears only in unit02's
+    EXAMPLE sentences (मेरे पास एक किताब है, etc.) and was never added to
+    that unit's own introduced_tokens list -- per AUTHORING_GUIDE §19
+    ("Examples do NOT feed introduced_tokens and never make a word fair
+    game for exercises"), पास was therefore never actually formally
+    taught before now, despite having been seen in passing. This unit
+    treats it as a genuinely new, first-time formal introduction
+    (lesson02's teach.paas card), while noting the connection to its
+    earlier example-only appearance and its shift in sense (मेरे पास =
+    "I have", literally "near me", vs. this unit's new spatial "near a
+    place" sense) directly in the overlay gloss/note.
+
+    No new anusवार/चंद्रबिंदु spelling decision was needed this unit
+    (unlike unit07's महंगा case) -- यहाँ/वहाँ reuse the exact spelling
+    already established in units 01-07 (चंद्रबिंदु ँ after the
+    non-ascending ा matra, same class as हाँ/कहाँ/पाँच), and बैंक's
+    अनुस्वार ं follows both the existing ascending-vowel-sign rule (ैं
+    is an ascending matra, same class as मैं/हैं) and, independently,
+    the same homorganic-nasal-before-a-stop-consonant pattern already
+    established for महंगा -- both rules agree here for a single very
+    standard, unambiguous loanword spelling, so nothing new to flag.
+
+    A real validator footgun hit and fixed while authoring this file:
+    `scripts/compile_content.py`'s untaught-vocabulary check
+    (`validate_untaught_vocabulary`) resets its "taught" token set PER
+    FILE, not cumulatively across the whole course, and its tokenizer
+    (`TOKEN_RE = r"[\w‌]+"`) does not include Unicode nonspacing
+    marks (category Mn), so a word like है or कहाँ tokenizes down to
+    just ह / कह once its vowel/nasal marks are stripped. This means
+    every reused Hindi function word -- even one formally introduced
+    back in unit01 -- must be re-listed in THIS file's own
+    introduced_tokens the first time it's tested here, or validation
+    fails with a confusing "tests tokens not introduced" error quoting
+    single mangled consonants. Confirmed this is the existing, accepted
+    convention (not a bug specific to this file) by checking that every
+    one of units 01-07 independently validates 0-errors/0-warnings
+    completely standalone, and that unit07 itself explicitly re-lists
+    "है" in its own very first teaching card's introduced_tokens despite
+    it having been taught back in unit01. Fixed here by adding
+    ["कहाँ", "है"] to lesson01's teach.school_kahan_hai card (the first
+    place both are tested in this file); no other content change was
+    needed. Flagging in case a future unit hits the same confusing
+    error message and wastes time suspecting a real vocabulary gap
+    instead of this validator's per-file/mark-stripping design.
+
+    Source access, re-attempted per this task's explicit instruction
+    (not just assumed to fail the same way as units 01-07): a fresh
+    `firecrawl search "FSI Hindi Active Introduction places locations
+    directions market"` failed outright with the same HTTP 402
+    (payment/quota) error as unit07's attempt -- quota has not reset,
+    fully disclosed rather than silently skipped. Fell back to the same
+    PDF/OCR path already used for units 01-07 (scratch copy at
+    .../scratchpad/hi/fsi_hindi.pdf, confirmed still present). (1) A
+    fresh `pdftotext -layout` against the raw PDF, run again specifically
+    for this unit, returned the same near-empty 143-byte file,
+    byte-for-byte identical (`cmp`-confirmed) to every earlier unit's
+    result -- `pdffonts` again returns an empty table, confirming this
+    is still a pure page-image scan with no embedded text layer, an
+    eighth confirmation of the same fact. (2) A fresh regex scan of the
+    Internet Archive's own OCR pass (`ocr.txt`) for the Devanagari
+    Unicode block (U+0900-U+097F) again returns ZERO matches anywhere in
+    the document. (3) A fresh grep of the same OCR file for
+    location-topic English framing this time found genuinely strong,
+    directly on-topic incidental corroboration -- "Where is it?",
+    "Where is Karachi?", "I arrive at school at nine o'clock", "There
+    was an unpaved road near our office", "There is a theater near
+    their house", "There was a dense woods near the village", "Near my
+    house there is a shop where you can get good candy", "My daughter,
+    who is seven, goes to school", "used for near in oblique phrases"
+    -- real, multiple hits squarely on this unit's own topic (location,
+    near/far, school, home, office), stronger and more numerous than
+    unit07's shopping-topic corroboration. Despite this, every single
+    Hindi-script line in the same OCR output remains unusable
+    Latin-lookalike mojibake (e.g. "S 3f farrc far ^ if 1 ?", "wfst
+    #mT far 1 ?") -- confirmed by eye to be garbage, not readable
+    Devanagari-as-Latin-transliteration, matching the failure mode
+    confirmed seven times over across units 01-07, now an eighth time
+    against this unit's own topic. Per this task's explicit instruction,
+    nothing from either extraction attempt -- neither any mojibake
+    fragment nor any wording of the recovered English framing prose --
+    was used, cleaned up, transcribed, or guessed at anywhere in this
+    file. Every Devanagari string below is this session's own careful,
+    correct rendering of established Modern Standard Hindi, verified
+    character-by-character.
+
+course:
+  realization_key: hi.a1
+  target_language_first: true
+  dialect: hi_standard
+  register_policy: >-
+    Continues unit01-07's aap/tum split. This unit's dialogue (lesson03)
+    stays entirely in तुम between Priya and Arjun -- unlike unit07, no
+    new stranger character is introduced here, so there is no fresh aap
+    exchange to demonstrate; the aap-with-strangers pattern already
+    established via unit07's दुकानदार remains the standing precedent for
+    any future unit that introduces another stranger. Gender agreement
+    (अच्छा/अच्छी, चाहता/चाहती, मेरा/मेरी) is deliberately NOT touched in
+    this unit -- every place noun taught here (घर, स्कूल, अस्पताल, बैंक,
+    पार्क, स्टेशन, डाकघर) is masculine, keeping this unit focused
+    squarely on its own spatial-location outcome rather than reopening
+    the gender point already taught at length in units 01/05/07.
+
+media_assets: []
+
+units:
+  - content_key: hi.a1.unit08.places
+    title: "जगहें"
+    section: reading_writing
+    spine_outcome_ids:
+      - universal.a1.places.locate_common_places
+    planned_lesson_count: 3
+
+    lessons:
+      - content_key: hi.a1.unit08.lesson01.jagahen
+        title: "जगहें"
+        spine_outcome_id: universal.a1.places.locate_common_places
+        teaching:
+          - content_key: hi.a1.unit08.lesson01.teach.ghar_school
+            kind: vocabulary
+            target: {text: "घर, स्कूल", language_code: hi, direction: ltr}
+            introduced_tokens: ["घर", "स्कूल"]
+            example:
+              - {text: "यह घर है।", language_code: hi, direction: ltr}
+              - {text: "यह स्कूल है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit08.lesson01.teach.aspatal_bank
+            kind: vocabulary
+            target: {text: "अस्पताल, बैंक", language_code: hi, direction: ltr}
+            introduced_tokens: ["अस्पताल", "बैंक"]
+            example:
+              - {text: "यह अस्पताल है।", language_code: hi, direction: ltr}
+              - {text: "यह बैंक है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit08.lesson01.teach.park_station
+            kind: vocabulary
+            target: {text: "पार्क, स्टेशन", language_code: hi, direction: ltr}
+            introduced_tokens: ["पार्क", "स्टेशन"]
+            example:
+              - {text: "यह पार्क है।", language_code: hi, direction: ltr}
+              - {text: "यह स्टेशन है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit08.lesson01.teach.yahan_wahan
+            kind: vocabulary
+            target: {text: "यहाँ, वहाँ", language_code: hi, direction: ltr}
+            introduced_tokens: ["यहाँ", "वहाँ"]
+            example:
+              - {text: "स्कूल यहाँ है।", language_code: hi, direction: ltr}
+              - {text: "बैंक वहाँ है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit08.lesson01.teach.school_kahan_hai
+            kind: phrase
+            target: {text: "स्कूल कहाँ है?", language_code: hi, direction: ltr}
+            introduced_tokens: ["कहाँ", "है"]
+          - content_key: hi.a1.unit08.lesson01.teach.school_yahan_hai
+            kind: phrase
+            target: {text: "स्कूल यहाँ है।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a1.unit08.lesson01.teach.bank_kahan_hai
+            kind: phrase
+            target: {text: "बैंक कहाँ है?", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a1.unit08.lesson01.teach.bank_wahan_hai
+            kind: phrase
+            target: {text: "बैंक वहाँ है।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+        exercises:
+          - content_key: hi.a1.unit08.lesson01.exercise01.select_ghar_meaning
+            type: multiple_choice
+            tested_text: "घर"
+            prompt:
+              target_blocks:
+                - {text: "घर", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit08.lesson01.exercise02.select_school_meaning
+            type: multiple_choice
+            tested_text: "स्कूल"
+            prompt:
+              target_blocks:
+                - {text: "स्कूल", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit08.lesson01.exercise03.select_aspatal_meaning
+            type: multiple_choice
+            tested_text: "अस्पताल"
+            prompt:
+              target_blocks:
+                - {text: "अस्पताल", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit08.lesson01.exercise04.select_yahan_meaning
+            type: multiple_choice
+            tested_text: "यहाँ"
+            prompt:
+              target_blocks:
+                - {text: "यहाँ", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit08.lesson01.exercise05.match_place_words
+            type: matching_pairs
+            tested_text: "घर स्कूल अस्पताल बैंक पार्क स्टेशन यहाँ वहाँ"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "घर", right: "home / house"}
+              - {left: "स्कूल", right: "school"}
+              - {left: "अस्पताल", right: "hospital"}
+              - {left: "बैंक", right: "bank"}
+              - {left: "पार्क", right: "park"}
+              - {left: "स्टेशन", right: "station"}
+              - {left: "यहाँ", right: "here"}
+              - {left: "वहाँ", right: "there"}
+          - content_key: hi.a1.unit08.lesson01.exercise06.order_school_kahan_hai
+            type: word_order
+            tested_text: "स्कूल कहाँ है"
+            prompt: {target_blocks: []}
+            word_bank: ["कहाँ", "स्कूल", "है"]
+          - content_key: hi.a1.unit08.lesson01.exercise07.order_bank_yahan_hai
+            type: word_order
+            tested_text: "बैंक यहाँ है"
+            prompt: {target_blocks: []}
+            word_bank: ["यहाँ", "बैंक", "है"]
+          - content_key: hi.a1.unit08.lesson01.exercise08.fill_yah_aspatal_school_nahin
+            type: fill_in_blank
+            tested_text: "अस्पताल"
+            prompt:
+              target_blocks:
+                - {text: "यह ___ है, स्कूल नहीं।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit08.lesson01.exercise09.fill_bank_kahan
+            type: fill_in_blank
+            tested_text: "कहाँ"
+            prompt:
+              target_blocks:
+                - {text: "बैंक ___ है?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit08.lesson01.exercise10.reply_school_kahan_hai
+            type: dialogue_response
+            tested_text: "स्कूल वहाँ है"
+            prompt:
+              target_blocks:
+                - {text: "स्कूल कहाँ है?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit08.lesson01.exercise11.speak_where_is_park
+            type: speak_response
+            tested_text: "पार्क यहाँ है"
+            prompt:
+              target_blocks:
+                - {text: "बताओ, पार्क कहाँ है?", language_code: hi, direction: ltr}
+
+      - content_key: hi.a1.unit08.lesson02.paas_aur_door
+        title: "पास और दूर"
+        spine_outcome_id: universal.a1.places.locate_common_places
+        teaching:
+          - content_key: hi.a1.unit08.lesson02.teach.paas
+            kind: vocabulary
+            target: {text: "पास", language_code: hi, direction: ltr}
+            introduced_tokens: ["पास"]
+            example: {text: "बैंक पास है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit08.lesson02.teach.door
+            kind: vocabulary
+            target: {text: "दूर", language_code: hi, direction: ltr}
+            introduced_tokens: ["दूर"]
+            example: {text: "स्टेशन दूर है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit08.lesson02.teach.ke_paas_note
+            kind: grammar_note
+            target: {text: "'के पास' का मतलब है किसी जगह के नज़दीक -- जैसे 'बैंक स्कूल के पास है'। यह वही 'पास' है जो पहले 'मेरे पास' (मेरे पास एक किताब है) में आया था, पर वहाँ इसका मतलब था 'मेरे स्वामित्व में' (I have), और यहाँ इसका मतलब है 'नज़दीक' (near) -- एक ही शब्द, दो अलग इस्तेमाल।", language_code: hi, direction: ltr}
+            introduced_tokens: ["के"]
+          - content_key: hi.a1.unit08.lesson02.teach.school_bank_ke_paas_hai
+            kind: phrase
+            target: {text: "स्कूल बैंक के पास है।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a1.unit08.lesson02.teach.samne_peeche
+            kind: vocabulary
+            target: {text: "सामने, पीछे", language_code: hi, direction: ltr}
+            introduced_tokens: ["सामने", "पीछे"]
+            example:
+              - {text: "अस्पताल स्टेशन के सामने है।", language_code: hi, direction: ltr}
+              - {text: "पार्क स्कूल के पीछे है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit08.lesson02.teach.samne_peeche_note
+            kind: grammar_note
+            target: {text: "'सामने' और 'पीछे' भी 'पास' की तरह 'के' के साथ आते हैं -- और ये एक-दूसरे के उल्टे हैं: 'पार्क स्कूल के पीछे है' और 'स्कूल पार्क के सामने है' दोनों एक ही बात कहते हैं, बस अलग-अलग तरफ़ से।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a1.unit08.lesson02.teach.school_park_ke_samne_hai
+            kind: phrase
+            target: {text: "स्कूल पार्क के सामने है।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+        exercises:
+          - content_key: hi.a1.unit08.lesson02.exercise01.select_door_meaning
+            type: multiple_choice
+            tested_text: "दूर"
+            prompt:
+              target_blocks:
+                - {text: "दूर", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit08.lesson02.exercise02.select_samne_meaning
+            type: multiple_choice
+            tested_text: "सामने"
+            prompt:
+              target_blocks:
+                - {text: "सामने", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit08.lesson02.exercise03.select_peeche_meaning
+            type: multiple_choice
+            tested_text: "पीछे"
+            prompt:
+              target_blocks:
+                - {text: "पीछे", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit08.lesson02.exercise04.match_spatial_words
+            type: matching_pairs
+            tested_text: "पास दूर सामने पीछे यहाँ वहाँ कहाँ"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "पास", right: "near"}
+              - {left: "दूर", right: "far"}
+              - {left: "सामने", right: "in front of"}
+              - {left: "पीछे", right: "behind"}
+              - {left: "यहाँ", right: "here"}
+              - {left: "वहाँ", right: "there"}
+              - {left: "कहाँ", right: "where"}
+          - content_key: hi.a1.unit08.lesson02.exercise05.order_school_bank_ke_paas_hai
+            type: word_order
+            tested_text: "स्कूल बैंक के पास है"
+            prompt: {target_blocks: []}
+            word_bank: ["बैंक", "स्कूल", "के", "पास", "है"]
+          - content_key: hi.a1.unit08.lesson02.exercise06.order_park_school_ke_peeche_hai
+            type: word_order
+            tested_text: "पार्क स्कूल के पीछे है"
+            prompt: {target_blocks: []}
+            word_bank: ["स्कूल", "पार्क", "के", "पीछे", "है"]
+          - content_key: hi.a1.unit08.lesson02.exercise07.fill_school_park_ke_samne
+            type: fill_in_blank
+            tested_text: "सामने"
+            prompt:
+              target_blocks:
+                - {text: "स्कूल पार्क के ___ है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit08.lesson02.exercise08.fill_bank_paas_station_door
+            type: fill_in_blank
+            tested_text: "पास"
+            prompt:
+              target_blocks:
+                - {text: "बैंक ___ है, स्टेशन दूर है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit08.lesson02.exercise09.fix_missing_ke_samne
+            type: grammar_check
+            tested_text: "अस्पताल स्टेशन के सामने है"
+            prompt:
+              target_blocks:
+                - {text: "अस्पताल स्टेशन सामने है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit08.lesson02.exercise10.reply_park_kahan_hai
+            type: dialogue_response
+            tested_text: "पार्क स्कूल के पीछे है"
+            prompt:
+              target_blocks:
+                - {text: "पार्क कहाँ है?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit08.lesson02.exercise11.speak_bank_location
+            type: speak_response
+            tested_text: "बैंक पास है"
+            prompt:
+              target_blocks:
+                - {text: "बताओ, बैंक कहाँ है?", language_code: hi, direction: ltr}
+
+      - content_key: hi.a1.unit08.lesson03.priya_arjun_ka_mohalla
+        title: "प्रिया और अर्जुन का मोहल्ला"
+        spine_outcome_id: universal.a1.places.locate_common_places
+        teaching:
+          - content_key: hi.a1.unit08.lesson03.teach.dakghar
+            kind: vocabulary
+            target: {text: "डाकघर", language_code: hi, direction: ltr}
+            introduced_tokens: ["डाकघर"]
+            example: {text: "डाकघर बैंक के पास है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit08.lesson03.teach.dakghar_kahan_hai
+            kind: phrase
+            target: {text: "डाकघर कहाँ है?", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a1.unit08.lesson03.teach.dialogue.line01
+            kind: dialogue
+            target:
+              text: "प्रिया, डाकघर कहाँ है?"
+              language_code: hi
+              direction: ltr
+              speaker: Arjun
+            introduced_tokens: []
+          - content_key: hi.a1.unit08.lesson03.teach.dialogue.line02
+            kind: dialogue
+            target:
+              text: "डाकघर बैंक के पास है।"
+              language_code: hi
+              direction: ltr
+              speaker: Priya
+            introduced_tokens: []
+          - content_key: hi.a1.unit08.lesson03.teach.dialogue.line03
+            kind: dialogue
+            target:
+              text: "अच्छा। और अस्पताल कहाँ है?"
+              language_code: hi
+              direction: ltr
+              speaker: Arjun
+            introduced_tokens: []
+          - content_key: hi.a1.unit08.lesson03.teach.dialogue.line04
+            kind: dialogue
+            target:
+              text: "अस्पताल स्टेशन के सामने है।"
+              language_code: hi
+              direction: ltr
+              speaker: Priya
+            introduced_tokens: []
+          - content_key: hi.a1.unit08.lesson03.teach.dialogue.line05
+            kind: dialogue
+            target:
+              text: "स्टेशन दूर है?"
+              language_code: hi
+              direction: ltr
+              speaker: Arjun
+            introduced_tokens: []
+          - content_key: hi.a1.unit08.lesson03.teach.dialogue.line06
+            kind: dialogue
+            target:
+              text: "हाँ, थोड़ा दूर है। बैंक पास है।"
+              language_code: hi
+              direction: ltr
+              speaker: Priya
+            introduced_tokens: ["थोड़ा"]
+          - content_key: hi.a1.unit08.lesson03.teach.dialogue.line07
+            kind: dialogue
+            target:
+              text: "ठीक है। और पार्क कहाँ है?"
+              language_code: hi
+              direction: ltr
+              speaker: Arjun
+            introduced_tokens: []
+          - content_key: hi.a1.unit08.lesson03.teach.dialogue.line08
+            kind: dialogue
+            target:
+              text: "पार्क स्कूल के पीछे है।"
+              language_code: hi
+              direction: ltr
+              speaker: Priya
+            introduced_tokens: []
+          - content_key: hi.a1.unit08.lesson03.teach.dialogue.line09
+            kind: dialogue
+            target:
+              text: "तो स्कूल पार्क के सामने है!"
+              language_code: hi
+              direction: ltr
+              speaker: Arjun
+            introduced_tokens: ["तो"]
+          - content_key: hi.a1.unit08.lesson03.teach.dialogue.line10
+            kind: dialogue
+            target:
+              text: "हाँ, यह सही है!"
+              language_code: hi
+              direction: ltr
+              speaker: Priya
+            introduced_tokens: ["सही"]
+          - content_key: hi.a1.unit08.lesson03.teach.dialogue.line11
+            kind: dialogue
+            target:
+              text: "बहुत शुक्रिया, प्रिया!"
+              language_code: hi
+              direction: ltr
+              speaker: Arjun
+            introduced_tokens: []
+          - content_key: hi.a1.unit08.lesson03.teach.dialogue.line12
+            kind: dialogue
+            target:
+              text: "कोई बात नहीं! फिर मिलेंगे।"
+              language_code: hi
+              direction: ltr
+              speaker: Priya
+            introduced_tokens: []
+        exercises:
+          - content_key: hi.a1.unit08.lesson03.exercise01.select_dakghar_meaning
+            type: multiple_choice
+            tested_text: "डाकघर"
+            prompt:
+              target_blocks:
+                - {text: "डाकघर", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit08.lesson03.exercise02.select_sahi_meaning
+            type: multiple_choice
+            tested_text: "सही"
+            prompt:
+              target_blocks:
+                - {text: "सही", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit08.lesson03.exercise03.comprehend_dakghar_location
+            type: dialogue_comprehension
+            tested_text: "बैंक के पास"
+            prompt:
+              target_blocks:
+                - {text: "डाकघर बैंक के पास है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit08.lesson03.exercise04.comprehend_park_location
+            type: dialogue_comprehension
+            tested_text: "स्कूल के पीछे"
+            prompt:
+              target_blocks:
+                - {text: "पार्क स्कूल के पीछे है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit08.lesson03.exercise05.order_dakghar_bank_ke_paas_hai
+            type: word_order
+            tested_text: "डाकघर बैंक के पास है"
+            prompt: {target_blocks: []}
+            word_bank: ["बैंक", "डाकघर", "के", "पास", "है"]
+          - content_key: hi.a1.unit08.lesson03.exercise06.order_aspatal_station_ke_samne_hai
+            type: word_order
+            tested_text: "अस्पताल स्टेशन के सामने है"
+            prompt: {target_blocks: []}
+            word_bank: ["स्टेशन", "अस्पताल", "के", "सामने", "है"]
+          - content_key: hi.a1.unit08.lesson03.exercise07.match_places_review
+            type: matching_pairs
+            tested_text: "घर स्कूल अस्पताल बैंक पार्क स्टेशन डाकघर पास दूर सामने पीछे थोड़ा"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "घर", right: "home / house"}
+              - {left: "स्कूल", right: "school"}
+              - {left: "अस्पताल", right: "hospital"}
+              - {left: "बैंक", right: "bank"}
+              - {left: "पार्क", right: "park"}
+              - {left: "स्टेशन", right: "station"}
+              - {left: "डाकघर", right: "post office"}
+              - {left: "पास", right: "near"}
+              - {left: "दूर", right: "far"}
+              - {left: "सामने", right: "in front of"}
+              - {left: "पीछे", right: "behind"}
+              - {left: "थोड़ा", right: "a bit / a little"}
+          - content_key: hi.a1.unit08.lesson03.exercise08.fill_station_thoda_door
+            type: fill_in_blank
+            tested_text: "थोड़ा"
+            prompt:
+              target_blocks:
+                - {text: "स्टेशन ___ दूर है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit08.lesson03.exercise09.fix_missing_ke_dakghar
+            type: grammar_check
+            tested_text: "डाकघर बैंक के पास है"
+            prompt:
+              target_blocks:
+                - {text: "डाकघर बैंक पास है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit08.lesson03.exercise10.reply_aspatal_kahan_hai
+            type: dialogue_response
+            tested_text: "अस्पताल स्टेशन के सामने है"
+            prompt:
+              target_blocks:
+                - {text: "अस्पताल कहाँ है?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit08.lesson03.exercise11.write_about_a_place
+            type: writing_prompt
+            tested_text: "डाकघर बैंक के पास है"
+            prompt:
+              target_blocks:
+                - {text: "अपने इलाके की एक जगह के बारे में एक वाक्य लिखो -- वह कहाँ है?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit08.lesson03.exercise12.speak_park_location
+            type: speak_response
+            tested_text: "पार्क स्कूल के पीछे है"
+            prompt:
+              target_blocks:
+                - {text: "बताओ, पार्क कहाँ है?", language_code: hi, direction: ltr}
