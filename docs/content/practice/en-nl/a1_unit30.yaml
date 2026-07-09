@@ -1,0 +1,221 @@
+schema_version: "1.0"
+pack_key: practice.en-nl.a1.unit30
+source_language: en
+target_language: nl
+unit_content_key: nl.a1.unit30.appearance
+review:
+  status: unreviewed
+  fresh_context: "false"
+  notes: "Authored 2026-07-09 by the practice-template depth-closing pass
+    (same pass as a1_unit29.yaml -- see that file's review.notes for the
+    full manifest-gap context). This file covers unit30 (describing
+    physical appearance). Extended scripts/backfill_lexemes_en_nl.py with 6
+    new semantic tags scoped to this unit's own real vocabulary
+    (hair_color_adj: 4-member bare-form pool blond/bruin/grijs/zwart
+    -- reusing unit20's already-classified 'zwart' -- verified safe in
+    'Lotte heeft lang {item} haar.'; eye_color_adj: 3-member INFLECTED -e
+    pool blauwe/bruine/groene, since 'ogen' is plural and takes agreement
+    per this unit's own ogen_agreement_note -- reuses unit13's already-
+    classified 'blauwe' -- verified safe in 'Lotte heeft {item} ogen.';
+    height_adj/age_adj: 2-member lang/klein and oud/jong, kept OUT of
+    multiple_choice/listen_select per this unit's own realization file's
+    explicit review.notes warning -- blanking either pair directly is
+    genuinely ambiguous with no in-frame disambiguation -- translation/
+    word_order only, where the English side always disambiguates which
+    word is meant; appearance_ogen_single/appearance_eruit_single:
+    single-member tags, the latter reusing unit10's already-classified
+    'eruit' token). Real, live bug caught and fixed while building this:
+    a first draft of hair_color_adj/pet_care_verb-style tags casefolded
+    the token match (t in {...}), which silently pulled in this unit's own
+    capitalized sentence-initial 'Oud' (from its lesson01 grammar note) as
+    a case-duplicate second member of age_adj -- fixed with an exact-case
+    token check, same convention as this file's existing huisarts_single/
+    weekday_pure precedents. Deliberately did NOT build any fill_in_blank
+    on the noun 'haar' (hair) itself: that token is already classified as
+    the possessive pronoun 'haar' (her, unit05) via nl_part_of_speech's
+    exact-token keying, so a noun-POS slot_preset could never resolve to
+    it -- baked as literal frame text everywhere instead, matching this
+    file's own documented 'zijn'/'werk' homograph precedent, and confirmed
+    this doesn't block anything since 'ogen'/'eruit' cover this unit's real
+    fill_in_blank content instead. Every generative frame's literal text
+    was checked against its own slot's candidate set for self-reference
+    (none found). Real course-wide candidate counts verified with a
+    standalone lexeme_matches()-replicating harness before writing these
+    templates. 17 templates across all 6 lessons: multiple_choice x3,
+    listen_select x3, matching_pairs x1 (7-pair hair_color_adj+
+    eye_color_adj pool anchored lesson05), fill_in_blank x2 (both
+    single-candidate), word_order x3, translation x5. Needs the standard
+    fresh-context review before import. Blocking dependency, same as every
+    other en-nl pack: backfill_lexemes_en_nl.py has not actually been run
+    against a real database yet."
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [hair_color_adj, eye_color_adj, height_adj, age_adj, appearance_ogen_single, appearance_eruit_single]
+slot_presets:
+  hair_color_adj: &hair_color_adj {language_code: nl, part_of_speech: adjective, agreement_tags: {semantic: hair_color_adj}}
+  eye_color_adj: &eye_color_adj {language_code: nl, part_of_speech: adjective, agreement_tags: {semantic: eye_color_adj}}
+  height_adj: &height_adj {language_code: nl, part_of_speech: adjective, agreement_tags: {semantic: height_adj}}
+  age_adj: &age_adj {language_code: nl, part_of_speech: adjective, agreement_tags: {semantic: age_adj}}
+  appearance_ogen_single: &appearance_ogen_single {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: appearance_ogen_single}}
+  appearance_eruit_single: &appearance_eruit_single {language_code: nl, part_of_speech: adverb, agreement_tags: {semantic: appearance_eruit_single}}
+templates:
+  - content_key: practice.en-nl.nl.a1.unit30.lesson01.translate.001
+    lesson_content_key: nl.a1.unit30.lesson01.lang_klein_oud_jong
+    type: translation
+    frame:
+      text: "He is {item}."
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *height_adj}
+    answer_derivation: {kind: render_frame, frame: {text: "Hij is {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Hij is {item}.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit30.lesson01.order.002
+    lesson_content_key: nl.a1.unit30.lesson01.lang_klein_oud_jong
+    type: word_order
+    frame: {text: "Hij is {item}.", language_code: nl, direction: ltr}
+    slots: {item: *height_adj}
+    answer_derivation: {kind: render_frame, frame: {text: "Hij is {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Hij is {item}. -- describes someone's height.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit30.lesson01.translate.003
+    lesson_content_key: nl.a1.unit30.lesson01.lang_klein_oud_jong
+    type: translation
+    frame:
+      text: "He is {item}."
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *age_adj}
+    answer_derivation: {kind: render_frame, frame: {text: "Hij is {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Hij is {item}.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit30.lesson01.order.004
+    lesson_content_key: nl.a1.unit30.lesson01.lang_klein_oud_jong
+    type: word_order
+    frame: {text: "Hij is {item}.", language_code: nl, direction: ltr}
+    slots: {item: *age_adj}
+    answer_derivation: {kind: render_frame, frame: {text: "Hij is {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Hij is {item}. -- describes someone's age impression.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit30.lesson02.choose.001
+    lesson_content_key: nl.a1.unit30.lesson02.haar_beschrijven
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *hair_color_adj}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a hair-color word from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit30.lesson02.listen.002
+    lesson_content_key: nl.a1.unit30.lesson02.haar_beschrijven
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *hair_color_adj}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit30.lesson02.translate.003
+    lesson_content_key: nl.a1.unit30.lesson02.haar_beschrijven
+    type: translation
+    frame:
+      text: "Lotte has long {item} hair."
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *hair_color_adj}
+    answer_derivation: {kind: render_frame, frame: {text: "Lotte heeft lang {item} haar.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Lotte heeft lang {item} haar.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit30.lesson02.order.004
+    lesson_content_key: nl.a1.unit30.lesson02.haar_beschrijven
+    type: word_order
+    frame: {text: "Lotte heeft lang {item} haar.", language_code: nl, direction: ltr}
+    slots: {item: *hair_color_adj}
+    answer_derivation: {kind: render_frame, frame: {text: "Lotte heeft lang {item} haar.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Lotte heeft lang {item} haar. -- describes Lotte's hair.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit30.lesson03.choose.001
+    lesson_content_key: nl.a1.unit30.lesson03.ogen_en_eruitzien
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *eye_color_adj}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is an eye-color word from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit30.lesson03.listen.002
+    lesson_content_key: nl.a1.unit30.lesson03.ogen_en_eruitzien
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *eye_color_adj}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit30.lesson03.translate.003
+    lesson_content_key: nl.a1.unit30.lesson03.ogen_en_eruitzien
+    type: translation
+    frame:
+      text: "Lotte has {item} eyes."
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *eye_color_adj}
+    answer_derivation: {kind: render_frame, frame: {text: "Lotte heeft {item} ogen.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Lotte heeft {item} ogen.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit30.lesson03.fill.004
+    lesson_content_key: nl.a1.unit30.lesson03.ogen_en_eruitzien
+    type: fill_in_blank
+    frame: {text: "Lotte heeft blauwe {item}.", language_code: nl, direction: ltr}
+    slots: {item: *appearance_ogen_single}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Lotte heeft blauwe ogen. -- Lotte has blue eyes.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit30.lesson03.fill.005
+    lesson_content_key: nl.a1.unit30.lesson03.ogen_en_eruitzien
+    type: fill_in_blank
+    frame: {text: "Hoe ziet Lotte {item}?", language_code: nl, direction: ltr}
+    slots: {item: *appearance_eruit_single}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Hoe ziet Lotte eruit? -- What does Lotte look like?", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit30.lesson04.listen.001
+    lesson_content_key: nl.a1.unit30.lesson04.taalcafe_nina
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *hair_color_adj}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit30.lesson04.choose.002
+    lesson_content_key: nl.a1.unit30.lesson04.taalcafe_nina
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *eye_color_adj}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is an eye-color word from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit30.lesson05.match.001
+    lesson_content_key: nl.a1.unit30.lesson05.sander_fenna_vergelijken
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth} · {seventh}", language_code: nl, direction: ltr}
+    slots: {first: *hair_color_adj, second: *hair_color_adj, third: *hair_color_adj, fourth: *hair_color_adj, fifth: *eye_color_adj, sixth: *eye_color_adj, seventh: *eye_color_adj}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth]}, {kind: distinct, slots: [fifth, sixth, seventh]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth, seventh]}
+    feedback_frame: {text: "Match each hair- or eye-color word with its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit30.lesson06.order.001
+    lesson_content_key: nl.a1.unit30.lesson06.taalcafe_herkenning
+    type: word_order
+    frame: {text: "Ze heeft kort {item} haar.", language_code: nl, direction: ltr}
+    slots: {item: *hair_color_adj}
+    answer_derivation: {kind: render_frame, frame: {text: "Ze heeft kort {item} haar.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Ze heeft kort {item} haar. -- describes someone's hair.", language_code: en, direction: ltr}
