@@ -1,0 +1,204 @@
+schema_version: "1.0"
+pack_key: practice.en-prs.a1.unit22
+source_language: en
+target_language: prs
+unit_content_key: prs.a1.unit22.weather
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: >-
+    Authored 2026-07-09, same practice-pool depth-extension pass as this
+    bundle's a1_unit20.yaml/a1_unit21.yaml siblings (see a1_unit20.yaml's
+    notes for the shared pass context).
+
+    New groups, all real vocabulary from this unit's own realization:
+    "weather_descriptor" (آفتابی/ابری/گرم/سرد, 4 members -- گرم is a
+    REUSED existing lexeme, additively tagged here alongside its
+    existing unit14 warm_word tag) combines grammatically with است ("هوا
+    X است") for BOTH the sky-condition adjectives AND the temperature
+    adjectives -- deliberately merged into one uniform-POS-adjective
+    group rather than kept separate, since both categories combine
+    identically with the same frame. "weather_precip_noun" (باران/برف,
+    2 members) are kept SEPARATE (genuine nouns, not adjectives) since
+    they combine with می‌بارد ("X می‌بارد"), not است -- composing them
+    with است instead would be ungrammatical, the same class of
+    constraint as unit20's eat_verb/work_past_verb single-candidate
+    subsets. "stay_verb" (بمانیم/می‌مانیم/می‌مانند, 3 members, completes
+    lesson06) is the "stay home" verb paradigm across subjunctive/1pl/
+    3pl forms -- three genuinely distinct glosses. "future_become_verb"
+    is a THIRD homograph sense of می‌شود (weather "will become"),
+    special-cased by content_key in backfill_lexemes_en_prs.py's
+    _classify(), unrelated to both A2-unit09's polite-request sense and
+    unit12's present-tense "wakes up" sense -- same collision class as
+    those two existing splits.
+
+    Checked for the "fine"/"okay" gloss-collision trap: weather_
+    descriptor's 4 glosses (sunny/cloudy/warm/cold) are all genuinely
+    distinct; weather_precip_noun's 2 (rain/snow) likewise. Checked POS
+    uniformity before pooling: all 4 weather_descriptor members are POS
+    adjective (confirmed گرم's existing POS entry before reusing it, not
+    assumed).
+
+    Word_order templates checked for grammaticality: "{weather_precip_
+    noun} می‌بارد" (lessons 1-2, matches the real taught "امروز برف
+    می‌بارد" pattern), "هوا {weather_descriptor} است" (lesson03, matches
+    "هوا آفتابی است"/"هوا سرد است"), "فردا هوا {weather_descriptor}
+    {future_become_verb}" (lesson04, matches "فردا هوا سرد می‌شود"
+    exactly), "بهتر است در خانه {stay_verb_subjunctive}" (lesson05,
+    single-candidate بمانیم, matches the real taught sentence exactly),
+    and a two-clause "امروز هوا {weather_descriptor} است اما فردا
+    {weather_precip_noun} می‌بارد" (lesson06, generalizes the real
+    wrap-up reading's own two-clause pattern -- both independent slots
+    remain grammatical in every combination since neither clause
+    references the other).
+
+    No listen_select/listen_type anywhere (en-prs has no TTS voices).
+    Zero fill_in_blank templates -- this unit's real vocabulary doesn't
+    need one beyond what translation/word_order already safely cover.
+
+    Verified with scripts/_practice_slot_check.py (reusing
+    backfill_lexemes_en_prs.py's real iter_specs() output) -- every
+    slot has enough distinct candidates. scripts/compile_content.py
+    practice-validate for the full en-prs pack -- 0 errors/0 warnings.
+    Needs the standard fresh-context review before import; no
+    backfill_lexemes_en_prs.py run has happened against a real database
+    yet in this pass.
+tag_schema:
+  part_of_speech: [noun, verb, adjective, adverb]
+  agreement_tags:
+    semantic:
+      [weather_descriptor, weather_noun, weather_precip_noun, fall_verb,
+       stay_verb, stay_verb_subjunctive, watch_verb, cant_verb,
+       film_word, future_become_verb, time_reference]
+slot_presets:
+  weather_descriptor: &weather_descriptor {language_code: prs, part_of_speech: adjective, agreement_tags: {semantic: weather_descriptor}}
+  weather_noun: &weather_noun {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: weather_noun}}
+  weather_precip_noun: &weather_precip_noun {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: weather_precip_noun}}
+  stay_verb: &stay_verb {language_code: prs, part_of_speech: verb, agreement_tags: {semantic: stay_verb}}
+  stay_verb_subjunctive: &stay_verb_subjunctive {language_code: prs, part_of_speech: verb, agreement_tags: {semantic: stay_verb_subjunctive}}
+  cant_verb: &cant_verb {language_code: prs, part_of_speech: verb, agreement_tags: {semantic: cant_verb}}
+  film_word: &film_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: film_word}}
+  future_become_verb: &future_become_verb {language_code: prs, part_of_speech: verb, agreement_tags: {semantic: future_become_verb}}
+  # Reuses the existing course-wide "time_reference" group (دیروز/امروز/فردا).
+  time_reference: &time_reference {language_code: prs, part_of_speech: adverb, agreement_tags: {semantic: time_reference}}
+templates:
+  # Lesson 1: weather vocabulary.
+  - content_key: practice.en-prs.prs.a1.unit22.lesson01.weather_noun_translate.001
+    lesson_content_key: prs.a1.unit22.lesson01.weather_vocabulary
+    type: translation
+    frame: {text: "{weather_noun}", language_code: en, direction: ltr, slot_rendering: {weather_noun: english_gloss}}
+    slots: {weather_noun: *weather_noun}
+    answer_derivation: {kind: slot_text, slot: weather_noun}
+    feedback_frame: {text: "{weather_noun} is the Dari word for this.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit22.lesson01.precip_falling_order.002
+    lesson_content_key: prs.a1.unit22.lesson01.weather_vocabulary
+    type: word_order
+    frame: {text: "{weather_precip_noun} می‌بارد", language_code: prs, direction: rtl}
+    slots: {weather_precip_noun: *weather_precip_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "{weather_precip_noun} می‌بارد", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: [rain/snow] می‌بارد (it's [raining/snowing]).", language_code: en, direction: ltr}
+
+  # Lesson 2: snow and asking about the weather.
+  - content_key: practice.en-prs.prs.a1.unit22.lesson02.precip_noun_translate.001
+    lesson_content_key: prs.a1.unit22.lesson02.snow_and_asking
+    type: translation
+    frame: {text: "{weather_precip_noun}", language_code: en, direction: ltr, slot_rendering: {weather_precip_noun: english_gloss}}
+    slots: {weather_precip_noun: *weather_precip_noun}
+    answer_derivation: {kind: slot_text, slot: weather_precip_noun}
+    feedback_frame: {text: "{weather_precip_noun} is the Dari word for this.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit22.lesson02.today_precip_order.002
+    lesson_content_key: prs.a1.unit22.lesson02.snow_and_asking
+    type: word_order
+    frame: {text: "امروز {weather_precip_noun} می‌بارد", language_code: prs, direction: rtl}
+    slots: {weather_precip_noun: *weather_precip_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "امروز {weather_precip_noun} می‌بارد", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: امروز [rain/snow] می‌بارد (it's [raining/snowing] today).", language_code: en, direction: ltr}
+
+  # Lesson 3: hot and cold.
+  - content_key: practice.en-prs.prs.a1.unit22.lesson03.weather_descriptor_gloss.001
+    lesson_content_key: prs.a1.unit22.lesson03.temperature
+    type: multiple_choice
+    frame: {text: "{weather_descriptor}", language_code: prs, direction: rtl}
+    slots: {weather_descriptor: *weather_descriptor}
+    answer_derivation: {kind: slot_gloss, slot: weather_descriptor}
+    feedback_frame: {text: "{weather_descriptor} describes the weather.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit22.lesson03.weather_is_order.002
+    lesson_content_key: prs.a1.unit22.lesson03.temperature
+    type: word_order
+    frame: {text: "هوا {weather_descriptor} است", language_code: prs, direction: rtl}
+    slots: {weather_descriptor: *weather_descriptor}
+    answer_derivation: {kind: render_frame, frame: {text: "هوا {weather_descriptor} است", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: هوا [descriptor] است (the weather is [descriptor]).", language_code: en, direction: ltr}
+
+  # Lesson 4: tomorrow's forecast.
+  - content_key: practice.en-prs.prs.a1.unit22.lesson04.time_reference_gloss.001
+    lesson_content_key: prs.a1.unit22.lesson04.tomorrow_forecast
+    type: multiple_choice
+    frame: {text: "{time_reference}", language_code: prs, direction: rtl}
+    slots: {time_reference: *time_reference}
+    answer_derivation: {kind: slot_gloss, slot: time_reference}
+    feedback_frame: {text: "{time_reference} refers to a day relative to today.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit22.lesson04.forecast_order.002
+    lesson_content_key: prs.a1.unit22.lesson04.tomorrow_forecast
+    type: word_order
+    frame: {text: "فردا هوا {weather_descriptor} {future_become_verb}", language_code: prs, direction: rtl}
+    slots: {weather_descriptor: *weather_descriptor, future_become_verb: *future_become_verb}
+    answer_derivation: {kind: render_frame, frame: {text: "فردا هوا {weather_descriptor} {future_become_verb}", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: فردا هوا [descriptor] می‌شود (it will get [descriptor] tomorrow).", language_code: en, direction: ltr}
+
+  # Lesson 5: weather changes a plan.
+  - content_key: practice.en-prs.prs.a1.unit22.lesson05.cant_verb_translate.001
+    lesson_content_key: prs.a1.unit22.lesson05.weather_changes_a_plan
+    type: translation
+    frame: {text: "{cant_verb}", language_code: en, direction: ltr, slot_rendering: {cant_verb: english_gloss}}
+    slots: {cant_verb: *cant_verb}
+    answer_derivation: {kind: slot_text, slot: cant_verb}
+    feedback_frame: {text: "{cant_verb} is the Dari word for this.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit22.lesson05.stay_home_order.002
+    lesson_content_key: prs.a1.unit22.lesson05.weather_changes_a_plan
+    type: word_order
+    frame: {text: "بهتر است در خانه {stay_verb_subjunctive}", language_code: prs, direction: rtl}
+    slots: {stay_verb_subjunctive: *stay_verb_subjunctive}
+    answer_derivation: {kind: render_frame, frame: {text: "بهتر است در خانه {stay_verb_subjunctive}", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: بهتر است در خانه بمانیم (it's better to stay home).", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit22.lesson05.film_word_translate.003
+    lesson_content_key: prs.a1.unit22.lesson05.weather_changes_a_plan
+    type: translation
+    frame: {text: "{film_word}", language_code: en, direction: ltr, slot_rendering: {film_word: english_gloss}}
+    slots: {film_word: *film_word}
+    answer_derivation: {kind: slot_text, slot: film_word}
+    feedback_frame: {text: "{film_word} is the Dari word for this.", language_code: en, direction: ltr}
+
+  # Lesson 6: wrap-up reading.
+  - content_key: practice.en-prs.prs.a1.unit22.lesson06.stay_verb_gloss.001
+    lesson_content_key: prs.a1.unit22.lesson06.wrap_up_reading
+    type: multiple_choice
+    frame: {text: "{stay_verb}", language_code: prs, direction: rtl}
+    slots: {stay_verb: *stay_verb}
+    answer_derivation: {kind: slot_gloss, slot: stay_verb}
+    feedback_frame: {text: "{stay_verb} means to stay/remain.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit22.lesson06.weather_review_pair.002
+    lesson_content_key: prs.a1.unit22.lesson06.wrap_up_reading
+    # Pools weather_descriptor (4) + weather_precip_noun (2) -- 6
+    # distinct real tokens.
+    type: matching_pairs
+    frame: {text: "{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six}", language_code: prs, direction: rtl}
+    slots:
+      word_one: *weather_descriptor
+      word_two: *weather_descriptor
+      word_three: *weather_descriptor
+      word_four: *weather_descriptor
+      word_five: *weather_precip_noun
+      word_six: *weather_precip_noun
+    slot_relations:
+      - {kind: distinct, slots: [word_one, word_two, word_three, word_four]}
+      - {kind: distinct, slots: [word_five, word_six]}
+    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}
+    feedback_frame: {text: "Match each word to its English meaning -- weather conditions.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit22.lesson06.today_tomorrow_order.003
+    lesson_content_key: prs.a1.unit22.lesson06.wrap_up_reading
+    type: word_order
+    frame: {text: "امروز هوا {weather_descriptor} است اما فردا {weather_precip_noun} می‌بارد", language_code: prs, direction: rtl}
+    slots: {weather_descriptor: *weather_descriptor, weather_precip_noun: *weather_precip_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "امروز هوا {weather_descriptor} است اما فردا {weather_precip_noun} می‌بارد", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: امروز هوا [descriptor] است اما فردا [rain/snow] می‌بارد (today the weather is [descriptor] but tomorrow it will [rain/snow]).", language_code: en, direction: ltr}
