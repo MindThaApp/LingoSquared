@@ -58,9 +58,18 @@ BACKEND_ROOT = REPO_ROOT / "backend"
 if str(BACKEND_ROOT) not in sys.path:
     sys.path.insert(0, str(BACKEND_ROOT))
 
+# Extended 2026-07-09 (practice-template depth-closing pass) to also cover
+# units 29-33 (hobbies/appearance/animals/sports/transportation) -- these are
+# file-numbered units appended after unit23 in scripts/content_manifest.txt's
+# en-nl line (still the same "Dutch A1" course, not a level change; see each
+# realization file's own review.notes for why the file numbering jumps).
+# Units 24-28 are NOT included here -- those are the SEPARATE "Dutch A2"
+# course, handled below by UNIT_FILES_A2. Units 34+ are not yet covered by
+# this pass and intentionally excluded from the filter below.
 UNIT_FILES = tuple(sorted(
     p for p in (REPO_ROOT / "docs/content/realizations/nl").glob("a1_unit*_*.yaml")
     if 1 <= int(p.name[len("a1_unit"):len("a1_unit")+2]) <= 23
+    or 29 <= int(p.name[len("a1_unit"):len("a1_unit")+2]) <= 33
 ))
 
 # A2 units (24-28: bureaucracy, opinions, banking, health, housing) live in a
@@ -490,6 +499,97 @@ NL_GLOSSES.update({
     "Tussen": "Between",
 })
 
+# Unit 29 (hobbies: free-time activities), added 2026-07-09 by the
+# practice-template depth-closing pass (see UNIT_FILES' own comment for the
+# file-numbering context -- still the "Dutch A1" course).
+NL_GLOSSES.update({
+    "lezen": "to read", "sporten": "to exercise; to play sports",
+    "koken": "to cook", "sport": "exercise; play sports (with ik)",
+    "kook": "cook (with ik)", "vrienden": "friends", "vrije": "free (inflected)",
+    "lees": "read (with ik)", "luisteren": "to listen",
+    "tekenen": "to draw", "teken": "draw (with ik)", "gamen": "to game",
+    "luister": "listen (with ik)", "game": "game (with ik)",
+    "soms": "sometimes", "nooit": "never", "elk": "every (neuter)",
+    "de-woorden": "de-words (common-gender nouns)", "zoals": "such as; like",
+    "het-woorden": "het-words (neuter nouns)", "Kook": "Cook",
+    "kookt": "cooks", "ontspannend": "relaxing", "Game": "Game",
+    "hobby's": "hobbies", "weet": "know (with ik)", "buiten": "outside",
+    "ons": "us", "allebei": "both", "zie": "see (with ik)",
+})
+
+# Unit 30 (appearance: describing people), added 2026-07-09.
+NL_GLOSSES.update({
+    "lang": "tall; long", "jong": "young", "Oud": "Old",
+    "aantal": "number; amount", "jaren": "years", "betekenen": "to mean",
+    "indruk": "impression", "zonder": "without", "getal": "a number",
+    # "Opa" (capitalized) is a real homograph-of-case with the already-
+    # classified common noun "opa" (unit05, "grandfather") -- here it is
+    # used as a name-like reference to Lotte's specific grandfather, the
+    # same convention as the capitalized Sander/Fenna/Nina proper nouns.
+    "Opa": "Grandpa (Lotte's grandfather, used as a name)",
+    "blond": "blond", "bruin": "brown", "grijs": "grey",
+    # "Haar" (capitalized, the noun "hair") is a genuine homograph-of-case
+    # with the already-classified possessive pronoun "haar" (her, unit05).
+    # Since nl_part_of_speech() keys on the exact token, this capitalized
+    # form gets its OWN classification (noun) rather than colliding with
+    # the lowercase possessive.
+    "Haar": "Hair",
+    "woord": "word", "lidwoord": "the article (grammar term)",
+    "blijft": "remains; stays", "ogen": "eyes", "groen": "green",
+    "meervoud": "the plural", "bruine": "brown (inflected)",
+    "groene": "green (inflected)", "meisje": "the girl", "Nina": "Nina",
+    "Oké": "Okay", "herken": "recognize (with ik)",
+    "anders": "different(ly)", "langer": "taller; longer", "Je": "You",
+    "kent": "know (with hij/zij/je)", "patroon": "the pattern",
+})
+
+# Unit 31 (animals and pets), added 2026-07-09.
+NL_GLOSSES.update({
+    "dier": "the animal", "huisdier": "the pet", "hond": "the dog",
+    "kat": "the cat", "vis": "the fish", "vogel": "the bird",
+    "ontkent": "negates", "onbepaald": "indefinite",
+    "zelfstandig": "substantive (noun-like)",
+    "ken": "know (with je, inverted)", "uitlaten": "to walk (an animal)",
+    "Uitlaten": "To walk (an animal)", "eerdere": "earlier; previous",
+    "les": "the lesson", "geven": "to give", "geef": "give (with ik)",
+    "spelen": "to play", "speelt": "plays", "Meervoud": "Plural",
+    "honden": "dogs", "dieren": "animals", "klinker": "the vowel",
+    "verdubbelt": "doubles", "medeklinker": "the consonant",
+    "katten": "cats", "vissen": "fish (plural)", "vogels": "birds",
+    "Laat": "Walk (imperative, part of uitlaten)",
+    "houden": "to love; to be fond of; to hold", "beiden": "both (of them)",
+    "Pico": "Pico (a pet bird's name)", "alle": "all",
+})
+
+# Unit 32 (sports and exercise), added 2026-07-09.
+NL_GLOSSES.update({
+    "voetbal": "football; soccer", "yoga": "yoga", "doet": "does",
+    # "hardlopen"/"zwemmen" (and their capitalized subject-position forms)
+    # are classified as nouns here -- every real use in this unit is as the
+    # object of "aan"/"van" (doen aan hardlopen, houden van zwemmen), the
+    # infinitive-as-gerund pattern Dutch uses after prepositions, matching
+    # how "hardlopen" is also used as a bare subject ("Hardlopen is niet
+    # scheidbaar").
+    "hardlopen": "running; to run", "zwemmen": "swimming; to swim",
+    "Doen": "To do", "specifieke": "specific", "noemt": "names; calls",
+    "Beide": "Both", "hard": "hard; fast", "dicht": "close; near",
+    "huis": "the house", "Hardlopen": "Running",
+    "loopt": "walks; runs", "rustig": "calm(ly)", "bewegen": "to move",
+    "zwemt": "swims", "bijna": "almost", "proberen": "to try",
+})
+
+# Unit 33 (transportation and commuting), added 2026-07-09.
+NL_GLOSSES.update({
+    "fiets": "the bike", "reist": "travels", "lopen": "to walk",
+    "reizen": "to travel", "fietst": "cycles", "rijdt": "drives",
+    "lessen": "lessons", "Die": "Those; that", "woorden": "words",
+    "vervoer": "transport", "loket": "the counter; ticket window",
+    "onbekende": "a stranger", "Welk": "Which",
+    "centrum": "the town centre", "ver": "far",
+    "Fietsen": "Cycling; to cycle", "dichtbij": "nearby; close by",
+    "rijd": "drive (with ik)",
+})
+
 for _token in ("Een", "Twee"):
     if _token not in NL_GLOSSES:
         NL_GLOSSES[_token] = NL_GLOSSES[_token.casefold()]
@@ -585,6 +685,42 @@ NOUNS.update({
     "recept", "pillen", "infinitieven", "Diagnose", "dokter", "verwarming",
     "monteur", "melding", "contact", "Bevestiging", "woningcorporatie",
     "Woningcorporatie", "bezoek", "Huisarts", "vierentwintig",
+})
+
+# Units 29-33 (hobbies, appearance, animals, sports, transportation), added
+# 2026-07-09 alongside UNIT_FILES' extended range above -- still the same
+# "Dutch A1" course, not a new course boundary (see UNIT_FILES' own comment).
+PROPER_NOUNS.update({"Opa", "Nina", "Pico"})
+PHRASES.update({"Oké"})
+PRONOUNS.update({"Je", "Die", "beiden", "ons", "Welk"})
+PREPOSITIONS.update({"zonder"})
+PARTICLES.update({"zoals"})
+ADJECTIVES.update({
+    "vrije", "ontspannend", "elk", "lang", "jong", "Oud", "blond", "bruin",
+    "grijs", "groen", "bruine", "groene", "langer", "anders", "onbepaald",
+    "zelfstandig", "eerdere", "alle", "specifieke", "Beide", "dicht",
+    "rustig", "ver",
+})
+ADVERBS.update({
+    "soms", "nooit", "buiten", "allebei", "hard", "bijna", "dichtbij",
+})
+VERBS.update({
+    "lezen", "sporten", "koken", "sport", "kook", "lees", "luisteren",
+    "tekenen", "teken", "gamen", "luister", "game", "Kook", "kookt", "Game",
+    "weet", "zie", "betekenen", "blijft", "herken", "kent", "ontkent",
+    "ken", "uitlaten", "Uitlaten", "geven", "geef", "spelen", "speelt",
+    "verdubbelt", "Laat", "houden", "doet", "Doen", "noemt", "loopt",
+    "bewegen", "zwemt", "proberen", "reist", "lopen", "reizen", "fietst",
+    "rijdt", "rijd",
+})
+NOUNS.update({
+    "vrienden", "de-woorden", "het-woorden", "hobby's", "aantal", "jaren",
+    "indruk", "getal", "Haar", "woord", "lidwoord", "ogen", "meervoud",
+    "meisje", "patroon", "dier", "huisdier", "hond", "kat", "vis", "vogel",
+    "les", "Meervoud", "honden", "dieren", "klinker", "medeklinker",
+    "katten", "vissen", "vogels", "voetbal", "yoga", "hardlopen", "zwemmen",
+    "Hardlopen", "huis", "fiets", "lessen", "woorden", "vervoer", "loket",
+    "onbekende", "centrum", "Fietsen",
 })
 
 
@@ -727,6 +863,48 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         "een_melding_doen": "issue_report",
         "bevestiging_lezen": "report_confirmation_reading",
         "verwarming_melden": "housing_report_dialogue",
+        # Unit 29 (hobbies), added 2026-07-09.
+        "lezen_sporten_koken": "hobby_verbs_set1",
+        "muziek_tekenen_gamen": "hobby_verbs_set2",
+        "vrije_tijd_vraag": "free_time_question",
+        "taalcafe_hobbies": "hobby_dialogue",
+        "hobbys_vergelijken": "hobby_reading",
+        "weekend_plan": "hobby_weekend_dialogue",
+        # Unit 30 (appearance), added 2026-07-09.
+        "lang_klein_oud_jong": "appearance_size_age",
+        "haar_beschrijven": "appearance_hair",
+        "ogen_en_eruitzien": "appearance_eyes",
+        "taalcafe_nina": "appearance_dialogue",
+        "sander_fenna_vergelijken": "appearance_reading",
+        "taalcafe_herkenning": "appearance_recognition_dialogue",
+        # Unit 31 (animals and pets), added 2026-07-09.
+        "huisdieren_woorden": "pet_noun_lesson",
+        "zorg_voor_huisdieren": "pet_care",
+        "van_dieren_houden": "pet_plural_preference",
+        "taalcafe_lottes_hond": "pet_dialogue",
+        "omar_fenna_sander_dieren": "pet_reading",
+        "taalcafe_ninas_vogel": "pet_wrapup_dialogue",
+        # Unit 32 (sports and exercise), added 2026-07-09.
+        "sport_woorden": "sport_noun_lesson",
+        "hoe_vaak_sport_je": "sport_frequency",
+        "ik_sport_graag": "sport_preference",
+        "taalcafe_sander_hardlopen": "sport_dialogue",
+        "lotte_fenna_sport": "sport_reading",
+        "taalcafe_samen_sporten": "sport_wrapup_dialogue",
+        # Unit 33 (transportation), added 2026-07-09. "een_kaartje_kopen" is
+        # deliberately NOT re-added here -- this unit's lesson03 (buying a
+        # train ticket) reuses the exact same bare content_key suffix as
+        # unit15's own "een_kaartje_kopen" lesson (also a ticket-purchase
+        # scenario), same dict-keyed-by-bare-suffix collision already
+        # documented above for advertentie_lezen/bonnetje_lezen -- unit15's
+        # existing "ticket_purchase" value is honestly generic enough to
+        # cover both, and this is purely descriptive metadata no template
+        # keys a slot_preset on directly, so reusing it is safe, not a bug.
+        "vervoer_woorden": "transport_noun_lesson",
+        "iedereen_reist_anders": "transport_habit",
+        "taalcafe_fenna_omar": "transport_dialogue",
+        "wie_reist_hoe": "transport_reading",
+        "taalcafe_samen_fietsen": "transport_wrapup_dialogue",
     }
     semantic.append(lesson_categories[unit_lesson])
     if t in {"jij", "je"}: semantic.append("informal_address")
@@ -1244,6 +1422,120 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         semantic.append("bank_openen_single")
     if t == "nodig":
         semantic.append("bank_nodig_single")
+
+    # Unit 29 (hobbies) practice-template tags, added 2026-07-09. 6-member
+    # bare-infinitive recognition-only tag (no shared generative frame --
+    # each collocates differently, same discipline as unit10's
+    # routine_verb_infinitive/unit17's work_vocab).
+    if t in {"lezen", "sporten", "koken", "luisteren", "tekenen", "gamen"}:
+        semantic.append("hobby_verb")
+    # 4-member frequency-adverb tag, verified safe generatively in
+    # "Ik lees {item} een boek."/"Ik sport {item} op zaterdag."/"Ik kook
+    # {item} voor vrienden." (all four grammatical in each frame -- this is
+    # NOT the fill_in_blank ambiguity trap the real unit29 realization
+    # flagged, since every practice template here uses translation/
+    # word_order with the ENGLISH side disambiguating which word is meant,
+    # never a bare Dutch fill_in_blank on this pool).
+    if t in {"altijd", "vaak", "soms", "nooit"}: semantic.append("freq_adverb")
+    # Single-member tags (by construction, exactly one token each) -- safe
+    # fill_in_blank slots regardless of the rest of the course's pool,
+    # matching this unit's own real fill_in_blank resolutions (blanking
+    # boek/vrienden/vrije rather than the interchangeable hobby verbs/
+    # frequency adverbs, per its own review.notes).
+    if t == "boek": semantic.append("hobby_boek_single")
+    if t == "vrienden": semantic.append("hobby_vrienden_single")
+    if t == "vrije": semantic.append("hobby_vrije_single")
+
+    # Unit 30 (appearance) practice-template tags, added 2026-07-09. 4-member
+    # hair-color tag (bare form, reusing unit20's "zwart"), verified safe in
+    # "Lotte heeft lang {item} haar." -- all four grammatical there ("lang
+    # blond/bruin/grijs/zwart haar").
+    if t in {"blond", "bruin", "grijs", "zwart"}: semantic.append("hair_color_adj")
+    # 3-member eye-color tag (INFLECTED -e forms, since "ogen" is plural and
+    # takes agreement per this unit's own ogen_agreement_note), verified safe
+    # in "Lotte heeft {item} ogen." -- reuses unit13's already-classified
+    # "blauwe".
+    if t in {"blauwe", "bruine", "groene"}: semantic.append("eye_color_adj")
+    # 2-member tags -- kept out of multiple_choice/listen_select (need >=3),
+    # translation/word_order only, matching this unit's own review.notes
+    # (blanking lang/kort or oud/jong directly is genuinely ambiguous with
+    # no in-frame disambiguation, the same risk class already resolved for
+    # unit14/unit20's sibling 2-member tags).
+    if t in {"lang", "klein"}: semantic.append("height_adj")
+    # Exact-case (not casefolded): this unit's own lesson01 grammar note
+    # separately introduces capitalized sentence-initial "Oud" ("Oud kan een
+    # precies aantal jaren betekenen...") as a case-duplicate of lowercase
+    # "oud" -- same class as the huisarts/opinion_verb fixes elsewhere in
+    # this file; casefolding would give this tag a near-duplicate-gloss
+    # ("Old" vs "old") second member of the same word, not a real 3rd
+    # candidate.
+    if token in {"oud", "jong"}: semantic.append("age_adj")
+    if t == "ogen": semantic.append("appearance_ogen_single")
+    if t == "eruit": semantic.append("appearance_eruit_single")
+    # Widen the already-established "person_name" tag (unit01 area) to
+    # include this unit's two new named characters -- additive only, does
+    # not change what "person_name" already matched, same convention as the
+    # weekday_pure/travel_noun_pure "_pure" tags elsewhere in this file.
+    if token in {"Nina", "Opa"}: semantic.append("person_name")
+
+    # Unit 31 (animals) practice-template tags, added 2026-07-09. 4-member
+    # pet-noun tag, verified safe generatively in "Ik heb een {item}." (all
+    # four grammatical there -- safe for translation, where the ENGLISH side
+    # disambiguates; NOT used in any bare Dutch fill_in_blank, matching this
+    # unit's own review.notes resolution of the identical risk).
+    if t in {"hond", "kat", "vis", "vogel"}: semantic.append("pet_noun")
+    # 4-member plural tag, verified safe in "Ik houd van {item}." (all four
+    # grammatical: "Ik houd van honden/katten/vissen/vogels.").
+    if t in {"honden", "katten", "vissen", "vogels"}: semantic.append("pet_noun_plural")
+    # 3-member bare-infinitive recognition-only tag (different collocations
+    # per this unit's own doc: uitlaten/eten geven/spelen met each take
+    # different objects/prepositions) -- same discipline as hobby_verb above.
+    # Exact-case (not casefolded): this unit's own lesson02 grammar note
+    # separately introduces capitalized sentence-initial "Uitlaten" as a
+    # case-duplicate of lowercase "uitlaten", same class as the age_adj fix
+    # above.
+    if token in {"uitlaten", "geven", "spelen"}: semantic.append("pet_care_verb")
+    # Single-member tags, reusing already-classified tokens (elke/van) --
+    # additive, does not disturb either token's existing semantic tags.
+    # Exact-case (not casefolded): earlier units already introduce
+    # capitalized sentence-initial "Elke" (unit14 area) and "Van" (unit14
+    # area) as separate lexemes -- casefolding would silently widen each
+    # tag to 2 members, same class as the age_adj/pet_care_verb fixes above.
+    if token == "elke": semantic.append("animal_elke_single")
+    if token == "van": semantic.append("animal_van_single")
+
+    # Unit 32 (sports) practice-template tags, added 2026-07-09. 4-member
+    # sport-noun tag (hardlopen/zwemmen classified as nouns -- see their
+    # NL_GLOSSES comment), verified safe generatively in "Ik houd van
+    # {item}."/"Ik doe aan {item}." (all four grammatical in both frames,
+    # translation-only per this unit's own review.notes, which explicitly
+    # avoided any bare Dutch fill_in_blank on this exact pool).
+    # Exact-case (not casefolded): this unit's own lesson04 grammar note
+    # separately introduces capitalized subject-position "Hardlopen"
+    # ("Hardlopen is niet scheidbaar...") as a case-duplicate of lowercase
+    # "hardlopen", same class as the age_adj/pet_care_verb fixes above.
+    if token in {"voetbal", "yoga", "hardlopen", "zwemmen"}: semantic.append("sport_noun")
+    if t == "dicht": semantic.append("sport_dicht_single")
+
+    # Unit 33 (transportation) practice-template tags, added 2026-07-09.
+    # 3-member transport-noun tag, verified safe in "Ik reis met de
+    # {item}." (all three grammatical: "met de trein/fiets/auto").
+    if t in {"trein", "fiets", "auto"}: semantic.append("transport_noun")
+    # 3-member conjugated-verb recognition-only tag (different subjects,
+    # no shared frame) -- same discipline as pet_care_verb above.
+    if t in {"fietst", "rijdt", "reist"}: semantic.append("transport_verb")
+    # Broader mixed noun/verb recognition-only pool for a bigger
+    # matching_pairs finale, same combined-slot-preset technique as
+    # a2_unit24's gemeente_noun_or_verb.
+    if t in {"trein", "fiets", "auto", "fietst", "rijdt", "reist", "lopen", "reizen"}:
+        semantic.append("transport_vocab")
+    # Exact-case (not casefolded): "alstublieft" is also introduced in A2
+    # unit24 (gemeente) as both lowercase and a capitalized sentence-initial
+    # "Alstublieft" -- casefolding here would pull in both the a2-course
+    # capitalized variant AND (harmlessly, since A1/A2 are separate courses
+    # per AUTHORING_GUIDE #18) widen the a1-course pool with a same-course
+    # case-duplicate if this unit's own dialogue ever capitalizes it.
+    if token == "alstublieft": semantic.append("vervoer_alstublieft_single")
 
     tags: dict[str, object] = {"semantic": list(dict.fromkeys(semantic))}
     if t in {"jij", "je"}: tags["register"] = "informal"

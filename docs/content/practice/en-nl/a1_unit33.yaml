@@ -1,0 +1,188 @@
+schema_version: "1.0"
+pack_key: practice.en-nl.a1.unit33
+source_language: en
+target_language: nl
+unit_content_key: nl.a1.unit33.vervoer
+review:
+  status: unreviewed
+  fresh_context: "false"
+  notes: "Authored 2026-07-09 by the practice-template depth-closing pass
+    (same pass as a1_unit29-32.yaml -- see a1_unit29.yaml's review.notes
+    for the full manifest-gap context). This file covers unit33
+    (transportation and commuting), the last unit in this pass's covered
+    range (units 34+ remain a gap for a future pass -- see the
+    practice_manifest.txt line-update instruction reported alongside this
+    file). Extended scripts/backfill_lexemes_en_nl.py with 4 new semantic
+    tags scoped to this unit's own real vocabulary (transport_noun:
+    3-member trein/fiets/auto, verified safe generatively in 'Ik reis met
+    de {item}.' via translation ONLY, matching this unit's own real
+    realization file's review.notes, which explicitly avoided any bare
+    Dutch fill_in_blank on this pool ('all four are grammatically valid
+    completions of Ik reis met de ___'); transport_verb: 3-member
+    conjugated recognition-only pool fietst/rijdt/reist, no shared
+    generative frame since each takes a different subject, same discipline
+    as unit31's pet_care_verb; transport_vocab: broader 8-member combined
+    noun+verb recognition-only pool (trein/fiets/auto + fietst/rijdt/
+    reist/lopen/reizen, the last two reusing already-classified verb
+    infinitives) for a bigger matching_pairs finale, same combined-tag
+    technique as a2_unit24's gemeente_noun_or_verb;
+    vervoer_alstublieft_single: single-member tag reusing unit06's
+    already-classified 'alstublieft' for this unit's own real
+    fill_in_blank, 'Een kaartje naar Amsterdam, ___.' -- matching the
+    realization file's own choice verbatim). Every generative frame's
+    literal text was checked against its own slot's candidate set for
+    self-reference (none found -- 'Ik reis met de {item}.' shares no
+    literal word with trein/fiets/auto). Real course-wide candidate counts
+    verified with a standalone lexeme_matches()-replicating harness before
+    writing these templates -- confirmed no case-duplicate contamination
+    on any of this unit's own capitalized forms (Die/Welk/Fietsen were all
+    checked and none collide with a lowercase sibling used in these
+    tags). 15 templates across all 6 lessons: multiple_choice x3,
+    listen_select x4, matching_pairs x1 (8-pair transport_vocab pool
+    anchored lesson05), fill_in_blank x1 (single-candidate), word_order x2,
+    translation x4. Needs the standard fresh-context review before import.
+    Blocking dependency, same as every other en-nl pack: backfill_
+    lexemes_en_nl.py has not actually been run against a real database
+    yet."
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [transport_noun, transport_verb, transport_vocab, vervoer_alstublieft_single]
+slot_presets:
+  transport_noun: &transport_noun {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: transport_noun}}
+  transport_verb: &transport_verb {language_code: nl, part_of_speech: verb, agreement_tags: {semantic: transport_verb}}
+  transport_vocab: &transport_vocab {language_code: nl, part_of_speech: [noun, verb], agreement_tags: {semantic: transport_vocab}}
+  vervoer_alstublieft_single: &vervoer_alstublieft_single {language_code: nl, part_of_speech: phrase, agreement_tags: {semantic: vervoer_alstublieft_single}}
+templates:
+  - content_key: practice.en-nl.nl.a1.unit33.lesson01.choose.001
+    lesson_content_key: nl.a1.unit33.lesson01.vervoer_woorden
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *transport_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a mode of transport from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit33.lesson01.listen.002
+    lesson_content_key: nl.a1.unit33.lesson01.vervoer_woorden
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *transport_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit33.lesson01.translate.003
+    lesson_content_key: nl.a1.unit33.lesson01.vervoer_woorden
+    type: translation
+    frame:
+      text: "I travel by {item}."
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *transport_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "Ik reis met de {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Ik reis met de {item}.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit33.lesson01.order.004
+    lesson_content_key: nl.a1.unit33.lesson01.vervoer_woorden
+    type: word_order
+    frame: {text: "Ik reis met de {item}.", language_code: nl, direction: ltr}
+    slots: {item: *transport_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "Ik reis met de {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Ik reis met de {item}. -- I travel by {item}.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit33.lesson02.choose.001
+    lesson_content_key: nl.a1.unit33.lesson02.iedereen_reist_anders
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *transport_verb}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a transportation verb from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit33.lesson02.listen.002
+    lesson_content_key: nl.a1.unit33.lesson02.iedereen_reist_anders
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *transport_verb}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit33.lesson02.translate.003
+    lesson_content_key: nl.a1.unit33.lesson02.iedereen_reist_anders
+    type: translation
+    frame:
+      text: "{item}"
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *transport_verb}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The Dutch word is {item}.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit33.lesson03.listen.001
+    lesson_content_key: nl.a1.unit33.lesson03.een_kaartje_kopen
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *transport_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit33.lesson03.fill.002
+    lesson_content_key: nl.a1.unit33.lesson03.een_kaartje_kopen
+    type: fill_in_blank
+    frame: {text: "Een kaartje naar Amsterdam, {item}.", language_code: nl, direction: ltr}
+    slots: {item: *vervoer_alstublieft_single}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Een kaartje naar Amsterdam, alstublieft. -- A ticket to Amsterdam, please.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit33.lesson04.listen.001
+    lesson_content_key: nl.a1.unit33.lesson04.taalcafe_fenna_omar
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *transport_verb}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit33.lesson04.order.002
+    lesson_content_key: nl.a1.unit33.lesson04.taalcafe_fenna_omar
+    type: word_order
+    frame: {text: "Ik reis met de {item}.", language_code: nl, direction: ltr}
+    slots: {item: *transport_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "Ik reis met de {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Ik reis met de {item}. -- I travel by {item}.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit33.lesson05.match.001
+    lesson_content_key: nl.a1.unit33.lesson05.wie_reist_hoe
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth} · {seventh} · {eighth}", language_code: nl, direction: ltr}
+    slots: {first: *transport_vocab, second: *transport_vocab, third: *transport_vocab, fourth: *transport_vocab, fifth: *transport_vocab, sixth: *transport_vocab, seventh: *transport_vocab, eighth: *transport_vocab}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth, seventh, eighth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth, seventh, eighth]}
+    feedback_frame: {text: "Match each word from this unit with its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit33.lesson06.translate.001
+    lesson_content_key: nl.a1.unit33.lesson06.taalcafe_samen_fietsen
+    type: translation
+    frame:
+      text: "I travel by {item}."
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *transport_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "Ik reis met de {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Ik reis met de {item}.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit33.lesson06.choose.002
+    lesson_content_key: nl.a1.unit33.lesson06.taalcafe_samen_fietsen
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *transport_verb}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a transportation verb from this unit.", language_code: en, direction: ltr}
