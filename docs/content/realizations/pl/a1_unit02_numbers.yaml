@@ -1,0 +1,507 @@
+schema_version: "1.1"
+realization_version: "2026.1-draft.1"
+target_language: "pl"
+cefr_level: "A1"
+status: "complete_draft"
+generation_provenance:
+  method: "ai_generated"
+  authoring_system: "claude"
+  human_reviewed: false
+review:
+  status: "unreviewed"
+  required_next_reviewer: "codex"
+  notes: >-
+    Second Polish unit, continuing directly from pl/a1_unit01_greetings.yaml
+    (same Ewa/Marek characters, same formal pan/pani register established
+    there since they've only just met). Sized to 3 lessons matching unit01's
+    bootstrap pace, not the 6-lesson depth other languages' numbers units
+    eventually grew to (checked es/a1_unit02_numbers.yaml, fr, nl for the
+    topic precedent -- every other launched language's unit02 realizes
+    universal.a1.numbers.use_basic_numbers, confirmed against
+    universal_spine.yaml). Authored from the start in AUTHORING_GUIDE §19
+    format (schema_version 1.1): every kind:vocabulary card carries a real
+    example: sentence, checked by hand for correct Polish number-noun
+    agreement (jeden + singular; dwa/trzy/cztery + nominative plural;
+    pięć+/teens/round tens/hundreds + genitive plural; compound numbers
+    agree by their final component, e.g. dwadzieścia osiem lat but
+    trzydzieści dwa lata). Zero listen_type/listen_select/listen_order
+    exercises anywhere in this file, matching unit01's own choice --
+    pl now has real Google Cloud TTS (pl-PL-Wavenet-F, confirmed live
+    backend-side) as of this unit's authoring, unlike when unit01 was
+    written, but this file intentionally still avoids audio-dependent
+    exercise types to stay consistent with unit01's established precedent
+    in this corpus rather than introduce the first audio-type lesson
+    content unilaterally; a future audio-authoring pass is a real, cheap
+    opportunity now that TTS is wired, just not done here. media_assets is
+    therefore an empty list, not an oversight. dialogue_comprehension
+    exercises in lesson03 render via the same MultipleChoice component as
+    multiple_choice/listen_select (frontend/src/components/exercises/
+    ExerciseRenderer.tsx) and are given real target_blocks text instead of
+    a media_asset_key, matching unit01's own pattern.
+
+    Source: FSI Polish FAST (1992), Unit 4 "Using the Telephone," the
+    "LICZBY" (Numbers) section (p. 86) -- confirmed real public-domain US
+    government course text (fsi-languages.yojik.eu/languages/FSI/Polish/
+    FAST/FSI - Polish FAST.pdf, downloaded and OCR'd via pdftotext -layout
+    this session). Real source vocabulary actually used, adapted per §10
+    (never imported verbatim): the cardinal numbers 0-8, the -naście
+    teens (11-19), the -dzieści/-dziesiąt tens (20-90), the hundreds
+    (100-900) and "tysiąc" (1,000), and the standalone "ile" (how much/
+    how many) vocabulary entry. The source's own explanatory note ("11-19
+    contain a -naście form similar to English -teen; 20-40 contain
+    -dzieści; 50-90 contain -dziesiąt") is paraphrased in this file's own
+    words on the jedenaście/dwadzieścia/pięćdziesiąt cards' overlay notes,
+    not copied verbatim. The source's telephone-context question "Pana/
+    pani numer?" (a bare fragment used there for long-distance-call
+    routing) is modernized and expanded here into full formal questions
+    ("Jaki jest pana/pani numer telefonu?") repurposed for a personal
+    contact-exchange scenario, consistent with the modernization
+    requirement -- reading the same after adaptation as before it would be
+    a sign the pass didn't happen, and it does not read the same. The
+    source's own price-question pattern ("Ile kosztuje ten pokój?") is
+    likewise adapted into the shorter, equally natural "Ile to kosztuje?"
+    used generically here rather than tied to a hotel room.
+
+    Two real gaps in the source, disclosed honestly: (1) the OCR'd LICZBY
+    table has a genuine two-row gap between the 8/18/80 row and the
+    19/90 row -- "dziewięć" (9) and "dziesięć" (10) never render in the
+    extracted text at all (confirmed by grep across the full document,
+    zero hits for either word near the table). These two are supplied
+    from general knowledge of standard Polish rather than the source,
+    same disclosure standard as any freshly-authored item -- they are
+    uncontroversial basic cardinals, not register-sensitive content. (2)
+    the source never asks age via "how many years" at all -- it asks via
+    birthday ("Kiedy się pan/pani urodził/a?", confirmed by grep, found
+    only in a later unit's birthday section, not near the numbers
+    material) -- so every "Ile masz lat?"/"Ile pan ma lat?"/"Mam ... lat/
+    lata" item in this file is freshly authored from general knowledge of
+    modern spoken Polish, not source-derived, disclosed the same way
+    unit01 disclosed its own freshly-authored ty-register items. The
+    lat/lata agreement nuance (numbers ending in 2/3/4 take "lata"; every
+    other numeral takes "lat") is real, verified Polish grammar, called
+    out explicitly on lesson03's line05 dialogue card and drilled once via
+    a grammar_check exercise -- not a source claim, a general-knowledge
+    grammar fact same as unit01's pan/pani verb-agreement notes.
+
+    The lesson03 Ewa/Marek phone-number-and-age dialogue, and the specific
+    numbers chosen for the scenario (28, 32, a 5-digit sample phone
+    number, a 30-złoty ticket price, a 100-złoty round price), are freshly
+    authored, continuing unit01's characters and formal register.
+
+course:
+  realization_key: pl.a1
+  target_language_first: true
+  dialect: pl_standard
+  register_policy: >-
+    Continue unit01's register split exactly: Ewa and Marek, who have only
+    just met, stay in the formal pan/pani register throughout this unit's
+    dialogue -- teaching cards present both the formal (pan/pani) and
+    informal (ty) versions of the phone-number and age questions as
+    standalone vocabulary, the same way unit01 taught both registers even
+    though its own closing dialogue used only one. Numbers themselves
+    don't change with register, but the surrounding questions do.
+
+media_assets: []
+
+units:
+  - content_key: pl.a1.unit02.numbers
+    title: "Liczby"
+    section: reading_writing
+    spine_outcome_ids:
+      - universal.a1.numbers.use_basic_numbers
+    planned_lesson_count: 3
+
+    lessons:
+      - content_key: pl.a1.unit02.lesson01.numbers_zero_to_ten
+        title: "Liczby od zera do dziesięciu"
+        spine_outcome_id: universal.a1.numbers.use_basic_numbers
+        teaching:
+          - content_key: pl.a1.unit02.lesson01.teach.zero
+            kind: vocabulary
+            target: {text: "zero", language_code: pl, direction: ltr}
+            introduced_tokens: ["zero"]
+            example: {text: "Dziś jest zero stopni.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit02.lesson01.teach.jeden
+            kind: vocabulary
+            target: {text: "jeden", language_code: pl, direction: ltr}
+            introduced_tokens: ["jeden"]
+            example: {text: "Mam jeden telefon.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit02.lesson01.teach.dwa
+            kind: vocabulary
+            target: {text: "dwa", language_code: pl, direction: ltr}
+            introduced_tokens: ["dwa"]
+            example: {text: "Mam dwa psy.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit02.lesson01.teach.trzy
+            kind: vocabulary
+            target: {text: "trzy", language_code: pl, direction: ltr}
+            introduced_tokens: ["trzy"]
+            example: {text: "Kawa kosztuje trzy złote.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit02.lesson01.teach.cztery
+            kind: vocabulary
+            target: {text: "cztery", language_code: pl, direction: ltr}
+            introduced_tokens: ["cztery"]
+            example: {text: "Mam cztery książki.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit02.lesson01.teach.piec
+            kind: vocabulary
+            target: {text: "pięć", language_code: pl, direction: ltr}
+            introduced_tokens: ["pięć"]
+            example: {text: "Mam pięć minut.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit02.lesson01.teach.szesc
+            kind: vocabulary
+            target: {text: "sześć", language_code: pl, direction: ltr}
+            introduced_tokens: ["sześć"]
+            example: {text: "Mam sześć jabłek.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit02.lesson01.teach.siedem
+            kind: vocabulary
+            target: {text: "siedem", language_code: pl, direction: ltr}
+            introduced_tokens: ["siedem"]
+            example: {text: "W tygodniu jest siedem dni.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit02.lesson01.teach.osiem
+            kind: vocabulary
+            target: {text: "osiem", language_code: pl, direction: ltr}
+            introduced_tokens: ["osiem"]
+            example: {text: "Mam osiem lat.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit02.lesson01.teach.dziewiec
+            kind: vocabulary
+            target: {text: "dziewięć", language_code: pl, direction: ltr}
+            introduced_tokens: ["dziewięć"]
+            example: {text: "Dziewięć osób czeka w kolejce.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit02.lesson01.teach.dziesiec
+            kind: vocabulary
+            target: {text: "dziesięć", language_code: pl, direction: ltr}
+            introduced_tokens: ["dziesięć"]
+            example: {text: "Mam dziesięć palców.", language_code: pl, direction: ltr}
+        exercises:
+          - content_key: pl.a1.unit02.lesson01.exercise01.select_dwa
+            type: multiple_choice
+            tested_text: "dwa"
+            prompt:
+              target_blocks:
+                - {text: "dwa", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit02.lesson01.exercise02.select_siedem
+            type: multiple_choice
+            tested_text: "siedem"
+            prompt:
+              target_blocks:
+                - {text: "siedem", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit02.lesson01.exercise03.select_dziesiec
+            type: multiple_choice
+            tested_text: "dziesięć"
+            prompt:
+              target_blocks:
+                - {text: "dziesięć", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit02.lesson01.exercise04.match_digits_zero_to_ten
+            type: matching_pairs
+            tested_text: "zero jeden dwa trzy cztery pięć sześć siedem osiem dziewięć dziesięć"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "zero", right: "0"}
+              - {left: "jeden", right: "1"}
+              - {left: "dwa", right: "2"}
+              - {left: "trzy", right: "3"}
+              - {left: "cztery", right: "4"}
+              - {left: "pięć", right: "5"}
+              - {left: "sześć", right: "6"}
+              - {left: "siedem", right: "7"}
+              - {left: "osiem", right: "8"}
+              - {left: "dziewięć", right: "9"}
+              - {left: "dziesięć", right: "10"}
+          - content_key: pl.a1.unit02.lesson01.exercise05.order_count_to_three
+            type: word_order
+            tested_text: "jeden dwa trzy"
+            prompt: {target_blocks: []}
+            word_bank: ["dwa", "jeden", "trzy"]
+          - content_key: pl.a1.unit02.lesson01.exercise06.order_count_four_to_six
+            type: word_order
+            tested_text: "cztery pięć sześć"
+            prompt: {target_blocks: []}
+            word_bank: ["pięć", "cztery", "sześć"]
+          - content_key: pl.a1.unit02.lesson01.exercise07.order_count_eight_to_ten
+            type: word_order
+            tested_text: "osiem dziewięć dziesięć"
+            prompt: {target_blocks: []}
+            word_bank: ["dziewięć", "osiem", "dziesięć"]
+          - content_key: pl.a1.unit02.lesson01.exercise08.fill_week_days
+            type: fill_in_blank
+            tested_text: "siedem"
+            prompt:
+              target_blocks:
+                - {text: "W tygodniu jest ___ dni.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit02.lesson01.exercise09.speak_count_to_ten
+            type: speak_response
+            tested_text: "zero jeden dwa trzy cztery pięć sześć siedem osiem dziewięć dziesięć"
+            prompt:
+              target_blocks:
+                - {text: "Policz od zera do dziesięciu.", language_code: pl, direction: ltr}
+
+      - content_key: pl.a1.unit02.lesson02.numbers_and_prices
+        title: "Liczby od jedenastu do stu i ceny"
+        spine_outcome_id: universal.a1.numbers.use_basic_numbers
+        teaching:
+          - content_key: pl.a1.unit02.lesson02.teach.jedenascie
+            kind: vocabulary
+            target: {text: "jedenaście", language_code: pl, direction: ltr}
+            introduced_tokens: ["jedenaście"]
+            example: {text: "Klasa ma jedenaście osób.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit02.lesson02.teach.dwanascie
+            kind: vocabulary
+            target: {text: "dwanaście", language_code: pl, direction: ltr}
+            introduced_tokens: ["dwanaście"]
+            example: {text: "W roku jest dwanaście miesięcy.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit02.lesson02.teach.pietnascie
+            kind: vocabulary
+            target: {text: "piętnaście", language_code: pl, direction: ltr}
+            introduced_tokens: ["piętnaście"]
+            example: {text: "Mam piętnaście minut przerwy.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit02.lesson02.teach.dwadziescia
+            kind: vocabulary
+            target: {text: "dwadzieścia", language_code: pl, direction: ltr}
+            introduced_tokens: ["dwadzieścia"]
+            example: {text: "Mam dwadzieścia lat.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit02.lesson02.teach.dwadziescia_jeden
+            kind: phrase
+            target: {text: "dwadzieścia jeden", language_code: pl, direction: ltr}
+            introduced_tokens: ["dwadzieścia", "jeden"]
+          - content_key: pl.a1.unit02.lesson02.teach.trzydziesci
+            kind: vocabulary
+            target: {text: "trzydzieści", language_code: pl, direction: ltr}
+            introduced_tokens: ["trzydzieści"]
+            example: {text: "Bilet kosztuje trzydzieści złotych.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit02.lesson02.teach.piecdziesiat
+            kind: vocabulary
+            target: {text: "pięćdziesiąt", language_code: pl, direction: ltr}
+            introduced_tokens: ["pięćdziesiąt"]
+            example: {text: "Mam pięćdziesiąt złotych.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit02.lesson02.teach.sto
+            kind: vocabulary
+            target: {text: "sto", language_code: pl, direction: ltr}
+            introduced_tokens: ["sto"]
+            example: {text: "To kosztuje sto złotych.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit02.lesson02.teach.ile
+            kind: vocabulary
+            target: {text: "Ile", language_code: pl, direction: ltr}
+            introduced_tokens: ["Ile"]
+            example: {text: "Ile to kosztuje?", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit02.lesson02.teach.ile_to_kosztuje
+            kind: phrase
+            target: {text: "Ile to kosztuje?", language_code: pl, direction: ltr}
+            introduced_tokens: ["Ile", "to", "kosztuje"]
+          - content_key: pl.a1.unit02.lesson02.teach.to_kosztuje_dwadziescia
+            kind: phrase
+            target: {text: "To kosztuje dwadzieścia złotych.", language_code: pl, direction: ltr}
+            introduced_tokens: ["To", "kosztuje", "dwadzieścia", "złotych"]
+        exercises:
+          - content_key: pl.a1.unit02.lesson02.exercise01.select_dwadziescia
+            type: multiple_choice
+            tested_text: "dwadzieścia"
+            prompt:
+              target_blocks:
+                - {text: "dwadzieścia", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit02.lesson02.exercise02.select_sto
+            type: multiple_choice
+            tested_text: "sto"
+            prompt:
+              target_blocks:
+                - {text: "sto", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit02.lesson02.exercise03.match_teens_and_tens
+            type: matching_pairs
+            tested_text: "jedenaście dwanaście piętnaście dwadzieścia trzydzieści pięćdziesiąt sto"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "jedenaście", right: "11"}
+              - {left: "dwanaście", right: "12"}
+              - {left: "piętnaście", right: "15"}
+              - {left: "dwadzieścia", right: "20"}
+              - {left: "trzydzieści", right: "30"}
+              - {left: "pięćdziesiąt", right: "50"}
+              - {left: "sto", right: "100"}
+          - content_key: pl.a1.unit02.lesson02.exercise04.order_twenty_one
+            type: word_order
+            tested_text: "dwadzieścia jeden"
+            prompt: {target_blocks: [{text: "21", language_code: pl, direction: ltr}]}
+            word_bank: ["jeden", "dwadzieścia"]
+          - content_key: pl.a1.unit02.lesson02.exercise05.order_cost_question
+            type: word_order
+            tested_text: "Ile to kosztuje"
+            prompt: {target_blocks: []}
+            word_bank: ["kosztuje", "Ile", "to"]
+          - content_key: pl.a1.unit02.lesson02.exercise06.fill_ticket_price
+            type: fill_in_blank
+            tested_text: "trzydzieści złotych"
+            prompt:
+              target_blocks:
+                - {text: "Bilet kosztuje ___ złotych.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit02.lesson02.exercise07.fix_cost_question_order
+            type: grammar_check
+            tested_text: "Ile to kosztuje"
+            prompt:
+              target_blocks:
+                - {text: "To ile kosztuje?", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit02.lesson02.exercise08.reply_price_hundred
+            type: dialogue_response
+            tested_text: "To kosztuje sto złotych"
+            prompt:
+              target_blocks:
+                - {text: "Ile to kosztuje?", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit02.lesson02.exercise09.speak_ticket_price
+            type: speak_response
+            tested_text: "kosztuje trzydzieści złotych"
+            prompt:
+              target_blocks:
+                - {text: "Powiedz, ile kosztuje bilet.", language_code: pl, direction: ltr}
+
+      - content_key: pl.a1.unit02.lesson03.phone_and_age
+        title: "Numer telefonu i wiek"
+        spine_outcome_id: universal.a1.numbers.use_basic_numbers
+        teaching:
+          - content_key: pl.a1.unit02.lesson03.teach.jaki_jest_pana_numer
+            kind: phrase
+            target: {text: "Jaki jest pana numer telefonu?", language_code: pl, direction: ltr}
+            introduced_tokens: ["Jaki", "jest", "pana", "numer", "telefonu"]
+          - content_key: pl.a1.unit02.lesson03.teach.jaki_jest_pani_numer
+            kind: phrase
+            target: {text: "Jaki jest pani numer telefonu?", language_code: pl, direction: ltr}
+            introduced_tokens: ["pani"]
+          - content_key: pl.a1.unit02.lesson03.teach.jaki_jest_twoj_numer
+            kind: phrase
+            target: {text: "Jaki jest twój numer telefonu?", language_code: pl, direction: ltr}
+            introduced_tokens: ["twój"]
+          - content_key: pl.a1.unit02.lesson03.teach.numer_to
+            kind: phrase
+            target: {text: "Numer to...", language_code: pl, direction: ltr}
+            introduced_tokens: ["Numer"]
+          - content_key: pl.a1.unit02.lesson03.teach.przykladowy_numer
+            kind: phrase
+            target: {text: "Sześć, jeden, pięć, zero, dwa.", language_code: pl, direction: ltr}
+            introduced_tokens: []
+          - content_key: pl.a1.unit02.lesson03.teach.ile_masz_lat
+            kind: phrase
+            target: {text: "Ile masz lat?", language_code: pl, direction: ltr}
+            introduced_tokens: ["masz", "lat"]
+          - content_key: pl.a1.unit02.lesson03.teach.ile_pan_ma_lat
+            kind: phrase
+            target: {text: "Ile pan ma lat?", language_code: pl, direction: ltr}
+            introduced_tokens: ["pan", "ma"]
+          - content_key: pl.a1.unit02.lesson03.teach.mam_dwadziescia_osiem_lat
+            kind: phrase
+            target: {text: "Mam dwadzieścia osiem lat.", language_code: pl, direction: ltr}
+            introduced_tokens: ["Mam"]
+          - content_key: pl.a1.unit02.lesson03.teach.dialogue.line01
+            kind: dialogue
+            target:
+              text: "Jaki jest pana numer telefonu?"
+              language_code: pl
+              direction: ltr
+              speaker: Ewa
+            introduced_tokens: []
+          - content_key: pl.a1.unit02.lesson03.teach.dialogue.line02
+            kind: dialogue
+            target:
+              text: "Numer to sześć, jeden, pięć, zero, dwa."
+              language_code: pl
+              direction: ltr
+              speaker: Marek
+            introduced_tokens: []
+          - content_key: pl.a1.unit02.lesson03.teach.dialogue.line03
+            kind: dialogue
+            target:
+              text: "Dziękuję. A ile pan ma lat?"
+              language_code: pl
+              direction: ltr
+              speaker: Ewa
+            introduced_tokens: ["Dziękuję", "A"]
+          - content_key: pl.a1.unit02.lesson03.teach.dialogue.line04
+            kind: dialogue
+            target:
+              text: "Mam dwadzieścia osiem lat. A pani?"
+              language_code: pl
+              direction: ltr
+              speaker: Marek
+            introduced_tokens: []
+          - content_key: pl.a1.unit02.lesson03.teach.dialogue.line05
+            kind: dialogue
+            target:
+              text: "Mam trzydzieści dwa lata."
+              language_code: pl
+              direction: ltr
+              speaker: Ewa
+            introduced_tokens: ["lata"]
+          - content_key: pl.a1.unit02.lesson03.teach.dialogue.line06
+            kind: dialogue
+            target:
+              text: "Miło było porozmawiać. Do zobaczenia!"
+              language_code: pl
+              direction: ltr
+              speaker: Marek
+            introduced_tokens: ["Miło", "było", "porozmawiać", "Do", "zobaczenia"]
+        exercises:
+          - content_key: pl.a1.unit02.lesson03.exercise01.select_formal_phone_question_man
+            type: multiple_choice
+            tested_text: "Jaki jest pana numer telefonu"
+            prompt:
+              target_blocks:
+                - {text: "Jaki jest pana numer telefonu?", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit02.lesson03.exercise02.select_informal_phone_question
+            type: multiple_choice
+            tested_text: "Jaki jest twój numer telefonu"
+            prompt:
+              target_blocks:
+                - {text: "Jaki jest twój numer telefonu?", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit02.lesson03.exercise03.comprehend_marek_number
+            type: dialogue_comprehension
+            tested_text: "sześć jeden pięć zero dwa"
+            prompt:
+              target_blocks:
+                - {text: "Numer to sześć, jeden, pięć, zero, dwa.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit02.lesson03.exercise04.comprehend_marek_age
+            type: dialogue_comprehension
+            tested_text: "dwadzieścia osiem"
+            prompt:
+              target_blocks:
+                - {text: "Mam dwadzieścia osiem lat. A pani?", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit02.lesson03.exercise05.match_questions_and_answers
+            type: matching_pairs
+            tested_text: "Jaki jest pana numer telefonu Numer to sześć jeden pięć zero dwa Jaki jest twój numer telefonu Numer to Ile masz lat Mam dwadzieścia osiem lat Ile pan ma lat Mam trzydzieści dwa lata Ile to kosztuje To kosztuje sto złotych Miło było porozmawiać Do zobaczenia"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "Jaki jest pana numer telefonu?", right: "Numer to sześć, jeden, pięć, zero, dwa."}
+              - {left: "Jaki jest twój numer telefonu?", right: "Numer to..."}
+              - {left: "Ile masz lat?", right: "Mam dwadzieścia osiem lat."}
+              - {left: "Ile pan ma lat?", right: "Mam trzydzieści dwa lata."}
+              - {left: "Ile to kosztuje?", right: "To kosztuje sto złotych."}
+              - {left: "Miło było porozmawiać.", right: "Do zobaczenia!"}
+          - content_key: pl.a1.unit02.lesson03.exercise06.order_thirty_two
+            type: word_order
+            tested_text: "trzydzieści dwa"
+            prompt: {target_blocks: [{text: "32", language_code: pl, direction: ltr}]}
+            word_bank: ["dwa", "trzydzieści"]
+          - content_key: pl.a1.unit02.lesson03.exercise07.fill_marek_age
+            type: fill_in_blank
+            tested_text: "dwadzieścia osiem lat"
+            prompt:
+              target_blocks:
+                - {text: "Marek ma ___ lat.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit02.lesson03.exercise08.check_lat_lata_agreement
+            type: grammar_check
+            tested_text: "Mam dwa lata"
+            prompt:
+              target_blocks:
+                - {text: "Mam dwa lat.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit02.lesson03.exercise09.reply_own_number
+            type: dialogue_response
+            tested_text: "Numer to"
+            prompt:
+              target_blocks:
+                - {text: "Jaki jest twój numer telefonu?", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit02.lesson03.exercise10.write_ewa_age
+            type: writing_prompt
+            tested_text: "trzydzieści dwa lata"
+            prompt:
+              target_blocks:
+                - {text: "Napisz, ile lat ma Ewa (z dialogu).", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit02.lesson03.exercise11.perform_marek_reply
+            type: speak_response
+            tested_text: "Numer to sześć jeden pięć zero dwa"
+            prompt:
+              target_blocks:
+                - {text: "Weź na siebie rolę Marka i podaj jego numer telefonu.", language_code: pl, direction: ltr}
