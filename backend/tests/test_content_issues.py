@@ -43,6 +43,8 @@ def test_successful_content_issue_report_creation(client,auth):
         assert issue is not None
         assert issue.reporter_user_id==decode_token(auth["Authorization"].split()[1])
         assert issue.exercise_id==exercise_id
+        assert issue.practice_item_id is None
+        assert issue.page_path is None
         assert issue.category=="wrong_answer_key"
         assert issue.description=="My valid response was rejected."
         assert issue.learner_response=={"response":"learner answer"}
@@ -53,6 +55,103 @@ def test_successful_content_issue_report_creation(client,auth):
         assert issue.content_release_id is None
         assert issue.content_key_id is None
         assert issue.attempt_id is None
+
+
+def test_anonymous_general_feedback_creates_page_level_report(client):
+    response=client.post(
+        "/feedback",
+        json={
+            "category":"app_bug",
+            "description":"The next button does nothing.",
+            "page_path":"/lessons/abc123",
+            "client_context":{"viewport":{"width":390,"height":844}},
+        },
+    )
+    assert response.status_code==201, response.text
+    result=response.json()
+    assert result["status"]=="open"
+    assert set(result)=={"id","status"}
+
+    with SessionLocal() as db:
+        issue=db.get(ContentIssueReport,result["id"])
+        assert issue is not None
+        assert issue.reporter_user_id is None
+        assert issue.exercise_id is None
+        assert issue.practice_item_id is None
+        assert issue.page_path=="/lessons/abc123"
+        assert issue.category=="app_bug"
+        assert issue.description=="The next button does nothing."
+        assert issue.client_context=={"viewport":{"width":390,"height":844}}
+
+
+def test_general_feedback_with_foreign_or_invalid_token_degrades_to_anonymous(client):
+    # A token minted by a DIFFERENT backend's signing key (the exact
+    # "many independent local installs all point feedback at one central
+    # collector" scenario from docs/CONTRACT.md) must never 401 here --
+    # it must silently resolve to an anonymous report, same as no token
+    # at all. This is why /feedback uses lenient_current_user, not
+    # optional_current_user (which 401s on a present-but-invalid token,
+    # correct for its other call site but wrong for this one).
+    response=client.post(
+        "/feedback",
+        headers={"Authorization":"Bearer not-a-real-token"},
+        json={
+            "category":"app_bug",
+            "page_path":"/home",
+        },
+    )
+    assert response.status_code==201, response.text
+
+    with SessionLocal() as db:
+        issue=db.get(ContentIssueReport,response.json()["id"])
+        assert issue is not None
+        assert issue.reporter_user_id is None
+
+
+def test_authenticated_general_feedback_sets_reporter_user_id(client,auth):
+    response=client.post(
+        "/feedback",
+        headers=auth,
+        json={
+            "category":"general_feedback",
+            "description":"This screen could use clearer wording.",
+            "page_path":"/home",
+            "client_context":{"locale":"en-GB"},
+        },
+    )
+    assert response.status_code==201, response.text
+
+    with SessionLocal() as db:
+        issue=db.get(ContentIssueReport,response.json()["id"])
+        assert issue is not None
+        assert issue.reporter_user_id==decode_token(auth["Authorization"].split()[1])
+        assert issue.exercise_id is None
+        assert issue.practice_item_id is None
+        assert issue.page_path=="/home"
+        assert issue.category=="general_feedback"
+        assert issue.client_context=={"locale":"en-GB"}
+
+
+def test_admin_issue_listing_includes_page_path_for_general_feedback(client,admin):
+    response=client.post(
+        "/feedback",
+        json={
+            "category":"app_bug",
+            "description":"The settings page is blank.",
+            "page_path":"/settings",
+            "client_context":{"route_state":"empty"},
+        },
+    )
+    assert response.status_code==201, response.text
+
+    listing=client.get("/admin/content/issues?status=open&limit=200",headers=admin)
+    assert listing.status_code==200, listing.text
+    by_id={issue["id"]:issue for issue in listing.json()}
+    row=by_id[response.json()["id"]]
+    assert row["reporter_user_id"] is None
+    assert row["exercise_id"] is None
+    assert row["practice_item_id"] is None
+    assert row["page_path"]=="/settings"
 
 
 def test_content_admin_routes_reject_non_admin(client,auth):
