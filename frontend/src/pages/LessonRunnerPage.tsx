@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { X } from "lucide-react";
+import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { LessonApi, ReviewApi } from "../api/endpoints";
 import { ExerciseRenderer } from "../components/exercises/ExerciseRenderer";
 import { TeachingCardView } from "../components/TeachingCardView";
@@ -19,6 +19,7 @@ import type {
   Exercise,
   PracticeAnswerResult,
   PracticeItem,
+  TeachingCard,
 } from "../api/types";
 
 interface QueueItem {
@@ -32,6 +33,17 @@ interface MissedWord {
   text: string;
   languageCode?: string;
 }
+
+// Read-only back/forward review (Ramin UX request, 2026-07-09): every
+// teaching card the learner has advanced past, and every exercise attempt
+// they've submitted (including recycled misses), gets appended here as it's
+// left behind. `reviewCursor` (an index into this array, or `null` for
+// "live") drives a purely-additive read-only replay mode - it never
+// mutates `teachingIndex`/`queue`/`result` and can never let the learner
+// resubmit an already-graded exercise or skip past the live item.
+type HistoryEntry =
+  | { kind: "teaching"; card: TeachingCard }
+  | { kind: "exercise"; exercise: Exercise; response: AnswerResponse | undefined; result: AnswerResult };
 
 const MISS_LIMIT = 2;
 
@@ -73,6 +85,10 @@ export function LessonRunnerPage() {
   const [submitError, setSubmitError] = useState(false);
   const [finishError, setFinishError] = useState(false);
   const [showQuitConfirm, setShowQuitConfirm] = useState(false);
+
+  // Read-only back/forward review state - see the HistoryEntry comment above.
+  const [history, setHistory] = useState<HistoryEntry[]>([]);
+  const [reviewCursor, setReviewCursor] = useState<number | null>(null);
 
   const lessonQuery = useQuery({
     queryKey: ["lesson", lessonId],
@@ -197,9 +213,57 @@ export function LessonRunnerPage() {
     navigate(-1);
   }
 
+  function handleReviewBack() {
+    setReviewCursor((c) => (c === null ? history.length - 1 : Math.max(0, c - 1)));
+  }
+
+  function handleReviewForward() {
+    setReviewCursor((c) => {
+      if (c === null) return c;
+      return c >= history.length - 1 ? null : c + 1;
+    });
+  }
+
+  // Shared with the live exercise-queue banner below - review mode reuses
+  // the exact same tri-state styling/copy rather than a second banner
+  // system, just without a Continue button and with the learner's original
+  // response line included.
+  function renderResultBanner(
+    bannerResult: AnswerResult,
+    options?: { response?: AnswerResponse; footer?: ReactNode },
+  ) {
+    const status = resultStatus(bannerResult);
+    return (
+      <div className={`feedback-banner ${status}`}>
+        <p style={{ margin: "0 0 6px" }}>
+          {status === "correct" && t("lesson_runner.correct")}
+          {status === "almost" && t("lesson_runner.almost")}
+          {status === "incorrect" && t("lesson_runner.incorrect")}
+        </p>
+        {options?.response !== undefined && (
+          <p style={{ margin: "0 0 6px", fontWeight: 400 }}>
+            {t("lesson_runner.your_answer", { answer: formatCorrectResponse(options.response) })}
+          </p>
+        )}
+        {status !== "correct" && (
+          <p style={{ margin: "0 0 6px", fontWeight: 400 }}>
+            {t("lesson_runner.correct_answer", { answer: formatCorrectResponse(bannerResult.correct_response) })}
+          </p>
+        )}
+        {bannerResult.feedback && (
+          <p style={{ margin: "0 0 10px", fontWeight: 400 }}>
+            <EmphasizedText text={bannerResult.feedback} />
+          </p>
+        )}
+        {options?.footer}
+      </div>
+    );
+  }
+
   function handleContinue() {
     if (!result || !queue || !current) return;
     const rest = queue.slice(1);
+    setHistory((h) => [...h, { kind: "exercise", exercise: current.exercise, response: lastResponse, result }]);
     setResult(null);
     setLastResponse(undefined);
 
@@ -321,6 +385,71 @@ export function LessonRunnerPage() {
     );
   }
 
+  // Read-only review of a previously-shown teaching card or exercise
+  // attempt (Ramin UX request, 2026-07-09). Takes priority over the live
+  // teaching/exercise phases below whenever the learner has stepped back;
+  // never touches teachingIndex/queue/result, so the live phase resumes
+  // exactly where it left off once reviewCursor returns to null.
+  if (reviewCursor !== null) {
+    const entry = history[reviewCursor];
+    const canGoBack = reviewCursor > 0;
+    return (
+      <div>
+        <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
+          <button
+            type="button"
+            className="btn-icon-toggle"
+            aria-label={t("lesson_runner.review_back_label")}
+            onClick={handleReviewBack}
+            disabled={!canGoBack}
+          >
+            <ChevronLeft size={18} />
+          </button>
+          <span className="badge" style={{ flex: 1, textAlign: "center" }}>
+            {t("lesson_runner.review_mode_label")}
+          </span>
+          <button
+            type="button"
+            className="btn-icon-toggle"
+            aria-label={t("lesson_runner.review_forward_label")}
+            onClick={handleReviewForward}
+          >
+            <ChevronRight size={18} />
+          </button>
+          <button
+            type="button"
+            className="btn-icon-toggle"
+            aria-label={t("lesson_runner.exit_label")}
+            onClick={() => setShowQuitConfirm(true)}
+          >
+            <X size={18} />
+          </button>
+        </div>
+        {entry.kind === "teaching" ? (
+          <TeachingCardView card={entry.card} />
+        ) : (
+          <>
+            <ExerciseRenderer
+              key={`review-${reviewCursor}`}
+              exercise={entry.exercise}
+              onAnswer={() => {}}
+              disabled
+              gradedResult={{ correct: entry.result.correct, correctResponse: entry.result.correct_response }}
+            />
+            {renderResultBanner(entry.result, { response: entry.response })}
+          </>
+        )}
+        {showQuitConfirm && (
+          <QuitConfirm
+            message={t("lesson_runner.quit_confirm_message")}
+            onKeepGoing={() => setShowQuitConfirm(false)}
+            onQuit={handleQuit}
+          />
+        )}
+      </div>
+    );
+  }
+
   if (teachingIndex < teaching.length) {
     const card = teaching[teachingIndex];
     const isLast = teachingIndex === teaching.length - 1;
@@ -328,6 +457,16 @@ export function LessonRunnerPage() {
     return (
       <div>
         <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
+          {history.length > 0 && (
+            <button
+              type="button"
+              className="btn-icon-toggle"
+              aria-label={t("lesson_runner.review_back_label")}
+              onClick={handleReviewBack}
+            >
+              <ChevronLeft size={18} />
+            </button>
+          )}
           <div className="progress-track" style={{ flex: 1 }}>
             <div className="progress-fill" style={{ width: `${pct}%` }} />
           </div>
@@ -344,7 +483,13 @@ export function LessonRunnerPage() {
           {t("lesson_runner.learn_progress", { current: teachingIndex + 1, total: teaching.length })}
         </span>
         <TeachingCardView card={card} />
-        <button className="btn btn-block" onClick={() => setTeachingIndex((i) => i + 1)}>
+        <button
+          className="btn btn-block"
+          onClick={() => {
+            setHistory((h) => [...h, { kind: "teaching", card }]);
+            setTeachingIndex((i) => i + 1);
+          }}
+        >
           {isLast ? t("lesson_runner.start_practice") : t("lesson_runner.next")}
         </button>
         {showQuitConfirm && (
@@ -370,6 +515,16 @@ export function LessonRunnerPage() {
   return (
     <div>
       <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
+        {history.length > 0 && (
+          <button
+            type="button"
+            className="btn-icon-toggle"
+            aria-label={t("lesson_runner.review_back_label")}
+            onClick={handleReviewBack}
+          >
+            <ChevronLeft size={18} />
+          </button>
+        )}
         <div className="progress-track" style={{ flex: 1 }}>
           <div className="progress-fill" style={{ width: `${Math.min(100, Math.max(0, pct))}%` }} />
         </div>
@@ -411,31 +566,14 @@ export function LessonRunnerPage() {
           </button>
         </div>
       )}
-      {result && (() => {
-        const status = resultStatus(result);
-        return (
-          <div className={`feedback-banner ${status}`}>
-            <p style={{ margin: "0 0 6px" }}>
-              {status === "correct" && t("lesson_runner.correct")}
-              {status === "almost" && t("lesson_runner.almost")}
-              {status === "incorrect" && t("lesson_runner.incorrect")}
-            </p>
-            {status !== "correct" && (
-              <p style={{ margin: "0 0 6px", fontWeight: 400 }}>
-                {t("lesson_runner.correct_answer", { answer: formatCorrectResponse(result.correct_response) })}
-              </p>
-            )}
-            {result.feedback && (
-              <p style={{ margin: "0 0 10px", fontWeight: 400 }}>
-                <EmphasizedText text={result.feedback} />
-              </p>
-            )}
+      {result &&
+        renderResultBanner(result, {
+          footer: (
             <button className="btn btn-block" onClick={handleContinue}>
               {t("lesson_runner.continue")}
             </button>
-          </div>
-        );
-      })()}
+          ),
+        })}
       <div style={{ marginTop: 12, textAlign: "center" }}>
         <ReportIssueButton
           lastResponse={lastResponse}

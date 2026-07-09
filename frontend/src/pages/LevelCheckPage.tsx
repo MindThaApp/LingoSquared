@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { CatalogApi } from "../api/endpoints";
@@ -7,10 +7,25 @@ import { getLevelPreference, setLevelPreference, type SelfReportedLevel } from "
 
 const LEVELS: SelfReportedLevel[] = ["beginner", "some_basics", "conversational"];
 
+// Present when this page was opened via CoursePickerPage's "Change level"
+// affordance (step 3) rather than the normal first-visit-to-a-course entry
+// point -- lets an already-answered course still show the picker instead of
+// auto-skipping, and sends the learner back to the course list (with the
+// same source/target selection restored) instead of into the course.
+interface RelevelState {
+  returnTo?: string;
+  source?: string;
+  target?: string;
+}
+
 export function LevelCheckPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const location = useLocation();
   const { courseId = "" } = useParams();
+
+  const relevel = location.state as RelevelState | null;
+  const forceShow = Boolean(relevel?.returnTo);
 
   const unitsQuery = useQuery({
     queryKey: ["units", courseId],
@@ -21,9 +36,11 @@ export function LevelCheckPage() {
     unitsQuery.data?.filter((u) => u.section === "reading_writing").length ?? 0;
 
   // Nothing to ask about: skip straight through if there's only one unit,
-  // or the user already answered for this course before.
+  // or the user already answered for this course before -- unless they got
+  // here explicitly to redo it (forceShow), in which case an existing
+  // answer should never auto-skip the picker.
   const alreadyAnswered = getLevelPreference(courseId) !== null;
-  const skip = unitsQuery.isSuccess && (readingWritingCount <= 1 || alreadyAnswered);
+  const skip = unitsQuery.isSuccess && (readingWritingCount <= 1 || (alreadyAnswered && !forceShow));
 
   useEffect(() => {
     if (skip) navigate(`/courses/${courseId}`, { replace: true });
@@ -31,9 +48,17 @@ export function LevelCheckPage() {
 
   if (!unitsQuery.isSuccess || skip) return null;
 
+  function returnToOrigin() {
+    if (relevel?.returnTo) {
+      navigate(relevel.returnTo, { state: { source: relevel.source, target: relevel.target } });
+    } else {
+      navigate(`/courses/${courseId}`);
+    }
+  }
+
   function choose(level: SelfReportedLevel) {
     setLevelPreference(courseId, level);
-    navigate(`/courses/${courseId}`);
+    returnToOrigin();
   }
 
   return (
@@ -55,6 +80,15 @@ export function LevelCheckPage() {
           </button>
         ))}
       </div>
+      {forceShow && (
+        <button
+          className="btn btn-secondary"
+          style={{ marginTop: 16 }}
+          onClick={returnToOrigin}
+        >
+          {t("level_check.cancel")}
+        </button>
+      )}
     </div>
   );
 }
