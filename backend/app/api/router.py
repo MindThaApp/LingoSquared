@@ -1197,7 +1197,13 @@ def practice_batch(
     enforce_rate_limit(GENERATION_RATE_LIMIT,user.id,"generation_rate_limited","Too many generation requests too quickly. Please slow down.")
     course=db.get(Course,course_id)
     if not course: fail(404,"course_not_found","Course not found")
-    locked,items=generate_batch(db,user.id,course,body.size if body else 10)
+    locked,items=generate_batch(
+        db,
+        user.id,
+        course,
+        body.size if body else 10,
+        is_admin=user.is_admin,
+    )
     db.commit()
     return {
         "locked":locked,

@@ -335,6 +335,22 @@ def test_practice_batch_is_locked_without_completed_lessons(client, admin, auth)
     assert response.json() == {"locked": True, "items": []}
 
 
+def test_admin_practice_batch_unlocked_without_completed_lessons(client, admin):
+    course_id, _ = create_course_with_lexemes()
+    import_templates(client, admin, course_id, artifact())
+
+    response = client.post(
+        f"/practice/{course_id}/batch",
+        headers=admin,
+        json={"size": 6},
+    )
+
+    assert response.status_code == 200, response.text
+    payload = response.json()
+    assert payload["locked"] is False
+    assert payload["items"]
+
+
 def test_practice_import_is_idempotent_and_all_prompt_contracts_generate(
     client, admin, auth
 ):
