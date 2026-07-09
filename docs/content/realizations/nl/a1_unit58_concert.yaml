@@ -1,0 +1,305 @@
+schema_version: "1.1"
+realization_version: "2026.1-draft.1"
+target_language: nl
+cefr_level: A1
+generation_provenance: {method: ai_generated, authoring_system: claude, human_reviewed: false}
+status: complete_draft
+review:
+  status: unreviewed
+  required_next_reviewer: claude
+  notes: >-
+    New Dutch A1 unit after unit57 (museum). A yaml.safe_load diff of every
+    spine_outcome_id/spine_outcome_ids across every
+    docs/content/realizations/nl/a1_unit*.yaml file against every
+    `- id: universal.a1.*` entry in universal_spine.yaml (53 total before
+    this file's own addition, confirmed by grepping
+    "^  - id: universal.a1." in the spine file both before and after the
+    edit) found no unrealized A1 outcome for Dutch -- all 53 pre-existing
+    A1 outcomes were already realized (exact set match, zero diff, every
+    single spine_outcome_id value grepped from every nl realization file
+    matched a real spine id one-for-one, confirmed with comm -23/-13
+    between the sorted spine id list and the sorted set of
+    spine_outcome_id values grepped from every nl realization file; only
+    the two pre-existing B1 outcomes, out of scope for A1 volume growth,
+    were absent). Git history was checked first (git log --oneline --
+    docs/content/universal_spine.yaml): the most recent addition was nl
+    unit57 (museum) and, in the same commit, the
+    universal.a1.museum.visit_a_museum spine outcome itself -- confirming
+    the standing delegated A1 spine-authority pattern (nl unit51 through
+    unit57 each added their own new outcome the same way) is still active
+    and this unit follows the same pattern. This unit therefore adds a new
+    delegated A1 spine outcome, universal.a1.concert.attend_a_concert
+    (topic: concert, prerequisites: plans.make_simple_plans,
+    money.handle_basic_money_matters) -- distinct from unit56's cinema
+    content and unit57's museum content: making a plan to attend a live
+    concert, buying a ticket, asking what time it starts, and reading a
+    concert poster is a distinct, practically common A1 leisure-outing
+    topic not yet covered anywhere in the spine, and unit57's own closing
+    scene already explicitly set up this exact payoff (Lotte proposing
+    "Zullen we volgende week samen naar een concert gaan?"). Sanity-checked
+    per the standing delegated spine-approval authority: the spine file
+    still parses cleanly with yaml.safe_load after the edit, the 61
+    resulting outcomes (54 A1 + 5 A2 + 2 B1) have zero duplicate ids, both
+    new prerequisite references resolve to real existing outcome ids
+    (confirmed programmatically -- the same pre-existing bad prerequisite
+    on universal.a1.library.borrow_return_item flagged by unit56/unit57's
+    own review notes was re-confirmed still present and still out of this
+    unit's scope), and all 4 modalities (listening, speaking, reading,
+    writing) are present in assessment_requirements. Story continuity:
+    unit57 closed on Saturday 20 June 2026 with Omar asking Nina "Was het
+    museum mooi?", Nina answering, and then Lotte proposing "Zullen we
+    volgende week samen naar een concert gaan?" (shall we go to a concert
+    together next week), which Nina accepted -- this unit opens
+    on the following Saturday, 27 June 2026 (verified with Python
+    datetime.date(2026,6,27).strftime("%A") == "Saturday", consistent with
+    datetime.date(2026,6,20) also being a Saturday), the payoff of that
+    plan: Omar, Nina, and Lotte go to the concert together. A new minor
+    character, Sven (the concert venue's neutral-polite "u"-register
+    box-office staff, same convention as unit50's pharmacist, unit51's
+    hairdresser, unit52's Daan, unit53's Sanne, unit54's Femke, unit55's
+    Bram, unit56's Iris, and unit57's Tessa), sells Nina a ticket. In the
+    closing scene, continuing the established Omar/Lotte closing-scene
+    proposer alternation pattern (unit50 Omar, unit51 Lotte, unit52 Omar,
+    unit53 Lotte, unit54 Omar, unit55 Lotte, unit56 Omar, unit57 Lotte;
+    this unit continues it with Omar as the proposer), and matching
+    unit56's own Omar-proposer scene shape (2 speakers, Omar/Nina; Lotte
+    is present at the concert per the narrative but does not speak in the
+    closing scene's tested dialogue, same reason unit56 kept its own
+    closing scene to 2 speakers), Omar asks Nina how the concert was, Nina
+    answers, and Omar proposes going to the park together the following
+    Saturday, 4 July 2026 (verified "Saturday" with the same method) -- a
+    genuinely new, not-yet-covered A1 topic flagged here as a plausible
+    next unit for whoever picks this up, not a commitment binding that
+    choice. Every vocabulary teaching card includes a real example
+    sentence with a matching overlay example_gloss, and every example was
+    checked to literally contain the card's exact target word/infinitive
+    surface form (no compiler inflection warnings expected). Prior words
+    (including "Ik wil"/"de"/"het"/"een"/"Zullen we"/numbers/"heel"/
+    "goed"/"blij"/day names/"beginnen" from earlier units, including
+    "concert" itself, taught in unit57, and "programma", taught in
+    unit56) are re-declared as introduced_tokens at first use in this file
+    because the untaught-vocabulary validator is per-file; within this
+    file, later cards correctly do NOT re-declare a token beyond what
+    their own text naturally contains once it was already introduced
+    earlier in the same file, consistent with the validator accumulating
+    taught tokens across the whole file in document order (confirmed by
+    reading validate_untaught_vocabulary in scripts/compile_content.py
+    before relying on this). Every listen_select/dialogue_response
+    exercise built from the two multi-turn dialogues (lesson04's
+    concert_sven and lesson06's concert_omar) was checked by hand: no
+    distractor is a line the tested speaker says anywhere else in that
+    same dialogue audio -- lesson04 ex01 tests Sven's opening line
+    ("Goedenavond! Wilt u een kaartje voor het concert?") and its three
+    distractors ("Good evening! Would you like a table?"/"Good afternoon!
+    Is the concert sold out?"/"Good morning! Would you like popcorn?")
+    match neither Sven's turn3 program-offer line ("Prima, en wilt u ook
+    een programma?") nor his turn5 "Komt eraan!" line; lesson06 ex01
+    tests Omar's line ("Was het concert goed?", his turn1 line) and its
+    three distractors ("did you buy a ticket?"/"do you want to go to the
+    museum again?"/"is that your new bike?") match neither that line nor
+    Omar's own turn3 park-proposal line ("Zullen we volgende week samen
+    naar het park gaan?") nor any of Nina's lines in the same clip -- all
+    such distractors are invented minimal-pair alternatives (several
+    deliberately reusing prior-unit themes -- tickets, museum, bike
+    rental -- as plausible-sounding decoys) never spoken by anyone in the
+    clip, per the corpus's established safe pattern (units 36-57).
+    matching_pairs exercises in this unit use 6-10 pairs each (not the
+    bare 5-pair floor), pooling vocabulary already taught earlier in the
+    same unit for lesson02 onward, per the standing matching_pairs
+    density guidance.
+
+course:
+  realization_key: nl.a1
+  target_language_first: true
+  dialect: nl_NL_standard
+  register_policy: >-
+    Teach contemporary Standard Dutch as used in the Netherlands. Nina,
+    Omar, and Lotte are established taalcafe friends and use informal
+    jij/je with each other throughout. Sven, the concert box-office staff
+    member, speaks in neutral, polite service language ("u"), consistent
+    with unit50's pharmacist, unit51's hairdresser, unit52's bike-shop
+    staff, unit53's launderette staff, unit54's zwembad reception staff,
+    unit55's restaurant server Bram, unit56's cinema staff Iris, and
+    unit57's museum staff Tessa.
+
+media_assets:
+  - {content_key: nl.a1.unit58.audio.concert.ik_ga_graag_naar_het_concert.01, language: nl, text: "Ik ga graag naar het concert.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - {content_key: nl.a1.unit58.audio.concert.ik_koop_een_kaartje_voor_het_concert.01, language: nl, text: "Ik koop een kaartje voor het concert.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - {content_key: nl.a1.unit58.audio.concert.het_concert_begint_om_acht_uur.01, language: nl, text: "Het concert begint om acht uur.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - content_key: nl.a1.unit58.audio.dialogue.concert_sven.01
+    language: nl
+    text: >-
+      Sven: Goedenavond! Wilt u een kaartje voor het concert? Nina: Ja, ik
+      wil graag een kaartje voor de band, alstublieft. Sven: Prima, en
+      wilt u ook een programma? Nina: Nee, dank u, dat is niet nodig.
+      Sven: Komt eraan!
+    voice_hint: two_young_adults_and_staff_neutral
+    status: pending_generation
+  - {content_key: nl.a1.unit58.audio.concert.prima_en_wilt_u_ook_een_programma.01, language: nl, text: "Prima, en wilt u ook een programma?", voice_hint: neutral_adult_clear, status: pending_generation}
+  - {content_key: nl.a1.unit58.audio.concert.het_publiek_is_blij.01, language: nl, text: "Het publiek is blij.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - content_key: nl.a1.unit58.audio.dialogue.concert_omar.01
+    language: nl
+    text: >-
+      Omar: Was het concert goed? Nina: Ja, heel geweldig! Omar: Zullen
+      we volgende week samen naar het park gaan? Nina: Ja, leuk! Tot
+      volgende week, Omar!
+    voice_hint: two_young_adults_friendly
+    status: pending_generation
+  - {content_key: nl.a1.unit58.audio.concert.zullen_we_volgende_week_samen_naar_het_park_gaan.01, language: nl, text: "Zullen we volgende week samen naar het park gaan?", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+
+units:
+  - content_key: nl.a1.unit58.concert
+    title: "Naar het concert: een kaartje kopen"
+    section: reading_writing
+    spine_outcome_ids: [universal.a1.concert.attend_a_concert]
+    planned_lesson_count: 6
+    lessons:
+      - content_key: nl.a1.unit58.lesson01.ik_wil_naar_het_concert
+        title: "Ik wil naar het concert"
+        spine_outcome_id: universal.a1.concert.attend_a_concert
+        teaching:
+          - content_key: nl.a1.unit58.lesson01.teach.concert
+            kind: vocabulary
+            target: {text: "het concert", language_code: nl, direction: ltr}
+            introduced_tokens: [het, concert, Ik, ga, graag, naar]
+            example: {text: "Ik ga graag naar het concert.", language_code: nl, direction: ltr}
+          - content_key: nl.a1.unit58.lesson01.teach.band
+            kind: vocabulary
+            target: {text: "de band", language_code: nl, direction: ltr}
+            introduced_tokens: [de, band, De, is, goed]
+            example: {text: "De band is goed.", language_code: nl, direction: ltr}
+          - {content_key: nl.a1.unit58.lesson01.teach.concert_van_de_band, kind: phrase, target: {text: "Ik wil graag naar het concert van de band gaan, alstublieft.", language_code: nl, direction: ltr}, introduced_tokens: [Ik, wil, graag, naar, het, concert, van, de, band, gaan, alstublieft]}
+        exercises:
+          - {content_key: nl.a1.unit58.lesson01.exercise01.choose_concert_van_de_band, type: multiple_choice, tested_text: "Ik wil graag naar het concert van de band gaan, alstublieft", prompt: {target_blocks: [{text: "I'd like to go to the band's concert, please.", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit58.lesson01.exercise02.listen_ik_ga_graag_naar_het_concert, type: listen_select, tested_text: "Ik ga graag naar het concert", media_asset_key: nl.a1.unit58.audio.concert.ik_ga_graag_naar_het_concert.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit58.lesson01.exercise03.match_concert_band, type: matching_pairs, tested_text: "concert band het concert de band", prompt: {target_blocks: []}, pairs: [{left: concert, right: concert}, {left: band, right: band}, {left: "het concert", right: "the concert"}, {left: "de band", right: "the band"}, {left: "Ik ga graag naar het concert.", right: "I like going to the concert."}, {left: "De band is goed.", right: "The band is good."}, {left: "Ik wil graag naar het concert van de band gaan, alstublieft.", right: "I'd like to go to the band's concert, please."}]}
+          - {content_key: nl.a1.unit58.lesson01.exercise04.order_concert_van_de_band, type: word_order, tested_text: "Ik wil graag naar het concert van de band gaan alstublieft", prompt: {target_blocks: []}, word_bank: [Ik, wil, graag, naar, het, concert, van, de, band, gaan, alstublieft]}
+          - {content_key: nl.a1.unit58.lesson01.exercise05.listen_order_ik_ga_graag_naar_het_concert, type: listen_order, tested_text: "Ik ga graag naar het concert", media_asset_key: nl.a1.unit58.audio.concert.ik_ga_graag_naar_het_concert.01, prompt: {target_blocks: []}, word_bank: [Ik, ga, graag, naar, het, concert]}
+          - {content_key: nl.a1.unit58.lesson01.exercise06.translate_het_concert, type: translation, tested_text: "het concert", prompt: {target_blocks: [{text: "the concert", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit58.lesson01.exercise07.respond_concert_van_de_band, type: dialogue_response, tested_text: "Ik wil graag naar het concert van de band gaan alstublieft", prompt: {target_blocks: [{text: "Say in Dutch: I'd like to go to the band's concert, please.", language_code: en, direction: ltr}]}}
+
+      - content_key: nl.a1.unit58.lesson02.ik_wil_een_kaartje_kopen
+        title: "Ik wil een kaartje kopen"
+        spine_outcome_id: universal.a1.concert.attend_a_concert
+        teaching:
+          - content_key: nl.a1.unit58.lesson02.teach.kaartje
+            kind: vocabulary
+            target: {text: "het kaartje", language_code: nl, direction: ltr}
+            introduced_tokens: [het, kaartje, Ik, koop, een, voor, concert]
+            example: {text: "Ik koop een kaartje voor het concert.", language_code: nl, direction: ltr}
+          - content_key: nl.a1.unit58.lesson02.teach.plaats
+            kind: vocabulary
+            target: {text: "de plaats", language_code: nl, direction: ltr}
+            introduced_tokens: [de, plaats, Ik, heb, een, goede]
+            example: {text: "Ik heb een goede plaats.", language_code: nl, direction: ltr}
+          - {content_key: nl.a1.unit58.lesson02.teach.kaartje_voor_het_concert, kind: phrase, target: {text: "Ik wil graag een kaartje voor het concert, alstublieft.", language_code: nl, direction: ltr}, introduced_tokens: [Ik, wil, graag, een, kaartje, voor, het, concert, alstublieft]}
+        exercises:
+          - {content_key: nl.a1.unit58.lesson02.exercise01.choose_kaartje_voor_het_concert, type: multiple_choice, tested_text: "Ik wil graag een kaartje voor het concert, alstublieft", prompt: {target_blocks: [{text: "I'd like a ticket for the concert, please.", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit58.lesson02.exercise02.listen_ik_koop_een_kaartje_voor_het_concert, type: listen_select, tested_text: "Ik koop een kaartje voor het concert", media_asset_key: nl.a1.unit58.audio.concert.ik_koop_een_kaartje_voor_het_concert.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit58.lesson02.exercise03.match_kaartje_plaats, type: matching_pairs, tested_text: "kaartje plaats concert band", prompt: {target_blocks: []}, pairs: [{left: kaartje, right: ticket}, {left: plaats, right: seat}, {left: "het kaartje", right: "the ticket"}, {left: "de plaats", right: "the seat"}, {left: "Ik koop een kaartje voor het concert.", right: "I'm buying a ticket for the concert."}, {left: "Ik heb een goede plaats.", right: "I have a good seat."}, {left: "Ik wil graag een kaartje voor het concert, alstublieft.", right: "I'd like a ticket for the concert, please."}, {left: band, right: band}]}
+          - {content_key: nl.a1.unit58.lesson02.exercise04.order_kaartje_voor_het_concert, type: word_order, tested_text: "Ik wil graag een kaartje voor het concert alstublieft", prompt: {target_blocks: []}, word_bank: [Ik, wil, graag, een, kaartje, voor, het, concert, alstublieft]}
+          - {content_key: nl.a1.unit58.lesson02.exercise05.listen_order_ik_koop_een_kaartje_voor_het_concert, type: listen_order, tested_text: "Ik koop een kaartje voor het concert", media_asset_key: nl.a1.unit58.audio.concert.ik_koop_een_kaartje_voor_het_concert.01, prompt: {target_blocks: []}, word_bank: [Ik, koop, een, kaartje, voor, het, concert]}
+          - {content_key: nl.a1.unit58.lesson02.exercise06.translate_de_plaats, type: translation, tested_text: "de plaats", prompt: {target_blocks: [{text: "the seat", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit58.lesson02.exercise07.respond_kaartje_voor_het_concert, type: dialogue_response, tested_text: "Ik wil graag een kaartje voor het concert alstublieft", prompt: {target_blocks: [{text: "Say in Dutch: I'd like a ticket for the concert, please.", language_code: en, direction: ltr}]}}
+
+      - content_key: nl.a1.unit58.lesson03.hoe_laat_begint_het_concert
+        title: "Hoe laat begint het concert?"
+        spine_outcome_id: universal.a1.concert.attend_a_concert
+        teaching:
+          - content_key: nl.a1.unit58.lesson03.teach.beginnen
+            kind: vocabulary
+            target: {text: beginnen, language_code: nl, direction: ltr}
+            introduced_tokens: [beginnen, Het, concert, begint, om, acht, uur]
+            example: {text: "Het concert begint om acht uur.", language_code: nl, direction: ltr}
+          - content_key: nl.a1.unit58.lesson03.teach.duren
+            kind: vocabulary
+            target: {text: duren, language_code: nl, direction: ltr}
+            introduced_tokens: [duren, Het, concert, duurt, twee, uur]
+            example: {text: "Het concert duurt twee uur.", language_code: nl, direction: ltr}
+          - {content_key: nl.a1.unit58.lesson03.teach.hoe_laat_begint_het_concert, kind: phrase, target: {text: "Hoe laat begint het concert?", language_code: nl, direction: ltr}, introduced_tokens: [Hoe, laat, begint, het, concert]}
+        exercises:
+          - {content_key: nl.a1.unit58.lesson03.exercise01.choose_hoe_laat_begint_het_concert, type: multiple_choice, tested_text: "Hoe laat begint het concert", prompt: {target_blocks: [{text: "What time does the concert start?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit58.lesson03.exercise02.listen_het_concert_begint_om_acht_uur, type: listen_select, tested_text: "Het concert begint om acht uur", media_asset_key: nl.a1.unit58.audio.concert.het_concert_begint_om_acht_uur.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit58.lesson03.exercise03.match_beginnen_duren, type: matching_pairs, tested_text: "beginnen duren kaartje plaats", prompt: {target_blocks: []}, pairs: [{left: beginnen, right: "to begin"}, {left: duren, right: "to last"}, {left: "Het concert begint om acht uur.", right: "The concert starts at eight o'clock."}, {left: "Het concert duurt twee uur.", right: "The concert lasts two hours."}, {left: "Hoe laat begint het concert?", right: "What time does the concert start?"}, {left: kaartje, right: ticket}, {left: plaats, right: seat}, {left: band, right: band}]}
+          - {content_key: nl.a1.unit58.lesson03.exercise04.order_hoe_laat_begint_het_concert, type: word_order, tested_text: "Hoe laat begint het concert", prompt: {target_blocks: []}, word_bank: [Hoe, laat, begint, het, concert]}
+          - {content_key: nl.a1.unit58.lesson03.exercise05.listen_order_het_concert_begint_om_acht_uur, type: listen_order, tested_text: "Het concert begint om acht uur", media_asset_key: nl.a1.unit58.audio.concert.het_concert_begint_om_acht_uur.01, prompt: {target_blocks: []}, word_bank: [Het, concert, begint, om, acht, uur]}
+          - {content_key: nl.a1.unit58.lesson03.exercise06.translate_beginnen, type: translation, tested_text: beginnen, prompt: {target_blocks: [{text: "to begin", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit58.lesson03.exercise07.respond_hoe_laat_begint_het_concert, type: dialogue_response, tested_text: "Hoe laat begint het concert", prompt: {target_blocks: [{text: "Ask in Dutch: what time does the concert start?", language_code: en, direction: ltr}]}}
+
+      - content_key: nl.a1.unit58.lesson04.bij_de_kassa
+        title: "Bij de kassa"
+        spine_outcome_id: universal.a1.concert.attend_a_concert
+        teaching:
+          - {content_key: nl.a1.unit58.lesson04.teach.sven_groet, kind: dialogue, target: {text: "Sven: Goedenavond! Wilt u een kaartje voor het concert?", language_code: nl, direction: ltr}, introduced_tokens: [Sven, Goedenavond, Wilt, u, een, kaartje, voor, het, concert]}
+          - {content_key: nl.a1.unit58.lesson04.teach.nina_bestelling, kind: dialogue, target: {text: "Nina: Ja, ik wil graag een kaartje voor de band, alstublieft.", language_code: nl, direction: ltr}, introduced_tokens: [Nina, "Ja", ik, wil, graag, een, kaartje, voor, de, band, alstublieft]}
+          - {content_key: nl.a1.unit58.lesson04.teach.sven_programma, kind: dialogue, target: {text: "Sven: Prima, en wilt u ook een programma?", language_code: nl, direction: ltr}, introduced_tokens: [Sven, Prima, en, wilt, u, ook, een, programma]}
+          - {content_key: nl.a1.unit58.lesson04.teach.nina_programma_antwoord, kind: dialogue, target: {text: "Nina: Nee, dank u, dat is niet nodig.", language_code: nl, direction: ltr}, introduced_tokens: [Nina, Nee, dank, u, dat, is, niet, nodig]}
+          - {content_key: nl.a1.unit58.lesson04.teach.sven_komt_eraan, kind: dialogue, target: {text: "Sven: Komt eraan!", language_code: nl, direction: ltr}, introduced_tokens: [Sven, Komt, eraan]}
+        exercises:
+          - {content_key: nl.a1.unit58.lesson04.exercise01.listen_wilt_u_een_kaartje_voor_het_concert, type: listen_select, tested_text: "Wilt u een kaartje voor het concert", media_asset_key: nl.a1.unit58.audio.dialogue.concert_sven.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit58.lesson04.exercise02.comprehend_bestelling, type: dialogue_comprehension, tested_text: "een kaartje voor de band", media_asset_key: nl.a1.unit58.audio.dialogue.concert_sven.01, prompt: {target_blocks: [{text: "What does Nina want a ticket for?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit58.lesson04.exercise03.comprehend_programma_vraag, type: dialogue_comprehension, tested_text: "wilt u ook een programma", media_asset_key: nl.a1.unit58.audio.dialogue.concert_sven.01, prompt: {target_blocks: [{text: "What does Sven ask if Nina wants?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit58.lesson04.exercise04.comprehend_programma_antwoord, type: dialogue_comprehension, tested_text: "dat is niet nodig", media_asset_key: nl.a1.unit58.audio.dialogue.concert_sven.01, prompt: {target_blocks: [{text: "Does Nina want a program?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit58.lesson04.exercise05.order_nina_bestelling, type: word_order, tested_text: "Ja ik wil graag een kaartje voor de band alstublieft", prompt: {target_blocks: []}, word_bank: ["Ja", ik, wil, graag, een, kaartje, voor, de, band, alstublieft]}
+          - {content_key: nl.a1.unit58.lesson04.exercise06.respond_programma, type: dialogue_response, tested_text: "Nee dank u dat is niet nodig", prompt: {target_blocks: [{text: "Prima, en wilt u ook een programma?", language_code: nl, direction: ltr}]}}
+          - {content_key: nl.a1.unit58.lesson04.exercise07.listen_type_programma_vraag, type: listen_type, tested_text: "Prima, en wilt u ook een programma", media_asset_key: nl.a1.unit58.audio.concert.prima_en_wilt_u_ook_een_programma.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit58.lesson04.exercise08.write_sven_groet, type: writing_prompt, tested_text: "Goedenavond Wilt u een kaartje voor het concert", prompt: {target_blocks: [{text: "Write in Dutch: Good evening! Would you like a ticket for the concert?", language_code: en, direction: ltr}]}}
+
+      - content_key: nl.a1.unit58.lesson05.het_programma_lezen
+        title: "Het programma lezen"
+        spine_outcome_id: universal.a1.concert.attend_a_concert
+        teaching:
+          - content_key: nl.a1.unit58.lesson05.teach.podium
+            kind: vocabulary
+            target: {text: "het podium", language_code: nl, direction: ltr}
+            introduced_tokens: [het, podium, Het, is, groot]
+            example: {text: "Het podium is groot.", language_code: nl, direction: ltr}
+          - content_key: nl.a1.unit58.lesson05.teach.publiek
+            kind: vocabulary
+            target: {text: "het publiek", language_code: nl, direction: ltr}
+            introduced_tokens: [het, publiek, Het, is, blij]
+            example: {text: "Het publiek is blij.", language_code: nl, direction: ltr}
+          - content_key: nl.a1.unit58.lesson05.teach.programma_tekst
+            kind: reading
+            target:
+              text: "Concert. Band: De Wandelaars. Begint: acht uur. Kaartje: twaalf euro vijftig."
+              language_code: nl
+              direction: ltr
+            introduced_tokens: [Concert, Band, De, Wandelaars, Begint, acht, uur, Kaartje, twaalf, euro, vijftig]
+          - {content_key: nl.a1.unit58.lesson05.teach.hoeveel_kost_het_kaartje, kind: phrase, target: {text: "Hoeveel kost het kaartje?", language_code: nl, direction: ltr}, introduced_tokens: [Hoeveel, kost, het, kaartje]}
+        exercises:
+          - {content_key: nl.a1.unit58.lesson05.exercise01.read_band_naam, type: reading_comprehension, tested_text: "De Wandelaars", prompt: {target_blocks: [{text: "According to the poster, which band is performing?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit58.lesson05.exercise02.read_begint, type: reading_comprehension, tested_text: "Begint acht uur", prompt: {target_blocks: [{text: "According to the poster, what time does the concert begin?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit58.lesson05.exercise03.read_kaartje_prijs, type: reading_comprehension, tested_text: "Kaartje twaalf euro vijftig", prompt: {target_blocks: [{text: "According to the poster, how much does the ticket cost?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit58.lesson05.exercise04.match_podium_publiek, type: matching_pairs, tested_text: "podium publiek kaartje plaats band concert", prompt: {target_blocks: []}, pairs: [{left: podium, right: stage}, {left: publiek, right: audience}, {left: "het podium", right: "the stage"}, {left: "het publiek", right: "the audience"}, {left: "Het podium is groot.", right: "The stage is big."}, {left: "Het publiek is blij.", right: "The audience is happy."}, {left: "Hoeveel kost het kaartje?", right: "How much does the ticket cost?"}, {left: kaartje, right: ticket}, {left: plaats, right: seat}, {left: band, right: band}]}
+          - {content_key: nl.a1.unit58.lesson05.exercise05.listen_het_publiek_is_blij, type: listen_select, tested_text: "Het publiek is blij", media_asset_key: nl.a1.unit58.audio.concert.het_publiek_is_blij.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit58.lesson05.exercise06.write_hoeveel_kost_het_kaartje, type: writing_prompt, tested_text: "Hoeveel kost het kaartje", prompt: {target_blocks: [{text: "Write in Dutch: how much does the ticket cost?", language_code: en, direction: ltr}]}}
+
+      - content_key: nl.a1.unit58.lesson06.omar_nina_en_lotte_bij_het_concert
+        title: "Omar, Nina en Lotte bij het concert"
+        spine_outcome_id: universal.a1.concert.attend_a_concert
+        teaching:
+          - content_key: nl.a1.unit58.lesson06.teach.park
+            kind: vocabulary
+            target: {text: "het park", language_code: nl, direction: ltr}
+            introduced_tokens: [het, park, Ik, ga, naar]
+            example: {text: "Ik ga naar het park.", language_code: nl, direction: ltr}
+          - content_key: nl.a1.unit58.lesson06.teach.geweldig
+            kind: vocabulary
+            target: {text: geweldig, language_code: nl, direction: ltr}
+            introduced_tokens: [geweldig, Het, concert, was]
+            example: {text: "Het concert was geweldig.", language_code: nl, direction: ltr}
+          - {content_key: nl.a1.unit58.lesson06.teach.omar_vraag, kind: dialogue, target: {text: "Omar: Was het concert goed?", language_code: nl, direction: ltr}, introduced_tokens: [Omar, Was, het, concert, goed]}
+          - {content_key: nl.a1.unit58.lesson06.teach.nina_antwoord, kind: dialogue, target: {text: "Nina: Ja, heel geweldig!", language_code: nl, direction: ltr}, introduced_tokens: [Nina, "Ja", heel, geweldig]}
+          - {content_key: nl.a1.unit58.lesson06.teach.omar_voorstel, kind: dialogue, target: {text: "Omar: Zullen we volgende week samen naar het park gaan?", language_code: nl, direction: ltr}, introduced_tokens: [Omar, Zullen, we, volgende, week, samen, naar, het, park, gaan]}
+          - {content_key: nl.a1.unit58.lesson06.teach.nina_akkoord, kind: dialogue, target: {text: "Nina: Ja, leuk! Tot volgende week, Omar!", language_code: nl, direction: ltr}, introduced_tokens: [Nina, "Ja", leuk, Tot, volgende, week, Omar]}
+          - {content_key: nl.a1.unit58.lesson06.teach.zullen_we_volgende_week_samen_naar_het_park_gaan, kind: phrase, target: {text: "Zullen we volgende week samen naar het park gaan?", language_code: nl, direction: ltr}, introduced_tokens: [Zullen, we, volgende, week, samen, naar, het, park, gaan]}
+        exercises:
+          - {content_key: nl.a1.unit58.lesson06.exercise01.listen_was_het_concert_goed, type: listen_select, tested_text: "Was het concert goed", media_asset_key: nl.a1.unit58.audio.dialogue.concert_omar.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit58.lesson06.exercise02.comprehend_antwoord, type: dialogue_comprehension, tested_text: "Ja heel geweldig", media_asset_key: nl.a1.unit58.audio.dialogue.concert_omar.01, prompt: {target_blocks: [{text: "How does Nina describe the concert?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit58.lesson06.exercise03.comprehend_voorstel, type: dialogue_comprehension, tested_text: "volgende week samen naar het park gaan", media_asset_key: nl.a1.unit58.audio.dialogue.concert_omar.01, prompt: {target_blocks: [{text: "What does Omar suggest?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit58.lesson06.exercise04.match_omar, type: matching_pairs, tested_text: "park geweldig concert kaartje", prompt: {target_blocks: []}, pairs: [{left: "Was het concert goed?", right: "Was the concert good?"}, {left: "Ja, heel geweldig!", right: "Yes, very amazing!"}, {left: "Zullen we volgende week samen naar het park gaan?", right: "Shall we go to the park together next week?"}, {left: "Ja, leuk! Tot volgende week, Omar!", right: "Yes, nice! See you next week, Omar!"}, {left: "het park", right: "the park"}, {left: geweldig, right: amazing}, {left: concert, right: concert}, {left: kaartje, right: ticket}, {left: band, right: band}, {left: podium, right: stage}]}
+          - {content_key: nl.a1.unit58.lesson06.exercise05.order_zullen_we_volgende_week_samen_naar_het_park_gaan, type: word_order, tested_text: "Zullen we volgende week samen naar het park gaan", prompt: {target_blocks: []}, word_bank: [Zullen, we, volgende, week, samen, naar, het, park, gaan]}
+          - {content_key: nl.a1.unit58.lesson06.exercise06.respond_voorstel, type: dialogue_response, tested_text: "Ja leuk Tot volgende week Omar", prompt: {target_blocks: [{text: "Zullen we volgende week samen naar het park gaan?", language_code: nl, direction: ltr}]}}
+          - {content_key: nl.a1.unit58.lesson06.exercise07.listen_type_zullen_we_volgende_week_samen_naar_het_park_gaan, type: listen_type, tested_text: "Zullen we volgende week samen naar het park gaan", media_asset_key: nl.a1.unit58.audio.concert.zullen_we_volgende_week_samen_naar_het_park_gaan.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit58.lesson06.exercise08.write_ja_heel_geweldig, type: writing_prompt, tested_text: "Ja heel geweldig", prompt: {target_blocks: [{text: "Write in Dutch: yes, very amazing!", language_code: en, direction: ltr}]}}
