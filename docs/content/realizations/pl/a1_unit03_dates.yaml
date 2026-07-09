@@ -1,0 +1,523 @@
+schema_version: "1.1"
+realization_version: "2026.1-draft.1"
+target_language: "pl"
+cefr_level: "A1"
+status: "complete_draft"
+generation_provenance:
+  method: "ai_generated"
+  authoring_system: "claude"
+  human_reviewed: false
+review:
+  status: "unreviewed"
+  required_next_reviewer: "codex"
+  notes: >-
+    Third Polish unit, continuing directly from pl/a1_unit02_numbers.yaml
+    (same Ewa/Marek characters, same formal pan/pani register). Realizes
+    universal.a1.dates.exchange_calendar_dates (confirmed the next A1
+    outcome in spine order after numbers.use_basic_numbers via
+    universal_spine.yaml -- prerequisites list literally names
+    universal.a1.numbers.use_basic_numbers, and nl/fa's own unit03/unit04
+    both realize this exact outcome next). Sized to 3 lessons matching
+    unit01/02's bootstrap pace, not the 6-lesson depth nl's own calendar-
+    dates unit eventually grew to (checked nl/a1_unit03_dates.yaml for the
+    topic precedent). Authored from the start in AUTHORING_GUIDE §19
+    format (schema_version 1.1): every kind:vocabulary card carries a real
+    example sentence, checked by hand for correct Polish case usage
+    (locative "w/we + month" for stating when something recurs; genitive
+    "[ordinal]-ego + [month]-a, no preposition" for stating a specific
+    date, matching the source's own table exactly). Zero listen_type/
+    listen_select/listen_order exercises anywhere in this file, matching
+    unit01/02's own established choice for this corpus (pl has real
+    Google Cloud TTS confirmed live, but this file stays consistent with
+    the precedent already set rather than introducing the first
+    audio-dependent exercise unilaterally -- a future audio-authoring
+    pass is a real, cheap opportunity now that TTS is wired, just not
+    done here). media_assets is therefore an empty list, not an
+    oversight. dialogue_comprehension exercises in lesson03 render via
+    the same MultipleChoice component as multiple_choice/listen_select
+    (frontend/src/components/exercises/ExerciseRenderer.tsx) and are
+    given real target_blocks text instead of a media_asset_key, matching
+    unit01/02's own pattern.
+
+    Cross-file vocabulary note (confirmed unit02 hit this too): every
+    word this file reuses from unit01/unit02 (pan/pani forms, "Do
+    zobaczenia", "jest", etc.) is re-declared via this file's OWN
+    introduced_tokens before being tested in this file's own exercises --
+    the compiler validates untaught vocabulary per realization FILE, not
+    per course, so no cross-file credit is given even for words already
+    taught in an earlier unit of the same course.
+
+    Source: FSI Polish FAST (1992) -- confirmed real public-domain US
+    government course text (fsi-languages.yojik.eu/languages/FSI/Polish/
+    FAST/FSI - Polish FAST.pdf, cached from unit02's download this
+    session at .firecrawl/fsi-polish-fast.pdf / .txt, extracted via
+    pdftotext -layout). Two real sections used, adapted per §10 (never
+    imported verbatim): (1) pp. 220-221, "DAYS OF THE WEEK" -- the full
+    poniedziałek-niedziela list and the w/we + weekday pattern (including
+    the real, source-confirmed "we wtorek" euphonic exception, taught
+    here via a grammar_note rather than copied verbatim) came directly
+    from this table and the "Practice using different days of the week"
+    drill section (e.g. "Dzisiaj jest poniedziałek, prawda?" -- the
+    source's own confirmation-question pattern, echoed here in this
+    file's own "Jaki dziś jest dzień tygodnia?" direct-question form
+    rather than copied as the same tag-question sentence). (2) pp.
+    323-332, "LANGUAGE NOTES" on dates -- the full months table with
+    correct locative forms (including luty's adjectival exception and the
+    "we wrześniu"/"we wtorek" euphonic pattern, both real and both
+    reused correctly, not guessed), the ordinal day-of-month table
+    (pierwszego, piątego, dziesiątego, piętnastego -- a representative
+    subset actually used in this unit's own scenario, not the source's
+    full pierwszego-through-trzydziestego list, since this unit only
+    needs two concrete dates), and the -ego/-a genitive date construction
+    rule itself (paraphrased in this file's own grammar_note, not copied
+    from the source's "The day will always have the -ego endings..."
+    phrasing). The source's own real birthday-date model sentence "moje
+    urodziny są siódmego czerwca" directly informed this file's
+    "Moje urodziny są [ordinal] maja" pattern (date changed to
+    dziesiątego maja to avoid a verbatim reuse of the source's exact
+    date), and the source's real appointment-scheduling drills (pp.
+    330-331, "Praktyce suggesting various appointment dates" -- e.g. "Czy
+    odpowiada panu/pani...?", "w sobotę, dwunastego kwietnia") directly
+    informed lesson03's whole scenario and its "Czy piątek panu/pani
+    odpowiada?" phrasing -- adapted from a diplomatic-office scheduling
+    context into a personal continuing-acquaintance scenario for Ewa and
+    Marek, consistent with the modernization requirement (the source's
+    own dialogue is 1990s diplomatic-office register; this unit's
+    dialogue is plain personal register throughout).
+
+    One real gap, disclosed honestly: the source's calendar-date material
+    never happens to use May, so "dziesiątego maja" (birthday) and
+    "piętnastego maja" (meeting date) are freshly assembled from the
+    source's own separately-confirmed ordinal table and months table
+    (both real, both verified against the source), not lifted as a whole
+    phrase from any single source sentence. The meeting date's weekday
+    claim was independently verified, not guessed: 15 May 2026 is a
+    real, calendar-true Friday (checked via `date -j`), matching this
+    file's own lesson01 "piątek" vocabulary and avoiding the
+    weekday/date-mismatch bug class documented in nl/a1_unit03_dates.yaml's
+    own review history.
+
+    The lesson03 Ewa/Marek meeting-scheduling dialogue, and the specific
+    dates chosen (10 May for Ewa's stated birthday, 15 May/Friday for the
+    agreed meeting), are freshly authored, continuing unit01/02's
+    characters and formal register (plus one informal "ci" variant,
+    matching unit01/02's own precedent of teaching both registers for key
+    phrases even when the dialogue itself stays formal).
+
+course:
+  realization_key: pl.a1
+  target_language_first: true
+  dialect: pl_standard
+  register_policy: >-
+    Continue unit01/02's register split exactly: Ewa and Marek stay in
+    the formal pan/pani register throughout this unit's dialogue.
+    Teaching cards present the formal (pan/pani) and one informal (ci)
+    version of the Friday-scheduling question as standalone vocabulary,
+    the same way unit02 taught both registers for its own phone-number
+    and age questions even though its closing dialogue used only the
+    formal register.
+
+media_assets: []
+
+units:
+  - content_key: pl.a1.unit03.dates
+    title: "Dni tygodnia i daty"
+    section: reading_writing
+    spine_outcome_ids:
+      - universal.a1.dates.exchange_calendar_dates
+    planned_lesson_count: 3
+
+    lessons:
+      - content_key: pl.a1.unit03.lesson01.dni_tygodnia
+        title: "Dni tygodnia"
+        spine_outcome_id: universal.a1.dates.exchange_calendar_dates
+        teaching:
+          - content_key: pl.a1.unit03.lesson01.teach.poniedzialek
+            kind: vocabulary
+            target: {text: "poniedziałek", language_code: pl, direction: ltr}
+            introduced_tokens: ["poniedziałek"]
+            example: {text: "Dziś jest poniedziałek.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit03.lesson01.teach.wtorek
+            kind: vocabulary
+            target: {text: "wtorek", language_code: pl, direction: ltr}
+            introduced_tokens: ["wtorek"]
+            example: {text: "Dziś jest wtorek.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit03.lesson01.teach.sroda
+            kind: vocabulary
+            target: {text: "środa", language_code: pl, direction: ltr}
+            introduced_tokens: ["środa"]
+            example: {text: "Dziś jest środa.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit03.lesson01.teach.czwartek
+            kind: vocabulary
+            target: {text: "czwartek", language_code: pl, direction: ltr}
+            introduced_tokens: ["czwartek"]
+            example: {text: "Dziś jest czwartek.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit03.lesson01.teach.piatek
+            kind: vocabulary
+            target: {text: "piątek", language_code: pl, direction: ltr}
+            introduced_tokens: ["piątek"]
+            example: {text: "Dziś jest piątek.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit03.lesson01.teach.sobota
+            kind: vocabulary
+            target: {text: "sobota", language_code: pl, direction: ltr}
+            introduced_tokens: ["sobota"]
+            example: {text: "Dziś jest sobota.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit03.lesson01.teach.niedziela
+            kind: vocabulary
+            target: {text: "niedziela", language_code: pl, direction: ltr}
+            introduced_tokens: ["niedziela"]
+            example: {text: "Dziś jest niedziela.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit03.lesson01.teach.jaki_dzien
+            kind: phrase
+            target: {text: "Jaki dziś jest dzień tygodnia?", language_code: pl, direction: ltr}
+            introduced_tokens: ["Jaki", "dziś", "jest", "dzień", "tygodnia"]
+          - content_key: pl.a1.unit03.lesson01.teach.we_wtorek_note
+            kind: grammar_note
+            target: {text: "W poniedziałek, w czwartek, w piątek -- ale we wtorek (dla łatwiejszej wymowy).", language_code: pl, direction: ltr}
+            introduced_tokens: ["we"]
+          - content_key: pl.a1.unit03.lesson01.teach.w_piatek_kino
+            kind: phrase
+            target: {text: "W piątek idę do kina.", language_code: pl, direction: ltr}
+            introduced_tokens: ["W", "idę", "do", "kina"]
+        exercises:
+          - content_key: pl.a1.unit03.lesson01.exercise01.select_sroda
+            type: multiple_choice
+            tested_text: "środa"
+            prompt:
+              target_blocks:
+                - {text: "środa", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit03.lesson01.exercise02.select_piatek
+            type: multiple_choice
+            tested_text: "piątek"
+            prompt:
+              target_blocks:
+                - {text: "piątek", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit03.lesson01.exercise03.select_niedziela
+            type: multiple_choice
+            tested_text: "niedziela"
+            prompt:
+              target_blocks:
+                - {text: "niedziela", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit03.lesson01.exercise04.match_weekdays
+            type: matching_pairs
+            tested_text: "poniedziałek wtorek środa czwartek piątek sobota niedziela"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "poniedziałek", right: "Monday"}
+              - {left: "wtorek", right: "Tuesday"}
+              - {left: "środa", right: "Wednesday"}
+              - {left: "czwartek", right: "Thursday"}
+              - {left: "piątek", right: "Friday"}
+              - {left: "sobota", right: "Saturday"}
+              - {left: "niedziela", right: "Sunday"}
+          - content_key: pl.a1.unit03.lesson01.exercise05.order_day_question
+            type: word_order
+            tested_text: "Jaki dziś jest dzień tygodnia"
+            prompt: {target_blocks: []}
+            word_bank: ["jest", "Jaki", "tygodnia", "dziś", "dzień"]
+          - content_key: pl.a1.unit03.lesson01.exercise06.order_friday_cinema
+            type: word_order
+            tested_text: "W piątek idę do kina"
+            prompt: {target_blocks: []}
+            word_bank: ["do", "W", "idę", "piątek", "kina"]
+          - content_key: pl.a1.unit03.lesson01.exercise07.fill_wednesday
+            type: fill_in_blank
+            tested_text: "środa"
+            prompt:
+              target_blocks:
+                - {text: "Dziś jest ___.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit03.lesson01.exercise08.fix_we_wtorek
+            type: grammar_check
+            tested_text: "we wtorek"
+            prompt:
+              target_blocks:
+                - {text: "w wtorek", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit03.lesson01.exercise09.speak_weekdays
+            type: speak_response
+            tested_text: "poniedziałek wtorek środa czwartek piątek sobota niedziela"
+            prompt:
+              target_blocks:
+                - {text: "Wymień dni tygodnia od poniedziałku do niedzieli.", language_code: pl, direction: ltr}
+
+      - content_key: pl.a1.unit03.lesson02.miesiace_i_daty
+        title: "Miesiące i daty"
+        spine_outcome_id: universal.a1.dates.exchange_calendar_dates
+        teaching:
+          - content_key: pl.a1.unit03.lesson02.teach.styczen_luty_marzec
+            kind: vocabulary
+            target: {text: "styczeń, luty, marzec", language_code: pl, direction: ltr}
+            introduced_tokens: ["styczeń", "luty", "marzec"]
+            example:
+              - {text: "Mam urodziny w styczniu.", language_code: pl, direction: ltr}
+              - {text: "Jadę do Warszawy w lutym.", language_code: pl, direction: ltr}
+              - {text: "Mam urodziny w marcu.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit03.lesson02.teach.kwiecien_maj_czerwiec
+            kind: vocabulary
+            target: {text: "kwiecień, maj, czerwiec", language_code: pl, direction: ltr}
+            introduced_tokens: ["kwiecień", "maj", "czerwiec"]
+            example:
+              - {text: "Jadę do Warszawy w kwietniu.", language_code: pl, direction: ltr}
+              - {text: "Mam urodziny w maju.", language_code: pl, direction: ltr}
+              - {text: "Jadę do Warszawy w czerwcu.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit03.lesson02.teach.lipiec_sierpien_wrzesien
+            kind: vocabulary
+            target: {text: "lipiec, sierpień, wrzesień", language_code: pl, direction: ltr}
+            introduced_tokens: ["lipiec", "sierpień", "wrzesień"]
+            example:
+              - {text: "Mam urlop w lipcu.", language_code: pl, direction: ltr}
+              - {text: "Jadę do Warszawy w sierpniu.", language_code: pl, direction: ltr}
+              - {text: "Mam urodziny we wrześniu.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit03.lesson02.teach.pazdziernik_listopad_grudzien
+            kind: vocabulary
+            target: {text: "październik, listopad, grudzień", language_code: pl, direction: ltr}
+            introduced_tokens: ["październik", "listopad", "grudzień"]
+            example:
+              - {text: "Jadę do Warszawy w październiku.", language_code: pl, direction: ltr}
+              - {text: "Mam urodziny w listopadzie.", language_code: pl, direction: ltr}
+              - {text: "Mam urlop w grudniu.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit03.lesson02.teach.urodziny
+            kind: vocabulary
+            target: {text: "urodziny", language_code: pl, direction: ltr}
+            introduced_tokens: ["urodziny"]
+            example: {text: "Moje urodziny są w maju.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit03.lesson02.teach.kiedy
+            kind: vocabulary
+            target: {text: "Kiedy", language_code: pl, direction: ltr}
+            introduced_tokens: ["Kiedy"]
+            example: {text: "Kiedy jest spotkanie?", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit03.lesson02.teach.kiedy_sa_twoje_urodziny
+            kind: phrase
+            target: {text: "Kiedy są twoje urodziny?", language_code: pl, direction: ltr}
+            introduced_tokens: ["są", "twoje"]
+          - content_key: pl.a1.unit03.lesson02.teach.moje_urodziny_sa_dziesiatego_maja
+            kind: phrase
+            target: {text: "Moje urodziny są dziesiątego maja.", language_code: pl, direction: ltr}
+            introduced_tokens: ["Moje", "dziesiątego", "maja"]
+          - content_key: pl.a1.unit03.lesson02.teach.kiedy_jest_spotkanie
+            kind: phrase
+            target: {text: "Kiedy jest spotkanie?", language_code: pl, direction: ltr}
+            introduced_tokens: ["spotkanie"]
+          - content_key: pl.a1.unit03.lesson02.teach.spotkanie_jest_pietnastego_maja
+            kind: phrase
+            target: {text: "Spotkanie jest piętnastego maja.", language_code: pl, direction: ltr}
+            introduced_tokens: ["Spotkanie", "piętnastego"]
+          - content_key: pl.a1.unit03.lesson02.teach.date_pattern_note
+            kind: grammar_note
+            target: {text: "Data: dzień na -ego + miesiąc na -a, bez przyimka -- dziesiątego maja, piętnastego maja.", language_code: pl, direction: ltr}
+            introduced_tokens: []
+        exercises:
+          - content_key: pl.a1.unit03.lesson02.exercise01.select_maj
+            type: multiple_choice
+            tested_text: "maj"
+            prompt:
+              target_blocks:
+                - {text: "maj", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit03.lesson02.exercise02.select_pazdziernik
+            type: multiple_choice
+            tested_text: "październik"
+            prompt:
+              target_blocks:
+                - {text: "październik", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit03.lesson02.exercise03.match_months
+            type: matching_pairs
+            tested_text: "styczeń luty marzec kwiecień maj czerwiec lipiec sierpień wrzesień październik listopad grudzień"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "styczeń", right: "January"}
+              - {left: "luty", right: "February"}
+              - {left: "marzec", right: "March"}
+              - {left: "kwiecień", right: "April"}
+              - {left: "maj", right: "May"}
+              - {left: "czerwiec", right: "June"}
+              - {left: "lipiec", right: "July"}
+              - {left: "sierpień", right: "August"}
+              - {left: "wrzesień", right: "September"}
+              - {left: "październik", right: "October"}
+              - {left: "listopad", right: "November"}
+              - {left: "grudzień", right: "December"}
+          - content_key: pl.a1.unit03.lesson02.exercise04.order_birthday_question
+            type: word_order
+            tested_text: "Kiedy są twoje urodziny"
+            prompt: {target_blocks: []}
+            word_bank: ["twoje", "są", "Kiedy", "urodziny"]
+          - content_key: pl.a1.unit03.lesson02.exercise05.order_birthday_date
+            type: word_order
+            tested_text: "Moje urodziny są dziesiątego maja"
+            prompt: {target_blocks: []}
+            word_bank: ["maja", "są", "Moje", "dziesiątego", "urodziny"]
+          - content_key: pl.a1.unit03.lesson02.exercise06.fill_birthday_ordinal
+            type: fill_in_blank
+            tested_text: "dziesiątego"
+            prompt:
+              target_blocks:
+                - {text: "Moje urodziny są ___ maja.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit03.lesson02.exercise07.fix_urodziny_agreement
+            type: grammar_check
+            tested_text: "Moje urodziny są dziesiątego maja"
+            prompt:
+              target_blocks:
+                - {text: "Moje urodziny jest dziesiątego maja.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit03.lesson02.exercise08.reply_meeting_date
+            type: dialogue_response
+            tested_text: "Spotkanie jest piętnastego maja"
+            prompt:
+              target_blocks:
+                - {text: "Kiedy jest spotkanie?", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit03.lesson02.exercise09.speak_meeting_date
+            type: speak_response
+            tested_text: "Spotkanie jest piętnastego maja"
+            prompt:
+              target_blocks:
+                - {text: "Powiedz, kiedy jest spotkanie.", language_code: pl, direction: ltr}
+
+      - content_key: pl.a1.unit03.lesson03.umawiamy_sie
+        title: "Umawiamy się na spotkanie"
+        spine_outcome_id: universal.a1.dates.exchange_calendar_dates
+        teaching:
+          - content_key: pl.a1.unit03.lesson03.teach.kiedy_mozemy_sie_spotkac
+            kind: phrase
+            target: {text: "Kiedy możemy się znowu spotkać?", language_code: pl, direction: ltr}
+            introduced_tokens: ["możemy", "się", "znowu", "spotkać"]
+          - content_key: pl.a1.unit03.lesson03.teach.czy_piatek_panu
+            kind: phrase
+            target: {text: "Czy piątek panu odpowiada?", language_code: pl, direction: ltr}
+            introduced_tokens: ["Czy", "panu", "odpowiada"]
+          - content_key: pl.a1.unit03.lesson03.teach.czy_piatek_pani
+            kind: phrase
+            target: {text: "Czy piątek pani odpowiada?", language_code: pl, direction: ltr}
+            introduced_tokens: ["pani"]
+          - content_key: pl.a1.unit03.lesson03.teach.czy_piatek_ci
+            kind: phrase
+            target: {text: "Czy piątek ci odpowiada?", language_code: pl, direction: ltr}
+            introduced_tokens: ["ci"]
+          - content_key: pl.a1.unit03.lesson03.teach.piatek_mi_odpowiada
+            kind: phrase
+            target: {text: "Piątek mi odpowiada.", language_code: pl, direction: ltr}
+            introduced_tokens: ["mi"]
+          - content_key: pl.a1.unit03.lesson03.teach.data
+            kind: vocabulary
+            target: {text: "data", language_code: pl, direction: ltr}
+            introduced_tokens: ["data"]
+            example: {text: "Jaka to będzie data?", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit03.lesson03.teach.jaka_to_bedzie_data
+            kind: phrase
+            target: {text: "Jaka to będzie data?", language_code: pl, direction: ltr}
+            introduced_tokens: ["Jaka", "to", "będzie"]
+          - content_key: pl.a1.unit03.lesson03.teach.dialogue.line01
+            kind: dialogue
+            target:
+              text: "Kiedy możemy się znowu spotkać?"
+              language_code: pl
+              direction: ltr
+              speaker: Ewa
+            introduced_tokens: []
+          - content_key: pl.a1.unit03.lesson03.teach.dialogue.line02
+            kind: dialogue
+            target:
+              text: "Czy piątek pani odpowiada?"
+              language_code: pl
+              direction: ltr
+              speaker: Marek
+            introduced_tokens: []
+          - content_key: pl.a1.unit03.lesson03.teach.dialogue.line03
+            kind: dialogue
+            target:
+              text: "Tak, piątek mi odpowiada. Jaka to będzie data?"
+              language_code: pl
+              direction: ltr
+              speaker: Ewa
+            introduced_tokens: ["Tak"]
+          - content_key: pl.a1.unit03.lesson03.teach.dialogue.line04
+            kind: dialogue
+            target:
+              text: "Piętnastego maja."
+              language_code: pl
+              direction: ltr
+              speaker: Marek
+            introduced_tokens: []
+          - content_key: pl.a1.unit03.lesson03.teach.dialogue.line05
+            kind: dialogue
+            target:
+              text: "Świetnie! Do zobaczenia piętnastego maja!"
+              language_code: pl
+              direction: ltr
+              speaker: Ewa
+            introduced_tokens: ["Świetnie", "Do", "zobaczenia"]
+          - content_key: pl.a1.unit03.lesson03.teach.dialogue.line06
+            kind: dialogue
+            target:
+              text: "Do zobaczenia!"
+              language_code: pl
+              direction: ltr
+              speaker: Marek
+            introduced_tokens: []
+        exercises:
+          - content_key: pl.a1.unit03.lesson03.exercise01.select_formal_friday_question_man
+            type: multiple_choice
+            tested_text: "Czy piątek panu odpowiada"
+            prompt:
+              target_blocks:
+                - {text: "Czy piątek panu odpowiada?", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit03.lesson03.exercise02.select_informal_friday_question
+            type: multiple_choice
+            tested_text: "Czy piątek ci odpowiada"
+            prompt:
+              target_blocks:
+                - {text: "Czy piątek ci odpowiada?", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit03.lesson03.exercise03.comprehend_agreed_day
+            type: dialogue_comprehension
+            tested_text: "piątek"
+            prompt:
+              target_blocks:
+                - {text: "Tak, piątek mi odpowiada. Jaka to będzie data?", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit03.lesson03.exercise04.comprehend_agreed_date
+            type: dialogue_comprehension
+            tested_text: "piętnastego maja"
+            prompt:
+              target_blocks:
+                - {text: "Piętnastego maja.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit03.lesson03.exercise05.match_questions_and_answers
+            type: matching_pairs
+            tested_text: "dzień tygodnia piątek urodziny maja spotkanie data"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "Jaki dziś jest dzień tygodnia?", right: "Dziś jest piątek."}
+              - {left: "Kiedy są twoje urodziny?", right: "Moje urodziny są dziesiątego maja."}
+              - {left: "Kiedy jest spotkanie?", right: "Spotkanie jest piętnastego maja."}
+              - {left: "Czy piątek pani odpowiada?", right: "Piątek mi odpowiada."}
+              - {left: "Jaka to będzie data?", right: "Piętnastego maja."}
+              - {left: "Kiedy możemy się znowu spotkać?", right: "Czy piątek ci odpowiada?"}
+          - content_key: pl.a1.unit03.lesson03.exercise06.order_friday_suits_me
+            type: word_order
+            tested_text: "Piątek mi odpowiada"
+            prompt: {target_blocks: []}
+            word_bank: ["mi", "Piątek", "odpowiada"]
+          - content_key: pl.a1.unit03.lesson03.exercise07.order_meet_again_question
+            type: word_order
+            tested_text: "Kiedy możemy się znowu spotkać"
+            prompt: {target_blocks: []}
+            word_bank: ["się", "możemy", "znowu", "Kiedy", "spotkać"]
+          - content_key: pl.a1.unit03.lesson03.exercise08.fill_formal_woman_question
+            type: fill_in_blank
+            tested_text: "pani"
+            prompt:
+              target_blocks:
+                - {text: "Czy piątek ___ odpowiada?", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit03.lesson03.exercise09.fix_dative_form
+            type: grammar_check
+            tested_text: "Czy piątek panu odpowiada"
+            prompt:
+              target_blocks:
+                - {text: "Czy piątek pan odpowiada?", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit03.lesson03.exercise10.reply_to_friday_question
+            type: dialogue_response
+            tested_text: "Piątek mi odpowiada"
+            prompt:
+              target_blocks:
+                - {text: "Czy piątek pani odpowiada?", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit03.lesson03.exercise11.speak_meeting_date
+            type: speak_response
+            tested_text: "Spotkanie jest piętnastego maja"
+            prompt:
+              target_blocks:
+                - {text: "Powiedz, kiedy jest spotkanie Ewy i Marka.", language_code: pl, direction: ltr}
