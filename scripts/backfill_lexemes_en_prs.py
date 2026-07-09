@@ -136,6 +136,31 @@ UNIT_FILES = (
         REPO_ROOT / "docs/content/realizations/prs/a1_unit19_housing.yaml",
         REPO_ROOT / "docs/content/overlays/en-prs/a1_unit19.yaml",
     ),
+    # Units 20-24 (A1: past events, clothing, weather, money,
+    # transportation), added 2026-07-09 -- practice-pool depth-extension
+    # pass closing the gap between the practice manifest (previously
+    # capped at unit19) and the real prs realization depth (now through
+    # unit44+). Only units 20-24 are backfilled in this pass.
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a1_unit20_past_events.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a1_unit20.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a1_unit21_clothing.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a1_unit21.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a1_unit22_weather.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a1_unit22.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a1_unit23_money.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a1_unit23.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a1_unit24_transportation.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a1_unit24.yaml",
+    ),
 )
 
 # A2 units live in a SEPARATE course row ("Dari A2", not "Dari A1") --
@@ -457,6 +482,49 @@ PRS_GLOSSES: dict[str, str] = {
     # فریدون were all already glossed from earlier units, reused as-is.
     "اتاق": "room", "آشپزخانه": "kitchen", "تشناب": "bathroom",
     "چوکی": "chair", "تخت": "bed", "کلکین": "window", "بزرگ": "big",
+    # Unit 20 (past events), added 2026-07-09 (practice-pool depth-
+    # extension pass, units 20-24). شدم ("I became") and کردم ("I did")
+    # are REUSED existing lexemes (unit02 and A2 unit09 respectively,
+    # genuinely the same words) -- not re-added here.
+    "دیروز": "yesterday", "رفتم": "I went", "خوردم": "I ate",
+    "خسته": "tired", "رفتی": "you went", "کردی": "you did / you worked",
+    "رفت": "she/he went", "کرد": "she/he did / worked", "شد": "she/he became",
+    # Unit 21 (clothing), added 2026-07-09. کنم/دارد/بود/رفت are REUSED
+    # existing lexemes, not re-added here.
+    "لباس": "clothes", "پیراهن": "shirt", "پطلون": "trousers",
+    "کفش": "shoes", "رنگ": "color", "سیاه": "black", "سفید": "white",
+    "سرخ": "red", "اندازه": "size", "کوچک": "small",
+    "می‌تانم": "I can", "این‌را": "this (object marker)",
+    "پرو": "try-on", "پرو کنین": "try it on (polite imperative)",
+    "پنجصد": "five hundred", "اندازه‌اش": "its size",
+    "می‌خرم": "I buy", "خرید": "bought",
+    # Unit 22 (weather), added 2026-07-09. چطور/گرم/یا/فردا/می‌شود/پارک/
+    # بهتر/برویم/اما are REUSED existing lexemes, not re-added here.
+    # می‌شود gets a THIRD homograph sense here (weather "will become"),
+    # special-cased in _classify() below -- same collision class as the
+    # existing A2-unit09/unit12 split.
+    "هوا": "weather", "آفتابی": "sunny", "ابری": "cloudy",
+    "باران": "rain", "برف": "snow", "می‌بارد": "is falling (rain/snow)",
+    "سرد": "cold", "بمانیم": "let's stay / we stay (subjunctive)",
+    "پس": "so / then", "می‌مانیم": "we stay", "نمی‌توانیم": "we can't",
+    "فلم": "film", "می‌بینیم": "we watch / we see", "می‌مانند": "they stay",
+    # Unit 23 (money), added 2026-07-09. دارم/صد/می‌تانم/افغانی/است/
+    # امروز/چند/به/را/می‌کنم/می‌خواهم/دارین/بفرمایین/هزار/زرمینه/بسیار/
+    # هفتاد/تشکر/کرد/رفت/برای are REUSED existing lexemes.
+    "پول": "money", "نقد": "cash", "کارت": "card", "دالر": "dollar",
+    "می‌پردازم": "I pay", "نقدی": "in cash", "می‌پردازین": "you pay (polite)",
+    "کارتی": "by card", "بپردازم": "let me pay / I pay (subjunctive)",
+    "صرافی": "money exchanger", "تبدیل": "exchange", "کردن": "to do / to make",
+    "نرخ": "exchange rate", "تبدیل کنین": "(please) exchange",
+    "می‌گیرم": "I take / I receive", "گرفت": "he/she took / received",
+    "گرفتم": "I took / I received",
+    # Unit 24 (transportation), added 2026-07-09. بس/می‌روم/با/چطور/
+    # می‌خرم/شهر/نزدیک/ارزان/اما/هر/روز/چون/می‌کند/او/نیست/من/یا are
+    # REUSED existing lexemes.
+    "تکسی": "taxi", "موتر": "car", "دوچرخه": "bicycle", "پیاده": "on foot",
+    "می‌روی": "you go", "تکت": "ticket", "ایستگاه": "station",
+    "تیز": "fast", "تیزتر": "faster", "خانه‌اش": "his house",
+    "پس‌انداز": "savings", "می‌رود": "he/she goes",
 }
 
 PRS_POS: dict[str, str] = {
@@ -627,6 +695,34 @@ PRS_POS: dict[str, str] = {
     # Unit 19 (housing), added 2026-07-07.
     "اتاق": "noun", "آشپزخانه": "noun", "تشناب": "noun",
     "چوکی": "noun", "تخت": "noun", "کلکین": "noun", "بزرگ": "adjective",
+    # Unit 20 (past events), added 2026-07-09.
+    "دیروز": "adverb", "رفتم": "verb", "خوردم": "verb", "خسته": "adjective",
+    "رفتی": "verb", "کردی": "verb", "رفت": "verb", "کرد": "verb", "شد": "verb",
+    # Unit 21 (clothing), added 2026-07-09.
+    "لباس": "noun", "پیراهن": "noun", "پطلون": "noun", "کفش": "noun",
+    "رنگ": "noun", "سیاه": "adjective", "سفید": "adjective",
+    "سرخ": "adjective", "اندازه": "noun", "کوچک": "adjective",
+    "می‌تانم": "verb", "این‌را": "pronoun", "پرو": "noun",
+    "پرو کنین": "phrase", "پنجصد": "adjective", "اندازه‌اش": "noun",
+    "می‌خرم": "verb", "خرید": "verb",
+    # Unit 22 (weather), added 2026-07-09.
+    "هوا": "noun", "آفتابی": "adjective", "ابری": "adjective",
+    "باران": "noun", "برف": "noun", "می‌بارد": "verb", "سرد": "adjective",
+    "بمانیم": "verb", "پس": "particle", "می‌مانیم": "verb",
+    "نمی‌توانیم": "verb", "فلم": "noun", "می‌بینیم": "verb",
+    "می‌مانند": "verb",
+    # Unit 23 (money), added 2026-07-09.
+    "پول": "noun", "نقد": "noun", "کارت": "noun", "دالر": "noun",
+    "می‌پردازم": "verb", "نقدی": "adjective", "می‌پردازین": "verb",
+    "کارتی": "adjective", "بپردازم": "verb", "صرافی": "noun",
+    "تبدیل": "noun", "کردن": "verb", "نرخ": "noun",
+    "تبدیل کنین": "phrase", "می‌گیرم": "verb", "گرفت": "verb",
+    "گرفتم": "verb",
+    # Unit 24 (transportation), added 2026-07-09.
+    "تکسی": "noun", "موتر": "noun", "دوچرخه": "noun", "پیاده": "adverb",
+    "می‌روی": "verb", "تکت": "noun", "ایستگاه": "noun", "تیز": "adjective",
+    "تیزتر": "adjective", "خانه‌اش": "noun", "پس‌انداز": "noun",
+    "می‌رود": "verb",
 }
 
 
@@ -1039,6 +1135,192 @@ def prs_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     if lesson_key.endswith("lesson06.home_dialogue"):
         semantics.append("dialogue_word")
 
+    # Unit 20 (past events) semantic tags, added 2026-07-09 (practice-pool
+    # depth-extension pass, units 20-24). "past_verb_first" (رفتم/خوردم/
+    # کردم/شدم, 4 members -- شدم/کردم are REUSED existing lexemes from
+    # unit02/A2-unit09 respectively, genuinely the same words) is the
+    # unit's core first-person simple-past paradigm. "go_verb"/"eat_verb"/
+    # "work_past_verb" are private single-candidate subsets layered on top
+    # (same pattern as منتظر/گرم in units 13/14), used only where composing
+    # with a fixed noun requires a SPECIFIC verb for grammaticality
+    # (صبحانه [ate], کار [worked] -- any OTHER past_verb_first member there
+    # would be ungrammatical, not just implausible). "past_verb_second"
+    # (رفتی/کردی, 2) and "past_verb_third" (رفت/کرد/شد, 3) are the matching
+    # 2nd/3rd-person forms, both completed in lesson06's dialogue.
+    # "time_reference" pools this unit's new دیروز together with the
+    # ALREADY-EXISTING امروز (unit09) and فردا (unit07/13) -- additive
+    # extension of those two tokens' tags, not a new parallel group.
+    if token in {"رفتم", "خوردم", "کردم", "شدم"}:
+        semantics.append("past_verb_first")
+    if token == "رفتم":
+        semantics.append("go_verb")
+    if token == "خوردم":
+        semantics.append("eat_verb")
+    if token == "کردم":
+        semantics.append("work_past_verb")
+    if token == "کار":
+        semantics.append("work_noun_word")
+    if token == "خسته":
+        semantics.append("tired_word")
+    if token in {"رفتی", "کردی"}:
+        semantics.append("past_verb_second")
+    if token in {"رفت", "کرد", "شد"}:
+        semantics.append("past_verb_third")
+    if token in {"دیروز", "امروز", "فردا"}:
+        semantics.append("time_reference")
+    if lesson_key.endswith("lesson06.yesterday_dialogue"):
+        semantics.append("dialogue_word")
+
+    # Unit 21 (clothing) semantic tags, added 2026-07-09. "clothing_word"
+    # (لباس/پیراهن/پطلون/کفش, 4 members, anchored lesson01) is the unit's
+    # core recognition vocabulary. "color_word" (سیاه/سفید/سرخ, 3,
+    # anchored lesson02) are the taught colors; "color_noun" (رنگ, 1) is
+    # the noun "color" itself, kept separate from the color ADJECTIVES.
+    # "size_word" (اندازه, 1) and "clothing_size_adjective" (بزرگ/کوچک, 2
+    # -- additive on top of whatever tags these already carry from the
+    # comparisons unit) are this unit's size vocabulary. "can_verb"
+    # (می‌تانم, 1) and "buy_verb" (می‌خرم, 1) are both later REUSED as-is
+    # by unit23/unit24 (genuinely the same words). "try_on_phrase" (پرو
+    # کنین, 1) is a real single-project-wide-candidate phrase-level token.
+    if token in {"لباس", "پیراهن", "پطلون", "کفش"}:
+        semantics.append("clothing_word")
+    if token in {"سیاه", "سفید", "سرخ"}:
+        semantics.append("color_word")
+    if token == "رنگ":
+        semantics.append("color_noun")
+    if token == "اندازه":
+        semantics.append("size_word")
+    if token in {"بزرگ", "کوچک"}:
+        semantics.append("clothing_size_adjective")
+    if token == "می‌تانم":
+        semantics.append("can_verb")
+    if token == "می‌خرم":
+        semantics.append("buy_verb")
+    if token == "پرو کنین":
+        semantics.append("try_on_phrase")
+    if lesson_key.endswith("lesson05.clothing_shop_dialogue"):
+        semantics.append("dialogue_word")
+
+    # Unit 22 (weather) semantic tags, added 2026-07-09. "weather_
+    # descriptor" (آفتابی/ابری/گرم/سرد, 4 members -- گرم is a REUSED
+    # existing lexeme, additively tagged here alongside its existing
+    # unit14 warm_word tag) combines grammatically with است ("هوا X
+    # است") for all 4 sky-condition AND temperature adjectives.
+    # "weather_precip_noun" (باران/برف, 2) are kept SEPARATE (nouns, not
+    # adjectives) since they combine with می‌بارد ("X می‌بارد"), not است --
+    # composing them with است instead would be ungrammatical, the same
+    # class of constraint already documented for unit20's eat_verb/
+    # work_past_verb above. "stay_verb" (بمانیم/می‌مانیم/می‌مانند, 3,
+    # completes lesson06) is the "stay home" verb paradigm across
+    # subjunctive/1pl/3pl forms -- all distinct glosses. "future_become_
+    # verb" is a THIRD homograph sense of می‌شود (weather "will become"),
+    # special-cased by content_key in _classify() below, same collision
+    # class as the existing A2-unit09/unit12 splits.
+    if token in {"آفتابی", "ابری", "گرم", "سرد"}:
+        semantics.append("weather_descriptor")
+    if token == "هوا":
+        semantics.append("weather_noun")
+    if token in {"باران", "برف"}:
+        semantics.append("weather_precip_noun")
+    if token == "می‌بارد":
+        semantics.append("fall_verb")
+    # Scoped by lesson_key (unambiguous -- this is the only می‌شود
+    # occurrence in this lesson) rather than content_key, since this
+    # function only receives lesson_key. Matches the resulting Lexeme
+    # row created by the content_key-scoped key/gloss split in
+    # _classify() above.
+    if token == "می‌شود" and lesson_key == "prs.a1.unit22.lesson04.tomorrow_forecast":
+        semantics.append("future_become_verb")
+    if token in {"بمانیم", "می‌مانیم", "می‌مانند"}:
+        semantics.append("stay_verb")
+    if token == "بمانیم":
+        semantics.append("stay_verb_subjunctive")
+    if token == "می‌بینیم":
+        semantics.append("watch_verb")
+    if token == "نمی‌توانیم":
+        semantics.append("cant_verb")
+    if token == "فلم":
+        semantics.append("film_word")
+    if lesson_key.endswith("lesson05.weather_changes_a_plan"):
+        semantics.append("dialogue_word")
+
+    # Unit 23 (money) semantic tags, added 2026-07-09. "money_word"
+    # (پول/نقد/کارت/دالر, 4, anchored lesson01) is the unit's core
+    # recognition vocabulary. "countable_money_word" (کارت/دالر, 2 --
+    # additive subset of money_word, excludes the mass nouns پول/نقد)
+    # is used only where a "how many X" frame requires a genuinely
+    # countable noun. "payment_verb" (می‌پردازم/می‌پردازین/بپردازم, 3,
+    # completes lesson02) and "receive_verb" (می‌گیرم/گرفت/گرفتم, 3,
+    # completes lesson05) are both real distinct-gloss paradigms.
+    # "exchange_word" (صرافی/نرخ, 2) and "cash_or_card_adj"
+    # (نقدی/کارتی, 2) are genuine small closed sets, matching_pairs/
+    # translation only, per the established role_word/family_message_
+    # word precedent. "currency_word" (دالر, 1 -- additive subset of
+    # money_word) is used where a frame needs specifically "dollar," not
+    # any money_word member (e.g. an exchange-rate question about a
+    # generic "card" wouldn't make sense).
+    if token in {"پول", "نقد", "کارت", "دالر"}:
+        semantics.append("money_word")
+    if token in {"کارت", "دالر"}:
+        semantics.append("countable_money_word")
+    if token == "دالر":
+        semantics.append("currency_word")
+    if token in {"می‌پردازم", "می‌پردازین", "بپردازم"}:
+        semantics.append("payment_verb")
+    if token in {"نقدی", "کارتی"}:
+        semantics.append("cash_or_card_adj")
+    if token in {"صرافی", "نرخ"}:
+        semantics.append("exchange_word")
+    if token == "تبدیل":
+        semantics.append("exchange_noun")
+    if token == "تبدیل کنین":
+        semantics.append("exchange_imperative")
+    if token == "رسید":
+        # رسید already carries A2-unit09's "paperwork_word" tag --
+        # additively layered here for this unit's own single-candidate
+        # fill_in_blank use, same pattern as حالم/منتظر/گرم above.
+        semantics.append("receipt_word")
+    if token in {"می‌گیرم", "گرفت", "گرفتم"}:
+        semantics.append("receive_verb")
+    if lesson_key.endswith("lesson04.exchange_dialogue"):
+        semantics.append("dialogue_word")
+
+    # Unit 24 (transportation) semantic tags, added 2026-07-09.
+    # "transport_mode_word" (بس/تکسی/موتر/دوچرخه, 4, completes lesson01
+    # -- بس is a REUSED existing lexeme from unit16 travel) is the
+    # unit's core vehicle vocabulary, all combining grammatically with
+    # با ... می‌روم ("I go by X"). "on_foot_word" (پیاده, 1) is kept
+    # SEPARATE from transport_mode_word since it's not a vehicle noun and
+    # combines differently in a sentence (پیاده می‌روم, no با). "go_verb_
+    # present" (می‌روم/می‌روی/می‌رود, 3, completes lesson05) is the "go"
+    # verb paradigm across 1st/2nd/3rd person -- all distinct glosses.
+    # "you_go_verb"/"go_verb_third" are private single-candidate subsets
+    # layered on top, same pattern as unit20's go_verb/eat_verb. "speed_
+    # adjective" (تیز/تیزتر, 2) is a genuine small closed set. "ticket_
+    # word" (تکت/ایستگاه, 2) and "ticket_only" (تکت, 1 -- additive
+    # subset, since "ایستگاه چند است؟" would be nonsensical, stations
+    # don't have a price) round out the set.
+    if token in {"بس", "تکسی", "موتر", "دوچرخه"}:
+        semantics.append("transport_mode_word")
+    if token == "پیاده":
+        semantics.append("on_foot_word")
+    if token in {"می‌روم", "می‌روی", "می‌رود"}:
+        semantics.append("go_verb_present")
+    if token == "می‌روی":
+        semantics.append("you_go_verb")
+    if token == "می‌رود":
+        semantics.append("go_verb_third")
+    if token in {"تیز", "تیزتر"}:
+        semantics.append("speed_adjective")
+    if token == "تیزتر":
+        semantics.append("speed_comparative_only")
+    if token in {"تکت", "ایستگاه"}:
+        semantics.append("ticket_word")
+    if token == "تکت":
+        semantics.append("ticket_only")
+    if lesson_key.endswith("lesson04.commute_dialogue"):
+        semantics.append("dialogue_word")
+
     tags: dict[str, object] = {}
     if semantics:
         tags["semantic"] = list(dict.fromkeys(semantics))
@@ -1129,6 +1411,18 @@ def _classify(files, level, specs, derive_phrases=False):
                         key = (level, token, "wakeup_third_person")
                         part_of_speech = "verb"
                         english_gloss = "he/she wakes up / becomes (third person)"
+                    # "می‌شود" gets a THIRD genuinely distinct sense here:
+                    # unit22 (weather)'s future "will become" sense
+                    # (فردا هوا سرد می‌شود -- it will get cold tomorrow),
+                    # unrelated to both A2-unit09's polite-request sense
+                    # and unit12's present-tense "wakes up" sense above.
+                    # Same collision class, given its own key/gloss so a
+                    # template constrained to this sense never draws
+                    # either of the other two.
+                    if token == "می‌شود" and content_key.endswith("teach.mishawad"):
+                        key = (level, token, "weather_future")
+                        part_of_speech = "verb"
+                        english_gloss = "will become"
                     # "کی" is likewise genuinely two different lexemes:
                     # unit07's interrogative pronoun sense ("who," content_key
                     # ...lesson02.teach.who_speaking, already the default

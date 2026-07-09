@@ -1,0 +1,192 @@
+schema_version: "1.0"
+pack_key: practice.en-prs.a1.unit21
+source_language: en
+target_language: prs
+unit_content_key: prs.a1.unit21.clothing
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: >-
+    Authored 2026-07-09, same practice-pool depth-extension pass as this
+    bundle's a1_unit20.yaml sibling (see that file's notes for the shared
+    pass context).
+
+    New groups, all real vocabulary from this unit's own realization:
+    "clothing_word" (لباس/پیراهن/پطلون/کفش, 4 members, anchored lesson01)
+    is the unit's core recognition vocabulary. "color_word"
+    (سیاه/سفید/سرخ, 3 members, anchored lesson02) are the taught colors;
+    "color_noun" (رنگ, 1 member) is the noun "color" itself, kept
+    SEPARATE from the color adjectives (different POS, would break a
+    uniform-POS multiple_choice pool if merged). "size_word" (اندازه, 1
+    member) and "clothing_size_adjective" (بزرگ/کوچک, 2 members --
+    additive on top of whatever tags these already carry from the
+    comparisons unit, same "extend an existing token's tags" precedent
+    as صاحب/title in unit17) are this unit's size vocabulary.
+    "can_verb" (می‌تانم, 1 member) and "buy_verb" (می‌خرم, 1 member) are
+    both REUSED as-is by unit23/unit24 later in this same pass (genuinely
+    the same words). "try_on_phrase" (پرو کنین, 1 member) is a real
+    single-project-wide-candidate phrase-level token, verified via
+    scripts/_fill_in_blank_ambiguity_check.py (not used in a
+    fill_in_blank here, but checked anyway since it's a single-candidate
+    group).
+
+    Checked for the "fine"/"okay" gloss-collision trap: clothing_word's
+    4 glosses (clothes/shirt/trousers/shoes) and color_word's 3
+    (black/white/red) are all genuinely distinct -- no shared glosses.
+    Checked POS uniformity before using clothing_word/color_word in
+    multiple_choice/matching_pairs (all 4 clothing_word members are POS
+    noun; all 3 color_word members are POS adjective) -- deliberately did
+    NOT widen color_word to include رنگ (POS noun, would break the
+    uniform-adjective pool the way the pre-existing politeness-tag bug
+    this session's methodology doc flags).
+
+    Word_order templates checked for grammaticality: "{clothing_word}
+    گران است" (lesson01, matches the real taught "پیراهن گران است"
+    generalized across all 4 items), "{clothing_word} {color_word} است"
+    (lesson02, two independent slots, 12 combinations, all grammatical --
+    matches "پیراهن سرخ است" generalized), "{clothing_word} اندازه
+    {clothing_size_adjective} رنگ {color_word}" (lesson04, a 3-slot
+    appositive list matching the real label-reading pattern "پیراهن
+    اندازه بزرگ رنگ سفید" exactly, not a full sentence so no verb-
+    agreement risk), "{clothing_word} را می‌خواهم" (lesson05, "I want
+    the [item]", reuses the existing می‌خواهم/را lexemes), and "{person_
+    name} یک {clothing_word} خرید" (lesson06, uses the full course-wide
+    person_name pool, matches the real "زرمینه یک پیراهن خرید" exactly).
+
+    No listen_select/listen_type anywhere (en-prs has no TTS voices).
+    Zero fill_in_blank templates -- this unit's real vocabulary doesn't
+    need one beyond what translation/word_order already safely cover.
+
+    Verified with scripts/_practice_slot_check.py (reusing
+    backfill_lexemes_en_prs.py's real iter_specs() output) -- every
+    slot has enough distinct candidates. scripts/compile_content.py
+    practice-validate for the full en-prs pack -- 0 errors/0 warnings.
+    Needs the standard fresh-context review before import; no
+    backfill_lexemes_en_prs.py run has happened against a real database
+    yet in this pass.
+tag_schema:
+  part_of_speech: [noun, verb, adjective, proper_noun]
+  agreement_tags:
+    semantic:
+      [clothing_word, color_word, color_noun, size_word,
+       clothing_size_adjective, can_verb, buy_verb, person_name]
+slot_presets:
+  clothing_word: &clothing_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: clothing_word}}
+  color_word: &color_word {language_code: prs, part_of_speech: adjective, agreement_tags: {semantic: color_word}}
+  color_noun: &color_noun {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: color_noun}}
+  size_word: &size_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: size_word}}
+  clothing_size_adjective: &clothing_size_adjective {language_code: prs, part_of_speech: adjective, agreement_tags: {semantic: clothing_size_adjective}}
+  buy_verb: &buy_verb {language_code: prs, part_of_speech: verb, agreement_tags: {semantic: buy_verb}}
+  # Pools clothing_word (4) + color_word (3) for the final review
+  # matching_pairs -- 7 distinct real tokens, AUTHORING_GUIDE.md #16.
+  clothing_review_pool: &clothing_review_pool {language_code: prs, part_of_speech: [noun, adjective], agreement_tags: {semantic: [clothing_word, color_word]}}
+  # Reuses the existing course-wide "person_name" group.
+  person_name: &person_name {language_code: prs, part_of_speech: proper_noun, agreement_tags: {semantic: person_name}}
+templates:
+  # Lesson 1: clothing vocabulary.
+  - content_key: practice.en-prs.prs.a1.unit21.lesson01.clothing_word_gloss.001
+    lesson_content_key: prs.a1.unit21.lesson01.clothing_vocabulary
+    type: multiple_choice
+    frame: {text: "{clothing_word}", language_code: prs, direction: rtl}
+    slots: {clothing_word: *clothing_word}
+    answer_derivation: {kind: slot_gloss, slot: clothing_word}
+    feedback_frame: {text: "{clothing_word} names a clothing item.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit21.lesson01.clothing_word_pair.002
+    lesson_content_key: prs.a1.unit21.lesson01.clothing_vocabulary
+    type: matching_pairs
+    frame: {text: "{word_one} — {word_two} — {word_three} — {word_four}", language_code: prs, direction: rtl}
+    slots: {word_one: *clothing_word, word_two: *clothing_word, word_three: *clothing_word, word_four: *clothing_word}
+    slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four]}]
+    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit21.lesson01.clothing_expensive_order.003
+    lesson_content_key: prs.a1.unit21.lesson01.clothing_vocabulary
+    type: word_order
+    frame: {text: "{clothing_word} گران است", language_code: prs, direction: rtl}
+    slots: {clothing_word: *clothing_word}
+    answer_derivation: {kind: render_frame, frame: {text: "{clothing_word} گران است", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: [item] گران است (the [item] is expensive).", language_code: en, direction: ltr}
+
+  # Lesson 2: colors.
+  - content_key: practice.en-prs.prs.a1.unit21.lesson02.color_word_gloss.001
+    lesson_content_key: prs.a1.unit21.lesson02.colors
+    type: multiple_choice
+    frame: {text: "{color_word}", language_code: prs, direction: rtl}
+    slots: {color_word: *color_word}
+    answer_derivation: {kind: slot_gloss, slot: color_word}
+    feedback_frame: {text: "{color_word} names a color.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit21.lesson02.clothing_color_order.002
+    lesson_content_key: prs.a1.unit21.lesson02.colors
+    type: word_order
+    frame: {text: "{clothing_word} {color_word} است", language_code: prs, direction: rtl}
+    slots: {clothing_word: *clothing_word, color_word: *color_word}
+    answer_derivation: {kind: render_frame, frame: {text: "{clothing_word} {color_word} است", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: [item] [color] است (the [item] is [color]).", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit21.lesson02.color_noun_translate.003
+    lesson_content_key: prs.a1.unit21.lesson02.colors
+    type: translation
+    frame: {text: "{color_noun}", language_code: en, direction: ltr, slot_rendering: {color_noun: english_gloss}}
+    slots: {color_noun: *color_noun}
+    answer_derivation: {kind: slot_text, slot: color_noun}
+    feedback_frame: {text: "{color_noun} is the Dari word for this.", language_code: en, direction: ltr}
+
+  # Lesson 3: sizes.
+  - content_key: practice.en-prs.prs.a1.unit21.lesson03.size_word_translate.001
+    lesson_content_key: prs.a1.unit21.lesson03.sizes
+    type: translation
+    frame: {text: "{size_word}", language_code: en, direction: ltr, slot_rendering: {size_word: english_gloss}}
+    slots: {size_word: *size_word}
+    answer_derivation: {kind: slot_text, slot: size_word}
+    feedback_frame: {text: "{size_word} is the Dari word for this.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit21.lesson03.size_adjective_pair.002
+    lesson_content_key: prs.a1.unit21.lesson03.sizes
+    type: matching_pairs
+    frame: {text: "{word_one} — {word_two}", language_code: prs, direction: rtl}
+    slots: {word_one: *clothing_size_adjective, word_two: *clothing_size_adjective}
+    slot_relations: [{kind: distinct, slots: [word_one, word_two]}]
+    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+
+  # Lesson 4: trying on and reading a label.
+  - content_key: practice.en-prs.prs.a1.unit21.lesson04.label_order.001
+    lesson_content_key: prs.a1.unit21.lesson04.trying_on_and_reading_a_label
+    type: word_order
+    frame: {text: "{clothing_word} اندازه {clothing_size_adjective} رنگ {color_word}", language_code: prs, direction: rtl}
+    slots: {clothing_word: *clothing_word, clothing_size_adjective: *clothing_size_adjective, color_word: *color_word}
+    answer_derivation: {kind: render_frame, frame: {text: "{clothing_word} اندازه {clothing_size_adjective} رنگ {color_word}", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: [item] اندازه [size] رنگ [color] ([item], size [size], color [color]).", language_code: en, direction: ltr}
+
+  # Lesson 5: a dialogue at the clothing shop.
+  - content_key: practice.en-prs.prs.a1.unit21.lesson05.buy_verb_translate.001
+    lesson_content_key: prs.a1.unit21.lesson05.clothing_shop_dialogue
+    type: translation
+    frame: {text: "{buy_verb}", language_code: en, direction: ltr, slot_rendering: {buy_verb: english_gloss}}
+    slots: {buy_verb: *buy_verb}
+    answer_derivation: {kind: slot_text, slot: buy_verb}
+    feedback_frame: {text: "{buy_verb} is the Dari word for this.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit21.lesson05.want_item_order.002
+    lesson_content_key: prs.a1.unit21.lesson05.clothing_shop_dialogue
+    type: word_order
+    frame: {text: "{clothing_word} را می‌خواهم", language_code: prs, direction: rtl}
+    slots: {clothing_word: *clothing_word}
+    answer_derivation: {kind: render_frame, frame: {text: "{clothing_word} را می‌خواهم", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: [item] را می‌خواهم (I want the [item]).", language_code: en, direction: ltr}
+
+  # Lesson 6: wrap-up reading.
+  - content_key: practice.en-prs.prs.a1.unit21.lesson06.clothing_review_pair.001
+    lesson_content_key: prs.a1.unit21.lesson06.wrap_up_reading
+    # Pools clothing_word (4) + color_word (3) -- 7 distinct real tokens,
+    # AUTHORING_GUIDE.md #16.
+    type: matching_pairs
+    frame: {text: "{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six} — {word_seven}", language_code: prs, direction: rtl}
+    slots: {word_one: *clothing_review_pool, word_two: *clothing_review_pool, word_three: *clothing_review_pool, word_four: *clothing_review_pool, word_five: *clothing_review_pool, word_six: *clothing_review_pool, word_seven: *clothing_review_pool}
+    slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five, word_six, word_seven]}]
+    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five, word_six, word_seven]}
+    feedback_frame: {text: "Match each word to its English meaning -- clothing and colors together.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit21.lesson06.person_bought_order.002
+    lesson_content_key: prs.a1.unit21.lesson06.wrap_up_reading
+    type: word_order
+    frame: {text: "{person_name} یک {clothing_word} خرید", language_code: prs, direction: rtl}
+    slots: {person_name: *person_name, clothing_word: *clothing_word}
+    answer_derivation: {kind: render_frame, frame: {text: "{person_name} یک {clothing_word} خرید", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: [name] یک [item] خرید ([name] bought a [item]).", language_code: en, direction: ltr}
