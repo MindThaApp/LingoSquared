@@ -314,6 +314,8 @@ export type ContentIssueCategory =
   | "untaught_vocabulary"
   | "audio_issue"
   | "unclear_instruction"
+  | "app_bug"
+  | "general_feedback"
   | "other";
 
 export interface ContentIssueReportResult {
@@ -323,17 +325,26 @@ export interface ContentIssueReportResult {
 
 export interface ContentIssue {
   id: string;
-  // Exactly one of these is set: exercise_id for compiled lesson content,
-  // practice_item_id for review/checkpoint/Endless Practice generated
-  // items (backed by PracticeItem, not Exercise).
+  // At most one of exercise_id/practice_item_id is set: exercise_id for
+  // compiled lesson content, practice_item_id for review/checkpoint/
+  // Endless Practice generated items (backed by PracticeItem, not
+  // Exercise). A page-level report (POST /feedback) has neither set and
+  // page_path set instead.
   exercise_id: string | null;
   practice_item_id: string | null;
+  page_path: string | null;
   category: ContentIssueCategory;
   description: string | null;
   status: string;
   created_at: string;
   triaged_at: string | null;
   resolved_at: string | null;
+}
+
+export interface FeedbackReportIn {
+  category: ContentIssueCategory;
+  description?: string;
+  page_path: string;
 }
 
 export interface CoverageRow {

@@ -1,4 +1,4 @@
-import { get, patch, post } from "./client";
+import { get, patch, post, postFeedback } from "./client";
 import type {
   Achievement,
   AnswerResponse,
@@ -12,6 +12,7 @@ import type {
   CourseDetail,
   CourseSummary,
   CoverageRow,
+  FeedbackReportIn,
   Language,
   LanguagePair,
   Lesson,
@@ -178,4 +179,11 @@ export const AdminApi = {
     get<ContentIssue[]>(`/admin/content/issues${status ? `?status=${encodeURIComponent(status)}` : ""}`),
   updateIssue: (issueId: string, body: { status?: string; triage_notes?: string }) =>
     patch<ContentIssue>(`/admin/content/issues/${issueId}`, body),
+};
+
+// Unauthenticated, works on any page (including logged-out screens) and
+// deliberately targets its own configurable base URL -- see
+// postFeedback()/FEEDBACK_BASE_URL in client.ts.
+export const FeedbackApi = {
+  submit: (body: FeedbackReportIn) => postFeedback<ContentIssueReportResult>("/feedback", body),
 };
