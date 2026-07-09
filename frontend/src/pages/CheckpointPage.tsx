@@ -1,14 +1,23 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { X } from "lucide-react";
 import { CheckpointApi } from "../api/endpoints";
 import { ApiError } from "../api/client";
 import { ExerciseRenderer } from "../components/exercises/ExerciseRenderer";
+import { QuitConfirm } from "../components/QuitConfirm";
 import { formatCorrectResponse } from "../lib/formatAnswer";
 import { resultStatus } from "../lib/gradingResult";
 import type { AnswerResponse, CheckpointResult, PracticeAnswerResult, PracticeItem } from "../api/types";
 
-type Phase = "loading" | "blocked" | "unavailable" | "in_progress" | "scoring" | "done";
+type Phase =
+  | "loading"
+  | "blocked"
+  | "unavailable"
+  | "in_progress"
+  | "scoring"
+  | "scoring_error"
+  | "done";
 
 function formatRetryAfter(seconds: number): string {
   const minutes = Math.ceil(seconds / 60);
@@ -27,6 +36,9 @@ export function CheckpointPage() {
   const [submitting, setSubmitting] = useState(false);
   const [retryAfterSeconds, setRetryAfterSeconds] = useState<number | null>(null);
   const [finalResult, setFinalResult] = useState<CheckpointResult | null>(null);
+  const [lastResponse, setLastResponse] = useState<AnswerResponse | undefined>();
+  const [submitError, setSubmitError] = useState(false);
+  const [showQuitConfirm, setShowQuitConfirm] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -62,11 +74,30 @@ export function CheckpointPage() {
   async function handleAnswer(response: AnswerResponse) {
     if (!current) return;
     setSubmitting(true);
+    setLastResponse(response);
+    setSubmitError(false);
     try {
       const res = await CheckpointApi.answer(current.id, response);
       setResult(res);
+    } catch {
+      setSubmitError(true);
     } finally {
       setSubmitting(false);
+    }
+  }
+
+  function handleRetryAnswer() {
+    if (lastResponse) handleAnswer(lastResponse);
+  }
+
+  async function scoreCheckpoint() {
+    setPhase("scoring");
+    try {
+      const scored = await CheckpointApi.result(unitId);
+      setFinalResult(scored);
+      setPhase("done");
+    } catch {
+      setPhase("scoring_error");
     }
   }
 
@@ -76,14 +107,26 @@ export function CheckpointPage() {
       setIndex(index + 1);
       return;
     }
-    setPhase("scoring");
-    const scored = await CheckpointApi.result(unitId);
-    setFinalResult(scored);
-    setPhase("done");
+    await scoreCheckpoint();
+  }
+
+  function handleQuit() {
+    navigate(-1);
   }
 
   if (phase === "loading" || phase === "scoring") {
     return <div className="page-loading">{t("checkpoint.loading")}</div>;
+  }
+
+  if (phase === "scoring_error") {
+    return (
+      <div className="card" style={{ textAlign: "center" }}>
+        <p className="muted">{t("checkpoint.scoring_error")}</p>
+        <button className="btn" onClick={scoreCheckpoint}>
+          {t("common.retry")}
+        </button>
+      </div>
+    );
   }
 
   if (phase === "blocked") {
@@ -169,16 +212,32 @@ export function CheckpointPage() {
         <span className="muted" style={{ whiteSpace: "nowrap" }}>
           {t("checkpoint.progress", { current: index + 1, total: items.length })}
         </span>
+        <button
+          type="button"
+          className="btn-icon-toggle"
+          aria-label={t("checkpoint.exit_label")}
+          onClick={() => setShowQuitConfirm(true)}
+        >
+          <X size={18} />
+        </button>
       </div>
       <ExerciseRenderer
         key={current.id}
         exercise={{ id: current.id, type: current.type, order: 0, prompt: current.prompt }}
         onAnswer={handleAnswer}
-        disabled={submitting || Boolean(result)}
+        disabled={submitting || Boolean(result) || submitError}
         gradedResult={
           result ? { correct: result.correct, correctResponse: result.correct_response } : undefined
         }
       />
+      {submitError && !result && (
+        <div className="feedback-banner error">
+          <p style={{ margin: "0 0 10px" }}>{t("checkpoint.submit_error")}</p>
+          <button className="btn btn-block" onClick={handleRetryAnswer} disabled={submitting}>
+            {t("common.retry")}
+          </button>
+        </div>
+      )}
       {result && (() => {
         const status = resultStatus(result);
         return (
@@ -199,6 +258,13 @@ export function CheckpointPage() {
           </div>
         );
       })()}
+      {showQuitConfirm && (
+        <QuitConfirm
+          message={t("checkpoint.quit_confirm_message")}
+          onKeepGoing={() => setShowQuitConfirm(false)}
+          onQuit={handleQuit}
+        />
+      )}
     </div>
   );
 }

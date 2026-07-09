@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { CatalogApi, PracticeApi, ProgressApi } from "../api/endpoints";
 import { ExerciseRenderer } from "../components/exercises/ExerciseRenderer";
 import { ReportIssueButton } from "../components/ReportIssueButton";
+import { ApiError } from "../api/client";
 import { formatCorrectResponse } from "../lib/formatAnswer";
 import { resultStatus } from "../lib/gradingResult";
 import type {
@@ -15,6 +16,16 @@ import type {
 
 const BATCH_SIZE = 10;
 const PREFETCH_THRESHOLD = 3;
+
+// These codes mean the item itself can never be answered again (already
+// answered elsewhere, expired mid-scroll, or not this user's) -- distinct
+// from a transient network/server failure, which IS retryable with the
+// same stored response. See backend/app/api/router.py's practice_answer().
+const PERMANENT_ANSWER_ERROR_CODES = new Set([
+  "practice_item_not_found",
+  "practice_item_answered",
+  "practice_item_expired",
+]);
 
 interface EligibleCourse extends CourseDetail {
   completed_lessons: number;
@@ -31,23 +42,35 @@ function PracticeCard({
   const [result, setResult] = useState<PracticeAnswerResult | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [unavailable, setUnavailable] = useState(false);
+  const [submitError, setSubmitError] = useState(false);
   const [lastResponse, setLastResponse] = useState<AnswerResponse | undefined>();
 
   async function handleAnswer(response: AnswerResponse) {
     setSubmitting(true);
     setLastResponse(response);
+    setSubmitError(false);
     try {
       const res = await PracticeApi.answer(item.id, response);
       setResult(res);
       onAnswered(res.correct, res.xp_awarded);
-    } catch {
-      // Item may have expired mid-scroll (or already been answered/is
-      // foreign to this user) — the card can't be retried, so resolve it
-      // visibly instead of silently re-enabling a dead exercise.
-      setUnavailable(true);
+    } catch (err) {
+      if (err instanceof ApiError && PERMANENT_ANSWER_ERROR_CODES.has(err.code)) {
+        // Item may have expired mid-scroll (or already been answered/is
+        // foreign to this user) — the card can't be retried, so resolve it
+        // visibly instead of silently re-enabling a dead exercise.
+        setUnavailable(true);
+      } else {
+        // Network failure or unexpected server error: retryable with the
+        // same stored response, don't clear the learner's selection.
+        setSubmitError(true);
+      }
     } finally {
       setSubmitting(false);
     }
+  }
+
+  function handleRetryAnswer() {
+    if (lastResponse) handleAnswer(lastResponse);
   }
 
   return (
@@ -55,11 +78,19 @@ function PracticeCard({
       <ExerciseRenderer
         exercise={{ id: item.id, type: item.type, order: 0, prompt: item.prompt }}
         onAnswer={handleAnswer}
-        disabled={submitting || Boolean(result) || unavailable}
+        disabled={submitting || Boolean(result) || unavailable || submitError}
         gradedResult={
           result ? { correct: result.correct, correctResponse: result.correct_response } : undefined
         }
       />
+      {submitError && !result && (
+        <div className="feedback-banner error">
+          <p style={{ margin: "0 0 10px" }}>{t("practice.submit_error")}</p>
+          <button className="btn btn-block" onClick={handleRetryAnswer} disabled={submitting}>
+            {t("common.retry")}
+          </button>
+        </div>
+      )}
       {result && (() => {
         const status = resultStatus(result);
         return (

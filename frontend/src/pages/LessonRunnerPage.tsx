@@ -2,12 +2,14 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
+import { X } from "lucide-react";
 import { LessonApi, ReviewApi } from "../api/endpoints";
 import { ExerciseRenderer } from "../components/exercises/ExerciseRenderer";
 import { TeachingCardView } from "../components/TeachingCardView";
 import { EmphasizedText } from "../components/EmphasizedText";
 import { ReportIssueButton } from "../components/ReportIssueButton";
 import { SpeakButton } from "../components/SpeakButton";
+import { QuitConfirm } from "../components/QuitConfirm";
 import { ApiError } from "../api/client";
 import { formatCorrectResponse } from "../lib/formatAnswer";
 import { resultStatus } from "../lib/gradingResult";
@@ -68,6 +70,9 @@ export function LessonRunnerPage() {
   const [missedWords, setMissedWords] = useState<MissedWord[]>([]);
   const [completedCount, setCompletedCount] = useState(0);
   const missedExerciseIds = useState(() => new Set<string>())[0];
+  const [submitError, setSubmitError] = useState(false);
+  const [finishError, setFinishError] = useState(false);
+  const [showQuitConfirm, setShowQuitConfirm] = useState(false);
 
   const lessonQuery = useQuery({
     queryKey: ["lesson", lessonId],
@@ -152,20 +157,44 @@ export function LessonRunnerPage() {
     if (!current) return;
     setSubmitting(true);
     setLastResponse(response);
+    setSubmitError(false);
     try {
       const res = await LessonApi.answer(current.exercise.id, response);
       setResult(res);
       setTotalXp((xp) => xp + res.xp_awarded);
+    } catch {
+      // Network failure or unexpected server error mid-lesson: don't let it
+      // become an unhandled rejection that leaves the UI just sitting there.
+      // The learner's chosen answer (lastResponse) is preserved so Retry can
+      // resubmit it without making them re-answer.
+      setSubmitError(true);
     } finally {
       setSubmitting(false);
     }
   }
 
+  function handleRetryAnswer() {
+    if (lastResponse) handleAnswer(lastResponse);
+  }
+
   async function finishLesson() {
-    const completion = await LessonApi.complete(lessonId);
-    navigate(`/lessons/${lessonId}/done`, {
-      state: { completion, totalXp, missedWords },
-    });
+    setFinishError(false);
+    try {
+      const completion = await LessonApi.complete(lessonId);
+      navigate(`/lessons/${lessonId}/done`, {
+        state: { completion, totalXp, missedWords },
+      });
+    } catch {
+      // Don't lose the just-finished lesson's completion silently -- offer
+      // a retry rather than leaving the learner on a dead-end screen.
+      setFinishError(true);
+    }
+  }
+
+  function handleQuit() {
+    // courseId only exists in route state, not the URL, so there's no
+    // reliable unit-lesson-list path to construct directly here.
+    navigate(-1);
   }
 
   function handleContinue() {
@@ -215,6 +244,17 @@ export function LessonRunnerPage() {
     );
   }
 
+  if (finishError) {
+    return (
+      <div className="card" style={{ textAlign: "center" }}>
+        <p className="muted">{t("lesson_runner.finish_error")}</p>
+        <button className="btn" onClick={finishLesson}>
+          {t("common.retry")}
+        </button>
+      </div>
+    );
+  }
+
   if (lessonQuery.isLoading || reviewItems === null) {
     return <div className="page-loading">{t("lesson_runner.loading")}</div>;
   }
@@ -224,9 +264,19 @@ export function LessonRunnerPage() {
     const item = reviewItems[reviewIndex];
     return (
       <div>
-        <span className="badge" style={{ marginBottom: 12, display: "inline-block" }}>
-          {t("lesson_runner.review_warmup_label")}
-        </span>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
+          <span className="badge" style={{ display: "inline-block" }}>
+            {t("lesson_runner.review_warmup_label")}
+          </span>
+          <button
+            type="button"
+            className="btn-icon-toggle"
+            aria-label={t("lesson_runner.exit_label")}
+            onClick={() => setShowQuitConfirm(true)}
+          >
+            <X size={18} />
+          </button>
+        </div>
         <ExerciseRenderer
           key={item.id}
           exercise={{ id: item.id, type: item.type, order: 0, prompt: item.prompt }}
@@ -260,6 +310,13 @@ export function LessonRunnerPage() {
             </div>
           );
         })()}
+        {showQuitConfirm && (
+          <QuitConfirm
+            message={t("lesson_runner.quit_confirm_message")}
+            onKeepGoing={() => setShowQuitConfirm(false)}
+            onQuit={handleQuit}
+          />
+        )}
       </div>
     );
   }
@@ -270,8 +327,18 @@ export function LessonRunnerPage() {
     const pct = ((teachingIndex + 1) / teaching.length) * 100;
     return (
       <div>
-        <div className="progress-track" style={{ marginBottom: 16 }}>
-          <div className="progress-fill" style={{ width: `${pct}%` }} />
+        <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
+          <div className="progress-track" style={{ flex: 1 }}>
+            <div className="progress-fill" style={{ width: `${pct}%` }} />
+          </div>
+          <button
+            type="button"
+            className="btn-icon-toggle"
+            aria-label={t("lesson_runner.exit_label")}
+            onClick={() => setShowQuitConfirm(true)}
+          >
+            <X size={18} />
+          </button>
         </div>
         <span className="muted">
           {t("lesson_runner.learn_progress", { current: teachingIndex + 1, total: teaching.length })}
@@ -280,6 +347,13 @@ export function LessonRunnerPage() {
         <button className="btn btn-block" onClick={() => setTeachingIndex((i) => i + 1)}>
           {isLast ? t("lesson_runner.start_practice") : t("lesson_runner.next")}
         </button>
+        {showQuitConfirm && (
+          <QuitConfirm
+            message={t("lesson_runner.quit_confirm_message")}
+            onKeepGoing={() => setShowQuitConfirm(false)}
+            onQuit={handleQuit}
+          />
+        )}
       </div>
     );
   }
@@ -302,6 +376,14 @@ export function LessonRunnerPage() {
         <span className="stat-xp" style={{ fontWeight: 700, whiteSpace: "nowrap" }}>
           ⭐ {totalXp}
         </span>
+        <button
+          type="button"
+          className="btn-icon-toggle"
+          aria-label={t("lesson_runner.exit_label")}
+          onClick={() => setShowQuitConfirm(true)}
+        >
+          <X size={18} />
+        </button>
       </div>
       {current.isConfirmation && result === null && (
         <div className="feedback-banner incorrect" style={{ marginBottom: 12 }}>
@@ -316,11 +398,19 @@ export function LessonRunnerPage() {
         key={`${current.exercise.id}-${current.missCount}`}
         exercise={current.exercise}
         onAnswer={handleAnswer}
-        disabled={submitting || Boolean(result)}
+        disabled={submitting || Boolean(result) || submitError}
         gradedResult={
           result ? { correct: result.correct, correctResponse: result.correct_response } : undefined
         }
       />
+      {submitError && !result && (
+        <div className="feedback-banner error">
+          <p style={{ margin: "0 0 10px" }}>{t("lesson_runner.submit_error")}</p>
+          <button className="btn btn-block" onClick={handleRetryAnswer} disabled={submitting}>
+            {t("common.retry")}
+          </button>
+        </div>
+      )}
       {result && (() => {
         const status = resultStatus(result);
         return (
@@ -354,6 +444,13 @@ export function LessonRunnerPage() {
           }
         />
       </div>
+      {showQuitConfirm && (
+        <QuitConfirm
+          message={t("lesson_runner.quit_confirm_message")}
+          onKeepGoing={() => setShowQuitConfirm(false)}
+          onQuit={handleQuit}
+        />
+      )}
     </div>
   );
 }
