@@ -1,0 +1,319 @@
+schema_version: "1.1"
+realization_version: "2026.1-draft.1"
+target_language: nl
+cefr_level: A1
+generation_provenance: {method: ai_generated, authoring_system: claude, human_reviewed: false}
+status: complete_draft
+review:
+  status: unreviewed
+  required_next_reviewer: claude
+  notes: >-
+    New Dutch A1 unit after unit58 (concert). A yaml.safe_load diff of every
+    spine_outcome_id/spine_outcome_ids across every
+    docs/content/realizations/nl/a1_unit*.yaml file against every
+    `- id: universal.a1.*` entry in universal_spine.yaml (54 total before
+    this file's own addition, confirmed programmatically) found no
+    unrealized A1 outcome for Dutch -- all 54 pre-existing A1 outcomes were
+    already realized (exact set match, zero diff both directions: every
+    spine_outcome_id value grepped/loaded from every nl realization file
+    matched a real spine id one-for-one, and every A1 spine id had a
+    matching realized outcome). Git history was checked first (git log
+    --oneline -- docs/content/universal_spine.yaml): the most recent
+    addition was nl unit58 (concert) and, in the same commit, the
+    universal.a1.concert.attend_a_concert spine outcome itself --
+    confirming the standing delegated A1 spine-authority pattern (nl
+    unit50 through unit58 each added their own new outcome the same way)
+    is still active and this unit follows the same pattern. This unit
+    therefore adds a new delegated A1 spine outcome,
+    universal.a1.park.enjoy_a_park_outing (topic: park, prerequisites:
+    plans.make_simple_plans, weather.describe_basic_weather) -- distinct
+    from unit56's cinema, unit57's museum, and unit58's concert content:
+    those three are all paid-admission venues with a service-role staff
+    member (buy a ticket, ask a showtime/price, talk about it afterward);
+    a park visit is free, has no box-office transaction, and centers on
+    describing the outdoor setting (trees, grass, ducks, water), reading a
+    park's own opening-hours/rules signage, and suggesting a shared
+    activity like a walk or a picnic -- a genuinely distinct, practically
+    common A1 leisure topic not yet covered anywhere in the spine, and
+    unit58's own closing scene already explicitly set up this exact
+    payoff (Omar proposing "Zullen we volgende week samen naar het park
+    gaan?"). Sanity-checked per the standing delegated spine-approval
+    authority: the spine file still parses cleanly with yaml.safe_load
+    after the edit, the 62 resulting outcomes (55 A1 + 5 A2 + 2 B1) have
+    zero duplicate ids, both new prerequisite references resolve to real
+    existing outcome ids (confirmed programmatically -- the same
+    pre-existing bad prerequisite on
+    universal.a1.library.borrow_return_item flagged by every unit since
+    unit56's own review notes was re-confirmed still present and still
+    out of this unit's scope), and all 4 modalities (listening, speaking,
+    reading, writing) are present in assessment_requirements. Story
+    continuity: unit58 closed on Saturday 27 June 2026 with Omar asking
+    Nina "Was het concert goed?", Nina answering "Ja, heel geweldig!",
+    and Omar proposing "Zullen we volgende week samen naar het park
+    gaan?" (shall we go to the park together next week), which Nina
+    accepted -- this unit opens on the following Saturday, 4 July 2026
+    (verified with Python datetime.date(2026,7,4).strftime("%A") ==
+    "Saturday", consistent with datetime.date(2026,6,27) also being a
+    Saturday), the payoff of that plan: Omar, Nina, and Lotte spend the
+    afternoon in the park together, see ducks in the water, and have a
+    picnic under a tree. Because this outing has no staff/vendor role
+    (unlike the cinema/museum/concert units), the whole unit stays in
+    the friends' established informal jij/je register throughout -- a
+    deliberate register change of pace from the last three units,
+    consistent with the outcome's own real-world shape (parks are public
+    and free, there is no one to address formally). In the closing
+    scene, continuing the established Omar/Lotte closing-scene proposer
+    alternation pattern (unit50 Omar, unit51 Lotte, unit52 Omar, unit53
+    Lotte, unit54 Omar, unit55 Lotte, unit56 Omar, unit57 Lotte, unit58
+    Omar; this unit continues it with Lotte as the proposer), Lotte asks
+    Omar how the park was, Omar answers, and Lotte proposes going to the
+    market together the following Saturday, 11 July 2026 (verified
+    "Saturday" with the same method) -- a genuinely new, not-yet-covered
+    A1 topic flagged here as a plausible next unit for whoever picks
+    this up, not a commitment binding that choice. To vary the
+    asker/acceptor roles across units (unit57 and unit58 both used
+    Omar-asks/Nina-answers, Nina-accepts), this unit's closing scene
+    pairs Lotte and Omar instead, matching unit56's own precedent of
+    keeping the closing scene to 2 speakers even though all three
+    friends are present in the narrative (Nina is present at the park
+    per the narrative but does not speak in the closing scene's tested
+    dialogue). Every dialogue teaching card in lesson05/lesson06 uses
+    the additive structured `target.speaker` field (e.g. `speaker:
+    "Omar"`) rather than baking the speaker's name into `text` as a
+    literal "Name:" prefix -- the corpus's own established-correct
+    convention per docs/BUILD_LOG.md's Phase D3 entry (confirmed via a
+    real example in docs/content/realizations/de/a1_unit01_greetings.yaml)
+    even though most existing nl dialogue cards, including unit58's own,
+    still use the older baked-in-prefix style; this file uses the
+    correct pattern from the start rather than perpetuating the
+    non-blocking-but-suboptimal older one. Every vocabulary teaching
+    card includes a real example sentence with a matching overlay
+    example_gloss, and every example was checked to literally contain
+    the card's exact target word/infinitive surface form (no compiler
+    inflection warnings expected, aside from the same accepted
+    infinitive-vs-conjugated-form pattern unit58 itself used for
+    "beginnen"/"duren"). Prior words (including "het"/"de"/"een"/"Ik"/
+    "Zullen we"/"heel"/"leuk"/"goed"/"ga"/"naar"/"park"/day names/numbers
+    from earlier units, including "park" itself, taught in unit58) are
+    re-declared as introduced_tokens at first use in this file because
+    the untaught-vocabulary validator is per-file; within this file,
+    later cards correctly do NOT re-declare a token beyond what their
+    own text naturally contains once it was already introduced earlier
+    in the same file, consistent with the validator accumulating taught
+    tokens across the whole file in document order (confirmed by reading
+    validate_untaught_vocabulary in scripts/compile_content.py before
+    relying on this). Every listen_select/dialogue_comprehension
+    exercise built from the two multi-turn dialogues (lesson05's
+    park_picknick and lesson06's park_lotte) was checked by hand against
+    every line every speaker says in that same clip, not just the tested
+    speaker's: lesson05's clip has Nina saying "Kijk, de eenden zwemmen
+    in het water!" and "Lekker! Waar zullen we zitten?", Omar saying
+    "Leuk! Zullen we een picknick maken?" and "Daar is een bankje, onder
+    de boom.", and Lotte saying "Goed idee! Ik heb brood en fruit." --
+    ex01 tests Omar's picnic-suggestion line and its three distractors
+    ("Is the water cold?"/"Do you want to go home?"/"Where is the
+    sign?") match none of those five lines' English meanings; lesson06's
+    clip has Lotte saying "Was het park leuk?" and "Zullen we volgende
+    week samen naar de markt gaan?", and Omar saying "Ja, heel leuk!"
+    and "Ja, leuk! Tot volgende week, Lotte!" -- ex01 tests Lotte's
+    opening question and its three distractors ("Did you buy a
+    ticket?"/"Is the museum open today?"/"Do you want some tea?") match
+    none of those four lines' English meanings -- all such distractors
+    are invented minimal-pair alternatives (several deliberately reusing
+    prior-unit themes -- tickets, museum -- as plausible-sounding
+    decoys) never spoken by anyone in either clip, per the corpus's
+    established safe pattern (units 36-58). matching_pairs exercises in
+    this unit use 7-10 pairs each (not the bare 5-pair floor), pooling
+    vocabulary already taught earlier in the same unit for lesson01
+    onward, per the standing matching_pairs density guidance. A
+    recursive yaml.safe_load scan of this file and its overlay for bare
+    unquoted Yes/No/True/False/on/off values found none (every value in
+    both files loaded as its expected str/int/list/dict type, no
+    unexpected bool).
+
+course:
+  realization_key: nl.a1
+  target_language_first: true
+  dialect: nl_NL_standard
+  register_policy: >-
+    Teach contemporary Standard Dutch as used in the Netherlands. Nina,
+    Omar, and Lotte are established taalcafe friends and use informal
+    jij/je with each other throughout. This unit has no service-role
+    staff character (a park is free and public), so the entire unit
+    stays in the friends' informal register -- unlike unit50-58's
+    venues, which each had a neutral-polite "u"-register staff member.
+
+media_assets:
+  - {content_key: nl.a1.unit59.audio.park.ik_ga_graag_naar_het_park.01, language: nl, text: "Ik ga graag naar het park.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - {content_key: nl.a1.unit59.audio.park.ik_maak_een_wandeling_in_het_park.01, language: nl, text: "Ik maak een wandeling in het park.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - {content_key: nl.a1.unit59.audio.park.de_boom_is_groot.01, language: nl, text: "De boom is groot.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - {content_key: nl.a1.unit59.audio.park.het_gras_is_groen.01, language: nl, text: "Het gras is groen.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - {content_key: nl.a1.unit59.audio.park.de_eend_zwemt_in_het_water.01, language: nl, text: "De eend zwemt in het water.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - {content_key: nl.a1.unit59.audio.park.het_water_is_koud.01, language: nl, text: "Het water is koud.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - {content_key: nl.a1.unit59.audio.park.hoe_laat_gaat_het_park_dicht.01, language: nl, text: "Hoe laat gaat het park dicht?", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - content_key: nl.a1.unit59.audio.dialogue.park_picknick.01
+    language: nl
+    text: >-
+      Nina: Kijk, de eenden zwemmen in het water! Omar: Leuk! Zullen we
+      een picknick maken? Lotte: Goed idee! Ik heb brood en fruit. Nina:
+      Lekker! Waar zullen we zitten? Omar: Daar is een bankje, onder de
+      boom.
+    voice_hint: three_young_adults_friendly
+    status: pending_generation
+  - {content_key: nl.a1.unit59.audio.park.ik_heb_brood_en_fruit.01, language: nl, text: "Ik heb brood en fruit.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - content_key: nl.a1.unit59.audio.dialogue.park_lotte.01
+    language: nl
+    text: >-
+      Lotte: Was het park leuk? Omar: Ja, heel leuk! Lotte: Zullen we
+      volgende week samen naar de markt gaan? Omar: Ja, leuk! Tot
+      volgende week, Lotte!
+    voice_hint: two_young_adults_friendly
+    status: pending_generation
+  - {content_key: nl.a1.unit59.audio.park.zullen_we_volgende_week_samen_naar_de_markt_gaan.01, language: nl, text: "Zullen we volgende week samen naar de markt gaan?", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+
+units:
+  - content_key: nl.a1.unit59.park
+    title: "Een middag in het park"
+    section: reading_writing
+    spine_outcome_ids: [universal.a1.park.enjoy_a_park_outing]
+    planned_lesson_count: 6
+    lessons:
+      - content_key: nl.a1.unit59.lesson01.zullen_we_naar_het_park_gaan
+        title: "Zullen we naar het park gaan?"
+        spine_outcome_id: universal.a1.park.enjoy_a_park_outing
+        teaching:
+          - content_key: nl.a1.unit59.lesson01.teach.park
+            kind: vocabulary
+            target: {text: "het park", language_code: nl, direction: ltr}
+            introduced_tokens: [het, park, Ik, ga, graag, naar]
+            example: {text: "Ik ga graag naar het park.", language_code: nl, direction: ltr}
+          - content_key: nl.a1.unit59.lesson01.teach.wandeling
+            kind: vocabulary
+            target: {text: "de wandeling", language_code: nl, direction: ltr}
+            introduced_tokens: [de, wandeling, Ik, maak, een, in, het, park]
+            example: {text: "Ik maak een wandeling in het park.", language_code: nl, direction: ltr}
+          - {content_key: nl.a1.unit59.lesson01.teach.zullen_we_een_wandeling_in_het_park_maken, kind: phrase, target: {text: "Zullen we een wandeling in het park maken?", language_code: nl, direction: ltr}, introduced_tokens: [Zullen, we, een, wandeling, in, het, park, maken]}
+        exercises:
+          - {content_key: nl.a1.unit59.lesson01.exercise01.choose_wandeling_in_het_park, type: multiple_choice, tested_text: "Zullen we een wandeling in het park maken", prompt: {target_blocks: [{text: "Shall we take a walk in the park?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit59.lesson01.exercise02.listen_ik_ga_graag_naar_het_park, type: listen_select, tested_text: "Ik ga graag naar het park", media_asset_key: nl.a1.unit59.audio.park.ik_ga_graag_naar_het_park.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit59.lesson01.exercise03.match_park_wandeling, type: matching_pairs, tested_text: "park wandeling het park de wandeling", prompt: {target_blocks: []}, pairs: [{left: park, right: park}, {left: wandeling, right: walk}, {left: "het park", right: "the park"}, {left: "de wandeling", right: "the walk"}, {left: "Ik ga graag naar het park.", right: "I like going to the park."}, {left: "Ik maak een wandeling in het park.", right: "I take a walk in the park."}, {left: "Zullen we een wandeling in het park maken?", right: "Shall we take a walk in the park?"}]}
+          - {content_key: nl.a1.unit59.lesson01.exercise04.order_wandeling_in_het_park, type: word_order, tested_text: "Zullen we een wandeling in het park maken", prompt: {target_blocks: []}, word_bank: [Zullen, we, een, wandeling, in, het, park, maken]}
+          - {content_key: nl.a1.unit59.lesson01.exercise05.listen_order_ik_maak_een_wandeling_in_het_park, type: listen_order, tested_text: "Ik maak een wandeling in het park", media_asset_key: nl.a1.unit59.audio.park.ik_maak_een_wandeling_in_het_park.01, prompt: {target_blocks: []}, word_bank: [Ik, maak, een, wandeling, in, het, park]}
+          - {content_key: nl.a1.unit59.lesson01.exercise06.translate_de_wandeling, type: translation, tested_text: "de wandeling", prompt: {target_blocks: [{text: "the walk", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit59.lesson01.exercise07.respond_wandeling_in_het_park, type: dialogue_response, tested_text: "Zullen we een wandeling in het park maken", prompt: {target_blocks: [{text: "Say in Dutch: shall we take a walk in the park?", language_code: en, direction: ltr}]}}
+
+      - content_key: nl.a1.unit59.lesson02.de_bomen_en_het_gras
+        title: "De bomen en het gras"
+        spine_outcome_id: universal.a1.park.enjoy_a_park_outing
+        teaching:
+          - content_key: nl.a1.unit59.lesson02.teach.boom
+            kind: vocabulary
+            target: {text: "de boom", language_code: nl, direction: ltr}
+            introduced_tokens: [de, boom, De, is, groot]
+            example: {text: "De boom is groot.", language_code: nl, direction: ltr}
+          - content_key: nl.a1.unit59.lesson02.teach.gras
+            kind: vocabulary
+            target: {text: "het gras", language_code: nl, direction: ltr}
+            introduced_tokens: [het, gras, Het, is, groen]
+            example: {text: "Het gras is groen.", language_code: nl, direction: ltr}
+          - {content_key: nl.a1.unit59.lesson02.teach.ik_zie_een_grote_boom_en_groen_gras, kind: phrase, target: {text: "Ik zie een grote boom en groen gras.", language_code: nl, direction: ltr}, introduced_tokens: [Ik, zie, een, grote, boom, en, groen, gras]}
+        exercises:
+          - {content_key: nl.a1.unit59.lesson02.exercise01.choose_grote_boom_en_groen_gras, type: multiple_choice, tested_text: "Ik zie een grote boom en groen gras", prompt: {target_blocks: [{text: "I see a big tree and green grass.", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit59.lesson02.exercise02.listen_de_boom_is_groot, type: listen_select, tested_text: "De boom is groot", media_asset_key: nl.a1.unit59.audio.park.de_boom_is_groot.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit59.lesson02.exercise03.match_boom_gras, type: matching_pairs, tested_text: "boom gras park wandeling", prompt: {target_blocks: []}, pairs: [{left: boom, right: tree}, {left: gras, right: grass}, {left: "de boom", right: "the tree"}, {left: "het gras", right: "the grass"}, {left: "De boom is groot.", right: "The tree is big."}, {left: "Het gras is groen.", right: "The grass is green."}, {left: "Ik zie een grote boom en groen gras.", right: "I see a big tree and green grass."}, {left: park, right: park}, {left: wandeling, right: walk}]}
+          - {content_key: nl.a1.unit59.lesson02.exercise04.order_grote_boom_en_groen_gras, type: word_order, tested_text: "Ik zie een grote boom en groen gras", prompt: {target_blocks: []}, word_bank: [Ik, zie, een, grote, boom, en, groen, gras]}
+          - {content_key: nl.a1.unit59.lesson02.exercise05.listen_order_het_gras_is_groen, type: listen_order, tested_text: "Het gras is groen", media_asset_key: nl.a1.unit59.audio.park.het_gras_is_groen.01, prompt: {target_blocks: []}, word_bank: [Het, gras, is, groen]}
+          - {content_key: nl.a1.unit59.lesson02.exercise06.translate_het_gras, type: translation, tested_text: "het gras", prompt: {target_blocks: [{text: "the grass", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit59.lesson02.exercise07.respond_grote_boom_en_groen_gras, type: dialogue_response, tested_text: "Ik zie een grote boom en groen gras", prompt: {target_blocks: [{text: "Say in Dutch: I see a big tree and green grass.", language_code: en, direction: ltr}]}}
+
+      - content_key: nl.a1.unit59.lesson03.de_eenden_bij_het_water
+        title: "De eenden bij het water"
+        spine_outcome_id: universal.a1.park.enjoy_a_park_outing
+        teaching:
+          - content_key: nl.a1.unit59.lesson03.teach.eend
+            kind: vocabulary
+            target: {text: "de eend", language_code: nl, direction: ltr}
+            introduced_tokens: [de, eend, De, zwemt, in, het, water]
+            example: {text: "De eend zwemt in het water.", language_code: nl, direction: ltr}
+          - content_key: nl.a1.unit59.lesson03.teach.water
+            kind: vocabulary
+            target: {text: "het water", language_code: nl, direction: ltr}
+            introduced_tokens: [het, water, Het, is, koud]
+            example: {text: "Het water is koud.", language_code: nl, direction: ltr}
+          - {content_key: nl.a1.unit59.lesson03.teach.kijk_de_eenden_zwemmen_in_het_water, kind: phrase, target: {text: "Kijk, de eenden zwemmen in het water!", language_code: nl, direction: ltr}, introduced_tokens: [Kijk, de, eenden, zwemmen, in, het, water]}
+        exercises:
+          - {content_key: nl.a1.unit59.lesson03.exercise01.choose_eenden_zwemmen_in_het_water, type: multiple_choice, tested_text: "Kijk, de eenden zwemmen in het water", prompt: {target_blocks: [{text: "Look, the ducks are swimming in the water!", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit59.lesson03.exercise02.listen_de_eend_zwemt_in_het_water, type: listen_select, tested_text: "De eend zwemt in het water", media_asset_key: nl.a1.unit59.audio.park.de_eend_zwemt_in_het_water.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit59.lesson03.exercise03.match_eend_water, type: matching_pairs, tested_text: "eend water boom gras", prompt: {target_blocks: []}, pairs: [{left: eend, right: duck}, {left: water, right: water}, {left: "de eend", right: "the duck"}, {left: "het water", right: "the water"}, {left: "De eend zwemt in het water.", right: "The duck swims in the water."}, {left: "Het water is koud.", right: "The water is cold."}, {left: "Kijk, de eenden zwemmen in het water!", right: "Look, the ducks are swimming in the water!"}, {left: boom, right: tree}, {left: gras, right: grass}, {left: park, right: park}]}
+          - {content_key: nl.a1.unit59.lesson03.exercise04.order_eenden_zwemmen_in_het_water, type: word_order, tested_text: "Kijk de eenden zwemmen in het water", prompt: {target_blocks: []}, word_bank: [Kijk, de, eenden, zwemmen, in, het, water]}
+          - {content_key: nl.a1.unit59.lesson03.exercise05.listen_order_het_water_is_koud, type: listen_order, tested_text: "Het water is koud", media_asset_key: nl.a1.unit59.audio.park.het_water_is_koud.01, prompt: {target_blocks: []}, word_bank: [Het, water, is, koud]}
+          - {content_key: nl.a1.unit59.lesson03.exercise06.translate_het_water, type: translation, tested_text: "het water", prompt: {target_blocks: [{text: "the water", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit59.lesson03.exercise07.respond_eenden_zwemmen_in_het_water, type: dialogue_response, tested_text: "Kijk de eenden zwemmen in het water", prompt: {target_blocks: [{text: "Say in Dutch: look, the ducks are swimming in the water!", language_code: en, direction: ltr}]}}
+
+      - content_key: nl.a1.unit59.lesson04.het_bord_bij_de_ingang
+        title: "Het bord bij de ingang"
+        spine_outcome_id: universal.a1.park.enjoy_a_park_outing
+        teaching:
+          - content_key: nl.a1.unit59.lesson04.teach.bord
+            kind: vocabulary
+            target: {text: "het bord", language_code: nl, direction: ltr}
+            introduced_tokens: [het, bord, Ik, lees]
+            example: {text: "Ik lees het bord.", language_code: nl, direction: ltr}
+          - content_key: nl.a1.unit59.lesson04.teach.bord_tekst
+            kind: reading
+            target:
+              text: "Park Zonnehof. Open: negen uur tot acht uur. Honden aan de lijn."
+              language_code: nl
+              direction: ltr
+            introduced_tokens: [Park, Zonnehof, Open, negen, uur, tot, acht, Honden, aan, de, lijn]
+          - {content_key: nl.a1.unit59.lesson04.teach.hoe_laat_gaat_het_park_dicht, kind: phrase, target: {text: "Hoe laat gaat het park dicht?", language_code: nl, direction: ltr}, introduced_tokens: [Hoe, laat, gaat, het, park, dicht]}
+        exercises:
+          - {content_key: nl.a1.unit59.lesson04.exercise01.read_park_naam, type: reading_comprehension, tested_text: "Park Zonnehof", prompt: {target_blocks: [{text: "According to the sign, what is the park called?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit59.lesson04.exercise02.read_openingstijden, type: reading_comprehension, tested_text: "negen uur tot acht uur", prompt: {target_blocks: [{text: "According to the sign, what hours is the park open?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit59.lesson04.exercise03.read_honden_regel, type: reading_comprehension, tested_text: "Honden aan de lijn", prompt: {target_blocks: [{text: "According to the sign, what is the rule about dogs?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit59.lesson04.exercise04.match_bord_park, type: matching_pairs, tested_text: "bord park eend water boom gras", prompt: {target_blocks: []}, pairs: [{left: bord, right: sign}, {left: "het bord", right: "the sign"}, {left: "Ik lees het bord.", right: "I read the sign."}, {left: "Hoe laat gaat het park dicht?", right: "What time does the park close?"}, {left: eend, right: duck}, {left: water, right: water}, {left: boom, right: tree}, {left: gras, right: grass}, {left: park, right: park}]}
+          - {content_key: nl.a1.unit59.lesson04.exercise05.listen_hoe_laat_gaat_het_park_dicht, type: listen_select, tested_text: "Hoe laat gaat het park dicht", media_asset_key: nl.a1.unit59.audio.park.hoe_laat_gaat_het_park_dicht.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit59.lesson04.exercise06.write_hoe_laat_gaat_het_park_dicht, type: writing_prompt, tested_text: "Hoe laat gaat het park dicht", prompt: {target_blocks: [{text: "Write in Dutch: what time does the park close?", language_code: en, direction: ltr}]}}
+
+      - content_key: nl.a1.unit59.lesson05.een_picknick_in_het_park
+        title: "Een picknick in het park"
+        spine_outcome_id: universal.a1.park.enjoy_a_park_outing
+        teaching:
+          - {content_key: nl.a1.unit59.lesson05.teach.nina_eenden, kind: dialogue, target: {text: "Kijk, de eenden zwemmen in het water!", language_code: nl, direction: ltr, speaker: Nina}, introduced_tokens: [Kijk, de, eenden, zwemmen, in, het, water]}
+          - {content_key: nl.a1.unit59.lesson05.teach.omar_picknick_voorstel, kind: dialogue, target: {text: "Leuk! Zullen we een picknick maken?", language_code: nl, direction: ltr, speaker: Omar}, introduced_tokens: [Leuk, Zullen, we, een, picknick, maken]}
+          - {content_key: nl.a1.unit59.lesson05.teach.lotte_brood_fruit, kind: dialogue, target: {text: "Goed idee! Ik heb brood en fruit.", language_code: nl, direction: ltr, speaker: Lotte}, introduced_tokens: [Goed, idee, Ik, heb, brood, en, fruit]}
+          - {content_key: nl.a1.unit59.lesson05.teach.nina_zitten_vraag, kind: dialogue, target: {text: "Lekker! Waar zullen we zitten?", language_code: nl, direction: ltr, speaker: Nina}, introduced_tokens: [Lekker, Waar, zullen, we, zitten]}
+          - {content_key: nl.a1.unit59.lesson05.teach.omar_bankje_antwoord, kind: dialogue, target: {text: "Daar is een bankje, onder de boom.", language_code: nl, direction: ltr, speaker: Omar}, introduced_tokens: [Daar, is, een, bankje, onder, de, boom]}
+        exercises:
+          - {content_key: nl.a1.unit59.lesson05.exercise01.listen_zullen_we_een_picknick_maken, type: listen_select, tested_text: "Zullen we een picknick maken", media_asset_key: nl.a1.unit59.audio.dialogue.park_picknick.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit59.lesson05.exercise02.comprehend_omar_voorstel, type: dialogue_comprehension, tested_text: "een picknick maken", media_asset_key: nl.a1.unit59.audio.dialogue.park_picknick.01, prompt: {target_blocks: [{text: "What does Omar suggest?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit59.lesson05.exercise03.comprehend_lotte_brood_fruit, type: dialogue_comprehension, tested_text: "brood en fruit", media_asset_key: nl.a1.unit59.audio.dialogue.park_picknick.01, prompt: {target_blocks: [{text: "What does Lotte have with her?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit59.lesson05.exercise04.comprehend_bankje_onder_boom, type: dialogue_comprehension, tested_text: "een bankje onder de boom", media_asset_key: nl.a1.unit59.audio.dialogue.park_picknick.01, prompt: {target_blocks: [{text: "Where do they sit?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit59.lesson05.exercise05.order_nina_zitten_vraag, type: word_order, tested_text: "Lekker Waar zullen we zitten", prompt: {target_blocks: []}, word_bank: [Lekker, Waar, zullen, we, zitten]}
+          - {content_key: nl.a1.unit59.lesson05.exercise06.respond_bankje, type: dialogue_response, tested_text: "Daar is een bankje onder de boom", prompt: {target_blocks: [{text: "Waar zullen we zitten?", language_code: nl, direction: ltr}]}}
+          - {content_key: nl.a1.unit59.lesson05.exercise07.listen_type_brood_en_fruit, type: listen_type, tested_text: "Ik heb brood en fruit", media_asset_key: nl.a1.unit59.audio.park.ik_heb_brood_en_fruit.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit59.lesson05.exercise08.write_goed_idee_brood_fruit, type: writing_prompt, tested_text: "Goed idee Ik heb brood en fruit", prompt: {target_blocks: [{text: "Write in Dutch: Good idea! I have bread and fruit.", language_code: en, direction: ltr}]}}
+
+      - content_key: nl.a1.unit59.lesson06.omar_nina_en_lotte_na_het_park
+        title: "Omar, Nina en Lotte na het park"
+        spine_outcome_id: universal.a1.park.enjoy_a_park_outing
+        teaching:
+          - content_key: nl.a1.unit59.lesson06.teach.markt
+            kind: vocabulary
+            target: {text: "de markt", language_code: nl, direction: ltr}
+            introduced_tokens: [de, markt, Ik, koop, fruit, op]
+            example: {text: "Ik koop fruit op de markt.", language_code: nl, direction: ltr}
+          - {content_key: nl.a1.unit59.lesson06.teach.lotte_vraag, kind: dialogue, target: {text: "Was het park leuk?", language_code: nl, direction: ltr, speaker: Lotte}, introduced_tokens: [Was, het, park, leuk]}
+          - {content_key: nl.a1.unit59.lesson06.teach.omar_antwoord, kind: dialogue, target: {text: "Ja, heel leuk!", language_code: nl, direction: ltr, speaker: Omar}, introduced_tokens: ["Ja", heel, leuk]}
+          - {content_key: nl.a1.unit59.lesson06.teach.lotte_voorstel, kind: dialogue, target: {text: "Zullen we volgende week samen naar de markt gaan?", language_code: nl, direction: ltr, speaker: Lotte}, introduced_tokens: [Zullen, we, volgende, week, samen, naar, de, markt, gaan]}
+          - {content_key: nl.a1.unit59.lesson06.teach.omar_akkoord, kind: dialogue, target: {text: "Ja, leuk! Tot volgende week, Lotte!", language_code: nl, direction: ltr, speaker: Omar}, introduced_tokens: ["Ja", leuk, Tot, volgende, week, Lotte]}
+          - {content_key: nl.a1.unit59.lesson06.teach.zullen_we_volgende_week_samen_naar_de_markt_gaan, kind: phrase, target: {text: "Zullen we volgende week samen naar de markt gaan?", language_code: nl, direction: ltr}, introduced_tokens: [Zullen, we, volgende, week, samen, naar, de, markt, gaan]}
+        exercises:
+          - {content_key: nl.a1.unit59.lesson06.exercise01.listen_was_het_park_leuk, type: listen_select, tested_text: "Was het park leuk", media_asset_key: nl.a1.unit59.audio.dialogue.park_lotte.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit59.lesson06.exercise02.comprehend_omar_antwoord, type: dialogue_comprehension, tested_text: "Ja heel leuk", media_asset_key: nl.a1.unit59.audio.dialogue.park_lotte.01, prompt: {target_blocks: [{text: "How does Omar describe the park?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit59.lesson06.exercise03.comprehend_lotte_voorstel, type: dialogue_comprehension, tested_text: "volgende week samen naar de markt gaan", media_asset_key: nl.a1.unit59.audio.dialogue.park_lotte.01, prompt: {target_blocks: [{text: "What does Lotte suggest?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit59.lesson06.exercise04.match_markt, type: matching_pairs, tested_text: "markt park picknick eend boom bord", prompt: {target_blocks: []}, pairs: [{left: markt, right: market}, {left: "de markt", right: "the market"}, {left: "Ik koop fruit op de markt.", right: "I buy fruit at the market."}, {left: "Was het park leuk?", right: "Was the park nice?"}, {left: "Zullen we volgende week samen naar de markt gaan?", right: "Shall we go to the market together next week?"}, {left: picknick, right: picnic}, {left: bankje, right: bench}, {left: eend, right: duck}, {left: boom, right: tree}, {left: bord, right: sign}, {left: park, right: park}]}
+          - {content_key: nl.a1.unit59.lesson06.exercise05.order_zullen_we_volgende_week_samen_naar_de_markt_gaan, type: word_order, tested_text: "Zullen we volgende week samen naar de markt gaan", prompt: {target_blocks: []}, word_bank: [Zullen, we, volgende, week, samen, naar, de, markt, gaan]}
+          - {content_key: nl.a1.unit59.lesson06.exercise06.respond_markt_voorstel, type: dialogue_response, tested_text: "Ja leuk Tot volgende week Lotte", prompt: {target_blocks: [{text: "Zullen we volgende week samen naar de markt gaan?", language_code: nl, direction: ltr}]}}
+          - {content_key: nl.a1.unit59.lesson06.exercise07.listen_type_zullen_we_volgende_week_samen_naar_de_markt_gaan, type: listen_type, tested_text: "Zullen we volgende week samen naar de markt gaan", media_asset_key: nl.a1.unit59.audio.park.zullen_we_volgende_week_samen_naar_de_markt_gaan.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit59.lesson06.exercise08.write_ja_heel_leuk, type: writing_prompt, tested_text: "Ja heel leuk", prompt: {target_blocks: [{text: "Write in Dutch: yes, very nice!", language_code: en, direction: ltr}]}}
