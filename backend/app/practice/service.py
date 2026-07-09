@@ -549,6 +549,17 @@ def _completed_lesson_ids(
     )
 
 
+def _course_lesson_ids(db: Session, course_id: str) -> list[str]:
+    return list(
+        db.scalars(
+            select(Lesson.id)
+            .join(Unit, Unit.id == Lesson.unit_id)
+            .where(Unit.course_id == course_id)
+            .order_by(Unit.order, Lesson.order, Lesson.id)
+        )
+    )
+
+
 def _material(
     db: Session,
     course: Course,
@@ -879,10 +890,13 @@ def generate_batch(
     user_id: str,
     course: Course,
     size: int,
+    is_admin: bool = False,
 ) -> tuple[bool, list[PracticeItem]]:
     completed = _completed_lesson_ids(db, user_id, course.id)
     if not completed:
-        return True, []
+        if not is_admin:
+            return True, []
+        completed = _course_lesson_ids(db, course.id)
 
     templates, lexemes = _material(db, course, completed)
     if not templates or not lexemes:
