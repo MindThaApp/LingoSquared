@@ -143,8 +143,16 @@ export interface MatchingPairAnswer {
 
 export type AnswerResponse = string | string[] | Record<string, string> | MatchingPairAnswer[];
 
+// Phase C (docs/CONTRACT.md): "almost" means a free-text answer was within
+// typo tolerance and was ACCEPTED (correct == true, XP awarded) but wasn't
+// an exact match - the frontend must surface this distinctly rather than
+// rendering a plain "Correct!" that hides the spelling slip. Choice-type
+// exercises never produce "almost", only free-text ones.
+export type GradingStatus = "correct" | "almost" | "incorrect";
+
 export interface AnswerResult {
   correct: boolean;
+  result: GradingStatus;
   correct_response: unknown;
   xp_awarded: number;
   feedback?: string;
@@ -214,6 +222,7 @@ export interface PracticeBatchResult {
 
 export interface PracticeAnswerResult {
   correct: boolean;
+  result: GradingStatus;
   correct_response: unknown;
   xp_awarded: number;
 }

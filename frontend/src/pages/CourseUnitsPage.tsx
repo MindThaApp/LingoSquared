@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Lock } from "lucide-react";
-import { CatalogApi } from "../api/endpoints";
+import { CatalogApi, ProgressApi } from "../api/endpoints";
 import type { UnitSummary } from "../api/types";
 import { getLevelPreference, recommendedUnitIndex } from "../lib/levelPreferences";
 import { unitIcon } from "../lib/unitIcons";
@@ -74,6 +74,22 @@ export function CourseUnitsPage() {
     queryKey: ["units", courseId],
     queryFn: () => CatalogApi.units(courseId),
   });
+  const progressQuery = useQuery({
+    queryKey: ["progress"],
+    queryFn: () => ProgressApi.progress(),
+  });
+
+  // Course-level "X of Y lessons completed" summary rather than a
+  // per-unit completion badge: the units response (UnitSummary) has
+  // lesson_count but not per-unit lesson ids, and lesson_progress rows
+  // only carry lesson_id — joining units to lessons client-side would
+  // need an N+1 CatalogApi.lessons(unitId) fetch per unit (up to ~40
+  // per course). skill_progress.completed_lessons already gives an
+  // honest, single-request course-wide total instead.
+  const skillProgress = progressQuery.data?.skill_progress.find(
+    (sp) => sp.course_id === courseId,
+  );
+  const totalLessons = unitsQuery.data?.reduce((sum, u) => sum + u.lesson_count, 0) ?? 0;
 
   const readingWriting =
     unitsQuery.data?.filter((u) => u.section === "reading_writing") ?? [];
@@ -87,6 +103,14 @@ export function CourseUnitsPage() {
     <div>
       <h1 style={{ marginBottom: 4 }}>{courseQuery.data?.title ?? t("course_units.default_title")}</h1>
       {courseQuery.data && <p className="muted">{courseQuery.data.description}</p>}
+      {skillProgress && totalLessons > 0 && (
+        <p className="muted course-units__progress-summary">
+          {t("course_units.lessons_completed_summary", {
+            completed: skillProgress.completed_lessons,
+            total: totalLessons,
+          })}
+        </p>
+      )}
 
       <div className="path">
         {readingWriting.length > 0 && (

@@ -10,6 +10,7 @@ import { ReportIssueButton } from "../components/ReportIssueButton";
 import { SpeakButton } from "../components/SpeakButton";
 import { ApiError } from "../api/client";
 import { formatCorrectResponse } from "../lib/formatAnswer";
+import { resultStatus } from "../lib/gradingResult";
 import type {
   AnswerResponse,
   AnswerResult,
@@ -231,26 +232,34 @@ export function LessonRunnerPage() {
           exercise={{ id: item.id, type: item.type, order: 0, prompt: item.prompt }}
           onAnswer={handleReviewAnswer}
           disabled={reviewSubmitting || Boolean(reviewResult)}
+          gradedResult={
+            reviewResult
+              ? { correct: reviewResult.correct, correctResponse: reviewResult.correct_response }
+              : undefined
+          }
         />
-        {reviewResult && (
-          <div className={`feedback-banner ${reviewResult.correct ? "correct" : "incorrect"}`}>
-            <p style={{ margin: "0 0 6px" }}>
-              {reviewResult.correct
-                ? t("lesson_runner.correct")
-                : t("lesson_runner.incorrect")}
-            </p>
-            {!reviewResult.correct && (
-              <p style={{ margin: "0 0 6px", fontWeight: 400 }}>
-                {t("lesson_runner.correct_answer", {
-                  answer: formatCorrectResponse(reviewResult.correct_response),
-                })}
+        {reviewResult && (() => {
+          const status = resultStatus(reviewResult);
+          return (
+            <div className={`feedback-banner ${status}`}>
+              <p style={{ margin: "0 0 6px" }}>
+                {status === "correct" && t("lesson_runner.correct")}
+                {status === "almost" && t("lesson_runner.almost")}
+                {status === "incorrect" && t("lesson_runner.incorrect")}
               </p>
-            )}
-            <button className="btn btn-block" onClick={handleReviewContinue}>
-              {t("lesson_runner.continue")}
-            </button>
-          </div>
-        )}
+              {status !== "correct" && (
+                <p style={{ margin: "0 0 6px", fontWeight: 400 }}>
+                  {t("lesson_runner.correct_answer", {
+                    answer: formatCorrectResponse(reviewResult.correct_response),
+                  })}
+                </p>
+              )}
+              <button className="btn btn-block" onClick={handleReviewContinue}>
+                {t("lesson_runner.continue")}
+              </button>
+            </div>
+          );
+        })()}
       </div>
     );
   }
@@ -308,27 +317,35 @@ export function LessonRunnerPage() {
         exercise={current.exercise}
         onAnswer={handleAnswer}
         disabled={submitting || Boolean(result)}
+        gradedResult={
+          result ? { correct: result.correct, correctResponse: result.correct_response } : undefined
+        }
       />
-      {result && (
-        <div className={`feedback-banner ${result.correct ? "correct" : "incorrect"}`}>
-          <p style={{ margin: "0 0 6px" }}>
-            {result.correct ? t("lesson_runner.correct") : t("lesson_runner.incorrect")}
-          </p>
-          {!result.correct && (
-            <p style={{ margin: "0 0 6px", fontWeight: 400 }}>
-              {t("lesson_runner.correct_answer", { answer: formatCorrectResponse(result.correct_response) })}
+      {result && (() => {
+        const status = resultStatus(result);
+        return (
+          <div className={`feedback-banner ${status}`}>
+            <p style={{ margin: "0 0 6px" }}>
+              {status === "correct" && t("lesson_runner.correct")}
+              {status === "almost" && t("lesson_runner.almost")}
+              {status === "incorrect" && t("lesson_runner.incorrect")}
             </p>
-          )}
-          {result.feedback && (
-            <p style={{ margin: "0 0 10px", fontWeight: 400 }}>
-              <EmphasizedText text={result.feedback} />
-            </p>
-          )}
-          <button className="btn btn-block" onClick={handleContinue}>
-            {t("lesson_runner.continue")}
-          </button>
-        </div>
-      )}
+            {status !== "correct" && (
+              <p style={{ margin: "0 0 6px", fontWeight: 400 }}>
+                {t("lesson_runner.correct_answer", { answer: formatCorrectResponse(result.correct_response) })}
+              </p>
+            )}
+            {result.feedback && (
+              <p style={{ margin: "0 0 10px", fontWeight: 400 }}>
+                <EmphasizedText text={result.feedback} />
+              </p>
+            )}
+            <button className="btn btn-block" onClick={handleContinue}>
+              {t("lesson_runner.continue")}
+            </button>
+          </div>
+        );
+      })()}
       <div style={{ marginTop: 12, textAlign: "center" }}>
         <ReportIssueButton
           lastResponse={lastResponse}

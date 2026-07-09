@@ -2,13 +2,17 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { TextBlockList } from "../TextBlock";
 import { SpeakButton } from "../SpeakButton";
+import { correctOptionFromResponse, optionClassName } from "./optionHighlight";
 import type { ExerciseComponentProps } from "./types";
 
-export function MultipleChoice({ exercise, onAnswer, disabled }: ExerciseComponentProps) {
+export function MultipleChoice({ exercise, onAnswer, disabled, gradedResult }: ExerciseComponentProps) {
   const { t } = useTranslation();
   const [selected, setSelected] = useState<string | null>(null);
   const options = exercise.prompt.options ?? [];
   const { audio_text, audio_language_code, media_asset_key } = exercise.prompt;
+  const correctOption = gradedResult
+    ? correctOptionFromResponse(gradedResult.correctResponse, options)
+    : null;
 
   return (
     <div className="exercise-shell">
@@ -24,7 +28,7 @@ export function MultipleChoice({ exercise, onAnswer, disabled }: ExerciseCompone
           <button
             key={option}
             type="button"
-            className={`exercise-option${selected === option ? " selected" : ""}`}
+            className={optionClassName(option, selected, gradedResult, correctOption)}
             onClick={() => !disabled && setSelected(option)}
             disabled={disabled}
           >
