@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { CatalogApi } from "../api/endpoints";
 import { sortByCefr } from "../lib/cefr";
 import { LANGUAGE_FLAG } from "../lib/flags";
+import { getLevelPreference } from "../lib/levelPreferences";
 import type { CourseSummary, Language } from "../api/types";
 
 const UI_SWITCHABLE_LANGUAGES: Record<string, string> = {
@@ -120,8 +121,15 @@ function UiLanguagePrompt({ sourceCode }: { sourceCode: string }) {
 
 export function CoursePickerPage() {
   const { t } = useTranslation();
-  const [source, setSource] = useState("");
-  const [target, setTarget] = useState("");
+  const navigate = useNavigate();
+  const location = useLocation();
+  // Restores step 3's language-pair selection when returning here from
+  // LevelCheckPage's "Change level" round trip (see the "Change level"
+  // button below) -- normal first-time entry has no location.state and
+  // falls through to the usual empty step 1.
+  const returnState = location.state as { source?: string; target?: string } | null;
+  const [source, setSource] = useState(returnState?.source ?? "");
+  const [target, setTarget] = useState(returnState?.target ?? "");
 
   const languagesQuery = useQuery({
     queryKey: ["languages"],
@@ -239,20 +247,40 @@ export function CoursePickerPage() {
           )}
 
           {courses?.map((course, i) => (
-            <Link key={course.id} to={`/courses/${course.id}/level`}>
-              <div className="card continue-card" style={{ marginBottom: 12 }}>
-                <div className="continue-info">
-                  <h3 style={{ margin: "0 0 4px" }}>
-                    {course.title} <span className="badge">{course.level}</span>
-                  </h3>
-                  <span className="muted">
-                    {t(`cefr.${course.level}`)} · {t("course_picker.unit_count", { count: course.unit_count })}
-                    {i === 0 && courses.length > 1 && t("course_picker.start_here_hint")}
-                  </span>
+            <div key={course.id} style={{ marginBottom: 12 }}>
+              <Link to={`/courses/${course.id}/level`}>
+                <div className="card continue-card">
+                  <div className="continue-info">
+                    <h3 style={{ margin: "0 0 4px" }}>
+                      {course.title} <span className="badge">{course.level}</span>
+                    </h3>
+                    <span className="muted">
+                      {t(`cefr.${course.level}`)} · {t("course_picker.unit_count", { count: course.unit_count })}
+                      {i === 0 && courses.length > 1 && t("course_picker.start_here_hint")}
+                    </span>
+                  </div>
+                  <span className="btn">{t("course_picker.start")}</span>
                 </div>
-                <span className="btn">{t("course_picker.start")}</span>
-              </div>
-            </Link>
+              </Link>
+              {/* Only offered once a level's actually been recorded for this
+                  course -- a first-time visit already opens the level check
+                  via the card link above, so there's nothing to "change"
+                  yet. Kept as a sibling of the Link (not nested inside it)
+                  to avoid a button-inside-anchor a11y anti-pattern. */}
+              {getLevelPreference(course.id) && (
+                <button
+                  className="btn btn-secondary"
+                  style={{ padding: "4px 12px", marginTop: 4 }}
+                  onClick={() =>
+                    navigate(`/courses/${course.id}/level`, {
+                      state: { returnTo: "/courses", source, target },
+                    })
+                  }
+                >
+                  {t("course_picker.change_level")}
+                </button>
+              )}
+            </div>
           ))}
         </>
       )}
