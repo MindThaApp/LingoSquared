@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -5,15 +6,18 @@ import { Lock } from "lucide-react";
 import { CatalogApi, ProgressApi } from "../api/endpoints";
 import type { UnitSummary } from "../api/types";
 import { getLevelPreference, recommendedUnitIndex } from "../lib/levelPreferences";
+import { getLastVisitedUnit, setLastVisitedUnit } from "../lib/lastUnitPreferences";
 import { unitIcon } from "../lib/unitIcons";
 
 function PathNode({
   unit,
   recommended,
+  current,
   courseId,
 }: {
   unit: UnitSummary;
   recommended?: boolean;
+  current?: boolean;
   courseId: string;
 }) {
   const { t } = useTranslation();
@@ -21,14 +25,16 @@ function PathNode({
   const locked = unit.locked;
   const Icon = unitIcon(unit.content_key);
   return (
-    <div className={`path-node${locked ? " locked" : ""}`}>
+    <div id={`unit-${unit.id}`} className={`path-node${locked ? " locked" : ""}${current ? " current" : ""}`}>
       <button
         className="path-bubble"
         aria-label={locked ? `${unit.title}${t("course_units.locked_suffix")}` : unit.title}
         disabled={locked}
-        onClick={() =>
-          !locked && navigate(`/units/${unit.id}`, { state: { courseId } })
-        }
+        onClick={() => {
+          if (locked) return;
+          setLastVisitedUnit(courseId, unit.id);
+          navigate(`/units/${unit.id}`, { state: { courseId } });
+        }}
         style={{ border: recommended ? "2px solid var(--accent)" : undefined }}
       >
         {locked ? <Lock size={24} /> : <Icon size={24} />}
@@ -99,6 +105,15 @@ export function CourseUnitsPage() {
   const recommendedIndex =
     level && readingWriting.length > 1 ? recommendedUnitIndex(level, readingWriting.length) : -1;
 
+  const lastUnitId = getLastVisitedUnit(courseId);
+  useEffect(() => {
+    if (!lastUnitId || !unitsQuery.data) return;
+    document.getElementById(`unit-${lastUnitId}`)?.scrollIntoView({ block: "center" });
+    // Only re-run when the fetched unit list actually changes -- lastUnitId
+    // itself never changes without a navigation that unmounts this page.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [unitsQuery.data]);
+
   return (
     <div>
       <h1 style={{ marginBottom: 4 }}>{courseQuery.data?.title ?? t("course_units.default_title")}</h1>
@@ -121,6 +136,7 @@ export function CourseUnitsPage() {
             key={unit.id}
             unit={unit}
             recommended={i === recommendedIndex}
+            current={unit.id === lastUnitId}
             courseId={courseId}
           />
         ))}
@@ -129,7 +145,7 @@ export function CourseUnitsPage() {
           <span className="path-section-label">{t("course_units.speaking")}</span>
         )}
         {speaking.map((unit) => (
-          <PathNode key={unit.id} unit={unit} courseId={courseId} />
+          <PathNode key={unit.id} unit={unit} current={unit.id === lastUnitId} courseId={courseId} />
         ))}
       </div>
     </div>
