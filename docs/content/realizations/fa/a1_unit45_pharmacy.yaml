@@ -1,0 +1,535 @@
+schema_version: "1.1"
+realization_version: "2026.1-draft.1"
+target_language: fa
+cefr_level: A1
+generation_provenance:
+  method: ai_adapted_from_public_domain_source
+  authoring_system: claude
+  source_material: >-
+    Made a real, fresh attempt at FSI Persian Basic Course source access for
+    this unit before authoring fresh, honestly disclosed either way per
+    AUTHORING_GUIDE.md #10. Firecrawl remains at 0 credits this session.
+    Tried WebFetch directly against the Live Lingua-hosted copy
+    (https://www.livelingua.com/fsi/FSI%20-%20Spoken%20Persian.pdf) first,
+    per this task's explicit instruction to try WebFetch before falling
+    back to local extraction -- it returned only a binary-content notice
+    ("compressed object streams with encoded data... not readable as plain
+    text"), no usable text, consistent with this PDF needing a real text
+    layer extracted locally rather than summarized by a fetch-and-model
+    pipeline. Fell back to downloading the PDF directly and running
+    `pdftotext -layout` locally (the same Live Lingua mirror every prior
+    fa unit this session has used, since it carries a real Acrobat Pro DC
+    OCR text layer, unlike the DigitalOcean mirror's JBIG2-only scan) --
+    this extracted 66,717 words, exactly matching every prior fetch of the
+    same file (units 36-44), confirming the extraction is stable and
+    complete, not a truncated fetch. Grepped the full extracted text
+    case-insensitively for pharmac/medicine/drug/prescription/dosage/
+    headache/fever/pill/tablet/drugstore/chemist: zero hits, a genuine dead
+    end (unlike unit44's hotel search, which found 137 real hits). A
+    broader grep for sick/illness/doctor/hospital/health found only
+    scattered vocabulary-list entries (e.g. a glossary line pairing
+    "doktor" with "doctor," a few isolated "health"/"hil" phonetic-drill
+    entries), no structured pharmacy, medicine-request, or dosage-
+    instruction dialogue anywhere in the extracted text. This is
+    consistent with unit17's own review, which already covered this
+    source's general "describe how you feel" health content -- the FSI
+    course simply has no pharmacy-specific material at all, not a
+    extraction failure. All pharmacy vocabulary and the full dialogue in
+    this unit (داروخانه, قرص, قبل, روزی, and the pharmacist exchange) is
+    authored fresh from this project's own established colloquial Iranian
+    Farsi conventions and already-shipped vocabulary (see review notes
+    below for the exact reuse chain), since no such content exists in the
+    FSI source.
+  human_reviewed: false
+review:
+  status: unreviewed
+  required_next_reviewer: codex_fresh_context
+  notes: >-
+    Draft authored 2026-07-09 by Claude (content-authoring worker session),
+    continuing fa A1 volume growth past unit44 (accommodation, merged).
+    Realizes universal.a1.pharmacy.buy_basic_medicine -- confirmed as the
+    next unrealized A1 outcome by a real yaml.safe_load recursive scan
+    (not grep) of every spine_outcome_ids/spine_outcome_id value across
+    all docs/content/realizations/fa/a1_unit*.yaml files against every
+    universal.a1.* id in docs/content/universal_spine.yaml: fa had realized
+    45 of 51 A1 outcomes through unit44, with pharmacy, personal_care,
+    bike_rental, laundry, swimming_pool, restaurant, and cinema remaining
+    -- pharmacy is the first of these in the spine's own declaration order
+    (accommodation -> pharmacy -> personal_care -> bike_rental -> laundry
+    -> swimming_pool -> restaurant -> cinema), so this unit covers it;
+    personal_care/bike_rental/laundry/swimming_pool/restaurant/cinema
+    remain unrealized after this unit. The universal.a1.pharmacy.
+    buy_basic_medicine outcome itself is not new -- it was added earlier
+    this session by the nl (Dutch) content lane (git log confirms nl
+    unit50 "Add nl unit50 (pharmacy: buying medicine)" is its origin), so
+    no new spine outcome needed adding here, just fa catching up to an
+    outcome that already exists. Prerequisite outcomes
+    (health.describe_basic_problem/unit17, shopping.ask_prices_quantities/
+    unit08, numbers.use_basic_numbers/unit03) are all already realized in
+    this course, so no prerequisite gap blocks this unit.
+
+    Reuse chain (all re-declared in this file's own introduced_tokens
+    before first use, per the compiler's per-file-only untaught-vocabulary
+    check, which validates each exercise's tested_text against tokens
+    introduced anywhere earlier in the SAME file's document order) --
+    confirmed with a real Python yaml.safe_load scan of every prior fa
+    a1_unit*.yaml file's introduced_tokens declarations, not by eye:
+    سردرد/دارو (unit17), دارم (unit12), می‌خوام (unit03), کجاست (unit05),
+    این (unit08), خوب (unit13), بعد (unit05), غذا (unit26), از (unit16/
+    unit42), چند (unit03/unit04), تا/دو/نه (unit03), فقط (unit23),
+    می‌تونم (unit20), هم (unit01), باشه (units01/02/06/17/22), ممنون
+    (units01/17/22), خداحافظ (units01/05/16), سلام (unit01), خانم
+    (unit41). New vocabulary genuinely introduced for the first time in
+    the whole corpus: داروخانه (pharmacy), قرص (pill/tablet), قبل
+    (before), and روزی (per day/daily) -- exactly 4 new words, this unit's
+    own deliberate low-new-vocabulary choice given how much directly
+    relevant vocabulary (سردرد، تب، دارو، دارم، می‌خوام) unit17 (health)
+    and unit08 (shopping) already established; the contraction خوبه ("is
+    good," colloquial contraction of خوب است) is declared alongside its
+    base-form خوب review card, the same pattern unit44 used for
+    "آماده‌ست"/"صبحانه‌ست." No new verb-conjugation pattern is
+    introduced -- every verb form used (دارم, می‌خوام, می‌تونم) was
+    already established by an earlier unit.
+
+    Register/character choice, per AUTHORING_GUIDE.md #3: نیما (the
+    established recurring character, previously the patient in unit17's
+    own health dialogue with سارا) is the pharmacy customer, a natural
+    continuation of his established "describes symptoms, gets advice"
+    role. A NEW formal-register character, خانم رضایی, is introduced as
+    the pharmacist (distinct surname from unit41's خانم احمدی, unit42's
+    آقای صادقی, and unit44's آقای کریمی -- confirmed via a real regex
+    scan of every آقای/خانم name already used across the fa corpus, zero
+    collision); she speaks in neutral polite service language (دارید-
+    register is available but not needed in this exchange's actual
+    lines), consistent with the receptionist/librarian/hotel-clerk
+    register already established in units 41/42/44, while نیما keeps the
+    same informal register he uses everywhere else in the corpus. Facts
+    are kept internally consistent across the whole unit per
+    AUTHORING_GUIDE.md #11: the dosage (two pills a day, after food, NOT
+    before food) is stated identically in the dialogue (lesson04), the
+    reading note (lesson05), and the wrap-up review (lesson06), and never
+    contradicted -- lesson04's own dialogue explicitly has نیما ask about
+    taking it before food and be told no, so the "after food only" fact is
+    actively reinforced rather than just asserted once. Every
+    kind:vocabulary card (داروخانه، قرص، قبل، روزی) has an example
+    sentence per schema 1.1/AUTHORING_GUIDE §19, built only from the
+    card's own word plus tokens already declared earlier in THIS file (no
+    forward references). Every matching_pairs exercise has 6-7 pairs per
+    §16 (lesson01: 6, lesson02: 6, lesson03: 7, lesson04: 7 dialogue-line
+    pairs matching the dialogue's own 7 turns, lesson05: 6, lesson06: 6).
+    No listen_type/listen_select/listen_order exercise is used anywhere in
+    this unit -- fa has real TTS per AUTHORING_GUIDE §14, but this file
+    continues the established text-based corpus-consistency pattern from
+    units 19-44, the same choice those units' own reviews made; this also
+    means the same-speaker/same-audio distractor-collision bug class
+    (found and fixed 2026-07-09 in the nl corpus, commit 148240e) cannot
+    directly apply here -- there is no listen_select exercise in this file
+    to check. Checked anyway, since lesson04's dialogue_comprehension
+    exercise is the closest analogue: its three distractors ("He wants to
+    know if the medicine is expensive."/"He wants to know where the
+    pharmacy is."/"He wants to know if he needs to see a doctor.") are
+    plausible-fact alternatives, NOT lines either dialogue speaker (نیما
+    or خانم رضایی) actually says or facts either speaker actually states
+    anywhere in this unit's dialogue -- price, the pharmacy's location, and
+    seeing a doctor are never mentioned by either speaker in this dialogue
+    at all. Deliberately avoided a distractor like "he wants to know if he
+    can take it before food" precisely because نیما DOES ask that later in
+    the same dialogue ("قبل از غذا هم می‌تونم؟") -- that would have been a
+    real distractor/dialogue-content collision of the same shape as the
+    documented same-speaker-audio footgun, even though this exercise isn't
+    audio-based. Every "Translate into English" exercise in the paired
+    overlay explicitly sets answer_language_code: en. No exercise in this
+    unit tests a genuine two-clause sentence (§12) -- every translated
+    sentence is a single clause or a colon-separated label-style note
+    (lesson05's reading text, matching unit43/unit44's own treatment of
+    their colon-separated notes with paraphrase-variant accepted answers
+    rather than clause-join variants). Ran a recursive yaml.safe_load scan
+    over this file and its paired overlay for bare unquoted yes/no/true/
+    false/on/off values (including matching_pairs right: values
+    specifically) -- zero hits, see the overlay's own review note for the
+    exact scan result.
+
+course:
+  realization_key: fa.a1
+  target_language_first: true
+  dialect: fa_IR_standard_colloquial_intro
+  register_policy: >-
+    Continues the established colloquial Iranian Farsi register: نیما (the
+    established recurring character, the patient in unit17's own health
+    dialogue) keeps his usual informal register as the pharmacy customer.
+    خانم رضایی, a new formal-register pharmacist character, speaks with
+    neutral polite service language, consistent with the register unit41's
+    خانم احمدی, unit42's آقای صادقی, and unit44's آقای کریمی already
+    established for this course's other service-encounter characters.
+    Reuses سردرد/دارو (unit17), دارم (unit12), می‌خوام (unit03), کجاست
+    (unit05), این (unit08), خوب (unit13), بعد (unit05), غذا (unit26), از
+    (unit16/unit42), چند/تا/دو/نه (unit03/unit04), فقط (unit23), می‌تونم
+    (unit20), هم (unit01), باشه/ممنون/خداحافظ/سلام (units01/02/05/06/16/
+    17/22), and خانم (unit41) without re-teaching any of it from scratch.
+    No word is given a new sense beyond its existing corpus meaning in
+    this unit.
+
+media_assets:
+  - content_key: fa.a1.unit45.audio.pharmacy.vocab.01
+    language: fa
+    text: "داروخانه، قرص، قبل، روزی"
+    voice_hint: neutral_adult
+    status: pending_generation
+  - content_key: fa.a1.unit45.audio.dialogue.pharmacy.01
+    language: fa
+    text: "نیما: سلام. سردرد دارم. دارو می‌خوام. خانم رضایی: سلام. این قرص خوبه. نیما: روزی چند تا؟ خانم رضایی: روزی دو تا، بعد از غذا. نیما: قبل از غذا هم می‌تونم؟ خانم رضایی: نه، فقط بعد از غذا. نیما: باشه، ممنون. خداحافظ!"
+    voice_hint: two_adults_neutral_friendly
+    status: pending_generation
+
+units:
+  - content_key: fa.a1.unit45.pharmacy
+    title: داروخانه
+    section: reading_writing
+    spine_outcome_ids:
+      - universal.a1.pharmacy.buy_basic_medicine
+    planned_lesson_count: 6
+
+    lessons:
+      - content_key: fa.a1.unit45.lesson01.new_pharmacy_one
+        title: "کلمات جدید ۱"
+        spine_outcome_id: universal.a1.pharmacy.buy_basic_medicine
+        teaching:
+          - content_key: fa.a1.unit45.lesson01.teach.review_sardard_daram
+            kind: grammar_note
+            target: {text: "سردرد (headache) -- already taught from unit17 / دارم (I have) -- already taught from unit12", language_code: fa, direction: rtl}
+            introduced_tokens: [سردرد, دارم]
+          - content_key: fa.a1.unit45.lesson01.teach.review_daroo_mikhaam
+            kind: grammar_note
+            target: {text: "دارو (medicine) -- already taught from unit17 / می‌خوام (I want) -- already taught from unit03", language_code: fa, direction: rtl}
+            introduced_tokens: [دارو, "می‌خوام"]
+          - content_key: fa.a1.unit45.lesson01.teach.review_kojast
+            kind: grammar_note
+            target: {text: "کجاست (where is) -- already taught from unit05", language_code: fa, direction: rtl}
+            introduced_tokens: [کجاست]
+          - content_key: fa.a1.unit45.lesson01.teach.daroukhane
+            kind: vocabulary
+            target: {text: داروخانه, language_code: fa, direction: rtl}
+            introduced_tokens: [داروخانه]
+            example: {text: "داروخانه کجاست؟", language_code: fa, direction: rtl}
+        exercises:
+          - content_key: fa.a1.unit45.lesson01.exercise01.recognize_daroukhane
+            type: multiple_choice
+            tested_text: داروخانه
+            prompt: {target_blocks: [{text: داروخانه, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit45.lesson01.exercise02.recognize_daroukhane_kojast
+            type: multiple_choice
+            tested_text: "داروخانه کجاست؟"
+            prompt: {target_blocks: [{text: "داروخانه کجاست؟", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit45.lesson01.exercise03.match_pharmacy_one
+            type: matching_pairs
+            tested_text: "داروخانه دارو سردرد دارم کجاست می‌خوام"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: داروخانه, right: pharmacy}
+              - {left: دارو, right: medicine}
+              - {left: سردرد, right: headache}
+              - {left: دارم, right: "I have"}
+              - {left: کجاست, right: "where is"}
+              - {left: "می‌خوام", right: "I want"}
+          - content_key: fa.a1.unit45.lesson01.exercise04.word_order_daroukhane_kojast
+            type: word_order
+            tested_text: "داروخانه کجاست"
+            prompt: {target_blocks: [{text: "Where is the pharmacy?", language_code: en, direction: ltr}]}
+            word_bank: [داروخانه, کجاست]
+          - content_key: fa.a1.unit45.lesson01.exercise05.translate_daroo_mikhaam
+            type: translation
+            tested_text: "دارو می‌خوام."
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit45.lesson02.new_pharmacy_two
+        title: "کلمات جدید ۲"
+        spine_outcome_id: universal.a1.pharmacy.buy_basic_medicine
+        teaching:
+          - content_key: fa.a1.unit45.lesson02.teach.review_in
+            kind: grammar_note
+            target: {text: "این (this) -- already taught from unit08", language_code: fa, direction: rtl}
+            introduced_tokens: [این]
+          - content_key: fa.a1.unit45.lesson02.teach.review_khoob
+            kind: grammar_note
+            target: {text: "خوب (good) -- already taught from unit13 / خوبه (contracted 'is good') -- colloquial contraction of خوب است", language_code: fa, direction: rtl}
+            introduced_tokens: [خوب, خوبه]
+          - content_key: fa.a1.unit45.lesson02.teach.gors
+            kind: vocabulary
+            target: {text: قرص, language_code: fa, direction: rtl}
+            introduced_tokens: [قرص]
+            example: {text: "این قرص خوبه.", language_code: fa, direction: rtl}
+        exercises:
+          - content_key: fa.a1.unit45.lesson02.exercise01.recognize_gors
+            type: multiple_choice
+            tested_text: قرص
+            prompt: {target_blocks: [{text: قرص, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit45.lesson02.exercise02.recognize_in_gors_khoobe
+            type: multiple_choice
+            tested_text: "این قرص خوبه."
+            prompt: {target_blocks: [{text: "این قرص خوبه.", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit45.lesson02.exercise03.match_pharmacy_two
+            type: matching_pairs
+            tested_text: "قرص این خوب خوبه داروخانه دارو"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: قرص, right: "pill / tablet"}
+              - {left: این, right: this}
+              - {left: خوب, right: good}
+              - {left: خوبه, right: "is good"}
+              - {left: داروخانه, right: pharmacy}
+              - {left: دارو, right: medicine}
+          - content_key: fa.a1.unit45.lesson02.exercise04.word_order_in_gors_khoobe
+            type: word_order
+            tested_text: "این قرص خوبه"
+            prompt: {target_blocks: [{text: "This pill is good.", language_code: en, direction: ltr}]}
+            word_bank: [این, قرص, خوبه]
+          - content_key: fa.a1.unit45.lesson02.exercise05.translate_gors_mikhaam
+            type: translation
+            tested_text: "قرص می‌خوام."
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit45.lesson03.dosage_timing
+        title: "زمان مصرف دارو"
+        spine_outcome_id: universal.a1.pharmacy.buy_basic_medicine
+        teaching:
+          - content_key: fa.a1.unit45.lesson03.teach.review_bad_ghaza
+            kind: grammar_note
+            target: {text: "بعد (after) -- already taught from unit05 / غذا (food, meal) -- already taught from unit26", language_code: fa, direction: rtl}
+            introduced_tokens: [بعد, غذا]
+          - content_key: fa.a1.unit45.lesson03.teach.review_az
+            kind: grammar_note
+            target: {text: "از (from) -- already taught from unit16/unit42", language_code: fa, direction: rtl}
+            introduced_tokens: [از]
+          - content_key: fa.a1.unit45.lesson03.teach.review_chand_ta_do
+            kind: grammar_note
+            target: {text: "چند (how many) -- already taught from unit03/unit04 / تا (counter word) -- already taught from unit03 / دو (two) -- already taught from unit03", language_code: fa, direction: rtl}
+            introduced_tokens: [چند, تا, دو]
+          - content_key: fa.a1.unit45.lesson03.teach.review_na_faghat
+            kind: grammar_note
+            target: {text: "نه (no) -- already taught from unit03 / فقط (only) -- already taught from unit23", language_code: fa, direction: rtl}
+            introduced_tokens: [نه, فقط]
+          - content_key: fa.a1.unit45.lesson03.teach.ghabl
+            kind: vocabulary
+            target: {text: قبل, language_code: fa, direction: rtl}
+            introduced_tokens: [قبل]
+            example: {text: "قبل از غذا", language_code: fa, direction: rtl}
+          - content_key: fa.a1.unit45.lesson03.teach.roozi
+            kind: vocabulary
+            target: {text: روزی, language_code: fa, direction: rtl}
+            introduced_tokens: [روزی]
+            example: {text: "روزی دو تا", language_code: fa, direction: rtl}
+        exercises:
+          - content_key: fa.a1.unit45.lesson03.exercise01.recognize_ghabl
+            type: multiple_choice
+            tested_text: قبل
+            prompt: {target_blocks: [{text: قبل, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit45.lesson03.exercise02.recognize_roozi_do_ta
+            type: multiple_choice
+            tested_text: "روزی دو تا"
+            prompt: {target_blocks: [{text: "روزی دو تا", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit45.lesson03.exercise03.match_dosage_timing
+            type: matching_pairs
+            tested_text: "قبل بعد غذا روزی روزی دو تا قبل از غذا بعد از غذا"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: قبل, right: before}
+              - {left: بعد, right: after}
+              - {left: غذا, right: "food, meal"}
+              - {left: روزی, right: "per day, daily"}
+              - {left: "روزی دو تا", right: "two a day"}
+              - {left: "قبل از غذا", right: "before food"}
+              - {left: "بعد از غذا", right: "after food"}
+          - content_key: fa.a1.unit45.lesson03.exercise04.word_order_roozi_do_ta
+            type: word_order
+            tested_text: "روزی دو تا"
+            prompt: {target_blocks: [{text: "Two a day.", language_code: en, direction: ltr}]}
+            word_bank: [روزی, دو, تا]
+          - content_key: fa.a1.unit45.lesson03.exercise05.translate_bad_az_ghaza
+            type: translation
+            tested_text: "بعد از غذا."
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit45.lesson04.pharmacy_dialogue
+        title: "دیالوگ: در داروخانه"
+        spine_outcome_id: universal.a1.pharmacy.buy_basic_medicine
+        teaching:
+          - content_key: fa.a1.unit45.lesson04.teach.review_salam_mamnoon
+            kind: grammar_note
+            target: {text: "سلام و ممنون -- already taught from units 01/17/22", language_code: fa, direction: rtl}
+            introduced_tokens: [سلام, ممنون]
+          - content_key: fa.a1.unit45.lesson04.teach.review_bashe
+            kind: grammar_note
+            target: {text: "باشه (okay) -- already taught from units 01/02/06/17/22", language_code: fa, direction: rtl}
+            introduced_tokens: [باشه]
+          - content_key: fa.a1.unit45.lesson04.teach.review_khodahafez
+            kind: grammar_note
+            target: {text: "خداحافظ (goodbye) -- already taught from units 01/05/16", language_code: fa, direction: rtl}
+            introduced_tokens: [خداحافظ]
+          - content_key: fa.a1.unit45.lesson04.teach.review_mitoonam_ham
+            kind: grammar_note
+            target: {text: "می‌تونم (I can) -- already taught from unit20 / هم (also, too) -- already taught from unit01", language_code: fa, direction: rtl}
+            introduced_tokens: ["می‌تونم", هم]
+          - content_key: fa.a1.unit45.lesson04.teach.review_khanoom
+            kind: grammar_note
+            target: {text: "خانم (Ms., madam) -- already taught from unit41 / داره (has, colloquial 3rd person) -- already taught from unit04", language_code: fa, direction: rtl}
+            introduced_tokens: [خانم, داره]
+          - content_key: fa.a1.unit45.lesson04.teach.character_rezaei
+            kind: vocabulary
+            target: {text: "خانم رضایی", language_code: fa, direction: rtl}
+            introduced_tokens: [رضایی]
+            example: {text: "خانم رضایی داروخانه داره.", language_code: fa, direction: rtl}
+          - content_key: fa.a1.unit45.lesson04.teach.dialogue_line1
+            kind: dialogue
+            target: {text: "سلام. سردرد دارم. دارو می‌خوام.", language_code: fa, direction: rtl, speaker: نیما}
+            introduced_tokens: []
+          - content_key: fa.a1.unit45.lesson04.teach.dialogue_line2
+            kind: dialogue
+            target: {text: "سلام. این قرص خوبه.", language_code: fa, direction: rtl, speaker: "خانم رضایی"}
+            introduced_tokens: []
+          - content_key: fa.a1.unit45.lesson04.teach.dialogue_line3
+            kind: dialogue
+            target: {text: "روزی چند تا؟", language_code: fa, direction: rtl, speaker: نیما}
+            introduced_tokens: []
+          - content_key: fa.a1.unit45.lesson04.teach.dialogue_line4
+            kind: dialogue
+            target: {text: "روزی دو تا، بعد از غذا.", language_code: fa, direction: rtl, speaker: "خانم رضایی"}
+            introduced_tokens: []
+          - content_key: fa.a1.unit45.lesson04.teach.dialogue_line5
+            kind: dialogue
+            target: {text: "قبل از غذا هم می‌تونم؟", language_code: fa, direction: rtl, speaker: نیما}
+            introduced_tokens: []
+          - content_key: fa.a1.unit45.lesson04.teach.dialogue_line6
+            kind: dialogue
+            target: {text: "نه، فقط بعد از غذا.", language_code: fa, direction: rtl, speaker: "خانم رضایی"}
+            introduced_tokens: []
+          - content_key: fa.a1.unit45.lesson04.teach.dialogue_line7
+            kind: dialogue
+            target: {text: "باشه، ممنون. خداحافظ!", language_code: fa, direction: rtl, speaker: نیما}
+            introduced_tokens: []
+        exercises:
+          - content_key: fa.a1.unit45.lesson04.exercise01.dialogue_comprehension_dosage
+            type: dialogue_comprehension
+            tested_text: "سلام سردرد دارم دارو می‌خوام سلام این قرص خوبه روزی چند تا روزی دو تا بعد از غذا قبل از غذا هم می‌تونم نه فقط بعد از غذا باشه ممنون خداحافظ"
+            prompt: {target_blocks: [{text: "روزی چند تا؟", language_code: fa, direction: rtl}]}
+            correct_option: "He wants to know how many pills to take per day."
+            distractors:
+              - "He wants to know if the medicine is expensive."
+              - "He wants to know where the pharmacy is."
+              - "He wants to know if he needs to see a doctor."
+          - content_key: fa.a1.unit45.lesson04.exercise02.recognize_dialogue_line6
+            type: multiple_choice
+            tested_text: "نه، فقط بعد از غذا."
+            prompt: {target_blocks: [{text: "نه، فقط بعد از غذا.", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit45.lesson04.exercise03.match_dialogue_pharmacy
+            type: matching_pairs
+            tested_text: "سلام سردرد دارم دارو می‌خوام سلام این قرص خوبه روزی چند تا روزی دو تا بعد از غذا قبل از غذا هم می‌تونم نه فقط بعد از غذا باشه ممنون خداحافظ"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "سلام. سردرد دارم. دارو می‌خوام.", right: "Hi. I have a headache. I want medicine."}
+              - {left: "سلام. این قرص خوبه.", right: "Hi. This pill is good."}
+              - {left: "روزی چند تا؟", right: "How many a day?"}
+              - {left: "روزی دو تا، بعد از غذا.", right: "Two a day, after food."}
+              - {left: "قبل از غذا هم می‌تونم؟", right: "Can I also before food?"}
+              - {left: "نه، فقط بعد از غذا.", right: "No, only after food."}
+              - {left: "باشه، ممنون. خداحافظ!", right: "Okay, thanks. Goodbye!"}
+          - content_key: fa.a1.unit45.lesson04.exercise04.dialogue_response_dosage
+            type: dialogue_response
+            tested_text: "روزی دو تا، بعد از غذا."
+            prompt: {target_blocks: [{text: "روزی چند تا؟", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit45.lesson04.exercise05.translate_ghabl_az_ghaza_ham
+            type: translation
+            tested_text: "قبل از غذا هم می‌تونم؟"
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit45.lesson05.reading_dosage_note
+        title: "خواندن برچسب دارو"
+        spine_outcome_id: universal.a1.pharmacy.buy_basic_medicine
+        teaching:
+          - content_key: fa.a1.unit45.lesson05.teach.reading_text
+            kind: reading
+            target: {text: "قرص سردرد: روزی دو تا، بعد از غذا.", language_code: fa, direction: rtl}
+            introduced_tokens: []
+        exercises:
+          - content_key: fa.a1.unit45.lesson05.exercise01.reading_comprehension_what_for
+            type: reading_comprehension
+            tested_text: "قرص سردرد: روزی دو تا، بعد از غذا."
+            prompt: {target_blocks: [{text: "قرص سردرد: روزی دو تا، بعد از غذا.", language_code: fa, direction: rtl}]}
+            correct_option: "A headache."
+            distractors:
+              - "A fever."
+              - "A stomachache."
+              - "Tiredness."
+          - content_key: fa.a1.unit45.lesson05.exercise02.reading_comprehension_how_many
+            type: reading_comprehension
+            tested_text: "قرص سردرد: روزی دو تا، بعد از غذا."
+            prompt: {target_blocks: [{text: "قرص سردرد: روزی دو تا، بعد از غذا.", language_code: fa, direction: rtl}]}
+            correct_option: "Two, after food."
+            distractors:
+              - "One, before food."
+              - "Three, before food."
+              - "Two, before food."
+          - content_key: fa.a1.unit45.lesson05.exercise03.match_reading_dosage
+            type: matching_pairs
+            tested_text: "قرص سردرد روزی دو تا بعد غذا"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: قرص, right: pill}
+              - {left: سردرد, right: headache}
+              - {left: روزی, right: "per day"}
+              - {left: "دو تا", right: "two (of them)"}
+              - {left: بعد, right: after}
+              - {left: غذا, right: food}
+          - content_key: fa.a1.unit45.lesson05.exercise04.translate_reading_dosage
+            type: translation
+            tested_text: "قرص سردرد: روزی دو تا، بعد از غذا."
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit45.lesson05.exercise05.write_dosage_note
+            type: writing_prompt
+            tested_text: "قرص سردرد: روزی دو تا، بعد از غذا."
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit45.lesson06.wrap_up
+        title: "جمع‌بندی داروخانه"
+        spine_outcome_id: universal.a1.pharmacy.buy_basic_medicine
+        teaching:
+          - content_key: fa.a1.unit45.lesson06.teach.review_request
+            kind: phrase
+            target: {text: "دارو می‌خوام. سردرد دارم.", language_code: fa, direction: rtl}
+            introduced_tokens: []
+          - content_key: fa.a1.unit45.lesson06.teach.review_dosage
+            kind: phrase
+            target: {text: "روزی دو تا، بعد از غذا.", language_code: fa, direction: rtl}
+            introduced_tokens: []
+          - content_key: fa.a1.unit45.lesson06.teach.summary_words
+            kind: grammar_note
+            target: {text: "داروخانه / قرص / قبل / بعد / غذا / روزی -- کلمات این درس", language_code: fa, direction: rtl}
+            introduced_tokens: []
+        exercises:
+          - content_key: fa.a1.unit45.lesson06.exercise01.recognize_review_request
+            type: multiple_choice
+            tested_text: "دارو می‌خوام. سردرد دارم."
+            prompt: {target_blocks: [{text: "دارو می‌خوام. سردرد دارم.", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit45.lesson06.exercise02.recognize_review_dosage
+            type: multiple_choice
+            tested_text: "روزی دو تا، بعد از غذا."
+            prompt: {target_blocks: [{text: "روزی دو تا، بعد از غذا.", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit45.lesson06.exercise03.match_wrap_pharmacy
+            type: matching_pairs
+            tested_text: "داروخانه قرص قبل بعد غذا روزی"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: داروخانه, right: pharmacy}
+              - {left: قرص, right: "pill / tablet"}
+              - {left: قبل, right: before}
+              - {left: بعد, right: after}
+              - {left: غذا, right: "food, meal"}
+              - {left: روزی, right: "per day, daily"}
+          - content_key: fa.a1.unit45.lesson06.exercise04.word_order_gors_mikhaam
+            type: word_order
+            tested_text: "قرص می‌خوام"
+            prompt: {target_blocks: [{text: "I want a pill.", language_code: en, direction: ltr}]}
+            word_bank: [قرص, "می‌خوام"]
+          - content_key: fa.a1.unit45.lesson06.exercise05.write_pharmacy_sentence
+            type: writing_prompt
+            tested_text: "روزی دو تا"
+            prompt: {target_blocks: []}
