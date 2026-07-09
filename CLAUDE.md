@@ -475,6 +475,42 @@ to the authoring reasoning) before import.
   text/voice_hint/status) into one project-wide recording queue,
   cross-referenced against `backend/media_assets/` (Phase D
   scaffolding; the actual serving route is Phase D3, not built yet).
+- **Firecrawl CLI (`firecrawl search`/`firecrawl scrape`/`firecrawl
+  map`), added 2026-07-09** — a real, working alternative to the
+  ad-hoc `WebFetch` + manual `pdftotext -layout` (or page-by-page image
+  reading for scanned PDFs) every content-authoring dispatch has been
+  doing all session to check FSI/Peace Corps/DLI source material.
+  Needs `FIRECRAWL_API_KEY` set (ask Ramin if a session doesn't have
+  it — never hardcode or persist the key to a committed file, and
+  never embed it directly in a shell command argument, which exposes
+  it in shell history/process listings; the safe pattern is
+  `firecrawl login --api-key ...` run once by Ramin himself, after
+  which the CLI reads stored credentials with no key in later
+  commands). `.firecrawl/` (scratch output dir) is gitignored — always
+  write search/scrape output there with `-o`, never assume the shell
+  tool's stdout capture is enough for large results.
+
+  **Confirmed via a real live test the same day**: search + scrape
+  found a genuinely new, previously-untapped public-domain source —
+  the DLI (Defense Language Institute) Dari Basic Course at
+  `https://fsi-languages.yojik.eu/languages/DLI/Dari/Books/` (36
+  files: a real 40-lesson course across 3 semesters, both student "S
+  Book" and teacher "T Book" volumes, plus short stories/proverbs/
+  dialogue scenarios) — cleanly text-extractable via
+  `firecrawl scrape`, unlike Peace Corps Dari's scanned-only PDFs
+  (a dead end hit almost every single prs content round this session).
+  **This is a standing instruction, not a one-off**: any future
+  content-authoring dispatch for ANY of this project's 18 language
+  paths should try `firecrawl search`/`firecrawl scrape` for real
+  source material FIRST (FSI/Peace Corps/DLI or any other public-
+  domain course for that specific language), before falling back to
+  established-conventions-only authoring — this is strictly better
+  than the old manual PDF-wrangling approach and should replace it as
+  the default research step, not just supplement it. Still disclose
+  honestly in `generation_provenance` either way (found real usable
+  content vs. genuinely nothing usable), same standard as before —
+  Firecrawl makes the search easier, it doesn't change the honesty
+  requirement.
 
 ## Verification bar (non-negotiable)
 
