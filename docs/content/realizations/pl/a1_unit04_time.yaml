@@ -1,0 +1,458 @@
+schema_version: "1.1"
+realization_version: "2026.1-draft.1"
+target_language: "pl"
+cefr_level: "A1"
+status: "complete_draft"
+generation_provenance:
+  method: "ai_generated"
+  authoring_system: "claude"
+  human_reviewed: false
+review:
+  status: "unreviewed"
+  required_next_reviewer: "codex"
+  notes: >-
+    Fourth Polish unit, continuing directly from pl/a1_unit03_dates.yaml
+    (same Ewa/Marek characters, same formal pan/pani register, same
+    3-lesson bootstrap pace). Realizes universal.a1.time.ask_tell_time --
+    confirmed the next A1 outcome in spine order after
+    dates.exchange_calendar_dates via docs/content/universal_spine.yaml
+    (spine file's own linear ordering is greetings -> introductions ->
+    numbers -> dates -> time -> family -> ..., and time's own
+    `prerequisites` list names numbers.use_basic_numbers, already
+    satisfied by unit02). Checked nl/a1_unit04_time.yaml (the reference
+    language) for the topic precedent: nl's own unit04 is also "time,"
+    confirming this is the correct next outcome rather than a
+    language-specific ordering choice (fa/prs went family next instead,
+    but their own course order diverges from spine order in several
+    other places too -- nl is the one that tracks the spine file's own
+    linear order exactly, same as this pl course has for units 01-03).
+
+    Authored from the start in AUTHORING_GUIDE §19 format (schema_version
+    1.1): every kind:vocabulary card carries a real example sentence.
+    Zero listen_type/listen_select/listen_order exercises anywhere in
+    this file, matching unit01/02/03's own established choice for this
+    corpus -- pl now has real Google Cloud TTS (pl-PL-Wavenet-F) live per
+    this session's own briefing, so audio-dependent exercises are no
+    longer blocked by AUTHORING_GUIDE §14's concern, but this file stays
+    consistent with the precedent unit01-03 already set (every exercise
+    uses a real visible text prompt) rather than introducing the first
+    audio-dependent exercise unilaterally in the same pass as a brand-new
+    grammar topic -- a future dedicated audio-authoring pass remains a
+    real, cheap opportunity now that TTS is wired, same disclosure as
+    unit03's own note. media_assets is therefore an empty list, not an
+    oversight. dialogue_comprehension exercises in lesson03 render via
+    the same MultipleChoice component as multiple_choice/listen_select
+    (frontend/src/components/exercises/ExerciseRenderer.tsx) and are
+    given real target_blocks text instead of a media_asset_key, matching
+    unit01/02/03's own pattern.
+
+    Cross-file vocabulary note (confirmed every prior unit hit this too):
+    every word this file reuses from unit01/02/03 (piątek, piętnastego,
+    maja, mi, odpowiada, Do, zobaczenia, Świetnie) is re-declared via
+    this file's OWN introduced_tokens before being tested in this file's
+    own exercises -- the compiler validates untaught vocabulary per
+    realization FILE, not per course, so no cross-file credit is given
+    even for words already taught in an earlier unit of the same course.
+
+    Source: FSI Polish FAST (1992) -- confirmed real public-domain US
+    government course text, same cached copy as unit02/unit03
+    (.firecrawl/fsi-polish-fast.pdf / .txt). One real section used, pp.
+    219-220 ("TELLING TIME" -- the full 1-12 o'clock table using the
+    feminine ordinal-numeral forms with godzina implied, e.g. "1 o'clock
+    pierwsza" through "12 o'clock dwunasta") and its immediately-following
+    time-of-day table (rano, w południe, po południu, wieczorem, w nocy)
+    plus five real worked examples combining an hour with a time-of-day
+    (o siódmej rano, o dwunastej w południe, o czwartej po południu, o
+    dziewiątej wieczorem, o jedenastej w nocy) -- both tables used
+    directly as real vocabulary (not sentence-level copying), adapted
+    into this unit's own fresh example sentences and Ewa/Marek dialogue
+    rather than reused as the source's own bare list. The locative "at
+    [hour]" pattern (czwarta -> o czwartej, siódma -> o siódmej, etc.,
+    adding -ej) is confirmed directly from the source's own five worked
+    examples, not guessed -- every one of the source's five sample hours
+    (siódmej, dwunastej, czwartej, dziewiątej, jedenastej) independently
+    confirms the same -ej locative ending. "O której (godzinie)" (at what
+    time) is confirmed from the source's own glossary (p. 244, "o której
+    (godzinie) -- what time"). The plain "Która jest godzina?" (what time
+    is it right now, as opposed to "at what time will X happen") is NOT
+    in the source -- disclosed honestly, freely authored from general
+    knowledge of standard modern spoken Polish, the single most common
+    beginner phrase for asking the current time and safe A1 content by
+    any standard reference.
+
+    The lesson03 Ewa/Marek dialogue (continuing directly from
+    a1_unit03_dates.yaml's ending, where they agreed to meet Friday, 15
+    May, but never fixed a time) and its specific chosen time (4pm) are
+    freshly authored, continuing unit01/02/03's characters and register.
+    Cross-checked against unit03 per AUTHORING_GUIDE §11: this unit's own
+    unrelated example sentences (Ewa's 7am wake-up time, the train's 4pm
+    departure) are deliberately NOT presented as facts about the Friday
+    15 May meeting itself, specifically to avoid an accidental
+    fact-collision with the meeting's own independently-agreed 4pm time
+    landing on the same hour by coincidence and reading as a continuity
+    error -- confirmed by design, not caught after the fact: the train's
+    4pm-departure example was chosen deliberately as a plausible everyday
+    coincidence (two unrelated things both happening to be scheduled for
+    4pm is unremarkable), not a contradiction, and no exercise anywhere
+    in this file asks the learner to reconcile the two.
+
+course:
+  realization_key: pl.a1
+  target_language_first: true
+  dialect: pl_standard
+  register_policy: >-
+    Continue unit01/02/03's register split exactly: Ewa and Marek stay in
+    the formal pan/pani register in narration, though this unit's own
+    dialogue (a continuing, now-familiar acquaintance exchange) uses the
+    plain first-person/third-person time statements established by
+    unit03's own closing dialogue rather than reintroducing pan/pani
+    forms mid-scheduling-exchange, matching unit03's own register choice
+    for the identical Ewa/Marek scheduling scenario.
+
+media_assets: []
+
+units:
+  - content_key: pl.a1.unit04.time
+    title: "Czas i godziny"
+    section: reading_writing
+    spine_outcome_ids:
+      - universal.a1.time.ask_tell_time
+    planned_lesson_count: 3
+
+    lessons:
+      - content_key: pl.a1.unit04.lesson01.ktora_godzina
+        title: "Która godzina?"
+        spine_outcome_id: universal.a1.time.ask_tell_time
+        teaching:
+          - content_key: pl.a1.unit04.lesson01.teach.pierwsza_druga_trzecia
+            kind: vocabulary
+            target: {text: "pierwsza, druga, trzecia", language_code: pl, direction: ltr}
+            introduced_tokens: ["pierwsza", "druga", "trzecia"]
+            example:
+              - {text: "Jest pierwsza.", language_code: pl, direction: ltr}
+              - {text: "Jest druga.", language_code: pl, direction: ltr}
+              - {text: "Jest trzecia.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit04.lesson01.teach.czwarta_piata_szosta
+            kind: vocabulary
+            target: {text: "czwarta, piąta, szósta", language_code: pl, direction: ltr}
+            introduced_tokens: ["czwarta", "piąta", "szósta"]
+            example:
+              - {text: "Jest czwarta.", language_code: pl, direction: ltr}
+              - {text: "Jest piąta.", language_code: pl, direction: ltr}
+              - {text: "Jest szósta.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit04.lesson01.teach.siodma_osma_dziewiata
+            kind: vocabulary
+            target: {text: "siódma, ósma, dziewiąta", language_code: pl, direction: ltr}
+            introduced_tokens: ["siódma", "ósma", "dziewiąta"]
+            example:
+              - {text: "Jest siódma.", language_code: pl, direction: ltr}
+              - {text: "Jest ósma.", language_code: pl, direction: ltr}
+              - {text: "Jest dziewiąta.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit04.lesson01.teach.dziesiata_jedenasta_dwunasta
+            kind: vocabulary
+            target: {text: "dziesiąta, jedenasta, dwunasta", language_code: pl, direction: ltr}
+            introduced_tokens: ["dziesiąta", "jedenasta", "dwunasta"]
+            example:
+              - {text: "Jest dziesiąta.", language_code: pl, direction: ltr}
+              - {text: "Jest jedenasta.", language_code: pl, direction: ltr}
+              - {text: "Jest dwunasta.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit04.lesson01.teach.ktora_jest_godzina
+            kind: phrase
+            target: {text: "Która jest godzina?", language_code: pl, direction: ltr}
+            introduced_tokens: ["Która", "jest", "godzina"]
+          - content_key: pl.a1.unit04.lesson01.teach.godzina_note
+            kind: grammar_note
+            target: {text: "Mówimy pierwsza, druga, trzecia -- nie pierwszy, drugi, trzeci.", language_code: pl, direction: ltr}
+            introduced_tokens: ["Mówimy", "nie"]
+        exercises:
+          - content_key: pl.a1.unit04.lesson01.exercise01.select_trzecia
+            type: multiple_choice
+            tested_text: "trzecia"
+            prompt:
+              target_blocks:
+                - {text: "trzecia", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit04.lesson01.exercise02.select_siodma
+            type: multiple_choice
+            tested_text: "siódma"
+            prompt:
+              target_blocks:
+                - {text: "siódma", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit04.lesson01.exercise03.select_dwunasta
+            type: multiple_choice
+            tested_text: "dwunasta"
+            prompt:
+              target_blocks:
+                - {text: "dwunasta", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit04.lesson01.exercise04.match_hours
+            type: matching_pairs
+            tested_text: "pierwsza druga trzecia czwarta piąta szósta siódma ósma dziewiąta dziesiąta jedenasta dwunasta"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "pierwsza", right: "one o'clock"}
+              - {left: "druga", right: "two o'clock"}
+              - {left: "trzecia", right: "three o'clock"}
+              - {left: "czwarta", right: "four o'clock"}
+              - {left: "piąta", right: "five o'clock"}
+              - {left: "szósta", right: "six o'clock"}
+              - {left: "siódma", right: "seven o'clock"}
+              - {left: "ósma", right: "eight o'clock"}
+              - {left: "dziewiąta", right: "nine o'clock"}
+              - {left: "dziesiąta", right: "ten o'clock"}
+              - {left: "jedenasta", right: "eleven o'clock"}
+              - {left: "dwunasta", right: "twelve o'clock"}
+          - content_key: pl.a1.unit04.lesson01.exercise05.order_time_question
+            type: word_order
+            tested_text: "Która jest godzina"
+            prompt: {target_blocks: []}
+            word_bank: ["jest", "Która", "godzina"]
+          - content_key: pl.a1.unit04.lesson01.exercise06.order_its_three
+            type: word_order
+            tested_text: "Jest trzecia"
+            prompt: {target_blocks: []}
+            word_bank: ["trzecia", "Jest"]
+          - content_key: pl.a1.unit04.lesson01.exercise07.fill_current_time
+            type: fill_in_blank
+            tested_text: "piąta"
+            prompt:
+              target_blocks:
+                - {text: "Jest ___.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit04.lesson01.exercise08.fix_hour_gender
+            type: grammar_check
+            tested_text: "Jest piąta"
+            prompt:
+              target_blocks:
+                - {text: "Jest piąty.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit04.lesson01.exercise09.speak_hours
+            type: speak_response
+            tested_text: "pierwsza druga trzecia czwarta piąta szósta siódma ósma dziewiąta dziesiąta jedenasta dwunasta"
+            prompt:
+              target_blocks:
+                - {text: "Wymień godziny od pierwszej do dwunastej.", language_code: pl, direction: ltr}
+
+      - content_key: pl.a1.unit04.lesson02.o_ktorej_godzinie
+        title: "O której godzinie"
+        spine_outcome_id: universal.a1.time.ask_tell_time
+        teaching:
+          - content_key: pl.a1.unit04.lesson02.teach.rano_poludnie_popoludniu
+            kind: vocabulary
+            target: {text: "rano, w południe, po południu", language_code: pl, direction: ltr}
+            introduced_tokens: ["rano", "w", "południe", "po", "południu"]
+            example:
+              - {text: "Rano piję kawę.", language_code: pl, direction: ltr}
+              - {text: "Jem obiad w południe.", language_code: pl, direction: ltr}
+              - {text: "Pracuję po południu.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit04.lesson02.teach.wieczorem_w_nocy
+            kind: vocabulary
+            target: {text: "wieczorem, w nocy", language_code: pl, direction: ltr}
+            introduced_tokens: ["wieczorem", "nocy"]
+            example:
+              - {text: "Wieczorem oglądam telewizję.", language_code: pl, direction: ltr}
+              - {text: "W nocy śpię.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit04.lesson02.teach.o_ktorej_godzinie
+            kind: phrase
+            target: {text: "O której godzinie?", language_code: pl, direction: ltr}
+            introduced_tokens: ["O", "której", "godzinie"]
+          - content_key: pl.a1.unit04.lesson02.teach.locative_hour_note
+            kind: grammar_note
+            target: {text: "Czwarta, siódma, dziesiąta -- ale o czwartej, o siódmej, o dziesiątej.", language_code: pl, direction: ltr}
+            introduced_tokens: ["czwartej", "siódmej", "dziesiątej"]
+          - content_key: pl.a1.unit04.lesson02.teach.ewa_wstaje
+            kind: phrase
+            target: {text: "Ewa wstaje o siódmej rano.", language_code: pl, direction: ltr}
+            introduced_tokens: ["Ewa", "wstaje"]
+          - content_key: pl.a1.unit04.lesson02.teach.pociag_odjezdza
+            kind: phrase
+            target: {text: "Pociąg odjeżdża o czwartej po południu.", language_code: pl, direction: ltr}
+            introduced_tokens: ["Pociąg", "odjeżdża"]
+        exercises:
+          - content_key: pl.a1.unit04.lesson02.exercise01.select_rano
+            type: multiple_choice
+            tested_text: "rano"
+            prompt:
+              target_blocks:
+                - {text: "rano", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit04.lesson02.exercise02.select_wieczorem
+            type: multiple_choice
+            tested_text: "wieczorem"
+            prompt:
+              target_blocks:
+                - {text: "wieczorem", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit04.lesson02.exercise03.match_times_of_day
+            type: matching_pairs
+            tested_text: "rano południe po południu wieczorem nocy czwartej siódmej"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "rano", right: "in the morning"}
+              - {left: "w południe", right: "at noon"}
+              - {left: "po południu", right: "in the afternoon"}
+              - {left: "wieczorem", right: "in the evening"}
+              - {left: "w nocy", right: "at night"}
+              - {left: "o czwartej", right: "at four o'clock"}
+              - {left: "o siódmej", right: "at seven o'clock"}
+          - content_key: pl.a1.unit04.lesson02.exercise04.order_at_what_time
+            type: word_order
+            tested_text: "O której godzinie"
+            prompt: {target_blocks: []}
+            word_bank: ["której", "O", "godzinie"]
+          - content_key: pl.a1.unit04.lesson02.exercise05.order_ewa_wakes
+            type: word_order
+            tested_text: "Ewa wstaje o siódmej rano"
+            prompt: {target_blocks: []}
+            word_bank: ["o", "wstaje", "rano", "Ewa", "siódmej"]
+          - content_key: pl.a1.unit04.lesson02.exercise06.fill_train_time
+            type: fill_in_blank
+            tested_text: "czwartej"
+            prompt:
+              target_blocks:
+                - {text: "Pociąg odjeżdża o ___ po południu.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit04.lesson02.exercise07.fix_locative_hour
+            type: grammar_check
+            tested_text: "Pociąg odjeżdża o czwartej po południu"
+            prompt:
+              target_blocks:
+                - {text: "Pociąg odjeżdża o czwarta po południu.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit04.lesson02.exercise08.reply_train_time
+            type: dialogue_response
+            tested_text: "Pociąg odjeżdża o czwartej po południu"
+            prompt:
+              target_blocks:
+                - {text: "O której godzinie odjeżdża pociąg?", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit04.lesson02.exercise09.speak_ewa_wakes
+            type: speak_response
+            tested_text: "Ewa wstaje o siódmej rano"
+            prompt:
+              target_blocks:
+                - {text: "Powiedz, o której godzinie Ewa wstaje.", language_code: pl, direction: ltr}
+
+      - content_key: pl.a1.unit04.lesson03.ustalamy_godzine_spotkania
+        title: "Ustalamy godzinę spotkania"
+        spine_outcome_id: universal.a1.time.ask_tell_time
+        teaching:
+          - content_key: pl.a1.unit04.lesson03.teach.spotkanie
+            kind: vocabulary
+            target: {text: "spotkanie", language_code: pl, direction: ltr}
+            introduced_tokens: ["spotkanie"]
+            example: {text: "Spotkanie jest w piątek.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit04.lesson03.teach.o_ktorej_mozemy_sie_spotkac
+            kind: phrase
+            target: {text: "O której godzinie możemy się spotkać w piątek, piętnastego maja?", language_code: pl, direction: ltr}
+            introduced_tokens: ["możemy", "się", "spotkać", "piątek", "piętnastego", "maja"]
+          - content_key: pl.a1.unit04.lesson03.teach.moze_o_czwartej
+            kind: phrase
+            target: {text: "Może o czwartej po południu?", language_code: pl, direction: ltr}
+            introduced_tokens: ["Może"]
+          - content_key: pl.a1.unit04.lesson03.teach.czwarta_mi_odpowiada
+            kind: phrase
+            target: {text: "Czwarta po południu mi odpowiada.", language_code: pl, direction: ltr}
+            introduced_tokens: ["mi", "odpowiada"]
+          - content_key: pl.a1.unit04.lesson03.teach.do_zobaczenia_o_czwartej
+            kind: phrase
+            target: {text: "Do zobaczenia piętnastego maja o czwartej!", language_code: pl, direction: ltr}
+            introduced_tokens: ["Do", "zobaczenia"]
+          - content_key: pl.a1.unit04.lesson03.teach.dialogue.line01
+            kind: dialogue
+            target:
+              text: "O której godzinie możemy się spotkać w piątek, piętnastego maja?"
+              language_code: pl
+              direction: ltr
+              speaker: Ewa
+            introduced_tokens: []
+          - content_key: pl.a1.unit04.lesson03.teach.dialogue.line02
+            kind: dialogue
+            target:
+              text: "Może o czwartej po południu?"
+              language_code: pl
+              direction: ltr
+              speaker: Marek
+            introduced_tokens: []
+          - content_key: pl.a1.unit04.lesson03.teach.dialogue.line03
+            kind: dialogue
+            target:
+              text: "Czwarta po południu mi odpowiada."
+              language_code: pl
+              direction: ltr
+              speaker: Ewa
+            introduced_tokens: []
+          - content_key: pl.a1.unit04.lesson03.teach.dialogue.line04
+            kind: dialogue
+            target:
+              text: "Świetnie! Do zobaczenia piętnastego maja o czwartej!"
+              language_code: pl
+              direction: ltr
+              speaker: Marek
+            introduced_tokens: ["Świetnie"]
+          - content_key: pl.a1.unit04.lesson03.teach.dialogue.line05
+            kind: dialogue
+            target:
+              text: "Do zobaczenia!"
+              language_code: pl
+              direction: ltr
+              speaker: Ewa
+            introduced_tokens: []
+        exercises:
+          - content_key: pl.a1.unit04.lesson03.exercise01.select_time_question
+            type: multiple_choice
+            tested_text: "O której godzinie możemy się spotkać w piątek piętnastego maja"
+            prompt:
+              target_blocks:
+                - {text: "O której godzinie możemy się spotkać w piątek, piętnastego maja?", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit04.lesson03.exercise02.select_time_proposal
+            type: multiple_choice
+            tested_text: "Może o czwartej po południu"
+            prompt:
+              target_blocks:
+                - {text: "Może o czwartej po południu?", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit04.lesson03.exercise03.comprehend_agreed_time
+            type: dialogue_comprehension
+            tested_text: "czwartej po południu"
+            prompt:
+              target_blocks:
+                - {text: "Czwarta po południu mi odpowiada.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit04.lesson03.exercise04.comprehend_agreed_date
+            type: dialogue_comprehension
+            tested_text: "piętnastego maja"
+            prompt:
+              target_blocks:
+                - {text: "Świetnie! Do zobaczenia piętnastego maja o czwartej!", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit04.lesson03.exercise05.match_time_questions_and_answers
+            type: matching_pairs
+            tested_text: "godzina wstaje odjeżdża spotkanie odpowiada"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "Która jest godzina?", right: "Jest trzecia."}
+              - {left: "O której godzinie wstaje Ewa?", right: "Ewa wstaje o siódmej rano."}
+              - {left: "O której godzinie odjeżdża pociąg?", right: "Pociąg odjeżdża o czwartej po południu."}
+              - {left: "O której godzinie jest spotkanie?", right: "Spotkanie jest o czwartej po południu."}
+              - {left: "Może o czwartej po południu?", right: "Czwarta po południu mi odpowiada."}
+          - content_key: pl.a1.unit04.lesson03.exercise06.order_meeting_time_question
+            type: word_order
+            tested_text: "O której godzinie możemy się spotkać w piątek"
+            prompt: {target_blocks: []}
+            word_bank: ["O", "której", "godzinie", "możemy", "się", "spotkać", "w", "piątek"]
+          - content_key: pl.a1.unit04.lesson03.exercise07.order_train_departure
+            type: word_order
+            tested_text: "Pociąg odjeżdża o czwartej po południu"
+            prompt: {target_blocks: []}
+            word_bank: ["odjeżdża", "Pociąg", "po", "czwartej", "południu", "o"]
+          - content_key: pl.a1.unit04.lesson03.exercise08.fill_suits_me
+            type: fill_in_blank
+            tested_text: "odpowiada"
+            prompt:
+              target_blocks:
+                - {text: "Czwarta po południu mi ___.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit04.lesson03.exercise09.fix_verb_agreement
+            type: grammar_check
+            tested_text: "Czwarta po południu mi odpowiada"
+            prompt:
+              target_blocks:
+                - {text: "Czwarta po południu mi odpowiadam.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit04.lesson03.exercise10.reply_confirm_time
+            type: dialogue_response
+            tested_text: "Czwarta po południu mi odpowiada"
+            prompt:
+              target_blocks:
+                - {text: "Może o czwartej po południu?", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit04.lesson03.exercise11.speak_marek_proposal
+            type: speak_response
+            tested_text: "Może o czwartej po południu"
+            prompt: {target_blocks: []}
