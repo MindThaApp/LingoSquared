@@ -1,0 +1,270 @@
+schema_version: "1.0"
+pack_key: practice.en-fa.a1.unit22
+source_language: en
+target_language: fa
+unit_content_key: fa.a1.unit22.phone
+review:
+  status: unreviewed
+  required_next_reviewer: codex
+  notes: >-
+    Authored 2026-07-09 (en-fa overnight units-20+ practice-depth pass,
+    same batch as a1_unit20.yaml/a1_unit21.yaml -- see those files' own
+    notes for the shared UNIT_FILES-extension pattern). Extends
+    scripts/backfill_lexemes.py with 16 new FA_GLOSSES entries, 1 new
+    FA_PARTICLES entry (الو), 2 new FA_ADVERBS entries (آهسته‌تر/بعداً),
+    2 new FA_ADJECTIVES entries (قطع/وصل/بهتر -- 3 actually), 6 new
+    FA_VERBS entries, and 8 new semantic tags. تلفن/پیام/زنگ/میشه/برات/
+    چهار/چطوری/بهتره/آره/حتماً/میام/الان already existed (established
+    across units 02/03/07/A2unit10/12/15/16 etc.) -- reused verbatim.
+
+    Real pre-existing content bugs caught and fixed live while extending
+    the classifier (not introduced by this pass): the unit22 OVERLAY file
+    (docs/content/overlays/en-fa/a1_unit22.yaml) was missing 2 teaching
+    entries the REALIZATION file already references --
+    fa.a1.unit22.lesson01.teach.va_word (the standard "و (and)" review
+    card every other unit in this course already carries) and
+    fa.a1.unit22.lesson06.teach.they_go (the میرن grammar-note card).
+    Both are genuine gaps in the existing draft content, not something
+    this pass introduced -- caught because _classify_fa() unconditionally
+    looks up every realization teaching item's content_key in the
+    overlay's teaching dict, which crashed with a real KeyError until
+    fixed. Added both missing overlay entries using the exact
+    title/gloss/note shape every sibling unit's identical card already
+    uses (va_word mirrors a1_unit21's own, verbatim), a minimal,
+    same-shape fix -- not new content design, and unrelated to this
+    pack's own template design. Flagging explicitly for the fresh-context
+    reviewer since this touches the realization/overlay pair, not just
+    the practice pack.
+
+    Eight semantic groups, all verified via scripts/_practice_slot_check.py:
+    "phone_word" pools the 4 core lesson01 items -- تلفن/پیام/صدا plus
+    the auto-derived "زنگ زدن" ("to call") phrase lexeme (mixed noun/
+    phrase, anchored lesson01, mirrors match_phone_words). تلفن/پیام
+    already carry unrelated tags from earlier units (unit02's phone_
+    number, a2_unit10's family_message_word) -- additive here, same
+    meaning throughout, not a homograph. "phone_answer_word" pools
+    الو/منم (2 members, translation/matching-only, anchored lesson02).
+    "repeat_word" pools تکرار/آهسته‌تر/صحبت (3 members, anchored
+    lesson03, mirrors match_repeat_phrases' word-level pairs);
+    "repeat_phrase" pools the 2 auto-derived lesson03 sentence-level
+    phrases (translation/matching-only). "message_word" pools
+    برات/بیا/کافه (3 members, anchored lesson04 -- برات is additive on
+    top of its existing preposition entry, same meaning throughout);
+    "message_phrase" pools the 2 auto-derived lesson04 sentence-level
+    phrases. "call_ending_word" pools بعداً/بهتر/شد/الان (4 members,
+    anchored lesson05 -- الان additive on top of its existing entry);
+    "ending_phrase" pools the 2 auto-derived lesson05 sentence-level
+    phrases.
+
+    Real dead-anchor risk checked and confirmed clear: none of this
+    unit's own auto-derivable multi-token phrases ("زنگ زدن", "میشه
+    تکرار کنید؟", "لطفاً آهسته‌تر صحبت کنید", "یه پیام برات دارم",
+    "فردا ساعت چهار بیا کافه", "خداحافظ، بعداً صحبت می‌کنیم", "الان بهتر
+    شد؟") collide with any earlier unit's own phrase text (checked via a
+    direct grep across every unit01-21 realization file before use, all
+    clean).
+
+    Lesson-anchor check: lesson01 (phone vocabulary), lesson02
+    (answering), lesson03 (asking to repeat), lesson04 (reading a text
+    message), and lesson05 (ending a call) each genuinely introduce new
+    vocabulary (confirmed by reading the realization file directly) --
+    safe anchors. lesson06 hosts a combined review matching_pairs
+    template pooling phone_word (4) + repeat_word (3) + message_word (3)
+    into one 10-pair exercise, the same "final unit review" pattern
+    established by a1_unit17/19/20/21's own packs.
+
+    Zero fill_in_blank templates, same standing en-fa precedent as every
+    prior unit in this direction. scripts/_fill_in_blank_ambiguity_
+    check.py reports zero flags. Verified with scripts/
+    _practice_slot_check.py against backfill_lexemes.py's actual
+    iter_specs() output -- clean, no zero-candidate slots, no under-3
+    multiple_choice/matching_pairs slots (phone_answer_word/repeat_
+    phrase/message_phrase/ending_phrase correctly have only 2 candidates
+    each and are never used for multiple_choice here, only matching_
+    pairs/translation). compile_content.py practice-validate clean (0
+    errors/0 warnings). Needs the standard fresh-context review before
+    import -- including a specific check of the 2 overlay-entry fixes
+    noted above.
+tag_schema:
+  part_of_speech: [noun, phrase, particle, verb, adverb, preposition, adjective]
+  agreement_tags:
+    semantic:
+      [phone_word, phone_answer_word, repeat_word, repeat_phrase,
+       message_word, message_phrase, call_ending_word, ending_phrase]
+slot_presets:
+  phone_word: &phone_word {language_code: fa, part_of_speech: [noun, phrase], agreement_tags: {semantic: phone_word}}
+  phone_answer_word: &phone_answer_word {language_code: fa, part_of_speech: [particle, verb], agreement_tags: {semantic: phone_answer_word}}
+  repeat_word: &repeat_word {language_code: fa, part_of_speech: [noun, adverb], agreement_tags: {semantic: repeat_word}}
+  repeat_phrase: &repeat_phrase {language_code: fa, part_of_speech: phrase, agreement_tags: {semantic: repeat_phrase}}
+  message_word: &message_word {language_code: fa, part_of_speech: [preposition, verb, noun], agreement_tags: {semantic: message_word}}
+  message_phrase: &message_phrase {language_code: fa, part_of_speech: phrase, agreement_tags: {semantic: message_phrase}}
+  call_ending_word: &call_ending_word {language_code: fa, part_of_speech: [adverb, adjective, verb], agreement_tags: {semantic: call_ending_word}}
+  ending_phrase: &ending_phrase {language_code: fa, part_of_speech: phrase, agreement_tags: {semantic: ending_phrase}}
+templates:
+  # Lesson 1: phone vocabulary.
+  - content_key: practice.en-fa.fa.a1.unit22.lesson01.phone_choice.001
+    lesson_content_key: fa.a1.unit22.lesson01.phone_vocabulary
+    type: multiple_choice
+    frame: {text: "{phone_word}", language_code: fa, direction: rtl}
+    slots: {phone_word: *phone_word}
+    answer_derivation: {kind: slot_gloss, slot: phone_word}
+    feedback_frame: {text: "{phone_word} is phone vocabulary from this lesson.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit22.lesson01.phone_match.002
+    lesson_content_key: fa.a1.unit22.lesson01.phone_vocabulary
+    type: matching_pairs
+    frame: {text: "Match each word or phrase with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *phone_word, second: *phone_word, third: *phone_word, fourth: *phone_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth]}
+    feedback_frame: {text: "These four cover the basic phone vocabulary for this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit22.lesson01.phone_translate.003
+    lesson_content_key: fa.a1.unit22.lesson01.phone_vocabulary
+    type: translation
+    frame: {text: "{phone_word}", language_code: en, direction: ltr, slot_rendering: {phone_word: english_gloss}}
+    slots: {phone_word: *phone_word}
+    answer_derivation: {kind: slot_text, slot: phone_word}
+    feedback_frame: {text: "The Farsi word or phrase is {phone_word}.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit22.lesson01.phone_word_pair_order.004
+    lesson_content_key: fa.a1.unit22.lesson01.phone_vocabulary
+    type: word_order
+    frame: {text: "{phone_word_a} و {phone_word_b}", language_code: fa, direction: rtl}
+    slots: {phone_word_a: *phone_word, phone_word_b: *phone_word}
+    slot_relations: [{kind: distinct, slots: [phone_word_a, phone_word_b]}]
+    answer_derivation: {kind: render_frame, frame: {text: "{phone_word_a} و {phone_word_b}", language_code: fa, direction: rtl}}
+    feedback_frame: {text: "و joins two words, like تلفن و پیام (phone and message).", language_code: en, direction: ltr}
+
+  # Lesson 2: answering the phone.
+  - content_key: practice.en-fa.fa.a1.unit22.lesson02.answer_match.001
+    lesson_content_key: fa.a1.unit22.lesson02.answering_the_phone
+    type: matching_pairs
+    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *phone_answer_word, second: *phone_answer_word}
+    slot_relations: [{kind: distinct, slots: [first, second]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit22.lesson02.answer_translate.002
+    lesson_content_key: fa.a1.unit22.lesson02.answering_the_phone
+    type: translation
+    frame: {text: "{phone_answer_word}", language_code: en, direction: ltr, slot_rendering: {phone_answer_word: english_gloss}}
+    slots: {phone_answer_word: *phone_answer_word}
+    answer_derivation: {kind: slot_text, slot: phone_answer_word}
+    feedback_frame: {text: "The Farsi word is {phone_answer_word}.", language_code: en, direction: ltr}
+
+  # Lesson 3: asking someone to repeat / speak slowly.
+  - content_key: practice.en-fa.fa.a1.unit22.lesson03.repeat_choice.001
+    lesson_content_key: fa.a1.unit22.lesson03.asking_to_repeat
+    type: multiple_choice
+    frame: {text: "{repeat_word}", language_code: fa, direction: rtl}
+    slots: {repeat_word: *repeat_word}
+    answer_derivation: {kind: slot_gloss, slot: repeat_word}
+    feedback_frame: {text: "{repeat_word} is used when asking someone to repeat or slow down.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit22.lesson03.repeat_match.002
+    lesson_content_key: fa.a1.unit22.lesson03.asking_to_repeat
+    type: matching_pairs
+    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *repeat_word, second: *repeat_word, third: *repeat_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit22.lesson03.repeat_translate.003
+    lesson_content_key: fa.a1.unit22.lesson03.asking_to_repeat
+    type: translation
+    frame: {text: "{repeat_word}", language_code: en, direction: ltr, slot_rendering: {repeat_word: english_gloss}}
+    slots: {repeat_word: *repeat_word}
+    answer_derivation: {kind: slot_text, slot: repeat_word}
+    feedback_frame: {text: "The Farsi word is {repeat_word}.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit22.lesson03.repeat_phrase_match.004
+    lesson_content_key: fa.a1.unit22.lesson03.asking_to_repeat
+    type: matching_pairs
+    frame: {text: "Match each phrase with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *repeat_phrase, second: *repeat_phrase}
+    slot_relations: [{kind: distinct, slots: [first, second]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second]}
+    feedback_frame: {text: "These are used when asking someone to repeat or slow down.", language_code: en, direction: ltr}
+
+  # Lesson 4: reading a text message.
+  - content_key: practice.en-fa.fa.a1.unit22.lesson04.message_choice.001
+    lesson_content_key: fa.a1.unit22.lesson04.reading_a_text_message
+    type: multiple_choice
+    frame: {text: "{message_word}", language_code: fa, direction: rtl}
+    slots: {message_word: *message_word}
+    answer_derivation: {kind: slot_gloss, slot: message_word}
+    feedback_frame: {text: "{message_word} is vocabulary from this lesson's text message.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit22.lesson04.message_match.002
+    lesson_content_key: fa.a1.unit22.lesson04.reading_a_text_message
+    type: matching_pairs
+    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *message_word, second: *message_word, third: *message_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit22.lesson04.message_translate.003
+    lesson_content_key: fa.a1.unit22.lesson04.reading_a_text_message
+    type: translation
+    frame: {text: "{message_word}", language_code: en, direction: ltr, slot_rendering: {message_word: english_gloss}}
+    slots: {message_word: *message_word}
+    answer_derivation: {kind: slot_text, slot: message_word}
+    feedback_frame: {text: "The Farsi word is {message_word}.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit22.lesson04.message_phrase_match.004
+    lesson_content_key: fa.a1.unit22.lesson04.reading_a_text_message
+    type: matching_pairs
+    frame: {text: "Match each phrase with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *message_phrase, second: *message_phrase}
+    slot_relations: [{kind: distinct, slots: [first, second]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second]}
+    feedback_frame: {text: "These are the two lines of the text message.", language_code: en, direction: ltr}
+
+  # Lesson 5: ending a call.
+  - content_key: practice.en-fa.fa.a1.unit22.lesson05.ending_choice.001
+    lesson_content_key: fa.a1.unit22.lesson05.ending_a_call
+    type: multiple_choice
+    frame: {text: "{call_ending_word}", language_code: fa, direction: rtl}
+    slots: {call_ending_word: *call_ending_word}
+    answer_derivation: {kind: slot_gloss, slot: call_ending_word}
+    feedback_frame: {text: "{call_ending_word} is used when checking on or ending a call.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit22.lesson05.ending_match.002
+    lesson_content_key: fa.a1.unit22.lesson05.ending_a_call
+    type: matching_pairs
+    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *call_ending_word, second: *call_ending_word, third: *call_ending_word, fourth: *call_ending_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth]}
+    feedback_frame: {text: "These four cover the call-ending vocabulary for this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit22.lesson05.ending_translate.003
+    lesson_content_key: fa.a1.unit22.lesson05.ending_a_call
+    type: translation
+    frame: {text: "{call_ending_word}", language_code: en, direction: ltr, slot_rendering: {call_ending_word: english_gloss}}
+    slots: {call_ending_word: *call_ending_word}
+    answer_derivation: {kind: slot_text, slot: call_ending_word}
+    feedback_frame: {text: "The Farsi word is {call_ending_word}.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit22.lesson05.ending_phrase_match.004
+    lesson_content_key: fa.a1.unit22.lesson05.ending_a_call
+    type: matching_pairs
+    frame: {text: "Match each phrase with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *ending_phrase, second: *ending_phrase}
+    slot_relations: [{kind: distinct, slots: [first, second]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second]}
+    feedback_frame: {text: "These are used to check on or end a phone call.", language_code: en, direction: ltr}
+
+  # Lesson 6: the full phone dialogue -- unit-wide review.
+  - content_key: practice.en-fa.fa.a1.unit22.lesson06.unit_review_match.001
+    lesson_content_key: fa.a1.unit22.lesson06.phone_dialogue
+    type: matching_pairs
+    frame: {text: "Match each word or phrase with its meaning -- a review of this whole unit's phone vocabulary.", language_code: en, direction: ltr}
+    slots:
+      pw1: *phone_word
+      pw2: *phone_word
+      pw3: *phone_word
+      pw4: *phone_word
+      rw1: *repeat_word
+      rw2: *repeat_word
+      rw3: *repeat_word
+      mw1: *message_word
+      mw2: *message_word
+      mw3: *message_word
+    slot_relations:
+      - {kind: distinct, slots: [pw1, pw2, pw3, pw4]}
+      - {kind: distinct, slots: [rw1, rw2, rw3]}
+      - {kind: distinct, slots: [mw1, mw2, mw3]}
+    answer_derivation: {kind: matching_pairs, slots: [pw1, pw2, pw3, pw4, rw1, rw2, rw3, mw1, mw2, mw3]}
+    feedback_frame: {text: "This reviews the phone, repeat/slow-down, and message vocabulary taught in this unit.", language_code: en, direction: ltr}
