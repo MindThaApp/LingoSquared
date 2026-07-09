@@ -1,0 +1,309 @@
+schema_version: "1.1"
+realization_version: "2026.1-draft.1"
+target_language: nl
+cefr_level: A1
+generation_provenance: {method: ai_generated, authoring_system: claude, human_reviewed: false}
+status: complete_draft
+review:
+  status: unreviewed
+  required_next_reviewer: claude
+  notes: >-
+    New Dutch A1 unit after unit56 (bioscoop). A yaml.safe_load diff of
+    every spine_outcome_id/spine_outcome_ids across every
+    docs/content/realizations/nl/a1_unit*.yaml file against every
+    `- id: universal.a1.*` entry in universal_spine.yaml (52 total before
+    this file's own addition, confirmed by grepping
+    "^  - id: universal.a1." in the spine file both before and after the
+    edit) found no unrealized A1 outcome for Dutch -- all 52 pre-existing
+    A1 outcomes were already realized (exact set match, zero diff, every
+    single spine_outcome_id value grepped from every nl realization file
+    matched a real spine id one-for-one, confirmed with comm -23/-13
+    between the sorted spine id list and the sorted set of
+    spine_outcome_id values grepped from every nl realization file; only
+    the two pre-existing B1 outcomes, out of scope for A1 volume growth,
+    were absent). Git history was checked first (git log --oneline --
+    docs/content/universal_spine.yaml): the most recent addition was nl
+    unit56 (cinema) and, in the same commit, the
+    universal.a1.cinema.go_to_the_cinema spine outcome itself -- confirming
+    the standing delegated A1 spine-authority pattern (nl unit51 through
+    unit56 each added their own new outcome the same way) is still active
+    and this unit follows the same pattern. This unit therefore adds a new
+    delegated A1 spine outcome, universal.a1.museum.visit_a_museum (topic:
+    museum, prerequisites: places.locate_common_places,
+    money.handle_basic_money_matters) -- distinct from unit56's cinema
+    content and unit47's library-borrowing content: visiting a museum,
+    buying an entrance ticket, asking about an exhibition/opening hours,
+    and reading an information sign is a distinct, practically common A1
+    leisure-outing topic not yet covered anywhere in the spine, and
+    unit56's own closing scene already explicitly set up this exact
+    payoff (Omar proposing "Zullen we volgende week samen naar het museum
+    gaan?"). Sanity-checked per the standing delegated spine-approval
+    authority: the spine file still parses cleanly with yaml.safe_load
+    after the edit, the 60 resulting outcomes (53 A1 + 5 A2 + 2 B1) have
+    zero duplicate ids, both new prerequisite references resolve to real
+    existing outcome ids (confirmed programmatically -- the same
+    pre-existing bad prerequisite on
+    universal.a1.library.borrow_return_item flagged by unit56's own review
+    note was re-confirmed still present and still out of this unit's
+    scope), and all 4 modalities (listening, speaking, reading, writing)
+    are present in assessment_requirements. Story continuity: unit56
+    closed on Saturday 13 June 2026 with Omar asking Nina "Was de film
+    goed?" and then proposing "Zullen we volgende week samen naar het
+    museum gaan?" (shall we go to the museum together next week), which
+    Nina accepted -- this unit opens on the following Saturday, 20 June
+    2026 (verified with Python datetime.date(2026,6,20).strftime("%A") ==
+    "Saturday", consistent with datetime.date(2026,6,13) also being a
+    Saturday), the payoff of that plan: Omar, Nina, and Lotte go to the
+    museum together. A new minor character, Tessa (the museum's
+    neutral-polite "u"-register ticket-counter staff, same convention as
+    unit50's pharmacist, unit51's hairdresser, unit52's Daan, unit53's
+    Sanne, unit54's Femke, unit55's Bram, and unit56's Iris), sells Nina a
+    ticket. In the closing scene, continuing the established Omar/Lotte
+    closing-scene proposer alternation pattern (unit50 Omar, unit51 Lotte,
+    unit52 Omar, unit53 Lotte, unit54 Omar, unit55 Lotte, unit56 Omar;
+    this unit continues it with Lotte as the proposer), and matching
+    unit55's own Lotte-proposer scene shape (3 speakers: Omar asks Nina a
+    question, Nina answers, Lotte proposes the next outing, Nina agrees),
+    Omar asks Nina how the museum was, Nina answers, and Lotte proposes
+    going to a concert together the following Saturday, 27 June 2026
+    (verified "Saturday" with the same method) -- a genuinely new,
+    not-yet-covered A1 topic flagged here as a plausible next unit for
+    whoever picks this up, not a commitment binding that choice. Every
+    vocabulary teaching card includes a real example sentence with a
+    matching overlay example_gloss, and every example was checked to
+    literally contain the card's exact target word/infinitive surface
+    form (no compiler inflection warnings expected, including "bezoek" as
+    the natural first-person-singular inflection of "bezoeken" in
+    lesson02's example). Prior words (including "Ik wil"/"de"/"het"/"een"/
+    "Zullen we"/numbers/"heel"/"mooi"/day names from earlier units,
+    including "museum" and "kaartje" themselves, taught in unit56 and
+    unit55/56 respectively) are re-declared as introduced_tokens at first
+    use in this file because the untaught-vocabulary validator is
+    per-file; within this file, lesson06's teach.heel example correctly
+    re-declares "mooi" (first taught in lesson05) since the corpus's own
+    established per-card token-declaration style lists every token in a
+    card's own target+example text regardless of whether an earlier card
+    already declared it -- redundant, never incorrect, and lesson05's own
+    reading card and phrase correctly do NOT re-declare "kaartje" (first
+    introduced lesson02) or "museum" (first introduced lesson01) a second
+    time within themselves beyond what their own text naturally contains,
+    consistent with the validator accumulating taught tokens across the
+    whole file in document order (confirmed by reading
+    validate_untaught_vocabulary in scripts/compile_content.py before
+    relying on this). Every listen_select/dialogue_response exercise built
+    from the two multi-turn dialogues (lesson04's museum_tessa and
+    lesson06's museum_omar) was checked by hand: no distractor is a line
+    the tested speaker says anywhere else in that same dialogue audio --
+    lesson04 ex01 tests Tessa's opening line ("Goedemiddag! Wilt u een
+    kaartje voor het museum?") and its three distractors ("Good afternoon!
+    Would you like a table?"/"Good evening! Is the museum closed?"/"Good
+    morning! Would you like popcorn?") match neither Tessa's turn3
+    guide-offer line ("Prima, en wilt u ook een gids?") nor her turn5
+    "Komt eraan!" line; lesson06 ex01 tests Omar's line ("Was het museum
+    mooi?", his only line in the clip) and its three distractors ("did you
+    buy a ticket?"/"do you want to go to the restaurant again?"/"is that
+    your new bike?") match neither that line nor any of Nina's or Lotte's
+    lines in the same clip -- all such distractors are invented
+    minimal-pair alternatives (several deliberately reusing prior-unit
+    themes -- restaurant, bike rental, cinema -- as plausible-sounding
+    decoys) never spoken by anyone in the clip, per the corpus's
+    established safe pattern (units 36-56). matching_pairs exercises in
+    this unit use 6-10 pairs each (not the bare 5-pair floor), pooling
+    vocabulary already taught earlier in the same unit for lesson02
+    onward, per the standing matching_pairs density guidance.
+
+course:
+  realization_key: nl.a1
+  target_language_first: true
+  dialect: nl_NL_standard
+  register_policy: >-
+    Teach contemporary Standard Dutch as used in the Netherlands. Nina,
+    Omar, and Lotte are established taalcafe friends and use informal
+    jij/je with each other throughout. Tessa, the museum ticket-counter
+    staff member, speaks in neutral, polite service language ("u"),
+    consistent with unit50's pharmacist, unit51's hairdresser, unit52's
+    bike-shop staff, unit53's launderette staff, unit54's zwembad
+    reception staff, unit55's restaurant server Bram, and unit56's cinema
+    staff Iris.
+
+media_assets:
+  - {content_key: nl.a1.unit57.audio.museum.ik_ga_graag_naar_het_museum.01, language: nl, text: "Ik ga graag naar het museum.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - {content_key: nl.a1.unit57.audio.museum.ik_koop_een_kaartje_voor_het_museum.01, language: nl, text: "Ik koop een kaartje voor het museum.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - {content_key: nl.a1.unit57.audio.museum.het_museum_sluit_om_vijf_uur.01, language: nl, text: "Het museum sluit om vijf uur.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - content_key: nl.a1.unit57.audio.dialogue.museum_tessa.01
+    language: nl
+    text: >-
+      Tessa: Goedemiddag! Wilt u een kaartje voor het museum? Nina: Ja, ik
+      wil graag een kaartje voor de tentoonstelling, alstublieft. Tessa:
+      Prima, en wilt u ook een gids? Nina: Nee, dank u, dat is niet nodig.
+      Tessa: Komt eraan!
+    voice_hint: two_young_adults_and_staff_neutral
+    status: pending_generation
+  - {content_key: nl.a1.unit57.audio.museum.prima_en_wilt_u_ook_een_gids.01, language: nl, text: "Prima, en wilt u ook een gids?", voice_hint: neutral_adult_clear, status: pending_generation}
+  - {content_key: nl.a1.unit57.audio.museum.ik_bezoek_de_tentoonstelling.01, language: nl, text: "Ik bezoek de tentoonstelling.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - content_key: nl.a1.unit57.audio.dialogue.museum_omar.01
+    language: nl
+    text: >-
+      Omar: Was het museum mooi? Nina: Ja, heel mooi! Lotte: Zullen we
+      volgende week samen naar een concert gaan? Nina: Ja, leuk! Tot
+      volgende week, Lotte!
+    voice_hint: two_young_adults_friendly
+    status: pending_generation
+  - {content_key: nl.a1.unit57.audio.museum.zullen_we_volgende_week_samen_naar_een_concert_gaan.01, language: nl, text: "Zullen we volgende week samen naar een concert gaan?", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+
+units:
+  - content_key: nl.a1.unit57.museum
+    title: "Naar het museum: kunst bekijken"
+    section: reading_writing
+    spine_outcome_ids: [universal.a1.museum.visit_a_museum]
+    planned_lesson_count: 6
+    lessons:
+      - content_key: nl.a1.unit57.lesson01.ik_wil_naar_het_museum
+        title: "Ik wil naar het museum"
+        spine_outcome_id: universal.a1.museum.visit_a_museum
+        teaching:
+          - content_key: nl.a1.unit57.lesson01.teach.museum
+            kind: vocabulary
+            target: {text: "het museum", language_code: nl, direction: ltr}
+            introduced_tokens: [het, museum, Ik, ga, graag, naar]
+            example: {text: "Ik ga graag naar het museum.", language_code: nl, direction: ltr}
+          - content_key: nl.a1.unit57.lesson01.teach.bezoeken
+            kind: vocabulary
+            target: {text: bezoeken, language_code: nl, direction: ltr}
+            introduced_tokens: [bezoeken, Ik, wil, het, museum]
+            example: {text: "Ik wil het museum bezoeken.", language_code: nl, direction: ltr}
+          - {content_key: nl.a1.unit57.lesson01.teach.museum_bezoeken, kind: phrase, target: {text: "Ik wil graag het museum bezoeken, alstublieft.", language_code: nl, direction: ltr}, introduced_tokens: [Ik, wil, graag, het, museum, bezoeken, alstublieft]}
+        exercises:
+          - {content_key: nl.a1.unit57.lesson01.exercise01.choose_museum_bezoeken, type: multiple_choice, tested_text: "Ik wil graag het museum bezoeken, alstublieft", prompt: {target_blocks: [{text: "I'd like to visit the museum, please.", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit57.lesson01.exercise02.listen_ik_ga_graag_naar_het_museum, type: listen_select, tested_text: "Ik ga graag naar het museum", media_asset_key: nl.a1.unit57.audio.museum.ik_ga_graag_naar_het_museum.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit57.lesson01.exercise03.match_museum_bezoeken, type: matching_pairs, tested_text: "museum bezoeken het museum", prompt: {target_blocks: []}, pairs: [{left: museum, right: museum}, {left: bezoeken, right: "to visit"}, {left: "het museum", right: "the museum"}, {left: "Ik ga graag naar het museum.", right: "I like going to the museum."}, {left: "Ik wil het museum bezoeken.", right: "I want to visit the museum."}, {left: "Ik wil graag het museum bezoeken, alstublieft.", right: "I'd like to visit the museum, please."}]}
+          - {content_key: nl.a1.unit57.lesson01.exercise04.order_museum_bezoeken, type: word_order, tested_text: "Ik wil graag het museum bezoeken alstublieft", prompt: {target_blocks: []}, word_bank: [Ik, wil, graag, het, museum, bezoeken, alstublieft]}
+          - {content_key: nl.a1.unit57.lesson01.exercise05.listen_order_ik_ga_graag_naar_het_museum, type: listen_order, tested_text: "Ik ga graag naar het museum", media_asset_key: nl.a1.unit57.audio.museum.ik_ga_graag_naar_het_museum.01, prompt: {target_blocks: []}, word_bank: [Ik, ga, graag, naar, het, museum]}
+          - {content_key: nl.a1.unit57.lesson01.exercise06.translate_het_museum, type: translation, tested_text: "het museum", prompt: {target_blocks: [{text: "the museum", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit57.lesson01.exercise07.respond_museum_bezoeken, type: dialogue_response, tested_text: "Ik wil graag het museum bezoeken alstublieft", prompt: {target_blocks: [{text: "Say in Dutch: I'd like to visit the museum, please.", language_code: en, direction: ltr}]}}
+
+      - content_key: nl.a1.unit57.lesson02.ik_wil_een_kaartje_kopen
+        title: "Ik wil een kaartje kopen"
+        spine_outcome_id: universal.a1.museum.visit_a_museum
+        teaching:
+          - content_key: nl.a1.unit57.lesson02.teach.kaartje
+            kind: vocabulary
+            target: {text: "het kaartje", language_code: nl, direction: ltr}
+            introduced_tokens: [het, kaartje, Ik, koop, een, voor, museum]
+            example: {text: "Ik koop een kaartje voor het museum.", language_code: nl, direction: ltr}
+          - content_key: nl.a1.unit57.lesson02.teach.tentoonstelling
+            kind: vocabulary
+            target: {text: "de tentoonstelling", language_code: nl, direction: ltr}
+            introduced_tokens: [de, tentoonstelling, Ik, bezoek]
+            example: {text: "Ik bezoek de tentoonstelling.", language_code: nl, direction: ltr}
+          - {content_key: nl.a1.unit57.lesson02.teach.kaartje_voor_de_tentoonstelling, kind: phrase, target: {text: "Ik wil graag een kaartje voor de tentoonstelling, alstublieft.", language_code: nl, direction: ltr}, introduced_tokens: [Ik, wil, graag, een, kaartje, voor, de, tentoonstelling, alstublieft]}
+        exercises:
+          - {content_key: nl.a1.unit57.lesson02.exercise01.choose_kaartje_voor_de_tentoonstelling, type: multiple_choice, tested_text: "Ik wil graag een kaartje voor de tentoonstelling, alstublieft", prompt: {target_blocks: [{text: "I'd like a ticket for the exhibition, please.", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit57.lesson02.exercise02.listen_ik_koop_een_kaartje_voor_het_museum, type: listen_select, tested_text: "Ik koop een kaartje voor het museum", media_asset_key: nl.a1.unit57.audio.museum.ik_koop_een_kaartje_voor_het_museum.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit57.lesson02.exercise03.match_kaartje_tentoonstelling, type: matching_pairs, tested_text: "kaartje tentoonstelling museum bezoeken", prompt: {target_blocks: []}, pairs: [{left: kaartje, right: ticket}, {left: tentoonstelling, right: exhibition}, {left: "het kaartje", right: "the ticket"}, {left: "de tentoonstelling", right: "the exhibition"}, {left: "Ik koop een kaartje voor het museum.", right: "I'm buying a ticket for the museum."}, {left: "Ik bezoek de tentoonstelling.", right: "I'm visiting the exhibition."}, {left: "Ik wil graag een kaartje voor de tentoonstelling, alstublieft.", right: "I'd like a ticket for the exhibition, please."}, {left: bezoeken, right: "to visit"}]}
+          - {content_key: nl.a1.unit57.lesson02.exercise04.order_kaartje_voor_de_tentoonstelling, type: word_order, tested_text: "Ik wil graag een kaartje voor de tentoonstelling alstublieft", prompt: {target_blocks: []}, word_bank: [Ik, wil, graag, een, kaartje, voor, de, tentoonstelling, alstublieft]}
+          - {content_key: nl.a1.unit57.lesson02.exercise05.listen_order_ik_koop_een_kaartje_voor_het_museum, type: listen_order, tested_text: "Ik koop een kaartje voor het museum", media_asset_key: nl.a1.unit57.audio.museum.ik_koop_een_kaartje_voor_het_museum.01, prompt: {target_blocks: []}, word_bank: [Ik, koop, een, kaartje, voor, het, museum]}
+          - {content_key: nl.a1.unit57.lesson02.exercise06.translate_tentoonstelling, type: translation, tested_text: tentoonstelling, prompt: {target_blocks: [{text: exhibition, language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit57.lesson02.exercise07.respond_kaartje_voor_de_tentoonstelling, type: dialogue_response, tested_text: "Ik wil graag een kaartje voor de tentoonstelling alstublieft", prompt: {target_blocks: [{text: "Say in Dutch: I'd like a ticket for the exhibition, please.", language_code: en, direction: ltr}]}}
+
+      - content_key: nl.a1.unit57.lesson03.hoe_laat_sluit_het_museum
+        title: "Hoe laat sluit het museum?"
+        spine_outcome_id: universal.a1.museum.visit_a_museum
+        teaching:
+          - content_key: nl.a1.unit57.lesson03.teach.sluiten
+            kind: vocabulary
+            target: {text: sluiten, language_code: nl, direction: ltr}
+            introduced_tokens: [sluiten, Het, museum, sluit, om, vijf, uur]
+            example: {text: "Het museum sluit om vijf uur.", language_code: nl, direction: ltr}
+          - content_key: nl.a1.unit57.lesson03.teach.open
+            kind: vocabulary
+            target: {text: open, language_code: nl, direction: ltr}
+            introduced_tokens: [open, Het, museum, is]
+            example: {text: "Het museum is open.", language_code: nl, direction: ltr}
+          - {content_key: nl.a1.unit57.lesson03.teach.hoe_laat_sluit_het_museum, kind: phrase, target: {text: "Hoe laat sluit het museum?", language_code: nl, direction: ltr}, introduced_tokens: [Hoe, laat, sluit, het, museum]}
+        exercises:
+          - {content_key: nl.a1.unit57.lesson03.exercise01.choose_hoe_laat_sluit_het_museum, type: multiple_choice, tested_text: "Hoe laat sluit het museum", prompt: {target_blocks: [{text: "What time does the museum close?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit57.lesson03.exercise02.listen_het_museum_sluit_om_vijf_uur, type: listen_select, tested_text: "Het museum sluit om vijf uur", media_asset_key: nl.a1.unit57.audio.museum.het_museum_sluit_om_vijf_uur.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit57.lesson03.exercise03.match_sluiten_open, type: matching_pairs, tested_text: "sluiten open kaartje tentoonstelling", prompt: {target_blocks: []}, pairs: [{left: sluiten, right: "to close"}, {left: open, right: open}, {left: "Het museum sluit om vijf uur.", right: "The museum closes at five o'clock."}, {left: "Het museum is open.", right: "The museum is open."}, {left: "Hoe laat sluit het museum?", right: "What time does the museum close?"}, {left: kaartje, right: ticket}, {left: tentoonstelling, right: exhibition}, {left: museum, right: museum}]}
+          - {content_key: nl.a1.unit57.lesson03.exercise04.order_hoe_laat_sluit_het_museum, type: word_order, tested_text: "Hoe laat sluit het museum", prompt: {target_blocks: []}, word_bank: [Hoe, laat, sluit, het, museum]}
+          - {content_key: nl.a1.unit57.lesson03.exercise05.listen_order_het_museum_sluit_om_vijf_uur, type: listen_order, tested_text: "Het museum sluit om vijf uur", media_asset_key: nl.a1.unit57.audio.museum.het_museum_sluit_om_vijf_uur.01, prompt: {target_blocks: []}, word_bank: [Het, museum, sluit, om, vijf, uur]}
+          - {content_key: nl.a1.unit57.lesson03.exercise06.translate_sluiten, type: translation, tested_text: sluiten, prompt: {target_blocks: [{text: "to close", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit57.lesson03.exercise07.respond_hoe_laat_sluit_het_museum, type: dialogue_response, tested_text: "Hoe laat sluit het museum", prompt: {target_blocks: [{text: "Ask in Dutch: what time does the museum close?", language_code: en, direction: ltr}]}}
+
+      - content_key: nl.a1.unit57.lesson04.bij_het_museum
+        title: "Bij het museum"
+        spine_outcome_id: universal.a1.museum.visit_a_museum
+        teaching:
+          - {content_key: nl.a1.unit57.lesson04.teach.tessa_groet, kind: dialogue, target: {text: "Tessa: Goedemiddag! Wilt u een kaartje voor het museum?", language_code: nl, direction: ltr}, introduced_tokens: [Tessa, Goedemiddag, Wilt, u, een, kaartje, voor, het, museum]}
+          - {content_key: nl.a1.unit57.lesson04.teach.nina_bestelling, kind: dialogue, target: {text: "Nina: Ja, ik wil graag een kaartje voor de tentoonstelling, alstublieft.", language_code: nl, direction: ltr}, introduced_tokens: [Nina, "Ja", ik, wil, graag, een, kaartje, voor, de, tentoonstelling, alstublieft]}
+          - {content_key: nl.a1.unit57.lesson04.teach.tessa_gids, kind: dialogue, target: {text: "Tessa: Prima, en wilt u ook een gids?", language_code: nl, direction: ltr}, introduced_tokens: [Tessa, Prima, en, wilt, u, ook, een, gids]}
+          - {content_key: nl.a1.unit57.lesson04.teach.nina_gids_antwoord, kind: dialogue, target: {text: "Nina: Nee, dank u, dat is niet nodig.", language_code: nl, direction: ltr}, introduced_tokens: [Nina, Nee, dank, u, dat, is, niet, nodig]}
+          - {content_key: nl.a1.unit57.lesson04.teach.tessa_komt_eraan, kind: dialogue, target: {text: "Tessa: Komt eraan!", language_code: nl, direction: ltr}, introduced_tokens: [Tessa, Komt, eraan]}
+        exercises:
+          - {content_key: nl.a1.unit57.lesson04.exercise01.listen_wilt_u_een_kaartje_voor_het_museum, type: listen_select, tested_text: "Wilt u een kaartje voor het museum", media_asset_key: nl.a1.unit57.audio.dialogue.museum_tessa.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit57.lesson04.exercise02.comprehend_bestelling, type: dialogue_comprehension, tested_text: "een kaartje voor de tentoonstelling", media_asset_key: nl.a1.unit57.audio.dialogue.museum_tessa.01, prompt: {target_blocks: [{text: "What does Nina want a ticket for?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit57.lesson04.exercise03.comprehend_gids_vraag, type: dialogue_comprehension, tested_text: "wilt u ook een gids", media_asset_key: nl.a1.unit57.audio.dialogue.museum_tessa.01, prompt: {target_blocks: [{text: "What does Tessa ask if Nina wants?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit57.lesson04.exercise04.comprehend_gids_antwoord, type: dialogue_comprehension, tested_text: "dat is niet nodig", media_asset_key: nl.a1.unit57.audio.dialogue.museum_tessa.01, prompt: {target_blocks: [{text: "Does Nina want a guide?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit57.lesson04.exercise05.order_nina_bestelling, type: word_order, tested_text: "Ja ik wil graag een kaartje voor de tentoonstelling alstublieft", prompt: {target_blocks: []}, word_bank: ["Ja", ik, wil, graag, een, kaartje, voor, de, tentoonstelling, alstublieft]}
+          - {content_key: nl.a1.unit57.lesson04.exercise06.respond_gids, type: dialogue_response, tested_text: "Nee dank u dat is niet nodig", prompt: {target_blocks: [{text: "Prima, en wilt u ook een gids?", language_code: nl, direction: ltr}]}}
+          - {content_key: nl.a1.unit57.lesson04.exercise07.listen_type_gids_vraag, type: listen_type, tested_text: "Prima, en wilt u ook een gids", media_asset_key: nl.a1.unit57.audio.museum.prima_en_wilt_u_ook_een_gids.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit57.lesson04.exercise08.write_tessa_groet, type: writing_prompt, tested_text: "Goedemiddag Wilt u een kaartje voor het museum", prompt: {target_blocks: [{text: "Write in Dutch: Good afternoon! Would you like a ticket for the museum?", language_code: en, direction: ltr}]}}
+
+      - content_key: nl.a1.unit57.lesson05.het_informatiebord_lezen
+        title: "Het informatiebord lezen"
+        spine_outcome_id: universal.a1.museum.visit_a_museum
+        teaching:
+          - content_key: nl.a1.unit57.lesson05.teach.zaal
+            kind: vocabulary
+            target: {text: "de zaal", language_code: nl, direction: ltr}
+            introduced_tokens: [de, zaal, De, is, groot]
+            example: {text: "De zaal is groot.", language_code: nl, direction: ltr}
+          - content_key: nl.a1.unit57.lesson05.teach.schilderij
+            kind: vocabulary
+            target: {text: "het schilderij", language_code: nl, direction: ltr}
+            introduced_tokens: [het, schilderij, Het, is, mooi]
+            example: {text: "Het schilderij is mooi.", language_code: nl, direction: ltr}
+          - content_key: nl.a1.unit57.lesson05.teach.informatiebord_tekst
+            kind: reading
+            target:
+              text: "Museum. Open: negen uur tot vijf uur. Tentoonstelling: schilderijen. Kaartje: acht euro vijftig."
+              language_code: nl
+              direction: ltr
+            introduced_tokens: [Museum, Open, negen, uur, tot, vijf, Tentoonstelling, schilderijen, Kaartje, acht, euro, vijftig]
+          - {content_key: nl.a1.unit57.lesson05.teach.wat_kost_het_kaartje, kind: phrase, target: {text: "Wat kost het kaartje?", language_code: nl, direction: ltr}, introduced_tokens: [Wat, kost, het, kaartje]}
+        exercises:
+          - {content_key: nl.a1.unit57.lesson05.exercise01.read_openingstijden, type: reading_comprehension, tested_text: "negen uur tot vijf uur", prompt: {target_blocks: [{text: "According to the sign, what are the museum's opening hours?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit57.lesson05.exercise02.read_tentoonstelling, type: reading_comprehension, tested_text: "Tentoonstelling schilderijen", prompt: {target_blocks: [{text: "According to the sign, what is the exhibition about?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit57.lesson05.exercise03.read_kaartje_prijs, type: reading_comprehension, tested_text: "Kaartje acht euro vijftig", prompt: {target_blocks: [{text: "According to the sign, how much does the ticket cost?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit57.lesson05.exercise04.match_zaal_schilderij, type: matching_pairs, tested_text: "zaal schilderij kaartje tentoonstelling museum", prompt: {target_blocks: []}, pairs: [{left: zaal, right: hall}, {left: schilderij, right: painting}, {left: "de zaal", right: "the hall"}, {left: "het schilderij", right: "the painting"}, {left: "De zaal is groot.", right: "The hall is big."}, {left: "Het schilderij is mooi.", right: "The painting is beautiful."}, {left: "Wat kost het kaartje?", right: "What does the ticket cost?"}, {left: tentoonstelling, right: exhibition}, {left: kaartje, right: ticket}, {left: museum, right: museum}]}
+          - {content_key: nl.a1.unit57.lesson05.exercise05.listen_ik_bezoek_de_tentoonstelling, type: listen_select, tested_text: "Ik bezoek de tentoonstelling", media_asset_key: nl.a1.unit57.audio.museum.ik_bezoek_de_tentoonstelling.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit57.lesson05.exercise06.write_wat_kost_het_kaartje, type: writing_prompt, tested_text: "Wat kost het kaartje", prompt: {target_blocks: [{text: "Write in Dutch: what does the ticket cost?", language_code: en, direction: ltr}]}}
+
+      - content_key: nl.a1.unit57.lesson06.omar_nina_en_lotte_bij_het_museum
+        title: "Omar, Nina en Lotte bij het museum"
+        spine_outcome_id: universal.a1.museum.visit_a_museum
+        teaching:
+          - content_key: nl.a1.unit57.lesson06.teach.concert
+            kind: vocabulary
+            target: {text: "het concert", language_code: nl, direction: ltr}
+            introduced_tokens: [het, concert, Ik, ga, naar, een]
+            example: {text: "Ik ga naar een concert.", language_code: nl, direction: ltr}
+          - content_key: nl.a1.unit57.lesson06.teach.heel
+            kind: vocabulary
+            target: {text: heel, language_code: nl, direction: ltr}
+            introduced_tokens: [heel, Het, museum, is, mooi]
+            example: {text: "Het museum is heel mooi.", language_code: nl, direction: ltr}
+          - {content_key: nl.a1.unit57.lesson06.teach.omar_vraag, kind: dialogue, target: {text: "Omar: Was het museum mooi?", language_code: nl, direction: ltr}, introduced_tokens: [Omar, Was, het, museum, mooi]}
+          - {content_key: nl.a1.unit57.lesson06.teach.nina_antwoord, kind: dialogue, target: {text: "Nina: Ja, heel mooi!", language_code: nl, direction: ltr}, introduced_tokens: [Nina, "Ja", heel, mooi]}
+          - {content_key: nl.a1.unit57.lesson06.teach.lotte_voorstel, kind: dialogue, target: {text: "Lotte: Zullen we volgende week samen naar een concert gaan?", language_code: nl, direction: ltr}, introduced_tokens: [Lotte, Zullen, we, volgende, week, samen, naar, een, concert, gaan]}
+          - {content_key: nl.a1.unit57.lesson06.teach.nina_akkoord, kind: dialogue, target: {text: "Nina: Ja, leuk! Tot volgende week, Lotte!", language_code: nl, direction: ltr}, introduced_tokens: [Nina, "Ja", leuk, Tot, volgende, week, Lotte]}
+          - {content_key: nl.a1.unit57.lesson06.teach.zullen_we_volgende_week_samen_naar_een_concert_gaan, kind: phrase, target: {text: "Zullen we volgende week samen naar een concert gaan?", language_code: nl, direction: ltr}, introduced_tokens: [Zullen, we, volgende, week, samen, naar, een, concert, gaan]}
+        exercises:
+          - {content_key: nl.a1.unit57.lesson06.exercise01.listen_was_het_museum_mooi, type: listen_select, tested_text: "Was het museum mooi", media_asset_key: nl.a1.unit57.audio.dialogue.museum_omar.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit57.lesson06.exercise02.comprehend_antwoord, type: dialogue_comprehension, tested_text: "Ja heel mooi", media_asset_key: nl.a1.unit57.audio.dialogue.museum_omar.01, prompt: {target_blocks: [{text: "How does Nina describe the museum?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit57.lesson06.exercise03.comprehend_voorstel, type: dialogue_comprehension, tested_text: "volgende week samen naar een concert gaan", media_asset_key: nl.a1.unit57.audio.dialogue.museum_omar.01, prompt: {target_blocks: [{text: "What does Lotte suggest?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit57.lesson06.exercise04.match_lotte, type: matching_pairs, tested_text: "concert heel mooi museum", prompt: {target_blocks: []}, pairs: [{left: "Was het museum mooi?", right: "Was the museum beautiful?"}, {left: "Ja, heel mooi!", right: "Yes, very beautiful!"}, {left: "Zullen we volgende week samen naar een concert gaan?", right: "Shall we go to a concert together next week?"}, {left: "Ja, leuk! Tot volgende week, Lotte!", right: "Yes, nice! See you next week, Lotte!"}, {left: "het concert", right: "the concert"}, {left: heel, right: very}, {left: mooi, right: beautiful}, {left: museum, right: museum}, {left: kaartje, right: ticket}, {left: tentoonstelling, right: exhibition}]}
+          - {content_key: nl.a1.unit57.lesson06.exercise05.order_zullen_we_volgende_week_samen_naar_een_concert_gaan, type: word_order, tested_text: "Zullen we volgende week samen naar een concert gaan", prompt: {target_blocks: []}, word_bank: [Zullen, we, volgende, week, samen, naar, een, concert, gaan]}
+          - {content_key: nl.a1.unit57.lesson06.exercise06.respond_voorstel, type: dialogue_response, tested_text: "Ja leuk Tot volgende week Lotte", prompt: {target_blocks: [{text: "Zullen we volgende week samen naar een concert gaan?", language_code: nl, direction: ltr}]}}
+          - {content_key: nl.a1.unit57.lesson06.exercise07.listen_type_zullen_we_volgende_week_samen_naar_een_concert_gaan, type: listen_type, tested_text: "Zullen we volgende week samen naar een concert gaan", media_asset_key: nl.a1.unit57.audio.museum.zullen_we_volgende_week_samen_naar_een_concert_gaan.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit57.lesson06.exercise08.write_ja_heel_mooi, type: writing_prompt, tested_text: "Ja heel mooi", prompt: {target_blocks: [{text: "Write in Dutch: yes, very beautiful!", language_code: en, direction: ltr}]}}
