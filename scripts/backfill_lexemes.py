@@ -134,6 +134,44 @@ UNIT_FILES = (
         REPO_ROOT / "docs/content/realizations/fa/a1_unit19_housing.yaml",
         REPO_ROOT / "docs/content/overlays/en-fa/a1_unit19.yaml",
     ),
+    # Unit 20 (Clothing), added 2026-07-09 by the en-fa overnight
+    # units-20+ practice-authoring pass (real lesson content had grown to
+    # a1_unit43+ with zero Endless Practice coverage past unit19 -- this
+    # pass closes part of that gap). Re-read this file fresh before
+    # appending any further unit here, per this file's own standing
+    # convention -- other lanes may extend this same tuple concurrently.
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a1_unit20_clothing.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a1_unit20.yaml",
+    ),
+    # Unit 21 (Money), added 2026-07-09, same overnight pass as unit20
+    # above. Re-read this file fresh before appending any further unit
+    # here, per this file's own standing convention.
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a1_unit21_money.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a1_unit21.yaml",
+    ),
+    # Unit 22 (Phone), added 2026-07-09, same overnight pass as units
+    # 20-21 above. Re-read this file fresh before appending any further
+    # unit here, per this file's own standing convention.
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a1_unit22_phone.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a1_unit22.yaml",
+    ),
+    # Unit 23 (Emotions), added 2026-07-09, same overnight pass as units
+    # 20-22 above. Re-read this file fresh before appending any further
+    # unit here, per this file's own standing convention.
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a1_unit23_emotions.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a1_unit23.yaml",
+    ),
+    # Unit 24 (Hobbies), added 2026-07-09, same overnight pass as units
+    # 20-23 above. Re-read this file fresh before appending any further
+    # unit here, per this file's own standing convention.
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a1_unit24_hobbies.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a1_unit24.yaml",
+    ),
 )
 
 # A2 units live in a SEPARATE course row ("Farsi A2", not "Farsi A1") --
@@ -432,6 +470,90 @@ FA_GLOSSES = {
     "آشپزخانه‌س": "it's the kitchen (colloquial contraction of آشپزخانه است)",
     "خونه‌ی": "house of / my house (ezafe form of خونه)",
     "خونه‌ت": "your house (colloquial)",
+    # Unit 20 (A1: clothing), added 2026-07-09 (en-fa units-20+ overnight
+    # practice-depth pass, closing the gap where real lesson content ran
+    # ahead of Endless Practice coverage). کت/می‌تونم/کنم already existed
+    # (کت "coat" from unit07's weather content -- same referent as this
+    # unit's "jacket," reused not re-glossed; می‌تونم/کنم from units
+    # 12/17 -- reused verbatim, not redeclared here).
+    "پیراهن": "shirt", "شلوار": "pants", "کفش": "shoes",
+    "قشنگ": "nice / pretty",
+    "رنگ": "color", "قرمز": "red", "آبی": "blue", "سیاه": "black", "سفید": "white",
+    "سایز": "size", "بزرگ": "big", "کوچیک": "small", "متوسط": "medium",
+    "امتحانش": "try it (on)",
+    "سایزی": "what size (indefinite/interrogative form of سایز)",
+    "قشنگه": "it's nice (colloquial contraction of قشنگ است)",
+    # Unit 21 (A1: money), added 2026-07-09, same overnight pass as unit20
+    # above. تومن/هزار already existed (established unit03/unit08, "price"
+    # semantic) -- reused verbatim, not redeclared here.
+    "پول": "money", "بانک": "bank", "دلار": "dollar",
+    "تبدیل": "exchange / convert",
+    "چقدر": "how much / how many",
+    "خودپرداز": "ATM (literally 'self-payer')",
+    "بردارم": "I withdraw / take out",
+    "خرد": "change / small (money)",
+    "نرخ": "rate",
+    "صد": "hundred",
+    "کنید": "you do (polite/plural, subjunctive)",
+    # Unit 22 (A1: phone), added 2026-07-09, same overnight pass as units
+    # 20-21 above. تلفن/پیام/زنگ/میشه/برات/چهار/چطوری/بهتره/آره/حتماً/میام/
+    # الان already existed (established across units 02/03/07/A2unit10/12/
+    # 15/16/etc.) -- reused verbatim, not redeclared here.
+    "زدن": "to ring / to hit (in زنگ زدن, 'to call')",
+    "صدا": "voice",
+    "الو": "hello (answering the phone)",
+    "منم": "it's me (colloquial contraction of من هم / من است)",
+    "تکرار": "repeat / repetition",
+    "آهسته‌تر": "more slowly",
+    "صحبت": "talk / speech (in صحبت کردن, 'to talk')",
+    "بیا": "come (imperative)",
+    "کافه": "cafe",
+    "قطع": "cut off / disconnected",
+    "وصل": "connected",
+    "بعداً": "later",
+    "بهتر": "better",
+    "شد": "became / happened (past)",
+    "می‌کنیم": "we do (in صحبت می‌کنیم, 'we'll talk')",
+    "میرن": "they go (informal/colloquial)",
+    # Unit 23 (A1: emotions), added 2026-07-09, same overnight pass as
+    # units 20-22 above. خسته‌ام/خوب/نیستم/چطوری/خوبم/من/یکم/چرا/هستی/کار/
+    # کردم/چون/امروز/سارا/چه/نیما/تو/نیست already existed (established
+    # across many earlier units) -- reused verbatim, not redeclared here.
+    "خوشحال": "happy", "ناراحت": "sad",
+    "خوشحالم": "I'm happy (colloquial contraction of خوشحال هستم)",
+    "ناراحتم": "I'm sad (colloquial contraction of ناراحت هستم)",
+    "خسته": "tired",
+    "گشنه": "hungry",
+    "گشنه‌ام": "I'm hungry (colloquial contraction of گشنه هستم)",
+    "عصبانی": "angry",
+    "عصبانی‌ام": "I'm angry (colloquial contraction of عصبانی هستم)",
+    "نگران": "worried",
+    "نگرانی": "you're worried (colloquial contraction of نگران هستی)",
+    "تعطیله": "it's a holiday (colloquial contraction of تعطیل است)",
+    "زیاد": "a lot / much",
+    "خسته‌ست": "is tired (colloquial contraction of خسته است)",
+    "کرده": "has done (past perfect)",
+    "فقط": "only",
+    "خوشحاله": "he's/she's happy (colloquial contraction of خوشحال است)",
+    # Unit 24 (A1: hobbies), added 2026-07-09, same overnight pass as
+    # units 20-23 above. وقت/کتاب/من/دوست/دارم/موسیقی/فیلم/می‌کنم/هر/تو/
+    # چیکار/می‌کنی/نیما/داره/چند/تا/هم/می‌کنه/سارا/سینما/چی/و/چه/خوب
+    # already existed (established across many earlier units) -- reused
+    # verbatim, not redeclared here.
+    "آزاد": "free (in وقت آزاد, 'free time')",
+    "سرگرمی": "hobby",
+    "خوندن": "to read / reading",
+    "گوش": "ear (in گوش دادن, 'to listen')",
+    "می‌دم": "I give / I do (in گوش می‌دم, 'I listen')",
+    "می‌بینم": "I watch / I see",
+    "ورزش": "sport / exercise",
+    "فوتبال": "football",
+    "بازی": "play / game",
+    "هفته": "week",
+    "گاهی": "sometimes",
+    "می‌خونه": "he/she reads",
+    "می‌رم": "I go",
+    "دیدن": "to watch / to see",
 }
 
 FA_SYMBOLS = set("س ل ا م ن ت ش چ ی ه ک گ ج د ر ف و ب خ ز".split())
@@ -440,26 +562,57 @@ FA_PROPER_NOUNS = set(
     "مریم نیما".split()
 )
 FA_PRONOUNS = set(
-    "من تو شما او ما این همون چی چه کی همین کدوم اون".split()
+    "من تو شما او ما این همون چی چه کی همین کدوم اون چقدر".split()
     + ["چی؟"]
 )
 FA_PREPOSITIONS = set(
     "به از با اهل بهت مثل کنار برای برات پیش در بالای".split()
 )
-FA_PARTICLES = set("هم ولی بله و آره پس تا یه یا چون رو خب چشم".split())
+FA_PARTICLES = set(
+    "هم ولی بله و آره پس تا یه یا چون رو خب چشم "
+    # Unit 22 (A1: phone), added 2026-07-09: الو is the phone-answering
+    # interjection ("hello?"), same class as other interjection-like
+    # particles already in this set.
+    "الو".split()
+)
 FA_ADVERBS = set(
     "فعلاً خیلی چطور کجا اینجا همین‌طور کجایی باهم فردا حتماً خودمونی چند "
     "اونجا مستقیم بعد لطفاً امروز الان کیلویی نقدی زیادی بیشتر چرا "
-    "یکم دیر چندم بعدش یه‌کم دیرتر چیکار معمولاً شب‌ها دیروز".split()
+    "یکم دیر چندم بعدش یه‌کم دیرتر چیکار معمولاً شب‌ها دیروز "
+    # Unit 22 (A1: phone), added 2026-07-09.
+    "آهسته‌تر بعداً "
+    # Unit 23 (A1: emotions), added 2026-07-09.
+    "زیاد فقط "
+    # Unit 24 (A1: hobbies), added 2026-07-09.
+    "گاهی".split()
 )
 FA_ADJECTIVES = set(
     "خوبی بد ایرانی انگلیسی فرانسوی بزرگه کوچیکه متأهل مجرد برعکسه شلوغه "
     "آفتابی بارونی ابری برفی گرم سرد خنک نزدیک خوشمزه ملی قدیم جدید موافق "
-    "تعطیل هجری شمسی دهم هشتم بیدار هر خوب".split()
+    "تعطیل هجری شمسی دهم هشتم بیدار هر خوب "
+    # Unit 20 (A1: clothing), added 2026-07-09: colors and sizes function
+    # attributively (پیراهن قرمز, سایز بزرگ), same class as the weather
+    # adjectives (آفتابی/بارونی/...) already in this set.
+    "قشنگ قرمز آبی سیاه سفید بزرگ کوچیک متوسط "
+    # Unit 21 (A1: money), added 2026-07-09: خرد modifies پول attributively
+    # (پول خرد, "small/change money"), same attributive-adjective class.
+    "خرد "
+    # Unit 22 (A1: phone), added 2026-07-09: قطع/وصل are predicate
+    # adjectives with میشه ("cuts in and out"); بهتر is the plain
+    # (non-contracted) form of the already-established بهتره.
+    "قطع وصل بهتر "
+    # Unit 23 (A1: emotions), added 2026-07-09: the 6 core feeling words,
+    # all attributive/predicate adjectives (من خوشحالم, تو نگرانی, etc.).
+    "خوشحال ناراحت خسته گشنه عصبانی نگران "
+    # Unit 24 (A1: hobbies), added 2026-07-09: آزاد modifies وقت
+    # attributively (وقت آزاد, "free time").
+    "آزاد".split()
 )
 FA_NUMBERS = set(
     "صفر یک دو سه چهار پنج شش هفت هشت نه ده یازده دوازده سیزده چهارده "
-    "پانزده شانزده هفده هجده نوزده بیست سی چهل پنجاه شصت هفتاد هشتاد نود"
+    "پانزده شانزده هفده هجده نوزده بیست سی چهل پنجاه شصت هفتاد هشتاد نود "
+    # Unit 21 (A1: money), added 2026-07-09.
+    "صد"
     .split()
 )
 FA_VERBS = {
@@ -514,6 +667,30 @@ FA_VERBS = {
     "مهندسم", "معلمم", "دکترم", "مهندسه", "معلمه",
     # Unit 19 (A1: housing), added 2026-07-07, same precedent as above.
     "تخته", "آشپزخانه‌س",
+    # Unit 20 (A1: clothing), added 2026-07-09, same colloquial -e-copula-
+    # contraction precedent as آفتابیه/سرده/بارونیه/گرمه above.
+    "قشنگه",
+    # Unit 21 (A1: money), added 2026-07-09. بردارم (I withdraw, 1st
+    # person subjunctive) and کنید (you do, polite/plural subjunctive --
+    # additive on top of کنم/کنی's already-established precedent).
+    "بردارم", "کنید",
+    # Unit 22 (A1: phone), added 2026-07-09. منم (colloquial "it's me"
+    # copula contraction), زدن (infinitive, "to ring/hit" -- part of
+    # زنگ زدن), بیا (imperative "come"), شد (past "became/happened"),
+    # می‌کنیم (we do, 1st person plural), میرن (they go, informal --
+    # from this unit's own grammar_note card, explicitly labeled
+    # colloquial there).
+    "منم", "زدن", "بیا", "شد", "می‌کنیم", "میرن",
+    # Unit 23 (A1: emotions), added 2026-07-09. Colloquial -am/-i/-e
+    # copula contractions (خوشحالم/ناراحتم/گشنه‌ام/عصبانی‌ام/نگرانی/
+    # تعطیله/خسته‌ست/خوشحاله), same established precedent as خسته‌ام/
+    # آفتابیه/سرده/بارونیه/گرمه above. کرده is the past-perfect "has done."
+    "خوشحالم", "ناراحتم", "گشنه‌ام", "عصبانی‌ام", "نگرانی",
+    "تعطیله", "خسته‌ست", "خوشحاله", "کرده",
+    # Unit 24 (A1: hobbies), added 2026-07-09. خوندن/دیدن (infinitives,
+    # same class as unit22's already-established زدن precedent), می‌دم/
+    # می‌بینم/می‌خونه/می‌رم (conjugated verb forms).
+    "خوندن", "دیدن", "می‌دم", "می‌بینم", "می‌خونه", "می‌رم",
 }
 FA_PHRASE_PARTS = {"بخیر", "خواهش"}
 
@@ -1076,6 +1253,210 @@ def fa_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         semantics.append("home_location_word")
     if lesson_key.endswith("lesson06.housing_dialogue"):
         semantics.append("dialogue_word")
+    # Unit 20 (A1: clothing), added 2026-07-09 (en-fa overnight
+    # practice-depth pass, units 20+). "clothing_word" pools the 4
+    # clothing-item nouns plus قشنگ (mixed noun/adjective, 5 members,
+    # anchored lesson01, mirrors the realization's own 5-pair
+    # match_clothing_words exercise). "clothing_item_word" is the
+    # narrower additive noun-only subset (4 members) used for this pack's
+    # generative "{X} می‌خوام"/"این {X} چنده؟" word_order templates,
+    # since قشنگ can't grammatically fill either frame. کت is additive
+    # here on top of its existing unit07 "coat" entry -- same referent,
+    # reused not re-glossed. "color_full_word" pools رنگ with the 4 color
+    # adjectives (5 members, anchored lesson02, mirrors the realization's
+    # own 5-pair match_colors exercise); "color_word" is the narrower
+    # additive adjective-only subset (4 members) for the generative
+    # "یه {item} {color} می‌خوام" template mirroring lesson06's own real
+    # dialogue line "یه پیراهن آبی می‌خوام". "size_full_word" pools سایز
+    # with the 3 size adjectives (4 members, anchored lesson03, mirrors
+    # the realization's own 4-pair match_sizes exercise); "size_word" is
+    # the narrower additive adjective-only subset (3 members) for the
+    # generative "سایز {size}" template mirroring lesson03's own real
+    # "سایز بزرگ" exercise. "try_on_phrase" pools the one non-colliding
+    # auto-derived lesson04 phrase lexeme with the two individual review
+    # tokens بله/بفرمایید (translation/matching-only, below the
+    # multiple_choice floor, same mixed-type class as e.g. unit17's own
+    # help_word). Deliberately NOT using the auto-derived phrase
+    # "بله، بفرمایید." itself as a pack slot member: it's a real
+    # dead-anchor homograph with unit06's restaurant dialogue, which
+    # already introduces the byte-identical phrase text for an unrelated
+    # "waiter confirms the order" meaning. This pack's phrase-derivation
+    # discriminator-key fix in _classify_fa (see the "trying_on_clothes"
+    # key below) keeps iter_specs() itself correct for either sense, but
+    # both senses still share one physical Lexeme row at DB-persistence
+    # time (main()'s existing-row lookup matches on token+part_of_speech
+    # only, not on this Python-side dict key) -- so relying on that
+    # specific phrase text for a generated practice item risks drawing
+    # whichever sense's gloss happened to be written to the DB last.
+    # Reusing بله/بفرمایید as plain review tokens instead sidesteps this
+    # entirely (each is its own long-established, non-colliding Lexeme).
+    if token in {"پیراهن", "شلوار", "کفش", "کت", "قشنگ"}:
+        semantics.append("clothing_word")
+    if token in {"پیراهن", "شلوار", "کفش", "کت"}:
+        semantics.append("clothing_item_word")
+    if token in {"رنگ", "قرمز", "آبی", "سیاه", "سفید"}:
+        semantics.append("color_full_word")
+    if token in {"قرمز", "آبی", "سیاه", "سفید"}:
+        semantics.append("color_word")
+    if token in {"سایز", "بزرگ", "کوچیک", "متوسط"}:
+        semantics.append("size_full_word")
+    if token in {"بزرگ", "کوچیک", "متوسط"}:
+        semantics.append("size_word")
+    if token == "می‌تونم امتحانش کنم؟" and lesson_key == "fa.a1.unit20.lesson04.trying_on":
+        semantics.append("try_on_phrase")
+    if token in {"بله", "بفرمایید"} and lesson_key == "fa.a1.unit20.lesson04.trying_on":
+        semantics.append("try_on_phrase")
+    if lesson_key.endswith("lesson06.store_dialogue"):
+        semantics.append("dialogue_word")
+    # Unit 21 (A1: money), added 2026-07-09 (en-fa overnight
+    # practice-depth pass, units 20+). "money_word" pools the 4 core
+    # nouns (پول/بانک/دلار/تبدیل, anchored lesson01, mirrors the
+    # realization's own 4-pair match_money_words exercise).
+    # "exchange_word" pools the 4 review/new words lesson02 teaches
+    # alongside its two phrases (به/تومن/چقدر/دارید, mixed preposition/
+    # noun/pronoun/verb, anchored lesson02, mirrors the realization's own
+    # match_exchange_phrases exercise's word-level pairs). "atm_word"
+    # pools خودپرداز with از/بردارم (mixed noun/preposition/verb, 3
+    # members, anchored lesson03, mirrors match_atm_phrases). "change_
+    # word" pools خرد with بفرمایید (mixed adjective/verb, 2 members,
+    # translation/matching-only, below the multiple_choice floor, same
+    # class as other units' narrow pairs -- بفرمایید is additive here on
+    # top of its long-established unit01 entry). "rate_word" pools نرخ
+    # with هر (mixed noun/adjective, 2 members, translation/matching-
+    # only, anchored lesson05).
+    if token in {"پول", "بانک", "دلار", "تبدیل"}:
+        semantics.append("money_word")
+    if token in {"به", "تومن", "چقدر", "دارید"} and lesson_key == "fa.a1.unit21.lesson02.exchanging_currency":
+        semantics.append("exchange_word")
+    if token in {"خودپرداز", "از", "بردارم"} and lesson_key == "fa.a1.unit21.lesson03.atm_withdrawal":
+        semantics.append("atm_word")
+    if token in {"خرد", "بفرمایید"} and lesson_key == "fa.a1.unit21.lesson04.asking_for_change":
+        semantics.append("change_word")
+    if token in {"نرخ", "هر"} and lesson_key == "fa.a1.unit21.lesson05.asking_the_rate":
+        semantics.append("rate_word")
+    if lesson_key.endswith("lesson06.bank_dialogue"):
+        semantics.append("dialogue_word")
+    # Unit 22 (A1: phone), added 2026-07-09 (en-fa overnight
+    # practice-depth pass, units 20+). "phone_word" pools the 4 core
+    # lesson01 items -- تلفن/پیام/صدا plus the auto-derived "زنگ زدن"
+    # phrase lexeme (mixed noun/phrase, anchored lesson01, mirrors
+    # match_phone_words). تلفن/پیام already carry unrelated tags from
+    # earlier units (unit02's phone_number, a2_unit10's family_message_
+    # word) -- additive here, same meaning throughout, not a homograph.
+    # "phone_answer_word" pools الو/منم (2 members, translation/
+    # matching-only, anchored lesson02). "repeat_word" pools تکرار/
+    # آهسته‌تر/صحبت (3 members, anchored lesson03, mirrors
+    # match_repeat_phrases' word-level pairs); "repeat_phrase" pools the
+    # 2 auto-derived lesson03 sentence-level phrases (translation/
+    # matching-only). "message_word" pools برات/بیا/کافه (3 members,
+    # anchored lesson04 -- برات is additive on top of its existing
+    # unit12-ish preposition entry, same meaning throughout);
+    # "message_phrase" pools the 2 auto-derived lesson04 sentence-level
+    # phrases. "call_ending_word" pools بعداً/بهتر/شد/الان (4 members,
+    # anchored lesson05 -- الان additive on top of its existing entry);
+    # "ending_phrase" pools the 2 auto-derived lesson05 sentence-level
+    # phrases.
+    if token in {"تلفن", "پیام", "صدا", "زنگ زدن"}:
+        semantics.append("phone_word")
+    if token in {"الو", "منم"} and lesson_key == "fa.a1.unit22.lesson02.answering_the_phone":
+        semantics.append("phone_answer_word")
+    if token in {"تکرار", "آهسته‌تر", "صحبت"} and lesson_key == "fa.a1.unit22.lesson03.asking_to_repeat":
+        semantics.append("repeat_word")
+    if token in {"میشه تکرار کنید؟", "لطفاً آهسته‌تر صحبت کنید"} and lesson_key == "fa.a1.unit22.lesson03.asking_to_repeat":
+        semantics.append("repeat_phrase")
+    if token in {"برات", "بیا", "کافه"} and lesson_key == "fa.a1.unit22.lesson04.reading_a_text_message":
+        semantics.append("message_word")
+    if token in {"یه پیام برات دارم", "فردا ساعت چهار بیا کافه"} and lesson_key == "fa.a1.unit22.lesson04.reading_a_text_message":
+        semantics.append("message_phrase")
+    if token in {"بعداً", "بهتر", "شد", "الان"} and lesson_key == "fa.a1.unit22.lesson05.ending_a_call":
+        semantics.append("call_ending_word")
+    if token in {"خداحافظ، بعداً صحبت می‌کنیم", "الان بهتر شد؟"} and lesson_key == "fa.a1.unit22.lesson05.ending_a_call":
+        semantics.append("ending_phrase")
+    if lesson_key.endswith("lesson06.phone_dialogue"):
+        semantics.append("dialogue_word")
+    # Unit 23 (A1: emotions), added 2026-07-09 (en-fa overnight
+    # practice-depth pass, units 20+). "basic_feeling_word" pools the 3
+    # core lesson01 adjectives (خوشحال/ناراحت/خسته, anchored lesson01,
+    # all 3 genuinely available there). "feeling_word" is the FULL
+    # growing 6-member superset (adds گشنه at lesson02, عصبانی/نگران at
+    # lesson03) -- anchored lesson03, the completing lesson, same
+    # growing-pool precedent already established by a1_unit17's own
+    # symptom_word (anchored at ITS completing lesson, not lesson01
+    # despite 2 of 5 members being taught there). "hunger_word" pools
+    # گشنه with یکم (2 members, mixed adjective/adverb, translation/
+    # matching-only, anchored lesson02 -- یکم additive on top of its
+    # existing adverb entry). "feeling_1st_person_word" pools the 5
+    # colloquial "I am X" contractions (anchored lesson03, where
+    # عصبانی‌ام completes the set) -- deliberately NOT built as a
+    # generative "{feeling_word}م" word_order frame, since the correct
+    # contraction suffix genuinely varies by word ending (خوشحالم has no
+    # inserted vowel, گشنه‌ام/عصبانی‌ام do) and can't be derived
+    # generically per candidate, the same caution already applied to
+    # a1_unit19's is_location_verb. "asking_state_word" pools چرا/نگرانی
+    # (2 members, anchored lesson03, translation/matching-only).
+    # "reason_word" pools تعطیله/امروز/زیاد (3 members, anchored lesson04
+    # -- امروز additive on top of its existing adverb entry).
+    # "reading_word" pools فقط/خسته‌ست/کرده/نیست (4 members, anchored
+    # lesson05 -- نیست additive on top of its existing copula entry).
+    # "reaction_word" pools چه/خوشحاله (2 members, anchored lesson06,
+    # translation/matching-only -- چه additive on top of its existing
+    # pronoun entry). One generative template reuses feeling_word:
+    # "{feeling_a} و {feeling_b}" (distinct pair joined by و) is always
+    # grammatical regardless of which two feelings are picked, same
+    # "join any two words with و" pattern already used by units 20-22.
+    if token in {"خوشحال", "ناراحت", "خسته"}:
+        semantics.append("basic_feeling_word")
+    if token in {"خوشحال", "ناراحت", "خسته", "گشنه", "عصبانی", "نگران"}:
+        semantics.append("feeling_word")
+    if token in {"گشنه", "یکم"} and lesson_key == "fa.a1.unit23.lesson02.asking_how_someone_is":
+        semantics.append("hunger_word")
+    if token in {"خوشحالم", "ناراحتم", "خسته‌ام", "گشنه‌ام", "عصبانی‌ام"}:
+        semantics.append("feeling_1st_person_word")
+    if token in {"چرا", "نگرانی"} and lesson_key == "fa.a1.unit23.lesson03.more_feelings":
+        semantics.append("asking_state_word")
+    if token in {"تعطیله", "امروز", "زیاد"} and lesson_key == "fa.a1.unit23.lesson04.giving_a_reason":
+        semantics.append("reason_word")
+    if token in {"فقط", "خسته‌ست", "کرده", "نیست"} and lesson_key == "fa.a1.unit23.lesson05.reading_about_feelings":
+        semantics.append("reading_word")
+    if token in {"چه", "خوشحاله"} and lesson_key == "fa.a1.unit23.lesson06.feelings_dialogue":
+        semantics.append("reaction_word")
+    if lesson_key.endswith("lesson06.feelings_dialogue"):
+        semantics.append("dialogue_word")
+    # Unit 24 (A1: hobbies), added 2026-07-09 (en-fa overnight
+    # practice-depth pass, units 20+). "hobby_word" pools سرگرمی with the
+    # 2 auto-derived lesson01 phrase lexemes "وقت آزاد"/"کتاب خوندن" (3
+    # members, mixed noun/phrase, anchored lesson01, mirrors
+    # match_basic_hobbies_vocab). "music_movie_word" pools موسیقی/فیلم/
+    # می‌بینم with the auto-derived "گوش می‌دم" phrase (4 members, mixed
+    # noun/verb/phrase, anchored lesson02, mirrors match_music_movies_
+    # vocab). "sport_word" pools ورزش/فوتبال/بازی (3 members, anchored
+    # lesson03, mirrors match_sport_vocab's new-word subset).
+    # "frequency_word" pools هفته/گاهی (2 members, translation/matching-
+    # only, anchored lesson04). "reading_hobby_word" pools می‌خونه/
+    # می‌کنه/هم (3 members, anchored lesson05) -- deliberately excludes
+    # "چند تا" despite this lesson's own teach.chand_ta_phrase card: that
+    # exact phrase text is a real dead-anchor collision with unit04's own
+    # "چند تا" (narrower "how many"-only sense/gloss there vs. this
+    # unit's broader "a few / how many"), given its own discriminator key
+    # below for iter_specs() correctness, but still not used as an actual
+    # slot member here, same DB-persistence-collapse caution already
+    # documented for unit20's بله، بفرمایید. "closing_word" pools دیدن
+    # with the auto-derived "می‌رم سینما" phrase (2 members, translation/
+    # matching-only, anchored lesson06).
+    if token in {"سرگرمی", "وقت آزاد", "کتاب خوندن"}:
+        semantics.append("hobby_word")
+    if token in {"موسیقی", "فیلم", "می‌بینم", "گوش می‌دم"} and lesson_key == "fa.a1.unit24.lesson02.music_and_movies":
+        semantics.append("music_movie_word")
+    if token in {"ورزش", "فوتبال", "بازی"} and lesson_key == "fa.a1.unit24.lesson03.sport":
+        semantics.append("sport_word")
+    if token in {"هفته", "گاهی"} and lesson_key == "fa.a1.unit24.lesson04.how_often":
+        semantics.append("frequency_word")
+    if token in {"می‌خونه", "می‌کنه", "هم"} and lesson_key == "fa.a1.unit24.lesson05.reading_about_a_hobby":
+        semantics.append("reading_hobby_word")
+    if token in {"دیدن", "می‌رم سینما"} and lesson_key == "fa.a1.unit24.lesson06.hobbies_dialogue":
+        semantics.append("closing_word")
+    if lesson_key.endswith("lesson06.hobbies_dialogue"):
+        semantics.append("dialogue_word")
     if semantics:
         tags["semantic"] = list(dict.fromkeys(semantics))
     person = {
@@ -1159,8 +1540,46 @@ def _classify_fa(files, level, fa_specs, seen_en):
                 introduced = item.get("introduced_tokens", [])
                 if len(introduced) > 1 and target_text and "\n" not in target_text:
                     tags = fa_agreement_tags(target_text, lesson_key)
+                    phrase_key = (level, target_text)
+                    # Real dead-anchor collision caught 2026-07-09 while
+                    # adding unit20 (clothing): unit06's own restaurant
+                    # dialogue (lesson06.teach.turn03) already introduces
+                    # the byte-identical phrase "بله، بفرمایید." (there,
+                    # a waiter confirming an order) -- setdefault() below
+                    # would otherwise silently keep unit06's OLD anchor/
+                    # gloss ("The waiter confirms and hands over the
+                    # menu.") for unit20's genuinely different "Yes, go
+                    # ahead [and try it on]" sense. Given its own
+                    # discriminator key here, same pattern as تو's
+                    # location_prep homograph split above, so unit20's
+                    # try_on_phrase group gets its own correctly-anchored,
+                    # correctly-glossed entry instead of silently reusing
+                    # unit06's.
+                    if target_text == "بله، بفرمایید." and content_key.endswith(
+                        "teach.yes_go_ahead"
+                    ):
+                        phrase_key = (level, target_text, "trying_on_clothes")
+                    # Same dead-anchor class caught again 2026-07-09 while
+                    # adding unit24 (hobbies): unit04's own family-asking
+                    # content already introduces the byte-identical phrase
+                    # "چند تا" (there, strictly interrogative "how many,"
+                    # gloss "how many" only) -- unit24 reuses the same
+                    # phrase in a genuinely different, broader sense ("a
+                    # few," in a declarative sentence, gloss "a few / how
+                    # many"). Without this, setdefault() below would
+                    # silently keep unit04's narrower anchor/gloss for
+                    # unit24's own occurrence. Given its own discriminator
+                    # key, same pattern as بله، بفرمایید above -- note this
+                    # pack still does NOT use "چند تا" as an actual slot
+                    # member (same DB-persistence-collapse caution as
+                    # unit20's own write-up), this fix is for iter_specs()
+                    # correctness only.
+                    if target_text == "چند تا" and content_key.endswith(
+                        "teach.chand_ta_phrase"
+                    ):
+                        phrase_key = (level, target_text, "hobby_reading_frequency")
                     fa_specs.setdefault(
-                        (level, target_text),
+                        phrase_key,
                         {
                             "level": level,
                             "unit_order": unit_order, "lesson_order": lesson_order,
