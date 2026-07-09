@@ -1,0 +1,500 @@
+schema_version: "1.1"
+realization_version: "2026.1-draft.1"
+target_language: "hi"
+cefr_level: "A1"
+status: "complete_draft"
+generation_provenance:
+  method: "ai_generated"
+  authoring_system: "claude"
+  human_reviewed: false
+review:
+  status: "unreviewed"
+  required_next_reviewer: "codex"
+  notes: >-
+    Fourth Hindi unit, continuing directly from hi/a1_unit03_dates.yaml
+    (same Priya/Arjun characters, same yoga-class setting, same aap/tum
+    register split). Spine outcome confirmed via universal_spine.yaml:
+    hi/a1_unit03 realized universal.a1.dates.exchange_calendar_dates,
+    and universal.a1.time.ask_tell_time is the next A1 outcome in spine
+    order -- confirmed against actual on-disk precedent from every other
+    launched language's own unit04 (nl/a1_unit04_time.yaml,
+    pl/a1_unit04_time.yaml, ro/a1_unit04_time.yaml all realize this
+    exact outcome as their fourth unit, matching hi's own
+    greetings-then-numbers-then-dates-then-time sequence; es/a1_unit03
+    is "family" and fa/a1_unit04 is "family" -- both older units
+    predating this project's now-settled numbers-then-dates-then-time
+    convention, not counter-examples). Sized to 3 lessons matching
+    unit01/02/03's bootstrap pace -- topic/pacing structure only (asking
+    and telling the hour, then parts of the day plus a scheduled event,
+    then a dialogue confirming the next class's day and time), no text
+    or phrasing reused from any other language's file, per the standing
+    skeleton-share-not-text-share policy.
+
+    Source access, re-attempted per this task's explicit instruction
+    (not just assumed to fail the same way as units 01-03): re-used the
+    same FSI "Hindi: An Active Introduction" PDF already downloaded for
+    the earlier units (scratch copy at .../scratchpad/hi/fsi_hindi.pdf)
+    and re-ran both extraction paths specifically against this unit's
+    own topic. (1) `pdftotext -layout` against the raw PDF again
+    returned a near-empty file (143 bytes total across all 143 pages,
+    byte-for-byte identical to every earlier unit's result) -- confirms
+    yet again this is a pure page-image scan with no embedded text
+    layer at all. (2) A fresh grep of the same Internet Archive OCR pass
+    (`ocr.txt`, the ABBYY FineReader 9.0 output already recovered for
+    units 01-03) specifically for time/clock English framing prose
+    found real hits confirming the OCR pass DID correctly transcribe
+    the surrounding instructional text for this exact section: "At what
+    time do you get up?", "I arrive at school at nine o'clock", "We
+    come back at one o'clock.", "The half-hours are expressed this
+    way:", "For the time being, avoid the question, \"What time is
+    it?\"", "What time is it: now?". But a full-document regex scan of
+    the same 94KB OCR file for the Devanagari Unicode block
+    (U+0900-U+097F) again returns ZERO matches anywhere -- including at
+    the exact lines identified above, where the Hindi half of each
+    example is either simply blank (nothing followed "At what time do
+    you get up?" at all) or survives only as unusable Latin-lookalike
+    mojibake (e.g. the line after "For the time being..." renders as
+    "! 5R OrFT | ? What time is it: now?", and the half-hour example
+    renders as "^tts rffa sr^r" with no recoverable Devanagari at all).
+    Identical failure mode to units 01-03, now confirmed a fourth time
+    against this unit's own specific topic rather than assumed. Per
+    this task's explicit instruction, nothing from either extraction
+    attempt was used, cleaned up, or guessed at anywhere in this file --
+    every Devanagari string below is this session's own careful,
+    correct rendering from established Modern Standard Hindi, verified
+    character-by-character (including the anusvara-vs-chandrabindu
+    convention: chandrabindu (ँ) after non-ascending vowel signs as in
+    पाँच, already established in unit02; anusvara (ं) after ascending
+    vowel signs as in नहीं/हैं, already established in units 01/03 --
+    this unit's own new vocabulary needs no NEW nasalization-mark
+    decisions, only reuse of already-settled spellings).
+
+    Two genuine, disclosed grammar-teaching decisions: (1) Hindi marks
+    "one o'clock" with the singular masculine बजा (एक बजा है) but every
+    other hour with the plural बजे (दो बजे हैं, बारह बजे हैं) -- a real,
+    load-bearing agreement exception, not a simplification, so it is
+    taught explicitly on its own grammar_note card and drilled via a
+    dedicated grammar_check exercise rather than glossed over. (2) A
+    specific hour combines directly with a time-of-day word with no
+    postposition (सुबह सात बजे, "at 7 in the morning"), while the same
+    time-of-day word used generally without a specific hour takes को
+    (दोपहर को, "in the afternoon", रात को, "at night") -- both are
+    genuine, natural constructions in real spoken/written Hindi, not an
+    invented rule, and each is taught on its own grammar_note card
+    rather than presented as one blanket pattern.
+
+    A genuine, disclosed lexical note: कल means both "tomorrow" and
+    "yesterday" in Hindi, disambiguated by context/tense rather than
+    having two separate words the way English does -- flagged honestly
+    on its own teaching card's overlay note rather than silently taught
+    as "tomorrow" only.
+
+course:
+  realization_key: hi.a1
+  target_language_first: true
+  dialect: hi_standard
+  register_policy: >-
+    Continues unit01/02/03's aap/tum split exactly -- no new
+    register-specific vocabulary this unit (time expressions and
+    postpositions are register-neutral in Hindi). Priya and Arjun,
+    already on तुम terms from earlier units, continue in that register
+    for this unit's own closing dialogue. The एक बजा/बाकी बजे agreement
+    exception and the बजे-vs-को postposition choice (see
+    generation_provenance above) are both called out explicitly on
+    dedicated grammar_note cards and drilled via grammar_check
+    exercises, matching the explicit-callout convention every earlier
+    unit's own agreement points (feminine तारीख़/कीमत/उम्र, feminine
+    क्लास) already established.
+
+media_assets: []
+
+units:
+  - content_key: hi.a1.unit04.time
+    title: "समय"
+    section: reading_writing
+    spine_outcome_ids:
+      - universal.a1.time.ask_tell_time
+    planned_lesson_count: 3
+
+    lessons:
+      - content_key: hi.a1.unit04.lesson01.kitne_baje_hain
+        title: "कितने बजे हैं?"
+        spine_outcome_id: universal.a1.time.ask_tell_time
+        teaching:
+          - content_key: hi.a1.unit04.lesson01.teach.baje
+            kind: vocabulary
+            target: {text: "बजे", language_code: hi, direction: ltr}
+            introduced_tokens: ["बजे"]
+            example: {text: "अभी पाँच बजे हैं।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit04.lesson01.teach.abhi
+            kind: vocabulary
+            target: {text: "अभी", language_code: hi, direction: ltr}
+            introduced_tokens: ["अभी"]
+            example: {text: "अभी दस बजे हैं।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit04.lesson01.teach.ek_do_teen
+            kind: vocabulary
+            target: {text: "एक, दो, तीन", language_code: hi, direction: ltr}
+            introduced_tokens: ["एक", "दो", "तीन"]
+            example:
+              - {text: "अभी एक बजा है।", language_code: hi, direction: ltr}
+              - {text: "अभी दो बजे हैं।", language_code: hi, direction: ltr}
+              - {text: "अभी तीन बजे हैं।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit04.lesson01.teach.chaar_paanch_chhah
+            kind: vocabulary
+            target: {text: "चार, पाँच, छह", language_code: hi, direction: ltr}
+            introduced_tokens: ["चार", "पाँच", "छह"]
+            example:
+              - {text: "अभी चार बजे हैं।", language_code: hi, direction: ltr}
+              - {text: "अभी पाँच बजे हैं।", language_code: hi, direction: ltr}
+              - {text: "अभी छह बजे हैं।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit04.lesson01.teach.saat_aath_nau
+            kind: vocabulary
+            target: {text: "सात, आठ, नौ", language_code: hi, direction: ltr}
+            introduced_tokens: ["सात", "आठ", "नौ"]
+            example:
+              - {text: "अभी सात बजे हैं।", language_code: hi, direction: ltr}
+              - {text: "अभी आठ बजे हैं।", language_code: hi, direction: ltr}
+              - {text: "अभी नौ बजे हैं।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit04.lesson01.teach.das_gyaarah_baarah
+            kind: vocabulary
+            target: {text: "दस, ग्यारह, बारह", language_code: hi, direction: ltr}
+            introduced_tokens: ["दस", "ग्यारह", "बारह"]
+            example:
+              - {text: "अभी दस बजे हैं।", language_code: hi, direction: ltr}
+              - {text: "अभी ग्यारह बजे हैं।", language_code: hi, direction: ltr}
+              - {text: "अभी बारह बजे हैं।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit04.lesson01.teach.baja_grammar_note
+            kind: grammar_note
+            target: {text: "एक के साथ 'बजा' आता है, बाकी सभी संख्याओं के साथ 'बजे': एक बजा है, दो बजे हैं।", language_code: hi, direction: ltr}
+            introduced_tokens: ["बजा", "है", "हैं"]
+          - content_key: hi.a1.unit04.lesson01.teach.kitne_baje_hain
+            kind: phrase
+            target: {text: "कितने बजे हैं?", language_code: hi, direction: ltr}
+            introduced_tokens: ["कितने"]
+          - content_key: hi.a1.unit04.lesson01.teach.abhi_paanch_baje_hain
+            kind: phrase
+            target: {text: "अभी पाँच बजे हैं।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+        exercises:
+          - content_key: hi.a1.unit04.lesson01.exercise01.select_paanch_baje
+            type: multiple_choice
+            tested_text: "पाँच बजे"
+            prompt:
+              target_blocks:
+                - {text: "पाँच बजे", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit04.lesson01.exercise02.select_baarah_baje
+            type: multiple_choice
+            tested_text: "बारह बजे"
+            prompt:
+              target_blocks:
+                - {text: "बारह बजे", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit04.lesson01.exercise03.select_kitne_baje_hain_meaning
+            type: multiple_choice
+            tested_text: "कितने बजे हैं"
+            prompt:
+              target_blocks:
+                - {text: "कितने बजे हैं?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit04.lesson01.exercise04.match_hours
+            type: matching_pairs
+            tested_text: "एक बजा दो बजे तीन बजे चार बजे पाँच बजे छह बजे सात बजे आठ बजे नौ बजे दस बजे ग्यारह बजे बारह बजे"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "एक बजा", right: "1 o'clock"}
+              - {left: "दो बजे", right: "2 o'clock"}
+              - {left: "तीन बजे", right: "3 o'clock"}
+              - {left: "चार बजे", right: "4 o'clock"}
+              - {left: "पाँच बजे", right: "5 o'clock"}
+              - {left: "छह बजे", right: "6 o'clock"}
+              - {left: "सात बजे", right: "7 o'clock"}
+              - {left: "आठ बजे", right: "8 o'clock"}
+              - {left: "नौ बजे", right: "9 o'clock"}
+              - {left: "दस बजे", right: "10 o'clock"}
+              - {left: "ग्यारह बजे", right: "11 o'clock"}
+              - {left: "बारह बजे", right: "12 o'clock"}
+          - content_key: hi.a1.unit04.lesson01.exercise05.order_kitne_baje_hain
+            type: word_order
+            tested_text: "कितने बजे हैं"
+            prompt: {target_blocks: []}
+            word_bank: ["बजे", "कितने", "हैं"]
+          - content_key: hi.a1.unit04.lesson01.exercise06.order_abhi_paanch_baje_hain
+            type: word_order
+            tested_text: "अभी पाँच बजे हैं"
+            prompt: {target_blocks: []}
+            word_bank: ["पाँच", "अभी", "हैं", "बजे"]
+          - content_key: hi.a1.unit04.lesson01.exercise07.fill_current_hour
+            type: fill_in_blank
+            tested_text: "दस"
+            prompt:
+              target_blocks:
+                - {text: "अभी ___ बजे हैं।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit04.lesson01.exercise08.fix_ek_baje_exception
+            type: grammar_check
+            tested_text: "एक बजा है"
+            prompt:
+              target_blocks:
+                - {text: "एक बजे है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit04.lesson01.exercise09.reply_current_time
+            type: dialogue_response
+            tested_text: "अभी दस बजे हैं"
+            prompt:
+              target_blocks:
+                - {text: "कितने बजे हैं?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit04.lesson01.exercise10.speak_current_time
+            type: speak_response
+            tested_text: "अभी सात बजे हैं"
+            prompt:
+              target_blocks:
+                - {text: "अभी का समय बताओ: अभी सात बजे हैं।", language_code: hi, direction: ltr}
+
+      - content_key: hi.a1.unit04.lesson02.din_ka_samay
+        title: "दिन का समय"
+        spine_outcome_id: universal.a1.time.ask_tell_time
+        teaching:
+          - content_key: hi.a1.unit04.lesson02.teach.yoga_class_reprise
+            kind: vocabulary
+            target: {text: "योग क्लास", language_code: hi, direction: ltr}
+            introduced_tokens: ["योग", "क्लास"]
+            example: {text: "योग क्लास आज है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit04.lesson02.teach.subah
+            kind: vocabulary
+            target: {text: "सुबह", language_code: hi, direction: ltr}
+            introduced_tokens: ["सुबह"]
+            example: {text: "योग क्लास सुबह है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit04.lesson02.teach.dopahar
+            kind: vocabulary
+            target: {text: "दोपहर", language_code: hi, direction: ltr}
+            introduced_tokens: ["दोपहर"]
+            example: {text: "दोपहर को क्लास नहीं है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit04.lesson02.teach.shaam
+            kind: vocabulary
+            target: {text: "शाम", language_code: hi, direction: ltr}
+            introduced_tokens: ["शाम"]
+            example: {text: "अगली क्लास शाम पाँच बजे है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit04.lesson02.teach.raat
+            kind: vocabulary
+            target: {text: "रात", language_code: hi, direction: ltr}
+            introduced_tokens: ["रात"]
+            example: {text: "रात को क्लास नहीं है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit04.lesson02.teach.ko_reprise
+            kind: grammar_note
+            target: {text: "'को' किसी सामान्य समय के साथ आता है, जब कोई खास घंटा नहीं बताया जाता: दोपहर को, रात को।", language_code: hi, direction: ltr}
+            introduced_tokens: ["को", "नहीं"]
+          - content_key: hi.a1.unit04.lesson02.teach.time_of_day_baje_note
+            kind: grammar_note
+            target: {text: "किसी खास घंटे के लिए दिन के समय का नाम सीधे 'बजे' से पहले आता है, बीच में कोई शब्द नहीं: सुबह सात बजे, शाम पाँच बजे।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a1.unit04.lesson02.teach.class_kitne_baje_hai
+            kind: phrase
+            target: {text: "क्लास कितने बजे है?", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a1.unit04.lesson02.teach.class_subah_saat_baje_hai
+            kind: phrase
+            target: {text: "क्लास सुबह सात बजे है।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+        exercises:
+          - content_key: hi.a1.unit04.lesson02.exercise01.select_shaam
+            type: multiple_choice
+            tested_text: "शाम"
+            prompt:
+              target_blocks:
+                - {text: "शाम", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit04.lesson02.exercise02.select_raat
+            type: multiple_choice
+            tested_text: "रात"
+            prompt:
+              target_blocks:
+                - {text: "रात", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit04.lesson02.exercise03.select_dopahar_no_class_meaning
+            type: multiple_choice
+            tested_text: "दोपहर को क्लास नहीं है"
+            prompt:
+              target_blocks:
+                - {text: "दोपहर को क्लास नहीं है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit04.lesson02.exercise04.match_times_of_day
+            type: matching_pairs
+            tested_text: "सुबह दोपहर शाम रात सुबह सात बजे शाम पाँच बजे दोपहर को रात को"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "सुबह", right: "morning"}
+              - {left: "दोपहर", right: "afternoon"}
+              - {left: "शाम", right: "evening"}
+              - {left: "रात", right: "night"}
+              - {left: "सुबह सात बजे", right: "7 in the morning"}
+              - {left: "शाम पाँच बजे", right: "5 in the evening"}
+              - {left: "दोपहर को", right: "in the afternoon"}
+              - {left: "रात को", right: "at night"}
+          - content_key: hi.a1.unit04.lesson02.exercise05.order_class_subah_saat_baje
+            type: word_order
+            tested_text: "क्लास सुबह सात बजे है"
+            prompt: {target_blocks: []}
+            word_bank: ["सुबह", "क्लास", "है", "बजे", "सात"]
+          - content_key: hi.a1.unit04.lesson02.exercise06.order_class_kitne_baje_hai
+            type: word_order
+            tested_text: "क्लास कितने बजे है"
+            prompt: {target_blocks: []}
+            word_bank: ["कितने", "क्लास", "है", "बजे"]
+          - content_key: hi.a1.unit04.lesson02.exercise07.fill_class_subah_hour
+            type: fill_in_blank
+            tested_text: "सात"
+            prompt:
+              target_blocks:
+                - {text: "क्लास सुबह ___ बजे है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit04.lesson02.exercise08.fix_raat_ko_missing
+            type: grammar_check
+            tested_text: "रात को क्लास नहीं है"
+            prompt:
+              target_blocks:
+                - {text: "रात क्लास नहीं है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit04.lesson02.exercise09.reply_class_time
+            type: dialogue_response
+            tested_text: "क्लास सुबह सात बजे है"
+            prompt:
+              target_blocks:
+                - {text: "क्लास कितने बजे है?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit04.lesson02.exercise10.speak_class_time
+            type: speak_response
+            tested_text: "क्लास सुबह सात बजे है"
+            prompt:
+              target_blocks:
+                - {text: "क्लास का समय बताओ: क्लास सुबह सात बजे है।", language_code: hi, direction: ltr}
+
+      - content_key: hi.a1.unit04.lesson03.agli_class_ka_samay
+        title: "अगली क्लास का समय"
+        spine_outcome_id: universal.a1.time.ask_tell_time
+        teaching:
+          - content_key: hi.a1.unit04.lesson03.teach.kal
+            kind: vocabulary
+            target: {text: "कल", language_code: hi, direction: ltr}
+            introduced_tokens: ["कल"]
+            example: {text: "कल क्लास शाम पाँच बजे है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit04.lesson03.teach.agli_reprise
+            kind: vocabulary
+            target: {text: "अगली", language_code: hi, direction: ltr}
+            introduced_tokens: ["अगली"]
+            example: {text: "अगली क्लास कल है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit04.lesson03.teach.theek_hai_shukriya_reprise
+            kind: phrase
+            target: {text: "ठीक है, शुक्रिया!", language_code: hi, direction: ltr}
+            introduced_tokens: ["ठीक", "शुक्रिया"]
+          - content_key: hi.a1.unit04.lesson03.teach.milte_hain_reprise
+            kind: phrase
+            target: {text: "मिलते हैं", language_code: hi, direction: ltr}
+            introduced_tokens: ["मिलते"]
+          - content_key: hi.a1.unit04.lesson03.teach.agli_class_kitne_baje_hai
+            kind: phrase
+            target: {text: "अगली क्लास कितने बजे है?", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a1.unit04.lesson03.teach.agli_class_shaam_paanch_baje_hai
+            kind: phrase
+            target: {text: "अगली क्लास शाम पाँच बजे है।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a1.unit04.lesson03.teach.kal_milte_hain
+            kind: phrase
+            target: {text: "ठीक है, कल मिलते हैं!", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a1.unit04.lesson03.teach.dialogue.line01
+            kind: dialogue
+            target:
+              text: "अगली क्लास कितने बजे है?"
+              language_code: hi
+              direction: ltr
+              speaker: Arjun
+            introduced_tokens: []
+          - content_key: hi.a1.unit04.lesson03.teach.dialogue.line02
+            kind: dialogue
+            target:
+              text: "अगली क्लास शाम पाँच बजे है।"
+              language_code: hi
+              direction: ltr
+              speaker: Priya
+            introduced_tokens: []
+          - content_key: hi.a1.unit04.lesson03.teach.dialogue.line03
+            kind: dialogue
+            target:
+              text: "ठीक है, शुक्रिया!"
+              language_code: hi
+              direction: ltr
+              speaker: Arjun
+            introduced_tokens: []
+          - content_key: hi.a1.unit04.lesson03.teach.dialogue.line04
+            kind: dialogue
+            target:
+              text: "ठीक है, कल मिलते हैं!"
+              language_code: hi
+              direction: ltr
+              speaker: Priya
+            introduced_tokens: []
+        exercises:
+          - content_key: hi.a1.unit04.lesson03.exercise01.select_agli_class_kitne_baje_hai
+            type: multiple_choice
+            tested_text: "अगली क्लास कितने बजे है"
+            prompt:
+              target_blocks:
+                - {text: "अगली क्लास कितने बजे है?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit04.lesson03.exercise02.select_kitne_baje_hain_general
+            type: multiple_choice
+            tested_text: "कितने बजे हैं"
+            prompt:
+              target_blocks:
+                - {text: "कितने बजे हैं?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit04.lesson03.exercise03.comprehend_next_class_time
+            type: dialogue_comprehension
+            tested_text: "शाम पाँच बजे"
+            prompt:
+              target_blocks:
+                - {text: "अगली क्लास शाम पाँच बजे है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit04.lesson03.exercise04.comprehend_meet_tomorrow
+            type: dialogue_comprehension
+            tested_text: "कल"
+            prompt:
+              target_blocks:
+                - {text: "ठीक है, कल मिलते हैं!", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit04.lesson03.exercise05.order_agli_class_kitne_baje_hai
+            type: word_order
+            tested_text: "अगली क्लास कितने बजे है"
+            prompt: {target_blocks: []}
+            word_bank: ["क्लास", "अगली", "है", "कितने", "बजे"]
+          - content_key: hi.a1.unit04.lesson03.exercise06.order_agli_class_shaam_paanch_baje_hai
+            type: word_order
+            tested_text: "अगली क्लास शाम पाँच बजे है"
+            prompt: {target_blocks: []}
+            word_bank: ["शाम", "अगली", "क्लास", "है", "पाँच", "बजे"]
+          - content_key: hi.a1.unit04.lesson03.exercise07.match_questions_and_answers
+            type: matching_pairs
+            tested_text: "अगली क्लास कितने बजे है शाम पाँच बजे है ठीक है शुक्रिया कल मिलते हैं कितने बजे हैं अभी दस बजे हैं क्लास कितने बजे है सुबह सात बजे है रात को क्लास नहीं है ठीक है दोपहर को क्लास नहीं है कल क्लास है"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "अगली क्लास कितने बजे है?", right: "अगली क्लास शाम पाँच बजे है।"}
+              - {left: "ठीक है, शुक्रिया!", right: "ठीक है, कल मिलते हैं!"}
+              - {left: "कितने बजे हैं?", right: "अभी दस बजे हैं।"}
+              - {left: "क्लास कितने बजे है?", right: "क्लास सुबह सात बजे है।"}
+              - {left: "रात को क्लास नहीं है।", right: "ठीक है।"}
+              - {left: "दोपहर को क्लास नहीं है।", right: "कल क्लास है।"}
+          - content_key: hi.a1.unit04.lesson03.exercise08.fill_agli_class_hour
+            type: fill_in_blank
+            tested_text: "पाँच"
+            prompt:
+              target_blocks:
+                - {text: "अगली क्लास शाम ___ बजे है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit04.lesson03.exercise09.fix_agla_vs_agli
+            type: grammar_check
+            tested_text: "अगली क्लास कल है"
+            prompt:
+              target_blocks:
+                - {text: "अगला क्लास कल है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit04.lesson03.exercise10.reply_agli_class_time
+            type: dialogue_response
+            tested_text: "अगली क्लास शाम पाँच बजे है"
+            prompt:
+              target_blocks:
+                - {text: "अगली क्लास कितने बजे है?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit04.lesson03.exercise11.write_next_class_time
+            type: writing_prompt
+            tested_text: "शाम पाँच बजे"
+            prompt: {target_blocks: []}
+          - content_key: hi.a1.unit04.lesson03.exercise12.speak_agli_class_time
+            type: speak_response
+            tested_text: "अगली क्लास शाम पाँच बजे है"
+            prompt:
+              target_blocks:
+                - {text: "अगली क्लास का समय बताओ: अगली क्लास शाम पाँच बजे है।", language_code: hi, direction: ltr}
