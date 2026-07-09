@@ -1,0 +1,540 @@
+schema_version: "1.1"
+realization_version: "2026.1-draft.1"
+target_language: fa
+cefr_level: A1
+generation_provenance:
+  method: ai_adapted_from_public_domain_source
+  authoring_system: claude
+  source_material: >-
+    Made a real, fresh attempt at FSI Persian Basic Course source access for
+    this unit before authoring fresh, honestly disclosed either way per
+    AUTHORING_GUIDE.md #10. Firecrawl remains at 0 credits this session, so
+    tried WebFetch directly against the Live Lingua-hosted copy
+    (https://www.livelingua.com/fsi/FSI%20-%20Spoken%20Persian.pdf) first,
+    per this task's explicit instruction to try WebFetch before falling
+    back to local extraction -- it returned only a binary-content notice
+    ("compressed object streams with encoded data... not readable as plain
+    text"), no usable text. Fell back to downloading the PDF directly and
+    running `pdftotext -layout` locally (the same Live Lingua mirror every
+    prior fa unit this session has used, since it carries a real Acrobat
+    Pro DC OCR text layer, unlike the DigitalOcean mirror's JBIG2-only
+    scan) -- this extracted 66,717 words, exactly matching every prior
+    fetch of the same file (units 36-45), confirming the extraction is
+    stable and complete, not a truncated fetch. Grepped the full extracted
+    text case-insensitively for haircut/barber/hairdress/salon/comb/shave/
+    trim/hair: found only 3 scattered hits, none of them structured
+    barbershop/haircut-request content -- "gis" ('hair') appears only as
+    one entry in an unrelated phonetic minimal-pair drill list (g-sounds),
+    "tarasidan" ('to sharpen, to shave, to scrape') appears only in a
+    "Classroom Expressions" section about sharpening a PENCIL, not shaving
+    a person, and "rish-tarasi" ('shaving') appears only inside an
+    unrelated household-chores dialogue about having a shirt washed and
+    ironed ("bring me hot water for shaving and have this shirt washed and
+    ironed") -- a passing mention embedded in a laundry request, not a
+    hairdresser/barbershop scene. No word for "barber," "hairdresser," or
+    "salon" appears anywhere in the extracted text at all. This is a
+    genuine dead end of the same shape as unit45's pharmacy search (which
+    found zero structured pharmacy content) -- the FSI course simply has
+    no barbershop/hairdresser material, not an extraction failure. All
+    personal-care vocabulary and the full dialogue in this unit (سلمانی,
+    موهام, کوتاه‌تر, and the customer-barber exchange) is authored fresh
+    from this project's own established colloquial Iranian Farsi
+    conventions and already-shipped vocabulary (see review notes below for
+    the exact reuse chain), since no such content exists in the FSI
+    source.
+  human_reviewed: false
+review:
+  status: unreviewed
+  required_next_reviewer: codex_fresh_context
+  notes: >-
+    Draft authored 2026-07-09 by Claude (content-authoring worker session),
+    continuing fa A1 volume growth past unit45 (pharmacy). Realizes
+    universal.a1.personal_care.get_haircut -- confirmed as the next
+    unrealized A1 outcome by a real yaml.safe_load-equivalent scan (grep
+    -h "spine_outcome_id" across every docs/content/realizations/fa/
+    a1_unit*.yaml, deduplicated) cross-checked against every
+    universal.a1.* id declared in docs/content/universal_spine.yaml (51
+    total A1 ids): fa had realized all A1 outcomes through unit45 except
+    personal_care, bike_rental, laundry, swimming_pool, restaurant,
+    cinema, and museum -- personal_care is the first of these in the
+    spine's own declaration order (pharmacy -> personal_care -> bike_rental
+    -> laundry -> swimming_pool -> restaurant -> cinema -> museum), so this
+    unit covers it; bike_rental/laundry/swimming_pool/restaurant/cinema/
+    museum remain unrealized for fa after this unit. The
+    universal.a1.personal_care.get_haircut outcome itself is not new -- it
+    was added earlier this session by the nl (Dutch) content lane (git log
+    confirms "Add nl unit51 (hairdresser)" as its origin, alongside the
+    spine outcome itself), so no new spine outcome needed adding here,
+    just fa catching up to an outcome that already exists (per this task's
+    own instruction to check git log first before considering adding a new
+    outcome). Prerequisite outcomes (appointments.make_simple_appointment/
+    unit41, money.handle_basic_money_matters/unit21) are both already
+    realized in this course, so no prerequisite gap blocks this unit.
+
+    Reuse chain (all re-declared in this file's own introduced_tokens
+    before first use, per the compiler's per-file-only untaught-vocabulary
+    check, which validates each exercise's tested_text against tokens
+    introduced anywhere earlier in the SAME file's document order) --
+    confirmed with a real grep of every prior fa a1_unit*.yaml file's
+    introduced_tokens declarations, not by eye: مو/کوتاه/موهاش (unit25,
+    appearance -- hair, short, "his/her hair" fused possessive), می‌رم
+    (unit24), می‌خوام (unit03), باشه (units01/02/06/17/22/45), مثل
+    (unit04), قبل (unit45), چطور (unit01), می‌خوای (unit12/14/16/20/35),
+    آره (unit07), ولی (unit15), یکم (unit09/23/36), چشم -- reused in its
+    established idiomatic "sure/got it" sense from unit06's food-ordering
+    dialogue, not its unrelated "eye" sense from unit25, disambiguated by
+    context the same way unit06 and unit25 already coexist without
+    confusion in this corpus -- دو/سه (unit03), دقیقه (unit09/28), آقای
+    (unit40/42/44), کردن (unit32/35), هزار/تومن (unit21). New vocabulary
+    genuinely introduced for the first time in the whole corpus: سلمانی
+    (barbershop), موهام (my hair -- a new 1st-person fused-possessive
+    form extending the already-taught موهاش pattern from unit25, the same
+    kind of morphological extension unit15 treated as new vocabulary for
+    its -تر comparatives), and کوتاه‌تر (shorter -- the -تر comparative
+    suffix applied to the already-taught کوتاه, following the exact fused
+    colloquial -e-contraction convention unit15 established, e.g.
+    بزرگ‌تره/کوچیک‌تره, with the ZWNJ (U+200C) before تر). Exactly 3 new
+    words/forms, continuing this course's established low-new-vocabulary
+    choice for later units (unit45 introduced exactly 4) given how much
+    directly relevant vocabulary (مو، کوتاه، موهاش، مثل، قبل، می‌خوام،
+    باشه) units 25/45/04/03 already established. No new verb-conjugation
+    pattern is introduced -- every verb form used (می‌رم, می‌خوام,
+    می‌خوای, باشه, کردن) was already established by an earlier unit; the
+    -تر comparative suffix itself was already established by unit15, only
+    the specific word کوتاه‌تر is new.
+
+    Register/character choice, per AUTHORING_GUIDE.md #3: نیما (the
+    established recurring character) is the barbershop customer, keeping
+    his usual informal register, a natural continuation of his established
+    "visits a service provider and states a need" role from units 17
+    (health), 41 (appointments), and 45 (pharmacy). A NEW formal-register
+    character, آقای نوری, is introduced as the barber (distinct surname
+    from unit41's خانم احمدی, unit42's آقای صادقی, unit44's آقای کریمی,
+    and unit45's خانم رضایی -- confirmed via a real regex scan of every
+    آقای/خانم name already used across the fa corpus, zero collision); he
+    speaks in neutral polite service language, consistent with the
+    receptionist/librarian/hotel-clerk/pharmacist register units
+    41/42/44/45 already established for this course's other
+    service-encounter characters, while نیما keeps the same informal
+    register he uses everywhere else in the corpus. Facts are kept
+    internally consistent across the whole unit per AUTHORING_GUIDE.md
+    #11: the style request (shorter, "like before"/the same style as
+    usual) is stated identically in the dialogue (lesson04), the reading
+    note (lesson05, as the shop's own service listing rather than a
+    restated fact, so there is nothing to contradict), and the wrap-up
+    review (lesson06), and never contradicted. Every kind:vocabulary
+    teaching card (سلمانی، موهام، کوتاه‌تر، and the character card آقای
+    نوری) has an example sentence per schema 1.1/AUTHORING_GUIDE §19,
+    built only from the card's own word plus tokens already declared
+    earlier in THIS file (no forward references). Every matching_pairs
+    exercise has 6-7 pairs per §16 (lesson01: 6, lesson02: 6, lesson03: 7,
+    lesson04: 7 dialogue-line pairs matching the dialogue's own 7 turns,
+    lesson05: 6, lesson06: 6). No listen_type/listen_select/listen_order
+    exercise is used anywhere in this unit -- fa has real Azure TTS per
+    AUTHORING_GUIDE §14 (this restriction is now prs-only, not fa+prs),
+    but this file continues the established text-based corpus-consistency
+    pattern from units 19-45, the same choice those units' own reviews
+    made, rather than introducing audio exercises to only this one unit
+    out of step with its immediate neighbors. This also means the
+    same-speaker/same-audio distractor-collision bug class (found and
+    fixed 2026-07-09 in the nl corpus, commit 148240e) cannot directly
+    apply here -- there is no listen_select exercise in this file to
+    check. Checked anyway, since lesson04's dialogue_comprehension
+    exercise is the closest analogue: its three distractors ("He wants to
+    know the price of the haircut."/"He wants to know if Mr. Nouri is
+    free today."/"He wants to know if he needs an appointment.") are
+    plausible-fact alternatives, NOT lines either dialogue speaker (نیما
+    or آقای نوری) actually says or facts either speaker actually states
+    anywhere in this unit's dialogue -- price, same-day availability, and
+    needing an appointment are never mentioned by either speaker in this
+    dialogue at all (the price only appears later, separately, in
+    lesson05's unrelated shop-sign reading text, not in the dialogue
+    itself, so there is no cross-exercise collision either). The
+    dialogue_response exercise (lesson04) also has no distractor set at
+    all (like unit45's own dialogue_response_dosage), so the
+    same-speaker-collision question doesn't apply to it. Every "Translate
+    into English" exercise in the paired overlay explicitly sets
+    answer_language_code: en. No exercise in this unit tests a genuine
+    two-clause sentence (§12) -- every translated sentence is a single
+    clause or a colon-separated label-style note (lesson05's reading
+    text, matching unit43/44/45's own treatment of their colon-separated
+    notes with paraphrase-variant accepted answers rather than
+    clause-join variants). Ran a recursive scan (grep for bare, unquoted
+    yes/no/true/false/on/off tokens as YAML scalar values, plus a full
+    yaml.safe_load parse of both this file and its paired overlay
+    confirming every value that loaded is a str/list/dict, never a Python
+    bool anywhere in a learner-facing field) for bare unquoted yes/no/
+    true/false/on/off values (including matching_pairs right: values
+    specifically) -- zero hits, see the overlay's own review note for the
+    exact scan result.
+
+course:
+  realization_key: fa.a1
+  target_language_first: true
+  dialect: fa_IR_standard_colloquial_intro
+  register_policy: >-
+    Continues the established colloquial Iranian Farsi register: نیما (the
+    established recurring character) keeps his usual informal register as
+    the barbershop customer. آقای نوری, a new formal-register barber
+    character, speaks with neutral polite service language, consistent
+    with the register unit41's خانم احمدی, unit42's آقای صادقی, unit44's
+    آقای کریمی, and unit45's خانم رضایی already established for this
+    course's other service-encounter characters. Reuses مو/کوتاه/موهاش
+    (unit25), می‌رم (unit24), می‌خوام (unit03), باشه (units01/02/06/17/
+    22/45), مثل (unit04), قبل (unit45), چطور (unit01), می‌خوای (unit12/
+    14/16/20/35), آره (unit07), ولی (unit15), یکم (unit09/23/36), چشم
+    (unit06, idiomatic "sure"), دو/سه (unit03), دقیقه (unit09/28), آقای
+    (unit40/42/44), کردن (unit32/35), and هزار/تومن (unit21) without
+    re-teaching any of it from scratch. No word is given a new sense
+    beyond its existing corpus meaning in this unit, except چشم, which is
+    deliberately reused in its already-established idiomatic "sure/got
+    it" sense (from unit06), not its unrelated "eye" sense (from unit25)
+    -- both senses already coexist in this corpus without confusion.
+
+media_assets:
+  - content_key: fa.a1.unit46.audio.personal_care.vocab.01
+    language: fa
+    text: "سلمانی، موهام، کوتاه‌تر"
+    voice_hint: neutral_adult
+    status: pending_generation
+  - content_key: fa.a1.unit46.audio.dialogue.personal_care.01
+    language: fa
+    text: "نیما: سلام آقای نوری. آقای نوری: سلام نیما. چطور می‌خوای؟ نیما: می‌خوام موهام کوتاه‌تر باشه. آقای نوری: باشه. مثل قبل؟ نیما: آره، مثل قبل، ولی یکم کوتاه‌تر. آقای نوری: چشم. دو دقیقه. نیما: ممنون!"
+    voice_hint: two_adults_neutral_friendly
+    status: pending_generation
+
+units:
+  - content_key: fa.a1.unit46.personal_care
+    title: سلمانی
+    section: reading_writing
+    spine_outcome_ids:
+      - universal.a1.personal_care.get_haircut
+    planned_lesson_count: 6
+
+    lessons:
+      - content_key: fa.a1.unit46.lesson01.new_personal_care_one
+        title: "کلمات جدید ۱"
+        spine_outcome_id: universal.a1.personal_care.get_haircut
+        teaching:
+          - content_key: fa.a1.unit46.lesson01.teach.review_mo_kootah
+            kind: grammar_note
+            target: {text: "مو (hair) -- already taught from unit25 / کوتاه (short) -- already taught from unit25 / موی (ezafe form of مو, 'hair of') -- already taught from unit25", language_code: fa, direction: rtl}
+            introduced_tokens: [مو, کوتاه, موی]
+          - content_key: fa.a1.unit46.lesson01.teach.review_miram
+            kind: grammar_note
+            target: {text: "می‌رم (I'm going) -- already taught from unit24", language_code: fa, direction: rtl}
+            introduced_tokens: ["می‌رم"]
+          - content_key: fa.a1.unit46.lesson01.teach.salmani
+            kind: vocabulary
+            target: {text: سلمانی, language_code: fa, direction: rtl}
+            introduced_tokens: [سلمانی]
+            example: {text: "می‌رم سلمانی.", language_code: fa, direction: rtl}
+        exercises:
+          - content_key: fa.a1.unit46.lesson01.exercise01.recognize_salmani
+            type: multiple_choice
+            tested_text: سلمانی
+            prompt: {target_blocks: [{text: سلمانی, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit46.lesson01.exercise02.recognize_miram_salmani
+            type: multiple_choice
+            tested_text: "می‌رم سلمانی."
+            prompt: {target_blocks: [{text: "می‌رم سلمانی.", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit46.lesson01.exercise03.match_personal_care_one
+            type: matching_pairs
+            tested_text: "سلمانی مو کوتاه می‌رم موی کوتاه می‌رم سلمانی"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: سلمانی, right: barbershop}
+              - {left: مو, right: hair}
+              - {left: کوتاه, right: short}
+              - {left: "می‌رم", right: "I'm going"}
+              - {left: "موی کوتاه", right: "short hair"}
+              - {left: "می‌رم سلمانی.", right: "I'm going to the barbershop."}
+          - content_key: fa.a1.unit46.lesson01.exercise04.word_order_miram_salmani
+            type: word_order
+            tested_text: "می‌رم سلمانی"
+            prompt: {target_blocks: [{text: "I'm going to the barbershop.", language_code: en, direction: ltr}]}
+            word_bank: ["می‌رم", سلمانی]
+          - content_key: fa.a1.unit46.lesson01.exercise05.translate_moye_kootah
+            type: translation
+            tested_text: "موی کوتاه"
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit46.lesson02.new_personal_care_two
+        title: "کلمات جدید ۲"
+        spine_outcome_id: universal.a1.personal_care.get_haircut
+        teaching:
+          - content_key: fa.a1.unit46.lesson02.teach.review_mohash
+            kind: grammar_note
+            target: {text: "موهاش (his/her hair) -- already taught from unit25", language_code: fa, direction: rtl}
+            introduced_tokens: [موهاش]
+          - content_key: fa.a1.unit46.lesson02.teach.moham
+            kind: vocabulary
+            target: {text: موهام, language_code: fa, direction: rtl}
+            introduced_tokens: [موهام, کوتاهه]
+            example: {text: "موهام کوتاهه.", language_code: fa, direction: rtl}
+          - content_key: fa.a1.unit46.lesson02.teach.review_bashe
+            kind: grammar_note
+            target: {text: "باشه (okay) -- already taught from units 01/02/06/17/22/45", language_code: fa, direction: rtl}
+            introduced_tokens: [باشه]
+        exercises:
+          - content_key: fa.a1.unit46.lesson02.exercise01.recognize_moham
+            type: multiple_choice
+            tested_text: موهام
+            prompt: {target_blocks: [{text: موهام, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit46.lesson02.exercise02.recognize_moham_kootahe
+            type: multiple_choice
+            tested_text: "موهام کوتاهه."
+            prompt: {target_blocks: [{text: "موهام کوتاهه.", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit46.lesson02.exercise03.match_personal_care_two
+            type: matching_pairs
+            tested_text: "موهام موهاش کوتاهه باشه مو کوتاه"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: موهام, right: "my hair"}
+              - {left: موهاش, right: "his/her hair"}
+              - {left: کوتاهه, right: "is short"}
+              - {left: باشه, right: okay}
+              - {left: مو, right: hair}
+              - {left: کوتاه, right: short}
+          - content_key: fa.a1.unit46.lesson02.exercise04.word_order_moham_kootahe
+            type: word_order
+            tested_text: "موهام کوتاهه"
+            prompt: {target_blocks: [{text: "My hair is short.", language_code: en, direction: ltr}]}
+            word_bank: [موهام, کوتاهه]
+          - content_key: fa.a1.unit46.lesson02.exercise05.translate_moham_kootahe
+            type: translation
+            tested_text: "موهام کوتاهه."
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit46.lesson03.request_shorter
+        title: "درخواستِ کوتاه‌تر"
+        spine_outcome_id: universal.a1.personal_care.get_haircut
+        teaching:
+          - content_key: fa.a1.unit46.lesson03.teach.review_mikhaam
+            kind: grammar_note
+            target: {text: "می‌خوام (I want) -- already taught from unit03", language_code: fa, direction: rtl}
+            introduced_tokens: ["می‌خوام"]
+          - content_key: fa.a1.unit46.lesson03.teach.kootahtar
+            kind: vocabulary
+            target: {text: "کوتاه‌تر", language_code: fa, direction: rtl}
+            introduced_tokens: ["کوتاه‌تر"]
+            example: {text: "می‌خوام موهام کوتاه‌تر باشه.", language_code: fa, direction: rtl}
+          - content_key: fa.a1.unit46.lesson03.teach.mesle_ghabl
+            kind: phrase
+            target: {text: "مثل قبل (like before) -- مثل already taught from unit04, قبل already taught from unit45 / ولی (but) -- already taught from unit15", language_code: fa, direction: rtl}
+            introduced_tokens: [مثل, قبل, "مثل قبل", ولی]
+        exercises:
+          - content_key: fa.a1.unit46.lesson03.exercise01.recognize_kootahtar
+            type: multiple_choice
+            tested_text: "کوتاه‌تر"
+            prompt: {target_blocks: [{text: "کوتاه‌تر", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit46.lesson03.exercise02.recognize_mikhaam_moham_kootahtar_bashe
+            type: multiple_choice
+            tested_text: "می‌خوام موهام کوتاه‌تر باشه."
+            prompt: {target_blocks: [{text: "می‌خوام موهام کوتاه‌تر باشه.", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit46.lesson03.exercise03.match_request_shorter
+            type: matching_pairs
+            tested_text: "کوتاه‌تر می‌خوام باشه موهام مثل قبل مثل قبل"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "کوتاه‌تر", right: shorter}
+              - {left: "می‌خوام", right: "I want"}
+              - {left: باشه, right: "(to) be"}
+              - {left: موهام, right: "my hair"}
+              - {left: مثل, right: like}
+              - {left: قبل, right: before}
+              - {left: "مثل قبل", right: "like before"}
+          - content_key: fa.a1.unit46.lesson03.exercise04.word_order_mikhaam_moham_kootahtar_bashe
+            type: word_order
+            tested_text: "می‌خوام موهام کوتاه‌تر باشه"
+            prompt: {target_blocks: [{text: "I want my hair to be shorter.", language_code: en, direction: ltr}]}
+            word_bank: ["می‌خوام", موهام, "کوتاه‌تر", باشه]
+          - content_key: fa.a1.unit46.lesson03.exercise05.translate_mesle_ghabl_kootahtar
+            type: translation
+            tested_text: "مثل قبل، ولی کوتاه‌تر."
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit46.lesson04.personal_care_dialogue
+        title: "دیالوگ: در سلمانی"
+        spine_outcome_id: universal.a1.personal_care.get_haircut
+        teaching:
+          - content_key: fa.a1.unit46.lesson04.teach.review_salam_mamnoon
+            kind: grammar_note
+            target: {text: "سلام و ممنون -- already taught from units 01/17/22/45", language_code: fa, direction: rtl}
+            introduced_tokens: [سلام, ممنون]
+          - content_key: fa.a1.unit46.lesson04.teach.review_aghaye
+            kind: grammar_note
+            target: {text: "آقای (Mr.) -- already taught from unit40/42/44", language_code: fa, direction: rtl}
+            introduced_tokens: [آقای]
+          - content_key: fa.a1.unit46.lesson04.teach.review_chetor_mikhaay
+            kind: grammar_note
+            target: {text: "چطور (how) -- already taught from unit01 / می‌خوای (you want) -- already taught from unit12/14/16/20/35", language_code: fa, direction: rtl}
+            introduced_tokens: [چطور, "می‌خوای"]
+          - content_key: fa.a1.unit46.lesson04.teach.review_are_vali_yekam
+            kind: grammar_note
+            target: {text: "آره (yeah) -- already taught from unit07 / ولی (but) -- already taught from unit15 / یکم (a little) -- already taught from unit09/23/36", language_code: fa, direction: rtl}
+            introduced_tokens: [آره, ولی, یکم]
+          - content_key: fa.a1.unit46.lesson04.teach.review_cheshm_do_daghighe
+            kind: grammar_note
+            target: {text: "چشم (sure, got it) -- already taught from unit06 / دو دقیقه (two minutes) -- دو already taught from unit03, دقیقه already taught from unit09/28", language_code: fa, direction: rtl}
+            introduced_tokens: [چشم, دو, دقیقه]
+          - content_key: fa.a1.unit46.lesson04.teach.character_noori
+            kind: vocabulary
+            target: {text: "آقای نوری", language_code: fa, direction: rtl}
+            introduced_tokens: [نوری, نیما]
+            example: {text: "آقای نوری سلمانی داره.", language_code: fa, direction: rtl}
+          - content_key: fa.a1.unit46.lesson04.teach.dialogue_line1
+            kind: dialogue
+            target: {text: "سلام آقای نوری.", language_code: fa, direction: rtl, speaker: نیما}
+            introduced_tokens: []
+          - content_key: fa.a1.unit46.lesson04.teach.dialogue_line2
+            kind: dialogue
+            target: {text: "سلام نیما. چطور می‌خوای؟", language_code: fa, direction: rtl, speaker: "آقای نوری"}
+            introduced_tokens: []
+          - content_key: fa.a1.unit46.lesson04.teach.dialogue_line3
+            kind: dialogue
+            target: {text: "می‌خوام موهام کوتاه‌تر باشه.", language_code: fa, direction: rtl, speaker: نیما}
+            introduced_tokens: []
+          - content_key: fa.a1.unit46.lesson04.teach.dialogue_line4
+            kind: dialogue
+            target: {text: "باشه. مثل قبل؟", language_code: fa, direction: rtl, speaker: "آقای نوری"}
+            introduced_tokens: []
+          - content_key: fa.a1.unit46.lesson04.teach.dialogue_line5
+            kind: dialogue
+            target: {text: "آره، مثل قبل، ولی یکم کوتاه‌تر.", language_code: fa, direction: rtl, speaker: نیما}
+            introduced_tokens: []
+          - content_key: fa.a1.unit46.lesson04.teach.dialogue_line6
+            kind: dialogue
+            target: {text: "چشم. دو دقیقه.", language_code: fa, direction: rtl, speaker: "آقای نوری"}
+            introduced_tokens: []
+          - content_key: fa.a1.unit46.lesson04.teach.dialogue_line7
+            kind: dialogue
+            target: {text: "ممنون!", language_code: fa, direction: rtl, speaker: نیما}
+            introduced_tokens: []
+        exercises:
+          - content_key: fa.a1.unit46.lesson04.exercise01.dialogue_comprehension_style
+            type: dialogue_comprehension
+            tested_text: "سلام آقای نوری سلام نیما چطور می‌خوای می‌خوام موهام کوتاه‌تر باشه باشه مثل قبل آره مثل قبل ولی یکم کوتاه‌تر چشم دو دقیقه ممنون"
+            prompt: {target_blocks: [{text: "چطور می‌خوای؟", language_code: fa, direction: rtl}]}
+            correct_option: "He wants to know what style Nima wants."
+            distractors:
+              - "He wants to know the price of the haircut."
+              - "He wants to know if Mr. Nouri is free today."
+              - "He wants to know if he needs an appointment."
+          - content_key: fa.a1.unit46.lesson04.exercise02.recognize_dialogue_line5
+            type: multiple_choice
+            tested_text: "آره، مثل قبل، ولی یکم کوتاه‌تر."
+            prompt: {target_blocks: [{text: "آره، مثل قبل، ولی یکم کوتاه‌تر.", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit46.lesson04.exercise03.match_dialogue_personal_care
+            type: matching_pairs
+            tested_text: "سلام آقای نوری سلام نیما چطور می‌خوای می‌خوام موهام کوتاه‌تر باشه باشه مثل قبل آره مثل قبل ولی یکم کوتاه‌تر چشم دو دقیقه ممنون"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "سلام آقای نوری.", right: "Hi Mr. Nouri."}
+              - {left: "سلام نیما. چطور می‌خوای؟", right: "Hi Nima. How do you want it?"}
+              - {left: "می‌خوام موهام کوتاه‌تر باشه.", right: "I want my hair to be shorter."}
+              - {left: "باشه. مثل قبل؟", right: "Okay. Like before?"}
+              - {left: "آره، مثل قبل، ولی یکم کوتاه‌تر.", right: "Yeah, like before, but a little shorter."}
+              - {left: "چشم. دو دقیقه.", right: "Sure. Two minutes."}
+              - {left: "ممنون!", right: "Thanks!"}
+          - content_key: fa.a1.unit46.lesson04.exercise04.dialogue_response_style
+            type: dialogue_response
+            tested_text: "می‌خوام موهام کوتاه‌تر باشه."
+            prompt: {target_blocks: [{text: "چطور می‌خوای؟", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit46.lesson04.exercise05.translate_dialogue_line4
+            type: translation
+            tested_text: "باشه. مثل قبل؟"
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit46.lesson05.reading_salon_sign
+        title: "خواندن تابلوی سلمانی"
+        spine_outcome_id: universal.a1.personal_care.get_haircut
+        teaching:
+          - content_key: fa.a1.unit46.lesson05.teach.reading_text
+            kind: reading
+            target: {text: "سلمانی نوری: کوتاه کردن مو، سه هزار تومن.", language_code: fa, direction: rtl}
+            introduced_tokens: [کردن, سه, هزار, تومن]
+        exercises:
+          - content_key: fa.a1.unit46.lesson05.exercise01.reading_comprehension_service
+            type: reading_comprehension
+            tested_text: "سلمانی نوری: کوتاه کردن مو، سه هزار تومن."
+            prompt: {target_blocks: [{text: "سلمانی نوری: کوتاه کردن مو، سه هزار تومن.", language_code: fa, direction: rtl}]}
+            correct_option: "A haircut."
+            distractors:
+              - "A shave."
+              - "A hair wash."
+              - "An appointment reminder."
+          - content_key: fa.a1.unit46.lesson05.exercise02.reading_comprehension_price
+            type: reading_comprehension
+            tested_text: "سلمانی نوری: کوتاه کردن مو، سه هزار تومن."
+            prompt: {target_blocks: [{text: "سلمانی نوری: کوتاه کردن مو، سه هزار تومن.", language_code: fa, direction: rtl}]}
+            correct_option: "Three thousand toman."
+            distractors:
+              - "Three hundred toman."
+              - "Thirty thousand toman."
+              - "Two thousand toman."
+          - content_key: fa.a1.unit46.lesson05.exercise03.match_reading_salon
+            type: matching_pairs
+            tested_text: "سلمانی نوری کوتاه کردن مو سه هزار تومن"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: سلمانی, right: barbershop}
+              - {left: نوری, right: Nouri}
+              - {left: "کوتاه کردن", right: "cutting short"}
+              - {left: مو, right: hair}
+              - {left: "سه هزار تومن", right: "three thousand toman"}
+              - {left: تومن, right: toman}
+          - content_key: fa.a1.unit46.lesson05.exercise04.translate_reading_salon
+            type: translation
+            tested_text: "سلمانی نوری: کوتاه کردن مو، سه هزار تومن."
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit46.lesson05.exercise05.write_salon_sign
+            type: writing_prompt
+            tested_text: "سلمانی نوری: کوتاه کردن مو، سه هزار تومن."
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit46.lesson06.wrap_up
+        title: "جمع‌بندی سلمانی"
+        spine_outcome_id: universal.a1.personal_care.get_haircut
+        teaching:
+          - content_key: fa.a1.unit46.lesson06.teach.review_request
+            kind: phrase
+            target: {text: "می‌خوام موهام کوتاه‌تر باشه.", language_code: fa, direction: rtl}
+            introduced_tokens: []
+          - content_key: fa.a1.unit46.lesson06.teach.review_mesle_ghabl
+            kind: phrase
+            target: {text: "مثل قبل، ولی یکم کوتاه‌تر.", language_code: fa, direction: rtl}
+            introduced_tokens: []
+          - content_key: fa.a1.unit46.lesson06.teach.summary_words
+            kind: grammar_note
+            target: {text: "سلمانی / مو / موهام / کوتاه‌تر / مثل قبل -- کلمات این درس", language_code: fa, direction: rtl}
+            introduced_tokens: []
+        exercises:
+          - content_key: fa.a1.unit46.lesson06.exercise01.recognize_review_request
+            type: multiple_choice
+            tested_text: "می‌خوام موهام کوتاه‌تر باشه."
+            prompt: {target_blocks: [{text: "می‌خوام موهام کوتاه‌تر باشه.", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit46.lesson06.exercise02.recognize_review_mesle_ghabl
+            type: multiple_choice
+            tested_text: "مثل قبل، ولی یکم کوتاه‌تر."
+            prompt: {target_blocks: [{text: "مثل قبل، ولی یکم کوتاه‌تر.", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit46.lesson06.exercise03.match_wrap_personal_care
+            type: matching_pairs
+            tested_text: "سلمانی مو موهام کوتاه‌تر مثل قبل"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: سلمانی, right: barbershop}
+              - {left: مو, right: hair}
+              - {left: موهام, right: "my hair"}
+              - {left: "کوتاه‌تر", right: shorter}
+              - {left: "مثل قبل", right: "like before"}
+              - {left: چشم, right: "sure, got it"}
+          - content_key: fa.a1.unit46.lesson06.exercise04.word_order_moham_kootahtar
+            type: word_order
+            tested_text: "موهام کوتاه‌تر"
+            prompt: {target_blocks: [{text: "My hair, shorter.", language_code: en, direction: ltr}]}
+            word_bank: [موهام, "کوتاه‌تر"]
+          - content_key: fa.a1.unit46.lesson06.exercise05.write_personal_care_sentence
+            type: writing_prompt
+            tested_text: "می‌خوام موهام کوتاه‌تر باشه"
+            prompt: {target_blocks: []}
