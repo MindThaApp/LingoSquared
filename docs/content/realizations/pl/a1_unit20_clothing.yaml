@@ -1,0 +1,624 @@
+schema_version: "1.1"
+realization_version: "2026.1-draft.1"
+target_language: "pl"
+cefr_level: "A1"
+status: "complete_draft"
+generation_provenance:
+  method: "ai_generated"
+  authoring_system: "claude"
+  human_reviewed: false
+review:
+  status: "unreviewed"
+  required_next_reviewer: "codex"
+  notes: >-
+    Twentieth Polish unit, continuing directly from pl/a1_unit19_weather.yaml
+    (same Ewa/Marek pair, same 3-lesson bootstrap pace as units01-19). Realizes
+    universal.a1.clothing.describe_buy_clothing -- confirmed directly against
+    docs/content/universal_spine.yaml: grepped "^  - id: universal.a1" across
+    the whole file and confirmed this is the FIRST outcome after
+    universal.a1.weather.describe_basic_weather (unit19's own outcome, line
+    564) with no outcome in between (universal.a1.clothing.describe_buy_clothing
+    is the very next block, line 587), then read that block directly (lines
+    587-607): can_do "Identify common clothing items and complete a simple
+    clothing purchase or exchange," prerequisites:
+    [universal.a1.shopping.ask_prices_quantities] (satisfied -- this course's
+    own unit07 realizes that outcome, confirmed by grepping
+    a1_unit07_shopping.yaml's own spine_outcome_ids), modalities [listening,
+    speaking, reading, writing], assessment_requirements:
+    understand_clothing_request (listening: identify a requested clothing
+    item, size, or color in a short exchange), request_clothing_item
+    (speaking: ask for a clothing item in a specific size or color),
+    read_clothing_label (reading: interpret a simple clothing label or size
+    chart), write_clothing_request (writing: write a short request for a
+    clothing item, size, or color). This is also the first genuinely new
+    topic choice for pl in numerical order -- confirmed by listing every
+    spine_outcome_ids value across pl/a1_unit01 through a1_unit19 (exactly
+    greetings/numbers/dates/time/family/food/shopping/places/directions/
+    routines/plans/past_events/preferences/comparisons/travel/health/work/
+    housing/weather, 19 outcomes for 19 units) and diffing against the full
+    "^  - id: universal.a1" list -- clothing is the first outcome after
+    weather that pl has not yet touched. Did NOT open nl/a1_unit20*,
+    fa/prs's own clothing units, or any other language's clothing-topic file
+    at all, per the strong sibling-isolation instruction (broader than
+    AUTHORING_GUIDE §8's same-direction rule) -- topic/outcome match and the
+    "size expressed as a plain letter (S/M/L), not a declined adjective" and
+    "two color adjectives each tied to one specific noun" design decisions
+    below were made purely from the spine file, this course's own prior
+    units, and general knowledge of natural Polish, with zero cross-language
+    content file read.
+
+    Authored from the start in AUTHORING_GUIDE §19 format (schema_version
+    1.1): every kind:vocabulary card carries a real example sentence. Zero
+    listen_type/listen_select/listen_order exercises anywhere in this file,
+    matching unit01-19's own established choice for this course -- media_assets
+    is an empty list, not an oversight. "Listening" comprehension
+    (understand_clothing_request) and "reading" comprehension
+    (read_clothing_label, via the size/color facts stated in the dialogue)
+    are both served via multiple_choice line-selection and
+    dialogue_comprehension exercises reading the dialogue's own text_blocks,
+    the same substitution unit01-19 already use in the absence of any audio
+    pipeline for this course. The spine's "complete a simple clothing
+    purchase or exchange" is served by lesson03's Marek/Sprzedawca dialogue,
+    which walks through asking for an item, giving a size, and confirming a
+    price -- a genuine transaction, not an isolated vocabulary drill.
+
+    Source-access research (done first, per standing instruction): checked
+    firecrawl availability before any search -- `firecrawl --status` showed
+    0/1,000 credits remaining this cycle (Authenticated via stored
+    credentials, Concurrency 0/2, Credits 0/1,000 -- 0% left), so a genuinely
+    fresh `firecrawl search`/`firecrawl scrape` call was not possible this
+    session (confirmed via an actual attempted `firecrawl search "FSI Polish
+    Basic Course clothing shopping lesson public domain"` call, which
+    returned "Error: Request failed with status code 402" -- payment
+    required, not a transient failure). Fell back to the ALREADY-CACHED FSI
+    Polish FAST (1992) text this course's units02-19 have been using
+    (.firecrawl/fsi-polish-fast.txt, 573,954 bytes, confirmed present on
+    disk) and searched it FRESH for this unit's own topic rather than reusing
+    a stale prior search: grepped for koszula/koszulę/spodnie/sweter/płaszcz/
+    buty/sukienka/sukienkę/kurtka/marynarka/krawat/czapka/rękawiczki/
+    skarpetki/sklep odzieżowy/przymierzyć/rozmiar/pasuje -- every one of
+    these real Polish clothing-item and clothing-transaction words returned
+    ZERO matches in the cached FSI text. Broader single-word checks for
+    "kupić" (32 hits, but every one in unrelated general-purchase contexts --
+    duck, wine, vitamins -- never clothing) and color words (czerwony/białe/
+    kolor/żółto: a handful of hits, all about wine, paint, or borscht, never
+    clothing) confirm the FSI Polish FAST course genuinely does not cover a
+    clothing-shopping scene at all, unlike weather (unit19) or the food
+    market (unit07), which it covered well. Honest conclusion: this specific
+    unit's vocabulary is NOT sourced from the cached FSI text -- it is
+    authored from established, standard modern Polish clothing-shopping
+    conventions (common nouns for shirt/pants/dress, the borrowed
+    international S/M/L size-letter convention that is genuinely how Polish
+    clothing stores label and speak sizes, and the pan/pani formal
+    address system already partially established in this course's own
+    unit07 shopkeeper dialogue), not adapted from any single external
+    source. Disclosed honestly per AUTHORING_GUIDE §10's standing
+    requirement to state plainly when nothing usable was found, rather than
+    force a source citation that would not be accurate.
+
+    Grammar-scope decision, disclosed up front per unit07-19's own
+    precedent for narrowing A1 grammar exposure deliberately rather than by
+    omission: (1) **Clothing sizes are taught as a bare borrowed letter
+    (S/M/L), never a declined adjective** -- this is genuinely how Polish
+    clothing retail works (a real Pole asking for a shirt says "Rozmiar M,"
+    not a translated/declined size word), so it sidesteps any need for new
+    adjective-noun agreement machinery entirely; "M" is explicitly added to
+    lesson03's `rozmiar` vocabulary card's own introduced_tokens (same
+    grouped-declaration technique unit07 used for "Kosztować"/"kosztuje"/
+    "kosztują"/"Banany" on one card) since it is tested directly in
+    lesson03's closing exercises. (2) **"niebieska" and "czerwona" are
+    introduced as exactly two memorized nominative feminine adjective FORMS
+    tied to one specific noun each, not a paired color-adjective set and
+    not a general agreement rule** -- the exact same technique unit18 used
+    for "duży" (tied only to "dom") and "mała" (tied only to "kuchnia"), and
+    unit19 used for "dobra"/"straszna" (both tied only to "pogoda").
+    "niebieska" is taught tied to exactly one noun, "koszula" ("Koszula
+    jest niebieska."); "czerwona" is taught tied to exactly one different
+    noun, "sukienka" ("Sukienka jest czerwona."). The masculine forms
+    (niebieski, czerwony) are never introduced or tested anywhere in this
+    file, and this file never cross-references the fact that "koszula"
+    could grammatically take other colors or that these adjectives have
+    other forms -- kept independent and additive, matching unit18/19's own
+    explicit precedent for this exact technique. (3) **"jest"/"są"/"To" are
+    explicitly redeclared via lesson01's own recap card despite being
+    pervasively established since unit01/02/03** -- the compiler's
+    untaught-vocabulary check is per-realization-FILE, not per-course, so
+    every cross-unit reused token this file's own EXERCISES test (not just
+    narrative prose, which is exempt) must be redeclared here, exactly as
+    unit19's own lesson01/03 recap cards redeclare "Jaka"/"jest"/"Dziś"/
+    "nie"/"Tak"/"A"/"ja"/"też"/"chcę"/"iść"/"do"/"parku"/"tam"/"bardzo" for
+    the same mechanical reason. (4) **"chce" (3rd person singular of
+    chcieć) and "pan" (formal masculine "you"/"sir") are introduced
+    together on one grammar_note in lesson03, extending the already
+    two-thirds-established chcieć paradigm (chcę/chcesz from unit11) and
+    the already-established formal-address pattern (pani from unit07's own
+    "Co dla pani?") to their natural remaining forms for a male customer --
+    not a new grammar point in kind, a completion of two already-taught
+    partial paradigms.** (5) **No new case ending is taught as its own
+    grammar point anywhere in this file** -- "do sklepu" (lesson01's
+    vocabulary-card example only, never tested) reuses the exact "do X"
+    +genitive pattern already established with "do parku"/"do domu"
+    (units08-11/19); "koszulę"/"sukienkę" (accusative singular of
+    feminine -a nouns) are used the same way "bananów"/"pomidorów" were in
+    unit07 -- explicitly added as extra introduced_tokens alongside the
+    dictionary-form word wherever the inflected form is actually tested
+    (see lesson01's `kupić` card, which declares both "kupić" and
+    "koszulę" since "Chcę kupić koszulę" is tested in multiple lesson01/03
+    exercises), never presented as a new declension rule to learn.
+
+    Same-speaker-distractor check (AUTHORING_GUIDE, standing bug-class
+    warning): this file has one TEXT dialogue (lesson03, no audio, so the
+    literal "same audio clip" bug class doesn't directly apply the same way
+    it would for a recorded dialogue -- same reasoning unit09-19 already
+    used for their own audio-less dialogues), but the analogous risk for
+    multiple_choice line-selection and dialogue_comprehension exercises was
+    checked by hand, listing every line each speaker actually says first.
+    Sprzedawca's three lines: "Dzień dobry! Co pan chce kupić?" / "Jaki
+    rozmiar?" / "Mamy niebieską koszulę. Razem sto złotych."
+    Marek's three lines: "Chcę kupić koszulę i spodnie." / "Rozmiar M." /
+    "Dobrze, poproszę."
+    lesson03.exercise01 asks which line says Marek wants to buy a shirt and
+    pants (correct: Marek's first line); distractors are Marek's OWN other
+    two lines (his second line states only a size letter, never mentions
+    buying a shirt or pants; his third line is a bare acceptance, never
+    mentions any item) -- neither distractor mentions the shirt/pants
+    purchase at all, so Marek's own other lines never accidentally restate
+    the fact being tested.
+    lesson03.exercise02 asks which line asks about size (correct:
+    Sprzedawca's second line); distractors are Sprzedawca's OWN other two
+    lines (the first line asks what the customer wants to buy but never
+    mentions size; the third line states the color and price but never
+    mentions size either) -- confirming Sprzedawca's own other lines never
+    accidentally restate the fact being tested either.
+    lesson03.exercise03 (dialogue_comprehension) shows ONLY Marek's second
+    line ("Rozmiar M.") as the read passage and asks what size Marek wants
+    -- no other size appears anywhere in this file, so the question is
+    unambiguous by construction (there is nothing else it could mean).
+    lesson03.exercise04 (dialogue_comprehension) shows ONLY Marek's first
+    line ("Chcę kupić koszulę i spodnie.") as the read passage and asks
+    what Marek wants to buy -- no other item list appears in this quoted
+    passage. No exercise in this file makes two answer options
+    simultaneously true for the specific fact being asked about.
+
+    Cross-checked against this file's own content per AUTHORING_GUIDE §11:
+    the concrete facts this unit establishes are (a) the shirt (koszula) is
+    blue, stated identically in lesson02's own teaching card ("Koszula jest
+    niebieska.") and reused without contradiction in lesson03's dialogue
+    ("Mamy niebieską koszulę."); (b) the dress (sukienka) is red, stated
+    once in lesson02's own teaching card ("Sukienka jest czerwona.") and
+    never restated or contradicted anywhere else in the file (lesson03's
+    dialogue never mentions the dress at all, so there is no opportunity for
+    contradiction); (c) Marek's size is M, stated once in lesson03's
+    dialogue and never restated elsewhere; (d) the total price is "sto
+    złotych" (100 zloty), stated once in lesson03's dialogue narration only
+    (never tested by any exercise's tested_text, so no risk of a
+    cross-exercise price mismatch). Lesson01/02's vocabulary-card EXAMPLE
+    sentences ("To jest koszula.", "To są spodnie.", "To jest sukienka.",
+    "Jaki kolor?") are deliberately kept color-and-fact-neutral, exactly the
+    same technique unit18/19 used for their own unattributed vocabulary
+    examples -- so these general vocabulary-teaching sentences can never
+    contradict the specific facts lesson02/03 later establish.
+
+    Cross-file vocabulary note (confirmed every prior unit hit this too):
+    every word this file reuses from earlier units (jest/są/To from
+    unit01/02/03, Poproszę/kosztuje/złotych/tanio/drogo from unit02/07,
+    chcę/chcesz/chcieć from unit11, do from unit03/08/09/10/11/19, Dzień/
+    dobry/Proszę/Co/pani from unit07, bardzo from unit06/07/08/09,
+    Dobrze/i from unit07/18) is re-declared via this file's OWN
+    introduced_tokens before being tested in this file's own exercises --
+    the compiler validates untaught vocabulary per realization FILE, not
+    per course, and taught accumulates lesson-by-lesson in document order
+    so lesson02/03 can freely build on lesson01's own declarations within
+    this same file. Tokens already declared earlier WITHIN this same file
+    (e.g. "Jaki" first declared in lesson02, reused untested in lesson03's
+    own vocabulary as "rozmiar" pairs with it) are correctly NOT
+    redeclared a second time when reused, matching unit18/19's own
+    convention of declaring each cross-file recap exactly once, at its
+    first appearance in the file. Example sentences on vocabulary cards,
+    teaching-card target text (including all six dialogue lines), and
+    fill_in_blank/grammar_check prompt context text are never checked
+    against the taught set (confirmed directly from
+    scripts/compile_content.py's validate_untaught_vocabulary, which reads
+    only each exercise's own tested_text field via
+    tokenize()/casefold() exact-string matching, never prompt.target_blocks
+    or teaching-card target text) -- only actual tested_text tokens do, and
+    every one of those was traced back to an explicit teaching-card
+    introduced_tokens entry in this file before finalizing (including the
+    grouped "M" token on lesson03's `rozmiar` card, added specifically
+    because "Rozmiar M" is tested by lesson03.exercise10). Two
+    ambiguity-avoidance checks made during authoring (AUTHORING_GUIDE §13/
+    §17's spirit, though these apply mechanically only to Endless Practice
+    templates, not hand-authored lesson content): lesson01.exercise07's
+    fill_in_blank frame ("Marek mówi: Chcę ___ koszulę.") has real
+    surrounding context (the direct-speech frame plus the object "koszulę"
+    make "kupić" the only sensible verb) rather than a bare blanked token;
+    lesson02.exercise07's fill_in_blank ("Marek pyta: Jaki kolor ma
+    koszula? Koszula jest ___.") is disambiguated by this file's own
+    established fact (koszula was taught as niebieska and no other color is
+    ever attributed to it anywhere in this file), the same domain-
+    restriction technique unit19's own lesson01.exercise07 used for its
+    "pogoda" blank. Two grammar_check exercises (lesson01.exercise08,
+    lesson03.exercise09) were deliberately built around a scramble that
+    displaces the interrogative word ("Ile"/"Co") from its required
+    sentence-initial position ("Koszula ile kosztuje?", "Chce pan co
+    kupić?") -- the same unambiguously-wrong technique unit19 verified and
+    used twice for its own "Jaka" displacement, rather than a merely
+    alternate-but-still-grammatical word order (Polish's genuinely flexible
+    word order makes many other reorderings defensible, not cleanly wrong,
+    exactly the trap unit19's own authoring notes already flagged and
+    avoided). lesson02.exercise08's grammar_check ("Niebieska koszula
+    jest.") displaces the copula "jest" to the sentence end after the
+    adjective-noun pair, which is a similarly unnatural/foreign-sounding
+    order for a simple declarative statement in Polish, not the neutral
+    subject-copula-adjective order this file's own teaching cards establish
+    ("Koszula jest niebieska.").
+
+    Source: established modern Polish clothing-shopping conventions
+    (common nouns, the internationally-borrowed S/M/L size-letter system,
+    and the pan/pani formal-address system), NOT the cached FSI Polish FAST
+    text -- see the source-access paragraph above for the specific
+    negative-result search that led to this honest disclosure.
+
+course:
+  realization_key: pl.a1
+  target_language_first: true
+  dialect: pl_standard
+  register_policy: >-
+    Continue unit01-19's register split: Ewa and Marek use the informal
+    ty-register with each other throughout. This unit's new dialogue scene
+    (lesson03) additionally reuses the formal pan/pani register already
+    established between a customer and unit07's "Sprzedawca" character --
+    Marek switches to being addressed formally by the shop assistant
+    ("Co pan chce kupić?"), exactly mirroring how unit07 addressed Ewa
+    formally ("Co dla pani?") in the same shopkeeper-customer relationship.
+    Ewa and Marek's own register with each other is untouched by this --
+    this unit's dialogue is Marek-and-Sprzedawca only, not a scene between
+    Ewa and Marek.
+
+media_assets: []
+
+units:
+  - content_key: pl.a1.unit20.ubrania
+    title: "Ubrania"
+    section: reading_writing
+    spine_outcome_ids:
+      - universal.a1.clothing.describe_buy_clothing
+    planned_lesson_count: 3
+
+    lessons:
+      - content_key: pl.a1.unit20.lesson01.w_sklepie
+        title: "W sklepie"
+        spine_outcome_id: universal.a1.clothing.describe_buy_clothing
+        teaching:
+          - content_key: pl.a1.unit20.lesson01.teach.recap_jest_sa_to_poprosze
+            kind: grammar_note
+            target: {text: "Jest, są, To, Poproszę, Ile, kosztuje, złotych, chcę, do -- już znasz te słowa z wcześniejszych lekcji.", language_code: pl, direction: ltr}
+            introduced_tokens: ["jest", "są", "To", "Poproszę", "Ile", "kosztuje", "złotych", "chcę", "do"]
+          - content_key: pl.a1.unit20.lesson01.teach.sklep
+            kind: vocabulary
+            target: {text: "sklep", language_code: pl, direction: ltr}
+            introduced_tokens: ["sklep"]
+            example:
+              {text: "Idę do sklepu.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit20.lesson01.teach.koszula
+            kind: vocabulary
+            target: {text: "koszula", language_code: pl, direction: ltr}
+            introduced_tokens: ["koszula"]
+            example:
+              {text: "To jest koszula.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit20.lesson01.teach.spodnie
+            kind: vocabulary
+            target: {text: "spodnie", language_code: pl, direction: ltr}
+            introduced_tokens: ["spodnie"]
+            example:
+              {text: "To są spodnie.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit20.lesson01.teach.kupic
+            kind: vocabulary
+            target: {text: "kupić", language_code: pl, direction: ltr}
+            introduced_tokens: ["kupić", "koszulę"]
+            example:
+              {text: "Chcę kupić koszulę.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit20.lesson01.teach.chce_kupic_spodnie_phrase
+            kind: phrase
+            target: {text: "Chcę kupić spodnie.", language_code: pl, direction: ltr}
+            introduced_tokens: []
+          - content_key: pl.a1.unit20.lesson01.teach.ile_kosztuje_koszula_phrase
+            kind: phrase
+            target: {text: "Ile kosztuje koszula?", language_code: pl, direction: ltr}
+            introduced_tokens: []
+        exercises:
+          - content_key: pl.a1.unit20.lesson01.exercise01.select_sklep
+            type: multiple_choice
+            tested_text: "sklep"
+            prompt:
+              target_blocks:
+                - {text: "sklep", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit20.lesson01.exercise02.select_koszula
+            type: multiple_choice
+            tested_text: "koszula"
+            prompt:
+              target_blocks:
+                - {text: "koszula", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit20.lesson01.exercise03.select_spodnie
+            type: multiple_choice
+            tested_text: "spodnie"
+            prompt:
+              target_blocks:
+                - {text: "spodnie", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit20.lesson01.exercise04.match_lesson1_vocabulary
+            type: matching_pairs
+            tested_text: "sklep koszula spodnie kupić chcę Poproszę Ile kosztuje"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "sklep", right: "store"}
+              - {left: "koszula", right: "shirt"}
+              - {left: "spodnie", right: "pants"}
+              - {left: "kupić", right: "to buy"}
+              - {left: "chcę", right: "I want"}
+              - {left: "Poproszę", right: "I'd like / please"}
+              - {left: "Ile", right: "how much"}
+              - {left: "kosztuje", right: "costs"}
+          - content_key: pl.a1.unit20.lesson01.exercise05.order_chce_kupic_koszule
+            type: word_order
+            tested_text: "Chcę kupić koszulę"
+            prompt: {target_blocks: []}
+            word_bank: ["kupić", "Chcę", "koszulę"]
+          - content_key: pl.a1.unit20.lesson01.exercise06.order_ile_kosztuje_koszula
+            type: word_order
+            tested_text: "Ile kosztuje koszula"
+            prompt: {target_blocks: []}
+            word_bank: ["kosztuje", "Ile", "koszula"]
+          - content_key: pl.a1.unit20.lesson01.exercise07.fill_marek_chce_kupic
+            type: fill_in_blank
+            tested_text: "kupić"
+            prompt:
+              target_blocks:
+                - {text: "Marek mówi: Chcę ___ koszulę.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit20.lesson01.exercise08.fix_ile_kosztuje_koszula
+            type: grammar_check
+            tested_text: "Ile kosztuje koszula"
+            prompt:
+              target_blocks:
+                - {text: "Koszula ile kosztuje?", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit20.lesson01.exercise09.speak_chce_kupic_spodnie
+            type: speak_response
+            tested_text: "Chcę kupić spodnie"
+            prompt: {target_blocks: []}
+
+      - content_key: pl.a1.unit20.lesson02.jaki_kolor
+        title: "Jaki kolor?"
+        spine_outcome_id: universal.a1.clothing.describe_buy_clothing
+        teaching:
+          - content_key: pl.a1.unit20.lesson02.teach.jaki_note
+            kind: grammar_note
+            target: {text: "Jaki, Jaka -- \"Jaki\" pyta o rzeczowniki rodzaju męskiego, \"Jaka\" o rodzaju żeńskiego (już znasz \"Jaka\" z lekcji o pogodzie).", language_code: pl, direction: ltr}
+            introduced_tokens: ["Jaki"]
+          - content_key: pl.a1.unit20.lesson02.teach.kolor
+            kind: vocabulary
+            target: {text: "kolor", language_code: pl, direction: ltr}
+            introduced_tokens: ["kolor"]
+            example:
+              {text: "Jaki kolor?", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit20.lesson02.teach.sukienka
+            kind: vocabulary
+            target: {text: "sukienka", language_code: pl, direction: ltr}
+            introduced_tokens: ["sukienka"]
+            example:
+              {text: "To jest sukienka.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit20.lesson02.teach.niebieska_note
+            kind: grammar_note
+            target: {text: "Koszula jest niebieska. -- \"niebieska\" pasuje do koszula (rodzaj żeński).", language_code: pl, direction: ltr}
+            introduced_tokens: ["niebieska"]
+          - content_key: pl.a1.unit20.lesson02.teach.czerwona_note
+            kind: grammar_note
+            target: {text: "Sukienka jest czerwona. -- \"czerwona\" też pasuje do rzeczowników rodzaju żeńskiego, tak jak \"niebieska\".", language_code: pl, direction: ltr}
+            introduced_tokens: ["czerwona"]
+          - content_key: pl.a1.unit20.lesson02.teach.koszula_niebieska_phrase
+            kind: phrase
+            target: {text: "Koszula jest niebieska.", language_code: pl, direction: ltr}
+            introduced_tokens: []
+          - content_key: pl.a1.unit20.lesson02.teach.sukienka_czerwona_phrase
+            kind: phrase
+            target: {text: "Sukienka jest czerwona.", language_code: pl, direction: ltr}
+            introduced_tokens: []
+        exercises:
+          - content_key: pl.a1.unit20.lesson02.exercise01.select_kolor
+            type: multiple_choice
+            tested_text: "kolor"
+            prompt:
+              target_blocks:
+                - {text: "kolor", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit20.lesson02.exercise02.select_sukienka
+            type: multiple_choice
+            tested_text: "sukienka"
+            prompt:
+              target_blocks:
+                - {text: "sukienka", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit20.lesson02.exercise03.select_niebieska
+            type: multiple_choice
+            tested_text: "niebieska"
+            prompt:
+              target_blocks:
+                - {text: "niebieska", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit20.lesson02.exercise04.match_lesson2_vocabulary
+            type: matching_pairs
+            tested_text: "kolor sukienka niebieska czerwona Jaki koszula spodnie"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "kolor", right: "color"}
+              - {left: "sukienka", right: "dress"}
+              - {left: "niebieska", right: "blue"}
+              - {left: "czerwona", right: "red"}
+              - {left: "Jaki", right: "what kind of"}
+              - {left: "koszula", right: "shirt"}
+              - {left: "spodnie", right: "pants"}
+          - content_key: pl.a1.unit20.lesson02.exercise05.order_koszula_jest_niebieska
+            type: word_order
+            tested_text: "Koszula jest niebieska"
+            prompt: {target_blocks: []}
+            word_bank: ["jest", "Koszula", "niebieska"]
+          - content_key: pl.a1.unit20.lesson02.exercise06.order_sukienka_jest_czerwona
+            type: word_order
+            tested_text: "Sukienka jest czerwona"
+            prompt: {target_blocks: []}
+            word_bank: ["jest", "Sukienka", "czerwona"]
+          - content_key: pl.a1.unit20.lesson02.exercise07.fill_koszula_kolor
+            type: fill_in_blank
+            tested_text: "niebieska"
+            prompt:
+              target_blocks:
+                - {text: "Marek pyta: Jaki kolor ma koszula? Koszula jest ___.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit20.lesson02.exercise08.fix_koszula_jest_niebieska
+            type: grammar_check
+            tested_text: "Koszula jest niebieska"
+            prompt:
+              target_blocks:
+                - {text: "Niebieska koszula jest.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit20.lesson02.exercise09.speak_sukienka_czerwona
+            type: speak_response
+            tested_text: "Sukienka jest czerwona"
+            prompt: {target_blocks: []}
+
+      - content_key: pl.a1.unit20.lesson03.kupujemy_ubrania
+        title: "Kupujemy ubrania"
+        spine_outcome_id: universal.a1.clothing.describe_buy_clothing
+        teaching:
+          - content_key: pl.a1.unit20.lesson03.teach.recap_words
+            kind: grammar_note
+            target: {text: "Dzień, dobry, Proszę, bardzo, i, Dobrze, Co -- już znasz te słowa z wcześniejszych lekcji.", language_code: pl, direction: ltr}
+            introduced_tokens: ["Dzień", "dobry", "Proszę", "bardzo", "i", "Dobrze", "Co"]
+          - content_key: pl.a1.unit20.lesson03.teach.rozmiar
+            kind: vocabulary
+            target: {text: "rozmiar", language_code: pl, direction: ltr}
+            introduced_tokens: ["rozmiar", "M"]
+            example:
+              {text: "Jaki rozmiar?", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit20.lesson03.teach.pan_chce_note
+            kind: grammar_note
+            target: {text: "Co pan chce kupić? -- \"pan\" to grzeczna forma zwracania się do mężczyzny, tak jak \"pani\" do kobiety (już znasz \"pani\" z lekcji o zakupach).", language_code: pl, direction: ltr}
+            introduced_tokens: ["pan", "chce"]
+          - content_key: pl.a1.unit20.lesson03.teach.co_pan_chce_kupic_phrase
+            kind: phrase
+            target: {text: "Co pan chce kupić?", language_code: pl, direction: ltr}
+            introduced_tokens: []
+          - content_key: pl.a1.unit20.lesson03.teach.dialogue.line01
+            kind: dialogue
+            target:
+              text: "Dzień dobry! Co pan chce kupić?"
+              language_code: pl
+              direction: ltr
+              speaker: Sprzedawca
+            introduced_tokens: []
+          - content_key: pl.a1.unit20.lesson03.teach.dialogue.line02
+            kind: dialogue
+            target:
+              text: "Chcę kupić koszulę i spodnie."
+              language_code: pl
+              direction: ltr
+              speaker: Marek
+            introduced_tokens: []
+          - content_key: pl.a1.unit20.lesson03.teach.dialogue.line03
+            kind: dialogue
+            target:
+              text: "Jaki rozmiar?"
+              language_code: pl
+              direction: ltr
+              speaker: Sprzedawca
+            introduced_tokens: []
+          - content_key: pl.a1.unit20.lesson03.teach.dialogue.line04
+            kind: dialogue
+            target:
+              text: "Rozmiar M."
+              language_code: pl
+              direction: ltr
+              speaker: Marek
+            introduced_tokens: []
+          - content_key: pl.a1.unit20.lesson03.teach.dialogue.line05
+            kind: dialogue
+            target:
+              text: "Mamy niebieską koszulę. Razem sto złotych."
+              language_code: pl
+              direction: ltr
+              speaker: Sprzedawca
+            introduced_tokens: []
+          - content_key: pl.a1.unit20.lesson03.teach.dialogue.line06
+            kind: dialogue
+            target:
+              text: "Dobrze, poproszę."
+              language_code: pl
+              direction: ltr
+              speaker: Marek
+            introduced_tokens: []
+        exercises:
+          - content_key: pl.a1.unit20.lesson03.exercise01.select_marek_wants_shirt_pants_line
+            type: multiple_choice
+            tested_text: "Chcę kupić koszulę i spodnie"
+            prompt:
+              target_blocks:
+                - {text: "Chcę kupić koszulę i spodnie.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit20.lesson03.exercise02.select_size_question_line
+            type: multiple_choice
+            tested_text: "Jaki rozmiar"
+            prompt:
+              target_blocks:
+                - {text: "Jaki rozmiar?", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit20.lesson03.exercise03.comprehend_marek_size
+            type: dialogue_comprehension
+            tested_text: "rozmiar"
+            prompt:
+              target_blocks:
+                - {text: "Rozmiar M.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit20.lesson03.exercise04.comprehend_marek_wants
+            type: dialogue_comprehension
+            tested_text: "koszulę spodnie"
+            prompt:
+              target_blocks:
+                - {text: "Chcę kupić koszulę i spodnie.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit20.lesson03.exercise05.match_lesson3_vocabulary
+            type: matching_pairs
+            tested_text: "sklep koszula spodnie kupić kolor sukienka niebieska czerwona rozmiar pan chce"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "sklep", right: "store"}
+              - {left: "koszula", right: "shirt"}
+              - {left: "spodnie", right: "pants"}
+              - {left: "kupić", right: "to buy"}
+              - {left: "kolor", right: "color"}
+              - {left: "sukienka", right: "dress"}
+              - {left: "niebieska", right: "blue"}
+              - {left: "czerwona", right: "red"}
+              - {left: "rozmiar", right: "size"}
+              - {left: "pan", right: "sir / formal you"}
+              - {left: "chce", right: "wants"}
+          - content_key: pl.a1.unit20.lesson03.exercise06.order_chce_kupic_koszule_i_spodnie
+            type: word_order
+            tested_text: "Chcę kupić koszulę i spodnie"
+            prompt: {target_blocks: []}
+            word_bank: ["kupić", "Chcę", "koszulę", "i", "spodnie"]
+          - content_key: pl.a1.unit20.lesson03.exercise07.order_jaki_rozmiar
+            type: word_order
+            tested_text: "Jaki rozmiar"
+            prompt: {target_blocks: []}
+            word_bank: ["rozmiar", "Jaki"]
+          - content_key: pl.a1.unit20.lesson03.exercise08.fill_jaki_rozmiar
+            type: fill_in_blank
+            tested_text: "rozmiar"
+            prompt:
+              target_blocks:
+                - {text: "Sprzedawca pyta: Jaki ___?", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit20.lesson03.exercise09.fix_co_pan_chce_kupic
+            type: grammar_check
+            tested_text: "Co pan chce kupić"
+            prompt:
+              target_blocks:
+                - {text: "Chce pan co kupić?", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit20.lesson03.exercise10.reply_jaki_rozmiar
+            type: dialogue_response
+            tested_text: "Rozmiar M"
+            prompt:
+              target_blocks:
+                - {text: "Jaki rozmiar?", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit20.lesson03.exercise11.speak_chce_kupic_koszule_i_spodnie
+            type: speak_response
+            tested_text: "Chcę kupić koszulę i spodnie"
+            prompt: {target_blocks: []}
