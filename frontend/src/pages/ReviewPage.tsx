@@ -30,6 +30,7 @@ export function ReviewPage() {
   const [reviewedCount, setReviewedCount] = useState(0);
   const [submitError, setSubmitError] = useState(false);
   const [showQuitConfirm, setShowQuitConfirm] = useState(false);
+  const [sessionError, setSessionError] = useState(false);
 
   const dueQuery = useQuery({
     queryKey: ["reviews-due"],
@@ -60,13 +61,27 @@ export function ReviewPage() {
   useEffect(() => {
     let cancelled = false;
     if (!courseId) return;
-    ReviewApi.session(courseId, 10).then((res) => {
-      if (!cancelled) setItems(res.items);
-    });
+    setSessionError(false);
+    ReviewApi.session(courseId, 10)
+      .then((res) => {
+        if (!cancelled) setItems(res.items);
+      })
+      .catch(() => {
+        if (!cancelled) setSessionError(true);
+      });
     return () => {
       cancelled = true;
     };
   }, [courseId]);
+
+  function handleSessionRetry() {
+    // Re-triggers the session-fetch effect by round-tripping courseId.
+    const id = courseId;
+    setCourseId(null);
+    setItems(null);
+    setSessionError(false);
+    setCourseId(id);
+  }
 
   const current = items?.[index];
 
@@ -121,6 +136,17 @@ export function ReviewPage() {
 
   if (dueQuery.isLoading) return <p className="muted">{t("review.loading")}</p>;
 
+  if (dueQuery.isError) {
+    return (
+      <div className="feedback-banner error">
+        <p style={{ margin: "0 0 10px" }}>{t("review.due_fetch_error")}</p>
+        <button className="btn btn-block" onClick={() => dueQuery.refetch()}>
+          {t("common.retry")}
+        </button>
+      </div>
+    );
+  }
+
   if (dueCourses.length === 0) {
     return (
       <div className="card" style={{ textAlign: "center" }}>
@@ -149,6 +175,17 @@ export function ReviewPage() {
             <span className="btn btn-secondary">{t("review.start")}</span>
           </button>
         ))}
+      </div>
+    );
+  }
+
+  if (sessionError) {
+    return (
+      <div className="feedback-banner error">
+        <p style={{ margin: "0 0 10px" }}>{t("review.session_fetch_error")}</p>
+        <button className="btn btn-block" onClick={handleSessionRetry}>
+          {t("common.retry")}
+        </button>
       </div>
     );
   }
