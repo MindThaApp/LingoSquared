@@ -187,6 +187,15 @@ conventions in places, mismatched to newly-authored content), but is
 worth using as a pronunciation reference during any recording pass,
 especially for fa/prs where the project currently has zero TTS coverage.
 
+**Update 2026-07-10: Ramin approved CC-licensed sourcing in principle**
+(public-domain government works are no longer the only permitted
+source type — see CLAUDE.md's "Sourcing policy widened" entry). That
+doesn't change anything below: the practical blockers here (empty CC0
+pool for launch languages, no attribution-credit surface built yet)
+are still real and still apply. This section remains the authoritative
+detail; CLAUDE.md's entry now points back here rather than duplicating
+policy that could drift out of sync with it.
+
 **Tatoeba: still reference-only — now a settled decision with data, not
 a placeholder (investigated and closed 2026-07-07).** The main corpus is
 CC-BY 2.0 FR (per-sentence contributor attribution required — tracking
