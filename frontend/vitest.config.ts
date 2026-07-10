@@ -9,5 +9,10 @@ export default defineConfig({
   test: {
     environment: "jsdom",
     include: ["src/**/*.test.{ts,tsx}"],
+    // Registers React Testing Library's afterEach cleanup (and jest-dom's
+    // matchers) once for every test file — without it, renders from
+    // earlier tests in the same file leak into later ones' queries. See
+    // src/test/setup.ts for the full why.
+    setupFiles: ["src/test/setup.ts"],
   },
 });
