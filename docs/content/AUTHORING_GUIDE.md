@@ -641,3 +641,160 @@ introduction, which this rule fixes on the card itself. Don't bolt a
 micro-quiz onto teaching cards without new evidence it's needed — it
 would duplicate the exercise phase immediately following and worsen
 the documented click-density complaint.
+
+## 20. Fresh-context review methodology (how to replicate a Fable-grade
+review without language-specific priors)
+
+Distilled 2026-07-11 from a real Fable review of nl B1 units 01-05
+(`docs/content/realizations/nl/b1_unit0{1..5}_*.yaml` +
+`docs/content/overlays/en-nl/b1_unit0{1..5}.yaml`, commit `2535730`)
+that found and fixed 8 real bugs a Sonnet authoring pass had missed,
+including one shape the compiler cannot catch at all. Written so any
+model (Sonnet, Opus, a future reviewer) can reproduce this quality bar
+on any language, including ones the reviewer has no fluency in — every
+check below is either mechanical (grep/script) or a nameable grammar
+pattern, not "does this sound right."
+
+**Order of operations — each stage feeds the next, don't skip ahead:**
+
+1. **Read this file and CLAUDE.md in full before touching content.**
+   The numbered rules above (§3 register, §5 instruction↔answer
+   coherence, §11 cross-fact consistency, §12 multi-clause answer
+   variants, §16 matching-pairs scale, §19 vocabulary examples) are the
+   literal checklist — most real findings map to one specific §.
+2. **Read one full realization+overlay pair together before judging
+   anything.** The realization holds prompts/tested_text/pairs/
+   word_banks; the overlay holds instructions/distractors/
+   accepted_answers/glosses/notes. Many bugs are only visible by
+   joining the two — e.g. a "(formal)" instruction in the overlay
+   against an informal pronoun in the realization's own dialogue.
+3. **Establish what grading actually does before judging
+   `accepted_answers`.** Read `backend/app/review/grading.py::
+   _normalize` — it casefolds and collapses whitespace but does NOT
+   strip punctuation, and typo tolerance is Damerau-Levenshtein
+   distance-1 with a 4-char minimum. So a missing comma degrades to
+   "almost" (fine), but any word-level variant the course itself
+   teaches as interchangeable (e.g. Dutch we/wij, ze/zij, jij/je)
+   grades flatly WRONG unless explicitly authored as a variant — that
+   line is what separates "typo tolerance covers it" from "needs a
+   §12 variant."
+
+**Mechanical sweeps — run these on every review, they catch the worst
+bugs and need zero fluency in the target language:**
+
+- **Boolean coercion (the highest-value single check — the compiler's
+  own validator does NOT catch every field this can happen on, a
+  documented gap in CLAUDE.md's footguns).** `yaml.safe_load` each
+  file and recursively walk the parsed structure for
+  `isinstance(x, bool)` anywhere outside a genuinely boolean field. A
+  matching-pair `{left: waar, right: true}` (meant as the *word*
+  "true") silently parses as Python `True` and passes `compile_content.
+  py` with 0 errors — only a real type-walk catches it.
+- **Snake_case/jargon leak scan** over every `options`/`distractors`/
+  `correct_option`/`word_bank` value, plus a grep of learner-facing
+  `feedback`/`gloss`/`note` text for internal words ("reviewed",
+  content_keys, template names).
+- **Title length**: grep for any `title:` field over ~200 chars (the
+  `content_items.title VARCHAR(200)` DB crash, §-referenced in
+  CLAUDE.md's footguns — passes `validate` clean, crashes on real
+  import).
+- **Spine outcome existence**: verify every `spine_outcome_id` the unit
+  references exists verbatim in `universal_spine.yaml`
+  (`grep -c "id: <exact-id>$"`), and that `scripts/content_manifest.
+  txt` actually lists the new files.
+- **`accepted_answers` shape**: every variant entry (when a dict) must
+  have a `value:` key, never `text:` or any other name — a bug that
+  passes `validate` clean and only crashes real `compile`
+  (`ValueError: accepted answer at index N has no value`).
+
+**Grammar/register red flags — nameable and checkable without native
+fluency, using a dictionary/reference grammar:**
+
+- **Register consistency within one scene**: if a unit claims a formal
+  register, grep the dialogue for every informal-register form and
+  check each hit by hand — fossilized idioms are where informality
+  sneaks in even when the author knows the rule (a formal-register
+  speaker correctly using formal forms everywhere except one frozen
+  idiomatic phrase). Also check that any register *mixing* across
+  speakers is intentional (one formal, one informal, is realistic; one
+  speaker mixing within their own lines is a bug).
+- **Bare-word multiple-choice ambiguity (the single highest-yield
+  check across every language reviewed so far).** For any
+  `recognize_X`-style exercise whose prompt is a single word with no
+  sentence context: list every distinct meaning of that word from a
+  dictionary, and confirm no distractor option IS one of those other
+  meanings. This fires hardest when an earlier unit taught meaning A of
+  a word and the current unit's distractor is meaning B of the *same*
+  word — technically correct either way, so the item is unanswerable.
+- **Subordinate-clause word order / inversion rules**, if the language
+  has them: verify the unit's own claimed grammar point holds in every
+  example the unit itself uses to teach it — the unit's own teaching
+  material is where a self-inflicted violation is most damaging
+  (undermines the very rule being taught).
+- **Agreement pairs the unit is explicitly teaching** (e.g. a
+  singular/plural conditional-verb contrast): verify every example
+  sentence's subject-verb pairing actually matches the rule, one by
+  one — don't sample.
+- **Anglicism/calque smell test**: flag any sentence that reads as a
+  word-for-word translation of the source-language instruction rather
+  than a natural target-language sentence, then judge: grammatical but
+  stiff → note in the review report for a native pass; actually wrong
+  → fix directly.
+- **Listening-distractor rule, meaning-level, not just verbatim** (the
+  CLAUDE.md `listen_select` footgun, extended): for every
+  `listen_select`/`dialogue_comprehension`/similar, read the FULL audio
+  text and confirm no distractor is something the tested speaker says
+  OR *defensibly implies* anywhere in that clip — apply this at the
+  meaning level (a paraphrase or reasonable inference from what's
+  actually said is just as unanswerable as a verbatim repeat), not only
+  a literal string match.
+
+**Fact/character consistency — exact method:**
+
+- `grep -rn "CharacterName"` across both the target-language
+  realizations and the overlays for every named character, including
+  inside `distractors` (a distractor naming a character absent from the
+  unit's own text is a bug on its own).
+- For any established recurring character, find the unit that pinned
+  their facts and diff every new claim in the unit under review against
+  that established profile before accepting it (job, nationality,
+  relationships — whatever the corpus has already committed to).
+- Before introducing a new character or reusing a name, verify it's
+  genuinely unused corpus-wide (`grep -rl "\b$name\b"` over every
+  candidate) rather than assuming a name is free.
+
+**Fix-vs-flag judgment — don't blur this line:**
+
+- **Fix** anything where a learner would be graded wrong on a right
+  answer, shown an unanswerable item, or shown broken/artifact text —
+  these are objective, no judgment call needed. Fix scoped renames or
+  register corrections when every touchpoint is enumerable: grep the
+  string, update realization + overlay + tested_text + introduced_
+  tokens + feedback together, then re-run the compiler.
+- **Flag instead of fixing** anything that's a genuine style
+  preference a native reviewer should arbitrate (correct-but-stiff
+  phrasing), or a "contradiction" that's really just unresolved tension
+  rather than an outright falsification. Inventing new content to
+  resolve mere tension is authoring, not reviewing — leave a note in
+  the unit's review block and let the content-authoring lane pick it up
+  on its own cycle.
+- **Don't add unbounded paraphrase variants to `accepted_answers`** —
+  only variants a learner following THIS course's own teaching would
+  actually produce (if the course explicitly teaches two forms as
+  interchangeable, both must grade correct; a synonym using vocabulary
+  the course never taught does not need to be added).
+- **Re-run the compiler (`validate` AND `compile`, both) after every
+  edit, then re-run your own mechanical sweeps.** The compiler passing
+  is necessary but never sufficient — it passed every single bug found
+  in the case this section is drawn from, including the boolean-
+  coercion one.
+
+**What this buys you**: this exact process, applied cold (zero prior
+exposure to the language or the unit) by one review pass, found a
+compiler-invisible boolean-coercion bug, a register break inside the
+unit that was teaching that exact register, two character-consistency
+violations, three unanswerable bare-word items, two meaning-level
+listening-distractor collisions, and five missing `accepted_answers`
+variants — all in five units that had already passed `compile_content.
+py` with 0 errors and 0 warnings. Treat compiler-clean as the floor,
+never the bar.
