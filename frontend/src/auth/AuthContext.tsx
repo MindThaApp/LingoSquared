@@ -7,7 +7,11 @@ import {
   type ReactNode,
 } from "react";
 import { AuthApi } from "@lingo/shared/api/endpoints";
-import { ApiError, setUnauthorizedHandler } from "@lingo/shared/api/client";
+import {
+  ApiError,
+  clearAuthTokens,
+  setUnauthorizedHandler,
+} from "@lingo/shared/api/client";
 import type { AuthUser } from "@lingo/shared/api/types";
 
 interface AuthContextValue {
@@ -25,13 +29,17 @@ interface AuthContextValue {
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
-function storeSession(token: string, user: AuthUser) {
-  localStorage.setItem("access_token", token);
+// Tokens (access + refresh) are stored by AuthApi.login/register/logout
+// themselves through the tokenStorage seam configured in main.tsx — this
+// layer only owns the cached "user" object.
+function storeSession(user: AuthUser) {
   localStorage.setItem("user", JSON.stringify(user));
 }
 
 function clearSession() {
-  localStorage.removeItem("access_token");
+  // clearAuthTokens() removes both the access and refresh tokens via the
+  // same tokenStorage seam the client's silent-refresh logic uses.
+  clearAuthTokens();
   localStorage.removeItem("user");
 }
 
@@ -40,6 +48,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   const logout = useCallback(() => {
+    // AuthApi.logout() synchronously captures + clears both tokens, then
+    // best-effort revokes the refresh token server-side (a later reuse of
+    // it must then fail). Errors are swallowed: the local session is
+    // already gone either way. This function also doubles as the
+    // setUnauthorizedHandler callback below -- in that path client.ts has
+    // already cleared the tokens itself, so AuthApi.logout() finds no
+    // refresh token and skips the network call entirely (no loop).
+    void AuthApi.logout().catch(() => {});
     clearSession();
     setUser(null);
   }, []);
@@ -74,14 +90,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = useCallback(async (email: string, password: string) => {
     const result = await AuthApi.login(email, password);
-    storeSession(result.access_token, result.user);
+    storeSession(result.user);
     setUser(result.user);
   }, []);
 
   const register = useCallback(
     async (email: string, password: string, displayName?: string) => {
       const result = await AuthApi.register(email, password, displayName);
-      storeSession(result.access_token, result.user);
+      storeSession(result.user);
       setUser(result.user);
     },
     [],
@@ -106,7 +122,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const email = `guest-${randomId}@example.com`;
       const password = crypto.randomUUID?.() ?? randomId;
       const result = await AuthApi.register(email, password, username);
-      storeSession(result.access_token, result.user);
+      storeSession(result.user);
       setUser(result.user);
     },
     [],

@@ -1,4 +1,13 @@
-import { del, get, patch, post, postFeedback } from "./client";
+import {
+  clearAuthTokens,
+  del,
+  get,
+  getStoredRefreshToken,
+  patch,
+  post,
+  postFeedback,
+  storeAuthTokens,
+} from "./client";
 import type {
   Achievement,
   AnswerResponse,
@@ -48,16 +57,44 @@ function clientTimezone(): string | undefined {
 }
 
 export const AuthApi = {
-  register: (email: string, password: string, display_name?: string) =>
-    post<AuthResult>("/auth/register", {
+  // register/login persist BOTH halves of the session (short-lived access
+  // token + long-lived rotating refresh token) through the platform's
+  // injected tokenStorage, so callers only need to handle the user object.
+  register: async (email: string, password: string, display_name?: string) => {
+    const result = await post<AuthResult>("/auth/register", {
       email,
       password,
       display_name,
       timezone: clientTimezone(),
-    }),
-  login: (email: string, password: string) =>
-    post<AuthResult>("/auth/login", { email, password, timezone: clientTimezone() }),
+    });
+    storeAuthTokens(result.access_token, result.refresh_token);
+    return result;
+  },
+  login: async (email: string, password: string) => {
+    const result = await post<AuthResult>("/auth/login", {
+      email,
+      password,
+      timezone: clientTimezone(),
+    });
+    storeAuthTokens(result.access_token, result.refresh_token);
+    return result;
+  },
   me: () => get<AuthUser>("/auth/me"),
+  // Revokes the refresh token server-side (best-effort) and clears both
+  // tokens locally. Local clearing happens FIRST, synchronously (before
+  // the network call resolves): if the revoke request is slow and the
+  // user logs in as someone else meanwhile, clearing afterwards would
+  // wipe the NEW session's tokens instead. The captured token is still
+  // the one that gets revoked. /auth/logout is unauthenticated
+  // server-side and always 204s for a valid-shape request, so an already-
+  // expired access token can't break it.
+  logout: async () => {
+    const refreshToken = getStoredRefreshToken();
+    clearAuthTokens();
+    if (refreshToken) {
+      await post<void>("/auth/logout", { refresh_token: refreshToken });
+    }
+  },
   // DELETE /me — permanently deletes the authenticated account and all
   // of its data server-side (204 on success). Irreversible; the caller
   // is responsible for the confirmation UX and for clearing the local

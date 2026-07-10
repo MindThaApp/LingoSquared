@@ -20,6 +20,11 @@ import { installGlobalCrashReporting } from './lib/crashReporter'
 // effect, so placing these calls before createRoot(...).render(...) is
 // sufficient; no explicit ordering hack needed.
 const ACCESS_TOKEN_STORAGE_KEY = 'access_token'
+// Refresh-token half of the session (backend commit 565f66c, 2026-07-10:
+// 30-minute access tokens + 60-day rotating refresh tokens). Stored
+// separately from the access token, same rationale as the interface
+// comment in @lingo/shared's client.ts.
+const REFRESH_TOKEN_STORAGE_KEY = 'refresh_token'
 
 configureApi({
   baseUrl: import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8000',
@@ -33,7 +38,13 @@ configureApi({
   tokenStorage: {
     get: () => localStorage.getItem(ACCESS_TOKEN_STORAGE_KEY),
     set: (token) => localStorage.setItem(ACCESS_TOKEN_STORAGE_KEY, token),
-    clear: () => localStorage.removeItem(ACCESS_TOKEN_STORAGE_KEY),
+    getRefresh: () => localStorage.getItem(REFRESH_TOKEN_STORAGE_KEY),
+    setRefresh: (token) => localStorage.setItem(REFRESH_TOKEN_STORAGE_KEY, token),
+    // clear() is the "session is dead" operation -- both tokens go.
+    clear: () => {
+      localStorage.removeItem(ACCESS_TOKEN_STORAGE_KEY)
+      localStorage.removeItem(REFRESH_TOKEN_STORAGE_KEY)
+    },
   },
 })
 
