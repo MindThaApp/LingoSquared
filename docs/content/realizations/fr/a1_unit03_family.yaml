@@ -8,8 +8,8 @@ generation_provenance:
   authoring_system: claude
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: claude
+  status: reviewed
+  required_next_reviewer: null
   notes: >-
     Initial six-lesson draft, continuing unit01/02's Inès/Mathieu cooking-
     workshop narrative into family. Covers the mon/ma/mes possessive-
@@ -24,9 +24,36 @@ review:
     fixed from cinq/five to six/six everywhere the refrain appears), a
     media_asset_key pointing at the wrong audio clip (added a real
     matching asset), an incoherent/ligature-inconsistent prompt, and a
-    near-total miss on the §15 asterisk convention. Left status
-    unreviewed per standing process; re-verified 0 errors/0 warnings
-    via real compile after every fix.
+    near-total miss on the §15 asterisk convention.
+
+    2026-07-10 second fresh-context review (Claude) found and fixed one
+    more real bug, cold, in the overlay half of this unit (docs/content/
+    overlays/en-fr/a1_unit03.yaml): fr.a1.unit03.lesson05.teach.
+    profile_reading's note said "...the same reading skill the family
+    outcome's read_family_profile requirement targets" -- a bare
+    snake_case internal spine assessment-requirement id
+    (universal_spine.yaml's family.assessment_requirements[].id ==
+    read_family_profile) leaking directly into learner-facing prose,
+    the exact failure mode CLAUDE.md's jargon-leak footgun warns about.
+    Fixed by rewording to plain prose matching the parallel Spanish
+    unit's already-clean equivalent note ("the same who-is-who reading
+    skill this unit's reading assessment focuses on"). Also re-checked
+    everything else on the current checklist cold: no same-speaker
+    listen_select/dialogue_comprehension distractor collisions in the
+    family-photos dialogue, no stray YAML booleans, matching_pairs/
+    word_order shapes correct, every exercise type registered, and the
+    household-size/age/location facts (Inès 31, two sisters + one
+    brother = 6 at home, Camille 20, parents in Lille, Mathieu's parents
+    in Lyon) stay mutually consistent across lesson04/05/06 -- confirmed
+    the 2026-07-06 Lyon/Lille and cinq/six fixes noted above are still
+    correctly applied everywhere. The "on_est_cinq" content_key/media
+    asset-key names still literally say "cinq" even though the spoken
+    text and household count are "six" -- purely an internal identifier
+    naming residue from the earlier arithmetic fix, never shown to a
+    learner, left as-is (not worth the risk of a rename touching a
+    referenced key for a cosmetic-only issue). Compiler re-validated 0
+    errors/0 new warnings after the fix. Now genuinely reviewed and
+    ship-ready.
 
 course:
   realization_key: fr.a1

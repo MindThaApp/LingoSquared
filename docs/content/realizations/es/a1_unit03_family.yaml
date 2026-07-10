@@ -8,8 +8,8 @@ generation_provenance:
   authoring_system: claude
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: claude
+  status: reviewed
+  required_next_reviewer: null
   notes: >-
     Initial six-lesson draft, continuing unit01/02's Elena/Mateo cooking-
     workshop narrative into family. Audio remains pending generation.
@@ -22,8 +22,34 @@ review:
     didn't match its own accepted answer, a pacing violation, stray
     literal quote characters, an internal spine-outcome-id leaking into
     learner text, and a near-total miss on the §15 asterisk convention.
-    Left status unreviewed per standing process; re-verified 0
-    errors/0 warnings via real compile after every fix.
+
+    2026-07-10 second fresh-context review (Claude) found and fixed two
+    more real bugs, cold, in the overlay half of this unit (docs/content/
+    overlays/en-es/a1_unit03.yaml, see its own notes): the lesson01 and
+    lesson02 grammar_check exercises (check_plural_agreement,
+    check_su_vs_tu) each authored a wrong FULL sentence in the prompt
+    ("Hermano y hermana, juntos: hermanas." / "Tu familia, hablando con
+    el profesor.") but only accepted a single corrected WORD/fragment
+    ("hermanos" / "Su familia") as the answer -- GrammarCheck.tsx's
+    generic free-text instruction is fixed copy, "Correct the grammar in
+    this sentence" with placeholder "Write the corrected sentence…", so
+    a learner following that instruction and typing the actual full
+    corrected sentence would have been marked wrong. Every sibling
+    grammar_check exercise in this same unit (check_gender_agreement,
+    check_parents_location) and in unit01/02 already used full corrected
+    sentences, confirming this was a real two-instance deviation, not the
+    house style. Fixed by making accepted_answers the full corrected
+    sentence in both cases, matching the established pattern. Also
+    re-checked everything else on the current checklist: no same-speaker
+    listen_select/dialogue_response distractor collisions in the
+    family-photos dialogue, no stray YAML booleans, matching_pairs/
+    word_order shapes correct, every exercise type registered, no
+    further jargon leaks, and the household-size/age/location facts
+    (Elena 31, one sister + one brother = 5 at home, Sofía 20, parents in
+    Barcelona) stay mutually consistent across lesson04/05/06. Compiler
+    re-validated 0 errors/0 new warnings after the fix (only the expected
+    schema_version 1.0 "no example sentence" warnings). Now genuinely
+    reviewed and ship-ready.
 
 course:
   realization_key: es.a1

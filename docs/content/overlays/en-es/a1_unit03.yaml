@@ -9,8 +9,8 @@ generation_provenance:
   authoring_system: claude
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: claude
+  status: reviewed
+  required_next_reviewer: null
   notes: >-
     Fresh-context review (2026-07-06) found and fixed real bugs: an
     arithmetic inconsistency in Elena's family-size facts, an
@@ -19,9 +19,26 @@ review:
     and a near-total miss on the §15 asterisk convention. Also flagged
     (not fixed, out of this file's scope): the platform's exact-match
     writing-prompt grading is a poor fit for a "write about your real
-    family" free-text exercise. Left status unreviewed per standing
-    process; re-verified 0 errors/0 warnings via real compile after
-    every fix.
+    family" free-text exercise.
+
+    2026-07-10 second fresh-context review (Claude) found and fixed two
+    more real bugs: es.a1.unit03.lesson01.exercise07.check_plural_agreement
+    and es.a1.unit03.lesson02.exercise07.check_su_vs_tu both accepted only
+    a bare corrected word/fragment ("hermanos" / "Su familia") where the
+    grammar_check exercise type's fixed UI copy ("Correct the grammar in
+    this sentence" / "Write the corrected sentence…") asks the learner to
+    retype the WHOLE sentence -- every other grammar_check in this unit
+    (and in unit01/02) correctly used a full corrected sentence, so this
+    was a genuine two-instance gap, not house style. Fixed both to accept
+    the full corrected sentence ("Hermano y hermana, juntos: hermanos." /
+    "Su familia, hablando con el profesor."), matching the sibling
+    exercises. Re-checked the rest of the current checklist cold: no
+    same-speaker distractor collisions, no stray booleans, matching_pairs/
+    word_order shapes correct, no further jargon leaks, and the
+    still-flagged writing-prompt grading-fit issue above remains a real,
+    deliberately out-of-scope platform limitation, not something to
+    silently drop from the notes. Confirmed 0 compiler errors after the
+    fix. Now genuinely reviewed and ship-ready.
 
 answer_policy:
   accent_marks: >-
@@ -296,7 +313,9 @@ exercises:
 
   es.a1.unit03.lesson01.exercise07.check_plural_agreement:
     instruction: "Correct the agreement error: what's the plural for a mixed group of siblings?"
-    accepted_answers: ["hermanos"]
+    accepted_answers:
+      - "Hermano y hermana, juntos: hermanos."
+      - "Hermano y hermana, juntos: hermanos"
     feedback: "*Hermanos* (masculine plural) covers a mixed group of brothers and sisters together."
 
   es.a1.unit03.lesson01.exercise08.speak_own_siblings:
@@ -342,7 +361,9 @@ exercises:
 
   es.a1.unit03.lesson02.exercise07.check_su_vs_tu:
     instruction: "Correct the register: you are speaking to your teacher (usted)."
-    accepted_answers: ["Su familia"]
+    accepted_answers:
+      - "Su familia, hablando con el profesor."
+      - "Su familia, hablando con el profesor"
     feedback: "*Su*, not *tu*, is used with the *usted* register."
 
   es.a1.unit03.lesson02.exercise08.speak_describe_family_size:

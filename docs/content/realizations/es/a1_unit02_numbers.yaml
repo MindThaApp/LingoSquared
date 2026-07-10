@@ -8,8 +8,8 @@ generation_provenance:
   authoring_system: claude
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: claude
+  status: reviewed
+  required_next_reviewer: null
   notes: >-
     Initial six-lesson draft, continuing unit01's Elena/Mateo cooking-
     workshop narrative into numbers. Audio remains pending generation.
@@ -18,9 +18,23 @@ review:
     gender-mismatched instruction (him/her), a duplicate word_bank tile,
     an internal content_key leaking into learner-facing text, three
     lessons with exercise-pacing violations, and a near-total miss on
-    the §15 asterisk convention. Left status unreviewed per standing
-    process; re-verified 0 errors/0 warnings via real compile after
-    every fix.
+    the §15 asterisk convention.
+
+    2026-07-10 second fresh-context review (Claude), cold, zero access to
+    the prior review's reasoning -- re-checked every item on the current
+    review checklist rather than trusting the earlier pass's self-report.
+    No further bugs found in THIS file: no same-speaker listen_select/
+    dialogue_response distractor collisions in the recipe-count dialogue,
+    no stray YAML booleans, matching_pairs pairs are correctly
+    array-of-{left,right} (including the digit-matching exercises), all
+    word_order correct_response values are token lists, ages (Mateo 28 /
+    Elena 31) and phone-number digit sequences stay internally consistent
+    across every exercise that reuses them, every exercise type used is
+    registered in ExerciseRenderer.tsx, and pacing holds programmatically
+    (no production/typing exercise precedes a recognition/drag exposure
+    in any lesson). Compiler validates 0 errors (only expected
+    schema_version 1.0 "no example sentence" warnings). Now genuinely
+    reviewed and ship-ready.
 
 course:
   realization_key: es.a1
