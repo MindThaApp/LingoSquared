@@ -512,6 +512,39 @@ to the authoring reasoning) before import.
   Firecrawl makes the search easier, it doesn't change the honesty
   requirement.
 
+**Sourcing policy widened beyond pure public-domain, 2026-07-10.**
+Ramin's call, prompted by a direct question of whether public-domain
+US government works (FSI/Peace Corps/DLI) were the only option — they
+weren't, and the standing policy was needlessly narrow. Now allowed,
+in addition to the existing public-domain sources:
+
+- **Tatoeba** (tatoeba.org) — large multilingual sentence-pair corpus,
+  well-suited to this project's example-sentence needs. License is
+  per-sentence (mostly CC-BY or CC0 depending on contributor) — record
+  the actual license found for whatever sentences are actually used in
+  `generation_provenance`, don't assume one blanket license for the
+  whole corpus.
+- **Wikibooks language courses** — structured open courses, but
+  licensed CC BY-SA (share-alike), a materially different legal
+  posture than public domain or plain CC-BY/CC0: derivative works can
+  carry share-alike obligations. Usable for research/reference and
+  light adaptation, but flag any CC BY-SA-derived unit's
+  `generation_provenance` explicitly as such (don't bury it alongside
+  plain public-domain sourcing) so this is easy to audit later if the
+  share-alike question ever needs a closer legal look.
+- **University OER courseware** — license varies per source, check and
+  record the specific license for whatever is actually used, same
+  discipline as above.
+
+Standing rule, same shape as the existing Firecrawl instruction: try
+`firecrawl search`/`firecrawl scrape` across public-domain sources
+FIRST (unchanged, still the simplest license posture), then Tatoeba/
+Wikibooks/OER as the next tier before falling back to
+established-conventions-only authoring. Always disclose the actual
+source and its actual license in `generation_provenance` — never
+average "found real material" into one undifferentiated bucket now
+that multiple license types are in play.
+
 ## Verification bar (non-negotiable)
 
 - Compiler validation green (`.content-venv/` has PyYAML;
