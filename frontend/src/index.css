@@ -9,13 +9,27 @@
   --accent: #4a3bff;
   --accent-soft: #edebff;
   --accent-contrast: #ffffff;
-  --gold: #f5a623;
-  --flame: #ff7a1a;
-  --correct: #1a9e4b;
+  /* WCAG AA (4.5:1) contrast pass, 2026-07-10. The foreground tokens below
+     were darkened to clear 4.5:1 against BOTH their -soft banner background
+     and the lightest page backgrounds they render on (--surface #ffffff,
+     --bg #f7f7fb, --surface-2 #f0f0f6). Measured ratios (WCAG relative
+     luminance), before -> after:
+       --gold on --surface:            #f5a623 2.03 -> #8f6200 5.36 (4.73 on --surface-2)
+       --flame on --surface:           #ff7a1a 2.61 -> #b34b00 5.35 (4.72 on --surface-2)
+       --correct on --correct-soft:    #1a9e4b 3.11 -> #127a3a 4.85
+       --almost on --almost-soft:      #a66a00 4.01 -> #8f5b00 5.13
+       --incorrect on --incorrect-soft:#d64545 3.78 -> #c02b2b 5.01
+     Dark mode keeps the brighter originals for --gold/--flame (they already
+     pass there) and gets its own --correct/--incorrect overrides -- see the
+     dark block below. If you retune any of these, recompute the ratios;
+     don't eyeball them. */
+  --gold: #8f6200;
+  --flame: #b34b00;
+  --correct: #127a3a;
   --correct-soft: #e3f7ea;
-  --almost: #a66a00;
+  --almost: #8f5b00;
   --almost-soft: #fdf1db;
-  --incorrect: #d64545;
+  --incorrect: #c02b2b;
   --incorrect-soft: #fdeaea;
   --locked: #b9b9c6;
   --radius: 14px;
@@ -41,9 +55,23 @@
     --accent: #7d71ff;
     --accent-soft: #2a2745;
     --accent-contrast: #ffffff;
+    /* WCAG AA dark-mode pass, 2026-07-10 (see the light-mode comment above).
+       --gold/--flame: the ORIGINAL bright values, which now need explicit
+       dark overrides because the :root defaults were darkened for light
+       mode. Already passing here: #f5a623 8.35 / #ff7a1a 6.49 on --surface
+       #1c1c24. --correct/--incorrect previously inherited the light values
+       and failed against their dark -soft banners; lightened instead of
+       darkened (dark bg needs brighter fg):
+         --correct on --correct-soft:    #1a9e4b 4.04 -> #4fc878 6.61
+         --incorrect on --incorrect-soft:#d64545 3.44 -> #e86a6a 4.80
+       --almost #e0a94b already passes (6.23 on #3a2f14) -- unchanged. */
+    --gold: #f5a623;
+    --flame: #ff7a1a;
+    --correct: #4fc878;
     --correct-soft: #16311f;
     --almost: #e0a94b;
     --almost-soft: #3a2f14;
+    --incorrect: #e86a6a;
     --incorrect-soft: #3a1f1f;
     --locked: #4a4a58;
     --shadow: 0 1px 3px rgba(0, 0, 0, 0.4), 0 6px 18px rgba(0, 0, 0, 0.3);
@@ -644,8 +672,13 @@ button {
 }
 
 .practice-combo {
-  background: var(--gold, var(--accent-soft));
-  color: var(--text-h);
+  /* Fixed amber chip, deliberately NOT var(--gold): --gold is now a
+     darkened FOREGROUND text token (WCAG pass, 2026-07-10) and would fail
+     as a background under dark text (3.56:1). Bright amber + fixed dark
+     text is 9.34:1 and works in both light and dark mode (previously the
+     dark-mode combo was near-white --text-h on bright gold, ~2:1). */
+  background: #f5a623;
+  color: #101018;
 }
 
 .practice-xp-toast {
