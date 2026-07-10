@@ -19,4 +19,5 @@ async def internal_error(request:Request,exc:Exception):
     return JSONResponse(status_code=500,content={"error":{"code":"internal_error","message":"An unexpected server error occurred"}})
 @app.get("/health")
 def health(): return {"status":"ok"}
-app.include_router(router)
+app.include_router(router, prefix="/v1")
+app.include_router(router, include_in_schema=False)
