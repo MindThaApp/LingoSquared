@@ -1,0 +1,245 @@
+schema_version: "1.1"
+realization_version: "2026.1-draft.1"
+target_language: es
+cefr_level: A1
+status: complete_draft
+generation_provenance:
+  method: ai_generated
+  authoring_system: claude
+  human_reviewed: false
+  source_material: >-
+    The apartment-hunting scenario shape (two friends check newspaper
+    listings for an available apartment to rent) and core vocabulary
+    (alquilar, el apartamento, el edificio, desocupado) are scaffolded
+    from the real, public-domain FSI Spanish Basic Course (Foreign
+    Service Institute, 1961, US government work), Volume 1 (Units
+    1-15), Unit 7 "White and Molina look for an apartment" (7.1 basic
+    sentences: "Vamos a ver el periódico," "El señor desea alquilar un
+    apartamento," "Por ahora sólo tengo dos desocupados") -- downloaded
+    directly (firecrawl confirmed at 0/1000 credits again this session
+    via `firecrawl --status`, so this used the documented WebSearch +
+    direct-download + `pdftotext -layout` fallback) from
+    https://fsi-languages.yojik.eu/languages/FSI/Spanish/Basic/Volume%201/Fsi-SpanishBasicCourse-Volume1-StudentText.pdf
+    -- `pdfinfo` confirms Author: Foreign Service Institute. Room-level
+    vocabulary (la cocina, el dormitorio, el baño, la sala) is not in
+    the source (which stops at "an apartment is available," not room
+    detail) and is established-conventions-only, needed for the
+    describe_home spine outcome specifically. No sentence or drill item
+    was copied verbatim -- every phrase below is freshly written for
+    Elena and Mateo's own storyline (Mateo wants a bigger kitchen to
+    practice cooking at home) and modernized register (no 1961
+    rental-agency framing).
+review:
+  status: unreviewed
+  required_next_reviewer: codex
+  notes: >-
+    Fourteenth Spanish A1 unit, continuing the Elena/Mateo cooking-
+    workshop storyline after unit13's work conversation. Realizes
+    universal.a1.housing.describe_home (no prerequisites per the
+    spine). New scenario: Mateo's current apartment has a tiny kitchen,
+    so after the workshop Elena helps him look through newspaper
+    listings for a new apartment with a bigger one. Authored fresh at
+    schema_version 1.1 per AUTHORING_GUIDE §19. tú register throughout.
+
+    Six lessons, recognition->drag->production (§2): 01 teaches 5 room
+    nouns (el apartamento, la cocina, el dormitorio, el baño, la sala);
+    02 teaches housing-search vocabulary (alquilar, el edificio,
+    desocupado, grande/pequeño); 03 teaches the core question-and-
+    answer pattern (¿Cuántos dormitorios tiene? / Tiene dos dormitorios
+    y una cocina grande); 04 is a phrase lesson stating Mateo's actual
+    need (Quiero alquilar un apartamento con una cocina grande); 05 is
+    a reading of a short newspaper-style apartment listing; 06 is a
+    dialogue capstone where Elena and Mateo look through listings
+    together and find one with a big kitchen.
+
+    §13: every fill_in_blank keeps surrounding context. §17: checked
+    grande/pequeño for true-synonym risk -- they are opposites (big vs.
+    small), not synonyms, and every slot testing one is anchored by an
+    already-stated fact (which specific apartment/kitchen is being
+    described), never an open choice. §16: lesson01's matching_pairs
+    uses all 5 room nouns plus 3 example sentences (8 pairs). §12:
+    multi-clause accepted_answers (lesson06's listing-description
+    sentences) have period/comma/conjunction-joined variants. No bare
+    yes/no/true/false -- checked by hand.
+
+    Internal consistency (§11): a grammar note explicitly disambiguates
+    *la cocina* (the kitchen, a room) from the already-established
+    *cocina*/*cocinar* (cooking/to cook, the workshop's own name) so
+    the two senses don't read as contradictory or confusing --
+    context (a room noun with an article vs. a bare activity noun)
+    distinguishes them, the same ambiguity a real English word like
+    "cook" would have if reused as a room name, which it isn't, so
+    this is flagged explicitly rather than left implicit. The
+    apartment listing's room counts (two bedrooms, one bathroom, one
+    big kitchen) are consistent between lesson05's reading and
+    lesson06's dialogue -- the same listing is referenced in both.
+    Never contradicts any established fact about Elena/Mateo.
+
+    Pending fresh-context review and Ramin's native-speaker pass. Audio
+    assets declared for generation, not yet recorded.
+
+course:
+  realization_key: es.a1
+  target_language_first: true
+  dialect: es_neutral_pan_hispanic
+  register_policy: >-
+    Continues unit01-13's tú register between Elena and Mateo.
+
+media_assets:
+  - {content_key: es.a1.audio.apartamento.lista.01, language: es, text: "el apartamento, la cocina, el dormitorio, el baño, la sala", voice_hint: neutral_adult, status: pending_generation}
+  - {content_key: es.a1.audio.apartamento.alquilar.01, language: es, text: "Quiero alquilar un apartamento.", voice_hint: neutral_young_adult, status: pending_generation}
+  - {content_key: es.a1.audio.apartamento.cuantos_dormitorios_tiene.01, language: es, text: "¿Cuántos dormitorios tiene?", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - {content_key: es.a1.audio.apartamento.tiene_dos_dormitorios.01, language: es, text: "Tiene dos dormitorios y una cocina grande.", voice_hint: neutral_young_adult, status: pending_generation}
+  - {content_key: es.a1.audio.apartamento.con_una_cocina_grande.01, language: es, text: "Quiero alquilar un apartamento con una cocina grande.", voice_hint: neutral_young_adult, status: pending_generation}
+  - content_key: es.a1.audio.dialogue.buscar_apartamento.01
+    language: es
+    text: >-
+      Mateo: Mi cocina es muy pequeña. Quiero alquilar un apartamento con una cocina grande.
+      Elena: Vamos a ver el periódico. Hay muchos anuncios.
+      Mateo: Este edificio tiene un apartamento desocupado.
+      Elena: ¿Cuántos dormitorios tiene?
+      Mateo: Tiene dos dormitorios y una cocina grande.
+      Elena: ¡Perfecto! Y tiene un baño y una sala también.
+      Mateo: Voy a llamar a la agencia hoy mismo.
+      Elena: Buena idea. Así puedes cocinar en casa también.
+    voice_hint: two_young_adults_neutral_friendly
+    status: pending_generation
+  - {content_key: es.a1.audio.dialogue.buscar_apartamento.tiene_dos_dormitorios.01, language: es, text: "Tiene dos dormitorios y una cocina grande.", voice_hint: neutral_young_adult, status: pending_generation}
+
+units:
+  - content_key: es.a1.unit14.housing
+    title: "Buscamos un apartamento nuevo"
+    section: reading_writing
+    spine_outcome_ids: [universal.a1.housing.describe_home]
+    planned_lesson_count: 6
+    lessons:
+      - content_key: es.a1.unit14.lesson01.el_apartamento_vocabulario
+        title: "El apartamento"
+        spine_outcome_id: universal.a1.housing.describe_home
+        teaching:
+          - {content_key: es.a1.unit14.lesson01.teach.el_apartamento, kind: vocabulary, target: {text: "el apartamento", language_code: es, direction: ltr}, introduced_tokens: [el, apartamento], example: {text: "Vivo en un apartamento pequeño.", language_code: es, direction: ltr}}
+          - {content_key: es.a1.unit14.lesson01.teach.la_cocina, kind: vocabulary, target: {text: "la cocina", language_code: es, direction: ltr}, introduced_tokens: [la, cocina, es, muy, pequeña, Mi, mi], example: {text: "Mi cocina es muy pequeña.", language_code: es, direction: ltr}}
+          - {content_key: es.a1.unit14.lesson01.teach.el_dormitorio, kind: vocabulary, target: {text: "el dormitorio", language_code: es, direction: ltr}, introduced_tokens: [el, dormitorio], example: {text: "El dormitorio tiene una cama grande.", language_code: es, direction: ltr}}
+          - {content_key: es.a1.unit14.lesson01.teach.el_bano, kind: vocabulary, target: {text: "el baño", language_code: es, direction: ltr}, introduced_tokens: [el, baño], example: {text: "El apartamento tiene un baño.", language_code: es, direction: ltr}}
+          - {content_key: es.a1.unit14.lesson01.teach.la_sala, kind: vocabulary, target: {text: "la sala", language_code: es, direction: ltr}, introduced_tokens: [la, sala], example: {text: "Vemos la televisión en la sala.", language_code: es, direction: ltr}}
+          - content_key: es.a1.unit14.lesson01.teach.cocina_ambiguity_note
+            kind: grammar_note
+            target: {text: "*La cocina* means \"the kitchen\" (a room) here, a different sense from the *cocina*/*cocinar* (cooking/to cook) already used throughout this whole storyline for the workshop itself. Context tells them apart: *la cocina* with an article names the room; *cocinar* is the bare activity verb.", language_code: en, direction: ltr}
+            introduced_tokens: []
+        exercises:
+          - {content_key: es.a1.unit14.lesson01.exercise01.choose_el_apartamento, type: multiple_choice, tested_text: "el apartamento", prompt: {target_blocks: [{text: "the apartment", language_code: en, direction: ltr}]}}
+          - {content_key: es.a1.unit14.lesson01.exercise02.choose_el_dormitorio, type: multiple_choice, tested_text: "el dormitorio", prompt: {target_blocks: [{text: "the bedroom", language_code: en, direction: ltr}]}}
+          - {content_key: es.a1.unit14.lesson01.exercise03.listen_apartamento_lista, type: listen_select, tested_text: "apartamento cocina dormitorio baño sala", media_asset_key: es.a1.audio.apartamento.lista.01, prompt: {target_blocks: []}}
+          - content_key: es.a1.unit14.lesson01.exercise04.match_apartamento_vocab
+            type: matching_pairs
+            tested_text: "apartamento cocina dormitorio baño sala"
+            prompt: {target_blocks: []}
+            pairs: [{left: "el apartamento", right: "the apartment"}, {left: "la cocina", right: "the kitchen"}, {left: "el dormitorio", right: "the bedroom"}, {left: "el baño", right: "the bathroom"}, {left: "la sala", right: "the living room"}, {left: "Mi cocina es muy pequeña.", right: "My kitchen is very small."}, {left: "El dormitorio tiene una cama grande.", right: "The bedroom has a big bed."}, {left: "Vemos la televisión en la sala.", right: "We watch television in the living room."}]
+          - {content_key: es.a1.unit14.lesson01.exercise05.order_mi_cocina_es_muy_pequena, type: word_order, tested_text: "Mi cocina es muy pequeña", prompt: {target_blocks: []}, word_bank: [Mi, cocina, es, muy, pequeña]}
+          - {content_key: es.a1.unit14.lesson01.exercise06.translate_el_bano, type: translation, tested_text: "el baño", prompt: {target_blocks: [{text: "the bathroom", language_code: en, direction: ltr}]}}
+
+      - content_key: es.a1.unit14.lesson02.buscar_apartamento_vocabulario
+        title: "Alquilar un apartamento"
+        spine_outcome_id: universal.a1.housing.describe_home
+        teaching:
+          - {content_key: es.a1.unit14.lesson02.teach.alquilar, kind: phrase, target: {text: "alquilar", language_code: es, direction: ltr}, introduced_tokens: [alquilar, Quiero, un]}
+          - {content_key: es.a1.unit14.lesson02.teach.el_edificio, kind: vocabulary, target: {text: "el edificio", language_code: es, direction: ltr}, introduced_tokens: [el, edificio, está, cerca, del, parque, Tiene], example: {text: "El edificio está cerca del parque.", language_code: es, direction: ltr}}
+          - {content_key: es.a1.unit14.lesson02.teach.desocupado, kind: phrase, target: {text: "desocupado", language_code: es, direction: ltr}, introduced_tokens: [desocupado]}
+          - {content_key: es.a1.unit14.lesson02.teach.grande, kind: phrase, target: {text: "grande", language_code: es, direction: ltr}, introduced_tokens: [grande]}
+          - {content_key: es.a1.unit14.lesson02.teach.pequeno, kind: phrase, target: {text: "pequeño", language_code: es, direction: ltr}, introduced_tokens: [pequeño]}
+        exercises:
+          - {content_key: es.a1.unit14.lesson02.exercise01.choose_alquilar, type: multiple_choice, tested_text: "alquilar", prompt: {target_blocks: [{text: "to rent", language_code: en, direction: ltr}]}}
+          - {content_key: es.a1.unit14.lesson02.exercise02.choose_desocupado, type: multiple_choice, tested_text: "desocupado", prompt: {target_blocks: [{text: "available / vacant", language_code: en, direction: ltr}]}}
+          - {content_key: es.a1.unit14.lesson02.exercise03.listen_alquilar, type: listen_select, tested_text: "Quiero alquilar un apartamento", media_asset_key: es.a1.audio.apartamento.alquilar.01, prompt: {target_blocks: []}}
+          - content_key: es.a1.unit14.lesson02.exercise04.match_buscar_vocab
+            type: matching_pairs
+            tested_text: "alquilar edificio desocupado grande pequeño"
+            prompt: {target_blocks: []}
+            pairs: [{left: "alquilar", right: "to rent"}, {left: "el edificio", right: "the building"}, {left: "desocupado", right: "available / vacant"}, {left: "grande", right: "big"}, {left: "pequeño", right: "small"}, {left: "El edificio está cerca del parque.", right: "The building is near the park."}]
+          - {content_key: es.a1.unit14.lesson02.exercise05.order_el_edificio_esta_cerca_del_parque, type: word_order, tested_text: "El edificio está cerca del parque", prompt: {target_blocks: []}, word_bank: [El, edificio, está, cerca, del, parque]}
+          - {content_key: es.a1.unit14.lesson02.exercise06.fill_desocupado, type: fill_in_blank, tested_text: "El edificio tiene un apartamento desocupado", prompt: {target_blocks: [{text: "El edificio tiene un apartamento ___. (available, not rented)", language_code: es, direction: ltr}]}}
+          - {content_key: es.a1.unit14.lesson02.exercise07.write_grande_o_pequeno, type: writing_prompt, tested_text: "grande", prompt: {target_blocks: [{text: "Write in Spanish: big.", language_code: en, direction: ltr}]}}
+
+      - content_key: es.a1.unit14.lesson03.cuantos_dormitorios_tiene
+        title: "¿Cuántos dormitorios tiene?"
+        spine_outcome_id: universal.a1.housing.describe_home
+        teaching:
+          - {content_key: es.a1.unit14.lesson03.teach.cuantos_dormitorios_tiene, kind: phrase, target: {text: "¿Cuántos dormitorios tiene?", language_code: es, direction: ltr}, introduced_tokens: [Cuántos, dormitorios, tiene]}
+          - {content_key: es.a1.unit14.lesson03.teach.tiene_dos_dormitorios_y_una_cocina_grande, kind: phrase, target: {text: "Tiene dos dormitorios y una cocina grande.", language_code: es, direction: ltr}, introduced_tokens: [Tiene, dos, dormitorios, y, una, cocina, grande]}
+        exercises:
+          - {content_key: es.a1.unit14.lesson03.exercise01.choose_cuantos_dormitorios_tiene, type: multiple_choice, tested_text: "Cuántos dormitorios tiene", prompt: {target_blocks: [{text: "How many bedrooms does it have?", language_code: en, direction: ltr}]}}
+          - {content_key: es.a1.unit14.lesson03.exercise02.listen_cuantos_dormitorios_tiene, type: listen_select, tested_text: "Cuántos dormitorios tiene", media_asset_key: es.a1.audio.apartamento.cuantos_dormitorios_tiene.01, prompt: {target_blocks: []}}
+          - {content_key: es.a1.unit14.lesson03.exercise03.listen_tiene_dos_dormitorios, type: listen_select, tested_text: "Tiene dos dormitorios y una cocina grande", media_asset_key: es.a1.audio.apartamento.tiene_dos_dormitorios.01, prompt: {target_blocks: []}}
+          - {content_key: es.a1.unit14.lesson03.exercise04.order_cuantos_dormitorios_tiene, type: word_order, tested_text: "Cuántos dormitorios tiene", prompt: {target_blocks: []}, word_bank: [Cuántos, dormitorios, tiene]}
+          - {content_key: es.a1.unit14.lesson03.exercise05.fill_tiene_dos_dormitorios, type: fill_in_blank, tested_text: "Tiene dos dormitorios y una cocina grande", prompt: {target_blocks: [{text: "Tiene dos dormitorios y una cocina ___. (big, not small)", language_code: es, direction: ltr}]}}
+          - {content_key: es.a1.unit14.lesson03.exercise06.reply_cuantos_dormitorios_tiene, type: dialogue_response, tested_text: "Tiene dos dormitorios y una cocina grande", prompt: {target_blocks: [{text: "¿Cuántos dormitorios tiene?", language_code: es, direction: ltr}]}}
+          - {content_key: es.a1.unit14.lesson03.exercise07.write_own_apartment, type: writing_prompt, tested_text: "Tiene dos dormitorios y una cocina grande", prompt: {target_blocks: [{text: "Write in Spanish: it has two bedrooms and a big kitchen.", language_code: en, direction: ltr}]}}
+
+      - content_key: es.a1.unit14.lesson04.quiero_una_cocina_grande
+        title: "Quiero una cocina grande"
+        spine_outcome_id: universal.a1.housing.describe_home
+        teaching:
+          - {content_key: es.a1.unit14.lesson04.teach.quiero_alquilar_un_apartamento_con_una_cocina_grande, kind: phrase, target: {text: "Quiero alquilar un apartamento con una cocina grande.", language_code: es, direction: ltr}, introduced_tokens: [Quiero, alquilar, un, apartamento, con, una, cocina, grande]}
+          - {content_key: es.a1.unit14.lesson04.teach.asi_puedes_cocinar_en_casa, kind: phrase, target: {text: "Así puedes cocinar en casa también.", language_code: es, direction: ltr}, introduced_tokens: [Así, puedes, cocinar, en, casa, también]}
+        exercises:
+          - {content_key: es.a1.unit14.lesson04.exercise01.choose_quiero_alquilar, type: multiple_choice, tested_text: "Quiero alquilar un apartamento con una cocina grande", prompt: {target_blocks: [{text: "I want to rent an apartment with a big kitchen.", language_code: en, direction: ltr}]}}
+          - {content_key: es.a1.unit14.lesson04.exercise02.choose_asi_puedes_cocinar_en_casa, type: multiple_choice, tested_text: "Así puedes cocinar en casa también", prompt: {target_blocks: [{text: "That way you can cook at home too.", language_code: en, direction: ltr}]}}
+          - content_key: es.a1.unit14.lesson04.exercise03.match_quiero_phrases
+            type: matching_pairs
+            tested_text: "Quiero alquilar cocina Así puedes casa"
+            prompt: {target_blocks: []}
+            pairs: [{left: "Quiero alquilar un apartamento con una cocina grande.", right: "I want to rent an apartment with a big kitchen."}, {left: "Así puedes cocinar en casa también.", right: "That way you can cook at home too."}]
+          - {content_key: es.a1.unit14.lesson04.exercise04.order_quiero_alquilar_un_apartamento, type: word_order, tested_text: "Quiero alquilar un apartamento con una cocina grande", prompt: {target_blocks: []}, word_bank: [Quiero, alquilar, un, apartamento, con, una, cocina, grande]}
+          - {content_key: es.a1.unit14.lesson04.exercise05.fill_con_una_cocina_grande, type: fill_in_blank, tested_text: "Quiero alquilar un apartamento con una cocina grande", prompt: {target_blocks: [{text: "Quiero alquilar un apartamento ___ una cocina grande. (with)", language_code: es, direction: ltr}]}}
+          - {content_key: es.a1.unit14.lesson04.exercise06.reply_por_que_quieres_mudarte, type: dialogue_response, tested_text: "Quiero alquilar un apartamento con una cocina grande", prompt: {target_blocks: [{text: "¿Por qué quieres un apartamento nuevo?", language_code: es, direction: ltr}]}}
+          - {content_key: es.a1.unit14.lesson04.exercise07.speak_state_reason, type: speak_response, tested_text: "Quiero alquilar un apartamento con una cocina grande", prompt: {target_blocks: [{text: "Explica que quieres alquilar un apartamento con una cocina grande.", language_code: es, direction: ltr}]}}
+
+      - content_key: es.a1.unit14.lesson05.leer_el_anuncio
+        title: "El anuncio del apartamento"
+        spine_outcome_id: universal.a1.housing.describe_home
+        teaching:
+          - content_key: es.a1.unit14.lesson05.teach.anuncio_reading
+            kind: reading
+            target:
+              text: "Apartamento desocupado en un edificio cerca del parque. Tiene dos dormitorios, un baño, una sala, y una cocina grande. Es perfecto para alguien que quiere cocinar en casa."
+              language_code: es
+              direction: ltr
+            introduced_tokens: [Apartamento, desocupado, en, un, edificio, cerca, del, parque, Tiene, dos, dormitorios, un, baño, una, sala, y, cocina, grande, Es, perfecto, para, alguien, que, quiere, cocinar, casa]
+          - content_key: es.a1.unit14.lesson05.teach.para_alguien_que_note
+            kind: grammar_note
+            target: {text: "*Para alguien que quiere* (for someone who wants) uses *alguien* (someone) + *que* (who) to introduce a relative clause -- a common pattern in classified ads describing an ideal tenant.", language_code: en, direction: ltr}
+            introduced_tokens: []
+        exercises:
+          - {content_key: es.a1.unit14.lesson05.exercise01.read_donde_esta_el_edificio, type: reading_comprehension, tested_text: "cerca del parque", prompt: {target_blocks: [{text: "Where is the building located?", language_code: en, direction: ltr}]}}
+          - {content_key: es.a1.unit14.lesson05.exercise02.read_cuantos_dormitorios, type: reading_comprehension, tested_text: "dos dormitorios", prompt: {target_blocks: [{text: "How many bedrooms does the apartment have?", language_code: en, direction: ltr}]}}
+          - {content_key: es.a1.unit14.lesson05.exercise03.read_como_es_la_cocina, type: reading_comprehension, tested_text: "una cocina grande", prompt: {target_blocks: [{text: "What kind of kitchen does it have?", language_code: en, direction: ltr}]}}
+          - {content_key: es.a1.unit14.lesson05.exercise04.read_para_quien_es_perfecto, type: reading_comprehension, tested_text: "alguien que quiere cocinar en casa", prompt: {target_blocks: [{text: "Who is this apartment perfect for?", language_code: en, direction: ltr}]}}
+          - content_key: es.a1.unit14.lesson05.exercise05.match_anuncio
+            type: matching_pairs
+            tested_text: "dormitorios baño sala cocina"
+            prompt: {target_blocks: []}
+            pairs: [{left: "dos", right: "dormitorios"}, {left: "un", right: "baño"}, {left: "una", right: "sala"}, {left: "una cocina", right: "grande"}]
+          - {content_key: es.a1.unit14.lesson05.exercise06.fill_es_perfecto_para, type: fill_in_blank, tested_text: "Es perfecto para alguien que quiere cocinar en casa", prompt: {target_blocks: [{text: "Es perfecto ___ alguien que quiere cocinar en casa. (for)", language_code: es, direction: ltr}]}}
+          - {content_key: es.a1.unit14.lesson05.exercise07.write_anuncio_summary, type: writing_prompt, tested_text: "Tiene dos dormitorios una cocina grande y un baño", prompt: {target_blocks: [{text: "Write one Spanish sentence describing the apartment: it has two bedrooms, a big kitchen, and a bathroom.", language_code: en, direction: ltr}]}}
+
+      - content_key: es.a1.unit14.lesson06.buscar_apartamento_dialogue
+        title: "Elena y Mateo buscan apartamento"
+        spine_outcome_ids: [universal.a1.housing.describe_home]
+        teaching:
+          - {content_key: es.a1.unit14.lesson06.teach.line01, kind: dialogue, target: {text: "Mi cocina es muy pequeña. Quiero alquilar un apartamento con una cocina grande.", language_code: es, direction: ltr, speaker: Mateo}, introduced_tokens: [Mi, cocina, es, muy, pequeña, Quiero, alquilar, un, apartamento, con, una, grande]}
+          - {content_key: es.a1.unit14.lesson06.teach.line02, kind: dialogue, target: {text: "Vamos a ver el periódico. Hay muchos anuncios.", language_code: es, direction: ltr, speaker: Elena}, introduced_tokens: [Vamos, a, ver, el, periódico, Hay, muchos, anuncios]}
+          - {content_key: es.a1.unit14.lesson06.teach.line03, kind: dialogue, target: {text: "Este edificio tiene un apartamento desocupado.", language_code: es, direction: ltr, speaker: Mateo}, introduced_tokens: [Este, edificio, tiene, un, apartamento, desocupado]}
+          - {content_key: es.a1.unit14.lesson06.teach.line04, kind: dialogue, target: {text: "¿Cuántos dormitorios tiene?", language_code: es, direction: ltr, speaker: Elena}, introduced_tokens: [Cuántos, dormitorios, tiene]}
+          - {content_key: es.a1.unit14.lesson06.teach.line05, kind: dialogue, target: {text: "Tiene dos dormitorios y una cocina grande.", language_code: es, direction: ltr, speaker: Mateo}, introduced_tokens: [Tiene, dos, dormitorios, y, una, cocina, grande]}
+          - {content_key: es.a1.unit14.lesson06.teach.line06, kind: dialogue, target: {text: "¡Perfecto! Y tiene un baño y una sala también.", language_code: es, direction: ltr, speaker: Elena}, introduced_tokens: [Perfecto, Y, tiene, un, baño, una, sala, también]}
+          - {content_key: es.a1.unit14.lesson06.teach.line07, kind: dialogue, target: {text: "Voy a llamar a la agencia hoy mismo.", language_code: es, direction: ltr, speaker: Mateo}, introduced_tokens: [Voy, a, llamar, la, agencia, hoy, mismo]}
+          - {content_key: es.a1.unit14.lesson06.teach.line08, kind: dialogue, target: {text: "Buena idea. Así puedes cocinar en casa también.", language_code: es, direction: ltr, speaker: Elena}, introduced_tokens: [Buena, idea, Así, puedes, cocinar, en, casa, también]}
+        exercises:
+          - {content_key: es.a1.unit14.lesson06.exercise01.listen_activity, type: dialogue_comprehension, tested_text: "apartamento cocina dormitorios agencia", media_asset_key: es.a1.audio.dialogue.buscar_apartamento.01, prompt: {target_blocks: []}}
+          - {content_key: es.a1.unit14.lesson06.exercise02.comprehend_por_que_busca, type: dialogue_comprehension, tested_text: "Mi cocina es muy pequeña", media_asset_key: es.a1.audio.dialogue.buscar_apartamento.01, prompt: {target_blocks: [{text: "Why is Mateo looking for a new apartment?", language_code: en, direction: ltr}]}}
+          - {content_key: es.a1.unit14.lesson06.exercise03.listen_tiene_dos_dormitorios, type: listen_select, tested_text: "Tiene dos dormitorios y una cocina grande", media_asset_key: es.a1.audio.dialogue.buscar_apartamento.tiene_dos_dormitorios.01, prompt: {target_blocks: []}}
+          - {content_key: es.a1.unit14.lesson06.exercise04.comprehend_que_mas_tiene, type: dialogue_comprehension, tested_text: "un baño y una sala también", media_asset_key: es.a1.audio.dialogue.buscar_apartamento.01, prompt: {target_blocks: [{text: "Besides the bedrooms and kitchen, what else does the apartment have?", language_code: en, direction: ltr}]}}
+          - {content_key: es.a1.unit14.lesson06.exercise05.order_vamos_a_ver_el_periodico, type: word_order, tested_text: "Vamos a ver el periódico", prompt: {target_blocks: []}, word_bank: [Vamos, a, ver, el, periódico]}
+          - {content_key: es.a1.unit14.lesson06.exercise06.respond_as_mateo, type: dialogue_response, tested_text: "Voy a llamar a la agencia hoy mismo", prompt: {target_blocks: [{text: "Toma el papel de Mateo. Di que vas a llamar a la agencia.", language_code: es, direction: ltr}]}}
+          - {content_key: es.a1.unit14.lesson06.exercise07.listen_type_cuantos_dormitorios_tiene, type: listen_type, tested_text: "Cuántos dormitorios tiene", media_asset_key: es.a1.audio.apartamento.cuantos_dormitorios_tiene.01, prompt: {target_blocks: []}}
+          - {content_key: es.a1.unit14.lesson06.exercise08.speak_confirm_perfect, type: speak_response, tested_text: "Perfecto Y tiene un baño y una sala también", prompt: {target_blocks: [{text: "Toma el papel de Elena. Confirma que el apartamento suena perfecto.", language_code: es, direction: ltr}]}}
