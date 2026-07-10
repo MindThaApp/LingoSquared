@@ -232,7 +232,7 @@ export function ReviewPage() {
         }
       />
       {submitError && !result && (
-        <div className="feedback-banner error">
+        <div className="feedback-banner error" role="alert">
           <p style={{ margin: "0 0 10px" }}>{t("review.submit_error")}</p>
           <button className="btn btn-block" onClick={handleResubmit} disabled={submitting}>
             {t("common.retry")}
@@ -242,7 +242,9 @@ export function ReviewPage() {
       {result && (() => {
         const status = resultStatus(result);
         return (
-          <div className={`feedback-banner ${status}`}>
+          // role="status" (implicit aria-live="polite") - announces the grading
+          // result to screen readers when the banner mounts.
+          <div className={`feedback-banner ${status}`} role="status">
             <p style={{ margin: "0 0 6px" }}>
               {status === "correct" && t("review.correct")}
               {status === "almost" && t("review.almost")}
