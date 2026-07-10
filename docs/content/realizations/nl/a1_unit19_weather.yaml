@@ -18,8 +18,8 @@ generation_provenance:
     text.
 status: complete_draft
 review:
-  status: unreviewed
-  required_next_reviewer: ramin
+  status: reviewed
+  required_next_reviewer: null
   notes: >-
     Initial six-lesson Dutch weather draft (spine outcome:
     universal.a1.weather.describe_basic_weather), continuing the
@@ -83,6 +83,30 @@ review:
     checked and approved as-is -- a deliberate, harmless preview
     pattern, not a defect. Re-validated/compiled clean.
 
+    2026-07-10 fresh-context review (zero access to authoring reasoning):
+    found and fixed two real bugs the earlier passes missed.
+    (1) lesson02.exercise03.match_temperatures's realization pairs had
+    grown to 5 items but one entry was the full sentence "Het is warm
+    vandaag." -> "It is warm today." instead of the bare word "warm" ->
+    "warm" that the exercise's own instruction ("Match each Dutch word
+    to its meaning") and every sibling pair call for -- fixed to the
+    bare word, and the overlay's accepted_answers (which still only had
+    the original 2 pairs) expanded to match all 5 displayed pairs.
+    (2) lesson06.exercise07.listen_type_closing was wired to the FULL
+    six-turn dialogue audio clip (nl.a1.audio.dialogue.weekend_plannen.
+    01) while only asking the learner to type Lotte's final line --
+    since the instruction is generic ("Listen and type the complete
+    Dutch sentence") with no indication of which of the six lines to
+    transcribe, this was genuinely confusing/unanswerable-with-
+    confidence. Added a new dedicated single-utterance audio asset
+    (nl.a1.audio.weather.perfect_film.01) containing just "Perfect, dan
+    kijken we een film." and rewired the exercise to it. Also checked
+    lesson06's dialogue_comprehension distractors for the
+    same-speaker-verbatim ambiguity bug class (clean -- "rain all day"
+    as a Saturday-weather distractor is unambiguous because Omar's own
+    sentence uses a clear "maar" contrast between the two days). No
+    other issues found. Re-validated/compiled clean.
+
 course:
   realization_key: nl.a1
   target_language_first: true
@@ -100,6 +124,7 @@ media_assets:
   - {content_key: nl.a1.audio.weather.morgen_zonnig.01, language: nl, text: "Morgen is het zonnig.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
   - {content_key: nl.a1.audio.weather.zullen_we_wandeling.01, language: nl, text: "Zullen we een wandeling maken?", voice_hint: neutral_young_adult_friendly, status: pending_generation}
   - {content_key: nl.a1.audio.weather.wat_voor_weer_weekend.01, language: nl, text: "Wat voor weer is het dit weekend?", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - {content_key: nl.a1.audio.weather.perfect_film.01, language: nl, text: "Perfect, dan kijken we een film.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
   - content_key: nl.a1.audio.weather.weerbericht.01
     language: nl
     text: >-
@@ -153,7 +178,7 @@ units:
         exercises:
           - {content_key: nl.a1.unit19.lesson02.exercise01.choose_cold, type: multiple_choice, tested_text: "Het is koud vandaag", prompt: {target_blocks: [{text: "It is cold today.", language_code: en, direction: ltr}]}}
           - {content_key: nl.a1.unit19.lesson02.exercise02.listen_warm, type: listen_select, tested_text: "Het is warm vandaag", media_asset_key: nl.a1.audio.weather.warm.01, prompt: {target_blocks: []}}
-          - {content_key: nl.a1.unit19.lesson02.exercise03.match_temperatures, type: matching_pairs, tested_text: "koud warm", prompt: {target_blocks: []}, pairs: [{left: koud, right: cold}, {left: "Het is warm vandaag.", right: "It is warm today."}, {left: zonnig, right: sunny}, {left: regent, right: raining}, {left: bewolkt, right: cloudy}]}
+          - {content_key: nl.a1.unit19.lesson02.exercise03.match_temperatures, type: matching_pairs, tested_text: "koud warm", prompt: {target_blocks: []}, pairs: [{left: koud, right: cold}, {left: warm, right: warm}, {left: zonnig, right: sunny}, {left: regent, right: raining}, {left: bewolkt, right: cloudy}]}
           - {content_key: nl.a1.unit19.lesson02.exercise04.order_cold, type: word_order, tested_text: "Het is koud vandaag", prompt: {target_blocks: []}, word_bank: [vandaag, Het, is, koud]}
           - {content_key: nl.a1.unit19.lesson02.exercise05.complete_warm, type: fill_in_blank, tested_text: "Het is niet koud het is warm", prompt: {target_blocks: [{text: "Het is niet koud, het is ___.", language_code: nl, direction: ltr}]}}
           - {content_key: nl.a1.unit19.lesson02.exercise06.translate_cold, type: translation, tested_text: "Het is koud vandaag", prompt: {target_blocks: [{text: "It is cold today.", language_code: en, direction: ltr}]}}
@@ -226,5 +251,5 @@ units:
           - {content_key: nl.a1.unit19.lesson06.exercise04.comprehend_plan, type: dialogue_comprehension, tested_text: "wandeling maken film kijken", media_asset_key: nl.a1.audio.dialogue.weekend_plannen.01, prompt: {target_blocks: [{text: "What do Lotte and Omar plan for Saturday and Sunday?", language_code: en, direction: ltr}]}}
           - {content_key: nl.a1.unit19.lesson06.exercise05.order_suggest_walk, type: word_order, tested_text: "Zullen we dan zaterdag een wandeling maken", prompt: {target_blocks: []}, word_bank: [zaterdag, Zullen, we, dan, een, wandeling, maken]}
           - {content_key: nl.a1.unit19.lesson06.exercise06.respond_agree_plan, type: dialogue_response, tested_text: "Goed idee en zondag blijven we lekker binnen", prompt: {target_blocks: [{text: "Zullen we dan zaterdag een wandeling maken?", language_code: nl, direction: ltr}]}}
-          - {content_key: nl.a1.unit19.lesson06.exercise07.listen_type_closing, type: listen_type, tested_text: "Perfect dan kijken we een film", media_asset_key: nl.a1.audio.dialogue.weekend_plannen.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit19.lesson06.exercise07.listen_type_closing, type: listen_type, tested_text: "Perfect dan kijken we een film", media_asset_key: nl.a1.audio.weather.perfect_film.01, prompt: {target_blocks: []}}
           - {content_key: nl.a1.unit19.lesson06.exercise08.write_weekend_plan, type: writing_prompt, tested_text: "Zaterdag maken we een wandeling Zondag kijken we een film", prompt: {target_blocks: [{text: "Write two Dutch sentences: on Saturday they go for a walk, and on Sunday they watch a film.", language_code: en, direction: ltr}]}}

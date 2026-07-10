@@ -5,8 +5,8 @@ cefr_level: A1
 generation_provenance: {method: ai_generated, authoring_system: claude, human_reviewed: false}
 status: complete_draft
 review:
-  status: unreviewed
-  required_next_reviewer: claude
+  status: reviewed
+  required_next_reviewer: null
   notes: >-
     New A1 transportation unit (file-numbered unit33, next after
     unit32), realizing the new spine outcome
@@ -75,6 +75,46 @@ review:
     Audio assets declared for generation. Pending fresh-context review
     and Ramin's native-speaker pass.
 
+    2026-07-10 genuine fresh-context review (independent scan of nl A1
+    units 21-23/29-35, this unit's first real independent review since
+    authoring): found and fixed two real audio/exercise mismatch bugs
+    (the same bug class as units 21/23's earlier fixes) --
+    lesson01.exercise05 (listen_order_ik_reis_trein, tested_text "Ik
+    reis met de trein") was wired to media_asset_key
+    nl.a1.audio.vervoer.hoe_reis_je.01, whose declared text is actually
+    "Hoe reis je naar je werk?" -- a completely different sentence with
+    different words, unanswerable-by-listening as authored; and
+    lesson04.exercise01 (listen_fenna_vraagt, tested_text "Hoe kom je
+    naar je werk Omar") was wired to that SAME hoe_reis_je.01 asset,
+    whose text ("Hoe reis je naar je werk?") uses a different verb
+    (reis vs. kom) and omits "Omar" entirely -- same bug, second
+    instance. Fixed by declaring two new dedicated media_assets (
+    nl.a1.audio.vervoer.ik_reis_trein.01: "Ik reis met de trein.";
+    nl.a1.audio.vervoer.fenna_hoe_kom_je.01: "Hoe kom je naar je werk,
+    Omar?") and repointing both exercises to them. The original
+    hoe_reis_je.01 asset is left declared but now genuinely unused by
+    any exercise -- its text is real, taught content
+    (lesson01.teach.hoe_reis_je's phrase card), just never had a
+    listen_select/listen_order exercise built for it; left as-is rather
+    than removed, since an unused declared asset is harmless and
+    removing it isn't necessary for correctness. Lesson04/06's
+    dialogue-audio distractors checked exhaustively for the
+    same-speaker-distractor bug class -- clean, no violations found.
+    Recursive YAML boolean scan: clean. matching_pairs shapes correct.
+    §17 fill_in_blank ambiguity avoidance verified: the single
+    fill_in_blank frame blanks only alstublieft, not a transport noun,
+    matching the unit's own design notes. §11 facts (each character's
+    commute mode) consistent across all six lessons, correctly
+    separated from unit32's distinct sport-habit facts as the unit's
+    own notes claim. No jargon leaks. All exercise `type:` values
+    registered in ExerciseRenderer.tsx. Grammar/register read as
+    natural, idiomatic Dutch throughout. Re-validated after the audio
+    fixes: 0 errors/0 warnings, both standalone and batch-compiled with
+    units 21-23/29-32/34/35 and the full en-nl course. Marking
+    status: reviewed -- this IS the independent pass; the two audio
+    bugs found were small, unambiguous, mechanically-fixable defects,
+    fixed directly per the review's own instructions.
+
 course:
   realization_key: nl.a1
   target_language_first: true
@@ -89,6 +129,8 @@ course:
 media_assets:
   - {content_key: nl.a1.audio.vervoer.lotte_trein.01, language: nl, text: "Ik reis elke dag met de trein.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
   - {content_key: nl.a1.audio.vervoer.hoe_reis_je.01, language: nl, text: "Hoe reis je naar je werk?", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - {content_key: nl.a1.audio.vervoer.ik_reis_trein.01, language: nl, text: "Ik reis met de trein.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - {content_key: nl.a1.audio.vervoer.fenna_hoe_kom_je.01, language: nl, text: "Hoe kom je naar je werk, Omar?", voice_hint: neutral_young_adult_friendly, status: pending_generation}
   - {content_key: nl.a1.audio.vervoer.omar_fiets.01, language: nl, text: "Omar fietst vaak naar zijn werk.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
   - {content_key: nl.a1.audio.vervoer.sander_auto.01, language: nl, text: "Sander rijdt met de auto.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
   - {content_key: nl.a1.audio.vervoer.fenna_loopt.01, language: nl, text: "Fenna loopt naar haar werk.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
@@ -150,7 +192,7 @@ units:
           - {content_key: nl.a1.unit33.lesson01.exercise02.listen_lotte_trein, type: listen_select, tested_text: "Ik reis elke dag met de trein", media_asset_key: nl.a1.audio.vervoer.lotte_trein.01, prompt: {target_blocks: []}}
           - {content_key: nl.a1.unit33.lesson01.exercise03.match_vervoer_words, type: matching_pairs, tested_text: "trein fiets auto lopen reizen", prompt: {target_blocks: []}, pairs: [{left: trein, right: train}, {left: fiets, right: bike}, {left: auto, right: car}, {left: lopen, right: "to walk"}, {left: reizen, right: "to travel"}, {left: "Hoe reis je naar je werk?", right: "How do you travel to work?"}]}
           - {content_key: nl.a1.unit33.lesson01.exercise04.order_hoe_reis_je, type: word_order, tested_text: "Hoe reis je naar je werk", prompt: {target_blocks: []}, word_bank: [Hoe, reis, je, naar, je, werk]}
-          - {content_key: nl.a1.unit33.lesson01.exercise05.listen_order_ik_reis_trein, type: listen_order, tested_text: "Ik reis met de trein", media_asset_key: nl.a1.audio.vervoer.hoe_reis_je.01, prompt: {target_blocks: []}, word_bank: [Ik, reis, met, de, trein]}
+          - {content_key: nl.a1.unit33.lesson01.exercise05.listen_order_ik_reis_trein, type: listen_order, tested_text: "Ik reis met de trein", media_asset_key: nl.a1.audio.vervoer.ik_reis_trein.01, prompt: {target_blocks: []}, word_bank: [Ik, reis, met, de, trein]}
           - {content_key: nl.a1.unit33.lesson01.exercise06.translate_fiets, type: translation, tested_text: "de fiets", prompt: {target_blocks: [{text: "the bike", language_code: en, direction: ltr}]}}
           - {content_key: nl.a1.unit33.lesson01.exercise07.respond_hoe_reis_je, type: dialogue_response, tested_text: "Ik reis met de auto", prompt: {target_blocks: [{text: "Hoe reis je naar je werk?", language_code: nl, direction: ltr}]}}
 
@@ -219,7 +261,7 @@ units:
             introduced_tokens: [Fietsen, naar, is, niet, scheidbaar, net, als, hardlopen, in, de, vorige, les, ik, fiets, werk]
           - {content_key: nl.a1.unit33.lesson04.teach.omar_dan_trein, kind: dialogue, target: {text: "Omar: Dan ga ik met de trein, samen met Lotte.", language_code: nl, direction: ltr}, introduced_tokens: [Omar, Dan, ga, ik, met, de, trein, samen, Lotte, gaat, hij, maar]}
         exercises:
-          - {content_key: nl.a1.unit33.lesson04.exercise01.listen_fenna_vraagt, type: listen_select, tested_text: "Hoe kom je naar je werk Omar", media_asset_key: nl.a1.audio.vervoer.hoe_reis_je.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit33.lesson04.exercise01.listen_fenna_vraagt, type: listen_select, tested_text: "Hoe kom je naar je werk Omar", media_asset_key: nl.a1.audio.vervoer.fenna_hoe_kom_je.01, prompt: {target_blocks: []}}
           - {content_key: nl.a1.unit33.lesson04.exercise02.comprehend_omar_fiets, type: dialogue_comprehension, tested_text: "Ik fiets meestal het is niet ver", media_asset_key: nl.a1.audio.dialogue.vervoer_taalcafe.01, prompt: {target_blocks: [{text: "How does Omar usually get to work, according to the dialogue?", language_code: en, direction: ltr}]}}
           - {content_key: nl.a1.unit33.lesson04.exercise03.comprehend_regen, type: dialogue_comprehension, tested_text: "Dan ga ik met de trein samen met Lotte", media_asset_key: nl.a1.audio.dialogue.vervoer_taalcafe.01, prompt: {target_blocks: [{text: "What does Omar do when it rains, according to the dialogue?", language_code: en, direction: ltr}]}}
           - {content_key: nl.a1.unit33.lesson04.exercise04.order_omar_fiets_meestal, type: word_order, tested_text: "Ik fiets meestal het is niet ver", prompt: {target_blocks: []}, word_bank: [Ik, fiets, meestal, het, is, niet, ver]}

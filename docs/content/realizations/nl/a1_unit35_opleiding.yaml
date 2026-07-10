@@ -6,7 +6,38 @@ generation_provenance: {method: ai_generated, authoring_system: claude, human_re
 status: complete_draft
 review:
   status: unreviewed
-  required_next_reviewer: claude
+  required_next_reviewer: ramin
+  flagged_issues:
+    - >-
+      2026-07-10 genuine fresh-context review: fixed three real,
+      unambiguous, mechanically-fixable bugs directly (documented in
+      full below in the 2026-07-10 dated notes entry) -- two audio/
+      exercise mismatches and one §11 fact contradiction (lesson03's
+      aan_de_hogeschool card wrongly attributed "de hogeschool" to
+      Sander, who this unit establishes studies at "de
+      volksuniversiteit"; Fenna is the one who studies at the
+      hogeschool -- fixed to Fenna in both files). One remaining
+      concern is NOT mechanically fixed and needs Ramin's judgment:
+      lesson01 introduces "de opleiding" using Sander's evening Spanish
+      class as the example ("Sander doet een opleiding Spaans"), but
+      every other reference to that same class (lesson02 onward, and
+      lesson04's dialogue: "Ik volg een cursus Spaans aan de
+      volksuniversiteit") consistently calls it "een cursus," not "een
+      opleiding" -- "opleiding" more naturally implies a longer/formal
+      programme (which IS what Fenna's actual hogeschool healthcare
+      programme is), while "cursus" fits a casual evening language
+      class. Using Sander's casual evening class to introduce
+      "opleiding" muddies the opleiding-vs-cursus distinction the
+      unit's own lesson02 grammar_note tries to teach, since the same
+      character/activity gets both labels without explanation. A
+      possible fix (e.g. reworking lesson01's opleiding example to
+      reference Fenna's hogeschool programme instead, which lesson03
+      hasn't formally introduced yet at that point in the unit) is a
+      real restructuring judgment call, not a one-line fix -- left
+      untouched pending Ramin's read. Everything else in this unit
+      (dialogue-audio distractors, boolean/jargon scans, matching_pairs
+      shapes, fill_in_blank ambiguity avoidance, remaining §11 facts)
+      checked clean.
   notes: >-
     New A1 education/studies unit (file-numbered unit35, next after
     unit34), realizing the new spine outcome
@@ -80,6 +111,47 @@ review:
     Audio assets declared for generation. Pending fresh-context review
     and Ramin's native-speaker pass.
 
+    2026-07-10 genuine fresh-context review (independent scan of nl A1
+    units 21-23/29-35): found and fixed three real bugs. (1) §11 fact
+    contradiction: lesson03.teach.aan_de_hogeschool (a phrase card) and
+    lesson03.exercise06.complete_aan both said "Sander studeert aan de
+    hogeschool" -- but this unit establishes Sander studies at "de
+    volksuniversiteit" (lesson03's own vocabulary-card example pairs
+    Sander->volksuniversiteit, Fenna->hogeschool correctly) and Fenna is
+    the one at the hogeschool. Fixed both to "Fenna studeert aan de
+    hogeschool" (realization target/introduced_tokens/tested_text/
+    prompt, and the matching overlay title/gloss/feedback). (2) Audio/
+    exercise mismatch: lesson04.exercise01 (listen_sander_volg_cursus,
+    tested_text "Ik volg een cursus Spaans aan de volksuniversiteit")
+    was wired to media_asset_key nl.a1.audio.opleiding.sander_cursus.01,
+    whose declared text is "Sander volgt een cursus Spaans." -- third
+    person, missing "aan de volksuniversiteit" entirely (that asset is
+    correctly used elsewhere, in lesson02.exercise02, where its text
+    does match). Fixed by declaring a new dedicated asset
+    (nl.a1.audio.opleiding.sander_volg_cursus_volks.01: "Ik volg een
+    cursus Spaans aan de volksuniversiteit.") and repointing this
+    exercise to it. (3) Second audio/exercise mismatch:
+    lesson06.exercise01 (listen_fenna_studeert_ook, tested_text "Ik
+    studeer ook weet je Ik doe een opleiding aan de hogeschool") was
+    wired to nl.a1.audio.opleiding.fenna_hogeschool.01, whose declared
+    text is the unrelated third-person "Fenna studeert aan de
+    hogeschool." (that asset is correctly used elsewhere too, in
+    lesson03.exercise05). Fixed by declaring a new dedicated asset
+    (nl.a1.audio.opleiding.fenna_studeer_ook.01: "Ik studeer ook, weet
+    je. Ik doe een opleiding aan de hogeschool.") and repointing this
+    exercise to it. Lesson04/06's dialogue-audio distractors checked
+    exhaustively for the same-speaker-distractor bug class -- clean.
+    Recursive YAML boolean scan: clean. matching_pairs shapes correct.
+    §17 fill_in_blank ambiguity avoidance verified: the single
+    fill_in_blank frame blanks only "aan," not studeren/leren/cursus,
+    matching the unit's own design notes. No jargon leaks. All exercise
+    `type:` values registered in ExerciseRenderer.tsx. Re-validated
+    after all three fixes: 0 errors/0 warnings, both standalone and
+    batch-compiled with units 21-23/29-34 and the full en-nl course.
+    Status stays unreviewed -- see the flagged_issues entry above for
+    the one remaining item (the opleiding-vs-cursus example-character
+    choice) that needs Ramin's judgment, not a mechanical fix.
+
 course:
   realization_key: nl.a1
   target_language_first: true
@@ -96,6 +168,8 @@ media_assets:
   - {content_key: nl.a1.audio.opleiding.fenna_leert.01, language: nl, text: "Fenna leert graag nieuwe dingen.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
   - {content_key: nl.a1.audio.opleiding.sander_volksuniversiteit.01, language: nl, text: "Sander studeert aan de volksuniversiteit.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
   - {content_key: nl.a1.audio.opleiding.fenna_hogeschool.01, language: nl, text: "Fenna studeert aan de hogeschool.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - {content_key: nl.a1.audio.opleiding.sander_volg_cursus_volks.01, language: nl, text: "Ik volg een cursus Spaans aan de volksuniversiteit.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - {content_key: nl.a1.audio.opleiding.fenna_studeer_ook.01, language: nl, text: "Ik studeer ook, weet je. Ik doe een opleiding aan de hogeschool.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
   - content_key: nl.a1.audio.dialogue.opleiding_taalcafe.01
     language: nl
     text: >-
@@ -192,14 +266,14 @@ units:
             kind: grammar_note
             target: {text: "Je kent al *Wat doe je voor werk?* Nu ook: *Wat studeer je?* en *Waar studeer je?*", language_code: nl, direction: ltr}
             introduced_tokens: [Je, kent, al, Wat, doe, je, voor, werk, Nu, ook, studeer, Waar]
-          - {content_key: nl.a1.unit35.lesson03.teach.aan_de_hogeschool, kind: phrase, target: {text: "Sander studeert aan de hogeschool.", language_code: nl, direction: ltr}, introduced_tokens: [Sander, studeert, aan, de, hogeschool]}
+          - {content_key: nl.a1.unit35.lesson03.teach.aan_de_hogeschool, kind: phrase, target: {text: "Fenna studeert aan de hogeschool.", language_code: nl, direction: ltr}, introduced_tokens: [Fenna, studeert, aan, de, hogeschool]}
         exercises:
           - {content_key: nl.a1.unit35.lesson03.exercise01.choose_sander_volksuniversiteit, type: multiple_choice, tested_text: "Sander studeert aan de volksuniversiteit", prompt: {target_blocks: [{text: "Sander studies at the community college.", language_code: en, direction: ltr}]}}
           - {content_key: nl.a1.unit35.lesson03.exercise02.listen_sander_volksuniversiteit, type: listen_select, tested_text: "Sander studeert aan de volksuniversiteit", media_asset_key: nl.a1.audio.opleiding.sander_volksuniversiteit.01, prompt: {target_blocks: []}}
           - {content_key: nl.a1.unit35.lesson03.exercise03.match_school_words, type: matching_pairs, tested_text: "universiteit hogeschool waar studeer je wat doe je voor werk", prompt: {target_blocks: []}, pairs: [{left: "de universiteit", right: "the university"}, {left: "de hogeschool", right: "the college/university of applied sciences"}, {left: "Waar studeer je?", right: "Where do you study?"}, {left: "Wat doe je voor werk?", right: "What do you do for work?"}, {left: "Sander studeert aan de volksuniversiteit.", right: "Sander studies at the community college."}, {left: "Fenna studeert aan de hogeschool.", right: "Fenna studies at the college."}]}
           - {content_key: nl.a1.unit35.lesson03.exercise04.order_fenna_hogeschool, type: word_order, tested_text: "Fenna studeert aan de hogeschool", prompt: {target_blocks: []}, word_bank: [Fenna, studeert, aan, de, hogeschool]}
           - {content_key: nl.a1.unit35.lesson03.exercise05.listen_order_fenna_hogeschool, type: listen_order, tested_text: "Fenna studeert aan de hogeschool", media_asset_key: nl.a1.audio.opleiding.fenna_hogeschool.01, prompt: {target_blocks: []}, word_bank: [Fenna, studeert, aan, de, hogeschool]}
-          - {content_key: nl.a1.unit35.lesson03.exercise06.complete_aan, type: fill_in_blank, tested_text: "Sander studeert aan de hogeschool", prompt: {target_blocks: [{text: "Sander studeert ___ de hogeschool.", language_code: nl, direction: ltr}]}}
+          - {content_key: nl.a1.unit35.lesson03.exercise06.complete_aan, type: fill_in_blank, tested_text: "Fenna studeert aan de hogeschool", prompt: {target_blocks: [{text: "Fenna studeert ___ de hogeschool.", language_code: nl, direction: ltr}]}}
           - {content_key: nl.a1.unit35.lesson03.exercise07.write_where_study, type: writing_prompt, tested_text: "Ik studeer aan de universiteit", prompt: {target_blocks: [{text: "Write in Dutch: say where you study (university or college).", language_code: en, direction: ltr}]}}
 
       - content_key: nl.a1.unit35.lesson04.taalcafe_sander_cursus
@@ -211,7 +285,7 @@ units:
           - {content_key: nl.a1.unit35.lesson04.teach.omar_leuk_wat_leer, kind: dialogue, target: {text: "Omar: Leuk! Wat leer je?", language_code: nl, direction: ltr}, introduced_tokens: [Omar, Leuk, Wat, leer, je]}
           - {content_key: nl.a1.unit35.lesson04.teach.sander_leer_woorden, kind: dialogue, target: {text: "Sander: Ik leer nieuwe woorden en ik spreek ook Spaans in de les.", language_code: nl, direction: ltr}, introduced_tokens: [Sander, Ik, leer, nieuwe, woorden, en, ik, spreek, ook, Spaans, in, de, les]}
         exercises:
-          - {content_key: nl.a1.unit35.lesson04.exercise01.listen_sander_volg_cursus, type: listen_select, tested_text: "Ik volg een cursus Spaans aan de volksuniversiteit", media_asset_key: nl.a1.audio.opleiding.sander_cursus.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit35.lesson04.exercise01.listen_sander_volg_cursus, type: listen_select, tested_text: "Ik volg een cursus Spaans aan de volksuniversiteit", media_asset_key: nl.a1.audio.opleiding.sander_volg_cursus_volks.01, prompt: {target_blocks: []}}
           - {content_key: nl.a1.unit35.lesson04.exercise02.comprehend_wat_avonds, type: dialogue_comprehension, tested_text: "Ik volg een cursus Spaans aan de volksuniversiteit", media_asset_key: nl.a1.audio.dialogue.opleiding_taalcafe.01, prompt: {target_blocks: [{text: "What does Sander do in the evenings?", language_code: en, direction: ltr}]}}
           - {content_key: nl.a1.unit35.lesson04.exercise03.comprehend_waar, media_asset_key: nl.a1.audio.dialogue.opleiding_taalcafe.01, type: dialogue_comprehension, tested_text: "aan de volksuniversiteit", prompt: {target_blocks: [{text: "Where does Sander take his Spanish course?", language_code: en, direction: ltr}]}}
           - {content_key: nl.a1.unit35.lesson04.exercise04.comprehend_wat_leert, media_asset_key: nl.a1.audio.dialogue.opleiding_taalcafe.01, type: dialogue_comprehension, tested_text: "Ik leer nieuwe woorden en ik spreek ook Spaans in de les", prompt: {target_blocks: [{text: "According to Sander, what does he do in class?", language_code: en, direction: ltr}]}}
@@ -257,7 +331,7 @@ units:
           - {content_key: nl.a1.unit35.lesson06.teach.sander_interessant_zullen_we, kind: dialogue, target: {text: "Sander: Interessant! Zullen we Spaans oefenen bij het volgende taalcafé?", language_code: nl, direction: ltr}, introduced_tokens: [Sander, Interessant, Zullen, we, Spaans, oefenen, bij, het, volgende, taalcafe]}
           - {content_key: nl.a1.unit35.lesson06.teach.fenna_goed_idee_tot_dan, kind: dialogue, target: {text: "Fenna: Goed idee, tot dan!", language_code: nl, direction: ltr}, introduced_tokens: [Fenna, Goed, idee, tot, dan]}
         exercises:
-          - {content_key: nl.a1.unit35.lesson06.exercise01.listen_fenna_studeert_ook, type: listen_select, tested_text: "Ik studeer ook weet je Ik doe een opleiding aan de hogeschool", media_asset_key: nl.a1.audio.opleiding.fenna_hogeschool.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit35.lesson06.exercise01.listen_fenna_studeert_ook, type: listen_select, tested_text: "Ik studeer ook weet je Ik doe een opleiding aan de hogeschool", media_asset_key: nl.a1.audio.opleiding.fenna_studeer_ook.01, prompt: {target_blocks: []}}
           - {content_key: nl.a1.unit35.lesson06.exercise02.comprehend_fenna_opleiding, type: dialogue_comprehension, tested_text: "Ik doe een opleiding aan de hogeschool", media_asset_key: nl.a1.audio.dialogue.opleiding_wrapup.01, prompt: {target_blocks: [{text: "Where is Fenna doing her programme?", language_code: en, direction: ltr}]}}
           - {content_key: nl.a1.unit35.lesson06.exercise03.comprehend_fenna_wat, media_asset_key: nl.a1.audio.dialogue.opleiding_wrapup.01, type: dialogue_comprehension, tested_text: "Ik studeer daar gezondheidszorg", prompt: {target_blocks: [{text: "What does Fenna say she studies there?", language_code: en, direction: ltr}]}}
           - {content_key: nl.a1.unit35.lesson06.exercise04.comprehend_zullen_we, media_asset_key: nl.a1.audio.dialogue.opleiding_wrapup.01, type: dialogue_comprehension, tested_text: "Zullen we Spaans oefenen bij het volgende taalcafe", prompt: {target_blocks: [{text: "What does Sander suggest they do together?", language_code: en, direction: ltr}]}}

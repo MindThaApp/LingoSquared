@@ -5,9 +5,41 @@ cefr_level: A1
 generation_provenance: {method: ai_generated, authoring_system: claude, human_reviewed: false}
 status: complete_draft
 review:
-  status: unreviewed
-  required_next_reviewer: claude
+  status: reviewed
+  required_next_reviewer: null
   notes: >-
+    Fresh-context review 2026-07-10 (Claude, zero access to authoring
+    reasoning): found and FIXED a real §11 cross-lesson fact-consistency
+    bug. lesson04's dialogue explicitly splits the cooking tasks ("Ja, ik
+    snijd de ui en jij bakt de tomaat" -- Lotte cuts ONLY the onion, Omar
+    fries ONLY the tomato), but lesson05's reading recap originally
+    contradicted this ("Lotte snijdt de ui en de tomaat. Omar bakt de ui
+    en de tomaat in de pan." -- both people doing both vegetables).
+    Fixed by changing the reading to match the dialogue's stated division
+    of labor ("Lotte snijdt de ui. Omar bakt de tomaat in de pan."),
+    cascaded through lesson05.exercise02's tested_text/correct_option/
+    distractors/accepted_answers/feedback (both realization and overlay)
+    and lesson05.exercise04's matching_pairs pair (both files). Re-ran
+    compiler validate after the fix: 0 errors, 0 warnings, confirming the
+    edit didn't break compilation. Checked same-speaker
+    listen_select/dialogue_comprehension distractors against both
+    dialogue transcripts (cooking_keuken.01, cooking_sander.01) -- one
+    borderline case (lesson04.exercise02's "Preparing the meal."
+    distractor, which Omar does separately state elsewhere in the same
+    clip) was judged NOT a violation since the question specifically
+    tests "what does Omar suggest" (a speech-act distinction) against a
+    later factual statement he makes, not two options both correct for
+    the same question -- only one answer is actually a suggestion.
+    Calendar fact verified by direct computation: 2026-04-26 is a real
+    Sunday, consistent with the claimed "+2 days" continuation from
+    unit39's Friday 24 April. Recursive YAML boolean-coercion scan found
+    no stray booleans outside human_reviewed/target_language_first.
+    matching_pairs use the correct {left,right}[] shape. No snake_case/
+    internal-jargon leaks found in any learner-facing string. Dutch read
+    for register/grammar/naturalness: separable-verb usage (klaarmaken/ik
+    maak het eten klaar) correct, no issues found beyond the fixed fact
+    bug.
+
     New A1 cooking unit (file-numbered unit40, next after unit39), realizing
     a NEW spine outcome universal.a1.cooking.prepare_simple_meal
     (prerequisite: universal.a1.food.order_simple_meal, realized in
@@ -302,18 +334,18 @@ units:
             target:
               text: >-
                 Lotte en Omar koken samen in de keuken bij Omar in
-                Utrecht. Lotte snijdt de ui en de tomaat. Omar bakt de ui
-                en de tomaat in de pan. Omar maakt het eten klaar. Lotte
-                proeft het eten. Het eten is lekker!
+                Utrecht. Lotte snijdt de ui. Omar bakt de tomaat in de
+                pan. Omar maakt het eten klaar. Lotte proeft het eten.
+                Het eten is lekker!
               language_code: nl
               direction: ltr
             introduced_tokens: [Lotte, en, Omar, koken, samen, in, de, keuken, bij, Utrecht, snijdt, ui, tomaat, bakt, pan, maakt, het, eten, klaar, proeft, Het, is, lekker]
           - {content_key: nl.a1.unit40.lesson05.teach.eten_is_lekker, kind: phrase, target: {text: "Het eten is klaar en het is lekker!", language_code: nl, direction: ltr}, introduced_tokens: [Het, eten, is, klaar, en, lekker]}
         exercises:
           - {content_key: nl.a1.unit40.lesson05.exercise01.read_wie_kookt_waar, type: reading_comprehension, tested_text: "Lotte en Omar koken samen in de keuken bij Omar in Utrecht", prompt: {target_blocks: [{text: "According to the text, who cooks together, and where?", language_code: en, direction: ltr}]}}
-          - {content_key: nl.a1.unit40.lesson05.exercise02.read_wat_snijdt_lotte, type: reading_comprehension, tested_text: "Lotte snijdt de ui en de tomaat", prompt: {target_blocks: [{text: "According to the text, what does Lotte cut?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit40.lesson05.exercise02.read_wat_snijdt_lotte, type: reading_comprehension, tested_text: "Lotte snijdt de ui", prompt: {target_blocks: [{text: "According to the text, what does Lotte cut?", language_code: en, direction: ltr}]}}
           - {content_key: nl.a1.unit40.lesson05.exercise03.read_hoe_smaakt_eten, type: reading_comprehension, tested_text: "Het eten is lekker", prompt: {target_blocks: [{text: "According to the text, how does the meal taste?", language_code: en, direction: ltr}]}}
-          - {content_key: nl.a1.unit40.lesson05.exercise04.match_koken_recap, type: matching_pairs, tested_text: "ui tomaat pan eten lekker", prompt: {target_blocks: []}, pairs: [{left: "de ui", right: "the onion"}, {left: "de tomaat", right: "the tomato"}, {left: "de pan", right: "the pan"}, {left: "Lotte snijdt de ui en de tomaat.", right: "Lotte cuts the onion and the tomato."}, {left: "Omar maakt het eten klaar.", right: "Omar prepares the meal."}, {left: "Het eten is lekker.", right: "The meal is tasty."}]}
+          - {content_key: nl.a1.unit40.lesson05.exercise04.match_koken_recap, type: matching_pairs, tested_text: "ui tomaat pan eten lekker", prompt: {target_blocks: []}, pairs: [{left: "de ui", right: "the onion"}, {left: "de tomaat", right: "the tomato"}, {left: "de pan", right: "the pan"}, {left: "Lotte snijdt de ui.", right: "Lotte cuts the onion."}, {left: "Omar maakt het eten klaar.", right: "Omar prepares the meal."}, {left: "Het eten is lekker.", right: "The meal is tasty."}]}
           - {content_key: nl.a1.unit40.lesson05.exercise05.listen_koken_samen, type: listen_select, tested_text: "Lotte en Omar koken samen in de keuken bij Omar in Utrecht", media_asset_key: nl.a1.audio.cooking.recap_koken_samen.01, prompt: {target_blocks: []}}
           - {content_key: nl.a1.unit40.lesson05.exercise06.write_eten_is_lekker, type: writing_prompt, tested_text: "Het eten is lekker", prompt: {target_blocks: [{text: "Write in Dutch: say the meal is tasty.", language_code: en, direction: ltr}]}}
 

@@ -5,9 +5,33 @@ cefr_level: A1
 generation_provenance: {method: ai_generated, authoring_system: claude, human_reviewed: false}
 status: complete_draft
 review:
-  status: unreviewed
-  required_next_reviewer: claude
+  status: reviewed
+  required_next_reviewer: null
   notes: >-
+    2026-07-10 fresh-context review (Claude) found and fixed ONE real
+    cross-lesson factual inconsistency per AUTHORING_GUIDE.md S11.
+    lesson04's own reading sign (teach.rooster_tekst) states "Yogales:
+    maandag negen uur." (yoga class: Monday nine o'clock), and this
+    file's own review notes establish the story's real-world visit day
+    as Monday 13 July 2026 -- exactly that day. But lesson05's dialogue
+    had the medewerker answer Lotte's "what time does yoga start today?"
+    with "Om drie uur" (three o'clock), directly contradicting the sign
+    for the same day/class. Resolved by changing the dialogue's answer
+    to "Om negen uur" to match the sign, updating the matching English
+    gloss in the overlay; no exercise in the file tested the specific
+    wrong number as a correct_option, so no other exercise text needed
+    updating. Re-validated clean after the fix: 0 errors/0 warnings.
+    Everything else in this unit was checked clean: no
+    same-speaker distractor collisions in either multi-turn dialogue
+    (lesson05 balie_dagpas, lesson06 na_de_sportschool); a recursive
+    boolean-coercion scan found no stray Yes/No/True/False; compiler
+    validation is 0 errors/0 warnings; matching_pairs/word_order answer
+    shapes match the frontend's real submission shape; every exercise
+    type used is a real ExerciseRenderer.tsx case; the day-pass price
+    (tien euro per persoon) is stated once only and never contradicted;
+    no jargon leaks; Dutch grammar/register read as natural and
+    consistent (jij/je among the friends, u toward de medewerker).
+
     New Dutch A1 unit after unit59 (park). A yaml.safe_load diff of every
     spine_outcome_id/spine_outcome_ids across every
     docs/content/realizations/nl/a1_unit*.yaml file against every
@@ -160,7 +184,7 @@ media_assets:
       Medewerker: Goedemiddag! Kan ik u helpen? Nina: Goedemiddag. Wij
       willen graag een dagpas kopen. Medewerker: Natuurlijk. Dat is tien
       euro per persoon. Lotte: Hoe laat begint de yogales vandaag?
-      Medewerker: Om drie uur. De instructeur heet Sanne.
+      Medewerker: Om negen uur. De instructeur heet Sanne.
     voice_hint: three_young_adults_and_staff_friendly
     status: pending_generation
   - {content_key: nl.a1.unit60.audio.gym.dat_is_tien_euro_per_persoon.01, language: nl, text: "Dat is tien euro per persoon.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
@@ -287,7 +311,7 @@ units:
           - {content_key: nl.a1.unit60.lesson05.teach.nina_dagpas_vraag, kind: dialogue, target: {text: "Goedemiddag. Wij willen graag een dagpas kopen.", language_code: nl, direction: ltr, speaker: Nina}, introduced_tokens: [Goedemiddag, Wij, willen, graag, een, dagpas, kopen]}
           - {content_key: nl.a1.unit60.lesson05.teach.medewerker_prijs, kind: dialogue, target: {text: "Natuurlijk. Dat is tien euro per persoon.", language_code: nl, direction: ltr, speaker: "de medewerker"}, introduced_tokens: [Natuurlijk, Dat, is, tien, euro, per, persoon]}
           - {content_key: nl.a1.unit60.lesson05.teach.lotte_yogales_vraag, kind: dialogue, target: {text: "Hoe laat begint de yogales vandaag?", language_code: nl, direction: ltr, speaker: Lotte}, introduced_tokens: [Hoe, laat, begint, de, yogales, vandaag]}
-          - {content_key: nl.a1.unit60.lesson05.teach.medewerker_antwoord, kind: dialogue, target: {text: "Om drie uur. De instructeur heet Sanne.", language_code: nl, direction: ltr, speaker: "de medewerker"}, introduced_tokens: [Om, drie, uur, De, instructeur, heet, Sanne]}
+          - {content_key: nl.a1.unit60.lesson05.teach.medewerker_antwoord, kind: dialogue, target: {text: "Om negen uur. De instructeur heet Sanne.", language_code: nl, direction: ltr, speaker: "de medewerker"}, introduced_tokens: [Om, negen, uur, De, instructeur, heet, Sanne]}
         exercises:
           - {content_key: nl.a1.unit60.lesson05.exercise01.listen_wij_willen_graag_een_dagpas_kopen, type: listen_select, tested_text: "Wij willen graag een dagpas kopen", media_asset_key: nl.a1.unit60.audio.dialogue.balie_dagpas.01, prompt: {target_blocks: []}}
           - {content_key: nl.a1.unit60.lesson05.exercise02.comprehend_dagpas_prijs, type: dialogue_comprehension, tested_text: "tien euro per persoon", media_asset_key: nl.a1.unit60.audio.dialogue.balie_dagpas.01, prompt: {target_blocks: [{text: "How much does a day pass cost per person?", language_code: en, direction: ltr}]}}

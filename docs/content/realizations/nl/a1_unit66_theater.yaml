@@ -5,9 +5,37 @@ cefr_level: A1
 generation_provenance: {method: ai_generated, authoring_system: claude, human_reviewed: false}
 status: complete_draft
 review:
-  status: unreviewed
-  required_next_reviewer: claude
+  status: reviewed
+  required_next_reviewer: null
   notes: >-
+    2026-07-10 fresh-context review (Claude, zero access to the authoring
+    reasoning) found and FIXED the same mechanical bug as unit64/65:
+    lesson02 (het_podium_en_het_gordijn), lesson03
+    (de_acteurs_en_de_kassa), lesson04
+    (het_programma_van_de_voorstelling), lesson05
+    (bij_de_kassa_van_het_theater), and lesson06
+    (nina_hoort_over_het_theater) all had their `title` field written in
+    ENGLISH directly in this Dutch-target realization file instead of
+    Dutch (e.g. lesson02's title was "The stage and the curtain" instead
+    of "Het podium en het gordijn"). Fixed the same way as unit64/65:
+    translated each title back to Dutch using the content_key's own
+    snake_case phrase and the corpus's established lesson-title pattern;
+    lesson01's title was already correct Dutch and untouched. Re-ran
+    `compile_content.py validate` after the fix together with units
+    59-66 as one batch -- still 0 errors/0 warnings. Everything else
+    checked clean: same-speaker distractor integrity in both multi-turn
+    dialogues (lesson05 kassa_theater, lesson06 na_het_theater) -- no
+    violation found; a recursive boolean-coercion scan (clean);
+    matching_pairs/word_order answer shapes match the frontend's real
+    submission shape; every exercise type used is a real
+    ExerciseRenderer.tsx case; independently re-verified this file's own
+    S11 price/time cross-check (ticket price dertig euro x 2 kaartjes =
+    zestig euro, matching the dialogue; no other conflicting price/time
+    claim) -- confirmed consistent; no jargon leaks; story continuity
+    with unit65's closing scene confirmed consistent. Dutch grammar/
+    register read as natural and correct throughout. Native-speaker
+    review is still planned.
+
     New Dutch A1 unit after unit65 (amusement park). Confirmed programmatically
     before adding anything: a yaml.safe_load walk of every nl a1_unit*.yaml
     realization file's spine_outcome_id/spine_outcome_ids against every
@@ -224,7 +252,7 @@ units:
           - {content_key: nl.a1.unit66.lesson01.exercise07.respond_vandaag_naar_het_theater_gaan, type: dialogue_response, tested_text: "Zullen we vandaag naar het theater gaan", prompt: {target_blocks: [{text: "Say in Dutch: shall we go to the theatre today?", language_code: en, direction: ltr}]}}
 
       - content_key: nl.a1.unit66.lesson02.het_podium_en_het_gordijn
-        title: "The stage and the curtain"
+        title: "Het podium en het gordijn"
         spine_outcome_id: universal.a1.theatre.attend_a_play
         teaching:
           - content_key: nl.a1.unit66.lesson02.teach.podium
@@ -248,7 +276,7 @@ units:
           - {content_key: nl.a1.unit66.lesson02.exercise07.respond_podium_en_gordijn, type: dialogue_response, tested_text: "Ik zie het podium en het gordijn", prompt: {target_blocks: [{text: "Say in Dutch: I see the stage and the curtain.", language_code: en, direction: ltr}]}}
 
       - content_key: nl.a1.unit66.lesson03.de_acteurs_en_de_kassa
-        title: "The actors and the ticket counter"
+        title: "De acteurs en de kassa"
         spine_outcome_id: universal.a1.theatre.attend_a_play
         teaching:
           - content_key: nl.a1.unit66.lesson03.teach.acteurs
@@ -272,7 +300,7 @@ units:
           - {content_key: nl.a1.unit66.lesson03.exercise07.respond_acteurs_en_kassa, type: dialogue_response, tested_text: "Ik zie de acteurs en de kassa", prompt: {target_blocks: [{text: "Say in Dutch: I see the actors and the ticket counter.", language_code: en, direction: ltr}]}}
 
       - content_key: nl.a1.unit66.lesson04.het_programma_van_de_voorstelling
-        title: "The programme for the performance"
+        title: "Het programma van de voorstelling"
         spine_outcome_id: universal.a1.theatre.attend_a_play
         teaching:
           - content_key: nl.a1.unit66.lesson04.teach.programma
@@ -298,7 +326,7 @@ units:
           - {content_key: nl.a1.unit66.lesson04.exercise07.write_hoe_laat_begint_de_voorstelling, type: writing_prompt, tested_text: "Hoe laat begint de voorstelling", prompt: {target_blocks: [{text: "Write in Dutch: what time does the performance start?", language_code: en, direction: ltr}]}}
 
       - content_key: nl.a1.unit66.lesson05.bij_de_kassa_van_het_theater
-        title: "At the theatre ticket counter"
+        title: "Bij de kassa van het theater"
         spine_outcome_id: universal.a1.theatre.attend_a_play
         teaching:
           - {content_key: nl.a1.unit66.lesson05.teach.medewerker_groet, kind: dialogue, target: {text: "Goedenavond! Kan ik u helpen?", language_code: nl, direction: ltr, speaker: "de medewerker"}, introduced_tokens: [Goedenavond, Kan, ik, u, helpen]}
@@ -317,7 +345,7 @@ units:
           - {content_key: nl.a1.unit66.lesson05.exercise08.write_hebben_we_goede_stoelen, type: writing_prompt, tested_text: "Hebben we goede stoelen", prompt: {target_blocks: [{text: "Write in Dutch: do we have good seats?", language_code: en, direction: ltr}]}}
 
       - content_key: nl.a1.unit66.lesson06.nina_hoort_over_het_theater
-        title: "Nina hears about the theatre"
+        title: "Nina hoort over het theater"
         spine_outcome_id: universal.a1.theatre.attend_a_play
         teaching:
           - content_key: nl.a1.unit66.lesson06.teach.tevreden
