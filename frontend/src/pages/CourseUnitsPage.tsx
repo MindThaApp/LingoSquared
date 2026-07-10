@@ -1,8 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Lock } from "lucide-react";
+import { Check, List, Lock } from "lucide-react";
 import { CatalogApi, ProgressApi } from "@lingo/shared/api/endpoints";
 import type { UnitSummary } from "@lingo/shared/api/types";
 import { getLevelPreference, recommendedUnitIndex } from "../lib/levelPreferences";
@@ -73,6 +73,96 @@ function PathNode({
   );
 }
 
+// Compact, collapsible numbered overview of every unit in the course.
+// Long courses (en-nl is 50+ units) previously offered no way to reach a
+// specific unit other than scrolling the entire path -- the auto-scroll to
+// the last-visited unit only helps the "resume where I left off" case, not
+// deliberate revisiting. Rows reuse the data the path already fetches
+// (lesson_count / completed_lesson_count / locked / checkpoint_passed --
+// zero extra requests); clicking a row scrolls the main path to that
+// unit's node via the same getElementById(`unit-${id}`).scrollIntoView
+// mechanism the last-visited auto-scroll uses. Locked units are jumpable
+// too, on purpose: their path node shows the unlock hint in place, which
+// is more informative than making the row inert.
+function UnitIndex({
+  sections,
+  currentUnitId,
+}: {
+  sections: { label: string; units: UnitSummary[] }[];
+  currentUnitId: string | null;
+}) {
+  const { t } = useTranslation();
+  const [open, setOpen] = useState(false);
+  const populated = sections.filter((s) => s.units.length > 0);
+  // Continuous numbering across sections, matching the top-to-bottom
+  // order the path itself renders in (core path first, then speaking).
+  let number = 0;
+  return (
+    <div className="unit-index-wrap">
+      <button
+        className="btn btn-secondary unit-index-toggle"
+        aria-expanded={open}
+        onClick={() => setOpen((o) => !o)}
+      >
+        <List size={16} />
+        {open ? t("course_units.unit_index_hide") : t("course_units.unit_index_show")}
+      </button>
+      {open && (
+        <nav className="unit-index" aria-label={t("course_units.unit_index_show")}>
+          {populated.map((section) => (
+            <div key={section.label}>
+              {populated.length > 1 && (
+                <span className="unit-index__section-label">{section.label}</span>
+              )}
+              {section.units.map((unit) => {
+                number += 1;
+                const complete =
+                  unit.lesson_count > 0 && unit.completed_lesson_count >= unit.lesson_count;
+                return (
+                  <button
+                    key={unit.id}
+                    className={`unit-index__row${unit.locked ? " locked" : ""}${
+                      complete ? " done" : ""
+                    }${unit.id === currentUnitId ? " current" : ""}`}
+                    aria-label={
+                      unit.locked ? `${unit.title}${t("course_units.locked_suffix")}` : unit.title
+                    }
+                    onClick={() => {
+                      setOpen(false);
+                      // Scroll after the collapsed panel has re-rendered --
+                      // collapsing shifts everything below it up, so scrolling
+                      // synchronously here would land off-target.
+                      requestAnimationFrame(() => {
+                        document
+                          .getElementById(`unit-${unit.id}`)
+                          ?.scrollIntoView({ block: "center", behavior: "smooth" });
+                      });
+                    }}
+                  >
+                    <span className="unit-index__num" aria-hidden="true">
+                      {number}
+                    </span>
+                    <span className="unit-index__title">{unit.title}</span>
+                    <span className="unit-index__meta">
+                      {unit.locked ? (
+                        <Lock size={14} aria-hidden="true" />
+                      ) : complete ? (
+                        <Check size={15} className="unit-index__done-check" aria-hidden="true" />
+                      ) : (
+                        `${unit.completed_lesson_count}/${unit.lesson_count}`
+                      )}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          ))}
+        </nav>
+      )}
+    </div>
+  );
+}
+
 export function CourseUnitsPage() {
   const { t } = useTranslation();
   const { courseId = "" } = useParams();
@@ -135,6 +225,15 @@ export function CourseUnitsPage() {
             total: totalLessons,
           })}
         </p>
+      )}
+      {readingWriting.length + speaking.length > 1 && (
+        <UnitIndex
+          sections={[
+            { label: t("course_units.core_path"), units: readingWriting },
+            { label: t("course_units.speaking"), units: speaking },
+          ]}
+          currentUnitId={lastUnitId}
+        />
       )}
 
       <div className="path">
