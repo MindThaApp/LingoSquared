@@ -512,38 +512,50 @@ to the authoring reasoning) before import.
   Firecrawl makes the search easier, it doesn't change the honesty
   requirement.
 
-**Sourcing policy widened beyond pure public-domain, 2026-07-10.**
-Ramin's call, prompted by a direct question of whether public-domain
-US government works (FSI/Peace Corps/DLI) were the only option — they
-weren't, and the standing policy was needlessly narrow. Now allowed,
-in addition to the existing public-domain sources:
+**Sourcing policy widened beyond pure public-domain, 2026-07-10 —
+reconciled with `docs/content/AUTHORING_GUIDE.md` §10 same day.**
+Ramin's call in principle (public-domain US government works are not
+the only permissible source type), but a same-day content-licensing
+audit found this section's original wording was looser than §10's
+already-settled, data-backed research on the exact same sources — §10
+wins on specifics, this section now matches it rather than the reverse:
 
-- **Tatoeba** (tatoeba.org) — large multilingual sentence-pair corpus,
-  well-suited to this project's example-sentence needs. License is
-  per-sentence (mostly CC-BY or CC0 depending on contributor) — record
-  the actual license found for whatever sentences are actually used in
-  `generation_provenance`, don't assume one blanket license for the
-  whole corpus.
-- **Wikibooks language courses** — structured open courses, but
-  licensed CC BY-SA (share-alike), a materially different legal
-  posture than public domain or plain CC-BY/CC0: derivative works can
-  carry share-alike obligations. Usable for research/reference and
-  light adaptation, but flag any CC BY-SA-derived unit's
-  `generation_provenance` explicitly as such (don't bury it alongside
-  plain public-domain sourcing) so this is easy to audit later if the
-  share-alike question ever needs a closer legal look.
-- **University OER courseware** — license varies per source, check and
-  record the specific license for whatever is actually used, same
-  discipline as above.
+- **Tatoeba** (tatoeba.org) — in principle usable, but §10's
+  2026-07-07 investigation actually downloaded and measured the real
+  corpus: the attribution-free CC0 subset is effectively empty for
+  every launch/near-launch language (fa 0, prs 0, nl 50 sentences),
+  and the much larger CC-BY pool needs a learner-facing attribution
+  credit surface — schema + UI, not just a `generation_provenance`
+  note — that doesn't exist yet. Net: **still reference-only in
+  practice** until either the CC0 pool grows dramatically in a needed
+  language or the CC-BY attribution surface actually gets built.
+  Don't re-investigate the pool sizes without new information.
+- **Wikibooks / any CC BY-SA source** — §10 categorically rules these
+  out, not just "flag for later audit": share-alike would force every
+  derived lesson to itself be licensed BY-SA, letting anyone legally
+  copy that part of the corpus. This section's original "flag and
+  audit later" language was wrong — the share-alike question must be
+  resolved (by Ramin, as a real legal call) *before* first use, not
+  after a unit is already shipped with derived content in it. Treat
+  CC BY-SA as excluded until that explicit resolution happens.
+- **University OER / other CC-BY courseware** (e.g. COERLL) — usable,
+  but same rule as Tatoeba's CC-BY pool: a real attribution credit
+  surface is a hard precondition of first import, not a follow-up
+  task. §10 has a live example (COERLL's Français interactif) already
+  gated exactly this way — follow that precedent.
 
-Standing rule, same shape as the existing Firecrawl instruction: try
-`firecrawl search`/`firecrawl scrape` across public-domain sources
-FIRST (unchanged, still the simplest license posture), then Tatoeba/
-Wikibooks/OER as the next tier before falling back to
-established-conventions-only authoring. Always disclose the actual
-source and its actual license in `generation_provenance` — never
-average "found real material" into one undifferentiated bucket now
-that multiple license types are in play.
+Standing rule, unchanged: try `firecrawl search`/`firecrawl scrape`
+across public-domain sources FIRST (simplest license posture, zero
+attribution burden), falling back to established-conventions-only
+authoring — CC-licensed sources are a real but currently-blocked
+tier (attribution infra + the BY-SA resolution above), not a live
+second option yet. Always disclose the actual source and its actual
+license in `generation_provenance`, never one undifferentiated
+"found real material" bucket. See §10 for the full source map,
+per-language investigation notes, and the categorical-exclusion list
+(DLI GLOSS/Headstart2, OpenSubtitles-derived corpora, Anki shared
+decks, anything from commercial apps/textbooks) — that section is the
+authoritative version of this policy, this entry is a pointer to it.
 
 ## Verification bar (non-negotiable)
 
