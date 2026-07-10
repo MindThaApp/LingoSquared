@@ -541,7 +541,17 @@ milestone while none is currently banked, auto-consumed on exactly one
 missed day instead of resetting the streak, both computed in the
 user's own timezone (`User.timezone`, IANA string, UTC fallback).
 
-`GET /me/xp` → `{ "total_xp": 120, "daily_goal": 20 }`.
+`GET /me/xp` → `{ "total_xp": 120, "daily_goal": 20, "xp_today": 15 }`.
+`xp_today` (added 2026-07-10) is the XP earned within the user's own
+local day (same `activity_day_bounds()` window streaks/quests use),
+summed live from the persisted per-answer rows: `ExerciseAttempt`
+(lesson answers) + `PracticeAttempt` (practice / Phase A review
+sessions / checkpoints) + today's `QuestCompletion` rewards.
+`LessonProgress.xp_earned` is deliberately excluded — it is a running
+sum of the same `ExerciseAttempt` rows and would double-count. Known
+gap: the legacy `POST /reviews/{id}/answer` flow bumps `total_xp`
+without persisting a per-answer XP row, so its XP cannot be attributed
+to a day; the frontend no longer uses that flow.
 
 `GET /me/achievements` → `[ { "id":"...", "code":"...", "title":"...", "description":"...", "earned": true } ]`.
 

@@ -102,7 +102,7 @@ from app.schemas.api import (
 )
 from app.api.deps import current_user, optional_current_user, lenient_current_user, admin_user
 from app.services.progress import activity_day_bounds, record_activity, resolve_user_tz, stats_for, valid_timezone_or_none
-from app.services.quests import daily_quests_for
+from app.services.quests import QUEST_DEFINITIONS, daily_quests_for
 from app.review.sm2 import schedule
 from app.review.grading import (
     decode_feedback,
@@ -1517,7 +1517,48 @@ def streak(user=Depends(current_user),db:Session=Depends(get_db)):
         "freeze_used_today":s.last_freeze_used_date==today,
     }
 @router.get("/me/xp",response_model=XPOut)
-def xp(user=Depends(current_user),db:Session=Depends(get_db)): s=stats_for(db,user.id); return {"total_xp":s.total_xp,"daily_goal":s.daily_goal}
+def xp(user=Depends(current_user),db:Session=Depends(get_db)):
+    s=stats_for(db,user.id)
+    # xp_today = XP earned within the user's own local day (the same
+    # activity_day_bounds() window streaks/quests/practice caps already
+    # use), summed live from the persisted per-answer rows rather than a
+    # new counter column: ExerciseAttempt covers lesson answers,
+    # PracticeAttempt covers practice/review-session/checkpoint answers,
+    # and today's QuestCompletion rows cover quest rewards (completions
+    # don't persist the reward amount, so it's joined back to the
+    # hardcoded QUEST_DEFINITIONS by code). LessonProgress.xp_earned is
+    # deliberately NOT added — it is a running sum of the same
+    # ExerciseAttempt rows, so adding it would double-count every lesson
+    # answer. Known gap (documented in CONTRACT.md): the legacy
+    # /reviews/{id}/answer flow bumps total_xp without persisting any
+    # per-answer XP row, so its XP can't be attributed to a day — the
+    # frontend stopped using that flow with Phase A/E1.
+    day_start,day_end=activity_day_bounds(user.timezone)
+    exercise_xp=db.scalar(
+        select(func.coalesce(func.sum(ExerciseAttempt.xp_awarded),0)).where(
+            ExerciseAttempt.user_id==user.id,
+            ExerciseAttempt.created_at>=day_start,
+            ExerciseAttempt.created_at<day_end,
+        )
+    ) or 0
+    practice_xp=db.scalar(
+        select(func.coalesce(func.sum(PracticeAttempt.xp_awarded),0)).where(
+            PracticeAttempt.user_id==user.id,
+            PracticeAttempt.created_at>=day_start,
+            PracticeAttempt.created_at<day_end,
+        )
+    ) or 0
+    quest_rewards={q["code"]:q["xp_reward"] for q in QUEST_DEFINITIONS}
+    quest_xp=sum(
+        quest_rewards.get(code,0)
+        for code in db.scalars(
+            select(QuestCompletion.quest_code).where(
+                QuestCompletion.user_id==user.id,
+                QuestCompletion.date==day_start.date(),
+            )
+        )
+    )
+    return {"total_xp":s.total_xp,"daily_goal":s.daily_goal,"xp_today":exercise_xp+practice_xp+quest_xp}
 @router.get("/me/achievements")
 def achievements(user=Depends(current_user),db:Session=Depends(get_db)):
     earned=set(db.scalars(select(UserAchievement.achievement_id).where(UserAchievement.user_id==user.id)))

@@ -67,7 +67,7 @@ class StartOut(BaseModel): started_at:datetime
 class CompleteOut(BaseModel): completed_at:datetime; xp_awarded:int; accuracy:float
 class ReviewAnswerOut(AnswerOut): next_due_at:datetime
 class StreakOut(BaseModel): streak_days:int; last_activity_date:Any=None; streak_freezes_available:int=0; freeze_used_today:bool=False
-class XPOut(BaseModel): total_xp:int; daily_goal:int
+class XPOut(BaseModel): total_xp:int; daily_goal:int; xp_today:int=0
 class QuestOut(BaseModel): code:str; title:str; description:str; xp_reward:int; completed:bool; progress:int; target:int
 class QuestsOut(BaseModel): quests:list[QuestOut]
 # updated_* counts are additive: content_key-matched rows that were

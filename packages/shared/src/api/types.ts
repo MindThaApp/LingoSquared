@@ -313,6 +313,10 @@ export interface CheckpointResult {
 export interface Xp {
   total_xp: number;
   daily_goal: number;
+  // XP earned within the user's own local day (server-computed from the
+  // persisted per-answer rows in the user's timezone) — the value the
+  // daily_goal progress indicator measures against.
+  xp_today: number;
 }
 
 export interface Achievement {
