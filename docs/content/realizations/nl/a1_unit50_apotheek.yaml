@@ -7,6 +7,39 @@ status: complete_draft
 review:
   status: unreviewed
   required_next_reviewer: claude
+  flagged_issues:
+    - >-
+      2026-07-10 fresh-context review: fixed one real, unambiguous,
+      mechanically-fixable bug directly -- lesson04 exercise01
+      (listen_waar_kan_ik_helpen, overlay
+      nl.a1.unit50.lesson04.exercise01.listen_waar_kan_ik_helpen) asks
+      "Listen and choose what the pharmacist asks," but 2 of its 3
+      distractors ("These painkillers are good." / "Yes, always with
+      water.") were the SAME tested speaker's (Apotheker) own other real
+      lines from this exact dialogue clip (nl.a1.audio.dialogue.
+      apotheek_balie.01) -- the same-speaker-distractor bug class from
+      the 2026-07-09 nl unit44-50 audit (commit 148240e). Replaced both
+      with "Would you like a receipt?" / "Is this your first visit?",
+      neither said anywhere in this audio. Re-verified every other
+      listen_select/dialogue_comprehension exercise in both this unit's
+      dialogue clips against every line each speaker actually says --
+      clean otherwise. Audio wiring (every media_asset_key's declared
+      text against its exercise's tested_text) also checked clean
+      throughout.
+
+      One remaining item needs Ramin's/a native judgment call, not a
+      mechanical fix, so status stays unreviewed: lesson06's
+      nl.a1.unit50.lesson06.teach.nina_medicijn_genomen ("Ja, ik heb
+      medicijn genomen...") uses bare singular "medicijn" with no
+      article and no plural marker. Native colloquial Dutch more
+      commonly says "medicijnen genomen" (plural) or "een pijnstiller
+      genomen" (referring back to this same unit's own "de pijnstiller"
+      -- would also tie the story together better); bare "medicijn
+      genomen" reads slightly calque-y/non-native but isn't unambiguously
+      wrong, so left as a flag rather than guessed at. If changed, the
+      overlay gloss/title, exercise07's tested_text, and the matching
+      exercise06/07/08 accepted_answers on this same lesson would all
+      need the same edit.
   notes: >-
     New Dutch A1 unit after unit49. A safe_load diff of every
     spine_outcome_id/spine_outcome_ids across every

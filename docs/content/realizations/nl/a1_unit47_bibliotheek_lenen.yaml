@@ -5,9 +5,40 @@ cefr_level: A1
 generation_provenance: {method: ai_generated, authoring_system: codex, human_reviewed: false}
 status: complete_draft
 review:
-  status: unreviewed
-  required_next_reviewer: claude
+  status: reviewed
+  required_next_reviewer: null
   notes: >-
+    2026-07-10 fresh-context review (Claude, isolated from the authoring
+    reasoning): fixed two real, unambiguous, mechanically-fixable bugs
+    directly. (1) lesson03.exercise05 (listen_order_wanneer) declared
+    media_asset_key nl.a1.audio.bibliotheek_lenen.inleverdatum.01, whose
+    actual spoken text is "De inleverdatum is donderdag 28 mei." --
+    completely unrelated to this exercise's own word_bank/tested_text
+    "Wanneer moet het boek terug" (no media asset for that phrase existed
+    anywhere in the file). Added a new media_assets entry
+    (nl.a1.audio.bibliotheek_lenen.wanneer_terug.01, text "Wanneer moet
+    het boek terug?") and repointed the exercise at it. (2) lesson06 used
+    the unaccented spelling "taalcafe" throughout every learner-facing
+    field (target text, introduced_tokens, tested_text, word_bank,
+    lesson title, and the matching overlay's feedback/accepted_answers/
+    correct_option) where all other units in the corpus (20 files,
+    100+ occurrences) consistently spell it "taalcafé" with the acute
+    accent -- fixed every learner-facing occurrence in both this file
+    and its overlay to "taalcafé" (content_keys left as-is, they're
+    internal identifiers). Re-verified same-speaker-distractor
+    correctness across both dialogue clips from scratch after the
+    fixes -- clean (a cross-speaker distractor in lesson04.exercise01
+    reusing Omar's real "Ik kom dit boek terugbrengen" line as a wrong
+    answer to "what does Nina say" is the same defensible
+    different-speaker pattern noted in unit45, not ambiguous). Checked
+    every remaining media_asset_key against its exercise's tested_text --
+    all match. Ran a recursive yaml.safe_load boolean-coercion scan --
+    clean. Re-ran the compiler validator after the fixes -- 0 errors.
+    Cross-checked the due-date math (Thursday 14 May + two weeks =
+    Thursday 28 May) -- correct and consistent everywhere it's stated.
+    Read every Dutch sentence for naturalness/register/grammar -- natural
+    throughout. No jargon leaks.
+
     New Dutch A1 unit after unit46. A safe_load diff across every
     docs/content/realizations/nl/a1_unit*.yaml file and every A1 outcome id
     in universal_spine.yaml found no unrealized A1 outcome, so this unit adds
@@ -37,6 +68,7 @@ media_assets:
   - {content_key: nl.a1.audio.bibliotheek_lenen.boek_lenen.01, language: nl, text: "Ik wil dit boek lenen.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
   - {content_key: nl.a1.audio.bibliotheek_lenen.boek_terugbrengen.01, language: nl, text: "Ik kom dit boek terugbrengen.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
   - {content_key: nl.a1.audio.bibliotheek_lenen.bibliotheekpas_nodig.01, language: nl, text: "Heeft u een bibliotheekpas?", voice_hint: neutral_adult_clear, status: pending_generation}
+  - {content_key: nl.a1.audio.bibliotheek_lenen.wanneer_terug.01, language: nl, text: "Wanneer moet het boek terug?", voice_hint: neutral_young_adult_friendly, status: pending_generation}
   - {content_key: nl.a1.audio.bibliotheek_lenen.inleverdatum.01, language: nl, text: "De inleverdatum is donderdag 28 mei.", voice_hint: neutral_adult_clear, status: pending_generation}
   - content_key: nl.a1.audio.dialogue.bibliotheek_lenen_balie.01
     language: nl
@@ -51,7 +83,7 @@ media_assets:
     language: nl
     text: >-
       Lotte: Wat heb je geleend, Nina? Nina: Een Nederlands boek voor het
-      taalcafe. Omar: Mijn boek is terug bij de bibliotheek. Lotte: Mooi, dan
+      taalcafé. Omar: Mijn boek is terug bij de bibliotheek. Lotte: Mooi, dan
       lezen we samen.
     voice_hint: three_young_adults_friendly
     status: pending_generation
@@ -131,7 +163,7 @@ units:
           - {content_key: nl.a1.unit47.lesson03.exercise02.listen_inleverdatum, type: listen_select, tested_text: "De inleverdatum is donderdag 28 mei", media_asset_key: nl.a1.audio.bibliotheek_lenen.inleverdatum.01, prompt: {target_blocks: []}}
           - {content_key: nl.a1.unit47.lesson03.exercise03.match_datum, type: matching_pairs, tested_text: "inleverdatum donderdag mei twee weken", prompt: {target_blocks: []}, pairs: [{left: inleverdatum, right: "due date"}, {left: donderdag, right: Thursday}, {left: mei, right: May}, {left: "28 mei", right: "May 28"}, {left: "twee weken", right: "two weeks"}, {left: terug, right: back}]}
           - {content_key: nl.a1.unit47.lesson03.exercise04.order_inleverdatum, type: word_order, tested_text: "De inleverdatum is donderdag 28 mei", prompt: {target_blocks: []}, word_bank: [De, inleverdatum, is, donderdag, "28", mei]}
-          - {content_key: nl.a1.unit47.lesson03.exercise05.listen_order_wanneer, type: listen_order, tested_text: "Wanneer moet het boek terug", media_asset_key: nl.a1.audio.bibliotheek_lenen.inleverdatum.01, prompt: {target_blocks: []}, word_bank: [Wanneer, moet, het, boek, terug]}
+          - {content_key: nl.a1.unit47.lesson03.exercise05.listen_order_wanneer, type: listen_order, tested_text: "Wanneer moet het boek terug", media_asset_key: nl.a1.audio.bibliotheek_lenen.wanneer_terug.01, prompt: {target_blocks: []}, word_bank: [Wanneer, moet, het, boek, terug]}
           - {content_key: nl.a1.unit47.lesson03.exercise06.translate_inleverdatum, type: translation, tested_text: inleverdatum, prompt: {target_blocks: [{text: "due date", language_code: en, direction: ltr}]}}
           - {content_key: nl.a1.unit47.lesson03.exercise07.respond_inleverdatum, type: dialogue_response, tested_text: "De inleverdatum is donderdag 28 mei", prompt: {target_blocks: [{text: "Wanneer moet het boek terug?", language_code: nl, direction: ltr}]}}
 
@@ -182,20 +214,20 @@ units:
           - {content_key: nl.a1.unit47.lesson05.exercise06.write_inleverdatum, type: writing_prompt, tested_text: "De inleverdatum is donderdag 28 mei", prompt: {target_blocks: [{text: "Write in Dutch: the due date is Thursday, May 28.", language_code: en, direction: ltr}]}}
 
       - content_key: nl.a1.unit47.lesson06.terug_bij_taalcafe
-        title: "Terug bij het taalcafe"
+        title: "Terug bij het taalcafé"
         spine_outcome_id: universal.a1.library.borrow_return_item
         teaching:
           - {content_key: nl.a1.unit47.lesson06.teach.lotte_vraag, kind: dialogue, target: {text: "Lotte: Wat heb je geleend, Nina?", language_code: nl, direction: ltr}, introduced_tokens: [Lotte, Wat, heb, je, geleend, Nina]}
-          - {content_key: nl.a1.unit47.lesson06.teach.nina_boek, kind: dialogue, target: {text: "Nina: Een Nederlands boek voor het taalcafe.", language_code: nl, direction: ltr}, introduced_tokens: [Nina, Een, Nederlands, boek, voor, het, taalcafe]}
+          - {content_key: nl.a1.unit47.lesson06.teach.nina_boek, kind: dialogue, target: {text: "Nina: Een Nederlands boek voor het taalcafé.", language_code: nl, direction: ltr}, introduced_tokens: [Nina, Een, Nederlands, boek, voor, het, "taalcafé"]}
           - {content_key: nl.a1.unit47.lesson06.teach.omar_terug, kind: dialogue, target: {text: "Omar: Mijn boek is terug bij de bibliotheek.", language_code: nl, direction: ltr}, introduced_tokens: [Omar, Mijn, boek, is, terug, bij, de, bibliotheek]}
           - {content_key: nl.a1.unit47.lesson06.teach.lotte_samen, kind: dialogue, target: {text: "Lotte: Mooi, dan lezen we samen.", language_code: nl, direction: ltr}, introduced_tokens: [Lotte, Mooi, dan, lezen, we, samen]}
-          - {content_key: nl.a1.unit47.lesson06.teach.boek_voor_taalcafe, kind: phrase, target: {text: "Ik leen een Nederlands boek voor het taalcafe.", language_code: nl, direction: ltr}, introduced_tokens: [Ik, leen, een, Nederlands, boek, voor, het, taalcafe]}
+          - {content_key: nl.a1.unit47.lesson06.teach.boek_voor_taalcafe, kind: phrase, target: {text: "Ik leen een Nederlands boek voor het taalcafé.", language_code: nl, direction: ltr}, introduced_tokens: [Ik, leen, een, Nederlands, boek, voor, het, "taalcafé"]}
         exercises:
-          - {content_key: nl.a1.unit47.lesson06.exercise01.listen_geleend, type: listen_select, tested_text: "Een Nederlands boek voor het taalcafe", media_asset_key: nl.a1.audio.dialogue.bibliotheek_lenen_slot.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit47.lesson06.exercise01.listen_geleend, type: listen_select, tested_text: "Een Nederlands boek voor het taalcafé", media_asset_key: nl.a1.audio.dialogue.bibliotheek_lenen_slot.01, prompt: {target_blocks: []}}
           - {content_key: nl.a1.unit47.lesson06.exercise02.comprehend_nina, type: dialogue_comprehension, tested_text: "een Nederlands boek", media_asset_key: nl.a1.audio.dialogue.bibliotheek_lenen_slot.01, prompt: {target_blocks: [{text: "What has Nina borrowed?", language_code: en, direction: ltr}]}}
           - {content_key: nl.a1.unit47.lesson06.exercise03.comprehend_omar, type: dialogue_comprehension, tested_text: "Mijn boek is terug bij de bibliotheek", media_asset_key: nl.a1.audio.dialogue.bibliotheek_lenen_slot.01, prompt: {target_blocks: [{text: "What does Omar say about his book?", language_code: en, direction: ltr}]}}
           - {content_key: nl.a1.unit47.lesson06.exercise04.match_slot, type: matching_pairs, tested_text: "geleend Nederlands boek terug samen", prompt: {target_blocks: []}, pairs: [{left: geleend, right: borrowed}, {left: "Nederlands boek", right: "Dutch book"}, {left: "Mijn boek is terug bij de bibliotheek.", right: "My book is back at the library."}, {left: "Wat heb je geleend?", right: "What did you borrow?"}, {left: "lezen we samen", right: "we read together"}, {left: samen, right: together}]}
-          - {content_key: nl.a1.unit47.lesson06.exercise05.order_nederlands_boek, type: word_order, tested_text: "Een Nederlands boek voor het taalcafe", prompt: {target_blocks: []}, word_bank: [Een, Nederlands, boek, voor, het, taalcafe]}
-          - {content_key: nl.a1.unit47.lesson06.exercise06.respond_geleend, type: dialogue_response, tested_text: "Een Nederlands boek voor het taalcafe", prompt: {target_blocks: [{text: "Wat heb je geleend?", language_code: nl, direction: ltr}]}}
+          - {content_key: nl.a1.unit47.lesson06.exercise05.order_nederlands_boek, type: word_order, tested_text: "Een Nederlands boek voor het taalcafé", prompt: {target_blocks: []}, word_bank: [Een, Nederlands, boek, voor, het, "taalcafé"]}
+          - {content_key: nl.a1.unit47.lesson06.exercise06.respond_geleend, type: dialogue_response, tested_text: "Een Nederlands boek voor het taalcafé", prompt: {target_blocks: [{text: "Wat heb je geleend?", language_code: nl, direction: ltr}]}}
           - {content_key: nl.a1.unit47.lesson06.exercise07.listen_type_terug, type: listen_type, tested_text: "Mijn boek is terug bij de bibliotheek", media_asset_key: nl.a1.audio.dialogue.bibliotheek_lenen_slot.01, prompt: {target_blocks: []}}
-          - {content_key: nl.a1.unit47.lesson06.exercise08.write_leen_boek, type: writing_prompt, tested_text: "Ik leen een Nederlands boek voor het taalcafe", prompt: {target_blocks: [{text: "Write in Dutch: I borrow a Dutch book for the language cafe.", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit47.lesson06.exercise08.write_leen_boek, type: writing_prompt, tested_text: "Ik leen een Nederlands boek voor het taalcafé", prompt: {target_blocks: [{text: "Write in Dutch: I borrow a Dutch book for the language cafe.", language_code: en, direction: ltr}]}}

@@ -5,9 +5,37 @@ cefr_level: A1
 generation_provenance: {method: ai_generated, authoring_system: claude, human_reviewed: false}
 status: complete_draft
 review:
-  status: unreviewed
-  required_next_reviewer: claude
+  status: reviewed
+  required_next_reviewer: null
   notes: >-
+    2026-07-10 fresh-context review (Claude, isolated from the authoring
+    reasoning): fixed one real, unambiguous, mechanically-fixable bug
+    directly. lesson04.exercise01 (listen_reservering) asks "Listen and
+    choose what the receptionist asks," but one of its distractors,
+    "Here is your key. Room twelve.", was the SAME tested speaker's
+    (Receptionist) own other real line from this exact dialogue clip
+    (nl.a1.audio.dialogue.accommodatie_balie.01) -- the same-speaker-
+    distractor bug class from the 2026-07-09 nl unit44-50 audit (commit
+    148240e). Replaced it with "Is breakfast included?" (a real phrase
+    from this unit's own lesson02, but never spoken in THIS dialogue
+    clip). Re-verified every other listen_select/dialogue_comprehension
+    exercise in both this unit's dialogue clips against every line each
+    speaker actually says -- clean otherwise (lesson06.exercise01's
+    three distractors are each a different speaker's real line, the
+    same defensible cross-speaker pattern confirmed clean elsewhere this
+    pass). Checked every media_asset_key's declared spoken text against
+    its exercise's tested_text -- all match. Ran a recursive
+    yaml.safe_load boolean-coercion scan -- clean. Re-ran the compiler
+    validator after the fix -- 0 errors. Cross-checked every stated fact
+    (room number twelve, one night, Saturday 16 May, checkout eleven
+    o'clock) across all 6 lessons -- fully consistent, no contradictions
+    (unlike unit46's flagged date issue). Spot-checked matching_pairs/
+    word_order accepted_answers shapes -- correct. Read every Dutch
+    sentence for naturalness/register/grammar -- reads as natural,
+    contemporary Standard Dutch; formal u used correctly for the
+    receptionist, informal jij/je for the taalcafe friends. No jargon
+    leaks.
+
     New Dutch A1 unit after unit48. A safe_load diff of every
     spine_outcome_id/spine_outcome_ids across every
     docs/content/realizations/nl/a1_unit*.yaml file against every A1
