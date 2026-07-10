@@ -31,6 +31,7 @@ Current tokenizer limitation:
 from __future__ import annotations
 
 import argparse
+from collections import Counter
 import copy
 import json
 import re
@@ -561,6 +562,110 @@ def validate_same_speaker_dialogue_distractors(
                                 "dialogue "
                                 f"({other_turn['content_key']})",
                             )
+
+
+def normalize_order_token(value: Any, *, case_sensitive: bool = False) -> Any:
+    """Mirror backend/app/api/router.py's normalized() for order tokens."""
+    if isinstance(value, str):
+        text = value.strip() if case_sensitive else value.strip().casefold()
+        return " ".join(text.split())
+    return value
+
+
+def canonical_order_answer_tokens(
+    value: Any,
+    *,
+    case_sensitive: bool = False,
+) -> list[Any] | None:
+    """Mirror router.canonical_order_tokens() exactly for answer values."""
+    if isinstance(value, str):
+        collapsed = normalize_order_token(value, case_sensitive=case_sensitive)
+        return collapsed.split(" ") if collapsed else []
+    if isinstance(value, list):
+        return [
+            normalize_order_token(item, case_sensitive=case_sensitive)
+            for item in value
+        ]
+    return None
+
+
+def _order_answer_values(exercise_overlay: dict[str, Any]) -> list[tuple[str, Any]]:
+    if "correct_response" in exercise_overlay:
+        return [("correct_response", exercise_overlay["correct_response"])]
+
+    values = []
+    for index, variant in enumerate(exercise_overlay.get("accepted_answers", [])):
+        value = variant.get("value") if isinstance(variant, dict) else variant
+        values.append((f"accepted_answers[{index}]", value))
+    return values
+
+
+def _counter_diff(
+    expected: Counter[Any],
+    actual: Counter[Any],
+) -> tuple[dict[Any, int], dict[Any, int]]:
+    missing = expected - actual
+    extra = actual - expected
+    return dict(missing), dict(extra)
+
+
+def validate_order_word_bank_answers(
+    realization: dict[str, Any],
+    overlay: dict[str, Any],
+    report: Report,
+):
+    exercise_overlays = overlay.get("exercises", {})
+
+    for unit in realization.get("units", []):
+        for lesson in unit.get("lessons", []):
+            for exercise in lesson.get("exercises", []):
+                if exercise.get("type") not in {"word_order", "listen_order"}:
+                    continue
+
+                key = exercise.get("content_key", "<unknown>")
+                word_bank = exercise.get("word_bank")
+                if not isinstance(word_bank, list):
+                    continue
+
+                exercise_overlay = exercise_overlays.get(key, {})
+                if not isinstance(exercise_overlay, dict):
+                    continue
+
+                case_sensitive = bool(exercise_overlay.get("case_sensitive"))
+                # WordOrder.tsx exposes one fixed word_bank, so every accepted
+                # variant must be buildable from that exact multiset. Variants
+                # with genuinely different wording need a different exercise
+                # shape; otherwise one of the advertised correct answers is
+                # mechanically impossible to click.
+                tile_tokens = [
+                    normalize_order_token(item, case_sensitive=case_sensitive)
+                    for item in word_bank
+                ]
+                tile_counts = Counter(tile_tokens)
+
+                for answer_location, answer_value in _order_answer_values(
+                    exercise_overlay
+                ):
+                    answer_tokens = canonical_order_answer_tokens(
+                        answer_value,
+                        case_sensitive=case_sensitive,
+                    )
+                    if answer_tokens is None:
+                        continue
+
+                    answer_counts = Counter(answer_tokens)
+                    if answer_counts == tile_counts:
+                        continue
+
+                    missing, extra = _counter_diff(tile_counts, answer_counts)
+                    report.error(
+                        f"overlay.exercises.{key}.{answer_location}",
+                        "word_bank tiles do not match order-answer tokens: "
+                        f"{len(tile_tokens)} tile(s) vs "
+                        f"{len(answer_tokens)} answer token(s); "
+                        f"missing from answer {missing}; "
+                        f"extra in answer {extra}",
+                    )
 
 
 #: Keys where a real YAML boolean is the intended, correct type — internal
@@ -1866,6 +1971,7 @@ def validate_documents(
     validate_overlay_references(realization, overlay, report)
     validate_no_stray_yaml_booleans(overlay, report)
     validate_same_speaker_dialogue_distractors(realization, overlay, report)
+    validate_order_word_bank_answers(realization, overlay, report)
     validate_untaught_vocabulary(realization, report)
     validate_vocabulary_examples(realization, overlay, report)
     validate_audio_references(realization, report)
