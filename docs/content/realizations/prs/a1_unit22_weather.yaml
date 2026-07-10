@@ -9,11 +9,11 @@ generation_provenance:
   source_material: "Peace Corps Dari course materials (public domain), modernized"
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: codex_fresh_context
+  status: reviewed
+  required_next_reviewer: null
   notes: "New unit, prs's next uncovered A1 outcome (universal.a1.weather.describe_basic_weather, no prerequisites). Authored by Claude in an isolated git worktree, 2026-07-07, part of an overnight multi-worker push. Six lessons: weather-condition vocabulary, asking/answering about today's weather, temperature words (hot/cold), a Zarmina/Homayoun dialogue where weather changes a plan (reusing the established characters from units 11/12/20/21), a reading passage, and a wrap-up. Continues the established استم/استین full-uncontracted register policy. Uses هوا (weather/air, standard in both Dari and Farsi) and آفتابی/ابری/باران/برف (sunny/cloudy/rain/snow) -- all shared Dari/Farsi vocabulary, no register-specific substitution needed here (unlike clothing/colors, weather terms don't diverge meaningfully between the two varieties). Reuses می‌روم (unit06 directions/routines) and فردا (tomorrow, unit13 plans) rather than reteaching. Authored §14/§16/§17-compliant from the start: no listen_type/listen_select/listen_order exercises (zero prs audio exists), matching_pairs sized 6+ pairs except lesson01's first-lesson ceiling, zero fill_in_blank. Multi-clause production exercises carry period/comma/و-joined accepted-answer variants at clause boundaries. Authored independently of the fa realization per the sibling-isolation rule. schema_version 1.1 from the start.
 
-    STATUS: draft, review pending. This file has NOT yet been through the project's mandatory fresh-context review and must not be imported/shipped until that review completes and any findings are fixed. Compiler validation (schema/structure only) was run and is clean, but that is not a substitute for the linguistic/pedagogical review."
+    FRESH-CONTEXT REVIEW COMPLETED 2026-07-10 (Claude, zero access to the authoring reasoning above, sibling fa/prs-en files never opened). Found and fixed three real issues, the same two bug classes already found in this same push's unit21: (1) lesson01's matching_pairs exercise (match_weather_words) claimed a first-lesson ceiling at 4 pairs, but the lesson teaches 6 vocabulary cards (است and امروز were taught with real example sentences but left out of the pairs) -- added them (now 6 pairs) and updated tested_text, in both this file and the paired overlay. (2) Two comprehension exercises had a completely empty prompt.target_blocks (lesson05.exercise02.recognize_rain_forecast and lesson06.exercise02.reading_comprehension_tomorrow) -- genuinely unanswerable without recalling text shown moments earlier from memory, unlike every other comprehension exercise in this unit which always shows real visible text; fixed by adding a standalone باران می‌بارد. line (matching the exact phrase already used as this same word's own §19 example, and matching this exercise's tested_text/correct_option exactly) and the full summary reading (matching its own sibling exercise01) respectively. (3) 12 learner-facing note fields (every review_* vocabulary card, e.g. 'خانه (house/home) -- reviewed from the housing unit.') used the internal-sounding word 'reviewed' -- these notes render directly on the teaching card in TeachingCardView.tsx; reworded to natural phrasing ('already familiar...', 'a recurring character in this course', 'an already-familiar conjugation pattern') throughout the paired overlay. Everything else checked clean: same-speaker dialogue-distractor rule (the listen_context exercise's distractors are English scenario paraphrases, never a line the tested speaker also says), zero stray YAML booleans, zero Arabic-range kaf/yeh, every exercise type used (multiple_choice, matching_pairs, translation, word_order, dialogue_response, writing_prompt, speak_response) registered in ExerciseRenderer.tsx, zero fill_in_blank, zero audio-only prompts per §14, §11 cross-lesson fact consistency (lesson04's generic 'tomorrow gets cold' practice sentence and lesson05's dialogue fact 'tomorrow it rains' are reconciled, not contradicted, by lesson06's summary explicitly stating both -- rain AND cold), §12 multi-clause boundary coverage already complete as authored, word_order/matching_pairs answer shapes match what grade() actually canonicalizes. Compiler validate re-run together with units 19/20/21 clean (0 errors/0 warnings) after all fixes."
 
 course:
   realization_key: prs.a1
@@ -105,13 +105,15 @@ units:
             prompt: {target_blocks: [{text: باران, language_code: prs, direction: rtl}]}
           - content_key: prs.a1.unit22.lesson01.exercise04.match_weather_words
             type: matching_pairs
-            tested_text: هوا آفتابی ابری باران
+            tested_text: هوا آفتابی ابری باران است امروز
             prompt: {target_blocks: []}
             pairs:
               - {left: هوا, right: weather}
               - {left: آفتابی, right: sunny}
               - {left: ابری, right: cloudy}
               - {left: باران, right: rain}
+              - {left: است, right: "is / are"}
+              - {left: امروز, right: today}
           - content_key: prs.a1.unit22.lesson01.exercise05.order_hawa_aftabi
             type: word_order
             tested_text: امروز هوا آفتابی است
@@ -384,7 +386,7 @@ units:
           - content_key: prs.a1.unit22.lesson05.exercise02.recognize_rain_forecast
             type: multiple_choice
             tested_text: باران می‌بارد
-            prompt: {target_blocks: []}
+            prompt: {target_blocks: [{text: "باران می‌بارد.", language_code: prs, direction: rtl}]}
           - content_key: prs.a1.unit22.lesson05.exercise03.match_dialogue_facts
             type: matching_pairs
             tested_text: باران پارک خانه فلم بهتر است بمانیم فردا
@@ -450,7 +452,7 @@ units:
           - content_key: prs.a1.unit22.lesson06.exercise02.reading_comprehension_tomorrow
             type: multiple_choice
             tested_text: باران می‌بارد و سرد می‌شود
-            prompt: {target_blocks: []}
+            prompt: {target_blocks: [{text: "امروز هوا آفتابی و گرم است. اما فردا باران می‌بارد و سرد می‌شود. زرمینه و همایون در خانه می‌مانند.", language_code: prs, direction: rtl}]}
           - content_key: prs.a1.unit22.lesson06.exercise03.match_summary_vocab
             type: matching_pairs
             tested_text: آفتابی گرم باران سرد اما می‌مانند امروز فردا

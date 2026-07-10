@@ -8,11 +8,57 @@ generation_provenance:
   source_material: "Peace Corps Dari course materials (public domain) were searched for a fetchable lesson-level sports/exercise unit this pass; none was found (the Peace Corps Dari course's own table of contents has no dedicated sports topic, matching the same search-and-disclose outcome as the unit24/unit26/unit28 precedents). Authored from established prs conventions and vocabulary already taught earlier in this course instead. Sport vocabulary verified independently via live web search (not just reasoning) during authoring: ورزش (varzesh) confirmed as the standard, shared Dari/Farsi word for both 'sport' and 'exercise' (no dialect-divergence risk); فوتبال and والیبال confirmed as standard loanwords used identically in both dialects; کرکت (cricket) confirmed as a genuinely popular, commonly-referenced sport specifically in Afghanistan (Afghanistan Cricket Board's own Dari name uses کرکت) -- included as an authentic cultural touch, not a lexical-divergence case like unit24's موتر/unit28's پشک, since the word itself is shared; شنا (swimming) and دویدن-family avoided (see register_policy) are standard shared vocabulary."
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: codex_fresh_context
-  notes: "New unit, prs's next uncovered A1 outcome found by exact-diffing every spine_outcome_id used across all prs realization files against every id: in docs/content/universal_spine.yaml (A1-level outcomes only): universal.a1.sports.talk_about_sports_exercise (prerequisite: universal.a1.hobbies.describe_free_time_activities [unit26], already realized). This is the earliest unrealized A1 outcome by the spine file's own line order (line 881, immediately after animals/unit28) among the ones prs has not yet covered -- technology/education/celebrations/household/neighborhood/post/cooking all come later in file order (one new outcome, cooking, was appended by a concurrent session partway through this pass -- re-checked against the live spine file before finalizing and confirmed the append does not change sports' position or definition) and remain unrealized too; transportation (already used, unit24) sits between animals and sports in an OLDER version of the file's line order but was realized earlier under its own gap-finding pass, so sports is the genuine next gap now. Six lessons: sport/exercise vocabulary (ورزش as the general sport/exercise word, فوتبال, والیبال, کرکت -- a genuine Afghanistan-popular sport, deliberately included as an authentic local touch -- and شنا, plus a بازی+کردن light-verb grammar note), a formal 'how many times a week do you exercise?' question (چند بار در هفته ورزش می‌کنین؟) built from already-established چند (unit03/04) + new بار (time/occurrence) + review در/هفته (unit02/unit04/unit09, re-declared here), answered with the same بازی می‌کنم light-verb pattern applied to a specific sport (من دو بار در هفته فوتبال بازی می‌کنم), a location lesson introducing باشگاه (gym) and reusing پارک (review from unit13) to state where the activity happens, a Homayoun/Zarmina dialogue in the established informal تو/-ی register (تو چند بار در هفته ورزش می‌کنی؟, matching the precedent set by unit20's رفتی/کردی, unit25's استی, unit26's می‌کنی, and unit28's داری informal forms) that covers sport, frequency, AND location in one exchange -- satisfying the spine outcome's full 'which sport, how often, and where' can_do in a single natural conversation, a short third-person reading passage continuing the same two characters and kept factually consistent with the dialogue's own numbers per AUTHORING_GUIDE.md #11 (Zarmina: twice a week, volleyball, at the gym; Homayoun: every week, football, at the park -- neither figure contradicts the dialogue), and a wrap-up combining a preference and a constraint with اما (فوتبال را دوست دارم اما وقت ندارم -- reusing the established را-marked دوست دارم construction from unit14/unit26 and وقت/ندارم from unit11/unit26/unit03/unit28) rather than just two flat facts, giving the وقت ندارم construction a genuine payoff. Deliberately did NOT introduce دویدن (to run) or any irregular present-stem verb -- kept every sport-doing verb to the already-established کردن/بازی-کردن light-verb family (ورزش می‌کنم, بازی می‌کنم, شنا می‌کنم are all the same pattern already used course-wide: پیاده‌روی می‌کنم/آشپزی می‌کنم unit26, معرفی می‌کنم unit01, زندگی می‌کنم unit01/03, صحبت می‌کند unit07) -- a deliberate scope decision per AUTHORING_GUIDE.md §1 to keep the unit about the sports/exercise outcome, not a verb-conjugation detour. Continues the established استم/استین full-uncontracted register policy outside the informal Zarmina/Homayoun dialogue lines. Every word re-declared via introduced_tokens within THIS file per the standing per-file untaught-vocabulary footgun, even for words taught many units earlier (چند/unit03-04, در/unit02, هفته/unit04, دو/unit04, پارک/unit13, تو/unit01, کجا-as-standalone/new-but-related-to-unit05-06's کجاست, می‌کنی/unit26's pattern, هر/unit24, دوست/دارم/را/unit14, وقت/unit11, ندارم/unit03, اما/unit24, است/من/یک -- all re-declared fresh here, confirmed via a real recursive check, see below). Ran the same class of check prior reviews used: a Python tokenizer confirmed every exercise's tested_text (the field the compiler's validate_untaught_vocabulary actually gates on) only tests tokens present in this file's cumulative introduced_tokens at that point, AND additionally (a stricter, non-compiler-enforced check matching past reviewers' own practice) checked every prompt.target_blocks/pairs/word_bank value against the same cumulative set -- this second, stricter pass found one real gap the compiler itself did not catch (it only gates on tested_text): lesson04's dialogue_comprehension exercise's prompt asked زرمینه چند بار در هفته والیبال بازی می‌کند؟ using 3rd-person می‌کند before that form was introduced anywhere earlier in the file (it was only first taught in lesson05's reading passage) -- fixed by adding a small review grammar_note (teach.review_mikonad) earlier in lesson04, before the dialogue lines, introducing می‌کند as review ahead of this exercise's prompt; re-ran both the compiler and the stricter checker after the fix, both clean. Authored §14/§16/§17/§19-compliant from the start: no listen_type/listen_select/listen_order exercises (zero prs audio exists), every matching_pairs exercise sized 6-7 pairs, zero fill_in_blank, every kind:vocabulary card has a real example sentence built from already-taught or transparently-glossed words. §12 multi-clause coverage applied to the wrap-up's اما-joined translation exercise (period/comma/no-comma variants). Also ran a recursive yaml.safe_load boolean-coercion scan (not just grep) over both this file and its overlay -- zero stray Python bools found beyond the two legitimate schema fields (human_reviewed, target_language_first). Authored independently of the fa realization per the sibling-isolation rule (fa/a1_unit* files were never opened while authoring this file). Deliberately double-checked he/she pronoun usage against the recent, real Pashto-vs-Dari pronoun bug found and fixed elsewhere this session (هغه/هغوی are Pashto, not Dari) -- this file uses only او for he/she (lesson05's reading passage), never هغه/هغوی. schema_version 1.1 from the start.
+  status: reviewed
+  required_next_reviewer: null
+  notes: >-
+    2026-07-10 fresh-context review (Claude, zero access to the authoring
+    reasoning, prs unit29 only -- units 23-26 reviewed separately in
+    parallel per the coordinator's split). Full standing checklist
+    applied: same-speaker dialogue-distractor collisions (none), stray
+    YAML boolean coercion (a recursive yaml.safe_load scan found none
+    beyond the two legitimate schema fields), Persian-range Unicode
+    codepoints throughout, matching_pairs/word_order answer shapes
+    (correct), exercise types used (all pre-registered), no
+    internal-jargon leaks, and Dari register/grammar (consistent
+    استم/استین formal register outside the Homayoun/Zarmina informal
+    تو/-ی dialogue lines; کرکت's Afghanistan-popularity and ورزش's
+    dual sport/exercise sense both plausible and consistent with the
+    file's own generation_provenance).
 
-    STATUS: draft, review pending. This file has NOT yet been through the project's mandatory fresh-context review and must not be imported/shipped until that review completes and any findings are fixed. Compiler validation (schema/structure only) was run and is clean, but that is not a substitute for the linguistic/pedagogical review."
+    Ran a token-by-token untaught-vocabulary trace of every teaching
+    card's target/example text against this file's own cumulative
+    introduced_tokens (stricter than the compiler's own tested_text-only
+    check). This pass found four real gaps the compiler
+    itself does not catch (it only gates on tested_text, and none of
+    these were exercise-tested, only used in teaching-card example
+    sentences): lesson01's football_word example ("من فوتبال دوست
+    دارم.") used دوست/دارم/من a full five lessons before their first
+    formal declaration (lesson06's wrap-up) -- fixed by rewriting the
+    example to "فوتبال یک ورزش خوب است." (Football is a good sport),
+    reusing only same-lesson vocabulary; lesson01's volleyball_word/
+    cricket_word/swimming_word examples used هم, محبوب, and خوب, none
+    of which were declared as introduced_tokens ANYWHERE in this file
+    (not just late -- genuinely never) -- fixed by adding all three to
+    the lesson01 combined_sentence card's introduced_tokens, the
+    existing same-lesson "review" recap slot already used for یک/است;
+    and lesson03's bashgah_word example used بزرگ (already taught
+    course-wide since unit15/unit28, but never redeclared in this file)
+    -- fixed by adding it to bashgah_word's own introduced_tokens.
+
+    Also found and fixed one §16 scale gap: lesson05's match_reading_words
+    matching_pairs exercise had only 5 pairs, below the 6-12 guidance
+    (every sibling matching_pairs exercise in this same unit has 6-8) --
+    added باشگاه/gym and پارک/park pairs (both already-taught, already
+    used in the reading passage's own sentences) to bring it to 7,
+    updating both the realization pairs list and the overlay's
+    accepted_answers value mapping.
+
+    Cross-checked facts within this unit per AUTHORING_GUIDE.md §11:
+    Zarmina (twice a week, volleyball, at the gym) and Homayoun (every
+    week, football, at the park) are consistent across the lesson04
+    dialogue and the lesson05 reading passage's own numbers -- no
+    conflict. Re-validated clean after all fixes: 0 errors/0 warnings,
+    both standalone and as part of the full prs.a1.unit27-30 batch.
 
 course:
   realization_key: prs.a1
@@ -73,7 +119,7 @@ units:
             kind: vocabulary
             target: {text: فوتبال, language_code: prs, direction: rtl}
             introduced_tokens: [فوتبال]
-            example: {text: "من فوتبال دوست دارم.", language_code: prs, direction: rtl}
+            example: {text: "فوتبال یک ورزش خوب است.", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit29.lesson01.teach.volleyball_word
             kind: vocabulary
             target: {text: والیبال, language_code: prs, direction: rtl}
@@ -96,7 +142,7 @@ units:
           - content_key: prs.a1.unit29.lesson01.teach.combined_sentence
             kind: phrase
             target: {text: "فوتبال یک ورزش است.", language_code: prs, direction: rtl}
-            introduced_tokens: [یک, است]
+            introduced_tokens: [یک, است, خوب, هم, محبوب]
         exercises:
           - content_key: prs.a1.unit29.lesson01.exercise01.recognize_football_word
             type: multiple_choice
@@ -211,7 +257,7 @@ units:
           - content_key: prs.a1.unit29.lesson03.teach.bashgah_word
             kind: vocabulary
             target: {text: باشگاه, language_code: prs, direction: rtl}
-            introduced_tokens: [باشگاه]
+            introduced_tokens: [باشگاه, بزرگ]
             example: {text: "باشگاه بزرگ است.", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit29.lesson03.teach.review_park
             kind: grammar_note
@@ -374,11 +420,13 @@ units:
             prompt: {target_blocks: [{text: "زرمینه دو بار در هفته والیبال بازی می‌کند.", language_code: prs, direction: rtl}]}
           - content_key: prs.a1.unit29.lesson05.exercise04.match_reading_words
             type: matching_pairs
-            tested_text: "می‌کند او زرمینه دو بار در هفته والیبال بازی می‌کند او در باشگاه بازی می‌کند همایون هر هفته در پارک فوتبال بازی می‌کند"
+            tested_text: "می‌کند او زرمینه دو بار در هفته والیبال بازی می‌کند او در باشگاه بازی می‌کند همایون هر هفته در پارک فوتبال بازی می‌کند باشگاه پارک"
             prompt: {target_blocks: []}
             pairs:
               - {left: "می‌کند", right: "he/she does"}
               - {left: او, right: "he/she"}
+              - {left: باشگاه, right: gym}
+              - {left: پارک, right: park}
               - {left: "زرمینه دو بار در هفته والیبال بازی می‌کند.", right: "Zarmina plays volleyball twice a week."}
               - {left: "او در باشگاه بازی می‌کند.", right: "She plays at the gym."}
               - {left: "همایون هر هفته در پارک فوتبال بازی می‌کند.", right: "Homayoun plays football at the park every week."}
