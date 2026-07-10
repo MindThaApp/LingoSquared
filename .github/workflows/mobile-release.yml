@@ -1,0 +1,58 @@
+name: Mobile Release
+
+# Manual-only production build (+ optional store submission). Deliberately
+# not automatic on any push/tag -- a production build/submission is a
+# deployment decision a human makes explicitly, same spirit as this repo's
+# standing "deploys happen with Ramin present" rule for the backend.
+#
+# Requires an EXPO_TOKEN repo secret (see mobile-preview.yml's comment) and,
+# for the submit step, real store-credentials configured in EAS
+# (`eas credentials`) -- neither exists yet. This workflow is a skeleton to
+# build on once those are set up, not something to run as-is.
+on:
+  workflow_dispatch:
+    inputs:
+      platform:
+        description: "Platform to build for"
+        type: choice
+        options:
+          - all
+          - ios
+          - android
+        default: all
+      submit:
+        description: "Submit the build to the app store(s) after it finishes"
+        type: boolean
+        default: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: EAS build (production)
+        working-directory: mobile
+        env:
+          BUILD_PLATFORM: ${{ inputs.platform }}
+        run: eas build --profile production --platform "$BUILD_PLATFORM" --non-interactive --no-wait
+
+      - name: Submit to store(s)
+        if: inputs.submit
+        working-directory: mobile
+        env:
+          BUILD_PLATFORM: ${{ inputs.platform }}
+        run: eas submit --profile production --platform "$BUILD_PLATFORM" --non-interactive --latest
