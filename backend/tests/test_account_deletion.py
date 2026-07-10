@@ -10,6 +10,7 @@ from app.models import (
     PracticeAttempt,
     PracticeItem,
     PushSubscription,
+    RefreshToken,
     User,
     UserLexemeSRS,
     UserStats,
@@ -93,6 +94,7 @@ def test_delete_me_removes_user_and_linked_rows(client, admin, auth):
         assert count_for_user(db, PracticeItem, PracticeItem.user_id, uid) > 0
         assert count_for_user(db, PracticeAttempt, PracticeAttempt.user_id, uid) > 0
         assert count_for_user(db, PushSubscription, PushSubscription.user_id, uid) > 0
+        assert count_for_user(db, RefreshToken, RefreshToken.user_id, uid) > 0
         assert db.scalar(
             select(func.count())
             .select_from(ContentIssueReport)
@@ -112,6 +114,7 @@ def test_delete_me_removes_user_and_linked_rows(client, admin, auth):
         assert count_for_user(db, PracticeItem, PracticeItem.user_id, uid) == 0
         assert count_for_user(db, PracticeAttempt, PracticeAttempt.user_id, uid) == 0
         assert count_for_user(db, PushSubscription, PushSubscription.user_id, uid) == 0
+        assert count_for_user(db, RefreshToken, RefreshToken.user_id, uid) == 0
         assert db.scalar(
             select(func.count())
             .select_from(ContentIssueReport)

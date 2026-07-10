@@ -192,15 +192,46 @@ response (both):
 ```json
 {
   "access_token": "jwt-string",
+  "refresh_token": "opaque-refresh-token",
   "token_type": "bearer",
-  "expires_in": 86400,
+  "expires_in": 1800,
   "user": { "id": "uuid", "email": "string", "display_name": "string" }
 }
 ```
-Access tokens are short-lived-ish (24h) bearer tokens. No refresh-token
-flow for this LAN-testing MVP — on 401, frontend does a hard logout
-(clears token, redirects to login). Revisit refresh tokens when this goes
-beyond LAN testing.
+Access tokens are intentionally short-lived bearer JWTs: 30 minutes
+(`expires_in: 1800`). Installed mobile clients must not require a full login
+every day, but access tokens should have a small blast radius if copied from
+memory or logs; long-lived session continuity comes from refresh tokens
+instead.
+
+Refresh tokens are opaque, DB-backed tokens with only a password-hash-style
+hash stored server-side. They live for 60 days by default, are revocable, and
+rotate on every use: when a refresh token is accepted, the server revokes that
+row and returns a fresh access token plus a fresh refresh token. Presenting an
+already-revoked refresh token is treated as possible token reuse/theft; the
+server revokes all refresh tokens for that user and returns 401.
+
+`POST /auth/refresh` request:
+```json
+{ "refresh_token": "opaque-refresh-token" }
+```
+response:
+```json
+{
+  "access_token": "jwt-string",
+  "refresh_token": "new-opaque-refresh-token",
+  "token_type": "bearer",
+  "expires_in": 1800
+}
+```
+
+`POST /auth/logout` request:
+```json
+{ "refresh_token": "opaque-refresh-token" }
+```
+Revokes that refresh token if it exists and belongs to a still-existing
+session. Returns `204 No Content`; callers should discard both access and
+refresh tokens locally.
 
 `GET /auth/me` response: `{ "id", "email", "display_name", "created_at" }`.
 
@@ -878,9 +909,10 @@ unit, race-safe under concurrent requests.
 ## Auth mechanism
 
 JWT bearer token, returned from `/auth/login` and `/auth/register` as
-`access_token`. Frontend stores it and sends `Authorization: Bearer <token>`.
-See the schema section above for token lifetime and the no-refresh-token
-decision for this phase.
+`access_token`. Clients send it as `Authorization: Bearer <token>`.
+`refresh_token` is an opaque long-lived credential used only with
+`POST /auth/refresh` or `POST /auth/logout`; clients must treat it as more
+sensitive than the access token and never send it as a bearer token.
 
 ## Error shape (consistent across all endpoints)
 
