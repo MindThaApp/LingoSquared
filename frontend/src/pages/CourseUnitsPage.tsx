@@ -43,7 +43,12 @@ function PathNode({
       <span className="path-meta">
         {locked
           ? t("course_units.locked_hint")
-          : t("course_units.lesson_count", { count: unit.lesson_count })}
+          : unit.completed_lesson_count >= unit.lesson_count && unit.lesson_count > 0
+            ? t("course_units.unit_complete")
+            : t("course_units.lesson_progress", {
+                completed: unit.completed_lesson_count,
+                total: unit.lesson_count,
+              })}
       </span>
       {recommended && !locked && (
         <span className="badge" style={{ marginTop: 4 }}>
