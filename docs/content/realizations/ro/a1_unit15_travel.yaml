@@ -1,0 +1,540 @@
+schema_version: "1.1"
+realization_version: "2026.1-draft.1"
+target_language: ro
+cefr_level: A1
+status: complete_draft
+generation_provenance:
+  method: ai_adapted_from_public_domain_source
+  authoring_system: claude
+  source_material: >-
+    "Basic Romanian Language Lessons" (US Peace Corps Moldova, public
+    domain), the same PDF used for units 01-14
+    (https://fsi-languages.yojik.eu/languages/PeaceCorps/Romanian/
+    MD_Romanian_Language_Lessons.pdf). Firecrawl was tried first per
+    standing instruction (`firecrawl search "Peace Corps Moldova Basic
+    Romanian Language Lessons train ticket station travel"`) but
+    returned HTTP 402 (0 credits remaining, the same exhausted state
+    every recent ro unit has hit), so this unit falls back to the same
+    direct `curl` + `pdftotext -layout` re-fetch of the confirmed-working
+    PDF those units used. Grepped the full extracted text for
+    train/ticket/station/travel/journey/departure/arrival/platform
+    terms and found real, directly usable material: Lesson 7's own
+    example sentence "Tu nu ai bilet." (You don't have a ticket.),
+    listed in that lesson's own vocabulary as "bilet -- ticket"; Lesson
+    8's possession-example "Trenul tău pleacă mîine." (Your train
+    leaves tomorrow.), listed in that lesson's own vocabulary as "tren
+    -- train (m.)"; and Lesson 17's "Day by day conversation" listening
+    exercise, which has "Eu trebuie să plec astăzi la Chişinău." (I
+    have to go to Chişinău today.) and closes with "Drum bun." (Have a
+    safe trip.) / "Mulţumesc." (Thank you.) as a genuine departure
+    farewell exchange. Note: this exact Lesson 17 exchange was already
+    checked and partially used by ro's own unit10 (routines) --
+    unit10's own provenance note explicitly says it found this
+    exchange NOT reusable as first-person routine vocabulary and only
+    lightly echoed "acasă" from it; unit10 never used "trebuie", "plec",
+    "Chişinău", "bilet", "tren", or "Drum bun" as actual taught
+    vocabulary (confirmed by grepping every existing ro realization
+    file for these tokens before starting this unit -- zero hits
+    outside unit10's own provenance prose, which only discusses the
+    source text, never teaches it). This unit is the first to actually
+    teach "bilet"/"tren"/"Drum bun" as real vocabulary. "Trenul tău
+    pleacă mîine" respells to modern "mâine" per this course's standing
+    modernization convention (see unit04's own provenance for the same
+    î-to-â respelling of this exact word); "pleacă" itself needs no
+    respelling, it was already modern-spelled in the source. "Chişinău"
+    (Moldova's capital, cedilla ş) was deliberately NOT reused as this
+    unit's destination city -- this course's own `dialect:
+    ro_RO_standard` is standard Romania Romanian, not Moldovan
+    Romanian, and no other ro unit has established any city name yet,
+    so "București" (Romania's own capital) was chosen fresh instead as
+    a dialect-appropriate destination, disclosed honestly as a
+    substitution rather than a direct reuse of the source's city.
+    "Trebuie" (must/have to) itself was deliberately NOT introduced in
+    this unit despite being in the source's own most relevant sentence
+    -- it's a genuinely separate modal-verb grammar point unit10 already
+    considered and declined to teach, and this unit's own scope
+    (tickets, destinations, platforms, departure times, per the spine
+    outcome's own can_do text) doesn't need it. No sourced material
+    covers train platforms at all -- grepped the full extracted text
+    for "peron"/"platform" with zero hits -- so "peron" (platform) is
+    freely authored fresh per AUTHORING_GUIDE #10's "if the source
+    doesn't cover the topic adequately, author fresh": it's basic-tier,
+    extremely common Romanian train-travel vocabulary with no plausible
+    substitute, independently confidence-checked (standard Romanian
+    word for a train platform, cognate with French "quai"-adjacent
+    usage, not sourced from this specific PDF), and its definite form
+    "peronul" follows the exact same "-ul" definite-article rule
+    already established from this same source's own Lesson 8 (see
+    unit08's/unit09's "gară"->"gara" pattern for a feminine noun;
+    "peron" is masculine/consonant-ending, so it takes "-ul" the same
+    way "magazin"->"magazinul" already does in unit08). "Aș dori" (I
+    would like), "vă rog" (please, formal), "cât costă" (how much does
+    it cost), and the "leu"/"lei" currency-plural rule are all direct
+    within-course reuse from unit07 (shopping), not re-sourced from the
+    PDF a second time -- see unit07's own realization file for their
+    original provenance. "Gară" (train station) is direct within-course
+    reuse from unit08/unit09 (places/directions), likewise not
+    re-sourced. This unit deliberately continues the same Ana/Mihai
+    cast established since unit01, this time with Mihai as the one
+    traveling by train and Ana seeing him off -- a new scenario, not a
+    repeat of any earlier one. Only three genuinely new content words
+    beyond "bilet"/"tren"/"peron"/"Drum bun" are introduced: "pleacă"
+    (leaves/departs, 3rd person singular of "a pleca"), "București"
+    (the destination city), and "bun" (good, the second half of the
+    "Drum bun" idiom, counted together with "drum" as one vocabulary
+    item per the idiom's fixed-phrase status). Authored at schema_version
+    1.1 from the start -- every kind:vocabulary card carries a real
+    example: sentence with a matching overlay example_gloss.
+  human_reviewed: false
+review:
+  status: unreviewed
+  required_next_reviewer: codex_fresh_context
+  notes: >-
+    Fifteenth Romanian unit, first draft, continuing directly from
+    unit14. Targets universal.a1.travel.handle_basic_journey --
+    confirmed by grepping universal_spine.yaml directly: it's the entry
+    immediately following universal.a1.comparisons.make_basic_comparisons
+    (unit14's own outcome) in spine order, its prerequisites
+    (universal.a1.numbers.use_basic_numbers,
+    universal.a1.time.ask_tell_time,
+    universal.a1.directions.ask_follow_basic_directions) are all
+    already satisfied by unit02, unit04, and unit09 respectively, and
+    its can_do text is "Handle basic transport information, tickets,
+    destinations, and departure details." This course's own established
+    3-lesson bootstrap pace and Ana/Mihai characters are used, matching
+    units 01-14. 3 lessons, each mapped to a distinct spine
+    assessment_requirement: lesson01 (tren/pleacă/peron, departure
+    announcements) covers understand_travel_announcement; lesson02
+    (bilet/București/aș dori/cât costă) covers request_travel_information
+    and write_travel_request; lesson03 (Ana/Mihai's station dialogue,
+    plus a short schedule-style reading text) covers read_ticket_schedule
+    and consolidates all four. Reuses unit02's numbers, unit04's "la ce
+    oră"/"la ora nouă" (the exact phrase unit04 already taught, now
+    combined with this unit's own "trenul pleacă" rather than
+    contradicted), unit07's shopping-payment language (aș dori/vă
+    rog/cât costă/costă.../lei), and unit08/09's "gară" -- all
+    re-declared via lesson-opening reminder cards per the standing
+    per-file token-scoping convention (lesson01 reminds gară/este/la/
+    ce/oră/ora/nouă; lesson02 reminds aș dori/vă rog/cât costă/costă/
+    lei; lesson03 reminds bună/mulțumesc/la revedere/Ana/Mihai). Within
+    this file, lesson02/03 freely reuse lesson01's own tren/pleacă/
+    peron without a fresh reminder card, since that's within-file
+    reuse, not cross-file, matching unit09's own established
+    precedent.
+
+    Checked this choice against AUTHORING_GUIDE #11 carefully before
+    finalizing. Facts this unit newly states: the train leaves at nine
+    o'clock (la ora nouă), from platform three (peronul trei), bound
+    for București, and Mihai has the ticket -- none of these touch any
+    fact any earlier unit ever established (grepped every earlier ro
+    realization file for "tren"/"bilet"/"peron"/"București": zero
+    prior hits outside this unit and unit10's own provenance prose
+    discussing the source, confirmed above). Unit04's own established
+    "la ora nouă" (Mihai's language class starts at nine, and a
+    separate generic "La ora nouă." time-telling example) is reused
+    here as a literal clock time attached to a DIFFERENT event (a train
+    departure, not the language class) -- these don't conflict, since
+    nothing says a class and a train can't share the same o'clock
+    without more context tying them together, and this unit's own
+    dialogue never mentions Mihai's class at all. No day/date, price
+    (beyond this unit's own fresh "zece lei" ticket price, which no
+    earlier unit's price list touches), family, preference, or
+    comparison claim from any earlier unit is touched.
+
+    Checked every fill_in_blank slot's correct answer against
+    AUTHORING_GUIDE #17's synonym-ambiguity concern: lesson01's
+    "Trenul ___ la ora nouă." recalls "pleacă" -- the sentence was
+    already taught verbatim as this lesson's own phrase card
+    immediately before the exercise, and no other verb this course has
+    taught (este, costă, mergeți, etc.) makes sense substituted into
+    this exact frame ("Trenul este la ora nouă" doesn't mean anything
+    coherent in Romanian), so there's no real second candidate.
+    lesson02's "Aș dori un ___ la București, vă rog." recalls "bilet"
+    -- the only masculine noun this course has ever paired with "Aș
+    dori un ___" is "bilet" itself (this course's other "aș dori"
+    example, unit06's "Aș dori pâine și pui," uses different nouns in a
+    different frame with a feminine/no-article shape, not a real
+    competing candidate for this specific "un ___" slot). lesson03's
+    "___, Mihai! La revedere!" recalls "Drum bun" -- the instruction
+    explicitly anchors it as "Complete Ana's goodbye (have a safe
+    trip)," and "Drum bun" was just taught as this lesson's own
+    vocabulary card immediately before the dialogue, with no other
+    taught phrase fitting that same slot-plus-gloss combination.
+
+    Checked the lesson03 dialogue exercises against the standing
+    same-speaker-distractor rule: listed every line each speaker
+    actually says in the six-line dialogue before writing distractors.
+    Ana's three lines are "Bună, Mihai! La ce oră pleacă trenul?", "De
+    la ce peron?", and "Drum bun, Mihai! La revedere!". Mihai's three
+    lines are "Trenul pleacă la ora nouă.", "De la peronul trei. Am un
+    bilet la București.", and "Mulțumesc, Ana! La revedere!". The
+    dialogue_comprehension exercise asks "From which platform does the
+    train leave?" (correct: "Peronul trei.") with distractors "Peronul
+    doi."/"Peronul unu." -- neither distractor is a line anyone
+    actually says anywhere in the dialogue audio (only "peronul trei"
+    is ever spoken), so there's no double-correct-option risk. The
+    reading_comprehension exercise ("Trenul pleacă la ora nouă. Peronul
+    trei. Bilet la București." -- "Where is the train going?", correct
+    "București.", distractors "Peron."/"Gară.") draws its distractors
+    from the same short text but neither is itself a place the train is
+    "going to," so there's no ambiguity there either. Both
+    listen_select clips (lesson01/lesson02) use single-sentence audio,
+    not multi-speaker dialogue audio, and their distractors were
+    confirmed to be sentences never spoken in that specific clip. Needs
+    a fresh-context content review before import, same as every other
+    language's content.
+
+course:
+  realization_key: ro.a1
+  target_language_first: true
+  dialect: ro_RO_standard
+  register_policy: >-
+    Continue unit01-14's register split (dumneavoastră as the safe
+    default with unfamiliar adults; Ana and Mihai's own established
+    formal register with each other, e.g. unit09's "Mergeți"). This
+    unit's own new vocabulary (tren, pleacă, bilet, peron, București,
+    Drum bun) is entirely person-invariant -- none of it carries a
+    tu/dumneavoastră distinction of its own, and the lesson03 dialogue
+    uses only first-person statements, impersonal questions ("La ce oră
+    pleacă trenul?"), and the fixed idiom "Drum bun" rather than any
+    directly-conjugated second-person verb, so no new register decision
+    is introduced this unit.
+
+media_assets:
+  - content_key: ro.a1.audio.travel.trenul_pleaca_la_ora_noua.01
+    language: ro
+    text: "Trenul pleacă la ora nouă."
+    voice_hint: neutral_adult
+    status: pending_generation
+  - content_key: ro.a1.audio.travel.de_la_ce_peron_pleaca_trenul.01
+    language: ro
+    text: "De la ce peron pleacă trenul?"
+    voice_hint: neutral_adult
+    status: pending_generation
+  - content_key: ro.a1.audio.travel.as_dori_bilet_bucuresti.01
+    language: ro
+    text: "Aș dori un bilet la București, vă rog."
+    voice_hint: neutral_adult
+    status: pending_generation
+  - content_key: ro.a1.audio.travel.costa_zece_lei.01
+    language: ro
+    text: "Costă zece lei."
+    voice_hint: neutral_adult
+    status: pending_generation
+  - content_key: ro.a1.audio.dialogue.la_gara.01
+    language: ro
+    text: "Ana: Bună, Mihai! La ce oră pleacă trenul?\nMihai: Trenul pleacă la ora nouă.\nAna: De la ce peron?\nMihai: De la peronul trei. Am un bilet la București.\nAna: Drum bun, Mihai! La revedere!\nMihai: Mulțumesc, Ana! La revedere!"
+    voice_hint: adult_female_and_male_neutral_polite
+    status: pending_generation
+
+units:
+  - content_key: ro.a1.unit15.travel
+    title: "Călătoria"
+    section: reading_writing
+    spine_outcome_ids:
+      - universal.a1.travel.handle_basic_journey
+    planned_lesson_count: 3
+
+    lessons:
+      - content_key: ro.a1.unit15.lesson01.trenul_pleaca
+        title: "Trenul pleacă"
+        spine_outcome_id: universal.a1.travel.handle_basic_journey
+        teaching:
+          - content_key: ro.a1.unit15.lesson01.teach.reminder_gara_ora
+            kind: grammar_note
+            target: {text: "gară · este · la · ce · oră · ora · nouă", language_code: ro, direction: ltr}
+            introduced_tokens: [gară, este, la, ce, oră, ora, nouă]
+          - content_key: ro.a1.unit15.lesson01.teach.tren_vocab
+            kind: vocabulary
+            target: {text: "Tren", language_code: ro, direction: ltr}
+            introduced_tokens: [tren]
+            example:
+              - {text: "Trenul este la gară.", language_code: ro, direction: ltr}
+          - content_key: ro.a1.unit15.lesson01.teach.pleaca_vocab
+            kind: vocabulary
+            target: {text: "Pleacă", language_code: ro, direction: ltr}
+            introduced_tokens: [pleacă]
+            example:
+              - {text: "Trenul pleacă.", language_code: ro, direction: ltr}
+          - content_key: ro.a1.unit15.lesson01.teach.trenul_pleaca_ora_noua_phrase
+            kind: phrase
+            target: {text: "Trenul pleacă la ora nouă.", language_code: ro, direction: ltr}
+            introduced_tokens: [trenul, pleacă, la, ora, nouă]
+          - content_key: ro.a1.unit15.lesson01.teach.la_ce_ora_pleaca_trenul_phrase
+            kind: phrase
+            target: {text: "La ce oră pleacă trenul?", language_code: ro, direction: ltr}
+            introduced_tokens: [la, ce, oră, pleacă, trenul]
+          - content_key: ro.a1.unit15.lesson01.teach.peron_vocab
+            kind: vocabulary
+            target: {text: "Peron", language_code: ro, direction: ltr}
+            introduced_tokens: [peron, peronul]
+            example:
+              - {text: "Trenul este la peronul trei.", language_code: ro, direction: ltr}
+          - content_key: ro.a1.unit15.lesson01.teach.de_la_ce_peron_phrase
+            kind: phrase
+            target: {text: "De la ce peron pleacă trenul?", language_code: ro, direction: ltr}
+            introduced_tokens: [de, la, ce, peron, pleacă, trenul]
+        exercises:
+          - content_key: ro.a1.unit15.lesson01.exercise01.choose_tren
+            type: multiple_choice
+            tested_text: "tren"
+            prompt:
+              target_blocks:
+                - {text: "train", language_code: en, direction: ltr}
+          - content_key: ro.a1.unit15.lesson01.exercise02.choose_pleaca
+            type: multiple_choice
+            tested_text: "pleacă"
+            prompt:
+              target_blocks:
+                - {text: "leaves / departs", language_code: en, direction: ltr}
+          - content_key: ro.a1.unit15.lesson01.exercise03.listen_trenul_pleaca_ora_noua
+            type: listen_select
+            tested_text: "Trenul pleacă la ora nouă"
+            media_asset_key: ro.a1.audio.travel.trenul_pleaca_la_ora_noua.01
+            prompt: {target_blocks: []}
+          - content_key: ro.a1.unit15.lesson01.exercise04.match_travel1
+            type: matching_pairs
+            tested_text: "tren pleacă peron gară la ce oră la ora nouă"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "Tren", right: "train"}
+              - {left: "Pleacă", right: "leaves / departs"}
+              - {left: "Peron", right: "platform"}
+              - {left: "Gară", right: "train station"}
+              - {left: "La ce oră?", right: "At what time?"}
+              - {left: "La ora nouă.", right: "At nine o'clock."}
+          - content_key: ro.a1.unit15.lesson01.exercise05.order_la_ce_ora_pleaca_trenul
+            type: word_order
+            tested_text: "La ce oră pleacă trenul"
+            prompt: {target_blocks: []}
+            word_bank: ["pleacă", "La", "trenul", "ce", "oră"]
+          - content_key: ro.a1.unit15.lesson01.exercise06.listen_order_de_la_ce_peron
+            type: listen_order
+            tested_text: "De la ce peron pleacă trenul"
+            media_asset_key: ro.a1.audio.travel.de_la_ce_peron_pleaca_trenul.01
+            prompt: {target_blocks: []}
+            word_bank: ["peron", "De", "la", "ce", "pleacă", "trenul"]
+          - content_key: ro.a1.unit15.lesson01.exercise07.complete_trenul_pleaca
+            type: fill_in_blank
+            tested_text: "pleacă"
+            prompt:
+              target_blocks:
+                - {text: "Trenul ___ la ora nouă.", language_code: ro, direction: ltr}
+          - content_key: ro.a1.unit15.lesson01.exercise08.speak_la_ce_ora_pleaca_trenul
+            type: speak_response
+            tested_text: "la ce oră pleacă trenul"
+            prompt:
+              target_blocks:
+                - {text: "Say: What time does the train leave?", language_code: en, direction: ltr}
+
+      - content_key: ro.a1.unit15.lesson02.un_bilet_va_rog
+        title: "Un bilet, vă rog"
+        spine_outcome_id: universal.a1.travel.handle_basic_journey
+        teaching:
+          - content_key: ro.a1.unit15.lesson02.teach.reminder_as_dori_va_rog_cat_costa
+            kind: grammar_note
+            target: {text: "aș dori · vă rog · cât costă · costă · lei", language_code: ro, direction: ltr}
+            introduced_tokens: [aș, dori, vă, rog, cât, costă, lei]
+          - content_key: ro.a1.unit15.lesson02.teach.bilet_vocab
+            kind: vocabulary
+            target: {text: "Bilet", language_code: ro, direction: ltr}
+            introduced_tokens: [bilet]
+            example:
+              - {text: "Am un bilet.", language_code: ro, direction: ltr}
+          - content_key: ro.a1.unit15.lesson02.teach.bucuresti_vocab
+            kind: vocabulary
+            target: {text: "București", language_code: ro, direction: ltr}
+            introduced_tokens: [București]
+            example:
+              - {text: "Trenul pleacă la București.", language_code: ro, direction: ltr}
+          - content_key: ro.a1.unit15.lesson02.teach.as_dori_bilet_bucuresti_phrase
+            kind: phrase
+            target: {text: "Aș dori un bilet la București, vă rog.", language_code: ro, direction: ltr}
+            introduced_tokens: [aș, dori, un, bilet, la, București, vă, rog]
+          - content_key: ro.a1.unit15.lesson02.teach.cat_costa_bilet_bucuresti_phrase
+            kind: phrase
+            target: {text: "Cât costă un bilet la București?", language_code: ro, direction: ltr}
+            introduced_tokens: [cât, costă, un, bilet, la, București]
+          - content_key: ro.a1.unit15.lesson02.teach.costa_zece_lei_phrase
+            kind: phrase
+            target: {text: "Costă zece lei.", language_code: ro, direction: ltr}
+            introduced_tokens: [costă, zece, lei]
+        exercises:
+          - content_key: ro.a1.unit15.lesson02.exercise01.choose_bilet
+            type: multiple_choice
+            tested_text: "bilet"
+            prompt:
+              target_blocks:
+                - {text: "ticket", language_code: en, direction: ltr}
+          - content_key: ro.a1.unit15.lesson02.exercise02.choose_how_much_question
+            type: multiple_choice
+            tested_text: "cât costă un bilet"
+            prompt:
+              target_blocks:
+                - {text: "How much does a ticket cost?", language_code: en, direction: ltr}
+          - content_key: ro.a1.unit15.lesson02.exercise03.listen_as_dori_bilet_bucuresti
+            type: listen_select
+            tested_text: "Aș dori un bilet la București, vă rog"
+            media_asset_key: ro.a1.audio.travel.as_dori_bilet_bucuresti.01
+            prompt: {target_blocks: []}
+          - content_key: ro.a1.unit15.lesson02.exercise04.match_travel2
+            type: matching_pairs
+            tested_text: "bilet București aș dori vă rog cât costă costă lei tren peron"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "Bilet", right: "ticket"}
+              - {left: "București", right: "Bucharest"}
+              - {left: "Aș dori", right: "I would like"}
+              - {left: "Vă rog", right: "please"}
+              - {left: "Cât costă?", right: "How much does it cost?"}
+              - {left: "Lei", right: "lei (currency)"}
+              - {left: "Tren", right: "train"}
+              - {left: "Peron", right: "platform"}
+          - content_key: ro.a1.unit15.lesson02.exercise05.order_cat_costa_bilet
+            type: word_order
+            tested_text: "Cât costă un bilet"
+            prompt: {target_blocks: []}
+            word_bank: ["costă", "Cât", "bilet", "un"]
+          - content_key: ro.a1.unit15.lesson02.exercise06.listen_order_costa_zece_lei
+            type: listen_order
+            tested_text: "Costă zece lei"
+            media_asset_key: ro.a1.audio.travel.costa_zece_lei.01
+            prompt: {target_blocks: []}
+            word_bank: ["zece", "Costă", "lei"]
+          - content_key: ro.a1.unit15.lesson02.exercise07.complete_as_dori_bilet
+            type: fill_in_blank
+            tested_text: "bilet"
+            prompt:
+              target_blocks:
+                - {text: "Aș dori un ___ la București, vă rog.", language_code: ro, direction: ltr}
+          - content_key: ro.a1.unit15.lesson02.exercise08.speak_as_dori_bilet_bucuresti
+            type: speak_response
+            tested_text: "aș dori un bilet la bucurești vă rog"
+            prompt:
+              target_blocks:
+                - {text: "Say: I would like a ticket to Bucharest, please.", language_code: en, direction: ltr}
+
+      - content_key: ro.a1.unit15.lesson03.la_gara
+        title: "La gară"
+        spine_outcome_id: universal.a1.travel.handle_basic_journey
+        teaching:
+          - content_key: ro.a1.unit15.lesson03.teach.reminder_travel_words
+            kind: grammar_note
+            target: {text: "tren · pleacă · peron · bilet · București · trei · am", language_code: ro, direction: ltr}
+            introduced_tokens: [tren, pleacă, peron, bilet, București, trei, am]
+          - content_key: ro.a1.unit15.lesson03.teach.reminder_buna_multumesc_la_revedere_ana_mihai
+            kind: grammar_note
+            target: {text: "bună · mulțumesc · la revedere · Ana · Mihai", language_code: ro, direction: ltr}
+            introduced_tokens: [bună, mulțumesc, la, revedere, Ana, Mihai]
+          - content_key: ro.a1.unit15.lesson03.teach.drum_bun_vocab
+            kind: vocabulary
+            target: {text: "Drum bun", language_code: ro, direction: ltr}
+            introduced_tokens: [drum, bun]
+            example:
+              - {text: "Drum bun, Mihai!", language_code: ro, direction: ltr}
+          - content_key: ro.a1.unit15.lesson03.teach.line01
+            kind: dialogue
+            target:
+              text: "Bună, Mihai! La ce oră pleacă trenul?"
+              language_code: ro
+              direction: ltr
+              speaker: Ana
+            introduced_tokens: []
+          - content_key: ro.a1.unit15.lesson03.teach.line02
+            kind: dialogue
+            target:
+              text: "Trenul pleacă la ora nouă."
+              language_code: ro
+              direction: ltr
+              speaker: Mihai
+            introduced_tokens: []
+          - content_key: ro.a1.unit15.lesson03.teach.line03
+            kind: dialogue
+            target:
+              text: "De la ce peron?"
+              language_code: ro
+              direction: ltr
+              speaker: Ana
+            introduced_tokens: []
+          - content_key: ro.a1.unit15.lesson03.teach.line04
+            kind: dialogue
+            target:
+              text: "De la peronul trei. Am un bilet la București."
+              language_code: ro
+              direction: ltr
+              speaker: Mihai
+            introduced_tokens: []
+          - content_key: ro.a1.unit15.lesson03.teach.line05
+            kind: dialogue
+            target:
+              text: "Drum bun, Mihai! La revedere!"
+              language_code: ro
+              direction: ltr
+              speaker: Ana
+            introduced_tokens: []
+          - content_key: ro.a1.unit15.lesson03.teach.line06
+            kind: dialogue
+            target:
+              text: "Mulțumesc, Ana! La revedere!"
+              language_code: ro
+              direction: ltr
+              speaker: Mihai
+            introduced_tokens: []
+        exercises:
+          - content_key: ro.a1.unit15.lesson03.exercise01.choose_who_says_drum_bun
+            type: multiple_choice
+            tested_text: "Ana"
+            prompt:
+              target_blocks:
+                - {text: "Drum bun, Mihai! La revedere!", language_code: ro, direction: ltr}
+          - content_key: ro.a1.unit15.lesson03.exercise02.dialogue_comprehend_platform
+            type: dialogue_comprehension
+            tested_text: "Peronul trei."
+            media_asset_key: ro.a1.audio.dialogue.la_gara.01
+            prompt: {target_blocks: []}
+          - content_key: ro.a1.unit15.lesson03.exercise03.reading_comprehend_destination
+            type: reading_comprehension
+            tested_text: "București"
+            prompt:
+              target_blocks:
+                - {text: "Trenul pleacă la ora nouă. Peronul trei. Bilet la București.", language_code: ro, direction: ltr}
+          - content_key: ro.a1.unit15.lesson03.exercise04.match_unit_review
+            type: matching_pairs
+            tested_text: "tren pleacă peron bilet București cât costă vă rog drum bun"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "Tren", right: "train"}
+              - {left: "Pleacă", right: "leaves / departs"}
+              - {left: "Peron", right: "platform"}
+              - {left: "Bilet", right: "ticket"}
+              - {left: "București", right: "Bucharest"}
+              - {left: "Cât costă?", right: "How much does it cost?"}
+              - {left: "Vă rog", right: "please"}
+              - {left: "Drum bun", right: "Have a safe trip"}
+          - content_key: ro.a1.unit15.lesson03.exercise05.order_am_bilet_bucuresti
+            type: word_order
+            tested_text: "Am un bilet la București"
+            prompt: {target_blocks: []}
+            word_bank: ["bilet", "Am", "un", "la", "București"]
+          - content_key: ro.a1.unit15.lesson03.exercise06.complete_drum_bun
+            type: fill_in_blank
+            tested_text: "Drum bun"
+            prompt:
+              target_blocks:
+                - {text: "___, Mihai! La revedere!", language_code: ro, direction: ltr}
+          - content_key: ro.a1.unit15.lesson03.exercise07.respond_as_mihai
+            type: dialogue_response
+            tested_text: "trenul pleacă la ora nouă"
+            prompt:
+              target_blocks:
+                - {text: "Ana: Bună, Mihai! La ce oră pleacă trenul?", language_code: ro, direction: ltr}
+          - content_key: ro.a1.unit15.lesson03.exercise08.speak_am_bilet_bucuresti
+            type: speak_response
+            tested_text: "am un bilet la bucurești"
+            prompt:
+              target_blocks:
+                - {text: "Say: I have a ticket to Bucharest.", language_code: en, direction: ltr}
+          - content_key: ro.a1.unit15.lesson03.exercise09.write_travel_message
+            type: writing_prompt
+            tested_text: "trenul pleacă la ora nouă de la peronul trei bilet la bucurești"
+            prompt: {target_blocks: []}
