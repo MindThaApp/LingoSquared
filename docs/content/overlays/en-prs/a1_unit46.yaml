@@ -9,9 +9,9 @@ generation_provenance:
   authoring_system: claude
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: codex_fresh_context
-  notes: "Authored with prs a1_unit46_pharmacy.yaml for en-prs only. Adapted from DLI Dari Semester 1 (s33-36.pdf) Lesson 34 'At the Pharmacy' per AUTHORING_GUIDE.md #10 -- heavily simplified from the source's B1/B2-level comparative-adverb/past-conditional grammar and contracted spoken dialogue forms down to A1 simple-present statements, one rising-intonation yes/no question, and this course's own established uncontracted -ین imperative family; دواخانه/دواساز/قرص/شربت/نسخه/دانه/بگیرین are genuinely source-verified (دواخانه/دواساز written as single-word compounds per this course's own established -خانه/-ساز compounding precedent from unit43's کتابخانه/کتابدار), دندان‌درد is a course-internal compound built from this course's own already-taught دندان (unit42) using the same compound pattern already established by سردرد/دل‌درد (unit17), not sourced from the DLI vocabulary list's differently-formed دندان دردی. The one اما-joined contrast sentence (lesson06) uses a single canonical comma-اما form, matching unit33/39-45's own established precedent. Dialogue content uses structured speakers in the realization, not embedded speaker labels. No bare Yes/No/True/False/On/Off gloss values exist anywhere in this unit, including every matching_pairs right: value (بلی/نخیر are quoted \"Yes\"/\"No\" where they appear as glosses)."
+  status: reviewed
+  required_next_reviewer: null
+  notes: "2026-07-10 fresh-context review (Claude) found and fixed ONE real bug. Every English translation of lesson05's reading-passage sentence \"این نسخه از همایون است\" (gloss, correct_option, feedback, accepted_answers, distractors, matching_pairs -- 8 occurrences total) read \"This prescription is from Homayoun,\" which is misleading in English: از + است is a standard Dari possessive-predicate construction meaning \"this is Homayoun's prescription,\" not that Homayoun issued or wrote it -- the literal \"from\" reading directly contradicts the established dialogue where Homayoun is the PATIENT receiving a prescription from the دواساز (pharmacist), not a prescriber. Fixed all 8 occurrences to \"This is Homayoun's prescription.\" and expanded the review_this_is_from grammar-note's own explanatory note to clarify the possessive usage for future readers. Also checked and confirmed clean: compiler validation, stray-boolean/jargon-leak checks, dialogue title/gloss consistency elsewhere in the file, and every other exercise's English-translation accuracy."
 course:
   title: Dari A1
   description: "Beginner Kabul Dari: ask a pharmacist for a basic medicine, describe a simple symptom (headache, stomachache, or toothache), ask for a tablet or syrup, and understand a basic dosage instruction."
@@ -165,7 +165,7 @@ teaching:
   prs.a1.unit46.lesson05.teach.review_this_is_from:
     title: "Review: this, is, Homayoun, from"
     gloss: this / is / Homayoun / from
-    note: "این, است, همایون, and از (from earlier units) are review words used in the reading passage."
+    note: "این, است, and همایون are review words used in the reading passage. از (from earlier units, usually \"from\") is used here predicatively with است to show possession -- این نسخه از همایون است literally reads \"this prescription is from Homayoun\" but actually means \"this is Homayoun's prescription,\" the same pattern as \"Whose is this? -- It's from me\" meaning \"It's mine.\""
   prs.a1.unit46.lesson05.teach.review_one_tablet_day_three_piece_take:
     title: "Review: one, tablet, day, three, piece, take"
     gloss: one / tablet / day / three / piece / take
@@ -177,7 +177,7 @@ teaching:
     example_gloss: This is a prescription.
   prs.a1.unit46.lesson05.teach.reading_passage:
     title: Reading a prescription
-    gloss: "This prescription is from Homayoun. It is one tablet. Take three pieces a day."
+    gloss: "This is Homayoun's prescription. It is one tablet. Take three pieces a day."
   prs.a1.unit46.lesson06.teach.review_but_formal_you_how_many:
     title: "Review: but, you (formal), how many"
     gloss: but / you (formal) / how many
@@ -390,15 +390,15 @@ exercises:
       - {value: "Three", status: correct}
   prs.a1.unit46.lesson05.exercise02.recognize_prescription_from_homayoun:
     instruction: Select the correct translation.
-    correct_option: "This prescription is from Homayoun."
+    correct_option: "This is Homayoun's prescription."
     distractors: ["Take three pieces a day.", "This is a prescription.", "I want a tablet."]
-    feedback: "این نسخه از همایون است means \"This prescription is from Homayoun.\""
+    feedback: "این نسخه از همایون است means \"This is Homayoun's prescription.\""
     accepted_answers:
-      - {value: "This prescription is from Homayoun.", status: correct}
+      - {value: "This is Homayoun's prescription.", status: correct}
   prs.a1.unit46.lesson05.exercise03.recognize_three_a_day:
     instruction: Select the correct translation.
     correct_option: "Take three pieces a day."
-    distractors: ["This prescription is from Homayoun.", "This is a prescription.", "I want a tablet."]
+    distractors: ["This is Homayoun's prescription.", "This is a prescription.", "I want a tablet."]
     feedback: "روز سه دانه بگیرین means \"Take three pieces a day.\""
     accepted_answers:
       - {value: "Take three pieces a day.", status: correct}
@@ -411,7 +411,7 @@ exercises:
           یک: one
           قرص: "tablet / pill"
           روز: day
-          "این نسخه از همایون است.": "This prescription is from Homayoun."
+          "این نسخه از همایون است.": "This is Homayoun's prescription."
           "روز سه دانه بگیرین.": "Take three pieces a day."
   prs.a1.unit46.lesson05.exercise05.order_prescription_from_homayoun:
     instruction: Put the words in the correct order.
@@ -432,14 +432,14 @@ exercises:
   prs.a1.unit46.lesson06.exercise01.recognize_morning_night_contrast:
     instruction: Select the correct translation.
     correct_option: "In the morning it's two pieces, but at night it's three pieces."
-    distractors: ["How many pieces is your prescription?", "This prescription is from Homayoun.", "Take three pieces a day."]
+    distractors: ["How many pieces is your prescription?", "This is Homayoun's prescription.", "Take three pieces a day."]
     feedback: "صبح دو دانه است، اما شب سه دانه است means \"In the morning it's two pieces, but at night it's three pieces.\""
     accepted_answers:
       - {value: "In the morning it's two pieces, but at night it's three pieces.", status: correct}
   prs.a1.unit46.lesson06.exercise02.recognize_your_prescription_question:
     instruction: Select the correct translation.
     correct_option: "How many pieces is your prescription?"
-    distractors: ["In the morning it's two pieces, but at night it's three pieces.", "This prescription is from Homayoun."]
+    distractors: ["In the morning it's two pieces, but at night it's three pieces.", "This is Homayoun's prescription."]
     feedback: "نسخه‌تان چند دانه است؟ means \"How many pieces is your prescription?\""
     accepted_answers:
       - {value: "How many pieces is your prescription?", status: correct}
