@@ -834,14 +834,10 @@ def _generate_prioritized(
         target = fallback[attempts % len(fallback)]
         attempts += 1
         row = srs_by_lexeme.get(target.id)
-        if row is not None:
-            mastery = row.mastery
-        elif source == "checkpoint":
-            mastery = CHECKPOINT_MASTERY_BANDS[
-                (attempts - 1) % len(CHECKPOINT_MASTERY_BANDS)
-            ]
-        else:
-            mastery = 0.0
+        # Checkpoints no longer flow through this function at all (see
+        # generate_checkpoint(), 2026-07-10) -- only practice and review
+        # reach here, and both are deliberately mastery-adaptive.
+        mastery = row.mastery if row is not None else 0.0
         item = _generate_target_item(
             db,
             user_id=user_id,
@@ -865,15 +861,16 @@ def _generate_prioritized(
             # with only one lesson's worth of material genuinely doesn't
             # have `size` distinct items to give yet -- returning fewer
             # honest items is correct; padding with visible duplicates is
-            # not. Checkpoint and review keep the old threshold-based
-            # escape hatch: a checkpoint is a fixed-size scored assessment
-            # that must reach its 12-15 item minimum even on a rate-limited
-            # retake reusing the same unit's material (confirmed live --
-            # narrowing this fix to "practice" only fixed a real checkpoint-
-            # retake regression the broader version introduced, caught by
-            # the existing test_checkpoint_retake_delay_and_expiry), and a
-            # review session is likewise a fixed due-item batch, not an
-            # open-ended feed.
+            # not. Review keeps the old threshold-based escape hatch: a
+            # review session is a fixed due-item batch, not an open-ended
+            # feed. (Checkpoints used to take the same escape hatch here
+            # for the same reason -- a fixed-size scored assessment must
+            # reach its 12-15 item minimum even on a rate-limited retake
+            # reusing the same unit's material, confirmed live by
+            # test_checkpoint_retake_delay_and_expiry -- but since
+            # 2026-07-10 checkpoint generation has its own stratified,
+            # fixed-difficulty loop in generate_checkpoint() carrying an
+            # equivalent escape hatch, and never reaches this function.)
             allow_existing_signature=(
                 False if source == "practice" else attempts > len(fallback) * 2
             ),
@@ -934,6 +931,31 @@ def generate_checkpoint(
     size: int = 15,
     session_id: str | None = None,
 ) -> list[PracticeItem]:
+    # A checkpoint is a criterion-referenced test of the WHOLE unit
+    # against a fixed 80% pass bar, not an adaptive practice session.
+    # This used to delegate to _generate_prioritized() with
+    # source="checkpoint", which a 2026-07-10 pedagogy review found
+    # miscalibrated the assessment in two ways, both fixed here
+    # (regular practice/review keep their mastery-adaptive behavior in
+    # _generate_prioritized() -- this is checkpoint-only):
+    #
+    # 1. Item selection was biased toward the learner's due/weakest
+    #    lexemes (SRS-priority order) rather than representative of the
+    #    unit -- two learners, or two attempts, could face materially
+    #    different samples with whole lessons unrepresented. Now targets
+    #    are stratified across the unit's lessons: round-robin over
+    #    per-lesson lexeme buckets (shuffled within each bucket), so the
+    #    12-15 items spread as evenly across every lesson as the
+    #    material allows.
+    # 2. Exercise-format difficulty tracked live per-lexeme mastery via
+    #    _tier_order(), so a learner with tracked-weak lexemes got
+    #    recognition-heavy (easier) formats against the same pass bar --
+    #    the weakest learners got the easiest test, inverting assessment
+    #    discrimination. Only untracked lexemes (the pure test-out case)
+    #    already got the fixed CHECKPOINT_MASTERY_BANDS cycling. Now
+    #    EVERY item cycles those bands (0.0/0.5/0.8 -> a consistent
+    #    recognition/structured/production mix) regardless of the
+    #    learner's SRS state, which this function no longer reads at all.
     size = max(12, min(15, size))
     lesson_ids = list(
         db.scalars(
@@ -949,33 +971,76 @@ def generate_checkpoint(
     if not templates or not lexemes:
         return []
 
-    srs_rows = list(
-        db.scalars(
-            select(UserLexemeSRS).where(
-                UserLexemeSRS.user_id == user_id,
-                UserLexemeSRS.course_id == course.id,
-                UserLexemeSRS.suspended.is_(False),
-            )
-        )
-    )
     rng = _batch_rng(
         db,
         user_id,
         course.id,
         f"checkpoint-unit:{unit_id}",
     )
-    return _generate_prioritized(
-        db,
-        user_id=user_id,
-        course=course,
-        size=size,
-        templates=templates,
-        lexemes=lexemes,
-        srs_rows=srs_rows,
-        source="checkpoint",
-        session_id=session_id,
-        rng=rng,
-    )
+
+    by_lesson: dict[str, list[Lexeme]] = {}
+    for lexeme in lexemes:
+        by_lesson.setdefault(lexeme.provenance_lesson_id, []).append(lexeme)
+    # _material() orders lexemes by id, so bucket contents are
+    # deterministic before the seeded shuffle.
+    buckets = [
+        by_lesson[lesson_id]
+        for lesson_id in lesson_ids
+        if lesson_id in by_lesson
+    ]
+    for bucket in buckets:
+        rng.shuffle(bucket)
+    # Round-robin across lesson buckets: every lesson with material is
+    # represented within the first len(buckets) targets and again each
+    # round after, so the sample can never cluster on 1-2 lessons'
+    # vocabulary the way SRS-priority ordering could.
+    targets: list[Lexeme] = []
+    for round_index in range(max(len(bucket) for bucket in buckets)):
+        for bucket in buckets:
+            if round_index < len(bucket):
+                targets.append(bucket[round_index])
+
+    signatures = _recent_signatures(db, user_id, course.id)
+    slot_candidate_cache: dict[str, dict[str, list]] = {}
+    generated: list[PracticeItem] = []
+    attempts = 0
+    max_attempts = max(size * 50, len(targets) * 10)
+    while len(generated) < size and attempts < max_attempts:
+        target = targets[attempts % len(targets)]
+        attempts += 1
+        # Band indexed by items GENERATED (not attempts), so a failed
+        # attempt -- e.g. a target no template can host -- never skips a
+        # band: the final 12-15 items always carry the full fixed
+        # difficulty mix.
+        mastery = CHECKPOINT_MASTERY_BANDS[
+            len(generated) % len(CHECKPOINT_MASTERY_BANDS)
+        ]
+        item = _generate_target_item(
+            db,
+            user_id=user_id,
+            course=course,
+            target=target,
+            mastery=mastery,
+            templates=templates,
+            lexemes=lexemes,
+            rng=rng,
+            signatures=signatures,
+            source="checkpoint",
+            session_id=session_id,
+            # Same threshold-based escape hatch checkpoints had in
+            # _generate_prioritized()'s padding loop: a checkpoint is a
+            # fixed-size scored assessment that must reach its 12-item
+            # minimum even on a retake reusing the same unit's material
+            # (the recent-signature window still holds the previous
+            # attempt's items -- confirmed live by
+            # test_checkpoint_retake_delay_and_expiry). Returning fewer
+            # honest items is correct for open-ended practice, not here.
+            allow_existing_signature=attempts > len(targets) * 2,
+            slot_candidate_cache=slot_candidate_cache,
+        )
+        if item is not None:
+            generated.append(item)
+    return generated
 
 
 def generate_review_batch(
