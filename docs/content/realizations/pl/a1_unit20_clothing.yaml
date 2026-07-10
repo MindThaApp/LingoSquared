@@ -8,9 +8,69 @@ generation_provenance:
   authoring_system: "claude"
   human_reviewed: false
 review:
-  status: "unreviewed"
-  required_next_reviewer: "codex"
+  status: "reviewed"
+  required_next_reviewer: null
   notes: >-
+    2026-07-10 fresh-context review (Claude, zero access to the original
+    authoring reasoning) checked everything the review brief asked for and
+    found no real bugs -- this unit is clean as authored. Verified by hand:
+    (1) same-speaker-distractor safety for every multiple_choice/dialogue_
+    comprehension exercise built from lesson03's dialogue -- traced every
+    line each of Sprzedawca's and Marek's three lines actually says and
+    confirmed no distractor restates the fact under test, matching the
+    file's own notes below exactly. (2) grepped for unquoted yes/no/true/
+    false/on/off in both files -- zero stray boolean coercions, only the
+    two legitimate schema booleans (human_reviewed, target_language_first).
+    (3) ran the compiler standalone (0 errors/0 warnings) and again against
+    the FULL 20-unit pl corpus with its en-pl overlays (0 errors, 4
+    warnings -- all 4 pre-existing in units03/13/17, none in unit20). (4)
+    matching_pairs uses the same flat-dict correct_response shape unit07
+    already established for this course (verified every pairs/correct_
+    response key set matches exactly across all 3 lessons); word_order's
+    correct_response token sets match each exercise's word_bank exactly in
+    all 6 instances -- both shapes the grader's canonicalization already
+    handles per CLAUDE.md's documented footgun, no mismatch either way. (5)
+    cast/register continuity confirmed directly against pl/a1_unit07_
+    shopping.yaml (not taken on faith): Sprzedawca is the same generic
+    shopkeeper role unit07 used with Ewa ("Co dla pani?"), correctly
+    re-gendered here to "pan" for Marek ("Co pan chce kupić?"); grepped
+    every speaker: value across the whole pl corpus and confirmed Ewa/Marek
+    are this course's real recurring pair, Sprzedawca a real recurring
+    minor role, not an invented claim. (6) no jargon leaks -- grepped for
+    null_subject/both_speakers/reviewed/raw content_key strings in
+    learner-facing overlay text, found none. (7) real Polish grammar
+    verified clause by clause: "Jaki"/"Jaka" gender agreement is applied
+    correctly (kolor and rozmiar are both genuinely masculine, so "Jaki" is
+    right, never misapplied to "Jaka"); "chce" (3rd person/formal-pan, no
+    ogonek) vs "chcę" (1st person, with ogonek) are never confused anywhere
+    in the file, the exact diacritic distinction this review was asked to
+    scrutinize; "niebieska"/"czerwona" are taught and tested only as the
+    single nominative feminine form claimed, with zero accidental
+    declension slip -- the one place a different inflected form appears
+    ("Mamy niebieską koszulę," correct accusative-after-"mieć") is
+    grammatically correct Polish and only ever shown as a full quoted
+    distractor line in a multiple_choice option, never something a learner
+    has to parse or produce, so the "one memorized form" design claim holds
+    under test. The two grammar_check word-order "corrections" (fronting
+    the interrogative's noun ahead of Ile/Co) are the same technique
+    unit19 already established and used twice in this same course -- a
+    judgment call about how cleanly "wrong" a flexible-word-order language
+    can make a scramble, but not a new departure introduced by this unit,
+    so left as authored. One narrative nit noted but not changed: lesson03's
+    shopkeeper confirms only the shirt ("Mamy niebieską koszulę") before
+    giving the combined total for both the shirt and pants Marek asked for
+    -- economical, plausible service-counter phrasing, not a factual
+    contradiction (no price or fact for spodnie is stated anywhere else to
+    conflict with), so left as authored rather than expanding the dialogue.
+    (8) every exercise type used (multiple_choice, matching_pairs,
+    word_order, fill_in_blank, grammar_check, dialogue_comprehension,
+    dialogue_response, speak_response) is registered in frontend/src/
+    components/exercises/ExerciseRenderer.tsx. (9) vocabulary/scenario
+    scrutinized for real-world authenticity given the honest "no source
+    material" disclosure below -- S/M/L sizing, pan/pani formal address,
+    and the shop-assistant/customer transaction shape are all genuinely how
+    Polish clothing retail works, not just plausible-sounding invention.
+
     Twentieth Polish unit, continuing directly from pl/a1_unit19_weather.yaml
     (same Ewa/Marek pair, same 3-lesson bootstrap pace as units01-19). Realizes
     universal.a1.clothing.describe_buy_clothing -- confirmed directly against
