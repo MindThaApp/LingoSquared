@@ -256,13 +256,17 @@ preference between two units (one already-passed, one not). Full
 detail in `docs/BUILD_LOG.md`.
 
 **Phases A through F are now all shipped and live-verified this
-session.** Remaining from the original upgrade program: E4 (web push
-— explicitly last-priority, its own spec says to skip if effort
-balloons), and the two pieces explicitly left for other sessions'
+session.** E4 (web push) shipped later, 2026-07-07 (`784da03`,
+migration 0016): VAPID subscriptions (`GET /push/vapid-public-key`,
+`POST /push/subscribe`/`unsubscribe`) plus one admin-triggerable send
+(`POST /admin/push/notify-due-reviews`) — no autonomous scheduling,
+since no cron/scheduler infrastructure exists to hook into (flagged
+out of scope rather than invented). Still remaining from the original
+upgrade program: the two pieces explicitly left for other sessions'
 lanes (D2's actual dialogue-content re-authoring, C1's feedback_by_
 option content pass — both Session 2/CONTENT). Phase G's integrity
 fixes were folded in opportunistically throughout (see each phase's
-entry above). Next up for whoever continues this: E4, or start on
+entry above). Next up for whoever continues this: start on
 Session 2's content backlog if that's in scope for this session, or
 begin the deeper content-authoring work needed to actually hit the
 2026-07-05 publish-gate content-depth bar (≥10hr teaching + ≥10hr
@@ -1249,9 +1253,17 @@ review-cleared growth.
   live server (192.168.4.4) — that's a separate, Ramin-present step per
   the standing deploy convention. Full detail in `docs/BUILD_LOG.md`'s
   matching entries.
-- No refresh tokens, password reset, or email verification.
-- No mobile app (Expo React Native is the recommended future path,
-  reusing the existing JWT/JSON API as-is).
+- No password reset or email verification. Refresh tokens ARE built
+  (2026-07-10, `565f66c`, a mobile-app prerequisite): 30-min access
+  tokens + long-lived rotating refresh tokens with reuse-detection
+  revocation (`RefreshToken` table, migration 0021, `POST /auth/
+  refresh`/`logout`), full pytest coverage.
+- No functional mobile app yet, but an Expo React Native scaffold now
+  exists (`mobile/`, merged 2026-07-10 — Phase 0 proof-of-concept
+  only: proves Metro resolves the shared `@lingo/shared` API client
+  through the npm-workspaces monorepo, plus mobile CI workflows; a
+  single placeholder screen, no real app screens). Reuses the
+  existing JWT/JSON API as-is, as originally recommended.
 - Rejected, don't re-propose without a strong new reason: hearts/lives,
   leagues/leaderboards, gems/currency, runtime-LLM content generation,
   a placement-quiz enrollment system (self-report + checkpoint test-out,
