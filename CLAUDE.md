@@ -1322,8 +1322,18 @@ review-cleared growth.
 ## Known limitations / accepted scope
 
 - **`backend/tests/test_content_answer_shapes.py`, added 2026-07-10,
-  currently shows ~226 known FAILING parametrized cases in a plain
-  `pytest -q` run — this is expected, not a regression.** This test
+  self-skips as a single trivial case (`1 skipped`) under the STANDARD
+  `docker compose run --rm api ... pytest` invocation** — same class of
+  gap as the pre-existing `backfill_lexemes.py` footgun: the backend
+  Docker image only contains `backend/`, not repo-root `docs/content/`,
+  so the test correctly detects the corpus is unreachable and skips
+  rather than silently passing or crashing. To actually run its full
+  ~12,627 parametrized cases, mount the full repo per the test file's
+  own docstring: `docker compose run --rm -v "$(cd .. && pwd):/repo"
+  -e LINGO_REPO_ROOT=/repo api sh -c '...pytest tests/
+  test_content_answer_shapes.py'`. **When run with
+  the corpus actually reachable, it currently shows ~226 known FAILING
+  cases — this is expected, not a regression.** The test itself
   grades every compiled exercise in the real corpus through the actual
   `grade()` path using the exact payload shape the real frontend
   component submits, and found 227 genuine pre-existing content bugs
