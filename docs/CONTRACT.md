@@ -85,6 +85,10 @@ this field existed).
 
 ## Core API endpoints (exact paths)
 
+`/v1` is the canonical API prefix for new clients, including the future
+mobile app. The unprefixed root paths remain available indefinitely as a
+backward-compatible alias for the existing web frontend.
+
 Auth: `POST /auth/register`, `POST /auth/login`, `GET /auth/me`
 
 Languages/courses: `GET /languages`, `GET /language-pairs`, `GET /courses`,
