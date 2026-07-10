@@ -26,6 +26,9 @@ import type {
   PracticeAnswerResult,
   PracticeBatchResult,
   Progress,
+  PushSubscribeIn,
+  PushSubscribedResult,
+  PushVapidKey,
   QuestsResult,
   ReviewAnswerResult,
   ReviewDueResult,
@@ -211,6 +214,20 @@ export const PracticeApi = {
       description,
       learner_response: learnerResponse,
     }),
+};
+
+// Web push (Phase E4) — see docs/CONTRACT.md "Web push notifications".
+// vapidPublicKey is the unauthenticated capability probe: configured:false
+// means the server has no VAPID keys and ALL push UI must stay hidden
+// (graceful no-op, never a broken button).
+export const PushApi = {
+  vapidPublicKey: () => get<PushVapidKey>("/push/vapid-public-key"),
+  subscribe: (subscription: PushSubscribeIn) =>
+    post<PushSubscribedResult>("/push/subscribe", subscription),
+  // Idempotent server-side; safe to call with an endpoint the server has
+  // never seen (e.g. cleaning up after a failed subscribe).
+  unsubscribe: (endpoint: string) =>
+    post<PushSubscribedResult>("/push/unsubscribe", { endpoint }),
 };
 
 export const AdminApi = {

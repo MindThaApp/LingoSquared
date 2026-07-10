@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { CheckCircle, Flame, Medal, Snowflake, Star } from "lucide-react";
 import { useAuth } from "../auth/AuthContext";
 import { ProgressApi, ReviewApi } from "@lingo/shared/api/endpoints";
+import { PushPrompt } from "../components/PushPrompt";
 
 export function HomePage() {
   const { t } = useTranslation();
@@ -99,6 +100,8 @@ export function HomePage() {
           </div>
         </div>
       </div>
+
+      <PushPrompt />
 
       <div className="stat-grid">
         <div className="stat-card">

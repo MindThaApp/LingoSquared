@@ -432,6 +432,24 @@ export interface FeedbackReportIn {
   client_context?: Record<string, unknown>;
 }
 
+// Web push (Phase E4) — see docs/CONTRACT.md "Web push notifications".
+export interface PushVapidKey {
+  // Raw base64url VAPID public key, null whenever configured is false.
+  public_key: string | null;
+  configured: boolean;
+}
+
+export interface PushSubscribeIn {
+  // The browser PushSubscription's own fields, exactly as
+  // subscription.toJSON() produces them.
+  endpoint: string;
+  keys: { p256dh: string; auth: string };
+}
+
+export interface PushSubscribedResult {
+  subscribed: boolean;
+}
+
 export interface CoverageRow {
   source_language: string;
   target_language: string;
