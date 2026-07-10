@@ -126,8 +126,19 @@ async function speakViaTtsAndBrowser(text: string, languageCode: string): Promis
     const url = URL.createObjectURL(blob);
     const audio = new Audio(url);
     audio.addEventListener("ended", () => URL.revokeObjectURL(url));
-    void audio.play();
-    return true;
+    // Must await, not fire-and-forget: iOS Safari's play() requires
+    // transient user-activation that can expire before this network
+    // round-trip finishes on a slow connection, rejecting with
+    // NotAllowedError. Unawaited, that rejection was silently dropped
+    // and speak() reported success with no sound -- exactly the
+    // "silently dead" outcome this whole fallback chain exists to avoid.
+    try {
+      await audio.play();
+      return true;
+    } catch {
+      URL.revokeObjectURL(url);
+      return speakInBrowser(text, languageCode);
+    }
   }
 
   // application/json — { use_browser_tts: true, reason: ... }
