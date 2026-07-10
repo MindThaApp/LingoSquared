@@ -39,6 +39,17 @@ class Settings(BaseSettings):
     # dimension a test environment actually needs to move.
     login_rate_limit_max: int = 10
     register_rate_limit_max: int = 5
+    # POST /auth/refresh shipped 2026-07-10 with no rate limit at all -- an
+    # unauthenticated endpoint whose token lookup bcrypt-verifies the
+    # presented value against every stored refresh-token hash, so hammering
+    # it (replaying a stolen-but-not-yet-rotated token, or probing for valid
+    # tokens) is both a guessing surface and a CPU sink. Deliberately more
+    # generous than login's 10/min: legitimate clients refresh automatically
+    # on access-token expiry (plus tab wakeups/retries) and several devices
+    # can share one NAT'd IP. The same limiter also covers /auth/logout,
+    # which takes the same unauthenticated refresh-token body and pays the
+    # same full-table bcrypt scan.
+    refresh_rate_limit_max: int = 30
     answer_rate_limit_max: int = 120
     # Phase H2 (2026-07-07 integrity audit): the three limiters above left
     # /tts, /stt/transcribe, and the three generation endpoints (reviews/
