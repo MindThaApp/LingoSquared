@@ -44,8 +44,47 @@ def schedule(item, correct: bool | str):
     quality = quality_for_result(correct)
     success = quality >= 3
     if not success:
-        item.repetitions = 0
-        item.interval_days = 1
+        # Lapse handling: proportional demotion, NOT a full reset.
+        #
+        # Textbook SM-2 (and this function's original form) resets
+        # repetitions=0 / interval_days=1 on any failed review, discarding
+        # all prior learning on the word in one wrong answer. For genuinely
+        # hard vocabulary that produces the classic "ease hell" spiral:
+        # every lapse restarts the word from scratch, its ease_factor keeps
+        # dropping, and its growth rate converges toward zero — the word
+        # feels endless. Real-world SRS implementations soften this:
+        # Anki's "new interval" lapse setting is exactly a multiplier on
+        # the pre-lapse interval (default 0%, but 20-30% is the widely
+        # recommended anti-ease-hell setting), and FSRS models post-lapse
+        # stability as a fraction of prior stability, never zero.
+        #
+        # Numbers chosen, and why:
+        #
+        # - interval_days keeps 30% of its pre-lapse value (floor 1 day).
+        #   30% sits at the generous end of the Anki-recommended 20-30%
+        #   range, deliberately: unlike stock Anki, a lapse here ALSO
+        #   costs -0.32 ease_factor and -0.2 mastery (both below, both
+        #   unchanged), so the word is already being demoted on two other
+        #   axes and doesn't need a near-total interval reset on top.
+        #
+        # - repetitions drops by 2 (floor 0) rather than to 0. The value
+        #   2 is chosen for how it composes with the success branch's
+        #   bootstrap ladder (reps==0 -> 1 day, reps==1 -> 6 days, else
+        #   interval * ease), which this fix must not touch:
+        #     * established words (reps >= 4) stay at reps >= 2 after a
+        #       lapse, so their NEXT success grows multiplicatively from
+        #       the retained 30% interval — the partial credit is actually
+        #       used, not overwritten by the 1/6-day bootstrap steps;
+        #     * young words (reps <= 2) fall back into the bootstrap
+        #       ladder, which is correct — one or two successful reviews
+        #       is not established learning worth preserving;
+        #     * consecutive lapses compound (-2 reps and x0.3 interval
+        #       each time) and converge to the old full reset
+        #       (reps=0, interval=1) — the right limit for a word the
+        #       learner keeps failing, so this is strictly a softening
+        #       of the single-lapse case, not unlimited credit.
+        item.repetitions = max(0, item.repetitions - 2)
+        item.interval_days = max(1, round(item.interval_days * 0.3))
     else:
         next_interval_days = (
             1

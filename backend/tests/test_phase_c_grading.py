@@ -207,7 +207,13 @@ def test_schedule_almost_counts_as_success_not_failure():
     assert item.mastery > 0.0  # success branch, not the -0.2 failure branch
 
 
-def test_schedule_incorrect_resets_repetitions():
+def test_schedule_incorrect_on_young_word_still_restarts_it():
+    # The 2026-07-10 lapse softening (proportional demotion instead of a
+    # hard reset — see the comment in sm2.schedule()) only preserves
+    # credit for ESTABLISHED words. A word with a single successful
+    # review has nothing worth preserving: -2 repetitions floors at 0 and
+    # 30% of a 1-day interval floors at 1, so the outcome for a young
+    # word is identical to the old full reset.
     item = _FakeSRSRow()
     schedule(item, "correct")
     schedule(item, "incorrect")
