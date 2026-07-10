@@ -1,0 +1,738 @@
+schema_version: "1.1"
+realization_version: "2026.1-draft.1"
+target_language: "hi"
+cefr_level: "A1"
+status: "complete_draft"
+generation_provenance:
+  method: "ai_generated"
+  authoring_system: "claude"
+  human_reviewed: false
+review:
+  status: "unreviewed"
+  required_next_reviewer: "codex"
+  notes: >-
+    Twelfth Hindi unit, continuing directly from hi/a1_unit11_plans.yaml
+    (same Priya/Arjun characters, still on तुम terms with each other). Spine
+    outcome confirmed via a direct read of universal_spine.yaml (not just
+    assumed from other languages): the outcome entry immediately following
+    universal.a1.plans.make_simple_plans (line 366, hi's own unit11) is
+    universal.a1.past_events.describe_recent_event (line 391, "Give a
+    short, basic account of a recent completed event"), whose own declared
+    prerequisites (lines 394-396) are universal.a1.routines.
+    describe_daily_routine and universal.a1.time.ask_tell_time -- already
+    realized as hi's own unit10 and unit04 respectively. Cross-checked
+    against on-disk precedent per this task's explicit instruction: `ls
+    docs/content/realizations/nl/`, `pl/`, and `ro/` all independently
+    confirm a1_unit12_past_events.yaml as their own twelfth unit, matching
+    hi's own unit01-11 sequence, which has independently tracked the same
+    topic order as those three languages throughout. Sized to 3 lessons
+    matching unit01-11's bootstrap pace. Topic/pacing structure only
+    (recognition-first, minimal new grammar surface per central decision,
+    dialogue in lesson03) informed at a purely structural level by this
+    session's own established hi conventions, not by opening any nl/pl/ro
+    file's actual text -- every Hindi sentence below is authored fresh.
+
+    Source access, re-attempted per this task's explicit instruction (not
+    assumed to fail the same way as every prior hi unit): a fresh
+    `firecrawl search` (no query cache reused from any prior session)
+    failed outright with the same HTTP 402 (payment/quota) error every
+    prior hi unit this session has hit -- quota still has not reset, fully
+    disclosed rather than silently skipped. Fell back to the same FSI
+    "Hindi: An Active Introduction" archive.org item
+    (`Fsi-Hindi-AnActiveIntroduction`), re-downloaded fresh into this
+    session's own isolated scratchpad (a fresh Claude session cannot reuse
+    a prior session's scratch files). A fresh regex scan (Python, not
+    eyeballed) of the Internet Archive's own OCR pass
+    (`Fsi-HindiActiveIntroduction-StudentText_djvu.txt`, 94KB, re-downloaded
+    this session) for the Devanagari Unicode block (U+0900-U+097F) returned
+    ZERO matches anywhere in the document -- confirmed programmatically, a
+    twelfth confirmation of the same fact across this whole session's worth
+    of hi units. A direct binary PDF re-fetch this round hit an unrelated
+    archive.org URL-format hiccup (the download link resolved to something
+    `pdfinfo`/`pdftotext` couldn't parse as a PDF at all) rather than
+    reproducing the exact "scanned image, empty pdffonts" evidence units
+    07-11 captured directly -- not re-chased further since the OCR-text
+    zero-Devanagari-match evidence above is the same authoritative signal
+    every prior unit actually relied on and is conclusive on its own. A
+    fresh grep of the OCR file for this unit's own topic (past events,
+    recent completed actions) this time found real, directly on-topic
+    incidental corroboration -- genuine grammar-explanation prose about
+    Hindi's perfect participle and past auxiliary ("With the past
+    auxiliary, the meaning is clearly in the past... it will be used
+    wherever in English 'I had gone' is appropriate, but also in many
+    cases where 'I went' is used") plus example glosses ("If he has gone to
+    the market", "Did you go?") -- but every Hindi-script line immediately
+    preceding each hit is pure OCR mojibake ("qf^ ^ ^"T^TR ?[t", "EPTT
+    s^PT I**"), confirmed by eye to be garbage, not readable
+    Devanagari-as-Latin-transliteration, matching the exact failure mode
+    confirmed eleven times over across units 01-11, now a twelfth time
+    against this unit's own topic. Per this task's explicit instruction,
+    nothing from either extraction attempt -- neither any mojibake
+    fragment nor any wording of the recovered English framing prose -- was
+    used, cleaned up, transcribed, or guessed at anywhere in this file.
+    Every Devanagari string below is this session's own careful, correct
+    rendering of established Modern Standard Hindi, verified
+    character-by-character.
+
+    Central grammar decision #1: था (m.sg) / थी (f.sg), the past copula
+    ("was"), is introduced as a direct, disclosed extension of the
+    already-established present copula है/हूँ/हैं (unit01/10) -- same
+    gender-agreement logic already drilled via मेरा/मेरी (unit05) and
+    अच्छा/अच्छी (used incidentally since unit01, formally paired here).
+    Demonstrated with both established characters (अर्जुन व्यस्त था /
+    प्रिया व्यस्त थी) exactly as unit11 demonstrated हम via both leads.
+
+    Central grammar decision #2, a deliberate simplification, disclosed:
+    this unit teaches the simple past of exactly two INTRANSITIVE verbs
+    only -- जाना ("to go") -> गया(m.sg)/गई(f.sg), reusing the same root
+    already established via जाओ (तुम-imperative, unit09's "go!"), and
+    मिलना ("to meet") -> मिला(m.sg)/मिली(f.sg), reusing the same root
+    already established via मिलते हैं (habitual, unit01/04/10/11's
+    closings). Both verbs conjugate by subject-gender agreement alone, no
+    ने (ergative case marking). Deliberately, explicitly avoids ANY
+    transitive-verb past tense this unit (मैंने चाय पी, मैंने खाना खाया,
+    तुमने क्या किया) -- the ergative ने-construction genuinely required for
+    transitive-verb past tense in Hindi is a significantly bigger, A2-
+    appropriate grammar point, the same "avoid the harder construction,
+    reuse what's already taught" discipline unit11 applied to decline via
+    copula+dative-possession instead of a new "can" modal (सकना). Deferred
+    to a future unit, not built here.
+
+    Central grammar decision #3: मिलना's past tense pairs with "से"
+    (Arjun प्रिया से मिला, lit. "Arjun met WITH Priya") -- a genuine dual
+    usage of an already-taught word disclosed explicitly: से was
+    previously only ever taught/tested meaning "from" (unit01 "मैं भारत
+    से हूँ", unit09 "यहाँ से सीधे जाओ"); this unit is the first to use its
+    equally standard "with" sense in the फिक्स्ड collocation "X से मिलना"
+    (to meet WITH X). Both senses are genuine, common, standard Hindi --
+    not a course error -- and a dedicated grammar_note
+    (lesson02.teach.milna_se_grammar) states the distinction explicitly,
+    matching the precedent already set for को's and अच्छा/अच्छी's own
+    dual-use/paradigm notes in earlier units.
+
+    Central grammar decision #4, a minor lexical extension not a new
+    grammar point: कैसा (m.sg "how") is introduced to complete a paradigm
+    this course already has two-thirds of -- कैसे (used for आप/तुम "how
+    are you", unit01) and कैसी (used for आप fem "how are you", unit01)
+    were both already taught; कैसा simply fills the missing masculine-
+    singular slot (used for यह/वह/दिन-type subjects: "दिन कैसा था?"), the
+    exact same paradigm, not a new one. Formalized in lesson01's
+    teach.kaisa_kaisi_grammar card, which explicitly ties the three forms
+    together for the first time.
+
+    Central grammar decision #5, disclosed as a deliberate RECOGNITION-
+    ONLY scope decision at the grammar-paradigm level (an extension of
+    the course's usual exercise-level recognition->production pacing
+    rule, applied here to which VERB FORMS get actively drilled): तुम,
+    हम, and वे all take the exact same "plural-shaped" past-tense verb
+    ending already established for present tense (unit10/11's -ते + हैं/हो
+    pattern) -- थे, गए, मिले replace था/गया/मिला respectively regardless
+    of the addressee's/subject's actual number or gender, mirroring the
+    already-taught present-tense fact that तुम/हम/वे always pair with the
+    "plural-looking" verb form. This unit's dialogue (lesson03, line02)
+    uses exactly one instance of this ("हम मिले") and lesson03's
+    teach.mile_grammar card states the full rule (थे/गए/मिले, all three
+    named) so the learner isn't confused encountering गए/थे later, but ONLY
+    मिले is drilled in an actual exercise (lesson03.exercise03, recognition
+    multiple_choice) -- गए and थे appear nowhere in this file's exercises
+    at all, only in the grammar_note's own explanatory prose (which, per
+    the standing tokenizer-footgun rule, is exempt from the taught-token
+    check since grammar_note prose isn't `tested_text`). This keeps the
+    unit's PRODUCTION burden to exactly six drilled forms (था/थी, गया/गई,
+    मिला/मिली) while still giving genuine, honest exposure to the fuller,
+    grammatically complete paradigm -- a wider application of this
+    project's standing recognition-before-production discipline, not a
+    new exception to it.
+
+    Central grammar decision #6, a genuine dual usage disclosed: क्या,
+    previously taught/tested only as the yes/no question marker (unit01
+    "क्या यह तुम्हारी पहली बार है?", unit11 "क्या रविवार को ठीक है?"),
+    additionally means "what" as an interrogative pronoun -- both are
+    completely standard, unrelated-looking-but-actually-the-same-word uses
+    of क्या in real Hindi. Used with its "what" sense in lesson03's
+    dialogue line04 ("बाज़ार में क्या था?" -- "What was at the market?").
+    Not tested via any exercise's tested_text in this file (only appears
+    in dialogue target text, which the tokenizer validator doesn't check),
+    so no re-declaration footgun applies here, but flagged per the
+    standing "cross-check every fact/usage, not just tokens that are
+    mechanically enforced" discipline.
+
+    कल's already-disclosed dual meaning (unit04: "means both 'tomorrow'
+    and 'yesterday', disambiguated only by the verb's tense") is
+    deliberately exploited as a real teaching moment in this unit, its
+    first genuine PAST-tense use anywhere in the course: कल pairs with
+    था/गया/मिला-family past verbs throughout lessons 1-3 to mean
+    "yesterday", then lesson03's closing line08 ("कल फिर मिलते हैं?" --
+    "Shall we meet again tomorrow?") deliberately switches back to कल's
+    "tomorrow" sense, signaled unambiguously by मिलते हैं's present-
+    habitual (non-past) tense in exactly the same closing-line slot
+    unit01/04/10/11 have already used with this same meaning -- the
+    learner sees both senses of the same word disambiguated by tense
+    within one unit, not a new fact, but the first unit that can actually
+    demonstrate it in action.
+
+    Same-speaker-distractor check (the nl unit44-50 regression class):
+    performed explicitly. All three listen_select exercises (lesson01.
+    exercise04, lesson02.exercise04, lesson03.exercise07) are each a
+    single standalone, non-dialogue utterance with no other speaker/other
+    lines in the same clip -- the "distractor must not be something the
+    same speaker also says elsewhere in this audio" bug class structurally
+    cannot occur here, since there is no "elsewhere in this audio" for a
+    standalone phrase (same reasoning as unit09/10/11's own listen_select
+    exercises, now applied a fourth time). The two dialogue_comprehension
+    exercises in lesson03 (exercise01/02) are TEXT reading-comprehension
+    (the learner reads the actual dialogue line, no audio/`media_asset_key`
+    involved), matching unit08/09/10/11's own dialogue_comprehension
+    pattern -- each shown `target_blocks` line was deliberately chosen to
+    directly contain its own correct answer (exercise01 shows line02
+    "बहुत अच्छा था! हम मिले।" and asks how Priya's day was, answer directly
+    stated; exercise02 shows line03 "हाँ! मैं पहले बाज़ार भी गया।" and asks
+    where Arjun went first, answer directly stated) -- neither requires
+    inference across lines the learner isn't shown, and neither distractor
+    option (English gloss text on the overlay side: "Busy"/"Bad" for
+    exercise01, "The tea shop"/"Home" for exercise02) is itself a fact
+    stated anywhere in the shown line, so neither is a disguised second-
+    correct-answer.
+
+    Cross-check of every concrete fact stated across the whole unit
+    (AUTHORING_GUIDE §11), not just within the dialogue: lesson03's
+    dialogue establishes, in order: Priya's day was good and she and Arjun
+    met; Arjun also went to the market first, before meeting; the market
+    had good food; the tea shop (where they met) was also very good;
+    they agree to meet again tomorrow. No exercise anywhere in lesson01-03
+    states a conflicting account -- lesson01's generic examples (अर्जुन/
+    प्रिया व्यस्त था/थी, दिन अच्छा था, फ़िल्म अच्छी थी) and lesson02's
+    generic examples (अर्जुन बाज़ार गया, प्रिया घर गई, अर्जुन/प्रिया...से
+    मिला/मिली) are all either unattributed teaching-card illustrations or,
+    where attributed to a character, consistent with lesson03's own
+    dialogue-established facts (Arjun did go to the market; Arjun and
+    Priya did meet). Priya's closing written note (lesson03's reading card)
+    restates exactly the same facts the dialogue already established (the
+    day was good, the food was good, the tea shop was also good) with no
+    numeric or factual conflict. This unit deliberately makes NO reference
+    to unit11's own specific Sunday/4-o'clock tea-plan details (day-of-week,
+    exact time) -- the "yesterday" recounted here is a fresh, self-
+    contained account that a reader could plausibly read as the SAME
+    meetup unit11 planned, without requiring it (avoids any risk of a
+    stale/contradicting numeric callback while still preserving the
+    narrative spirit of "the plan from last unit happened").
+
+    Nasalization/spelling discipline, disclosed per unit07-11 precedent:
+    this unit introduces genuinely NO new nasalized vocabulary. था, थी,
+    गया, गई, मिला, मिली, कैसा, कैसी, का, खाना, दुकान, चाय, बाज़ार, घर,
+    वहाँ (reused, already anusvara/chandrabindu-settled from unit08-09) --
+    the only nasalized forms anywhere in this unit are हैं/हूँ (reused
+    unchanged from their already-settled spellings) and वहाँ (reused
+    unchanged from unit08/09's own chandrabindu spelling). No new
+    nasalization decision was needed. बाज़ार and फ़िल्म (reused from
+    unit07/11) both correctly keep their nuqta-marked ज़/फ़ (U+095B/
+    U+095E), matching this course's established loanword convention.
+
+    Untaught-vocabulary validator footgun (already documented by
+    unit07-11, re-confirmed live during this unit's authoring): every
+    word from an earlier unit reused here in a `tested_text` (कल, अच्छा,
+    अच्छी, फ़िल्म, व्यस्त, बाज़ार, घर, वहाँ, साथ, मैं, अर्जुन, प्रिया, से,
+    चाय, दुकान, खाना, दिन, है, हूँ, हैं) was re-added to this file's own
+    introduced_tokens at or before its first tested-text use, since
+    `validate_untaught_vocabulary`'s `taught` set is declared fresh per
+    realization FILE (confirmed correct this round: it is NOT reset
+    per-lesson within one file -- lesson01's introduced_tokens carry
+    forward and remain valid for lesson02/lesson03's own tested_text
+    within this same file, confirmed by direct reading of
+    `scripts/compile_content.py`'s `validate_untaught_vocabulary` before
+    relying on it). Two live catches while drafting: बहुत (already taught
+    unit06, reused only in dialogue/reading TEXT here, never in a
+    tested_text -- deliberately left OUT of introduced_tokens since it's
+    never actually tested in this file, confirmed by grep of every
+    tested_text/correct_response value before finalizing) and मिले
+    (lesson03's own new plural-agreeing form -- added to
+    teach.mile_grammar's introduced_tokens specifically because
+    lesson03.exercise03 tests it, unlike गए/थे which are never tested and
+    correctly left undeclared).
+
+    Word-order duplicate-token check (unit10/11's own standing
+    consideration, re-confirmed clean here): every `word_order`/
+    `listen_order` exercise in this unit uses a word_bank with zero
+    repeated tokens (checked by hand against each exercise's own
+    word_bank array below).
+
+course:
+  realization_key: hi.a1
+  target_language_first: true
+  dialect: hi_standard
+  register_policy: >-
+    Continues unit01-11's aap/tum split. This unit's dialogue (lesson03)
+    stays entirely in तुम between Priya and Arjun, matching every prior
+    unit's continuation of their established friendship -- no new
+    stranger character is introduced here.
+
+media_assets:
+  - {content_key: hi.a1.audio.past.kal_kaisa_tha.01, language: hi, text: "कल कैसा था?", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - {content_key: hi.a1.audio.past.arjun_bazaar_gaya.01, language: hi, text: "अर्जुन बाज़ार गया।", voice_hint: neutral_adult_clear, status: pending_generation}
+  - {content_key: hi.a1.audio.past.kal_din_achha_tha.01, language: hi, text: "कल का दिन अच्छा था।", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+
+units:
+  - content_key: hi.a1.unit12.past_events
+    title: "कल"
+    section: reading_writing
+    spine_outcome_ids:
+      - universal.a1.past_events.describe_recent_event
+    planned_lesson_count: 3
+
+    lessons:
+      - content_key: hi.a1.unit12.lesson01.tha_thi
+        title: "कल कैसा था?"
+        spine_outcome_id: universal.a1.past_events.describe_recent_event
+        teaching:
+          - content_key: hi.a1.unit12.lesson01.teach.vyast_review
+            kind: vocabulary
+            target: {text: "व्यस्त", language_code: hi, direction: ltr}
+            introduced_tokens: ["व्यस्त"]
+            example: {text: "अर्जुन व्यस्त है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit12.lesson01.teach.tha_thi
+            kind: vocabulary
+            target: {text: "था, थी", language_code: hi, direction: ltr}
+            introduced_tokens: ["था", "थी"]
+            example:
+              - {text: "अर्जुन कल व्यस्त था।", language_code: hi, direction: ltr}
+              - {text: "प्रिया कल व्यस्त थी।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit12.lesson01.teach.tha_thi_grammar
+            kind: grammar_note
+            target: {text: "'था' पुल्लिंग विषय के साथ आता है, 'थी' स्त्रीलिंग विषय के साथ -- ठीक उसी तरह जैसे 'है'/'हूँ' के साथ: अर्जुन व्यस्त था, प्रिया व्यस्त थी।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a1.unit12.lesson01.teach.kal_review
+            kind: vocabulary
+            target: {text: "कल", language_code: hi, direction: ltr}
+            introduced_tokens: ["कल"]
+            example: {text: "कल शनिवार था।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit12.lesson01.teach.kaisa
+            kind: vocabulary
+            target: {text: "कैसा", language_code: hi, direction: ltr}
+            introduced_tokens: ["कैसा"]
+            example: {text: "दिन कैसा था?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit12.lesson01.teach.kal_kaisa_tha_phrase
+            kind: phrase
+            target: {text: "कल कैसा था?", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a1.unit12.lesson01.teach.din_achha_tha_phrase
+            kind: phrase
+            target: {text: "दिन अच्छा था।", language_code: hi, direction: ltr}
+            introduced_tokens: ["दिन", "अच्छा"]
+          - content_key: hi.a1.unit12.lesson01.teach.filma_achi_thi
+            kind: phrase
+            target: {text: "फ़िल्म अच्छी थी।", language_code: hi, direction: ltr}
+            introduced_tokens: ["फ़िल्म", "अच्छी"]
+          - content_key: hi.a1.unit12.lesson01.teach.kaisa_kaisi_grammar
+            kind: grammar_note
+            target: {text: "'कैसा' पुल्लिंग एकवचन के साथ आता है (दिन कैसा था?), 'कैसी' स्त्रीलिंग के साथ (चाय कैसी थी?), और 'कैसे' आप/तुम से पूछने के लिए (आप कैसे हैं?) -- तीनों एक ही शब्द के रूप हैं।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+        exercises:
+          - content_key: hi.a1.unit12.lesson01.exercise01.select_vyast_meaning
+            type: multiple_choice
+            tested_text: "व्यस्त"
+            prompt:
+              target_blocks:
+                - {text: "व्यस्त", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit12.lesson01.exercise02.select_tha_meaning
+            type: multiple_choice
+            tested_text: "था"
+            prompt:
+              target_blocks:
+                - {text: "था", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit12.lesson01.exercise03.select_thi_meaning
+            type: multiple_choice
+            tested_text: "थी"
+            prompt:
+              target_blocks:
+                - {text: "थी", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit12.lesson01.exercise04.listen_kal_kaisa_tha
+            type: listen_select
+            tested_text: "कल कैसा था"
+            media_asset_key: hi.a1.audio.past.kal_kaisa_tha.01
+            prompt: {target_blocks: []}
+          - content_key: hi.a1.unit12.lesson01.exercise05.select_kaisa_meaning
+            type: multiple_choice
+            tested_text: "कैसा"
+            prompt:
+              target_blocks:
+                - {text: "कैसा", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit12.lesson01.exercise06.match_lesson01_words
+            type: matching_pairs
+            tested_text: "था थी कल कैसा दिन अच्छा अच्छी व्यस्त फ़िल्म"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "था", right: "was (masculine)"}
+              - {left: "थी", right: "was (feminine)"}
+              - {left: "कल", right: "yesterday"}
+              - {left: "कैसा", right: "how (masculine)"}
+              - {left: "दिन", right: "day"}
+              - {left: "अच्छा", right: "good (masculine)"}
+              - {left: "अच्छी", right: "good (feminine)"}
+              - {left: "व्यस्त", right: "busy"}
+              - {left: "फ़िल्म", right: "movie"}
+          - content_key: hi.a1.unit12.lesson01.exercise07.order_kal_kaisa_tha
+            type: word_order
+            tested_text: "कल कैसा था"
+            prompt: {target_blocks: []}
+            word_bank: ["कल", "कैसा", "था"]
+          - content_key: hi.a1.unit12.lesson01.exercise08.order_din_achha_tha
+            type: word_order
+            tested_text: "दिन अच्छा था"
+            prompt: {target_blocks: []}
+            word_bank: ["दिन", "अच्छा", "था"]
+          - content_key: hi.a1.unit12.lesson01.exercise09.order_filma_achi_thi
+            type: word_order
+            tested_text: "फ़िल्म अच्छी थी"
+            prompt: {target_blocks: []}
+            word_bank: ["फ़िल्म", "अच्छी", "थी"]
+          - content_key: hi.a1.unit12.lesson01.exercise10.fill_arjun_vyast_tha
+            type: fill_in_blank
+            tested_text: "था"
+            prompt:
+              target_blocks:
+                - {text: "अर्जुन कल व्यस्त ___।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit12.lesson01.exercise11.fill_priya_vyast_thi
+            type: fill_in_blank
+            tested_text: "थी"
+            prompt:
+              target_blocks:
+                - {text: "प्रिया कल व्यस्त ___।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit12.lesson01.exercise12.reply_kal_kaisa_tha
+            type: dialogue_response
+            tested_text: "दिन अच्छा था"
+            prompt:
+              target_blocks:
+                - {text: "कल कैसा था?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit12.lesson01.exercise13.speak_din_achha_tha
+            type: speak_response
+            tested_text: "दिन अच्छा था"
+            prompt:
+              target_blocks:
+                - {text: "बोलो: दिन कैसा था?", language_code: hi, direction: ltr}
+
+      - content_key: hi.a1.unit12.lesson02.gaya_gai_mila_mili
+        title: "मैं बाज़ार गया"
+        spine_outcome_id: universal.a1.past_events.describe_recent_event
+        teaching:
+          - content_key: hi.a1.unit12.lesson02.teach.names_mai_review
+            kind: vocabulary
+            target: {text: "मैं, अर्जुन, प्रिया", language_code: hi, direction: ltr}
+            introduced_tokens: ["मैं", "अर्जुन", "प्रिया"]
+            example:
+              - {text: "मैं अर्जुन हूँ।", language_code: hi, direction: ltr}
+              - {text: "मैं प्रिया हूँ।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit12.lesson02.teach.jaana_gaya_gai
+            kind: vocabulary
+            target: {text: "गया, गई", language_code: hi, direction: ltr}
+            introduced_tokens: ["गया", "गई"]
+            example:
+              - {text: "अर्जुन बाज़ार गया।", language_code: hi, direction: ltr}
+              - {text: "प्रिया घर गई।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit12.lesson02.teach.jaana_grammar
+            kind: grammar_note
+            target: {text: "'गया'/'गई' 'जाना' (जाओ, यूनिट 9) का भूतकाल है, कर्ता के लिंग के अनुसार बदलता है -- 'था'/'थी' की तरह।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a1.unit12.lesson02.teach.bazaar_ghar_review
+            kind: vocabulary
+            target: {text: "बाज़ार, घर", language_code: hi, direction: ltr}
+            introduced_tokens: ["बाज़ार", "घर"]
+            example:
+              - {text: "यह बाज़ार है।", language_code: hi, direction: ltr}
+              - {text: "यह घर है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit12.lesson02.teach.milna_mila_mili
+            kind: vocabulary
+            target: {text: "मिला, मिली", language_code: hi, direction: ltr}
+            introduced_tokens: ["मिला", "मिली", "से"]
+            example:
+              - {text: "अर्जुन प्रिया से मिला।", language_code: hi, direction: ltr}
+              - {text: "प्रिया अर्जुन से मिली।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit12.lesson02.teach.milna_se_grammar
+            kind: grammar_note
+            target: {text: "'से' का मतलब यहाँ 'from' नहीं, 'with' है -- 'X से मिलना' का मतलब है 'X से मिलना/मुलाक़ात करना', ठीक वैसे ही जैसे 'मैं भारत से हूँ' में 'से' का मतलब 'from' था।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a1.unit12.lesson02.teach.wahan_review
+            kind: vocabulary
+            target: {text: "वहाँ", language_code: hi, direction: ltr}
+            introduced_tokens: ["वहाँ"]
+            example: {text: "स्कूल वहाँ है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit12.lesson02.teach.kal_bazaar_gaya_phrase
+            kind: phrase
+            target: {text: "मैं कल बाज़ार गया।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a1.unit12.lesson02.teach.wahan_priya_se_mila_phrase
+            kind: phrase
+            target: {text: "मैं वहाँ प्रिया से मिला।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a1.unit12.lesson02.teach.saath_review
+            kind: vocabulary
+            target: {text: "साथ", language_code: hi, direction: ltr}
+            introduced_tokens: ["साथ"]
+            example: {text: "हम साथ चाय पीते हैं।", language_code: hi, direction: ltr}
+        exercises:
+          - content_key: hi.a1.unit12.lesson02.exercise01.select_gaya_meaning
+            type: multiple_choice
+            tested_text: "गया"
+            prompt:
+              target_blocks:
+                - {text: "गया", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit12.lesson02.exercise02.select_gai_meaning
+            type: multiple_choice
+            tested_text: "गई"
+            prompt:
+              target_blocks:
+                - {text: "गई", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit12.lesson02.exercise03.select_mila_meaning
+            type: multiple_choice
+            tested_text: "मिला"
+            prompt:
+              target_blocks:
+                - {text: "मिला", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit12.lesson02.exercise04.listen_arjun_bazaar_gaya
+            type: listen_select
+            tested_text: "अर्जुन बाज़ार गया"
+            media_asset_key: hi.a1.audio.past.arjun_bazaar_gaya.01
+            prompt: {target_blocks: []}
+          - content_key: hi.a1.unit12.lesson02.exercise05.select_mili_meaning
+            type: multiple_choice
+            tested_text: "मिली"
+            prompt:
+              target_blocks:
+                - {text: "मिली", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit12.lesson02.exercise06.match_lesson02_words
+            type: matching_pairs
+            tested_text: "गया गई मिला मिली बाज़ार घर वहाँ साथ"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "गया", right: "went (masculine)"}
+              - {left: "गई", right: "went (feminine)"}
+              - {left: "मिला", right: "met (masculine)"}
+              - {left: "मिली", right: "met (feminine)"}
+              - {left: "बाज़ार", right: "market"}
+              - {left: "घर", right: "home"}
+              - {left: "वहाँ", right: "there"}
+              - {left: "साथ", right: "together"}
+          - content_key: hi.a1.unit12.lesson02.exercise07.order_arjun_bazaar_gaya
+            type: word_order
+            tested_text: "अर्जुन बाज़ार गया"
+            prompt: {target_blocks: []}
+            word_bank: ["अर्जुन", "बाज़ार", "गया"]
+          - content_key: hi.a1.unit12.lesson02.exercise08.order_priya_ghar_gai
+            type: word_order
+            tested_text: "प्रिया घर गई"
+            prompt: {target_blocks: []}
+            word_bank: ["प्रिया", "घर", "गई"]
+          - content_key: hi.a1.unit12.lesson02.exercise09.order_arjun_priya_se_mila
+            type: word_order
+            tested_text: "अर्जुन प्रिया से मिला"
+            prompt: {target_blocks: []}
+            word_bank: ["अर्जुन", "प्रिया", "से", "मिला"]
+          - content_key: hi.a1.unit12.lesson02.exercise10.fill_main_bazaar_gaya
+            type: fill_in_blank
+            tested_text: "गया"
+            prompt:
+              target_blocks:
+                - {text: "मैं कल बाज़ार ___।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit12.lesson02.exercise11.fill_main_priya_se_mila
+            type: fill_in_blank
+            tested_text: "मिला"
+            prompt:
+              target_blocks:
+                - {text: "मैं वहाँ प्रिया से ___।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit12.lesson02.exercise12.reply_kal_kaisa_tha
+            type: dialogue_response
+            tested_text: "मैं बाज़ार गया"
+            prompt:
+              target_blocks:
+                - {text: "कल कैसा था?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit12.lesson02.exercise13.speak_wahan_priya_se_mila
+            type: speak_response
+            tested_text: "मैं वहाँ प्रिया से मिला"
+            prompt:
+              target_blocks:
+                - {text: "बोलो: 'मैं वहाँ प्रिया से मिला।'", language_code: hi, direction: ltr}
+
+      - content_key: hi.a1.unit12.lesson03.arjun_priya_kal
+        title: "अर्जुन और प्रिया: कल"
+        spine_outcome_id: universal.a1.past_events.describe_recent_event
+        teaching:
+          - content_key: hi.a1.unit12.lesson03.teach.chai_dukaan_khana_review
+            kind: vocabulary
+            target: {text: "चाय, दुकान, खाना", language_code: hi, direction: ltr}
+            introduced_tokens: ["चाय", "दुकान", "खाना"]
+            example:
+              - {text: "चाय अच्छी है।", language_code: hi, direction: ltr}
+              - {text: "दुकान अच्छी है।", language_code: hi, direction: ltr}
+              - {text: "खाना अच्छा है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit12.lesson03.teach.ka_kaisi_review
+            kind: vocabulary
+            target: {text: "का, कैसी", language_code: hi, direction: ltr}
+            introduced_tokens: ["का", "कैसी"]
+            example:
+              - {text: "कल का दिन अच्छा था।", language_code: hi, direction: ltr}
+              - {text: "चाय की दुकान कैसी थी?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit12.lesson03.teach.dialogue.line01
+            kind: dialogue
+            target:
+              text: "प्रिया, कल का दिन कैसा था?"
+              language_code: hi
+              direction: ltr
+              speaker: Arjun
+            introduced_tokens: []
+          - content_key: hi.a1.unit12.lesson03.teach.dialogue.line02
+            kind: dialogue
+            target:
+              text: "बहुत अच्छा था! हम मिले।"
+              language_code: hi
+              direction: ltr
+              speaker: Priya
+            introduced_tokens: []
+          - content_key: hi.a1.unit12.lesson03.teach.dialogue.line03
+            kind: dialogue
+            target:
+              text: "हाँ! मैं पहले बाज़ार भी गया।"
+              language_code: hi
+              direction: ltr
+              speaker: Arjun
+            introduced_tokens: []
+          - content_key: hi.a1.unit12.lesson03.teach.dialogue.line04
+            kind: dialogue
+            target:
+              text: "अच्छा! बाज़ार में क्या था?"
+              language_code: hi
+              direction: ltr
+              speaker: Priya
+            introduced_tokens: []
+          - content_key: hi.a1.unit12.lesson03.teach.dialogue.line05
+            kind: dialogue
+            target:
+              text: "खाना अच्छा था।"
+              language_code: hi
+              direction: ltr
+              speaker: Arjun
+            introduced_tokens: []
+          - content_key: hi.a1.unit12.lesson03.teach.dialogue.line06
+            kind: dialogue
+            target:
+              text: "अच्छा! और चाय की दुकान कैसी थी?"
+              language_code: hi
+              direction: ltr
+              speaker: Priya
+            introduced_tokens: []
+          - content_key: hi.a1.unit12.lesson03.teach.dialogue.line07
+            kind: dialogue
+            target:
+              text: "चाय की दुकान बहुत अच्छी थी।"
+              language_code: hi
+              direction: ltr
+              speaker: Arjun
+            introduced_tokens: []
+          - content_key: hi.a1.unit12.lesson03.teach.dialogue.line08
+            kind: dialogue
+            target:
+              text: "अच्छा! फिर, कल फिर मिलते हैं?"
+              language_code: hi
+              direction: ltr
+              speaker: Priya
+            introduced_tokens: []
+          - content_key: hi.a1.unit12.lesson03.teach.mile_grammar
+            kind: grammar_note
+            target: {text: "'तुम', 'हम' और 'वे' के साथ भूतकाल में भी वही रूप आता है जो वर्तमान काल में '-ते' के साथ आता है: थे (था की जगह), गए (गया की जगह), मिले (मिला की जगह) -- जैसे 'हम मिलते हैं' की तरह 'हम मिले'।", language_code: hi, direction: ltr}
+            introduced_tokens: ["मिले"]
+          - content_key: hi.a1.unit12.lesson03.teach.priya_note
+            kind: reading
+            target: {text: "अर्जुन, कल का दिन बहुत अच्छा था। खाना अच्छा था और चाय की दुकान भी अच्छी थी। - प्रिया", language_code: hi, direction: ltr}
+            introduced_tokens: []
+        exercises:
+          - content_key: hi.a1.unit12.lesson03.exercise01.comprehend_priya_din
+            type: dialogue_comprehension
+            tested_text: "अच्छा"
+            prompt:
+              target_blocks:
+                - {text: "बहुत अच्छा था! हम मिले।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit12.lesson03.exercise02.comprehend_arjun_bazaar
+            type: dialogue_comprehension
+            tested_text: "बाज़ार"
+            prompt:
+              target_blocks:
+                - {text: "हाँ! मैं पहले बाज़ार भी गया।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit12.lesson03.exercise03.select_mile_meaning
+            type: multiple_choice
+            tested_text: "मिले"
+            prompt:
+              target_blocks:
+                - {text: "हम मिले।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit12.lesson03.exercise04.read_note_din
+            type: reading_comprehension
+            tested_text: "अच्छा"
+            prompt:
+              target_blocks:
+                - {text: "अर्जुन, कल का दिन बहुत अच्छा था। खाना अच्छा था और चाय की दुकान भी अच्छी थी। - प्रिया", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit12.lesson03.exercise05.read_note_khana
+            type: reading_comprehension
+            tested_text: "अच्छा"
+            prompt:
+              target_blocks:
+                - {text: "अर्जुन, कल का दिन बहुत अच्छा था। खाना अच्छा था और चाय की दुकान भी अच्छी थी। - प्रिया", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit12.lesson03.exercise06.read_note_dukaan
+            type: reading_comprehension
+            tested_text: "अच्छी"
+            prompt:
+              target_blocks:
+                - {text: "अर्जुन, कल का दिन बहुत अच्छा था। खाना अच्छा था और चाय की दुकान भी अच्छी थी। - प्रिया", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit12.lesson03.exercise07.listen_kal_din_achha_tha
+            type: listen_select
+            tested_text: "कल का दिन अच्छा था"
+            media_asset_key: hi.a1.audio.past.kal_din_achha_tha.01
+            prompt: {target_blocks: []}
+          - content_key: hi.a1.unit12.lesson03.exercise08.match_lesson03_review
+            type: matching_pairs
+            tested_text: "गया गई मिला मिली था थी कैसा बाज़ार घर दुकान चाय खाना"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "गया", right: "went (masculine)"}
+              - {left: "गई", right: "went (feminine)"}
+              - {left: "मिला", right: "met (masculine)"}
+              - {left: "मिली", right: "met (feminine)"}
+              - {left: "था", right: "was (masculine)"}
+              - {left: "थी", right: "was (feminine)"}
+              - {left: "कैसा", right: "how (masculine)"}
+              - {left: "बाज़ार", right: "market"}
+              - {left: "घर", right: "home"}
+              - {left: "दुकान", right: "shop"}
+              - {left: "चाय", right: "tea"}
+              - {left: "खाना", right: "food"}
+          - content_key: hi.a1.unit12.lesson03.exercise09.order_khana_achha_tha
+            type: word_order
+            tested_text: "खाना अच्छा था"
+            prompt: {target_blocks: []}
+            word_bank: ["खाना", "अच्छा", "था"]
+          - content_key: hi.a1.unit12.lesson03.exercise10.fill_chai_dukaan_kaisi
+            type: fill_in_blank
+            tested_text: "कैसी"
+            prompt:
+              target_blocks:
+                - {text: "और चाय की दुकान ___ थी?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit12.lesson03.exercise11.fix_din_tha_not_thi
+            type: grammar_check
+            tested_text: "दिन अच्छा था"
+            prompt:
+              target_blocks:
+                - {text: "दिन अच्छी थी।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit12.lesson03.exercise12.reply_bazaar_kya_tha
+            type: dialogue_response
+            tested_text: "खाना अच्छा था"
+            prompt:
+              target_blocks:
+                - {text: "बाज़ार में क्या था?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit12.lesson03.exercise13.write_own_yesterday
+            type: writing_prompt
+            tested_text: "मैं बाज़ार गया"
+            prompt:
+              target_blocks:
+                - {text: "लिखो: कल तुम कहाँ गए, और वह दिन कैसा था?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit12.lesson03.exercise14.speak_din_kaisa_tha
+            type: speak_response
+            tested_text: "दिन अच्छा था"
+            prompt:
+              target_blocks:
+                - {text: "बोलो: तुम्हारा कल का दिन कैसा था?", language_code: hi, direction: ltr}
