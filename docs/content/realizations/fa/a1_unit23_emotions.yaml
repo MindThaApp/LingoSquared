@@ -8,22 +8,48 @@ generation_provenance:
   source_material: "FSI Persian Basic Course (public domain), scope/register adapted; attempted real lesson text again this pass (livelingua.com/fsi index page, confirmed the Persian/Farsi course entry exists at livelingua.com/project/fsi/persian/farsi) but the page returned only a course directory/update log, no fetchable lesson-by-lesson text or vocabulary lists -- authored using this project's own established fa register/character conventions instead, per docs/content/AUTHORING_GUIDE.md's modernization standard, same honest-disclosure pattern as fa unit21/unit22."
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: codex_fresh_context
+  status: reviewed
+  required_next_reviewer: null
   notes: >-
-    Draft authored 2026-07-08 by a Sonnet 5 fork. Realizes
+    2026-07-10 fresh-context review (Claude, zero access to the original
+    authoring reasoning) found and fixed TWO real issues, both in
+    lesson06.exercise01.dialogue_comprehension_context: (1) an English
+    correct_option/distractors block had been duplicated directly into
+    this fa (target-language) realization file, identical to what the
+    overlay already carried -- confirmed via scripts/compile_content.py
+    (the compiled-exercise builder only ever reads correct_option/
+    distractors from exercise_overlay, never from the realization exercise
+    dict) that this was pure dead English-language data sitting in a file
+    that should be Farsi-only; removed it. (2) media_assets already
+    declared a real dialogue audio asset
+    (fa.a1.audio.emotions.dialogue.01) but no exercise ever referenced it
+    via media_asset_key, unlike unit21/unit22's own established pattern of
+    wiring their dialogue's media_asset_key onto the matching
+    dialogue_comprehension exercise -- fixed by adding
+    media_asset_key: fa.a1.audio.emotions.dialogue.01 to that exercise, so
+    the asset will actually play once recorded/synthesized instead of
+    staying permanently orphaned. Everything else checked clean: no
+    same-speaker listen_select/dialogue_response distractor collisions
+    (compiler's validate_same_speaker_dialogue_distractors passed with 0
+    errors); no stray unquoted YAML booleans; every exercise type used is
+    registered in ExerciseRenderer.tsx; matching_pairs/word_order answer
+    shapes correct; no jargon leaks; Sara/Nima's stated feelings and
+    reasons (tired because she worked a lot; happy because it's a holiday)
+    are mutually consistent across the lesson04 vocabulary, lesson05
+    reading passage, and lesson06 dialogue; Farsi register and script read
+    correctly throughout. Re-validated clean standalone and as part of the
+    full fa units 21-26 batch: 0 errors/0 warnings.
+
+    Original draft note (2026-07-08, Sonnet 5 fork): realizes
     universal.a1.emotions.express_basic_feelings (prerequisite:
     universal.a1.preferences.express_preferences, covered by unit14).
     Scoped to: basic feeling vocabulary, asking about someone's state
     (reusing unit01's already-taught حالتون چطوره/چطوری/خوبم rather than
     re-teaching), negating a feeling, giving a simple cause with چون
     (already taught unit14), reading a short feelings passage, and a
-    closing نیما/سارا dialogue (reusing the established cast from
-    unit14 rather than introducing new characters, since this is a
-    personal check-in exchange). Matches the spine outcome's 4
-    assessment_requirements exactly. Not self-certified -- needs the
-    mandatory fresh-context review before shipping, same as every
-    other Claude-authored fa unit.
+    closing نیما/سارا dialogue (reusing the established cast from unit14
+    rather than introducing new characters, since this is a personal
+    check-in exchange).
 
 course:
   realization_key: fa.a1
@@ -317,12 +343,8 @@ units:
           - content_key: fa.a1.unit23.lesson06.exercise01.dialogue_comprehension_context
             type: dialogue_comprehension
             tested_text: "سارا چطوری امروز یکم خسته‌ام چون زیاد کار کردم تو چطوری من خوشحالم چون امروز تعطیله چه خوب"
+            media_asset_key: fa.a1.audio.emotions.dialogue.01
             prompt: {target_blocks: [{text: "سارا، چطوری؟ امروز یکم خسته‌ام چون زیاد کار کردم. تو چطوری؟ من خوشحالم چون امروز تعطیله. چه خوب!", language_code: fa, direction: rtl}]}
-            correct_option: "Nima is happy because today is a holiday; Sara is a little tired because she worked a lot."
-            distractors:
-              - "Nima is tired because he worked a lot; Sara is happy because today is a holiday."
-              - "Both Nima and Sara are angry about work today."
-              - "Sara is worried about Nima being tired."
           - content_key: fa.a1.unit23.lesson06.exercise02.match_dialogue_facts
             type: matching_pairs
             tested_text: "نیما سارا خوشحال خسته تعطیله کار کردم"

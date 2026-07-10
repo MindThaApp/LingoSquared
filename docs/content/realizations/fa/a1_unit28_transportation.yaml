@@ -40,9 +40,30 @@ generation_provenance:
     rather than re-teaching those words from scratch.
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: codex_fresh_context
+  status: reviewed
+  required_next_reviewer: null
   notes: >-
+    2026-07-10 fresh-context review (Claude) found this unit clean: 0
+    compiler errors/warnings (validated together with units 27/29-32 and
+    their overlays), 0 stray YAML boolean coercions (recursive
+    yaml.safe_load type scan), no listen_select/listen_type/listen_order
+    exercises (none authored here, consistent with the unit's own
+    provenance note), and the one dialogue_response exercise is
+    free-text (no distractors, so the same-speaker-distractor bug class
+    doesn't apply). Explicitly checked the paired overlay's own claim
+    that unit29 flagged a missing answer_language_code on this unit's
+    "Translate into English" exercises -- re-verified directly via a
+    parsed-YAML walk and found all 3 such exercises already correctly
+    set answer_language_code: en, so no fix was actually needed there
+    (the flag in unit29's notes appears to have been already resolved
+    by the time of this review, or based on a stale read). Cross-checked
+    every stated fact (who commutes how, which vehicle is recommended
+    and why, the bus ticket price/frequency) against every other
+    exercise/reading/dialogue touching the same facts -- all mutually
+    consistent. All exercise types used have a matching
+    ExerciseRenderer.tsx case. No real bugs found requiring a fix.
+    Original authoring notes below, retained for context.
+
     Draft authored 2026-07-09 by a Sonnet 5 worker task. Realizes
     universal.a1.transportation.getting_around_town (prerequisite:
     universal.a1.directions.ask_follow_basic_directions, covered by

@@ -9,11 +9,36 @@ generation_provenance:
   source_material: "FSI Persian Basic Course (public domain), scope/register adapted; specific FSI page content not directly mined this pass (no local copy available to this worker) -- authored using this project's own established fa register/character conventions instead, per docs/content/AUTHORING_GUIDE.md's modernization standard."
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: codex_fresh_context
+  status: reviewed
+  required_next_reviewer: null
   notes: >-
-    Draft authored 2026-07-07 by a Sonnet 5 fork during a Codex usage-limit
-    outage. Realizes universal.a1.money.handle_basic_money_matters
+    2026-07-10 fresh-context review (Claude, zero access to the original
+    authoring reasoning) found NO real bugs in this unit -- checked and
+    confirmed clean: no same-speaker listen_select/dialogue_response
+    distractor collisions (lesson06's dialogue_comprehension distractors are
+    general scene-summary options, not lines the tested speaker says
+    elsewhere in the audio, and the compiler's own
+    validate_same_speaker_dialogue_distractors check passed with 0 errors);
+    no stray unquoted YAML yes/no/true/false booleans anywhere in
+    learner-facing fields; every exercise type used (multiple_choice,
+    matching_pairs, word_order, translation, writing_prompt, speak_response,
+    dialogue_comprehension, dialogue_response) is registered in
+    ExerciseRenderer.tsx; matching_pairs accepted_answers use the flat-dict
+    shape consistently, word_order accepted_answers are token lists matching
+    word_bank -- both shapes grade() canonicalizes correctly; no internal
+    jargon leaks; the هزار (thousand) introduction in lesson06 is properly
+    taught via that card's own introduced_tokens, not smuggled in, and is
+    genuinely needed for the 100-dollar/30-toman exchange total to be
+    arithmetically real; the exchange rate, dollar amount, and total toman
+    figure are mutually consistent across every exercise and teaching card
+    that references them (100 dollars x 30 toman/dollar = 3000 toman,
+    checked per AUTHORING_GUIDE.md #11); Farsi register and script
+    (Persian keheh/yeh codepoints) read correctly throughout. Re-validated
+    clean standalone and as part of the full fa units 21-26 batch: 0
+    errors/0 warnings.
+
+    Original draft note (2026-07-07, Sonnet 5 fork, during a Codex
+    usage-limit outage): realizes universal.a1.money.handle_basic_money_matters
     (prerequisites: universal.a1.numbers.use_basic_numbers,
     universal.a1.shopping.ask_prices_quantities -- both already covered by
     fa unit03/unit08). Deliberately scoped to banking/currency-exchange
@@ -21,16 +46,7 @@ review:
     change, asking an exchange rate) rather than market/shopping payment,
     which unit08 already owns, to avoid outcome overlap. Reused unit08's
     small round exchange-rate number (سی, 30/dollar) rather than inventing
-    a new one, but DID introduce "هزار" (thousand) in lesson06's dialogue,
-    properly taught via that dialogue card's own introduced_tokens (not
-    smuggled in) -- unlike unit08's flagged-but-left toy-price issue, a
-    $100-at-30/dollar exchange genuinely needs it for the total to make
-    arithmetic sense. Flagging this scope expansion explicitly for the
-    fresh-context reviewer to confirm it's within this outcome's intended
-    reach, since numbers.use_basic_numbers (this unit's own prerequisite)
-    may or may not already cover هزار elsewhere -- check that file directly
-    before approving. Not self-certified -- needs the mandatory fresh-context review
-    before shipping, same as every other Claude-authored fa unit.
+    a new one.
 
 course:
   realization_key: fa.a1

@@ -34,10 +34,38 @@ generation_provenance:
     modernization standard.
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: codex_fresh_context
+  status: reviewed
+  required_next_reviewer: null
   notes: >-
-    Draft authored 2026-07-09 by a Sonnet 5 fork. Realizes
+    2026-07-10 fresh-context review (Claude, zero access to the original
+    authoring reasoning) found and fixed TWO real issues, both in
+    lesson06.exercise01.dialogue_comprehension_context, same bug class as
+    fa unit23/unit24/unit25's own fresh-context reviews: (1) an English
+    correct_option/distractors block had been duplicated directly into
+    this fa (target-language) realization file, identical to what the
+    overlay already carried -- confirmed via scripts/compile_content.py
+    that the compiled-exercise builder only ever reads correct_option/
+    distractors from exercise_overlay, so this was pure dead English data
+    in a file that should be Farsi-only; removed it. (2) media_assets
+    already declared a real dialogue audio asset
+    (fa.a1.audio.dialogue.animals.01) but no exercise ever referenced it
+    via media_asset_key, unlike unit21/unit22's own established wiring
+    pattern -- fixed by adding
+    media_asset_key: fa.a1.audio.dialogue.animals.01 to that exercise, so
+    the asset will actually play once recorded/synthesized. Everything
+    else checked clean: no same-speaker distractor collisions (compiler's
+    validate_same_speaker_dialogue_distractors passed with 0 errors); no
+    stray unquoted YAML booleans; every exercise type used is registered
+    in ExerciseRenderer.tsx; matching_pairs/word_order answer shapes
+    correct; no jargon leaks; Pashmak's stated color/size (white, small)
+    is mutually consistent across the lesson04 vocabulary, the lesson05
+    reading passage, and the lesson06 dialogue and exercises; Farsi
+    register and script read correctly throughout, including پشمک as an
+    authentic (not transliterated) Iranian pet name. Re-validated clean
+    standalone and as part of the full fa units 21-26 batch: 0 errors/0
+    warnings.
+
+    Original draft note (2026-07-09, Sonnet 5 fork): realizes
     universal.a1.animals.describe_pets_animals (prerequisite:
     universal.a1.preferences.express_preferences, covered by unit14 --
     reuses its established دوست دارم/دارم/داره patterns rather than
@@ -499,12 +527,8 @@ units:
           - content_key: fa.a1.unit26.lesson06.exercise01.dialogue_comprehension_context
             type: dialogue_comprehension
             tested_text: "این گربه‌ی کیه گربه‌ی منه اسمش پشمکه چه رنگیه سفیده و کوچیکه خیلی خوشگله ممنون"
+            media_asset_key: fa.a1.audio.dialogue.animals.01
             prompt: {target_blocks: [{text: "نیما: این گربه‌ی کیه؟ سارا: گربه‌ی منه. اسمش پشمکه. نیما: چه رنگیه؟ سارا: سفیده و کوچیکه. نیما: خیلی خوشگله! سارا: ممنون!", language_code: fa, direction: rtl}]}
-            correct_option: "Sara's cat Pashmak is white, small, and cute."
-            distractors:
-              - "Sara's cat is black and big."
-              - "Nima already has a cat named Pashmak."
-              - "Sara doesn't have any pets."
           - content_key: fa.a1.unit26.lesson06.exercise02.match_dialogue_vocab
             type: matching_pairs
             tested_text: "سگ گربه پرنده ماهی سفید کوچیک بزرگ خوشگل"

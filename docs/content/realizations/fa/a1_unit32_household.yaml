@@ -23,9 +23,48 @@ generation_provenance:
     sentence is imported verbatim.
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: codex_fresh_context
+  status: reviewed
+  required_next_reviewer: null
   notes: >-
+    2026-07-10 fresh-context review (Claude) found and fixed ONE real
+    bug: lesson04.exercise01.dialogue_comprehension_context's `prompt`
+    did not match the actual dialogue transcript and used vocabulary/
+    grammar the learner hasn't been taught yet at this point in the
+    unit. Every other dialogue_comprehension exercise in this unit
+    (and across every other unit in this review batch, 27/28/29/30/31)
+    shows the learner the literal, verbatim multi-speaker dialogue
+    transcript (with نیما:/سارا: speaker labels) as its `prompt` --
+    unit32's own lesson04 exercise instead showed a rewritten
+    third-person paraphrase ("سارا می‌گوید خانه امروز خیلی شلوغه. نیما
+    ظرف‌ها رو می‌شوره. سارا اتاق رو تمیز می‌کنه. بعد نیما لباس‌ها رو
+    می‌شوره.") that (a) used می‌گوید, a word never taught anywhere in
+    this unit at all, and (b) used the 3rd-person colloquial forms
+    می‌شوره/می‌کنه, which aren't introduced until lesson05's own
+    review_third_person grammar note -- one full lesson AFTER this
+    exercise. Since exercise prompts aren't compiler-validated against
+    introduced_tokens (only tested_text is, confirmed against
+    scripts/compile_content.py), this passed validation clean but would
+    have shown a real learner unreviewed vocabulary/grammar mid-exercise,
+    exactly the failure mode AUTHORING_GUIDE.md's instruction-coherence
+    and lesson-pacing rules exist to prevent. Fixed by replacing the
+    prompt with the actual verbatim dialogue transcript (matching the
+    media_assets audio text and every other unit's established
+    convention): "سارا: نیما، امروز خانه خیلی شلوغه. نیما: آره، من
+    ظرف‌ها رو می‌شورم. سارا: من اتاق رو تمیز می‌کنم. بعد کمک می‌کنی؟
+    نیما: حتماً. بعد لباس‌ها رو می‌شورم. سارا: عالیه، ممنون!" -- every
+    word in this transcript is already-taught 1st/2nd-person vocabulary
+    from this unit's own lessons 01-04. Also fixed the paired overlay's
+    feedback text for the same exercise, which likewise used the
+    untaught می‌شوره form -- replaced with a feedback string quoting the
+    dialogue's actual taught lines. Re-ran the compiler after both fixes
+    (0 errors/0 warnings). Also confirmed 0 stray YAML boolean
+    coercions, no listen_select/listen_type/listen_order exercises, both
+    dialogue_response exercises free-text (no distractors), all exercise
+    types used have a matching ExerciseRenderer.tsx case, and every
+    other stated fact (who does which chore) is mutually consistent
+    across the dialogue, reading, and exercises. Original authoring
+    notes below, retained for context.
+
     Draft authored 2026-07-09 by Codex. Realizes
     universal.a1.household.describe_chores, the next unrealized A1 outcome
     after unit31. Confirmed by yaml.safe_load recursive collection of every
@@ -298,7 +337,7 @@ units:
           - content_key: fa.a1.unit32.lesson04.exercise01.dialogue_comprehension_context
             type: dialogue_comprehension
             tested_text: "نیما امروز خانه خیلی شلوغه آره من ظرف‌ها رو می‌شورم من اتاق رو تمیز می‌کنم بعد کمک می‌کنی حتماً بعد لباس‌ها رو می‌شورم عالیه ممنون"
-            prompt: {target_blocks: [{text: "سارا می‌گوید خانه امروز خیلی شلوغه. نیما ظرف‌ها رو می‌شوره. سارا اتاق رو تمیز می‌کنه. بعد نیما لباس‌ها رو می‌شوره.", language_code: fa, direction: rtl}]}
+            prompt: {target_blocks: [{text: "سارا: نیما، امروز خانه خیلی شلوغه. نیما: آره، من ظرف‌ها رو می‌شورم. سارا: من اتاق رو تمیز می‌کنم. بعد کمک می‌کنی؟ نیما: حتماً. بعد لباس‌ها رو می‌شورم. سارا: عالیه، ممنون!", language_code: fa, direction: rtl}]}
             correct_option: "Nima washes the dishes and later does the laundry; Sara cleans the room."
             distractors:
               - "Sara does all the chores alone."
