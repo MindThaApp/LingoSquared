@@ -1,0 +1,37 @@
+{
+  "compilerOptions": {
+    "target": "es2023",
+    /* DOM is here for fetch/Headers/RequestInit/URLSearchParams (api/
+       client.ts, api/endpoints.ts) -- both today's consumer (web,
+       genuinely has DOM) and the future React Native consumer (no DOM,
+       but polyfills these exact globals itself) provide them at runtime.
+       This lib list is only for this package's own standalone typecheck
+       convenience; it doesn't affect how a consuming app's own tsconfig
+       (e.g. frontend/tsconfig.app.json) type-checks these files once
+       imported -- that always uses the consumer's own lib set. */
+    "lib": ["ES2023", "DOM"],
+    "module": "esnext",
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+
+    /* Bundler mode -- mirrors frontend/tsconfig.app.json. No emit: this
+       package ships raw TypeScript source (see package.json's exports
+       map/comment); each consumer's own bundler (Vite for web today,
+       Metro for the future mobile app) compiles it directly, the same
+       way it already compiles frontend/src/**. */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "jsx": "react-jsx",
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "erasableSyntaxOnly": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": ["src"]
+}

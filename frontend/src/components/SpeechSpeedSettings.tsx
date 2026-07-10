@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { CatalogApi } from "../api/endpoints";
+import { CatalogApi } from "@lingo/shared/api/endpoints";
 import { speak } from "../api/tts";
-import { SAMPLE_SPEECH_TEXT } from "../lib/sampleSpeechText";
+import { SAMPLE_SPEECH_TEXT } from "@lingo/shared/lib/sampleSpeechText";
 import {
   DEFAULT_SPEED,
   MAX_SPEED,

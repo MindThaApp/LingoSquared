@@ -1,4 +1,4 @@
-import type { AnswerResponse, Exercise } from "../../api/types";
+import type { AnswerResponse, Exercise } from "@lingo/shared/api/types";
 
 // Passed down from pages once an answer has been graded, so option-based
 // components can highlight the correct/wrong option instead of just

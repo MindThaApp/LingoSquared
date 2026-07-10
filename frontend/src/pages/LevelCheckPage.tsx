@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { CatalogApi } from "../api/endpoints";
+import { CatalogApi } from "@lingo/shared/api/endpoints";
 import { getLevelPreference, setLevelPreference, type SelfReportedLevel } from "../lib/levelPreferences";
 
 const LEVELS: SelfReportedLevel[] = ["beginner", "some_basics", "conversational"];

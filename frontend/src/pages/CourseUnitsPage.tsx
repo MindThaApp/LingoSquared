@@ -3,11 +3,11 @@ import { useQuery } from "@tanstack/react-query";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Lock } from "lucide-react";
-import { CatalogApi, ProgressApi } from "../api/endpoints";
-import type { UnitSummary } from "../api/types";
+import { CatalogApi, ProgressApi } from "@lingo/shared/api/endpoints";
+import type { UnitSummary } from "@lingo/shared/api/types";
 import { getLevelPreference, recommendedUnitIndex } from "../lib/levelPreferences";
 import { getLastVisitedUnit, setLastVisitedUnit } from "../lib/lastUnitPreferences";
-import { unitIcon } from "../lib/unitIcons";
+import { unitIcon } from "@lingo/shared/lib/unitIcons";
 
 function PathNode({
   unit,

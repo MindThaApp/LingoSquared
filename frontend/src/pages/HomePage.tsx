@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { CheckCircle, Flame, Medal, Snowflake, Star } from "lucide-react";
 import { useAuth } from "../auth/AuthContext";
-import { ProgressApi, ReviewApi } from "../api/endpoints";
+import { ProgressApi, ReviewApi } from "@lingo/shared/api/endpoints";
 
 export function HomePage() {
   const { t } = useTranslation();

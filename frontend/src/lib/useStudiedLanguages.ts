@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useQueries, useQuery } from "@tanstack/react-query";
-import { CatalogApi, ProgressApi } from "../api/endpoints";
+import { CatalogApi, ProgressApi } from "@lingo/shared/api/endpoints";
 
 // The set of language codes actually relevant to this learner right now —
 // both directions of every course they have real progress in (skill_progress

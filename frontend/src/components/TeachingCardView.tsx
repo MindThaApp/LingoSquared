@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import type { TeachingCard } from "../api/types";
+import type { TeachingCard } from "@lingo/shared/api/types";
 import { TextBlockList } from "./TextBlock";
 import { EmphasizedText } from "./EmphasizedText";
 

@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { ProgressApi } from "../api/endpoints";
+import { ProgressApi } from "@lingo/shared/api/endpoints";
 import { isGuestUser, useAuth } from "../auth/AuthContext";
 import { VoiceSettings } from "../components/VoiceSettings";
 import { SpeechSpeedSettings } from "../components/SpeechSpeedSettings";

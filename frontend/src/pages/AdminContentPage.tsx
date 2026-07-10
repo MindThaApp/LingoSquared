@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { AdminApi } from "../api/endpoints";
-import { ApiError } from "../api/client";
+import { AdminApi } from "@lingo/shared/api/endpoints";
+import { ApiError } from "@lingo/shared/api/client";
 
 const STATUS_OPTIONS = ["open", "triaged", "resolved", "wontfix", "duplicate"];
 

@@ -6,9 +6,9 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { AuthApi } from "../api/endpoints";
-import { ApiError, setUnauthorizedHandler } from "../api/client";
-import type { AuthUser } from "../api/types";
+import { AuthApi } from "@lingo/shared/api/endpoints";
+import { ApiError, setUnauthorizedHandler } from "@lingo/shared/api/client";
+import type { AuthUser } from "@lingo/shared/api/types";
 
 interface AuthContextValue {
   user: AuthUser | null;
