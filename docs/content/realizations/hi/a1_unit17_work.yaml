@@ -1,0 +1,800 @@
+schema_version: "1.1"
+realization_version: "2026.1-draft.1"
+target_language: "hi"
+cefr_level: "A1"
+status: "complete_draft"
+generation_provenance:
+  method: "ai_generated"
+  authoring_system: "claude"
+  human_reviewed: false
+review:
+  status: "unreviewed"
+  required_next_reviewer: "codex"
+  notes: >-
+    Seventeenth Hindi unit, continuing directly from hi/a1_unit16_health.yaml
+    (same Priya/Arjun characters, still on तुम terms). Spine outcome
+    confirmed via a direct read of universal_spine.yaml (not assumed from
+    other languages, though pl/ro's own unit17 files were also cross-checked
+    as a secondary sanity check per this task's explicit instruction): the
+    outcome entry immediately following universal.a1.health.
+    describe_basic_problem (line 490, hi's own unit16) is universal.a1.
+    work.describe_job (line 514, "State a basic occupation, workplace, and
+    simple work activity"). Its `prerequisites:` list (lines 517-519) names
+    universal.a1.introductions.exchange_identity (hi unit01, done) and
+    universal.a1.routines.describe_daily_routine (hi unit10, done) -- no
+    gating gap. `ls docs/content/realizations/pl/` and `ro/` independently
+    confirm a1_unit17_work.yaml as their own seventeenth unit (both files'
+    own spine_outcome_id lines directly grepped and confirmed as universal.
+    a1.work.describe_job), matching hi's own unit01-16 sequence -- used only
+    as a cross-check, not as the basis for the decision, which rests on the
+    direct spine-file read above (lines 514-537 read in full: can_do, all
+    four modalities, and all four assessment_requirements -- understand_
+    work_description/describe_work/read_work_profile/write_work_profile --
+    were read before designing this unit's exercises, to make sure all four
+    are genuinely served, not just nominally). Sized to 3 lessons matching
+    unit01-16's bootstrap pace. Topic/pacing structure only
+    (recognition-first, minimal new grammar surface, dialogue in lesson03)
+    informed at a purely structural level by this session's own established
+    hi conventions, not by opening any pl/ro file's actual text -- every
+    Hindi sentence below is authored fresh.
+
+    Source access, re-attempted per this task's explicit instruction (not
+    assumed to fail the same way as every prior hi unit): a fresh
+    `firecrawl search "FSI Hindi Active Introduction occupation job work
+    profession"` failed outright with HTTP 402 (payment/quota), the
+    seventeenth consecutive such failure across this whole session's worth
+    of hi units. Fell back to the FSI "Hindi: An Active Introduction"
+    archive.org item (`Fsi-Hindi-AnActiveIntroduction`) -- the exact mirror
+    URL used by unit16 (`.../Fsi-Hindi-AnActiveIntroduction_djvu.txt`) 404'd
+    again this round (a genuinely different filename problem than a simple
+    down-mirror: the item's real OCR-text filename, confirmed via a fresh
+    `archive.org/metadata/...` API call this round, is actually
+    `Fsi-HindiActiveIntroduction-StudentText_djvu.txt` -- no dash between
+    "Hindi" and "ActiveIntroduction", plus a "-StudentText" suffix neither
+    this file's own prior attempts nor unit16's had used). Re-fetched via
+    the metadata-confirmed correct filename into THIS session's own
+    isolated scratchpad (`.../scratchpad/fsi_hindi_unit17/
+    fsi_hindi_correct.txt`, 94,250 bytes -- the exact same byte count
+    unit16's own successful `_djvu.txt` fetch reported, confirming this is
+    the same underlying OCR document, just reached via the correct
+    filename this round rather than a stale/wrong one). A fresh regex scan
+    (Python, not eyeballed) of this freshly-fetched OCR text for the
+    Devanagari Unicode block (U+0900-U+097F) returned ZERO matches anywhere
+    in the document -- confirmed programmatically, consistent with every
+    prior hi unit's documented zero-Devanagari-match result; this is the
+    seventeenth such confirmation in sequence (counting this round). A
+    grep of the same extracted text for work-topic English framing found
+    real, directly on-topic incidental corroboration -- "He wants a job."
+    (line 3039), "There was an unpaved road near our office." (line 3400),
+    "I need a job." (line 3437), "I needed a job." (line 3491), plus
+    several "teacher"/"doctor" mentions in the book's own front-matter
+    pedagogy discussion (not learner content). Every Devanagari-script
+    line immediately adjacent to the job/office hits remains unreadable
+    OCR mojibake ("^ ^ft^fl\" ^TfcTT f I He wants a job.", "Jpfi ^FT ^lP^ I
+    I need a job.", "Tg* ^T%q\" *ft I I needed a job."), confirmed by eye
+    to be garbage, not readable Devanagari-as-Latin-transliteration --
+    matching the exact failure mode confirmed sixteen times before. Per
+    this task's explicit instruction, nothing from either extraction
+    attempt -- neither any mojibake fragment nor any wording of the
+    recovered English framing prose -- was copied, cleaned up,
+    transcribed, or translated anywhere in this file: this file's own
+    occupation/workplace vocabulary and sentence design (शिक्षक/शिक्षिका
+    "teacher", इंजीनियर "engineer", डॉक्टर "doctor" reviewed from unit16;
+    स्कूल/अस्पताल reviewed from unit08, दफ़्तर "office" new) were BOTH
+    already fully planned and largely authored before this source-access
+    step was run at all -- the topical overlap ("job"/"office" appearing
+    in the FSI text at all) is a genuine, honestly-disclosed coincidence
+    of two independent authors covering the same standard, obvious A1
+    beginner topic (work/occupation), not a reuse of the FSI text's own
+    unspecified vocabulary or sentence structure. Every Devanagari string
+    below is this session's own careful, correct rendering of established
+    Modern Standard Hindi, verified character-by-character (codepoint hex
+    dump run directly against every new word before finalizing, see the
+    nasalization discipline paragraph below).
+
+    Central grammar decision #1: occupation identity via "मैं + occupation
+    + हूँ" ("I am a/an [occupation]"), a trivial, already-established
+    extension of the copula (मैं...हूँ, taught since unit01) to a new noun
+    category. Disclosed explicitly on lesson01's own teach.
+    grammar_occupation_gender card: occupation nouns divide into two
+    classes -- शिक्षक/शिक्षिका ("teacher") agree with the SPEAKER's own
+    gender, the exact same discipline already taught for verb forms in
+    unit10's -ता/-ती rule (उठता/उठती, etc.) and unit01's कोई-गender
+    adjectives, now applied to a noun instead of a verb; डॉक्टर/इंजीनियर
+    ("doctor"/"engineer") are gender-invariant loanwords, identical in
+    either speaker's mouth. No new case or conjugation is introduced by
+    this decision -- it is a vocabulary-class distinction layered onto
+    already-known grammar.
+
+    Central grammar decision #2: "[जगह] में काम करता/करती हूँ" ("I work
+    at/in [place]"), disclosed on lesson02's own teach.grammar_workplace
+    card as a direct combination of three already-established pieces: में
+    ("in", unit01's "लंदन में रहता हूँ"), काम ("work", unit10/11), and
+    करना's already-taught -ता/-ती/-ते present-tense agreement rule (first
+    disclosed unit10 via नाश्ता करता/करती हूँ, and independently
+    precedented even earlier in unit01's own "क्या तुम योग करती हो?").
+    No new grammar is introduced -- this unit is the first to combine all
+    three into one sentence, which is disclosed as combination, not
+    invention.
+
+    Central grammar decision #3 (addressee-gender disambiguation
+    technique, reused explicitly from unit10's own precedent): every
+    exercise that blanks a करते/करती (or similarly gender-agreeing) slot
+    is anchored to a NAMED, already-established-gender character (अर्जुन
+    = male, प्रिया = female, both confirmed via unit10's own dialogue
+    where Priya's verbs take -ती and Arjun's take -ता) rather than left
+    as a bare "तुम" question with no addressee named -- e.g. lesson01.
+    exercise10's "अर्जुन, तुम क्या काम ___ हो?" (करते) and lesson02.
+    exercise10's "प्रिया, तुम कहाँ काम ___ हो?" (करती). This directly
+    reuses unit10's own established name-anchoring convention (its own
+    dialogue used "प्रिया, तुम रोज़ कितने बजे उठती हो?" /
+    "मैं...उठता हूँ" address-by-name pattern) rather than inventing a
+    new disambiguation mechanism -- see the fill_in_blank ambiguity
+    paragraph below for the full accounting of every blanked slot in this
+    unit, both this name-anchored kind and the open-vocabulary-slot kind
+    (disambiguated by the accompanying English translation cue, the
+    established unit06/unit15/unit16 convention).
+
+    Central grammar decision #4, a deliberate scope-narrowing, disclosed
+    (matching unit16's own explicit precedent for this discipline): this
+    unit teaches केवल three occupations (शिक्षक/शिक्षिका, डॉक्टर,
+    इंजीनियर) and three workplaces (स्कूल, अस्पताल, दफ़्तर), each mapped
+    1:1 to a single occupation (teacher-school, doctor-hospital,
+    engineer-office) for scenario coherence, not a broader occupation
+    vocabulary set. दुकानदार ("shopkeeper") and अन्य occupation words were
+    considered and deliberately left out to keep the unit's real
+    vocabulary load comparable to unit16's own two-symptom/three-advice
+    scope. This unit's own scope fully satisfies the spine outcome's own
+    can_do ("State a basic occupation, workplace, and simple work
+    activity") without needing a larger occupation-vocabulary set; a
+    broader occupations unit remains available as a clean future topic.
+
+    Same-speaker-distractor check (the nl unit44-50 regression class):
+    performed explicitly, and structurally inapplicable here the same way
+    it was in unit16 -- hi dialogue content carries NO `media_asset_key`
+    at all (plain TextBlocks, matching unit08-16's established pattern
+    that hi dialogue is text-only, not audio, for dialogue_comprehension
+    purposes), so lesson03's two dialogue_comprehension exercises
+    (exercise01/02) cannot trigger this bug class by construction -- each
+    shown line was chosen to directly contain its own correct answer
+    (exercise01 shows line02 "मैं शिक्षिका हूँ। मैं स्कूल में काम करती
+    हूँ।" and asks Priya's job, answer directly stated; exercise02 shows
+    line05 "मैं इंजीनियर हूँ। मैं दफ़्तर में काम करता हूँ।" and asks
+    Arjun's job, answer directly stated), neither requiring inference
+    across unseen lines. The three listen_select exercises (lesson01.
+    exercise04, lesson02.exercise04, lesson03.exercise06) are each a
+    single standalone, non-dialogue utterance with its own dedicated
+    media_asset_key and no other speaker/other lines in the same clip --
+    structurally cannot trigger this bug class either, matching unit08-16's
+    own precedent, now applied a ninth time. Distractors for the two
+    dialogue_comprehension exercises (English-language multiple_choice
+    options, per §6, since these are comprehension checks) never name a
+    fact stated anywhere else in this unit's own scenario (no "shopkeeper"
+    or "bank teller" occupation is ever mentioned in this work-topic unit,
+    so distractors like "Shopkeeper" are safely never-true here, not just
+    never-said-by-this-speaker).
+
+    Cross-check of every concrete fact stated across the whole unit
+    (AUTHORING_GUIDE §11), not just within the dialogue: this unit
+    establishes exactly two character facts and one generic fact,
+    restated (never contradicted) across lessons, exercises, and the
+    closing reading card: (1) Priya is a teacher (शिक्षिका) who works at a
+    school (लesson02's teach.school_review example, lesson02.exercise10/11's
+    vocative-anchored "प्रिया, तुम कहाँ काम करती हो?" -> "मैं स्कूल में
+    काम करती हूँ", lesson03 dialogue line02 "मैं शिक्षिका हूँ। मैं स्कूल
+    में काम करती हूँ।", lesson03's closing reading card "प्रिया शिक्षिका
+    है। वह स्कूल में काम करती है।"); (2) Arjun is an engineer (इंजीनियर)
+    who works at an office (दफ़्तर) (lesson02's teach.daftar example,
+    lesson03 dialogue line05 "मैं इंजीनियर हूँ। मैं दफ़्तर में काम करता
+    हूँ।", lesson03's closing reading card "अर्जुन इंजीनियर है। वह दफ़्तर
+    में काम करता है।", lesson03.exercise13's writing-prompt fact); (3) a
+    generic, unnamed doctor works at a hospital (lesson02's teach.
+    hospital_review example and lesson02.exercise05, stated only as a
+    general fact about the occupation, never attributed to Priya, Arjun,
+    or any other named character, and never contradicted). Every
+    restatement across all three lessons, the reading card, and the
+    exercises agrees with these three facts; none is ever contradicted
+    (Priya is never said to work anywhere but the school, Arjun never
+    anywhere but the office, and no third occupation is introduced for
+    either named character).
+
+    Nasalization/spelling discipline, disclosed per unit07-16 precedent,
+    verified this round via a direct Python codepoint hex dump of every
+    NEW word before finalizing (not eyeballed): शिक्षक (U+0936 U+093F
+    U+0915 U+094D U+0937 U+0915, zero nasalization), शिक्षिका (U+0936
+    U+093F U+0915 U+094D U+0937 U+093F U+0915 U+093E, zero nasalization),
+    दफ़्तर (U+0926 U+092B U+093C U+094D U+0924 U+0930, zero nasalization,
+    nuqta-फ़ matching the exact same combining-nuqta codepoint pair
+    U+092B U+093C already used course-wide for फ़ोन in unit02 -- verified
+    by a direct comparison hex dump against that existing word, not
+    assumed). UNLIKE unit16 (which had zero nasalization decisions to
+    make), this unit's third new word genuinely does carry a
+    nasalization mark, and the choice was verified deliberately, not
+    defaulted: इंजीनियर (U+0907 U+0902 U+091C U+0940 U+0928 U+093F U+092F
+    U+0930) uses ANUSVARA (U+0902), not chandrabindu (U+0901) -- correct
+    per standard Modern Standard Hindi orthography, since the nasal here
+    precedes an oral stop (ज) within the same syllable-cluster, the
+    anusvara-before-consonant pattern already established course-wide by
+    words like अंग्रेज़ी-class loanwords, and structurally distinct from
+    this course's own chandrabindu uses (हूँ, नहीं, हाँ), which are all
+    nasalized VOWELS at a word-final/open-syllable position with no
+    following consonant. करते/करती/करता (U+0915 U+0930 U+0924 U+0947 /
+    U+0940 / U+093E) carry zero nasalization, regular verb-stem
+    inflections of the already-known करना.
+
+    Untaught-vocabulary validator footgun (already documented by
+    unit07-16, re-confirmed live during this unit's authoring, and
+    directly re-read from `scripts/compile_content.py`'s
+    `validate_untaught_vocabulary` before relying on it): the function
+    only checks each exercise's own `tested_text` against the accumulated
+    `introduced_tokens` set for the FILE so far (resets per file,
+    accumulates across lessons within one file, and critically only
+    checks `tested_text`, never `prompt.target_blocks`). Every token used
+    in ANY exercise's tested_text below -- including words already known
+    corpus-wide -- was explicitly re-declared in THIS file's own
+    introduced_tokens before its first tested_text use: तुम/तुम्हारा/क्या
+    via lesson01.teach.tum_tumhara_kya_review; अर्जुन/प्रिया via lesson01.
+    teach.arjun_priya_review; मैं/हूँ/है/हो via lesson01.teach.
+    copula_review; काम via lesson01.teach.kaam_review; करते/करती/करता via
+    lesson01.teach.karte_karti_karta_verb; शिक्षक/शिक्षिका via lesson01.
+    teach.shikshak_shikshika; डॉक्टर via lesson01.teach.doctor_review;
+    इंजीनियर via lesson01.teach.engineer; कहाँ via lesson02.teach.
+    kahan_review; में via lesson02.teach.mein_review; स्कूल via lesson02.
+    teach.school_review; अस्पताल via lesson02.teach.hospital_review;
+    दफ़्तर via lesson02.teach.daftar; रोज़ via lesson03.teach.roz_review;
+    जाती/जाते/जाता via lesson03.teach.jaana_forms_review. Because
+    introduced_tokens accumulate across lessons WITHIN one file (not reset
+    per lesson), tokens declared in lesson01/lesson02 remain valid for
+    lesson03's own tested_text without redeclaration -- confirmed by
+    re-reading the same compiler function this unit, not assumed. Words
+    used ONLY in dialogue text, example sentences, or exercise PROMPT text
+    and never in a tested_text (वह, भी, हाँ, अच्छा, बहुत, शुक्रिया, ठीक,
+    लिखो, बोलो -- all already established corpus-wide or, for लिखो/बोलो,
+    instructional prefixes that never appear in any tested_text in this
+    course's own precedent either) were deliberately left OUT of this
+    file's introduced_tokens, matching unit09/12/13/14/15/16's own
+    precedent for dialogue-only/example-only/prompt-only words -- confirmed
+    by grep of every tested_text/word_bank value below before finalizing.
+
+    Word-order duplicate-token check (unit10-16's own standing
+    consideration, re-confirmed clean here): every `word_order` exercise
+    in this unit uses a word_bank with zero repeated tokens (checked by
+    hand against each exercise's own word_bank array below -- longest is
+    lesson02.exercise07's and lesson03.exercise08/09's 6-token banks, all
+    distinct).
+
+    fill_in_blank ambiguity check (AUTHORING_GUIDE §17): every blank in
+    this unit is either (a) a genuinely open vocabulary slot disambiguated
+    by the English instruction's own explicit translation, matching the
+    established convention already used throughout this course (unit06's
+    पानी/चाय-style blanks, unit15/16's translation-cued blanks) --
+    lesson01.exercise09's "मैं ___ हूँ।" blank (इंजीनियर, candidates
+    शिक्षक/शिक्षिका/डॉक्टर/इंजीनियर all frame-compatible in isolation,
+    disambiguated by "Complete: I am an engineer.") and lesson02.
+    exercise09's "मैं ___ में काम करती हूँ।" blank (अस्पताल, candidates
+    स्कूल/अस्पताल/दफ़्तर all frame-compatible in isolation, disambiguated
+    by "Complete: I work at the hospital."); or (b) a गender-agreement
+    slot (करते/करती) anchored to a NAMED character whose gender is already
+    an established course fact, per central grammar decision #3 above --
+    lesson01.exercise10's "अर्जुन, तुम क्या काम ___ हो?" (करते, Arjun
+    established male) and lesson02.exercise10's "प्रिया, तुम कहाँ काम
+    ___ हो?" (करती, Priya established female). lesson03.exercise10's
+    "प्रिया ___ है।" blank (शिक्षिका) uses BOTH disambiguators at once,
+    deliberately, for maximum safety: Priya's established gender AND an
+    explicit English cue naming the female form ("Complete: Priya is a
+    teacher (female form)."), specifically because शिक्षक/शिक्षिका are a
+    true near-synonym gender pair (the exact failure class named in §17's
+    own je/jij example) and a name-only anchor, while defensible per
+    central grammar decision #3, was judged not quite as airtight for a
+    true synonym-pair NOUN slot as it is for a verb-agreement slot, so
+    the extra explicit cue was added as a deliberate belt-and-suspenders
+    choice rather than relying on either disambiguator alone.
+
+    Cast/register note: no new character is introduced. Priya and Arjun
+    remain on तुम terms throughout, matching every prior unit.
+
+course:
+  realization_key: hi.a1
+  target_language_first: true
+  dialect: hi_standard
+  register_policy: >-
+    Continues unit01-16's aap/tum split. This unit's dialogue (lesson03)
+    stays entirely in तुम between Priya and Arjun, matching every prior
+    unit's continuation of their established friendship -- no new
+    stranger/colleague character (e.g. a boss or coworker) is introduced
+    here; Priya and Arjun simply ask each other about their own jobs,
+    keeping the dialogue's register consistent with the whole course's
+    Priya/Arjun thread rather than adding a new aap-register
+    workplace-transaction scene.
+
+media_assets:
+  - {content_key: hi.a1.audio.work.mein_shikshika_hoon.01, language: hi, text: "मैं शिक्षिका हूँ।", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - {content_key: hi.a1.audio.work.mein_daftar_mein_kaam_karta_hoon.01, language: hi, text: "मैं दफ़्तर में काम करता हूँ।", voice_hint: neutral_adult_clear, status: pending_generation}
+  - {content_key: hi.a1.audio.work.mein_school_mein_kaam_karti_hoon.01, language: hi, text: "मैं स्कूल में काम करती हूँ।", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+
+units:
+  - content_key: hi.a1.unit17.work
+    title: "काम"
+    section: reading_writing
+    spine_outcome_ids:
+      - universal.a1.work.describe_job
+    planned_lesson_count: 3
+
+    lessons:
+      - content_key: hi.a1.unit17.lesson01.shikshak_shikshika_engineer
+        title: "शिक्षक, शिक्षिका, इंजीनियर"
+        spine_outcome_id: universal.a1.work.describe_job
+        teaching:
+          - content_key: hi.a1.unit17.lesson01.teach.tum_tumhara_kya_review
+            kind: vocabulary
+            target: {text: "तुम, तुम्हारा, क्या", language_code: hi, direction: ltr}
+            introduced_tokens: ["तुम", "तुम्हारा", "क्या"]
+            example: {text: "तुम्हारा नाम क्या है?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit17.lesson01.teach.arjun_priya_review
+            kind: vocabulary
+            target: {text: "अर्जुन, प्रिया", language_code: hi, direction: ltr}
+            introduced_tokens: ["अर्जुन", "प्रिया"]
+            example:
+              - {text: "मेरा नाम अर्जुन है।", language_code: hi, direction: ltr}
+              - {text: "मेरा नाम प्रिया है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit17.lesson01.teach.copula_review
+            kind: vocabulary
+            target: {text: "मैं, हूँ, है, हो", language_code: hi, direction: ltr}
+            introduced_tokens: ["मैं", "हूँ", "है", "हो"]
+            example:
+              - {text: "तुम ठीक हो?", language_code: hi, direction: ltr}
+              - {text: "मैं ठीक हूँ।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit17.lesson01.teach.kaam_review
+            kind: vocabulary
+            target: {text: "काम", language_code: hi, direction: ltr}
+            introduced_tokens: ["काम"]
+            example: {text: "मुझे काम है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit17.lesson01.teach.karte_karti_karta_verb
+            kind: vocabulary
+            target: {text: "करते, करती, करता", language_code: hi, direction: ltr}
+            introduced_tokens: ["करते", "करती", "करता"]
+            example:
+              - {text: "तुम क्या करते हो?", language_code: hi, direction: ltr}
+              - {text: "मैं नाश्ता करता हूँ।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit17.lesson01.teach.tum_kya_kaam_karte_ho_phrase
+            kind: phrase
+            target: {text: "तुम क्या काम करते हो?", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a1.unit17.lesson01.teach.tum_kya_kaam_karti_ho_phrase
+            kind: phrase
+            target: {text: "तुम क्या काम करती हो?", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a1.unit17.lesson01.teach.shikshak_shikshika
+            kind: vocabulary
+            target: {text: "शिक्षक, शिक्षिका", language_code: hi, direction: ltr}
+            introduced_tokens: ["शिक्षक", "शिक्षिका"]
+            example:
+              - {text: "मैं शिक्षक हूँ।", language_code: hi, direction: ltr}
+              - {text: "मैं शिक्षिका हूँ।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit17.lesson01.teach.grammar_occupation_gender
+            kind: grammar_note
+            target: {text: "'मैं + पेशा + हूँ' से पेशा बताते हैं, वही पुराना 'मैं...हूँ' ढांचा (यूनिट 1 से)। कुछ पेशे बोलने वाले के लिंग के साथ बदलते हैं -- 'शिक्षक' (पुरुष), 'शिक्षिका' (स्त्री), ठीक वैसे ही जैसे यूनिट 10 में क्रिया -ता/-ती बदलती थी। 'डॉक्टर' और 'इंजीनियर' नहीं बदलते -- दोनों लिंग के लिए एक ही शब्द।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a1.unit17.lesson01.teach.doctor_review
+            kind: vocabulary
+            target: {text: "डॉक्टर", language_code: hi, direction: ltr}
+            introduced_tokens: ["डॉक्टर"]
+            example: {text: "वह डॉक्टर है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit17.lesson01.teach.mein_doctor_hoon_phrase
+            kind: phrase
+            target: {text: "मैं डॉक्टर हूँ।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a1.unit17.lesson01.teach.engineer
+            kind: vocabulary
+            target: {text: "इंजीनियर", language_code: hi, direction: ltr}
+            introduced_tokens: ["इंजीनियर"]
+            example: {text: "वह इंजीनियर है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit17.lesson01.teach.mein_engineer_hoon_phrase
+            kind: phrase
+            target: {text: "मैं इंजीनियर हूँ।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+        exercises:
+          - content_key: hi.a1.unit17.lesson01.exercise01.select_shikshak_meaning
+            type: multiple_choice
+            tested_text: "शिक्षक"
+            prompt:
+              target_blocks:
+                - {text: "शिक्षक", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit17.lesson01.exercise02.select_shikshika_meaning
+            type: multiple_choice
+            tested_text: "शिक्षिका"
+            prompt:
+              target_blocks:
+                - {text: "शिक्षिका", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit17.lesson01.exercise03.select_mein_shikshak_hoon_meaning
+            type: multiple_choice
+            tested_text: "मैं शिक्षक हूँ"
+            prompt:
+              target_blocks:
+                - {text: "मैं शिक्षक हूँ।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit17.lesson01.exercise04.listen_mein_shikshika_hoon
+            type: listen_select
+            tested_text: "मैं शिक्षिका हूँ"
+            media_asset_key: hi.a1.audio.work.mein_shikshika_hoon.01
+            prompt: {target_blocks: []}
+          - content_key: hi.a1.unit17.lesson01.exercise05.select_engineer_meaning
+            type: multiple_choice
+            tested_text: "इंजीनियर"
+            prompt:
+              target_blocks:
+                - {text: "इंजीनियर", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit17.lesson01.exercise06.match_lesson01_words
+            type: matching_pairs
+            tested_text: "शिक्षक शिक्षिका इंजीनियर डॉक्टर काम करते करती तुम क्या हूँ"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "शिक्षक", right: "teacher (male)"}
+              - {left: "शिक्षिका", right: "teacher (female)"}
+              - {left: "इंजीनियर", right: "engineer"}
+              - {left: "डॉक्टर", right: "doctor"}
+              - {left: "काम", right: "work"}
+              - {left: "करते", right: "do (you, male)"}
+              - {left: "करती", right: "do (you, female)"}
+              - {left: "तुम", right: "you (informal)"}
+              - {left: "क्या", right: "what"}
+              - {left: "हूँ", right: "am"}
+          - content_key: hi.a1.unit17.lesson01.exercise07.order_mein_shikshak_hoon
+            type: word_order
+            tested_text: "मैं शिक्षक हूँ"
+            prompt: {target_blocks: []}
+            word_bank: ["मैं", "शिक्षक", "हूँ"]
+          - content_key: hi.a1.unit17.lesson01.exercise08.order_tum_kya_kaam_karti_ho
+            type: word_order
+            tested_text: "तुम क्या काम करती हो"
+            prompt: {target_blocks: []}
+            word_bank: ["तुम", "क्या", "काम", "करती", "हो"]
+          - content_key: hi.a1.unit17.lesson01.exercise09.fill_mein_engineer
+            type: fill_in_blank
+            tested_text: "इंजीनियर"
+            prompt:
+              target_blocks:
+                - {text: "मैं ___ हूँ।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit17.lesson01.exercise10.fill_arjun_tum_karte
+            type: fill_in_blank
+            tested_text: "करते"
+            prompt:
+              target_blocks:
+                - {text: "अर्जुन, तुम क्या काम ___ हो?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit17.lesson01.exercise11.reply_tumhara_kya_kaam_hai
+            type: dialogue_response
+            tested_text: "मैं इंजीनियर हूँ"
+            prompt:
+              target_blocks:
+                - {text: "तुम्हारा क्या काम है?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit17.lesson01.exercise12.fix_mein_shikshak_hoon
+            type: grammar_check
+            tested_text: "मैं शिक्षक हूँ"
+            prompt:
+              target_blocks:
+                - {text: "मैं शिक्षक है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit17.lesson01.exercise13.speak_mein_engineer_hoon
+            type: speak_response
+            tested_text: "मैं इंजीनियर हूँ"
+            prompt:
+              target_blocks:
+                - {text: "बोलो: मैं इंजीनियर हूँ।", language_code: hi, direction: ltr}
+
+      - content_key: hi.a1.unit17.lesson02.school_aspatal_daftar
+        title: "स्कूल, अस्पताल, दफ़्तर"
+        spine_outcome_id: universal.a1.work.describe_job
+        teaching:
+          - content_key: hi.a1.unit17.lesson02.teach.kahan_review
+            kind: vocabulary
+            target: {text: "कहाँ", language_code: hi, direction: ltr}
+            introduced_tokens: ["कहाँ"]
+            example: {text: "अस्पताल कहाँ है?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit17.lesson02.teach.mein_review
+            kind: vocabulary
+            target: {text: "में", language_code: hi, direction: ltr}
+            introduced_tokens: ["में"]
+            example: {text: "मैं लंदन में रहता हूँ।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit17.lesson02.teach.tum_kahan_kaam_karte_ho_phrase
+            kind: phrase
+            target: {text: "तुम कहाँ काम करते हो?", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a1.unit17.lesson02.teach.tum_kahan_kaam_karti_ho_phrase
+            kind: phrase
+            target: {text: "तुम कहाँ काम करती हो?", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a1.unit17.lesson02.teach.school_review
+            kind: vocabulary
+            target: {text: "स्कूल", language_code: hi, direction: ltr}
+            introduced_tokens: ["स्कूल"]
+            example: {text: "मैं स्कूल में काम करती हूँ।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit17.lesson02.teach.mein_school_mein_kaam_karti_hoon_phrase
+            kind: phrase
+            target: {text: "मैं स्कूल में काम करती हूँ।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a1.unit17.lesson02.teach.hospital_review
+            kind: vocabulary
+            target: {text: "अस्पताल", language_code: hi, direction: ltr}
+            introduced_tokens: ["अस्पताल"]
+            example: {text: "डॉक्टर अस्पताल में काम करता है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit17.lesson02.teach.daftar
+            kind: vocabulary
+            target: {text: "दफ़्तर", language_code: hi, direction: ltr}
+            introduced_tokens: ["दफ़्तर"]
+            example: {text: "मैं दफ़्तर में काम करता हूँ।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit17.lesson02.teach.mein_daftar_mein_kaam_karta_hoon_phrase
+            kind: phrase
+            target: {text: "मैं दफ़्तर में काम करता हूँ।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a1.unit17.lesson02.teach.grammar_workplace
+            kind: grammar_note
+            target: {text: "'[जगह] में काम करता/करती हूँ' तीन पहले से जाने-पहचाने टुकड़ों को जोड़ता है: 'में' (यूनिट 1, 'लंदन में रहता हूँ'), 'काम' (यूनिट 10/11), और 'करना' का -ता/-ती/-ते रूप (यूनिट 10 का 'नाश्ता करता हूँ', और यूनिट 1 का 'क्या तुम योग करती हो?')। यह कोई नया व्याकरण नहीं है, बस तीनों को एक ही वाक्य में जोड़ा गया है।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+        exercises:
+          - content_key: hi.a1.unit17.lesson02.exercise01.select_daftar_meaning
+            type: multiple_choice
+            tested_text: "दफ़्तर"
+            prompt:
+              target_blocks:
+                - {text: "दफ़्तर", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit17.lesson02.exercise02.select_mein_school_mein_kaam_karti_hoon_meaning
+            type: multiple_choice
+            tested_text: "मैं स्कूल में काम करती हूँ"
+            prompt:
+              target_blocks:
+                - {text: "मैं स्कूल में काम करती हूँ।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit17.lesson02.exercise03.select_mein_daftar_mein_kaam_karta_hoon_meaning
+            type: multiple_choice
+            tested_text: "मैं दफ़्तर में काम करता हूँ"
+            prompt:
+              target_blocks:
+                - {text: "मैं दफ़्तर में काम करता हूँ।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit17.lesson02.exercise04.listen_mein_daftar_mein_kaam_karta_hoon
+            type: listen_select
+            tested_text: "मैं दफ़्तर में काम करता हूँ"
+            media_asset_key: hi.a1.audio.work.mein_daftar_mein_kaam_karta_hoon.01
+            prompt: {target_blocks: []}
+          - content_key: hi.a1.unit17.lesson02.exercise05.select_doctor_aspatal_meaning
+            type: multiple_choice
+            tested_text: "डॉक्टर अस्पताल में काम करता है"
+            prompt:
+              target_blocks:
+                - {text: "डॉक्टर अस्पताल में काम करता है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit17.lesson02.exercise06.match_lesson02_words
+            type: matching_pairs
+            tested_text: "दफ़्तर स्कूल अस्पताल में कहाँ काम करती करता हूँ है"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "दफ़्तर", right: "office"}
+              - {left: "स्कूल", right: "school"}
+              - {left: "अस्पताल", right: "hospital"}
+              - {left: "में", right: "in / at"}
+              - {left: "कहाँ", right: "where"}
+              - {left: "काम", right: "work"}
+              - {left: "करती", right: "do (you, female)"}
+              - {left: "करता", right: "does (male)"}
+              - {left: "हूँ", right: "am"}
+              - {left: "है", right: "is"}
+          - content_key: hi.a1.unit17.lesson02.exercise07.order_mein_daftar_mein_kaam_karta_hoon
+            type: word_order
+            tested_text: "मैं दफ़्तर में काम करता हूँ"
+            prompt: {target_blocks: []}
+            word_bank: ["मैं", "दफ़्तर", "में", "काम", "करता", "हूँ"]
+          - content_key: hi.a1.unit17.lesson02.exercise08.order_tum_kahan_kaam_karti_ho
+            type: word_order
+            tested_text: "तुम कहाँ काम करती हो"
+            prompt: {target_blocks: []}
+            word_bank: ["तुम", "कहाँ", "काम", "करती", "हो"]
+          - content_key: hi.a1.unit17.lesson02.exercise09.fill_mein_aspatal
+            type: fill_in_blank
+            tested_text: "अस्पताल"
+            prompt:
+              target_blocks:
+                - {text: "मैं ___ में काम करती हूँ।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit17.lesson02.exercise10.fill_priya_karti
+            type: fill_in_blank
+            tested_text: "करती"
+            prompt:
+              target_blocks:
+                - {text: "प्रिया, तुम कहाँ काम ___ हो?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit17.lesson02.exercise11.reply_priya_kahan_kaam_karti_ho
+            type: dialogue_response
+            tested_text: "मैं स्कूल में काम करती हूँ"
+            prompt:
+              target_blocks:
+                - {text: "प्रिया, तुम कहाँ काम करती हो?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit17.lesson02.exercise12.fix_mein_daftar_mein_kaam_karta_hoon
+            type: grammar_check
+            tested_text: "मैं दफ़्तर में काम करता हूँ"
+            prompt:
+              target_blocks:
+                - {text: "मैं दफ़्तर काम करता हूँ।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit17.lesson02.exercise13.speak_mein_daftar_mein_kaam_karta_hoon
+            type: speak_response
+            tested_text: "मैं दफ़्तर में काम करता हूँ"
+            prompt:
+              target_blocks:
+                - {text: "बोलो: मैं दफ़्तर में काम करता हूँ।", language_code: hi, direction: ltr}
+
+      - content_key: hi.a1.unit17.lesson03.priya_arjun_kaam
+        title: "प्रिया और अर्जुन: तुम क्या काम करते हो?"
+        spine_outcome_id: universal.a1.work.describe_job
+        teaching:
+          - content_key: hi.a1.unit17.lesson03.teach.roz_review
+            kind: vocabulary
+            target: {text: "रोज़", language_code: hi, direction: ltr}
+            introduced_tokens: ["रोज़"]
+            example: {text: "मैं रोज़ काम करता हूँ।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit17.lesson03.teach.jaana_forms_review
+            kind: vocabulary
+            target: {text: "जाती, जाते, जाता", language_code: hi, direction: ltr}
+            introduced_tokens: ["जाती", "जाते", "जाता"]
+            example:
+              - {text: "मैं रोज़ स्कूल जाती हूँ।", language_code: hi, direction: ltr}
+              - {text: "तुम रोज़ दफ़्तर जाते हो?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit17.lesson03.teach.bhi_haan_review
+            kind: vocabulary
+            target: {text: "भी, हाँ", language_code: hi, direction: ltr}
+            introduced_tokens: ["भी", "हाँ"]
+            example: {text: "हाँ, मुझे भी अच्छा लगा।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit17.lesson03.teach.dialogue.line01
+            kind: dialogue
+            target:
+              text: "प्रिया, तुम क्या काम करती हो?"
+              language_code: hi
+              direction: ltr
+              speaker: Arjun
+            introduced_tokens: []
+          - content_key: hi.a1.unit17.lesson03.teach.dialogue.line02
+            kind: dialogue
+            target:
+              text: "मैं शिक्षिका हूँ। मैं स्कूल में काम करती हूँ।"
+              language_code: hi
+              direction: ltr
+              speaker: Priya
+            introduced_tokens: []
+          - content_key: hi.a1.unit17.lesson03.teach.dialogue.line03
+            kind: dialogue
+            target:
+              text: "अच्छा! तुम रोज़ स्कूल जाती हो?"
+              language_code: hi
+              direction: ltr
+              speaker: Arjun
+            introduced_tokens: []
+          - content_key: hi.a1.unit17.lesson03.teach.dialogue.line04
+            kind: dialogue
+            target:
+              text: "हाँ, मैं रोज़ स्कूल जाती हूँ। तुम क्या काम करते हो?"
+              language_code: hi
+              direction: ltr
+              speaker: Priya
+            introduced_tokens: []
+          - content_key: hi.a1.unit17.lesson03.teach.dialogue.line05
+            kind: dialogue
+            target:
+              text: "मैं इंजीनियर हूँ। मैं दफ़्तर में काम करता हूँ।"
+              language_code: hi
+              direction: ltr
+              speaker: Arjun
+            introduced_tokens: []
+          - content_key: hi.a1.unit17.lesson03.teach.dialogue.line06
+            kind: dialogue
+            target:
+              text: "बहुत अच्छा! तुम भी रोज़ दफ़्तर जाते हो?"
+              language_code: hi
+              direction: ltr
+              speaker: Priya
+            introduced_tokens: []
+          - content_key: hi.a1.unit17.lesson03.teach.dialogue.line07
+            kind: dialogue
+            target:
+              text: "हाँ, मैं रोज़ दफ़्तर जाता हूँ।"
+              language_code: hi
+              direction: ltr
+              speaker: Arjun
+            introduced_tokens: []
+          - content_key: hi.a1.unit17.lesson03.teach.dialogue.line08
+            kind: dialogue
+            target:
+              text: "ठीक है, शुक्रिया।"
+              language_code: hi
+              direction: ltr
+              speaker: Priya
+            introduced_tokens: []
+          - content_key: hi.a1.unit17.lesson03.teach.grammar_summary
+            kind: grammar_note
+            target: {text: "इस यूनिट के तीन मुख्य नियम: (1) 'मैं + पेशा + हूँ' से पेशा बताते हैं (जैसे 'मैं शिक्षिका हूँ'), कुछ पेशे बोलने वाले के लिंग से बदलते हैं। (2) '[जगह] में काम करता/करती हूँ' से कार्यस्थल बताते हैं (जैसे 'मैं दफ़्तर में काम करता हूँ')। (3) 'रोज़ [जगह] जाता/जाती हूँ' से रोज़ की आदत बताते हैं, यूनिट 10 का वही -ता/-ती नियम।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a1.unit17.lesson03.teach.work_profile_reading
+            kind: reading
+            target: {text: "प्रिया शिक्षिका है। वह स्कूल में काम करती है। अर्जुन इंजीनियर है। वह दफ़्तर में काम करता है।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+        exercises:
+          - content_key: hi.a1.unit17.lesson03.exercise01.comprehend_priya_job
+            type: dialogue_comprehension
+            tested_text: "शिक्षिका"
+            prompt:
+              target_blocks:
+                - {text: "मैं शिक्षिका हूँ। मैं स्कूल में काम करती हूँ।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit17.lesson03.exercise02.comprehend_arjun_job
+            type: dialogue_comprehension
+            tested_text: "इंजीनियर"
+            prompt:
+              target_blocks:
+                - {text: "मैं इंजीनियर हूँ। मैं दफ़्तर में काम करता हूँ।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit17.lesson03.exercise03.select_tum_roz_school_jaati_ho_meaning
+            type: multiple_choice
+            tested_text: "तुम रोज़ स्कूल जाती हो"
+            prompt:
+              target_blocks:
+                - {text: "अच्छा! तुम रोज़ स्कूल जाती हो?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit17.lesson03.exercise04.read_profile_priya_job
+            type: reading_comprehension
+            tested_text: "शिक्षिका"
+            prompt:
+              target_blocks:
+                - {text: "प्रिया शिक्षिका है। वह स्कूल में काम करती है। अर्जुन इंजीनियर है। वह दफ़्तर में काम करता है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit17.lesson03.exercise05.read_profile_arjun_workplace
+            type: reading_comprehension
+            tested_text: "दफ़्तर"
+            prompt:
+              target_blocks:
+                - {text: "प्रिया शिक्षिका है। वह स्कूल में काम करती है। अर्जुन इंजीनियर है। वह दफ़्तर में काम करता है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit17.lesson03.exercise06.listen_mein_school_mein_kaam_karti_hoon
+            type: listen_select
+            tested_text: "मैं स्कूल में काम करती हूँ"
+            media_asset_key: hi.a1.audio.work.mein_school_mein_kaam_karti_hoon.01
+            prompt: {target_blocks: []}
+          - content_key: hi.a1.unit17.lesson03.exercise07.match_lesson03_review
+            type: matching_pairs
+            tested_text: "शिक्षक शिक्षिका इंजीनियर डॉक्टर स्कूल दफ़्तर अस्पताल काम में रोज़"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "शिक्षक", right: "teacher (male)"}
+              - {left: "शिक्षिका", right: "teacher (female)"}
+              - {left: "इंजीनियर", right: "engineer"}
+              - {left: "डॉक्टर", right: "doctor"}
+              - {left: "स्कूल", right: "school"}
+              - {left: "दफ़्तर", right: "office"}
+              - {left: "अस्पताल", right: "hospital"}
+              - {left: "काम", right: "work"}
+              - {left: "में", right: "in / at"}
+              - {left: "रोज़", right: "every day"}
+          - content_key: hi.a1.unit17.lesson03.exercise08.order_priya_school_mein_kaam_karti_hai
+            type: word_order
+            tested_text: "प्रिया स्कूल में काम करती है"
+            prompt: {target_blocks: []}
+            word_bank: ["प्रिया", "स्कूल", "में", "काम", "करती", "है"]
+          - content_key: hi.a1.unit17.lesson03.exercise09.order_arjun_daftar_mein_kaam_karta_hai
+            type: word_order
+            tested_text: "अर्जुन दफ़्तर में काम करता है"
+            prompt: {target_blocks: []}
+            word_bank: ["अर्जुन", "दफ़्तर", "में", "काम", "करता", "है"]
+          - content_key: hi.a1.unit17.lesson03.exercise10.fill_priya_shikshika_hai
+            type: fill_in_blank
+            tested_text: "शिक्षिका"
+            prompt:
+              target_blocks:
+                - {text: "प्रिया ___ है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit17.lesson03.exercise11.fix_arjun_engineer_hai
+            type: grammar_check
+            tested_text: "अर्जुन इंजीनियर है"
+            prompt:
+              target_blocks:
+                - {text: "अर्जुन इंजीनियर हूँ।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit17.lesson03.exercise12.reply_tumhara_kya_kaam_hai_review
+            type: dialogue_response
+            tested_text: "मैं शिक्षिका हूँ"
+            prompt:
+              target_blocks:
+                - {text: "तुम्हारा क्या काम है?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit17.lesson03.exercise13.write_arjun_kahan_kaam_karta_hai
+            type: writing_prompt
+            tested_text: "अर्जुन दफ़्तर में काम करता है"
+            prompt:
+              target_blocks:
+                - {text: "लिखो: अर्जुन कहाँ काम करता है?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit17.lesson03.exercise14.speak_mein_shikshika_hoon_school
+            type: speak_response
+            tested_text: "मैं शिक्षिका हूँ मैं स्कूल में काम करती हूँ"
+            prompt:
+              target_blocks:
+                - {text: "बोलो: मैं शिक्षिका हूँ। मैं स्कूल में काम करती हूँ।", language_code: hi, direction: ltr}
