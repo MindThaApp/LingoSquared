@@ -201,6 +201,49 @@ def test_content_issue_status_transitions_set_server_timestamps(client,auth,admi
         assert issue.resolved_at is not None
 
 
+def test_admin_issue_listing_enriches_exercise_context(client,auth,admin):
+    # Triage enrichment (docs/CONTRACT.md "Issue-triage enrichment",
+    # 2026-07-10): the list endpoint resolves the referenced exercise's
+    # prompt + answer key and counts open reports against the same
+    # exercise, so an admin never has to psql a raw UUID to understand a
+    # report. Two reports against the same exercise -> open_report_count 2
+    # on both.
+    exercise_id,first=create_report(client,auth)
+    _,second=create_report(client,auth,exercise_id=exercise_id)
+
+    with SessionLocal() as db:
+        exercise=db.get(Exercise,exercise_id)
+        expected_prompt=exercise.prompt
+        expected_correct=exercise.correct_response
+
+    listing=client.get("/admin/content/issues?status=open&limit=200",headers=admin)
+    assert listing.status_code==200, listing.text
+    by_id={issue["id"]:issue for issue in listing.json()}
+    for report_id in (first["id"],second["id"]):
+        row=by_id[report_id]
+        assert row["exercise_prompt"]==expected_prompt
+        assert row["exercise_correct_response"]==expected_correct
+        assert row["open_report_count"]>=2
+        assert row["practice_item_prompt"] is None
+        # learner_response was always returned here -- pin it so the field
+        # the admin UI now renders can't silently vanish from the payload.
+        assert row["learner_response"]=={"response":"learner answer"}
+
+    # Page-level feedback has no content to resolve: all enrichment
+    # fields stay null rather than erroring.
+    feedback=client.post(
+        "/feedback",
+        json={"category":"app_bug","page_path":"/enrichment-null-check"},
+    )
+    assert feedback.status_code==201, feedback.text
+    listing=client.get("/admin/content/issues?status=open&limit=200",headers=admin)
+    page_row=next(issue for issue in listing.json() if issue["id"]==feedback.json()["id"])
+    assert page_row["exercise_prompt"] is None
+    assert page_row["exercise_correct_response"] is None
+    assert page_row["practice_item_prompt"] is None
+    assert page_row["open_report_count"] is None
+
+
 def test_content_issue_list_filters(client,auth,admin):
     _,result=create_report(client,auth)
 

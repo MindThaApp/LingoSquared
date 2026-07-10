@@ -139,6 +139,19 @@ class ContentIssueOut(ORM):
     created_at:datetime
     triaged_at:datetime|None
     resolved_at:datetime|None
+    # Triage enrichment, computed per-request by GET /admin/content/issues
+    # (never stored on the report row) so an admin sees what the report is
+    # about without spelunking YAML/psql: the referenced exercise's prompt
+    # + answer key (or the generated practice item's stored prompt), and
+    # how many OPEN reports point at the same exercise (duplicate
+    # spotting). All default None — the PATCH endpoint returns the bare
+    # row without re-running the enrichment joins, and page-level
+    # feedback has no content to resolve. See docs/CONTRACT.md
+    # "Issue-triage enrichment", 2026-07-10.
+    exercise_prompt:dict[str,Any]|None=None
+    exercise_correct_response:Any|None=None
+    practice_item_prompt:dict[str,Any]|None=None
+    open_report_count:int|None=None
 class ContentCoverageOut(BaseModel): source_language:str; target_language:str; course_count:int; total_unit_count:int; total_lesson_count:int; open_issue_count:int
 
 # content_key (optional, additive): a stable authoring key (e.g.
