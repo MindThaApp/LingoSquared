@@ -2,6 +2,7 @@ import {
   clearAuthTokens,
   del,
   get,
+  getFile,
   getStoredRefreshToken,
   patch,
   post,
@@ -220,6 +221,13 @@ export const LexemeApi = {
     if (opts?.offset !== undefined) params.set("offset", String(opts.offset));
     return get<MistakeLexemeListResult>(`/me/mistakes?${params.toString()}`);
   },
+  // File download (CSV spreadsheet, or Anki's 2-column tab-separated
+  // text-import format) of the same tracked-vocabulary population as
+  // list(). See docs/CONTRACT.md "Vocabulary export".
+  exportFile: (courseId: string, format: "csv" | "anki" = "csv") =>
+    getFile(
+      `/courses/${encodeURIComponent(courseId)}/lexemes/export?format=${format}`,
+    ),
 };
 
 export const CheckpointApi = {
