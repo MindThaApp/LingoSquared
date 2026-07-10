@@ -108,6 +108,48 @@ export function get<T>(path: string): Promise<T> {
   return apiFetch<T>(path, { method: "GET" });
 }
 
+// File-download variant of apiFetch: same base URL / bearer-token /
+// 401-means-session-expired / error-envelope handling, but returns the raw
+// body as a Blob (plus the server's suggested filename from
+// Content-Disposition) instead of parsing JSON -- apiFetch's unconditional
+// res.json() would corrupt a CSV/TSV body. Used by the vocabulary export.
+export async function getFile(
+  path: string,
+): Promise<{ blob: Blob; filename: string | null }> {
+  const { baseUrl, tokenStorage } = requireConfig();
+  const token = tokenStorage.get();
+  const headers = new Headers();
+  if (token) headers.set("Authorization", `Bearer ${token}`);
+
+  const res = await fetch(`${baseUrl}${path}`, { method: "GET", headers });
+
+  if (res.status === 401) {
+    onUnauthorized?.();
+    throw new ApiError(401, "unauthorized", "Session expired");
+  }
+  if (!res.ok) {
+    let body: ApiErrorBody | null = null;
+    try {
+      body = await res.json();
+    } catch {
+      // non-JSON error body, fall through to generic message
+    }
+    const details: Record<string, unknown> = { ...(body?.error ?? {}) };
+    delete details.code;
+    delete details.message;
+    throw new ApiError(
+      res.status,
+      body?.error?.code ?? "unknown_error",
+      body?.error?.message ?? res.statusText,
+      details,
+    );
+  }
+
+  const disposition = res.headers.get("content-disposition");
+  const filename = disposition?.match(/filename="([^"]+)"/)?.[1] ?? null;
+  return { blob: await res.blob(), filename };
+}
+
 export function post<T>(path: string, body?: unknown): Promise<T> {
   return apiFetch<T>(path, {
     method: "POST",
