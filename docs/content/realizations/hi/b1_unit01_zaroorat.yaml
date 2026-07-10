@@ -1,0 +1,510 @@
+schema_version: "1.1"
+realization_version: "2026.1-draft.1"
+target_language: "hi"
+cefr_level: "B1"
+status: "complete_draft"
+generation_provenance:
+  method: "ai_generated"
+  authoring_system: "claude"
+  human_reviewed: false
+  source_note: >-
+    `firecrawl --status` checked before authoring (per standing instruction
+    to try real source material first) and confirmed 0/1,000 credits left
+    this billing cycle, same as every hi A2 unit before it -- no FSI/Peace
+    Corps Hindi source has ever been recoverable as usable text across any
+    of the 25 prior hi units (every attempt reached only OCR-unreadable
+    scans), so `firecrawl search` was not attempted given the confirmed-
+    empty quota. This is hi's first B1 unit, and per the standing
+    established-conventions-only fallback, every sentence below is this
+    session's own fresh authoring of Modern Standard Hindi grammar --
+    nothing adapted, translated, or copied from any external source.
+review:
+  status: "unreviewed"
+  required_next_reviewer: null
+  notes: >-
+    Hi's first B1 unit (spine outcome:
+    universal.b1.necessity.express_obligation_with_subjunctive, confirmed
+    by direct read of universal_spine.yaml lines 1006-1031: can_do, all
+    four modalities, and all four assessment_requirements -- read in full
+    before designing this unit's exercises). Continues directly from hi's
+    A2 course (Priya/Arjun remain the throughline; Arjun just got the job
+    offered in a2_unit25, so this unit's workplace-obligation scenario is
+    a direct, natural continuation of that storyline, still on तुम terms).
+
+    Central B1 grammar decision (this unit's whole reason for existing):
+    चाहिए itself is invariant, but the INFINITIVE immediately before it
+    agrees in gender/number with the logical direct object of a transitive
+    verb (करना/करनी/करने) -- a rule hi's own A2 unit23 explicitly
+    DEFERRED by design (that unit's own grammar note states verbatim: "यह
+    यूनिट सिर्फ़ पुल्लिंग 'करना' रूप को अभ्यास में इस्तेमाल करती है, ताकि
+    एक बार में एक ही नया नियम सिखाया जाए" -- confirmed by direct grep of
+    hi/a2_unit23_doctor.yaml before writing this note). This unit picks up
+    exactly that deferred rule: lesson01 teaches all three agreement forms
+    (करना masc sg, करनी fem sg/pl, करने masc pl) against रिपोर्ट (fem)/
+    रिपोर्टें (fem pl)/काम (masc, invariant sg/pl) as the three test nouns.
+    Lesson02 adds the second half of the spine outcome -- past regret about
+    an unfulfilled obligation via चाहिए था/थी (था/थी itself ALSO agrees
+    with the same complement, e.g. "...पूरी करनी चाहिए थी", genuine added
+    complexity layered onto lesson01's rule, not a separate one) and
+    negation for prohibition (नहीं placed before the infinitive: "...नहीं
+    जाना चाहिए"). Lesson03 applies both in a Priya/Arjun workplace dialogue
+    (Priya's report deadline, Arjun's own missed-call regret) plus a short
+    reading passage and review.
+
+    Confirmed by a fresh grep of every hi realization file for 'चाहिए था'/
+    'चाहिए थी' before writing: zero hits anywhere in the corpus -- the
+    past-regret construction is genuinely new to hi, not previously taught
+    under a different label. सकना/सकता is NOT used anywhere in this file
+    (reserved for the planned b1_unit02 abilities unit, kept out here to
+    keep this unit's new-grammar budget to exactly the चाहिए paradigm).
+
+    Per this task's standing tokenizer-fragmentation discipline: this file
+    is fully SELF-CONTAINED (every token any exercise's tested_text or
+    word_bank uses is declared via this file's OWN introduced_tokens,
+    including basic words like मुझे/यह/ये/नहीं/कल that a real learner
+    already knows from A1/A2 -- not assumed carried over from another
+    file, matching fa/prs/ro's own B1-unit precedent for a fresh CEFR-level
+    jump). Verified by running the compiler's own tokenize() regex against
+    every planned literal surface form in a standalone check before writing
+    any exercise -- Devanagari matras fragment badly under that regex
+    (confirmed: जानी/जाने both fragment to identical {'ज','न'}; करनी/करने
+    both fragment to identical {'करन'}; सकता/सकती/सकते would all fragment
+    identically) but this is harmless as long as the EXACT literal string
+    used in tested_text/word_bank is separately declared in
+    introduced_tokens somewhere in this file, which it always is here --
+    never relied on one form's declaration silently covering a different
+    form via fragment-set collision.
+
+    `Dialogue`/`reading`-kind teaching cards' own `target` text and exercise
+    `prompt.target_blocks` are NOT checked by validate_untaught_vocabulary
+    (confirmed by re-reading that function directly, matching a2_unit25's
+    own documented finding) -- lesson03's dialogue and reading passage use
+    a couple of richer words (क्लाइंट, फ़ोन) freely without a separate
+    introduced_tokens declaration, since neither string is ever used as an
+    exercise's own tested_text.
+
+    Same-speaker-distractor check (the nl unit44-50 regression class):
+    structurally inapplicable, same as every prior hi unit -- hi dialogue
+    content carries no media_asset_key (plain TextBlocks), and this unit's
+    two listen_select exercises are each a single standalone utterance with
+    its own dedicated media_asset_key, not pulled from the dialogue clip.
+
+    Cross-check of every concrete fact stated across the unit (AUTHORING_
+    GUIDE §11): exactly two facts are stated and never contradicted --
+    (1) Priya's report is due tonight (आज रात तक), stated in lesson03's
+    dialogue line01 and the reading passage's own restatement ("आज रिपोर्ट
+    पूरी हो गई"); (2) Arjun should have called a client yesterday but
+    forgot, stated once in dialogue line02 and never repeated elsewhere
+    with a conflicting detail.
+
+    fill_in_blank ambiguity check (§17): lesson01's blank (करना, frame
+    "मुझे यह काम ___ चाहिए।") -- यह काम is masculine singular by this
+    file's own established gender assignment, and करनी (fem) / करने (pl)
+    are grammatically excluded by that same agreement rule the lesson
+    exists to teach, so the frame disambiguates by grammar alone, not a
+    true-synonym collision. lesson02's blank (थी, frame "मुझे कल यह
+    रिपोर्ट पूरी करनी चाहिए ___।") -- थी is required by रिपोर्ट (fem);
+    था is grammatically excluded the same way; unambiguous.
+
+    Word-order duplicate-token check: every word_order exercise's
+    word_bank below has zero repeated tokens (checked by hand).
+
+    This unit is NOT yet native-speaker or fresh-context reviewed --
+    status left honestly as unreviewed, matching this course's own
+    standing convention for freshly authored content pending that
+    separate pass.
+
+course:
+  realization_key: hi.b1
+  target_language_first: true
+  dialect: hi_standard
+  register_policy: >-
+    Continues the A1/A2 course's established तुम-terms Priya/Arjun
+    throughline. चाहिए itself has no formal/informal register variant --
+    it is register-neutral, used identically with मुझे/तुम्हें/आपको.
+
+media_assets:
+  - {content_key: hi.b1.audio.necessity.mujhe_ye_kaam_karne_chahiye.01, language: hi, text: "मुझे ये काम करने चाहिए।", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - {content_key: hi.b1.audio.necessity.mujhe_vahan_nahin_jaana_chahiye.01, language: hi, text: "मुझे वहाँ नहीं जाना चाहिए।", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+
+units:
+  - content_key: hi.b1.unit01.necessity
+    title: "ज़रूरत और चाहिए"
+    section: reading_writing
+    spine_outcome_ids:
+      - universal.b1.necessity.express_obligation_with_subjunctive
+    planned_lesson_count: 3
+
+    lessons:
+      - content_key: hi.b1.unit01.lesson01.chahiye_agreement
+        title: "करना, करनी, करने"
+        spine_outcome_id: universal.b1.necessity.express_obligation_with_subjunctive
+        teaching:
+          - content_key: hi.b1.unit01.lesson01.teach.mujhe
+            kind: vocabulary
+            target: {text: "मुझे", language_code: hi, direction: ltr}
+            introduced_tokens: ["मुझे"]
+            example: {text: "मुझे कॉफ़ी चाहिए।", language_code: hi, direction: ltr}
+          - content_key: hi.b1.unit01.lesson01.teach.yeh
+            kind: vocabulary
+            target: {text: "यह", language_code: hi, direction: ltr}
+            introduced_tokens: ["यह"]
+            example: {text: "यह मेरा घर है।", language_code: hi, direction: ltr}
+          - content_key: hi.b1.unit01.lesson01.teach.ye
+            kind: vocabulary
+            target: {text: "ये", language_code: hi, direction: ltr}
+            introduced_tokens: ["ये"]
+            example: {text: "ये मेरी किताबें हैं।", language_code: hi, direction: ltr}
+          - content_key: hi.b1.unit01.lesson01.teach.chahiye
+            kind: vocabulary
+            target: {text: "चाहिए", language_code: hi, direction: ltr}
+            introduced_tokens: ["चाहिए"]
+            example: {text: "आपको आराम करना चाहिए।", language_code: hi, direction: ltr}
+          - content_key: hi.b1.unit01.lesson01.teach.kaam
+            kind: vocabulary
+            target: {text: "काम", language_code: hi, direction: ltr}
+            introduced_tokens: ["काम"]
+            example: {text: "आज बहुत काम है।", language_code: hi, direction: ltr}
+          - content_key: hi.b1.unit01.lesson01.teach.karna
+            kind: vocabulary
+            target: {text: "करना", language_code: hi, direction: ltr}
+            introduced_tokens: ["करना"]
+            example: {text: "मुझे यह करना है।", language_code: hi, direction: ltr}
+          - content_key: hi.b1.unit01.lesson01.teach.karne
+            kind: vocabulary
+            target: {text: "करने", language_code: hi, direction: ltr}
+            introduced_tokens: ["करने"]
+            example: {text: "मुझे ये काम करने हैं।", language_code: hi, direction: ltr}
+          - content_key: hi.b1.unit01.lesson01.teach.report
+            kind: vocabulary
+            target: {text: "रिपोर्ट", language_code: hi, direction: ltr}
+            introduced_tokens: ["रिपोर्ट"]
+            example: {text: "रिपोर्ट कल तक चाहिए।", language_code: hi, direction: ltr}
+          - content_key: hi.b1.unit01.lesson01.teach.reports_pl
+            kind: vocabulary
+            target: {text: "रिपोर्टें", language_code: hi, direction: ltr}
+            introduced_tokens: ["रिपोर्टें"]
+            example: {text: "दो रिपोर्टें आज चाहिए।", language_code: hi, direction: ltr}
+          - content_key: hi.b1.unit01.lesson01.teach.poori
+            kind: vocabulary
+            target: {text: "पूरी", language_code: hi, direction: ltr}
+            introduced_tokens: ["पूरी"]
+            example: {text: "किताब पूरी है।", language_code: hi, direction: ltr}
+          - content_key: hi.b1.unit01.lesson01.teach.karni
+            kind: vocabulary
+            target: {text: "करनी", language_code: hi, direction: ltr}
+            introduced_tokens: ["करनी"]
+            example: {text: "मुझे यह बात करनी है।", language_code: hi, direction: ltr}
+          - content_key: hi.b1.unit01.lesson01.teach.grammar_agreement
+            kind: grammar_note
+            target: {text: "मुझे यह काम करना चाहिए। मुझे यह रिपोर्ट पूरी करनी चाहिए। मुझे ये काम करने चाहिए।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.b1.unit01.lesson01.teach.phrase_report
+            kind: phrase
+            target: {text: "मुझे यह रिपोर्ट पूरी करनी चाहिए।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.b1.unit01.lesson01.teach.phrase_kaam_pl
+            kind: phrase
+            target: {text: "मुझे ये काम करने चाहिए।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+        exercises:
+          - content_key: hi.b1.unit01.lesson01.exercise01.select_chahiye_meaning
+            type: multiple_choice
+            tested_text: "चाहिए"
+            prompt:
+              target_blocks:
+                - {text: "चाहिए", language_code: hi, direction: ltr}
+          - content_key: hi.b1.unit01.lesson01.exercise02.select_report_meaning
+            type: multiple_choice
+            tested_text: "रिपोर्ट"
+            prompt:
+              target_blocks:
+                - {text: "रिपोर्ट", language_code: hi, direction: ltr}
+          - content_key: hi.b1.unit01.lesson01.exercise03.select_mujhe_yeh_report_poori_karni_chahiye_meaning
+            type: multiple_choice
+            tested_text: "मुझे यह रिपोर्ट पूरी करनी चाहिए"
+            prompt:
+              target_blocks:
+                - {text: "मुझे यह रिपोर्ट पूरी करनी चाहिए।", language_code: hi, direction: ltr}
+          - content_key: hi.b1.unit01.lesson01.exercise04.listen_mujhe_ye_kaam_karne_chahiye
+            type: listen_select
+            tested_text: "मुझे ये काम करने चाहिए"
+            media_asset_key: hi.b1.audio.necessity.mujhe_ye_kaam_karne_chahiye.01
+            prompt: {target_blocks: []}
+          - content_key: hi.b1.unit01.lesson01.exercise05.match_lesson01_words
+            type: matching_pairs
+            tested_text: "चाहिए काम रिपोर्ट रिपोर्टें पूरी करनी करने"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "चाहिए", right: "should"}
+              - {left: "काम", right: "work / task"}
+              - {left: "रिपोर्ट", right: "report"}
+              - {left: "रिपोर्टें", right: "reports"}
+              - {left: "पूरी", right: "complete (fem.)"}
+              - {left: "करनी", right: "to do (fem. agreement)"}
+              - {left: "करने", right: "to do (masc. pl. agreement)"}
+          - content_key: hi.b1.unit01.lesson01.exercise06.order_mujhe_yeh_report_poori_karni_chahiye
+            type: word_order
+            tested_text: "मुझे यह रिपोर्ट पूरी करनी चाहिए"
+            prompt: {target_blocks: []}
+            word_bank: ["मुझे", "यह", "रिपोर्ट", "पूरी", "करनी", "चाहिए"]
+          - content_key: hi.b1.unit01.lesson01.exercise07.order_mujhe_ye_kaam_karne_chahiye
+            type: word_order
+            tested_text: "मुझे ये काम करने चाहिए"
+            prompt: {target_blocks: []}
+            word_bank: ["मुझे", "ये", "काम", "करने", "चाहिए"]
+          - content_key: hi.b1.unit01.lesson01.exercise08.fill_yeh_kaam_karna
+            type: fill_in_blank
+            tested_text: "करना"
+            prompt:
+              target_blocks:
+                - {text: "मुझे यह काम ___ चाहिए।", language_code: hi, direction: ltr}
+          - content_key: hi.b1.unit01.lesson01.exercise09.fix_report_agreement
+            type: grammar_check
+            tested_text: "मुझे यह रिपोर्ट पूरी करनी चाहिए"
+            prompt:
+              target_blocks:
+                - {text: "मुझे यह रिपोर्ट पूरी करना चाहिए।", language_code: hi, direction: ltr}
+          - content_key: hi.b1.unit01.lesson01.exercise10.reply_tumhein_kya_karna_chahiye
+            type: dialogue_response
+            tested_text: "मुझे यह रिपोर्ट पूरी करनी चाहिए"
+            prompt:
+              target_blocks:
+                - {text: "तुम्हें क्या करना चाहिए?", language_code: hi, direction: ltr}
+
+      - content_key: hi.b1.unit01.lesson02.chahiye_tha_negation
+        title: "चाहिए था, नहीं चाहिए"
+        spine_outcome_id: universal.b1.necessity.express_obligation_with_subjunctive
+        teaching:
+          - content_key: hi.b1.unit01.lesson02.teach.kal
+            kind: vocabulary
+            target: {text: "कल", language_code: hi, direction: ltr}
+            introduced_tokens: ["कल"]
+            example: {text: "कल मैं बाज़ार गया।", language_code: hi, direction: ltr}
+          - content_key: hi.b1.unit01.lesson02.teach.tha
+            kind: vocabulary
+            target: {text: "था", language_code: hi, direction: ltr}
+            introduced_tokens: ["था"]
+            example: {text: "वह घर पर था।", language_code: hi, direction: ltr}
+          - content_key: hi.b1.unit01.lesson02.teach.thi
+            kind: vocabulary
+            target: {text: "थी", language_code: hi, direction: ltr}
+            introduced_tokens: ["थी"]
+            example: {text: "रिपोर्ट अच्छी थी।", language_code: hi, direction: ltr}
+          - content_key: hi.b1.unit01.lesson02.teach.grammar_past_regret
+            kind: grammar_note
+            target: {text: "मुझे यह काम करना चाहिए था। मुझे यह रिपोर्ट पूरी करनी चाहिए थी।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.b1.unit01.lesson02.teach.vahan
+            kind: vocabulary
+            target: {text: "वहाँ", language_code: hi, direction: ltr}
+            introduced_tokens: ["वहाँ"]
+            example: {text: "वहाँ मत जाओ।", language_code: hi, direction: ltr}
+          - content_key: hi.b1.unit01.lesson02.teach.nahin
+            kind: vocabulary
+            target: {text: "नहीं", language_code: hi, direction: ltr}
+            introduced_tokens: ["नहीं"]
+            example: {text: "मुझे नहीं पता।", language_code: hi, direction: ltr}
+          - content_key: hi.b1.unit01.lesson02.teach.jaana
+            kind: vocabulary
+            target: {text: "जाना", language_code: hi, direction: ltr}
+            introduced_tokens: ["जाना"]
+            example: {text: "मुझे घर जाना है।", language_code: hi, direction: ltr}
+          - content_key: hi.b1.unit01.lesson02.teach.grammar_negation
+            kind: grammar_note
+            target: {text: "मुझे वहाँ नहीं जाना चाहिए।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.b1.unit01.lesson02.teach.tumhein
+            kind: vocabulary
+            target: {text: "तुम्हें", language_code: hi, direction: ltr}
+            introduced_tokens: ["तुम्हें"]
+            example: {text: "तुम्हें क्या चाहिए?", language_code: hi, direction: ltr}
+          - content_key: hi.b1.unit01.lesson02.teach.der
+            kind: vocabulary
+            target: {text: "देर", language_code: hi, direction: ltr}
+            introduced_tokens: ["देर"]
+            example: {text: "आज देर हो गई।", language_code: hi, direction: ltr}
+          - content_key: hi.b1.unit01.lesson02.teach.phrase_past_regret
+            kind: phrase
+            target: {text: "मुझे कल यह रिपोर्ट पूरी करनी चाहिए थी।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.b1.unit01.lesson02.teach.phrase_negation
+            kind: phrase
+            target: {text: "तुम्हें देर नहीं करनी चाहिए।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+        exercises:
+          - content_key: hi.b1.unit01.lesson02.exercise01.select_tha_meaning
+            type: multiple_choice
+            tested_text: "था"
+            prompt:
+              target_blocks:
+                - {text: "था", language_code: hi, direction: ltr}
+          - content_key: hi.b1.unit01.lesson02.exercise02.select_der_meaning
+            type: multiple_choice
+            tested_text: "देर"
+            prompt:
+              target_blocks:
+                - {text: "देर", language_code: hi, direction: ltr}
+          - content_key: hi.b1.unit01.lesson02.exercise03.select_mujhe_kal_yeh_report_poori_karni_chahiye_thi_meaning
+            type: multiple_choice
+            tested_text: "मुझे कल यह रिपोर्ट पूरी करनी चाहिए थी"
+            prompt:
+              target_blocks:
+                - {text: "मुझे कल यह रिपोर्ट पूरी करनी चाहिए थी।", language_code: hi, direction: ltr}
+          - content_key: hi.b1.unit01.lesson02.exercise04.listen_mujhe_vahan_nahin_jaana_chahiye
+            type: listen_select
+            tested_text: "मुझे वहाँ नहीं जाना चाहिए"
+            media_asset_key: hi.b1.audio.necessity.mujhe_vahan_nahin_jaana_chahiye.01
+            prompt: {target_blocks: []}
+          - content_key: hi.b1.unit01.lesson02.exercise05.match_lesson02_words
+            type: matching_pairs
+            tested_text: "कल था थी वहाँ नहीं जाना तुम्हें देर"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "कल", right: "yesterday"}
+              - {left: "था", right: "was (masc.)"}
+              - {left: "थी", right: "was (fem.)"}
+              - {left: "वहाँ", right: "there"}
+              - {left: "नहीं", right: "not"}
+              - {left: "जाना", right: "to go"}
+              - {left: "तुम्हें", right: "to you (informal)"}
+              - {left: "देर", right: "lateness / delay"}
+          - content_key: hi.b1.unit01.lesson02.exercise06.order_mujhe_kal_yeh_kaam_karna_chahiye_tha
+            type: word_order
+            tested_text: "मुझे कल यह काम करना चाहिए था"
+            prompt: {target_blocks: []}
+            word_bank: ["मुझे", "कल", "यह", "काम", "करना", "चाहिए", "था"]
+          - content_key: hi.b1.unit01.lesson02.exercise07.order_tumhein_der_nahin_karni_chahiye
+            type: word_order
+            tested_text: "तुम्हें देर नहीं करनी चाहिए"
+            prompt: {target_blocks: []}
+            word_bank: ["तुम्हें", "देर", "नहीं", "करनी", "चाहिए"]
+          - content_key: hi.b1.unit01.lesson02.exercise08.fill_report_thi
+            type: fill_in_blank
+            tested_text: "थी"
+            prompt:
+              target_blocks:
+                - {text: "मुझे कल यह रिपोर्ट पूरी करनी चाहिए ___।", language_code: hi, direction: ltr}
+          - content_key: hi.b1.unit01.lesson02.exercise09.fix_report_past_regret
+            type: grammar_check
+            tested_text: "मुझे कल यह रिपोर्ट पूरी करनी चाहिए थी"
+            prompt:
+              target_blocks:
+                - {text: "मुझे कल यह रिपोर्ट पूरी करनी चाहिए था।", language_code: hi, direction: ltr}
+          - content_key: hi.b1.unit01.lesson02.exercise10.write_mujhe_vahan_nahin_jaana_chahiye
+            type: writing_prompt
+            tested_text: "मुझे वहाँ नहीं जाना चाहिए"
+            prompt:
+              target_blocks:
+                - {text: "Write in Hindi: say you should not go there.", language_code: en, direction: ltr}
+          - content_key: hi.b1.unit01.lesson02.exercise11.speak_tumhein_der_nahin_karni_chahiye
+            type: speak_response
+            tested_text: "तुम्हें देर नहीं करनी चाहिए"
+            prompt:
+              target_blocks:
+                - {text: "बोलो: तुम्हें देर नहीं करनी चाहिए।", language_code: hi, direction: ltr}
+
+      - content_key: hi.b1.unit01.lesson03.priya_arjun_report
+        title: "प्रिया की रिपोर्ट"
+        spine_outcome_id: universal.b1.necessity.express_obligation_with_subjunctive
+        teaching:
+          - content_key: hi.b1.unit01.lesson03.teach.dialogue.line01
+            kind: dialogue
+            target: {text: "अर्जुन, मुझे आज रात तक यह रिपोर्ट पूरी करनी है, पर समय कम है।", language_code: hi, direction: ltr, speaker: Priya}
+            introduced_tokens: []
+          - content_key: hi.b1.unit01.lesson03.teach.dialogue.line02
+            kind: dialogue
+            target: {text: "तुम्हें जल्दी शुरू करना चाहिए। मुझे भी कल एक क्लाइंट को फ़ोन करना चाहिए था, पर मैं भूल गया।", language_code: hi, direction: ltr, speaker: Arjun}
+            introduced_tokens: ["क्लाइंट"]
+          - content_key: hi.b1.unit01.lesson03.teach.dialogue.line03
+            kind: dialogue
+            target: {text: "सच में? अब क्या करोगे?", language_code: hi, direction: ltr, speaker: Priya}
+            introduced_tokens: []
+          - content_key: hi.b1.unit01.lesson03.teach.dialogue.line04
+            kind: dialogue
+            target: {text: "अब मुझे उसे आज फ़ोन करना चाहिए। और तुम्हें देर नहीं करनी चाहिए -- मैं मदद कर सकता हूँ।", language_code: hi, direction: ltr, speaker: Arjun}
+            introduced_tokens: []
+          - content_key: hi.b1.unit01.lesson03.teach.dialogue.line05
+            kind: dialogue
+            target: {text: "बहुत अच्छा! धन्यवाद अर्जुन।", language_code: hi, direction: ltr, speaker: Priya}
+            introduced_tokens: []
+          - content_key: hi.b1.unit01.lesson03.teach.grammar_summary
+            kind: grammar_note
+            target: {text: "मुझे यह करना चाहिए। मुझे यह करनी चाहिए। मुझे ये करने चाहिए। मुझे यह करना चाहिए था। मुझे वहाँ नहीं जाना चाहिए।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.b1.unit01.lesson03.teach.reading_passage
+            kind: reading
+            target: {text: "पिछले हफ़्ते प्रिया को यह रिपोर्ट जल्दी शुरू करनी चाहिए थी, पर वह बहुत व्यस्त थी। कल रात अर्जुन ने उसकी मदद की, इसलिए आज रिपोर्ट पूरी हो गई। अब प्रिया सोचती है कि उसे हमेशा जल्दी शुरू करना चाहिए।", language_code: hi, direction: ltr}
+            introduced_tokens: ["व्यस्त"]
+        exercises:
+          - content_key: hi.b1.unit01.lesson03.exercise01.comprehend_deadline
+            type: dialogue_comprehension
+            tested_text: "रात"
+            prompt:
+              target_blocks:
+                - {text: "अर्जुन, मुझे आज रात तक यह रिपोर्ट पूरी करनी है, पर समय कम है।", language_code: hi, direction: ltr}
+          - content_key: hi.b1.unit01.lesson03.exercise02.comprehend_arjun_regret
+            type: dialogue_comprehension
+            tested_text: "क्लाइंट"
+            prompt:
+              target_blocks:
+                - {text: "तुम्हें जल्दी शुरू करना चाहिए। मुझे भी कल एक क्लाइंट को फ़ोन करना चाहिए था, पर मैं भूल गया।", language_code: hi, direction: ltr}
+          - content_key: hi.b1.unit01.lesson03.exercise03.select_chahiye_meaning_review
+            type: multiple_choice
+            tested_text: "चाहिए"
+            prompt:
+              target_blocks:
+                - {text: "चाहिए", language_code: hi, direction: ltr}
+          - content_key: hi.b1.unit01.lesson03.exercise04.read_reading_priya_delay
+            type: reading_comprehension
+            tested_text: "व्यस्त"
+            prompt:
+              target_blocks:
+                - {text: "पिछले हफ़्ते प्रिया को यह रिपोर्ट जल्दी शुरू करनी चाहिए थी, पर वह बहुत व्यस्त थी। कल रात अर्जुन ने उसकी मदद की, इसलिए आज रिपोर्ट पूरी हो गई। अब प्रिया सोचती है कि उसे हमेशा जल्दी शुरू करना चाहिए।", language_code: hi, direction: ltr}
+          - content_key: hi.b1.unit01.lesson03.exercise05.read_reading_report_done
+            type: reading_comprehension
+            tested_text: "पूरी"
+            prompt:
+              target_blocks:
+                - {text: "पिछले हफ़्ते प्रिया को यह रिपोर्ट जल्दी शुरू करनी चाहिए थी, पर वह बहुत व्यस्त थी। कल रात अर्जुन ने उसकी मदद की, इसलिए आज रिपोर्ट पूरी हो गई। अब प्रिया सोचती है कि उसे हमेशा जल्दी शुरू करना चाहिए।", language_code: hi, direction: ltr}
+          - content_key: hi.b1.unit01.lesson03.exercise06.listen_mujhe_ye_kaam_karne_chahiye_review
+            type: listen_select
+            tested_text: "मुझे ये काम करने चाहिए"
+            media_asset_key: hi.b1.audio.necessity.mujhe_ye_kaam_karne_chahiye.01
+            prompt: {target_blocks: []}
+          - content_key: hi.b1.unit01.lesson03.exercise07.match_lesson03_review
+            type: matching_pairs
+            tested_text: "चाहिए रिपोर्ट पूरी करनी था थी नहीं देर"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "चाहिए", right: "should"}
+              - {left: "रिपोर्ट", right: "report"}
+              - {left: "पूरी", right: "complete (fem.)"}
+              - {left: "करनी", right: "to do (fem. agreement)"}
+              - {left: "था", right: "was (masc.)"}
+              - {left: "थी", right: "was (fem.)"}
+              - {left: "नहीं", right: "not"}
+              - {left: "देर", right: "lateness / delay"}
+          - content_key: hi.b1.unit01.lesson03.exercise08.order_mujhe_kal_yeh_report_poori_karni_chahiye_thi_review
+            type: word_order
+            tested_text: "मुझे कल यह रिपोर्ट पूरी करनी चाहिए थी"
+            prompt: {target_blocks: []}
+            word_bank: ["मुझे", "कल", "यह", "रिपोर्ट", "पूरी", "करनी", "चाहिए", "थी"]
+          - content_key: hi.b1.unit01.lesson03.exercise09.fix_negation_review
+            type: grammar_check
+            tested_text: "मुझे वहाँ नहीं जाना चाहिए"
+            prompt:
+              target_blocks:
+                - {text: "मुझे वहाँ नहीं जाना चाहिए था।", language_code: hi, direction: ltr}
+          - content_key: hi.b1.unit01.lesson03.exercise10.write_report_summary
+            type: writing_prompt
+            tested_text: "मुझे यह रिपोर्ट पूरी करनी चाहिए थी"
+            prompt:
+              target_blocks:
+                - {text: "Write in Hindi: say you should have finished this report.", language_code: en, direction: ltr}
+          - content_key: hi.b1.unit01.lesson03.exercise11.speak_own_necessity
+            type: speak_response
+            tested_text: "मुझे यह काम करना चाहिए"
+            prompt:
+              target_blocks:
+                - {text: "बोलो: मुझे यह काम करना चाहिए।", language_code: hi, direction: ltr}
