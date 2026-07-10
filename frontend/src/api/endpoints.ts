@@ -19,6 +19,10 @@ import type {
   LessonCompleteResult,
   LessonStartResult,
   LessonSummary,
+  LexemeListResult,
+  LexemeSort,
+  LexemeSummary,
+  MistakeLexemeListResult,
   PracticeAnswerResult,
   PracticeBatchResult,
   Progress,
@@ -134,6 +138,37 @@ export const ReviewApi = {
       description,
       learner_response: learnerResponse,
     }),
+};
+
+// Vocabulary browser + mistakes hub -- read-only views over the same
+// per-lexeme SRS state the review/practice engines already maintain.
+export const LexemeApi = {
+  list: (
+    courseId: string,
+    opts?: {
+      sort?: LexemeSort;
+      partOfSpeech?: string;
+      search?: string;
+      limit?: number;
+      offset?: number;
+    },
+  ) => {
+    const params = new URLSearchParams({ course_id: courseId });
+    if (opts?.sort) params.set("sort", opts.sort);
+    if (opts?.partOfSpeech) params.set("part_of_speech", opts.partOfSpeech);
+    if (opts?.search) params.set("search", opts.search);
+    if (opts?.limit !== undefined) params.set("limit", String(opts.limit));
+    if (opts?.offset !== undefined) params.set("offset", String(opts.offset));
+    return get<LexemeListResult>(`/me/lexemes?${params.toString()}`);
+  },
+  summary: (courseId: string) =>
+    get<LexemeSummary>(`/me/lexemes/summary?course_id=${encodeURIComponent(courseId)}`),
+  mistakes: (courseId: string, opts?: { limit?: number; offset?: number }) => {
+    const params = new URLSearchParams({ course_id: courseId });
+    if (opts?.limit !== undefined) params.set("limit", String(opts.limit));
+    if (opts?.offset !== undefined) params.set("offset", String(opts.offset));
+    return get<MistakeLexemeListResult>(`/me/mistakes?${params.toString()}`);
+  },
 };
 
 export const CheckpointApi = {

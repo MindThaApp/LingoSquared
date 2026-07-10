@@ -40,6 +40,7 @@ export interface UnitSummary {
   title: string;
   order: number;
   lesson_count: number;
+  completed_lesson_count: number;
   section: UnitSection;
   locked: boolean;
   checkpoint_passed: boolean;
@@ -239,6 +240,64 @@ export interface ReviewDueResult {
 
 export interface ReviewItemsResult {
   items: PracticeItem[];
+}
+
+export type LexemeSort =
+  | "due_soonest"
+  | "mastery_asc"
+  | "mastery_desc"
+  | "alphabetical"
+  | "recently_introduced";
+
+export interface Lexeme {
+  token: string;
+  english_gloss: string;
+  part_of_speech: string;
+  mastery: number;
+  interval_days: number;
+  repetitions: number;
+  due_at: string;
+  introduced_at: string;
+  suspended: boolean;
+  last_reviewed_at: string | null;
+}
+
+export interface LexemeListResult {
+  items: Lexeme[];
+  total_count: number;
+  limit: number;
+  offset: number;
+}
+
+export interface LexemeMasteryBands {
+  new: number;
+  learning: number;
+  strong: number;
+}
+
+export interface LexemeSummary {
+  total_tracked: number;
+  mastery_bands: LexemeMasteryBands;
+  due_today: number;
+  suspended: number;
+}
+
+export interface MistakeLexeme {
+  token: string;
+  english_gloss: string;
+  part_of_speech: string;
+  mastery: number;
+  repetitions: number;
+  recent_accuracy: number;
+  wrong_attempt_count: number;
+  total_attempt_count: number;
+}
+
+export interface MistakeLexemeListResult {
+  items: MistakeLexeme[];
+  total_count: number;
+  limit: number;
+  offset: number;
 }
 
 export interface CheckpointResult {

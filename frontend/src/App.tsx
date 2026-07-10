@@ -15,6 +15,7 @@ import { PracticeFeedPage } from "./pages/PracticeFeedPage";
 import { LessonRunnerPage } from "./pages/LessonRunnerPage";
 import { LessonCompletePage } from "./pages/LessonCompletePage";
 import { ReviewPage } from "./pages/ReviewPage";
+import { VocabularyPage } from "./pages/VocabularyPage";
 import { ProfilePage } from "./pages/ProfilePage";
 import { AdminContentPage } from "./pages/AdminContentPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
@@ -97,6 +98,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <ReviewPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/vocabulary"
+              element={
+                <ProtectedRoute>
+                  <VocabularyPage />
                 </ProtectedRoute>
               }
             />
