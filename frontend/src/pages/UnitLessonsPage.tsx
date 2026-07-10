@@ -27,6 +27,16 @@ export function UnitLessonsPage() {
   return (
     <div>
       <h1>{t("unit_lessons.title")}</h1>
+      {/* Without this, a failed lessons fetch leaves a blank list under the
+          heading -- a misleading "no lessons" look, not an error. */}
+      {lessonsQuery.isError && (
+        <div className="feedback-banner error">
+          <p style={{ margin: "0 0 10px" }}>{t("unit_lessons.lessons_fetch_error")}</p>
+          <button className="btn btn-block" onClick={() => lessonsQuery.refetch()}>
+            {t("common.retry")}
+          </button>
+        </div>
+      )}
       {lessonsQuery.data?.map((lesson) => {
         const progress = progressByLessonId.get(lesson.id);
         const completed = !!progress?.completed_at;

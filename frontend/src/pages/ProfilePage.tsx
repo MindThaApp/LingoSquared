@@ -74,7 +74,17 @@ export function ProfilePage() {
 
       <div className="card">
         <h2 style={{ marginTop: 0 }}>{t("profile.achievements")}</h2>
-        {achievementsQuery.data?.length ? (
+        {/* Without the error branch, a failed achievements fetch silently
+            renders the "no achievements yet" empty state -- misleading for a
+            user who has earned some. */}
+        {achievementsQuery.isError ? (
+          <div className="feedback-banner error">
+            <p style={{ margin: "0 0 10px" }}>{t("profile.achievements_fetch_error")}</p>
+            <button className="btn btn-block" onClick={() => achievementsQuery.refetch()}>
+              {t("common.retry")}
+            </button>
+          </div>
+        ) : achievementsQuery.data?.length ? (
           achievementsQuery.data.map((achievement) => (
             <div key={achievement.id} style={{ marginBottom: 8, opacity: achievement.earned ? 1 : 0.4 }}>
               <span className="badge">🏅 {achievement.title}</span>{" "}
