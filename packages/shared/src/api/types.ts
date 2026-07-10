@@ -404,6 +404,12 @@ export interface FeedbackReportIn {
   category: ContentIssueCategory;
   description?: string;
   page_path: string;
+  // Free-form diagnostic blob. The backend (GeneralFeedbackIn in
+  // backend/app/schemas/api.py) accepts any JSON object here, bounded to
+  // 5000 serialized characters -- callers must truncate large values
+  // (stack traces etc.) themselves or the whole report 422s. Used by the
+  // automatic crash reporter (frontend/src/lib/crashReporter.ts).
+  client_context?: Record<string, unknown>;
 }
 
 export interface CoverageRow {

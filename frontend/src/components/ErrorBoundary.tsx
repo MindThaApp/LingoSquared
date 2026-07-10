@@ -1,6 +1,7 @@
 import { Component, type ErrorInfo, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import i18n from "../i18n";
+import { reportCrash, truncateComponentStack } from "../lib/crashReporter";
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -26,6 +27,12 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
   componentDidCatch(error: Error, info: ErrorInfo) {
     // eslint-disable-next-line no-console
     console.error("Unhandled render error caught by ErrorBoundary:", error, info);
+    // ALSO ship it to the feedback collector (console.error alone
+    // vanishes when the tab closes). reportCrash dedups by message and
+    // can never throw, so this is safe even mid-crash.
+    reportCrash("error_boundary", error.message, error.stack, {
+      component_stack: truncateComponentStack(info.componentStack),
+    });
   }
 
   handleReset = () => {

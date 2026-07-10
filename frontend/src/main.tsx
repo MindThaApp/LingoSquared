@@ -8,6 +8,7 @@ import './index.css'
 import './i18n'
 import App from './App.tsx'
 import { AuthProvider } from './auth/AuthContext'
+import { installGlobalCrashReporting } from './lib/crashReporter'
 
 // @lingo/shared's api/client.ts and lib/answerInputMode.ts moved out of
 // frontend/src (Phase 0 of the mobile plan, see CLAUDE.md) and can no
@@ -35,6 +36,12 @@ configureApi({
     clear: () => localStorage.removeItem(ACCESS_TOKEN_STORAGE_KEY),
   },
 })
+
+// Automatic crash reporting (window error / unhandledrejection ->
+// POST /feedback, category app_bug). Must come after configureApi()
+// above -- FeedbackApi throws if the client isn't configured yet.
+// ErrorBoundary.componentDidCatch reports through the same path.
+installGlobalCrashReporting()
 
 // Same storage key/behavior as the pre-extraction answerInputMode.ts,
 // including the private-browsing/quota-error swallow on set.
