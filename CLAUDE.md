@@ -1089,6 +1089,57 @@ separately: Peace Corps' own Persian/Dari materials have no recordings
 at all, PDF-only** — the other public-domain source is a dead end too
 for this specific need, don't re-check it either.
 
+## Feedback/issue-report collection strategy, 2026-07-09
+
+Prompted by Ramin asking how in-app feedback gets recorded once this app
+runs somewhere other than a single dev laptop — three deployment shapes
+were named: his home server (LAN or tunneled), a GitHub-published
+"clone and run locally via a shortcut" app, and an eventual publicly
+hosted domain. The existing `ContentIssueReport` mechanism (DB table +
+API-only admin triage at `/admin/content`, exercise/practice-item-scoped
+only) already works correctly for the first and third shapes — one
+shared backend, one shared DB, reports just land there. **It breaks for
+the second shape**: if each person who runs a local copy spins up their
+own local backend+Postgres, their reports live only on their own
+machine and Ramin never sees them — no shared DB exists across
+independent local installs.
+
+**Fix, decided and built this session**: a new `POST /feedback`
+endpoint (unauthenticated — has to work from a logged-out screen too),
+a `page_path` column on `ContentIssueReport` (relaxed the
+exactly-one-of-exercise_id/practice_item_id check constraint to
+at-most-one), and a real every-page "give feedback" widget
+(`FeedbackWidget.tsx`, mounted once in `App.tsx`, distinct from the
+existing exercise-scoped `ReportIssueButton.tsx`). The part that
+actually solves the multi-deployment problem: the frontend submits
+feedback via a **separate, independently-configurable base URL**
+(`VITE_FEEDBACK_API_URL` in `frontend/src/api/client.ts`, falls back to
+the normal `VITE_API_BASE_URL` when unset) instead of always hitting
+whatever backend happens to be serving the rest of the app. Since
+Ramin is the one who builds and publishes the "clickable shortcut"
+local app, baking a fixed value into that build means every local
+install already points at one central collector by default — nobody
+downloading it needs to configure anything themselves. Same mechanism
+is REST-only and mobile-ready by construction: a future Expo/React
+Native app (see "No mobile app" in Known limitations below) hits the
+exact same endpoint the same way, no separate mobile reporting design
+needed later. Full spec in `docs/CONTRACT.md`'s "General app/page
+feedback" section.
+
+**Standing gap, not yet resolved: `VITE_FEEDBACK_API_URL` has no real
+value set yet.** It needs ONE stable, internet-reachable URL for
+whichever backend is meant to be the permanent feedback collector —
+until Ramin decides that (e.g. a tunnel/DDNS record pointed at
+192.168.4.4, or the eventual hosted domain once it exists) and the env
+var gets set at build time, local-install feedback still only reaches
+whatever backend that specific install happens to be running against,
+same as before this feature existed. This is an infra/deployment
+decision for Ramin to make, not something a Claude session should
+invent unilaterally (picking a random tunneling service or exposing
+his home server to the internet has real security tradeoffs). Flag
+this explicitly again before ever publishing a "run this locally"
+distribution of the app.
+
 ## What's built and verified live
 
 Auth; all 10 languages (fa/prs fully separate, correct RTL + script
