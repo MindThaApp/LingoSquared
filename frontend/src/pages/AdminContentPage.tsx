@@ -5,6 +5,7 @@ import { AdminApi } from "@lingo/shared/api/endpoints";
 import { ApiError } from "@lingo/shared/api/client";
 import { formatCorrectResponse } from "@lingo/shared/lib/formatAnswer";
 import type { ContentIssue, ExercisePrompt } from "@lingo/shared/api/types";
+import { useAuth } from "../auth/AuthContext";
 
 const STATUS_OPTIONS = ["open", "triaged", "resolved", "wontfix", "duplicate"];
 
@@ -24,17 +25,28 @@ function promptSummary(prompt: ExercisePrompt): string {
 
 export function AdminContentPage() {
   const { t } = useTranslation();
+  const { user } = useAuth();
   const queryClient = useQueryClient();
   const [statusFilter, setStatusFilter] = useState("open");
   const [updateError, setUpdateError] = useState<string | null>(null);
 
+  // Gate on the real is_admin flag from the authenticated session so a
+  // non-admin who navigates here directly gets the access-required screen
+  // without this page ever firing admin API calls. UX only -- the backend's
+  // admin_user dependency (401/403 on every /admin/* route) is the actual
+  // security boundary; the 403 check below stays as the fallback for any
+  // stale locally-stored session that predates the is_admin field.
+  const isAdmin = user?.is_admin === true;
+
   const coverageQuery = useQuery({
     queryKey: ["admin-coverage"],
     queryFn: () => AdminApi.coverage(),
+    enabled: isAdmin,
   });
   const issuesQuery = useQuery({
     queryKey: ["admin-issues", statusFilter],
     queryFn: () => AdminApi.issues(statusFilter || undefined),
+    enabled: isAdmin,
   });
 
   async function setIssueStatus(issueId: string, status: string) {
@@ -71,6 +83,7 @@ export function AdminContentPage() {
   }
 
   const forbidden =
+    !isAdmin ||
     (coverageQuery.error instanceof ApiError && coverageQuery.error.status === 403) ||
     (issuesQuery.error instanceof ApiError && issuesQuery.error.status === 403);
 
