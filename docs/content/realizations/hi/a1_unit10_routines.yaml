@@ -1,0 +1,668 @@
+schema_version: "1.1"
+realization_version: "2026.1-draft.1"
+target_language: "hi"
+cefr_level: "A1"
+status: "complete_draft"
+generation_provenance:
+  method: "ai_generated"
+  authoring_system: "claude"
+  human_reviewed: false
+review:
+  status: "unreviewed"
+  required_next_reviewer: "codex"
+  notes: >-
+    Tenth Hindi unit, continuing directly from hi/a1_unit09_directions.yaml
+    (same Priya/Arjun characters, still on तुम terms with each other).
+    Spine outcome confirmed via a direct read of universal_spine.yaml (not
+    just assumed from other languages): the outcome entry immediately
+    following universal.a1.directions.ask_follow_basic_directions (hi's own
+    unit09, confirmed at line 318 of universal_spine.yaml) is
+    universal.a1.routines.describe_daily_routine (line 342, "Describe a
+    simple daily routine using common activities and times"), whose own
+    declared prerequisite (line 345) is universal.a1.time.ask_tell_time --
+    already realized as hi's own unit04. Cross-checked against on-disk
+    precedent: `ls docs/content/realizations/nl/`, `pl/`, and `ro/` all
+    confirm a1_unit10_routines.yaml as their independently-authored tenth
+    unit, matching hi's own unit01-09 sequence, which has independently
+    tracked the same topic order as those three languages throughout.
+    Sized to 3 lessons matching unit01-09's bootstrap pace. Topic/pacing
+    structure only reused from nl/pl/ro at a skeletal level (this is a
+    routines unit, roughly: core routine verbs with 1st-person habitual
+    present -> tum-form questions about someone else's routine -> a
+    dialogue where the two leads compare full routines), no text or
+    phrasing from any other language's file, per the standing
+    skeleton-share-not-text-share policy.
+
+    Source access, re-attempted per this task's explicit instruction (not
+    assumed to fail the same way as units 01-09): a fresh `firecrawl
+    search` (no query cache reused from any prior session) failed outright
+    with the same HTTP 402 (payment/quota) error every prior hi unit this
+    session has hit -- quota still has not reset, fully disclosed rather
+    than silently skipped. Fell back to the same FSI "Hindi: An Active
+    Introduction" archive.org item (`Fsi-Hindi-AnActiveIntroduction`),
+    re-downloaded fresh into this session's own isolated scratchpad (a
+    fresh Claude session cannot reuse a prior session's scratch files) --
+    confirmed the same 143-page PDF (`pdfinfo`: 143 pages, Adobe Acrobat
+    7.08 Image Conversion Plug-in, byte-identical page count to every
+    prior unit's own check). (1) `pdftotext -layout` against the raw PDF
+    again returned a near-empty 143-byte file, and `pdffonts` returned a
+    completely empty table -- confirming yet again this is a pure
+    page-image scan with no embedded text layer at all, a tenth
+    confirmation of the same fact across this whole session's worth of hi
+    units. (2) A fresh regex scan (Python, not eyeballed) of the Internet
+    Archive's own OCR pass (`Fsi-HindiActiveIntroduction-StudentText_djvu.
+    txt`, 94KB) for the Devanagari Unicode block (U+0900-U+097F) returned
+    ZERO matches anywhere in the document -- confirmed programmatically.
+    (3) A fresh grep of the same OCR file for daily-routine-topic English
+    framing this time found real, directly on-topic incidental
+    corroboration: "Daily routine :", "At what time do you get up?",
+    "Build up a monolog on your daily routine.", "I can never get up
+    before 8, (no matter how hard I try.)", "I arrive at school at nine
+    o'clock", "We come back at one o'clock." -- genuine hits squarely on
+    this unit's own topic. Despite this, the Hindi-script line following
+    the very first hit ("At what time do you get up?") is entirely BLANK
+    in the OCR output (nothing recovered at all), and a separate nearby
+    line renders as unusable Latin-lookalike mojibake ("cj-c-rfl ^ft ^T^f
+    v5fT^\" ^ % I We used to let them go to school ."), confirmed by eye to
+    be garbage, not readable Devanagari-as-Latin-transliteration --
+    matching the exact failure mode confirmed nine times over across units
+    01-09, now a tenth time against this unit's own topic. Per this task's
+    explicit instruction, nothing from either extraction attempt -- neither
+    any mojibake fragment nor any wording of the recovered English framing
+    prose -- was used, cleaned up, transcribed, or guessed at anywhere in
+    this file. Every Devanagari string below is this session's own
+    careful, correct rendering of established Modern Standard Hindi,
+    verified character-by-character.
+
+    Central grammar decision, genuinely new but deliberately built as a
+    completion of a pattern already partially seeded, not invented from
+    nothing: this unit formally teaches the full habitual-present paradigm
+    (verb stem + -ता/-ती/-ते, with हूँ/हो/है/हैं according to the subject).
+    Two real precedents already exist in this course before this unit ever
+    introduces it as its own grammar point: unit01's own dialogue already
+    used हूँ ("मैं भारत से हूँ...रहता हूँ"), हो ("तुम कैसे हो?", "क्या तुम
+    योग करती हो?"), and even a bare -ती+हो instance (करती हो) as incidental
+    dialogue exposure, never drilled as its own rule; unit05 formalized the
+    THIRD-person-only slice of the same suffix system (रहता है / रहती है /
+    रहते हैं) with its own dedicated grammar_note and gender-agreement
+    grammar_check exercises. This unit's lesson01 grammar_note states the
+    complete paradigm in one card (explicitly citing हूँ/हो/है/हैं
+    together, matching this course's "flag the real pattern explicitly"
+    discipline already used for unit01's aap/tum split, unit04's बजा/बजे
+    exception, unit05's gender-possessive system, and unit09's -ओ
+    imperative note) so that lesson01's own exercises testing उठता
+    है/उठती है (third person, reusing the copula already established by
+    unit05's precedent) aren't asking the learner to guess untaught
+    material -- the whole paradigm is stated up front, even though only
+    the 1st-person forms get their own dedicated vocabulary+example cards
+    in lesson01, with the 2nd-person तुम-form drilled specifically in
+    lesson02 via its own grammar_note.
+
+    A second, genuinely new and disclosed grammar point taught in
+    lesson02: तुम-form habitual verbs agree with the GENDER OF THE PERSON
+    BEING ADDRESSED, not the speaker's own gender -- e.g. Arjun (male)
+    asking Priya (female) "तुम कब उठती हो?" uses the feminine form because
+    Priya is who's being asked, even though Arjun himself would say "मैं
+    उठता हूँ" for himself. This is stated explicitly on its own
+    grammar_note card (distinct from the tum-form-introduction note) and
+    verified consistently across all three तुम-form questions in lesson03's
+    dialogue (line01 Arjun->Priya uses उठती; line04 Priya->Arjun uses आते;
+    line07 Arjun->Priya uses सोती) -- each checked by hand against the
+    addressee's established gender, not the asker's.
+
+    A third, disclosed lexical/idiom decision: "काम पर जाना" (go to work)
+    idiomatically requires the postposition पर (on/at), a fixed
+    collocation, while "स्कूल जाना" (go to school) is natural with no
+    postposition at all -- both are genuinely correct, natural
+    constructions, not a single blanket rule with one exception (per
+    AUTHORING_GUIDE §3's "don't overstate absolute grammar rules"
+    guidance), so this unit's own grammar_note states both forms
+    explicitly rather than implying one governs the other.
+
+    A fourth, disclosed answer-acceptance decision, specific to a gendered
+    target language: every exercise that asks the LEARNER to describe
+    their own routine (dialogue_response/writing_prompt/speak_response
+    where the subject is "तुम"/the learner, not a named character with an
+    established gender) accepts BOTH the masculine and feminine
+    conjugated forms as equally correct in `accepted_answers` -- the app
+    has no signal of the learner's own gender, and marking only one form
+    correct would wrongly fail half of all learners regardless of which
+    form the compiler happened to be seeded with. Exercises asking about a
+    SPECIFIC named character (Arjun or Priya, whose gender is established
+    by the unit's own content) correctly accept only that character's
+    single correct gendered form, since there the answer isn't ambiguous.
+
+    Same-speaker-distractor check (the nl unit44-50 regression class):
+    performed explicitly. All three listen_select exercises (lesson01.
+    exercise05, lesson02.exercise04, lesson03.exercise06) are each a
+    single standalone, non-dialogue utterance with no other speaker/other
+    lines in the same clip -- the "distractor must not be something the
+    same speaker also says elsewhere in this audio" bug class structurally
+    cannot occur here, since there is no "elsewhere in this audio" for a
+    standalone phrase (same reasoning as unit09's own three listen_select
+    exercises, now applied a second time). The two dialogue_comprehension
+    exercises in lesson03 (exercise04/05) are TEXT reading-comprehension
+    (the learner reads the actual dialogue line, no audio/`media_asset_key`
+    involved), matching unit08/09's own dialogue_comprehension pattern --
+    distractors were checked by hand to ensure they are not themselves
+    also true answers to the question asked: exercise04 ("कितने बजे
+    उठती है?", correct="छह बजे") uses "सात बजे" (Arjun's own wake time,
+    line03) and "ग्यारह बजे" (Priya's own bedtime, line08) as distractors
+    -- both are real facts stated elsewhere in the SAME dialogue, but
+    neither answers THIS specific question about when Priya wakes up;
+    exercise05 ("अर्जुन कब वापस आता है?", correct="शाम को छह बजे") mirrors
+    this with Arjun's own wake time and Priya's own bedtime as the two
+    distractors, again real facts elsewhere in the dialogue that don't
+    answer this specific question.
+
+    Cross-check of every concrete fact stated across the whole unit
+    (AUTHORING_GUIDE §11), not just within the dialogue: Priya wakes at 6,
+    sleeps at 11; Arjun wakes at 7, returns home at 6pm. No exercise
+    anywhere in lesson01-03 states a conflicting number for either
+    character. The 3 listen_select clips and the dialogue-external
+    teaching-card examples all use either an unattributed generic "मैं"
+    (not tied to either character's own established facts) or numbers that
+    don't collide with either Priya's or Arjun's dialogue-stated times.
+
+    Nasalization/spelling discipline, disclosed per unit07/08/09
+    precedent: this unit introduces genuinely NO new nasalized vocabulary
+    at all -- उठता/उठती/उठते, सोता/सोती/सोते, जाता/जाती/जाते,
+    आता/आती/आते, खाता/खाती/खाते, नाश्ता, काम, रोज़, and वापस all have zero
+    anusvara/chandrabindu marks. The only nasalized form appearing
+    anywhere in this unit is हूँ, reused unchanged from its already-settled
+    unit01 spelling (चंद्रबिंदु after the non-ascending vowel sign ू, the
+    same rule already established for यहाँ/वहाँ/कहाँ/जाऊँ/बाएँ/दाएँ) --
+    no new spelling decision was needed this unit, only reuse of an
+    already-settled convention.
+
+    Untaught-vocabulary validator footgun (already documented by
+    unit07/08/09, re-confirmed live during this unit's authoring): every
+    unit01/04/05/06/08/09-originated word reused here (है, हैं, हूँ, हो,
+    तुम, मैं, बजे, सुबह, दोपहर, शाम, रात, को, कब, स्कूल, पर, पहले, फिर,
+    का, खाना, अच्छा, ठीक, शुक्रिया, कल, मिलते, बहुत, स्वादिष्ट, और) was
+    re-added to this file's own introduced_tokens at its first point of
+    use, since `validate_untaught_vocabulary`'s `taught` set is declared
+    fresh per realization file. Within THIS file, tokens introduced in an
+    earlier lesson (lesson01) are correctly available to later lessons
+    (lesson02/03) without re-listing, since the taught set accumulates
+    across the whole file, not per-lesson -- e.g. जाता/जाती (introduced
+    lesson01 on the काम पर जाना card) are reused with zero re-listing on
+    lesson02's स्कूल जाता हूँ card.
+
+    Word-order duplicate-token check, a new consideration for this unit
+    specifically (not hit by units 01-09's own sentences): several natural
+    two-clause routine sentences ("पहले मैं उठता हूँ, फिर मैं नाश्ता करता
+    हूँ") repeat both मैं and हूँ across the two clauses. A `comm`-style
+    check of the whole existing hi+nl corpus found zero precedent anywhere
+    for a `word_order` exercise with duplicate `word_bank` tokens, so
+    rather than risk an untested frontend/grading edge case, every
+    `word_order` exercise in this unit was deliberately kept to sentences
+    with NO repeated token (either a single clause, or a two-clause
+    sentence with the repeated subject dropped via natural Hindi
+    ellipsis) -- the two-clause repeated-subject phrasing is still taught
+    on teaching cards (never exercised via word_order), so the natural
+    fuller phrasing is still modeled for the learner, just not tested via
+    a token-array exercise type where the duplicate would be untested
+    territory.
+
+course:
+  realization_key: hi.a1
+  target_language_first: true
+  dialect: hi_standard
+  register_policy: >-
+    Continues unit01-09's aap/tum split. This unit's dialogue (lesson03)
+    stays entirely in तुम between Priya and Arjun, matching every prior
+    unit's continuation of their established friendship -- no new
+    stranger character is introduced here. The तुम-form habitual verbs
+    introduced this unit (उठते/सोते/आते + हो) agree with the GENDER OF
+    THE ADDRESSEE, not the speaker -- see generation_provenance above for
+    the full disclosed rule and its verification against every तुम-form
+    line in lesson03's dialogue. Every exercise asking the LEARNER
+    (rather than a named character) to describe their own routine accepts
+    both masculine and feminine conjugated answer forms, since the app has
+    no signal of the learner's own gender.
+
+media_assets:
+  - {content_key: hi.a1.audio.routines.uthta_hoon.01, language: hi, text: "मैं रोज़ सुबह सात बजे उठता हूँ।", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - {content_key: hi.a1.audio.routines.kab_sote_ho.01, language: hi, text: "तुम कब सोते हो?", voice_hint: neutral_adult_clear, status: pending_generation}
+  - {content_key: hi.a1.audio.routines.vaapas_aata_hoon.01, language: hi, text: "मैं शाम को वापस आता हूँ।", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+
+units:
+  - content_key: hi.a1.unit10.routines
+    title: "दिनचर्या"
+    section: reading_writing
+    spine_outcome_ids:
+      - universal.a1.routines.describe_daily_routine
+    planned_lesson_count: 3
+
+    lessons:
+      - content_key: hi.a1.unit10.lesson01.uthna_nashta_kaam
+        title: "उठना, नाश्ता, काम पर जाना"
+        spine_outcome_id: universal.a1.routines.describe_daily_routine
+        teaching:
+          - content_key: hi.a1.unit10.lesson01.teach.review_time
+            kind: vocabulary
+            target: {text: "बजे, सुबह, दोपहर, शाम, रात, को", language_code: hi, direction: ltr}
+            introduced_tokens: ["बजे", "सुबह", "दोपहर", "शाम", "रात", "को", "फिर", "अर्जुन"]
+            example:
+              - {text: "अभी सुबह आठ बजे हैं।", language_code: hi, direction: ltr}
+              - {text: "रात को क्लास नहीं है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit10.lesson01.teach.uthna
+            kind: vocabulary
+            target: {text: "उठता हूँ, उठती हूँ", language_code: hi, direction: ltr}
+            introduced_tokens: ["उठता", "उठती", "हूँ", "छह"]
+            example:
+              - {text: "मैं सुबह सात बजे उठता हूँ।", language_code: hi, direction: ltr}
+              - {text: "मैं सुबह छह बजे उठती हूँ।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit10.lesson01.teach.roz
+            kind: vocabulary
+            target: {text: "रोज़", language_code: hi, direction: ltr}
+            introduced_tokens: ["रोज़"]
+            example: {text: "मैं रोज़ सुबह उठता हूँ।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit10.lesson01.teach.nashta_karna
+            kind: vocabulary
+            target: {text: "नाश्ता करता हूँ, नाश्ता करती हूँ", language_code: hi, direction: ltr}
+            introduced_tokens: ["नाश्ता", "करता", "करती"]
+            example:
+              - {text: "सुबह मैं नाश्ता करता हूँ।", language_code: hi, direction: ltr}
+              - {text: "सुबह मैं नाश्ता करती हूँ।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit10.lesson01.teach.kaam_par_jaana
+            kind: vocabulary
+            target: {text: "काम पर जाता हूँ, काम पर जाती हूँ", language_code: hi, direction: ltr}
+            introduced_tokens: ["काम", "पर", "जाता", "जाती"]
+            example:
+              - {text: "फिर मैं काम पर जाता हूँ।", language_code: hi, direction: ltr}
+              - {text: "फिर मैं काम पर जाती हूँ।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit10.lesson01.teach.habitual_paradigm_note
+            kind: grammar_note
+            target: {text: "रोज़ की आदत बताने के लिए क्रिया में -ता/-ती/-ते लगता है, और कर्ता के अनुसार हूँ/हो/है/हैं जुड़ता है: मैं उठता/उठती हूँ, तुम उठते/उठती हो, वह उठता/उठती है, वे उठते हैं।", language_code: hi, direction: ltr}
+            introduced_tokens: ["तुम", "मैं", "है", "हैं", "हो", "वह", "वे"]
+          - content_key: hi.a1.unit10.lesson01.teach.full_routine_phrase
+            kind: phrase
+            target: {text: "मैं रोज़ सुबह सात बजे उठता हूँ, फिर नाश्ता करता हूँ, फिर काम पर जाता हूँ।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+        exercises:
+          - content_key: hi.a1.unit10.lesson01.exercise01.select_uthta_hoon_meaning
+            type: multiple_choice
+            tested_text: "उठता हूँ"
+            prompt:
+              target_blocks:
+                - {text: "उठता हूँ", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit10.lesson01.exercise02.select_nashta_meaning
+            type: multiple_choice
+            tested_text: "नाश्ता"
+            prompt:
+              target_blocks:
+                - {text: "नाश्ता", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit10.lesson01.exercise03.select_kaam_meaning
+            type: multiple_choice
+            tested_text: "काम"
+            prompt:
+              target_blocks:
+                - {text: "काम", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit10.lesson01.exercise04.select_roz_meaning
+            type: multiple_choice
+            tested_text: "रोज़"
+            prompt:
+              target_blocks:
+                - {text: "रोज़", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit10.lesson01.exercise05.listen_uthta_hoon
+            type: listen_select
+            tested_text: "मैं रोज़ सुबह सात बजे उठता हूँ"
+            media_asset_key: hi.a1.audio.routines.uthta_hoon.01
+            prompt: {target_blocks: []}
+          - content_key: hi.a1.unit10.lesson01.exercise06.match_routine_words
+            type: matching_pairs
+            tested_text: "उठता हूँ उठती हूँ नाश्ता करता हूँ काम पर जाता हूँ रोज़ सुबह बजे को"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "उठता हूँ", right: "I get up"}
+              - {left: "उठती हूँ", right: "I get up (female speaker)"}
+              - {left: "नाश्ता करता हूँ", right: "I have breakfast"}
+              - {left: "काम पर जाता हूँ", right: "I go to work"}
+              - {left: "रोज़", right: "every day"}
+              - {left: "सुबह", right: "morning"}
+              - {left: "बजे", right: "o'clock"}
+              - {left: "को", right: "at/on (general time)"}
+          - content_key: hi.a1.unit10.lesson01.exercise07.order_main_routine_uthta
+            type: word_order
+            tested_text: "मैं रोज़ सुबह सात बजे उठता हूँ"
+            prompt: {target_blocks: []}
+            word_bank: ["सुबह", "मैं", "उठता", "रोज़", "सात", "हूँ", "बजे"]
+          - content_key: hi.a1.unit10.lesson01.exercise08.order_phir_kaam_par_jaata
+            type: word_order
+            tested_text: "फिर मैं काम पर जाता हूँ"
+            prompt: {target_blocks: []}
+            word_bank: ["जाता", "फिर", "मैं", "पर", "काम", "हूँ"]
+          - content_key: hi.a1.unit10.lesson01.exercise09.fill_nashta_karta_hoon
+            type: fill_in_blank
+            tested_text: "नाश्ता"
+            prompt:
+              target_blocks:
+                - {text: "मैं रोज़ सुबह सात बजे ___ करता हूँ।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit10.lesson01.exercise10.fill_kaam_par_jaata
+            type: fill_in_blank
+            tested_text: "काम"
+            prompt:
+              target_blocks:
+                - {text: "फिर मैं ___ पर जाता हूँ।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit10.lesson01.exercise11.reply_arjun_kab_uthta
+            type: dialogue_response
+            tested_text: "अर्जुन रोज़ सुबह सात बजे उठता है"
+            prompt:
+              target_blocks:
+                - {text: "अर्जुन कब उठता है?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit10.lesson01.exercise12.speak_routine_sentence
+            type: speak_response
+            tested_text: "मैं रोज़ सुबह सात बजे उठता हूँ"
+            prompt:
+              target_blocks:
+                - {text: "यह वाक्य बोलो: 'मैं रोज़ सुबह सात बजे उठता हूँ।'", language_code: hi, direction: ltr}
+
+      - content_key: hi.a1.unit10.lesson02.tum_kab_uthte_ho
+        title: "तुम कब उठते हो?"
+        spine_outcome_id: universal.a1.routines.describe_daily_routine
+        teaching:
+          - content_key: hi.a1.unit10.lesson02.teach.sona
+            kind: vocabulary
+            target: {text: "सोता हूँ, सोती हूँ", language_code: hi, direction: ltr}
+            introduced_tokens: ["सोता", "सोती", "ग्यारह"]
+            example:
+              - {text: "मैं रात को ग्यारह बजे सोता हूँ।", language_code: hi, direction: ltr}
+              - {text: "मैं रात को दस बजे सोती हूँ।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit10.lesson02.teach.school_jaana
+            kind: vocabulary
+            target: {text: "स्कूल जाता हूँ, स्कूल जाती हूँ", language_code: hi, direction: ltr}
+            introduced_tokens: ["स्कूल", "आठ"]
+            example:
+              - {text: "मैं रोज़ सुबह आठ बजे स्कूल जाता हूँ।", language_code: hi, direction: ltr}
+              - {text: "मैं रोज़ सुबह आठ बजे स्कूल जाती हूँ।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit10.lesson02.teach.tum_form_note
+            kind: grammar_note
+            target: {text: "'तुम' के साथ -ते/-ती और 'हो' आता है: तुम उठते हो / उठती हो, तुम सोते हो / सोती हो।", language_code: hi, direction: ltr}
+            introduced_tokens: ["उठते", "सोते"]
+          - content_key: hi.a1.unit10.lesson02.teach.addressee_gender_note
+            kind: grammar_note
+            target: {text: "तुम-रूप की क्रिया सुनने वाले के लिंग से मेल खाती है, बोलने वाले के नहीं -- प्रिया से पूछते समय 'तुम कब उठती हो?', अर्जुन से पूछते समय 'तुम कब उठते हो?'", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a1.unit10.lesson02.teach.kab_uthte_ho_phrase
+            kind: phrase
+            target: {text: "तुम कब उठते हो?", language_code: hi, direction: ltr}
+            introduced_tokens: ["कब"]
+          - content_key: hi.a1.unit10.lesson02.teach.pahle_phir_routine
+            kind: phrase
+            target: {text: "पहले मैं उठता हूँ, फिर मैं नाश्ता करता हूँ।", language_code: hi, direction: ltr}
+            introduced_tokens: ["पहले"]
+          - content_key: hi.a1.unit10.lesson02.teach.kaam_idiom_note
+            kind: grammar_note
+            target: {text: "'काम पर जाना' में 'पर' ज़रूरी है, पर 'स्कूल जाना' में किसी शब्द की ज़रूरत नहीं -- दोनों सही और आम हैं।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+        exercises:
+          - content_key: hi.a1.unit10.lesson02.exercise01.select_sota_hoon_meaning
+            type: multiple_choice
+            tested_text: "सोता हूँ"
+            prompt:
+              target_blocks:
+                - {text: "सोता हूँ", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit10.lesson02.exercise02.select_school_jaata_hoon_meaning
+            type: multiple_choice
+            tested_text: "स्कूल जाता हूँ"
+            prompt:
+              target_blocks:
+                - {text: "स्कूल जाता हूँ", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit10.lesson02.exercise03.select_tum_kab_uthte_ho_meaning
+            type: multiple_choice
+            tested_text: "तुम कब उठते हो"
+            prompt:
+              target_blocks:
+                - {text: "तुम कब उठते हो?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit10.lesson02.exercise04.listen_kab_sote_ho
+            type: listen_select
+            tested_text: "तुम कब सोते हो"
+            media_asset_key: hi.a1.audio.routines.kab_sote_ho.01
+            prompt: {target_blocks: []}
+          - content_key: hi.a1.unit10.lesson02.exercise05.match_routine_review
+            type: matching_pairs
+            tested_text: "सोता हूँ सोती हूँ स्कूल जाता हूँ तुम कब उठते हो तुम कब उठती हो पहले फिर कब"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "सोता हूँ", right: "I sleep"}
+              - {left: "सोती हूँ", right: "I sleep (female speaker)"}
+              - {left: "स्कूल जाता हूँ", right: "I go to school"}
+              - {left: "तुम कब उठते हो?", right: "When do you get up? (to a man)"}
+              - {left: "तुम कब उठती हो?", right: "When do you get up? (to a woman)"}
+              - {left: "पहले", right: "first"}
+              - {left: "फिर", right: "then"}
+              - {left: "कब", right: "when"}
+          - content_key: hi.a1.unit10.lesson02.exercise06.order_tum_kab_uthte_ho
+            type: word_order
+            tested_text: "तुम कब उठते हो"
+            prompt: {target_blocks: []}
+            word_bank: ["उठते", "तुम", "कब", "हो"]
+          - content_key: hi.a1.unit10.lesson02.exercise07.order_pahle_uthta_hoon
+            type: word_order
+            tested_text: "पहले मैं उठता हूँ"
+            prompt: {target_blocks: []}
+            word_bank: ["पहले", "मैं", "उठता", "हूँ"]
+          - content_key: hi.a1.unit10.lesson02.exercise08.fill_kab_sote_ho
+            type: fill_in_blank
+            tested_text: "सोते"
+            prompt:
+              target_blocks:
+                - {text: "तुम रात को कब ___ हो?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit10.lesson02.exercise09.fill_phir_nashta
+            type: fill_in_blank
+            tested_text: "फिर"
+            prompt:
+              target_blocks:
+                - {text: "पहले मैं उठता हूँ, ___ मैं नाश्ता करता हूँ।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit10.lesson02.exercise10.fix_tum_kab_sota_ho
+            type: grammar_check
+            tested_text: "तुम कब सोते हो"
+            prompt:
+              target_blocks:
+                - {text: "तुम कब सोता हो?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit10.lesson02.exercise11.reply_tum_kab_school_jaate_ho
+            type: dialogue_response
+            tested_text: "मैं रोज़ सुबह आठ बजे स्कूल जाता हूँ"
+            prompt:
+              target_blocks:
+                - {text: "तुम कब स्कूल जाते हो?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit10.lesson02.exercise12.speak_kab_sote_ho
+            type: speak_response
+            tested_text: "मैं रात को ग्यारह बजे सोता हूँ"
+            prompt:
+              target_blocks:
+                - {text: "बताओ, तुम कब सोते हो?", language_code: hi, direction: ltr}
+
+      - content_key: hi.a1.unit10.lesson03.priya_arjun_dincharya
+        title: "प्रिया और अर्जुन: दिनचर्या"
+        spine_outcome_id: universal.a1.routines.describe_daily_routine
+        teaching:
+          - content_key: hi.a1.unit10.lesson03.teach.vaapas
+            kind: vocabulary
+            target: {text: "वापस", language_code: hi, direction: ltr}
+            introduced_tokens: ["वापस", "प्रिया"]
+            example: {text: "मैं वापस जाता हूँ।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit10.lesson03.teach.aana
+            kind: vocabulary
+            target: {text: "आता हूँ, आती हूँ", language_code: hi, direction: ltr}
+            introduced_tokens: ["आता", "आती"]
+            example:
+              - {text: "मैं शाम को वापस आता हूँ।", language_code: hi, direction: ltr}
+              - {text: "मैं शाम को वापस आती हूँ।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit10.lesson03.teach.khana_verb
+            kind: vocabulary
+            target: {text: "खाना खाता हूँ, खाना खाती हूँ", language_code: hi, direction: ltr}
+            introduced_tokens: ["खाता", "खाती"]
+            example:
+              - {text: "मैं रात को खाना खाता हूँ।", language_code: hi, direction: ltr}
+              - {text: "मैं रात को खाना खाती हूँ।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit10.lesson03.teach.raat_ka_khana
+            kind: vocabulary
+            target: {text: "रात का खाना", language_code: hi, direction: ltr}
+            introduced_tokens: ["का", "और"]
+            example: {text: "रात का खाना बहुत स्वादिष्ट है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit10.lesson03.teach.dialogue.line01
+            kind: dialogue
+            target:
+              text: "प्रिया, तुम रोज़ कितने बजे उठती हो?"
+              language_code: hi
+              direction: ltr
+              speaker: Arjun
+            introduced_tokens: []
+          - content_key: hi.a1.unit10.lesson03.teach.dialogue.line02
+            kind: dialogue
+            target:
+              text: "मैं रोज़ सुबह छह बजे उठती हूँ। फिर मैं नाश्ता करती हूँ।"
+              language_code: hi
+              direction: ltr
+              speaker: Priya
+            introduced_tokens: []
+          - content_key: hi.a1.unit10.lesson03.teach.dialogue.line03
+            kind: dialogue
+            target:
+              text: "अच्छा! मैं सात बजे उठता हूँ। मैं भी नाश्ता करता हूँ, फिर काम पर जाता हूँ।"
+              language_code: hi
+              direction: ltr
+              speaker: Arjun
+            introduced_tokens: []
+          - content_key: hi.a1.unit10.lesson03.teach.dialogue.line04
+            kind: dialogue
+            target:
+              text: "तुम कब वापस आते हो?"
+              language_code: hi
+              direction: ltr
+              speaker: Priya
+            introduced_tokens: []
+          - content_key: hi.a1.unit10.lesson03.teach.dialogue.line05
+            kind: dialogue
+            target:
+              text: "मैं शाम को छह बजे वापस आता हूँ। फिर मैं रात का खाना खाता हूँ, फिर सोता हूँ।"
+              language_code: hi
+              direction: ltr
+              speaker: Arjun
+            introduced_tokens: []
+          - content_key: hi.a1.unit10.lesson03.teach.dialogue.line06
+            kind: dialogue
+            target:
+              text: "मैं भी शाम को वापस आती हूँ, फिर खाना खाती हूँ।"
+              language_code: hi
+              direction: ltr
+              speaker: Priya
+            introduced_tokens: []
+          - content_key: hi.a1.unit10.lesson03.teach.dialogue.line07
+            kind: dialogue
+            target:
+              text: "तुम कितने बजे सोती हो?"
+              language_code: hi
+              direction: ltr
+              speaker: Arjun
+            introduced_tokens: []
+          - content_key: hi.a1.unit10.lesson03.teach.dialogue.line08
+            kind: dialogue
+            target:
+              text: "मैं रात को ग्यारह बजे सोती हूँ। ठीक है, कल मिलते हैं!"
+              language_code: hi
+              direction: ltr
+              speaker: Priya
+            introduced_tokens: []
+          - content_key: hi.a1.unit10.lesson03.teach.dialogue.line09
+            kind: dialogue
+            target:
+              text: "ठीक है, फिर मिलते हैं!"
+              language_code: hi
+              direction: ltr
+              speaker: Arjun
+            introduced_tokens: []
+        exercises:
+          - content_key: hi.a1.unit10.lesson03.exercise01.select_vaapas_meaning
+            type: multiple_choice
+            tested_text: "वापस"
+            prompt:
+              target_blocks:
+                - {text: "वापस", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit10.lesson03.exercise02.select_aata_hoon_meaning
+            type: multiple_choice
+            tested_text: "आता हूँ"
+            prompt:
+              target_blocks:
+                - {text: "आता हूँ", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit10.lesson03.exercise03.select_raat_ka_khana_meaning
+            type: multiple_choice
+            tested_text: "रात का खाना"
+            prompt:
+              target_blocks:
+                - {text: "रात का खाना", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit10.lesson03.exercise04.comprehend_priya_wake_time
+            type: dialogue_comprehension
+            tested_text: "छह बजे"
+            prompt:
+              target_blocks:
+                - {text: "मैं रोज़ सुबह छह बजे उठती हूँ। फिर मैं नाश्ता करती हूँ।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit10.lesson03.exercise05.comprehend_arjun_return_time
+            type: dialogue_comprehension
+            tested_text: "शाम को छह बजे"
+            prompt:
+              target_blocks:
+                - {text: "मैं शाम को छह बजे वापस आता हूँ। फिर मैं रात का खाना खाता हूँ, फिर सोता हूँ।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit10.lesson03.exercise06.listen_vaapas_aata_hoon
+            type: listen_select
+            tested_text: "मैं शाम को वापस आता हूँ"
+            media_asset_key: hi.a1.audio.routines.vaapas_aata_hoon.01
+            prompt: {target_blocks: []}
+          - content_key: hi.a1.unit10.lesson03.exercise07.order_main_vaapas_jaata
+            type: word_order
+            tested_text: "मैं वापस जाता हूँ"
+            prompt: {target_blocks: []}
+            word_bank: ["मैं", "वापस", "जाता", "हूँ"]
+          - content_key: hi.a1.unit10.lesson03.exercise08.order_raat_ka_khana_khaata
+            type: word_order
+            tested_text: "मैं रात का खाना खाता हूँ"
+            prompt: {target_blocks: []}
+            word_bank: ["मैं", "रात", "का", "खाना", "खाता", "हूँ"]
+          - content_key: hi.a1.unit10.lesson03.exercise09.match_unit_review
+            type: matching_pairs
+            tested_text: "उठता हूँ सोता हूँ नाश्ता काम रोज़ वापस आता हूँ खाता हूँ रात का खाना स्कूल जाता हूँ"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "उठता हूँ", right: "I get up"}
+              - {left: "सोता हूँ", right: "I sleep"}
+              - {left: "नाश्ता", right: "breakfast"}
+              - {left: "काम", right: "work"}
+              - {left: "रोज़", right: "every day"}
+              - {left: "वापस", right: "back"}
+              - {left: "आता हूँ", right: "I come"}
+              - {left: "खाता हूँ", right: "I eat"}
+              - {left: "रात का खाना", right: "dinner"}
+              - {left: "स्कूल जाता हूँ", right: "I go to school"}
+          - content_key: hi.a1.unit10.lesson03.exercise10.fill_shaam_ko_vaapas
+            type: fill_in_blank
+            tested_text: "वापस"
+            prompt:
+              target_blocks:
+                - {text: "मैं शाम को छह बजे ___ आता हूँ।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit10.lesson03.exercise11.fix_tum_kab_vaapas_aate_ho
+            type: grammar_check
+            tested_text: "तुम कब वापस आती हो"
+            prompt:
+              target_blocks:
+                - {text: "तुम कब वापस आते हो?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit10.lesson03.exercise12.reply_priya_kab_soti
+            type: dialogue_response
+            tested_text: "प्रिया रात को ग्यारह बजे सोती है"
+            prompt:
+              target_blocks:
+                - {text: "प्रिया कब सोती है?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit10.lesson03.exercise13.write_own_routine
+            type: writing_prompt
+            tested_text: "मैं सुबह सात बजे उठता हूँ और रात को ग्यारह बजे सोता हूँ"
+            prompt:
+              target_blocks:
+                - {text: "अपनी दिनचर्या लिखो: तुम कब उठते हो, और कब सोते हो?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit10.lesson03.exercise14.speak_own_routine
+            type: speak_response
+            tested_text: "मैं रोज़ सुबह उठता हूँ, फिर नाश्ता करता हूँ, फिर काम पर जाता हूँ"
+            prompt:
+              target_blocks:
+                - {text: "बताओ: तुम रोज़ सुबह क्या करते हो?", language_code: hi, direction: ltr}
