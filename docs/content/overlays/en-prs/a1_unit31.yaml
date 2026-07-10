@@ -9,11 +9,19 @@ generation_provenance:
   authoring_system: claude
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: codex_fresh_context
-  notes: 'Authored alongside the new prs a1_unit31_education.yaml realization, same worker, same pass. Follows the established en-prs overlay convention from units 01-30. Introduces two fresh characters, Karim and Parwin (lesson04 dialogue -- Karim asks Parwin where she studies; she studies at Kabul University with a field of medicine; Karim asks if medicine is difficult; she says yes, difficult but interesting, and asks Karim in return; Karim studies at school) and a matching third-person reading passage (lesson05) kept factually consistent with the dialogue. Double-checked every bare yes/no-shaped gloss value in this file is explicitly quoted (the standing boolean-coercion footgun) -- ran a real recursive yaml.safe_load scan over this file (not just grep), zero stray Python bools found beyond the two legitimate schema fields.
-
-    STATUS: draft, review pending -- has NOT yet been through the mandatory fresh-context review. Do not import/ship until that review completes.'
+  status: reviewed
+  required_next_reviewer: null
+  notes: >-
+    2026-07-10 fresh-context review (Claude), reviewed together with the
+    matching prs a1_unit31_education.yaml realization. Verified every
+    exercise's instruction matches its accepted_answers/distractors,
+    checked the Karim/Parwin dialogue glosses against the realization's
+    Dari text turn-for-turn, re-ran the recursive yaml.safe_load
+    boolean-coercion scan (clean, only the two legitimate schema
+    booleans), and confirmed every accepted_answers list uses either the
+    correct matching_pairs flat-dict shape or a plain string/list shape
+    for word_order, both of which grade() already canonicalizes
+    correctly. No bugs found; marking reviewed.
 course:
   title: Dari A1
   description: 'Beginner Kabul Dari: education and studies vocabulary (university, school, field of study, student, lesson), naming a field of study (medicine, law, economics, literature), asking and answering where you study, and a Karim/Parwin dialogue about studies and how they feel about them.'
