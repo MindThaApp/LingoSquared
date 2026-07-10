@@ -1065,6 +1065,65 @@ authoritative version of this policy, this entry is a pointer to it.
   "that one succeeded" against a tool result you didn't re-check line
   by line, especially right after a permission interrupt or a
   conflict-driven retry loop.
+- **`git stash` refs are shared repo-globally across ALL worktrees, not
+  scoped to the worktree that created them.** Confirmed 2026-07-10 by
+  a worker (checkpoint stratified-sampling task) whose own `git stash
+  pop` — run to verify a test failed against pre-fix code — popped a
+  DIFFERENT concurrent worker's stash instead ("xp-today-wip" from a
+  sibling worktree), dumping that other worker's uncommitted WIP into
+  the wrong worktree's working directory. The other worker's stash was
+  in turn consumed the same way. Both workers had to manually recover
+  via dangling-commit lookups (`git log` on the SHA the stash pop
+  reported) rather than trusting the stash stack. **Standing rule**:
+  never use `git stash` during any multi-session/multi-worktree work —
+  the stash stack is one shared, repo-wide resource and a pop races
+  exactly like a broad `git add -A` does, just less obviously (nothing
+  in the pop's own output tells you whose work you just grabbed). Use
+  worktree-local alternatives instead (a scratch commit you can `git
+  reset --soft HEAD^` later, or a plain diff file saved outside git).
+- **An npm workspace worktree with no `node_modules` of its own
+  silently resolves shared packages (`@lingo/shared`) UP to the main
+  repo's copy, not the worktree's own edited copy.** Confirmed
+  repeatedly 2026-07-10 across at least five independent workers
+  (unit-index syllabus view, virtual-keyboard characters, matching-
+  pairs/word-order contract tests, privacy/ToS pages, vocabulary
+  mistakes-tab) — each one initially built and "verified" against
+  stale code without realizing it, because Node's module resolution
+  walks up parent directories once a worktree lacks its own
+  `node_modules/@lingo/shared`, and the main repo one satisfies the
+  import with zero error. Symptoms ranged from silently-stale test
+  results to literally rendering a raw i18n key (`course_units.
+  unit_index_hide`) instead of the translated string because the
+  worktree's own newly-added locale entries were invisible. Every
+  worker that caught this fixed it the same way: run `npm install` (or
+  a scoped symlink) inside the worktree root before treating any build/
+  test/dev-server output as real verification. **Standing rule**: any
+  worktree-isolated dispatch touching `frontend/`, `packages/shared/`,
+  or `mobile/` should run `npm install` at the worktree root as an
+  early step, before relying on `npm run build`/`npm run test`/`npm
+  run dev` results — don't wait to discover this via a confusing
+  symptom.
+- **The claude-in-chrome / chrome-devtools MCP browser has exactly one
+  "selected page" shared across every concurrent session using it —
+  there is no per-session isolation.** Confirmed repeatedly 2026-07-10
+  across multiple workers (virtual-keyboard verification, privacy/ToS
+  page verification, dark-mode audit, account-deletion UI, virtual-
+  keyboard sizing): one session's `navigate`/`select_page`/mobile-
+  emulation call would silently steal the "current page" out from
+  under a DIFFERENT concurrent session, and at least one worker's own
+  actions landed on a stranger session's already-dead tab, or briefly
+  navigated Ramin's own live manual-testing tab away from what he was
+  looking at. Workers that handled this correctly added an explicit
+  `location.href`/URL check before acting and re-selected their own
+  page before every step rather than trusting the MCP's implicit
+  "current page" state. **Standing rule**: any dispatch that will use
+  claude-in-chrome/chrome-devtools while other sessions might be
+  active should open its OWN new tab (`tabs_create_mcp`/`new_page`)
+  rather than reusing "whatever page is currently selected," and
+  verify the URL before every interaction, not just before the first
+  one. When this isn't practical, a real Playwright browser instance
+  (already a project dependency via `e2e/`) is a reliable, fully-
+  isolated fallback several workers used successfully instead.
 
 ## Where things run
 
