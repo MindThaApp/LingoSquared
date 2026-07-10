@@ -86,6 +86,21 @@ the live server.
    ```bash
    ssh ramin@192.168.4.4 "grep -E 'ADMIN_EMAILS|CORS_ORIGINS|AZURE_SPEECH|GOOGLE_CLOUD_TTS|JWT_SECRET' /home/ramin/LingoSquared/backend/.env"
    ```
+   **Automated version of this check** (added 2026-07-10):
+   `scripts/check_deploy_config.sh <path-to-.env>` — checks every row of
+   the "Required environment variables" table below against a `.env`
+   file and exits non-zero on any FAIL-level finding (placeholder
+   `ADMIN_EMAILS`/`JWT_SECRET`/`POSTGRES_PASSWORD`; localhost-only
+   `CORS_ORIGINS` and missing TTS credentials are WARN-level, matching
+   the table's "not a deploy blocker" calls). For the live server, pull
+   the file locally first rather than SSHing from the script:
+   ```bash
+   ssh ramin@192.168.4.4 cat /home/ramin/LingoSquared/backend/.env > /tmp/live.env
+   scripts/check_deploy_config.sh /tmp/live.env && rm /tmp/live.env
+   ```
+   It only inspects the file — it cannot confirm the admin account is
+   actually registered (post-deploy step 4) or that a non-empty Google
+   credential isn't the corrupted key (open question #1 below).
    As of the last read-only check (2026-07-05), `ADMIN_EMAILS` was
    still the `.env.example` placeholder (`admin@example.com`) and
    `CORS_ORIGINS` was `http://localhost:5173, http://localhost:5174`
