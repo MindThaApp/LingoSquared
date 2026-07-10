@@ -1,0 +1,576 @@
+schema_version: "1.1"
+realization_version: "2026.1-draft.1"
+target_language: fa
+cefr_level: A1
+generation_provenance:
+  method: ai_adapted_from_public_domain_source
+  authoring_system: claude
+  source_material: >-
+    Made a real, fresh attempt at FSI Persian Basic Course source access
+    before authoring this unit, per AUTHORING_GUIDE.md #10 and the standing
+    instruction to re-check Firecrawl quota fresh even though it has been
+    reported exhausted in every prior round. `firecrawl search "FSI Persian
+    Basic Course gym باشگاه exercise workout"` returned `Error: Request
+    failed with status code 402` (payment required), confirming the account
+    genuinely remains at 0 credits. This worker session is a fresh session
+    with no inherited scratchpad state from any prior session (scratchpad
+    directories are session-isolated), so no cached local pdftotext
+    extraction of the FSI Spoken Persian PDF was available this time,
+    unlike several prior units' provenance notes which reused an
+    already-cached file. Instead of skipping the check, fetched the same
+    public-domain Live Lingua-hosted PDF directly this session
+    (`curl https://www.livelingua.com/fsi/FSI%20-%20Spoken%20Persian.pdf`,
+    8,753,270 bytes, confirmed reachable and downloaded successfully) and
+    ran `pdftotext -layout` on it locally (17,130 lines, 66,717 words --
+    matching the same line/word counts prior units' provenance notes
+    reported for this identical source, confirming this is the same
+    document, not a different edition). Grepped the freshly-extracted text
+    case-insensitively for gym/gymnas/weight/barbell/dumbbell/membership/
+    "day pass"/workout/exercise/fitness/"athletic club"/club: exactly 3
+    hits, all false positives -- a pedagogical cross-reference ("this
+    exercise" as in a grammar drill, line 565), an unrelated grammatical
+    suffix explanation using the word "fitness" in the sense of
+    "suitability" (line 5076), and another pedagogical "exercises
+    necessary to gain fluency" reference (line 6882). Zero genuine hits for
+    a gym/fitness scenario anywhere in the document. FSI Persian's own
+    1960s diplomatic training course genuinely does not cover a gym visit
+    at all (same honest-nothing-found outcome as the park/swimming-pool/
+    sports units before it). All vocabulary and the full dialogue in this
+    unit are authored fresh from this project's own already-shipped
+    vocabulary (see review notes below for the exact reuse chain).
+  human_reviewed: false
+review:
+  status: unreviewed
+  required_next_reviewer: codex_fresh_context
+  notes: >-
+    Draft authored 2026-07-10 by Claude (content-authoring worker session),
+    continuing fa A1 volume growth past unit54 (park). Realizes
+    universal.a1.gym.join_a_gym -- confirmed as the correct next unrealized
+    A1 outcome for fa by diffing every spine_outcome_id/spine_outcome_ids
+    value already used across every docs/content/realizations/fa/
+    a1_unit*.yaml file (a yaml-aware grep of "spine_outcome_id" per file,
+    deduplicated -- 55 distinct A1 outcomes covered across units01-54, plus
+    two A2 outcomes and one B1 outcome from this course's separate A2/B1
+    files) against every universal.a1.* id in docs/content/
+    universal_spine.yaml's own declaration order: fa has realized every A1
+    outcome through unit54 (park) with zero gaps, and
+    universal.a1.gym.join_a_gym is the very next A1 id declared in the
+    spine immediately after park.enjoy_a_park_outing. Prerequisite outcomes
+    (sports.talk_about_sports_exercise/unit27,
+    appointments.make_simple_appointment/unit41) are both already realized
+    in this course, so no prerequisite gap blocks this unit.
+
+    Scenario shape: universal.a1.gym.join_a_gym's own can_do ("ask about
+    joining a gym or buying a day pass, describe basic equipment and a
+    class, and talk simply about a workout") is a paid-service transaction,
+    so this unit returns to the units 41-49's service-counter convention
+    (park/unit54 was a deliberate one-unit departure into a friends'-plan
+    scene, explicitly flagged as such in its own review notes) rather than
+    reusing the سارا/نیما friend-pair pattern. نیما (this course's
+    established male recurring character) is the gym customer, continuing
+    his established "visits a service provider and states a need" role
+    from units 17 (health), 41 (appointments), 44 (accommodation), 45
+    (pharmacy), 46 (barbershop), 47 (bike rental), 48 (laundry), and 49
+    (swimming pool). A NEW formal-register character, خانم شریفی, is
+    introduced as the gym receptionist -- confirmed collision-free via a
+    real scan of every آقای/خانم surname already used across the fa
+    corpus's service-encounter units (کریمی، احمدی، صادقی، رضایی، نوری،
+    مرادی، کاظمی، جعفری، رحیمی، موسوی، فرهادی، حسینی -- 6 male/6 female as
+    of unit53, balanced -- zero collision with شریفی). Choosing her female
+    keeps this course's service-clerk gender count close to balanced
+    (6 male / 7 female after this unit), not a large skew.
+
+    Reuse chain (all re-declared in this file's own introduced_tokens
+    before first use, per the compiler's per-file-only untaught-vocabulary
+    check, confirmed with a real grep of every prior fa a1_unit*.yaml
+    file's introduced_tokens declarations, not by eye): باشگاه "gym"
+    (earliest: unit27, already taught there as a place sports-adjacent
+    vocabulary, so this unit's OWN new vocabulary is genuinely limited to
+    the transaction-specific words below, not the gym word itself),
+    می‌خوام "I want" (unit03), یک "one/a" (unit03), کارت "card" (unit08,
+    there used for a payment card -- reused here for a membership/day-pass
+    card, the same core "card" sense, no new sense given to the word),
+    چقدر "how much" (unit21/28), می‌شه "it comes to/costs" (unit11/35),
+    چهل/هزار/تومن (unit03, and چهل هزار تومن as an exact combination was
+    already used together in unit03's own price-list matching_pairs),
+    تومنه (تومن + colloquial -ه copula contraction, reused directly from
+    the exact "سی هزار تومنه" pattern unit03 itself already established),
+    داره "it has" (unit26, also reused by unit54), دارید "do you have,
+    formal" (units01/04/06/08/21/42/44/45), کلاس "class" (unit02, there
+    used for "Persian class" -- reused here for a gym class, same core
+    "class" sense), از "from" (unit16), تا "until, to" (unit42), ساعت
+    "hour, o'clock" (unit09), شش "six" (unit03), یازده "eleven" (unit03),
+    صبح "morning" (unit01/09), شب "night" (unit01/09), باز "open"
+    (unit08/24/27/43), بازه "it's open" (colloquial باز + است contraction,
+    established unit49), و "and" (unit26), سلام/ممنون (units01/17/22/45/
+    46/47/48/49), باشه (units01/02/06/17/22/45/46/47/48/49), بله "yes"
+    (unit20/21), آقای/خانم (units40+/41+), عالیه "great" (unit07), تمرین
+    "practice/workout" (unit03, from "تمرین کنیم" -- reused here as the
+    noun object of می‌کنم), می‌کنم "I do" (established from units01/05/08/
+    16/18 and many others). New vocabulary genuinely introduced for the
+    first time in the whole corpus: روزانه (daily, forming کارت روزانه
+    "day pass") and وزنه (weight/weights, gym equipment) -- exactly 2 new
+    words, at the low end of this course's established 2-4-new-word-per-
+    unit range (unit52: 3, unit53: 2, unit54: 3), a deliberate choice
+    since باشگاه itself (the unit's own topic word) was already taught
+    three units ago in unit27, leaving less genuinely new vocabulary
+    needed here than a typical brand-new-place unit. One new INFLECTION
+    (not a new lexeme) is also introduced: داریم ("we have," 1st-person-
+    plural of the already-taught دار- root that unit49 already
+    established as دارید/داره) -- declared at its first use in lesson04's
+    dialogue_line4, the same "extends an already-known root, not a new
+    verb-conjugation pattern" treatment unit27 already used for
+    می‌رم/می‌ری/می‌ره and unit49 used for بازه.
+
+    Facts are kept internally consistent across the whole unit per
+    AUTHORING_GUIDE.md #11: the day-pass price (چهل هزار تومن, "40,000
+    toman") and the opening hours (از ساعت شش صبح تا یازده شب, "6am to
+    11pm") are stated identically in the dialogue (lesson04), the gym-sign
+    reading text (lesson05), and the wrap-up review (lesson06); that the
+    gym has both a class and weights (کلاس و وزنه داره) is likewise stated
+    identically in the dialogue and the reading sign; none of these facts
+    are contradicted anywhere else in the unit. Every kind:vocabulary
+    teaching item (روزانه, وزنه, and the character card خانم شریفی) has an
+    example sentence per schema 1.1/AUTHORING_GUIDE §19, built only from
+    the card's own word plus tokens already declared earlier in THIS
+    file's document order (no forward references): "کارت روزانه می‌خوام."
+    (روزانه's example) only uses کارت and می‌خوام, both declared on the
+    two immediately preceding review cards in this same lesson01; "باشگاه
+    وزنه داره." (وزنه's example) only uses باشگاه (lesson01) and داره,
+    declared on the immediately preceding review card in this same
+    lesson02; "سلام خانم شریفی!" (character example) only uses سلام,
+    declared on the immediately preceding review card in this same
+    lesson04. Every matching_pairs exercise has 6-8 pairs per §16
+    (lesson01: 6, lesson02: 7, lesson03: 8, lesson04: 7 dialogue-line
+    pairs matching the dialogue's own 7 turns, lesson05: 8, lesson06: 6).
+    No listen_type/listen_select/listen_order exercise is used anywhere in
+    this unit -- fa has real Azure TTS per AUTHORING_GUIDE §14 (this
+    restriction is prs-only, not fa+prs), but this file continues the
+    established text-based corpus-consistency pattern from units 19-54,
+    the same choice those units' own reviews made. The spine outcome's own
+    "listening" assessment requirement (identify membership price, class
+    time, or opening hours in a short exchange) is covered via lesson04's
+    dialogue_comprehension exercise, the same interpretation units 41-49
+    already established for their own "listening" assessment coverage
+    without a literal audio exercise type. Checked the same-speaker/
+    same-audio distractor-collision bug class (found and fixed 2026-07-09
+    in the nl corpus, commit 148240e) anyway, per the standing instruction
+    to list every line each speaker says before writing any distractor:
+    نیما says "سلام خانم شریفی. یک کارت روزانه می‌خوام."/"باشه. کلاس و
+    وزنه دارید؟"/"باشگاه بازه؟"/"عالیه. تمرین می‌کنم. ممنون!"; خانم شریفی
+    says "سلام نیما. کارت روزانه چهل هزار تومنه."/"بله، کلاس و وزنه
+    داریم."/"بله، از ساعت شش صبح تا یازده شب بازه." -- lesson04's
+    dialogue_comprehension exercise asks what نیما wants to know when he
+    asks "باشه. کلاس و وزنه دارید؟", with distractors ("He asks if there's
+    a swimming pool."/"He asks how much a class costs."/"He asks if they
+    sell water bottles.") that are plausible-fact alternatives, NOT lines
+    either speaker actually says or facts either speaker actually states
+    anywhere in this unit's dialogue -- a swimming pool, a class price, and
+    water bottles are never mentioned by either character, so there is no
+    cross-exercise collision. The dialogue_response exercise (lesson04)
+    accepts نیما's own actual next line ("عالیه. تمرین می‌کنم. ممنون!",
+    with paraphrase variants also accepted), not a distractor set, so the
+    same-speaker-collision question doesn't apply to it. Every "Translate
+    into English" exercise in the paired overlay explicitly sets
+    answer_language_code: en. No exercise in this unit tests a genuine
+    two-clause sentence joined by "and"/comma (§12) -- the only
+    "and"-joined construction (کلاس و وزنه دارید؟/داریم, "a class and
+    weights") is a simple noun conjunction inside one clause, not two
+    independent clauses, so §12's multi-clause-joining-form concern
+    doesn't apply; every genuinely multi-sentence teaching/review line
+    (lesson04 dialogue line1/line7, lesson06's price/hours review) is
+    authored as two separate short sentences, matching how units 44-49
+    already treat their own two-sentence notes, with paraphrase-variant
+    accepted answers rather than clause-join variants. Ran a recursive
+    scan (grep for bare, unquoted yes/no/true/false/on/off tokens as YAML
+    scalar values, plus a full yaml.safe_load parse of both this file and
+    its paired overlay confirming every value that loaded is a
+    str/list/dict, never a Python bool anywhere in a learner-facing
+    field) for bare unquoted yes/no/true/false/on/off values (including
+    matching_pairs right: values specifically) -- zero hits, see the
+    overlay's own review note for the exact scan result. Ran a
+    Persian-vs-Arabic codepoint scan (grep for Arabic kaf U+0643 and
+    Arabic yeh U+064A across both files) -- zero hits, all keheh/yeh in
+    this file use the correct Persian-range codepoints (U+06A9/U+06CC).
+
+course:
+  realization_key: fa.a1
+  target_language_first: true
+  dialect: fa_IR_standard_colloquial_intro
+  register_policy: >-
+    Continues the established colloquial Iranian Farsi register: نیما (the
+    established recurring character) keeps his usual informal register as
+    the gym customer. خانم شریفی, a new formal-register gym receptionist,
+    speaks with neutral polite service language, consistent with the
+    register units 41/42/44/45/46/47/48/49 already established for this
+    course's other service-encounter characters. Reuses باشگاه (unit27),
+    می‌خوام/یک (unit03), کارت (unit08), چقدر (unit21/28), می‌شه (unit11/
+    35), چهل/هزار/تومن (unit03), داره (unit26), دارید (established), کلاس
+    (unit02), از/تا/ساعت (unit16/42/09), شش/یازده (unit03), صبح/شب (unit01/
+    09), باز (unit08/24/27/43), بازه (unit49), و (unit26), سلام/ممنون/باشه/
+    بله/آقای/خانم (established), عالیه (unit07), تمرین (unit03), می‌کنم
+    (established) without re-teaching any of it from scratch. No word is
+    given a new sense beyond its existing corpus meaning in this unit.
+
+media_assets:
+  - content_key: fa.a1.unit55.audio.gym.vocab.01
+    language: fa
+    text: "روزانه، وزنه"
+    voice_hint: neutral_adult
+    status: pending_generation
+  - content_key: fa.a1.unit55.audio.dialogue.gym.01
+    language: fa
+    text: "نیما: سلام خانم شریفی. یک کارت روزانه می‌خوام. خانم شریفی: سلام نیما. کارت روزانه چهل هزار تومنه. نیما: باشه. کلاس و وزنه دارید؟ خانم شریفی: بله، کلاس و وزنه داریم. نیما: باشگاه بازه؟ خانم شریفی: بله، از ساعت شش صبح تا یازده شب بازه. نیما: عالیه. تمرین می‌کنم. ممنون!"
+    voice_hint: two_adults_neutral_friendly
+    status: pending_generation
+
+units:
+  - content_key: fa.a1.unit55.gym
+    title: باشگاه
+    section: reading_writing
+    spine_outcome_ids:
+      - universal.a1.gym.join_a_gym
+    planned_lesson_count: 6
+
+    lessons:
+      - content_key: fa.a1.unit55.lesson01.new_gym_one
+        title: "کلمات جدید ۱"
+        spine_outcome_id: universal.a1.gym.join_a_gym
+        teaching:
+          - content_key: fa.a1.unit55.lesson01.teach.review_bashgah_mikhaam
+            kind: grammar_note
+            target: {text: "باشگاه (gym) -- already taught from unit27 / می‌خوام (I want) -- already taught from unit03", language_code: fa, direction: rtl}
+            introduced_tokens: [باشگاه, "می‌خوام"]
+          - content_key: fa.a1.unit55.lesson01.teach.review_yek_kart
+            kind: grammar_note
+            target: {text: "یک (one, a) -- already taught from unit03 / کارت (card) -- already taught from unit08", language_code: fa, direction: rtl}
+            introduced_tokens: [یک, کارت]
+          - content_key: fa.a1.unit55.lesson01.teach.roozane
+            kind: vocabulary
+            target: {text: روزانه, language_code: fa, direction: rtl}
+            introduced_tokens: [روزانه]
+            example: {text: "کارت روزانه می‌خوام.", language_code: fa, direction: rtl}
+        exercises:
+          - content_key: fa.a1.unit55.lesson01.exercise01.recognize_roozane
+            type: multiple_choice
+            tested_text: روزانه
+            prompt: {target_blocks: [{text: روزانه, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit55.lesson01.exercise02.recognize_kart_roozane_mikhaam
+            type: multiple_choice
+            tested_text: "کارت روزانه می‌خوام."
+            prompt: {target_blocks: [{text: "کارت روزانه می‌خوام.", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit55.lesson01.exercise03.match_gym_one
+            type: matching_pairs
+            tested_text: "باشگاه می‌خوام یک کارت روزانه کارت روزانه"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: باشگاه, right: gym}
+              - {left: "می‌خوام", right: "I want"}
+              - {left: یک, right: "one, a"}
+              - {left: کارت, right: card}
+              - {left: روزانه, right: daily}
+              - {left: "کارت روزانه", right: "day pass"}
+          - content_key: fa.a1.unit55.lesson01.exercise04.word_order_kart_roozane_mikhaam
+            type: word_order
+            tested_text: "کارت روزانه می‌خوام"
+            prompt: {target_blocks: [{text: "I want a day pass.", language_code: en, direction: ltr}]}
+            word_bank: [کارت, روزانه, "می‌خوام"]
+          - content_key: fa.a1.unit55.lesson01.exercise05.translate_bashgah_mikhaam
+            type: translation
+            tested_text: "باشگاه می‌خوام"
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit55.lesson02.new_gym_two
+        title: "کلمات جدید ۲"
+        spine_outcome_id: universal.a1.gym.join_a_gym
+        teaching:
+          - content_key: fa.a1.unit55.lesson02.teach.review_cheghadr_mishe
+            kind: grammar_note
+            target: {text: "چقدر (how much) -- already taught from unit21/28 / می‌شه (it comes to / costs) -- already taught from unit11/35", language_code: fa, direction: rtl}
+            introduced_tokens: [چقدر, "می‌شه"]
+          - content_key: fa.a1.unit55.lesson02.teach.review_chehel_hezar_toman
+            kind: grammar_note
+            target: {text: "چهل (forty) -- already taught from unit03 / هزار (thousand), تومن (toman) -- already taught from unit03 / تومنه (it's ... toman, colloquial تومن + است contraction) -- already taught from unit03's own \"سی هزار تومنه\"", language_code: fa, direction: rtl}
+            introduced_tokens: [چهل, هزار, تومن, "تومنه"]
+          - content_key: fa.a1.unit55.lesson02.teach.review_dare
+            kind: grammar_note
+            target: {text: "داره (it has) -- already taught from unit26", language_code: fa, direction: rtl}
+            introduced_tokens: [داره]
+          - content_key: fa.a1.unit55.lesson02.teach.vazne
+            kind: vocabulary
+            target: {text: وزنه, language_code: fa, direction: rtl}
+            introduced_tokens: [وزنه]
+            example: {text: "باشگاه وزنه داره.", language_code: fa, direction: rtl}
+        exercises:
+          - content_key: fa.a1.unit55.lesson02.exercise01.recognize_vazne
+            type: multiple_choice
+            tested_text: وزنه
+            prompt: {target_blocks: [{text: وزنه, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit55.lesson02.exercise02.recognize_bashgah_vazne_dare
+            type: multiple_choice
+            tested_text: "باشگاه وزنه داره."
+            prompt: {target_blocks: [{text: "باشگاه وزنه داره.", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit55.lesson02.exercise03.match_gym_two
+            type: matching_pairs
+            tested_text: "چقدر می‌شه چهل هزار تومن داره وزنه"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: چقدر, right: "how much"}
+              - {left: "می‌شه", right: "it comes to"}
+              - {left: چهل, right: forty}
+              - {left: هزار, right: thousand}
+              - {left: تومن, right: toman}
+              - {left: داره, right: "it has"}
+              - {left: وزنه, right: weights}
+          - content_key: fa.a1.unit55.lesson02.exercise04.word_order_kart_roozane_chehel_hezar_tomane
+            type: word_order
+            tested_text: "کارت روزانه چهل هزار تومنه"
+            prompt: {target_blocks: [{text: "The day pass is 40,000 toman.", language_code: en, direction: ltr}]}
+            word_bank: [کارت, روزانه, چهل, هزار, "تومنه"]
+          - content_key: fa.a1.unit55.lesson02.exercise05.translate_chehel_hezar_toman
+            type: translation
+            tested_text: "چهل هزار تومن"
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit55.lesson03.class_and_hours
+        title: "کلاس و ساعت کاری"
+        spine_outcome_id: universal.a1.gym.join_a_gym
+        teaching:
+          - content_key: fa.a1.unit55.lesson03.teach.review_darid_kelas
+            kind: grammar_note
+            target: {text: "دارید (do you have, formal) -- already taught from units 01/04/06/08/21/42/44/45 / کلاس (class) -- already taught from unit02", language_code: fa, direction: rtl}
+            introduced_tokens: [دارید, کلاس]
+          - content_key: fa.a1.unit55.lesson03.teach.review_az_ta_saat_va
+            kind: grammar_note
+            target: {text: "از (from) -- already taught from unit16 / تا (until, to) -- already taught from unit42 / ساعت (hour, o'clock) -- already taught from unit09 / و (and) -- already taught from unit26", language_code: fa, direction: rtl}
+            introduced_tokens: [از, تا, ساعت, "و"]
+          - content_key: fa.a1.unit55.lesson03.teach.review_shesh_yazdah_sobh_shab
+            kind: grammar_note
+            target: {text: "شش (six) -- already taught from unit03 / یازده (eleven) -- already taught from unit03 / صبح (morning) -- already taught from unit01/09 / شب (night) -- already taught from unit01/09", language_code: fa, direction: rtl}
+            introduced_tokens: [شش, یازده, صبح, شب]
+          - content_key: fa.a1.unit55.lesson03.teach.review_baz_baze
+            kind: grammar_note
+            target: {text: "باز (open) -- already taught from unit08/24/27/43 / بازه (it's open, colloquial contraction of باز + است) -- already taught from unit49", language_code: fa, direction: rtl}
+            introduced_tokens: [باز, "بازه"]
+          - content_key: fa.a1.unit55.lesson03.teach.phrase_kelas_vazne_darid
+            kind: phrase
+            target: {text: "کلاس و وزنه دارید؟", language_code: fa, direction: rtl}
+            introduced_tokens: []
+          - content_key: fa.a1.unit55.lesson03.teach.phrase_bashgah_baze
+            kind: phrase
+            target: {text: "باشگاه بازه؟", language_code: fa, direction: rtl}
+            introduced_tokens: []
+        exercises:
+          - content_key: fa.a1.unit55.lesson03.exercise01.recognize_kelas_vazne_darid
+            type: multiple_choice
+            tested_text: "کلاس و وزنه دارید؟"
+            prompt: {target_blocks: [{text: "کلاس و وزنه دارید؟", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit55.lesson03.exercise02.recognize_bashgah_baze
+            type: multiple_choice
+            tested_text: "باشگاه بازه؟"
+            prompt: {target_blocks: [{text: "باشگاه بازه؟", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit55.lesson03.exercise03.match_class_and_hours
+            type: matching_pairs
+            tested_text: "دارید کلاس از تا ساعت شش یازده صبح شب باز بازه"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: دارید, right: "do you have"}
+              - {left: کلاس, right: class}
+              - {left: از, right: from}
+              - {left: تا, right: to}
+              - {left: ساعت, right: "hour, o'clock"}
+              - {left: شش, right: six}
+              - {left: یازده, right: eleven}
+              - {left: بازه, right: "it's open"}
+          - content_key: fa.a1.unit55.lesson03.exercise04.word_order_hours
+            type: word_order
+            tested_text: "از ساعت شش صبح تا یازده شب بازه"
+            prompt: {target_blocks: [{text: "It's open from six in the morning to eleven at night.", language_code: en, direction: ltr}]}
+            word_bank: [از, ساعت, شش, صبح, تا, یازده, شب, بازه]
+          - content_key: fa.a1.unit55.lesson03.exercise05.translate_kelas_darid
+            type: translation
+            tested_text: "کلاس دارید؟"
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit55.lesson04.gym_dialogue
+        title: "دیالوگ: باشگاه"
+        spine_outcome_id: universal.a1.gym.join_a_gym
+        teaching:
+          - content_key: fa.a1.unit55.lesson04.teach.review_salam_mamnoon
+            kind: grammar_note
+            target: {text: "سلام و ممنون -- already taught from units 01/17/22/45/46/47/48/49", language_code: fa, direction: rtl}
+            introduced_tokens: [سلام, ممنون]
+          - content_key: fa.a1.unit55.lesson04.teach.review_bashe_baleh
+            kind: grammar_note
+            target: {text: "باشه (okay) -- already taught from units 01/02/06/17/22/45/46/47/48/49 / بله (yes) -- already taught from unit20/21", language_code: fa, direction: rtl}
+            introduced_tokens: [باشه, بله]
+          - content_key: fa.a1.unit55.lesson04.teach.review_aghaye_khanom
+            kind: grammar_note
+            target: {text: "آقای (Mr.) / خانم (Ms.) -- already taught from units 40+/41+", language_code: fa, direction: rtl}
+            introduced_tokens: [آقای, خانم]
+          - content_key: fa.a1.unit55.lesson04.teach.review_aaliye_tamrin_mikonam
+            kind: grammar_note
+            target: {text: "عالیه (great) -- already taught from unit07 / تمرین (workout, practice) -- already taught from unit03 / می‌کنم (I do) -- already taught from many units", language_code: fa, direction: rtl}
+            introduced_tokens: [عالیه, تمرین, "می‌کنم"]
+          - content_key: fa.a1.unit55.lesson04.teach.character_sharifi
+            kind: vocabulary
+            target: {text: "خانم شریفی", language_code: fa, direction: rtl}
+            introduced_tokens: [شریفی, نیما]
+            example: {text: "سلام خانم شریفی!", language_code: fa, direction: rtl}
+          - content_key: fa.a1.unit55.lesson04.teach.dialogue_line1
+            kind: dialogue
+            target: {text: "سلام خانم شریفی. یک کارت روزانه می‌خوام.", language_code: fa, direction: rtl, speaker: نیما}
+            introduced_tokens: []
+          - content_key: fa.a1.unit55.lesson04.teach.dialogue_line2
+            kind: dialogue
+            target: {text: "سلام نیما. کارت روزانه چهل هزار تومنه.", language_code: fa, direction: rtl, speaker: "خانم شریفی"}
+            introduced_tokens: []
+          - content_key: fa.a1.unit55.lesson04.teach.dialogue_line3
+            kind: dialogue
+            target: {text: "باشه. کلاس و وزنه دارید؟", language_code: fa, direction: rtl, speaker: نیما}
+            introduced_tokens: []
+          - content_key: fa.a1.unit55.lesson04.teach.dialogue_line4
+            kind: dialogue
+            target: {text: "بله، کلاس و وزنه داریم.", language_code: fa, direction: rtl, speaker: "خانم شریفی"}
+            introduced_tokens: ["داریم"]
+          - content_key: fa.a1.unit55.lesson04.teach.dialogue_line5
+            kind: dialogue
+            target: {text: "باشگاه بازه؟", language_code: fa, direction: rtl, speaker: نیما}
+            introduced_tokens: []
+          - content_key: fa.a1.unit55.lesson04.teach.dialogue_line6
+            kind: dialogue
+            target: {text: "بله، از ساعت شش صبح تا یازده شب بازه.", language_code: fa, direction: rtl, speaker: "خانم شریفی"}
+            introduced_tokens: []
+          - content_key: fa.a1.unit55.lesson04.teach.dialogue_line7
+            kind: dialogue
+            target: {text: "عالیه. تمرین می‌کنم. ممنون!", language_code: fa, direction: rtl, speaker: نیما}
+            introduced_tokens: []
+        exercises:
+          - content_key: fa.a1.unit55.lesson04.exercise01.dialogue_comprehension_class_and_weights
+            type: dialogue_comprehension
+            tested_text: "سلام خانم شریفی یک کارت روزانه می‌خوام سلام نیما کارت روزانه چهل هزار تومنه باشه کلاس و وزنه دارید بله کلاس و وزنه داریم باشگاه بازه بله از ساعت شش صبح تا یازده شب بازه عالیه تمرین می‌کنم ممنون"
+            prompt: {target_blocks: [{text: "باشه. کلاس و وزنه دارید؟", language_code: fa, direction: rtl}]}
+            correct_option: "He asks if there's a class and weights."
+            distractors:
+              - "He asks if there's a swimming pool."
+              - "He asks how much a class costs."
+              - "He asks if they sell water bottles."
+          - content_key: fa.a1.unit55.lesson04.exercise02.recognize_dialogue_line2
+            type: multiple_choice
+            tested_text: "سلام نیما. کارت روزانه چهل هزار تومنه."
+            prompt: {target_blocks: [{text: "سلام نیما. کارت روزانه چهل هزار تومنه.", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit55.lesson04.exercise03.match_dialogue_gym
+            type: matching_pairs
+            tested_text: "سلام خانم شریفی یک کارت روزانه می‌خوام سلام نیما کارت روزانه چهل هزار تومنه باشه کلاس و وزنه دارید بله کلاس و وزنه داریم باشگاه بازه بله از ساعت شش صبح تا یازده شب بازه عالیه تمرین می‌کنم ممنون"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "سلام خانم شریفی. یک کارت روزانه می‌خوام.", right: "Hi Ms. Sharifi. I want a day pass."}
+              - {left: "سلام نیما. کارت روزانه چهل هزار تومنه.", right: "Hi Nima. The day pass is 40,000 toman."}
+              - {left: "باشه. کلاس و وزنه دارید؟", right: "Okay. Do you have a class and weights?"}
+              - {left: "بله، کلاس و وزنه داریم.", right: "Yes, we have a class and weights."}
+              - {left: "باشگاه بازه؟", right: "Is the gym open?"}
+              - {left: "بله، از ساعت شش صبح تا یازده شب بازه.", right: "Yes, it's open from six in the morning to eleven at night."}
+              - {left: "عالیه. تمرین می‌کنم. ممنون!", right: "Great. I'll work out. Thanks!"}
+          - content_key: fa.a1.unit55.lesson04.exercise04.dialogue_response_confirm
+            type: dialogue_response
+            tested_text: "عالیه. تمرین می‌کنم. ممنون!"
+            prompt: {target_blocks: [{text: "بله، از ساعت شش صبح تا یازده شب بازه.", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit55.lesson04.exercise05.translate_dialogue_line3
+            type: translation
+            tested_text: "باشه. کلاس و وزنه دارید؟"
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit55.lesson05.reading_gym_sign
+        title: "خواندن تابلوی باشگاه"
+        spine_outcome_id: universal.a1.gym.join_a_gym
+        teaching:
+          - content_key: fa.a1.unit55.lesson05.teach.reading_text
+            kind: reading
+            target: {text: "باشگاه شریفی: کارت روزانه چهل هزار تومن. از ساعت شش صبح تا یازده شب. کلاس و وزنه داره.", language_code: fa, direction: rtl}
+            introduced_tokens: []
+        exercises:
+          - content_key: fa.a1.unit55.lesson05.exercise01.reading_comprehension_place
+            type: reading_comprehension
+            tested_text: "باشگاه شریفی: کارت روزانه چهل هزار تومن. از ساعت شش صبح تا یازده شب. کلاس و وزنه داره."
+            prompt: {target_blocks: [{text: "باشگاه شریفی: کارت روزانه چهل هزار تومن. از ساعت شش صبح تا یازده شب. کلاس و وزنه داره.", language_code: fa, direction: rtl}]}
+            correct_option: "Gym."
+            distractors:
+              - "Swimming pool."
+              - "Bike rental shop."
+              - "Library."
+          - content_key: fa.a1.unit55.lesson05.exercise02.reading_comprehension_price
+            type: reading_comprehension
+            tested_text: "باشگاه شریفی: کارت روزانه چهل هزار تومن. از ساعت شش صبح تا یازده شب. کلاس و وزنه داره."
+            prompt: {target_blocks: [{text: "باشگاه شریفی: کارت روزانه چهل هزار تومن. از ساعت شش صبح تا یازده شب. کلاس و وزنه داره.", language_code: fa, direction: rtl}]}
+            correct_option: "40,000 toman."
+            distractors:
+              - "4,000 toman."
+              - "400,000 toman."
+              - "It's free."
+          - content_key: fa.a1.unit55.lesson05.exercise03.match_reading_gym_sign
+            type: matching_pairs
+            tested_text: "باشگاه شریفی کارت روزانه چهل هزار تومن وزنه"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: باشگاه, right: gym}
+              - {left: شریفی, right: Sharifi}
+              - {left: کارت, right: card}
+              - {left: روزانه, right: daily}
+              - {left: چهل, right: forty}
+              - {left: هزار, right: thousand}
+              - {left: تومن, right: toman}
+              - {left: وزنه, right: weights}
+          - content_key: fa.a1.unit55.lesson05.exercise04.translate_reading_gym_sign
+            type: translation
+            tested_text: "باشگاه شریفی: کارت روزانه چهل هزار تومن. از ساعت شش صبح تا یازده شب. کلاس و وزنه داره."
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit55.lesson05.exercise05.write_gym_sign
+            type: writing_prompt
+            tested_text: "باشگاه شریفی: کارت روزانه چهل هزار تومن. از ساعت شش صبح تا یازده شب. کلاس و وزنه داره."
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit55.lesson06.wrap_up
+        title: "جمع‌بندی باشگاه"
+        spine_outcome_id: universal.a1.gym.join_a_gym
+        teaching:
+          - content_key: fa.a1.unit55.lesson06.teach.review_request
+            kind: phrase
+            target: {text: "یک کارت روزانه می‌خوام.", language_code: fa, direction: rtl}
+            introduced_tokens: []
+          - content_key: fa.a1.unit55.lesson06.teach.review_price_hours
+            kind: phrase
+            target: {text: "کارت روزانه چهل هزار تومنه. از ساعت شش صبح تا یازده شب بازه.", language_code: fa, direction: rtl}
+            introduced_tokens: []
+          - content_key: fa.a1.unit55.lesson06.teach.summary_words
+            kind: grammar_note
+            target: {text: "باشگاه / روزانه / وزنه / کلاس و وزنه دارید؟ / باشگاه بازه؟ -- کلمات این درس", language_code: fa, direction: rtl}
+            introduced_tokens: []
+        exercises:
+          - content_key: fa.a1.unit55.lesson06.exercise01.recognize_review_request
+            type: multiple_choice
+            tested_text: "یک کارت روزانه می‌خوام."
+            prompt: {target_blocks: [{text: "یک کارت روزانه می‌خوام.", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit55.lesson06.exercise02.recognize_review_price_hours
+            type: multiple_choice
+            tested_text: "کارت روزانه چهل هزار تومنه. از ساعت شش صبح تا یازده شب بازه."
+            prompt: {target_blocks: [{text: "کارت روزانه چهل هزار تومنه. از ساعت شش صبح تا یازده شب بازه.", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit55.lesson06.exercise03.match_wrap_gym
+            type: matching_pairs
+            tested_text: "باشگاه روزانه وزنه کلاس و وزنه دارید باشگاه بازه"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: باشگاه, right: gym}
+              - {left: روزانه, right: daily}
+              - {left: وزنه, right: weights}
+              - {left: "کلاس و وزنه دارید؟", right: "Do you have a class and weights?"}
+              - {left: "باشگاه بازه؟", right: "Is the gym open?"}
+              - {left: بازه, right: "it's open"}
+          - content_key: fa.a1.unit55.lesson06.exercise04.word_order_review_request
+            type: word_order
+            tested_text: "یک کارت روزانه می‌خوام"
+            prompt: {target_blocks: [{text: "I want a day pass.", language_code: en, direction: ltr}]}
+            word_bank: [یک, کارت, روزانه, "می‌خوام"]
+          - content_key: fa.a1.unit55.lesson06.exercise05.write_gym_message
+            type: writing_prompt
+            tested_text: "یک کارت روزانه می‌خوام"
+            prompt: {target_blocks: []}
