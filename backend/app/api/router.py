@@ -356,6 +356,39 @@ def logout(body:LogoutIn,db:Session=Depends(get_db)):
     return Response(status_code=204)
 @router.get("/auth/me",response_model=MeOut)
 def me(user=Depends(current_user)): return user
+@router.get("/me/export")
+def export_me(response:Response,user=Depends(current_user),db:Session=Depends(get_db)):
+    # GDPR-style data-portability export: everything reasonably tied to this
+    # account in one JSON document, so a user can download their data before
+    # the irreversible DELETE /me below. Shape documented in docs/CONTRACT.md
+    # (update it FIRST if this changes). Deliberately excluded: refresh_tokens
+    # rows (session material, not personal data -- also revoked wholesale by
+    # DELETE /me regardless) and push-subscription p256dh/auth values
+    # (channel crypto keys, not personal data).
+    stats=db.get(UserStats,user.id)
+    lexeme_rows=db.execute(select(UserLexemeSRS,Lexeme).join(Lexeme,Lexeme.id==UserLexemeSRS.lexeme_id).where(UserLexemeSRS.user_id==user.id)).all()
+    practice_rows=db.execute(select(PracticeAttempt,PracticeItem).join(PracticeItem,PracticeItem.id==PracticeAttempt.practice_item_id).where(PracticeAttempt.user_id==user.id).order_by(PracticeAttempt.created_at)).all()
+    earned=db.execute(select(UserAchievement,Achievement).join(Achievement,Achievement.id==UserAchievement.achievement_id).where(UserAchievement.user_id==user.id)).all()
+    response.headers["Content-Disposition"]=f'attachment; filename="lingosquared-export-{datetime.now(timezone.utc).date().isoformat()}.json"'
+    return {
+        "format_version":1,
+        "exported_at":datetime.now(timezone.utc),
+        "profile":{"id":user.id,"email":user.email,"display_name":user.display_name,"created_at":user.created_at,"timezone":user.timezone},
+        "stats":{"total_xp":stats.total_xp,"streak_days":stats.streak_days,"last_activity_date":stats.last_activity_date,"daily_goal":stats.daily_goal,"streak_freezes_available":stats.streak_freezes_available,"last_freeze_used_date":stats.last_freeze_used_date} if stats else None,
+        "skill_progress":[{"course_id":x.course_id,"completed_lessons":x.completed_lessons,"mastery":x.mastery} for x in db.scalars(select(SkillProgress).where(SkillProgress.user_id==user.id))],
+        "lesson_progress":[{"lesson_id":x.lesson_id,"started_at":x.started_at,"completed_at":x.completed_at,"correct_count":x.correct_count,"answer_count":x.answer_count,"xp_earned":x.xp_earned} for x in db.scalars(select(LessonProgress).where(LessonProgress.user_id==user.id))],
+        "exercise_attempts":[{"exercise_id":x.exercise_id,"response":x.response,"correct":x.correct,"outcome":x.outcome,"xp_awarded":x.xp_awarded,"created_at":x.created_at} for x in db.scalars(select(ExerciseAttempt).where(ExerciseAttempt.user_id==user.id).order_by(ExerciseAttempt.created_at))],
+        "practice_attempts":[{"practice_item_id":a.practice_item_id,"course_id":i.course_id,"prompt":i.prompt,"response":a.response,"correct":a.correct,"xp_awarded":a.xp_awarded,"created_at":a.created_at} for a,i in practice_rows],
+        "checkpoint_attempts":[{"unit_id":x.unit_id,"total_items":x.total_items,"passed":x.passed,"score":x.score,"weak_outcomes":x.weak_outcomes,"created_at":x.created_at,"scored_at":x.scored_at} for x in db.scalars(select(CheckpointAttempt).where(CheckpointAttempt.user_id==user.id).order_by(CheckpointAttempt.created_at))],
+        "lexeme_srs":[{"lexeme_id":s.lexeme_id,"token":lx.token,"english_gloss":lx.english_gloss,"language_code":lx.language_code,"course_id":s.course_id,"mastery":s.mastery,"ease_factor":s.ease_factor,"interval_days":s.interval_days,"repetitions":s.repetitions,"due_at":s.due_at,"last_reviewed_at":s.last_reviewed_at,"introduced_at":s.introduced_at,"suspended":s.suspended} for s,lx in lexeme_rows],
+        "review_items":[{"exercise_id":x.exercise_id,"ease_factor":x.ease_factor,"interval_days":x.interval_days,"repetitions":x.repetitions,"mastery":x.mastery,"due_at":x.due_at} for x in db.scalars(select(ReviewItem).where(ReviewItem.user_id==user.id))],
+        "achievements":[{"code":ach.code,"title":ach.title,"earned_at":ua.earned_at} for ua,ach in earned],
+        "quest_completions":[{"quest_code":x.quest_code,"date":x.date,"awarded_at":x.awarded_at} for x in db.scalars(select(QuestCompletion).where(QuestCompletion.user_id==user.id))],
+        "vocabulary_progress":[{"content_item_id":x.content_item_id,"mastery":x.mastery,"last_reviewed_at":x.last_reviewed_at} for x in db.scalars(select(VocabularyProgress).where(VocabularyProgress.user_id==user.id))],
+        "grammar_progress":[{"content_item_id":x.content_item_id,"mastery":x.mastery,"last_reviewed_at":x.last_reviewed_at} for x in db.scalars(select(GrammarProgress).where(GrammarProgress.user_id==user.id))],
+        "push_subscriptions":[{"endpoint":x.endpoint,"created_at":x.created_at} for x in db.scalars(select(PushSubscription).where(PushSubscription.user_id==user.id))],
+        "content_issue_reports":[{"id":x.id,"exercise_id":x.exercise_id,"practice_item_id":x.practice_item_id,"page_path":x.page_path,"category":x.category,"description":x.description,"status":x.status,"created_at":x.created_at} for x in db.scalars(select(ContentIssueReport).where(ContentIssueReport.reporter_user_id==user.id))],
+    }
 @router.delete("/me",status_code=204)
 def delete_me(user=Depends(current_user),db:Session=Depends(get_db)):
     user_practice_item_ids = select(PracticeItem.id).where(PracticeItem.user_id == user.id)
