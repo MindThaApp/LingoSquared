@@ -1,0 +1,540 @@
+schema_version: "1.1"
+overlay_version: "2026.1-draft.1"
+source_language: en
+target_language: hi
+cefr_level: A1
+status: complete_draft
+generation_provenance:
+  method: ai_generated
+  authoring_system: claude
+  human_reviewed: false
+review:
+  status: unreviewed
+  required_next_reviewer: codex
+  notes: >-
+    Fourteenth en-hi overlay, written for hi/a1_unit14_comparisons.yaml
+    (schema_version 1.1, §19 vocabulary-example format from the start; see
+    that file's own generation_provenance for the full, honest
+    source-access account, the spine-outcome confirmation against
+    universal_spine.yaml, the four disclosed central grammar decisions
+    (से's third sense as "than", added to its already-taught "from"/"with"
+    senses; the deliberate avoidance of pronoun-oblique comparatives,
+    keeping every से-marked comparison target a bare common noun or proper
+    name; comparative adjective agreement targeting the SUBJECT, not the
+    से-marked item; ज़्यादा generalizing beyond पसंद है to intensify any
+    comparative), the same-speaker-distractor check, the cross-unit fact
+    check (six comparative facts, all mutually consistent, none
+    contradicted), the disclosed nasalization/spelling discipline (verified
+    via direct codepoint hex dump for लंबा/लंबी/नया/नई), the
+    confirmed-not-reset-per-lesson-but-reset-per-file tokenizer behavior,
+    the word-order duplicate-token check, and the §17 fill_in_blank
+    ambiguity check (including the directly-inherited ज़्यादा-blank
+    avoidance, the same consideration unit13 already made once for its own
+    ज़्यादा/बहुत ambiguity). Both files are freshly authored from
+    established Modern Standard Hindi, same as units 01-13. No
+    sibling-direction overlay exists yet for this unit (hi-en hasn't been
+    authored), so the sibling-isolation rule (AUTHORING_GUIDE §8) doesn't
+    apply here -- noted for whoever authors hi-en next: do not open this
+    file for structure/phrasing reference when doing so.
+
+answer_policy:
+  se_comparative: >-
+    This unit's central grammar point is से + adjective = "than" (X, Y से
+    ADJ है = "X is more ADJ than Y"). A typed answer that drops से entirely
+    from a comparative sentence, or substitutes a different postposition,
+    should be marked incorrect -- this is the exact point being tested.
+  subject_agreement: >-
+    The comparative adjective (बड़ा/बड़ी, छोटा/छोटी, सस्ता/सस्ती,
+    महंगा/महंगी, नया/नई) always agrees with the SENTENCE'S SUBJECT, never
+    the से-marked compared item -- e.g. "प्रिया अर्जुन से छोटी है" uses
+    छोटी because प्रिया (feminine) is the subject, regardless of अर्जुन's
+    gender. A typed answer using the wrong gender for the actual subject
+    should be marked incorrect as a real structural error, not tolerated as
+    a minor typo.
+  zyada_intensifier: >-
+    ज़्यादा placed directly before the adjective in a comparative sentence
+    ("X, Y से ज़्यादा ADJ है") intensifies the comparison ("even more ADJ
+    than Y") but is never grammatically REQUIRED -- से + adjective alone is
+    already a complete, correct comparative. Accept both the plain and the
+    ज़्यादा-intensified form as equally correct for any open-ended
+    "compare these two things" prompt (e.g. writing_prompt/speak_response),
+    unless the exercise specifically targets the intensified form.
+  nasalization_marks: >-
+    Display and teach the correct chandrabindu/anusvara distinction. This
+    unit's one new nasalized word pair, लंबा/लंबी, uses anusvara, verified
+    against a direct codepoint check -- consistent with the
+    already-established हैं/मुझे/तुम्हें/पसंद/संगीत convention. नया/नई
+    carry no nasalization at all. In typed A1 answers, accept a variant
+    that drops a nasalization mark entirely or substitutes anusvara for
+    chandrabindu (or vice versa) when every other character is correct. Do
+    not extend this tolerance to a wrong vowel or consonant, which changes
+    the actual word.
+  punctuation: >-
+    Hindi text is shown with the traditional danda (।) as the
+    sentence-final mark. In typed answers, accept the danda, a plain
+    period (.), or the mark omitted entirely as equivalent. Question marks
+    (?) may likewise be omitted, but the fully punctuated form remains the
+    model answer.
+  spoken_answers: >-
+    Judge spoken responses by intelligibility rather than written
+    punctuation or nasalization marks. For any exercise asking the learner
+    to state their own comparison, accept any of this unit's taught
+    phrasings that fit the prompt, not only the single model sentence given
+    in `accepted_answers`.
+
+course:
+  title: "Hindi A1"
+
+units:
+  hi.a1.unit14.comparisons:
+    title: "Comparisons"
+
+lessons:
+  hi.a1.unit14.lesson01.se_tulna:
+    title: "Arjun is bigger than Priya"
+  hi.a1.unit14.lesson02.vastu_tulna:
+    title: "The hat is cheaper than the bag"
+  hi.a1.unit14.lesson03.arjun_priya_tulna:
+    title: "Arjun and Priya: comparisons"
+
+teaching:
+  hi.a1.unit14.lesson01.teach.arjun_priya_review:
+    title: "Review: Arjun, Priya, is"
+    gloss: "Arjun, Priya, is"
+    note: "A quick review of the two characters' names and the copula 'hai', needed to build comparative sentences in this unit."
+    example_gloss:
+      - "Arjun is fine."
+      - "Priya is fine."
+
+  hi.a1.unit14.lesson01.teach.bada_badi_review:
+    title: "Review: big / older"
+    gloss: "big / older (masculine / feminine)"
+    note: "First taught in unit 5 for sibling age -- this unit extends it to comparing any two people or things directly."
+    example_gloss:
+      - "My older brother lives in Delhi."
+      - "My older sister lives in Delhi."
+
+  hi.a1.unit14.lesson01.teach.chota_choti_review:
+    title: "Review: small / younger"
+    gloss: "small / younger (masculine / feminine)"
+    note: "First taught in unit 5 for sibling age -- reused here the same way as bada/badi."
+    example_gloss:
+      - "My younger brother is a student now."
+      - "My younger sister is a student now."
+
+  hi.a1.unit14.lesson01.teach.se_comparative_grammar:
+    title: "Se = than"
+    gloss: "'Se' was already learned as 'from' (unit 9, 'yahan se seedhe jao') and as 'with' (unit 12, 'Priya se mila'). Now it also means comparison: 'X, Y se ADJ hai' means 'X is more ADJ than Y' -- like 'Arjun Priya se bada hai'."
+    note: "Discloses the third sense of an already-taught word, naming both prior senses by unit number before introducing the new one."
+
+  hi.a1.unit14.lesson01.teach.arjun_bada_phrase:
+    title: "Arjun is bigger than Priya."
+    gloss: "Arjun is bigger than Priya."
+    note: "The unit's first full example of the se-comparative pattern."
+
+  hi.a1.unit14.lesson01.teach.lamba_lambi:
+    title: "Tall / long"
+    gloss: "tall / long (masculine / feminine)"
+    note: "A new adjective pair, following the already-established -a/-i masculine/feminine agreement pattern (bada/badi, chota/choti)."
+    example_gloss:
+      - "My brother is tall."
+      - "My sister is tall."
+
+  hi.a1.unit14.lesson01.teach.agreement_grammar:
+    title: "Adjective agrees with the subject"
+    gloss: "In a comparative sentence, the adjective (like bada/badi, chota/choti) always agrees with the gender of the SUBJECT, not the word after 'se' -- e.g. in 'Priya Arjun se choti hai', 'choti' agrees with Priya (the feminine subject), not with Arjun."
+    note: "A direct, explicit extension of the already-established -a/-i adjective agreement pattern, applied specifically to comparative sentences."
+
+  hi.a1.unit14.lesson01.teach.priya_chota_phrase:
+    title: "Priya is smaller than Arjun."
+    gloss: "Priya is smaller than Arjun."
+    note: "The complementary restatement of the same fact from the other direction -- demonstrates subject agreement with a feminine subject."
+
+  hi.a1.unit14.lesson01.teach.kaun_ya_review:
+    title: "Review: who, or"
+    gloss: "who, or"
+    note: "Both already taught (unit 5 and unit 6/13) -- reused here to ask a comparison question."
+    example_gloss: "Who is bigger, Arjun or Priya?"
+
+  hi.a1.unit14.lesson02.teach.topi_bag_review:
+    title: "Review: hat, bag"
+    gloss: "hat, bag"
+    note: "Both nouns first taught in unit 7's shopping unit -- reused here as the two things being compared."
+    example_gloss:
+      - "This hat is nice."
+      - "This bag is nice."
+
+  hi.a1.unit14.lesson02.teach.sasta_mehnga_review:
+    title: "Review: cheap, expensive"
+    gloss: "cheap, expensive"
+    note: "First taught in unit 7 -- reused here for object comparisons."
+    example_gloss:
+      - "The bag is cheap."
+      - "The bag is expensive."
+
+  hi.a1.unit14.lesson02.teach.sasti_mehngi_note:
+    title: "Feminine forms: sasti, mehngi"
+    gloss: "'Sasta' and 'mehnga' become 'sasti' and 'mehngi' with feminine words (from unit 7) -- like 'topi sasti hai' (the hat is cheap)."
+    note: "A quick reminder of unit 7's own gender-agreement rule, needed since 'topi' (hat) is feminine."
+
+  hi.a1.unit14.lesson02.teach.se_object_phrase:
+    title: "The hat is cheaper than the bag."
+    gloss: "The hat is cheaper than the bag."
+    note: "The se-comparative pattern applied to two objects rather than two people."
+
+  hi.a1.unit14.lesson02.teach.zyada_review:
+    title: "Review: more"
+    gloss: "more"
+    note: "First taught in unit 13 only with 'pasand hai' (to express a preference) -- this lesson generalizes its use."
+    example_gloss: "I like tea more."
+
+  hi.a1.unit14.lesson02.teach.zyada_mehnga_grammar:
+    title: "Zyada intensifies any comparison"
+    gloss: "'Zyada' was only learned with 'pasand hai' before (unit 13). Now it can go before ANY adjective to make a comparison stronger -- 'bag topi se zyada mehnga hai' means 'the bag is even more expensive than the hat'."
+    note: "A disclosed generalization of an already-taught word's placement rule, not a new grammar point."
+
+  hi.a1.unit14.lesson02.teach.zyada_mehnga_phrase:
+    title: "The bag is even more expensive than the hat."
+    gloss: "The bag is even more expensive than the hat."
+    note: "The intensified form of the same se-comparative pattern."
+
+  hi.a1.unit14.lesson02.teach.naya_nai:
+    title: "New"
+    gloss: "new (masculine / feminine)"
+    note: "A new adjective pair, following the same -a/-i agreement pattern as every other adjective in this unit."
+    example_gloss:
+      - "The bag is new."
+      - "The hat is new."
+
+  hi.a1.unit14.lesson02.teach.topi_nai_phrase:
+    title: "The hat is newer than the bag."
+    gloss: "The hat is newer than the bag."
+    note: "A second comparative attribute (age/newness) between the same two objects, consistent with the price comparison already established."
+
+  hi.a1.unit14.lesson03.teach.review_words:
+    title: "Review: big, small, tall, new"
+    gloss: "big/older, small/younger, tall/long, new"
+    note: "A quick review of this unit's key adjectives, needed for the dialogue and reading note."
+    example_gloss:
+      - "Arjun is bigger."
+      - "Priya is smaller."
+      - "Arjun is tall."
+      - "The bag is new."
+
+  hi.a1.unit14.lesson03.teach.main_hun_review:
+    title: "Review: I, am"
+    gloss: "I, am"
+    note: "First taught in unit 1 ('main theek hun') -- needed for Arjun to talk about himself in the dialogue."
+    example_gloss: "I am fine."
+
+  hi.a1.unit14.lesson03.teach.aur_bhi_review:
+    title: "Review: and, also"
+    gloss: "and, also"
+    note: "Both words have appeared in earlier dialogue text but are formally introduced as testable vocabulary here for the first time."
+    example_gloss:
+      - "I like tea and coffee."
+      - "I like it too."
+
+  hi.a1.unit14.lesson03.teach.ka_review:
+    title: "Review: 's (possessive)"
+    gloss: "'s (possessive marker)"
+    note: "The possessive marker already used throughout the course (e.g. unit 5-11) -- reused here to talk about whose bag is being compared."
+    example_gloss: "Arjun's bag is new."
+
+  hi.a1.unit14.lesson03.teach.dialogue.line01:
+    title: "Arjun shows his new bag"
+    gloss: "Priya, this is my new bag."
+  hi.a1.unit14.lesson03.teach.dialogue.line02:
+    title: "Priya says the hat is cheaper"
+    gloss: "Nice bag! But the hat is cheaper than a bag."
+  hi.a1.unit14.lesson03.teach.dialogue.line03:
+    title: "Arjun agrees his bag is expensive"
+    gloss: "Yes. My bag is expensive -- it's even more expensive than a hat."
+  hi.a1.unit14.lesson03.teach.dialogue.line04:
+    title: "Priya asks who is bigger"
+    gloss: "OK, OK! Arjun, who is bigger, you or I?"
+  hi.a1.unit14.lesson03.teach.dialogue.line05:
+    title: "Arjun answers himself"
+    gloss: "I am bigger, and I am tall too!"
+  hi.a1.unit14.lesson03.teach.dialogue.line06:
+    title: "Priya says the hat is also newer"
+    gloss: "OK, OK! But the hat is also newer than the bag."
+  hi.a1.unit14.lesson03.teach.dialogue.line07:
+    title: "Arjun agrees and closes"
+    gloss: "Yes, that's true. Shall we meet again tomorrow?"
+  hi.a1.unit14.lesson03.teach.dialogue.line08:
+    title: "Priya closes"
+    gloss: "OK! See you tomorrow."
+
+  hi.a1.unit14.lesson03.teach.grammar_summary:
+    title: "Three main rules"
+    gloss: "This unit's three main rules: (1) 'X, Y se ADJ hai' means 'X is more ADJ than Y'; (2) ADJ always agrees with the gender of the subject (X), not Y; (3) adding 'zyada' before ADJ makes the comparison stronger, like 'X, Y se zyada ADJ hai'."
+    note: "A closing summary tying the whole unit's grammar together, mirroring unit 13's own paradigm-tying grammar note."
+
+  hi.a1.unit14.lesson03.teach.priya_note:
+    title: "Priya's note"
+    gloss: "Arjun is bigger, and he is tall too. But my hat is nice -- the hat is cheaper than the bag, and the hat is also newer than the bag. - Priya"
+    note: "A short written note restating exactly the facts already established in the dialogue, no new claims."
+
+exercises:
+  hi.a1.unit14.lesson01.exercise01.select_lamba_meaning:
+    instruction: "What does this word mean?"
+    correct_option: "tall / long"
+    distractors: ["big / older", "cheap"]
+    accepted_answers: ["लंबा"]
+
+  hi.a1.unit14.lesson01.exercise02.select_bada_meaning:
+    instruction: "What does this word mean?"
+    correct_option: "big / older"
+    distractors: ["small / younger", "new"]
+    accepted_answers: ["बड़ा"]
+
+  hi.a1.unit14.lesson01.exercise03.select_arjun_bada_meaning:
+    instruction: "What does this sentence mean?"
+    correct_option: "Arjun is bigger than Priya."
+    distractors: ["Arjun is with Priya.", "Arjun met Priya."]
+    accepted_answers: ["अर्जुन प्रिया से बड़ा है"]
+
+  hi.a1.unit14.lesson01.exercise04.listen_arjun_prese_lamba:
+    instruction: "Listen and choose what you hear."
+    correct_option: "Arjun is taller than Priya."
+    distractors: ["Priya is taller than Arjun.", "Arjun is bigger than Priya."]
+    accepted_answers: ["अर्जुन प्रिया से लंबा है"]
+
+  hi.a1.unit14.lesson01.exercise05.select_chota_meaning:
+    instruction: "What does this word mean?"
+    correct_option: "small / younger"
+    distractors: ["big / older", "tall / long"]
+    accepted_answers: ["छोटा"]
+
+  hi.a1.unit14.lesson01.exercise06.match_lesson01_words:
+    instruction: "Match each Hindi word to its English meaning."
+    correct_response:
+      "बड़ा": "big / older (m.)"
+      "बड़ी": "big / older (f.)"
+      "छोटा": "small / younger (m.)"
+      "छोटी": "small / younger (f.)"
+      "लंबा": "tall / long (m.)"
+      "लंबी": "tall / long (f.)"
+      "से": "than"
+      "कौन": "who"
+
+  hi.a1.unit14.lesson01.exercise07.order_arjun_prese_bada:
+    instruction: "Put the sentence in order: Arjun is bigger than Priya."
+    correct_response: ["अर्जुन", "प्रिया", "से", "बड़ा", "है"]
+
+  hi.a1.unit14.lesson01.exercise08.order_priya_arjunse_chota:
+    instruction: "Put the sentence in order: Priya is smaller than Arjun."
+    correct_response: ["प्रिया", "अर्जुन", "से", "छोटी", "है"]
+
+  hi.a1.unit14.lesson01.exercise09.fill_arjun_bada:
+    instruction: "Complete the sentence: Arjun is bigger than Priya."
+    accepted_answers: ["से"]
+    feedback: "Arjun Priya se bada hai -- 'se' marks the comparison, 'than'."
+
+  hi.a1.unit14.lesson01.exercise10.fill_priya_chota:
+    instruction: "Complete the sentence: Priya is smaller than Arjun."
+    accepted_answers: ["छोटी"]
+    feedback: "Priya Arjun se choti hai -- 'choti' agrees with Priya (feminine subject)."
+
+  hi.a1.unit14.lesson01.exercise11.reply_kaun_bada:
+    instruction: "Answer: Arjun is bigger."
+    accepted_answers:
+      - "अर्जुन बड़ा है।"
+      - "अर्जुन बड़ा है"
+
+  hi.a1.unit14.lesson01.exercise12.fix_priya_chota:
+    instruction: "Correct the sentence -- Priya (feminine subject) needs 'choti', not 'chota'."
+    accepted_answers:
+      - "प्रिया अर्जुन से छोटी है।"
+      - "प्रिया अर्जुन से छोटी है"
+    feedback: "Priya Arjun se choti hai -- 'choti' (not 'chota') agrees with Priya, the feminine subject."
+
+  hi.a1.unit14.lesson01.exercise13.speak_arjun_prese_lamba:
+    instruction: "Say: Arjun is taller than Priya."
+    accepted_answers:
+      - "अर्जुन प्रिया से लंबा है।"
+      - "अर्जुन प्रिया से लंबा है"
+
+  hi.a1.unit14.lesson02.exercise01.select_naya_meaning:
+    instruction: "What does this word mean?"
+    correct_option: "new"
+    distractors: ["cheap", "expensive"]
+    accepted_answers: ["नया"]
+
+  hi.a1.unit14.lesson02.exercise02.select_mehnga_meaning:
+    instruction: "What does this word mean?"
+    correct_option: "expensive"
+    distractors: ["cheap", "new"]
+    accepted_answers: ["महंगा"]
+
+  hi.a1.unit14.lesson02.exercise03.select_topi_sasti_meaning:
+    instruction: "What does this sentence mean?"
+    correct_option: "The hat is cheaper than the bag."
+    distractors: ["The hat is more expensive than the bag.", "The hat is newer than the bag."]
+    accepted_answers: ["टोपी बैग से सस्ती है"]
+
+  hi.a1.unit14.lesson02.exercise04.listen_bag_topise_zyada_mehnga:
+    instruction: "Listen and choose what you hear."
+    correct_option: "The bag is even more expensive than the hat."
+    distractors: ["The hat is even more expensive than the bag.", "The bag is more expensive than the hat."]
+    accepted_answers: ["बैग टोपी से ज़्यादा महंगा है"]
+
+  hi.a1.unit14.lesson02.exercise05.select_sasta_meaning:
+    instruction: "What does this word mean?"
+    correct_option: "cheap"
+    distractors: ["expensive", "new"]
+    accepted_answers: ["सस्ता"]
+
+  hi.a1.unit14.lesson02.exercise06.match_lesson02_words:
+    instruction: "Match each Hindi word to its English meaning."
+    correct_response:
+      "सस्ता": "cheap"
+      "महंगा": "expensive"
+      "नया": "new (m.)"
+      "नई": "new (f.)"
+      "टोपी": "hat"
+      "बैग": "bag"
+      "ज़्यादा": "more"
+      "या": "or"
+
+  hi.a1.unit14.lesson02.exercise07.order_topi_bagse_sasti:
+    instruction: "Put the sentence in order: The hat is cheaper than the bag."
+    correct_response: ["टोपी", "बैग", "से", "सस्ती", "है"]
+
+  hi.a1.unit14.lesson02.exercise08.order_bag_topise_zyada_mehnga:
+    instruction: "Put the sentence in order: The bag is even more expensive than the hat."
+    correct_response: ["बैग", "टोपी", "से", "ज़्यादा", "महंगा", "है"]
+
+  hi.a1.unit14.lesson02.exercise09.fill_topi_nai:
+    instruction: "Complete the sentence: The hat is newer than the bag."
+    accepted_answers: ["नई"]
+    feedback: "Topi bag se nai hai -- 'nai' (feminine) agrees with 'topi'."
+
+  hi.a1.unit14.lesson02.exercise10.fill_bag_zyada_mehnga:
+    instruction: "Complete the sentence: The bag is even more expensive than the hat."
+    accepted_answers: ["महंगा"]
+    feedback: "Bag topi se zyada mehnga hai -- 'mehnga' (masculine) agrees with 'bag'."
+
+  hi.a1.unit14.lesson02.exercise11.reply_topi_ya_bag:
+    instruction: "Answer: The hat is cheap."
+    accepted_answers:
+      - "टोपी सस्ती है।"
+      - "टोपी सस्ती है"
+
+  hi.a1.unit14.lesson02.exercise12.fix_topi_nai:
+    instruction: "Correct the sentence -- 'topi' (hat, feminine) needs 'nai', not 'naya'."
+    accepted_answers:
+      - "टोपी बैग से नई है।"
+      - "टोपी बैग से नई है"
+    feedback: "Topi bag se nai hai -- 'nai' (not 'naya') agrees with 'topi', the feminine subject."
+
+  hi.a1.unit14.lesson02.exercise13.speak_bag_topise_mehnga:
+    instruction: "Say: The bag is more expensive than the hat."
+    accepted_answers:
+      - "बैग टोपी से महंगा है।"
+      - "बैग टोपी से महंगा है"
+
+  hi.a1.unit14.lesson03.exercise01.comprehend_arjun_bag_mehnga:
+    instruction: "Read the line. What is Arjun's bag like?"
+    correct_option: "Expensive"
+    distractors:
+      - "Cheap"
+      - "New"
+    accepted_answers:
+      - "Expensive"
+      - "महंगा"
+
+  hi.a1.unit14.lesson03.exercise02.comprehend_topi_nai:
+    instruction: "Read the line. What is also newer than the bag?"
+    correct_option: "The hat"
+    distractors:
+      - "The book"
+      - "Priya"
+    accepted_answers:
+      - "The hat"
+      - "टोपी"
+
+  hi.a1.unit14.lesson03.exercise03.select_main_bada_lamba_meaning:
+    instruction: "What does this sentence mean?"
+    correct_option: "I am bigger, and I am tall too."
+    distractors: ["I am smaller, and I am short too.", "I am new, and I am cheap too."]
+    accepted_answers: ["मैं बड़ा हूँ, और मैं लंबा भी हूँ"]
+
+  hi.a1.unit14.lesson03.exercise04.read_note_arjun_bada:
+    instruction: "Read the note. Is Arjun bigger or smaller?"
+    correct_option: "Bigger"
+    distractors:
+      - "Smaller"
+      - "Cheaper"
+    accepted_answers:
+      - "Bigger"
+      - "बड़ा"
+
+  hi.a1.unit14.lesson03.exercise05.read_note_topi_sasti:
+    instruction: "Read the note. Is the hat cheaper or more expensive than the bag?"
+    correct_option: "Cheaper"
+    distractors:
+      - "More expensive"
+      - "Bigger"
+    accepted_answers:
+      - "Cheaper"
+      - "सस्ती"
+
+  hi.a1.unit14.lesson03.exercise06.listen_topi_bagse_nai:
+    instruction: "Listen and choose what you hear."
+    correct_option: "The hat is newer than the bag."
+    distractors: ["The bag is newer than the hat.", "The hat is cheaper than the bag."]
+    accepted_answers: ["टोपी बैग से नई है"]
+
+  hi.a1.unit14.lesson03.exercise07.match_lesson03_review:
+    instruction: "Match each Hindi word to its English meaning."
+    correct_response:
+      "बड़ा": "big / older"
+      "छोटा": "small / younger"
+      "लंबा": "tall / long"
+      "नया": "new"
+      "सस्ता": "cheap"
+      "महंगा": "expensive"
+      "से": "than"
+      "ज़्यादा": "more"
+      "कौन": "who"
+      "या": "or"
+      "टोपी": "hat"
+      "बैग": "bag"
+
+  hi.a1.unit14.lesson03.exercise08.order_topi_bagse_nai:
+    instruction: "Put the sentence in order: The hat is newer than the bag."
+    correct_response: ["टोपी", "बैग", "से", "नई", "है"]
+
+  hi.a1.unit14.lesson03.exercise09.fill_topi_sasti:
+    instruction: "Complete the sentence: The hat is cheaper than the bag."
+    accepted_answers: ["सस्ती"]
+    feedback: "Topi bag se sasti hai -- 'sasti' (feminine) agrees with 'topi'."
+
+  hi.a1.unit14.lesson03.exercise10.fix_main_bada:
+    instruction: "Correct the sentence -- Arjun is speaking about himself, so it needs 'bada' (masculine), not 'badi'."
+    accepted_answers:
+      - "मैं बड़ा हूँ।"
+      - "मैं बड़ा हूँ"
+    feedback: "Main bada hun -- Arjun (masculine) uses 'bada', not 'badi'."
+
+  hi.a1.unit14.lesson03.exercise11.reply_arjun_bag_kaisa:
+    instruction: "Answer: Arjun's bag is expensive."
+    accepted_answers:
+      - "अर्जुन का बैग महंगा है।"
+      - "अर्जुन का बैग महंगा है"
+
+  hi.a1.unit14.lesson03.exercise12.write_topi_bag_compare:
+    instruction: "Write: Is the hat cheap, or the bag?"
+    accepted_answers:
+      - "टोपी सस्ती है।"
+      - "टोपी सस्ती है"
+      - "टोपी बैग से सस्ती है।"
+      - "टोपी बैग से सस्ती है"
+
+  hi.a1.unit14.lesson03.exercise13.speak_topi_bagse_sasti:
+    instruction: "Say: The hat is cheaper than the bag."
+    accepted_answers:
+      - "टोपी बैग से सस्ती है।"
+      - "टोपी बैग से सस्ती है"
