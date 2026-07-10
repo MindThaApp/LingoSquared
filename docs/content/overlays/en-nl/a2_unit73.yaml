@@ -6,9 +6,35 @@ target_language: nl
 status: complete_draft
 generation_provenance: {method: ai_generated, authoring_system: claude, human_reviewed: false}
 review:
-  status: unreviewed
+  status: reviewed
   required_next_reviewer: null
   notes: >-
+    2026-07-10 fresh-context review (Claude, zero access to the original
+    authoring reasoning), paired with the matching realization file's
+    own independent review. Found and fixed one issue on this side: the
+    realization file's lesson06 gained a new
+    exercise05.match_unit_recap (matching_pairs) that had been promised
+    by the original self-review notes but never actually shipped
+    (details in the realization file's review notes) -- added the
+    matching overlay entry (instruction, accepted_answers as an exact
+    {left,right}[] set match to the realization's `pairs`, feedback),
+    and renumbered lesson06's exercise05-08 keys to exercise06-09 to
+    match the realization file's renumbering. Verified afterward that
+    every content_key in the realization file resolves to exactly one
+    entry here and vice versa (no orphans either direction). Re-checked
+    every gloss against its realization counterpart word-for-word
+    (including the newly added recap exercise's feedback translations),
+    re-ran the boolean-coercion scan (clean), and re-verified the
+    fill_in_blank blanked-word answers (afspraak, beschikbaar) against
+    their frames' surrounding context. Ran the compiler paired with the
+    realization file, alone and together with the existing nl A2 batch
+    (units 24-28): 0 errors, 0 warnings both times, both before and
+    after the fix.
+
+    Original self-review notes preserved below.
+
+    ---
+
     English-to-Dutch overlay for nl A2 unit73 (job interview), realizing
     the newly added universal.a2.employment.attend_job_interview
     outcome -- paired with the matching realization file's own review
@@ -296,20 +322,24 @@ exercises:
     distractors: ["We will contact you next month.", "You will start tomorrow.", "She doesn't say when."]
     accepted_answers: [{value: "We will contact you this week.", status: correct}]
     feedback: "Mevrouw Jansen zegt: Wij nemen deze week nog contact met u op."
-  nl.a2.unit73.lesson06.exercise05.order_dank_gesprek:
+  nl.a2.unit73.lesson06.exercise05.match_unit_recap:
+    instruction: "Match each Dutch word or phrase to its meaning."
+    accepted_answers: [{value: [{left: "de vacature", right: "the vacancy"}, {left: "het sollicitatiegesprek", right: "the job interview"}, {left: "de ervaring", right: "the experience"}, {left: "de vaardigheid", right: "the skill"}, {left: beschikbaar, right: available}, {left: "de werktijden", right: "the working hours"}, {left: klantcontact, right: "customer contact"}, {left: "administratief medewerker", right: "administrative assistant"}], status: correct}]
+    feedback: "A recap of this unit's key words: vacature (vacancy), sollicitatiegesprek (job interview), ervaring (experience), vaardigheid (skill), beschikbaar (available), werktijden (working hours), klantcontact (customer contact), and administratief medewerker (administrative assistant)."
+  nl.a2.unit73.lesson06.exercise06.order_dank_gesprek:
     instruction: "Put the words in order to thank mevrouw Jansen for the interview."
     correct_option: "Dank u wel voor het gesprek"
     accepted_answers: [{value: "Dank u wel voor het gesprek", status: correct}]
     feedback: "The complete sentence is Dank u wel voor het gesprek."
-  nl.a2.unit73.lesson06.exercise06.respond_jansen_beschikbaar:
+  nl.a2.unit73.lesson06.exercise07.respond_jansen_beschikbaar:
     instruction: "Answer formally in Dutch: say yes, that works, and ask what the working hours are exactly."
     accepted_answers: [{value: "Ja, dat kan. Wat zijn de werktijden precies?", status: correct}, {value: "Ja, dat kan. Wat zijn de werktijden precies", status: correct}, {value: "Ja dat kan Wat zijn de werktijden precies", status: correct}]
     feedback: "Ja, dat kan. Wat zijn de werktijden precies?"
-  nl.a2.unit73.lesson06.exercise07.listen_type_uren_contact:
+  nl.a2.unit73.lesson06.exercise08.listen_type_uren_contact:
     instruction: "Listen and type the complete Dutch sentences."
     accepted_answers: [{value: "Van negen tot vijf uur. Wij nemen deze week nog contact met u op.", status: correct}, {value: "Van negen tot vijf uur Wij nemen deze week nog contact met u op", status: correct}]
     feedback: "Van negen tot vijf uur. Wij nemen deze week nog contact met u op."
-  nl.a2.unit73.lesson06.exercise08.write_summary_grammar:
+  nl.a2.unit73.lesson06.exercise09.write_summary_grammar:
     instruction: "Write two Dutch sentences: Nina applied at Kantoor Bloem, and she has experience as a volunteer at the library."
     accepted_answers: [{value: "Nina heeft gesolliciteerd bij Kantoor Bloem. Zij heeft ervaring als vrijwilliger in de bibliotheek.", status: correct}, {value: "Nina heeft gesolliciteerd bij Kantoor Bloem Zij heeft ervaring als vrijwilliger in de bibliotheek", status: correct}, {value: "Nina heeft gesolliciteerd bij Kantoor Bloem, en zij heeft ervaring als vrijwilliger in de bibliotheek.", status: correct}, {value: "Nina heeft gesolliciteerd bij Kantoor Bloem, en zij heeft ervaring als vrijwilliger in de bibliotheek", status: correct}]
     feedback: "Nina heeft gesolliciteerd bij Kantoor Bloem. Zij heeft ervaring als vrijwilliger in de bibliotheek."
