@@ -10,6 +10,7 @@ export function AdminContentPage() {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const [statusFilter, setStatusFilter] = useState("open");
+  const [updateError, setUpdateError] = useState<string | null>(null);
 
   const coverageQuery = useQuery({
     queryKey: ["admin-coverage"],
@@ -21,9 +22,23 @@ export function AdminContentPage() {
   });
 
   async function setIssueStatus(issueId: string, status: string) {
-    await AdminApi.updateIssue(issueId, { status });
-    queryClient.invalidateQueries({ queryKey: ["admin-issues"] });
-    queryClient.invalidateQueries({ queryKey: ["admin-coverage"] });
+    setUpdateError(null);
+    // The backend hard-requires duplicate_of_id when marking an issue
+    // duplicate (422 duplicate_target_required) -- this button used to
+    // send only {status} and fail silently on every use.
+    let duplicateOfId: string | undefined;
+    if (status === "duplicate") {
+      const target = window.prompt(t("admin.duplicate_target_prompt"));
+      if (!target) return;
+      duplicateOfId = target.trim();
+    }
+    try {
+      await AdminApi.updateIssue(issueId, { status, duplicate_of_id: duplicateOfId });
+      queryClient.invalidateQueries({ queryKey: ["admin-issues"] });
+      queryClient.invalidateQueries({ queryKey: ["admin-coverage"] });
+    } catch {
+      setUpdateError(t("admin.update_status_error"));
+    }
   }
 
   const forbidden =
@@ -97,6 +112,7 @@ export function AdminContentPage() {
             ))}
           </select>
         </div>
+        {updateError && <p className="feedback-banner error">{updateError}</p>}
         {issuesQuery.isLoading && <p className="muted">{t("admin.loading")}</p>}
         {issuesQuery.data?.length === 0 && <p className="muted">{t("admin.no_issues")}</p>}
         {issuesQuery.data?.map((issue) => (

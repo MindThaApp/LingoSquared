@@ -212,7 +212,10 @@ export const AdminApi = {
   coverage: () => get<CoverageRow[]>("/admin/content/coverage"),
   issues: (status?: string) =>
     get<ContentIssue[]>(`/admin/content/issues${status ? `?status=${encodeURIComponent(status)}` : ""}`),
-  updateIssue: (issueId: string, body: { status?: string; triage_notes?: string }) =>
+  updateIssue: (
+    issueId: string,
+    body: { status?: string; triage_notes?: string; duplicate_of_id?: string },
+  ) =>
     patch<ContentIssue>(`/admin/content/issues/${issueId}`, body),
 };
 
