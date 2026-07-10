@@ -405,6 +405,19 @@ def units(course_id:str,user=Depends(optional_current_user),db:Session=Depends(g
                     select(func.count(Lesson.id))
                     .where(Lesson.unit_id==unit.id)
                 ),
+                "completed_lesson_count":(
+                    db.scalar(
+                        select(func.count(LessonProgress.id))
+                        .join(Lesson,Lesson.id==LessonProgress.lesson_id)
+                        .where(
+                            LessonProgress.user_id==user.id,
+                            Lesson.unit_id==unit.id,
+                            LessonProgress.completed_at.is_not(None),
+                        )
+                    )
+                    if user
+                    else 0
+                ),
                 "section":unit.section,
                 "locked":unit.section==UnitSection.speaking and not unlocked,
                 "checkpoint_passed":checkpoint_passed,

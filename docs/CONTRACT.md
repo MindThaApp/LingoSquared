@@ -218,13 +218,27 @@ beyond LAN testing.
 `"description"`. Does not inline units (fetch those separately) — avoids two
 sources of truth for unit ordering.
 
-`GET /courses/{course_id}/units` and `GET /units/{unit_id}/lessons` → flat
-arrays of `{ "id", "title", "order", "lesson_count" }` /
-`{ "id", "title", "order", "exercise_count" }`. (Units listing is actually
-richer than this — also carries `section`, `locked`, `checkpoint_passed`,
-and, added 2026-07-07, `content_key` — this doc block was already stale
-on those first three before the fourth was added; see `UnitOut` in
-`backend/app/schemas/api.py` for the authoritative current shape.)
+`GET /courses/{course_id}/units` → flat array of:
+```json
+[
+  {
+    "id": "uuid",
+    "title": "string",
+    "order": 1,
+    "lesson_count": 4,
+    "completed_lesson_count": 2,
+    "section": "reading_writing",
+    "locked": false,
+    "checkpoint_passed": false,
+    "content_key": "en.a1.unit06.family"
+  }
+]
+```
+`completed_lesson_count` is learner-specific: with authenticated optional auth
+it counts that user's lessons in the unit whose `LessonProgress.completed_at`
+is non-null; anonymous requests return `0` for every unit.
+`GET /units/{unit_id}/lessons` → flat array of
+`{ "id", "title", "order", "exercise_count" }`.
 `content_key` is the unit's stable authoring key (e.g.
 `"en.a1.unit06.family"`, nullable for any unit imported before content_key
 tracking existed) — the frontend uses its topic slug to pick a per-unit

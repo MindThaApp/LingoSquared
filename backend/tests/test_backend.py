@@ -1,3 +1,4 @@
+import os
 from datetime import datetime, timezone
 from sqlalchemy import delete, select
 from app.db.session import SessionLocal
@@ -46,6 +47,84 @@ def test_admin_import_course_and_queries(client, admin):
     lessons = client.get(f"/units/{units[0]['id']}/lessons").json()
     detail = client.get(f"/lessons/{lessons[0]['id']}").json()
     assert "correct_response" not in detail["exercises"][0]
+
+def test_course_units_include_per_user_completed_lesson_counts(client, admin, auth):
+    title = f"Completion count course {os.urandom(4).hex()}"
+    body = payload(title=title)
+    body["courses"][0]["units"] = [
+        {
+            "title": "Unit one",
+            "order": 1,
+            "lessons": [
+                {
+                    "title": "Unit one lesson one",
+                    "order": 1,
+                    "exercises": [
+                        {
+                            "type": "translation",
+                            "order": 1,
+                            "prompt": {"text_blocks": [{"text": "hello", "language_code": "en", "direction": "ltr"}]},
+                            "correct_response": "hola",
+                        }
+                    ],
+                },
+                {
+                    "title": "Unit one lesson two",
+                    "order": 2,
+                    "exercises": [
+                        {
+                            "type": "translation",
+                            "order": 1,
+                            "prompt": {"text_blocks": [{"text": "goodbye", "language_code": "en", "direction": "ltr"}]},
+                            "correct_response": "adios",
+                        }
+                    ],
+                },
+            ],
+        },
+        {
+            "title": "Unit two",
+            "order": 2,
+            "lessons": [
+                {
+                    "title": "Unit two lesson one",
+                    "order": 1,
+                    "exercises": [
+                        {
+                            "type": "translation",
+                            "order": 1,
+                            "prompt": {"text_blocks": [{"text": "thanks", "language_code": "en", "direction": "ltr"}]},
+                            "correct_response": "gracias",
+                        }
+                    ],
+                }
+            ],
+        },
+    ]
+    response = client.post("/admin/content/import", headers=admin, json=body)
+    assert response.status_code == 200
+    course = next(x for x in client.get("/courses?source=en&target=es").json() if x["title"] == title)
+    units_response = client.get(f"/courses/{course['id']}/units", headers=auth)
+    assert units_response.status_code == 200
+    units = units_response.json()
+    first_unit, second_unit = units
+    first_lessons = client.get(f"/units/{first_unit['id']}/lessons").json()
+
+    assert client.post(f"/lessons/{first_lessons[0]['id']}/start", headers=auth).status_code == 200
+    assert client.post(f"/lessons/{first_lessons[0]['id']}/complete", headers=auth).status_code == 200
+
+    authenticated_response = client.get(f"/courses/{course['id']}/units", headers=auth)
+    assert authenticated_response.status_code == 200
+    authenticated_units = authenticated_response.json()
+    assert authenticated_units[0]["lesson_count"] == 2
+    assert authenticated_units[0]["completed_lesson_count"] == 1
+    assert authenticated_units[1]["lesson_count"] == 1
+    assert authenticated_units[1]["completed_lesson_count"] == 0
+
+    anonymous_response = client.get(f"/courses/{course['id']}/units")
+    assert anonymous_response.status_code == 200
+    anonymous_units = anonymous_response.json()
+    assert [unit["completed_lesson_count"] for unit in anonymous_units] == [0, 0]
 
 def test_lesson_answer_xp_streak_review(client, auth):
     course = client.get("/courses?source=en&target=fa").json()[0]
