@@ -112,6 +112,83 @@ def test_schedule_first_ever_review_is_not_early_scaled():
     assert item.repetitions == 3
 
 
+def test_schedule_lapse_on_established_word_keeps_partial_credit():
+    # A lapse must NOT hard-reset a well-established word to
+    # repetitions=0/interval_days=1 (the "ease hell" pattern) — it keeps
+    # 30% of the prior interval and loses 2 repetitions, while the
+    # ease_factor penalty (-0.32, unchanged from before the softening)
+    # and the mastery penalty (-0.2) still apply in full.
+    now = datetime.now(timezone.utc)
+    item = _ScheduleItem(
+        repetitions=8,
+        interval_days=100,
+        ease_factor=2.5,
+        mastery=0.9,
+        due_at=now - timedelta(minutes=1),
+        last_reviewed_at=now - timedelta(days=100),
+    )
+
+    schedule(item, "incorrect")
+
+    assert item.interval_days == 30  # round(100 * 0.3), not 1
+    assert item.repetitions == 6  # 8 - 2, not 0
+    assert abs(item.ease_factor - 2.18) < 1e-9  # 2.5 - 0.32, unchanged
+    assert abs(item.mastery - 0.7) < 1e-9  # 0.9 - 0.2, unchanged
+    assert item.due_at > now + timedelta(days=29)
+
+
+def test_schedule_success_after_lapse_regrows_from_retained_interval():
+    # The retained post-lapse interval must actually be USED: with
+    # repetitions still >= 2 after the lapse, the next success takes the
+    # multiplicative branch (interval * ease) from the retained 30%
+    # interval, instead of being overwritten by the 1-day/6-day
+    # new-word bootstrap ladder.
+    now = datetime.now(timezone.utc)
+    item = _ScheduleItem(
+        repetitions=8,
+        interval_days=100,
+        ease_factor=2.5,
+        mastery=0.9,
+        due_at=now - timedelta(minutes=1),
+        last_reviewed_at=now - timedelta(days=100),
+    )
+    schedule(item, "incorrect")
+    assert item.interval_days == 30
+
+    # Simulate the retained interval elapsing fully (on-time review).
+    item.due_at = now - timedelta(minutes=1)
+    item.last_reviewed_at = now - timedelta(days=30)
+    schedule(item, "correct")
+
+    assert item.interval_days == 65  # round(30 * 2.18), not 1 or 6
+    assert item.repetitions == 7
+
+
+def test_schedule_consecutive_lapses_converge_to_floor_never_negative():
+    # Repeated failures compound (x0.3 interval, -2 repetitions each) and
+    # converge to the old full-reset floor (interval=1, repetitions=0)
+    # without ever going negative or below 1 day.
+    now = datetime.now(timezone.utc)
+    item = _ScheduleItem(
+        repetitions=8,
+        interval_days=100,
+        ease_factor=2.5,
+        mastery=0.9,
+        due_at=now - timedelta(minutes=1),
+        last_reviewed_at=now - timedelta(days=100),
+    )
+
+    for _ in range(8):
+        schedule(item, "incorrect")
+        assert item.interval_days >= 1
+        assert item.repetitions >= 0
+        assert item.ease_factor >= 1.3
+        assert item.mastery >= 0.0
+
+    assert item.interval_days == 1
+    assert item.repetitions == 0
+
+
 def test_lesson_completion_populates_srs_idempotently(client, auth):
     course_id, lesson_id = create_course_with_lexemes()
     uid = user_id(auth)
