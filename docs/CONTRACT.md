@@ -1115,7 +1115,15 @@ client IP), and the three answer-submission endpoints (`POST /exercises/{id}
 /answer`, `POST /reviews/{id}/answer`, `POST /practice/items/{id}/answer` —
 120 requests/60s per account) all return `429` with the same additional-field
 shape when exceeded: `login_rate_limited`, `register_rate_limited`, and
-`answer_rate_limited` respectively, each with `retry_after_seconds`. In-memory
+`answer_rate_limited` respectively, each with `retry_after_seconds`.
+**Added 2026-07-10**: `POST /auth/refresh` and `POST /auth/logout` (30
+requests/60s per client IP, shared between the two — both are
+unauthenticated, refresh-token-bearing endpoints, so this bounds stolen-token
+replay probing and valid-token guessing; deliberately more generous than
+login's 10/60s because legitimate clients refresh automatically on
+access-token expiry and several devices can share one NAT'd IP) return the
+same `429` shape with code `refresh_rate_limited`. Invalid-token probes count
+against the limit exactly like login's failed attempts do. In-memory
 sliding-window limiter (`app/core/rate_limit.py`), not Redis-backed — correct
 for this deployment's single-process, no-Redis stack; would need to move to a
 shared store if ever scaled to multiple worker processes.
