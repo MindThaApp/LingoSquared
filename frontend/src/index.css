@@ -31,6 +31,13 @@
   --almost-soft: #fdf1db;
   --incorrect: #c02b2b;
   --incorrect-soft: #fdeaea;
+  /* Text color for solid --incorrect FILLS (.btn-danger), sibling of
+     --accent-contrast. Needed because dark mode LIGHTENS --incorrect to
+     #e86a6a (a foreground-on-dark tune, see the dark block) -- white text
+     on that lightened red is only 3.13:1, a real AA fail for 16px/700
+     button text. White on light-mode #c02b2b: 5.80. Same bright-fill/
+     dark-text tradeoff .practice-combo documents for --gold. */
+  --incorrect-contrast: #ffffff;
   --locked: #b9b9c6;
   --radius: 14px;
   --radius-sm: 9px;
@@ -73,6 +80,9 @@
     --almost-soft: #3a2f14;
     --incorrect: #e86a6a;
     --incorrect-soft: #3a1f1f;
+    /* Dark text on the lightened dark-mode red: 6.04 (white would be 3.13,
+       an AA fail -- see the :root comment on this token). */
+    --incorrect-contrast: #101018;
     --locked: #4a4a58;
     --shadow: 0 1px 3px rgba(0, 0, 0, 0.4), 0 6px 18px rgba(0, 0, 0, 0.3);
   }
@@ -266,7 +276,10 @@ button {
    from the page). */
 .btn-danger {
   background: var(--incorrect);
-  color: #ffffff;
+  /* NOT plain #ffffff: dark mode's --incorrect is a lightened red that
+     fails AA under white text -- var(--incorrect-contrast) flips to dark
+     text there. Ratios documented on the token itself. */
+  color: var(--incorrect-contrast);
 }
 
 .btn-danger-soft {
