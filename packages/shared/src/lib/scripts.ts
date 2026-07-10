@@ -19,11 +19,34 @@ export const LANGUAGE_SCRIPT: Record<string, ScriptCode> = {
 };
 
 // Traditional Perso-Arabic alphabet order — shared by Farsi and Dari.
+// Two additions beyond the bare 32-letter alphabet (2026-07-10 RTL/script
+// review found real words unanswerable without them):
+// - آ (alef madda) sits right after ا: it's an alef variant, that's where a
+//   learner looks for it, and it's extremely common (آب, آری, آقا).
+// - The hamza family (ء أ إ ؤ ئ) is grouped at the END, after ی — the same
+//   place traditional alphabet listings put hamza. All five occur in real
+//   Persian/Dari text via Arabic loanwords (مسئله, سؤال, تأیید, إن‌شاءالله),
+//   with إ the rarest but still needed to type what content actually ships.
 const PERSO_ARABIC_LETTERS = [
-  "ا", "ب", "پ", "ت", "ث", "ج", "چ", "ح", "خ",
+  "ا", "آ", "ب", "پ", "ت", "ث", "ج", "چ", "ح", "خ",
   "د", "ذ", "ر", "ز", "ژ", "س", "ش", "ص", "ض",
   "ط", "ظ", "ع", "غ", "ف", "ق", "ک", "گ", "ل",
   "م", "ن", "و", "ه", "ی",
+  "ء", "أ", "إ", "ؤ", "ئ",
+];
+
+// Secondary (toggled) key layer for Perso-Arabic: Extended Arabic-Indic
+// digits — the ۴/۵/۶ forms used by fa AND prs, NOT the Arabic-proper
+// ٤/٥/٦ forms (U+06F0–U+06F9, not U+0660–U+0669) — plus the Persian
+// punctuation marks (،  ؛  ؟) that ASCII , ; ? don't substitute for.
+// Kept behind a toggle rather than always-visible rows: at the 42px
+// touch-target key width this would add two more wrapped lines on a
+// 375px phone, pushing the answer input off-screen (see the per-line
+// math in index.css's .virtual-keyboard-key comment).
+// Digit order ۱..۹ then ۰, matching the number row on real fa keyboards.
+const PERSO_ARABIC_SYMBOLS = [
+  "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹", "۰",
+  "،", "؛", "؟",
 ];
 
 // Devanagari (Hindi) characters, ordered per the InScript standard — India's
@@ -66,6 +89,20 @@ export interface KeyboardLayout {
   // Zero-width non-joiner — needed for correct Persian/Dari compound
   // spelling (e.g. نمی‌شود) and easy to get wrong typing manually.
   hasZwnj?: boolean;
+  // Optional secondary key layer (digits/punctuation) behind a toggle key,
+  // so the always-visible letter grid stays phone-sized. The toggle labels
+  // live here (not hardcoded in the component) because they're script
+  // glyphs, not translatable UI copy — a future script's layer should
+  // bring its own (e.g. "123"/"अ" for Devanagari).
+  symbols?: {
+    keys: string[];
+    // Digits read left-to-right even inside RTL text (۱۲۳ = 123), and real
+    // fa/prs keyboards lay their number rows out LTR — so a symbol layer
+    // may need its own direction independent of the letter grid's.
+    direction: "ltr" | "rtl";
+    toggleLabel: string; // shown on the toggle key while letters are visible
+    lettersLabel: string; // shown on the toggle key while symbols are visible
+  };
 }
 
 const ROW_SIZE = 11;
@@ -83,6 +120,12 @@ export const KEYBOARD_LAYOUTS: Partial<Record<ScriptCode, KeyboardLayout>> = {
     direction: "rtl",
     rows: chunk(PERSO_ARABIC_LETTERS, ROW_SIZE),
     hasZwnj: true,
+    symbols: {
+      keys: PERSO_ARABIC_SYMBOLS,
+      direction: "ltr",
+      toggleLabel: "۱۲۳",
+      lettersLabel: "الف‌ب",
+    },
   },
   devanagari: {
     // Unlike Perso-Arabic-family scripts, Devanagari reads left-to-right.
