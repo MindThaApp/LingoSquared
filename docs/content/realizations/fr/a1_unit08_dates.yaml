@@ -1,0 +1,303 @@
+schema_version: "1.1"
+realization_version: "2026.1-draft.1"
+target_language: fr
+cefr_level: A1
+status: complete_draft
+generation_provenance:
+  method: ai_generated
+  authoring_system: claude
+  human_reviewed: false
+  source_material:
+    - name: "None -- established-conventions-only authoring"
+      license: not_applicable
+      usage: >-
+        Same situation as unit06 (time): the FSI French Basic Course's early
+        units don't carry a dedicated "calendar dates" topic distinct from
+        general scheduling, so rather than force-fit an unrelated dialogue
+        this unit is authored directly from established A1 date conventions
+        (days of the week, ordinal "le premier," cardinal dates for the
+        2nd-31st, mois), continuing the Inès/Mathieu narrative. Firecrawl
+        remained at zero credits this cycle throughout this whole authoring
+        session (confirmed once at the start, see a1_unit04_shopping.yaml's
+        provenance note); no further external search was attempted for this
+        specific unit since the topic doesn't map to a distinct FSI unit
+        worth chasing.
+review:
+  status: unreviewed
+  required_next_reviewer: fresh_context
+  notes: >-
+    New unit, 2026-07-10, continuing the Inès/Mathieu cooking-workshop
+    narrative into planning the workshop's final session date. Scoped to 3
+    lessons like units04-07. Every kind:vocabulary card carries a real
+    example sentence per schema_version 1.1. Not yet fresh-context reviewed.
+
+course:
+  realization_key: fr.a1
+  target_language_first: true
+  dialect: fr_FR_standard_metropolitan
+  register_policy: >-
+    Continues unit01-07's register split: tu with Mathieu and other peers at
+    the workshop, vous with unfamiliar adults.
+
+media_assets:
+  - content_key: fr.a1.audio.quel_jour_sommes_nous.neutral.01
+    language: fr
+    text: "Quel jour sommes-nous ?"
+    voice_hint: neutral_adult
+    status: pending_generation
+  - content_key: fr.a1.audio.cest_le_quinze_mars.neutral.01
+    language: fr
+    text: "C'est le quinze mars."
+    voice_hint: neutral_adult
+    status: pending_generation
+  - content_key: fr.a1.audio.dialogue.derniere_seance.01
+    language: fr
+    text: "Inès : C'est quand, la dernière séance de l'atelier ?\nMathieu : Elle est le vingt-deux mars, je crois. Un samedi.\nInès : Quelle est la date aujourd'hui ?\nMathieu : Nous sommes le quinze mars. Donc c'est dans une semaine.\nInès : Parfait, j'ai le temps de préparer un dessert pour l'occasion.\nMathieu : Bonne idée ! On se voit samedi prochain, le vingt-deux, alors."
+    voice_hint: two_young_adults_neutral_friendly
+    status: pending_generation
+
+units:
+  - content_key: fr.a1.unit08.dates
+    title: "Quelle est la date ?"
+    section: reading_writing
+    spine_outcome_ids:
+      - universal.a1.dates.exchange_calendar_dates
+    planned_lesson_count: 3
+
+    lessons:
+      - content_key: fr.a1.unit08.lesson01.jours_de_la_semaine
+        title: "Les jours de la semaine"
+        spine_outcome_id: universal.a1.dates.exchange_calendar_dates
+        teaching:
+          - content_key: fr.a1.unit08.lesson01.teach.lundi
+            kind: vocabulary
+            target: {text: "lundi", language_code: fr, direction: ltr}
+            introduced_tokens: ["lundi"]
+            example: {text: "L'atelier ne se réunit jamais le lundi.", language_code: fr, direction: ltr}
+          - content_key: fr.a1.unit08.lesson01.teach.samedi
+            kind: vocabulary
+            target: {text: "samedi", language_code: fr, direction: ltr}
+            introduced_tokens: ["samedi", "L'atelier", "a", "lieu", "le"]
+            example: {text: "L'atelier a lieu le samedi.", language_code: fr, direction: ltr}
+          - content_key: fr.a1.unit08.lesson01.teach.dimanche
+            kind: vocabulary
+            target: {text: "dimanche", language_code: fr, direction: ltr}
+            introduced_tokens: ["dimanche"]
+            example: {text: "La boulangerie est fermée le dimanche.", language_code: fr, direction: ltr}
+          - content_key: fr.a1.unit08.lesson01.teach.aujourdhui
+            kind: vocabulary
+            target: {text: "aujourd'hui", language_code: fr, direction: ltr}
+            introduced_tokens: ["aujourd'hui"]
+            example: {text: "Nous sommes samedi aujourd'hui.", language_code: fr, direction: ltr}
+          - content_key: fr.a1.unit08.lesson01.teach.demain
+            kind: vocabulary
+            target: {text: "demain", language_code: fr, direction: ltr}
+            introduced_tokens: ["demain"]
+            example: {text: "L'atelier continue demain.", language_code: fr, direction: ltr}
+          - content_key: fr.a1.unit08.lesson01.teach.hier
+            kind: vocabulary
+            target: {text: "hier", language_code: fr, direction: ltr}
+            introduced_tokens: ["hier"]
+            example: {text: "L'atelier a commencé hier.", language_code: fr, direction: ltr}
+          - content_key: fr.a1.unit08.lesson01.teach.quel_jour_sommes_nous
+            kind: phrase
+            target: {text: "Quel jour sommes-nous ?", language_code: fr, direction: ltr}
+            introduced_tokens: ["Quel", "jour", "sommes", "nous"]
+        exercises:
+          - content_key: fr.a1.unit08.lesson01.exercise01.select_samedi
+            type: multiple_choice
+            tested_text: "samedi"
+            prompt:
+              target_blocks:
+                - {text: "samedi", language_code: fr, direction: ltr}
+          - content_key: fr.a1.unit08.lesson01.exercise02.listen_dimanche
+            type: listen_select
+            tested_text: "dimanche"
+            media_asset_key: fr.a1.audio.quel_jour_sommes_nous.neutral.01
+            prompt: {target_blocks: []}
+          - content_key: fr.a1.unit08.lesson01.exercise03.match_days
+            type: matching_pairs
+            tested_text: "lundi samedi dimanche aujourd'hui demain hier"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "lundi", right: "Monday"}
+              - {left: "samedi", right: "Saturday"}
+              - {left: "dimanche", right: "Sunday"}
+              - {left: "aujourd'hui", right: "today"}
+              - {left: "demain", right: "tomorrow"}
+              - {left: "hier", right: "yesterday"}
+          - content_key: fr.a1.unit08.lesson01.exercise04.order_atelier_samedi
+            type: word_order
+            tested_text: "L'atelier a lieu le samedi"
+            prompt: {target_blocks: []}
+            word_bank: ["L'atelier", "a", "lieu", "le", "samedi"]
+          - content_key: fr.a1.unit08.lesson01.exercise05.fill_dimanche_fermee
+            type: fill_in_blank
+            tested_text: "dimanche"
+            prompt:
+              target_blocks:
+                - {text: "La boulangerie est fermée le ___. (Sunday)", language_code: fr, direction: ltr}
+          - content_key: fr.a1.unit08.lesson01.exercise06.speak_today
+            type: speak_response
+            tested_text: "Quel jour sommes nous aujourd'hui"
+            prompt:
+              target_blocks:
+                - {text: "Dis quel jour nous sommes aujourd'hui.", language_code: fr, direction: ltr}
+
+      - content_key: fr.a1.unit08.lesson02.donner_la_date
+        title: "Donner la date"
+        spine_outcome_id: universal.a1.dates.exchange_calendar_dates
+        teaching:
+          - content_key: fr.a1.unit08.lesson02.teach.mars
+            kind: vocabulary
+            target: {text: "mars", language_code: fr, direction: ltr}
+            introduced_tokens: ["mars"]
+            example: {text: "L'atelier finit en mars.", language_code: fr, direction: ltr}
+          - content_key: fr.a1.unit08.lesson02.teach.quelle_est_la_date
+            kind: phrase
+            target: {text: "Quelle est la date aujourd'hui ?", language_code: fr, direction: ltr}
+            introduced_tokens: ["Quelle", "est", "la", "date", "aujourd'hui"]
+          - content_key: fr.a1.unit08.lesson02.teach.cest_le_quinze_mars
+            kind: phrase
+            target: {text: "C'est le quinze mars.", language_code: fr, direction: ltr}
+            introduced_tokens: ["C'est", "le", "quinze", "mars"]
+          - content_key: fr.a1.unit08.lesson02.teach.nous_sommes_le
+            kind: phrase
+            target: {text: "Nous sommes le quinze mars.", language_code: fr, direction: ltr}
+            introduced_tokens: ["Nous", "sommes", "le", "quinze", "mars"]
+          - content_key: fr.a1.unit08.lesson02.teach.le_premier
+            kind: grammar_note
+            target: {text: "le premier", language_code: fr, direction: ltr}
+            introduced_tokens: ["le", "premier"]
+          - content_key: fr.a1.unit08.lesson02.teach.le_vingt_deux
+            kind: phrase
+            target: {text: "L'atelier se termine le vingt-deux mars.", language_code: fr, direction: ltr}
+            introduced_tokens: ["L'atelier", "se", "termine", "le", "vingt-deux", "mars"]
+        exercises:
+          - content_key: fr.a1.unit08.lesson02.exercise01.select_quelle_est_la_date
+            type: multiple_choice
+            tested_text: "Quelle est la date aujourd'hui"
+            prompt:
+              target_blocks:
+                - {text: "Quelle est la date aujourd'hui ?", language_code: fr, direction: ltr}
+          - content_key: fr.a1.unit08.lesson02.exercise02.listen_quinze_mars
+            type: listen_select
+            tested_text: "C'est le quinze mars"
+            media_asset_key: fr.a1.audio.cest_le_quinze_mars.neutral.01
+            prompt: {target_blocks: []}
+          - content_key: fr.a1.unit08.lesson02.exercise03.match_date_phrases
+            type: matching_pairs
+            tested_text: "quelle est la date c'est le quinze mars nous sommes le vingt-deux mars"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "Quelle est la date aujourd'hui ?", right: "What's today's date?"}
+              - {left: "C'est le quinze mars.", right: "It's March fifteenth."}
+              - {left: "Nous sommes le quinze mars.", right: "Today is March fifteenth."}
+              - {left: "le premier", right: "the first (of the month)"}
+              - {left: "L'atelier se termine le vingt-deux mars.", right: "The workshop ends on March twenty-second."}
+              - {left: "mars", right: "March"}
+          - content_key: fr.a1.unit08.lesson02.exercise04.order_nous_sommes_quinze_mars
+            type: word_order
+            tested_text: "Nous sommes le quinze mars"
+            prompt: {target_blocks: []}
+            word_bank: ["Nous", "sommes", "le", "quinze", "mars"]
+          - content_key: fr.a1.unit08.lesson02.exercise05.fill_vingt_deux
+            type: fill_in_blank
+            tested_text: "vingt-deux"
+            prompt:
+              target_blocks:
+                - {text: "L'atelier se termine le ___ mars. (twenty-second)", language_code: fr, direction: ltr}
+          - content_key: fr.a1.unit08.lesson02.exercise06.reply_todays_date
+            type: dialogue_response
+            tested_text: "Nous sommes le quinze mars"
+            prompt:
+              target_blocks:
+                - {text: "Quelle est la date aujourd'hui ?", language_code: fr, direction: ltr}
+
+      - content_key: fr.a1.unit08.lesson03.dialogue_derniere_seance
+        title: "La dernière séance de l'atelier"
+        spine_outcome_ids:
+          - universal.a1.dates.exchange_calendar_dates
+        teaching:
+          - content_key: fr.a1.unit08.lesson03.teach.line01
+            kind: dialogue
+            target:
+              text: "C'est quand, la dernière séance de l'atelier ?"
+              language_code: fr
+              direction: ltr
+              speaker: Inès
+            introduced_tokens: ["C'est", "quand", "la", "dernière", "séance", "de", "l'atelier"]
+          - content_key: fr.a1.unit08.lesson03.teach.line02
+            kind: dialogue
+            target:
+              text: "Elle est le vingt-deux mars, je crois. Un samedi."
+              language_code: fr
+              direction: ltr
+              speaker: Mathieu
+            introduced_tokens: ["Elle", "est", "le", "vingt-deux", "mars", "je", "crois", "Un", "samedi"]
+          - content_key: fr.a1.unit08.lesson03.teach.line03
+            kind: dialogue
+            target:
+              text: "Quelle est la date aujourd'hui ?"
+              language_code: fr
+              direction: ltr
+              speaker: Inès
+            introduced_tokens: ["Quelle", "est", "la", "date", "aujourd'hui"]
+          - content_key: fr.a1.unit08.lesson03.teach.line04
+            kind: dialogue
+            target:
+              text: "Nous sommes le quinze mars. Donc c'est dans une semaine."
+              language_code: fr
+              direction: ltr
+              speaker: Mathieu
+            introduced_tokens: ["Nous", "sommes", "le", "quinze", "mars", "Donc", "c'est", "dans", "une", "semaine"]
+          - content_key: fr.a1.unit08.lesson03.teach.line05
+            kind: dialogue
+            target:
+              text: "Parfait, j'ai le temps de préparer un dessert pour l'occasion."
+              language_code: fr
+              direction: ltr
+              speaker: Inès
+            introduced_tokens: ["Parfait", "j'ai", "le", "temps", "de", "préparer", "un", "dessert", "pour", "l'occasion"]
+          - content_key: fr.a1.unit08.lesson03.teach.line06
+            kind: dialogue
+            target:
+              text: "Bonne idée ! On se voit samedi prochain, le vingt-deux, alors."
+              language_code: fr
+              direction: ltr
+              speaker: Mathieu
+            introduced_tokens: ["Bonne", "idée", "On", "se", "voit", "samedi", "prochain", "le", "vingt-deux", "alors"]
+        exercises:
+          - content_key: fr.a1.unit08.lesson03.exercise01.comprehend_last_session_date
+            type: dialogue_comprehension
+            tested_text: "le vingt-deux mars un samedi"
+            media_asset_key: fr.a1.audio.dialogue.derniere_seance.01
+            prompt: {target_blocks: []}
+          - content_key: fr.a1.unit08.lesson03.exercise02.comprehend_todays_date
+            type: dialogue_comprehension
+            tested_text: "Nous sommes le quinze mars"
+            media_asset_key: fr.a1.audio.dialogue.derniere_seance.01
+            prompt: {target_blocks: []}
+          - content_key: fr.a1.unit08.lesson03.exercise03.select_what_ines_will_do
+            type: multiple_choice
+            tested_text: "préparer un dessert"
+            prompt:
+              target_blocks:
+                - {text: "Parfait, j'ai le temps de préparer un dessert pour l'occasion.", language_code: fr, direction: ltr}
+          - content_key: fr.a1.unit08.lesson03.exercise04.order_elle_est_vingt_deux
+            type: word_order
+            tested_text: "Elle est le vingt-deux mars je crois"
+            prompt: {target_blocks: []}
+            word_bank: ["Elle", "est", "le", "vingt-deux", "mars", "je", "crois"]
+          - content_key: fr.a1.unit08.lesson03.exercise05.reply_as_mathieu
+            type: dialogue_response
+            tested_text: "Nous sommes le quinze mars Donc c'est dans une semaine"
+            prompt:
+              target_blocks:
+                - {text: "Quelle est la date aujourd'hui ?", language_code: fr, direction: ltr}
+          - content_key: fr.a1.unit08.lesson03.exercise06.speak_confirm_last_session
+            type: speak_response
+            tested_text: "On se voit samedi prochain le vingt-deux"
+            prompt:
+              target_blocks:
+                - {text: "Confirme à voix haute la date de la dernière séance.", language_code: fr, direction: ltr}

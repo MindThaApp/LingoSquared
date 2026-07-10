@@ -1,0 +1,300 @@
+schema_version: "1.1"
+realization_version: "2026.1-draft.1"
+target_language: fr
+cefr_level: A1
+status: complete_draft
+generation_provenance:
+  method: ai_generated
+  authoring_system: claude
+  human_reviewed: false
+  source_material:
+    - name: "FSI French Basic Course (Revised), Unit 3 (\"À la gare\")"
+      license: public_domain
+      publisher: US Foreign Service Institute
+      usage: >-
+        Used as a topic-sequencing scaffold only (asking where a place is,
+        basic prepositions of location) -- confirmed genuinely public domain
+        and confirmed real via a live fetch/pdftotext pass on the actual
+        hosted PDF (see a1_unit04_shopping.yaml's provenance note for the
+        full method; not repeated verbatim here). No sentence or drill text
+        was copied; every phrase below is freshly authored for this course's
+        own Inès/Mathieu narrative per AUTHORING_GUIDE.md #10.
+review:
+  status: unreviewed
+  required_next_reviewer: fresh_context
+  notes: >-
+    New unit, 2026-07-10, continuing the Inès/Mathieu narrative into
+    locating places near the workshop. Scoped to 3 lessons like units04-06.
+    Every kind:vocabulary card carries a real example sentence per
+    schema_version 1.1. Not yet fresh-context reviewed.
+
+course:
+  realization_key: fr.a1
+  target_language_first: true
+  dialect: fr_FR_standard_metropolitan
+  register_policy: >-
+    Continues unit01-06's register split: tu with Mathieu and other peers at
+    the workshop, vous with unfamiliar adults (e.g. asking a stranger for
+    directions).
+
+media_assets:
+  - content_key: fr.a1.audio.la_pharmacie.neutral.01
+    language: fr
+    text: "La pharmacie"
+    voice_hint: neutral_adult
+    status: pending_generation
+  - content_key: fr.a1.audio.ou_est_la_gare.neutral.01
+    language: fr
+    text: "Où est la gare, s'il vous plaît ?"
+    voice_hint: neutral_young_adult_polite
+    status: pending_generation
+  - content_key: fr.a1.audio.dialogue.chercher_pharmacie.01
+    language: fr
+    text: "Mathieu : Excusez-moi, où est la pharmacie, s'il vous plaît ?\nUne passante : Elle est en face de la banque, à côté du café.\nMathieu : C'est loin d'ici ?\nUne passante : Non, c'est tout près. Cinq minutes à pied.\nMathieu : Merci beaucoup !\nUne passante : Je vous en prie."
+    voice_hint: two_speakers_neutral_friendly
+    status: pending_generation
+
+units:
+  - content_key: fr.a1.unit07.places
+    title: "Où est... ?"
+    section: reading_writing
+    spine_outcome_ids:
+      - universal.a1.places.locate_common_places
+    planned_lesson_count: 3
+
+    lessons:
+      - content_key: fr.a1.unit07.lesson01.lieux_du_quartier
+        title: "Les lieux du quartier"
+        spine_outcome_id: universal.a1.places.locate_common_places
+        teaching:
+          - content_key: fr.a1.unit07.lesson01.teach.gare
+            kind: vocabulary
+            target: {text: "la gare", language_code: fr, direction: ltr}
+            introduced_tokens: ["la", "gare"]
+            example: {text: "La gare est grande.", language_code: fr, direction: ltr}
+          - content_key: fr.a1.unit07.lesson01.teach.pharmacie
+            kind: vocabulary
+            target: {text: "la pharmacie", language_code: fr, direction: ltr}
+            introduced_tokens: ["la", "pharmacie"]
+            example: {text: "La pharmacie ouvre à neuf heures.", language_code: fr, direction: ltr}
+          - content_key: fr.a1.unit07.lesson01.teach.banque
+            kind: vocabulary
+            target: {text: "la banque", language_code: fr, direction: ltr}
+            introduced_tokens: ["la", "banque"]
+            example: {text: "La banque est fermée le dimanche.", language_code: fr, direction: ltr}
+          - content_key: fr.a1.unit07.lesson01.teach.ecole
+            kind: vocabulary
+            target: {text: "l'école", language_code: fr, direction: ltr}
+            introduced_tokens: ["l'école"]
+            example: {text: "L'école est à côté du parc.", language_code: fr, direction: ltr}
+          - content_key: fr.a1.unit07.lesson01.teach.cafe
+            kind: vocabulary
+            target: {text: "le café", language_code: fr, direction: ltr}
+            introduced_tokens: ["le", "café"]
+            example: {text: "Le café est ouvert toute la journée.", language_code: fr, direction: ltr}
+          - content_key: fr.a1.unit07.lesson01.teach.poste
+            kind: vocabulary
+            target: {text: "la poste", language_code: fr, direction: ltr}
+            introduced_tokens: ["la", "poste"]
+            example: {text: "La poste ferme à dix-huit heures.", language_code: fr, direction: ltr}
+          - content_key: fr.a1.unit07.lesson01.teach.la_gare_est_grande
+            kind: phrase
+            target: {text: "La gare est grande et la pharmacie est petite.", language_code: fr, direction: ltr}
+            introduced_tokens: ["La", "gare", "est", "grande", "et", "la", "pharmacie", "petite"]
+        exercises:
+          - content_key: fr.a1.unit07.lesson01.exercise01.select_pharmacie
+            type: multiple_choice
+            tested_text: "la pharmacie"
+            prompt:
+              target_blocks:
+                - {text: "la pharmacie", language_code: fr, direction: ltr}
+          - content_key: fr.a1.unit07.lesson01.exercise02.listen_gare
+            type: listen_select
+            tested_text: "la gare"
+            media_asset_key: fr.a1.audio.la_pharmacie.neutral.01
+            prompt: {target_blocks: []}
+          - content_key: fr.a1.unit07.lesson01.exercise03.match_places
+            type: matching_pairs
+            tested_text: "gare pharmacie banque école café poste"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "la gare", right: "the train station"}
+              - {left: "la pharmacie", right: "the pharmacy"}
+              - {left: "la banque", right: "the bank"}
+              - {left: "l'école", right: "the school"}
+              - {left: "le café", right: "the café"}
+              - {left: "la poste", right: "the post office"}
+          - content_key: fr.a1.unit07.lesson01.exercise04.order_gare_grande
+            type: word_order
+            tested_text: "La gare est grande et la pharmacie est petite"
+            prompt: {target_blocks: []}
+            word_bank: ["La", "gare", "est", "grande", "et", "la", "pharmacie", "est", "petite"]
+          - content_key: fr.a1.unit07.lesson01.exercise05.fill_pharmacie_ouvre
+            type: fill_in_blank
+            tested_text: "pharmacie"
+            prompt:
+              target_blocks:
+                - {text: "La ___ ouvre à neuf heures. (pharmacy)", language_code: fr, direction: ltr}
+          - content_key: fr.a1.unit07.lesson01.exercise06.speak_nearby_place
+            type: speak_response
+            tested_text: "gare pharmacie banque école café poste"
+            prompt:
+              target_blocks:
+                - {text: "Nomme un lieu près de chez toi : la gare, la banque, l'école ou la poste.", language_code: fr, direction: ltr}
+
+      - content_key: fr.a1.unit07.lesson02.demander_son_chemin
+        title: "Demander son chemin"
+        spine_outcome_id: universal.a1.places.locate_common_places
+        teaching:
+          - content_key: fr.a1.unit07.lesson02.teach.ou_est_la_gare
+            kind: phrase
+            target: {text: "Où est la gare, s'il vous plaît ?", language_code: fr, direction: ltr}
+            introduced_tokens: ["Où", "est", "la", "gare", "s'il", "vous", "plaît"]
+          - content_key: fr.a1.unit07.lesson02.teach.en_face_de
+            kind: phrase
+            target: {text: "La banque est en face de la gare.", language_code: fr, direction: ltr}
+            introduced_tokens: ["La", "banque", "est", "en", "face", "de", "la", "gare"]
+          - content_key: fr.a1.unit07.lesson02.teach.a_cote_de
+            kind: phrase
+            target: {text: "La pharmacie est à côté de la banque.", language_code: fr, direction: ltr}
+            introduced_tokens: ["La", "pharmacie", "est", "à", "côté", "de", "la", "banque"]
+          - content_key: fr.a1.unit07.lesson02.teach.pres_de
+            kind: phrase
+            target: {text: "L'école est près d'ici.", language_code: fr, direction: ltr}
+            introduced_tokens: ["L'école", "est", "près", "d'ici"]
+          - content_key: fr.a1.unit07.lesson02.teach.loin_de
+            kind: phrase
+            target: {text: "La poste est loin d'ici.", language_code: fr, direction: ltr}
+            introduced_tokens: ["La", "poste", "est", "loin", "d'ici"]
+          - content_key: fr.a1.unit07.lesson02.teach.cest_loin
+            kind: phrase
+            target: {text: "C'est loin d'ici ?", language_code: fr, direction: ltr}
+            introduced_tokens: ["C'est", "loin", "d'ici", "Non", "ce", "n'est", "pas"]
+        exercises:
+          - content_key: fr.a1.unit07.lesson02.exercise01.select_ou_est_la_gare
+            type: multiple_choice
+            tested_text: "Où est la gare"
+            prompt:
+              target_blocks:
+                - {text: "Où est la gare, s'il vous plaît ?", language_code: fr, direction: ltr}
+          - content_key: fr.a1.unit07.lesson02.exercise02.listen_ou_est_la_gare
+            type: listen_select
+            tested_text: "Où est la gare s'il vous plaît"
+            media_asset_key: fr.a1.audio.ou_est_la_gare.neutral.01
+            prompt: {target_blocks: []}
+          - content_key: fr.a1.unit07.lesson02.exercise03.match_location_phrases
+            type: matching_pairs
+            tested_text: "en face de à côté de près de loin de c'est loin où est la gare"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "en face de", right: "across from"}
+              - {left: "à côté de", right: "next to"}
+              - {left: "près de", right: "near"}
+              - {left: "loin de", right: "far from"}
+              - {left: "C'est loin d'ici ?", right: "Is it far from here?"}
+              - {left: "Où est la gare, s'il vous plaît ?", right: "Where is the train station, please?"}
+          - content_key: fr.a1.unit07.lesson02.exercise04.order_pharmacie_a_cote
+            type: word_order
+            tested_text: "La pharmacie est à côté de la banque"
+            prompt: {target_blocks: []}
+            word_bank: ["La", "pharmacie", "est", "à", "côté", "de", "la", "banque"]
+          - content_key: fr.a1.unit07.lesson02.exercise05.fill_pres_dici
+            type: fill_in_blank
+            tested_text: "près"
+            prompt:
+              target_blocks:
+                - {text: "L'école est ___ d'ici. (near)", language_code: fr, direction: ltr}
+          - content_key: fr.a1.unit07.lesson02.exercise06.reply_cest_loin
+            type: dialogue_response
+            tested_text: "Non ce n'est pas loin"
+            prompt:
+              target_blocks:
+                - {text: "C'est loin d'ici ?", language_code: fr, direction: ltr}
+
+      - content_key: fr.a1.unit07.lesson03.dialogue_chercher_pharmacie
+        title: "Chercher la pharmacie"
+        spine_outcome_ids:
+          - universal.a1.places.locate_common_places
+        teaching:
+          - content_key: fr.a1.unit07.lesson03.teach.line01
+            kind: dialogue
+            target:
+              text: "Excusez-moi, où est la pharmacie, s'il vous plaît ?"
+              language_code: fr
+              direction: ltr
+              speaker: Mathieu
+            introduced_tokens: ["Excusez-moi", "où", "est", "la", "pharmacie", "s'il", "vous", "plaît"]
+          - content_key: fr.a1.unit07.lesson03.teach.line02
+            kind: dialogue
+            target:
+              text: "Elle est en face de la banque, à côté du café."
+              language_code: fr
+              direction: ltr
+              speaker: "Une passante"
+            introduced_tokens: ["Elle", "est", "en", "face", "de", "la", "banque", "à", "côté", "du", "café"]
+          - content_key: fr.a1.unit07.lesson03.teach.line03
+            kind: dialogue
+            target:
+              text: "C'est loin d'ici ?"
+              language_code: fr
+              direction: ltr
+              speaker: Mathieu
+            introduced_tokens: ["C'est", "loin", "d'ici"]
+          - content_key: fr.a1.unit07.lesson03.teach.line04
+            kind: dialogue
+            target:
+              text: "Non, c'est tout près. Cinq minutes à pied."
+              language_code: fr
+              direction: ltr
+              speaker: "Une passante"
+            introduced_tokens: ["Non", "c'est", "tout", "près", "Cinq", "minutes", "à", "pied"]
+          - content_key: fr.a1.unit07.lesson03.teach.line05
+            kind: dialogue
+            target:
+              text: "Merci beaucoup !"
+              language_code: fr
+              direction: ltr
+              speaker: Mathieu
+            introduced_tokens: ["Merci", "beaucoup"]
+          - content_key: fr.a1.unit07.lesson03.teach.line06
+            kind: dialogue
+            target:
+              text: "Je vous en prie."
+              language_code: fr
+              direction: ltr
+              speaker: "Une passante"
+            introduced_tokens: ["Je", "vous", "en", "prie"]
+        exercises:
+          - content_key: fr.a1.unit07.lesson03.exercise01.comprehend_pharmacie_location
+            type: dialogue_comprehension
+            tested_text: "en face de la banque à côté du café"
+            media_asset_key: fr.a1.audio.dialogue.chercher_pharmacie.01
+            prompt: {target_blocks: []}
+          - content_key: fr.a1.unit07.lesson03.exercise02.comprehend_distance
+            type: dialogue_comprehension
+            tested_text: "Cinq minutes à pied"
+            media_asset_key: fr.a1.audio.dialogue.chercher_pharmacie.01
+            prompt: {target_blocks: []}
+          - content_key: fr.a1.unit07.lesson03.exercise03.select_who_mathieu_asks
+            type: multiple_choice
+            tested_text: "Excusez-moi où est la pharmacie"
+            prompt:
+              target_blocks:
+                - {text: "Excusez-moi, où est la pharmacie, s'il vous plaît ?", language_code: fr, direction: ltr}
+          - content_key: fr.a1.unit07.lesson03.exercise04.order_elle_est_en_face
+            type: word_order
+            tested_text: "Elle est en face de la banque"
+            prompt: {target_blocks: []}
+            word_bank: ["Elle", "est", "en", "face", "de", "la", "banque"]
+          - content_key: fr.a1.unit07.lesson03.exercise05.reply_as_passante
+            type: dialogue_response
+            tested_text: "Non c'est tout près Cinq minutes à pied"
+            prompt:
+              target_blocks:
+                - {text: "C'est loin d'ici ?", language_code: fr, direction: ltr}
+          - content_key: fr.a1.unit07.lesson03.exercise06.speak_ask_directions
+            type: speak_response
+            tested_text: "Excusez-moi où est la gare s'il vous plaît"
+            prompt:
+              target_blocks:
+                - {text: "Demande poliment où est la gare.", language_code: fr, direction: ltr}
