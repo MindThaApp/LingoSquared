@@ -533,13 +533,20 @@ wrapper shape, not a flat array:
 }
 ```
 
-`GET /me/streak` → `{ "streak_days": 3, "last_activity_date": "2026-07-01", "streak_freezes_available": 0, "freeze_used_today": false }`.
+`GET /me/streak` → `{ "streak_days": 3, "last_activity_date": "2026-07-01", "streak_freezes_available": 0, "freeze_used_today": false, "active_today": false }`.
 There is no "longest streak" tracked — only current `streak_days`.
 `streak_freezes_available`/`freeze_used_today` are Phase E additions
 (2026-07-05): one streak freeze is earned at every 7-day streak
 milestone while none is currently banked, auto-consumed on exactly one
 missed day instead of resetting the streak, both computed in the
 user's own timezone (`User.timezone`, IANA string, UTC fallback).
+`active_today` (added 2026-07-10, additive) is `last_activity_date ==
+today`, computed server-side against that same user-timezone day
+boundary — clients should use it (rather than re-deriving from
+`last_activity_date` with the device clock, which can disagree with
+the account timezone) to decide whether today's streak-preserving
+activity has already happened; the HomePage streak-at-risk banner is
+its consumer.
 
 `GET /me/xp` → `{ "total_xp": 120, "daily_goal": 20, "xp_today": 15 }`.
 `xp_today` (added 2026-07-10) is the XP earned within the user's own

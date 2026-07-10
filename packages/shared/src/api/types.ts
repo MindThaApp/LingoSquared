@@ -208,6 +208,10 @@ export interface Streak {
   last_activity_date: string | null;
   streak_freezes_available: number;
   freeze_used_today: boolean;
+  /** Server-computed "streak-preserving activity has happened today", in the
+   *  account's own timezone day boundary — use this, never re-derive it from
+   *  last_activity_date against the device clock (see docs/CONTRACT.md). */
+  active_today: boolean;
 }
 
 export interface PracticeItem {
