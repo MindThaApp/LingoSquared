@@ -42,9 +42,47 @@ generation_provenance:
     FSI source.
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: codex_fresh_context
+  status: reviewed
+  required_next_reviewer: null
   notes: >-
+    2026-07-10 fresh-context review (Claude) found and fixed the same
+    class of real cross-unit character-name collision documented in
+    unit44's own review note: this file's review notes claimed the
+    pharmacist خانم رضایی was confirmed collision-free "via a real regex
+    scan of every آقای/خانم name already used across the fa corpus," but
+    that regex specifically only matched آقای/خانم-prefixed names, so it
+    missed unit41's دکتر رضایی (Dr. Rezaei, the dentist referenced by
+    name in that unit's appointment-booking dialogue) -- a دکتر-titled
+    name, structurally invisible to that scan pattern. Fixed by renaming
+    this unit's pharmacist from خانم رضایی to خانم صالحی throughout
+    (dialogue lines, the dedicated character teaching card -- content_key
+    renamed from ...teach.character_rezaei to ...teach.character_salehi
+    in both this file and its overlay -- register-policy prose, and
+    every matching_pairs/translation exercise referencing her); صالحی
+    confirmed via a fresh corpus-wide grep (not just آقای/خانم-anchored)
+    to collide with no other named character, including دکتر-titled
+    ones, across the whole fa corpus. Also ran the same compiler-
+    invisible example-forward-reference check described in unit43's
+    review note against this file: clean, no unrelated-word forward
+    references found (only the pharmacist's own newly-introduced surname
+    ever triggered the naive scan, which is expected/correct).
+    Re-validated clean after the rename (0 errors/0 warnings, standalone
+    and as part of the 4-unit combined run). Everything else was checked
+    clean: no same-speaker distractor collisions (lesson04's
+    dialogue_comprehension distractors -- price, pharmacy location,
+    seeing a doctor -- are never mentioned by either speaker; the
+    before-food distractor was deliberately avoided since نیما does ask
+    about taking it before food later in the same dialogue, correctly
+    treated as a real collision risk by the original author); a real
+    yaml.safe_load boolean-type walk found zero stray
+    yes/no/true/false/on/off coercions; no Arabic-range kaf/yeh
+    codepoints; matching_pairs accepted_answers use the established
+    fa-corpus flat-dict convention, left as-is; every exercise type used
+    is registered; no jargon leaks; the dosage fact (two pills a day,
+    after food, not before) stays consistent across the dialogue, the
+    reading note, and the wrap-up review; the Persian reads as natural,
+    contemporary Iranian colloquial register throughout.
+
     Draft authored 2026-07-09 by Claude (content-authoring worker session),
     continuing fa A1 volume growth past unit44 (accommodation, merged).
     Realizes universal.a1.pharmacy.buy_basic_medicine -- confirmed as the
@@ -95,7 +133,7 @@ review:
     established recurring character, previously the patient in unit17's
     own health dialogue with سارا) is the pharmacy customer, a natural
     continuation of his established "describes symptoms, gets advice"
-    role. A NEW formal-register character, خانم رضایی, is introduced as
+    role. A NEW formal-register character, خانم صالحی, is introduced as
     the pharmacist (distinct surname from unit41's خانم احمدی, unit42's
     آقای صادقی, and unit44's آقای کریمی -- confirmed via a real regex
     scan of every آقای/خانم name already used across the fa corpus, zero
@@ -129,7 +167,7 @@ review:
     know if the medicine is expensive."/"He wants to know where the
     pharmacy is."/"He wants to know if he needs to see a doctor.") are
     plausible-fact alternatives, NOT lines either dialogue speaker (نیما
-    or خانم رضایی) actually says or facts either speaker actually states
+    or خانم صالحی) actually says or facts either speaker actually states
     anywhere in this unit's dialogue -- price, the pharmacy's location, and
     seeing a doctor are never mentioned by either speaker in this dialogue
     at all. Deliberately avoided a distractor like "he wants to know if he
@@ -157,7 +195,7 @@ course:
     Continues the established colloquial Iranian Farsi register: نیما (the
     established recurring character, the patient in unit17's own health
     dialogue) keeps his usual informal register as the pharmacy customer.
-    خانم رضایی, a new formal-register pharmacist character, speaks with
+    خانم صالحی, a new formal-register pharmacist character, speaks with
     neutral polite service language, consistent with the register unit41's
     خانم احمدی, unit42's آقای صادقی, and unit44's آقای کریمی already
     established for this course's other service-encounter characters.
@@ -177,7 +215,7 @@ media_assets:
     status: pending_generation
   - content_key: fa.a1.unit45.audio.dialogue.pharmacy.01
     language: fa
-    text: "نیما: سلام. سردرد دارم. دارو می‌خوام. خانم رضایی: سلام. این قرص خوبه. نیما: روزی چند تا؟ خانم رضایی: روزی دو تا، بعد از غذا. نیما: قبل از غذا هم می‌تونم؟ خانم رضایی: نه، فقط بعد از غذا. نیما: باشه، ممنون. خداحافظ!"
+    text: "نیما: سلام. سردرد دارم. دارو می‌خوام. خانم صالحی: سلام. این قرص خوبه. نیما: روزی چند تا؟ خانم صالحی: روزی دو تا، بعد از غذا. نیما: قبل از غذا هم می‌تونم؟ خانم صالحی: نه، فقط بعد از غذا. نیما: باشه، ممنون. خداحافظ!"
     voice_hint: two_adults_neutral_friendly
     status: pending_generation
 
@@ -373,18 +411,18 @@ units:
             kind: grammar_note
             target: {text: "خانم (Ms., madam) -- already taught from unit41 / داره (has, colloquial 3rd person) -- already taught from unit04", language_code: fa, direction: rtl}
             introduced_tokens: [خانم, داره]
-          - content_key: fa.a1.unit45.lesson04.teach.character_rezaei
+          - content_key: fa.a1.unit45.lesson04.teach.character_salehi
             kind: vocabulary
-            target: {text: "خانم رضایی", language_code: fa, direction: rtl}
-            introduced_tokens: [رضایی]
-            example: {text: "خانم رضایی داروخانه داره.", language_code: fa, direction: rtl}
+            target: {text: "خانم صالحی", language_code: fa, direction: rtl}
+            introduced_tokens: [صالحی]
+            example: {text: "خانم صالحی داروخانه داره.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit45.lesson04.teach.dialogue_line1
             kind: dialogue
             target: {text: "سلام. سردرد دارم. دارو می‌خوام.", language_code: fa, direction: rtl, speaker: نیما}
             introduced_tokens: []
           - content_key: fa.a1.unit45.lesson04.teach.dialogue_line2
             kind: dialogue
-            target: {text: "سلام. این قرص خوبه.", language_code: fa, direction: rtl, speaker: "خانم رضایی"}
+            target: {text: "سلام. این قرص خوبه.", language_code: fa, direction: rtl, speaker: "خانم صالحی"}
             introduced_tokens: []
           - content_key: fa.a1.unit45.lesson04.teach.dialogue_line3
             kind: dialogue
@@ -392,7 +430,7 @@ units:
             introduced_tokens: []
           - content_key: fa.a1.unit45.lesson04.teach.dialogue_line4
             kind: dialogue
-            target: {text: "روزی دو تا، بعد از غذا.", language_code: fa, direction: rtl, speaker: "خانم رضایی"}
+            target: {text: "روزی دو تا، بعد از غذا.", language_code: fa, direction: rtl, speaker: "خانم صالحی"}
             introduced_tokens: []
           - content_key: fa.a1.unit45.lesson04.teach.dialogue_line5
             kind: dialogue
@@ -400,7 +438,7 @@ units:
             introduced_tokens: []
           - content_key: fa.a1.unit45.lesson04.teach.dialogue_line6
             kind: dialogue
-            target: {text: "نه، فقط بعد از غذا.", language_code: fa, direction: rtl, speaker: "خانم رضایی"}
+            target: {text: "نه، فقط بعد از غذا.", language_code: fa, direction: rtl, speaker: "خانم صالحی"}
             introduced_tokens: []
           - content_key: fa.a1.unit45.lesson04.teach.dialogue_line7
             kind: dialogue
