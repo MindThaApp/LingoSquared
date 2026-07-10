@@ -88,6 +88,23 @@ rebuild needed since the compose file bind-mounts the repo), are in
   state, not a crash or empty feed.
 - `nav.spec.ts` -- every bottom-tab route renders without an error
   boundary swallowing it.
+- `refresh-tokens.spec.ts` -- the refresh-token flow shipped 2026-07-10
+  (30-min access tokens + rotating refresh tokens, `POST
+  /auth/refresh`): register returns both tokens and both genuinely
+  work; refresh rotates the pair; a rotated-out token is rejected with
+  `refresh_token_reused` AND its reuse revokes every refresh token the
+  user has (reuse = possible theft). API-only via Playwright's
+  `request` fixture -- no browser -- because the web frontend's
+  auto-refresh-on-401 integration hadn't landed when this was written
+  (that half is a `test.skip` placeholder in the file with the
+  suggested approach for whoever lands it). Targets `E2E_API_BASE_URL`
+  if set, else `frontend/.env`'s `VITE_API_BASE_URL`, else
+  localhost:8000; a `beforeAll` guard fails fast with a real
+  explanation if the target backend predates the feature (the usual
+  cause is the documented "bind mount syncs code but uvicorn doesn't
+  reload" footgun -- force-recreate the api container and run
+  migration 0021). Registers 2 fresh accounts, so it draws from the
+  same `REGISTER_RATE_LIMIT` budget as the rest of the suite.
 
 ## Resolved flakiness in `goToCourseUnits` (2026-07-05) -- two real bugs, one Playwright API trap
 
