@@ -394,10 +394,26 @@ export interface ContentIssue {
   page_path: string | null;
   category: ContentIssueCategory;
   description: string | null;
+  // The learner's actual submitted answer, captured at report time.
+  // Arbitrary shape by exercise type (same caveats as correct_response
+  // everywhere else) -- render via formatCorrectResponse(), never
+  // String().
+  learner_response: unknown;
   status: string;
+  triage_notes: string | null;
+  duplicate_of_id: string | null;
   created_at: string;
   triaged_at: string | null;
   resolved_at: string | null;
+  // Triage enrichment, computed by GET /admin/content/issues only (all
+  // four are null on PATCH responses and on page-level feedback rows) --
+  // see docs/CONTRACT.md "Issue-triage enrichment", 2026-07-10.
+  exercise_prompt: ExercisePrompt | null;
+  exercise_correct_response: unknown;
+  practice_item_prompt: ExercisePrompt | null;
+  // Open reports pointing at the same exercise_id (whole table, not just
+  // the returned page) -- duplicate spotting. Null unless exercise-backed.
+  open_report_count: number | null;
 }
 
 export interface FeedbackReportIn {
