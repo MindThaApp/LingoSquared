@@ -88,6 +88,13 @@ rebuild needed since the compose file bind-mounts the repo), are in
   state, not a crash or empty feed.
 - `nav.spec.ts` -- every bottom-tab route renders without an error
   boundary swallowing it.
+- `account-deletion.spec.ts` -- the DELETE /me flow through the real
+  ProfilePage UI: typed-email confirmation gate (disabled until the
+  exact email is typed), redirect to /login with the one-time deleted
+  notice, and the deleted account's credentials failing with a real
+  auth error. Deliberately one test, one freshly-registered throwaway
+  account created inside the test itself -- it deletes the account it
+  runs on, so it must never be pointed at a shared/reused account.
 
 ## Resolved flakiness in `goToCourseUnits` (2026-07-05) -- two real bugs, one Playwright API trap
 
