@@ -45,9 +45,48 @@ generation_provenance:
     vocabulary, not sourced from FSI.
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: codex_fresh_context
+  status: reviewed
+  required_next_reviewer: null
   notes: >-
+    2026-07-10 fresh-context review (Claude), reviewed cold alongside
+    units 39/41/42 in the same batch, no access to the authoring
+    reasoning beyond what's recorded below this note. Found no real bugs
+    -- unit40 is clean. Checked: the compiler validator (0 errors/0
+    warnings standalone and as part of the full 39-42 group); a recursive
+    yaml.safe_load boolean scan over both this file and the paired overlay
+    for stray yes/no/true/false/on/off coercions (zero hits, only the two
+    legitimate boolean fields human_reviewed/target_language_first); every
+    exercise `type:` used (multiple_choice, matching_pairs, word_order,
+    translation, dialogue_comprehension, dialogue_response,
+    reading_comprehension, writing_prompt) is registered in
+    ExerciseRenderer.tsx; no listen_select/dialogue_response exercise in
+    this unit (confirmed, so the same-speaker/same-audio distractor bug
+    class structurally cannot apply here) -- checked anyway that
+    lesson04's dialogue_comprehension distractors ("He lost his
+    key."/"He lost his passport."/"He lost his umbrella.") are invented
+    plausible-fact paraphrases, not lines either dialogue speaker (نیما,
+    آقای کریمی) actually says in the dialogue text; matching_pairs
+    accepted_answers use this fa corpus's established flat-dict shape,
+    consistent with unit38/39 and correctly graded either way by the
+    backend's shape canonicalization; no snake_case/internal-jargon leaks
+    into learner-facing text; every kind:vocabulary card has a genuine
+    example sentence built only from earlier-declared tokens (schema 1.1/
+    AUTHORING_GUIDE.md #19); no untaught vocabulary (confirmed by the
+    compiler's own validator). Grammar/script spot-checked by hand: گم
+    کردم/پیدا کردم ("I lost/found it") correctly extend unit13's -م
+    past-tense pattern to کردن; دیدید ("did you see?", formal) is a
+    regular consonant-stem past tense + -ید ending, correctly spelled with
+    a single ی (unlike unit39's بیاید/بیایید issue -- دیدن's past stem
+    دید already ends in a consonant, so no doubling is needed, and none is
+    present); گمشده/پیداشده ("lost"/"found") are standard passive-adjective
+    compounds; Persian keheh (ک U+06A9) and yeh (ی U+06CC) codepoints are
+    used throughout, not the Arabic kaf/yeh variants. The register split
+    (نیما's register-neutral lines vs. the formal شما-register used with
+    the stranger آقای کریمی) is applied consistently and reads as natural
+    Iranian Farsi, not Dari or machine-translated. Cross-lesson facts
+    (which items are lost/found/still-lost in lesson05's reading notice)
+    are internally consistent and don't contradict the lesson04 dialogue.
+
     Draft authored 2026-07-09 by Claude (content-authoring worker session),
     continuing fa A1 volume growth past unit39 (emergencies, merged).
     Realizes universal.a1.lost_items.report_lost_item, the next unrealized A1
