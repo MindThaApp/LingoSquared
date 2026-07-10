@@ -10,6 +10,7 @@ const TABS = [
   { to: "/courses", labelKey: "nav.learn", icon: "📚" },
   { to: "/practice", labelKey: "nav.practice", icon: "⚡" },
   { to: "/review", labelKey: "nav.review", icon: "🔁" },
+  { to: "/vocabulary", labelKey: "nav.vocabulary", icon: "🧠" },
   { to: "/profile", labelKey: "nav.profile", icon: "👤" },
 ];
 
