@@ -985,6 +985,86 @@ authoritative version of this policy, this entry is a pointer to it.
   string's own Unicode bidi rendering is sufficient there; direction
   problems specifically arise from sequence-assembly UIs, not every
   RTL-adjacent component.
+- **Dispatching 25+ concurrent workers against the SAME shared Docker
+  dev stack causes real, severe collisions — confirmed 2026-07-10.**
+  Many workers were independently told to "run the isolated-DB pytest
+  recipe if you have Docker access," and several instead pointed
+  `DATABASE_URL` at (or otherwise ran a schema-drop-and-reseed
+  against) the SHARED `lingosquared` dev database rather than an
+  isolated `lingosquared_test`/uniquely-named one — wiping the shared
+  dev DB down to the 4 bootstrap demo courses, losing all real content
+  and every test account's progress from that session. Confirmed via
+  container logs (`AdminShutdown: terminating connection due to
+  administrator command` killed an in-flight pytest run) and via the
+  DB itself (`alembic_version` table missing entirely, `refresh_tokens`
+  table absent despite the code requiring it — meaning some worker's
+  `Base.metadata.create_all()` ran against an older checkout of
+  `entities.py` than what was actually merged). Recovered by
+  `alembic upgrade head` (safe — every migration after 0001 is
+  guarded, so it only filled in what was missing) followed by a full
+  content re-import from `scripts/content_manifest.txt`/
+  `practice_manifest.txt` against the real files on disk. **Standing
+  rule going forward**: any dispatch prompt that tells a worker to run
+  tests against Docker MUST explicitly name a uniquely-named test DB/
+  compose project for that worker (not just say "the isolated-DB
+  recipe" and trust it'll pick a safe target) when many workers will
+  run concurrently — several workers this session already improvised
+  this correctly on their own (e.g. `lingo-ttsfix`, `gradingref`,
+  `issuetriage`) once told to avoid contention; make it an explicit
+  instruction, not something left to chance.
+- **`git worktree remove --force` discards uncommitted changes with no
+  separate warning, and "is this branch an ancestor of master" is NOT
+  the same check as "is this branch's real work already merged."**
+  Confirmed as a real, costly mistake 2026-07-10: after merging ~50
+  worktree-isolated dispatches, a cleanup loop removed every worktree
+  whose branch was `git merge-base --is-ancestor <branch> master`.
+  That check is true both for branches genuinely merged AND for
+  branches that never committed anything at all (a worker that failed/
+  stalled mid-task before running `git commit` leaves its branch
+  pointing at the same base commit it started from — which, once
+  master has moved on, is trivially "an ancestor of master" despite
+  containing zero of that worker's real work). At least 7 dispatches
+  that had stalled or hit the platform's "connection closed mid-
+  response"/spend-limit errors — several with substantial, working,
+  reviewed code per their own last status message (e.g. "All changes
+  are in place and reviewed... I'll commit once it reports green")
+  — had their worktrees force-removed this way, permanently deleting
+  uncommitted work from disk. Partially recovered (not from git — `git
+  fsck --dangling` found nothing, since the work was never `git add`ed
+  in the first place — but from the raw subagent JSONL transcripts at
+  `~/.claude/projects/<project>/<session>/subagents/agent-<id>.jsonl`,
+  which still contained every Write/Edit tool call's actual file
+  content and were extractable via a small script filtering `message.
+  content[].type == "tool_use"` blocks). **Standing rule going
+  forward**: before removing ANY worktree, check `git log --oneline
+  <branch> -1` against the branch's own STARTING base commit (not just
+  "is it an ancestor of master") — if the branch has zero commits of
+  its own, treat it as a possible-uncommitted-work case and inspect
+  `git -C <worktree-path> status --short` before removing, not after.
+  When in doubt, `git worktree remove` (without `--force`) first — it
+  refuses and tells you exactly what's uncommitted, which is the
+  actual signal to go recover it before forcing anything.
+- **A worktree-isolated task started with `AskUserQuestion`-required
+  work in progress can silently drop that specific in-flight action
+  when a permission block interrupts it, if the coordinator doesn't
+  explicitly re-queue it.** Confirmed 2026-07-10: a merge attempt that
+  happened to be the exact command a safety classifier blocked (over
+  an unrelated `.env` edit earlier in the same turn) was never
+  retried — the coordinator's own narrative continued as if it had
+  succeeded (having seen a similar merge's "Merge made by the 'ort'
+  strategy" output moments before, for a different branch, and
+  conflating the two). A second, unrelated branch was dropped the same
+  way after a merge conflict left it out of a batch retry loop.
+  Neither was caught until the user reported the live app's UI
+  "feels different, like something's missing" — at which point tracing
+  actual merge status via `git merge-base --is-ancestor` and `git
+  reflog`, not memory of what tool calls "looked like they succeeded,"
+  was what actually found them. **Standing rule**: after ANY batch of
+  merge attempts, verify with `git merge-base --is-ancestor <branch>
+  master` for every branch in the batch — don't trust a remembered
+  "that one succeeded" against a tool result you didn't re-check line
+  by line, especially right after a permission interrupt or a
+  conflict-driven retry loop.
 
 ## Where things run
 
