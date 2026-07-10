@@ -58,6 +58,22 @@ ARABIC_PERSIAN_SCRIPT_PAIRS: frozenset[frozenset[str]] = frozenset(
 
 LATIN_RANGE_STARTS = (0x0041, 0x0061, 0x00C0, 0x0100)
 
+# Minimum length (of the normalized CORRECT answer) for distance-1 typo
+# tolerance to apply at all. Answers this short or shorter require an
+# exact match - see is_too_short_for_typo_tolerance() below for why.
+#
+# Why 4 (i.e. block <= 3): on a 2-3 character word, almost every
+# distance-1 neighbor is itself a real word rather than a plausible typo
+# - Dutch je/ze, hij/zij, in/en, de/te/we are exactly the grammatical
+# contrasts short function words exist to test, so forgiving them as
+# typos silently marks the tested distinction correct. At 4+ characters
+# the distance-1 neighborhood is overwhelmingly nonwords (a genuine
+# single-letter slip on e.g. a 5-letter word stays forgiven), so 3 is
+# the conservative floor: strict enough to protect short function-word
+# contrasts, low enough not to regress legitimate typo forgiveness on
+# normal-length vocabulary.
+MIN_ANSWER_LENGTH_FOR_TYPO_TOLERANCE = 4
+
 
 def _normalize(value: str, *, case_sensitive: bool = False) -> str:
     folded = value if case_sensitive else value.casefold()
@@ -157,6 +173,36 @@ def is_case_only_difference(a: str, b: str) -> bool:
     return a != b and a.casefold() == b.casefold()
 
 
+def is_too_short_for_typo_tolerance(correct: str) -> bool:
+    """True if the (already-normalized) correct answer is too short for
+    distance-1 typo tolerance to be meaningful - i.e. any mismatch must
+    grade "incorrect", never "almost".
+
+    Same "hard-block before the typo-tolerance check" shape as
+    is_script_confusion()/is_case_only_difference() above (2026-07-10,
+    found by a pedagogy review): a distance-1 edit on a 2-3 character
+    word almost always produces a genuinely DIFFERENT word, not a typo -
+    Dutch "je"/"ze", "hij"/"zij", "in"/"en" are real grammatical
+    contrasts that exercises specifically test, and forgiving them as
+    "almost" (which counts as correct for XP/SRS) silently defeats the
+    exercise. Keyed on the CORRECT answer's length, not the response's,
+    so a genuine deletion typo against a longer target (e.g. "tre" for
+    "tree") stays forgiven - the authored answer is the stable,
+    per-exercise-deterministic side to measure.
+
+    Applies regardless of script (not Latin-gated like the tolerant-by-
+    default heuristic): the "distance-1 on a tiny word = different word"
+    logic holds for any script, and for non-Latin scripts this only
+    matters when an author explicitly set orthography_strict: False -
+    exactly the case where a short function word still shouldn't be
+    forgiven. Known accepted limitation: the length check is on the
+    whole normalized answer, not per-token, so a short-word swap inside
+    a longer phrase ("ik ga" vs "ik za") is still forgiven - a per-token
+    check would be a bigger behavior change than this conservative floor
+    is meant to be."""
+    return len(correct) < MIN_ANSWER_LENGTH_FOR_TYPO_TOLERANCE
+
+
 def grade_answer(
     response: str,
     correct: str,
@@ -183,6 +229,12 @@ def grade_answer(
     - A single-character substitution that crosses an Arabic/Persian
       script-purity boundary (e.g. Arabic kaf vs Persian keheh) is never
       treated as an "almost" typo, regardless of strictness settings.
+    - A correct answer shorter than MIN_ANSWER_LENGTH_FOR_TYPO_TOLERANCE
+      (i.e. 3 characters or fewer after normalization) requires an exact
+      match - never "almost", regardless of strictness settings, because
+      distance-1 on a word that short almost always yields a genuinely
+      different word (Dutch je/ze, hij/zij, in/en), frequently the exact
+      contrast being tested. See is_too_short_for_typo_tolerance().
     - case_sensitive (author-set per exercise, same feedback_meta blob as
       orthography_strict), when True, compares without casefolding and
       never forgives a case-only mismatch (e.g. "sie" vs "Sie") as a
@@ -206,6 +258,9 @@ def grade_answer(
     if case_sensitive and is_case_only_difference(
         normalized_response, normalized_correct
     ):
+        return "incorrect"
+
+    if is_too_short_for_typo_tolerance(normalized_correct):
         return "incorrect"
 
     if orthography_strict is True:
