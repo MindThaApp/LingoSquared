@@ -378,6 +378,24 @@ class UserLexemeSRS(Base):
             "lexeme_id",
             name="uq_user_lexeme_srs_user_lexeme",
         ),
+        Index(
+            "ix_user_lexeme_srs_user_course_due",
+            "user_id",
+            "course_id",
+            "due_at",
+        ),
+        Index(
+            "ix_user_lexeme_srs_user_course_mastery",
+            "user_id",
+            "course_id",
+            "mastery",
+        ),
+        Index(
+            "ix_user_lexeme_srs_user_course_introduced",
+            "user_id",
+            "course_id",
+            "introduced_at",
+        ),
     )
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uid)
@@ -420,6 +438,13 @@ class UserLexemeSRS(Base):
 
 class PracticeItem(Base):
     __tablename__ = "practice_items"
+    __table_args__ = (
+        Index(
+            "ix_practice_items_course_target_lexeme",
+            "course_id",
+            "target_lexeme_id",
+        ),
+    )
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uid)
     user_id: Mapped[str] = mapped_column(
@@ -463,6 +488,11 @@ class PracticeAttempt(Base):
         UniqueConstraint(
             "practice_item_id",
             name="uq_practice_attempts_practice_item",
+        ),
+        Index(
+            "ix_practice_attempts_user_created",
+            "user_id",
+            "created_at",
         ),
     )
 

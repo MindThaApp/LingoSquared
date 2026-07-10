@@ -7,7 +7,7 @@ from pathlib import Path
 from uuid import uuid4
 from fastapi import APIRouter, Depends, File, Form, HTTPException, Query, Request, Response, UploadFile
 from fastapi.responses import FileResponse, JSONResponse
-from sqlalchemy import func, select, text
+from sqlalchemy import Float, case, func, select, text
 from sqlalchemy.orm import Session
 from app.core.config import get_settings
 from app.core.rate_limit import DailyCharBudget, RateLimiter, register_limiter
@@ -688,6 +688,229 @@ def lexeme_reviews_due(
             {"course_id": course_id, "due_count": count}
             for course_id, count in grouped
         ],
+    }
+
+
+@router.get("/me/lexemes", response_model=LexemeListOut)
+def lexemes(
+    course_id: str,
+    sort: LexemeSort = "due_soonest",
+    part_of_speech: str | None = None,
+    search: str | None = None,
+    limit: int = Query(50, ge=1, le=200),
+    offset: int = Query(0, ge=0),
+    user=Depends(current_user),
+    db: Session = Depends(get_db),
+):
+    if not db.get(Course, course_id):
+        fail(404, "course_not_found", "Course not found")
+
+    conditions = [
+        UserLexemeSRS.user_id == user.id,
+        UserLexemeSRS.course_id == course_id,
+        Lexeme.course_id == course_id,
+    ]
+    if part_of_speech:
+        conditions.append(Lexeme.part_of_speech == part_of_speech)
+    if search:
+        pattern = f"%{search}%"
+        conditions.append(
+            Lexeme.token.ilike(pattern)
+            | Lexeme.english_gloss.ilike(pattern)
+        )
+
+    total_count = db.scalar(
+        select(func.count(UserLexemeSRS.id))
+        .join(Lexeme, Lexeme.id == UserLexemeSRS.lexeme_id)
+        .where(*conditions)
+    ) or 0
+
+    orderings = {
+        "due_soonest": (
+            UserLexemeSRS.suspended.asc(),
+            UserLexemeSRS.due_at.asc(),
+            Lexeme.token.asc(),
+        ),
+        "mastery_asc": (UserLexemeSRS.mastery.asc(), Lexeme.token.asc()),
+        "mastery_desc": (UserLexemeSRS.mastery.desc(), Lexeme.token.asc()),
+        "alphabetical": (Lexeme.token.asc(), Lexeme.english_gloss.asc()),
+        "recently_introduced": (
+            UserLexemeSRS.introduced_at.desc(),
+            Lexeme.token.asc(),
+        ),
+    }
+    rows = db.execute(
+        select(Lexeme, UserLexemeSRS)
+        .join(UserLexemeSRS, UserLexemeSRS.lexeme_id == Lexeme.id)
+        .where(*conditions)
+        .order_by(*orderings[sort])
+        .offset(offset)
+        .limit(limit)
+    ).all()
+    return {
+        "items": [
+            {
+                "token": lexeme.token,
+                "english_gloss": lexeme.english_gloss,
+                "part_of_speech": lexeme.part_of_speech,
+                "mastery": srs.mastery,
+                "interval_days": srs.interval_days,
+                "repetitions": srs.repetitions,
+                "due_at": srs.due_at,
+                "introduced_at": srs.introduced_at,
+                "suspended": srs.suspended,
+                "last_reviewed_at": srs.last_reviewed_at,
+            }
+            for lexeme, srs in rows
+        ],
+        "total_count": total_count,
+        "limit": limit,
+        "offset": offset,
+    }
+
+
+@router.get("/me/lexemes/summary", response_model=LexemeSummaryOut)
+def lexeme_summary(
+    course_id: str,
+    user=Depends(current_user),
+    db: Session = Depends(get_db),
+):
+    if not db.get(Course, course_id):
+        fail(404, "course_not_found", "Course not found")
+
+    conditions = (
+        UserLexemeSRS.user_id == user.id,
+        UserLexemeSRS.course_id == course_id,
+    )
+    _, day_end = activity_day_bounds(user.timezone)
+    row = db.execute(
+        select(
+            func.count(UserLexemeSRS.id),
+            # Rough learner-facing bands over the 0.0-1.0 mastery score:
+            # <0.33 just introduced, <0.75 still learning, >=0.75 strong.
+            func.sum(case((UserLexemeSRS.mastery < 0.33, 1), else_=0)),
+            func.sum(
+                case(
+                    (
+                        (UserLexemeSRS.mastery >= 0.33)
+                        & (UserLexemeSRS.mastery < 0.75),
+                        1,
+                    ),
+                    else_=0,
+                )
+            ),
+            func.sum(case((UserLexemeSRS.mastery >= 0.75, 1), else_=0)),
+            func.sum(
+                case(
+                    (
+                        (UserLexemeSRS.due_at <= day_end)
+                        & (UserLexemeSRS.suspended.is_(False)),
+                        1,
+                    ),
+                    else_=0,
+                )
+            ),
+            func.sum(case((UserLexemeSRS.suspended.is_(True), 1), else_=0)),
+        ).where(*conditions)
+    ).one()
+    return {
+        "total_tracked": row[0] or 0,
+        "mastery_bands": {
+            "new": row[1] or 0,
+            "learning": row[2] or 0,
+            "strong": row[3] or 0,
+        },
+        "due_today": row[4] or 0,
+        "suspended": row[5] or 0,
+    }
+
+
+@router.get("/me/mistakes", response_model=MistakeLexemeListOut)
+def mistakes(
+    course_id: str,
+    limit: int = Query(50, ge=1, le=200),
+    offset: int = Query(0, ge=0),
+    user=Depends(current_user),
+    db: Session = Depends(get_db),
+):
+    if not db.get(Course, course_id):
+        fail(404, "course_not_found", "Course not found")
+
+    cutoff = datetime.now(timezone.utc) - timedelta(days=30)
+    correct_count = func.sum(
+        case((PracticeAttempt.correct.is_(True), 1), else_=0)
+    ).label("correct_count")
+    wrong_count = func.sum(
+        case((PracticeAttempt.correct.is_(False), 1), else_=0)
+    ).label("wrong_attempt_count")
+    total_attempts = func.count(PracticeAttempt.id).label("total_attempt_count")
+    accuracy = (
+        correct_count.cast(Float) / func.nullif(total_attempts, 0)
+    ).label("recent_accuracy")
+
+    # Real per-lexeme attempt history exists only for generated
+    # PracticeItem-backed flows (practice, review, checkpoint), where
+    # PracticeItem.target_lexeme_id identifies the word being tested.
+    # Legacy ExerciseAttempt rows for hand-authored lesson exercises do not
+    # carry a lexeme id, so they cannot honestly power a per-word mistakes
+    # hub without a new persistence model.
+    grouped = (
+        select(
+            Lexeme.token.label("token"),
+            Lexeme.english_gloss.label("english_gloss"),
+            Lexeme.part_of_speech.label("part_of_speech"),
+            UserLexemeSRS.mastery.label("mastery"),
+            UserLexemeSRS.repetitions.label("repetitions"),
+            accuracy,
+            wrong_count,
+            total_attempts,
+        )
+        .join(PracticeItem, PracticeItem.target_lexeme_id == Lexeme.id)
+        .join(
+            PracticeAttempt,
+            PracticeAttempt.practice_item_id == PracticeItem.id,
+        )
+        .join(
+            UserLexemeSRS,
+            (UserLexemeSRS.lexeme_id == Lexeme.id)
+            & (UserLexemeSRS.user_id == user.id),
+        )
+        .where(
+            PracticeAttempt.user_id == user.id,
+            PracticeAttempt.created_at >= cutoff,
+            PracticeItem.course_id == course_id,
+            PracticeItem.target_lexeme_id.is_not(None),
+            Lexeme.course_id == course_id,
+            UserLexemeSRS.course_id == course_id,
+        )
+        .group_by(
+            Lexeme.id,
+            Lexeme.token,
+            Lexeme.english_gloss,
+            Lexeme.part_of_speech,
+            UserLexemeSRS.mastery,
+            UserLexemeSRS.repetitions,
+        )
+        .having(wrong_count > 0)
+    ).subquery()
+
+    total_count = db.scalar(select(func.count()).select_from(grouped)) or 0
+    rows = db.execute(
+        select(grouped)
+        .order_by(
+            grouped.c.wrong_attempt_count.desc(),
+            grouped.c.recent_accuracy.asc(),
+            grouped.c.mastery.asc(),
+            grouped.c.token.asc(),
+        )
+        .offset(offset)
+        .limit(limit)
+    ).all()
+    return {
+        "items": [dict(row._mapping) for row in rows],
+        "total_count": total_count,
+        "limit": limit,
+        "offset": offset,
     }
 
 
