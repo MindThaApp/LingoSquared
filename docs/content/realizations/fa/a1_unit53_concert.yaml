@@ -1,0 +1,578 @@
+schema_version: "1.1"
+realization_version: "2026.1-draft.1"
+target_language: fa
+cefr_level: A1
+generation_provenance:
+  method: ai_adapted_from_public_domain_source
+  authoring_system: claude
+  source_material: >-
+    Made a real, fresh attempt at FSI Persian Basic Course source access
+    before authoring this unit, per AUTHORING_GUIDE.md #10 and the standing
+    instruction to re-check Firecrawl quota fresh even though it has been
+    reported exhausted in every prior round. `firecrawl search "FSI Persian
+    Basic Course concert کنسرت singer خواننده music"` returned `Error:
+    Request failed with status code 402` (payment required), confirming the
+    account genuinely remains at 0 credits. Fell back to this worker's own
+    cached local `pdftotext -layout` extraction of the same Live Lingua-
+    hosted FSI Spoken Persian PDF prior fa units in this line have used
+    (`fsi_persian_livelingua.txt`, ~17,130 lines, ~66,700 words, found
+    already present in this scratchpad from an earlier round). Grepped
+    case-insensitively for concert/singer/music/band: zero genuine hits
+    anywhere in the document (one incidental false-positive-looking match
+    for "band" as the Persian word بند/بند~ used in unrelated grammar
+    examples, not the English word "band" in a musical sense -- read in
+    context and confirmed irrelevant). FSI Persian's own course genuinely
+    does not cover a concert/music scene at all (same honest-nothing-found
+    outcome as the museum unit before it). All vocabulary and the full
+    dialogue in this unit are authored fresh from this project's own
+    already-shipped vocabulary (see review notes below for the exact reuse
+    chain).
+  human_reviewed: false
+review:
+  status: unreviewed
+  required_next_reviewer: codex_fresh_context
+  notes: >-
+    Draft authored 2026-07-10 by Claude (content-authoring worker session),
+    continuing fa A1 volume growth past unit52 (museum). Realizes
+    universal.a1.concert.attend_a_concert -- confirmed as the correct next
+    unrealized A1 outcome for fa by diffing every spine_outcome_id already
+    used across every docs/content/realizations/fa/a1_unit*.yaml file
+    (grep -h "spine_outcome_id" per file, deduplicated, plus every
+    spine_outcome_ids list entry via a yaml.safe_load walk, not just grep)
+    against every universal.a1.* id in docs/content/universal_spine.yaml's
+    own declaration order: fa has realized every A1 outcome through unit52
+    (museum) with zero gaps, and universal.a1.concert.attend_a_concert is
+    the very next A1 id declared in the spine immediately after
+    museum.visit_a_museum. Prerequisite outcomes
+    (plans.make_simple_plans/unit12, money.handle_basic_money_matters/
+    unit21) are both already realized in this course, so no prerequisite
+    gap blocks this unit.
+
+    Relationship to unit12 (plans): unit12 already realizes
+    universal.a1.plans.make_simple_plans with a cinema-going plan, not a
+    concert one, so there is no overlap or duplicate-scenario risk with
+    this unit; unlike unit51 (cinema), this unit's topic was never
+    previously touched by unit12's own dialogue.
+
+    Character/register choice, per AUTHORING_GUIDE.md #3: نیما (the
+    established recurring customer character) buys the concert ticket,
+    continuing his established "visits a service provider and states a
+    need" role from units 17/41/44/45/46/47/48/49/50/51/52. A NEW named
+    box-office clerk, خانم حسینی, is introduced -- confirmed collision-free
+    via a real grep of every آقای/خانم surname already used across the fa
+    corpus (کریمی, احمدی, صادقی, رضایی, نوری, مرادی, کاظمی, جعفری, رحیمی,
+    موسوی, فرهادی -- 11 names, run via `for n in ...; do grep -rl "$n" ...;
+    done`, each returning at least one real hit) plus a separate scan
+    confirming زero prior use of حسینی anywhere in the existing fa
+    realizations/overlays. This brings the corpus-wide named-service-
+    character balance to 6 male (کریمی, صادقی, نوری, مرادی, جعفری, فرهادی)
+    vs 6 female (احمدی, رضایی, کاظمی, رحیمی, موسوی, حسینی) -- genuine parity
+    for the second time this session (after unit51's 5/5), continuing the
+    long-run-balance goal unit52's own notes described, not a fixed
+    every-unit ratio. خانم حسینی speaks in the same neutral polite service
+    register units 41/42/44/45/46/47/48/49/50/51/52 already established for
+    this course's other service-encounter characters; نیما keeps his usual
+    informal register.
+
+    A second new proper noun, شاهین, names the singer whose concert نیما is
+    attending -- confirmed collision-free the same way (zero prior use
+    anywhere in the fa corpus, checked alongside a handful of other common
+    Persian male first names to confirm the choice itself, not just the
+    absence of a clash: امید already appears twice elsewhere in the corpus
+    as an unrelated word, so it was avoided; بهنام/سیاوش/رامین were also
+    checked and are unused but شاهین was selected). Per AUTHORING_GUIDE.md
+    #3, a singer's stage name in this A1-appropriate box-office scene needs
+    no honorific (like a band/artist name on a real poster), so شاهین is
+    declared directly as an introduced_token on the dialogue line where
+    نیما first says it (lesson04.dialogue_line3), NOT given its own
+    dedicated kind:vocabulary teaching card with a required example
+    sentence -- the same precedent unit51 already established for برای
+    (declared inline on a dialogue line, no separate vocabulary card), and
+    distinct from خانم حسینی, who DOES get her own character card because
+    she is a speaking participant in the dialogue with a full exchange
+    attributed to her, matching how موسوی/فرهادی were each treated.
+    Similarly, حسینی itself (the clerk's surname) and نیما (already
+    corpus-known) are declared via that one character card's
+    introduced_tokens, not counted toward this unit's "new vocabulary"
+    tally below, exactly matching the موسوی/فرهادی precedent from units
+    51/52.
+
+    The concert is named کنسرت شاهین ("Shahin Concert" -- named after the
+    performing singer) rather than after خانم حسینی the box-office clerk --
+    a deliberate, small deviation from unit51/unit52's own venue-named-
+    after-its-clerk convention (سینما موسوی, موزه فرهادی), because a
+    concert is naturally named after the performing artist, not the ticket
+    seller, and forcing the clerk-naming convention onto a concert would
+    have been unnatural. This is flagged explicitly here as an intentional
+    scenario judgment call, not an oversight.
+
+    Reuse chain (all re-declared in this file's own introduced_tokens
+    before first use, per the compiler's per-file-only untaught-vocabulary
+    check, confirmed with a real grep of every prior fa a1_unit*.yaml
+    file's introduced_tokens declarations, not by eye): بلیط (earliest:
+    unit16, also 28/51/52), می‌خوام (earliest: unit03), این (earliest:
+    unit02, also 03/04/08/15/20/26/49/50/51/52), چقدر (earliest: unit21,
+    also 28/48/49/50/51/52), می‌شه (earliest: unit11, also
+    35/48/49/50/51/52), کدوم (earliest: unit10, also 14/28/43/51/52),
+    شروع (earliest: unit51, "start/begin" -- genuinely new to the corpus
+    there, reused here for the first time since), ساعت (earliest: unit09),
+    شب (earliest: unit09, also 01/11/12/44), چه ساعتی؟ (earliest: unit12,
+    "what time?" -- a full established phrase, reused whole rather than
+    re-derived), چقدره (earliest: unit03, also 28/51/52), صد (earliest:
+    unit21), هزار/تومن/تومنه (earliest: unit03, also 21/46-52), سلام/ممنون
+    (earliest: unit01, also 06/08/12/20/21/22/33/34/35/41-52), باشه
+    (earliest: unit03, also 07/08/09/10/12/16/17/20/21/22/25/34/35/39/
+    40-52), خانم (earliest: unit41, also 45/48/50/51/52), یه (earliest:
+    unit02), برای (earliest: unit51 -- genuinely new to the corpus there,
+    reused here), ده (earliest: unit03, "ten"), چطور (earliest: unit01),
+    بود (earliest: unit06), باحال (earliest: unit36). New vocabulary
+    genuinely introduced for the first time in the whole corpus: کنسرت
+    (concert) and خواننده (singer) -- exactly 2 new words (within this
+    course's established 2-4 new-word-per-unit range: unit47: 2, unit48: 2,
+    unit49: 3, unit50: 3, unit51: 3, unit52: 3), not counting the two
+    exempt proper nouns (حسینی, شاهین) per the precedent explained above.
+    No new verb-conjugation pattern is introduced -- every verb form used
+    (می‌خوام, می‌شه, باشه) was already established by earlier units, and
+    شروع می‌شه directly reuses the exact "starts/begins" construction unit51
+    already introduced (not re-derived from scratch).
+
+    Facts are kept internally consistent across the whole unit per
+    AUTHORING_GUIDE.md #11: the singer's name (شاهین), the ticket price
+    (صد هزار تومن, 100,000 toman), and the start time (ساعت ده شب, ten at
+    night) are stated identically in the dialogue (lesson04), the
+    concert-poster reading text (lesson05), and the wrap-up review
+    (lesson06), and never contradicted anywhere else in the unit. Every
+    kind:vocabulary teaching item (کنسرت, خواننده, خانم حسینی) has an
+    example sentence per schema 1.1/AUTHORING_GUIDE §19, built only from
+    the card's own word plus tokens already declared earlier in THIS
+    file's document order (no forward references) -- confirmed by hand for
+    each: "بلیط کنسرت می‌خوام." (کنسرت's example) only uses بلیط/می‌خوام,
+    both declared earlier in lesson01; "این خواننده خوبه." (خواننده's
+    example) only uses این (lesson01) and خوبه, which is declared earlier
+    in THIS SAME lesson02 via its own review card immediately preceding the
+    خواننده card; "سلام خانم حسینی!" (character example) only uses سلام,
+    declared earlier in lesson04. The phrase cards "بلیط کنسرت چقدره؟" and
+    "بلیط صد هزار تومنه." (lesson03) review only already-taught component
+    tokens (no new root word), so they are not subject to the
+    vocabulary-card example requirement, mirroring exactly how units
+    51/52's own analogous phrase cards were treated. Every matching_pairs
+    exercise has 6-8 pairs per §16 (lesson01: 6, lesson02: 6, lesson03: 6,
+    lesson04: 7 dialogue-line pairs matching the dialogue's own 7 turns,
+    lesson05: 8, lesson06: 6). No listen_type/listen_select/listen_order
+    exercise is used anywhere in this unit -- fa has real Azure TTS per
+    AUTHORING_GUIDE §14, but this file continues the established
+    text-based corpus-consistency pattern from units 19-52, the same
+    choice those units' own reviews made. The spine outcome's own
+    "listening" assessment requirement (identify the start time, ticket
+    price, or artist/band name in a short concert ticket-counter exchange)
+    is covered via lesson04's dialogue_comprehension exercise, the same
+    interpretation units 41-52 already established for their own
+    "listening" assessment coverage without a literal audio exercise type.
+    Checked the same-speaker/same-audio distractor-collision bug class
+    (found and fixed 2026-07-09 in the nl corpus, commit 148240e) anyway,
+    per the standing instruction to list every line each speaker says
+    before writing any distractor, even though there is no listen_select
+    exercise in this file to directly trigger it: نیما says "سلام خانم
+    حسینی. یه بلیط کنسرت می‌خوام."/"شاهین. بلیط چقدره؟"/"باشه، می‌خوام.
+    کنسرت چه ساعتی شروع می‌شه؟"/"ممنون!"; خانم حسینی says "سلام نیما. برای
+    کدوم خواننده؟"/"بلیط صد هزار تومنه."/"ساعت ده شب شروع می‌شه." --
+    lesson04's dialogue_comprehension exercise asks what نیما wants to know
+    when he says "کنسرت چه ساعتی شروع می‌شه؟", with distractors ("He asks
+    how many tickets he wants."/"He asks if there are seats
+    available."/"He asks for a discount.") that are plausible-fact
+    alternatives, NOT lines either speaker actually says or facts either
+    speaker actually states anywhere in this unit's dialogue -- ticket
+    quantity, seat availability, and a discount are never mentioned by
+    either character, so there is no cross-exercise collision. The
+    dialogue_response exercise (lesson04) accepts نیما's own actual next
+    line ("ممنون!", with paraphrase variants also accepted), not a
+    distractor set, so the same-speaker-collision question doesn't apply
+    to it. Every "Translate into English" exercise in the paired overlay
+    explicitly sets answer_language_code: en. No exercise in this unit
+    tests a genuine two-clause sentence joined by "and"/comma (§12) --
+    every multi-sentence teaching/review line (lesson04 dialogue lines
+    1/5, lesson06's review_afterward line) is authored as two separate
+    short sentences, matching how units 44-52 already treat their own
+    two-sentence notes, with paraphrase-variant accepted answers rather
+    than clause-join variants. Ran a recursive scan (grep for bare,
+    unquoted yes/no/true/false/on/off tokens as YAML scalar values, plus a
+    full yaml.safe_load parse of both this file and its paired overlay
+    confirming every value that loaded is a str/list/dict, never a Python
+    bool anywhere in a learner-facing field) for bare unquoted
+    yes/no/true/false/on/off values (including matching_pairs right:
+    values specifically) -- zero hits, see the overlay's own review note
+    for the exact scan result. Ran a Persian-vs-Arabic codepoint scan
+    (grep for Arabic kaf U+0643 and Arabic yeh U+064A across both files)
+    -- zero hits, all keheh/yeh in this file use the correct Persian-range
+    codepoints (U+06A9/U+06CC).
+
+course:
+  realization_key: fa.a1
+  target_language_first: true
+  dialect: fa_IR_standard_colloquial_intro
+  register_policy: >-
+    Continues the established colloquial Iranian Farsi register: نیما (the
+    established recurring character) keeps his usual informal register as
+    the concert customer. خانم حسینی, a new formal-register box-office
+    clerk, speaks with neutral polite service language, consistent with
+    the register units 41/42/44/45/46/47/48/49/50/51/52 already established
+    for this course's other service-encounter characters. Reuses بلیط
+    (unit16), می‌خوام (unit03), این (unit02), چقدر (unit21), می‌شه
+    (unit11), کدوم (unit10), شروع (unit51), ساعت/شب (unit09), چه ساعتی؟
+    (unit12), چقدره (unit03), صد (unit21), هزار/تومن/تومنه (unit03),
+    سلام/ممنون (unit01), باشه (unit03), خانم (unit41), یه (unit02), برای
+    (unit51), ده (unit03), چطور (unit01), بود (unit06), باحال (unit36)
+    without re-teaching any of it from scratch. No word is given a new
+    sense beyond its existing corpus meaning in this unit.
+
+media_assets:
+  - content_key: fa.a1.unit53.audio.concert.vocab.01
+    language: fa
+    text: "کنسرت، خواننده"
+    voice_hint: neutral_adult
+    status: pending_generation
+  - content_key: fa.a1.unit53.audio.dialogue.concert.01
+    language: fa
+    text: "نیما: سلام خانم حسینی. یه بلیط کنسرت می‌خوام. خانم حسینی: سلام نیما. برای کدوم خواننده؟ نیما: شاهین. بلیط چقدره؟ خانم حسینی: بلیط صد هزار تومنه. نیما: باشه، می‌خوام. کنسرت چه ساعتی شروع می‌شه؟ خانم حسینی: ساعت ده شب شروع می‌شه. نیما: ممنون!"
+    voice_hint: two_adults_neutral_friendly
+    status: pending_generation
+
+units:
+  - content_key: fa.a1.unit53.concert
+    title: کنسرت
+    section: reading_writing
+    spine_outcome_ids:
+      - universal.a1.concert.attend_a_concert
+    planned_lesson_count: 6
+
+    lessons:
+      - content_key: fa.a1.unit53.lesson01.new_concert_one
+        title: "کلمات جدید ۱"
+        spine_outcome_id: universal.a1.concert.attend_a_concert
+        teaching:
+          - content_key: fa.a1.unit53.lesson01.teach.review_belit_mikhaam
+            kind: grammar_note
+            target: {text: "بلیط (ticket) -- already taught from unit16/28/51/52 / می‌خوام (I want) -- already taught from unit03", language_code: fa, direction: rtl}
+            introduced_tokens: [بلیط, "می‌خوام"]
+          - content_key: fa.a1.unit53.lesson01.teach.review_in_cheghadr_mishe
+            kind: grammar_note
+            target: {text: "این (this) -- already taught from unit02/03/04/08/15/20/26/49/50/51/52 / چقدر (how much) -- already taught from unit21/28/48/49/50/51/52 / می‌شه (it comes to / it becomes) -- already taught from unit11/35/48/49/50/51/52", language_code: fa, direction: rtl}
+            introduced_tokens: [این, چقدر, "می‌شه"]
+          - content_key: fa.a1.unit53.lesson01.teach.konsert
+            kind: vocabulary
+            target: {text: کنسرت, language_code: fa, direction: rtl}
+            introduced_tokens: [کنسرت]
+            example: {text: "بلیط کنسرت می‌خوام.", language_code: fa, direction: rtl}
+        exercises:
+          - content_key: fa.a1.unit53.lesson01.exercise01.recognize_konsert
+            type: multiple_choice
+            tested_text: کنسرت
+            prompt: {target_blocks: [{text: کنسرت, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit53.lesson01.exercise02.recognize_belit_konsert_mikhaam
+            type: multiple_choice
+            tested_text: "بلیط کنسرت می‌خوام."
+            prompt: {target_blocks: [{text: "بلیط کنسرت می‌خوام.", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit53.lesson01.exercise03.match_concert_one
+            type: matching_pairs
+            tested_text: "بلیط می‌خوام این چقدر می‌شه کنسرت"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: بلیط, right: ticket}
+              - {left: "می‌خوام", right: "I want"}
+              - {left: این, right: this}
+              - {left: چقدر, right: "how much"}
+              - {left: "می‌شه", right: "it comes to"}
+              - {left: کنسرت, right: concert}
+          - content_key: fa.a1.unit53.lesson01.exercise04.word_order_belit_konsert_mikhaam
+            type: word_order
+            tested_text: "بلیط کنسرت می‌خوام"
+            prompt: {target_blocks: [{text: "I want a concert ticket.", language_code: en, direction: ltr}]}
+            word_bank: [بلیط, کنسرت, "می‌خوام"]
+          - content_key: fa.a1.unit53.lesson01.exercise05.translate_in_konsert
+            type: translation
+            tested_text: "این کنسرت"
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit53.lesson02.new_concert_two
+        title: "کلمات جدید ۲"
+        spine_outcome_id: universal.a1.concert.attend_a_concert
+        teaching:
+          - content_key: fa.a1.unit53.lesson02.teach.review_kodum_shoru
+            kind: grammar_note
+            target: {text: "کدوم (which) -- already taught from unit10/14/28/43/51/52 / شروع (start / begin) -- already taught from unit51", language_code: fa, direction: rtl}
+            introduced_tokens: [کدوم, شروع]
+          - content_key: fa.a1.unit53.lesson02.teach.review_saat_shab_che_saati
+            kind: grammar_note
+            target: {text: "ساعت (o'clock, hour), شب (night) -- already taught from unit09 / چه ساعتی؟ (what time?) -- already taught from unit12", language_code: fa, direction: rtl}
+            introduced_tokens: [ساعت, شب, "چه ساعتی؟"]
+          - content_key: fa.a1.unit53.lesson02.teach.review_khoobe
+            kind: grammar_note
+            target: {text: "خوبه (it's good) -- already taught from unit01/05/06/07/10/12", language_code: fa, direction: rtl}
+            introduced_tokens: [خوبه]
+          - content_key: fa.a1.unit53.lesson02.teach.khaanande
+            kind: vocabulary
+            target: {text: خواننده, language_code: fa, direction: rtl}
+            introduced_tokens: [خواننده]
+            example: {text: "این خواننده خوبه.", language_code: fa, direction: rtl}
+        exercises:
+          - content_key: fa.a1.unit53.lesson02.exercise01.recognize_khaanande
+            type: multiple_choice
+            tested_text: خواننده
+            prompt: {target_blocks: [{text: خواننده, language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit53.lesson02.exercise02.recognize_in_khaanande_khoobe
+            type: multiple_choice
+            tested_text: "این خواننده خوبه."
+            prompt: {target_blocks: [{text: "این خواننده خوبه.", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit53.lesson02.exercise03.match_concert_two
+            type: matching_pairs
+            tested_text: "کدوم شروع ساعت شب چه ساعتی خواننده"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: کدوم, right: which}
+              - {left: شروع, right: "start / begin"}
+              - {left: ساعت, right: "o'clock / hour"}
+              - {left: شب, right: night}
+              - {left: "چه ساعتی؟", right: "What time?"}
+              - {left: خواننده, right: singer}
+          - content_key: fa.a1.unit53.lesson02.exercise04.word_order_in_khaanande_khoobe
+            type: word_order
+            tested_text: "این خواننده خوبه"
+            prompt: {target_blocks: [{text: "This singer is good.", language_code: en, direction: ltr}]}
+            word_bank: [این, خواننده, خوبه]
+          - content_key: fa.a1.unit53.lesson02.exercise05.translate_konsert_che_saati_shoru_mishe
+            type: translation
+            tested_text: "کنسرت چه ساعتی شروع می‌شه؟"
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit53.lesson03.ticket_price
+        title: "قیمت بلیط"
+        spine_outcome_id: universal.a1.concert.attend_a_concert
+        teaching:
+          - content_key: fa.a1.unit53.lesson03.teach.review_cheghadre
+            kind: grammar_note
+            target: {text: "چقدره (how much is it) -- already taught from unit03/28/51/52", language_code: fa, direction: rtl}
+            introduced_tokens: ["چقدره"]
+          - content_key: fa.a1.unit53.lesson03.teach.review_sad_hezar_toman
+            kind: grammar_note
+            target: {text: "صد (hundred) -- already taught from unit21 / هزار (thousand), تومن (toman) -- already taught from unit03/21 / تومنه (it's ... toman) -- already taught from unit03/50/51/52", language_code: fa, direction: rtl}
+            introduced_tokens: [صد, هزار, تومن, "تومنه"]
+          - content_key: fa.a1.unit53.lesson03.teach.belit_cheghadre
+            kind: phrase
+            target: {text: "بلیط کنسرت چقدره؟", language_code: fa, direction: rtl}
+            introduced_tokens: []
+          - content_key: fa.a1.unit53.lesson03.teach.belit_price
+            kind: phrase
+            target: {text: "بلیط صد هزار تومنه.", language_code: fa, direction: rtl}
+            introduced_tokens: []
+        exercises:
+          - content_key: fa.a1.unit53.lesson03.exercise01.recognize_belit_cheghadre
+            type: multiple_choice
+            tested_text: "بلیط کنسرت چقدره؟"
+            prompt: {target_blocks: [{text: "بلیط کنسرت چقدره؟", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit53.lesson03.exercise02.recognize_belit_price
+            type: multiple_choice
+            tested_text: "بلیط صد هزار تومنه."
+            prompt: {target_blocks: [{text: "بلیط صد هزار تومنه.", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit53.lesson03.exercise03.match_ticket_price
+            type: matching_pairs
+            tested_text: "چقدره صد هزار تومن بلیط کنسرت چقدره بلیط صد هزار تومنه"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "چقدره", right: "how much is it"}
+              - {left: صد, right: hundred}
+              - {left: هزار, right: thousand}
+              - {left: تومن, right: toman}
+              - {left: "بلیط کنسرت چقدره؟", right: "How much is a concert ticket?"}
+              - {left: "بلیط صد هزار تومنه.", right: "The ticket is 100,000 toman."}
+          - content_key: fa.a1.unit53.lesson03.exercise04.word_order_belit_price
+            type: word_order
+            tested_text: "بلیط صد هزار تومنه"
+            prompt: {target_blocks: [{text: "The ticket is 100,000 toman.", language_code: en, direction: ltr}]}
+            word_bank: [بلیط, صد, هزار, "تومنه"]
+          - content_key: fa.a1.unit53.lesson03.exercise05.translate_in_belit_cheghadre
+            type: translation
+            tested_text: "این بلیط چقدره؟"
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit53.lesson04.concert_dialogue
+        title: "دیالوگ: کنسرت"
+        spine_outcome_id: universal.a1.concert.attend_a_concert
+        teaching:
+          - content_key: fa.a1.unit53.lesson04.teach.review_salam_mamnoon
+            kind: grammar_note
+            target: {text: "سلام و ممنون -- already taught from units 01/06/08/12/20/21/22/33/34/35/41/42/43/44/45/46/47/48/49/50/51/52", language_code: fa, direction: rtl}
+            introduced_tokens: [سلام, ممنون]
+          - content_key: fa.a1.unit53.lesson04.teach.review_bashe
+            kind: grammar_note
+            target: {text: "باشه (okay) -- already taught from units 03/07/08/09/10/12/16/17/20/21/22/25/34/35/39/40/41/42/43/44/45/46/47/48/49/50/51/52", language_code: fa, direction: rtl}
+            introduced_tokens: [باشه]
+          - content_key: fa.a1.unit53.lesson04.teach.review_khanom
+            kind: grammar_note
+            target: {text: "خانم (Ms.) -- already taught from unit41/45/48/50/51/52", language_code: fa, direction: rtl}
+            introduced_tokens: [خانم]
+          - content_key: fa.a1.unit53.lesson04.teach.character_hosseini
+            kind: vocabulary
+            target: {text: "خانم حسینی", language_code: fa, direction: rtl}
+            introduced_tokens: [حسینی, نیما]
+            example: {text: "سلام خانم حسینی!", language_code: fa, direction: rtl}
+          - content_key: fa.a1.unit53.lesson04.teach.dialogue_line1
+            kind: dialogue
+            target: {text: "سلام خانم حسینی. یه بلیط کنسرت می‌خوام.", language_code: fa, direction: rtl, speaker: نیما}
+            introduced_tokens: [یه]
+          - content_key: fa.a1.unit53.lesson04.teach.dialogue_line2
+            kind: dialogue
+            target: {text: "سلام نیما. برای کدوم خواننده؟", language_code: fa, direction: rtl, speaker: "خانم حسینی"}
+            introduced_tokens: [برای]
+          - content_key: fa.a1.unit53.lesson04.teach.dialogue_line3
+            kind: dialogue
+            target: {text: "شاهین. بلیط چقدره؟", language_code: fa, direction: rtl, speaker: نیما}
+            introduced_tokens: [شاهین]
+          - content_key: fa.a1.unit53.lesson04.teach.dialogue_line4
+            kind: dialogue
+            target: {text: "بلیط صد هزار تومنه.", language_code: fa, direction: rtl, speaker: "خانم حسینی"}
+            introduced_tokens: []
+          - content_key: fa.a1.unit53.lesson04.teach.dialogue_line5
+            kind: dialogue
+            target: {text: "باشه، می‌خوام. کنسرت چه ساعتی شروع می‌شه؟", language_code: fa, direction: rtl, speaker: نیما}
+            introduced_tokens: []
+          - content_key: fa.a1.unit53.lesson04.teach.dialogue_line6
+            kind: dialogue
+            target: {text: "ساعت ده شب شروع می‌شه.", language_code: fa, direction: rtl, speaker: "خانم حسینی"}
+            introduced_tokens: [ده]
+          - content_key: fa.a1.unit53.lesson04.teach.dialogue_line7
+            kind: dialogue
+            target: {text: "ممنون!", language_code: fa, direction: rtl, speaker: نیما}
+            introduced_tokens: []
+        exercises:
+          - content_key: fa.a1.unit53.lesson04.exercise01.dialogue_comprehension_what_time_starts
+            type: dialogue_comprehension
+            tested_text: "سلام خانم حسینی یه بلیط کنسرت می‌خوام سلام نیما برای کدوم خواننده شاهین بلیط چقدره بلیط صد هزار تومنه باشه می‌خوام کنسرت چه ساعتی شروع می‌شه ساعت ده شب شروع می‌شه ممنون"
+            prompt: {target_blocks: [{text: "کنسرت چه ساعتی شروع می‌شه؟", language_code: fa, direction: rtl}]}
+            correct_option: "He asks what time the concert starts."
+            distractors:
+              - "He asks how many tickets he wants."
+              - "He asks if there are seats available."
+              - "He asks for a discount."
+          - content_key: fa.a1.unit53.lesson04.exercise02.recognize_dialogue_line4
+            type: multiple_choice
+            tested_text: "بلیط صد هزار تومنه."
+            prompt: {target_blocks: [{text: "بلیط صد هزار تومنه.", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit53.lesson04.exercise03.match_dialogue_concert
+            type: matching_pairs
+            tested_text: "سلام خانم حسینی یه بلیط کنسرت می‌خوام سلام نیما برای کدوم خواننده شاهین بلیط چقدره بلیط صد هزار تومنه باشه می‌خوام کنسرت چه ساعتی شروع می‌شه ساعت ده شب شروع می‌شه ممنون"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "سلام خانم حسینی. یه بلیط کنسرت می‌خوام.", right: "Hi Ms. Hosseini. I want a concert ticket."}
+              - {left: "سلام نیما. برای کدوم خواننده؟", right: "Hi Nima. For which singer?"}
+              - {left: "شاهین. بلیط چقدره؟", right: "Shahin. How much is the ticket?"}
+              - {left: "بلیط صد هزار تومنه.", right: "The ticket is 100,000 toman."}
+              - {left: "باشه، می‌خوام. کنسرت چه ساعتی شروع می‌شه؟", right: "Okay, I want it. What time does the concert start?"}
+              - {left: "ساعت ده شب شروع می‌شه.", right: "It starts at ten at night."}
+              - {left: "ممنون!", right: "Thanks!"}
+          - content_key: fa.a1.unit53.lesson04.exercise04.dialogue_response_thanks
+            type: dialogue_response
+            tested_text: "ممنون!"
+            prompt: {target_blocks: [{text: "ساعت ده شب شروع می‌شه.", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit53.lesson04.exercise05.translate_dialogue_line5
+            type: translation
+            tested_text: "باشه، می‌خوام. کنسرت چه ساعتی شروع می‌شه؟"
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit53.lesson05.reading_concert_poster
+        title: "خواندن پوستر کنسرت"
+        spine_outcome_id: universal.a1.concert.attend_a_concert
+        teaching:
+          - content_key: fa.a1.unit53.lesson05.teach.reading_text
+            kind: reading
+            target: {text: "کنسرت شاهین: ساعت ده شب شروع می‌شه. بلیط صد هزار تومن.", language_code: fa, direction: rtl}
+            introduced_tokens: []
+        exercises:
+          - content_key: fa.a1.unit53.lesson05.exercise01.reading_comprehension_service
+            type: reading_comprehension
+            tested_text: "کنسرت شاهین: ساعت ده شب شروع می‌شه. بلیط صد هزار تومن."
+            prompt: {target_blocks: [{text: "کنسرت شاهین: ساعت ده شب شروع می‌شه. بلیط صد هزار تومن.", language_code: fa, direction: rtl}]}
+            correct_option: "Concert."
+            distractors:
+              - "Restaurant."
+              - "Cinema."
+              - "Museum."
+          - content_key: fa.a1.unit53.lesson05.exercise02.reading_comprehension_price
+            type: reading_comprehension
+            tested_text: "کنسرت شاهین: ساعت ده شب شروع می‌شه. بلیط صد هزار تومن."
+            prompt: {target_blocks: [{text: "کنسرت شاهین: ساعت ده شب شروع می‌شه. بلیط صد هزار تومن.", language_code: fa, direction: rtl}]}
+            correct_option: "100,000 toman."
+            distractors:
+              - "10,000 toman."
+              - "110,000 toman."
+              - "1,000,000 toman."
+          - content_key: fa.a1.unit53.lesson05.exercise03.match_reading_concert_poster
+            type: matching_pairs
+            tested_text: "کنسرت شاهین ساعت ده شب شروع بلیط صد هزار"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: کنسرت, right: concert}
+              - {left: شاهین, right: Shahin}
+              - {left: ساعت, right: "o'clock / hour"}
+              - {left: ده, right: ten}
+              - {left: شب, right: night}
+              - {left: شروع, right: "start / begin"}
+              - {left: بلیط, right: ticket}
+              - {left: صد, right: hundred}
+          - content_key: fa.a1.unit53.lesson05.exercise04.translate_reading_concert_poster
+            type: translation
+            tested_text: "کنسرت شاهین: ساعت ده شب شروع می‌شه. بلیط صد هزار تومن."
+            prompt: {target_blocks: []}
+          - content_key: fa.a1.unit53.lesson05.exercise05.write_concert_poster
+            type: writing_prompt
+            tested_text: "کنسرت شاهین: ساعت ده شب شروع می‌شه. بلیط صد هزار تومن."
+            prompt: {target_blocks: []}
+
+      - content_key: fa.a1.unit53.lesson06.wrap_up
+        title: "جمع‌بندی کنسرت"
+        spine_outcome_id: universal.a1.concert.attend_a_concert
+        teaching:
+          - content_key: fa.a1.unit53.lesson06.teach.review_request
+            kind: phrase
+            target: {text: "یه بلیط کنسرت می‌خوام.", language_code: fa, direction: rtl}
+            introduced_tokens: []
+          - content_key: fa.a1.unit53.lesson06.teach.review_price
+            kind: phrase
+            target: {text: "بلیط صد هزار تومنه.", language_code: fa, direction: rtl}
+            introduced_tokens: []
+          - content_key: fa.a1.unit53.lesson06.teach.review_afterward
+            kind: phrase
+            target: {text: "کنسرت چطور بود؟ باحال بود!", language_code: fa, direction: rtl}
+            introduced_tokens: [چطور, بود, باحال]
+          - content_key: fa.a1.unit53.lesson06.teach.summary_words
+            kind: grammar_note
+            target: {text: "کنسرت / بلیط / خواننده / شروع / بلیط چقدره؟ -- کلمات این درس", language_code: fa, direction: rtl}
+            introduced_tokens: []
+        exercises:
+          - content_key: fa.a1.unit53.lesson06.exercise01.recognize_review_request
+            type: multiple_choice
+            tested_text: "یه بلیط کنسرت می‌خوام."
+            prompt: {target_blocks: [{text: "یه بلیط کنسرت می‌خوام.", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit53.lesson06.exercise02.recognize_review_afterward
+            type: multiple_choice
+            tested_text: "کنسرت چطور بود؟ باحال بود!"
+            prompt: {target_blocks: [{text: "کنسرت چطور بود؟ باحال بود!", language_code: fa, direction: rtl}]}
+          - content_key: fa.a1.unit53.lesson06.exercise03.match_wrap_concert
+            type: matching_pairs
+            tested_text: "کنسرت بلیط خواننده شروع بلیط چقدره کنسرت چطور بود"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: کنسرت, right: concert}
+              - {left: بلیط, right: ticket}
+              - {left: خواننده, right: singer}
+              - {left: شروع, right: "start / begin"}
+              - {left: "بلیط چقدره؟", right: "How much is the ticket?"}
+              - {left: "کنسرت چطور بود؟", right: "How was the concert?"}
+          - content_key: fa.a1.unit53.lesson06.exercise04.word_order_ye_belit_mikhaam
+            type: word_order
+            tested_text: "یه بلیط می‌خوام"
+            prompt: {target_blocks: [{text: "I want a ticket.", language_code: en, direction: ltr}]}
+            word_bank: [یه, بلیط, "می‌خوام"]
+          - content_key: fa.a1.unit53.lesson06.exercise05.write_concert_message
+            type: writing_prompt
+            tested_text: "یه بلیط می‌خوام"
+            prompt: {target_blocks: []}
