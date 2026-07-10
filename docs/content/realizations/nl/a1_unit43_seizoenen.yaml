@@ -5,9 +5,41 @@ cefr_level: A1
 generation_provenance: {method: ai_generated, authoring_system: claude, human_reviewed: false}
 status: complete_draft
 review:
-  status: unreviewed
-  required_next_reviewer: claude
+  status: reviewed
+  required_next_reviewer: null
   notes: >-
+    Fresh-context review 2026-07-10 (Claude, zero access to authoring
+    reasoning): checked same-speaker listen_select/dialogue_comprehension
+    distractors against both dialogue transcripts
+    (seizoenen_taalcafe1.01, seizoenen_taalcafe2.01). Several distractors
+    reuse a real fact the tested speaker or a DIFFERENT speaker states
+    elsewhere in the same clip (e.g. lesson04.exercise02's "Summer."
+    distractor is literally Omar's own later stated preference, offered
+    as a wrong answer to "what season IS it now") -- all judged NOT
+    violations since each question targets a specific, distinct fact
+    (current season vs. stated preference, or one speaker's opinion vs.
+    another's) and only one answer actually satisfies the specific
+    question asked; none create two options both technically correct for
+    the same question. Specifically verified the overlay's several bare
+    unquoted `Spring.`/`Summer.`/`Fall.`/`Winter.` values (correct_option/
+    distractors/accepted_answers) parse as genuine Python strings via a
+    direct yaml.safe_load type-check, not booleans -- none of these
+    tokens are in PyYAML's boolean-keyword set (yes/no/true/false/on/off/
+    y/n only), so no coercion risk despite being unquoted. Calendar fact
+    verified by direct computation: 2026-05-05 is a real Tuesday,
+    consistent with the claimed "+3 days" continuation from unit42's
+    Saturday 2 May. Cross-checked the deliberate 3rd-person "vindt"
+    grammar-gating claim (A2-only, per a2_unit25_meningen.yaml) against
+    every "vind"/"vindt" occurrence in this file -- confirmed every
+    instance is 1st-person, inverted-2nd-person, or explanatory
+    metalanguage only, never a tested 3rd-person production form.
+    Recursive YAML boolean-coercion scan found no stray booleans outside
+    human_reviewed/target_language_first. Compiler validate (realization +
+    overlay together): 0 errors, 0 warnings. matching_pairs use the
+    correct {left,right}[] shape. No snake_case/internal-jargon leaks
+    found in any learner-facing string. Dutch read for register/grammar/
+    naturalness: no issues found.
+
     New A1 seasons unit (file-numbered unit43, next after unit42's colors),
     realizing a NEW spine outcome universal.a1.seasons.describe_seasons
     (prerequisite: universal.a1.weather.describe_basic_weather). An exact

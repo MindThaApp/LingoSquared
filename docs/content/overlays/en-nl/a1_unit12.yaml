@@ -6,8 +6,8 @@ target_language: nl
 status: complete_draft
 generation_provenance: {method: ai_generated, authoring_system: codex, human_reviewed: false}
 review:
-  status: unreviewed
-  required_next_reviewer: claude
+  status: reviewed
+  required_next_reviewer: null
   notes: >-
     Initial English-to-Dutch overlay for recent completed events;
     fresh-context review required. 2026-07-06: collapsed lesson04's
@@ -20,6 +20,18 @@ review:
     gisteren/vanmorgen), matching the realization's new example
     sentences; schema_version bumped to 1.1. Glosses are Claude-authored
     and pending fresh-context review.
+
+    2026-07-10 fresh-context review (zero access to authoring reasoning):
+    fixed a real ungradable matching_pairs bug in
+    lesson03.exercise03.match_auxiliary (overlay's accepted_answers had
+    only 4 of the realization's 6 pairs, missing werken/gewerkt and
+    kopen/gekocht -- a learner correctly matching all 6 displayed pairs
+    could never grade as fully correct) and the same bug in
+    lesson05.exercise04.match_account (missing the "activity" ->
+    "koffie gedronken" pair). Verified every teaching entry has a
+    gloss, checked jargon/booleans (clean), and compiled clean (0
+    errors/0 warnings) with the other 9 units in this batch. Fixes
+    re-validated.
 
 course:
   title: "Dutch A1"
@@ -146,7 +158,7 @@ exercises:
     feedback: "The speaker says naar de supermarkt."
   nl.a1.unit12.lesson03.exercise03.match_auxiliary:
     instruction: "Match each infinitive and participle to the auxiliary used in this unit."
-    accepted_answers: [{value: [{left: "drinken → gedronken", right: hebben}, {left: "eten → gegeten", right: hebben}, {left: "gaan → gegaan", right: zijn}, {left: "komen → gekomen", right: zijn}], status: correct}]
+    accepted_answers: [{value: [{left: "drinken → gedronken", right: hebben}, {left: "eten → gegeten", right: hebben}, {left: "werken → gewerkt", right: hebben}, {left: "kopen → gekocht", right: hebben}, {left: "gaan → gegaan", right: zijn}, {left: "komen → gekomen", right: zijn}], status: correct}]
     feedback: "Drinken and eten use hebben; gaan and komen use zijn."
   nl.a1.unit12.lesson03.exercise04.order_come:
     instruction: "Put the words in order to say that you came to the language café."
@@ -220,7 +232,7 @@ exercises:
     feedback: "Ik heb appels gekocht means I bought apples."
   nl.a1.unit12.lesson05.exercise04.match_account:
     instruction: "Match each detail type to the information in the account."
-    accepted_answers: [{value: [{left: time, right: Vanmorgen}, {left: "first place", right: supermarkt}, {left: purchase, right: appels}, {left: "later place", right: taalcafé}], status: correct}]
+    accepted_answers: [{value: [{left: time, right: Vanmorgen}, {left: "first place", right: supermarkt}, {left: purchase, right: appels}, {left: "later place", right: taalcafé}, {left: activity, right: "koffie gedronken"}], status: correct}]
     feedback: "The account gives a time, two places, and a purchase."
   nl.a1.unit12.lesson05.exercise05.listen_reading_action:
     instruction: "Listen and choose what happened next."

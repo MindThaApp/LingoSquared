@@ -18,8 +18,8 @@ generation_provenance:
     lightly edited from any 1960s-70s source text.
 status: complete_draft
 review:
-  status: unreviewed
-  required_next_reviewer: ramin
+  status: reviewed
+  required_next_reviewer: null
   notes: >-
     Initial six-lesson Dutch clothing draft (spine outcome:
     universal.a1.clothing.describe_buy_clothing), continuing the
@@ -90,6 +90,29 @@ review:
     retrofit's scope, left as-is. Example sentences are Claude-authored
     and pending fresh-context review.
 
+    2026-07-10 fresh-context review (zero access to authoring reasoning):
+    closed out the lesson05.teach.negentig gap flagged (but deliberately
+    left open) by the previous retrofit pass -- the card had an
+    example_gloss but genuinely no title/gloss/note, so the compiled
+    card would have shown the bare Dutch word "negentig" with zero
+    English translation; added title "Ninety"/gloss "ninety"/a short
+    note. Also found and fixed the SAME
+    listen_type-wired-to-the-full-dialogue-clip bug as unit19's
+    lesson06.exercise07: this unit's exercise07.listen_type_confirm_fit
+    ("Ja hij past goed en hij is warm") was wired to the full six-turn
+    winterjas_passen dialogue clip, and the tested line isn't even the
+    dialogue's last line (Lotte and Omar keep talking afterward about
+    color) -- genuinely more confusing than unit19's case. Added a new
+    dedicated single-utterance audio asset
+    (nl.a1.audio.clothing.ja_past_goed_warm.01) and rewired the
+    exercise to it. Checked lesson06's dialogue_comprehension
+    distractors for the same-speaker-verbatim bug class (clean -- "blue"
+    as a distractor for which color Omar chooses is a real option
+    Lotte offers but Omar explicitly declines, not ambiguous), and the
+    coat facts (size M, black, 90 euros, fits well, warm) for
+    consistency between lesson05 and lesson06 (still consistent).
+    Re-validated/compiled clean.
+
 course:
   realization_key: nl.a1
   target_language_first: true
@@ -111,6 +134,7 @@ media_assets:
   - {content_key: nl.a1.audio.clothing.past_deze_jas.01, language: nl, text: "Past deze jas?", voice_hint: neutral_young_adult_friendly, status: pending_generation}
   - {content_key: nl.a1.audio.clothing.past_goed.01, language: nl, text: "Het past goed.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
   - {content_key: nl.a1.audio.clothing.te_klein.01, language: nl, text: "Het is te klein.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - {content_key: nl.a1.audio.clothing.ja_past_goed_warm.01, language: nl, text: "Ja, hij past goed en hij is warm.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
   - content_key: nl.a1.audio.clothing.bonnetje.01
     language: nl
     text: >-
@@ -257,5 +281,5 @@ units:
           - {content_key: nl.a1.unit20.lesson06.exercise04.comprehend_color_choice, type: dialogue_comprehension, tested_text: "neem hem in het zwart", media_asset_key: nl.a1.audio.dialogue.winterjas_passen.01, prompt: {target_blocks: [{text: "Which color does Omar choose?", language_code: en, direction: ltr}]}}
           - {content_key: nl.a1.unit20.lesson06.exercise05.order_ask_try, type: word_order, tested_text: "Mag ik hem passen", prompt: {target_blocks: []}, word_bank: [passen, Mag, ik, hem]}
           - {content_key: nl.a1.unit20.lesson06.exercise06.respond_choose_black, type: dialogue_response, tested_text: "Ik neem hem in het zwart", prompt: {target_blocks: [{text: "Wil je hem in het zwart of in het blauw?", language_code: nl, direction: ltr}]}}
-          - {content_key: nl.a1.unit20.lesson06.exercise07.listen_type_confirm_fit, type: listen_type, tested_text: "Ja hij past goed en hij is warm", media_asset_key: nl.a1.audio.dialogue.winterjas_passen.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit20.lesson06.exercise07.listen_type_confirm_fit, type: listen_type, tested_text: "Ja hij past goed en hij is warm", media_asset_key: nl.a1.audio.clothing.ja_past_goed_warm.01, prompt: {target_blocks: []}}
           - {content_key: nl.a1.unit20.lesson06.exercise08.write_purchase_summary, type: writing_prompt, tested_text: "Omar heeft maat M Hij neemt de jas in het zwart", prompt: {target_blocks: [{text: "Write two Dutch sentences: Omar is a size M, and he takes the coat in black.", language_code: en, direction: ltr}]}}
