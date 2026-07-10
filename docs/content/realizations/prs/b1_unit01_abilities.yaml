@@ -17,10 +17,52 @@ generation_provenance:
     this pass (prerequisite: universal.a2.bureaucracy.register_with_authorities).
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: codex_fresh_context
+  status: reviewed
+  required_next_reviewer: null
   notes: >-
-    First prs B1 unit, genuinely exploratory. Source material check: the
+    2026-07-10 fresh-context review (Claude) found and fixed FOUR real bugs.
+    (1) پوسته ("post office" in lesson04's dialogue/vocabulary/exercises) is
+    actually the standard Persian/Dari word for "peel/shell/crust" (fruit
+    skin), NOT "post office" -- confirmed via web search against multiple
+    Persian dictionaries; the Pashto word for "post/mail" is coincidentally
+    also پوسته, but that's a different language's lexeme, not Dari's real
+    word for a post office, which is پوسته خانه (posta khana) or اداره پست.
+    Fixed by changing every occurrence (realization target/introduced_tokens/
+    tested_text/word_bank/media_assets and overlay gloss/note/feedback/
+    accepted_answers/matching_pairs) from پوسته to پوسته خانه. (2) Four
+    grammar-note instances (lesson03's teach.natanestam/teach.grammar_past,
+    lesson06's teach.grammar_review, realization and overlay) incorrectly
+    described نتانستم's negation morpheme as the prefix "نه-" -- the actual
+    Persian/Dari verbal negation prefix is "ن-" (na-); "نه" is a different,
+    standalone word meaning "no." Left uncorrected, this would have taught
+    learners a real morphological error. Fixed all four instances to "ن-".
+    (3) lesson01.teach.review_ketab/review_nama/review_in/review_ra and
+    lesson02.teach.review_anha and lesson03.teach.review_diroz/review_daftar/
+    review_beravam/ba and lesson05.teach.review_ast2/man's overlay `note`
+    fields all ended with the literal internal-authoring phrase "-- reviewed
+    vocabulary," an AUTHORING_GUIDE.md-flagged jargon-leak pattern (internal
+    words like "reviewed" leaking into learner-facing text) -- fixed by
+    rewriting each note into a plain, learner-facing "X means Y" sentence
+    (11 instances). (4) lesson05.exercise06.write_reading_summary's overlay
+    accepted a second variant, "...می‌تواند...", using the standard/literary
+    verb form می‌تواند instead of this unit's own established colloquial
+    می‌تانه -- inconsistent with the file's own explicitly stated register
+    policy (این پروژه uses می‌تانم/می‌تانه throughout, deliberately not
+    می‌توانم/می‌تواند) and never taught anywhere in the unit; removed the
+    untaught variant, keeping only the correct می‌تانه form. Verified the
+    fix against the compiler: 0 errors/0 warnings standalone and as part of
+    the b1 course. Everything else checked clean: the می‌تانم/می‌تانی/
+    می‌تانه/می‌تانیم/می‌تانین/می‌تانن paradigm and its که-subjunctive
+    construction are real, correctly formed colloquial Kabul Dari; no stray
+    YAML boolean coercion; no Pashto pronoun (هغه/هغوی) leakage; no
+    same-speaker-distractor issues (lesson04's dialogue_response and
+    multiple_choice items test literal shown text, not audio); every
+    exercise type used (multiple_choice, word_order, matching_pairs,
+    translation, speak_response, writing_prompt, dialogue_response) is
+    registered in ExerciseRenderer.tsx; cross-lesson facts (Zarmina's
+    doctor's-appointment story, the errand dialogue) are internally
+    consistent. First prs B1 unit, genuinely exploratory. Source material
+    check: the
     1966 source (titled "Advanced Farsi" internally despite its Dari/
     Afghan Peace Corps framing) drills می‌تانم که + subjunctive ("I can
     that I buy" = "I can buy") across many verbs/persons, contrasted
@@ -74,7 +116,7 @@ media_assets:
     status: pending_generation
   - content_key: prs.b1.audio.dialogue.errands.01
     language: prs
-    text: "زرمینه: همایون، می‌تانی که این نامه را به پوسته ببری؟ همایون: بلی، می‌تانم. امروز وقت دارم. زرمینه: تشکر. راستی، دیروز می‌خواستم که به دفتر تذکره بروم، ولی نتانستم. همایون: چرا نتانستی؟ زرمینه: وقت نداشتم. فردا می‌تانم که بروم."
+    text: "زرمینه: همایون، می‌تانی که این نامه را به پوسته خانه ببری؟ همایون: بلی، می‌تانم. امروز وقت دارم. زرمینه: تشکر. راستی، دیروز می‌خواستم که به دفتر تذکره بروم، ولی نتانستم. همایون: چرا نتانستی؟ زرمینه: وقت نداشتم. فردا می‌تانم که بروم."
     voice_hint: two_adults_neutral_polite
     status: pending_generation
 
@@ -270,7 +312,7 @@ units:
             example: {text: "دیروز نتانستم که به دفتر بروم.", language_code: prs, direction: rtl}
           - content_key: prs.b1.unit01.lesson03.teach.grammar_past
             kind: grammar_note
-            target: {text: "می‌تانستم که بخرم = I could/was able to buy, about the PAST -- add -ستم to می‌تان to make the past stem (می‌تانستم، می‌تانستی، می‌تانست، می‌تانستیم، می‌تانستین، می‌تانستن), still followed by که + subjunctive. Negate with نه-: نتانستم = I could NOT / was not able to.", language_code: prs, direction: rtl}
+            target: {text: "می‌تانستم که بخرم = I could/was able to buy, about the PAST -- add -ستم to می‌تان to make the past stem (می‌تانستم، می‌تانستی، می‌تانست، می‌تانستیم، می‌تانستین، می‌تانستن), still followed by که + subjunctive. Negate with ن-: نتانستم = I could NOT / was not able to.", language_code: prs, direction: rtl}
             introduced_tokens: []
           - content_key: prs.b1.unit01.lesson03.teach.review_diroz
             kind: vocabulary
@@ -341,9 +383,9 @@ units:
         teaching:
           - content_key: prs.b1.unit01.lesson04.teach.posta
             kind: vocabulary
-            target: {text: پوسته, language_code: prs, direction: rtl}
-            introduced_tokens: [پوسته]
-            example: {text: "این نامه را به پوسته می‌برم.", language_code: prs, direction: rtl}
+            target: {text: پوسته خانه, language_code: prs, direction: rtl}
+            introduced_tokens: [پوسته خانه]
+            example: {text: "این نامه را به پوسته خانه می‌برم.", language_code: prs, direction: rtl}
           - content_key: prs.b1.unit01.lesson04.teach.tazkera
             kind: vocabulary
             target: {text: تذکره, language_code: prs, direction: rtl}
@@ -376,7 +418,7 @@ units:
             example: {text: "امروز وقت دارم.", language_code: prs, direction: rtl}
           - content_key: prs.b1.unit01.lesson04.teach.dialogue_zarmina_ask
             kind: dialogue
-            target: {text: "همایون، می‌تانی که این نامه را به پوسته ببری؟", language_code: prs, direction: rtl, speaker: زرمینه}
+            target: {text: "همایون، می‌تانی که این نامه را به پوسته خانه ببری؟", language_code: prs, direction: rtl, speaker: زرمینه}
             introduced_tokens: [ببری]
           - content_key: prs.b1.unit01.lesson04.teach.dialogue_homayoun_agree
             kind: dialogue
@@ -401,19 +443,19 @@ units:
             prompt: {target_blocks: [{text: "چرا زرمینه دیروز به دفتر تذکره نرفت؟", language_code: prs, direction: rtl}]}
           - content_key: prs.b1.unit01.lesson04.exercise02.recognize_posta
             type: multiple_choice
-            tested_text: پوسته
-            prompt: {target_blocks: [{text: پوسته, language_code: prs, direction: rtl}]}
+            tested_text: پوسته خانه
+            prompt: {target_blocks: [{text: پوسته خانه, language_code: prs, direction: rtl}]}
           - content_key: prs.b1.unit01.lesson04.exercise03.order_mitani_nama
             type: word_order
-            tested_text: می‌تانی که این نامه را به پوسته ببری؟
+            tested_text: می‌تانی که این نامه را به پوسته خانه ببری؟
             prompt: {target_blocks: []}
-            word_bank: [می‌تانی, که, این, نامه, را, به, پوسته, ببری؟]
+            word_bank: [می‌تانی, که, این, نامه, را, به, پوسته خانه, ببری؟]
           - content_key: prs.b1.unit01.lesson04.exercise04.match_dialogue_words
             type: matching_pairs
-            tested_text: پوسته تذکره وقت راستی چرا فردا
+            tested_text: پوسته خانه تذکره وقت راستی چرا فردا
             prompt: {target_blocks: []}
             pairs:
-              - {left: پوسته, right: post office}
+              - {left: پوسته خانه, right: post office}
               - {left: تذکره, right: ID card}
               - {left: وقت, right: time}
               - {left: راستی, right: by the way}
@@ -426,7 +468,7 @@ units:
           - content_key: prs.b1.unit01.lesson04.exercise06.dialogue_response
             type: dialogue_response
             tested_text: "بلی، می‌تانم. امروز وقت دارم."
-            prompt: {target_blocks: [{text: "می‌تانی که این نامه را به پوسته ببری؟", language_code: prs, direction: rtl}]}
+            prompt: {target_blocks: [{text: "می‌تانی که این نامه را به پوسته خانه ببری؟", language_code: prs, direction: rtl}]}
 
       - content_key: prs.b1.unit01.lesson05.reading_appointment
         title: ملاقات داکتر
@@ -530,7 +572,7 @@ units:
         teaching:
           - content_key: prs.b1.unit01.lesson06.teach.grammar_review
             kind: grammar_note
-            target: {text: "Review: present ability = می‌تان + person-ending + که + subjunctive (می‌تانم که بخرم). Past ability = می‌تانست + person-ending + که + subjunctive (می‌تانستم که بخرم). Negative = نه‌ prefix on either (نتانستم). All six lessons in this unit use the same pattern with different persons, tenses, and errands.", language_code: prs, direction: rtl}
+            target: {text: "Review: present ability = می‌تان + person-ending + که + subjunctive (می‌تانم که بخرم). Past ability = می‌تانست + person-ending + که + subjunctive (می‌تانستم که بخرم). Negative = ن- prefix on either (نتانستم). All six lessons in this unit use the same pattern with different persons, tenses, and errands.", language_code: prs, direction: rtl}
             introduced_tokens: []
           - content_key: prs.b1.unit01.lesson06.teach.ba2
             kind: vocabulary
