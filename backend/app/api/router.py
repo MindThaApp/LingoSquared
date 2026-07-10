@@ -1549,6 +1549,11 @@ def streak(user=Depends(current_user),db:Session=Depends(get_db)):
         "last_activity_date":s.last_activity_date,
         "streak_freezes_available":s.streak_freezes_available,
         "freeze_used_today":s.last_freeze_used_date==today,
+        # Computed server-side (not left to the client) because "today" is the
+        # user's own timezone day boundary (User.timezone), the same boundary
+        # streak accounting itself uses — a device-clock derivation could
+        # disagree with it. Consumed by the HomePage streak-at-risk banner.
+        "active_today":s.last_activity_date==today,
     }
 @router.get("/me/xp",response_model=XPOut)
 def xp(user=Depends(current_user),db:Session=Depends(get_db)):
