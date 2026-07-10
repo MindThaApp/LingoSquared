@@ -20,6 +20,8 @@ import { ReviewPage } from "./pages/ReviewPage";
 import { VocabularyPage } from "./pages/VocabularyPage";
 import { ProfilePage } from "./pages/ProfilePage";
 import { NotFoundPage } from "./pages/NotFoundPage";
+import { PrivacyPolicyPage } from "./pages/PrivacyPolicyPage";
+import { TermsOfServicePage } from "./pages/TermsOfServicePage";
 
 // Route-level code splitting: AdminContentPage is genuinely admin-only, so it
 // stays out of the initial bundle everyone downloads. Core daily-use pages
@@ -50,6 +52,10 @@ function App() {
             <Routes>
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
+              {/* Public legal pages — must stay reachable logged-out (a
+                  prospective user reads these before registering). */}
+              <Route path="/privacy" element={<PrivacyPolicyPage />} />
+              <Route path="/terms" element={<TermsOfServicePage />} />
               <Route
                 path="/courses"
                 element={

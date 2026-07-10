@@ -136,6 +136,11 @@ export function LoginPage() {
       <p className="muted" style={{ textAlign: "center", marginTop: 16 }}>
         {t("login.no_account")} <Link to="/register">{t("login.register_link")}</Link>
       </p>
+      <p className="muted" style={{ fontSize: "0.85rem", textAlign: "center", marginTop: 8 }}>
+        <Link to="/terms">{t("legal.terms")}</Link>
+        {" · "}
+        <Link to="/privacy">{t("legal.privacy")}</Link>
+      </p>
     </div>
   );
 }
