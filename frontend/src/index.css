@@ -927,28 +927,50 @@ button {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  margin: 10px 0 16px;
+  margin: 10px auto 16px;
   padding: 10px;
+  /* Caps a letter line at 11 keys (11x42 + 10x4 + 20 padding = 522px), so
+     wide/desktop viewports keep the familiar 11-per-line alphabet layout
+     instead of packing 15+ keys per line just because the space exists. */
+  max-width: 560px;
   background: var(--surface-2);
   border-radius: var(--radius);
 }
 
 .virtual-keyboard-row {
   display: flex;
-  gap: 5px;
+  /* Row-gap 6px / column-gap 4px between keys. The 4px column gap is
+     deliberate: it buys key WIDTH on phones (see the touch-target comment
+     on .virtual-keyboard-key below) while still separating targets. */
+  gap: 6px 4px;
   justify-content: center;
   flex-wrap: wrap;
 }
 
 .virtual-keyboard-key {
-  min-width: 34px;
-  height: 38px;
+  /* Touch-target size (2026-07-10 accessibility pass, raised from 34x38):
+     fa/prs learners type every free-text answer through these keys, so
+     they should approach Apple's 44pt / Android's 48dp minimums.
+     - Height is the free axis: 48px meets Android's 48dp outright.
+     - Width is the constrained axis: on a 375px phone, usable line width is
+       ~323px (375 - 32 app-main padding - 20 keyboard padding). 42px keys +
+       4px gaps fit 7 per line (7x42 + 6x4 = 318px); full 44px keys would
+       drop that to 6 per line, adding a whole extra line to the 32-key
+       Perso-Arabic keyboard (and two to the 65-key Devanagari one) and
+       pushing the answer input further off-screen. 42px was chosen because
+       the effective touch pitch — key plus its gap, per the spacing
+       allowance in Apple's HIG and WCAG 2.5.8 — is 46px horizontally and
+       54px vertically, and iOS/Android system keyboards themselves ship
+       narrower-but-tall keys (~33x43) on exactly this tradeoff. Don't
+       "round up" width to 44px without redoing the per-line math above. */
+  min-width: 42px;
+  height: 48px;
   padding: 0 8px;
   border: 1px solid var(--border);
   border-radius: 6px;
   background: var(--surface);
   color: var(--text-h);
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   font-family: "Vazirmatn", system-ui, sans-serif;
   cursor: pointer;
 }
