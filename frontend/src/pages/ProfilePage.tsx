@@ -1,14 +1,50 @@
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ProgressApi } from "@lingo/shared/api/endpoints";
+import { AuthApi, ProgressApi } from "@lingo/shared/api/endpoints";
+import { ApiError } from "@lingo/shared/api/client";
 import { isGuestUser, useAuth } from "../auth/AuthContext";
+import { setAccountDeletedNotice } from "../lib/accountDeletedNotice";
 import { VoiceSettings } from "../components/VoiceSettings";
 import { SpeechSpeedSettings } from "../components/SpeechSpeedSettings";
+import { DeleteAccountConfirm } from "../components/DeleteAccountConfirm";
 
 export function ProfilePage() {
   const { t } = useTranslation();
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const isGuest = isGuestUser(user);
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
+
+  async function handleDeleteAccount() {
+    setDeleting(true);
+    setDeleteError(null);
+    try {
+      await AuthApi.deleteAccount();
+      // The account is gone server-side; clear the (now-dangling) local
+      // session and land on the login page with a one-time confirmation
+      // notice. The notice travels via sessionStorage, not route state —
+      // see accountDeletedNotice.ts for why route state gets clobbered
+      // here.
+      setAccountDeletedNotice();
+      logout();
+      navigate("/login", { replace: true });
+    } catch (err) {
+      // 401 means the session already expired — apiFetch has fired the
+      // unauthorized handler (logging us out), so there's nothing to show
+      // here; any other failure means the account still exists, so say so
+      // honestly and let the user retry.
+      setDeleteError(
+        err instanceof ApiError && err.status !== 401
+          ? err.message
+          : t("profile.delete_error"),
+      );
+      setDeleting(false);
+    }
+  }
   const progressQuery = useQuery({ queryKey: ["progress"], queryFn: ProgressApi.progress });
   const streakQuery = useQuery({ queryKey: ["streak"], queryFn: ProgressApi.streak });
   const xpQuery = useQuery({ queryKey: ["xp"], queryFn: ProgressApi.xp });
@@ -104,6 +140,32 @@ export function ProfilePage() {
       <button className="btn btn-secondary btn-block" onClick={logout} style={{ marginTop: 8 }}>
         {t("profile.logout")}
       </button>
+
+      <div className="card" style={{ borderColor: "var(--incorrect)", marginTop: 16 }}>
+        <h2 style={{ marginTop: 0, color: "var(--incorrect)" }}>{t("profile.danger_title")}</h2>
+        <p className="muted">{t("profile.danger_body")}</p>
+        <button
+          type="button"
+          className="btn btn-danger-soft btn-block"
+          onClick={() => {
+            setDeleteError(null);
+            setDeleteConfirmOpen(true);
+          }}
+        >
+          {t("profile.delete_account")}
+        </button>
+      </div>
+
+      {deleteConfirmOpen && user && (
+        <DeleteAccountConfirm
+          email={user.email}
+          isGuest={isGuest}
+          deleting={deleting}
+          error={deleteError}
+          onCancel={() => setDeleteConfirmOpen(false)}
+          onConfirm={handleDeleteAccount}
+        />
+      )}
     </div>
   );
 }

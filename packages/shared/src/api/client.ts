@@ -156,3 +156,10 @@ export function patch<T>(path: string, body?: unknown): Promise<T> {
     body: body !== undefined ? JSON.stringify(body) : undefined,
   });
 }
+
+// "del" rather than "delete" (a reserved word). The backend's DELETE
+// endpoints return 204 No Content; apiFetch already resolves that to
+// undefined, so callers should use del<void>.
+export function del<T>(path: string): Promise<T> {
+  return apiFetch<T>(path, { method: "DELETE" });
+}
