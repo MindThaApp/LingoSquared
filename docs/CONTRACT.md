@@ -582,6 +582,100 @@ endpoints are deprecated in favor of the lexeme review flow above. They
 remain available only for pre-existing `ReviewItem` rows; lesson answers no
 longer create new legacy review rows.
 
+### Lexeme browser and mistakes hub, 2026-07-10
+
+`GET /me/lexemes` is the vocabulary browser data source. Auth required.
+Query params:
+
+```
+course_id=uuid
+sort=due_soonest|mastery_asc|mastery_desc|alphabetical|recently_introduced
+part_of_speech=noun
+search=substring
+limit=50
+offset=0
+```
+
+`course_id` is a query parameter (not a path parameter) to match the
+course-scoped `/me/*` style used by review endpoints. It is required in
+practice; an unknown course returns `404 course_not_found`. `limit` is 1-200
+and `offset` is >=0. Only lexemes with a `UserLexemeSRS` row for the current
+user are returned — this is the learner's encountered vocabulary, not the full
+course-wide lexeme pool.
+
+Response:
+
+```json
+{
+  "items": [
+    {
+      "token": "uno",
+      "english_gloss": "one",
+      "part_of_speech": "noun",
+      "mastery": 0.42,
+      "interval_days": 3,
+      "repetitions": 2,
+      "due_at": "2026-07-10T12:00:00Z",
+      "introduced_at": "2026-07-01T12:00:00Z",
+      "suspended": false,
+      "last_reviewed_at": "2026-07-09T12:00:00Z"
+    }
+  ],
+  "total_count": 1,
+  "limit": 50,
+  "offset": 0
+}
+```
+
+`GET /me/lexemes/summary?course_id=uuid` powers the small vocabulary-page
+stats header. Auth required. Unknown course returns `404 course_not_found`.
+
+```json
+{
+  "total_tracked": 42,
+  "mastery_bands": { "new": 8, "learning": 22, "strong": 12 },
+  "due_today": 5,
+  "suspended": 1
+}
+```
+
+Mastery bands are rough UI buckets over the existing 0.0-1.0 `mastery` float:
+`new` < 0.33, `learning` 0.33-0.749..., `strong` >= 0.75. `due_today` counts
+unsuspended tracked lexemes due at or before the end of the learner's current
+local day (`User.timezone`, UTC fallback).
+
+`GET /me/mistakes?course_id=uuid&limit=50&offset=0` is the mistakes hub data
+source. Auth required. Unknown course returns `404 course_not_found`.
+
+Important data-source caveat: real per-lexeme attempt history currently exists
+only for `PracticeItem`-backed flows (`/practice/{course_id}/batch`,
+`/reviews/session`, and unit checkpoints) because `PracticeItem.target_lexeme_id`
+identifies the tested word. Legacy hand-authored `ExerciseAttempt` lesson rows
+record correct/incorrect answers but do not identify a lexeme, so they cannot
+honestly be rolled up into a per-word mistakes hub without a new persistence
+model. This endpoint therefore aggregates wrong attempts from the last 30 days
+of lexeme-linked `PracticeAttempt` rows and sorts worst-first.
+
+```json
+{
+  "items": [
+    {
+      "token": "uno",
+      "english_gloss": "one",
+      "part_of_speech": "noun",
+      "mastery": 0.2,
+      "repetitions": 3,
+      "recent_accuracy": 0.33,
+      "wrong_attempt_count": 2,
+      "total_attempt_count": 3
+    }
+  ],
+  "total_count": 1,
+  "limit": 50,
+  "offset": 0
+}
+```
+
 ### Content issue reporting for PracticeItem-backed content, 2026-07-07
 
 `POST /exercises/{exercise_id}/report` only ever recognized real `Exercise`
