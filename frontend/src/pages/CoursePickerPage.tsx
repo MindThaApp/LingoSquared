@@ -155,6 +155,26 @@ export function CoursePickerPage() {
   const courses = coursesQuery.data ? sortByCefr(coursesQuery.data) : undefined;
   const step = !source ? 1 : !target ? 2 : 3;
 
+  // Without this, a failed languages fetch renders an empty tile grid and a
+  // failed all-courses fetch renders every language as a locked "coming
+  // soon" tile -- both misleading success states, not errors.
+  if (languagesQuery.isError || allCoursesQuery.isError) {
+    return (
+      <div className="feedback-banner error">
+        <p style={{ margin: "0 0 10px" }}>{t("course_picker.catalog_fetch_error")}</p>
+        <button
+          className="btn btn-block"
+          onClick={() => {
+            if (languagesQuery.isError) languagesQuery.refetch();
+            if (allCoursesQuery.isError) allCoursesQuery.refetch();
+          }}
+        >
+          {t("common.retry")}
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div>
       <div className="picker-steps">
@@ -237,6 +257,15 @@ export function CoursePickerPage() {
           </p>
 
           {coursesQuery.isLoading && <p className="muted">{t("course_picker.loading_courses")}</p>}
+
+          {coursesQuery.isError && (
+            <div className="feedback-banner error">
+              <p style={{ margin: "0 0 10px" }}>{t("course_picker.courses_fetch_error")}</p>
+              <button className="btn btn-block" onClick={() => coursesQuery.refetch()}>
+                {t("common.retry")}
+              </button>
+            </div>
+          )}
 
           {courses && courses.length === 0 && (
             <div className="card">

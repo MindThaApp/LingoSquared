@@ -137,6 +137,17 @@ export function CourseUnitsPage() {
         </p>
       )}
 
+      {/* Without this, a failed units fetch renders a completely empty
+          path -- a misleading "no units" look, not an error. */}
+      {unitsQuery.isError && (
+        <div className="feedback-banner error">
+          <p style={{ margin: "0 0 10px" }}>{t("course_units.units_fetch_error")}</p>
+          <button className="btn btn-block" onClick={() => unitsQuery.refetch()}>
+            {t("common.retry")}
+          </button>
+        </div>
+      )}
+
       <div className="path">
         {readingWriting.length > 0 && (
           <span className="path-section-label">{t("course_units.core_path")}</span>
