@@ -141,6 +141,12 @@ router=APIRouter()
 _rate_limit_settings = get_settings()
 LOGIN_RATE_LIMIT = register_limiter(RateLimiter(limit=_rate_limit_settings.login_rate_limit_max, window_seconds=60))
 REGISTER_RATE_LIMIT = register_limiter(RateLimiter(limit=_rate_limit_settings.register_rate_limit_max, window_seconds=3600))
+# 2026-07-10: /auth/refresh and /auth/logout shipped unrated. Both are
+# unauthenticated and both funnel through find_refresh_token()'s
+# bcrypt-verify-against-every-row scan, so an unrated caller gets a free
+# token-probing surface AND a CPU sink. Shared limiter, per-IP, same
+# convention as REPORT_RATE_LIMIT's shared coverage of its 3 endpoints.
+REFRESH_RATE_LIMIT = register_limiter(RateLimiter(limit=_rate_limit_settings.refresh_rate_limit_max, window_seconds=60))
 ANSWER_RATE_LIMIT = register_limiter(RateLimiter(limit=_rate_limit_settings.answer_rate_limit_max, window_seconds=60))
 # Phase H2 (2026-07-07 integrity audit, docs/SONNET_BUILD_PROMPT_LAUNCH.md):
 # /tts, /stt/transcribe, and the three generation endpoints were completely
@@ -329,7 +335,12 @@ def login(body:LoginIn,request:Request,db:Session=Depends(get_db)):
     if valid_tz and valid_tz!=user.timezone: user.timezone=valid_tz
     return auth_response(db,user)
 @router.post("/auth/refresh",response_model=RefreshOut)
-def refresh(body:RefreshIn,db:Session=Depends(get_db)):
+def refresh(body:RefreshIn,request:Request,db:Session=Depends(get_db)):
+    # Rate-limit BEFORE the token lookup: find_refresh_token() bcrypt-checks
+    # against every stored hash, so the limit must gate that cost, and an
+    # invalid-token probe must count against the limit (same principle as
+    # login counting failed password attempts).
+    enforce_rate_limit(REFRESH_RATE_LIMIT,client_ip(request),"refresh_rate_limited","Too many token refresh attempts from this address. Please wait before trying again.")
     refresh_token=find_refresh_token(db,body.refresh_token)
     now_value=utc_now()
     if not refresh_token:
@@ -348,7 +359,10 @@ def refresh(body:RefreshIn,db:Session=Depends(get_db)):
     db.commit()
     return response
 @router.post("/auth/logout",status_code=204)
-def logout(body:LogoutIn,db:Session=Depends(get_db)):
+def logout(body:LogoutIn,request:Request,db:Session=Depends(get_db)):
+    # Same unauthenticated refresh-token-scan surface as /auth/refresh --
+    # shares its limiter and error code (see REFRESH_RATE_LIMIT above).
+    enforce_rate_limit(REFRESH_RATE_LIMIT,client_ip(request),"refresh_rate_limited","Too many token refresh attempts from this address. Please wait before trying again.")
     refresh_token=find_refresh_token(db,body.refresh_token)
     if refresh_token and refresh_token.revoked_at is None:
         refresh_token.revoked_at=utc_now()

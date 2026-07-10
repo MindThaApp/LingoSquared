@@ -10,6 +10,11 @@ endpoints (`/exercises/{id}/answer`, `/reviews/{id}/answer`,
 surface `test_security_payload_bounds.py` already bounds payload size
 on), keyed per-account since those are already authenticated.
 
+Added 2026-07-10: `/auth/refresh` + `/auth/logout` (per-IP, shared
+limiter) — both shipped unrated alongside the refresh-token-rotation
+feature, leaving an unauthenticated endpoint that bcrypt-scans every
+stored refresh token free to hammer for token probing or CPU burn.
+
 The "actually trips" tests monkeypatch each limiter's `.limit` down to a
 small number rather than depending on (or needing hundreds of real HTTP
 round-trips to reach) the real configured limits in `app/api/router.py`
@@ -106,6 +111,75 @@ def test_normal_registration_usage_unaffected(client):
     for i in range(2):
         r = client.post("/auth/register", json={"email": f"ratelimit-reg-normal-{i}@example.com", "password": "password123"})
         assert r.status_code == 201
+
+
+# --- /auth/refresh + /auth/logout (2026-07-10: shipped unrated) ---
+
+def test_refresh_rate_limit_returns_429_after_limit_exceeded(client, monkeypatch):
+    monkeypatch.setattr(router_module.REFRESH_RATE_LIMIT, "limit", 3)
+    reg = client.post("/auth/register", json={"email": "ratelimit-refresh@example.com", "password": "password123"})
+    assert reg.status_code == 201
+    refresh_token = reg.json()["refresh_token"]
+
+    for _ in range(3):
+        r = client.post("/auth/refresh", json={"refresh_token": refresh_token})
+        assert r.status_code == 200
+        # Rotation: each successful refresh revokes the presented token and
+        # returns a new one — must chain, or the second call would be a
+        # (correctly) 401'd reuse rather than a rate-limit sample.
+        refresh_token = r.json()["refresh_token"]
+
+    r = client.post("/auth/refresh", json={"refresh_token": refresh_token})
+    assert r.status_code == 429
+    assert r.json()["error"]["code"] == "refresh_rate_limited"
+    assert r.json()["error"]["retry_after_seconds"] >= 1
+
+
+def test_refresh_rate_limit_also_counts_invalid_token_probes(client, monkeypatch):
+    # The whole point of rating this endpoint is bounding an attacker
+    # probing for valid tokens — 401s must count against the limit, same
+    # principle as login counting wrong-password attempts.
+    monkeypatch.setattr(router_module.REFRESH_RATE_LIMIT, "limit", 3)
+
+    for _ in range(3):
+        r = client.post("/auth/refresh", json={"refresh_token": "not-a-real-token"})
+        assert r.status_code == 401
+
+    r = client.post("/auth/refresh", json={"refresh_token": "not-a-real-token"})
+    assert r.status_code == 429
+    assert r.json()["error"]["code"] == "refresh_rate_limited"
+
+
+def test_logout_shares_refresh_rate_limit(client, monkeypatch):
+    # /auth/logout takes the same unauthenticated refresh-token body and
+    # pays the same full-table bcrypt scan, so it shares REFRESH_RATE_LIMIT.
+    monkeypatch.setattr(router_module.REFRESH_RATE_LIMIT, "limit", 2)
+    reg = client.post("/auth/register", json={"email": "ratelimit-logout@example.com", "password": "password123"})
+    assert reg.status_code == 201
+    refresh_token = reg.json()["refresh_token"]
+
+    for _ in range(2):
+        # Logout is idempotent-shaped (204 whether or not the token matched),
+        # so re-presenting the same token is fine here.
+        r = client.post("/auth/logout", json={"refresh_token": refresh_token})
+        assert r.status_code == 204
+
+    r = client.post("/auth/logout", json={"refresh_token": refresh_token})
+    assert r.status_code == 429
+    assert r.json()["error"]["code"] == "refresh_rate_limited"
+    assert r.json()["error"]["retry_after_seconds"] >= 1
+
+
+def test_normal_refresh_usage_unaffected(client):
+    reg = client.post("/auth/register", json={"email": "ratelimit-refresh-normal@example.com", "password": "password123"})
+    assert reg.status_code == 201
+    refresh_token = reg.json()["refresh_token"]
+    for _ in range(3):
+        r = client.post("/auth/refresh", json={"refresh_token": refresh_token})
+        assert r.status_code == 200
+        refresh_token = r.json()["refresh_token"]
+    r = client.post("/auth/logout", json={"refresh_token": refresh_token})
+    assert r.status_code == 204
 
 
 # --- answer-submission endpoints ---
