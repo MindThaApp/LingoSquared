@@ -1321,6 +1321,34 @@ review-cleared growth.
 
 ## Known limitations / accepted scope
 
+- **`backend/tests/test_content_answer_shapes.py`, added 2026-07-10,
+  currently shows ~226 known FAILING parametrized cases in a plain
+  `pytest -q` run — this is expected, not a regression.** This test
+  grades every compiled exercise in the real corpus through the actual
+  `grade()` path using the exact payload shape the real frontend
+  component submits, and found 227 genuine pre-existing content bugs
+  (one already fixed same-day — a live `right: yes` YAML-boolean-
+  coercion instance in fa unit20). The remaining ~226 break down as:
+  **159 in en-hi** (one systemic bug — every comprehension exercise's
+  `correct_response` is set to the Hindi source text itself while
+  `prompt.options` are English glosses, so nothing can ever match —
+  hi units 3-19, needs a real content-authoring fix, not code); **~60
+  `matching_pairs`** where `prompt.pairs` shows a left item with no
+  corresponding entry in `correct_response` (concentrated in en-nl
+  units 2-10/22/23, and duplicated once each across nl-en/fa-en/prs-en
+  units 30-58 since they share the same underlying English
+  realization); **~6 more `matching_pairs`** phrasing mismatches
+  between `correct_response` and the displayed right-side text; **1
+  `en-fa` `grammar_check`** submitting a plain string against a
+  multi-answer-shaped `correct_response`; **1 `en-fr`
+  `reading_comprehension`** with no `prompt.options` at all
+  (unrenderable). Full per-case detail was in the discovering worker's
+  scratchpad; treat this whole paragraph as the durable record since
+  scratchpad paths don't survive across sessions. **Do not "fix" this
+  by weakening the test** — the failures are real learner-facing
+  unanswerable/ungradeable exercises; fixing the content (a
+  content-lane task) is what should turn them green, not touching the
+  test's own logic.
 - **STT (speak_response/speak_repeat), added 2026-07-06**: client-side
   Whisper must run `dtype: "fp32"` (~150MB one-time browser-cached
   download) — every quantized dtype throws a real onnxruntime-web
