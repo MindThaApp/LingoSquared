@@ -133,6 +133,19 @@ export function VocabularyPage() {
 
   if (progressQuery.isLoading) return <p className="muted">{t("vocabulary.loading")}</p>;
 
+  // Without this, a failed progress fetch falls into the "start learning"
+  // empty state below -- misleading for a user who has real progress.
+  if (progressQuery.isError) {
+    return (
+      <div className="feedback-banner error">
+        <p style={{ margin: "0 0 10px" }}>{t("vocabulary.progress_fetch_error")}</p>
+        <button className="btn btn-block" onClick={() => progressQuery.refetch()}>
+          {t("common.retry")}
+        </button>
+      </div>
+    );
+  }
+
   if (courseOptions.length === 0) {
     return (
       <div className="card" style={{ textAlign: "center" }}>
@@ -247,6 +260,19 @@ export function VocabularyPage() {
       )}
 
       {activeQuery.isLoading && <p className="muted">{t("vocabulary.loading")}</p>}
+
+      {/* Without this, a failed words/mistakes fetch renders nothing at all
+          under the tabs -- no list, no error. */}
+      {activeQuery.isError && (
+        <div className="feedback-banner error">
+          <p style={{ margin: "0 0 10px" }}>
+            {tab === "words" ? t("vocabulary.words_fetch_error") : t("vocabulary.mistakes_fetch_error")}
+          </p>
+          <button className="btn btn-block" onClick={() => activeQuery.refetch()}>
+            {t("common.retry")}
+          </button>
+        </div>
+      )}
 
       {!activeQuery.isLoading && items?.length === 0 && (
         <p className="muted">
