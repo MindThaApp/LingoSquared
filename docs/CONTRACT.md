@@ -945,6 +945,97 @@ with a `retry_after_seconds` field (see the error-shape section above) when
 called again too soon after the same user's most recent attempt for that
 unit, race-safe under concurrent requests.
 
+### Web push notifications (Phase E4), 2026-07-10
+
+Standard Web Push with VAPID — no third-party push provider, no new
+frontend dependency (the browser Push API + `pywebpush` server-side).
+Server config is `VAPID_PUBLIC_KEY` / `VAPID_PRIVATE_KEY` (plus optional
+`VAPID_SUBJECT`, a `mailto:` contact URI) env vars, following the same
+unset-by-default/graceful-degradation convention as the TTS/STT
+credentials: when either key is empty, push is "not configured" and the
+whole feature no-ops honestly (endpoints below return `configured: false`
+/ `503 push_not_configured`; the frontend hides all push UI) — never a
+crash, never a broken button.
+
+`GET /push/vapid-public-key` — unauthenticated capability probe. The
+frontend calls this before rendering ANY push UI; `configured: false`
+means hide the feature entirely:
+
+```json
+{ "public_key": "BPa1…base64url", "configured": true }
+```
+
+(`public_key` is `null` whenever `configured` is `false`. The key is the
+raw base64url-encoded VAPID public key; the frontend converts it to a
+`Uint8Array` for `pushManager.subscribe()`'s `applicationServerKey`.)
+
+`POST /push/subscribe` (auth) — the body is the browser
+`PushSubscription`'s own fields, exactly as `subscription.toJSON()`
+produces them:
+
+```json
+{ "endpoint": "https://fcm.googleapis.com/…", "keys": { "p256dh": "…", "auth": "…" } }
+→ { "subscribed": true }
+```
+
+`endpoint` is the uniqueness key (one row per browser profile + service
+worker registration). Re-subscribing an endpoint that already exists
+re-binds it to the calling user and refreshes its keys — the correct
+behavior for a shared device where a second account logs in. Returns
+`503 push_not_configured` when VAPID keys are unset.
+
+`POST /push/unsubscribe` (auth) — `{ "endpoint": "…" }` →
+`{ "subscribed": false }`. Idempotent (an unknown or other-user endpoint
+is not an error) and deliberately NOT gated on `push_configured`, so a
+client can always clean up a local subscription even after the server's
+keys were rotated away.
+
+Admin trigger — manual, not scheduled (this project has no background
+scheduler/cron infrastructure by design; an external cron or a
+Ramin-initiated call fires it whenever a "reviews due" push should go
+out):
+
+`POST /admin/push/notify-due-reviews` (admin auth) — sends a "Reviews are
+waiting" notification to every user with at least one due, non-suspended
+SRS lexeme:
+
+```json
+→ { "notified_users": 3, "notifications_sent": 4 }
+```
+
+This is the only implemented notification trigger today; any future
+trigger (e.g. streaks-at-risk) must be added to this section before being
+built.
+
+**Push payload contract (server → service worker)** — the data of every
+push message is JSON:
+
+```json
+{ "title": "Reviews are waiting", "body": "You have words due for review — keep your streak going.", "url": "/review" }
+```
+
+The web frontend's service worker (`frontend/public/sw.js`) shows a
+notification with `title`/`body` and, on notification click,
+focuses/opens the app at `url` (an app-relative path, not a full URL).
+Unknown extra fields must be ignored by the SW, never treated as an
+error.
+
+Dead subscriptions (the push service answers a send with 404/410) are
+pruned server-side automatically on the next send attempt; other send
+failures are logged and skipped, never fatal to the whole batch. The
+frontend does not need to re-assert its subscription on every load,
+though re-POSTing `/push/subscribe` with the same endpoint is harmless.
+
+Frontend behavior (web): push UI appears in exactly two places — a
+dismissible "enable notifications" card on HomePage (shown only when the
+server reports `configured: true`, the browser actually supports Web Push
+(`serviceWorker` + `PushManager` + `Notification` all present — iOS
+Safari outside an installed PWA does not), permission is not already
+denied, no subscription exists yet, and the user hasn't dismissed it;
+dismissal persists per-device in localStorage) and an enable/disable
+control in ProfilePage's settings area. Unsupported browsers see neither
+surface — hidden, not disabled.
+
 ## Auth mechanism
 
 JWT bearer token, returned from `/auth/login` and `/auth/register` as
