@@ -1,0 +1,710 @@
+schema_version: "1.1"
+realization_version: "2026.1-draft.1"
+target_language: "hi"
+cefr_level: "A1"
+status: "complete_draft"
+generation_provenance:
+  method: "ai_generated"
+  authoring_system: "claude"
+  human_reviewed: false
+review:
+  status: "unreviewed"
+  required_next_reviewer: "codex"
+  notes: >-
+    Fourteenth Hindi unit, continuing directly from hi/a1_unit13_preferences.yaml
+    (same Priya/Arjun characters, still on तुम terms). Spine outcome confirmed
+    via a direct read of universal_spine.yaml (not assumed from other
+    languages): the outcome entry immediately following
+    universal.a1.preferences.express_preferences (line 416, hi's own
+    unit13) is universal.a1.comparisons.make_basic_comparisons (line 439,
+    "Make and understand basic comparisons between familiar people, objects,
+    or options"). Its `prerequisites:` list (line 442-444) names
+    universal.a1.preferences.express_preferences (hi unit13, done) and
+    universal.a1.numbers.use_basic_numbers (hi unit02, done) -- both
+    satisfied, no gating gap. Cross-checked against on-disk precedent per
+    this task's explicit instruction: `ls docs/content/realizations/nl/`,
+    `pl/`, and `ro/` all independently confirm a1_unit14_comparisons.yaml as
+    their own fourteenth unit, matching hi's own unit01-13 sequence. Sized
+    to 3 lessons matching unit01-13's bootstrap pace. Topic/pacing structure
+    only (recognition-first, minimal new grammar surface, dialogue in
+    lesson03) informed at a purely structural level by this session's own
+    established hi conventions, not by opening any nl/pl/ro file's actual
+    text -- every Hindi sentence below is authored fresh. Also explicitly
+    honored: unit13's own forward-reference (its central grammar decision
+    #3) that deferred any से-based comparative to "unit14 (comparisons, the
+    very next spine outcome, which exists specifically to teach comparison
+    grammar)" -- this unit is exactly that.
+
+    Source access, re-attempted per this task's explicit instruction (not
+    assumed to fail the same way as every prior hi unit): a fresh
+    `firecrawl search` (no query cache reused from any prior session) failed
+    outright with HTTP 402 (payment/quota), the same failure every prior hi
+    unit this session has hit. Fell back to the same FSI "Hindi: An Active
+    Introduction" archive.org item (`Fsi-Hindi-AnActiveIntroduction`),
+    re-downloaded fresh into THIS session's own isolated scratchpad (a fresh
+    Claude session cannot reuse a prior session's scratch files). A fresh
+    regex scan (Python, not eyeballed) of the Internet Archive's own OCR
+    pass (`Fsi-HindiActiveIntroduction-StudentText_djvu.txt`, 94KB,
+    re-downloaded this session) for the Devanagari Unicode block
+    (U+0900-U+097F) returned ZERO matches anywhere in the document --
+    confirmed programmatically, consistent with every prior hi unit's
+    documented zero-Devanagari-match result; this is the fourteenth such
+    confirmation in sequence. Unlike prior units, this scan's English-only
+    surrounding prose happened to include a short comparison-grammar
+    explanation ("Comparison is expressed with than", worked examples like
+    "India is larger than Pakistan", "Kerala is smaller than Madras", and a
+    separate "sabse" (most)-superlative aside) -- disclosed honestly because
+    it INCIDENTALLY CONFIRMS (does not source) that a से-marked "X, Y से ADJ
+    है" construction is the real, standard Hindi comparative, matching this
+    unit's independently-designed central grammar point; it also confirms
+    real Hindi has a sabse-superlative, which this unit deliberately does
+    NOT teach (spine's "basic comparisons" outcome asks for comparatives
+    between two familiar things, not superlatives -- scope discipline, not
+    an oversight). Every Devanagari string in the OCR pass itself was pure
+    mojibake ("€t miff % ^rtt r", "?TR<T 3"fT | I"), confirmed unreadable
+    garbage, not usable Devanagari-as-Latin-transliteration -- matching the
+    exact failure mode confirmed thirteen times before. Per this task's
+    explicit instruction, nothing from either extraction attempt -- neither
+    any mojibake fragment nor any wording of the recovered English framing
+    prose -- was copied, cleaned up, transcribed, or translated anywhere in
+    this file. Every Devanagari string below is this session's own careful,
+    correct rendering of established Modern Standard Hindi, verified
+    character-by-character (codepoint hex dump run directly against every
+    new word before finalizing, see the nasalization discipline paragraph
+    below).
+
+    Central grammar decision #1: से's THIRD disclosed sense. से was already
+    taught as "from" (unit09, "यहाँ से सीधे जाओ") and as the fixed "meet
+    WITH" collocation (unit12, "X से मिलना", a genuine dual usage disclosed
+    there). This unit adds a third, equally real sense: से + adjective is
+    the standard Hindi comparative, "than" -- "X, Y से ADJ है" means "X is
+    more ADJ than Y" (e.g. "अर्जुन प्रिया से बड़ा है", "Arjun is bigger than
+    Priya"). Disclosed explicitly via a dedicated grammar_note
+    (lesson01.teach.se_comparative_grammar) that names both prior senses by
+    unit number before introducing the new one, following unit12's own
+    precedent for disclosing से's second sense.
+
+    Central grammar decision #2: the compared-against noun phrase is always
+    a bare common noun or a proper name in every sentence in this unit
+    (अर्जुन, प्रिया, बैग, टोपी) -- DELIBERATELY never a demonstrative
+    pronoun (यह/वह) or a first/second-person pronoun (मैं/तुम) in the
+    से-marked slot. This was a considered, disclosed design choice: वह's
+    oblique form (उस) and मैं's oblique stem (मुझ, as in "मुझसे") have never
+    been taught as a general rule in this course (only the fixed collocation
+    "मेरे पास" and the idiomatic "तुमसे मिलकर अच्छा लगा" from unit01 use an
+    oblique pronoun form, and neither was ever disclosed as a GENERAL
+    declension rule) -- introducing pronoun-oblique comparatives here would
+    add real, undisclosed grammar beyond the spine's "basic comparisons"
+    scope. Common nouns (बैग, टोपी) and proper names (अर्जुन, प्रिया) never
+    decline before से in Hindi, so every से-marked comparison target in this
+    unit is safe without teaching oblique case at all. Possessives
+    (मेरा/तुम्हारी) are used only in nominative subject position in this
+    file (never modifying a से-marked noun), for the same reason -- avoiding
+    the undisclosed मेरा→मेरे-style oblique-adjective shift.
+
+    Central grammar decision #3: comparative-sentence adjective agreement
+    targets the SUBJECT, never the से-marked compared item -- e.g. "प्रिया
+    अर्जुन से छोटी है" uses छोटी (feminine) because प्रिया (the subject) is
+    feminine, regardless of अर्जुन's (masculine) gender. Disclosed via a
+    dedicated grammar_note (lesson01.teach.agreement_grammar) as a direct,
+    explicit extension of the already-established -आ/-ई adjective-agreement
+    pattern (मेरा/मेरी, बड़ा/बड़ी, सस्ता/सस्ती), now applied specifically to
+    comparative sentences.
+
+    Central grammar decision #4: ज़्यादा generalizes beyond पसंद है. Unit13
+    taught "X ज़्यादा पसंद है" (prefer) as a fixed collocation. This unit
+    discloses explicitly (lesson02.teach.zyada_mehnga_grammar) that ज़्यादा
+    can precede ANY adjective to intensify a comparison -- "बैग टोपी से
+    ज़्यादा महंगा है" ("the bag is even more expensive than the hat") uses
+    the exact same "X, Y से ADJ है" frame from decision #1, with ज़्यादा
+    simply inserted before the adjective. Not a new grammar point, a
+    disclosed generalization of an already-taught word's placement rule.
+
+    New vocabulary this unit: लंबा/लंबी (tall/long, lesson01) and नया/नई
+    (new, lesson02) -- two adjective pairs, both following the
+    already-established -आ/-ई masculine/feminine agreement pattern
+    (बड़ा/बड़ी, छोटा/छोटी, सस्ता/सस्ती, महंगा/महंगी), so no new agreement
+    RULE is introduced, only two new adjective STEMS applying the existing
+    rule. Also formally (re-)declared as this FILE's own introduced_tokens
+    (see the tokenizer-footgun paragraph below) though already known
+    corpus-wide: अर्जुन, प्रिया, है, कौन, या, मैं, हूँ, और, भी, का.
+
+    Same-speaker-distractor check (the nl unit44-50 regression class):
+    performed explicitly. The three listen_select exercises (lesson01.
+    exercise04, lesson02.exercise04, lesson03.exercise06) are each a single
+    standalone, non-dialogue utterance with no other speaker/other lines in
+    the same clip -- structurally cannot trigger this bug class, matching
+    unit09-13's own precedent, now applied a sixth time. lesson03's dialogue
+    lines themselves carry NO `media_asset_key` at all (plain TextBlocks,
+    matching unit08-13's established pattern that hi dialogue is
+    text-only, not audio, for dialogue_comprehension purposes) -- the two
+    dialogue_comprehension exercises in lesson03 (exercise01/02) are TEXT
+    reading-comprehension, each shown line was chosen to directly contain
+    its own correct answer (exercise01 shows line03 "हाँ। मेरा बैग महंगा है
+    -- यह टोपी से ज़्यादा महंगा है।" and asks what Arjun's bag is like,
+    answer directly stated as "महंगा"; exercise02 shows line06 "ठीक है, ठीक
+    है! पर टोपी बैग से नई भी है।" and asks what is new, answer directly
+    stated as "टोपी") -- neither requires inference across unseen lines, and
+    neither distractor is itself a fact stated in the shown line.
+
+    Cross-check of every concrete fact stated across the whole unit
+    (AUTHORING_GUIDE §11), not just within the dialogue: this unit
+    establishes exactly six comparative facts, restated (never contradicted)
+    across lessons: (1) Arjun is bigger/older than Priya (lesson01 phrase +
+    lesson03 line05 "मैं बड़ा हूँ"); (2) Priya is smaller/younger than Arjun
+    (lesson01 phrase, the direct complementary restatement of fact 1, not a
+    conflicting claim); (3) Arjun is taller than Priya (lesson01 vocabulary
+    example + lesson03 line05 "मैं...लंबा भी हूँ"); (4) the hat is cheaper
+    than the bag (lesson02 phrase + lesson03 line02 + priya_note); (5) the
+    bag is more expensive than the hat (lesson02 phrase + intensified
+    restatement + lesson03 line03, the direct complement of fact 4, not a
+    conflict); (6) the hat is newer than the bag (lesson02 phrase +
+    lesson03 line06 + priya_note). Every restatement across all three
+    lessons and the closing reading note agrees with these six facts; none
+    is ever contradicted.
+
+    Nasalization/spelling discipline, disclosed per unit07-13 precedent,
+    verified this round via a direct Python codepoint hex dump of every NEW
+    word before finalizing (not eyeballed): लंबा (U+0932 U+0902 U+092C
+    U+093E) and लंबी (U+0932 U+0902 U+092C U+0940) both use anusvara U+0902
+    (a homorganic nasal before the following stop consonant ब) -- correct,
+    matches the already-established anusvara convention (हैं/मुझे/तुम्हें/
+    पसंद/संगीत from unit13), NOT chandrabindu. नया (U+0928 U+092F U+093E)
+    and नई (U+0928 U+0908) carry no nasalization at all -- no decision
+    needed, confirmed by the same hex-dump pass. हूँ (reused exactly from
+    unit01, U+0939 U+0942 U+0901) correctly keeps its own already-settled
+    chandrabindu U+0901 unchanged -- reused, not re-decided.
+
+    Untaught-vocabulary validator footgun (already documented by unit07-13,
+    re-confirmed live during this unit's authoring, and directly re-read
+    from `scripts/compile_content.py`'s `validate_untaught_vocabulary`
+    before relying on it): the function only checks each exercise's own
+    `tested_text` against the accumulated `introduced_tokens` set for the
+    FILE so far (resets per file, accumulates across lessons within one
+    file). Every token used in ANY exercise's tested_text below --
+    including names/function words already known corpus-wide (अर्जुन,
+    प्रिया, है, कौन, या, मैं, हूँ, और, भी, का) -- was explicitly re-declared
+    in THIS file's own introduced_tokens before its first tested_text use:
+    अर्जुन/प्रिया/है via lesson01.teach.arjun_priya_review; कौन/या via
+    lesson01.teach.kaun_ya_review; मैं/हूँ via lesson03.teach.main_hun_review;
+    और/भी via lesson03.teach.aur_bhi_review; का via lesson03.teach.ka_review.
+    Genuinely new words (लंबा/लंबी, नया/नई) and reused-but-file-local words
+    (बड़ा/बड़ी, छोटा/छोटी, से, सस्ता/महंगा, सस्ती/महंगी, ज़्यादा, टोपी, बैग)
+    were likewise all declared before first tested_text use. Words used
+    ONLY in dialogue/example/reading-note TEXT and never in a tested_text
+    (देखो-style fillers were deliberately avoided rather than left
+    undeclared; ठीक/कल/फिर/मिलते/सच appear only in lesson03's dialogue
+    closing lines, never in any tested_text, and were deliberately left OUT
+    of introduced_tokens, matching unit12/13's own precedent for
+    dialogue-only words) -- confirmed by grep of every tested_text/
+    word_bank/fill-blank value before finalizing.
+
+    Word-order duplicate-token check (unit10-13's own standing
+    consideration, re-confirmed clean here): every `word_order` exercise in
+    this unit uses a word_bank with zero repeated tokens (checked by hand
+    against each exercise's own word_bank array below).
+
+    fill_in_blank ambiguity check (AUTHORING_GUIDE §17), including a
+    directly-inherited consideration from unit13: unit13 explicitly
+    considered and REJECTED blanking ज़्यादा (found it synonym-adjacent
+    with बहुत in some frames) and never blanked it in any fill_in_blank.
+    This unit hits the exact same risk in lesson02.exercise10's frame
+    ("बैग टोपी से ___ महंगा है", intending ज़्यादा) -- ज़्यादा was
+    considered and REJECTED for that blank for the same reason (बहुत could
+    also grammatically slot into that exact position with a related but
+    distinct meaning), so the blank was redesigned to target the ADJECTIVE
+    (महंगा) instead, with ज़्यादा left in the visible frame -- ज़्यादा
+    itself, like in unit13, is only tested via multiple_choice/word_order/
+    listen_select/speak_response/dialogue lines in this unit, never
+    fill_in_blank. Every other blank in this unit has a unique,
+    unambiguous answer given its English instruction (which states the
+    exact intended translation, e.g. "Complete: The hat is newer than the
+    bag" uniquely identifies नई over सस्ती/महंगी, which would otherwise also
+    fit the bare grammatical slot) -- matching unit13's own established
+    translation-cued fill_in_blank convention exactly.
+
+course:
+  realization_key: hi.a1
+  target_language_first: true
+  dialect: hi_standard
+  register_policy: >-
+    Continues unit01-13's aap/tum split. This unit's dialogue (lesson03)
+    stays entirely in तुम between Priya and Arjun, matching every prior
+    unit's continuation of their established friendship -- no new stranger
+    character is introduced here.
+
+media_assets:
+  - {content_key: hi.a1.audio.comp.arjun_priya_se_lamba_hai.01, language: hi, text: "अर्जुन प्रिया से लंबा है।", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - {content_key: hi.a1.audio.comp.bag_topi_se_zyada_mehnga_hai.01, language: hi, text: "बैग टोपी से ज़्यादा महंगा है।", voice_hint: neutral_adult_clear, status: pending_generation}
+  - {content_key: hi.a1.audio.comp.topi_bag_se_nai_hai.01, language: hi, text: "टोपी बैग से नई है।", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+
+units:
+  - content_key: hi.a1.unit14.comparisons
+    title: "तुलना"
+    section: reading_writing
+    spine_outcome_ids:
+      - universal.a1.comparisons.make_basic_comparisons
+    planned_lesson_count: 3
+
+    lessons:
+      - content_key: hi.a1.unit14.lesson01.se_tulna
+        title: "अर्जुन प्रिया से बड़ा है"
+        spine_outcome_id: universal.a1.comparisons.make_basic_comparisons
+        teaching:
+          - content_key: hi.a1.unit14.lesson01.teach.arjun_priya_review
+            kind: vocabulary
+            target: {text: "अर्जुन, प्रिया, है", language_code: hi, direction: ltr}
+            introduced_tokens: ["अर्जुन", "प्रिया", "है"]
+            example:
+              - {text: "अर्जुन ठीक है।", language_code: hi, direction: ltr}
+              - {text: "प्रिया ठीक है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit14.lesson01.teach.bada_badi_review
+            kind: vocabulary
+            target: {text: "बड़ा, बड़ी", language_code: hi, direction: ltr}
+            introduced_tokens: ["बड़ा", "बड़ी"]
+            example:
+              - {text: "मेरा बड़ा भाई दिल्ली में रहता है।", language_code: hi, direction: ltr}
+              - {text: "मेरी बड़ी बहन दिल्ली में रहती है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit14.lesson01.teach.chota_choti_review
+            kind: vocabulary
+            target: {text: "छोटा, छोटी", language_code: hi, direction: ltr}
+            introduced_tokens: ["छोटा", "छोटी"]
+            example:
+              - {text: "मेरा छोटा भाई अभी छात्र है।", language_code: hi, direction: ltr}
+              - {text: "मेरी छोटी बहन अभी छात्र है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit14.lesson01.teach.se_comparative_grammar
+            kind: grammar_note
+            target: {text: "'से' पहले 'यहाँ से सीधे जाओ' (यूनिट 9, matlab 'from') और 'प्रिया से मिला' (यूनिट 12, matlab 'with') में सीखा था; अब यह तुलना के लिए भी आता है: 'X, Y से ADJ है' का मतलब है 'X is more ADJ than Y' -- जैसे 'अर्जुन प्रिया से बड़ा है'।", language_code: hi, direction: ltr}
+            introduced_tokens: ["से"]
+          - content_key: hi.a1.unit14.lesson01.teach.arjun_bada_phrase
+            kind: phrase
+            target: {text: "अर्जुन प्रिया से बड़ा है।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a1.unit14.lesson01.teach.lamba_lambi
+            kind: vocabulary
+            target: {text: "लंबा, लंबी", language_code: hi, direction: ltr}
+            introduced_tokens: ["लंबा", "लंबी"]
+            example:
+              - {text: "मेरा भाई लंबा है।", language_code: hi, direction: ltr}
+              - {text: "मेरी बहन लंबी है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit14.lesson01.teach.agreement_grammar
+            kind: grammar_note
+            target: {text: "तुलना के वाक्य में विशेषण (जैसे बड़ा/बड़ी, छोटा/छोटी) हमेशा विषय (subject) के लिंग से मेल खाता है, 'से' के बाद वाले शब्द के नहीं -- जैसे 'प्रिया अर्जुन से छोटी है' में 'छोटी' प्रिया (स्त्रीलिंग विषय) से मेल खाता है, अर्जुन से नहीं।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a1.unit14.lesson01.teach.priya_chota_phrase
+            kind: phrase
+            target: {text: "प्रिया अर्जुन से छोटी है।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a1.unit14.lesson01.teach.kaun_ya_review
+            kind: vocabulary
+            target: {text: "कौन, या", language_code: hi, direction: ltr}
+            introduced_tokens: ["कौन", "या"]
+            example: {text: "कौन बड़ा है, अर्जुन या प्रिया?", language_code: hi, direction: ltr}
+        exercises:
+          - content_key: hi.a1.unit14.lesson01.exercise01.select_lamba_meaning
+            type: multiple_choice
+            tested_text: "लंबा"
+            prompt:
+              target_blocks:
+                - {text: "लंबा", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit14.lesson01.exercise02.select_bada_meaning
+            type: multiple_choice
+            tested_text: "बड़ा"
+            prompt:
+              target_blocks:
+                - {text: "बड़ा", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit14.lesson01.exercise03.select_arjun_bada_meaning
+            type: multiple_choice
+            tested_text: "अर्जुन प्रिया से बड़ा है"
+            prompt:
+              target_blocks:
+                - {text: "अर्जुन प्रिया से बड़ा है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit14.lesson01.exercise04.listen_arjun_prese_lamba
+            type: listen_select
+            tested_text: "अर्जुन प्रिया से लंबा है"
+            media_asset_key: hi.a1.audio.comp.arjun_priya_se_lamba_hai.01
+            prompt: {target_blocks: []}
+          - content_key: hi.a1.unit14.lesson01.exercise05.select_chota_meaning
+            type: multiple_choice
+            tested_text: "छोटा"
+            prompt:
+              target_blocks:
+                - {text: "छोटा", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit14.lesson01.exercise06.match_lesson01_words
+            type: matching_pairs
+            tested_text: "बड़ा बड़ी छोटा छोटी लंबा लंबी से कौन"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "बड़ा", right: "big / older (m.)"}
+              - {left: "बड़ी", right: "big / older (f.)"}
+              - {left: "छोटा", right: "small / younger (m.)"}
+              - {left: "छोटी", right: "small / younger (f.)"}
+              - {left: "लंबा", right: "tall / long (m.)"}
+              - {left: "लंबी", right: "tall / long (f.)"}
+              - {left: "से", right: "than"}
+              - {left: "कौन", right: "who"}
+          - content_key: hi.a1.unit14.lesson01.exercise07.order_arjun_prese_bada
+            type: word_order
+            tested_text: "अर्जुन प्रिया से बड़ा है"
+            prompt: {target_blocks: []}
+            word_bank: ["अर्जुन", "प्रिया", "से", "बड़ा", "है"]
+          - content_key: hi.a1.unit14.lesson01.exercise08.order_priya_arjunse_chota
+            type: word_order
+            tested_text: "प्रिया अर्जुन से छोटी है"
+            prompt: {target_blocks: []}
+            word_bank: ["प्रिया", "अर्जुन", "से", "छोटी", "है"]
+          - content_key: hi.a1.unit14.lesson01.exercise09.fill_arjun_bada
+            type: fill_in_blank
+            tested_text: "से"
+            prompt:
+              target_blocks:
+                - {text: "अर्जुन प्रिया ___ बड़ा है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit14.lesson01.exercise10.fill_priya_chota
+            type: fill_in_blank
+            tested_text: "छोटी"
+            prompt:
+              target_blocks:
+                - {text: "प्रिया अर्जुन से ___ है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit14.lesson01.exercise11.reply_kaun_bada
+            type: dialogue_response
+            tested_text: "अर्जुन बड़ा है"
+            prompt:
+              target_blocks:
+                - {text: "कौन बड़ा है, अर्जुन या प्रिया?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit14.lesson01.exercise12.fix_priya_chota
+            type: grammar_check
+            tested_text: "प्रिया अर्जुन से छोटी है"
+            prompt:
+              target_blocks:
+                - {text: "प्रिया अर्जुन से छोटा है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit14.lesson01.exercise13.speak_arjun_prese_lamba
+            type: speak_response
+            tested_text: "अर्जुन प्रिया से लंबा है"
+            prompt:
+              target_blocks:
+                - {text: "बोलो: अर्जुन प्रिया से लंबा है।", language_code: hi, direction: ltr}
+
+      - content_key: hi.a1.unit14.lesson02.vastu_tulna
+        title: "टोपी बैग से सस्ती है"
+        spine_outcome_id: universal.a1.comparisons.make_basic_comparisons
+        teaching:
+          - content_key: hi.a1.unit14.lesson02.teach.topi_bag_review
+            kind: vocabulary
+            target: {text: "टोपी, बैग", language_code: hi, direction: ltr}
+            introduced_tokens: ["टोपी", "बैग"]
+            example:
+              - {text: "यह टोपी अच्छी है।", language_code: hi, direction: ltr}
+              - {text: "यह बैग अच्छा है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit14.lesson02.teach.sasta_mehnga_review
+            kind: vocabulary
+            target: {text: "सस्ता, महंगा", language_code: hi, direction: ltr}
+            introduced_tokens: ["सस्ता", "महंगा"]
+            example:
+              - {text: "बैग सस्ता है।", language_code: hi, direction: ltr}
+              - {text: "बैग महंगा है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit14.lesson02.teach.sasti_mehngi_note
+            kind: grammar_note
+            target: {text: "'सस्ता' और 'महंगा' स्त्रीलिंग शब्दों के साथ 'सस्ती' और 'महंगी' बनते हैं (यूनिट 7 से) -- जैसे 'टोपी सस्ती है'।", language_code: hi, direction: ltr}
+            introduced_tokens: ["सस्ती", "महंगी"]
+          - content_key: hi.a1.unit14.lesson02.teach.se_object_phrase
+            kind: phrase
+            target: {text: "टोपी बैग से सस्ती है।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a1.unit14.lesson02.teach.zyada_review
+            kind: vocabulary
+            target: {text: "ज़्यादा", language_code: hi, direction: ltr}
+            introduced_tokens: ["ज़्यादा"]
+            example: {text: "मुझे चाय ज़्यादा पसंद है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit14.lesson02.teach.zyada_mehnga_grammar
+            kind: grammar_note
+            target: {text: "'ज़्यादा' पहले सिर्फ़ 'X ज़्यादा पसंद है' (यूनिट 13) में सीखा था; अब यह किसी भी विशेषण से पहले आ सकता है ताकि तुलना और मज़बूत हो -- 'बैग टोपी से ज़्यादा महंगा है' का मतलब है 'the bag is even more expensive than the hat'।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a1.unit14.lesson02.teach.zyada_mehnga_phrase
+            kind: phrase
+            target: {text: "बैग टोपी से ज़्यादा महंगा है।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a1.unit14.lesson02.teach.naya_nai
+            kind: vocabulary
+            target: {text: "नया, नई", language_code: hi, direction: ltr}
+            introduced_tokens: ["नया", "नई"]
+            example:
+              - {text: "बैग नया है।", language_code: hi, direction: ltr}
+              - {text: "टोपी नई है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit14.lesson02.teach.topi_nai_phrase
+            kind: phrase
+            target: {text: "टोपी बैग से नई है।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+        exercises:
+          - content_key: hi.a1.unit14.lesson02.exercise01.select_naya_meaning
+            type: multiple_choice
+            tested_text: "नया"
+            prompt:
+              target_blocks:
+                - {text: "नया", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit14.lesson02.exercise02.select_mehnga_meaning
+            type: multiple_choice
+            tested_text: "महंगा"
+            prompt:
+              target_blocks:
+                - {text: "महंगा", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit14.lesson02.exercise03.select_topi_sasti_meaning
+            type: multiple_choice
+            tested_text: "टोपी बैग से सस्ती है"
+            prompt:
+              target_blocks:
+                - {text: "टोपी बैग से सस्ती है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit14.lesson02.exercise04.listen_bag_topise_zyada_mehnga
+            type: listen_select
+            tested_text: "बैग टोपी से ज़्यादा महंगा है"
+            media_asset_key: hi.a1.audio.comp.bag_topi_se_zyada_mehnga_hai.01
+            prompt: {target_blocks: []}
+          - content_key: hi.a1.unit14.lesson02.exercise05.select_sasta_meaning
+            type: multiple_choice
+            tested_text: "सस्ता"
+            prompt:
+              target_blocks:
+                - {text: "सस्ता", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit14.lesson02.exercise06.match_lesson02_words
+            type: matching_pairs
+            tested_text: "सस्ता महंगा नया नई टोपी बैग ज़्यादा या"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "सस्ता", right: "cheap"}
+              - {left: "महंगा", right: "expensive"}
+              - {left: "नया", right: "new (m.)"}
+              - {left: "नई", right: "new (f.)"}
+              - {left: "टोपी", right: "hat"}
+              - {left: "बैग", right: "bag"}
+              - {left: "ज़्यादा", right: "more"}
+              - {left: "या", right: "or"}
+          - content_key: hi.a1.unit14.lesson02.exercise07.order_topi_bagse_sasti
+            type: word_order
+            tested_text: "टोपी बैग से सस्ती है"
+            prompt: {target_blocks: []}
+            word_bank: ["टोपी", "बैग", "से", "सस्ती", "है"]
+          - content_key: hi.a1.unit14.lesson02.exercise08.order_bag_topise_zyada_mehnga
+            type: word_order
+            tested_text: "बैग टोपी से ज़्यादा महंगा है"
+            prompt: {target_blocks: []}
+            word_bank: ["बैग", "टोपी", "से", "ज़्यादा", "महंगा", "है"]
+          - content_key: hi.a1.unit14.lesson02.exercise09.fill_topi_nai
+            type: fill_in_blank
+            tested_text: "नई"
+            prompt:
+              target_blocks:
+                - {text: "टोपी बैग से ___ है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit14.lesson02.exercise10.fill_bag_zyada_mehnga
+            type: fill_in_blank
+            tested_text: "महंगा"
+            prompt:
+              target_blocks:
+                - {text: "बैग टोपी से ज़्यादा ___ है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit14.lesson02.exercise11.reply_topi_ya_bag
+            type: dialogue_response
+            tested_text: "टोपी सस्ती है"
+            prompt:
+              target_blocks:
+                - {text: "टोपी सस्ती है या बैग?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit14.lesson02.exercise12.fix_topi_nai
+            type: grammar_check
+            tested_text: "टोपी बैग से नई है"
+            prompt:
+              target_blocks:
+                - {text: "टोपी बैग से नया है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit14.lesson02.exercise13.speak_bag_topise_mehnga
+            type: speak_response
+            tested_text: "बैग टोपी से महंगा है"
+            prompt:
+              target_blocks:
+                - {text: "बोलो: बैग टोपी से महंगा है।", language_code: hi, direction: ltr}
+
+      - content_key: hi.a1.unit14.lesson03.arjun_priya_tulna
+        title: "अर्जुन और प्रिया: तुलना"
+        spine_outcome_id: universal.a1.comparisons.make_basic_comparisons
+        teaching:
+          - content_key: hi.a1.unit14.lesson03.teach.review_words
+            kind: vocabulary
+            target: {text: "बड़ा, छोटा, लंबा, नया", language_code: hi, direction: ltr}
+            introduced_tokens: ["बड़ा", "छोटा", "लंबा", "नया"]
+            example:
+              - {text: "अर्जुन बड़ा है।", language_code: hi, direction: ltr}
+              - {text: "प्रिया छोटी है।", language_code: hi, direction: ltr}
+              - {text: "अर्जुन लंबा है।", language_code: hi, direction: ltr}
+              - {text: "बैग नया है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit14.lesson03.teach.main_hun_review
+            kind: vocabulary
+            target: {text: "मैं, हूँ", language_code: hi, direction: ltr}
+            introduced_tokens: ["मैं", "हूँ"]
+            example: {text: "मैं ठीक हूँ।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit14.lesson03.teach.aur_bhi_review
+            kind: vocabulary
+            target: {text: "और, भी", language_code: hi, direction: ltr}
+            introduced_tokens: ["और", "भी"]
+            example:
+              - {text: "मुझे चाय और कॉफ़ी पसंद है।", language_code: hi, direction: ltr}
+              - {text: "मुझे भी पसंद है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit14.lesson03.teach.ka_review
+            kind: vocabulary
+            target: {text: "का", language_code: hi, direction: ltr}
+            introduced_tokens: ["का"]
+            example: {text: "अर्जुन का बैग नया है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit14.lesson03.teach.dialogue.line01
+            kind: dialogue
+            target:
+              text: "प्रिया, यह मेरा नया बैग है।"
+              language_code: hi
+              direction: ltr
+              speaker: Arjun
+            introduced_tokens: []
+          - content_key: hi.a1.unit14.lesson03.teach.dialogue.line02
+            kind: dialogue
+            target:
+              text: "अच्छा बैग है! पर टोपी बैग से सस्ती है।"
+              language_code: hi
+              direction: ltr
+              speaker: Priya
+            introduced_tokens: []
+          - content_key: hi.a1.unit14.lesson03.teach.dialogue.line03
+            kind: dialogue
+            target:
+              text: "हाँ। मेरा बैग महंगा है -- यह टोपी से ज़्यादा महंगा है।"
+              language_code: hi
+              direction: ltr
+              speaker: Arjun
+            introduced_tokens: []
+          - content_key: hi.a1.unit14.lesson03.teach.dialogue.line04
+            kind: dialogue
+            target:
+              text: "ठीक है, ठीक है! अर्जुन, कौन बड़ा है, तुम या मैं?"
+              language_code: hi
+              direction: ltr
+              speaker: Priya
+            introduced_tokens: []
+          - content_key: hi.a1.unit14.lesson03.teach.dialogue.line05
+            kind: dialogue
+            target:
+              text: "मैं बड़ा हूँ, और मैं लंबा भी हूँ!"
+              language_code: hi
+              direction: ltr
+              speaker: Arjun
+            introduced_tokens: []
+          - content_key: hi.a1.unit14.lesson03.teach.dialogue.line06
+            kind: dialogue
+            target:
+              text: "ठीक है, ठीक है! पर टोपी बैग से नई भी है।"
+              language_code: hi
+              direction: ltr
+              speaker: Priya
+            introduced_tokens: []
+          - content_key: hi.a1.unit14.lesson03.teach.dialogue.line07
+            kind: dialogue
+            target:
+              text: "हाँ, यह सच है। कल फिर मिलते हैं?"
+              language_code: hi
+              direction: ltr
+              speaker: Arjun
+            introduced_tokens: []
+          - content_key: hi.a1.unit14.lesson03.teach.dialogue.line08
+            kind: dialogue
+            target:
+              text: "ठीक है! कल मिलते हैं।"
+              language_code: hi
+              direction: ltr
+              speaker: Priya
+            introduced_tokens: []
+          - content_key: hi.a1.unit14.lesson03.teach.grammar_summary
+            kind: grammar_note
+            target: {text: "इस यूनिट के तीन मुख्य नियम: (1) 'X, Y से ADJ है' का मतलब है 'X is more ADJ than Y'; (2) ADJ हमेशा विषय (X) के लिंग से मेल खाता है, Y से नहीं; (3) 'ज़्यादा' को ADJ से पहले जोड़ने से तुलना और मज़बूत हो जाती है, जैसे 'X, Y से ज़्यादा ADJ है'।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a1.unit14.lesson03.teach.priya_note
+            kind: reading
+            target: {text: "अर्जुन बड़ा है, और वह लंबा भी है। पर मेरी टोपी अच्छी है -- टोपी बैग से सस्ती है, और टोपी बैग से नई भी है। - प्रिया", language_code: hi, direction: ltr}
+            introduced_tokens: []
+        exercises:
+          - content_key: hi.a1.unit14.lesson03.exercise01.comprehend_arjun_bag_mehnga
+            type: dialogue_comprehension
+            tested_text: "महंगा"
+            prompt:
+              target_blocks:
+                - {text: "हाँ। मेरा बैग महंगा है -- यह टोपी से ज़्यादा महंगा है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit14.lesson03.exercise02.comprehend_topi_nai
+            type: dialogue_comprehension
+            tested_text: "टोपी"
+            prompt:
+              target_blocks:
+                - {text: "ठीक है, ठीक है! पर टोपी बैग से नई भी है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit14.lesson03.exercise03.select_main_bada_lamba_meaning
+            type: multiple_choice
+            tested_text: "मैं बड़ा हूँ, और मैं लंबा भी हूँ"
+            prompt:
+              target_blocks:
+                - {text: "मैं बड़ा हूँ, और मैं लंबा भी हूँ।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit14.lesson03.exercise04.read_note_arjun_bada
+            type: reading_comprehension
+            tested_text: "बड़ा"
+            prompt:
+              target_blocks:
+                - {text: "अर्जुन बड़ा है, और वह लंबा भी है। पर मेरी टोपी अच्छी है -- टोपी बैग से सस्ती है, और टोपी बैग से नई भी है। - प्रिया", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit14.lesson03.exercise05.read_note_topi_sasti
+            type: reading_comprehension
+            tested_text: "सस्ती"
+            prompt:
+              target_blocks:
+                - {text: "अर्जुन बड़ा है, और वह लंबा भी है। पर मेरी टोपी अच्छी है -- टोपी बैग से सस्ती है, और टोपी बैग से नई भी है। - प्रिया", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit14.lesson03.exercise06.listen_topi_bagse_nai
+            type: listen_select
+            tested_text: "टोपी बैग से नई है"
+            media_asset_key: hi.a1.audio.comp.topi_bag_se_nai_hai.01
+            prompt: {target_blocks: []}
+          - content_key: hi.a1.unit14.lesson03.exercise07.match_lesson03_review
+            type: matching_pairs
+            tested_text: "बड़ा छोटा लंबा नया सस्ता महंगा से ज़्यादा कौन या टोपी बैग"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "बड़ा", right: "big / older"}
+              - {left: "छोटा", right: "small / younger"}
+              - {left: "लंबा", right: "tall / long"}
+              - {left: "नया", right: "new"}
+              - {left: "सस्ता", right: "cheap"}
+              - {left: "महंगा", right: "expensive"}
+              - {left: "से", right: "than"}
+              - {left: "ज़्यादा", right: "more"}
+              - {left: "कौन", right: "who"}
+              - {left: "या", right: "or"}
+              - {left: "टोपी", right: "hat"}
+              - {left: "बैग", right: "bag"}
+          - content_key: hi.a1.unit14.lesson03.exercise08.order_topi_bagse_nai
+            type: word_order
+            tested_text: "टोपी बैग से नई है"
+            prompt: {target_blocks: []}
+            word_bank: ["टोपी", "बैग", "से", "नई", "है"]
+          - content_key: hi.a1.unit14.lesson03.exercise09.fill_topi_sasti
+            type: fill_in_blank
+            tested_text: "सस्ती"
+            prompt:
+              target_blocks:
+                - {text: "टोपी बैग से ___ है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit14.lesson03.exercise10.fix_main_bada
+            type: grammar_check
+            tested_text: "मैं बड़ा हूँ"
+            prompt:
+              target_blocks:
+                - {text: "मैं बड़ी हूँ।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit14.lesson03.exercise11.reply_arjun_bag_kaisa
+            type: dialogue_response
+            tested_text: "अर्जुन का बैग महंगा है"
+            prompt:
+              target_blocks:
+                - {text: "अर्जुन का बैग कैसा है, सस्ता या महंगा?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit14.lesson03.exercise12.write_topi_bag_compare
+            type: writing_prompt
+            tested_text: "टोपी बैग से सस्ती है"
+            prompt:
+              target_blocks:
+                - {text: "लिखो: टोपी सस्ती है या बैग?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit14.lesson03.exercise13.speak_topi_bagse_sasti
+            type: speak_response
+            tested_text: "टोपी बैग से सस्ती है"
+            prompt:
+              target_blocks:
+                - {text: "बोलो: टोपी बैग से सस्ती है।", language_code: hi, direction: ltr}
