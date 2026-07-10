@@ -1,0 +1,69 @@
+name: Mobile Preview
+
+# Fires on merge to main when mobile/ or its @lingo/shared dependency
+# changed. Publishes a JS-only EAS Update when possible (fast, no native
+# build needed); falls back to a full EAS preview build only when the
+# native "fingerprint" changed (a new native dependency/config that an
+# OTA JS update can't cover). Skeleton only -- the actual
+# fingerprint-diffing logic is intentionally simple for Phase 0 and can be
+# hardened later (e.g. comparing against the last successfully-published
+# fingerprint via `eas build:list`/`eas update:list` instead of always
+# diffing against HEAD~1).
+#
+# Requires an EXPO_TOKEN repo secret (an EAS access token from
+# https://expo.dev/accounts/[account]/settings/access-tokens) -- not yet
+# created, Ramin needs to set this up once he has an expo.dev account.
+on:
+  push:
+    branches: [main]
+    paths:
+      - "mobile/**"
+      - "packages/shared/**"
+      - "package.json"
+      - "package-lock.json"
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Check whether the native fingerprint changed
+        id: fingerprint
+        working-directory: mobile
+        run: |
+          npx expo-updates fingerprint:generate --platform all > /tmp/fingerprint-head.json
+          if git show HEAD~1:mobile/app.json > /dev/null 2>&1; then
+            git worktree add /tmp/mobile-prev HEAD~1 --quiet
+            (cd /tmp/mobile-prev/mobile && npx expo-updates fingerprint:generate --platform all > /tmp/fingerprint-prev.json) || true
+          fi
+          if [ -f /tmp/fingerprint-prev.json ] && diff -q /tmp/fingerprint-head.json /tmp/fingerprint-prev.json > /dev/null 2>&1; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Publish EAS Update (JS-only, fingerprint unchanged)
+        if: steps.fingerprint.outputs.changed == 'false'
+        working-directory: mobile
+        run: eas update --branch preview --message "Preview update from ${{ github.sha }}" --non-interactive
+
+      - name: Trigger EAS preview build (native fingerprint changed)
+        if: steps.fingerprint.outputs.changed == 'true'
+        working-directory: mobile
+        run: eas build --profile preview --platform all --non-interactive --no-wait

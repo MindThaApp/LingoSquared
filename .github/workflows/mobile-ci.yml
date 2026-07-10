@@ -1,0 +1,39 @@
+name: Mobile CI
+
+# Typecheck + lint the Expo app on every PR that touches it, or the
+# @lingo/shared package it depends on (a change there can break mobile/
+# even if no file under mobile/ itself changed). Phase 0 scaffold --
+# intentionally does not build/run the app, just proves the code compiles.
+on:
+  pull_request:
+    paths:
+      - "mobile/**"
+      - "packages/shared/**"
+      - "package.json"
+      - "package-lock.json"
+      - ".github/workflows/mobile-ci.yml"
+
+jobs:
+  typecheck-and-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      # Root install, not `cd mobile && npm install` -- mobile/ is an npm
+      # workspace member and depends on @lingo/shared via workspace linking,
+      # same as frontend/'s own CI must do.
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        working-directory: mobile
+        run: npm run typecheck
+
+      - name: Lint
+        working-directory: mobile
+        run: npm run lint
