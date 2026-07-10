@@ -48,7 +48,7 @@ export function HomePage() {
   return (
     <div>
       {streak?.freeze_used_today && (
-        <div className="card" style={{ marginBottom: 12, textAlign: "center" }}>
+        <div className="card" role="status" style={{ marginBottom: 12, textAlign: "center" }}>
           <span>
             <Snowflake size={16} style={{ color: "var(--accent)", verticalAlign: -3 }} />{" "}
             {t("home.streak_freeze_used")}

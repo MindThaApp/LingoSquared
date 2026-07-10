@@ -84,7 +84,7 @@ function PracticeCard({
         }
       />
       {submitError && !result && (
-        <div className="feedback-banner error">
+        <div className="feedback-banner error" role="alert">
           <p style={{ margin: "0 0 10px" }}>{t("practice.submit_error")}</p>
           <button className="btn btn-block" onClick={handleRetryAnswer} disabled={submitting}>
             {t("common.retry")}
@@ -94,7 +94,9 @@ function PracticeCard({
       {result && (() => {
         const status = resultStatus(result);
         return (
-          <div className={`feedback-banner ${status}`}>
+          // role="status" (implicit aria-live="polite") - announces the grading
+          // result to screen readers when the banner mounts.
+          <div className={`feedback-banner ${status}`} role="status">
             <p style={{ margin: 0 }}>
               {status === "correct" && t("practice.correct", { xp: result.xp_awarded })}
               {status === "almost" &&
@@ -111,7 +113,7 @@ function PracticeCard({
         );
       })()}
       {unavailable && (
-        <div className="feedback-banner">
+        <div className="feedback-banner" role="status">
           <p style={{ margin: 0 }}>{t("practice.item_unavailable")}</p>
         </div>
       )}
@@ -282,7 +284,7 @@ export function PracticeFeedPage() {
       )}
 
       {xpToast !== null && (
-        <div className="practice-xp-toast stat-xp">+{xpToast} XP</div>
+        <div className="practice-xp-toast stat-xp" role="status">+{xpToast} XP</div>
       )}
     </div>
   );
