@@ -6,9 +6,20 @@ target_language: nl
 status: complete_draft
 generation_provenance: {method: ai_generated, authoring_system: claude, human_reviewed: false}
 review:
-  status: unreviewed
-  required_next_reviewer: claude
+  status: reviewed
+  required_next_reviewer: null
   notes: >-
+    Fresh-context review 2026-07-10 (Claude): reviewed alongside the
+    realization file, which had a real §11 fact-consistency bug (lesson05's
+    reading recap contradicted lesson04's dialogue about who cut/fried
+    which vegetable) -- fixed on both sides, see the realization file's
+    review notes for the full detail. This overlay's lesson05.teach.tekst
+    gloss and exercise02/exercise04 correct_option/distractors/
+    accepted_answers/feedback were updated to match the corrected
+    realization text. Everything else read clean: same-speaker distractor
+    audit, boolean-coercion scan, compiler validate (0 errors/0 warnings
+    after the fix), jargon-leak grep, Dutch quality read.
+
     New English-to-Dutch overlay for the new A1 cooking unit (realizing
     the new spine outcome universal.a1.cooking.prepare_simple_meal),
     authored fresh at schema_version 1.1 alongside its realization -- see
@@ -64,7 +75,7 @@ teaching:
   nl.a1.unit40.lesson04.teach.omar_maak_klaar: {title: "Omar prepares the meal", gloss: "Omar: Good, I'll prepare the meal."}
   nl.a1.unit40.lesson04.teach.lotte_proef_je_al: {title: "Lotte asks if he's tasting it", gloss: "Lotte: Are you tasting it already?"}
 
-  nl.a1.unit40.lesson05.teach.tekst: {title: "Lotte and Omar cook together", gloss: "Lotte and Omar cook together in the kitchen at Omar's place in Utrecht. Lotte cuts the onion and the tomato. Omar fries the onion and the tomato in the pan. Omar prepares the meal. Lotte tastes the meal. The meal is tasty!", note: "Recaps what Lotte and Omar did while cooking, mirroring the post/neighborhood/household units' own comparison-reading shape."}
+  nl.a1.unit40.lesson05.teach.tekst: {title: "Lotte and Omar cook together", gloss: "Lotte and Omar cook together in the kitchen at Omar's place in Utrecht. Lotte cuts the onion. Omar fries the tomato in the pan. Omar prepares the meal. Lotte tastes the meal. The meal is tasty!", note: "Recaps what Lotte and Omar did while cooking, mirroring the post/neighborhood/household units' own comparison-reading shape."}
   nl.a1.unit40.lesson05.teach.eten_is_lekker: {title: "The meal is ready and tasty", gloss: "The meal is ready and it's tasty!"}
 
   nl.a1.unit40.lesson06.teach.sander_hoi: {title: "Sander greets them", gloss: "Sander: Hi! What are you preparing?"}
@@ -229,10 +240,10 @@ exercises:
     feedback: "Lotte en Omar koken samen in de keuken bij Omar in Utrecht."
   nl.a1.unit40.lesson05.exercise02.read_wat_snijdt_lotte:
     instruction: "Read the text and choose what Lotte cuts."
-    correct_option: "The onion and the tomato."
-    distractors: ["The onion and the pan.", "The tomato and the meal.", "The text doesn't say."]
-    accepted_answers: [{value: "The onion and the tomato.", status: correct}]
-    feedback: "Lotte snijdt de ui en de tomaat."
+    correct_option: "The onion."
+    distractors: ["The tomato.", "The onion and the pan.", "The text doesn't say."]
+    accepted_answers: [{value: "The onion.", status: correct}]
+    feedback: "Lotte snijdt de ui."
   nl.a1.unit40.lesson05.exercise03.read_hoe_smaakt_eten:
     instruction: "Read the text and choose how the meal tastes."
     correct_option: "Tasty."
@@ -241,7 +252,7 @@ exercises:
     feedback: "Het eten is lekker!"
   nl.a1.unit40.lesson05.exercise04.match_koken_recap:
     instruction: "Match each Dutch word or phrase to what the text says about it."
-    accepted_answers: [{value: [{left: "de ui", right: "the onion"}, {left: "de tomaat", right: "the tomato"}, {left: "de pan", right: "the pan"}, {left: "Lotte snijdt de ui en de tomaat.", right: "Lotte cuts the onion and the tomato."}, {left: "Omar maakt het eten klaar.", right: "Omar prepares the meal."}, {left: "Het eten is lekker.", right: "The meal is tasty."}], status: correct}]
+    accepted_answers: [{value: [{left: "de ui", right: "the onion"}, {left: "de tomaat", right: "the tomato"}, {left: "de pan", right: "the pan"}, {left: "Lotte snijdt de ui.", right: "Lotte cuts the onion."}, {left: "Omar maakt het eten klaar.", right: "Omar prepares the meal."}, {left: "Het eten is lekker.", right: "The meal is tasty."}], status: correct}]
     feedback: "Lotte and Omar split the work: cutting, frying, and preparing the meal together."
   nl.a1.unit40.lesson05.exercise05.listen_koken_samen:
     instruction: "Listen and choose what the speaker says."

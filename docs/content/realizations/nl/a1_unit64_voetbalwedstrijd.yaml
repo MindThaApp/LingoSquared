@@ -5,9 +5,43 @@ cefr_level: A1
 generation_provenance: {method: ai_generated, authoring_system: claude, human_reviewed: false}
 status: complete_draft
 review:
-  status: unreviewed
-  required_next_reviewer: claude
+  status: reviewed
+  required_next_reviewer: null
   notes: >-
+    2026-07-10 fresh-context review (Claude, zero access to the authoring
+    reasoning) found and FIXED one real, mechanical bug: lesson02
+    (het_team_en_de_speler), lesson03 (het_doelpunt_en_de_stand), lesson04
+    (het_bord_bij_de_ingang), lesson05 (bij_de_kassa_van_het_stadion), and
+    lesson06 (omar_en_nina_na_de_wedstrijd) all had their `title` field
+    written in ENGLISH directly in this Dutch-target realization file
+    (e.g. lesson02's title was "The team and the player" instead of "Het
+    team en de speler") -- a copy-paste artifact from the overlay's own
+    English titles, and a genuine deviation from every other unit in
+    units 59-66, which all correctly give the realization's own lesson
+    titles in Dutch (confirmed by grep across units 59-63, all clean).
+    Since `course.target_language_first: true`, this would have shown
+    English lesson titles as the PRIMARY title in the app instead of
+    Dutch. Fixed by translating each title back to Dutch using the
+    content_key's own snake_case phrase (which already spells out the
+    correct Dutch title) and the corpus's established lesson-title
+    pattern (matching "Het bord bij de X", "Bij de kassa van de/het X",
+    "X en Y na de Z" used identically across unit59-63/65/66); lesson01's
+    title was already correct Dutch and untouched. Re-ran
+    `compile_content.py validate` after the fix together with units
+    59-66 as one batch -- still 0 errors/0 warnings. Everything else
+    checked clean: same-speaker distractor integrity in both multi-turn
+    dialogues (lesson05 kassa_wedstrijd, lesson06 na_de_wedstrijd) -- no
+    violation found; a recursive boolean-coercion scan (clean);
+    matching_pairs/word_order answer shapes match the frontend's real
+    submission shape; every exercise type used is a real
+    ExerciseRenderer.tsx case; independently re-verified this file's own
+    S11 price/time cross-check (ticket price vijftien euro x 2 kaartjes =
+    dertig euro, matching the dialogue; kickoff "Om acht uur" matches the
+    sign's stated "acht uur" begin time exactly) -- confirmed consistent;
+    no jargon leaks; story continuity with unit63's closing scene
+    confirmed consistent. Dutch grammar/register read as natural and
+    correct throughout. Native-speaker review is still planned.
+
     New Dutch A1 unit after unit63 (boat tour). Confirmed programmatically
     before adding anything: a yaml.safe_load walk of every nl a1_unit*.yaml
     realization file's spine_outcome_id/spine_outcome_ids against every
@@ -241,7 +275,7 @@ units:
           - {content_key: nl.a1.unit64.lesson01.exercise07.respond_vanavond_naar_de_wedstrijd_gaan, type: dialogue_response, tested_text: "Zullen we vanavond naar de wedstrijd gaan", prompt: {target_blocks: [{text: "Say in Dutch: shall we go to the match tonight?", language_code: en, direction: ltr}]}}
 
       - content_key: nl.a1.unit64.lesson02.het_team_en_de_speler
-        title: "The team and the player"
+        title: "Het team en de speler"
         spine_outcome_id: universal.a1.sports_event.attend_a_sports_match
         teaching:
           - content_key: nl.a1.unit64.lesson02.teach.team
@@ -265,7 +299,7 @@ units:
           - {content_key: nl.a1.unit64.lesson02.exercise07.respond_team_en_speler, type: dialogue_response, tested_text: "Ik zie het team en de speler", prompt: {target_blocks: [{text: "Say in Dutch: I see the team and the player.", language_code: en, direction: ltr}]}}
 
       - content_key: nl.a1.unit64.lesson03.het_doelpunt_en_de_stand
-        title: "The goal and the score"
+        title: "Het doelpunt en de stand"
         spine_outcome_id: universal.a1.sports_event.attend_a_sports_match
         teaching:
           - content_key: nl.a1.unit64.lesson03.teach.doelpunt
@@ -289,7 +323,7 @@ units:
           - {content_key: nl.a1.unit64.lesson03.exercise07.respond_doelpunt_en_stand, type: dialogue_response, tested_text: "Ik zie het doelpunt en de stand", prompt: {target_blocks: [{text: "Say in Dutch: I see the goal and the score.", language_code: en, direction: ltr}]}}
 
       - content_key: nl.a1.unit64.lesson04.het_bord_bij_de_ingang
-        title: "The sign at the entrance"
+        title: "Het bord bij de ingang"
         spine_outcome_id: universal.a1.sports_event.attend_a_sports_match
         teaching:
           - content_key: nl.a1.unit64.lesson04.teach.scorebord
@@ -315,7 +349,7 @@ units:
           - {content_key: nl.a1.unit64.lesson04.exercise07.write_hoe_laat_begint_de_wedstrijd, type: writing_prompt, tested_text: "Hoe laat begint de wedstrijd", prompt: {target_blocks: [{text: "Write in Dutch: what time does the match begin?", language_code: en, direction: ltr}]}}
 
       - content_key: nl.a1.unit64.lesson05.bij_de_kassa_van_het_stadion
-        title: "At the stadium ticket counter"
+        title: "Bij de kassa van het stadion"
         spine_outcome_id: universal.a1.sports_event.attend_a_sports_match
         teaching:
           - {content_key: nl.a1.unit64.lesson05.teach.medewerker_groet, kind: dialogue, target: {text: "Goedenavond! Kan ik u helpen?", language_code: nl, direction: ltr, speaker: "de medewerker"}, introduced_tokens: [Goedenavond, Kan, ik, u, helpen]}
@@ -334,7 +368,7 @@ units:
           - {content_key: nl.a1.unit64.lesson05.exercise08.write_hoe_laat_begint_de_wedstrijd_dialoog, type: writing_prompt, tested_text: "Hoe laat begint de wedstrijd", prompt: {target_blocks: [{text: "Write in Dutch: what time does the match begin?", language_code: en, direction: ltr}]}}
 
       - content_key: nl.a1.unit64.lesson06.omar_en_nina_na_de_wedstrijd
-        title: "Omar and Nina after the match"
+        title: "Omar en Nina na de wedstrijd"
         spine_outcome_id: universal.a1.sports_event.attend_a_sports_match
         teaching:
           - content_key: nl.a1.unit64.lesson06.teach.winnaar

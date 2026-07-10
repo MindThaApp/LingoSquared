@@ -5,9 +5,34 @@ cefr_level: A1
 generation_provenance: {method: ai_generated, authoring_system: claude, human_reviewed: false}
 status: complete_draft
 review:
-  status: unreviewed
-  required_next_reviewer: claude
+  status: reviewed
+  required_next_reviewer: null
   notes: >-
+    2026-07-10 fresh-context review (Claude) found and fixed ONE real
+    cross-lesson factual inconsistency per AUTHORING_GUIDE.md §11.
+    Lesson04's dialogue has Sanne quote a flat "een wasbeurt kost vijf
+    euro" (a wash costs five euros) BEFORE Nina even picks a wash
+    temperature, but lesson05's own price-list card originally showed
+    the price varying by degree (30°=€4, 60°=€5) -- a direct
+    contradiction, and it made lesson04 exercise03's "Four euros"
+    distractor unintentionally a real, correct price under the unit's
+    own price list. Resolved by making the sign flat ("Wasbeurt 30 of
+    60 graden €5.") rather than rewriting the dialogue, since the flat
+    "vijf euro" framing was already established repeatedly across
+    lesson02's 7 exercises, its audio assets, and lesson04's dialogue
+    audio -- changing the sign touched far fewer places. Lesson05's two
+    reading_comprehension exercises were repurposed (one now tests the
+    flat wash price, the other now tests the dryer price) rather than
+    left as a redundant near-duplicate pair, and the matching_pairs
+    exercise and overlay entries were updated to match. Re-validated
+    clean after the fix: 0 errors/0 warnings standalone and as part of
+    the full en-nl A1 corpus. Everything else in this unit was checked
+    clean: no same-speaker distractor collisions in either dialogue
+    (wasserette_afgeven, wasserette_lotte), no boolean-coercion issues,
+    matching_pairs/word_order answer shapes are correct, every exercise
+    type used is registered, no jargon leaks, and the Dutch reads
+    naturally and with consistent register.
+
     New Dutch A1 unit after unit52. A safe_load diff of every
     spine_outcome_id/spine_outcome_ids across every
     docs/content/realizations/nl/a1_unit*.yaml file against every
@@ -216,16 +241,16 @@ units:
           - content_key: nl.a1.unit53.lesson05.teach.prijslijst_tekst
             kind: reading
             target:
-              text: "Prijslijst: Wasbeurt 30 graden €4. Wasbeurt 60 graden €5. Droger 10 minuten €1."
+              text: "Prijslijst: Wasbeurt 30 of 60 graden €5. Droger 10 minuten €1."
               language_code: nl
               direction: ltr
-            introduced_tokens: [Prijslijst, Wasbeurt, "30", graden, "4", Wasbeurt, "60", graden, "5", Droger, "10", minuten, "1"]
+            introduced_tokens: [Prijslijst, Wasbeurt, "30", of, "60", graden, "5", Droger, "10", minuten, "1"]
           - {content_key: nl.a1.unit53.lesson05.teach.betalen_munten_kaart, kind: phrase, target: {text: "Ik betaal met munten of met kaart.", language_code: nl, direction: ltr}, introduced_tokens: [Ik, betaal, met, munten, of, met, kaart]}
         exercises:
-          - {content_key: nl.a1.unit53.lesson05.exercise01.read_wasbeurt_30_prijs, type: reading_comprehension, tested_text: "Wasbeurt 30 graden €4", prompt: {target_blocks: [{text: "According to the price list, what does a 30-degree wash cost?", language_code: en, direction: ltr}]}}
-          - {content_key: nl.a1.unit53.lesson05.exercise02.read_wasbeurt_60_prijs, type: reading_comprehension, tested_text: "Wasbeurt 60 graden €5", prompt: {target_blocks: [{text: "According to the price list, what does a 60-degree wash cost?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit53.lesson05.exercise01.read_wasbeurt_prijs, type: reading_comprehension, tested_text: "Wasbeurt 30 of 60 graden €5", prompt: {target_blocks: [{text: "According to the price list, what does a wash cost, at either temperature?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit53.lesson05.exercise02.read_droger_prijs, type: reading_comprehension, tested_text: "Droger 10 minuten €1", prompt: {target_blocks: [{text: "According to the price list, what does the dryer cost for 10 minutes?", language_code: en, direction: ltr}]}}
           - {content_key: nl.a1.unit53.lesson05.exercise03.read_document_type, type: reading_comprehension, tested_text: Prijslijst, prompt: {target_blocks: [{text: "What kind of document is this?", language_code: en, direction: ltr}]}}
-          - {content_key: nl.a1.unit53.lesson05.exercise04.match_prijslijst, type: matching_pairs, tested_text: "droger prijslijst", prompt: {target_blocks: []}, pairs: [{left: droger, right: dryer}, {left: prijslijst, right: "price list"}, {left: "Prijslijst: Wasbeurt 30 graden €4.", right: "Price list: wash 30 degrees €4."}, {left: "Wasbeurt 60 graden €5.", right: "Wash 60 degrees €5."}, {left: "Ik gebruik de droger.", right: "I use the dryer."}, {left: "Ik betaal met munten of met kaart.", right: "I pay with coins or with card."}]}
+          - {content_key: nl.a1.unit53.lesson05.exercise04.match_prijslijst, type: matching_pairs, tested_text: "droger prijslijst", prompt: {target_blocks: []}, pairs: [{left: droger, right: dryer}, {left: prijslijst, right: "price list"}, {left: "Prijslijst: Wasbeurt 30 of 60 graden €5.", right: "Price list: wash 30 or 60 degrees €5."}, {left: "Droger 10 minuten €1.", right: "Dryer 10 minutes €1."}, {left: "Ik gebruik de droger.", right: "I use the dryer."}, {left: "Ik betaal met munten of met kaart.", right: "I pay with coins or with card."}]}
           - {content_key: nl.a1.unit53.lesson05.exercise05.listen_ik_betaal_met_munten_of_kaart, type: listen_select, tested_text: "Ik betaal met munten of met kaart", media_asset_key: nl.a1.audio.wasserette.ik_betaal_met_munten_of_kaart.01, prompt: {target_blocks: []}}
           - {content_key: nl.a1.unit53.lesson05.exercise06.write_betalen_munten_kaart, type: writing_prompt, tested_text: "Ik betaal met munten of met kaart", prompt: {target_blocks: [{text: "Write in Dutch: I pay with coins or with card.", language_code: en, direction: ltr}]}}
 
