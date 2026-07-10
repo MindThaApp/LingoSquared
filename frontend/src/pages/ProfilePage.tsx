@@ -19,6 +19,41 @@ export function ProfilePage() {
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState<string | null>(null);
+  const [exporting, setExporting] = useState(false);
+  const [exportError, setExportError] = useState<string | null>(null);
+
+  async function handleDownloadData() {
+    setExporting(true);
+    setExportError(null);
+    try {
+      const data = await AuthApi.exportData();
+      // Standard vanilla download: serialize to a Blob, mint an object URL,
+      // click a synthetic anchor. No library needed, works in every
+      // supported browser.
+      const blob = new Blob([JSON.stringify(data, null, 2)], {
+        type: "application/json",
+      });
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement("a");
+      anchor.href = url;
+      anchor.download = `lingosquared-export-${new Date().toISOString().slice(0, 10)}.json`;
+      document.body.appendChild(anchor);
+      anchor.click();
+      anchor.remove();
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      // 401 means the session expired — apiFetch's unauthorized handler has
+      // already logged us out, nothing to show here. Anything else: say so
+      // and let the user retry.
+      setExportError(
+        err instanceof ApiError && err.status !== 401
+          ? err.message
+          : t("profile.export_error"),
+      );
+    } finally {
+      setExporting(false);
+    }
+  }
 
   async function handleDeleteAccount() {
     setDeleting(true);
@@ -142,6 +177,23 @@ export function ProfilePage() {
       <button className="btn btn-secondary btn-block" onClick={logout} style={{ marginTop: 8 }}>
         {t("profile.logout")}
       </button>
+
+      {/* Data export lives directly above account deletion on purpose:
+          export-before-delete is the natural flow, and deletion below is
+          one click away and irreversible. */}
+      <div className="card" style={{ marginTop: 16 }}>
+        <h2 style={{ marginTop: 0 }}>{t("profile.export_title")}</h2>
+        <p className="muted">{t("profile.export_body")}</p>
+        {exportError && <div className="form-error">{exportError}</div>}
+        <button
+          type="button"
+          className="btn btn-secondary btn-block"
+          disabled={exporting}
+          onClick={handleDownloadData}
+        >
+          {exporting ? t("profile.export_downloading") : t("profile.download_data")}
+        </button>
+      </div>
 
       <div className="card" style={{ borderColor: "var(--incorrect)", marginTop: 16 }}>
         <h2 style={{ marginTop: 0, color: "var(--incorrect)" }}>{t("profile.danger_title")}</h2>
