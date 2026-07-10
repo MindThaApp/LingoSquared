@@ -1,0 +1,678 @@
+schema_version: "1.1"
+realization_version: "2026.1-draft.1"
+target_language: "hi"
+cefr_level: "A1"
+status: "complete_draft"
+generation_provenance:
+  method: "ai_generated"
+  authoring_system: "claude"
+  human_reviewed: false
+review:
+  status: "unreviewed"
+  required_next_reviewer: "codex"
+  notes: >-
+    Eleventh Hindi unit, continuing directly from hi/a1_unit10_routines.yaml
+    (same Priya/Arjun characters, still on तुम terms with each other). Spine
+    outcome confirmed via a direct read of universal_spine.yaml (not just
+    assumed from other languages): the outcome entry immediately following
+    universal.a1.routines.describe_daily_routine (line 342, hi's own
+    unit10) is universal.a1.plans.make_simple_plans (line 366, "Propose,
+    accept, decline, and schedule a simple near-future plan"), whose own
+    declared prerequisites (lines 369-371) are universal.a1.time.
+    ask_tell_time and universal.a1.dates.exchange_calendar_dates -- already
+    realized as hi's own unit04 and unit03 respectively. Cross-checked
+    against on-disk precedent per this task's explicit instruction: `ls
+    docs/content/realizations/nl/`, `pl/`, and `ro/` all independently
+    confirm a1_unit11_plans.yaml as their own eleventh unit, matching hi's
+    own unit01-10 sequence, which has independently tracked the same topic
+    order as those three languages throughout. Sized to 3 lessons matching
+    unit01-10's bootstrap pace (nl's own unit11 runs 6 lessons -- not
+    followed here per this task's explicit instruction to keep hi's
+    established 3-lesson pace). A brief skeletal look at nl/a1_unit11_
+    plans.yaml's own lesson breakdown (propose -> accept/decline -> confirm
+    day/time -> read an invitation -> write/confirm a message -> full
+    dialogue) informed this unit's topic sequencing at a structural level
+    only (this is the standing skeleton-share-not-text-share policy already
+    used for unit10 and earlier units) -- zero Hindi or Dutch text,
+    phrasing, character names beyond the already-established Priya/Arjun,
+    or exercise wording was copied; every Hindi sentence below is authored
+    fresh for this file.
+
+    Source access, re-attempted per this task's explicit instruction (not
+    assumed to fail the same way as every prior hi unit): a fresh
+    `firecrawl search` (no query cache reused from any prior session)
+    failed outright with the same HTTP 402 (payment/quota) error every
+    prior hi unit this session has hit -- quota still has not reset, fully
+    disclosed rather than silently skipped. Fell back to the same FSI
+    "Hindi: An Active Introduction" archive.org item
+    (`Fsi-Hindi-AnActiveIntroduction`), re-downloaded fresh into this
+    session's own isolated scratchpad (a fresh Claude session cannot reuse
+    a prior session's scratch files) -- confirmed the same 143-page PDF
+    (`pdfinfo`: 143 pages, Adobe Acrobat 7.08 Image Conversion Plug-in,
+    byte-identical page count to every prior unit's own check). (1)
+    `pdftotext -layout` against the raw PDF again returned a near-empty
+    143-byte file, and `pdffonts` returned a completely empty table --
+    confirming yet again this is a pure page-image scan with no embedded
+    text layer at all, an eleventh confirmation of the same fact across
+    this whole session's worth of hi units. (2) A fresh regex scan
+    (Python, not eyeballed) of the Internet Archive's own OCR pass
+    (`Fsi-HindiActiveIntroduction-StudentText_djvu.txt`, 94KB) for the
+    Devanagari Unicode block (U+0900-U+097F) returned ZERO matches anywhere
+    in the document -- confirmed programmatically. (3) A fresh grep of the
+    same OCR file for planning/scheduling/proposal-topic English framing
+    this time found real, directly on-topic incidental corroboration:
+    "Let's go to eat." and "Shall we start?" (a direct English gloss of a
+    grammatical construction used to propose/suggest an action, genuinely
+    on-topic for this unit's own "propose a plan" outcome) -- but the
+    Hindi-script line immediately preceding each hit is pure OCR mojibake
+    ("*STHT % fWt |" and ".efn; ?"), confirmed by eye to be garbage, not
+    readable Devanagari-as-Latin-transliteration, matching the exact
+    failure mode confirmed ten times over across units 01-10, now an
+    eleventh time against this unit's own topic. Per this task's explicit
+    instruction, nothing from either extraction attempt -- neither any
+    mojibake fragment nor any wording of the recovered English framing
+    prose -- was used, cleaned up, transcribed, or guessed at anywhere in
+    this file. Every Devanagari string below is this session's own
+    careful, correct rendering of established Modern Standard Hindi,
+    verified character-by-character.
+
+    Central grammar decision #1, genuinely new but deliberately built as an
+    extension of an already-established pattern, not invented from
+    nothing: proposing a joint activity uses the already-live "चलो +
+    verb-stem-ता/ती/ते + हैं" construction -- a real, working idiom already
+    used incidentally three times before this unit ever teaches it as its
+    own point (unit01 "चलो शुरू करते हैं" = "let's start"; unit06 "चलो, कुछ
+    खाते हैं!" = "let's eat something"; unit07 "चलो, कुछ खरीदते हैं!" =
+    "let's buy something"). This unit's lesson01 grammar_note formally
+    states the pattern ("चलो" + habitual-plural verb form = "Let's ___")
+    and extends it to two new activities (watching a movie, drinking tea
+    together) rather than inventing a separate "let's" construction (e.g.
+    the subjunctive) that would require new grammar this course hasn't
+    built toward yet.
+
+    Central grammar decision #2, a deliberate simplification, disclosed:
+    declining a plan does NOT use a modal "can" construction (verb +
+    सकना), which would be genuinely new grammar this course hasn't
+    introduced. Instead this unit teaches the natural, equally common
+    Hindi pattern of declining via a state-of-being adjective + reason:
+    "माफ़ करना, मैं व्यस्त हूँ। मुझे काम है।" (Sorry, I'm busy. I have
+    work.) -- both halves reuse already-established grammar in full: the
+    copula हूँ (unit01/10) for "व्यस्त हूँ" (busy), and the dative-
+    possession मुझे...है pattern already taught in unit06/07's "मुझे...
+    चाहिए" (I want/need) for "मुझे काम है" (I have work). This keeps the
+    unit's new-grammar surface area to genuinely new vocabulary plus one
+    new pronoun (see below), not a second new verb paradigm on top of the
+    "let's" construction already being introduced.
+
+    Central grammar decision #3, a genuinely new addition, disclosed: this
+    unit introduces हम ("we") as the course's first formal first-person-
+    plural pronoun. Its habitual-present conjugation reuses the SAME
+    -ते + हैं ending already established for तुम (unit10) and वे (unit10's
+    paradigm note) -- no new conjugation paradigm, only a new pronoun
+    slotting into an ending already taught. Used in "हम कब मिलते हैं?"
+    (When do we meet?), reusing कब (unit10) and मिलते हैं (established
+    since unit01/04/10's own "फिर/कल मिलते हैं" closings, where the subject
+    is conventionally dropped via natural Hindi ellipsis -- this unit is
+    the first to make हम explicit).
+
+    A fourth, smaller lexical decision: scheduling a day uses the
+    already-established यस/no marker क्या (first taught unit01, e.g. "क्या
+    यह तुम्हारी पहली बार है?", "क्या तुम योग करती हो?") rather than a new
+    "which day" interrogative (किस दिन/कौन-सा दिन) -- "क्या रविवार को ठीक
+    है?" (Is Sunday OK?) proposes a specific already-named day rather than
+    asking an open "which day" question, so the simpler, already-taught
+    यस/no-question form suffices and no new interrogative grammar is
+    needed. Weekday names (शनिवार, रविवार) reuse unit03's own vocabulary,
+    re-listed in this file's own introduced_tokens per the standing
+    tokenizer footgun (see below) since the taught set resets per file.
+
+    Same-speaker-distractor check (the nl unit44-50 regression class):
+    performed explicitly. All three listen_select exercises (lesson01.
+    exercise05, lesson02.exercise04, lesson03.exercise07) are each a
+    single standalone, non-dialogue utterance with no other speaker/other
+    lines in the same clip -- the "distractor must not be something the
+    same speaker also says elsewhere in this audio" bug class structurally
+    cannot occur here, since there is no "elsewhere in this audio" for a
+    standalone phrase (same reasoning as unit09/unit10's own listen_select
+    exercises, now applied a third time). The two dialogue_comprehension
+    exercises in lesson03 (exercise01/02) are TEXT reading-comprehension
+    (the learner reads the actual dialogue line, no audio/`media_asset_key`
+    involved), matching unit08/09/10's own dialogue_comprehension pattern
+    -- distractors were checked by hand to ensure they are not themselves
+    also true answers to the question asked: exercise01 ("प्रिया कब व्यस्त
+    है?", correct="शनिवार को") uses "रविवार को" (the day they actually
+    meet, line04/08) and "चार बजे" (the confirmed meeting time, line06/07)
+    as distractors -- both are real facts stated elsewhere in the SAME
+    dialogue, but neither answers THIS specific question about when Priya
+    is busy; exercise02 (correct="रविवार", asking what day they finally
+    meet, shown line04 which states it directly) uses "शनिवार" (Arjun's
+    original, declined proposal day, stated in line01/02) as a distractor
+    -- a real fact stated elsewhere that doesn't answer this specific
+    question about the finally-confirmed day. Each dialogue_comprehension
+    exercise's shown `target_blocks` line was deliberately chosen to
+    directly contain its own correct answer (not require inference across
+    lines the learner isn't shown), after an earlier draft of exercise02
+    was caught asking about the day while only showing line07 (which
+    states the confirmed TIME but never repeats the day) -- fixed by
+    re-pointing it at line04, which states "रविवार" directly.
+
+    Cross-check of every concrete fact stated across the whole unit
+    (AUTHORING_GUIDE §11), not just within the dialogue: Arjun first
+    proposes a movie on Saturday; Priya is busy Saturday (she has work);
+    Priya proposes tea together on Sunday instead; both confirm Sunday at
+    4 o'clock. No exercise anywhere in lesson01-03 states a conflicting
+    day or time. The invitation-message reading card (lesson03) restates
+    exactly this same confirmed plan (Sunday, 4 o'clock, tea) with no
+    numeric or day conflict against the dialogue. The 3 listen_select
+    clips and the dialogue-external teaching-card examples all use either
+    an unattributed generic "हम"/"मैं" (not tied to either character's own
+    established facts) or numbers/days that don't collide with the
+    dialogue's own stated plan.
+
+    Nasalization/spelling discipline, disclosed per unit07/08/09/10
+    precedent: this unit introduces genuinely NO new nasalized vocabulary
+    at all -- फ़िल्म, देखते, साथ, पीते, विचार, व्यस्त, माफ़, करना, हम,
+    संदेश, and every weekday name reused from unit03 (शनिवार, रविवार) have
+    zero anusvara/chandrabindu marks. The only nasalized forms appearing
+    anywhere in this unit are हूँ and हैं, both reused unchanged from their
+    already-settled unit01/unit10 spellings (चंद्रबिंदु after ू for हूँ;
+    plain anusvara for हैं, following the same paradigm unit10 already
+    formalized) -- no new spelling decision was needed this unit, only
+    reuse of already-settled conventions. फ़िल्म uses the nuqta-marked फ़
+    (U+095E, correct for the loanword "film," matching this course's
+    existing loanword convention already used for शुक्रिया/रोज़/तारीख़-
+    style borrowings), not the plain फ (U+092B).
+
+    Untaught-vocabulary validator footgun (already documented by
+    unit07/08/09/10, re-confirmed live during this unit's authoring, and
+    caught twice live while drafting this file's own exercises -- once for
+    अच्छा/है being tested in lesson01 before either was re-listed, fixed by
+    folding both into lesson01's own teach.achha_vichar card alongside
+    विचार; once for चार/बजे never being re-listed anywhere despite being
+    tested by several lesson02/lesson03 exercises, fixed by adding a new
+    lesson02 teach.samay_review vocabulary card): every
+    unit01/03/04/06/07/10-originated word reused here (चलो, चाय, कॉफ़ी,
+    अर्जुन, प्रिया, मैं, है, हूँ, हैं, हो, तुम, को, मुझे, काम, कब, मिलते,
+    ठीक, क्या, शनिवार, रविवार, चार, बजे, कितने, हाँ, नमस्ते, अच्छा) was
+    re-added to this file's own introduced_tokens at or before its first
+    point of use
+    IN AN EXERCISE (`tested_text`), since `validate_untaught_vocabulary`'s
+    `taught` set is declared fresh per realization file. Confirmed by
+    direct reading of `scripts/compile_content.py`'s
+    `validate_untaught_vocabulary`: it only cross-checks each exercise's
+    `tested_text` against the accumulated `introduced_tokens` set (built
+    from ALL teaching cards in the current lesson and every earlier lesson
+    of this same file, processed as a completed pass before that lesson's
+    own exercises are checked) -- teaching-card `target`/`example` text and
+    exercise `prompt.target_blocks` text are NOT themselves checked against
+    the taught set, only `tested_text`/multi-answer `accepted_answers`-
+    backing fields are. This was used deliberately: teaching-card example
+    sentences and exercise prompts (e.g. lesson03's dialogue-comprehension
+    questions, the invitation-message reading card) freely use natural
+    connective words like और ("and") and नमस्ते ("hello") that are NOT
+    re-listed in this file's own introduced_tokens, since no exercise's
+    `tested_text` anywhere in this file tests either of those two specific
+    words -- confirmed by a direct grep of every `tested_text`/
+    `correct_response` value in this file before finalizing.
+
+    Word-order duplicate-token check (unit10's own new consideration,
+    re-confirmed clean here): every `word_order`/`listen_order` exercise
+    in this unit uses a word_bank with zero repeated tokens (checked by
+    hand against each exercise's own word_bank array below) -- no sentence
+    in this unit's exercises needed the two-clause repeated-subject
+    phrasing that forced unit10's own workaround.
+
+course:
+  realization_key: hi.a1
+  target_language_first: true
+  dialect: hi_standard
+  register_policy: >-
+    Continues unit01-10's aap/tum split. This unit's dialogue (lesson03)
+    stays entirely in तुम between Priya and Arjun, matching every prior
+    unit's continuation of their established friendship -- no new
+    stranger character is introduced here. Proposals use the established
+    "चलो + verb-ते + हैं" idiom (see generation_provenance above); declines
+    are polite (माफ़ करना + a stated reason) rather than blunt refusals,
+    matching the friendly register this course has maintained between
+    Priya and Arjun since unit01.
+
+media_assets:
+  - {content_key: hi.a1.audio.plans.chalo_film.01, language: hi, text: "चलो, फ़िल्म देखते हैं!", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - {content_key: hi.a1.audio.plans.maaf_vyast.01, language: hi, text: "माफ़ करना, मैं व्यस्त हूँ।", voice_hint: neutral_adult_polite, status: pending_generation}
+  - {content_key: hi.a1.audio.plans.confirm_ravivar.01, language: hi, text: "ठीक है, रविवार को मिलते हैं!", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+
+units:
+  - content_key: hi.a1.unit11.plans
+    title: "योजना बनाना"
+    section: reading_writing
+    spine_outcome_ids:
+      - universal.a1.plans.make_simple_plans
+    planned_lesson_count: 3
+
+    lessons:
+      - content_key: hi.a1.unit11.lesson01.prastaav_aur_sweekriti
+        title: "फ़िल्म देखना, चाय पीना"
+        spine_outcome_id: universal.a1.plans.make_simple_plans
+        teaching:
+          - content_key: hi.a1.unit11.lesson01.teach.review_chai_kaafi
+            kind: vocabulary
+            target: {text: "चाय, कॉफ़ी", language_code: hi, direction: ltr}
+            introduced_tokens: ["चाय", "कॉफ़ी", "अर्जुन", "प्रिया"]
+            example:
+              - {text: "मुझे चाय चाहिए।", language_code: hi, direction: ltr}
+              - {text: "मुझे कॉफ़ी चाहिए।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit11.lesson01.teach.filma
+            kind: vocabulary
+            target: {text: "फ़िल्म", language_code: hi, direction: ltr}
+            introduced_tokens: ["फ़िल्म"]
+            example: {text: "यह फ़िल्म अच्छी है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit11.lesson01.teach.dekhna
+            kind: vocabulary
+            target: {text: "देखते हैं", language_code: hi, direction: ltr}
+            introduced_tokens: ["देखते", "हैं"]
+            example: {text: "हम फ़िल्म देखते हैं।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit11.lesson01.teach.chalo_film_phrase
+            kind: phrase
+            target: {text: "चलो, फ़िल्म देखते हैं!", language_code: hi, direction: ltr}
+            introduced_tokens: ["चलो"]
+          - content_key: hi.a1.unit11.lesson01.teach.saath
+            kind: vocabulary
+            target: {text: "साथ", language_code: hi, direction: ltr}
+            introduced_tokens: ["साथ"]
+            example: {text: "चलो, साथ फ़िल्म देखते हैं!", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit11.lesson01.teach.peena
+            kind: vocabulary
+            target: {text: "पीते हैं", language_code: hi, direction: ltr}
+            introduced_tokens: ["पीते"]
+            example: {text: "हम चाय पीते हैं।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit11.lesson01.teach.chalo_chai_phrase
+            kind: phrase
+            target: {text: "चलो, साथ चाय पीते हैं!", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a1.unit11.lesson01.teach.chalo_grammar_note
+            kind: grammar_note
+            target: {text: "साथ कुछ करने का सुझाव देने के लिए 'चलो' + क्रिया-ते + हैं कहते हैं: चलो, फ़िल्म देखते हैं! चलो, साथ चाय पीते हैं!", language_code: hi, direction: ltr}
+            introduced_tokens: ["सुझाव"]
+          - content_key: hi.a1.unit11.lesson01.teach.achha_vichar
+            kind: phrase
+            target: {text: "अच्छा विचार है!", language_code: hi, direction: ltr}
+            introduced_tokens: ["विचार", "अच्छा", "है"]
+        exercises:
+          - content_key: hi.a1.unit11.lesson01.exercise01.select_filma_meaning
+            type: multiple_choice
+            tested_text: "फ़िल्म"
+            prompt:
+              target_blocks:
+                - {text: "फ़िल्म", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit11.lesson01.exercise02.select_chalo_filma_meaning
+            type: multiple_choice
+            tested_text: "चलो फ़िल्म देखते हैं"
+            prompt:
+              target_blocks:
+                - {text: "चलो, फ़िल्म देखते हैं!", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit11.lesson01.exercise03.select_saath_meaning
+            type: multiple_choice
+            tested_text: "साथ"
+            prompt:
+              target_blocks:
+                - {text: "साथ", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit11.lesson01.exercise04.select_achha_vichar_meaning
+            type: multiple_choice
+            tested_text: "अच्छा विचार है"
+            prompt:
+              target_blocks:
+                - {text: "अच्छा विचार है!", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit11.lesson01.exercise05.listen_chalo_film
+            type: listen_select
+            tested_text: "चलो फ़िल्म देखते हैं"
+            media_asset_key: hi.a1.audio.plans.chalo_film.01
+            prompt: {target_blocks: []}
+          - content_key: hi.a1.unit11.lesson01.exercise06.match_proposal_words
+            type: matching_pairs
+            tested_text: "फ़िल्म साथ चाय पीते हैं देखते हैं विचार अच्छा विचार है चलो कॉफ़ी"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "फ़िल्म", right: "movie"}
+              - {left: "साथ", right: "together"}
+              - {left: "चाय", right: "tea"}
+              - {left: "कॉफ़ी", right: "coffee"}
+              - {left: "पीते हैं", right: "(we) drink / let's drink"}
+              - {left: "देखते हैं", right: "(we) watch / let's watch"}
+              - {left: "विचार", right: "idea"}
+              - {left: "अच्छा विचार है!", right: "Good idea!"}
+          - content_key: hi.a1.unit11.lesson01.exercise07.order_chalo_film
+            type: word_order
+            tested_text: "चलो फ़िल्म देखते हैं"
+            prompt: {target_blocks: []}
+            word_bank: ["चलो", "फ़िल्म", "देखते", "हैं"]
+          - content_key: hi.a1.unit11.lesson01.exercise08.order_chalo_saath_chai
+            type: word_order
+            tested_text: "चलो साथ चाय पीते हैं"
+            prompt: {target_blocks: []}
+            word_bank: ["चलो", "साथ", "चाय", "पीते", "हैं"]
+          - content_key: hi.a1.unit11.lesson01.exercise09.fill_chalo_filma_dekhte
+            type: fill_in_blank
+            tested_text: "फ़िल्म"
+            prompt:
+              target_blocks:
+                - {text: "चलो, ___ देखते हैं!", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit11.lesson01.exercise10.fill_saath_chai_peete
+            type: fill_in_blank
+            tested_text: "पीते"
+            prompt:
+              target_blocks:
+                - {text: "चलो, साथ चाय ___ हैं!", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit11.lesson01.exercise11.reply_chalo_filma
+            type: dialogue_response
+            tested_text: "अच्छा विचार है"
+            prompt:
+              target_blocks:
+                - {text: "चलो, फ़िल्म देखते हैं?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit11.lesson01.exercise12.speak_chalo_saath_chai
+            type: speak_response
+            tested_text: "चलो साथ चाय पीते हैं"
+            prompt:
+              target_blocks:
+                - {text: "यह प्रस्ताव बोलो: 'चलो, साथ चाय पीते हैं!'", language_code: hi, direction: ltr}
+
+      - content_key: hi.a1.unit11.lesson02.hum_kab_milte_hain
+        title: "हम कब मिलते हैं?"
+        spine_outcome_id: universal.a1.plans.make_simple_plans
+        teaching:
+          - content_key: hi.a1.unit11.lesson02.teach.vyast
+            kind: vocabulary
+            target: {text: "व्यस्त", language_code: hi, direction: ltr}
+            introduced_tokens: ["व्यस्त", "मैं", "हूँ", "है"]
+            example: {text: "मैं आज व्यस्त हूँ।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit11.lesson02.teach.maaf_karna
+            kind: vocabulary
+            target: {text: "माफ़ करना", language_code: hi, direction: ltr}
+            introduced_tokens: ["माफ़", "करना"]
+            example: {text: "माफ़ करना, मैं व्यस्त हूँ।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit11.lesson02.teach.maaf_vyast_phrase
+            kind: phrase
+            target: {text: "माफ़ करना, मैं व्यस्त हूँ।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a1.unit11.lesson02.teach.mujhe_kaam_hai
+            kind: phrase
+            target: {text: "मुझे काम है।", language_code: hi, direction: ltr}
+            introduced_tokens: ["मुझे", "काम"]
+          - content_key: hi.a1.unit11.lesson02.teach.decline_grammar_note
+            kind: grammar_note
+            target: {text: "प्रस्ताव को विनम्रता से मना करने के लिए 'माफ़ करना' के बाद अपनी स्थिति (जैसे 'व्यस्त हूँ') या कारण (जैसे 'मुझे काम है') बताते हैं।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a1.unit11.lesson02.teach.hum_pronoun
+            kind: vocabulary
+            target: {text: "हम", language_code: hi, direction: ltr}
+            introduced_tokens: ["हम"]
+            example: {text: "हम रोज़ मिलते हैं।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit11.lesson02.teach.kab_milte_phrase
+            kind: phrase
+            target: {text: "हम कब मिलते हैं?", language_code: hi, direction: ltr}
+            introduced_tokens: ["कब", "मिलते"]
+          - content_key: hi.a1.unit11.lesson02.teach.din_review
+            kind: vocabulary
+            target: {text: "शनिवार, रविवार", language_code: hi, direction: ltr}
+            introduced_tokens: ["शनिवार", "रविवार", "को"]
+            example:
+              - {text: "आज शनिवार है।", language_code: hi, direction: ltr}
+              - {text: "कल रविवार है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit11.lesson02.teach.samay_review
+            kind: vocabulary
+            target: {text: "चार बजे, कितने बजे", language_code: hi, direction: ltr}
+            introduced_tokens: ["चार", "बजे", "कितने"]
+            example:
+              - {text: "अभी चार बजे हैं।", language_code: hi, direction: ltr}
+              - {text: "अभी कितने बजे हैं?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit11.lesson02.teach.kya_ravivar_thik_phrase
+            kind: phrase
+            target: {text: "क्या रविवार को ठीक है?", language_code: hi, direction: ltr}
+            introduced_tokens: ["क्या", "ठीक"]
+        exercises:
+          - content_key: hi.a1.unit11.lesson02.exercise01.select_vyast_meaning
+            type: multiple_choice
+            tested_text: "व्यस्त"
+            prompt:
+              target_blocks:
+                - {text: "व्यस्त", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit11.lesson02.exercise02.select_maaf_vyast_meaning
+            type: multiple_choice
+            tested_text: "माफ़ करना मैं व्यस्त हूँ"
+            prompt:
+              target_blocks:
+                - {text: "माफ़ करना, मैं व्यस्त हूँ।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit11.lesson02.exercise03.select_mujhe_kaam_meaning
+            type: multiple_choice
+            tested_text: "मुझे काम है"
+            prompt:
+              target_blocks:
+                - {text: "मुझे काम है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit11.lesson02.exercise04.listen_maaf_vyast
+            type: listen_select
+            tested_text: "माफ़ करना मैं व्यस्त हूँ"
+            media_asset_key: hi.a1.audio.plans.maaf_vyast.01
+            prompt: {target_blocks: []}
+          - content_key: hi.a1.unit11.lesson02.exercise05.select_hum_kab_milte_meaning
+            type: multiple_choice
+            tested_text: "हम कब मिलते हैं"
+            prompt:
+              target_blocks:
+                - {text: "हम कब मिलते हैं?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit11.lesson02.exercise06.match_decline_schedule_words
+            type: matching_pairs
+            tested_text: "व्यस्त माफ़ करना मुझे काम है हम कब शनिवार रविवार ठीक है"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "व्यस्त", right: "busy"}
+              - {left: "माफ़ करना", right: "sorry / excuse me"}
+              - {left: "मुझे काम है।", right: "I have work."}
+              - {left: "हम", right: "we"}
+              - {left: "कब", right: "when"}
+              - {left: "शनिवार", right: "Saturday"}
+              - {left: "रविवार", right: "Sunday"}
+              - {left: "ठीक है", right: "OK / fine"}
+          - content_key: hi.a1.unit11.lesson02.exercise07.order_maaf_vyast
+            type: word_order
+            tested_text: "माफ़ करना मैं व्यस्त हूँ"
+            prompt: {target_blocks: []}
+            word_bank: ["माफ़", "करना", "मैं", "व्यस्त", "हूँ"]
+          - content_key: hi.a1.unit11.lesson02.exercise08.order_hum_kab_milte
+            type: word_order
+            tested_text: "हम कब मिलते हैं"
+            prompt: {target_blocks: []}
+            word_bank: ["हम", "कब", "मिलते", "हैं"]
+          - content_key: hi.a1.unit11.lesson02.exercise09.fill_maaf_karna_vyast
+            type: fill_in_blank
+            tested_text: "व्यस्त"
+            prompt:
+              target_blocks:
+                - {text: "माफ़ करना, मैं ___ हूँ।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit11.lesson02.exercise10.fill_mujhe_kaam
+            type: fill_in_blank
+            tested_text: "काम"
+            prompt:
+              target_blocks:
+                - {text: "मुझे ___ है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit11.lesson02.exercise11.reply_shanivaar_decline
+            type: dialogue_response
+            tested_text: "माफ़ करना मैं शनिवार को व्यस्त हूँ मुझे काम है"
+            prompt:
+              target_blocks:
+                - {text: "चलो, शनिवार को फ़िल्म देखते हैं?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit11.lesson02.exercise12.speak_kya_ravivar_thik
+            type: speak_response
+            tested_text: "क्या रविवार को ठीक है"
+            prompt:
+              target_blocks:
+                - {text: "प्रिया को रविवार के लिए पूछो।", language_code: hi, direction: ltr}
+
+      - content_key: hi.a1.unit11.lesson03.priya_arjun_yojana
+        title: "प्रिया और अर्जुन: एक योजना"
+        spine_outcome_id: universal.a1.plans.make_simple_plans
+        teaching:
+          - content_key: hi.a1.unit11.lesson03.teach.sandesh
+            kind: vocabulary
+            target: {text: "संदेश", language_code: hi, direction: ltr}
+            introduced_tokens: ["संदेश", "प्रिया"]
+            example: {text: "यह अर्जुन का संदेश है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit11.lesson03.teach.dialogue.line01
+            kind: dialogue
+            target:
+              text: "प्रिया, चलो शनिवार को फ़िल्म देखते हैं?"
+              language_code: hi
+              direction: ltr
+              speaker: Arjun
+            introduced_tokens: []
+          - content_key: hi.a1.unit11.lesson03.teach.dialogue.line02
+            kind: dialogue
+            target:
+              text: "माफ़ करना, मैं शनिवार को व्यस्त हूँ। मुझे काम है।"
+              language_code: hi
+              direction: ltr
+              speaker: Priya
+            introduced_tokens: []
+          - content_key: hi.a1.unit11.lesson03.teach.dialogue.line03
+            kind: dialogue
+            target:
+              text: "ठीक है। हम कब मिलते हैं?"
+              language_code: hi
+              direction: ltr
+              speaker: Arjun
+            introduced_tokens: []
+          - content_key: hi.a1.unit11.lesson03.teach.dialogue.line04
+            kind: dialogue
+            target:
+              text: "क्या रविवार को ठीक है? चलो साथ चाय पीते हैं!"
+              language_code: hi
+              direction: ltr
+              speaker: Priya
+            introduced_tokens: []
+          - content_key: hi.a1.unit11.lesson03.teach.dialogue.line05
+            kind: dialogue
+            target:
+              text: "अच्छा विचार है! रविवार को कितने बजे?"
+              language_code: hi
+              direction: ltr
+              speaker: Arjun
+            introduced_tokens: []
+          - content_key: hi.a1.unit11.lesson03.teach.dialogue.line06
+            kind: dialogue
+            target:
+              text: "चार बजे ठीक है?"
+              language_code: hi
+              direction: ltr
+              speaker: Priya
+            introduced_tokens: []
+          - content_key: hi.a1.unit11.lesson03.teach.dialogue.line07
+            kind: dialogue
+            target:
+              text: "हाँ, चार बजे ठीक है। फिर मिलते हैं!"
+              language_code: hi
+              direction: ltr
+              speaker: Arjun
+            introduced_tokens: []
+          - content_key: hi.a1.unit11.lesson03.teach.dialogue.line08
+            kind: dialogue
+            target:
+              text: "ठीक है, रविवार को मिलते हैं!"
+              language_code: hi
+              direction: ltr
+              speaker: Priya
+            introduced_tokens: []
+          - content_key: hi.a1.unit11.lesson03.teach.invitation_message
+            kind: reading
+            target: {text: "नमस्ते अर्जुन, चलो रविवार को चार बजे मिलते हैं और चाय पीते हैं। ठीक है? - प्रिया", language_code: hi, direction: ltr}
+            introduced_tokens: []
+        exercises:
+          - content_key: hi.a1.unit11.lesson03.exercise01.comprehend_priya_busy_day
+            type: dialogue_comprehension
+            tested_text: "शनिवार को"
+            prompt:
+              target_blocks:
+                - {text: "माफ़ करना, मैं शनिवार को व्यस्त हूँ। मुझे काम है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit11.lesson03.exercise02.comprehend_meeting_day
+            type: dialogue_comprehension
+            tested_text: "रविवार"
+            prompt:
+              target_blocks:
+                - {text: "क्या रविवार को ठीक है? चलो साथ चाय पीते हैं!", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit11.lesson03.exercise03.select_sandesh_meaning
+            type: multiple_choice
+            tested_text: "संदेश"
+            prompt:
+              target_blocks:
+                - {text: "संदेश", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit11.lesson03.exercise04.read_invitation_activity
+            type: reading_comprehension
+            tested_text: "चाय पीते हैं"
+            prompt:
+              target_blocks:
+                - {text: "नमस्ते अर्जुन, चलो रविवार को चार बजे मिलते हैं और चाय पीते हैं। ठीक है? - प्रिया", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit11.lesson03.exercise05.read_invitation_day
+            type: reading_comprehension
+            tested_text: "रविवार"
+            prompt:
+              target_blocks:
+                - {text: "नमस्ते अर्जुन, चलो रविवार को चार बजे मिलते हैं और चाय पीते हैं। ठीक है? - प्रिया", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit11.lesson03.exercise06.read_invitation_time
+            type: reading_comprehension
+            tested_text: "चार बजे"
+            prompt:
+              target_blocks:
+                - {text: "नमस्ते अर्जुन, चलो रविवार को चार बजे मिलते हैं और चाय पीते हैं। ठीक है? - प्रिया", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit11.lesson03.exercise07.listen_confirm_ravivar
+            type: listen_select
+            tested_text: "ठीक है रविवार को मिलते हैं"
+            media_asset_key: hi.a1.audio.plans.confirm_ravivar.01
+            prompt: {target_blocks: []}
+          - content_key: hi.a1.unit11.lesson03.exercise08.match_unit_review
+            type: matching_pairs
+            tested_text: "फ़िल्म चाय व्यस्त माफ़ करना मुझे काम है हम संदेश विचार साथ शनिवार रविवार"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "फ़िल्म", right: "movie"}
+              - {left: "चाय", right: "tea"}
+              - {left: "व्यस्त", right: "busy"}
+              - {left: "माफ़ करना", right: "sorry / excuse me"}
+              - {left: "मुझे काम है।", right: "I have work."}
+              - {left: "हम", right: "we"}
+              - {left: "संदेश", right: "message"}
+              - {left: "विचार", right: "idea"}
+              - {left: "साथ", right: "together"}
+              - {left: "शनिवार", right: "Saturday"}
+              - {left: "रविवार", right: "Sunday"}
+          - content_key: hi.a1.unit11.lesson03.exercise09.order_chalo_ravivar_chai
+            type: word_order
+            tested_text: "चलो रविवार को चाय पीते हैं"
+            prompt: {target_blocks: []}
+            word_bank: ["चलो", "रविवार", "को", "चाय", "पीते", "हैं"]
+          - content_key: hi.a1.unit11.lesson03.exercise10.fill_kya_ravivar_ko
+            type: fill_in_blank
+            tested_text: "को"
+            prompt:
+              target_blocks:
+                - {text: "क्या रविवार ___ ठीक है?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit11.lesson03.exercise11.fix_main_vyast_hoon
+            type: grammar_check
+            tested_text: "मैं व्यस्त हूँ"
+            prompt:
+              target_blocks:
+                - {text: "मैं व्यस्त है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit11.lesson03.exercise12.reply_accept_ravivar
+            type: dialogue_response
+            tested_text: "अच्छा विचार है"
+            prompt:
+              target_blocks:
+                - {text: "चलो, रविवार को फ़िल्म देखते हैं?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit11.lesson03.exercise13.write_own_plan_message
+            type: writing_prompt
+            tested_text: "चलो शनिवार को चार बजे फ़िल्म देखते हैं"
+            prompt:
+              target_blocks:
+                - {text: "एक संदेश लिखो: एक गतिविधि, एक दिन, और एक समय बताओ।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit11.lesson03.exercise14.speak_own_proposal
+            type: speak_response
+            tested_text: "चलो साथ चाय पीते हैं"
+            prompt:
+              target_blocks:
+                - {text: "अपना प्रस्ताव बोलो: तुम क्या करना चाहते हो?", language_code: hi, direction: ltr}
