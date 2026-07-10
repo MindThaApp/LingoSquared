@@ -234,7 +234,10 @@ export function LessonRunnerPage() {
   ) {
     const status = resultStatus(bannerResult);
     return (
-      <div className={`feedback-banner ${status}`}>
+      // role="status" (implicit aria-live="polite") so screen readers announce
+      // the grading result the moment the banner mounts - without it this
+      // banner is completely silent to non-sighted users.
+      <div className={`feedback-banner ${status}`} role="status">
         <p style={{ margin: "0 0 6px" }}>
           {status === "correct" && t("lesson_runner.correct")}
           {status === "almost" && t("lesson_runner.almost")}
@@ -355,7 +358,7 @@ export function LessonRunnerPage() {
         {reviewResult && (() => {
           const status = resultStatus(reviewResult);
           return (
-            <div className={`feedback-banner ${status}`}>
+            <div className={`feedback-banner ${status}`} role="status">
               <p style={{ margin: "0 0 6px" }}>
                 {status === "correct" && t("lesson_runner.correct")}
                 {status === "almost" && t("lesson_runner.almost")}
@@ -541,7 +544,7 @@ export function LessonRunnerPage() {
         </button>
       </div>
       {current.isConfirmation && result === null && (
-        <div className="feedback-banner incorrect" style={{ marginBottom: 12 }}>
+        <div className="feedback-banner incorrect" role="status" style={{ marginBottom: 12 }}>
           <p style={{ margin: 0 }}>
             {t("lesson_runner.confirmation_hint", {
               answer: current.correctAnswerHint ?? "",
@@ -559,7 +562,7 @@ export function LessonRunnerPage() {
         }
       />
       {submitError && !result && (
-        <div className="feedback-banner error">
+        <div className="feedback-banner error" role="alert">
           <p style={{ margin: "0 0 10px" }}>{t("lesson_runner.submit_error")}</p>
           <button className="btn btn-block" onClick={handleRetryAnswer} disabled={submitting}>
             {t("common.retry")}
