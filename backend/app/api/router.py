@@ -1,4 +1,5 @@
 import json
+import logging
 import mimetypes
 import os
 import re
@@ -36,6 +37,8 @@ from app.content.service import (
     import_practice_templates,
     validation_errors,
 )
+
+logger = logging.getLogger(__name__)
 
 router=APIRouter()
 def fail(status,code,message,**details):
@@ -1783,7 +1786,7 @@ def content_coverage(user=Depends(admin_user),db:Session=Depends(get_db)):
     return [{"source_language":source,"target_language":target,"course_count":courses,"total_unit_count":units,"total_lesson_count":lessons,"open_issue_count":issues} for source,target,courses,units,lessons,issues in rows]
 
 @router.post("/tts",responses={200:{"content":{"audio/mpeg":{},"application/json":{"schema":TTSFallback.model_json_schema()}}}})
-def tts(body:TTSIn,user=Depends(current_user),db:Session=Depends(get_db)):
+def tts(request:Request,body:TTSIn,user=Depends(current_user),db:Session=Depends(get_db)):
     enforce_rate_limit(TTS_RATE_LIMIT,user.id,"tts_rate_limited","Too many TTS requests too quickly. Please slow down.")
     if not db.get(Language,body.language_code): fail(422,"unsupported_language_code","Language code is not supported")
     if body.language_code not in tts_service.TTS_SUPPORTED_LANGUAGES:
@@ -1800,6 +1803,14 @@ def tts(body:TTSIn,user=Depends(current_user),db:Session=Depends(get_db)):
         return JSONResponse({"use_browser_tts":True,"reason":"quota_exceeded"})
     try: audio=tts_service.synthesize(body.text,body.language_code,body.speaking_rate or 1.0)
     except Exception:
+        # Previously swallowed silently — a dead/corrupted Google or Azure
+        # credential looked identical to normal operation server-side (the
+        # client just quietly used browser TTS). Log the real provider
+        # exception with the request id before degrading.
+        logger.exception(
+            "tts synthesis failed, falling back to browser TTS request_id=%s user_id=%s language=%s",
+            getattr(request.state, "request_id", None), user.id, body.language_code,
+        )
         tts_service.refund_characters(db,len(body.text))
         return JSONResponse({"use_browser_tts":True,"reason":"provider_error"})
     return Response(content=audio,media_type="audio/mpeg")
