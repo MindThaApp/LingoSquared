@@ -1036,6 +1036,54 @@ def admin_push_notify_due_reviews(
     return {"notified_users": notified_users, "notifications_sent": notifications_sent}
 
 
+@router.post("/admin/push/notify-streaks-at-risk", response_model=PushNotifyOut)
+def admin_push_notify_streaks_at_risk(
+    user=Depends(admin_user),
+    db: Session = Depends(get_db),
+):
+    """Manual trigger for the evening "your streak ends tonight" push.
+    Same design as /admin/push/notify-due-reviews above: NOT on a
+    schedule — this project deliberately has no background scheduler/
+    cron infrastructure, so an external cron (see
+    scripts/trigger_streak_notifications.sh) hits this endpoint in the
+    evening. A user's streak is "at risk" when they have a streak worth
+    protecting (streak_days > 0) and haven't been active yet TODAY in
+    their OWN timezone — the same per-user day boundary
+    record_activity() uses (activity_day_bounds(), E2), so this never
+    disagrees with the actual streak bookkeeping about whether today
+    still counts.
+
+    No per-day send dedup exists: every call re-notifies every
+    still-inactive user, so the external cron should fire this once per
+    evening, not repeatedly (documented in the trigger script).
+    """
+    if not push_service.push_configured():
+        fail(503, "push_not_configured", "Web push is not configured on this server")
+    rows = db.execute(
+        select(UserStats.user_id, UserStats.streak_days, UserStats.last_activity_date, User.timezone)
+        .join(User, User.id == UserStats.user_id)
+        .where(UserStats.streak_days > 0)
+    ).all()
+    notified_users = 0
+    notifications_sent = 0
+    for uid_, streak_days, last_activity_date, user_tz in rows:
+        day_start, _ = activity_day_bounds(user_tz)
+        if last_activity_date == day_start.date():
+            # Already active today in their own timezone — streak is safe.
+            continue
+        sent = push_service.send_push_to_user(
+            db,
+            uid_,
+            title="Your streak is at risk",
+            body=f"Your {streak_days}-day streak ends tonight — come back before midnight!",
+            url="/",
+        )
+        if sent:
+            notified_users += 1
+            notifications_sent += sent
+    return {"notified_users": notified_users, "notifications_sent": notifications_sent}
+
+
 @router.post("/reviews/session", response_model=ReviewItemsOut)
 def review_session(
     body: ReviewSessionIn,
