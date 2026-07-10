@@ -8,11 +8,9 @@ generation_provenance:
   source_material: "Peace Corps Dari course materials (public domain), modernized"
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: codex_fresh_context
-  notes: "New unit, prs's next uncovered A1 outcome (universal.a1.money.handle_basic_money_matters, prerequisites: universal.a1.numbers.use_basic_numbers [unit04] and universal.a1.shopping.ask_prices_quantities [unit10], both already realized). Authored by Claude in an isolated git worktree, part of an overnight multi-worker push. Six lessons: money/payment vocabulary (پول/نقد/کارت/دالر), asking about payment method, currency exchange at a صرافی (money exchanger -- the real, common Afghan institution for this, not a bank), a Zarmina/Homayoun dialogue where Zarmina exchanges dollars for afghanis, a reading passage, and a wrap-up. Builds directly on already-taught vocabulary rather than reteaching: قیمت/چند (price/how much, unit10 shopping), افغانی (unit10, already used for a price -- 'صد افغانی'), numbers (unit04), دوکاندار (unit10). New vocabulary: پول (money), نقد (cash), کارت (card), دالر (dollar -- USD is genuinely widely used/quoted alongside afghani in real Afghan currency exchange, not an invented detail), صرافی (money exchanger), تبدیل کردن (to exchange), نرخ (exchange rate). Continues the established استم/استین full-uncontracted register policy. Authored §14/§16/§17-compliant from the start: no listen_type/listen_select/listen_order exercises (zero prs audio exists), matching_pairs sized 6+ pairs except lesson01's first-lesson ceiling, zero fill_in_blank. Multi-clause production exercises carry period/comma/و-joined accepted-answer variants at clause boundaries. Authored independently of the fa realization per the sibling-isolation rule -- did not open fa/a1_unit21_money.yaml. schema_version 1.1 from the start.
-
-    STATUS: draft, review pending. This file has NOT yet been through the project's mandatory fresh-context review and must not be imported/shipped until that review completes and any findings are fixed. Compiler validation (schema/structure only) was run and is clean, but that is not a substitute for the linguistic/pedagogical review."
+  status: reviewed
+  required_next_reviewer: null
+  notes: "2026-07-10 fresh-context review (Claude, zero access to the authoring reasoning). Checked: same-speaker dialogue-distractor rule (no violation -- lesson04's listen_context multiple_choice options are scene-level English glosses, not lines any character actually says), price/rate consistency across the whole unit (100 dollars at 70 afghanis/dollar = 7000 afghanis, stated identically in lesson04/05/06, no contradiction), bare-YAML-boolean grep, Persian-vs-Arabic codepoints, internal-jargon leaks, exercise-type registration, and §19 vocabulary-card examples -- all clean. Found and fixed two real bugs: (1) lesson02/03/04's matching_pairs exercises had only 5 pairs each despite this file's own authoring notes claiming '6+ pairs except lesson01's first-lesson ceiling' -- added a 6th pair to each (یا/or in lesson02, چند/how much in lesson03, می‌خواهم/I want in lesson04) from vocabulary already taught in that same lesson, updated tested_text and the overlay's accepted_answers to match. (2) ALL SIX translation exercises in this unit had a bare 'Translate into Dari.' instruction paired with an empty prompt (target_blocks: []) -- since Translation.tsx renders only prompt.text_blocks, a real learner would see literally nothing indicating what English sentence to translate, an unanswerable-without-already-knowing-it exercise. Confirmed this against the corpus: units 25/27-33 already use the correct 'Translate into Dari: <sentence>.' convention, so this unit and unit24 (fixed separately, out of this file) were the outliers. Rewrote all six instructions to name the specific sentence. Also note for the coordinator: this file's overlay review notes previously described lesson04's dialogue as 'Homayoun voices the صرافی role' -- that is not actually true of the shipped content. The money-exchanger's dialogue turns are labeled with the generic speaker صرافی (money exchanger), never the personal name همایون, so unit23 does NOT establish Homayoun's job as money exchanger; Homayoun is only concretely established as a named character starting unit24. Re-validated clean (0 errors/0 warnings) after all fixes."
 
 course:
   realization_key: prs.a1
@@ -174,6 +172,7 @@ units:
               - {left: می‌تانم, right: "I can"}
               - {left: پول, right: money}
               - {left: کارت, right: card}
+              - {left: یا, right: or}
           - content_key: prs.a1.unit23.lesson02.exercise04.order_can_pay_cash
             type: word_order
             tested_text: می‌تانم نقد بپردازم
@@ -237,7 +236,7 @@ units:
             prompt: {target_blocks: [{text: "امروز نرخ دالر چند است؟", language_code: prs, direction: rtl}]}
           - content_key: prs.a1.unit23.lesson03.exercise03.match_exchange_words
             type: matching_pairs
-            tested_text: صرافی تبدیل کردن نرخ افغانی دالر
+            tested_text: صرافی تبدیل کردن نرخ افغانی دالر چند
             prompt: {target_blocks: []}
             pairs:
               - {left: صرافی, right: "money exchanger"}
@@ -245,6 +244,7 @@ units:
               - {left: نرخ, right: "exchange rate"}
               - {left: افغانی, right: afghani}
               - {left: دالر, right: dollar}
+              - {left: چند, right: "how much / how many"}
           - content_key: prs.a1.unit23.lesson03.exercise04.order_exchange_rate_question
             type: word_order
             tested_text: امروز نرخ دالر چند است
@@ -345,7 +345,7 @@ units:
             prompt: {target_blocks: []}
           - content_key: prs.a1.unit23.lesson04.exercise03.match_dialogue_facts
             type: matching_pairs
-            tested_text: صد دالر هفتاد افغانی هزار بفرمایین تشکر
+            tested_text: صد دالر هفتاد افغانی هزار بفرمایین تشکر می‌خواهم
             prompt: {target_blocks: []}
             pairs:
               - {left: "صد دالر", right: "one hundred dollars"}
@@ -353,6 +353,7 @@ units:
               - {left: هزار, right: thousand}
               - {left: بفرمایین, right: "here you go"}
               - {left: تشکر, right: thanks}
+              - {left: می‌خواهم, right: "I want"}
           - content_key: prs.a1.unit23.lesson04.exercise04.order_want_exchange
             type: word_order
             tested_text: "می‌خواهم دالر را به افغانی تبدیل کنم"

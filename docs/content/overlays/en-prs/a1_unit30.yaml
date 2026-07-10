@@ -9,11 +9,30 @@ generation_provenance:
   authoring_system: claude
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: codex_fresh_context
-  notes: 'Authored alongside the new prs a1_unit30_technology.yaml realization, same worker, same pass. Follows the established en-prs overlay convention from units 01-29. Continues the Zarmina/Homayoun storyline (lesson04 dialogue -- Homayoun asks Zarmina how many times a day she uses her mobile phone; she uses it a lot, taking photos and sending messages; Homayoun asks if she also uses a computer; she uses one at the office; Homayoun uses the internet every day) and a matching third-person reading passage (lesson05) kept factually consistent with the dialogue. Double-checked every bare yes/no-shaped gloss value in this file is explicitly quoted (the standing boolean-coercion footgun) -- ran a real recursive yaml.safe_load scan over this file (not just grep), zero stray Python bools found beyond the two legitimate schema fields.
-
-    STATUS: draft, review pending -- has NOT yet been through the mandatory fresh-context review. Do not import/ship until that review completes.'
+  status: reviewed
+  required_next_reviewer: null
+  notes: >-
+    2026-07-10 fresh-context review (Claude), paired with the prs
+    realization's own review completed the same pass (see that file's
+    review notes for the full checklist and the real §11 fact-
+    consistency bug found there -- the reading passage had swapped which
+    of Zarmina/Homayoun uses a computer at the office). Matching
+    overlay-side updates applied: lesson05.teach.reading_passage's gloss
+    rewritten to match the corrected realization text ("She uses a
+    computer at the office. Homayoun uses the internet every day."
+    instead of attributing both facts to Homayoun);
+    lesson05.exercise01's feedback corrected from "The reading says
+    Homayoun uses a computer..." to "...Zarmina uses a computer...";
+    lesson05.exercise04's accepted_answers value mapping updated to
+    match the realization's corrected 7-pair matching_pairs exercise;
+    download_word's example_gloss updated from "I download this app." to
+    "I download an app." (matching the realization's را-avoiding
+    rewrite); and lesson05.exercise06.translate_she_takes_sends gained
+    the same three additional §12 multi-clause variants as the
+    realization. Every other gloss/note/feedback/instruction string read
+    clean for jargon leaks and boolean-coercion risk. Re-validated clean
+    after the fixes: 0 errors/0 warnings, both standalone and as part of
+    the full prs.a1.unit27-30 batch.
 course:
   title: Dari A1
   description: 'Beginner Kabul Dari: technology and device vocabulary (mobile phone, computer, internet, app, photo), phone-action phrases (send a message, call, take a photo, download an app), asking and answering how many times a day you use your mobile phone, and a Zarmina/Homayoun dialogue about phone, computer, and internet use.'
@@ -93,7 +112,7 @@ teaching:
     title: Download
     gloss: download
     note: دانلود is the standard Dari loanword for "download," combined with کردن (to do, review) as a light verb, e.g. دانلود می‌کنم (I download).
-    example_gloss: I download this app.
+    example_gloss: I download an app.
   prs.a1.unit30.lesson02.teach.want_download_app_phrase:
     title: I want to download an app
     gloss: I want to download an app
@@ -150,7 +169,7 @@ teaching:
     gloss: Great!
   prs.a1.unit30.lesson05.teach.reading_passage:
     title: Reading about technology
-    gloss: 'Zarmina uses her mobile phone every day. She takes photos and sends messages. Homayoun uses a computer at the office and uses the internet every day.'
+    gloss: 'Zarmina uses her mobile phone every day. She takes photos and sends messages. She uses a computer at the office. Homayoun uses the internet every day.'
   prs.a1.unit30.lesson06.teach.review_ama:
     title: But
     gloss: but
@@ -344,7 +363,7 @@ exercises:
     instruction: Read the passage and answer the question.
     correct_option: 'At the office.'
     distractors: ['At home.', 'At the gym.', 'At the park.']
-    feedback: The reading says Homayoun uses a computer at the office.
+    feedback: The reading says Zarmina uses a computer at the office.
     accepted_answers:
       - {value: 'At the office.', status: correct}
   prs.a1.unit30.lesson05.exercise02.recognize_migirad:
@@ -370,14 +389,19 @@ exercises:
           او: 'he/she'
           زرمینه هر روز از موبایل استفاده می‌کند.: 'Zarmina uses her mobile phone every day.'
           او عکس می‌گیرد و پیام می‌فرستد.: 'She takes photos and sends messages.'
-          همایون از کمپیوتر در دفتر استفاده می‌کند.: 'Homayoun uses a computer at the office.'
+          او در دفتر از کمپیوتر استفاده می‌کند.: 'She uses a computer at the office.'
+          همایون هر روز از انترنت استفاده می‌کند.: 'Homayoun uses the internet every day.'
   prs.a1.unit30.lesson05.exercise05.order_zarmina_uses:
     instruction: Put the words in the correct order.
     accepted_answers: ['زرمینه هر روز از موبایل استفاده می‌کند']
     feedback: The correct order is زرمینه هر روز از موبایل استفاده می‌کند (Zarmina uses her mobile phone every day).
   prs.a1.unit30.lesson05.exercise06.translate_she_takes_sends:
     instruction: 'Translate into Dari: She takes photos and sends messages.'
-    accepted_answers: ['او عکس می‌گیرد و پیام می‌فرستد.']
+    accepted_answers:
+      - 'او عکس می‌گیرد و پیام می‌فرستد.'
+      - 'او عکس می‌گیرد و پیام می‌فرستد'
+      - 'او عکس می‌گیرد، پیام می‌فرستد'
+      - 'او عکس می‌گیرد. پیام می‌فرستد.'
     feedback: او عکس می‌گیرد و پیام می‌فرستد means "She takes photos and sends messages."
   prs.a1.unit30.lesson05.exercise07.write_reading_summary:
     instruction: Write a sentence summarizing what you read about Zarmina's phone use.
