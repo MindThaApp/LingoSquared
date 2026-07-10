@@ -1,0 +1,397 @@
+schema_version: "1.1"
+realization_version: "2026.1-draft.1"
+target_language: nl
+cefr_level: A2
+generation_provenance:
+  method: ai_generated
+  authoring_system: claude
+  human_reviewed: false
+  source_note: >-
+    Firecrawl was tried FIRST per the standing instruction (`firecrawl
+    search "FSI Dutch Basic Course sollicitatie/solliciteren job
+    interview vocabulary employment lesson"`) but returned a hard 402
+    ("Request failed with status code 402"); `firecrawl --status`
+    confirmed the account was genuinely out of credits (0/1000 this
+    cycle), not a transient error worth retrying. Fell back to a
+    WebSearch for the same query as a second honest attempt before
+    giving up on real source material -- it surfaced modern Dutch
+    job-interview vocabulary resources (learndutch.org lesson 19,
+    polyglotclub.com, a Transparent Language blog post) and confirmed
+    an FSI Dutch Reader (1980, Foreign Service Institute) exists, but
+    found no evidence any FSI/Peace-Corps/DLI Dutch course actually
+    contains a job-interview or employment-application lesson to adapt
+    from -- plausible given FSI courses are 1960s-70s diplomatic-
+    register material, not modern HR-style job-seeking content. This
+    unit is therefore genuinely `ai_generated` from established modern
+    Dutch conventions (solliciteren, de vacature, het
+    sollicitatiegesprek, beschikbaar, de werktijden are all standard,
+    current terms, cross-checked against the WebSearch results above),
+    not adapted from any public-domain source, disclosed honestly per
+    AUTHORING_GUIDE.md §10 rather than mislabeled to match the other
+    A2 units' `adapted_from_public_domain_source` precedent.
+status: complete_draft
+review:
+  status: unreviewed
+  required_next_reviewer: null
+  notes: >-
+    Sixth Dutch A2 unit, new spine outcome
+    universal.a2.employment.attend_job_interview added to
+    universal_spine.yaml in this same task. Spine check performed
+    BEFORE adding anything: a yaml.safe_load walk of the full
+    universal_spine.yaml (pre-addition) found 75 pre-existing
+    universal.a1/a2/b1.* outcomes (76 after this addition), 0 duplicate
+    ids among them, and confirmed by direct grep that ALL 68 A1 and ALL
+    5 A2 outcomes already had at least one realizing nl unit --
+    only two B1 outcomes (universal.b1.abilities.*,
+    universal.b1.necessity.*, both grammar-shaped, not topic-shaped)
+    were unused, so per the standing delegated-authority instruction a
+    new A2 outcome was added rather than reusing one of those. The new
+    outcome's prerequisites (universal.a1.work.describe_job,
+    universal.a2.opinions.give_opinions_with_reasons) both resolve to
+    real existing outcome ids -- verified programmatically with
+    yaml.safe_load, not just by eye. Checked carefully against every
+    existing outcome for substantive duplication before adding it: NOT
+    a duplicate of universal.a1.work.describe_job (that outcome is
+    about describing a job you ALREADY HAVE -- workplace, schedule,
+    third-person job descriptions, realized in nl unit17 where Omar
+    already has an established job as a kok and Lotte as a
+    verpleegkundige; this new outcome is the reverse direction, SEEKING
+    and INTERVIEWING for a job you don't have yet, with its own
+    register/vocabulary shape: vacature, solliciteren,
+    sollicitatiegesprek, describing experience/availability to a
+    stranger, none of which unit17 touches); NOT a duplicate of
+    universal.a2.opinions.give_opinions_with_reasons (a general
+    opinion-plus-reason skill with no venue, formal-register, or
+    application-process shape of its own); NOT a duplicate of any
+    other A2 outcome (bureaucracy/banking/health/housing are all
+    civic-service formal appointments with a government/institutional
+    counterpart, not an employer evaluating a candidate -- a
+    genuinely different social shape and the reason employment gets
+    its own outcome rather than being folded into one of those).
+    Sanity-checked programmatically after the edit: the spine file
+    still parses cleanly with yaml.safe_load, the 76 resulting
+    outcomes have zero duplicate ids, and both prerequisite references
+    resolve to real existing outcome ids.
+
+    Story continuity: continues the Lotte/Omar/Nina taalcafe cast (same
+    A2-level jump-forward-in-time convention already established by
+    units 24-28, which are not day-to-day continuations of the A1
+    storyline but later chapters of the same characters' lives).
+    Checked Nina's established facts across the whole nl corpus before
+    writing: she has no established job or field of study anywhere
+    (confirmed by grep across every nl realization file for
+    "Nina werkt"/"Nina...baan"/"Nina...studeert" etc. -- zero hits,
+    a genuine blank slate), she has a fish (unit30/31), was new to the
+    taalcafe as of unit41, and borrowed a book at the library in
+    unit47 (established "de bibliotheek" as a place she visits, not
+    that she works there) -- so having her apply for her first
+    part-time job, drawing on volunteer experience at that same
+    library, is a new but non-contradictory addition to her arc, not a
+    conflict with anything already shipped. The employer (Kantoor
+    Bloem, a small office; interviewer "mevrouw Jansen") and the job
+    itself (administratief medewerker, administrative assistant) are
+    newly introduced -- grepped the whole nl corpus for "meneer
+    [A-Z]"/"mevrouw [A-Z]" first and found zero prior named formal
+    characters, so mevrouw Jansen doesn't collide with anything.
+    Register: mevrouw Jansen and Nina use formal "u" throughout, the
+    same neutral-polite-stranger convention as every other A2 unit's
+    official appointment (gemeente/bank/huisarts/woningcorporatie).
+    Deliberately reuses several already-established phrases rather
+    than inventing new ones where an existing pattern fits: "een
+    afspraak maken voor" (unit46), "de bibliotheek" (unit47), the
+    "Wij nemen ... contact met u op" construction (unit28, reused here
+    as "Wij nemen deze week nog contact met u op" -- a natural
+    variant, not a verbatim copy, of unit28's "Wij nemen binnen
+    vierentwintig uur contact met u op"), and "Dank u wel" (used
+    across nearly every formal-register unit so far). All are
+    re-declared as introduced_tokens at their first use in THIS file
+    per the corpus's established per-file convention (confirmed by
+    re-reading validate_untaught_vocabulary in
+    scripts/compile_content.py: it only checks each exercise's own
+    tested_text against the cumulative introduced_tokens pool built up
+    within THIS file, not across files).
+
+    Every kind:vocabulary teaching card carries a real example sentence
+    built from this unit's own taught material, with a matching
+    overlay example_gloss (AUTHORING_GUIDE §19); schema_version is
+    "1.1" from the start since this is a brand-new file, so missing
+    examples are a hard compiler error, not a warning. Deliberately
+    kept "de ervaring" (experience) and "de vaardigheid" (skill) as
+    standalone vocabulary cards rather than teaching the compounds
+    "werkervaring"/"computervaardigheden" -- the standalone forms are
+    more reusable across this unit's own sentences (Ik heb ervaring
+    als vrijwilliger / Typen is een belangrijke vaardigheid / Ik heb
+    goede vaardigheden), and introducing a compound would have meant
+    declaring yet another distinct surface-form token for the same
+    underlying idea with no real pedagogical benefit at A2. Every
+    fill_in_blank frame (lesson02 exercise06, lesson04 exercise06)
+    retains visible surrounding Dutch text besides the blanked slot
+    per §13, and neither slot's candidate is a true synonym of another
+    already-taught word in this unit (afspraak and beschikbaar are
+    each the unit's only word with that meaning) so no
+    interchangeable-candidate ambiguity per §17. Every multi-clause
+    accepted_answers list (the lesson06 dialogue_response and
+    writing_prompt) is authored with period-joined, no-final-period,
+    and (where the two clauses are independent enough to naturally
+    combine with "en") comma-plus-conjunction-joined variants per §12.
+    matching_pairs exercises grow 3 (lesson01, capped by being the
+    unit's first lesson) -> 6 -> 7 -> 8 -> 3 (lesson05's smaller
+    structural reading-comprehension match, matching unit26's own
+    precedent for its folder-reading lesson) -> 8 (lesson06, pooling
+    the whole unit), per §16.
+
+    Cross-checked every concrete fact stated across this unit per §11:
+    the job title ("administratief medewerker") is stated identically
+    in lesson01's teaching card and lesson05's job-posting reading;
+    the preferred-experience fact ("ervaring met klantcontact is een
+    pre") appears in lesson05's ad and Nina explicitly claims exactly
+    that experience in lesson06's dialogue ("Daar had ik veel
+    klantcontact"), tying the ad's stated preference to her own
+    library-volunteer background rather than leaving it an
+    unaddressed non-sequitur; the working days ("maandag, woensdag en
+    vrijdag") are stated in lesson04's teaching card, asked about
+    verbatim by mevrouw Jansen in lesson06, and confirmed by Nina's
+    "Ja, dat kan" (consistent with lesson04's established
+    availability, not contradicting it); the working hours ("van
+    negen tot vijf uur") are stated identically in lesson05's ad and
+    lesson06's dialogue. No other price/quantity/schedule claim
+    appears anywhere else in the unit to conflict with these.
+
+    Distractor safety for every listen_select/dialogue_comprehension
+    exercise built from lesson06's dialogue audio (per the standing
+    "a distractor must never be a line the tested/any speaker actually
+    says elsewhere in the same clip" rule): the full dialogue clip
+    has six lines -- mevrouw Jansen: "Goedemorgen, welkom bij Kantoor
+    Bloem. Vertelt u eens over uw ervaring.", "Mooi. Bent u
+    beschikbaar op maandag, woensdag en vrijdag?", "Van negen tot vijf
+    uur. Wij nemen deze week nog contact met u op."; Nina: "Goedemorgen.
+    Ik heb ervaring als vrijwilliger in de bibliotheek. Daar had ik
+    veel klantcontact.", "Ja, dat kan. Wat zijn de werktijden
+    precies?", "Dank u wel voor het gesprek." lesson06 exercise01 uses
+    a SHORT dedicated clip of only Jansen's opening greeting (not the
+    full dialogue), and its distractors ("What is your salary
+    expectation?"/"When can you start?"/"Do you have any questions for
+    me?") are invented, never spoken by anyone in either that clip or
+    the full dialogue. exercise02 tests Nina's "Daar had ik veel
+    klantcontact" against distractors ("She learned to type
+    there."/"She managed the collection there."/"She doesn't say.") --
+    none match any of the six lines' meanings. exercise03 tests
+    Jansen's availability question against distractors ("Whether Nina
+    has a valid ID."/"Whether Nina can start today."/"She doesn't ask
+    anything.") -- none spoken by anyone in the clip. exercise04 tests
+    Jansen's "Wij nemen deze week nog contact met u op" against
+    distractors ("We will contact you next month."/"You will start
+    tomorrow."/"She doesn't say when.") -- none spoken by anyone in
+    the clip, and specifically avoids "Van negen tot vijf uur" (the
+    same speaker's own immediately preceding line) as a distractor.
+
+    A recursive yaml.safe_load scan of this file (and the re-checked
+    spine file) found no bare unquoted Yes/No/True/False/on/off value
+    -- every value loaded as its expected str/int/list/dict type, no
+    unexpected bool. Every exercise `type:` used here (multiple_choice,
+    listen_select, matching_pairs, word_order, listen_order,
+    translation, dialogue_response, fill_in_blank, reading_comprehension,
+    dialogue_comprehension, listen_type, writing_prompt) is registered
+    in ExerciseRenderer.tsx.
+
+    Second, genuine fresh-eyes self-review pass (no sub-agent available
+    in this task, so done as an explicit context-reset re-read rather
+    than trusting the first draft): re-read every Dutch sentence in
+    this file cold for grammaticality (word order, verb agreement,
+    formal register consistency) and found it holds up -- "solliciteren
+    voor" + a following PP is a normal Dutch extraposition pattern
+    (compare "studeren aan de universiteit"), "Vertelt u eens over..."
+    is a standard formal-imperative construction, and "heeft
+    gesolliciteerd"/"had" are correctly formed present-perfect/simple-
+    past forms. Re-verified the §11 fact cross-check and the lesson06
+    distractor-safety claims above line by line against the actual
+    dialogue text as written (not just trusting the first pass's
+    summary), re-confirmed every matching_pairs value is a
+    `{left,right}[]` list of plain scalars, and re-ran the
+    boolean-coercion scan. Found no additional issues. Ran
+    `scripts/compile_content.py validate` against this file together
+    with the existing a2_unit24-28 batch: 0 errors, 0 warnings (see
+    commit message / task report for the exact command). Pending
+    Ramin's native-speaker review, same as every other A2 unit.
+
+course:
+  realization_key: nl.a2
+  target_language_first: true
+  dialect: nl_NL_standard
+  register_policy: >-
+    Teach contemporary Standard Dutch as used in the Netherlands. Nina
+    and the Kantoor Bloem interviewer ("mevrouw Jansen") use the formal
+    u throughout this unit, the same neutral-polite-stranger register
+    convention as every other A2 unit's official appointment (units
+    24, 26, 27, 28).
+
+media_assets:
+  - {content_key: nl.a2.audio.solliciteren.nina_ziet_vacature.01, language: nl, text: "Nina ziet een vacature online.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - {content_key: nl.a2.audio.solliciteren.sollicitatiegesprek_volgende_week.01, language: nl, text: "Het sollicitatiegesprek is volgende week.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - {content_key: nl.a2.audio.solliciteren.natuurlijk_dinsdag_tien_uur.01, language: nl, text: "Natuurlijk, kunt u dinsdag om tien uur langskomen?", voice_hint: neutral_adult_polite, status: pending_generation}
+  - {content_key: nl.a2.audio.solliciteren.ervaring_als_vrijwilliger.01, language: nl, text: "Ik heb ervaring als vrijwilliger in de bibliotheek.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - {content_key: nl.a2.audio.solliciteren.goede_vaardigheden.01, language: nl, text: "Ik heb goede vaardigheden.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - {content_key: nl.a2.audio.solliciteren.nina_beschikbaar_vanaf_maandag.01, language: nl, text: "Nina is beschikbaar vanaf maandag.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - {content_key: nl.a2.audio.solliciteren.wat_zijn_de_werktijden_precies.01, language: nl, text: "Wat zijn de werktijden precies?", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - content_key: nl.a2.audio.solliciteren.vacature_tekst.01
+    language: nl
+    text: >-
+      Kantoor Bloem zoekt een administratief medewerker. Ervaring met
+      klantcontact is een pre. Werktijden: maandag, woensdag en
+      vrijdag, van negen tot vijf uur. Bel voor een sollicitatiegesprek.
+    voice_hint: neutral_adult_clear
+    status: pending_generation
+  - {content_key: nl.a2.audio.solliciteren.jansen_groet.01, language: nl, text: "Goedemorgen, welkom bij Kantoor Bloem. Vertelt u eens over uw ervaring.", voice_hint: neutral_adult_polite, status: pending_generation}
+  - content_key: nl.a2.audio.dialogue.sollicitatiegesprek.01
+    language: nl
+    text: >-
+      Jansen: Goedemorgen, welkom bij Kantoor Bloem. Vertelt u eens
+      over uw ervaring. Nina: Goedemorgen. Ik heb ervaring als
+      vrijwilliger in de bibliotheek. Daar had ik veel klantcontact.
+      Jansen: Mooi. Bent u beschikbaar op maandag, woensdag en
+      vrijdag? Nina: Ja, dat kan. Wat zijn de werktijden precies?
+      Jansen: Van negen tot vijf uur. Wij nemen deze week nog contact
+      met u op. Nina: Dank u wel voor het gesprek.
+    voice_hint: two_adults_formal_polite
+    status: pending_generation
+  - {content_key: nl.a2.audio.solliciteren.negen_tot_vijf_contact.01, language: nl, text: "Van negen tot vijf uur. Wij nemen deze week nog contact met u op.", voice_hint: neutral_adult_polite, status: pending_generation}
+
+units:
+  - content_key: nl.a2.unit73.sollicitatiegesprek
+    title: "Solliciteren bij Kantoor Bloem"
+    section: reading_writing
+    spine_outcome_ids: [universal.a2.employment.attend_job_interview]
+    planned_lesson_count: 6
+    lessons:
+      - content_key: nl.a2.unit73.lesson01.ik_wil_solliciteren
+        title: "Ik wil solliciteren"
+        spine_outcome_id: universal.a2.employment.attend_job_interview
+        teaching:
+          - content_key: nl.a2.unit73.lesson01.teach.vacature
+            kind: vocabulary
+            target: {text: "de vacature", language_code: nl, direction: ltr}
+            introduced_tokens: [de, vacature, Nina, ziet, een, online]
+            example: {text: "Nina ziet een vacature online.", language_code: nl, direction: ltr}
+          - {content_key: nl.a2.unit73.lesson01.teach.solliciteren_voor, kind: phrase, target: {text: "Ik wil graag solliciteren voor deze vacature.", language_code: nl, direction: ltr}, introduced_tokens: [Ik, wil, graag, solliciteren, voor, deze, vacature]}
+          - {content_key: nl.a2.unit73.lesson01.teach.kantoor_bloem_zoekt, kind: phrase, target: {text: "Kantoor Bloem zoekt een administratief medewerker.", language_code: nl, direction: ltr}, introduced_tokens: [Kantoor, Bloem, zoekt, een, administratief, medewerker]}
+        exercises:
+          - {content_key: nl.a2.unit73.lesson01.exercise01.choose_solliciteren_voor, type: multiple_choice, tested_text: "Ik wil graag solliciteren voor deze vacature", prompt: {target_blocks: [{text: "I would like to apply for this vacancy.", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a2.unit73.lesson01.exercise02.listen_nina_ziet_vacature, type: listen_select, tested_text: "Nina ziet een vacature online", media_asset_key: nl.a2.audio.solliciteren.nina_ziet_vacature.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a2.unit73.lesson01.exercise03.match_vacature_words, type: matching_pairs, tested_text: "vacature solliciteren administratief medewerker", prompt: {target_blocks: []}, pairs: [{left: "de vacature", right: "the vacancy"}, {left: solliciteren, right: "to apply"}, {left: "administratief medewerker", right: "administrative assistant"}]}
+          - {content_key: nl.a2.unit73.lesson01.exercise04.order_solliciteren_voor, type: word_order, tested_text: "Ik wil graag solliciteren voor deze vacature", prompt: {target_blocks: []}, word_bank: [Ik, wil, graag, solliciteren, voor, deze, vacature]}
+          - {content_key: nl.a2.unit73.lesson01.exercise05.listen_order_nina_ziet_vacature, type: listen_order, tested_text: "Nina ziet een vacature online", media_asset_key: nl.a2.audio.solliciteren.nina_ziet_vacature.01, prompt: {target_blocks: []}, word_bank: [Nina, ziet, een, vacature, online]}
+          - {content_key: nl.a2.unit73.lesson01.exercise06.translate_kantoor_bloem_zoekt, type: translation, tested_text: "Kantoor Bloem zoekt een administratief medewerker", prompt: {target_blocks: [{text: "Kantoor Bloem is looking for an administrative assistant.", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a2.unit73.lesson01.exercise07.respond_solliciteren_voor, type: dialogue_response, tested_text: "Ik wil graag solliciteren voor deze vacature", prompt: {target_blocks: [{text: "Say in Dutch: I would like to apply for this vacancy.", language_code: en, direction: ltr}]}}
+
+      - content_key: nl.a2.unit73.lesson02.ik_bel_over_de_vacature
+        title: "Ik bel over de vacature"
+        spine_outcome_id: universal.a2.employment.attend_job_interview
+        teaching:
+          - content_key: nl.a2.unit73.lesson02.teach.sollicitatiegesprek
+            kind: vocabulary
+            target: {text: "het sollicitatiegesprek", language_code: nl, direction: ltr}
+            introduced_tokens: [het, sollicitatiegesprek, Het, is, volgende, week]
+            example: {text: "Het sollicitatiegesprek is volgende week.", language_code: nl, direction: ltr}
+          - {content_key: nl.a2.unit73.lesson02.teach.afspraak_maken, kind: phrase, target: {text: "Kan ik een afspraak maken voor een sollicitatiegesprek?", language_code: nl, direction: ltr}, introduced_tokens: [Kan, ik, een, afspraak, maken, voor, sollicitatiegesprek]}
+          - {content_key: nl.a2.unit73.lesson02.teach.natuurlijk_dinsdag, kind: phrase, target: {text: "Natuurlijk, kunt u dinsdag om tien uur langskomen?", language_code: nl, direction: ltr}, introduced_tokens: [Natuurlijk, kunt, u, dinsdag, om, tien, uur, langskomen]}
+        exercises:
+          - {content_key: nl.a2.unit73.lesson02.exercise01.choose_afspraak_maken, type: multiple_choice, tested_text: "Kan ik een afspraak maken voor een sollicitatiegesprek", prompt: {target_blocks: [{text: "Can I make an appointment for a job interview?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a2.unit73.lesson02.exercise02.listen_sollicitatiegesprek_volgende_week, type: listen_select, tested_text: "Het sollicitatiegesprek is volgende week", media_asset_key: nl.a2.audio.solliciteren.sollicitatiegesprek_volgende_week.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a2.unit73.lesson02.exercise03.match_gesprek_words, type: matching_pairs, tested_text: "sollicitatiegesprek afspraak vacature solliciteren medewerker", prompt: {target_blocks: []}, pairs: [{left: "het sollicitatiegesprek", right: "the job interview"}, {left: "een afspraak maken", right: "to make an appointment"}, {left: "de vacature", right: "the vacancy"}, {left: solliciteren, right: "to apply"}, {left: "administratief medewerker", right: "administrative assistant"}, {left: "Nina ziet een vacature online.", right: "Nina sees a vacancy online."}]}
+          - {content_key: nl.a2.unit73.lesson02.exercise04.order_afspraak_maken, type: word_order, tested_text: "Kan ik een afspraak maken voor een sollicitatiegesprek", prompt: {target_blocks: []}, word_bank: [Kan, ik, een, afspraak, maken, voor, sollicitatiegesprek]}
+          - {content_key: nl.a2.unit73.lesson02.exercise05.listen_order_natuurlijk_dinsdag, type: listen_order, tested_text: "Natuurlijk kunt u dinsdag om tien uur langskomen", media_asset_key: nl.a2.audio.solliciteren.natuurlijk_dinsdag_tien_uur.01, prompt: {target_blocks: []}, word_bank: [Natuurlijk, kunt, u, dinsdag, om, tien, uur, langskomen]}
+          - {content_key: nl.a2.unit73.lesson02.exercise06.complete_afspraak_maken, type: fill_in_blank, tested_text: "Kan ik een afspraak maken voor een sollicitatiegesprek", prompt: {target_blocks: [{text: "Kan ik een ___ maken voor een sollicitatiegesprek?", language_code: nl, direction: ltr}]}}
+          - {content_key: nl.a2.unit73.lesson02.exercise07.write_sollicitatiegesprek_volgende_week, type: writing_prompt, tested_text: "Het sollicitatiegesprek is volgende week", prompt: {target_blocks: [{text: "Write in Dutch: say the job interview is next week.", language_code: en, direction: ltr}]}}
+
+      - content_key: nl.a2.unit73.lesson03.mijn_ervaring_en_vaardigheden
+        title: "Mijn ervaring en vaardigheden"
+        spine_outcome_id: universal.a2.employment.attend_job_interview
+        teaching:
+          - content_key: nl.a2.unit73.lesson03.teach.ervaring
+            kind: vocabulary
+            target: {text: "de ervaring", language_code: nl, direction: ltr}
+            introduced_tokens: [de, ervaring, Ik, heb, als, vrijwilliger]
+            example: {text: "Ik heb ervaring als vrijwilliger.", language_code: nl, direction: ltr}
+          - content_key: nl.a2.unit73.lesson03.teach.vaardigheid
+            kind: vocabulary
+            target: {text: "de vaardigheid", language_code: nl, direction: ltr}
+            introduced_tokens: [de, vaardigheid, Typen, is, een, belangrijke]
+            example: {text: "Typen is een belangrijke vaardigheid.", language_code: nl, direction: ltr}
+          - {content_key: nl.a2.unit73.lesson03.teach.ervaring_bibliotheek, kind: phrase, target: {text: "Ik heb ervaring als vrijwilliger in de bibliotheek.", language_code: nl, direction: ltr}, introduced_tokens: [Ik, heb, ervaring, als, vrijwilliger, in, de, bibliotheek]}
+          - {content_key: nl.a2.unit73.lesson03.teach.goede_vaardigheden, kind: phrase, target: {text: "Ik heb goede vaardigheden.", language_code: nl, direction: ltr}, introduced_tokens: [Ik, heb, goede, vaardigheden]}
+        exercises:
+          - {content_key: nl.a2.unit73.lesson03.exercise01.choose_ervaring_bibliotheek, type: multiple_choice, tested_text: "Ik heb ervaring als vrijwilliger in de bibliotheek", prompt: {target_blocks: [{text: "I have experience as a volunteer at the library.", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a2.unit73.lesson03.exercise02.listen_ervaring_bibliotheek, type: listen_select, tested_text: "Ik heb ervaring als vrijwilliger in de bibliotheek", media_asset_key: nl.a2.audio.solliciteren.ervaring_als_vrijwilliger.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a2.unit73.lesson03.exercise03.match_ervaring_words, type: matching_pairs, tested_text: "ervaring vaardigheid vrijwilliger bibliotheek sollicitatiegesprek afspraak vacature", prompt: {target_blocks: []}, pairs: [{left: "de ervaring", right: "the experience"}, {left: "de vaardigheid", right: "the skill"}, {left: vrijwilliger, right: volunteer}, {left: "de bibliotheek", right: "the library"}, {left: "het sollicitatiegesprek", right: "the job interview"}, {left: "een afspraak maken", right: "to make an appointment"}, {left: "de vacature", right: "the vacancy"}]}
+          - {content_key: nl.a2.unit73.lesson03.exercise04.order_ervaring_bibliotheek, type: word_order, tested_text: "Ik heb ervaring als vrijwilliger in de bibliotheek", prompt: {target_blocks: []}, word_bank: [Ik, heb, ervaring, als, vrijwilliger, in, de, bibliotheek]}
+          - {content_key: nl.a2.unit73.lesson03.exercise05.listen_order_goede_vaardigheden, type: listen_order, tested_text: "Ik heb goede vaardigheden", media_asset_key: nl.a2.audio.solliciteren.goede_vaardigheden.01, prompt: {target_blocks: []}, word_bank: [Ik, heb, goede, vaardigheden]}
+          - {content_key: nl.a2.unit73.lesson03.exercise06.translate_typen_vaardigheid, type: translation, tested_text: "Typen is een belangrijke vaardigheid", prompt: {target_blocks: [{text: "Typing is an important skill.", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a2.unit73.lesson03.exercise07.respond_goede_vaardigheden, type: dialogue_response, tested_text: "Ik heb goede vaardigheden", prompt: {target_blocks: [{text: "Say in Dutch: I have good skills.", language_code: en, direction: ltr}]}}
+
+      - content_key: nl.a2.unit73.lesson04.ben_ik_beschikbaar
+        title: "Ben ik beschikbaar?"
+        spine_outcome_id: universal.a2.employment.attend_job_interview
+        teaching:
+          - content_key: nl.a2.unit73.lesson04.teach.beschikbaar
+            kind: vocabulary
+            target: {text: "beschikbaar", language_code: nl, direction: ltr}
+            introduced_tokens: [beschikbaar, Nina, is, vanaf, maandag]
+            example: {text: "Nina is beschikbaar vanaf maandag.", language_code: nl, direction: ltr}
+          - content_key: nl.a2.unit73.lesson04.teach.werktijden
+            kind: vocabulary
+            target: {text: "de werktijden", language_code: nl, direction: ltr}
+            introduced_tokens: [de, werktijden, Wat, zijn]
+            example: {text: "Wat zijn de werktijden?", language_code: nl, direction: ltr}
+          - {content_key: nl.a2.unit73.lesson04.teach.beschikbaar_dagen, kind: phrase, target: {text: "Ik ben beschikbaar op maandag, woensdag en vrijdag.", language_code: nl, direction: ltr}, introduced_tokens: [Ik, ben, beschikbaar, op, maandag, woensdag, en, vrijdag]}
+          - {content_key: nl.a2.unit73.lesson04.teach.werktijden_precies, kind: phrase, target: {text: "Wat zijn de werktijden precies?", language_code: nl, direction: ltr}, introduced_tokens: [Wat, zijn, de, werktijden, precies]}
+        exercises:
+          - {content_key: nl.a2.unit73.lesson04.exercise01.choose_beschikbaar_dagen, type: multiple_choice, tested_text: "Ik ben beschikbaar op maandag, woensdag en vrijdag", prompt: {target_blocks: [{text: "I am available on Monday, Wednesday, and Friday.", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a2.unit73.lesson04.exercise02.listen_nina_beschikbaar, type: listen_select, tested_text: "Nina is beschikbaar vanaf maandag", media_asset_key: nl.a2.audio.solliciteren.nina_beschikbaar_vanaf_maandag.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a2.unit73.lesson04.exercise03.match_beschikbaar_words, type: matching_pairs, tested_text: "beschikbaar werktijden ervaring vaardigheid vrijwilliger bibliotheek sollicitatiegesprek vacature", prompt: {target_blocks: []}, pairs: [{left: beschikbaar, right: available}, {left: "de werktijden", right: "the working hours"}, {left: "de ervaring", right: "the experience"}, {left: "de vaardigheid", right: "the skill"}, {left: vrijwilliger, right: volunteer}, {left: "de bibliotheek", right: "the library"}, {left: "het sollicitatiegesprek", right: "the job interview"}, {left: "de vacature", right: "the vacancy"}]}
+          - {content_key: nl.a2.unit73.lesson04.exercise04.order_beschikbaar_dagen, type: word_order, tested_text: "Ik ben beschikbaar op maandag woensdag en vrijdag", prompt: {target_blocks: []}, word_bank: [Ik, ben, beschikbaar, op, maandag, woensdag, en, vrijdag]}
+          - {content_key: nl.a2.unit73.lesson04.exercise05.listen_order_werktijden_precies, type: listen_order, tested_text: "Wat zijn de werktijden precies", media_asset_key: nl.a2.audio.solliciteren.wat_zijn_de_werktijden_precies.01, prompt: {target_blocks: []}, word_bank: [Wat, zijn, de, werktijden, precies]}
+          - {content_key: nl.a2.unit73.lesson04.exercise06.complete_beschikbaar_dagen, type: fill_in_blank, tested_text: "Ik ben beschikbaar op maandag, woensdag en vrijdag", prompt: {target_blocks: [{text: "Ik ben ___ op maandag, woensdag en vrijdag.", language_code: nl, direction: ltr}]}}
+          - {content_key: nl.a2.unit73.lesson04.exercise07.translate_werktijden, type: translation, tested_text: "Wat zijn de werktijden", prompt: {target_blocks: [{text: "What are the working hours?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a2.unit73.lesson04.exercise08.write_beschikbaar_dagen, type: writing_prompt, tested_text: "Ik ben beschikbaar op maandag, woensdag en vrijdag", prompt: {target_blocks: [{text: "Write in Dutch: say you are available on Monday, Wednesday, and Friday.", language_code: en, direction: ltr}]}}
+
+      - content_key: nl.a2.unit73.lesson05.een_vacature_lezen
+        title: "Een vacature lezen"
+        spine_outcome_id: universal.a2.employment.attend_job_interview
+        teaching:
+          - content_key: nl.a2.unit73.lesson05.teach.vacature_tekst
+            kind: reading
+            target:
+              text: "Kantoor Bloem zoekt een administratief medewerker. Ervaring met klantcontact is een pre. Werktijden: maandag, woensdag en vrijdag, van negen tot vijf uur. Bel voor een sollicitatiegesprek."
+              language_code: nl
+              direction: ltr
+            introduced_tokens: [Kantoor, Bloem, zoekt, een, administratief, medewerker, Ervaring, met, klantcontact, is, pre, Werktijden, maandag, woensdag, en, vrijdag, van, negen, tot, vijf, uur, Bel, voor, sollicitatiegesprek]
+          - {content_key: nl.a2.unit73.lesson05.teach.ervaring_klantcontact, kind: phrase, target: {text: "Ik heb ervaring met klantcontact.", language_code: nl, direction: ltr}, introduced_tokens: [Ik, heb, ervaring, met, klantcontact]}
+        exercises:
+          - {content_key: nl.a2.unit73.lesson05.exercise01.read_functie, type: reading_comprehension, tested_text: "administratief medewerker", prompt: {target_blocks: [{text: "According to the ad, what job is Kantoor Bloem looking to fill?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a2.unit73.lesson05.exercise02.read_ervaring_pre, type: reading_comprehension, tested_text: "Ervaring met klantcontact is een pre", prompt: {target_blocks: [{text: "According to the ad, what experience is a plus?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a2.unit73.lesson05.exercise03.read_werktijden, type: reading_comprehension, tested_text: "maandag woensdag en vrijdag van negen tot vijf uur", prompt: {target_blocks: [{text: "According to the ad, which days and hours does the job involve?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a2.unit73.lesson05.exercise04.read_volgende_stap, type: reading_comprehension, tested_text: "Bel voor een sollicitatiegesprek", prompt: {target_blocks: [{text: "According to the ad, what should you do to apply?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a2.unit73.lesson05.exercise05.listen_vacature_tekst, type: listen_select, tested_text: "Kantoor Bloem zoekt een administratief medewerker", media_asset_key: nl.a2.audio.solliciteren.vacature_tekst.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a2.unit73.lesson05.exercise06.match_vacature_points, type: matching_pairs, tested_text: "administratief medewerker klantcontact werktijden sollicitatiegesprek", prompt: {target_blocks: []}, pairs: [{left: "administratief medewerker", right: "the job on offer"}, {left: klantcontact, right: "the preferred experience"}, {left: "van negen tot vijf uur", right: "the working hours"}]}
+          - {content_key: nl.a2.unit73.lesson05.exercise07.write_ervaring_klantcontact, type: writing_prompt, tested_text: "Ik heb ervaring met klantcontact", prompt: {target_blocks: [{text: "Write in Dutch: say you have experience with customer contact.", language_code: en, direction: ltr}]}}
+
+      - content_key: nl.a2.unit73.lesson06.het_sollicitatiegesprek
+        title: "Het sollicitatiegesprek"
+        spine_outcome_id: universal.a2.employment.attend_job_interview
+        teaching:
+          - {content_key: nl.a2.unit73.lesson06.teach.jansen_greet, kind: dialogue, target: {text: "Goedemorgen, welkom bij Kantoor Bloem. Vertelt u eens over uw ervaring.", language_code: nl, direction: ltr, speaker: "mevrouw Jansen"}, introduced_tokens: [Goedemorgen, welkom, bij, Kantoor, Bloem, Vertelt, u, eens, over, uw, ervaring]}
+          - {content_key: nl.a2.unit73.lesson06.teach.nina_ervaring, kind: dialogue, target: {text: "Goedemorgen. Ik heb ervaring als vrijwilliger in de bibliotheek. Daar had ik veel klantcontact.", language_code: nl, direction: ltr, speaker: Nina}, introduced_tokens: [Goedemorgen, Ik, heb, ervaring, als, vrijwilliger, in, de, bibliotheek, Daar, had, ik, veel, klantcontact]}
+          - {content_key: nl.a2.unit73.lesson06.teach.jansen_beschikbaar, kind: dialogue, target: {text: "Mooi. Bent u beschikbaar op maandag, woensdag en vrijdag?", language_code: nl, direction: ltr, speaker: "mevrouw Jansen"}, introduced_tokens: [Mooi, Bent, u, beschikbaar, op, maandag, woensdag, en, vrijdag]}
+          - {content_key: nl.a2.unit73.lesson06.teach.nina_dat_kan, kind: dialogue, target: {text: "Ja, dat kan. Wat zijn de werktijden precies?", language_code: nl, direction: ltr, speaker: Nina}, introduced_tokens: ["Ja", dat, kan, Wat, zijn, de, werktijden, precies]}
+          - {content_key: nl.a2.unit73.lesson06.teach.jansen_uren_contact, kind: dialogue, target: {text: "Van negen tot vijf uur. Wij nemen deze week nog contact met u op.", language_code: nl, direction: ltr, speaker: "mevrouw Jansen"}, introduced_tokens: [Van, negen, tot, vijf, uur, Wij, nemen, deze, week, nog, contact, met, u, op]}
+          - {content_key: nl.a2.unit73.lesson06.teach.nina_dank_gesprek, kind: dialogue, target: {text: "Dank u wel voor het gesprek.", language_code: nl, direction: ltr, speaker: Nina}, introduced_tokens: [Dank, u, wel, voor, het, gesprek]}
+          - {content_key: nl.a2.unit73.lesson06.teach.summary_grammar, kind: grammar_note, target: {text: "Nina heeft gesolliciteerd bij Kantoor Bloem. Zij heeft ervaring als vrijwilliger in de bibliotheek.", language_code: nl, direction: ltr}, introduced_tokens: [Nina, heeft, gesolliciteerd, bij, Kantoor, Bloem, Zij, ervaring, als, vrijwilliger, in, de, bibliotheek]}
+        exercises:
+          - {content_key: nl.a2.unit73.lesson06.exercise01.listen_jansen_greet, type: listen_select, tested_text: "Vertelt u eens over uw ervaring", media_asset_key: nl.a2.audio.solliciteren.jansen_groet.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a2.unit73.lesson06.exercise02.comprehend_nina_klantcontact, type: dialogue_comprehension, tested_text: "Daar had ik veel klantcontact", media_asset_key: nl.a2.audio.dialogue.sollicitatiegesprek.01, prompt: {target_blocks: [{text: "Why does Nina say her library experience matters?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a2.unit73.lesson06.exercise03.comprehend_jansen_beschikbaar, type: dialogue_comprehension, tested_text: "Bent u beschikbaar op maandag woensdag en vrijdag", media_asset_key: nl.a2.audio.dialogue.sollicitatiegesprek.01, prompt: {target_blocks: [{text: "What does mevrouw Jansen ask about?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a2.unit73.lesson06.exercise04.comprehend_jansen_contact, type: dialogue_comprehension, tested_text: "Wij nemen deze week nog contact met u op", media_asset_key: nl.a2.audio.dialogue.sollicitatiegesprek.01, prompt: {target_blocks: [{text: "What does mevrouw Jansen say about next steps?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a2.unit73.lesson06.exercise05.order_dank_gesprek, type: word_order, tested_text: "Dank u wel voor het gesprek", prompt: {target_blocks: []}, word_bank: [Dank, u, wel, voor, het, gesprek]}
+          - {content_key: nl.a2.unit73.lesson06.exercise06.respond_jansen_beschikbaar, type: dialogue_response, tested_text: "Ja dat kan Wat zijn de werktijden precies", prompt: {target_blocks: [{text: "Bent u beschikbaar op maandag, woensdag en vrijdag?", language_code: nl, direction: ltr}]}}
+          - {content_key: nl.a2.unit73.lesson06.exercise07.listen_type_uren_contact, type: listen_type, tested_text: "Van negen tot vijf uur Wij nemen deze week nog contact met u op", media_asset_key: nl.a2.audio.solliciteren.negen_tot_vijf_contact.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a2.unit73.lesson06.exercise08.write_summary_grammar, type: writing_prompt, tested_text: "Nina heeft gesolliciteerd bij Kantoor Bloem Zij heeft ervaring als vrijwilliger in de bibliotheek", prompt: {target_blocks: [{text: "Write two Dutch sentences: Nina applied at Kantoor Bloem, and she has experience as a volunteer at the library.", language_code: en, direction: ltr}]}}
