@@ -12,7 +12,7 @@ from sqlalchemy import Float, case, delete, func, select, text
 from sqlalchemy.orm import Session
 from app.core.config import get_settings
 from app.core.rate_limit import DailyCharBudget, RateLimiter, register_limiter
-from app.core.security import create_token, hash_password, verify_password
+from app.core.security import create_refresh_token, create_token, hash_password, verify_password
 from app.db.session import get_db
 from app.models import *
 from app.schemas.api import *
@@ -91,8 +91,51 @@ def media_asset_path(key: str) -> Path:
         )
     return MEDIA_ASSETS_DIR / f"{key}.mp3"
 
-def auth_response(user):
-    return {"access_token":create_token(user.id),"token_type":"bearer","expires_in":get_settings().access_token_expire_seconds,"user":user}
+def utc_now():
+    return datetime.now(timezone.utc)
+
+def as_aware(value):
+    return value if value.tzinfo else value.replace(tzinfo=timezone.utc)
+
+def issue_refresh_token(db:Session,user_id:str,now_value:datetime|None=None) -> str:
+    raw_token=create_refresh_token()
+    now_value=now_value or utc_now()
+    db.add(
+        RefreshToken(
+            token_hash=hash_password(raw_token),
+            user_id=user_id,
+            issued_at=now_value,
+            expires_at=now_value+timedelta(seconds=get_settings().refresh_token_expire_seconds),
+        )
+    )
+    return raw_token
+
+def find_refresh_token(db:Session,raw_token:str):
+    for token in db.scalars(select(RefreshToken)):
+        try:
+            if verify_password(raw_token,token.token_hash):
+                return token
+        except Exception:
+            continue
+    return None
+
+def revoke_all_refresh_tokens(db:Session,user_id:str,now_value:datetime):
+    for token in db.scalars(
+        select(RefreshToken).where(
+            RefreshToken.user_id==user_id,
+            RefreshToken.revoked_at.is_(None),
+        )
+    ):
+        token.revoked_at=now_value
+
+def auth_response(db:Session,user):
+    refresh_token=issue_refresh_token(db,user.id)
+    db.commit()
+    return {"access_token":create_token(user.id),"refresh_token":refresh_token,"token_type":"bearer","expires_in":get_settings().access_token_expire_seconds,"user":user}
+
+def refresh_response(db:Session,user_id:str):
+    refresh_token=issue_refresh_token(db,user_id)
+    return {"access_token":create_token(user_id),"refresh_token":refresh_token,"token_type":"bearer","expires_in":get_settings().access_token_expire_seconds}
 def normalized(v,case_sensitive=False):
     """Collapse whitespace and (unless case_sensitive) casefold, recursively
     for list/dict values. case_sensitive is a 2026-07-07 addition (German's
@@ -343,15 +386,41 @@ def register(body:RegisterIn,request:Request,db:Session=Depends(get_db)):
     if db.scalar(select(User).where(User.email==email)): fail(409,"email_exists","An account with this email already exists")
     user=User(email=email,password_hash=hash_password(body.password),display_name=body.display_name or email.split("@")[0],is_admin=email in get_settings().admin_email_set,timezone=valid_timezone_or_none(body.timezone)); db.add(user); db.flush()
     db.add(UserStats(user_id=user.id,total_xp=0,streak_days=0,last_activity_date=None,daily_goal=20))
-    db.commit(); return auth_response(user)
+    return auth_response(db,user)
 @router.post("/auth/login",response_model=AuthOut)
 def login(body:LoginIn,request:Request,db:Session=Depends(get_db)):
     enforce_rate_limit(LOGIN_RATE_LIMIT,client_ip(request),"login_rate_limited","Too many login attempts. Please wait before trying again.")
     user=db.scalar(select(User).where(User.email==body.email.lower()))
     if not user or not verify_password(body.password,user.password_hash): fail(401,"invalid_credentials","Invalid email or password")
     valid_tz=valid_timezone_or_none(body.timezone)
-    if valid_tz and valid_tz!=user.timezone: user.timezone=valid_tz; db.commit()
-    return auth_response(user)
+    if valid_tz and valid_tz!=user.timezone: user.timezone=valid_tz
+    return auth_response(db,user)
+@router.post("/auth/refresh",response_model=RefreshOut)
+def refresh(body:RefreshIn,db:Session=Depends(get_db)):
+    refresh_token=find_refresh_token(db,body.refresh_token)
+    now_value=utc_now()
+    if not refresh_token:
+        fail(401,"invalid_refresh_token","Invalid or expired refresh token")
+    if refresh_token.revoked_at is not None:
+        revoke_all_refresh_tokens(db,refresh_token.user_id,now_value)
+        db.commit()
+        fail(401,"refresh_token_reused","Refresh token was already used or revoked")
+    if as_aware(refresh_token.expires_at)<=now_value:
+        fail(401,"invalid_refresh_token","Invalid or expired refresh token")
+    user=db.get(User,refresh_token.user_id)
+    if not user:
+        fail(401,"invalid_refresh_token","Invalid or expired refresh token")
+    refresh_token.revoked_at=now_value
+    response=refresh_response(db,user.id)
+    db.commit()
+    return response
+@router.post("/auth/logout",status_code=204)
+def logout(body:LogoutIn,db:Session=Depends(get_db)):
+    refresh_token=find_refresh_token(db,body.refresh_token)
+    if refresh_token and refresh_token.revoked_at is None:
+        refresh_token.revoked_at=utc_now()
+        db.commit()
+    return Response(status_code=204)
 @router.get("/auth/me",response_model=MeOut)
 def me(user=Depends(current_user)): return user
 @router.delete("/me",status_code=204)

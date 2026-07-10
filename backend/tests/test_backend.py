@@ -10,7 +10,8 @@ from app.content.service import import_content
 def test_auth_register_login_me(client):
     body = {"email": "auth@example.com", "password": "password123", "display_name": "Auth"}
     response = client.post("/auth/register", json=body)
-    assert response.status_code == 201 and response.json()["expires_in"] == 86400
+    assert response.status_code == 201 and response.json()["expires_in"] == 1800
+    assert response.json()["refresh_token"]
     login = client.post("/auth/login", json={"email": body["email"], "password": body["password"]})
     me = client.get("/auth/me", headers={"Authorization": f"Bearer {login.json()['access_token']}"})
     assert login.status_code == 200 and me.json()["email"] == body["email"]
