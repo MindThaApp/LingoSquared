@@ -606,6 +606,22 @@ NL_GLOSSES.update({
     "Bushalte": "Bus stop", "Kijk": "look", "Mooi": "nice; good",
 })
 
+# A2 unit 73 (sollicitatiegesprek/job interview), added 2026-07-10.
+NL_GLOSSES.update({
+    "vacature": "vacancy; job opening", "solliciteren": "to apply",
+    "Kantoor": "Office", "Bloem": "Bloem", "zoekt": "is looking for",
+    "administratief": "administrative", "medewerker": "employee; assistant",
+    "sollicitatiegesprek": "job interview", "langskomen": "to come by",
+    "ervaring": "experience", "vrijwilliger": "volunteer",
+    "vaardigheid": "skill", "Typen": "Typing", "belangrijke": "important",
+    "goede": "good", "vaardigheden": "skills", "beschikbaar": "available",
+    "werktijden": "working hours", "Ervaring": "Experience",
+    "klantcontact": "customer contact", "pre": "plus; advantage",
+    "Werktijden": "Working hours", "Vertelt": "Tell",
+    "had": "had", "gesprek": "conversation; interview",
+    "gesolliciteerd": "applied",
+})
+
 # Case variants are tokens in their own right because provenance preserves the
 # realization spelling. Their gloss is the explicit lexical gloss above.
 for _token in (
@@ -685,6 +701,24 @@ NOUNS.update({
     "recept", "pillen", "infinitieven", "Diagnose", "dokter", "verwarming",
     "monteur", "melding", "contact", "Bevestiging", "woningcorporatie",
     "Woningcorporatie", "bezoek", "Huisarts", "vierentwintig",
+})
+
+# A2 unit 73 (sollicitatiegesprek/job interview), added 2026-07-10 alongside
+# the new realization file picked up by UNIT_FILES_A2's broad glob.
+PROPER_NOUNS.update({"Kantoor", "Bloem"})
+ADJECTIVES.update({
+    "administratief", "belangrijke", "goede", "beschikbaar",
+})
+ADVERBS.update({"pre"})
+VERBS.update({
+    "solliciteren", "zoekt", "langskomen", "Typen", "Vertelt", "had",
+    "gesolliciteerd",
+})
+NOUNS.update({
+    "vacature", "medewerker", "sollicitatiegesprek", "ervaring",
+    "vrijwilliger", "vaardigheid", "vaardigheden", "werktijden",
+    "klantcontact", "gesprek",
+    "Ervaring", "Werktijden",
 })
 
 # Units 29-33 (hobbies, appearance, animals, sports, transportation), added
@@ -905,6 +939,13 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         "taalcafe_fenna_omar": "transport_dialogue",
         "wie_reist_hoe": "transport_reading",
         "taalcafe_samen_fietsen": "transport_wrapup_dialogue",
+        # A2 unit 73 (sollicitatiegesprek/job interview), added 2026-07-10.
+        "ik_wil_solliciteren": "job_application_interest",
+        "ik_bel_over_de_vacature": "job_interview_appointment",
+        "mijn_ervaring_en_vaardigheden": "experience_and_skills",
+        "ben_ik_beschikbaar": "availability_and_hours",
+        "een_vacature_lezen": "job_ad_reading",
+        "het_sollicitatiegesprek": "job_interview_dialogue",
     }
     semantic.append(lesson_categories[unit_lesson])
     if t in {"jij", "je"}: semantic.append("informal_address")
@@ -1536,6 +1577,39 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     # per AUTHORING_GUIDE #18) widen the a1-course pool with a same-course
     # case-duplicate if this unit's own dialogue ever capitalizes it.
     if token == "alstublieft": semantic.append("vervoer_alstublieft_single")
+
+    # A2 unit 73 (sollicitatiegesprek/job interview), added 2026-07-10.
+    # Recognition-only employment vocabulary spanning nouns/adjectives/verbs
+    # from the job-ad and interview lessons. The narrower tags below carry
+    # any shared-frame assumptions.
+    if t in {"vacature", "solliciteren", "medewerker", "sollicitatiegesprek",
+             "ervaring", "vrijwilliger", "vaardigheid", "vaardigheden",
+             "beschikbaar", "werktijden", "klantcontact", "gesprek"}:
+        semantic.append("job_interview_vocab")
+    # Exact-case tag for matching_pairs: Ervaring/Werktijden appear as
+    # sentence-initial/heading variants in the reading lesson and should not
+    # be drawn alongside their lowercase case-duplicates.
+    if token in {"vacature", "solliciteren", "medewerker", "sollicitatiegesprek",
+                 "ervaring", "vrijwilliger", "vaardigheid", "vaardigheden",
+                 "beschikbaar", "werktijden", "klantcontact", "gesprek"}:
+        semantic.append("job_interview_vocab_pure")
+    # Two singular role/position nouns safe after "een" in the application
+    # context: "een administratief medewerker" and "een vrijwilliger".
+    if t in {"medewerker", "vrijwilliger"}:
+        semantic.append("job_role_noun")
+    # Skills/experience nouns used in "Ik heb {item}" frames. "ervaring" is
+    # mass-singular; "vaardigheden" is plural, but both are directly attested
+    # in this unit's "Ik heb ..." sentences.
+    if t in {"ervaring", "vaardigheden"}:
+        semantic.append("job_have_noun")
+    # Availability/time vocabulary is recognition-only; beschikbaar is an
+    # adjective while werktijden is a plural noun.
+    if t in {"beschikbaar", "werktijden"}:
+        semantic.append("availability_vocab")
+    if t == "beschikbaar":
+        semantic.append("job_beschikbaar_single")
+    if t == "klantcontact":
+        semantic.append("job_klantcontact_single")
 
     tags: dict[str, object] = {"semantic": list(dict.fromkeys(semantic))}
     if t in {"jij", "je"}: tags["register"] = "informal"
