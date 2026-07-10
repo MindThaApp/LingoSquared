@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useQueries, useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { CatalogApi, LexemeApi, ProgressApi } from "@lingo/shared/api/endpoints";
@@ -89,6 +90,7 @@ function MistakeRow({ mistake }: { mistake: MistakeLexeme }) {
 
 export function VocabularyPage() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [courseId, setCourseId] = useState<string | null>(null);
   const [tab, setTab] = useState<"words" | "mistakes">("words");
   const [sort, setSort] = useState<LexemeSort>("due_soonest");
@@ -198,6 +200,11 @@ export function VocabularyPage() {
           <div className="card" style={{ padding: "10px 16px", textAlign: "center" }}>
             <strong style={{ fontSize: "1.3rem" }}>{summaryQuery.data.due_today}</strong>
             <div className="muted" style={{ fontSize: "0.75rem" }}>{t("vocabulary.stat_due_today")}</div>
+            {summaryQuery.data.due_today > 0 && (
+              <Link to="/review" style={{ fontSize: "0.8rem", display: "inline-block", marginTop: 4 }}>
+                {t("vocabulary.review_now")}
+              </Link>
+            )}
           </div>
           <div className="card" style={{ padding: "10px 16px", textAlign: "center" }}>
             <strong style={{ fontSize: "1.3rem" }}>{summaryQuery.data.mastery_bands.strong}</strong>
@@ -278,6 +285,21 @@ export function VocabularyPage() {
         <p className="muted">
           {tab === "words" ? t("vocabulary.no_words") : t("vocabulary.no_mistakes")}
         </p>
+      )}
+
+      {/* The practice engine already prioritizes weak/due lexemes server-side
+          (_generate_prioritized), so sending the learner into the practice feed
+          for this course IS the drill for these words -- no lexeme-targeted
+          endpoint needed. courseId rides route state, same pattern as
+          CourseUnitsPage -> UnitLessonsPage. */}
+      {tab === "mistakes" && !!items?.length && (
+        <button
+          className="btn btn-block"
+          style={{ marginBottom: 12 }}
+          onClick={() => navigate("/practice", { state: { courseId: activeCourseId } })}
+        >
+          {t("vocabulary.practice_mistakes")}
+        </button>
       )}
 
       {tab === "words" &&

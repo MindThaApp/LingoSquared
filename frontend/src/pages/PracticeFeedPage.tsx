@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { CatalogApi, PracticeApi, ProgressApi } from "@lingo/shared/api/endpoints";
 import { ExerciseRenderer } from "../components/exercises/ExerciseRenderer";
@@ -140,6 +140,10 @@ function PracticeCard({
 
 export function PracticeFeedPage() {
   const { t } = useTranslation();
+  const location = useLocation();
+  // Course pre-selection via route state (e.g. VocabularyPage's "Practice
+  // these words"), same threading pattern as CourseUnitsPage -> UnitLessonsPage.
+  const requestedCourseId = (location.state as { courseId?: string } | null)?.courseId;
   const [loadingEligibility, setLoadingEligibility] = useState(true);
   const [eligibleCourses, setEligibleCourses] = useState<EligibleCourse[]>([]);
   const [courseId, setCourseId] = useState<string | null>(null);
@@ -167,9 +171,20 @@ export function PracticeFeedPage() {
           ),
         );
         setEligibleCourses(courses);
-        if (courses.length === 1) setCourseId(courses[0].id);
+        // A requested course that isn't actually eligible (no completed
+        // lessons) falls through to the normal picker/locked states rather
+        // than starting a feed the backend would refuse to fill.
+        if (requestedCourseId && courses.some((c) => c.id === requestedCourseId)) {
+          setCourseId(requestedCourseId);
+        } else if (courses.length === 1) {
+          setCourseId(courses[0].id);
+        }
       })
       .finally(() => setLoadingEligibility(false));
+    // Mount-only on purpose: route state is read once when the page is
+    // entered; re-running on in-place state changes would re-append a new
+    // course's items onto an already-populated feed.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const loadMore = useCallback(async () => {
