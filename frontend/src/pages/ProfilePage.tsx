@@ -8,6 +8,7 @@ import { isGuestUser, useAuth } from "../auth/AuthContext";
 import { setAccountDeletedNotice } from "../lib/accountDeletedNotice";
 import { VoiceSettings } from "../components/VoiceSettings";
 import { SpeechSpeedSettings } from "../components/SpeechSpeedSettings";
+import { NotificationSettings } from "../components/NotificationSettings";
 import { DeleteAccountConfirm } from "../components/DeleteAccountConfirm";
 
 export function ProfilePage() {
@@ -134,6 +135,7 @@ export function ProfilePage() {
         )}
       </div>
 
+      <NotificationSettings />
       <SpeechSpeedSettings />
       <VoiceSettings />
 
