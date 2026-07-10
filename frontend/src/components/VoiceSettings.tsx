@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { CatalogApi } from "../api/endpoints";
+import { CatalogApi } from "@lingo/shared/api/endpoints";
 import { BROWSER_TTS_LANG } from "../api/tts";
 import { getVoicePreference, setVoicePreference } from "../lib/voicePreferences";
-import { SAMPLE_SPEECH_TEXT as SAMPLE_TEXT } from "../lib/sampleSpeechText";
+import { SAMPLE_SPEECH_TEXT as SAMPLE_TEXT } from "@lingo/shared/lib/sampleSpeechText";
 
 function useBrowserVoices(): SpeechSynthesisVoice[] {
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);

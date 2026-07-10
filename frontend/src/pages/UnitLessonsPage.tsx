@@ -2,8 +2,8 @@ import { useQuery } from "@tanstack/react-query";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { CheckCircle } from "lucide-react";
-import { CatalogApi, ProgressApi } from "../api/endpoints";
-import type { LessonProgress } from "../api/types";
+import { CatalogApi, ProgressApi } from "@lingo/shared/api/endpoints";
+import type { LessonProgress } from "@lingo/shared/api/types";
 
 export function UnitLessonsPage() {
   const { t } = useTranslation();

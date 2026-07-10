@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import type { AnswerResponse, ContentIssueCategory } from "../api/types";
+import type { AnswerResponse, ContentIssueCategory } from "@lingo/shared/api/types";
 
 // Only the exercise-scoped categories are offered here -- app_bug/
 // general_feedback are FeedbackWidget's (a page has no "wrong answer key").

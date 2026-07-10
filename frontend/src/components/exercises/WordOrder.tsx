@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { TextBlockList } from "../TextBlock";
 import { SpeakButton } from "../SpeakButton";
-import { answerDirectionForExercise } from "../../lib/scripts";
+import { answerDirectionForExercise } from "@lingo/shared/lib/scripts";
 import type { ExerciseComponentProps } from "./types";
 
 // Shared by "word_order" and "listen_order" — listen_order additionally

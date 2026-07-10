@@ -1,4 +1,4 @@
-import type { TextBlock as TextBlockType } from "../api/types";
+import type { TextBlock as TextBlockType } from "@lingo/shared/api/types";
 import { SpeakButton } from "./SpeakButton";
 import { EmphasizedText } from "./EmphasizedText";
 

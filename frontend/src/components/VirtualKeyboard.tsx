@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
-import type { ScriptCode } from "../api/types";
-import { KEYBOARD_LAYOUTS } from "../lib/scripts";
+import type { ScriptCode } from "@lingo/shared/api/types";
+import { KEYBOARD_LAYOUTS } from "@lingo/shared/lib/scripts";
 
 // Every key uses onMouseDown+preventDefault (not onClick alone) so clicking
 // a key never blurs the associated text input — this is what lets the

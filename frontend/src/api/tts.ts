@@ -1,4 +1,4 @@
-import type { TtsFallback } from "./types";
+import type { TtsFallback } from "@lingo/shared/api/types";
 import { getVoicePreference } from "../lib/voicePreferences";
 import { getSpeedPreference } from "../lib/ttsSpeedPreferences";
 

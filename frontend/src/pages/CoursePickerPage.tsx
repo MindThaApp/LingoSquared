@@ -2,11 +2,11 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { CatalogApi } from "../api/endpoints";
-import { sortByCefr } from "../lib/cefr";
-import { LANGUAGE_FLAG } from "../lib/flags";
+import { CatalogApi } from "@lingo/shared/api/endpoints";
+import { sortByCefr } from "@lingo/shared/lib/cefr";
+import { LANGUAGE_FLAG } from "@lingo/shared/lib/flags";
 import { getLevelPreference } from "../lib/levelPreferences";
-import type { CourseSummary, Language } from "../api/types";
+import type { CourseSummary, Language } from "@lingo/shared/api/types";
 
 const UI_SWITCHABLE_LANGUAGES: Record<string, string> = {
   fa: "language_switcher.farsi",

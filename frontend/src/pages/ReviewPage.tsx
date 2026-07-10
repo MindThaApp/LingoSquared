@@ -3,13 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { X } from "lucide-react";
-import { CatalogApi, ReviewApi } from "../api/endpoints";
+import { CatalogApi, ReviewApi } from "@lingo/shared/api/endpoints";
 import { ExerciseRenderer } from "../components/exercises/ExerciseRenderer";
 import { ReportIssueButton } from "../components/ReportIssueButton";
 import { QuitConfirm } from "../components/QuitConfirm";
-import { formatCorrectResponse } from "../lib/formatAnswer";
-import { resultStatus } from "../lib/gradingResult";
-import type { AnswerResponse, PracticeAnswerResult, PracticeItem } from "../api/types";
+import { formatCorrectResponse } from "@lingo/shared/lib/formatAnswer";
+import { resultStatus } from "@lingo/shared/lib/gradingResult";
+import type { AnswerResponse, PracticeAnswerResult, PracticeItem } from "@lingo/shared/api/types";
 
 interface CoursePickOption {
   courseId: string;

@@ -1,8 +1,8 @@
 import { useMemo, useState } from "react";
 import { useQueries, useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { CatalogApi, LexemeApi, ProgressApi } from "../api/endpoints";
-import type { Lexeme, LexemeSort, MistakeLexeme } from "../api/types";
+import { CatalogApi, LexemeApi, ProgressApi } from "@lingo/shared/api/endpoints";
+import type { Lexeme, LexemeSort, MistakeLexeme } from "@lingo/shared/api/types";
 
 const PAGE_SIZE = 50;
 
