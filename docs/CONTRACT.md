@@ -791,6 +791,34 @@ of lexeme-linked `PracticeAttempt` rows and sorts worst-first.
 }
 ```
 
+### Vocabulary export, 2026-07-10
+
+`GET /courses/{course_id}/lexemes/export?format=csv|anki` downloads the
+current user's tracked vocabulary for that course (same
+`UserLexemeSRS`-backed population as `GET /me/lexemes` — encountered words
+only, never the full course-wide lexeme pool) as a file for external tools.
+Auth required. Unknown course returns `404 course_not_found`. `format`
+defaults to `csv`; any other value is a 422. Rows are sorted alphabetically
+by token. This is a file-download endpoint, not JSON — no pagination, all
+tracked rows in one response, `Content-Disposition: attachment` with a
+`vocabulary-{course_id}.{csv|txt}` filename.
+
+`format=csv` (`Content-Type: text/csv; charset=utf-8`) is a spreadsheet
+export with a header row:
+
+```csv
+token,gloss,part_of_speech,mastery,due_at
+uno,one,noun,0.42,2026-07-10T12:00:00+00:00
+```
+
+`format=anki` (`Content-Type: text/tab-separated-values; charset=utf-8`,
+`.txt` filename since that's what Anki's importer expects) is the standard
+2-column Anki text-import shape — front (token) TAB back (gloss), one note
+per line, no header row. Two `#`-prefixed Anki file-header directives
+(`#separator:tab`, `#html:false`) lead the file; Anki ≥2.1.55 honors them
+and older versions ignore `#` lines as comments, so the file imports
+cleanly either way.
+
 ### Content issue reporting for PracticeItem-backed content, 2026-07-07
 
 `POST /exercises/{exercise_id}/report` only ever recognized real `Exercise`
