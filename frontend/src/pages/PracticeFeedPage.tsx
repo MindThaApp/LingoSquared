@@ -17,6 +17,12 @@ import type {
 const BATCH_SIZE = 10;
 const PREFETCH_THRESHOLD = 3;
 
+// Old budget-Android WebViews (a real slice of the fa/prs audience) can
+// lack IntersectionObserver entirely -- constructing it unguarded would
+// hard-crash the whole feed at first render. When it's missing, fall back
+// to a manual "Load more" button instead of auto-loading infinite scroll.
+const SUPPORTS_INTERSECTION_OBSERVER = typeof IntersectionObserver !== "undefined";
+
 // These codes mean the item itself can never be answered again (already
 // answered elsewhere, expired mid-scroll, or not this user's) -- distinct
 // from a transient network/server failure, which IS retryable with the
@@ -188,6 +194,7 @@ export function PracticeFeedPage() {
   }, [courseId]);
 
   useEffect(() => {
+    if (!SUPPORTS_INTERSECTION_OBSERVER) return;
     const targetIndex = items.length - PREFETCH_THRESHOLD;
     const target = targetIndex >= 0 ? cardRefs.current.get(targetIndex) : null;
     if (!target) return;
@@ -274,6 +281,12 @@ export function PracticeFeedPage() {
       ))}
 
       {loadingMore && <div className="page-loading">{t("common.loading")}</div>}
+
+      {!SUPPORTS_INTERSECTION_OBSERVER && !exhausted && !loadingMore && items.length > 0 && (
+        <button className="btn btn-block" onClick={() => loadMore()}>
+          {t("practice.load_more")}
+        </button>
+      )}
 
       {exhausted && !loadingMore && (
         <p className="muted" style={{ textAlign: "center" }}>
