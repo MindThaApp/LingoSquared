@@ -103,7 +103,12 @@ export function CourseUnitsPage() {
 
   const level = getLevelPreference(courseId);
   const recommendedIndex =
-    level && readingWriting.length > 1 ? recommendedUnitIndex(level, readingWriting.length) : -1;
+    level && readingWriting.length > 1
+      ? recommendedUnitIndex(
+          level,
+          readingWriting.map((u) => u.content_key),
+        )
+      : -1;
 
   const lastUnitId = getLastVisitedUnit(courseId);
   useEffect(() => {
