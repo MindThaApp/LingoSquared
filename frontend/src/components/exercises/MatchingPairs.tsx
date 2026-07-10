@@ -1,11 +1,20 @@
 import { useMemo, useState } from "react";
 import { TextBlockList } from "../TextBlock";
 import { SpeakButton } from "../SpeakButton";
+import { answerDirectionForExercise } from "@lingo/shared/lib/scripts";
 import type { ExerciseComponentProps } from "./types";
 
 export function MatchingPairs({ exercise, onAnswer, disabled }: ExerciseComponentProps) {
   const pairs = exercise.prompt.pairs ?? [];
   const answerLanguageCode = exercise.prompt.answer_language_code;
+  // The left column is the answer-language side (same answer_language_code
+  // the SpeakButton below speaks p.left in). Once matched, the button text
+  // becomes a MIXED-direction string -- e.g. an RTL Farsi/Dari term + an LTR
+  // arrow + an English gloss -- and with no explicit base direction the
+  // Unicode bidi algorithm can put the arrow/gloss on the wrong visual side.
+  // Same footgun class as WordOrder.tsx's word_bank fix (2026-07-09): raw
+  // token strings carry no direction of their own, unlike text_blocks.
+  const direction = answerDirectionForExercise(exercise);
   const rightOptions = useMemo(
     () => [...pairs.map((p) => p.right)].sort(() => Math.random() - 0.5),
     // eslint-disable-next-line react-hooks/exhaustive-deps -- shuffle once per exercise, not per pairs reference
@@ -35,8 +44,21 @@ export function MatchingPairs({ exercise, onAnswer, disabled }: ExerciseComponen
                 disabled={disabled || Boolean(matches[p.left])}
                 onClick={() => setActiveLeft(p.left)}
                 style={{ flex: 1, marginBottom: 0 }}
+                dir={direction}
               >
-                {p.left} {matches[p.left] ? `→ ${matches[p.left]}` : ""}
+                {/* <bdi> isolates each side so the (often English, LTR) match
+                    can't reorder around the (possibly RTL) term under the bidi
+                    algorithm; the explicit dir above fixes the base direction
+                    so term -> arrow -> match always reads in the answer
+                    language's own flow, with the arrow glyph flipped to keep
+                    pointing from term to match visually in RTL. */}
+                <bdi>{p.left}</bdi>
+                {matches[p.left] && (
+                  <>
+                    {" "}
+                    {direction === "rtl" ? "←" : "→"} <bdi>{matches[p.left]}</bdi>
+                  </>
+                )}
               </button>
               {answerLanguageCode && <SpeakButton text={p.left} languageCode={answerLanguageCode} />}
             </div>
