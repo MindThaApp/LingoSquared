@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../../auth/AuthContext";
-import { ProgressApi } from "../../api/endpoints";
+import { ProgressApi } from "@lingo/shared/api/endpoints";
 import { LanguageSwitcher } from "../LanguageSwitcher";
 
 const TABS = [

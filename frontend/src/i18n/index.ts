@@ -1,11 +1,12 @@
-import i18n from "i18next";
-import { initReactI18next } from "react-i18next";
-import en from "./locales/en.json";
-import fa from "./locales/fa.json";
-import prs from "./locales/prs.json";
-import nl from "./locales/nl.json";
+// Web-only wrapper around @lingo/shared's platform-agnostic i18next core
+// (see packages/shared/src/i18n/index.ts). localStorage persistence and
+// document.documentElement RTL/lang mutation are DOM APIs that don't exist
+// in React Native, so they live here rather than in the shared package --
+// this file's job is just to restore the exact previous end-to-end
+// behavior (persist + apply direction on every language change, including
+// the very first load) on top of the shared init function.
+import { initI18n, RTL_LANGUAGES } from "@lingo/shared/i18n";
 
-const RTL_LANGUAGES = new Set(["fa", "prs"]);
 const STORAGE_KEY = "ui-language";
 
 function applyDocumentDirection(language: string) {
@@ -15,21 +16,12 @@ function applyDocumentDirection(language: string) {
 
 const storedLanguage = localStorage.getItem(STORAGE_KEY) ?? "en";
 
-i18n.use(initReactI18next).init({
-  resources: {
-    en: { translation: en },
-    fa: { translation: fa },
-    prs: { translation: prs },
-    nl: { translation: nl },
+const i18n = initI18n({
+  language: storedLanguage,
+  onLanguageChanged: (language) => {
+    localStorage.setItem(STORAGE_KEY, language);
+    applyDocumentDirection(language);
   },
-  lng: storedLanguage,
-  fallbackLng: "en",
-  interpolation: { escapeValue: false },
-});
-
-i18n.on("languageChanged", (language) => {
-  localStorage.setItem(STORAGE_KEY, language);
-  applyDocumentDirection(language);
 });
 
 applyDocumentDirection(storedLanguage);

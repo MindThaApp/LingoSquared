@@ -1,18 +1,48 @@
 import type { ApiErrorBody } from "./types";
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8000";
+// Platform seam (added when this file moved from frontend/src/api/client.ts
+// into @lingo/shared): this package has no access to import.meta.env or
+// localStorage (neither exists in a React Native runtime), so every
+// caller MUST call configureApi() once at startup before making any
+// request. Each platform (web's frontend/src/main.tsx, and later
+// mobile/'s entry point) supplies its own base URLs and token storage;
+// the request logic below is otherwise byte-for-byte the same as the
+// original web-only client.
+export interface ApiTokenStorage {
+  get(): string | null;
+  set(token: string): void;
+  clear(): void;
+}
 
-// General feedback (POST /feedback) deliberately targets a SEPARATE,
-// independently-configurable base URL, not BASE_URL. If this app is ever
-// run as many independent local installs (each with its own local
-// backend), feedback still needs to reach ONE centrally-reachable
-// collector Ramin actually checks -- pointing feedback at whatever
-// backend happens to be running locally would silently strand it there.
-// Falls back to BASE_URL, which is correct for the single-shared-backend
-// deployment shapes (home server, hosted domain) where there's only ever
-// one backend anyway. See docs/CONTRACT.md's "General app/page feedback"
-// section.
-const FEEDBACK_BASE_URL = import.meta.env.VITE_FEEDBACK_API_URL ?? BASE_URL;
+export interface ApiConfig {
+  baseUrl: string;
+  // General feedback (POST /feedback) deliberately targets a SEPARATE,
+  // independently-configurable base URL, not baseUrl. If this app is ever
+  // run as many independent local installs (each with its own local
+  // backend), feedback still needs to reach ONE centrally-reachable
+  // collector Ramin actually checks -- pointing feedback at whatever
+  // backend happens to be running locally would silently strand it there.
+  // Callers that don't need this distinction (a single-shared-backend
+  // deployment) should just pass the same value as baseUrl. See
+  // docs/CONTRACT.md's "General app/page feedback" section.
+  feedbackBaseUrl: string;
+  tokenStorage: ApiTokenStorage;
+}
+
+let config: ApiConfig | null = null;
+
+export function configureApi(newConfig: ApiConfig): void {
+  config = newConfig;
+}
+
+function requireConfig(): ApiConfig {
+  if (!config) {
+    throw new Error(
+      "configureApi() must be called before making any API request.",
+    );
+  }
+  return config;
+}
 
 export class ApiError extends Error {
   code: string;
@@ -31,20 +61,17 @@ export function setUnauthorizedHandler(handler: () => void) {
   onUnauthorized = handler;
 }
 
-function getToken(): string | null {
-  return localStorage.getItem("access_token");
-}
-
 export async function apiFetch<T>(
   path: string,
   options: RequestInit = {},
 ): Promise<T> {
-  const token = getToken();
+  const { baseUrl, tokenStorage } = requireConfig();
+  const token = tokenStorage.get();
   const headers = new Headers(options.headers);
   headers.set("Content-Type", "application/json");
   if (token) headers.set("Authorization", `Bearer ${token}`);
 
-  const res = await fetch(`${BASE_URL}${path}`, { ...options, headers });
+  const res = await fetch(`${baseUrl}${path}`, { ...options, headers });
 
   // Auth endpoints return 401 for ordinary "wrong password" cases, not an
   // expired session — only treat 401 as session expiry for authenticated
@@ -89,17 +116,18 @@ export function post<T>(path: string, body?: unknown): Promise<T> {
 }
 
 // POST /feedback is intentionally unauthenticated and lives on its own
-// base URL (see FEEDBACK_BASE_URL above) -- deliberately NOT built on
+// base URL (see feedbackBaseUrl above) -- deliberately NOT built on
 // apiFetch, since apiFetch's 401-means-session-expired handling and
-// single BASE_URL don't apply here: a token from a different backend
+// single baseUrl don't apply here: a token from a different backend
 // (the distributed-local-install case) may fail validation there, and
 // that must resolve to an anonymous report, never a forced logout.
 export async function postFeedback<T>(path: string, body: unknown): Promise<T> {
-  const token = getToken();
+  const { feedbackBaseUrl, tokenStorage } = requireConfig();
+  const token = tokenStorage.get();
   const headers = new Headers({ "Content-Type": "application/json" });
   if (token) headers.set("Authorization", `Bearer ${token}`);
 
-  const res = await fetch(`${FEEDBACK_BASE_URL}${path}`, {
+  const res = await fetch(`${feedbackBaseUrl}${path}`, {
     method: "POST",
     headers,
     body: JSON.stringify(body),

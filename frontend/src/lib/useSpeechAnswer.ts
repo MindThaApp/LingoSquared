@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { getAnswerInputMode, setAnswerInputMode, type AnswerInputMode } from "./answerInputMode";
+import { getAnswerInputMode, setAnswerInputMode, type AnswerInputMode } from "@lingo/shared/lib/answerInputMode";
 import { micRecordingSupported, useMicRecorder } from "./useMicRecorder";
 import { clientTranscriptionSupported, transcribeClientSide } from "./whisperClient";
 import { transcribeViaServer } from "../api/stt";

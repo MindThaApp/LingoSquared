@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { X } from "lucide-react";
-import { CheckpointApi } from "../api/endpoints";
-import { ApiError } from "../api/client";
+import { CheckpointApi } from "@lingo/shared/api/endpoints";
+import { ApiError } from "@lingo/shared/api/client";
 import { ExerciseRenderer } from "../components/exercises/ExerciseRenderer";
 import { QuitConfirm } from "../components/QuitConfirm";
-import { formatCorrectResponse } from "../lib/formatAnswer";
-import { resultStatus } from "../lib/gradingResult";
-import type { AnswerResponse, CheckpointResult, PracticeAnswerResult, PracticeItem } from "../api/types";
+import { formatCorrectResponse } from "@lingo/shared/lib/formatAnswer";
+import { resultStatus } from "@lingo/shared/lib/gradingResult";
+import type { AnswerResponse, CheckpointResult, PracticeAnswerResult, PracticeItem } from "@lingo/shared/api/types";
 
 type Phase =
   | "loading"

@@ -1,18 +1,18 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { CatalogApi, PracticeApi, ProgressApi } from "../api/endpoints";
+import { CatalogApi, PracticeApi, ProgressApi } from "@lingo/shared/api/endpoints";
 import { ExerciseRenderer } from "../components/exercises/ExerciseRenderer";
 import { ReportIssueButton } from "../components/ReportIssueButton";
-import { ApiError } from "../api/client";
-import { formatCorrectResponse } from "../lib/formatAnswer";
-import { resultStatus } from "../lib/gradingResult";
+import { ApiError } from "@lingo/shared/api/client";
+import { formatCorrectResponse } from "@lingo/shared/lib/formatAnswer";
+import { resultStatus } from "@lingo/shared/lib/gradingResult";
 import type {
   AnswerResponse,
   CourseDetail,
   PracticeAnswerResult,
   PracticeItem,
-} from "../api/types";
+} from "@lingo/shared/api/types";
 
 const BATCH_SIZE = 10;
 const PREFETCH_THRESHOLD = 3;

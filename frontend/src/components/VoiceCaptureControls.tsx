@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { micRecordingSupported } from "../lib/useMicRecorder";
 import { useSpeechAnswer } from "../lib/useSpeechAnswer";
-import type { AnswerInputMode } from "../lib/answerInputMode";
+import type { AnswerInputMode } from "@lingo/shared/lib/answerInputMode";
 
 // Shared mic/keyboard toggle + record/transcribe UI for speak_response and
 // speak_repeat. Deliberately NOT a text-field replacement — it just feeds

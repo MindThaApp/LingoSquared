@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { FeedbackApi } from "../api/endpoints";
-import type { ContentIssueCategory } from "../api/types";
+import { FeedbackApi } from "@lingo/shared/api/endpoints";
+import type { ContentIssueCategory } from "@lingo/shared/api/types";
 
 const CATEGORY_KEY: Record<ContentIssueCategory, string> = {
   app_bug: "feedback_widget.category.app_bug",

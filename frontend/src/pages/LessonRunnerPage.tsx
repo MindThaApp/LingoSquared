@@ -3,16 +3,16 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
-import { LessonApi, ReviewApi } from "../api/endpoints";
+import { LessonApi, ReviewApi } from "@lingo/shared/api/endpoints";
 import { ExerciseRenderer } from "../components/exercises/ExerciseRenderer";
 import { TeachingCardView } from "../components/TeachingCardView";
 import { EmphasizedText } from "../components/EmphasizedText";
 import { ReportIssueButton } from "../components/ReportIssueButton";
 import { SpeakButton } from "../components/SpeakButton";
 import { QuitConfirm } from "../components/QuitConfirm";
-import { ApiError } from "../api/client";
-import { formatCorrectResponse } from "../lib/formatAnswer";
-import { resultStatus } from "../lib/gradingResult";
+import { ApiError } from "@lingo/shared/api/client";
+import { formatCorrectResponse } from "@lingo/shared/lib/formatAnswer";
+import { resultStatus } from "@lingo/shared/lib/gradingResult";
 import type {
   AnswerResponse,
   AnswerResult,
@@ -20,7 +20,7 @@ import type {
   PracticeAnswerResult,
   PracticeItem,
   TeachingCard,
-} from "../api/types";
+} from "@lingo/shared/api/types";
 
 interface QueueItem {
   exercise: Exercise;

@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import type { LessonCompleteResult } from "../api/types";
+import type { LessonCompleteResult } from "@lingo/shared/api/types";
 import { MissedWordsSummary } from "./LessonRunnerPage";
 
 export function LessonCompletePage() {
