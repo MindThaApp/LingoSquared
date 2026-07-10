@@ -273,3 +273,20 @@ def test_admin_issue_listing_shows_both_exercise_and_practice_item_reports(
     practice_row = by_id[practice_report.json()["id"]]
     assert practice_row["practice_item_id"] == practice_item_id
     assert practice_row["exercise_id"] is None
+
+    # Triage enrichment (docs/CONTRACT.md "Issue-triage enrichment",
+    # 2026-07-10): each row resolves ITS OWN target's prompt payload --
+    # the exercise-backed row also gets the answer key + open-report
+    # count, the PracticeItem-backed row gets the generated item's
+    # stored prompt only (its correct_response is intentionally not
+    # exposed, and open_report_count is exercise-scoped).
+    with SessionLocal() as db:
+        expected_exercise_prompt = db.get(Exercise, exercise_row["exercise_id"]).prompt
+        expected_item_prompt = db.get(PracticeItem, practice_item_id).prompt
+    assert exercise_row["exercise_prompt"] == expected_exercise_prompt
+    assert exercise_row["open_report_count"] >= 1
+    assert exercise_row["practice_item_prompt"] is None
+    assert practice_row["practice_item_prompt"] == expected_item_prompt
+    assert practice_row["exercise_prompt"] is None
+    assert practice_row["exercise_correct_response"] is None
+    assert practice_row["open_report_count"] is None
