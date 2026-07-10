@@ -43,23 +43,45 @@ generation_provenance:
     example_gloss.
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: codex_fresh_context
+  status: reviewed
+  required_next_reviewer: null
   notes: >-
-    Second Romanian unit, first draft, continuing directly from unit01.
-    Targets the single spine outcome every other language's own unit02
-    uses for numbers (universal.a1.numbers.use_basic_numbers), confirmed
-    against nl/fa/fr/es's own unit02 files before authoring. 3 lessons
-    (bootstrap pace, matching unit01's own size, not the fuller 6-lesson
-    fr/es numbers-unit shape). Teens (12-19) and the higher tens
-    (30-90) are deliberately taught via a single consolidated
+    2026-07-10 fresh-context review (Claude), part of the full ro A1
+    course review (units 01-19). Found and fixed ONE real bug:
+    lesson03's `listen_type_phone` exercise
+    (ro.a1.unit02.lesson03.exercise06.listen_type_phone) had
+    `tested_text: "zero șapte doi unu patru cinci șase opt nouă"` --
+    nine digits, missing the second "șapte" -- while the exercise's own
+    `media_asset_key` (ro.a1.audio.numar_telefon_exemplu.neutral.01)
+    and the overlay's `accepted_answers` both correctly use the full
+    ten-digit phone number "zero, șapte, doi, unu, patru, cinci, șase,
+    șapte, opt, nouă" (0721456789). `tested_text` compiles directly into
+    the exercise's `audio_text` for listen_type/listen_select/
+    listen_order types (used by the frontend's TTS-fallback path
+    whenever no recorded asset exists yet, which is the case here --
+    `status: pending_generation`), so a learner would have heard/been
+    quizzed on a 9-digit number that could never match the 10-digit
+    graded answer. Fixed by correcting `tested_text` to the full
+    ten-digit form, matching both the media asset's recording script
+    and the overlay's accepted answers. Confirmed via a corpus-wide
+    programmatic sweep that no other listen_type/listen_select/
+    listen_order exercise in any of the 19 ro units has a tested_text/
+    media_asset token mismatch. Everything else in this unit checked
+    clean: no same-speaker distractor collisions, no stray YAML
+    booleans, matching_pairs/word_order shapes correct, every exercise
+    type registered, no jargon leaks, correct and consistent
+    diacritics, natural Romanian throughout. Second Romanian unit,
+    first draft, continuing directly from unit01. Targets the single
+    spine outcome every other language's own unit02 uses for numbers
+    (universal.a1.numbers.use_basic_numbers), confirmed against
+    nl/fa/fr/es's own unit02 files before authoring. 3 lessons
+    (bootstrap pace, matching unit01's own size, not the fuller
+    6-lesson fr/es numbers-unit shape). Teens (12-19) and the higher
+    tens (30-90) are deliberately taught via a single consolidated
     grammar_note per pattern rather than one card per number, to keep
     density in line with unit01's per-lesson teaching-card counts while
-    still making every number available to test -- flag this
-    consolidation choice specifically during fresh-context review in
-    case the reviewer prefers one-card-per-number density instead. Needs
-    a fresh-context content review before import, same as every other
-    language's content.
+    still making every number available to test -- this consolidation
+    choice reads fine on review, not flagging it further.
 
 course:
   realization_key: ro.a1
@@ -391,7 +413,7 @@ units:
                 - {text: "Câți ani ___? (adult necunoscut)", language_code: ro, direction: ltr}
           - content_key: ro.a1.unit02.lesson03.exercise06.listen_type_phone
             type: listen_type
-            tested_text: "zero șapte doi unu patru cinci șase opt nouă"
+            tested_text: "zero șapte doi unu patru cinci șase șapte opt nouă"
             media_asset_key: ro.a1.audio.numar_telefon_exemplu.neutral.01
             prompt: {target_blocks: []}
           - content_key: ro.a1.unit02.lesson03.exercise07.complete_de_rule
