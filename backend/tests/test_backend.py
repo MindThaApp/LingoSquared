@@ -1,4 +1,5 @@
 import os
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 from sqlalchemy import delete, select
 from app.db.session import SessionLocal
@@ -273,7 +274,10 @@ def test_tts_fallbacks(client, auth, monkeypatch):
 
         with SessionLocal() as db: db.execute(delete(TTSUsage)); db.commit()
         settings.tts_monthly_char_budget=100
-        def provider_error(text,language_code,speaking_rate=1.0): raise RuntimeError("provider unavailable")
+        def provider_error(text,language_code,speaking_rate=1.0):
+            with SessionLocal() as db:
+                assert db.scalar(select(TTSUsage.characters))==len(text)
+            raise RuntimeError("provider unavailable")
         monkeypatch.setattr(tts_service,"synthesize",provider_error)
         response=client.post("/tts",headers=auth,json={"text":"hello","language_code":"en"})
         assert response.json()=={"use_browser_tts":True,"reason":"provider_error"}
@@ -285,6 +289,58 @@ def test_tts_fallbacks(client, auth, monkeypatch):
         with SessionLocal() as db: assert db.scalar(select(TTSUsage.characters))==5
     finally:
         settings.tts_monthly_char_budget=original_budget
+
+def test_tts_monthly_reservation_concurrency_does_not_overspend(monkeypatch):
+    from app.core.config import get_settings
+    from app.services import tts as tts_service
+
+    settings=get_settings(); original_budget=settings.tts_monthly_char_budget
+    try:
+        with SessionLocal() as db:
+            db.execute(delete(TTSUsage))
+            db.commit()
+        settings.tts_monthly_char_budget=5
+
+        def reserve_once():
+            with SessionLocal() as db:
+                return tts_service.reserve_characters(db,5)
+
+        with ThreadPoolExecutor(max_workers=2) as executor:
+            results=list(executor.map(lambda _: reserve_once(), range(2)))
+
+        assert sorted(results)==[False,True]
+        with SessionLocal() as db:
+            assert db.scalar(select(TTSUsage.characters))==5
+    finally:
+        settings.tts_monthly_char_budget=original_budget
+        with SessionLocal() as db:
+            db.execute(delete(TTSUsage))
+            db.commit()
+
+def test_tts_refund_preserves_other_committed_reservations(monkeypatch):
+    from app.core.config import get_settings
+    from app.services import tts as tts_service
+
+    settings=get_settings(); original_budget=settings.tts_monthly_char_budget
+    try:
+        with SessionLocal() as db:
+            db.execute(delete(TTSUsage))
+            db.commit()
+        settings.tts_monthly_char_budget=20
+
+        with SessionLocal() as first_db:
+            assert tts_service.reserve_characters(first_db,5)
+            with SessionLocal() as second_db:
+                assert tts_service.reserve_characters(second_db,5)
+            tts_service.refund_characters(first_db,5)
+
+        with SessionLocal() as db:
+            assert db.scalar(select(TTSUsage.characters))==5
+    finally:
+        settings.tts_monthly_char_budget=original_budget
+        with SessionLocal() as db:
+            db.execute(delete(TTSUsage))
+            db.commit()
 
 def test_tts_routes_farsi_to_azure_and_covered_languages_to_google(client, auth, monkeypatch):
     from app.services import tts as tts_service

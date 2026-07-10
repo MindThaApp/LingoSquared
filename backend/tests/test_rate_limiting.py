@@ -146,3 +146,24 @@ def test_normal_answer_submission_usage_unaffected(client, auth):
     for _ in range(3):
         r = client.post(f"/exercises/{exercise_id}/answer", headers=auth, json={"response": "some answer"})
         assert r.status_code == 200
+
+
+# --- content reports / general feedback ---
+
+def test_anonymous_feedback_rate_limit_returns_429_after_limit_exceeded(client, monkeypatch):
+    monkeypatch.setattr(router_module.REPORT_RATE_LIMIT, "limit", 2)
+
+    for i in range(2):
+        r = client.post(
+            "/feedback",
+            json={"category": "app_bug", "description": f"Feedback {i}", "page_path": "/home"},
+        )
+        assert r.status_code == 201
+
+    r = client.post(
+        "/feedback",
+        json={"category": "app_bug", "description": "overflow", "page_path": "/home"},
+    )
+    assert r.status_code == 429
+    assert r.json()["error"]["code"] == "report_rate_limited"
+    assert r.json()["error"]["retry_after_seconds"] >= 1
