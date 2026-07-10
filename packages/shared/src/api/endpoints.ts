@@ -95,6 +95,12 @@ export const AuthApi = {
       await post<void>("/auth/logout", { refresh_token: refreshToken });
     }
   },
+  // GET /me/export — the authenticated account's complete data export
+  // (GDPR-style portability, the counterpart to deleteAccount below —
+  // export before deleting). One JSON document; full shape in
+  // docs/CONTRACT.md. Typed loosely on purpose: callers download/save it
+  // verbatim rather than render individual fields.
+  exportData: () => get<Record<string, unknown>>("/me/export"),
   // DELETE /me — permanently deletes the authenticated account and all
   // of its data server-side (204 on success). Irreversible; the caller
   // is responsible for the confirmation UX and for clearing the local
