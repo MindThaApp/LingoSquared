@@ -22,10 +22,39 @@ generation_provenance:
     imported verbatim.
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: codex_fresh_context
+  status: reviewed
+  required_next_reviewer: null
   notes: >-
-    Draft authored 2026-07-09 by Codex. Realizes
+    2026-07-10 fresh-context review (Claude) found and fixed ONE real
+    narrative-consistency bug: lesson04.exercise01's dialogue_comprehension
+    prompt summarizes the whole dialogue in third person ("نیما می‌گوید
+    محله‌اش آرومه. نزدیک خانه‌اش پارک هست. همسایه‌اش خوبه...") but its final
+    clause reverted to the first-person possessive left over from the
+    original dialogue line ("...و کنار خانه ما زندگی می‌کنه" -- "lives next
+    to OUR house"), which doesn't parse against a narrator describing Nima in
+    the third person. Fixed to "کنار خانه‌اش زندگی می‌کنه" ("lives next to
+    HIS house"), consistent with the rest of the same sentence and with every
+    other "خانه ما" occurrence in this file (all of which are legitimately
+    first-person, spoken directly by نیما, and were left untouched). Checked
+    every other dialogue_comprehension/reading_comprehension prompt in this
+    unit for the same first-person-leftover pattern -- none found. Everything
+    else in this unit was checked clean: no listen_select/listen_type
+    exercises exist in this unit at all (only dialogue_comprehension/
+    dialogue_response/multiple_choice/reading_comprehension/matching_pairs/
+    word_order/translation/writing_prompt), so the same-speaker-distractor
+    bug class doesn't apply; no stray unquoted yes/no/true/false/on/off
+    values in any learner-facing field (only the legitimate
+    human_reviewed/target_language_first schema booleans); every exercise
+    type used has a matching case in ExerciseRenderer.tsx; matching_pairs
+    pairs and word_order/accepted_answers shapes match exactly between this
+    realization and its overlay; every spine_outcome_id resolves to a real
+    universal_spine.yaml entry; no internal jargon leaks into learner-facing
+    text; the Farsi reads naturally and with consistent colloquial Iranian
+    register throughout. Re-validated clean after the fix: 0 errors/0
+    warnings standalone and as part of the full 6-unit (33-38) fresh-context
+    review batch.
+
+    Originally authored 2026-07-09 by Codex. Realizes
     universal.a1.neighborhood.describe_neighborhood, the next unrealized A1
     outcome after unit32. Confirmed by yaml.safe_load recursive collection of
     every spine_outcome_id/spine_outcome_ids value across all
@@ -282,7 +311,7 @@ units:
           - content_key: fa.a1.unit33.lesson04.exercise01.dialogue_comprehension_place
             type: dialogue_comprehension
             tested_text: "نیما محله‌ات چطوره محله‌ام آرومه نزدیک خانه ما پارک هست همسایه‌ات چطوره همسایه‌ام خوبه کنار خانه ما زندگی می‌کنه"
-            prompt: {target_blocks: [{text: "نیما می‌گوید محله‌اش آرومه. نزدیک خانه‌اش پارک هست. همسایه‌اش خوبه و کنار خانه ما زندگی می‌کنه.", language_code: fa, direction: rtl}]}
+            prompt: {target_blocks: [{text: "نیما می‌گوید محله‌اش آرومه. نزدیک خانه‌اش پارک هست. همسایه‌اش خوبه و کنار خانه‌اش زندگی می‌کنه.", language_code: fa, direction: rtl}]}
             correct_option: "There is a park near Nima's house."
             distractors:
               - "There is a school next to Nima's house."

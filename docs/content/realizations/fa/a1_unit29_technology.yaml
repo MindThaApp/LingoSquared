@@ -58,9 +58,37 @@ generation_provenance:
     just a dictionary loanword).
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: codex_fresh_context
+  status: reviewed
+  required_next_reviewer: null
   notes: >-
+    2026-07-10 fresh-context review (Claude) found and fixed ONE real
+    cross-lesson factual inconsistency per AUTHORING_GUIDE.md §11.
+    Lesson04's dialogue has سارا say "من زیاد از گوشی استفاده می‌کنم"
+    (I use my phone A LOT) -- not "every day" -- but lesson05's own
+    third-person reading passage originally restated this as "سارا هر
+    روز از گوشی استفاده می‌کنه" (Sara uses her phone EVERY DAY), a
+    different claim than the dialogue actually established (confirmed by
+    the exercise's own feedback text, which correctly used "زیاد" to
+    match the dialogue -- so the reading passage was the one place that
+    drifted). No exercise happened to test this specific frequency word
+    directly, so it wasn't a live wrong-answer bug, but it's a real
+    stated-fact contradiction between the dialogue and the reading within
+    the same unit. Fixed by changing the reading text (both the
+    realization's teaching-card target and both reading_comprehension
+    exercises' tested_text/prompt, all 4 occurrences of the same string)
+    from "سارا هر روز از گوشی استفاده می‌کنه" to "سارا زیاد از گوشی
+    استفاده می‌کنه", matching the dialogue; updated the paired overlay's
+    reading_text gloss to match ("Sara uses her phone a lot" instead of
+    "every day"). زیاد was already taught earlier in this same file
+    (lesson04, before lesson05), so this substitution introduces no
+    untaught-vocabulary violation -- re-confirmed by re-running the
+    compiler validator after the fix (0 errors/0 warnings). Also
+    confirmed 0 stray YAML boolean coercions, no listen_select/
+    listen_type/listen_order exercises, all dialogue_response exercises
+    free-text (no distractors), and all exercise types used have a
+    matching ExerciseRenderer.tsx case. No other real bugs found. Original
+    authoring notes below, retained for context.
+
     Draft authored 2026-07-09 by a Sonnet 5 worker task. Realizes
     universal.a1.technology.describe_device_use (prerequisite:
     universal.a1.communication.basic_phone_contact, covered by unit22's
@@ -540,13 +568,13 @@ units:
             introduced_tokens: [نیما]
           - content_key: fa.a1.unit29.lesson05.teach.reading_text
             kind: reading
-            target: {text: "سارا هر روز از گوشی استفاده می‌کنه. عکس می‌گیره و پیام می‌فرسته. سارا خونه از کامپیوتر هم استفاده می‌کنه. نیما هر روز از اینترنت استفاده می‌کنه.", language_code: fa, direction: rtl}
+            target: {text: "سارا زیاد از گوشی استفاده می‌کنه. عکس می‌گیره و پیام می‌فرسته. سارا خونه از کامپیوتر هم استفاده می‌کنه. نیما هر روز از اینترنت استفاده می‌کنه.", language_code: fa, direction: rtl}
             introduced_tokens: []
         exercises:
           - content_key: fa.a1.unit29.lesson05.exercise01.reading_comprehension_goshi
             type: reading_comprehension
-            tested_text: "سارا هر روز از گوشی استفاده می‌کنه. عکس می‌گیره و پیام می‌فرسته. سارا خونه از کامپیوتر هم استفاده می‌کنه. نیما هر روز از اینترنت استفاده می‌کنه."
-            prompt: {target_blocks: [{text: "سارا هر روز از گوشی استفاده می‌کنه. عکس می‌گیره و پیام می‌فرسته. سارا خونه از کامپیوتر هم استفاده می‌کنه. نیما هر روز از اینترنت استفاده می‌کنه.", language_code: fa, direction: rtl}]}
+            tested_text: "سارا زیاد از گوشی استفاده می‌کنه. عکس می‌گیره و پیام می‌فرسته. سارا خونه از کامپیوتر هم استفاده می‌کنه. نیما هر روز از اینترنت استفاده می‌کنه."
+            prompt: {target_blocks: [{text: "سارا زیاد از گوشی استفاده می‌کنه. عکس می‌گیره و پیام می‌فرسته. سارا خونه از کامپیوتر هم استفاده می‌کنه. نیما هر روز از اینترنت استفاده می‌کنه.", language_code: fa, direction: rtl}]}
             correct_option: "She takes photos and sends messages"
             distractors:
               - "She only calls people"
@@ -554,8 +582,8 @@ units:
               - "She never uses her phone"
           - content_key: fa.a1.unit29.lesson05.exercise02.reading_comprehension_internet
             type: reading_comprehension
-            tested_text: "سارا هر روز از گوشی استفاده می‌کنه. عکس می‌گیره و پیام می‌فرسته. سارا خونه از کامپیوتر هم استفاده می‌کنه. نیما هر روز از اینترنت استفاده می‌کنه."
-            prompt: {target_blocks: [{text: "سارا هر روز از گوشی استفاده می‌کنه. عکس می‌گیره و پیام می‌فرسته. سارا خونه از کامپیوتر هم استفاده می‌کنه. نیما هر روز از اینترنت استفاده می‌کنه.", language_code: fa, direction: rtl}]}
+            tested_text: "سارا زیاد از گوشی استفاده می‌کنه. عکس می‌گیره و پیام می‌فرسته. سارا خونه از کامپیوتر هم استفاده می‌کنه. نیما هر روز از اینترنت استفاده می‌کنه."
+            prompt: {target_blocks: [{text: "سارا زیاد از گوشی استفاده می‌کنه. عکس می‌گیره و پیام می‌فرسته. سارا خونه از کامپیوتر هم استفاده می‌کنه. نیما هر روز از اینترنت استفاده می‌کنه.", language_code: fa, direction: rtl}]}
             correct_option: "The internet"
             distractors:
               - "The computer"

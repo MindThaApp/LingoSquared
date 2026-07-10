@@ -35,10 +35,41 @@ generation_provenance:
     modernization standard.
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: codex_fresh_context
+  status: reviewed
+  required_next_reviewer: null
   notes: >-
-    Draft authored 2026-07-08 by a Sonnet 5 fork. Realizes
+    2026-07-10 fresh-context review (Claude, zero access to the original
+    authoring reasoning) found and fixed TWO real issues, both in
+    lesson06.exercise01.dialogue_comprehension_context, same bug class as
+    fa unit23/unit24's own fresh-context reviews: (1) an English
+    correct_option/distractors block had been duplicated directly into
+    this fa (target-language) realization file, identical to what the
+    overlay already carried -- confirmed via scripts/compile_content.py
+    that the compiled-exercise builder only ever reads correct_option/
+    distractors from exercise_overlay, so this was pure dead English data
+    in a file that should be Farsi-only; removed it. (2) media_assets
+    already declared a real dialogue audio asset
+    (fa.a1.audio.dialogue.appearance.01) but no exercise ever referenced
+    it via media_asset_key, unlike unit21/unit22's own established wiring
+    pattern -- fixed by adding
+    media_asset_key: fa.a1.audio.dialogue.appearance.01 to that exercise,
+    so the asset will actually play once recorded/synthesized. Everything
+    else checked clean: no same-speaker distractor collisions (compiler's
+    validate_same_speaker_dialogue_distractors passed with 0 errors); no
+    stray unquoted YAML booleans; every exercise type used is registered
+    in ExerciseRenderer.tsx; matching_pairs/word_order answer shapes
+    correct; no jargon leaks; Nima's and Maryam's stated appearance
+    (height, hair color, eye color, glasses) is mutually consistent across
+    every teaching card, the lesson05 reading passage, the lesson06
+    dialogue, and every exercise that references them (checked per
+    AUTHORING_GUIDE.md #11); the چشماش/موهاش singular-copula-with-plural-
+    inanimate-subject pattern the draft note flags is used consistently
+    throughout with no internal contradiction; Farsi register and script
+    (Persian keheh/yeh codepoints) read correctly throughout. Re-validated
+    clean standalone and as part of the full fa units 21-26 batch: 0
+    errors/0 warnings.
+
+    Original draft note (2026-07-08, Sonnet 5 fork): realizes
     universal.a1.appearance.describe_physical_appearance (prerequisite:
     universal.a1.family.describe_relationships, covered by unit04 --
     reuses its established برادر/خواهر/دارم pattern's grammar, not its
@@ -464,12 +495,8 @@ units:
           - content_key: fa.a1.unit25.lesson06.exercise01.dialogue_comprehension_context
             type: dialogue_comprehension
             tested_text: "مریم الان میاد مریم چه شکلیه قدش بلنده و موهاش مشکیه چشماش چه رنگیه چشماش قهوه‌ایه باشه ممنون"
+            media_asset_key: fa.a1.audio.dialogue.appearance.01
             prompt: {target_blocks: [{text: "سارا: مریم الان میاد. نیما: مریم چه شکلیه؟ سارا: قدش بلنده و موهاش مشکیه. نیما: چشماش چه رنگیه؟ سارا: چشماش قهوه‌ایه. نیما: باشه، ممنون.", language_code: fa, direction: rtl}]}
-            correct_option: "Maryam is tall with black hair and brown eyes."
-            distractors:
-              - "Maryam is short with blond hair and blue eyes."
-              - "Maryam is tall with blond hair and green eyes."
-              - "Nima already knows what Maryam looks like."
           - content_key: fa.a1.unit25.lesson06.exercise02.match_dialogue_vocab
             type: matching_pairs
             tested_text: "مریم الان میاد چه رنگیه باشه ممنون قهوه‌ای مشکی"

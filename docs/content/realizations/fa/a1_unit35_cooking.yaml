@@ -42,10 +42,38 @@ generation_provenance:
     verb ending, or vocabulary choice was copied.
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: codex_fresh_context
+  status: reviewed
+  required_next_reviewer: null
   notes: >-
-    Draft authored 2026-07-09 by Claude (content-authoring worker session).
+    2026-07-10 fresh-context review (Claude) found and fixed ONE real
+    cross-lesson narrative-consistency bug per AUTHORING_GUIDE.md §11:
+    lesson04's dialogue has سارا ask نیما to chop the onion ("لطفاً پیاز رو
+    خرد کن" / "باشه") -- but lesson05's reading passage, written entirely
+    with سارا as the sole third-person subject ("اون قرمه‌سبزی می‌پزه. اول
+    پیاز رو خرد می‌کنه، بعد تو روغن سرخش می‌کنه..."), silently implied Sara
+    chopped the onion herself, directly contradicting the dialogue two
+    lessons earlier. This also made lesson05.exercise01's correct_option
+    ("Sara chops the onion first, then fries it in oil.") factually wrong
+    against the unit's own established story. Fixed by explicitly naming
+    نیما as the subject of the chopping clause and سارا as the subject of
+    the frying/salting clauses in the reading text (all 4 occurrences: the
+    teaching card, both exercise tested_text/prompt duplicates), updating
+    the overlay's matching English gloss, and rewriting exercise01's
+    correct_option/distractors/feedback (realization + overlay) to test "who
+    chops, who fries" instead of misattributing both actions to Sara alone
+    -- no new vocabulary introduced (both نیما and سارا were already taught
+    earlier in this same file, in lesson04). Re-validated clean after the
+    fix: 0 errors/0 warnings standalone and as part of the full 6-unit
+    (33-38) fresh-context review batch. Everything else in this unit was
+    checked clean: no listen_select/listen_type exercises exist (so the
+    same-speaker-distractor bug class doesn't apply), no stray unquoted
+    yes/no/true/false/on/off values, every exercise type used is registered
+    in ExerciseRenderer.tsx, matching_pairs/word_order shapes match between
+    realization and overlay, every spine_outcome_id resolves to a real
+    universal_spine.yaml entry, no jargon leaks, and the Farsi reads
+    naturally with consistent colloquial Iranian register.
+
+    Originally authored 2026-07-09 by Claude (content-authoring worker session).
     Realizes universal.a1.cooking.prepare_simple_meal, the next unrealized A1
     outcome after unit34 (post). Confirmed by grepping every
     spine_outcome_id/spine_outcome_ids value across all
@@ -369,7 +397,7 @@ units:
         teaching:
           - content_key: fa.a1.unit35.lesson05.teach.reading_text
             kind: reading
-            target: {text: "سارا تو آشپزخانه‌ست. اون قرمه‌سبزی می‌پزه. اول پیاز رو خرد می‌کنه، بعد تو روغن سرخش می‌کنه. نمک هم می‌ریزه. غذا آروم می‌پزه و خیلی خوشمزه می‌شه.", language_code: fa, direction: rtl}
+            target: {text: "سارا تو آشپزخانه‌ست. اون قرمه‌سبزی می‌پزه. نیما اول پیاز رو خرد می‌کنه، بعد سارا تو روغن سرخش می‌کنه. سارا نمک هم می‌ریزه. غذا آروم می‌پزه و خیلی خوشمزه می‌شه.", language_code: fa, direction: rtl}
             introduced_tokens: ["آشپزخانه‌ست", اون, "می‌کنه", "می‌ریزه", "می‌شه", هم, و]
           - content_key: fa.a1.unit35.lesson05.teach.reading_note
             kind: grammar_note
@@ -378,17 +406,17 @@ units:
         exercises:
           - content_key: fa.a1.unit35.lesson05.exercise01.reading_comprehension_action
             type: reading_comprehension
-            tested_text: "سارا تو آشپزخانه‌ست. اون قرمه‌سبزی می‌پزه. اول پیاز رو خرد می‌کنه، بعد تو روغن سرخش می‌کنه. نمک هم می‌ریزه. غذا آروم می‌پزه و خیلی خوشمزه می‌شه."
-            prompt: {target_blocks: [{text: "سارا تو آشپزخانه‌ست. اون قرمه‌سبزی می‌پزه. اول پیاز رو خرد می‌کنه، بعد تو روغن سرخش می‌کنه. نمک هم می‌ریزه. غذا آروم می‌پزه و خیلی خوشمزه می‌شه.", language_code: fa, direction: rtl}]}
-            correct_option: "Sara chops the onion first, then fries it in oil."
+            tested_text: "سارا تو آشپزخانه‌ست. اون قرمه‌سبزی می‌پزه. نیما اول پیاز رو خرد می‌کنه، بعد سارا تو روغن سرخش می‌کنه. سارا نمک هم می‌ریزه. غذا آروم می‌پزه و خیلی خوشمزه می‌شه."
+            prompt: {target_blocks: [{text: "سارا تو آشپزخانه‌ست. اون قرمه‌سبزی می‌پزه. نیما اول پیاز رو خرد می‌کنه، بعد سارا تو روغن سرخش می‌کنه. سارا نمک هم می‌ریزه. غذا آروم می‌پزه و خیلی خوشمزه می‌شه.", language_code: fa, direction: rtl}]}
+            correct_option: "Nima chops the onion first, then Sara fries it in oil."
             distractors:
-              - "Sara fries the onion first, then chops it."
-              - "Nima cooks the ghormeh sabzi."
+              - "Sara chops the onion first, then fries it in oil."
+              - "Nima cooks the ghormeh sabzi alone."
               - "Sara adds salt before chopping the onion."
           - content_key: fa.a1.unit35.lesson05.exercise02.reading_comprehension_result
             type: reading_comprehension
-            tested_text: "سارا تو آشپزخانه‌ست. اون قرمه‌سبزی می‌پزه. اول پیاز رو خرد می‌کنه، بعد تو روغن سرخش می‌کنه. نمک هم می‌ریزه. غذا آروم می‌پزه و خیلی خوشمزه می‌شه."
-            prompt: {target_blocks: [{text: "سارا تو آشپزخانه‌ست. اون قرمه‌سبزی می‌پزه. اول پیاز رو خرد می‌کنه، بعد تو روغن سرخش می‌کنه. نمک هم می‌ریزه. غذا آروم می‌پزه و خیلی خوشمزه می‌شه.", language_code: fa, direction: rtl}]}
+            tested_text: "سارا تو آشپزخانه‌ست. اون قرمه‌سبزی می‌پزه. نیما اول پیاز رو خرد می‌کنه، بعد سارا تو روغن سرخش می‌کنه. سارا نمک هم می‌ریزه. غذا آروم می‌پزه و خیلی خوشمزه می‌شه."
+            prompt: {target_blocks: [{text: "سارا تو آشپزخانه‌ست. اون قرمه‌سبزی می‌پزه. نیما اول پیاز رو خرد می‌کنه، بعد سارا تو روغن سرخش می‌کنه. سارا نمک هم می‌ریزه. غذا آروم می‌پزه و خیلی خوشمزه می‌شه.", language_code: fa, direction: rtl}]}
             correct_option: "The food cooks slowly and turns out very delicious."
             distractors:
               - "The food cooks quickly and turns out salty."

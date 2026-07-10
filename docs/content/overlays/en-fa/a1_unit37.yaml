@@ -9,10 +9,27 @@ generation_provenance:
   authoring_system: claude
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: codex_fresh_context
+  status: reviewed
+  required_next_reviewer: null
   notes: >-
-    Draft overlay paired with the fa.a1.unit37.colors realization. See that
+    2026-07-10 fresh-context review (Claude) found and fixed one minor gap:
+    lesson06.exercise05.write_favorite_color_sentence's accepted_answers had
+    a period-terminated variant for the first two example sentences
+    ("رنگ سبز رو دوست دارم" / "رنگ سبز رو دوست دارم.", "رنگ آبی رو دوست دارم"
+    / "رنگ آبی رو دوست دارم.") but not for the third ("رنگ زرد رو دوست
+    دارم"), inconsistent with itself and with every other writing_prompt in
+    this corpus that authors both forms explicitly. Added the missing
+    "رنگ زرد رو دوست دارم." variant. (Grading would already have tolerated a
+    missing period as a distance-1 typo per Phase C, so this wasn't a
+    learner-facing bug, just a real inconsistency worth fixing for its own
+    sake.) Everything else checked clean: every accepted_answers shape
+    matches its realization counterpart, exercise instructions test the same
+    thing their answer data tests, no jargon leaks. Re-validated clean: 0
+    errors/0 warnings standalone and as part of the full 6-unit (33-38)
+    fresh-context review batch.
+
+    Original draft-overlay notes: paired with the fa.a1.unit37.colors
+    realization. See that
     file's generation_provenance for the honest source-access result: with
     Firecrawl at 0/1000 credits this session, direct pdftotext extraction
     (not the Firecrawl-OCR path prior units used) against the Live
@@ -386,4 +403,5 @@ exercises:
       - {value: "رنگ آبی رو دوست دارم", status: correct}
       - {value: "رنگ آبی رو دوست دارم.", status: correct}
       - {value: "رنگ زرد رو دوست دارم", status: correct}
+      - {value: "رنگ زرد رو دوست دارم.", status: correct}
     feedback: "A wrap-up sentence can say which color you like using رنگ ... رو دوست دارم."

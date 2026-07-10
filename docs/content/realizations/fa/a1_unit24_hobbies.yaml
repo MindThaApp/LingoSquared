@@ -41,10 +41,37 @@ generation_provenance:
     docs/content/AUTHORING_GUIDE.md's modernization standard.
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: codex_fresh_context
+  status: reviewed
+  required_next_reviewer: null
   notes: >-
-    Draft authored 2026-07-08 by a Sonnet 5 fork. Realizes
+    2026-07-10 fresh-context review (Claude, zero access to the original
+    authoring reasoning) found and fixed TWO real issues, both in
+    lesson06.exercise01.dialogue_comprehension_context, same bug class as
+    fa unit23's own fresh-context review: (1) an English
+    correct_option/distractors block had been duplicated directly into
+    this fa (target-language) realization file, identical to what the
+    overlay already carried -- confirmed via scripts/compile_content.py
+    that the compiled-exercise builder only ever reads correct_option/
+    distractors from exercise_overlay, so this was pure dead English data
+    in a file that should be Farsi-only; removed it. (2) media_assets
+    already declared a real dialogue audio asset
+    (fa.a1.audio.hobbies.dialogue.01) but no exercise ever referenced it
+    via media_asset_key, unlike unit21/unit22's own established wiring
+    pattern -- fixed by adding
+    media_asset_key: fa.a1.audio.hobbies.dialogue.01 to that exercise, so
+    the asset will actually play once recorded/synthesized. Everything
+    else checked clean: no same-speaker distractor collisions (compiler's
+    validate_same_speaker_dialogue_distractors passed with 0 errors); no
+    stray unquoted YAML booleans; every exercise type used is registered
+    in ExerciseRenderer.tsx; matching_pairs/word_order answer shapes
+    correct; no jargon leaks; Sara's cinema/movies and Nima's reading/
+    football characterization is genuinely consistent with the unit13
+    precedent this unit's own provenance note claims to continue (spot-
+    checked against unit13 directly); Farsi register and script read
+    correctly throughout. Re-validated clean standalone and as part of the
+    full fa units 21-26 batch: 0 errors/0 warnings.
+
+    Original draft note (2026-07-08, Sonnet 5 fork): realizes
     universal.a1.hobbies.describe_free_time_activities (prerequisite:
     universal.a1.preferences.express_preferences, covered by unit14 -- reuses
     its established دوست دارم pattern throughout rather than teaching a new
@@ -425,12 +452,8 @@ units:
           - content_key: fa.a1.unit24.lesson06.exercise01.dialogue_comprehension_context
             type: dialogue_comprehension
             tested_text: "سارا وقت آزاد چیکار می‌کنی من فیلم دیدن دوست دارم هر هفته می‌رم سینما تو چی من کتاب خوندن دوست دارم گاهی هم فوتبال بازی می‌کنم چه خوب"
+            media_asset_key: fa.a1.audio.hobbies.dialogue.01
             prompt: {target_blocks: [{text: "سارا، وقت آزاد چیکار می‌کنی؟ من فیلم دیدن دوست دارم. هر هفته می‌رم سینما. تو چی؟ من کتاب خوندن دوست دارم. گاهی هم فوتبال بازی می‌کنم. چه خوب!", language_code: fa, direction: rtl}]}
-            correct_option: "Sara likes watching movies and goes to the cinema every week; Nima likes reading books and sometimes plays football."
-            distractors:
-              - "Nima likes watching movies and goes to the cinema every week; Sara likes reading books and sometimes plays football."
-              - "Both Nima and Sara only play football in their free time."
-              - "Sara doesn't have any free time this week."
           - content_key: fa.a1.unit24.lesson06.exercise02.match_dialogue_vocab
             type: matching_pairs
             tested_text: "سینما می‌رم فیلم دیدن چه خوب سارا ورزش فوتبال"
