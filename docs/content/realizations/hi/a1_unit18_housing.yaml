@@ -1,0 +1,794 @@
+schema_version: "1.1"
+realization_version: "2026.1-draft.1"
+target_language: "hi"
+cefr_level: "A1"
+status: "complete_draft"
+generation_provenance:
+  method: "ai_generated"
+  authoring_system: "claude"
+  human_reviewed: false
+review:
+  status: "unreviewed"
+  required_next_reviewer: "codex"
+  notes: >-
+    Eighteenth Hindi unit, continuing directly from hi/a1_unit17_work.yaml
+    (same Priya/Arjun characters, still on तुम terms). Spine outcome
+    confirmed via a direct read of universal_spine.yaml (not assumed from
+    other languages): the outcome entry immediately following universal.
+    a1.work.describe_job (line 514, hi's own unit17) is universal.a1.
+    housing.describe_home (line 539, "Describe a basic home, rooms,
+    household objects, and location"). Its `prerequisites:` list names
+    universal.a1.places.locate_common_places (hi unit08, done) and
+    universal.a1.numbers.use_basic_numbers (hi unit02, done) -- no gating
+    gap. `ls docs/content/realizations/pl/` and `ro/` independently
+    confirm a1_unit18_housing.yaml as their own eighteenth unit, matching
+    hi's own unit01-17 sequence -- used only as a cross-check on the unit
+    NUMBER/topic pairing (via filename and directory listing only,
+    neither file's actual content was opened), not as the basis for the
+    decision, which rests on the direct spine-file read above (lines
+    539-560 read in full: can_do, all four modalities, and all four
+    assessment_requirements -- understand_home_description/describe_home/
+    read_housing_description/write_home_description -- were read before
+    designing this unit's exercises, to make sure all four are genuinely
+    served, not just nominally). Sized to 3 lessons matching unit01-17's
+    bootstrap pace. Topic/pacing structure only (recognition-first,
+    minimal new grammar surface, dialogue in lesson03) informed at a
+    purely structural level by this session's own established hi
+    conventions, not by opening any pl/ro file's actual text -- every
+    Hindi sentence below is authored fresh.
+
+    Source access, re-attempted per this task's explicit instruction (not
+    assumed to fail the same way as every prior hi unit): a fresh
+    `firecrawl search "FSI Hindi Active Introduction house home rooms
+    housing"` failed outright with HTTP 402 (payment/quota), the
+    eighteenth consecutive such failure across this whole session's worth
+    of hi units. Fell back to the FSI "Hindi: An Active Introduction"
+    archive.org item, re-fetched via the metadata-confirmed correct
+    filename (`Fsi-HindiActiveIntroduction-StudentText_djvu.txt`, per
+    unit17's own metadata-API confirmation this round; the older
+    dash-variant filename was not retried since it is already confirmed
+    404 twice). A fresh regex scan (Python, not eyeballed) of this
+    freshly-fetched OCR text for the Devanagari Unicode block
+    (U+0900-U+097F) returned ZERO matches anywhere in the document --
+    confirmed programmatically, consistent with every prior hi unit's
+    documented zero-Devanagari-match result; this is the eighteenth such
+    confirmation in sequence. A grep of the same extracted text for
+    housing-topic English framing found only incidental, non-substantive
+    hits ("in the house" x2 as a generic locative phrase, no room-name or
+    furniture vocabulary at all in the recovered English text this
+    round). Every Devanagari-script line near those hits remains
+    unreadable OCR mojibake, confirmed by eye to be garbage, not
+    readable Devanagari-as-Latin-transliteration -- matching the exact
+    failure mode confirmed seventeen times before. Per this task's
+    explicit instruction, nothing from this extraction attempt -- neither
+    any mojibake fragment nor any wording of the recovered English
+    framing prose -- was copied, cleaned up, transcribed, or translated
+    anywhere in this file: this file's own housing vocabulary and
+    sentence design (कमरा/कमरे "room/rooms", रसोई "kitchen" reviewed from
+    unit06's kitchen-adjacent food context only at the concept level, not
+    the word itself which is new here, बाथरूम/बेडरूम "bathroom"/
+    "bedroom", मेज़/कुर्सी/बिस्तर/खिड़की "table"/"chair"/"bed"/"window")
+    were both already fully planned and largely authored before this
+    source-access step was run at all. Every Devanagari string below is
+    this session's own careful, correct rendering of established Modern
+    Standard Hindi, verified character-by-character (codepoint hex dump
+    run directly against every new word before finalizing, see the
+    nasalization discipline paragraph below).
+
+    Central grammar decision #1: existential quantity construction,
+    "[जगह] में [संख्या] [संज्ञा] है/हैं" ("There is/are [number] [noun]
+    in/at [place]"), combining three already-established pieces: में
+    ("in/at", unit01/17), है/हैं (copula, unit05/10, singular/plural
+    verb agreement already established for respect-plural family members
+    and now extended to ordinary count-plural nouns), and एक/दो/तीन/
+    कितने (numbers and "how many", unit02/07). No new function word is
+    introduced by this decision -- this unit is the first to combine all
+    of these into a genuine quantity-existential sentence about a home.
+
+    Central grammar decision #2 (genuinely new morphology, disclosed
+    explicitly, lesson01's own teach.grammar_room_plural card): the
+    masculine noun plural rule for words ending in "-आ" -- कमरा (one
+    room) becomes कमरे (more than one room) in the direct plural, the
+    first time this course formally teaches AND tests a noun-plural rule
+    (a bare example of this exact pattern, "इस कमरे में आठ कुर्सियाँ
+    हैं", appeared untested in unit02's own numbers content but was never
+    formally taught or exercised there -- this unit is the first to
+    disclose the rule itself, not just use an inflected form in passing).
+
+    Central grammar decision #3 (second plural rule, lesson02's own
+    teach.grammar_feminine_plural card): the feminine noun plural rule
+    for words ending in "-ई" -- कुर्सी (one chair) becomes कुर्सियाँ
+    (more than one chair), खिड़की (one window) becomes खिड़कियाँ (more
+    than one window), contrasted explicitly against decision #2's
+    masculine "-आ"->"-े" rule in the same grammar note, since a learner
+    seeing both patterns back-to-back is far more likely to retain the
+    contrast than seeing them in separate units.
+
+    Central grammar decision #4, a deliberate scope-narrowing (matching
+    unit16/17's own explicit precedent for this discipline): मेज़
+    ("table") and बिस्तर ("bed") are feminine/masculine nouns whose own
+    plural forms use a DIFFERENT rule again (मेज़->मेज़ें, an "-ें"
+    suffix on a consonant-ending feminine noun; बिस्तर stays invariant,
+    a consonant-ending masculine noun) -- this unit deliberately keeps
+    both of these singular-only in every exercise, and बाथरूम/बेडरूम
+    (invariant English loanwords, matching unit17's डॉक्टर/इंजीनियर
+    precedent for loanword invariance) are only ever pluralized via the
+    numeral + हैं pattern, never given their own plural SUFFIX. This
+    keeps this unit's new-morphology surface to exactly the two
+    contrasting native plural rules (decisions #2 and #3) rather than
+    piling a third and fourth suffix pattern into one unit's real
+    vocabulary load. A future unit remains free to teach the "-ें" rule
+    on its own terms.
+
+    Central grammar decision #5, a second deliberate scope-narrowing:
+    this unit never combines a possessive (मेरा/तुम्हारा) directly with
+    a postposition-marked noun (which would require the oblique-case
+    agreement मेरा->मेरे / तुम्हारा->तुम्हारे, already informally
+    PRESENT in the corpus via "मेरे हाथ में" (unit02) and "मेरे दादा
+    दिल्ली में रहते हैं" (unit05) but never formally taught as its own
+    rule). Every "in/at [place]" sentence in this unit uses either a bare
+    place noun ("घर में", "रसोई में", "बेडरूम में" -- whose ownership is
+    already clear from dialogue/exercise context) or a possessive in a
+    NON-oblique predicate-adjective position ("प्रिया का घर छोटा है",
+    "अर्जुन का घर बड़ा है", where घर is followed by an adjective, not a
+    postposition, so का/मेरा/तुम्हारा never needs to shift to के/मेरे/
+    तुम्हारे). This is a deliberate, disclosed decision to keep this
+    unit's new-grammar budget to decisions #2/#3 above, not an oversight
+    -- the oblique-possessive-before-postposition rule remains available
+    as a clean, well-precedented future teaching point.
+
+    Same-speaker-distractor check (the nl unit44-50 regression class):
+    performed explicitly, and structurally inapplicable here the same
+    way it was in unit16/17 -- hi dialogue content carries NO
+    `media_asset_key` at all (plain TextBlocks, matching unit08-17's
+    established pattern that hi dialogue is text-only, not audio, for
+    dialogue_comprehension purposes), so lesson03's two
+    dialogue_comprehension exercises (exercise01/02) cannot trigger this
+    bug class by construction -- each shown line was chosen to directly
+    contain its own correct answer (exercise01 shows line02 "मेरा घर
+    छोटा है। घर में दो कमरे हैं, एक रसोई और एक बाथरूम।" and asks (in the
+    ENGLISH instruction only, never in the Hindi prompt itself) whether
+    Priya's house is big or small, answer directly stated; exercise02
+    shows line04 "मेरा घर बड़ा है। घर में तीन बेडरूम हैं और एक बड़ी
+    रसोई है।" and asks how many bedrooms Arjun's house has, answer
+    directly stated), neither requiring inference across unseen lines or
+    a Hindi-language "whose" construction that would itself need the
+    oblique-possessive rule scoped out by decision #5 above. The three
+    listen_select exercises (lesson01.exercise04, lesson02.exercise04,
+    lesson03.exercise06) are each a single standalone, non-dialogue
+    utterance with its own dedicated media_asset_key and no other
+    speaker/other lines in the same clip -- structurally cannot trigger
+    this bug class either, matching unit08-17's own precedent, now
+    applied a tenth time. Distractors for the two dialogue_comprehension
+    exercises (English-language multiple_choice options, per §6, since
+    these are comprehension checks) never name a fact stated anywhere
+    else in this unit's own scenario (no "Medium"-sized house or "Two"-
+    or "Four"-bedroom house is ever mentioned anywhere in this unit, so
+    those distractors are safely never-true here, not just
+    never-said-by-this-speaker).
+
+    Cross-check of every concrete fact stated across the whole unit
+    (AUTHORING_GUIDE §11), not just within the dialogue: this unit
+    establishes exactly two character facts, restated (never
+    contradicted) across the dialogue, the reading card, and the
+    exercises: (1) Priya's house is small (छोटा), with two rooms -- one
+    kitchen and one bathroom (lesson03 dialogue line02, restated
+    identically in lesson03's closing reading card); (2) Arjun's house
+    is big (बड़ा), with three bedrooms and one big kitchen (lesson03
+    dialogue line04, restated identically in the reading card), and his
+    bedroom (described generically, not claimed to be true of all three
+    individually) has one bed and two windows (lesson03 dialogue line06,
+    restated only in exercise14's speak_response, never contradicted by
+    anything said about Priya's home, which never mentions a bedroom at
+    all). Every restatement across the dialogue, the reading card, and
+    the exercises agrees with these facts; neither character's home is
+    ever given a conflicting room count, size, or furniture fact.
+
+    Nasalization/nuqta discipline, disclosed per unit07-17 precedent,
+    verified this round via a direct Python codepoint hex dump of every
+    NEW word before finalizing (not eyeballed), each compared against an
+    already-shipped known-good precedent word rather than judged in
+    isolation: कमरा/कमरे (U+0915 U+092E U+0930 U+093E / U+0915 U+092E
+    U+0930 U+0947, zero nasalization, zero nuqta), रसोई (U+0930 U+0938
+    U+094B U+0908, zero nasalization), बाथरूम/बेडरूम (zero nasalization,
+    zero nuqta, plain loanword transliterations), बिस्तर (U+092C U+093F
+    U+0938 U+094D U+0924 U+0930, zero nasalization). Two genuine nuqta/
+    nasalization decisions were made and verified this unit: मेज़ (U+092E
+    U+0947 U+091C U+093C) uses the combining nuqta pair U+091C U+093C
+    for ज़ -- confirmed via a direct hex-dump comparison against रोज़
+    (unit10/17, U+0930 U+094B U+091C U+093C), an EXACT codepoint match on
+    the ja+nuqta pair, not assumed; खिड़की/खिड़कियाँ (U+0916 U+093F
+    U+0921 U+093C U+0915 U+0940 / ...U+0915 U+093F U+092F U+093E U+0901)
+    use the combining nuqta pair U+0921 U+093C for ड़ -- confirmed via a
+    direct hex-dump comparison against बड़ा (unit14, U+092C U+0921 U+093C
+    U+093E), an EXACT codepoint match on the Da+nuqta pair. The two
+    plural forms कुर्सियाँ and खिड़कियाँ both end in CHANDRABINDU
+    (U+0901), not anusvara -- confirmed via a direct hex-dump comparison
+    against हूँ (U+0939 U+0942 U+0901), an EXACT codepoint match on the
+    vowel+chandrabindu pair -- correct per standard Modern Standard Hindi
+    orthography, since both are nasalized OPEN word-final vowels
+    (-इयाँ), the same phonological class as हूँ/नहीं/हाँ, not the
+    nasal-before-consonant anusvara class used by इंजीनियर (unit17).
+    Zero anusvara decisions were needed anywhere in this unit's new
+    vocabulary.
+
+    Untaught-vocabulary validator footgun (already documented by
+    unit07-17, re-confirmed live during this unit's authoring, and
+    directly re-read from `scripts/compile_content.py`'s
+    `validate_untaught_vocabulary` before relying on it): the function
+    only checks each exercise's own `tested_text` against the accumulated
+    `introduced_tokens` set for the FILE so far (resets per file,
+    accumulates across lessons within one file, and critically only
+    checks `tested_text`, never `prompt.target_blocks`). Every token used
+    in ANY exercise's tested_text below -- including words already known
+    corpus-wide -- was explicitly re-declared in THIS file's own
+    introduced_tokens before its first tested_text use: घर via
+    lesson01.teach.ghar_review; में via lesson01.teach.mein_review; है/
+    हैं via lesson01.teach.hai_hain_review; कितने/एक/दो/तीन via
+    lesson01.teach.numbers_review; कमरा/कमरे via lesson01.teach.
+    kamra_kamre; रसोई via lesson01.teach.rasoi; बाथरूम via lesson01.
+    teach.bathroom; बेडरूम via lesson01.teach.bedroom; और via lesson02.
+    teach.aur_review; मेज़ via lesson02.teach.mez; कुर्सी/कुर्सियाँ via
+    lesson02.teach.kursi_kursiyan; बिस्तर via lesson02.teach.bistar;
+    खिड़की/खिड़कियाँ via lesson02.teach.khidki_khidkiyan; चार via
+    lesson02.teach.chaar_review; कैसा via lesson03.teach.kaisa_review;
+    बड़ा/बड़ी/छोटा/छोटी via lesson03.teach.bada_chota_review; या via
+    lesson03.teach.ya_review; अर्जुन/प्रिया via lesson03.teach.
+    arjun_priya_review (a real gap caught live by the compiler's own
+    validator on the first validation pass of this file -- both names
+    are used in lesson03's word_order/grammar_check tested_text but had
+    no review card declaring them in this new file, since unlike every
+    other reused token this unit, neither name happens to appear in any
+    lesson01/lesson02 teaching card; fixed by adding the review card
+    before ka_review rather than assuming corpus-wide familiarity was
+    enough); का via lesson03.teach.ka_review. Because
+    introduced_tokens accumulate across lessons WITHIN one file (not
+    reset per lesson), tokens declared in lesson01/lesson02 remain valid
+    for lesson03's own tested_text without redeclaration -- confirmed by
+    re-reading the same compiler function this unit, not assumed. Words
+    used ONLY in dialogue text, example sentences, or exercise PROMPT
+    text and never in a tested_text (वाह, अच्छा, शुक्रिया, ठीक, लिखो,
+    बोलो -- all already established corpus-wide or, for लिखो/बोलो,
+    instructional prefixes that never appear in any tested_text in this
+    course's own precedent either) were deliberately left OUT of this
+    file's introduced_tokens, matching unit09/12-17's own precedent for
+    dialogue-only/example-only/prompt-only words -- confirmed by grep of
+    every tested_text/word_bank value below before finalizing.
+
+    Word-order duplicate-token check (unit10-17's own standing
+    consideration, re-confirmed clean here): every `word_order` exercise
+    in this unit uses a word_bank with zero repeated tokens (checked by
+    hand against each exercise's own word_bank array below -- every one
+    is a 5-token bank, all distinct).
+
+    fill_in_blank ambiguity check (AUTHORING_GUIDE §17): every blank in
+    this unit is a genuinely open vocabulary slot whose full
+    frame-compatible candidate pool (within this unit's own real
+    vocabulary) contains more than one grammatically valid member --
+    lesson01.exercise09's "घर में ___ है।" (रसोई vs. बाथरूम both
+    frame-compatible), lesson01.exercise10's "घर में तीन ___ हैं।"
+    (कमरे vs. बेडरूम both frame-compatible, since बेडरूम is also a
+    numeral-invariant plural-capable noun), lesson02.exercise09's "रसोई
+    में एक ___ है।" (मेज़ vs. बिस्तर both frame-compatible), lesson02.
+    exercise10's "बेडरूम में दो ___ हैं।" (कुर्सियाँ vs. खिड़कियाँ both
+    frame-compatible), and lesson03.exercise10's "बेडरूम में एक बिस्तर
+    और दो ___ हैं।" (कुर्सियाँ vs. खिड़कियाँ again) -- every one of these
+    is disambiguated by the overlay's own explicit English instruction
+    naming the intended word directly (e.g. "Complete: There are three
+    rooms in the house." / "Complete: There are two windows in the
+    bedroom."), matching the established convention already used
+    throughout this course (unit06's पानी/चाय-style blanks, unit17's
+    मैं___हूँ blank) rather than `interchangeable: true`, since these are
+    genuinely DIFFERENT vocabulary items (not true synonyms) whose
+    ambiguity is purely a same-slot-shape coincidence, not a meaning
+    coincidence.
+
+    Cast/register note: no new character is introduced. Priya and Arjun
+    remain on तुम terms throughout, matching every prior unit.
+
+course:
+  realization_key: hi.a1
+  target_language_first: true
+  dialect: hi_standard
+  register_policy: >-
+    Continues unit01-17's aap/tum split. This unit's dialogue (lesson03)
+    stays entirely in तुम between Priya and Arjun, matching every prior
+    unit's continuation of their established friendship -- they simply
+    compare their own homes, no new stranger/landlord/agent character is
+    introduced here, keeping the dialogue's register consistent with the
+    whole course's Priya/Arjun thread.
+
+media_assets:
+  - {content_key: hi.a1.audio.housing.ghar_mein_ek_bathroom_hai.01, language: hi, text: "घर में एक बाथरूम है।", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - {content_key: hi.a1.audio.housing.bedroom_mein_ek_bistar_hai.01, language: hi, text: "बेडरूम में एक बिस्तर है।", voice_hint: neutral_adult_clear, status: pending_generation}
+  - {content_key: hi.a1.audio.housing.bedroom_mein_bistar_aur_khidkiyan_hain.01, language: hi, text: "बेडरूम में एक बिस्तर और दो खिड़कियाँ हैं।", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+
+units:
+  - content_key: hi.a1.unit18.housing
+    title: "घर"
+    section: reading_writing
+    spine_outcome_ids:
+      - universal.a1.housing.describe_home
+    planned_lesson_count: 3
+
+    lessons:
+      - content_key: hi.a1.unit18.lesson01.kamra_rasoi_bathroom_bedroom
+        title: "कमरा, रसोई, बाथरूम, बेडरूम"
+        spine_outcome_id: universal.a1.housing.describe_home
+        teaching:
+          - content_key: hi.a1.unit18.lesson01.teach.ghar_review
+            kind: vocabulary
+            target: {text: "घर", language_code: hi, direction: ltr}
+            introduced_tokens: ["घर"]
+            example: {text: "यह घर है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit18.lesson01.teach.mein_review
+            kind: vocabulary
+            target: {text: "में", language_code: hi, direction: ltr}
+            introduced_tokens: ["में"]
+            example: {text: "मैं दफ़्तर में काम करता हूँ।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit18.lesson01.teach.hai_hain_review
+            kind: vocabulary
+            target: {text: "है, हैं", language_code: hi, direction: ltr}
+            introduced_tokens: ["है", "हैं"]
+            example:
+              - {text: "यह घर है।", language_code: hi, direction: ltr}
+              - {text: "मेरे दादा दिल्ली में रहते हैं।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit18.lesson01.teach.numbers_review
+            kind: vocabulary
+            target: {text: "कितने, एक, दो, तीन", language_code: hi, direction: ltr}
+            introduced_tokens: ["कितने", "एक", "दो", "तीन"]
+            example:
+              - {text: "मेरे तीन भाई हैं।", language_code: hi, direction: ltr}
+              - {text: "घर में कितने कमरे हैं?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit18.lesson01.teach.kamra_kamre
+            kind: vocabulary
+            target: {text: "कमरा, कमरे", language_code: hi, direction: ltr}
+            introduced_tokens: ["कमरा", "कमरे"]
+            example:
+              - {text: "घर में एक कमरा है।", language_code: hi, direction: ltr}
+              - {text: "घर में तीन कमरे हैं।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit18.lesson01.teach.grammar_room_plural
+            kind: grammar_note
+            target: {text: "'-आ' में खत्म होने वाले पुल्लिंग शब्द बहुवचन में '-ए' में बदल जाते हैं -- 'कमरा' (एक) से 'कमरे' (एक से ज़्यादा) बनता है। संख्या के साथ क्रिया भी बदलती है: एक के लिए 'है', एक से ज़्यादा के लिए 'हैं' -- जैसे 'घर में एक कमरा है' पर 'घर में तीन कमरे हैं'।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a1.unit18.lesson01.teach.rasoi
+            kind: vocabulary
+            target: {text: "रसोई", language_code: hi, direction: ltr}
+            introduced_tokens: ["रसोई"]
+            example: {text: "घर में एक रसोई है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit18.lesson01.teach.bathroom
+            kind: vocabulary
+            target: {text: "बाथरूम", language_code: hi, direction: ltr}
+            introduced_tokens: ["बाथरूम"]
+            example: {text: "घर में एक बाथरूम है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit18.lesson01.teach.bedroom
+            kind: vocabulary
+            target: {text: "बेडरूम", language_code: hi, direction: ltr}
+            introduced_tokens: ["बेडरूम"]
+            example: {text: "घर में दो बेडरूम हैं।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit18.lesson01.teach.ghar_mein_kitne_kamre_phrase
+            kind: phrase
+            target: {text: "घर में कितने कमरे हैं?", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a1.unit18.lesson01.teach.ghar_mein_teen_kamre_phrase
+            kind: phrase
+            target: {text: "घर में तीन कमरे हैं।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+        exercises:
+          - content_key: hi.a1.unit18.lesson01.exercise01.select_kamra_meaning
+            type: multiple_choice
+            tested_text: "कमरा"
+            prompt:
+              target_blocks:
+                - {text: "कमरा", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit18.lesson01.exercise02.select_rasoi_meaning
+            type: multiple_choice
+            tested_text: "रसोई"
+            prompt:
+              target_blocks:
+                - {text: "रसोई", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit18.lesson01.exercise03.select_ghar_mein_teen_kamre_hain_meaning
+            type: multiple_choice
+            tested_text: "घर में तीन कमरे हैं"
+            prompt:
+              target_blocks:
+                - {text: "घर में तीन कमरे हैं।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit18.lesson01.exercise04.listen_ghar_mein_ek_bathroom_hai
+            type: listen_select
+            tested_text: "घर में एक बाथरूम है"
+            media_asset_key: hi.a1.audio.housing.ghar_mein_ek_bathroom_hai.01
+            prompt: {target_blocks: []}
+          - content_key: hi.a1.unit18.lesson01.exercise05.select_bedroom_meaning
+            type: multiple_choice
+            tested_text: "बेडरूम"
+            prompt:
+              target_blocks:
+                - {text: "बेडरूम", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit18.lesson01.exercise06.match_lesson01_words
+            type: matching_pairs
+            tested_text: "कमरा कमरे रसोई बाथरूम बेडरूम घर में कितने एक दो तीन"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "कमरा", right: "room"}
+              - {left: "कमरे", right: "rooms"}
+              - {left: "रसोई", right: "kitchen"}
+              - {left: "बाथरूम", right: "bathroom"}
+              - {left: "बेडरूम", right: "bedroom"}
+              - {left: "घर", right: "house / home"}
+              - {left: "में", right: "in / at"}
+              - {left: "कितने", right: "how many"}
+              - {left: "एक", right: "one"}
+              - {left: "तीन", right: "three"}
+          - content_key: hi.a1.unit18.lesson01.exercise07.order_ghar_mein_ek_rasoi_hai
+            type: word_order
+            tested_text: "घर में एक रसोई है"
+            prompt: {target_blocks: []}
+            word_bank: ["घर", "में", "एक", "रसोई", "है"]
+          - content_key: hi.a1.unit18.lesson01.exercise08.order_ghar_mein_kitne_kamre_hain
+            type: word_order
+            tested_text: "घर में कितने कमरे हैं"
+            prompt: {target_blocks: []}
+            word_bank: ["घर", "में", "कितने", "कमरे", "हैं"]
+          - content_key: hi.a1.unit18.lesson01.exercise09.fill_ghar_mein_rasoi
+            type: fill_in_blank
+            tested_text: "रसोई"
+            prompt:
+              target_blocks:
+                - {text: "घर में ___ है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit18.lesson01.exercise10.fill_ghar_mein_teen_kamre
+            type: fill_in_blank
+            tested_text: "कमरे"
+            prompt:
+              target_blocks:
+                - {text: "घर में तीन ___ हैं।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit18.lesson01.exercise11.reply_ghar_mein_kitne_kamre_hain
+            type: dialogue_response
+            tested_text: "घर में तीन कमरे हैं"
+            prompt:
+              target_blocks:
+                - {text: "घर में कितने कमरे हैं?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit18.lesson01.exercise12.fix_ghar_mein_teen_kamre_hain
+            type: grammar_check
+            tested_text: "घर में तीन कमरे हैं"
+            prompt:
+              target_blocks:
+                - {text: "घर में तीन कमरा है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit18.lesson01.exercise13.speak_ghar_mein_ek_rasoi_hai
+            type: speak_response
+            tested_text: "घर में एक रसोई है"
+            prompt:
+              target_blocks:
+                - {text: "बोलो: घर में एक रसोई है।", language_code: hi, direction: ltr}
+
+      - content_key: hi.a1.unit18.lesson02.mez_kursi_bistar_khidki
+        title: "मेज़, कुर्सी, बिस्तर, खिड़की"
+        spine_outcome_id: universal.a1.housing.describe_home
+        teaching:
+          - content_key: hi.a1.unit18.lesson02.teach.aur_review
+            kind: vocabulary
+            target: {text: "और", language_code: hi, direction: ltr}
+            introduced_tokens: ["और"]
+            example: {text: "मुझे भी अच्छा लगा, और तुम्हें?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit18.lesson02.teach.mez
+            kind: vocabulary
+            target: {text: "मेज़", language_code: hi, direction: ltr}
+            introduced_tokens: ["मेज़"]
+            example: {text: "रसोई में एक मेज़ है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit18.lesson02.teach.kursi_kursiyan
+            kind: vocabulary
+            target: {text: "कुर्सी, कुर्सियाँ", language_code: hi, direction: ltr}
+            introduced_tokens: ["कुर्सी", "कुर्सियाँ"]
+            example:
+              - {text: "रसोई में एक कुर्सी है।", language_code: hi, direction: ltr}
+              - {text: "रसोई में चार कुर्सियाँ हैं।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit18.lesson02.teach.chaar_review
+            kind: vocabulary
+            target: {text: "चार", language_code: hi, direction: ltr}
+            introduced_tokens: ["चार"]
+            example: {text: "रसोई में चार कुर्सियाँ हैं।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit18.lesson02.teach.grammar_feminine_plural
+            kind: grammar_note
+            target: {text: "'-ई' में खत्म होने वाले स्त्रीलिंग शब्द बहुवचन में '-इयाँ' में बदल जाते हैं -- 'कुर्सी' (एक) से 'कुर्सियाँ' (एक से ज़्यादा) बनता है, ठीक वैसे ही जैसे इसी यूनिट में 'कमरा' पुल्लिंग नियम से 'कमरे' बना था, पर यहाँ नियम अलग है क्योंकि शब्द स्त्रीलिंग है और '-ई' में खत्म होता है।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a1.unit18.lesson02.teach.bistar
+            kind: vocabulary
+            target: {text: "बिस्तर", language_code: hi, direction: ltr}
+            introduced_tokens: ["बिस्तर"]
+            example: {text: "बेडरूम में एक बिस्तर है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit18.lesson02.teach.khidki_khidkiyan
+            kind: vocabulary
+            target: {text: "खिड़की, खिड़कियाँ", language_code: hi, direction: ltr}
+            introduced_tokens: ["खिड़की", "खिड़कियाँ"]
+            example:
+              - {text: "बेडरूम में एक खिड़की है।", language_code: hi, direction: ltr}
+              - {text: "बेडरूम में दो खिड़कियाँ हैं।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit18.lesson02.teach.rasoi_mein_mez_phrase
+            kind: phrase
+            target: {text: "रसोई में एक मेज़ है।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a1.unit18.lesson02.teach.bedroom_mein_bistar_phrase
+            kind: phrase
+            target: {text: "बेडरूम में एक बिस्तर है।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+        exercises:
+          - content_key: hi.a1.unit18.lesson02.exercise01.select_mez_meaning
+            type: multiple_choice
+            tested_text: "मेज़"
+            prompt:
+              target_blocks:
+                - {text: "मेज़", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit18.lesson02.exercise02.select_kursi_meaning
+            type: multiple_choice
+            tested_text: "कुर्सी"
+            prompt:
+              target_blocks:
+                - {text: "कुर्सी", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit18.lesson02.exercise03.select_rasoi_mein_chaar_kursiyan_hain_meaning
+            type: multiple_choice
+            tested_text: "रसोई में चार कुर्सियाँ हैं"
+            prompt:
+              target_blocks:
+                - {text: "रसोई में चार कुर्सियाँ हैं।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit18.lesson02.exercise04.listen_bedroom_mein_ek_bistar_hai
+            type: listen_select
+            tested_text: "बेडरूम में एक बिस्तर है"
+            media_asset_key: hi.a1.audio.housing.bedroom_mein_ek_bistar_hai.01
+            prompt: {target_blocks: []}
+          - content_key: hi.a1.unit18.lesson02.exercise05.select_khidki_meaning
+            type: multiple_choice
+            tested_text: "खिड़की"
+            prompt:
+              target_blocks:
+                - {text: "खिड़की", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit18.lesson02.exercise06.match_lesson02_words
+            type: matching_pairs
+            tested_text: "मेज़ कुर्सी कुर्सियाँ बिस्तर खिड़की खिड़कियाँ में है हैं चार"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "मेज़", right: "table"}
+              - {left: "कुर्सी", right: "chair"}
+              - {left: "कुर्सियाँ", right: "chairs"}
+              - {left: "बिस्तर", right: "bed"}
+              - {left: "खिड़की", right: "window"}
+              - {left: "खिड़कियाँ", right: "windows"}
+              - {left: "में", right: "in / at"}
+              - {left: "है", right: "is"}
+              - {left: "हैं", right: "are"}
+              - {left: "चार", right: "four"}
+          - content_key: hi.a1.unit18.lesson02.exercise07.order_rasoi_mein_ek_mez_hai
+            type: word_order
+            tested_text: "रसोई में एक मेज़ है"
+            prompt: {target_blocks: []}
+            word_bank: ["रसोई", "में", "एक", "मेज़", "है"]
+          - content_key: hi.a1.unit18.lesson02.exercise08.order_bedroom_mein_do_khidkiyan_hain
+            type: word_order
+            tested_text: "बेडरूम में दो खिड़कियाँ हैं"
+            prompt: {target_blocks: []}
+            word_bank: ["बेडरूम", "में", "दो", "खिड़कियाँ", "हैं"]
+          - content_key: hi.a1.unit18.lesson02.exercise09.fill_rasoi_mein_mez
+            type: fill_in_blank
+            tested_text: "मेज़"
+            prompt:
+              target_blocks:
+                - {text: "रसोई में एक ___ है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit18.lesson02.exercise10.fill_bedroom_mein_do_khidkiyan
+            type: fill_in_blank
+            tested_text: "खिड़कियाँ"
+            prompt:
+              target_blocks:
+                - {text: "बेडरूम में दो ___ हैं।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit18.lesson02.exercise11.reply_rasoi_mein_kya_hai
+            type: dialogue_response
+            tested_text: "रसोई में एक मेज़ है"
+            prompt:
+              target_blocks:
+                - {text: "रसोई में क्या है?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit18.lesson02.exercise12.fix_bedroom_mein_do_khidkiyan_hain
+            type: grammar_check
+            tested_text: "बेडरूम में दो खिड़कियाँ हैं"
+            prompt:
+              target_blocks:
+                - {text: "बेडरूम में दो खिड़की है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit18.lesson02.exercise13.speak_rasoi_mein_mez_aur_kursiyan
+            type: speak_response
+            tested_text: "रसोई में एक मेज़ और चार कुर्सियाँ हैं"
+            prompt:
+              target_blocks:
+                - {text: "बोलो: रसोई में एक मेज़ और चार कुर्सियाँ हैं।", language_code: hi, direction: ltr}
+
+      - content_key: hi.a1.unit18.lesson03.priya_arjun_ghar
+        title: "प्रिया और अर्जुन: घर कैसा है?"
+        spine_outcome_id: universal.a1.housing.describe_home
+        teaching:
+          - content_key: hi.a1.unit18.lesson03.teach.kaisa_review
+            kind: vocabulary
+            target: {text: "कैसा", language_code: hi, direction: ltr}
+            introduced_tokens: ["कैसा"]
+            example: {text: "तुम्हारा घर कैसा है?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit18.lesson03.teach.bada_chota_review
+            kind: vocabulary
+            target: {text: "बड़ा, बड़ी, छोटा, छोटी", language_code: hi, direction: ltr}
+            introduced_tokens: ["बड़ा", "बड़ी", "छोटा", "छोटी"]
+            example:
+              - {text: "मेरा घर छोटा है।", language_code: hi, direction: ltr}
+              - {text: "यह एक बड़ी रसोई है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit18.lesson03.teach.ya_review
+            kind: vocabulary
+            target: {text: "या", language_code: hi, direction: ltr}
+            introduced_tokens: ["या"]
+            example: {text: "तुम्हारा घर बड़ा है या छोटा?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit18.lesson03.teach.arjun_priya_review
+            kind: vocabulary
+            target: {text: "अर्जुन, प्रिया", language_code: hi, direction: ltr}
+            introduced_tokens: ["अर्जुन", "प्रिया"]
+            example:
+              - {text: "मेरा नाम अर्जुन है।", language_code: hi, direction: ltr}
+              - {text: "मेरा नाम प्रिया है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit18.lesson03.teach.ka_review
+            kind: vocabulary
+            target: {text: "का", language_code: hi, direction: ltr}
+            introduced_tokens: ["का"]
+            example: {text: "प्रिया का घर छोटा है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit18.lesson03.teach.dialogue.line01
+            kind: dialogue
+            target:
+              text: "प्रिया, तुम्हारा घर बड़ा है या छोटा?"
+              language_code: hi
+              direction: ltr
+              speaker: Arjun
+            introduced_tokens: []
+          - content_key: hi.a1.unit18.lesson03.teach.dialogue.line02
+            kind: dialogue
+            target:
+              text: "मेरा घर छोटा है। घर में दो कमरे हैं, एक रसोई और एक बाथरूम।"
+              language_code: hi
+              direction: ltr
+              speaker: Priya
+            introduced_tokens: []
+          - content_key: hi.a1.unit18.lesson03.teach.dialogue.line03
+            kind: dialogue
+            target:
+              text: "और तुम्हारा घर, अर्जुन?"
+              language_code: hi
+              direction: ltr
+              speaker: Priya
+            introduced_tokens: []
+          - content_key: hi.a1.unit18.lesson03.teach.dialogue.line04
+            kind: dialogue
+            target:
+              text: "मेरा घर बड़ा है। घर में तीन बेडरूम हैं और एक बड़ी रसोई है।"
+              language_code: hi
+              direction: ltr
+              speaker: Arjun
+            introduced_tokens: []
+          - content_key: hi.a1.unit18.lesson03.teach.dialogue.line05
+            kind: dialogue
+            target:
+              text: "वाह! बेडरूम में क्या है?"
+              language_code: hi
+              direction: ltr
+              speaker: Priya
+            introduced_tokens: []
+          - content_key: hi.a1.unit18.lesson03.teach.dialogue.line06
+            kind: dialogue
+            target:
+              text: "बेडरूम में एक बिस्तर और दो खिड़कियाँ हैं।"
+              language_code: hi
+              direction: ltr
+              speaker: Arjun
+            introduced_tokens: []
+          - content_key: hi.a1.unit18.lesson03.teach.dialogue.line07
+            kind: dialogue
+            target:
+              text: "बहुत अच्छा!"
+              language_code: hi
+              direction: ltr
+              speaker: Priya
+            introduced_tokens: []
+          - content_key: hi.a1.unit18.lesson03.teach.dialogue.line08
+            kind: dialogue
+            target:
+              text: "शुक्रिया!"
+              language_code: hi
+              direction: ltr
+              speaker: Arjun
+            introduced_tokens: []
+          - content_key: hi.a1.unit18.lesson03.teach.grammar_summary
+            kind: grammar_note
+            target: {text: "इस यूनिट के तीन मुख्य नियम: (1) '[जगह] में [संख्या] [संज्ञा] है/हैं' से घर की चीज़ें और उनकी गिनती बताते हैं। (2) '-आ' में खत्म होने वाले पुल्लिंग शब्द बहुवचन में '-ए' बनते हैं (कमरा -> कमरे)। (3) '-ई' में खत्म होने वाले स्त्रीलिंग शब्द बहुवचन में '-इयाँ' बनते हैं (कुर्सी -> कुर्सियाँ, खिड़की -> खिड़कियाँ)।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a1.unit18.lesson03.teach.home_reading
+            kind: reading
+            target: {text: "प्रिया का घर छोटा है। घर में दो कमरे हैं, एक रसोई और एक बाथरूम। अर्जुन का घर बड़ा है। घर में तीन बेडरूम हैं और एक बड़ी रसोई है।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+        exercises:
+          - content_key: hi.a1.unit18.lesson03.exercise01.comprehend_priya_home_size
+            type: dialogue_comprehension
+            tested_text: "छोटा"
+            prompt:
+              target_blocks:
+                - {text: "मेरा घर छोटा है। घर में दो कमरे हैं, एक रसोई और एक बाथरूम।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit18.lesson03.exercise02.comprehend_arjun_bedroom_count
+            type: dialogue_comprehension
+            tested_text: "तीन"
+            prompt:
+              target_blocks:
+                - {text: "मेरा घर बड़ा है। घर में तीन बेडरूम हैं और एक बड़ी रसोई है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit18.lesson03.exercise03.select_tumhara_ghar_bada_ya_chota_meaning
+            type: multiple_choice
+            tested_text: "तुम्हारा घर बड़ा है या छोटा"
+            prompt:
+              target_blocks:
+                - {text: "तुम्हारा घर बड़ा है या छोटा?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit18.lesson03.exercise04.read_profile_priya_rooms
+            type: reading_comprehension
+            tested_text: "रसोई और एक बाथरूम"
+            prompt:
+              target_blocks:
+                - {text: "प्रिया का घर छोटा है। घर में दो कमरे हैं, एक रसोई और एक बाथरूम। अर्जुन का घर बड़ा है। घर में तीन बेडरूम हैं और एक बड़ी रसोई है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit18.lesson03.exercise05.read_profile_arjun_bedroom_count
+            type: reading_comprehension
+            tested_text: "तीन बेडरूम"
+            prompt:
+              target_blocks:
+                - {text: "प्रिया का घर छोटा है। घर में दो कमरे हैं, एक रसोई और एक बाथरूम। अर्जुन का घर बड़ा है। घर में तीन बेडरूम हैं और एक बड़ी रसोई है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit18.lesson03.exercise06.listen_bedroom_mein_bistar_aur_khidkiyan
+            type: listen_select
+            tested_text: "बेडरूम में एक बिस्तर और दो खिड़कियाँ हैं"
+            media_asset_key: hi.a1.audio.housing.bedroom_mein_bistar_aur_khidkiyan_hain.01
+            prompt: {target_blocks: []}
+          - content_key: hi.a1.unit18.lesson03.exercise07.match_lesson03_review
+            type: matching_pairs
+            tested_text: "कमरा रसोई बाथरूम बेडरूम मेज़ कुर्सी बिस्तर खिड़की बड़ा छोटा"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "कमरा", right: "room"}
+              - {left: "रसोई", right: "kitchen"}
+              - {left: "बाथरूम", right: "bathroom"}
+              - {left: "बेडरूम", right: "bedroom"}
+              - {left: "मेज़", right: "table"}
+              - {left: "कुर्सी", right: "chair"}
+              - {left: "बिस्तर", right: "bed"}
+              - {left: "खिड़की", right: "window"}
+              - {left: "बड़ा", right: "big"}
+              - {left: "छोटा", right: "small"}
+          - content_key: hi.a1.unit18.lesson03.exercise08.order_priya_ka_ghar_chota_hai
+            type: word_order
+            tested_text: "प्रिया का घर छोटा है"
+            prompt: {target_blocks: []}
+            word_bank: ["प्रिया", "का", "घर", "छोटा", "है"]
+          - content_key: hi.a1.unit18.lesson03.exercise09.order_arjun_ka_ghar_bada_hai
+            type: word_order
+            tested_text: "अर्जुन का घर बड़ा है"
+            prompt: {target_blocks: []}
+            word_bank: ["अर्जुन", "का", "घर", "बड़ा", "है"]
+          - content_key: hi.a1.unit18.lesson03.exercise10.fill_bedroom_mein_bistar_aur_khidkiyan
+            type: fill_in_blank
+            tested_text: "खिड़कियाँ"
+            prompt:
+              target_blocks:
+                - {text: "बेडरूम में एक बिस्तर और दो ___ हैं।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit18.lesson03.exercise11.fix_priya_ka_ghar_chota_hai
+            type: grammar_check
+            tested_text: "प्रिया का घर छोटा है"
+            prompt:
+              target_blocks:
+                - {text: "प्रिया का घर छोटी है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit18.lesson03.exercise12.reply_tumhara_ghar_bada_ya_chota
+            type: dialogue_response
+            tested_text: "मेरा घर छोटा है"
+            prompt:
+              target_blocks:
+                - {text: "तुम्हारा घर बड़ा है या छोटा?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit18.lesson03.exercise13.write_arjun_ka_ghar_kaisa_hai
+            type: writing_prompt
+            tested_text: "अर्जुन का घर बड़ा है"
+            prompt:
+              target_blocks:
+                - {text: "लिखो: अर्जुन का घर कैसा है?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit18.lesson03.exercise14.speak_bedroom_mein_bistar_aur_khidkiyan
+            type: speak_response
+            tested_text: "घर में तीन बेडरूम हैं और एक बड़ी रसोई है"
+            prompt:
+              target_blocks:
+                - {text: "बोलो: घर में तीन बेडरूम हैं और एक बड़ी रसोई है।", language_code: hi, direction: ltr}
