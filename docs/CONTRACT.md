@@ -200,6 +200,11 @@ beyond LAN testing.
 
 `GET /auth/me` response: `{ "id", "email", "display_name", "created_at" }`.
 
+`DELETE /me` (auth required) permanently deletes the current user's account
+and user-owned learning state. Returns `204 No Content` on success. There is
+no admin override form of this endpoint; a bearer token can only delete its
+own account.
+
 **Languages/courses**
 
 `GET /languages` → array of the language objects shown above.
