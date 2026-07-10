@@ -1,9 +1,12 @@
+import csv
+import io
 import logging
 import mimetypes
 import os
 import re
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
+from typing import Literal
 from uuid import uuid4
 from fastapi import APIRouter, Depends, File, Form, Query, Request, Response, UploadFile
 from fastapi.responses import FileResponse, JSONResponse
@@ -773,6 +776,32 @@ def lexeme_reviews_due(
     }
 
 
+def tracked_lexeme_conditions(
+    user_id,
+    course_id: str,
+    part_of_speech: str | None = None,
+    search: str | None = None,
+):
+    """Shared WHERE clause for the user's tracked vocabulary in a course
+    (the /me/lexemes browser and the /courses/{id}/lexemes/export download
+    must agree on the population: UserLexemeSRS-tracked lexemes only, never
+    the full course-wide pool)."""
+    conditions = [
+        UserLexemeSRS.user_id == user_id,
+        UserLexemeSRS.course_id == course_id,
+        Lexeme.course_id == course_id,
+    ]
+    if part_of_speech:
+        conditions.append(Lexeme.part_of_speech == part_of_speech)
+    if search:
+        pattern = f"%{search}%"
+        conditions.append(
+            Lexeme.token.ilike(pattern)
+            | Lexeme.english_gloss.ilike(pattern)
+        )
+    return conditions
+
+
 @router.get("/me/lexemes", response_model=LexemeListOut)
 def lexemes(
     course_id: str,
@@ -787,19 +816,7 @@ def lexemes(
     if not db.get(Course, course_id):
         fail(404, "course_not_found", "Course not found")
 
-    conditions = [
-        UserLexemeSRS.user_id == user.id,
-        UserLexemeSRS.course_id == course_id,
-        Lexeme.course_id == course_id,
-    ]
-    if part_of_speech:
-        conditions.append(Lexeme.part_of_speech == part_of_speech)
-    if search:
-        pattern = f"%{search}%"
-        conditions.append(
-            Lexeme.token.ilike(pattern)
-            | Lexeme.english_gloss.ilike(pattern)
-        )
+    conditions = tracked_lexeme_conditions(user.id, course_id, part_of_speech, search)
 
     total_count = db.scalar(
         select(func.count(UserLexemeSRS.id))
@@ -849,6 +866,70 @@ def lexemes(
         "limit": limit,
         "offset": offset,
     }
+
+
+@router.get("/courses/{course_id}/lexemes/export")
+def lexemes_export(
+    course_id: str,
+    format: Literal["csv", "anki"] = "csv",
+    user=Depends(current_user),
+    db: Session = Depends(get_db),
+):
+    """Download the user's tracked vocabulary for a course as a file for
+    external tools (spreadsheet CSV, or Anki's 2-column tab-separated
+    text-import format). See docs/CONTRACT.md "Vocabulary export".
+
+    A plain in-memory Response (not StreamingResponse) is deliberate: the
+    population is one user's tracked lexemes in one course — bounded by how
+    much vocabulary a human can actually study (hundreds to low thousands
+    of short rows), nowhere near a size that needs chunked streaming.
+    """
+    if not db.get(Course, course_id):
+        fail(404, "course_not_found", "Course not found")
+
+    rows = db.execute(
+        select(Lexeme, UserLexemeSRS)
+        .join(UserLexemeSRS, UserLexemeSRS.lexeme_id == Lexeme.id)
+        .where(*tracked_lexeme_conditions(user.id, course_id))
+        .order_by(Lexeme.token.asc(), Lexeme.english_gloss.asc())
+    ).all()
+
+    buffer = io.StringIO()
+    if format == "anki":
+        # Standard Anki text import: front TAB back, one note per line, no
+        # header row. The two #-directives are honored by Anki >=2.1.55 and
+        # ignored as comments by older versions, so the file imports
+        # cleanly either way. csv.writer (not "\t".join) so a token/gloss
+        # containing a tab or newline can't silently corrupt the column
+        # structure.
+        buffer.write("#separator:tab\n#html:false\n")
+        writer = csv.writer(buffer, delimiter="\t", lineterminator="\n")
+        for lexeme, _srs in rows:
+            writer.writerow([lexeme.token, lexeme.english_gloss])
+        media_type = "text/tab-separated-values"
+        # Anki's import picker expects .txt for text files, not .tsv.
+        filename = f"vocabulary-{course_id}.txt"
+    else:
+        writer = csv.writer(buffer, lineterminator="\n")
+        writer.writerow(["token", "gloss", "part_of_speech", "mastery", "due_at"])
+        for lexeme, srs in rows:
+            writer.writerow(
+                [
+                    lexeme.token,
+                    lexeme.english_gloss,
+                    lexeme.part_of_speech,
+                    srs.mastery,
+                    srs.due_at.isoformat() if srs.due_at else "",
+                ]
+            )
+        media_type = "text/csv"
+        filename = f"vocabulary-{course_id}.csv"
+
+    return Response(
+        content=buffer.getvalue(),
+        media_type=f"{media_type}; charset=utf-8",
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
+    )
 
 
 @router.get("/me/lexemes/summary", response_model=LexemeSummaryOut)

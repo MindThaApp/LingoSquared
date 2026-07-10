@@ -96,6 +96,8 @@ export function VocabularyPage() {
   const [sort, setSort] = useState<LexemeSort>("due_soonest");
   const [search, setSearch] = useState("");
   const [limit, setLimit] = useState(PAGE_SIZE);
+  const [exporting, setExporting] = useState<"csv" | "anki" | null>(null);
+  const [exportError, setExportError] = useState(false);
 
   const progressQuery = useQuery({ queryKey: ["progress"], queryFn: ProgressApi.progress });
   const courseIds = useMemo(
@@ -178,6 +180,30 @@ export function VocabularyPage() {
     );
   }
 
+  // Standard Blob + object URL + synthetic anchor click download. The
+  // backend's Content-Disposition filename wins when present so the file
+  // the user sees matches what any other client (curl, etc.) would get.
+  async function handleExport(format: "csv" | "anki") {
+    if (exporting) return;
+    setExporting(format);
+    setExportError(false);
+    try {
+      const { blob, filename } = await LexemeApi.exportFile(activeCourseId!, format);
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement("a");
+      anchor.href = url;
+      anchor.download = filename ?? `vocabulary.${format === "anki" ? "txt" : "csv"}`;
+      document.body.appendChild(anchor);
+      anchor.click();
+      anchor.remove();
+      URL.revokeObjectURL(url);
+    } catch {
+      setExportError(true);
+    } finally {
+      setExporting(null);
+    }
+  }
+
   const activeQuery = tab === "words" ? wordsQuery : mistakesQuery;
   const items = tab === "words" ? wordsQuery.data?.items : mistakesQuery.data?.items;
   const totalCount = tab === "words" ? wordsQuery.data?.total_count : mistakesQuery.data?.total_count;
@@ -217,7 +243,7 @@ export function VocabularyPage() {
         </div>
       )}
 
-      <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
+      <div style={{ display: "flex", gap: 8, marginBottom: 12, flexWrap: "wrap", alignItems: "center" }}>
         <button
           className={`btn ${tab === "words" ? "" : "btn-secondary"}`}
           onClick={() => {
@@ -236,7 +262,32 @@ export function VocabularyPage() {
         >
           {t("vocabulary.tab_mistakes")}
         </button>
+        {/* Exports the whole tracked vocabulary for this course (not the
+            current tab/filter view), so it lives with the course-level
+            controls rather than inside the words tab's filter row. */}
+        <div style={{ marginInlineStart: "auto", display: "flex", gap: 8 }}>
+          <button
+            className="btn-icon-toggle"
+            disabled={exporting !== null}
+            onClick={() => handleExport("csv")}
+          >
+            {exporting === "csv" ? t("vocabulary.exporting") : t("vocabulary.export_csv")}
+          </button>
+          <button
+            className="btn-icon-toggle"
+            disabled={exporting !== null}
+            onClick={() => handleExport("anki")}
+          >
+            {exporting === "anki" ? t("vocabulary.exporting") : t("vocabulary.export_anki")}
+          </button>
+        </div>
       </div>
+
+      {exportError && (
+        <div className="feedback-banner error" style={{ marginBottom: 12 }}>
+          <p style={{ margin: 0 }}>{t("vocabulary.export_error")}</p>
+        </div>
+      )}
 
       {tab === "words" && (
         <div style={{ display: "flex", gap: 8, marginBottom: 12, flexWrap: "wrap" }}>
