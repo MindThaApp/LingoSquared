@@ -8,9 +8,58 @@ generation_provenance:
   authoring_system: "claude"
   human_reviewed: false
 review:
-  status: "unreviewed"
-  required_next_reviewer: "codex"
+  status: "reviewed"
+  required_next_reviewer: null
   notes: >-
+    2026-07-10 fresh-context review (Claude, zero access to the original
+    authoring reasoning) found the shipped content clean -- no learner-
+    facing bug required a fix. Re-verified independently rather than taking
+    the original notes on faith: same-speaker-distractor safety (re-read
+    every lesson03 dialogue turn by hand -- Daniel/Mia's lines carry at
+    most one fact each, Clerk's four lines are each a single, distinct fact
+    -- closing time / ticket total / guide location / exhibition name --
+    with zero turn stating two facts of the same question-type, so a
+    future overlay author has a safe distractor pool); no stray unquoted
+    YAML booleans (grep plus a full yaml.safe_load walk found only the two
+    intentional real booleans, generation_provenance.human_reviewed and
+    course.target_language_first); matching_pairs/word_order answer shapes
+    are correct per the documented frontend footguns (matching_pairs uses
+    the required {left,right} array-of-objects shape, word_order's
+    tested_text and word_bank tokens match exactly); cross-lesson facts are
+    genuinely consistent ($6/ticket x 2 = $12 total agrees between the
+    dialogue and the lesson04 notice card, "five o'clock"/"5:00" closing
+    time agrees, "Colors of the City"/"Room 2" exhibition details agree
+    across the dialogue, reading passage, and notice card); no internal-
+    jargon leaks; every exercise type used (listen_select, multiple_choice,
+    matching_pairs, word_order, translation, speak_response,
+    writing_prompt) is a real, registered case in
+    frontend/src/components/exercises/ExerciseRenderer.tsx; the English
+    reads naturally throughout at an appropriate A1 level; and cast-
+    continuity claims spot-checked directly against their source units
+    (unit36's photography class, unit42's outgoing/organized personality,
+    unit56's "bring Daniel next time" hook) all matched. Re-ran the
+    compiler's own validate subcommand against a throwaway, never-committed
+    empty overlay: a genuine 0 errors/0 warnings, confirming the original
+    author's untaught-vocabulary and boolean-coercion claims rather than
+    trusting them unverified.
+
+    One real inaccuracy found and fixed, narrative-only -- it never reached
+    the shipped content: the cast-pairing paragraph below originally
+    described the pre-unit58 tally (Daniel&Leila=10, Daniel&Mia=9,
+    Mia&Leila=9, re-derived independently here from unit54-57's own
+    dialogue speaker: fields and confirmed correct) as a three-way "tied"
+    state. It isn't -- Daniel&Leila leads outright at 10; only Daniel&Mia
+    and Mia&Leila are genuinely tied, at 9. The actual pairing decision
+    (Daniel&Mia, the correct least-used pairing, tie-broken by recency over
+    Mia&Leila) and the resulting tally update (Daniel&Leila=10,
+    Daniel&Mia=10, Mia&Leila=9) were unaffected and are both correct --
+    fixed the wording below to describe the real 10/9/9 split rather than a
+    tie, so whoever reads this file to pick unit59's pairing isn't misled
+    about how the tie-break logic actually applies.
+
+    Original authoring notes, preserved below for provenance and future
+    continuity reference:
+
     Four-lesson draft. Realizes universal.a1.museum.visit_a_museum, the next
     unrealized outcome in the shared English realization (fa-en/nl-en/prs-en
     all depend on this file) -- determined by a fresh `ls` of this directory
@@ -57,17 +106,21 @@ review:
     unit52's Hairdresser, unit53's Rental Clerk, unit54's Attendant,
     unit55's Lifeguard, unit56's Waiter, unit57's Cashier -- does not count
     toward the pairing tally). Starting tally, per unit57's own closing
-    note: Daniel&Leila=10, Daniel&Mia=9, Mia&Leila=9, tied. Re-derived the
-    real recency order directly from each unit's own dialogue `speaker:`
-    fields: unit54=Daniel&Leila, unit55=Daniel&Mia, unit56=Leila&Mia,
-    unit57=Daniel&Leila. Recency breaks the tie the same way it has every
-    prior time this project hit one: avoid the pairing used immediately
-    prior (Daniel&Leila, unit57) and, between the two remaining tied
-    pairings, prefer whichever was used longer ago -- Daniel&Mia (unit55,
-    two units back) over Mia&Leila (unit56, one unit back). Daniel&Mia used
-    here. After this unit the tally is Daniel&Leila=10, Daniel&Mia=10,
-    Mia&Leila=9, leaving Mia&Leila as the sole least-used pairing for
-    whoever picks unit59's pairing.
+    note: Daniel&Leila=10, Daniel&Mia=9, Mia&Leila=9 -- Daniel&Leila leads
+    outright, NOT a three-way tie; only Daniel&Mia and Mia&Leila are
+    genuinely tied, at 9 (corrected during the 2026-07-10 fresh-context
+    review -- see the review block above). Re-derived the real recency
+    order directly from each unit's own dialogue `speaker:` fields:
+    unit54=Daniel&Leila, unit55=Daniel&Mia, unit56=Leila&Mia,
+    unit57=Daniel&Leila. Since Daniel&Leila already leads the count, it
+    isn't a candidate regardless of recency; between the two pairings
+    actually tied for least-used, recency breaks the tie the same way it
+    has every prior time this project hit one -- prefer whichever was used
+    longer ago -- Daniel&Mia (unit55, two units back) over Mia&Leila
+    (unit56, one unit back). Daniel&Mia used here. After this unit the
+    tally is Daniel&Leila=10, Daniel&Mia=10, Mia&Leila=9, leaving
+    Mia&Leila as the sole least-used pairing for whoever picks unit59's
+    pairing.
 
     Scenario: one Saturday afternoon, Daniel and Mia decide to visit the
     City Museum together. At the entrance, a Clerk tells them the museum
