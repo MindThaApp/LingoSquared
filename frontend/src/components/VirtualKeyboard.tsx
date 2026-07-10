@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import type { ScriptCode } from "@lingo/shared/api/types";
 import { KEYBOARD_LAYOUTS } from "@lingo/shared/lib/scripts";
@@ -18,8 +19,13 @@ export function VirtualKeyboard({
   onDismiss: () => void;
 }) {
   const { t } = useTranslation();
+  // Secondary digits/punctuation layer (layouts that define one). State must
+  // be declared before the early return below — hooks can't be conditional.
+  const [showSymbols, setShowSymbols] = useState(false);
   const layout = KEYBOARD_LAYOUTS[script];
   if (!layout) return null;
+  const symbols = layout.symbols;
+  const symbolsActive = showSymbols && symbols !== undefined;
 
   function keyMouseDown(e: React.MouseEvent, action: () => void) {
     e.preventDefault();
@@ -43,13 +49,20 @@ export function VirtualKeyboard({
           semantic groupings, and an 11-key line has never fit a phone-width
           viewport anyway — with per-chunk divs each chunk wrapped into its
           own ragged pair of lines (e.g. 7+4, 7+4, 7+3 at 375px). A single
-          wrapping container lets flexbox pack every line evenly (7/7/7/7/4)
-          at whatever width is actually available, which matters more now
+          wrapping container lets flexbox pack every line evenly (7 per line
+          at 375px) at whatever width is actually available, which matters more now
           that keys are touch-target sized (42x48, see index.css). Alphabet
           order is preserved; dir={layout.direction} on the root makes the
           wrap direction follow the script. */}
-      <div className="virtual-keyboard-row">
-        {layout.rows.flat().map((char) => (
+      {/* Letter grid, or the toggled digits/punctuation layer. The symbol
+          layer carries its OWN direction (digits read left-to-right even in
+          RTL scripts, matching real fa/prs keyboards' number rows), so it
+          sets dir explicitly rather than inheriting the root's. */}
+      <div
+        className="virtual-keyboard-row"
+        dir={symbolsActive ? symbols.direction : undefined}
+      >
+        {(symbolsActive ? symbols.keys : layout.rows.flat()).map((char) => (
           <button
             key={char}
             type="button"
@@ -61,6 +74,16 @@ export function VirtualKeyboard({
         ))}
       </div>
       <div className="virtual-keyboard-row">
+        {symbols && (
+          <button
+            type="button"
+            className="virtual-keyboard-key virtual-keyboard-key-wide"
+            onMouseDown={(e) => keyMouseDown(e, () => setShowSymbols((s) => !s))}
+            title={showSymbols ? t("keyboard.show_letters") : t("keyboard.show_symbols")}
+          >
+            {showSymbols ? symbols.lettersLabel : symbols.toggleLabel}
+          </button>
+        )}
         {layout.hasZwnj && (
           <button
             type="button"
