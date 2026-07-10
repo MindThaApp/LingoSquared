@@ -355,6 +355,9 @@ export interface AuthUser {
 
 export interface AuthResult {
   access_token: string;
+  // Opaque, DB-backed, 60-day, rotates on every /auth/refresh use — see
+  // docs/CONTRACT.md's Auth section.
+  refresh_token: string;
   token_type: "bearer";
   expires_in: number;
   user: AuthUser;
