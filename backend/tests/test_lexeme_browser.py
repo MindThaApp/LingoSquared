@@ -1,3 +1,5 @@
+import csv
+import io
 from datetime import datetime, timedelta, timezone
 
 from sqlalchemy import select
@@ -74,6 +76,109 @@ def test_lexeme_browser_invalid_course_returns_404(client, auth):
     response = client.get("/me/lexemes?course_id=missing", headers=auth)
     assert response.status_code == 404
     assert response.json()["error"]["code"] == "course_not_found"
+
+
+def test_lexeme_export_csv_returns_tracked_vocabulary_only(client, auth):
+    course_id, lesson_id = create_course_with_lexemes()
+    complete_via_api(client, auth, lesson_id)
+    uid = user_id(auth)
+
+    with SessionLocal() as db:
+        rows = list(
+            db.scalars(
+                select(UserLexemeSRS)
+                .where(
+                    UserLexemeSRS.user_id == uid,
+                    UserLexemeSRS.course_id == course_id,
+                )
+                .order_by(UserLexemeSRS.lexeme_id)
+            )
+        )
+        rows[0].mastery = 0.42
+        lesson = db.get(Lexeme, rows[0].lexeme_id).provenance_lesson_id
+        db.add(
+            Lexeme(
+                course_id=course_id,
+                token="never-seen",
+                language_code="es",
+                part_of_speech="noun",
+                english_gloss="never seen",
+                agreement_tags={},
+                provenance_lesson_id=lesson,
+                provenance_lesson_content_key="test.practice.lesson.001",
+                provenance_content_key="test.lexeme.never_seen",
+            )
+        )
+        db.commit()
+
+    response = client.get(f"/courses/{course_id}/lexemes/export", headers=auth)
+    assert response.status_code == 200, response.text
+    assert response.headers["content-type"].startswith("text/csv")
+    assert (
+        response.headers["content-disposition"]
+        == f'attachment; filename="vocabulary-{course_id}.csv"'
+    )
+
+    rows_out = list(csv.reader(io.StringIO(response.text)))
+    assert rows_out[0] == ["token", "gloss", "part_of_speech", "mastery", "due_at"]
+    body = rows_out[1:]
+    tokens = [row[0] for row in body]
+    # Only the SRS-tracked lexemes (all 8 the completed lesson introduces),
+    # never the untracked course-pool lexeme added above.
+    assert set(tokens) == {
+        "uno", "dos", "tres", "cuatro", "derecha",
+        "buenos días", "buenas tardes", "buenas noches",
+    }
+    assert "never-seen" not in tokens
+    # Alphabetical by token (spot-check rather than pinning the DB
+    # collation's full ordering).
+    assert tokens.index("cuatro") < tokens.index("uno")
+    glosses = dict(zip(tokens, (row[1] for row in body)))
+    assert glosses["uno"] == "one"
+    for row in body:
+        assert len(row) == 5
+        assert 0.0 <= float(row[3]) <= 1.0
+        datetime.fromisoformat(row[4])  # due_at is real ISO 8601
+
+
+def test_lexeme_export_anki_format_is_tab_separated_front_back(client, auth):
+    course_id, lesson_id = create_course_with_lexemes()
+    complete_via_api(client, auth, lesson_id)
+
+    response = client.get(
+        f"/courses/{course_id}/lexemes/export?format=anki", headers=auth
+    )
+    assert response.status_code == 200, response.text
+    assert response.headers["content-type"].startswith("text/tab-separated-values")
+    assert (
+        response.headers["content-disposition"]
+        == f'attachment; filename="vocabulary-{course_id}.txt"'
+    )
+
+    lines = response.text.splitlines()
+    assert lines[0] == "#separator:tab"
+    assert lines[1] == "#html:false"
+    notes = [line.split("\t") for line in lines[2:]]
+    assert all(len(n) == 2 for n in notes)
+    pairs = dict(notes)
+    assert pairs["dos"] == "two"
+    assert pairs["buenas noches"] == "good evening"
+    assert len(notes) == 8  # every tracked lexeme, front TAB back only
+
+
+def test_lexeme_export_invalid_course_returns_404(client, auth):
+    response = client.get("/courses/missing/lexemes/export", headers=auth)
+    assert response.status_code == 404
+    assert response.json()["error"]["code"] == "course_not_found"
+
+
+def test_lexeme_export_invalid_format_returns_422(client, auth):
+    course_id, lesson_id = create_course_with_lexemes()
+    complete_via_api(client, auth, lesson_id)
+    response = client.get(
+        f"/courses/{course_id}/lexemes/export?format=xml", headers=auth
+    )
+    assert response.status_code == 422
 
 
 def test_lexeme_summary_counts_bands_due_today_and_suspended(client, auth):
