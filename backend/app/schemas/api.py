@@ -39,7 +39,10 @@ class MeOut(UserOut): created_at:datetime
 # names (e.g. "America/Argentina/ComodRivadavia", under 40 chars).
 class RegisterIn(BaseModel): email:EmailStr; password:str=Field(min_length=8,max_length=128); display_name:str|None=Field(default=None,max_length=100); timezone:str|None=Field(default=None,max_length=64)
 class LoginIn(BaseModel): email:EmailStr; password:str=Field(max_length=128); timezone:str|None=Field(default=None,max_length=64)
-class AuthOut(BaseModel): access_token:str; token_type:Literal["bearer"]="bearer"; expires_in:int; user:UserOut
+class AuthOut(BaseModel): access_token:str; refresh_token:str; token_type:Literal["bearer"]="bearer"; expires_in:int; user:UserOut
+class RefreshIn(BaseModel): refresh_token:str=Field(min_length=1,max_length=512)
+class RefreshOut(BaseModel): access_token:str; refresh_token:str; token_type:Literal["bearer"]="bearer"; expires_in:int
+class LogoutIn(BaseModel): refresh_token:str=Field(min_length=1,max_length=512)
 class LanguageOut(ORM): code:str; name:str; native_name:str; script:Literal["latin","cyrillic","han","arabic","devanagari"]; direction:Literal["ltr","rtl"]
 class TextBlock(BaseModel): text:str; language_code:str; direction:Literal["ltr","rtl"]; speaker:str|None=None
 # 2026-07-07 vocabulary-example addition (CONTRACT.md, AUTHORING_GUIDE.md #19):

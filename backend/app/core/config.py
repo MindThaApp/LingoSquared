@@ -5,7 +5,8 @@ class Settings(BaseSettings):
     app_name: str = "Lingo² API"
     database_url: str = "postgresql+psycopg://lingosquared:change-me@db:5432/lingosquared"
     jwt_secret: str = "development-only-secret"
-    access_token_expire_seconds: int = 86400
+    access_token_expire_seconds: int = 1800
+    refresh_token_expire_seconds: int = 60 * 24 * 60 * 60
     admin_emails: str = "admin@example.com"
     cors_origins: str = "http://localhost:5173"
     # Raw service-account JSON content (not a file path) — set as a single
