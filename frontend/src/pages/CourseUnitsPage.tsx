@@ -23,9 +23,13 @@ function PathNode({
   const { t } = useTranslation();
   const navigate = useNavigate();
   const locked = unit.locked;
+  const done = unit.completed_lesson_count >= unit.lesson_count && unit.lesson_count > 0;
   const Icon = unitIcon(unit.content_key);
   return (
-    <div id={`unit-${unit.id}`} className={`path-node${locked ? " locked" : ""}${current ? " current" : ""}`}>
+    <div
+      id={`unit-${unit.id}`}
+      className={`path-node${locked ? " locked" : ""}${current ? " current" : ""}${done ? " done" : ""}`}
+    >
       <button
         className="path-bubble"
         aria-label={locked ? `${unit.title}${t("course_units.locked_suffix")}` : unit.title}
