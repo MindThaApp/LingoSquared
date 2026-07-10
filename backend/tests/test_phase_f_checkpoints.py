@@ -14,7 +14,11 @@ from app.models import (
     Unit,
     UserLexemeSRS,
 )
-from app.review.grading import grade_answer, FREE_TEXT_EXERCISE_TYPES
+from app.review.grading import (
+    grade_answer,
+    FREE_TEXT_EXERCISE_TYPES,
+    MIN_ANSWER_LENGTH_FOR_TYPO_TOLERANCE,
+)
 from test_endless_practice import (
     artifact,
     create_course_with_lexemes,
@@ -153,7 +157,16 @@ def test_checkpoint_forces_strict_orthography(
             if (
                 template.type in FREE_TEXT_EXERCISE_TYPES
                 and isinstance(item.correct_response, str)
-                and len(item.correct_response) >= 2
+                # Must be long enough that typo tolerance applies at all:
+                # answers under MIN_ANSWER_LENGTH_FOR_TYPO_TOLERANCE
+                # (2026-07-10 short-answer exact-match floor, see
+                # grading.is_too_short_for_typo_tolerance()) grade
+                # "incorrect" on ANY mismatch, which would break this
+                # test's "almost" precondition whenever sampling happened
+                # to pick a 2-3 character answer - same flakiness class as
+                # the fill_in_blank sampling bug described above.
+                and len(item.correct_response.strip())
+                >= MIN_ANSWER_LENGTH_FOR_TYPO_TOLERANCE
             ):
                 selected = (
                     item.id,
