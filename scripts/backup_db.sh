@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 # Nightly database backup for the Docker Compose Postgres service.
 #
-# Manual activation step on the live server: install this cron entry with
-# `crontab -e` after this script has been deployed:
+# Manual activation step on the live server: run
+# `./scripts/install_backup_cron.sh` (idempotent, preserves existing cron
+# entries) after this script has been deployed — or install the entry by
+# hand with `crontab -e`:
 # 0 3 * * * cd /home/ramin/LingoSquared && ./scripts/backup_db.sh >> backend/backup.log 2>&1
 #
 # Manual run from the repo root:
