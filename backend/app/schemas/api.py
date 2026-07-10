@@ -29,7 +29,12 @@ def _bounded_payload_size(value):
     return value
 
 class ORM(BaseModel): model_config=ConfigDict(from_attributes=True)
-class UserOut(ORM): id:str; email:EmailStr; display_name:str
+# is_admin: additive (2026-07-10 security pass). The backend's admin_user
+# dependency remains the real security boundary for every /admin/* route --
+# exposing the flag here only lets the frontend gate admin UI
+# (AdminContentPage) on the real value instead of firing admin API calls
+# and reacting to the 403 after the fact.
+class UserOut(ORM): id:str; email:EmailStr; display_name:str; is_admin:bool=False
 class MeOut(UserOut): created_at:datetime
 # Phase H3 (2026-07-07 integrity audit): display_name/timezone were the
 # only free-form string fields on the auth path with no length bound --
