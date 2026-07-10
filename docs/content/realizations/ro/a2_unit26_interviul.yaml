@@ -1,0 +1,494 @@
+schema_version: "1.1"
+realization_version: "2026.1-draft.1"
+target_language: ro
+cefr_level: A2
+status: complete_draft
+generation_provenance:
+  method: ai_generated
+  authoring_system: claude
+  source_material: >-
+    "Basic Romanian Language Lessons" (US Peace Corps Moldova, public
+    domain, the same PDF used for units 01-25,
+    https://fsi-languages.yojik.eu/languages/PeaceCorps/Romanian/
+    MD_Romanian_Language_Lessons.pdf) was checked first for dedicated
+    job-interview material. `firecrawl --status` still shows 0/1,000
+    credits, so this unit again falls back to established-conventions-
+    only authoring. Grepped the existing 785-line extraction for
+    experiență/interviu/disponibil/angajare and found no dedicated
+    lesson content beyond unit17's own basic job/workplace vocabulary
+    (inginer, birou, profesoară, școală) -- every word and phrase
+    specific to this unit's interview scenario is authored fresh from
+    general standard Romanian knowledge.
+
+    Continues the A2 grammar progression with the perfect tense ("am
+    lucrat," I have worked) as a second past-tense form alongside this
+    course's existing simple-past dialogue narration, needed to
+    describe past work experience naturally. Switches to Mihai as
+    interviewer for this unit specifically: unit17 established Mihai
+    as an inginer (engineer) who lucrează la birou (works at an
+    office), a natural fit for conducting an engineering-adjacent
+    interview at his own workplace, while Ana's established teaching
+    job (unit17) has no interview-conducting angle. Introduces one new
+    character, Diana, a job candidate -- a new named character rather
+    than reusing Ana, since Ana already has an established teaching
+    job (unit17) and having her separately interview for an unrelated
+    position would need its own new, unestablished narrative reason
+    this unit doesn't need to invent.
+  human_reviewed: false
+review:
+  status: unreviewed
+  required_next_reviewer: null
+  notes: >-
+    Sixth Romanian A2 unit, completing this course's A2 tier (all six
+    of universal_spine.yaml's current A2 outcomes are now realized in
+    Romanian, matching nl's own A2 coverage). Targets universal.a2.
+    employment.attend_job_interview (confirmed by grepping
+    universal_spine.yaml directly -- prerequisites are
+    universal.a1.work.describe_job, this course's own unit17, and
+    universal.a2.opinions.give_opinions_with_reasons, this course's own
+    unit22). 4 lessons, each mapped to a distinct spine
+    assessment_requirement: lesson01 (asking about/describing
+    experience) covers answer_interview_question's experience half;
+    lesson02 (asking about availability) completes
+    answer_interview_question; lesson03 (reading a job posting) covers
+    read_job_posting and previews write_availability_note via its
+    writing_prompt; lesson04 (the full Mihai/Diana interview dialogue)
+    covers understand_interview_question and consolidates all four.
+
+    Reuses unit01's bună/mulțumesc/la revedere/Mihai, unit17's
+    inginer/birou (Mihai's own established workplace), re-declared via
+    a lesson-opening reminder card per the standing per-file
+    token-scoping convention. Within this file, lesson02-04 freely
+    reuse lesson01's own experiență/am lucrat without a fresh reminder
+    card, matching the established within-file-reuse precedent.
+
+    Checked this choice against AUTHORING_GUIDE #11 before finalizing.
+    Facts this unit newly states: Diana has two years of experience as
+    a technician (tehniciană), is available starting Monday, and asks
+    a clarifying question about the role's schedule; Mihai, in his own
+    established capacity as an inginer at his birou, conducts the
+    interview. Grepped unit17 to confirm no conflict: unit17 states
+    Mihai lucrează la birou as an inginer with no claim about hiring
+    authority or team size, so him conducting one interview at that
+    same office doesn't contradict anything already established, and
+    Diana is a genuinely new character with no prior appearance to
+    conflict with.
+
+    Checked every fill_in_blank slot against AUTHORING_GUIDE #17: each
+    blank's instruction explicitly states the target English meaning
+    (lesson01's blank=doi instruction names "two years" explicitly;
+    lesson02's blank=luni instruction names "from Monday" explicitly).
+    Checked every listen_select/dialogue_comprehension distractor
+    against the standing same-speaker-audio rule for lesson04's
+    dialogue -- Mihai's and Diana's own lines were listed before
+    writing distractors, and every distractor is either something
+    neither speaker says in that clip, or (for "who says this")
+    genuinely said by the other speaker only.
+
+    Verified every word_order/listen_order exercise's word_bank token
+    multiset exactly matches its paired overlay correct_response token
+    multiset (case- and diacritic-exact), and every exercise's
+    tested_text tokens are covered by an earlier introduced_tokens
+    entry in THIS SAME FILE (per-file scoping, confirmed the hard way
+    by units 21/23's own first-pass compiler errors, checked
+    proactively here before running the compiler at all). Needs a
+    fresh-context content review before import, same as every other
+    language's content.
+
+course:
+  realization_key: ro.a2
+  target_language_first: true
+  dialect: ro_RO_standard
+  register_policy: >-
+    Fully formal register throughout -- dumneavoastră between Mihai and
+    Diana (a job interview between strangers), matching units 21/23/
+    24/25's identical convention for a first professional meeting.
+
+media_assets:
+  - content_key: ro.a2.audio.interviu.aveti_experienta.01
+    language: ro
+    text: "Aveți experiență în acest domeniu?"
+    voice_hint: neutral_adult_polite
+    status: pending_generation
+  - content_key: ro.a2.audio.interviu.am_lucrat.01
+    language: ro
+    text: "Am lucrat doi ani ca tehniciană."
+    voice_hint: neutral_young_adult_friendly
+    status: pending_generation
+  - content_key: ro.a2.audio.interviu.sunt_disponibila.01
+    language: ro
+    text: "Sunt disponibilă de luni."
+    voice_hint: neutral_young_adult_friendly
+    status: pending_generation
+  - content_key: ro.a2.audio.interviu.as_avea_o_intrebare.01
+    language: ro
+    text: "Aș avea o întrebare despre program."
+    voice_hint: neutral_young_adult_friendly
+    status: pending_generation
+  - content_key: ro.a2.audio.interviu.anunt.01
+    language: ro
+    text: "Căutăm un tehnician cu experiență, disponibil de luni până vineri. Program complet, opt ore pe zi."
+    voice_hint: neutral_adult_formal
+    status: pending_generation
+  - content_key: ro.a2.audio.dialogue.interviul.01
+    language: ro
+    text: "Mihai: Bună ziua, Diana! Aveți experiență în acest domeniu?\nDiana: Bună ziua! Da, am lucrat doi ani ca tehniciană.\nMihai: Foarte bine. Când sunteți disponibilă?\nDiana: Sunt disponibilă de luni.\nMihai: Perfect. Aveți întrebări pentru mine?\nDiana: Da, aș avea o întrebare despre program.\nMihai: Programul este de opt ore pe zi, de luni până vineri.\nDiana: Mulțumesc pentru informații!\nMihai: Cu plăcere, vă vom contacta în curând."
+    voice_hint: adult_male_and_female_neutral_polite
+    status: pending_generation
+
+units:
+  - content_key: ro.a2.unit26.interviul
+    title: "Interviul de angajare"
+    section: reading_writing
+    spine_outcome_ids:
+      - universal.a2.employment.attend_job_interview
+    planned_lesson_count: 4
+
+    lessons:
+      - content_key: ro.a2.unit26.lesson01.aveti_experienta
+        title: "Aveți experiență?"
+        spine_outcome_id: universal.a2.employment.attend_job_interview
+        teaching:
+          - content_key: ro.a2.unit26.lesson01.teach.reminder_buna_multumesc_la_revedere_mihai_inginer_birou
+            kind: grammar_note
+            target: {text: "Bună ziua · Mulțumesc · La revedere · Mihai · Inginer · Birou", language_code: ro, direction: ltr}
+            introduced_tokens: [bună, ziua, mulțumesc, la, revedere, mihai, inginer, birou, diana]
+          - content_key: ro.a2.unit26.lesson01.teach.experienta_vocab
+            kind: vocabulary
+            target: {text: "Experiență", language_code: ro, direction: ltr}
+            introduced_tokens: [aveți, experiență, în, acest, domeniu]
+            example:
+              - {text: "Aveți experiență în acest domeniu?", language_code: ro, direction: ltr}
+          - content_key: ro.a2.unit26.lesson01.teach.am_lucrat_grammar
+            kind: grammar_note
+            target: {text: "Am lucrat (I have worked)", language_code: ro, direction: ltr}
+            introduced_tokens: [am, lucrat]
+          - content_key: ro.a2.unit26.lesson01.teach.tehniciana_vocab
+            kind: vocabulary
+            target: {text: "Tehniciană", language_code: ro, direction: ltr}
+            introduced_tokens: [doi, ani, ca, tehniciană]
+            example:
+              - {text: "Am lucrat doi ani ca tehniciană.", language_code: ro, direction: ltr}
+          - content_key: ro.a2.unit26.lesson01.teach.am_lucrat_doi_ani_phrase
+            kind: phrase
+            target: {text: "Am lucrat doi ani ca tehniciană.", language_code: ro, direction: ltr}
+            introduced_tokens: [am, lucrat, doi, ani, ca, tehniciană]
+        exercises:
+          - content_key: ro.a2.unit26.lesson01.exercise01.choose_experienta
+            type: multiple_choice
+            tested_text: "experiență"
+            prompt:
+              target_blocks:
+                - {text: "experience", language_code: en, direction: ltr}
+          - content_key: ro.a2.unit26.lesson01.exercise02.choose_tehniciana
+            type: multiple_choice
+            tested_text: "tehniciană"
+            prompt:
+              target_blocks:
+                - {text: "technician (female)", language_code: en, direction: ltr}
+          - content_key: ro.a2.unit26.lesson01.exercise03.listen_aveti_experienta
+            type: listen_select
+            tested_text: "Aveți experiență în acest domeniu"
+            media_asset_key: ro.a2.audio.interviu.aveti_experienta.01
+            prompt: {target_blocks: []}
+          - content_key: ro.a2.unit26.lesson01.exercise04.match_interviu1
+            type: matching_pairs
+            tested_text: "experiență domeniu am lucrat doi ani tehniciană bună ziua mulțumesc"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "Experiență", right: "experience"}
+              - {left: "Domeniu", right: "field"}
+              - {left: "Am lucrat", right: "I have worked"}
+              - {left: "Doi ani", right: "two years"}
+              - {left: "Tehniciană", right: "technician (female)"}
+              - {left: "Am lucrat doi ani ca tehniciană.", right: "I have worked two years as a technician."}
+              - {left: "Bună ziua.", right: "Good day."}
+              - {left: "Mulțumesc.", right: "Thank you."}
+          - content_key: ro.a2.unit26.lesson01.exercise05.order_am_lucrat_doi_ani
+            type: word_order
+            tested_text: "Am lucrat doi ani ca tehniciană"
+            prompt: {target_blocks: []}
+            word_bank: ["Am", "lucrat", "doi", "ani", "ca", "tehniciană"]
+          - content_key: ro.a2.unit26.lesson01.exercise06.listen_order_aveti_experienta
+            type: listen_order
+            tested_text: "Aveți experiență în acest domeniu"
+            media_asset_key: ro.a2.audio.interviu.aveti_experienta.01
+            prompt: {target_blocks: []}
+            word_bank: ["Aveți", "experiență", "în", "acest", "domeniu"]
+          - content_key: ro.a2.unit26.lesson01.exercise07.complete_am_lucrat_doi_ani
+            type: fill_in_blank
+            tested_text: "doi"
+            prompt:
+              target_blocks:
+                - {text: "Complete the sentence, two years: Am lucrat ___ ani ca tehniciană.", language_code: ro, direction: ltr}
+          - content_key: ro.a2.unit26.lesson01.exercise08.speak_am_lucrat_doi_ani
+            type: speak_response
+            tested_text: "am lucrat doi ani ca tehniciană"
+            prompt:
+              target_blocks:
+                - {text: "Say: I have worked two years as a technician.", language_code: en, direction: ltr}
+
+      - content_key: ro.a2.unit26.lesson02.sunt_disponibila
+        title: "Sunt disponibilă de luni"
+        spine_outcome_id: universal.a2.employment.attend_job_interview
+        teaching:
+          - content_key: ro.a2.unit26.lesson02.teach.disponibila_vocab
+            kind: vocabulary
+            target: {text: "Disponibilă", language_code: ro, direction: ltr}
+            introduced_tokens: [când, sunteți, disponibilă, sunt]
+            example:
+              - {text: "Când sunteți disponibilă?", language_code: ro, direction: ltr}
+          - content_key: ro.a2.unit26.lesson02.teach.de_luni_vocab
+            kind: vocabulary
+            target: {text: "De luni", language_code: ro, direction: ltr}
+            introduced_tokens: [de, luni]
+            example:
+              - {text: "Sunt disponibilă de luni.", language_code: ro, direction: ltr}
+          - content_key: ro.a2.unit26.lesson02.teach.sunt_disponibila_de_luni_phrase
+            kind: phrase
+            target: {text: "Sunt disponibilă de luni.", language_code: ro, direction: ltr}
+            introduced_tokens: [sunt, disponibilă, de, luni]
+          - content_key: ro.a2.unit26.lesson02.teach.intrebare_vocab
+            kind: vocabulary
+            target: {text: "Întrebare", language_code: ro, direction: ltr}
+            introduced_tokens: [aș, avea, o, întrebare, despre, program]
+            example:
+              - {text: "Aș avea o întrebare despre program.", language_code: ro, direction: ltr}
+        exercises:
+          - content_key: ro.a2.unit26.lesson02.exercise01.choose_disponibila
+            type: multiple_choice
+            tested_text: "disponibilă"
+            prompt:
+              target_blocks:
+                - {text: "available", language_code: en, direction: ltr}
+          - content_key: ro.a2.unit26.lesson02.exercise02.choose_intrebare
+            type: multiple_choice
+            tested_text: "întrebare"
+            prompt:
+              target_blocks:
+                - {text: "question", language_code: en, direction: ltr}
+          - content_key: ro.a2.unit26.lesson02.exercise03.listen_sunt_disponibila
+            type: listen_select
+            tested_text: "Sunt disponibilă de luni"
+            media_asset_key: ro.a2.audio.interviu.sunt_disponibila.01
+            prompt: {target_blocks: []}
+          - content_key: ro.a2.unit26.lesson02.exercise04.match_interviu2
+            type: matching_pairs
+            tested_text: "disponibilă de luni întrebare program experiență tehniciană"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "Disponibilă", right: "available"}
+              - {left: "De luni", right: "from Monday"}
+              - {left: "Întrebare", right: "question"}
+              - {left: "Program", right: "schedule"}
+              - {left: "Sunt disponibilă de luni.", right: "I am available from Monday."}
+              - {left: "Experiență", right: "experience"}
+          - content_key: ro.a2.unit26.lesson02.exercise05.order_sunt_disponibila_de_luni
+            type: word_order
+            tested_text: "Sunt disponibilă de luni"
+            prompt: {target_blocks: []}
+            word_bank: ["Sunt", "disponibilă", "de", "luni"]
+          - content_key: ro.a2.unit26.lesson02.exercise06.listen_order_as_avea_o_intrebare
+            type: listen_order
+            tested_text: "Aș avea o întrebare despre program"
+            media_asset_key: ro.a2.audio.interviu.as_avea_o_intrebare.01
+            prompt: {target_blocks: []}
+            word_bank: ["Aș", "avea", "o", "întrebare", "despre", "program"]
+          - content_key: ro.a2.unit26.lesson02.exercise07.complete_sunt_disponibila_de_luni
+            type: fill_in_blank
+            tested_text: "luni"
+            prompt:
+              target_blocks:
+                - {text: "Complete the sentence, from Monday: Sunt disponibilă de ___.", language_code: ro, direction: ltr}
+          - content_key: ro.a2.unit26.lesson02.exercise08.translate_have_a_question
+            type: translation
+            tested_text: "aș avea o întrebare despre program"
+            prompt:
+              target_blocks:
+                - {text: "I would have a question about the schedule.", language_code: en, direction: ltr}
+
+      - content_key: ro.a2.unit26.lesson03.anuntul_de_angajare
+        title: "Anunțul de angajare"
+        spine_outcome_id: universal.a2.employment.attend_job_interview
+        teaching:
+          - content_key: ro.a2.unit26.lesson03.teach.cautam_vocab
+            kind: vocabulary
+            target: {text: "Căutăm", language_code: ro, direction: ltr}
+            introduced_tokens: [căutăm, un, tehnician, cu, experiență]
+            example:
+              - {text: "Căutăm un tehnician cu experiență.", language_code: ro, direction: ltr}
+          - content_key: ro.a2.unit26.lesson03.teach.program_complet_vocab
+            kind: vocabulary
+            target: {text: "Program complet", language_code: ro, direction: ltr}
+            introduced_tokens: [program, complet, opt, ore, pe, zi]
+            example:
+              - {text: "Program complet, opt ore pe zi.", language_code: ro, direction: ltr}
+          - content_key: ro.a2.unit26.lesson03.teach.anunt_reading
+            kind: reading
+            target:
+              text: "Căutăm un tehnician cu experiență, disponibil de luni până vineri. Program complet, opt ore pe zi."
+              language_code: ro
+              direction: ltr
+            introduced_tokens: [disponibil, până, vineri]
+        exercises:
+          - content_key: ro.a2.unit26.lesson03.exercise01.read_position_requirements
+            type: reading_comprehension
+            tested_text: "un tehnician cu experiență, disponibil de luni până vineri"
+            prompt:
+              target_blocks:
+                - {text: "What is the posting looking for?", language_code: en, direction: ltr}
+          - content_key: ro.a2.unit26.lesson03.exercise02.read_schedule
+            type: reading_comprehension
+            tested_text: "program complet, opt ore pe zi"
+            prompt:
+              target_blocks:
+                - {text: "What is the work schedule?", language_code: en, direction: ltr}
+          - content_key: ro.a2.unit26.lesson03.exercise03.listen_anunt
+            type: listen_select
+            tested_text: "Căutăm un tehnician cu experiență"
+            media_asset_key: ro.a2.audio.interviu.anunt.01
+            prompt: {target_blocks: []}
+          - content_key: ro.a2.unit26.lesson03.exercise04.match_anunt
+            type: matching_pairs
+            tested_text: "căutăm tehnician program complet opt ore disponibil vineri"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "Căutăm", right: "we are looking for"}
+              - {left: "Tehnician cu experiență", right: "technician with experience"}
+              - {left: "Program complet", right: "full schedule"}
+              - {left: "Opt ore pe zi", right: "eight hours a day"}
+              - {left: "Disponibil de luni până vineri", right: "available Monday to Friday"}
+          - content_key: ro.a2.unit26.lesson03.exercise05.complete_opt_ore
+            type: fill_in_blank
+            tested_text: "opt"
+            prompt:
+              target_blocks:
+                - {text: "Complete the posting, eight hours a day: Program complet, ___ ore pe zi.", language_code: ro, direction: ltr}
+          - content_key: ro.a2.unit26.lesson03.exercise06.write_availability_note
+            type: writing_prompt
+            tested_text: "am lucrat doi ani ca tehniciană sunt disponibilă de luni"
+            prompt: {target_blocks: []}
+
+      - content_key: ro.a2.unit26.lesson04.la_interviu
+        title: "La interviu"
+        spine_outcome_id: universal.a2.employment.attend_job_interview
+        teaching:
+          - content_key: ro.a2.unit26.lesson04.teach.reminder_foarte_bine_va_contacta
+            kind: grammar_note
+            target: {text: "Foarte bine · Perfect · Vă vom contacta", language_code: ro, direction: ltr}
+            introduced_tokens: [foarte, bine, perfect, vă, vom, contacta, în, curând]
+          - content_key: ro.a2.unit26.lesson04.teach.line01
+            kind: dialogue
+            target:
+              text: "Bună ziua, Diana! Aveți experiență în acest domeniu?"
+              language_code: ro
+              direction: ltr
+              speaker: Mihai
+            introduced_tokens: []
+          - content_key: ro.a2.unit26.lesson04.teach.line02
+            kind: dialogue
+            target:
+              text: "Bună ziua! Da, am lucrat doi ani ca tehniciană."
+              language_code: ro
+              direction: ltr
+              speaker: Diana
+            introduced_tokens: [da]
+          - content_key: ro.a2.unit26.lesson04.teach.line03
+            kind: dialogue
+            target:
+              text: "Foarte bine. Când sunteți disponibilă?"
+              language_code: ro
+              direction: ltr
+              speaker: Mihai
+            introduced_tokens: []
+          - content_key: ro.a2.unit26.lesson04.teach.line04
+            kind: dialogue
+            target:
+              text: "Sunt disponibilă de luni."
+              language_code: ro
+              direction: ltr
+              speaker: Diana
+            introduced_tokens: []
+          - content_key: ro.a2.unit26.lesson04.teach.line05
+            kind: dialogue
+            target:
+              text: "Perfect. Aveți întrebări pentru mine?"
+              language_code: ro
+              direction: ltr
+              speaker: Mihai
+            introduced_tokens: [întrebări, pentru, mine]
+          - content_key: ro.a2.unit26.lesson04.teach.line06
+            kind: dialogue
+            target:
+              text: "Da, aș avea o întrebare despre program."
+              language_code: ro
+              direction: ltr
+              speaker: Diana
+            introduced_tokens: []
+          - content_key: ro.a2.unit26.lesson04.teach.line07
+            kind: dialogue
+            target:
+              text: "Programul este de opt ore pe zi, de luni până vineri."
+              language_code: ro
+              direction: ltr
+              speaker: Mihai
+            introduced_tokens: [programul, este, de, opt, ore, pe, zi, luni, până, vineri]
+          - content_key: ro.a2.unit26.lesson04.teach.line08
+            kind: dialogue
+            target:
+              text: "Mulțumesc pentru informații!"
+              language_code: ro
+              direction: ltr
+              speaker: Diana
+            introduced_tokens: [informații]
+          - content_key: ro.a2.unit26.lesson04.teach.line09
+            kind: dialogue
+            target:
+              text: "Cu plăcere, vă vom contacta în curând."
+              language_code: ro
+              direction: ltr
+              speaker: Mihai
+            introduced_tokens: [cu, plăcere]
+        exercises:
+          - content_key: ro.a2.unit26.lesson04.exercise01.choose_who_states_availability
+            type: multiple_choice
+            tested_text: "diana"
+            prompt:
+              target_blocks:
+                - {text: "Sunt disponibilă de luni.", language_code: ro, direction: ltr}
+          - content_key: ro.a2.unit26.lesson04.exercise02.dialogue_comprehend_experience
+            type: dialogue_comprehension
+            tested_text: "doi ani ca tehniciană"
+            media_asset_key: ro.a2.audio.dialogue.interviul.01
+            prompt:
+              target_blocks:
+                - {text: "What experience does Diana describe?", language_code: en, direction: ltr}
+          - content_key: ro.a2.unit26.lesson04.exercise03.dialogue_comprehend_schedule_question
+            type: dialogue_comprehension
+            tested_text: "o întrebare despre program"
+            media_asset_key: ro.a2.audio.dialogue.interviul.01
+            prompt:
+              target_blocks:
+                - {text: "What does Diana ask Mihai about?", language_code: en, direction: ltr}
+          - content_key: ro.a2.unit26.lesson04.exercise04.dialogue_comprehend_answer
+            type: dialogue_comprehension
+            tested_text: "opt ore pe zi de luni până vineri"
+            media_asset_key: ro.a2.audio.dialogue.interviul.01
+            prompt:
+              target_blocks:
+                - {text: "What does Mihai answer about the schedule?", language_code: en, direction: ltr}
+          - content_key: ro.a2.unit26.lesson04.exercise05.order_aveti_intrebari_pentru_mine
+            type: word_order
+            tested_text: "Aveți întrebări pentru mine"
+            prompt: {target_blocks: []}
+            word_bank: ["Aveți", "întrebări", "pentru", "mine"]
+          - content_key: ro.a2.unit26.lesson04.exercise06.respond_as_diana
+            type: dialogue_response
+            tested_text: "da aș avea o întrebare despre program"
+            prompt:
+              target_blocks:
+                - {text: "Mihai: Perfect. Aveți întrebări pentru mine?", language_code: ro, direction: ltr}
+          - content_key: ro.a2.unit26.lesson04.exercise07.write_interview_summary
+            type: writing_prompt
+            tested_text: "diana este disponibilă de luni"
+            prompt: {target_blocks: []}

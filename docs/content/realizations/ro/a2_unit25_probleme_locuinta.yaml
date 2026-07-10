@@ -1,0 +1,487 @@
+schema_version: "1.1"
+realization_version: "2026.1-draft.1"
+target_language: ro
+cefr_level: A2
+status: complete_draft
+generation_provenance:
+  method: ai_generated
+  authoring_system: claude
+  source_material: >-
+    "Basic Romanian Language Lessons" (US Peace Corps Moldova, public
+    domain, the same PDF used for units 01-24,
+    https://fsi-languages.yojik.eu/languages/PeaceCorps/Romanian/
+    MD_Romanian_Language_Lessons.pdf) was checked first for dedicated
+    household-maintenance-report material. `firecrawl --status` still
+    shows 0/1,000 credits, so this unit again falls back to
+    established-conventions-only authoring. Grepped the existing
+    785-line extraction for robinet/repar/încălzire/meșter and found no
+    dedicated lesson content beyond unit18's own basic house-orientation
+    vocabulary (dormitor, bucătărie, baie, fereastră) -- every word and
+    phrase specific to this unit's maintenance-report scenario is
+    authored fresh from general standard Romanian knowledge.
+
+    Continues the A2 grammar progression with "de ieri" (since
+    yesterday) as a second duration-marker pattern alongside unit24's
+    "de trei zile," and "cât mai curând posibil" (as soon as possible)
+    as a new fixed formal-request phrase. Switches protagonist to Mihai
+    for this unit specifically: unit18 established Ana owns a house
+    (casă) while Mihai has a smaller apartment (apartament) -- a
+    maintenance problem reported to a landlord/building manager fits a
+    renter, not an owner, so Mihai is the more consistent choice here
+    rather than Ana. Introduces one new character, Administratorul
+    Ionescu, the building manager -- a new named character for the same
+    reason units 21/23/24 introduced Elena/Radu/Doctorița Vasile, since
+    neither established job connects to building management.
+  human_reviewed: false
+review:
+  status: unreviewed
+  required_next_reviewer: null
+  notes: >-
+    Fifth Romanian A2 unit. Targets universal.a2.housing.
+    report_maintenance_problem (confirmed by grepping
+    universal_spine.yaml directly -- prerequisites are
+    universal.a1.housing.describe_home, this course's own unit18 (where
+    Mihai's apartment was established), and universal.a1.communication.
+    basic_phone_contact, treated as satisfied by this unit's own
+    building-office visit framing, the same latitude units 21/24 used
+    for the identical prerequisite type). 4 lessons, each mapped to a
+    distinct spine assessment_requirement: lesson01 (reporting the leak)
+    covers report_household_problem's speaking half; lesson02 (asking
+    about repair timing) completes report_household_problem; lesson03
+    (reading a maintenance confirmation notice) covers
+    read_maintenance_notice and previews write_problem_report via its
+    writing_prompt; lesson04 (the full Mihai/Administrator dialogue)
+    covers understand_problem_description and consolidates all four.
+
+    Reuses unit01's bună/mulțumesc/la revedere/Mihai, unit18's
+    apartament/fereastră (Mihai's own established home vocabulary),
+    re-declared via a lesson-opening reminder card per the standing
+    per-file token-scoping convention. Within this file, lesson02-04
+    freely reuse lesson01's own robinet/curge/de ieri without a fresh
+    reminder card, matching the established within-file-reuse
+    precedent.
+
+    Checked this choice against AUTHORING_GUIDE #11 before finalizing.
+    Facts this unit newly states: Mihai's kitchen faucet has been
+    leaking since yesterday; a repairman is scheduled to come the next
+    day between nine and twelve o'clock. Grepped unit18 to confirm no
+    conflict: unit18 states Mihai's apartment has a dormitor, o
+    bucătărie, and a fereastră -- a leaking robinet (faucet) in the
+    bucătărie (kitchen) is consistent with, not contradictory to, that
+    established two-room layout (a kitchen naturally has a faucet;
+    nothing in unit18 claims the plumbing is problem-free).
+
+    Checked every fill_in_blank slot against AUTHORING_GUIDE #17: each
+    blank's instruction explicitly states the target English meaning
+    (lesson01's blank=ieri instruction names "since yesterday"
+    explicitly; lesson02's blank=posibil instruction names "as soon as
+    possible" explicitly). Checked every listen_select/dialogue_
+    comprehension distractor against the standing same-speaker-audio
+    rule for lesson04's dialogue -- the Administrator's and Mihai's own
+    lines were listed before writing distractors, and every distractor
+    is either something neither speaker says in that clip, or (for
+    "who says this") genuinely said by the other speaker only.
+
+    Verified every word_order/listen_order exercise's word_bank token
+    multiset exactly matches its paired overlay correct_response token
+    multiset (case- and diacritic-exact), and every exercise's
+    tested_text tokens are covered by an earlier introduced_tokens
+    entry in THIS SAME FILE (validate_untaught_vocabulary is scoped
+    per realization file, not cross-file -- confirmed the hard way by
+    units 21/23's own first-pass compiler errors, checked proactively
+    here before running the compiler at all). Needs a fresh-context
+    content review before import, same as every other language's
+    content.
+
+course:
+  realization_key: ro.a2
+  target_language_first: true
+  dialect: ro_RO_standard
+  register_policy: >-
+    Fully formal register throughout -- dumneavoastră with the building
+    administrator (Mihai and Administratorul Ionescu have never met),
+    matching units 21/23/24's identical convention for a first meeting
+    with an official/professional.
+
+media_assets:
+  - content_key: ro.a2.audio.locuinta.robinetul_curge.01
+    language: ro
+    text: "Robinetul curge de ieri."
+    voice_hint: neutral_young_adult_friendly
+    status: pending_generation
+  - content_key: ro.a2.audio.locuinta.cand_poate_veni.01
+    language: ro
+    text: "Când poate veni un meșter?"
+    voice_hint: neutral_adult_polite
+    status: pending_generation
+  - content_key: ro.a2.audio.locuinta.cat_mai_curand.01
+    language: ro
+    text: "Aș dori o reparație cât mai curând posibil."
+    voice_hint: neutral_young_adult_friendly
+    status: pending_generation
+  - content_key: ro.a2.audio.locuinta.va_veni_maine.01
+    language: ro
+    text: "Va veni mâine, între orele nouă și doisprezece."
+    voice_hint: neutral_adult_formal
+    status: pending_generation
+  - content_key: ro.a2.audio.locuinta.confirmare.01
+    language: ro
+    text: "Reparația dumneavoastră este confirmată pentru mâine, între orele nouă și doisprezece. Meșterul va suna înainte de a veni."
+    voice_hint: neutral_adult_formal
+    status: pending_generation
+  - content_key: ro.a2.audio.dialogue.raportarea_problemei.01
+    language: ro
+    text: "Mihai: Bună ziua! Robinetul din bucătărie curge de ieri.\nAdministratorul Ionescu: Bună ziua! Îmi pare rău să aud asta. Când ați observat problema?\nMihai: Ieri seara. Aș dori o reparație cât mai curând posibil.\nAdministratorul Ionescu: Înțeleg. Un meșter va veni mâine, între orele nouă și doisprezece.\nMihai: Perfect, mulțumesc! Trebuie să fiu acasă?\nAdministratorul Ionescu: Da, vă rugăm să fiți acasă. Meșterul va suna înainte de a veni.\nMihai: Mulțumesc mult pentru ajutor!\nAdministratorul Ionescu: Cu plăcere, o zi bună!"
+    voice_hint: adult_male_and_male_neutral_polite
+    status: pending_generation
+
+units:
+  - content_key: ro.a2.unit25.probleme_locuinta
+    title: "Probleme la locuință"
+    section: reading_writing
+    spine_outcome_ids:
+      - universal.a2.housing.report_maintenance_problem
+    planned_lesson_count: 4
+
+    lessons:
+      - content_key: ro.a2.unit25.lesson01.robinetul_curge
+        title: "Robinetul curge"
+        spine_outcome_id: universal.a2.housing.report_maintenance_problem
+        teaching:
+          - content_key: ro.a2.unit25.lesson01.teach.reminder_buna_multumesc_la_revedere_mihai_apartament
+            kind: grammar_note
+            target: {text: "Bună ziua · Mulțumesc · La revedere · Mihai · Apartament", language_code: ro, direction: ltr}
+            introduced_tokens: [bună, ziua, mulțumesc, la, revedere, mihai, apartament, bucătărie]
+          - content_key: ro.a2.unit25.lesson01.teach.robinet_vocab
+            kind: vocabulary
+            target: {text: "Robinet", language_code: ro, direction: ltr}
+            introduced_tokens: [robinet, robinetul, din]
+            example:
+              - {text: "Robinetul din bucătărie.", language_code: ro, direction: ltr}
+          - content_key: ro.a2.unit25.lesson01.teach.curge_vocab
+            kind: vocabulary
+            target: {text: "Curge", language_code: ro, direction: ltr}
+            introduced_tokens: [curge]
+            example:
+              - {text: "Robinetul curge.", language_code: ro, direction: ltr}
+          - content_key: ro.a2.unit25.lesson01.teach.de_ieri_vocab
+            kind: vocabulary
+            target: {text: "De ieri", language_code: ro, direction: ltr}
+            introduced_tokens: [de, ieri]
+            example:
+              - {text: "Robinetul curge de ieri.", language_code: ro, direction: ltr}
+          - content_key: ro.a2.unit25.lesson01.teach.robinetul_curge_de_ieri_phrase
+            kind: phrase
+            target: {text: "Robinetul curge de ieri.", language_code: ro, direction: ltr}
+            introduced_tokens: [robinetul, curge, de, ieri]
+        exercises:
+          - content_key: ro.a2.unit25.lesson01.exercise01.choose_robinet
+            type: multiple_choice
+            tested_text: "robinet"
+            prompt:
+              target_blocks:
+                - {text: "faucet", language_code: en, direction: ltr}
+          - content_key: ro.a2.unit25.lesson01.exercise02.choose_curge
+            type: multiple_choice
+            tested_text: "curge"
+            prompt:
+              target_blocks:
+                - {text: "leaks / flows", language_code: en, direction: ltr}
+          - content_key: ro.a2.unit25.lesson01.exercise03.listen_robinetul_curge
+            type: listen_select
+            tested_text: "Robinetul curge de ieri"
+            media_asset_key: ro.a2.audio.locuinta.robinetul_curge.01
+            prompt: {target_blocks: []}
+          - content_key: ro.a2.unit25.lesson01.exercise04.match_locuinta1
+            type: matching_pairs
+            tested_text: "robinet curge de ieri apartament bucătărie bună ziua mulțumesc"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "Robinetul", right: "the faucet"}
+              - {left: "Curge", right: "leaks / flows"}
+              - {left: "De ieri", right: "since yesterday"}
+              - {left: "Apartament", right: "apartment"}
+              - {left: "Bucătărie", right: "kitchen"}
+              - {left: "Robinetul curge de ieri.", right: "The faucet has been leaking since yesterday."}
+              - {left: "Bună ziua.", right: "Good day."}
+              - {left: "Mulțumesc.", right: "Thank you."}
+          - content_key: ro.a2.unit25.lesson01.exercise05.order_robinetul_curge_de_ieri
+            type: word_order
+            tested_text: "Robinetul curge de ieri"
+            prompt: {target_blocks: []}
+            word_bank: ["Robinetul", "curge", "de", "ieri"]
+          - content_key: ro.a2.unit25.lesson01.exercise06.listen_order_robinetul_din_bucatarie
+            type: listen_order
+            tested_text: "Robinetul din bucătărie curge de ieri"
+            media_asset_key: ro.a2.audio.locuinta.robinetul_curge.01
+            prompt: {target_blocks: []}
+            word_bank: ["Robinetul", "din", "bucătărie", "curge", "de", "ieri"]
+          - content_key: ro.a2.unit25.lesson01.exercise07.complete_robinetul_curge_de_ieri
+            type: fill_in_blank
+            tested_text: "ieri"
+            prompt:
+              target_blocks:
+                - {text: "Complete the sentence, since yesterday: Robinetul curge de ___.", language_code: ro, direction: ltr}
+          - content_key: ro.a2.unit25.lesson01.exercise08.write_problem_report
+            type: writing_prompt
+            tested_text: "robinetul curge de ieri apartament bucătărie"
+            prompt: {target_blocks: []}
+
+      - content_key: ro.a2.unit25.lesson02.cand_poate_veni_un_mester
+        title: "Când poate veni un meșter?"
+        spine_outcome_id: universal.a2.housing.report_maintenance_problem
+        teaching:
+          - content_key: ro.a2.unit25.lesson02.teach.mester_vocab
+            kind: vocabulary
+            target: {text: "Meșter", language_code: ro, direction: ltr}
+            introduced_tokens: [un, meșter]
+            example:
+              - {text: "Când poate veni un meșter?", language_code: ro, direction: ltr}
+          - content_key: ro.a2.unit25.lesson02.teach.poate_veni_grammar
+            kind: grammar_note
+            target: {text: "Poate veni (can come)", language_code: ro, direction: ltr}
+            introduced_tokens: [când, poate, veni]
+          - content_key: ro.a2.unit25.lesson02.teach.cat_mai_curand_vocab
+            kind: vocabulary
+            target: {text: "Cât mai curând posibil", language_code: ro, direction: ltr}
+            introduced_tokens: [aș, dori, o, reparație, cât, mai, curând, posibil]
+            example:
+              - {text: "Aș dori o reparație cât mai curând posibil.", language_code: ro, direction: ltr}
+          - content_key: ro.a2.unit25.lesson02.teach.cand_poate_veni_phrase
+            kind: phrase
+            target: {text: "Când poate veni un meșter?", language_code: ro, direction: ltr}
+            introduced_tokens: [când, poate, veni, un, meșter]
+          - content_key: ro.a2.unit25.lesson02.teach.va_veni_maine_phrase
+            kind: phrase
+            target: {text: "Va veni mâine, între orele nouă și doisprezece.", language_code: ro, direction: ltr}
+            introduced_tokens: [va, veni, mâine, între, orele, nouă, și, doisprezece]
+        exercises:
+          - content_key: ro.a2.unit25.lesson02.exercise01.choose_mester
+            type: multiple_choice
+            tested_text: "meșter"
+            prompt:
+              target_blocks:
+                - {text: "repairman", language_code: en, direction: ltr}
+          - content_key: ro.a2.unit25.lesson02.exercise02.choose_cat_mai_curand_posibil
+            type: multiple_choice
+            tested_text: "cât mai curând posibil"
+            prompt:
+              target_blocks:
+                - {text: "as soon as possible", language_code: en, direction: ltr}
+          - content_key: ro.a2.unit25.lesson02.exercise03.listen_cand_poate_veni
+            type: listen_select
+            tested_text: "Când poate veni un meșter"
+            media_asset_key: ro.a2.audio.locuinta.cand_poate_veni.01
+            prompt: {target_blocks: []}
+          - content_key: ro.a2.unit25.lesson02.exercise04.match_locuinta2
+            type: matching_pairs
+            tested_text: "meșter cât mai curând posibil când poate veni mâine doisprezece robinet curge"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "Meșter", right: "repairman"}
+              - {left: "Cât mai curând posibil", right: "as soon as possible"}
+              - {left: "Când poate veni?", right: "When can he come?"}
+              - {left: "Mâine", right: "tomorrow"}
+              - {left: "Între orele nouă și doisprezece", right: "between nine and twelve o'clock"}
+              - {left: "Robinetul curge.", right: "The faucet leaks."}
+          - content_key: ro.a2.unit25.lesson02.exercise05.order_cand_poate_veni_un_mester
+            type: word_order
+            tested_text: "Când poate veni un meșter"
+            prompt: {target_blocks: []}
+            word_bank: ["Când", "poate", "veni", "un", "meșter"]
+          - content_key: ro.a2.unit25.lesson02.exercise06.listen_order_va_veni_maine
+            type: listen_order
+            tested_text: "Va veni mâine"
+            media_asset_key: ro.a2.audio.locuinta.va_veni_maine.01
+            prompt: {target_blocks: []}
+            word_bank: ["Va", "veni", "mâine"]
+          - content_key: ro.a2.unit25.lesson02.exercise07.complete_cat_mai_curand_posibil
+            type: fill_in_blank
+            tested_text: "posibil"
+            prompt:
+              target_blocks:
+                - {text: "Complete the sentence, as soon as possible: Aș dori o reparație cât mai curând ___.", language_code: ro, direction: ltr}
+          - content_key: ro.a2.unit25.lesson02.exercise08.translate_repair_timing
+            type: translation
+            tested_text: "va veni mâine între orele nouă și doisprezece"
+            prompt:
+              target_blocks:
+                - {text: "He will come tomorrow, between nine and twelve o'clock.", language_code: en, direction: ltr}
+
+      - content_key: ro.a2.unit25.lesson03.confirmarea_reparatiei
+        title: "Confirmarea reparației"
+        spine_outcome_id: universal.a2.housing.report_maintenance_problem
+        teaching:
+          - content_key: ro.a2.unit25.lesson03.teach.confirmata_vocab
+            kind: vocabulary
+            target: {text: "Confirmată", language_code: ro, direction: ltr}
+            introduced_tokens: [reparația, dumneavoastră, este, confirmată, pentru]
+            example:
+              - {text: "Reparația dumneavoastră este confirmată.", language_code: ro, direction: ltr}
+          - content_key: ro.a2.unit25.lesson03.teach.va_suna_vocab
+            kind: vocabulary
+            target: {text: "Va suna", language_code: ro, direction: ltr}
+            introduced_tokens: [meșterul, va, suna, înainte, de, a, veni]
+            example:
+              - {text: "Meșterul va suna înainte de a veni.", language_code: ro, direction: ltr}
+          - content_key: ro.a2.unit25.lesson03.teach.confirmare_reading
+            kind: reading
+            target:
+              text: "Reparația dumneavoastră este confirmată pentru mâine, între orele nouă și doisprezece. Meșterul va suna înainte de a veni."
+              language_code: ro
+              direction: ltr
+            introduced_tokens: [mâine, între, orele, nouă, și, doisprezece]
+        exercises:
+          - content_key: ro.a2.unit25.lesson03.exercise01.read_repair_time
+            type: reading_comprehension
+            tested_text: "mâine, între orele nouă și doisprezece"
+            prompt:
+              target_blocks:
+                - {text: "When is the repair confirmed?", language_code: en, direction: ltr}
+          - content_key: ro.a2.unit25.lesson03.exercise02.read_call_instruction
+            type: reading_comprehension
+            tested_text: "meșterul va suna înainte de a veni"
+            prompt:
+              target_blocks:
+                - {text: "What will the repairman do before arriving?", language_code: en, direction: ltr}
+          - content_key: ro.a2.unit25.lesson03.exercise03.listen_confirmare
+            type: listen_select
+            tested_text: "Reparația dumneavoastră este confirmată pentru mâine"
+            media_asset_key: ro.a2.audio.locuinta.confirmare.01
+            prompt: {target_blocks: []}
+          - content_key: ro.a2.unit25.lesson03.exercise04.match_confirmare
+            type: matching_pairs
+            tested_text: "confirmată mâine doisprezece va suna înainte robinet meșter"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "Confirmată", right: "confirmed"}
+              - {left: "Mâine, între orele nouă și doisprezece", right: "tomorrow, between nine and twelve o'clock"}
+              - {left: "Va suna înainte de a veni", right: "will call before coming"}
+              - {left: "Robinetul", right: "the faucet"}
+              - {left: "Meșter", right: "repairman"}
+          - content_key: ro.a2.unit25.lesson03.exercise05.complete_va_suna
+            type: fill_in_blank
+            tested_text: "suna"
+            prompt:
+              target_blocks:
+                - {text: "Complete the sentence, will call: Meșterul va ___ înainte de a veni.", language_code: ro, direction: ltr}
+          - content_key: ro.a2.unit25.lesson03.exercise06.write_repair_confirmation_reply
+            type: writing_prompt
+            tested_text: "robinetul curge de ieri aș dori o reparație"
+            prompt: {target_blocks: []}
+
+      - content_key: ro.a2.unit25.lesson04.la_administrator
+        title: "La administrator"
+        spine_outcome_id: universal.a2.housing.report_maintenance_problem
+        teaching:
+          - content_key: ro.a2.unit25.lesson04.teach.reminder_imi_pare_rau_observat_ionescu
+            kind: grammar_note
+            target: {text: "Îmi pare rău · Ați observat · Administratorul Ionescu", language_code: ro, direction: ltr}
+            introduced_tokens: [îmi, pare, rău, să, aud, asta, ați, observat, problema, administratorul, ionescu, fie]
+          - content_key: ro.a2.unit25.lesson04.teach.line01
+            kind: dialogue
+            target:
+              text: "Bună ziua! Robinetul din bucătărie curge de ieri."
+              language_code: ro
+              direction: ltr
+              speaker: Mihai
+            introduced_tokens: []
+          - content_key: ro.a2.unit25.lesson04.teach.line02
+            kind: dialogue
+            target:
+              text: "Bună ziua! Îmi pare rău să aud asta. Când ați observat problema?"
+              language_code: ro
+              direction: ltr
+              speaker: Administratorul Ionescu
+            introduced_tokens: []
+          - content_key: ro.a2.unit25.lesson04.teach.line03
+            kind: dialogue
+            target:
+              text: "Ieri seara. Aș dori o reparație cât mai curând posibil."
+              language_code: ro
+              direction: ltr
+              speaker: Mihai
+            introduced_tokens: [ieri, seara]
+          - content_key: ro.a2.unit25.lesson04.teach.line04
+            kind: dialogue
+            target:
+              text: "Înțeleg. Un meșter va veni mâine, între orele nouă și doisprezece."
+              language_code: ro
+              direction: ltr
+              speaker: Administratorul Ionescu
+            introduced_tokens: [înțeleg]
+          - content_key: ro.a2.unit25.lesson04.teach.line05
+            kind: dialogue
+            target:
+              text: "Perfect, mulțumesc! Trebuie să fiu acasă?"
+              language_code: ro
+              direction: ltr
+              speaker: Mihai
+            introduced_tokens: [perfect, trebuie, să, fiu, acasă]
+          - content_key: ro.a2.unit25.lesson04.teach.line06
+            kind: dialogue
+            target:
+              text: "Da, vă rugăm să fiți acasă. Meșterul va suna înainte de a veni."
+              language_code: ro
+              direction: ltr
+              speaker: Administratorul Ionescu
+            introduced_tokens: [da, vă, rugăm, să, fiți, acasă]
+          - content_key: ro.a2.unit25.lesson04.teach.line07
+            kind: dialogue
+            target:
+              text: "Mulțumesc mult pentru ajutor!"
+              language_code: ro
+              direction: ltr
+              speaker: Mihai
+            introduced_tokens: [mult, pentru, ajutor]
+          - content_key: ro.a2.unit25.lesson04.teach.line08
+            kind: dialogue
+            target:
+              text: "Cu plăcere, o zi bună!"
+              language_code: ro
+              direction: ltr
+              speaker: Administratorul Ionescu
+            introduced_tokens: [cu, plăcere, o, zi, bună]
+        exercises:
+          - content_key: ro.a2.unit25.lesson04.exercise01.choose_who_asks_when_observed
+            type: multiple_choice
+            tested_text: "administratorul ionescu"
+            prompt:
+              target_blocks:
+                - {text: "Când ați observat problema?", language_code: ro, direction: ltr}
+          - content_key: ro.a2.unit25.lesson04.exercise02.dialogue_comprehend_problem
+            type: dialogue_comprehension
+            tested_text: "robinetul din bucătărie curge de ieri"
+            media_asset_key: ro.a2.audio.dialogue.raportarea_problemei.01
+            prompt:
+              target_blocks:
+                - {text: "What problem does Mihai report, and since when?", language_code: en, direction: ltr}
+          - content_key: ro.a2.unit25.lesson04.exercise03.dialogue_comprehend_repair_time
+            type: dialogue_comprehension
+            tested_text: "mâine între orele nouă și doisprezece"
+            media_asset_key: ro.a2.audio.dialogue.raportarea_problemei.01
+            prompt:
+              target_blocks:
+                - {text: "When will the repairman come?", language_code: en, direction: ltr}
+          - content_key: ro.a2.unit25.lesson04.exercise04.dialogue_comprehend_instruction
+            type: dialogue_comprehension
+            tested_text: "trebuie să fie acasă"
+            media_asset_key: ro.a2.audio.dialogue.raportarea_problemei.01
+            prompt:
+              target_blocks:
+                - {text: "What does Mihai need to do before the repairman arrives?", language_code: en, direction: ltr}
+          - content_key: ro.a2.unit25.lesson04.exercise05.order_cand_ati_observat_problema
+            type: word_order
+            tested_text: "Când ați observat problema"
+            prompt: {target_blocks: []}
+            word_bank: ["Când", "ați", "observat", "problema"]
+          - content_key: ro.a2.unit25.lesson04.exercise06.respond_as_mihai
+            type: dialogue_response
+            tested_text: "ieri seara aș dori o reparație cât mai curând posibil"
+            prompt:
+              target_blocks:
+                - {text: "Administratorul Ionescu: Când ați observat problema?", language_code: ro, direction: ltr}
+          - content_key: ro.a2.unit25.lesson04.exercise07.write_visit_summary
+            type: writing_prompt
+            tested_text: "robinetul din bucătărie curge de ieri un meșter va veni mâine"
+            prompt: {target_blocks: []}
