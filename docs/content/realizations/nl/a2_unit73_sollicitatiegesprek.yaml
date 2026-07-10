@@ -31,9 +31,104 @@ generation_provenance:
     A2 units' `adapted_from_public_domain_source` precedent.
 status: complete_draft
 review:
-  status: unreviewed
+  status: reviewed
   required_next_reviewer: null
   notes: >-
+    2026-07-10 fresh-context review (Claude, zero access to the original
+    authoring reasoning) found and fixed TWO real issues, then confirmed
+    the rest of the original self-review's claims independently rather
+    than trusting them.
+
+    Bug 1 (genuinely unanswerable exercise): lesson02 exercise04
+    (order_afspraak_maken, word_order) tested "Kan ik een afspraak maken
+    voor een sollicitatiegesprek" but its word_bank was missing the
+    second "een" -- [Kan, ik, een, afspraak, maken, voor,
+    sollicitatiegesprek] only supplied ONE "een" tile, and
+    WordOrder.tsx's tile bank removes a tile from `available` the
+    instant it's clicked (no reuse), so no learner could ever assemble
+    the correct sentence regardless of skill. This is a variant of the
+    project's documented word_order footgun (CLAUDE.md) -- not the
+    already-fixed comma/string-vs-list shape bug, but a genuinely
+    missing token. Fixed by adding the second "een" to word_bank:
+    [Kan, ik, een, afspraak, maken, voor, een, sollicitatiegesprek].
+
+    Bug 2 (review notes described content that was never shipped): the
+    original self-review's own notes claimed matching_pairs exercises
+    grow "3 -> 6 -> 7 -> 8 -> 3 -> 8 (lesson06, pooling the whole
+    unit)" per AUTHORING_GUIDE §16, but lesson06 as shipped had NO
+    matching_pairs exercise at all -- the claim was never true. Fixed
+    by adding lesson06.exercise05.match_unit_recap (8 pairs: vacature,
+    sollicitatiegesprek, ervaring, vaardigheid, beschikbaar,
+    werktijden, klantcontact, administratief medewerker -- all taught
+    earlier in this unit, tested_text verified against the taught-token
+    pool), placed before word_order/dialogue_response/listen_type/
+    writing_prompt to match the recognition-before-drag-before-
+    production ordering every other lesson in this unit already
+    follows (per AUTHORING_GUIDE §2). This required renumbering
+    lesson06's exercise05-08 to exercise06-09 in both this file and the
+    overlay; re-ran the compiler after the renumber and confirmed every
+    content_key still resolves 1:1 between the two files.
+
+    Independently re-verified (not just re-trusted) the original
+    self-review's other claims: re-ran a bool-coercion scan (no stray
+    yes/no/true/false leaks in learner-facing fields, only the expected
+    human_reviewed/target_language_first booleans); re-checked every
+    matching_pairs exercise's `pairs` against its overlay
+    accepted_answers ({left,right}[] shape, exact set match, no
+    self-reference pairs); re-checked every word_order/listen_order
+    word_bank against its accepted answer (all consistent after the
+    Bug 1 fix); grepped the whole nl corpus independently for "Nina
+    werkt"/"Nina studeert"/"Nina...baan"/"Nina...functie" (zero hits,
+    confirming no prior job/field-of-study fact for Nina exists to
+    contradict) and for "meneer "/"mevrouw " (zero hits outside this
+    file, confirming mevrouw Jansen doesn't collide with any existing
+    named character); independently re-read unit47's actual dialogue
+    lines and confirmed Nina is there as a library PATRON borrowing a
+    book, not a volunteer -- this file's own claim that unit73's
+    volunteer detail is a new, non-contradictory addition (not
+    something unit47 itself established) is accurate as worded, not
+    overclaimed. Checked the new spine outcome
+    universal.a2.employment.attend_job_interview independently:
+    yaml.safe_load confirms the spine parses cleanly, all outcome-level
+    ids are unique, and both declared prerequisites resolve to real
+    outcomes. (A broader recursive scan of every "id" key anywhere in
+    the spine, including nested per-outcome assessment_requirements
+    sub-ids, found one pre-existing duplicate --
+    "read_appointment_confirmation", reused across
+    universal.a2.health.attend_doctor_appointment and a separate
+    appointments outcome -- confirmed via `git show` to predate this
+    unit's commit entirely and out of scope for this unit's review.)
+    Ran the compiler against this file alone and together with the
+    existing nl A2 batch (units 24-28): 0 errors, 0 warnings both times,
+    both before and after the two fixes above.
+
+    Dutch quality (the highest-priority check for this reference-
+    language unit): read every sentence for grammaticality and
+    register. "Solliciteren voor" (rather than the more textbook
+    "solliciteren naar" or the very common "solliciteren op") was
+    specifically checked against real usage -- confirmed genuine,
+    attested Dutch (taaladvies.net and sollicitatiedokter.nl both list
+    it as a valid, if less common, variant), not an invented
+    construction. "Solliciteren bij een bedrijf" (used in the lesson06
+    summary card) is the correct preposition for the employER, matching
+    real usage. Formal "u" register is used with zero informal je/jij/
+    jouw leaks anywhere in the file (grepped explicitly). Separable
+    verbs (langskomen, contact ... opnemen) and the present-perfect/
+    simple-past forms (heeft gesolliciteerd, had) are correctly formed
+    and appropriately A2 -- not accidentally simpler (A1) or more
+    complex (B1, e.g. no subjunctive/conditional/passive voice
+    anywhere). "Een pre" (a plus/advantage) in the job posting is
+    genuine, idiomatic modern Dutch job-ad register, not a generic-
+    sounding translation. No remaining register/naturalness judgment
+    call found that needed flagging for Ramin instead of resolving
+    directly.
+
+    Original self-review notes preserved below for the spine-addition
+    and story-continuity reasoning, which were independently
+    re-verified above rather than removed.
+
+    ---
+
     Sixth Dutch A2 unit, new spine outcome
     universal.a2.employment.attend_job_interview added to
     universal_spine.yaml in this same task. Spine check performed
@@ -298,7 +393,7 @@ units:
           - {content_key: nl.a2.unit73.lesson02.exercise01.choose_afspraak_maken, type: multiple_choice, tested_text: "Kan ik een afspraak maken voor een sollicitatiegesprek", prompt: {target_blocks: [{text: "Can I make an appointment for a job interview?", language_code: en, direction: ltr}]}}
           - {content_key: nl.a2.unit73.lesson02.exercise02.listen_sollicitatiegesprek_volgende_week, type: listen_select, tested_text: "Het sollicitatiegesprek is volgende week", media_asset_key: nl.a2.audio.solliciteren.sollicitatiegesprek_volgende_week.01, prompt: {target_blocks: []}}
           - {content_key: nl.a2.unit73.lesson02.exercise03.match_gesprek_words, type: matching_pairs, tested_text: "sollicitatiegesprek afspraak vacature solliciteren medewerker", prompt: {target_blocks: []}, pairs: [{left: "het sollicitatiegesprek", right: "the job interview"}, {left: "een afspraak maken", right: "to make an appointment"}, {left: "de vacature", right: "the vacancy"}, {left: solliciteren, right: "to apply"}, {left: "administratief medewerker", right: "administrative assistant"}, {left: "Nina ziet een vacature online.", right: "Nina sees a vacancy online."}]}
-          - {content_key: nl.a2.unit73.lesson02.exercise04.order_afspraak_maken, type: word_order, tested_text: "Kan ik een afspraak maken voor een sollicitatiegesprek", prompt: {target_blocks: []}, word_bank: [Kan, ik, een, afspraak, maken, voor, sollicitatiegesprek]}
+          - {content_key: nl.a2.unit73.lesson02.exercise04.order_afspraak_maken, type: word_order, tested_text: "Kan ik een afspraak maken voor een sollicitatiegesprek", prompt: {target_blocks: []}, word_bank: [Kan, ik, een, afspraak, maken, voor, een, sollicitatiegesprek]}
           - {content_key: nl.a2.unit73.lesson02.exercise05.listen_order_natuurlijk_dinsdag, type: listen_order, tested_text: "Natuurlijk kunt u dinsdag om tien uur langskomen", media_asset_key: nl.a2.audio.solliciteren.natuurlijk_dinsdag_tien_uur.01, prompt: {target_blocks: []}, word_bank: [Natuurlijk, kunt, u, dinsdag, om, tien, uur, langskomen]}
           - {content_key: nl.a2.unit73.lesson02.exercise06.complete_afspraak_maken, type: fill_in_blank, tested_text: "Kan ik een afspraak maken voor een sollicitatiegesprek", prompt: {target_blocks: [{text: "Kan ik een ___ maken voor een sollicitatiegesprek?", language_code: nl, direction: ltr}]}}
           - {content_key: nl.a2.unit73.lesson02.exercise07.write_sollicitatiegesprek_volgende_week, type: writing_prompt, tested_text: "Het sollicitatiegesprek is volgende week", prompt: {target_blocks: [{text: "Write in Dutch: say the job interview is next week.", language_code: en, direction: ltr}]}}
@@ -391,7 +486,8 @@ units:
           - {content_key: nl.a2.unit73.lesson06.exercise02.comprehend_nina_klantcontact, type: dialogue_comprehension, tested_text: "Daar had ik veel klantcontact", media_asset_key: nl.a2.audio.dialogue.sollicitatiegesprek.01, prompt: {target_blocks: [{text: "Why does Nina say her library experience matters?", language_code: en, direction: ltr}]}}
           - {content_key: nl.a2.unit73.lesson06.exercise03.comprehend_jansen_beschikbaar, type: dialogue_comprehension, tested_text: "Bent u beschikbaar op maandag woensdag en vrijdag", media_asset_key: nl.a2.audio.dialogue.sollicitatiegesprek.01, prompt: {target_blocks: [{text: "What does mevrouw Jansen ask about?", language_code: en, direction: ltr}]}}
           - {content_key: nl.a2.unit73.lesson06.exercise04.comprehend_jansen_contact, type: dialogue_comprehension, tested_text: "Wij nemen deze week nog contact met u op", media_asset_key: nl.a2.audio.dialogue.sollicitatiegesprek.01, prompt: {target_blocks: [{text: "What does mevrouw Jansen say about next steps?", language_code: en, direction: ltr}]}}
-          - {content_key: nl.a2.unit73.lesson06.exercise05.order_dank_gesprek, type: word_order, tested_text: "Dank u wel voor het gesprek", prompt: {target_blocks: []}, word_bank: [Dank, u, wel, voor, het, gesprek]}
-          - {content_key: nl.a2.unit73.lesson06.exercise06.respond_jansen_beschikbaar, type: dialogue_response, tested_text: "Ja dat kan Wat zijn de werktijden precies", prompt: {target_blocks: [{text: "Bent u beschikbaar op maandag, woensdag en vrijdag?", language_code: nl, direction: ltr}]}}
-          - {content_key: nl.a2.unit73.lesson06.exercise07.listen_type_uren_contact, type: listen_type, tested_text: "Van negen tot vijf uur Wij nemen deze week nog contact met u op", media_asset_key: nl.a2.audio.solliciteren.negen_tot_vijf_contact.01, prompt: {target_blocks: []}}
-          - {content_key: nl.a2.unit73.lesson06.exercise08.write_summary_grammar, type: writing_prompt, tested_text: "Nina heeft gesolliciteerd bij Kantoor Bloem Zij heeft ervaring als vrijwilliger in de bibliotheek", prompt: {target_blocks: [{text: "Write two Dutch sentences: Nina applied at Kantoor Bloem, and she has experience as a volunteer at the library.", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a2.unit73.lesson06.exercise05.match_unit_recap, type: matching_pairs, tested_text: "vacature sollicitatiegesprek ervaring vaardigheid beschikbaar werktijden klantcontact administratief medewerker", prompt: {target_blocks: []}, pairs: [{left: "de vacature", right: "the vacancy"}, {left: "het sollicitatiegesprek", right: "the job interview"}, {left: "de ervaring", right: "the experience"}, {left: "de vaardigheid", right: "the skill"}, {left: beschikbaar, right: available}, {left: "de werktijden", right: "the working hours"}, {left: klantcontact, right: "customer contact"}, {left: "administratief medewerker", right: "administrative assistant"}]}
+          - {content_key: nl.a2.unit73.lesson06.exercise06.order_dank_gesprek, type: word_order, tested_text: "Dank u wel voor het gesprek", prompt: {target_blocks: []}, word_bank: [Dank, u, wel, voor, het, gesprek]}
+          - {content_key: nl.a2.unit73.lesson06.exercise07.respond_jansen_beschikbaar, type: dialogue_response, tested_text: "Ja dat kan Wat zijn de werktijden precies", prompt: {target_blocks: [{text: "Bent u beschikbaar op maandag, woensdag en vrijdag?", language_code: nl, direction: ltr}]}}
+          - {content_key: nl.a2.unit73.lesson06.exercise08.listen_type_uren_contact, type: listen_type, tested_text: "Van negen tot vijf uur Wij nemen deze week nog contact met u op", media_asset_key: nl.a2.audio.solliciteren.negen_tot_vijf_contact.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a2.unit73.lesson06.exercise09.write_summary_grammar, type: writing_prompt, tested_text: "Nina heeft gesolliciteerd bij Kantoor Bloem Zij heeft ervaring als vrijwilliger in de bibliotheek", prompt: {target_blocks: [{text: "Write two Dutch sentences: Nina applied at Kantoor Bloem, and she has experience as a volunteer at the library.", language_code: en, direction: ltr}]}}
