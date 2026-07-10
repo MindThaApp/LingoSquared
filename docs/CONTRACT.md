@@ -798,6 +798,35 @@ or DNS record pointed at his home server, or the eventual hosted domain) —
 until then, local installs' feedback stays local to that install, which is
 a known limitation of that deployment shape, not a bug in this mechanism.
 
+### Issue-triage enrichment on `GET /admin/content/issues`, 2026-07-10
+
+An admin triaging a report used to see only a raw exercise/practice-item
+UUID — understanding what the report was even about meant manually digging
+through YAML/psql. `ContentIssueOut` (both the list endpoint and the PATCH
+response share this schema) gains four additive, nullable fields, computed
+per-request by `GET /admin/content/issues` (never stored on the report row):
+
+- `exercise_prompt` (object|null): the referenced `Exercise.prompt` payload
+  (same shape the learner saw — `text_blocks`, `options`, `word_bank`, …).
+  Only set on exercise-backed reports whose exercise still exists.
+- `exercise_correct_response` (any|null): that exercise's server-held
+  answer key, arbitrary shape by exercise type (same caveats as
+  `correct_response` everywhere else in this contract).
+- `practice_item_prompt` (object|null): for PracticeItem-backed reports,
+  the generated item's stored `prompt` payload (its `correct_response` is
+  intentionally not exposed here — generated items are ephemeral
+  per-user artifacts; the prompt is what identifies the content problem).
+- `open_report_count` (int|null): how many currently-OPEN reports point at
+  the same `exercise_id` (duplicate spotting). Counted against the whole
+  table, not just the returned page. Null on practice-item/page reports.
+
+All four are null on `PATCH /admin/content/issues/{id}` responses (the
+PATCH returns the bare row without re-running the enrichment joins) and on
+page-level feedback rows. The existing `learner_response` field (the
+learner's actual submitted wrong answer, stored at report time) was always
+returned by this endpoint — the frontend `ContentIssue` type/rendering now
+finally surfaces it alongside the correct answer.
+
 ### Unit checkpoint (test-out), Phase F, 2026-07-05
 
 Not the rejected placement-quiz enrollment system — assembled entirely from
