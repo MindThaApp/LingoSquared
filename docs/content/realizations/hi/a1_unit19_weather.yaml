@@ -8,9 +8,74 @@ generation_provenance:
   authoring_system: "claude"
   human_reviewed: false
 review:
-  status: "unreviewed"
-  required_next_reviewer: "codex"
+  status: "reviewed"
+  required_next_reviewer: null
   notes: >-
+    2026-07-10 fresh-context review (Claude, zero access to the original
+    authoring reasoning). Found clean, no bugs required fixing. Verified,
+    not just skimmed: (1) same-speaker-distractor check -- confirmed the
+    author's own claim that hi dialogue is text-only is actually true for
+    this unit: neither dialogue_comprehension exercise (lesson03.
+    exercise01/02) nor any dialogue teaching card carries a
+    `media_asset_key`, and all three `listen_select` exercises
+    (lesson01.exercise04, lesson02.exercise04, lesson03.exercise06) are
+    each a standalone single-utterance clip with its own dedicated
+    media_asset_key, unrelated to the dialogue audio -- this bug class is
+    structurally inapplicable, as claimed. (2) Grepped for unquoted
+    yes/no/true/false/on/off in both files: zero stray booleans in any
+    learner-facing field (only benign matches were `human_reviewed:
+    false`, `interchangeable: true` in prose, and English words containing
+    "on"/"no" as substrings). (3) Ran the real compiler
+    (`.content-venv/bin/python scripts/compile_content.py validate`)
+    standalone AND as part of the full en-hi A1 corpus (units 01-19
+    together): 0 errors/0 warnings both times -- no untaught-vocabulary
+    hits. (4) `matching_pairs` correct_response is a flat
+    `{left: right}` dict and `word_order`/`listen_order` correct_response
+    is a plain token array in every exercise -- both shapes are ones
+    `grade()`/`canonical_order_tokens()` in `app/api/router.py` correctly
+    canonicalize per the CLAUDE.md footgun list, confirmed by direct read
+    of every matching_pairs/word_order entry in the overlay. (5)
+    Cross-checked both continuity claims against the actual referenced
+    files rather than trusting the notes: `hi/a1_unit18_housing.yaml`'s
+    own `register_policy`/closing note independently confirms Priya and
+    Arjun are still on तुम terms at the end of unit18, and
+    `hi/a1_unit14_comparisons.yaml` (via its own en-hi overlay) does
+    establish बड़ा/बड़ी as the "-a/-i masculine/feminine agreement
+    pattern" this unit's गर्म/ठंडा-ठंडी contrast claims to reuse -- both
+    claims check out against the real source units, not just internal
+    self-consistency. (6) No internal-jargon leaks found in any
+    learner-facing string. (7) Independently re-verified the grammar and
+    script claims rather than trusting them: गर्म is a genuine
+    consonant-ending (non "-आ") Hindi adjective and does not inflect for
+    gender in real Modern Standard Hindi, while ठंडा/ठंडी is a real "-आ"/
+    "-ई" gender-agreeing pair -- the disclosed contrast is linguistically
+    accurate, not just internally consistent. Independently re-ran a
+    Python codepoint hex dump of every new/reused word (मौसम, धूप,
+    बारिश, हवा, गर्म, ठंडा/ठंडी, बादल, बुरा, बाहर, जाते, चलो, रहते, कल,
+    घर, में, हम, अच्छा, बहुत, कैसा, है, हैं, और) and it matches the
+    author's own claimed dump exactly -- correct anusvara use before ड in
+    ठंडा/ठंडी and in में/हैं's word-final nasalization, zero nuqta
+    letters, zero stray codepoints. The weather vocabulary and existential
+    "[weather word] + है" construction ("आज धूप है," "आज बारिश है," "आज
+    हवा है," "चलो, बाहर जाते हैं!") are genuinely natural, idiomatic
+    beginner Hindi, not machine-translation-style calques -- reasonable
+    given no FSI/Peace Corps source material was accessible this round
+    (firecrawl credits genuinely exhausted, disclosed honestly in this
+    unit's own provenance note) and extra scrutiny was applied per this
+    review's explicit instruction. (8) All 11 exercise types used
+    (multiple_choice, listen_select, matching_pairs, word_order,
+    fill_in_blank, dialogue_response, grammar_check, speak_response,
+    dialogue_comprehension, reading_comprehension, writing_prompt) are
+    registered in `ExerciseRenderer.tsx`. One minor documentation gap
+    noted but not treated as a bug: lesson01's two fill_in_blank blanks
+    ("आज ___ है।") are disclosed in the original notes as a two-way
+    धूप-vs-बारिश ambiguity, but हवा (also taught earlier in the same
+    lesson, also frame-compatible with "आज ___ है।") makes the real
+    candidate pool three-way -- doesn't affect grading correctness (each
+    exercise's English instruction still names the intended word
+    unambiguously) or compiler validation (clean both times), just an
+    incomplete disclosure in the prose, not worth a content change.
+
     Nineteenth Hindi unit, continuing directly from hi/a1_unit18_housing.yaml
     (same Priya/Arjun characters, still on तुम terms). Spine outcome
     confirmed via a direct read of universal_spine.yaml (not assumed from
