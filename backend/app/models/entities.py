@@ -616,10 +616,6 @@ class ExerciseAttempt(Base):
             name="fk_exercise_attempts_exercise_id",
         )
     )
-    content_release_id: Mapped[str | None] = mapped_column(
-        ForeignKey("content_releases.id", ondelete="SET NULL"),
-        nullable=True,
-    )
     lesson_session_id: Mapped[str | None] = mapped_column(
         String(36), nullable=True
     )
@@ -803,120 +799,6 @@ class TTSUsage(Base):
     )
 
 
-class LearningObjective(Base):
-    __tablename__ = "learning_objectives"
-    __table_args__ = (
-        CheckConstraint(
-            "scope IN ('universal','realization')",
-            name="ck_learning_objectives_scope",
-        ),
-    )
-
-    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uid)
-    key: Mapped[str] = mapped_column(String(255), unique=True)
-    scope: Mapped[str] = mapped_column(String(20))
-    language_code: Mapped[str | None] = mapped_column(
-        ForeignKey("languages.code", ondelete="RESTRICT"),
-        nullable=True,
-    )
-    cefr_level: Mapped[CEFRLevel] = mapped_column(
-        Enum(
-            CEFRLevel,
-            native_enum=False,
-            create_constraint=True,
-            name="ck_learning_objectives_cefr_level",
-        ),
-        default=CEFRLevel.A1,
-    )
-    title: Mapped[str] = mapped_column(String(255))
-    can_do: Mapped[str] = mapped_column(Text)
-    spine_objective_id: Mapped[str | None] = mapped_column(
-        ForeignKey("learning_objectives.id", ondelete="SET NULL"),
-        nullable=True,
-    )
-    module_kind: Mapped[str | None] = mapped_column(String(40), nullable=True)
-    modalities: Mapped[list] = mapped_column(JSON, default=list)
-    assessment_requirements: Mapped[list] = mapped_column(JSON, default=list)
-    objective_metadata: Mapped[dict] = mapped_column(JSON, default=dict)
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now)
-    updated_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), default=now, onupdate=now
-    )
-
-
-class LearningObjectivePrerequisite(Base):
-    __tablename__ = "learning_objective_prerequisites"
-    __table_args__ = (
-        UniqueConstraint(
-            "objective_id",
-            "prerequisite_objective_id",
-            name="uq_learning_objective_prerequisites_pair",
-        ),
-        CheckConstraint(
-            "objective_id <> prerequisite_objective_id",
-            name="ck_learning_objective_prerequisites_not_self",
-        ),
-    )
-
-    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uid)
-    objective_id: Mapped[str] = mapped_column(
-        ForeignKey("learning_objectives.id", ondelete="CASCADE")
-    )
-    prerequisite_objective_id: Mapped[str] = mapped_column(
-        ForeignKey("learning_objectives.id", ondelete="CASCADE")
-    )
-    required_mastery: Mapped[float] = mapped_column(Float, default=0.0)
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now)
-
-
-class ContentRelease(Base):
-    __tablename__ = "content_releases"
-    __table_args__ = (
-        UniqueConstraint(
-            "learning_path_id",
-            "cefr_level",
-            "version",
-            name="uq_content_releases_path_level_version",
-        ),
-        CheckConstraint(
-            "status IN ('draft','review','published','retired')",
-            name="ck_content_releases_status",
-        ),
-    )
-
-    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uid)
-    learning_path_id: Mapped[str] = mapped_column(
-        ForeignKey("learning_paths.id", ondelete="RESTRICT")
-    )
-    course_id: Mapped[str | None] = mapped_column(
-        ForeignKey("courses.id", ondelete="SET NULL"),
-        nullable=True,
-    )
-    version: Mapped[str] = mapped_column(String(40))
-    cefr_level: Mapped[CEFRLevel] = mapped_column(
-        Enum(
-            CEFRLevel,
-            native_enum=False,
-            create_constraint=True,
-            name="ck_content_releases_cefr_level",
-        ),
-        default=CEFRLevel.A1,
-    )
-    schema_version: Mapped[str] = mapped_column(String(20), default="1")
-    status: Mapped[str] = mapped_column(String(20), default="draft")
-    manifest: Mapped[dict] = mapped_column(JSON, default=dict)
-    content_checksum: Mapped[str | None] = mapped_column(
-        String(128), nullable=True
-    )
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now)
-    published_at: Mapped[datetime | None] = mapped_column(
-        DateTime(timezone=True), nullable=True
-    )
-    retired_at: Mapped[datetime | None] = mapped_column(
-        DateTime(timezone=True), nullable=True
-    )
-
-
 class ContentKey(Base):
     __tablename__ = "content_keys"
 
@@ -924,86 +806,11 @@ class ContentKey(Base):
     key: Mapped[str] = mapped_column(String(255), unique=True)
     entity_type: Mapped[str] = mapped_column(String(40))
     entity_id: Mapped[str | None] = mapped_column(String(36), nullable=True)
-    content_release_id: Mapped[str | None] = mapped_column(
-        ForeignKey("content_releases.id", ondelete="SET NULL"),
-        nullable=True,
-    )
     supersedes_content_key_id: Mapped[str | None] = mapped_column(
         ForeignKey("content_keys.id", ondelete="SET NULL"),
         nullable=True,
     )
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now)
-
-
-class ContentReview(Base):
-    __tablename__ = "content_reviews"
-
-    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uid)
-    content_release_id: Mapped[str] = mapped_column(
-        ForeignKey("content_releases.id", ondelete="CASCADE")
-    )
-    content_key_id: Mapped[str | None] = mapped_column(
-        ForeignKey("content_keys.id", ondelete="SET NULL"),
-        nullable=True,
-    )
-    review_stage: Mapped[str] = mapped_column(String(50))
-    reviewer_system: Mapped[str] = mapped_column(String(50))
-    reviewer_model: Mapped[str | None] = mapped_column(
-        String(100), nullable=True
-    )
-    fresh_context: Mapped[bool] = mapped_column(Boolean, default=False)
-    status: Mapped[str] = mapped_column(String(30), default="pending")
-    findings: Mapped[list] = mapped_column(JSON, default=list)
-    notes: Mapped[str | None] = mapped_column(Text, nullable=True)
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now)
-    completed_at: Mapped[datetime | None] = mapped_column(
-        DateTime(timezone=True), nullable=True
-    )
-
-
-class LessonObjective(Base):
-    __tablename__ = "lesson_objectives"
-    __table_args__ = (
-        UniqueConstraint(
-            "lesson_id",
-            "objective_id",
-            "role",
-            name="uq_lesson_objectives_mapping",
-        ),
-    )
-
-    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uid)
-    lesson_id: Mapped[str] = mapped_column(
-        ForeignKey("lessons.id", ondelete="CASCADE")
-    )
-    objective_id: Mapped[str] = mapped_column(
-        ForeignKey("learning_objectives.id", ondelete="CASCADE")
-    )
-    role: Mapped[str] = mapped_column(String(30), default="teach")
-    required_mastery: Mapped[float] = mapped_column(Float, default=0.0)
-    order: Mapped[int | None] = mapped_column(Integer, nullable=True)
-
-
-class ExerciseObjective(Base):
-    __tablename__ = "exercise_objectives"
-    __table_args__ = (
-        UniqueConstraint(
-            "exercise_id",
-            "objective_id",
-            "role",
-            name="uq_exercise_objectives_mapping",
-        ),
-    )
-
-    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uid)
-    exercise_id: Mapped[str] = mapped_column(
-        ForeignKey("exercises.id", ondelete="CASCADE")
-    )
-    objective_id: Mapped[str] = mapped_column(
-        ForeignKey("learning_objectives.id", ondelete="CASCADE")
-    )
-    role: Mapped[str] = mapped_column(String(30), default="assess")
-    weight: Mapped[float] = mapped_column(Float, default=1.0)
 
 
 class ContentIssueReport(Base):
@@ -1032,9 +839,14 @@ class ContentIssueReport(Base):
         ForeignKey("practice_items.id", ondelete="RESTRICT"),
         nullable=True,
     )
+    # Plain column, deliberately no ForeignKey: the content_releases
+    # table this used to reference was confirmed-dead Phase 0
+    # scaffolding, dropped in migration 0021. The column itself stays
+    # because ContentIssueOut (app/schemas/api.py) exposes it in the
+    # admin-triage API contract; it is never written and is always
+    # null in practice.
     content_release_id: Mapped[str | None] = mapped_column(
-        ForeignKey("content_releases.id", ondelete="SET NULL"),
-        nullable=True,
+        String(36), nullable=True
     )
     content_key_id: Mapped[str | None] = mapped_column(
         ForeignKey("content_keys.id", ondelete="SET NULL"),
@@ -1060,157 +872,5 @@ class ContentIssueReport(Base):
         DateTime(timezone=True), nullable=True
     )
     resolved_at: Mapped[datetime | None] = mapped_column(
-        DateTime(timezone=True), nullable=True
-    )
-
-
-class UserObjectiveMastery(Base):
-    __tablename__ = "user_objective_mastery"
-    __table_args__ = (
-        UniqueConstraint(
-            "user_id",
-            "objective_id",
-            name="uq_user_objective_mastery",
-        ),
-    )
-
-    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uid)
-    user_id: Mapped[str] = mapped_column(
-        ForeignKey("users.id", ondelete="CASCADE")
-    )
-    objective_id: Mapped[str] = mapped_column(
-        ForeignKey("learning_objectives.id", ondelete="CASCADE")
-    )
-    mastery: Mapped[float] = mapped_column(Float, default=0.0)
-    ease_factor: Mapped[float] = mapped_column(Float, default=2.5)
-    interval_days: Mapped[int] = mapped_column(Integer, default=0)
-    repetitions: Mapped[int] = mapped_column(Integer, default=0)
-    due_at: Mapped[datetime | None] = mapped_column(
-        DateTime(timezone=True), nullable=True
-    )
-    last_reviewed_at: Mapped[datetime | None] = mapped_column(
-        DateTime(timezone=True), nullable=True
-    )
-    updated_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), default=now, onupdate=now
-    )
-
-
-class UserCourseEnrollment(Base):
-    __tablename__ = "user_course_enrollments"
-    __table_args__ = (
-        UniqueConstraint(
-            "user_id",
-            "learning_path_id",
-            name="uq_user_course_enrollments_path",
-        ),
-    )
-
-    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uid)
-    user_id: Mapped[str] = mapped_column(
-        ForeignKey("users.id", ondelete="CASCADE")
-    )
-    learning_path_id: Mapped[str] = mapped_column(
-        ForeignKey("learning_paths.id", ondelete="CASCADE")
-    )
-    active_course_id: Mapped[str | None] = mapped_column(
-        ForeignKey("courses.id", ondelete="SET NULL"),
-        nullable=True,
-    )
-    active_release_id: Mapped[str | None] = mapped_column(
-        ForeignKey("content_releases.id", ondelete="SET NULL"),
-        nullable=True,
-    )
-    current_content_key: Mapped[str | None] = mapped_column(
-        String(255), nullable=True
-    )
-    sync_cursor: Mapped[str | None] = mapped_column(Text, nullable=True)
-    started_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now)
-    updated_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), default=now, onupdate=now
-    )
-
-
-class NotificationPreference(Base):
-    __tablename__ = "notification_preferences"
-
-    user_id: Mapped[str] = mapped_column(
-        ForeignKey("users.id", ondelete="CASCADE"),
-        primary_key=True,
-    )
-    enabled: Mapped[bool] = mapped_column(Boolean, default=False)
-    timezone: Mapped[str] = mapped_column(String(100), default="UTC")
-    reminder_time: Mapped[str | None] = mapped_column(String(5), nullable=True)
-    days_of_week: Mapped[list] = mapped_column(JSON, default=list)
-    notification_types: Mapped[dict] = mapped_column(JSON, default=dict)
-    updated_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), default=now, onupdate=now
-    )
-
-
-class StreakFreezeBalance(Base):
-    __tablename__ = "streak_freeze_balances"
-
-    user_id: Mapped[str] = mapped_column(
-        ForeignKey("users.id", ondelete="CASCADE"),
-        primary_key=True,
-    )
-    available: Mapped[int] = mapped_column(Integer, default=0)
-    updated_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), default=now, onupdate=now
-    )
-
-
-class StreakFreezeEvent(Base):
-    __tablename__ = "streak_freeze_events"
-
-    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uid)
-    user_id: Mapped[str] = mapped_column(
-        ForeignKey("users.id", ondelete="CASCADE")
-    )
-    delta: Mapped[int] = mapped_column(Integer)
-    reason: Mapped[str] = mapped_column(String(50))
-    activity_date: Mapped[date | None] = mapped_column(Date, nullable=True)
-    event_metadata: Mapped[dict] = mapped_column(JSON, default=dict)
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now)
-
-
-class SyncOperation(Base):
-    __tablename__ = "sync_operations"
-    __table_args__ = (
-        UniqueConstraint(
-            "user_id",
-            "operation_id",
-            name="uq_sync_operations_user_operation",
-        ),
-        UniqueConstraint(
-            "user_id",
-            "device_id",
-            "sequence",
-            name="uq_sync_operations_user_device_sequence",
-        ),
-    )
-
-    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uid)
-    user_id: Mapped[str] = mapped_column(
-        ForeignKey("users.id", ondelete="CASCADE")
-    )
-    operation_id: Mapped[str] = mapped_column(String(36))
-    device_id: Mapped[str] = mapped_column(String(36))
-    sequence: Mapped[int] = mapped_column(Integer)
-    operation_type: Mapped[str] = mapped_column(String(50))
-    content_release_id: Mapped[str | None] = mapped_column(
-        ForeignKey("content_releases.id", ondelete="SET NULL"),
-        nullable=True,
-    )
-    occurred_at: Mapped[datetime | None] = mapped_column(
-        DateTime(timezone=True), nullable=True
-    )
-    payload: Mapped[dict] = mapped_column(JSON, default=dict)
-    status: Mapped[str] = mapped_column(String(30), default="pending")
-    canonical_result: Mapped[dict | None] = mapped_column(JSON, nullable=True)
-    error: Mapped[dict | None] = mapped_column(JSON, nullable=True)
-    received_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now)
-    processed_at: Mapped[datetime | None] = mapped_column(
         DateTime(timezone=True), nullable=True
     )
