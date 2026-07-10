@@ -2,7 +2,7 @@ import { test, expect, type APIRequestContext } from "@playwright/test";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { freshEmail } from "./helpers";
+import { freshEmail, registerAndLand } from "./helpers";
 
 /**
  * Refresh-token flow (backend commit 565f66c, 2026-07-10): short-lived
@@ -10,14 +10,13 @@ import { freshEmail } from "./helpers";
  * reuse-detection that revokes ALL of a user's refresh tokens when a
  * rotated-out token is presented again.
  *
- * These tests exercise the backend API directly via Playwright's request
- * fixture, NOT the browser -- deliberately. The frontend auto-refresh
- * integration (retry-on-401 via the stored refresh token) had not landed
- * in `packages/shared/src/api/client.ts` when this spec was written
- * (verified: zero `refresh_token` references in packages/shared/src or
- * frontend/src), so the browser half is a skipped placeholder below.
- * Once it lands, replace the skip with a real browser test (see the
- * skipped test's comment for the suggested approach).
+ * The first two tests exercise the backend API directly via Playwright's
+ * request fixture, NOT the browser -- deliberately, to isolate rotation/
+ * reuse-detection semantics from any frontend behavior. The last test
+ * below DOES drive a real browser: the frontend auto-refresh integration
+ * (retry-on-401 via the stored refresh token, `packages/shared/src/api/
+ * client.ts`'s `apiFetch`/`refreshSession`) landed 2026-07-10, so it's a
+ * real test now, not a skipped placeholder.
  *
  * API base URL: `E2E_API_BASE_URL` env var if set, else
  * `VITE_API_BASE_URL` from ../frontend/.env (the same backend the
@@ -156,18 +155,114 @@ test("refresh rotates the token pair; reuse of the rotated-out token is rejected
   expect(meAfterNuke.status()).toBe(200);
 });
 
-// Frontend auto-refresh on access-token expiry: NOT YET IMPLEMENTED in the
-// web frontend as of 2026-07-10 -- `packages/shared/src/api/client.ts` has
-// no refresh_token handling at all (it stores only access_token and
-// hard-logs-out on 401). Once the auto-refresh integration lands, replace
-// this skip with a browser test: register via the UI, overwrite the stored
-// access token with a garbage/expired one (or use a backend hook to issue
-// a short-exp token, if one gets added -- none exists today), trigger an
-// authenticated fetch, and assert the app silently recovers (stays on the
-// page, no redirect to /login) because the client refreshed and retried.
-test.skip(
-  "app silently refreshes an expired access token and the user stays logged in",
-  async () => {
-    /* pending frontend auto-refresh integration */
-  },
-);
+// Frontend auto-refresh on access-token expiry (drives a real browser, not
+// the request fixture -- the whole point is exercising AuthContext's mount
+// effect -> AuthApi.me() -> apiFetch's 401 -> silent refresh + retry path
+// exactly as a real user would hit it after 30 minutes idle).
+//
+// Rather than waiting out the real 30-minute access-token lifetime (or
+// standing up a separate short-expiry backend stack just for this one
+// test -- overkill for a suite that otherwise runs against whatever
+// backend is already up), this test forges the "expired access token"
+// condition directly: register normally (real access + refresh tokens,
+// both genuinely valid), then overwrite ONLY the stored access token with
+// a garbage value via localStorage, leaving the real refresh token
+// in place. From the client's point of view this is indistinguishable
+// from a genuinely expired access token -- the next authenticated request
+// 401s, and apiFetch/refreshSession must silently recover using the
+// still-valid refresh token.
+test("app silently refreshes an expired access token and the user stays logged in", async ({ page }) => {
+  const email = freshEmail("refresh-e2e-browser");
+  await registerAndLand(page, email);
+
+  const refreshTokenBefore = await page.evaluate(() => localStorage.getItem("refresh_token"));
+  expect(refreshTokenBefore, "register must store a refresh token via the tokenStorage seam").toBeTruthy();
+
+  // Forge access-token expiry; the real refresh token is left untouched.
+  await page.evaluate(() => {
+    localStorage.setItem("access_token", "garbage.expired.token");
+  });
+
+  // Reload re-runs AuthContext's mount effect, which calls AuthApi.me()
+  // with the now-garbage access token -> 401 -> apiFetch's silent
+  // refresh-and-retry. If that path is broken, ProtectedRoute redirects
+  // to /login instead of staying on "/".
+  await page.reload();
+  await page.waitForURL("/", { timeout: 10000 });
+  // A real authenticated page element, not just the URL -- confirms the
+  // app is actually rendered as logged-in, not mid-redirect.
+  await page.getByRole("link", { name: "Learn" }).first().waitFor({ state: "visible" });
+
+  // The token pair must have been rotated in storage: a fresh access
+  // token (not the garbage value) and a fresh, different refresh token
+  // (server-side rotation-on-use, mirrored client-side).
+  const accessTokenAfter = await page.evaluate(() => localStorage.getItem("access_token"));
+  const refreshTokenAfter = await page.evaluate(() => localStorage.getItem("refresh_token"));
+  expect(accessTokenAfter).toBeTruthy();
+  expect(accessTokenAfter).not.toBe("garbage.expired.token");
+  expect(refreshTokenAfter).toBeTruthy();
+  expect(refreshTokenAfter).not.toBe(refreshTokenBefore);
+
+  // The pre-refresh refresh token was rotated out server-side; presenting
+  // it again must now be rejected as reuse -- confirms the client didn't
+  // just fabricate local values but genuinely completed a real rotation
+  // against the backend.
+  const reused = await page.request.post(`${API}/auth/refresh`, {
+    data: { refresh_token: refreshTokenBefore },
+  });
+  expect(reused.status()).toBe(401);
+});
+
+// Logout (ProfilePage's "Log out" button -> AuthContext.logout() ->
+// AuthApi.logout()) must revoke the refresh token server-side, not just
+// clear it locally -- otherwise a stolen/leaked refresh token captured
+// before logout would keep working indefinitely.
+test("logging out via the UI revokes the refresh token server-side", async ({ page }) => {
+  const email = freshEmail("refresh-e2e-logout");
+  await registerAndLand(page, email);
+
+  await page.getByRole("link", { name: "Profile" }).first().click();
+  await page.waitForURL(/\/profile$/);
+
+  // Read the refresh token as late as possible, immediately before
+  // clicking Log out -- NOT right after registration. AuthApi.logout()
+  // revokes whatever refresh token is CURRENTLY stored, and background
+  // authenticated requests (streak/xp/quests polling on HomePage, etc.)
+  // can legitimately have already rotated the original one via the
+  // silent-refresh path by the time the user reaches this page (this
+  // stack's ACCESS_TOKEN_EXPIRE_SECONDS=8 makes that easy to hit) --
+  // asserting against a stale, already-superseded token would be
+  // asserting the wrong thing, not exercising a real bug.
+  const refreshToken = await page.evaluate(() => localStorage.getItem("refresh_token"));
+  expect(refreshToken).toBeTruthy();
+
+  // AuthContext.logout() clears local state and redirects synchronously,
+  // firing the actual revoking POST /auth/logout in the background (see
+  // AuthApi.logout()'s own comment: local-first, so a slow/failed revoke
+  // call never leaves the user stuck unable to log out on this device).
+  // Wait for that specific network response directly, not the URL change
+  // -- otherwise this assertion races ahead of the real server-side
+  // revoke and can observe it as "not yet happened" even though it's
+  // correctly in flight.
+  const logoutResponse = page.waitForResponse(
+    (res) => res.request().method() === "POST" && res.url().endsWith("/auth/logout"),
+  );
+  await page.getByRole("button", { name: "Log out" }).click();
+  await page.waitForURL(/\/login$/);
+  const res = await logoutResponse;
+  expect(res.status()).toBe(204);
+
+  // Local storage must be fully cleared.
+  const accessAfter = await page.evaluate(() => localStorage.getItem("access_token"));
+  const refreshAfter = await page.evaluate(() => localStorage.getItem("refresh_token"));
+  expect(accessAfter).toBeNull();
+  expect(refreshAfter).toBeNull();
+
+  // The refresh token that was actually current at logout time must now
+  // be rejected -- proves the server-side revoke genuinely happened, not
+  // just a local clear.
+  const reuse = await page.request.post(`${API}/auth/refresh`, {
+    data: { refresh_token: refreshToken },
+  });
+  expect(reuse.status()).toBe(401);
+});
