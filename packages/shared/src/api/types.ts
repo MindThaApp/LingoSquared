@@ -354,6 +354,11 @@ export interface AuthUser {
   id: string;
   email: string;
   display_name: string;
+  // Optional (not `boolean`) because a session stored in localStorage before
+  // this field shipped won't have it -- treat anything other than `true` as
+  // non-admin. UX gating only: the backend's admin_user dependency is the
+  // actual security boundary for every /admin/* route.
+  is_admin?: boolean;
   created_at?: string;
 }
 

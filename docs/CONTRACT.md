@@ -195,9 +195,14 @@ response (both):
   "refresh_token": "opaque-refresh-token",
   "token_type": "bearer",
   "expires_in": 1800,
-  "user": { "id": "uuid", "email": "string", "display_name": "string" }
+  "user": { "id": "uuid", "email": "string", "display_name": "string", "is_admin": false }
 }
 ```
+`is_admin` (added 2026-07-10) is UX-only, for gating admin UI (e.g.
+`AdminContentPage`) on the real value instead of firing admin API calls
+and reacting to the 403 after the fact — the actual security boundary for
+every `/admin/*` route is unchanged: the `admin_user` dependency, checked
+server-side on every request regardless of what the client believes.
 Access tokens are intentionally short-lived bearer JWTs: 30 minutes
 (`expires_in: 1800`). Installed mobile clients must not require a full login
 every day, but access tokens should have a small blast radius if copied from
@@ -233,7 +238,7 @@ Revokes that refresh token if it exists and belongs to a still-existing
 session. Returns `204 No Content`; callers should discard both access and
 refresh tokens locally.
 
-`GET /auth/me` response: `{ "id", "email", "display_name", "created_at" }`.
+`GET /auth/me` response: `{ "id", "email", "display_name", "is_admin", "created_at" }`.
 
 `GET /me/export` (auth required) returns the authenticated account's complete
 data export as one JSON document — the data-portability counterpart to
