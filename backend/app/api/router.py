@@ -341,7 +341,7 @@ def register(body:RegisterIn,request:Request,db:Session=Depends(get_db)):
     email=body.email.lower()
     if db.scalar(select(User).where(User.email==email)): fail(409,"email_exists","An account with this email already exists")
     user=User(email=email,password_hash=hash_password(body.password),display_name=body.display_name or email.split("@")[0],is_admin=email in get_settings().admin_email_set,timezone=valid_timezone_or_none(body.timezone)); db.add(user); db.flush()
-    db.add(UserStats(user_id=user.id,total_xp=0,streak_days=0,last_activity_date=None,daily_goal=20,hearts=5,gems=0))
+    db.add(UserStats(user_id=user.id,total_xp=0,streak_days=0,last_activity_date=None,daily_goal=20))
     db.commit(); return auth_response(user)
 @router.post("/auth/login",response_model=AuthOut)
 def login(body:LoginIn,request:Request,db:Session=Depends(get_db)):

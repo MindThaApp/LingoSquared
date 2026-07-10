@@ -346,8 +346,6 @@ def validate_overlay_references(
 
 
 def validate_no_stray_yaml_booleans(overlay: dict[str, Any], report: Report):
-    bool_fields = ("correct_option", "distractors", "options")
-
     def check_value(value: Any, location: str):
         if isinstance(value, bool):
             report.error(
@@ -359,9 +357,55 @@ def validate_no_stray_yaml_booleans(overlay: dict[str, Any], report: Report):
         elif isinstance(value, list):
             for i, item in enumerate(value):
                 check_value(item, f"{location}[{i}]")
+        elif isinstance(value, dict):
+            for key, item in value.items():
+                if isinstance(key, bool):
+                    report.error(
+                        f"{location}.{key!r}",
+                        f"parsed a mapping key as YAML boolean {key!r}; "
+                        "quote it as a string in the source YAML",
+                    )
+                check_value(item, f"{location}.{key}")
 
+    course = overlay.get("course", {})
+    if isinstance(course, dict):
+        for field in ("title", "description"):
+            if field in course:
+                check_value(course[field], f"overlay.course.{field}")
+
+    for unit_key, unit_overlay in overlay.get("units", {}).items():
+        if isinstance(unit_overlay, dict) and "title" in unit_overlay:
+            check_value(unit_overlay["title"], f"overlay.units.{unit_key}.title")
+
+    for lesson_key, lesson_overlay in overlay.get("lessons", {}).items():
+        if isinstance(lesson_overlay, dict) and "title" in lesson_overlay:
+            check_value(
+                lesson_overlay["title"],
+                f"overlay.lessons.{lesson_key}.title",
+            )
+
+    teaching_string_fields = ("title", "gloss", "note", "example_gloss")
+    for teaching_key, teaching_overlay in overlay.get("teaching", {}).items():
+        if not isinstance(teaching_overlay, dict):
+            continue
+        for field in teaching_string_fields:
+            if field in teaching_overlay:
+                check_value(
+                    teaching_overlay[field],
+                    f"overlay.teaching.{teaching_key}.{field}",
+                )
+
+    exercise_string_fields = (
+        "instruction",
+        "correct_option",
+        "distractors",
+        "options",
+        "feedback",
+        "feedback_by_option",
+        "correct_response",
+    )
     for exercise_key, exercise_overlay in overlay.get("exercises", {}).items():
-        for field in bool_fields:
+        for field in exercise_string_fields:
             if field in exercise_overlay:
                 check_value(
                     exercise_overlay[field],
@@ -376,6 +420,147 @@ def validate_no_stray_yaml_booleans(overlay: dict[str, Any], report: Report):
                     f"overlay.exercises.{exercise_key}"
                     f".accepted_answers[{i}].value",
                 )
+
+
+def normalize_dialogue_option(value: Any) -> str | None:
+    if not isinstance(value, str):
+        return None
+    value = SPEAKER_LABEL_RE.sub("", value, count=1)
+    value = re.sub(r"[^\w\u200c]+", " ", value, flags=re.UNICODE)
+    normalized = " ".join(value.casefold().split())
+    return normalized or None
+
+
+def dialogue_speaker_and_text(block: dict[str, Any]) -> tuple[str | None, str | None]:
+    speaker = block.get("speaker")
+    text = block.get("text")
+    if not isinstance(text, str):
+        return None, None
+    if isinstance(speaker, str) and speaker.strip():
+        return speaker.strip(), text
+    match = SPEAKER_LABEL_RE.match(text)
+    if not match:
+        return None, text
+    return match.group("label").strip(), text[match.end() :].strip()
+
+
+def _option_values(value: Any) -> list[Any]:
+    if isinstance(value, list):
+        return value
+    if value is None:
+        return []
+    return [value]
+
+
+def _accepted_answer_values(exercise_overlay: dict[str, Any]) -> set[str]:
+    values: set[str] = set()
+    if "correct_response" in exercise_overlay:
+        normalized = normalize_dialogue_option(exercise_overlay["correct_response"])
+        if normalized:
+            values.add(normalized)
+    for variant in exercise_overlay.get("accepted_answers", []):
+        value = variant.get("value") if isinstance(variant, dict) else variant
+        normalized = normalize_dialogue_option(value)
+        if normalized:
+            values.add(normalized)
+    return values
+
+
+def validate_same_speaker_dialogue_distractors(
+    realization: dict[str, Any],
+    overlay: dict[str, Any],
+    report: Report,
+):
+    teaching_overlays = overlay.get("teaching", {})
+    exercise_overlays = overlay.get("exercises", {})
+
+    for unit in realization.get("units", []):
+        for lesson in unit.get("lessons", []):
+            turns = []
+            for item in lesson.get("teaching", []):
+                if item.get("kind") != "dialogue":
+                    continue
+                target = item.get("target", {})
+                if not isinstance(target, dict):
+                    continue
+                speaker, target_text = dialogue_speaker_and_text(target)
+                if not speaker or not target_text:
+                    continue
+                overlay_entry = teaching_overlays.get(item.get("content_key"), {})
+                source_text = None
+                if isinstance(overlay_entry, dict):
+                    source_text = overlay_entry.get("gloss")
+                turns.append(
+                    {
+                        "speaker": speaker,
+                        "target_text": target_text,
+                        "target_norm": normalize_dialogue_option(target_text),
+                        "source_norm": normalize_dialogue_option(source_text),
+                        "content_key": item.get("content_key", "<unknown>"),
+                    }
+                )
+
+            if len(turns) < 2:
+                continue
+
+            for exercise in lesson.get("exercises", []):
+                if exercise.get("type") not in {"listen_select", "dialogue_response"}:
+                    continue
+                key = exercise.get("content_key")
+                exercise_overlay = exercise_overlays.get(key, {})
+                if not isinstance(exercise_overlay, dict):
+                    continue
+
+                tested_norm = normalize_dialogue_option(exercise.get("tested_text"))
+                if not tested_norm:
+                    continue
+                matching_turns = [
+                    turn for turn in turns if turn["target_norm"] == tested_norm
+                ]
+                if not matching_turns:
+                    continue
+                tested_turn = matching_turns[0]
+
+                wrong_options = []
+                for field in ("distractors", "options"):
+                    for option in _option_values(exercise_overlay.get(field)):
+                        normalized = normalize_dialogue_option(option)
+                        if normalized:
+                            wrong_options.append((field, option, normalized))
+
+                correct_values = {
+                    normalize_dialogue_option(exercise_overlay.get("correct_option")),
+                    *_accepted_answer_values(exercise_overlay),
+                }
+                wrong_options = [
+                    option
+                    for option in wrong_options
+                    if option[2] not in correct_values
+                ]
+
+                for other_turn in turns:
+                    if other_turn is tested_turn:
+                        continue
+                    if other_turn["speaker"] != tested_turn["speaker"]:
+                        continue
+                    spoken_values = {
+                        value
+                        for value in (
+                            other_turn["target_norm"],
+                            other_turn["source_norm"],
+                        )
+                        if value
+                    }
+                    for field, option, normalized in wrong_options:
+                        if normalized in spoken_values:
+                            report.error(
+                                f"overlay.exercises.{key}.{field}",
+                                "wrong option "
+                                f"{option!r} matches another line by speaker "
+                                f"{tested_turn['speaker']!r} in the same "
+                                "dialogue "
+                                f"({other_turn['content_key']})",
+                            )
 
 
 #: Keys where a real YAML boolean is the intended, correct type — internal
@@ -1680,6 +1865,7 @@ def validate_documents(
     validate_text_block_directions(overlay, "overlay", report)
     validate_overlay_references(realization, overlay, report)
     validate_no_stray_yaml_booleans(overlay, report)
+    validate_same_speaker_dialogue_distractors(realization, overlay, report)
     validate_untaught_vocabulary(realization, report)
     validate_vocabulary_examples(realization, overlay, report)
     validate_audio_references(realization, report)

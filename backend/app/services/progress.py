@@ -39,8 +39,6 @@ def stats_for(db:Session,user_id:str):
             streak_days=0,
             last_activity_date=None,
             daily_goal=20,
-            hearts=5,
-            gems=0,
             streak_freezes_available=0,
             last_freeze_used_date=None,
         )
