@@ -1,0 +1,488 @@
+schema_version: "1.1"
+realization_version: "2026.1-draft.1"
+target_language: ro
+cefr_level: A2
+status: complete_draft
+generation_provenance:
+  method: ai_generated
+  authoring_system: claude
+  source_material: >-
+    "Basic Romanian Language Lessons" (US Peace Corps Moldova, public
+    domain, the same PDF used for units 01-23,
+    https://fsi-languages.yojik.eu/languages/PeaceCorps/Romanian/
+    MD_Romanian_Language_Lessons.pdf) was checked first for a doctor-
+    appointment lesson beyond the basic-symptom vocabulary this
+    course's own unit16 already adapted from it. `firecrawl --status`
+    still shows 0/1,000 credits, so this unit again falls back to
+    established-conventions-only authoring for its NEW A2-level
+    vocabulary (duration/severity phrasing, treatment/prescription
+    words) -- unit16's own already-adapted A1 words (doare, cap,
+    stomac, bolnav, doctor) are reused directly via reminder, not
+    re-sourced.
+
+    This unit deliberately builds on unit16's health A1 content rather
+    than starting fresh: Mihai was the patient in unit16's own
+    dialogue ("Mihai este bolnav," a headache); this unit switches to
+    Ana as the patient on a different, later occasion, avoiding any
+    "who is sick when" continuity conflict while reusing the same
+    doare/cap A1 vocabulary as a genuine A2 depth extension (duration
+    "de trei zile," severity "foarte tare," and real treatment/
+    prescription vocabulary) rather than re-teaching the same A1
+    content under a new unit number. Introduces one new character,
+    Doctorița Vasile, a doctor -- a new named character for the same
+    reason units 21/23 introduced Elena/Radu, since neither Ana's nor
+    Mihai's established jobs connect to medical work.
+  human_reviewed: false
+review:
+  status: unreviewed
+  required_next_reviewer: null
+  notes: >-
+    Fourth Romanian A2 unit. Targets universal.a2.health.
+    attend_doctor_appointment (confirmed by grepping
+    universal_spine.yaml directly -- prerequisites are
+    universal.a1.health.describe_basic_problem, this course's own
+    unit16, and universal.a1.communication.basic_phone_contact, treated
+    as satisfied by this unit's own appointment-booking framing, the
+    same latitude unit21 already used for the identical prerequisite
+    type). 4 lessons, each mapped to a distinct spine
+    assessment_requirement: lesson01 (describing the symptom with
+    duration) covers describe_symptom_in_detail's speaking half;
+    lesson02 (severity and a follow-up question) completes
+    describe_symptom_in_detail; lesson03 (reading an appointment
+    confirmation) covers read_appointment_confirmation and previews
+    write_appointment_request via its writing_prompt; lesson04 (the
+    full Ana/Doctorița Vasile consultation) covers
+    understand_doctor_instructions and consolidates all four.
+
+    Reuses unit01's bună/mulțumesc/la revedere/Ana, unit16's mă doare/
+    cap/bolnav/doctor (this course's own A1 health vocabulary, the
+    natural foundation for this A2 extension), re-declared via a
+    lesson-opening reminder card per the standing per-file
+    token-scoping convention. Within this file, lesson02-04 freely
+    reuse lesson01's own de trei zile/foarte tare without a fresh
+    reminder card, matching the established within-file-reuse
+    precedent.
+
+    Checked this choice against AUTHORING_GUIDE #11 before finalizing.
+    Facts this unit newly states: Ana has had a headache for three
+    days, describes it as quite severe when asked, and is prescribed
+    rest and medication to take twice a day for five days by
+    Doctorița Vasile. Grepped unit16 to confirm this doesn't conflict:
+    unit16's own dialogue has MIHAI as the patient with a headache on
+    an earlier, separate occasion, resolved with rest and water, no
+    doctor visit shown -- this unit is a genuinely different, later
+    scene with ANA as the patient, seeing an actual doctor, which is a
+    natural progression rather than a contradiction (nothing in unit16
+    claims headaches never happen again, and the two are different
+    people on different days).
+
+    Checked every fill_in_blank slot against AUTHORING_GUIDE #17: each
+    blank's instruction explicitly states the target English meaning
+    (lesson01's blank=trei instruction names "three days" explicitly;
+    lesson02's blank=tare instruction names "quite severe"
+    explicitly). Checked every listen_select/dialogue_comprehension
+    distractor against the standing same-speaker-audio rule for
+    lesson04's dialogue -- Doctorița Vasile's and Ana's own lines were
+    listed before writing distractors, and every distractor is either
+    something neither speaker says in that clip, or (for "who says
+    this") genuinely said by the other speaker only.
+
+    Verified every word_order/listen_order exercise's word_bank token
+    multiset exactly matches its paired overlay correct_response token
+    multiset (case- and diacritic-exact), and every exercise's
+    tested_text tokens are covered by an earlier introduced_tokens
+    entry in this same file (both checked proactively before running
+    the compiler). Needs a fresh-context content review before import,
+    same as every other language's content.
+
+course:
+  realization_key: ro.a2
+  target_language_first: true
+  dialect: ro_RO_standard
+  register_policy: >-
+    Fully formal register throughout -- dumneavoastră with the doctor
+    (Ana and Doctorița Vasile have never met), matching unit21/23's
+    identical convention for a first meeting with a professional.
+
+media_assets:
+  - content_key: ro.a2.audio.doctor.ma_doare_de_trei_zile.01
+    language: ro
+    text: "Mă doare capul de trei zile."
+    voice_hint: neutral_young_adult_friendly
+    status: pending_generation
+  - content_key: ro.a2.audio.doctor.cat_de_tare.01
+    language: ro
+    text: "Cât de tare vă doare?"
+    voice_hint: neutral_adult_polite
+    status: pending_generation
+  - content_key: ro.a2.audio.doctor.doare_foarte_tare.01
+    language: ro
+    text: "Mă doare foarte tare, mai ales dimineața."
+    voice_hint: neutral_young_adult_friendly
+    status: pending_generation
+  - content_key: ro.a2.audio.doctor.tratament.01
+    language: ro
+    text: "Vă recomand odihnă și acest medicament, de două ori pe zi, timp de cinci zile."
+    voice_hint: neutral_adult_formal
+    status: pending_generation
+  - content_key: ro.a2.audio.doctor.confirmare.01
+    language: ro
+    text: "Programarea dumneavoastră este confirmată pentru miercuri, ora unsprezece, la Doctorița Vasile. Vă rugăm să veniți cu cincisprezece minute mai devreme."
+    voice_hint: neutral_adult_formal
+    status: pending_generation
+  - content_key: ro.a2.audio.dialogue.la_doctor.01
+    language: ro
+    text: "Ana: Bună ziua, Doctoriță! Mă doare capul de trei zile.\nDoctorița Vasile: Bună ziua! Cât de tare vă doare?\nAna: Mă doare foarte tare, mai ales dimineața.\nDoctorița Vasile: Înțeleg. Vă recomand odihnă și acest medicament, de două ori pe zi, timp de cinci zile.\nAna: Trebuie să mă întorc pentru un control?\nDoctorița Vasile: Doar dacă durerea nu trece în cinci zile.\nAna: Mulțumesc mult, Doctoriță!\nDoctorița Vasile: Cu plăcere. Însănătoșire grabnică!"
+    voice_hint: adult_female_and_female_neutral_polite
+    status: pending_generation
+
+units:
+  - content_key: ro.a2.unit24.la_doctor
+    title: "La doctor"
+    section: reading_writing
+    spine_outcome_ids:
+      - universal.a2.health.attend_doctor_appointment
+    planned_lesson_count: 4
+
+    lessons:
+      - content_key: ro.a2.unit24.lesson01.de_trei_zile
+        title: "Mă doare de trei zile"
+        spine_outcome_id: universal.a2.health.attend_doctor_appointment
+        teaching:
+          - content_key: ro.a2.unit24.lesson01.teach.reminder_ma_doare_capul_bolnav_doctor
+            kind: grammar_note
+            target: {text: "Mă doare capul · Bolnav · Doctor", language_code: ro, direction: ltr}
+            introduced_tokens: [bună, ziua, mă, doare, capul, sunt, bolnav, un, doctor]
+          - content_key: ro.a2.unit24.lesson01.teach.de_trei_zile_vocab
+            kind: vocabulary
+            target: {text: "De trei zile", language_code: ro, direction: ltr}
+            introduced_tokens: [de, trei, zile]
+            example:
+              - {text: "Mă doare capul de trei zile.", language_code: ro, direction: ltr}
+          - content_key: ro.a2.unit24.lesson01.teach.ma_doare_de_trei_zile_phrase
+            kind: phrase
+            target: {text: "Mă doare capul de trei zile.", language_code: ro, direction: ltr}
+            introduced_tokens: [mă, doare, capul, de, trei, zile]
+          - content_key: ro.a2.unit24.lesson01.teach.doctorita_vocab
+            kind: vocabulary
+            target: {text: "Doctoriță", language_code: ro, direction: ltr}
+            introduced_tokens: [doctoriță]
+            example:
+              - {text: "Bună ziua, Doctoriță!", language_code: ro, direction: ltr}
+        exercises:
+          - content_key: ro.a2.unit24.lesson01.exercise01.choose_de_trei_zile
+            type: multiple_choice
+            tested_text: "de trei zile"
+            prompt:
+              target_blocks:
+                - {text: "for three days", language_code: en, direction: ltr}
+          - content_key: ro.a2.unit24.lesson01.exercise02.choose_doctorita
+            type: multiple_choice
+            tested_text: "doctoriță"
+            prompt:
+              target_blocks:
+                - {text: "female doctor", language_code: en, direction: ltr}
+          - content_key: ro.a2.unit24.lesson01.exercise03.listen_ma_doare_de_trei_zile
+            type: listen_select
+            tested_text: "Mă doare capul de trei zile"
+            media_asset_key: ro.a2.audio.doctor.ma_doare_de_trei_zile.01
+            prompt: {target_blocks: []}
+          - content_key: ro.a2.unit24.lesson01.exercise04.match_doctor1
+            type: matching_pairs
+            tested_text: "de trei zile mă doare capul doctoriță bolnav bună ziua"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "De trei zile", right: "for three days"}
+              - {left: "Mă doare capul.", right: "My head hurts."}
+              - {left: "Doctoriță", right: "female doctor"}
+              - {left: "Bolnav", right: "sick"}
+              - {left: "Mă doare capul de trei zile.", right: "My head has hurt for three days."}
+              - {left: "Bună ziua, Doctoriță!", right: "Good day, Doctor!"}
+          - content_key: ro.a2.unit24.lesson01.exercise05.order_ma_doare_de_trei_zile
+            type: word_order
+            tested_text: "Mă doare capul de trei zile"
+            prompt: {target_blocks: []}
+            word_bank: ["Mă", "doare", "capul", "de", "trei", "zile"]
+          - content_key: ro.a2.unit24.lesson01.exercise06.listen_order_ma_doare_de_trei_zile
+            type: listen_order
+            tested_text: "Mă doare capul de trei zile"
+            media_asset_key: ro.a2.audio.doctor.ma_doare_de_trei_zile.01
+            prompt: {target_blocks: []}
+            word_bank: ["Mă", "doare", "capul", "de", "trei", "zile"]
+          - content_key: ro.a2.unit24.lesson01.exercise07.complete_ma_doare_de_trei_zile
+            type: fill_in_blank
+            tested_text: "trei"
+            prompt:
+              target_blocks:
+                - {text: "Complete the sentence, three days: Mă doare capul de ___ zile.", language_code: ro, direction: ltr}
+          - content_key: ro.a2.unit24.lesson01.exercise08.speak_ma_doare_de_trei_zile
+            type: speak_response
+            tested_text: "mă doare capul de trei zile"
+            prompt:
+              target_blocks:
+                - {text: "Say: My head has hurt for three days.", language_code: en, direction: ltr}
+
+      - content_key: ro.a2.unit24.lesson02.cat_de_tare
+        title: "Cât de tare vă doare?"
+        spine_outcome_id: universal.a2.health.attend_doctor_appointment
+        teaching:
+          - content_key: ro.a2.unit24.lesson02.teach.cat_de_tare_grammar
+            kind: grammar_note
+            target: {text: "Cât de tare (how severely)", language_code: ro, direction: ltr}
+            introduced_tokens: [cât, de, tare, vă]
+          - content_key: ro.a2.unit24.lesson02.teach.foarte_tare_vocab
+            kind: vocabulary
+            target: {text: "Foarte tare", language_code: ro, direction: ltr}
+            introduced_tokens: [foarte, tare]
+            example:
+              - {text: "Mă doare foarte tare.", language_code: ro, direction: ltr}
+          - content_key: ro.a2.unit24.lesson02.teach.mai_ales_dimineata_vocab
+            kind: vocabulary
+            target: {text: "Mai ales dimineața", language_code: ro, direction: ltr}
+            introduced_tokens: [mai, ales, dimineața]
+            example:
+              - {text: "Mă doare mai ales dimineața.", language_code: ro, direction: ltr}
+          - content_key: ro.a2.unit24.lesson02.teach.cat_de_tare_va_doare_phrase
+            kind: phrase
+            target: {text: "Cât de tare vă doare?", language_code: ro, direction: ltr}
+            introduced_tokens: [cât, de, tare, vă, doare]
+          - content_key: ro.a2.unit24.lesson02.teach.doare_foarte_tare_phrase
+            kind: phrase
+            target: {text: "Mă doare foarte tare, mai ales dimineața.", language_code: ro, direction: ltr}
+            introduced_tokens: [mă, doare, foarte, tare, mai, ales, dimineața]
+        exercises:
+          - content_key: ro.a2.unit24.lesson02.exercise01.choose_foarte_tare
+            type: multiple_choice
+            tested_text: "foarte tare"
+            prompt:
+              target_blocks:
+                - {text: "quite severely", language_code: en, direction: ltr}
+          - content_key: ro.a2.unit24.lesson02.exercise02.choose_dimineata
+            type: multiple_choice
+            tested_text: "dimineața"
+            prompt:
+              target_blocks:
+                - {text: "morning", language_code: en, direction: ltr}
+          - content_key: ro.a2.unit24.lesson02.exercise03.listen_cat_de_tare
+            type: listen_select
+            tested_text: "Cât de tare vă doare"
+            media_asset_key: ro.a2.audio.doctor.cat_de_tare.01
+            prompt: {target_blocks: []}
+          - content_key: ro.a2.unit24.lesson02.exercise04.match_doctor2
+            type: matching_pairs
+            tested_text: "cât de tare foarte tare mai ales dimineața de trei zile mă doare capul"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "Cât de tare?", right: "How severely?"}
+              - {left: "Foarte tare", right: "quite severely"}
+              - {left: "Mai ales dimineața", right: "especially in the morning"}
+              - {left: "De trei zile", right: "for three days"}
+              - {left: "Mă doare capul.", right: "My head hurts."}
+              - {left: "Cât de tare vă doare?", right: "How severely does it hurt?"}
+          - content_key: ro.a2.unit24.lesson02.exercise05.order_cat_de_tare_va_doare
+            type: word_order
+            tested_text: "Cât de tare vă doare"
+            prompt: {target_blocks: []}
+            word_bank: ["Cât", "de", "tare", "vă", "doare"]
+          - content_key: ro.a2.unit24.lesson02.exercise06.listen_order_doare_foarte_tare
+            type: listen_order
+            tested_text: "Mă doare foarte tare"
+            media_asset_key: ro.a2.audio.doctor.doare_foarte_tare.01
+            prompt: {target_blocks: []}
+            word_bank: ["Mă", "doare", "foarte", "tare"]
+          - content_key: ro.a2.unit24.lesson02.exercise07.complete_doare_foarte_tare
+            type: fill_in_blank
+            tested_text: "tare"
+            prompt:
+              target_blocks:
+                - {text: "Complete the sentence, quite severely: Mă doare foarte ___, mai ales dimineața.", language_code: ro, direction: ltr}
+          - content_key: ro.a2.unit24.lesson02.exercise08.translate_it_hurts_severely
+            type: translation
+            tested_text: "mă doare foarte tare mai ales dimineața"
+            prompt:
+              target_blocks:
+                - {text: "It hurts quite severely, especially in the morning.", language_code: en, direction: ltr}
+
+      - content_key: ro.a2.unit24.lesson03.confirmarea_programarii
+        title: "Confirmarea programării"
+        spine_outcome_id: universal.a2.health.attend_doctor_appointment
+        teaching:
+          - content_key: ro.a2.unit24.lesson03.teach.confirmata_vocab
+            kind: vocabulary
+            target: {text: "Confirmată", language_code: ro, direction: ltr}
+            introduced_tokens: [programarea, dumneavoastră, este, confirmată, pentru]
+            example:
+              - {text: "Programarea dumneavoastră este confirmată.", language_code: ro, direction: ltr}
+          - content_key: ro.a2.unit24.lesson03.teach.miercuri_vocab
+            kind: vocabulary
+            target: {text: "Miercuri, ora unsprezece", language_code: ro, direction: ltr}
+            introduced_tokens: [miercuri, ora, unsprezece, la]
+            example:
+              - {text: "Programarea este miercuri, ora unsprezece.", language_code: ro, direction: ltr}
+          - content_key: ro.a2.unit24.lesson03.teach.mai_devreme_vocab
+            kind: vocabulary
+            target: {text: "Mai devreme", language_code: ro, direction: ltr}
+            introduced_tokens: [vă, rugăm, să, veniți, cu, cincisprezece, minute, mai, devreme]
+            example:
+              - {text: "Vă rugăm să veniți cu cincisprezece minute mai devreme.", language_code: ro, direction: ltr}
+          - content_key: ro.a2.unit24.lesson03.teach.confirmare_reading
+            kind: reading
+            target:
+              text: "Programarea dumneavoastră este confirmată pentru miercuri, ora unsprezece, la Doctorița Vasile. Vă rugăm să veniți cu cincisprezece minute mai devreme."
+              language_code: ro
+              direction: ltr
+            introduced_tokens: [doctorița, vasile]
+        exercises:
+          - content_key: ro.a2.unit24.lesson03.exercise01.read_appointment_time
+            type: reading_comprehension
+            tested_text: "miercuri, ora unsprezece"
+            prompt:
+              target_blocks:
+                - {text: "When is the confirmed appointment?", language_code: en, direction: ltr}
+          - content_key: ro.a2.unit24.lesson03.exercise02.read_arrival_instruction
+            type: reading_comprehension
+            tested_text: "cu cincisprezece minute mai devreme"
+            prompt:
+              target_blocks:
+                - {text: "How early should the patient arrive?", language_code: en, direction: ltr}
+          - content_key: ro.a2.unit24.lesson03.exercise03.listen_confirmare
+            type: listen_select
+            tested_text: "Programarea dumneavoastră este confirmată pentru miercuri"
+            media_asset_key: ro.a2.audio.doctor.confirmare.01
+            prompt: {target_blocks: []}
+          - content_key: ro.a2.unit24.lesson03.exercise04.match_confirmare
+            type: matching_pairs
+            tested_text: "confirmată miercuri ora unsprezece mai devreme doctorița vasile cincisprezece minute"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "Confirmată", right: "confirmed"}
+              - {left: "Miercuri, ora unsprezece", right: "Wednesday, eleven o'clock"}
+              - {left: "Mai devreme", right: "earlier"}
+              - {left: "Doctorița Vasile", right: "Doctor Vasile"}
+              - {left: "Cincisprezece minute", right: "fifteen minutes"}
+          - content_key: ro.a2.unit24.lesson03.exercise05.complete_mai_devreme
+            type: fill_in_blank
+            tested_text: "cincisprezece"
+            prompt:
+              target_blocks:
+                - {text: "Complete the sentence, fifteen minutes: Vă rugăm să veniți cu ___ minute mai devreme.", language_code: ro, direction: ltr}
+          - content_key: ro.a2.unit24.lesson03.exercise06.write_appointment_request
+            type: writing_prompt
+            tested_text: "mă doare capul de trei zile"
+            prompt: {target_blocks: []}
+
+      - content_key: ro.a2.unit24.lesson04.la_cabinet
+        title: "La cabinet"
+        spine_outcome_id: universal.a2.health.attend_doctor_appointment
+        teaching:
+          - content_key: ro.a2.unit24.lesson04.teach.reminder_recomand_medicament_control
+            kind: grammar_note
+            target: {text: "Vă recomand · Medicament · Control", language_code: ro, direction: ltr}
+            introduced_tokens: [vă, recomand, odihnă, și, acest, medicament, de, două, ori, pe, zi, timp, cinci, zile, control]
+          - content_key: ro.a2.unit24.lesson04.teach.line01
+            kind: dialogue
+            target:
+              text: "Bună ziua, Doctoriță! Mă doare capul de trei zile."
+              language_code: ro
+              direction: ltr
+              speaker: Ana
+            introduced_tokens: []
+          - content_key: ro.a2.unit24.lesson04.teach.line02
+            kind: dialogue
+            target:
+              text: "Bună ziua! Cât de tare vă doare?"
+              language_code: ro
+              direction: ltr
+              speaker: Doctorița Vasile
+            introduced_tokens: []
+          - content_key: ro.a2.unit24.lesson04.teach.line03
+            kind: dialogue
+            target:
+              text: "Mă doare foarte tare, mai ales dimineața."
+              language_code: ro
+              direction: ltr
+              speaker: Ana
+            introduced_tokens: []
+          - content_key: ro.a2.unit24.lesson04.teach.line04
+            kind: dialogue
+            target:
+              text: "Înțeleg. Vă recomand odihnă și acest medicament, de două ori pe zi, timp de cinci zile."
+              language_code: ro
+              direction: ltr
+              speaker: Doctorița Vasile
+            introduced_tokens: [înțeleg]
+          - content_key: ro.a2.unit24.lesson04.teach.line05
+            kind: dialogue
+            target:
+              text: "Trebuie să mă întorc pentru un control?"
+              language_code: ro
+              direction: ltr
+              speaker: Ana
+            introduced_tokens: [trebuie, să, mă, întorc, pentru, un]
+          - content_key: ro.a2.unit24.lesson04.teach.line06
+            kind: dialogue
+            target:
+              text: "Doar dacă durerea nu trece în cinci zile."
+              language_code: ro
+              direction: ltr
+              speaker: Doctorița Vasile
+            introduced_tokens: [doar, dacă, durerea, nu, trece, în, cinci, zile]
+          - content_key: ro.a2.unit24.lesson04.teach.line07
+            kind: dialogue
+            target:
+              text: "Mulțumesc mult, Doctoriță!"
+              language_code: ro
+              direction: ltr
+              speaker: Ana
+            introduced_tokens: [mult]
+          - content_key: ro.a2.unit24.lesson04.teach.line08
+            kind: dialogue
+            target:
+              text: "Cu plăcere. Însănătoșire grabnică!"
+              language_code: ro
+              direction: ltr
+              speaker: Doctorița Vasile
+            introduced_tokens: [cu, plăcere, însănătoșire, grabnică]
+        exercises:
+          - content_key: ro.a2.unit24.lesson04.exercise01.choose_who_recommends_treatment
+            type: multiple_choice
+            tested_text: "Doctorița Vasile"
+            prompt:
+              target_blocks:
+                - {text: "Vă recomand odihnă și acest medicament, de două ori pe zi, timp de cinci zile.", language_code: ro, direction: ltr}
+          - content_key: ro.a2.unit24.lesson04.exercise02.dialogue_comprehend_symptom
+            type: dialogue_comprehension
+            tested_text: "mă doare capul de trei zile"
+            media_asset_key: ro.a2.audio.dialogue.la_doctor.01
+            prompt:
+              target_blocks:
+                - {text: "What is Ana's symptom, and how long has she had it?", language_code: en, direction: ltr}
+          - content_key: ro.a2.unit24.lesson04.exercise03.dialogue_comprehend_treatment
+            type: dialogue_comprehension
+            tested_text: "odihnă și acest medicament de două ori pe zi timp de cinci zile"
+            media_asset_key: ro.a2.audio.dialogue.la_doctor.01
+            prompt:
+              target_blocks:
+                - {text: "What treatment does the doctor recommend, and how often?", language_code: en, direction: ltr}
+          - content_key: ro.a2.unit24.lesson04.exercise04.dialogue_comprehend_followup
+            type: dialogue_comprehension
+            tested_text: "doar dacă durerea nu trece în cinci zile"
+            media_asset_key: ro.a2.audio.dialogue.la_doctor.01
+            prompt:
+              target_blocks:
+                - {text: "When does Ana need to come back for a follow-up?", language_code: en, direction: ltr}
+          - content_key: ro.a2.unit24.lesson04.exercise05.order_va_recomand_odihna
+            type: word_order
+            tested_text: "Vă recomand odihnă și acest medicament"
+            prompt: {target_blocks: []}
+            word_bank: ["Vă", "recomand", "odihnă", "și", "acest", "medicament"]
+          - content_key: ro.a2.unit24.lesson04.exercise06.respond_as_ana
+            type: dialogue_response
+            tested_text: "trebuie să mă întorc pentru un control"
+            prompt:
+              target_blocks:
+                - {text: "Doctorița Vasile: Vă recomand odihnă și acest medicament, de două ori pe zi, timp de cinci zile.", language_code: ro, direction: ltr}
+          - content_key: ro.a2.unit24.lesson04.exercise07.write_visit_summary
+            type: writing_prompt
+            tested_text: "mă doare capul de trei zile"
+            prompt: {target_blocks: []}
