@@ -7,7 +7,7 @@ import {
   type ReactNode,
 } from "react";
 import { AuthApi } from "../api/endpoints";
-import { setUnauthorizedHandler } from "../api/client";
+import { ApiError, setUnauthorizedHandler } from "../api/client";
 import type { AuthUser } from "../api/types";
 
 interface AuthContextValue {
@@ -56,7 +56,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
     AuthApi.me()
       .then(setUser)
-      .catch(() => clearSession())
+      .catch((err) => {
+        // Only a real 401 means the token is actually invalid/expired --
+        // any other failure (network drop, server hiccup) must NOT clear
+        // the session, since for guest accounts the generated password is
+        // never shown to the user and a cleared session is permanently
+        // unrecoverable (see continueAsGuest's comment below). A transient
+        // failure here just means we don't know who the user is yet;
+        // ProtectedRoute's redirect-to-login is the safe fallback, not a
+        // silent, irreversible logout.
+        if (err instanceof ApiError && err.status === 401) {
+          clearSession();
+        }
+      })
       .finally(() => setLoading(false));
   }, []);
 
