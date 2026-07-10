@@ -477,6 +477,18 @@ button {
   background: var(--accent);
   border-color: var(--accent);
   color: var(--accent-contrast);
+  /* Plays once when this node's DOM mounts already marked "done" (a
+     freshly-completed unit, or the path re-rendering after navigating back
+     to it) -- see path-node-pop below. Covered by the global
+     prefers-reduced-motion `* { animation: none !important }` rule at the
+     bottom of this file, no separate gating needed here. */
+  animation: path-node-pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes path-node-pop {
+  0% { transform: scale(0.55); }
+  65% { transform: scale(1.15); }
+  100% { transform: scale(1); }
 }
 
 .path-node.locked .path-bubble {
@@ -1165,6 +1177,56 @@ button {
   z-index: 50;
   width: min(320px, calc(100vw - 32px));
   box-shadow: var(--shadow);
+}
+
+/* ---------- lesson-complete celebration (LessonCompletePage.tsx) ---------- */
+/* Plays once on mount, gated in the component itself to real completion
+   route state (never on a revisit/refresh of the URL -- see the
+   `celebrate` comment in LessonCompletePage.tsx). Covered by the global
+   prefers-reduced-motion `* { animation: none !important }` rule below,
+   same as path-node-pop above -- no separate media query needed here. */
+
+.lesson-complete-celebration {
+  position: relative;
+  overflow: hidden;
+}
+
+.confetti-piece {
+  position: absolute;
+  top: -12px;
+  left: var(--confetti-left, 50%);
+  width: 8px;
+  height: 14px;
+  border-radius: 2px;
+  opacity: 0;
+  background: var(--confetti-color, var(--accent));
+  animation: confetti-fall 2.4s ease-in forwards;
+  animation-delay: var(--confetti-delay, 0s);
+}
+
+@keyframes confetti-fall {
+  0% {
+    opacity: 1;
+    transform: translateY(-10px) rotate(var(--confetti-rotate, 0deg));
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(260px) rotate(calc(var(--confetti-rotate, 0deg) + 540deg));
+  }
+}
+
+.xp-pop-value {
+  display: inline-block;
+  animation: xp-pop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes xp-pop {
+  0% { transform: scale(0.4); opacity: 0; }
+  65% { transform: scale(1.18); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
 }
 
 @media (prefers-reduced-motion: reduce) {
