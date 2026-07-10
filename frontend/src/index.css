@@ -1,3 +1,29 @@
+/* Vazirmatn -- the Perso-Arabic UI font for fa/prs (and any future
+   Arabic-script language). This @font-face is the ONLY thing that actually
+   loads the font: before 2026-07-10 the stacks below named "Vazirmatn" but
+   nothing anywhere loaded it, so every Farsi/Dari string silently fell back
+   to the platform's default Arabic font (Geeza Pro / Segoe UI Arabic / Noto
+   Naskh, wildly varying quality). Self-hosted (OFL-licensed, license file
+   sits next to the woff2) because this app is local-first -- no Google Fonts
+   request at runtime. Single variable file covers weights 100-900, so the
+   600/700 weights used across this sheet render as true bolds, not
+   synthesized ones. The unicode-range restricts it to Arabic-script blocks
+   (incl. Persian digits U+06F0-06F9 and ZWNJ U+200C, which Persian
+   morphology genuinely needs), so listing it FIRST in the root stack below
+   is safe: Latin text falls straight through to system-ui and never
+   downloads or renders in Vazirmatn. */
+@font-face {
+  font-family: "Vazirmatn";
+  src: url("/fonts/Vazirmatn-Variable.woff2") format("woff2-variations"),
+       url("/fonts/Vazirmatn-Variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891,
+    U+0897-08E1, U+08E3-08FF, U+200C-200E, U+204F, U+2E41, U+FB50-FDFF,
+    U+FE70-FE74, U+FE76-FEFC;
+}
+
 :root {
   --bg: #f7f7fb;
   --surface: #ffffff;
@@ -37,7 +63,12 @@
   --shadow: 0 1px 3px rgba(20, 16, 60, 0.07), 0 6px 18px rgba(20, 16, 60, 0.05);
   --nav-h: 60px;
 
-  font: 16px/1.55 system-ui, "Segoe UI", Roboto, "Vazirmatn", sans-serif;
+  /* "Vazirmatn" must stay FIRST: its @font-face above is unicode-ranged to
+     Arabic script only, so Latin still resolves to system-ui, while Persian/
+     Dari glyphs ANYWHERE (option buttons, tiles, inputs -- everything
+     inherits via the global `button { font: inherit }`) get Vazirmatn even
+     without a dir="rtl" ancestor. Behind system-ui it can never win. */
+  font: 16px/1.55 "Vazirmatn", system-ui, "Segoe UI", Roboto, sans-serif;
   color: var(--text);
   background: var(--bg);
   color-scheme: light dark;
