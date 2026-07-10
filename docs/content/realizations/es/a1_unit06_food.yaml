@@ -1,0 +1,271 @@
+schema_version: "1.1"
+realization_version: "2026.1-draft.1"
+target_language: es
+cefr_level: A1
+status: complete_draft
+generation_provenance:
+  method: ai_generated
+  authoring_system: claude
+  human_reviewed: false
+  source_material: >-
+    The restaurant scenario shape (two friends sit down, look at the
+    menu, order a main dish and a drink, then dessert) and core
+    ordering vocabulary (mesa, menú, sándwich, ensalada, sopa, postre)
+    are scaffolded from the real, public-domain FSI Spanish Basic
+    Course (Foreign Service Institute, 1961, US government work),
+    Volume 1 (Units 1-15), Unit 6 "White and Molina have lunch
+    together" -- fetched via WebSearch/WebFetch + local pdftotext
+    extraction from
+    https://fsi-languages.yojik.eu/languages/FSI/Spanish/Basic/Volume%201/Fsi-SpanishBasicCourse-Volume1-StudentText.pdf
+    (firecrawl was out of API credits this session -- 0/1000 remaining
+    per `firecrawl --status` -- so this fell back to the older manual
+    WebFetch+pdftotext workflow AUTHORING_GUIDE §10 should normally
+    replace). No sentence was copied verbatim, and the 1961 source's
+    formal "Mesero" (waiter)-addressed, gentlemen-only framing was
+    dropped for a modern, informal camarero/camarera exchange between
+    two peers ordering for themselves -- matching AUTHORING_GUIDE §10's
+    explicit modernization requirement. All dialogue is freshly written
+    for Elena and Mateo's own storyline (their lunch the day after the
+    workshop, set up by unit05 lesson06).
+review:
+  status: unreviewed
+  required_next_reviewer: codex
+  notes: >-
+    Sixth Spanish A1 unit, continuing the Elena/Mateo storyline directly
+    from unit05's cliffhanger (they agreed to meet for lunch at one
+    o'clock). Realizes universal.a1.food.order_simple_meal
+    (prerequisites: universal.a1.greetings.open_close_exchange (unit01),
+    universal.a1.numbers.use_basic_numbers (unit02)). Authored fresh at
+    schema_version 1.1 per AUTHORING_GUIDE §19. tú register throughout,
+    both with each other and with the waiter (a young, informal
+    restaurant, consistent with the workshop's overall casual register).
+
+    Six lessons, recognition->drag->production (§2): 01 teaches core
+    food/drink nouns (sándwich, ensalada, sopa, agua, café); 02 teaches
+    ordering phrases (Quiero..., Para mí..., ¿Qué quieres comer?); 03
+    teaches asking for and reading a menu; 04 teaches dessert and
+    asking for the check (la cuenta); 05 is a short reading of a
+    printed menu with prices (also lightly touches
+    universal.a1.shopping's price-reading skill by exposure, but the
+    unit's own spine_outcome_id stays food throughout per §1 -- prices
+    here exist only to make the menu realistic, no lesson tests asking
+    ABOUT a price the way unit07 will); 06 is a dialogue capstone: Elena
+    and Mateo's actual lunch, ordering food, drink, and dessert, closing
+    the loop from unit05's setup.
+
+    Only specific numbers this unit's menu prices actually use (cinco,
+    ocho, tres) are introduced, confirmed against
+    validate_untaught_vocabulary's per-file accumulation (same finding
+    as units04-05). §13: every fill_in_blank keeps surrounding context.
+    §17: no true-synonym ambiguity risk -- sándwich/ensalada/sopa/agua/
+    café are genuinely distinct foods, not synonyms, and lesson02's
+    Quiero/Para mí are taught as a fixed alternate-phrasing pair (both
+    always accepted together wherever tested, not treated as an open
+    single-answer slot). §16: lesson01's matching_pairs uses all 5
+    food/drink nouns plus 3 full example sentences (8 pairs). §12: the
+    multi-clause accepted_answers (lesson06's closing order) has
+    period/comma/conjunction-joined variants. No bare yes/no/true/false
+    -- checked by hand.
+
+    Internal consistency (§11): the lunch happens "al día siguiente"
+    (the next day) at "la una," both facts established in unit05
+    lesson05/06 and restated identically in this unit's lesson06
+    dialogue; the restaurant is the same "restaurante cerca de aquí"
+    Mateo mentioned in unit05's closing line. Menu prices (sándwich 5,
+    ensalada 8, sopa 3 -- unit currency left unstated, matching this
+    project's established convention of not inventing a fictional
+    country/currency for the shared workshop setting) are internally
+    consistent between the lesson05 reading and the lesson06 dialogue's
+    actual order.
+
+    Pending fresh-context review and Ramin's native-speaker pass. Audio
+    assets declared for generation, not yet recorded.
+
+course:
+  realization_key: es.a1
+  target_language_first: true
+  dialect: es_neutral_pan_hispanic
+  register_policy: >-
+    Continues unit01-05's tú register with Mateo, extended here to the
+    waiter as well (a casual, informal restaurant) -- no usted appears
+    in this unit.
+
+media_assets:
+  - {content_key: es.a1.audio.comida.lista.01, language: es, text: "sándwich, ensalada, sopa, agua, café", voice_hint: neutral_adult, status: pending_generation}
+  - {content_key: es.a1.audio.comida.quiero_un_sandwich.01, language: es, text: "Quiero un sándwich.", voice_hint: neutral_young_adult, status: pending_generation}
+  - {content_key: es.a1.audio.comida.que_quieres_comer.01, language: es, text: "¿Qué quieres comer?", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - {content_key: es.a1.audio.comida.podemos_ver_el_menu.01, language: es, text: "¿Podemos ver el menú?", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - {content_key: es.a1.audio.comida.aqui_tiene.01, language: es, text: "Aquí tiene.", voice_hint: neutral_adult, status: pending_generation}
+  - {content_key: es.a1.audio.comida.de_postre_quiero_pastel.01, language: es, text: "De postre, quiero pastel.", voice_hint: neutral_young_adult, status: pending_generation}
+  - {content_key: es.a1.audio.comida.la_cuenta_por_favor.01, language: es, text: "La cuenta, por favor.", voice_hint: neutral_young_adult, status: pending_generation}
+  - content_key: es.a1.audio.dialogue.almuerzo_elena_mateo.01
+    language: es
+    text: >-
+      Camarero: Buenas tardes. ¿Qué quieren comer?
+      Elena: Yo quiero una ensalada y agua, por favor.
+      Mateo: Para mí, un sándwich y un café.
+      Camarero: Muy bien. ¿Algo de postre?
+      Elena: Sí, un pastel para los dos.
+      Mateo: Buena idea. Y la cuenta, por favor.
+      Camarero: Aquí tiene.
+      Elena: Gracias. ¡Qué buena comida!
+    voice_hint: waiter_and_two_young_adults_neutral_friendly
+    status: pending_generation
+  - {content_key: es.a1.audio.dialogue.almuerzo_elena_mateo.pastel_para_los_dos.01, language: es, text: "Sí, un pastel para los dos.", voice_hint: neutral_young_adult, status: pending_generation}
+
+units:
+  - content_key: es.a1.unit06.food
+    title: "El almuerzo de Elena y Mateo"
+    section: reading_writing
+    spine_outcome_ids: [universal.a1.food.order_simple_meal]
+    planned_lesson_count: 6
+    lessons:
+      - content_key: es.a1.unit06.lesson01.comida_y_bebida
+        title: "Comida y bebida"
+        spine_outcome_id: universal.a1.food.order_simple_meal
+        teaching:
+          - content_key: es.a1.unit06.lesson01.teach.sandwich_ensalada
+            kind: vocabulary
+            target: {text: "el sándwich, la ensalada", language_code: es, direction: ltr}
+            introduced_tokens: [el, sándwich, la, ensalada]
+            example:
+              - {text: "Quiero un sándwich.", language_code: es, direction: ltr}
+              - {text: "La ensalada tiene tomate.", language_code: es, direction: ltr}
+          - content_key: es.a1.unit06.lesson01.teach.sopa
+            kind: vocabulary
+            target: {text: "la sopa", language_code: es, direction: ltr}
+            introduced_tokens: [la, sopa, está, muy, buena]
+            example: {text: "La sopa está muy buena.", language_code: es, direction: ltr}
+          - content_key: es.a1.unit06.lesson01.teach.agua_cafe
+            kind: vocabulary
+            target: {text: "el agua, el café", language_code: es, direction: ltr}
+            introduced_tokens: [el, agua, café]
+            example:
+              - {text: "Quiero agua, por favor.", language_code: es, direction: ltr}
+              - {text: "Para mí, un café.", language_code: es, direction: ltr}
+        exercises:
+          - {content_key: es.a1.unit06.lesson01.exercise01.choose_sandwich, type: multiple_choice, tested_text: "sándwich", prompt: {target_blocks: [{text: "sandwich", language_code: en, direction: ltr}]}}
+          - {content_key: es.a1.unit06.lesson01.exercise02.listen_comida, type: listen_select, tested_text: "sándwich ensalada sopa agua café", media_asset_key: es.a1.audio.comida.lista.01, prompt: {target_blocks: []}}
+          - content_key: es.a1.unit06.lesson01.exercise03.match_comida
+            type: matching_pairs
+            tested_text: "sándwich ensalada sopa agua café"
+            prompt: {target_blocks: []}
+            pairs: [{left: "el sándwich", right: sandwich}, {left: "la ensalada", right: salad}, {left: "la sopa", right: soup}, {left: "el agua", right: water}, {left: "el café", right: coffee}, {left: "Quiero un sándwich.", right: "I want a sandwich."}, {left: "La sopa está muy buena.", right: "The soup is very good."}, {left: "Para mí, un café.", right: "For me, a coffee."}]
+          - {content_key: es.a1.unit06.lesson01.exercise04.listen_agua, type: listen_select, tested_text: "agua", media_asset_key: es.a1.audio.comida.lista.01, prompt: {target_blocks: []}}
+          - {content_key: es.a1.unit06.lesson01.exercise05.order_la_sopa_esta_buena, type: word_order, tested_text: "La sopa está muy buena", prompt: {target_blocks: []}, word_bank: [La, sopa, está, muy, buena]}
+          - {content_key: es.a1.unit06.lesson01.exercise06.translate_ensalada, type: translation, tested_text: "ensalada", prompt: {target_blocks: [{text: "salad", language_code: en, direction: ltr}]}}
+
+      - content_key: es.a1.unit06.lesson02.pedir_comida
+        title: "Pedir comida"
+        spine_outcome_id: universal.a1.food.order_simple_meal
+        teaching:
+          - {content_key: es.a1.unit06.lesson02.teach.quiero_un_sandwich, kind: phrase, target: {text: "Quiero un sándwich.", language_code: es, direction: ltr}, introduced_tokens: [Quiero, un, sándwich]}
+          - {content_key: es.a1.unit06.lesson02.teach.para_mi_un_cafe, kind: phrase, target: {text: "Para mí, un café.", language_code: es, direction: ltr}, introduced_tokens: [Para, mí, un, café]}
+          - {content_key: es.a1.unit06.lesson02.teach.que_quieres_comer, kind: phrase, target: {text: "¿Qué quieres comer?", language_code: es, direction: ltr}, introduced_tokens: [Qué, quieres, comer]}
+          - content_key: es.a1.unit06.lesson02.teach.quiero_vs_para_mi_note
+            kind: grammar_note
+            target: {text: "*Quiero* (\"I want\") and *Para mí* (\"for me,\" said before naming the item) are both natural, equally polite ways to order in an informal setting -- neither is more correct than the other.", language_code: en, direction: ltr}
+            introduced_tokens: []
+        exercises:
+          - {content_key: es.a1.unit06.lesson02.exercise01.choose_quiero_un_sandwich, type: multiple_choice, tested_text: "Quiero un sándwich", prompt: {target_blocks: [{text: "I want a sandwich.", language_code: en, direction: ltr}]}}
+          - {content_key: es.a1.unit06.lesson02.exercise02.listen_quiero_un_sandwich, type: listen_select, tested_text: "Quiero un sándwich", media_asset_key: es.a1.audio.comida.quiero_un_sandwich.01, prompt: {target_blocks: []}}
+          - {content_key: es.a1.unit06.lesson02.exercise03.listen_que_quieres_comer, type: listen_select, tested_text: "Qué quieres comer", media_asset_key: es.a1.audio.comida.que_quieres_comer.01, prompt: {target_blocks: []}}
+          - {content_key: es.a1.unit06.lesson02.exercise04.order_para_mi_un_cafe, type: word_order, tested_text: "Para mí un café", prompt: {target_blocks: []}, word_bank: [Para, mí, un, café]}
+          - content_key: es.a1.unit06.lesson02.exercise05.match_pedir
+            type: matching_pairs
+            tested_text: "Quiero Para mí quieres comer"
+            prompt: {target_blocks: []}
+            pairs: [{left: "Quiero un sándwich.", right: "I want a sandwich."}, {left: "Para mí, un café.", right: "For me, a coffee."}, {left: "¿Qué quieres comer?", right: "What do you want to eat?"}]
+          - {content_key: es.a1.unit06.lesson02.exercise06.reply_que_quieres_comer, type: dialogue_response, tested_text: "Qué quieres comer Quiero un sándwich", prompt: {target_blocks: [{text: "¿Qué quieres comer?", language_code: es, direction: ltr}]}}
+          - {content_key: es.a1.unit06.lesson02.exercise07.write_own_order, type: writing_prompt, tested_text: "Quiero un sándwich Para mí un café", prompt: {target_blocks: [{text: "Write in Spanish: order a sandwich and, for you, a coffee.", language_code: en, direction: ltr}]}}
+
+      - content_key: es.a1.unit06.lesson03.pedir_el_menu
+        title: "Pedir el menú"
+        spine_outcome_id: universal.a1.food.order_simple_meal
+        teaching:
+          - {content_key: es.a1.unit06.lesson03.teach.el_menu, kind: vocabulary, target: {text: "el menú", language_code: es, direction: ltr}, introduced_tokens: [el, menú], example: {text: "¿Podemos ver el menú?", language_code: es, direction: ltr}}
+          - {content_key: es.a1.unit06.lesson03.teach.podemos_ver_el_menu, kind: phrase, target: {text: "¿Podemos ver el menú?", language_code: es, direction: ltr}, introduced_tokens: [Podemos, ver, el, menú]}
+          - {content_key: es.a1.unit06.lesson03.teach.aqui_tiene, kind: phrase, target: {text: "Aquí tiene.", language_code: es, direction: ltr}, introduced_tokens: [Aquí, tiene]}
+          - {content_key: es.a1.unit06.lesson03.teach.buen_provecho, kind: vocabulary, target: {text: "Buen provecho", language_code: es, direction: ltr}, introduced_tokens: [Buen, provecho], example: {text: "Aquí tiene. Buen provecho.", language_code: es, direction: ltr}}
+        exercises:
+          - {content_key: es.a1.unit06.lesson03.exercise01.choose_el_menu, type: multiple_choice, tested_text: "el menú", prompt: {target_blocks: [{text: "the menu", language_code: en, direction: ltr}]}}
+          - {content_key: es.a1.unit06.lesson03.exercise02.listen_podemos_ver_el_menu, type: listen_select, tested_text: "Podemos ver el menú", media_asset_key: es.a1.audio.comida.podemos_ver_el_menu.01, prompt: {target_blocks: []}}
+          - {content_key: es.a1.unit06.lesson03.exercise03.listen_aqui_tiene, type: listen_select, tested_text: "Aquí tiene", media_asset_key: es.a1.audio.comida.aqui_tiene.01, prompt: {target_blocks: []}}
+          - {content_key: es.a1.unit06.lesson03.exercise04.order_podemos_ver_el_menu, type: word_order, tested_text: "Podemos ver el menú", prompt: {target_blocks: []}, word_bank: [Podemos, ver, el, menú]}
+          - content_key: es.a1.unit06.lesson03.exercise05.match_menu_phrases
+            type: matching_pairs
+            tested_text: "menú Aquí tiene provecho"
+            prompt: {target_blocks: []}
+            pairs: [{left: "¿Podemos ver el menú?", right: "Can we see the menu?"}, {left: "Aquí tiene.", right: "Here you go."}, {left: "Buen provecho", right: "Enjoy your meal"}]
+          - {content_key: es.a1.unit06.lesson03.exercise06.fill_podemos_ver, type: fill_in_blank, tested_text: "Podemos ver el menú", prompt: {target_blocks: [{text: "¿___ ver el menú, por favor? (Can we)", language_code: es, direction: ltr}]}}
+          - {content_key: es.a1.unit06.lesson03.exercise07.speak_ask_for_menu, type: speak_response, tested_text: "Podemos ver el menú", prompt: {target_blocks: [{text: "Pídele el menú al camarero.", language_code: es, direction: ltr}]}}
+
+      - content_key: es.a1.unit06.lesson04.postre_y_la_cuenta
+        title: "Postre y la cuenta"
+        spine_outcome_id: universal.a1.food.order_simple_meal
+        teaching:
+          - {content_key: es.a1.unit06.lesson04.teach.el_postre, kind: vocabulary, target: {text: "el postre", language_code: es, direction: ltr}, introduced_tokens: [el, postre], example: {text: "De postre, quiero pastel.", language_code: es, direction: ltr}}
+          - {content_key: es.a1.unit06.lesson04.teach.de_postre_quiero_pastel, kind: phrase, target: {text: "De postre, quiero pastel.", language_code: es, direction: ltr}, introduced_tokens: [De, postre, quiero, pastel]}
+          - {content_key: es.a1.unit06.lesson04.teach.la_cuenta_por_favor, kind: phrase, target: {text: "La cuenta, por favor.", language_code: es, direction: ltr}, introduced_tokens: [La, cuenta, por, favor]}
+        exercises:
+          - {content_key: es.a1.unit06.lesson04.exercise01.choose_el_postre, type: multiple_choice, tested_text: "el postre", prompt: {target_blocks: [{text: "dessert", language_code: en, direction: ltr}]}}
+          - {content_key: es.a1.unit06.lesson04.exercise02.listen_de_postre_pastel, type: listen_select, tested_text: "De postre quiero pastel", media_asset_key: es.a1.audio.comida.de_postre_quiero_pastel.01, prompt: {target_blocks: []}}
+          - {content_key: es.a1.unit06.lesson04.exercise03.listen_la_cuenta, type: listen_select, tested_text: "La cuenta por favor", media_asset_key: es.a1.audio.comida.la_cuenta_por_favor.01, prompt: {target_blocks: []}}
+          - {content_key: es.a1.unit06.lesson04.exercise04.order_de_postre_pastel, type: word_order, tested_text: "De postre quiero pastel", prompt: {target_blocks: []}, word_bank: [De, postre, quiero, pastel]}
+          - content_key: es.a1.unit06.lesson04.exercise05.match_postre_cuenta
+            type: matching_pairs
+            tested_text: "postre pastel cuenta favor"
+            prompt: {target_blocks: []}
+            pairs: [{left: "el postre", right: dessert}, {left: "De postre, quiero pastel.", right: "For dessert, I want cake."}, {left: "La cuenta, por favor.", right: "The check, please."}]
+          - {content_key: es.a1.unit06.lesson04.exercise06.fill_la_cuenta, type: fill_in_blank, tested_text: "La cuenta por favor", prompt: {target_blocks: [{text: "La ___, por favor. (the check)", language_code: es, direction: ltr}]}}
+          - {content_key: es.a1.unit06.lesson04.exercise07.write_ask_for_check, type: writing_prompt, tested_text: "La cuenta por favor", prompt: {target_blocks: [{text: "Write in Spanish: ask for the check, please.", language_code: en, direction: ltr}]}}
+
+      - content_key: es.a1.unit06.lesson05.leer_el_menu
+        title: "Leer el menú del restaurante"
+        spine_outcome_id: universal.a1.food.order_simple_meal
+        teaching:
+          - content_key: es.a1.unit06.lesson05.teach.menu_reading
+            kind: reading
+            target:
+              text: "Menú: sándwich, cinco. Ensalada, ocho. Sopa, tres. Café o agua, incluido. Postre: pastel."
+              language_code: es
+              direction: ltr
+            introduced_tokens: [Menú, sándwich, cinco, Ensalada, ocho, Sopa, tres, Café, o, agua, incluido, Postre, pastel]
+          - content_key: es.a1.unit06.lesson05.teach.incluido_note
+            kind: grammar_note
+            target: {text: "*Incluido* (included) tells you a drink comes free with the meal, no extra charge.", language_code: en, direction: ltr}
+            introduced_tokens: []
+        exercises:
+          - {content_key: es.a1.unit06.lesson05.exercise01.read_precio_sandwich, type: reading_comprehension, tested_text: "sándwich cinco", prompt: {target_blocks: [{text: "According to the menu, how much is the sandwich?", language_code: en, direction: ltr}]}}
+          - {content_key: es.a1.unit06.lesson05.exercise02.read_precio_ensalada, type: reading_comprehension, tested_text: "Ensalada ocho", prompt: {target_blocks: [{text: "How much is the salad?", language_code: en, direction: ltr}]}}
+          - {content_key: es.a1.unit06.lesson05.exercise03.read_precio_sopa, type: reading_comprehension, tested_text: "Sopa tres", prompt: {target_blocks: [{text: "How much is the soup?", language_code: en, direction: ltr}]}}
+          - {content_key: es.a1.unit06.lesson05.exercise04.read_bebida_incluida, type: reading_comprehension, tested_text: "Café o agua incluido", prompt: {target_blocks: [{text: "According to the menu, do coffee and water cost extra?", language_code: en, direction: ltr}]}}
+          - content_key: es.a1.unit06.lesson05.exercise05.match_menu_precios
+            type: matching_pairs
+            tested_text: "sándwich ensalada sopa"
+            prompt: {target_blocks: []}
+            pairs: [{left: sándwich, right: "5"}, {left: ensalada, right: "8"}, {left: sopa, right: "3"}, {left: "Café o agua", right: incluido}]
+          - {content_key: es.a1.unit06.lesson05.exercise06.fill_menu_incluido, type: fill_in_blank, tested_text: "Café o agua incluido", prompt: {target_blocks: [{text: "Café o agua, ___. (included, no extra charge)", language_code: es, direction: ltr}]}}
+          - {content_key: es.a1.unit06.lesson05.exercise07.write_cheapest_item, type: writing_prompt, tested_text: "Sopa tres", prompt: {target_blocks: [{text: "Write in Spanish which menu item is the cheapest, and its price.", language_code: en, direction: ltr}]}}
+
+      - content_key: es.a1.unit06.lesson06.el_almuerzo_dialogue
+        title: "El almuerzo de Elena y Mateo"
+        spine_outcome_ids: [universal.a1.food.order_simple_meal]
+        teaching:
+          - {content_key: es.a1.unit06.lesson06.teach.line01, kind: dialogue, target: {text: "Buenas tardes. ¿Qué quieren comer?", language_code: es, direction: ltr, speaker: Camarero}, introduced_tokens: [Buenas, tardes, Qué, quieren, comer]}
+          - {content_key: es.a1.unit06.lesson06.teach.line02, kind: dialogue, target: {text: "Yo quiero una ensalada y agua, por favor.", language_code: es, direction: ltr, speaker: Elena}, introduced_tokens: [Yo, quiero, una, ensalada, y, agua, por, favor]}
+          - {content_key: es.a1.unit06.lesson06.teach.line03, kind: dialogue, target: {text: "Para mí, un sándwich y un café.", language_code: es, direction: ltr, speaker: Mateo}, introduced_tokens: [Para, mí, un, sándwich, y, un, café]}
+          - {content_key: es.a1.unit06.lesson06.teach.line04, kind: dialogue, target: {text: "Muy bien. ¿Algo de postre?", language_code: es, direction: ltr, speaker: Camarero}, introduced_tokens: [Muy, bien, Algo, de, postre]}
+          - {content_key: es.a1.unit06.lesson06.teach.line05, kind: dialogue, target: {text: "Sí, un pastel para los dos.", language_code: es, direction: ltr, speaker: Elena}, introduced_tokens: [Sí, un, pastel, para, los, dos]}
+          - {content_key: es.a1.unit06.lesson06.teach.line06, kind: dialogue, target: {text: "Buena idea. Y la cuenta, por favor.", language_code: es, direction: ltr, speaker: Mateo}, introduced_tokens: [Buena, idea, Y, la, cuenta, por, favor]}
+          - {content_key: es.a1.unit06.lesson06.teach.line07, kind: dialogue, target: {text: "Aquí tiene.", language_code: es, direction: ltr, speaker: Camarero}, introduced_tokens: [Aquí, tiene]}
+          - {content_key: es.a1.unit06.lesson06.teach.line08, kind: dialogue, target: {text: "Gracias. ¡Qué buena comida!", language_code: es, direction: ltr, speaker: Elena}, introduced_tokens: [Gracias, Qué, buena, comida]}
+        exercises:
+          - {content_key: es.a1.unit06.lesson06.exercise01.listen_activity, type: dialogue_comprehension, tested_text: "ensalada sándwich postre cuenta", media_asset_key: es.a1.audio.dialogue.almuerzo_elena_mateo.01, prompt: {target_blocks: []}}
+          - {content_key: es.a1.unit06.lesson06.exercise02.comprehend_elena_orden, type: dialogue_comprehension, tested_text: "Yo quiero una ensalada y agua", media_asset_key: es.a1.audio.dialogue.almuerzo_elena_mateo.01, prompt: {target_blocks: [{text: "What does Elena order?", language_code: en, direction: ltr}]}}
+          - {content_key: es.a1.unit06.lesson06.exercise03.comprehend_mateo_orden, type: dialogue_comprehension, tested_text: "Para mí un sándwich y un café", media_asset_key: es.a1.audio.dialogue.almuerzo_elena_mateo.01, prompt: {target_blocks: [{text: "What does Mateo order?", language_code: en, direction: ltr}]}}
+          - {content_key: es.a1.unit06.lesson06.exercise04.listen_pastel_para_los_dos, type: listen_select, tested_text: "Sí un pastel para los dos", media_asset_key: es.a1.audio.dialogue.almuerzo_elena_mateo.pastel_para_los_dos.01, prompt: {target_blocks: []}}
+          - {content_key: es.a1.unit06.lesson06.exercise05.order_para_mi_un_sandwich_y_un_cafe, type: word_order, tested_text: "Para mí un sándwich y un café", prompt: {target_blocks: []}, word_bank: [Para, mí, un, sándwich, y, un, café]}
+          - {content_key: es.a1.unit06.lesson06.exercise06.respond_as_camarero, type: dialogue_response, tested_text: "Buenas tardes Qué quieren comer", prompt: {target_blocks: [{text: "Toma el papel del camarero. Saluda y pregunta qué quieren comer.", language_code: es, direction: ltr}]}}
+          - {content_key: es.a1.unit06.lesson06.exercise07.listen_type_aqui_tiene, type: listen_type, tested_text: "Aquí tiene", media_asset_key: es.a1.audio.comida.aqui_tiene.01, prompt: {target_blocks: []}}
+          - {content_key: es.a1.unit06.lesson06.exercise08.speak_order_as_mateo, type: speak_response, tested_text: "Para mí un sándwich y un café", prompt: {target_blocks: [{text: "Toma el papel de Mateo. Pide tu comida y bebida.", language_code: es, direction: ltr}]}}
