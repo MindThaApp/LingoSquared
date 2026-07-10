@@ -1,0 +1,488 @@
+schema_version: "1.1"
+realization_version: "2026.1-draft.1"
+target_language: "hi"
+cefr_level: "A2"
+status: "complete_draft"
+generation_provenance:
+  method: "ai_generated"
+  authoring_system: "claude"
+  human_reviewed: false
+  source_note: >-
+    Same source-access situation as hi/a2_unit20_panjikaran.yaml, authored
+    the same session: `firecrawl --status` confirmed 0/1,000 credits, no
+    search attempted given that. Established-conventions-only fallback,
+    matching every prior hi unit's own precedent. Every sentence below is
+    this session's own fresh authoring of established Modern Standard
+    Hindi.
+review:
+  status: "unreviewed"
+  required_next_reviewer: null
+  notes: >-
+    Second Hindi A2 unit (spine outcome:
+    universal.a2.opinions.give_opinions_with_reasons, confirmed by direct
+    read of universal_spine.yaml lines 710-733). Continues directly from
+    hi/a2_unit20_panjikaran.yaml -- same Priya/Arjun characters, तुम terms
+    (no formal-register stranger this unit, unlike unit20).
+
+    Real tokenizer footgun found and worked around while authoring unit20,
+    applied proactively here from the start: `compile_content.py`'s
+    `tokenize()` uses a plain `[\w‌]+` regex, and Python's Unicode
+    `\w` does NOT include Devanagari dependent vowel signs/virama (the Mc/
+    Mn-category combining marks) -- so a word like "नया" tokenizes to the
+    fragment "नय", "अपना" to "अपन", etc. Because the validator applies this
+    SAME lossy tokenizer to both `introduced_tokens` and each exercise's
+    `tested_text`, a word only validates cleanly if its EXACT surface form
+    (not just a related form -- an infinitive doesn't cover its own
+    inflected past-tense form, for instance) has been fed through
+    `introduced_tokens` somewhere earlier in the same file, since the
+    tokenizer resets per file. Confirmed live: unit20's first validation
+    attempt failed with 7 errors, all resolved by adding explicit review-
+    vocabulary cards for words that were genuinely already-taught Hindi
+    (मेरा, हाँ, अर्जुन, प्रिया, नया) but had never been literally declared
+    as `introduced_tokens` INSIDE that specific file. Every teaching card
+    below was planned with this in mind up front (every literal surface
+    form used in any exercise's `tested_text`, including function words
+    and character names, has its own `introduced_tokens` declaration
+    earlier in this file), rather than discovered via a validation-error
+    loop this time. This is a real, general gap worth flagging for the
+    compiler's own lane (Codex): the tokenizer's Unicode handling is
+    accurate for Latin/Cyrillic-script content but produces misleadingly
+    coarse fragments for any script with combining diacritics/vowel signs
+    (Devanagari, and likely Arabic/Farsi harakat if those are ever
+    similarly checked) -- not a hi-specific content bug, a script-general
+    validator limitation, not yet documented in CLAUDE.md's footguns list.
+
+    Central A2 grammar decision: the लगना ("to seem/feel") experiencer
+    verb, in two distinct uses that are DELIBERATELY DISCLOSED as
+    different despite looking similar on the surface: (1) lesson01's
+    "मुझे [चीज़] [विशेषण] लगती/लगता है" (agrees with the thing being
+    evaluated, exactly parallel to unit13's already-taught "पसंद है/हैं"
+    pattern -- same dative-experiencer shape, same -आ/-ई adjective
+    agreement already established for बड़ा/बड़ी (unit14) and ठंडा/ठंडी
+    (unit19), now applied to अच्छी); (2) lesson02's "मुझे लगता है कि
+    [पूरा वाक्य]" (a FIXED, non-agreeing idiomatic form -- लगता stays
+    invariant here regardless of what follows, since grammatically
+    nothing agrees with it; the following कि-clause is a full subordinate
+    sentence, not a simple noun). Getting this distinction right matters:
+    lesson02's own grammar_check exercise (fix_lagta_hai_ki_agreement)
+    directly tests a learner NOT over-applying pattern (1)'s agreement
+    rule to pattern (2)'s fixed idiom.
+
+    Second new grammar point: क्योंकि (because), joining a stated opinion
+    to its supporting reason -- directly serves this outcome's own
+    "support it with a simple reason" requirement.
+
+    Scenario: Priya and Arjun discuss a film (फ़िल्म, reused from unit11)
+    they watched together, disagree, and each states a preference --
+    directly serves this outcome's "respond to someone else's opinion"
+    assessment requirement (lesson03's dialogue).
+
+    Vocabulary reuse audited before writing (grep-confirmed): फ़िल्म
+    (unit11), पसंद/हाँ/नहीं (unit13), यह/खेल (unit13), बड़ा/बड़ी agreement
+    rule (unit14), बहुत (unit06), ठीक है (unit01), कैसा (unit12, reused
+    unit19), बुरा (unit19, masculine only -- this unit's बुरी is the
+    first live use of its feminine counterpart, predictable from the
+    same rule but never before exercised). New this unit: लगना, कहानी,
+    मज़ेदार (invariant, doesn't end in -आ, a disclosed contrast against
+    अच्छी/बुरी right in the same lesson), क्योंकि, किताब/किताबें (books,
+    reintroduced since unit13's own declaration doesn't carry over
+    file-to-file). उसे/उसका (3rd-person oblique pronoun forms) were
+    again deliberately avoided in the reading card (still not
+    established anywhere in the corpus, confirmed by grep) -- repeats
+    "प्रिया को" by name instead, matching unit20's own precedent for the
+    same reason. को as a third-person dative postposition (as opposed to
+    the already-fused मुझे/तुम्हें) appears ONLY in the untested reading
+    card, not exercised directly, to avoid adding a third new grammar
+    point this unit beyond लगना and क्योंकि.
+
+    Word-order duplicate-token check: every word_order exercise's
+    word_bank below has zero repeated tokens (checked by hand;
+    deliberately avoided "मुझे यह फ़िल्म पसंद है क्योंकि कहानी अच्छी है"-
+    shaped sentences for word_order specifically, since any two-clause
+    sentence with पसंद है...अच्छी है repeats है -- used only in fill_in_
+    blank/dialogue/reading contexts instead, where repeated words aren't
+    a constraint).
+
+    fill_in_blank ambiguity check (§17): lesson01's exercise08 blank
+    (अच्छी, frame "मुझे यह फ़िल्म ___ लगती है।") has मज़ेदार as a genuinely
+    plausible alternative within this lesson's own vocabulary (a learner
+    could reasonably answer "I find this film fun" instead of "good") --
+    disambiguated via the overlay's explicit English instruction
+    ("Complete: I find this film good."), not `interchangeable: true`,
+    since अच्छी and मज़ेदार are not true synonyms. Lesson02's exercise07
+    blank (क्योंकि) has no other reason-connector taught in this unit's
+    own vocabulary, so it is unambiguous by frame alone.
+
+    Not yet native-speaker or fresh-context reviewed -- status left
+    honestly as unreviewed.
+
+course:
+  realization_key: hi.a2
+  target_language_first: true
+  dialect: hi_standard
+  register_policy: >-
+    Continues unit01-20's aap/tum split. No new stranger character this
+    unit -- Priya and Arjun's exchange stays तुम throughout, matching
+    their established friendship in every prior unit.
+
+media_assets:
+  - {content_key: hi.a2.audio.opinions.mujhe_yah_film_acchi_lagti_hai.01, language: hi, text: "मुझे यह फ़िल्म अच्छी लगती है।", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - {content_key: hi.a2.audio.opinions.mujhe_lagta_hai_ki_yah_film_acchi_hai.01, language: hi, text: "मुझे लगता है कि यह फ़िल्म अच्छी है।", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - {content_key: hi.a2.audio.opinions.mujhe_lagta_hai_ki_kahani_buri_hai.01, language: hi, text: "मुझे लगता है कि कहानी बुरी है।", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+
+units:
+  - content_key: hi.a2.unit21.raay
+    title: "राय"
+    section: reading_writing
+    spine_outcome_ids:
+      - universal.a2.opinions.give_opinions_with_reasons
+    planned_lesson_count: 3
+
+    lessons:
+      - content_key: hi.a2.unit21.lesson01.mujhe_lagta_hai
+        title: "मुझे लगता है"
+        spine_outcome_id: universal.a2.opinions.give_opinions_with_reasons
+        teaching:
+          - content_key: hi.a2.unit21.lesson01.teach.film_review
+            kind: vocabulary
+            target: {text: "फ़िल्म", language_code: hi, direction: ltr}
+            introduced_tokens: ["फ़िल्म"]
+            example: {text: "हम फ़िल्म देखते हैं।", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit21.lesson01.teach.yah_review
+            kind: vocabulary
+            target: {text: "यह", language_code: hi, direction: ltr}
+            introduced_tokens: ["यह"]
+            example: {text: "यह घर बड़ा है।", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit21.lesson01.teach.kaisi_review
+            kind: vocabulary
+            target: {text: "कैसी", language_code: hi, direction: ltr}
+            introduced_tokens: ["कैसी"]
+            example: {text: "यह फ़िल्म कैसी है?", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit21.lesson01.teach.lagna
+            kind: vocabulary
+            target: {text: "लगना", language_code: hi, direction: ltr}
+            introduced_tokens: ["लगना", "लगती", "लगता"]
+            example: {text: "मुझे यह फ़िल्म अच्छी लगती है।", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit21.lesson01.teach.mujhe_yah_film_acchi_lagti_hai_phrase
+            kind: phrase
+            target: {text: "मुझे यह फ़िल्म अच्छी लगती है।", language_code: hi, direction: ltr}
+            introduced_tokens: ["मुझे", "यह", "फ़िल्म", "अच्छी", "लगती", "है"]
+          - content_key: hi.a2.unit21.lesson01.teach.grammar_lagna
+            kind: grammar_note
+            target: {text: "'लगना' (to seem/feel) 'मुझे...लगता/लगती/लगते है/हैं' रूप में इस्तेमाल होता है, ठीक 'पसंद है' (यूनिट 13) की तरह -- क्रिया उस चीज़ से मेल खाती है जिसके बारे में राय दी जा रही है, कर्ता 'मुझे' से नहीं। 'फ़िल्म' स्त्रीलिंग है, इसलिए 'अच्छी लगती है' आता है -- वही '-आ'/'-ई' नियम (यूनिट 14) जो 'बड़ा'/'बड़ी' के साथ था।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a2.unit21.lesson01.teach.kahani
+            kind: vocabulary
+            target: {text: "कहानी", language_code: hi, direction: ltr}
+            introduced_tokens: ["कहानी"]
+            example: {text: "कहानी अच्छी है।", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit21.lesson01.teach.majedaar
+            kind: vocabulary
+            target: {text: "मज़ेदार", language_code: hi, direction: ltr}
+            introduced_tokens: ["मज़ेदार"]
+            example: {text: "यह फ़िल्म मज़ेदार है।", language_code: hi, direction: ltr}
+        exercises:
+          - content_key: hi.a2.unit21.lesson01.exercise01.select_mujhe_yah_film_acchi_lagti_hai_meaning
+            type: multiple_choice
+            tested_text: "मुझे यह फ़िल्म अच्छी लगती है"
+            prompt:
+              target_blocks:
+                - {text: "मुझे यह फ़िल्म अच्छी लगती है।", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit21.lesson01.exercise02.select_kahani_meaning
+            type: multiple_choice
+            tested_text: "कहानी"
+            prompt:
+              target_blocks:
+                - {text: "कहानी", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit21.lesson01.exercise03.select_majedaar_meaning
+            type: multiple_choice
+            tested_text: "मज़ेदार"
+            prompt:
+              target_blocks:
+                - {text: "मज़ेदार", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit21.lesson01.exercise04.listen_mujhe_yah_film_acchi_lagti_hai
+            type: listen_select
+            tested_text: "मुझे यह फ़िल्म अच्छी लगती है"
+            media_asset_key: hi.a2.audio.opinions.mujhe_yah_film_acchi_lagti_hai.01
+            prompt: {target_blocks: []}
+          - content_key: hi.a2.unit21.lesson01.exercise05.match_lesson01_words
+            type: matching_pairs
+            tested_text: "फ़िल्म यह लगना कहानी मज़ेदार अच्छी कैसी"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "फ़िल्म", right: "film"}
+              - {left: "यह", right: "this"}
+              - {left: "लगना", right: "to seem / to feel"}
+              - {left: "कहानी", right: "story"}
+              - {left: "मज़ेदार", right: "fun / entertaining"}
+              - {left: "अच्छी", right: "good (fem.)"}
+              - {left: "कैसी", right: "what kind of (fem.)"}
+          - content_key: hi.a2.unit21.lesson01.exercise06.order_mujhe_yah_film_acchi_lagti_hai
+            type: word_order
+            tested_text: "मुझे यह फ़िल्म अच्छी लगती है"
+            prompt: {target_blocks: []}
+            word_bank: ["मुझे", "यह", "फ़िल्म", "अच्छी", "लगती", "है"]
+          - content_key: hi.a2.unit21.lesson01.exercise07.order_yah_film_majedaar_hai
+            type: word_order
+            tested_text: "यह फ़िल्म मज़ेदार है"
+            prompt: {target_blocks: []}
+            word_bank: ["यह", "फ़िल्म", "मज़ेदार", "है"]
+          - content_key: hi.a2.unit21.lesson01.exercise08.fill_mujhe_yah_film_acchi
+            type: fill_in_blank
+            tested_text: "अच्छी"
+            prompt:
+              target_blocks:
+                - {text: "मुझे यह फ़िल्म ___ लगती है।", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit21.lesson01.exercise09.reply_tumhein_yah_film_kaisi_lagti_hai
+            type: dialogue_response
+            tested_text: "मुझे यह फ़िल्म अच्छी लगती है"
+            prompt:
+              target_blocks:
+                - {text: "तुम्हें यह फ़िल्म कैसी लगती है?", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit21.lesson01.exercise10.fix_mujhe_yah_film_accha_lagta_hai
+            type: grammar_check
+            tested_text: "मुझे यह फ़िल्म अच्छी लगती है"
+            prompt:
+              target_blocks:
+                - {text: "मुझे यह फ़िल्म अच्छा लगता है।", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit21.lesson01.exercise11.speak_mujhe_yah_film_acchi_lagti_hai
+            type: speak_response
+            tested_text: "मुझे यह फ़िल्म अच्छी लगती है"
+            prompt:
+              target_blocks:
+                - {text: "बोलो: मुझे यह फ़िल्म अच्छी लगती है।", language_code: hi, direction: ltr}
+
+      - content_key: hi.a2.unit21.lesson02.kyonki
+        title: "क्योंकि"
+        spine_outcome_id: universal.a2.opinions.give_opinions_with_reasons
+        teaching:
+          - content_key: hi.a2.unit21.lesson02.teach.pasand_review
+            kind: vocabulary
+            target: {text: "पसंद", language_code: hi, direction: ltr}
+            introduced_tokens: ["पसंद"]
+            example: {text: "मुझे चाय पसंद है।", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit21.lesson02.teach.kyonki
+            kind: vocabulary
+            target: {text: "क्योंकि", language_code: hi, direction: ltr}
+            introduced_tokens: ["क्योंकि"]
+            example: {text: "मुझे यह फ़िल्म पसंद है क्योंकि कहानी अच्छी है।", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit21.lesson02.teach.mujhe_pasand_hai_kyonki_phrase
+            kind: phrase
+            target: {text: "मुझे यह फ़िल्म पसंद है क्योंकि कहानी अच्छी है।", language_code: hi, direction: ltr}
+            introduced_tokens: ["मुझे", "यह", "फ़िल्म", "पसंद", "है", "क्योंकि", "कहानी", "अच्छी"]
+          - content_key: hi.a2.unit21.lesson02.teach.grammar_kyonki
+            kind: grammar_note
+            target: {text: "'क्योंकि' (because) राय के बाद उसका कारण जोड़ता है: '[राय] + क्योंकि + [कारण]' -- जैसे 'मुझे यह फ़िल्म पसंद है क्योंकि कहानी अच्छी है।'", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a2.unit21.lesson02.teach.bahut_review
+            kind: vocabulary
+            target: {text: "बहुत", language_code: hi, direction: ltr}
+            introduced_tokens: ["बहुत"]
+            example: {text: "कहानी बहुत अच्छी है।", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit21.lesson02.teach.lagta_hai_ki_phrase
+            kind: phrase
+            target: {text: "मुझे लगता है कि यह फ़िल्म अच्छी है।", language_code: hi, direction: ltr}
+            introduced_tokens: ["लगता", "कि"]
+          - content_key: hi.a2.unit21.lesson02.teach.grammar_ki_clause
+            kind: grammar_note
+            target: {text: "'मुझे लगता है कि...' (I think that...) एक अलग, तय रूप है -- यहाँ 'लगता' हमेशा वैसा ही रहता है, किसी लिंग से नहीं बदलता, क्योंकि 'कि' के बाद पूरा वाक्य आता है, कोई सीधी संज्ञा नहीं। यह पिछले पाठ के 'मुझे...लगती/लगता है' (जो चीज़ से मेल खाता है) से अलग नियम है -- दोनों को मिलाना मत।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a2.unit21.lesson02.teach.buri_review
+            kind: vocabulary
+            target: {text: "बुरी", language_code: hi, direction: ltr}
+            introduced_tokens: ["बुरी"]
+            example: {text: "यह फ़िल्म बुरी है।", language_code: hi, direction: ltr}
+        exercises:
+          - content_key: hi.a2.unit21.lesson02.exercise01.select_kyonki_meaning
+            type: multiple_choice
+            tested_text: "क्योंकि"
+            prompt:
+              target_blocks:
+                - {text: "क्योंकि", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit21.lesson02.exercise02.select_mujhe_pasand_hai_kyonki_meaning
+            type: multiple_choice
+            tested_text: "मुझे यह फ़िल्म पसंद है क्योंकि कहानी अच्छी है"
+            prompt:
+              target_blocks:
+                - {text: "मुझे यह फ़िल्म पसंद है क्योंकि कहानी अच्छी है।", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit21.lesson02.exercise03.listen_mujhe_lagta_hai_ki_yah_film_acchi_hai
+            type: listen_select
+            tested_text: "मुझे लगता है कि यह फ़िल्म अच्छी है"
+            media_asset_key: hi.a2.audio.opinions.mujhe_lagta_hai_ki_yah_film_acchi_hai.01
+            prompt: {target_blocks: []}
+          - content_key: hi.a2.unit21.lesson02.exercise04.match_lesson02_words
+            type: matching_pairs
+            tested_text: "पसंद क्योंकि कहानी बहुत लगता कि बुरी"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "पसंद", right: "liked"}
+              - {left: "क्योंकि", right: "because"}
+              - {left: "कहानी", right: "story"}
+              - {left: "बहुत", right: "very"}
+              - {left: "मुझे लगता है कि", right: "I think that"}
+              - {left: "बुरी", right: "bad (fem.)"}
+          - content_key: hi.a2.unit21.lesson02.exercise05.order_kahani_bahut_acchi_hai
+            type: word_order
+            tested_text: "कहानी बहुत अच्छी है"
+            prompt: {target_blocks: []}
+            word_bank: ["कहानी", "बहुत", "अच्छी", "है"]
+          - content_key: hi.a2.unit21.lesson02.exercise06.order_mujhe_lagta_hai_ki_kahani_buri_hai
+            type: word_order
+            tested_text: "मुझे लगता है कि कहानी बुरी है"
+            prompt: {target_blocks: []}
+            word_bank: ["मुझे", "लगता", "है", "कि", "कहानी", "बुरी"]
+          - content_key: hi.a2.unit21.lesson02.exercise07.fill_mujhe_pasand_hai_kyonki
+            type: fill_in_blank
+            tested_text: "क्योंकि"
+            prompt:
+              target_blocks:
+                - {text: "मुझे यह फ़िल्म पसंद है ___ कहानी अच्छी है।", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit21.lesson02.exercise08.fix_lagta_hai_ki_agreement
+            type: grammar_check
+            tested_text: "मुझे लगता है कि यह फ़िल्म अच्छी है"
+            prompt:
+              target_blocks:
+                - {text: "मुझे लगती है कि यह फ़िल्म अच्छी है।", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit21.lesson02.exercise09.reply_tumhein_yah_film_kaisi_lagti_hai_kyonki
+            type: dialogue_response
+            tested_text: "मुझे यह फ़िल्म पसंद है क्योंकि कहानी अच्छी है"
+            prompt:
+              target_blocks:
+                - {text: "तुम्हें यह फ़िल्म कैसी लगती है?", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit21.lesson02.exercise10.write_mujhe_lagta_hai_ki_film_acchi_hai
+            type: writing_prompt
+            tested_text: "मुझे लगता है कि यह फ़िल्म अच्छी है"
+            prompt:
+              target_blocks:
+                - {text: "Write in Hindi: say you think this film is good.", language_code: en, direction: ltr}
+          - content_key: hi.a2.unit21.lesson02.exercise11.speak_mujhe_pasand_hai_kyonki_kahani_acchi_hai
+            type: speak_response
+            tested_text: "मुझे यह फ़िल्म पसंद है क्योंकि कहानी अच्छी है"
+            prompt:
+              target_blocks:
+                - {text: "बोलो: मुझे यह फ़िल्म पसंद है क्योंकि कहानी अच्छी है।", language_code: hi, direction: ltr}
+
+      - content_key: hi.a2.unit21.lesson03.priya_arjun_film_par_raay
+        title: "प्रिया और अर्जुन: फ़िल्म पर राय"
+        spine_outcome_id: universal.a2.opinions.give_opinions_with_reasons
+        teaching:
+          - content_key: hi.a2.unit21.lesson03.teach.nahin_review
+            kind: vocabulary
+            target: {text: "नहीं", language_code: hi, direction: ltr}
+            introduced_tokens: ["नहीं"]
+            example: {text: "मुझे कॉफ़ी पसंद नहीं है।", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit21.lesson03.teach.kitaab
+            kind: vocabulary
+            target: {text: "किताब, किताबें", language_code: hi, direction: ltr}
+            introduced_tokens: ["किताब", "किताबें", "हैं"]
+            example: {text: "मुझे किताबें पसंद हैं।", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit21.lesson03.teach.arjun_priya_review
+            kind: vocabulary
+            target: {text: "अर्जुन, प्रिया", language_code: hi, direction: ltr}
+            introduced_tokens: ["अर्जुन", "प्रिया"]
+            example:
+              - {text: "अर्जुन आधार केंद्र गया।", language_code: hi, direction: ltr}
+              - {text: "प्रिया घर गई।", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit21.lesson03.teach.dialogue.line01
+            kind: dialogue
+            target: {text: "तुम्हें यह फ़िल्म कैसी लगती है?", language_code: hi, direction: ltr, speaker: Priya}
+            introduced_tokens: []
+          - content_key: hi.a2.unit21.lesson03.teach.dialogue.line02
+            kind: dialogue
+            target: {text: "मुझे यह फ़िल्म बहुत पसंद है क्योंकि कहानी मज़ेदार है।", language_code: hi, direction: ltr, speaker: Arjun}
+            introduced_tokens: []
+          - content_key: hi.a2.unit21.lesson03.teach.dialogue.line03
+            kind: dialogue
+            target: {text: "मुझे नहीं लगता। मुझे लगता है कि कहानी बुरी है।", language_code: hi, direction: ltr, speaker: Priya}
+            introduced_tokens: []
+          - content_key: hi.a2.unit21.lesson03.teach.dialogue.line04
+            kind: dialogue
+            target: {text: "अच्छा? तुम्हें क्या पसंद है?", language_code: hi, direction: ltr, speaker: Arjun}
+            introduced_tokens: []
+          - content_key: hi.a2.unit21.lesson03.teach.dialogue.line05
+            kind: dialogue
+            target: {text: "मुझे किताबें पसंद हैं, फ़िल्में नहीं।", language_code: hi, direction: ltr, speaker: Priya}
+            introduced_tokens: []
+          - content_key: hi.a2.unit21.lesson03.teach.dialogue.line06
+            kind: dialogue
+            target: {text: "ठीक है!", language_code: hi, direction: ltr, speaker: Arjun}
+            introduced_tokens: []
+          - content_key: hi.a2.unit21.lesson03.teach.grammar_summary
+            kind: grammar_note
+            target: {text: "इस यूनिट के दो मुख्य नियम: (1) 'मुझे [चीज़] [विशेषण] लगती/लगता है' उस चीज़ के लिंग से मेल खाता है, 'पसंद है' की तरह। (2) 'मुझे लगता है कि [वाक्य]' एक तय रूप है, 'लगता' नहीं बदलता। 'क्योंकि' राय के बाद कारण जोड़ता है।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a2.unit21.lesson03.teach.reading
+            kind: reading
+            target: {text: "प्रिया और अर्जुन ने फ़िल्म देखी। अर्जुन को फ़िल्म पसंद है क्योंकि कहानी मज़ेदार है। प्रिया को फ़िल्म पसंद नहीं है -- प्रिया को लगता है कि कहानी बुरी है। प्रिया को किताबें पसंद हैं।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+        exercises:
+          - content_key: hi.a2.unit21.lesson03.exercise01.comprehend_arjun_opinion
+            type: dialogue_comprehension
+            tested_text: "मज़ेदार"
+            prompt:
+              target_blocks:
+                - {text: "मुझे यह फ़िल्म बहुत पसंद है क्योंकि कहानी मज़ेदार है।", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit21.lesson03.exercise02.comprehend_priya_opinion
+            type: dialogue_comprehension
+            tested_text: "बुरी"
+            prompt:
+              target_blocks:
+                - {text: "मुझे नहीं लगता। मुझे लगता है कि कहानी बुरी है।", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit21.lesson03.exercise03.select_mujhe_kitaabein_pasand_hain_meaning
+            type: multiple_choice
+            tested_text: "मुझे किताबें पसंद हैं"
+            prompt:
+              target_blocks:
+                - {text: "मुझे किताबें पसंद हैं।", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit21.lesson03.exercise04.read_arjun_reason
+            type: reading_comprehension
+            tested_text: "मज़ेदार"
+            prompt:
+              target_blocks:
+                - {text: "प्रिया और अर्जुन ने फ़िल्म देखी। अर्जुन को फ़िल्म पसंद है क्योंकि कहानी मज़ेदार है। प्रिया को फ़िल्म पसंद नहीं है -- प्रिया को लगता है कि कहानी बुरी है। प्रिया को किताबें पसंद हैं।", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit21.lesson03.exercise05.read_priya_preference
+            type: reading_comprehension
+            tested_text: "किताबें"
+            prompt:
+              target_blocks:
+                - {text: "प्रिया और अर्जुन ने फ़िल्म देखी। अर्जुन को फ़िल्म पसंद है क्योंकि कहानी मज़ेदार है। प्रिया को फ़िल्म पसंद नहीं है -- प्रिया को लगता है कि कहानी बुरी है। प्रिया को किताबें पसंद हैं।", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit21.lesson03.exercise06.listen_mujhe_lagta_hai_ki_kahani_buri_hai
+            type: listen_select
+            tested_text: "मुझे लगता है कि कहानी बुरी है"
+            media_asset_key: hi.a2.audio.opinions.mujhe_lagta_hai_ki_kahani_buri_hai.01
+            prompt: {target_blocks: []}
+          - content_key: hi.a2.unit21.lesson03.exercise07.match_lesson03_review
+            type: matching_pairs
+            tested_text: "पसंद क्योंकि कहानी मज़ेदार बुरी किताबें लगना"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "पसंद", right: "liked"}
+              - {left: "क्योंकि", right: "because"}
+              - {left: "कहानी", right: "story"}
+              - {left: "मज़ेदार", right: "fun / entertaining"}
+              - {left: "बुरी", right: "bad (fem.)"}
+              - {left: "किताबें", right: "books"}
+              - {left: "लगना", right: "to seem / to feel"}
+          - content_key: hi.a2.unit21.lesson03.exercise08.order_mujhe_kitaabein_pasand_hain
+            type: word_order
+            tested_text: "मुझे किताबें पसंद हैं"
+            prompt: {target_blocks: []}
+            word_bank: ["मुझे", "किताबें", "पसंद", "हैं"]
+          - content_key: hi.a2.unit21.lesson03.exercise09.fix_mujhe_kitaabein_pasand_hai
+            type: grammar_check
+            tested_text: "मुझे किताबें पसंद हैं"
+            prompt:
+              target_blocks:
+                - {text: "मुझे किताबें पसंद है।", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit21.lesson03.exercise10.write_priya_opinion
+            type: writing_prompt
+            tested_text: "मुझे लगता है कि कहानी बुरी है"
+            prompt:
+              target_blocks:
+                - {text: "Write in Hindi: say you think the story is bad.", language_code: en, direction: ltr}
+          - content_key: hi.a2.unit21.lesson03.exercise11.speak_mujhe_kitaabein_pasand_hain
+            type: speak_response
+            tested_text: "मुझे किताबें पसंद हैं"
+            prompt:
+              target_blocks:
+                - {text: "बोलो: मुझे किताबें पसंद हैं।", language_code: hi, direction: ltr}
