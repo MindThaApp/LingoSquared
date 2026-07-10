@@ -46,6 +46,20 @@ export function LevelCheckPage() {
     if (skip) navigate(`/courses/${courseId}`, { replace: true });
   }, [skip, courseId, navigate]);
 
+  // Without this, a failed units fetch means isSuccess never turns true and
+  // the `return null` below renders a permanently blank screen -- no
+  // spinner, no error, no retry, ever.
+  if (unitsQuery.isError) {
+    return (
+      <div className="feedback-banner error">
+        <p style={{ margin: "0 0 10px" }}>{t("level_check.units_fetch_error")}</p>
+        <button className="btn btn-block" onClick={() => unitsQuery.refetch()}>
+          {t("common.retry")}
+        </button>
+      </div>
+    );
+  }
+
   if (!unitsQuery.isSuccess || skip) return null;
 
   function returnToOrigin() {
