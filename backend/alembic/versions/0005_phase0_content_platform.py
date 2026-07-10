@@ -1,4 +1,20 @@
-"""add Phase 0 content, objective, offline, and retention schema"""
+"""add Phase 0 content, objective, offline, and retention schema
+
+EDITED 2026-07-10 (dead-scaffolding removal): this migration originally
+also created 12 Phase 0 tables (learning_objectives,
+learning_objective_prerequisites, content_releases, content_reviews,
+lesson_objectives, exercise_objectives, user_objective_mastery,
+user_course_enrollments, notification_preferences,
+streak_freeze_balances, streak_freeze_events, sync_operations) plus an
+exercise_attempts.content_release_id column/FK. Those ORM models were
+confirmed dead (zero references anywhere in app/) and removed from
+app/models/entities.py, so this file could no longer import them --
+imports here run at migration time, so keeping them would crash every
+fresh 0001->head migrate. The dead creations are simply omitted now:
+already-migrated databases have their leftovers dropped by migration
+0021; fresh databases never create them at all (0001's create_all()
+uses the live model set, which no longer contains them).
+"""
 
 from alembic import op
 import sqlalchemy as sa
@@ -6,20 +22,8 @@ import sqlalchemy as sa
 from app.models import (
     ContentIssueReport,
     ContentKey,
-    ContentRelease,
-    ContentReview,
-    ExerciseObjective,
-    LearningObjective,
-    LearningObjectivePrerequisite,
     LearningPath,
-    LessonObjective,
-    NotificationPreference,
     PushSubscription,
-    StreakFreezeBalance,
-    StreakFreezeEvent,
-    SyncOperation,
-    UserCourseEnrollment,
-    UserObjectiveMastery,
 )
 
 
@@ -54,21 +58,9 @@ EXERCISE_TYPES = (
 
 PHASE0_TABLES = (
     LearningPath.__table__,
-    LearningObjective.__table__,
-    LearningObjectivePrerequisite.__table__,
-    ContentRelease.__table__,
     ContentKey.__table__,
-    ContentReview.__table__,
-    LessonObjective.__table__,
-    ExerciseObjective.__table__,
     ContentIssueReport.__table__,
-    UserObjectiveMastery.__table__,
-    UserCourseEnrollment.__table__,
     PushSubscription.__table__,
-    NotificationPreference.__table__,
-    StreakFreezeBalance.__table__,
-    StreakFreezeEvent.__table__,
-    SyncOperation.__table__,
 )
 
 
@@ -133,14 +125,6 @@ def upgrade():
     attempt_columns = _column_names(bind, "exercise_attempts")
     additions = (
         (
-            "content_release_id",
-            sa.Column(
-                "content_release_id",
-                sa.String(length=36),
-                nullable=True,
-            ),
-        ),
-        (
             "lesson_session_id",
             sa.Column("lesson_session_id", sa.String(length=36), nullable=True),
         ),
@@ -186,19 +170,6 @@ def upgrade():
             op.add_column("exercise_attempts", column)
 
     attempt_foreign_keys = sa.inspect(bind).get_foreign_keys("exercise_attempts")
-    content_release_fk_exists = any(
-        fk.get("constrained_columns") == ["content_release_id"]
-        for fk in attempt_foreign_keys
-    )
-    if not content_release_fk_exists:
-        op.create_foreign_key(
-            "fk_exercise_attempts_content_release_id",
-            "exercise_attempts",
-            "content_releases",
-            ["content_release_id"],
-            ["id"],
-            ondelete="SET NULL",
-        )
 
     # Exercise attempts are historical records. Replace the legacy
     # exercise ON DELETE CASCADE foreign key with RESTRICT.
