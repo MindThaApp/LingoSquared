@@ -42,6 +42,17 @@ export function HomePage() {
   const goalMet = xp != null && dailyGoal > 0 && xpToday >= dailyGoal;
   const goalPct = dailyGoal > 0 ? Math.min(100, Math.max(0, (xpToday / dailyGoal) * 100)) : 0;
 
+  // Streak-at-risk banner: shown whenever there's a streak to protect and the
+  // server says today's activity hasn't happened yet (active_today is computed
+  // server-side in the account's timezone day boundary — never re-derive it
+  // from last_activity_date with the device clock). Deliberately NOT gated on
+  // "late in the day": a local-hour heuristic would add a second clock that
+  // can disagree with the server's boundary, and the message is an invitation
+  // rather than an alarm, so it works as the day's nudge from the first open.
+  // Complements the push-notification path (POST /admin/push/notify-streaks-
+  // at-risk) for users without push enabled.
+  const streakAtRisk = Boolean(streak && streak.streak_days > 0 && !streak.active_today);
+
   const heroTitle =
     streak && streak.streak_days > 0
       ? user?.display_name
@@ -53,6 +64,31 @@ export function HomePage() {
 
   return (
     <div>
+      {streakAtRisk && (
+        <div
+          className="card continue-card"
+          role="status"
+          style={{
+            marginBottom: 12,
+            // Warm amber, the existing validated --almost/--almost-soft
+            // contrast pair (defined for both themes) — distinct but not
+            // alarming, unlike --incorrect.
+            background: "var(--almost-soft)",
+            borderColor: "var(--almost)",
+          }}
+        >
+          <div className="continue-info">
+            <h3 style={{ color: "var(--almost)" }}>
+              <Flame size={18} className="stat-flame" style={{ verticalAlign: -3 }} />{" "}
+              {t("home.streak_reminder_title", { count: streak!.streak_days })}
+            </h3>
+            <span style={{ color: "var(--almost)" }}>{t("home.streak_reminder_body")}</span>
+          </div>
+          <Link className="btn" to={(dueReviews ?? 0) > 0 ? "/review" : "/practice"}>
+            {t("home.streak_reminder_cta")}
+          </Link>
+        </div>
+      )}
       {streak?.freeze_used_today && (
         <div className="card" role="status" style={{ marginBottom: 12, textAlign: "center" }}>
           <span>
