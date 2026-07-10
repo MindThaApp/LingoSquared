@@ -1,4 +1,4 @@
-import { get, patch, post, postFeedback } from "./client";
+import { del, get, patch, post, postFeedback } from "./client";
 import type {
   Achievement,
   AnswerResponse,
@@ -55,6 +55,11 @@ export const AuthApi = {
   login: (email: string, password: string) =>
     post<AuthResult>("/auth/login", { email, password, timezone: clientTimezone() }),
   me: () => get<AuthUser>("/auth/me"),
+  // DELETE /me — permanently deletes the authenticated account and all
+  // of its data server-side (204 on success). Irreversible; the caller
+  // is responsible for the confirmation UX and for clearing the local
+  // session afterwards.
+  deleteAccount: () => del<void>("/me"),
 };
 
 export const CatalogApi = {
