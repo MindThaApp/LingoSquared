@@ -352,8 +352,26 @@ def test_admin_practice_batch_unlocked_without_completed_lessons(client, admin):
 
 
 def test_practice_import_is_idempotent_and_all_prompt_contracts_generate(
-    client, admin, auth
+    client, admin, auth, monkeypatch
 ):
+    # This test verifies the six prompt SHAPES/contracts, not credential
+    # gating -- but listen_select generation is gated on
+    # tts_actually_configured() (app/practice/service.py, 2026-07-07 Fable
+    # audit fix), which reads the REAL settings.google_cloud_tts_
+    # credentials_json / azure_speech_key at request time. Without this
+    # monkeypatch the listen_select leg of this test silently depends on
+    # whatever TTS credentials happen to be in the test environment's .env:
+    # it passed on the shared dev stack (Google credential configured) and
+    # failed with 0 generated items on every clean/isolated stack
+    # (confirmed by three independent dispatches, 2026-07-10). Pin the gate
+    # open so the contract assertions are deterministic everywhere; the
+    # gate's own behavior has dedicated tests below (fa excluded without a
+    # key / fa included with one / prs always excluded).
+    import app.practice.service as practice_service
+
+    monkeypatch.setattr(
+        practice_service, "tts_actually_configured", lambda language_code: True
+    )
     course_id, lesson_id = create_course_with_lexemes()
     first = import_templates(client, admin, course_id, artifact())
     second = import_templates(client, admin, course_id, artifact())
@@ -582,7 +600,7 @@ def test_expired_practice_item_fails_cleanly(client, admin, auth):
 
 
 def test_farsi_sampler_excludes_listen_select_without_a_configured_azure_key(
-    client, admin, auth
+    client, admin, auth, monkeypatch
 ):
     # 2026-07-07 (Fable audit finding): fa was added to
     # TTS_SUPPORTED_LANGUAGES the day Azure integration code shipped, but
@@ -593,6 +611,19 @@ def test_farsi_sampler_excludes_listen_select_without_a_configured_azure_key(
     # default (app/core/config.py) until Ramin actually provisions one.
     # This is the REAL current default state and must stay excluded, or
     # the app generates unanswerable audio-only items with no real voice.
+    #
+    # 2026-07-10: pin the gate CLOSED rather than relying on the test
+    # environment's .env actually having no Azure key -- the mirror image
+    # of the env-dependence that made the prompt-contracts test above fail
+    # on credential-less stacks. What this test verifies is the WIRING
+    # (generate_batch consults the gate and drops listen_select when it
+    # says no), which stays meaningful regardless of what credentials the
+    # host running pytest happens to have configured.
+    import app.practice.service as practice_service
+
+    monkeypatch.setattr(
+        practice_service, "tts_actually_configured", lambda language_code: False
+    )
     course_id, lesson_id = create_course_with_lexemes(target="fa")
     import_templates(client, admin, course_id, artifact(target="fa"))
     complete_lesson(auth, lesson_id)
