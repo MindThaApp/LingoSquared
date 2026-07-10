@@ -1,13 +1,26 @@
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../auth/AuthContext";
 import { ApiError } from "@lingo/shared/api/client";
+import {
+  clearAccountDeletedNotice,
+  peekAccountDeletedNotice,
+} from "../lib/accountDeletedNotice";
 
 export function LoginPage() {
   const { t } = useTranslation();
   const { login, continueAsGuest } = useAuth();
   const navigate = useNavigate();
+  // One-time confirmation after account deletion (set by ProfilePage's
+  // delete flow via sessionStorage — see accountDeletedNotice.ts for why
+  // route state can't carry this). Peek in the initializer, clear in an
+  // effect: it stays visible for this render of the page and is gone on
+  // the next full load.
+  const [accountDeleted] = useState(peekAccountDeletedNotice);
+  useEffect(() => {
+    if (accountDeleted) clearAccountDeletedNotice();
+  }, [accountDeleted]);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -49,6 +62,14 @@ export function LoginPage() {
   return (
     <div className="auth-page">
       <h1 style={{ textAlign: "center", color: "var(--accent)" }}>{t("login.brand")}</h1>
+      {accountDeleted && (
+        <div
+          className="form-error"
+          style={{ background: "var(--correct-soft)", color: "var(--correct)" }}
+        >
+          {t("login.account_deleted")}
+        </div>
+      )}
       <div className="card">
         <h2 style={{ marginTop: 0 }}>{t("login.title")}</h2>
         <form onSubmit={handleSubmit}>
