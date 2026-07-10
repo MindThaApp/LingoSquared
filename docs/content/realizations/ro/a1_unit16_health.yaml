@@ -1,0 +1,562 @@
+schema_version: "1.1"
+realization_version: "2026.1-draft.1"
+target_language: ro
+cefr_level: A1
+status: complete_draft
+generation_provenance:
+  method: ai_adapted_from_public_domain_source
+  authoring_system: claude
+  source_material: >-
+    "Basic Romanian Language Lessons" (US Peace Corps Moldova, public
+    domain), the same PDF used for units 01-15
+    (https://fsi-languages.yojik.eu/languages/PeaceCorps/Romanian/
+    MD_Romanian_Language_Lessons.pdf). Firecrawl was tried first per
+    standing instruction (`firecrawl search "Peace Corps Moldova Basic
+    Romanian Language Lessons sick doctor pain pharmacy health"`) but
+    returned HTTP 402 (0 credits remaining, the same exhausted state
+    every recent ro unit has hit), so this unit falls back to the same
+    direct `curl` + `pdftotext -layout` re-fetch of the confirmed-working
+    PDF those units used. Grepped the full extracted text for
+    sick/pain/doctor/hurt/health/pharmacy/hospital terms and found real,
+    directly usable material in Lesson 2's own "Basic Expressions" survival
+    list (lines 242-253 of the extracted text): "I do not feel well. / Nu
+    mă simt bine." (line 242), "I am sick. / Sînt bolnav." (line 243), "I
+    have a stomach ache. / Mă doare stomacul." (line 244), and "I need
+    help. / Am nevoie de ajutor." (line 253). Lesson 8 ("Articles")
+    separately confirms "doctor" as its own vocabulary entry ("doctor --
+    doctor (m.)", line 453) with the worked example "Fratele meu este
+    doctor." (My brother is a doctor., line 435) -- already checked and
+    explicitly declined by unit05's own provenance (it only discusses this
+    source sentence, never actually teaches "doctor" as a token; confirmed
+    by grepping every existing ro realization file for "doctor" before
+    starting this unit -- zero hits outside provenance prose discussing
+    the source, in unit05 and unit12). This unit is the first to actually
+    teach "bolnav"/"doare"/"stomac"/"nevoie"/"doctor" as real vocabulary.
+    "Sînt bolnav" respells to modern "Sunt bolnav" per this course's
+    standing î-to-â-adjacent modernization convention (see unit01's own
+    provenance for the "sînt"->"sunt" respelling rule) -- this is also
+    the first unit to actually teach "sunt" itself (checked: no prior ro
+    file has "sunt" in any introduced_tokens list, only unit01's own
+    provenance prose mentioning the respelling convention in the
+    abstract). "Nu mă simt bine" and "Mă doare stomacul" needed no
+    respelling, both already modern-spelled in the source. Lesson 2's
+    same nearby block also has "How do you feel? / Cum te simţi?" and "I
+    am a little tired. / Sînt puţin obosit." (lines 200-201) -- both
+    deliberately NOT used: "te simți" is the informal-tu conjugation,
+    which would contradict Ana and Mihai's own established formal
+    (dumneavoastră) register with each other (see unit01/unit09's own
+    register precedent), and "obosit" (tired) is a distinct A1
+    hobbies/feelings vocabulary item this unit's own scope (a basic
+    health PROBLEM, per the spine outcome's can_do text) doesn't need.
+    No sourced material covers head pain specifically (only stomach) --
+    grepped the full extracted text for "cap"/"gât"/"head" with zero
+    relevant hits -- so "cap" (head) is freely authored fresh per
+    AUTHORING_GUIDE #10's "if the source doesn't cover the topic
+    adequately, author fresh": it's basic-tier, extremely common
+    Romanian body-part vocabulary with no plausible substitute,
+    independently confidence-checked (standard Romanian word for
+    "head"), and its definite form "capul" follows the exact same "-ul"
+    definite-article rule already established from this same source's
+    own Lesson 8 (see unit15's "tren"->"trenul"/"peron"->"peronul"
+    pattern for a masculine, consonant-ending noun; "cap" is
+    masculine/consonant-ending, so it takes "-ul" the same way). "Odihnă"
+    (rest) is likewise freely authored fresh -- grepped for "odihn" with
+    zero hits -- again basic-tier vocabulary with no plausible
+    substitute for a health-advice scenario. "Multă apă" (plenty of
+    water) combines this unit's own fresh "multă" with unit06's
+    already-established "apă" (water), not re-sourced from the PDF a
+    second time. "Mă", "vă", "ce", "sau", "nu", "bine", "am", "un", "de"
+    are all direct within-course reuse (mă from unit01/unit10; vă from
+    unit01/unit06/unit07/unit13; ce from unit01/unit03/unit04/unit11/
+    unit15; sau from unit13; nu/bine from unit01/unit06/unit11; am from
+    unit02/unit05/unit12/unit15; un/de from unit06/unit07/unit15),
+    likewise not re-sourced. "Spital" (hospital), "vizavi de" (opposite),
+    and "magazin" (store) are direct within-course reuse from unit08
+    (places) -- this unit's lesson03 reading note deliberately reuses
+    unit08's own already-established fact "Spitalul este vizavi de
+    magazin." (The hospital is opposite the store.) verbatim as a
+    cross-unit callback, checked against AUTHORING_GUIDE #11 to confirm
+    it doesn't contradict anything (unit08 never states any OTHER
+    location for the hospital, so restating the same fact here is
+    reinforcement, not risk). "Ce mai faceți?"/"aveți"/"da" are also
+    direct within-course reuse (unit01, unit05, unit06/unit11
+    respectively). This unit deliberately continues the same Ana/Mihai
+    cast established since unit01, this time with Mihai as the one who
+    feels unwell and Ana checking on him -- a new scenario, not a repeat
+    of any earlier one. Only genuinely new content words beyond
+    "doare"/"cap"/"stomac"/"nu mă simt bine"/"sunt"/"bolnav"/"nevoie"/
+    "doctor"/"odihnă"/"multă" are introduced this unit; everything else
+    is confirmed reuse (sourced or within-course). Deliberately kept
+    "bolnav" (sick) masculine-only this unit -- Mihai is the only
+    character who states "Sunt bolnav" anywhere in this file, so the
+    feminine form "bolnavă" is never needed and is NOT introduced,
+    avoiding an adjective-gender-agreement grammar point this unit's own
+    scope doesn't require (matching the same deliberate-scope-narrowing
+    precedent as unit15 declining to teach "trebuie"). Authored at
+    schema_version 1.1 from the start -- every kind:vocabulary card
+    carries a real example: sentence with a matching overlay
+    example_gloss.
+  human_reviewed: false
+review:
+  status: unreviewed
+  required_next_reviewer: codex_fresh_context
+  notes: >-
+    Sixteenth Romanian unit, first draft, continuing directly from
+    unit15. Targets universal.a1.health.describe_basic_problem --
+    confirmed by grepping universal_spine.yaml directly: it's the entry
+    immediately following universal.a1.travel.handle_basic_journey
+    (unit15's own outcome) in spine order, its sole prerequisite
+    (universal.a1.introductions.exchange_identity) is already satisfied
+    by unit01, and its can_do text is "State a basic health problem and
+    understand simple immediate advice." This course's own established
+    3-lesson bootstrap pace and Ana/Mihai characters are used, matching
+    units 01-15. 3 lessons, each mapped to a distinct spine
+    assessment_requirement: lesson01 (doare/cap/stomac, "Ce vă doare?")
+    covers understand_health_problem; lesson02 (nu mă simt bine/sunt
+    bolnav/am nevoie de un doctor) covers state_health_problem; lesson03
+    (Ana/Mihai's check-in dialogue, plus a short reading note) covers
+    read_basic_health_instruction and write_health_message, and
+    consolidates all four. Reuses unit01's mă/vă/ce/bună/mulțumesc/la
+    revedere/ce mai faceți, unit02's am, unit05's aveți, unit06's nu/
+    bine/apă/da, unit07's un/de, unit08's spital/vizavi de/magazin/este,
+    unit13's sau, and unit15's ce (again) -- all re-declared via
+    lesson-opening reminder cards per the standing per-file
+    token-scoping convention (lesson01 reminds mă/vă/ce/sau; lesson02
+    reminds nu/bine/am/un/de; lesson03 reminds ce/mai/faceți/aveți/da in
+    one card, bună/mulțumesc/la revedere/Ana/Mihai in a second, and
+    spitalul/spital/este/vizavi/de/magazin in a third specifically for
+    the reused unit08 fact). Within this file, lesson02/03 freely reuse
+    lesson01's own mă/doare without a fresh reminder card, since that's
+    within-file reuse, not cross-file, matching unit09's/unit15's own
+    established precedent.
+
+    Checked this choice against AUTHORING_GUIDE #11 carefully before
+    finalizing. Facts this unit newly states: Mihai's head hurts (mă
+    doare capul), he doesn't feel well, he is sick, he needs a doctor --
+    none of these touch any fact any earlier unit ever established
+    (grepped every earlier ro realization file for "doare"/"bolnav"/
+    "stomac"/"cap"/"doctor": zero prior hits outside unit05/unit12's own
+    provenance prose discussing the source, confirmed above). The one
+    fact this unit REUSES rather than states fresh -- "Spitalul este
+    vizavi de magazin." (unit08) -- was checked against every other
+    place-related fact unit08/unit09 established (magazin lângă gară;
+    poșta între magazin și spital; biblioteca aproape de gară) and
+    confirmed this unit doesn't add or imply any conflicting location
+    for the hospital, store, or anything else. No day/date, price,
+    family, preference, comparison, or travel claim from any earlier
+    unit is touched. Mihai being unwell in this unit's scenario doesn't
+    conflict with unit10's established routine (wakes up, works
+    evenings, goes to bed at night) or unit15's established train trip
+    -- each unit is understood as its own separate day/scenario, the
+    same precedent unit15 itself relied on when reusing unit04's "la ora
+    nouă" for a different event.
+
+    Checked every fill_in_blank slot's correct answer against
+    AUTHORING_GUIDE #17's synonym-ambiguity concern: lesson01's "Mă ___
+    capul." recalls "doare" -- no other verb this course has taught
+    (este, pleacă, costă, simt) makes sense substituted into this exact
+    frame ("Mă este capul" or "Mă costă capul" are not coherent
+    Romanian), so there's no real second candidate. lesson02's "Nu mă
+    simt bine. Sunt ___." recalls "bolnav" -- checked whether "bine"
+    (also an already-taught word that can grammatically follow "Sunt
+    ___") is a real competing candidate, and concluded no: the
+    immediately preceding "Nu mă simt bine" contextually anchors the
+    continuation as a contrast, not a repeat, of feeling well, so
+    "bolnav" is the only coherent completion, and no other course
+    adjective (obosit, fericit, etc.) has ever been taught to compete
+    here at all. lesson03's "___ și multă apă! La revedere, Mihai!"
+    recalls "Odihnă" -- the instruction explicitly anchors it as
+    "Complete Ana's advice (rest and plenty of water)," and "Odihnă"
+    was just taught as this lesson's own vocabulary card immediately
+    before the dialogue, with no other taught noun fitting that same
+    slot-plus-gloss combination.
+
+    Checked the lesson03 dialogue exercises against the standing
+    same-speaker-distractor rule: listed every line each speaker
+    actually says in the six-line dialogue before writing distractors.
+    Ana's three lines are "Bună, Mihai! Ce mai faceți?", "Aveți nevoie
+    de un doctor?", and "Odihnă și multă apă! La revedere, Mihai!".
+    Mihai's three lines are "Nu mă simt bine. Mă doare capul.", "Da.
+    Sunt bolnav. Am nevoie de un doctor.", and "Mulțumesc, Ana! La
+    revedere!". The dialogue_comprehension exercise asks "What hurts
+    Mihai?" (correct: "Capul.") with distractor "Stomacul." -- "stomac"
+    is taught in this unit's own lesson01 but is never said by anyone in
+    THIS six-line dialogue's audio (only "capul" is), so there's no
+    double-correct-option risk. The reading_comprehension exercise (a
+    standalone note, not tied to any dialogue audio: "Spitalul este
+    vizavi de magazin. Odihnă și multă apă." -- "What does the note
+    recommend?", correct "Odihnă și multă apă.", distractors "Un bilet
+    la tren."/"O cafea.") draws its distractors from other units'
+    vocabulary (unit15's ticket, unit06's coffee), neither of which
+    appears anywhere in this note's own text, so there's no ambiguity
+    there either -- this exercise has no media_asset_key at all (a pure
+    reading text, matching unit15's own reading_comprehension exercise
+    shape), so the same-speaker-audio concern doesn't apply to it in the
+    first place. Both listen_select clips (lesson01/lesson02) use
+    single-sentence audio, not multi-speaker dialogue audio, and their
+    distractors were confirmed to be sentences never spoken in that
+    specific clip. Needs a fresh-context content review before import,
+    same as every other language's content.
+
+course:
+  realization_key: ro.a1
+  target_language_first: true
+  dialect: ro_RO_standard
+  register_policy: >-
+    Continue unit01-15's register split (dumneavoastră as the safe
+    default with unfamiliar adults; Ana and Mihai's own established
+    formal register with each other, e.g. unit09's "Mergeți", unit15's
+    "Aveți"/"Sunteți"-shaped forms). This unit's own new vocabulary
+    (doare, cap, stomac, simt, bolnav, nevoie, doctor, odihnă, multă) is
+    entirely person-invariant in the forms actually taught here --
+    "Nu mă simt bine"/"Sunt bolnav" are both fixed first-person
+    statements (Mihai's own), and "Aveți nevoie de un doctor?" reuses
+    unit05's already-established formal "aveți" rather than introducing
+    a new conjugation. No informal-tu form is introduced this unit
+    (deliberately declined the source's own "Cum te simți?" for exactly
+    this reason, see provenance above).
+
+media_assets:
+  - content_key: ro.a1.audio.health.ma_doare_capul.01
+    language: ro
+    text: "Mă doare capul."
+    voice_hint: neutral_adult
+    status: pending_generation
+  - content_key: ro.a1.audio.health.ce_va_doare.01
+    language: ro
+    text: "Ce vă doare?"
+    voice_hint: neutral_adult
+    status: pending_generation
+  - content_key: ro.a1.audio.health.nu_ma_simt_bine.01
+    language: ro
+    text: "Nu mă simt bine."
+    voice_hint: neutral_adult
+    status: pending_generation
+  - content_key: ro.a1.audio.health.am_nevoie_de_doctor.01
+    language: ro
+    text: "Am nevoie de un doctor."
+    voice_hint: neutral_adult
+    status: pending_generation
+  - content_key: ro.a1.audio.dialogue.mihai_bolnav.01
+    language: ro
+    text: "Ana: Bună, Mihai! Ce mai faceți?\nMihai: Nu mă simt bine. Mă doare capul.\nAna: Aveți nevoie de un doctor?\nMihai: Da. Sunt bolnav. Am nevoie de un doctor.\nAna: Odihnă și multă apă! La revedere, Mihai!\nMihai: Mulțumesc, Ana! La revedere!"
+    voice_hint: adult_female_and_male_neutral_polite
+    status: pending_generation
+
+units:
+  - content_key: ro.a1.unit16.health
+    title: "Sănătatea"
+    section: reading_writing
+    spine_outcome_ids:
+      - universal.a1.health.describe_basic_problem
+    planned_lesson_count: 3
+
+    lessons:
+      - content_key: ro.a1.unit16.lesson01.ma_doare_capul
+        title: "Mă doare capul"
+        spine_outcome_id: universal.a1.health.describe_basic_problem
+        teaching:
+          - content_key: ro.a1.unit16.lesson01.teach.reminder_ma_va_ce_sau
+            kind: grammar_note
+            target: {text: "mă · vă · ce · sau", language_code: ro, direction: ltr}
+            introduced_tokens: [mă, vă, ce, sau]
+          - content_key: ro.a1.unit16.lesson01.teach.doare_vocab
+            kind: vocabulary
+            target: {text: "Doare", language_code: ro, direction: ltr}
+            introduced_tokens: [doare]
+            example:
+              - {text: "Mă doare.", language_code: ro, direction: ltr}
+          - content_key: ro.a1.unit16.lesson01.teach.cap_vocab
+            kind: vocabulary
+            target: {text: "Cap", language_code: ro, direction: ltr}
+            introduced_tokens: [cap, capul]
+            example:
+              - {text: "Mă doare capul.", language_code: ro, direction: ltr}
+          - content_key: ro.a1.unit16.lesson01.teach.ce_va_doare_phrase
+            kind: phrase
+            target: {text: "Ce vă doare?", language_code: ro, direction: ltr}
+            introduced_tokens: [ce, vă, doare]
+          - content_key: ro.a1.unit16.lesson01.teach.stomac_vocab
+            kind: vocabulary
+            target: {text: "Stomac", language_code: ro, direction: ltr}
+            introduced_tokens: [stomac, stomacul]
+            example:
+              - {text: "Mă doare stomacul.", language_code: ro, direction: ltr}
+          - content_key: ro.a1.unit16.lesson01.teach.ma_doare_capul_sau_stomacul_phrase
+            kind: phrase
+            target: {text: "Mă doare capul sau stomacul?", language_code: ro, direction: ltr}
+            introduced_tokens: [mă, doare, capul, sau, stomacul]
+        exercises:
+          - content_key: ro.a1.unit16.lesson01.exercise01.choose_cap
+            type: multiple_choice
+            tested_text: "cap"
+            prompt:
+              target_blocks:
+                - {text: "head", language_code: en, direction: ltr}
+          - content_key: ro.a1.unit16.lesson01.exercise02.choose_doare
+            type: multiple_choice
+            tested_text: "doare"
+            prompt:
+              target_blocks:
+                - {text: "hurts", language_code: en, direction: ltr}
+          - content_key: ro.a1.unit16.lesson01.exercise03.listen_ma_doare_capul
+            type: listen_select
+            tested_text: "Mă doare capul"
+            media_asset_key: ro.a1.audio.health.ma_doare_capul.01
+            prompt: {target_blocks: []}
+          - content_key: ro.a1.unit16.lesson01.exercise04.match_health1
+            type: matching_pairs
+            tested_text: "cap doare stomac mă doare capul mă doare stomacul ce vă doare"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "Cap", right: "head"}
+              - {left: "Doare", right: "hurts"}
+              - {left: "Stomac", right: "stomach"}
+              - {left: "Mă doare capul.", right: "My head hurts."}
+              - {left: "Mă doare stomacul.", right: "My stomach hurts."}
+              - {left: "Ce vă doare?", right: "What hurts you?"}
+          - content_key: ro.a1.unit16.lesson01.exercise05.order_ma_doare_capul
+            type: word_order
+            tested_text: "Mă doare capul"
+            prompt: {target_blocks: []}
+            word_bank: ["doare", "Mă", "capul"]
+          - content_key: ro.a1.unit16.lesson01.exercise06.listen_order_ce_va_doare
+            type: listen_order
+            tested_text: "Ce vă doare"
+            media_asset_key: ro.a1.audio.health.ce_va_doare.01
+            prompt: {target_blocks: []}
+            word_bank: ["vă", "Ce", "doare"]
+          - content_key: ro.a1.unit16.lesson01.exercise07.complete_ma_doare_capul
+            type: fill_in_blank
+            tested_text: "doare"
+            prompt:
+              target_blocks:
+                - {text: "Mă ___ capul.", language_code: ro, direction: ltr}
+          - content_key: ro.a1.unit16.lesson01.exercise08.speak_ma_doare_capul
+            type: speak_response
+            tested_text: "mă doare capul"
+            prompt:
+              target_blocks:
+                - {text: "Say: My head hurts.", language_code: en, direction: ltr}
+
+      - content_key: ro.a1.unit16.lesson02.nu_ma_simt_bine
+        title: "Nu mă simt bine"
+        spine_outcome_id: universal.a1.health.describe_basic_problem
+        teaching:
+          - content_key: ro.a1.unit16.lesson02.teach.reminder_nu_bine_am_un_de
+            kind: grammar_note
+            target: {text: "nu · bine · am · un · de", language_code: ro, direction: ltr}
+            introduced_tokens: [nu, bine, am, un, de]
+          - content_key: ro.a1.unit16.lesson02.teach.ma_simt_vocab
+            kind: vocabulary
+            target: {text: "Mă simt", language_code: ro, direction: ltr}
+            introduced_tokens: [mă, simt]
+            example:
+              - {text: "Mă simt bine.", language_code: ro, direction: ltr}
+          - content_key: ro.a1.unit16.lesson02.teach.nu_ma_simt_bine_phrase
+            kind: phrase
+            target: {text: "Nu mă simt bine.", language_code: ro, direction: ltr}
+            introduced_tokens: [nu, mă, simt, bine]
+          - content_key: ro.a1.unit16.lesson02.teach.bolnav_vocab
+            kind: vocabulary
+            target: {text: "Bolnav", language_code: ro, direction: ltr}
+            introduced_tokens: [sunt, bolnav]
+            example:
+              - {text: "Sunt bolnav.", language_code: ro, direction: ltr}
+          - content_key: ro.a1.unit16.lesson02.teach.am_nevoie_de_un_doctor_phrase
+            kind: phrase
+            target: {text: "Am nevoie de un doctor.", language_code: ro, direction: ltr}
+            introduced_tokens: [am, nevoie, de, un, doctor]
+          - content_key: ro.a1.unit16.lesson02.teach.doctor_vocab
+            kind: vocabulary
+            target: {text: "Doctor", language_code: ro, direction: ltr}
+            introduced_tokens: [doctor]
+            example:
+              - {text: "Am nevoie de un doctor.", language_code: ro, direction: ltr}
+        exercises:
+          - content_key: ro.a1.unit16.lesson02.exercise01.choose_bolnav
+            type: multiple_choice
+            tested_text: "bolnav"
+            prompt:
+              target_blocks:
+                - {text: "sick", language_code: en, direction: ltr}
+          - content_key: ro.a1.unit16.lesson02.exercise02.choose_doctor
+            type: multiple_choice
+            tested_text: "doctor"
+            prompt:
+              target_blocks:
+                - {text: "doctor", language_code: en, direction: ltr}
+          - content_key: ro.a1.unit16.lesson02.exercise03.listen_nu_ma_simt_bine
+            type: listen_select
+            tested_text: "Nu mă simt bine"
+            media_asset_key: ro.a1.audio.health.nu_ma_simt_bine.01
+            prompt: {target_blocks: []}
+          - content_key: ro.a1.unit16.lesson02.exercise04.match_health2
+            type: matching_pairs
+            tested_text: "mă simt nu mă simt bine bolnav sunt bolnav doctor am nevoie de un doctor"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "Mă simt", right: "I feel"}
+              - {left: "Nu mă simt bine.", right: "I don't feel well."}
+              - {left: "Bolnav", right: "sick"}
+              - {left: "Sunt bolnav.", right: "I am sick."}
+              - {left: "Doctor", right: "doctor"}
+              - {left: "Am nevoie de un doctor.", right: "I need a doctor."}
+          - content_key: ro.a1.unit16.lesson02.exercise05.order_nu_ma_simt_bine
+            type: word_order
+            tested_text: "Nu mă simt bine"
+            prompt: {target_blocks: []}
+            word_bank: ["mă", "Nu", "bine", "simt"]
+          - content_key: ro.a1.unit16.lesson02.exercise06.listen_order_am_nevoie_de_doctor
+            type: listen_order
+            tested_text: "Am nevoie de un doctor"
+            media_asset_key: ro.a1.audio.health.am_nevoie_de_doctor.01
+            prompt: {target_blocks: []}
+            word_bank: ["nevoie", "Am", "de", "doctor", "un"]
+          - content_key: ro.a1.unit16.lesson02.exercise07.complete_sunt_bolnav
+            type: fill_in_blank
+            tested_text: "bolnav"
+            prompt:
+              target_blocks:
+                - {text: "Nu mă simt bine. Sunt ___.", language_code: ro, direction: ltr}
+          - content_key: ro.a1.unit16.lesson02.exercise08.speak_am_nevoie_de_doctor
+            type: speak_response
+            tested_text: "am nevoie de un doctor"
+            prompt:
+              target_blocks:
+                - {text: "Say: I need a doctor.", language_code: en, direction: ltr}
+
+      - content_key: ro.a1.unit16.lesson03.mihai_este_bolnav
+        title: "Mihai este bolnav"
+        spine_outcome_id: universal.a1.health.describe_basic_problem
+        teaching:
+          - content_key: ro.a1.unit16.lesson03.teach.reminder_ce_mai_faceti_aveti_da
+            kind: grammar_note
+            target: {text: "Ce mai faceți? · Aveți · Da", language_code: ro, direction: ltr}
+            introduced_tokens: [ce, mai, faceți, aveți, da]
+          - content_key: ro.a1.unit16.lesson03.teach.reminder_buna_multumesc_la_revedere_ana_mihai
+            kind: grammar_note
+            target: {text: "bună · mulțumesc · la revedere · Ana · Mihai", language_code: ro, direction: ltr}
+            introduced_tokens: [bună, mulțumesc, la, revedere, Ana, Mihai]
+          - content_key: ro.a1.unit16.lesson03.teach.reminder_spitalul_vizavi_magazin
+            kind: grammar_note
+            target: {text: "Spitalul este vizavi de magazin.", language_code: ro, direction: ltr}
+            introduced_tokens: [spitalul, spital, este, vizavi, de, magazin]
+          - content_key: ro.a1.unit16.lesson03.teach.odihna_vocab
+            kind: vocabulary
+            target: {text: "Odihnă", language_code: ro, direction: ltr}
+            introduced_tokens: [odihnă]
+            example:
+              - {text: "Aveți nevoie de odihnă.", language_code: ro, direction: ltr}
+          - content_key: ro.a1.unit16.lesson03.teach.multa_apa_vocab
+            kind: vocabulary
+            target: {text: "Multă apă", language_code: ro, direction: ltr}
+            introduced_tokens: [multă, apă, și]
+            example:
+              - {text: "Odihnă și multă apă.", language_code: ro, direction: ltr}
+          - content_key: ro.a1.unit16.lesson03.teach.line01
+            kind: dialogue
+            target:
+              text: "Bună, Mihai! Ce mai faceți?"
+              language_code: ro
+              direction: ltr
+              speaker: Ana
+            introduced_tokens: []
+          - content_key: ro.a1.unit16.lesson03.teach.line02
+            kind: dialogue
+            target:
+              text: "Nu mă simt bine. Mă doare capul."
+              language_code: ro
+              direction: ltr
+              speaker: Mihai
+            introduced_tokens: []
+          - content_key: ro.a1.unit16.lesson03.teach.line03
+            kind: dialogue
+            target:
+              text: "Aveți nevoie de un doctor?"
+              language_code: ro
+              direction: ltr
+              speaker: Ana
+            introduced_tokens: []
+          - content_key: ro.a1.unit16.lesson03.teach.line04
+            kind: dialogue
+            target:
+              text: "Da. Sunt bolnav. Am nevoie de un doctor."
+              language_code: ro
+              direction: ltr
+              speaker: Mihai
+            introduced_tokens: []
+          - content_key: ro.a1.unit16.lesson03.teach.line05
+            kind: dialogue
+            target:
+              text: "Odihnă și multă apă! La revedere, Mihai!"
+              language_code: ro
+              direction: ltr
+              speaker: Ana
+            introduced_tokens: []
+          - content_key: ro.a1.unit16.lesson03.teach.line06
+            kind: dialogue
+            target:
+              text: "Mulțumesc, Ana! La revedere!"
+              language_code: ro
+              direction: ltr
+              speaker: Mihai
+            introduced_tokens: []
+        exercises:
+          - content_key: ro.a1.unit16.lesson03.exercise01.choose_who_feels_unwell
+            type: multiple_choice
+            tested_text: "Mihai"
+            prompt:
+              target_blocks:
+                - {text: "Nu mă simt bine. Mă doare capul.", language_code: ro, direction: ltr}
+          - content_key: ro.a1.unit16.lesson03.exercise02.dialogue_comprehend_symptom
+            type: dialogue_comprehension
+            tested_text: "Capul."
+            media_asset_key: ro.a1.audio.dialogue.mihai_bolnav.01
+            prompt: {target_blocks: []}
+          - content_key: ro.a1.unit16.lesson03.exercise03.reading_comprehend_advice
+            type: reading_comprehension
+            tested_text: "Odihnă și multă apă."
+            prompt:
+              target_blocks:
+                - {text: "Spitalul este vizavi de magazin. Odihnă și multă apă.", language_code: ro, direction: ltr}
+          - content_key: ro.a1.unit16.lesson03.exercise04.match_unit_review
+            type: matching_pairs
+            tested_text: "cap stomac doare bolnav doctor odihnă nu mă simt bine am nevoie de un doctor"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "Cap", right: "head"}
+              - {left: "Stomac", right: "stomach"}
+              - {left: "Doare", right: "hurts"}
+              - {left: "Bolnav", right: "sick"}
+              - {left: "Doctor", right: "doctor"}
+              - {left: "Odihnă", right: "rest"}
+              - {left: "Nu mă simt bine.", right: "I don't feel well."}
+              - {left: "Am nevoie de un doctor.", right: "I need a doctor."}
+          - content_key: ro.a1.unit16.lesson03.exercise05.order_aveti_nevoie_de_doctor
+            type: word_order
+            tested_text: "Aveți nevoie de un doctor"
+            prompt: {target_blocks: []}
+            word_bank: ["nevoie", "Aveți", "de", "un", "doctor"]
+          - content_key: ro.a1.unit16.lesson03.exercise06.complete_odihna
+            type: fill_in_blank
+            tested_text: "Odihnă"
+            prompt:
+              target_blocks:
+                - {text: "___ și multă apă! La revedere, Mihai!", language_code: ro, direction: ltr}
+          - content_key: ro.a1.unit16.lesson03.exercise07.respond_as_mihai
+            type: dialogue_response
+            tested_text: "nu mă simt bine mă doare capul"
+            prompt:
+              target_blocks:
+                - {text: "Ana: Bună, Mihai! Ce mai faceți?", language_code: ro, direction: ltr}
+          - content_key: ro.a1.unit16.lesson03.exercise08.speak_sunt_bolnav
+            type: speak_response
+            tested_text: "sunt bolnav am nevoie de un doctor"
+            prompt:
+              target_blocks:
+                - {text: "Say: I am sick. I need a doctor.", language_code: en, direction: ltr}
+          - content_key: ro.a1.unit16.lesson03.exercise09.write_health_message
+            type: writing_prompt
+            tested_text: "mă doare capul nu mă simt bine sunt bolnav am nevoie de un doctor"
+            prompt: {target_blocks: []}
