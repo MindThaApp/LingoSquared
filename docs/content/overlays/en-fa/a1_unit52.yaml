@@ -1,0 +1,463 @@
+schema_version: "1.1"
+overlay_version: "2026.1-draft.1"
+overlay_key: en-fa.a1.unit52
+source_language: en
+target_language: fa
+status: complete_draft
+generation_provenance:
+  method: ai_adapted_from_public_domain_source
+  authoring_system: claude
+  human_reviewed: false
+review:
+  status: unreviewed
+  required_next_reviewer: codex_fresh_context
+  notes: >-
+    Draft overlay paired with the fa.a1.unit52.museum realization. See that
+    file's generation_provenance for the honest source-access result:
+    tried `firecrawl search "FSI Persian Basic Course museum موزه exhibition
+    ticket"` first, per the standing instruction to re-check Firecrawl quota
+    fresh even though it was reported exhausted in every earlier round this
+    session -- it returned `Error: Request failed with status code 402`
+    (payment required), confirming the account genuinely remains at 0
+    credits. Fell back to this session's own cached local `pdftotext
+    -layout` extraction of the same Live Lingua-hosted FSI Spoken Persian
+    PDF (`fsi_persian_livelingua.txt`, ~66,700 words) found already present
+    in this worker's scratchpad. Grepped case-insensitively for
+    museum/exhibit: genuinely zero hits anywhere in the document -- FSI
+    Persian's own course does not cover a museum scene at all, unlike the
+    cinema unit's partial hit. Disclosing honestly that nothing usable was
+    found rather than stretching an unrelated passage. All vocabulary and
+    the full dialogue are authored fresh from this project's own
+    established conventions.
+
+    Scenario/register note: نیما (the established recurring customer
+    character) buys the museum ticket, continuing his established role from
+    units 17/41/44/45/46/47/48/49/50/51. A NEW named museum-clerk character,
+    آقای فرهادی, is introduced -- distinct from unit40/42/44's آقای کریمی,
+    unit41's خانم احمدی, unit42's آقای صادقی, unit45's خانم رضایی, unit46's
+    آقای نوری, unit47's آقای مرادی, unit48's خانم کاظمی, unit49's آقای
+    جعفری, unit50's خانم رحیمی, and unit51's خانم موسوی (confirmed via a
+    real scan of every آقای/خانم name already used across the fa corpus,
+    plus a scan for فرهادی anywhere in existing realizations/overlays --
+    zero collision). This brings the corpus-wide named-service-character
+    balance to 6 male vs 5 female -- a normal fluctuation, not a policy
+    change, after unit51 brought it to genuine 5/5 parity. The museum is
+    named موزه فرهادی ("Farhadi Museum") after its own clerk, the same
+    self-naming convention unit51 used for سینما موسوی.
+
+    Reuse chain: بلیط (unit16), دارید (unit01), می‌خوام (unit03), این
+    (unit02), چقدر (unit21), می‌شه (unit11), بله (unit02 -- see correction
+    note below), داریم (unit38), یه (unit02), از (unit01), تا (unit03),
+    ساعت (unit09), باز/بازه (unit24/unit49), چقدره (unit28), شصت/هزار/
+    تومن/تومنه (unit03), سلام/ممنون (unit01), باشه (unit03), آقای
+    (unit40), دیدم (unit13), چطور (unit01), بود (unit06), باحال (unit36),
+    نه/پنج (unit03). New vocabulary genuinely introduced for the first
+    time in the whole corpus: موزه (museum), نمایشگاه (exhibition), and
+    قدیمی (old, historic) -- exactly 3 new words. No new verb-conjugation
+    pattern is introduced. The ticket price (شصت هزار تومن), opening hours
+    (از ساعت نه تا پنج), and exhibition description (یه نمایشگاه قدیمی)
+    are kept identical across the dialogue, the museum-sign reading text,
+    and the wrap-up review, per AUTHORING_GUIDE.md #11.
+
+    CORRECTION TO A PRE-EXISTING INACCURACY (found while verifying this
+    unit's own reuse chain by real grep, not by eye): unit51's own review
+    notes claimed بله was "New vocabulary genuinely introduced for the
+    first time in the whole corpus" in unit51. A direct grep of every fa
+    a1_unit*.yaml file's introduced_tokens shows بله was actually already
+    introduced in unit02, not unit51. This is a pre-existing citation error
+    in unit51's own already-drafted, unreviewed file -- out of scope to fix
+    here (a sibling file this task wasn't asked to touch), flagged so a
+    future reviewer or audit pass catches it. This unit does not reuse بله
+    from unit51's claim, so the error does not propagate into this file's
+    own content.
+
+    Every "Translate into English" exercise below explicitly sets
+    answer_language_code: en. No exercise in this unit tests a genuine
+    two-clause sentence joined by "and"/comma (§12) -- every multi-sentence
+    line is authored as two separate short sentences in both languages,
+    matching how units 44-51 already treat their own two-sentence notes.
+    No listen_type/listen_select/listen_order exercise is used anywhere in
+    this unit (continuing the established text-based corpus-consistency
+    pattern from units 19-51, even though fa now has real Azure TTS per
+    §14) -- the spine outcome's "listening" assessment requirement is
+    covered via the dialogue_comprehension exercise's comprehension-of-the-
+    exchange task, the same interpretation units 41/42/44/45/46/47/48/49/
+    50/51 already established. Checked the same-speaker/same-audio
+    distractor-collision bug class (fixed 2026-07-09 in the nl corpus,
+    commit 148240e) anyway, per the standing instruction to list every
+    line each speaker says before writing distractors: نیما says "سلام
+    آقای فرهادی. یه بلیط موزه می‌خوام."/"باشه، می‌خوام. نمایشگاه دارید؟"/
+    "موزه بازه؟"/"ممنون!"; آقای فرهادی says "سلام نیما. بلیط شصت هزار
+    تومنه."/"بله، یه نمایشگاه قدیمی داریم."/"بله، از ساعت نه تا پنج بازه."
+    -- lesson04's dialogue_comprehension distractors ("He asks how many
+    tickets he wants."/"He asks if he needs a guide."/"He asks for a
+    discount.") are plausible-fact alternatives, not lines either speaker
+    actually says or facts either speaker actually states anywhere in this
+    unit's dialogue -- ticket quantity, a guide, and a discount are never
+    mentioned by either character. The dialogue_response exercise
+    (lesson04) accepts نیما's own actual next line, not a distractor set,
+    so this check doesn't apply to it. Boolean-coercion check: ran a
+    recursive scan over title/gloss/note/example_gloss/answer/matching-pair
+    value fields (including matching_pairs right: values specifically)
+    across both this overlay and the paired realization for bare
+    yes/no/true/false/on/off string values or coerced booleans, plus a full
+    yaml.safe_load parse of both files confirming every loaded value is a
+    str/list/dict rather than a Python bool -- zero hits. Persian-vs-Arabic
+    codepoint scan (Arabic kaf U+0643/yeh U+064A) across both files -- zero
+    hits. Compiler validation, both standalone and against the full
+    52-unit en-fa A1 corpus with position-matched realization/overlay
+    lists, confirmed 0 errors/0 warnings (see this task's final report for
+    the exact command and output).
+
+course:
+  title: Farsi A1
+  description: >-
+    Beginner Iranian Farsi: buying a museum entrance ticket from a museum
+    clerk, asking whether there's an exhibition and whether the museum is
+    open, learning the opening hours, and briefly saying what you saw
+    afterward, plus reading/writing a short museum sign naming an
+    exhibition, its opening hours, and its ticket price.
+
+units:
+  fa.a1.unit52.museum: {title: Museum}
+
+lessons:
+  fa.a1.unit52.lesson01.new_museum_one: {title: "New words 1"}
+  fa.a1.unit52.lesson02.new_museum_two: {title: "New words 2"}
+  fa.a1.unit52.lesson03.ticket_price: {title: "Ticket price"}
+  fa.a1.unit52.lesson04.museum_dialogue: {title: "Dialogue: at the museum"}
+  fa.a1.unit52.lesson05.reading_museum_sign: {title: "Reading a museum sign"}
+  fa.a1.unit52.lesson06.wrap_up: {title: "Wrap-up"}
+
+teaching:
+  fa.a1.unit52.lesson01.teach.review_belit_darid:
+    title: "Review: ticket / do you have"
+    gloss: "ticket / do you have"
+    note: "*بلیط* ('ticket') was already taught in unit16; *دارید* ('do you have,' formal) was already taught in unit01/04/06/21/42/44/49."
+  fa.a1.unit52.lesson01.teach.review_mikhaam_in:
+    title: "Review: I want / this"
+    gloss: "I want / this"
+    note: "*می‌خوام* ('I want') was already taught in unit03; *این* ('this') was already taught in unit02/03/04/08/15/20/26/49/50/51."
+  fa.a1.unit52.lesson01.teach.review_cheghadr_mishe:
+    title: "Review: how much / it comes to"
+    gloss: "how much / it comes to"
+    note: "*چقدر* ('how much') was already taught in unit21/28/48/49/50/51; *می‌شه* ('it comes to, it becomes') was already taught in unit11/35/48/49/50/51."
+  fa.a1.unit52.lesson01.teach.mooze:
+    title: Museum
+    gloss: museum
+    note: "*موزه* is a place that displays historic or interesting objects."
+    example_gloss: "I want a museum ticket."
+
+  fa.a1.unit52.lesson02.teach.review_bale_darim_ye:
+    title: "Review: yes / we have / a, an"
+    gloss: "yes / we have / a, an"
+    note: "*بله* ('yes,' formal) was already taught in unit02/06/20/21/42/44/48/49/51; *داریم* ('we have') was already taught in unit38; *یه* ('a, an') was already taught in unit02."
+  fa.a1.unit52.lesson02.teach.review_az_ta_saat:
+    title: "Review: from / to / o'clock"
+    gloss: "from / to / o'clock"
+    note: "*از* ('from') was already taught in unit01; *تا* ('until, to') was already taught in unit03; *ساعت* ('o'clock, hour') was already taught in unit09."
+  fa.a1.unit52.lesson02.teach.review_baz_baze:
+    title: "Review: open / it's open"
+    gloss: "open / it's open"
+    note: "*باز* ('open') was already taught in unit24/27/43/49; *بازه* ('it's open') was already taught in unit49."
+  fa.a1.unit52.lesson02.teach.namayeshgaah:
+    title: Exhibition
+    gloss: exhibition
+    note: "*نمایشگاه* is a display of objects or artwork visitors can see."
+    example_gloss: "We have an exhibition."
+  fa.a1.unit52.lesson02.teach.ghadimi:
+    title: "Old, historic"
+    gloss: "old, historic"
+    note: "*قدیمی* describes something old or historic, like a museum exhibition of old objects."
+    example_gloss: "We have an old exhibition."
+
+  fa.a1.unit52.lesson03.teach.review_cheghadre:
+    title: "Review: how much is it"
+    gloss: "how much is it"
+    note: "*چقدره* ('how much is it') was already taught in unit28/51."
+  fa.a1.unit52.lesson03.teach.review_shast_hezar_toman:
+    title: "Review: sixty / thousand / toman"
+    gloss: "sixty / thousand / toman"
+    note: "*شصت* ('sixty') was already taught in unit03; *هزار* ('thousand') and *تومن* ('toman') were already taught in unit03; *تومنه* ('it's ... toman') was already taught in unit03/50/51."
+  fa.a1.unit52.lesson03.teach.belit_cheghadre:
+    title: "How much is a museum ticket?"
+    gloss: "How much is a museum ticket?"
+    note: "A direct reuse of *چقدره* to ask the price of the museum ticket."
+  fa.a1.unit52.lesson03.teach.belit_price:
+    title: "The ticket is 60,000 toman."
+    gloss: "The ticket is 60,000 toman."
+    note: "States the price using already-known numbers and *تومنه*."
+
+  fa.a1.unit52.lesson04.teach.review_salam_mamnoon:
+    title: "Review: hi / thanks"
+    gloss: "hi / thanks"
+    note: "*سلام* and *ممنون* were already taught in units 01/06/08/12/20/21/22/33/34/35/41/42/43/44/45/46/47/48/49/50/51."
+  fa.a1.unit52.lesson04.teach.review_bashe:
+    title: "Review: okay"
+    gloss: okay
+    note: "*باشه* ('okay') was already taught in units 03/07/08/09/10/12/16/17/20/21/22/25/34/35/39/40/41/42/43/44/45/46/47/48/49/50/51."
+  fa.a1.unit52.lesson04.teach.review_aghaye:
+    title: "Review: Mr."
+    gloss: "Mr."
+    note: "*آقای* ('Mr.') was already taught in unit40/42/44/46/47/49."
+  fa.a1.unit52.lesson04.teach.character_farhadi:
+    title: "Mr. Farhadi"
+    gloss: "Mr. Farhadi"
+    note: "*آقای فرهادی* is this unit's new museum clerk character, distinct from every other named service-encounter character already in this course."
+    example_gloss: "Hi Mr. Farhadi!"
+  fa.a1.unit52.lesson04.teach.dialogue_line1:
+    title: "Nima: Hi Mr. Farhadi. I want a museum ticket."
+    gloss: "Hi Mr. Farhadi. I want a museum ticket."
+  fa.a1.unit52.lesson04.teach.dialogue_line2:
+    title: "Mr. Farhadi: Hi Nima. The ticket is 60,000 toman."
+    gloss: "Hi Nima. The ticket is 60,000 toman."
+  fa.a1.unit52.lesson04.teach.dialogue_line3:
+    title: "Nima: Okay, I want it. Do you have an exhibition?"
+    gloss: "Okay, I want it. Do you have an exhibition?"
+  fa.a1.unit52.lesson04.teach.dialogue_line4:
+    title: "Mr. Farhadi: Yes, we have an old exhibition."
+    gloss: "Yes, we have an old exhibition."
+  fa.a1.unit52.lesson04.teach.dialogue_line5:
+    title: "Nima: Is the museum open?"
+    gloss: "Is the museum open?"
+  fa.a1.unit52.lesson04.teach.dialogue_line6:
+    title: "Mr. Farhadi: Yes, it's open from nine to five."
+    gloss: "Yes, it's open from nine to five."
+  fa.a1.unit52.lesson04.teach.dialogue_line7:
+    title: "Nima: Thanks!"
+    gloss: "Thanks!"
+
+  fa.a1.unit52.lesson05.teach.reading_text:
+    title: "Reading: a museum sign"
+    gloss: "Farhadi Museum: old exhibition. Ticket 60,000 toman. Open from nine to five."
+    note: "A short museum sign naming an exhibition, its opening hours, and its ticket price."
+
+  fa.a1.unit52.lesson06.teach.review_request:
+    title: "I want a museum ticket."
+    gloss: "I want a museum ticket."
+    note: "A full review sentence reusing only already-known words from this unit."
+  fa.a1.unit52.lesson06.teach.review_price:
+    title: "The ticket is 60,000 toman."
+    gloss: "The ticket is 60,000 toman."
+  fa.a1.unit52.lesson06.teach.review_saw:
+    title: "I saw an old exhibition."
+    gloss: "I saw an old exhibition."
+    note: "*دیدم* ('I saw') was already taught in unit13 -- this reuses it to talk about what you saw at the museum, as the spine outcome requires."
+  fa.a1.unit52.lesson06.teach.review_afterward:
+    title: "How was the exhibition? It was cool!"
+    gloss: "How was the exhibition? It was cool!"
+    note: "*چطور* ('how'), *بود* ('was'), and *باحال* ('cool') were each already taught (unit01, unit06, unit36) -- this combines them fresh to talk briefly about the exhibition afterward."
+  fa.a1.unit52.lesson06.teach.summary_words:
+    title: "Museum / ticket / exhibition / old / How much is the ticket?"
+    gloss: "museum / ticket / exhibition / old / how much is the ticket?"
+    note: "These are the key words and phrases taught in this unit."
+
+exercises:
+  fa.a1.unit52.lesson01.exercise01.recognize_mooze:
+    instruction: "What does this word mean?"
+    correct_option: museum
+    distractors: [ticket, price, exhibition]
+    accepted_answers: [{value: museum, status: correct}]
+    feedback: "موزه means 'museum.'"
+  fa.a1.unit52.lesson01.exercise02.recognize_belit_mooze_mikhaam:
+    instruction: "What does this sentence mean?"
+    correct_option: "I want a museum ticket."
+    distractors: ["I don't want a ticket.", "I have a ticket.", "I want the price."]
+    accepted_answers: [{value: "I want a museum ticket.", status: correct}]
+    feedback: "بلیط موزه می‌خوام means 'I want a museum ticket.'"
+  fa.a1.unit52.lesson01.exercise03.match_museum_one:
+    instruction: "Match each word with its meaning."
+    accepted_answers:
+      - value: {بلیط: ticket, دارید: "do you have", "می‌خوام": "I want", این: this, چقدر: "how much", "می‌شه": "it comes to", موزه: museum}
+        status: correct
+    feedback: "These are the first new museum words for this unit."
+  fa.a1.unit52.lesson01.exercise04.word_order_belit_mooze_mikhaam:
+    instruction: "Put the words in order."
+    accepted_answers: [{value: [بلیط, موزه, "می‌خوام"], status: correct}]
+    feedback: "بلیط موزه می‌خوام means 'I want a museum ticket.'"
+  fa.a1.unit52.lesson01.exercise05.translate_in_mooze:
+    instruction: "Translate into English: این موزه"
+    answer_language_code: en
+    accepted_answers:
+      - {value: "This museum.", status: correct}
+      - {value: "This, museum", status: correct}
+      - {value: "this museum", status: correct}
+      - {value: "This, museum.", status: correct}
+    feedback: "این موزه means 'this, museum.'"
+
+  fa.a1.unit52.lesson02.exercise01.recognize_namayeshgaah:
+    instruction: "What does this word mean?"
+    correct_option: exhibition
+    distractors: [museum, ticket, guide]
+    accepted_answers: [{value: exhibition, status: correct}]
+    feedback: "نمایشگاه means 'exhibition.'"
+  fa.a1.unit52.lesson02.exercise02.recognize_ye_namayeshgaah_ghadimi_darim:
+    instruction: "What does this sentence mean?"
+    correct_option: "We have an old exhibition."
+    distractors: ["We have a new exhibition.", "We don't have an exhibition.", "We have two exhibitions."]
+    accepted_answers: [{value: "We have an old exhibition.", status: correct}]
+    feedback: "یه نمایشگاه قدیمی داریم means 'We have an old exhibition.'"
+  fa.a1.unit52.lesson02.exercise03.match_museum_two:
+    instruction: "Match each word or phrase with its meaning."
+    accepted_answers:
+      - value: {بله: "yes (formal)", داریم: "we have", یه: "a / an", از: from, تا: to, ساعت: "o'clock / hour", بازه: "it's open", نمایشگاه: exhibition}
+        status: correct
+    feedback: "These words let you ask about an exhibition and opening hours."
+  fa.a1.unit52.lesson02.exercise04.word_order_ye_namayeshgaah_ghadimi_darim:
+    instruction: "Put the words in order."
+    accepted_answers: [{value: [یه, نمایشگاه, قدیمی, داریم], status: correct}]
+    feedback: "یه نمایشگاه قدیمی داریم means 'We have an old exhibition.'"
+  fa.a1.unit52.lesson02.exercise05.translate_mooze_baze:
+    instruction: "Translate into English: موزه بازه؟"
+    answer_language_code: en
+    accepted_answers:
+      - {value: "Is the museum open?", status: correct}
+      - {value: "is the museum open", status: correct}
+    feedback: "موزه بازه؟ means 'Is the museum open?'"
+
+  fa.a1.unit52.lesson03.exercise01.recognize_belit_cheghadre:
+    instruction: "What does this sentence mean?"
+    correct_option: "How much is a museum ticket?"
+    distractors: ["Where is a museum ticket?", "Do you have a museum ticket?", "I want a museum ticket."]
+    accepted_answers: [{value: "How much is a museum ticket?", status: correct}]
+    feedback: "بلیط موزه چقدره؟ means 'How much is a museum ticket?'"
+  fa.a1.unit52.lesson03.exercise02.recognize_belit_price:
+    instruction: "What does this sentence mean?"
+    correct_option: "The ticket is 60,000 toman."
+    distractors: ["The ticket is free.", "There are no tickets.", "The ticket is 600,000 toman."]
+    accepted_answers: [{value: "The ticket is 60,000 toman.", status: correct}]
+    feedback: "بلیط شصت هزار تومنه means 'The ticket is 60,000 toman.'"
+  fa.a1.unit52.lesson03.exercise03.match_ticket_price:
+    instruction: "Match each word or phrase with its meaning."
+    accepted_answers:
+      - value: {"چقدره": "how much is it", شصت: sixty, هزار: thousand, تومن: toman, "بلیط موزه چقدره؟": "How much is a museum ticket?", "بلیط شصت هزار تومنه.": "The ticket is 60,000 toman."}
+        status: correct
+    feedback: "These words let you ask and state the price of a museum ticket."
+  fa.a1.unit52.lesson03.exercise04.word_order_belit_price:
+    instruction: "Put the words in order."
+    accepted_answers: [{value: [بلیط, شصت, هزار, "تومنه"], status: correct}]
+    feedback: "بلیط شصت هزار تومنه means 'The ticket is 60,000 toman.'"
+  fa.a1.unit52.lesson03.exercise05.translate_in_belit_cheghadre:
+    instruction: "Translate into English: این بلیط چقدره؟"
+    answer_language_code: en
+    accepted_answers:
+      - {value: "How much is this ticket?", status: correct}
+      - {value: "how much is this ticket", status: correct}
+    feedback: "این بلیط چقدره؟ means 'How much is this ticket?'"
+
+  fa.a1.unit52.lesson04.exercise01.dialogue_comprehension_asks_exhibition:
+    instruction: "Nima asks Mr. Farhadi something. What does he want to know?"
+    correct_option: "He asks if there's an exhibition."
+    distractors:
+      - "He asks how many tickets he wants."
+      - "He asks if he needs a guide."
+      - "He asks for a discount."
+    accepted_answers: [{value: "He asks if there's an exhibition.", status: correct}]
+    feedback: "نمایشگاه دارید؟ means 'Do you have an exhibition?'"
+  fa.a1.unit52.lesson04.exercise02.recognize_dialogue_line4:
+    instruction: "What does this sentence mean?"
+    correct_option: "Yes, we have an old exhibition."
+    distractors:
+      - "No, we don't have an exhibition."
+      - "Yes, we have a new exhibition."
+      - "Yes, we have two exhibitions."
+    accepted_answers: [{value: "Yes, we have an old exhibition.", status: correct}]
+    feedback: "بله، یه نمایشگاه قدیمی داریم means 'Yes, we have an old exhibition.'"
+  fa.a1.unit52.lesson04.exercise03.match_dialogue_museum:
+    instruction: "Match each line with its meaning."
+    accepted_answers:
+      - value: {"سلام آقای فرهادی. یه بلیط موزه می‌خوام.": "Hi Mr. Farhadi. I want a museum ticket.", "سلام نیما. بلیط شصت هزار تومنه.": "Hi Nima. The ticket is 60,000 toman.", "باشه، می‌خوام. نمایشگاه دارید؟": "Okay, I want it. Do you have an exhibition?", "بله، یه نمایشگاه قدیمی داریم.": "Yes, we have an old exhibition.", "موزه بازه؟": "Is the museum open?", "بله، از ساعت نه تا پنج بازه.": "Yes, it's open from nine to five.", "ممنون!": "Thanks!"}
+        status: correct
+    feedback: "These lines appear in the museum conversation between Nima and Mr. Farhadi."
+  fa.a1.unit52.lesson04.exercise04.dialogue_response_thanks:
+    instruction: "Respond to بله، از ساعت نه تا پنج بازه by saying thanks."
+    accepted_answers:
+      - {value: "ممنون!", status: correct}
+      - {value: ممنون, status: correct}
+      - {value: "خیلی ممنون!", status: correct}
+      - {value: "خیلی ممنون", status: correct}
+    feedback: "ممنون! means 'Thanks!'"
+  fa.a1.unit52.lesson04.exercise05.translate_dialogue_line3:
+    instruction: "Translate into English: باشه، می‌خوام. نمایشگاه دارید؟"
+    answer_language_code: en
+    accepted_answers:
+      - {value: "Okay, I want it. Do you have an exhibition?", status: correct}
+      - {value: "Okay. I want it. Do you have an exhibition?", status: correct}
+      - {value: "Okay, I want it. Do you have an exhibition", status: correct}
+    feedback: "باشه، می‌خوام. نمایشگاه دارید؟ means 'Okay, I want it. Do you have an exhibition?'"
+
+  fa.a1.unit52.lesson05.exercise01.reading_comprehension_service:
+    instruction: "According to the sign, what service is this?"
+    correct_option: "Museum."
+    distractors:
+      - "Restaurant."
+      - "Cinema."
+      - "Library."
+    accepted_answers: [{value: "Museum.", status: correct}]
+    feedback: "موزه means 'museum' -- the sign is for a museum."
+  fa.a1.unit52.lesson05.exercise02.reading_comprehension_price:
+    instruction: "According to the sign, how much is the ticket?"
+    correct_option: "60,000 toman."
+    distractors:
+      - "6,000 toman."
+      - "16,000 toman."
+      - "600,000 toman."
+    accepted_answers: [{value: "60,000 toman.", status: correct}]
+    feedback: "بلیط شصت هزار تومن means 'ticket, 60,000 toman.'"
+  fa.a1.unit52.lesson05.exercise03.match_reading_museum_sign:
+    instruction: "Match each word or phrase with its meaning."
+    accepted_answers:
+      - value: {موزه: museum, فرهادی: Farhadi, نمایشگاه: exhibition, قدیمی: "old / historic", بلیط: ticket, نه: nine, پنج: five}
+        status: correct
+    feedback: "These words let you understand the museum sign."
+  fa.a1.unit52.lesson05.exercise04.translate_reading_museum_sign:
+    instruction: "Translate into English: موزه فرهادی: نمایشگاه قدیمی. بلیط شصت هزار تومن. از ساعت نه تا پنج بازه."
+    answer_language_code: en
+    accepted_answers:
+      - {value: "Farhadi Museum: old exhibition. Ticket 60,000 toman. Open from nine to five.", status: correct}
+      - {value: "Farhadi Museum, old exhibition, ticket 60,000 toman, open from nine to five.", status: correct}
+      - {value: "Farhadi's Museum: old exhibition. Ticket 60,000 toman. Open from nine to five.", status: correct}
+    feedback: "موزه فرهادی: نمایشگاه قدیمی. بلیط شصت هزار تومن. از ساعت نه تا پنج بازه means 'Farhadi Museum: old exhibition. Ticket 60,000 toman. Open from nine to five.'"
+  fa.a1.unit52.lesson05.exercise05.write_museum_sign:
+    instruction: "Write a short museum sign naming an exhibition, its opening hours, and its ticket price, using this sign's pattern."
+    accepted_answers:
+      - {value: "موزه فرهادی: نمایشگاه قدیمی. بلیط شصت هزار تومن. از ساعت نه تا پنج بازه.", status: correct}
+      - {value: "موزه فرهادی: نمایشگاه قدیمی. بلیط شصت هزار تومن. از ساعت نه تا پنج بازه", status: correct}
+    feedback: "A sign can name the exhibition, hours, and price, e.g. موزه فرهادی: نمایشگاه قدیمی. بلیط شصت هزار تومن. از ساعت نه تا پنج بازه."
+
+  fa.a1.unit52.lesson06.exercise01.recognize_review_request:
+    instruction: "What does this sentence mean?"
+    correct_option: "I want a museum ticket."
+    distractors:
+      - "I don't want a ticket."
+      - "I want a cinema ticket."
+      - "I want the price."
+    accepted_answers: [{value: "I want a museum ticket.", status: correct}]
+    feedback: "یه بلیط موزه می‌خوام means 'I want a museum ticket.'"
+  fa.a1.unit52.lesson06.exercise02.recognize_review_afterward:
+    instruction: "What does this sentence mean?"
+    correct_option: "How was the exhibition? It was cool!"
+    distractors:
+      - "How much was the exhibition? It was cheap!"
+      - "Where was the exhibition? It was far!"
+      - "When was the exhibition? It was late!"
+    accepted_answers: [{value: "How was the exhibition? It was cool!", status: correct}]
+    feedback: "نمایشگاه چطور بود؟ باحال بود! means 'How was the exhibition? It was cool!'"
+  fa.a1.unit52.lesson06.exercise03.match_wrap_museum:
+    instruction: "Match each word or phrase with its meaning."
+    accepted_answers:
+      - value: {موزه: museum, بلیط: ticket, نمایشگاه: exhibition, قدیمی: "old / historic", "بلیط چقدره؟": "How much is the ticket?", "نمایشگاه چطور بود؟": "How was the exhibition?"}
+        status: correct
+    feedback: "This reviews all the key museum words from this unit."
+  fa.a1.unit52.lesson06.exercise04.word_order_ye_belit_mikhaam:
+    instruction: "Put the words in order."
+    accepted_answers: [{value: [یه, بلیط, "می‌خوام"], status: correct}]
+    feedback: "یه بلیط می‌خوام means 'I want a ticket.'"
+  fa.a1.unit52.lesson06.exercise05.write_museum_message:
+    instruction: "Write a short message asking about or confirming museum plans."
+    accepted_answers:
+      - {value: "یه بلیط می‌خوام", status: correct}
+      - {value: "یه بلیط می‌خوام.", status: correct}
+      - {value: "بلیط چقدره؟", status: correct}
+      - {value: "موزه بازه؟", status: correct}
+    feedback: "You can say یه بلیط می‌خوام (I want a ticket) to ask for a ticket at the museum."
