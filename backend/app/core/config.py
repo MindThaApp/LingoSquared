@@ -7,9 +7,6 @@ class Settings(BaseSettings):
     jwt_secret: str = "development-only-secret"
     access_token_expire_seconds: int = 86400
     admin_emails: str = "admin@example.com"
-    enable_hearts: bool = False
-    enable_gems: bool = False
-    enable_leaderboard: bool = False
     cors_origins: str = "http://localhost:5173"
     # Raw service-account JSON content (not a file path) — set as a single
     # env var so credentials don't require a mounted file in every deploy

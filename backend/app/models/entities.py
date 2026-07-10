@@ -606,11 +606,6 @@ class UserStats(Base):
     streak_freezes_available: Mapped[int] = mapped_column(Integer, default=0)
     last_freeze_used_date: Mapped[date | None] = mapped_column(Date, nullable=True)
 
-    # Rejected product scope: no hearts/lives or gems/currency system.
-    # Columns remain only for additive-schema compatibility.
-    hearts: Mapped[int] = mapped_column(Integer, default=5)
-    gems: Mapped[int] = mapped_column(Integer, default=0)
-
 
 class QuestCompletion(Base):
     __tablename__ = "quest_completions"
@@ -890,111 +885,6 @@ class ContentKey(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now)
 
 
-class MediaAsset(Base):
-    __tablename__ = "media_assets"
-
-    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uid)
-    checksum: Mapped[str] = mapped_column(String(128), unique=True)
-    content_release_id: Mapped[str | None] = mapped_column(
-        ForeignKey("content_releases.id", ondelete="SET NULL"),
-        nullable=True,
-    )
-    language_code: Mapped[str | None] = mapped_column(
-        ForeignKey("languages.code", ondelete="RESTRICT"),
-        nullable=True,
-    )
-    kind: Mapped[str] = mapped_column(String(30))
-    purpose: Mapped[str | None] = mapped_column(String(40), nullable=True)
-    mime_type: Mapped[str] = mapped_column(String(100))
-    storage_path: Mapped[str | None] = mapped_column(Text, nullable=True)
-    byte_size: Mapped[int | None] = mapped_column(Integer, nullable=True)
-    duration_ms: Mapped[int | None] = mapped_column(Integer, nullable=True)
-    provider: Mapped[str | None] = mapped_column(String(50), nullable=True)
-    voice_key: Mapped[str | None] = mapped_column(String(100), nullable=True)
-    generation_metadata: Mapped[dict] = mapped_column(JSON, default=dict)
-    license_metadata: Mapped[dict] = mapped_column(JSON, default=dict)
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now)
-
-
-class Dialogue(Base):
-    __tablename__ = "dialogues"
-
-    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uid)
-    content_release_id: Mapped[str] = mapped_column(
-        ForeignKey("content_releases.id", ondelete="CASCADE")
-    )
-    content_key_id: Mapped[str | None] = mapped_column(
-        ForeignKey("content_keys.id", ondelete="SET NULL"),
-        nullable=True,
-    )
-    language_code: Mapped[str] = mapped_column(
-        ForeignKey("languages.code", ondelete="RESTRICT")
-    )
-    title: Mapped[str] = mapped_column(String(255))
-    scenario: Mapped[dict] = mapped_column(JSON, default=dict)
-    register: Mapped[str | None] = mapped_column(String(50), nullable=True)
-    cultural_context: Mapped[dict] = mapped_column(JSON, default=dict)
-    structure_fingerprint: Mapped[str | None] = mapped_column(
-        String(128), nullable=True
-    )
-    dialogue_metadata: Mapped[dict] = mapped_column(JSON, default=dict)
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now)
-
-
-class DialogueNode(Base):
-    __tablename__ = "dialogue_nodes"
-    __table_args__ = (
-        UniqueConstraint(
-            "dialogue_id",
-            "node_key",
-            name="uq_dialogue_nodes_dialogue_key",
-        ),
-    )
-
-    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uid)
-    dialogue_id: Mapped[str] = mapped_column(
-        ForeignKey("dialogues.id", ondelete="CASCADE")
-    )
-    node_key: Mapped[str] = mapped_column(String(100))
-    kind: Mapped[str] = mapped_column(String(30))
-    speaker_key: Mapped[str | None] = mapped_column(String(100), nullable=True)
-    text_blocks: Mapped[list] = mapped_column(JSON, default=list)
-    media_asset_id: Mapped[str | None] = mapped_column(
-        ForeignKey("media_assets.id", ondelete="SET NULL"),
-        nullable=True,
-    )
-    order_hint: Mapped[int | None] = mapped_column(Integer, nullable=True)
-    node_metadata: Mapped[dict] = mapped_column(JSON, default=dict)
-
-
-class DialogueEdge(Base):
-    __tablename__ = "dialogue_edges"
-    __table_args__ = (
-        UniqueConstraint(
-            "dialogue_id",
-            "source_node_id",
-            "order",
-            name="uq_dialogue_edges_source_order",
-        ),
-    )
-
-    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uid)
-    dialogue_id: Mapped[str] = mapped_column(
-        ForeignKey("dialogues.id", ondelete="CASCADE")
-    )
-    source_node_id: Mapped[str] = mapped_column(
-        ForeignKey("dialogue_nodes.id", ondelete="CASCADE")
-    )
-    target_node_id: Mapped[str] = mapped_column(
-        ForeignKey("dialogue_nodes.id", ondelete="CASCADE")
-    )
-    response_key: Mapped[str | None] = mapped_column(String(100), nullable=True)
-    condition: Mapped[dict] = mapped_column(JSON, default=dict)
-    feedback: Mapped[dict] = mapped_column(JSON, default=dict)
-    order: Mapped[int] = mapped_column(Integer, default=1)
-    edge_metadata: Mapped[dict] = mapped_column(JSON, default=dict)
-
-
 class ContentReview(Base):
     __tablename__ = "content_reviews"
 
@@ -1018,26 +908,6 @@ class ContentReview(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now)
     completed_at: Mapped[datetime | None] = mapped_column(
         DateTime(timezone=True), nullable=True
-    )
-
-
-class AnswerSpec(Base):
-    __tablename__ = "answer_specs"
-
-    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uid)
-    exercise_id: Mapped[str] = mapped_column(
-        ForeignKey("exercises.id", ondelete="CASCADE"),
-        unique=True,
-    )
-    accepted_variants: Mapped[list] = mapped_column(JSON, default=list)
-    normalization: Mapped[dict] = mapped_column(JSON, default=dict)
-    rejected_near_matches: Mapped[list] = mapped_column(JSON, default=list)
-    rubric: Mapped[dict] = mapped_column(JSON, default=dict)
-    explanation: Mapped[str | None] = mapped_column(Text, nullable=True)
-    error_feedback: Mapped[dict] = mapped_column(JSON, default=dict)
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now)
-    updated_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), default=now, onupdate=now
     )
 
 
@@ -1225,48 +1095,6 @@ class NotificationPreference(Base):
     notification_types: Mapped[dict] = mapped_column(JSON, default=dict)
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), default=now, onupdate=now
-    )
-
-
-class DailyQuest(Base):
-    __tablename__ = "daily_quests"
-
-    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uid)
-    code: Mapped[str] = mapped_column(String(80), unique=True)
-    title: Mapped[str] = mapped_column(String(200))
-    description: Mapped[str] = mapped_column(Text)
-    criteria: Mapped[dict] = mapped_column(JSON, default=dict)
-    reward: Mapped[dict] = mapped_column(JSON, default=dict)
-    active: Mapped[bool] = mapped_column(Boolean, default=True)
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now)
-
-
-class UserDailyQuestProgress(Base):
-    __tablename__ = "user_daily_quest_progress"
-    __table_args__ = (
-        UniqueConstraint(
-            "user_id",
-            "quest_id",
-            "quest_date",
-            name="uq_user_daily_quest_progress",
-        ),
-    )
-
-    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uid)
-    user_id: Mapped[str] = mapped_column(
-        ForeignKey("users.id", ondelete="CASCADE")
-    )
-    quest_id: Mapped[str] = mapped_column(
-        ForeignKey("daily_quests.id", ondelete="CASCADE")
-    )
-    quest_date: Mapped[date] = mapped_column(Date)
-    progress: Mapped[dict] = mapped_column(JSON, default=dict)
-    completed: Mapped[bool] = mapped_column(Boolean, default=False)
-    completed_at: Mapped[datetime | None] = mapped_column(
-        DateTime(timezone=True), nullable=True
-    )
-    reward_claimed_at: Mapped[datetime | None] = mapped_column(
-        DateTime(timezone=True), nullable=True
     )
 
 
