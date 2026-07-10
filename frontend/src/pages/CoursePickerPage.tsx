@@ -11,6 +11,7 @@ import type { CourseSummary, Language } from "../api/types";
 const UI_SWITCHABLE_LANGUAGES: Record<string, string> = {
   fa: "language_switcher.farsi",
   prs: "language_switcher.dari",
+  nl: "language_switcher.dutch",
 };
 
 // Below this total unit count for a path, it's real but still growing --

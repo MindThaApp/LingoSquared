@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 // English speaker can still find "دری" in the dropdown.
 const UI_LANGUAGES: { code: string; nativeName: string }[] = [
   { code: "en", nativeName: "English" },
+  { code: "nl", nativeName: "Nederlands" },
   { code: "fa", nativeName: "فارسی" },
   { code: "prs", nativeName: "دری" },
 ];

@@ -3,6 +3,7 @@ import { initReactI18next } from "react-i18next";
 import en from "./locales/en.json";
 import fa from "./locales/fa.json";
 import prs from "./locales/prs.json";
+import nl from "./locales/nl.json";
 
 const RTL_LANGUAGES = new Set(["fa", "prs"]);
 const STORAGE_KEY = "ui-language";
@@ -19,6 +20,7 @@ i18n.use(initReactI18next).init({
     en: { translation: en },
     fa: { translation: fa },
     prs: { translation: prs },
+    nl: { translation: nl },
   },
   lng: storedLanguage,
   fallbackLng: "en",
