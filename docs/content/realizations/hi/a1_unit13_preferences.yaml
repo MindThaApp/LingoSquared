@@ -1,0 +1,675 @@
+schema_version: "1.1"
+realization_version: "2026.1-draft.1"
+target_language: "hi"
+cefr_level: "A1"
+status: "complete_draft"
+generation_provenance:
+  method: "ai_generated"
+  authoring_system: "claude"
+  human_reviewed: false
+review:
+  status: "unreviewed"
+  required_next_reviewer: "codex"
+  notes: >-
+    Thirteenth Hindi unit, continuing directly from hi/a1_unit12_past_events.yaml
+    (same Priya/Arjun characters, still on तुम terms). Spine outcome confirmed
+    via a direct read of universal_spine.yaml (not assumed from other
+    languages): the outcome entry immediately following
+    universal.a1.past_events.describe_recent_event (line 391, hi's own
+    unit12) is universal.a1.preferences.express_preferences (line 416, "Express
+    and ask about basic likes, dislikes, wants, and choices"), whose own
+    `prerequisites:` list is empty (line 418) -- no gating dependency to
+    verify. Cross-checked against on-disk precedent per this task's explicit
+    instruction: `ls docs/content/realizations/nl/`, `pl/`, and `ro/` all
+    independently confirm a1_unit13_preferences.yaml as their own thirteenth
+    unit, matching hi's own unit01-12 sequence, which has independently
+    tracked the same topic order as those three languages throughout. Sized
+    to 3 lessons matching unit01-12's bootstrap pace. Topic/pacing structure
+    only (recognition-first, minimal new grammar surface, dialogue in
+    lesson03) informed at a purely structural level by this session's own
+    established hi conventions, not by opening any nl/pl/ro file's actual
+    text -- every Hindi sentence below is authored fresh.
+
+    Source access, re-attempted per this task's explicit instruction (not
+    assumed to fail the same way as every prior hi unit): a fresh
+    `firecrawl search` (no query cache reused from any prior session) failed
+    outright with the same HTTP 402 (payment/quota) error every prior hi
+    unit this session has hit -- quota still has not reset, fully disclosed
+    rather than silently skipped. Fell back to the same FSI "Hindi: An
+    Active Introduction" archive.org item (`Fsi-Hindi-AnActiveIntroduction`),
+    re-downloaded fresh into this session's own isolated scratchpad (a fresh
+    Claude session cannot reuse a prior session's scratch files). A fresh
+    regex scan (Python, not eyeballed) of the Internet Archive's own OCR
+    pass (`Fsi-HindiActiveIntroduction-StudentText_djvu.txt`, 94KB,
+    re-downloaded this session) for the Devanagari Unicode block
+    (U+0900-U+097F) returned ZERO matches anywhere in the document --
+    confirmed programmatically, consistent with unit12's own documented
+    "twelfth" confirmation of this exact same zero-Devanagari-match result;
+    this unit's own fresh scan is the thirteenth such confirmation in
+    sequence. A dedicated grep of the OCR file for this unit's own topic
+    (like/dislike/want/prefer) found only incidental English commentary
+    about honorific naming conventions and greeting-phrase regional
+    preference ("Different greetings are preferred by people of different
+    religious and regional backgrounds", "Most Hindu women prefer to be
+    known by their first name") -- no grammar explanation of an actual
+    Hindi liking/preference construction, and every Hindi-script line
+    anywhere near those hits is pure OCR mojibake ("TFtf ^tf^ I", "SPHTiT^T
+    I"), confirmed by eye to be garbage, not readable
+    Devanagari-as-Latin-transliteration, matching the exact failure mode
+    confirmed twelve times over across units 01-12, now a thirteenth time.
+    Per this task's explicit instruction, nothing from either extraction
+    attempt -- neither any mojibake fragment nor any wording of the
+    recovered English framing prose -- was used, cleaned up, transcribed,
+    or guessed at anywhere in this file. Every Devanagari string below is
+    this session's own careful, correct rendering of established Modern
+    Standard Hindi, verified character-by-character (codepoint hex dump
+    run directly against every new word before finalizing, see the
+    nasalization discipline paragraph below).
+
+    Central grammar decision #1: "पसंद है/हैं" (pasand hai/hain, "is/are
+    liked", i.e. "I like...") is introduced as a direct, disclosed
+    extension of the ALREADY-established दातिव-subject construction
+    मुझे/तुम्हें ... है (already taught via मुझे...चाहिए, unit06/07's "I
+    want/need", and मुझे काम है, unit11's "I have work") -- same मुझे/तुम्हें
+    dative-subject logic, now applied to a new predicate noun पसंद
+    ("liking/favorite") instead of चाहिए ("want/need") or काम है ("have
+    work"). A dedicated grammar_note (lesson01.teach.pasand_hai_grammar)
+    explicitly distinguishes पसंद से चाहिए: चाहिए (unit06) is itself already
+    gender-invariant and takes NO है after it ("इसके बाद 'है' नहीं आता",
+    unit06's own disclosed rule); पसंद, by contrast, is a noun that
+    REQUIRES a है/हैं copula after it, disclosed here as the one genuinely
+    new structural fact this unit adds to the दातिव-subject family.
+
+    Central grammar decision #2: the है/हैं choice after पसंद agrees with
+    the NUMBER of the liked thing (not the speaker's gender, and not the
+    liked thing's gender either) -- a direct, disclosed extension of the
+    already-established है/हैं number-agreement pattern from unit02's
+    "मेरे पास एक किताब है" (singular) / "मेरे पास छह किताबें हैं" (plural).
+    Demonstrated with चाय/संगीत (singular, है) against किताबें (plural,
+    हैं) -- lesson01.teach.number_agreement_grammar states this explicitly
+    and cross-references unit02 by name. This deliberately avoids
+    introducing any NEW grammar concept: it is the same है/हैं fact the
+    course already taught, now shown to apply beyond simple possession.
+
+    Central grammar decision #3: "X ज़्यादा पसंद है" ("X is liked more",
+    i.e. "I prefer X") is introduced as a minor lexical extension, not a
+    new grammar point -- ज़्यादा ("more") is simply placed before the
+    already-taught पसंद है, no new sentence structure. This is how the
+    spine's "choices" requirement is met without introducing कौन सा/सी
+    ("which") or a से-based comparative ("X से ज़्यादा", "more than X"),
+    both of which are deliberately deferred to unit14 (comparisons, the
+    very next spine outcome, which exists specifically to teach comparison
+    grammar) -- this unit only teaches EXPRESSING a preference between two
+    options already both named in the same या-joined question
+    (लेसन02's "तुम्हें चाय पसंद है या कॉफ़ी?"), not comparing them
+    grammatically.
+
+    Central grammar decision #4: choice/either-or questions reuse या
+    ("or"), already taught in unit06/07 (there for ordering food/goods,
+    e.g. unit06 lesson02's "चाय या कॉफ़ी" word_bank) -- lesson02's
+    "तुम्हें चाय पसंद है या कॉफ़ी?" is a direct, disclosed extension of that
+    same word into the "likes" domain, no new grammar.
+
+    Central grammar decision #5, a genuine dual usage disclosed: तुम्हें
+    (already taught unit06 as "to you", used there only with चाहिए, e.g.
+    "तुम्हें चाय चाहिए?") is now also paired with पसंद है ("तुम्हें संगीत
+    पसंद है?") -- the same दातिव pronoun, a new predicate, not a new word
+    or a new grammatical fact about तुम्हें itself (it was already
+    established as a general दातिव-subject marker, not चाहिए-specific);
+    flagged here per the standing "cross-check every usage, not just
+    mechanically-enforced tokens" discipline even though this is a
+    straightforward extension rather than a surprising dual meaning like
+    से or क्या in earlier units.
+
+    Same-speaker-distractor check (the nl unit44-50 regression class):
+    performed explicitly. All three listen_select exercises (lesson01.
+    exercise04, lesson02.exercise03, lesson03.exercise05) are each a
+    single standalone, non-dialogue utterance with no other speaker/other
+    lines in the same clip -- this bug class structurally cannot occur
+    here, matching unit09-12's own precedent, now applied a fifth time.
+    The two dialogue_comprehension exercises in lesson03 (exercise01/02)
+    are TEXT reading-comprehension (the learner reads the actual dialogue
+    line, no audio/`media_asset_key` involved), matching unit08-12's own
+    dialogue_comprehension pattern -- each shown `target_blocks` line was
+    deliberately chosen to directly contain its own correct answer
+    (exercise01 shows line02 "हाँ, मुझे संगीत बहुत पसंद है। तुम्हें?" and
+    asks what Priya likes, answer directly stated; exercise02 shows line04
+    "अच्छा! मुझे यह खेल पसंद नहीं है। मुझे किताबें पसंद हैं।" and asks what
+    Priya likes instead of the game, answer directly stated) -- neither
+    requires inference across lines the learner isn't shown, and neither
+    distractor option is itself a fact stated anywhere in the shown line.
+
+    Cross-check of every concrete fact stated across the whole unit
+    (AUTHORING_GUIDE §11), not just within the dialogue: lesson03's
+    dialogue establishes, in order: Priya likes music a lot; Arjun also
+    likes music and likes sports/games; Priya does NOT like this
+    particular game, but likes books; Priya prefers tea over coffee when
+    asked to choose; Arjun also likes tea. Priya's closing written note
+    (lesson03's reading card) restates exactly these same facts (likes
+    music a lot, likes books, doesn't like this game, prefers tea) with no
+    added or conflicting claim -- deliberately does NOT state she dislikes
+    coffee outright (the dialogue only established a PREFERENCE for tea
+    over coffee when choosing between the two, not a stated dislike of
+    coffee), so the note's wording was kept to "मुझे चाय ज़्यादा पसंद है"
+    rather than adding an unsupported "कॉफ़ी नहीं" clause. No exercise
+    anywhere in lesson01-03 states a conflicting account of any of these
+    facts.
+
+    Nasalization/spelling discipline, disclosed per unit07-12 precedent,
+    verified this round via a direct Python codepoint hex dump of every
+    NEW word before finalizing (not eyeballed): पसंद (U+092A U+0938
+    U+0902 U+0926) and संगीत (U+0938 U+0902 U+0917 U+0940 U+0924) both use
+    anusvara U+0902 (a homorganic nasal before a following stop consonant
+    द/ग) -- correct, matches the already-established anusvara convention
+    (हैं/मुझे/तुम्हें), NOT chandrabindu, which this unit's reused हाँ
+    (U+0939 U+093E U+0901) correctly keeps unchanged from its own
+    already-settled spelling. किताबें's plural ending (U+0947 U+0902,
+    "-ें") is likewise anusvara, the correct standard spelling for a
+    consonant-final feminine noun's direct plural (किताब -> किताबें,
+    parallel to बात -> बातें) -- distinct from the chandrabindु plural
+    pattern used by ी-final feminine nouns (लड़की -> लड़कियाँ, not used in
+    this unit, noted here only to disclose the distinction was actually
+    considered, not assumed). ज़्यादा correctly uses nuqta-marked ज़
+    (U+091C + U+093C), matching this course's established loanword
+    convention already used for बाज़ार/फ़िल्म. No new nasalization DECISION
+    was actually needed this unit -- every new nasalized form followed an
+    already-settled rule, applied to new words.
+
+    Untaught-vocabulary validator footgun (already documented by
+    unit07-12, re-confirmed live during this unit's authoring, and
+    directly re-read from `scripts/compile_content.py`'s
+    `validate_untaught_vocabulary` before relying on it): the function
+    only checks each exercise's own `tested_text` against the accumulated
+    `introduced_tokens` set for the file so far (all teaching cards in a
+    lesson are added to `taught` before that lesson's own exercises are
+    checked; the set is NOT reset per lesson within one file, but IS
+    reset per file). Every token that appears in ANY tested_text below --
+    including reused grammar words from earlier units (मुझे, है, हैं,
+    नहीं, हाँ, तुम्हें, यह, या, चाय, कॉफ़ी) -- was re-added to THIS file's
+    own introduced_tokens before its first tested_text use (मुझे, है,
+    हाँ, नहीं declared via lesson01's mujhe_review/pasand_hai_grammar/
+    haan_nahi_review cards; हैं via lesson01.teach.number_agreement_
+    grammar; तुम्हें/यह/या via lesson02's own review cards). Words used
+    ONLY in dialogue/reading-note TEXT and never in a tested_text
+    (प्रिया, अर्जुन, बहुत, भी, और, अच्छा, ठीक, कल, फिर, मिलते) were
+    deliberately left OUT of introduced_tokens, confirmed by grep of
+    every tested_text/word_bank/fill-blank value before finalizing --
+    exactly the same treatment unit12 gave बहुत (reused in dialogue only,
+    never re-declared since never tested).
+
+    Word-order duplicate-token check (unit10-12's own standing
+    consideration, re-confirmed clean here): every `word_order` exercise
+    in this unit uses a word_bank with zero repeated tokens (checked by
+    hand against each exercise's own word_bank array below).
+
+    fill_in_blank ambiguity check (AUTHORING_GUIDE §17): every blank in
+    this unit either has a unique, unambiguous grammatical answer (है vs.
+    हैं number agreement, where only one of the two is grammatically
+    correct for the given subject) or tests recall of a specific pronoun/
+    connector word (तुम्हें, या) where no other already-taught word could
+    plausibly fill the same syntactic slot in that exact frame. A
+    considered-and-rejected design: blanking ज़्यादा in a frame like
+    "मुझे यह खेल ___ पसंद है" was dropped because बहुत ("a lot", already
+    taught unit06) would ALSO fit that exact slot grammatically and
+    change the meaning only subtly ("I like this sport more" vs. "I like
+    this sport a lot") with nothing in the bare frame to disambiguate
+    which is being tested -- a real instance of the synonym-adjacent
+    ambiguity §17 warns against, avoided by never blanking ज़्यादा at all
+    (it is only tested via multiple_choice/word_order/dialogue_response/
+    speak_response, never fill_in_blank).
+
+course:
+  realization_key: hi.a1
+  target_language_first: true
+  dialect: hi_standard
+  register_policy: >-
+    Continues unit01-12's aap/tum split. This unit's dialogue (lesson03)
+    stays entirely in तुम between Priya and Arjun, matching every prior
+    unit's continuation of their established friendship -- no new
+    stranger character is introduced here.
+
+media_assets:
+  - {content_key: hi.a1.audio.pref.mujhe_sangeet_pasand_hai.01, language: hi, text: "मुझे संगीत पसंद है।", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - {content_key: hi.a1.audio.pref.tumhein_sangeet_pasand_hai.01, language: hi, text: "तुम्हें संगीत पसंद है?", voice_hint: neutral_adult_clear, status: pending_generation}
+  - {content_key: hi.a1.audio.pref.mujhe_chai_zyada_pasand_hai.01, language: hi, text: "मुझे चाय ज़्यादा पसंद है।", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+
+units:
+  - content_key: hi.a1.unit13.preferences
+    title: "पसंद"
+    section: reading_writing
+    spine_outcome_ids:
+      - universal.a1.preferences.express_preferences
+    planned_lesson_count: 3
+
+    lessons:
+      - content_key: hi.a1.unit13.lesson01.pasand_hai
+        title: "मुझे पसंद है"
+        spine_outcome_id: universal.a1.preferences.express_preferences
+        teaching:
+          - content_key: hi.a1.unit13.lesson01.teach.chai_coffee_review
+            kind: vocabulary
+            target: {text: "चाय, कॉफ़ी", language_code: hi, direction: ltr}
+            introduced_tokens: ["चाय", "कॉफ़ी"]
+            example:
+              - {text: "मुझे चाय चाहिए।", language_code: hi, direction: ltr}
+              - {text: "मुझे कॉफ़ी चाहिए।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit13.lesson01.teach.mujhe_review
+            kind: vocabulary
+            target: {text: "मुझे", language_code: hi, direction: ltr}
+            introduced_tokens: ["मुझे"]
+            example: {text: "मुझे चाय चाहिए।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit13.lesson01.teach.pasand
+            kind: vocabulary
+            target: {text: "पसंद", language_code: hi, direction: ltr}
+            introduced_tokens: ["पसंद"]
+            example: {text: "मुझे चाय पसंद है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit13.lesson01.teach.pasand_hai_grammar
+            kind: grammar_note
+            target: {text: "'पसंद है' का मतलब है 'X अच्छा लगता है', यानी 'I like X'। यह 'मुझे...चाहिए' (यूनिट 6) की तरह मुझे/तुम्हें से शुरू होता है, पर 'चाहिए' के बाद 'है' नहीं आता जबकि 'पसंद' के बाद हमेशा 'है' या 'हैं' आता है।", language_code: hi, direction: ltr}
+            introduced_tokens: ["है"]
+          - content_key: hi.a1.unit13.lesson01.teach.sangeet
+            kind: vocabulary
+            target: {text: "संगीत", language_code: hi, direction: ltr}
+            introduced_tokens: ["संगीत"]
+            example: {text: "मुझे संगीत पसंद है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit13.lesson01.teach.haan_nahi_review
+            kind: vocabulary
+            target: {text: "हाँ, नहीं", language_code: hi, direction: ltr}
+            introduced_tokens: ["हाँ", "नहीं"]
+            example:
+              - {text: "हाँ, मुझे संगीत पसंद है।", language_code: hi, direction: ltr}
+              - {text: "नहीं, मुझे कॉफ़ी पसंद नहीं है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit13.lesson01.teach.pasand_nahi_hai_phrase
+            kind: phrase
+            target: {text: "मुझे कॉफ़ी पसंद नहीं है।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a1.unit13.lesson01.teach.kitab_kitaben
+            kind: vocabulary
+            target: {text: "किताब, किताबें", language_code: hi, direction: ltr}
+            introduced_tokens: ["किताब", "किताबें"]
+            example:
+              - {text: "मुझे किताब पसंद है।", language_code: hi, direction: ltr}
+              - {text: "मुझे किताबें पसंद हैं।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit13.lesson01.teach.number_agreement_grammar
+            kind: grammar_note
+            target: {text: "'पसंद' के बाद 'है' या 'हैं' पसंद की जाने वाली चीज़ की संख्या के अनुसार बदलता है -- ठीक 'मेरे पास...है/हैं' (यूनिट 2) की तरह: चाय/संगीत पसंद है (एकवचन), किताबें पसंद हैं (बहुवचन)।", language_code: hi, direction: ltr}
+            introduced_tokens: ["हैं"]
+        exercises:
+          - content_key: hi.a1.unit13.lesson01.exercise01.select_pasand_meaning
+            type: multiple_choice
+            tested_text: "पसंद"
+            prompt:
+              target_blocks:
+                - {text: "पसंद", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit13.lesson01.exercise02.select_sangeet_meaning
+            type: multiple_choice
+            tested_text: "संगीत"
+            prompt:
+              target_blocks:
+                - {text: "संगीत", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit13.lesson01.exercise03.select_kitab_meaning
+            type: multiple_choice
+            tested_text: "किताब"
+            prompt:
+              target_blocks:
+                - {text: "किताब", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit13.lesson01.exercise04.listen_mujhe_sangeet_pasand_hai
+            type: listen_select
+            tested_text: "मुझे संगीत पसंद है"
+            media_asset_key: hi.a1.audio.pref.mujhe_sangeet_pasand_hai.01
+            prompt: {target_blocks: []}
+          - content_key: hi.a1.unit13.lesson01.exercise05.select_pasand_nahi_hai_meaning
+            type: multiple_choice
+            tested_text: "पसंद नहीं है"
+            prompt:
+              target_blocks:
+                - {text: "पसंद नहीं है", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit13.lesson01.exercise06.match_lesson01_words
+            type: matching_pairs
+            tested_text: "पसंद संगीत किताब किताबें चाय कॉफ़ी नहीं"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "पसंद", right: "liked / favorite"}
+              - {left: "संगीत", right: "music"}
+              - {left: "किताब", right: "book"}
+              - {left: "किताबें", right: "books"}
+              - {left: "चाय", right: "tea"}
+              - {left: "कॉफ़ी", right: "coffee"}
+              - {left: "नहीं", right: "not"}
+          - content_key: hi.a1.unit13.lesson01.exercise07.order_mujhe_sangeet_pasand_hai
+            type: word_order
+            tested_text: "मुझे संगीत पसंद है"
+            prompt: {target_blocks: []}
+            word_bank: ["मुझे", "संगीत", "पसंद", "है"]
+          - content_key: hi.a1.unit13.lesson01.exercise08.order_mujhe_kitaben_pasand_hain
+            type: word_order
+            tested_text: "मुझे किताबें पसंद हैं"
+            prompt: {target_blocks: []}
+            word_bank: ["मुझे", "किताबें", "पसंद", "हैं"]
+          - content_key: hi.a1.unit13.lesson01.exercise09.fill_chai_pasand_hai
+            type: fill_in_blank
+            tested_text: "है"
+            prompt:
+              target_blocks:
+                - {text: "मुझे चाय पसंद ___।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit13.lesson01.exercise10.fill_kitaben_pasand_hain
+            type: fill_in_blank
+            tested_text: "हैं"
+            prompt:
+              target_blocks:
+                - {text: "मुझे किताबें पसंद ___।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit13.lesson01.exercise11.reply_sangeet_pasand
+            type: dialogue_response
+            tested_text: "हाँ, मुझे संगीत पसंद है"
+            prompt:
+              target_blocks:
+                - {text: "तुम्हें संगीत पसंद है?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit13.lesson01.exercise12.speak_kitaben_pasand_hain
+            type: speak_response
+            tested_text: "मुझे किताबें पसंद हैं"
+            prompt:
+              target_blocks:
+                - {text: "बोलो: मुझे किताबें पसंद हैं।", language_code: hi, direction: ltr}
+
+      - content_key: hi.a1.unit13.lesson02.tumhein_kya_pasand
+        title: "तुम्हें क्या पसंद है?"
+        spine_outcome_id: universal.a1.preferences.express_preferences
+        teaching:
+          - content_key: hi.a1.unit13.lesson02.teach.tumhein_review
+            kind: vocabulary
+            target: {text: "तुम्हें", language_code: hi, direction: ltr}
+            introduced_tokens: ["तुम्हें"]
+            example: {text: "तुम्हें संगीत पसंद है?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit13.lesson02.teach.kya_tumhein_pasand_hai_grammar
+            kind: grammar_note
+            target: {text: "'क्या' सवाल की शुरुआत में हाँ/नहीं-सवाल का चिह्न है (यूनिट 1); 'तुम्हें' वही दातिव-कर्ता ढांचा दोहराता है जो 'तुम्हें...चाहिए?' (यूनिट 6) में था -- यहाँ 'चाहिए' की जगह 'पसंद है' आता है।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a1.unit13.lesson02.teach.khel
+            kind: vocabulary
+            target: {text: "खेल", language_code: hi, direction: ltr}
+            introduced_tokens: ["खेल"]
+            example: {text: "मुझे यह खेल पसंद है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit13.lesson02.teach.yah_review
+            kind: vocabulary
+            target: {text: "यह", language_code: hi, direction: ltr}
+            introduced_tokens: ["यह"]
+            example: {text: "यह किताब अच्छी है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit13.lesson02.teach.ya_review
+            kind: vocabulary
+            target: {text: "या", language_code: hi, direction: ltr}
+            introduced_tokens: ["या"]
+            example: {text: "चाय या कॉफ़ी?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit13.lesson02.teach.chai_ya_coffee_phrase
+            kind: phrase
+            target: {text: "तुम्हें चाय पसंद है या कॉफ़ी?", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a1.unit13.lesson02.teach.zyada
+            kind: vocabulary
+            target: {text: "ज़्यादा", language_code: hi, direction: ltr}
+            introduced_tokens: ["ज़्यादा"]
+            example: {text: "मुझे चाय ज़्यादा पसंद है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit13.lesson02.teach.zyada_pasand_grammar
+            kind: grammar_note
+            target: {text: "'X ज़्यादा पसंद है' का मतलब है दो चीज़ों में से एक को तरजीह देना (prefer) -- 'मुझे चाय ज़्यादा पसंद है' का मतलब है 'I like tea more' / 'I prefer tea'।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+        exercises:
+          - content_key: hi.a1.unit13.lesson02.exercise01.select_tumhein_meaning
+            type: multiple_choice
+            tested_text: "तुम्हें"
+            prompt:
+              target_blocks:
+                - {text: "तुम्हें", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit13.lesson02.exercise02.select_khel_meaning
+            type: multiple_choice
+            tested_text: "खेल"
+            prompt:
+              target_blocks:
+                - {text: "खेल", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit13.lesson02.exercise03.listen_tumhein_sangeet_pasand_hai
+            type: listen_select
+            tested_text: "तुम्हें संगीत पसंद है"
+            media_asset_key: hi.a1.audio.pref.tumhein_sangeet_pasand_hai.01
+            prompt: {target_blocks: []}
+          - content_key: hi.a1.unit13.lesson02.exercise04.select_zyada_meaning
+            type: multiple_choice
+            tested_text: "ज़्यादा"
+            prompt:
+              target_blocks:
+                - {text: "ज़्यादा", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit13.lesson02.exercise05.select_ya_meaning
+            type: multiple_choice
+            tested_text: "या"
+            prompt:
+              target_blocks:
+                - {text: "या", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit13.lesson02.exercise06.match_lesson02_words
+            type: matching_pairs
+            tested_text: "तुम्हें खेल ज़्यादा या यह संगीत पसंद"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "तुम्हें", right: "to you (informal)"}
+              - {left: "खेल", right: "sport / game"}
+              - {left: "ज़्यादा", right: "more"}
+              - {left: "या", right: "or"}
+              - {left: "यह", right: "this"}
+              - {left: "संगीत", right: "music"}
+              - {left: "पसंद", right: "liked / favorite"}
+          - content_key: hi.a1.unit13.lesson02.exercise07.order_tumhein_sangeet_pasand_hai
+            type: word_order
+            tested_text: "तुम्हें संगीत पसंद है"
+            prompt: {target_blocks: []}
+            word_bank: ["तुम्हें", "संगीत", "पसंद", "है"]
+          - content_key: hi.a1.unit13.lesson02.exercise08.order_mujhe_chai_zyada_pasand_hai
+            type: word_order
+            tested_text: "मुझे चाय ज़्यादा पसंद है"
+            prompt: {target_blocks: []}
+            word_bank: ["मुझे", "चाय", "ज़्यादा", "पसंद", "है"]
+          - content_key: hi.a1.unit13.lesson02.exercise09.fill_chai_ya_coffee
+            type: fill_in_blank
+            tested_text: "या"
+            prompt:
+              target_blocks:
+                - {text: "तुम्हें चाय पसंद है ___ कॉफ़ी?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit13.lesson02.exercise10.fill_tumhein_sangeet
+            type: fill_in_blank
+            tested_text: "तुम्हें"
+            prompt:
+              target_blocks:
+                - {text: "क्या ___ संगीत पसंद है?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit13.lesson02.exercise11.reply_chai_ya_coffee
+            type: dialogue_response
+            tested_text: "मुझे चाय ज़्यादा पसंद है"
+            prompt:
+              target_blocks:
+                - {text: "तुम्हें चाय पसंद है या कॉफ़ी?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit13.lesson02.exercise12.fix_kitaben_pasand_hain
+            type: grammar_check
+            tested_text: "मुझे किताबें पसंद हैं"
+            prompt:
+              target_blocks:
+                - {text: "मुझे किताबें पसंद है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit13.lesson02.exercise13.speak_khel_pasand
+            type: speak_response
+            tested_text: "तुम्हें खेल पसंद है"
+            prompt:
+              target_blocks:
+                - {text: "बोलो: तुम्हें खेल पसंद है?", language_code: hi, direction: ltr}
+
+      - content_key: hi.a1.unit13.lesson03.arjun_priya_pasand
+        title: "अर्जुन और प्रिया: पसंद"
+        spine_outcome_id: universal.a1.preferences.express_preferences
+        teaching:
+          - content_key: hi.a1.unit13.lesson03.teach.review_words
+            kind: vocabulary
+            target: {text: "संगीत, खेल, किताबें", language_code: hi, direction: ltr}
+            introduced_tokens: ["संगीत", "खेल", "किताबें"]
+            example:
+              - {text: "मुझे संगीत पसंद है।", language_code: hi, direction: ltr}
+              - {text: "मुझे यह खेल पसंद नहीं है।", language_code: hi, direction: ltr}
+              - {text: "मुझे किताबें पसंद हैं।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit13.lesson03.teach.dialogue.line01
+            kind: dialogue
+            target:
+              text: "प्रिया, तुम्हें संगीत पसंद है?"
+              language_code: hi
+              direction: ltr
+              speaker: Arjun
+            introduced_tokens: []
+          - content_key: hi.a1.unit13.lesson03.teach.dialogue.line02
+            kind: dialogue
+            target:
+              text: "हाँ, मुझे संगीत बहुत पसंद है। तुम्हें?"
+              language_code: hi
+              direction: ltr
+              speaker: Priya
+            introduced_tokens: []
+          - content_key: hi.a1.unit13.lesson03.teach.dialogue.line03
+            kind: dialogue
+            target:
+              text: "मुझे भी! और मुझे खेल भी पसंद है।"
+              language_code: hi
+              direction: ltr
+              speaker: Arjun
+            introduced_tokens: []
+          - content_key: hi.a1.unit13.lesson03.teach.dialogue.line04
+            kind: dialogue
+            target:
+              text: "अच्छा! मुझे यह खेल पसंद नहीं है। मुझे किताबें पसंद हैं।"
+              language_code: hi
+              direction: ltr
+              speaker: Priya
+            introduced_tokens: []
+          - content_key: hi.a1.unit13.lesson03.teach.dialogue.line05
+            kind: dialogue
+            target:
+              text: "ठीक है। तुम्हें चाय पसंद है या कॉफ़ी?"
+              language_code: hi
+              direction: ltr
+              speaker: Arjun
+            introduced_tokens: []
+          - content_key: hi.a1.unit13.lesson03.teach.dialogue.line06
+            kind: dialogue
+            target:
+              text: "मुझे चाय ज़्यादा पसंद है।"
+              language_code: hi
+              direction: ltr
+              speaker: Priya
+            introduced_tokens: []
+          - content_key: hi.a1.unit13.lesson03.teach.dialogue.line07
+            kind: dialogue
+            target:
+              text: "बहुत अच्छा! मुझे भी चाय पसंद है।"
+              language_code: hi
+              direction: ltr
+              speaker: Arjun
+            introduced_tokens: []
+          - content_key: hi.a1.unit13.lesson03.teach.dialogue.line08
+            kind: dialogue
+            target:
+              text: "ठीक है! कल फिर मिलते हैं?"
+              language_code: hi
+              direction: ltr
+              speaker: Priya
+            introduced_tokens: []
+          - content_key: hi.a1.unit13.lesson03.teach.chahiye_pasand_zyada_grammar
+            kind: grammar_note
+            target: {text: "इस यूनिट के तीन तरीके: 'चाहिए' (चाहना/ज़रूरत, यूनिट 6) के बाद 'है' नहीं आता; 'पसंद है/हैं' (यह यूनिट) चीज़ की संख्या से बदलता है; 'ज़्यादा पसंद है' का मतलब है दो में से एक को तरजीह देना (prefer)।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a1.unit13.lesson03.teach.priya_note
+            kind: reading
+            target: {text: "अर्जुन, मुझे संगीत बहुत पसंद है। मुझे किताबें भी पसंद हैं। मुझे यह खेल पसंद नहीं है। मुझे चाय ज़्यादा पसंद है। - प्रिया", language_code: hi, direction: ltr}
+            introduced_tokens: []
+        exercises:
+          - content_key: hi.a1.unit13.lesson03.exercise01.comprehend_priya_sangeet
+            type: dialogue_comprehension
+            tested_text: "संगीत"
+            prompt:
+              target_blocks:
+                - {text: "हाँ, मुझे संगीत बहुत पसंद है। तुम्हें?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit13.lesson03.exercise02.comprehend_priya_kitaben
+            type: dialogue_comprehension
+            tested_text: "किताबें"
+            prompt:
+              target_blocks:
+                - {text: "अच्छा! मुझे यह खेल पसंद नहीं है। मुझे किताबें पसंद हैं।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit13.lesson03.exercise03.select_zyada_pasand_meaning
+            type: multiple_choice
+            tested_text: "ज़्यादा पसंद है"
+            prompt:
+              target_blocks:
+                - {text: "मुझे चाय ज़्यादा पसंद है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit13.lesson03.exercise04.read_note_sangeet
+            type: reading_comprehension
+            tested_text: "संगीत"
+            prompt:
+              target_blocks:
+                - {text: "अर्जुन, मुझे संगीत बहुत पसंद है। मुझे किताबें भी पसंद हैं। मुझे यह खेल पसंद नहीं है। मुझे चाय ज़्यादा पसंद है। - प्रिया", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit13.lesson03.exercise05.read_note_khel
+            type: reading_comprehension
+            tested_text: "खेल"
+            prompt:
+              target_blocks:
+                - {text: "अर्जुन, मुझे संगीत बहुत पसंद है। मुझे किताबें भी पसंद हैं। मुझे यह खेल पसंद नहीं है। मुझे चाय ज़्यादा पसंद है। - प्रिया", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit13.lesson03.exercise06.read_note_chai
+            type: reading_comprehension
+            tested_text: "चाय"
+            prompt:
+              target_blocks:
+                - {text: "अर्जुन, मुझे संगीत बहुत पसंद है। मुझे किताबें भी पसंद हैं। मुझे यह खेल पसंद नहीं है। मुझे चाय ज़्यादा पसंद है। - प्रिया", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit13.lesson03.exercise07.listen_mujhe_chai_zyada_pasand_hai
+            type: listen_select
+            tested_text: "मुझे चाय ज़्यादा पसंद है"
+            media_asset_key: hi.a1.audio.pref.mujhe_chai_zyada_pasand_hai.01
+            prompt: {target_blocks: []}
+          - content_key: hi.a1.unit13.lesson03.exercise08.match_lesson03_review
+            type: matching_pairs
+            tested_text: "पसंद संगीत खेल किताब किताबें चाय कॉफ़ी ज़्यादा तुम्हें या यह नहीं"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "पसंद", right: "liked / favorite"}
+              - {left: "संगीत", right: "music"}
+              - {left: "खेल", right: "sport / game"}
+              - {left: "किताब", right: "book"}
+              - {left: "किताबें", right: "books"}
+              - {left: "चाय", right: "tea"}
+              - {left: "कॉफ़ी", right: "coffee"}
+              - {left: "ज़्यादा", right: "more"}
+              - {left: "तुम्हें", right: "to you (informal)"}
+              - {left: "या", right: "or"}
+              - {left: "यह", right: "this"}
+              - {left: "नहीं", right: "not"}
+          - content_key: hi.a1.unit13.lesson03.exercise09.order_mujhe_yah_khel_pasand_nahi_hai
+            type: word_order
+            tested_text: "मुझे यह खेल पसंद नहीं है"
+            prompt: {target_blocks: []}
+            word_bank: ["मुझे", "यह", "खेल", "पसंद", "नहीं", "है"]
+          - content_key: hi.a1.unit13.lesson03.exercise10.fill_sangeet_pasand_hai
+            type: fill_in_blank
+            tested_text: "है"
+            prompt:
+              target_blocks:
+                - {text: "मुझे संगीत पसंद ___।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit13.lesson03.exercise11.fix_khel_pasand_nahi_hai
+            type: grammar_check
+            tested_text: "मुझे यह खेल पसंद नहीं है"
+            prompt:
+              target_blocks:
+                - {text: "मुझे यह खेल पसंद नहीं हैं।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit13.lesson03.exercise12.reply_khel_ya_kitaben
+            type: dialogue_response
+            tested_text: "मुझे किताबें ज़्यादा पसंद हैं"
+            prompt:
+              target_blocks:
+                - {text: "तुम्हें खेल पसंद है या किताबें?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit13.lesson03.exercise13.write_own_preferences
+            type: writing_prompt
+            tested_text: "मुझे संगीत पसंद है"
+            prompt:
+              target_blocks:
+                - {text: "लिखो: तुम्हें क्या पसंद है, और क्या पसंद नहीं है?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit13.lesson03.exercise14.speak_chai_zyada_pasand
+            type: speak_response
+            tested_text: "मुझे चाय ज़्यादा पसंद है"
+            prompt:
+              target_blocks:
+                - {text: "बोलो: मुझे चाय ज़्यादा पसंद है।", language_code: hi, direction: ltr}
