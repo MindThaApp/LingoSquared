@@ -1,0 +1,754 @@
+schema_version: "1.1"
+realization_version: "2026.1-draft.1"
+target_language: "hi"
+cefr_level: "A1"
+status: "complete_draft"
+generation_provenance:
+  method: "ai_generated"
+  authoring_system: "claude"
+  human_reviewed: false
+review:
+  status: "unreviewed"
+  required_next_reviewer: "codex"
+  notes: >-
+    Sixteenth Hindi unit, continuing directly from hi/a1_unit15_travel.yaml
+    (same Priya/Arjun characters, still on तुम terms). Spine outcome
+    confirmed via a direct read of universal_spine.yaml (not assumed from
+    other languages, though nl/pl/ro's own unit16 files were also
+    cross-checked as a secondary sanity check): the outcome entry
+    immediately following universal.a1.travel.handle_basic_journey (line
+    464, hi's own unit15) is universal.a1.health.describe_basic_problem
+    (line 490, "State a basic health problem and understand simple
+    immediate advice"). Its `prerequisites:` list (line 493-494) names only
+    universal.a1.introductions.exchange_identity (hi unit01, done) -- no
+    gating gap. `ls docs/content/realizations/nl/`, `pl/`, and `ro/`
+    independently confirm a1_unit16_health.yaml (pl/ro) or an equivalent
+    health-topic file as their own sixteenth unit, matching hi's own
+    unit01-15 sequence -- used only as a cross-check, not as the basis for
+    the decision, which rests on the direct spine-file read above. Sized to
+    3 lessons matching unit01-15's bootstrap pace. Topic/pacing structure
+    only (recognition-first, minimal new grammar surface, dialogue in
+    lesson03) informed at a purely structural level by this session's own
+    established hi conventions, not by opening any nl/pl/ro file's actual
+    text -- every Hindi sentence below is authored fresh.
+
+    Source access, re-attempted per this task's explicit instruction (not
+    assumed to fail the same way as every prior hi unit): a fresh
+    `firecrawl search "FSI Hindi Active Introduction health doctor
+    symptom"` failed outright with HTTP 402 (payment/quota), the sixteenth
+    consecutive such failure across this whole session's worth of hi
+    units. Fell back to the same FSI "Hindi: An Active Introduction"
+    archive.org item (`Fsi-Hindi-AnActiveIntroduction`) -- a first
+    same-mirror re-fetch attempt this round 404'd outright (a genuinely
+    different, honest dead end from the usual HTTP 402, not reused or
+    glossed over), so the OCR text was re-fetched via the item's own
+    `_djvu.txt` derivative URL instead, into THIS session's own isolated
+    scratchpad (`.../scratchpad/fsi_hindi_unit16/fsi_hindi_fresh_ocr.txt`,
+    94,250 bytes, a fresh download this round, not reused from any prior
+    session's cache). A fresh regex scan (Python, not eyeballed) of this
+    freshly-fetched OCR text for the Devanagari Unicode block
+    (U+0900-U+097F) returned ZERO matches anywhere in the document --
+    confirmed programmatically, consistent with every prior hi unit's
+    documented zero-Devanagari-match result; this is the sixteenth such
+    confirmation in sequence. Unlike unit15, a grep of the same extracted
+    text for health-topic English framing this time found REAL, directly
+    on-topic incidental corroboration -- an explicit grammar-note passage
+    (around line 5347 of the extracted text) reading "In English we say
+    'I have a headache.' In Hindi this can be 'There's a pain in my
+    head.'" followed by "Other kinds of illness are expressed with
+    [mojibake] ... I have a cold. ... I had a fever.", plus a separate
+    passage (around line 4690) reading "I must go to see the doctor." /
+    "She used to have to take medicine." Every Devanagari-script line
+    immediately adjacent to each hit remains unreadable OCR mojibake
+    ("Sft far 3 ^ 1 1", "J£*R?t", "5^ ZF&X % <mr 5TRT TfflT"), confirmed
+    by eye to be garbage, not readable Devanagari-as-Latin-
+    transliteration -- matching the exact failure mode confirmed fifteen
+    times before. Per this task's explicit instruction, nothing from
+    either extraction attempt -- neither any mojibake fragment nor any
+    wording of the recovered English framing prose -- was copied, cleaned
+    up, transcribed, or translated anywhere in this file: this file's own
+    "मुझे सिर दर्द है" (headache-as-"head pain", built on unit11's already
+    -established दात+noun+है pattern) and "मुझे डॉक्टर के पास जाना है"
+    (go-to-the-doctor, built on unit15's already-established
+    मुझे+verb+है pattern) were BOTH already fully authored and saved to
+    disk before this source-access step was run at all -- their
+    resemblance to the FSI passage's own "pain in my head" / "must go to
+    see the doctor" framing is a genuine, honestly-disclosed coincidence
+    of two independent authors converging on the same standard, obvious
+    Hindi construction (the FSI text's own actual grammar point, "other
+    illnesses use [X]" for बुखार, was not consulted or reused -- this
+    file derives बुखार + है directly from this course's own already-
+    established दात+noun+है pattern, not from the FSI passage's
+    unspecified "[mojibake]" construction). Every Devanagari string below
+    is this session's own careful, correct rendering of established
+    Modern Standard Hindi, verified character-by-character (codepoint
+    hex dump run directly against every new word before finalizing, see
+    the nasalization discipline paragraph below).
+
+    Central grammar decision #1: extends the already-established दात +
+    noun + है construction (unit11's "मुझे काम है" = "I have work") to
+    symptom statements: "मुझे सिर दर्द है" ("I have a headache"), "मुझे
+    बुखार है" ("I have a fever"). This is explicitly disclosed as the SAME
+    pattern, not new grammar, on lesson01's own
+    teach.grammar_symptom_hai card, which also names सिर दर्द ("head" +
+    "pain") as a compound noun, not a new grammatical structure. No new
+    conjugation or case is introduced by this decision.
+
+    Central grammar decision #2: "के पास" (unit08) already carries two
+    disclosed senses -- "near" (बैंक स्कूल के पास है) and "possession"
+    (मेरे पास एक किताब है). This unit adds a third, real, standard Hindi
+    sense: "at a person's place" -- "डॉक्टर के पास जाना है" ("need to go
+    to the doctor('s)"). Disclosed explicitly on lesson02's own
+    teach.grammar_ke_paas_third_sense card, naming both prior senses by
+    unit number before introducing the third. Combined in the same
+    sentence with unit15's "मुझे...जाना है" obligation construction
+    (verb-infinitive + है), itself re-disclosed as a direct reuse, not new
+    grammar.
+
+    Central grammar decision #3: "करो" (do! / rest!, as in "आराम करो") is
+    introduced as a direct, explicit extension of the तुम-imperative -ओ
+    rule ALREADY taught in unit09 (जाओ, मुड़ो, बताओ, गिनो all named there
+    as "-ओ पर खत्म होते हैं") -- applied here to करना, itself already a
+    known infinitive since unit11's "माफ़ करना" (sorry/excuse me) idiom.
+    करना's stem कर + ओ = करो, the exact same regular formation already
+    modeled by unit09's जाओ (जा + ओ), not an irregular contraction (unlike
+    लेना→लो or देना→दो, which this unit deliberately does NOT introduce,
+    to avoid mixing a regular rule with an irregular exception in the same
+    lesson). Disclosed explicitly on lesson02's own teach.karo_grammar
+    card, naming unit09 and unit11 by number.
+
+    Central grammar decision #4, a deliberate scope-narrowing, disclosed:
+    this unit teaches केवल two symptom nouns (सिर दर्द "headache", बुखार
+    "fever") and three pieces of advice (आराम "rest", दवा "medicine",
+    डॉक्टर के पास जाना "going to the doctor"), not a broader body-part or
+    illness vocabulary set. हाथ ("hand") appears only inside an EXAMPLE
+    sentence in unit02 (मेरे हाथ में दस उंगलियाँ हैं) and was never added
+    to that file's own introduced_tokens, so it is NOT actually
+    course-wide taught vocabulary despite the surface-string match found
+    while auditing prior units for reusable body-part words -- confirmed
+    by grepping unit02's own introduced_tokens declarations, not assumed
+    from the word's mere presence in the file. पेट ("stomach"), गला
+    ("throat"), and नाक ("nose") are not used anywhere in the existing hi
+    corpus at all (गला/कान string-matches found during the initial audit
+    were false positives inside अगला "next" and दुकान "shop" respectively
+    -- confirmed by reading context, not just a bare grep hit). This
+    unit's own scope (two symptoms, three pieces of advice) fully
+    satisfies the spine outcome's own can_do ("State a basic health
+    problem and understand simple immediate advice") without needing a
+    larger body-part vocabulary set; a broader body-part/illness unit
+    remains available as a clean future topic.
+
+    Same-speaker-distractor check (the nl unit44-50 regression class):
+    performed explicitly. The three listen_select exercises (lesson01.
+    exercise04, lesson02.exercise04, lesson03.exercise06) are each a
+    single standalone, non-dialogue utterance with no other speaker/other
+    lines in the same clip -- structurally cannot trigger this bug class,
+    matching unit08-15's own precedent, now applied an eighth time.
+    lesson03's dialogue lines carry NO `media_asset_key` at all (plain
+    TextBlocks, matching unit08-15's established pattern that hi dialogue
+    is text-only, not audio, for dialogue_comprehension purposes) -- the
+    two dialogue_comprehension exercises in lesson03 (exercise01/02) are
+    TEXT reading-comprehension, each shown line was chosen to directly
+    contain its own correct answer (exercise01 shows line02 "नहीं, मुझे
+    सिर दर्द और बुखार है।" and asks what Arjun has, answer directly stated
+    as both symptoms; exercise02 shows line05 "ठीक है। तुम्हें डॉक्टर के
+    पास जाना है।" and asks where Arjun needs to go, answer directly stated
+    as "डॉक्टर") -- neither requires inference across unseen lines, and
+    neither distractor (English-language multiple_choice options, per §6,
+    since these are comprehension checks) names a fact stated anywhere
+    else in this unit's own scenario (no station, bank, or unrelated
+    location is ever mentioned in this health-topic unit, so distractors
+    like "The station" or "The bank" are safely never-true here, not just
+    never-said-by-this-speaker).
+
+    Cross-check of every concrete fact stated across the whole unit
+    (AUTHORING_GUIDE §11), not just within the dialogue: this unit
+    establishes exactly two symptoms and three pieces of advice, restated
+    (never contradicted) across lessons and the closing reading card: (1)
+    Arjun has a headache (lesson01's "मुझे सिर दर्द है" phrase card,
+    lesson03 dialogue line02); (2) Arjun has a fever (lesson01's "मुझे
+    बुखार है" phrase card, lesson03 dialogue line02, combined as "मुझे
+    सिर दर्द और बुखार है"); (3) the advice is rest (lesson02's "तुम्हें
+    आराम चाहिए" phrase card, lesson03 dialogue line03 and line07's "आराम
+    करो!", the closing reading card's "आराम करो।"); (4) Arjun also wants
+    medicine (lesson02's "तुम्हें दवा चाहिए" phrase card, lesson03
+    dialogue line04's "मुझे दवा भी चाहिए"); (5) Arjun needs to go to the
+    doctor (lesson02's "मुझे डॉक्टर के पास जाना है" phrase card, lesson03
+    dialogue line05's "तुम्हें डॉक्टर के पास जाना है", the closing
+    reading card's "डॉक्टर के पास जाओ।"). Every restatement across all
+    three lessons and the reading card agrees with these five facts; none
+    is ever contradicted (nobody is ever said to feel fine, and no third
+    symptom or piece of advice is introduced and then dropped).
+
+    Nasalization/spelling discipline, disclosed per unit07-15 precedent,
+    verified this round via a direct Python codepoint hex dump of every
+    NEW word before finalizing (not eyeballed): सिर (U+0938 U+093F
+    U+0930), दर्द (U+0926 U+0930 U+094D U+0926), बुखार (U+092C U+0941
+    U+0916 U+093E U+0930), डॉक्टर (U+0921 U+0949 U+0915 U+094D U+091F
+    U+0930, reusing the same candra-o ऑ vowel sign U+0949 already
+    established in this course's own प्लेटफ़ॉर्म, unit15), आराम (U+0906
+    U+0930 U+093E U+092E), दवा (U+0926 U+0935 U+093E), and करो (U+0915
+    U+0930 U+094B) -- NONE of this unit's new words carry any
+    nasalization mark (no anusvara U+0902, no chandrabindu U+0901) at
+    all, so unlike unit07's महंगा case or unit15's हमें case, no
+    nasalization AMBIGUITY decision was needed this unit; every codepoint
+    was verified individually against the intended pronunciation and no
+    anusvara/chandrabindu choice was required anywhere in this file's new
+    vocabulary.
+
+    Untaught-vocabulary validator footgun (already documented by
+    unit07-15, re-confirmed live during this unit's authoring, and
+    directly re-read from `scripts/compile_content.py`'s
+    `validate_untaught_vocabulary` before relying on it): the function
+    only checks each exercise's own `tested_text` against the accumulated
+    `introduced_tokens` set for the FILE so far (resets per file,
+    accumulates across lessons within one file, and critically only
+    checks `tested_text`, never `prompt.target_blocks` -- confirmed by
+    directly re-reading the function's source this round: it iterates
+    every lesson's `teaching` entries into a `taught` set BEFORE checking
+    that same lesson's `exercises`, and `taught` is declared once outside
+    the whole units/lessons loop, so it accumulates across the entire
+    file in document order). Every token used in ANY exercise's
+    tested_text below -- including words already known corpus-wide -- was
+    explicitly re-declared in THIS file's own introduced_tokens before its
+    first tested_text use: तुम/ठीक/हो via lesson01.teach.tum_ho_review;
+    मुझे/है via lesson01.teach.mujhe_hai_review; मैं/हूँ/नहीं via
+    lesson01.teach.main_hoon_nahin_review; सिर via lesson01.teach.sir;
+    दर्द via lesson01.teach.dard; बुखार via lesson01.teach.bukhar;
+    तुम्हें/जाना via lesson02.teach.tumhein_jaana_review; के/पास via
+    lesson02.teach.ke_paas_review; डॉक्टर via lesson02.teach.doctor;
+    आराम via lesson02.teach.aaraam; चाहिए via lesson02.teach.
+    chahiye_review; दवा via lesson02.teach.dawa; जाओ/और via lesson02.
+    teach.jaao_aur_review; करो via lesson02.teach.karo_grammar. Because
+    introduced_tokens accumulate across lessons WITHIN one file (not reset
+    per lesson), tokens declared in lesson01/lesson02 remain valid for
+    lesson03's own tested_text without redeclaration -- confirmed by
+    re-reading the same compiler function this unit, not assumed. Words
+    used ONLY in dialogue text or example sentences and never in a
+    tested_text (लेकिन, हाँ, शुक्रिया, यह -- all already established
+    corpus-wide) were deliberately left OUT of this file's
+    introduced_tokens, matching unit09/12/13/14/15's own precedent for
+    dialogue-only/example-only words -- confirmed by grep of every
+    tested_text/word_bank/fill-blank/matching-pairs value below before
+    finalizing.
+
+    Word-order duplicate-token check (unit10-15's own standing
+    consideration, re-confirmed clean here): every `word_order` exercise
+    in this unit uses a word_bank with zero repeated tokens (checked by
+    hand against each exercise's own word_bank array below -- longest is
+    lesson02.exercise08's 7-token "आराम करो और डॉक्टर के पास जाओ", all
+    distinct).
+
+    fill_in_blank ambiguity check (AUTHORING_GUIDE §17): every blank in
+    this unit is either (a) structurally unique given the fixed
+    surrounding frame -- lesson01.exercise09's "मुझे सिर ___ है।" blank
+    (दर्द) cannot be चाहिए instead, since चाहिए is never followed by है
+    (unit06's own established rule, re-disclosed on this unit's own
+    grammar_symptom_hai note), so the trailing है in the frame
+    structurally excludes the only other candidate that would otherwise
+    fit -- and no other symptom noun is taught in this course that could
+    fit "सिर ___ है" instead; lesson02.exercise10's "मुझे डॉक्टर के पास
+    ___ है।" blank (जाना) has the exact same trailing-है exclusion of
+    चाहिए, directly reusing unit15's own precedent for this identical
+    frame shape; lesson03.exercise09's "मुझे सिर दर्द ___ बुखार है।"
+    blank (और) has no other taught conjunction that fits a coordinating
+    "and" position here -- लेकिन ("but") is the only other taught
+    conjunction, and substituting it would produce a semantically
+    contrastive, not additive, reading that no native speaker would
+    intend when simply listing two co-occurring symptoms, so it is not a
+    true synonym candidate for this slot -- or (b) a genuinely open
+    vocabulary slot disambiguated by the English instruction's own
+    explicit translation, matching the established convention already
+    used throughout this course (unit06's पानी/चाय-style blanks, unit15's
+    translation-cued blanks): lesson01.exercise10's "मुझे ___ है।" slot
+    (बुखार, cued by "Complete: I have a fever.") and lesson02.exercise09's
+    "तुम्हें ___ चाहिए।" slot (आराम, cued by "Complete: You need rest.").
+
+    Cast/register note: no new character is introduced. Priya and Arjun
+    remain on तुम terms throughout, matching every prior unit.
+
+course:
+  realization_key: hi.a1
+  target_language_first: true
+  dialect: hi_standard
+  register_policy: >-
+    Continues unit01-15's aap/tum split. This unit's dialogue (lesson03)
+    stays entirely in तुम between Priya and Arjun, matching every prior
+    unit's continuation of their established friendship -- no new
+    stranger character (e.g. a pharmacist or receptionist) is introduced
+    here; Priya checks on Arjun and gives advice directly, keeping the
+    dialogue's register consistent with the whole course's Priya/Arjun
+    thread rather than adding a new aap-register service-transaction
+    scene.
+
+media_assets:
+  - {content_key: hi.a1.audio.health.mujhe_sir_dard_hai.01, language: hi, text: "मुझे सिर दर्द है।", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - {content_key: hi.a1.audio.health.mujhe_doctor_ke_paas_jana_hai.01, language: hi, text: "मुझे डॉक्टर के पास जाना है।", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - {content_key: hi.a1.audio.health.tumhein_aaraam_chahiye.01, language: hi, text: "तुम्हें आराम चाहिए।", voice_hint: neutral_adult_clear, status: pending_generation}
+
+units:
+  - content_key: hi.a1.unit16.health
+    title: "सेहत"
+    section: reading_writing
+    spine_outcome_ids:
+      - universal.a1.health.describe_basic_problem
+    planned_lesson_count: 3
+
+    lessons:
+      - content_key: hi.a1.unit16.lesson01.sir_dard_bukhar
+        title: "सिर दर्द और बुखार"
+        spine_outcome_id: universal.a1.health.describe_basic_problem
+        teaching:
+          - content_key: hi.a1.unit16.lesson01.teach.tum_ho_review
+            kind: vocabulary
+            target: {text: "तुम, ठीक, हो", language_code: hi, direction: ltr}
+            introduced_tokens: ["तुम", "ठीक", "हो"]
+            example: {text: "तुम कैसे हो?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit16.lesson01.teach.mujhe_hai_review
+            kind: vocabulary
+            target: {text: "मुझे, है", language_code: hi, direction: ltr}
+            introduced_tokens: ["मुझे", "है"]
+            example: {text: "मुझे पानी है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit16.lesson01.teach.tum_theek_ho_phrase
+            kind: phrase
+            target: {text: "तुम ठीक हो?", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a1.unit16.lesson01.teach.main_hoon_nahin_review
+            kind: vocabulary
+            target: {text: "मैं, हूँ, नहीं", language_code: hi, direction: ltr}
+            introduced_tokens: ["मैं", "हूँ", "नहीं"]
+            example: {text: "मैं ठीक हूँ।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit16.lesson01.teach.sir
+            kind: vocabulary
+            target: {text: "सिर", language_code: hi, direction: ltr}
+            introduced_tokens: ["सिर"]
+            example: {text: "मेरा सिर बड़ा है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit16.lesson01.teach.dard
+            kind: vocabulary
+            target: {text: "दर्द", language_code: hi, direction: ltr}
+            introduced_tokens: ["दर्द"]
+            example: {text: "मुझे दर्द है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit16.lesson01.teach.mujhe_sir_dard_hai_phrase
+            kind: phrase
+            target: {text: "मुझे सिर दर्द है।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a1.unit16.lesson01.teach.grammar_symptom_hai
+            kind: grammar_note
+            target: {text: "'मुझे + संज्ञा + है' पहले यूनिट 11 में सीखा था ('मुझे काम है' = I have work)। अब यह लक्षण बताने के लिए भी इस्तेमाल होता है: 'मुझे सिर दर्द है' का मतलब है 'I have a headache' -- 'सिर दर्द' (सिर = head, दर्द = pain) एक साथ मिलकर 'headache' बनाते हैं। यह कोई नया व्याकरण नहीं है, वही पुराना पैटर्न है।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a1.unit16.lesson01.teach.bukhar
+            kind: vocabulary
+            target: {text: "बुखार", language_code: hi, direction: ltr}
+            introduced_tokens: ["बुखार"]
+            example: {text: "तुम्हें बुखार है?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit16.lesson01.teach.mujhe_bukhar_hai_phrase
+            kind: phrase
+            target: {text: "मुझे बुखार है।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+        exercises:
+          - content_key: hi.a1.unit16.lesson01.exercise01.select_sir_meaning
+            type: multiple_choice
+            tested_text: "सिर"
+            prompt:
+              target_blocks:
+                - {text: "सिर", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit16.lesson01.exercise02.select_dard_meaning
+            type: multiple_choice
+            tested_text: "दर्द"
+            prompt:
+              target_blocks:
+                - {text: "दर्द", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit16.lesson01.exercise03.select_mujhe_sir_dard_hai_meaning
+            type: multiple_choice
+            tested_text: "मुझे सिर दर्द है"
+            prompt:
+              target_blocks:
+                - {text: "मुझे सिर दर्द है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit16.lesson01.exercise04.listen_mujhe_sir_dard_hai
+            type: listen_select
+            tested_text: "मुझे सिर दर्द है"
+            media_asset_key: hi.a1.audio.health.mujhe_sir_dard_hai.01
+            prompt: {target_blocks: []}
+          - content_key: hi.a1.unit16.lesson01.exercise05.select_mujhe_bukhar_hai_meaning
+            type: multiple_choice
+            tested_text: "मुझे बुखार है"
+            prompt:
+              target_blocks:
+                - {text: "मुझे बुखार है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit16.lesson01.exercise06.match_lesson01_words
+            type: matching_pairs
+            tested_text: "सिर दर्द बुखार ठीक मुझे है तुम नहीं"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "सिर", right: "head"}
+              - {left: "दर्द", right: "pain / ache"}
+              - {left: "बुखार", right: "fever"}
+              - {left: "ठीक", right: "fine / well"}
+              - {left: "मुझे", right: "to me / I have"}
+              - {left: "है", right: "is"}
+              - {left: "तुम", right: "you (informal)"}
+              - {left: "नहीं", right: "no / not"}
+          - content_key: hi.a1.unit16.lesson01.exercise07.order_mujhe_sir_dard_hai
+            type: word_order
+            tested_text: "मुझे सिर दर्द है"
+            prompt: {target_blocks: []}
+            word_bank: ["मुझे", "सिर", "दर्द", "है"]
+          - content_key: hi.a1.unit16.lesson01.exercise08.order_main_theek_nahin_hoon
+            type: word_order
+            tested_text: "मैं ठीक नहीं हूँ"
+            prompt: {target_blocks: []}
+            word_bank: ["मैं", "ठीक", "नहीं", "हूँ"]
+          - content_key: hi.a1.unit16.lesson01.exercise09.fill_mujhe_sir_dard
+            type: fill_in_blank
+            tested_text: "दर्द"
+            prompt:
+              target_blocks:
+                - {text: "मुझे सिर ___ है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit16.lesson01.exercise10.fill_mujhe_bukhar
+            type: fill_in_blank
+            tested_text: "बुखार"
+            prompt:
+              target_blocks:
+                - {text: "मुझे ___ है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit16.lesson01.exercise11.reply_tum_theek_ho
+            type: dialogue_response
+            tested_text: "मुझे सिर दर्द है"
+            prompt:
+              target_blocks:
+                - {text: "तुम ठीक हो?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit16.lesson01.exercise12.fix_mujhe_sir_dard_hai
+            type: grammar_check
+            tested_text: "मुझे सिर दर्द है"
+            prompt:
+              target_blocks:
+                - {text: "मुझे सिर दर्द चाहिए है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit16.lesson01.exercise13.speak_mujhe_bukhar_hai
+            type: speak_response
+            tested_text: "मुझे बुखार है"
+            prompt:
+              target_blocks:
+                - {text: "बोलो: मुझे बुखार है।", language_code: hi, direction: ltr}
+
+      - content_key: hi.a1.unit16.lesson02.doctor_dawa
+        title: "डॉक्टर और दवा"
+        spine_outcome_id: universal.a1.health.describe_basic_problem
+        teaching:
+          - content_key: hi.a1.unit16.lesson02.teach.tumhein_jaana_review
+            kind: vocabulary
+            target: {text: "तुम्हें, जाना", language_code: hi, direction: ltr}
+            introduced_tokens: ["तुम्हें", "जाना"]
+            example:
+              - {text: "तुम्हें क्या चाहिए?", language_code: hi, direction: ltr}
+              - {text: "मुझे स्टेशन जाना है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit16.lesson02.teach.ke_paas_review
+            kind: vocabulary
+            target: {text: "के, पास", language_code: hi, direction: ltr}
+            introduced_tokens: ["के", "पास"]
+            example: {text: "बैंक स्कूल के पास है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit16.lesson02.teach.doctor
+            kind: vocabulary
+            target: {text: "डॉक्टर", language_code: hi, direction: ltr}
+            introduced_tokens: ["डॉक्टर"]
+            example: {text: "डॉक्टर अच्छा है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit16.lesson02.teach.mujhe_doctor_ke_paas_jana_hai_phrase
+            kind: phrase
+            target: {text: "मुझे डॉक्टर के पास जाना है।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a1.unit16.lesson02.teach.grammar_ke_paas_third_sense
+            kind: grammar_note
+            target: {text: "'के पास' के पहले दो मतलब यूनिट 8 में सीखे थे -- नज़दीक ('बैंक स्कूल के पास है') और स्वामित्व ('मेरे पास एक किताब है')। अब एक तीसरा इस्तेमाल: किसी व्यक्ति के पास जाना, यानी उस व्यक्ति के यहाँ जाना -- 'डॉक्टर के पास जाना है' का मतलब है 'need to go to the doctor'। यही 'मुझे...जाना है' ढांचा भी यूनिट 15 से दोहराया गया है।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a1.unit16.lesson02.teach.aaraam
+            kind: vocabulary
+            target: {text: "आराम", language_code: hi, direction: ltr}
+            introduced_tokens: ["आराम"]
+            example: {text: "मुझे आराम चाहिए।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit16.lesson02.teach.chahiye_review
+            kind: vocabulary
+            target: {text: "चाहिए", language_code: hi, direction: ltr}
+            introduced_tokens: ["चाहिए"]
+            example: {text: "मुझे चाय चाहिए।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit16.lesson02.teach.tumhein_aaraam_chahiye_phrase
+            kind: phrase
+            target: {text: "तुम्हें आराम चाहिए।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a1.unit16.lesson02.teach.dawa
+            kind: vocabulary
+            target: {text: "दवा", language_code: hi, direction: ltr}
+            introduced_tokens: ["दवा"]
+            example: {text: "मुझे दवा चाहिए।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit16.lesson02.teach.tumhein_dawa_chahiye_phrase
+            kind: phrase
+            target: {text: "तुम्हें दवा चाहिए।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a1.unit16.lesson02.teach.jaao_aur_review
+            kind: vocabulary
+            target: {text: "जाओ, और", language_code: hi, direction: ltr}
+            introduced_tokens: ["जाओ", "और"]
+            example:
+              - {text: "सीधे जाओ।", language_code: hi, direction: ltr}
+              - {text: "चाय और कॉफ़ी चाहिए।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit16.lesson02.teach.karo_grammar
+            kind: grammar_note
+            target: {text: "'करो' उसी तुम-रूप के आदेश-नियम से बनता है जो यूनिट 9 में सिखाया गया था ('जाओ', 'मुड़ो', 'बताओ', 'गिनो' -- सब '-ओ' पर खत्म)। यहाँ 'करना' (यूनिट 11 का 'माफ़ करना') के तने 'कर' से 'करो' बनता है, यानी 'do!'। 'आराम करो' का मतलब है 'Rest!'", language_code: hi, direction: ltr}
+            introduced_tokens: ["करो"]
+          - content_key: hi.a1.unit16.lesson02.teach.aaraam_karo_phrase
+            kind: phrase
+            target: {text: "आराम करो!", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a1.unit16.lesson02.teach.aaraam_karo_aur_doctor_ke_paas_jaao_phrase
+            kind: phrase
+            target: {text: "आराम करो और डॉक्टर के पास जाओ।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+        exercises:
+          - content_key: hi.a1.unit16.lesson02.exercise01.select_doctor_meaning
+            type: multiple_choice
+            tested_text: "डॉक्टर"
+            prompt:
+              target_blocks:
+                - {text: "डॉक्टर", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit16.lesson02.exercise02.select_mujhe_doctor_ke_paas_jana_hai_meaning
+            type: multiple_choice
+            tested_text: "मुझे डॉक्टर के पास जाना है"
+            prompt:
+              target_blocks:
+                - {text: "मुझे डॉक्टर के पास जाना है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit16.lesson02.exercise03.select_tumhein_aaraam_chahiye_meaning
+            type: multiple_choice
+            tested_text: "तुम्हें आराम चाहिए"
+            prompt:
+              target_blocks:
+                - {text: "तुम्हें आराम चाहिए।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit16.lesson02.exercise04.listen_mujhe_doctor_ke_paas_jana_hai
+            type: listen_select
+            tested_text: "मुझे डॉक्टर के पास जाना है"
+            media_asset_key: hi.a1.audio.health.mujhe_doctor_ke_paas_jana_hai.01
+            prompt: {target_blocks: []}
+          - content_key: hi.a1.unit16.lesson02.exercise05.select_tumhein_dawa_chahiye_meaning
+            type: multiple_choice
+            tested_text: "तुम्हें दवा चाहिए"
+            prompt:
+              target_blocks:
+                - {text: "तुम्हें दवा चाहिए।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit16.lesson02.exercise06.match_lesson02_words
+            type: matching_pairs
+            tested_text: "डॉक्टर आराम दवा करो के पास चाहिए तुम्हें जाना जाओ"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "डॉक्टर", right: "doctor"}
+              - {left: "आराम", right: "rest"}
+              - {left: "दवा", right: "medicine"}
+              - {left: "करो", right: "do! (command)"}
+              - {left: "के पास", right: "near / at (a place)"}
+              - {left: "चाहिए", right: "want / need"}
+              - {left: "तुम्हें", right: "to you / you need"}
+              - {left: "जाना", right: "to go"}
+              - {left: "जाओ", right: "go!"}
+              - {left: "और", right: "and"}
+          - content_key: hi.a1.unit16.lesson02.exercise07.order_mujhe_doctor_ke_paas_jana_hai
+            type: word_order
+            tested_text: "मुझे डॉक्टर के पास जाना है"
+            prompt: {target_blocks: []}
+            word_bank: ["मुझे", "डॉक्टर", "के", "पास", "जाना", "है"]
+          - content_key: hi.a1.unit16.lesson02.exercise08.order_aaraam_karo_aur_doctor_ke_paas_jaao
+            type: word_order
+            tested_text: "आराम करो और डॉक्टर के पास जाओ"
+            prompt: {target_blocks: []}
+            word_bank: ["आराम", "करो", "और", "डॉक्टर", "के", "पास", "जाओ"]
+          - content_key: hi.a1.unit16.lesson02.exercise09.fill_tumhein_aaraam_chahiye
+            type: fill_in_blank
+            tested_text: "आराम"
+            prompt:
+              target_blocks:
+                - {text: "तुम्हें ___ चाहिए।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit16.lesson02.exercise10.fill_mujhe_doctor_ke_paas_jana
+            type: fill_in_blank
+            tested_text: "जाना"
+            prompt:
+              target_blocks:
+                - {text: "मुझे डॉक्टर के पास ___ है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit16.lesson02.exercise11.reply_tumhein_kya_chahiye
+            type: dialogue_response
+            tested_text: "मुझे दवा चाहिए"
+            prompt:
+              target_blocks:
+                - {text: "तुम्हें क्या चाहिए?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit16.lesson02.exercise12.fix_mujhe_doctor_ke_paas_jana_hai
+            type: grammar_check
+            tested_text: "मुझे डॉक्टर के पास जाना है"
+            prompt:
+              target_blocks:
+                - {text: "मुझे डॉक्टर के पास जाना चाहिए है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit16.lesson02.exercise13.speak_tumhein_aaraam_chahiye
+            type: speak_response
+            tested_text: "तुम्हें आराम चाहिए"
+            prompt:
+              target_blocks:
+                - {text: "बोलो: तुम्हें आराम चाहिए।", language_code: hi, direction: ltr}
+
+      - content_key: hi.a1.unit16.lesson03.priya_arjun_theek_ho
+        title: "प्रिया और अर्जुन: तुम ठीक हो?"
+        spine_outcome_id: universal.a1.health.describe_basic_problem
+        teaching:
+          - content_key: hi.a1.unit16.lesson03.teach.dialogue.line01
+            kind: dialogue
+            target:
+              text: "अर्जुन, तुम ठीक हो?"
+              language_code: hi
+              direction: ltr
+              speaker: Priya
+            introduced_tokens: []
+          - content_key: hi.a1.unit16.lesson03.teach.dialogue.line02
+            kind: dialogue
+            target:
+              text: "नहीं, मुझे सिर दर्द और बुखार है।"
+              language_code: hi
+              direction: ltr
+              speaker: Arjun
+            introduced_tokens: []
+          - content_key: hi.a1.unit16.lesson03.teach.dialogue.line03
+            kind: dialogue
+            target:
+              text: "यह ठीक नहीं है। तुम्हें आराम चाहिए।"
+              language_code: hi
+              direction: ltr
+              speaker: Priya
+            introduced_tokens: []
+          - content_key: hi.a1.unit16.lesson03.teach.dialogue.line04
+            kind: dialogue
+            target:
+              text: "हाँ, लेकिन मुझे दवा भी चाहिए।"
+              language_code: hi
+              direction: ltr
+              speaker: Arjun
+            introduced_tokens: []
+          - content_key: hi.a1.unit16.lesson03.teach.dialogue.line05
+            kind: dialogue
+            target:
+              text: "ठीक है। तुम्हें डॉक्टर के पास जाना है।"
+              language_code: hi
+              direction: ltr
+              speaker: Priya
+            introduced_tokens: []
+          - content_key: hi.a1.unit16.lesson03.teach.dialogue.line06
+            kind: dialogue
+            target:
+              text: "ठीक है, शुक्रिया।"
+              language_code: hi
+              direction: ltr
+              speaker: Arjun
+            introduced_tokens: []
+          - content_key: hi.a1.unit16.lesson03.teach.dialogue.line07
+            kind: dialogue
+            target:
+              text: "आराम करो!"
+              language_code: hi
+              direction: ltr
+              speaker: Priya
+            introduced_tokens: []
+          - content_key: hi.a1.unit16.lesson03.teach.dialogue.line08
+            kind: dialogue
+            target:
+              text: "ठीक है।"
+              language_code: hi
+              direction: ltr
+              speaker: Arjun
+            introduced_tokens: []
+          - content_key: hi.a1.unit16.lesson03.teach.grammar_summary
+            kind: grammar_note
+            target: {text: "इस यूनिट के तीन मुख्य नियम: (1) 'मुझे/तुम्हें + लक्षण + है' से बीमारी बताते हैं (जैसे 'मुझे बुखार है')। (2) 'तुम्हें/मुझे + चीज़ + चाहिए' से ज़रूरत बताते हैं (जैसे 'तुम्हें आराम चाहिए')। (3) 'X के पास जाना है' से पता चलता है किसके पास जाना ज़रूरी है (जैसे 'डॉक्टर के पास जाना है')।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a1.unit16.lesson03.teach.advice_reading
+            kind: reading
+            target: {text: "आराम करो। डॉक्टर के पास जाओ।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+        exercises:
+          - content_key: hi.a1.unit16.lesson03.exercise01.comprehend_arjun_symptoms
+            type: dialogue_comprehension
+            tested_text: "बुखार"
+            prompt:
+              target_blocks:
+                - {text: "नहीं, मुझे सिर दर्द और बुखार है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit16.lesson03.exercise02.comprehend_doctor_destination
+            type: dialogue_comprehension
+            tested_text: "डॉक्टर"
+            prompt:
+              target_blocks:
+                - {text: "ठीक है। तुम्हें डॉक्टर के पास जाना है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit16.lesson03.exercise03.select_tumhein_doctor_ke_paas_jana_hai_meaning
+            type: multiple_choice
+            tested_text: "तुम्हें डॉक्टर के पास जाना है"
+            prompt:
+              target_blocks:
+                - {text: "तुम्हें डॉक्टर के पास जाना है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit16.lesson03.exercise04.read_advice_first
+            type: reading_comprehension
+            tested_text: "आराम"
+            prompt:
+              target_blocks:
+                - {text: "आराम करो। डॉक्टर के पास जाओ।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit16.lesson03.exercise05.read_advice_second
+            type: reading_comprehension
+            tested_text: "डॉक्टर के पास जाओ"
+            prompt:
+              target_blocks:
+                - {text: "आराम करो। डॉक्टर के पास जाओ।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit16.lesson03.exercise06.listen_tumhein_aaraam_chahiye
+            type: listen_select
+            tested_text: "तुम्हें आराम चाहिए"
+            media_asset_key: hi.a1.audio.health.tumhein_aaraam_chahiye.01
+            prompt: {target_blocks: []}
+          - content_key: hi.a1.unit16.lesson03.exercise07.match_lesson03_review
+            type: matching_pairs
+            tested_text: "सिर दर्द बुखार आराम दवा डॉक्टर करो के पास चाहिए तुम्हें"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "सिर दर्द", right: "headache"}
+              - {left: "बुखार", right: "fever"}
+              - {left: "आराम", right: "rest"}
+              - {left: "दवा", right: "medicine"}
+              - {left: "डॉक्टर", right: "doctor"}
+              - {left: "करो", right: "do! (command)"}
+              - {left: "के पास", right: "near / at (a place)"}
+              - {left: "चाहिए", right: "want / need"}
+              - {left: "तुम्हें", right: "to you / you need"}
+          - content_key: hi.a1.unit16.lesson03.exercise08.order_tumhein_doctor_ke_paas_jana_hai
+            type: word_order
+            tested_text: "तुम्हें डॉक्टर के पास जाना है"
+            prompt: {target_blocks: []}
+            word_bank: ["तुम्हें", "डॉक्टर", "के", "पास", "जाना", "है"]
+          - content_key: hi.a1.unit16.lesson03.exercise09.order_mujhe_sir_dard_aur_bukhar_hai
+            type: word_order
+            tested_text: "मुझे सिर दर्द और बुखार है"
+            prompt: {target_blocks: []}
+            word_bank: ["मुझे", "सिर", "दर्द", "और", "बुखार", "है"]
+          - content_key: hi.a1.unit16.lesson03.exercise10.fill_sir_dard_aur_bukhar
+            type: fill_in_blank
+            tested_text: "और"
+            prompt:
+              target_blocks:
+                - {text: "मुझे सिर दर्द ___ बुखार है।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit16.lesson03.exercise11.fix_mujhe_bukhar_hai
+            type: grammar_check
+            tested_text: "मुझे बुखार है"
+            prompt:
+              target_blocks:
+                - {text: "मुझे बुखार हैं।", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit16.lesson03.exercise12.reply_tum_theek_ho_full
+            type: dialogue_response
+            tested_text: "नहीं मुझे सिर दर्द और बुखार है"
+            prompt:
+              target_blocks:
+                - {text: "तुम ठीक हो?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit16.lesson03.exercise13.write_tumhein_kya_chahiye
+            type: writing_prompt
+            tested_text: "मुझे दवा चाहिए"
+            prompt:
+              target_blocks:
+                - {text: "लिखो: तुम्हें क्या चाहिए?", language_code: hi, direction: ltr}
+          - content_key: hi.a1.unit16.lesson03.exercise14.speak_mujhe_sir_dard_hai
+            type: speak_response
+            tested_text: "मुझे सिर दर्द है"
+            prompt:
+              target_blocks:
+                - {text: "बोलो: मुझे सिर दर्द है।", language_code: hi, direction: ltr}
