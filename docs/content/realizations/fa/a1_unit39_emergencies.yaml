@@ -40,9 +40,66 @@ generation_provenance:
     notes below for the specific reuse chain), not sourced from FSI at all.
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: codex_fresh_context
+  status: reviewed
+  required_next_reviewer: null
   notes: >-
+    2026-07-10 fresh-context review (Claude) found and fixed ONE real
+    grammar/spelling error that appeared 13 times in this file (plus 6 more
+    in the paired overlay): the formal/plural imperative "come!" was
+    spelled "بیاید" (5 codepoints: ب-ی-ا-ی-د) throughout -- teaching cards
+    (teach.zud_biayid), the dialogue (line3, and the media_assets dialogue
+    transcript), every exercise built from it (recognize/match/translate/
+    dialogue_comprehension/matching_pairs "right" values), and lesson06's
+    wrap-up. That spelling is actually the standard 3rd-person-singular
+    subjunctive "(که) او بیاید" ("that he/she come"), NOT the 2nd-person
+    formal/plural imperative the unit intends -- Persian verbs whose
+    present stem ends in the glide -ی (آمدن's stem آی) need a DOUBLE ی
+    before the -ید formal ending (بیایید, 6 codepoints), the same pattern
+    already used correctly and consistently everywhere in this course's own
+    "بفرمایید" (verified with a corpus-wide grep of every fa realization
+    file: "بفرمایید" always has the double-ی spelling, in units
+    01/02/06/08/20/21/22/40/41/42/a2_unit09 -- 90+ instances, zero
+    exceptions). This unit's other two formal-imperative forms, کنید
+    (کن+ید, stem ends in a consonant) and بزنید (زن+ید, stem ends in a
+    consonant), don't need the doubling and were already spelled correctly
+    -- only the آمدن-derived form was wrong. Fixed by replacing every
+    "بیاید" with "بیایید" in both this file and the paired overlay (13 + 6
+    occurrences respectively, confirmed by grep after the fix: zero
+    remaining bare "بیاید" instances, all now "بیایید"). Also added one
+    missing multi-clause join variant per AUTHORING_GUIDE.md #12:
+    lesson04.exercise05's ("ممنون! زود بیایید!") accepted_answers had "!"
+    and ","-joined English forms but no period-joined form, unlike this
+    same unit's own lesson03.exercise05, which already had all three --
+    added "Thanks. Come quickly!" to match. Re-validated clean after both
+    fixes: 0 errors/0 warnings standalone and as part of the full 4-unit
+    (39-42) group. Everything else checked clean: no listen_select/
+    dialogue_response distractor is a line either dialogue speaker (نیما,
+    سارا) actually says elsewhere in this unit's dialogue audio (the one
+    dialogue_comprehension exercise's distractors are invented
+    plausible-fact paraphrases -- "he needs an ambulance/fire
+    department/doctor" -- never spoken by anyone in the clip, matching the
+    corpus's established safe pattern); a recursive yaml.safe_load boolean
+    scan over both files found zero stray yes/no/true/false coercions
+    (only the two legitimate boolean fields, human_reviewed and
+    target_language_first); matching_pairs accepted_answers use this fa
+    corpus's established flat-dict shape (not the {left,right}[] array
+    shape), consistent with every other fa unit (checked unit38 as
+    precedent) and correctly graded either way by the backend's shape
+    canonicalization; every exercise `type:` used (multiple_choice,
+    matching_pairs, word_order, translation, dialogue_comprehension,
+    dialogue_response, reading_comprehension, writing_prompt) is registered
+    in ExerciseRenderer.tsx; no untaught vocabulary (confirmed by the
+    compiler's own validator, 0 errors); no snake_case/internal-jargon
+    leaks into learner-facing text; the three emergency services'
+    vocabulary and the لازمه fused-predicate construction are used
+    consistently across all 6 lessons with no contradicting facts; the
+    formal/plural register choice (کنید/بیایید/بزنید, not unit17's informal
+    کن) is applied consistently and is correctly justified by the
+    stranger/responder addressee, distinct from unit17's friend-to-friend
+    context; Persian keheh (ک U+06A9) and yeh (ی U+06CC) codepoints are used
+    throughout, not the Arabic kaf/yeh variants; the Iranian Farsi register
+    reads naturally with no Dari forms or machine-translation-style calques.
+
     Draft authored 2026-07-09 by Claude (content-authoring worker session),
     continuing fa A1 volume growth past unit38 (seasons). Realizes
     universal.a1.emergencies.handle_basic_emergency, the next unrealized A1
@@ -75,7 +132,7 @@ review:
     established قشنگه/گرمه/سرده/بارونیه/برفیه/باحاله fused predicates from
     units 07/20/23/36/38), rather than introducing unrelated new grammar.
     Register choice, explicitly noted per AUTHORING_GUIDE.md #3: this unit
-    deliberately uses the FORMAL/plural imperative (کنید/بیاید/بزنید,
+    deliberately uses the FORMAL/plural imperative (کنید/بیایید/بزنید,
     "you-formal do/come/call") throughout, not the friend-to-friend informal
     تو-register imperative (کن) unit17 used for health advice between
     friends -- appropriate here since the shouted requests are addressed to
@@ -107,7 +164,7 @@ course:
     Continues the established colloquial Iranian Farsi register: fused
     copula predicates (لازمه) built the same way as units 07/20/23/36/38's
     own fused forms, plus a deliberate formal/plural imperative register
-    (کنید/بیاید/بزنید) for addressing strangers/responders in an emergency --
+    (کنید/بیایید/بزنید) for addressing strangers/responders in an emergency --
     distinct from unit17's friend-to-friend informal imperative (کن), see
     this file's review notes for why. Reuses کمک (unit17), الو/باشه/میام/
     زنگ/زدن (units 17 and 22), and ممنون (unit17) without re-teaching them
@@ -126,7 +183,7 @@ media_assets:
     status: pending_generation
   - content_key: fa.a1.unit39.audio.dialogue.emergencies.01
     language: fa
-    text: "نیما: الو! کمک کنید! پلیس لازمه! سارا: باشه. پلیس میاد. نیما: ممنون! زود بیاید! سارا: باشه!"
+    text: "نیما: الو! کمک کنید! پلیس لازمه! سارا: باشه. پلیس میاد. نیما: ممنون! زود بیایید! سارا: باشه!"
     voice_hint: two_adults_neutral_urgent
     status: pending_generation
 
@@ -307,8 +364,8 @@ units:
             introduced_tokens: [میاد, میام]
           - content_key: fa.a1.unit39.lesson04.teach.zud_biayid
             kind: phrase
-            target: {text: "زود بیاید!", language_code: fa, direction: rtl}
-            introduced_tokens: [زود, بیاید]
+            target: {text: "زود بیایید!", language_code: fa, direction: rtl}
+            introduced_tokens: [زود, بیایید]
           - content_key: fa.a1.unit39.lesson04.teach.zang_bezanid
             kind: phrase
             target: {text: "زنگ بزنید!", language_code: fa, direction: rtl}
@@ -323,7 +380,7 @@ units:
             introduced_tokens: []
           - content_key: fa.a1.unit39.lesson04.teach.dialogue_line3
             kind: dialogue
-            target: {text: "ممنون! زود بیاید!", language_code: fa, direction: rtl, speaker: نیما}
+            target: {text: "ممنون! زود بیایید!", language_code: fa, direction: rtl, speaker: نیما}
             introduced_tokens: []
           - content_key: fa.a1.unit39.lesson04.teach.dialogue_line4
             kind: dialogue
@@ -332,7 +389,7 @@ units:
         exercises:
           - content_key: fa.a1.unit39.lesson04.exercise01.dialogue_comprehension_emergency
             type: dialogue_comprehension
-            tested_text: "الو کمک کنید پلیس لازمه باشه پلیس میاد ممنون زود بیاید باشه"
+            tested_text: "الو کمک کنید پلیس لازمه باشه پلیس میاد ممنون زود بیایید باشه"
             prompt: {target_blocks: [{text: "کمک کنید! پلیس لازمه!", language_code: fa, direction: rtl}]}
             correct_option: "He needs the police."
             distractors:
@@ -345,7 +402,7 @@ units:
             prompt: {target_blocks: [{text: "پلیس میاد.", language_code: fa, direction: rtl}]}
           - content_key: fa.a1.unit39.lesson04.exercise03.match_dialogue_emergency_words
             type: matching_pairs
-            tested_text: "الو کمک کنید پلیس لازمه میاد زود بیاید"
+            tested_text: "الو کمک کنید پلیس لازمه میاد زود بیایید"
             prompt: {target_blocks: []}
             pairs:
               - {left: الو, right: "hello (on the phone)"}
@@ -354,14 +411,14 @@ units:
               - {left: لازمه, right: "is needed"}
               - {left: میاد, right: "is coming"}
               - {left: زود, right: quickly}
-              - {left: بیاید, right: "come!"}
+              - {left: بیایید, right: "come!"}
           - content_key: fa.a1.unit39.lesson04.exercise04.dialogue_response_confirm_police
             type: dialogue_response
             tested_text: "باشه. پلیس میاد."
             prompt: {target_blocks: [{text: "الو! کمک کنید! پلیس لازمه!", language_code: fa, direction: rtl}]}
           - content_key: fa.a1.unit39.lesson04.exercise05.translate_mamnoon_zud_biayid
             type: translation
-            tested_text: "ممنون! زود بیاید!"
+            tested_text: "ممنون! زود بیایید!"
             prompt: {target_blocks: []}
 
       - content_key: fa.a1.unit39.lesson05.reading_emergency_notice
@@ -426,7 +483,7 @@ units:
             introduced_tokens: []
           - content_key: fa.a1.unit39.lesson06.teach.review_orjans_biayid
             kind: phrase
-            target: {text: "اورژانسه! زود بیاید!", language_code: fa, direction: rtl}
+            target: {text: "اورژانسه! زود بیایید!", language_code: fa, direction: rtl}
             introduced_tokens: []
           - content_key: fa.a1.unit39.lesson06.teach.summary_services
             kind: grammar_note
@@ -439,8 +496,8 @@ units:
             prompt: {target_blocks: [{text: "پلیس لازمه! کمک کنید!", language_code: fa, direction: rtl}]}
           - content_key: fa.a1.unit39.lesson06.exercise02.recognize_orjans_biayid
             type: multiple_choice
-            tested_text: "اورژانسه! زود بیاید!"
-            prompt: {target_blocks: [{text: "اورژانسه! زود بیاید!", language_code: fa, direction: rtl}]}
+            tested_text: "اورژانسه! زود بیایید!"
+            prompt: {target_blocks: [{text: "اورژانسه! زود بیایید!", language_code: fa, direction: rtl}]}
           - content_key: fa.a1.unit39.lesson06.exercise03.match_wrap_emergencies
             type: matching_pairs
             tested_text: "پلیس آمبولانس آتش‌نشانی خطر تصادف لازمه کمک"

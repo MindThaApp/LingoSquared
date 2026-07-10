@@ -9,9 +9,25 @@ generation_provenance:
   authoring_system: claude
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: codex_fresh_context
+  status: reviewed
+  required_next_reviewer: null
   notes: >-
+    2026-07-10 fresh-context review (Claude), paired with the realization
+    file's own review pass. Found and fixed the SAME bug on this side:
+    this overlay also spelled "ticket" as بلیت (24 lines) instead of the
+    corpus-standard بلیط -- fixed with the same global find-and-replace,
+    re-validated 0 errors/0 warnings both standalone and combined with
+    units 47/48/50. See the realization file's review notes for the full
+    detail on why this was a real bug (corpus-wide spelling consistency
+    against earlier units 16/28 and later units 51/52/53/57, not a
+    stylistic nitpick) and everything else checked clean (boolean-
+    coercion/Arabic-codepoint/jargon-leak scans, same-speaker distractor
+    check, character-name collision check, price/hours consistency).
+    Nothing else needed fixing on the overlay side -- every gloss/title/
+    note/feedback string read for accuracy against its paired realization
+    text, every "Translate into English" exercise confirmed to set
+    answer_language_code: en. Marking reviewed.
+
     Draft overlay paired with the fa.a1.unit49.swimming_pool realization.
     See that file's generation_provenance for the honest source-access
     result: tried `firecrawl search "FSI Persian Basic Course swimming
@@ -44,7 +60,7 @@ review:
     شش/نه (unit03), باز (unit08/24/27/43), سلام/ممنون (units01/17/22/45/
     46/47/48), باشه (units01/02/06/17/22/45/46/47/48), بله (unit20/21),
     خوبه (unit06/10/12/19/48). New vocabulary genuinely introduced for the
-    first time in the whole corpus: استخر (swimming pool), بلیت (ticket),
+    first time in the whole corpus: استخر (swimming pool), بلیط (ticket),
     and کمد (locker) -- exactly 3 new words. One new construction without
     being a new root word: بازه, the colloquial contraction of باز + است
     ("it's open"), built on the already-taught root باز and following the
@@ -79,8 +95,8 @@ review:
     class fixed 2026-07-09 in the nl corpus (commit 148240e) cannot
     directly apply here -- verified anyway, per the standing instruction to
     list every line each speaker says before writing distractors: نیما
-    says "سلام آقای جعفری. یک بلیت استخر می‌خوام."/"باشه. کمد دارید؟"/
-    "استخر بازه؟"/"خوبه. ممنون!"; آقای جعفری says "سلام نیما. بلیت پنج
+    says "سلام آقای جعفری. یک بلیط استخر می‌خوام."/"باشه. کمد دارید؟"/
+    "استخر بازه؟"/"خوبه. ممنون!"; آقای جعفری says "سلام نیما. بلیط پنج
     هزار تومنه."/"بله، کمد هست."/"بله، از ساعت شش تا نه بازه." --
     lesson04's dialogue_comprehension distractors ("He wants to know if
     they sell swimsuits."/"He wants to know if there's a café."/"He wants
@@ -147,7 +163,7 @@ teaching:
   fa.a1.unit49.lesson02.teach.belit:
     title: Ticket
     gloss: ticket
-    note: "*بلیت* is a ticket, used here for the swimming-pool entry ticket."
+    note: "*بلیط* is a ticket, used here for the swimming-pool entry ticket."
     example_gloss: "How much does the ticket come to?"
 
   fa.a1.unit49.lesson03.teach.review_darid:
@@ -266,23 +282,23 @@ exercises:
     correct_option: ticket
     distractors: [locker, price, key]
     accepted_answers: [{value: ticket, status: correct}]
-    feedback: "بلیت means 'ticket.'"
+    feedback: "بلیط means 'ticket.'"
   fa.a1.unit49.lesson02.exercise02.recognize_belit_cheghadr_mishe:
     instruction: "What does this sentence mean?"
     correct_option: "How much does the ticket come to?"
     distractors: ["Where is the ticket?", "Do you have a ticket?", "I don't want a ticket."]
     accepted_answers: [{value: "How much does the ticket come to?", status: correct}]
-    feedback: "بلیت چقدر می‌شه؟ means 'How much does the ticket come to?'"
+    feedback: "بلیط چقدر می‌شه؟ means 'How much does the ticket come to?'"
   fa.a1.unit49.lesson02.exercise03.match_pool_two:
     instruction: "Match each word with its meaning."
     accepted_answers:
-      - value: {بلیت: ticket, چقدر: "how much", "می‌شه": "it comes to", پنج: five, هزار: thousand, تومن: toman, "بلیت چقدر می‌شه؟": "How much does the ticket come to?"}
+      - value: {بلیط: ticket, چقدر: "how much", "می‌شه": "it comes to", پنج: five, هزار: thousand, تومن: toman, "بلیط چقدر می‌شه؟": "How much does the ticket come to?"}
         status: correct
     feedback: "These words let you ask about the ticket price."
   fa.a1.unit49.lesson02.exercise04.word_order_belit_panj_hezar_tomane:
     instruction: "Put the words in order."
-    accepted_answers: [{value: [بلیت, پنج, هزار, "تومنه"], status: correct}]
-    feedback: "بلیت پنج هزار تومنه means 'The ticket is 5,000 toman.'"
+    accepted_answers: [{value: [بلیط, پنج, هزار, "تومنه"], status: correct}]
+    feedback: "بلیط پنج هزار تومنه means 'The ticket is 5,000 toman.'"
   fa.a1.unit49.lesson02.exercise05.translate_panj_hezar_toman:
     instruction: "Translate into English: پنج هزار تومن"
     answer_language_code: en
@@ -345,7 +361,7 @@ exercises:
   fa.a1.unit49.lesson04.exercise03.match_dialogue_pool:
     instruction: "Match each line with its meaning."
     accepted_answers:
-      - value: {"سلام آقای جعفری. یک بلیت استخر می‌خوام.": "Hi Mr. Jafari. I want a swimming-pool ticket.", "سلام نیما. بلیت پنج هزار تومنه.": "Hi Nima. The ticket is 5,000 toman.", "باشه. کمد دارید؟": "Okay. Do you have a locker?", "بله، کمد هست.": "Yes, there's a locker.", "استخر بازه؟": "Is the pool open?", "بله، از ساعت شش تا نه بازه.": "Yes, it's open from six to nine.", "خوبه. ممنون!": "Good. Thanks!"}
+      - value: {"سلام آقای جعفری. یک بلیط استخر می‌خوام.": "Hi Mr. Jafari. I want a swimming-pool ticket.", "سلام نیما. بلیط پنج هزار تومنه.": "Hi Nima. The ticket is 5,000 toman.", "باشه. کمد دارید؟": "Okay. Do you have a locker?", "بله، کمد هست.": "Yes, there's a locker.", "استخر بازه؟": "Is the pool open?", "بله، از ساعت شش تا نه بازه.": "Yes, it's open from six to nine.", "خوبه. ممنون!": "Good. Thanks!"}
         status: correct
     feedback: "These lines appear in the swimming-pool conversation between Nima and Mr. Jafari."
   fa.a1.unit49.lesson04.exercise04.dialogue_response_confirm:
@@ -386,23 +402,23 @@ exercises:
   fa.a1.unit49.lesson05.exercise03.match_reading_pool_sign:
     instruction: "Match each word or phrase with its meaning."
     accepted_answers:
-      - value: {استخر: "swimming pool", جعفری: Jafari, بلیت: ticket, پنج: five, هزار: thousand, تومن: toman, شش: six, نه: nine}
+      - value: {استخر: "swimming pool", جعفری: Jafari, بلیط: ticket, پنج: five, هزار: thousand, تومن: toman, شش: six, نه: nine}
         status: correct
     feedback: "These words let you understand the swimming-pool sign."
   fa.a1.unit49.lesson05.exercise04.translate_reading_pool_sign:
-    instruction: "Translate into English: استخر جعفری: بلیت پنج هزار تومن. از ساعت شش تا نه."
+    instruction: "Translate into English: استخر جعفری: بلیط پنج هزار تومن. از ساعت شش تا نه."
     answer_language_code: en
     accepted_answers:
       - {value: "Jafari Pool: ticket 5,000 toman. Six to nine o'clock.", status: correct}
       - {value: "Jafari Pool, ticket 5,000 toman, six to nine o'clock.", status: correct}
       - {value: "Jafari's Pool: ticket 5,000 toman. Six to nine o'clock.", status: correct}
-    feedback: "استخر جعفری: بلیت پنج هزار تومن. از ساعت شش تا نه means 'Jafari Pool: ticket 5,000 toman. Six to nine o'clock.'"
+    feedback: "استخر جعفری: بلیط پنج هزار تومن. از ساعت شش تا نه means 'Jafari Pool: ticket 5,000 toman. Six to nine o'clock.'"
   fa.a1.unit49.lesson05.exercise05.write_pool_sign:
     instruction: "Write a short swimming-pool sign naming the price and the opening hours, using this sign's pattern."
     accepted_answers:
-      - {value: "استخر جعفری: بلیت پنج هزار تومن. از ساعت شش تا نه.", status: correct}
-      - {value: "استخر جعفری: بلیت پنج هزار تومن. از ساعت شش تا نه", status: correct}
-    feedback: "A sign can name the service, the price, and the opening hours, e.g. استخر جعفری: بلیت پنج هزار تومن. از ساعت شش تا نه."
+      - {value: "استخر جعفری: بلیط پنج هزار تومن. از ساعت شش تا نه.", status: correct}
+      - {value: "استخر جعفری: بلیط پنج هزار تومن. از ساعت شش تا نه", status: correct}
+    feedback: "A sign can name the service, the price, and the opening hours, e.g. استخر جعفری: بلیط پنج هزار تومن. از ساعت شش تا نه."
 
   fa.a1.unit49.lesson06.exercise01.recognize_review_request:
     instruction: "What does this sentence mean?"
@@ -412,7 +428,7 @@ exercises:
       - "I want to rent a bike."
       - "I don't want a ticket."
     accepted_answers: [{value: "I want a swimming-pool ticket.", status: correct}]
-    feedback: "یک بلیت استخر می‌خوام means 'I want a swimming-pool ticket.'"
+    feedback: "یک بلیط استخر می‌خوام means 'I want a swimming-pool ticket.'"
   fa.a1.unit49.lesson06.exercise02.recognize_review_price_hours:
     instruction: "What does this sentence mean?"
     correct_option: "The ticket is 5,000 toman. It's open from six to nine."
@@ -421,22 +437,22 @@ exercises:
       - "The ticket is 50,000 toman. It's open all day."
       - "It's free. It's open from nine to six."
     accepted_answers: [{value: "The ticket is 5,000 toman. It's open from six to nine.", status: correct}]
-    feedback: "بلیت پنج هزار تومنه. از ساعت شش تا نه بازه means 'The ticket is 5,000 toman. It's open from six to nine.'"
+    feedback: "بلیط پنج هزار تومنه. از ساعت شش تا نه بازه means 'The ticket is 5,000 toman. It's open from six to nine.'"
   fa.a1.unit49.lesson06.exercise03.match_wrap_pool:
     instruction: "Match each word or phrase with its meaning."
     accepted_answers:
-      - value: {استخر: "swimming pool", بلیت: ticket, کمد: locker, "کمد دارید؟": "Do you have a locker?", "استخر بازه؟": "Is the pool open?", بازه: "it's open"}
+      - value: {استخر: "swimming pool", بلیط: ticket, کمد: locker, "کمد دارید؟": "Do you have a locker?", "استخر بازه؟": "Is the pool open?", بازه: "it's open"}
         status: correct
     feedback: "This reviews all the key swimming-pool words from this unit."
   fa.a1.unit49.lesson06.exercise04.word_order_yek_belit_estakhr:
     instruction: "Put the words in order."
-    accepted_answers: [{value: [یک, بلیت, استخر, "می‌خوام"], status: correct}]
-    feedback: "یک بلیت استخر می‌خوام means 'I want a swimming-pool ticket.'"
+    accepted_answers: [{value: [یک, بلیط, استخر, "می‌خوام"], status: correct}]
+    feedback: "یک بلیط استخر می‌خوام means 'I want a swimming-pool ticket.'"
   fa.a1.unit49.lesson06.exercise05.write_pool_message:
     instruction: "Write a short message asking about a swimming-pool ticket, locker, or opening hours."
     accepted_answers:
-      - {value: "یک بلیت استخر می‌خوام", status: correct}
-      - {value: "یک بلیت استخر می‌خوام.", status: correct}
+      - {value: "یک بلیط استخر می‌خوام", status: correct}
+      - {value: "یک بلیط استخر می‌خوام.", status: correct}
       - {value: "کمد دارید؟", status: correct}
       - {value: "استخر بازه؟", status: correct}
-    feedback: "You can say یک بلیت استخر می‌خوام (I want a swimming-pool ticket) to ask about a pool ticket."
+    feedback: "You can say یک بلیط استخر می‌خوام (I want a swimming-pool ticket) to ask about a pool ticket."

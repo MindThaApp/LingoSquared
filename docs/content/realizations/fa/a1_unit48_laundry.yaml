@@ -40,9 +40,42 @@ generation_provenance:
     vocabulary (see review notes below for the exact reuse chain).
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: codex_fresh_context
+  status: reviewed
+  required_next_reviewer: null
   notes: >-
+    2026-07-10 fresh-context review (Claude) found no real bugs in this
+    unit. Checked: the compiler (`compile_content.py validate`) standalone
+    and combined with units 47/49/50 -- 0 errors/0 warnings both times; a
+    recursive grep for unquoted yes/no/true/false/on/off scalar values --
+    zero hits; a scan for Arabic-range kaf (U+0643)/yeh (U+064A)/alef
+    maksura (U+0649) codepoints across both this file and its overlay --
+    zero hits, all keheh/yeh correctly in the Persian range; a targeted
+    scan of every learner-facing gloss/title/note/instruction/
+    correct_option/feedback string for snake_case jargon leaks -- zero
+    hits. Same-speaker/same-audio distractor-collision check (no
+    listen_select in this unit, so applied to lesson04's
+    dialogue_comprehension instead): manually re-listed both نیما's and
+    خانم کاظمی's actual dialogue lines and confirmed none of the three
+    distractors ("...if they also do dry cleaning."/"...if the shop is
+    open on Fridays."/"...if he needs an appointment.") is a fact either
+    speaker states anywhere in the dialogue -- confirmed clean, matching
+    the author's own claim. Price (ده هزار تومن) and pickup time (فردا
+    ظهر) are stated identically in the dialogue, the shop-sign reading
+    text, and the wrap-up review, per AUTHORING_GUIDE.md #11 -- no drift.
+    Character check: خانم کاظمی does not collide with any other named
+    آقای/خانم service character anywhere else in the fa corpus. All 19
+    registered exercise types are used correctly. matching_pairs
+    accepted_answers use the flat-dict shape, consistent with the
+    established corpus convention (same as every other already-shipped fa
+    unit), not treated as a bug since `grade()` canonicalizes either
+    shape. Vocabulary reuse chain spot-checked against earlier units
+    (لباس‌ها/unit32, می‌گیرم/unit29/34/41, etc.) -- confirmed accurate.
+    Genuine colloquial Iranian Farsi register throughout, no Dari/Afghan
+    forms detected; the خشکشویی (drop-off shop, not self-service
+    launderette) scenario choice is a real, correctly-reasoned dialect-
+    authenticity call per AUTHORING_GUIDE.md #3. Nothing needed fixing in
+    this unit; marking reviewed.
+
     Draft authored 2026-07-10 by Claude (content-authoring worker session),
     continuing fa A1 volume growth past unit47 (bike_rental). Realizes
     universal.a1.laundry.use_launderette -- confirmed as the correct next

@@ -49,9 +49,49 @@ generation_provenance:
     "hotel" hit count.
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: codex_fresh_context
+  status: reviewed
+  required_next_reviewer: null
   notes: >-
+    2026-07-10 fresh-context review (Claude) found and fixed a real
+    cross-unit character-name collision: this file's own review notes
+    claimed the hotel receptionist آقای کریمی was "a NEW formal-register
+    character... avoiding any surname collision with" units 41/42, but a
+    corpus-wide grep for کریمی found it was already in active use as the
+    lost-and-found clerk in unit40 (a full speaking dialogue character,
+    not just a mentioned name) -- the "zero collision" check that
+    authored this unit only compared against unit41/42's own two names
+    and missed unit40's. Fixed by renaming this unit's hotel-receptionist
+    character from آقای کریمی to آقای رستمی throughout (dialogue lines,
+    the grammar-note/register-policy prose, and every matching_pairs/
+    translation exercise referencing him) -- رستمی confirmed via a fresh
+    corpus-wide grep to collide with no other named character across the
+    whole fa corpus (units 01-57). Also ran the same compiler-invisible
+    example-forward-reference check described in unit43's own review
+    note against this file (a standalone script replicating the
+    compiler's own tokenize() against every teaching-card example): clean,
+    no unrelated-word forward references found here (only each card's own
+    newly-introduced word ever triggered the naive scan, which is
+    expected/correct). Re-validated clean after the rename (0 errors/0
+    warnings, standalone and as part of the 4-unit combined run).
+    Everything else was checked clean: no same-speaker distractor
+    collisions (lesson04's dialogue_comprehension distractors --
+    restaurant, key location, room price -- are never mentioned by either
+    speaker in the dialogue; the wifi distractor was deliberately avoided
+    since نیما does ask about wifi later in the same dialogue, correctly
+    treated as a real collision risk by the original author); a real
+    yaml.safe_load boolean-type walk found zero stray
+    yes/no/true/false/on/off coercions; no Arabic-range kaf/yeh
+    codepoints; matching_pairs accepted_answers use the established
+    fa-corpus flat-dict convention, left as-is (see unit43's own review
+    note for the reasoning); every exercise type used is registered in
+    ExerciseRenderer.tsx; no jargon leaks; breakfast hours
+    (seven-to-ten) and checkout time (twelve noon) stay consistent
+    across the dialogue and every exercise referencing them; the Persian
+    reads as natural, contemporary Iranian colloquial register (both
+    نیما's informal register and آقای رستمی's neutral polite service
+    register are internally consistent and match the corpus's
+    established service-encounter convention from units 41/42).
+
     Draft authored 2026-07-09 by Claude (content-authoring worker session),
     continuing fa A1 volume growth past unit43 (waste disposal, merged).
     Realizes universal.a1.accommodation.check_into_lodging, the next
@@ -100,7 +140,7 @@ review:
     established recurring traveler from units 16/20) is the guest, checking
     into a hotel after a trip -- a natural continuation of his established
     role rather than a new character. A NEW formal-register character,
-    آقای کریمی, is introduced as the hotel receptionist (distinct from
+    آقای رستمی, is introduced as the hotel receptionist (distinct from
     unit41's خانم احمدی and unit42's آقای صادقی, avoiding any surname
     collision with either); he speaks in neutral polite service language
     (دارید/شما), consistent with the librarian's register in unit42 and the
@@ -137,7 +177,7 @@ review:
     three distractors ("He wants to know if the hotel has a restaurant."/
     "He wants to know where the key is."/"He wants to know the room
     price.") are plausible-fact alternatives, NOT lines either dialogue
-    speaker (نیما or آقای کریمی) actually says or facts either speaker
+    speaker (نیما or آقای رستمی) actually says or facts either speaker
     actually states anywhere in this unit's dialogue -- a restaurant, the
     key, and a price are never mentioned by either speaker in this
     dialogue at all. Deliberately avoided a distractor like "he wants to
@@ -166,7 +206,7 @@ course:
   register_policy: >-
     Continues the established colloquial Iranian Farsi register: نیما (the
     established recurring traveler from units 16/20) keeps his usual
-    informal register as the hotel guest. آقای کریمی, a new formal-register
+    informal register as the hotel guest. آقای رستمی, a new formal-register
     hotel-receptionist character, speaks with دارید/شما polite service
     language, consistent with the register unit41's خانم احمدی and unit42's
     آقای صادقی already established for this course's other service-
@@ -194,7 +234,7 @@ media_assets:
     status: pending_generation
   - content_key: fa.a1.unit44.audio.dialogue.checkin.01
     language: fa
-    text: "نیما: سلام، رزرو دارم. اسمم نیماست. آقای کریمی: سلام، خوش اومدید. اتاق شما آماده‌ست. نیما: ممنون. صبحانه ساعت چنده؟ آقای کریمی: از ساعت هفت تا ده. نیما: باشه. وای‌فای دارید؟ آقای کریمی: بله. ساعت خروج هم دوازده ظهره. نیما: ممنون، خداحافظ!"
+    text: "نیما: سلام، رزرو دارم. اسمم نیماست. آقای رستمی: سلام، خوش اومدید. اتاق شما آماده‌ست. نیما: ممنون. صبحانه ساعت چنده؟ آقای رستمی: از ساعت هفت تا ده. نیما: باشه. وای‌فای دارید؟ آقای رستمی: بله. ساعت خروج هم دوازده ظهره. نیما: ممنون، خداحافظ!"
     voice_hint: two_adults_neutral_friendly
     status: pending_generation
 
@@ -417,15 +457,15 @@ units:
             introduced_tokens: ["نیماست"]
           - content_key: fa.a1.unit44.lesson04.teach.dialogue_line2
             kind: dialogue
-            target: {text: "سلام، خوش اومدید. اتاق شما آماده‌ست.", language_code: fa, direction: rtl, speaker: "آقای کریمی"}
-            introduced_tokens: [آقای, کریمی]
+            target: {text: "سلام، خوش اومدید. اتاق شما آماده‌ست.", language_code: fa, direction: rtl, speaker: "آقای رستمی"}
+            introduced_tokens: [آقای, رستمی]
           - content_key: fa.a1.unit44.lesson04.teach.dialogue_line3
             kind: dialogue
             target: {text: "ممنون. صبحانه ساعت چنده؟", language_code: fa, direction: rtl, speaker: نیما}
             introduced_tokens: []
           - content_key: fa.a1.unit44.lesson04.teach.dialogue_line4
             kind: dialogue
-            target: {text: "از ساعت هفت تا ده.", language_code: fa, direction: rtl, speaker: "آقای کریمی"}
+            target: {text: "از ساعت هفت تا ده.", language_code: fa, direction: rtl, speaker: "آقای رستمی"}
             introduced_tokens: []
           - content_key: fa.a1.unit44.lesson04.teach.dialogue_line5
             kind: dialogue
@@ -433,7 +473,7 @@ units:
             introduced_tokens: []
           - content_key: fa.a1.unit44.lesson04.teach.dialogue_line6
             kind: dialogue
-            target: {text: "بله. ساعت خروج هم دوازده ظهره.", language_code: fa, direction: rtl, speaker: "آقای کریمی"}
+            target: {text: "بله. ساعت خروج هم دوازده ظهره.", language_code: fa, direction: rtl, speaker: "آقای رستمی"}
             introduced_tokens: ["ظهره"]
           - content_key: fa.a1.unit44.lesson04.teach.dialogue_line7
             kind: dialogue

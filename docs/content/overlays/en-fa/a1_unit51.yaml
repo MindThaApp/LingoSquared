@@ -9,9 +9,31 @@ generation_provenance:
   authoring_system: claude
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: codex_fresh_context
+  status: reviewed
+  required_next_reviewer: null
   notes: >-
+    2026-07-10 fresh-context review (Claude) found and fixed the same real
+    bug found in the paired realization file: this overlay's own reuse-
+    chain notes claimed بله ("yes," formal) was new vocabulary "genuinely
+    introduced for the first time in the whole corpus," counted among 3
+    new words. A real introduced_tokens grep across every fa
+    a1_unit*.yaml file shows بله was already introduced in unit02 and
+    reused since (unit06/20/21/42/44/48/49) -- corrected the count to 2
+    new words (سانس, شروع) and explained why the teach.bale card's overlay
+    entry is still kept as authored (first place this course contrasts
+    بله with the already-taught informal آره as the formal-register
+    choice). Everything else checked clean: no same-speaker distractor
+    collisions in the dialogue_comprehension exercise, no stray unquoted
+    yes/no/true/false/on/off YAML booleans, no Arabic-range kaf/yeh
+    codepoints, every exercise type used is registered, every "Translate
+    into English" exercise correctly sets answer_language_code: en, and
+    every accepted_answers entry (matching_pairs, word_order, translation)
+    matches the paired realization's own data shape and order. Compiler
+    validation clean both standalone and as part of the combined
+    unit51-54 run: 0 errors/0 warnings.
+
+    Prior draft-authoring provenance notes, kept for the record below.
+
     Draft overlay paired with the fa.a1.unit51.cinema realization. See that
     file's generation_provenance for the honest source-access result:
     tried `firecrawl search "FSI Persian Basic Course cinema سینما movie
@@ -76,14 +98,22 @@ review:
     the first time in the whole corpus: سانس (showtime/session), شروع
     (start/begin -- combined with the already-taught cost-sense verb
     می‌شه to form "شروع می‌شه," the same authentic /mise/ "becomes/starts"
-    construction FSI's own Unit 4 grammar notes independently confirm),
-    and بله (formal "yes," chosen over the already-taught informal آره
-    specifically to match خانم موسوی's neutral-polite service register,
-    the same register every other service character in this corpus
-    already uses) -- exactly 3 new words. No new verb-conjugation pattern
-    is introduced. The showtime (ساعت هفت عصر) and ticket price (هشتاد
-    هزار تومن) are kept identical across the dialogue, the cinema-sign
-    reading text, and the wrap-up review, per AUTHORING_GUIDE.md #11.
+    construction FSI's own Unit 4 grammar notes independently confirm) --
+    exactly 2 new words. No new verb-conjugation pattern is introduced.
+    CORRECTED DURING FRESH-CONTEXT REVIEW (2026-07-10): this overlay
+    originally also counted بله (formal "yes," chosen over the already-
+    taught informal آره to match خانم موسوی's neutral-polite service
+    register) as a third genuinely new word. A real grep of every fa
+    a1_unit*.yaml file's introduced_tokens (run during review) shows بله
+    was actually already introduced in unit02 ("بله. من مینا هستم.") and
+    reused since (unit06/20/21/42/44/48/49) -- corrected from 3 new words
+    to 2. The teach.bale card is kept as authored: it's still the first
+    place this course explicitly contrasts بله with the already-taught
+    informal آره as a formal-register choice, a nuance unit02 never
+    called out on its own. The showtime (ساعت هفت عصر) and ticket price
+    (هشتاد هزار تومن) are kept identical across the dialogue, the
+    cinema-sign reading text, and the wrap-up review, per
+    AUTHORING_GUIDE.md #11.
     Every "Translate into English" exercise below explicitly sets
     answer_language_code: en. No exercise in this unit tests a genuine
     two-clause sentence joined by "and"/comma (§12) -- every multi-

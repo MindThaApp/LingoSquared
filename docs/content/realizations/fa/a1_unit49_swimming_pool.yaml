@@ -27,15 +27,60 @@ generation_provenance:
     genuine dead end of the same shape as units 44-48's own source
     searches: the FSI course has no public-swimming-pool material, not an
     extraction failure. All swimming-pool vocabulary and the full dialogue
-    in this unit (استخر, بلیت, کمد, and the customer-attendant exchange)
+    in this unit (استخر, بلیط, کمد, and the customer-attendant exchange)
     is authored fresh from this project's own established colloquial
     Iranian Farsi conventions and already-shipped vocabulary (see review
     notes below for the exact reuse chain).
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: codex_fresh_context
+  status: reviewed
+  required_next_reviewer: null
   notes: >-
+    2026-07-10 fresh-context review (Claude) found and fixed ONE real
+    spelling bug. This unit's own draft spelled "ticket" as بلیت
+    throughout (46 lines in this file, 24 in the paired overlay), but the
+    standard modern Persian spelling -- and the spelling already
+    established by two EARLIER fa units (unit16 travel, unit28
+    transportation) plus every later fa unit that also uses the word
+    (units 51/52/53/57: cinema/museum/concert/zoo, already-shipped) -- is
+    بلیط (from French "billet," ط not ت). This unit was internally
+    self-consistent (بلیت used uniformly, never mixed with بلیط within the
+    same file, so the compiler's own per-file checks had nothing to catch)
+    but broke corpus-wide spelling consistency for a word this course
+    teaches learners more than once across different units -- a real
+    "genuine Persian... grammar/register quality" defect per this review's
+    own charge, not a stylistic nitpick (بلیت would read as a plain typo
+    to a native speaker). Fixed with a global find-and-replace of بلیت ->
+    بلیط across both this file and its overlay (content_key values like
+    `...teach.belit` are romanized ASCII and untouched, correctly).
+    Re-validated clean after the fix: 0 errors/0 warnings standalone and
+    combined with units 47/48/50.
+
+    Everything else in this unit was checked clean: a recursive grep for
+    unquoted yes/no/true/false/on/off scalar values -- zero hits; a scan
+    for Arabic-range kaf (U+0643)/yeh (U+064A)/alef maksura (U+0649)
+    codepoints -- zero hits, all keheh/yeh correctly in the Persian range;
+    a targeted scan of every learner-facing gloss/title/note/instruction/
+    correct_option/feedback string for snake_case jargon leaks -- zero
+    hits. Same-speaker/same-audio distractor-collision check (no
+    listen_select in this unit, so applied to lesson04's
+    dialogue_comprehension instead): manually re-listed both نیما's and
+    آقای جعفری's actual dialogue lines and confirmed none of the three
+    distractors ("...if they sell swimsuits."/"...if there's a
+    café."/"...how many lanes the pool has.") is a fact either speaker
+    states anywhere in the dialogue -- confirmed clean. Ticket price (پنج
+    هزار تومن) and opening hours (از ساعت شش تا نه) are stated identically
+    in the dialogue, the pool-sign reading text, and the wrap-up review,
+    per AUTHORING_GUIDE.md #11 -- no drift. Character check: آقای جعفری
+    does not collide with any other named آقای/خانم service character
+    anywhere else in the fa corpus. All 19 registered exercise types are
+    used correctly. matching_pairs accepted_answers use the flat-dict
+    shape, consistent with the established corpus convention, not treated
+    as a bug. The gender-segregated-pool scenario reasoning (male
+    front-desk attendant matching real Iranian public-pool staffing
+    convention) is a genuinely researched dialect-authenticity call per
+    AUTHORING_GUIDE.md #3, not an unexamined default.
+
     Draft authored 2026-07-10 by Claude (content-authoring worker session),
     continuing fa A1 volume growth past unit48 (laundry). Realizes
     universal.a1.swimming_pool.visit_swimming_pool -- confirmed as the
@@ -91,7 +136,7 @@ review:
     46/47/48), باشه (units01/02/06/17/22/45/46/47/48), بله "yes" (unit20/
     21), خوبه "good, that's fine" (unit06/10/12/19/48). New vocabulary
     genuinely introduced for the first time in the whole corpus: استخر
-    (swimming pool), بلیت (ticket), and کمد (locker) -- exactly 3 new
+    (swimming pool), بلیط (ticket), and کمد (locker) -- exactly 3 new
     words, in line with this course's established 2-4-new-word-per-unit
     range (unit47: 2, unit48: 2, unit45: 4). One new CONSTRUCTION is also
     introduced without being a new root word: بازه, the colloquial
@@ -131,7 +176,7 @@ review:
     are stated identically in the dialogue (lesson04), the pool-sign
     reading text (lesson05), and the wrap-up review (lesson06), and never
     contradicted anywhere else in the unit. Every kind:vocabulary teaching
-    item (استخر, بلیت, کمد, and the character card آقای جعفری) has an
+    item (استخر, بلیط, کمد, and the character card آقای جعفری) has an
     example sentence per schema 1.1/AUTHORING_GUIDE §19, built only from
     the card's own word plus tokens already declared earlier in THIS
     file's document order (no forward references); بازه is authored as a
@@ -158,8 +203,8 @@ review:
     cannot directly apply here -- there is no listen_select exercise in
     this file to check. Checked anyway, per the standing instruction to
     list every line each speaker says before writing any distractor: نیما
-    says "سلام آقای جعفری. یک بلیت استخر می‌خوام."/"باشه. کمد دارید؟"/
-    "استخر بازه؟"/"خوبه. ممنون!"; آقای جعفری says "سلام نیما. بلیت پنج
+    says "سلام آقای جعفری. یک بلیط استخر می‌خوام."/"باشه. کمد دارید؟"/
+    "استخر بازه؟"/"خوبه. ممنون!"; آقای جعفری says "سلام نیما. بلیط پنج
     هزار تومنه."/"بله، کمد هست."/"بله، از ساعت شش تا نه بازه." -- lesson04's
     dialogue_comprehension exercise asks what نیما wants to know when he
     asks "استخر بازه؟", with distractors ("He wants to know if they sell
@@ -213,12 +258,12 @@ course:
 media_assets:
   - content_key: fa.a1.unit49.audio.pool.vocab.01
     language: fa
-    text: "استخر، بلیت، کمد"
+    text: "استخر، بلیط، کمد"
     voice_hint: neutral_adult
     status: pending_generation
   - content_key: fa.a1.unit49.audio.dialogue.pool.01
     language: fa
-    text: "نیما: سلام آقای جعفری. یک بلیت استخر می‌خوام. آقای جعفری: سلام نیما. بلیت پنج هزار تومنه. نیما: باشه. کمد دارید؟ آقای جعفری: بله، کمد هست. نیما: استخر بازه؟ آقای جعفری: بله، از ساعت شش تا نه بازه. نیما: خوبه. ممنون!"
+    text: "نیما: سلام آقای جعفری. یک بلیط استخر می‌خوام. آقای جعفری: سلام نیما. بلیط پنج هزار تومنه. نیما: باشه. کمد دارید؟ آقای جعفری: بله، کمد هست. نیما: استخر بازه؟ آقای جعفری: بله، از ساعت شش تا نه بازه. نیما: خوبه. ممنون!"
     voice_hint: two_adults_neutral_friendly
     status: pending_generation
 
@@ -292,35 +337,35 @@ units:
             introduced_tokens: [پنج, هزار, تومن, "تومنه"]
           - content_key: fa.a1.unit49.lesson02.teach.belit
             kind: vocabulary
-            target: {text: بلیت, language_code: fa, direction: rtl}
-            introduced_tokens: [بلیت]
-            example: {text: "بلیت چقدر می‌شه؟", language_code: fa, direction: rtl}
+            target: {text: بلیط, language_code: fa, direction: rtl}
+            introduced_tokens: [بلیط]
+            example: {text: "بلیط چقدر می‌شه؟", language_code: fa, direction: rtl}
         exercises:
           - content_key: fa.a1.unit49.lesson02.exercise01.recognize_belit
             type: multiple_choice
-            tested_text: بلیت
-            prompt: {target_blocks: [{text: بلیت, language_code: fa, direction: rtl}]}
+            tested_text: بلیط
+            prompt: {target_blocks: [{text: بلیط, language_code: fa, direction: rtl}]}
           - content_key: fa.a1.unit49.lesson02.exercise02.recognize_belit_cheghadr_mishe
             type: multiple_choice
-            tested_text: "بلیت چقدر می‌شه؟"
-            prompt: {target_blocks: [{text: "بلیت چقدر می‌شه؟", language_code: fa, direction: rtl}]}
+            tested_text: "بلیط چقدر می‌شه؟"
+            prompt: {target_blocks: [{text: "بلیط چقدر می‌شه؟", language_code: fa, direction: rtl}]}
           - content_key: fa.a1.unit49.lesson02.exercise03.match_pool_two
             type: matching_pairs
-            tested_text: "بلیت چقدر می‌شه پنج هزار تومن بلیت چقدر می‌شه"
+            tested_text: "بلیط چقدر می‌شه پنج هزار تومن بلیط چقدر می‌شه"
             prompt: {target_blocks: []}
             pairs:
-              - {left: بلیت, right: ticket}
+              - {left: بلیط, right: ticket}
               - {left: چقدر, right: "how much"}
               - {left: "می‌شه", right: "it comes to"}
               - {left: پنج, right: five}
               - {left: هزار, right: thousand}
               - {left: تومن, right: toman}
-              - {left: "بلیت چقدر می‌شه؟", right: "How much does the ticket come to?"}
+              - {left: "بلیط چقدر می‌شه؟", right: "How much does the ticket come to?"}
           - content_key: fa.a1.unit49.lesson02.exercise04.word_order_belit_panj_hezar_tomane
             type: word_order
-            tested_text: "بلیت پنج هزار تومنه"
+            tested_text: "بلیط پنج هزار تومنه"
             prompt: {target_blocks: [{text: "The ticket is 5,000 toman.", language_code: en, direction: ltr}]}
-            word_bank: [بلیت, پنج, هزار, "تومنه"]
+            word_bank: [بلیط, پنج, هزار, "تومنه"]
           - content_key: fa.a1.unit49.lesson02.exercise05.translate_panj_hezar_toman
             type: translation
             tested_text: "پنج هزار تومن"
@@ -410,11 +455,11 @@ units:
             example: {text: "سلام آقای جعفری!", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit49.lesson04.teach.dialogue_line1
             kind: dialogue
-            target: {text: "سلام آقای جعفری. یک بلیت استخر می‌خوام.", language_code: fa, direction: rtl, speaker: نیما}
+            target: {text: "سلام آقای جعفری. یک بلیط استخر می‌خوام.", language_code: fa, direction: rtl, speaker: نیما}
             introduced_tokens: []
           - content_key: fa.a1.unit49.lesson04.teach.dialogue_line2
             kind: dialogue
-            target: {text: "سلام نیما. بلیت پنج هزار تومنه.", language_code: fa, direction: rtl, speaker: "آقای جعفری"}
+            target: {text: "سلام نیما. بلیط پنج هزار تومنه.", language_code: fa, direction: rtl, speaker: "آقای جعفری"}
             introduced_tokens: []
           - content_key: fa.a1.unit49.lesson04.teach.dialogue_line3
             kind: dialogue
@@ -439,7 +484,7 @@ units:
         exercises:
           - content_key: fa.a1.unit49.lesson04.exercise01.dialogue_comprehension_hours
             type: dialogue_comprehension
-            tested_text: "سلام آقای جعفری یک بلیت استخر می‌خوام سلام نیما بلیت پنج هزار تومنه باشه کمد دارید بله کمد هست استخر بازه بله از ساعت شش تا نه بازه خوبه ممنون"
+            tested_text: "سلام آقای جعفری یک بلیط استخر می‌خوام سلام نیما بلیط پنج هزار تومنه باشه کمد دارید بله کمد هست استخر بازه بله از ساعت شش تا نه بازه خوبه ممنون"
             prompt: {target_blocks: [{text: "استخر بازه؟", language_code: fa, direction: rtl}]}
             correct_option: "He wants to know if the pool is open."
             distractors:
@@ -452,11 +497,11 @@ units:
             prompt: {target_blocks: [{text: "بله، کمد هست.", language_code: fa, direction: rtl}]}
           - content_key: fa.a1.unit49.lesson04.exercise03.match_dialogue_pool
             type: matching_pairs
-            tested_text: "سلام آقای جعفری یک بلیت استخر می‌خوام سلام نیما بلیت پنج هزار تومنه باشه کمد دارید بله کمد هست استخر بازه بله از ساعت شش تا نه بازه خوبه ممنون"
+            tested_text: "سلام آقای جعفری یک بلیط استخر می‌خوام سلام نیما بلیط پنج هزار تومنه باشه کمد دارید بله کمد هست استخر بازه بله از ساعت شش تا نه بازه خوبه ممنون"
             prompt: {target_blocks: []}
             pairs:
-              - {left: "سلام آقای جعفری. یک بلیت استخر می‌خوام.", right: "Hi Mr. Jafari. I want a swimming-pool ticket."}
-              - {left: "سلام نیما. بلیت پنج هزار تومنه.", right: "Hi Nima. The ticket is 5,000 toman."}
+              - {left: "سلام آقای جعفری. یک بلیط استخر می‌خوام.", right: "Hi Mr. Jafari. I want a swimming-pool ticket."}
+              - {left: "سلام نیما. بلیط پنج هزار تومنه.", right: "Hi Nima. The ticket is 5,000 toman."}
               - {left: "باشه. کمد دارید؟", right: "Okay. Do you have a locker?"}
               - {left: "بله، کمد هست.", right: "Yes, there's a locker."}
               - {left: "استخر بازه؟", right: "Is the pool open?"}
@@ -477,13 +522,13 @@ units:
         teaching:
           - content_key: fa.a1.unit49.lesson05.teach.reading_text
             kind: reading
-            target: {text: "استخر جعفری: بلیت پنج هزار تومن. از ساعت شش تا نه.", language_code: fa, direction: rtl}
+            target: {text: "استخر جعفری: بلیط پنج هزار تومن. از ساعت شش تا نه.", language_code: fa, direction: rtl}
             introduced_tokens: []
         exercises:
           - content_key: fa.a1.unit49.lesson05.exercise01.reading_comprehension_service
             type: reading_comprehension
-            tested_text: "استخر جعفری: بلیت پنج هزار تومن. از ساعت شش تا نه."
-            prompt: {target_blocks: [{text: "استخر جعفری: بلیت پنج هزار تومن. از ساعت شش تا نه.", language_code: fa, direction: rtl}]}
+            tested_text: "استخر جعفری: بلیط پنج هزار تومن. از ساعت شش تا نه."
+            prompt: {target_blocks: [{text: "استخر جعفری: بلیط پنج هزار تومن. از ساعت شش تا نه.", language_code: fa, direction: rtl}]}
             correct_option: "Swimming pool."
             distractors:
               - "Bike rental shop."
@@ -491,8 +536,8 @@ units:
               - "Laundry shop."
           - content_key: fa.a1.unit49.lesson05.exercise02.reading_comprehension_price
             type: reading_comprehension
-            tested_text: "استخر جعفری: بلیت پنج هزار تومن. از ساعت شش تا نه."
-            prompt: {target_blocks: [{text: "استخر جعفری: بلیت پنج هزار تومن. از ساعت شش تا نه.", language_code: fa, direction: rtl}]}
+            tested_text: "استخر جعفری: بلیط پنج هزار تومن. از ساعت شش تا نه."
+            prompt: {target_blocks: [{text: "استخر جعفری: بلیط پنج هزار تومن. از ساعت شش تا نه.", language_code: fa, direction: rtl}]}
             correct_option: "5,000 toman."
             distractors:
               - "500 toman."
@@ -500,12 +545,12 @@ units:
               - "It's free."
           - content_key: fa.a1.unit49.lesson05.exercise03.match_reading_pool_sign
             type: matching_pairs
-            tested_text: "استخر جعفری بلیت پنج هزار تومن شش نه"
+            tested_text: "استخر جعفری بلیط پنج هزار تومن شش نه"
             prompt: {target_blocks: []}
             pairs:
               - {left: استخر, right: "swimming pool"}
               - {left: جعفری, right: Jafari}
-              - {left: بلیت, right: ticket}
+              - {left: بلیط, right: ticket}
               - {left: پنج, right: five}
               - {left: هزار, right: thousand}
               - {left: تومن, right: toman}
@@ -513,11 +558,11 @@ units:
               - {left: نه, right: nine}
           - content_key: fa.a1.unit49.lesson05.exercise04.translate_reading_pool_sign
             type: translation
-            tested_text: "استخر جعفری: بلیت پنج هزار تومن. از ساعت شش تا نه."
+            tested_text: "استخر جعفری: بلیط پنج هزار تومن. از ساعت شش تا نه."
             prompt: {target_blocks: []}
           - content_key: fa.a1.unit49.lesson05.exercise05.write_pool_sign
             type: writing_prompt
-            tested_text: "استخر جعفری: بلیت پنج هزار تومن. از ساعت شش تا نه."
+            tested_text: "استخر جعفری: بلیط پنج هزار تومن. از ساعت شش تا نه."
             prompt: {target_blocks: []}
 
       - content_key: fa.a1.unit49.lesson06.wrap_up
@@ -526,42 +571,42 @@ units:
         teaching:
           - content_key: fa.a1.unit49.lesson06.teach.review_request
             kind: phrase
-            target: {text: "یک بلیت استخر می‌خوام.", language_code: fa, direction: rtl}
+            target: {text: "یک بلیط استخر می‌خوام.", language_code: fa, direction: rtl}
             introduced_tokens: []
           - content_key: fa.a1.unit49.lesson06.teach.review_price_hours
             kind: phrase
-            target: {text: "بلیت پنج هزار تومنه. از ساعت شش تا نه بازه.", language_code: fa, direction: rtl}
+            target: {text: "بلیط پنج هزار تومنه. از ساعت شش تا نه بازه.", language_code: fa, direction: rtl}
             introduced_tokens: []
           - content_key: fa.a1.unit49.lesson06.teach.summary_words
             kind: grammar_note
-            target: {text: "استخر / بلیت / کمد / کمد دارید؟ / استخر بازه؟ -- کلمات این درس", language_code: fa, direction: rtl}
+            target: {text: "استخر / بلیط / کمد / کمد دارید؟ / استخر بازه؟ -- کلمات این درس", language_code: fa, direction: rtl}
             introduced_tokens: []
         exercises:
           - content_key: fa.a1.unit49.lesson06.exercise01.recognize_review_request
             type: multiple_choice
-            tested_text: "یک بلیت استخر می‌خوام."
-            prompt: {target_blocks: [{text: "یک بلیت استخر می‌خوام.", language_code: fa, direction: rtl}]}
+            tested_text: "یک بلیط استخر می‌خوام."
+            prompt: {target_blocks: [{text: "یک بلیط استخر می‌خوام.", language_code: fa, direction: rtl}]}
           - content_key: fa.a1.unit49.lesson06.exercise02.recognize_review_price_hours
             type: multiple_choice
-            tested_text: "بلیت پنج هزار تومنه. از ساعت شش تا نه بازه."
-            prompt: {target_blocks: [{text: "بلیت پنج هزار تومنه. از ساعت شش تا نه بازه.", language_code: fa, direction: rtl}]}
+            tested_text: "بلیط پنج هزار تومنه. از ساعت شش تا نه بازه."
+            prompt: {target_blocks: [{text: "بلیط پنج هزار تومنه. از ساعت شش تا نه بازه.", language_code: fa, direction: rtl}]}
           - content_key: fa.a1.unit49.lesson06.exercise03.match_wrap_pool
             type: matching_pairs
-            tested_text: "استخر بلیت کمد کمد دارید استخر بازه"
+            tested_text: "استخر بلیط کمد کمد دارید استخر بازه"
             prompt: {target_blocks: []}
             pairs:
               - {left: استخر, right: "swimming pool"}
-              - {left: بلیت, right: ticket}
+              - {left: بلیط, right: ticket}
               - {left: کمد, right: locker}
               - {left: "کمد دارید؟", right: "Do you have a locker?"}
               - {left: "استخر بازه؟", right: "Is the pool open?"}
               - {left: بازه, right: "it's open"}
           - content_key: fa.a1.unit49.lesson06.exercise04.word_order_yek_belit_estakhr
             type: word_order
-            tested_text: "یک بلیت استخر می‌خوام"
+            tested_text: "یک بلیط استخر می‌خوام"
             prompt: {target_blocks: [{text: "I want a swimming-pool ticket.", language_code: en, direction: ltr}]}
-            word_bank: [یک, بلیت, استخر, "می‌خوام"]
+            word_bank: [یک, بلیط, استخر, "می‌خوام"]
           - content_key: fa.a1.unit49.lesson06.exercise05.write_pool_message
             type: writing_prompt
-            tested_text: "یک بلیت استخر می‌خوام"
+            tested_text: "یک بلیط استخر می‌خوام"
             prompt: {target_blocks: []}

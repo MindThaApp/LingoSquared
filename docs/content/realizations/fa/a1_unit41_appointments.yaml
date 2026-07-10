@@ -39,9 +39,48 @@ generation_provenance:
     for the specific reuse chain), not sourced from FSI at all.
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: codex_fresh_context
+  status: reviewed
+  required_next_reviewer: null
   notes: >-
+    2026-07-10 fresh-context review (Claude), reviewed cold alongside
+    units 39/40/42 in the same batch, no access to the authoring reasoning
+    beyond what's recorded below this note. Found no real bugs -- unit41
+    is clean. Checked: the compiler validator (0 errors/0 warnings
+    standalone and as part of the full 39-42 group); a recursive
+    yaml.safe_load boolean scan over both this file and the paired overlay
+    (zero stray coercions); every exercise `type:` used (multiple_choice,
+    matching_pairs, word_order, translation, dialogue_comprehension,
+    dialogue_response, reading_comprehension, writing_prompt) is
+    registered in ExerciseRenderer.tsx; no listen_select/dialogue_response
+    exercise in this unit, so the same-speaker/same-audio distractor bug
+    class structurally cannot apply -- checked anyway that lesson04's
+    dialogue_comprehension distractors ("He wants a doctor's
+    appointment."/"He wants to cancel his appointment."/"He wants
+    directions to the clinic.") are invented plausible-fact paraphrases,
+    not lines either dialogue speaker (نیما, خانم احمدی) actually says;
+    matching_pairs accepted_answers use the established fa-corpus
+    flat-dict shape, graded correctly either way; no jargon leaks; every
+    kind:vocabulary card has a genuine example sentence built only from
+    earlier-declared tokens; no untaught vocabulary (compiler-confirmed).
+    Cross-lesson fact consistency per AUTHORING_GUIDE.md #11 verified by
+    hand: the appointment's day/time/place (Thursday, 4pm, Dr. Rezaei's
+    office) are stated identically in the lesson04 dialogue, the lesson05
+    reading notice, and every exercise referencing them -- no
+    contradiction found. Every multi-clause translate/writing exercise
+    (lesson04.exercise05, lesson05.exercise04/05, lesson06.exercise05)
+    carries period-joined and comma/no-period variants per
+    AUTHORING_GUIDE.md #12. Grammar/script spot-checked by hand: آزادم
+    ("I'm free") and آزادید ("are you free?", formal) correctly extend
+    آزاد with the consonant-stem -م/-ید endings, single ی throughout (no
+    doubling needed, unlike unit39's بیاید/بیایید issue, since آزاد
+    already ends in a consonant); the وقت/آزاد polysemy extension (from
+    "free time" to "appointment slot"/"available") and the دیدید-style
+    formal -ید ending precedent are both accurately cross-referenced to
+    their real originating units; Persian keheh (ک U+06A9) and yeh (ی
+    U+06CC) codepoints are used throughout. The register split (نیما's
+    neutral lines vs. the polite service register used with خانم احمدی)
+    reads as natural, consistent Iranian Farsi.
+
     Draft authored 2026-07-09 by Claude (content-authoring worker session),
     continuing fa A1 volume growth past unit40 (lost items, merged). Realizes
     universal.a1.appointments.make_simple_appointment, the next unrealized A1

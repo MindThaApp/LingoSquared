@@ -9,9 +9,44 @@ generation_provenance:
   authoring_system: claude
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: codex_fresh_context
+  status: reviewed
+  required_next_reviewer: null
   notes: >-
+    2026-07-10 fresh-context review (Claude), paired with the
+    fa.a1.unit39.emergencies realization review. Found and fixed the same
+    real bug in this overlay: "بیاید" (the 3rd-person subjunctive "that
+    he/she come," 5 codepoints) was used in place of the intended formal
+    2nd-person/plural imperative "بیایید" (6 codepoints, double-ی before
+    the -ید ending) in 6 places -- the note field on teach.zud_biayid, the
+    matching_pairs value on lesson04.exercise03, and the
+    instruction/feedback text on lesson04.exercise05 and
+    lesson06.exercise02. Confirmed against this fa corpus's own
+    established spelling of the same verb-ending pattern (بفرمایید, always
+    double-ی, 90+ instances across units 01/02/06/08/20/21/22/40/41/42/
+    a2_unit09, zero exceptions). Fixed all 6 occurrences; grep after the
+    fix confirms zero remaining bare "بیاید". Also added a missing
+    period-joined variant to lesson04.exercise05's accepted_answers
+    ("Thanks. Come quickly!") per AUTHORING_GUIDE.md #12, matching this
+    same unit's own lesson03.exercise05, which already had all three join
+    forms. Re-validated clean after both fixes: 0 errors/0 warnings
+    standalone and as part of the full 4-unit (39-42) group. Everything
+    else checked clean: a recursive yaml.safe_load scan over
+    title/gloss/note/example_gloss/instruction/correct_option/distractors/
+    accepted_answers/feedback fields in both this overlay and the paired
+    realization found zero stray yes/no/true/false/on/off boolean
+    coercions; every "Translate into English" exercise correctly sets
+    answer_language_code: en; lesson04's dialogue_comprehension distractors
+    ("He needs an ambulance."/"He needs the fire department."/"He needs a
+    doctor.") are invented plausible-fact paraphrases, not lines either
+    dialogue speaker (نیما, سارا) actually says in the dialogue audio; the
+    matching_pairs flat-dict accepted_answers shape matches this fa
+    corpus's established, consistently-used convention (not the
+    {left,right}[] array shape) and grades correctly either way per the
+    backend's shape canonicalization; every exercise instruction coheres
+    with its own answer data; no jargon leaks into learner-facing text; the
+    Iranian Farsi register and script (Persian keheh/yeh codepoints) are
+    correct throughout.
+
     Draft overlay paired with the fa.a1.unit39.emergencies realization. See
     that file's generation_provenance for the honest source-access result:
     with Firecrawl at 0/1000 credits this session, tried both known FSI
@@ -32,7 +67,7 @@ review:
     Farsi conventions and already-shipped vocabulary (unit17's کمک, unit22's
     الو/باشه/میام/زنگ/زدن, this course's established -ه fused-copula
     pattern from units 07/20/23/36/38). Register note: this unit
-    deliberately uses the formal/plural imperative (کنید/بیاید/بزنید) rather
+    deliberately uses the formal/plural imperative (کنید/بیایید/بزنید) rather
     than unit17's friend-to-friend informal کن, since shouting for help
     addresses strangers/responders -- a different, correctly distinct
     register context, not an inconsistency. Every "Translate into English"
@@ -131,7 +166,7 @@ teaching:
   fa.a1.unit39.lesson04.teach.zud_biayid:
     title: "Come quickly!"
     gloss: "Come quickly!"
-    note: "*زود* means 'quickly'; *بیاید* is the formal imperative 'come!'"
+    note: "*زود* means 'quickly'; *بیایید* is the formal imperative 'come!'"
   fa.a1.unit39.lesson04.teach.zang_bezanid:
     title: "Call!"
     gloss: "Call!"
@@ -289,7 +324,7 @@ exercises:
   fa.a1.unit39.lesson04.exercise03.match_dialogue_emergency_words:
     instruction: "Match each word or phrase with its meaning."
     accepted_answers:
-      - value: {الو: "hello (on the phone)", "کمک کنید!": "Help!", پلیس: police, لازمه: "is needed", میاد: "is coming", زود: quickly, بیاید: "come!"}
+      - value: {الو: "hello (on the phone)", "کمک کنید!": "Help!", پلیس: police, لازمه: "is needed", میاد: "is coming", زود: quickly, بیایید: "come!"}
         status: correct
     feedback: "These words appear in the emergency phone call dialogue."
   fa.a1.unit39.lesson04.exercise04.dialogue_response_confirm_police:
@@ -300,13 +335,14 @@ exercises:
       - {value: "باشه، پلیس میاد.", status: correct}
     feedback: "باشه. پلیس میاد. means 'Okay. Police is coming.'"
   fa.a1.unit39.lesson04.exercise05.translate_mamnoon_zud_biayid:
-    instruction: "Translate into English: ممنون! زود بیاید!"
+    instruction: "Translate into English: ممنون! زود بیایید!"
     answer_language_code: en
     accepted_answers:
       - {value: "Thanks! Come quickly!", status: correct}
       - {value: "Thank you! Come quickly!", status: correct}
       - {value: "Thanks, come quickly!", status: correct}
-    feedback: "ممنون! زود بیاید! means 'Thanks! Come quickly!'"
+      - {value: "Thanks. Come quickly!", status: correct}
+    feedback: "ممنون! زود بیایید! means 'Thanks! Come quickly!'"
 
   fa.a1.unit39.lesson05.exercise01.reading_comprehension_fire_service:
     instruction: "According to the notice, what's needed for a fire?"
@@ -369,7 +405,7 @@ exercises:
       - "It's an emergency! Wait here!"
       - "It's dangerous! Come quickly!"
     accepted_answers: [{value: "It's an emergency! Come quickly!", status: correct}]
-    feedback: "اورژانسه! زود بیاید! means 'It's an emergency! Come quickly!'"
+    feedback: "اورژانسه! زود بیایید! means 'It's an emergency! Come quickly!'"
   fa.a1.unit39.lesson06.exercise03.match_wrap_emergencies:
     instruction: "Match each word with its meaning."
     accepted_answers:

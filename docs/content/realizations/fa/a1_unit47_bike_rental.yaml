@@ -44,9 +44,45 @@ generation_provenance:
     (see review notes below for the exact reuse chain).
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: codex_fresh_context
+  status: reviewed
+  required_next_reviewer: null
   notes: >-
+    2026-07-10 fresh-context review (Claude) found no real bugs in this
+    unit. Checked: the compiler (`compile_content.py validate`) standalone
+    and combined with units 48-50 -- 0 errors/0 warnings both times; a
+    recursive grep for unquoted yes/no/true/false/on/off scalar values --
+    zero hits; a scan for Arabic-range kaf (U+0643)/yeh (U+064A)/alef
+    maksura (U+0649) codepoints across both this file and its overlay --
+    zero hits, all keheh/yeh correctly in the Persian range; a targeted
+    scan of every learner-facing gloss/title/note/instruction/
+    correct_option/feedback string for snake_case jargon leaks -- zero
+    hits (the only underscore-bearing tokens are internal content_keys,
+    never learner-facing). Same-speaker/same-audio distractor-collision
+    check (this unit has no listen_select, so the check applies to
+    lesson04's dialogue_comprehension instead, per the task's own
+    instruction not to assume "no listen_select" means "nothing to
+    check"): manually re-listed both نیما's and آقای مرادی's actual
+    dialogue lines and confirmed none of the three distractors ("He wants
+    to know the price of the rental."/"...if Nima already has a
+    bicycle."/"...if Nima needs a helmet.") is a fact either speaker
+    states anywhere in the dialogue -- confirmed clean, matching the
+    author's own claim. Price (روزی پنج هزار تومن) and deposit (ده هزار
+    تومن) are stated identically in the dialogue, the shop-sign reading
+    text, and the wrap-up review, per AUTHORING_GUIDE.md #11 -- no drift.
+    Character check: آقای مرادی does not collide with any other named
+    آقای/خانم service character anywhere else in the fa corpus (grepped
+    every unit). All 19 registered exercise types are used correctly (no
+    unregistered type value). matching_pairs accepted_answers use the
+    flat-dict shape (`{left: right, ...}`), consistent with every other
+    already-shipped fa unit's own overlay convention (e.g. unit46) rather
+    than the array-of-{left,right}-objects shape -- since `grade()`
+    canonicalizes either shape and this matches the established corpus
+    norm rather than deviating from it, left as-is, not treated as a bug.
+    Genuine colloquial Iranian Farsi register throughout (تومنه/کوچیک/
+    بزرگ contractions, می‌خوام...کنم subjunctive pattern) -- no Dari/
+    Afghan forms detected. Nothing needed fixing in this unit; marking
+    reviewed.
+
     Draft authored 2026-07-10 by Claude (content-authoring worker session),
     continuing fa A1 volume growth past unit46 (personal_care/barbershop).
     Realizes universal.a1.bike_rental.rent_a_bicycle -- confirmed as the

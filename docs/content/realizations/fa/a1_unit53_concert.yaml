@@ -29,9 +29,37 @@ generation_provenance:
     chain).
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: codex_fresh_context
+  status: reviewed
+  required_next_reviewer: null
   notes: >-
+    2026-07-10 fresh-context review (Claude) found and fixed ONE real
+    citation-accuracy bug present in BOTH this file and its paired
+    overlay's LEARNER-FACING review card: the lesson02 grammar_note card's
+    target.text and the overlay's matching "note" field both claimed خوبه
+    ("good") was "already taught from unit01/05/06/07/10/12." A real
+    introduced_tokens grep (not by eye) shows unit01/05/07 only ever used
+    خوبه inside an example sentence or informal review-note prose, never
+    actually declared it as taught vocabulary -- its real first
+    introduction is unit06 (unit07's own review notes independently
+    confirm this: "خوبه، خوبه‌ست pattern from unit06"). Corrected the
+    citation in both this file's target.text and the overlay's note field
+    to "unit06/10/12." The identical citation error also appeared in
+    unit54 (same authoring pass, same wording); fixed there too as part
+    of this same review batch. Everything else in this unit checked
+    clean: no same-speaker/same-audio distractor collisions in the
+    dialogue_comprehension exercise (نیما and خانم حسینی's lines
+    independently listed and checked against the distractors), no stray
+    unquoted yes/no/true/false/on/off YAML booleans, no Arabic-range
+    kaf/yeh codepoints, every exercise type used is registered, the
+    singer's name (شاهین), ticket price (100,000 toman), and start time
+    (10pm) are stated identically across the dialogue, concert-poster
+    reading text, and wrap-up review, matching_pairs/word_order shapes
+    are correct, and the Farsi reads naturally with correct Iranian
+    colloquial register. Compiler validation clean both standalone and as
+    part of the combined unit51-54 run: 0 errors/0 warnings.
+
+    Prior draft-authoring provenance notes, kept for the record below.
+
     Draft authored 2026-07-10 by Claude (content-authoring worker session),
     continuing fa A1 volume growth past unit52 (museum). Realizes
     universal.a1.concert.attend_a_concert -- confirmed as the correct next
@@ -307,7 +335,7 @@ units:
             introduced_tokens: [ساعت, شب, "چه ساعتی؟"]
           - content_key: fa.a1.unit53.lesson02.teach.review_khoobe
             kind: grammar_note
-            target: {text: "خوبه (it's good) -- already taught from unit01/05/06/07/10/12", language_code: fa, direction: rtl}
+            target: {text: "خوبه (it's good) -- already taught from unit06/10/12", language_code: fa, direction: rtl}
             introduced_tokens: [خوبه]
           - content_key: fa.a1.unit53.lesson02.teach.khaanande
             kind: vocabulary

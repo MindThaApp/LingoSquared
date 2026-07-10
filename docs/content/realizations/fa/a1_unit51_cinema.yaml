@@ -45,9 +45,47 @@ generation_provenance:
     below for the exact reuse chain).
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: codex_fresh_context
+  status: reviewed
+  required_next_reviewer: null
   notes: >-
+    2026-07-10 fresh-context review (Claude) found and fixed ONE real
+    documentation-accuracy bug: this file's own review notes and
+    new-vocabulary count claimed بله ("yes," formal) was "new vocabulary
+    genuinely introduced for the first time in the whole corpus" here, with
+    a resulting count of 3 new words. A real grep of every fa
+    a1_unit*.yaml file's introduced_tokens (not by eye) shows بله was
+    already introduced in unit02 ("بله. من مینا هستم.") and reused several
+    times since (unit06/20/21/42/44/48/49) -- corrected the new-word count
+    to 2 (سانس, شروع) and annotated why the teach.bale card is still kept
+    as authored: it's the first place this course explicitly contrasts
+    بله with the already-taught informal آره as a formal-register choice
+    for a polite service character, a nuance unit02 never called out on
+    its own. Everything else in this unit was checked clean: no
+    same-speaker/same-audio distractor collisions in the
+    dialogue_comprehension exercise (independently listed every line نیما
+    and خانم موسوی say and confirmed none of the distractors match a line
+    or fact either speaker states anywhere in the dialogue), no stray
+    unquoted yes/no/true/false/on/off YAML booleans (recursive grep plus a
+    full yaml.safe_load type-check across both this file and its overlay),
+    no Arabic-range kaf/yeh codepoints (independent grep for U+0643/U+064A,
+    zero hits -- all keheh/yeh use the correct Persian-range U+06A9/
+    U+06CC), every exercise type used is registered in
+    ExerciseRenderer.tsx (multiple_choice, matching_pairs, word_order,
+    translation, dialogue_comprehension, dialogue_response,
+    reading_comprehension, writing_prompt), the showtime (7pm) and ticket
+    price (80,000 toman) are stated identically across the dialogue,
+    cinema-sign reading text, and wrap-up review, matching_pairs
+    pairs/word_order word_banks match their overlay accepted_answers'
+    order, and the Farsi reads as natural, correctly registered Iranian
+    colloquial speech (نیما informal, خانم موسوی neutral-polite service
+    register, correct formal دارید-style verb register maintained by both
+    speakers toward each other as strangers). Compiler validation clean
+    both standalone and as part of the combined unit51-54 run: 0
+    errors/0 warnings.
+
+    Prior draft-authoring provenance notes (2026-07-10, Claude
+    content-authoring worker session), kept for the record below.
+
     Draft authored 2026-07-10 by Claude (content-authoring worker session),
     continuing fa A1 volume growth past unit50 (restaurant). Realizes
     universal.a1.cinema.go_to_the_cinema -- confirmed as the correct next
@@ -120,12 +158,23 @@ review:
     equally authentic sense of the same verb of becoming, exactly the
     /sinema key soru mise/ "when do the movies start" construction FSI's
     own Unit 4 grammar notes independently confirm as genuine colloquial
-    Persian -- not a stretch usage), and بله (formal "yes," chosen over
-    the already-taught informal آره specifically because خانم موسوی's
-    established neutral-polite service register calls for the more formal
-    yes, matching how every other service character in this corpus speaks
-    -- exactly 3 new words, in line with this course's established 2-4
-    new-word-per-unit range (unit47: 2, unit48: 2, unit49: 3, unit50: 3).
+    Persian -- not a stretch usage) -- exactly 2 new words, in line with
+    this course's established 2-4 new-word-per-unit range (unit47: 2,
+    unit48: 2, unit49: 3, unit50: 3). CORRECTED DURING FRESH-CONTEXT REVIEW
+    (2026-07-10): this file originally also counted بله (formal "yes") as
+    a third genuinely new word here, chosen over the already-taught
+    informal آره because خانم موسوی's neutral-polite service register
+    calls for the more formal yes. A real grep of every fa a1_unit*.yaml
+    file's introduced_tokens (run during review, not by eye) shows بله was
+    actually already introduced in unit02 ("بله. من مینا هستم.") and
+    reused several times since (unit06/20/21/42/44/48/49) -- it is NOT new
+    to the corpus, so the new-word count is corrected from 3 to 2. This
+    unit's own teach.bale card and its example sentence are left as
+    authored: reintroducing بله with a dedicated card is still
+    pedagogically justified here, since this is the first place the
+    course explicitly contrasts it with the already-taught informal آره as
+    the formal-register "yes" a polite service character would use, a
+    nuance unit02 never called out on its own.
     No new verb-conjugation pattern is introduced -- شروع می‌شه reuses the
     exact می‌شه present-tense colloquial form already established by
     units 11/35/49/50 (cost/become sense), and every other verb form used

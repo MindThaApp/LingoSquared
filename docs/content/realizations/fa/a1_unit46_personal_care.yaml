@@ -44,9 +44,52 @@ generation_provenance:
     source.
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: codex_fresh_context
+  status: reviewed
+  required_next_reviewer: null
   notes: >-
+    2026-07-10 fresh-context review (Claude) found and fixed one real,
+    compiler-invisible bug per AUTHORING_GUIDE.md #19's "no forward
+    references" rule: lesson04's character_noori vocabulary card's own
+    example ("آقای نوری سلمانی داره.") used داره ("has," colloquial 3rd
+    person) without it ever being declared anywhere earlier in THIS
+    file -- unit45's own review card happens to re-declare داره (it's
+    genuinely already-taught, from unit04), but the untaught-vocabulary
+    check is per-file only (this corpus's own standing convention), so
+    unit45's declaration doesn't carry over into unit46's file, and this
+    file itself never re-declared it before using it in an example. This
+    slipped past compile_content.py's validate_untaught_vocabulary check
+    because that check only walks exercises' tested_text, never a
+    teaching card's own example: field (confirmed by writing a
+    standalone script replicating the compiler's own tokenize() against
+    every example in this file, not by eyeballing it) -- the file still
+    validated 0 errors/0 warnings despite the real gap. Fixed by adding
+    داره to character_noori's own introduced_tokens. Also updated this
+    file's own review-notes prose, which still named unit44's hotel
+    receptionist as آقای کریمی and unit45's pharmacist as خانم رضایی --
+    both renamed this same review pass (see those units' own review
+    notes) to آقای رستمی and خانم صالحی after a corpus-wide
+    character-name-collision audit found and fixed real collisions with
+    unit40 and unit41 respectively; this unit's own barber character
+    آقای نوری was independently re-confirmed collision-free against the
+    corrected names and every other named character across the whole fa
+    corpus. Re-validated clean after the fix (0 errors/0 warnings,
+    standalone and as part of the 4-unit combined run). Everything else
+    was checked clean: no same-speaker distractor collisions (lesson04's
+    dialogue_comprehension distractors -- haircut price, same-day
+    availability, needing an appointment -- are never mentioned by
+    either speaker in the dialogue itself; the price only appears
+    separately in lesson05's unrelated shop-sign reading text, so
+    there's no cross-exercise collision either); a real yaml.safe_load
+    boolean-type walk found zero stray yes/no/true/false/on/off
+    coercions; no Arabic-range kaf/yeh codepoints; matching_pairs
+    accepted_answers use the established fa-corpus flat-dict convention,
+    left as-is; every exercise type used is registered; no jargon leaks;
+    the style request (shorter, "like before") stays consistent across
+    the dialogue and the wrap-up review; the Persian reads as natural,
+    contemporary Iranian colloquial register throughout, with چشم
+    correctly reused in its established idiomatic "sure/got it" sense
+    (unit06), distinct from its unrelated "eye" sense (unit25).
+
     Draft authored 2026-07-09 by Claude (content-authoring worker session),
     continuing fa A1 volume growth past unit45 (pharmacy). Realizes
     universal.a1.personal_care.get_haircut -- confirmed as the next
@@ -109,8 +152,8 @@ review:
     "visits a service provider and states a need" role from units 17
     (health), 41 (appointments), and 45 (pharmacy). A NEW formal-register
     character, آقای نوری, is introduced as the barber (distinct surname
-    from unit41's خانم احمدی, unit42's آقای صادقی, unit44's آقای کریمی,
-    and unit45's خانم رضایی -- confirmed via a real regex scan of every
+    from unit41's خانم احمدی, unit42's آقای صادقی, unit44's آقای رستمی,
+    and unit45's خانم صالحی -- confirmed via a real regex scan of every
     آقای/خانم name already used across the fa corpus, zero collision); he
     speaks in neutral polite service language, consistent with the
     receptionist/librarian/hotel-clerk/pharmacist register units
@@ -178,7 +221,7 @@ course:
     the barbershop customer. آقای نوری, a new formal-register barber
     character, speaks with neutral polite service language, consistent
     with the register unit41's خانم احمدی, unit42's آقای صادقی, unit44's
-    آقای کریمی, and unit45's خانم رضایی already established for this
+    آقای رستمی, and unit45's خانم صالحی already established for this
     course's other service-encounter characters. Reuses مو/کوتاه/موهاش
     (unit25), می‌رم (unit24), می‌خوام (unit03), باشه (units01/02/06/17/
     22/45), مثل (unit04), قبل (unit45), چطور (unit01), می‌خوای (unit12/
@@ -381,7 +424,7 @@ units:
           - content_key: fa.a1.unit46.lesson04.teach.character_noori
             kind: vocabulary
             target: {text: "آقای نوری", language_code: fa, direction: rtl}
-            introduced_tokens: [نوری, نیما]
+            introduced_tokens: [نوری, نیما, داره]
             example: {text: "آقای نوری سلمانی داره.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit46.lesson04.teach.dialogue_line1
             kind: dialogue

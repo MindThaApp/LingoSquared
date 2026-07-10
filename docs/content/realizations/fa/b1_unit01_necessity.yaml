@@ -17,9 +17,115 @@ generation_provenance:
     volumes). This is fa's first B1 unit, built from general Persian
     grammar knowledge rather than adapted from a public-domain text.
 review:
-  status: unreviewed
-  required_next_reviewer: codex_fresh_context
+  status: reviewed
+  required_next_reviewer: null
   notes: >-
+    2026-07-10 fresh-context review (Claude), performed cold with no access
+    to the authoring reasoning below, with extra scrutiny given this is fa's
+    first-ever B1/intermediate unit. Found and fixed FOUR real structural
+    bugs, all in the four kind:grammar_note teaching cards
+    (lesson01.teach.grammar_bayad_invariant, lesson02.teach.grammar_agreement,
+    lesson03.teach.grammar_past_regret, lesson06.teach.grammar_review):
+    their `target.text` was a full paragraph of ENGLISH grammatical
+    explanation (with a few Farsi words embedded), but tagged
+    `language_code: fa, direction: rtl` -- confirmed via a corpus-wide check
+    (e.g. a1_unit26/a1_unit55's own grammar_note cards) that every other
+    grammar_note in this corpus keeps `target.text` as short, genuine
+    target-language content, with the actual English explanation living in
+    the overlay's title/gloss/note fields, never in a fa/rtl-tagged target
+    block. As shipped, this would have rendered English prose paragraphs
+    right-to-left in the app, with a "speak in Farsi" affordance attached to
+    English text. Fixed by shrinking each of the 4 target blocks to a short,
+    genuine Farsi phrase built only from tokens already taught earlier in
+    this same file (باید برم. باید بری؟ / باید برم، باید بری، باید بره،
+    باید بریم، باید برید، باید برن. / باید برم. باید می‌رفتم. نباید بری. /
+    the same paradigm + باید می‌رفتم + نباید بری combined for the wrap-up
+    card), and moving the displaced English explanation into each card's
+    paired overlay note field (which already substantially had it) with a
+    matching literal title/gloss for the new short Farsi target.
+
+    Also found and fixed, in the same 4 cards' overlay note fields plus 5
+    more (bayad/beram/chera/emruz/kar_konam/nabayad): zero
+    AUTHORING_GUIDE.md #15 asterisk-marking anywhere in this overlay's
+    `note` fields, despite every one of them mixing target-language words
+    inline with English exposition (e.g. "باید is invariant..." with no
+    *باید* marking) -- confirmed via a corpus-wide check (a1_unit55's
+    overlay) that #15 asterisk-marking IS the actual, consistently-applied
+    corpus convention for exactly this kind of mixed-language note, not a
+    theoretical rule. Applied *asterisk* marking to every target-language
+    span across all 9 affected note fields.
+
+    Also found and fixed a real grammatical inaccuracy carried over from
+    the same paragraph: the original text claimed نباید is formed with a
+    "نه‌ prefix" -- wrong; ن‌ه (with a full silent-ه) is the separate word
+    "no," not the bound negative prefix. نباید is ن + باید (a single
+    consonant prefix), confirmed against every other نباید-negated verb
+    already shipped across the fa corpus (e.g. ندارم "I don't have," نداره
+    "it doesn't have" -- always a bare ن-, never نه-). Fixed the note to
+    say "ن‌ prefix."
+
+    Also found and fixed: lesson04's dialogue_nargess_ask card ("باید امشب
+    کار کنی؟") used the 2nd-person subjunctive کنی without ever declaring
+    it in introduced_tokens anywhere in the file, unlike its sibling کنه
+    (lesson04.teach.kone), which got its own dedicated vocabulary card --
+    an inconsistent standard for a file whose own provenance note claims
+    "all vocabulary is introduced self-contained within this file." The
+    compiler's untaught-vocabulary check doesn't hard-gate dialogue-only
+    tokens the way it gates tested_text/word_bank, so this compiled clean
+    both before and after, but per the established convention (a1_unit55's
+    review notes explicitly declare even single-unit inflection extensions
+    like داریم at their dialogue first-use) it should have been declared.
+    Fixed by adding کنی to that card's introduced_tokens.
+
+    Also found and fixed a real title mismatch: lesson05's realization
+    title was "دو تا کار" (literally "two tasks/jobs," generic) while its
+    paired overlay title was "Two reports" (specific) -- the lesson's
+    actual reading passage and exercises are specifically about two
+    گزارش (reports), so retitled the realization to "دو تا گزارش" (two
+    reports) to match both the overlay title and the actual content.
+
+    Also found and fixed a real §12 multi-clause-joining gap:
+    lesson06.exercise06's sole accepted answer for "Yesterday I should have
+    gone to the doctor but I didn't" had NO comma before ولی ("but"), while
+    the exact same باید-past-stem-plus-ولی construction is used with a
+    comma before ولی three separate times elsewhere in this same file's own
+    dialogue and reading passage (lesson04's two dialogue lines, lesson05's
+    reading passage) -- a learner naturally reproducing this file's own
+    established comma convention would have been marked wrong. Added the
+    comma-joined form as a second accepted variant.
+
+    Independently verified everything else the authoring notes below claim
+    rather than trusting the self-report: ran the actual compiler (0
+    errors/0 warnings, both standalone and after every fix above); grepped
+    for Arabic-range kaf/yeh -- zero hits; grepped for stray unquoted
+    yes/no/true/false booleans -- only genuine boolean fields matched;
+    confirmed every exercise type used (multiple_choice, word_order,
+    matching_pairs, translation, speak_response, writing_prompt,
+    dialogue_response) is registered in ExerciseRenderer.tsx; confirmed
+    every kind:vocabulary card has a real example built from already-taught
+    tokens; read every باید/subjunctive/past-regret construction against
+    real Persian grammar for the invariant-modal-plus-conjugated-verb
+    pattern, the باید+imperfect-stem past-regret construction, and نباید
+    negation, and confirmed the grammar is genuinely accurate (beyond the
+    one نه‌/ن‌ fix above) and genuinely B1-appropriate: relative clauses
+    (که باید تموم کنه), causal subordination (چون), reported thought
+    (فکر می‌کنه که...), and past-counterfactual obligation appear across
+    the unit, which is real additional clause-structure complexity beyond
+    A1/A2 simple-sentence vocabulary drilling, not A1/A2 content relabeled
+    with a B1 tag. Confirmed سارا/نرگس's workplace-deadline scenario doesn't
+    contradict anything established for the corpus's recurring سارا
+    character in the A1 course (different life-context scene, not a factual
+    conflict). No same-speaker-distractor collisions found (no
+    listen_select/dialogue_response exercise in this unit carries a
+    distractor list to check). Full compiler re-validation after all fixes:
+    0 errors/0 warnings, standalone and as part of a full en-fa A1+B1
+    corpus sanity pass (the combined-batch validate command legitimately
+    errors on cross-course cefr_level/course.title mismatch when A1 and B1
+    files are validated together in one call -- a validator characteristic
+    of mixing two different courses in one batch, not a content bug; the
+    A1-only 3-unit batch and this file standalone both separately confirm
+    0/0).
+
     First fa B1 unit, genuinely exploratory, same as prs's b1_unit01.
     Teaches باید (must/should) + present subjunctive as the main B1
     target -- deliberately chosen as a DIFFERENT grammar pattern than
@@ -39,9 +145,10 @@ review:
     prs's present/past structure. All vocabulary is introduced
     self-contained within this file (not assumed already taught
     elsewhere) to avoid the known per-file untaught-vocabulary compiler
-    gotcha. STATUS: draft, review pending, not self-certified -- extra
-    scrutiny owed since this is from-scratch (not source-adapted)
-    content and the first B1 unit for this specific language.
+    gotcha. STATUS (updated 2026-07-10): fresh-context review complete, see
+    the review: block above for what was found and fixed -- this was
+    genuinely from-scratch (not source-adapted) content and fa's first B1
+    unit, and got the extra scrutiny that warranted.
 
 course:
   realization_key: fa.b1
@@ -96,7 +203,7 @@ units:
             example: {text: "باید بری دکتر؟", language_code: fa, direction: rtl}
           - content_key: fa.b1.unit01.lesson01.teach.grammar_bayad_invariant
             kind: grammar_note
-            target: {text: "باید (must/should) never changes form for person -- it's the same word whether you say I must, you must, or they must. Instead, the VERB after it changes: باید برم (I must go), باید بری (you must go). This is the opposite of می‌تونم (I can), which itself conjugates. باید stays fixed; the subjunctive verb after it carries the person.", language_code: fa, direction: rtl}
+            target: {text: "باید برم. باید بری؟", language_code: fa, direction: rtl}
             introduced_tokens: [خونه, دانشگاه, دکتر]
           - content_key: fa.b1.unit01.lesson01.teach.chera
             kind: vocabulary
@@ -177,7 +284,7 @@ units:
             example: {text: "اونا باید برن خونه.", language_code: fa, direction: rtl}
           - content_key: fa.b1.unit01.lesson02.teach.grammar_agreement
             kind: grammar_note
-            target: {text: "باید stays the same in every sentence. Only the subjunctive verb after it agrees with the subject: برم (I), بری (you), بره (he/she), بریم (we), برید (you pl.), برن (they). Compare with می‌تونم (I can), which itself changes for every person -- باید never does.", language_code: fa, direction: rtl}
+            target: {text: "باید برم، باید بری، باید بره، باید بریم، باید برید، باید برن.", language_code: fa, direction: rtl}
             introduced_tokens: []
           - content_key: fa.b1.unit01.lesson02.teach.nargess
             kind: vocabulary
@@ -248,7 +355,7 @@ units:
             example: {text: "نباید بری اونجا.", language_code: fa, direction: rtl}
           - content_key: fa.b1.unit01.lesson03.teach.grammar_past_regret
             kind: grammar_note
-            target: {text: "باید می‌رفتم = I should have gone (but didn't) -- a real regret about an unfulfilled past obligation. This uses باید + the PAST/IMPERFECT stem (می‌رفتم, می‌کردم), not the subjunctive used for present necessity. Negate باید itself with نه‌ to make نباید (must not) -- this is different from negating the verb after it.", language_code: fa, direction: rtl}
+            target: {text: "باید برم. باید می‌رفتم. نباید بری.", language_code: fa, direction: rtl}
             introduced_tokens: []
           - content_key: fa.b1.unit01.lesson03.teach.diruz
             kind: vocabulary
@@ -369,7 +476,7 @@ units:
           - content_key: fa.b1.unit01.lesson04.teach.dialogue_nargess_ask
             kind: dialogue
             target: {text: "باید امشب کار کنی؟", language_code: fa, direction: rtl, speaker: نرگس}
-            introduced_tokens: [امشب]
+            introduced_tokens: [امشب, کنی]
           - content_key: fa.b1.unit01.lesson04.teach.dialogue_sara_confirm
             kind: dialogue
             target: {text: "آره، فکر کنم باید بمونم و کار کنم.", language_code: fa, direction: rtl, speaker: سارا}
@@ -417,7 +524,7 @@ units:
             prompt: {target_blocks: [{text: "باید امشب کار کنی؟", language_code: fa, direction: rtl}]}
 
       - content_key: fa.b1.unit01.lesson05.reading_two_obligations
-        title: دو تا کار
+        title: دو تا گزارش
         spine_outcome_id: universal.b1.necessity.express_obligation_with_subjunctive
         teaching:
           - content_key: fa.b1.unit01.lesson05.teach.emsal
@@ -498,7 +605,7 @@ units:
         teaching:
           - content_key: fa.b1.unit01.lesson06.teach.grammar_review
             kind: grammar_note
-            target: {text: "Review: present necessity = باید (invariant) + subjunctive verb matching the subject (باید برم، باید بری، باید بره، باید بریم، باید برید، باید برن). Past regret/unfulfilled obligation = باید + past/imperfect stem (باید می‌رفتم = I should have gone). Negate باید itself for نباید (must not). All six lessons in this unit use this same fixed-باید-plus-changing-verb pattern across different persons, tenses, and situations.", language_code: fa, direction: rtl}
+            target: {text: "باید برم، باید بری، باید بره، باید بریم، باید برید، باید برن. باید می‌رفتم. نباید بری.", language_code: fa, direction: rtl}
             introduced_tokens: []
           - content_key: fa.b1.unit01.lesson06.teach.bokonam
             kind: vocabulary

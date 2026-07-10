@@ -31,9 +31,55 @@ generation_provenance:
     vocabulary (see review notes below for the exact reuse chain).
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: codex_fresh_context
+  status: reviewed
+  required_next_reviewer: null
   notes: >-
+    2026-07-10 fresh-context review (Claude) found and fixed ONE real,
+    compiler-invisible bug per AUTHORING_GUIDE.md #19's "no forward
+    references" rule: lesson01's zabale vocabulary card's own example
+    ("این زباله‌ست.") used این ("this") before it was declared anywhere
+    earlier in this file (این wasn't re-declared until lesson02's
+    review_in_baraye grammar_note) -- this slipped past
+    compile_content.py's validate_untaught_vocabulary check because that
+    check only walks exercises' tested_text, never a teaching card's own
+    example: field, so the file still validated 0 errors/0 warnings
+    despite the real gap (confirmed by writing a standalone script
+    replicating the compiler's own tokenize() against every example in
+    this file, not by eyeballing it). Fixed by adding این to zabale's own
+    introduced_tokens, the same self-contained-declaration pattern this
+    unit's own pelastik card already uses for its پلاستیک/پلاستیکه
+    contraction pair. Re-validated clean after the fix (0 errors/0
+    warnings, standalone and as part of the 4-unit combined en-fa run).
+    Everything else was checked clean: no same-speaker distractor
+    collisions (lesson04's dialogue_comprehension exercise, the closest
+    analogue to a listen_select in this text-only unit, has zero overlap
+    with anything either نیما or سارا actually says in the dialogue); a
+    real yaml.safe_load boolean-type walk (not just a grep) over both
+    this file and its overlay found zero stray yes/no/true/false/on/off
+    coercions -- the only booleans present are the legitimate
+    human_reviewed/target_language_first metadata fields; a script
+    confirmed no Arabic-range kaf/yeh codepoints anywhere, only the
+    correct Persian keheh/yeh codepoints throughout; matching_pairs
+    accepted_answers use the flat-dict shape (not the {left,right} array
+    shape nl uses) -- confirmed this is the established fa-corpus-wide
+    convention (checked against unit42), so left as-is rather than
+    converted, since grade() already canonicalizes either shape and
+    rewriting only these 4 units would create a fresh inconsistency
+    against 40+ already-shipped fa units using the same pattern; every
+    exercise type used (multiple_choice, matching_pairs, word_order,
+    translation, dialogue_comprehension, dialogue_response,
+    reading_comprehension, writing_prompt) is registered in
+    ExerciseRenderer.tsx; no jargon leaks in any learner-facing field;
+    recycling->blue bin, plain trash->green bin, and collection
+    day->Saturday stay consistent across the dialogue and the reading
+    notice; the Persian throughout reads as natural, contemporary
+    Iranian colloquial register consistent with the established
+    نیما/سارا friend-pair dynamic, with no Dari forms. Also cross-checked
+    نیما and سارا against every other named character across the whole fa
+    corpus (units 01-57) -- no collision, unlike the real
+    کریمی/رضایی name collisions this same review pass found and fixed in
+    the paired unit44/unit45 files (see those units' own review notes).
+
     Draft authored 2026-07-09 by Claude (content-authoring worker session),
     continuing fa A1 volume growth past unit42 (library, merged). Realizes
     universal.a1.waste_disposal.sort_household_waste, the next unrealized A1
@@ -200,7 +246,7 @@ units:
           - content_key: fa.a1.unit43.lesson01.teach.zabale
             kind: vocabulary
             target: {text: زباله, language_code: fa, direction: rtl}
-            introduced_tokens: [زباله]
+            introduced_tokens: [زباله, این]
             example: {text: "این زباله‌ست.", language_code: fa, direction: rtl}
           - content_key: fa.a1.unit43.lesson01.teach.satl
             kind: vocabulary

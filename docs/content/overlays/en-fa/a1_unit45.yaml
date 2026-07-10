@@ -9,9 +9,27 @@ generation_provenance:
   authoring_system: claude
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: codex_fresh_context
+  status: reviewed
+  required_next_reviewer: null
   notes: >-
+    2026-07-10 fresh-context review (Claude), paired with the
+    fa.a1.unit45.pharmacy realization's own review note (see that file
+    for full detail on the bug found and fixed): the pharmacist's name
+    was changed from خانم رضایی to خانم صالحی (Ms. Rezaei -> Ms. Salehi
+    in every English title/gloss/instruction/feedback string below, and
+    the teaching content_key renamed from ...teach.character_rezaei to
+    ...teach.character_salehi) after a corpus-wide grep found the
+    original name collided with unit41's already-mentioned دکتر رضایی
+    (Dr. Rezaei, the dentist) -- a collision the original authoring's
+    آقای/خانم-only regex scan structurally could not have caught. On this
+    overlay's own side: re-verified every English string reflects the
+    corrected name and content_key consistently; re-confirmed a real
+    yaml.safe_load boolean-type walk found zero stray
+    yes/no/true/false/on/off coercions; re-confirmed every "Translate
+    into English" exercise explicitly sets answer_language_code: en (5
+    of 5); no jargon leaks. Standalone and 4-unit-combined compiler
+    validation: 0 errors/0 warnings.
+
     Draft overlay paired with the fa.a1.unit45.pharmacy realization. See
     that file's generation_provenance for the honest source-access result:
     with Firecrawl at 0 credits this session, tried WebFetch directly
@@ -36,7 +54,7 @@ review:
     tablet), قبل (before), and روزی (per day/daily) -- 4 new words, no new
     verb conjugation pattern introduced. Register note: نیما (established
     from unit17's own health dialogue) is the pharmacy customer; a new
-    formal-register character, خانم رضایی, is the pharmacist, distinct
+    formal-register character, خانم صالحی, is the pharmacist, distinct
     from unit41's خانم احمدی, unit42's آقای صادقی, and unit44's آقای
     کریمی (confirmed via a real regex scan of every آقای/خانم name already
     used across the fa corpus, zero collision). The dosage fact (two
@@ -59,7 +77,7 @@ review:
     distractors ("He wants to know if the medicine is expensive."/"He
     wants to know where the pharmacy is."/"He wants to know if he needs
     to see a doctor.") are plausible-fact alternatives, not lines either
-    dialogue speaker (نیما or خانم رضایی) actually says or facts they
+    dialogue speaker (نیما or خانم صالحی) actually says or facts they
     actually state anywhere in this unit's dialogue -- price, the
     pharmacy's location, and seeing a doctor are never mentioned by
     either speaker; a "does he want to know if he can take it before
@@ -176,28 +194,28 @@ teaching:
     title: "Review: Ms. / madam / has"
     gloss: "Ms., madam / has"
     note: "*خانم* was already taught in unit41; *داره* ('has,' colloquial 3rd person) was already taught in unit04."
-  fa.a1.unit45.lesson04.teach.character_rezaei:
-    title: "Ms. Rezaei"
-    gloss: "Ms. Rezaei"
-    note: "*خانم رضایی* is this unit's new pharmacist character, distinct from every other named service-encounter character already in this course."
-    example_gloss: "Ms. Rezaei has a pharmacy."
+  fa.a1.unit45.lesson04.teach.character_salehi:
+    title: "Ms. Salehi"
+    gloss: "Ms. Salehi"
+    note: "*خانم صالحی* is this unit's new pharmacist character, distinct from every other named service-encounter character already in this course."
+    example_gloss: "Ms. Salehi has a pharmacy."
   fa.a1.unit45.lesson04.teach.dialogue_line1:
     title: "Nima: Hi. I have a headache. I want medicine."
     gloss: "Hi. I have a headache. I want medicine."
   fa.a1.unit45.lesson04.teach.dialogue_line2:
-    title: "Ms. Rezaei: Hi. This pill is good."
+    title: "Ms. Salehi: Hi. This pill is good."
     gloss: "Hi. This pill is good."
   fa.a1.unit45.lesson04.teach.dialogue_line3:
     title: "Nima: How many a day?"
     gloss: "How many a day?"
   fa.a1.unit45.lesson04.teach.dialogue_line4:
-    title: "Ms. Rezaei: Two a day, after food."
+    title: "Ms. Salehi: Two a day, after food."
     gloss: "Two a day, after food."
   fa.a1.unit45.lesson04.teach.dialogue_line5:
     title: "Nima: Can I also before food?"
     gloss: "Can I also before food?"
   fa.a1.unit45.lesson04.teach.dialogue_line6:
-    title: "Ms. Rezaei: No, only after food."
+    title: "Ms. Salehi: No, only after food."
     gloss: "No, only after food."
   fa.a1.unit45.lesson04.teach.dialogue_line7:
     title: "Nima: Okay, thanks. Goodbye!"
@@ -315,7 +333,7 @@ exercises:
     feedback: "بعد از غذا means 'After food.'"
 
   fa.a1.unit45.lesson04.exercise01.dialogue_comprehension_dosage:
-    instruction: "Nima asks Ms. Rezaei something. What does he want to know?"
+    instruction: "Nima asks Ms. Salehi something. What does he want to know?"
     correct_option: "He wants to know how many pills to take per day."
     distractors:
       - "He wants to know if the medicine is expensive."
@@ -337,7 +355,7 @@ exercises:
     accepted_answers:
       - value: {"سلام. سردرد دارم. دارو می‌خوام.": "Hi. I have a headache. I want medicine.", "سلام. این قرص خوبه.": "Hi. This pill is good.", "روزی چند تا؟": "How many a day?", "روزی دو تا، بعد از غذا.": "Two a day, after food.", "قبل از غذا هم می‌تونم؟": "Can I also before food?", "نه، فقط بعد از غذا.": "No, only after food.", "باشه، ممنون. خداحافظ!": "Okay, thanks. Goodbye!"}
         status: correct
-    feedback: "These lines appear in the pharmacy conversation between Nima and Ms. Rezaei."
+    feedback: "These lines appear in the pharmacy conversation between Nima and Ms. Salehi."
   fa.a1.unit45.lesson04.exercise04.dialogue_response_dosage:
     instruction: "Respond to روزی چند تا؟ by saying two a day, after food."
     accepted_answers:
