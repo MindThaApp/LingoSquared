@@ -1,12 +1,16 @@
 import math
+import os
 from datetime import datetime, timedelta, timezone
+from uuid import uuid4
 
 from sqlalchemy import func, select
 
+from app.content.service import import_content
 from app.core.security import decode_token
 from app.db.session import SessionLocal
 from app.models import (
     CheckpointAttempt,
+    Course,
     Lesson,
     Lexeme,
     PracticeItem,
@@ -14,11 +18,17 @@ from app.models import (
     Unit,
     UserLexemeSRS,
 )
+from app.practice.service import (
+    PRODUCTION_TYPES,
+    RECOGNITION_TYPES,
+    STRUCTURED_TYPES,
+)
 from app.review.grading import (
     grade_answer,
     FREE_TEXT_EXERCISE_TYPES,
     MIN_ANSWER_LENGTH_FOR_TYPO_TOLERANCE,
 )
+from app.schemas.api import ImportRequest
 from test_endless_practice import (
     artifact,
     create_course_with_lexemes,
@@ -425,3 +435,262 @@ def test_checkpoint_retake_delay_and_expiry(
     )
     assert allowed.status_code == 200, allowed.text
     assert 12 <= len(allowed.json()["items"]) <= 15
+
+
+# --- Checkpoint calibration (2026-07-10 pedagogy-review fix) ---------------
+#
+# generate_checkpoint() used to delegate to _generate_prioritized(), which
+# (a) sampled the learner's due/weakest lexemes first (so two learners or
+# two attempts could face materially different samples, with whole lessons
+# unrepresented) and (b) picked exercise-format difficulty from live
+# per-lexeme mastery via _tier_order() (so weak learners got easier
+# recognition-heavy formats against the same fixed 80% pass bar). The tests
+# below pin the fixed behavior: stratified lesson coverage, and a fixed
+# CHECKPOINT_MASTERY_BANDS difficulty mix that ignores SRS state entirely.
+
+CKPT_LESSON_KEYS = (
+    "test.ckpt.lesson.001",
+    "test.ckpt.lesson.002",
+    "test.ckpt.lesson.003",
+)
+
+
+def create_multi_lesson_course(lexemes_per_lesson=6):
+    """One unit whose material is spread across THREE lessons.
+
+    Unlike test_endless_practice.create_course_with_lexemes() (a single
+    lesson, useless for coverage assertions), every lexeme here matches
+    the shared noun/"word" slot the artifact() templates use, so any
+    lexeme is a viable target for every template -- the only thing that
+    distinguishes lessons is provenance, which is exactly what the
+    stratification test needs to observe.
+    """
+    title = f"Checkpoint stratification test {uuid4()}"
+    payload = {
+        "courses": [
+            {
+                "source_language": "en",
+                "target_language": "es",
+                "title": title,
+                "units": [
+                    {
+                        "title": "Unit",
+                        "order": 1,
+                        "lessons": [
+                            {
+                                "title": f"Lesson {index + 1}",
+                                "order": index + 1,
+                                "exercises": [
+                                    {
+                                        "type": "translation",
+                                        "order": 1,
+                                        "prompt": {
+                                            "text_blocks": [
+                                                {
+                                                    "text": "test",
+                                                    "language_code": "en",
+                                                    "direction": "ltr",
+                                                }
+                                            ]
+                                        },
+                                        "correct_response": "test",
+                                    }
+                                ],
+                            }
+                            for index in range(len(CKPT_LESSON_KEYS))
+                        ],
+                    }
+                ],
+            }
+        ]
+    }
+    with SessionLocal() as db:
+        count, errors, _ = import_content(
+            db, ImportRequest.model_validate(payload)
+        )
+        assert count == 1 and not errors
+        course = db.scalar(select(Course).where(Course.title == title))
+        lessons = list(
+            db.scalars(
+                select(Lesson)
+                .join(Unit)
+                .where(Unit.course_id == course.id)
+                .order_by(Lesson.order)
+            )
+        )
+        assert len(lessons) == len(CKPT_LESSON_KEYS)
+        token_index = 0
+        for lesson, lesson_key in zip(lessons, CKPT_LESSON_KEYS):
+            for _ in range(lexemes_per_lesson):
+                token_index += 1
+                db.add(
+                    Lexeme(
+                        course_id=course.id,
+                        token=f"palabra{token_index}",
+                        language_code="es",
+                        part_of_speech="noun",
+                        english_gloss=f"word{token_index}",
+                        agreement_tags={"semantic": "word"},
+                        provenance_lesson_id=lesson.id,
+                        provenance_lesson_content_key=lesson_key,
+                        provenance_content_key=(
+                            f"test.ckpt.lexeme.{token_index}"
+                        ),
+                    )
+                )
+        db.commit()
+        unit_id = db.scalar(
+            select(Unit.id).where(Unit.course_id == course.id)
+        )
+        return course.id, unit_id, [lesson.id for lesson in lessons]
+
+
+def multi_lesson_checkpoint_setup(client, admin):
+    course_id, unit_id, lesson_ids = create_multi_lesson_course()
+    body = artifact(include_listen=False)
+    for template in body["packs"][0]["templates"]:
+        # Template->lesson resolution goes through
+        # Lexeme.provenance_lesson_content_key; any one lesson in the
+        # unit works, since _material() gathers templates unit-wide.
+        template["lesson_content_key"] = CKPT_LESSON_KEYS[0]
+    import_templates(client, admin, course_id, body)
+    return course_id, unit_id, lesson_ids
+
+
+def register_second_user(client):
+    email = f"user-{os.urandom(4).hex()}@example.com"
+    response = client.post(
+        "/auth/register",
+        json={
+            "email": email,
+            "password": "password123",
+            "display_name": "Second Test User",
+        },
+    )
+    assert response.status_code == 201, response.text
+    return {"Authorization": f"Bearer {response.json()['access_token']}"}
+
+
+def seed_srs_for_all_course_lexemes(auth, course_id, mastery, due_in_days):
+    with SessionLocal() as db:
+        lexeme_ids = list(
+            db.scalars(
+                select(Lexeme.id).where(Lexeme.course_id == course_id)
+            )
+        )
+        assert lexeme_ids
+        for lexeme_id in lexeme_ids:
+            db.add(
+                UserLexemeSRS(
+                    user_id=user_id(auth),
+                    lexeme_id=lexeme_id,
+                    course_id=course_id,
+                    ease_factor=2.5,
+                    interval_days=1,
+                    repetitions=2,
+                    mastery=mastery,
+                    due_at=(
+                        datetime.now(timezone.utc)
+                        + timedelta(days=due_in_days)
+                    ),
+                    last_reviewed_at=None,
+                    introduced_at=(
+                        datetime.now(timezone.utc) - timedelta(days=5)
+                    ),
+                    suspended=False,
+                    last_session_id=None,
+                )
+            )
+        db.commit()
+
+
+TIER_BY_TYPE = (
+    {name: "recognition" for name in RECOGNITION_TYPES}
+    | {name: "structured" for name in STRUCTURED_TYPES}
+    | {name: "production" for name in PRODUCTION_TYPES}
+)
+
+
+def tier_distribution(items):
+    counts = {"recognition": 0, "structured": 0, "production": 0}
+    for item in items:
+        counts[TIER_BY_TYPE[item["type"]]] += 1
+    return counts
+
+
+def test_checkpoint_items_are_stratified_across_unit_lessons(
+    client,
+    admin,
+    auth,
+):
+    _, unit_id, lesson_ids = multi_lesson_checkpoint_setup(client, admin)
+
+    response = client.post(f"/units/{unit_id}/checkpoint", headers=auth)
+    assert response.status_code == 200, response.text
+    items = response.json()["items"]
+    assert 12 <= len(items) <= 15
+
+    lesson_counts = {lesson_id: 0 for lesson_id in lesson_ids}
+    with SessionLocal() as db:
+        for output_item in items:
+            item = db.get(PracticeItem, output_item["id"])
+            lexeme = db.get(Lexeme, item.target_lexeme_id)
+            lesson_counts[lexeme.provenance_lesson_id] += 1
+
+    # Round-robin stratification: every lesson represented, no lesson
+    # clustered on. With 12-15 items over 3 equally-sized lessons the
+    # split is 4/4/4 to 5/5/5 when every generation attempt succeeds;
+    # the small tolerance below only absorbs occasional per-attempt
+    # generation retries (which advance the target cursor but not the
+    # item count), not any real clustering.
+    assert all(count > 0 for count in lesson_counts.values())
+    floor_share = len(items) // len(lesson_ids)
+    assert all(
+        count >= floor_share - 1 for count in lesson_counts.values()
+    ), lesson_counts
+    assert (
+        max(lesson_counts.values()) - min(lesson_counts.values()) <= 2
+    ), lesson_counts
+
+
+def test_checkpoint_format_mix_is_consistent_regardless_of_mastery(
+    client,
+    admin,
+    auth,
+):
+    course_id, unit_id, _ = multi_lesson_checkpoint_setup(client, admin)
+
+    weak_auth = auth
+    strong_auth = register_second_user(client)
+
+    # Weak learner: every unit lexeme tracked at rock-bottom mastery and
+    # overdue -- under the old adaptive path this produced an all-
+    # recognition (easiest) checkpoint. Strong learner: everything
+    # tracked at near-max mastery, nothing due -- old path produced an
+    # all-production checkpoint. Same course, same unit, same pass bar.
+    seed_srs_for_all_course_lexemes(
+        weak_auth, course_id, mastery=0.05, due_in_days=-1
+    )
+    seed_srs_for_all_course_lexemes(
+        strong_auth, course_id, mastery=0.95, due_in_days=30
+    )
+
+    weak = client.post(f"/units/{unit_id}/checkpoint", headers=weak_auth)
+    assert weak.status_code == 200, weak.text
+    strong = client.post(
+        f"/units/{unit_id}/checkpoint", headers=strong_auth
+    )
+    assert strong.status_code == 200, strong.text
+
+    weak_counts = tier_distribution(weak.json()["items"])
+    strong_counts = tier_distribution(strong.json()["items"])
+
+    # Criterion-referenced: the difficulty mix comes from the fixed
+    # CHECKPOINT_MASTERY_BANDS cycle, identical for every learner --
+    # per-lexeme mastery state must not shift it in either direction.
+    assert weak_counts == strong_counts, (weak_counts, strong_counts)
+    # And that shared mix genuinely spans all three tiers (a 15-item
+    # checkpoint cycling 3 bands puts 5 items in each; >=4 leaves room
+    # only for per-attempt generation retries, not a skewed test).
+    for counts in (weak_counts, strong_counts):
+        assert all(count >= 4 for count in counts.values()), counts
