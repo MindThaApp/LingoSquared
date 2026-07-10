@@ -4,6 +4,7 @@ from app.review.grading import (
     is_case_only_difference,
     is_latin_script_text,
     is_script_confusion,
+    is_too_short_for_typo_tolerance,
 )
 from app.review.sm2 import quality_for_result, schedule
 
@@ -181,6 +182,82 @@ def test_case_sensitive_real_typos_still_tolerated():
         "Sie geth", "Sie geht", exercise_type="translation", case_sensitive=True
     )
     assert result == "almost"
+
+
+def test_is_too_short_for_typo_tolerance_helper():
+    assert is_too_short_for_typo_tolerance("je") is True
+    assert is_too_short_for_typo_tolerance("hij") is True  # exactly 3
+    assert is_too_short_for_typo_tolerance("tree") is False  # exactly 4
+    assert is_too_short_for_typo_tolerance("hola") is False
+
+
+def test_short_dutch_function_words_never_forgiven_as_typos():
+    # The reported pedagogy gap: distance-1 on a 2-3 character word almost
+    # always yields a genuinely different word - and for Dutch function
+    # words the "typo" IS the grammatical contrast being tested. All three
+    # reported pairs are distance-1 from each other, so without the length
+    # floor every one of them would grade "almost" (counted correct for
+    # XP/SRS), silently defeating the exercise.
+    for response, correct in [
+        ("ze", "je"),  # "they/she" vs "you" - pronoun contrast
+        ("zij", "hij"),  # "she" vs "he" - pronoun contrast
+        ("en", "in"),  # "and" vs "in" - preposition/conjunction contrast
+    ]:
+        assert damerau_levenshtein(response, correct) == 1  # would-be "almost"
+        assert (
+            grade_answer(
+                response, correct, exercise_type="translation", script="latin"
+            )
+            == "incorrect"
+        )
+        # Exact match on the same short word still grades correct, of course.
+        assert (
+            grade_answer(
+                correct, correct, exercise_type="translation", script="latin"
+            )
+            == "correct"
+        )
+
+
+def test_short_answer_floor_hard_blocks_even_explicit_tolerant_override():
+    # Same hard-block shape as script confusion / case-only mismatches:
+    # an author-set orthography_strict: False must NOT re-enable typo
+    # forgiveness on a too-short answer.
+    assert (
+        grade_answer(
+            "ze",
+            "je",
+            exercise_type="translation",
+            script="latin",
+            orthography_strict=False,
+        )
+        == "incorrect"
+    )
+
+
+def test_short_answer_floor_keys_on_correct_answer_length():
+    # A genuine deletion typo against a 4+ character target stays forgiven
+    # even though the RESPONSE is only 3 characters - the floor is keyed on
+    # the authored correct answer, not on what the learner happened to type.
+    assert (
+        grade_answer("tre", "tree", exercise_type="translation", script="latin")
+        == "almost"
+    )
+    # And 4-letter targets in general keep normal distance-1 forgiveness
+    # (the floor must not creep upward and regress legitimate typos).
+    assert (
+        grade_answer("hoal", "hola", exercise_type="translation", script="latin")
+        == "almost"
+    )
+
+
+def test_short_answer_floor_applies_after_normalization():
+    # Whitespace/case normalization happens first, so "  JE  " is still a
+    # 2-character answer for the purposes of the floor.
+    assert (
+        grade_answer("  ZE ", "  je ", exercise_type="translation", script="latin")
+        == "incorrect"
+    )
 
 
 def test_quality_for_result_mapping():
