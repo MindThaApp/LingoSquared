@@ -235,6 +235,45 @@ refresh tokens locally.
 
 `GET /auth/me` response: `{ "id", "email", "display_name", "created_at" }`.
 
+`GET /me/export` (auth required) returns the authenticated account's complete
+data export as one JSON document — the data-portability counterpart to
+`DELETE /me` (export before deleting; deletion is irreversible). Served with a
+`Content-Disposition: attachment; filename="lingosquared-export-<date>.json"`
+hint. Arrays are complete row listings, not paginated — an export is a
+snapshot, not a browsing API. Top-level shape:
+
+```json
+{
+  "format_version": 1,
+  "exported_at": "iso-datetime",
+  "profile": { "id": "uuid", "email": "string", "display_name": "string", "created_at": "iso-datetime", "timezone": "IANA-string-or-null" },
+  "stats": { "total_xp": 0, "streak_days": 0, "last_activity_date": "date-or-null", "daily_goal": 20, "streak_freezes_available": 0, "last_freeze_used_date": "date-or-null" },
+  "skill_progress": [ { "course_id": "uuid", "completed_lessons": 0, "mastery": 0.0 } ],
+  "lesson_progress": [ { "lesson_id": "uuid", "started_at": "iso-datetime", "completed_at": "iso-datetime-or-null", "correct_count": 0, "answer_count": 0, "xp_earned": 0 } ],
+  "exercise_attempts": [ { "exercise_id": "uuid", "response": "any-json", "correct": true, "outcome": "string-or-null", "xp_awarded": 0, "created_at": "iso-datetime" } ],
+  "practice_attempts": [ { "practice_item_id": "uuid", "course_id": "uuid", "prompt": {}, "response": "any-json", "correct": true, "xp_awarded": 0, "created_at": "iso-datetime" } ],
+  "checkpoint_attempts": [ { "unit_id": "uuid", "total_items": 12, "passed": true, "score": 0.9, "weak_outcomes": [], "created_at": "iso-datetime", "scored_at": "iso-datetime-or-null" } ],
+  "lexeme_srs": [ { "lexeme_id": "uuid", "token": "string", "english_gloss": "string", "language_code": "string", "course_id": "uuid", "mastery": 0.0, "ease_factor": 2.5, "interval_days": 0, "repetitions": 0, "due_at": "iso-datetime", "last_reviewed_at": "iso-datetime-or-null", "introduced_at": "iso-datetime", "suspended": false } ],
+  "review_items": [ { "exercise_id": "uuid", "ease_factor": 2.5, "interval_days": 0, "repetitions": 0, "mastery": 0.0, "due_at": "iso-datetime" } ],
+  "achievements": [ { "code": "string", "title": "string", "earned_at": "iso-datetime" } ],
+  "quest_completions": [ { "quest_code": "string", "date": "date", "awarded_at": "iso-datetime" } ],
+  "vocabulary_progress": [ { "content_item_id": "uuid", "mastery": 0.0, "last_reviewed_at": "iso-datetime-or-null" } ],
+  "grammar_progress": [ { "content_item_id": "uuid", "mastery": 0.0, "last_reviewed_at": "iso-datetime-or-null" } ],
+  "push_subscriptions": [ { "endpoint": "url", "created_at": "iso-datetime" } ],
+  "content_issue_reports": [ { "id": "uuid", "exercise_id": "uuid-or-null", "practice_item_id": "uuid-or-null", "page_path": "string-or-null", "category": "string", "description": "string-or-null", "status": "string", "created_at": "iso-datetime" } ]
+}
+```
+
+`stats` is `null` for an account that somehow has no `user_stats` row.
+`achievements` lists earned achievements only (the catalog itself isn't user
+data). `lexeme_srs` inlines each lexeme's `token`/`english_gloss`/
+`language_code` so the export is meaningful standalone, not a bag of opaque
+ids. Deliberately excluded: `refresh_tokens` rows (bearer-token session
+material, not personal data — also revoked wholesale by `DELETE /me`
+regardless) and push-subscription `p256dh`/`auth` values (channel crypto
+keys, not personal data). Strictly scoped to the bearer token's own account;
+no admin/other-user form exists.
+
 `DELETE /me` (auth required) permanently deletes the current user's account
 and user-owned learning state. Returns `204 No Content` on success. There is
 no admin override form of this endpoint; a bearer token can only delete its
