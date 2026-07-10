@@ -1,0 +1,560 @@
+schema_version: "1.1"
+realization_version: "2026.1-draft.1"
+target_language: "hi"
+cefr_level: "A2"
+status: "complete_draft"
+generation_provenance:
+  method: "ai_generated"
+  authoring_system: "claude"
+  human_reviewed: false
+  source_note: >-
+    `firecrawl --status` checked before authoring (per standing instruction
+    to try real source material first) and confirmed 0/1,000 credits left
+    this billing cycle, same as the prior four hi A2 units this session
+    (unit20-23) -- `firecrawl search` was not attempted given that
+    confirmed-empty quota. No FSI/Peace Corps Hindi source has ever been
+    recoverable as usable text across any of the 23 prior hi units (every
+    attempt reached only OCR-unreadable scans), so this is consistent with,
+    not a new gap versus, that established precedent. Every sentence below
+    is this session's own fresh authoring of established Modern Standard
+    Hindi, following the established-conventions-only fallback this guide
+    specifies -- nothing adapted, translated, or copied from any external
+    source.
+review:
+  status: "unreviewed"
+  required_next_reviewer: null
+  notes: >-
+    Fifth Hindi A2 unit (spine outcome:
+    universal.a2.housing.report_maintenance_problem, confirmed by direct
+    read of universal_spine.yaml lines 785-808: can_do, all four
+    modalities, and all four assessment_requirements -- understand_
+    problem_description/report_household_problem/read_maintenance_notice/
+    write_problem_report -- read in full before designing this unit's
+    exercises). Continues directly from hi/a2_unit23_doctor.yaml (same
+    Priya/Arjun characters, still on तुम terms with each other). Introduces
+    hi's fourth A2 stranger character, मकान मालिक (landlord), in आप
+    register, matching the established formal-official convention already
+    used for unit20's क्लर्क/unit22's कर्मचारी/unit23's डॉक्टर.
+
+    Scenario: something breaks at Arjun's home (the fan, and later also
+    the tap); he reports it to his landlord and asks when it will be
+    fixed, gets a repair timing, and a written maintenance notice
+    confirms it -- directly serving all four assessment_requirements
+    (listening: understand the reported problem + timing; speaking:
+    describe the problem and ask about repair timing; reading: interpret
+    a maintenance notice; writing: report a household problem).
+
+    Central A2 grammar decision (this unit's whole reason for existing):
+    the simple future tense via '-गा/-गी/-गे' suffixed onto होना (है/हैं's
+    own future form) -- genuinely new grammar, never introduced anywhere
+    in this course before (confirmed by a fresh grep of every hi
+    realization file for 'होगा'/'होगी'/'होंगे' before writing this note --
+    zero hits anywhere in the corpus). Deliberately scope-narrowed to
+    exactly ONE live-tested form, होगा (masculine singular, matching
+    पंखा/नल/'यह' as the subject every exercise uses) -- lesson02's own
+    grammar note discloses होगी/होंगे exist for feminine/plural subjects
+    but never exercises them live, matching this course's own standing
+    scope-narrowing discipline (unit20's ने-ergative masculine-only
+    scope, unit23's चाहिए masculine-only scope). होगी IS used once,
+    passively, in lesson03's own maintenance-notice reading card ("पंखे
+    की मरम्मत कल होगी") -- reading-card target text is not checked by the
+    compiler's untaught-vocabulary validator (confirmed by re-reading
+    that function directly, see the tokenizer paragraph below), so this
+    is safe exposure-only, consistent with how unit20/22/23 exposed
+    ने-agreement variants passively without testing them.
+
+    Secondary grammar note (not a new construction, just an explicit
+    disclosure): खराब ("broken/not working") is an INVARIANT adjective --
+    unlike बड़ा/बड़ी or छोटा/छोटी (unit18), it never changes form
+    regardless of the noun's gender. Flagged explicitly in lesson01's own
+    grammar note specifically because this course has spent multiple
+    units training learners to expect adjectives to gender-agree, so an
+    adjective that deliberately does NOT was judged worth calling out
+    rather than leaving as a silent exception.
+
+    Vocabulary reuse audited before writing (grep-confirmed): समस्या/क्या
+    (unit23), ठीक (unit13/18/23), कब (unit23), कल (unit03/04/12), यह
+    (widely established, e.g. unit18), भी (unit17/23), है/हैं (unit01
+    onward) are all real prior vocabulary, confirmed by grep before use
+    and re-declared in THIS file's own introduced_tokens per the standing
+    per-file-reset tokenizer discipline (see the tokenizer-fragmentation
+    paragraph below). New words this unit: पंखा (fan), खराब (broken/not
+    working), मकान मालिक (landlord, two-word compound), नल (tap/faucet),
+    होगा (future copula, masculine), मरम्मत (repair, noun, feminine),
+    सूचना (notice, noun).
+
+    Tokenizer-fragmentation discipline (per this task's explicit
+    instruction, and unit20-23's own established precedent): every
+    literal surface form tested anywhere in this file's exercises
+    (tested_text or word_bank) has its own explicit `introduced_tokens`
+    declaration earlier in the SAME file -- verified this round by
+    actually running the compiler's own `tokenize()` regex
+    (`[\w‌]+`) against every planned new word in a standalone Python
+    check before writing any exercise, not assumed clean by eye. Several
+    of this unit's new words fragment badly under that regex (e.g. मकान
+    -> two separate fragments, मालिक -> three, होगा -> two, मरम्मत -> two)
+    -- this is harmless AS LONG AS the exact same literal string is
+    declared via introduced_tokens as appears in the exercise's own
+    tested_text (fragment-set comparison is symmetric: tokenizing an
+    identical substring in isolation vs. embedded in a larger
+    space-separated sentence produces the same fragments either way,
+    confirmed by direct check), which is the discipline followed
+    throughout. `Reading`/`dialogue`-kind teaching cards' own `target`
+    text and exercise `prompt.target_blocks` are NOT checked by the
+    compiler's `validate_untaught_vocabulary` (only `tested_text`/
+    `word_bank` are, confirmed by re-reading that function directly) --
+    so the lesson03 reading cards and every dialogue line below use
+    richer, more natural vocabulary (कोई बात नहीं, बहुत अच्छा, अगले दिन,
+    बात की) freely, without needing separate introduced_tokens
+    declarations, since none of those specific strings is ever used as
+    an exercise's own tested_text.
+
+    Same-speaker-distractor check (the nl unit44-50 regression class):
+    performed explicitly, structurally inapplicable the same way it was
+    in unit20-23 -- hi dialogue content carries NO `media_asset_key` at
+    all (plain TextBlocks), so lesson03's two dialogue_comprehension
+    exercises cannot trigger this bug class by construction. The three
+    listen_select exercises (lesson01.exercise04, lesson02.exercise04,
+    lesson03.exercise06) are each a single standalone, non-dialogue
+    utterance with its own dedicated media_asset_key and no other
+    speaker/other lines in the same clip -- structurally cannot trigger
+    this bug class either.
+
+    Cross-check of every concrete fact stated across the whole unit
+    (AUTHORING_GUIDE §11): this unit establishes exactly two facts,
+    restated (never contradicted) across the dialogue, the reading cards,
+    and the exercises: (1) the fan (पंखा) is broken -- stated in lesson01,
+    the lesson03 dialogue line03, and both reading cards; (2) the repair
+    will happen tomorrow (कल) -- stated in lesson02, the lesson03 dialogue
+    line04, and both reading cards. lesson03's dialogue additionally has
+    Arjun mention the tap (नल) is ALSO broken (word_order/speak_response
+    review material only, drawn from lesson02's own vocabulary) -- this
+    is never contradicted anywhere (no exercise or card claims the tap
+    is fine).
+
+    Word-order duplicate-token check: every word_order exercise's
+    word_bank below has zero repeated tokens (checked by hand).
+
+    fill_in_blank ambiguity check (§17): lesson01's exercise09 blank
+    (खराब, frame "पंखा ___ है।") is grammatically compatible with several
+    OTHER already-corpus-wide adjectives (बड़ा, छोटा, नया, अच्छा would all
+    grammatically fit the bare frame), so this is disambiguated via the
+    overlay's explicit English instruction naming the intended meaning
+    ("Complete: The fan is broken."), matching this course's own
+    established §17 precedent for open-vocabulary slots (unit17/18's
+    own convention) rather than `interchangeable: true`, since these are
+    not true synonyms of खराब. lesson02's exercise09 blank (होगा, frame
+    "कल ठीक ___।") has a genuine two-way ambiguity WITHIN this unit's own
+    vocabulary -- "कल ठीक है" (tomorrow works/is fine, present tense) is
+    an equally grammatical, semantically DIFFERENT but plausible
+    completion using this file's own already-declared है -- disambiguated
+    the same way, via an explicit English instruction naming the future
+    reading ("Complete: It will be fixed tomorrow.").
+
+    This unit is NOT yet native-speaker or fresh-context reviewed --
+    status left honestly as unreviewed, matching this course's own
+    convention for freshly authored content pending that separate pass.
+
+course:
+  realization_key: hi.a2
+  target_language_first: true
+  dialect: hi_standard
+  register_policy: >-
+    Continues unit01-23's aap/tum split. This unit's stranger character,
+    मकान मालिक (the landlord), uses आप throughout with Arjun, the same
+    formal-official convention as unit20's क्लर्क/unit22's कर्मचारी/
+    unit23's डॉक्टर.
+
+media_assets:
+  - {content_key: hi.a2.audio.housing_maintenance.pankha_kharab_hai.01, language: hi, text: "पंखा खराब है।", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - {content_key: hi.a2.audio.housing_maintenance.yah_kab_theek_hoga.01, language: hi, text: "यह कब ठीक होगा?", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - {content_key: hi.a2.audio.housing_maintenance.kal_theek_hoga.01, language: hi, text: "कल ठीक होगा।", voice_hint: neutral_adult_polite, status: pending_generation}
+
+units:
+  - content_key: hi.a2.unit24.marammat
+    title: "मरम्मत"
+    section: reading_writing
+    spine_outcome_ids:
+      - universal.a2.housing.report_maintenance_problem
+    planned_lesson_count: 3
+
+    lessons:
+      - content_key: hi.a2.unit24.lesson01.pankha_kharab_hai
+        title: "पंखा खराब है"
+        spine_outcome_id: universal.a2.housing.report_maintenance_problem
+        teaching:
+          - content_key: hi.a2.unit24.lesson01.teach.hai_review
+            kind: vocabulary
+            target: {text: "है", language_code: hi, direction: ltr}
+            introduced_tokens: ["है"]
+            example: {text: "यह घर है।", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit24.lesson01.teach.samasya_review
+            kind: vocabulary
+            target: {text: "समस्या", language_code: hi, direction: ltr}
+            introduced_tokens: ["समस्या"]
+            example: {text: "घर में एक समस्या है।", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit24.lesson01.teach.pankha
+            kind: vocabulary
+            target: {text: "पंखा", language_code: hi, direction: ltr}
+            introduced_tokens: ["पंखा"]
+            example: {text: "घर में एक पंखा है।", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit24.lesson01.teach.kharab
+            kind: vocabulary
+            target: {text: "खराब", language_code: hi, direction: ltr}
+            introduced_tokens: ["खराब"]
+            example: {text: "पंखा खराब है।", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit24.lesson01.teach.grammar_kharab_invariant
+            kind: grammar_note
+            target: {text: "'खराब' (broken/not working) 'बड़ा/बड़ी' या 'छोटा/छोटी' (यूनिट 18) की तरह लिंग के साथ नहीं बदलता -- हर संज्ञा के साथ हमेशा 'खराब' ही आता है, चाहे वह पुल्लिंग हो या स्त्रीलिंग।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a2.unit24.lesson01.teach.pankha_kharab_hai_phrase
+            kind: phrase
+            target: {text: "पंखा खराब है।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a2.unit24.lesson01.teach.kya_review
+            kind: vocabulary
+            target: {text: "क्या", language_code: hi, direction: ltr}
+            introduced_tokens: ["क्या"]
+            example: {text: "यह क्या है?", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit24.lesson01.teach.kya_samasya_hai_phrase
+            kind: phrase
+            target: {text: "क्या समस्या है?", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a2.unit24.lesson01.teach.makan_malik
+            kind: vocabulary
+            target: {text: "मकान मालिक", language_code: hi, direction: ltr}
+            introduced_tokens: ["मकान", "मालिक"]
+            example: {text: "मकान मालिक अच्छा है।", language_code: hi, direction: ltr}
+        exercises:
+          - content_key: hi.a2.unit24.lesson01.exercise01.select_pankha_meaning
+            type: multiple_choice
+            tested_text: "पंखा"
+            prompt:
+              target_blocks:
+                - {text: "पंखा", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit24.lesson01.exercise02.select_kharab_meaning
+            type: multiple_choice
+            tested_text: "खराब"
+            prompt:
+              target_blocks:
+                - {text: "खराब", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit24.lesson01.exercise03.select_pankha_kharab_hai_meaning
+            type: multiple_choice
+            tested_text: "पंखा खराब है"
+            prompt:
+              target_blocks:
+                - {text: "पंखा खराब है।", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit24.lesson01.exercise04.listen_pankha_kharab_hai
+            type: listen_select
+            tested_text: "पंखा खराब है"
+            media_asset_key: hi.a2.audio.housing_maintenance.pankha_kharab_hai.01
+            prompt: {target_blocks: []}
+          - content_key: hi.a2.unit24.lesson01.exercise05.select_makan_malik_meaning
+            type: multiple_choice
+            tested_text: "मकान मालिक"
+            prompt:
+              target_blocks:
+                - {text: "मकान मालिक", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit24.lesson01.exercise06.match_lesson01_words
+            type: matching_pairs
+            tested_text: "पंखा खराब समस्या मकान मालिक क्या है"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "पंखा", right: "fan"}
+              - {left: "खराब", right: "broken / not working"}
+              - {left: "समस्या", right: "problem"}
+              - {left: "मकान मालिक", right: "landlord"}
+              - {left: "क्या", right: "what"}
+              - {left: "है", right: "is"}
+          - content_key: hi.a2.unit24.lesson01.exercise07.order_pankha_kharab_hai
+            type: word_order
+            tested_text: "पंखा खराब है"
+            prompt: {target_blocks: []}
+            word_bank: ["पंखा", "खराब", "है"]
+          - content_key: hi.a2.unit24.lesson01.exercise08.order_kya_samasya_hai
+            type: word_order
+            tested_text: "क्या समस्या है"
+            prompt: {target_blocks: []}
+            word_bank: ["क्या", "समस्या", "है"]
+          - content_key: hi.a2.unit24.lesson01.exercise09.fill_pankha_kharab
+            type: fill_in_blank
+            tested_text: "खराब"
+            prompt:
+              target_blocks:
+                - {text: "पंखा ___ है।", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit24.lesson01.exercise10.reply_kya_samasya_hai
+            type: dialogue_response
+            tested_text: "पंखा खराब है"
+            prompt:
+              target_blocks:
+                - {text: "क्या समस्या है?", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit24.lesson01.exercise11.fix_pankha_kharab_hai
+            type: grammar_check
+            tested_text: "पंखा खराब है"
+            prompt:
+              target_blocks:
+                - {text: "पंखा खराब हैं।", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit24.lesson01.exercise12.speak_pankha_kharab_hai
+            type: speak_response
+            tested_text: "पंखा खराब है"
+            prompt:
+              target_blocks:
+                - {text: "बोलो: पंखा खराब है।", language_code: hi, direction: ltr}
+
+      - content_key: hi.a2.unit24.lesson02.yah_kab_theek_hoga
+        title: "यह कब ठीक होगा?"
+        spine_outcome_id: universal.a2.housing.report_maintenance_problem
+        teaching:
+          - content_key: hi.a2.unit24.lesson02.teach.nal
+            kind: vocabulary
+            target: {text: "नल", language_code: hi, direction: ltr}
+            introduced_tokens: ["नल"]
+            example: {text: "बाथरूम में एक नल है।", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit24.lesson02.teach.nal_kharab_hai_phrase
+            kind: phrase
+            target: {text: "नल खराब है।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a2.unit24.lesson02.teach.theek_review
+            kind: vocabulary
+            target: {text: "ठीक", language_code: hi, direction: ltr}
+            introduced_tokens: ["ठीक"]
+            example: {text: "अब मैं ठीक हूँ।", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit24.lesson02.teach.kab_review
+            kind: vocabulary
+            target: {text: "कब", language_code: hi, direction: ltr}
+            introduced_tokens: ["कब"]
+            example: {text: "आपको कब से बुखार है?", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit24.lesson02.teach.kal_review
+            kind: vocabulary
+            target: {text: "कल", language_code: hi, direction: ltr}
+            introduced_tokens: ["कल"]
+            example: {text: "मैं कल बाज़ार गया।", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit24.lesson02.teach.yah_review
+            kind: vocabulary
+            target: {text: "यह", language_code: hi, direction: ltr}
+            introduced_tokens: ["यह"]
+            example: {text: "यह घर है।", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit24.lesson02.teach.hoga_future
+            kind: vocabulary
+            target: {text: "होगा", language_code: hi, direction: ltr}
+            introduced_tokens: ["होगा"]
+            example: {text: "कल अच्छा मौसम होगा।", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit24.lesson02.teach.grammar_future_hoga
+            kind: grammar_note
+            target: {text: "भविष्यकाल (future) के लिए 'होना' के साथ '-गा/-गी/-गे' जोड़ा जाता है -- पुल्लिंग एकवचन के लिए 'होगा' ('यह कल ठीक होगा'), स्त्रीलिंग एकवचन के लिए 'होगी', बहुवचन के लिए 'होंगे'। यह यूनिट सिर्फ़ 'होगा' का अभ्यास कराती है -- वही 'है' (यूनिट 1) और 'था' (यूनिट 12) वाला पैटर्न, अब भविष्य के लिए।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a2.unit24.lesson02.teach.yah_kab_theek_hoga_phrase
+            kind: phrase
+            target: {text: "यह कब ठीक होगा?", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a2.unit24.lesson02.teach.kal_theek_hoga_phrase
+            kind: phrase
+            target: {text: "कल ठीक होगा।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+        exercises:
+          - content_key: hi.a2.unit24.lesson02.exercise01.select_nal_meaning
+            type: multiple_choice
+            tested_text: "नल"
+            prompt:
+              target_blocks:
+                - {text: "नल", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit24.lesson02.exercise02.select_yah_kab_theek_hoga_meaning
+            type: multiple_choice
+            tested_text: "यह कब ठीक होगा"
+            prompt:
+              target_blocks:
+                - {text: "यह कब ठीक होगा?", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit24.lesson02.exercise03.select_kal_theek_hoga_meaning
+            type: multiple_choice
+            tested_text: "कल ठीक होगा"
+            prompt:
+              target_blocks:
+                - {text: "कल ठीक होगा।", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit24.lesson02.exercise04.listen_yah_kab_theek_hoga
+            type: listen_select
+            tested_text: "यह कब ठीक होगा"
+            media_asset_key: hi.a2.audio.housing_maintenance.yah_kab_theek_hoga.01
+            prompt: {target_blocks: []}
+          - content_key: hi.a2.unit24.lesson02.exercise05.select_nal_kharab_hai_meaning
+            type: multiple_choice
+            tested_text: "नल खराब है"
+            prompt:
+              target_blocks:
+                - {text: "नल खराब है।", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit24.lesson02.exercise06.match_lesson02_words
+            type: matching_pairs
+            tested_text: "नल होगा कल कब यह ठीक"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "नल", right: "tap / faucet"}
+              - {left: "होगा", right: "will be"}
+              - {left: "कल", right: "tomorrow"}
+              - {left: "कब", right: "when"}
+              - {left: "यह", right: "this / it"}
+              - {left: "ठीक", right: "fine / fixed"}
+          - content_key: hi.a2.unit24.lesson02.exercise07.order_yah_kab_theek_hoga
+            type: word_order
+            tested_text: "यह कब ठीक होगा"
+            prompt: {target_blocks: []}
+            word_bank: ["यह", "कब", "ठीक", "होगा"]
+          - content_key: hi.a2.unit24.lesson02.exercise08.order_kal_theek_hoga
+            type: word_order
+            tested_text: "कल ठीक होगा"
+            prompt: {target_blocks: []}
+            word_bank: ["कल", "ठीक", "होगा"]
+          - content_key: hi.a2.unit24.lesson02.exercise09.fill_kal_theek_hoga
+            type: fill_in_blank
+            tested_text: "होगा"
+            prompt:
+              target_blocks:
+                - {text: "कल ठीक ___।", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit24.lesson02.exercise10.fix_nal_kharab_hai
+            type: grammar_check
+            tested_text: "नल खराब है"
+            prompt:
+              target_blocks:
+                - {text: "नल खराब हूँ।", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit24.lesson02.exercise11.reply_yah_kab_theek_hoga
+            type: dialogue_response
+            tested_text: "कल ठीक होगा"
+            prompt:
+              target_blocks:
+                - {text: "यह कब ठीक होगा?", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit24.lesson02.exercise12.write_nal_kharab_hai
+            type: writing_prompt
+            tested_text: "नल खराब है"
+            prompt:
+              target_blocks:
+                - {text: "Write in Hindi: say the tap is broken.", language_code: en, direction: ltr}
+          - content_key: hi.a2.unit24.lesson02.exercise13.speak_yah_kab_theek_hoga
+            type: speak_response
+            tested_text: "यह कब ठीक होगा"
+            prompt:
+              target_blocks:
+                - {text: "बोलो: यह कब ठीक होगा?", language_code: hi, direction: ltr}
+
+      - content_key: hi.a2.unit24.lesson03.arjun_aur_makan_malik
+        title: "अर्जुन और मकान मालिक"
+        spine_outcome_id: universal.a2.housing.report_maintenance_problem
+        teaching:
+          - content_key: hi.a2.unit24.lesson03.teach.marammat
+            kind: vocabulary
+            target: {text: "मरम्मत", language_code: hi, direction: ltr}
+            introduced_tokens: ["मरम्मत"]
+            example: {text: "यह मरम्मत का काम है।", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit24.lesson03.teach.soochana
+            kind: vocabulary
+            target: {text: "सूचना", language_code: hi, direction: ltr}
+            introduced_tokens: ["सूचना"]
+            example: {text: "यह एक सूचना है।", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit24.lesson03.teach.bhi_review
+            kind: vocabulary
+            target: {text: "भी", language_code: hi, direction: ltr}
+            introduced_tokens: ["भी"]
+            example: {text: "मुझे भी अच्छा लगा।", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit24.lesson03.teach.dialogue.line01
+            kind: dialogue
+            target: {text: "नमस्ते! घर में एक समस्या है।", language_code: hi, direction: ltr, speaker: Arjun}
+            introduced_tokens: []
+          - content_key: hi.a2.unit24.lesson03.teach.dialogue.line02
+            kind: dialogue
+            target: {text: "नमस्ते! क्या समस्या है?", language_code: hi, direction: ltr, speaker: "Landlord"}
+            introduced_tokens: []
+          - content_key: hi.a2.unit24.lesson03.teach.dialogue.line03
+            kind: dialogue
+            target: {text: "पंखा खराब है।", language_code: hi, direction: ltr, speaker: Arjun}
+            introduced_tokens: []
+          - content_key: hi.a2.unit24.lesson03.teach.dialogue.line04
+            kind: dialogue
+            target: {text: "ठीक है। यह कल ठीक होगा।", language_code: hi, direction: ltr, speaker: "Landlord"}
+            introduced_tokens: []
+          - content_key: hi.a2.unit24.lesson03.teach.dialogue.line05
+            kind: dialogue
+            target: {text: "बहुत अच्छा, धन्यवाद!", language_code: hi, direction: ltr, speaker: Arjun}
+            introduced_tokens: []
+          - content_key: hi.a2.unit24.lesson03.teach.dialogue.line06
+            kind: dialogue
+            target: {text: "कोई बात नहीं।", language_code: hi, direction: ltr, speaker: "Landlord"}
+            introduced_tokens: []
+          - content_key: hi.a2.unit24.lesson03.teach.grammar_summary
+            kind: grammar_note
+            target: {text: "इस यूनिट के दो मुख्य नियम: (1) 'खराब' लिंग के साथ कभी नहीं बदलता। (2) भविष्यकाल के लिए 'होना' में '-गा' जोड़ा जाता है -- 'यह कल ठीक होगा'।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a2.unit24.lesson03.teach.reading
+            kind: reading
+            target: {text: "घर में एक समस्या थी। पंखा खराब था। अर्जुन ने मकान मालिक से बात की। मकान मालिक ने कहा -- यह कल ठीक होगा। अगले दिन पंखा ठीक था।", language_code: hi, direction: ltr}
+            introduced_tokens: []
+          - content_key: hi.a2.unit24.lesson03.teach.notice_reading
+            kind: reading
+            target: {text: "सूचना: पंखे की मरम्मत कल होगी। धन्यवाद -- मकान मालिक", language_code: hi, direction: ltr}
+            introduced_tokens: []
+        exercises:
+          - content_key: hi.a2.unit24.lesson03.exercise01.comprehend_problem
+            type: dialogue_comprehension
+            tested_text: "पंखा"
+            prompt:
+              target_blocks:
+                - {text: "पंखा खराब है।", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit24.lesson03.exercise02.comprehend_timing
+            type: dialogue_comprehension
+            tested_text: "कल"
+            prompt:
+              target_blocks:
+                - {text: "ठीक है। यह कल ठीक होगा।", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit24.lesson03.exercise03.select_marammat_meaning
+            type: multiple_choice
+            tested_text: "मरम्मत"
+            prompt:
+              target_blocks:
+                - {text: "मरम्मत", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit24.lesson03.exercise04.read_notice_problem
+            type: reading_comprehension
+            tested_text: "पंखे"
+            prompt:
+              target_blocks:
+                - {text: "सूचना: पंखे की मरम्मत कल होगी। धन्यवाद -- मकान मालिक", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit24.lesson03.exercise05.read_notice_timing
+            type: reading_comprehension
+            tested_text: "कल"
+            prompt:
+              target_blocks:
+                - {text: "सूचना: पंखे की मरम्मत कल होगी। धन्यवाद -- मकान मालिक", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit24.lesson03.exercise06.listen_kal_theek_hoga
+            type: listen_select
+            tested_text: "कल ठीक होगा"
+            media_asset_key: hi.a2.audio.housing_maintenance.kal_theek_hoga.01
+            prompt: {target_blocks: []}
+          - content_key: hi.a2.unit24.lesson03.exercise07.match_lesson03_review
+            type: matching_pairs
+            tested_text: "मरम्मत सूचना पंखा नल खराब होगा"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "मरम्मत", right: "repair"}
+              - {left: "सूचना", right: "notice"}
+              - {left: "पंखा", right: "fan"}
+              - {left: "नल", right: "tap / faucet"}
+              - {left: "खराब", right: "broken / not working"}
+              - {left: "होगा", right: "will be"}
+          - content_key: hi.a2.unit24.lesson03.exercise08.order_nal_bhi_kharab_hai
+            type: word_order
+            tested_text: "नल भी खराब है"
+            prompt: {target_blocks: []}
+            word_bank: ["नल", "भी", "खराब", "है"]
+          - content_key: hi.a2.unit24.lesson03.exercise09.fix_yah_kal_theek_hoga
+            type: grammar_check
+            tested_text: "यह कल ठीक होगा"
+            prompt:
+              target_blocks:
+                - {text: "यह कल ठीक है।", language_code: hi, direction: ltr}
+          - content_key: hi.a2.unit24.lesson03.exercise10.write_pankha_kharab_hai
+            type: writing_prompt
+            tested_text: "पंखा खराब है"
+            prompt:
+              target_blocks:
+                - {text: "Write in Hindi: say the fan is broken.", language_code: en, direction: ltr}
+          - content_key: hi.a2.unit24.lesson03.exercise11.speak_pankha_nal_kharab
+            type: speak_response
+            tested_text: "पंखा खराब है नल भी खराब है"
+            prompt:
+              target_blocks:
+                - {text: "बोलो: पंखा खराब है। नल भी खराब है।", language_code: hi, direction: ltr}
