@@ -35,6 +35,11 @@ export function HomePage() {
   );
   const lessonsCompleted = progress?.lessons_completed ?? 0;
   const dailyGoal = xp?.daily_goal ?? 20;
+  const xpToday = xp?.xp_today ?? 0;
+  // Only claim the goal is met once real data has arrived — a 0-goal
+  // account would otherwise flash "done" while the query is loading.
+  const goalMet = xp != null && dailyGoal > 0 && xpToday >= dailyGoal;
+  const goalPct = dailyGoal > 0 ? Math.min(100, Math.max(0, (xpToday / dailyGoal) * 100)) : 0;
 
   const heroTitle =
     streak && streak.streak_days > 0
@@ -57,9 +62,42 @@ export function HomePage() {
       )}
       <div className="home-hero">
         <h1>{heroTitle}</h1>
-        <span className="muted">
-          {t("home.daily_goal", { goal: dailyGoal, total: xp?.total_xp ?? "—" })}
-        </span>
+        <div style={{ maxWidth: 360 }}>
+          <span
+            className="muted"
+            style={{ fontSize: "0.9rem", display: "flex", alignItems: "center", gap: 6 }}
+          >
+            {goalMet ? (
+              <>
+                <CheckCircle
+                  size={16}
+                  style={{ color: "var(--correct)", flexShrink: 0 }}
+                  aria-hidden
+                />
+                {t("home.daily_goal_done", { earned: xpToday })}
+              </>
+            ) : (
+              t("home.daily_goal_progress", { earned: xpToday, goal: dailyGoal })
+            )}
+          </span>
+          <div
+            className="progress-track"
+            style={{ marginTop: 6 }}
+            role="progressbar"
+            aria-valuemin={0}
+            aria-valuemax={dailyGoal}
+            aria-valuenow={Math.min(xpToday, dailyGoal)}
+            aria-label={t("home.daily_goal_progress", { earned: xpToday, goal: dailyGoal })}
+          >
+            <div
+              className="progress-fill"
+              style={{
+                width: `${goalPct}%`,
+                ...(goalMet ? { background: "var(--correct)" } : {}),
+              }}
+            />
+          </div>
+        </div>
       </div>
 
       <div className="stat-grid">
