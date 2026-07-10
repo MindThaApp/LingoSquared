@@ -32,6 +32,7 @@ from app.models import (
     PracticeItem,
     PracticeTemplate,
     PushSubscription,
+    QuestCompletion,
     RefreshToken,
     ReviewItem,
     SkillProgress,
