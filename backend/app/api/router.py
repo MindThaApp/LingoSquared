@@ -7,7 +7,8 @@ from pathlib import Path
 from uuid import uuid4
 from fastapi import APIRouter, Depends, File, Form, HTTPException, Query, Request, Response, UploadFile
 from fastapi.responses import FileResponse, JSONResponse
-from sqlalchemy import Float, case, func, select, text
+from starlette.concurrency import run_in_threadpool
+from sqlalchemy import Float, case, delete, func, select, text
 from sqlalchemy.orm import Session
 from app.core.config import get_settings
 from app.core.rate_limit import DailyCharBudget, RateLimiter, register_limiter
@@ -353,6 +354,23 @@ def login(body:LoginIn,request:Request,db:Session=Depends(get_db)):
     return auth_response(user)
 @router.get("/auth/me",response_model=MeOut)
 def me(user=Depends(current_user)): return user
+@router.delete("/me",status_code=204)
+def delete_me(user=Depends(current_user),db:Session=Depends(get_db)):
+    user_practice_item_ids = select(PracticeItem.id).where(PracticeItem.user_id == user.id)
+    db.execute(
+        delete(ContentIssueReport).where(
+            ContentIssueReport.practice_item_id.in_(user_practice_item_ids)
+        )
+    )
+    db.execute(
+        delete(PracticeAttempt).where(
+            (PracticeAttempt.user_id == user.id)
+            | (PracticeAttempt.practice_item_id.in_(user_practice_item_ids))
+        )
+    )
+    db.delete(user)
+    db.commit()
+    return Response(status_code=204)
 @router.get("/languages",response_model=list[LanguageOut])
 def languages(db:Session=Depends(get_db)): return list(db.scalars(select(Language).order_by(Language.code)))
 @router.get("/language-pairs",response_model=list[LanguagePairOut])
@@ -485,7 +503,9 @@ def report_practice_item_issue(item_id:str,body:ContentIssueReportIn,request:Req
     db.add(issue); db.commit(); db.refresh(issue)
     return issue
 @router.post("/feedback",response_model=ContentIssueCreatedOut,status_code=201)
-def report_general_feedback(body:GeneralFeedbackIn,user=Depends(lenient_current_user),db:Session=Depends(get_db)):
+def report_general_feedback(body:GeneralFeedbackIn,request:Request,user=Depends(lenient_current_user),db:Session=Depends(get_db)):
+    rate_key=user.id if user else client_ip(request)
+    enforce_rate_limit(REPORT_RATE_LIMIT,rate_key,"report_rate_limited","Too many reports submitted too quickly. Please slow down.")
     issue=ContentIssueReport(reporter_user_id=user.id if user else None,exercise_id=None,practice_item_id=None,page_path=body.page_path,category=body.category,description=body.description,client_context=body.client_context)
     db.add(issue); db.commit(); db.refresh(issue)
     return issue
@@ -1275,6 +1295,14 @@ def checkpoint_result(
     scored_at = datetime.now(timezone.utc)
     if passed:
         unit = db.get(Unit, unit_id)
+        all_unit_lexeme_ids = set(
+            db.scalars(
+                select(Lexeme.id)
+                .join(Lesson, Lesson.id == Lexeme.provenance_lesson_id)
+                .where(Lesson.unit_id == unit_id)
+                .distinct()
+            )
+        )
         covered_lexeme_ids = set(
             db.scalars(
                 select(PracticeItem.target_lexeme_id)
@@ -1291,11 +1319,11 @@ def checkpoint_result(
                 select(UserLexemeSRS.lexeme_id)
                 .where(
                     UserLexemeSRS.user_id == user.id,
-                    UserLexemeSRS.lexeme_id.in_(covered_lexeme_ids),
+                    UserLexemeSRS.lexeme_id.in_(all_unit_lexeme_ids),
                 )
                 .with_for_update()
             )
-        )
+        ) if all_unit_lexeme_ids else set()
         for lexeme_id in covered_lexeme_ids - existing_lexeme_ids:
             db.add(
                 UserLexemeSRS(
@@ -1308,6 +1336,28 @@ def checkpoint_result(
                     mastery=0.5,
                     due_at=scored_at + timedelta(days=3),
                     last_reviewed_at=scored_at,
+                    introduced_at=scored_at,
+                    suspended=False,
+                    last_session_id=None,
+                )
+            )
+        for lexeme_id in (
+            all_unit_lexeme_ids - covered_lexeme_ids - existing_lexeme_ids
+        ):
+            db.add(
+                UserLexemeSRS(
+                    user_id=user.id,
+                    lexeme_id=lexeme_id,
+                    course_id=unit.course_id,
+                    ease_factor=2.5,
+                    interval_days=1,
+                    repetitions=0,
+                    # The checkpoint passed the unit but did not directly
+                    # sample this lexeme, so seed it as known-enough to enter
+                    # SRS while still due soon for an actual recall check.
+                    mastery=0.3,
+                    due_at=scored_at + timedelta(days=1),
+                    last_reviewed_at=None,
                     introduced_at=scored_at,
                     suspended=False,
                     last_session_id=None,
@@ -1750,9 +1800,8 @@ def tts(body:TTSIn,user=Depends(current_user),db:Session=Depends(get_db)):
         return JSONResponse({"use_browser_tts":True,"reason":"quota_exceeded"})
     try: audio=tts_service.synthesize(body.text,body.language_code,body.speaking_rate or 1.0)
     except Exception:
-        db.rollback()
+        tts_service.refund_characters(db,len(body.text))
         return JSONResponse({"use_browser_tts":True,"reason":"provider_error"})
-    db.commit()
     return Response(content=audio,media_type="audio/mpeg")
 
 @router.post("/stt/transcribe",response_model=STTOut)
@@ -1778,7 +1827,11 @@ async def stt_transcribe(
         fail(422, "empty_audio", "Recording must not be empty")
     audio_bytes = b"".join(chunks)
     try:
-        transcript = stt_service.transcribe_audio(audio_bytes, language_code)
+        transcript = await run_in_threadpool(
+            stt_service.transcribe_audio,
+            audio_bytes,
+            language_code,
+        )
     except Exception:
         fail(500, "transcription_failed", "Speech-to-text transcription failed")
     finally:

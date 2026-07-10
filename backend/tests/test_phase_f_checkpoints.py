@@ -7,6 +7,8 @@ from app.core.security import decode_token
 from app.db.session import SessionLocal
 from app.models import (
     CheckpointAttempt,
+    Lesson,
+    Lexeme,
     PracticeItem,
     PracticeTemplate,
     Unit,
@@ -188,7 +190,7 @@ def test_checkpoint_forces_strict_orthography(
     assert response.json()["result"] == "incorrect"
 
 
-def test_passing_checkpoint_consolidates_only_untracked_lexemes(
+def test_passing_checkpoint_consolidates_all_untracked_unit_lexemes(
     client,
     admin,
     auth,
@@ -216,6 +218,14 @@ def test_passing_checkpoint_consolidates_only_untracked_lexemes(
             if item.target_lexeme_id is not None
         }
         assert covered
+        all_unit_lexeme_ids = set(
+            db.scalars(
+                select(Lexeme.id)
+                .join(Lesson, Lesson.id == Lexeme.provenance_lesson_id)
+                .where(Lesson.unit_id == unit_id)
+            )
+        )
+        assert covered < all_unit_lexeme_ids
 
         existing_lexeme_id = sorted(covered)[0]
         existing_due_at = datetime.now(timezone.utc) + timedelta(days=11)
@@ -265,26 +275,44 @@ def test_passing_checkpoint_consolidates_only_untracked_lexemes(
             db.scalars(
                 select(UserLexemeSRS).where(
                     UserLexemeSRS.user_id == uid,
-                    UserLexemeSRS.lexeme_id.in_(covered),
+                    UserLexemeSRS.lexeme_id.in_(all_unit_lexeme_ids),
                 )
             )
         )
-        assert {row.lexeme_id for row in rows} == covered
+        assert {row.lexeme_id for row in rows} == all_unit_lexeme_ids
 
-        new_rows = [
+        covered_new_rows = [
             row
             for row in rows
-            if row.lexeme_id != existing_lexeme_id
+            if (
+                row.lexeme_id in covered
+                and row.lexeme_id != existing_lexeme_id
+            )
         ]
-        assert new_rows
-        assert all(row.mastery >= 0.5 for row in new_rows)
-        assert all(row.interval_days == 3 for row in new_rows)
-        assert all(row.repetitions == 1 for row in new_rows)
+        assert covered_new_rows
+        assert all(row.mastery >= 0.5 for row in covered_new_rows)
+        assert all(row.interval_days == 3 for row in covered_new_rows)
+        assert all(row.repetitions == 1 for row in covered_new_rows)
         assert all(
             before_result + timedelta(days=3)
             <= row.due_at
             <= after_result + timedelta(days=3)
-            for row in new_rows
+            for row in covered_new_rows
+        )
+
+        uncovered_rows = [
+            row for row in rows if row.lexeme_id not in covered
+        ]
+        assert uncovered_rows
+        assert all(row.mastery == 0.3 for row in uncovered_rows)
+        assert all(row.interval_days == 1 for row in uncovered_rows)
+        assert all(row.repetitions == 0 for row in uncovered_rows)
+        assert all(row.last_reviewed_at is None for row in uncovered_rows)
+        assert all(
+            before_result + timedelta(days=1)
+            <= row.due_at
+            <= after_result + timedelta(days=1)
+            for row in uncovered_rows
         )
 
     units = client.get(

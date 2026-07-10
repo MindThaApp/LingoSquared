@@ -10,6 +10,7 @@ from app.models import (
     PracticeTemplate,
     UserLexemeSRS,
 )
+from app.review.sm2 import schedule
 from test_endless_practice import (
     artifact,
     create_course_with_lexemes,
@@ -46,6 +47,69 @@ def answer_from_db(client, auth, item_id):
     )
     assert result.status_code == 200, result.text
     return result
+
+
+class _ScheduleItem:
+    def __init__(
+        self,
+        *,
+        repetitions=2,
+        interval_days=10,
+        ease_factor=2.5,
+        mastery=0.4,
+        due_at=None,
+        last_reviewed_at=None,
+    ):
+        self.repetitions = repetitions
+        self.interval_days = interval_days
+        self.ease_factor = ease_factor
+        self.mastery = mastery
+        self.due_at = due_at
+        self.last_reviewed_at = last_reviewed_at
+
+
+def test_schedule_on_time_review_keeps_existing_sm2_growth():
+    now = datetime.now(timezone.utc)
+    item = _ScheduleItem(
+        due_at=now - timedelta(minutes=1),
+        last_reviewed_at=now - timedelta(days=10),
+    )
+
+    schedule(item, "correct")
+
+    assert item.interval_days == 25
+    assert item.repetitions == 3
+    assert 0.54 < item.mastery < 0.56
+    assert item.due_at > now + timedelta(days=24)
+
+
+def test_schedule_early_review_scales_interval_growth_by_elapsed_ratio():
+    now = datetime.now(timezone.utc)
+    item = _ScheduleItem(
+        due_at=now + timedelta(days=8),
+        last_reviewed_at=now - timedelta(days=2),
+    )
+
+    schedule(item, "correct")
+
+    assert item.interval_days == 13
+    assert item.interval_days < 25
+    assert item.repetitions == 3
+    assert 0.54 < item.mastery < 0.56
+    assert item.due_at > now + timedelta(days=12)
+
+
+def test_schedule_first_ever_review_is_not_early_scaled():
+    now = datetime.now(timezone.utc)
+    item = _ScheduleItem(
+        due_at=now + timedelta(days=8),
+        last_reviewed_at=None,
+    )
+
+    schedule(item, "correct")
+
+    assert item.interval_days == 25
+    assert item.repetitions == 3
 
 
 def test_lesson_completion_populates_srs_idempotently(client, auth):

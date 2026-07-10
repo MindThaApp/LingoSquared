@@ -89,15 +89,27 @@ def reserve_characters(db:Session,characters:int) -> bool:
     # PostgreSQL transaction advisory lock serializes creation/check/update of
     # the single monthly row, preventing concurrent requests overspending.
     db.execute(text("SELECT pg_advisory_xact_lock(hashtext(:key))"),{"key":f"lingosquared-tts-{month}"})
+    db.expire_all()
     usage=db.scalar(select(TTSUsage).where(TTSUsage.month==month).with_for_update())
     if not usage:
         usage=TTSUsage(month=month,characters=0,updated_at=datetime.now(timezone.utc)); db.add(usage); db.flush()
     if usage.characters+characters > max(0,settings.tts_monthly_char_budget):
         db.rollback(); return False
-    # Keep the reservation uncommitted, and therefore keep the advisory lock,
-    # until the provider returns audio. The caller commits success or rolls
-    # back failure, so failed generations never consume the monthly budget.
-    usage.characters+=characters; usage.updated_at=datetime.now(timezone.utc); return True
+    # Commit the reservation immediately so the advisory transaction lock and
+    # pooled DB connection are released before the slow external provider call.
+    # The route refunds this reservation in a separate short transaction if
+    # synthesis fails.
+    usage.characters+=characters; usage.updated_at=datetime.now(timezone.utc); db.commit(); return True
+
+def refund_characters(db:Session,characters:int) -> None:
+    month=current_month()
+    db.execute(text("SELECT pg_advisory_xact_lock(hashtext(:key))"),{"key":f"lingosquared-tts-{month}"})
+    db.expire_all()
+    usage=db.scalar(select(TTSUsage).where(TTSUsage.month==month).with_for_update())
+    if usage:
+        usage.characters=max(0,usage.characters-characters)
+        usage.updated_at=datetime.now(timezone.utc)
+    db.commit()
 
 def synthesize_google(text_value:str,language_code:str,speaking_rate:float=1.0) -> bytes:
     settings=get_settings()
