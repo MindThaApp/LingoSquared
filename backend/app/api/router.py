@@ -1743,7 +1743,26 @@ def missing(user=Depends(admin_user),db:Session=Depends(get_db)):
 @router.get("/admin/content/issues",response_model=list[ContentIssueOut])
 def content_issues(status:ContentIssueStatus|None=None,category:ContentIssueCategory|None=None,limit:int=Query(100,ge=1,le=200),offset:int=Query(0,ge=0),user=Depends(admin_user),db:Session=Depends(get_db)):
     q=select(ContentIssueReport); q=q.where(ContentIssueReport.status==status) if status else q; q=q.where(ContentIssueReport.category==category) if category else q
-    return list(db.scalars(q.order_by(ContentIssueReport.created_at.desc(),ContentIssueReport.id.desc()).offset(offset).limit(limit)))
+    issues=list(db.scalars(q.order_by(ContentIssueReport.created_at.desc(),ContentIssueReport.id.desc()).offset(offset).limit(limit)))
+    # Triage enrichment (see ContentIssueOut / docs/CONTRACT.md): resolve
+    # each referenced exercise/practice item's prompt (+ the exercise's
+    # answer key) in ONE batched query per table, not per issue, plus a
+    # per-exercise open-report count for duplicate spotting. The count is
+    # over ALL open reports for that exercise in the whole table, not just
+    # this filtered/paginated page. A dangling id (content since deleted)
+    # simply leaves the enrichment fields null — never an error.
+    ex_ids={i.exercise_id for i in issues if i.exercise_id}; pi_ids={i.practice_item_id for i in issues if i.practice_item_id}
+    ex_map={row.id:row for row in db.execute(select(Exercise.id,Exercise.prompt,Exercise.correct_response).where(Exercise.id.in_(ex_ids)))} if ex_ids else {}
+    pi_map={row_id:prompt for row_id,prompt in db.execute(select(PracticeItem.id,PracticeItem.prompt).where(PracticeItem.id.in_(pi_ids)))} if pi_ids else {}
+    open_counts={eid:n for eid,n in db.execute(select(ContentIssueReport.exercise_id,func.count()).where(ContentIssueReport.exercise_id.in_(ex_ids),ContentIssueReport.status=="open").group_by(ContentIssueReport.exercise_id))} if ex_ids else {}
+    out=[]
+    for issue in issues:
+        item=ContentIssueOut.model_validate(issue)
+        ex=ex_map.get(issue.exercise_id) if issue.exercise_id else None
+        if ex is not None: item.exercise_prompt=ex.prompt; item.exercise_correct_response=ex.correct_response; item.open_report_count=open_counts.get(issue.exercise_id,0)
+        if issue.practice_item_id and issue.practice_item_id in pi_map: item.practice_item_prompt=pi_map[issue.practice_item_id]
+        out.append(item)
+    return out
 @router.patch("/admin/content/issues/{issue_id}",response_model=ContentIssueOut)
 def update_content_issue(issue_id:str,body:ContentIssueUpdateIn,user=Depends(admin_user),db:Session=Depends(get_db)):
     issue=db.get(ContentIssueReport,issue_id)
