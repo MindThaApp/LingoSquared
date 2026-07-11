@@ -1,0 +1,78 @@
+schema_version: "1.0"
+pack_key: practice.nl-en.a1.unit33
+source_language: nl
+target_language: en
+unit_content_key: en.a1.unit33.transportation
+review:
+  status: unreviewed
+  fresh_context: "false"
+  notes: "Authored 2026-07-11, nl-en depth-completion sprint (see
+    a1_unit30.yaml's notes for the sprint context). 4-member
+    'vehicle_noun' tag (bus/train/car/bike, all nouns) -- deliberately
+    excludes the lesson's 5th vocabulary item, 'walk', since it's used
+    as a verb here ('walk to work'), not a noun alongside the others.
+    No shared generative frame attempted -- the unit's own overlay notes
+    explicitly flag that each vehicle takes its OWN verb (take the
+    bus/train, drive the car, ride the bike), so a single '{verb} the
+    {item}.' frame would be ungrammatical for at least two of the four
+    members regardless of which verb is chosen; same 'don't force it'
+    discipline as unit25/unit27's bureaucracy_noun/banking_noun.
+    Repeated the same tag's bare-word recognition across lesson03
+    (dialogue) and lesson04 (reading) for depth, following a2_unit25's
+    established pattern of spreading recognition across a unit's later
+    lessons rather than only its vocabulary-teaching lesson. Extended
+    scripts/_en_target_lexeme_common.py/scripts/backfill_lexemes_nl_en.py
+    with every introduced_token this unit's realization uses. Every
+    slot's real candidate count verified with
+    scripts/_practice_slot_check.py (4 distinct, above the >=3 floor).
+    Needs the standard fresh-context review before import."
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [vehicle_noun]
+slot_presets:
+  vehicle_noun: &vehicle_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: vehicle_noun}}
+templates:
+  - content_key: practice.nl-en.en.a1.unit33.lesson01.choose.001
+    lesson_content_key: en.a1.unit33.lesson01.transport_vocabulary
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *vehicle_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is een vervoermiddel uit deze les.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit33.lesson01.listen.002
+    lesson_content_key: en.a1.unit33.lesson01.transport_vocabulary
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *vehicle_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is het woord dat je hoorde.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit33.lesson01.match.003
+    lesson_content_key: en.a1.unit33.lesson01.transport_vocabulary
+    type: matching_pairs
+    frame: {text: "{first} · {second}", language_code: en, direction: ltr}
+    slots: {first: *vehicle_noun, second: *vehicle_noun, third: *vehicle_noun, fourth: *vehicle_noun}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth]}
+    feedback_frame: {text: "Verbind elk vervoermiddel met de Nederlandse betekenis.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit33.lesson01.translate.004
+    lesson_content_key: en.a1.unit33.lesson01.transport_vocabulary
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *vehicle_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit33.lesson03.choose.002
+    lesson_content_key: en.a1.unit33.lesson03.dialogue_commute_talk
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *vehicle_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is een woord uit dit gesprek.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit33.lesson04.translate.003
+    lesson_content_key: en.a1.unit33.lesson04.two_commuters
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *vehicle_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}

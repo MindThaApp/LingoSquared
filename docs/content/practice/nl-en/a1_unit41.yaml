@@ -1,0 +1,75 @@
+schema_version: "1.0"
+pack_key: practice.nl-en.a1.unit41
+source_language: nl
+target_language: en
+unit_content_key: en.a1.unit41.cooking
+review:
+  status: unreviewed
+  fresh_context: "false"
+  notes: "Authored 2026-07-11, nl-en depth-completion sprint (see
+    a1_unit30.yaml's notes for the sprint context). 3-member
+    'cooking_verb' tag (chop/boil/taste, all verbs) for bare-word
+    recognition only -- deliberately excludes the lesson's other two
+    vocabulary items ('recipe'/'ingredient', nouns) to keep
+    part_of_speech uniform within the tag, AND excludes the lesson's own
+    'cook' -- a real homograph collision found while extending
+    scripts/_en_target_lexeme_common.py: 'cook' is already classified
+    'noun' (unit23's occupation sense, 'She is a cook'), so declaring it
+    'verb' here for this tag would silently find zero real candidates at
+    runtime (part_of_speech must be uniform per lexeme across the whole
+    course). Exactly 3 members -- at the >=3 floor for multiple_choice/
+    listen_select, one fewer than the original 4-member draft. No shared
+    generative frame attempted (each verb needs its own object -- chop
+    the onions, boil the water/pasta, taste the sauce -- that doesn't
+    reduce to one single-object shared frame), same 'don't force it'
+    discipline as unit25/unit27's bureaucracy_noun/banking_noun.
+    Repeated the tag's bare-word recognition against lesson02 for depth.
+    Extended
+    scripts/_en_target_lexeme_common.py/scripts/backfill_lexemes_nl_en.py
+    with every introduced_token this unit's realization uses. Every
+    slot's real candidate count verified with
+    scripts/_practice_slot_check.py (3 distinct, at the >=3 floor).
+    Needs the standard fresh-context review before import."
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [cooking_verb]
+slot_presets:
+  cooking_verb: &cooking_verb {language_code: en, part_of_speech: verb, agreement_tags: {semantic: cooking_verb}}
+templates:
+  - content_key: practice.nl-en.en.a1.unit41.lesson01.choose.001
+    lesson_content_key: en.a1.unit41.lesson01.cooking_vocabulary
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *cooking_verb}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is een woord uit deze les.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit41.lesson01.listen.002
+    lesson_content_key: en.a1.unit41.lesson01.cooking_vocabulary
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *cooking_verb}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is het woord dat je hoorde.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit41.lesson01.match.003
+    lesson_content_key: en.a1.unit41.lesson01.cooking_vocabulary
+    type: matching_pairs
+    frame: {text: "{first} · {second}", language_code: en, direction: ltr}
+    slots: {first: *cooking_verb, second: *cooking_verb, third: *cooking_verb}
+    slot_relations: [{kind: distinct, slots: [first, second, third]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third]}
+    feedback_frame: {text: "Verbind elk woord met de Nederlandse betekenis.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit41.lesson01.translate.004
+    lesson_content_key: en.a1.unit41.lesson01.cooking_vocabulary
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *cooking_verb}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit41.lesson02.choose.002
+    lesson_content_key: en.a1.unit41.lesson02.preparing_a_meal
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *cooking_verb}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is een woord uit deze les.", language_code: nl, direction: ltr}
