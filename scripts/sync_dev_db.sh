@@ -13,7 +13,8 @@
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-API="${1:-http://localhost:8000}"
+DEFAULT_PORT="$(grep -m1 '^API_PORT=' "$REPO_ROOT/backend/.env" 2>/dev/null | cut -d= -f2)"
+API="${1:-http://localhost:${DEFAULT_PORT:-8000}}"
 PY="$REPO_ROOT/.content-venv/bin/python"
 [ -x "$PY" ] || PY=python3
 
