@@ -1,0 +1,76 @@
+schema_version: "1.0"
+pack_key: practice.en-prs.a1.unit39
+source_language: en
+target_language: prs
+unit_content_key: prs.a1.unit39.seasons
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: >-
+    Authored 2026-07-11, same units 31-40 practice-pool depth-extension
+    pass as this bundle's a1_unit31.yaml sibling (see that file's notes
+    for the shared pass context). Realization and overlay are both
+    status reviewed.
+
+    Two groups: "season_word" (فصل/بهار/تابستان/خزان/زمستان, 5 members,
+    completes lesson01 -- includes the generic "season" noun فصل
+    alongside the four specific season names) is the recognition pool.
+    "specific_season_word" (بهار/تابستان/خزان/زمستان, 4 -- excludes the
+    generic فصل) is the subset that combines grammatically with the
+    taught "... را دوست دارم" frame.
+
+    Word_order template checked for grammaticality: "{specific_season_word}
+    را دوست دارم" (lesson03, matches the real taught "بهار را دوست
+    دارم." verbatim; "تابستان را دوست دارم."/"خزان را دوست دارم."/
+    "زمستان را دوست دارم." are all equally grammatical generalizations
+    checked directly, even though the taught dialogue's زمستان line
+    uses the negative "دوست ندارم" instead).
+
+    No listen_select/listen_type anywhere (en-prs has no TTS voices).
+    No bare unquoted yes/no/true/false anywhere. Verified with
+    scripts/_practice_slot_check.py (0 problems) and
+    scripts/compile_content.py practice-validate for the full en-prs
+    pack (0 errors / 0 warnings). Needs the standard fresh-context
+    review before import.
+tag_schema:
+  part_of_speech: [noun]
+  agreement_tags:
+    semantic: [season_word, specific_season_word]
+slot_presets:
+  season_word: &season_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: season_word}}
+  specific_season_word: &specific_season_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: specific_season_word}}
+templates:
+  # Lesson 1: seasons vocabulary.
+  - content_key: practice.en-prs.prs.a1.unit39.lesson01.season_gloss.001
+    lesson_content_key: prs.a1.unit39.lesson01.primary_seasons
+    type: multiple_choice
+    frame: {text: "{season_word}", language_code: prs, direction: rtl}
+    slots: {season_word: *season_word}
+    answer_derivation: {kind: slot_gloss, slot: season_word}
+    feedback_frame: {text: "{season_word} belongs to this unit's seasons vocabulary.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit39.lesson01.season_pair.002
+    lesson_content_key: prs.a1.unit39.lesson01.primary_seasons
+    type: matching_pairs
+    frame: {text: "{word_one} — {word_two} — {word_three} — {word_four} — {word_five}", language_code: prs, direction: rtl}
+    slots: {word_one: *season_word, word_two: *season_word, word_three: *season_word, word_four: *season_word, word_five: *season_word}
+    slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five]}]
+    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+
+  # Lesson 3: asking about seasons.
+  - content_key: practice.en-prs.prs.a1.unit39.lesson03.season_liked_order.001
+    lesson_content_key: prs.a1.unit39.lesson03.asking_about_seasons
+    type: word_order
+    frame: {text: "{specific_season_word} را دوست دارم", language_code: prs, direction: rtl}
+    slots: {specific_season_word: *specific_season_word}
+    answer_derivation: {kind: render_frame, frame: {text: "{specific_season_word} را دوست دارم", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: [season] را دوست دارم (I like [season]).", language_code: en, direction: ltr}
+
+  # Lesson 6: wrap-up.
+  - content_key: practice.en-prs.prs.a1.unit39.lesson06.season_translate.001
+    lesson_content_key: prs.a1.unit39.lesson06.wrap_up
+    type: translation
+    frame: {text: "{season_word}", language_code: en, direction: ltr, slot_rendering: {season_word: english_gloss}}
+    slots: {season_word: *season_word}
+    answer_derivation: {kind: slot_text, slot: season_word}
+    feedback_frame: {text: "{season_word} is the Dari word for this.", language_code: en, direction: ltr}
