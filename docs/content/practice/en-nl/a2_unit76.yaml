@@ -1,0 +1,191 @@
+schema_version: "1.0"
+pack_key: practice.en-nl.a2.unit76
+source_language: en
+target_language: nl
+unit_content_key: nl.a2.unit76.drukke_week
+review:
+  status: unreviewed
+  fresh_context: "false"
+  notes: "Authored 2026-07-11, alongside the sibling a2_unit74/75/77.yaml
+    packs -- see a2_unit74.yaml's own review notes for the shared
+    background. This file covers unit76 (drukke week: a weekly
+    schedule, sequencing with eerst/daarna/ten slotte, weekday-vs-
+    weekend contrast, and a full agenda).
+
+    scripts/backfill_lexemes_en_nl.py already had broad recognition-only
+    tags for this unit (weekly_schedule_vocab: 5 nouns -- rooster/
+    cursus/volgorde/agenda/verschil; sequence_connector: 3 connectors --
+    eerst/daarna/slotte). This pass adds 6 new single-member *_single
+    tags (drukkeweek_rooster_single/_daarna_single/_slotte_single/
+    _verschil_single/_agenda_single/_volgorde_single) anchoring each
+    lesson's hero full sentence for word_order/translation/
+    fill_in_blank via render_frame/slot_text -- single-member by
+    construction. sequence_connector is deliberately used bare-word
+    only (multiple_choice/listen_select) and never in a render_frame
+    template: its real course-wide pool has case duplicates
+    ('Eerst'/'eerst', 'Daarna'/'daarna') and 'slotte' alone (without
+    'Ten') isn't grammatical standalone Dutch, so no safe generative
+    multi-slot chain frame was attempted -- the single-member
+    drukkeweek_daarna_single/_slotte_single tags sidestep this
+    entirely by anchoring each connector inside its own already-
+    disambiguating fixed frame ('Eerst werk ik, ___ ga ik sporten.' /
+    'Ten ___ kook ik iets voor het avondeten.') instead.
+
+    Also reuses the pre-existing cross-unit 'weekday'/'weekday_pure'
+    tags (introduced by earlier A1 routines content, re-established
+    within THIS A2 course by unit76 lesson01's maandag/woensdag phrase
+    and lesson05's reading, per AUTHORING_GUIDE.md #18 -- verified the
+    real A2-scoped pool has 5 members: dinsdag/donderdag/maandag/
+    vrijdag/woensdag, well above the multiple_choice/listen_select
+    floor and comfortable for a 5-slot matching_pairs, via a
+    standalone iter_specs()-replicating check, not just the pooled
+    A1+A2 count).
+
+    14 templates across all 6 lessons: multiple_choice x2, listen_select
+    x3, matching_pairs x2 (5-pair weekly_schedule_vocab pool in
+    lesson02, 5-pair weekday_pure pool in lesson05 -- exactly matches
+    the real pool size, no margin, but the pool was independently
+    re-verified, not estimated), word_order x2, fill_in_blank x1,
+    translation x2. The one fill_in_blank slot (slotte_single) has
+    exactly 1 course-wide candidate by construction -- re-verified by
+    re-running scripts/_fill_in_blank_ambiguity_check.py after adding
+    this file's PACKS entry, 0 flagged. Needs the standard fresh-context
+    review before import. Same blocking dependency as every other en-nl
+    pack: backfill_lexemes_en_nl.py has not actually been run against a
+    real database yet (only --dry-run, which succeeds)."
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [weekly_schedule_vocab, sequence_connector, weekday, weekday_pure, drukkeweek_rooster_single, drukkeweek_daarna_single, drukkeweek_slotte_single, drukkeweek_verschil_single, drukkeweek_agenda_single, drukkeweek_volgorde_single]
+slot_presets:
+  weekly_schedule_vocab: &weekly_schedule_vocab {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: weekly_schedule_vocab}}
+  sequence_connector: &sequence_connector {language_code: nl, part_of_speech: [adverb, particle, phrase], agreement_tags: {semantic: sequence_connector}}
+  weekday: &weekday {language_code: nl, part_of_speech: [noun, proper_noun], agreement_tags: {semantic: weekday}}
+  weekday_pure: &weekday_pure {language_code: nl, part_of_speech: [noun, proper_noun], agreement_tags: {semantic: weekday_pure}}
+  rooster_single: &rooster_single {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: drukkeweek_rooster_single}}
+  daarna_single: &daarna_single {language_code: nl, part_of_speech: [adverb, particle, phrase], agreement_tags: {semantic: drukkeweek_daarna_single}}
+  slotte_single: &slotte_single {language_code: nl, part_of_speech: [adverb, particle, phrase], agreement_tags: {semantic: drukkeweek_slotte_single}}
+  verschil_single: &verschil_single {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: drukkeweek_verschil_single}}
+  agenda_single: &agenda_single {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: drukkeweek_agenda_single}}
+  volgorde_single: &volgorde_single {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: drukkeweek_volgorde_single}}
+templates:
+  - content_key: practice.en-nl.nl.a2.unit76.lesson01.choose.001
+    lesson_content_key: nl.a2.unit76.lesson01.op_maandag_en_woensdag
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *weekly_schedule_vocab}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a word from this unit's weekly-schedule vocabulary.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit76.lesson01.listen.002
+    lesson_content_key: nl.a2.unit76.lesson01.op_maandag_en_woensdag
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *weekday}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the day you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit76.lesson01.order.003
+    lesson_content_key: nl.a2.unit76.lesson01.op_maandag_en_woensdag
+    type: word_order
+    frame: {text: "Ik kijk elke week naar mijn {item}.", language_code: nl, direction: ltr}
+    slots: {item: *rooster_single}
+    answer_derivation: {kind: render_frame, frame: {text: "Ik kijk elke week naar mijn {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} is what someone checks every week.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit76.lesson02.choose.001
+    lesson_content_key: nl.a2.unit76.lesson02.eerst_werken_dan_sporten
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *sequence_connector}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a sequencing word from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit76.lesson02.match.002
+    lesson_content_key: nl.a2.unit76.lesson02.eerst_werken_dan_sporten
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth}", language_code: nl, direction: ltr}
+    slots: {first: *weekly_schedule_vocab, second: *weekly_schedule_vocab, third: *weekly_schedule_vocab, fourth: *weekly_schedule_vocab, fifth: *weekly_schedule_vocab}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth]}
+    feedback_frame: {text: "Match each word with its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit76.lesson02.order.003
+    lesson_content_key: nl.a2.unit76.lesson02.eerst_werken_dan_sporten
+    type: word_order
+    frame: {text: "Eerst werk ik, {item} ga ik sporten.", language_code: nl, direction: ltr}
+    slots: {item: *daarna_single}
+    answer_derivation: {kind: render_frame, frame: {text: "Eerst werk ik, {item} ga ik sporten.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} links the two actions in sequence.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit76.lesson03.listen.001
+    lesson_content_key: nl.a2.unit76.lesson03.door_de_week_versus_weekend
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *weekly_schedule_vocab}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit76.lesson03.order.002
+    lesson_content_key: nl.a2.unit76.lesson03.door_de_week_versus_weekend
+    type: word_order
+    frame: {text: "Wat is het {item} tussen jouw doordeweekse dagen en het weekend?", language_code: nl, direction: ltr}
+    slots: {item: *verschil_single}
+    answer_derivation: {kind: render_frame, frame: {text: "Wat is het {item} tussen jouw doordeweekse dagen en het weekend?", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} is what's being asked about between weekdays and the weekend.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit76.lesson04.listen.001
+    lesson_content_key: nl.a2.unit76.lesson04.een_drukke_agenda
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *sequence_connector}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit76.lesson04.translate.002
+    lesson_content_key: nl.a2.unit76.lesson04.een_drukke_agenda
+    type: translation
+    frame:
+      text: "My schedule is completely full this week."
+      language_code: en
+      direction: ltr
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *agenda_single}
+    answer_derivation: {kind: render_frame, frame: {text: "Mijn {item} zit deze week helemaal vol.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Mijn {item} zit deze week helemaal vol.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit76.lesson05.match.001
+    lesson_content_key: nl.a2.unit76.lesson05.ninas_week_lezen
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth}", language_code: nl, direction: ltr}
+    slots: {first: *weekday_pure, second: *weekday_pure, third: *weekday_pure, fourth: *weekday_pure, fifth: *weekday_pure}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth]}
+    feedback_frame: {text: "Match each day with its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit76.lesson05.fill.002
+    lesson_content_key: nl.a2.unit76.lesson05.ninas_week_lezen
+    type: fill_in_blank
+    frame: {text: "Ten {item} kook ik iets voor het avondeten.", language_code: nl, direction: ltr}
+    slots: {item: *slotte_single}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Ten slotte kook ik iets voor het avondeten -- Finally I cook something for dinner.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit76.lesson06.listen.001
+    lesson_content_key: nl.a2.unit76.lesson06.lotte_en_omar_over_de_week
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *weekly_schedule_vocab}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a word from this dialogue.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit76.lesson06.translate.002
+    lesson_content_key: nl.a2.unit76.lesson06.lotte_en_omar_over_de_week
+    type: translation
+    frame:
+      text: "The order of my day is always the same."
+      language_code: en
+      direction: ltr
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *volgorde_single}
+    answer_derivation: {kind: render_frame, frame: {text: "De {item} van mijn dag is altijd hetzelfde.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "De {item} van mijn dag is altijd hetzelfde.", language_code: en, direction: ltr}

@@ -1,0 +1,187 @@
+schema_version: "1.0"
+pack_key: practice.en-nl.a2.unit74
+source_language: en
+target_language: nl
+unit_content_key: nl.a2.unit74.reisvertraging
+review:
+  status: unreviewed
+  fresh_context: "false"
+  notes: "Authored 2026-07-11, first Endless Practice pack for any of the
+    four new Dutch A2 units 74-77 (travel disruption, screen time, weekly
+    schedule, shopping complaint/returns) -- these units had zero practice
+    templates before this pass despite being reviewed lesson content, a
+    real gap against the ≥10hr practice-depth publish-gate bar. This file
+    covers unit74 (reisvertraging: reporting a train delay, a cancelled
+    connection due to a signal failure, missing a connection, and asking
+    the NS service desk for an alternative route).
+
+    scripts/backfill_lexemes_en_nl.py already had broad recognition-only
+    tags for this unit from its 2026-07-11 UNIT_FILES_A2 extension
+    (travel_disruption_vocab: 8 nouns -- seinstoring/aansluiting/
+    servicebalie/verbinding/intercity/mededeling/reisplanner/spoor;
+    travel_disruption_verb: 5 verbs -- rijden/omreizen/adviseren/
+    raadplegen/weten), deliberately left without finer per-lesson tags
+    per that pass's own docstring note ('add them alongside that future
+    practice-template pass'). This pass adds exactly that: 5 new
+    single-member *_single tags (reisvertraging_vertraging_single/
+    _seinstoring_single/_aansluiting_single/_verbinding_single/
+    _spoor_single) anchoring each lesson's hero full sentence for
+    word_order/translation/fill_in_blank via render_frame/slot_text --
+    single-member by construction, so no AUTHORING_GUIDE.md #17
+    candidate-pool ambiguity judgment call is needed (only one candidate
+    exists, full stop). The two pre-existing broad tags are reused
+    as-is, unchanged, for every bare-word multiple_choice/listen_select/
+    matching_pairs template below (each has 5-8 members, comfortably
+    above the 3-candidate MC/listen_select floor and the matching_pairs
+    slot count used here).
+
+    14 templates across all 6 lessons: multiple_choice x2, listen_select
+    x4, matching_pairs x2 (5-pair travel_disruption_vocab pool in
+    lesson03, 4-pair travel_disruption_verb pool in lesson05),
+    word_order x4, fill_in_blank x1, translation x2. fill_in_blank's
+    single slot (seinstoring_single) has exactly 1 course-wide candidate,
+    verified by construction (the tag has one member) -- also spot-
+    checked by re-running scripts/_fill_in_blank_ambiguity_check.py
+    after adding the PACKS entry for this file, 0 flagged. All other
+    templates use exercise types with no candidate-floor requirement
+    (word_order/translation, single-member tags) or a comfortably-sized
+    pool (MC/listen_select/matching_pairs). scripts/_practice_slot_check.py
+    also re-run against the updated backfill script output to confirm
+    every slot's real candidate count. Needs the standard fresh-context
+    review before import. Same blocking dependency as every other en-nl
+    pack: backfill_lexemes_en_nl.py has not actually been run against a
+    real database yet (only --dry-run, which succeeds: 1870 nl lexemes
+    parsed with 0 KeyError after this pass's additions)."
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [travel_disruption_vocab, travel_disruption_verb, reisvertraging_vertraging_single, reisvertraging_seinstoring_single, reisvertraging_aansluiting_single, reisvertraging_verbinding_single, reisvertraging_spoor_single]
+slot_presets:
+  travel_disruption_vocab: &travel_disruption_vocab {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: travel_disruption_vocab}}
+  travel_disruption_verb: &travel_disruption_verb {language_code: nl, part_of_speech: verb, agreement_tags: {semantic: travel_disruption_verb}}
+  vertraging_single: &vertraging_single {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: reisvertraging_vertraging_single}}
+  seinstoring_single: &seinstoring_single {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: reisvertraging_seinstoring_single}}
+  aansluiting_single: &aansluiting_single {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: reisvertraging_aansluiting_single}}
+  verbinding_single: &verbinding_single {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: reisvertraging_verbinding_single}}
+  spoor_single: &spoor_single {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: reisvertraging_spoor_single}}
+templates:
+  - content_key: practice.en-nl.nl.a2.unit74.lesson01.choose.001
+    lesson_content_key: nl.a2.unit74.lesson01.er_is_een_vertraging
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *travel_disruption_vocab}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a word from this unit's travel-disruption vocabulary.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit74.lesson01.listen.002
+    lesson_content_key: nl.a2.unit74.lesson01.er_is_een_vertraging
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *travel_disruption_vocab}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit74.lesson01.order.003
+    lesson_content_key: nl.a2.unit74.lesson01.er_is_een_vertraging
+    type: word_order
+    frame: {text: "Mijn trein heeft {item}.", language_code: nl, direction: ltr}
+    slots: {item: *vertraging_single}
+    answer_derivation: {kind: render_frame, frame: {text: "Mijn trein heeft {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} is what the train has -- a delay.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit74.lesson01.translate.004
+    lesson_content_key: nl.a2.unit74.lesson01.er_is_een_vertraging
+    type: translation
+    frame:
+      text: "There's a delay of ten minutes."
+      language_code: en
+      direction: ltr
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *vertraging_single}
+    answer_derivation: {kind: render_frame, frame: {text: "Er is een {item} van tien minuten.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Er is een {item} van tien minuten.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit74.lesson02.choose.001
+    lesson_content_key: nl.a2.unit74.lesson02.de_trein_valt_uit
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *travel_disruption_verb}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a verb from this unit's travel-disruption vocabulary.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit74.lesson02.fill.002
+    lesson_content_key: nl.a2.unit74.lesson02.de_trein_valt_uit
+    type: fill_in_blank
+    frame: {text: "Mijn trein valt uit door een {item}.", language_code: nl, direction: ltr}
+    slots: {item: *seinstoring_single}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Mijn trein valt uit door een seinstoring -- My train is cancelled because of a signal failure.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit74.lesson03.match.001
+    lesson_content_key: nl.a2.unit74.lesson03.ik_mis_mijn_aansluiting
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth}", language_code: nl, direction: ltr}
+    slots: {first: *travel_disruption_vocab, second: *travel_disruption_vocab, third: *travel_disruption_vocab, fourth: *travel_disruption_vocab, fifth: *travel_disruption_vocab}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth]}
+    feedback_frame: {text: "Match each word with its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit74.lesson03.translate.002
+    lesson_content_key: nl.a2.unit74.lesson03.ik_mis_mijn_aansluiting
+    type: translation
+    frame:
+      text: "I'm missing my connection because of the delay."
+      language_code: en
+      direction: ltr
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *aansluiting_single}
+    answer_derivation: {kind: render_frame, frame: {text: "Ik mis mijn {item} door de vertraging.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Ik mis mijn {item} door de vertraging.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit74.lesson04.listen.001
+    lesson_content_key: nl.a2.unit74.lesson04.bij_de_servicebalie
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *travel_disruption_verb}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit74.lesson04.order.002
+    lesson_content_key: nl.a2.unit74.lesson04.bij_de_servicebalie
+    type: word_order
+    frame: {text: "Kunt u mij helpen met een alternatieve {item}?", language_code: nl, direction: ltr}
+    slots: {item: *verbinding_single}
+    answer_derivation: {kind: render_frame, frame: {text: "Kunt u mij helpen met een alternatieve {item}?", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} is what Lotte asks the employee for help with.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit74.lesson05.listen.001
+    lesson_content_key: nl.a2.unit74.lesson05.mededeling_lezen
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *travel_disruption_vocab}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a word from the public notice.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit74.lesson05.match.002
+    lesson_content_key: nl.a2.unit74.lesson05.mededeling_lezen
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth}", language_code: nl, direction: ltr}
+    slots: {first: *travel_disruption_verb, second: *travel_disruption_verb, third: *travel_disruption_verb, fourth: *travel_disruption_verb}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth]}
+    feedback_frame: {text: "Match each verb with its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit74.lesson06.listen.001
+    lesson_content_key: nl.a2.unit74.lesson06.lotte_bij_de_balie
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *travel_disruption_vocab}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a word from this dialogue.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit74.lesson06.order.002
+    lesson_content_key: nl.a2.unit74.lesson06.lotte_bij_de_balie
+    type: word_order
+    frame: {text: "Over tien minuten, van {item} vier.", language_code: nl, direction: ltr}
+    slots: {item: *spoor_single}
+    answer_derivation: {kind: render_frame, frame: {text: "Over tien minuten, van {item} vier.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} is where the alternative train leaves from.", language_code: en, direction: ltr}
