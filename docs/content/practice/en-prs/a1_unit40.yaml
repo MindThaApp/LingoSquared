@@ -1,0 +1,79 @@
+schema_version: "1.0"
+pack_key: practice.en-prs.a1.unit40
+source_language: en
+target_language: prs
+unit_content_key: prs.a1.unit40.emergencies
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: >-
+    Authored 2026-07-11, same units 31-40 practice-pool depth-extension
+    pass as this bundle's a1_unit31.yaml sibling (see that file's notes
+    for the shared pass context) -- the last unit in this pass.
+    Realization and overlay are both status reviewed.
+
+    Two groups: "emergency_topic_word" (اضطراری/پولیس/امبولانس/آتش/
+    اطفائیه/زخمی/خون‌ریزی, 7 members, spans lesson01+lesson03) is the
+    recognition pool. "emergency_service_word" (پولیس/امبولانس/
+    اطفائیه, 3) is the strict subset of callable services that combine
+    with the taught "... می‌خواهم" (I need X) frame -- اضطراری describes
+    the situation itself (not something you "need"), and زخمی/
+    خون‌ریزی describe a person's condition rather than a service, so
+    all three are excluded from this frame.
+
+    Word_order template checked for grammaticality: "{emergency_service_word}
+    می‌خواهم" (lesson01, matches the real taught "پولیس می‌خواهم!"/
+    "امبولانس می‌خواهم!" verbatim for those two members; "اطفائیه
+    می‌خواهم!" is an equally natural generalization -- checked directly,
+    even though the unit's own taught text never uses that exact
+    sentence for the fire brigade).
+
+    No listen_select/listen_type anywhere (en-prs has no TTS voices).
+    No bare unquoted yes/no/true/false anywhere. Verified with
+    scripts/_practice_slot_check.py (0 problems) and
+    scripts/compile_content.py practice-validate for the full en-prs
+    pack (0 errors / 0 warnings). Needs the standard fresh-context
+    review before import; no backfill_lexemes_en_prs.py run has
+    happened against a real database yet in this pass.
+tag_schema:
+  part_of_speech: [noun, adjective]
+  agreement_tags:
+    semantic: [emergency_topic_word, emergency_service_word]
+slot_presets:
+  emergency_topic_word: &emergency_topic_word {language_code: prs, part_of_speech: [noun, adjective], agreement_tags: {semantic: emergency_topic_word}}
+  emergency_service_word: &emergency_service_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: emergency_service_word}}
+templates:
+  # Lesson 1: emergency vocabulary.
+  - content_key: practice.en-prs.prs.a1.unit40.lesson01.emergency_gloss.001
+    lesson_content_key: prs.a1.unit40.lesson01.emergency_types
+    type: multiple_choice
+    frame: {text: "{emergency_topic_word}", language_code: prs, direction: rtl}
+    slots: {emergency_topic_word: *emergency_topic_word}
+    answer_derivation: {kind: slot_gloss, slot: emergency_topic_word}
+    feedback_frame: {text: "{emergency_topic_word} belongs to this unit's emergency vocabulary.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit40.lesson03.emergency_pair.002
+    lesson_content_key: prs.a1.unit40.lesson03.describing_the_emergency
+    type: matching_pairs
+    frame: {text: "{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six} — {word_seven}", language_code: prs, direction: rtl}
+    slots: {word_one: *emergency_topic_word, word_two: *emergency_topic_word, word_three: *emergency_topic_word, word_four: *emergency_topic_word, word_five: *emergency_topic_word, word_six: *emergency_topic_word, word_seven: *emergency_topic_word}
+    slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five, word_six, word_seven]}]
+    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five, word_six, word_seven]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+
+  # Lesson 1: asking for the right service.
+  - content_key: practice.en-prs.prs.a1.unit40.lesson01.emergency_service_order.001
+    lesson_content_key: prs.a1.unit40.lesson01.emergency_types
+    type: word_order
+    frame: {text: "{emergency_service_word} می‌خواهم", language_code: prs, direction: rtl}
+    slots: {emergency_service_word: *emergency_service_word}
+    answer_derivation: {kind: render_frame, frame: {text: "{emergency_service_word} می‌خواهم", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: [service] می‌خواهم (I need the [service]).", language_code: en, direction: ltr}
+
+  # Lesson 6: wrap-up.
+  - content_key: practice.en-prs.prs.a1.unit40.lesson06.emergency_translate.001
+    lesson_content_key: prs.a1.unit40.lesson06.wrap_up
+    type: translation
+    frame: {text: "{emergency_topic_word}", language_code: en, direction: ltr, slot_rendering: {emergency_topic_word: english_gloss}}
+    slots: {emergency_topic_word: *emergency_topic_word}
+    answer_derivation: {kind: slot_text, slot: emergency_topic_word}
+    feedback_frame: {text: "{emergency_topic_word} is the Dari word for this.", language_code: en, direction: ltr}

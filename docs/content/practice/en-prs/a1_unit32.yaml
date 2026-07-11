@@ -1,0 +1,73 @@
+schema_version: "1.0"
+pack_key: practice.en-prs.a1.unit32
+source_language: en
+target_language: prs
+unit_content_key: prs.a1.unit32.celebrations
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: >-
+    Authored 2026-07-11, same units 31-40 practice-pool depth-extension
+    pass as this bundle's a1_unit31.yaml sibling (see that file's notes
+    for the shared pass context). Realization and overlay are both
+    status reviewed.
+
+    Two groups: "celebration_word" (تولد/جشن/کیک/هدیه/تبریک, 5 members,
+    completes lesson01) is the recognition pool. "celebration_liked_word"
+    (تولد/جشن/کیک/هدیه, 4) deliberately excludes تبریک -- "I like
+    congratulations" is not a sentence this unit teaches or a natural
+    generalization of the taught "... را دوست دارم" wrap-up frame,
+    same composition-trap discipline as unit24's پیاده/با split.
+
+    Word_order template checked for grammaticality: "{celebration_liked_word}
+    را دوست دارم" (lesson06, matches the real taught "جشن را دوست
+    دارم اما وقت ندارم." generalized to all four -- checked per
+    candidate: "تولد را دوست دارم."/"کیک را دوست دارم."/"هدیه را دوست
+    دارم." are all grammatical, natural sentences).
+
+    No listen_select/listen_type anywhere (en-prs has no TTS voices).
+    No bare unquoted yes/no/true/false anywhere. Verified with
+    scripts/_practice_slot_check.py (0 problems) and
+    scripts/compile_content.py practice-validate for the full en-prs
+    pack (0 errors / 0 warnings). Needs the standard fresh-context
+    review before import.
+tag_schema:
+  part_of_speech: [noun]
+  agreement_tags:
+    semantic: [celebration_word, celebration_liked_word]
+slot_presets:
+  celebration_word: &celebration_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: celebration_word}}
+  celebration_liked_word: &celebration_liked_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: celebration_liked_word}}
+templates:
+  # Lesson 1: celebration vocabulary.
+  - content_key: practice.en-prs.prs.a1.unit32.lesson01.celebration_gloss.001
+    lesson_content_key: prs.a1.unit32.lesson01.celebration_vocabulary
+    type: multiple_choice
+    frame: {text: "{celebration_word}", language_code: prs, direction: rtl}
+    slots: {celebration_word: *celebration_word}
+    answer_derivation: {kind: slot_gloss, slot: celebration_word}
+    feedback_frame: {text: "{celebration_word} belongs to this unit's celebration vocabulary.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit32.lesson01.celebration_pair.002
+    lesson_content_key: prs.a1.unit32.lesson01.celebration_vocabulary
+    type: matching_pairs
+    frame: {text: "{word_one} — {word_two} — {word_three} — {word_four} — {word_five}", language_code: prs, direction: rtl}
+    slots: {word_one: *celebration_word, word_two: *celebration_word, word_three: *celebration_word, word_four: *celebration_word, word_five: *celebration_word}
+    slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five]}]
+    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+
+  # Lesson 6: wrap-up.
+  - content_key: practice.en-prs.prs.a1.unit32.lesson06.celebration_liked_order.001
+    lesson_content_key: prs.a1.unit32.lesson06.wrap_up
+    type: word_order
+    frame: {text: "{celebration_liked_word} را دوست دارم", language_code: prs, direction: rtl}
+    slots: {celebration_liked_word: *celebration_liked_word}
+    answer_derivation: {kind: render_frame, frame: {text: "{celebration_liked_word} را دوست دارم", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: [thing] را دوست دارم (I like [thing]).", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit32.lesson06.celebration_translate.001
+    lesson_content_key: prs.a1.unit32.lesson06.wrap_up
+    type: translation
+    frame: {text: "{celebration_word}", language_code: en, direction: ltr, slot_rendering: {celebration_word: english_gloss}}
+    slots: {celebration_word: *celebration_word}
+    answer_derivation: {kind: slot_text, slot: celebration_word}
+    feedback_frame: {text: "{celebration_word} is the Dari word for this.", language_code: en, direction: ltr}

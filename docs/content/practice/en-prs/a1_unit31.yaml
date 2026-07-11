@@ -1,0 +1,88 @@
+schema_version: "1.0"
+pack_key: practice.en-prs.a1.unit31
+source_language: en
+target_language: prs
+unit_content_key: prs.a1.unit31.education
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: >-
+    Authored 2026-07-11, second practice-pool depth-extension pass for
+    en-prs (units 31-40, continuing directly from the units 25-30 pass
+    the same day) -- extends both scripts/backfill_lexemes_en_prs.py
+    (UNIT_FILES 31-40, new glosses/POS/semantic tags, and three
+    genuine homograph overrides in _classify()) and the en-prs pack set
+    past its previous unit30 cap. Realization and overlay are both
+    status reviewed.
+
+    Two groups: "study_vocab_word" (تحصیل/پوهنتون/مکتب/رشته/محصل/درس, 6
+    members, completes lesson01 -- مکتب/محصل are REUSED existing
+    lexemes, additive tags) is the recognition pool. "field_word"
+    (طب/حقوق/اقتصاد/ادبیات, 4, lesson02) is the academic-fields subset;
+    حقوق is a genuine homograph against the existing "salary" sense (A2
+    unit14) -- this unit's sense ("law") is special-cased by content_key
+    in _classify() so a field_word template only ever draws the law
+    sense, never salary.
+
+    Word_order template checked for grammaticality: "من {field_word}
+    می‌خوانم" (lesson02, matches the real taught "من طب می‌خوانم."
+    generalized to all four fields -- checked per candidate, not just
+    the taught example: "من حقوق می‌خوانم."/"من اقتصاد می‌خوانم."/"من
+    ادبیات می‌خوانم." are all grammatical).
+
+    No listen_select/listen_type anywhere (en-prs has no TTS voices).
+    No bare unquoted yes/no/true/false anywhere. Verified with
+    scripts/_practice_slot_check.py (0 problems) and
+    scripts/compile_content.py practice-validate for the full en-prs
+    pack (0 errors / 0 warnings). Needs the standard fresh-context
+    review before import; no backfill_lexemes_en_prs.py run has
+    happened against a real database yet in this pass.
+tag_schema:
+  part_of_speech: [noun]
+  agreement_tags:
+    semantic: [study_vocab_word, field_word]
+slot_presets:
+  study_vocab_word: &study_vocab_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: study_vocab_word}}
+  field_word: &field_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: field_word}}
+templates:
+  # Lesson 1: study vocabulary.
+  - content_key: practice.en-prs.prs.a1.unit31.lesson01.study_gloss.001
+    lesson_content_key: prs.a1.unit31.lesson01.study_vocabulary
+    type: multiple_choice
+    frame: {text: "{study_vocab_word}", language_code: prs, direction: rtl}
+    slots: {study_vocab_word: *study_vocab_word}
+    answer_derivation: {kind: slot_gloss, slot: study_vocab_word}
+    feedback_frame: {text: "{study_vocab_word} belongs to this unit's education vocabulary.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit31.lesson01.study_pair.002
+    lesson_content_key: prs.a1.unit31.lesson01.study_vocabulary
+    type: matching_pairs
+    frame: {text: "{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six}", language_code: prs, direction: rtl}
+    slots: {word_one: *study_vocab_word, word_two: *study_vocab_word, word_three: *study_vocab_word, word_four: *study_vocab_word, word_five: *study_vocab_word, word_six: *study_vocab_word}
+    slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}]
+    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+
+  # Lesson 2: fields of study.
+  - content_key: practice.en-prs.prs.a1.unit31.lesson02.field_gloss.001
+    lesson_content_key: prs.a1.unit31.lesson02.fields_of_study
+    type: multiple_choice
+    frame: {text: "{field_word}", language_code: prs, direction: rtl}
+    slots: {field_word: *field_word}
+    answer_derivation: {kind: slot_gloss, slot: field_word}
+    feedback_frame: {text: "{field_word} is a field of study.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit31.lesson02.field_study_order.001
+    lesson_content_key: prs.a1.unit31.lesson02.fields_of_study
+    type: word_order
+    frame: {text: "من {field_word} می‌خوانم", language_code: prs, direction: rtl}
+    slots: {field_word: *field_word}
+    answer_derivation: {kind: render_frame, frame: {text: "من {field_word} می‌خوانم", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: من [field] می‌خوانم (I study [field]).", language_code: en, direction: ltr}
+
+  # Lesson 6: wrap-up.
+  - content_key: practice.en-prs.prs.a1.unit31.lesson06.study_translate.001
+    lesson_content_key: prs.a1.unit31.lesson06.wrap_up
+    type: translation
+    frame: {text: "{study_vocab_word}", language_code: en, direction: ltr, slot_rendering: {study_vocab_word: english_gloss}}
+    slots: {study_vocab_word: *study_vocab_word}
+    answer_derivation: {kind: slot_text, slot: study_vocab_word}
+    feedback_frame: {text: "{study_vocab_word} is the Dari word for this.", language_code: en, direction: ltr}
