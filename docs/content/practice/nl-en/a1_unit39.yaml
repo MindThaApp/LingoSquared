@@ -1,0 +1,73 @@
+schema_version: "1.0"
+pack_key: practice.nl-en.a1.unit39
+source_language: nl
+target_language: en
+unit_content_key: en.a1.unit39.neighborhood
+review:
+  status: unreviewed
+  fresh_context: "false"
+  notes: "Authored 2026-07-11, nl-en depth-completion sprint (see
+    a1_unit30.yaml's notes for the sprint context). 3-member
+    'neighborhood_adj' tag (quiet/noisy/friendly, all adjectives) for
+    bare-word recognition only -- deliberately excludes the lesson's
+    other two vocabulary items ('neighborhood'/'neighbor', nouns) to
+    keep part_of_speech uniform, and excludes 'nearby' (functions as an
+    adverb in this unit's own examples, not a predicate adjective). No
+    shared generative frame attempted -- 'My street is {item}.' works
+    for quiet/noisy but reads oddly for friendly (streets aren't
+    friendly, neighbors are, per the unit's own example sentence 'My
+    neighbors are very friendly.'), so kept recognition-only, same
+    'don't force it' discipline as unit25/unit27's bureaucracy_noun/
+    banking_noun. Exactly 3 members -- at the >=3 floor for
+    multiple_choice/listen_select, smaller than usual but the unit's
+    real single-token adjective vocabulary doesn't support more without
+    mixing part_of_speech. Repeated the tag's bare-word recognition
+    against lesson02 for depth. Extended
+    scripts/_en_target_lexeme_common.py/scripts/backfill_lexemes_nl_en.py
+    with every introduced_token this unit's realization uses. Every
+    slot's real candidate count verified with
+    scripts/_practice_slot_check.py (3 distinct, at the >=3 floor).
+    Needs the standard fresh-context review before import."
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [neighborhood_adj]
+slot_presets:
+  neighborhood_adj: &neighborhood_adj {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: neighborhood_adj}}
+templates:
+  - content_key: practice.nl-en.en.a1.unit39.lesson01.choose.001
+    lesson_content_key: en.a1.unit39.lesson01.neighborhood_vocabulary
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *neighborhood_adj}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is een woord uit deze les.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit39.lesson01.listen.002
+    lesson_content_key: en.a1.unit39.lesson01.neighborhood_vocabulary
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *neighborhood_adj}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is het woord dat je hoorde.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit39.lesson01.match.003
+    lesson_content_key: en.a1.unit39.lesson01.neighborhood_vocabulary
+    type: matching_pairs
+    frame: {text: "{first} · {second}", language_code: en, direction: ltr}
+    slots: {first: *neighborhood_adj, second: *neighborhood_adj, third: *neighborhood_adj}
+    slot_relations: [{kind: distinct, slots: [first, second, third]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third]}
+    feedback_frame: {text: "Verbind elk woord met de Nederlandse betekenis.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit39.lesson01.translate.004
+    lesson_content_key: en.a1.unit39.lesson01.neighborhood_vocabulary
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *neighborhood_adj}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit39.lesson02.choose.002
+    lesson_content_key: en.a1.unit39.lesson02.describing_your_area
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *neighborhood_adj}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is een woord uit deze les.", language_code: nl, direction: ltr}
