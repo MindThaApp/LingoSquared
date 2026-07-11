@@ -51,6 +51,38 @@ review:
     Needs the standard fresh-context review before import; no
     backfill_lexemes_en_prs.py run has happened against a real database
     yet in this pass.
+
+    CORRECTION, 2026-07-11: the claim above that condition_word/حالم
+    was a single-project-wide-candidate group stopped being true once
+    b1_unit02_necessity.yaml (a later, separately-authored B1 unit)
+    additively extended the SAME condition_word semantic tag with
+    حالش ("his/her condition," backfill_lexemes_en_prs.py's iter_specs()
+    comment at the حالش entry documents this explicitly). Since the
+    compiler's fill_in_blank ambiguity check (AUTHORING_GUIDE.md #17)
+    pools lexeme candidates by (source_language, target_language) only,
+    not by course, this made the lesson02.condition_word_fill.002
+    template's blanked-slot pool hit 2 distinct candidates
+    (حالم vs حالش) with nothing else in the frame ("{condition_word}
+    خوب نیست") able to disambiguate first-person "my condition" from
+    third-person "his/her condition" -- a real cross-file hard error
+    caught by `scripts/verify.sh --content-only`. NOT fixed with
+    `interchangeable: true`: the two candidates are grammatically
+    distinct persons, not synonyms, so accepting either would defeat
+    the point of the drill. Fixed instead by converting this one
+    template from fill_in_blank to word_order (content_key renamed
+    condition_word_fill.002 -> condition_state_order.002,
+    answer_derivation kind slot_text -> render_frame), the same
+    "no minimum-candidate-floor exercise type" remedy AUTHORING_GUIDE.md
+    #18 already prescribes for cross-course-boundary tag reuse --
+    word_order's answer is the rendered frame for whichever candidate
+    generation actually picked, so the learner arranges given tiles
+    rather than having to guess among the pool, which sidesteps the
+    ambiguity entirely while still testing "{condition_word} خوب نیست"
+    exactly as before. Mirrors this same file's own sick_state_order.003
+    sibling template. Re-verified: scripts/compile_content.py
+    practice-validate for en-prs -- 0 errors/0 warnings (was 1 error);
+    full scripts/verify.sh --content-only re-run confirms no new
+    failures introduced elsewhere in the corpus.
 tag_schema:
   part_of_speech: [noun, verb, adjective, adverb, particle, proper_noun]
   agreement_tags:
@@ -103,12 +135,12 @@ templates:
     slots: {health_feeling_word: *health_feeling_word}
     answer_derivation: {kind: slot_gloss, slot: health_feeling_word}
     feedback_frame: {text: "{health_feeling_word} describes how someone feels.", language_code: en, direction: ltr}
-  - content_key: practice.en-prs.prs.a1.unit17.lesson02.condition_word_fill.002
+  - content_key: practice.en-prs.prs.a1.unit17.lesson02.condition_state_order.002
     lesson_content_key: prs.a1.unit17.lesson02.feeling_unwell
-    type: fill_in_blank
+    type: word_order
     frame: {text: "{condition_word} خوب نیست", language_code: prs, direction: rtl}
     slots: {condition_word: *condition_word}
-    answer_derivation: {kind: slot_text, slot: condition_word}
+    answer_derivation: {kind: render_frame, frame: {text: "{condition_word} خوب نیست", language_code: prs, direction: rtl}}
     feedback_frame: {text: "حالم خوب نیست means I don't feel well.", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a1.unit17.lesson02.sick_state_order.003
     lesson_content_key: prs.a1.unit17.lesson02.feeling_unwell
