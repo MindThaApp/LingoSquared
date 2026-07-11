@@ -189,6 +189,49 @@ UNIT_FILES_A2 = (
         REPO_ROOT / "docs/content/realizations/prs/a2_unit10_opinions.yaml",
         REPO_ROOT / "docs/content/overlays/en-prs/a2_unit10.yaml",
     ),
+    # Units 11-18 (banking, doctor, home maintenance, job interview, travel
+    # disruption, online habits, weekly schedule, shopping complaint), added
+    # 2026-07-11 -- these 8 A2 units exist on disk and are imported to the
+    # DB but were missing from this script entirely, leaving them with zero
+    # practice-pool lexeme coverage. Kept in this SAME UNIT_FILES_A2 tuple
+    # (not a separate one) since they're all still the "Dari A2" course --
+    # only the LOCAL 1-based position within this tuple matters (see the
+    # comment above UNIT_FILES_A2's own declaration), and units 09/10
+    # already occupy positions 1/2, so 11-18 correctly land at positions
+    # 3-10 by simple append, matching the real unit.order values Dari A2's
+    # own imported course rows will have.
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a2_unit11_banking.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a2_unit11.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a2_unit12_doctor.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a2_unit12.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a2_unit13_maintenance.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a2_unit13.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a2_unit14_job_interview.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a2_unit14.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a2_unit15_travel_disruption.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a2_unit15.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a2_unit16_online_habits.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a2_unit16.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a2_unit17_weekly_schedule.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a2_unit17.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a2_unit18_shopping_complaint.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a2_unit18.yaml",
+    ),
 )
 
 # Hand-classified from every introduced_token across all 6 lessons of
@@ -525,6 +568,143 @@ PRS_GLOSSES: dict[str, str] = {
     "می‌روی": "you go", "تکت": "ticket", "ایستگاه": "station",
     "تیز": "fast", "تیزتر": "faster", "خانه‌اش": "his house",
     "پس‌انداز": "savings", "می‌رود": "he/she goes",
+    # A2 unit 11 (banking), added 2026-07-11. Confirmed by reading
+    # docs/content/realizations/prs/a2_unit11_banking.yaml directly --
+    # بانک/کارت/تذکره/باشین/کنین/کردن/و/می‌خواستم/یک/کنم/رسید/کرایه/خانه/
+    # تا/سه/روز/می‌شود/برای/بیارین/پنجصد/افغانی/است/نیست/بفرمایین/چه/
+    # خدمتی/می‌توانم/برایتان/انجام/بدهم/کارمند/همایون/دارین/بلی/خانه‌ام/
+    # خوب/را/کی/می‌گیرم/تشکر/از were all already glossed from earlier
+    # units, reused as-is.
+    "حساب": "account", "بانکی": "banking (adjective)", "رمز": "PIN code",
+    "موجودی": "balance (account)", "امضا": "signature", "اگر": "if",
+    "داشته": "having (perfect participle stem)",
+    "می‌توانین": "you can (polite)", "باز": "open",
+    "بانکی‌تان": "your bank (possessive, polite)", "دیگر": "more; another",
+    "آماده": "ready", "کارمزد": "fee", "حداقل": "minimum",
+    "ماهانه": "monthly", "اینه": "here it is (colloquial)",
+    "تذکره‌ام": "my ID booklet", "رمزش": "its PIN",
+    "همان": "that very; the same", "روزی": "the day (indefinite/construct)",
+    "که": "that (relative pronoun)",
+    "تحویل": "handover; receipt of delivery",
+    "می‌گیرین": "you take/receive (polite)", "وقت‌تان": "your time (polite)",
+    # A2 unit 12 (doctor visit), added 2026-07-11. Confirmed by reading
+    # docs/content/realizations/prs/a2_unit12_doctor.yaml directly --
+    # از/دو/روز/خیلی/است/و/باید/بدهم/این/دوا/را/داکتر/شما/چهارشنبه/ساعت/
+    # نه/صبح/لطفاً/تذکره/بیارین/اگر/یک/زنگ/سلام/بشیر/چطور/استین/چه/مشکل/
+    # دارین/صاحب/کی/تب/هم/بلی/دارم/بهتر/دوباره/تشکر were all already
+    # glossed from earlier units, reused as-is.
+    "علامت": "symptom", "مدت": "duration", "شدید": "severe",
+    "آزمایش": "medical test", "نسخه": "prescription",
+    "تجویز": "to prescribe", "پیش": "ago; before", "سردردم": "my headache",
+    "شروع": "start; beginning",
+    "شده": "has become / has happened (past participle auxiliary)",
+    "آیا": "(question particle)", "بار": "time(s) (counter, occurrence)",
+    "بخورم": "let me take/eat (subjunctive)", "تاییدی": "confirmation",
+    "معاینه": "checkup; examination", "نوبت": "appointment (turn)",
+    "نتوانین": "you cannot (polite)", "بیایین": "come (polite imperative)",
+    "بزنین": "make/do (polite imperative, e.g. of a phone call)",
+    "یک‌کمی": "a little bit",
+    "بخورین": "take/drink/eat (polite imperative)",
+    "نشدین": "you don't get well/become (polite negative)",
+    # A2 unit 13 (home maintenance), added 2026-07-11. Confirmed by
+    # reading docs/content/realizations/prs/a2_unit13_maintenance.yaml
+    # directly -- هر/چه/می‌کند/و/باید/کی/می‌توانین/اتاق/کار/روز/ساعت/ده/
+    # است/اما/دارد/الو/بفرمایین/سلام/من/کریم/استم/از/شروع/شده/فردا/نه/را/
+    # تشکر/هم/آن/به were all already glossed from earlier units, reused
+    # as-is.
+    "خرابی": "malfunction; breakdown", "لوله": "pipe", "برق": "electricity",
+    "چکه": "leak", "تعمیر": "repair", "کارگر": "worker; repairman",
+    "زودتر": "sooner; more quickly", "آشپزخانه‌ام": "my kitchen",
+    "شود": "becomes / gets done (bare subjunctive)",
+    "بفرستین": "send (polite imperative)", "خوابم": "my sleep (in 'اتاق خوابم', my bedroom)",
+    "نمی‌کند": "does not work / is not working", "هزینه": "cost",
+    "رایگان": "free (no cost)", "تعمیرات": "repairs (plural)",
+    "پنج‌شنبه": "Thursday", "می‌آید": "comes / is coming",
+    "صاحب خانه": "landlord", "دیشب": "last night", "باشه": "okay (colloquial)",
+    "می‌فرستم": "I send", "می‌گویم": "I say / I tell",
+    # A2 unit 14 (job interview), added 2026-07-11. Confirmed by reading
+    # docs/content/realizations/prs/a2_unit14_job_interview.yaml directly
+    # -- چند/سال/دارین/من/سه/در/این/دارم/از/می‌توانم/شروع/کنم/است/برای/
+    # حداقل/دو/و/افغانی/ماه/لطفاً/تجربهٔ/بگویین/لیمه/شما/چیست/کی/
+    # می‌توانین/کنین were all already glossed from earlier units, reused
+    # as-is.
+    "تجربه": "experience", "مهارت": "skill", "حقوق": "salary",
+    "وظیفه": "position; duty; job", "رزومه": "resume; CV",
+    "مصاحبه": "interview", "هفتهٔ": "week of (construct form)",
+    "آینده": "next; coming; future", "چقدر": "how much",
+    "بست": "job vacancy; position (Afghan bureaucratic term)",
+    "شرایط": "requirements; conditions", "لازم": "necessary; required",
+    "کمپیوتر": "computer", "زبان": "language", "انگلیسی": "English",
+    "سی‌هزار": "thirty thousand", "خوش آمدین": "welcome (polite)",
+    "خود": "self; own", "مصاحبه‌کننده": "interviewer",
+    "مهارت‌های": "skills (of) (plural, construct form)",
+    # A2 unit 15 (travel disruption), added 2026-07-11. Confirmed by
+    # reading docs/content/realizations/prs/a2_unit15_travel_disruption.
+    # yaml directly -- به/دلیل/شده/است/باید/تا/فردا/صبح/کنین/و/من/هم/کنم/
+    # بس/کی/حرکت/می‌کند/دارد/ساعت/هشت/ایستگاه/امروز/نه/مزار/شریف/کابل/
+    # بفرمایین/چه/می‌توانم/برایتان/همایون/آن/نخیر/چند/تشکر/از were all
+    # already glossed from earlier units, reused as-is.
+    "تاخیر": "delay", "لغو": "cancellation", "بسته": "closed",
+    "راه": "road; way", "مسیر": "route", "بدیل": "alternative",
+    "برفباری": "snowfall", "اطلاعیه": "notice; announcement",
+    "صبر": "patience; waiting", "بعدی": "next", "وجود": "existence",
+    "مسافران": "passengers", "کمکی": "some help",
+    "بکنم": "let me do / may I do (subjunctive)",
+    "کارمند ایستگاه": "station clerk", "متأسفم": "I'm sorry",
+    "معلومات‌تان": "your information",
+    # A2 unit 16 (online habits), added 2026-07-11. Confirmed by reading
+    # docs/content/realizations/prs/a2_unit16_online_habits.yaml directly
+    # -- کردن/وقت/من/در/را/می‌بینم/زیاد/و/هر/روز/تو/چقدر/به/نظر/است/ولی/
+    # باید/خود/بیشتر/از/چند/ساعت/استفاده/تا/برای/زرمینه/همایون/یک/چطور/
+    # شاید/دو/این/آن/درست/فردا/عالی were all already glossed from earlier
+    # units, reused as-is.
+    "شبکهٔ": "network of (construct form)", "اجتماعی": "social",
+    "ویدیو": "video", "دانلود": "download", "پیام‌رسان": "messaging app",
+    "بازی": "game", "کمپیوتری": "computer (adjective)",
+    "آزاد": "free (available time)", "معمولاً": "usually",
+    "شبکه‌های": "networks (plural, construct form)", "بعضی": "some",
+    "اوقات": "times (plural of وقت)", "می‌گیرد": "takes (third person)",
+    "می‌گذرانی": "you spend (time) (informal)", "انترنت": "internet",
+    "مفید": "useful", "محدود": "limited", "کنیم": "let's do / we do (subjunctive)",
+    "کاربر": "user", "بسیاری": "many (of)", "مردم": "people",
+    "روزانه": "daily", "می‌کنند": "they do", "افراد": "individuals; people",
+    "بیشتری": "more (comparative, indefinite)", "خانواده": "family",
+    "دوستان": "friends", "باشند": "they may be (subjunctive)",
+    "لذت": "pleasure; enjoyment", "می‌برم": "I take / I carry",
+    "کمتر": "less",
+    # A2 unit 17 (weekly schedule), added 2026-07-11. Confirmed by
+    # reading docs/content/realizations/prs/a2_unit17_weekly_schedule.
+    # yaml directly -- هفته/آخر/اول/بعد/در/به/دفتر/می‌روم/می‌کنم/و/هفتهٔ/
+    # تو/چطور/است/بیدار/می‌شوم/با/فامیلم/وقت/استراحت/کردن/همایون/صبح/
+    # زود/می‌شود/می‌رود/اما/او/می‌کند/زرمینه/چه/کار/من/خانه/می‌آیم/بازار/
+    # داری were all already glossed from earlier units, reused as-is.
+    "برنامه": "schedule; program", "روزهای": "days of (plural construct)",
+    "ورزش": "exercise; sport", "کمی": "a little; a bit",
+    "مطالعه": "study; reading", "برنامهٔ": "schedule of (construct form)",
+    "دیر": "late", "می‌گذرانم": "I spend (time)", "تفاوت": "difference",
+    "می‌کنی": "you do (informal)", "آشپزی": "cooking",
+    "دوستانم": "my friends", "خوبی": "good (indefinite form)",
+    # A2 unit 18 (shopping complaint), added 2026-07-11. Confirmed by
+    # reading docs/content/realizations/prs/a2_unit18_shopping_complaint.
+    # yaml directly -- کردن/رسید/آن/را/می‌کنم/گرم/و/این/که/دیروز/است/
+    # می‌خواهم/کنم/یا/پس/بگیرم/کدام/مهلت/اگر/شده/هفت/روز/با/کنین/
+    # بفرمایین/چه/کمکی/می‌توانم/بکنم/فروشنده/کریم/دارد/بلی/اینه/بدهم/
+    # بهتر/تشکر were all already glossed from earlier units, reused
+    # as-is.
+    "خراب": "broken", "تعویض": "exchange", "بازپرداخت": "refund",
+    "گارانتی": "warranty", "عیب": "defect", "وقتی": "when (temporal clause)",
+    "روشن": "turned on; lit", "نمی‌شود": "does not become (negative)",
+    "بخاری": "heater", "برقی": "electric (adjective)",
+    "خریدم": "I bought", "پولم": "my money",
+    "ترجیح": "preference", "می‌دهین": "you give (polite)",
+    "اصلی": "original", "کالای": "item of; goods of (construct form)",
+    "خریداری": "purchase; purchasing",
+    "باشد": "may be / is (subjunctive, third person)",
+    "می‌توانید": "you can (polite)", "ظرف": "within (a period of time)",
+    "مشکلی": "a problem (indefinite)",
+    "روشنش": "turning it on / its being turned on",
+    "همراه‌تان": "with you (polite)", "رسیدم": "my receipt",
+    "پول‌تان": "your money (polite)",
 }
 
 PRS_POS: dict[str, str] = {
@@ -723,6 +903,70 @@ PRS_POS: dict[str, str] = {
     "می‌روی": "verb", "تکت": "noun", "ایستگاه": "noun", "تیز": "adjective",
     "تیزتر": "adjective", "خانه‌اش": "noun", "پس‌انداز": "noun",
     "می‌رود": "verb",
+    # A2 unit 11 (banking), added 2026-07-11.
+    "حساب": "noun", "بانکی": "adjective", "رمز": "noun", "موجودی": "noun",
+    "امضا": "noun", "اگر": "particle", "داشته": "verb",
+    "می‌توانین": "verb", "باز": "adjective", "بانکی‌تان": "noun",
+    "دیگر": "adjective", "آماده": "adjective", "کارمزد": "noun",
+    "حداقل": "adjective", "ماهانه": "adjective", "اینه": "particle",
+    "تذکره‌ام": "noun", "رمزش": "noun", "همان": "pronoun", "روزی": "noun",
+    "که": "particle", "تحویل": "noun", "می‌گیرین": "verb",
+    "وقت‌تان": "noun",
+    # A2 unit 12 (doctor visit), added 2026-07-11.
+    "علامت": "noun", "مدت": "noun", "شدید": "adjective",
+    "آزمایش": "noun", "نسخه": "noun", "تجویز": "noun", "پیش": "adverb",
+    "سردردم": "noun", "شروع": "noun", "شده": "verb", "آیا": "particle",
+    "بار": "noun", "بخورم": "verb", "تاییدی": "noun", "معاینه": "noun",
+    "نوبت": "noun", "نتوانین": "verb", "بیایین": "verb", "بزنین": "verb",
+    "یک‌کمی": "adverb", "بخورین": "verb", "نشدین": "verb",
+    # A2 unit 13 (home maintenance), added 2026-07-11.
+    "خرابی": "noun", "لوله": "noun", "برق": "noun", "چکه": "noun",
+    "تعمیر": "noun", "کارگر": "noun", "زودتر": "adverb",
+    "آشپزخانه‌ام": "noun", "شود": "verb", "بفرستین": "verb",
+    "خوابم": "noun", "نمی‌کند": "verb", "هزینه": "noun",
+    "رایگان": "adjective", "تعمیرات": "noun", "پنج‌شنبه": "noun",
+    "می‌آید": "verb", "صاحب خانه": "noun", "دیشب": "adverb",
+    "باشه": "particle", "می‌فرستم": "verb", "می‌گویم": "verb",
+    # A2 unit 14 (job interview), added 2026-07-11.
+    "تجربه": "noun", "مهارت": "noun", "حقوق": "noun", "وظیفه": "noun",
+    "رزومه": "noun", "مصاحبه": "noun", "هفتهٔ": "noun",
+    "آینده": "adjective", "چقدر": "adverb", "بست": "noun",
+    "شرایط": "noun", "لازم": "adjective", "کمپیوتر": "noun",
+    "زبان": "noun", "انگلیسی": "adjective", "سی‌هزار": "adjective",
+    "خوش آمدین": "phrase", "خود": "pronoun", "مصاحبه‌کننده": "noun",
+    "مهارت‌های": "noun",
+    # A2 unit 15 (travel disruption), added 2026-07-11.
+    "تاخیر": "noun", "لغو": "noun", "بسته": "adjective", "راه": "noun",
+    "مسیر": "noun", "بدیل": "adjective", "برفباری": "noun",
+    "اطلاعیه": "noun", "صبر": "noun", "بعدی": "adjective",
+    "وجود": "noun", "مسافران": "noun", "کمکی": "noun", "بکنم": "verb",
+    "کارمند ایستگاه": "noun", "متأسفم": "verb", "معلومات‌تان": "noun",
+    # A2 unit 16 (online habits), added 2026-07-11.
+    "شبکهٔ": "noun", "اجتماعی": "adjective", "ویدیو": "noun",
+    "دانلود": "noun", "پیام‌رسان": "noun", "بازی": "noun",
+    "کمپیوتری": "adjective", "آزاد": "adjective", "معمولاً": "adverb",
+    "شبکه‌های": "noun", "بعضی": "pronoun", "اوقات": "noun",
+    "می‌گیرد": "verb", "می‌گذرانی": "verb", "انترنت": "noun",
+    "مفید": "adjective", "محدود": "adjective", "کنیم": "verb",
+    "کاربر": "noun", "بسیاری": "adjective", "مردم": "noun",
+    "روزانه": "adverb", "می‌کنند": "verb", "افراد": "noun",
+    "بیشتری": "adjective", "خانواده": "noun", "دوستان": "noun",
+    "باشند": "verb", "لذت": "noun", "می‌برم": "verb", "کمتر": "adverb",
+    # A2 unit 17 (weekly schedule), added 2026-07-11.
+    "برنامه": "noun", "روزهای": "noun", "ورزش": "noun", "کمی": "adverb",
+    "مطالعه": "noun", "برنامهٔ": "noun", "دیر": "adverb",
+    "می‌گذرانم": "verb", "تفاوت": "noun", "می‌کنی": "verb",
+    "آشپزی": "noun", "دوستانم": "noun", "خوبی": "adjective",
+    # A2 unit 18 (shopping complaint), added 2026-07-11.
+    "خراب": "adjective", "تعویض": "noun", "بازپرداخت": "noun",
+    "گارانتی": "noun", "عیب": "noun", "وقتی": "particle",
+    "روشن": "adjective", "نمی‌شود": "verb", "بخاری": "noun",
+    "برقی": "adjective", "خریدم": "verb", "پولم": "noun",
+    "ترجیح": "noun", "می‌دهین": "verb", "اصلی": "adjective",
+    "کالای": "noun", "خریداری": "noun", "باشد": "verb",
+    "می‌توانید": "verb", "ظرف": "preposition", "مشکلی": "noun",
+    "روشنش": "noun", "همراه‌تان": "adjective", "رسیدم": "noun",
+    "پول‌تان": "noun",
 }
 
 
@@ -1320,6 +1564,116 @@ def prs_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         semantics.append("ticket_only")
     if lesson_key.endswith("lesson04.commute_dialogue"):
         semantics.append("dialogue_word")
+
+    # A2 unit 11 (banking) semantic tags, added 2026-07-11. "bank_word"
+    # (بانک/حساب/بانکی/کارت/رمز/موجودی/امضا, anchored lesson01) is the
+    # unit's core recognition vocabulary. "bank_action_verb"
+    # (باز/کنین/می‌توانین, completes the if-grammar note) covers "open an
+    # account." "bank_notice_word" (کارمزد/حداقل/ماهانه, anchored
+    # lesson03) is the reading-notice vocabulary.
+    if token in {"بانک", "حساب", "بانکی", "کارت", "رمز", "موجودی", "امضا"}:
+        semantics.append("bank_word")
+    if token in {"کارمزد", "حداقل", "ماهانه"}:
+        semantics.append("bank_notice_word")
+    if lesson_key.startswith("prs.a2.unit11") and (
+        " " in token or "،" in token or "؟" in token
+    ):
+        semantics.append("banking_phrase")
+
+    # A2 unit 12 (doctor visit) semantic tags, added 2026-07-11.
+    # "symptom_report_word" (علامت/مدت/شدید, anchored lesson01) is the
+    # unit's core recognition vocabulary. "appointment_word"
+    # (تاییدی/معاینه/نوبت, anchored lesson03) is the appointment-notice
+    # vocabulary.
+    if token in {"علامت", "مدت", "شدید"}:
+        semantics.append("symptom_report_word")
+    if token in {"تاییدی", "معاینه", "نوبت"}:
+        semantics.append("appointment_word")
+    if lesson_key.startswith("prs.a2.unit12") and (
+        " " in token or "،" in token or "؟" in token
+    ):
+        semantics.append("doctor_phrase")
+
+    # A2 unit 13 (home maintenance) semantic tags, added 2026-07-11.
+    # "maintenance_word" (خرابی/لوله/برق/چکه/تعمیر/کارگر, anchored
+    # lesson01) is the unit's core recognition vocabulary.
+    if token in {"خرابی", "لوله", "برق", "چکه", "تعمیر", "کارگر"}:
+        semantics.append("maintenance_word")
+    if token in {"هزینه", "رایگان"}:
+        semantics.append("repair_cost_word")
+    if lesson_key.startswith("prs.a2.unit13") and (
+        " " in token or "،" in token or "؟" in token
+    ):
+        semantics.append("maintenance_phrase")
+
+    # A2 unit 14 (job interview) semantic tags, added 2026-07-11.
+    # "interview_word" (تجربه/مهارت/حقوق/وظیفه/رزومه/مصاحبه, anchored
+    # lesson01) is the unit's core recognition vocabulary. "posting_word"
+    # (بست/شرایط, anchored lesson03) is the job-posting reading
+    # vocabulary.
+    if token in {"تجربه", "مهارت", "حقوق", "وظیفه", "رزومه", "مصاحبه"}:
+        semantics.append("interview_word")
+    if token in {"بست", "شرایط"}:
+        semantics.append("posting_word")
+    if token in {"لیمه"}:
+        semantics.append("person_name")
+    if lesson_key.startswith("prs.a2.unit14") and (
+        " " in token or "،" in token or "؟" in token
+    ):
+        semantics.append("interview_phrase")
+
+    # A2 unit 15 (travel disruption) semantic tags, added 2026-07-11.
+    # "disruption_word" (تاخیر/لغو/بسته/مسیر/بدیل/برفباری/اطلاعیه,
+    # anchored lesson01) is the unit's core recognition vocabulary.
+    if token in {"تاخیر", "لغو", "بسته", "مسیر", "بدیل", "برفباری", "اطلاعیه"}:
+        semantics.append("disruption_word")
+    if token in {"ایستگاه", "مسافران"}:
+        semantics.append("station_word")
+    if lesson_key.startswith("prs.a2.unit15") and (
+        " " in token or "،" in token or "؟" in token
+    ):
+        semantics.append("travel_disruption_phrase")
+
+    # A2 unit 16 (online habits) semantic tags, added 2026-07-11.
+    # "online_habit_word" (ویدیو/دانلود/پیام‌رسان/بازی/کمپیوتری/انترنت,
+    # anchored lesson01) is the unit's core recognition vocabulary.
+    if token in {"ویدیو", "دانلود", "پیام‌رسان", "بازی", "کمپیوتری", "انترنت"}:
+        semantics.append("online_habit_word")
+    if token in {"معمولاً", "بعضی", "اوقات"}:
+        semantics.append("frequency_word")
+    if token == "کاربر":
+        semantics.append("technology_role_word")
+    if lesson_key.startswith("prs.a2.unit16") and (
+        " " in token or "،" in token or "؟" in token
+    ):
+        semantics.append("online_habit_phrase")
+
+    # A2 unit 17 (weekly schedule) semantic tags, added 2026-07-11.
+    # "schedule_word" (هفته/برنامه/ورزش/مطالعه, anchored lesson01) is the
+    # unit's core recognition vocabulary. "sequence_connector"
+    # (اول/بعد/در آخر) is this unit's own step-up connector set,
+    # distinct from unit06's own directional اول/بعد "sequence_word" tag
+    # (a different, narrower routine-sequencing sense reused here).
+    if token in {"هفته", "برنامه", "ورزش", "مطالعه"}:
+        semantics.append("schedule_word")
+    if token in {"اول", "بعد"}:
+        semantics.append("sequence_connector")
+    if lesson_key.startswith("prs.a2.unit17") and (
+        " " in token or "،" in token or "؟" in token
+    ):
+        semantics.append("weekly_schedule_phrase")
+
+    # A2 unit 18 (shopping complaint) semantic tags, added 2026-07-11.
+    # "complaint_word" (خراب/تعویض/بازپرداخت/گارانتی/عیب, anchored
+    # lesson01) is the unit's core recognition vocabulary.
+    if token in {"خراب", "تعویض", "بازپرداخت", "گارانتی", "عیب"}:
+        semantics.append("complaint_word")
+    if token in {"مهلت", "اصلی"}:
+        semantics.append("return_policy_word")
+    if lesson_key.startswith("prs.a2.unit18") and (
+        " " in token or "،" in token or "؟" in token
+    ):
+        semantics.append("shopping_complaint_phrase")
 
     tags: dict[str, object] = {}
     if semantics:
