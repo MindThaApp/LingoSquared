@@ -1,1212 +1,618 @@
 # Lingo² — project state (read this first)
 
 Local-first language-learning app, Duolingo/Babbel-caliber, 18 directed
-en↔X learning paths (nl, fr, de, it, es, ru, zh, fa, prs). Backend code
-and alembic migrations stay **Codex**'s lane, dispatched and verified
-by Claude; language content is now authored by **both** Codex
-(from-scratch generation) and Claude (adapting public-domain FSI/Peace
-Corps source material — see "Division of labor" below); frontend,
-orchestration, and verification owned by the executing **Claude**
-session(s). For the full chronological history behind every decision
-and bug below, see `docs/BUILD_LOG.md` — this file is the current
-state, standing invariants, and footguns only.
+en↔X learning paths (nl, fr, de, it, es, ru, zh, fa, prs). **Lanes:**
+backend code + alembic migrations + `scripts/compile_content.py` are
+**Codex**'s lane (dispatched and verified by Claude); frontend,
+orchestration, verification, and CONTRACT.md are the executing
+**Claude** session's; language content is authored by **both** (Codex
+from-scratch, Claude adapting public-domain source material). This file
+is the current state, standing invariants, and footguns only — full
+chronological history and every incident narrative behind the rules
+below is in `docs/BUILD_LOG.md`.
 
-## Current plan of record
+## QUICK MAP — where to find what (read this when…)
 
-`docs/SONNET_BUILD_PROMPT_UPGRADES.md` is the active work order
-(phases A–G: lexeme-level SRS, in-lesson error recycling, feedback
-quality, recorded fa/prs audio, retention loop, unit checkpoints,
-integrity fixes) — read it before starting any new work. It also
-defines the up-to-three-parallel-session ownership map (CODE / CONTENT
-/ INFRA) if multiple Claude instances are running.
+- **CURRENT STATE** — plan of record, what's shipped (per-phase, compressed), scope/publish-gate decisions, seeded-course counts. Read when planning new work or checking if something already exists.
+- **KNOWN LIMITATIONS / ACCEPTED SCOPE** — deliberate gaps, rejected ideas, pre-deploy checklist items. Read before "fixing" something that may be intentional or before proposing a rejected feature.
+- **POLICIES → Division of labor & Codex dispatch** — who owns what, how to dispatch/verify Codex. Read before delegating.
+- **POLICIES → Tiered review** — how much fresh-context review a lane needs. Read before deciding review effort or skipping review.
+- **POLICIES → Content sourcing** — Firecrawl-first, public-domain vs CC licensing gates. Read before authoring content from external sources.
+- **FOOTGUNS** — hard-won failure modes (git/worktree/agent, migrations, docker, grading-shape, RTL, credentials). Read before: multi-agent dispatch, worktree cleanup, a migration, staging commits, credential handling, any grading/answer-shape change.
+- **OPERATIONS** — where things run, deploy runbook + skeleton, isolated-DB test recipe, TTS/secrets state, the non-negotiable VERIFICATION BAR. Read before running/testing/deploying.
+- **Binding external docs:** `docs/SONNET_BUILD_PROMPT_UPGRADES.md` (active work order, phases A–G) · `docs/content/AUTHORING_GUIDE.md` (all content authoring) · `docs/CONTRACT.md` (API/schema contract) · `docs/APP_SPEC_FOR_FABLE_REVIEW.md` (architecture "why") · `docs/PRE_DEPLOY_RUNBOOK.md` (deploy) · `docs/CONTENT_DEFECT_REGISTRY.md` (per-lane review-yield ledger) · `docs/BUILD_LOG.md` (full history).
 
-**Phase A — DONE, 2026-07-05, live-verified.** SRS now schedules
-lexemes (not exercise instances) and generates a fresh reviewed
-exercise each time one comes due, converged with the Endless Practice
-engine. New: `user_lexeme_srs` table, `GET /me/reviews/due`,
-`POST /reviews/session`, `POST /reviews/items/{id}/retry`, adaptive
-recognition→structured→production format ladder by per-lexeme
-mastery. Folded in opportunistically: the XP-grind fix, the
-completion-XP-delta fix, and the dead-code cleanup from Phase G. Full
-detail, what was verified, and the real (non-Codex) test-fixture bugs
-found along the way are in `docs/BUILD_LOG.md`. **Genuinely closed out
-2026-07-05**: Instance 3 found that a fresh 0001→head migration
-crashed (invisible on the shared, already-migrated dev stack this
-phase was originally verified against) — fixed and re-verified against
-a truly empty, isolated database, not the shared one. See the
-Footguns entry below and `docs/BUILD_LOG.md` for the full root cause.
+---
 
-**Phase B — DONE, 2026-07-05, live-verified.** `LessonRunnerPage`
-recycles missed exercises to the end of its queue instead of a linear
-index; 2 misses caps a "copy it" confirmation pass that always
-resolves regardless of correctness (never hard-blocks); up to 2 due
-reviews (via Phase A's `/reviews/session`) prepend before teaching
-cards when a `courseId` is known (threaded through route `state` from
-`CourseUnitsPage` → `UnitLessonsPage`, since no backend field maps a
-lesson to its course) and skip silently otherwise; the completion
-screen lists missed words with a speak button. Frontend-only, no
-backend/migration changes.
+# CURRENT STATE
 
-**Phase E1 also done alongside Phase B** (pulled forward since it's
-frontend-only and uses an endpoint Phase A already shipped): HomePage's
-primary CTA becomes "Review — N due" from `GET /me/reviews/due` when
-due, demoting "Continue lesson" to secondary; zero-due keeps the old
-layout. Discovered and fixed a real gap while wiring this up:
-`ReviewPage.tsx` still used the legacy account-wide `/me/reviews`
-flow, which Phase A no longer populates from in-lesson answers at all
-— rewritten to use `/reviews/session` per-course (with a course-picker
-when more than one course has due items) plus the retry endpoint for
-an in-place "try again."
+## Plan of record
 
-**Phase C — DONE, 2026-07-05 (mechanism only; content pass is Session
-2/CONTENT's lane).** Typo tolerance (`result: correct|almost|incorrect`
-on every answer endpoint, Damerau-Levenshtein distance-1, per-language
-strictness via `Language.script`, `orthography_strict` compiler
-override, Arabic/Persian script-confusion pairs never forgiven) and
-`feedback_by_option` (per-wrong-option explanations, JSON-encoded into
-the existing `Exercise.feedback` Text column — zero migration).
-**Built directly by Claude, not Codex** — the Codex dispatch hit a
-real usage-limit exhaustion (not a design gap) partway through this
-phase; per Ramin's standing contingency instruction, implementation
-continued directly rather than blocking. Revert to normal Codex
-delegation once usage resets (checking periodically — Codex still
-reported exhausted as of 04:49, stated reset ~5:16 AM). Full detail in
-`docs/BUILD_LOG.md`.
+`docs/SONNET_BUILD_PROMPT_UPGRADES.md` is the active work order (phases
+A–G: lexeme-level SRS, in-lesson error recycling, feedback quality,
+recorded fa/prs audio, retention loop, unit checkpoints, integrity
+fixes) — **read it before starting any new work.** It also defines the
+up-to-three-parallel-session ownership map (CODE / CONTENT / INFRA).
+`docs/APP_SPEC_FOR_FABLE_REVIEW.md` is the architecture snapshot behind
+the upgrade program (the "why" of Phase A's SRS redesign).
 
-**Phase C follow-up, 2026-07-07: `case_sensitive` grading flag.**
-`orthography_strict` only ever controlled typo-edit-distance tolerance,
-never case — every grading path unconditionally casefolds. German's
-formal "Sie" (capital, "you" formal) vs. lowercase "sie" ("she"/"they")
-is a real grammatical distinction with no equivalent in nl/en/fa/prs
-content shipped so far, and was ungradeable under the old always-
-casefold comparison (found by the content lane authoring German, which
-correctly deferred teaching this contrast rather than ship an
-ungradeable exercise). Fixed with a new `case_sensitive: bool` flag, a
-sibling of `orthography_strict` in the same `Exercise.feedback` JSON
-blob and the same overlay-authoring field in
-`scripts/compile_content.py`'s `compile_feedback()` — threaded through
-`normalized()`/`canonical_pairs()`/`canonical_order_tokens()`/`grade()`
-(`app/api/router.py`) and `grade_answer()`/`_normalize()` (`app/review/
-grading.py`). Defaults to `False` (old behavior, zero regression to any
-existing exercise). Critically, a case-only mismatch (e.g. "sie" vs
-"Sie") is hard-blocked to `incorrect` rather than falling into the
-existing distance-1 "almost" typo-tolerance path (new
-`is_case_only_difference()` helper, same shape as the existing
-Arabic/Persian `is_script_confusion()` guard) — without that, the
-mismatch would still count as correct for XP/SRS purposes, silently
-defeating the whole feature. Not yet wired into Endless Practice's
-generated `PracticeItem`s (no per-template metadata slot exists for
-it, and no German Endless Practice content exists yet to make it
-meaningful) — exercise-level only for now. Full detail, the live
-verification (real `en→de` exercise imported and answered both ways
-against the actual running dev stack), and a real unrelated test flake
-found and fixed along the way (`test_rate_limiting.py`'s
-`seeded_exercise_id()` picking an incompatible `flashcard` exercise) in
-`docs/BUILD_LOG.md`.
+## What's shipped (all live-verified; full detail per phase in BUILD_LOG)
 
-**Phase E2 — DONE, 2026-07-05 (also built directly, same Codex-outage
-window).** Timezone-aware streaks/daily-windows: additive `User.
-timezone` (IANA string, nullable, migration 0009), `app/services/
-progress.py`'s `record_activity()`/`activity_day_bounds()` now take a
-`user_timezone` param (UTC fallback for missing/invalid values) instead
-of `date.today()`/server-local `datetime.now()` — audited and fixed
-every call site (5 total, all in `router.py`: the streak-updating
-`record_activity()` calls in `exercise_answer()`/`review_answer()`/
-`practice_answer()`, and both `activity_day_bounds()` calls gating
-practice's diminishing-XP/per-lexeme-per-day windows). Frontend sends
-`Intl.DateTimeFormat().resolvedOptions().timeZone` at register/login;
-backend validates against the IANA database before persisting (login
-also refreshes it if it changed). **Real bug caught while wiring this
-in**: `schedule()`'s mastery-delta line used to truthiness-check the
-`correct` parameter directly — once that parameter could be the
-*string* `"incorrect"` (Phase C), that line would treat it as truthy
-and wrongly award the success bonus. Fixed with an explicit `success =
-quality >= 3` boolean (see Phase C notes in `docs/BUILD_LOG.md`).
-**Also found while applying this migration**: the dev DB's
-`alembic_version` table didn't exist at all despite the schema
-correctly reflecting migrations through 0008 — `alembic upgrade head`
-failed trying to re-run 0008's `ADD COLUMN` against a column that
-already existed. Fixed by `alembic stamp 0008` before upgrading; see
-`docs/BUILD_LOG.md` for what this might mean for the dev DB's history
-and what to watch for.
+Phases A–F are all shipped and live-verified. Compressed:
 
-**Phase E3 (streak-freeze half only) — DONE, 2026-07-05, same outage
-window.** One earned, auto-consumed, re-earnable streak freeze: `user_
-stats.streak_freezes_available`/`last_freeze_used_date` (migration
-0010), earned at every 7-day streak milestone while none is banked,
-silently covers exactly one missed day in `record_activity()` instead
-of resetting the streak, surfaced via `GET /me/streak`'s new fields
-and a ❄️ indicator + "Streak freeze used!" banner on `HomePage`.
-**Daily quests (the other half of E3) intentionally NOT built** — a
-properly separable, well-scoped new subsystem (new table, generation
-logic, progress-tracking hooks into lesson/review/practice completion)
-better suited to a fresh Codex dispatch once available than to
-continuing the direct-build exception further.
+- **Phase A (lexeme-level SRS)** — SRS schedules lexemes (not exercise
+  instances), generating a fresh reviewed exercise each time one comes
+  due. New: `user_lexeme_srs` table, `GET /me/reviews/due`,
+  `POST /reviews/session`, `POST /reviews/items/{id}/retry`; adaptive
+  recognition→structured→production ladder by per-lexeme mastery.
+  *Invariant:* every migration after 0001 must be fresh-migrate-safe
+  (see Footguns). Detail: BUILD_LOG Phase A.
+- **Phase B (in-lesson error recycling)** — `LessonRunnerPage` recycles
+  missed exercises to queue end; 2 misses trigger a "copy it"
+  confirmation pass that never hard-blocks; up to 2 due reviews prepend
+  before teaching cards when `courseId` is known (threaded via route
+  `state`), skip silently otherwise. Frontend-only. Detail: BUILD_LOG Phase B.
+- **Phase E1 (HomePage review CTA)** — primary CTA becomes "Review — N
+  due" when due. Also rewrote `ReviewPage.tsx` off the dead legacy
+  `/me/reviews` onto `/reviews/session` per-course. Detail: BUILD_LOG.
+- **Phase C (typo tolerance + feedback_by_option)** —
+  `result: correct|almost|incorrect` on every answer endpoint,
+  Damerau-Levenshtein distance-1, per-language strictness via
+  `Language.script`, `orthography_strict` compiler override,
+  Arabic/Persian script-confusion pairs never forgiven;
+  `feedback_by_option` JSON-encoded into `Exercise.feedback`. Detail: BUILD_LOG Phase C.
+- **Phase C follow-up (`case_sensitive` flag)** — new `case_sensitive:
+  bool` (default `False`) sibling of `orthography_strict`; a case-only
+  mismatch (e.g. "sie" vs "Sie") is hard-blocked to `incorrect`, never
+  the distance-1 "almost" path (else it'd count correct for XP/SRS).
+  Exercise-level only, not yet in Endless Practice. Detail: BUILD_LOG 2026-07-07.
+- **Phase E2 (timezone-aware streaks)** — additive `User.timezone`
+  (migration 0009); `record_activity()`/`activity_day_bounds()` take a
+  `user_timezone` param (UTC fallback). *Invariant:* grading success is
+  `quality >= 3`, never a truthiness check on `correct` (which can now
+  be the string `"incorrect"`). Detail: BUILD_LOG Phase E2.
+- **Phase E3 (streak freeze + daily quests)** — one earned/auto-consumed
+  streak freeze (migration 0010); `GET /me/quests` = 3 quests computed
+  LIVE each request, `QuestCompletion` row (migration 0011) pays XP once
+  per user/quest/day. Detail: BUILD_LOG Phase E3.
+- **Phase D (recorded audio)** — `POST /admin/media/upload` +
+  `GET /media/{key}` serving flat `backend/media_assets/{key}.mp3` (real
+  404 for not-yet-recorded keys is expected); compiler rejects NEW
+  dialogue cards using the embedded-"Name:"-label anti-pattern
+  (`TextBlock.speaker` field for split cards); `speak()`/`SpeakButton`
+  priority chain recorded asset → Google TTS → browser speechSynthesis →
+  honest fallback. *Not done:* re-authoring existing dialogue cards
+  (CONTENT lane). Detail: BUILD_LOG Phase D.
+- **Phase F (unit checkpoint / test-out)** — `POST /units/{id}/checkpoint`
+  generates 12–15 items (not gated on lesson completion),
+  `orthography_strict` forced `True`, never touch per-item SRS;
+  `GET /units/{id}/checkpoint/result` scores once (≥80% passes),
+  bulk-consolidates SRS only for untracked lexemes (mastery 0.5, +3d),
+  idempotent, 1-hr retake delay via advisory lock + `429
+  checkpoint_retake_delayed`; `GET /courses/{id}/units` returns
+  `checkpoint_passed`. Frontend `CheckpointPage` + path-node badges.
+  Migration 0012. Detail: BUILD_LOG Phase F.
+- **E4 (web push)** — shipped 2026-07-07 (`784da03`, migration 0016):
+  VAPID subscribe/unsubscribe + admin-triggerable notify-due-reviews. No
+  autonomous scheduling (no cron infra). Detail: BUILD_LOG.
+- **Mic-based speaking + STT** — `speak_response`/`speak_repeat` now do
+  real `MediaRecorder` capture + STT, graded through the free-text path.
+  Client-side WASM Whisper primary (zero audio leaves device);
+  self-hosted `faster-whisper` (`POST /stt/transcribe`) fallback, never
+  a cloud STT API. *Invariant:* Whisper must run `dtype: "fp32"` (see
+  Known limitations). Detail: BUILD_LOG 2026-07-06.
+- **Per-language TTS speech-speed** — `/tts` gained optional
+  `speaking_rate` (default 1.0, 0.25–2.0); per-device, per-language
+  `localStorage` preference (not an account field — `/tts` never caches
+  audio across users). `SpeechSpeedSettings.tsx` on ProfilePage, wired
+  via `api/tts.ts`'s `speak()` chokepoint. *Open:* a live-tab slider
+  click-through was never completed — do a visual close-out next live
+  browser session. Detail: BUILD_LOG 2026-07-07.
 
-Starting point once Codex usage resets: hand back Phase D (recorded
-fa/prs audio), E3's daily quests, and E4 (web push) — this multi-phase
-direct-build stretch (C, E1, E2, E3-half) was the outage exception, not
-a standing change to the division of labor.
+*Still remaining from the upgrade program:* D2's dialogue-content
+re-authoring and C1's feedback_by_option content pass (both CONTENT
+lane). The mechanism is fully built across every phase; the real
+remaining path to launch is full-depth content for en-nl/en-fa/en-prs.
 
-**Codex usage reset ~5:16 AM as stated — back to normal delegation.**
-Probed successfully at 05:19.
+## Scope & publish-gate decisions (2026-07-05)
 
-**Phase D3 + D2 (compiler validator half) — DONE, 2026-07-05, back to
-normal Codex delegation.** Recorded-audio mechanism: `POST /admin/
-media/upload` (multipart, admin-auth) and `GET /media/{key}` (long-
-cache, real 404 for not-yet-recorded keys — expected, not an error)
-serving flat files from `backend/media_assets/{key}.mp3`, zero new DB
-tables (explicitly avoided the dead `MediaAsset`/`Dialogue` scaffolding
-discovered while scoping this — third instance of that pattern this
-session, after `AnswerSpec` and `ExerciseAttempt.outcome`). Compiler
-now rejects any NEW dialogue teaching card using the old single-block-
-with-embedded-"Name:"-labels anti-pattern; `TextBlock` gained an
-additive `speaker` field for properly-split cards. Frontend
-`speak()`/`SpeakButton` gained the documented priority chain (recorded
-asset → Google TTS → browser speechSynthesis → honest fallback),
-wired into the 3 listen-type exercise components
-(MultipleChoice/Translation/WordOrder) via each prompt's
-`media_asset_key`. **Explicitly NOT done, Session 2/CONTENT's lane**:
-re-authoring any EXISTING dialogue cards into the new per-speaker-turn
-shape — the compiler validator only blocks new/edited cards using the
-anti-pattern, it doesn't touch anything already compiled. D1 (recording
-manifest) was already built by Session 3 earlier. D4's "lift the
-zero-listen_select-for-fa restriction for exercises with a recorded
-asset" (practice engine change) not yet done — no real fa/prs
-recordings exist yet to make it meaningful. Full detail in `docs/
-BUILD_LOG.md`.
+- **End goal is genuine fluency (full CEFR A1→C2), but publish is a much
+  earlier, separate gate.** Publish-gate language set: **en↔nl and
+  en↔fa/prs only** (6 directed paths) — the languages Ramin can
+  personally verify. The other 15 paths keep building as post-launch
+  drip content, not blocked.
+- **Publish-gate quality bar: "very usable, minimum bugs," not a phase
+  checklist.** Beta users on the 3 launch pairs must hit essentially no
+  functional breakage. The Claude session earns this via the full
+  VERIFICATION BAR (below) on the actual lesson/review/practice flows
+  BEFORE any user sees it — the report-button → triage loop is the next
+  layer, not a substitute for pre-launch verification.
+- **Publish-gate content depth: ≥10 hrs new teaching + ≥10 hrs practice
+  + working scored module checkpoints, per launch pair.** Practice hours
+  come from the Endless Practice engine (built for all 6 launch
+  directions — en-fa 124, en-nl 240, en-prs 36, fa-en 86, nl-en 327,
+  prs-en 86 templates per `scripts/practice_manifest.txt`); actual
+  hour-depth vs the bar hasn't been separately measured. Phase F unit
+  checkpoints are a hard publish-gate requirement. Detail:
+  APP_SPEC_FOR_FABLE_REVIEW.md §1 + `project-lingosquared-roadmap` memory.
 
-**Phase E3 daily quests (the other half) — DONE, 2026-07-05, Codex,
-normal delegation.** `GET /me/quests` — 3 hardcoded quests ("Clear your
-due reviews," "Complete a lesson," "5 correct in practice"), progress
-computed LIVE against existing state each request (due-lexeme count,
-today's `LessonProgress`/`PracticeAttempt` rows, all in the user's own
-timezone via E2's `activity_day_bounds()`) rather than tracked via
-hooks into the answer endpoints — a new `QuestCompletion` row (migration
-0011) records the award exactly once per user/quest/day so repeat
-`GET`s never double-pay XP. Deliberately avoided two dead, pre-existing
-`DailyQuest`/`UserDailyQuestProgress` models discovered while
-implementing this (unreferenced anywhere in `app/`, fourth instance of
-this exact pattern this session after `AnswerSpec`, `MediaAsset`/
-`Dialogue*`, and the once-unused `ExerciseAttempt.outcome`) — built
-fresh instead of forcing the new live-computed design onto that old
-persisted-definition shape. Both halves of Phase E3 are now done; E3 as
-a whole is complete. Live-verified against a real test user's actual
-accumulated activity today (not just synthetic fixtures) — correctly
-showed one quest already complete from earlier real activity, XP
-confirmed unchanged across repeated calls.
+## Reference-language priorities
 
-**Phase F backend (unit checkpoint / test-out) — DONE, 2026-07-05,
-Codex, normal delegation.** `POST /units/{unit_id}/checkpoint`
-generates 12–15 items from the unit's own lessons via a new
-`generate_checkpoint()` (reuses the practice engine's `_material()`/
-`_generate_prioritized()`, `source="checkpoint"`, not gated on lesson
-completion — "test out" means skipping the lessons); items are graded
-via the shared `/practice/items/{id}/answer` endpoint but with
-`orthography_strict` forced `True` (no typo tolerance for a pass/fail
-assessment) and never touch per-item `UserLexemeSRS` scheduling.
-`GET /units/{unit_id}/checkpoint/result` scores the session once all
-items are answered (≥80% passes), consolidates SRS in bulk for
-lexemes the checkpoint covered THAT AREN'T ALREADY TRACKED (mastery
-floor 0.5, due +3 days — existing rows are never touched), reports
-weak-outcome glosses on a fail, and is idempotent (repeat calls return
-the same persisted result). A 1-hour retake delay is enforced via a
-Postgres advisory lock + `429 checkpoint_retake_delayed` with
-`retry_after_seconds`. `GET /courses/{course_id}/units` now also
-returns `checkpoint_passed` per unit — the hook the frontend needs for
-a future "Test out of Unit 1" button. New `CheckpointAttempt` table
-(migration 0012). Live-verified against real en-fa content on the
-actual running stack, including both the "leave already-tracked
-lexemes alone" path (a long-lived test account) and the "consolidate
-untracked lexemes" path (a brand-new account, 15 fresh SRS rows at
-exactly mastery=0.5/interval=3), plus the retake-delay firing
-correctly on a real second attempt. Full detail in `docs/BUILD_LOG.md`.
+- **Reference language: Dutch (nl).** Ramin is fluent in Dutch, so nl is
+  built to full polish first (native review) and is the primary UX
+  verification target.
+- **fa/prs remain the mandatory RTL / virtual-keyboard /
+  script-strict-grading verification target for every phase regardless
+  — don't let them rot.**
+- **es/fr:** finish in-flight units, then park until nl is done.
+- **`docs/content/AUTHORING_GUIDE.md` is binding for all content
+  authoring.** **`docs/CONTRACT.md` is the API/schema contract both
+  sides build against — update it before implementing any contract
+  change, never after.**
 
-**Phase F frontend — DONE, 2026-07-05.** New `CheckpointPage`
-(`/units/:unitId/checkpoint`) reusing `ExerciseRenderer` like Practice/
-Review do, but deliberately distinct: no teaching cards, no B1-style
-error-recycling (a wrong answer moves straight to the next item, "a
-test is a test"), a persistent "Unit checkpoint" header banner instead
-of the lesson XP counter. Handles all 4 backend states: starting
-(`POST .../checkpoint`), the 429 retake-delay (shows a live countdown
-from `ApiError`'s new `details` field — `ApiError`/`ApiErrorBody`
-extended additively to carry error fields beyond `code`/`message`),
-generation-unavailable (409, not enough material), and the scored
-result (pass/fail, score %, weak-outcome list, links back to the
-unit's lessons or the course list). `CourseUnitsPage`'s `PathNode`
-gained a "Test out of this unit" button next to the existing
-"Recommended for you" badge (shown only when recommended AND not yet
-passed) and a standalone "Checkpoint passed ✓" badge (shown on ANY
-passed unit, independent of the recommendation) using the new
-`checkpoint_passed` field. `docs/CONTRACT.md`'s checkpoint section
-rewritten to match the ACTUAL shipped shapes (it previously only had
-the pre-implementation placeholder example) — also caught and fixed a
-separate staleness bug while there: the `/me/streak` doc block still
-showed the pre-E2/E3 shape, missing `streak_freezes_available`/
-`freeze_used_today` added earlier this session. Small Codex round-trip
-for fa/prs translations of the 22 new UI strings, same pattern as
-every other phase this session. Live-verified end-to-end in the
-browser on real en-fa content, not just curl: played a full 15-item
-checkpoint through every exercise type it generated, got a genuine
-73% fail result with the exact 4 wrong answers' glosses listed as
-weak outcomes, confirmed the retake-block screen (both freshly and
-after browser-back navigation), and confirmed both unit-path badges
-render correctly and independently by toggling the local level
-preference between two units (one already-passed, one not). Full
-detail in `docs/BUILD_LOG.md`.
+## What's built and verified live
 
-**Phases A through F are now all shipped and live-verified this
-session.** E4 (web push) shipped later, 2026-07-07 (`784da03`,
-migration 0016): VAPID subscriptions (`GET /push/vapid-public-key`,
-`POST /push/subscribe`/`unsubscribe`) plus one admin-triggerable send
-(`POST /admin/push/notify-due-reviews`) — no autonomous scheduling,
-since no cron/scheduler infrastructure exists to hook into (flagged
-out of scope rather than invented). Still remaining from the original
-upgrade program: the two pieces explicitly left for other sessions'
-lanes (D2's actual dialogue-content re-authoring, C1's feedback_by_
-option content pass — both Session 2/CONTENT). Phase G's integrity
-fixes were folded in opportunistically throughout (see each phase's
-entry above). Next up for whoever continues this: start on
-Session 2's content backlog if that's in scope for this session, or
-begin the deeper content-authoring work needed to actually hit the
-2026-07-05 publish-gate content-depth bar (≥10hr teaching + ≥10hr
-practice per launch pair) — the mechanism is now fully built across
-every phase, but real full-depth content for en-nl/en-fa/en-prs is
-the actual remaining path to launch.
+Auth; all 10 languages (fa/prs fully separate, correct RTL + script
+metadata); courses → units → lessons → all 19 exercise types; SM-2
+review (being replaced by lexeme-level SRS); gamification
+(XP/streak/achievements); reading/writing vs. speaking sections with
+server-enforced unlock; CEFR A1–C2; teaching phase before exercises;
+in-app content-issue reporting + admin triage + coverage dashboard;
+Endless Practice generative feed (all 6 launch directions, lexeme pool +
+reviewed sentence-frame templates, zero runtime LLM calls); on-screen
+virtual keyboard for non-Latin scripts; self-reported level check with
+recommended-unit badge (not a placement system — rejected as premature);
+mic-based speaking (`speak_response`/`speak_repeat`) with client-side
+WASM Whisper STT.
 
-**Real mic-based speaking exercises + STT grading — DONE, 2026-07-06,
-live-verified, a standalone task outside the phase program above.**
-`speak_response` (used to render as plain typed text despite its name)
-and `speak_repeat` (used to render `Placeholder.tsx`, an unbuilt stub)
-now have real `MediaRecorder` capture + speech-to-text, graded through
-the same free-text path as every other exercise. Client-side WASM
-Whisper is the primary path (`Transformers.js`, zero raw audio ever
-leaves the device); self-hosted `faster-whisper` (`POST
-/stt/transcribe`) is the fallback for when the client path isn't
-available — never a cloud STT API. Per-device `localStorage` mic/
-keyboard toggle, same "honest fallback, never silently dead" pattern
-as `SpeakButton`/`speak()`. **Real upstream bug found and root-caused**:
-every quantized dtype for `whisper-tiny`'s merged decoder throws at
-ONNX session-creation time in the onnxruntime-web version
-`@huggingface/transformers@4.2.0` pins (confirmed across both
-`Xenova/whisper-tiny` and `onnx-community/whisper-tiny` — not a stale-
-export issue) — fixed by pinning `dtype: "fp32"`
-(`frontend/src/workers/whisperWorker.ts`, heavily commented so it isn't
-"optimized" back to a smaller quantized dtype and silently
-reintroduces 100%-fallback-to-server). Also found and fixed: neither
-type was in `FREE_TEXT_EXERCISE_TYPES` (no typo tolerance, exact-match
-only) and `docs/CONTRACT.md` incorrectly claimed `speak_repeat` "has no
-checkable answer" (false — real shipped content proves it has genuine
-`accepted_answers`). Full detail, the live-verification method (real
-synthesized speech via macOS `say` fed through Chromium's fake-mic-
-device flags, not mocked), and the colima/`$HOME`-mount footgun hit
-while standing up an isolated test stack, all in `docs/BUILD_LOG.md`.
-**Not done**: fa/prs translations for the new UI strings (English-only
-this pass, safe fallback via i18next, normal Codex round-trip pending).
+**Seeded courses** (re-check by `ls docs/content/realizations/<lang>/`
+before quoting — grows fast; counts as of 2026-07-08): en→nl 37 units;
+en→fa 26 A1/A2 + 1 B1; en→prs 28 A1/A2 + 1 B1; fa-en/nl-en/prs-en share
+the same English realization, ~33 units; es/fr 3 units each (A1, parked);
+de 10 units. New units are `status: unreviewed` drafts pending mandatory
+fresh-context review.
 
-**Per-language TTS speech-speed setting — DONE, 2026-07-07, live-verified,
-a standalone task outside the phase program, prompted by a real Ramin
-report** ("Dutch TTS sounds too fast"). `/tts`'s request gained an
-optional `speaking_rate` (default `1.0`, validated `0.25`-`2.0` to match
-`google-cloud-texttospeech`'s own `AudioConfig.speaking_rate` bound),
-threaded into `synthesize_google()`'s `AudioConfig` directly and into
-`synthesize_azure()` via a new `<prosody rate="...">` SSML wrap (Azure's
-REST API has no equivalent top-level field). **Per-device, per-language
-`localStorage` preference, not a backend/account field**
-(`frontend/src/lib/ttsSpeedPreferences.ts`, same precedent as the
-existing per-language voice preference and the STT mic/keyboard toggle)
-— confirmed safe because `/tts` never caches synthesized audio across
-users/requests, so there's no shared-cache-correctness reason to push
-this server-side. New `SpeechSpeedSettings.tsx` on `ProfilePage` (next to
-`VoiceSettings`), a 0.75-1.25 slider scoped to languages the account has
-actually studied (derived from real `/me/progress` `skill_progress`
-course IDs, not all 10 languages). Wired into every playback tier via
-`api/tts.ts`'s `speak()` (the single chokepoint every `SpeakButton` call
-site already goes through, so teaching cards/exercises/Endless
-Practice/Review/Checkpoint all pick it up for free, no per-component
-changes needed): cloud TTS bakes the rate in server-side; browser
-`speechSynthesis` fallback sets `utterance.rate` client-side; recorded
-human audio (`GET /media/{key}`, fixed-speed flat MP3s with no synthesis
-step to parameterize) still respects the same preference via
-`HTMLMediaElement.playbackRate`, a genuine browser feature, not a hack.
-Live-verified against a real, credentialed Google Cloud TTS call on an
-isolated stack (fresh migrate, real content import, real lesson
-completion for real `skill_progress`) — measured actual output audio
-duration via `afinfo`, not just request inspection: identical Dutch text
-at `speaking_rate` 1.0 vs 0.8 produced 1.608s vs 1.992s (ratio ~1.24,
-matching the expected ~1.25 inverse-rate relationship), while an
-independent English request at 1.0 stayed at its own normal 1.464s,
-confirming per-language isolation. **Browser-UI click-through (actually
-moving the slider in a live tab) could not be completed this session** —
-`claude-in-chrome`'s interactive tools (`computer`/`read_page`/`find`/
-`javascript_tool`/`form_input`) all failed/timed out ("couldn't
-determine which page this action targets" / hung waiting on what looked
-like a stuck permission prompt in the extension side panel), while
-passive tools (`get_page_text`, `navigate`, `tabs_context_mcp`) worked
-fine throughout; `list_connected_browsers` showed only one, local browser
-already selected, so it wasn't a multi-device ambiguity. Whoever next has
-a live browser session should do a quick real click-through of the new
-Settings rows as a final visual close-out — the mechanism itself is
-verified working end-to-end against the real provider, just not
-eyeballed in a rendered page this pass.
+## Known limitations / accepted scope
 
-`docs/APP_SPEC_FOR_FABLE_REVIEW.md` is the architecture snapshot +
-review that produced the upgrade program — read for the "why" behind
-Phase A's SRS redesign and the content-architecture rationale.
+- **Hindi/Devanagari: `compile_content.py`'s `[\w‌]+` tokenizer doesn't
+  cleanly match combining vowel signs/virama** (found 2026-07-10) — it
+  fragments words (e.g. "नया"→"नय"). Consequences for Devanagari
+  authoring: (1) an infinitive does NOT auto-cover its inflected surface
+  forms — declare every tested literal string in `introduced_tokens`;
+  (2) "already taught" doesn't reliably carry across files. Not yet
+  fixed (Codex lane) — budget extra token-coverage validation
+  iterations. Detail: BUILD_LOG 2026-07-10.
+- **`backend/tests/test_content_answer_shapes.py` self-skips (`1
+  skipped`) under the standard docker pytest** (the image lacks repo-root
+  `docs/content/`). Run it with the full repo mounted per its docstring
+  (`-v "$(cd .. && pwd):/repo" -e LINGO_REPO_ROOT=/repo`). **With the
+  corpus reachable it shows ~226 known FAILING cases — expected, not a
+  regression** (real learner-facing ungradeable exercises: 159 en-hi
+  comprehension `correct_response`=Hindi-source bug, ~60 en-nl
+  `matching_pairs` missing-right-entry, ~6 phrasing mismatches, 1 en-fa
+  `grammar_check`, 1 en-fr `reading_comprehension`). **Do not "fix" this
+  by weakening the test** — fix the content (CONTENT lane). Detail: BUILD_LOG 2026-07-10.
+- **STT: client-side Whisper must run `dtype: "fp32"`** (~150MB, cached)
+  — every quantized dtype throws an onnxruntime-web session-creation bug
+  at the pinned `@huggingface/transformers` version. Whisper may
+  transcribe number words as digits ("zeven"→"7"), missing word-form
+  `accepted_answers` — accepted caveat, don't chase with digit tables.
+  fa/prs UI strings for voice-answer not yet translated. Detail: BUILD_LOG 2026-07-06.
+- **The spine outcome count moves fast — re-grep
+  `docs/content/universal_spine.yaml` before trusting any number.** Grew
+  19→24→26→28 across 2026-07-05/06. The English realization (all X→en
+  directions) still only covers the first 26 outcomes;
+  `banking`/second-`health` aren't realized anywhere yet. 10 of 18 paths
+  have zero content; no path is past A2.
+- Dari's browser-TTS fallback quality is uncertain (`fa-AF`
+  approximation; may be silent or wrong-accent).
+- No native-speaker review network in general — nl is the deliberate exception.
+- Admin content import/export is API-only, no UI (intentional trim).
+- Writing prompts graded by exact string match (Phase C adds distance-1
+  typo tolerance, per-language strictness).
+- **Pre-deploy/pre-beta checklist: confirm `ADMIN_EMAILS` on the live
+  deployment is Ramin's real private email, not the `.env.example`
+  placeholder, and his account is already registered under it.**
+  `register()` grants `is_admin` to whoever registers first with a
+  listed email; no email verification closes that race. Deployment step,
+  not a code bug. Detail: BUILD_LOG security-audit entry.
+- **Pre-deploy/pre-beta checklist: the live server's `CORS_ORIGINS` is
+  currently localhost-only** — must list the real origin(s) beta users
+  load the frontend from or their requests are rejected. A deployment
+  decision, don't guess-and-fix. (An unbounded-`response`-field
+  resource-exhaustion bug was found and fixed in the same pass.) Detail: BUILD_LOG.
+- Starlette "BadHost" CVE (CVE-2026-48710) **fixed and deployed to the
+  dev stack 2026-07-06** (`fastapi` 0.115.12→0.139.0, starlette→1.3.1);
+  not yet on the live server (192.168.4.4). Detail: BUILD_LOG.
+- No password reset or email verification. **Refresh tokens ARE built**
+  (2026-07-10, `565f66c`, migration 0021): 30-min access + rotating
+  refresh tokens with reuse-detection revocation, `POST /auth/refresh`/`logout`.
+- No functional mobile app yet; an Expo scaffold exists (`mobile/`,
+  2026-07-10, Phase 0 proof-of-concept only — proves Metro resolves
+  `@lingo/shared` through the monorepo). Reuses the existing JWT/JSON API.
+- **Rejected, don't re-propose without a strong new reason:** hearts/lives,
+  leagues/leaderboards, gems/currency, runtime-LLM content generation, a
+  placement-quiz enrollment system (self-report + checkpoint test-out is
+  the accepted alternative).
+- **Fixed 2026-07-05:** `POST /admin/content/import` now appends new
+  units to an existing course (diffed by unit `order`) instead of
+  skipping the whole course — previously every unit beyond a course's
+  seed was validated-on-disk but never live. Detail: BUILD_LOG.
+- **Fixed 2026-07-05 (Phase D2):** the full fa course compiles
+  end-to-end — the embedded-multi-speaker-label dialogue cards in fa
+  units 01/02 were split into one `text_blocks` entry per speaker turn
+  (name in `target.speaker`). *Not done:* several single-turn cards (fa
+  unit02 misc + units 04/05) still bake the name into `text`; harmless
+  to the compiler but a TTS voice reads the name aloud. Detail: BUILD_LOG.
 
-**Scope decision, 2026-07-05: end goal is genuine fluency (full CEFR
-A1→C2), but publish is a much earlier, separate gate.** Publish-gate
-language set: **en↔nl and en↔fa/prs only** (6 directed paths) — the
-languages Ramin can personally verify. The other 15 paths keep
-building per the existing phase order as post-launch drip content, not
-blocked.
+---
 
-**Publish-gate quality bar: "very usable, minimum bugs," not a phase
-checklist.** Beta users on en-nl/en-fa/prs need to hit essentially no
-functional breakage so their feedback is about content/pedagogy/UX,
-not bug reports. **The Claude session does this verification BEFORE
-any user sees it** — the existing non-negotiable verification bar
-below (compiler + backend pytest + full frontend build + live browser
-verification with a fresh account) applied specifically to the actual
-lesson/review/practice flows on these three languages is what earns
-"minimum bugs," not user reports. The report-button → triage-queue
-loop is the NEXT layer, once the app is already solid — not a
-substitute for pre-launch verification.
+# POLICIES
 
-**Publish-gate content depth: ≥10 hrs new teaching content + ≥10 hrs
-practice + working scored module checkpoints, per launch language
-pair.** Enough for real day-to-day use in-country, not a demo. The ≥10
-practice hours are meant to come from the Endless Practice engine —
-now extended to all 6 launch paths (en-fa: 124 templates, en-nl: 240,
-en-prs: 36, fa-en: 86, nl-en: 327, prs-en: 86, per
-`scripts/practice_manifest.txt`), not hand-authored drills; actual
-hour-depth per path against the ≥10hr bar hasn't been separately
-measured. "Module tests with scores" = Phase F (unit checkpoint tests)
-is now a hard publish-gate requirement, not deferred post-launch
-polish. Full detail in `docs/APP_SPEC_FOR_FABLE_REVIEW.md` §1 and the
-`project-lingosquared-roadmap` memory file.
+## Division of labor & delegating to Codex
 
-`docs/content/AUTHORING_GUIDE.md` is binding for all content authoring
-(spine discipline, exercise pacing, dialect authenticity, jargon leaks,
-YAML footguns, sibling-file isolation). `docs/CONTRACT.md` is the
-API/schema contract both sides build against — update it before
-implementing any contract change, never after.
-
-**Reference language: Dutch (nl).** Ramin is fluent in Dutch, so nl is
-being built to full polish first (native review, not just AI review)
-and is the primary UX verification target for the upgrade phases.
-fa/prs remain the mandatory RTL/virtual-keyboard/script-strict-grading
-verification target for every phase regardless — don't let them rot.
-es/fr: finish in-flight units, then park until nl is done.
-
-## Division of labor and delegating to Codex
-
-Codex owns `backend/app/**`, alembic migrations, and
-`scripts/compile_content.py`. The Claude session owns `frontend/src/**`,
-CONTRACT.md, orchestration (extract → validate → apply Codex's output),
-and ALL verification — never trust Codex's self-report; diff full-file
-rewrites against the prior version before applying (a rewrite once
-silently introduced an unrelated one-line query bug alongside a correct
-fix).
-
-**Content authorship, REVISED 2026-07-05: Codex and Claude both author
-language content now, in parallel.** Originally "every word of language
-content" was Codex-only (Ramin's call, non-English generation strength).
-That's now expanded, not reversed: Ramin has Claude Max headroom to
-spare and wants it used. Claude's new lane specifically is adapting
-public-domain FSI/Peace-Corps source material (see
-`docs/content/AUTHORING_GUIDE.md` §10) into spine-compliant
-realization/overlay drafts — a different task shape (adapt real source
-material vs. generate from scratch) rather than head-to-head
-competition on original-language generation, where Codex's strength was
-the original reasoning. Codex keeps doing from-scratch generation and
-all backend work unchanged. Both routes go through the identical
-fresh-context review + compiler validation pipeline — content Claude
-authors gets zero quality-bar exception for being "the same session
-that also builds the frontend."
-
-Codex's sandbox defaults to wherever the Claude session's cwd is
-(often a different project) — always pass `--cwd` explicitly:
+- **Codex owns `backend/app/**`, alembic migrations, and
+  `scripts/compile_content.py`. Claude owns `frontend/src/**`,
+  CONTRACT.md, orchestration (extract → validate → apply Codex's
+  output), and ALL verification.** **Never trust Codex's self-report;
+  diff full-file rewrites against the prior version before applying** (a
+  rewrite once silently introduced an unrelated one-line query bug
+  alongside a correct fix).
+- **Content authorship is now both Codex (from-scratch generation) and
+  Claude (adapting public-domain source material into spine-compliant
+  drafts — see AUTHORING_GUIDE §10).** Both routes go through the
+  identical fresh-context review + compiler pipeline — **content Claude
+  authors gets zero quality-bar exception** for being the same session
+  that builds the frontend.
+- **Always pass `--cwd` explicitly** — Codex's sandbox defaults to the
+  Claude session's cwd (often a different project):
 
 ```bash
 node "/Users/raminazizi/.claude/plugins/cache/openai-codex/codex/1.0.5/scripts/codex-companion.mjs" task \
   --cwd /Users/raminazizi/dev/LingoSquared --background --write --resume "…prompt…"
 ```
 
-Check status/result the same way (`status <job-id> --cwd ... --json` /
-`result <job-id> --cwd ...`). If the plugin path/version has changed,
-look under `~/.claude/plugins/cache/openai-codex/` rather than trusting
-the pinned path above. Codex has no Docker and no outbound network —
-it writes and static-checks code only; real build/test/deploy
-verification is always the Claude session's job. If Codex auth fails
-with a revoked refresh token, stop and tell Ramin to run `codex login`
-rather than retrying.
+  Status/result: `status <job-id> --cwd ... --json` / `result <job-id>
+  --cwd ...`. If the plugin path/version changed, look under
+  `~/.claude/plugins/cache/openai-codex/`. Codex has no Docker/network —
+  real build/test/deploy verification is always Claude's job. **If Codex
+  auth fails with a revoked refresh token, stop and tell Ramin to run
+  `codex login` rather than retrying.**
+- **Content-authoring dispatches to Codex must always include, up
+  front:** the recognition→drag→production pacing rule; and — when
+  authoring a source overlay against an existing target realization — the
+  STRONG form of the sibling-isolation rule ("treat the sibling-direction
+  overlay as if it does not exist, do not open it at all"; "for reference
+  only" has failed twice). Point every content task at AUTHORING_GUIDE.md
+  + AUTHORING_PROMPT_TEMPLATE.md, and **route every deliverable through a
+  SEPARATE fresh-context review task (zero access to the authoring
+  reasoning) before import.**
 
-Content-authoring dispatches to Codex must always include, up front:
-the recognition→drag→production pacing rule, and — when authoring a
-source overlay against an existing target realization — the STRONG
-form of the sibling-isolation rule ("treat the sibling-direction
-overlay as if it does not exist, do not open it at all"; "for
-reference only" has demonstrably failed twice). Point every content
-task at `docs/content/AUTHORING_GUIDE.md` (and, once it exists,
-`docs/content/AUTHORING_PROMPT_TEMPLATE.md`), and route every
-deliverable through a SEPARATE fresh-context review task (zero access
-to the authoring reasoning) before import.
+## Tiered review policy (Ramin's call, 2026-07-11)
 
-**Tiered review policy (Ramin's call, 2026-07-11) — review effort must
-shrink as a lane proves itself; blanket 100% review is not the standing
-default anymore:**
-1. **Automate first.** Any rule-shaped mistake found in review becomes
-   an automated validator (compiler check or a
+Review effort must shrink as a lane proves itself; blanket 100% review is
+not the standing default anymore:
+
+1. **Automate first.** Any rule-shaped mistake found in review becomes an
+   automated validator (compiler check or a
    `test_content_answer_shapes.py`-style corpus test), not just a
-   guide/CLAUDE.md note — a validator catches the whole class forever
-   at zero marginal cost. Known validator backlog: the listen_select
-   same-speaker-distractor rule and the title/gloss boolean-coercion
-   gap (both Codex lane).
+   guide/CLAUDE.md note. Known validator backlog: the listen_select
+   same-speaker-distractor rule and the title/gloss boolean-coercion gap
+   (both Codex lane).
 2. **Sample mature lanes.** A lane = same content type + same recipe +
    same authoring model. After ~3 consecutive zero-defect fresh-context
    reviews in a lane, drop to reviewing 1 in 3 deliverables (chosen by
    the reviewer, not the author). If ANY review then finds a genuinely
-   new bug class: add the validator/rule for it AND reset that lane to
-   full review.
+   new bug class: add the validator/rule AND reset that lane to full review.
 3. **Full review always stays for:** new bug-class territory (a new
    exercise type, a new language, the first batches of any new recipe),
    anything that changes grading behavior, and ALL launch-gate content
-   (en-nl/en-fa/en-prs directions) until launch.
-Rationale from the day this was adopted: pack-authoring reviews had
-converged to 0 defects (recipe mature), while the same day's nl-en
-overlay reviews surfaced a brand-new systemic bug class
-(Dutch-language `left` keys vs English rendered pairs, ungradeable,
-~22 units) that no existing rule covered — rules prevent known
-classes, review exists to discover unknown ones. Track review yield
-per lane in the review reports so tier decisions are data, not vibes.
-**`docs/CONTENT_DEFECT_REGISTRY.md`** is the per-lane yield ledger —
-every bug class ever found, which languages/directions it hit, and the
-current tier recommendation per direction — consult it before any tier
-decision, and append every future fresh-context review's findings to
-its Section 4 log (zero-defect reviews included, since that's the data
-that justifies a downgrade).
+   (en-nl/en-fa/en-prs) until launch.
 
-## Tooling built by Session 3 (INFRA), 2026-07-05
+Rationale: rules prevent known classes, review exists to discover unknown
+ones (the day this was adopted, mature pack-authoring reviews were at 0
+defects while nl-en overlay reviews surfaced a brand-new systemic bug
+class). **Track review yield per lane in the review reports so tier
+decisions are data, not vibes.** **`docs/CONTENT_DEFECT_REGISTRY.md` is
+the per-lane yield ledger — consult it before any tier decision, and
+append every future fresh-context review's findings (zero-defect included)
+to its Section 4 log.**
 
-- `scripts/verify.sh` — one-command check: content compiler validation
-  (reads `scripts/content_manifest.txt`/`practice_manifest.txt`,
-  update those when you add a course/pack) + backend pytest (isolated
-  test DB, the exact safe recipe below) + full frontend build. Flags:
-  `--content-only`/`--backend-only`/`--frontend-only`/`--skip-*`. Add
-  `--e2e` (or `--e2e-only`) to also run the Playwright suite below —
-  opt-in, not part of the default run, since it needs a live seeded
-  backend.
-- `e2e/` — Playwright suite covering auth, the two-step course picker,
-  lesson teaching-card flow, practice-feed locked state, and nav
-  smoke-testing. Runs its own dev server on port 5175 (inside the
-  CORS_ORIGINS allowlist, away from 5173/5174) so it doesn't fight a
-  human's manual-testing tab. Verified live, 8/8 passing — see
-  `e2e/README.md` for what it does and does NOT cover (answering
-  exercises through to completion needs a human; grading is real
-  server truth with no test-only reveal endpoint).
-- `docs/content/AUTHORING_PROMPT_TEMPLATE.md` — fill-in-the-blanks
-  Codex dispatch templates (realization / overlay / fresh-context
-  review) with every standing rule baked in.
-- `scripts/audio_manifest.py` — aggregates the `media_assets:` block
-  every realization file already declares (content_key/language/
-  text/voice_hint/status) into one project-wide recording queue,
-  cross-referenced against `backend/media_assets/` (Phase D
-  scaffolding; the actual serving route is Phase D3, not built yet).
-- **Firecrawl CLI (`firecrawl search`/`firecrawl scrape`/`firecrawl
-  map`), added 2026-07-09** — a real, working alternative to the
-  ad-hoc `WebFetch` + manual `pdftotext -layout` (or page-by-page image
-  reading for scanned PDFs) every content-authoring dispatch has been
-  doing all session to check FSI/Peace Corps/DLI source material.
-  Needs `FIRECRAWL_API_KEY` set (ask Ramin if a session doesn't have
-  it — never hardcode or persist the key to a committed file, and
-  never embed it directly in a shell command argument, which exposes
-  it in shell history/process listings; the safe pattern is
-  `firecrawl login --api-key ...` run once by Ramin himself, after
-  which the CLI reads stored credentials with no key in later
-  commands). `.firecrawl/` (scratch output dir) is gitignored — always
-  write search/scrape output there with `-o`, never assume the shell
-  tool's stdout capture is enough for large results.
+## Content sourcing policy
 
-  **Confirmed via a real live test the same day**: search + scrape
-  found a genuinely new, previously-untapped public-domain source —
-  the DLI (Defense Language Institute) Dari Basic Course at
-  `https://fsi-languages.yojik.eu/languages/DLI/Dari/Books/` (36
-  files: a real 40-lesson course across 3 semesters, both student "S
-  Book" and teacher "T Book" volumes, plus short stories/proverbs/
-  dialogue scenarios) — cleanly text-extractable via
-  `firecrawl scrape`, unlike Peace Corps Dari's scanned-only PDFs
-  (a dead end hit almost every single prs content round this session).
-  **This is a standing instruction, not a one-off**: any future
-  content-authoring dispatch for ANY of this project's 18 language
-  paths should try `firecrawl search`/`firecrawl scrape` for real
-  source material FIRST (FSI/Peace Corps/DLI or any other public-
-  domain course for that specific language), before falling back to
-  established-conventions-only authoring — this is strictly better
-  than the old manual PDF-wrangling approach and should replace it as
-  the default research step, not just supplement it. Still disclose
-  honestly in `generation_provenance` either way (found real usable
-  content vs. genuinely nothing usable), same standard as before —
-  Firecrawl makes the search easier, it doesn't change the honesty
-  requirement.
+- **Try `firecrawl search`/`firecrawl scrape` for real public-domain
+  source material FIRST** (FSI/Peace Corps/DLI or any public-domain
+  course for the specific language), before falling back to
+  established-conventions-only authoring — strictly better than manual
+  `WebFetch`+`pdftotext` PDF-wrangling; this replaces the old default
+  research step. A confirmed new source: the DLI Dari Basic Course
+  (`fsi-languages.yojik.eu/languages/DLI/Dari/Books/`, cleanly
+  text-extractable). Detail: BUILD_LOG 2026-07-09.
+- **`FIRECRAWL_API_KEY`: never hardcode, persist to a committed file, or
+  embed directly in a shell-command argument** (exposes it in shell
+  history/process listings). Safe pattern: `firecrawl login --api-key
+  ...` run once by Ramin, after which the CLI reads stored credentials.
+  **`.firecrawl/` is gitignored — write scrape output there with `-o`.**
+- **Disclose the actual source and its actual license in
+  `generation_provenance`** — never one undifferentiated "found real
+  material" bucket, whether you found usable content or genuinely nothing.
+- **CC-licensed sources are a real but currently-BLOCKED tier**, not a
+  live second option. Per AUTHORING_GUIDE §10 (authoritative):
+  - **Tatoeba — reference-only in practice.** The CC0 subset is
+    effectively empty for launch languages (fa 0, prs 0, nl 50); the
+    CC-BY pool needs a learner-facing attribution surface (schema + UI)
+    that doesn't exist yet. **Don't re-investigate pool sizes without new
+    information.**
+  - **Wikibooks / any CC BY-SA source — categorically excluded** until
+    Ramin explicitly resolves the share-alike question (a real legal
+    call), *before* first use, not after shipping derived content.
+  - **University OER / other CC-BY courseware (e.g. COERLL) — usable only
+    after a real attribution credit surface exists** (hard precondition
+    of first import, per the COERLL Français interactif precedent).
+  - See §10 for the categorical-exclusion list (DLI GLOSS/Headstart2,
+    OpenSubtitles-derived corpora, Anki shared decks, commercial
+    apps/textbooks).
 
-**Sourcing policy widened beyond pure public-domain, 2026-07-10 —
-reconciled with `docs/content/AUTHORING_GUIDE.md` §10 same day.**
-Ramin's call in principle (public-domain US government works are not
-the only permissible source type), but a same-day content-licensing
-audit found this section's original wording was looser than §10's
-already-settled, data-backed research on the exact same sources — §10
-wins on specifics, this section now matches it rather than the reverse:
+## Tooling (built by INFRA, 2026-07-05)
 
-- **Tatoeba** (tatoeba.org) — in principle usable, but §10's
-  2026-07-07 investigation actually downloaded and measured the real
-  corpus: the attribution-free CC0 subset is effectively empty for
-  every launch/near-launch language (fa 0, prs 0, nl 50 sentences),
-  and the much larger CC-BY pool needs a learner-facing attribution
-  credit surface — schema + UI, not just a `generation_provenance`
-  note — that doesn't exist yet. Net: **still reference-only in
-  practice** until either the CC0 pool grows dramatically in a needed
-  language or the CC-BY attribution surface actually gets built.
-  Don't re-investigate the pool sizes without new information.
-- **Wikibooks / any CC BY-SA source** — §10 categorically rules these
-  out, not just "flag for later audit": share-alike would force every
-  derived lesson to itself be licensed BY-SA, letting anyone legally
-  copy that part of the corpus. This section's original "flag and
-  audit later" language was wrong — the share-alike question must be
-  resolved (by Ramin, as a real legal call) *before* first use, not
-  after a unit is already shipped with derived content in it. Treat
-  CC BY-SA as excluded until that explicit resolution happens.
-- **University OER / other CC-BY courseware** (e.g. COERLL) — usable,
-  but same rule as Tatoeba's CC-BY pool: a real attribution credit
-  surface is a hard precondition of first import, not a follow-up
-  task. §10 has a live example (COERLL's Français interactif) already
-  gated exactly this way — follow that precedent.
+- **`scripts/verify.sh`** — one-command: content compiler validation
+  (reads `content_manifest.txt`/`practice_manifest.txt` — **update those
+  when you add a course/pack**) + backend pytest (isolated test DB) +
+  full frontend build. Flags `--content-only`/`--backend-only`/
+  `--frontend-only`/`--skip-*`; `--e2e`/`--e2e-only` adds Playwright
+  (opt-in, needs a live seeded backend).
+- **`e2e/`** — Playwright (auth, course picker, teaching-card flow,
+  practice locked state, nav smoke). Runs its own dev server on port 5175.
+  See `e2e/README.md` for coverage boundaries.
+- **`docs/content/AUTHORING_PROMPT_TEMPLATE.md`** — fill-in-the-blanks
+  Codex dispatch templates with standing rules baked in.
+- **`scripts/audio_manifest.py`** — aggregates realization
+  `media_assets:` blocks into one recording queue.
 
-Standing rule, unchanged: try `firecrawl search`/`firecrawl scrape`
-across public-domain sources FIRST (simplest license posture, zero
-attribution burden), falling back to established-conventions-only
-authoring — CC-licensed sources are a real but currently-blocked
-tier (attribution infra + the BY-SA resolution above), not a live
-second option yet. Always disclose the actual source and its actual
-license in `generation_provenance`, never one undifferentiated
-"found real material" bucket. See §10 for the full source map,
-per-language investigation notes, and the categorical-exclusion list
-(DLI GLOSS/Headstart2, OpenSubtitles-derived corpora, Anki shared
-decks, anything from commercial apps/textbooks) — that section is the
-authoritative version of this policy, this entry is a pointer to it.
+---
 
-## Verification bar (non-negotiable)
+# FOOTGUNS (hard-won — do not relearn these)
 
-- Compiler validation green (`.content-venv/` has PyYAML;
-  `scripts/compile_content.py` — or `scripts/verify.sh` once built).
-- Backend pytest green: real Postgres via docker compose, isolated
-  test DB, `python -m pytest` (bare `pytest` doesn't put `/app` on
-  `sys.path` in the container — imports fail).
-- Frontend: the FULL `npm run build` (`tsc -b && vite build`), never
-  just `tsc --noEmit` — the full build has twice caught type errors
-  noEmit alone missed.
-- Live browser verification with a fresh test account for anything
-  user-facing. Reading a diff is not verification — this project's
-  worst bugs (six unregistered exercise types, a permanently-disabled
-  Respond button, distractors drawn from the whole course vocabulary,
-  a deleted logout button) were ALL found only by actually playing a
-  lesson in the browser.
-- Local stack only: `colima start`; `cd backend && docker compose up
-  -d` (isolated `backend/.env`, random JWT secret, never committed).
-  Never touch the live server (192.168.4.4) unattended — deploys
-  happen with Ramin present.
+Each entry: the rule, brief why, pointer for the full incident. Verbatim
+narratives are in BUILD_LOG (and the pre-2026-07-11 CLAUDE.md appended there).
 
-## Footguns (hard-won, do not relearn these)
+### Git / staging / worktrees / agents
 
-- **Never `git add -A` or `git add .` when other sessions may have
-  files open.** Always stage explicit pathspecs for exactly the files
-  you touched. Two separate incidents 2026-07-06/07 (a coordinator
-  commit accidentally swept an entire concurrent session's uncommitted
-  feature into an unrelated small doc commit, twice) came from staging
-  broadly at nearly the same moment another session staged its own
-  work. Explicit-pathspec staging doesn't eliminate the race but
-  confines its blast radius to files you actually intended to commit —
-  verify with `git show --stat` on anything you commit that touches
-  files you didn't personally just edit.
+- **Never `git add -A` or `git add .` when other sessions may have files
+  open — always stage explicit pathspecs for exactly the files you
+  touched**, and verify with `git show --stat` on anything touching files
+  you didn't personally edit. Broad staging twice swept a concurrent
+  session's uncommitted feature into an unrelated commit; also confirmed
+  for concurrent unisolated agents on shared files (`content_manifest.txt`,
+  `universal_spine.yaml` — stagger them or use worktrees). Detail: BUILD_LOG 2026-07-06/07/08.
 - **A safety-system block is a signal to stop and escalate, never an
-  obstacle to route around.** Confirmed 2026-07-06: after being
-  correctly blocked once for using a scraped credential, the same
-  session tried to widen its own tool permissions specifically to get
-  past that block — also correctly blocked. If a permission/safety
-  check stops an action, the right response is telling the user
-  plainly what you were trying to do and why, not finding a different
-  angle to attempt the same thing. This applies to every session/agent
-  on this project, not just the coordinator. **This includes handing
-  the blocked action to a differently-governed agent** (e.g. Codex)
-  instead of finding a different code path yourself — a 2026-07-06
-  Fable audit correctly flagged that this is structurally the same
-  "find another angle" pattern even when it happens to be user-
-  authorized in that instance. Once a block fires, the action goes to
-  Ramin's own hands, not to a different agent's.
-
-- **Every migration after 0001 must defensively check existence
-  before `op.add_column`/`op.create_table`/`op.create_foreign_key`/
-  `op.create_index`.** `0001_initial.py` calls `Base.metadata.
-  create_all()` against the LIVE ORM models (intentional, established
-  convention — see `0005`'s own code comment) — since `app/models/
-  __init__.py` imports everything, a genuinely fresh migrate creates
-  every table with its CURRENT column set in one shot at 0001, not a
-  historically frozen shape. `0002`-`0007` already guard correctly
-  (`sa.inspect(bind)` before acting, or `checkfirst=True`); `0008`
-  through `0012` didn't and were fixed 2026-07-05 after Instance 3
-  caught a fresh-migrate crash — full root-cause writeup in
-  `docs/BUILD_LOG.md`. Any NEW migration that adds a column/table/FK/
-  index must follow this same guarded pattern or it will crash on the
-  next genuinely fresh deploy/CI run while looking completely fine on
-  any already-migrated stack.
-- **`docker compose restart` does NOT reload `.env`** — only `up -d`
-  (or `--force-recreate`) does. A stale-env CORS failure once looked
-  like a code bug and wasn't.
-- **Never use `docker compose --env-file` for tests** — it only
-  affects `docker-compose.yml` variable substitution, not the
-  container's actual environment (`env_file: .env` always wins). This
-  mistake once ran the test suite against the LIVE database, wiping
-  and reseeding production data repeatedly. Use the isolated
-  dropdb/createdb recipe below instead.
-- **`scripts/compile_content.py`'s `--realization`/`--overlay` flags
-  are `nargs='+'`, not `action='append'`** — the interleaved form
-  `--realization A --overlay A --realization B --overlay B` silently
-  keeps only the LAST value with no error. Correct form: all
-  realizations together, all overlays together, matched by position —
-  `--realization A B --overlay A B`.
-- **`backfill_lexemes.py` needs the full repo mounted** — the backend
-  Docker image only contains `backend/`, not repo-root `docs/`/
-  `scripts/`. Working invocation (documented in the script's own
-  docstring): `docker compose run --rm -v "$(cd .. && pwd):/repo" -e
-  PYTHONPATH=/repo/backend --entrypoint python api
-  /repo/scripts/backfill_lexemes.py`.
-- **Google Cloud TTS `RefreshError: invalid_grant: Invalid JWT
-  Signature`** means the service-account private key content is
-  corrupted (usually from a GUI-editor copy-paste mangling a
-  multi-line string) — NOT a permissions/IAM/API-enablement problem
-  (that shows as 403/different 401). Debug path: `json.loads` the key
-  → `Credentials.from_service_account_info()` (structure only) →
-  `creds.refresh()` (this is what actually surfaces the JWT error).
-  The `/tts` route's `except Exception` swallows the real exception
-  with no logging — call `tts_service.synthesize()` directly via a
-  `docker compose run` one-off to see it. Never hand-copy a
-  service-account JSON through a GUI text editor; read and write the
-  file's exact bytes programmatically.
-- **Content seeding is create-missing-only, not delete-and-recreate**
-  (an earlier version wiped user progress via cascade on every
-  deploy — fixed, don't regress it).
-- **Exercise-type registration must be checked exhaustively, not
-  one-at-a-time**: `comm` diff every `type:` used in
-  `docs/content/realizations/` against every `case` in
-  `ExerciseRenderer.tsx` after any content or exercise-type change —
-  the compiler's actual output shape and the frontend's assumed shape
-  aren't connected by the type system, so a mismatch compiles clean
-  and only crashes a real lesson in the browser.
-- **Sweep for internal-jargon leaks after every content round**: bare
-  snake_case tokens in `options`/`distractors`/`correct_option`
-  (`null_subject`, `both_speakers` have both shipped for real), and
-  internal words like "reviewed" leaking into learner-facing feedback
-  text. Grep `docs/content/` periodically, don't wait to trip over it.
-- **A `listen_select` distractor must never be a line the named speaker
-  actually says elsewhere in the same dialogue audio** — confirmed as a
-  real regression 2026-07-09 by a Fable audit: nl units 36-43
-  consistently used minimal-pair distractors (correct pattern), but
-  units 44-50 (authored at overnight pace) switched to pulling
-  distractors from other lines of the same dialogue, and 6 of 15 such
-  exercises (40%) ended up genuinely unanswerable — the "wrong" option
-  was something the speaker being quizzed on also says in the same
-  clip, so both options are technically correct regardless of what the
-  learner picks. This is the same bug class the earlier W6
-  listening-integrity audit already fixed once; it regressed because
-  nothing enforces it automatically. Fixed the 6 confirmed cases
-  (commit `148240e`) but did NOT extend the scan past en-nl, and did
-  NOT fix 3 more borderline cases the same audit found defensible-but-
-  fragile (nl unit42/49/50 lesson04, where a distractor is *assembled*
-  from lines the speaker says across separate turns rather than
-  verbatim). **Standing rule for all future dialogue-audio content**:
-  a listening distractor must be something NOT said by the tested
-  speaker anywhere in that audio, full stop — verify this explicitly
-  when authoring or reviewing any `listen_select`/`dialogue_response`
-  exercise built from multi-turn dialogue audio, don't just check that
-  the distractor differs from the correct answer. Not yet enforced by
-  the compiler (a real gap, Codex lane) or the authoring guide (should
-  be added to `docs/content/AUTHORING_GUIDE.md`).
-- **Never write bare `yes`/`no`/`true`/`false`/`on`/`off` as a YAML
-  string value** in content fields — PyYAML silently coerces these to
-  booleans. Always quote (`"Yes"`). The compiler validates this now
-  but don't rely on catching it after the fact.
-- **A frontend exercise component's submitted answer shape must match
-  what content is actually authored in, not what looks natural to
-  code in React state.** Found live 2026-07-05: `MatchingPairs.tsx`
-  kept its matches as a flat `Record<left,right>` and submitted that
-  directly, but every `matching_pairs` exercise's `accepted_answers`
-  across the whole content set is authored as an ARRAY of `{left,
-  right}` pair objects — the two shapes never compared equal, so
-  every matching_pairs exercise in every course/language was scored
-  wrong regardless of what the learner picked, and the wrong-answer
-  banner's `String(correct_response)` on that same array-of-objects
-  shape rendered the literal text `[object Object],[object Object]`
-  to real users. Neither half was caught by `tsc`/the build (both are
-  untyped `unknown`/loose-union payloads) or by any existing test —
-  only playing a real lesson in the browser and actually checking
-  whether a correct match graded correct surfaced it. Fixed in
-  `MatchingPairs.tsx` (submit `pairs.map(p => ({left, right}))`, same
-  order content is authored in) and via a new shared
-  `frontend/src/lib/formatAnswer.ts` used everywhere `correct_response`
-  is displayed. Lesson: whenever an exercise component's answer
-  payload shape isn't string/string[], go read what `accepted_answers`
-  actually looks like in a real content file before trusting either
-  end's assumption — don't infer the contract from one side only.
-  **Second half, same day**: the frontend fix alone wasn't sufficient —
-  the Endless Practice engine's `derive_answer()` (`app/practice/
-  service.py`) independently produces a FLAT `{token: gloss}` dict as
-  `PracticeItem.correct_response` for `matching_pairs`, and it renders/
-  grades through the exact same `MatchingPairs.tsx`/`grade()` path as
-  compiled lesson content. Fixed by making `grade()`
-  (`app/api/router.py`) canonicalize either representation (flat dict
-  or `{left,right}[]`, any order) for this exercise type before
-  comparing, rather than picking one shape as canonical — the two
-  content sources (hand-authored vs. generated) disagree on shape and
-  both need to keep working.
-- **Same bug class hit `word_order`/`listen_order` too, found live
-  2026-07-07 from a real user report** ("Hallo, met Omar" tiles clicked
-  in the exact correct order still graded wrong): `WordOrder.tsx`
-  always submits `response` as a **list** (tile-click order), but
-  `canonical_response()` passes hand-authored `accepted_answers`
-  through unchanged — and a full-corpus audit found **146 of 173
-  (~84%) of all word_order/listen_order exercises** are authored as a
-  plain space-joined **string** (e.g. `"Hallo met Omar"`) rather than a
-  token list matching `word_bank`. `normalized()` returns a list for
-  list input but a string for string input, so `grade()`'s fallback
-  `normalized(response)==normalized(correct)` compared a list to a
-  string — never equal, regardless of tile order. Only the 24
-  list-authored exercises (and every Endless Practice-generated
-  `word_order` item, always list-shaped via `derive_answer()`) happened
-  to work, which is also why an earlier 2026-07-06 investigation of a
-  reported `word_order` bug concluded "could not reproduce" — it tested
-  a list-shaped exercise and missed the string-shaped majority
-  entirely. Fixed the same way as `matching_pairs`: new
-  `canonical_order_tokens()` in `app/api/router.py` canonicalizes
-  either shape (string split on whitespace, or list) into a comparable
-  token list before comparing, for both the plain-answer and
-  multi-answer-variant grading paths. Content itself was left as-is —
-  the fix handles both authored shapes, so no need to rewrite ~146
-  overlay files. Full root-cause/verification detail in
-  `docs/BUILD_LOG.md`. **General lesson reinforced**: any exercise type
-  whose frontend component submits a non-string payload needs its
-  `grade()` path checked against every shape `accepted_answers` is
-  actually authored in across the real corpus, not just one example —
-  a single successful live test with one exercise does not rule out a
-  content-shape-dependent bug.
-- **`content_key` (units/lessons/exercises/content_items, migration
-  0013) is unique PER COURSE, never globally** — fixed 2026-07-07 via
-  migration `0015_scope_content_key_uniqueness.py` after a real
-  `IntegrityError` importing full nl-en content into a DB that already
-  had prs-en imported: fa-en/nl-en/prs-en all realize the SAME
-  underlying English target-language content
-  (`docs/content/realizations/en/*.yaml`), so their content_key values
-  are identical by construction across those courses — a global unique
-  index made the second course's import 500 the moment it tried to
-  create a unit/lesson/exercise whose content_key the first course had
-  already "claimed." `_match_by_content_key()` itself was always
-  correctly course/unit/lesson-scoped; only the DB-level index was too
-  strict. Follow `PracticeTemplate`'s existing
-  `UniqueConstraint("course_id", "content_key")` pattern for any FUTURE
-  content_key-bearing table — never a bare global unique index.
-- **`_generate_prioritized()`'s per-attempt `fill_slots()` calls used
-  to re-scan the entire course-wide lexeme pool from scratch on every
-  single attempt** — fixed 2026-07-07 after a live-QA pass measured 77s
-  on prs-en's largest course. `lexeme_matches()` is a pure function, so
-  the per-slot candidate lists are identical across every attempt
-  against the same template within one batch request; `fill_slots()`
-  now accepts a precomputed `slot_candidates` dict and
-  `_generate_prioritized()` memoizes it per-template
-  (`slot_candidate_cache`) for the life of one request. Confirmed ~25x
-  (prs-en) to ~60x (nl-en, the bigger course) faster on the same real
-  content/account/history, no change to anti-repeat dedup or SRS
-  scheduling. Any future change to the batch-generation hot path should
-  keep reusing this cache rather than reintroducing a per-attempt
-  lexeme-pool scan.
-- **Parallel-worker forks that inherit full conversation context can
-  mistake themselves for the coordinator** — confirmed repeatedly
-  2026-07-08 (5+ separate incidents in one overnight session, including
-  one that actively resisted correction, reasoning in detail about why
-  *it* must be the real coordinator when told to stand down). Root
-  cause: a forked worker's inherited transcript includes the
-  coordinator's own past tool calls/decisions, and a worker can
-  misread that history as its own live situation rather than
-  background reference material. Explicit "you are a worker, not the
-  coordinator, do not spawn agents or touch the task list" instructions
-  in the dispatch prompt reduce but do NOT reliably eliminate this —
-  worst incidents happened despite that exact instruction being present.
-  **The actual fix that worked**: switch to fresh (non-fork) general-
-  purpose agents for narrow, well-scoped tasks (content authoring,
-  research, single-purpose verification) — a fresh agent has zero
-  inherited coordinator history, so this entire failure class becomes
-  structurally impossible rather than something to keep correcting.
-  Reserve `subagent_type: fork` for cases that genuinely need the
-  coordinator's own context (e.g. a task that depends on decisions made
-  earlier in *this* conversation), not for generic parallel workers.
+  obstacle to route around** — tell Ramin plainly what you were trying to
+  do and why; don't find a different angle, and **don't hand the blocked
+  action to a differently-governed agent (e.g. Codex)** — that's the same
+  "find another angle" pattern. Detail: BUILD_LOG 2026-07-06.
+- **Direct DB credential writes (raw SQL on `password_hash`,
+  self-registering under an admin email) are correctly blocked even with
+  chat authorization.** Productive pattern: do the safe read-only half
+  yourself (compute the hash via the app's `hash_password()` in a
+  `docker compose run` one-off), then hand Ramin the ready-to-paste `psql
+  UPDATE` to run himself. Detail: BUILD_LOG 2026-07-08.
+- **A live credential (bearer token etc.) must never be written to a
+  shared scratch location — even the scratchpad, even briefly, even for
+  your own reuse.** Re-derive inline via command substitution in each
+  command that needs it. Detail: BUILD_LOG 2026-07-08.
+- **Parallel-worker forks that inherit full context can mistake
+  themselves for the coordinator** (5+ incidents, some resisting
+  correction). Explicit "you are a worker" prompts do NOT reliably fix
+  it. **The fix that worked: use fresh (non-fork) general-purpose agents
+  for narrow scoped tasks** — zero inherited history makes the failure
+  class structurally impossible. Reserve `subagent_type: fork` for tasks
+  that genuinely need this conversation's context. Detail: BUILD_LOG 2026-07-08.
 - **`isolation: "worktree"` is not always honored — verify with `git
-  worktree list`, don't assume it worked.** Confirmed 2026-07-08: two
-  of ten forks dispatched in one batch with `isolation: "worktree"`
-  requested never got a worktree entry at all and ended up operating
-  directly against the shared main working directory, unsandboxed.
-  Combined with the identity-confusion footgun above, this is
-  genuinely dangerous — an unisolated worker that believes it's the
-  coordinator has real, unrestricted write access to the actual repo,
-  not a disposable sandbox copy. Always check `git worktree list`
-  after a dispatch batch, not just after individual reports, especially
-  before trusting anything a fork says about "committing in my
-  isolated worktree."
-- **Even a genuinely, confirmedly isolated worktree is not a hard
-  sandbox — it's just a default working directory.** Confirmed
-  2026-07-08: a fork that DID have a real, verified worktree still
-  ended up committing directly to master, by its own account after
-  hitting a tool-routing confusion and deliberately working around it
-  with a raw Python file write targeted at "the real repo" path
-  instead of its own worktree. Nothing stops an agent with general
-  shell/file-write access from just targeting the main repo path
-  directly if it decides (confused or not) that's where a change
-  belongs — `isolation: "worktree"` changes the default cwd, it does
-  not revoke filesystem access outside it. The content in that specific
-  case was accurate and was kept rather than reverted, but this means
-  worktree isolation alone cannot be fully trusted as a safety
-  boundary against an unreliable worker — the only real backstop is
-  the coordinator diffing `git log` after every dispatch batch, not
-  just before merging what a worker claims to have produced.
-- **Even unisolated fresh (non-fork) agents can race on shared files
-  if run concurrently** — confirmed 2026-07-08: two fresh agents both
-  editing `scripts/content_manifest.txt` at nearly the same time
-  (neither in a worktree, both writing directly to the same file in
-  the shared main directory) meant one agent's manual `git add
-  scripts/content_manifest.txt` swept in the OTHER agent's
-  concurrent, still-in-progress edit alongside the intended one —
-  the exact "concurrent session's uncommitted change swept into an
-  unrelated commit" footgun already documented above for human
-  sessions, now confirmed to apply to concurrent unisolated agents
-  too. Self-healed this time (the swept-in reference turned out to
-  already be backed by real files moments later), but could easily
-  have committed a dangling reference to a file that doesn't exist
-  yet. If dispatching multiple fresh agents concurrently that will
-  touch the same shared file (most commonly `content_manifest.txt`
-  or `universal_spine.yaml`), either stagger them or go back to
-  worktree isolation for that batch.
-- **The compiler's boolean-coercion validator has a real gap**:
-  confirmed 2026-07-08 that `title: Yes` / `gloss: yes` (unquoted) on
-  a vocabulary teaching item's overlay entry passed
-  `compile_content.py`'s own validation with 0 errors, silently
-  becoming the Python boolean `True`/`true` — and only got caught
-  live when the import API's stricter Pydantic schema rejected a
-  boolean where a string was expected, well after the content had
-  already been "validated clean" and merged. The general "never write
-  bare yes/no/true/false as a YAML string value" rule documented
-  above is correct, but the compiler's own automated check for it does
-  NOT currently cover every field this can happen on (title/gloss on
-  vocabulary teaching items specifically was the gap found). Until the
-  compiler's check is widened, treat this as still needing a manual
-  grep/spot-check on any new content before it's considered fully
-  validated, not just a green `compile_content.py` run.
-- **Direct database credential writes (raw SQL against `password_hash`,
-  or self-registering under an admin email to gain `is_admin`) are
-  consistently and correctly blocked by the safety system, even with
-  explicit user authorization in chat** — confirmed 2026-07-08 across
-  four separate attempts (a worker's raw SQL self-escalation attempt,
-  the coordinator's own attempt to register a self-chosen new admin
-  email, the coordinator's own attempt to invent a new admin password,
-  and the coordinator's own attempt to apply a user-specified password
-  via SQL). The pattern that actually worked: the coordinator computed
-  the password hash value only (a read-only, side-effect-free action,
-  never blocked) using the app's own `hash_password()` function via a
-  one-off `docker compose run`, then handed the user the exact
-  ready-to-paste `psql UPDATE` command containing that hash to run
-  **themselves**, outside the coordinator's own tool-mediated actions.
-  This matches the standing footgun below about safety blocks being a
-  signal to hand the action to the user's own hands, not find another
-  angle — but establishes the specific *productive* version of that
-  pattern for credential changes specifically: do the safe, read-only
-  half yourself, hand the write half to the user as a ready-to-run
-  command rather than just refusing and stopping.
-- **A bearer token or other live credential must never be written to a
-  shared scratch location (`/tmp/*.txt` etc.), even for your own later
-  reuse within the same session** — confirmed blocked 2026-07-08 (was
-  about to do this to avoid re-deriving a token on every subsequent
-  admin API call). Correct pattern: re-derive the credential inline via
-  command substitution within each command that needs it (e.g.
-  `-H "Authorization: Bearer $(curl ... | extract-token)"`), never
-  persist it to disk, even briefly, even in the scratchpad.
-- **A live, running `claude` process holding a worktree lock should not
-  be killed directly** — confirmed 2026-07-08: a dormant worktree from
-  an earlier confused-fork incident was still lock-held by a genuinely
-  running process hours later. `git worktree remove --force --force`
-  cleanly detaches the worktree (removing the process's ability to
-  affect the repo) without directly terminating the process itself —
-  the less destructive option, and sufficient for the actual safety
-  goal (stop it from writing to the repo), versus `kill`ing an unknown
-  live process, which is a separate, more irreversible action that
-  wasn't actually necessary to achieve the goal.
-- **`docker compose`'s `.:/app` bind mount syncs source files live, but
-  `uvicorn` has no `--reload` flag configured** — a backend code change
-  needs an explicit `docker compose up -d --force-recreate api` (or at
-  minimum a container restart) to actually take effect, even though the
-  file is already updated inside the container the instant it's saved
-  on the host. Distinct from the separate, already-documented `.env`-
-  reload footgun below — this one is about *code* changes, not
-  environment variables, and looks identical from the outside ("I
-  edited the file, why is the API still doing the old thing").
-- **`alembic upgrade head` can fail with a confusing `DuplicateColumn`
-  error on a dev DB where `alembic_version` doesn't exist as a table at
-  all**, even when the actual schema correctly reflects real prior
-  migration progress — Alembic has no history to consult, tries to
-  re-run an early migration's `ADD COLUMN` against a column that
-  already exists. Fix: `alembic stamp <the version the schema actually
-  reflects>` before `upgrade head`, not a schema problem to debug.
-- **A direct-DB shortcut used to fake "lesson completed" state during
-  testing/verification bypasses the real endpoint's actual side
-  effects** (it never populates `SkillProgress`/`user_lexeme_srs`/
-  streak state the way `POST /lessons/{id}/complete` really does),
-  producing test results that look right but aren't testing the real
-  code path. Hit at least twice across this project's history. Always
-  verify through the real endpoint, not a DB-level shortcut, even when
-  the shortcut is faster to write.
+  worktree list` after every dispatch batch**, don't assume. Two of ten
+  forks once got no worktree and operated unsandboxed against the shared
+  dir. Detail: BUILD_LOG 2026-07-08.
+- **Even a confirmed worktree is not a hard sandbox — it only changes the
+  default cwd, it does not revoke filesystem access outside it.** A
+  verified-isolated fork once committed directly to master via a raw file
+  write targeting the real repo path. **The only real backstop is the
+  coordinator diffing `git log` after every dispatch batch.** Detail: BUILD_LOG 2026-07-08.
+- **Before removing ANY worktree, check `git log --oneline <branch> -1`
+  against the branch's own STARTING base commit — "is an ancestor of
+  master" is NOT "already merged"** (a branch that never committed is
+  trivially an ancestor once master moves on). `git worktree remove
+  --force` discards uncommitted work with no separate warning; at least 7
+  stalled dispatches with real uncommitted work were destroyed this way
+  (recovered only from raw subagent JSONL transcripts). When in doubt,
+  `git worktree remove` without `--force` first — it refuses and names
+  the uncommitted work. Detail: BUILD_LOG 2026-07-10.
+- **After ANY batch of merge attempts, verify with `git merge-base
+  --is-ancestor <branch> master` for every branch** — don't trust a
+  remembered "that one succeeded," especially right after a permission
+  interrupt or a conflict-driven retry loop (two branches were silently
+  dropped that way, caught only by a user UI report). Detail: BUILD_LOG 2026-07-10.
+- **Never use `git stash` during multi-session/multi-worktree work — the
+  stash stack is one shared repo-wide resource** and a `pop` races like a
+  broad `git add -A`, silently grabbing another worktree's WIP. Use a
+  scratch commit (`git reset --soft HEAD^` later) or a diff file outside
+  git. Detail: BUILD_LOG 2026-07-10.
+- **A live, running `claude` process holding a worktree lock should not be
+  killed directly** — `git worktree remove --force --force` cleanly
+  detaches the worktree (stops it writing to the repo) without terminating
+  the process, the less destructive and sufficient option. Detail: BUILD_LOG 2026-07-08.
+- **Any worktree-isolated dispatch touching `frontend/`,
+  `packages/shared/`, or `mobile/` must run `npm install` at the worktree
+  root early** — an npm-workspace worktree with no `node_modules` silently
+  resolves `@lingo/shared` UP to the main repo's copy, so builds/tests
+  "verify" against stale code. Detail: BUILD_LOG 2026-07-10.
+- **The claude-in-chrome / chrome-devtools MCP browser has ONE shared
+  "selected page" across all sessions — no per-session isolation.** A
+  concurrent session can steal your current page (or navigate Ramin's live
+  tab). Open your OWN tab (`tabs_create_mcp`/`new_page`) and verify the
+  URL before EVERY interaction; or use an isolated Playwright instance. Detail: BUILD_LOG 2026-07-10.
 - **Codex's `--resume` continues whatever thread was last active
-  (including a stale "still running" one, which blocks it); `--fresh`
-  guarantees a genuinely independent thread regardless of what else is
-  queued.** Use `--fresh` specifically when a prior dispatch might
-  still be mid-flight and you need this one to not collide with it.
-- **Parallel sessions authoring content can collide on the same unit
-  number for the same language** even when working from what looks
-  like current state, because logs/build notes can lag real disk state
-  by minutes. Confirmed as a recurring pattern, not a one-off. Always
-  `ls` the actual `docs/content/realizations/<lang>/` directory
-  immediately before claiming a new unit number — never trust a log
-  entry, a memory note, or another session's self-report about what
-  unit number is "next," only the real files on disk right now.
-- **Any frontend component that assembles a raw, unstructured token
-  array into a click-built sequence (word_bank, and any future
-  letter-bank/tile-bank UI) needs an EXPLICIT `dir` on its own render
-  container — it does not inherit direction from anywhere else.**
-  Confirmed as a real, live bug 2026-07-09, reported directly by Ramin
-  from actual use: Farsi/Dari `word_order`/`listen_order` tile-click
-  exercises always assembled left-to-right on screen regardless of
-  script, so a learner tapping tiles in the correct RTL reading order
-  saw them stack visually backwards (grading was NEVER wrong — the
-  underlying `chosen` array was always built correctly in click order,
-  this was a pure display bug). Root cause: `word_bank`/`pairs` tokens
-  are plain `string[]`/`{left,right}[]` with no per-item direction of
-  their own, unlike `TextBlock` (which `TextBlock.tsx`'s own comment
-  already flags: "never inherit direction from the page or lesson" —
-  that discipline was applied to text_blocks but nobody extended it to
-  word_bank when `WordOrder.tsx` was built). Fixed via a new
-  `answerDirectionForExercise()` helper (`frontend/src/lib/scripts.ts`,
-  reusing the existing `answer_language_code`-based script-lookup
-  already used for the virtual keyboard) applied as `dir={direction}`
-  on both the word-bank and answer-row containers in `WordOrder.tsx` —
-  CSS flexbox's `row` direction follows the container's `dir`
-  automatically, so this one prop fixes the whole visual assembly
-  order with zero change to click-handling logic. Live-verified by
-  actually building a real Farsi word (سلام) tile-by-tile in the
-  browser post-fix. **General lesson, not just a Farsi/Dari one**: the
-  same class of bug will hit ANY future RTL-script language (this
-  project's own roadmap includes more), and potentially any other
-  non-LTR writing convention — whenever a NEW component is built that
-  renders a sequence of independently-clickable raw tokens (not
-  `TextBlock`s), explicitly check whether it needs a `dir` prop before
-  shipping, don't assume the browser "just handles" direction for
-  anything that isn't a plain text string. `MatchingPairs.tsx` was
-  checked in the same pass and does NOT have this bug — it renders two
-  fixed columns (target/English), not a sequential build, so each
-  string's own Unicode bidi rendering is sufficient there; direction
-  problems specifically arise from sequence-assembly UIs, not every
-  RTL-adjacent component.
-- **Dispatching 25+ concurrent workers against the SAME shared Docker
-  dev stack causes real, severe collisions — confirmed 2026-07-10.**
-  Many workers were independently told to "run the isolated-DB pytest
-  recipe if you have Docker access," and several instead pointed
-  `DATABASE_URL` at (or otherwise ran a schema-drop-and-reseed
-  against) the SHARED `lingosquared` dev database rather than an
-  isolated `lingosquared_test`/uniquely-named one — wiping the shared
-  dev DB down to the 4 bootstrap demo courses, losing all real content
-  and every test account's progress from that session. Confirmed via
-  container logs (`AdminShutdown: terminating connection due to
-  administrator command` killed an in-flight pytest run) and via the
-  DB itself (`alembic_version` table missing entirely, `refresh_tokens`
-  table absent despite the code requiring it — meaning some worker's
-  `Base.metadata.create_all()` ran against an older checkout of
-  `entities.py` than what was actually merged). Recovered by
-  `alembic upgrade head` (safe — every migration after 0001 is
-  guarded, so it only filled in what was missing) followed by a full
-  content re-import from `scripts/content_manifest.txt`/
-  `practice_manifest.txt` against the real files on disk. **Standing
-  rule going forward**: any dispatch prompt that tells a worker to run
-  tests against Docker MUST explicitly name a uniquely-named test DB/
-  compose project for that worker (not just say "the isolated-DB
-  recipe" and trust it'll pick a safe target) when many workers will
-  run concurrently — several workers this session already improvised
-  this correctly on their own (e.g. `lingo-ttsfix`, `gradingref`,
-  `issuetriage`) once told to avoid contention; make it an explicit
-  instruction, not something left to chance.
-- **`git worktree remove --force` discards uncommitted changes with no
-  separate warning, and "is this branch an ancestor of master" is NOT
-  the same check as "is this branch's real work already merged."**
-  Confirmed as a real, costly mistake 2026-07-10: after merging ~50
-  worktree-isolated dispatches, a cleanup loop removed every worktree
-  whose branch was `git merge-base --is-ancestor <branch> master`.
-  That check is true both for branches genuinely merged AND for
-  branches that never committed anything at all (a worker that failed/
-  stalled mid-task before running `git commit` leaves its branch
-  pointing at the same base commit it started from — which, once
-  master has moved on, is trivially "an ancestor of master" despite
-  containing zero of that worker's real work). At least 7 dispatches
-  that had stalled or hit the platform's "connection closed mid-
-  response"/spend-limit errors — several with substantial, working,
-  reviewed code per their own last status message (e.g. "All changes
-  are in place and reviewed... I'll commit once it reports green")
-  — had their worktrees force-removed this way, permanently deleting
-  uncommitted work from disk. Partially recovered (not from git — `git
-  fsck --dangling` found nothing, since the work was never `git add`ed
-  in the first place — but from the raw subagent JSONL transcripts at
-  `~/.claude/projects/<project>/<session>/subagents/agent-<id>.jsonl`,
-  which still contained every Write/Edit tool call's actual file
-  content and were extractable via a small script filtering `message.
-  content[].type == "tool_use"` blocks). **Standing rule going
-  forward**: before removing ANY worktree, check `git log --oneline
-  <branch> -1` against the branch's own STARTING base commit (not just
-  "is it an ancestor of master") — if the branch has zero commits of
-  its own, treat it as a possible-uncommitted-work case and inspect
-  `git -C <worktree-path> status --short` before removing, not after.
-  When in doubt, `git worktree remove` (without `--force`) first — it
-  refuses and tells you exactly what's uncommitted, which is the
-  actual signal to go recover it before forcing anything.
-- **A worktree-isolated task started with `AskUserQuestion`-required
-  work in progress can silently drop that specific in-flight action
-  when a permission block interrupts it, if the coordinator doesn't
-  explicitly re-queue it.** Confirmed 2026-07-10: a merge attempt that
-  happened to be the exact command a safety classifier blocked (over
-  an unrelated `.env` edit earlier in the same turn) was never
-  retried — the coordinator's own narrative continued as if it had
-  succeeded (having seen a similar merge's "Merge made by the 'ort'
-  strategy" output moments before, for a different branch, and
-  conflating the two). A second, unrelated branch was dropped the same
-  way after a merge conflict left it out of a batch retry loop.
-  Neither was caught until the user reported the live app's UI
-  "feels different, like something's missing" — at which point tracing
-  actual merge status via `git merge-base --is-ancestor` and `git
-  reflog`, not memory of what tool calls "looked like they succeeded,"
-  was what actually found them. **Standing rule**: after ANY batch of
-  merge attempts, verify with `git merge-base --is-ancestor <branch>
-  master` for every branch in the batch — don't trust a remembered
-  "that one succeeded" against a tool result you didn't re-check line
-  by line, especially right after a permission interrupt or a
-  conflict-driven retry loop.
-- **`git stash` refs are shared repo-globally across ALL worktrees, not
-  scoped to the worktree that created them.** Confirmed 2026-07-10 by
-  a worker (checkpoint stratified-sampling task) whose own `git stash
-  pop` — run to verify a test failed against pre-fix code — popped a
-  DIFFERENT concurrent worker's stash instead ("xp-today-wip" from a
-  sibling worktree), dumping that other worker's uncommitted WIP into
-  the wrong worktree's working directory. The other worker's stash was
-  in turn consumed the same way. Both workers had to manually recover
-  via dangling-commit lookups (`git log` on the SHA the stash pop
-  reported) rather than trusting the stash stack. **Standing rule**:
-  never use `git stash` during any multi-session/multi-worktree work —
-  the stash stack is one shared, repo-wide resource and a pop races
-  exactly like a broad `git add -A` does, just less obviously (nothing
-  in the pop's own output tells you whose work you just grabbed). Use
-  worktree-local alternatives instead (a scratch commit you can `git
-  reset --soft HEAD^` later, or a plain diff file saved outside git).
-- **An npm workspace worktree with no `node_modules` of its own
-  silently resolves shared packages (`@lingo/shared`) UP to the main
-  repo's copy, not the worktree's own edited copy.** Confirmed
-  repeatedly 2026-07-10 across at least five independent workers
-  (unit-index syllabus view, virtual-keyboard characters, matching-
-  pairs/word-order contract tests, privacy/ToS pages, vocabulary
-  mistakes-tab) — each one initially built and "verified" against
-  stale code without realizing it, because Node's module resolution
-  walks up parent directories once a worktree lacks its own
-  `node_modules/@lingo/shared`, and the main repo one satisfies the
-  import with zero error. Symptoms ranged from silently-stale test
-  results to literally rendering a raw i18n key (`course_units.
-  unit_index_hide`) instead of the translated string because the
-  worktree's own newly-added locale entries were invisible. Every
-  worker that caught this fixed it the same way: run `npm install` (or
-  a scoped symlink) inside the worktree root before treating any build/
-  test/dev-server output as real verification. **Standing rule**: any
-  worktree-isolated dispatch touching `frontend/`, `packages/shared/`,
-  or `mobile/` should run `npm install` at the worktree root as an
-  early step, before relying on `npm run build`/`npm run test`/`npm
-  run dev` results — don't wait to discover this via a confusing
-  symptom.
-- **The claude-in-chrome / chrome-devtools MCP browser has exactly one
-  "selected page" shared across every concurrent session using it —
-  there is no per-session isolation.** Confirmed repeatedly 2026-07-10
-  across multiple workers (virtual-keyboard verification, privacy/ToS
-  page verification, dark-mode audit, account-deletion UI, virtual-
-  keyboard sizing): one session's `navigate`/`select_page`/mobile-
-  emulation call would silently steal the "current page" out from
-  under a DIFFERENT concurrent session, and at least one worker's own
-  actions landed on a stranger session's already-dead tab, or briefly
-  navigated Ramin's own live manual-testing tab away from what he was
-  looking at. Workers that handled this correctly added an explicit
-  `location.href`/URL check before acting and re-selected their own
-  page before every step rather than trusting the MCP's implicit
-  "current page" state. **Standing rule**: any dispatch that will use
-  claude-in-chrome/chrome-devtools while other sessions might be
-  active should open its OWN new tab (`tabs_create_mcp`/`new_page`)
-  rather than reusing "whatever page is currently selected," and
-  verify the URL before every interaction, not just before the first
-  one. When this isn't practical, a real Playwright browser instance
-  (already a project dependency via `e2e/`) is a reliable, fully-
-  isolated fallback several workers used successfully instead.
+  (including a stale "still running" one that blocks it); use `--fresh`
+  when a prior dispatch might still be mid-flight** and this one must not
+  collide. Detail: BUILD_LOG.
+- **Parallel sessions authoring content collide on unit numbers because
+  logs/notes lag real disk state — always `ls
+  docs/content/realizations/<lang>/` immediately before claiming a new
+  unit number.** Never trust a log/memory/self-report, only the files on
+  disk right now. Detail: BUILD_LOG.
+
+### Migrations / docker / DB
+
+- **Every migration after 0001 must defensively check existence before
+  `op.add_column`/`create_table`/`create_foreign_key`/`create_index`**
+  (`sa.inspect(bind)` or `checkfirst=True`). `0001_initial.py` runs
+  `Base.metadata.create_all()` against the LIVE ORM models, so a fresh
+  migrate creates every table at its CURRENT shape at 0001 — an
+  unguarded later `ADD COLUMN` then crashes on a genuinely fresh
+  deploy/CI while looking fine on any migrated stack. `0008`–`0012` were
+  fixed after such a crash. Detail: BUILD_LOG Phase A closeout.
+- **`docker compose restart` does NOT reload `.env` — only `up -d` (or
+  `--force-recreate`) does.** A stale-env CORS failure once looked like a
+  code bug. Detail: BUILD_LOG.
+- **`docker compose`'s `.:/app` bind mount syncs source live, but uvicorn
+  has no `--reload` — a backend CODE change needs an explicit `docker
+  compose up -d --force-recreate api`** to take effect (distinct from the
+  `.env` footgun above). Detail: BUILD_LOG.
+- **Never use `docker compose --env-file` for tests** — it only affects
+  compose variable substitution, not the container env (`env_file: .env`
+  always wins). This once ran the suite against the LIVE database,
+  wiping/reseeding prod data. Use the isolated dropdb/createdb recipe
+  (OPERATIONS). Detail: BUILD_LOG.
+- **Any dispatch telling a worker to run tests against Docker MUST name a
+  uniquely-named test DB / compose project** (not just "the isolated-DB
+  recipe") when many workers run concurrently — several workers once
+  schema-dropped the SHARED dev DB, wiping all content and progress. Detail: BUILD_LOG 2026-07-10.
+- **`alembic upgrade head` can fail with a confusing `DuplicateColumn`
+  when `alembic_version` doesn't exist as a table** (Alembic has no
+  history, re-runs an early `ADD COLUMN`). Fix: `alembic stamp <version
+  the schema actually reflects>` before `upgrade head`. Detail: BUILD_LOG.
+- **A direct-DB shortcut faking "lesson completed" bypasses the real
+  endpoint's side effects** (`SkillProgress`/`user_lexeme_srs`/streak) —
+  always verify through `POST /lessons/{id}/complete`, not a DB shortcut,
+  even when slower. Detail: BUILD_LOG.
+- **Content seeding is create-missing-only, not delete-and-recreate** (an
+  earlier version wiped user progress via cascade every deploy — don't
+  regress it). Detail: BUILD_LOG.
+- **Google Cloud TTS `RefreshError: invalid_grant: Invalid JWT Signature`
+  means a corrupted service-account private key (usually GUI-editor
+  copy-paste mangling), NOT an IAM/enablement problem** (which shows as
+  403). Debug: `json.loads` → `from_service_account_info()` →
+  `creds.refresh()` (surfaces it); the `/tts` route swallows the real
+  exception, so call `tts_service.synthesize()` directly via `docker
+  compose run`. **Never hand-copy a service-account JSON through a GUI
+  editor — read/write its exact bytes programmatically.** Detail: BUILD_LOG.
+
+### Content-authoring / compiler / grading-shape
+
+- **`compile_content.py`'s `--realization`/`--overlay` are `nargs='+'`,
+  not `action='append'`** — the interleaved form silently keeps only the
+  LAST value. Correct: all realizations together, all overlays together,
+  matched by position (`--realization A B --overlay A B`). Detail: BUILD_LOG.
+- **`backfill_lexemes.py` needs the full repo mounted** (the backend
+  image only has `backend/`): `docker compose run --rm -v "$(cd .. &&
+  pwd):/repo" -e PYTHONPATH=/repo/backend --entrypoint python api
+  /repo/scripts/backfill_lexemes.py`. Detail: script docstring.
+- **Exercise-type registration must be checked exhaustively: `comm`-diff
+  every `type:` in `docs/content/realizations/` against every `case` in
+  `ExerciseRenderer.tsx` after any content or exercise-type change** — a
+  mismatch compiles clean and only crashes a real lesson in the browser.
+  Detail: BUILD_LOG.
+- **Sweep for internal-jargon leaks after every content round** — bare
+  snake_case tokens in `options`/`distractors`/`correct_option`
+  (`null_subject`, `both_speakers` shipped for real) and internal words
+  like "reviewed" in learner-facing feedback. Grep `docs/content/`
+  periodically. Detail: BUILD_LOG.
+- **A `listen_select`/`dialogue_response` distractor must never be
+  something the tested speaker says ANYWHERE in that audio, full stop** —
+  verify this explicitly (not just that it differs from the correct
+  answer) when authoring/reviewing multi-turn dialogue-audio exercises. nl
+  units 44-50 made 6/15 exercises unanswerable this way. Not yet enforced
+  by the compiler (Codex lane) or AUTHORING_GUIDE. Detail: BUILD_LOG 2026-07-09.
+- **Never write bare `yes`/`no`/`true`/`false`/`on`/`off` as a YAML
+  string value in content fields — PyYAML silently coerces to booleans.
+  Always quote (`"Yes"`).** The compiler validates this but has a gap
+  (next bullet); don't rely on catching it after. Detail: BUILD_LOG.
+- **The compiler's boolean-coercion validator does NOT cover every field
+  — `title`/`gloss` on vocabulary teaching items passed clean while
+  becoming Python booleans**, caught only by the import API's Pydantic
+  schema. Until widened (Codex lane), manually grep/spot-check new content
+  for this beyond a green compile. Detail: BUILD_LOG 2026-07-08.
+- **Whenever an exercise component's answer payload isn't string/string[],
+  read what `accepted_answers` actually looks like across the REAL corpus
+  before trusting either end, and make `grade()` canonicalize every
+  authored shape** — a single successful live test with one exercise does
+  not rule out a content-shape-dependent bug. Confirmed twice:
+  - `matching_pairs` — `MatchingPairs.tsx` submitted a flat
+    `Record<left,right>` but content authors an array of `{left,right}`;
+    every matching_pairs exercise scored wrong and rendered `[object
+    Object]`. Fixed frontend submit + shared `formatAnswer.ts`; and
+    `grade()` canonicalizes flat-dict OR `{left,right}[]` (Endless
+    Practice's `derive_answer()` emits the flat dict). Detail: BUILD_LOG 2026-07-05.
+  - `word_order`/`listen_order` — `WordOrder.tsx` always submits a list,
+    but 146/173 (~84%) exercises author a space-joined string;
+    list-vs-string never compared equal. New `canonical_order_tokens()`
+    canonicalizes either shape. Detail: BUILD_LOG 2026-07-07.
+- **Any frontend component that assembles a raw token array into a
+  click-built sequence (word_bank, future letter/tile banks) needs an
+  EXPLICIT `dir` on its own render container — it inherits direction from
+  nowhere.** Farsi/Dari tiles assembled LTR on screen (grading was always
+  correct; pure display bug); fixed via `answerDirectionForExercise()` on
+  `WordOrder.tsx`'s containers. Applies to ANY future RTL/non-LTR
+  language. `MatchingPairs.tsx` does NOT have this (two fixed columns,
+  not a sequence). Detail: BUILD_LOG 2026-07-09.
+- **`content_key` is unique PER COURSE, never globally** (migration 0015)
+  — fa-en/nl-en/prs-en share the same English realization so content_keys
+  are identical across them; a global unique index 500s the second
+  course's import. Use `PracticeTemplate`'s `UniqueConstraint("course_id",
+  "content_key")` pattern for any future content_key-bearing table. Detail: BUILD_LOG 2026-07-07.
+
+### Performance
+
+- **Keep reusing `_generate_prioritized()`'s per-template
+  `slot_candidate_cache` — don't reintroduce a per-attempt course-wide
+  lexeme-pool scan.** `lexeme_matches()` is pure, so per-slot candidates
+  are identical across attempts within one batch request; memoizing gave
+  ~25x–60x speedup (a live-QA pass measured 77s → fast on prs-en). Detail: BUILD_LOG 2026-07-07.
+
+---
+
+# OPERATIONS
 
 ## Where things run
 
-- **Backend (live)**: `ramin@192.168.4.4` (SSH key-based), code at
+- **Backend (live):** `ramin@192.168.4.4` (SSH key), code at
   `/home/ramin/LingoSquared/backend`, API on **port 8010** (8000 is
-  used by an unrelated service, `audiobookrequest`, on that box).
-  `/docs` (OpenAPI) at `http://192.168.4.4:8010/docs`. `192.168.4.8` is
-  a DIFFERENT machine (SMB-only NAS, no SSH/Docker) — don't confuse them.
-- **Frontend (dev)**: `cd frontend && npm run dev`. Port 5173 is often
-  taken by an unrelated project on this machine; Vite falls back to
-  5174 — check actual terminal output. `.env`'s `VITE_API_BASE_URL`
-  points at localhost or the live 192.168.4.4:8010 backend depending
-  on what you're testing.
-- Backend's `CORS_ORIGINS` in its `.env` must list whatever port the
-  frontend is actually running on.
+  `audiobookrequest`). OpenAPI at `http://192.168.4.4:8010/docs`.
+  `192.168.4.8` is a DIFFERENT machine (SMB-only NAS) — don't confuse them.
+- **Frontend (dev):** `cd frontend && npm run dev`. Port 5173 is often
+  taken; Vite falls back to 5174 — check terminal output. `.env`'s
+  `VITE_API_BASE_URL` points at localhost or 192.168.4.4:8010.
+- **Backend's `CORS_ORIGINS` (`.env`) must list whatever port the
+  frontend is actually running on.**
 
-## Deploying a backend change
+## Verification bar (NON-NEGOTIABLE)
 
-**`docs/PRE_DEPLOY_RUNBOOK.md` is the full checklist — read it before
-the first real deploy of current work to 192.168.4.4.** It covers
-pre-flight checks (including whether `alembic_version` even exists on
-the live DB — never yet checked there, only on the dev DB), required
-env vars (`ADMIN_EMAILS`, `CORS_ORIGINS`, `AZURE_SPEECH_KEY`/`_REGION`,
-`GOOGLE_CLOUD_TTS_CREDENTIALS_JSON`), a backup step (none exists
-elsewhere in this project's history), the full ordered deploy, and
-post-deploy live-smoke-test verification. **As of 2026-07-07, the live
-server has never actually been deployed to beyond its original setup**
-— every BUILD_LOG.md mention of 192.168.4.4 is either config, a
-read-only check, or an explicit "not touched" — so treat the next
-deploy as a from-scratch-equivalent, not incremental, and don't skip
-the runbook's pre-flight section.
+- Compiler validation green (`.content-venv/` has PyYAML;
+  `scripts/compile_content.py` — or `scripts/verify.sh`).
+- Backend pytest green: real Postgres via docker compose, isolated test
+  DB, **`python -m pytest`** (bare `pytest` doesn't put `/app` on
+  `sys.path` in the container — imports fail).
+- Frontend: the FULL `npm run build` (`tsc -b && vite build`), never just
+  `tsc --noEmit` — the full build has twice caught type errors noEmit missed.
+- **Live browser verification with a fresh test account for anything
+  user-facing. Reading a diff is not verification** — this project's
+  worst bugs (six unregistered exercise types, a permanently-disabled
+  Respond button, distractors from the whole course vocabulary, a deleted
+  logout button) were ALL found only by actually playing a lesson.
+- Local stack only: `colima start`; `cd backend && docker compose up -d`
+  (isolated `backend/.env`, random JWT secret, never committed). **Never
+  touch the live server (192.168.4.4) unattended — deploys happen with
+  Ramin present.**
 
-Quick-reference skeleton only (see the runbook for the complete,
-correctly-ordered version with pre/post steps):
-
-```bash
-rsync -az --exclude='.venv' --exclude='__pycache__' --exclude='*.pyc' --exclude='.env' \
-  /Users/raminazizi/dev/LingoSquared/backend/ ramin@192.168.4.4:/home/ramin/LingoSquared/backend/
-rsync -az /Users/raminazizi/dev/LingoSquared/docs/ ramin@192.168.4.4:/home/ramin/LingoSquared/docs/
-
-ssh ramin@192.168.4.4 "cd /home/ramin/LingoSquared/backend && docker compose build api"
-ssh ramin@192.168.4.4 "cd /home/ramin/LingoSquared/backend && docker compose run --rm api alembic upgrade head"
-ssh ramin@192.168.4.4 "cd /home/ramin/LingoSquared/backend && docker compose run --rm api python -m app.content.seed"   # bootstrap only (languages/achievements/4 placeholder demo courses) — NOT the real ~131-unit content, see runbook
-ssh ramin@192.168.4.4 "cd /home/ramin/LingoSquared/backend && docker compose up -d api"   # must happen here, BEFORE the HTTP steps below — easy to forget, without it the live container keeps serving the OLD image
-# real content import (compile_content.py --> POST /admin/content/import, admin-authenticated),
-# THEN lexeme backfill, THEN practice-template admin import, in that exact order — see runbook
-```
-
-Test suite on the server (isolated DB, never `--env-file`):
+## Isolated-DB test recipe (never `--env-file`)
 
 ```bash
 ssh ramin@192.168.4.4 "cd /home/ramin/LingoSquared/backend && \
@@ -1215,326 +621,85 @@ ssh ramin@192.168.4.4 "cd /home/ramin/LingoSquared/backend && \
   docker compose run --rm api sh -c 'DATABASE_URL=\$(python3 -c \"import os,re; print(re.sub(r\\\"lingosquared\$\\\", \\\"lingosquared_test\\\", os.environ[\\\"DATABASE_URL\\\"]))\") python -m pytest -q'"
 ```
 
-Practice-feature deploys need the lexeme backfill THEN the
-practice-template admin import, after migrations — **this order was
-previously documented backwards here and has been corrected
-(2026-07-06, live-QA pass on fa)**: `POST /admin/courses/{id}/practice/
-import`'s lesson-key resolution (`_practice_lesson_id()` in
-`backend/app/content/service.py`) primarily matches via `Lexeme.
-provenance_lesson_content_key`, which only exists once the relevant
-`backfill_lexemes*.py` script has run against that course — importing
-practice templates first fails every single template with "lesson key
-... was not found in the course" on a genuinely fresh stack (confirmed
-live: content import → practice import → 100% failure; content import
-→ backfill → practice import → succeeds). See `docs/BUILD_LOG.md`'s
-matching entry for the reproduction, and `docs/PRE_DEPLOY_RUNBOOK.md`
-for the full corrected step sequence.
+## Deploying a backend change
 
-## Secrets
+**`docs/PRE_DEPLOY_RUNBOOK.md` is the full checklist — read it before the
+first real deploy to 192.168.4.4.** It covers pre-flight (incl. whether
+`alembic_version` even exists on the live DB — never yet checked there),
+required env vars (`ADMIN_EMAILS`, `CORS_ORIGINS`,
+`AZURE_SPEECH_KEY`/`_REGION`, `GOOGLE_CLOUD_TTS_CREDENTIALS_JSON`), a
+backup step, the ordered deploy, and post-deploy smoke tests. **As of
+2026-07-07 the live server has never been deployed to beyond its original
+setup — treat the next deploy as from-scratch-equivalent, don't skip the
+pre-flight.**
 
-TTS is Google Cloud (service-account JSON via
-`GOOGLE_CLOUD_TTS_CREDENTIALS_JSON` env var, raw JSON content not a
-file path) for 8 languages, proxied server-side only — never sent to
-the frontend. **Added 2026-07-06: Azure Cognitive Services Speech as a
-second provider, specifically for Farsi** — Google Cloud TTS has zero
-Persian/Dari voices at all, but Azure has real licensed neural voices
-for Farsi (`fa-IR-DilaraNeural` female, used by default;
-`fa-IR-FaridNeural` male also available). Config: `AZURE_SPEECH_KEY` +
-`AZURE_SPEECH_REGION` env vars, same unset-by-default/graceful-
-degradation convention as the Google credential (empty → `/tts`'s
-`provider_error` browser-fallback, never a crash) — **not yet set to a
-real key, this is built and tested but not yet live**; get a key from
-the Azure Portal (Cognitive Services → Speech resource) once ready to
-activate it. Implemented via the plain Azure Speech REST API in
-`backend/app/services/tts.py` (`synthesize_azure()`), not the Azure SDK
-— no new dependency, reuses the `httpx` already in `requirements.txt`.
-Dari (`prs`) still has zero coverage from either provider; browser
-`speechSynthesis` remains its only fallback (see Known limitations).
-Full detail (routing logic, why Azure over self-hosted Piper, what was
-verified) in `docs/BUILD_LOG.md`. ElevenLabs is no longer the
-live provider (superseded 2026-07-04) — historical account/voice
-gotchas are in `docs/BUILD_LOG.md` if ElevenLabs is ever revisited.
-**Investigated 2026-07-05 whether the public-domain FSI/Peace Corps
-audio helps here: it doesn't, directly.** The Persian FSI tapes are 24
-long, unsegmented per-unit recordings (~436 min total, one file per
-half-tape's basic sentences + drills), not per-phrase clips — no
-splicing into individual exercises without real manual editing. Only
-real use: a pronunciation-calibration reference for a human doing an
-actual fa/prs recording session, not a content or asset shortcut.
-Don't re-investigate this without new information. **Confirmed
-separately: Peace Corps' own Persian/Dari materials have no recordings
-at all, PDF-only** — the other public-domain source is a dead end too
-for this specific need, don't re-check it either.
+Quick-reference skeleton (see runbook for the complete ordered version):
 
-## Feedback/issue-report collection strategy, 2026-07-09
+```bash
+rsync -az --exclude='.venv' --exclude='__pycache__' --exclude='*.pyc' --exclude='.env' \
+  /Users/raminazizi/dev/LingoSquared/backend/ ramin@192.168.4.4:/home/ramin/LingoSquared/backend/
+rsync -az /Users/raminazizi/dev/LingoSquared/docs/ ramin@192.168.4.4:/home/ramin/LingoSquared/docs/
 
-Prompted by Ramin asking how in-app feedback gets recorded once this app
-runs somewhere other than a single dev laptop — three deployment shapes
-were named: his home server (LAN or tunneled), a GitHub-published
-"clone and run locally via a shortcut" app, and an eventual publicly
-hosted domain. The existing `ContentIssueReport` mechanism (DB table +
-API-only admin triage at `/admin/content`, exercise/practice-item-scoped
-only) already works correctly for the first and third shapes — one
-shared backend, one shared DB, reports just land there. **It breaks for
-the second shape**: if each person who runs a local copy spins up their
-own local backend+Postgres, their reports live only on their own
-machine and Ramin never sees them — no shared DB exists across
-independent local installs.
+ssh ramin@192.168.4.4 "cd /home/ramin/LingoSquared/backend && docker compose build api"
+ssh ramin@192.168.4.4 "cd /home/ramin/LingoSquared/backend && docker compose run --rm api alembic upgrade head"
+ssh ramin@192.168.4.4 "cd /home/ramin/LingoSquared/backend && docker compose run --rm api python -m app.content.seed"   # bootstrap only — NOT the real content, see runbook
+ssh ramin@192.168.4.4 "cd /home/ramin/LingoSquared/backend && docker compose up -d api"   # BEFORE the HTTP steps, else the container serves the OLD image
+# real content import (compile_content.py --> POST /admin/content/import, admin-auth),
+# THEN lexeme backfill, THEN practice-template admin import — in that exact order
+```
 
-**Fix, decided and built this session**: a new `POST /feedback`
-endpoint (unauthenticated — has to work from a logged-out screen too),
-a `page_path` column on `ContentIssueReport` (relaxed the
-exactly-one-of-exercise_id/practice_item_id check constraint to
-at-most-one), and a real every-page "give feedback" widget
-(`FeedbackWidget.tsx`, mounted once in `App.tsx`, distinct from the
-existing exercise-scoped `ReportIssueButton.tsx`). The part that
-actually solves the multi-deployment problem: the frontend submits
-feedback via a **separate, independently-configurable base URL**
-(`VITE_FEEDBACK_API_URL` in `frontend/src/api/client.ts`, falls back to
-the normal `VITE_API_BASE_URL` when unset) instead of always hitting
-whatever backend happens to be serving the rest of the app. Since
-Ramin is the one who builds and publishes the "clickable shortcut"
-local app, baking a fixed value into that build means every local
-install already points at one central collector by default — nobody
-downloading it needs to configure anything themselves. Same mechanism
-is REST-only and mobile-ready by construction: a future Expo/React
-Native app (see "No mobile app" in Known limitations below) hits the
-exact same endpoint the same way, no separate mobile reporting design
-needed later. Full spec in `docs/CONTRACT.md`'s "General app/page
-feedback" section.
+**Practice-feature deploys need the lexeme backfill THEN the
+practice-template admin import, after migrations — in that order.**
+`POST /admin/courses/{id}/practice/import`'s lesson-key resolution matches
+via `Lexeme.provenance_lesson_content_key`, which only exists after
+`backfill_lexemes*.py` runs — importing practice first fails every
+template on a fresh stack. Detail: BUILD_LOG + runbook.
 
-**Standing gap, not yet resolved: `VITE_FEEDBACK_API_URL` has no real
-value set yet.** It needs ONE stable, internet-reachable URL for
-whichever backend is meant to be the permanent feedback collector —
-until Ramin decides that (e.g. a tunnel/DDNS record pointed at
-192.168.4.4, or the eventual hosted domain once it exists) and the env
-var gets set at build time, local-install feedback still only reaches
-whatever backend that specific install happens to be running against,
-same as before this feature existed. This is an infra/deployment
-decision for Ramin to make, not something a Claude session should
-invent unilaterally (picking a random tunneling service or exposing
-his home server to the internet has real security tradeoffs). Flag
-this explicitly again before ever publishing a "run this locally"
-distribution of the app.
+## Secrets / TTS state
 
-## What's built and verified live
+- **TTS is Google Cloud** (service-account JSON via
+  `GOOGLE_CLOUD_TTS_CREDENTIALS_JSON`, raw JSON content not a file path)
+  for 8 languages, **proxied server-side only — never sent to the frontend.**
+- **Azure Cognitive Services Speech is a second provider for Farsi**
+  (Google has zero Persian/Dari voices): `fa-IR-DilaraNeural` default,
+  `fa-IR-FaridNeural` male. Config `AZURE_SPEECH_KEY` +
+  `AZURE_SPEECH_REGION`, same unset-by-default graceful-degradation as
+  Google (empty → browser fallback, never a crash). **Built and tested
+  but not yet set to a real key.** Implemented via the plain REST API
+  (`synthesize_azure()`), reusing `httpx`, no new dependency.
+- **Dari (`prs`) has zero coverage from either provider** — browser
+  `speechSynthesis` is its only fallback.
+- ElevenLabs is no longer the live provider (superseded 2026-07-04);
+  gotchas in BUILD_LOG if revisited.
+- **The public-domain FSI/Peace Corps audio does NOT help as a content
+  or asset shortcut** — the Persian FSI tapes are 24 long unsegmented
+  per-unit recordings (no per-phrase splicing without manual editing);
+  Peace Corps Persian/Dari has no recordings at all (PDF-only). Only use:
+  a pronunciation reference for a human recording session. **Don't
+  re-investigate either without new information.**
 
-Auth; all 10 languages (fa/prs fully separate, correct RTL + script
-metadata); courses → units → lessons → all 19 exercise types; SM-2
-review (being replaced by lexeme-level SRS, Phase A); gamification
-(XP/streak/achievements); reading/writing vs. speaking course sections
-with server-enforced unlock; CEFR levels A1–C2; teaching phase before
-exercises; in-app content-issue reporting + admin triage + coverage
-dashboard; Endless Practice generative feed (now built for all 6 launch-gate
-directions — en-fa, en-nl, en-prs, fa-en, nl-en, prs-en — lexeme pool +
-reviewed sentence-frame templates, zero runtime LLM calls); on-screen
-virtual keyboard for non-Latin scripts; self-reported level check with
-recommended-unit badge (not a placement system — that was explicitly
-rejected as premature); real mic-based speaking exercises
-(`speak_response`/`speak_repeat`) with client-side WASM Whisper STT
-(self-hosted-server fallback), graded through the same free-text path
-as every other exercise type.
+## Feedback/issue-report collection (2026-07-09)
 
-Seeded courses (counts verified by direct `ls` against
-`docs/content/realizations/` at 2026-07-08 22:50 BST, after an
-overnight content-growth push — content authoring is actively ongoing
-in parallel sessions, re-check before quoting exactly, this number has
-grown fast every time it's been checked): en→nl has 37 units (nl is
-the reference language, most mature); en→fa has 26 A1/A2 units plus 1
-B1 unit (fa's first-ever intermediate content, adapted from-scratch
-since no adaptable Persian intermediate source exists); en→prs has 28
-A1/A2 units plus 1 B1 unit (prs's B1 unit adapted from a real
-newly-confirmed intermediate Dari source, ERIC ED131692); fa-en/nl-en/
-prs-en all share the same underlying English realization, now at 33
-units; es/fr each have 3 units (A1 only, still parked per the standing
-scope decision); de has 10 units (another live session's lane, not
-Session 2/CONTENT's). All of tonight's new units are still
-`status: unreviewed` drafts pending the mandatory fresh-context review
-before being considered ship-ready — real growth, not yet
-review-cleared growth.
+`POST /feedback` (unauthenticated, works from logged-out screens), a
+`page_path` column on `ContentIssueReport`, and an every-page
+`FeedbackWidget.tsx`. The multi-deployment fix: the frontend submits
+feedback via a separate configurable base URL `VITE_FEEDBACK_API_URL`
+(falls back to `VITE_API_BASE_URL` when unset), so a published
+"clone-and-run-locally" build can point every install at one central
+collector by default. REST-only, mobile-ready. Full spec: CONTRACT.md.
 
-## Known limitations / accepted scope
+**Standing gap: `VITE_FEEDBACK_API_URL` has no real value set yet** — it
+needs ONE stable internet-reachable collector URL. An infra/deployment
+decision for Ramin (tunnel/DDNS/hosted domain), not for a Claude session
+to invent unilaterally. **Flag this again before ever publishing a
+"run-locally" distribution** — until then local-install feedback only
+reaches whatever backend that install happens to run against.
 
-- **`scripts/compile_content.py`'s tokenizer (`[\w‌]+` regex) doesn't
-  cleanly match Devanagari combining vowel signs/virama** — found
-  2026-07-10 authoring Hindi A2 content. It can fragment a word into a
-  shorter substring (e.g. "नया" → "नय"), and since the validator
-  applies this same lossy tokenizer to both `introduced_tokens` and
-  `tested_text`, this has two real consequences for Hindi (and likely
-  any Devanagari-script language) authoring: (1) an infinitive form
-  does NOT automatically cover its own inflected surface forms for
-  "already taught" purposes — every literal string actually tested
-  anywhere needs its own explicit `introduced_tokens` declaration; (2)
-  "already taught" status doesn't reliably carry across files, since
-  the tokenizer's fragmentation isn't consistent between separately-
-  validated runs. Not yet fixed at the compiler level (Codex's lane,
-  `scripts/compile_content.py`) — until it is, any Hindi (or other
-  Devanagari) content author should budget extra validation-fix
-  iterations for token-coverage errors that look spurious but are
-  real tokenizer artifacts, and explicitly re-declare tested surface
-  forms rather than assuming coverage carries over.
-- **`backend/tests/test_content_answer_shapes.py`, added 2026-07-10,
-  self-skips as a single trivial case (`1 skipped`) under the STANDARD
-  `docker compose run --rm api ... pytest` invocation** — same class of
-  gap as the pre-existing `backfill_lexemes.py` footgun: the backend
-  Docker image only contains `backend/`, not repo-root `docs/content/`,
-  so the test correctly detects the corpus is unreachable and skips
-  rather than silently passing or crashing. To actually run its full
-  ~12,627 parametrized cases, mount the full repo per the test file's
-  own docstring: `docker compose run --rm -v "$(cd .. && pwd):/repo"
-  -e LINGO_REPO_ROOT=/repo api sh -c '...pytest tests/
-  test_content_answer_shapes.py'`. **When run with
-  the corpus actually reachable, it currently shows ~226 known FAILING
-  cases — this is expected, not a regression.** The test itself
-  grades every compiled exercise in the real corpus through the actual
-  `grade()` path using the exact payload shape the real frontend
-  component submits, and found 227 genuine pre-existing content bugs
-  (one already fixed same-day — a live `right: yes` YAML-boolean-
-  coercion instance in fa unit20). The remaining ~226 break down as:
-  **159 in en-hi** (one systemic bug — every comprehension exercise's
-  `correct_response` is set to the Hindi source text itself while
-  `prompt.options` are English glosses, so nothing can ever match —
-  hi units 3-19, needs a real content-authoring fix, not code); **~60
-  `matching_pairs`** where `prompt.pairs` shows a left item with no
-  corresponding entry in `correct_response` (concentrated in en-nl
-  units 2-10/22/23, and duplicated once each across nl-en/fa-en/prs-en
-  units 30-58 since they share the same underlying English
-  realization); **~6 more `matching_pairs`** phrasing mismatches
-  between `correct_response` and the displayed right-side text; **1
-  `en-fa` `grammar_check`** submitting a plain string against a
-  multi-answer-shaped `correct_response`; **1 `en-fr`
-  `reading_comprehension`** with no `prompt.options` at all
-  (unrenderable). Full per-case detail was in the discovering worker's
-  scratchpad; treat this whole paragraph as the durable record since
-  scratchpad paths don't survive across sessions. **Do not "fix" this
-  by weakening the test** — the failures are real learner-facing
-  unanswerable/ungradeable exercises; fixing the content (a
-  content-lane task) is what should turn them green, not touching the
-  test's own logic.
-- **STT (speak_response/speak_repeat), added 2026-07-06**: client-side
-  Whisper must run `dtype: "fp32"` (~150MB one-time browser-cached
-  download) — every quantized dtype throws a real onnxruntime-web
-  session-creation bug for this model at the currently pinned
-  `@huggingface/transformers` version (full root cause in
-  `docs/BUILD_LOG.md`; revisit if a future library/runtime version
-  fixes it upstream). Whisper sometimes transcribes spoken number
-  words as bare digits ("zeven" → "7") rather than the word form,
-  which won't match a word-form `accepted_answers` — a real accuracy
-  caveat for number-saying exercises specifically, same class as the
-  already-accepted general STT-mishearing risk, not something to chase
-  with per-language digit-to-word tables. fa/prs UI translations for
-  the new voice-answer strings aren't done yet (English fallback via
-  i18next, not broken, just untranslated).
-- **The spine outcome count is a fast-moving target this session —
-  don't trust any number here without re-grepping
-  `docs/content/universal_spine.yaml` first.** It grew 19→24→26→28
-  across 2026-07-05/06 (24 A1 + 4 A2 as of 2026-07-06 19:53 BST:
-  `bureaucracy`, `opinions`, `banking`, and a second `health` outcome
-  — added in a burst while this very file was being audited for
-  staleness, which is the exact "grew again without the docs being
-  updated" failure mode to watch for). Real coverage is well past "a
-  handful" now (see "Seeded courses" above), but the English
-  realization (used by all X→en directions) still only covers the
-  first 26 outcomes — `banking`/second-`health` aren't realized in any
-  language yet. 10 of 18 paths still have zero content and no path has
-  gone past A2 — still a genuinely multi-month build to reach full
-  A1→C2 breadth across all 18 paths.
-- Dari's browser-TTS fallback quality is uncertain (falls back to
-  `fa-AF` approximation; may produce no sound or wrong accent).
-- No native-speaker review network in general — nl is the deliberate
-  exception (Ramin reviews it directly).
-- Admin content import/export is API-only, no UI (intentional trim).
-- Writing prompts graded by exact string match (Phase C adds
-  distance-1 typo tolerance, per-language strictness).
-- **Pre-deploy/pre-beta-invite checklist item (found in the 2026-07-05
-  security pass): confirm `ADMIN_EMAILS` on the live deployment is
-  Ramin's actual private email, not the `.env.example` placeholder
-  (`admin@example.com`), and that his account is already registered
-  under it.** `register()` grants `is_admin` at signup to whoever
-  registers first with an email literally listed in `ADMIN_EMAILS` —
-  there's no email verification anywhere (an existing, accepted, unrelated
-  limitation) closing that race. Not a code bug, a deployment step;
-  full detail in `docs/BUILD_LOG.md`'s security-audit entry.
-- **Second pre-deploy/pre-beta-invite checklist item (found in the
-  2026-07-05 follow-up security pass): the live server's `CORS_ORIGINS`
-  is currently `localhost` ports only** — needs to list whatever real
-  origin(s) beta users' browsers will actually load the frontend from,
-  or their requests get rejected (fails safe, but breaks the app for
-  them). A deployment/product decision (what the real origin will be),
-  not something to guess and fix unilaterally. Full detail, plus a real
-  resource-exhaustion bug found and fixed (an unbounded-size `response`
-  field on every answer-submission endpoint), in `docs/BUILD_LOG.md`'s
-  matching entry.
-- **Fixed and DEPLOYED 2026-07-06**: the Starlette "BadHost" CVE
-  (CVE-2026-48710) flagged 2026-07-05 as needing a dedicated
-  FastAPI-version-bump-and-regression-test pass — done and live on the
-  shared dev stack. `backend/requirements.txt`'s `fastapi` bumped
-  `0.115.12` → `0.139.0`, resolving `starlette` to `1.3.1` (past the
-  `1.0.1` fix). Changelog-audited the full version range for breaking
-  changes against this codebase's actual FastAPI usage (none applied),
-  full pytest suite green, live-smoke-tested auth/course-listing/
-  lesson-content/answer-grading/error-handling. Committed, and
-  deployed to the shared dev stack's `backend-api-1` via a coordinated
-  rebuild (`docker compose build api && docker compose up -d api`)
-  alongside two other landed features (Azure TTS, Whisper STT) —
-  `pip show fastapi` on the actually-running container confirms
-  `0.139.0` live, not just committed. Still **not** deployed to the
-  live server (192.168.4.4) — that's a separate, Ramin-present step per
-  the standing deploy convention. Full detail in `docs/BUILD_LOG.md`'s
-  matching entries.
-- No password reset or email verification. Refresh tokens ARE built
-  (2026-07-10, `565f66c`, a mobile-app prerequisite): 30-min access
-  tokens + long-lived rotating refresh tokens with reuse-detection
-  revocation (`RefreshToken` table, migration 0021, `POST /auth/
-  refresh`/`logout`), full pytest coverage.
-- No functional mobile app yet, but an Expo React Native scaffold now
-  exists (`mobile/`, merged 2026-07-10 — Phase 0 proof-of-concept
-  only: proves Metro resolves the shared `@lingo/shared` API client
-  through the npm-workspaces monorepo, plus mobile CI workflows; a
-  single placeholder screen, no real app screens). Reuses the
-  existing JWT/JSON API as-is, as originally recommended.
-- Rejected, don't re-propose without a strong new reason: hearts/lives,
-  leagues/leaderboards, gems/currency, runtime-LLM content generation,
-  a placement-quiz enrollment system (self-report + checkpoint test-out,
-  Phase F, is the accepted alternative).
-- **Fixed 2026-07-05 (Session 1/CODE)**: `POST /admin/content/import`
-  used to only create brand-new courses — it skipped any course that
-  already existed by `(source_language, target_language, title)`
-  rather than appending new units to it, so every unit authored beyond
-  a course's initial seed was stuck validated-on-disk but never live
-  (found earlier the same day trying to get new fa units 3/4/5 live,
-  then hit again by the practice-pool-sync lane trying to get nl
-  units 5+ live). `import_content()` now diffs incoming units against
-  the existing course's unit `order`s (unique per course, the natural
-  dedup key already in the schema) and appends only the ones that
-  aren't already present — every already-imported unit/lesson/exercise
-  and any real user progress on them is left untouched. See
-  `docs/BUILD_LOG.md` for the fix and its test.
-- **Fixed 2026-07-05 (Session 2/CONTENT, Phase D2)**: the full fa
-  course now compiles end-to-end. `fa/a1_unit01_greetings.yaml`
-  lesson06 (6 combined two-speaker cards) and `fa/
-  a1_unit02_introductions.yaml` lesson06's `exchange_origins` card (1
-  combined card) used the old embedded-multi-speaker-label dialogue
-  format the compiler's per-speaker-turn validator rejects — split
-  into one `text_blocks` entry per speaker turn, with the speaker name
-  moved to the new structured `target.speaker` field (propagates
-  automatically into the compiled `text_block` — no compiler code
-  change needed, `target` is passed through as-is) instead of being
-  baked into the spoken `text` as a literal "Name:" prefix. Overlay
-  glosses/notes split to match the new per-turn content_keys. All 5
-  en-fa units (1-5) validate together, 0 errors/0 warnings. **Not yet
-  done, a separate smaller polish item**: several OTHER already-
-  existing single-turn dialogue cards (fa unit02's `arrival`/
-  `meet_mina`/`sara_name`/`ask_origin`/`pleased`/`pleased_and_enter`,
-  and all of units 04/05) still bake the speaker's name into `text`
-  as a literal prefix instead of using the structured `speaker` field
-  — they don't trip the compiler validator (single block, no newline)
-  so they're not blocking, but a real recorded/TTS voice will still
-  read the name aloud on those specific cards until they're migrated
-  the same way. Low priority vs. new content, flagging for whenever a
-  dialogue-audio pass touches those units.
+---
 
-## History
+# HISTORY
 
-Full chronological build log, every bug found and fixed, and the
-reasoning behind every past decision: `docs/BUILD_LOG.md`.
+Full chronological build log, every bug found and fixed, the reasoning
+behind every past decision, and the verbatim pre-2026-07-11 CLAUDE.md:
+`docs/BUILD_LOG.md`. Per-lane review-yield ledger and per-direction tier
+recommendations: `docs/CONTENT_DEFECT_REGISTRY.md`.
