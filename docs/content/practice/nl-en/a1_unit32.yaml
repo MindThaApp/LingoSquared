@@ -1,0 +1,74 @@
+schema_version: "1.0"
+pack_key: practice.nl-en.a1.unit32
+source_language: nl
+target_language: en
+unit_content_key: en.a1.unit32.animals
+review:
+  status: unreviewed
+  fresh_context: "false"
+  notes: "Authored 2026-07-11, nl-en depth-completion sprint (see
+    a1_unit30.yaml's notes for the sprint context). 4-member 'pet_animal'
+    tag (dog/cat/fish/bird, all nouns) -- deliberately excludes the
+    lesson's 5th vocabulary item, 'pet' itself (the generic hypernym),
+    since including it in the same recognition set would let matching
+    pairs/multiple_choice offer the category word alongside its own
+    members. Frame 'I have a {item}.' verified grammatical for all 4
+    (each is a singular countable noun with a consonant-initial sound,
+    safe with 'a'; also directly matches the unit's own taught sentence,
+    lesson01.exercise04.order_dog_sentence's tested_text 'I have a
+    dog.'). Extended
+    scripts/_en_target_lexeme_common.py/scripts/backfill_lexemes_nl_en.py
+    with every introduced_token this unit's realization uses. Every
+    slot's real candidate count verified with
+    scripts/_practice_slot_check.py (4 distinct, above the >=3 floor).
+    Needs the standard fresh-context review before import."
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [pet_animal]
+slot_presets:
+  pet_animal: &pet_animal {language_code: en, part_of_speech: noun, agreement_tags: {semantic: pet_animal}}
+templates:
+  - content_key: practice.nl-en.en.a1.unit32.lesson01.choose.001
+    lesson_content_key: en.a1.unit32.lesson01.pet_vocabulary
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *pet_animal}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is een dier uit deze les.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit32.lesson01.listen.002
+    lesson_content_key: en.a1.unit32.lesson01.pet_vocabulary
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *pet_animal}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is het woord dat je hoorde.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit32.lesson01.match.003
+    lesson_content_key: en.a1.unit32.lesson01.pet_vocabulary
+    type: matching_pairs
+    frame: {text: "{first} · {second}", language_code: en, direction: ltr}
+    slots: {first: *pet_animal, second: *pet_animal, third: *pet_animal, fourth: *pet_animal}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth]}
+    feedback_frame: {text: "Verbind elk dier met de Nederlandse betekenis.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit32.lesson01.translate.004
+    lesson_content_key: en.a1.unit32.lesson01.pet_vocabulary
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *pet_animal}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit32.lesson01.order.005
+    lesson_content_key: en.a1.unit32.lesson01.pet_vocabulary
+    type: word_order
+    frame: {text: "I have a {item}", language_code: en, direction: ltr}
+    slots: {item: *pet_animal}
+    answer_derivation: {kind: render_frame, frame: {text: "I have a {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} is het genoemde huisdier.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit32.lesson02.translate.001
+    lesson_content_key: en.a1.unit32.lesson02.describing_pets
+    type: translation
+    frame: {text: "Ik heb een {item}.", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *pet_animal}
+    answer_derivation: {kind: render_frame, frame: {text: "I have a {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "I have a {item}. betekent Ik heb een {item}.", language_code: nl, direction: ltr}

@@ -506,6 +506,107 @@ EN_POS: dict[str, str] = {
     "preposition", "wonderful": "adjective", "work?": "verb", "worry": "verb",
     "writes": "verb", "yes,": "particle", "yet": "adverb", "yoga": "noun",
     "mess": "noun", "text": "verb", "took": "verb",
+    # Units 30-42 (nl-en depth-completion sprint, added 2026-07-11 --
+    # see docs/content/practice/nl-en/a1_unit30.yaml's notes). Every
+    # introduced_token across these 13 units' realizations, not just the
+    # words used in a practice-pack slot (backfill_lexemes_nl_en.py's
+    # classify step raises on any unclassified introduced_token for the
+    # WHOLE unit, not just tagged words). Real homograph collisions
+    # found and resolved by REUSING the existing entry rather than
+    # redeclaring: "cook" stays "noun" (unit23's occupation sense --
+    # unit41's cooking_verb tag deliberately excludes it, using only
+    # chop/boil/taste); "dog"/"train"/"car"/"phone"/"class"/"student"/
+    # "test"/"birthday"/"blue" were also already classified from
+    # earlier units and are NOT redeclared here. "reading"/"cooking"/
+    # "painting"/"running" are classified "noun" (gerund-as-noun,
+    # matching real usage in the unit's own text -- "Reading is my
+    # favorite hobby.", "I like reading." -- and matching the
+    # hobby_activity slot preset's part_of_speech: noun).
+    "12th": "adjective", "active": "adjective", "add": "verb", "along": "preposition",
+    "already": "adverb", "always": "adverb", "anyone's": "pronoun", "app": "noun",
+    "apps": "noun", "around": "adverb", "arrived": "verb", "asked": "verb", "bake": "verb",
+    "ball.": "noun", "balloons": "noun", "barks": "verb", "basketball": "noun",
+    "battery": "noun", "before": "preposition", "bike": "noun", "bird": "noun",
+    "blond": "adjective", "boil": "verb", "boiled": "verb", "book": "noun", "books": "noun",
+    "bought": "verb", "break": "noun", "brown": "adjective", "bus": "noun", "buy": "verb",
+    "buys": "verb", "cake": "noun", "call": "verb", "calm": "adjective", "camera": "noun",
+    "cat": "noun", "celebrate": "verb", "chat": "verb", "chicago": "proper_noun",
+    "chop": "verb", "chopped": "verb", "chore": "noun", "chose": "verb", "classes": "noun",
+    "clean": "verb", "cleaning": "verb", "cleans": "verb", "clerk": "noun", "college": "noun",
+    "comfortable": "adjective", "coming": "verb", "community": "noun", "computer": "noun",
+    "congratulate": "verb", "congratulated": "verb", "congratulations": "noun",
+    "cooking": "noun", "cooks": "verb", "cost": "verb", "course": "noun", "coworker": "noun",
+    "coworkers": "noun", "creative": "adjective", "curly": "adjective", "cutting": "verb",
+    "daniel's": "proper_noun", "daniel?": "proper_noun", "decided": "verb",
+    "definitely": "adverb", "delicious": "adjective", "didn't": "verb",
+    "different": "adjective", "differently": "adverb", "difficult.": "adjective",
+    "dishes": "noun", "does.": "verb", "doing": "verb", "door": "noun", "download": "verb",
+    "downloads": "verb", "drive": "verb", "drives": "verb", "employee": "noun",
+    "enjoy": "verb", "envelope": "noun", "even": "adverb", "ever": "adverb",
+    "everyone": "pronoun", "everywhere": "adverb", "exercise": "noun", "express": "adjective",
+    "eyes": "noun", "fast": "adjective", "feels": "verb", "fingers": "noun",
+    "finishes": "verb", "fish": "noun", "five-minute": "adjective", "forget": "verb",
+    "found": "verb", "framed": "adjective", "friend": "noun", "friendly": "adjective",
+    "friends": "noun", "funny": "adjective", "fur": "noun", "games": "noun", "gave": "verb",
+    "gets": "verb", "gift": "noun", "glasses": "noun", "goes": "verb",
+    "grandmother's": "noun", "green": "adjective", "grocery": "noun", "group": "noun",
+    "guests": "noun", "gym": "noun", "habits": "noun", "hair": "noun", "hallway": "noun",
+    "hardworking": "adjective", "hates": "verb", "having": "verb", "he's": "phrase",
+    "helpful": "adjective", "helps": "verb", "herself": "pronoun", "him": "pronoun",
+    "hobbies": "noun", "homework": "noun", "house": "noun", "how's": "phrase",
+    "humor": "noun", "ingredient": "noun", "instead": "adverb", "invite": "verb",
+    "it?": "pronoun", "know": "verb", "knows": "verb", "laptop": "noun", "laptops": "noun",
+    "late": "adjective", "laugh": "verb", "laundry": "noun", "learn": "verb",
+    "learning": "verb", "least": "adverb", "leave": "verb", "letter": "noun",
+    "letters": "noun", "likes": "verb", "live": "verb", "lives": "verb", "long": "adjective",
+    "lopez": "proper_noun", "lot": "noun", "loves": "verb", "low": "adjective",
+    "luna": "proper_noun", "luna.": "proper_noun", "made": "verb", "mail": "noun",
+    "mailbox": "noun", "makes": "verb", "making": "verb", "map": "noun", "maps": "noun",
+    "math": "noun", "max.": "proper_noun", "meetings": "noun", "meets": "verb",
+    "mess": "noun", "mexico": "proper_noun", "mia": "proper_noun", "mia's": "proper_noun",
+    "mia,": "proper_noun", "might": "verb", "mind": "verb", "mine": "pronoun", "mom": "noun",
+    "morning.": "noun", "mornings": "noun", "most": "adverb", "mostly": "adverb",
+    "mother's": "noun", "mr": "noun", "named": "verb", "names": "noun", "nearby": "adjective",
+    "needs": "verb", "neighbor": "noun", "neighborhood": "noun", "neighborhoods": "noun",
+    "neighbors": "noun", "never": "adverb", "nice!": "adjective", "nights": "noun",
+    "noisy": "adjective", "now": "adverb", "october": "proper_noun", "office": "noun",
+    "office.": "noun", "often": "adverb", "okay,": "particle", "once": "preposition",
+    "onions": "noun", "organized": "adjective", "out": "particle", "outgoing": "adjective",
+    "outside": "adverb", "own": "adjective", "package": "noun", "packages": "noun",
+    "paid": "verb", "paint": "verb", "painting": "noun", "paints": "verb", "pair": "noun",
+    "parking": "noun", "party": "noun", "pasta": "noun", "patient": "adjective",
+    "people": "noun", "perfect": "adjective", "personal": "adjective",
+    "personalities": "noun", "pet": "noun", "pets": "noun", "phones": "noun",
+    "photography": "noun", "photos": "noun", "pieces": "noun", "planning": "verb",
+    "plans": "verb", "plants": "noun", "play": "verb", "plays": "verb", "pool": "noun",
+    "post": "noun", "post office": "noun", "postcard": "noun", "project": "noun",
+    "promotion": "noun", "put": "verb", "quickly": "adverb", "quiet": "adjective",
+    "rarely": "adverb", "reading": "noun", "reads": "verb", "ready": "adjective",
+    "really": "adverb", "receipt": "noun", "recipe": "noun", "recipes": "noun",
+    "regular": "adjective", "relax": "verb", "relaxed": "adjective", "restaurants": "noun",
+    "ride": "verb", "running": "noun", "said": "verb", "salt": "noun", "same": "adjective",
+    "saturdays": "noun", "sauce": "noun", "say": "verb", "says": "verb", "sends": "verb",
+    "sense": "noun", "sent": "verb", "several": "adjective", "shops": "noun",
+    "short": "adjective", "show": "verb", "shy": "adjective", "sister's": "noun",
+    "skills": "noun", "slow": "adjective", "soccer": "noun", "some": "pronoun",
+    "someday": "adverb", "something": "pronoun", "sometime": "adverb", "soon": "adverb",
+    "spanish": "proper_noun", "spending": "verb", "sport": "noun", "stamp": "noun",
+    "starting": "verb", "stay": "verb", "still": "adverb", "studies": "verb", "study": "verb",
+    "studying": "verb", "subject": "noun", "sundays": "noun", "surprise": "noun",
+    "swim.": "verb", "swimming": "noun", "swims": "verb", "tablet": "noun", "takes": "verb",
+    "taking": "verb", "talk": "verb", "talkative": "adjective", "talking": "verb",
+    "tall": "adjective", "tasks": "noun", "taste": "verb", "tasted": "verb", "taught": "verb",
+    "teach": "verb", "teaches": "verb", "team": "noun", "tennis": "noun", "text": "verb",
+    "thanked": "verb", "thankful": "adjective", "their": "pronoun", "them": "pronoun",
+    "these": "pronoun", "though": "adverb", "times": "noun", "took": "verb", "trash": "noun",
+    "travel": "verb", "tries": "verb", "upset": "adjective", "us": "pronoun", "use": "verb",
+    "uses": "verb", "using": "verb", "vacuum": "verb", "vacuumed": "verb", "vacuums": "verb",
+    "video": "noun", "walks,": "verb", "wanted": "verb", "wants": "verb", "warms": "verb",
+    "wash": "verb", "washes": "verb", "washing": "verb", "watch": "verb", "waters": "verb",
+    "ways": "noun", "we'll": "phrase", "wears": "verb", "weekends": "noun", "weighed": "verb",
+    "were": "verb", "while": "preposition", "wifi": "noun", "wish": "verb",
+    "without": "preposition", "wonderful": "adjective", "work?": "noun", "worry": "verb",
+    "writes": "verb", "yes,": "particle", "yet": "adverb", "yoga": "noun",
 }
 
 def en_agreement_tags(token: str) -> dict[str, object]:
@@ -996,6 +1097,84 @@ def en_agreement_tags(token: str) -> dict[str, object]:
     # gradable with "very").
     if token in {"friendly", "funny", "hardworking", "shy", "calm", "talkative"}:
         semantics.append("personality_adjective")
+    # Units 30-42 (nl-en depth-completion sprint, added 2026-07-11) --
+    # every semantic tag a new nl-en practice-pack slot preset references.
+    # Unit 30 (hobbies): 4-member gerund-noun tag, verified all four
+    # collocate in "I like {item}." (the unit's own lesson03 teaches this
+    # exact pattern). Excludes "video games" (two-word compound).
+    if token in {"reading", "cooking", "painting", "running"}:
+        semantics.append("hobby_activity")
+    # Unit 31 (appearance): 4-member adjective tag, bare-word recognition
+    # only. Excludes "hair" (a noun, would break part_of_speech
+    # uniformity within the tag).
+    if token in {"tall", "short", "blond", "curly"}:
+        semantics.append("trait_adj")
+    # Unit 31: 3-member eye-color adjective tag, used in the generative
+    # frame "Her eyes are {item}." -- directly matches the unit's own
+    # taught sentence "Her eyes are blue."
+    if token in {"blue", "brown", "green"}:
+        semantics.append("eye_color")
+    # Unit 32 (animals): 4-member noun tag, used in "I have a {item}."
+    # (verified consonant-initial, safe with "a"; matches the unit's own
+    # taught sentence "I have a dog."). Excludes the hypernym "pet".
+    if token in {"dog", "cat", "fish", "bird"}:
+        semantics.append("pet_animal")
+    # Unit 33 (transportation): 4-member noun tag, bare-word recognition
+    # only -- the unit's own overlay notes flag that each vehicle takes
+    # its own verb (take the bus/train, drive the car, ride the bike), so
+    # no single shared frame is safe. Excludes "walk" (used as a verb).
+    if token in {"bus", "train", "car", "bike"}:
+        semantics.append("vehicle_noun")
+    # Unit 34 (sports): 6-member noun tag, bare-word recognition/matching
+    # only (mixed play/go/do collocations across members).
+    if token in {"soccer", "tennis", "basketball", "swimming", "yoga", "exercise"}:
+        semantics.append("sport_noun")
+    # Unit 34: narrower 3-member subset of sport_noun, verified all three
+    # take "play" (unlike swimming/yoga, which need go/do) -- used in the
+    # generative frame "We play {item}."
+    if token in {"soccer", "tennis", "basketball"}:
+        semantics.append("play_sport")
+    # Unit 35 (technology): 6-member noun tag, bare-word recognition/
+    # matching only (includes "app").
+    if token in {"phone", "laptop", "tablet", "computer", "app", "camera"}:
+        semantics.append("device_noun")
+    # Unit 35: narrower 5-member subset excluding "app" (needs "an", not
+    # "a") -- used in the generative frame "I have a {item}."
+    if token in {"phone", "laptop", "tablet", "computer", "camera"}:
+        semantics.append("device_noun_a")
+    # Unit 36 (education): 6-member noun tag, bare-word recognition only
+    # (mixed collocations -- "I have a {item}" doesn't generalize).
+    if token in {"class", "course", "student", "homework", "subject", "test"}:
+        semantics.append("education_noun")
+    # Unit 37 (celebrations): 4-member noun tag, bare-word recognition
+    # only. Excludes "invite"/"celebrate" (verbs, would break
+    # part_of_speech uniformity).
+    if token in {"birthday", "party", "gift", "congratulations"}:
+        semantics.append("celebration_noun")
+    # Unit 38 (household): 4-member noun tag, bare-word recognition only.
+    # Excludes "vacuum"/"clean" (verbs here).
+    if token in {"chore", "dishes", "laundry", "trash"}:
+        semantics.append("household_noun")
+    # Unit 39 (neighborhood): 3-member adjective tag, bare-word
+    # recognition only -- "friendly" collides with unit32's/unit42's
+    # own uses of the same word (same POS, reused not redeclared).
+    if token in {"quiet", "noisy", "friendly"}:
+        semantics.append("neighborhood_adj")
+    # Unit 40 (post): 5-member noun tag, bare-word recognition only.
+    # Excludes the two-word compound "post office".
+    if token in {"letter", "package", "stamp", "envelope", "mailbox"}:
+        semantics.append("post_noun")
+    # Unit 41 (cooking): 3-member verb tag, bare-word recognition only.
+    # Deliberately excludes "cook" -- already classified "noun" (unit23's
+    # occupation sense), so a verb-POS slot would find zero candidates
+    # for it.
+    if token in {"chop", "boil", "taste"}:
+        semantics.append("cooking_verb")
+    # Unit 42 (personality): 6-member adjective tag, used in the
+    # generative frame "She is {item}." -- verified grammatical for
+    # every member, matching the unit's own predicate-adjective examples.
+    if token in {"friendly", "funny", "hardworking", "shy", "calm", "talkative"}:
+        semantics.append("personality_adj")
 
     tags: dict[str, object] = {}
     if semantics:
