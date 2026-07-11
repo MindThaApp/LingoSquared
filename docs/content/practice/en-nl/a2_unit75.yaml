@@ -1,0 +1,182 @@
+schema_version: "1.0"
+pack_key: practice.en-nl.a2.unit75
+source_language: en
+target_language: nl
+unit_content_key: nl.a2.unit75.schermtijd
+review:
+  status: unreviewed
+  fresh_context: "false"
+  notes: "Authored 2026-07-11, alongside the sibling a2_unit74/76/77.yaml
+    packs -- see a2_unit74.yaml's own review notes for the shared
+    background (zero Endless Practice coverage existed for any of the
+    four newest Dutch A2 units before this pass). This file covers
+    unit75 (schermtijd: phone/social-media habits, screen time as an
+    opinion topic reusing unit25's vinden dat/volgens mij construction,
+    and a suggestion to spend less time on the phone).
+
+    scripts/backfill_lexemes_en_nl.py already had broad recognition-only
+    tags for this unit (screen_time_vocab: 6 nouns -- scherm/telefoon/
+    media/schermtijd/gewoonte/apps; screen_time_verb: 4 verbs -- chat/
+    doorbrengen/wegleggen/probeer). This pass adds 7 new single-member
+    *_single tags (schermtijd_scherm_single/_telefoon_single/_chat_
+    single/_schermtijd_single/_doorbrengen_single/_gewoonte_single/
+    _wegleggen_single) anchoring each lesson's hero full sentence for
+    word_order/translation/fill_in_blank via render_frame/slot_text --
+    single-member by construction, so no AUTHORING_GUIDE.md #17
+    candidate-pool ambiguity judgment call is needed. The two
+    pre-existing broad tags are reused as-is for every bare-word
+    multiple_choice/listen_select/matching_pairs template below.
+
+    14 templates across all 6 lessons: multiple_choice x2, listen_select
+    x4, matching_pairs x2 (both drawn from the 6-member screen_time_vocab
+    pool, 5 pairs in lesson02 and 3 in lesson04 -- deliberately NOT
+    screen_time_verb for either matching_pairs template: that tag's
+    real course-wide pool has a genuine case-duplicate,
+    'Probeer'/'probeer' -- both glossed close enough to 'try' that two
+    simultaneous matching_pairs cards from the same pool risked reading
+    as a near-duplicate pair, so screen_time_verb is only ever used
+    bare-word (multiple_choice/listen_select, one word shown at a time,
+    where this isn't a problem) in this pack), word_order x2,
+    fill_in_blank x2, translation x2. Both fill_in_blank slots
+    (doorbrengen_single, wegleggen_single) have exactly 1 course-wide
+    candidate by construction -- re-verified by re-running
+    scripts/_fill_in_blank_ambiguity_check.py after adding this file's
+    PACKS entry, 0 flagged. Needs the standard fresh-context review
+    before import. Same blocking dependency as every other en-nl pack:
+    backfill_lexemes_en_nl.py has not actually been run against a real
+    database yet (only --dry-run, which succeeds)."
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [screen_time_vocab, screen_time_verb, schermtijd_scherm_single, schermtijd_telefoon_single, schermtijd_chat_single, schermtijd_schermtijd_single, schermtijd_doorbrengen_single, schermtijd_gewoonte_single, schermtijd_wegleggen_single]
+slot_presets:
+  screen_time_vocab: &screen_time_vocab {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: screen_time_vocab}}
+  screen_time_verb: &screen_time_verb {language_code: nl, part_of_speech: verb, agreement_tags: {semantic: screen_time_verb}}
+  scherm_single: &scherm_single {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: schermtijd_scherm_single}}
+  telefoon_single: &telefoon_single {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: schermtijd_telefoon_single}}
+  chat_single: &chat_single {language_code: nl, part_of_speech: verb, agreement_tags: {semantic: schermtijd_chat_single}}
+  schermtijd_single: &schermtijd_single {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: schermtijd_schermtijd_single}}
+  doorbrengen_single: &doorbrengen_single {language_code: nl, part_of_speech: verb, agreement_tags: {semantic: schermtijd_doorbrengen_single}}
+  gewoonte_single: &gewoonte_single {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: schermtijd_gewoonte_single}}
+  wegleggen_single: &wegleggen_single {language_code: nl, part_of_speech: verb, agreement_tags: {semantic: schermtijd_wegleggen_single}}
+templates:
+  - content_key: practice.en-nl.nl.a2.unit75.lesson01.choose.001
+    lesson_content_key: nl.a2.unit75.lesson01.ik_gebruik_mijn_telefoon_vaak
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *screen_time_vocab}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a word from this unit's screen-time vocabulary.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit75.lesson01.listen.002
+    lesson_content_key: nl.a2.unit75.lesson01.ik_gebruik_mijn_telefoon_vaak
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *screen_time_vocab}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit75.lesson01.order.003
+    lesson_content_key: nl.a2.unit75.lesson01.ik_gebruik_mijn_telefoon_vaak
+    type: word_order
+    frame: {text: "Ik kijk vaak naar mijn {item}.", language_code: nl, direction: ltr}
+    slots: {item: *scherm_single}
+    answer_derivation: {kind: render_frame, frame: {text: "Ik kijk vaak naar mijn {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} is what Lotte often looks at.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit75.lesson02.choose.001
+    lesson_content_key: nl.a2.unit75.lesson02.ik_chat_met_vrienden
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *screen_time_verb}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a verb from this unit's screen-time vocabulary.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit75.lesson02.match.002
+    lesson_content_key: nl.a2.unit75.lesson02.ik_chat_met_vrienden
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth}", language_code: nl, direction: ltr}
+    slots: {first: *screen_time_vocab, second: *screen_time_vocab, third: *screen_time_vocab, fourth: *screen_time_vocab, fifth: *screen_time_vocab}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth]}
+    feedback_frame: {text: "Match each word with its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit75.lesson02.order.003
+    lesson_content_key: nl.a2.unit75.lesson02.ik_chat_met_vrienden
+    type: word_order
+    frame: {text: "Ik {item} vaak met vrienden op mijn telefoon.", language_code: nl, direction: ltr}
+    slots: {item: *chat_single}
+    answer_derivation: {kind: render_frame, frame: {text: "Ik {item} vaak met vrienden op mijn telefoon.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} is what Lotte often does with friends on her phone.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit75.lesson03.listen.001
+    lesson_content_key: nl.a2.unit75.lesson03.te_veel_schermtijd
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *screen_time_vocab}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit75.lesson03.translate.002
+    lesson_content_key: nl.a2.unit75.lesson03.te_veel_schermtijd
+    type: translation
+    frame:
+      text: "I think I have too much screen time."
+      language_code: en
+      direction: ltr
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *schermtijd_single}
+    answer_derivation: {kind: render_frame, frame: {text: "Ik vind dat ik te veel {item} heb.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Ik vind dat ik te veel {item} heb.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit75.lesson04.match.001
+    lesson_content_key: nl.a2.unit75.lesson04.minder_tijd_op_je_telefoon
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third}", language_code: nl, direction: ltr}
+    slots: {first: *screen_time_vocab, second: *screen_time_vocab, third: *screen_time_vocab}
+    slot_relations: [{kind: distinct, slots: [first, second, third]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third]}
+    feedback_frame: {text: "Match each word with its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit75.lesson04.fill.002
+    lesson_content_key: nl.a2.unit75.lesson04.minder_tijd_op_je_telefoon
+    type: fill_in_blank
+    frame: {text: "Volgens mij moet je minder tijd op je telefoon {item}.", language_code: nl, direction: ltr}
+    slots: {item: *doorbrengen_single}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Volgens mij moet je minder tijd op je telefoon doorbrengen -- In my opinion, you should spend less time on your phone.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit75.lesson05.listen.001
+    lesson_content_key: nl.a2.unit75.lesson05.blog_lezen
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *screen_time_vocab}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a word from the blog.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit75.lesson05.translate.002
+    lesson_content_key: nl.a2.unit75.lesson05.blog_lezen
+    type: translation
+    frame:
+      text: "It's a bad habit to keep looking at your phone."
+      language_code: en
+      direction: ltr
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *gewoonte_single}
+    answer_derivation: {kind: render_frame, frame: {text: "Het is een slechte {item} om steeds op je telefoon te kijken.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Het is een slechte {item} om steeds op je telefoon te kijken.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit75.lesson06.listen.001
+    lesson_content_key: nl.a2.unit75.lesson06.omar_en_lotte_praten
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *screen_time_vocab}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a word from this dialogue.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit75.lesson06.fill.002
+    lesson_content_key: nl.a2.unit75.lesson06.omar_en_lotte_praten
+    type: fill_in_blank
+    frame: {text: "Misschien kun je 's avonds je telefoon {item}.", language_code: nl, direction: ltr}
+    slots: {item: *wegleggen_single}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Misschien kun je 's avonds je telefoon wegleggen -- Maybe you can put your phone away in the evenings.", language_code: en, direction: ltr}
