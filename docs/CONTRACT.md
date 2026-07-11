@@ -943,6 +943,38 @@ POST /feedback
   unaffected (page-level reports have no course to roll up into, same
   known-scope-gap precedent as the PracticeItem entry above).
 
+**Feedback attachments (screenshots), added 2026-07-12 (spec-first —
+implementation follows):**
+
+```
+POST /feedback/attachments        (multipart/form-data, field "file")
+→ 201 { "attachment_key": "fb_<random>", "expires_in_seconds": 3600 }
+```
+
+- No auth (same rationale as `/feedback` itself), but hard abuse limits
+  enforced server-side: image content types only (png/jpeg/webp — sniffed
+  from magic bytes, never trusted from the header), max 5 MB, its own
+  rate limit at least as strict as `/feedback`'s. Uploads land as opaque
+  keys in a private directory (`backend/feedback_uploads/`, gitignored,
+  NEVER served statically); an attachment is an orphan until a
+  `POST /feedback` references it, and orphans older than ~1 hour are
+  eligible for cleanup (opportunistic sweep on new uploads — no cron
+  infrastructure exists, same constraint as E4).
+- `POST /feedback` gains optional `"attachment_keys": ["fb_..."]` (max 3);
+  unknown/expired keys are silently dropped (report still succeeds —
+  feedback must never be lost over a bad attachment). New
+  `FeedbackAttachment` table (id/key/report_id nullable until claimed/
+  content_type/byte_size/created_at) — additive, guarded migration.
+- Retrieval is ADMIN-ONLY: `GET /admin/content/issues/{id}/attachments/
+  {attachment_id}` streams the image with auth; `ContentIssueOut` gains
+  `attachments: [{id, content_type, byte_size}]`. Attachment bytes are
+  never exposed on any unauthenticated route (an unauthenticated upload
+  must not become an unauthenticated public file host).
+- Frontend: the feedback widget gains an optional image picker (`<input
+  type="file" accept="image/*">` — on phones this offers camera/photo
+  library natively); client-side downscale to ≤1600px longest edge before
+  upload to keep mobile uploads fast.
+
 Frontend: `VITE_FEEDBACK_API_URL` is a new, separate env var (falls back to
 the existing `VITE_API_BASE_URL` when unset, which is correct for the
 "single shared backend" deployment shapes — home server or hosted domain).
