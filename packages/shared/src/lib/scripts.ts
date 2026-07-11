@@ -16,6 +16,10 @@ export const LANGUAGE_SCRIPT: Record<string, ScriptCode> = {
   pl: "latin",
   ro: "latin",
   hi: "devanagari",
+  // True (Modern Standard) Arabic -- deliberately NOT "arabic" (that id
+  // is Perso-Arabic, fa/prs). See the ScriptCode comment in api/types.ts
+  // and ARABIC_MSA_LETTERS below for why these need separate codepoints.
+  ar: "arabic_msa",
 };
 
 // Traditional Perso-Arabic alphabet order — shared by Farsi and Dari.
@@ -46,6 +50,45 @@ const PERSO_ARABIC_LETTERS = [
 // Digit order ۱..۹ then ۰, matching the number row on real fa keyboards.
 const PERSO_ARABIC_SYMBOLS = [
   "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹", "۰",
+  "،", "؛", "؟",
+];
+
+// True (Modern Standard) Arabic alphabet, traditional order -- for `ar`
+// ONLY, never fa/prs (those use PERSO_ARABIC_LETTERS above). Confirmed
+// 2026-07-12 against the real en-ar content corpus
+// (docs/content/realizations/ar/*.yaml, all 3 units): every Arabic-range
+// codepoint the content actually types was cross-checked, notably kaf ك
+// (U+0643) and yeh ي (U+064A) -- NOT the Persian-range keheh ک (U+06A9)/
+// farsi-yeh ی (U+06CC) the old shared "arabic" layout wrongly used for
+// Arabic learners. Additions beyond the bare 28-letter alphabet, same
+// convention as PERSO_ARABIC_LETTERS above:
+// - آ (alif madda) sits right after ا, same reasoning as Persian.
+// - ة (ta marbuta) sits right after ه -- it's visually "ه with two dots"
+//   and content (e.g. لغة، جمهورية) needs it.
+// - ى (alif maqsura) sits right after ي -- visually "ي without dots",
+//   needed for content like "أخرى".
+// - The hamza family (ء أ إ ؤ ئ) is grouped at the end, same place and
+//   same reasoning as the Perso-Arabic layout -- all five appear in real
+//   Arabic content (see ar unit01/02/03: أنتَ، سؤال-type loanwords, etc).
+// No ZWNJ (unlike Persian) -- MSA doesn't rely on zero-width non-joiners
+// for correct spelling the way Persian compounds do; the content review
+// that flagged this whole gap explicitly noted no tashkeel/harakat are
+// typed either (accepted_answers stay unvocalized), so no diacritic keys.
+const ARABIC_MSA_LETTERS = [
+  "ا", "آ", "ب", "ت", "ث", "ج", "ح", "خ",
+  "د", "ذ", "ر", "ز", "س", "ش", "ص", "ض",
+  "ط", "ظ", "ع", "غ", "ف", "ق", "ك", "ل",
+  "م", "ن", "ه", "ة", "و", "ي", "ى",
+  "ء", "أ", "إ", "ؤ", "ئ",
+];
+
+// Secondary (toggled) key layer for true Arabic: real Arabic-Indic digits
+// (٠-٩, U+0660-U+0669) -- distinct from the Persian extended-Arabic-Indic
+// digits (۰-۹, U+06F0-U+06F9) PERSO_ARABIC_SYMBOLS uses -- plus the same
+// Arabic-originated punctuation marks (، ؛ ؟) fa/prs share (identical
+// codepoints, borrowed by Persian from Arabic).
+const ARABIC_MSA_SYMBOLS = [
+  "١", "٢", "٣", "٤", "٥", "٦", "٧", "٨", "٩", "٠",
   "،", "؛", "؟",
 ];
 
@@ -125,6 +168,16 @@ export const KEYBOARD_LAYOUTS: Partial<Record<ScriptCode, KeyboardLayout>> = {
       direction: "ltr",
       toggleLabel: "۱۲۳",
       lettersLabel: "الف‌ب",
+    },
+  },
+  arabic_msa: {
+    direction: "rtl",
+    rows: chunk(ARABIC_MSA_LETTERS, ROW_SIZE),
+    symbols: {
+      keys: ARABIC_MSA_SYMBOLS,
+      direction: "ltr",
+      toggleLabel: "١٢٣",
+      lettersLabel: "أ ب ت",
     },
   },
   devanagari: {
