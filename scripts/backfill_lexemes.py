@@ -215,6 +215,47 @@ UNIT_FILES_A2 = (
         REPO_ROOT / "docs/content/realizations/fa/a2_unit10_opinions.yaml",
         REPO_ROOT / "docs/content/overlays/en-fa/a2_unit10.yaml",
     ),
+    # Units 11-18 (banking / doctor / maintenance / job interview / travel
+    # disruption / online habits / weekly schedule / shopping complaint),
+    # added 2026-07-11 -- these 8 units existed on disk and were already
+    # imported into the DB but had zero lexeme classifier coverage in this
+    # script at all, so Endless Practice for en-fa's A2 course beyond
+    # unit10 was completely dead (same root cause already documented above
+    # for units 9-10 before THEY were added). Re-read this tuple fresh
+    # before appending any further unit here, per this file's own standing
+    # convention -- other lanes may extend it concurrently.
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a2_unit11_banking.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a2_unit11.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a2_unit12_doctor.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a2_unit12.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a2_unit13_maintenance.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a2_unit13.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a2_unit14_job_interview.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a2_unit14.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a2_unit15_travel_disruption.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a2_unit15.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a2_unit16_online_habits.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a2_unit16.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a2_unit17_weekly_schedule.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a2_unit17.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a2_unit18_shopping_complaint.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a2_unit18.yaml",
+    ),
 )
 EN_TOKEN_RE = re.compile(r"[A-Za-z]+(?:['’/-][A-Za-z]+)*")
 
@@ -554,12 +595,163 @@ FA_GLOSSES = {
     "می‌خونه": "he/she reads",
     "می‌رم": "I go",
     "دیدن": "to watch / to see",
+    # Unit 11 (A2: banking), added 2026-07-11 (A2 units 11-18 backfill
+    # pass -- these 8 units existed on disk and were already imported
+    # into the DB but had zero lexeme classifier coverage in this script
+    # at all; see UNIT_FILES_A2's own comment above).
+    "کارت بانکی": "bank card", "رمز": "PIN code / password",
+    "موجودی": "balance", "باز": "open",
+    "کردن": "to do (infinitive)",
+    "کارت ملی": "national ID card", "مدرک آدرس": "proof-of-address document",
+    "بانکی": "banking / bank (adjective, from بانک)",
+    "اگر": "if", "مدارکتون": "your documents (polite)",
+    "می‌تونید": "you can (polite)",
+    "لازم": "necessary / needed", "لازمه": "necessary / needed (colloquial contraction of لازم است)",
+    "ساعت کاری": "working hours", "بعدازظهر": "afternoon",
+    "۸": "8 (eight, numeral)", "۲": "2 (two, numeral)",
+    "بکنم": "let me do (subjunctive, formal variant of کنم)",
+    "ملیم": "my national ID (colloquial, short for کارت ملیم)",
+    "جدیدم": "my new (colloquial possessive form of جدید)",
+    "آوردم": "I brought (past)",
+    "دیگه": "another; more; next",
+    "آماده": "ready", "رمزش": "its PIN code (colloquial)",
+    "می‌گیرم": "I get / I take (spoken)",
+    "روزی": "day (indefinite form of روز, e.g. 'the day that ...'/'what day')",
+    "که": "that / which / so that",
+    "تحویل": "delivery / handover (in تحویل گرفتن/می‌گیرید, 'to receive/pick up')",
+    # Unit 12 (A2: doctor), added 2026-07-11, same pass as unit11 above.
+    "علائم": "symptoms", "مدت": "duration / length of time",
+    "نسخه": "prescription", "شدیدی": "severe (indefinite form of شدید)",
+    "گفت": "he/she said (past)", "بخورم": "let me drink / I drink (subjunctive)",
+    "نوبت": "appointment; turn", "نوبتم": "my appointment (colloquial)",
+    "۱۱": "11 (eleven, numeral)",
+    "صبحه": "is morning / a.m. (colloquial contraction of صبح است)",
+    "زودتر": "earlier; sooner", "۱۵": "15 (fifteen, numeral)",
+    "بیایید": "come (polite imperative)",
+    "نشد": "didn't happen / didn't become (negative past of شدن)",
+    "دوباره": "again", "تماس": "contact / call",
+    "بگیرید": "take / get (polite imperative)",
+    "شده": "become; happened (past participle of شدن)",
+    "دکتر رضایی": "Dr. Rezaei",
+    "سردرده": "it's a headache (colloquial contraction of سردرد است)",
+    "شدیده": "it's severe (colloquial contraction of شدید است)",
+    "شدید": "severe", "داشت": "he/she had (past)",
+    "کند": "he/she does (formal subjunctive of کردن)",
+    # Unit 13 (A2: maintenance), added 2026-07-11, same pass as unit11
+    # above.
+    "لوله": "pipe", "لوله‌ی": "pipe of (ezafe-linked form of لوله)",
+    "حمام": "bathroom", "چکه": "leak / drip",
+    "شوفاژ": "radiator / heater", "خراب": "broken",
+    "سرایدار": "building superintendent / custodian",
+    "تعمیر": "repair", "زدم": "I hit / I called (past)",
+    "زد": "he/she hit / called (past)",
+    "بیاید": "come (polite imperative)",
+    "تعمیرش": "repair it / its repair (object suffix on تعمیر)",
+    "درخواست": "request", "ثبت": "registration / logging",
+    "تعمیرکار": "repairman",
+    "میاد": "he/she comes (spoken, 3rd person)",
+    "۱۰": "10 (ten, numeral)",
+    "این‌طوریه": "is like this (colloquial contraction)",
+    "میره": "it goes (spoken, 3rd person of رفتن)",
+    "روی": "on top of; onto", "زمین": "ground; floor",
+    "خونه‌ام": "I'm home (colloquial contraction of خونه + هستم)",
+    "می‌بینمتون": "I'll see you (polite)",
+    # Unit 14 (A2: job interview), added 2026-07-11, same pass as unit11
+    # above.
+    "مصاحبه": "interview", "تجربه": "experience",
+    "تجربه‌ی": "experience of (ezafe-linked form of تجربه)",
+    "مهارت": "skill", "حقوق": "salary",
+    "فرصت شغلی": "job opportunity", "رزومه": "résumé / CV",
+    "هفته‌ی": "week of (ezafe-linked form of هفته)",
+    "شروع": "start; beginning",
+    "حداقل": "at least; minimum",
+    "فروشگاه": "store; shop", "نیاز": "need",
+    "مناسب": "suitable; good (fitting)",
+    "مصاحبه‌ها": "interviews (plural of مصاحبه)",
+    "انجام": "carrying out; performing",
+    "کاریتون": "your work (possessive form of کار, polite)",
+    "مصاحبه‌کننده": "interviewer",
+    "مهارت‌هایی": "skills (indefinite/plural form of مهارت)",
+    "تیمی": "team-related; of the team (in کار تیمی, 'teamwork')",
+    "حل": "solving; solution (in حل مسئله, 'problem-solving')",
+    "مسئله": "problem; issue",
+    "خوبم": "I'm good (at) (colloquial contraction of خوب + ام)",
+    # Unit 15 (A2: travel disruption), added 2026-07-11, same pass as
+    # unit11 above.
+    "قطار": "train", "تاخیر": "delay", "سکو": "platform",
+    "سکوی": "platform of (ezafe-linked form of سکو)",
+    "لغو": "cancelled", "لغو شدن": "to be cancelled",
+    "اعلامیه": "announcement", "مسیر جایگزین": "alternative route",
+    "مسیر": "route", "جایگزین": "alternative; substitute",
+    "جایگزینی": "alternative; substitute (indefinite form)",
+    "نُه": "nine (vocalized spelling, distinct from نه 'no')",
+    "هست": "there is / exists",
+    "برسم": "let me arrive / I arrive (subjunctive)",
+    "به خاطر": "because of",
+    "مشکل فنی": "technical problem", "مشکل": "problem",
+    "فنی": "technical", "توجه": "attention",
+    "اصفهان": "Isfahan", "منتظر": "waiting",
+    "می‌مونم": "I stay / I wait (spoken)",
+    "قطارم": "my train (colloquial)",
+    "متاسفانه": "unfortunately",
+    "بخرید": "buy (polite imperative)",
+    # Unit 16 (A2: online habits), added 2026-07-11, same pass as unit11
+    # above.
+    "شبکه‌ی اجتماعی": "social media", "شبکه": "network",
+    "اجتماعی": "social", "اپلیکیشن": "app", "صفحه": "screen",
+    "مفید": "useful",
+    "مفیده": "is useful (colloquial contraction of مفید است)",
+    "خبر": "news", "سرگرم‌کننده": "entertaining; fun",
+    "حدود": "about; approximately", "استفاده": "use",
+    "دنیا": "world", "می‌خونم": "I read (spoken, 1st person)",
+    "مورد علاقه": "favorite", "مورد": "case; item",
+    "علاقه": "interest; liking",
+    "علاقه‌ام": "my interest / liking (possessive form of علاقه)",
+    "می‌کند": "he/she does (formal, written register)",
+    "اینستاگرامه": "is Instagram (colloquial contraction of اینستاگرام + است)",
+    "نظرت": "your opinion (in به نظرت, 'in your opinion')",
+    # Unit 17 (A2: weekly schedule), added 2026-07-11, same pass as
+    # unit11 above.
+    "هفته‌ات": "your week (colloquial possessive)",
+    "آخر هفته": "weekend", "آخر": "end",
+    "استراحت کردن": "to rest", "اول": "first",
+    "در آخر": "finally; at the end",
+    "پنجشنبه‌ها": "on Thursdays (habitual plural of پنجشنبه)",
+    "جمعه‌ها": "on Fridays (habitual plural of جمعه)",
+    "در طول هفته": "during the week", "طول": "duration; length",
+    "تمیز کردن": "to clean", "تمیز": "clean",
+    "برنامه‌ی": "schedule of (ezafe-linked form of برنامه)",
+    "خرید": "shopping; purchase",
+    "دوستامو": "my friends (object marker, colloquial)",
+    "برنامه‌ت": "your schedule (colloquial possessive)",
+    "سر کار": "at/to work",
+    # Unit 18 (A2: shopping complaint), added 2026-07-11, same pass as
+    # unit11 above.
+    "خرابه": "is broken (colloquial contraction of خراب است)",
+    "رسید": "receipt", "دادن": "to give (infinitive)",
+    "بدم": "let me give / I give (subjunctive)",
+    "تعویض": "exchange", "تعویض کردن": "to exchange",
+    "بازپرداخت": "refund", "هدفون": "headphones",
+    "خریدم": "I bought (past)",
+    "صدا نداره": "has no sound",
+    "پولم": "my money", "پس بگیرم": "let me get back / get my money back",
+    "تعویضش": "exchange it (object suffix on تعویض)",
+    "تاریخ خرید": "purchase date", "کالا": "goods; merchandise",
+    "را": "(marks a definite direct object, formal)",
+    "داد": "he/she gave (past)",
+    "خریدینش": "you bought it (polite/formal past)",
+    "خریدمش": "I bought it (past)",
+    "پولتون": "your money (polite)",
+    "بدیم": "let's give / we give (subjunctive)",
+    "بهتون": "to you (polite)",
 }
 
 FA_SYMBOLS = set("س ل ا م ن ت ش چ ی ه ک گ ج د ر ف و ب خ ز".split())
 FA_PROPER_NOUNS = set(
     "علی نرگس سارا مینا ایران انگلیس فرانسه آزادی رضا تهران نگار آرش "
     "مریم نیما".split()
+    # A2 units 11-18, added 2026-07-11.
+    + ["دکتر رضایی", "اصفهان"]
 )
 FA_PRONOUNS = set(
     "من تو شما او ما این همون چی چه کی همین کدوم اون چقدر".split()
@@ -567,6 +759,11 @@ FA_PRONOUNS = set(
 )
 FA_PREPOSITIONS = set(
     "به از با اهل بهت مثل کنار برای برات پیش در بالای".split()
+    # A2 units 11-18, added 2026-07-11: به خاطر (because of, + noun,
+    # distinct from چون which takes a full clause), روی (on top of/onto),
+    # بهتون (to you, polite -- same class as the already-established
+    # informal بهت).
+    + ["به خاطر", "روی", "بهتون"]
 )
 FA_PARTICLES = set(
     "هم ولی بله و آره پس تا یه یا چون رو خب چشم "
@@ -574,6 +771,10 @@ FA_PARTICLES = set(
     # interjection ("hello?"), same class as other interjection-like
     # particles already in this set.
     "الو".split()
+    # A2 units 11-18, added 2026-07-11: اگر (if, conditional conjunction),
+    # که (that/which/so that, subordinating conjunction), را (formal
+    # object marker, same class as the already-established colloquial رو).
+    + ["اگر", "که", "را"]
 )
 FA_ADVERBS = set(
     "فعلاً خیلی چطور کجا اینجا همین‌طور کجایی باهم فردا حتماً خودمونی چند "
@@ -585,6 +786,14 @@ FA_ADVERBS = set(
     "زیاد فقط "
     # Unit 24 (A1: hobbies), added 2026-07-09.
     "گاهی".split()
+    # A2 units 11-18, added 2026-07-11: دیگه (another/more/next), حداقل
+    # (at least/minimum), زودتر (earlier/sooner), دوباره (again), متاسفانه
+    # (unfortunately), حدود (about/approximately), اول (first), در آخر
+    # (finally/at the end), در طول هفته (during the week) -- all function
+    # as sentence-level adverbial modifiers, same class as بیشتر/چند
+    # already in this set.
+    + ["دیگه", "حداقل", "زودتر", "دوباره", "متاسفانه", "حدود", "اول",
+       "در آخر", "در طول هفته"]
 )
 FA_ADJECTIVES = set(
     "خوبی بد ایرانی انگلیسی فرانسوی بزرگه کوچیکه متأهل مجرد برعکسه شلوغه "
@@ -607,6 +816,16 @@ FA_ADJECTIVES = set(
     # Unit 24 (A1: hobbies), added 2026-07-09: آزاد modifies وقت
     # attributively (وقت آزاد, "free time").
     "آزاد".split()
+    # A2 units 11-18, added 2026-07-11: باز (open), جدیدم (colloquial
+    # possessive of جدید), لازم (necessary), آماده (ready), شدیدی/شدید
+    # (severe), خراب (broken), لغو (cancelled), جایگزین/جایگزینی
+    # (alternative), فنی (technical), منتظر (waiting), اجتماعی (social),
+    # مفید (useful), سرگرم‌کننده (entertaining), تمیز (clean), مناسب
+    # (suitable), تیمی (team-related), بانکی (banking/bank, adjectival
+    # form of بانک).
+    + ["باز", "جدیدم", "لازم", "آماده", "شدیدی", "شدید", "خراب", "لغو",
+       "جایگزین", "جایگزینی", "فنی", "منتظر", "اجتماعی", "مفید",
+       "سرگرم‌کننده", "تمیز", "مناسب", "تیمی", "بانکی"]
 )
 FA_NUMBERS = set(
     "صفر یک دو سه چهار پنج شش هفت هشت نه ده یازده دوازده سیزده چهارده "
@@ -614,6 +833,12 @@ FA_NUMBERS = set(
     # Unit 21 (A1: money), added 2026-07-09.
     "صد"
     .split()
+    # A2 unit 15 (travel disruption), added 2026-07-11: نُه is the
+    # vocalized spelling of "nine" this unit deliberately uses to avoid
+    # colliding with the plain, unvocalized نه ("no") -- see
+    # NO_NEGATION_LESSONS below for the reverse collision this unit's own
+    # spelling choice avoids.
+    + ["نُه"]
 )
 FA_VERBS = {
     "می‌کنم", "حالتون", "چطوره", "خوبم", "آمدید", "داشته", "باشید",
@@ -691,8 +916,68 @@ FA_VERBS = {
     # same class as unit22's already-established زدن precedent), می‌دم/
     # می‌بینم/می‌خونه/می‌رم (conjugated verb forms).
     "خوندن", "دیدن", "می‌دم", "می‌بینم", "می‌خونه", "می‌رم",
+    # A2 unit 11 (banking), added 2026-07-11 (A2 units 11-18 backfill
+    # pass). کردن (infinitive "to do", same class as the already-
+    # established شدن precedent); لازمه/صبحه are colloquial -e-copula-
+    # contraction predicates, same precedent as آفتابیه/سرده/بارونیه/
+    # گرمه above.
+    "کردن", "می‌تونید", "لازمه", "بکنم", "آوردم", "می‌گیرم",
+    # A2 unit 12 (doctor), added 2026-07-11.
+    "گفت", "بخورم", "صبحه", "بیایید", "نشد", "بگیرید", "شده", "سردرده",
+    "شدیده", "داشت", "کند",
+    # A2 unit 13 (maintenance), added 2026-07-11.
+    "زدم", "زد", "بیاید", "میاد", "این‌طوریه", "میره", "خونه‌ام",
+    "می‌بینمتون",
+    # A2 unit 14 (job interview), added 2026-07-11. خوبم is the colloquial
+    # "I'm good (at)" copula contraction, same precedent as خسته‌ام above.
+    "خوبم",
+    # A2 unit 15 (travel disruption), added 2026-07-11. هست is the plain
+    # existential copula ("there is/exists").
+    "هست", "برسم", "بخرید", "می‌مونم",
+    # A2 unit 16 (online habits), added 2026-07-11. مفیده/اینستاگرامه are
+    # colloquial -e-copula-contraction predicates, same precedent as
+    # آفتابیه/سرده/بارونیه/گرمه above.
+    "مفیده", "می‌خونم", "می‌کند", "اینستاگرامه",
+    # A2 unit 18 (shopping complaint), added 2026-07-11. خرابه is the
+    # same colloquial -e-copula-contraction precedent as خراب above's
+    # sibling unit13 قشنگه/etc.
+    "خرابه", "دادن", "بدم", "خریدم", "داد", "خریدینش", "خریدمش", "بدیم",
 }
 FA_PHRASE_PARTS = {"بخیر", "خواهش"}
+
+# تو is a genuine homograph across this whole course: the informal
+# second-person PRONOUN "you" everywhere else, but a spatial/abstract
+# PREPOSITION "in / inside / within" in these specific lessons --
+# unit19's own "تو آشپزخانه" locational sense (the original case this
+# split was built for), plus two more instances found while adding A2
+# units 11-18 (2026-07-11): unit14's "تو کار تیمی ... خوبم" ("good AT
+# teamwork") and unit18's "تو مهلت هفت روزه هستید" ("within the seven-
+# day window") -- both abstract, non-locational uses of the same
+# preposition sense, and both introduce تو itself as a real vocabulary
+# item in this sense (present in introduced_tokens), not the pronoun.
+# Listed by LESSON, not a single content_key, since a lesson can reuse
+# the preposition sense across more than one card (unit14's turn02 AND
+# turn04 both use it).
+TOO_PREPOSITION_LESSONS = {
+    "fa.a1.unit19.lesson04.location_in_home",
+    "fa.a2.unit14.lesson04.interview_dialogue",
+    "fa.a2.unit18.lesson04.shop_return_counter_dialogue",
+}
+
+# نه is a genuine homograph too: "nine" (FA_NUMBERS, established since
+# a1_unit03) versus the negation "no / not" used in these three A2
+# dialogue lessons -- a real, previously-latent bug found while adding
+# units 12/15/16 (2026-07-11 A2 units 11-18 backfill pass). None of
+# these three lessons mention the number nine at all; unit15's own
+# "nine o'clock" is deliberately spelled "نُه" (with the vocalization
+# mark, see FA_NUMBERS above) specifically to avoid this exact
+# collision, but these three lessons' negation still collides with the
+# long-established plain "نه" = "nine" entry without this split.
+NO_NEGATION_LESSONS = {
+    "fa.a2.unit12.lesson04.doctor_visit_dialogue",
+    "fa.a2.unit15.lesson04.station_counter_dialogue",
+    "fa.a2.unit16.lesson04.habits_conversation",
+}
 
 EN_PRONOUNS = {
     "i", "you", "we", "she", "he", "him", "her", "they", "this",
@@ -783,12 +1068,15 @@ def fa_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         semantics.append("person_name")
     if token == "اسم":
         semantics.append("name_word")
-    # تو's unit19-lesson04 occurrence is the spatial PREPOSITION sense
-    # ("in/inside"), not the pronoun -- excluded here so that sense never
-    # picks up the pronoun tag (and, below, the pronoun's person/number
-    # metadata), matching _classify_fa's own separate-Lexeme handling for
-    # this same homograph.
-    is_too_location = token == "تو" and lesson_key == "fa.a1.unit19.lesson04.location_in_home"
+    # تو's PREPOSITION sense ("in/inside/within", see TOO_PREPOSITION_
+    # LESSONS above) is excluded here so that sense never picks up the
+    # pronoun tag (and, below, the pronoun's person/number metadata),
+    # matching _classify_fa's own separate-Lexeme handling for this same
+    # homograph.
+    is_too_location = token == "تو" and lesson_key in TOO_PREPOSITION_LESSONS
+    # نه's negation sense ("no/not", see NO_NEGATION_LESSONS above) is
+    # excluded from the "number" tag below the same way.
+    is_no_negation = token == "نه" and lesson_key in NO_NEGATION_LESSONS
     if token in FA_PRONOUNS and not is_too_location:
         semantics.append("pronoun")
     if token in {"هستم", "هستی", "هست", "است", "هستید", "هستین", "ساراست", "ایرانیه", "ایرانی‌ام"}:
@@ -818,7 +1106,7 @@ def fa_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         semantics.extend(["wellbeing_answer", "wellbeing_answer_phrase"])
     if token in {"خواهش می‌کنم", "لطف دارید", "زحمت نکشید", "ممنون از لطف شما"}:
         semantics.extend(["politeness", "politeness_phrase"])
-    if token in FA_NUMBERS or token in {"چنده", "شماره", "تلفن", "تلفنتون", "تلفنت", "شماره‌ام"}:
+    if (token in FA_NUMBERS or token in {"چنده", "شماره", "تلفن", "تلفنتون", "تلفنت", "شماره‌ام"}) and not is_no_negation:
         semantics.append("number")
     if token in {"شماره", "تلفن", "تلفنتون", "تلفنت", "شماره‌ام"}:
         semantics.append("phone_number")
@@ -1503,21 +1791,33 @@ def _classify_fa(files, level, fa_specs, seen_en):
                     # تو is genuinely two different lexemes in this course:
                     # the informal second-person PRONOUN "you" (taught
                     # early, used throughout, e.g. "تو چی؟" in units
-                    # 11/13/18) versus unit19's own spatial PREPOSITION
-                    # sense "in/inside" (تو آشپزخانه, "in the kitchen"),
-                    # introduced specifically by this unit's own
-                    # teach.too_word card. Same collision class as the
-                    # en-prs sibling script's already-established
-                    # و/می‌شود/کی special cases -- given its own key/POS/
-                    # gloss here instead of letting the second sense
-                    # silently share the pronoun's classification (which
-                    # would make a preposition-constrained practice slot
-                    # draw "you," or a pronoun-constrained slot draw
-                    # "in/inside").
-                    if token == "تو" and content_key.endswith("teach.too_word"):
+                    # 11/13/18) versus a spatial/abstract PREPOSITION
+                    # sense "in/inside/within" (تو آشپزخانه, "in the
+                    # kitchen"; unit14's "تو کار تیمی ... خوبم"; unit18's
+                    # "تو مهلت هفت روزه هستید") in TOO_PREPOSITION_LESSONS
+                    # above. Same collision class as the en-prs sibling
+                    # script's already-established و/می‌شود/کی special
+                    # cases -- given its own key/POS/gloss here instead of
+                    # letting the second sense silently share the
+                    # pronoun's classification (which would make a
+                    # preposition-constrained practice slot draw "you," or
+                    # a pronoun-constrained slot draw "in/inside").
+                    if token == "تو" and lesson_key in TOO_PREPOSITION_LESSONS:
                         key = (level, token, "location_prep")
                         part_of_speech = "preposition"
-                        english_gloss = "in / inside"
+                        english_gloss = "in / inside / within"
+                    # نه is genuinely two different lexemes too: "nine"
+                    # (FA_NUMBERS, established since a1_unit03) versus the
+                    # negation "no / not" in NO_NEGATION_LESSONS above --
+                    # a real, previously-latent bug found while adding A2
+                    # units 12/15/16 (2026-07-11). Without this split,
+                    # every "no"/"not" occurrence in these three dialogue
+                    # lessons would silently inherit the long-established
+                    # "nine" gloss/POS/number-tag instead.
+                    if token == "نه" and lesson_key in NO_NEGATION_LESSONS:
+                        key = (level, token, "negation")
+                        part_of_speech = "particle"
+                        english_gloss = "no / not"
                     existing = fa_specs.get(key)
                     if existing is None:
                         fa_specs[key] = {
