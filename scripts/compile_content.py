@@ -68,7 +68,16 @@ from _fill_in_blank_ambiguity_check import (  # noqa: E402
     load_lexemes_for_pair as _fib_load_lexemes_for_pair,
 )
 
-RTL_LANGUAGES = {"fa", "prs"}
+RTL_LANGUAGES = {"fa", "prs", "ar"}
+# Persian-script codepoint purity only applies to fa/prs (Persian-range
+# yeh/keheh are the CORRECT codepoints there). Arabic (ar) is RTL too but
+# uses the opposite convention -- Arabic-range yeh U+064A / kaf U+0643 are
+# the correct codepoints for ar, so it must not be checked against this
+# same forbidden-codepoint list. Kept as a separate set from RTL_LANGUAGES
+# rather than special-casing "ar" inline, so any future RTL/Arabic-script
+# language (e.g. a future Urdu path) defaults to no script-purity
+# assumption unless explicitly added here.
+PERSIAN_SCRIPT_LANGUAGES = {"fa", "prs"}
 FORBIDDEN_PERSIAN_CODEPOINTS = {
     "\u064a": "Arabic Yeh U+064A (ي); use Persian Yeh U+06CC (ی)",
     "\u0643": "Arabic Kaf U+0643 (ك); use Persian Keheh U+06A9 (ک)",
@@ -282,7 +291,7 @@ def validate_script_purity(
     document_name: str,
     report: Report,
 ):
-    if target_language not in RTL_LANGUAGES:
+    if target_language not in PERSIAN_SCRIPT_LANGUAGES:
         return
 
     for location, value in walk(document, document_name):
