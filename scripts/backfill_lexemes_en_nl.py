@@ -51,6 +51,49 @@ pack exists yet (only through unit28), so there is nothing yet to wire them
 into; add them alongside that future practice-template pass instead of
 speculatively now.
 
+**Extended 2026-07-11** to cover the Dutch B1 course (units 01-11, all now
+`status: reviewed`), which was imported to the DB but entirely absent from
+this script -- B1 lessons were creating zero Lexeme rows, so B1 content
+never fed the lexeme-level SRS or practice pool. B1 is a SEPARATE course
+row from A1/A2 ("Dutch B1", not "Dutch A1"/"Dutch A2" -- same
+`(source_language, target_language, title)` course-dedup pattern already
+documented above for A2), so it gets its own `UNIT_FILES_B1` glob (all 11
+files match `b1_unit*_*.yaml` with no gaps, every one hand-glossed below,
+same discipline UNIT_FILES_A2 established) and its own `_classify_nl(...,
+"b1")` call in `iter_specs()`/`courses_by_level` entry in `main()`. Every
+genuinely new `introduced_tokens` value across all 11 units was
+hand-classified from each overlay's own `gloss`/`example_gloss` fields, not
+guessed. Real homograph/polysemy collisions found and handled the same way
+prior rounds established (see "zijn"/"over" notes elsewhere in this
+docstring): capitalized "Steeds" (B1's "steeds meer" = "more and more,"
+grammatically distinct from the pre-existing lowercase "steeds" = "still,"
+part of "nog steeds") and capitalized "Beste" (B1's email-salutation "Beste
+collega's," = "Dear colleagues," distinct from the pre-existing lowercase
+"beste" = "best," the unit14 superlative) were each given their OWN fresh
+NL_GLOSSES entry rather than reused, since case-sensitive dict keys make
+this safe with zero risk to the pre-existing lowercase/uppercase sibling.
+Same treatment for lowercase "stad" (B1's common noun "the city," distinct
+from the pre-existing capitalized "Stad," a unit14 comparison-ad placeholder
+brand/product name classified as a proper noun) and lowercase "groet" (B1's
+common noun "regards; greeting" inside "met vriendelijke groet," distinct
+from the pre-existing capitalized "Groet," a unit11 standalone message-
+closing PHRASE). Genuine same-meaning case variants (e.g. lowercase "zou"/
+"misschien"/"geweldig"/"sommige"/"alles"/"vorige" reusing the gloss already
+established for their capitalized sentence-initial siblings, and vice versa
+for "Ken"/"Later"/"Soms"/"Nu"/"Vorige") were reused directly, same
+convention as every prior round's `for _token in (...)` case-variant blocks.
+Deliberately did NOT add the finer-grained per-unit `semantic` slot-preset
+tags beyond the blanket `lesson_categories` entry per lesson -- no
+`docs/content/practice/en-nl/b1_unit*.yaml` pack exists yet, same "add
+those alongside a future practice-template authoring pass instead of
+speculatively now" discipline the A2 unit 74-77 round already established.
+`wrapup_production` (B1's own review lesson in every one of the 11 units)
+reuses one shared generic `lesson_categories` value across all 11 units --
+same intentional bare-suffix-collision-reuse precedent already established
+for `advertentie_lezen`/`bonnetje_lezen`/`een_kaartje_kopen` elsewhere in
+this file (all 11 lessons really are the same kind of generic unit-review
+wrapup, so one shared descriptive tag is correct, not a bug).
+
 Known limitation surfaced while extending this (units 5-6): this script keys
 its in-memory `specs` dict by bare token string, and `nl_part_of_speech()` is
 a pure function of the token with no context -- so a genuine homograph across
@@ -110,6 +153,24 @@ UNIT_FILES = tuple(sorted(
 # unit24 is unit.order=1 within the "Dutch A2" course, not 24.
 UNIT_FILES_A2 = tuple(sorted(
     (REPO_ROOT / "docs/content/realizations/nl").glob("a2_unit*_*.yaml")
+))
+
+# B1 units (01-11: hypothetical situations, opinion/nuance, workplace
+# meetings, relative clauses, indirect speech, obligations, ability/kunnen-
+# konden, real/unreal conditionals, agreement/disagreement, work
+# responsibilities, storytelling) live in a THIRD separate course row
+# ("Dutch B1", not "Dutch A1"/"Dutch A2") -- added 2026-07-11, same
+# course-dedup reasoning as UNIT_FILES_A2's own comment above. A plain glob
+# is safe here (matching UNIT_FILES_A2's own precedent) because all 11 real
+# files match `b1_unit*_*.yaml` with no gaps and no numbers past 11 exist
+# yet, and every token every one of them introduces is hand-glossed below --
+# this glob does NOT get to silently pick up a future, not-yet-glossed
+# b1_unit12+ file the way a broader A1-style range-filtered glob would need
+# re-auditing for; a genuinely new B1 unit added later will still hard-crash
+# this script (by design, see the module-level KeyError note above) until
+# someone extends this file again.
+UNIT_FILES_B1 = tuple(sorted(
+    (REPO_ROOT / "docs/content/realizations/nl").glob("b1_unit*_*.yaml")
 ))
 
 # Each lexical gloss is deliberately atomic. Capitalized sentence-initial forms
@@ -713,6 +774,178 @@ NL_GLOSSES.update({
     "teruggekregen": "got back (past participle of terugkrijgen)",
 })
 
+# B1 unit 01 (hypothetische situaties/hypothetical situations), added
+# 2026-07-11. "zou"/"misschien"/"geweldig"/"Soms" reuse the gloss already
+# established for their existing capitalized/lowercase sentence-initial
+# sibling (same meaning, safe direct reuse, see this file's own docstring
+# note on this round); "Toch" is this unit's own capitalized sentence-
+# initial variant of the lowercase "toch" this same block defines.
+NL_GLOSSES.update({
+    "Spanje": "Spain", "zou": "would", "zouden": "would (plural)",
+    "jullie": "you (plural)", "rijk": "rich", "vaker": "more often",
+    "Stel": "imagine (imperative, in 'stel je voor')",
+    "loterij": "the lottery", "winnen": "to win", "stoppen": "to stop",
+    "wereld": "the world", "rondreizen": "to travel around",
+    "misschien": "maybe", "meteen": "immediately",
+    "geweldig": "great; wonderful", "kon": "could", "kiezen": "to choose",
+    "willen": "to want", "Anouk": "Anouk (a Dutch female name)",
+    "Soms": "sometimes", "denkt": "thinks", "opnieuw": "again",
+    "studeren": "to study", "worden": "to become",
+    "kosten": "to cost; to take (time)", "toch": "still; nevertheless",
+    "Toch": "still; nevertheless", "bezoeken": "to visit",
+})
+
+# B1 unit 02 (mening en nuance/opinion and nuance), added 2026-07-11.
+# "sommige" reuses the existing capitalized "Sommige" ("Some") gloss --
+# same meaning, safe direct reuse. "Steeds" (capitalized, this unit's own
+# "steeds meer" = "more and more") is a REAL polysemy/homograph collision
+# with the pre-existing lowercase "steeds" = "still" (part of "nog steeds",
+# unit16) -- given its own fresh entry rather than reused, see this file's
+# own docstring note on this round.
+NL_GLOSSES.update({
+    "hoewel": "although", "vlees": "meat", "ondanks": "despite",
+    "milieu": "the environment", "echter": "however",
+    "sommige": "some", "makkelijk": "easy", "kleine": "little (inflected)",
+    "stap": "the step", "daarmee": "with that; with it",
+    "groente": "vegetables", "gezondheid": "health",
+    "Steeds": "more and more (with a comparative, e.g. 'steeds meer')",
+    "Sommigen": "some (people)", "Anderen": "others",
+    "vooral": "mainly; especially", "veranderen": "to change",
+    "enerzijds": "on one hand", "anderzijds": "on the other hand",
+})
+
+# B1 unit 03 (werkoverleg/workplace meetings), added 2026-07-11. "Beste"
+# (this unit's own email-salutation "Beste collega's," = "Dear
+# colleagues,") is a REAL homograph collision with the pre-existing
+# lowercase "beste" = "best (attributive)" (unit14's superlative) -- given
+# its own fresh entry rather than reused. "groet" (this unit's own "met
+# vriendelijke groet" = "kind regards," a common noun) is likewise given
+# its own fresh entry rather than reused from the pre-existing capitalized
+# "Groet" (a standalone unit11 message-closing PHRASE, a different
+# grammatical role for the same underlying word).
+NL_GLOSSES.update({
+    "rapport": "the report", "nakijken": "to check; to review",
+    "voorstellen": "to propose; to suggest", "vergadering": "the meeting",
+    "beginnen": "to begin; to start", "punt": "the point; the item",
+    "bespreken": "to discuss", "afronden": "to finish; to complete",
+    "cijfers": "the figures; the numbers",
+    "lukken": "to work out; to succeed",
+    "gang": "way (in 'ga uw gang,' go ahead)",
+    "jaarverslag": "the annual report", "Beste": "Dear (letter/email salutation)",
+    "collega's": "colleagues", "ontvang": "receive (with ik)",
+    "opmerkingen": "comments", "hoop": "hope (with ik)",
+    "lukt": "works out; succeeds",
+    "vriendelijke": "kind; friendly (inflected)",
+    "groet": "regards; greeting", "Jasper": "Jasper (a Dutch male name)",
+    "mogelijk": "possible",
+})
+
+# B1 unit 04 (ingewikkelde zinnen/relative clauses), added 2026-07-11. "Ken"
+# reuses the existing lowercase "ken" ("know (with je, inverted)") gloss --
+# same meaning, safe direct reuse (both are the "Ken je...?"/"ken je...?"
+# question form). "stad" (this unit's own common noun "the city") is a REAL
+# collision with the pre-existing capitalized "Stad" -- that token is a
+# unit14 comparison-ad placeholder brand/product name classified as a
+# proper noun, an unrelated meaning -- given its own fresh entry rather
+# than reused.
+NL_GLOSSES.update({
+    "collega": "the colleague", "aardig": "nice; kind",
+    "stad": "the city", "praat": "talk (with ik)",
+    "waarover": "about which", "interessant": "interesting",
+    "Ken": "know (with je, inverted)", "vrouw": "the woman",
+    "Bedoel": "mean (question form, with je)", "geboren": "born",
+    "wereldje": "small world (diminutive of wereld)", "drinkt": "drinks",
+    "toevallig": "coincidental; what a coincidence",
+    "vriendin": "girlfriend; female friend",
+    "universiteit": "the university", "bedrijf": "a company",
+    "Sara": "Sara (a name)", "vlak": "right (next to); close",
+})
+
+# B1 unit 05 (indirecte rede/indirect speech), added 2026-07-11. "Later"
+# reuses the existing lowercase "later" gloss -- same meaning, safe direct
+# reuse.
+NL_GLOSSES.update({
+    "zei": "said", "gehoord": "heard", "ophalen": "to pick up",
+    "Later": "later", "belde": "called", "konden": "could (plural)",
+})
+
+# B1 unit 06 (verplichtingen/obligations), added 2026-07-11. "alles" reuses
+# the existing capitalized "Alles" ("Everything") gloss -- same meaning,
+# safe direct reuse.
+NL_GLOSSES.update({
+    "schoonmaken": "to clean", "kamer": "the room", "eerder": "earlier",
+    "opruimen": "to tidy up", "hoef": "need to (don't need to, with ik)",
+    "vanavond": "tonight",
+    "hoeft": "need to (don't need to, with hij/zij/u)",
+    "cadeau": "the present; the gift", "roken": "to smoke",
+    "rookvrij": "smoke-free", "gebouw": "the building",
+    "Trouwens": "by the way", "wist": "knew", "niets": "nothing",
+    "alles": "everything", "geregeld": "arranged", "vriend": "friend",
+    "gelukkig": "fortunately",
+    "zelf": "-self (emphatic, e.g. himself)", "brengt": "brings",
+})
+
+# B1 unit 07 (kunnen en konden/ability, present and past), added
+# 2026-07-11. "Vorige" reuses the existing lowercase "vorige" ("previous;
+# last") gloss -- same meaning, safe direct reuse. ophalen/kon/eerder/zou/
+# gelukkig were already classified by earlier B1 units above.
+NL_GLOSSES.update({
+    "moest": "had to (past of moeten)", "Vorige": "previous; last",
+    "mogelijkheid": "the possibility",
+})
+
+# B1 unit 08 (reële en irreële situaties/real and unreal conditionals),
+# added 2026-07-11. "Nu" reuses the existing lowercase "nu" ("now") gloss --
+# same meaning, safe direct reuse. "Vorig" (uninflected, used with the
+# het-word "jaar") is a distinct exact token from "Vorige" (inflected, used
+# with the de-word "week") -- ordinary Dutch adjective agreement, not a
+# homograph, each gets its own entry since dict keys are exact strings.
+# zou/studeren/eerder/Sara/willen were already classified by earlier B1
+# units above.
+NL_GLOSSES.update({
+    "geweten": "known (past participle of weten)", "feest": "the party",
+    "Vorig": "last (uninflected, with a het-word like 'jaar')",
+    "hoorde": "heard (simple past)", "Nu": "now",
+    "voorwaarde": "the condition",
+})
+
+# B1 unit 09 (eens en oneens/agreement and disagreement), added 2026-07-11.
+# worden/Toch/denkt were already classified by earlier B1 units above.
+NL_GLOSSES.update({
+    "ermee": "with it (in 'het ermee eens zijn')",
+    "vierdaagse": "four-day (inflected)", "werkweek": "the work week",
+    "bedrijven": "companies", "zegt": "says",
+    "gelukkiger": "happier", "blijf": "remain; stay (with ik)",
+    "sceptisch": "skeptical", "praten": "to talk",
+})
+
+# B1 unit 10 (werkverantwoordelijkheden/work responsibilities), added
+# 2026-07-11. rapport was already classified by unit03 above.
+NL_GLOSSES.update({
+    "verantwoordelijk": "responsible", "medicatie": "the medication",
+    "patiënten": "the patients", "klaar": "done; ready",
+    "gepland": "planned", "planning": "the schedule; the planning",
+    "ergens": "somewhere; something", "meneer": "Mr.; sir",
+    "Bakker": "Bakker (a Dutch surname)", "vraagt": "asks",
+    "taak": "the task",
+})
+
+# B1 unit 11 (een verhaal vertellen/telling a story), added 2026-07-11.
+# belde/opnieuw/zei/kon/Sara were already classified by earlier B1 units
+# above.
+NL_GLOSSES.update({
+    "Terwijl": "while",
+    "nam": "took (simple past of nemen, in 'nam niet op,' didn't answer)",
+    "Toen": "when; then",
+    "opnam": "picked up (the phone; simple past of opnemen)",
+    "deed": "did (simple past of doen)", "jammer": "a shame; a pity",
+    "gebeurde": "happened (simple past of gebeuren)",
+    "grappigs": "funny (indeclinable form after 'iets')",
+    "Uiteindelijk": "in the end; eventually",
+    "lachten": "laughed (plural simple past of lachen)",
+    "verhaal": "the story", "grappig": "funny",
+})
+
 # Case variants are tokens in their own right because provenance preserves the
 # realization spelling. Their gloss is the explicit lexical gloss above.
 for _token in (
@@ -893,6 +1126,106 @@ NOUNS.update({
     "Hardlopen", "huis", "fiets", "lessen", "woorden", "vervoer", "loket",
     "onbekende", "centrum", "Fietsen",
 })
+
+
+# B1 units 01-11, added 2026-07-11. Grouped by unit for traceability, same
+# convention as every prior round's POS-set additions. Case-dup/homograph
+# tokens whose gloss is reused/distinct per the NL_GLOSSES comments above
+# still need their OWN exact-string POS-set membership here, since
+# nl_part_of_speech() keys on the exact token too.
+
+# Unit 01.
+PROPER_NOUNS.update({"Spanje", "Anouk"})
+ADJECTIVES.update({"rijk", "geweldig"})
+ADVERBS.update({"vaker", "misschien", "meteen", "opnieuw", "toch", "Toch", "Soms"})
+VERBS.update({
+    "zou", "zouden", "Stel", "winnen", "stoppen", "rondreizen", "kon",
+    "kiezen", "willen", "denkt", "studeren", "worden", "kosten", "bezoeken",
+})
+NOUNS.update({"loterij", "wereld"})
+PRONOUNS.update({"jullie"})
+
+# Unit 02.
+ADJECTIVES.update({"sommige", "makkelijk", "kleine"})
+ADVERBS.update({"echter", "vooral", "enerzijds", "anderzijds", "Steeds"})
+VERBS.update({"veranderen"})
+NOUNS.update({"vlees", "milieu", "stap", "groente", "gezondheid"})
+PRONOUNS.update({"daarmee", "Sommigen", "Anderen"})
+PREPOSITIONS.update({"ondanks"})
+PARTICLES.update({"hoewel"})
+
+# Unit 03.
+ADJECTIVES.update({"vriendelijke", "mogelijk"})
+NOUNS.update({
+    "rapport", "vergadering", "punt", "cijfers", "gang", "jaarverslag",
+    "collega's", "opmerkingen",
+})
+VERBS.update({
+    "nakijken", "voorstellen", "beginnen", "bespreken", "afronden",
+    "lukken", "ontvang", "hoop", "lukt",
+})
+PROPER_NOUNS.update({"Jasper"})
+ADJECTIVES.update({"Beste"})
+NOUNS.update({"groet"})
+
+# Unit 04.
+NOUNS.update({
+    "collega", "stad", "vrouw", "wereldje", "vriendin", "universiteit",
+    "bedrijf",
+})
+ADJECTIVES.update({"aardig", "interessant", "toevallig"})
+VERBS.update({"praat", "Ken", "Bedoel", "geboren", "drinkt"})
+PRONOUNS.update({"waarover"})
+PROPER_NOUNS.update({"Sara"})
+ADVERBS.update({"vlak"})
+
+# Unit 05.
+VERBS.update({"zei", "gehoord", "ophalen", "belde", "konden"})
+ADVERBS.update({"Later"})
+
+# Unit 06.
+VERBS.update({
+    "schoonmaken", "opruimen", "hoef", "hoeft", "roken", "wist",
+    "geregeld", "brengt",
+})
+ADVERBS.update({"eerder", "vanavond", "Trouwens", "gelukkig"})
+NOUNS.update({"kamer", "cadeau", "gebouw", "vriend"})
+ADJECTIVES.update({"rookvrij"})
+PRONOUNS.update({"niets", "alles", "zelf"})
+
+# Unit 07.
+VERBS.update({"moest"})
+ADJECTIVES.update({"Vorige"})
+NOUNS.update({"mogelijkheid"})
+
+# Unit 08.
+VERBS.update({"geweten"})
+NOUNS.update({"feest", "voorwaarde"})
+ADJECTIVES.update({"Vorig"})
+VERBS.update({"hoorde"})
+ADVERBS.update({"Nu"})
+
+# Unit 09.
+PRONOUNS.update({"ermee"})
+ADJECTIVES.update({"vierdaagse", "gelukkiger", "sceptisch"})
+NOUNS.update({"werkweek", "bedrijven"})
+VERBS.update({"zegt", "blijf", "praten"})
+
+# Unit 10.
+ADJECTIVES.update({"verantwoordelijk", "klaar"})
+NOUNS.update({
+    "medicatie", "patiënten", "planning", "meneer", "taak",
+})
+VERBS.update({"gepland", "vraagt"})
+PRONOUNS.update({"ergens"})
+PROPER_NOUNS.update({"Bakker"})
+
+# Unit 11.
+PARTICLES.update({"Terwijl", "Toen"})
+VERBS.update({"nam", "opnam", "deed", "gebeurde", "lachten"})
+ADJECTIVES.update({"jammer", "grappigs", "grappig"})
+ADVERBS.update({"Uiteindelijk"})
+NOUNS.update({"verhaal"})
 
 
 def nl_part_of_speech(token: str) -> str:
@@ -1114,6 +1447,91 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         "het_retourbeleid": "return_policy_statement",
         "beleid_lezen": "return_policy_reading",
         "omar_brengt_de_koptelefoon_terug": "return_dialogue",
+        # B1 unit 01 (hypothetische situaties/hypothetical situations),
+        # added 2026-07-11.
+        "ik_zou_graag": "hypothetical_wish_singular",
+        "wij_zouden": "hypothetical_wish_plural",
+        "als_had_was": "unreal_conditional_als",
+        "de_loterij": "lottery_hypothetical",
+        "opnieuw_kiezen": "redo_choice_hypothetical",
+        # B1 unit 02 (mening en nuance/opinion and nuance), added
+        # 2026-07-11.
+        "hoewel": "concession_hoewel",
+        "ondanks_dat": "concession_ondanks_dat",
+        "toch_echter": "contrast_toch_echter",
+        "gesprek_vlees": "opinion_dialogue_meat",
+        "artikel_minder_vlees": "opinion_article_reading",
+        # B1 unit 03 (werkoverleg/workplace meetings), added 2026-07-11.
+        "zou_u": "polite_request_zou_u",
+        "voorstellen": "meeting_proposal",
+        "agenda_vragen": "meeting_agenda_question",
+        "overleg_met_bakker": "meeting_dialogue",
+        "email_lezen": "meeting_email_reading",
+        # B1 unit 04 (ingewikkelde zinnen/relative clauses), added
+        # 2026-07-11. "die"/"dat"/"waar" are single-word bare lesson-key
+        # suffixes -- verified no collision with any existing
+        # lesson_categories key (every other key in this dict is a
+        # multi-word snake_case string).
+        "die": "relative_clause_die",
+        "dat": "relative_clause_dat",
+        "waar": "relative_clause_waar",
+        "klein_wereldje": "small_world_dialogue",
+        "sara_lezen": "relative_clause_reading",
+        # B1 unit 05 (indirecte rede/indirect speech), added 2026-07-11.
+        "zei_dat": "reported_speech_statement",
+        "zei_dat_zou": "reported_speech_future",
+        "vroeg_of": "reported_speech_question",
+        "omar_belde": "reported_speech_dialogue",
+        "omar_belde_lezen": "reported_speech_reading",
+        # B1 unit 06 (verplichtingen/obligations), added 2026-07-11.
+        "moet_schoonmaken": "obligation_moet",
+        "had_moeten_opruimen": "past_regret_had_moeten",
+        "hoef_niet_koken": "no_obligation_hoeven",
+        "mag_niet_roken": "prohibition_mag_niet",
+        "omar_bezoek_lezen": "obligation_reading",
+        # B1 unit 07 (kunnen en konden/ability, present and past), added
+        # 2026-07-11.
+        "kan_paspoort_ophalen": "present_ability_kan",
+        "kon_niet_komen": "past_ability_kon",
+        "had_kunnen_ophalen": "past_regret_had_kunnen",
+        "zou_kunnen_afspraak": "hypothetical_ability_zou_kunnen",
+        "paspoort_lezen": "ability_reading",
+        # B1 unit 08 (reële en irreële situaties/real and unreal
+        # conditionals), added 2026-07-11.
+        "reele_conditie_park": "real_conditional",
+        "onreele_heden_studeren": "unreal_present_conditional",
+        "onreele_verleden_feest": "unreal_past_conditional",
+        "weekend_dialoog": "conditional_dialogue",
+        "sara_feest_lezen": "conditional_reading",
+        # B1 unit 09 (eens en oneens/agreement and disagreement), added
+        # 2026-07-11.
+        "eens_werkweek": "agreement_eens",
+        "oneens_werkweek": "disagreement_oneens",
+        "jij_zegt_dat": "restating_opinion",
+        "debat_dialoog": "debate_dialogue",
+        "werkweek_lezen": "debate_reading",
+        # B1 unit 10 (werkverantwoordelijkheden/work responsibilities),
+        # added 2026-07-11.
+        "verantwoordelijk_medicatie": "job_responsibility_statement",
+        "bijna_klaar_rapport": "work_status_update",
+        "zou_u_kunnen_helpen": "polite_help_request",
+        "bakker_dialoog": "workplace_dialogue",
+        "werkdag_lezen": "workday_reading",
+        # B1 unit 11 (een verhaal vertellen/telling a story), added
+        # 2026-07-11.
+        "terwijl_koken": "background_action_terwijl",
+        "eerst_later": "sequencing_eerst_later",
+        "toen_opnam": "past_narrative_toen",
+        "sara_dialoog": "storytelling_dialogue",
+        "verhaal_lezen": "storytelling_reading",
+        # B1's own review lesson (unit 01-11's "wrapup_production" bare
+        # suffix, identical across all 11 units) -- same intentional
+        # bare-suffix-collision-reuse precedent already established for
+        # advertentie_lezen/bonnetje_lezen/een_kaartje_kopen elsewhere in
+        # this dict: every one of these 11 lessons really is the same kind
+        # of generic unit-review production wrapup, so one shared
+        # descriptive value is correct, not a missing-entry bug.
+        "wrapup_production": "b1_unit_review",
     }
     semantic.append(lesson_categories[unit_lesson])
     if t in {"jij", "je"}: semantic.append("informal_address")
@@ -1856,6 +2274,7 @@ def _classify_nl(unit_files, level):
 def iter_specs():
     yield from _classify_nl(UNIT_FILES, "a1")
     yield from _classify_nl(UNIT_FILES_A2, "a2")
+    yield from _classify_nl(UNIT_FILES_B1, "b1")
 
 
 def main() -> int:
@@ -1866,7 +2285,8 @@ def main() -> int:
     if args.dry_run:
         a1_count = sum(spec["level"] == "a1" for spec in specs)
         a2_count = sum(spec["level"] == "a2" for spec in specs)
-        print(f"Lexeme backfill dry run: {len(specs)} nl ({a1_count} a1, {a2_count} a2).")
+        b1_count = sum(spec["level"] == "b1" for spec in specs)
+        print(f"Lexeme backfill dry run: {len(specs)} nl ({a1_count} a1, {a2_count} a2, {b1_count} b1).")
         return 0
 
     from sqlalchemy import select
@@ -1875,7 +2295,7 @@ def main() -> int:
 
     with SessionLocal() as db:
         courses_by_level = {}
-        for level, title in (("a1", "Dutch A1"), ("a2", "Dutch A2")):
+        for level, title in (("a1", "Dutch A1"), ("a2", "Dutch A2"), ("b1", "Dutch B1")):
             needed = any(spec["level"] == level for spec in specs)
             course = db.scalar(
                 select(Course).where(
