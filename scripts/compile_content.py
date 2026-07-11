@@ -72,7 +72,19 @@ FORBIDDEN_PERSIAN_CODEPOINTS = {
     "\u064a": "Arabic Yeh U+064A (ي); use Persian Yeh U+06CC (ی)",
     "\u0643": "Arabic Kaf U+0643 (ك); use Persian Keheh U+06A9 (ک)",
 }
-TOKEN_RE = re.compile(r"[\w\u200c]+", re.UNICODE)
+# Python's \w covers Devanagari letters, but not the dependent vowel signs,
+# nukta, virama, and related combining marks that complete a word. Keep the
+# Devanagari branch separate so those marks do not attach to other scripts.
+DEVANAGARI_WORD_CHARS = (
+    "\u0900-\u0963"
+    "\u0966-\u096f"
+    "\u0971-\u097f"
+)
+TOKEN_RE = re.compile(
+    rf"[{DEVANAGARI_WORD_CHARS}][\w\u200c{DEVANAGARI_WORD_CHARS}]*|"
+    r"[\w\u200c]+",
+    re.UNICODE,
+)
 SPEAKER_LABEL_RE = re.compile(
     r"^[ \t]*(?P<label>[^\n:]{1,40}?)[ \t]*:",
     re.MULTILINE,
