@@ -45,16 +45,22 @@ echo "== 1/3 content import =="
 grep -v '^\s*#' "$REPO_ROOT/scripts/content_manifest.txt" | grep -v '^\s*$' | \
 while IFS='|' read -r COURSE REALS OVERLAYS; do
   echo "-- $COURSE"
+  # A failing course must not abort the whole sync (e.g. another lane's
+  # course with open validation errors) — skip it loudly and continue.
   # shellcheck disable=SC2086
-  (cd "$REPO_ROOT" && $PY scripts/compile_content.py compile \
+  if ! (cd "$REPO_ROOT" && $PY scripts/compile_content.py compile \
       --realization $REALS --overlay $OVERLAYS \
-      --output "$TMPDIR_SYNC/content.json")
+      --output "$TMPDIR_SYNC/content.json"); then
+    echo "   COMPILE FAILED for $COURSE — SKIPPED (fix its validation errors separately)"
+    FAILED_COURSES="${FAILED_COURSES:-} $COURSE"; continue
+  fi
   HTTP=$(curl -s -o "$TMPDIR_SYNC/resp.json" -w '%{http_code}' \
       "$API/admin/content/import" \
       -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' \
       --data-binary @"$TMPDIR_SYNC/content.json")
   if [ "$HTTP" != "200" ]; then
-    echo "   IMPORT FAILED ($HTTP): $(cat "$TMPDIR_SYNC/resp.json")"; exit 1
+    echo "   IMPORT FAILED ($HTTP) for $COURSE — SKIPPED: $(head -c 300 "$TMPDIR_SYNC/resp.json")"
+    FAILED_COURSES="${FAILED_COURSES:-} $COURSE"; continue
   fi
   $PY -c 'import json,sys; d=json.load(open(sys.argv[1])); print("   ", {k:v for k,v in d.items() if k!="warnings"}); w=d.get("warnings") or []; [print("    warn:", x) for x in w[:5]]' "$TMPDIR_SYNC/resp.json"
 done
@@ -91,9 +97,13 @@ import json,sys
 src,tgt,lvl=sys.argv[2],sys.argv[3],sys.argv[4].upper()
 data=json.load(open(sys.argv[1]))
 courses=data if isinstance(data,list) else data.get("courses",[])
-for c in courses:
-    if c.get("source_language")==src and c.get("target_language")==tgt and str(c.get("level","")).upper()==lvl:
-        print(c["id"]); break' "$COURSES_JSON" "$SRC" "$TGT" "$LEVEL")
+matches=[c for c in courses
+         if c.get("source_language")==src and c.get("target_language")==tgt
+         and str(c.get("level","")).upper()==lvl]
+# bootstrap demo courses share language pairs with real ones — pick the
+# course with the most units, which is always the real imported course
+if matches:
+    print(max(matches, key=lambda c: c.get("unit_count") or 0)["id"])' "$COURSES_JSON" "$SRC" "$TGT" "$LEVEL")
     if [ -z "$CID" ]; then echo "   $LEVEL: no $DIRECTION course at this level -- skipping"; continue; fi
     # shellcheck disable=SC2086
     (cd "$REPO_ROOT" && $PY scripts/compile_content.py practice-compile \
