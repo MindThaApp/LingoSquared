@@ -1,0 +1,98 @@
+schema_version: "1.0"
+pack_key: practice.en-prs.a1.unit27
+source_language: en
+target_language: prs
+unit_content_key: prs.a1.unit27.appearance
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: >-
+    Authored 2026-07-11, same A1 units 25-30 practice-pool
+    depth-extension pass as this bundle's a1_unit25.yaml sibling (see
+    that file's notes for the shared pass context). Realization is
+    status reviewed.
+
+    Three groups: "appearance_word" (قد/مو/چشم/ریش/عینک/قیافه, 6
+    members, completes lesson01 -- قد is a REUSED existing lexeme;
+    glosses height/hair/eye/beard/glasses/appearance all distinct).
+    IMPORTANT: چشم here is the unit27 EYE sense only -- the bare token
+    is a genuine homograph against the course's existing polite
+    acknowledgment particle ("of course," lit. eye), split by
+    content_key in scripts/backfill_lexemes_en_prs.py's _classify()
+    (same collision class as its existing و/می‌شود/کی splits) so a slot
+    constrained to part_of_speech noun + this tag can never show
+    "of course" as the gloss for a body-part drill.
+    "have_feature_word" (ریش/عینک, 2) is the subset that combines with
+    "او ... دارد" (taught: "او ریش دارد", "عینک هم دارد") -- مو/چشم
+    would read oddly in that frame, so they're excluded from it.
+    "eye_hair_color_word" (آبی/قهوه‌ای/سیاه, 3 -- سیاه REUSED, additive
+    on its unit21 color_word tag) generalizes the taught "چشم او آبی
+    است" frame; سفید is deliberately excluded (blue/brown/black are the
+    eye colors this unit actually teaches or reads; "چشم او سیاه است"
+    matches the reading passage's black-hair/brown-eye pattern and is a
+    natural Dari sentence).
+
+    Word_order templates checked for grammaticality: "او
+    {have_feature_word} دارد" (lesson02, matches the real taught "او
+    ریش دارد" generalized to both members) and "چشم او
+    {eye_hair_color_word} است" (lesson03, matches the real taught "چشم
+    او آبی است" generalized across the three taught colors).
+
+    No listen_select/listen_type anywhere (en-prs has no TTS voices).
+    No bare unquoted yes/no/true/false anywhere. Verified with
+    scripts/_practice_slot_check.py (0 problems) and
+    scripts/compile_content.py practice-validate for the full en-prs
+    pack (0 errors / 0 warnings). Needs the standard fresh-context
+    review before import.
+tag_schema:
+  part_of_speech: [noun, adjective]
+  agreement_tags:
+    semantic: [appearance_word, have_feature_word, eye_hair_color_word]
+slot_presets:
+  appearance_word: &appearance_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: appearance_word}}
+  have_feature_word: &have_feature_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: have_feature_word}}
+  eye_hair_color_word: &eye_hair_color_word {language_code: prs, part_of_speech: adjective, agreement_tags: {semantic: eye_hair_color_word}}
+templates:
+  # Lesson 1: appearance vocabulary.
+  - content_key: practice.en-prs.prs.a1.unit27.lesson01.appearance_gloss.001
+    lesson_content_key: prs.a1.unit27.lesson01.appearance_vocabulary
+    type: multiple_choice
+    frame: {text: "{appearance_word}", language_code: prs, direction: rtl}
+    slots: {appearance_word: *appearance_word}
+    answer_derivation: {kind: slot_gloss, slot: appearance_word}
+    feedback_frame: {text: "{appearance_word} describes how someone looks.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit27.lesson01.appearance_pair.002
+    lesson_content_key: prs.a1.unit27.lesson01.appearance_vocabulary
+    type: matching_pairs
+    frame: {text: "{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six}", language_code: prs, direction: rtl}
+    slots: {word_one: *appearance_word, word_two: *appearance_word, word_three: *appearance_word, word_four: *appearance_word, word_five: *appearance_word, word_six: *appearance_word}
+    slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}]
+    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+
+  # Lesson 2: asking about appearance.
+  - content_key: practice.en-prs.prs.a1.unit27.lesson02.he_has_feature_order.001
+    lesson_content_key: prs.a1.unit27.lesson02.appearance_question
+    type: word_order
+    frame: {text: "او {have_feature_word} دارد", language_code: prs, direction: rtl}
+    slots: {have_feature_word: *have_feature_word}
+    answer_derivation: {kind: render_frame, frame: {text: "او {have_feature_word} دارد", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: او [feature] دارد (he/she has [feature]).", language_code: en, direction: ltr}
+
+  # Lesson 3: hair and eye color.
+  - content_key: practice.en-prs.prs.a1.unit27.lesson03.eye_color_order.001
+    lesson_content_key: prs.a1.unit27.lesson03.hair_eye_color
+    type: word_order
+    frame: {text: "چشم او {eye_hair_color_word} است", language_code: prs, direction: rtl}
+    slots: {eye_hair_color_word: *eye_hair_color_word}
+    answer_derivation: {kind: render_frame, frame: {text: "چشم او {eye_hair_color_word} است", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: چشم او [color] است (his/her eyes are [color]).", language_code: en, direction: ltr}
+
+  # Lesson 6: wrap-up.
+  - content_key: practice.en-prs.prs.a1.unit27.lesson06.appearance_translate.001
+    lesson_content_key: prs.a1.unit27.lesson06.wrap_up
+    type: translation
+    frame: {text: "{appearance_word}", language_code: en, direction: ltr, slot_rendering: {appearance_word: english_gloss}}
+    slots: {appearance_word: *appearance_word}
+    answer_derivation: {kind: slot_text, slot: appearance_word}
+    feedback_frame: {text: "{appearance_word} is the Dari word for this.", language_code: en, direction: ltr}
