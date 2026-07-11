@@ -198,6 +198,82 @@ UNIT_FILES = (
         REPO_ROOT / "docs/content/realizations/en/a1_unit24_housing.yaml",
         REPO_ROOT / "docs/content/overlays/fa-en/a1_unit24.yaml",
     ),
+    # Units 30-42 (A1: hobbies, appearance, animals, transportation, sports,
+    # technology, education, celebrations, household, neighborhood, post
+    # office, cooking, personality), added 2026-07-11 (fa-en depth-audit
+    # lane -- a real content-depth audit found fa-en's Endless Practice pool
+    # only covered units 1-29 of the 69 authored units, well under the
+    # >=10hr publish-gate bar). These are all still A1-level; the shared
+    # English realization's on-disk unit numbering skips 25-29 for the A1
+    # track (those are the SEPARATE A2 course's own units 25-29, see
+    # UNIT_FILES_A2 below, and content_manifest.txt/practice_manifest.txt
+    # both order fa-en's realization/overlay files exactly this way: 1-24,
+    # then 30-42-and-beyond) -- appended here CONTINUOUS with units 1-24 so
+    # `_classify()`'s enumerate(..., 1) unit_order matches the real Unit.
+    # order values the "انگلیسی A1" course was imported with (25 for
+    # unit30, 26 for unit31, ... 37 for unit42). EN_POS/en_agreement_tags
+    # for all thirteen units' vocabulary (including the new hobby_noun/
+    # frequency_adverb/eye_color/pet_noun/transport_noun/sport_noun/
+    # ball_sport/device_noun/class_noun/celebration_noun/chore_noun/
+    # neighborhood_noun/mail_noun/cooking_verb/personality_adjective
+    # semantic tags) were added to _en_target_lexeme_common.py as part of
+    # this same pass -- verified every introduced_token across these
+    # thirteen realization files against EN_POS's keys: zero missing after
+    # the addition. This script's own Farsi gloss dict was extended to
+    # match (364 new tokens, cross-checked against, but not copy-pasted
+    # from, each unit's own fa-en overlay Farsi text).
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit30_hobbies.yaml",
+        REPO_ROOT / "docs/content/overlays/fa-en/a1_unit30.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit31_appearance.yaml",
+        REPO_ROOT / "docs/content/overlays/fa-en/a1_unit31.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit32_animals.yaml",
+        REPO_ROOT / "docs/content/overlays/fa-en/a1_unit32.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit33_transportation.yaml",
+        REPO_ROOT / "docs/content/overlays/fa-en/a1_unit33.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit34_sports.yaml",
+        REPO_ROOT / "docs/content/overlays/fa-en/a1_unit34.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit35_technology.yaml",
+        REPO_ROOT / "docs/content/overlays/fa-en/a1_unit35.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit36_education.yaml",
+        REPO_ROOT / "docs/content/overlays/fa-en/a1_unit36.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit37_celebrations.yaml",
+        REPO_ROOT / "docs/content/overlays/fa-en/a1_unit37.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit38_household.yaml",
+        REPO_ROOT / "docs/content/overlays/fa-en/a1_unit38.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit39_neighborhood.yaml",
+        REPO_ROOT / "docs/content/overlays/fa-en/a1_unit39.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit40_post.yaml",
+        REPO_ROOT / "docs/content/overlays/fa-en/a1_unit40.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit41_cooking.yaml",
+        REPO_ROOT / "docs/content/overlays/fa-en/a1_unit41.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit42_personality.yaml",
+        REPO_ROOT / "docs/content/overlays/fa-en/a1_unit42.yaml",
+    ),
 )
 
 # A2 units live in a SEPARATE course row ("انگلیسی A2", not "انگلیسی A1")
@@ -555,6 +631,151 @@ EN_TARGET_TO_FA_GLOSS: dict[str, str] = {
     "2pm": "ساعت ۲ بعدازظهر", "4pm": "ساعت ۴ بعدازظهر",
     "received": "دریافت شده", "6180": "۶۱۸۰", "send": "فرستادن",
     "home": "خونه", "here's": "اینه (مخفف this is، در معرفی چیزی)",
+    # Units 30-42 (A1: hobbies, appearance, animals, transportation,
+    # sports, technology, education, celebrations, household,
+    # neighborhood, post office, cooking, personality), added 2026-07-11
+    # (fa-en depth-audit lane, extending Endless Practice coverage past
+    # the shared English realization's unit24 ceiling -- these are all
+    # still A1-level, in the SAME "انگلیسی A1" course, continuous with
+    # units 1-24 in UNIT_FILES below; the shared English realization's
+    # on-disk numbering skips 25-29 for the A1 track (those are the A2
+    # course's own units, see UNIT_FILES_A2). Atomic per-token glosses --
+    # cross-checked against, but not copy-pasted from, each unit's own
+    # (phrase-level) Farsi overlay glosses. Includes tokens with attached
+    # punctuation exactly as introduced_tokens declares them (e.g.
+    # "ball.", "mia,"), matching EN_POS's own keying convention for the
+    # same tokens.
+    "12th": "دوازدهم", "active": "فعال", "add": "اضافه کردن",
+    "along": "کنار آمدن (در get along)", "already": "قبلاً",
+    "always": "همیشه", "anyone's": "مالِ هیچ‌کس", "app": "اپلیکیشن",
+    "apps": "اپلیکیشن‌ها", "around": "دور و بر", "arrived": "رسید",
+    "asked": "درخواست کرد", "bake": "پختن (در فر)", "ball.": "توپ",
+    "balloons": "بادکنک‌ها", "barks": "پارس می‌کند", "basketball": "بسکتبال",
+    "battery": "باتری", "before": "قبل از", "bike": "دوچرخه",
+    "bird": "پرنده", "blond": "بلوند (رنگ مو)", "boil": "جوشاندن",
+    "boiled": "جوشاند", "book": "کتاب", "books": "کتاب‌ها", "bought": "خرید",
+    "break": "اتاق استراحت (در break room)", "brown": "قهوه‌ای",
+    "bus": "اتوبوس", "buy": "خریدن", "buys": "می‌خرد", "cake": "کیک",
+    "call": "تماس گرفتن", "calm": "آرام", "camera": "دوربین", "cat": "گربه",
+    "celebrate": "جشن گرفتن", "chat": "چت کردن", "chicago": "شیکاگو",
+    "chop": "خرد کردن", "chopped": "خرد کرد", "chore": "کار خانه",
+    "chose": "انتخاب کرد", "classes": "کلاس‌ها", "clean": "تمیز کردن",
+    "cleaning": "تمیزکردن (اسم مصدر)", "cleans": "تمیز می‌کند",
+    "clerk": "کارمند", "college": "دانشکده", "comfortable": "راحت",
+    "coming": "آمدن (میهمان‌ها می‌آیند)",
+    "community": "اجتماع (در community college)", "computer": "کامپیوتر",
+    "congratulate": "تبریک گفتن", "congratulated": "تبریک گفت",
+    "congratulations": "تبریک", "cooking": "آشپزی", "cooks": "آشپزی می‌کند",
+    "cost": "هزینه داشتن", "course": "دوره", "coworker": "همکار",
+    "coworkers": "همکاران", "creative": "خلاق", "curly": "فرفری",
+    "cutting": "در حال بریدن", "daniel's": "مالِ دنیل", "daniel?": "دنیل؟",
+    "decided": "تصمیم گرفت", "definitely": "قطعاً", "delicious": "خوشمزه",
+    "didn't": "(منفیِ فعل کمکی گذشته did)", "different": "متفاوت",
+    "differently": "به‌طور متفاوت", "difficult.": "سخت", "dishes": "ظرف‌ها",
+    "does.": "بله (فعل کمکی does، در پاسخ کوتاه)", "doing": "انجام دادن",
+    "door": "در", "download": "دانلود کردن", "downloads": "دانلود می‌کند",
+    "drive": "رانندگی کردن", "drives": "رانندگی می‌کند",
+    "employee": "کارمند", "enjoy": "لذت بردن", "envelope": "پاکت‌نامه",
+    "even": "حتی", "ever": "هیچ‌وقت (در سؤال)", "everyone": "همه",
+    "everywhere": "همه‌جا", "exercise": "ورزش کردن",
+    "express": "پیشتاز (پست پیشتاز)", "eyes": "چشم‌ها", "fast": "سریع",
+    "feels": "احساس می‌شود", "fingers": "انگشت‌ها",
+    "finishes": "تمام می‌کند", "fish": "ماهی", "five-minute": "پنج‌دقیقه‌ای",
+    "forget": "فراموش کردن", "found": "پیدا کرد", "framed": "قاب‌شده",
+    "friend": "دوست", "friendly": "دوست‌داشتنی (حیوان اهلی)",
+    "friends": "دوستان", "funny": "بامزه", "fur": "پشم (حیوان)",
+    "games": "بازی‌ها", "gave": "داد",
+    "gets": "می‌شود (gets more comfortable)", "gift": "هدیه",
+    "glasses": "عینک", "goes": "می‌رود", "grandmother's": "مالِ مادربزرگ",
+    "green": "سبز", "grocery": "خواربارفروشی (در grocery store)",
+    "group": "گروه", "guests": "میهمان‌ها", "gym": "باشگاه",
+    "habits": "عادت‌ها", "hair": "مو", "hallway": "راهرو",
+    "hardworking": "زحمت‌کش", "hates": "متنفر است",
+    "having": "برگزار کردن (در having a party)",
+    "he's": "او ... است (مخفف he is)", "helpful": "کمک‌کننده",
+    "helps": "کمک می‌کند", "herself": "خودش (مؤنث)", "him": "او را (مذکر)",
+    "hobbies": "سرگرمی‌ها", "homework": "تکلیف", "house": "خانه",
+    "how's": "چطوره (مخفف how is)", "humor": "شوخ‌طبعی",
+    "ingredient": "مواد اولیه", "instead": "در عوض", "invite": "دعوت کردن",
+    "it?": "آن؟", "know": "دانستن", "knows": "می‌شناسد", "laptop": "لپ‌تاپ",
+    "laptops": "لپ‌تاپ‌ها", "late": "دیر", "laugh": "خندیدن",
+    "laundry": "لباسشویی", "learn": "یاد گرفتن",
+    "learning": "در حال یادگیری", "least": "کمترین",
+    "leave": "وقت گذاشتن (در leave for)", "letter": "نامه",
+    "letters": "نامه‌ها", "likes": "دوست دارد", "live": "زندگی کردن",
+    "lives": "زندگی می‌کند", "long": "بلند", "lopez": "لوپز",
+    "lot": "خیلی (در a lot)", "loves": "خیلی دوست دارد",
+    "low": "کم (باتری کم)", "luna": "لونا", "luna.": "لونا",
+    "made": "درست کرد", "mail": "پست", "mailbox": "صندوق پستی",
+    "makes": "درست می‌کند", "making": "درست کردن", "map": "نقشه",
+    "maps": "نقشه‌ها", "math": "ریاضی", "max.": "مکس", "meetings": "جلسات",
+    "meets": "ملاقات می‌کند", "mess": "به‌هم‌ریختگی", "mexico": "مکزیک",
+    "mia": "میا", "mia's": "مالِ میا", "mia,": "میا،", "might": "ممکن است",
+    "mind": "اهمیت دادن (I don't mind)", "mine": "مالِ من", "mom": "مامان",
+    "morning.": "صبح", "mornings": "صبح‌ها", "most": "بیشتر",
+    "mostly": "بیشترِ اوقات", "mother's": "مالِ مادر", "mr": "آقای",
+    "named": "به نام", "names": "اسم‌ها", "nearby": "نزدیک",
+    "needs": "نیاز دارد", "neighbor": "همسایه", "neighborhood": "محله",
+    "neighborhoods": "محله‌ها", "neighbors": "همسایه‌ها", "never": "هرگز",
+    "nice!": "قشنگ!", "nights": "شب‌ها", "noisy": "پرسروصدا", "now": "حالا",
+    "october": "اکتبر", "office": "دفتر کار", "office.": "دفتر کار",
+    "often": "اغلب", "okay,": "خب،", "once": "وقتی که (once you know)",
+    "onions": "پیازها", "organized": "منظم", "out": "بیرون (در take out)",
+    "outgoing": "اجتماعی", "outside": "بیرون از",
+    "own": "خودش (own chore habits)", "package": "بسته",
+    "packages": "بسته‌ها", "paid": "پرداخت کرد", "paint": "نقاشی کردن",
+    "painting": "نقاشی", "paints": "نقاشی می‌کند", "pair": "جفت",
+    "parking": "پارکینگ", "party": "مهمانی", "pasta": "پاستا",
+    "patient": "صبور", "people": "آدم‌ها", "perfect": "عالی",
+    "personal": "شخصی", "personalities": "شخصیت‌ها", "pet": "حیوان خانگی",
+    "pets": "حیوانات خانگی", "phones": "گوشی‌ها", "photography": "عکاسی",
+    "photos": "عکس‌ها", "pieces": "تکه‌ها", "planning": "در حال برنامه‌ریزی",
+    "plans": "برنامه‌ها", "plants": "گیاهان", "play": "بازی کردن",
+    "plays": "بازی می‌کند", "pool": "استخر", "post": "پست",
+    "post office": "اداره پست", "postcard": "کارت‌پستال", "project": "پروژه",
+    "promotion": "ترفیع", "put": "گذاشتن", "quickly": "سریع",
+    "quiet": "آرام", "rarely": "به‌ندرت", "reading": "کتاب‌خوانی",
+    "reads": "می‌خواند", "ready": "آماده", "really": "واقعاً",
+    "receipt": "رسید", "recipe": "دستور پخت", "recipes": "دستور پخت‌ها",
+    "regular": "معمولی", "relax": "آرام شدن", "relaxed": "آرام (احساس)",
+    "restaurants": "رستوران‌ها", "ride": "دوچرخه‌سواری کردن",
+    "running": "دویدن", "said": "گفت", "salt": "نمک", "same": "مثل هم",
+    "saturdays": "شنبه‌ها", "sauce": "سس", "say": "گفتن", "says": "می‌گوید",
+    "sends": "می‌فرستد", "sense": "حس (sense of humor)", "sent": "فرستاد",
+    "several": "چند تا", "shops": "مغازه‌ها", "short": "کوتاه",
+    "show": "نشان دادن", "shy": "خجالتی", "sister's": "مالِ خواهرم",
+    "skills": "مهارت‌ها", "slow": "کند", "soccer": "فوتبال",
+    "some": "مقداری", "someday": "یک روزی", "something": "چیزی",
+    "sometime": "یک وقتی", "soon": "به‌زودی", "spanish": "اسپانیایی",
+    "spending": "گذراندن (وقت)", "sport": "ورزش", "stamp": "تمبر",
+    "starting": "شروع می‌کند", "stay": "ماندن (در stay active)",
+    "still": "هنوز", "studies": "درس می‌خواند", "study": "درس خواندن",
+    "studying": "در حال درس‌خواندن", "subject": "درس (موضوع تحصیلی)",
+    "sundays": "یکشنبه‌ها", "surprise": "غافلگیری", "swim.": "شنا کردن",
+    "swimming": "شنا", "swims": "شنا می‌کند", "tablet": "تبلت",
+    "takes": "طول می‌کشد", "taking": "گرفتن (کلاس گرفتن)",
+    "talk": "صحبت کردن", "talkative": "پرحرف", "talking": "در حال صحبت کردن",
+    "tall": "قدبلند", "tasks": "وظایف", "taste": "چشیدن", "tasted": "چشید",
+    "taught": "یاد داد", "teach": "یاد دادن", "teaches": "یاد می‌دهد",
+    "team": "تیم", "tennis": "تنیس", "text": "پیامک فرستادن",
+    "thanked": "تشکر کرد", "thankful": "قدردان", "their": "مالِ آنها",
+    "them": "آنها را", "these": "این‌ها", "though": "هرچند",
+    "times": "بار (تعداد دفعات)", "took": "گرفت (زمان گذشتهٔ take)",
+    "trash": "زباله", "travel": "سفر کردن", "tries": "امتحان می‌کند",
+    "upset": "ناراحت", "us": "ما (حالت مفعولی)", "use": "استفاده کردن",
+    "uses": "استفاده می‌کند", "using": "با استفاده از",
+    "vacuum": "جارو کردن", "vacuumed": "جارو کرد", "vacuums": "جارو می‌کند",
+    "video": "ویدیویی (در video games)", "walks,": "پیاده‌روی‌ها،",
+    "wanted": "می‌خواست", "wants": "می‌خواهد",
+    "warms": "گرم می‌شود (warms up: راحت می‌شود)", "wash": "شستن",
+    "washes": "می‌شوید", "washing": "شستن (اسم مصدر)", "watch": "تماشا کردن",
+    "waters": "آب می‌دهد", "ways": "راه‌ها",
+    "we'll": "ما ... خواهیم (مخفف we will)", "wears": "می‌پوشد",
+    "weekends": "آخر هفته‌ها", "weighed": "وزن کرد", "were": "بودند",
+    "while": "درحالی‌که", "wifi": "وای‌فای", "wish": "آرزو کردن",
+    "without": "بدون", "wonderful": "فوق‌العاده", "work?": "کار؟ (محل کار)",
+    "worry": "نگران بودن", "writes": "می‌نویسد", "yes,": "بله،",
+    "yet": "هنوز", "yoga": "یوگا",
 }
 
 
