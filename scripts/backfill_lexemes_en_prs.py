@@ -197,6 +197,51 @@ UNIT_FILES = (
         REPO_ROOT / "docs/content/realizations/prs/a1_unit30_technology.yaml",
         REPO_ROOT / "docs/content/overlays/en-prs/a1_unit30.yaml",
     ),
+    # Units 31-40 (A1: education, celebrations, household, neighborhood,
+    # post, cooking, personality, colors, seasons, emergencies), added
+    # 2026-07-11 -- second practice-pool depth-extension pass, continuing
+    # directly from the units 25-30 pass. All ten are `status: reviewed`
+    # on disk (both the prs realization and the en-prs overlay).
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a1_unit31_education.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a1_unit31.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a1_unit32_celebrations.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a1_unit32.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a1_unit33_household.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a1_unit33.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a1_unit34_neighborhood.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a1_unit34.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a1_unit35_post.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a1_unit35.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a1_unit36_cooking.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a1_unit36.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a1_unit37_personality.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a1_unit37.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a1_unit38_colors.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a1_unit38.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a1_unit39_seasons.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a1_unit39.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a1_unit40_emergencies.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a1_unit40.yaml",
+    ),
 )
 
 # A2 units live in a SEPARATE course row ("Dari A2", not "Dari A1") --
@@ -942,6 +987,102 @@ PRS_GLOSSES: dict[str, str] = {
     "هدف": "goal; purpose", "می‌خواهد": "he/she wants",
     "تلاش": "effort (used with کردن: to try hard)",
     "بخرد": "(that) he/she buy",
+    # Unit 31 (education), added 2026-07-11 (units 31-40 practice-pool
+    # depth-extension pass). مکتب/محصل/کجا/دوست/دارم/را/وقت/ندارم/اما/
+    # است/من/در/شما/تو/بلی/چطور/کابل/او/عالی/تحصیل/درس/جالب/پروین/کریم
+    # are all REUSED existing lexemes (تحصیل/درس/جالب/پروین/کریم were
+    # first introduced by A2 units 09/10, but specs are (level, token)
+    # keyed, so unit31 -- level a1 -- still needs its own row; not
+    # re-added here, the shared dict value already matches). حقوق is a
+    # genuine homograph against the existing "salary" sense (A2 unit14)
+    # -- this unit's sense is "law" (field of study), special-cased by
+    # content_key in _classify() below instead of overwriting the
+    # shared dict entry.
+    "پوهنتون": "university", "رشته": "field of study; major",
+    "می‌خوانم": "I study / I read", "طب": "medicine",
+    "اقتصاد": "economics", "ادبیات": "literature",
+    "می‌خوانین": "you study (polite)", "می‌خواند": "he/she studies",
+    "می‌خوانی": "you study (informal)", "دشوار": "difficult",
+    "رشته‌ی": "field of (construct form)",
+    # Unit 32 (celebrations), added 2026-07-11. شما/من/است/چطور/او/یک/
+    # اما/دوست/دارم/وقت/ندارم/تو/بلی/خوشحال/امروز/در/کدام are all REUSED
+    # existing lexemes.
+    "تولد": "birthday", "جشن": "celebration; party", "کیک": "cake",
+    "هدیه": "gift", "تبریک": "congratulations",
+    "تولدت": "your birthday (informal)", "مبارک": "blessed; happy",
+    "می‌آیین": "will you come? (polite)", "بصیر": "Basir (name)",
+    "مریم": "Maryam (name)", "می‌آورد": "he/she brings",
+    # Unit 33 (household chores), added 2026-07-11. پاک ("clean") /
+    # کمک ("help") / باید ("must") / لطفاً ("please") / کی ("who") /
+    # چه ("what") / می‌کند / کنین are all REUSED existing lexemes with
+    # matching meanings. ظرف is a genuine homograph against the
+    # existing "within (a period of time)" preposition sense (A2
+    # unit18) -- this unit's sense is the noun "dishes," special-cased
+    # by content_key in _classify() below. می‌شویم is likewise a genuine
+    # homograph against the existing "we become" sense (B1 unit04,
+    # شدن paradigm) -- this unit's sense is "I wash" (شستن paradigm,
+    # a coincidental shared conjugated form), also special-cased by
+    # content_key below.
+    "جاروب": "broom; to sweep", "شستن": "to wash",
+    "وحید": "Wahid (name)", "شکریه": "Shukria (name)",
+    "می‌شوید": "he/she washes",
+    # Unit 34 (neighborhood), added 2026-07-11. نزدیک/دور/کدام/شما/بلی/
+    # چطور/من/ما/خانه/خوب/است/نیست/کجاست/در/تو/او/هر/روز/خوشحال/دوست/
+    # دارم/را/اما/وقت/ندارم/مکتب/لیلا/فرید are all REUSED existing
+    # lexemes.
+    "محله": "neighborhood", "همسایه": "neighbor", "سرک": "street; road",
+    "دوکان": "shop; store", "کارته": "Karte (neighborhood-name element)",
+    # Unit 35 (post office), added 2026-07-11. تکت/خانه/نزدیک/است/
+    # می‌خواهم/یک/کجا/به/هرات/شما/چند/روز/دو/سه/امروز/فردا/سلام/برای/یا/
+    # خوب/او/در/بسیار/دوست/دارم/را/اما/وقت/ندارم/لطفاً are all REUSED
+    # existing lexemes.
+    "پُسته": "post (as in پُسته خانه, post office)",
+    "پُستی": "postal (as in تکت پُستی, postage stamp)",
+    "پارسل": "parcel", "روان": "sent; dispatched (as in روان کردن, to send)",
+    "می‌رسد": "it arrives", "روزه": "-day (duration marker, e.g. دو روزه, two-day)",
+    "نادیا": "Nadia (name)", "رحیم": "Rahim (name)",
+    # Unit 36 (cooking), added 2026-07-11. آشپزخانه/غذا/گوشت/یک/می‌خواهم/
+    # در/اول/بعد/آب/گرم/سلام/بلی/لطفاً/چشم/تشکر/او/می‌کند/بسیار/خوشحال/
+    # است/دوست/دارم/را/اما/وقت/ندارم/نادیا/فرید are all REUSED existing
+    # lexemes.
+    "پیاز": "onion", "هستم": "I am (spelling/register variant of استم)",
+    "می‌پزم": "I cook", "نمک": "salt", "برنج": "rice",
+    "خرد": "chopped (as in خرد کردن, to chop)",
+    "می‌اندازم": "I add / I throw in",
+    "می‌ریزم": "I pour", "می‌پزین": "you cook (polite)",
+    "می‌پزد": "he/she cooks", "بپزین": "(please) cook",
+    # Unit 37 (personality), added 2026-07-11. او/است/و/اما/چطور/چون/
+    # کمک/بلی/کمی/همیشه/گاهی/همه/را/استم/استین are all REUSED existing
+    # lexemes.
+    "مهربان": "kind", "زحمتکش": "hardworking", "باهوش": "smart; intelligent",
+    "تنبل": "lazy", "شوخ": "funny; playful", "کم‌حرف": "quiet; reserved",
+    "راستگو": "honest", "آدم": "person",
+    "دوست دارند": "they like",
+    # Unit 38 (colors), added 2026-07-11. رنگ/است/سیاه/سفید/سرخ/این/
+    # پیراهن/موتر/کتاب/من/و/اما/خانه/چه/کدام/شما/او/اتاق/میز are all
+    # REUSED existing lexemes; آبی is a REUSED existing lexeme
+    # (unit27 appearance) gaining an additive color_word tag here.
+    "زرد": "yellow", "سبز": "green", "نارنجی": "orange",
+    "خاکستری": "gray", "بنفش": "purple",
+    "قهوه‌یی": "brown (spelling variant of قهوه‌ای, no dialect-meaning difference)",
+    "دوست دارین": "you like (polite)", "دوست دارم": "I like",
+    "دوست دارد": "he/she likes", "دوست ندارم": "I don't like",
+    # Unit 39 (seasons), added 2026-07-11. چهار/است/سال/هوا/گرم/سرد/
+    # خیلی/امروز/و/اما/در/می‌شود/می‌بارد/باران/برف/آفتابی/کدام/را/من/
+    # شما/بلی/او/محبوب/دوست دارین/دوست دارم/دوست ندارم/دوست دارد are
+    # all REUSED existing lexemes (the دوست دار* phrases were first
+    # introduced by unit38 above, reused as-is here).
+    "فصل": "season", "بهار": "spring", "تابستان": "summer",
+    "خنک": "cool", "خزان": "autumn; fall", "زمستان": "winter",
+    # Unit 40 (emergencies), added 2026-07-11. کمک/می‌خواهم/این/است/
+    # می‌تانین/کنین/به/زود/بیایین/او/دارد/چه/می‌آید/تشکر/زیاد/یک/نفر/
+    # شهر/می‌کند/در/تلفن/ندارم/اما/شما are all REUSED existing lexemes.
+    "اضطراری": "emergency", "پولیس": "police", "امبولانس": "ambulance",
+    "آتش": "fire", "اطفائیه": "fire brigade",
+    "مه ره": "me (informal object pronoun)",
+    "زنگ بزنین": "call! (polite imperative)",
+    "زخمی": "injured", "خون‌ریزی": "bleeding",
+    "زنگ می‌زنم": "I call (by phone)", "تشکر زیاد": "thanks a lot",
 }
 
 PRS_POS: dict[str, str] = {
@@ -1266,6 +1407,48 @@ PRS_POS: dict[str, str] = {
     "می‌خوابی": "verb", "این‌قدر": "adverb", "پیدا": "adjective",
     "هدف": "noun", "می‌خواهد": "verb", "تلاش": "noun",
     "بخرد": "verb",
+    # Unit 31 (education), added 2026-07-11.
+    "پوهنتون": "noun", "رشته": "noun", "می‌خوانم": "verb", "طب": "noun",
+    "اقتصاد": "noun", "ادبیات": "noun", "می‌خوانین": "verb",
+    "می‌خواند": "verb", "می‌خوانی": "verb", "دشوار": "adjective",
+    "رشته‌ی": "noun",
+    # Unit 32 (celebrations), added 2026-07-11.
+    "تولد": "noun", "جشن": "noun", "کیک": "noun", "هدیه": "noun",
+    "تبریک": "noun", "تولدت": "noun", "مبارک": "adjective",
+    "می‌آیین": "verb", "بصیر": "proper_noun", "مریم": "proper_noun",
+    "می‌آورد": "verb",
+    # Unit 33 (household chores), added 2026-07-11.
+    "جاروب": "noun", "شستن": "verb", "وحید": "proper_noun",
+    "شکریه": "proper_noun", "می‌شوید": "verb",
+    # Unit 34 (neighborhood), added 2026-07-11.
+    "محله": "noun", "همسایه": "noun", "سرک": "noun", "دوکان": "noun",
+    "کارته": "proper_noun",
+    # Unit 35 (post office), added 2026-07-11.
+    "پُسته": "noun", "پُستی": "adjective", "پارسل": "noun",
+    "روان": "adjective", "می‌رسد": "verb", "روزه": "adjective",
+    "نادیا": "proper_noun", "رحیم": "proper_noun",
+    # Unit 36 (cooking), added 2026-07-11.
+    "پیاز": "noun", "هستم": "verb", "می‌پزم": "verb", "نمک": "noun",
+    "برنج": "noun", "خرد": "adjective", "می‌اندازم": "verb",
+    "می‌ریزم": "verb", "می‌پزین": "verb", "می‌پزد": "verb",
+    "بپزین": "verb",
+    # Unit 37 (personality), added 2026-07-11.
+    "مهربان": "adjective", "زحمتکش": "adjective", "باهوش": "adjective",
+    "تنبل": "adjective", "شوخ": "adjective", "کم‌حرف": "adjective",
+    "راستگو": "adjective", "آدم": "noun", "دوست دارند": "phrase",
+    # Unit 38 (colors), added 2026-07-11.
+    "زرد": "adjective", "سبز": "adjective", "نارنجی": "adjective",
+    "خاکستری": "adjective", "بنفش": "adjective", "قهوه‌یی": "adjective",
+    "دوست دارین": "phrase", "دوست دارم": "phrase", "دوست دارد": "phrase",
+    "دوست ندارم": "phrase",
+    # Unit 39 (seasons), added 2026-07-11.
+    "فصل": "noun", "بهار": "noun", "تابستان": "noun", "خنک": "adjective",
+    "خزان": "noun", "زمستان": "noun",
+    # Unit 40 (emergencies), added 2026-07-11.
+    "اضطراری": "noun", "پولیس": "noun", "امبولانس": "noun", "آتش": "noun",
+    "اطفائیه": "noun", "مه ره": "phrase", "زنگ بزنین": "phrase",
+    "زخمی": "adjective", "خون‌ریزی": "noun", "زنگ می‌زنم": "phrase",
+    "تشکر زیاد": "phrase",
 }
 
 
@@ -1954,6 +2137,139 @@ def prs_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     if token in {"می‌فرستم", "می‌زنم", "می‌گیرم"}:
         semantics.append("phone_action_verb")
 
+    # Unit 31 (education) semantic tags, added 2026-07-11.
+    # "study_vocab_word" (تحصیل/پوهنتون/مکتب/رشته/محصل/درس, 6 --
+    # مکتب/محصل REUSED, additive tags) is the unit's recognition pool.
+    # "field_word" (طب/حقوق/اقتصاد/ادبیات, 4) is the subset of academic
+    # fields that combine grammatically with "من ... می‌خوانم" (I study
+    # X), matching the taught "من طب می‌خوانم." pattern. حقوق here uses
+    # the special-cased "law" sense (content_key-scoped in _classify()
+    # below), never the existing "salary" sense.
+    if token in {"تحصیل", "پوهنتون", "مکتب", "رشته", "محصل", "درس"}:
+        semantics.append("study_vocab_word")
+    if token in {"طب", "حقوق", "اقتصاد", "ادبیات"} and (
+        token != "حقوق" or lesson_key.startswith("prs.a1.unit31")
+    ):
+        semantics.append("field_word")
+
+    # Unit 32 (celebrations) semantic tags, added 2026-07-11.
+    # "celebration_word" (تولد/جشن/کیک/هدیه/تبریک, 5) is the unit's
+    # recognition pool. "celebration_liked_word" (تولد/جشن/کیک/هدیه, 4
+    # -- excludes تبریک, since "I like congratulations" is not a
+    # sentence this unit teaches or a natural generalization) is the
+    # subset that combines grammatically with the taught "... را دوست
+    # دارم" wrap-up frame.
+    if token in {"تولد", "جشن", "کیک", "هدیه", "تبریک"}:
+        semantics.append("celebration_word")
+    if token in {"تولد", "جشن", "کیک", "هدیه"}:
+        semantics.append("celebration_liked_word")
+
+    # Unit 33 (household chores) semantic tags, added 2026-07-11.
+    # "chore_word" (جاروب/ظرف/پاک/کمک, 4 -- "کار خانه" deliberately
+    # excluded, since its own introduced_tokens are the two SEPARATE
+    # already-existing words کار/خانه, not a combined "کار خانه"
+    # lexeme; there is no single token to tag) is the unit's
+    # recognition pool -- ظرف here uses the special-cased "dishes"
+    # sense (content_key-scoped in _classify() below), never the
+    # existing "within a period of time" sense. "sweep_clean_word"
+    # (جاروب/پاک, 2) is the strict subset that combines with the taught
+    # "باید ... کنم" light-verb frame (جاروب کردن/پاک کردن) -- ظرف uses
+    # شستن instead, a different light verb, so drawing it into this
+    # frame would be ungrammatical, same composition trap as unit24's
+    # پیاده/با split.
+    if token in {"جاروب", "ظرف", "پاک", "کمک"} and (
+        token != "ظرف" or lesson_key.startswith("prs.a1.unit33")
+    ):
+        semantics.append("chore_word")
+    if token in {"جاروب", "پاک"}:
+        semantics.append("sweep_clean_word")
+
+    # Unit 34 (neighborhood) semantic tags, added 2026-07-11.
+    # "neighborhood_word" (محله/همسایه/سرک/دوکان/مکتب, 5 -- مکتب REUSED,
+    # additive tag) is the unit's recognition pool. "place_proximity_word"
+    # (دوکان/مکتب, 2) is the subset the taught "... نزدیک است"/"... دور
+    # نیست" frames actually use.
+    if token in {"محله", "همسایه", "سرک", "دوکان", "مکتب"}:
+        semantics.append("neighborhood_word")
+    if token in {"دوکان", "مکتب"}:
+        semantics.append("place_proximity_word")
+
+    # Unit 35 (post office) semantic tags, added 2026-07-11.
+    # "post_word" (پُسته/پُستی/نامه/پارسل, 4 -- "پُسته خانه" and "تکت
+    # پُستی" deliberately excluded: both are taught as vocabulary whose
+    # own introduced_tokens split into two separate pieces (پُسته+خانه
+    # reused; تکت reused+پُستی), not a combined single lexeme, so پُسته
+    # and پُستی are drawn individually here, each with its own
+    # standalone gloss) is the unit's recognition pool.
+    # "sendable_item_word" (نامه/پارسل, 2) is the subset the taught
+    # "... روان می‌کنم" (I send X) frame actually uses.
+    if token in {"پُسته", "پُستی", "نامه", "پارسل"}:
+        semantics.append("post_word")
+    if token in {"نامه", "پارسل"}:
+        semantics.append("sendable_item_word")
+
+    # Unit 36 (cooking) semantic tags, added 2026-07-11.
+    # "cooking_word" (آشپزخانه/غذا/پیاز/گوشت/نمک/برنج, 6, all nouns) is
+    # the unit's recognition pool. "cook_object_word" (غذا/گوشت/برنج, 3)
+    # is the subset that combines grammatically with the taught "...
+    # می‌پزم" (I cook X) frame -- پیاز pairs with خرد می‌کنم (chop) and
+    # نمک pairs with می‌اندازم (add) instead, so drawing either into a
+    # می‌پزم frame would be a composition trap, same class as unit24's
+    # پیاده/با split.
+    if token in {"آشپزخانه", "غذا", "پیاز", "گوشت", "نمک", "برنج"}:
+        semantics.append("cooking_word")
+    if token in {"غذا", "گوشت", "برنج"}:
+        semantics.append("cook_object_word")
+
+    # Unit 37 (personality) semantic tags, added 2026-07-11.
+    # "personality_word" (مهربان/زحمتکش/باهوش/تنبل/شوخ/کم‌حرف/راستگو, 7,
+    # all adjectives) is the unit's recognition pool -- every member
+    # combines grammatically with the taught "او ... است" predicate
+    # frame, checked per candidate (all 7 are simple predicate
+    # adjectives with no exceptions).
+    if token in {
+        "مهربان", "زحمتکش", "باهوش", "تنبل", "شوخ", "کم‌حرف", "راستگو",
+    }:
+        semantics.append("personality_word")
+
+    # Unit 38 (colors) semantic tags, added 2026-07-11. Extends the
+    # existing "color_word" tag (unit21: سیاه/سفید/سرخ) with this
+    # unit's new colors plus آبی (REUSED existing lexeme from unit27
+    # appearance, additive tag on top of its eye_hair_color_word tag)
+    # -- every member combines grammatically with the taught "رنگ ...
+    # را دوست دارم" (I like the color X) frame, checked per candidate.
+    if token in {
+        "آبی", "زرد", "سبز", "نارنجی", "خاکستری", "بنفش", "قهوه‌یی",
+    }:
+        semantics.append("color_word")
+
+    # Unit 39 (seasons) semantic tags, added 2026-07-11. "season_word"
+    # (فصل/بهار/تابستان/خزان/زمستان, 5, includes the generic "season"
+    # noun) is the unit's recognition pool. "specific_season_word"
+    # (بهار/تابستان/خزان/زمستان, 4 -- excludes the generic فصل) is the
+    # subset that combines with the taught "... را دوست دارم" frame
+    # (matching "بهار را دوست دارم.").
+    if token in {"فصل", "بهار", "تابستان", "خزان", "زمستان"}:
+        semantics.append("season_word")
+    if token in {"بهار", "تابستان", "خزان", "زمستان"}:
+        semantics.append("specific_season_word")
+
+    # Unit 40 (emergencies) semantic tags, added 2026-07-11.
+    # "emergency_topic_word" (اضطراری/پولیس/امبولانس/آتش/اطفائیه/زخمی/
+    # خون‌ریزی, 7) is the unit's recognition pool. "emergency_service_word"
+    # (پولیس/امبولانس/اطفائیه, 3) is the strict subset of callable
+    # services that combine with the taught "... می‌خواهم" (I need X)
+    # frame (matching "پولیس می‌خواهم!"/"امبولانس می‌خواهم!") -- اضطراری
+    # is a description of the situation itself (not something you
+    # "need"), and زخمی/خون‌ریزی describe a person's condition, not a
+    # service, so both are excluded from this frame.
+    if token in {
+        "اضطراری", "پولیس", "امبولانس", "آتش", "اطفائیه", "زخمی", "خون‌ریزی",
+    }:
+        semantics.append("emergency_topic_word")
+    if token in {"پولیس", "امبولانس", "اطفائیه"}:
+        semantics.append("emergency_service_word")
+
     # A2 unit 11 (banking) semantic tags, added 2026-07-11. "bank_word"
     # (بانک/حساب/بانکی/کارت/رمز/موجودی/امضا, anchored lesson01) is the
     # unit's core recognition vocabulary. "bank_action_verb"
@@ -2431,6 +2747,36 @@ def _classify(files, level, specs, derive_phrases=False):
                         key = (level, token, "purpose_conjunction")
                         part_of_speech = "particle"
                         english_gloss = "in order to / so that"
+                    # Units 31-40 (2026-07-11 practice-pool pass) introduce
+                    # three more genuine homographs against existing
+                    # entries, same collision class as the others above:
+                    # "حقوق" already exists as a NOUN meaning "salary" (A2
+                    # unit14 job interview) -- unit31's education lesson02
+                    # teaches the bare token as "law" (a field of study),
+                    # an unrelated meaning that happens to share the same
+                    # spelling.
+                    if token == "حقوق" and content_key.endswith("teach.law_word"):
+                        key = (level, token, "law_sense")
+                        part_of_speech = "noun"
+                        english_gloss = "law"
+                    # "ظرف" already exists as a PREPOSITION meaning "within
+                    # (a period of time)" (A2 unit18 shopping complaint) --
+                    # unit33's household-chores lesson01 teaches the bare
+                    # token as the NOUN "dishes," an unrelated meaning that
+                    # happens to share the same spelling.
+                    if token == "ظرف" and content_key.endswith("teach.dishes_word"):
+                        key = (level, token, "dishes_sense")
+                        part_of_speech = "noun"
+                        english_gloss = "dishes"
+                    # "می‌شویم" already exists meaning "we become" (B1
+                    # unit04 sequencing, شدن paradigm) -- unit33's
+                    # household-chores lesson01 teaches the bare token as
+                    # "I wash" (شستن paradigm), a coincidentally identical
+                    # conjugated form with an unrelated verb root.
+                    if token == "می‌شویم" and content_key.endswith("teach.review_wash_do"):
+                        key = (level, token, "wash_first_person")
+                        part_of_speech = "verb"
+                        english_gloss = "I wash"
                     existing = specs.get(key)
                     if existing is None:
                         specs[key] = {
