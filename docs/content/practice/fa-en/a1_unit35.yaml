@@ -4,27 +4,36 @@ source_language: fa
 target_language: en
 unit_content_key: en.a1.unit35.technology
 review:
-  status: unreviewed
-  fresh_context: false
+  status: reviewed
+  fresh_context: true
   notes: >-
     Authored 2026-07-11, fa-en depth-audit lane (unit 6 of the 30-42
     batch, see unit30's pack notes for the full batch rationale).
 
-    One semantic tag: 'device_noun' (phone/laptop/tablet/computer/camera
-    from lesson01, five common countable singular devices, all safe in
-    "I have a {item}.").
+    Two semantic tags: 'device_noun' (the 6 lesson01 device items --
+    phone/laptop/tablet/computer/camera plus 'app', all shared from
+    _en_target_lexeme_common.py) for bare-word recognition/matching, and
+    a narrower 5-member 'device_noun_a' (excludes 'app') for the
+    generative frame "I have a {item}." -- 'app' needs the article "an",
+    not "a", so leaving it in the frame pool would render an
+    ungrammatical "I have a app." (fresh-context review fix, 2026-07-11,
+    mirroring the nl-en unit35 pack's identical device_noun/device_noun_a
+    split; both tags already present in _en_target_lexeme_common.py).
 
-    Anchoring check: lesson01 introduces all five device nouns as real
+    Anchoring check: lesson01 introduces all device nouns as real
     new lexemes, verified via iter_specs(). Slot candidate count
     verified with scripts/_practice_slot_check.py and compile_content.py
     practice-validate. Needs the standard fresh-context review before
     import.
+
+    Fresh-context review 2026-07-11 (zero access to authoring reasoning): found and fixed a real composition trap -- the two generative "I have a {item}" frames (order.005, translate_sentence.006) referenced the full 'device_noun' tag, whose shared _en_target_lexeme_common.py pool includes 'app', so the frame could render the ungrammatical "I have a app." Repointed both generative templates at the narrower 'device_noun_a' tag (excludes 'app'), mirroring the nl-en unit35 pack's identical split; recognition/matching templates keep the full 'device_noun'. All else verified sound. compile_content.py practice-validate, scripts/_practice_slot_check.py, and backfill_lexemes_fa_en.py --dry-run all clean. Upgraded to reviewed.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [device_noun]
+    semantic: [device_noun, device_noun_a]
 slot_presets:
   device_noun: &device_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: device_noun}}
+  device_noun_a: &device_noun_a {language_code: en, part_of_speech: noun, agreement_tags: {semantic: device_noun_a}}
 templates:
   - content_key: practice.fa-en.en.a1.unit35.lesson01.choose.001
     lesson_content_key: en.a1.unit35.lesson01.device_vocabulary
@@ -59,13 +68,13 @@ templates:
     lesson_content_key: en.a1.unit35.lesson01.device_vocabulary
     type: word_order
     frame: {text: "I have a {item}", language_code: en, direction: ltr}
-    slots: {item: *device_noun}
+    slots: {item: *device_noun_a}
     answer_derivation: {kind: render_frame, frame: {text: "I have a {item}", language_code: en, direction: ltr}}
     feedback_frame: {text: "{item} دستگاهی است که ذکر شد.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit35.lesson01.translate_sentence.006
     lesson_content_key: en.a1.unit35.lesson01.device_vocabulary
     type: translation
     frame: {text: "من یه {item} دارم.", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
-    slots: {item: *device_noun}
+    slots: {item: *device_noun_a}
     answer_derivation: {kind: render_frame, frame: {text: "I have a {item}", language_code: en, direction: ltr}}
     feedback_frame: {text: "I have a {item}. یعنی من یه {item} دارم.", language_code: fa, direction: rtl}
