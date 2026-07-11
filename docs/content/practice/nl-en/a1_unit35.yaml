@@ -1,0 +1,75 @@
+schema_version: "1.0"
+pack_key: practice.nl-en.a1.unit35
+source_language: nl
+target_language: en
+unit_content_key: en.a1.unit35.technology
+review:
+  status: unreviewed
+  fresh_context: "false"
+  notes: "Authored 2026-07-11, nl-en depth-completion sprint (see
+    a1_unit30.yaml's notes for the sprint context). Two tags:
+    'device_noun' (all 6 lesson01 vocabulary items -- phone/laptop/
+    tablet/computer/app/camera, all nouns) for bare-word recognition/
+    matching, and a narrower 5-member 'device_noun_a' (excludes 'app')
+    for the generative frame 'I have a {item}.' -- 'app' needs the
+    vowel-initial article 'an' ('an app'), which would make the shared
+    frame ungrammatical for that one member ('I have a app.'), same
+    article-agreement discipline as unit23's existing occupation_a/
+    occupation_noun split. Extended
+    scripts/_en_target_lexeme_common.py/scripts/backfill_lexemes_nl_en.py
+    with every introduced_token this unit's realization uses. Every
+    slot's real candidate count verified with
+    scripts/_practice_slot_check.py (device_noun: 6, device_noun_a: 5,
+    both above the >=3 floor). Needs the standard fresh-context review
+    before import."
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [device_noun, device_noun_a]
+slot_presets:
+  device_noun: &device_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: device_noun}}
+  device_noun_a: &device_noun_a {language_code: en, part_of_speech: noun, agreement_tags: {semantic: device_noun_a}}
+templates:
+  - content_key: practice.nl-en.en.a1.unit35.lesson01.choose.001
+    lesson_content_key: en.a1.unit35.lesson01.device_vocabulary
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *device_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is een apparaat uit deze les.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit35.lesson01.listen.002
+    lesson_content_key: en.a1.unit35.lesson01.device_vocabulary
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *device_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is het woord dat je hoorde.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit35.lesson01.match.003
+    lesson_content_key: en.a1.unit35.lesson01.device_vocabulary
+    type: matching_pairs
+    frame: {text: "{first} · {second}", language_code: en, direction: ltr}
+    slots: {first: *device_noun, second: *device_noun, third: *device_noun, fourth: *device_noun, fifth: *device_noun, sixth: *device_noun}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Verbind elk apparaat met de Nederlandse betekenis.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit35.lesson01.translate.004
+    lesson_content_key: en.a1.unit35.lesson01.device_vocabulary
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *device_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit35.lesson01.order.005
+    lesson_content_key: en.a1.unit35.lesson01.device_vocabulary
+    type: word_order
+    frame: {text: "I have a {item}", language_code: en, direction: ltr}
+    slots: {item: *device_noun_a}
+    answer_derivation: {kind: render_frame, frame: {text: "I have a {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} is het genoemde apparaat.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit35.lesson02.translate.001
+    lesson_content_key: en.a1.unit35.lesson02.using_your_phone
+    type: translation
+    frame: {text: "Ik heb een {item}.", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *device_noun_a}
+    answer_derivation: {kind: render_frame, frame: {text: "I have a {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "I have a {item}. betekent Ik heb een {item}.", language_code: nl, direction: ltr}
