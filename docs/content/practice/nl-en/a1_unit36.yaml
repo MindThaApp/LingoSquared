@@ -1,0 +1,74 @@
+schema_version: "1.0"
+pack_key: practice.nl-en.a1.unit36
+source_language: nl
+target_language: en
+unit_content_key: en.a1.unit36.education
+review:
+  status: unreviewed
+  fresh_context: "false"
+  notes: "Authored 2026-07-11, nl-en depth-completion sprint (see
+    a1_unit30.yaml's notes for the sprint context). 6-member
+    'education_noun' tag (class/course/student/homework/subject/test,
+    all nouns) for bare-word recognition only -- no shared generative
+    frame attempted, since these nouns don't collocate uniformly ('I
+    have a {item}' reads fine for class/course/test but is odd for
+    student, and outright wrong for the mass noun homework without an
+    article), same 'don't force it' discipline as unit25/unit27's
+    bureaucracy_noun/banking_noun. Repeated the tag's bare-word
+    recognition across lesson02 and lesson04 for depth, following
+    a2_unit25's established pattern. Extended
+    scripts/_en_target_lexeme_common.py/scripts/backfill_lexemes_nl_en.py
+    with every introduced_token this unit's realization uses. Every
+    slot's real candidate count verified with
+    scripts/_practice_slot_check.py (6 distinct, above the >=3 floor).
+    Needs the standard fresh-context review before import."
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [education_noun]
+slot_presets:
+  education_noun: &education_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: education_noun}}
+templates:
+  - content_key: practice.nl-en.en.a1.unit36.lesson01.choose.001
+    lesson_content_key: en.a1.unit36.lesson01.education_vocabulary
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *education_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is een woord uit deze les.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit36.lesson01.listen.002
+    lesson_content_key: en.a1.unit36.lesson01.education_vocabulary
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *education_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is het woord dat je hoorde.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit36.lesson01.match.003
+    lesson_content_key: en.a1.unit36.lesson01.education_vocabulary
+    type: matching_pairs
+    frame: {text: "{first} · {second}", language_code: en, direction: ltr}
+    slots: {first: *education_noun, second: *education_noun, third: *education_noun, fourth: *education_noun, fifth: *education_noun, sixth: *education_noun}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Verbind elk woord met de Nederlandse betekenis.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit36.lesson01.translate.004
+    lesson_content_key: en.a1.unit36.lesson01.education_vocabulary
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *education_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit36.lesson02.choose.002
+    lesson_content_key: en.a1.unit36.lesson02.taking_a_class
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *education_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is een woord uit deze les.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit36.lesson04.translate.003
+    lesson_content_key: en.a1.unit36.lesson04.learning_something_new
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *education_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
