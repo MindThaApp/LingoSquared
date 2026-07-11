@@ -480,6 +480,12 @@ overlay reviews surfaced a brand-new systemic bug class
 ~22 units) that no existing rule covered — rules prevent known
 classes, review exists to discover unknown ones. Track review yield
 per lane in the review reports so tier decisions are data, not vibes.
+**`docs/CONTENT_DEFECT_REGISTRY.md`** is the per-lane yield ledger —
+every bug class ever found, which languages/directions it hit, and the
+current tier recommendation per direction — consult it before any tier
+decision, and append every future fresh-context review's findings to
+its Section 4 log (zero-defect reviews included, since that's the data
+that justifies a downgrade).
 
 ## Tooling built by Session 3 (INFRA), 2026-07-05
 
