@@ -66,14 +66,26 @@ while IFS='|' read -r COURSE REALS OVERLAYS; do
 done
 
 echo "== 2/3 lexeme backfills (docker, full-repo mount) =="
-cd "$REPO_ROOT/backend"
-for BF in "$REPO_ROOT"/scripts/backfill_lexemes*.py; do
-  NAME=$(basename "$BF")
-  echo "-- $NAME"
-  docker compose run --rm -v "$REPO_ROOT:/repo" -e PYTHONPATH=/repo/backend \
-    --entrypoint python api "/repo/scripts/$NAME"
-done
-cd "$REPO_ROOT"
+# When syncing a REMOTE deployment, set LINGO_BACKFILL_SSH (e.g.
+# ramin@192.168.4.4) and LINGO_REMOTE_REPO (default /home/ramin/LingoSquared):
+# backfills must run against THAT host's DB, not the local one.
+if [ -n "${LINGO_BACKFILL_SSH:-}" ]; then
+  RREPO="${LINGO_REMOTE_REPO:-/home/ramin/LingoSquared}"
+  for BF in "$REPO_ROOT"/scripts/backfill_lexemes*.py; do
+    NAME=$(basename "$BF")
+    echo "-- $NAME (remote: $LINGO_BACKFILL_SSH)"
+    ssh "$LINGO_BACKFILL_SSH" "cd $RREPO/backend && docker compose run --rm -v $RREPO:/repo -e PYTHONPATH=/repo/backend --entrypoint python api /repo/scripts/$NAME"
+  done
+else
+  cd "$REPO_ROOT/backend"
+  for BF in "$REPO_ROOT"/scripts/backfill_lexemes*.py; do
+    NAME=$(basename "$BF")
+    echo "-- $NAME"
+    docker compose run --rm -v "$REPO_ROOT:/repo" -e PYTHONPATH=/repo/backend \
+      --entrypoint python api "/repo/scripts/$NAME"
+  done
+  cd "$REPO_ROOT"
+fi
 
 echo "== 3/3 practice import =="
 COURSES_JSON="$TMPDIR_SYNC/courses.json"
