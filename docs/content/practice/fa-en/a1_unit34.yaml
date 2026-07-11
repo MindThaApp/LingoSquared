@@ -1,0 +1,76 @@
+schema_version: "1.0"
+pack_key: practice.fa-en.a1.unit34
+source_language: fa
+target_language: en
+unit_content_key: en.a1.unit34.sports
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: >-
+    Authored 2026-07-11, fa-en depth-audit lane (unit 5 of the 30-42
+    batch, see unit30's pack notes for the full batch rationale).
+
+    Two semantic tags: 'sport_noun' (soccer/tennis/basketball/swimming/
+    yoga from lesson01, all five sport/activity nouns this unit
+    introduces, bare recognition only -- the real content pairs each
+    with a DIFFERENT verb, play/go/do, per the overlay's own explicit
+    note on this) and the narrower 'ball_sport' (soccer/tennis/
+    basketball, the 3-member subset that genuinely collocates with
+    "play", safe in "We play {item}.").
+
+    Anchoring check: lesson01 introduces all five sport nouns as real
+    new lexemes, verified via iter_specs(). Slot candidate counts
+    verified with scripts/_practice_slot_check.py and compile_content.py
+    practice-validate. Needs the standard fresh-context review before
+    import.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [sport_noun, ball_sport]
+slot_presets:
+  sport_noun: &sport_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: sport_noun}}
+  ball_sport: &ball_sport {language_code: en, part_of_speech: noun, agreement_tags: {semantic: ball_sport}}
+templates:
+  - content_key: practice.fa-en.en.a1.unit34.lesson01.choose.001
+    lesson_content_key: en.a1.unit34.lesson01.sports_vocabulary
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *sport_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit34.lesson01.listen.002
+    lesson_content_key: en.a1.unit34.lesson01.sports_vocabulary
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *sport_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "واژه‌ای که شنیدید {item} بود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit34.lesson01.match.003
+    lesson_content_key: en.a1.unit34.lesson01.sports_vocabulary
+    type: matching_pairs
+    frame: {text: "{first} — {second}", language_code: en, direction: ltr}
+    slots: {first: *sport_noun, second: *sport_noun, third: *sport_noun, fourth: *sport_noun, fifth: *sport_noun}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth]}
+    feedback_frame: {text: "هر ورزش را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit34.lesson01.translate.004
+    lesson_content_key: en.a1.unit34.lesson01.sports_vocabulary
+    type: translation
+    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *sport_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این ورزش است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit34.lesson01.order.005
+    lesson_content_key: en.a1.unit34.lesson01.sports_vocabulary
+    type: word_order
+    frame: {text: "We play {item}", language_code: en, direction: ltr}
+    slots: {item: *ball_sport}
+    answer_derivation: {kind: render_frame, frame: {text: "We play {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} ورزشی توپی است که با فعل play می‌آید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit34.lesson01.translate_sentence.006
+    lesson_content_key: en.a1.unit34.lesson01.sports_vocabulary
+    type: translation
+    frame: {text: "ما {item} بازی می‌کنیم.", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *ball_sport}
+    answer_derivation: {kind: render_frame, frame: {text: "We play {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "We play {item}. یعنی ما {item} بازی می‌کنیم.", language_code: fa, direction: rtl}

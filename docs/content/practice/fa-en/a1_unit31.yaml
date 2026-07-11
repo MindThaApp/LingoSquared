@@ -1,0 +1,72 @@
+schema_version: "1.0"
+pack_key: practice.fa-en.a1.unit31
+source_language: fa
+target_language: en
+unit_content_key: en.a1.unit31.appearance
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: >-
+    Authored 2026-07-11, fa-en depth-audit lane (unit 2 of the 30-42
+    batch, see unit30's pack notes for the full batch rationale).
+
+    One semantic tag: 'eye_color' (blue/brown/green from lesson02, all
+    real, common eye colors, all safe in "Her eyes are {item}."). This
+    narrower tag was added alongside the pre-existing A1 unit12 'color'
+    tag rather than merged into it -- black/red/white (unit12's
+    car-color members) are deliberately excluded since black/white eyes
+    would be a strange claim and red isn't a real eye color; per
+    AUTHORING_GUIDE.md #18 this is a same-course-level (A1) reuse
+    decision, not a new tag scoping risk. Only 3 members (the unit's
+    entire real eye-color vocabulary) -- matching_pairs was skipped as
+    too thin at 3 pairs (AUTHORING_GUIDE.md #16's "handful to a dozen"
+    guidance), covered instead by a full-sentence translate variant for
+    added depth.
+
+    Anchoring check: lesson02 introduces all three eye-color adjectives
+    as real new lexemes, verified via iter_specs(). Slot candidate count
+    verified with scripts/_practice_slot_check.py and
+    compile_content.py practice-validate. Needs the standard
+    fresh-context review before import.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [eye_color]
+slot_presets:
+  eye_color: &eye_color {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: eye_color}}
+templates:
+  - content_key: practice.fa-en.en.a1.unit31.lesson02.choose.001
+    lesson_content_key: en.a1.unit31.lesson02.eyes_and_description
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *eye_color}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit31.lesson02.listen.002
+    lesson_content_key: en.a1.unit31.lesson02.eyes_and_description
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *eye_color}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "رنگی که شنیدید {item} بود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit31.lesson02.translate.003
+    lesson_content_key: en.a1.unit31.lesson02.eyes_and_description
+    type: translation
+    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *eye_color}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این رنگ است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit31.lesson02.order.004
+    lesson_content_key: en.a1.unit31.lesson02.eyes_and_description
+    type: word_order
+    frame: {text: "Her eyes are {item}", language_code: en, direction: ltr}
+    slots: {item: *eye_color}
+    answer_derivation: {kind: render_frame, frame: {text: "Her eyes are {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} رنگ چشمی است که ذکر شد.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit31.lesson02.translate_sentence.005
+    lesson_content_key: en.a1.unit31.lesson02.eyes_and_description
+    type: translation
+    frame: {text: "چشماش {item}ه.", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *eye_color}
+    answer_derivation: {kind: render_frame, frame: {text: "Her eyes are {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "Her eyes are {item}. یعنی چشماش {item}ه.", language_code: fa, direction: rtl}
