@@ -54,15 +54,15 @@ EN_POS: dict[str, str] = {
     "daniel": "proper_noun", "work": "verb", "at": "preposition", "the": "particle",
     "welcome": "verb", "thank": "verb",
     # Unit 3 (numbers/ages/prices/phones/market), added 2026-07-05.
-    "zero": "noun", "one": "noun", "two": "noun", "three": "noun", "four": "noun",
-    "five": "noun", "six": "noun", "seven": "noun", "eight": "noun", "nine": "noun",
-    "ten": "noun", "eleven": "noun", "twelve": "noun", "thirteen": "noun",
-    "fifteen": "noun", "twenty": "noun", "twenty-one": "noun", "thirty": "noun",
-    "forty": "noun", "fifty": "noun", "hundred": "noun", "twenty-five": "noun",
-    "old": "adjective", "years": "noun", "it's": "pronoun", "dollars": "noun",
-    "phone": "noun", "number": "noun", "market": "noun", "apples": "noun",
-    "they're": "pronoun", "ok": "adjective", "this": "pronoun", "shop": "noun",
-    "much": "adverb",
+    "zero": "noun", "one": "noun", "two": "noun", "three": "noun",
+    "four": "noun", "five": "noun", "six": "noun", "seven": "noun",
+    "eight": "noun", "nine": "noun", "ten": "noun", "eleven": "noun",
+    "twelve": "noun", "thirteen": "noun", "fifteen": "noun", "twenty": "noun",
+    "twenty-one": "noun", "thirty": "noun", "forty": "noun", "fifty": "noun",
+    "hundred": "noun", "twenty-five": "noun", "old": "adjective", "years": "noun",
+    "it's": "pronoun", "dollars": "noun", "phone": "noun", "number": "noun",
+    "market": "noun", "apples": "noun", "they're": "pronoun", "ok": "adjective",
+    "this": "pronoun", "shop": "noun", "much": "adverb",
     # Unit 4 (days/months/calendar dates), added 2026-07-05.
     "monday": "noun", "tuesday": "noun", "wednesday": "noun", "thursday": "noun",
     "friday": "noun", "saturday": "noun", "sunday": "noun", "it": "pronoun",
@@ -91,20 +91,19 @@ EN_POS: dict[str, str] = {
     "close": "verb", "in": "preposition",
     # Unit 6 (family members and relationships), added 2026-07-05.
     "mother": "noun", "father": "noun", "brother": "noun", "sister": "noun",
-    "parents": "noun", "siblings": "noun", "grandmother": "noun",
-    "grandfather": "noun", "aunt": "noun", "uncle": "noun", "cousin": "noun",
-    "his": "pronoun", "her": "pronoun", "she's": "pronoun", "brothers": "noun",
-    "do": "verb", "any": "particle", "don't": "verb", "only": "adjective",
-    "child": "noun", "photo": "noun", "family": "noun", "who": "pronoun",
-    "just": "adverb",
+    "parents": "noun", "siblings": "noun", "grandmother": "noun", "grandfather": "noun",
+    "aunt": "noun", "uncle": "noun", "cousin": "noun", "his": "pronoun",
+    "her": "pronoun", "she's": "pronoun", "brothers": "noun", "do": "verb",
+    "any": "particle", "don't": "verb", "only": "adjective", "child": "noun",
+    "photo": "noun", "family": "noun", "who": "pronoun", "just": "adverb",
     # Unit 7 (food, drink, and ordering), added 2026-07-05.
     "coffee": "noun", "tea": "noun", "water": "noun", "bread": "noun",
     "soup": "noun", "salad": "noun", "sandwich": "noun", "i'd": "pronoun",
     "like": "verb", "please": "adverb", "anything": "pronoun", "else": "adverb",
     "that's": "pronoun", "all": "pronoun", "for": "preposition", "here": "adverb",
     "or": "particle", "go": "verb", "menu": "noun", "price": "noun",
-    "cafe": "noun", "2": "symbol", "3": "symbol", "5": "symbol", "6": "symbol",
-    "sure": "adjective",
+    "cafe": "noun", "2": "symbol", "3": "symbol", "5": "symbol",
+    "6": "symbol", "sure": "adjective",
     # Unit 8 (shopping: prices and quantities), added 2026-07-05.
     "pound": "noun", "of": "preposition", "dozen": "noun", "eggs": "noun",
     "bottle": "noun", "bag": "noun", "kilo": "noun", "tomatoes": "noun",
@@ -112,45 +111,40 @@ EN_POS: dict[str, str] = {
     "4": "symbol",
     # Unit 9 (common places and locations), added 2026-07-05.
     "bank": "noun", "hospital": "noun", "pharmacy": "noun", "park": "noun",
-    "restaurant": "noun", "next": "adjective", "across": "preposition",
-    "from": "preposition", "between": "preposition", "behind": "preposition",
-    "front": "noun", "where": "pronoun", "excuse": "verb", "me": "pronoun",
-    "far": "adjective",
+    "restaurant": "noun", "next": "adjective", "across": "preposition", "from": "preposition",
+    "between": "preposition", "behind": "preposition", "front": "noun", "where": "pronoun",
+    "excuse": "verb", "me": "pronoun", "far": "adjective",
     # Unit 10 (asking for and following directions), added 2026-07-05.
     "turn": "verb", "left": "noun", "right": "noun", "straight": "adverb",
     "stop": "verb", "corner": "noun", "get": "verb", "minutes": "noun",
     "can't": "verb", "miss": "verb", "take": "verb", "first": "adjective",
     "street": "noun", "second": "adjective", "directions": "noun",
     # Unit 11 (talking about the weather), added 2026-07-05.
-    "sunny": "adjective", "rainy": "adjective", "cloudy": "adjective",
-    "cold": "adjective", "hot": "adjective", "windy": "adjective",
-    "weather": "noun", "warm": "adjective", "raining": "verb", "should": "verb",
-    "umbrella": "noun", "tomorrow": "noun", "will": "verb", "be": "verb",
-    "rain": "verb", "let's": "pronoun", "idea": "noun", "but": "particle",
-    "going": "verb", "so": "adverb",
+    "sunny": "adjective", "rainy": "adjective", "cloudy": "adjective", "cold": "adjective",
+    "hot": "adjective", "windy": "adjective", "weather": "noun", "warm": "adjective",
+    "raining": "verb", "should": "verb", "umbrella": "noun", "tomorrow": "noun",
+    "will": "verb", "be": "verb", "rain": "verb", "let's": "pronoun",
+    "idea": "noun", "but": "particle", "going": "verb", "so": "adverb",
     # Unit 12 (clothing: sizes and colors), added 2026-07-05.
     "shirt": "noun", "pants": "noun", "shoes": "noun", "jacket": "noun",
-    "dress": "noun", "small": "adjective", "medium": "adjective",
-    "large": "adjective", "blue": "adjective", "black": "adjective",
-    "size": "noun", "color": "noun", "20": "symbol", "i'll": "pronoun",
-    "we": "pronoun",
+    "dress": "noun", "small": "adjective", "medium": "adjective", "large": "adjective",
+    "blue": "adjective", "black": "adjective", "size": "noun", "color": "noun",
+    "20": "symbol", "i'll": "pronoun", "we": "pronoun",
     # Unit 13 (talking about feelings), added 2026-07-05.
-    "happy": "adjective", "sad": "adjective", "tired": "adjective",
-    "excited": "adjective", "worried": "adjective", "feeling": "noun",
-    "little": "adjective", "because": "particle", "big": "adjective",
-    "test": "noun", "class": "noun", "almost": "adverb", "over": "adjective",
-    "last": "adjective", "year": "noun", "writer": "noun", "oh": "particle",
-    "understand": "verb",
+    "happy": "adjective", "sad": "adjective", "tired": "adjective", "excited": "adjective",
+    "worried": "adjective", "feeling": "noun", "little": "adjective", "because": "particle",
+    "big": "adjective", "test": "noun", "class": "noun", "almost": "adverb",
+    "over": "adjective", "last": "adjective", "year": "noun", "writer": "noun",
+    "oh": "particle", "understand": "verb",
     # Unit 14 (phone calls and messages), added 2026-07-05.
-    "free": "adjective", "tonight": "noun", "sorry": "adjective",
-    "repeat": "verb", "speak": "verb", "more": "adverb", "slowly": "adverb",
-    "hear": "verb", "well": "adverb", "6pm": "noun", "message": "noun",
-    "suggest": "verb", "meeting": "noun", "place": "noun", "about": "preposition",
-    "that": "pronoun",
+    "free": "adjective", "tonight": "noun", "sorry": "adjective", "repeat": "verb",
+    "speak": "verb", "more": "adverb", "slowly": "adverb", "hear": "verb",
+    "well": "adverb", "6pm": "noun", "message": "noun", "suggest": "verb",
+    "meeting": "noun", "place": "noun", "about": "preposition", "that": "pronoun",
     # Unit 15 (handling money and payments), added 2026-07-05.
     "cash": "noun", "card": "noun", "credit": "noun", "debit": "noun",
-    "total": "noun", "cards": "noun", "pay": "verb", "tax": "noun", "10": "symbol",
-    "by": "preposition", "1": "symbol",
+    "total": "noun", "cards": "noun", "pay": "verb", "tax": "noun",
+    "10": "symbol", "by": "preposition", "1": "symbol",
     # Unit 16 (describing a daily routine), added 2026-07-05.
     "wake": "verb", "up": "particle", "dressed": "adjective", "dinner": "noun",
     "bed": "noun", "every": "adjective", "usually": "adverb", "breakfast": "noun",
@@ -165,14 +159,13 @@ EN_POS: dict[str, str] = {
     "watched": "verb", "writer's": "noun", "s": "particle", "was": "verb",
     "week": "noun",
     # Unit 19 (expressing likes and preferences), added 2026-07-05.
-    "like": "verb", "don't": "verb", "prefer": "verb", "hate": "verb",
-    "calmer": "adjective", "very": "adverb", "strong": "adjective",
-    "why": "adverb", "think": "verb", "prefers": "verb", "thinks": "verb",
+    "prefer": "verb", "hate": "verb", "calmer": "adjective", "very": "adverb",
+    "strong": "adjective", "why": "adverb", "think": "verb", "prefers": "verb",
+    "thinks": "verb",
     # Unit 20 (making basic comparisons), added 2026-07-06.
-    "bigger": "adjective", "smaller": "adjective", "cheaper": "adjective",
-    "expensive": "adjective", "faster": "adjective", "than": "particle",
-    "nicer": "adjective", "cheapest": "adjective", "red": "adjective",
-    "car": "noun", "white": "adjective",
+    "bigger": "adjective", "smaller": "adjective", "cheaper": "adjective", "expensive": "adjective",
+    "faster": "adjective", "than": "particle", "nicer": "adjective", "cheapest": "adjective",
+    "red": "adjective", "car": "noun", "white": "adjective",
     # Unit 21 (handling a basic journey/travel), added 2026-07-06.
     "ticket": "noun", "platform": "noun", "train": "noun", "departure": "noun",
     "arrival": "noun", "boston": "proper_noun", "way": "noun", "round": "adjective",
@@ -188,9 +181,9 @@ EN_POS: dict[str, str] = {
     # merge incident silently reverted this and the unit 24-26 entries
     # below -- see docs/BUILD_LOG.md for the incident and its fix).
     "nurse": "noun", "cook": "noun", "driver": "noun", "patients": "noun",
-    "reports": "noun", "interesting": "adjective", "company": "noun",
-    "downtown": "noun", "answer": "verb", "emails": "noun", "sometimes": "adverb",
-    "with": "preposition", "clients": "noun", "job": "noun",
+    "reports": "noun", "interesting": "adjective", "company": "noun", "downtown": "noun",
+    "answer": "verb", "emails": "noun", "sometimes": "adverb", "with": "preposition",
+    "clients": "noun", "job": "noun",
     # Unit 24 (describing a home), added 2026-07-06.
     "bedroom": "noun", "kitchen": "noun", "bathroom": "noun", "living": "adjective",
     "room": "noun", "garden": "noun", "many": "adjective", "rooms": "noun",
@@ -200,30 +193,22 @@ EN_POS: dict[str, str] = {
     "eat": "verb",
     # Unit 25 (A2: registering with local authorities), added 2026-07-06.
     "address": "noun", "appointment": "noun", "document": "noun", "proof": "noun",
-    "residency": "noun", "form": "noun", "confirmation": "noun", "was": "verb",
-    "wondering": "verb", "whether": "particle", "could": "verb", "make": "verb",
-    "an": "particle", "would": "verb", "possible": "adjective", "come": "verb",
-    "this": "pronoun", "friday": "noun", "update": "verb", "my": "pronoun",
-    "because": "particle", "moved": "verb", "last": "adjective", "month": "noun",
-    "photo": "noun", "id": "noun", "utility": "noun", "bill": "noun",
-    "your": "pronoun", "please": "adverb", "bring": "verb", "such": "preposition",
-    "as": "preposition", "you": "pronoun", "have": "verb", "lived": "verb",
-    "at": "preposition", "new": "adjective", "since": "preposition", "so": "adverb",
-    "also": "adverb", "lease": "noun", "will": "verb", "when": "adverb",
-    "yes": "particle", "10am": "symbol", "4471": "symbol", "works": "verb",
+    "residency": "noun", "form": "noun", "confirmation": "noun", "wondering": "verb",
+    "whether": "particle", "could": "verb", "make": "verb", "possible": "adjective",
+    "come": "verb", "update": "verb", "moved": "verb", "id": "noun",
+    "utility": "noun", "bill": "noun", "bring": "verb", "such": "preposition",
+    "lived": "verb", "since": "preposition", "lease": "noun", "when": "adverb",
+    "10am": "symbol", "4471": "symbol",
     # Unit 26 (A2: giving opinions with reasons), added 2026-07-06.
-    "opinion": "noun", "agree": "verb", "on": "preposition", "other": "adjective",
-    "hand": "noun", "about": "preposition", "dog": "noun", "park": "noun",
-    "good": "adjective", "idea": "noun", "dogs": "noun", "space": "noun",
-    "run": "verb", "very": "adverb", "playground": "noun",
-    "fair": "adjective", "point": "noun", "they": "pronoun", "should": "verb",
-    "move": "verb", "little": "adjective", "farther": "adverb", "away": "adverb",
+    "opinion": "noun", "agree": "verb", "other": "adjective", "hand": "noun",
+    "dog": "noun", "dogs": "noun", "space": "noun", "run": "verb",
+    "playground": "noun", "fair": "adjective", "point": "noun", "they": "pronoun",
+    "move": "verb", "farther": "adverb", "away": "adverb",
     # Unit 27 (A2: opening a bank account), added 2026-07-07 -- part of the
     # nl-en A2 course-routing fix (see backfill_lexemes_nl_en.py's docstring).
-    "checking": "adjective", "account": "noun", "monthly": "adjective",
-    "fee": "noun", "minimum": "adjective", "balance": "noun",
-    "direct": "adjective", "deposit": "noun", "documents": "noun",
-    "you'll": "pronoun", "dmv": "proper_noun", "business": "noun",
+    "checking": "adjective", "account": "noun", "monthly": "adjective", "fee": "noun",
+    "minimum": "adjective", "balance": "noun", "direct": "adjective", "deposit": "noun",
+    "documents": "noun", "you'll": "pronoun", "dmv": "proper_noun", "business": "noun",
     "days": "noun", "keep": "verb", "500": "symbol", "sounds": "verb",
     "teller": "noun", "both": "pronoun",
     # Unit 28 (A2: attending a doctor's appointment), added 2026-07-07 --
@@ -231,11 +216,10 @@ EN_POS: dict[str, str] = {
     # "card"/"headache"/"sore"/"throat"/"fever"/"up" already exist (units
     # 25/15/22/16 respectively) -- only genuinely new-to-unit28 tokens
     # added here.
-    "medicine": "noun", "prescription": "noun", "follow": "verb",
-    "getting": "verb", "worse": "adjective", "insurance": "noun",
-    "i've": "pronoun", "had": "verb", "early": "adverb", "confirmed": "verb",
-    "3pm": "symbol", "7724": "symbol", "back": "adverb", "within": "preposition",
-    "twice": "adverb", "plenty": "noun",
+    "medicine": "noun", "prescription": "noun", "follow": "verb", "getting": "verb",
+    "worse": "adjective", "insurance": "noun", "i've": "pronoun", "had": "verb",
+    "early": "adverb", "confirmed": "verb", "3pm": "symbol", "7724": "symbol",
+    "back": "adverb", "within": "preposition", "twice": "adverb", "plenty": "noun",
     # KNOWN HOMOGRAPH LIMITATION (same class as "close" above): "cold" is
     # already classified "adjective" (unit11's weather_condition sense --
     # "It's cold today"), but unit28 also introduces "cold" as a NOUN ("You
@@ -274,339 +258,128 @@ EN_POS: dict[str, str] = {
     # new entry was added here and no unit41 practice template uses
     # "cook" as a fillable slot for the verb sense -- same discipline
     # as the existing "close"/"cold"/"report" entries above.
+    #
+    # Deduplicated 2026-07-11: three concurrent workers (prs-en, fa-en,
+    # nl-en depth sprints) each appended a full units 30-42 classification
+    # block, leaving every token declared 2-3 times (Python last-wins hid
+    # it). Merged down to this single per-unit block; for the ~21 tokens
+    # whose duplicates disagreed on POS (mostly contractions and
+    # punctuation-attached forms -- he's/we'll, work?/walks,/okay,, post,
+    # exercise, once, outside, around, etc.), the kept POS was decided from
+    # the token's actual usage in docs/content/realizations/en/ units
+    # 30-42, not by last-wins. Lexeme dry-run counts (fa/prs 1011 en, nl
+    # 1011 en + 1072 nl) are unchanged by the dedup -- POS is a per-token
+    # lookup, so the key set, not the values, drives the count.
     # Unit 30
-    "reading": "noun", "cooking": "noun", "painting": "noun",
-    "running": "noun", "goes": "verb", "video": "noun", "games": "noun",
-    "always": "adverb", "often": "adverb", "cooks": "verb",
-    "rarely": "adverb", "never": "adverb", "paint": "verb", "ever": "adverb",
-    "play": "verb", "book": "noun", "different": "adjective",
-    "hobbies": "noun", "mornings": "noun", "friends": "noun",
+    "reading": "noun", "cooking": "noun", "painting": "noun", "running": "noun",
+    "goes": "verb", "video": "noun", "games": "noun", "always": "adverb",
+    "often": "adverb", "cooks": "verb", "rarely": "adverb", "never": "adverb",
+    "paint": "verb", "ever": "adverb", "play": "verb", "book": "noun",
+    "different": "adjective", "hobbies": "noun", "mornings": "noun", "friends": "noun",
     "paints": "verb",
     # Unit 31
-    "tall": "adjective", "short": "adjective", "hair": "noun",
-    "long": "adjective", "blond": "adjective", "curly": "adjective",
-    "eyes": "noun", "brown": "adjective", "green": "adjective",
-    "glasses": "noun", "wears": "verb", "coworker": "noun",
-    "starting": "verb", "mia": "proper_noun", "does.": "verb",
-    "door": "noun", "now": "adverb", "same": "adjective", "laugh": "verb",
-    "lot": "noun",
+    "tall": "adjective", "short": "adjective", "hair": "noun", "long": "adjective",
+    "blond": "adjective", "curly": "adjective", "eyes": "noun", "brown": "adjective",
+    "green": "adjective", "glasses": "noun", "wears": "verb", "coworker": "noun",
+    "starting": "verb", "mia": "proper_noun", "does.": "verb", "door": "noun",
+    "now": "adverb", "same": "adjective", "laugh": "verb", "lot": "noun",
     # Unit 32
     "cat": "noun", "sister's": "noun", "fish": "noun", "bird": "noun",
     "pet": "noun", "pets": "noun", "luna.": "proper_noun", "likes": "verb",
-    "friendly": "adjective", "mia,": "proper_noun", "yes,": "particle",
-    "nice!": "adjective", "loves": "verb", "ball.": "noun", "named": "verb",
-    "max.": "proper_noun", "morning.": "noun", "walks,": "noun",
-    "still": "adverb", "watch": "verb", "swim.": "verb",
+    "friendly": "adjective", "mia,": "proper_noun", "yes,": "particle", "nice!": "adjective",
+    "loves": "verb", "ball.": "noun", "named": "verb", "max.": "proper_noun",
+    "morning.": "noun", "walks,": "noun", "still": "adverb", "watch": "verb",
+    "swim.": "verb",
     # Unit 33
     "bus": "noun", "drive": "verb", "bike": "noun", "ride": "verb",
-    "work?": "noun", "takes": "verb", "late": "adjective",
-    "daniel?": "proper_noun", "it?": "pronoun", "okay,": "adjective",
-    "parking": "noun", "difficult.": "adjective", "drives": "verb",
-    "office.": "noun", "worry": "verb",
+    "work?": "noun", "takes": "verb", "late": "adjective", "daniel?": "proper_noun",
+    "it?": "pronoun", "okay,": "adjective", "parking": "noun", "difficult.": "adjective",
+    "drives": "verb", "office.": "noun", "worry": "verb",
     # Unit 34
     "soccer": "noun", "saturdays": "noun", "tennis": "noun", "plays": "verb",
-    "basketball": "noun", "swimming": "noun", "yoga": "noun",
-    "exercise": "noun", "times": "noun", "swims": "verb", "weekends": "noun",
-    "gym": "noun", "pool": "noun", "us": "pronoun", "really": "adverb",
-    "house": "noun", "stay": "verb", "active": "adjective", "ways": "noun",
-    "before": "preposition", "team": "noun", "already": "adverb",
-    "neighbor": "noun", "even": "adverb", "though": "particle",
-    "anyone's": "pronoun", "sport": "noun",
+    "basketball": "noun", "swimming": "noun", "yoga": "noun", "exercise": "verb",
+    "times": "noun", "swims": "verb", "weekends": "noun", "gym": "noun",
+    "pool": "noun", "us": "pronoun", "really": "adverb", "house": "noun",
+    "stay": "verb", "active": "adjective", "ways": "noun", "before": "preposition",
+    "team": "noun", "already": "adverb", "neighbor": "noun", "even": "adverb",
+    "though": "particle", "anyone's": "pronoun", "sport": "noun",
     # Unit 35
     "call": "verb", "mom": "noun", "laptop": "noun", "uses": "verb",
     "tablet": "noun", "reads": "verb", "books": "noun", "computer": "noun",
     "app": "noun", "camera": "noun", "photos": "noun", "text": "verb",
-    "sends": "verb", "friend": "noun", "download": "verb",
-    "downloads": "verb", "wifi": "noun", "fast": "adjective",
-    "battery": "noun", "low": "adjective", "use": "verb",
-    "slow": "adjective", "most": "adverb", "mostly": "adverb",
+    "sends": "verb", "friend": "noun", "download": "verb", "downloads": "verb",
+    "wifi": "noun", "fast": "adjective", "battery": "noun", "low": "adjective",
+    "use": "verb", "slow": "adjective", "most": "adverb", "mostly": "adverb",
     "apps": "noun", "map": "noun", "them": "pronoun", "names": "noun",
-    "their": "pronoun", "phones": "noun", "differently": "adverb",
-    "people": "noun", "instead": "adverb", "maps": "noun", "tries": "verb",
-    "recipes": "noun", "laptops": "noun", "chat": "verb",
+    "their": "pronoun", "phones": "noun", "differently": "adverb", "people": "noun",
+    "instead": "adverb", "maps": "noun", "tries": "verb", "recipes": "noun",
+    "laptops": "noun", "chat": "verb",
     # Unit 36
-    "course": "noun", "taking": "verb", "community": "noun",
-    "college": "noun", "homework": "noun", "subject": "noun",
-    "math": "proper_noun", "study": "verb", "studies": "verb",
-    "studying": "verb", "doing": "verb", "photography": "noun",
-    "how's": "pronoun", "learning": "verb", "teach": "verb",
-    "sometime": "adverb", "something": "pronoun", "outside": "preposition",
-    "nights": "noun", "learn": "verb", "skills": "noun",
-    "spanish": "proper_noun", "wants": "verb", "travel": "verb",
-    "mexico": "proper_noun", "someday": "adverb", "talk": "verb",
-    "classes": "noun", "october": "proper_noun",
+    "course": "noun", "taking": "verb", "community": "noun", "college": "noun",
+    "homework": "noun", "subject": "noun", "math": "noun", "study": "verb",
+    "studies": "verb", "studying": "verb", "doing": "verb", "photography": "noun",
+    "how's": "adverb", "learning": "verb", "teach": "verb", "sometime": "adverb",
+    "something": "pronoun", "outside": "adverb", "nights": "noun", "learn": "verb",
+    "skills": "noun", "spanish": "proper_noun", "wants": "verb", "travel": "verb",
+    "mexico": "proper_noun", "someday": "adverb", "talk": "verb", "classes": "noun",
+    "october": "proper_noun",
     # Unit 37
     "party": "noun", "having": "verb", "gift": "noun", "bought": "verb",
-    "invite": "verb", "celebrate": "verb", "congratulations": "noun",
-    "coworkers": "noun", "congratulate": "verb", "him": "pronoun",
-    "promotion": "noun", "wish": "verb", "surprise": "adjective",
-    "planning": "verb", "know": "verb", "daniel's": "pronoun",
-    "12th": "symbol", "didn't": "verb", "office": "noun",
-    "perfect": "adjective", "buy": "verb", "cake": "noun",
-    "definitely": "adverb", "we'll": "pronoun", "were": "verb",
-    "arrived": "verb", "found": "verb", "balloons": "noun", "break": "noun",
-    "everyone": "pronoun", "said": "verb", "congratulated": "verb",
+    "invite": "verb", "celebrate": "verb", "congratulations": "noun", "coworkers": "noun",
+    "congratulate": "verb", "him": "pronoun", "promotion": "noun", "wish": "verb",
+    "surprise": "noun", "planning": "verb", "know": "verb", "daniel's": "proper_noun",
+    "12th": "symbol", "didn't": "verb", "office": "noun", "perfect": "adjective",
+    "buy": "verb", "cake": "noun", "definitely": "adverb", "we'll": "pronoun",
+    "were": "verb", "arrived": "verb", "found": "verb", "balloons": "noun",
+    "break": "noun", "everyone": "pronoun", "said": "verb", "congratulated": "verb",
     "gave": "verb", "pair": "noun", "framed": "adjective", "took": "verb",
     "herself": "pronoun", "thanked": "verb", "wonderful": "adjective",
     # Unit 38
     "chore": "noun", "washing": "verb", "dishes": "noun", "least": "adverb",
-    "laundry": "noun", "sundays": "noun", "vacuum": "verb",
-    "vacuums": "verb", "trash": "noun", "out": "particle", "clean": "verb",
-    "wash": "verb", "cleans": "verb", "mess": "noun", "coming": "verb",
-    "some": "pronoun", "cleaning": "verb", "leave": "verb",
-    "own": "adjective", "habits": "noun", "washes": "verb", "mind": "verb",
-    "hates": "verb", "mia's": "pronoun", "luna": "proper_noun",
-    "fur": "noun", "everywhere": "adverb", "guests": "noun", "asked": "verb",
-    "vacuumed": "verb", "thankful": "adjective",
+    "laundry": "noun", "sundays": "noun", "vacuum": "verb", "vacuums": "verb",
+    "trash": "noun", "out": "particle", "clean": "verb", "wash": "verb",
+    "cleans": "verb", "mess": "noun", "coming": "verb", "some": "pronoun",
+    "cleaning": "verb", "leave": "verb", "own": "adjective", "habits": "noun",
+    "washes": "verb", "mind": "verb", "hates": "verb", "mia's": "proper_noun",
+    "luna": "proper_noun", "fur": "noun", "everywhere": "adverb", "guests": "noun",
+    "asked": "verb", "vacuumed": "verb", "thankful": "adjective",
     # Unit 39
-    "neighborhood": "noun", "helpful": "adjective", "nearby": "adverb",
-    "quiet": "adjective", "noisy": "adjective", "mine": "pronoun",
-    "neighbors": "noun", "live": "verb", "along": "preposition",
-    "grocery": "noun", "five-minute": "adjective", "say": "verb",
+    "neighborhood": "noun", "helpful": "adjective", "nearby": "adverb", "quiet": "adjective",
+    "noisy": "adjective", "mine": "pronoun", "neighbors": "noun", "live": "verb",
+    "along": "preposition", "grocery": "noun", "five-minute": "adjective", "say": "verb",
     "might": "verb", "soon": "adverb", "mr": "noun", "lopez": "proper_noun",
-    "waters": "verb", "plants": "noun", "neighborhoods": "noun",
-    "restaurants": "noun", "shops": "noun", "knows": "verb",
-    "several": "adjective", "says": "verb", "hallway": "noun",
-    "lives": "verb", "barks": "verb", "talking": "verb", "decided": "verb",
+    "waters": "verb", "plants": "noun", "neighborhoods": "noun", "restaurants": "noun",
+    "shops": "noun", "knows": "verb", "several": "adjective", "says": "verb",
+    "hallway": "noun", "lives": "verb", "barks": "verb", "talking": "verb",
+    "decided": "verb",
     # Unit 40
-    "post office": "noun", "letters": "noun", "letter": "noun",
-    "package": "noun", "stamp": "noun", "envelope": "noun", "put": "verb",
-    "mailbox": "noun", "postcard": "noun", "express": "adjective",
-    "mail": "noun", "regular": "adjective", "cost": "verb",
-    "chicago": "proper_noun", "receipt": "noun", "around": "preposition",
-    "post": "verb", "sent": "verb", "paid": "verb", "wanted": "verb",
-    "quickly": "adverb", "ready": "adjective", "clerk": "noun",
-    "weighed": "verb", "chose": "verb", "packages": "noun", "buys": "verb",
-    "writes": "verb", "feels": "verb", "personal": "adjective",
+    "post office": "noun", "letters": "noun", "letter": "noun", "package": "noun",
+    "stamp": "noun", "envelope": "noun", "put": "verb", "mailbox": "noun",
+    "postcard": "noun", "express": "adjective", "mail": "noun", "regular": "adjective",
+    "cost": "verb", "chicago": "proper_noun", "receipt": "noun", "around": "preposition",
+    "post": "noun", "sent": "verb", "paid": "verb", "wanted": "verb",
+    "quickly": "adverb", "ready": "adjective", "clerk": "noun", "weighed": "verb",
+    "chose": "verb", "packages": "noun", "buys": "verb", "writes": "verb",
+    "feels": "verb", "personal": "adjective",
     # Unit 41
-    "recipe": "noun", "grandmother's": "noun", "ingredient": "noun",
-    "onions": "noun", "chop": "verb", "boil": "verb", "pasta": "noun",
-    "taste": "verb", "sauce": "noun", "needs": "verb", "salt": "noun",
-    "bake": "verb", "forget": "verb", "add": "verb", "making": "verb",
-    "show": "verb", "these": "pronoun", "pieces": "noun",
-    "delicious": "adjective", "makes": "verb", "using": "verb",
-    "mother's": "noun", "taught": "verb", "without": "preposition",
+    "recipe": "noun", "grandmother's": "noun", "ingredient": "noun", "onions": "noun",
+    "chop": "verb", "boil": "verb", "pasta": "noun", "taste": "verb",
+    "sauce": "noun", "needs": "verb", "salt": "noun", "bake": "verb",
+    "forget": "verb", "add": "verb", "making": "verb", "show": "verb",
+    "these": "pronoun", "pieces": "noun", "delicious": "adjective", "makes": "verb",
+    "using": "verb", "mother's": "noun", "taught": "verb", "without": "preposition",
     "cutting": "verb", "fingers": "noun", "yet": "adverb", "he's": "pronoun",
     "chopped": "verb", "while": "particle", "boiled": "verb", "made": "verb",
     "tasted": "verb",
     # Unit 42
-    "funny": "adjective", "hardworking": "adjective", "employee": "noun",
-    "shy": "adjective", "calm": "adjective", "talkative": "adjective",
-    "warms": "verb", "sense": "noun", "humor": "noun", "gets": "verb",
-    "once": "particle", "project": "noun", "finishes": "verb",
-    "tasks": "noun", "meetings": "noun", "comfortable": "adjective",
-    "relaxed": "adjective", "personalities": "noun", "meets": "verb",
-    "creative": "adjective", "helps": "verb", "relax": "verb",
-    "upset": "adjective", "outgoing": "adjective", "organized": "adjective",
-    "plans": "noun", "group": "noun", "patient": "adjective",
+    "funny": "adjective", "hardworking": "adjective", "employee": "noun", "shy": "adjective",
+    "calm": "adjective", "talkative": "adjective", "warms": "verb", "sense": "noun",
+    "humor": "noun", "gets": "verb", "once": "particle", "project": "noun",
+    "finishes": "verb", "tasks": "noun", "meetings": "noun", "comfortable": "adjective",
+    "relaxed": "adjective", "personalities": "noun", "meets": "verb", "creative": "adjective",
+    "helps": "verb", "relax": "verb", "upset": "adjective", "outgoing": "adjective",
+    "organized": "adjective", "plans": "noun", "group": "noun", "patient": "adjective",
     "teaches": "verb", "enjoy": "verb", "spending": "verb",
-    # Units 30-42 (A1: hobbies, appearance, animals, transportation, sports,
-    # technology, education, celebrations, household, neighborhood, post
-    # office, cooking, personality), added 2026-07-11 (fa-en depth-audit
-    # lane, extending Endless Practice coverage past the shared English
-    # realization's unit24 ceiling). Includes tokens with attached
-    # punctuation exactly as introduced_tokens declares them (e.g. "ball.",
-    # "mia,", "office.") -- the classifier keys on the literal casefolded
-    # token, not a further-cleaned form, matching every existing entry's
-    # convention above.
-    "12th": "symbol", "active": "adjective", "add": "verb", "along":
-    "preposition", "already": "adverb", "always": "adverb", "anyone's":
-    "pronoun", "app": "noun", "apps": "noun", "around": "preposition",
-    "arrived": "verb", "asked": "verb", "bake": "verb", "ball.": "noun",
-    "balloons": "noun", "barks": "verb", "basketball": "noun", "battery":
-    "noun", "before": "preposition", "bike": "noun", "bird": "noun", "blond":
-    "adjective", "boil": "verb", "boiled": "verb", "book": "noun", "books":
-    "noun", "bought": "verb", "break": "noun", "brown": "adjective", "bus":
-    "noun", "buy": "verb", "buys": "verb", "cake": "noun", "call": "verb",
-    "calm": "adjective", "camera": "noun", "cat": "noun", "celebrate": "verb",
-    "chat": "verb", "chicago": "proper_noun", "chop": "verb", "chopped": "verb",
-    "chore": "noun", "chose": "verb", "classes": "noun", "clean": "verb",
-    "cleaning": "verb", "cleans": "verb", "clerk": "noun", "college": "noun",
-    "comfortable": "adjective", "coming": "verb", "community": "noun",
-    "computer": "noun", "congratulate": "verb", "congratulated": "verb",
-    "congratulations": "noun", "cooking": "noun", "cooks": "verb", "cost":
-    "verb", "course": "noun", "coworker": "noun", "coworkers": "noun",
-    "creative": "adjective", "curly": "adjective", "cutting": "verb",
-    "daniel's": "noun", "daniel?": "proper_noun", "decided": "verb",
-    "definitely": "adverb", "delicious": "adjective", "didn't": "verb",
-    "different": "adjective", "differently": "adverb", "difficult.":
-    "adjective", "dishes": "noun", "does.": "verb", "doing": "verb", "door":
-    "noun", "download": "verb", "downloads": "verb", "drive": "verb", "drives":
-    "verb", "employee": "noun", "enjoy": "verb", "envelope": "noun", "even":
-    "adverb", "ever": "adverb", "everyone": "pronoun", "everywhere": "adverb",
-    "exercise": "verb", "express": "adjective", "eyes": "noun", "fast":
-    "adjective", "feels": "verb", "fingers": "noun", "finishes": "verb", "fish":
-    "noun", "five-minute": "adjective", "forget": "verb", "found": "verb",
-    "framed": "adjective", "friend": "noun", "friendly": "adjective", "friends":
-    "noun", "funny": "adjective", "fur": "noun", "games": "noun", "gave":
-    "verb", "gets": "verb", "gift": "noun", "glasses": "noun", "goes": "verb",
-    "grandmother's": "noun", "green": "adjective", "grocery": "noun", "group":
-    "noun", "guests": "noun", "gym": "noun", "habits": "noun", "hair": "noun",
-    "hallway": "noun", "hardworking": "adjective", "hates": "verb", "having":
-    "verb", "he's": "verb", "helpful": "adjective", "helps": "verb", "herself":
-    "pronoun", "him": "pronoun", "hobbies": "noun", "homework": "noun", "house":
-    "noun", "how's": "adverb", "humor": "noun", "ingredient": "noun", "instead":
-    "adverb", "invite": "verb", "it?": "pronoun", "know": "verb", "knows":
-    "verb", "laptop": "noun", "laptops": "noun", "late": "adjective", "laugh":
-    "verb", "laundry": "noun", "learn": "verb", "learning": "verb", "least":
-    "adverb", "leave": "verb", "letter": "noun", "letters": "noun", "likes":
-    "verb", "live": "verb", "lives": "verb", "long": "adjective", "lopez":
-    "proper_noun", "lot": "noun", "loves": "verb", "low": "adjective", "luna":
-    "proper_noun", "luna.": "proper_noun", "made": "verb", "mail": "noun",
-    "mailbox": "noun", "makes": "verb", "making": "verb", "map": "noun", "maps":
-    "noun", "math": "noun", "max.": "proper_noun", "meetings": "noun", "meets":
-    "verb", "mexico": "proper_noun", "mia": "proper_noun", "mia's": "noun",
-    "mia,": "proper_noun", "might": "verb", "mind": "verb", "mine": "pronoun",
-    "mom": "noun", "morning.": "noun", "mornings": "noun", "most": "adverb",
-    "mostly": "adverb", "mother's": "noun", "mr": "noun", "named": "verb",
-    "names": "noun", "nearby": "adverb", "needs": "verb", "neighbor": "noun",
-    "neighborhood": "noun", "neighborhoods": "noun", "neighbors": "noun",
-    "never": "adverb", "nice!": "adjective", "nights": "noun", "noisy":
-    "adjective", "now": "adverb", "october": "noun", "office": "noun",
-    "office.": "noun", "often": "adverb", "okay,": "adjective", "once":
-    "adverb", "onions": "noun", "organized": "adjective", "out": "particle",
-    "outgoing": "adjective", "outside": "adverb", "own": "adjective", "package":
-    "noun", "packages": "noun", "paid": "verb", "paint": "verb", "painting":
-    "noun", "paints": "verb", "pair": "noun", "parking": "noun", "party":
-    "noun", "pasta": "noun", "patient": "adjective", "people": "noun",
-    "perfect": "adjective", "personal": "adjective", "personalities": "noun",
-    "pet": "noun", "pets": "noun", "phones": "noun", "photography": "noun",
-    "photos": "noun", "pieces": "noun", "planning": "verb", "plans": "noun",
-    "plants": "noun", "play": "verb", "plays": "verb", "pool": "noun", "post":
-    "noun", "post office": "noun", "postcard": "noun", "project": "noun",
-    "promotion": "noun", "put": "verb", "quickly": "adverb", "quiet":
-    "adjective", "rarely": "adverb", "reading": "noun", "reads": "verb",
-    "ready": "adjective", "really": "adverb", "receipt": "noun", "recipe":
-    "noun", "recipes": "noun", "regular": "adjective", "relax": "verb",
-    "relaxed": "adjective", "restaurants": "noun", "ride": "verb", "running":
-    "noun", "said": "verb", "salt": "noun", "same": "adjective", "saturdays":
-    "noun", "sauce": "noun", "say": "verb", "says": "verb", "sends": "verb",
-    "sense": "noun", "sent": "verb", "several": "adjective", "shops": "noun",
-    "short": "adjective", "show": "verb", "shy": "adjective", "sister's":
-    "noun", "skills": "noun", "slow": "adjective", "soccer": "noun", "some":
-    "pronoun", "someday": "adverb", "something": "pronoun", "sometime":
-    "adverb", "soon": "adverb", "spanish": "proper_noun", "spending": "verb",
-    "sport": "noun", "stamp": "noun", "starting": "verb", "stay": "verb",
-    "still": "adverb", "studies": "verb", "study": "verb", "studying": "verb",
-    "subject": "noun", "sundays": "noun", "surprise": "noun", "swim.": "verb",
-    "swimming": "noun", "swims": "verb", "tablet": "noun", "takes": "verb",
-    "taking": "verb", "talk": "verb", "talkative": "adjective", "talking":
-    "verb", "tall": "adjective", "tasks": "noun", "taste": "verb", "tasted":
-    "verb", "taught": "verb", "teach": "verb", "teaches": "verb", "team":
-    "noun", "tennis": "noun", "thanked": "verb", "thankful": "adjective",
-    "their": "pronoun", "them": "pronoun", "these": "pronoun", "though":
-    "particle", "times": "noun", "trash": "noun", "travel": "verb", "tries":
-    "verb", "upset": "adjective", "us": "pronoun", "use": "verb", "uses":
-    "verb", "using": "verb", "vacuum": "verb", "vacuumed": "verb", "vacuums":
-    "verb", "video": "noun", "walks,": "noun", "wanted": "verb", "wants":
-    "verb", "warms": "verb", "wash": "verb", "washes": "verb", "washing":
-    "verb", "watch": "verb", "waters": "verb", "ways": "noun", "we'll": "verb",
-    "wears": "verb", "weekends": "noun", "weighed": "verb", "were": "verb",
-    "while": "particle", "wifi": "noun", "wish": "verb", "without":
-    "preposition", "wonderful": "adjective", "work?": "verb", "worry": "verb",
-    "writes": "verb", "yes,": "particle", "yet": "adverb", "yoga": "noun",
-    "mess": "noun", "text": "verb", "took": "verb",
-    # Units 30-42 (nl-en depth-completion sprint, added 2026-07-11 --
-    # see docs/content/practice/nl-en/a1_unit30.yaml's notes). Every
-    # introduced_token across these 13 units' realizations, not just the
-    # words used in a practice-pack slot (backfill_lexemes_nl_en.py's
-    # classify step raises on any unclassified introduced_token for the
-    # WHOLE unit, not just tagged words). Real homograph collisions
-    # found and resolved by REUSING the existing entry rather than
-    # redeclaring: "cook" stays "noun" (unit23's occupation sense --
-    # unit41's cooking_verb tag deliberately excludes it, using only
-    # chop/boil/taste); "dog"/"train"/"car"/"phone"/"class"/"student"/
-    # "test"/"birthday"/"blue" were also already classified from
-    # earlier units and are NOT redeclared here. "reading"/"cooking"/
-    # "painting"/"running" are classified "noun" (gerund-as-noun,
-    # matching real usage in the unit's own text -- "Reading is my
-    # favorite hobby.", "I like reading." -- and matching the
-    # hobby_activity slot preset's part_of_speech: noun).
-    "12th": "adjective", "active": "adjective", "add": "verb", "along": "preposition",
-    "already": "adverb", "always": "adverb", "anyone's": "pronoun", "app": "noun",
-    "apps": "noun", "around": "adverb", "arrived": "verb", "asked": "verb", "bake": "verb",
-    "ball.": "noun", "balloons": "noun", "barks": "verb", "basketball": "noun",
-    "battery": "noun", "before": "preposition", "bike": "noun", "bird": "noun",
-    "blond": "adjective", "boil": "verb", "boiled": "verb", "book": "noun", "books": "noun",
-    "bought": "verb", "break": "noun", "brown": "adjective", "bus": "noun", "buy": "verb",
-    "buys": "verb", "cake": "noun", "call": "verb", "calm": "adjective", "camera": "noun",
-    "cat": "noun", "celebrate": "verb", "chat": "verb", "chicago": "proper_noun",
-    "chop": "verb", "chopped": "verb", "chore": "noun", "chose": "verb", "classes": "noun",
-    "clean": "verb", "cleaning": "verb", "cleans": "verb", "clerk": "noun", "college": "noun",
-    "comfortable": "adjective", "coming": "verb", "community": "noun", "computer": "noun",
-    "congratulate": "verb", "congratulated": "verb", "congratulations": "noun",
-    "cooking": "noun", "cooks": "verb", "cost": "verb", "course": "noun", "coworker": "noun",
-    "coworkers": "noun", "creative": "adjective", "curly": "adjective", "cutting": "verb",
-    "daniel's": "proper_noun", "daniel?": "proper_noun", "decided": "verb",
-    "definitely": "adverb", "delicious": "adjective", "didn't": "verb",
-    "different": "adjective", "differently": "adverb", "difficult.": "adjective",
-    "dishes": "noun", "does.": "verb", "doing": "verb", "door": "noun", "download": "verb",
-    "downloads": "verb", "drive": "verb", "drives": "verb", "employee": "noun",
-    "enjoy": "verb", "envelope": "noun", "even": "adverb", "ever": "adverb",
-    "everyone": "pronoun", "everywhere": "adverb", "exercise": "noun", "express": "adjective",
-    "eyes": "noun", "fast": "adjective", "feels": "verb", "fingers": "noun",
-    "finishes": "verb", "fish": "noun", "five-minute": "adjective", "forget": "verb",
-    "found": "verb", "framed": "adjective", "friend": "noun", "friendly": "adjective",
-    "friends": "noun", "funny": "adjective", "fur": "noun", "games": "noun", "gave": "verb",
-    "gets": "verb", "gift": "noun", "glasses": "noun", "goes": "verb",
-    "grandmother's": "noun", "green": "adjective", "grocery": "noun", "group": "noun",
-    "guests": "noun", "gym": "noun", "habits": "noun", "hair": "noun", "hallway": "noun",
-    "hardworking": "adjective", "hates": "verb", "having": "verb", "he's": "phrase",
-    "helpful": "adjective", "helps": "verb", "herself": "pronoun", "him": "pronoun",
-    "hobbies": "noun", "homework": "noun", "house": "noun", "how's": "phrase",
-    "humor": "noun", "ingredient": "noun", "instead": "adverb", "invite": "verb",
-    "it?": "pronoun", "know": "verb", "knows": "verb", "laptop": "noun", "laptops": "noun",
-    "late": "adjective", "laugh": "verb", "laundry": "noun", "learn": "verb",
-    "learning": "verb", "least": "adverb", "leave": "verb", "letter": "noun",
-    "letters": "noun", "likes": "verb", "live": "verb", "lives": "verb", "long": "adjective",
-    "lopez": "proper_noun", "lot": "noun", "loves": "verb", "low": "adjective",
-    "luna": "proper_noun", "luna.": "proper_noun", "made": "verb", "mail": "noun",
-    "mailbox": "noun", "makes": "verb", "making": "verb", "map": "noun", "maps": "noun",
-    "math": "noun", "max.": "proper_noun", "meetings": "noun", "meets": "verb",
-    "mess": "noun", "mexico": "proper_noun", "mia": "proper_noun", "mia's": "proper_noun",
-    "mia,": "proper_noun", "might": "verb", "mind": "verb", "mine": "pronoun", "mom": "noun",
-    "morning.": "noun", "mornings": "noun", "most": "adverb", "mostly": "adverb",
-    "mother's": "noun", "mr": "noun", "named": "verb", "names": "noun", "nearby": "adjective",
-    "needs": "verb", "neighbor": "noun", "neighborhood": "noun", "neighborhoods": "noun",
-    "neighbors": "noun", "never": "adverb", "nice!": "adjective", "nights": "noun",
-    "noisy": "adjective", "now": "adverb", "october": "proper_noun", "office": "noun",
-    "office.": "noun", "often": "adverb", "okay,": "particle", "once": "preposition",
-    "onions": "noun", "organized": "adjective", "out": "particle", "outgoing": "adjective",
-    "outside": "adverb", "own": "adjective", "package": "noun", "packages": "noun",
-    "paid": "verb", "paint": "verb", "painting": "noun", "paints": "verb", "pair": "noun",
-    "parking": "noun", "party": "noun", "pasta": "noun", "patient": "adjective",
-    "people": "noun", "perfect": "adjective", "personal": "adjective",
-    "personalities": "noun", "pet": "noun", "pets": "noun", "phones": "noun",
-    "photography": "noun", "photos": "noun", "pieces": "noun", "planning": "verb",
-    "plans": "verb", "plants": "noun", "play": "verb", "plays": "verb", "pool": "noun",
-    "post": "noun", "post office": "noun", "postcard": "noun", "project": "noun",
-    "promotion": "noun", "put": "verb", "quickly": "adverb", "quiet": "adjective",
-    "rarely": "adverb", "reading": "noun", "reads": "verb", "ready": "adjective",
-    "really": "adverb", "receipt": "noun", "recipe": "noun", "recipes": "noun",
-    "regular": "adjective", "relax": "verb", "relaxed": "adjective", "restaurants": "noun",
-    "ride": "verb", "running": "noun", "said": "verb", "salt": "noun", "same": "adjective",
-    "saturdays": "noun", "sauce": "noun", "say": "verb", "says": "verb", "sends": "verb",
-    "sense": "noun", "sent": "verb", "several": "adjective", "shops": "noun",
-    "short": "adjective", "show": "verb", "shy": "adjective", "sister's": "noun",
-    "skills": "noun", "slow": "adjective", "soccer": "noun", "some": "pronoun",
-    "someday": "adverb", "something": "pronoun", "sometime": "adverb", "soon": "adverb",
-    "spanish": "proper_noun", "spending": "verb", "sport": "noun", "stamp": "noun",
-    "starting": "verb", "stay": "verb", "still": "adverb", "studies": "verb", "study": "verb",
-    "studying": "verb", "subject": "noun", "sundays": "noun", "surprise": "noun",
-    "swim.": "verb", "swimming": "noun", "swims": "verb", "tablet": "noun", "takes": "verb",
-    "taking": "verb", "talk": "verb", "talkative": "adjective", "talking": "verb",
-    "tall": "adjective", "tasks": "noun", "taste": "verb", "tasted": "verb", "taught": "verb",
-    "teach": "verb", "teaches": "verb", "team": "noun", "tennis": "noun", "text": "verb",
-    "thanked": "verb", "thankful": "adjective", "their": "pronoun", "them": "pronoun",
-    "these": "pronoun", "though": "adverb", "times": "noun", "took": "verb", "trash": "noun",
-    "travel": "verb", "tries": "verb", "upset": "adjective", "us": "pronoun", "use": "verb",
-    "uses": "verb", "using": "verb", "vacuum": "verb", "vacuumed": "verb", "vacuums": "verb",
-    "video": "noun", "walks,": "verb", "wanted": "verb", "wants": "verb", "warms": "verb",
-    "wash": "verb", "washes": "verb", "washing": "verb", "watch": "verb", "waters": "verb",
-    "ways": "noun", "we'll": "phrase", "wears": "verb", "weekends": "noun", "weighed": "verb",
-    "were": "verb", "while": "preposition", "wifi": "noun", "wish": "verb",
-    "without": "preposition", "wonderful": "adjective", "work?": "noun", "worry": "verb",
-    "writes": "verb", "yes,": "particle", "yet": "adverb", "yoga": "noun",
 }
 
 def en_agreement_tags(token: str) -> dict[str, object]:
