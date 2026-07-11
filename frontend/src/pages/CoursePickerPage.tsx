@@ -106,9 +106,23 @@ function UiLanguagePrompt({ sourceCode }: { sourceCode: string }) {
   const languageName = t(labelKey);
 
   return (
-    <div className="card" style={{ marginBottom: 16, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
-      <span>{t("course_picker.ui_language_prompt", { language: languageName })}</span>
-      <div style={{ display: "flex", gap: 8, flexShrink: 0 }}>
+    <div
+      className="card"
+      style={{
+        marginBottom: 16,
+        display: "flex",
+        flexWrap: "wrap",
+        alignItems: "center",
+        justifyContent: "space-between",
+        gap: 12,
+      }}
+    >
+      {/* minWidth: 0 lets this text actually wrap/shrink inside the flex
+          container instead of forcing the row wider than the viewport --
+          without it, a long language name plus both buttons on one line
+          pushed the page past 390px on an iPhone-width viewport. */}
+      <span style={{ minWidth: 0 }}>{t("course_picker.ui_language_prompt", { language: languageName })}</span>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
         <button className="btn" onClick={() => i18n.changeLanguage(sourceCode)}>
           {t("course_picker.ui_language_switch", { language: languageName })}
         </button>
