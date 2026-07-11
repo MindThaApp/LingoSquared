@@ -1,0 +1,62 @@
+schema_version: "1.0"
+pack_key: practice.fa-en.a1.unit33
+source_language: fa
+target_language: en
+unit_content_key: en.a1.unit33.transportation
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: >-
+    Authored 2026-07-11, fa-en depth-audit lane (unit 4 of the 30-42
+    batch, see unit30's pack notes for the full batch rationale).
+
+    One semantic tag: 'transport_noun' (bus/train/car/bike from lesson01,
+    four transportation-mode nouns). Deliberately NOT used in any shared
+    generative frame -- the real content pairs each mode with its OWN
+    verb (take the bus/train, drive my car, ride my bike; the overlay's
+    own notes explicitly flag this as a thing to memorize per-mode), so
+    a single "{verb} the/my {item}" frame would be ungrammatical for at
+    least one member no matter which verb is chosen. Kept
+    recognition-only, same discipline as unit25's bureaucracy_noun.
+
+    Anchoring check: lesson01 introduces all four transport nouns as
+    real new lexemes, verified via iter_specs(). Slot candidate count
+    verified with scripts/_practice_slot_check.py and
+    compile_content.py practice-validate. Needs the standard
+    fresh-context review before import.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [transport_noun]
+slot_presets:
+  transport_noun: &transport_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: transport_noun}}
+templates:
+  - content_key: practice.fa-en.en.a1.unit33.lesson01.choose.001
+    lesson_content_key: en.a1.unit33.lesson01.transport_vocabulary
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *transport_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit33.lesson01.listen.002
+    lesson_content_key: en.a1.unit33.lesson01.transport_vocabulary
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *transport_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "واژه‌ای که شنیدید {item} بود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit33.lesson01.match.003
+    lesson_content_key: en.a1.unit33.lesson01.transport_vocabulary
+    type: matching_pairs
+    frame: {text: "{first} — {second}", language_code: en, direction: ltr}
+    slots: {first: *transport_noun, second: *transport_noun, third: *transport_noun, fourth: *transport_noun}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth]}
+    feedback_frame: {text: "هر وسیلهٔ نقلیه را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit33.lesson01.translate.004
+    lesson_content_key: en.a1.unit33.lesson01.transport_vocabulary
+    type: translation
+    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *transport_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این وسیلهٔ نقلیه است.", language_code: fa, direction: rtl}
