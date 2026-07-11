@@ -296,6 +296,34 @@ UNIT_FILES_B1 = (
         REPO_ROOT / "docs/content/realizations/fa/b1_unit06_narrative.yaml",
         REPO_ROOT / "docs/content/overlays/en-fa/b1_unit06.yaml",
     ),
+    # Units 07-11 ("second wave": wishes and regret / nuanced debate /
+    # professional meetings / relative clauses / reported speech), added
+    # 2026-07-11 (B1 units 07-11 backfill pass) -- these 5 units existed on
+    # disk and were already imported into the DB but had zero lexeme
+    # classifier coverage in this script at all, same root cause already
+    # documented above for units 01-06 before THEY were added. Re-read this
+    # tuple fresh before appending any further unit here, per this file's
+    # own standing convention -- other lanes may extend it concurrently.
+    (
+        REPO_ROOT / "docs/content/realizations/fa/b1_unit07_wishes_and_regret.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/b1_unit07.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/b1_unit08_nuanced_debate.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/b1_unit08.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/b1_unit09_professional_meetings.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/b1_unit09.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/b1_unit10_relative_clauses.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/b1_unit10.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/b1_unit11_reported_speech.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/b1_unit11.yaml",
+    ),
 )
 EN_TOKEN_RE = re.compile(r"[A-Za-z]+(?:['’/-][A-Za-z]+)*")
 
@@ -879,6 +907,62 @@ FA_GLOSSES = {
     "گفتم": "I said", "گفتی": "you said", "می‌رسم": "I'll arrive",
     "می‌رسه": "he/she'll arrive", "نگفت": "he/she didn't say",
     "هیچی": "anything / nothing", "می‌رفت": "he/she was going",
+    # B1 units 07-11 ("second wave": wishes and regret / nuanced debate /
+    # professional meetings / relative clauses / reported speech), added
+    # 2026-07-11 (B1 units 07-11 backfill pass). Same convention as units
+    # 01-06 above: B1 reuses many earlier tokens verbatim -- only
+    # genuinely new tokens are declared below, one comment block per unit.
+    # Unit 07 (wishes and regret: کاش-wish + imperfect بودن, past counterfactual).
+    "کاش": "if only / I wish", "بودم": "I was", "بودی": "you were",
+    "دیشب": "last night", "جشن": "party; celebration", "تولد": "birth; birthday (in جشن تولد, 'birthday party')",
+    "بودیم": "we were", "بودید": "you (pl.) were", "بودن": "they were",
+    "رفته": "gone (past participle, used in رفته بودم, 'I had gone')", "می‌دیدم": "I would see / I would have seen", "نرفته": "not gone (negative past participle)",
+    "نمی‌دیدم": "I wouldn't see / I wouldn't have seen", "نیومد": "he/she didn't come (colloquial)", "نیومدم": "I didn't come (colloquial)",
+    "اشکالی": "a problem; a flaw (indefinite, in اشکالی نداره, 'no problem')", "جات": "your place (colloquial جا+ت, in جات خالی بود, 'we missed you')", "خالی": "empty",
+    "بپرسم": "(that) I ask / let me ask (subjunctive)", "همدیگه": "each other", "ببینیم": "(that) we see (subjunctive)",
+    "نتونستم": "I couldn't / wasn't able to", "می‌دونم": "I know (colloquial)", "خوشحال می‌شم": "I'd be happy (to) (خوشحال + colloquial می‌شم, 'I'll become happy')",
+    "دست": "hand (in از دست رفت, 'was lost', lit. 'went from hand')", "کمی": "a little", "گذاشتن": "to put; to place (infinitive, in قرار گذاشتن, 'to make plans')",
+    "نرفت": "he/she didn't go", "دلتنگ": "homesick; longing (for someone)", "ببینن": "(that) they see (subjunctive)",
+    # Unit 08 (nuanced debate: concessive هرچند/با اینکه + stronger contrastives).
+    "هرچند": "although", "اما": "but (contrastive)", "اینکه": "that (complementizer, in با اینکه, 'even though')",
+    "تنها": "alone", "عین": "(part of در عین حال, 'nevertheless / at the same time')", "حال": "state; condition; mood (bare form of the already-established حالم)",
+    "کارم": "my work (possessive form of کار)", "ارتباط": "communication; connection", "تیم": "team",
+    "سخت‌تر": "harder (comparative of سخت)", "بعضی": "some", "روزا": "days (colloquial plural of روز)",
+    "بازم": "still; also (colloquial)", "درباره‌ی": "about (preposition, ezafe-linked)", "فکری": "thought; idea (indefinite form of فکر, in چه فکری می‌کنه؟)",
+    "حرفت": "your point / your words (possessive form of حرف)", "بعضی وقتا": "sometimes (colloquial)", "فرق": "difference (in فرق داره, 'is different')",
+    "هیچ‌کدوم": "neither one; none of them", "نظرشون": "their opinion (possessive form of نظر)", "چیزی": "thing; something (indefinite form of چیز)",
+    "آیا": "whether (yes-no question particle)", "بحث می‌کنن": "they discuss / debate", "می‌گه": "he/she says (colloquial, 3rd person of گفتن)",
+    "حرف": "talk; word; speech", "می‌مونه": "he/she stays / remains (colloquial, 3rd person)", "کارش": "his/her work (possessive form of کار)",
+    "می‌ده": "he/she gives / does (colloquial, 3rd person, in انجام می‌ده)", "احترام": "respect", "گفتن": "to say (infinitive)",
+    "نکردن": "they didn't do (negative past, 3rd plural)",
+    # Unit 09 (professional meetings: formal softened requests/suggestions).
+    "بیایم": "(that) we come (subjunctive)", "موکول": "postponed (participial adjective, in موکول کنیم, 'we postpone')", "امکانش": "possibility (of it) (in امکانش هست, 'is it possible')",
+    "بفرستید": "you (formal) send", "پیشنهاد": "suggestion", "تصمیم": "decision",
+    "بگیریم": "(that) we take/decide (subjunctive, in تصمیم بگیریم)", "بودجه": "budget", "می‌خواد": "he/she wants (colloquial, 3rd person)",
+    "جلسه‌ی": "meeting of (ezafe-linked form of جلسه)", "کردید": "you (formal) did", "بعدی": "next",
+    "برگزار": "held; organized (participial adjective, in برگزار می‌شه, 'is held')", "تشکر": "thanks; gratitude (in با تشکر, 'with thanks')", "روزیه": "is (which) day (colloquial contraction, in چه روزیه؟)",
+    "بفرسته": "he/she sends (subjunctive, 3rd person)", "همچنین": "also; likewise", "گرفتیم": "we took / decided (past, in تصمیم گرفتیم, 'we decided')",
+    "سوالی": "a question (indefinite form of سوال)",
+    # Unit 10 (relative clauses: subject/object/oblique که-clauses).
+    "کسی": "someone; the person (indefinite, in کسی که, 'the person who')", "سارا‌ست": "is Sara (colloquial contraction of سارا+است)", "دوستی": "a friend (indefinite form of دوست, in دوستی که, 'the friend who')",
+    "درس می‌خونه": "he/she studies (lit. 'reads lesson')", "کتابی": "a book (indefinite form of کتاب, in کتابی که, 'the book that')", "کاری": "a job/task (indefinite form of کار, in کاری که می‌کنه)",
+    "واقعاً": "really", "باهاش": "with him/her (colloquial با+هاش)", "شهری": "a city (indefinite form of شهر, in شهری که, 'the city that')",
+    "توش": "in it (colloquial تو+ش)", "شدم": "I became", "صمیمی": "close; intimate",
+    "بگم": "(that) I say / let me say (subjunctive)", "دوستم": "my friend", "درباره‌ش": "about him/her/it (colloquial درباره+ش)",
+    "همونه": "that's the one (colloquial contraction of همون+است)", "با هم": "together", "می‌رفتیم": "we were going / used to go (imperfect)",
+    "بزرگ شده": "has grown up (present perfect, in شهری که توش بزرگ شده)", "شهر": "city (bare form)", "فرق داره": "is different (lit. 'has difference')",
+    "همیشه": "always", "برگردم": "let me go back / (that) I return (subjunctive)", "خیابونی": "a street (indefinite form of خیابون, in خیابونی که)",
+    "می‌کردم": "I was doing / used to do (imperfect)", "همسایه‌ها": "neighbors (plural)", "همسایه‌هایی": "neighbors (indefinite/relative plural form)",
+    "باهاشون": "with them (colloquial با+هاشون)", "مهربون": "kind", "می‌کرد": "he/she was doing / used to do (imperfect)",
+    "کوچیکی": "small; little (indefinite adjective form of کوچیک, in شهر کوچیکی)", "به دنیا اومد": "was born (lit. 'came to the world')", "آروم": "calm; quiet",
+    "کمکش": "help him/her (object suffix on کمک)", "می‌کردن": "they were doing / used to do (imperfect, 3rd plural)", "برگرده": "(that) he/she return (subjunctive)",
+    # Unit 11 (reported speech: reported questions, pronoun shift, plural گفتن).
+    "پرسید": "he/she asked", "کِی": "when (explicit kasre diacritic, disambiguating from کی 'who')", "میای": "you're coming (colloquial, 2nd person)",
+    "میری": "you're going (colloquial, 2nd person)", "خودش": "himself / herself", "می‌ره": "he/she goes (colloquial, 3rd person)",
+    "گفتیم": "we said", "داریم": "we have", "گفتید": "you (pl./formal) said",
+    "میاید": "you (pl./formal) are coming", "بهم": "to me (colloquial به+م)", "من و": "... and I (lit. 'I and', in من و مریم, 'Maryam and I')",
+    "تعریف": "recounting; telling (in تعریف کردن, 'to recount/tell about')", "موافقت": "agreement (in موافقت کردن, 'to agree')", "کیا": "who (plural, colloquial, in کیا دیگه, 'who else')",
+    "بهشون": "to them (colloquial به+شون)", "گفته": "said (past participle, in گفته بود, 'had said')",
 }
 
 FA_SYMBOLS = set("س ل ا م ن ت ش چ ی ه ک گ ج د ر ف و ب خ ز".split())
@@ -899,6 +983,14 @@ FA_PRONOUNS = set(
     # (anything/nothing, indefinite pronoun), چه‌وقت (when, interrogative
     # pronoun, same class as the already-established کی).
     + ["اونا", "هیچی", "چه‌وقت"]
+    # B1 units 07-11 ("second wave"), added 2026-07-11: همدیگه
+    # ("each other", reciprocal pronoun), هیچ‌کدوم ("neither one", same
+    # class as the already-established کدوم), کسی ("someone/the person",
+    # indefinite relative antecedent), خودش ("himself/herself", reflexive
+    # pronoun), کِی ("when", explicit-kasre variant of the already-
+    # established کی, disambiguating "when" from "who"), کیا ("who",
+    # colloquial plural interrogative).
+    + ["همدیگه", "هیچ‌کدوم", "کسی", "کِی", "خودش", "کیا"]
 )
 FA_PREPOSITIONS = set(
     "به از با اهل بهت مثل کنار برای برات پیش در بالای".split()
@@ -907,6 +999,14 @@ FA_PREPOSITIONS = set(
     # بهتون (to you, polite -- same class as the already-established
     # informal بهت).
     + ["به خاطر", "روی", "بهتون"]
+    # B1 units 07-11 ("second wave"), added 2026-07-11: درباره‌ی
+    # ("about", ezafe-linked), باهاش/باهاشون ("with him-her"/"with them",
+    # colloquial pronoun-incorporated forms of با), توش ("in it",
+    # colloquial pronoun-incorporated تو), درباره‌ش ("about him/her/it",
+    # colloquial pronoun-incorporated درباره‌ی), بهم/بهشون ("to me"/"to
+    # them", colloquial pronoun-incorporated به, sibling of the already-
+    # established بهت/بهتون).
+    + ["درباره‌ی", "باهاش", "توش", "درباره‌ش", "باهاشون", "بهم", "بهشون"]
 )
 FA_PARTICLES = set(
     "هم ولی بله و آره پس تا یه یا چون رو خب چشم "
@@ -923,6 +1023,12 @@ FA_PARTICLES = set(
     # اگر), وقتی (when, temporal subordinating conjunction, same class
     # as the already-established چون).
     + ["اگه", "وقتی"]
+    # B1 units 07-11 ("second wave"), added 2026-07-11: کاش ("if
+    # only / I wish", wish particle), هرچند ("although", concessive
+    # subordinator), اما ("but", contrastive, sibling of the already-
+    # established ولی), اینکه ("that", complementizer in با اینکه, "even
+    # though"), آیا (yes-no question particle).
+    + ["کاش", "هرچند", "اما", "اینکه", "آیا"]
 )
 FA_ADVERBS = set(
     "فعلاً خیلی چطور کجا اینجا همین‌طور کجایی باهم فردا حتماً خودمونی چند "
@@ -951,6 +1057,13 @@ FA_ADVERBS = set(
     # (still/yet).
     + ["امشب", "امسال", "پارسال", "به‌موقع", "کمتر", "حالا", "شاید",
        "همینطور", "هنوز"]
+    # B1 units 07-11 ("second wave"), added 2026-07-11: دیشب ("last
+    # night"), تنها ("alone"), بعضی/بعضی وقتا ("some"/"sometimes",
+    # quantifier-adverbs, same class as the already-established چند),
+    # بازم ("still/also", colloquial), همچنین ("also/likewise", sibling
+    # of the already-established هم/همینطور), واقعاً ("really"), با هم
+    # ("together"), همیشه ("always"), کمی ("a little").
+    + ["دیشب", "کمی", "تنها", "بعضی", "بازم", "بعضی وقتا", "همچنین", "واقعاً", "با هم", "همیشه"]
 )
 FA_ADJECTIVES = set(
     "خوبی بد ایرانی انگلیسی فرانسوی بزرگه کوچیکه متأهل مجرد برعکسه شلوغه "
@@ -988,6 +1101,15 @@ FA_ADJECTIVES = set(
     # (finished/done, participial adjective -- combines with کنم/کنه to
     # form "finish"), مهم (important), مسئول (responsible).
     + ["شلوغ", "تموم", "مهم", "مسئول"]
+    # B1 units 07-11 ("second wave"), added 2026-07-11: خالی ("empty"),
+    # دلتنگ ("homesick/longing"), سخت‌تر ("harder", bare comparative,
+    # distinct from the already-established -e-copula-contracted
+    # comparatives like بزرگ‌تره), موکول ("postponed", participial
+    # adjective, same class as the already-established لغو) and برگزار
+    # ("held/organized", same class), بعدی ("next"), صمیمی
+    # ("close/intimate"), مهربون ("kind"), کوچیکی (indefinite adjective
+    # form of the already-established کوچیک), آروم ("calm/quiet").
+    + ["خالی", "دلتنگ", "سخت‌تر", "موکول", "بعدی", "برگزار", "صمیمی", "مهربون", "کوچیکی", "آروم"]
 )
 FA_NUMBERS = set(
     "صفر یک دو سه چهار پنج شش هفت هشت نه ده یازده دوازده سیزده چهارده "
@@ -1150,8 +1272,26 @@ FA_VERBS = {
     # arrive), نگفت (he/she didn't say), می‌رفت (he/she was going,
     # sibling of the already-established می‌رفتم).
     "گفتم", "گفتی", "می‌رسم", "می‌رسه", "نگفت", "می‌رفت",
+    # B1 units 07-11 ("second wave"), added 2026-07-11: the بودم/بودی/
+    # بود/بودیم/بودید/بودن past-tense "to be" paradigm (unit07, used
+    # bare with an atomic "I was"/"you were"/etc. gloss -- the کاش-wish
+    # meaning comes from the grammar construction, not baked into the
+    # token gloss, same discipline as the already-established
+    # داشتم/می‌خریدم precedent); رفته/نرفته (pluperfect participles);
+    # می‌دیدم/نمی‌دیدم (imperfect "would see"); the rest are ordinary
+    # conjugated verb forms, colloquial copula contractions (سارا‌ست/
+    # همونه/روزیه, same precedent as آفتابیه/سرده/بارونیه/گرمه), or
+    # subjunctive forms following the established کنم/کنی/... paradigm
+    # pattern.
+    "بودم", "بودی", "بودیم", "بودید", "بودن", "رفته", "می‌دیدم", "نرفته", "نمی‌دیدم", "نیومد", "نیومدم", "بپرسم", "ببینیم", "نتونستم", "می‌دونم", "گذاشتن", "نرفت", "ببینن", "می‌گه", "می‌مونه", "می‌ده", "گفتن", "نکردن", "بیایم", "بفرستید", "بگیریم", "می‌خواد", "کردید", "روزیه", "بفرسته", "گرفتیم", "سارا‌ست", "شدم", "بگم", "همونه", "می‌رفتیم", "برگردم", "می‌کردم", "می‌کرد", "می‌کردن", "برگرده", "پرسید", "میای", "میری", "می‌ره", "گفتیم", "داریم", "گفتید", "میاید", "گفته",
 }
 FA_PHRASE_PARTS = {"بخیر", "خواهش"}
+# B1 units 07-11 ("second wave"), added 2026-07-11: عین (only ever
+# appears here as part of در عین حال, "nevertheless" -- meaningless
+# alone in this corpus, same class as بخیر/خواهش) and من و (an
+# incomplete fragment, "... and I", that only makes sense followed by
+# a name, e.g. من و مریم, "Maryam and I").
+FA_PHRASE_PARTS |= {"عین", "من و"}
 
 # تو is a genuine homograph across this whole course: the informal
 # second-person PRONOUN "you" everywhere else, but a spatial/abstract
@@ -1170,6 +1310,16 @@ TOO_PREPOSITION_LESSONS = {
     "fa.a1.unit19.lesson04.location_in_home",
     "fa.a2.unit14.lesson04.interview_dialogue",
     "fa.a2.unit18.lesson04.shop_return_counter_dialogue",
+    # B1 units 07-11 ("second wave"), added 2026-07-11: two more instances
+    # found while adding this pass, both confirmed by the units' own
+    # fresh-context review notes -- unit09's "تو جلسه شرکت کردید" ("you
+    # participated IN the meeting," paired with the formal شرکت کردید, NOT
+    # an informal-pronoun slip per the review's own explicit check) and
+    # unit10's "دوستی که تو دانشگاه درس می‌خونه" ("the friend who studies
+    # AT university"). Both are the same abstract/locational preposition
+    # sense as the existing entries, not the informal "you" pronoun.
+    "fa.b1.unit09.lesson04.dialogue_meeting",
+    "fa.b1.unit10.lesson01.subject_relative",
 }
 
 # نه is a genuine homograph too: "nine" (FA_NUMBERS, established since
@@ -1213,6 +1363,13 @@ NO_NEGATION_LESSONS = {
 # existing FA_VERBS membership), so no override needed there either.
 BASHE_SUBJUNCTIVE_LESSONS = {
     "fa.b1.unit03.lesson02.real_condition_all_persons",
+    # B1 unit09 (professional meetings), added 2026-07-11 (B1 units 07-11
+    # backfill pass): the same subjunctive-copula sense recurs in this
+    # unit's own reading passage -- "تصمیم گرفتیم که جلسه‌ی بعدی سه‌شنبه
+    # باشه" ("we decided the next meeting should be [on] Tuesday"), a
+    # 3rd-person "(that it) be" completing a formal decision/suggestion
+    # clause, not the informal "okay" affirmation.
+    "fa.b1.unit09.lesson05.reading_the_professional_message",
 }
 
 EN_PRONOUNS = {
