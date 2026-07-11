@@ -302,7 +302,7 @@ PRS_GLOSSES: dict[str, str] = {
     "نیستم": "I am not", "و": "and", "همه": "everyone; all", "استند": "they are",
     "فامیل‌تان": "your family", "است": "is", "اهل": "from; originally of",
     "خانه": "house", "شکر": "thank God; thanks", "زنده": "alive; long (may you live)",
-    "باشین": "may you be (polite)", "خانهٔ": "house of", "خودتان": "yourself",
+    "باشین": "may you be / (if) you be (subjunctive, polite)", "خانهٔ": "house of", "خودتان": "yourself",
     "بالا": "up; upstairs", "بفرمایین": "please, go ahead / come in (polite)", "اول": "first",
     "بزرگ‌ترها": "elders", "می‌کنیم": "we do", "دفتر": "office", "کابل": "Kabul",
     "حامد": "Hamed (name)", "من": "I", "همکار": "colleague", "نو": "new",
@@ -804,7 +804,7 @@ PRS_GLOSSES: dict[str, str] = {
     # (unit02 above) is a REUSED existing B1 lexeme, not re-added.
     "باشم": "(if) I have", "باشی": "(if) you have",
     "می‌آیی": "you come", "باشیم": "(if) we have",
-    "باشید": "(if) you (plural/polite) have", "می‌آییم": "we come",
+    "می‌آییم": "we come",
     "ببارد": "it rains (subjunctive)", "نبارد": "it doesn't rain",
     "می‌رویم": "we go", "نمی‌دانم": "I don't know",
     "می‌نوشیم": "we drink", "رفتند": "they went",
@@ -831,8 +831,8 @@ PRS_GLOSSES: dict[str, str] = {
     # senses) -- special-cased by lesson_key/content_key in _classify()
     # below instead of overwriting the shared dict entries, same
     # collision class as the existing و/کی/می‌شود splits.
-    "می‌کنید": "you (plural/polite) do", "می‌شویم": "we become",
-    "می‌شوید": "you (plural/polite) become", "می‌شوند": "they become",
+    "می‌کنین": "you (plural/polite) do", "می‌شویم": "we become",
+    "می‌شین": "you (plural/polite) become", "می‌شوند": "they become",
     "پختم": "I cooked", "رسیدی": "you arrived",
     "تلویزیون": "television", "خورد": "he/she ate",
     "تمام": "complete; finished", "آمد": "he/she came",
@@ -864,7 +864,7 @@ PRS_GLOSSES: dict[str, str] = {
     "کنی": "(that) you do", "بگیرد": "(that) he/she takes/gets",
     "کند": "(that) he/she does", "بگیری": "(that) you take/get",
     "بگیریم": "(that) we take/get",
-    "بگیرید": "(that) you (plural/polite) take/get",
+    "بگیرین": "(that) you (plural/polite) take/get",
     "بگیرند": "(that) they take/get",
     "کنید": "(that) you (plural/polite) do", "کنند": "(that) they do",
     "نشوم": "(so that) I don't become",
@@ -1157,12 +1157,12 @@ PRS_POS: dict[str, str] = {
     "می‌کرد": "verb", "داشت": "verb", "حالش": "noun", "بپزد": "verb",
     # B1 unit 03 (conditions), added 2026-07-11.
     "باشم": "verb", "باشی": "verb", "می‌آیی": "verb", "باشیم": "verb",
-    "باشید": "verb", "می‌آییم": "verb", "ببارد": "verb",
+    "می‌آییم": "verb", "ببارد": "verb",
     "نبارد": "verb", "می‌رویم": "verb", "نمی‌دانم": "verb",
     "می‌نوشیم": "verb", "رفتند": "verb", "ماندند": "verb",
     "نوشیدند": "verb", "آنجا": "adverb", "می‌روند": "verb",
     # B1 unit 04 (sequencing), added 2026-07-11.
-    "می‌کنید": "verb", "می‌شویم": "verb", "می‌شوید": "verb",
+    "می‌کنین": "verb", "می‌شویم": "verb", "می‌شین": "verb",
     "می‌شوند": "verb", "پختم": "verb", "رسیدی": "verb",
     "تلویزیون": "noun", "خورد": "verb", "تمام": "adjective",
     "آمد": "verb",
@@ -1174,7 +1174,7 @@ PRS_POS: dict[str, str] = {
     # B1 unit 06 (purpose), added 2026-07-11.
     "یاد": "noun", "جمع": "noun", "کنی": "verb", "بگیرد": "verb",
     "کند": "verb", "بگیری": "verb", "بگیریم": "verb",
-    "بگیرید": "verb", "بگیرند": "verb", "کنید": "verb",
+    "بگیرین": "verb", "بگیرند": "verb", "کنید": "verb",
     "کنند": "verb", "نشوم": "verb", "نشوی": "verb",
     "می‌خوابی": "verb", "این‌قدر": "adverb", "پیدا": "adjective",
     "هدف": "noun", "می‌خواهد": "verb", "تلاش": "noun",
@@ -1979,7 +1979,7 @@ def prs_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     # all genuinely the same "come" verb, placed here since unit03 is
     # where most of the paradigm completes. "rain_verb" and
     # "past_verb_plural_third" (park reading) are real closed sets.
-    if token in {"باشم", "باشی", "باشیم", "باشید"}:
+    if token in {"باشم", "باشی", "باشیم", "باشین"}:
         semantics.append("subjunctive_be_verb")
     if token in {"می‌آیی", "می‌آیند", "می‌آییم"}:
         semantics.append("come_verb_present")
@@ -2003,14 +2003,14 @@ def prs_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
 
     # B1 unit 04 (sequencing) semantic tags, added 2026-07-11.
     # "become_verb_plural" completes the می‌شود paradigm's plural persons
-    # (کار می‌کنید pairs with the existing می‌کنیم/می‌کنند members).
+    # (کار می‌کنین pairs with the existing می‌کنیم/می‌کنند members).
     # "past_verb_first_b1"/"past_verb_second_b1"/"past_verb_third_b1" are
     # this unit's own new simple-past forms (distinct from A1 unit20's
     # own past_verb_first/second/third sets, which cover a DIFFERENT verb
     # paradigm -- رفتم/خوردم/کردم/شدم -- kept separate rather than merged
     # in, since combining them would mix verbs across two different
     # courses' tag pools for no real benefit).
-    if token in {"می‌شویم", "می‌شوید", "می‌شوند"}:
+    if token in {"می‌شویم", "می‌شین", "می‌شوند"}:
         semantics.append("become_verb_plural")
     if token in {"پختم", "رسیدم"}:
         semantics.append("past_verb_first_b1")
@@ -2048,7 +2048,7 @@ def prs_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     # the نشوم/نشوی pair (lesson03). "goal_word" is the reading/dialogue's
     # own vocabulary (هدف/تلاش).
     if token in {
-        "کنی", "بگیرد", "کند", "بگیری", "بگیریم", "بگیرید", "بگیرند",
+        "کنی", "بگیرد", "کند", "بگیری", "بگیریم", "بگیرین", "بگیرند",
         "کنید", "کنند", "بخرم", "بخرد",
     }:
         semantics.append("purpose_subjunctive_verb")
