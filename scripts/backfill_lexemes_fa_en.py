@@ -682,7 +682,7 @@ EN_TARGET_TO_FA_GLOSS: dict[str, str] = {
     "feels": "احساس می‌شود", "fingers": "انگشت‌ها",
     "finishes": "تمام می‌کند", "fish": "ماهی", "five-minute": "پنج‌دقیقه‌ای",
     "forget": "فراموش کردن", "found": "پیدا کرد", "framed": "قاب‌شده",
-    "friend": "دوست", "friendly": "دوست‌داشتنی (حیوان اهلی)",
+    "friend": "دوست", "friendly": "مهربان",
     "friends": "دوستان", "funny": "بامزه", "fur": "پشم (حیوان)",
     "games": "بازی‌ها", "gave": "داد",
     "gets": "می‌شود (gets more comfortable)", "gift": "هدیه",
