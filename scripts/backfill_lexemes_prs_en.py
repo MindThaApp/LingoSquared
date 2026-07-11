@@ -170,6 +170,70 @@ UNIT_FILES = (
         REPO_ROOT / "docs/content/realizations/en/a1_unit24_housing.yaml",
         REPO_ROOT / "docs/content/overlays/prs-en/a1_unit24.yaml",
     ),
+    # Units 30-42 (hobbies through personality), added 2026-07-11 by the
+    # prs-en depth-extension worker (a fresh-context worker extending
+    # Endless Practice coverage from unit29 to unit42, per a depth audit
+    # finding prs-en had only ~7.2hrs vs the >=10hr publish bar, with
+    # existing practice packs stopping at unit29). Appended in the SAME
+    # order these units are imported in scripts/content_manifest.txt's
+    # prs-en line (...a1_unit24...a1_unit30...a1_unit42...) -- units
+    # 25-29 are NOT in this tuple (they belong to the separate "انگلیسی
+    # A2" course, UNIT_FILES_A2 below), so position 25 in THIS tuple
+    # correctly corresponds to the real "انگلیسی A1" course's unit_order
+    # 25, i.e. a1_unit30 (the A1 course's units are 1-24 then 30-58,
+    # contiguous by import order, not by the on-disk unit NUMBER).
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit30_hobbies.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a1_unit30.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit31_appearance.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a1_unit31.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit32_animals.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a1_unit32.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit33_transportation.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a1_unit33.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit34_sports.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a1_unit34.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit35_technology.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a1_unit35.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit36_education.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a1_unit36.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit37_celebrations.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a1_unit37.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit38_household.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a1_unit38.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit39_neighborhood.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a1_unit39.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit40_post.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a1_unit40.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit41_cooking.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a1_unit41.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit42_personality.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a1_unit42.yaml",
+    ),
 )
 
 # A2 units live in a SEPARATE course row ("انگلیسی A2", not "انگلیسی
@@ -557,6 +621,183 @@ EN_TARGET_TO_PRS_GLOSS: dict[str, str] = {
     "2pm": "ساعت ۲ بعد از چاشت", "4pm": "ساعت ۴ بعد از چاشت",
     "received": "دریافت شده (است)", "6180": "۶۱۸۰", "send": "فرستادن",
     "home": "خانه", "here's": "همینه (این است، در معرفی چیزی)",
+    # Units 30-42 (hobbies through personality), added 2026-07-11 by
+    # the prs-en depth-extension worker. Atomic per-token glosses --
+    # authored fresh in Afghan Dari register for each unit's real
+    # taught vocabulary (checked against docs/content/overlays/
+    # prs-en/a1_unit30.yaml through a1_unit42.yaml's own real Dari
+    # phrasing where a matching gloss existed), NOT a copy of any
+    # sibling script's Farsi. Afghan-Dari-specific vocabulary used
+    # deliberately here where it differs from Iranian Farsi: کدن
+    # (rather than the Farsi-only کردن) in several light-verb glosses,
+    # مکتب-register informal forms, and the existing dictionary's own
+    # established third-person "می‌کنه" spoken-register ending
+    # (rather than Farsi's written می‌کند) for every new present-tense
+    # third-person verb form below, matching this file's own
+    # precedent throughout units 1-29.
+    # Unit 30
+    "reading": "کتاب خواندن", "cooking": "آشپزی",
+    "painting": "رنگ‌مالی؛ نقاشی کردن", "running": "دویدن",
+    "goes": "می‌ره (سوم‌شخص مفرد go)", "video": "ویدیو", "games": "بازی‌ها",
+    "always": "همیشه", "often": "اکثراً",
+    "cooks": "آشپزی می‌کنه (سوم‌شخص مفرد)", "rarely": "به ندرت",
+    "never": "هیچ‌وقت", "paint": "رنگ‌مالی کردن",
+    "ever": "هیچ‌وقت (در سوال)", "play": "بازی کردن", "book": "کتاب",
+    "different": "مختلف", "hobbies": "سرگرمی‌ها", "mornings": "صبح‌ها",
+    "friends": "رفقا", "paints": "رنگ‌مالی می‌کنه (سوم‌شخص مفرد)",
+    # Unit 31
+    "tall": "قد بلند", "short": "قد کوتاه", "hair": "موی سر", "long": "دراز",
+    "blond": "موی طلایی", "curly": "چوقی (موی)", "eyes": "چشم‌ها",
+    "brown": "قهوه‌یی", "green": "سبز", "glasses": "عینک",
+    "wears": "می‌پوشه (سوم‌شخص مفرد wear)", "coworker": "همکار",
+    "starting": "شروع کدن", "mia": "میا (اسم)",
+    "does.": "(فعل کمکی، سوم‌شخص مفرد do)", "door": "دروازه", "now": "حالا",
+    "same": "همرنگ؛ یکسان", "laugh": "خندیدن", "lot": "خیلی (در a lot)",
+    # Unit 32
+    "cat": "پیشک", "sister's": "مالِ خواهر", "fish": "ماهی", "bird": "مرغک",
+    "pet": "حیوان خانگی", "pets": "حیوانات خانگی",
+    "luna.": "لونا (اسم حیوان)", "likes": "خوش داره (سوم‌شخص مفرد)",
+    "friendly": "خوش‌رفتار", "mia,": "میا،", "yes,": "بلی،",
+    "nice!": "قشنگ!", "loves": "خیلی خوش داره (سوم‌شخص مفرد)",
+    "ball.": "توپ.", "named": "نام‌دار؛ به نام", "max.": "مکس (اسم حیوان).",
+    "morning.": "صبح.", "walks,": "قدم‌ زدن‌ها،", "still": "بازهم",
+    "watch": "تماشا کردن", "swim.": "شنا کردن.",
+    # Unit 33
+    "bus": "بس", "drive": "موتر راندن", "bike": "بایسکل", "ride": "سوار شدن",
+    "work?": "کار؟", "takes": "طول می‌کشه (سوم‌شخص مفرد take)",
+    "late": "دیر", "daniel?": "دنیل؟", "it?": "آن؟", "okay,": "خیر است،",
+    "parking": "پارکینگ", "difficult.": "مشکل.",
+    "drives": "موتر می‌رانه (سوم‌شخص مفرد)", "office.": "دفتر.",
+    "worry": "پریشان بودن",
+    # Unit 34
+    "soccer": "فوتبال", "saturdays": "روزهای شنبه", "tennis": "تنیس",
+    "plays": "بازی می‌کنه (سوم‌شخص مفرد)", "basketball": "بسکتبال",
+    "swimming": "شنا کردن", "yoga": "یوگا", "exercise": "ورزش",
+    "times": "دفعه‌ها", "swims": "شنا می‌کنه (سوم‌شخص مفرد)",
+    "weekends": "آخر هفته‌ها", "gym": "جیم؛ باشگاه ورزشی", "pool": "حوض شنا",
+    "us": "ما را", "really": "واقعاً", "house": "خانه", "stay": "ماندن",
+    "active": "فعال", "ways": "طریقه‌ها", "before": "پیش از", "team": "تیم",
+    "already": "قبلاً", "neighbor": "همسایه", "even": "حتی",
+    "though": "اگرچه", "anyone's": "مالِ هیچ‌کس", "sport": "ورزش",
+    # Unit 35
+    "call": "زنگ زدن", "mom": "مادر (خودمانی)", "laptop": "لپ‌تاپ",
+    "uses": "استفاده می‌کنه (سوم‌شخص مفرد)", "tablet": "تبلت",
+    "reads": "می‌خانه (سوم‌شخص مفرد read)", "books": "کتاب‌ها",
+    "computer": "کمپیوتر", "app": "اپلیکیشن", "camera": "کمره",
+    "photos": "عکس‌ها", "text": "پیامک فرستادن",
+    "sends": "می‌فرستد (سوم‌شخص مفرد)", "friend": "رفیق",
+    "download": "دانلود کردن", "downloads": "دانلود می‌کنه (سوم‌شخص مفرد)",
+    "wifi": "وایفای", "fast": "تیز", "battery": "بتری", "low": "کم",
+    "use": "استفاده کردن", "slow": "آهسته", "most": "بیشتر",
+    "mostly": "بیشترینه", "apps": "اپلیکیشن‌ها", "map": "نقشه",
+    "them": "آنها را", "names": "نام‌ها", "their": "مالِ آنها",
+    "phones": "تیلفون‌ها", "differently": "به طور مختلف", "people": "مردم",
+    "instead": "به‌عوض", "maps": "نقشه‌ها",
+    "tries": "کوشش می‌کنه (سوم‌شخص مفرد)", "recipes": "رسپی‌ها",
+    "laptops": "لپ‌تاپ‌ها", "chat": "گپ زدن (آنلاین)",
+    # Unit 36
+    "course": "کورس", "taking": "گرفتن (کورس)",
+    "community": "اجتماعی (در community college)", "college": "کالج",
+    "homework": "کار خانگی", "subject": "مضمون", "math": "ریاضی",
+    "study": "درس خواندن", "studies": "درس می‌خانه (سوم‌شخص مفرد)",
+    "studying": "درس‌خواندن", "doing": "انجام دادن", "photography": "عکاسی",
+    "how's": "چطوره (مخفف how is)", "learning": "یادگرفتن",
+    "teach": "درس دادن", "sometime": "یک وقتی", "something": "یک چیزی",
+    "outside": "بیرون از", "nights": "شب‌ها", "learn": "یاد گرفتن",
+    "skills": "مهارت‌ها", "spanish": "زبان هسپانوی",
+    "wants": "می‌خواهد (سوم‌شخص مفرد)", "travel": "سفر کردن",
+    "mexico": "مکسیکو", "someday": "یک روزی", "talk": "گپ زدن",
+    "classes": "صنف‌ها", "october": "اکتوبر",
+    # Unit 37
+    "party": "میلاد؛ محفل", "having": "داشتن (در have a party)",
+    "gift": "تحفه", "bought": "خرید (زمان گذشتهٔ buy)",
+    "invite": "دعوت کردن", "celebrate": "جشن گرفتن",
+    "congratulations": "مبارک باشه", "coworkers": "همکاران",
+    "congratulate": "تبریک گفتن", "him": "او را (مذکر)",
+    "promotion": "ترفیع", "wish": "آرزو کردن", "surprise": "غافلگیرکننده",
+    "planning": "پلان کدن", "know": "دانستن", "daniel's": "مالِ دنیل",
+    "12th": "دوازدهم", "didn't": "(منفیِ فعل کمکی did)", "office": "دفتر",
+    "perfect": "عالی", "buy": "خریدن", "cake": "کیک", "definitely": "قطعاً",
+    "we'll": "ما ... خواهیم (مخفف we will)",
+    "were": "بودند (زمان گذشتهٔ are)",
+    "arrived": "رسید (زمان گذشتهٔ arrive)",
+    "found": "یافت (زمان گذشتهٔ find)", "balloons": "بلون‌ها",
+    "break": "وقفه", "everyone": "همه", "said": "گفت (زمان گذشتهٔ say)",
+    "congratulated": "تبریک گفت (زمان گذشته)",
+    "gave": "داد (زمان گذشتهٔ give)", "pair": "یک جوره", "framed": "قاب‌شده",
+    "took": "گرفت (زمان گذشتهٔ take)", "herself": "خودش (مؤنث)",
+    "thanked": "تشکر کرد (زمان گذشته)", "wonderful": "عالی؛ فوق‌العاده",
+    # Unit 38
+    "chore": "کار خانه", "washing": "شستن", "dishes": "ظرف‌ها",
+    "least": "کمترین", "laundry": "لباس‌شویی", "sundays": "روزهای یکشنبه",
+    "vacuum": "جاروبرقی کدن", "vacuums": "جاروبرقی می‌کنه (سوم‌شخص مفرد)",
+    "trash": "زباله", "out": "بیرون", "clean": "پاک کردن", "wash": "شستن",
+    "cleans": "پاک می‌کنه (سوم‌شخص مفرد)", "mess": "شلوغی", "coming": "آمدن",
+    "some": "بعضی", "cleaning": "پاک‌کاری", "leave": "رفتن (ترک کردن)",
+    "own": "خودِ", "habits": "عادت‌ها", "washes": "می‌شویه (سوم‌شخص مفرد)",
+    "mind": "چیزی نگفتن (در doesn't mind)",
+    "hates": "نفرت داره (سوم‌شخص مفرد)", "mia's": "مالِ میا",
+    "luna": "لونا (اسم حیوان)", "fur": "پشم حیوان", "everywhere": "همه‌جا",
+    "guests": "میهمانان", "asked": "پرسید (زمان گذشته)",
+    "vacuumed": "جاروبرقی کرد (زمان گذشته)", "thankful": "سپاسگزار",
+    # Unit 39
+    "neighborhood": "همسایگی؛ ساحه", "helpful": "کمک‌کننده",
+    "nearby": "نزدیک", "quiet": "آرام", "noisy": "پرسروصدا",
+    "mine": "مالِ من", "neighbors": "همسایه‌ها", "live": "زندگی کردن",
+    "along": "خوب رفتار کدن (در get along)", "grocery": "مواد خوراکی",
+    "five-minute": "پنج‌دقیقه‌یی", "say": "گفتن", "might": "شاید (فعل کمکی)",
+    "soon": "زود", "mr": "آقای", "lopez": "لوپیز (اسم)",
+    "waters": "آب می‌ته (سوم‌شخص مفرد water)", "plants": "نباتات",
+    "neighborhoods": "ساحه‌ها", "restaurants": "رستورانت‌ها",
+    "shops": "دکان‌ها", "knows": "می‌شناسه (سوم‌شخص مفرد know)",
+    "several": "چند تا", "says": "می‌گه (سوم‌شخص مفرد)", "hallway": "دهلیز",
+    "lives": "زندگی می‌کنه (سوم‌شخص مفرد)",
+    "barks": "پارس می‌کنه (سوم‌شخص مفرد)", "talking": "گپ زدن",
+    "decided": "تصمیم گرفت (زمان گذشته)",
+    # Unit 40
+    "post office": "پوستخانه", "letters": "خط‌ها (نامه‌ها)",
+    "letter": "خط (نامه)", "package": "پارسل", "stamp": "تمبر",
+    "envelope": "پاکت خط", "put": "گذاشتن", "mailbox": "صندوق پستی",
+    "postcard": "کارت پستال", "express": "عاجل", "mail": "پُست (خط و پارسل)",
+    "regular": "معمولی", "cost": "قیمت داشتن", "chicago": "شیکاگو",
+    "receipt": "رسید", "around": "دور و بر", "post": "پُست کردن",
+    "sent": "فرستاد (زمان گذشتهٔ send)",
+    "paid": "پرداخت کرد (زمان گذشتهٔ pay)",
+    "wanted": "خواست (زمان گذشتهٔ want)", "quickly": "زود", "ready": "آماده",
+    "clerk": "کارمند", "weighed": "وزن کرد (زمان گذشته)",
+    "chose": "انتخاب کرد (زمان گذشتهٔ choose)", "packages": "پارسل‌ها",
+    "buys": "می‌خره (سوم‌شخص مفرد buy)",
+    "writes": "می‌نویسه (سوم‌شخص مفرد write)",
+    "feels": "احساس می‌کنه (سوم‌شخص مفرد)", "personal": "شخصی",
+    # Unit 41
+    "recipe": "رسپی", "grandmother's": "مالِ بی‌بی",
+    "ingredient": "مواد اولیه", "onions": "پیاز", "chop": "خرد کردن",
+    "boil": "جوش دادن", "pasta": "پاستا", "taste": "چشیدن", "sauce": "سُس",
+    "needs": "ضرورت داره (سوم‌شخص مفرد need)", "salt": "نمک",
+    "bake": "پختن (در تنور/فِر)", "forget": "فراموش کردن",
+    "add": "اضافه کردن", "making": "ساختن", "show": "نشان دادن",
+    "these": "این‌ها", "pieces": "قطعه‌ها", "delicious": "خوش‌مزه",
+    "makes": "می‌سازه (سوم‌شخص مفرد)", "using": "استفاده کدن",
+    "mother's": "مالِ مادر", "taught": "یاد داد (زمان گذشتهٔ teach)",
+    "without": "بدون", "cutting": "بریدن", "fingers": "انگشت‌ها",
+    "yet": "هنوز", "he's": "او ... است (مخفف he is)",
+    "chopped": "خرد کرد (زمان گذشته)", "while": "در حالی که",
+    "boiled": "جوش داد (زمان گذشته)", "made": "ساخت (زمان گذشتهٔ make)",
+    "tasted": "چشید (زمان گذشته)",
+    # Unit 42
+    "funny": "بذله‌گو", "hardworking": "زحمتکش", "employee": "کارمند",
+    "shy": "شرمگین", "calm": "آرام", "talkative": "پرگپ",
+    "warms": "گرم می‌شه (در warm up)", "sense": "حس (در sense of humor)",
+    "humor": "مزاح", "gets": "می‌گیره (سوم‌شخص مفرد get)", "once": "یک‌بار",
+    "project": "پروژه", "finishes": "ختم می‌کنه (سوم‌شخص مفرد finish)",
+    "tasks": "وظیفه‌ها", "meetings": "ملاقات‌ها", "comfortable": "راحت",
+    "relaxed": "آرام‌شده", "personalities": "شخصیت‌ها",
+    "meets": "ملاقات می‌کنه (سوم‌شخص مفرد)", "creative": "خلاق",
+    "helps": "کمک می‌کنه (سوم‌شخص مفرد)", "relax": "آرام گرفتن",
+    "upset": "ناراحت", "outgoing": "اجتماعی", "organized": "منظم",
+    "plans": "پلان‌ها", "group": "گروه", "patient": "صابر",
+    "teaches": "درس می‌ته (سوم‌شخص مفرد teach)", "enjoy": "لذت بردن",
+    "spending": "سپری کدن (وخت)",
 }
 
 
