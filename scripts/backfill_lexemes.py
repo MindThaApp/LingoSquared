@@ -2107,7 +2107,21 @@ def _classify_fa(files, level, fa_specs, seen_en):
 
                 target_text = item.get("target", {}).get("text", "").strip()
                 introduced = item.get("introduced_tokens", [])
-                if len(introduced) > 1 and target_text and "\n" not in target_text:
+                # No phrase-derivation at B1: its multi-token teaching cards
+                # are grammar-note paragraphs and full reading passages, not
+                # the short natural phrases this path was built for (same
+                # policy the en-prs script chose for its B1 wiring). The
+                # length guard is a hard backstop for every level: Lexeme.
+                # token is VARCHAR(255), and a newline-free reading passage
+                # slipped through here on 2026-07-11 and crashed the real
+                # backfill run with StringDataRightTruncation.
+                if (
+                    len(introduced) > 1
+                    and target_text
+                    and "\n" not in target_text
+                    and level != "b1"
+                    and len(target_text) <= 255
+                ):
                     tags = fa_agreement_tags(target_text, lesson_key)
                     phrase_key = (level, target_text)
                     # Real dead-anchor collision caught 2026-07-09 while
