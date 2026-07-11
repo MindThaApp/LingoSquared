@@ -1,0 +1,77 @@
+schema_version: "1.0"
+pack_key: practice.prs-en.a1.unit30
+source_language: prs
+target_language: en
+unit_content_key: en.a1.unit30.hobbies
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: >-
+    Authored 2026-07-11 by the prs-en depth-extension worker (a fresh-
+    context worker extending Endless Practice coverage from unit29 to
+    unit42, per a depth audit finding prs-en had only ~7.2hrs vs the
+    >=10hr publish bar). Two tags: 4-member 'hobby_noun' (reading/
+    cooking/painting/running), verified all four fit "I like {item}.";
+    5-member 'frequency_adverb' (always/often/sometimes/rarely/never --
+    "sometimes" already classified since unit23, reused additively),
+    verified all five fit "I {item} play tennis." EN_POS/
+    en_agreement_tags for both tags added to
+    scripts/_en_target_lexeme_common.py as part of this same pass;
+    scripts/backfill_lexemes_prs_en.py's Dari gloss dict and UNIT_FILES
+    tuple extended to cover units 30-42 (this unit through personality).
+    Anchoring check: lesson01/lesson02 both introduce genuinely new
+    lexemes (verified via the realization file's own introduced_tokens),
+    safe as lesson_content_key anchors. Every slot's real candidate
+    count verified with scripts/_practice_slot_check.py. Needs the
+    standard fresh-context review before import.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [hobby_noun, frequency_adverb]
+slot_presets:
+  hobby_noun: &hobby_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: hobby_noun}}
+  frequency_adverb: &frequency_adverb {language_code: en, part_of_speech: adverb, agreement_tags: {semantic: frequency_adverb}}
+templates:
+  - content_key: practice.prs-en.en.a1.unit30.lesson01.choose.001
+    lesson_content_key: en.a1.unit30.lesson01.free_time_activities
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *hobby_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی دری {item} را انتخاب کنین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit30.lesson01.listen.002
+    lesson_content_key: en.a1.unit30.lesson01.free_time_activities
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *hobby_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "واژه‌ای که شنیدین {item} بود.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit30.lesson01.match.003
+    lesson_content_key: en.a1.unit30.lesson01.free_time_activities
+    type: matching_pairs
+    frame: {text: "{first} — {second}", language_code: en, direction: ltr}
+    slots: {first: *hobby_noun, second: *hobby_noun, third: *hobby_noun, fourth: *hobby_noun}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth]}
+    feedback_frame: {text: "هر سرگرمی را به معنی دری خودش وصل کنین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit30.lesson01.translate.004
+    lesson_content_key: en.a1.unit30.lesson01.free_time_activities
+    type: translation
+    frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *hobby_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "معادل انگلیسی همی سرگرمی {item} است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit30.lesson02.order.001
+    lesson_content_key: en.a1.unit30.lesson02.how_often
+    type: word_order
+    frame: {text: "I {item} play tennis", language_code: en, direction: ltr}
+    slots: {item: *frequency_adverb}
+    answer_derivation: {kind: render_frame, frame: {text: "I {item} play tennis", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} کلمه‌ای است که بسامد را نشان می‌ته.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit30.lesson02.choose.002
+    lesson_content_key: en.a1.unit30.lesson02.how_often
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *frequency_adverb}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی دری {item} را انتخاب کنین.", language_code: prs, direction: rtl}

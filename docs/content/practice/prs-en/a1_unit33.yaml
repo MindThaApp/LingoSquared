@@ -1,0 +1,65 @@
+schema_version: "1.0"
+pack_key: practice.prs-en.a1.unit33
+source_language: prs
+target_language: en
+unit_content_key: en.a1.unit33.transportation
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: >-
+    Authored 2026-07-11 by the prs-en depth-extension worker, same pass
+    as unit30-32. Single tag: 4-member 'transport_noun' (bus/train/car/
+    bike -- "train"/"car" already classified since unit21's
+    travel_noun/unit20's comparative-unit sentence respectively, reused
+    additively), verified all four fit "I take the {item} to work."
+    "walk" is deliberately excluded (already classified "noun" from
+    unit17's different sense, and "I take the walk to work" is not
+    idiomatic). EN_POS/en_agreement_tags added to
+    scripts/_en_target_lexeme_common.py as part of this pass. Anchoring
+    check: lesson01 introduces new lexemes, safe as an anchor. Every
+    slot's real candidate count verified with
+    scripts/_practice_slot_check.py. Needs the standard fresh-context
+    review before import.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [transport_noun]
+slot_presets:
+  transport_noun: &transport_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: transport_noun}}
+templates:
+  - content_key: practice.prs-en.en.a1.unit33.lesson01.choose.001
+    lesson_content_key: en.a1.unit33.lesson01.transport_vocabulary
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *transport_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی دری {item} را انتخاب کنین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit33.lesson01.listen.002
+    lesson_content_key: en.a1.unit33.lesson01.transport_vocabulary
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *transport_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "واژه‌ای که شنیدین {item} بود.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit33.lesson01.match.003
+    lesson_content_key: en.a1.unit33.lesson01.transport_vocabulary
+    type: matching_pairs
+    frame: {text: "{first} — {second}", language_code: en, direction: ltr}
+    slots: {first: *transport_noun, second: *transport_noun, third: *transport_noun, fourth: *transport_noun}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth]}
+    feedback_frame: {text: "هر وسیلهٔ ترانسپورت را به معنی دری خودش وصل کنین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit33.lesson01.translate.004
+    lesson_content_key: en.a1.unit33.lesson01.transport_vocabulary
+    type: translation
+    frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *transport_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "معادل انگلیسی همی وسیلهٔ ترانسپورت {item} است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit33.lesson01.order.005
+    lesson_content_key: en.a1.unit33.lesson01.transport_vocabulary
+    type: word_order
+    frame: {text: "I take the {item} to work", language_code: en, direction: ltr}
+    slots: {item: *transport_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "I take the {item} to work", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} وسیله‌ای است که ذکر شد.", language_code: prs, direction: rtl}

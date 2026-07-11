@@ -1,0 +1,57 @@
+schema_version: "1.0"
+pack_key: practice.prs-en.a1.unit34
+source_language: prs
+target_language: en
+unit_content_key: en.a1.unit34.sports
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: >-
+    Authored 2026-07-11 by the prs-en depth-extension worker, same pass
+    as unit30-33. Single tag: 3-member 'play_sport_noun' (soccer/
+    tennis/basketball), verified all three fit "We play {item}."
+    "swimming"/"yoga"/"exercise" are deliberately excluded -- each needs
+    a different collocating verb ("go swimming", "do yoga", "do
+    exercise"), not "play", so they'd break the shared frame. Kept at 3
+    members (the mc/listen_select floor), so matching_pairs is
+    deliberately NOT used here. EN_POS/en_agreement_tags added to
+    scripts/_en_target_lexeme_common.py as part of this pass. Anchoring
+    check: lesson01 introduces new lexemes, safe as an anchor. Every
+    slot's real candidate count verified with
+    scripts/_practice_slot_check.py. Needs the standard fresh-context
+    review before import.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [play_sport_noun]
+slot_presets:
+  play_sport_noun: &play_sport_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: play_sport_noun}}
+templates:
+  - content_key: practice.prs-en.en.a1.unit34.lesson01.choose.001
+    lesson_content_key: en.a1.unit34.lesson01.sports_vocabulary
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *play_sport_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی دری {item} را انتخاب کنین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit34.lesson01.listen.002
+    lesson_content_key: en.a1.unit34.lesson01.sports_vocabulary
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *play_sport_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "واژه‌ای که شنیدین {item} بود.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit34.lesson01.translate.003
+    lesson_content_key: en.a1.unit34.lesson01.sports_vocabulary
+    type: translation
+    frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *play_sport_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "معادل انگلیسی همی ورزش {item} است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit34.lesson01.order.004
+    lesson_content_key: en.a1.unit34.lesson01.sports_vocabulary
+    type: word_order
+    frame: {text: "We play {item}", language_code: en, direction: ltr}
+    slots: {item: *play_sport_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "We play {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} ورزشی است که ذکر شد.", language_code: prs, direction: rtl}
