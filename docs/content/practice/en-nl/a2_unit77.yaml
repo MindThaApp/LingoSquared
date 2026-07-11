@@ -1,0 +1,191 @@
+schema_version: "1.0"
+pack_key: practice.en-nl.a2.unit77
+source_language: en
+target_language: nl
+unit_content_key: nl.a2.unit77.iets_terugbrengen
+review:
+  status: unreviewed
+  fresh_context: "false"
+  notes: "Authored 2026-07-11, alongside the sibling a2_unit74/75/76.yaml
+    packs -- see a2_unit74.yaml's own review notes for the shared
+    background. This file covers unit77 (iets terugbrengen: reporting
+    broken headphones, asking for a refund, the receipt/return-window
+    exchange, and the shop's retourbeleid).
+
+    scripts/backfill_lexemes_en_nl.py already had broad recognition-only
+    tags for this unit (shopping_complaint_vocab: 7 nouns --
+    koptelefoon/linkerkant/bonnetje/retourbeleid/artikel/aankoop/
+    exemplaar; shopping_complaint_verb: 4 verbs -- ruilen/terugkrijgen/
+    terugbrengen/regel). This pass adds 6 new single-member *_single
+    tags (terugbrengen_koptelefoon_single/_bonnetje_single/
+    _retourbeleid_single/_ruilen_single/_artikel_single/
+    _terugkrijgen_single) anchoring each lesson's hero full sentence
+    for word_order/translation/fill_in_blank via render_frame/
+    slot_text -- single-member by construction.
+
+    Real case-duplicate found and fixed while verifying
+    shopping_complaint_vocab's actual course-wide pool: it contains
+    both lowercase 'retourbeleid' (lesson04 vocab card) and capitalized
+    'Retourbeleid' (lesson05 reading's own heading), both meaning 'the
+    return policy' with an identical English gloss -- harmless for
+    bare-word multiple_choice/listen_select (one word at a time) but a
+    real risk for matching_pairs (could sample both as two
+    simultaneous, effectively-duplicate cards). Added a new exact-case
+    'shopping_complaint_vocab_pure' sibling to
+    scripts/backfill_lexemes_en_nl.py (excludes the capitalized
+    duplicate by construction, same fix class as this file's existing
+    job_interview_vocab_pure/housing_report_noun_pure precedent) and
+    used THAT tag for both matching_pairs templates below instead of
+    the plain casefolded tag.
+
+    14 templates across all 6 lessons: multiple_choice x2, listen_select
+    x3, matching_pairs x2 (4-pair shopping_complaint_vocab_pure pool in
+    lesson03, 3-pair shopping_complaint_verb pool in lesson06),
+    word_order x2, fill_in_blank x2, translation x3. Both fill_in_blank
+    slots (bonnetje_single, artikel_single) have exactly 1 course-wide
+    candidate by construction -- re-verified by re-running
+    scripts/_fill_in_blank_ambiguity_check.py after adding this file's
+    PACKS entry, 0 flagged. Needs the standard fresh-context review
+    before import. Same blocking dependency as every other en-nl pack:
+    backfill_lexemes_en_nl.py has not actually been run against a real
+    database yet (only --dry-run, which succeeds)."
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [shopping_complaint_vocab, shopping_complaint_vocab_pure, shopping_complaint_verb, terugbrengen_koptelefoon_single, terugbrengen_bonnetje_single, terugbrengen_retourbeleid_single, terugbrengen_ruilen_single, terugbrengen_artikel_single, terugbrengen_terugkrijgen_single]
+slot_presets:
+  shopping_complaint_vocab: &shopping_complaint_vocab {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: shopping_complaint_vocab}}
+  shopping_complaint_vocab_pure: &shopping_complaint_vocab_pure {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: shopping_complaint_vocab_pure}}
+  shopping_complaint_verb: &shopping_complaint_verb {language_code: nl, part_of_speech: verb, agreement_tags: {semantic: shopping_complaint_verb}}
+  koptelefoon_single: &koptelefoon_single {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: terugbrengen_koptelefoon_single}}
+  bonnetje_single: &bonnetje_single {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: terugbrengen_bonnetje_single}}
+  retourbeleid_single: &retourbeleid_single {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: terugbrengen_retourbeleid_single}}
+  ruilen_single: &ruilen_single {language_code: nl, part_of_speech: verb, agreement_tags: {semantic: terugbrengen_ruilen_single}}
+  artikel_single: &artikel_single {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: terugbrengen_artikel_single}}
+  terugkrijgen_single: &terugkrijgen_single {language_code: nl, part_of_speech: verb, agreement_tags: {semantic: terugbrengen_terugkrijgen_single}}
+templates:
+  - content_key: practice.en-nl.nl.a2.unit77.lesson01.choose.001
+    lesson_content_key: nl.a2.unit77.lesson01.deze_koptelefoon_is_kapot
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *shopping_complaint_vocab}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a word from this unit's shopping-complaint vocabulary.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit77.lesson01.listen.002
+    lesson_content_key: nl.a2.unit77.lesson01.deze_koptelefoon_is_kapot
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *shopping_complaint_vocab}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit77.lesson01.order.003
+    lesson_content_key: nl.a2.unit77.lesson01.deze_koptelefoon_is_kapot
+    type: word_order
+    frame: {text: "Deze {item} is kapot.", language_code: nl, direction: ltr}
+    slots: {item: *koptelefoon_single}
+    answer_derivation: {kind: render_frame, frame: {text: "Deze {item} is kapot.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} is what's broken.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit77.lesson01.translate.004
+    lesson_content_key: nl.a2.unit77.lesson01.deze_koptelefoon_is_kapot
+    type: translation
+    frame:
+      text: "I bought a new pair of headphones."
+      language_code: en
+      direction: ltr
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *koptelefoon_single}
+    answer_derivation: {kind: render_frame, frame: {text: "Ik heb een nieuwe {item} gekocht.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Ik heb een nieuwe {item} gekocht.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit77.lesson02.choose.001
+    lesson_content_key: nl.a2.unit77.lesson02.ik_wil_mijn_geld_terug
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots: {item: *shopping_complaint_verb}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a verb from this unit's shopping-complaint vocabulary.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit77.lesson02.order.002
+    lesson_content_key: nl.a2.unit77.lesson02.ik_wil_mijn_geld_terug
+    type: word_order
+    frame: {text: "Kan ik {item} of mijn geld terugkrijgen?", language_code: nl, direction: ltr}
+    slots: {item: *ruilen_single}
+    answer_derivation: {kind: render_frame, frame: {text: "Kan ik {item} of mijn geld terugkrijgen?", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} is the other option besides a refund.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit77.lesson03.match.001
+    lesson_content_key: nl.a2.unit77.lesson03.heeft_u_het_bonnetje_nog
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth}", language_code: nl, direction: ltr}
+    slots: {first: *shopping_complaint_vocab_pure, second: *shopping_complaint_vocab_pure, third: *shopping_complaint_vocab_pure, fourth: *shopping_complaint_vocab_pure}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth]}
+    feedback_frame: {text: "Match each word with its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit77.lesson03.fill.002
+    lesson_content_key: nl.a2.unit77.lesson03.heeft_u_het_bonnetje_nog
+    type: fill_in_blank
+    frame: {text: "Heeft u het {item} nog?", language_code: nl, direction: ltr}
+    slots: {item: *bonnetje_single}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Heeft u het bonnetje nog? -- Do you still have the receipt?", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit77.lesson04.listen.001
+    lesson_content_key: nl.a2.unit77.lesson04.het_retourbeleid
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *shopping_complaint_verb}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit77.lesson04.translate.002
+    lesson_content_key: nl.a2.unit77.lesson04.het_retourbeleid
+    type: translation
+    frame:
+      text: "What is this shop's return policy?"
+      language_code: en
+      direction: ltr
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *retourbeleid_single}
+    answer_derivation: {kind: render_frame, frame: {text: "Wat is het {item} van deze winkel?", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Wat is het {item} van deze winkel?", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit77.lesson05.listen.001
+    lesson_content_key: nl.a2.unit77.lesson05.beleid_lezen
+    type: listen_select
+    frame: {text: "{item}", language_code: nl, direction: ltr}
+    slots: {item: *shopping_complaint_vocab}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a word from the return policy.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit77.lesson05.fill.002
+    lesson_content_key: nl.a2.unit77.lesson05.beleid_lezen
+    type: fill_in_blank
+    frame: {text: "U kunt een {item} binnen dertig dagen terugbrengen.", language_code: nl, direction: ltr}
+    slots: {item: *artikel_single}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "U kunt een artikel binnen dertig dagen terugbrengen -- You can return an item within thirty days.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit77.lesson06.match.001
+    lesson_content_key: nl.a2.unit77.lesson06.omar_brengt_de_koptelefoon_terug
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third}", language_code: nl, direction: ltr}
+    slots: {first: *shopping_complaint_verb, second: *shopping_complaint_verb, third: *shopping_complaint_verb}
+    slot_relations: [{kind: distinct, slots: [first, second, third]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third]}
+    feedback_frame: {text: "Match each verb with its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a2.unit77.lesson06.translate.002
+    lesson_content_key: nl.a2.unit77.lesson06.omar_brengt_de_koptelefoon_terug
+    type: translation
+    frame:
+      text: "Can I exchange it or get my money back?"
+      language_code: en
+      direction: ltr
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *terugkrijgen_single}
+    answer_derivation: {kind: render_frame, frame: {text: "Kan ik ruilen of mijn geld {item}?", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Kan ik ruilen of mijn geld {item}?", language_code: en, direction: ltr}
