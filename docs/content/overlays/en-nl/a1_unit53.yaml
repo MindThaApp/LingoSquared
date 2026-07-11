@@ -6,23 +6,41 @@ target_language: nl
 status: complete_draft
 generation_provenance: {method: ai_generated, authoring_system: claude, human_reviewed: false}
 review:
-  status: unreviewed
-  required_next_reviewer: claude
+  status: reviewed
+  required_next_reviewer: null
   notes: >-
-    2026-07-10 fresh-context review (Claude): left unreviewed, paired
-    with the realization file's own flagged issue -- see that file's
-    review.notes for the full description of the lesson04 wash-price
-    (flat "vijf euro" vs. the price list's per-degree €4/€5) cross-
-    lesson inconsistency (AUTHORING_GUIDE.md §11). This overlay's own
-    English text (feedback/gloss/distractors) is an accurate translation
-    of the Dutch as authored, so the inconsistency isn't a translation
-    bug on this side -- it needs to be resolved on the realization side
-    (or both sides together, since the overlay's exercise04
-    "comprehend_prijs" gloss would need updating to match whatever the
-    realization decision ends up being). Everything else checked clean
-    on this side: no same-speaker distractor collisions, no boolean-
-    coercion issues, answer shapes correct, exercise types registered,
-    no jargon leaks, natural register throughout.
+    2026-07-11 fresh-context review (Opus, isolated worktree): now
+    marked reviewed. The one item that had blocked sign-off in the
+    2026-07-10 pass -- the lesson04 wash-price cross-lesson
+    inconsistency (flat "vijf euro" vs. the price list's per-degree
+    €4/€5), AUTHORING_GUIDE.md §11 -- has since been RESOLVED on the
+    realization side (that file is now review.status: reviewed; the
+    sign was flattened to "Wasbeurt 30 of 60 graden €5." so a wash is
+    €5 at either temperature). This overlay is consistent with that
+    resolution end to end: prijslijst_tekst gloss and the lesson05
+    read_wasbeurt_prijs feedback/match pairs all say €5 flat, and the
+    now-flat pricing makes the "Four euros"/"€4" distractors in
+    lesson04.comprehend_prijs and lesson05.read_wasbeurt_prijs cleanly
+    wrong rather than accidentally-correct. Re-ran the mechanical sweep
+    on this side and confirmed clean: recursive boolean-coercion
+    type-walk (zero stray booleans), no snake_case/jargon leaks in any
+    distractor/correct_option/gloss/feedback, all matching_pairs
+    accepted_answers cover every realization pair and match the
+    displayed text, all listen_select/dialogue_comprehension
+    distractors checked against every OTHER line the tested speaker
+    (Sanne lesson04, Lotte/Nina lesson06) says in that same dialogue --
+    no collisions, all invented minimal-pair alternatives. Multi-clause
+    accepted_answers carry punctuation variants. Compiler validate AND
+    compile re-run clean across the full en-nl A1 corpus (0 errors/0
+    warnings).
+
+    2026-07-10 fresh-context review (Claude): originally left
+    unreviewed, paired with the realization file's own then-flagged §11
+    inconsistency (now resolved, see above). Everything else checked
+    clean on this side even then: no same-speaker distractor
+    collisions, no boolean-coercion issues, answer shapes correct,
+    exercise types registered, no jargon leaks, natural register
+    throughout.
 
     English-to-Dutch overlay for nl A1 unit53, realizing the newly added
     universal.a1.laundry.use_launderette outcome. Every vocabulary
