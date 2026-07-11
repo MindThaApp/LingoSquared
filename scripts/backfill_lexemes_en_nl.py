@@ -51,6 +51,22 @@ pack exists yet (only through unit28), so there is nothing yet to wire them
 into; add them alongside that future practice-template pass instead of
 speculatively now.
 
+**Extended again 2026-07-11**, same day, for that deferred practice-
+template pass: ``docs/content/practice/en-nl/a2_unit74.yaml`` through
+``a2_unit77.yaml`` now exist, so ``nl_agreement_tags()`` gained one
+single-member ``*_single`` semantic tag per lesson's hero full-sentence
+frame (25 new tags total, one block per unit, placed right after each
+unit's existing broad recognition-only block) -- e.g.
+``reisvertraging_vertraging_single``, ``schermtijd_scherm_single``,
+``drukkeweek_daarna_single``, ``terugbrengen_koptelefoon_single``. Every
+one has exactly one member by construction (a single ``t == "token"``
+check), which is what makes it safe to embed in a fixed multi-word
+``render_frame``/``slot_text`` template (AUTHORING_GUIDE.md #17) without
+a candidate-pool grammaticality judgment call -- the existing broader
+per-unit vocab/verb tags (``travel_disruption_vocab``, etc.) are still
+used as-is, unchanged, for the bare-word ``multiple_choice``/
+``listen_select``/``matching_pairs`` templates in the same four packs.
+
 **Extended 2026-07-11** to cover the Dutch B1 course (units 01-11, all now
 `status: reviewed`), which was imported to the DB but entirely absent from
 this script -- B1 lessons were creating zero Lexeme rows, so B1 content
@@ -2231,8 +2247,72 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     if t in {"koptelefoon", "linkerkant", "bonnetje", "retourbeleid",
              "artikel", "aankoop", "exemplaar"}:
         semantic.append("shopping_complaint_vocab")
+    # Exact-case (not casefolded) sibling for matching_pairs, added
+    # 2026-07-11 alongside the practice-template pass: the casefolded
+    # "shopping_complaint_vocab" pool above genuinely contains both
+    # lowercase "retourbeleid" (lesson04 vocab card) and capitalized
+    # "Retourbeleid" (lesson05 reading's heading), both meaning "the
+    # return policy" with an identical English gloss -- fine for
+    # bare-word multiple_choice/listen_select (one word shown at a
+    # time), but a real risk for matching_pairs, which could sample
+    # both as two simultaneous cards that look like duplicate pairs.
+    # Restricting to the exact-case lowercase token excludes the
+    # capitalized duplicate, same class of fix as this file's existing
+    # job_interview_vocab_pure/housing_report_noun_pure precedent.
+    if token in {"koptelefoon", "linkerkant", "bonnetje", "retourbeleid",
+                 "artikel", "aankoop", "exemplaar"}:
+        semantic.append("shopping_complaint_vocab_pure")
     if t in {"ruilen", "terugkrijgen", "terugbrengen", "regel"}:
         semantic.append("shopping_complaint_verb")
+
+    # Single-member render_frame-safe tags for units 74-77, added 2026-07-11
+    # alongside the first docs/content/practice/en-nl/a2_unit7[4-7].yaml
+    # practice-template pass (the four broader recognition-only tags just
+    # above were deliberately left bare-word-only when this file was first
+    # extended for these units, per this module's own docstring note -- this
+    # is that deferred follow-up). Each tag below has EXACTLY one member, so
+    # it can safely anchor a fixed multi-word frame (word_order/translation/
+    # fill_in_blank via render_frame/slot_text) without the multi-candidate
+    # ambiguity §17 warns about -- no grammaticality-across-candidates
+    # judgment call is needed when there is only one candidate. Casefold
+    # matching (`t == ...`) is used throughout, deliberately unifying a
+    # token with its own sentence-initial capitalized variant where one
+    # exists in this unit (verified by hand, not guessed): "daarna"/"Daarna"
+    # (unit76 lesson02 mid-sentence vs. lesson06 grammar-note sentence-
+    # initial, identical meaning) and "retourbeleid"/"Retourbeleid" (unit77
+    # lesson04 vocab card vs. lesson05 reading's heading, identical
+    # meaning) -- same safe-reuse pattern as this file's existing Ervaring/
+    # Werktijden precedent, not a new risk class. Every other token below
+    # was grepped against the full NL_GLOSSES dict to confirm no unrelated
+    # capitalized homograph exists that casefolding could accidentally pull
+    # in.
+    if t == "vertraging": semantic.append("reisvertraging_vertraging_single")
+    if t == "seinstoring": semantic.append("reisvertraging_seinstoring_single")
+    if t == "aansluiting": semantic.append("reisvertraging_aansluiting_single")
+    if t == "verbinding": semantic.append("reisvertraging_verbinding_single")
+    if t == "spoor": semantic.append("reisvertraging_spoor_single")
+
+    if t == "scherm": semantic.append("schermtijd_scherm_single")
+    if t == "telefoon": semantic.append("schermtijd_telefoon_single")
+    if t == "chat": semantic.append("schermtijd_chat_single")
+    if t == "schermtijd": semantic.append("schermtijd_schermtijd_single")
+    if t == "doorbrengen": semantic.append("schermtijd_doorbrengen_single")
+    if t == "gewoonte": semantic.append("schermtijd_gewoonte_single")
+    if t == "wegleggen": semantic.append("schermtijd_wegleggen_single")
+
+    if t == "rooster": semantic.append("drukkeweek_rooster_single")
+    if t == "daarna": semantic.append("drukkeweek_daarna_single")
+    if t == "slotte": semantic.append("drukkeweek_slotte_single")
+    if t == "verschil": semantic.append("drukkeweek_verschil_single")
+    if t == "agenda": semantic.append("drukkeweek_agenda_single")
+    if t == "volgorde": semantic.append("drukkeweek_volgorde_single")
+
+    if t == "koptelefoon": semantic.append("terugbrengen_koptelefoon_single")
+    if t == "bonnetje": semantic.append("terugbrengen_bonnetje_single")
+    if t == "retourbeleid": semantic.append("terugbrengen_retourbeleid_single")
+    if t == "ruilen": semantic.append("terugbrengen_ruilen_single")
+    if t == "artikel": semantic.append("terugbrengen_artikel_single")
+    if t == "terugkrijgen": semantic.append("terugbrengen_terugkrijgen_single")
 
     tags: dict[str, object] = {"semantic": list(dict.fromkeys(semantic))}
     if t in {"jij", "je"}: tags["register"] = "informal"
