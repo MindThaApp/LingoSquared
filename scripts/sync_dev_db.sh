@@ -17,8 +17,18 @@ API="${1:-http://localhost:8000}"
 PY="$REPO_ROOT/.content-venv/bin/python"
 [ -x "$PY" ] || PY=python3
 
-read -r -p "Admin email: " ADMIN_EMAIL
-read -r -s -p "Admin password: " ADMIN_PASSWORD; echo
+# Non-interactive mode (same convention as trigger_streak_notifications.sh):
+# set LINGO_ADMIN_EMAIL and LINGO_ADMIN_PASSWORD_FILE (a chmod-600 file
+# containing ONLY the password, e.g. ~/.lingo_admin_pw). Falls back to
+# interactive prompts when unset. The password never appears in argv,
+# shell history, or any file this script writes.
+if [ -n "${LINGO_ADMIN_EMAIL:-}" ] && [ -r "${LINGO_ADMIN_PASSWORD_FILE:-}" ]; then
+  ADMIN_EMAIL="$LINGO_ADMIN_EMAIL"
+  ADMIN_PASSWORD="$(cat "$LINGO_ADMIN_PASSWORD_FILE")"
+else
+  read -r -p "Admin email: " ADMIN_EMAIL
+  read -r -s -p "Admin password: " ADMIN_PASSWORD; echo
+fi
 
 echo "== logging in =="
 TOKEN=$(curl -sf "$API/auth/login" -H 'Content-Type: application/json' \
