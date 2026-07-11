@@ -238,7 +238,42 @@ Revokes that refresh token if it exists and belongs to a still-existing
 session. Returns `204 No Content`; callers should discard both access and
 refresh tokens locally.
 
-`GET /auth/me` response: `{ "id", "email", "display_name", "is_admin", "created_at" }`.
+`POST /auth/social` (added 2026-07-11, spec-first — implementation follows)
+request:
+```json
+{
+  "provider": "google | apple",
+  "id_token": "provider-issued ID token (JWT) from the client-side sign-in flow",
+  "display_name": "string, optional — Apple only sends the user's name on the FIRST authorization, so clients pass it through here when present"
+}
+```
+response: identical shape to `POST /auth/login` (access_token + refresh_token
++ user). The server verifies the id_token server-side against the provider's
+published JWKS (signature, expiry, issuer, and audience — audience must be in
+the configured allowlist: `GOOGLE_OAUTH_CLIENT_IDS` / `APPLE_AUDIENCE_IDS`
+env vars, comma-separated to cover web + iOS + Android client IDs). The raw
+id_token is never stored.
+
+Account resolution, in order: (1) an existing `(provider, provider_subject)`
+identity row → that user; (2) no identity row but a provider-VERIFIED email
+matching an existing account → link a new identity row to that account
+(unverified provider emails never link — they create a fresh account, since
+linking on an unverified email would let anyone claim an existing account);
+(3) otherwise create a new passwordless user (null `password_hash`;
+password login for such accounts returns the normal invalid-credentials
+error, and `POST /auth/social` is their only login path until a password-set
+flow exists — an accepted gap, same tier as the missing password reset).
+Identities live in a new `user_identities` table (user_id, provider,
+provider_subject unique per provider, created_at) — additive migration,
+guarded per the standing migration rule.
+
+Unset/empty provider env vars → `503 social_login_unavailable` for that
+provider (same graceful-degradation convention as the TTS keys); the other
+provider and password auth are unaffected. `GET /auth/me` gains an
+additive `"identities": [{"provider": "google", "created_at": "..."}]` field
+(subjects/emails from providers are not echoed back).
+
+`GET /auth/me` response: `{ "id", "email", "display_name", "is_admin", "created_at", "identities" }`.
 
 `GET /me/export` (auth required) returns the authenticated account's complete
 data export as one JSON document — the data-portability counterpart to
