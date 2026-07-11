@@ -135,15 +135,28 @@ worker — see the DB-isolation footgun in root `CLAUDE.md`.)
 
 ## Deploying a backend change
 
-**`docs/PRE_DEPLOY_RUNBOOK.md` is the full checklist — read it before the
-first real deploy to 192.168.4.4.** It covers pre-flight (incl. whether
-`alembic_version` even exists on the live DB — never yet checked there),
-required env vars (`ADMIN_EMAILS`, `CORS_ORIGINS`,
-`AZURE_SPEECH_KEY`/`_REGION`, `GOOGLE_CLOUD_TTS_CREDENTIALS_JSON`), a
-backup step, the ordered deploy, and post-deploy smoke tests. **As of
-2026-07-07 the live server has never been deployed to beyond its original
-setup — treat the next deploy as from-scratch-equivalent, don't skip the
-pre-flight.**
+**`docs/PRE_DEPLOY_RUNBOOK.md` is the full checklist — read it before any
+deploy to 192.168.4.4.** It covers pre-flight, required env vars
+(`ADMIN_EMAILS`, `CORS_ORIGINS`, `AZURE_SPEECH_KEY`/`_REGION`,
+`GOOGLE_CLOUD_TTS_CREDENTIALS_JSON`), a backup step, the ordered deploy,
+and post-deploy smoke tests.
+
+**First real deploy COMPLETED 2026-07-12 (Ramin present).** Live state:
+DB dropped fresh (old one only had demo data; backup at
+`~/lingosquared_backup_20260711_2358.sql.gz` on the server) and migrated
+0001→0023 via the fresh-create path (the 0004→0005 incremental path
+FAILS — 0005 forward-references tables only 0001-with-current-models
+creates; a historically-migrated DB below ~0005 must go fresh, not
+incremental). Full content synced (42 course groups, 35 courses/596
+units; German skipped pending its lane's validator fixes), backfills run
+server-side, all practice packs imported. Frontend served by the `web`
+nginx service on port 8011 (`http://192.168.4.4:8011` is the LAN app
+URL); `CORS_ORIGINS` includes it; Google TTS credentials live and
+smoke-verified (real MP3 returned). `ADMIN_EMAILS` is still
+`admin@example.com` — MUST become Ramin's real email before any external
+beta invite (standing pre-beta checklist item). Ongoing syncs:
+`scripts/sync_dev_db.sh http://192.168.4.4:8010` with
+`LINGO_BACKFILL_SSH=ramin@192.168.4.4`.
 
 Quick-reference skeleton (see runbook for the complete ordered version):
 
