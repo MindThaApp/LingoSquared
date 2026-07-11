@@ -36,6 +36,7 @@ import copy
 import json
 import re
 import sys
+import unicodedata
 from pathlib import Path
 from typing import Any
 
@@ -108,6 +109,7 @@ PRACTICE_ANSWER_KINDS = {
 SLOT_NAME_RE = re.compile(r"^[a-z][a-z0-9_]*$")
 SLOT_PLACEHOLDER_RE = re.compile(r"\{([a-z][a-z0-9_]*)\}")
 _MISSING = object()
+MIN_MATCHING_PAIR_COUNT = 6
 
 
 class Report:
@@ -686,6 +688,60 @@ def canonical_order_answer_tokens(
     return None
 
 
+def order_sequence_key(value: Any, *, case_sensitive: bool = False) -> Any:
+    """Punctuation-insensitive key used only to align tiles to tested_text."""
+    token = normalize_order_token(value, case_sensitive=case_sensitive)
+    if not isinstance(token, str):
+        return token
+
+    start = 0
+    end = len(token)
+    while start < end and unicodedata.category(token[start]).startswith("P"):
+        start += 1
+    while end > start and unicodedata.category(token[end - 1]).startswith("P"):
+        end -= 1
+    return token[start:end]
+
+
+def sentence_order_tokens_from_word_bank(
+    tested_text: Any,
+    word_bank: list[Any],
+    *,
+    case_sensitive: bool = False,
+) -> list[Any] | None:
+    """Return word_bank tokens ordered by tested_text, when unambiguous.
+
+    Real word-order tiles often retain punctuation on the tile while
+    tested_text stores the bare sentence. Align by punctuation-stripped
+    token keys, but return the original normalized tile tokens so the final
+    comparison still mirrors the grader-facing answer shape.
+    """
+    tested_tokens = canonical_order_answer_tokens(
+        tested_text,
+        case_sensitive=case_sensitive,
+    )
+    if tested_tokens is None:
+        return None
+
+    available: dict[Any, list[Any]] = {}
+    for token in word_bank:
+        normalized = normalize_order_token(token, case_sensitive=case_sensitive)
+        key = order_sequence_key(normalized, case_sensitive=case_sensitive)
+        available.setdefault(key, []).append(normalized)
+
+    ordered = []
+    for token in tested_tokens:
+        key = order_sequence_key(token, case_sensitive=case_sensitive)
+        matches = available.get(key)
+        if not matches:
+            return None
+        ordered.append(matches.pop(0))
+
+    if any(matches for matches in available.values()):
+        return None
+    return ordered
+
+
 def _order_answer_values(exercise_overlay: dict[str, Any]) -> list[tuple[str, Any]]:
     if "correct_response" in exercise_overlay:
         return [("correct_response", exercise_overlay["correct_response"])]
@@ -739,6 +795,11 @@ def validate_order_word_bank_answers(
                     for item in word_bank
                 ]
                 tile_counts = Counter(tile_tokens)
+                expected_tokens = sentence_order_tokens_from_word_bank(
+                    exercise.get("tested_text"),
+                    word_bank,
+                    case_sensitive=case_sensitive,
+                )
 
                 for answer_location, answer_value in _order_answer_values(
                     exercise_overlay
@@ -751,17 +812,62 @@ def validate_order_word_bank_answers(
                         continue
 
                     answer_counts = Counter(answer_tokens)
-                    if answer_counts == tile_counts:
+                    if answer_counts != tile_counts:
+                        missing, extra = _counter_diff(tile_counts, answer_counts)
+                        report.error(
+                            f"overlay.exercises.{key}.{answer_location}",
+                            "word_bank tiles do not match order-answer tokens: "
+                            f"{len(tile_tokens)} tile(s) vs "
+                            f"{len(answer_tokens)} answer token(s); "
+                            f"missing from answer {missing}; "
+                            f"extra in answer {extra}",
+                        )
                         continue
 
-                    missing, extra = _counter_diff(tile_counts, answer_counts)
+                    if (
+                        expected_tokens is None
+                        or answer_tokens == expected_tokens
+                        or answer_tokens != tile_tokens
+                    ):
+                        continue
+
                     report.error(
                         f"overlay.exercises.{key}.{answer_location}",
-                        "word_bank tiles do not match order-answer tokens: "
-                        f"{len(tile_tokens)} tile(s) vs "
-                        f"{len(answer_tokens)} answer token(s); "
-                        f"missing from answer {missing}; "
-                        f"extra in answer {extra}",
+                        "order-answer tokens match the displayed word_bank "
+                        "order instead of tested_text sentence order: "
+                        f"expected {expected_tokens!r}; "
+                        f"got {answer_tokens!r}",
+                    )
+
+
+def validate_matching_pairs_minimum_scale(
+    realization: dict[str, Any],
+    report: Report,
+):
+    for unit in realization.get("units", []):
+        for lesson in unit.get("lessons", []):
+            for exercise in lesson.get("exercises", []):
+                if exercise.get("type") != "matching_pairs":
+                    continue
+
+                key = exercise.get("content_key", "<unknown>")
+                pairs = exercise.get("pairs")
+                if not isinstance(pairs, list):
+                    continue
+
+                if len(pairs) < MIN_MATCHING_PAIR_COUNT:
+                    # WARNING, not error: AUTHORING_GUIDE.md §16 is an aim
+                    # ("6-12 where the unit's vocabulary genuinely supports
+                    # it - don't pad"), and it explicitly grandfathers
+                    # already-shipped small exercises pending a retrofit
+                    # pass. A hard floor would block every import over
+                    # legacy content (50 instances in en-fa alone).
+                    report.warn(
+                        f"realization.exercises.{key}.pairs",
+                        "matching_pairs below AUTHORING_GUIDE.md §16 aim "
+                        f"(found {len(pairs)}, aim {MIN_MATCHING_PAIR_COUNT}-12) "
+                        "- pool earlier-taught vocabulary if the unit "
+                        "supports it; do not pad",
                     )
 
 
@@ -2069,6 +2175,7 @@ def validate_documents(
     validate_no_stray_yaml_booleans(realization, overlay, report)
     validate_same_speaker_dialogue_distractors(realization, overlay, report)
     validate_order_word_bank_answers(realization, overlay, report)
+    validate_matching_pairs_minimum_scale(realization, report)
     validate_untaught_vocabulary(realization, report)
     validate_vocabulary_examples(realization, overlay, report)
     validate_audio_references(realization, report)
