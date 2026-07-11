@@ -167,6 +167,36 @@ UNIT_FILES = (
         REPO_ROOT / "docs/content/realizations/prs/a1_unit24_transportation.yaml",
         REPO_ROOT / "docs/content/overlays/en-prs/a1_unit24.yaml",
     ),
+    # Units 25-30 (A1: emotions, hobbies, appearance, animals, sports,
+    # technology), added 2026-07-11 -- practice-pool depth-extension pass
+    # closing part of the gap between the practice manifest (previously
+    # capped at unit24 for A1) and the real prs realization depth (now
+    # through unit61). All six units are `status: reviewed` on disk.
+    # Only units 25-30 are backfilled in this pass.
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a1_unit25_emotions.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a1_unit25.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a1_unit26_hobbies.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a1_unit26.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a1_unit27_appearance.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a1_unit27.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a1_unit28_animals.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a1_unit28.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a1_unit29_sports.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a1_unit29.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a1_unit30_technology.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a1_unit30.yaml",
+    ),
 )
 
 # A2 units live in a SEPARATE course row ("Dari A2", not "Dari A1") --
@@ -613,6 +643,44 @@ PRS_GLOSSES: dict[str, str] = {
     "می‌روی": "you go", "تکت": "ticket", "ایستگاه": "station",
     "تیز": "fast", "تیزتر": "faster", "خانه‌اش": "his house",
     "پس‌انداز": "savings", "می‌رود": "he/she goes",
+    # Unit 25 (emotions), added 2026-07-11. خوشحال/خسته/نگران/چرا/چون/
+    # امروز/هوا/خوب/است/کار/زیاد/کردم/خراب/دارم/من/تو/هم/کمی/بعد/از/او/
+    # اما/استم/استین/استی/دارد are REUSED existing lexemes.
+    "ناراحت": "sad", "عصبانی": "angry", "گاهی": "sometimes",
+    # Unit 26 (hobbies), added 2026-07-11. کتاب/موسیقی/کردن/فلم/دیدن/
+    # آشپزی/آزاد/وقت/چی/در/را/دوست/دارم/دارین/هر/روز/هفته/آخر/می‌کنم/من/
+    # تو/می‌کنی/هم/و/می‌کند/دارد/او/اما/گاهی are REUSED existing lexemes.
+    "سرگرمی": "hobby", "خواندن": "reading / to read",
+    "گوش": "listening (as in gosh kardan, to listen)",
+    "پیاده‌روی": "walking",
+    # Unit 27 (appearance), added 2026-07-11. قد/کوتاه/است/دارد/او/چطور/
+    # خوب/سیاه/رنگ/برادر/بلی/تشکر/هم/زرمینه/و/کریم/ندارد/اما/استم/دارم/
+    # من are REUSED existing lexemes. چشم is a genuine homograph against
+    # the existing polite particle sense ("of course") -- split by
+    # content_key in _classify() below, same collision class as و/می‌شود.
+    "بلند": "tall; high", "مو": "hair", "موی": "hair (linked form)",
+    "ریش": "beard", "عینک": "glasses", "قیافه": "appearance / looks",
+    "قیافه‌اش": "his/her appearance", "آبی": "blue", "قهوه‌ای": "brown",
+    "برادرت": "your brother (informal)",
+    # Unit 28 (animals), added 2026-07-11. دارم/دارین/است/من/یک/بلی/
+    # نخیر/ندارم/رنگ/سیاه/سفید/کوچک/بزرگ/و/تو/داری/چه/هر/روز/زرمینه/به/
+    # او/غذا/دارد/می‌دهد/اما/استم are REUSED existing lexemes.
+    "حیوان": "animal", "سگ": "dog", "پشک": "cat", "پرنده": "bird",
+    "ماهی": "fish", "خانگی": "domestic; household (as in pet)",
+    "می‌دهی": "you give (informal)", "می‌دهم": "I give",
+    # Unit 29 (sports), added 2026-07-11. ورزش/بازی/کردن/می‌کنم/یک/است/
+    # خوب/هم/چند/بار/در/هفته/می‌کنین/من/دو/پارک/بزرگ/تو/می‌کنی/کجا/
+    # می‌کند/زرمینه/هر/عالی/او/همایون/اما/دوست/دارم/را/وقت/ندارم are
+    # REUSED existing lexemes.
+    "فوتبال": "football", "والیبال": "volleyball", "کرکت": "cricket",
+    "شنا": "swimming", "محبوب": "popular", "باشگاه": "gym",
+    # Unit 30 (technology), added 2026-07-11. کمپیوتر/انترنت/من/دارم/در/
+    # دفتر/است/آهسته/این/خوب/استفاده/کردن/می‌کنم/از/پیام/می‌فرستم/زنگ/
+    # می‌زنم/می‌گیرم/دانلود/می‌خواهم/یک/کنم/چند/بار/روز/می‌کنین/هر/
+    # می‌کند/تو/می‌کنی/کجا/زرمینه/زیاد/و/بلی/عالی/او/می‌گیرد/همایون/اما/
+    # دوست/را/وقت/ندارم are REUSED existing lexemes.
+    "تکنالوژی": "technology", "موبایل": "mobile phone",
+    "اپلیکیشن": "app", "عکس": "photo", "می‌فرستد": "he/she sends",
     # A2 unit 11 (banking), added 2026-07-11. Confirmed by reading
     # docs/content/realizations/prs/a2_unit11_banking.yaml directly --
     # بانک/کارت/تذکره/باشین/کنین/کردن/و/می‌خواستم/یک/کنم/رسید/کرایه/خانه/
@@ -1072,6 +1140,25 @@ PRS_POS: dict[str, str] = {
     "می‌روی": "verb", "تکت": "noun", "ایستگاه": "noun", "تیز": "adjective",
     "تیزتر": "adjective", "خانه‌اش": "noun", "پس‌انداز": "noun",
     "می‌رود": "verb",
+    # Unit 25 (emotions), added 2026-07-11.
+    "ناراحت": "adjective", "عصبانی": "adjective", "گاهی": "adverb",
+    # Unit 26 (hobbies), added 2026-07-11.
+    "سرگرمی": "noun", "خواندن": "verb", "گوش": "noun",
+    "پیاده‌روی": "noun",
+    # Unit 27 (appearance), added 2026-07-11.
+    "بلند": "adjective", "مو": "noun", "موی": "noun", "ریش": "noun",
+    "عینک": "noun", "قیافه": "noun", "قیافه‌اش": "noun",
+    "آبی": "adjective", "قهوه‌ای": "adjective", "برادرت": "noun",
+    # Unit 28 (animals), added 2026-07-11.
+    "حیوان": "noun", "سگ": "noun", "پشک": "noun", "پرنده": "noun",
+    "ماهی": "noun", "خانگی": "adjective", "می‌دهی": "verb",
+    "می‌دهم": "verb",
+    # Unit 29 (sports), added 2026-07-11.
+    "فوتبال": "noun", "والیبال": "noun", "کرکت": "noun", "شنا": "noun",
+    "محبوب": "adjective", "باشگاه": "noun",
+    # Unit 30 (technology), added 2026-07-11.
+    "تکنالوژی": "noun", "موبایل": "noun", "اپلیکیشن": "noun",
+    "عکس": "noun", "می‌فرستد": "verb",
     # A2 unit 11 (banking), added 2026-07-11.
     "حساب": "noun", "بانکی": "adjective", "رمز": "noun", "موجودی": "noun",
     "امضا": "noun", "اگر": "particle", "داشته": "verb",
@@ -1777,6 +1864,96 @@ def prs_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     if lesson_key.endswith("lesson04.commute_dialogue"):
         semantics.append("dialogue_word")
 
+    # Unit 25 (emotions) semantic tags, added 2026-07-11.
+    # "emotion_word" (خوشحال/ناراحت/خسته/عصبانی/نگران, 5 members,
+    # completes lesson01 -- خوشحال/خسته/نگران are REUSED existing
+    # lexemes, additive on top of their existing tags) is the unit's
+    # core feeling vocabulary; all five are adjectives that combine
+    # grammatically with استم ("I am X") and with the taught
+    # "چرا ... استین؟" question frame.
+    if token in {"خوشحال", "ناراحت", "خسته", "عصبانی", "نگران"}:
+        semantics.append("emotion_word")
+
+    # Unit 26 (hobbies) semantic tags, added 2026-07-11.
+    # "hobby_topic_word" (سرگرمی/پیاده‌روی/آشپزی/موسیقی/کتاب/فلم, 6 --
+    # موسیقی/کتاب/فلم/آشپزی are REUSED existing lexemes re-taught in
+    # this unit's lesson01 hobby compounds) is the unit's recognition
+    # pool. "hobby_activity_word" (پیاده‌روی/آشپزی, 2) is the strict
+    # subset that combines grammatically with می‌کنم ("I do X") -- the
+    # other members would produce ungrammatical "کتاب می‌کنم"-style
+    # sentences, same composition trap as unit24's پیاده/با split.
+    if token in {"سرگرمی", "پیاده‌روی", "آشپزی", "موسیقی", "کتاب", "فلم"}:
+        semantics.append("hobby_topic_word")
+    if token in {"پیاده‌روی", "آشپزی"}:
+        semantics.append("hobby_activity_word")
+
+    # Unit 27 (appearance) semantic tags, added 2026-07-11.
+    # "appearance_word" (قد/مو/چشم/ریش/عینک/قیافه, 6 -- قد is a REUSED
+    # existing lexeme; چشم here is the unit27 EYE sense only, a genuine
+    # homograph against the existing polite particle "of course," split
+    # by content_key in _classify() below and scoped here by lesson_key
+    # so the particle sense never gains this tag). "have_feature_word"
+    # (ریش/عینک, 2) is the subset that combines with "او ... دارد"
+    # (he has a beard / glasses) -- مو/چشم would read oddly there.
+    # "eye_hair_color_word" (آبی/قهوه‌ای/سیاه, 3 -- سیاه REUSED,
+    # additive on its existing color_word tag) generalizes the taught
+    # "چشم او آبی است" frame; سفید deliberately excluded (blue/brown/
+    # black are the eye colors this unit actually teaches or reads).
+    if token in {"قد", "مو", "ریش", "عینک", "قیافه"}:
+        semantics.append("appearance_word")
+    if token == "چشم" and lesson_key.startswith("prs.a1.unit27"):
+        semantics.append("appearance_word")
+    if token in {"ریش", "عینک"}:
+        semantics.append("have_feature_word")
+    if token in {"آبی", "قهوه‌ای", "سیاه"}:
+        semantics.append("eye_hair_color_word")
+
+    # Unit 28 (animals) semantic tags, added 2026-07-11.
+    # "animal_topic_word" (حیوان/سگ/پشک/پرنده/ماهی, 5, completes
+    # lesson01) is the unit's recognition pool. "animal_word"
+    # (سگ/پشک/پرنده/ماهی, 4) excludes the generic حیوان so the taught
+    # "یک ... دارم" frame never renders the odd "یک حیوان دارم" as a
+    # drilled sentence. "pet_color_word" (سیاه/سفید, 2, both REUSED)
+    # is deliberately narrower than unit21's color_word (سرخ excluded
+    # -- a red pet is not a sentence this unit teaches).
+    if token in {"حیوان", "سگ", "پشک", "پرنده", "ماهی"}:
+        semantics.append("animal_topic_word")
+    if token in {"سگ", "پشک", "پرنده", "ماهی"}:
+        semantics.append("animal_word")
+    if token in {"سیاه", "سفید"}:
+        semantics.append("pet_color_word")
+
+    # Unit 29 (sports) semantic tags, added 2026-07-11.
+    # "sport_topic_word" (ورزش/فوتبال/والیبال/کرکت/شنا/باشگاه, 6 --
+    # ورزش REUSED) is the unit's recognition pool. "ball_sport_word"
+    # (فوتبال/والیبال/کرکت, 3) is the strict subset that combines with
+    # "بازی می‌کنم" ("I play X") -- شنا composes with شنا می‌کنم
+    # instead, so drawing it into a بازی frame would be ungrammatical,
+    # same composition trap as unit24's پیاده/با split.
+    # "sport_place_word" (باشگاه/پارک, 2 -- پارک REUSED) generalizes
+    # the taught "در ... بازی می‌کنم" location frame.
+    if token in {"ورزش", "فوتبال", "والیبال", "کرکت", "شنا", "باشگاه"}:
+        semantics.append("sport_topic_word")
+    if token in {"فوتبال", "والیبال", "کرکت"}:
+        semantics.append("ball_sport_word")
+    if token in {"باشگاه", "پارک"}:
+        semantics.append("sport_place_word")
+
+    # Unit 30 (technology) semantic tags, added 2026-07-11.
+    # "tech_topic_word" (تکنالوژی/موبایل/کمپیوتر/انترنت/اپلیکیشن/عکس,
+    # 6 -- کمپیوتر/انترنت REUSED) is the unit's recognition pool.
+    # "tech_use_word" (موبایل/کمپیوتر/انترنت, 3) is the subset the
+    # taught "از ... استفاده می‌کنم" frame actually uses.
+    # "phone_action_verb" (می‌فرستم/می‌زنم/می‌گیرم, 3, all REUSED with
+    # genuinely distinct glosses: I send / I make a call / I take-
+    # receive) covers lesson02's phone actions.
+    if token in {"تکنالوژی", "موبایل", "کمپیوتر", "انترنت", "اپلیکیشن", "عکس"}:
+        semantics.append("tech_topic_word")
+    if token in {"موبایل", "کمپیوتر", "انترنت"}:
+        semantics.append("tech_use_word")
+    if token in {"می‌فرستم", "می‌زنم", "می‌گیرم"}:
+        semantics.append("phone_action_verb")
+
     # A2 unit 11 (banking) semantic tags, added 2026-07-11. "bank_word"
     # (بانک/حساب/بانکی/کارت/رمز/موجودی/امضا, anchored lesson01) is the
     # unit's core recognition vocabulary. "bank_action_verb"
@@ -2189,6 +2366,23 @@ def _classify(files, level, specs, derive_phrases=False):
                         key = (level, token, "when_sense")
                         part_of_speech = "adverb"
                         english_gloss = "when"
+                    # "چشم" is likewise genuinely two different lexemes:
+                    # the polite acknowledgment particle ("of course,"
+                    # lit. eye, already the default PRS_GLOSSES/PRS_POS
+                    # entry from its earlier teaching occurrence) versus
+                    # unit27 (appearance)'s literal body-part NOUN "eye"
+                    # (چشم او آبی است -- his/her eyes are blue). Same
+                    # collision class as و/می‌شود/کی above -- given its
+                    # own key/POS/gloss here so unit27's appearance
+                    # templates (part_of_speech: noun + the unit27-scoped
+                    # appearance_word tag) only ever draw the "eye" sense
+                    # and never show "of course" as the gloss for a
+                    # body-part drill. Added 2026-07-11 (units 25-30
+                    # practice-pool pass).
+                    if token == "چشم" and content_key.endswith("unit27.lesson01.teach.eye_word"):
+                        key = (level, token, "eye_noun")
+                        part_of_speech = "noun"
+                        english_gloss = "eye"
                     # B1 unit04 introduces THREE more genuine homographs
                     # against existing A1/A2 entries, found and fixed while
                     # backfilling the B1 course, 2026-07-11:
