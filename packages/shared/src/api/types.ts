@@ -1,7 +1,20 @@
 // Types mirror /Users/raminazizi/dev/LingoSquared/docs/CONTRACT.md exactly.
 // Keep this file in sync with the contract; do not invent fields it doesn't define.
 
-export type ScriptCode = "latin" | "cyrillic" | "han" | "arabic" | "devanagari";
+// NOTE: "devanagari" and "arabic_msa" are frontend-only extensions beyond
+// CONTRACT.md's documented `script` enum (latin/cyrillic/han/arabic) —
+// devanagari was already added this way for hi; arabic_msa follows the
+// same precedent, added 2026-07-12 to fix an untypeable-Arabic blocker.
+// "arabic" (Perso-Arabic: fa/prs) and "arabic_msa" (true MSA Arabic: ar)
+// are deliberately DISTINCT codes, not a rename of "arabic" — they use
+// genuinely different codepoints (Perso-Arabic keheh ک/farsi-yeh ی vs.
+// Arabic kaf ك/yeh ي) and a rename would have required auditing every
+// fa/prs consumer for zero benefit. See lib/scripts.ts for the two
+// keyboard layouts and docs/CONTRACT.md's `script` field, which the live
+// API still returns as "arabic" for `ar` today (this frontend-only code
+// is a LOCAL LANGUAGE_SCRIPT lookup keyed by language code, not derived
+// from the API's `Language.script` field, so this is safe).
+export type ScriptCode = "latin" | "cyrillic" | "han" | "arabic" | "arabic_msa" | "devanagari";
 export type Direction = "ltr" | "rtl";
 
 export interface Language {
