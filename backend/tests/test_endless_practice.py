@@ -1,3 +1,4 @@
+from collections import Counter
 from datetime import datetime, timedelta, timezone
 from uuid import uuid4
 
@@ -133,6 +134,33 @@ def create_course_with_lexemes(source="en", target="es"):
             )
         db.commit()
         return course.id, lesson.id
+
+
+def add_extra_word_lexemes(course_id, lesson_id, target="es", count=12):
+    with SessionLocal() as db:
+        existing = db.scalar(
+            select(func.count(Lexeme.id)).where(
+                Lexeme.course_id == course_id,
+                Lexeme.language_code == target,
+                Lexeme.part_of_speech == "noun",
+            )
+        )
+        for offset in range(count):
+            index = existing + offset
+            db.add(
+                Lexeme(
+                    course_id=course_id,
+                    token=f"palabra{index}",
+                    language_code=target,
+                    part_of_speech="noun",
+                    english_gloss=f"word {index}",
+                    agreement_tags={"semantic": "word"},
+                    provenance_lesson_id=lesson_id,
+                    provenance_lesson_content_key=LESSON_KEY,
+                    provenance_content_key=f"test.lexeme.extra.{index}",
+                )
+            )
+        db.commit()
 
 
 def artifact(target="es", include_listen=True):
@@ -461,6 +489,29 @@ def test_practice_import_is_idempotent_and_all_prompt_contracts_generate(
     # specifically, not "any block", since the instruction header always
     # has text and would make a weaker assertion pass even with this bug.
     assert fill_blocks[1]["text"].replace("___", "").strip()
+
+
+def test_low_mastery_practice_batch_interleaves_broad_mc_with_buildable_formats(
+    client, admin, auth
+):
+    course_id, lesson_id = create_course_with_lexemes()
+    add_extra_word_lexemes(course_id, lesson_id, count=12)
+    import_templates(client, admin, course_id, artifact(include_listen=False))
+    complete_via_api(client, auth, lesson_id)
+
+    response = client.post(
+        f"/practice/{course_id}/batch",
+        headers=auth,
+        json={"size": 12},
+    )
+
+    assert response.status_code == 200, response.text
+    items = response.json()["items"]
+    assert len(items) == 12
+    counts = Counter(item["type"] for item in items)
+    assert counts["multiple_choice"] > 0
+    assert len(counts) > 1
+    assert max(counts.values()) <= len(items) / 2
 
 
 def test_selectable_practice_requires_two_constrained_distractors(
