@@ -1,0 +1,68 @@
+schema_version: "1.0"
+pack_key: practice.prs-en.a1.unit37
+source_language: prs
+target_language: en
+unit_content_key: en.a1.unit37.celebrations
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: >-
+    Authored 2026-07-11 by the prs-en depth-extension worker, same pass
+    as unit30-36. Two tags: 4-member 'celebration_noun' (birthday/
+    party/gift/congratulations -- "birthday" already classified since
+    unit04, reused additively), bare-word recognition only (these four
+    don't collocate uniformly, e.g. "having a birthday"/"having a gift"
+    both read oddly next to "having a party"), same recognition-only
+    discipline as unit25's bureaucracy_noun. Single-member 'party_word'
+    (party only) for the generative "We are having a {item} on
+    Saturday." frame, same precedent as the shared module's existing
+    single-member "superlative_adj" tag. EN_POS/en_agreement_tags added
+    to scripts/_en_target_lexeme_common.py as part of this pass.
+    Anchoring check: lesson01 introduces new lexemes, safe as an
+    anchor. Every slot's real candidate count verified with
+    scripts/_practice_slot_check.py. Needs the standard fresh-context
+    review before import.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [celebration_noun, party_word]
+slot_presets:
+  celebration_noun: &celebration_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: celebration_noun}}
+  party_word: &party_word {language_code: en, part_of_speech: noun, agreement_tags: {semantic: party_word}}
+templates:
+  - content_key: practice.prs-en.en.a1.unit37.lesson01.choose.001
+    lesson_content_key: en.a1.unit37.lesson01.celebration_vocabulary
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *celebration_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی دری {item} را انتخاب کنین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit37.lesson01.listen.002
+    lesson_content_key: en.a1.unit37.lesson01.celebration_vocabulary
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *celebration_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "واژه‌ای که شنیدین {item} بود.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit37.lesson01.match.003
+    lesson_content_key: en.a1.unit37.lesson01.celebration_vocabulary
+    type: matching_pairs
+    frame: {text: "{first} — {second}", language_code: en, direction: ltr}
+    slots: {first: *celebration_noun, second: *celebration_noun, third: *celebration_noun, fourth: *celebration_noun}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth]}
+    feedback_frame: {text: "هر واژهٔ جشن را به معنی دری خودش وصل کنین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit37.lesson01.translate.004
+    lesson_content_key: en.a1.unit37.lesson01.celebration_vocabulary
+    type: translation
+    frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *celebration_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "معادل انگلیسی همی واژهٔ جشن {item} است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit37.lesson01.order.005
+    lesson_content_key: en.a1.unit37.lesson01.celebration_vocabulary
+    type: word_order
+    frame: {text: "We are having a {item} on Saturday", language_code: en, direction: ltr}
+    slots: {item: *party_word}
+    answer_derivation: {kind: render_frame, frame: {text: "We are having a {item} on Saturday", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} چیزی است که روز شنبه دارین.", language_code: prs, direction: rtl}

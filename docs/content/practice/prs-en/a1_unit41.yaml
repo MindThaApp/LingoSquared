@@ -1,0 +1,62 @@
+schema_version: "1.0"
+pack_key: practice.prs-en.a1.unit41
+source_language: prs
+target_language: en
+unit_content_key: en.a1.unit41.cooking
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: >-
+    Authored 2026-07-11 by the prs-en depth-extension worker, same pass
+    as unit30-40. Two tags: 3-member 'cooking_verb' (chop/boil/taste),
+    bare-word recognition only -- kept at 3 members (the mc/
+    listen_select floor), so matching_pairs is deliberately NOT used
+    here. "cook" is deliberately excluded from this tag: it already has
+    a NOUN classification (unit23's occupation_noun, "I'm a cook"), and
+    this unit reintroduces it as a VERB ("I like to cook dinner") --
+    same homograph-avoidance discipline as the shared module's existing
+    "close"/"cold"/"report" entries, documented at both the EN_POS
+    comment site and here. Single-member 'chop_word' (chop only) for
+    the generative "Can you {item} the onions for me?" frame -- "chop"
+    is the only cooking_verb member that fits that fixed idiom.
+    EN_POS/en_agreement_tags added to scripts/_en_target_lexeme_common.py
+    as part of this pass. Anchoring check: lesson01 introduces new
+    lexemes, safe as an anchor. Every slot's real candidate count
+    verified with scripts/_practice_slot_check.py. Needs the standard
+    fresh-context review before import.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [cooking_verb, chop_word]
+slot_presets:
+  cooking_verb: &cooking_verb {language_code: en, part_of_speech: verb, agreement_tags: {semantic: cooking_verb}}
+  chop_word: &chop_word {language_code: en, part_of_speech: verb, agreement_tags: {semantic: chop_word}}
+templates:
+  - content_key: practice.prs-en.en.a1.unit41.lesson01.choose.001
+    lesson_content_key: en.a1.unit41.lesson01.cooking_vocabulary
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *cooking_verb}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی دری {item} را انتخاب کنین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit41.lesson01.listen.002
+    lesson_content_key: en.a1.unit41.lesson01.cooking_vocabulary
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *cooking_verb}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "واژه‌ای که شنیدین {item} بود.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit41.lesson01.translate.003
+    lesson_content_key: en.a1.unit41.lesson01.cooking_vocabulary
+    type: translation
+    frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *cooking_verb}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "معادل انگلیسی همی فعل {item} است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit41.lesson01.order.004
+    lesson_content_key: en.a1.unit41.lesson01.cooking_vocabulary
+    type: word_order
+    frame: {text: "Can you {item} the onions for me", language_code: en, direction: ltr}
+    slots: {item: *chop_word}
+    answer_derivation: {kind: render_frame, frame: {text: "Can you {item} the onions for me", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} فعلی است که ذکر شد.", language_code: prs, direction: rtl}

@@ -1,0 +1,65 @@
+schema_version: "1.0"
+pack_key: practice.prs-en.a1.unit40
+source_language: prs
+target_language: en
+unit_content_key: en.a1.unit40.post
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: >-
+    Authored 2026-07-11 by the prs-en depth-extension worker, same pass
+    as unit30-39. Two tags: 5-member 'post_noun' (letter/package/
+    stamp/envelope/mailbox), bare-word recognition only (matching_pairs
+    uses the first 4: letter/package/stamp/envelope). Narrower 2-member
+    'sendable_noun' (letter/package) for the generative "I need to send
+    a {item}." frame -- "send a stamp"/"send an envelope"/"send a
+    mailbox" are not real phrases, so those three are excluded.
+    EN_POS/en_agreement_tags added to scripts/_en_target_lexeme_common.py
+    as part of this pass. Anchoring check: lesson01 introduces new
+    lexemes, safe as an anchor. Every slot's real candidate count
+    verified with scripts/_practice_slot_check.py. Needs the standard
+    fresh-context review before import.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [post_noun, sendable_noun]
+slot_presets:
+  post_noun: &post_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: post_noun}}
+  sendable_noun: &sendable_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: sendable_noun}}
+templates:
+  - content_key: practice.prs-en.en.a1.unit40.lesson01.choose.001
+    lesson_content_key: en.a1.unit40.lesson01.post_office_vocabulary
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *post_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی دری {item} را انتخاب کنین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit40.lesson01.listen.002
+    lesson_content_key: en.a1.unit40.lesson01.post_office_vocabulary
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *post_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "واژه‌ای که شنیدین {item} بود.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit40.lesson01.match.003
+    lesson_content_key: en.a1.unit40.lesson01.post_office_vocabulary
+    type: matching_pairs
+    frame: {text: "{first} — {second}", language_code: en, direction: ltr}
+    slots: {first: *post_noun, second: *post_noun, third: *post_noun, fourth: *post_noun}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth]}
+    feedback_frame: {text: "هر واژهٔ پوستخانه را به معنی دری خودش وصل کنین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit40.lesson01.translate.004
+    lesson_content_key: en.a1.unit40.lesson01.post_office_vocabulary
+    type: translation
+    frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *post_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "معادل انگلیسی همی واژهٔ پوستخانه {item} است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit40.lesson01.order.005
+    lesson_content_key: en.a1.unit40.lesson01.post_office_vocabulary
+    type: word_order
+    frame: {text: "I need to send a {item}", language_code: en, direction: ltr}
+    slots: {item: *sendable_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "I need to send a {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} چیزی است که می‌خواین بفرستین.", language_code: prs, direction: rtl}

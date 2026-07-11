@@ -1,0 +1,67 @@
+schema_version: "1.0"
+pack_key: practice.prs-en.a1.unit31
+source_language: prs
+target_language: en
+unit_content_key: en.a1.unit31.appearance
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: >-
+    Authored 2026-07-11 by the prs-en depth-extension worker, same pass
+    as unit30. Two tags: 3-member 'eye_color' (blue/brown/green --
+    "blue" already classified since unit12's clothing_color, reused
+    additively), verified all three fit "Her eyes are {item}." -- kept
+    at 3 members, below the 4-candidate comfort margin used for
+    matching_pairs elsewhere, so matching_pairs is deliberately NOT used
+    here (only mc/listen/translation, all safe at the 3-candidate
+    floor). 2-member 'height_adj' (tall/short), word_order/translation
+    only (below the mc/listen_select 3-candidate floor), verified both
+    fit "My brother is {item}." EN_POS/en_agreement_tags for both tags
+    added to scripts/_en_target_lexeme_common.py as part of this pass.
+    Anchoring check: lesson01/lesson02 both introduce new lexemes,
+    safe as anchors. Every slot's real candidate count verified with
+    scripts/_practice_slot_check.py. Needs the standard fresh-context
+    review before import.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [eye_color, height_adj]
+slot_presets:
+  eye_color: &eye_color {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: eye_color}}
+  height_adj: &height_adj {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: height_adj}}
+templates:
+  - content_key: practice.prs-en.en.a1.unit31.lesson02.choose.001
+    lesson_content_key: en.a1.unit31.lesson02.eyes_and_description
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *eye_color}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی دری {item} را انتخاب کنین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit31.lesson02.listen.002
+    lesson_content_key: en.a1.unit31.lesson02.eyes_and_description
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *eye_color}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "واژه‌ای که شنیدین {item} بود.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit31.lesson02.translate.003
+    lesson_content_key: en.a1.unit31.lesson02.eyes_and_description
+    type: translation
+    frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *eye_color}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "معادل انگلیسی همی رنگ چشم {item} است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit31.lesson01.order.001
+    lesson_content_key: en.a1.unit31.lesson01.height_and_hair
+    type: word_order
+    frame: {text: "My brother is {item}", language_code: en, direction: ltr}
+    slots: {item: *height_adj}
+    answer_derivation: {kind: render_frame, frame: {text: "My brother is {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} قدی است که ذکر شد.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit31.lesson01.translate.002
+    lesson_content_key: en.a1.unit31.lesson01.height_and_hair
+    type: translation
+    frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *height_adj}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "معادل انگلیسی همی صفتِ قد {item} است.", language_code: prs, direction: rtl}
