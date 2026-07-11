@@ -1355,24 +1355,6 @@ review-cleared growth.
 
 ## Known limitations / accepted scope
 
-- **`scripts/compile_content.py`'s tokenizer (`[\w‌]+` regex) doesn't
-  cleanly match Devanagari combining vowel signs/virama** — found
-  2026-07-10 authoring Hindi A2 content. It can fragment a word into a
-  shorter substring (e.g. "नया" → "नय"), and since the validator
-  applies this same lossy tokenizer to both `introduced_tokens` and
-  `tested_text`, this has two real consequences for Hindi (and likely
-  any Devanagari-script language) authoring: (1) an infinitive form
-  does NOT automatically cover its own inflected surface forms for
-  "already taught" purposes — every literal string actually tested
-  anywhere needs its own explicit `introduced_tokens` declaration; (2)
-  "already taught" status doesn't reliably carry across files, since
-  the tokenizer's fragmentation isn't consistent between separately-
-  validated runs. Not yet fixed at the compiler level (Codex's lane,
-  `scripts/compile_content.py`) — until it is, any Hindi (or other
-  Devanagari) content author should budget extra validation-fix
-  iterations for token-coverage errors that look spurious but are
-  real tokenizer artifacts, and explicitly re-declare tested surface
-  forms rather than assuming coverage carries over.
 - **`backend/tests/test_content_answer_shapes.py`, added 2026-07-10,
   self-skips as a single trivial case (`1 skipped`) under the STANDARD
   `docker compose run --rm api ... pytest` invocation** — same class of
