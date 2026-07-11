@@ -47,6 +47,13 @@ def test_grade_answer_explicit_script_param():
     )
 
 
+def test_arabic_uses_arabic_script_strictness():
+    assert (
+        grade_answer("مرحبا", "مرحباً", exercise_type="translation", script="arabic")
+        == "incorrect"
+    )
+
+
 def test_grade_answer_orthography_strict_overrides_script_default():
     # Latin-script correct answer, but author forced strict mode.
     assert (
