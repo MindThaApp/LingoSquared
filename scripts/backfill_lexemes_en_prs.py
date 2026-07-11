@@ -831,7 +831,7 @@ PRS_GLOSSES: dict[str, str] = {
     # senses) -- special-cased by lesson_key/content_key in _classify()
     # below instead of overwriting the shared dict entries, same
     # collision class as the existing و/کی/می‌شود splits.
-    "می‌کنین": "you (plural/polite) do", "می‌شویم": "we become",
+    "می‌شویم": "we become",
     "می‌شین": "you (plural/polite) become", "می‌شوند": "they become",
     "پختم": "I cooked", "رسیدی": "you arrived",
     "تلویزیون": "television", "خورد": "he/she ate",
@@ -1162,7 +1162,7 @@ PRS_POS: dict[str, str] = {
     "می‌نوشیم": "verb", "رفتند": "verb", "ماندند": "verb",
     "نوشیدند": "verb", "آنجا": "adverb", "می‌روند": "verb",
     # B1 unit 04 (sequencing), added 2026-07-11.
-    "می‌کنین": "verb", "می‌شویم": "verb", "می‌شین": "verb",
+    "می‌شویم": "verb", "می‌شین": "verb",
     "می‌شوند": "verb", "پختم": "verb", "رسیدی": "verb",
     "تلویزیون": "noun", "خورد": "verb", "تمام": "adjective",
     "آمد": "verb",
