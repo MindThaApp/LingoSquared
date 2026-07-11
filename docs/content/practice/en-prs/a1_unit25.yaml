@@ -1,0 +1,87 @@
+schema_version: "1.0"
+pack_key: practice.en-prs.a1.unit25
+source_language: en
+target_language: prs
+unit_content_key: prs.a1.unit25.emotions
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: >-
+    Authored 2026-07-11, practice-pool depth-extension pass for A1 units
+    25-30 (this bundle's a1_unit26.yaml through a1_unit30.yaml siblings
+    are the same pass) -- extends both scripts/backfill_lexemes_en_prs.py
+    (UNIT_FILES 25-30, new glosses/POS/semantic tags) and the en-prs pack
+    set past its previous unit24 cap. Realization is status reviewed.
+
+    One group: "emotion_word" (خوشحال/ناراحت/خسته/عصبانی/نگران, 5
+    members, completes lesson01 -- خوشحال/خسته/نگران are REUSED existing
+    lexemes from earlier units, additive tags). All five are adjectives
+    with genuinely distinct glosses (happy/sad/tired/angry/worried) and
+    all combine grammatically with استم ("I am X") and the taught
+    "چرا ... استین؟" question frame -- checked per candidate, not just
+    per the taught examples.
+
+    Word_order templates checked for grammaticality: "{emotion_word}
+    استم" (lesson03, matches the real taught "خسته استم"/"عصبانی استم"/
+    "نگران استم" pattern, generalizes to all 5) and "چرا {emotion_word}
+    استین" (lesson02, matches the real taught "چرا خوشحال استین؟"
+    generalized -- question mark omitted from the frame per the unit24
+    "چطور {you_go_verb}" precedent).
+
+    No listen_select/listen_type anywhere (en-prs has no TTS voices).
+    No bare unquoted yes/no/true/false anywhere. Verified with
+    scripts/_practice_slot_check.py (0 problems) and
+    scripts/compile_content.py practice-validate for the full en-prs
+    pack (0 errors / 0 warnings). Needs the standard fresh-context
+    review before import; no backfill_lexemes_en_prs.py run has
+    happened against a real database yet in this pass.
+tag_schema:
+  part_of_speech: [adjective]
+  agreement_tags:
+    semantic: [emotion_word]
+slot_presets:
+  emotion_word: &emotion_word {language_code: prs, part_of_speech: adjective, agreement_tags: {semantic: emotion_word}}
+templates:
+  # Lesson 1: feelings vocabulary.
+  - content_key: practice.en-prs.prs.a1.unit25.lesson01.emotion_gloss.001
+    lesson_content_key: prs.a1.unit25.lesson01.feelings_vocabulary
+    type: multiple_choice
+    frame: {text: "{emotion_word}", language_code: prs, direction: rtl}
+    slots: {emotion_word: *emotion_word}
+    answer_derivation: {kind: slot_gloss, slot: emotion_word}
+    feedback_frame: {text: "{emotion_word} names a feeling.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit25.lesson01.emotion_pair.002
+    lesson_content_key: prs.a1.unit25.lesson01.feelings_vocabulary
+    type: matching_pairs
+    frame: {text: "{word_one} — {word_two} — {word_three} — {word_four} — {word_five}", language_code: prs, direction: rtl}
+    slots: {word_one: *emotion_word, word_two: *emotion_word, word_three: *emotion_word, word_four: *emotion_word, word_five: *emotion_word}
+    slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five]}]
+    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five]}
+    feedback_frame: {text: "Match each feeling word to its English meaning.", language_code: en, direction: ltr}
+
+  # Lesson 2: why and because.
+  - content_key: practice.en-prs.prs.a1.unit25.lesson02.why_feeling_order.001
+    lesson_content_key: prs.a1.unit25.lesson02.why_and_because
+    type: word_order
+    frame: {text: "چرا {emotion_word} استین", language_code: prs, direction: rtl}
+    slots: {emotion_word: *emotion_word}
+    answer_derivation: {kind: render_frame, frame: {text: "چرا {emotion_word} استین", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: چرا [feeling] استین (why are you [feeling]?).", language_code: en, direction: ltr}
+
+  # Lesson 3: more feelings and reasons.
+  - content_key: practice.en-prs.prs.a1.unit25.lesson03.i_am_feeling_order.001
+    lesson_content_key: prs.a1.unit25.lesson03.more_feelings_and_reasons
+    type: word_order
+    frame: {text: "{emotion_word} استم", language_code: prs, direction: rtl}
+    slots: {emotion_word: *emotion_word}
+    answer_derivation: {kind: render_frame, frame: {text: "{emotion_word} استم", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: [feeling] استم (I am [feeling]).", language_code: en, direction: ltr}
+
+  # Lesson 6: wrap-up.
+  - content_key: practice.en-prs.prs.a1.unit25.lesson06.emotion_translate.001
+    lesson_content_key: prs.a1.unit25.lesson06.wrap_up
+    type: translation
+    frame: {text: "{emotion_word}", language_code: en, direction: ltr, slot_rendering: {emotion_word: english_gloss}}
+    slots: {emotion_word: *emotion_word}
+    answer_derivation: {kind: slot_text, slot: emotion_word}
+    feedback_frame: {text: "{emotion_word} is the Dari word for this.", language_code: en, direction: ltr}
