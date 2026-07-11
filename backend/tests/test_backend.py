@@ -18,8 +18,11 @@ def test_auth_register_login_me(client):
 
 def test_language_seed_and_rtl(client):
     rows = client.get("/languages").json()
-    assert len(rows) == 13
+    assert len(rows) == 14
     by_code = {item["code"]: item for item in rows}
+    assert by_code["ar"]["name"] == "Arabic"
+    assert by_code["ar"]["native_name"] == "العربية"
+    assert by_code["ar"]["script"] == "arabic" and by_code["ar"]["direction"] == "rtl"
     assert by_code["fa"]["script"] == "arabic" and by_code["fa"]["direction"] == "rtl"
     assert by_code["prs"]["direction"] == "rtl"
     assert by_code["pl"]["script"] == "latin" and by_code["pl"]["direction"] == "ltr"
@@ -27,11 +30,11 @@ def test_language_seed_and_rtl(client):
     assert by_code["hi"]["script"] == "devanagari" and by_code["hi"]["direction"] == "ltr"
 
 def payload(source="en", target="es", title="Test course"):
-    direction = "rtl" if source in ("fa", "prs") else "ltr"
+    direction = "rtl" if source in ("ar", "fa", "prs") else "ltr"
     return {"courses": [{"source_language": source, "target_language": target, "title": title, "units": [{"title": "Unit", "order": 1, "lessons": [{"title": "Lesson", "order": 1, "exercises": [{"type": "translation", "order": 1, "prompt": {"text_blocks": [{"text": "hello", "language_code": source, "direction": direction}]}, "correct_response": "answer"}]}]}]}]}
 
-def test_all_90_ordered_pairs_constructible():
-    codes = ["en", "nl", "fr", "de", "it", "es", "ru", "zh", "fa", "prs"]
+def test_all_core_ordered_pairs_constructible():
+    codes = ["en", "nl", "fr", "de", "it", "es", "ru", "zh", "ar", "fa", "prs"]
     with SessionLocal() as db:
         for source in codes:
             for target in codes:
@@ -39,7 +42,7 @@ def test_all_90_ordered_pairs_constructible():
                     data = ImportRequest.model_validate(payload(source, target, f"Pair {source}-{target}"))
                     count, errors, counters = import_content(db, data)
                     assert count == 1 and not errors
-    assert sum(1 for a in codes for b in codes if a != b) == 90
+    assert sum(1 for a in codes for b in codes if a != b) == 110
 
 def test_admin_import_course_and_queries(client, admin):
     response = client.post("/admin/content/import", headers=admin, json=payload(title="Imported course"))
@@ -358,12 +361,16 @@ def test_tts_routes_farsi_to_azure_and_covered_languages_to_google(client, auth,
     assert response.status_code==200
     assert response.content==b"google-audio"
 
+    response=client.post("/tts",headers=auth,json={"text":"مرحبا","language_code":"ar"})
+    assert response.status_code==200
+    assert response.content==b"google-audio"
+
     # prs still has no provider at all (neither Google nor Azure) — must
     # still fall back to the browser, never attempt either provider.
     response=client.post("/tts",headers=auth,json={"text":"سلام","language_code":"prs"})
     assert response.json()=={"use_browser_tts":True,"reason":"unsupported_language"}
 
-    assert calls==[("azure","fa"),("google","en")]
+    assert calls==[("azure","fa"),("google","en"),("google","ar")]
 
 def test_tts_azure_missing_key_falls_back_to_browser(client, auth):
     # Default settings ship with no Azure credentials configured at all
@@ -469,13 +476,17 @@ def test_synthesize_google_passes_speaking_rate_to_audio_config(monkeypatch):
             def __init__(self,credentials=None): pass
             def synthesize_speech(self,input,voice,audio_config):
                 captured["speaking_rate"]=audio_config.speaking_rate
+                captured["language_code"]=voice.language_code
+                captured["voice_name"]=voice.name
                 return FakeResponse()
         monkeypatch.setattr(tts_service.texttospeech,"TextToSpeechClient",FakeClient)
 
-        audio=tts_service.synthesize_google("hallo","nl",speaking_rate=0.8)
+        audio=tts_service.synthesize_google("مرحبا","ar",speaking_rate=0.8)
 
         assert audio==b"google-mp3"
         assert captured["speaking_rate"]==0.8
+        assert captured["language_code"]=="ar-XA"
+        assert captured["voice_name"]=="ar-XA-Wavenet-D"
     finally:
         settings.google_cloud_tts_credentials_json=original
 
