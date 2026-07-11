@@ -236,7 +236,7 @@ def grade_answer(
       'han'|'arabic') for the *correct* answer, resolved by the caller
       from the Language table. Default strictness: tolerant for 'latin',
       strict for everything else (in particular 'arabic', which covers
-      fa/prs). Falls back to a character-based Latin heuristic if the
+      ar/fa/prs). Falls back to a character-based Latin heuristic if the
       caller has no script value handy.
     - orthography_strict, when not None, overrides the script-based
       default in either direction (author-set per exercise).
