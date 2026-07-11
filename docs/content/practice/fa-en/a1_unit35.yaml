@@ -1,0 +1,71 @@
+schema_version: "1.0"
+pack_key: practice.fa-en.a1.unit35
+source_language: fa
+target_language: en
+unit_content_key: en.a1.unit35.technology
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: >-
+    Authored 2026-07-11, fa-en depth-audit lane (unit 6 of the 30-42
+    batch, see unit30's pack notes for the full batch rationale).
+
+    One semantic tag: 'device_noun' (phone/laptop/tablet/computer/camera
+    from lesson01, five common countable singular devices, all safe in
+    "I have a {item}.").
+
+    Anchoring check: lesson01 introduces all five device nouns as real
+    new lexemes, verified via iter_specs(). Slot candidate count
+    verified with scripts/_practice_slot_check.py and compile_content.py
+    practice-validate. Needs the standard fresh-context review before
+    import.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [device_noun]
+slot_presets:
+  device_noun: &device_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: device_noun}}
+templates:
+  - content_key: practice.fa-en.en.a1.unit35.lesson01.choose.001
+    lesson_content_key: en.a1.unit35.lesson01.device_vocabulary
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *device_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit35.lesson01.listen.002
+    lesson_content_key: en.a1.unit35.lesson01.device_vocabulary
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *device_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "واژه‌ای که شنیدید {item} بود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit35.lesson01.match.003
+    lesson_content_key: en.a1.unit35.lesson01.device_vocabulary
+    type: matching_pairs
+    frame: {text: "{first} — {second}", language_code: en, direction: ltr}
+    slots: {first: *device_noun, second: *device_noun, third: *device_noun, fourth: *device_noun, fifth: *device_noun}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth]}
+    feedback_frame: {text: "هر دستگاه را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit35.lesson01.translate.004
+    lesson_content_key: en.a1.unit35.lesson01.device_vocabulary
+    type: translation
+    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *device_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این دستگاه است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit35.lesson01.order.005
+    lesson_content_key: en.a1.unit35.lesson01.device_vocabulary
+    type: word_order
+    frame: {text: "I have a {item}", language_code: en, direction: ltr}
+    slots: {item: *device_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "I have a {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} دستگاهی است که ذکر شد.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit35.lesson01.translate_sentence.006
+    lesson_content_key: en.a1.unit35.lesson01.device_vocabulary
+    type: translation
+    frame: {text: "من یه {item} دارم.", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *device_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "I have a {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "I have a {item}. یعنی من یه {item} دارم.", language_code: fa, direction: rtl}

@@ -1,0 +1,88 @@
+schema_version: "1.0"
+pack_key: practice.fa-en.a1.unit30
+source_language: fa
+target_language: en
+unit_content_key: en.a1.unit30.hobbies
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: >-
+    Authored 2026-07-11 by the fa-en depth-audit lane, extending Endless
+    Practice coverage past the shared English realization's unit24
+    ceiling (a real content-depth audit found fa-en's practice pool only
+    covered units 1-29 of 69 authored units, ~7.1hrs vs the >=10hr
+    publish-gate bar). This is the first of a 13-unit batch (30-42).
+
+    Two semantic tags used, both new: 'hobby_noun' (reading/cooking/
+    painting/running, all real gerund-noun hobbies from lesson01, all
+    safe in "I like {item}." with no article) and 'frequency_adverb'
+    (always/often/sometimes/rarely/never from lesson02, all safe as the
+    standard English pre-verb frequency adverb in "She {item} cooks
+    dinner."). EN_POS/en_agreement_tags for both tags, and every other
+    introduced_token across units 30-42, were added to
+    _en_target_lexeme_common.py as part of this same pass -- verified
+    zero missing tokens against the real realization files.
+    scripts/backfill_lexemes_fa_en.py's UNIT_FILES tuple was extended to
+    include units 30-42 continuous with 1-24 (unit_order 25-37, matching
+    the real Unit.order the "انگلیسی A1" course was imported with --
+    the on-disk realization numbering skips 25-29 for the A1 track,
+    those are the separate A2 course's own units), and its Farsi gloss
+    dict extended with 364 new atomic per-token glosses, cross-checked
+    against (not copy-pasted from) this unit's own fa-en overlay text.
+
+    Anchoring check: lesson01 (hobby_noun) and lesson02 (frequency_adverb)
+    each introduce real new lexemes, verified via iter_specs(). Slot
+    candidate counts verified with scripts/_practice_slot_check.py and
+    compile_content.py practice-validate. Needs the standard
+    fresh-context review before import.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [hobby_noun, frequency_adverb]
+slot_presets:
+  hobby_noun: &hobby_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: hobby_noun}}
+  frequency_adverb: &frequency_adverb {language_code: en, part_of_speech: adverb, agreement_tags: {semantic: frequency_adverb}}
+templates:
+  - content_key: practice.fa-en.en.a1.unit30.lesson01.choose.001
+    lesson_content_key: en.a1.unit30.lesson01.free_time_activities
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *hobby_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit30.lesson01.listen.002
+    lesson_content_key: en.a1.unit30.lesson01.free_time_activities
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *hobby_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "واژه‌ای که شنیدید {item} بود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit30.lesson01.match.003
+    lesson_content_key: en.a1.unit30.lesson01.free_time_activities
+    type: matching_pairs
+    frame: {text: "{first} — {second}", language_code: en, direction: ltr}
+    slots: {first: *hobby_noun, second: *hobby_noun, third: *hobby_noun, fourth: *hobby_noun}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth]}
+    feedback_frame: {text: "هر سرگرمی را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit30.lesson01.translate.004
+    lesson_content_key: en.a1.unit30.lesson01.free_time_activities
+    type: translation
+    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *hobby_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این سرگرمی است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit30.lesson02.order.001
+    lesson_content_key: en.a1.unit30.lesson02.how_often
+    type: word_order
+    frame: {text: "She {item} cooks dinner", language_code: en, direction: ltr}
+    slots: {item: *frequency_adverb}
+    answer_derivation: {kind: render_frame, frame: {text: "She {item} cooks dinner", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} قید تکراری است که چقدر زیاد این کار انجام می‌شود را نشان می‌دهد.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit30.lesson02.translate.002
+    lesson_content_key: en.a1.unit30.lesson02.how_often
+    type: translation
+    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *frequency_adverb}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این قید تکرار است.", language_code: fa, direction: rtl}

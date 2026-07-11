@@ -1,0 +1,74 @@
+schema_version: "1.0"
+pack_key: practice.fa-en.a1.unit39
+source_language: fa
+target_language: en
+unit_content_key: en.a1.unit39.neighborhood
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: >-
+    Authored 2026-07-11, fa-en depth-audit lane (unit 10 of the 30-42
+    batch, see unit30's pack notes for the full batch rationale).
+
+    One semantic tag: 'neighborhood_noun' (neighbor/park/store/street),
+    mirroring unit24's room_noun precedent -- all four safe in "There's
+    a {item} nearby." "neighbor" is genuinely new to this unit
+    (lesson01); "park"/"store"/"street" reuse already-classified A1
+    tokens from earlier units (park: unit09; store: unit05; street:
+    unit10) per AUTHORING_GUIDE.md #18's same-course-level reuse
+    allowance (all four are A1, same course as this unit) -- verified
+    all three reused tokens' real candidate counts (each already >=3
+    course-wide within A1) via scripts/_practice_slot_check.py, no new
+    A1/A2 course-boundary risk since nothing crosses into A2.
+
+    Anchoring check: lesson01 introduces "neighbor" (and neighborhood/
+    nearby/quiet/noisy/friendly) as real new lexemes, verified via
+    iter_specs() -- a real new lexeme for the anchor even though 3 of
+    the 4 tag members are reused, matching the discipline every other
+    pack in this batch follows. Slot candidate count verified with
+    scripts/_practice_slot_check.py and compile_content.py
+    practice-validate. Needs the standard fresh-context review before
+    import.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [neighborhood_noun]
+slot_presets:
+  neighborhood_noun: &neighborhood_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: neighborhood_noun}}
+templates:
+  - content_key: practice.fa-en.en.a1.unit39.lesson01.choose.001
+    lesson_content_key: en.a1.unit39.lesson01.neighborhood_vocabulary
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *neighborhood_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit39.lesson01.listen.002
+    lesson_content_key: en.a1.unit39.lesson01.neighborhood_vocabulary
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *neighborhood_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "واژه‌ای که شنیدید {item} بود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit39.lesson01.match.003
+    lesson_content_key: en.a1.unit39.lesson01.neighborhood_vocabulary
+    type: matching_pairs
+    frame: {text: "{first} — {second}", language_code: en, direction: ltr}
+    slots: {first: *neighborhood_noun, second: *neighborhood_noun, third: *neighborhood_noun, fourth: *neighborhood_noun}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth]}
+    feedback_frame: {text: "هر واژه را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit39.lesson01.translate.004
+    lesson_content_key: en.a1.unit39.lesson01.neighborhood_vocabulary
+    type: translation
+    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *neighborhood_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit39.lesson01.order.005
+    lesson_content_key: en.a1.unit39.lesson01.neighborhood_vocabulary
+    type: word_order
+    frame: {text: "There's a {item} nearby", language_code: en, direction: ltr}
+    slots: {item: *neighborhood_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "There's a {item} nearby", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} چیزی است که این نزدیکی‌ها هست.", language_code: fa, direction: rtl}

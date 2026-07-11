@@ -1,0 +1,69 @@
+schema_version: "1.0"
+pack_key: practice.fa-en.a1.unit41
+source_language: fa
+target_language: en
+unit_content_key: en.a1.unit41.cooking
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: >-
+    Authored 2026-07-11, fa-en depth-audit lane (unit 12 of the 30-42
+    batch, see unit30's pack notes for the full batch rationale).
+
+    One semantic tag: 'cooking_verb' (chop/boil/taste from lesson01,
+    three real cooking actions with identical syntax, all safe as the
+    bare infinitive in "Can you {item} it?" -- the real content uses
+    exactly this pattern for "chop"/"taste": "Can you chop the onions
+    for me?"/"Can you taste the sauce...?"). "cook"/"bake" excluded
+    (cook is the category verb itself and pairs with a direct object
+    like "dinner", not "it"; bake isn't collocated with "it" in the real
+    content either).
+
+    Anchoring check: lesson01 introduces chop/boil/taste as real new
+    lexemes, verified via iter_specs(). Slot candidate count verified
+    with scripts/_practice_slot_check.py and compile_content.py
+    practice-validate. Needs the standard fresh-context review before
+    import.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [cooking_verb]
+slot_presets:
+  cooking_verb: &cooking_verb {language_code: en, part_of_speech: verb, agreement_tags: {semantic: cooking_verb}}
+templates:
+  - content_key: practice.fa-en.en.a1.unit41.lesson01.choose.001
+    lesson_content_key: en.a1.unit41.lesson01.cooking_vocabulary
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *cooking_verb}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit41.lesson01.listen.002
+    lesson_content_key: en.a1.unit41.lesson01.cooking_vocabulary
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *cooking_verb}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "واژه‌ای که شنیدید {item} بود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit41.lesson01.match.003
+    lesson_content_key: en.a1.unit41.lesson01.cooking_vocabulary
+    type: matching_pairs
+    frame: {text: "{first} — {second}", language_code: en, direction: ltr}
+    slots: {first: *cooking_verb, second: *cooking_verb, third: *cooking_verb}
+    slot_relations: [{kind: distinct, slots: [first, second, third]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third]}
+    feedback_frame: {text: "هر فعل را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit41.lesson01.translate.004
+    lesson_content_key: en.a1.unit41.lesson01.cooking_vocabulary
+    type: translation
+    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *cooking_verb}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این فعل است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit41.lesson01.order.005
+    lesson_content_key: en.a1.unit41.lesson01.cooking_vocabulary
+    type: word_order
+    frame: {text: "Can you {item} it", language_code: en, direction: ltr}
+    slots: {item: *cooking_verb}
+    answer_derivation: {kind: render_frame, frame: {text: "Can you {item} it", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} کاری است که از او خواسته شد.", language_code: fa, direction: rtl}

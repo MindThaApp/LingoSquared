@@ -1,0 +1,62 @@
+schema_version: "1.0"
+pack_key: practice.fa-en.a1.unit40
+source_language: fa
+target_language: en
+unit_content_key: en.a1.unit40.post
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: >-
+    Authored 2026-07-11, fa-en depth-audit lane (unit 11 of the 30-42
+    batch, see unit30's pack notes for the full batch rationale).
+
+    One semantic tag: 'mail_noun' (letter/package/stamp/envelope from
+    lesson01). Deliberately NOT used in any shared generative frame --
+    no single verb collocates naturally across all four ("send a
+    letter/package" works, "send a stamp/envelope" reads oddly, since
+    those are things you buy or use, not send), so kept
+    recognition-only, same discipline as unit25's bureaucracy_noun.
+    "post office"/"mailbox" are excluded from this tag (two-word
+    compound and a fixture noun respectively, not sent items).
+
+    Anchoring check: lesson01 introduces all four mail-item nouns as
+    real new lexemes, verified via iter_specs(). Slot candidate count
+    verified with scripts/_practice_slot_check.py and compile_content.py
+    practice-validate. Needs the standard fresh-context review before
+    import.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [mail_noun]
+slot_presets:
+  mail_noun: &mail_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: mail_noun}}
+templates:
+  - content_key: practice.fa-en.en.a1.unit40.lesson01.choose.001
+    lesson_content_key: en.a1.unit40.lesson01.post_office_vocabulary
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *mail_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit40.lesson01.listen.002
+    lesson_content_key: en.a1.unit40.lesson01.post_office_vocabulary
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *mail_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "واژه‌ای که شنیدید {item} بود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit40.lesson01.match.003
+    lesson_content_key: en.a1.unit40.lesson01.post_office_vocabulary
+    type: matching_pairs
+    frame: {text: "{first} — {second}", language_code: en, direction: ltr}
+    slots: {first: *mail_noun, second: *mail_noun, third: *mail_noun, fourth: *mail_noun}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth]}
+    feedback_frame: {text: "هر واژه را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit40.lesson01.translate.004
+    lesson_content_key: en.a1.unit40.lesson01.post_office_vocabulary
+    type: translation
+    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *mail_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}
