@@ -257,6 +257,46 @@ UNIT_FILES_A2 = (
         REPO_ROOT / "docs/content/overlays/en-fa/a2_unit18.yaml",
     ),
 )
+
+# B1 units live in a THIRD, separate course row ("Farsi B1", confirmed by
+# reading this pack's own en-fa/b1_unit0N.yaml `course.title` front-matter
+# rather than assuming the "Farsi A1"/"Farsi A2" naming pattern continues),
+# added 2026-07-11. These 6 units (necessity/abilities/hypotheticals/
+# debate/workplace/narrative) existed on disk and were already imported
+# into the DB but had zero lexeme classifier coverage in this script at
+# all -- same root cause already documented above for A2 units 9-10/11-18
+# before THEY were added: Endless Practice for en-fa's entire B1 course was
+# completely dead (zero Lexeme rows, so its practice templates, if any, can
+# never generate an item). Kept as its own tuple with LOCAL 1-based
+# ordering, looked up against the "Farsi B1" course separately in main(),
+# never mixed with UNIT_FILES/UNIT_FILES_A2's indices -- same pattern as
+# UNIT_FILES_A2 itself.
+UNIT_FILES_B1 = (
+    (
+        REPO_ROOT / "docs/content/realizations/fa/b1_unit01_necessity.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/b1_unit01.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/b1_unit02_abilities.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/b1_unit02.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/b1_unit03_hypotheticals.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/b1_unit03.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/b1_unit04_debate.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/b1_unit04.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/b1_unit05_workplace.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/b1_unit05.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/b1_unit06_narrative.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/b1_unit06.yaml",
+    ),
+)
 EN_TOKEN_RE = re.compile(r"[A-Za-z]+(?:['’/-][A-Za-z]+)*")
 
 # Atomic glosses are intentionally explicit. A teaching-card gloss often
@@ -384,14 +424,26 @@ FA_GLOSSES = {
     "قابلی": "(part of قابلی نداره, 'no trouble at all')",
     "فروشنده": "shopkeeper; seller", "سیب‌ها": "the apples (plural)",
     # Unit 9 (A2: administrative errands / bureaucracy), added 2026-07-06.
-    "وقت": "appointment; time slot", "مدرک": "document",
+    # Widened 2026-07-11 (B1 units 01/03/06 backfill pass): B1's own
+    # "وقت ندارم"/"وقت دارم" ("I don't/do have time") and "وقت"
+    # (b1_unit03.lesson06) use the plain, general "time" sense, not the
+    # narrower A2-bureaucracy "appointment/time slot" sense this entry
+    # originally covered -- widened rather than split, since both senses
+    # are the same word and the DB rows for A2/B1 are already separate
+    # (different course_id) regardless.
+    "وقت": "appointment; time slot; time (in general)", "مدرک": "document",
     "آدرس": "address", "قبض": "utility bill", "ملی": "national",
     "برای": "for", "تغییر": "change",
     "بگیرم": "let me take/get (subjunctive)",
     "خونه‌مو": "my house (object marker)",
     "عوض": "change; exchange (in عوض کردن)", "کردم": "I did",
     "آدرسمو": "my address (object marker)",
-    "می‌شه": "would it be possible", "بگید": "tell (polite imperative)",
+    # Widened 2026-07-11 (B1 unit01 reading_passage): "امسال بهتر می‌شه"
+    # ("this year will turn out better") uses شدن's plain "becomes/turns
+    # out" sense, not the polite-request-opener idiom this entry
+    # originally covered -- widened, same reasoning as وقت above.
+    "می‌شه": "would it be possible; becomes / turns out (to be)",
+    "بگید": "tell (polite imperative)",
     "بیارم": "let me bring (subjunctive)",
     "اجاره‌نامه": "lease agreement", "مهلت": "deadline",
     "قدیم": "old", "برق": "electricity",
@@ -685,7 +737,12 @@ FA_GLOSSES = {
     "مسیر": "route", "جایگزین": "alternative; substitute",
     "جایگزینی": "alternative; substitute (indefinite form)",
     "نُه": "nine (vocalized spelling, distinct from نه 'no')",
-    "هست": "there is / exists",
+    # Widened 2026-07-11 (B1 unit05 workplace, e.g. "او مسئول این پروژه
+    # هست"): B1 uses هست as a plain predicate copula ("he/she/it is"),
+    # not just the existential "there is" sense this entry originally
+    # covered -- same core 3rd-singular "to be" verb, widened rather than
+    # split (same reasoning as وقت/می‌شه above).
+    "هست": "there is / exists; he/she/it is (copula)",
     "برسم": "let me arrive / I arrive (subjunctive)",
     "به خاطر": "because of",
     "مشکل فنی": "technical problem", "مشکل": "problem",
@@ -744,6 +801,84 @@ FA_GLOSSES = {
     "پولتون": "your money (polite)",
     "بدیم": "let's give / we give (subjunctive)",
     "بهتون": "to you (polite)",
+    # B1 units 01-06 (necessity / abilities / hypotheticals / debate /
+    # workplace / narrative), added 2026-07-11. This is the FIRST time
+    # this script has covered any B1-level content -- see UNIT_FILES_B1's
+    # own comment above for why it's a separate course/tuple, same
+    # pattern as UNIT_FILES_A2. B1 reuses many A1/A2 tokens verbatim
+    # (باید/کار/چون/خیلی/etc.) -- only genuinely new tokens are declared
+    # below, one comment block per unit. Two real homograph collisions
+    # were found and fixed via the existing scoped-discriminator pattern
+    # (see BASHE_SUBJUNCTIVE_LESSONS/NO_NEGATION_LESSONS below); two more
+    # reused tokens (برید/باشید) turned out to be compatible reuse, not
+    # true homographs -- both existing sub/imperative-adjacent glosses
+    # ("go (polite)"/"be (polite)") already read naturally for this
+    # course's own subjunctive-complement usage too ("you must go"/"if
+    # you have"), so they're deliberately left unchanged rather than
+    # forcing an unnecessary split. سه existing entries ARE widened below
+    # (وقت/هست/می‌شه) where the B1 sense is genuinely broader than what
+    # was on file, not just a compatible restatement.
+    #
+    # Unit 01 (necessity: باید + subjunctive, present/past, dialogue about
+    # a work deadline, reading about two years' obligations).
+    "برم": "(that) I go", "بری": "(that) you go", "دانشگاه": "university",
+    "بره": "(that) he/she go", "برن": "(that) they go", "اونا": "they",
+    "می‌رفتم": "I was going / I used to go (imperfect past)",
+    "نباید": "must not", "شلوغ": "busy; crowded",
+    "نرفتم": "I didn't go", "گزارش": "report",
+    "تموم": "finished; done", "کنه": "(that) he/she do",
+    "امشب": "tonight", "بمونم": "(that) I stay",
+    "وقت دارم": "I have time", "امسال": "this year", "پارسال": "last year",
+    "مهم": "important", "به‌موقع": "on time",
+    "نتونست": "couldn't / wasn't able to (simple past)",
+    "کمتر": "less", "قبول": "acceptance (in قبول کردن, 'to accept')",
+    "حالا": "now",
+    # Unit 02 (abilities: می‌تونم + subjunctive, present/past, dialogue
+    # about a car needing a repair, reading about getting a license).
+    "رانندگی": "driving", "ماشین": "car", "می‌تونه": "he/she can",
+    "می‌تونیم": "we can", "می‌تونن": "they can",
+    "کنن": "(that) they do", "می‌تونستم": "I could / was able to",
+    "نمی‌تونستم": "I couldn't / wasn't able to",
+    "گواهینامه": "driver's license",
+    "درستش": "fix it / repair it (object-suffixed)",
+    "قطعه": "part (mechanical)", "بخرم": "(that I) buy",
+    "حاضره": "is ready (colloquial contraction of حاضر است)",
+    "نمی‌تونست": "he/she couldn't / wasn't able to",
+    "نداشت": "he/she didn't have (past)", "گرفت": "got / received (past)",
+    "ماشینش": "his/her car", "ماشینم": "my car",
+    "امتحان": "test / exam",
+    # Unit 03 (hypotheticals: اگه + subjunctive real conditions, plus
+    # counterfactual past, dialogue about weekend shopping plans).
+    "اگه": "if", "باشی": "(if) you be", "می‌خرم": "I buy / I'll buy",
+    "می‌خری": "you buy / you'll buy", "باشیم": "(if) we be",
+    "باشن": "(if) they be", "می‌خره": "he/she buys",
+    "می‌خریم": "we buy", "می‌خرید": "you (pl.) buy",
+    "می‌خرن": "they buy", "داشتم": "I had", "نداشتم": "I didn't have",
+    "می‌خریدم": "I would buy / I would have bought",
+    "نداشته": "not having (negative participle)",
+    "نمی‌خرم": "I won't buy", "چیز": "thing",
+    "امیدوارم": "I hope (contraction of امیدوار + ام)",
+    "شاید": "maybe", "همینطور": "likewise",
+    # Unit 04 (debate: agreeing/disagreeing with an opinion, plus a
+    # reason clause, dialogue about remote work).
+    "موافقی": "you agree (informal)", "موافقه": "he/she agrees",
+    "موافقیم": "we agree", "موافقید": "you (pl.) agree",
+    "موافقن": "they agree", "مخالفم": "I disagree",
+    "مخالفه": "he/she disagrees", "سخته": "it's hard (colloquial)",
+    "تنهام": "I'm lonely (colloquial contraction of تنها + ام)",
+    "تنهاست": "he/she is lonely (colloquial contraction of تنها + است)",
+    # Unit 05 (workplace: stating responsibility for a project, status
+    # updates, dialogue about a status meeting).
+    "مسئول": "responsible", "پروژه": "project", "هستیم": "we are",
+    "هستن": "they are", "حسین": "Hossein",
+    "تمومه": "it's done (colloquial contraction of تموم + است)",
+    "هنوز": "still / yet", "چه‌وقت": "when",
+    # Unit 06 (narrative: past-continuous background + simple-past event,
+    # reported speech, dialogue retelling a story about a broken-down car).
+    "وقتی": "when (temporal conjunction, in وقتی که)",
+    "گفتم": "I said", "گفتی": "you said", "می‌رسم": "I'll arrive",
+    "می‌رسه": "he/she'll arrive", "نگفت": "he/she didn't say",
+    "هیچی": "anything / nothing", "می‌رفت": "he/she was going",
 }
 
 FA_SYMBOLS = set("س ل ا م ن ت ش چ ی ه ک گ ج د ر ف و ب خ ز".split())
@@ -752,10 +887,18 @@ FA_PROPER_NOUNS = set(
     "مریم نیما".split()
     # A2 units 11-18, added 2026-07-11.
     + ["دکتر رضایی", "اصفهان"]
+    # B1 unit05 (workplace), added 2026-07-11: حسین (Hossein), a colleague
+    # named in the responsibility/status-update dialogue.
+    + ["حسین"]
 )
 FA_PRONOUNS = set(
     "من تو شما او ما این همون چی چه کی همین کدوم اون چقدر".split()
     + ["چی؟"]
+    # B1 units 01/06 (necessity/narrative), added 2026-07-11: اونا (they,
+    # informal plural, sibling of او/اونا already established), هیچی
+    # (anything/nothing, indefinite pronoun), چه‌وقت (when, interrogative
+    # pronoun, same class as the already-established کی).
+    + ["اونا", "هیچی", "چه‌وقت"]
 )
 FA_PREPOSITIONS = set(
     "به از با اهل بهت مثل کنار برای برات پیش در بالای".split()
@@ -775,6 +918,11 @@ FA_PARTICLES = set(
     # که (that/which/so that, subordinating conjunction), را (formal
     # object marker, same class as the already-established colloquial رو).
     + ["اگر", "که", "را"]
+    # B1 units 03/06 (hypotheticals/narrative), added 2026-07-11: اگه
+    # (if, colloquial spoken variant of the already-established formal
+    # اگر), وقتی (when, temporal subordinating conjunction, same class
+    # as the already-established چون).
+    + ["اگه", "وقتی"]
 )
 FA_ADVERBS = set(
     "فعلاً خیلی چطور کجا اینجا همین‌طور کجایی باهم فردا حتماً خودمونی چند "
@@ -794,6 +942,15 @@ FA_ADVERBS = set(
     # already in this set.
     + ["دیگه", "حداقل", "زودتر", "دوباره", "متاسفانه", "حدود", "اول",
        "در آخر", "در طول هفته"]
+    # B1 units 01-05, added 2026-07-11: امشب (tonight), امسال (this
+    # year), پارسال (last year), به‌موقع (on time), کمتر (less, sibling
+    # of the already-established comparative بیشتر), حالا (now, sibling
+    # of the already-established الان), شاید (maybe), همینطور
+    # (likewise -- a genuinely distinct string from the already-
+    # established همین‌طور, which has a ZWNJ; not a duplicate), هنوز
+    # (still/yet).
+    + ["امشب", "امسال", "پارسال", "به‌موقع", "کمتر", "حالا", "شاید",
+       "همینطور", "هنوز"]
 )
 FA_ADJECTIVES = set(
     "خوبی بد ایرانی انگلیسی فرانسوی بزرگه کوچیکه متأهل مجرد برعکسه شلوغه "
@@ -826,6 +983,11 @@ FA_ADJECTIVES = set(
     + ["باز", "جدیدم", "لازم", "آماده", "شدیدی", "شدید", "خراب", "لغو",
        "جایگزین", "جایگزینی", "فنی", "منتظر", "اجتماعی", "مفید",
        "سرگرم‌کننده", "تمیز", "مناسب", "تیمی", "بانکی"]
+    # B1 units 01/05, added 2026-07-11: شلوغ (busy/crowded, bare form of
+    # the already-established colloquial contraction شلوغه), تموم
+    # (finished/done, participial adjective -- combines with کنم/کنه to
+    # form "finish"), مهم (important), مسئول (responsible).
+    + ["شلوغ", "تموم", "مهم", "مسئول"]
 )
 FA_NUMBERS = set(
     "صفر یک دو سه چهار پنج شش هفت هشت نه ده یازده دوازده سیزده چهارده "
@@ -942,6 +1104,52 @@ FA_VERBS = {
     # same colloquial -e-copula-contraction precedent as خراب above's
     # sibling unit13 قشنگه/etc.
     "خرابه", "دادن", "بدم", "خریدم", "داد", "خریدینش", "خریدمش", "بدیم",
+    # B1 unit01 (necessity), added 2026-07-11. برم/بری/بره/برن (subjunctive
+    # "go" paradigm, sibling of the already-established formal بروم and
+    # subjunctive بریم/برید), نباید (must not, sibling of the already-
+    # established باید), نرفتم (didn't go), کنه (subjunctive "that he/she
+    # do", sibling of the already-established کنم/کنی/کنید/کنیم), بمونم
+    # (subjunctive "that I stay").
+    "برم", "بری", "بره", "برن", "نباید", "نرفتم", "کنه", "بمونم",
+    # B1 unit02 (abilities), added 2026-07-11. می‌تونه/می‌تونیم/می‌تونن
+    # (ability paradigm, sibling of the already-established می‌تونم/
+    # می‌تونی/می‌تونید), کنن (subjunctive "that they do", completing the
+    # کنم/کنی/کنه/کنیم/کنید paradigm), می‌تونستم/نمی‌تونستم/نمی‌تونست
+    # (past-ability forms), درستش (object-suffixed subjunctive "fix it"),
+    # بخرم (subjunctive "that I buy"), حاضره (colloquial -e-copula-
+    # contraction predicate, same precedent as آفتابیه/سرده/بارونیه/گرمه
+    # above), نداشت (he/she didn't have, past), گرفت (got/received,
+    # past).
+    "می‌تونه", "می‌تونیم", "می‌تونن", "کنن", "می‌تونستم", "نمی‌تونستم",
+    "درستش", "بخرم", "حاضره", "نمی‌تونست", "نداشت", "گرفت",
+    # B1 unit03 (hypotheticals), added 2026-07-11. باشی/باشیم/باشن
+    # (subjunctive "be" paradigm, sibling of the already-established
+    # داشته/باشید), می‌خرم/می‌خری/می‌خره/می‌خریم/می‌خرید/می‌خرن (indicative
+    # "buy" paradigm), داشتم/نداشتم (I had / I didn't have, past),
+    # می‌خریدم (I would buy / would have bought), نداشته (negative
+    # participle "not having", sibling of the already-established
+    # داشته), نمی‌خرم (I won't buy), امیدوارم (I hope, colloquial -am
+    # copula contraction, same precedent as خوشحالم/تنهام).
+    "باشی", "باشیم", "باشن", "می‌خرم", "می‌خری", "می‌خره", "می‌خریم",
+    "می‌خرید", "می‌خرن", "داشتم", "نداشتم", "می‌خریدم", "نداشته",
+    "نمی‌خرم", "امیدوارم",
+    # B1 unit04 (debate), added 2026-07-11. موافقی/موافقه/موافقیم/
+    # موافقید/موافقن (agreement paradigm, sibling of the already-
+    # established موافقم), مخالفم/مخالفه (disagreement, same paradigm),
+    # سخته/تنهام/تنهاست (colloquial copula-contraction predicates, same
+    # precedent as آفتابیه/سرده/بارونیه/گرمه/ساراست above).
+    "موافقی", "موافقه", "موافقیم", "موافقید", "موافقن", "مخالفم",
+    "مخالفه", "سخته", "تنهام", "تنهاست",
+    # B1 unit05 (workplace), added 2026-07-11. هستیم/هستن (be paradigm,
+    # sibling of the already-established هستم/هستی/هستید/هستین), تمومه
+    # (colloquial -e-copula-contraction predicate, same precedent as
+    # تخته/آشپزخانه‌س above).
+    "هستیم", "هستن", "تمومه",
+    # B1 unit06 (narrative), added 2026-07-11. گفتم/گفتی (I/you said,
+    # sibling of the already-established گفت), می‌رسم/می‌رسه (will
+    # arrive), نگفت (he/she didn't say), می‌رفت (he/she was going,
+    # sibling of the already-established می‌رفتم).
+    "گفتم", "گفتی", "می‌رسم", "می‌رسه", "نگفت", "می‌رفت",
 }
 FA_PHRASE_PARTS = {"بخیر", "خواهش"}
 
@@ -977,6 +1185,34 @@ NO_NEGATION_LESSONS = {
     "fa.a2.unit12.lesson04.doctor_visit_dialogue",
     "fa.a2.unit15.lesson04.station_counter_dialogue",
     "fa.a2.unit16.lesson04.habits_conversation",
+    # B1 unit04 (debate), added 2026-07-11 (B1 units 01-06 backfill
+    # pass): the same نه = "no" (not "nine") collision, found while
+    # adding this unit's remote-work-disagreement dialogue -- B1 doesn't
+    # teach numbers at all, so this is the only نه occurrence at the b1
+    # level, but the fix is the same regardless of level since this set
+    # isn't itself level-scoped.
+    "fa.b1.unit04.lesson04.dialogue_remote_work",
+}
+
+# باشه is a genuine homograph too, found while adding B1 unit03
+# (hypotheticals), 2026-07-11: the informal affirmation "okay"
+# (FA_VERBS, established since a1_unit12's accept_word group) versus the
+# 3rd-person-singular SUBJUNCTIVE copula "(if) he/she be/has" that
+# completes this unit's "داشته باشم/باشی/باشه/باشیم/باشید/باشن"
+# conditional paradigm -- a real, confusable difference (a learner
+# flashcard reading "باشه: okay" while the actual sentence is "اگه پول
+# داشته باشه می‌خره", "if he/she has money, he/she buys it," would be
+# genuinely misled), unlike برید/باشید's compatible-reuse cases
+# documented in FA_GLOSSES' own B1 comment block above. Both senses
+# already land as separate Lexeme rows regardless (the "okay" sense is
+# level="a1", this sense is level="b1", and fa_specs's key already
+# includes level) -- so unlike تو/نه above, no third key-tuple
+# discriminator is needed here, just the english_gloss/semantic-tag
+# override in fa_agreement_tags()/_classify_fa() below. part_of_speech
+# stays "verb" either way (already true for both senses via the
+# existing FA_VERBS membership), so no override needed there either.
+BASHE_SUBJUNCTIVE_LESSONS = {
+    "fa.b1.unit03.lesson02.real_condition_all_persons",
 }
 
 EN_PRONOUNS = {
@@ -1077,6 +1313,12 @@ def fa_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     # نه's negation sense ("no/not", see NO_NEGATION_LESSONS above) is
     # excluded from the "number" tag below the same way.
     is_no_negation = token == "نه" and lesson_key in NO_NEGATION_LESSONS
+    # باشه's B1 subjunctive-copula sense (see BASHE_SUBJUNCTIVE_LESSONS
+    # above) is excluded from the "accept_word"/"travel_confirmation_
+    # word" tags below the same way, so this unrelated A1 "okay"
+    # semantic grouping never sweeps in the b1-level conditional-
+    # paradigm occurrence.
+    is_bashe_subjunctive = token == "باشه" and lesson_key in BASHE_SUBJUNCTIVE_LESSONS
     if token in FA_PRONOUNS and not is_too_location:
         semantics.append("pronoun")
     if token in {"هستم", "هستی", "هست", "است", "هستید", "هستین", "ساراست", "ایرانیه", "ایرانی‌ام"}:
@@ -1341,7 +1583,7 @@ def fa_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     # noun/verb, anchored lesson05).
     if token in {"برنامه", "سینما", "بریم"}:
         semantics.append("plan_core_word")
-    if token in {"باشه", "عالیه", "قبوله"}:
+    if token in {"باشه", "عالیه", "قبوله"} and not is_bashe_subjunctive:
         semantics.append("accept_word")
     if token in {"متأسفم", "نمی‌تونم"}:
         semantics.append("decline_word")
@@ -1437,7 +1679,7 @@ def fa_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         semantics.append("ticket_request_word")
     if token in {"سکو", "حرکت", "کی"}:
         semantics.append("departure_detail_word")
-    if token in {"فردا", "باشه"}:
+    if token in {"فردا", "باشه"} and not is_bashe_subjunctive:
         semantics.append("travel_confirmation_word")
     if token in {"مسافر", "فروشنده"}:
         semantics.append("dialogue_role_word")
@@ -1780,7 +2022,18 @@ def _classify_fa(files, level, fa_specs, seen_en):
             lesson_key = lesson["content_key"]
             for item in lesson["teaching"]:
                 content_key = item["content_key"]
-                gloss = teaching_overlays[content_key].get("gloss", "")
+                # B1 unit01's own overlay omits the teaching-card entry
+                # entirely (not just a blank gloss) for 9 pure-review
+                # content_keys (e.g. teach.unja/teach.kone/teach.ro --
+                # tokens already established/glossed elsewhere, found
+                # while adding the B1 units 01-06 backfill pass,
+                # 2026-07-11) -- .get(content_key, {}) tolerates that
+                # gap the same way the existing .get("gloss", "") already
+                # tolerates a present-but-blank gloss field, without
+                # touching the content itself (out of scope for this
+                # script). A1/A2 overlays have always had a complete
+                # entry per content_key, so this is a no-op for them.
+                gloss = teaching_overlays.get(content_key, {}).get("gloss", "")
                 for token in item.get("introduced_tokens", []):
                     if token not in FA_GLOSSES:
                         raise ValueError(f"missing explicit Farsi gloss for {token!r}")
@@ -1818,6 +2071,22 @@ def _classify_fa(files, level, fa_specs, seen_en):
                         key = (level, token, "negation")
                         part_of_speech = "particle"
                         english_gloss = "no / not"
+                    # باشه is genuinely two different lexemes too: the
+                    # informal affirmation "okay" (level="a1", established
+                    # since a1_unit12) versus the 3rd-singular SUBJUNCTIVE
+                    # copula "(if) he/she be/has" that completes B1
+                    # unit03's own conditional paradigm, in
+                    # BASHE_SUBJUNCTIVE_LESSONS above -- a real, previously
+                    # -latent bug class found while adding B1 units 01-06
+                    # (2026-07-11). Unlike تو/نه above, NO key-tuple
+                    # discriminator is needed here: `key = (level, token)`
+                    # already differs (a1 vs b1), since these two senses
+                    # never occur within the SAME course/level. Only the
+                    # gloss needs overriding here (part_of_speech is
+                    # already "verb" for both senses via the shared
+                    # FA_VERBS membership, so no override needed there).
+                    if token == "باشه" and lesson_key in BASHE_SUBJUNCTIVE_LESSONS:
+                        english_gloss = "(if) he/she is / be (subjunctive copula)"
                     existing = fa_specs.get(key)
                     if existing is None:
                         fa_specs[key] = {
@@ -1914,6 +2183,7 @@ def iter_specs():
     seen_en: set[tuple[str, str]] = set()
     yield from _classify_fa(UNIT_FILES, "a1", fa_specs, seen_en)
     yield from _classify_fa(UNIT_FILES_A2, "a2", fa_specs, seen_en)
+    yield from _classify_fa(UNIT_FILES_B1, "b1", fa_specs, seen_en)
     yield from fa_specs.values()
 
 
@@ -1939,7 +2209,7 @@ def main() -> int:
 
     with SessionLocal() as db:
         courses_by_level = {}
-        for level, title in (("a1", "Farsi A1"), ("a2", "Farsi A2")):
+        for level, title in (("a1", "Farsi A1"), ("a2", "Farsi A2"), ("b1", "Farsi B1")):
             needed = any(spec["level"] == level for spec in specs)
             course = db.scalar(
                 select(Course).where(
