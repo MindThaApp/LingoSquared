@@ -1,0 +1,92 @@
+schema_version: "1.0"
+pack_key: practice.en-prs.a1.unit30
+source_language: en
+target_language: prs
+unit_content_key: prs.a1.unit30.technology
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: >-
+    Authored 2026-07-11, same A1 units 25-30 practice-pool
+    depth-extension pass as this bundle's a1_unit25.yaml sibling (see
+    that file's notes for the shared pass context) -- the last unit in
+    this pass. Realization is status reviewed. تکنالوژی is the Afghan
+    Dari spelling, straight from the realization.
+
+    Three groups: "tech_topic_word" (تکنالوژی/موبایل/کمپیوتر/انترنت/
+    اپلیکیشن/عکس, 6 members, completes lesson01 -- کمپیوتر/انترنت are
+    REUSED existing lexemes; glosses technology/mobile phone/computer/
+    internet/app/photo all distinct) is the recognition pool.
+    "tech_use_word" (موبایل/کمپیوتر/انترنت, 3) is the subset the taught
+    "از ... استفاده می‌کنم" frame actually uses (all three appear in
+    that exact frame in the unit's own sentences); اپلیکیشن/عکس/
+    تکنالوژی are excluded so the drilled sentences stay within what the
+    unit teaches. "phone_action_verb" (می‌فرستم/می‌زنم/می‌گیرم, 3, all
+    REUSED existing lexemes with genuinely distinct glosses: I send /
+    I make (a call) / I take-receive) covers lesson02's phone actions
+    as a recognition drill.
+
+    Word_order template checked for grammaticality: "من هر روز از
+    {tech_use_word} استفاده می‌کنم" (lesson03, matches the real taught
+    "من هر روز از انترنت استفاده می‌کنم"; the موبایل and کمپیوتر
+    variants appear verbatim in the unit's own question and dialogue
+    lines).
+
+    No listen_select/listen_type anywhere (en-prs has no TTS voices).
+    No bare unquoted yes/no/true/false anywhere. Verified with
+    scripts/_practice_slot_check.py (0 problems) and
+    scripts/compile_content.py practice-validate for the full en-prs
+    pack (0 errors / 0 warnings). Needs the standard fresh-context
+    review before import.
+tag_schema:
+  part_of_speech: [noun, verb]
+  agreement_tags:
+    semantic: [tech_topic_word, tech_use_word, phone_action_verb]
+slot_presets:
+  tech_topic_word: &tech_topic_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: tech_topic_word}}
+  tech_use_word: &tech_use_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: tech_use_word}}
+  phone_action_verb: &phone_action_verb {language_code: prs, part_of_speech: verb, agreement_tags: {semantic: phone_action_verb}}
+templates:
+  # Lesson 1: device vocabulary.
+  - content_key: practice.en-prs.prs.a1.unit30.lesson01.tech_gloss.001
+    lesson_content_key: prs.a1.unit30.lesson01.device_vocabulary
+    type: multiple_choice
+    frame: {text: "{tech_topic_word}", language_code: prs, direction: rtl}
+    slots: {tech_topic_word: *tech_topic_word}
+    answer_derivation: {kind: slot_gloss, slot: tech_topic_word}
+    feedback_frame: {text: "{tech_topic_word} belongs to this unit's technology vocabulary.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit30.lesson01.tech_pair.002
+    lesson_content_key: prs.a1.unit30.lesson01.device_vocabulary
+    type: matching_pairs
+    frame: {text: "{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six}", language_code: prs, direction: rtl}
+    slots: {word_one: *tech_topic_word, word_two: *tech_topic_word, word_three: *tech_topic_word, word_four: *tech_topic_word, word_five: *tech_topic_word, word_six: *tech_topic_word}
+    slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}]
+    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+
+  # Lesson 2: phone actions.
+  - content_key: practice.en-prs.prs.a1.unit30.lesson02.phone_action_gloss.001
+    lesson_content_key: prs.a1.unit30.lesson02.phone_actions
+    type: multiple_choice
+    frame: {text: "{phone_action_verb}", language_code: prs, direction: rtl}
+    slots: {phone_action_verb: *phone_action_verb}
+    answer_derivation: {kind: slot_gloss, slot: phone_action_verb}
+    feedback_frame: {text: "{phone_action_verb} is something you do with a phone.", language_code: en, direction: ltr}
+
+  # Lesson 3: how often do you use it?
+  - content_key: practice.en-prs.prs.a1.unit30.lesson03.daily_use_order.001
+    lesson_content_key: prs.a1.unit30.lesson03.frequency_question
+    type: word_order
+    frame: {text: "من هر روز از {tech_use_word} استفاده می‌کنم", language_code: prs, direction: rtl}
+    slots: {tech_use_word: *tech_use_word}
+    answer_derivation: {kind: render_frame, frame: {text: "من هر روز از {tech_use_word} استفاده می‌کنم", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: من هر روز از [device] استفاده می‌کنم (I use the [device] every day).", language_code: en, direction: ltr}
+
+  # Lesson 6: wrap-up.
+  - content_key: practice.en-prs.prs.a1.unit30.lesson06.tech_translate.001
+    lesson_content_key: prs.a1.unit30.lesson06.wrap_up
+    type: translation
+    frame: {text: "{tech_topic_word}", language_code: en, direction: ltr, slot_rendering: {tech_topic_word: english_gloss}}
+    slots: {tech_topic_word: *tech_topic_word}
+    answer_derivation: {kind: slot_text, slot: tech_topic_word}
+    feedback_frame: {text: "{tech_topic_word} is the Dari word for this.", language_code: en, direction: ltr}
