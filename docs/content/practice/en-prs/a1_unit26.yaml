@@ -1,0 +1,88 @@
+schema_version: "1.0"
+pack_key: practice.en-prs.a1.unit26
+source_language: en
+target_language: prs
+unit_content_key: prs.a1.unit26.hobbies
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: >-
+    Authored 2026-07-11, same A1 units 25-30 practice-pool
+    depth-extension pass as this bundle's a1_unit25.yaml sibling (see
+    that file's notes for the shared pass context). Realization is
+    status reviewed.
+
+    Two groups: "hobby_topic_word" (سرگرمی/پیاده‌روی/آشپزی/موسیقی/کتاب/
+    فلم, 6 members, completes lesson01 -- موسیقی/کتاب/فلم/آشپزی are
+    REUSED existing lexemes genuinely re-taught in this unit's lesson01
+    hobby compounds, additive tags; glosses hobby/walking/cooking/music/
+    book/film all distinct) is the recognition pool.
+    "hobby_activity_word" (پیاده‌روی/آشپزی, 2) is the strict subset that
+    combines grammatically with می‌کنم ("I do X") -- composing کتاب or
+    موسیقی into a می‌کنم frame would be ungrammatical, the same
+    composition trap as unit24's پیاده/با split, so the word_order
+    frames below only ever draw from the 2-member subset.
+
+    Word_order templates checked for grammaticality: "من هر هفته
+    {hobby_activity_word} می‌کنم" (lesson03, matches the real taught
+    "من هر هفته پیاده‌روی می‌کنم"; آشپزی می‌کنم is itself taught in
+    lesson04) and "من هم گاهی {hobby_activity_word} می‌کنم" (lesson04,
+    matches the real taught "من هم گاهی آشپزی می‌کنم" generalized).
+
+    No listen_select/listen_type anywhere (en-prs has no TTS voices).
+    No bare unquoted yes/no/true/false anywhere. Verified with
+    scripts/_practice_slot_check.py (0 problems) and
+    scripts/compile_content.py practice-validate for the full en-prs
+    pack (0 errors / 0 warnings). Needs the standard fresh-context
+    review before import.
+tag_schema:
+  part_of_speech: [noun]
+  agreement_tags:
+    semantic: [hobby_topic_word, hobby_activity_word]
+slot_presets:
+  hobby_topic_word: &hobby_topic_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: hobby_topic_word}}
+  hobby_activity_word: &hobby_activity_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: hobby_activity_word}}
+templates:
+  # Lesson 1: hobby vocabulary.
+  - content_key: practice.en-prs.prs.a1.unit26.lesson01.hobby_gloss.001
+    lesson_content_key: prs.a1.unit26.lesson01.hobby_vocabulary
+    type: multiple_choice
+    frame: {text: "{hobby_topic_word}", language_code: prs, direction: rtl}
+    slots: {hobby_topic_word: *hobby_topic_word}
+    answer_derivation: {kind: slot_gloss, slot: hobby_topic_word}
+    feedback_frame: {text: "{hobby_topic_word} belongs to this unit's free-time vocabulary.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit26.lesson01.hobby_pair.002
+    lesson_content_key: prs.a1.unit26.lesson01.hobby_vocabulary
+    type: matching_pairs
+    frame: {text: "{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six}", language_code: prs, direction: rtl}
+    slots: {word_one: *hobby_topic_word, word_two: *hobby_topic_word, word_three: *hobby_topic_word, word_four: *hobby_topic_word, word_five: *hobby_topic_word, word_six: *hobby_topic_word}
+    slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}]
+    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+
+  # Lesson 3: every week / weekend.
+  - content_key: practice.en-prs.prs.a1.unit26.lesson03.weekly_hobby_order.001
+    lesson_content_key: prs.a1.unit26.lesson03.frequency
+    type: word_order
+    frame: {text: "من هر هفته {hobby_activity_word} می‌کنم", language_code: prs, direction: rtl}
+    slots: {hobby_activity_word: *hobby_activity_word}
+    answer_derivation: {kind: render_frame, frame: {text: "من هر هفته {hobby_activity_word} می‌کنم", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: من هر هفته [activity] می‌کنم (I do [activity] every week).", language_code: en, direction: ltr}
+
+  # Lesson 4: hobbies dialogue.
+  - content_key: practice.en-prs.prs.a1.unit26.lesson04.sometimes_hobby_order.001
+    lesson_content_key: prs.a1.unit26.lesson04.hobbies_dialogue
+    type: word_order
+    frame: {text: "من هم گاهی {hobby_activity_word} می‌کنم", language_code: prs, direction: rtl}
+    slots: {hobby_activity_word: *hobby_activity_word}
+    answer_derivation: {kind: render_frame, frame: {text: "من هم گاهی {hobby_activity_word} می‌کنم", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: من هم گاهی [activity] می‌کنم (I also sometimes do [activity]).", language_code: en, direction: ltr}
+
+  # Lesson 6: wrap-up.
+  - content_key: practice.en-prs.prs.a1.unit26.lesson06.hobby_translate.001
+    lesson_content_key: prs.a1.unit26.lesson06.wrap_up
+    type: translation
+    frame: {text: "{hobby_topic_word}", language_code: en, direction: ltr, slot_rendering: {hobby_topic_word: english_gloss}}
+    slots: {hobby_topic_word: *hobby_topic_word}
+    answer_derivation: {kind: slot_text, slot: hobby_topic_word}
+    feedback_frame: {text: "{hobby_topic_word} is the Dari word for this.", language_code: en, direction: ltr}

@@ -1,0 +1,89 @@
+schema_version: "1.0"
+pack_key: practice.en-prs.a1.unit28
+source_language: en
+target_language: prs
+unit_content_key: prs.a1.unit28.animals
+review:
+  status: unreviewed
+  fresh_context: false
+  notes: >-
+    Authored 2026-07-11, same A1 units 25-30 practice-pool
+    depth-extension pass as this bundle's a1_unit25.yaml sibling (see
+    that file's notes for the shared pass context). Realization is
+    status reviewed. Vocabulary is genuinely Afghan Dari (پشک for cat,
+    not the Iranian گربه) straight from the realization.
+
+    Three groups: "animal_topic_word" (حیوان/سگ/پشک/پرنده/ماهی, 5
+    members, completes lesson01; glosses animal/dog/cat/bird/fish all
+    distinct) is the recognition pool. "animal_word" (سگ/پشک/پرنده/
+    ماهی, 4) excludes the generic حیوان so the taught "یک ... دارم"
+    frame never drills the odd "یک حیوان دارم" as a sentence.
+    "pet_color_word" (سیاه/سفید, 2, both REUSED existing lexemes) is
+    deliberately narrower than unit21's color_word -- سرخ is excluded
+    since a red pet is not a sentence this unit teaches.
+
+    Word_order templates checked for grammaticality: "یک {animal_word}
+    دارم" (lesson02, matches the real taught "بلی، یک پشک دارم" minus
+    the leading بلی، and "سگ دارم", generalized across all 4 animals)
+    and "{animal_word} من {pet_color_word} است" (lesson03, composed
+    from the taught "سگ من سیاه و بزرگ است" and "سفید است" patterns --
+    every combination is a natural Dari sentence).
+
+    No listen_select/listen_type anywhere (en-prs has no TTS voices).
+    No bare unquoted yes/no/true/false anywhere. Verified with
+    scripts/_practice_slot_check.py (0 problems) and
+    scripts/compile_content.py practice-validate for the full en-prs
+    pack (0 errors / 0 warnings). Needs the standard fresh-context
+    review before import.
+tag_schema:
+  part_of_speech: [noun, adjective]
+  agreement_tags:
+    semantic: [animal_topic_word, animal_word, pet_color_word]
+slot_presets:
+  animal_topic_word: &animal_topic_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: animal_topic_word}}
+  animal_word: &animal_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: animal_word}}
+  pet_color_word: &pet_color_word {language_code: prs, part_of_speech: adjective, agreement_tags: {semantic: pet_color_word}}
+templates:
+  # Lesson 1: animal vocabulary.
+  - content_key: practice.en-prs.prs.a1.unit28.lesson01.animal_gloss.001
+    lesson_content_key: prs.a1.unit28.lesson01.animal_vocabulary
+    type: multiple_choice
+    frame: {text: "{animal_topic_word}", language_code: prs, direction: rtl}
+    slots: {animal_topic_word: *animal_topic_word}
+    answer_derivation: {kind: slot_gloss, slot: animal_topic_word}
+    feedback_frame: {text: "{animal_topic_word} belongs to this unit's animal vocabulary.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit28.lesson01.animal_pair.002
+    lesson_content_key: prs.a1.unit28.lesson01.animal_vocabulary
+    type: matching_pairs
+    frame: {text: "{word_one} — {word_two} — {word_three} — {word_four} — {word_five}", language_code: prs, direction: rtl}
+    slots: {word_one: *animal_topic_word, word_two: *animal_topic_word, word_three: *animal_topic_word, word_four: *animal_topic_word, word_five: *animal_topic_word}
+    slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five]}]
+    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+
+  # Lesson 2: do you have a pet?
+  - content_key: practice.en-prs.prs.a1.unit28.lesson02.have_animal_order.001
+    lesson_content_key: prs.a1.unit28.lesson02.have_a_pet
+    type: word_order
+    frame: {text: "یک {animal_word} دارم", language_code: prs, direction: rtl}
+    slots: {animal_word: *animal_word}
+    answer_derivation: {kind: render_frame, frame: {text: "یک {animal_word} دارم", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: یک [animal] دارم (I have a [animal]).", language_code: en, direction: ltr}
+
+  # Lesson 3: describing a pet.
+  - content_key: practice.en-prs.prs.a1.unit28.lesson03.pet_color_order.001
+    lesson_content_key: prs.a1.unit28.lesson03.describe_pet
+    type: word_order
+    frame: {text: "{animal_word} من {pet_color_word} است", language_code: prs, direction: rtl}
+    slots: {animal_word: *animal_word, pet_color_word: *pet_color_word}
+    answer_derivation: {kind: render_frame, frame: {text: "{animal_word} من {pet_color_word} است", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: [animal] من [color] است (my [animal] is [color]).", language_code: en, direction: ltr}
+
+  # Lesson 6: wrap-up.
+  - content_key: practice.en-prs.prs.a1.unit28.lesson06.animal_translate.001
+    lesson_content_key: prs.a1.unit28.lesson06.wrap_up
+    type: translation
+    frame: {text: "{animal_topic_word}", language_code: en, direction: ltr, slot_rendering: {animal_topic_word: english_gloss}}
+    slots: {animal_topic_word: *animal_topic_word}
+    answer_derivation: {kind: slot_text, slot: animal_topic_word}
+    feedback_frame: {text: "{animal_topic_word} is the Dari word for this.", language_code: en, direction: ltr}
