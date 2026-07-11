@@ -30,6 +30,27 @@ LOCAL 1-based unit ordering, looked up against the separate "Dutch A2"
 course) and restructuring `iter_specs()`/`main()` to classify and backfill
 each level against its own course, matching that established pattern.
 
+**Extended 2026-07-11** to cover the four new Dutch A2 units 74-77 (travel
+disruption, screen time/online habits, weekly schedule, shopping
+complaint/returns) that ``UNIT_FILES_A2``'s broad ``a2_unit*_*.yaml`` glob
+picked up automatically -- their lexemes were unclassified, so
+``nl_agreement_tags()``'s ``lesson_categories[unit_lesson]`` lookup raised
+``KeyError: 'er_is_een_vertraging'`` (unit74's own first lesson) the moment
+any of these units' tokens were classified. Fixed by adding the same three
+things every prior unit round added: ``NL_GLOSSES`` entries (hand-classified
+from each unit's own overlay glosses/notes, never guessed), POS-set
+membership (``NOUNS``/``VERBS``/``ADJECTIVES``/``ADVERBS``/``PREPOSITIONS``/
+``PARTICLES``/``PROPER_NOUNS``/``PRONOUNS``), and ``lesson_categories``
+entries for each of the 24 new lesson content_keys across the four units.
+Deliberately did NOT add the finer-grained per-unit ``semantic`` slot-preset
+tags (like unit73's ``job_interview_vocab``/``job_role_noun``) beyond a
+handful of broad recognition-only vocab tags -- those fine frame-specific
+tags were added in prior units specifically to support a practice-template
+authoring pass, and no ``docs/content/practice/en-nl/a2_unit7[4-7].yaml``
+pack exists yet (only through unit28), so there is nothing yet to wire them
+into; add them alongside that future practice-template pass instead of
+speculatively now.
+
 Known limitation surfaced while extending this (units 5-6): this script keys
 its in-memory `specs` dict by bare token string, and `nl_part_of_speech()` is
 a pure function of the token with no context -- so a genuine homograph across
@@ -622,6 +643,76 @@ NL_GLOSSES.update({
     "gesolliciteerd": "applied",
 })
 
+# A2 unit 74 (reisvertraging/travel disruption), added 2026-07-11. Widened
+# the already-existing "over" gloss (unit15-era, "past; after") to also cover
+# the time-duration sense this unit uses ("Over tien minuten" = "In ten
+# minutes") -- this is ordinary polysemy of the single Dutch preposition
+# "over", not a distinct homograph/different-POS collision like the "zijn"/
+# "werk" cases documented in this file's module docstring, so widening the
+# one gloss (rather than adding a conflicting second entry) is safe.
+NL_GLOSSES["over"] = "past; after; in (a duration, as in 'over tien minuten')"
+NL_GLOSSES.update({
+    "seinstoring": "the signal failure", "valt": "falls; is cancelled (with hij/zij, part of uitvallen)",
+    "door": "through; because of; during (as in 'door de week')",
+    "aansluiting": "the connection", "mis": "miss (with ik)",
+    "servicebalie": "the service desk", "Kunt": "can (with u/je, formal or informal)",
+    "alternatieve": "alternative (inflected)", "verbinding": "the connection",
+    "intercity": "the intercity train", "via": "via; through",
+    "Belangrijke": "important (inflected)", "mededeling": "the notice; announcement",
+    "rijden": "to run (trains/buses); to drive", "Arnhem": "Arnhem",
+    "treinen": "trains", "Reizigers": "Travelers", "kunnen": "can (infinitive/plural)",
+    "omreizen": "to reroute", "Amersfoort": "Amersfoort", "duurt": "lasts (with hij/zij)",
+    "ongeveer": "about; approximately", "adviseren": "to advise",
+    "reizigers": "travelers", "reisplanner": "the journey planner",
+    "raadplegen": "to consult", "NS": "NS (Dutch national railway company)",
+    "uitgevallen": "cancelled; failed (past participle of uitvallen)",
+    "weten": "to know", "inderdaad": "indeed", "Over": "past; after; in (a duration, as in 'over tien minuten')",
+    "spoor": "the platform; track", "even": "just; briefly",
+})
+
+# A2 unit 75 (schermtijd/screen time and online habits), added 2026-07-11.
+NL_GLOSSES.update({
+    "scherm": "the screen", "telefoon": "the phone", "sociale": "social (inflected)",
+    "media": "media", "chat": "chat (with ik)", "apps": "apps",
+    "schermtijd": "screen time", "gewoonte": "the habit",
+    "doorbrengen": "to spend (time)", "hun": "their",
+    "Sociale": "Social (inflected)", "gezond": "healthy",
+    "Probeer": "Try (imperative)", "brengen": "to bring; to spend (time) (part of doorbrengen)",
+    "Eigenlijk": "actually", "kijk": "look (with ik)",
+    "Jawel": "yes indeed (contradicting a negative assumption)",
+    "wegleggen": "to put away", "probeer": "try (with ik)",
+})
+
+# A2 unit 76 (drukke week/describing a weekly schedule), added 2026-07-11.
+NL_GLOSSES.update({
+    "cursus": "the course", "volgorde": "the order; sequence",
+    "Ten": "finally (part of 'ten slotte')", "slotte": "finally (part of 'ten slotte')",
+    "avondeten": "the dinner; evening meal",
+    "doordeweekse": "weekday (adjective, as in 'doordeweekse dag')",
+    "Door": "through; because of; during (as in 'door de week')",
+    "verschil": "the difference", "agenda": "the schedule; planner",
+    "zit": "sits; is (with hij/zij, idiomatic 'zit vol' = is full)",
+    "vol": "full", "Volgende": "next", "druk": "busy",
+    "woensdagavond": "Wednesday evening", "taalcursus": "the language course",
+    "leest": "reads (with hij/zij)", "Best": "pretty; quite (degree adverb, as in 'best druk')",
+    "vrij": "free; off (a day)", "lekkers": "something tasty (as in 'iets lekkers')",
+    "gewoon": "just; simply",
+})
+
+# A2 unit 77 (iets terugbrengen/shopping complaint and returns), added
+# 2026-07-11.
+NL_GLOSSES.update({
+    "koptelefoon": "the headphones", "kapot": "broken",
+    "linkerkant": "the left side", "geld": "the money",
+    "ruilen": "to exchange", "terugkrijgen": "to get back",
+    "bonnetje": "the receipt", "geleden": "ago",
+    "retourbeleid": "the return policy", "artikel": "the item; article",
+    "terugbrengen": "to return (an item)", "regel": "arrange (with ik, part of regelen)",
+    "Retourbeleid": "the return policy", "aankoop": "the purchase",
+    "defect": "defective", "exemplaar": "the copy; item (replacement)",
+    "teruggekregen": "got back (past participle of terugkrijgen)",
+})
+
 # Case variants are tokens in their own right because provenance preserves the
 # realization spelling. Their gloss is the explicit lexical gloss above.
 for _token in (
@@ -719,6 +810,52 @@ NOUNS.update({
     "vrijwilliger", "vaardigheid", "vaardigheden", "werktijden",
     "klantcontact", "gesprek",
     "Ervaring", "Werktijden",
+})
+
+# A2 unit 74 (reisvertraging/travel disruption), added 2026-07-11.
+PROPER_NOUNS.update({"Arnhem", "Amersfoort", "NS"})
+PREPOSITIONS.update({"door", "via", "Over"})
+ADJECTIVES.update({"alternatieve", "Belangrijke"})
+ADVERBS.update({"ongeveer", "inderdaad", "even"})
+VERBS.update({
+    "valt", "mis", "rijden", "kunnen", "omreizen", "duurt", "adviseren",
+    "raadplegen", "uitgevallen", "weten", "Kunt",
+})
+NOUNS.update({
+    "seinstoring", "aansluiting", "servicebalie", "verbinding", "intercity",
+    "mededeling", "treinen", "Reizigers", "reizigers", "reisplanner", "spoor",
+})
+
+# A2 unit 75 (schermtijd/screen time and online habits), added 2026-07-11.
+PRONOUNS.update({"hun"})
+PARTICLES.update({"Jawel"})
+ADJECTIVES.update({"sociale", "Sociale", "gezond"})
+ADVERBS.update({"Eigenlijk"})
+VERBS.update({
+    "chat", "doorbrengen", "brengen", "kijk", "wegleggen", "probeer", "Probeer",
+})
+NOUNS.update({"scherm", "telefoon", "media", "schermtijd", "gewoonte", "apps"})
+
+# A2 unit 76 (drukke week/describing a weekly schedule), added 2026-07-11.
+PREPOSITIONS.update({"Door"})
+ADJECTIVES.update({"doordeweekse", "vol", "Volgende", "druk", "vrij"})
+ADVERBS.update({"Ten", "slotte", "Best", "gewoon"})
+VERBS.update({"zit", "leest"})
+NOUNS.update({
+    "cursus", "volgorde", "avondeten", "verschil", "agenda", "woensdagavond",
+    "taalcursus", "lekkers",
+})
+
+# A2 unit 77 (iets terugbrengen/shopping complaint and returns), added
+# 2026-07-11.
+ADJECTIVES.update({"kapot", "defect"})
+ADVERBS.update({"geleden"})
+VERBS.update({
+    "ruilen", "terugkrijgen", "terugbrengen", "regel", "teruggekregen",
+})
+NOUNS.update({
+    "koptelefoon", "linkerkant", "geld", "bonnetje", "retourbeleid",
+    "artikel", "Retourbeleid", "aankoop", "exemplaar",
 })
 
 # Units 29-33 (hobbies, appearance, animals, sports, transportation), added
@@ -946,6 +1083,37 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         "ben_ik_beschikbaar": "availability_and_hours",
         "een_vacature_lezen": "job_ad_reading",
         "het_sollicitatiegesprek": "job_interview_dialogue",
+        # A2 unit 74 (reisvertraging/travel disruption), added 2026-07-11.
+        "er_is_een_vertraging": "delay_report",
+        "de_trein_valt_uit": "cancellation_report",
+        "ik_mis_mijn_aansluiting": "missed_connection",
+        "bij_de_servicebalie": "service_desk_request",
+        "mededeling_lezen": "disruption_notice_reading",
+        "lotte_bij_de_balie": "disruption_dialogue",
+        # A2 unit 75 (schermtijd/screen time and online habits), added
+        # 2026-07-11.
+        "ik_gebruik_mijn_telefoon_vaak": "phone_use_frequency",
+        "ik_chat_met_vrienden": "chat_habit",
+        "te_veel_schermtijd": "screen_time_opinion",
+        "minder_tijd_op_je_telefoon": "reduce_screen_time_opinion",
+        "blog_lezen": "screen_time_reading",
+        "omar_en_lotte_praten": "screen_time_dialogue",
+        # A2 unit 76 (drukke week/describing a weekly schedule), added
+        # 2026-07-11.
+        "op_maandag_en_woensdag": "weekly_schedule_days",
+        "eerst_werken_dan_sporten": "sequencing_activities",
+        "door_de_week_versus_weekend": "weekday_weekend_contrast",
+        "een_drukke_agenda": "busy_schedule",
+        "ninas_week_lezen": "weekly_schedule_reading",
+        "lotte_en_omar_over_de_week": "weekly_schedule_dialogue",
+        # A2 unit 77 (iets terugbrengen/shopping complaint and returns),
+        # added 2026-07-11.
+        "deze_koptelefoon_is_kapot": "broken_item_report",
+        "ik_wil_mijn_geld_terug": "refund_request",
+        "heeft_u_het_bonnetje_nog": "receipt_question",
+        "het_retourbeleid": "return_policy_statement",
+        "beleid_lezen": "return_policy_reading",
+        "omar_brengt_de_koptelefoon_terug": "return_dialogue",
     }
     semantic.append(lesson_categories[unit_lesson])
     if t in {"jij", "je"}: semantic.append("informal_address")
@@ -1610,6 +1778,43 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         semantic.append("job_beschikbaar_single")
     if t == "klantcontact":
         semantic.append("job_klantcontact_single")
+
+    # A2 unit 74 (reisvertraging/travel disruption), added 2026-07-11.
+    # Recognition-only travel-disruption vocabulary; no practice-template
+    # pack exists yet for this unit (only through a2_unit28.yaml), so no
+    # finer generative-frame tags are added -- add those alongside a future
+    # practice-template authoring pass instead, same discipline as this
+    # file's own note for unit73 above.
+    if t in {"seinstoring", "aansluiting", "servicebalie", "verbinding",
+             "intercity", "mededeling", "reisplanner", "spoor"}:
+        semantic.append("travel_disruption_vocab")
+    if t in {"rijden", "omreizen", "adviseren", "raadplegen", "weten"}:
+        semantic.append("travel_disruption_verb")
+
+    # A2 unit 75 (schermtijd/screen time and online habits), added
+    # 2026-07-11. Recognition-only, same discipline as unit74 above.
+    if t in {"scherm", "telefoon", "media", "schermtijd", "gewoonte", "apps"}:
+        semantic.append("screen_time_vocab")
+    if t in {"chat", "doorbrengen", "wegleggen", "probeer"}:
+        semantic.append("screen_time_verb")
+
+    # A2 unit 76 (drukke week/describing a weekly schedule), added
+    # 2026-07-11. Recognition-only, same discipline as unit74 above.
+    if t in {"rooster", "cursus", "volgorde", "agenda", "verschil"}:
+        semantic.append("weekly_schedule_vocab")
+    # 3-member sequencing-connector tag, verified safe generatively in
+    # "{item} werk ik, {item2} sport ik." style chaining -- kept
+    # recognition-only here since no practice-template pack exists yet to
+    # consume it as a generative frame (see the module-docstring note).
+    if t in {"eerst", "daarna", "slotte"}: semantic.append("sequence_connector")
+
+    # A2 unit 77 (iets terugbrengen/shopping complaint and returns), added
+    # 2026-07-11. Recognition-only, same discipline as unit74 above.
+    if t in {"koptelefoon", "linkerkant", "bonnetje", "retourbeleid",
+             "artikel", "aankoop", "exemplaar"}:
+        semantic.append("shopping_complaint_vocab")
+    if t in {"ruilen", "terugkrijgen", "terugbrengen", "regel"}:
+        semantic.append("shopping_complaint_verb")
 
     tags: dict[str, object] = {"semantic": list(dict.fromkeys(semantic))}
     if t in {"jij", "je"}: tags["register"] = "informal"
