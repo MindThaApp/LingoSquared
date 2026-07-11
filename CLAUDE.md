@@ -453,6 +453,34 @@ task at `docs/content/AUTHORING_GUIDE.md` (and, once it exists,
 deliverable through a SEPARATE fresh-context review task (zero access
 to the authoring reasoning) before import.
 
+**Tiered review policy (Ramin's call, 2026-07-11) — review effort must
+shrink as a lane proves itself; blanket 100% review is not the standing
+default anymore:**
+1. **Automate first.** Any rule-shaped mistake found in review becomes
+   an automated validator (compiler check or a
+   `test_content_answer_shapes.py`-style corpus test), not just a
+   guide/CLAUDE.md note — a validator catches the whole class forever
+   at zero marginal cost. Known validator backlog: the listen_select
+   same-speaker-distractor rule and the title/gloss boolean-coercion
+   gap (both Codex lane).
+2. **Sample mature lanes.** A lane = same content type + same recipe +
+   same authoring model. After ~3 consecutive zero-defect fresh-context
+   reviews in a lane, drop to reviewing 1 in 3 deliverables (chosen by
+   the reviewer, not the author). If ANY review then finds a genuinely
+   new bug class: add the validator/rule for it AND reset that lane to
+   full review.
+3. **Full review always stays for:** new bug-class territory (a new
+   exercise type, a new language, the first batches of any new recipe),
+   anything that changes grading behavior, and ALL launch-gate content
+   (en-nl/en-fa/en-prs directions) until launch.
+Rationale from the day this was adopted: pack-authoring reviews had
+converged to 0 defects (recipe mature), while the same day's nl-en
+overlay reviews surfaced a brand-new systemic bug class
+(Dutch-language `left` keys vs English rendered pairs, ungradeable,
+~22 units) that no existing rule covered — rules prevent known
+classes, review exists to discover unknown ones. Track review yield
+per lane in the review reports so tier decisions are data, not vibes.
+
 ## Tooling built by Session 3 (INFRA), 2026-07-05
 
 - `scripts/verify.sh` — one-command check: content compiler validation
