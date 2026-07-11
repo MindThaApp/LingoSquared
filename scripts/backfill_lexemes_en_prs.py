@@ -19,6 +19,12 @@ of this writing -- built correctly against current content, but a
 later content review could still touch wording. Not this script's
 problem to solve, flagged for whoever reviews next.
 
+Extended 2026-07-11 to also cover A2 units 11-18 and the full B1 course
+(units 01-06, its own separate "Dari B1" course/UNIT_FILES_B1 tuple) --
+see UNIT_FILES_A2/UNIT_FILES_B1's own header comments for why each is
+kept as a separate, locally-1-based-ordered tuple rather than appended
+to UNIT_FILES.
+
 Run via docker compose from backend/, mounting the full repo:
     cd backend
     docker compose run --rm \
@@ -231,6 +237,45 @@ UNIT_FILES_A2 = (
     (
         REPO_ROOT / "docs/content/realizations/prs/a2_unit18_shopping_complaint.yaml",
         REPO_ROOT / "docs/content/overlays/en-prs/a2_unit18.yaml",
+    ),
+)
+
+# B1 units 01-06 (abilities, necessity, conditions, sequencing, reported
+# speech, purpose), added 2026-07-11 -- these 6 units exist on disk and are
+# imported to the DB (their own separate "Dari B1" course, confirmed via
+# every b1_unitNN.yaml overlay's `course.title: Dari B1`) but were entirely
+# missing from this script, leaving B1 lessons with zero practice-pool
+# lexeme coverage. Kept as its OWN tuple with LOCAL 1-based ordering
+# (looked up against the "Dari B1" course separately in main(), never
+# mixed with UNIT_FILES/UNIT_FILES_A2's indices), same defensive pattern
+# UNIT_FILES_A2's own header comment documents and for the identical
+# reason: a bare positional index would silently resolve to the wrong
+# course's unit/lesson if either course's real unit count ever diverges
+# from this tuple's length.
+UNIT_FILES_B1 = (
+    (
+        REPO_ROOT / "docs/content/realizations/prs/b1_unit01_abilities.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/b1_unit01.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/b1_unit02_necessity.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/b1_unit02.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/b1_unit03_conditions.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/b1_unit03.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/b1_unit04_sequencing.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/b1_unit04.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/b1_unit05_reported_speech.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/b1_unit05.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/b1_unit06_purpose.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/b1_unit06.yaml",
     ),
 )
 
@@ -705,6 +750,130 @@ PRS_GLOSSES: dict[str, str] = {
     "روشنش": "turning it on / its being turned on",
     "همراه‌تان": "with you (polite)", "رسیدم": "my receipt",
     "پول‌تان": "your money (polite)",
+    # B1 unit 01 (abilities: می‌تانم/توانستن paradigm, present + past,
+    # errands dialogue, appointment reading), added 2026-07-11. Confirmed
+    # by reading docs/content/realizations/prs/b1_unit01_abilities.yaml
+    # directly. This is the FIRST B1 unit backfilled by this script --
+    # B1 is its own separate course ("Dari B1"), so these are all new
+    # (level, token) keys regardless of any bare-string overlap with
+    # A1/A2 (see UNIT_FILES_B1's own comment below for why that's safe).
+    # می‌تانم/می‌تانین are REUSED existing A1 lexemes (same paradigm,
+    # completed here with the missing persons), not re-added.
+    "می‌تانی": "you can", "بخرم": "(that) I buy", "ببینم": "(that) I see",
+    "بفرستم": "(that) I send", "کتاب": "book", "نامه": "letter",
+    "بفرستی": "(that) you send", "می‌تانه": "he/she can",
+    "می‌تانیم": "we can", "می‌تانن": "they can",
+    "ببره": "(that) he/she take", "بکنین": "(that) you (polite) do",
+    "بیایند": "(that) they come", "آنها": "they",
+    "می‌تانستم": "I could / I was able to",
+    "نتانستم": "I could not / I was not able to",
+    "می‌تانستی": "you could / you were able to",
+    "پسته خانه": "post office", "نرفت": "didn't go",
+    "ببری": "(that) you take", "راستی": "by the way",
+    "نداشتم": "I didn't have", "ملاقات": "appointment",
+    "برود": "(that) he/she go", "نتانست": "he/she could not",
+    "نزد": "near / at (someone's place)", "پارسال": "last year",
+    "بگیره": "(that) he/she take", "امسال": "this year",
+    # B1 unit 02 (necessity: باید paradigm, present + past + negation,
+    # guests dialogue, reading), added 2026-07-11. Confirmed by reading
+    # docs/content/realizations/prs/b1_unit02_necessity.yaml directly.
+    # باید/نان/کار/کمک/تشکر/مریض/بود/استراحت/خوب/برای/می‌کند/او/هم were
+    # all already glossed from earlier A1/A2 units, reused as-is.
+    # بخرم (unit01 above) and نداشتم (unit01 above) are REUSED existing
+    # B1 lexemes -- same meaning, not re-added.
+    "بخری": "(that) you buy", "خودش": "itself",
+    "همیشه": "always", "شکل": "form; shape",
+    "فعل": "verb (grammar term)", "فاعل": "subject (grammar term)",
+    "بخره": "he/she (should) buy", "بخریم": "(that) we buy",
+    "بخرین": "(that) you (plural/polite) buy", "بخرن": "(that) they buy",
+    "می‌خریدم": "I should have bought / I was supposed to buy",
+    "نباید": "must not", "نخریدم": "I didn't buy",
+    "مهمان": "guest(s)", "امشب": "tonight", "پاک": "clean",
+    "غذا": "food", "بپزم": "(that) I cook", "گوشت": "meat",
+    "می‌آیند": "they come / are coming", "نگران": "worried",
+    "نباش": "don't be (negative imperative)",
+    "می‌کرد": "he/she was doing / used to do",
+    "داشت": "had", "حالش": "his/her condition",
+    "بپزد": "(that) he/she cook",
+    # B1 unit 03 (conditions: اگر paradigm, weather negation, Friday-plan
+    # dialogue, park reading), added 2026-07-11. Confirmed by reading
+    # docs/content/realizations/prs/b1_unit03_conditions.yaml directly.
+    # داشته/باشد/باشند/می‌آیم/پارک/می‌روم/ما/باران/می‌مانیم/در/جمعه/
+    # می‌کنی/شاید/آفتابی/چای/می‌مانم/روز/دیگر/دوباره/خوبی/هوا were all
+    # already glossed from earlier A1/A2 units, reused as-is. می‌آیند
+    # (unit02 above) is a REUSED existing B1 lexeme, not re-added.
+    "باشم": "(if) I have", "باشی": "(if) you have",
+    "می‌آیی": "you come", "باشیم": "(if) we have",
+    "باشید": "(if) you (plural/polite) have", "می‌آییم": "we come",
+    "ببارد": "it rains (subjunctive)", "نبارد": "it doesn't rain",
+    "می‌رویم": "we go", "نمی‌دانم": "I don't know",
+    "می‌نوشیم": "we drink", "رفتند": "they went",
+    "ماندند": "they stayed", "نوشیدند": "they drank",
+    # آنجا is a genuine spelling variant of the already-existing "آن‌جا"
+    # (unit05 places, with a ZWNJ between آن and جا) -- this realization
+    # writes it WITHOUT the ZWNJ, a different literal string the
+    # compiler/grader compares byte-for-byte, so it needs its own entry
+    # rather than being silently treated as the same token. Flagged in
+    # this pass's report as a genuinely uncertain spelling inconsistency,
+    # not something this script should "fix" by rewriting content.
+    "آنجا": "there (spelling variant of آن‌جا, no ZWNJ)",
+    "می‌روند": "they go",
+    # B1 unit 04 (sequencing: وقتی paradigm, present + past time clauses,
+    # after-work dialogue, Homayoun's-day reading), added 2026-07-11.
+    # Confirmed by reading
+    # docs/content/realizations/prs/b1_unit04_sequencing.yaml directly.
+    # وقتی/خسته/می‌شوم/می‌شوی/می‌کنیم/می‌کنند/کردی/کمی/می‌خورم/می‌بینم/
+    # کرد/شد were all already glossed from earlier A1/A2 units, reused
+    # as-is. غذا (unit02 above) and می‌آیی (unit03 above) are REUSED
+    # existing B1 lexemes, not re-added. می‌شود/رسید/رسیدم are genuine
+    # homographs against existing A1/A2 entries with unrelated meanings
+    # (polite-request/receipt/receipt vs. this unit's become/arrive
+    # senses) -- special-cased by lesson_key/content_key in _classify()
+    # below instead of overwriting the shared dict entries, same
+    # collision class as the existing و/کی/می‌شود splits.
+    "می‌کنید": "you (plural/polite) do", "می‌شویم": "we become",
+    "می‌شوید": "you (plural/polite) become", "می‌شوند": "they become",
+    "پختم": "I cooked", "رسیدی": "you arrived",
+    "تلویزیون": "television", "خورد": "he/she ate",
+    "تمام": "complete; finished", "آمد": "he/she came",
+    # B1 unit 05 (reported speech: گفت که paradigm, reported questions,
+    # manager-news dialogue, reading), added 2026-07-11. Confirmed by
+    # reading docs/content/realizations/prs/b1_unit05_reported_speech.yaml
+    # directly. چیزی/صبح/بیایم/صحبت were all already glossed from earlier
+    # A1/A2 units, reused as-is. مهمان (unit02 above) and می‌آیی/می‌آییم
+    # (unit03 above) and می‌آیند (unit02 above) are REUSED existing B1
+    # lexemes, not re-added.
+    "گفتم": "I said", "گفتی": "you said", "گفت": "he/she said",
+    "گفتیم": "we said", "گفتید": "you (plural/polite) said",
+    "گفتند": "they said", "پرسید": "he/she asked",
+    "پرسیدم": "I asked", "مدیر": "manager", "مهم": "important",
+    "پرسیدی": "you asked", "شنید": "heard",
+    # B1 unit 06 (purpose: تا/برای اینکه paradigm, negative purpose,
+    # goals dialogue, reading), added 2026-07-11. Confirmed by reading
+    # docs/content/realizations/prs/b1_unit06_purpose.yaml directly.
+    # مکتب/انگلیسی/می‌رود/می‌خوابم/موتر/کنم/هر/دو were all already
+    # glossed from earlier A1/A2 units, reused as-is. بخرم (unit01
+    # above) and بگیرم (existing A2 lexeme, reused compositionally with
+    # یاد to mean "learn") are REUSED, not re-added. تا is a genuine
+    # homograph against the existing "counter word (pieces)" sense
+    # (A1 unit08 food) -- this unit's sense is the purpose conjunction
+    # "in order to / so that", special-cased by content_key in
+    # _classify() below, same collision class as می‌شود/رسید above.
+    "یاد": "memory (used with گرفتن: to learn)",
+    "جمع": "total; gathering (used with کردن: to save/collect)",
+    "کنی": "(that) you do", "بگیرد": "(that) he/she takes/gets",
+    "کند": "(that) he/she does", "بگیری": "(that) you take/get",
+    "بگیریم": "(that) we take/get",
+    "بگیرید": "(that) you (plural/polite) take/get",
+    "بگیرند": "(that) they take/get",
+    "کنید": "(that) you (plural/polite) do", "کنند": "(that) they do",
+    "نشوم": "(so that) I don't become",
+    "نشوی": "(so that) you don't become", "می‌خوابی": "you sleep",
+    "این‌قدر": "this much / so much",
+    "پیدا": "found (used with کردن: to find)",
+    "هدف": "goal; purpose", "می‌خواهد": "he/she wants",
+    "تلاش": "effort (used with کردن: to try hard)",
+    "بخرد": "(that) he/she buy",
 }
 
 PRS_POS: dict[str, str] = {
@@ -967,6 +1136,49 @@ PRS_POS: dict[str, str] = {
     "می‌توانید": "verb", "ظرف": "preposition", "مشکلی": "noun",
     "روشنش": "noun", "همراه‌تان": "adjective", "رسیدم": "noun",
     "پول‌تان": "noun",
+    # B1 unit 01 (abilities), added 2026-07-11.
+    "می‌تانی": "verb", "بخرم": "verb", "ببینم": "verb", "بفرستم": "verb",
+    "کتاب": "noun", "نامه": "noun", "بفرستی": "verb", "می‌تانه": "verb",
+    "می‌تانیم": "verb", "می‌تانن": "verb", "ببره": "verb",
+    "بکنین": "verb", "بیایند": "verb", "آنها": "pronoun",
+    "می‌تانستم": "verb", "نتانستم": "verb", "می‌تانستی": "verb",
+    "پسته خانه": "noun", "نرفت": "verb", "ببری": "verb",
+    "راستی": "adverb", "نداشتم": "verb", "ملاقات": "noun",
+    "برود": "verb", "نتانست": "verb", "نزد": "preposition",
+    "پارسال": "adverb", "بگیره": "verb", "امسال": "adverb",
+    # B1 unit 02 (necessity), added 2026-07-11.
+    "بخری": "verb", "خودش": "pronoun", "همیشه": "adverb",
+    "شکل": "noun", "فعل": "noun", "فاعل": "noun", "بخره": "verb",
+    "بخریم": "verb", "بخرین": "verb", "بخرن": "verb",
+    "می‌خریدم": "verb", "نباید": "verb", "نخریدم": "verb",
+    "مهمان": "noun", "امشب": "adverb", "پاک": "adjective",
+    "غذا": "noun", "بپزم": "verb", "گوشت": "noun",
+    "می‌آیند": "verb", "نگران": "adjective", "نباش": "verb",
+    "می‌کرد": "verb", "داشت": "verb", "حالش": "noun", "بپزد": "verb",
+    # B1 unit 03 (conditions), added 2026-07-11.
+    "باشم": "verb", "باشی": "verb", "می‌آیی": "verb", "باشیم": "verb",
+    "باشید": "verb", "می‌آییم": "verb", "ببارد": "verb",
+    "نبارد": "verb", "می‌رویم": "verb", "نمی‌دانم": "verb",
+    "می‌نوشیم": "verb", "رفتند": "verb", "ماندند": "verb",
+    "نوشیدند": "verb", "آنجا": "adverb", "می‌روند": "verb",
+    # B1 unit 04 (sequencing), added 2026-07-11.
+    "می‌کنید": "verb", "می‌شویم": "verb", "می‌شوید": "verb",
+    "می‌شوند": "verb", "پختم": "verb", "رسیدی": "verb",
+    "تلویزیون": "noun", "خورد": "verb", "تمام": "adjective",
+    "آمد": "verb",
+    # B1 unit 05 (reported speech), added 2026-07-11.
+    "گفتم": "verb", "گفتی": "verb", "گفت": "verb", "گفتیم": "verb",
+    "گفتید": "verb", "گفتند": "verb", "پرسید": "verb",
+    "پرسیدم": "verb", "مدیر": "noun", "مهم": "adjective",
+    "پرسیدی": "verb", "شنید": "verb",
+    # B1 unit 06 (purpose), added 2026-07-11.
+    "یاد": "noun", "جمع": "noun", "کنی": "verb", "بگیرد": "verb",
+    "کند": "verb", "بگیری": "verb", "بگیریم": "verb",
+    "بگیرید": "verb", "بگیرند": "verb", "کنید": "verb",
+    "کنند": "verb", "نشوم": "verb", "نشوی": "verb",
+    "می‌خوابی": "verb", "این‌قدر": "adverb", "پیدا": "adjective",
+    "هدف": "noun", "می‌خواهد": "verb", "تلاش": "noun",
+    "بخرد": "verb",
 }
 
 
@@ -1675,6 +1887,184 @@ def prs_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     ):
         semantics.append("shopping_complaint_phrase")
 
+    # B1 unit 01 (abilities) semantic tags, added 2026-07-11. This is the
+    # first B1 unit tagged by this function -- B1 is its own separate
+    # course ("Dari B1"), so tag-name reuse against A1/A2 tag names
+    # elsewhere in this function (e.g. "appointment_word", "location_word",
+    # "time_reference" below) is harmless: practice-pool queries are
+    # scoped by course_id, so there is no actual cross-course pooling even
+    # when the same tag string is used. "ability_verb_present" completes
+    # the می‌تانم paradigm across all 6 persons (می‌تانم/می‌تانین are
+    # REUSED existing A1 lexemes, additively tagged here). "past_ability_
+    # verb" is the past/negative paradigm. "ke_clause_subjunctive" pools
+    # every subjunctive verb form this unit teaches after a که-clause
+    # (می‌تانم که + subjunctive), spanning lessons 01-05.
+    if token in {"می‌تانم", "می‌تانی", "می‌تانه", "می‌تانیم", "می‌تانین", "می‌تانن"}:
+        semantics.append("ability_verb_present")
+    if token in {"می‌تانستم", "می‌تانستی", "نتانستم", "نتانست"}:
+        semantics.append("past_ability_verb")
+    if token in {
+        "بخرم", "ببینم", "بفرستم", "بفرستی", "ببره", "بکنین", "بیایند",
+        "برود", "ببری", "بگیره",
+    }:
+        semantics.append("ke_clause_subjunctive")
+    if token == "آنها":
+        semantics.append("plural_pronoun")
+    if token in {"کتاب", "نامه"}:
+        semantics.append("correspondence_word")
+    if token == "پسته خانه":
+        semantics.append("errand_place_word")
+    if token in {"نرفت", "نتانست", "نداشتم"}:
+        semantics.append("past_negative_verb")
+    if token == "ملاقات":
+        # Reuses the "appointment_word" tag name already used for A1
+        # unit11's قرار/جلسه and A2 unit12's تاییدی/معاینه/نوبت -- same
+        # generic concept, different course, no real pool mixing (see
+        # the module-level comment above).
+        semantics.append("appointment_word")
+    if token in {"پارسال", "امسال"}:
+        # Additive extension of the existing "time_reference" tag
+        # (A1 unit20: دیروز/امروز/فردا) -- both are genuine time-reference
+        # adverbs, same semantic role.
+        semantics.append("time_reference")
+    if token == "راستی":
+        semantics.append("byway_particle")
+    if token == "نزد":
+        # Additive extension of the existing "location_word" tag
+        # (A1 unit05: نزدیک/دور/این‌جا/آن‌جا).
+        semantics.append("location_word")
+    if lesson_key.endswith("lesson04.dialogue_errands"):
+        semantics.append("dialogue_word")
+
+    # B1 unit 02 (necessity) semantic tags, added 2026-07-11.
+    # "necessity_subjunctive_verb" is the باید + بخر- paradigm (بخرم is a
+    # REUSED existing B1 lexeme from unit01 above, additively tagged).
+    # "past_necessity_verb" (باید + imperfect stem, unfulfilled past
+    # obligation) is a genuine small closed set. "grammar_term_word"
+    # pools the metalanguage this unit's grammar note teaches (itself/
+    # always/form/verb/subject) to explain that باید never conjugates.
+    if token in {"بخرم", "بخری", "بخره", "بخریم", "بخرین", "بخرن"}:
+        semantics.append("necessity_subjunctive_verb")
+    if token in {"می‌خریدم", "می‌کرد"}:
+        semantics.append("past_necessity_verb")
+    if token in {"نباید", "نخریدم"}:
+        semantics.append("necessity_negation_word")
+    if token in {"خودش", "همیشه", "شکل", "فعل", "فاعل"}:
+        semantics.append("grammar_term_word")
+    if token in {"مهمان", "امشب"}:
+        semantics.append("guest_word")
+    if token in {"غذا", "گوشت"}:
+        # Additive extension of the existing "food_item" tag (A1 unit08:
+        # نان/پلو/قورمه/چای/آب; A1 unit10: سیب/سیب‌ها).
+        semantics.append("food_item")
+    if token in {"بپزم", "بپزد"}:
+        semantics.append("cook_verb")
+    if token in {"نگران", "نباش"}:
+        semantics.append("worry_word")
+    if token == "پاک":
+        semantics.append("clean_word")
+    if token == "داشت":
+        semantics.append("past_have_verb")
+    if token == "حالش":
+        # Additive extension of the existing "condition_word" tag
+        # (A1 unit17: حالم).
+        semantics.append("condition_word")
+    if lesson_key.endswith("lesson04.dialogue_guests"):
+        semantics.append("dialogue_word")
+
+    # B1 unit 03 (conditions) semantic tags, added 2026-07-11.
+    # "subjunctive_be_verb" is the داشته باشم/باشی/باشیم/باشید compound
+    # paradigm. "come_verb_present" is a cross-unit paradigm spanning
+    # units 02 (می‌آیند), 03 (می‌آیی/می‌آییم), and 05 (reviewed again) --
+    # all genuinely the same "come" verb, placed here since unit03 is
+    # where most of the paradigm completes. "rain_verb" and
+    # "past_verb_plural_third" (park reading) are real closed sets.
+    if token in {"باشم", "باشی", "باشیم", "باشید"}:
+        semantics.append("subjunctive_be_verb")
+    if token in {"می‌آیی", "می‌آیند", "می‌آییم"}:
+        semantics.append("come_verb_present")
+    if token in {"ببارد", "نبارد"}:
+        semantics.append("rain_verb")
+    if token in {"می‌رویم", "می‌روند"}:
+        semantics.append("go_verb_plural")
+    if token == "نمی‌دانم":
+        semantics.append("know_verb")
+    if token == "می‌نوشیم":
+        semantics.append("drink_verb_plural")
+    if token in {"رفتند", "ماندند", "نوشیدند"}:
+        semantics.append("past_verb_plural_third")
+    if token == "آنجا":
+        # Additive extension of the existing "location_word" tag, same
+        # concept as آن‌جا (the ZWNJ-having spelling) -- see the dict
+        # comment above about this being a genuine spelling variant.
+        semantics.append("location_word")
+    if lesson_key.endswith("lesson04.dialogue_friday_plan"):
+        semantics.append("dialogue_word")
+
+    # B1 unit 04 (sequencing) semantic tags, added 2026-07-11.
+    # "become_verb_plural" completes the می‌شود paradigm's plural persons
+    # (کار می‌کنید pairs with the existing می‌کنیم/می‌کنند members).
+    # "past_verb_first_b1"/"past_verb_second_b1"/"past_verb_third_b1" are
+    # this unit's own new simple-past forms (distinct from A1 unit20's
+    # own past_verb_first/second/third sets, which cover a DIFFERENT verb
+    # paradigm -- رفتم/خوردم/کردم/شدم -- kept separate rather than merged
+    # in, since combining them would mix verbs across two different
+    # courses' tag pools for no real benefit).
+    if token in {"می‌شویم", "می‌شوید", "می‌شوند"}:
+        semantics.append("become_verb_plural")
+    if token in {"پختم", "رسیدم"}:
+        semantics.append("past_verb_first_b1")
+    if token in {"رسیدی"}:
+        semantics.append("past_verb_second_b1")
+    if token in {"خورد", "آمد"}:
+        semantics.append("past_verb_third_b1")
+    if token == "تلویزیون":
+        semantics.append("household_object_word")
+    if token == "تمام":
+        semantics.append("completion_word")
+    if lesson_key.endswith("lesson04.dialogue_after_work"):
+        semantics.append("dialogue_word")
+
+    # B1 unit 05 (reported speech) semantic tags, added 2026-07-11.
+    # "report_verb_present"/"report_verb_past" are the گفت/پرسید paradigms
+    # (both completed across lessons 01-03).
+    if token in {"گفتم", "گفتی", "گفت", "گفتیم", "گفتید", "گفتند"}:
+        semantics.append("report_verb_say")
+    if token in {"پرسید", "پرسیدم", "پرسیدی"}:
+        semantics.append("report_verb_ask")
+    if token == "مدیر":
+        semantics.append("workplace_person_word")
+    if token == "مهم":
+        semantics.append("important_word")
+    if token == "شنید":
+        semantics.append("hear_verb")
+    if lesson_key.endswith("lesson04.dialogue_manager_news"):
+        semantics.append("dialogue_word")
+
+    # B1 unit 06 (purpose) semantic tags, added 2026-07-11.
+    # "purpose_subjunctive_verb" pools the یاد گرفتن/جمع کردن paradigms
+    # taught together across lessons 01-02 (بخرم is a REUSED existing B1
+    # lexeme from unit01, additively tagged). "negative_purpose_verb" is
+    # the نشوم/نشوی pair (lesson03). "goal_word" is the reading/dialogue's
+    # own vocabulary (هدف/تلاش).
+    if token in {
+        "کنی", "بگیرد", "کند", "بگیری", "بگیریم", "بگیرید", "بگیرند",
+        "کنید", "کنند", "بخرم", "بخرد",
+    }:
+        semantics.append("purpose_subjunctive_verb")
+    if token in {"نشوم", "نشوی"}:
+        semantics.append("negative_purpose_verb")
+    if token in {"یاد", "جمع"}:
+        semantics.append("purpose_noun_stem")
+    if token in {"هدف", "تلاش"}:
+        semantics.append("goal_word")
+    if token == "این‌قدر":
+        semantics.append("degree_word")
+    if token == "پیدا":
+        semantics.append("find_word")
+    if lesson_key.endswith("lesson04.dialogue_goals"):
+        semantics.append("dialogue_word")
+
     tags: dict[str, object] = {}
     if semantics:
         tags["semantic"] = list(dict.fromkeys(semantics))
@@ -1799,6 +2189,54 @@ def _classify(files, level, specs, derive_phrases=False):
                         key = (level, token, "when_sense")
                         part_of_speech = "adverb"
                         english_gloss = "when"
+                    # B1 unit04 introduces THREE more genuine homographs
+                    # against existing A1/A2 entries, found and fixed while
+                    # backfilling the B1 course, 2026-07-11:
+                    # "رسید" already exists as a NOUN ("receipt," A2
+                    # unit10) -- b1_unit04.lesson05's reading passage
+                    # teaches the bare token as the 3rd-person simple past
+                    # VERB of رسیدن ("he/she arrived"), an unrelated word
+                    # that happens to share the same spelling. Same
+                    # collision class as و/می‌شود/کی above.
+                    if token == "رسید" and content_key.endswith("teach.resid"):
+                        key = (level, token, "arrived_third_person")
+                        part_of_speech = "verb"
+                        english_gloss = "he/she arrived"
+                    # "رسیدم" likewise already exists as a NOUN ("my
+                    # receipt," A2 unit18 shopping_complaint, رسید + م
+                    # possessive) -- b1_unit04.lesson03 teaches the SAME
+                    # bare string as the 1st-person simple past VERB of
+                    # رسیدن ("I arrived"). Same collision class.
+                    if token == "رسیدم" and content_key.endswith("teach.residam"):
+                        key = (level, token, "arrived_first_person")
+                        part_of_speech = "verb"
+                        english_gloss = "I arrived"
+                    # "می‌شود" gets a FOURTH genuinely distinct sense here
+                    # (on top of the three A1/A2 senses already split
+                    # above): b1_unit04.lesson02's grammar_agreement card
+                    # teaches the plain 3rd-person-present indicative
+                    # "becomes" as part of a full کار می‌کنم/... و
+                    # می‌شوم/... paradigm table, unrelated to A2-unit09's
+                    # polite-request idiom, A1-unit12's specific "wakes up"
+                    # dialogue sense, and A1-unit22's weather "will become"
+                    # sense. content_key.endswith("teach.grammar_agreement")
+                    # is reused by MANY B1 lessons for their own unrelated
+                    # grammar notes, so this one is scoped by the more
+                    # specific lesson_key instead (unique to this card).
+                    if token == "می‌شود" and lesson_key == "prs.b1.unit04.lesson02.present_time_clause_all_persons":
+                        key = (level, token, "become_third_person_b1")
+                        part_of_speech = "verb"
+                        english_gloss = "he/she becomes (third person)"
+                    # "تا" already exists as a counter word ("two pieces,"
+                    # A1 unit08 food) -- b1_unit06.lesson01 teaches the
+                    # bare token as the purpose conjunction "in order to /
+                    # so that," an unrelated grammatical function that
+                    # happens to share the same spelling. Same collision
+                    # class as the others above.
+                    if token == "تا" and content_key.endswith("teach.ta"):
+                        key = (level, token, "purpose_conjunction")
+                        part_of_speech = "particle"
+                        english_gloss = "in order to / so that"
                     existing = specs.get(key)
                     if existing is None:
                         specs[key] = {
@@ -1854,6 +2292,20 @@ def iter_specs():
     specs: dict[tuple[str, str], dict] = {}
     _classify(UNIT_FILES, "a1", specs)
     _classify(UNIT_FILES_A2, "a2", specs, derive_phrases=True)
+    # B1 is NOT passed derive_phrases=True, unlike A2 -- checked its
+    # actual teaching-card shapes before deciding this, 2026-07-11: several
+    # B1 cards introduce more than one token per card, but those are
+    # GRAMMAR-NOTE cards whose `target.text` is a full explanatory
+    # paragraph (e.g. the می‌تانم paradigm summary) or, in the reading
+    # cards, a genuine multi-sentence passage -- neither shape is the
+    # short, real, natural phrase/sentence A2's derive_phrases was built
+    # for (see backfill_lexemes.py's own _classify_fa() precedent this
+    # mirrors). Turning it on for B1 would create garbled "phrase" lexemes
+    # keyed on entire grammar explanations or full reading passages, not
+    # useful practice-pool material. B1's content shape (dialogue-driven,
+    # like A1) is a closer match to A1's own convention, which also never
+    # uses derive_phrases.
+    _classify(UNIT_FILES_B1, "b1", specs)
     yield from specs.values()
 
 
@@ -1875,7 +2327,7 @@ def main() -> int:
 
     with SessionLocal() as db:
         courses_by_level = {}
-        for level, title in (("a1", "Dari A1"), ("a2", "Dari A2")):
+        for level, title in (("a1", "Dari A1"), ("a2", "Dari A2"), ("b1", "Dari B1")):
             needed = any(spec["level"] == level for spec in specs)
             course = db.scalar(
                 select(Course).where(
