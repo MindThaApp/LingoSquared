@@ -256,7 +256,7 @@ def _instruction_block(course: Course, text_value: str) -> dict[str, str]:
         "text": text_value,
         "language_code": course.source_language,
         "direction": (
-            "rtl" if course.source_language in {"fa", "prs"} else "ltr"
+            "rtl" if course.source_language in {"ar", "fa", "prs"} else "ltr"
         ),
     }
 
@@ -522,9 +522,19 @@ def _prompt_signature(prompt: dict[str, Any]) -> tuple:
     return ("visible", texts, options, word_bank, audio)
 
 
-def _tier_order(mastery: float) -> tuple[tuple[str, ...], ...]:
+def _tier_order(
+    mastery: float,
+    tier_rotation: int = 0,
+) -> tuple[tuple[str, ...], ...]:
     if mastery < 0.3:
-        return RECOGNITION_TYPES, STRUCTURED_TYPES, PRODUCTION_TYPES
+        # Fresh/low-mastery Endless Practice items still need recognition,
+        # but broad MC templates can build for nearly every lexeme. Rotate
+        # the first-choice tier by final batch position so recognition,
+        # structured, and production formats all get first chance without
+        # changing the mastery ladder for stronger lexemes.
+        tiers = (RECOGNITION_TYPES, STRUCTURED_TYPES, PRODUCTION_TYPES)
+        rotation = tier_rotation % len(tiers)
+        return tiers[rotation:] + tiers[:rotation]
     if mastery <= 0.7:
         return STRUCTURED_TYPES, RECOGNITION_TYPES, PRODUCTION_TYPES
     return PRODUCTION_TYPES, STRUCTURED_TYPES, RECOGNITION_TYPES
@@ -661,8 +671,9 @@ def _generate_target_item(
     session_id: str | None,
     allow_existing_signature: bool = False,
     slot_candidate_cache: dict[str, dict[str, list]] | None = None,
+    tier_rotation: int = 0,
 ) -> PracticeItem | None:
-    for tier in _tier_order(mastery):
+    for tier in _tier_order(mastery, tier_rotation):
         candidates = [
             template for template in templates if template.type in tier
         ]
@@ -795,6 +806,7 @@ def _generate_prioritized(
             source=source,
             session_id=session_id,
             slot_candidate_cache=slot_candidate_cache,
+            tier_rotation=len(generated) if source == "practice" else 0,
         )
         if item is None:
             # A due lexeme must not disappear solely because its last surface
@@ -813,6 +825,7 @@ def _generate_prioritized(
                 session_id=session_id,
                 allow_existing_signature=True,
                 slot_candidate_cache=slot_candidate_cache,
+                tier_rotation=len(generated) if source == "practice" else 0,
             )
         if item is not None:
             generated.append(item)
@@ -875,6 +888,7 @@ def _generate_prioritized(
                 False if source == "practice" else attempts > len(fallback) * 2
             ),
             slot_candidate_cache=slot_candidate_cache,
+            tier_rotation=len(generated) if source == "practice" else 0,
         )
         if item is not None:
             generated.append(item)
