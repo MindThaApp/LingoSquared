@@ -127,7 +127,7 @@ unilaterally.
 | Variable | Current live state (last confirmed) | What it needs to be |
 |---|---|---|
 | `ADMIN_EMAILS` | `admin@example.com` (placeholder, confirmed 2026-07-05) | **Needs Ramin's real private email**, and his account must be registered under it. No email verification exists — whoever registers first with the literal listed address becomes admin, so set this *before* any beta invite goes out, and register Ramin's account immediately after. |
-| `CORS_ORIGINS` | `http://localhost:5173, http://localhost:5174` (confirmed 2026-07-05) | **Needs the real origin(s) beta users' browsers will load the frontend from** (a real domain or the LAN IP + port). Fails safe (rejects) if wrong, but breaks the app for every real user until fixed — a product decision (what the origin actually is), not something to infer. |
+| `CORS_ORIGINS` | `http://localhost:5173, http://localhost:5174` (confirmed 2026-07-05) | **Needs the real origin(s) beta users' browsers will load the frontend from** (a real domain or the LAN IP + port). Fails safe (rejects) if wrong, but breaks the app for every real user until fixed — a product decision (what the origin actually is), not something to infer. **If deploying the LAN web bundle (see "Frontend (LAN web)" section below), must also include `http://192.168.4.4:8011`.** |
 | `AZURE_SPEECH_KEY` / `AZURE_SPEECH_REGION` | unset (never provisioned anywhere, dev or live) | **Needs Ramin to provision an Azure Speech resource** (Azure Portal → Cognitive Services → Speech), then set both here. Without it, `fa` TTS degrades gracefully to `provider_error`/browser fallback (no crash — `tts_actually_configured()` in `backend/app/services/tts.py` already gates the Endless Practice `listen_select` generator on real credentials, not just language support) — so this is NOT a deploy blocker, just a "fa audio won't actually work" gap until provided. |
 | `GOOGLE_CLOUD_TTS_CREDENTIALS_JSON` | presumed already set on live (predates this session) — genuinely unconfirmed whether it's present, unset, or the corrupted key from the 2026-07-04 incident (see open question #1 below) | Confirm it's present and non-empty. If TTS for the 8 Google-covered languages is silently falling back to browser speech, re-verify via the debug path in `CLAUDE.md`'s Footguns section (`json.loads` → `Credentials.from_service_account_info()` → `creds.refresh()`) rather than trusting `/tts`'s silent exception-swallowing fallback. |
 | `JWT_SECRET` | presumably already set from original setup | Confirm it's a real random secret, not the `.env.example` placeholder (`replace-with-a-long-random-secret`) — never regenerate it on a running deploy without warning Ramin first (invalidates every existing session token). |
@@ -305,6 +305,93 @@ time.
    and script-strict grading on a real fa/prs exercise in the browser
    — this project's established bar is that reading a diff has never
    caught its worst bugs; only playing a real lesson has.
+
+## Frontend (LAN web)
+
+The live server (192.168.4.4) runs only the backend — nothing serves the
+frontend there today. This section stands up a static-hosting path so
+the app is reachable from a phone on the LAN tonight: an `nginx:alpine`
+`web` service (host port **8011**; 8010 is the api, 8000 is the
+unrelated `audiobookrequest` service) serving a prebuilt
+`frontend/dist`, added additively to `backend/docker-compose.yml`
+(`backend/nginx.web.conf` is its mounted config — SPA fallback via
+`try_files ... /index.html`, long-cache on hashed assets, no-cache on
+`index.html`). This is separate from, and does not replace, any future
+plan to deploy the frontend to a real hosted domain — it's the fastest
+path to "open it from a phone right now."
+
+**Build with the LAN mode, on the Mac** (bakes `VITE_API_BASE_URL` in
+at build time — there is no runtime config for this, a rebuild +
+re-deploy is required if the API origin ever changes):
+
+```bash
+cd /Users/raminazizi/dev/LingoSquared/frontend
+npm install   # only if node_modules is missing/stale for this checkout
+npm run build -- --mode production.lan
+```
+
+This picks up `frontend/.env.production.lan`
+(`VITE_API_BASE_URL=http://192.168.4.4:8010`) via Vite's `.env.[mode]`
+convention — `--mode production.lan` loads `.env.production.lan` in
+addition to the base `.env`/`.env.[mode].local` if present. Confirm
+`frontend/dist/index.html` references hashed asset filenames (e.g.
+`/assets/index-XXXXXXXX.js`) before deploying — that's the signal the
+build actually ran, not a stale copy.
+
+**Deploy the built bundle and bring the `web` service up:**
+
+```bash
+rsync -az --delete /Users/raminazizi/dev/LingoSquared/frontend/dist/ \
+  ramin@192.168.4.4:/home/ramin/LingoSquared/backend/web_dist/
+
+# nginx.web.conf and docker-compose.yml's new `web` service are already
+# synced by the normal backend rsync step (step 1) above, if that step
+# already ran this deploy. If deploying the frontend on its own, sync
+# just those two files first:
+rsync -az /Users/raminazizi/dev/LingoSquared/backend/docker-compose.yml \
+  /Users/raminazizi/dev/LingoSquared/backend/nginx.web.conf \
+  ramin@192.168.4.4:/home/ramin/LingoSquared/backend/
+
+ssh ramin@192.168.4.4 "cd /home/ramin/LingoSquared/backend && docker compose up -d web"
+```
+
+`docker compose up -d web` (not `restart`) both on first bring-up and on
+any later re-deploy of a new `dist/` — the bind-mounted directory content
+changes on every `rsync`, but if the compose file/nginx conf themselves
+changed too, `up -d` is what actually picks that up (same
+`.env`-vs-`up -d` distinction as elsewhere in this runbook, applies to
+compose-file/mount changes too, not just `.env`).
+
+**CORS — required, or every request from the phone fails:** the backend
+`.env`'s `CORS_ORIGINS` must include `http://192.168.4.4:8011` (the
+origin the phone's browser actually loads the app from), added to
+whatever origins are already there, not replacing them. This is on top
+of — not instead of — the existing "confirm `CORS_ORIGINS` matches the
+real beta-user origin" pre-flight/required-env-vars items above. After
+editing `.env` on the server, `docker compose up -d api` (not
+`restart`) to actually reload it.
+
+**Phone URL**: `http://192.168.4.4:8011` (LAN only, no HTTPS — expect a
+"not secure" browser warning, which is expected/fine for LAN
+phone-testing, not a bug).
+
+**What this worker verified vs. did not:**
+- Verified: `npm run build -- --mode production.lan` succeeds in an
+  isolated worktree (after `npm install` at the worktree root — the
+  npm-workspace footgun in `CLAUDE.md`); `dist/index.html` references
+  hashed assets; the built JS bundle contains the expected
+  `192.168.4.4:8010` API origin (confirms the env file is actually
+  picked up by this mode, not silently ignored); `nginx -t` syntax-checks
+  `backend/nginx.web.conf` cleanly via a throwaway, unpublished
+  `docker run --rm nginx:alpine nginx -t` container (no shared stack/
+  volumes/ports touched).
+- **Not verified** (out of scope for a worktree-isolated prep worker,
+  per the standing "never touch the live server / any running stack"
+  rule): the actual `docker compose up -d web` bring-up on
+  192.168.4.4, whether port 8011 is reachable through any router/
+  firewall between the phone and the LAN, and an actual phone-browser
+  load of the app end-to-end. Do these live, with Ramin present, per
+  the rest of this runbook's conventions.
 
 ## Contradictions / open questions found while synthesizing this (need Ramin's input)
 
