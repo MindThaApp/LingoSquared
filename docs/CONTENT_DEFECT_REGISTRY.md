@@ -1,0 +1,795 @@
+# Content Defect Registry
+
+Single consolidated registry of every content/code defect class ever found
+in this project, across content authoring (`docs/content/**`), the
+compiler (`scripts/compile_content.py`), the grading path
+(`backend/app/api/router.py`, `backend/app/review/grading.py`), and the
+Endless Practice engine (`backend/app/practice/service.py`). Built
+2026-07-11 for the tiered review policy adopted the same day
+(`CLAUDE.md`, commit `48cea58`) — a coordinator making a per-lane
+full/sample/validator-only review-tier call should consult this file
+first, not vibes.
+
+**Sources mined**: `CLAUDE.md` (Footguns + phase entries), the full
+`docs/BUILD_LOG.md` (10,426 lines, 2026-07-02 through 2026-07-10),
+`docs/content/AUTHORING_GUIDE.md` (20 numbered rules, each traceable to
+an incident), `review:`/`notes:` blocks across
+`docs/content/{realizations,overlays,practice}/**/*.yaml`, and
+`git log --oneline` on `master` (771 commits, ~149 fix/bug-named) with
+`git show`/`git log -1 --format=%B` follow-up on ambiguous ones.
+
+---
+
+## Section 1: Bug-class catalog
+
+Each entry: name; description; first found; instances/languages hit;
+root cause; learner impact; prevention status; how to avoid.
+
+### 1.1 First-listed-only multi-answer grading
+**Description**: `canonical_response()` only ever compiled the FIRST
+`accepted_answers` variant; `grade()` did single-value equality — every
+accepted-answer list across fa/prs/es only accepted the first-listed
+spelling variant.
+**First found**: 2026-07-04, `docs/BUILD_LOG.md` line ~202 ("CRITICAL
+FIX: multi-answer grading").
+**Instances**: systemic, every multi-variant exercise authored before
+the fix (fa/prs/es content of that date).
+**Root cause**: compiler compiled a single value; backend had no
+membership-check concept.
+**Learner impact**: correct answers other than the first-listed variant
+graded wrong.
+**Prevention status**: AUTOMATED — `correct_response` now compiles to
+`{"canonical", "accepted"}`; `backend/tests/test_multi_answer_grading.py`
++ `scripts/tests/test_compile_content.py` cover it.
+**Avoid**: none needed — mechanism-level fix, not an authoring
+discipline.
+
+### 1.2 Multi-speaker dialogue blob breaks TTS ("choking" audio)
+**Description**: dialogue teaching cards stored a whole exchange as one
+`text_block` with embedded `"Name: ..."` labels and literal newlines;
+TTS read speaker names aloud and stumbled on the raw newline.
+**First found**: 2026-07-04 (Ramin's own hands-on testing),
+`docs/BUILD_LOG.md` ~line 250.
+**Instances**: every dialogue card authored before Phase D2/D3
+(2026-07-05); confirmed residual instances in fa unit02
+(arrival/meet_mina/sara_name/ask_origin/pleased/pleased_and_enter) and
+all of fa units 04/05 — single-turn so they don't trip the validator,
+just read the name aloud.
+**Root cause**: dialogue authored as one blob instead of one
+`text_blocks` entry per speaker turn.
+**Prevention status**: AUTOMATED for NEW cards — compiler now rejects
+new dialogue cards using the old anti-pattern (Phase D2/D3,
+2026-07-05). UNPREVENTED for existing pre-Phase-D2 cards not yet
+migrated (the fa unit02/04/05 residual, `CLAUDE.md` "Known
+limitations" closing paragraph) — compiler validator only blocks
+new/edited cards, doesn't retroactively flag old ones.
+**Avoid**: always author dialogue as one `text_blocks` entry per turn
+with `target.speaker` set, never bake the name into `text`.
+
+### 1.3 `listen_select`/`listen_type`/`listen_order` had no audio at all
+**Description**: `media_asset_key` was compiled but never referenced by
+the frontend — listening exercises showed an instruction with nothing
+to play.
+**First found**: 2026-07-04, root cause of Ramin's "exercise 1 is
+impossible" report.
+**Instances**: every listening exercise, every shipped language, at
+that date.
+**Prevention status**: AUTOMATED — compiler stamps `audio_text`/
+`audio_language_code`, frontend renders a "Tap to listen" `SpeakButton`
+wired to live `/tts`.
+**Avoid**: n/a, mechanism fix.
+
+### 1.4 Exercise types shipped in content but never registered in the frontend
+**Description**: `speak_response`, `listen_order`,
+`dialogue_comprehension`, `speak_repeat`, `listen_select`, `listen_type`
+— six types valid in the backend enum and used in shipped content but
+absent from `ExerciseRenderer.tsx`'s switch, crashing the whole lesson
+with "Unsupported exercise type."
+**First found**: 2026-07-04, found by doing an exhaustive `comm` diff
+after tripping over the 2nd and 3rd instance one at a time.
+**Prevention status**: GUIDE-RULE / PROMPT-BAKED — CLAUDE.md footgun:
+"Exercise-type registration must be checked exhaustively... after any
+content or exercise-type change." No compiler-level or CI-level
+automated check exists (UNPREVENTED at the tooling layer — this is a
+manual-discipline rule, not a validator).
+**Avoid**: `comm` diff every `type:` in `docs/content/realizations/`
+against every `case` in `ExerciseRenderer.tsx` after any exercise-type
+or content-type change.
+
+### 1.5 Internal-jargon / snake_case tokens leaking into learner-facing text
+**Description**: `null_subject`, `both_speakers`, `neither_speaker` and
+similar internal tags shipped verbatim as `options`/`distractors`/
+`correct_option` text.
+**First found**: 2026-07-04 (Dari content), recurred 2026-07-04
+(en-fa/en-prs unit01/02 dialogue-comprehension) and again as a
+full-corpus sweep, commit `5da3874` ("Fix 12 internal-jargon leaks").
+**Instances**: at least 3 documented rounds, ≥15 total instances across
+en-fa/en-prs/Dari.
+**Root cause**: authoring pattern reused across files copies internal
+bookkeeping tags into learner-visible fields.
+**Prevention status**: GUIDE-RULE (`AUTHORING_GUIDE.md` §4) +
+PROMPT-BAKED sweep instruction in CLAUDE.md footguns ("grep
+`docs/content/` periodically"). UNPREVENTED by any automated
+validator — no compiler check exists for bare snake_case in
+learner-facing fields.
+**Avoid**: grep `docs/content/` for bare snake_case tokens in
+`options`/`distractors`/`correct_option` after every content round.
+
+### 1.6 `dialogue_response` built as multiple-choice but content is free-text
+**Description**: component always had an empty `options` array in
+practice (every shipped `dialogue_response` compiles to a free-text
+`{canonical, accepted}` reply), so the "Respond" button stayed
+permanently disabled.
+**First found**: 2026-07-04, live browser playthrough.
+**Prevention status**: AUTOMATED — rewritten to match `Translation.tsx`'s
+free-text pattern. No recurrence risk (component-level fix).
+
+### 1.7 `matching_pairs` answer-shape mismatch (frontend/backend/practice-engine)
+**Description**: three independent instances of dict-vs-list shape
+mismatch: (a) `MatchingPairs.tsx` submitted a flat `Record<left,right>`
+while all hand-authored `accepted_answers` are `{left,right}[]`; (b)
+`grade()`'s generic fallback had no shape canonicalization; (c) the
+Endless Practice engine's `derive_answer()` independently produces a
+FLAT dict for the same exercise type, rendered through the same
+component/grade path.
+**First found**: 2026-07-05, live claude-in-chrome walkthrough
+(`73dae0d`, `9c42e9f`, `28048ed`, and the backend half in a second
+concurrent session).
+**Instances**: every `matching_pairs` exercise in every course, both
+lesson-authored and Endless-Practice-generated, at that date.
+**Learner impact**: every matching_pairs exercise graded "Not quite"
+regardless of correctness; wrong-answer hint rendered literal
+`[object Object],[object Object]`.
+**Prevention status**: AUTOMATED — `canonical_pairs()` in
+`app/api/router.py` canonicalizes either shape into an
+order-independent frozenset; `frontend/src/lib/formatAnswer.ts`
+centralizes display; `backend/tests/test_matching_pairs_grading.py`
+covers both shapes.
+**Avoid**: whenever an exercise component's answer payload isn't
+string/string[], verify what `accepted_answers` actually looks like in
+real content AND what the Endless Practice engine independently
+produces — don't infer the contract from one side only (this is the
+general lesson CLAUDE.md draws from this incident).
+
+### 1.8 `matching_pairs` content bug: overlay `left` text translated/mismatched vs. rendered `prompt.pairs`
+**Description**: distinct from 1.7 (a shape bug) — this is a *content*
+bug: the overlay's `accepted_answers[].left` was translated into the
+source language (or otherwise didn't match) while the realization's
+`prompt.pairs` (what the frontend actually renders and the learner
+clicks) stayed in the displayed language, so `canonical_pairs()`
+correctly canonicalizes shape but the sets never matched regardless of
+learner input.
+**First found**: systemically via `backend/tests/
+test_content_answer_shapes.py` (added 2026-07-10) — 94 instances fixed
+in one pass (`44765aa`), further instances found and fixed by
+fresh-context reviews across nl-en units 25/31/38-58 and a2/25-27
+(`c8ce1ae`, `d2ccb5e`, `476acc9`, `4d64abc`, `f9a912a`).
+**Instances**: ≥94 confirmed fixed (nl-en/fa-en/prs-en X-en overlays,
+en-nl overlays keying only a subset of displayed pairs, one YAML
+boolean-coercion variant in en-fa b1 unit05); concentrated in the
+X-en directions since they share the underlying English realization.
+**Source conflict**: `CLAUDE.md`'s "Known limitations" section
+(written 2026-07-10, before `44765aa` and the nl-en fresh-context
+reviews) states "~60 matching_pairs... ~6 more matching_pairs phrasing
+mismatches" as still-open — that count is now STALE; `44765aa` alone
+fixed 92 matching_pairs instances of the same class. **Re-run
+`test_content_answer_shapes.py` against the full corpus before trusting
+either count** — this registry cannot assert the current true-zero
+state without that live re-run.
+**Root cause**: overlay authoring reflexively translates every field
+including `left`, without checking it must mirror what the realization
+actually displays.
+**Prevention status**: AUTOMATED detection (`test_content_answer_shapes.py`,
+corpus-wide, ~12,627 parametrized cases) but NOT compiler-blocking —
+the compiler's own `validate`/`compile` passes clean regardless. Fixes
+are review-driven, not automatic. Effectively GUIDE-RULE (§16 density
+guidance references correctness) + AUTOMATED-DETECTION-ONLY.
+**Avoid**: overlay `accepted_answers` for `matching_pairs` must mirror
+the realization's `prompt.pairs` verbatim on the `left` side (the
+rendered text), never translate it.
+
+### 1.9 `word_order`/`listen_order` string-vs-list shape mismatch (~84% of corpus)
+**Description**: `WordOrder.tsx` always submits a list (tile-click
+order); `canonical_response()` passes hand-authored `accepted_answers`
+through unchanged, and 146/173 (~84%) of all word_order/listen_order
+exercises corpus-wide are authored as a plain space-joined STRING.
+`normalized()` returns a list for list input, a string for string
+input — never equal regardless of tile order.
+**First found**: 2026-07-07, real user report ("Hallo, met Omar" tiles
+clicked in correct order still graded wrong), commit `ada1cdc`.
+**Instances**: 146 of 173 word_order/listen_order exercises
+corpus-wide at that date (an earlier 2026-07-06 investigation of the
+same symptom concluded "could not reproduce" because it happened to
+test one of the 24 already-working list-shaped exercises).
+**Prevention status**: AUTOMATED — new `canonical_order_tokens()`
+canonicalizes either shape before comparing.
+**Avoid**: n/a going forward, mechanism fix; general lesson — check
+grading against every shape `accepted_answers` is actually authored in
+across the real corpus, not one example.
+
+### 1.10 `word_order`/`listen_order` `accepted_answers` authored in scrambled (not sentence) order
+**Description**: distinct from 1.9 — even where the list SHAPE is
+correct, `accepted_answers` was sometimes authored in the same
+scrambled order as the display `word_bank` instead of correct sentence
+order. `word_order` grading is order-sensitive; the compiler only
+checks the accepted tokens form the same MULTISET as `word_bank` (not
+order), so this passes `validate`/`compile` clean.
+**First found**: fresh-context review of en A2 units 30-34 + fa-en
+overlays, commit `1bb596e` — 15 instances (3/unit across 5 units), all
+graded wrong regardless of what the learner clicked.
+**Prevention status**: UNPREVENTED at the compiler level — the
+compiler's multiset check cannot distinguish this from a correct
+answer; only caught by human fresh-context review or a corpus-wide
+answer-execution test (not yet built for this specific ordering
+check). Flag prominently — see Section 3.
+**Avoid**: when authoring `accepted_answers` for word_order/listen_order,
+always write the tokens in correct grammatical sentence order, never
+copy the scrambled `word_bank` order.
+
+### 1.11 RTL word-order tile assembly rendered left-to-right regardless of script
+**Description**: `word_bank`/`pairs` tokens are plain arrays with no
+per-item direction; `WordOrder.tsx`'s render container had no explicit
+`dir` and didn't inherit direction from anywhere, so Farsi/Dari tiles
+assembled visually LTR even though the underlying `chosen` click-order
+array (and grading) was always correct.
+**First found**: 2026-07-09, live Ramin report.
+**Prevention status**: AUTOMATED for this component — new
+`answerDirectionForExercise()` helper applies `dir` to both word-bank
+and answer-row containers. GUIDE-RULE (documented as a general lesson
+for any FUTURE sequence-assembly UI): any new component rendering a
+sequence of independently-clickable raw tokens needs an explicit `dir`
+prop — not automatically checked for components not yet built.
+**Avoid**: for any new tile/letter-bank UI, explicitly check/set `dir`
+before shipping; don't assume the browser handles it.
+
+### 1.12 YAML boolean coercion (`yes`/`no`/`true`/`false` unquoted)
+**Description**: PyYAML silently coerces bare `yes`/`no`/`true`/`false`/
+`on`/`off` to booleans.
+**First found**: recurring — fa unit20 `right: yes` (`4f776bb`), prs B1
+`title: Yes`/`gloss: yes` on vocabulary teaching items (`58a1248`),
+also surfaced inside the 94-instance matching_pairs fix (`44765aa`).
+**Instances**: ≥3 confirmed distinct instances across fa/prs, likely
+undercounted (this class only surfaces when something downstream
+chokes on the wrong type).
+**Root cause**: compiler's boolean-coercion validator has a confirmed
+gap — passes `compile_content.py` with 0 errors on `title`/`gloss`
+fields of vocabulary teaching items specifically (found 2026-07-08),
+then only caught later by the stricter Pydantic import schema or a
+runtime grading failure.
+**Prevention status**: PARTIALLY AUTOMATED — compiler validates some
+fields; UNPREVENTED for the title/gloss-on-vocabulary-teaching-item gap
+specifically (`CLAUDE.md` Footguns, explicit: "treat this as still
+needing a manual grep/spot-check... not just a green compile_content.py
+run"). See Section 3.
+**Avoid**: always quote `"Yes"`/`"No"` etc. as YAML string values;
+don't trust a green compiler run alone for title/gloss fields.
+
+### 1.13 `content_key` uniqueness scoped globally instead of per-course
+**Description**: fa-en/nl-en/prs-en all realize the same underlying
+English content, so their `content_key` values are identical by
+construction — a global unique DB index made the second course's
+import 500 on collision.
+**First found**: 2026-07-07, real `IntegrityError` importing nl-en into
+a DB that already had prs-en.
+**Prevention status**: AUTOMATED — migration `0015` rescoped the index
+to `(course_id, content_key)`, matching `PracticeTemplate`'s existing
+pattern. Standing rule in CLAUDE.md Footguns for any future
+content_key-bearing table.
+
+### 1.14 Endless Practice self-reference (word is both fixed anchor text and its own fillable candidate)
+**Description**: a frame's literal text collides with one of its own
+slot's real candidate values (e.g. "It's the [ordinal] of April" where
+"april" was itself tagged as a candidate `ordinal_number`, producing
+"Het is de april april").
+**First found**: multiple instances across sessions — nl-en unit07
+"sandwich", en-nl unit07 "market_quantity"/produce-quantity confusion,
+"april"/`ordinal_number` (`6636194`).
+**Prevention status**: AUTOMATED — `scripts/_practice_content_integrity_check.py`
+(2026-07-07) reproduces the real `render_frame()`/`build_prompt()`
+logic and checks all 157 practice files corpus-wide. Corpus-wide sweep
+found 0 NEW instances beyond the already-known 2 as of 2026-07-06, and
+1 more (en-prs a1_unit15, a dead-anchor variant not self-reference) on
+2026-07-07 — the checker itself is a durable tool, kept as a permanent
+validator.
+**Avoid**: n/a going forward for checked packs; run the checker after
+any new practice-pack authoring round.
+
+### 1.15 Endless Practice dead anchor (template's `lesson_content_key` resolves to a lesson introducing zero vocabulary)
+**Description**: a practice template anchored to a pure reading/review
+lesson with `introduced_tokens` summing to zero can never actually
+resolve at runtime.
+**First found**: fa-en unit23 (ad hoc catch during authoring), then
+en-prs a1_unit15 `person_name_pair.001` via the dedicated
+`_practice_content_integrity_check.py` sweep, 2026-07-07.
+**Prevention status**: AUTOMATED — same checker as 1.14, both bug
+classes covered by one tool, run corpus-wide (157 files/2056
+templates) 0/1 found respectively.
+
+### 1.16 `fill_in_blank` ambiguous open-vocabulary slot (no disambiguating context)
+**Description**: an open-vocabulary slot (colors, names, weekdays,
+occupations...) embedded in a fixed-text frame with no other anchor is
+structurally unable to tell the learner which pool member is correct,
+because `_material()` scopes the candidate pool to every lexeme from
+every completed lesson, not just the template's own anchor lesson.
+**First found**: 2026-07-06, corpus-wide audit
+(`scripts/_fill_in_blank_ambiguity_check.py`) triggered by a live
+en-nl user report of an unanswerable exercise.
+**Instances**: 251 single-slot templates flagged out of 276 total
+fill_in_blank templates project-wide (en-fa 17, fa-en 52, en-prs 29,
+prs-en 52, en-nl 47, nl-en 54), plus 6 multi-slot templates needing
+human read. 229/251 had a safe sibling exercise already covering the
+vocabulary (mechanical-removal-safe); 22 had no sibling (need real
+authoring). 43 fixed same night in untouched files; remainder deferred
+to lanes under active concurrent edit at audit time — **status of the
+remaining ~180 as of this writing is not independently re-verified by
+this registry**; a follow-up sweep in `c963e03`/`5c0b527` closed at
+least the en-prs `condition_word` instance.
+**Prevention status**: AUTOMATED DETECTION
+(`_fill_in_blank_ambiguity_check.py`, permanent tool,
+`AUTHORING_GUIDE.md` §17 references it) but fixes are manual/review-
+driven per instance, not auto-applied except the mechanical-removal
+subset.
+**Avoid**: run `_fill_in_blank_ambiguity_check.py` after authoring any
+new fill_in_blank template; if flagged with no sibling, either add
+real disambiguating context or narrow the pool.
+
+### 1.17 `fill_in_blank` true-synonym slot pools (all pool members equally correct)
+**Description**: narrower than 1.16 — real surrounding context DOES
+survive masking, but every candidate in the slot's pool is a true
+register/stress synonym of the others (je/jij, alsjeblieft/alstublieft,
+mijn/je/jouw) with nothing in the frame able to prefer one; only ONE
+was ever marked correct by the sampler.
+**First found**: 2026-07-06, same audit as 1.16, 4 confirmed instances
+(en-nl unit01/05/06).
+**Prevention status**: AUTOMATED mechanism (opt-in
+`interchangeable: true` flag on `answer_derivation`, computes every
+still-matching lexeme into a multi-answer `{canonical, accepted}`
+shape) + GUIDE-RULE `AUTHORING_GUIDE.md` §17. Detection is via the same
+`_fill_in_blank_ambiguity_check.py` tool as 1.16, but distinguishing
+"true synonym, use `interchangeable: true`" from "different word, needs
+real narrowing" (1.16) is a HUMAN judgment call, not automated.
+**Avoid**: when a flagged slot's candidates are true synonyms with no
+possible disambiguation, use `interchangeable: true` rather than
+picking one arbitrarily as correct.
+
+### 1.18 Cross-course-level (A1/A2) candidate-pool reuse breaks candidate-floor exercise types
+**Description**: `multiple_choice`/`listen_select` need ≥3 distinct
+candidates; reusing an already-classified tag across the A1/A2 course
+boundary (two separately-scoped `Course` rows at runtime) silently
+undercounts real candidates for the new course level, since the
+classification list is combined across both levels but runtime scoping
+is per-course.
+**First found**: 2026-07-07, dedicated audit after a methodology
+concern was raised about the "tag-reuse depth technique."
+**Instances**: 25 real violations across 9 files (nl-en a2_unit25/26,
+fa-en/prs-en a2_unit25-28 — mirrored since they share underlying
+English content).
+**Prevention status**: GUIDE-RULE (`AUTHORING_GUIDE.md` §18, added
+2026-07-07) — no automated per-authoring-time check exists; the audit
+script (`_practice_slot_check.py` extended with the `level` filter) is
+a detection tool, must be run manually, not wired into
+`compile_content.py`'s own validate/compile path.
+**Avoid**: filter `iter_specs()`'s own `level` field before deciding to
+use `multiple_choice`/`listen_select` across a course-level boundary;
+`word_order`/`translation` have no candidate floor and are always safe.
+
+### 1.19 `matching_pairs` needs real scale (a handful to a dozen pairs, not 2-3)
+**Description**: guide rule (§16) — thin matching_pairs pools make the
+exercise trivial/guessable.
+**First found**: established as a rule after repeated review findings;
+concrete violation counts: 29 §16 violations found across the shared
+English A1/A2 realization (`5d412a2` fixed 23/29, follow-up commits
+closed the rest), plus 9 unplayable zero-pairs matching_pairs
+exercises found separately (`194b3a2`).
+**Prevention status**: GUIDE-RULE (`AUTHORING_GUIDE.md` §16). No
+automated validator enforces a minimum pair count at compile time —
+UNPREVENTED at the tooling layer.
+
+### 1.20 Wrong/contradictory `media_asset_key` (audio references a different clip than the exercise tests)
+**Description**: an exercise's `media_asset_key` pointed at a
+completely different lesson's audio clip, or a bare vocabulary word
+list instead of the sentence actually being tested.
+**First found**: 2026-07-06, cross-language content-integrity sweep,
+bug class 3 of 5. 2 real instances found and fixed (nl unit22, en
+unit21) via a purpose-built comparison script; ~30 other candidates
+were false positives after refining to word-level comparison.
+**Prevention status**: UNPREVENTED as a standing automated check — the
+comparison script used was ad hoc for that one sweep, not integrated
+as a permanent validator (`_practice_content_integrity_check.py` and
+siblings don't cover this class). See Section 3.
+**Avoid**: when authoring/reviewing any exercise with `media_asset_key`,
+confirm the referenced clip's declared transcript actually contains
+the `tested_text`, not just that a key exists.
+
+### 1.21 `accepted_answers` missing natural multi-clause phrasing variants
+**Description**: a natural sentence has multiple valid punctuation/
+conjunction joins (e.g. "[reply]. And you?" vs. "[reply], and you?")
+but only one was authored.
+**First found**: 2026-07-06, cross-language sweep, bug class 4 of 5 —
+~28 candidates found by script, 9 highest-confidence fixed same night
+(fa-en/prs-en/nl-en/en-fr/en-es unit01, en-nl unit09/10/12/13).
+**Prevention status**: GUIDE-RULE (`AUTHORING_GUIDE.md` §12). No
+automated validator — detection was a one-off script, not a permanent
+tool. ~19 lower-confidence candidates (mostly open-ended prompts) left
+untriaged.
+**Avoid**: when authoring a tag-question or multi-clause reply pattern,
+author every natural punctuation/conjunction join as a listed variant,
+not just one.
+
+### 1.22 `listen_select` distractor is something the tested speaker actually says elsewhere in the same dialogue audio
+**Description**: a listening distractor drawn from another line of the
+same multi-turn dialogue audio, spoken by the SAME tested speaker,
+makes both options technically correct — genuinely unanswerable
+regardless of what the learner picks.
+**First found**: regression confirmed 2026-07-09 (a 2026-07-0x audit
+had already fixed this once, class regressed under overnight-pace
+authoring). nl units 44-50: 6 of 15 such exercises (40%) were
+unanswerable; commit `148240e` fixed those 6; 3 more borderline
+"assembled from separate turns" cases in nl unit42/49/50 lesson04 left
+as defensible-but-fragile. Also found: 29 more unanswerable
+`listen_select` + 1 truncated `listen_order` answer (`8a0b948`, "Fable
+plan W6"), and 17 more unanswerable `dialogue_comprehension` in
+en-de/de-en (`f622d7f`).
+**Instances**: ≥52 confirmed fixed across multiple rounds; this is a
+CONFIRMED-RECURRING class, not a one-off.
+**Prevention status**: UNPREVENTED — explicitly flagged in CLAUDE.md
+Footguns as "not yet enforced by the compiler... or the authoring
+guide." **This is a top-priority automation gap** (Section 3).
+**Avoid**: a listening distractor must be something NOT said by the
+tested speaker anywhere in that audio, full stop — verify explicitly
+when authoring/reviewing any `listen_select`/`dialogue_response` built
+from multi-turn dialogue audio.
+
+### 1.23 Apostrophe-elision defeats the compiler's untaught-vocabulary tokenizer (validator-gaming risk)
+**Description**: `TOKEN_RE = [\w‌]+` splits on apostrophes ("J'ai" →
+`{"j","ai"}`), and `validate_untaught_vocabulary` resets its `taught`
+set per (realization, overlay) file pair, not across units — so a
+genuinely-required elided subject like "J'" can appear "untaught" even
+when correctly used, tempting an author to delete it from the answer
+(making the sentence ungrammatical) rather than declare it taught.
+**First found**: 2026-07-06, French unit03 — exactly this: "J'ai deux
+sœurs" had its "J'" deleted from `word_bank`/`correct_response`
+entirely, leaving the ungrammatical "ai deux sœurs" as the only correct
+answer.
+**Instances**: 1 real user-facing instance (fr unit03) + 13 cosmetic-
+only instances (dropped "J'" in internal `tested_text` only, not in
+learner-facing fields) across fr unit02/03. No other language showed
+this exact apostrophe-elision failure mode in the same sweep.
+**Prevention status**: UNPREVENTED at the tokenizer level — the
+compiler's tokenizer gap itself was not fixed, only the one real
+instance's content. Related to 1.24 (Devanagari) — same tokenizer
+class of bug, different scripts.
+**Avoid**: never delete a token to make an "untaught vocabulary" error
+go away — add it to `introduced_tokens` instead, and check whether the
+apparent gap is a real teaching gap or a tokenizer artifact.
+
+### 1.24 Devanagari tokenizer fragmentation (compiler doesn't cleanly match combining vowel signs/virama)
+**Description**: `[\w‌]+` can fragment a Devanagari word into a shorter
+substring (e.g. "नया" → "नय"), applied lossily to both
+`introduced_tokens` and `tested_text` — an infinitive doesn't
+automatically cover its own inflected surface forms, and "already
+taught" status doesn't reliably carry across files.
+**First found**: 2026-07-10, authoring Hindi A2 content.
+**Prevention status**: UNPREVENTED — explicitly flagged in CLAUDE.md
+"Known limitations," Codex's lane
+(`scripts/compile_content.py`), not yet fixed. Same tokenizer bug
+family as 1.23.
+**Avoid**: budget extra validation-fix iterations for Hindi/Devanagari
+content; explicitly re-declare tested surface forms rather than assume
+coverage carries over.
+
+### 1.25 Case-sensitivity never modeled in grading (German Sie/sie)
+**Description**: `normalized()`/`_normalize()` unconditionally
+`.casefold()`s every string; German's formal "Sie" vs. lowercase "sie"
+("she"/"they") is a real grammatical distinction with no equivalent in
+nl/en/fa/prs content, making it ungradeable under always-casefold
+comparison.
+**First found**: 2026-07-07, the content lane authoring German
+correctly deferred teaching this contrast rather than ship an
+ungradeable exercise, and flagged it.
+**Prevention status**: AUTOMATED for hand-authored `Exercise`s — new
+`case_sensitive: bool` flag (sibling of `orthography_strict`), hard-
+blocks a case-only mismatch to `incorrect` rather than letting it fall
+into the distance-1 "almost" typo-tolerance path. NOT wired into
+Endless Practice's generated `PracticeItem`s — `PracticeTemplate` rows
+have no per-template metadata slot analogous to `Exercise.feedback`,
+and no German Endless Practice content exists yet. Gap is
+acknowledged/scoped-out, not accidental — still UNPREVENTED for any
+future German (or other case-sensitive-grammar language) Endless
+Practice content.
+**Avoid**: for any future case-sensitive grammatical distinction in
+Endless Practice content, a new mechanism will be needed first — flag
+before authoring, don't assume the Exercise-level flag covers it.
+
+### 1.26 Corpus-wide answer-shape regression test: 227 pre-existing content bugs found in one sweep
+**Description**: `backend/tests/test_content_answer_shapes.py` (added
+2026-07-10) grades every compiled exercise in the real corpus through
+the actual `grade()` path with the exact payload shape the real
+frontend component submits — a meta-finding: this class of bug
+(shape/answerability mismatches) had never been checked exhaustively
+before.
+**Findings breakdown** (as first measured, 2026-07-10; **see 1.8's
+staleness note — 94+ of the matching_pairs subset were already fixed
+by `44765aa` and later fresh-context reviews; the en-hi figure below is
+NOT independently confirmed still-open by this registry**):
+- **159 in en-hi** — see 1.27, a single systemic bug, hi units 3-19.
+- **~60 `matching_pairs`** missing correct_response entries
+  (concentrated en-nl units 2-10/22/23, duplicated once each across
+  nl-en/fa-en/prs-en units 30-58) — subset of 1.8.
+- **~6 more `matching_pairs`** phrasing mismatches — subset of 1.8.
+- **1 `en-fa` `grammar_check`** submitting a plain string against a
+  multi-answer-shaped `correct_response`.
+- **1 `en-fr` `reading_comprehension`** with no `prompt.options` at all
+  (unrenderable).
+**Prevention status**: AUTOMATED DETECTION (the test itself, permanent,
+~12,627 parametrized cases) but requires the full-repo Docker mount
+(`LINGO_REPO_ROOT=/repo`) to actually run — self-skips as "1 skipped"
+under the standard invocation, a real footgun of its own (documented in
+CLAUDE.md "Known limitations"). Fixing found instances is manual/
+review-driven, the test explicitly must NOT be weakened to pass.
+**Avoid**: run this test with the full repo mounted before trusting any
+"clean corpus" claim; do not fix by touching the test's own logic.
+
+### 1.27 en-hi comprehension exercises: `correct_response` is the Hindi source text while `prompt.options` are English glosses
+**Description**: one systemic authoring bug across all of hi units
+3-19 — every comprehension exercise's answer key is set to the Hindi
+text itself while the choosable options shown to the learner are
+English glosses, so nothing can ever match.
+**First found**: via 1.26's corpus-wide test, 2026-07-10.
+**Instances**: 159 exercises, hi units 3-19 (the entire early Hindi
+comprehension-exercise population at that date).
+**Prevention status**: UNPREVENTED / open as of the last confirmed
+check — explicitly flagged "needs a real content-authoring fix, not
+code." **This registry could not confirm current status** — hi content
+has grown since (units up to 31 exist on disk now) and later
+fresh-context reviews touched hi B1 units 01-06 (`b72166f`, 2 bugs
+fixed) but NOT the A1/A2 systemic en-hi issue by name. Treat as
+OPEN until `test_content_answer_shapes.py` is re-run against current
+hi content.
+**Avoid**: n/a — content fix needed, not an authoring-discipline rule
+yet (hi is not yet mature enough to have converged on a fix pattern).
+
+### 1.28 Dari (prs) 2pl verb-ending dialect split-brain (Iranian `-ید` vs Afghan `-ین`)
+**Description**: the prs course's own `register_policy` establishes
+the Afghan استم/استین paradigm (2pl `-ین`) and the copula was
+uniformly Afghan, but lexical 2pl verbs split by unit — some correctly
+Afghan, others Iranian `-ید` inside otherwise-authentic Afghan
+vocabulary, mixing two dialects within one register.
+**First found**: 2026-07-07, Opus fa/prs corpus audit.
+**Instances**: ~756 replacements across 37 files (16 prs realizations,
+11 en-prs overlays, 3 prs-en overlays, 10 practice packs, plus the
+backfill script) — a genuinely project-wide dialect-consistency bug.
+**Prevention status**: GUIDE-RULE (a Fable dialect ruling now
+documented as project history/precedent) but NO automated dialect-
+consistency checker exists — UNPREVENTED at the tooling layer. Purely
+relies on native/Fable review to catch a recurrence.
+**Avoid**: when authoring any new Dari content, cross-check verb
+endings against the unit's own declared `register_policy` for
+internal consistency, not just correctness in isolation.
+
+### 1.29 Homograph / polysemy collision in the lexeme classifier
+**Description**: a single token with multiple senses (تو = pronoun
+"you" vs. preposition "in/inside"; و = conjunction vs. other reading)
+gets one flat classifier entry, causing the wrong sense's tags/gloss to
+leak into unrelated exercises.
+**First found**: recurring — تو/pronoun-vs-preposition (`b7543aa`),
+و/می‌شود/کی precedent pattern cited as the established fix shape.
+**Prevention status**: GUIDE-RULE / per-instance fix pattern
+(`(level, token, sense)`-scoped classifier entries) established and
+reused successfully across languages, but NO automated homograph
+detector exists — each new homograph is still found by a human noticing
+a wrong gloss/tag leak. UNPREVENTED as a class.
+**Avoid**: when adding a new sense of an already-classified token,
+scope the classifier entry by `(level, token, sense)`, never overwrite
+the existing flat entry.
+
+### 1.30 Farsi/Dari harakat (diacritic) grading trap
+**Description**: fa/prs grade strict (no distance-1 typo tolerance,
+per the Arabic/Persian script-confusion carve-out) and normalization
+does not strip harakat (short-vowel diacritics) — a learner typing the
+natural undiacritized form of a word authored WITH harakat (e.g. کِی
+vs. plain کی) is marked wrong even though undiacritized typing is how
+real users normally type Persian/Dari.
+**First found**: fresh-context review of fa B1 units 07-11 (`e71ebe5`),
+2026-07-07.
+**Instances**: 3 typed-answer exercises in fa B1 unit11 (not the
+matching word_order tile exercise, which doesn't have this failure
+mode).
+**Prevention status**: GUIDE-RULE (add an undiacritized accepted
+variant whenever a diacritic-bearing form is the canonical answer) — no
+automated check exists. UNPREVENTED at the tooling layer.
+**Avoid**: whenever authoring a fa/prs typed-answer exercise whose
+canonical answer includes harakat, add the undiacritized form as an
+explicit accepted variant.
+
+### 1.31 Admin content import silently skipped appending new units to an already-existing course
+**Description**: `POST /admin/content/import` dedup logic only ever
+created brand-new courses, skipping any course that already existed by
+`(source_language, target_language, title)` rather than appending new
+units — every unit authored beyond a course's initial seed was stuck
+validated-on-disk but never live.
+**First found**: 2026-07-05, trying to get new fa units 3/4/5 live.
+**Prevention status**: AUTOMATED — fixed to diff incoming units against
+existing unit `order`s and append only new ones (`5b95345`); backend
+code fix, not a content-authoring discipline.
+
+### 1.32 Checkpoint retake-lock and practice-anchor bugs (backend, Farsi live QA)
+**Description**: two backend bugs found on a genuinely fresh, isolated
+en-fa/fa-en stack: a checkpoint retake-lock misbehavior and an fa-en
+practice-anchor bug.
+**First found**: 2026-07-06, live QA pass on Farsi (`82ca9d0`).
+**Prevention status**: AUTOMATED — fixed same session, covered by the
+live-QA methodology (fresh isolated stack), not a recurring content
+class per se. Included here because the SAME live-QA methodology is
+what future per-direction full-review-tier decisions should replicate.
+
+### 1.33 Frontend pages silently masking fetch errors as success/empty states
+**Description**: six pages treated a failed fetch identically to a
+genuinely-empty result, showing misleading "all done"/success UI
+instead of an error state.
+**First found**: `b3c0d29` "Fix six pages silently masking fetch errors
+as success/empty states"; a narrower instance (`ReviewPage`) fixed
+separately in `960eabe`.
+**Prevention status**: AUTOMATED (fixed) but no linter/pattern-check
+prevents a NEW page from reintroducing this shape — UNPREVENTED as a
+class for future pages.
+**Avoid**: any new data-fetching page must distinguish "fetch failed"
+from "fetch succeeded, empty result" in its rendered state.
+
+### 1.34 WCAG AA contrast failures (design-system color tokens)
+**Description**: several UI states (`.btn-danger` dark mode, feedback-
+banner, stat color tokens) failed WCAG AA contrast.
+**First found**: multiple commits (`c799507`, `47fcff9`, `a12b276`).
+**Prevention status**: AUTOMATED (fixed via new tokens, e.g.
+`--incorrect-contrast`) but no automated contrast-check runs in CI —
+UNPREVENTED as a recurring class for new color tokens.
+
+### 1.35 Guest-account data loss
+**Description**: a real data-loss bug for guest accounts, fixed
+alongside a react-query `staleTime` tuning.
+**First found**: `77c919e`.
+**Prevention status**: AUTOMATED (fixed); no dedicated regression test
+named in the commit message — verify test coverage exists before
+treating this as durably closed.
+
+---
+
+## Section 2: Per-language/direction ledger
+
+Directions with content on disk (2026-07-11): `en-nl`, `nl-en`, `en-fa`,
+`fa-en`, `en-prs`, `prs-en` (the 6 launch-gate directions, mandatory
+full review per CLAUDE.md's Tiered review policy until launch);
+`en-de`, `de-en`, `en-es`, `en-fr`, `en-hi`, `en-pl`, `en-ro` (post-launch
+drip content, in-flight).
+
+| Direction | Bug classes hit (see §1 IDs) | Instance count (approx, cumulative) | Review-tier recommendation | Justification |
+|---|---|---|---|---|
+| en-nl | 1.7, 1.8(subset), 1.9, 1.10, 1.16, 1.17, 1.19, 1.20, 1.21, 1.22, 1.26 | ~150+ across all classes (largest, most mature corpus, 88 units) | **Full** (launch-gate, mandatory until launch) | Still finding real content bugs on recent passes (1.22 regressed 2026-07-09); largest corpus = largest absolute defect surface even if defect *rate* is falling. |
+| nl-en | 1.7, 1.8 (94-fix batch concentrated here), 1.9, 1.16, 1.18, 1.21 | ~120+ (heaviest hit by 1.8's matching_pairs left-text bug: 10+ units in one review round alone) | **Full** (launch-gate) | `test_content_answer_shapes.py`'s 60+ unresolved matching_pairs instances were concentrated here as of last measurement — do not downgrade until a fresh corpus-wide re-run shows 3 consecutive zero-defect reviews. |
+| en-fa | 1.5, 1.8, 1.12, 1.16, 1.18, 1.20, 1.29, 1.30 | ~60-80 across rounds | **Full** (launch-gate) | fa is the mandatory RTL/script-strict grading target; 1.30 (harakat) is fa/prs-specific and still uncaught by any validator. |
+| fa-en | 1.7, 1.8, 1.16, 1.18, 1.28, 1.29 | ~60-80 | **Full** (launch-gate) | Same corpus family as nl-en/prs-en for shared-English bugs (1.8); 1.28's dialect fix touched fa-en overlays too. |
+| en-prs | 1.5, 1.16, 1.20, 1.28 | ~40-60 (incl. 756-replacement dialect fix) | **Full** (launch-gate) | Mandatory RTL/virtual-keyboard target; 1.28 (dialect split-brain) is prs-specific and was project-wide when found — highest-severity single incident of any direction. |
+| prs-en | 1.7, 1.8, 1.16, 1.18, 1.28 | ~60-80 | **Full** (launch-gate) | Same shared-English-content family as nl-en/fa-en. |
+| en-de / de-en | 1.22 (17 instances), 1.25 | ~20-30 | **Full** — new territory (German just started, only 10 units) | Per policy §3, new languages get full review regardless of other lanes' maturity; 1.25 (case_sensitive) is de-specific and genuinely novel. |
+| en-hi | 1.24, 1.26, 1.27 | 159+ (single systemic bug dominates) | **Full**, and BLOCKED from downgrading until 1.27 is confirmed fixed | 1.27 alone (159 unanswerable exercises, hi units 3-19) is the single largest unresolved defect count of any direction in this registry — do not sample this lane. |
+| en-ro | 1.10-class (word-order/answer-shape), plus 1 confirmed grammar bug (plece 3sg/3pl syncretism distractor, `329ca85`) | 1 confirmed | **Sample** candidate once ≥3 consecutive zero-defect reviews land (currently 1 review, 1 bug found — not yet eligible) | Recipe reused from nl-en/fa-en/prs-en pattern (mature), but ro itself has had only 1 fresh-context review round so far. |
+| en-pl | genitive-case grammar bug (`974d00c`, `665aa31`) | 1 confirmed | **Sample** candidate, not yet eligible (only 1 review round) | Same status as ro — mature recipe, immature per-language review history. |
+| en-es / es-en | 1.2 residual (legacy dialogue format fixed `2ea892e`), parked per CLAUDE.md scope decision | low (content frozen, not actively growing) | **Validator-only** | Explicitly parked ("finish in-flight units, then park until nl is done") — no active authoring means no new-defect risk; existing content already compiler-clean. |
+| en-fr / fr-en | 1.23 (apostrophe-elision, fr-specific) | 1 confirmed + 13 cosmetic | **Validator-only** (same parked status as es) | Same parked status; 1.23 is closed for the one real instance found. |
+
+**Caveat on this table**: instance counts are reconstructed from
+BUILD_LOG/commit-message language, not a fresh corpus query — several
+entries (notably en-hi's 159 and nl-en's matching_pairs count) have
+documented staleness (see 1.8, 1.26, 1.27). Before acting on a
+downgrade recommendation, re-run `test_content_answer_shapes.py`,
+`_fill_in_blank_ambiguity_check.py`, and `_practice_content_integrity_check.py`
+against current content for that direction.
+
+---
+
+## Section 3: Top gaps (UNPREVENTED classes, ranked by expected recurrence risk)
+
+1. **1.22 — `listen_select` same-speaker distractor (unanswerable
+   listening exercises).** Already regressed once after being fixed
+   once (nl units 44-50 after an earlier W6 fix). Highest recurrence
+   risk of any class in this registry — proven to recur under
+   overnight/fast-paced authoring specifically. **Next step**: build a
+   corpus-wide checker (sibling to `_practice_content_integrity_check.py`)
+   that cross-references every `listen_select`/`dialogue_response`
+   distractor against the full transcript of its own `media_asset_key`
+   audio for the same speaker. **Lane**: compiler validator = Codex;
+   the checker script pattern itself (script-only, no schema change)
+   could also be built content-lane-side as an interim measure, same
+   as `_fill_in_blank_ambiguity_check.py` was.
+2. **1.10 — word_order/listen_order `accepted_answers` in scrambled
+   (not sentence) order.** The compiler's multiset check cannot
+   distinguish this from a correct answer by construction; only found
+   via full fresh-context review (15 instances in one 5-unit review).
+   **Next step**: a corpus-wide script comparing each `word_order`/
+   `listen_order` `accepted_answers` sequence against a
+   grammaticality heuristic, or — more reliably — flagging any
+   template where `accepted_answers` token order exactly equals
+   `word_bank` display order (a strong scrambled-copy signal).
+   **Lane**: content-lane script (pattern precedent:
+   `_fill_in_blank_ambiguity_check.py`).
+3. **1.27 — en-hi systemic comprehension-answer bug (159 instances).**
+   Largest single unresolved defect count in the corpus, status
+   unconfirmed. **Next step**: re-run
+   `test_content_answer_shapes.py` against current hi content
+   immediately, then dispatch a dedicated fresh-context content-fix
+   pass. **Lane**: content lane (Hindi authoring), verification =
+   Claude session.
+4. **1.24 — Devanagari tokenizer fragmentation.** Structural compiler
+   gap, actively costing extra iteration time on every Hindi
+   authoring round. **Next step**: fix `TOKEN_RE` (or add a
+   Devanagari-aware tokenization path) in `scripts/compile_content.py`.
+   **Lane**: Codex (compiler).
+5. **1.12 — YAML boolean-coercion gap on title/gloss fields of
+   vocabulary teaching items.** Confirmed gap, not yet closed; explicit
+   backlog item named in CLAUDE.md's own Tiered review policy adoption
+   note ("Known validator backlog"). **Next step**: widen the existing
+   boolean-coercion validator to cover `title`/`gloss` specifically.
+   **Lane**: Codex (compiler).
+6. **1.20 — Wrong/contradictory `media_asset_key`.** No permanent
+   validator exists (the 2026-07-06 sweep used a throwaway script).
+   **Next step**: promote that comparison script (transcript-vs-
+   `tested_text` word-level match) into a permanent corpus-wide checker
+   alongside `_practice_content_integrity_check.py`. **Lane**:
+   content-lane script initially, candidate for Codex compiler
+   integration later.
+7. **1.28 / 1.29 — Dialect split-brain and homograph collisions
+   (fa/prs).** No automated dialect-consistency or homograph detector
+   exists; both rely entirely on native/Fable review. **Next step**: at
+   minimum, a script cross-referencing verb-ending suffixes against
+   each unit's own declared `register_policy` for internal consistency
+   (catches 1.28-shaped bugs specifically). **Lane**: content-lane
+   script; full homograph detection (1.29) is likely infeasible to
+   fully automate and should stay a review-discipline item.
+8. **1.30 — Farsi/Dari harakat grading trap.** No automated check for
+   "canonical answer has harakat but no undiacritized accepted
+   variant exists." **Next step**: a corpus script flagging any fa/prs
+   typed-answer exercise whose sole accepted answer contains a harakat
+   character with no diacritic-stripped sibling variant. **Lane**:
+   content-lane script.
+9. **1.4 — Exercise-type registration drift.** Currently a pure
+   manual-discipline rule (`comm` diff). **Next step**: a CI/verify.sh
+   step that runs the same `comm` diff automatically after any
+   exercise-type-touching change, failing the build if a used type is
+   unregistered in `ExerciseRenderer.tsx`. **Lane**: frontend/Claude
+   session (verify.sh is INFRA/Claude-owned tooling).
+10. **1.19 — matching_pairs minimum scale.** GUIDE-RULE only, no
+    compile-time enforcement of a minimum pair count. **Next step**: add
+    a minimum-pairs-count check to the compiler validator (mirrors the
+    existing candidate-count floor already enforced for
+    multiple_choice/listen_select). **Lane**: Codex (compiler).
+
+---
+
+## Section 4: Maintenance rule
+
+**Every future fresh-context review report must append its findings
+here** — as a new dated entry under a running "Recent review yield log"
+subsection (create it the first time this rule is exercised, below this
+line), in the form:
+
+```
+### YYYY-MM-DD — <direction> <units> (<reviewer/session>)
+Bug classes found: <§1 IDs, or "none — 0 defects">
+New bug class discovered: <yes/no; if yes, add a new §1 entry and reset
+  that lane's review tier to full per the Tiered review policy>
+Instance count: <N, including 0>
+```
+
+**Zero-yield entries are data, not noise** — three consecutive
+zero-defect reviews in a lane is the trigger to downgrade that lane to
+1-in-3 sampling per CLAUDE.md's Tiered review policy. Do not skip
+logging a clean review just because there's nothing to fix; the
+absence of a bug is exactly the evidence a tier-downgrade decision
+needs. Whoever runs `codex:rescue`, a fresh-context review dispatch, or
+any manual review pass is responsible for this entry before closing out
+that task — not a follow-up chore for someone else.
+
+### Recent review yield log
+
+(none logged yet under this rule as of 2026-07-11 — this registry's own
+creation predates the rule's first live use)
