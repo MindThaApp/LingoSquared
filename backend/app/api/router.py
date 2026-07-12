@@ -1,4 +1,5 @@
 import csv
+import hashlib
 import io
 import logging
 import mimetypes
@@ -12,7 +13,7 @@ from fastapi import APIRouter, Depends, File, Form, Query, Request, Response, Up
 from fastapi.responses import FileResponse, JSONResponse
 from starlette.concurrency import run_in_threadpool
 from sqlalchemy import Float, case, delete, func, select, text
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, selectinload
 from app.core.config import get_settings
 from app.core.rate_limit import DailyCharBudget, RateLimiter, register_limiter
 from app.core.security import create_refresh_token, create_token, hash_password, verify_password
@@ -26,6 +27,7 @@ from app.models import (
     Course,
     Exercise,
     ExerciseAttempt,
+    FeedbackAttachment,
     GrammarProgress,
     Language,
     Lesson,
@@ -43,6 +45,7 @@ from app.models import (
     UnitSection,
     User,
     UserAchievement,
+    UserIdentity,
     UserLexemeSRS,
     UserStats,
     VocabularyProgress,
@@ -57,6 +60,7 @@ from app.schemas.api import (
     ContentCoverageOut,
     ContentIssueCategory,
     ContentIssueCreatedOut,
+    FeedbackAttachmentUploadOut,
     ContentIssueOut,
     ContentIssueReportIn,
     ContentIssueStatus,
@@ -94,6 +98,7 @@ from app.schemas.api import (
     ReviewDueOut,
     ReviewItemsOut,
     ReviewSessionIn,
+    SocialLoginIn,
     STTOut,
     StartOut,
     StreakOut,
@@ -116,7 +121,9 @@ from app.review.grading import (
 )
 from app.services import tts as tts_service
 from app.services import stt as stt_service
+from app.services import social_auth
 from app.services import push as push_service
+from app.services import feedback_attachments as feedback_attachment_service
 from app.practice.service import (
     generate_batch,
     generate_checkpoint,
@@ -161,6 +168,9 @@ STT_RATE_LIMIT = register_limiter(RateLimiter(limit=_rate_limit_settings.stt_rat
 GENERATION_RATE_LIMIT = register_limiter(RateLimiter(limit=_rate_limit_settings.generation_rate_limit_max, window_seconds=60))
 # Phase H4: content-issue report endpoints never had any rate limit.
 REPORT_RATE_LIMIT = register_limiter(RateLimiter(limit=_rate_limit_settings.report_rate_limit_max, window_seconds=60))
+# Screenshot uploads are unauthenticated for the same reason as /feedback
+# itself, so they get their own per-IP limiter at the same ceiling/window.
+FEEDBACK_ATTACHMENT_RATE_LIMIT = register_limiter(RateLimiter(limit=_rate_limit_settings.report_rate_limit_max, window_seconds=60))
 
 def client_ip(request: Request) -> str:
     return request.client.host if request.client else "unknown"
@@ -232,6 +242,51 @@ def auth_response(db:Session,user):
 def refresh_response(db:Session,user_id:str):
     refresh_token=issue_refresh_token(db,user_id)
     return {"access_token":create_token(user_id),"refresh_token":refresh_token,"token_type":"bearer","expires_in":get_settings().access_token_expire_seconds}
+def social_audiences(provider:str) -> set[str]:
+    settings=get_settings()
+    return settings.google_oauth_client_id_set if provider=="google" else settings.apple_audience_id_set
+def social_display_name(body:SocialLoginIn,claims:dict,email:str|None) -> str:
+    name=body.display_name or claims.get("name")
+    if isinstance(name,str) and name.strip():
+        return name.strip()[:100]
+    if email and "@" in email:
+        return email.split("@",1)[0][:100]
+    return f"{body.provider.title()} user"
+def synthetic_social_email(provider:str,subject:str) -> str:
+    digest=hashlib.sha256(f"{provider}:{subject}".encode()).hexdigest()[:24]
+    return f"{provider}-{digest}@social.lingosquared.example"
+def resolve_social_user(db:Session,body:SocialLoginIn,claims:dict):
+    provider=body.provider
+    subject=claims["sub"]
+    identity=db.get(UserIdentity,(provider,subject))
+    if identity:
+        user=db.get(User,identity.user_id)
+        if user:
+            return user
+        fail(401,"invalid_credentials","Invalid social sign-in token")
+
+    raw_email=claims.get("email")
+    email=raw_email.strip().lower() if isinstance(raw_email,str) and raw_email.strip() else None
+    email_verified=social_auth.email_is_verified(provider,claims)
+    if email and email_verified:
+        existing=db.scalar(select(User).where(User.email==email))
+        if existing:
+            db.add(UserIdentity(user_id=existing.id,provider=provider,provider_subject=subject))
+            return existing
+
+    existing_email_user=db.scalar(select(User).where(User.email==email)) if email else None
+    user_email=email if email and not existing_email_user else synthetic_social_email(provider,subject)
+    user=User(
+        email=user_email,
+        password_hash=None,
+        display_name=social_display_name(body,claims,email),
+        is_admin=bool(email and email_verified and email in get_settings().admin_email_set),
+    )
+    db.add(user)
+    db.flush()
+    db.add(UserStats(user_id=user.id,total_xp=0,streak_days=0,last_activity_date=None,daily_goal=20))
+    db.add(UserIdentity(user_id=user.id,provider=provider,provider_subject=subject))
+    return user
 def resolve_script(db, language_code):
     if not language_code:
         return None
@@ -333,9 +388,20 @@ def register(body:RegisterIn,request:Request,db:Session=Depends(get_db)):
 def login(body:LoginIn,request:Request,db:Session=Depends(get_db)):
     enforce_rate_limit(LOGIN_RATE_LIMIT,client_ip(request),"login_rate_limited","Too many login attempts. Please wait before trying again.")
     user=db.scalar(select(User).where(User.email==body.email.lower()))
-    if not user or not verify_password(body.password,user.password_hash): fail(401,"invalid_credentials","Invalid email or password")
+    if not user or not user.password_hash or not verify_password(body.password,user.password_hash): fail(401,"invalid_credentials","Invalid email or password")
     valid_tz=valid_timezone_or_none(body.timezone)
     if valid_tz and valid_tz!=user.timezone: user.timezone=valid_tz
+    return auth_response(db,user)
+@router.post("/auth/social",response_model=AuthOut)
+def social_login(body:SocialLoginIn,db:Session=Depends(get_db)):
+    audiences=social_audiences(body.provider)
+    if not audiences:
+        fail(503,"social_login_unavailable",f"{body.provider.title()} social login is not configured")
+    try:
+        claims=social_auth.verify_id_token(body.provider,body.id_token,audiences)
+    except social_auth.SocialTokenError:
+        fail(401,"invalid_credentials","Invalid social sign-in token")
+    user=resolve_social_user(db,body,claims)
     return auth_response(db,user)
 @router.post("/auth/refresh",response_model=RefreshOut)
 def refresh(body:RefreshIn,request:Request,db:Session=Depends(get_db)):
@@ -372,7 +438,16 @@ def logout(body:LogoutIn,request:Request,db:Session=Depends(get_db)):
         db.commit()
     return Response(status_code=204)
 @router.get("/auth/me",response_model=MeOut)
-def me(user=Depends(current_user)): return user
+def me(user=Depends(current_user),db:Session=Depends(get_db)):
+    identities=list(db.scalars(select(UserIdentity).where(UserIdentity.user_id==user.id).order_by(UserIdentity.created_at)))
+    return {
+        "id":user.id,
+        "email":user.email,
+        "display_name":user.display_name,
+        "is_admin":user.is_admin,
+        "created_at":user.created_at,
+        "identities":[{"provider":identity.provider,"created_at":identity.created_at} for identity in identities],
+    }
 @router.get("/me/export")
 def export_me(response:Response,user=Depends(current_user),db:Session=Depends(get_db)):
     # GDPR-style data-portability export: everything reasonably tied to this
@@ -554,12 +629,22 @@ def report_practice_item_issue(item_id:str,body:ContentIssueReportIn,request:Req
     issue=ContentIssueReport(reporter_user_id=user.id,practice_item_id=item_id,category=body.category,description=body.description,learner_response=body.learner_response,client_context={"user_agent":request.headers.get("user-agent",""),"accept_language":request.headers.get("accept-language","")})
     db.add(issue); db.commit(); db.refresh(issue)
     return issue
+@router.post("/feedback/attachments",response_model=FeedbackAttachmentUploadOut,status_code=201)
+def upload_feedback_attachment(request:Request,file:UploadFile=File(...),db:Session=Depends(get_db)):
+    enforce_rate_limit(FEEDBACK_ATTACHMENT_RATE_LIMIT,client_ip(request),"report_rate_limited","Too many reports submitted too quickly. Please slow down.")
+    attachment=feedback_attachment_service.store_feedback_attachment(db,file)
+    return {
+        "attachment_key":attachment.key,
+        "expires_in_seconds":feedback_attachment_service.FEEDBACK_ATTACHMENT_EXPIRES_SECONDS,
+    }
 @router.post("/feedback",response_model=ContentIssueCreatedOut,status_code=201)
 def report_general_feedback(body:GeneralFeedbackIn,request:Request,user=Depends(lenient_current_user),db:Session=Depends(get_db)):
     rate_key=user.id if user else client_ip(request)
     enforce_rate_limit(REPORT_RATE_LIMIT,rate_key,"report_rate_limited","Too many reports submitted too quickly. Please slow down.")
     issue=ContentIssueReport(reporter_user_id=user.id if user else None,exercise_id=None,practice_item_id=None,page_path=body.page_path,category=body.category,description=body.description,client_context=body.client_context)
-    db.add(issue); db.commit(); db.refresh(issue)
+    db.add(issue); db.flush()
+    feedback_attachment_service.claim_feedback_attachments(db,issue,body.attachment_keys)
+    db.commit(); db.refresh(issue)
     return issue
 @router.post("/lessons/{lesson_id}/complete", response_model=CompleteOut)
 def complete(
@@ -1966,7 +2051,7 @@ def missing(user=Depends(admin_user),db:Session=Depends(get_db)):
     return {"missing_language_pairs":[{"source_language":a,"target_language":b} for a in codes for b in codes if a!=b and (a,b) not in present],"missing_content_kinds":sorted({"vocabulary","phrase","grammar_note","dialogue","pronunciation_note","cultural_note","reading"}-kinds)}
 @router.get("/admin/content/issues",response_model=list[ContentIssueOut])
 def content_issues(status:ContentIssueStatus|None=None,category:ContentIssueCategory|None=None,limit:int=Query(100,ge=1,le=200),offset:int=Query(0,ge=0),user=Depends(admin_user),db:Session=Depends(get_db)):
-    q=select(ContentIssueReport); q=q.where(ContentIssueReport.status==status) if status else q; q=q.where(ContentIssueReport.category==category) if category else q
+    q=select(ContentIssueReport).options(selectinload(ContentIssueReport.attachments)); q=q.where(ContentIssueReport.status==status) if status else q; q=q.where(ContentIssueReport.category==category) if category else q
     issues=list(db.scalars(q.order_by(ContentIssueReport.created_at.desc(),ContentIssueReport.id.desc()).offset(offset).limit(limit)))
     # Triage enrichment (see ContentIssueOut / docs/CONTRACT.md): resolve
     # each referenced exercise/practice item's prompt (+ the exercise's
@@ -1989,7 +2074,7 @@ def content_issues(status:ContentIssueStatus|None=None,category:ContentIssueCate
     return out
 @router.patch("/admin/content/issues/{issue_id}",response_model=ContentIssueOut)
 def update_content_issue(issue_id:str,body:ContentIssueUpdateIn,user=Depends(admin_user),db:Session=Depends(get_db)):
-    issue=db.get(ContentIssueReport,issue_id)
+    issue=db.scalar(select(ContentIssueReport).options(selectinload(ContentIssueReport.attachments)).where(ContentIssueReport.id==issue_id))
     if not issue: fail(404,"content_issue_not_found","Content issue report not found")
     if body.duplicate_of_id:
         if body.duplicate_of_id==issue.id: fail(422,"invalid_duplicate_target","An issue cannot duplicate itself")
@@ -2004,6 +2089,15 @@ def update_content_issue(issue_id:str,body:ContentIssueUpdateIn,user=Depends(adm
         issue.status=body.status
     db.commit(); db.refresh(issue)
     return issue
+@router.get("/admin/content/issues/{issue_id}/attachments/{attachment_id}")
+def content_issue_attachment(issue_id:str,attachment_id:str,user=Depends(admin_user),db:Session=Depends(get_db)):
+    attachment=db.get(FeedbackAttachment,attachment_id)
+    if not attachment or attachment.report_id!=issue_id:
+        fail(404,"feedback_attachment_not_found","Feedback attachment not found")
+    path=feedback_attachment_service.feedback_attachment_path(attachment.key)
+    if not path.is_file():
+        fail(404,"feedback_attachment_file_missing","Feedback attachment file is missing")
+    return FileResponse(path,media_type=attachment.content_type)
 @router.get("/admin/content/coverage",response_model=list[ContentCoverageOut])
 def content_coverage(user=Depends(admin_user),db:Session=Depends(get_db)):
     rows=db.execute(
