@@ -275,6 +275,79 @@ additive `"identities": [{"provider": "google", "created_at": "..."}]` field
 
 `GET /auth/me` response: `{ "id", "email", "display_name", "is_admin", "created_at", "identities" }`.
 
+**Admin user management**
+
+Every endpoint in this section is admin-only, enforced server-side by the
+same `/admin/*` guard as content import. Admin status is true when either the
+normalized email is listed in `ADMIN_EMAILS` or the persisted `users.is_admin`
+column is true. `ADMIN_EMAILS` remains the bootstrap escape hatch.
+
+`POST /admin/users` request:
+```json
+{ "email": "string", "display_name": "string" }
+```
+response `201`:
+```json
+{
+  "user": { "id": "uuid", "email": "string", "display_name": "string", "created_at": "iso-datetime", "xp": 0, "streak": 0, "last_activity": null, "enrolled_courses": [], "is_admin": false, "is_active": true },
+  "temporary_password": "server-generated plaintext shown once"
+}
+```
+The temporary password is cryptographically random, stored only as a hash, and
+never retrievable again.
+
+`GET /admin/users?q=&limit=50&offset=0` response:
+```json
+{
+  "items": [
+    { "id": "uuid", "email": "string", "display_name": "string", "created_at": "iso-datetime", "xp": 0, "streak": 0, "last_activity": null, "enrolled_courses": [ { "id": "uuid", "title": "string" } ], "is_admin": false, "is_active": true }
+  ],
+  "total": 1,
+  "limit": 50,
+  "offset": 0
+}
+```
+`q` searches email/display name case-insensitively. `last_activity` is the
+user stats `last_activity_date`.
+
+`POST /admin/users/{id}/reset-password` response:
+```json
+{ "temporary_password": "new server-generated plaintext shown once" }
+```
+The old password stops working immediately; existing refresh tokens are
+revoked.
+
+`POST /admin/users/{id}/deactivate` and
+`POST /admin/users/{id}/activate` return the same user object as list rows.
+Inactive users are refused at password/social login and token refresh, and
+existing access tokens stop working because authenticated dependencies reject
+inactive users on every request. Deactivation also revokes existing refresh
+tokens.
+
+`DELETE /admin/users/{id}` permanently deletes that user and user-owned
+learning state, using the same cascade behavior as `DELETE /me`. Returns
+`204 No Content`.
+
+`POST /admin/users/{id}/admin` request:
+```json
+{ "is_admin": true }
+```
+response: the same user object as list rows. Demoting the last remaining
+admin is refused with `409 last_admin`.
+
+`POST /admin/users/{id}/unlock` request:
+```json
+{ "course_id": "uuid, optional", "unit_id": "uuid, optional", "lesson_id": "uuid, optional" }
+```
+Exactly one target selector may be supplied. Response:
+```json
+{ "completed_lessons": 0, "passed_checkpoints": 0, "introduced_lexemes": 0 }
+```
+The endpoint marks the targeted lesson/unit/course state exactly like normal
+completion/checkpoint paths: completed `lesson_progress`, matching
+`skill_progress`, passed unit checkpoints, and due SRS rows for introduced
+lexemes. It does not weaken normal unlock rules for anyone else.
+
 `GET /me/export` (auth required) returns the authenticated account's complete
 data export as one JSON document — the data-portability counterpart to
 `DELETE /me` (export before deleting; deletion is irreversible). Served with a

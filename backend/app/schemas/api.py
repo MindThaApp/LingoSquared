@@ -50,6 +50,35 @@ class AuthOut(BaseModel): access_token:str; refresh_token:str; token_type:Litera
 class RefreshIn(BaseModel): refresh_token:str=Field(min_length=1,max_length=512)
 class RefreshOut(BaseModel): access_token:str; refresh_token:str; token_type:Literal["bearer"]="bearer"; expires_in:int
 class LogoutIn(BaseModel): refresh_token:str=Field(min_length=1,max_length=512)
+class AdminUserCreateIn(BaseModel): email:EmailStr; display_name:str=Field(min_length=1,max_length=100)
+class AdminUserAdminIn(BaseModel): is_admin:bool
+class AdminUserUnlockIn(BaseModel):
+    course_id:str|None=None
+    unit_id:str|None=None
+    lesson_id:str|None=None
+
+    @model_validator(mode="after")
+    def exactly_one_target(self):
+        targets=[self.course_id,self.unit_id,self.lesson_id]
+        if sum(value is not None for value in targets)!=1:
+            raise ValueError("Exactly one of course_id, unit_id, or lesson_id is required")
+        return self
+class AdminUserCourseOut(BaseModel): id:str; title:str
+class AdminUserOut(BaseModel):
+    id:str
+    email:EmailStr
+    display_name:str
+    created_at:datetime
+    xp:int
+    streak:int
+    last_activity:Any=None
+    enrolled_courses:list[AdminUserCourseOut]=Field(default_factory=list)
+    is_admin:bool
+    is_active:bool
+class AdminUserListOut(BaseModel): items:list[AdminUserOut]; total:int; limit:int; offset:int
+class AdminUserCreateOut(BaseModel): user:AdminUserOut; temporary_password:str
+class AdminPasswordResetOut(BaseModel): temporary_password:str
+class AdminUserUnlockOut(BaseModel): completed_lessons:int; passed_checkpoints:int; introduced_lexemes:int
 class LanguageOut(ORM): code:str; name:str; native_name:str; script:Literal["latin","cyrillic","han","arabic","devanagari","hangul","japanese"]; direction:Literal["ltr","rtl"]
 class TextBlock(BaseModel): text:str; language_code:str; direction:Literal["ltr","rtl"]; speaker:str|None=None
 # 2026-07-07 vocabulary-example addition (CONTRACT.md, AUTHORING_GUIDE.md #19):
