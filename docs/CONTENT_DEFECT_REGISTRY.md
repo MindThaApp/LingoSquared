@@ -1079,3 +1079,50 @@ Persian-orthography confusable; lane stays full review.
 Process note: two of three Opus reviewers this round committed DIRECTLY
 to master (worktree isolation not honored — known footgun, commits
 verified clean); coordinator diffed git log per standing rule.
+
+### 2026-07-12 (evening) — en B1 12-14, ru A1 16-18, it A1 16-18 (fresh-context reviews, Claude Opus)
+
+**Yields — the sampling experiment FAILED and was reversed:**
+- **en B1 12-14** (launch-gate, shared spine for nl-en/fa-en/prs-en; full
+  review): **9 defects** (u12: 4, u13: 1, u14: 4). Incl. a genuinely
+  unanswerable matching exercise (4 interchangeable glosses) and 3
+  underdetermined production prompts where 3 of 4 correct answers would
+  grade WRONG. Character continuity vs u09-11 verified clean.
+- **ru A1 16-18** (1-in-3 SAMPLE): **4 defects**, one a NEW bug class —
+  a dialogue teaching card attributed Дима's line to Настя (she asked how
+  many rooms were in her own apartment), contradicting the unit's own
+  audio; a second unit skipped an audio turn, leaving a tested word
+  untaught. Fired twice in one wave. Author's two self-flagged Russian
+  concerns (formal вы register, на кухне idiom) verified CORRECT.
+- **it A1 16-18** (was set to merge on VALIDATORS ALONE; pulled back to
+  full review because the ru sample found a new class): **10 defects, all
+  compiler-invisible — it validated at 0 errors before review.** Three
+  graded a CORRECT learner answer as WRONG (a fill-in yielding "e il il
+  bagno"; an instruction demanding "three words" whose answer had five; a
+  prompt whose own feedback showed a different string than the accepted
+  answer). Plus a cross-unit character-canon break (Sam is an engineer
+  since u02; u17 made him a teacher) — which would have been RECORDED as
+  audio, since audio_manifest.py pulls dialogue text into the record queue.
+
+**Tier ruling: it/ru RESET to full review. Sampling was misapplied** — a
+lane is mature per-RECIPE, and these units moved to NEW TOPICS
+(health/work/housing), which policy already classes as new territory.
+Rule now written into root CLAUDE.md §Tiered review 4.
+
+**New rule-shaped classes → validators (Codex, dispatched same session):**
+1. `untaught_vocabulary` only checked `tested_text`, NOT
+   `prompt.target_blocks` — **the gap that caused defects in BOTH waves.**
+   Must resolve taught tokens CUMULATIVELY over prior units (an author
+   wrongly dropped a valid pair believing "non" untaught — taught since u12).
+2. Duplicate/confusable matching_pairs LEFTs (duplicate RIGHTs are LEGAL —
+   many-lefts→one-right is intentional; frontend fixed 2026-07-12).
+3. Underdetermined production prompts (word-count contradiction;
+   feedback string ≠ accepted answer).
+4. Dialogue teaching cards vs the dialogue audio's speaker-labelled turns.
+
+**Frontend bug found live the same day (not a content defect):**
+`MatchingPairs.tsx` keyed/disabled right tiles by TEXT VALUE, so nl A1
+u13's 3×"lekker"/3×"leuk" exercise disabled all matching tiles on the
+first pick → Check never enabled → **lesson impossible to complete** in the
+en-nl launch pair. Fixed to index-keying (`ba804a7`), verified live.
+Affected 5 exercises across nl u11/u12/u13 and it u01.

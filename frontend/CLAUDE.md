@@ -30,6 +30,16 @@ non-negotiable verification bar.
     but 146/173 (~84%) exercises author a space-joined string;
     list-vs-string never compared equal. New `canonical_order_tokens()`
     canonicalizes either shape. Detail: BUILD_LOG 2026-07-07.
+- **Never key or disable a click-to-match / click-to-build option tile by
+  its TEXT VALUE — always by its INDEX.** Content legitimately maps many
+  lefts onto one right (nl A1 unit13: 3 items → `lekker`, 3 → `leuk`), so
+  value-keying disabled every tile sharing that text on the first match;
+  the remaining lefts became unmatchable, Check never enabled, and the
+  lesson was **impossible to complete** (a hard block in the en-nl launch
+  pair, found live 2026-07-12 — the compiler cannot see this, only playing
+  it can). Corollary: once you index-key, `0` is a falsy index, so every
+  "is this matched" test must be `!== undefined`, never a truthiness
+  check. Applies to `MatchingPairs.tsx` and any future tile/bank UI.
 - **Exercise-type registration must be checked exhaustively: `comm`-diff
   every `type:` in `docs/content/realizations/` against every `case` in
   `ExerciseRenderer.tsx` after any content or exercise-type change** — a

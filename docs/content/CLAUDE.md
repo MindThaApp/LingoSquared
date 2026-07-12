@@ -164,6 +164,41 @@ review.
   unit02 misc + units 04/05) still bake the name into `text`; harmless
   to the compiler but a TTS voice reads the name aloud. Detail: BUILD_LOG.
 
+## Bug classes found 2026-07-12 (all slipped a GREEN 0-error compile)
+
+Three fresh-context reviews in one day surfaced these. Validators are being
+built for the automatable ones, but AUTHORS must not reproduce them:
+
+- **Underdetermined production prompts.** An instruction satisfiable by
+  more than one taught form, graded against ONE exact string, marks correct
+  learners wrong. "Write a polite request to move the meeting" after
+  teaching four request forms → 3 of 4 correct answers fail. **Name the
+  form the prompt wants.** Sub-cases seen: an instruction saying "three
+  words" whose accepted answer had five; a prompt whose own feedback
+  displayed a DIFFERENT string than the accepted answer.
+- **Confusable matching_pairs LEFTs.** The compiler enforces pair COUNT
+  (§16) but not DISTINCTNESS. Four mutually interchangeable glosses ("a
+  polite way to ask for a change" / "…to ask someone to do something") make
+  the exercise unanswerable — the lefts are the learner's ONLY
+  discriminator. Every left must discriminate on actual meaning.
+  (Duplicate RIGHT values are FINE and intentional — many lefts → one right
+  is valid pedagogy; the frontend was fixed 2026-07-12 to support it.)
+- **Dialogue cards vs the unit's own AUDIO.** A ru card put Дима's line in
+  Настя's mouth (she asked how many rooms were in her own apartment);
+  another taught only 3 of the audio's 4 turns, leaving a word untaught
+  that a later exercise tested. Enumerate the audio's turns against the
+  teaching cards; attribute every line to the speaker who actually says it.
+- **Cross-unit character-canon violation.** it unit17 made Sam a teacher;
+  unit02 pinned him as an engineer. No validator and no single-file review
+  can catch this — **grep the established character profiles before writing
+  any new dialogue.**
+- **Vocabulary is CUMULATIVE across the course, not unit-local.** An author
+  needlessly dropped a valid pair believing "non" was untaught — it had been
+  taught since unit12. Conversely, `untaught_vocabulary` only checked
+  `tested_text`, NOT `prompt.target_blocks`, so untaught tokens leaked into
+  prompts in two separate waves — **hand-check target_blocks** until the
+  extended validator lands.
+
 ## Per-lane register pins (prevents cross-unit register drift)
 
 - **fa-en overlay lane: colloquial spoken Persian** (می‌شه/می‌کنه/اینجاست
