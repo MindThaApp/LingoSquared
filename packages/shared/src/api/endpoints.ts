@@ -7,6 +7,7 @@ import {
   patch,
   post,
   postFeedback,
+  postFeedbackFile,
   storeAuthTokens,
 } from "./client";
 import type {
@@ -22,6 +23,7 @@ import type {
   CourseDetail,
   CourseSummary,
   CoverageRow,
+  FeedbackAttachmentUploadResult,
   FeedbackReportIn,
   Language,
   LanguagePair,
@@ -297,4 +299,10 @@ export const AdminApi = {
 // postFeedback()/FEEDBACK_BASE_URL in client.ts.
 export const FeedbackApi = {
   submit: (body: FeedbackReportIn) => postFeedback<ContentIssueReportResult>("/feedback", body),
+  // See docs/CONTRACT.md "Feedback attachments": image-only, max 5MB,
+  // sniffed server-side -- the returned key is orphaned (never appears on
+  // any report) unless a following submit() includes it in
+  // attachment_keys within ~1hr.
+  uploadAttachment: (file: Blob, filename: string) =>
+    postFeedbackFile<FeedbackAttachmentUploadResult>("/feedback/attachments", file, filename),
 };
