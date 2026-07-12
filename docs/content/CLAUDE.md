@@ -98,6 +98,12 @@ digest, not a replacement for it.
   becoming Python booleans**, caught only by the import API's Pydantic
   schema. Until widened (Codex lane), manually grep/spot-check new content
   for this beyond a green compile. Detail: BUILD_LOG 2026-07-08.
+- **The shared English realization is consumed by FOUR X→en overlay
+  sets: nl-en, fa-en, prs-en AND de-en** — any change to an en
+  realization's matching_pairs/exercise shapes must update ALL FOUR
+  mirrors (a §16 retrofit missed de-en on 2026-07-12; caught in review
+  by the compiler's mirror validator). Grep content_manifest.txt for
+  every line referencing the changed en file before committing.
 - **`content_key` is unique PER COURSE, never globally** (migration 0015)
   — fa-en/nl-en/prs-en share the same English realization so content_keys
   are identical across them; a global unique index 500s the second
