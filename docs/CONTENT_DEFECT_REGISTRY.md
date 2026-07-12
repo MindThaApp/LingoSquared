@@ -1045,3 +1045,12 @@ Both directions now validate 0 errors → full-corpus content validation
 GREEN for the first time. Note: first fixer attempt FALSELY self-
 reported success (validated wrong file set) — coordinator re-validation
 caught it; acceptance commands must be verbatim in fixer prompts.
+
+### 2026-07-12 — en A1 units 59-63 + it/ru units 13-15 (+overlays) reviews (Claude Opus)
+en 59-63 (launch-gate X→en expansion): 1 cosmetic content_key fix +
+1 non-blocking dialogue-logic note (unit62), otherwise clean; all
+reviewed. it/ru 13-15 realizations AND overlays: 0 defects across all
+12 files. it/ru overlay lane now at 3+ consecutive zero-defect batches
+with the two big classes compiler-enforced → per policy §2, eligible
+for 1-in-3 sampling from the units 16+ waves onward (coordinator
+decision applied going forward; realization lane likewise eligible).
