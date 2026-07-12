@@ -1,8 +1,8 @@
 # Session handoff — 2026-07-12 night (supersedes the EVENING doc)
 
 Read this + `docs/COORDINATOR_HANDBOOK.md` + root `CLAUDE.md` to resume.
-Everything below is committed and pushed to master EXCEPT the one in-flight
-Codex task called out in §2 — **read §2 before touching `scripts/compile_content.py`.**
+**Everything below is committed and pushed to master. Nothing is in flight and the
+working tree is clean.**
 
 ---
 
@@ -26,26 +26,38 @@ launch pair.
 - It compiled clean and validated at 0 errors. **Only playing the lesson found it.**
   One fix cleared 5 broken exercises (nl u11/u12/u13, it u01).
 
-## 2. IN FLIGHT — one Codex task, tree is DIRTY
+## 2. RESOLVED — four validators are LIVE and committed (nothing in flight)
 
-`scripts/compile_content.py` is **modified in the working tree, uncommitted**, by
-a running Codex task (job `task-mri56xl9-ifgl0z`, model gpt-5.5, effort high).
+**Nothing is running. The tree is clean.** All four validators landed in
+`scripts/compile_content.py` and are pushed.
 
-Four new validators were added (all four are IN that uncommitted diff):
-- **3 are GOOD and already found real bugs — keep them:**
-  duplicate matching_pairs LEFT items; production-prompt word-count contradiction;
-  dialogue-audio vs teaching-cards (correctly fires zero times).
-- **1 was BROKEN** — the untaught-vocabulary check extended to `prompt.target_blocks`
-  emitted **360 false positives** (it tokenized English gloss text, and even
-  content-key fragments like `lesson01`, as untaught target-language words).
-  The running task is repairing exactly that, with instructions to downgrade it to
-  a WARNING if it cannot reach zero false positives.
+They turn today's four newly-discovered bug classes into permanent checks:
+- duplicate/confusable matching_pairs **LEFT** items — *duplicate RIGHTs stay
+  LEGAL* (many-lefts→one-right is intentional pedagogy the frontend now supports;
+  a validator rejecting duplicate rights would be WRONG)
+- production-prompt word-count contradiction + feedback string ≠ accepted answer
+- dialogue teaching cards vs the unit's own audio turns (speaker attribution)
+- untaught vocabulary in `prompt.target_blocks`, resolved **cumulatively** across
+  prior units — the gap that let defects through both waves
 
-**To resume:** `node .../codex-companion.mjs status task-mri56xl9-ifgl0z --cwd <repo> --json`
-then `result <job-id>`. **Verify it yourself** — run `bash scripts/verify.sh --content-only`
-and confirm the ONLY errors are none. Do not trust the report (see §5).
-If the task died, `git diff scripts/compile_content.py` still holds the work —
-a "failed" Codex task often has done most of it.
+**On their first corpus run these found 3 real bugs**, one of them in a unit Opus
+had already reviewed and passed (en-it u14: instruction said "three words",
+accepted answer had four). All 3 are fixed.
+
+The `target_blocks` check first shipped with **360 false positives** (it tokenized
+English gloss text and content-key fragments like `lesson01` as untaught target
+words) and was repaired: scoped to blocks with a real `language_code`/`direction`,
+placeholders stripped, ambiguous dialogue-response findings honestly downgraded to
+warnings rather than forced.
+
+**Verified by the coordinator, not the reporter** — and note HOW, because it
+generalizes: a green corpus alone cannot distinguish an *armed* validator from one
+quietly *neutered* to make the suite pass. I confirmed both (a) full corpus 0 errors,
+and (b) the duplicate-left validator still FIRES when pointed at the pre-fix nl u49
+content. **Do this for any future validator.**
+
+These validators have had exactly one corpus run. Treat their first firings in the
+next authoring wave as "judge each hit", not "the content is broken".
 
 ## 3. What shipped today (all merged, validated, pushed)
 
@@ -136,18 +148,15 @@ is discovering NEW classes (it found 4 → 4 permanent validators), not re-findi
 
 ## 8. Next actions (in order)
 
-1. Land the in-flight Codex validator repair (§2) — verify the corpus YOURSELF, commit
-   `scripts/compile_content.py` with an explicit pathspec, push.
-2. Run `scripts/sync_dev_db.sh` so it/ru 16-18 + en B1 12-14 reach the app.
-3. Optional drip (NOT launch-blocking): X→en overlays for English B1 12-14
+1. Run `scripts/sync_dev_db.sh` so it/ru 16-18 + en B1 12-14 reach the app.
+2. Optional drip (NOT launch-blocking): X→en overlays for English B1 12-14
    (nl-en/fa-en/prs-en) — quote the register pins VERBATIM and paste the pre-flight.
-4. Consider an admin UI for the new user-management API (currently API-only).
+3. Consider an admin UI for the new user-management API (currently API-only).
 
 ## 9. State at handoff
 
-- master = `0638e39` + whatever §2 lands. Pushed to private GitHub.
-- Working tree: `scripts/compile_content.py` DIRTY (in-flight Codex, §2);
-  `.claude/settings.json` modified (pre-existing, not mine).
+- master = all of today's work, pushed to private GitHub. Working tree CLEAN
+  (only `.claude/settings.json`, pre-existing and not mine).
 - 9 worktree entries exist from today's dispatches — all merged; safe to prune, but
   **check `git log --oneline <branch> -1` against each branch's own base before
   `git worktree remove`** (standing footgun: "ancestor of master" != "merged").
