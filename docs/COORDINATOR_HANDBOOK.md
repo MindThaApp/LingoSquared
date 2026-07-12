@@ -20,8 +20,16 @@ commit, and push.
   round-trips) carries backend/compiler work and large language-content
   fixes — deliberately load-balance toward Codex when Claude budget is
   constrained (Ramin tracks weekly usage; ~40% by day 2 prompted this).
-  gpt-5.6 exists but is NOT available on ChatGPT-account Codex (tested
-  2026-07-11, API 400).
+  gpt-5.6 is NOT available on ChatGPT-account Codex regardless of
+  usage resets — re-confirmed 2026-07-13 with gpt-5.6, gpt-5.6-codex,
+  and gpt-5.6-codex-high (identical server-side 400 "not supported when
+  using Codex with a ChatGPT account"; the ChatGPT WEBSITE offering 5.6
+  is a different product surface). Only paths: gpt-5.5, or an API key
+  with per-token billing. Do not re-probe.
+  Budget snapshot 2026-07-13 00:18: Claude at 80% used (resets Fri
+  17:00), Codex 95% LEFT (resets ~6.5d) — route aggressively to Codex:
+  mechanical content repair, validators, backend; keep Opus reviews for
+  launch-gate only; coordinator stays lean.
 - Every worker dispatch: isolated worktree, verified with
   `git worktree list` after dispatch; explicit-pathspec commits; unique
   Docker DB/compose-project names named IN the dispatch prompt; inline
