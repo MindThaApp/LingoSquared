@@ -880,6 +880,229 @@ def validate_matching_pairs_minimum_scale(
                     )
 
 
+def _matching_pair_tuple(value: Any) -> tuple[str, str] | None:
+    if not isinstance(value, dict):
+        return None
+    left = value.get("left")
+    right = value.get("right")
+    if not isinstance(left, str) or not isinstance(right, str):
+        return None
+    return left, right
+
+
+def _matching_pair_counter(values: Any) -> Counter[tuple[str, str]] | None:
+    if isinstance(values, dict):
+        pairs = []
+        for left, right in values.items():
+            if not isinstance(left, str) or not isinstance(right, str):
+                return None
+            pairs.append((left, right))
+        return Counter(pairs)
+
+    if not isinstance(values, list):
+        return None
+
+    pairs: list[tuple[str, str]] = []
+    for value in values:
+        pair = _matching_pair_tuple(value)
+        if pair is not None:
+            pairs.append(pair)
+            continue
+        if not isinstance(value, dict) or len(value) != 1:
+            return None
+        left, right = next(iter(value.items()))
+        if not isinstance(left, str) or not isinstance(right, str):
+            return None
+        pairs.append((left, right))
+    return Counter(pairs)
+
+
+def _overlay_matching_pair_answers(
+    exercise_overlay: dict[str, Any],
+) -> list[tuple[str, Counter[tuple[str, str]] | None]]:
+    if "correct_response" in exercise_overlay:
+        return [
+            (
+                "correct_response",
+                _matching_pair_counter(exercise_overlay["correct_response"]),
+            )
+        ]
+
+    answers = []
+    for index, variant in enumerate(exercise_overlay.get("accepted_answers", [])):
+        value = variant.get("value") if isinstance(variant, dict) else variant
+        answers.append(
+            (
+                f"accepted_answers[{index}]",
+                _matching_pair_counter(value),
+            )
+        )
+    return answers
+
+
+def _format_pair_counter(counter: Counter[tuple[str, str]]) -> list[str]:
+    return [
+        f"{left!r} -> {right!r}"
+        for (left, right), count in sorted(counter.items())
+        for _ in range(count)
+    ]
+
+
+def validate_matching_pairs_overlay_mirror(
+    realization: dict[str, Any],
+    overlay: dict[str, Any],
+    report: Report,
+):
+    exercise_overlays = overlay.get("exercises", {})
+    if not isinstance(exercise_overlays, dict):
+        exercise_overlays = {}
+
+    for unit in realization.get("units", []):
+        for lesson in unit.get("lessons", []):
+            for exercise in lesson.get("exercises", []):
+                if exercise.get("type") != "matching_pairs":
+                    continue
+
+                key = exercise.get("content_key", "<unknown>")
+                realization_pairs = _matching_pair_counter(exercise.get("pairs"))
+                if realization_pairs is None:
+                    continue
+
+                exercise_overlay = exercise_overlays.get(key, {})
+                if not isinstance(exercise_overlay, dict):
+                    continue
+
+                for answer_location, overlay_pairs in _overlay_matching_pair_answers(
+                    exercise_overlay
+                ):
+                    location = f"overlay.exercises.{key}.{answer_location}"
+                    if overlay_pairs is None:
+                        report.error(
+                            location,
+                            "matching_pairs answer must be a list of "
+                            "{left, right} string pairs that mirrors "
+                            "realization pairs",
+                        )
+                        continue
+
+                    if overlay_pairs == realization_pairs:
+                        continue
+
+                    missing, extra = _counter_diff(
+                        realization_pairs,
+                        overlay_pairs,
+                    )
+                    report.error(
+                        location,
+                        "matching_pairs answer does not mirror realization "
+                        "pairs exactly: "
+                        f"{sum(realization_pairs.values())} realization "
+                        "pair(s) vs "
+                        f"{sum(overlay_pairs.values())} overlay pair(s); "
+                        f"missing from overlay {_format_pair_counter(missing)}; "
+                        f"extra in overlay {_format_pair_counter(extra)}",
+                    )
+
+
+def _text_values(value: Any) -> list[str]:
+    if isinstance(value, str):
+        return [value]
+    if isinstance(value, list):
+        values = []
+        for item in value:
+            values.extend(_text_values(item))
+        return values
+    if isinstance(value, dict):
+        values = []
+        text = value.get("text")
+        if isinstance(text, str):
+            values.append(text)
+        for key, item in value.items():
+            if key == "text":
+                continue
+            values.extend(_text_values(item))
+        return values
+    return []
+
+
+def _media_asset_text(item: dict[str, Any]) -> str | None:
+    values: list[str] = []
+    for field in ("text", "script"):
+        if field in item:
+            values.extend(_text_values(item[field]))
+    text = " ".join(value.strip() for value in values if value.strip())
+    return text or None
+
+
+def _media_asset_texts(
+    realization: dict[str, Any],
+) -> dict[Any, str]:
+    texts = {}
+    for item in realization.get("media_assets", []):
+        if not isinstance(item, dict):
+            continue
+        key = item.get("content_key")
+        text = _media_asset_text(item)
+        if key and text:
+            texts[key] = text
+    return texts
+
+
+def _normalized_contains(haystack: str, needle: str) -> bool:
+    normalized_haystack = normalize_audio_text(haystack)
+    normalized_needle = normalize_audio_text(needle)
+    if normalized_haystack and normalized_needle:
+        if normalized_needle in normalized_haystack:
+            return True
+
+    normalized_haystack = normalize_dialogue_option(haystack)
+    normalized_needle = normalize_dialogue_option(needle)
+    if not normalized_haystack or not normalized_needle:
+        return False
+    return normalized_needle in normalized_haystack
+
+
+def normalize_audio_text(value: Any) -> str | None:
+    if not isinstance(value, str):
+        return None
+    value = re.sub(r"[^\w\u200c]+", " ", value, flags=re.UNICODE)
+    normalized = " ".join(value.casefold().split())
+    return normalized or None
+
+
+def validate_listen_audio_contains_tested_text(
+    realization: dict[str, Any],
+    report: Report,
+):
+    media_texts = _media_asset_texts(realization)
+
+    for unit in realization.get("units", []):
+        for lesson in unit.get("lessons", []):
+            for exercise in lesson.get("exercises", []):
+                exercise_type = exercise.get("type")
+                if exercise_type not in {"listen_order", "listen_type"}:
+                    continue
+
+                tested_text = exercise.get("tested_text")
+                media_key = exercise.get("media_asset_key")
+                if not isinstance(tested_text, str) or not media_key:
+                    continue
+
+                media_text = media_texts.get(media_key)
+                if media_text is None:
+                    continue
+
+                if _normalized_contains(media_text, tested_text):
+                    continue
+
+                key = exercise.get("content_key", "<unknown>")
+                report.error(
+                    f"realization.exercises.{key}.media_asset_key",
+                    f"media asset {media_key!r} text/script does not contain "
+                    f"tested_text {tested_text!r}",
+                )
+
+
 #: Keys where a real YAML boolean is the intended, correct type — internal
 #: control flags never rendered to a learner, not the "author meant to write
 #: the string Yes/No and got silently coerced" footgun this check exists for.
@@ -2185,8 +2408,10 @@ def validate_documents(
     validate_same_speaker_dialogue_distractors(realization, overlay, report)
     validate_order_word_bank_answers(realization, overlay, report)
     validate_matching_pairs_minimum_scale(realization, report)
+    validate_matching_pairs_overlay_mirror(realization, overlay, report)
     validate_untaught_vocabulary(realization, report)
     validate_vocabulary_examples(realization, overlay, report)
+    validate_listen_audio_contains_tested_text(realization, report)
     validate_audio_references(realization, report)
 
     return report
