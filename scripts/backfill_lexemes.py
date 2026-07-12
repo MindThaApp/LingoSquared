@@ -172,6 +172,35 @@ UNIT_FILES = (
         REPO_ROOT / "docs/content/realizations/fa/a1_unit24_hobbies.yaml",
         REPO_ROOT / "docs/content/overlays/en-fa/a1_unit24.yaml",
     ),
+    # Units 31-36 (celebrations / household / neighborhood / post /
+    # cooking / personality), added 2026-07-12 for the Endless Practice
+    # coverage-extension batch. Units 25-30 are not in this tuple in the
+    # current practice manifest; this additive pass follows the requested
+    # en-fa units 31+ range and keeps A2/B1 course routing separate below.
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a1_unit31_celebrations.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a1_unit31.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a1_unit32_household.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a1_unit32.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a1_unit33_neighborhood.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a1_unit33.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a1_unit34_post.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a1_unit34.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a1_unit35_cooking.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a1_unit35.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a1_unit36_personality.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a1_unit36.yaml",
+    ),
 )
 
 # A2 units live in a SEPARATE course row ("Farsi A2", not "Farsi A1") --

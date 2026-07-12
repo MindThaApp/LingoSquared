@@ -274,6 +274,34 @@ UNIT_FILES = (
         REPO_ROOT / "docs/content/realizations/en/a1_unit42_personality.yaml",
         REPO_ROOT / "docs/content/overlays/fa-en/a1_unit42.yaml",
     ),
+    # Units 43-48 (colors / seasons / emergencies / lost items /
+    # appointments / library), added 2026-07-12 for the Endless Practice
+    # coverage-extension batch. Kept in the A1 tuple because these files
+    # import into the same "انگلیسی A1" course row as units 30-42.
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit43_colors.yaml",
+        REPO_ROOT / "docs/content/overlays/fa-en/a1_unit43.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit44_seasons.yaml",
+        REPO_ROOT / "docs/content/overlays/fa-en/a1_unit44.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit45_emergencies.yaml",
+        REPO_ROOT / "docs/content/overlays/fa-en/a1_unit45.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit46_lost_items.yaml",
+        REPO_ROOT / "docs/content/overlays/fa-en/a1_unit46.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit47_appointments.yaml",
+        REPO_ROOT / "docs/content/overlays/fa-en/a1_unit47.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit48_library.yaml",
+        REPO_ROOT / "docs/content/overlays/fa-en/a1_unit48.yaml",
+    ),
 )
 
 # A2 units live in a SEPARATE course row ("انگلیسی A2", not "انگلیسی A1")
@@ -777,6 +805,56 @@ EN_TARGET_TO_FA_GLOSS: dict[str, str] = {
     "worry": "نگران بودن", "writes": "می‌نویسد", "yes,": "بله،",
     "yet": "هنوز", "yoga": "یوگا",
 }
+
+EN_TARGET_TO_FA_GLOSS.update({
+    "sky": "آسمان", "grass": "چمن", "yellow": "زرد", "sun": "خورشید",
+    "dark": "تیره", "wearing": "پوشیده است", "light": "روشن",
+    "painted": "رنگ‌شده", "bright": "روشن؛ درخشان", "fun": "جالب؛ سرگرم‌کننده",
+    "our": "مالِ ما", "presentation": "ارائه", "choose": "انتخاب کردن",
+    "colors": "رنگ‌ها", "looks": "به‌نظر می‌رسد", "professional": "حرفه‌ای",
+    "choice": "انتخاب", "everything": "همه‌چیز", "gardens": "باغ‌ها",
+    "especially": "به‌خصوص", "beautiful": "زیبا", "reminds": "یادآوری می‌کند",
+    "everyday": "روزمره", "conversations": "گفت‌وگوها",
+    "spring": "بهار", "flowers": "گل‌ها", "bloom": "شکوفه دادن",
+    "summer": "تابستان", "beach": "ساحل", "fall": "پاییز",
+    "change": "تغییر کردن", "winter": "زمستان", "snows": "برف می‌بارد",
+    "season": "فصل", "walking": "پیاده‌روی", "seasons": "فصل‌ها",
+    "playing": "بازی کردن", "find": "پیدا کردن؛ دانستن", "outdoors": "بیرون",
+    "emergency": "وضعیت اضطراری", "police": "پلیس", "ambulance": "آمبولانس",
+    "fire": "آتش", "department": "اداره؛ بخش", "911": "۹۱۱",
+    "burning": "در حال سوختن", "smell": "بو", "smoke": "دود", "pan": "تابه",
+    "caught": "گرفت (در catch fire)", "off": "خاموش؛ دور", "stove": "اجاق",
+    "hurry": "عجله کردن", "friend's": "مالِ دوست", "goodness": "خوبی؛ وای",
+    "wait": "صبر کردن", "case": "مورد", "safer": "امن‌تر",
+    "until": "تا", "elevator": "آسانسور", "stairs": "پله‌ها",
+    "third": "سوم", "give": "دادن", "finally": "بالاخره",
+    "waited": "صبر کرد", "notice": "اطلاعیه", "safe": "امن",
+    "came": "آمد", "check": "بررسی کردن", "relieved": "آسوده",
+    "hurt": "آسیب‌دیده", "lost": "گم‌شده", "keys": "کلیدها",
+    "wallet": "کیف پول", "backpack": "کوله‌پشتی", "seen": "دیده",
+    "anyone": "کسی", "strap": "بند", "where's": "کجاست",
+    "fountain": "فواره", "you're": "تو/شما هستی", "inside": "داخل",
+    "ask": "پرسیدن", "holding": "در دست داشتن", "desk": "میز پذیرش",
+    "lose": "گم کردن", "item": "وسیله", "main": "اصلی", "gate": "دروازه",
+    "describe": "توصیف کردن", "its": "مالِ آن", "special": "خاص",
+    "details": "جزئیات", "staff": "کارکنان", "called": "زنگ زد؛ صدا کرد",
+    "told": "گفت", "whole": "تمام", "story": "داستان", "track": "رد؛ پیگیری",
+    "things": "چیزها", "available": "در دسترس؛ موجود", "confirm": "تأیید کردن",
+    "reschedule": "زمان را تغییر دادن", "max": "مکس", "seems": "به‌نظر می‌رسد",
+    "lately": "اخیراً", "due": "موعدش رسیده", "yearly": "سالانه",
+    "checkup": "معاینه", "vet": "دامپزشک", "dog's": "مالِ سگ",
+    "max's": "مالِ مکس", "dentist": "دندان‌پزشک", "service": "خدمات",
+    "you'd": "تو/شما ... می‌کردی", "receptionist": "مسئول پذیرش",
+    "changes": "تغییرات", "nervous": "عصبی؛ مضطرب", "borrow": "قرض گرفتن",
+    "return": "برگرداندن", "borrowed": "قرض گرفته", "weeks": "هفته‌ها",
+    "cookbook": "کتاب آشپزی", "fill": "پر کردن", "visiting": "بازدید کردن",
+    "libraries": "کتابخانه‌ها", "let": "اجازه دادن", "items": "وسایل",
+    "few": "چند", "librarian": "کتابدار", "finished": "تمام کرد",
+    "used": "استفاده کرد", "started": "شروع کرد", "borrowing": "قرض گرفتن",
+    "returned": "برگرداند", "picked": "برداشت", "got": "گرفت",
+    "checked": "بررسی کرد", "practice": "تمرین", "teaching": "آموزش",
+    "reminded": "یادآوری کرد",
+})
 
 
 def _classify(files, level, specs):
