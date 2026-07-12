@@ -992,6 +992,52 @@ FA_GLOSSES = {
     "میاید": "you (pl./formal) are coming", "بهم": "to me (colloquial به+م)", "من و": "... and I (lit. 'I and', in من و مریم, 'Maryam and I')",
     "تعریف": "recounting; telling (in تعریف کردن, 'to recount/tell about')", "موافقت": "agreement (in موافقت کردن, 'to agree')", "کیا": "who (plural, colloquial, in کیا دیگه, 'who else')",
     "بهشون": "to them (colloquial به+شون)", "گفته": "said (past participle, in گفته بود, 'had said')",
+    # A1 units 31-36 (celebrations, household, neighborhood, post, cooking,
+    # personality), added 2026-07-12 after those realization files were
+    # added to the en-fa backfill file list. Keep these atomic: card-level
+    # phrase glosses are intentionally not copied onto individual tokens.
+    "مهمونی": "party / gathering", "کیک": "cake", "هدیه": "gift",
+    "تولدمه": "it's my birthday", "تولدت": "your birthday",
+    "کِیه": "when is it?", "تولدم": "my birthday", "مبارک": "happy; blessed",
+    "براش": "for him/her", "نیماست": "is Nima", "جشن‌ها": "celebrations",
+    "تولدها": "birthdays", "ظرف": "dish", "شستن": "washing; to wash",
+    "لباس": "clothes", "جارو": "broom; sweeping", "خانه": "home / house",
+    "می‌شورم": "I wash", "ظرف‌ها": "dishes", "لباس‌ها": "clothes",
+    "می‌شوره": "he/she washes", "کارها": "tasks / chores",
+    "می‌کنن": "they do", "کارهای": "tasks of / kinds of work",
+    "محله": "neighborhood", "همسایه": "neighbor", "خیابان": "street",
+    "محله‌ام": "my neighborhood", "آرومه": "is quiet / calm",
+    "محله‌ات": "your neighborhood", "ماست": "is our / belongs to us",
+    "پارکه": "is a park", "همسایه‌ات": "your neighbor",
+    "همسایه‌ام": "my neighbor", "خانه‌اش": "his/her house",
+    "نزدیکه": "is near", "پستخانه": "post office", "تمبر": "stamp",
+    "نامه": "letter", "بسته": "package", "بفرستم": "I send (subjunctive)",
+    "می‌فرستم": "I send / I am sending", "فرستادن": "to send",
+    "گرفتن": "to receive / to take", "می‌فرستمش": "I send it",
+    "زود": "soon / early", "می‌فرسته": "he/she sends",
+    "آشپزی": "cooking", "پیاز": "onion", "نمک": "salt", "روغن": "oil",
+    "خرد می‌کنم": "I chop", "می‌ریزم": "I pour / add",
+    "سرخ می‌کنم": "I fry", "خرد کردن": "to chop",
+    "سرخ کردن": "to fry", "ریختن": "to pour", "سرخش": "fry it",
+    "غذا": "food / meal", "می‌پزه": "he/she cooks", "تقریباً": "almost",
+    "آماده‌ست": "is ready", "مرسی": "thanks", "قرمه‌سبزی": "ghormeh sabzi",
+    "می‌پزی": "you cook", "می‌پزم": "I cook",
+    "آشپزخانه‌ست": "is the kitchen", "می‌ریزه": "he/she pours / adds",
+    "دوست دارم": "I like", "وقت ندارم": "I don't have time",
+    "بپز": "cook! (imperative)", "بامزه": "funny", "خجالتی": "shy",
+    "جدی": "serious", "مهربونه": "he/she is kind",
+    "بامزه‌ست": "he/she is funny", "خجالتیه": "he/she is shy",
+    "جدیه": "he/she is serious", "زرنگ": "smart / clever",
+    "تنبل": "lazy", "زحمت‌کش": "hardworking", "صبور": "patient",
+    "تنبل نیست": "he/she is not lazy", "صبوره": "he/she is patient",
+    "معلم": "teacher", "زحمت‌کشه": "he/she is hardworking",
+    "شخصیت": "personality", "چه جوریه": "what is he/she like?",
+    "شخصیتش": "his/her personality", "زرنگه": "he/she is smart",
+    "اصلاً": "at all", "باحال": "cool", "آشنا بشم": "I get acquainted",
+    "باحاله": "is cool", "هیچ‌وقت": "never", "برای همین": "for this reason",
+    "جمع‌های": "groups of / plural gatherings of",
+    "حرف نمی‌زنه": "he/she doesn't talk", "فکر می‌کنم": "I think",
+    "زحمت‌کشم": "I am hardworking", "شخصیتت": "your personality",
 }
 
 FA_SYMBOLS = set("س ل ا م ن ت ش چ ی ه ک گ ج د ر ف و ب خ ز".split())
@@ -1036,6 +1082,9 @@ FA_PREPOSITIONS = set(
     # them", colloquial pronoun-incorporated به, sibling of the already-
     # established بهت/بهتون).
     + ["درباره‌ی", "باهاش", "توش", "درباره‌ش", "باهاشون", "بهم", "بهشون"]
+    # A1 unit31 (celebrations), added 2026-07-12: براش is the third-person
+    # sibling of the already-established برات ("for you").
+    + ["براش"]
 )
 FA_PARTICLES = set(
     "هم ولی بله و آره پس تا یه یا چون رو خب چشم "
@@ -1093,6 +1142,8 @@ FA_ADVERBS = set(
     # of the already-established هم/همینطور), واقعاً ("really"), با هم
     # ("together"), همیشه ("always"), کمی ("a little").
     + ["دیشب", "کمی", "تنها", "بعضی", "بازم", "بعضی وقتا", "همچنین", "واقعاً", "با هم", "همیشه"]
+    # A1 units 34-36, added 2026-07-12.
+    + ["زود", "تقریباً", "اصلاً", "هیچ‌وقت", "برای همین"]
 )
 FA_ADJECTIVES = set(
     "خوبی بد ایرانی انگلیسی فرانسوی بزرگه کوچیکه متأهل مجرد برعکسه شلوغه "
@@ -1139,6 +1190,10 @@ FA_ADJECTIVES = set(
     # ("close/intimate"), مهربون ("kind"), کوچیکی (indefinite adjective
     # form of the already-established کوچیک), آروم ("calm/quiet").
     + ["خالی", "دلتنگ", "سخت‌تر", "موکول", "بعدی", "برگزار", "صمیمی", "مهربون", "کوچیکی", "آروم"]
+    # A1 units 31/36, added 2026-07-12: celebration/personality
+    # adjectives in bare attributive form. Their fused copula forms are
+    # classified as verbs below, following the existing course precedent.
+    + ["مبارک", "بامزه", "خجالتی", "جدی", "زرنگ", "تنبل", "زحمت‌کش", "صبور", "باحال"]
 )
 FA_NUMBERS = set(
     "صفر یک دو سه چهار پنج شش هفت هشت نه ده یازده دوازده سیزده چهارده "
@@ -1313,6 +1368,19 @@ FA_VERBS = {
     # subjunctive forms following the established کنم/کنی/... paradigm
     # pattern.
     "بودم", "بودی", "بودیم", "بودید", "بودن", "رفته", "می‌دیدم", "نرفته", "نمی‌دیدم", "نیومد", "نیومدم", "بپرسم", "ببینیم", "نتونستم", "می‌دونم", "گذاشتن", "نرفت", "ببینن", "می‌گه", "می‌مونه", "می‌ده", "گفتن", "نکردن", "بیایم", "بفرستید", "بگیریم", "می‌خواد", "کردید", "روزیه", "بفرسته", "گرفتیم", "سارا‌ست", "شدم", "بگم", "همونه", "می‌رفتیم", "برگردم", "می‌کردم", "می‌کرد", "می‌کردن", "برگرده", "پرسید", "میای", "میری", "می‌ره", "گفتیم", "داریم", "گفتید", "میاید", "گفته",
+    # A1 units 31-36, added 2026-07-12. Includes ordinary conjugated
+    # verbs, infinitives, light-verb compounds, and colloquial fused
+    # copula predicates, matching the existing precedent for earlier A1
+    # units' -ه/-ست contractions.
+    "تولدمه", "کِیه", "نیماست", "می‌شورم", "می‌شوره", "می‌کنن",
+    "آرومه", "ماست", "پارکه", "نزدیکه", "بفرستم", "می‌فرستم",
+    "فرستادن", "گرفتن", "می‌فرستمش", "می‌فرسته", "خرد می‌کنم",
+    "می‌ریزم", "سرخ می‌کنم", "خرد کردن", "سرخ کردن", "ریختن",
+    "سرخش", "می‌پزه", "آماده‌ست", "می‌پزی", "می‌پزم",
+    "آشپزخانه‌ست", "می‌ریزه", "دوست دارم", "وقت ندارم", "بپز",
+    "مهربونه", "بامزه‌ست", "خجالتیه", "جدیه", "تنبل نیست",
+    "صبوره", "زحمت‌کشه", "چه جوریه", "زرنگه", "آشنا بشم",
+    "باحاله", "حرف نمی‌زنه", "فکر می‌کنم", "زحمت‌کشم",
 }
 FA_PHRASE_PARTS = {"بخیر", "خواهش"}
 # B1 units 07-11 ("second wave"), added 2026-07-11: عین (only ever
