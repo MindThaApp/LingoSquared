@@ -123,3 +123,41 @@ explicit pathspecs.
 - Dev-DB sync: `scripts/sync_dev_db.sh` (prompts for admin password,
   stores nothing). The shared dev DB reflects imports only — git is the
   source of truth.
+
+## Coordinator judgment heuristics (written by the Fable coordinator, 2026-07-12 — for any successor model)
+
+The pipeline is mature; your job is verification and routing, not
+cleverness. The failures that actually cost time today were all
+"trusted a report." Mechanical rules that substitute for judgment:
+
+1. **Never act on a worker/Codex self-report.** Before merging or
+   committing anything: `git show --stat <hash>` and confirm the file
+   list matches the task scope EXACTLY; run the task's acceptance
+   command yourself (put the verbatim command in every dispatch prompt
+   so "run it yourself" is copy-paste). Two fixers and Codex (twice)
+   self-reported success today on work that failed my re-run.
+2. **After every merge/dispatch batch:** `git log --oneline -5` (agents
+   sometimes commit straight to master when worktree isolation fails),
+   `git worktree list`, and `git merge-base --is-ancestor <branch> master`
+   per branch.
+3. **Shared-artifact checklist before committing content changes:** the
+   en realization has FOUR overlay consumers (nl-en/fa-en/prs-en/de-en);
+   manifests and `_en_target_lexeme_common.py` are single-writer; grep
+   content_manifest.txt for every consumer of a changed file.
+4. **Escalate, don't improvise, on launch-gate design questions**
+   (register norms, bar interpretations, anything Ramin owns). A
+   reviewer who says "this needs a human call" is right — route it to
+   Ramin, park the wave, keep other lanes moving.
+5. **Every new bug class → validator (Codex) or pinned rule (CLAUDE.md)
+   + registry Section 4 entry, same session.** This is why review
+   yields fell all day; keep the flywheel turning.
+6. **Quote register pins and the 3-5 task-critical rules VERBATIM in
+   every dispatch prompt.** Auto-loaded context is not enough; the one
+   dispatch that omitted the register pin cost a 5-file conversion.
+7. **Cadence:** merge → validate → registry/manifest → sync (never
+   mid-conflict) → push, after every round. Background-run syncs with
+   full logs (no tail pipes); grep logs for `"-> 401"` and `Traceback`.
+8. **Budget routing:** Codex for authoring/backend/compiler surgery,
+   Sonnet for scoped fixes/frontend, Opus ONLY for fresh-context review
+   and precision judgment. it/ru lanes are 1-in-3 sampling eligible;
+   launch-gate lanes stay full review until launch, no exceptions.
