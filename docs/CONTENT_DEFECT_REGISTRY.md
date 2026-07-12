@@ -652,6 +652,63 @@ alongside a react-query `staleTime` tuning.
 named in the commit message — verify test coverage exists before
 treating this as durably closed.
 
+### 1.36 nl-en overlay "Dutch-left" systemic bug (source-language text left untranslated/unswapped in an X-en overlay)
+**Description**: a systemic class in nl-en overlay authoring where
+Dutch-side text was left in place (not correctly swapped/translated)
+when generating the en-target overlay from the nl-source realization —
+the class that drove nl-en's "Full review" tier recommendation in
+Section 2 for several review rounds.
+**First found**: prior nl-en overlay review rounds (see Section 2 nl-en
+row history); closed 2026-07-12.
+**Prevention status**: AUTOMATED (fixed) — fix landed plus a regression
+test added 2026-07-12 (see Section 4 log entry same date). This is the
+first nl-en review round with both the fix AND a durable regression
+test in place; treat as CLOSED pending confirmation the test actually
+runs in CI/verify.sh (not independently re-verified by this entry).
+
+### 1.37 Script-constraint two-layer requirement for new languages (DB check constraint + Pydantic literal must both be updated)
+**Description**: adding a new language's script value requires updating
+TWO independent places — the Postgres check constraint on the relevant
+column AND the Pydantic literal/enum in the backend schema — updating
+only one silently leaves the other layer rejecting or miscategorizing
+the new script.
+**First found**: 2026-07-12, during ko/ja groundwork (script constraint
+migration 0025 mentioned in root CLAUDE.md history).
+**Prevention status**: UNPREVENTED — no single-source-of-truth or
+validator catches a partial update; discovered via review, not
+automated. **Next step**: either derive the Pydantic literal from the
+DB constraint (or vice versa) at build/migration time, or add a
+compiler/backend startup check that diffs the two lists and fails
+loudly on mismatch. **Lane**: Codex (backend/migrations).
+
+### 1.38 Romanized-source trap for ko/ja (source material teaches romanization, app must teach native script)
+**Description**: public-domain/reference source material for Korean and
+Japanese commonly teaches via romanization (romaji/romanized Hangul)
+rather than native script — naively adapting such sources risks
+authoring content that teaches romanization instead of native
+Hangul/kana/kanji, which is wrong for this app's goals.
+**First found**: 2026-07-12, ko/ja groundwork planning.
+**Prevention status**: UNPREVENTED — no automated check exists (or
+could easily exist) for this; it is a sourcing-discipline item.
+**Avoid**: any ko/ja content authoring must render/grade in native
+script by default; treat any source that presents romanization as the
+primary form as needing an explicit conversion step, not a direct
+adaptation. **Lane**: content-lane authoring discipline (ko/ja, not yet
+in production content — groundwork stage only per root CLAUDE.md).
+
+### 1.39 Devanagari OCR trap (scanned Hindi sources OCR unreliably)
+**Description**: scanned/OCR'd Hindi source material is unreliable —
+combining vowel signs, virama, and conjunct consonants are prone to
+OCR misread or silent corruption, compounding with the existing 1.24
+Devanagari tokenizer fragmentation issue at the compiler layer.
+**First found**: 2026-07-12, noted alongside ko/ja groundwork review
+(Devanagari-adjacent sourcing risk).
+**Prevention status**: UNPREVENTED — no automated OCR-quality check
+exists. **Next step**: prefer non-OCR (born-digital/Unicode) Hindi
+sources where available; if OCR sourcing is unavoidable, add a manual
+native-reviewer spot-check step before authoring from OCR'd text.
+**Lane**: content-lane sourcing discipline (Hindi).
+
 ---
 
 ## Section 2: Per-language/direction ledger
@@ -665,7 +722,7 @@ drip content, in-flight).
 | Direction | Bug classes hit (see §1 IDs) | Instance count (approx, cumulative) | Review-tier recommendation | Justification |
 |---|---|---|---|---|
 | en-nl | 1.7, 1.8(subset), 1.9, 1.10, 1.16, 1.17, 1.19, 1.20, 1.21, 1.22, 1.26 | ~150+ across all classes (largest, most mature corpus, 88 units) | **Full** (launch-gate, mandatory until launch) | Still finding real content bugs on recent passes (1.22 regressed 2026-07-09); largest corpus = largest absolute defect surface even if defect *rate* is falling. |
-| nl-en | 1.7, 1.8 (94-fix batch concentrated here), 1.9, 1.16, 1.18, 1.21 | ~120+ (heaviest hit by 1.8's matching_pairs left-text bug: 10+ units in one review round alone) | **Full** (launch-gate) | `test_content_answer_shapes.py`'s 60+ unresolved matching_pairs instances were concentrated here as of last measurement — do not downgrade until a fresh corpus-wide re-run shows 3 consecutive zero-defect reviews. |
+| nl-en | 1.7, 1.8 (94-fix batch concentrated here), 1.9, 1.16, 1.18, 1.21, 1.36 | ~120+ (heaviest hit by 1.8's matching_pairs left-text bug: 10+ units in one review round alone) | **Full** (launch-gate) | `test_content_answer_shapes.py`'s 60+ unresolved matching_pairs instances were concentrated here as of last measurement — do not downgrade until a fresh corpus-wide re-run shows 3 consecutive zero-defect reviews. **2026-07-12 update**: the 1.36 "Dutch-left" systemic class is now fixed + regression-tested (see Section 4 log), but nl-en remains launch-gate content and stays **Full** review regardless per policy §3 — this closes one bug class, it does not change the direction's tier. |
 | en-fa | 1.5, 1.8, 1.12, 1.16, 1.18, 1.20, 1.29, 1.30 | ~60-80 across rounds | **Full** (launch-gate) | fa is the mandatory RTL/script-strict grading target; 1.30 (harakat) is fa/prs-specific and still uncaught by any validator. |
 | fa-en | 1.7, 1.8, 1.16, 1.18, 1.28, 1.29 | ~60-80 | **Full** (launch-gate) | Same corpus family as nl-en/prs-en for shared-English bugs (1.8); 1.28's dialect fix touched fa-en overlays too. |
 | en-prs | 1.5, 1.16, 1.20, 1.28 | ~40-60 (incl. 756-replacement dialect fix) | **Full** (launch-gate) | Mandatory RTL/virtual-keyboard target; 1.28 (dialect split-brain) is prs-specific and was project-wide when found — highest-severity single incident of any direction. |
@@ -676,6 +733,19 @@ drip content, in-flight).
 | en-pl | genitive-case grammar bug (`974d00c`, `665aa31`) | 1 confirmed | **Sample** candidate, not yet eligible (only 1 review round) | Same status as ro — mature recipe, immature per-language review history. |
 | en-es / es-en | 1.2 residual (legacy dialogue format fixed `2ea892e`), parked per CLAUDE.md scope decision | low (content frozen, not actively growing) | **Validator-only** | Explicitly parked ("finish in-flight units, then park until nl is done") — no active authoring means no new-defect risk; existing content already compiler-clean. |
 | en-fr / fr-en | 1.23 (apostrophe-elision, fr-specific) | 1 confirmed + 13 cosmetic | **Validator-only** (same parked status as es) | Same parked status; 1.23 is closed for the one real instance found. |
+
+**Pack-authoring lane (cross-direction, tracked separately from the
+per-direction rows above)**: the "pack-authoring" lane (Endless Practice
+template packs, not overlay/realization content) has now logged 3
+consecutive zero-defect fresh-context reviews as of 2026-07-12 — **per
+CLAUDE.md's Tiered review policy, this lane is now ELIGIBLE to drop to
+1-in-3 sampling** (reviewer's choice of which 1-in-3, not the author's).
+This is a lane-level (recipe + authoring model) downgrade, distinct
+from the per-direction table above; it does not change any individual
+direction's launch-gate "Full" status where that direction's content
+also happens to include packs. (Not recorded: the specific commit hashes
+of the 3 qualifying zero-defect reviews — cross-reference BUILD_LOG/
+git log around 2026-07-11/12 pack-authoring review commits if needed.)
 
 **Caveat on this table**: instance counts are reconstructed from
 BUILD_LOG/commit-message language, not a fresh corpus query — several
@@ -793,3 +863,72 @@ that task — not a follow-up chore for someone else.
 
 (none logged yet under this rule as of 2026-07-11 — this registry's own
 creation predates the rule's first live use)
+
+### 2026-07-12 — nl-en overlays (coordinator/session, "Dutch-left" fix pass)
+Bug classes found: 1.36 (new class — nl-en overlay "Dutch-left"
+systemic bug)
+New bug class discovered: yes; added as §1.36 above. CLOSED this
+round: fix landed plus a regression test added (not merely a one-off
+content fix), per SESSION_HANDOFF_2026-07-12.md. nl-en itself stays
+**Full** review tier regardless (launch-gate content, policy §3) — this
+entry records the class closure, not a tier change for the direction.
+Instance count: (not recorded — see BUILD_LOG/commit history around
+2026-07-12 for the exact fix commit if needed)
+
+### 2026-07-12 — pack-authoring lane (3rd consecutive review)
+Bug classes found: none — 0 defects (3rd consecutive zero-defect
+fresh-context review in this lane)
+New bug class discovered: no
+Instance count: 0
+**Tier action**: per Tiered review policy §2 (3 consecutive zero-defect
+reviews → eligible for 1-in-3 sampling), the pack-authoring lane is now
+ELIGIBLE to drop to 1-in-3 sampling. See Section 2 pack-authoring-lane
+note above. (Not recorded: commit hashes of the 3 qualifying reviews.)
+
+### 2026-07-12 — ko/ja groundwork review (script-constraint + sourcing discovery)
+Bug classes found: 1.37 (script-constraint two-layer requirement), 1.38
+(romanized-source trap for ko/ja)
+New bug class discovered: yes (both); added as §1.37 and §1.38 above.
+Neither is a content-authoring-tier issue per se (ko/ja are still at
+groundwork stage, no production content authored yet), but both are
+UNPREVENTED classes to guard against before ko/ja content authoring begins.
+Instance count: (not recorded — discovered during groundwork/planning,
+not a corpus review of existing content)
+
+### 2026-07-12 — Devanagari OCR-sourcing discovery (Hindi, adjacent to ko/ja review)
+Bug classes found: 1.39 (Devanagari OCR trap for scanned Hindi sources)
+New bug class discovered: yes; added as §1.39 above. Related to the
+existing §1.24 Devanagari tokenizer fragmentation compiler gap but
+distinct (sourcing-quality risk vs. compiler tokenization bug).
+Instance count: (not recorded — a sourcing-discipline finding, not a
+corpus defect count)
+
+### 2026-07-12 — fa B1 units 12-16 (fresh-context review, Codex gpt-5.5)
+Bug classes found: 3 fixes found and all reviewed (per commit `3693bed`
+message: "fa B1 12-16 (3 fixes, all reviewed)"). Specific §1 bug-class
+IDs not individually identified in the commit message — (not recorded
+which existing §1 classes, if any, these map to; treat as low-yield,
+NOT zero-defect).
+New bug class discovered: no (not indicated in commit message)
+Instance count: 3
+**Tier note**: this is a low-yield (not clean) review round for this
+lane/direction — does not count toward a 3-consecutive-zero-defect
+downgrade; resets any such streak for fa B1 content if one was being
+tracked.
+
+### 2026-07-12 — en B1 units 07-11 (fresh-context review, Codex gpt-5.5)
+Bug classes found: listen-audio fixes found (per commit `3693bed`
+message: "en B1 07-11 (listen-audio fixes, all reviewed pending
+overlay-dependent checks)"). Likely relates to §1.20 (wrong/
+contradictory `media_asset_key`) and/or §1.22 (`listen_select`
+same-speaker distractor) given the "listen-audio" description, but the
+commit message does not specify which — (not recorded, needs
+confirmation against the actual diff before closing out §1.20/1.22
+status for this direction).
+New bug class discovered: no (not indicated in commit message)
+Instance count: (not recorded — "fixes" plural, exact count not in
+commit message)
+**Status caveat**: explicitly "all reviewed **pending overlay-dependent
+checks**" per the commit message — this review round is not fully
+closed out; do not treat en B1 07-11 as a clean pass until the
+overlay-dependent checks referenced in the commit are confirmed done.
