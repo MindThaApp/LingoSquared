@@ -1183,3 +1183,20 @@ New bug class discovered: no. First corpus compile of units 15-17 found
 Instance count: 0 overlay defects. The form-identification-distractor
 warning quoted verbatim in these dispatches returned zero findings —
 consistent with the preflight-verbatim effect (23→3→0 over three waves).
+
+### 2026-07-13 — nl-en/fa-en/prs-en B1 overlays 18-19 (fresh-context reviews, Claude Opus ×3)
+Bug classes found: nl-en: none — 0 defects. fa-en: none blocking; 1
+optional strengthening applied (u19 l04 ex01 distractor was the OTHER
+speaker's real line — legal but borderline; swapped for fabricated).
+prs-en: 2 — Iranian-register leak (می‌خوام ×5 in u18, lane pin is Dari;
+fixed to می‌خواهم) and a cue/answer mismatch (u19 l02 ex04 Dari cue said
+"in short" while only the "In summary" answer was accepted — correct
+learner graded wrong; cue realigned).
+New bug class discovered: arguably one AUTHOR-side sub-class worth a
+rule: a production prompt's SOURCE-LANGUAGE cue must use the gloss of
+the same discourse marker the accepted answer uses (cue/answer marker
+mismatch). Added to no validator (semantic); reviewers now watch it.
+Instance count: 3 fixed + 1 strengthening across 6 files.
+First corpus compile of units 18-19 found 1 realization defect
+("months" untaught, fixed 181af98) — the second time the first overlay
+compile caught a realization token gap (see "leading", 9ff6886).
