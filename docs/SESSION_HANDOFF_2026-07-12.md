@@ -156,7 +156,13 @@ All queued wave items landed; everything below is merged, reviewed
   per-direction or per-pair? Per-pair, every launch pair passes
   (18h/20.6h/22h); per-direction, X→en needs ~10 more English units
   (they'd be shared by all three directions — one authoring effort).
-- Practice half: measured after the final sync (see registry/log below).
+- Practice half (measured post-sync6, real lexeme pool, dev DB):
+  en-fa ~219h, en-nl ~159h, en-prs ~188h, fa-en ~148h, nl-en ~148h,
+  prs-en ~145h — **all six directions clear the ≥10hr practice bar by
+  an order of magnitude. The practice-depth launch gap is CLOSED.**
+  (Note: 60-90% of templates are "thin" per the measure's variety
+  metric — quantity passes; the format-monotony work from the variety
+  audit remains the quality follow-up.)
 
 ### New footguns learned tonight
 - sync_dev_db.sh's admin token can expire mid-run (30-min access token,
