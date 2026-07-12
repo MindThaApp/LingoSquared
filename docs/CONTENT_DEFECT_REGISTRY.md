@@ -1054,3 +1054,16 @@ reviewed. it/ru 13-15 realizations AND overlays: 0 defects across all
 with the two big classes compiler-enforced → per policy §2, eligible
 for 1-in-3 sampling from the units 16+ waves onward (coordinator
 decision applied going forward; realization lane likewise eligible).
+
+### 2026-07-12 — X→en A1 units 59-63 wave (en realizations + 3 overlay sets)
+en realizations (Opus review): 1 cosmetic content_key fix + 1
+non-blocking note. nl-en overlays: 0 defects. prs-en overlays: 0
+defects (Dari clean). fa-en overlays: **NEW CLASS — lane register
+divergence** (Codex authored formal Persian; lane norm colloquial).
+Reviewer correctly escalated instead of auto-fixing; converted by a
+dedicated worker (~255 forms), second-round review found 3 leftover
+formal forms in u63 (fixed) and 0 over-conversion errors.
+PREVENTION: per-lane register pins added to docs/content/CLAUDE.md —
+every new authoring dispatch must quote the lane's pinned register.
+**Tier note**: fa-en overlay lane resets to full review (new class);
+nl-en/prs-en remain full (launch-gate).
