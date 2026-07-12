@@ -1145,3 +1145,15 @@ Preflight-checklist note: first wave with AUTHORING_PREFLIGHT.md pasted
 verbatim — yield fell from 23 (previous wave, 3 lanes) to 3, and zero
 findings in every class the checklist names except item 1 edge case
 above.
+
+### 2026-07-13 — en B1 realizations 15-17 (fresh-context review, Claude Opus)
+Bug classes found: 1 — prompt/answer wording mismatch (u16 l03 ex05:
+prompt said "the other project", sole accepted answer said "the other
+one"; correct learner graded wrong). Known underdetermined-prompt
+sub-class.
+New bug class discovered: no
+Instance count: 1 across 3 files. Fixed by coordinator (prompt aligned
+to accepted answer), merged. Units 15 and 17: zero defects.
+NOTE: compiler validation still pending — requires the first X→en
+overlay for these units; reviewer reproduced the mechanical validators
+by hand (cumulative token coverage clean across b1 01-17).
