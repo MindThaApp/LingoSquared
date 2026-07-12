@@ -1,8 +1,29 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { matchPath, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { FeedbackApi } from "@lingo/shared/api/endpoints";
 import type { ContentIssueCategory } from "@lingo/shared/api/types";
+import { downscaleImage } from "../lib/downscaleImage";
+
+// Contract limits -- docs/CONTRACT.md "Feedback attachments": image
+// content types only (sniffed server-side from magic bytes, but the
+// client still pre-filters for a fast, friendly error), max 5 MB per
+// file, max 3 attachment_keys per report.
+const MAX_ATTACHMENTS = 3;
+const MAX_ATTACHMENT_BYTES = 5 * 1024 * 1024;
+const ACCEPTED_TYPES = ["image/png", "image/jpeg", "image/webp"];
+
+type AttachmentStatus = "uploading" | "done" | "failed";
+
+interface Attachment {
+  localId: string;
+  previewUrl: string;
+  status: AttachmentStatus;
+  // Set once the upload succeeds -- this is what actually gets sent as
+  // attachment_keys on submit. A "failed" attachment has no key and is
+  // never included (feedback text must never be blocked/lost over it).
+  attachmentKey: string | null;
+}
 
 // Three learner-facing "kinds" the guided flow starts from. Only the
 // content-error kind branches into an extra step (step 2 below) -- the
@@ -95,6 +116,9 @@ export function FeedbackWidget() {
   const [description, setDescription] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [sent, setSent] = useState(false);
+  const [attachments, setAttachments] = useState<Attachment[]>([]);
+  const [attachmentError, setAttachmentError] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   function resetFlow() {
     setStep("kind");
@@ -102,6 +126,78 @@ export function FeedbackWidget() {
     setHereChoice(null);
     setLocationHint("");
     setDescription("");
+    attachments.forEach((a) => URL.revokeObjectURL(a.previewUrl));
+    setAttachments([]);
+    setAttachmentError(null);
+  }
+
+  async function addAttachment(file: File) {
+    setAttachmentError(null);
+    if (attachments.length >= MAX_ATTACHMENTS) {
+      setAttachmentError(t("feedback_widget.attachments.error_too_many"));
+      return;
+    }
+    if (!ACCEPTED_TYPES.includes(file.type)) {
+      setAttachmentError(t("feedback_widget.attachments.error_unsupported_type"));
+      return;
+    }
+    if (file.size > MAX_ATTACHMENT_BYTES) {
+      setAttachmentError(t("feedback_widget.attachments.error_too_large"));
+      return;
+    }
+
+    const localId = `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+    const previewUrl = URL.createObjectURL(file);
+    setAttachments((prev) => [...prev, { localId, previewUrl, status: "uploading", attachmentKey: null }]);
+
+    try {
+      const upload = await downscaleImage(file);
+      // Still under the size cap after downscale? Enforce again -- a
+      // downscale failure (falls back to the original file) could leave
+      // an oversized file that the server would reject anyway.
+      if (upload.size > MAX_ATTACHMENT_BYTES) {
+        setAttachments((prev) =>
+          prev.map((a) => (a.localId === localId ? { ...a, status: "failed" } : a)),
+        );
+        setAttachmentError(t("feedback_widget.attachments.error_too_large"));
+        return;
+      }
+      const result = await FeedbackApi.uploadAttachment(upload, upload.name);
+      setAttachments((prev) =>
+        prev.map((a) =>
+          a.localId === localId ? { ...a, status: "done", attachmentKey: result.attachment_key } : a,
+        ),
+      );
+    } catch {
+      // Upload failure must never lose the typed feedback text -- mark
+      // this one attachment failed and let the rest of the flow continue
+      // uninterrupted; submit() below simply omits its key.
+      setAttachments((prev) =>
+        prev.map((a) => (a.localId === localId ? { ...a, status: "failed" } : a)),
+      );
+      setAttachmentError(t("feedback_widget.attachments.error_upload_failed"));
+    }
+  }
+
+  function removeAttachment(localId: string) {
+    setAttachments((prev) => {
+      const target = prev.find((a) => a.localId === localId);
+      if (target) URL.revokeObjectURL(target.previewUrl);
+      return prev.filter((a) => a.localId !== localId);
+    });
+  }
+
+  function handleFileInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = Array.from(e.target.files ?? []);
+    e.target.value = ""; // allow re-selecting the same file later
+    // Only take as many as fit within the remaining slots -- addAttachment
+    // itself also guards this, but slicing here avoids a burst of
+    // identical "too many" errors when several files are picked at once.
+    const remaining = MAX_ATTACHMENTS - attachments.length;
+    files.slice(0, Math.max(remaining, 0)).forEach((file) => void addAttachment(file));
+    if (files.length > remaining) {
+      setAttachmentError(t("feedback_widget.attachments.error_too_many"));
+    }
   }
 
   function chooseKind(next: FeedbackKind) {
@@ -134,11 +230,15 @@ export function FeedbackWidget() {
           : kind === "content" && hereChoice === "no"
             ? { content_error_on_screen: false, location_hint: locationHint || undefined }
             : {};
+      const attachmentKeys = attachments
+        .filter((a): a is Attachment & { attachmentKey: string } => a.status === "done" && a.attachmentKey !== null)
+        .map((a) => a.attachmentKey);
       await FeedbackApi.submit({
         category: CATEGORY_FOR_KIND[kind],
         description: description || undefined,
         page_path: location.pathname,
         client_context: clientContext,
+        attachment_keys: attachmentKeys.length > 0 ? attachmentKeys : undefined,
       });
       setSent(true);
       setTimeout(() => {
@@ -258,8 +358,66 @@ export function FeedbackWidget() {
                   placeholder={t("feedback_widget.details_placeholder")}
                 />
               </div>
+
+              <div className="feedback-widget-attachments">
+                {attachments.map((a) => (
+                  <div
+                    key={a.localId}
+                    className={`feedback-widget-attachment-thumb${a.status === "uploading" ? " is-uploading" : ""}`}
+                  >
+                    <img src={a.previewUrl} alt={t("feedback_widget.attachments.thumbnail_alt")} />
+                    <button
+                      type="button"
+                      className="feedback-widget-attachment-remove"
+                      onClick={() => removeAttachment(a.localId)}
+                      aria-label={t("feedback_widget.attachments.remove")}
+                    >
+                      ✕
+                    </button>
+                  </div>
+                ))}
+                {attachments.length < MAX_ATTACHMENTS && (
+                  <button
+                    type="button"
+                    className="feedback-widget-attachment-add"
+                    onClick={() => fileInputRef.current?.click()}
+                    aria-label={t("feedback_widget.attachments.add_photo")}
+                  >
+                    📷
+                  </button>
+                )}
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/png,image/jpeg,image/webp"
+                  multiple
+                  hidden
+                  onChange={handleFileInputChange}
+                />
+              </div>
+              {attachments.length > 0 && (
+                <p className="muted" style={{ fontSize: "0.75rem", margin: "0 0 6px" }}>
+                  {t("feedback_widget.attachments.count_hint", { count: attachments.length })}
+                </p>
+              )}
+              {attachments.some((a) => a.status === "uploading") && (
+                <p className="muted" style={{ fontSize: "0.75rem", margin: "0 0 6px" }}>
+                  {t("feedback_widget.attachments.uploading")}
+                </p>
+              )}
+              {attachmentError && (
+                <p role="alert" className="form-error" style={{ fontSize: "0.75rem", padding: "6px 8px", margin: "0 0 6px" }}>
+                  {attachmentError}
+                </p>
+              )}
+
               <div style={{ display: "flex", gap: 8 }}>
-                <button className="btn" disabled={submitting} onClick={handleSubmit} style={{ flex: 1 }}>
+                <button
+                  className="btn"
+                  disabled={submitting || attachments.some((a) => a.status === "uploading")}
+                  onClick={handleSubmit}
+                  style={{ flex: 1 }}
+                >
                   {t("common.submit")}
                 </button>
                 <button
