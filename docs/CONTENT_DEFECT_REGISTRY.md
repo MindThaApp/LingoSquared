@@ -1067,3 +1067,15 @@ PREVENTION: per-lane register pins added to docs/content/CLAUDE.md —
 every new authoring dispatch must quote the lane's pinned register.
 **Tier note**: fa-en overlay lane resets to full review (new class);
 nl-en/prs-en remain full (launch-gate).
+
+### 2026-07-12 — X→en A1 units 64-68 wave (en realizations + 3 overlay sets)
+en realizations: 0 defects (1 borderline dialogue phrasing noted, not
+tested). nl-en overlays: 0 defects (4+ consecutive clean batches).
+fa-en overlays: 0 defects — the register pin quoted verbatim in the
+Codex dispatch PREVENTED a recurrence of the register-divergence class.
+prs-en overlays: 1 gloss-faithfulness defect (علامه "eminent scholar"
+for علامت "symptom", 11 occurrences in u66, fixed in review) — real
+Persian-orthography confusable; lane stays full review.
+Process note: two of three Opus reviewers this round committed DIRECTLY
+to master (worktree isolation not honored — known footgun, commits
+verified clean); coordinator diffed git log per standing rule.
