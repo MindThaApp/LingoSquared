@@ -982,3 +982,17 @@ New bug class discovered: minor variant — "distractor that cannot be
 rendered distinctly in text" (script-ramp letter exercises); note for
 future script-ramp authoring (ko/ja/ar).
 **Tier note**: en-ru overlays stay Full review (new lane).
+
+### 2026-07-12 — it/ru A1 units 04-06 realizations + overlays (fresh-context reviews, Claude Opus)
+Realizations: 0 correctness defects both languages (4 ru §16
+matching_pairs poolings applied — ru author systematically under-sized
+where the it author pooled correctly). Overlays: 0 defects, all six
+files, all priority classes (pairs-mirror, distractor-vs-audio,
+render-distinct) checked mechanically and clean.
+Instance count: realizations 0+0 (4 quality poolings), overlays 0.
+New bug class discovered: no.
+**Tier note**: it/ru realization + overlay lanes each now have a
+zero-correctness-defect streak forming (overlay lane: 2 consecutive
+clean units-batches for ru, 1 for it after its unit01-03 6-defect
+batch). Both lanes stay Full review (new language) but the recipe
+with the inline pairs-mirror + audio-containment rules is holding.
