@@ -1017,3 +1017,14 @@ New bug class: minor — "real-world realism" (prices/facts) worth a
 reviewer-checklist line, not a validator.
 **Tier note**: both lanes remain Full (new language); recipe holding at
 near-zero yield with validators now enforcing pairs-mirror + containment.
+
+### 2026-07-12 — it/ru A1 units 10-12 realizations + overlays (fresh-context reviews, Claude Opus)
+Realizations: 0 correctness defects both languages (5 ru §16
+matching_pairs poolings — the ru-author-undersizes pattern recurred a
+third time; overlay/realization recipe prompts should carry the §16 aim
+explicitly for ru). Overlays: 0 defects / 6 files.
+**Tier note**: en-it and en-ru overlay lanes now at 2-3 consecutive
+zero-defect batches; realization lanes near-zero. Still Full review
+(new language) but both lanes are candidates for 1-in-3 sampling once
+each hits 3 consecutive clean batches AND validators cover the recurring
+classes (pairs-mirror + containment now compiler-enforced).
