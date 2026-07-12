@@ -996,3 +996,15 @@ zero-correctness-defect streak forming (overlay lane: 2 consecutive
 clean units-batches for ru, 1 for it after its unit01-03 6-defect
 batch). Both lanes stay Full review (new language) but the recipe
 with the inline pairs-mirror + audio-containment rules is holding.
+
+### 2026-07-12 — nl-en / fa-en / prs-en B1 overlays 07-11 (fresh-context reviews, Claude Opus; authored by Codex gpt-5.5)
+Yields: nl-en 0 defects / 5 files; prs-en 0 defects / 5 files (Dari
+register fully clean); fa-en 1 defect / 5 files — one listen_select
+same-speaker distractor (unit11: "the design course" is spoken by the
+tested speaker). Exactly the known not-yet-compiler-enforced §1.22
+class; validator dispatch is in flight (task-mrhf0qrp).
+Instance count: 1 total across 15 files.
+New bug class discovered: no.
+**Tier note**: launch-gate — all three lanes stay Full review until
+launch regardless of streaks. The Codex-B1-overlay recipe (pairs-mirror
++ sibling-isolation rules inline) is performing at near-zero yield.
