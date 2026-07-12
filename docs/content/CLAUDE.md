@@ -141,8 +141,8 @@ review.
 - **The spine outcome count moves fast — re-grep
   `docs/content/universal_spine.yaml` before trusting any number.** Grew
   19→24→26→28 across 2026-07-05/06. The English realization (all X→en
-  directions) still only covers the first 26 outcomes;
-  `banking`/second-`health` aren't realized anywhere yet. 10 of 18 paths
+  directions) covers ALL spine outcomes as of 2026-07-12
+  (a2_unit27_banking + a2_unit28_doctor exist on disk). 10 of 18 paths
   have zero content; no path is past A2.
 - No native-speaker review network in general — nl is the deliberate exception.
 - Writing prompts graded by exact string match (Phase C adds distance-1
