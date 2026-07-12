@@ -77,12 +77,18 @@ class Settings(BaseSettings):
     vapid_public_key: str = ""
     vapid_private_key: str = ""
     vapid_subject: str = "mailto:admin@example.com"
+    google_oauth_client_ids: str = ""
+    apple_audience_ids: str = ""
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
     @property
     def admin_email_set(self): return {x.strip().lower() for x in self.admin_emails.split(",") if x.strip()}
     @property
     def cors_origin_list(self): return [x.strip() for x in self.cors_origins.split(",") if x.strip()]
+    @property
+    def google_oauth_client_id_set(self): return {x.strip() for x in self.google_oauth_client_ids.split(",") if x.strip()}
+    @property
+    def apple_audience_id_set(self): return {x.strip() for x in self.apple_audience_ids.split(",") if x.strip()}
 
 @lru_cache
 def get_settings(): return Settings()

@@ -35,7 +35,8 @@ class ORM(BaseModel): model_config=ConfigDict(from_attributes=True)
 # (AdminContentPage) on the real value instead of firing admin API calls
 # and reacting to the 403 after the fact.
 class UserOut(ORM): id:str; email:EmailStr; display_name:str; is_admin:bool=False
-class MeOut(UserOut): created_at:datetime
+class UserIdentityOut(ORM): provider:Literal["google","apple"]; created_at:datetime
+class MeOut(UserOut): created_at:datetime; identities:list[UserIdentityOut]=Field(default_factory=list)
 # Phase H3 (2026-07-07 integrity audit): display_name/timezone were the
 # only free-form string fields on the auth path with no length bound --
 # an unbounded display_name persists verbatim and is echoed on every
@@ -44,11 +45,12 @@ class MeOut(UserOut): created_at:datetime
 # names (e.g. "America/Argentina/ComodRivadavia", under 40 chars).
 class RegisterIn(BaseModel): email:EmailStr; password:str=Field(min_length=8,max_length=128); display_name:str|None=Field(default=None,max_length=100); timezone:str|None=Field(default=None,max_length=64)
 class LoginIn(BaseModel): email:EmailStr; password:str=Field(max_length=128); timezone:str|None=Field(default=None,max_length=64)
+class SocialLoginIn(BaseModel): provider:Literal["google","apple"]; id_token:str=Field(min_length=1,max_length=8192); display_name:str|None=Field(default=None,max_length=100)
 class AuthOut(BaseModel): access_token:str; refresh_token:str; token_type:Literal["bearer"]="bearer"; expires_in:int; user:UserOut
 class RefreshIn(BaseModel): refresh_token:str=Field(min_length=1,max_length=512)
 class RefreshOut(BaseModel): access_token:str; refresh_token:str; token_type:Literal["bearer"]="bearer"; expires_in:int
 class LogoutIn(BaseModel): refresh_token:str=Field(min_length=1,max_length=512)
-class LanguageOut(ORM): code:str; name:str; native_name:str; script:Literal["latin","cyrillic","han","arabic","devanagari"]; direction:Literal["ltr","rtl"]
+class LanguageOut(ORM): code:str; name:str; native_name:str; script:Literal["latin","cyrillic","han","arabic","devanagari","hangul","japanese"]; direction:Literal["ltr","rtl"]
 class TextBlock(BaseModel): text:str; language_code:str; direction:Literal["ltr","rtl"]; speaker:str|None=None
 # 2026-07-07 vocabulary-example addition (CONTRACT.md, AUTHORING_GUIDE.md #19):
 # optional example sentences showing the card's word in real context —
@@ -107,12 +109,16 @@ class GeneralFeedbackIn(BaseModel):
     description:str|None=Field(default=None,max_length=2000)
     page_path:str=Field(max_length=255)
     client_context:dict[str,Any]=Field(default_factory=dict)
+    attachment_keys:list[str]=Field(default_factory=list,max_length=3)
 
     @model_validator(mode="after")
     def bounded_client_context(self):
         _bounded_payload_size(self.client_context)
+        _bounded_payload_size(self.attachment_keys)
         return self
 class ContentIssueCreatedOut(BaseModel): id:str; status:ContentIssueStatus
+class FeedbackAttachmentUploadOut(BaseModel): attachment_key:str; expires_in_seconds:int
+class ContentIssueAttachmentOut(ORM): id:str; content_type:str; byte_size:int
 class ContentIssueUpdateIn(BaseModel):
     status:ContentIssueStatus|None=None
     triage_notes:str|None=Field(default=None,max_length=5000)
@@ -144,6 +150,7 @@ class ContentIssueOut(ORM):
     created_at:datetime
     triaged_at:datetime|None
     resolved_at:datetime|None
+    attachments:list[ContentIssueAttachmentOut]=Field(default_factory=list)
     # Triage enrichment, computed per-request by GET /admin/content/issues
     # (never stored on the report row) so an admin sees what the report is
     # about without spelunking YAML/psql: the referenced exercise's prompt
