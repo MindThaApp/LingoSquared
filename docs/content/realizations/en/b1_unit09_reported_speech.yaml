@@ -13,13 +13,27 @@ generation_provenance:
     Not adapted from external course material.
 status: "complete_draft"
 review:
-  status: "unreviewed"
-  required_next_reviewer: "fresh_context"
+  status: "reviewed"
+  required_next_reviewer: null
   notes: >-
-    Needs fresh-context content review. Author self-check covered spine fit,
-    B1 reported-speech grammar, recognition-to-production pacing, dialogue
-    speaker fields, word_order sentence order, matching-pair coverage,
-    boolean-like strings, and learner-facing text.
+    2026-07-12 fresh-context review (Codex). Verified: said that/told me
+    that/asked whether/asked if style reported-speech forms are correct and
+    natural; statement backshift and embedded yes-or-no question order are
+    accurate; message-chain facts are internally consistent (Mia available
+    after lunch, full report vs short summary, meeting at two); character
+    continuity stays within the reviewed workplace/update storyline.
+    Realization-only structural audit passed: YAML parses cleanly, spine
+    reference resolves, content_keys are unique, text-block directions are
+    correct, no stray YAML booleans or learner-facing snake_case leaks,
+    vocabulary examples present, media references declared, all word_order
+    items are buildable in sentence order, matching_pairs has 7 pairs, and
+    dialogue teaching cards use structured target.speaker with no
+    Name:-in-text. Fixed lesson01 exercise01's listen_select audio from a
+    whole vocabulary-list clip to single-target-word audio so future
+    distractors are not spoken in the same clip. LIMITATION: no X-to-en
+    overlays exist for this unit yet, so accepted_answers,
+    contraction/punctuation variants, and overlay-authored listen distractors
+    could not be machine-checked.
 
 course:
   realization_key: "en.b1"
@@ -28,11 +42,11 @@ course:
   register_policy: "Teach clear, neutral American English at B1 level: reporting what someone said or asked with said that, told me that, asked whether, and asked if, in everyday messages and workplace coordination."
 
 media_assets:
-  - {content_key: "en.b1.audio.reported_speech.words.01", language: "en", text: "said that, told me that, asked whether, message, confirm, available", voice_hint: "neutral_adult", status: "pending_generation"}
+  - {content_key: "en.b1.audio.reported_speech.word.available.01", language: "en", text: "available", voice_hint: "neutral_adult", status: "pending_generation"}
   - {content_key: "en.b1.audio.reported_speech.sentence.01", language: "en", text: "Mia said that she was available after lunch.", voice_hint: "neutral_adult", status: "pending_generation"}
   - content_key: "en.b1.audio.dialogue.reported_speech.01"
     language: "en"
-    text: "Daniel: Did Mia reply about the review? Leila: Yes, she said that she was available after lunch. Daniel: Great. Did she ask anything else? Leila: She asked whether we needed the full report today. Daniel: What did you tell her? Leila: I told her that a short summary was enough. Daniel: Perfect. I will tell the team that we can meet at two."
+    text: "Daniel: Did Mia reply about the review? Leila: Yes, she said that she was available after lunch. Daniel: Great. Did she ask anything else? Leila: She asked if we needed the full report today. Daniel: What did you tell her? Leila: I told her that a short summary was enough. Daniel: Perfect. I will tell the team that we can meet at two."
     voice_hint: "two_adults_neutral_professional"
     status: "pending_generation"
 
@@ -45,20 +59,21 @@ units:
     planned_lesson_count: 4
     lessons:
       - content_key: "en.b1.unit09.lesson01.reported_speech_vocabulary"
-        title: "Said that, asked whether, and message"
+        title: "Said that, asked if, and message"
         spine_outcome_id: "universal.b1.reported_speech.report_what_someone_said"
         teaching:
           - {content_key: "en.b1.unit09.lesson01.teach.said_that", kind: "vocabulary", target: {text: "said that", language_code: "en", direction: "ltr"}, introduced_tokens: ["said", "that"], example: {text: "She said that she was busy.", language_code: "en", direction: "ltr"}}
           - {content_key: "en.b1.unit09.lesson01.teach.told_me_that", kind: "vocabulary", target: {text: "told me that", language_code: "en", direction: "ltr"}, introduced_tokens: ["told", "me"], example: {text: "He told me that the meeting was canceled.", language_code: "en", direction: "ltr"}}
           - {content_key: "en.b1.unit09.lesson01.teach.asked_whether", kind: "vocabulary", target: {text: "asked whether", language_code: "en", direction: "ltr"}, introduced_tokens: ["asked", "whether"], example: {text: "Mia asked whether we needed help.", language_code: "en", direction: "ltr"}}
+          - {content_key: "en.b1.unit09.lesson01.teach.asked_if", kind: "vocabulary", target: {text: "asked if", language_code: "en", direction: "ltr"}, introduced_tokens: ["if"], example: {text: "Mia asked if we needed help.", language_code: "en", direction: "ltr"}}
           - {content_key: "en.b1.unit09.lesson01.teach.message", kind: "vocabulary", target: {text: "message", language_code: "en", direction: "ltr"}, introduced_tokens: ["message"], example: {text: "Leila sent a message after lunch.", language_code: "en", direction: "ltr"}}
           - {content_key: "en.b1.unit09.lesson01.teach.confirm", kind: "vocabulary", target: {text: "confirm", language_code: "en", direction: "ltr"}, introduced_tokens: ["confirm"], example: {text: "Please confirm the time before you leave.", language_code: "en", direction: "ltr"}}
           - {content_key: "en.b1.unit09.lesson01.teach.available", kind: "vocabulary", target: {text: "available", language_code: "en", direction: "ltr"}, introduced_tokens: ["available"], example: {text: "Mia is available after lunch.", language_code: "en", direction: "ltr"}}
         exercises:
-          - {content_key: "en.b1.unit09.lesson01.exercise01.listen_word", type: "listen_select", tested_text: "available", media_asset_key: "en.b1.audio.reported_speech.words.01", prompt: {target_blocks: []}}
+          - {content_key: "en.b1.unit09.lesson01.exercise01.listen_word", type: "listen_select", tested_text: "available", media_asset_key: "en.b1.audio.reported_speech.word.available.01", prompt: {target_blocks: []}}
           - {content_key: "en.b1.unit09.lesson01.exercise02.choose_said_that", type: "multiple_choice", tested_text: "said that", prompt: {target_blocks: [{text: "Which phrase reports a statement someone made?", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.b1.unit09.lesson01.exercise03.choose_available", type: "multiple_choice", tested_text: "available", prompt: {target_blocks: [{text: "Which word means free or able to meet?", language_code: "en", direction: "ltr"}]}}
-          - {content_key: "en.b1.unit09.lesson01.exercise04.match_reported_speech_words", type: "matching_pairs", tested_text: "said that told me that asked whether message confirm available", prompt: {target_blocks: [{text: "Match each meaning to the correct English word or phrase.", language_code: "en", direction: "ltr"}]}, pairs: [{left: "reports a statement someone made", right: "said that"}, {left: "reports information someone gave to you", right: "told me that"}, {left: "reports a yes-or-no question", right: "asked whether"}, {left: "a short written or spoken note", right: "message"}, {left: "to say that something is definite or correct", right: "confirm"}, {left: "free or able to meet", right: "available"}]}
+          - {content_key: "en.b1.unit09.lesson01.exercise04.match_reported_speech_words", type: "matching_pairs", tested_text: "said that told me that asked whether asked if message confirm available", prompt: {target_blocks: [{text: "Match each meaning to the correct English word or phrase.", language_code: "en", direction: "ltr"}]}, pairs: [{left: "reports a statement someone made", right: "said that"}, {left: "reports information someone gave to you", right: "told me that"}, {left: "reports a yes-or-no question, slightly formal", right: "asked whether"}, {left: "reports a yes-or-no question in everyday speech", right: "asked if"}, {left: "a short written or spoken note", right: "message"}, {left: "to say that something is definite or correct", right: "confirm"}, {left: "free or able to meet", right: "available"}]}
           - {content_key: "en.b1.unit09.lesson01.exercise05.write_confirm", type: "writing_prompt", tested_text: "confirm", prompt: {target_blocks: [{text: "Write the word that means to say something is definite or correct.", language_code: "en", direction: "ltr"}]}}
 
       - content_key: "en.b1.unit09.lesson02.reporting_statements"
@@ -99,13 +114,13 @@ units:
           - {content_key: "en.b1.unit09.lesson04.teach.q_mia_reply", kind: "dialogue", target: {text: "Did Mia reply about the review?", language_code: "en", direction: "ltr", speaker: "Daniel"}, introduced_tokens: ["Did", "Mia", "reply", "about", "review"], media_asset_key: "en.b1.audio.dialogue.reported_speech.01"}
           - {content_key: "en.b1.unit09.lesson04.teach.a_she_said_available", kind: "dialogue", target: {text: "Yes, she said that she was available after lunch.", language_code: "en", direction: "ltr", speaker: "Leila"}, introduced_tokens: ["Yes", "she", "said", "that", "was", "available", "after", "lunch"]}
           - {content_key: "en.b1.unit09.lesson04.teach.q_anything_else", kind: "dialogue", target: {text: "Great. Did she ask anything else?", language_code: "en", direction: "ltr", speaker: "Daniel"}, introduced_tokens: ["Great", "ask", "anything", "else"]}
-          - {content_key: "en.b1.unit09.lesson04.teach.a_asked_whether_report", kind: "dialogue", target: {text: "She asked whether we needed the full report today.", language_code: "en", direction: "ltr", speaker: "Leila"}, introduced_tokens: ["asked", "whether", "we", "needed", "full", "report", "today"]}
+          - {content_key: "en.b1.unit09.lesson04.teach.a_asked_if_report", kind: "dialogue", target: {text: "She asked if we needed the full report today.", language_code: "en", direction: "ltr", speaker: "Leila"}, introduced_tokens: ["asked", "if", "we", "needed", "full", "report", "today"]}
           - {content_key: "en.b1.unit09.lesson04.teach.q_what_tell_her", kind: "dialogue", target: {text: "What did you tell her?", language_code: "en", direction: "ltr", speaker: "Daniel"}, introduced_tokens: ["What", "tell", "her"]}
           - {content_key: "en.b1.unit09.lesson04.teach.a_short_summary_enough", kind: "dialogue", target: {text: "I told her that a short summary was enough.", language_code: "en", direction: "ltr", speaker: "Leila"}, introduced_tokens: ["I", "told", "a", "short", "summary", "enough"]}
           - {content_key: "en.b1.unit09.lesson04.teach.q_tell_team", kind: "dialogue", target: {text: "Perfect. I will tell the team that we can meet at two.", language_code: "en", direction: "ltr", speaker: "Daniel"}, introduced_tokens: ["Perfect", "the", "team", "can", "meet", "at", "two"]}
         exercises:
           - {content_key: "en.b1.unit09.lesson04.exercise01.listen_what_mia_said", type: "dialogue_comprehension", tested_text: "she was available after lunch", media_asset_key: "en.b1.audio.dialogue.reported_speech.01", prompt: {target_blocks: []}}
-          - {content_key: "en.b1.unit09.lesson04.exercise02.listen_what_mia_asked", type: "listen_select", tested_text: "whether we needed the full report today", media_asset_key: "en.b1.audio.dialogue.reported_speech.01", prompt: {target_blocks: []}}
+          - {content_key: "en.b1.unit09.lesson04.exercise02.listen_what_mia_asked", type: "listen_select", tested_text: "if we needed the full report today", media_asset_key: "en.b1.audio.dialogue.reported_speech.01", prompt: {target_blocks: []}}
           - {content_key: "en.b1.unit09.lesson04.exercise03.choose_what_leila_told_mia", type: "multiple_choice", tested_text: "a short summary was enough", prompt: {target_blocks: [{text: "What did Leila tell Mia?", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.b1.unit09.lesson04.exercise04.order_told_her_summary", type: "word_order", tested_text: "I told her that a short summary was enough", prompt: {target_blocks: []}, word_bank: ["told", "her", "that", "a", "short", "summary", "was", "enough", "I"]}
           - content_key: "en.b1.unit09.lesson04.exercise05.reply_as_leila"
@@ -114,5 +129,5 @@ units:
             prompt: {target_blocks: [{text: "Did Mia reply about the review?", language_code: "en", direction: "ltr"}]}
           - content_key: "en.b1.unit09.lesson04.exercise06.speak_reported_speech_dialogue"
             type: "speak_response"
-            tested_text: "She asked whether we needed the full report today"
+            tested_text: "She asked if we needed the full report today"
             prompt: {target_blocks: [{text: "Great. Did she ask anything else?", language_code: "en", direction: "ltr"}]}
