@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { CatalogApi } from "@lingo/shared/api/endpoints";
 import { sortByCefr } from "@lingo/shared/lib/cefr";
 import { LANGUAGE_FLAG } from "@lingo/shared/lib/flags";
+import { localizedLanguageName } from "@lingo/shared/lib/localizedLanguageName";
 import { getLevelPreference } from "../lib/levelPreferences";
 import type { CourseSummary, Language } from "@lingo/shared/api/types";
 
@@ -88,7 +89,7 @@ function LangTile({
         </span>
       )}
       <span className="lang-flag">{LANGUAGE_FLAG[lang.code] ?? "🌐"}</span>
-      <span className="lang-name">{lang.name}</span>
+      <span className="lang-name">{localizedLanguageName(lang.code, t, lang.name)}</span>
       <span className="lang-native" dir={lang.direction}>
         {lang.native_name}
       </span>
@@ -222,7 +223,7 @@ export function CoursePickerPage() {
           <h1>{t("course_picker.learn_heading")}</h1>
           <p className="muted">
             {t("course_picker.you_speak")} {LANGUAGE_FLAG[source]}{" "}
-            {languages.find((l) => l.code === source)?.name}{" "}
+            {localizedLanguageName(source, t, languages.find((l) => l.code === source)?.name)}{" "}
             <button
               className="btn btn-secondary"
               style={{ padding: "4px 12px", marginInlineStart: 8 }}
@@ -256,11 +257,13 @@ export function CoursePickerPage() {
           <h1>
             {t("course_picker.courses_heading", {
               flag: LANGUAGE_FLAG[target],
-              name: languages.find((l) => l.code === target)?.name,
+              name: localizedLanguageName(target, t, languages.find((l) => l.code === target)?.name),
             })}
           </h1>
           <p className="muted">
-            {t("course_picker.for_speakers", { name: languages.find((l) => l.code === source)?.name })}{" "}
+            {t("course_picker.for_speakers", {
+              name: localizedLanguageName(source, t, languages.find((l) => l.code === source)?.name),
+            })}{" "}
             <button
               className="btn btn-secondary"
               style={{ padding: "4px 12px", marginInlineStart: 8 }}
