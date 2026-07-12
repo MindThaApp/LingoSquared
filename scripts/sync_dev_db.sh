@@ -31,18 +31,60 @@ else
   read -r -s -p "Admin password: " ADMIN_PASSWORD; echo
 fi
 
+TMPDIR_SYNC=""
+cleanup() {
+  unset ADMIN_PASSWORD
+  [ -z "$TMPDIR_SYNC" ] || rm -rf "$TMPDIR_SYNC"
+}
+trap cleanup EXIT
+
+login() {
+  local new_token
+  if ! new_token=$(
+    {
+      printf '%s\n' "$ADMIN_EMAIL"
+      printf '%s' "$ADMIN_PASSWORD"
+    } | "$PY" -c '
+import json
+import sys
+
+email = sys.stdin.readline().rstrip("\n")
+password = sys.stdin.read()
+print(json.dumps({"email": email, "password": password}))
+' | curl -sf "$API/auth/login" -H 'Content-Type: application/json' --data-binary @- \
+      | "$PY" -c 'import json,sys; print(json.load(sys.stdin)["access_token"])'
+  ); then
+    return 1
+  fi
+  [ -n "$new_token" ] || return 1
+  TOKEN="$new_token"
+}
+
+api_request() {
+  local output="$1"
+  shift
+  local http
+  http=$(curl -s -o "$output" -w '%{http_code}' "$@" -H "Authorization: Bearer $TOKEN")
+  if [ "$http" = "401" ]; then
+    echo "   token expired; re-authenticating and retrying" >&2
+    if ! login; then
+      echo "   re-authentication failed" >&2
+      printf '%s' "$http"
+      return 0
+    fi
+    http=$(curl -s -o "$output" -w '%{http_code}' "$@" -H "Authorization: Bearer $TOKEN")
+  fi
+  printf '%s' "$http"
+}
+
 echo "== logging in =="
-TOKEN=$(curl -sf "$API/auth/login" -H 'Content-Type: application/json' \
-  -d "{\"email\":\"$ADMIN_EMAIL\",\"password\":\"$ADMIN_PASSWORD\"}" \
-  | $PY -c 'import json,sys; print(json.load(sys.stdin)["access_token"])')
-unset ADMIN_PASSWORD
+TOKEN=""
+login || { echo "login failed"; exit 1; }
 [ -n "$TOKEN" ] || { echo "login failed"; exit 1; }
 
 TMPDIR_SYNC=$(mktemp -d)
-trap 'rm -rf "$TMPDIR_SYNC"' EXIT
 
 echo "== 1/3 content import =="
-grep -v '^\s*#' "$REPO_ROOT/scripts/content_manifest.txt" | grep -v '^\s*$' | \
 while IFS='|' read -r COURSE REALS OVERLAYS; do
   echo "-- $COURSE"
   # A failing course must not abort the whole sync (e.g. another lane's
@@ -54,16 +96,16 @@ while IFS='|' read -r COURSE REALS OVERLAYS; do
     echo "   COMPILE FAILED for $COURSE — SKIPPED (fix its validation errors separately)"
     FAILED_COURSES="${FAILED_COURSES:-} $COURSE"; continue
   fi
-  HTTP=$(curl -s -o "$TMPDIR_SYNC/resp.json" -w '%{http_code}' \
+  HTTP=$(api_request "$TMPDIR_SYNC/resp.json" \
       "$API/admin/content/import" \
-      -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' \
+      -H 'Content-Type: application/json' \
       --data-binary @"$TMPDIR_SYNC/content.json")
   if [ "$HTTP" != "200" ]; then
     echo "   IMPORT FAILED ($HTTP) for $COURSE — SKIPPED: $(head -c 300 "$TMPDIR_SYNC/resp.json")"
     FAILED_COURSES="${FAILED_COURSES:-} $COURSE"; continue
   fi
   $PY -c 'import json,sys; d=json.load(open(sys.argv[1])); print("   ", {k:v for k,v in d.items() if k!="warnings"}); w=d.get("warnings") or []; [print("    warn:", x) for x in w[:5]]' "$TMPDIR_SYNC/resp.json"
-done
+done < <(grep -v '^\s*#' "$REPO_ROOT/scripts/content_manifest.txt" | grep -v '^\s*$')
 
 echo "== 2/3 lexeme backfills (docker, full-repo mount) =="
 # When syncing a REMOTE deployment, set LINGO_BACKFILL_SSH (e.g.
@@ -89,8 +131,11 @@ fi
 
 echo "== 3/3 practice import =="
 COURSES_JSON="$TMPDIR_SYNC/courses.json"
-curl -sf "$API/courses" -H "Authorization: Bearer $TOKEN" > "$COURSES_JSON"
-grep -v '^\s*#' "$REPO_ROOT/scripts/practice_manifest.txt" | grep -v '^\s*$' | \
+HTTP=$(api_request "$COURSES_JSON" "$API/courses")
+if [ "$HTTP" != "200" ]; then
+  echo "   COURSE LIST FAILED ($HTTP): $(head -c 300 "$COURSES_JSON")"
+  exit 1
+fi
 while IFS='|' read -r DIRECTION PACKS; do
   echo "-- $DIRECTION"
   SRC=${DIRECTION%%-*}; TGT=${DIRECTION##*-}
@@ -121,12 +166,12 @@ if matches:
     (cd "$REPO_ROOT" && $PY scripts/compile_content.py practice-compile \
         --pack $LEVEL_PACKS --content-root docs/content/realizations \
         --output "$TMPDIR_SYNC/practice.json")
-    HTTP=$(curl -s -o "$TMPDIR_SYNC/presp.json" -w '%{http_code}' \
+    HTTP=$(api_request "$TMPDIR_SYNC/presp.json" \
         "$API/admin/courses/$CID/practice/import" \
-        -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' \
+        -H 'Content-Type: application/json' \
         --data-binary @"$TMPDIR_SYNC/practice.json")
     echo "   $LEVEL -> course $CID -> $HTTP: $(head -c 200 "$TMPDIR_SYNC/presp.json")"
   done
-done
+done < <(grep -v '^\s*#' "$REPO_ROOT/scripts/practice_manifest.txt" | grep -v '^\s*$')
 
 echo "== done =="
