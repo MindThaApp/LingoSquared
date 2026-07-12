@@ -1168,3 +1168,18 @@ preflight self-report, which the reviewer confirmed.
 New bug class discovered: no
 Instance count: 3 across 2 files. Fixed by coordinator, merged.
 Compiler validation still pending first X→en overlay for these units.
+
+### 2026-07-13 — nl-en/fa-en/prs-en B1 overlays 15-17 (fresh-context reviews, Claude Opus ×3)
+Bug classes found: none — 0 defects across all 9 files (63 exercises/lane).
+One optional strengthening applied (prs-en u17 choose_procrastinate:
+"delay" distractor semantically overlapped the Dari prompt's wording —
+swapped for "regret"). One judgment item flagged for Ramin, no change
+made: nl-en u15 complaint-LETTER glosses use formal "u" (reviewer judges
+correct Dutch business register; learner-facing instruction voice stays
+jij).
+New bug class discovered: no. First corpus compile of units 15-17 found
+1 realization defect ("leading" forward-referenced, fixed 9ff6886) —
+5 other standalone-run errors were cumulative-vocabulary false positives.
+Instance count: 0 overlay defects. The form-identification-distractor
+warning quoted verbatim in these dispatches returned zero findings —
+consistent with the preflight-verbatim effect (23→3→0 over three waves).
