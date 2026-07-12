@@ -1008,3 +1008,12 @@ New bug class discovered: no.
 **Tier note**: launch-gate — all three lanes stay Full review until
 launch regardless of streaks. The Codex-B1-overlay recipe (pairs-mirror
 + sibling-isolation rules inline) is performing at near-zero yield.
+
+### 2026-07-12 — it/ru A1 units 07-09 realizations + overlays (fresh-context reviews, Claude Opus)
+Realizations: 1 defect / 6 files (ru unit08 unrealistic price in
+learner-facing dialogue, fixed; no grammar/containment/gradability
+defects). Overlays: 0 defects / 6 files, all mechanical checks clean.
+New bug class: minor — "real-world realism" (prices/facts) worth a
+reviewer-checklist line, not a validator.
+**Tier note**: both lanes remain Full (new language); recipe holding at
+near-zero yield with validators now enforcing pairs-mirror + containment.
