@@ -1048,6 +1048,19 @@ def _media_asset_texts(
     return texts
 
 
+def _media_assets_by_key(
+    realization: dict[str, Any],
+) -> dict[Any, dict[str, Any]]:
+    assets = {}
+    for item in realization.get("media_assets", []):
+        if not isinstance(item, dict):
+            continue
+        key = item.get("content_key")
+        if key:
+            assets[key] = item
+    return assets
+
+
 def _normalized_contains(haystack: str, needle: str) -> bool:
     normalized_haystack = normalize_audio_text(haystack)
     normalized_needle = normalize_audio_text(needle)
@@ -1068,6 +1081,114 @@ def normalize_audio_text(value: Any) -> str | None:
     value = re.sub(r"[^\w\u200c]+", " ", value, flags=re.UNICODE)
     normalized = " ".join(value.casefold().split())
     return normalized or None
+
+
+AUDIO_KEY_VOICE_SEGMENTS = {
+    "clear",
+    "formal",
+    "informal",
+    "neutral",
+    "polite",
+    "spoken",
+}
+
+
+def _audio_key_voice(value: Any) -> str | None:
+    if not isinstance(value, str):
+        return None
+
+    parts = [part for part in value.split(".") if part]
+    while parts and parts[-1].isdigit():
+        parts.pop()
+    if not parts:
+        return None
+
+    candidate = parts[-1].casefold()
+    if candidate in AUDIO_KEY_VOICE_SEGMENTS:
+        return candidate
+    return None
+
+
+def _media_key_for_option(
+    value: Any,
+    assets: dict[Any, dict[str, Any]],
+) -> Any | None:
+    if not isinstance(value, str):
+        return None
+    if value in assets:
+        return value
+    return None
+
+
+def _listen_select_option_media_keys(
+    exercise: dict[str, Any],
+    exercise_overlay: dict[str, Any],
+    assets: dict[Any, dict[str, Any]],
+) -> list[tuple[str, Any]]:
+    key = exercise.get("content_key", "<unknown>")
+    media_keys = []
+
+    media_key = exercise.get("media_asset_key")
+    if media_key:
+        media_keys.append((f"realization.exercises.{key}.media_asset_key", media_key))
+
+    for field in ("correct_option", "distractors", "options"):
+        for value in _option_values(exercise_overlay.get(field)):
+            option_media_key = _media_key_for_option(value, assets)
+            if option_media_key:
+                media_keys.append(
+                    (f"overlay.exercises.{key}.{field}", option_media_key)
+                )
+
+    return media_keys
+
+
+def validate_listen_select_same_speaker_audio_options(
+    realization: dict[str, Any],
+    overlay: dict[str, Any],
+    report: Report,
+):
+    assets = _media_assets_by_key(realization)
+    exercise_overlays = overlay.get("exercises", {})
+    if not isinstance(exercise_overlays, dict):
+        exercise_overlays = {}
+
+    for unit in realization.get("units", []):
+        for lesson in unit.get("lessons", []):
+            for exercise in lesson.get("exercises", []):
+                if exercise.get("type") != "listen_select":
+                    continue
+
+                key = exercise.get("content_key", "<unknown>")
+                exercise_overlay = exercise_overlays.get(key, {})
+                if not isinstance(exercise_overlay, dict):
+                    continue
+
+                option_media_keys = _listen_select_option_media_keys(
+                    exercise,
+                    exercise_overlay,
+                    assets,
+                )
+                voiced_options = []
+                for location, media_key in option_media_keys:
+                    voice = _audio_key_voice(media_key)
+                    if voice:
+                        voiced_options.append((location, media_key, voice))
+
+                if len(voiced_options) < 2:
+                    continue
+
+                _, correct_media_key, correct_voice = voiced_options[0]
+                for location, media_key, voice in voiced_options[1:]:
+                    if voice == correct_voice:
+                        continue
+                    report.error(
+                        location,
+                        "listen_select audio option uses a different "
+                        f"inferred voice from the correct audio: "
+                        f"{media_key!r} -> {voice!r}, "
+                        f"{correct_media_key!r} -> {correct_voice!r}",
+                    )
 
 
 def validate_listen_audio_contains_tested_text(
@@ -2411,6 +2532,7 @@ def validate_documents(
     validate_matching_pairs_overlay_mirror(realization, overlay, report)
     validate_untaught_vocabulary(realization, report)
     validate_vocabulary_examples(realization, overlay, report)
+    validate_listen_select_same_speaker_audio_options(realization, overlay, report)
     validate_listen_audio_contains_tested_text(realization, report)
     validate_audio_references(realization, report)
 
