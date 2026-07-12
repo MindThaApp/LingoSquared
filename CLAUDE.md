@@ -401,9 +401,13 @@ docker/DB/secrets → backend; grading-shape/RTL/build → frontend).
   Respond button, distractors from the whole course vocabulary, a deleted
   logout button) were ALL found only by actually playing a lesson.
 - Local stack only: `colima start`; `cd backend && docker compose up -d`
-  (isolated `backend/.env`, random JWT secret, never committed). **Never
-  touch the live server (192.168.4.4) unattended — deploys happen with
-  Ramin present.**
+  (isolated `backend/.env`, random JWT secret, never committed).
+- **Deploy authority (Ramin, 2026-07-12): the coordinator has standing
+  authority to deploy to the live server (192.168.4.4) — frontend
+  `web_dist` rsync and backend deploys per `docs/PRE_DEPLOY_RUNBOOK.md` —
+  without Ramin present, provided the VERIFICATION BAR passed on the
+  deployed change first. Destructive live-DB operations (drops,
+  data-losing migrations) still require Ramin present.**
 
 ---
 
