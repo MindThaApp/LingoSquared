@@ -164,6 +164,22 @@ review.
   unit02 misc + units 04/05) still bake the name into `text`; harmless
   to the compiler but a TTS voice reads the name aloud. Detail: BUILD_LOG.
 
+## Dispatching an authoring task? Paste the pre-flight checklist.
+
+**`docs/content/AUTHORING_PREFLIGHT.md` must be pasted VERBATIM into every
+content-authoring dispatch prompt** (not linked — pasted), and the author
+must self-report per item before claiming done.
+
+Evidence it works, 2026-07-12: of the bug classes below, the ONE that was
+quoted verbatim in that day's dispatch prompts (duplicate/gloss-sharing
+matching_pairs lefts) came back with **zero findings in two independent
+reviews** — after needing 5 fixes the previous wave. All 23 defects found
+that day were classes the prompts did NOT mention, even though every author
+had this file auto-loaded and the guide "binding". Authors apply what is in
+front of them while writing, not what is merely loaded. This is also the
+cheap path: author-side prevention costs a paragraph; reviewer-side
+detection cost ~200k tokens per review.
+
 ## Bug classes found 2026-07-12 (all slipped a GREEN 0-error compile)
 
 Three fresh-context reviews in one day surfaced these. Validators are being
