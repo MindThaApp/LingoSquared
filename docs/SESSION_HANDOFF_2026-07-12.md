@@ -173,3 +173,15 @@ All queued wave items landed; everything below is merged, reviewed
   merges complete).
 - Codex self-reported acceptance ("spec counts OK") missed full-iteration
   failures twice — always run the exact harness yourself before commit.
+
+
+### X→en teaching depth after units 59-68 (measured ~17:30)
+Ten new shared English A1 units (59-68, all reviewed, all three overlay
+sets reviewed) moved X→en per-direction teaching from 6.78h to **7.90h**
+(6.05 A1 + 0.82 A2 + 1.03 B1). The new 4-lesson topical units are
+lighter (~22 cards ≈ 0.11h each) than legacy units, so closing the
+remaining ~2.1h purely with more A1 units needs ~19 more. Per-PAIR the
+bar passes everywhere already (en↔nl 19.2h, en↔fa 21.7h, en↔prs 23.2h).
+**Paused further X→en unit waves pending Ramin's per-direction vs
+per-pair ruling** — if per-direction, the efficient path is probably
+denser B1/A2 English units (B1 is only 1.03h) rather than more A1.
