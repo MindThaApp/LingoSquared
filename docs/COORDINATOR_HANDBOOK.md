@@ -75,6 +75,28 @@ commit, and push.
   anyway, which no crawler fixes — page-by-page image reading by the
   authoring worker is the workhorse there.
 
+## Local models (Ollama on the M4 Pro) — assessed 2026-07-12, don't re-test without new models
+
+- Installed: qwen3:14b (9.3GB, the only one that fits alongside the Docker
+  stack on 24GB RAM), qwen3-coder:30b + deepseek-r1:32b (18-19GB — will
+  swap unless Docker is stopped first; don't use casually).
+- Benchmarked qwen3:14b on the §16 matching_pairs retrofit (the most
+  local-model-friendly backlog we have): YAML format compliance and
+  constraint-following were good (no invented vocabulary), speed 17-49s
+  per exercise, but **content judgment fails in exactly the ways that
+  create unanswerable exercises** — it collapsed two distinct exercises
+  into identical pair lists, and on a register-labeling exercise emitted
+  the same left item twice with BOTH labels (duplicate-left, contradictory
+  answers) plus dubious formal/informal labels.
+- **Standing verdict: local models must not author or modify learner-facing
+  content, even "mechanical" expansions.** Acceptable uses: pure-format
+  transforms verifiable 100% programmatically, throwaway scaffolding, or
+  bulk classification where a validator is the sole consumer. Ramin's
+  operating rule: ask him before running local AI; overnight runs allowed
+  only while on AC power or battery >= 60% (check `pmset -g batt`).
+- MLX is installed (can be ~10-30% faster than Ollama on the same model);
+  only worth revisiting if a materially stronger small model lands.
+
 ## Known multi-agent footguns (full list in root CLAUDE.md)
 
 The ones that have actually bitten coordinators: broad `git add` sweeping
