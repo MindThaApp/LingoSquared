@@ -956,3 +956,29 @@ backlog item: extend the audio-containment check to `listen_order`**
 (currently only the listen_select same-speaker rule is on the backlog).
 **Tier note**: new-language lane — Full review stays. The bug is
 mechanical wiring, not language competence.
+
+### 2026-07-12 — en-it overlays A1 01-03 (fresh-context review, Claude Opus; first en-it overlays)
+Bug classes found: **NEW SYSTEMIC CLASS** — overlay matching_pairs
+`accepted_answers` diverging from the realization's `pairs` (frontend
+shows realization tiles, grading compares overlay accepted_answers →
+exercise ungradeable-incorrect regardless of learner input). 5
+instances (English rights vs Italian tiles, swapped/mistranslated pair,
+5-of-11 pair subset, decimal point vs Italian decimal comma). Plus 1
+listen_select spoken-substring distractor violation.
+Instance count: 6 (u01=1, u02=2, u03=3)
+New bug class discovered: YES — **validator backlog (Codex lane,
+HIGH PRIORITY): compiler must cross-check every overlay matching_pairs
+accepted_answers left/right set equals its realization pairs set
+(count + exact strings)**; a green compile let all 5 through.
+**Tier note**: en-it overlays stay Full review — high first-batch yield.
+
+### 2026-07-12 — en-ru overlays A1 01-03 (fresh-context review, Claude Opus; first en-ru overlays)
+Bug classes found: 1 low-severity display-integrity defect (a
+"mirrored glyph" MCQ distractor that renders identical to the correct
+Cyrillic letter in plain text). Fixed. Glosses, distractor-vs-audio,
+matching_pairs mirrors, YAML hygiene all clean.
+Instance count: 1 (u01=1, u02=0, u03=0)
+New bug class discovered: minor variant — "distractor that cannot be
+rendered distinctly in text" (script-ramp letter exercises); note for
+future script-ramp authoring (ko/ja/ar).
+**Tier note**: en-ru overlays stay Full review (new lane).
