@@ -5,6 +5,7 @@ import logging
 import mimetypes
 import os
 import re
+import secrets
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Literal
@@ -12,7 +13,7 @@ from uuid import uuid4
 from fastapi import APIRouter, Depends, File, Form, Query, Request, Response, UploadFile
 from fastapi.responses import FileResponse, JSONResponse
 from starlette.concurrency import run_in_threadpool
-from sqlalchemy import Float, case, delete, func, select, text
+from sqlalchemy import Float, case, delete, func, or_, select, text
 from sqlalchemy.orm import Session, selectinload
 from app.core.config import get_settings
 from app.core.rate_limit import DailyCharBudget, RateLimiter, register_limiter
@@ -53,6 +54,14 @@ from app.models import (
 from app.schemas.api import (
     AnswerIn,
     AnswerOut,
+    AdminPasswordResetOut,
+    AdminUserAdminIn,
+    AdminUserCreateIn,
+    AdminUserCreateOut,
+    AdminUserListOut,
+    AdminUserOut,
+    AdminUserUnlockIn,
+    AdminUserUnlockOut,
     AuthOut,
     CheckpointIn,
     CheckpointResultOut,
@@ -109,7 +118,7 @@ from app.schemas.api import (
     ValidationOut,
     XPOut,
 )
-from app.api.deps import current_user, optional_current_user, lenient_current_user, admin_user
+from app.api.deps import current_user, optional_current_user, lenient_current_user, admin_user, is_admin_user
 from app.services.progress import activity_day_bounds, record_activity, resolve_user_tz, stats_for, valid_timezone_or_none
 from app.services.quests import QUEST_DEFINITIONS, daily_quests_for
 from app.review.sm2 import schedule
@@ -237,7 +246,7 @@ def revoke_all_refresh_tokens(db:Session,user_id:str,now_value:datetime):
 def auth_response(db:Session,user):
     refresh_token=issue_refresh_token(db,user.id)
     db.commit()
-    return {"access_token":create_token(user.id),"refresh_token":refresh_token,"token_type":"bearer","expires_in":get_settings().access_token_expire_seconds,"user":user}
+    return {"access_token":create_token(user.id),"refresh_token":refresh_token,"token_type":"bearer","expires_in":get_settings().access_token_expire_seconds,"user":{"id":user.id,"email":user.email,"display_name":user.display_name,"is_admin":is_admin_user(user)}}
 
 def refresh_response(db:Session,user_id:str):
     refresh_token=issue_refresh_token(db,user_id)
@@ -287,6 +296,20 @@ def resolve_social_user(db:Session,body:SocialLoginIn,claims:dict):
     db.add(UserStats(user_id=user.id,total_xp=0,streak_days=0,last_activity_date=None,daily_goal=20))
     db.add(UserIdentity(user_id=user.id,provider=provider,provider_subject=subject))
     return user
+def delete_user_account(db:Session,user:User):
+    user_practice_item_ids = select(PracticeItem.id).where(PracticeItem.user_id == user.id)
+    db.execute(
+        delete(ContentIssueReport).where(
+            ContentIssueReport.practice_item_id.in_(user_practice_item_ids)
+        )
+    )
+    db.execute(
+        delete(PracticeAttempt).where(
+            (PracticeAttempt.user_id == user.id)
+            | (PracticeAttempt.practice_item_id.in_(user_practice_item_ids))
+        )
+    )
+    db.delete(user)
 def resolve_script(db, language_code):
     if not language_code:
         return None
@@ -373,7 +396,7 @@ def require_speaking_unlocked(db:Session, unit:"Unit", user) -> None:
     # unit's lessons, answer every exercise by id (earning XP), and complete
     # each lesson without ever unlocking speaking. Shared helper, 3 call
     # sites (start, answer, complete), same check each time.
-    if unit.section==UnitSection.speaking and not user.is_admin and not speaking_unlocked(db,unit.course_id,user.id):
+    if unit.section==UnitSection.speaking and not is_admin_user(user) and not speaking_unlocked(db,unit.course_id,user.id):
         fail(409,"speaking_locked","Complete all reading and writing units before starting speaking lessons")
 
 @router.post("/auth/register",response_model=AuthOut,status_code=201)
@@ -389,6 +412,7 @@ def login(body:LoginIn,request:Request,db:Session=Depends(get_db)):
     enforce_rate_limit(LOGIN_RATE_LIMIT,client_ip(request),"login_rate_limited","Too many login attempts. Please wait before trying again.")
     user=db.scalar(select(User).where(User.email==body.email.lower()))
     if not user or not user.password_hash or not verify_password(body.password,user.password_hash): fail(401,"invalid_credentials","Invalid email or password")
+    if not user.is_active: fail(401,"inactive_user","This account is inactive")
     valid_tz=valid_timezone_or_none(body.timezone)
     if valid_tz and valid_tz!=user.timezone: user.timezone=valid_tz
     return auth_response(db,user)
@@ -402,6 +426,7 @@ def social_login(body:SocialLoginIn,db:Session=Depends(get_db)):
     except social_auth.SocialTokenError:
         fail(401,"invalid_credentials","Invalid social sign-in token")
     user=resolve_social_user(db,body,claims)
+    if not user.is_active: fail(401,"inactive_user","This account is inactive")
     return auth_response(db,user)
 @router.post("/auth/refresh",response_model=RefreshOut)
 def refresh(body:RefreshIn,request:Request,db:Session=Depends(get_db)):
@@ -421,7 +446,7 @@ def refresh(body:RefreshIn,request:Request,db:Session=Depends(get_db)):
     if as_aware(refresh_token.expires_at)<=now_value:
         fail(401,"invalid_refresh_token","Invalid or expired refresh token")
     user=db.get(User,refresh_token.user_id)
-    if not user:
+    if not user or not user.is_active:
         fail(401,"invalid_refresh_token","Invalid or expired refresh token")
     refresh_token.revoked_at=now_value
     response=refresh_response(db,user.id)
@@ -444,7 +469,7 @@ def me(user=Depends(current_user),db:Session=Depends(get_db)):
         "id":user.id,
         "email":user.email,
         "display_name":user.display_name,
-        "is_admin":user.is_admin,
+        "is_admin":is_admin_user(user),
         "created_at":user.created_at,
         "identities":[{"provider":identity.provider,"created_at":identity.created_at} for identity in identities],
     }
@@ -483,19 +508,7 @@ def export_me(response:Response,user=Depends(current_user),db:Session=Depends(ge
     }
 @router.delete("/me",status_code=204)
 def delete_me(user=Depends(current_user),db:Session=Depends(get_db)):
-    user_practice_item_ids = select(PracticeItem.id).where(PracticeItem.user_id == user.id)
-    db.execute(
-        delete(ContentIssueReport).where(
-            ContentIssueReport.practice_item_id.in_(user_practice_item_ids)
-        )
-    )
-    db.execute(
-        delete(PracticeAttempt).where(
-            (PracticeAttempt.user_id == user.id)
-            | (PracticeAttempt.practice_item_id.in_(user_practice_item_ids))
-        )
-    )
-    db.delete(user)
+    delete_user_account(db,user)
     db.commit()
     return Response(status_code=204)
 @router.get("/languages",response_model=list[LanguageOut])
@@ -518,7 +531,7 @@ def course(course_id:str,db:Session=Depends(get_db)):
 def units(course_id:str,user=Depends(optional_current_user),db:Session=Depends(get_db)):
     if not db.get(Course,course_id):
         fail(404,"course_not_found","Course not found")
-    unlocked=(user and user.is_admin) or speaking_unlocked(
+    unlocked=(user and is_admin_user(user)) or speaking_unlocked(
         db,
         course_id,
         user.id if user else None,
@@ -1802,7 +1815,7 @@ def practice_batch(
         user.id,
         course,
         body.size if body else 10,
-        is_admin=user.is_admin,
+        is_admin=is_admin_user(user),
     )
     db.commit()
     return {
@@ -1932,6 +1945,265 @@ def practice_answer(
         ),
         "xp_awarded": xp_awarded,
     }
+
+def temporary_password() -> str:
+    return secrets.token_urlsafe(18)
+
+def admin_user_summary(db:Session,target:User) -> dict:
+    stats=db.get(UserStats,target.id)
+    direct_courses=set(db.scalars(select(SkillProgress.course_id).where(SkillProgress.user_id==target.id)))
+    lesson_courses=set(
+        db.scalars(
+            select(Unit.course_id)
+            .join(Lesson,Lesson.unit_id==Unit.id)
+            .join(LessonProgress,LessonProgress.lesson_id==Lesson.id)
+            .where(LessonProgress.user_id==target.id)
+            .distinct()
+        )
+    )
+    course_ids=direct_courses|lesson_courses
+    enrolled=[
+        {"id":course.id,"title":course.title}
+        for course in db.scalars(select(Course).where(Course.id.in_(course_ids)).order_by(Course.title)) if course
+    ] if course_ids else []
+    return {
+        "id":target.id,
+        "email":target.email,
+        "display_name":target.display_name,
+        "created_at":target.created_at,
+        "xp":stats.total_xp if stats else 0,
+        "streak":stats.streak_days if stats else 0,
+        "last_activity":stats.last_activity_date if stats else None,
+        "enrolled_courses":enrolled,
+        "is_admin":is_admin_user(target),
+        "is_active":target.is_active,
+    }
+
+def get_admin_target_user(db:Session,user_id:str) -> User:
+    target=db.get(User,user_id)
+    if not target: fail(404,"user_not_found","User not found")
+    return target
+
+def active_admin_count(db:Session) -> int:
+    admin_emails=get_settings().admin_email_set
+    count=0
+    for candidate in db.scalars(select(User).where(User.is_active.is_(True))):
+        if candidate.is_admin or candidate.email.lower() in admin_emails:
+            count+=1
+    return count
+
+def complete_lesson_for_user(db:Session,target:User,lesson_row:Lesson,now:datetime) -> tuple[bool,int]:
+    progress=db.scalar(
+        select(LessonProgress)
+        .where(
+            LessonProgress.user_id==target.id,
+            LessonProgress.lesson_id==lesson_row.id,
+        )
+        .with_for_update()
+    )
+    created_or_completed=False
+    if not progress:
+        progress=LessonProgress(
+            user_id=target.id,
+            lesson_id=lesson_row.id,
+            started_at=now,
+            completed_at=now,
+            correct_count=0,
+            answer_count=0,
+            xp_earned=0,
+        )
+        db.add(progress)
+        created_or_completed=True
+    elif progress.completed_at is None:
+        if progress.started_at is None:
+            progress.started_at=now
+        progress.completed_at=now
+        created_or_completed=True
+
+    introduced=0
+    lexemes=list(db.scalars(select(Lexeme).where(Lexeme.provenance_lesson_id==lesson_row.id)))
+    existing=set(
+        db.scalars(
+            select(UserLexemeSRS.lexeme_id)
+            .where(
+                UserLexemeSRS.user_id==target.id,
+                UserLexemeSRS.lexeme_id.in_([lexeme.id for lexeme in lexemes]),
+            )
+            .with_for_update()
+        )
+    ) if lexemes else set()
+    for lexeme in lexemes:
+        if lexeme.id in existing:
+            continue
+        db.add(
+            UserLexemeSRS(
+                user_id=target.id,
+                lexeme_id=lexeme.id,
+                course_id=lexeme.course_id,
+                ease_factor=2.5,
+                interval_days=0,
+                repetitions=0,
+                mastery=0.0,
+                due_at=now+timedelta(days=1),
+                last_reviewed_at=None,
+                introduced_at=now,
+                suspended=False,
+                last_session_id=None,
+            )
+        )
+        introduced+=1
+    return created_or_completed,introduced
+
+def refresh_skill_progress(db:Session,target:User,course_id:str):
+    completed=db.scalar(
+        select(func.count(LessonProgress.id))
+        .join(Lesson,Lesson.id==LessonProgress.lesson_id)
+        .join(Unit,Unit.id==Lesson.unit_id)
+        .where(
+            LessonProgress.user_id==target.id,
+            Unit.course_id==course_id,
+            LessonProgress.completed_at.is_not(None),
+        )
+    ) or 0
+    total=db.scalar(select(func.count(Lesson.id)).join(Unit).where(Unit.course_id==course_id)) or 1
+    skill=db.scalar(select(SkillProgress).where(SkillProgress.user_id==target.id,SkillProgress.course_id==course_id))
+    if not skill:
+        skill=SkillProgress(user_id=target.id,course_id=course_id,completed_lessons=0,mastery=0.0)
+        db.add(skill)
+    skill.completed_lessons=completed
+    skill.mastery=completed/total
+
+def mark_unit_checkpoint_passed(db:Session,target:User,unit_id:str,now:datetime) -> bool:
+    existing=checkpoint_passed_for_unit(db,target.id,unit_id)
+    if existing:
+        return False
+    db.add(
+        CheckpointAttempt(
+            user_id=target.id,
+            unit_id=unit_id,
+            total_items=12,
+            passed=True,
+            score=1.0,
+            weak_outcomes=[],
+            created_at=now,
+            scored_at=now,
+        )
+    )
+    return True
+
+@router.post("/admin/users",response_model=AdminUserCreateOut,status_code=201)
+def admin_create_user(body:AdminUserCreateIn,user=Depends(admin_user),db:Session=Depends(get_db)):
+    email=body.email.lower()
+    if db.scalar(select(User).where(User.email==email)): fail(409,"email_exists","An account with this email already exists")
+    password=temporary_password()
+    target=User(email=email,password_hash=hash_password(password),display_name=body.display_name,is_admin=False,is_active=True)
+    db.add(target); db.flush()
+    db.add(UserStats(user_id=target.id,total_xp=0,streak_days=0,last_activity_date=None,daily_goal=20))
+    db.commit(); db.refresh(target)
+    return {"user":admin_user_summary(db,target),"temporary_password":password}
+
+@router.get("/admin/users",response_model=AdminUserListOut)
+def admin_list_users(q:str|None=Query(None,max_length=200),limit:int=Query(50,ge=1,le=200),offset:int=Query(0,ge=0),user=Depends(admin_user),db:Session=Depends(get_db)):
+    query=select(User)
+    if q and q.strip():
+        pattern=f"%{q.strip()}%"
+        query=query.where(or_(User.email.ilike(pattern),User.display_name.ilike(pattern)))
+    total=db.scalar(select(func.count()).select_from(query.subquery())) or 0
+    users=list(db.scalars(query.order_by(User.created_at.desc(),User.email).offset(offset).limit(limit)))
+    return {"items":[admin_user_summary(db,target) for target in users],"total":total,"limit":limit,"offset":offset}
+
+@router.post("/admin/users/{user_id}/reset-password",response_model=AdminPasswordResetOut)
+def admin_reset_password(user_id:str,user=Depends(admin_user),db:Session=Depends(get_db)):
+    target=get_admin_target_user(db,user_id)
+    password=temporary_password()
+    target.password_hash=hash_password(password)
+    revoke_all_refresh_tokens(db,target.id,utc_now())
+    db.commit()
+    return {"temporary_password":password}
+
+@router.post("/admin/users/{user_id}/deactivate",response_model=AdminUserOut)
+def admin_deactivate_user(user_id:str,user=Depends(admin_user),db:Session=Depends(get_db)):
+    target=get_admin_target_user(db,user_id)
+    if target.is_active and is_admin_user(target) and active_admin_count(db)<=1:
+        fail(409,"last_admin","Cannot deactivate the last remaining admin")
+    target.is_active=False
+    revoke_all_refresh_tokens(db,target.id,utc_now())
+    db.commit(); db.refresh(target)
+    return admin_user_summary(db,target)
+
+@router.post("/admin/users/{user_id}/activate",response_model=AdminUserOut)
+def admin_activate_user(user_id:str,user=Depends(admin_user),db:Session=Depends(get_db)):
+    target=get_admin_target_user(db,user_id)
+    target.is_active=True
+    db.commit(); db.refresh(target)
+    return admin_user_summary(db,target)
+
+@router.delete("/admin/users/{user_id}",status_code=204)
+def admin_delete_user(user_id:str,user=Depends(admin_user),db:Session=Depends(get_db)):
+    target=get_admin_target_user(db,user_id)
+    if target.is_active and is_admin_user(target) and active_admin_count(db)<=1:
+        fail(409,"last_admin","Cannot delete the last remaining admin")
+    delete_user_account(db,target)
+    db.commit()
+    return Response(status_code=204)
+
+@router.post("/admin/users/{user_id}/admin",response_model=AdminUserOut)
+def admin_set_admin(user_id:str,body:AdminUserAdminIn,user=Depends(admin_user),db:Session=Depends(get_db)):
+    target=get_admin_target_user(db,user_id)
+    if not body.is_admin and target.is_active and is_admin_user(target):
+        target_is_bootstrap=target.email.lower() in get_settings().admin_email_set
+        if not target_is_bootstrap and active_admin_count(db)<=1:
+            fail(409,"last_admin","Cannot demote the last remaining admin")
+    target.is_admin=body.is_admin
+    db.commit(); db.refresh(target)
+    return admin_user_summary(db,target)
+
+@router.post("/admin/users/{user_id}/unlock",response_model=AdminUserUnlockOut)
+def admin_unlock_user(user_id:str,body:AdminUserUnlockIn,user=Depends(admin_user),db:Session=Depends(get_db)):
+    target=get_admin_target_user(db,user_id)
+    now=datetime.now(timezone.utc)
+    lessons_to_complete:list[Lesson]=[]
+    unit_ids:set[str]=set()
+    course_ids:set[str]=set()
+    if body.lesson_id:
+        lesson_row=db.get(Lesson,body.lesson_id)
+        if not lesson_row: fail(404,"lesson_not_found","Lesson not found")
+        unit=db.get(Unit,lesson_row.unit_id)
+        lessons_to_complete=[lesson_row]
+        unit_ids.add(unit.id)
+        course_ids.add(unit.course_id)
+    elif body.unit_id:
+        unit=db.get(Unit,body.unit_id)
+        if not unit: fail(404,"unit_not_found","Unit not found")
+        lessons_to_complete=list(db.scalars(select(Lesson).where(Lesson.unit_id==unit.id).order_by(Lesson.order)))
+        unit_ids.add(unit.id)
+        course_ids.add(unit.course_id)
+    else:
+        course=db.get(Course,body.course_id)
+        if not course: fail(404,"course_not_found","Course not found")
+        lessons_to_complete=list(
+            db.scalars(
+                select(Lesson)
+                .join(Unit,Unit.id==Lesson.unit_id)
+                .where(Unit.course_id==course.id)
+                .order_by(Unit.order,Lesson.order)
+            )
+        )
+        unit_ids=set(db.scalars(select(Unit.id).where(Unit.course_id==course.id)))
+        course_ids.add(course.id)
+
+    completed_lessons=0
+    introduced_lexemes=0
+    for lesson_row in lessons_to_complete:
+        completed,introduced=complete_lesson_for_user(db,target,lesson_row,now)
+        completed_lessons+=int(completed)
+        introduced_lexemes+=introduced
+    for course_id in course_ids:
+        refresh_skill_progress(db,target,course_id)
+    passed_checkpoints=sum(1 for unit_id in unit_ids if mark_unit_checkpoint_passed(db,target,unit_id,now))
+    db.commit()
+    return {"completed_lessons":completed_lessons,"passed_checkpoints":passed_checkpoints,"introduced_lexemes":introduced_lexemes}
+
 @router.post("/admin/media/upload")
 async def upload_media_asset(
     request: Request,
