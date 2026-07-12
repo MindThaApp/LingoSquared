@@ -455,6 +455,18 @@ export interface FeedbackReportIn {
   // (stack traces etc.) themselves or the whole report 422s. Used by the
   // automatic crash reporter (frontend/src/lib/crashReporter.ts).
   client_context?: Record<string, unknown>;
+  // Opaque keys from POST /feedback/attachments, max 3 -- see
+  // docs/CONTRACT.md "Feedback attachments". Unknown/expired keys are
+  // silently dropped server-side; the report never fails over a bad key.
+  attachment_keys?: string[];
+}
+
+// POST /feedback/attachments response -- see docs/CONTRACT.md "Feedback
+// attachments". The key is opaque and orphans after ~1hr if never
+// claimed by a POST /feedback.
+export interface FeedbackAttachmentUploadResult {
+  attachment_key: string;
+  expires_in_seconds: number;
 }
 
 // Web push (Phase E4) — see docs/CONTRACT.md "Web push notifications".

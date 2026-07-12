@@ -325,6 +325,45 @@ export async function postFeedback<T>(path: string, body: unknown): Promise<T> {
   return res.json() as Promise<T>;
 }
 
+// Multipart variant of postFeedback -- POST /feedback/attachments takes a
+// raw file (field name "file"), not JSON. Same base-URL/no-forced-logout
+// rationale as postFeedback: it's unauthenticated and must never trigger
+// the shared apiFetch's 401-means-session-expired handling. Deliberately
+// does NOT set a Content-Type header -- the browser/fetch sets the
+// multipart boundary itself when given a FormData body; setting it
+// manually breaks the boundary.
+export async function postFeedbackFile<T>(path: string, file: Blob, filename: string): Promise<T> {
+  const { feedbackBaseUrl, tokenStorage } = requireConfig();
+  const token = tokenStorage.get();
+  const headers = new Headers();
+  if (token) headers.set("Authorization", `Bearer ${token}`);
+
+  const form = new FormData();
+  form.append("file", file, filename);
+
+  const res = await fetch(`${feedbackBaseUrl}${path}`, {
+    method: "POST",
+    headers,
+    body: form,
+  });
+
+  if (!res.ok) {
+    let body2: ApiErrorBody | null = null;
+    try {
+      body2 = await res.json();
+    } catch {
+      // non-JSON error body, fall through to generic message
+    }
+    throw new ApiError(
+      res.status,
+      body2?.error?.code ?? "unknown_error",
+      body2?.error?.message ?? res.statusText,
+    );
+  }
+
+  return res.json() as Promise<T>;
+}
+
 export function patch<T>(path: string, body?: unknown): Promise<T> {
   return apiFetch<T>(path, {
     method: "PATCH",
