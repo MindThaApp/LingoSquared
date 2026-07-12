@@ -157,3 +157,15 @@ review.
   (name in `target.speaker`). *Not done:* several single-turn cards (fa
   unit02 misc + units 04/05) still bake the name into `text`; harmless
   to the compiler but a TTS voice reads the name aloud. Detail: BUILD_LOG.
+
+## Per-lane register pins (prevents cross-unit register drift)
+
+- **fa-en overlay lane: colloquial spoken Persian** (می‌شه/می‌کنه/اینجاست
+  style, polite شما where addressing the learner) — the norm set by
+  units 49-58 and confirmed 2026-07-12 after Codex-authored 59-63
+  arrived in formal register and had to be converted. Pin any NEW
+  lane's register in the first dispatch prompt and record it here.
+- **fa.json UI locale (app chrome): formal written Persian** — distinct
+  surface from course-content overlays; normalized 2026-07-12.
+- **prs-en overlay lane: colloquial Dari** (می‌تانین/استه style).
+- **nl-en overlay lane: informal jij-register.**
