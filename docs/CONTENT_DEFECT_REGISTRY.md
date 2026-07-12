@@ -1157,3 +1157,14 @@ to accepted answer), merged. Units 15 and 17: zero defects.
 NOTE: compiler validation still pending — requires the first X→en
 overlay for these units; reviewer reproduced the mechanical validators
 by hand (cumulative token coverage clean across b1 01-17).
+
+### 2026-07-13 — en B1 realizations 18-19 (fresh-context review, Claude Opus)
+Bug classes found: 3 — two prompt/accepted-answer wording mismatches
+(u18 l03 ex05 "Daniel" vs "He"; u19 l02 ex05 "the team is" vs "we are")
+and one confusable matching_pairs LEFT pair (u19 "in summary" vs "in
+short" glosses did not discriminate — blocking, unanswerable). All known
+classes; the confusable-lefts hit was pre-flagged by the AUTHOR's own
+preflight self-report, which the reviewer confirmed.
+New bug class discovered: no
+Instance count: 3 across 2 files. Fixed by coordinator, merged.
+Compiler validation still pending first X→en overlay for these units.
