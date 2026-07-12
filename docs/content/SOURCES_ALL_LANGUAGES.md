@@ -580,3 +580,253 @@ re-evaluating them.
    depth push reaches past what the current FSI Basic Course material
    covers (minus Book IV's military-register content, which should be
    skipped regardless of PD status).
+
+---
+
+## Addendum, 2026-07-12: Korean (ko) and Japanese (ja) — newly approved paths
+
+Ko/ja were just approved as new language paths. Same method as the rest
+of this document: Exa (`web_search_exa`/`web_fetch_exa`) seeded with the
+yojik.eu FSI/DLI URL pattern and a check for community re-OCR remasters
+(the precedent being the Russian "stressed" PDF above), then every real
+candidate downloaded directly and run through `pdfinfo`/`pdftotext` —
+not assumed from a search snippet. Given the Hindi Devanagari OCR trap
+already documented above, every non-Latin-script sample here was
+additionally grepped for actual Hangul/kana/kanji codepoint counts
+(`[가-힣]` for Hangul, `[぀-ヿ]`/`[一-鿿]` for kana/kanji) rather than
+trusting a "text layer present" signal or a readable-looking snippet in
+isolation — a PDF can have a real, sizeable text layer that is still
+functionally 0% target-script.
+
+### Korean (ko)
+
+#### 1. FSI Korean Basic Course (new, 2009 revision) — Volume 1 student text: scanned dead end
+
+- **URL**: `fsi-languages.yojik.eu/languages/FSI/Korean/Basic/Volume 1/Fsi-KoreanBasicCourseVolume1-StudentText.pdf`
+  (Volume 2 sibling at the same path; per-unit audio hosted alongside).
+  Indexed from `fsi-languages.yojik.eu/languages/FSI/fsi-korean-basic-course.html`.
+- **Covers**: 18 units, Volume 1 (original FSI Korean Basic Course
+  structure, 1960s-era, revised audio/notes only in 2009 — the "Notes
+  2009"/revised audio are `© 2009 Martin Sander`, non-commercial-only;
+  the underlying original course text itself remains PD).
+- **License/provenance**: `pdfinfo` confirms `Author: Foreign Service
+  Institute`; genuine US federal work, PD (17 U.S.C. §105), same basis
+  as every other FSI course already in use — but see the caveat above:
+  don't touch the *revised* audio/notes layer without separately
+  confirming it isn't needed (the plain PD original text stands alone).
+- **Extraction quality — verified directly**: `pdfinfo` shows 560 pages,
+  `Producer: Adobe Acrobat 8.0` (a plain page-merge, not a Paper Capture/
+  OCR pass, unlike most other FSI PDFs in this whole document).
+  `pdftotext` (both plain and `-layout`) on the full 560-page file
+  yields **560 bytes total — effectively 1 byte/page, a pure scanned
+  image with literally zero OCR attempted**, worse than even the usual
+  "scanned dead end" cases elsewhere in this document (those at least
+  have a bad OCR text layer to point at; this one has none at all).
+- **Fitness verdict**: Real depth and genuine PD, but 100% page-image
+  reading with no OCR shortcut whatsoever. Not disqualifying, just the
+  most expensive extraction mode.
+
+#### 2. DLI Korean Headstart — real extractable text, but ROMANIZATION ONLY (zero Hangul)
+
+- **URL**: `fsi-languages.yojik.eu/languages/FSI/Korean/Headstart/DLI Korean Headstart.pdf`
+  (per-unit audio also hosted alongside, 8 units).
+- **Covers**: Survival-level situational Korean (greetings,
+  introductions, directions, etc.) in the same DLI Headstart shape as
+  the Japanese/other-language Headstart courses in this document —
+  vocabulary, notes, drills, dialogues, self-evaluation quizzes per
+  unit.
+- **License/provenance**: `Author: Defense Language Institute`, PD
+  federal work — same basis as every other DLI course in active use.
+  Plain Headstart, not the Headstart2/GLOSS product that §10
+  categorically excludes.
+- **Extraction quality — verified directly**: `pdftotext` yields real,
+  substantial text (~556KB across 490 pages, genuinely readable
+  English + romanized-Korean prose, not garbage). **But a full-document
+  grep for the Hangul Unicode block (`[가-힣]`) returns exactly ZERO
+  matches across all 490 pages.** Every Korean word in this entire
+  course is rendered in McCune-Reischauer-style romanization only
+  (e.g. `Sangbyong`, `Kurassumnida`, `Ch'am pwepsumnida`) — confirmed by
+  reading actual sample pages, not just the character count. This is a
+  genuine 1980s-DLI pedagogical choice (teach survival phrases via
+  Latin-alphabet transliteration for GIs with zero time to learn a new
+  script), not an OCR failure — the text IS clean, it simply never
+  contains the target script at all.
+- **Fitness verdict**: **A real, direct pedagogical mismatch with this
+  app's script-first approach** (native script from unit 1, per
+  `AUTHORING_GUIDE.md`). Clean extraction is worthless here without a
+  full re-Hangulization pass (converting every romanized form back to
+  actual Hangul, which is real linguistic work, not a mechanical
+  transliteration in general because Korean romanization is lossy/
+  ambiguous in places) — closer to "established-conventions-only
+  authoring using this as a phrase/topic-coverage outline" than to a
+  normal adaptation.
+
+#### 3. DLI Korean Basic Course (15-lesson, separate from Headstart) — audio-only, no text at all
+
+- **URL**: `fsi-languages.yojik.eu/languages/DLI/Korean/Lesson 01/`
+  through `Lesson 15/`, plus a `SOLT/` subfolder, indexed from
+  `fsi-languages.yojik.eu/languages/DLI/DLI-Korean.html`.
+- **Covers**: 15 lessons, each with Conversation/Grammar/Listening
+  Comprehension/Narration/New Words/Pronunciation tracks.
+- **License/provenance**: DLI, PD, same basis as above.
+- **Extraction quality**: **N/A — every lesson folder checked contains
+  only `.mp3` files, no PDF or any written companion document at all.**
+  Not a scanned-PDF case, an audio-only-with-nothing-to-extract case.
+- **Fitness verdict**: Unusable without real audio transcription (a
+  much heavier lift than page-image reading); not a viable text-based
+  adaptation source. Flag only as an audio pronunciation reference, same
+  caveat already standing for the FSI Persian tapes elsewhere in this
+  project.
+
+#### Peace Corps Korean — checked, no viable learner-facing source found
+
+Real Peace Corps/Korea archival material exists (Peace Corps operated in
+Korea 1966–1981, confirmed via ERIC), but everything found this pass is
+either (a) English-TEFL material *for Koreans learning English* (the
+inverse direction — `ED131696` "Lessons in the Korean Language and
+Culture for Teachers of English as a Second Language", `ED116452`/
+`ED116453` "Methodology for Teachers" — irrelevant to an en→ko path), or
+(b) the USC Peace Corps Korea Archive's digitized trainee materials,
+which are explicitly licensed **CC BY-NC-SA** (non-commercial +
+share-alike — excluded on two independent grounds: §10's categorical
+BY-SA exclusion, and the separate non-commercial restriction this
+project hasn't even needed to rule on yet since BY-SA already closes
+it). No genuine PD Peace-Corps-Korean-for-English-speakers course
+surfaced. Don't re-search this without new information.
+
+**Korean verdict for the first authoring wave**: **FSI Korean Basic
+Course (candidate #1)** is the best available real source — genuine
+Hangul-script content, real PD, real depth (18+ units across 2
+volumes) — at the cost of **page-image reading exclusively** (zero OCR
+text layer to lean on at all, the worst-case extraction mode already
+documented for zh/hi/ar-eg elsewhere in this file). DLI Korean
+Headstart is a **usable topic/phrase-coverage outline only**, not a
+direct-adapt source, due to its total absence of Hangul — treat it as
+background material for established-conventions-only authoring of the
+Hangul forms, not a text to adapt directly. **Flag, per the task's
+instruction**: DLI Korean Headstart is the clearest concrete instance
+found in this whole research pass of the "1960s/1980s FSI/DLI courses
+often teach in romanization" pedagogical mismatch — this app teaches
+native script from unit 1, so an entirely-romanized source needs a real
+re-Hangulization pass before any of its content/situational coverage is
+usable, not just a modernization pass.
+
+### Japanese (ja)
+
+#### 1. FSI Japanese FAST (Familiarization and Short-Term Training) — primary candidate, real kana/kanji but messy layout extraction
+
+- **URL**: `fsi-languages.yojik.eu/languages/FSI/Japanese/Fsi-JapaneseFast-StudentText.pdf`,
+  indexed from `fsi-languages.yojik.eu/languages/FSI/fsi-japanese.html`.
+- **Covers**: ~30 lessons (grepped `Lesson` boundary markers through the
+  extracted text; introduction/situational framing per lesson, same FAST
+  shape already documented for Italian above), communicative/situational
+  design.
+- **License/provenance**: `pdfinfo` confirms `Author: Foreign Service
+  Institute`, `Producer: ... Paper Capture Plug-in` (a real OCR pass) —
+  genuine PD federal work, same basis as every other FSI course.
+- **Extraction quality — verified directly**: 526 pages, `pdftotext`
+  yields ~2.0M characters — NOT a scanned dead end. A full-document
+  Unicode grep confirms real target-script content: **17,968 kana
+  characters + 7,002 kanji characters** actually present, genuinely
+  legible in isolation (e.g. `スミス` Sumisu, `なごや` Nagoya, `きょうと`
+  Kyōto sampled directly from page text). **However, `pdftotext -layout`
+  badly fragments this specific PDF**: the source lays Kana glyphs out
+  with interlinear furigana/romaji readings via a ruby-annotation-style
+  column layout, and `pdftotext` (both plain and `-layout` mode) breaks
+  characters into single-glyph-per-line runs and interleaves them with
+  romaji in a way that needs real reassembly work, not simple cleanup —
+  concretely sampled: `フ守ラウン` where `守` (the kanji "mori"/guard) is
+  clearly a misread dakuten diacritic mark on `ブ`, i.e. an OCR-adjacent
+  garbling that only shows up on close inspection of a real sample, not
+  from the raw character-count signal alone. This is a distinct failure
+  mode from the Hindi trap (that one produced total garbage; this one
+  produces mostly-correct but structurally scrambled text with
+  occasional real character-level misreads) — treat both as reasons to
+  never trust an aggregate character count without reading actual
+  sample lines.
+- **Fitness verdict**: **Best available candidate for ja** — real
+  target-script content at genuine depth, PD, but budget real cleanup
+  time for the furigana/layout fragmentation and spot-check dakuten/
+  glyph-level misreads rather than treating extracted lines as
+  ready-to-adapt text.
+
+#### 2. DLI Japanese Headstart (Modules 1–10) — same romanization-only pattern as Korean's Headstart
+
+- **URL**: `fsi-languages.yojik.eu/languages/FSI/Japanese/Headstart/DLI Japanese Headstart Modules 1-5.pdf`
+  (Modules 6–10 sibling file, plus a separate Student Guide, Glossary,
+  and Flashcards PDF, all at the same path).
+- **Covers**: 10 modules (Cultural Background, Greetings/Introductions,
+  Directions, Eating Out, Shopping/Repairs, Subways/Trains, Taxis,
+  Prices, Time, plus an explicitly-optional reading/writing module for
+  signs and menus) — same Headstart shape/structure already documented
+  for Japanese in the Student Guide search result and for Korean above.
+  **The Student Guide itself explicitly states**: "The system of writing
+  Japanese used in this course is called the Hepburn system" —
+  confirming this is romanization-based by the source's own design, not
+  an extraction artifact.
+- **License/provenance**: `Author: Defense Language Institute`, PD,
+  same basis as above. Plain Headstart (1980, DLIFLC), not the
+  Headstart2/GLOSS exclusion.
+- **Extraction quality — verified directly**: 184 pages (Modules 1–5
+  only sampled), `pdftotext` yields ~269KB of clean, real, readable
+  English + romanized-Japanese prose (sample: the "Foods"/"Cultural
+  Background" section reads cleanly). **A full-document grep for kana
+  (`[぀-ヿ]`) and kanji (`[一-鿿]`) returns only 8 kana + 15 kanji
+  combined across the entire 184-page sample** (essentially the
+  optional writing-system module's cue-card examples, not the bulk
+  course content) — confirming the Student Guide's own claim: this
+  course is genuinely ~99.99% Hepburn romanization, not Japanese script,
+  by design.
+- **Fitness verdict**: Same verdict as DLI Korean Headstart —
+  **real, clean text, but a direct pedagogical mismatch** with this
+  app's script-first approach. Usable as a topic/situational-coverage
+  outline (its module breakdown is genuinely well-organized: greetings,
+  directions, eating out, shopping, transit, taxis, prices, time —
+  good real-world A1/A2 topic coverage), not as adaptable target-
+  language text without a full re-scripting pass into actual
+  hiragana/katakana/kanji.
+
+#### Peace Corps Japan — none exists
+
+Peace Corps has never operated a program in Japan (a developed, non-PC-
+host nation) — no search result surfaced any Peace Corps Japanese
+course, confirming this is a genuine non-source rather than a
+missed-search gap. Don't re-check.
+
+**Japanese verdict for the first authoring wave**: **FSI Japanese FAST
+(candidate #1)** is the best available source — real kana/kanji
+content at real depth (~30 lessons), PD, at the cost of a genuine
+layout-reassembly + spot-check-for-misreads cleanup pass (messier than
+a clean OCR source like Italian FAST, but not a scanned dead end like
+Korean's Basic Course). DLI Japanese Headstart is again a **topic-
+outline-only source**, not directly adaptable, due to its ~100%
+romanization — its module structure is a genuinely useful situational-
+coverage checklist for a first A1 wave regardless (greetings → directions
+→ eating out → shopping → transit → prices → time is a sound real-world
+sequence), just don't adapt its actual sentences without converting them
+to real script first.
+
+### Ko/ja addendum summary table
+
+| Language | Best source for first wave | License basis | Extraction mode | Realistic authoring mode |
+|---|---|---|---|---|
+| ko | FSI Korean Basic Course (new), Vol. 1–2 | PD | Scanned, **zero OCR at all** (not even bad OCR) | Page-image reading only |
+| ko (topic outline, not adaptable) | DLI Korean Headstart | PD | Clean text, **0 Hangul chars in 490 pages — 100% romanization** | Established-conventions-only authoring using its topic/phrase coverage; do not adapt its sentences directly |
+| ja | FSI Japanese FAST, Student Text | PD | Real kana/kanji present (17,968 kana + 7,002 kanji / 526pp) but layout-fragmented by furigana columns, spot-checked dakuten misreads | Adaptation, budgeting real layout-reassembly + glyph-level spot-checking |
+| ja (topic outline, not adaptable) | DLI Japanese Headstart, Modules 1–10 | PD | Clean text, **23 kana+kanji chars total in 184pp sampled — ~100% Hepburn romanization by the source's own stated design** | Established-conventions-only authoring using its module/topic coverage; do not adapt its sentences directly |
+
+**Standing flag for whoever authors ko/ja content**: both languages'
+best "clean text" DLI Headstart sources are pedagogically unusable as
+direct adaptation material for this app specifically because this app
+teaches native script from unit 1 (per `AUTHORING_GUIDE.md`) while
+those 1980s-era DLI courses were deliberately designed to avoid
+teaching script at all (Hangul / kanji-kana) for time-pressured
+military personnel. This is the clearest concrete confirmation yet of
+the general "1960s/70s FSI courses often teach in romanization first"
+risk this task was scoped to check for — for ko/ja specifically it
+isn't a partial risk, it's the ENTIRE content of the cleanest-
+extracting candidate for each language. The genuinely adaptable
+sources for both languages (FSI Korean Basic Course, FSI Japanese FAST)
+are real, in-script, PD material, but both require page-image or
+heavy-layout-reassembly reading rather than the "clean OCR, low-cost
+adaptation" outcome found for it/ru/pl elsewhere in this document.
