@@ -54,6 +54,17 @@ def test_arabic_uses_arabic_script_strictness():
     )
 
 
+def test_hangul_and_japanese_scripts_are_strict_by_default():
+    assert (
+        grade_answer("안녕하세", "안녕하세요", exercise_type="translation", script="hangul")
+        == "incorrect"
+    )
+    assert (
+        grade_answer("こんにち", "こんにちは", exercise_type="translation", script="japanese")
+        == "incorrect"
+    )
+
+
 def test_grade_answer_orthography_strict_overrides_script_default():
     # Latin-script correct answer, but author forced strict mode.
     assert (

@@ -18,13 +18,19 @@ def test_auth_register_login_me(client):
 
 def test_language_seed_and_rtl(client):
     rows = client.get("/languages").json()
-    assert len(rows) == 14
+    assert len(rows) == 16
     by_code = {item["code"]: item for item in rows}
     assert by_code["ar"]["name"] == "Arabic"
     assert by_code["ar"]["native_name"] == "العربية"
     assert by_code["ar"]["script"] == "arabic" and by_code["ar"]["direction"] == "rtl"
     assert by_code["fa"]["script"] == "arabic" and by_code["fa"]["direction"] == "rtl"
     assert by_code["prs"]["direction"] == "rtl"
+    assert by_code["ko"]["name"] == "Korean"
+    assert by_code["ko"]["native_name"] == "한국어"
+    assert by_code["ko"]["script"] == "hangul" and by_code["ko"]["direction"] == "ltr"
+    assert by_code["ja"]["name"] == "Japanese"
+    assert by_code["ja"]["native_name"] == "日本語"
+    assert by_code["ja"]["script"] == "japanese" and by_code["ja"]["direction"] == "ltr"
     assert by_code["pl"]["script"] == "latin" and by_code["pl"]["direction"] == "ltr"
     assert by_code["ro"]["script"] == "latin" and by_code["ro"]["direction"] == "ltr"
     assert by_code["hi"]["script"] == "devanagari" and by_code["hi"]["direction"] == "ltr"
@@ -34,7 +40,7 @@ def payload(source="en", target="es", title="Test course"):
     return {"courses": [{"source_language": source, "target_language": target, "title": title, "units": [{"title": "Unit", "order": 1, "lessons": [{"title": "Lesson", "order": 1, "exercises": [{"type": "translation", "order": 1, "prompt": {"text_blocks": [{"text": "hello", "language_code": source, "direction": direction}]}, "correct_response": "answer"}]}]}]}]}
 
 def test_all_core_ordered_pairs_constructible():
-    codes = ["en", "nl", "fr", "de", "it", "es", "ru", "zh", "ar", "fa", "prs"]
+    codes = ["en", "nl", "fr", "de", "it", "es", "ru", "zh", "ar", "fa", "prs", "ko", "ja"]
     with SessionLocal() as db:
         for source in codes:
             for target in codes:
@@ -42,7 +48,7 @@ def test_all_core_ordered_pairs_constructible():
                     data = ImportRequest.model_validate(payload(source, target, f"Pair {source}-{target}"))
                     count, errors, counters = import_content(db, data)
                     assert count == 1 and not errors
-    assert sum(1 for a in codes for b in codes if a != b) == 110
+    assert sum(1 for a in codes for b in codes if a != b) == 156
 
 def test_admin_import_course_and_queries(client, admin):
     response = client.post("/admin/content/import", headers=admin, json=payload(title="Imported course"))
@@ -365,12 +371,20 @@ def test_tts_routes_farsi_to_azure_and_covered_languages_to_google(client, auth,
     assert response.status_code==200
     assert response.content==b"google-audio"
 
+    response=client.post("/tts",headers=auth,json={"text":"안녕하세요","language_code":"ko"})
+    assert response.status_code==200
+    assert response.content==b"google-audio"
+
+    response=client.post("/tts",headers=auth,json={"text":"こんにちは","language_code":"ja"})
+    assert response.status_code==200
+    assert response.content==b"google-audio"
+
     # prs still has no provider at all (neither Google nor Azure) — must
     # still fall back to the browser, never attempt either provider.
     response=client.post("/tts",headers=auth,json={"text":"سلام","language_code":"prs"})
     assert response.json()=={"use_browser_tts":True,"reason":"unsupported_language"}
 
-    assert calls==[("azure","fa"),("google","en"),("google","ar")]
+    assert calls==[("azure","fa"),("google","en"),("google","ar"),("google","ko"),("google","ja")]
 
 def test_tts_azure_missing_key_falls_back_to_browser(client, auth):
     # Default settings ship with no Azure credentials configured at all
@@ -481,12 +495,18 @@ def test_synthesize_google_passes_speaking_rate_to_audio_config(monkeypatch):
                 return FakeResponse()
         monkeypatch.setattr(tts_service.texttospeech,"TextToSpeechClient",FakeClient)
 
-        audio=tts_service.synthesize_google("مرحبا","ar",speaking_rate=0.8)
+        cases=[
+            ("مرحبا","ar","ar-XA","ar-XA-Wavenet-D"),
+            ("안녕하세요","ko","ko-KR","ko-KR-Neural2-A"),
+            ("こんにちは","ja","ja-JP","ja-JP-Neural2-B"),
+        ]
+        for text,language_code,expected_locale,expected_voice in cases:
+            audio=tts_service.synthesize_google(text,language_code,speaking_rate=0.8)
+            assert audio==b"google-mp3"
+            assert captured["speaking_rate"]==0.8
+            assert captured["language_code"]==expected_locale
+            assert captured["voice_name"]==expected_voice
 
-        assert audio==b"google-mp3"
-        assert captured["speaking_rate"]==0.8
-        assert captured["language_code"]=="ar-XA"
-        assert captured["voice_name"]=="ar-XA-Wavenet-D"
     finally:
         settings.google_cloud_tts_credentials_json=original
 

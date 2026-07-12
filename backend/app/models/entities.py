@@ -71,7 +71,8 @@ class Language(Base):
     __tablename__ = "languages"
     __table_args__ = (
         CheckConstraint(
-            "script IN ('latin','cyrillic','han','arabic','devanagari')",
+            "script IN ('latin','cyrillic','han','arabic','devanagari',"
+            "'hangul','japanese')",
             name="ck_languages_script",
         ),
         CheckConstraint("direction IN ('ltr','rtl')"),
@@ -89,11 +90,36 @@ class User(Base):
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uid)
     email: Mapped[str] = mapped_column(String(320), unique=True, index=True)
-    password_hash: Mapped[str] = mapped_column(Text)
+    password_hash: Mapped[str | None] = mapped_column(Text, nullable=True)
     display_name: Mapped[str] = mapped_column(String(100), default="")
     is_admin: Mapped[bool] = mapped_column(Boolean, default=False)
     timezone: Mapped[str | None] = mapped_column(String(64), nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now)
+    identities: Mapped[list["UserIdentity"]] = relationship(
+        back_populates="user",
+        cascade="all, delete-orphan",
+        passive_deletes=True,
+    )
+
+
+class UserIdentity(Base):
+    __tablename__ = "user_identities"
+    __table_args__ = (
+        CheckConstraint(
+            "provider IN ('google','apple')",
+            name="ck_user_identities_provider",
+        ),
+        Index("ix_user_identities_user_id", "user_id"),
+    )
+
+    user_id: Mapped[str] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"),
+        nullable=False,
+    )
+    provider: Mapped[str] = mapped_column(String(16), primary_key=True)
+    provider_subject: Mapped[str] = mapped_column(String(255), primary_key=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now)
+    user: Mapped[User] = relationship(back_populates="identities")
 
 
 class RefreshToken(Base):
@@ -873,4 +899,29 @@ class ContentIssueReport(Base):
     )
     resolved_at: Mapped[datetime | None] = mapped_column(
         DateTime(timezone=True), nullable=True
+    )
+    attachments: Mapped[list["FeedbackAttachment"]] = relationship(
+        back_populates="report",
+        order_by=lambda: (FeedbackAttachment.created_at, FeedbackAttachment.id),
+    )
+
+
+class FeedbackAttachment(Base):
+    __tablename__ = "feedback_attachments"
+    __table_args__ = (
+        UniqueConstraint("key", name="uq_feedback_attachments_key"),
+        Index("ix_feedback_attachments_report_created", "report_id", "created_at"),
+    )
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uid)
+    key: Mapped[str] = mapped_column(String(80))
+    report_id: Mapped[str | None] = mapped_column(
+        ForeignKey("content_issue_reports.id", ondelete="CASCADE"),
+        nullable=True,
+    )
+    content_type: Mapped[str] = mapped_column(String(40))
+    byte_size: Mapped[int] = mapped_column(Integer)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now)
+    report: Mapped[ContentIssueReport | None] = relationship(
+        back_populates="attachments"
     )
