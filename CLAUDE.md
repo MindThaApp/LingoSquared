@@ -5,7 +5,13 @@ en↔X learning paths (nl, fr, de, it, es, ru, zh, fa, prs, ar, ko, ja —
 ar approved 2026-07-11 with first content live; ko/ja approved
 2026-07-12, groundwork stage: typing/IME exercises for ja/ko need a
 real input-method design decision before production-typing exercises
-ship — recognition/word_order/listen types work without it). **Lanes:**
+ship — recognition/word_order/listen types work without it).
+**Priority order (Ramin, 2026-07-12): every path is English-anchored —
+(1) en→X (English speakers learning any language) and (2) X→en (any
+language's speakers learning English) are THE product; non-English↔
+non-English pairs (e.g. fr↔de) are explicitly deferred and should not
+be proposed, scaffolded, or content-planned without a new decision
+from Ramin.** **Lanes:**
 backend code + alembic migrations + `scripts/compile_content.py` are
 **Codex**'s lane (dispatched and verified by Claude); frontend,
 orchestration, verification, and CONTRACT.md are the executing
