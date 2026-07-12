@@ -439,6 +439,10 @@ def validate_overlay_references(
             )
 
 
+#: Keys where a real YAML boolean is the intended, correct type. These are
+#: metadata/control flags, never learner-facing strings. Every other parsed
+#: bool in realization/overlay content is treated as PyYAML's yes/no/true/
+#: false/on/off coercion footgun and must be quoted in the source YAML.
 YAML_BOOLEAN_CONTROL_KEYS = {
     "case_sensitive",
     "human_reviewed",
@@ -475,27 +479,8 @@ def validate_no_stray_yaml_booleans(
                     continue
                 check_value(item, f"{location}.{key}")
 
+    check_value(realization, "realization")
     check_value(overlay, "overlay")
-
-    for unit_index, unit in enumerate(realization.get("units", [])):
-        if not isinstance(unit, dict):
-            continue
-        for lesson_index, lesson in enumerate(unit.get("lessons", [])):
-            if not isinstance(lesson, dict):
-                continue
-            lesson_location = (
-                f"realization.units[{unit_index}].lessons[{lesson_index}]"
-            )
-            for teaching_index, item in enumerate(lesson.get("teaching", [])):
-                check_value(
-                    item,
-                    f"{lesson_location}.teaching[{teaching_index}]",
-                )
-            for exercise_index, exercise in enumerate(lesson.get("exercises", [])):
-                check_value(
-                    exercise,
-                    f"{lesson_location}.exercises[{exercise_index}]",
-                )
 
 
 def normalize_dialogue_option(value: Any) -> str | None:
