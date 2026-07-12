@@ -200,7 +200,15 @@ backend; STT/frontend → frontend.)
 
 ### Cross-cutting known limitations & rejected scope
 
-- No password reset or email verification. **Refresh tokens ARE built**
+- No SELF-SERVE password reset or email verification. **Admin user
+  management IS built** (2026-07-12, migration 0026): admin can create a
+  user with a server-generated one-time temp password, reset a password,
+  list/search, deactivate/delete, promote/demote admins, and unlock
+  lessons — which is how beta testers get logins without an email service.
+  `is_admin` is a persisted column OR'd with `ADMIN_EMAILS` (the env var
+  still bootstraps); demoting/deactivating the LAST active admin is
+  refused. *No admin UI yet — API only.*
+- **Refresh tokens ARE built**
   (2026-07-10, `565f66c`, migration 0021): 30-min access + rotating
   refresh tokens with reuse-detection revocation, `POST /auth/refresh`/`logout`.
 - No functional mobile app yet; an Expo scaffold exists (`mobile/`,
@@ -270,6 +278,17 @@ not the standing default anymore:
    exercise type, a new language, the first batches of any new recipe),
    anything that changes grading behavior, and ALL launch-gate content
    (en-nl/en-fa/en-prs) until launch.
+4. **"Mature lane" is per-RECIPE, not per-language — a lane does NOT stay
+   mature when it moves to new TOPICS.** Learned the hard way 2026-07-12:
+   it/ru were sampled 1-in-3 on the strength of zero-defect A1 13-15
+   reviews, so Italian 16-18 was set to merge on validators alone. The
+   Russian sample came back with a NEW bug class, which forced a full
+   Italian review — and Italian turned out to have **10 compiler-invisible
+   defects** (it validated at 0 errors), including three exercises that
+   graded a CORRECT learner answer as wrong. Sampling would have shipped
+   every one of them. New topics on a proven recipe are still new
+   territory; sample only within an unchanged recipe AND unchanged topic
+   family.
 
 Rationale: rules prevent known classes, review exists to discover unknown
 ones (the day this was adopted, mature pack-authoring reviews were at 0
