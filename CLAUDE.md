@@ -1,7 +1,11 @@
 # Lingo² — project state (read this first)
 
-Local-first language-learning app, Duolingo/Babbel-caliber, 18 directed
-en↔X learning paths (nl, fr, de, it, es, ru, zh, fa, prs). **Lanes:**
+Local-first language-learning app, Duolingo/Babbel-caliber, 24 directed
+en↔X learning paths (nl, fr, de, it, es, ru, zh, fa, prs, ar, ko, ja —
+ar approved 2026-07-11 with first content live; ko/ja approved
+2026-07-12, groundwork stage: typing/IME exercises for ja/ko need a
+real input-method design decision before production-typing exercises
+ship — recognition/word_order/listen types work without it). **Lanes:**
 backend code + alembic migrations + `scripts/compile_content.py` are
 **Codex**'s lane (dispatched and verified by Claude); frontend,
 orchestration, verification, and CONTRACT.md are the executing
