@@ -932,3 +932,27 @@ commit message)
 checks**" per the commit message — this review round is not fully
 closed out; do not treat en B1 07-11 as a clean pass until the
 overlay-dependent checks referenced in the commit are confirmed done.
+
+### 2026-07-12 — it A1 units 01-03 (fresh-context review, Claude Opus; first-ever Italian content)
+Bug classes found: 2 minor/cosmetic (one awkward learner-facing
+matching label reworded; one §16 undersized matching_pairs expanded
+with genuinely-taught digits). No hard/blocking defects, no grading
+impact, no new bug class.
+Instance count: 2 (unit01=0, unit02=1, unit03=1)
+**Tier note**: new-language lane — stays Full review regardless
+(policy §3, first batches of a new recipe). Quality of the
+Sonnet-adaptation-from-FSI-FAST recipe looks strong on first evidence.
+
+### 2026-07-12 — ru A1 units 01-03 (fresh-context review, Claude Opus; first-ever Russian content)
+Bug classes found: 1 recurring class, 4 instances — `listen_order`
+exercises wired to a nearby `media_asset_key` that does not speak the
+tested sentence (audio containment violation; same family as §1.20 /
+the listen_select same-speaker rule). All 4 fixed by adding dedicated
+pending_generation assets. Russian grammar/register/ё/stress-stripping
+all clean.
+Instance count: 4 (unit01=1, unit02=1, unit03=2)
+New bug class discovered: variant of known family — **validator
+backlog item: extend the audio-containment check to `listen_order`**
+(currently only the listen_select same-speaker rule is on the backlog).
+**Tier note**: new-language lane — Full review stays. The bug is
+mechanical wiring, not language competence.
