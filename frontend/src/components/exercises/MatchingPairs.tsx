@@ -20,17 +20,27 @@ export function MatchingPairs({ exercise, onAnswer, disabled }: ExerciseComponen
     // eslint-disable-next-line react-hooks/exhaustive-deps -- shuffle once per exercise, not per pairs reference
     [exercise.id],
   );
-  const [matches, setMatches] = useState<Record<string, string>>({});
+  // Right tiles are tracked by POSITION, never by their text. Several units
+  // legitimately map many lefts onto one right (nl a1 unit13 sends 3 items to
+  // "lekker" and 3 to "leuk"); keying/disabling by value made the first match
+  // consume every tile sharing that text, so the remaining lefts had nothing
+  // left to match, Check never enabled, and the lesson could not be completed
+  // at all (found live, 2026-07-12). Index 0 is falsy, so every "is this left
+  // matched" test must compare against undefined, not truthiness.
+  const [matches, setMatches] = useState<Record<string, number>>({});
   const [activeLeft, setActiveLeft] = useState<string | null>(null);
 
-  function chooseRight(right: string) {
+  function chooseRight(rightIndex: number) {
     if (disabled || !activeLeft) return;
-    setMatches((prev) => ({ ...prev, [activeLeft]: right }));
+    setMatches((prev) => ({ ...prev, [activeLeft]: rightIndex }));
     setActiveLeft(null);
   }
 
-  const usedRights = new Set(Object.values(matches));
-  const allMatched = pairs.length > 0 && pairs.every((p) => matches[p.left]);
+  const matchedRightFor = (left: string): string | undefined =>
+    matches[left] === undefined ? undefined : rightOptions[matches[left]];
+
+  const usedRightIndexes = new Set(Object.values(matches));
+  const allMatched = pairs.length > 0 && pairs.every((p) => matches[p.left] !== undefined);
 
   return (
     <div className="exercise-shell">
@@ -40,8 +50,8 @@ export function MatchingPairs({ exercise, onAnswer, disabled }: ExerciseComponen
           {pairs.map((p) => (
             <div key={p.left} style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6 }}>
               <button
-                className={`matching-item${activeLeft === p.left ? " selected" : ""}${matches[p.left] ? " matched" : ""}`}
-                disabled={disabled || Boolean(matches[p.left])}
+                className={`matching-item${activeLeft === p.left ? " selected" : ""}${matches[p.left] !== undefined ? " matched" : ""}`}
+                disabled={disabled || matches[p.left] !== undefined}
                 onClick={() => setActiveLeft(p.left)}
                 style={{ flex: 1, marginBottom: 0 }}
                 dir={direction}
@@ -53,10 +63,10 @@ export function MatchingPairs({ exercise, onAnswer, disabled }: ExerciseComponen
                     language's own flow, with the arrow glyph flipped to keep
                     pointing from term to match visually in RTL. */}
                 <bdi>{p.left}</bdi>
-                {matches[p.left] && (
+                {matchedRightFor(p.left) !== undefined && (
                   <>
                     {" "}
-                    {direction === "rtl" ? "←" : "→"} <bdi>{matches[p.left]}</bdi>
+                    {direction === "rtl" ? "←" : "→"} <bdi>{matchedRightFor(p.left)}</bdi>
                   </>
                 )}
               </button>
@@ -65,12 +75,12 @@ export function MatchingPairs({ exercise, onAnswer, disabled }: ExerciseComponen
           ))}
         </div>
         <div>
-          {rightOptions.map((right) => (
+          {rightOptions.map((right, rightIndex) => (
             <button
-              key={right}
-              className={`matching-item${usedRights.has(right) ? " matched" : ""}`}
-              disabled={disabled || usedRights.has(right) || !activeLeft}
-              onClick={() => chooseRight(right)}
+              key={rightIndex}
+              className={`matching-item${usedRightIndexes.has(rightIndex) ? " matched" : ""}`}
+              disabled={disabled || usedRightIndexes.has(rightIndex) || !activeLeft}
+              onClick={() => chooseRight(rightIndex)}
             >
               {right}
             </button>
@@ -89,7 +99,7 @@ export function MatchingPairs({ exercise, onAnswer, disabled }: ExerciseComponen
           // to every authored answer and made matching_pairs always grade
           // incorrect regardless of what the learner picked (found live,
           // 2026-07-05).
-          onAnswer(pairs.map((p) => ({ left: p.left, right: matches[p.left] })))
+          onAnswer(pairs.map((p) => ({ left: p.left, right: matchedRightFor(p.left) as string })))
         }
       >
         Check
