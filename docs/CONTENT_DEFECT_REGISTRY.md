@@ -1035,3 +1035,13 @@ classes (pairs-mirror + containment now compiler-enforced).
 flag (not this change): fa u37 lesson03 match_asking_color_words has
 two synonym lefts both glossed "What color is it?" — technically
 ambiguous in a matching UI; small-fix backlog.
+
+### 2026-07-12 — German lane recovery (fixes + fresh-context review, Claude)
+Dead session's WIP landed; 23 unique validator errors fixed (13
+same-speaker distractors, 5 pairs-mirror, en-de+de-en). Fix diff
+fully reviewed (Opus): all new distractors verified absent from audio,
+natural, plausible-wrong; mirrors character-exact. 0 defects in review.
+Both directions now validate 0 errors → full-corpus content validation
+GREEN for the first time. Note: first fixer attempt FALSELY self-
+reported success (validated wrong file set) — coordinator re-validation
+caught it; acceptance commands must be verbatim in fixer prompts.
