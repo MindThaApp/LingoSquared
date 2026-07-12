@@ -1028,3 +1028,10 @@ zero-defect batches; realization lanes near-zero. Still Full review
 (new language) but both lanes are candidates for 1-in-3 sampling once
 each hits 3 consecutive clean batches AND validators cover the recurring
 classes (pairs-mirror + containment now compiler-enforced).
+
+### 2026-07-12 — en-fa §16 retrofit (25 exercises) fresh-context review (Claude Opus)
+0 defects: every pooled pair verified taught-in-unit, glosses correct,
+0 Arabic-character hits, mirrors compiler-confirmed. One PRE-EXISTING
+flag (not this change): fa u37 lesson03 match_asking_color_words has
+two synonym lefts both glossed "What color is it?" — technically
+ambiguous in a matching UI; small-fix backlog.
