@@ -1,0 +1,260 @@
+schema_version: "1.1"
+realization_version: "2026.1-draft.1"
+target_language: ru
+cefr_level: A1
+status: unreviewed
+generation_provenance:
+  method: ai_adapted
+  authoring_system: claude
+  source: >-
+    The Russian FAST Course (Foreign Service Institute, US government,
+    public domain), community re-OCR'd/re-typeset edition hosted at
+    fsi-languages.yojik.eu/yazik/Downloads/FSI-book-stressed.pdf. Lesson
+    4's "Useful words and expressions" family-vocabulary list (мать,
+    отец, брат, сестра, муж, жена, сын, дочь, бабушка, дедушка, родители,
+    семья) and its dialogue line "Да, мать, отец, брат и сестра" and
+    "У меня есть брат и сестра" supplied the vocabulary set and core
+    possessive construction ("У меня есть..."/"У вас есть...?"); every
+    example sentence, exercise, and dialogue here was freshly authored
+    for a natural 2026 everyday-use context (describing one's immediate
+    and extended family, introducing a family member by name), not
+    imported verbatim from the source (AUTHORING_GUIDE §10). Combining
+    acute-accent stress marks were stripped from every learner-facing
+    string.
+  human_reviewed: false
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker
+  notes: >-
+    Unreviewed draft (new spine outcome, new lane). Every listen_select/
+    listen_order media_asset_key points to a dedicated pending_generation
+    asset whose recorded text literally contains the tested_text sentence
+    (no reuse of a general family-vocabulary overview asset for a
+    single-sentence test) -- this was the exact bug class found and fixed
+    in ru unit03 review. Possessive "мой/моя/моё" agrees with the family
+    noun's grammatical gender (мой брат [m], моя сестра [f], my possessive
+    used consistently: мой отец, моя мать, мой муж, моя жена, мой сын,
+    моя дочь, мой дедушка, моя бабушка). Needs the standard fresh-context
+    review before ship.
+
+course:
+  realization_key: ru.a1
+  target_language_first: true
+  dialect: ru_RU_standard
+  register_policy: >-
+    Teach contemporary standard Russian as spoken in Russia today. This
+    unit is family-focused; ты is used within the dialogue between two
+    friends looking at a family photo (peer register).
+
+media_assets:
+  - {content_key: ru.a1.audio.moy_brat.neutral.01, language: ru, text: "Это мой брат.", voice_hint: neutral_adult, status: pending_generation}
+  - {content_key: ru.a1.audio.u_menya_est_sestra.neutral.01, language: ru, text: "У меня есть сестра.", voice_hint: neutral_adult, status: pending_generation}
+  - {content_key: ru.a1.audio.u_vas_est_deti.formal.01, language: ru, text: "У вас есть дети?", voice_hint: neutral_adult_polite, status: pending_generation}
+  - {content_key: ru.a1.audio.moya_babushka.neutral.01, language: ru, text: "Это моя бабушка.", voice_hint: neutral_adult, status: pending_generation}
+  - {content_key: ru.a1.audio.u_menya_est_syn_i_doch.neutral.01, language: ru, text: "У меня есть сын и дочь.", voice_hint: neutral_adult, status: pending_generation}
+  - {content_key: ru.a1.audio.eyo_zovut_anna.neutral.01, language: ru, text: "Её зовут Анна.", voice_hint: neutral_adult, status: pending_generation}
+  - content_key: ru.a1.audio.dialogue.family_photo.01
+    language: ru
+    text: >-
+      Максим: Кто это на фото? Ольга: Это моя семья. Вот мой отец, моя
+      мать и мой брат. Максим: А кто эта девочка? Ольга: Это моя дочь.
+      Её зовут Анна.
+    voice_hint: two_adults_neutral_polite
+    status: pending_generation
+
+units:
+  - content_key: ru.a1.unit06.family
+    title: "Семья"
+    section: reading_writing
+    spine_outcome_ids:
+      - universal.a1.family.describe_relationships
+    planned_lesson_count: 3
+    lessons:
+      - content_key: ru.a1.unit06.lesson01.blizkaya_semya
+        title: "Мать, отец, брат, сестра"
+        spine_outcome_id: universal.a1.family.describe_relationships
+        teaching:
+          - {content_key: ru.a1.unit06.lesson01.teach.u_menya_est, kind: phrase, target: {text: "У меня есть ...", language_code: ru, direction: ltr}, introduced_tokens: [У, меня, есть]}
+          - {content_key: ru.a1.unit06.lesson01.teach.eto, kind: phrase, target: {text: "Это ...", language_code: ru, direction: ltr}, introduced_tokens: [Это, это]}
+          - content_key: ru.a1.unit06.lesson01.teach.mat_otets
+            kind: vocabulary
+            target: {text: "мать, отец", language_code: ru, direction: ltr}
+            introduced_tokens: [мать, отец]
+            example:
+              - {text: "Это моя мать.", language_code: ru, direction: ltr}
+              - {text: "Это мой отец.", language_code: ru, direction: ltr}
+          - content_key: ru.a1.unit06.lesson01.teach.brat_sestra
+            kind: vocabulary
+            target: {text: "брат, сестра", language_code: ru, direction: ltr}
+            introduced_tokens: [брат, сестра]
+            example:
+              - {text: "Это мой брат.", language_code: ru, direction: ltr}
+              - {text: "У меня есть сестра.", language_code: ru, direction: ltr}
+          - {content_key: ru.a1.unit06.lesson01.teach.moy_moya, kind: phrase, target: {text: "мой, моя", language_code: ru, direction: ltr}, introduced_tokens: [мой, моя]}
+        exercises:
+          - content_key: ru.a1.unit06.lesson01.exercise01.recognize_mat
+            type: multiple_choice
+            tested_text: "мать"
+            prompt: {target_blocks: [{text: "mother", language_code: en, direction: ltr}]}
+          - content_key: ru.a1.unit06.lesson01.exercise02.recognize_brat
+            type: multiple_choice
+            tested_text: "брат"
+            prompt: {target_blocks: [{text: "brother", language_code: en, direction: ltr}]}
+          - content_key: ru.a1.unit06.lesson01.exercise03.listen_select_brat
+            type: listen_select
+            tested_text: "Это мой брат"
+            media_asset_key: ru.a1.audio.moy_brat.neutral.01
+            prompt: {target_blocks: [{text: "Who is being introduced?", language_code: en, direction: ltr}]}
+          - content_key: ru.a1.unit06.lesson01.exercise04.match_close_family
+            type: matching_pairs
+            tested_text: "мать отец брат сестра"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "мать", right: "mother"}
+              - {left: "отец", right: "father"}
+              - {left: "брат", right: "brother"}
+              - {left: "сестра", right: "sister"}
+          - content_key: ru.a1.unit06.lesson01.exercise05.order_this_my_father
+            type: word_order
+            tested_text: "Это мой отец"
+            prompt: {target_blocks: []}
+            word_bank: ["отец", "мой", "Это"]
+          - content_key: ru.a1.unit06.lesson01.exercise06.listen_order_have_sister
+            type: listen_order
+            tested_text: "У меня есть сестра"
+            media_asset_key: ru.a1.audio.u_menya_est_sestra.neutral.01
+            prompt: {target_blocks: []}
+            word_bank: ["сестра", "есть", "У", "меня"]
+          - content_key: ru.a1.unit06.lesson01.exercise07.complete_family
+            type: fill_in_blank
+            tested_text: "Это моя мать"
+            prompt: {target_blocks: [{text: "Это ___ мать. (my)", language_code: ru, direction: ltr}]}
+          - content_key: ru.a1.unit06.lesson01.exercise08.write_sibling
+            type: writing_prompt
+            tested_text: "У меня есть брат"
+            prompt: {target_blocks: [{text: "Write a sentence saying you have a brother, using \"У меня есть ...\".", language_code: en, direction: ltr}]}
+
+      - content_key: ru.a1.unit06.lesson02.rasshirennaya_semya
+        title: "Бабушка, дедушка, муж, жена, дети"
+        spine_outcome_id: universal.a1.family.describe_relationships
+        teaching:
+          - content_key: ru.a1.unit06.lesson02.teach.babushka_dedushka
+            kind: vocabulary
+            target: {text: "бабушка, дедушка", language_code: ru, direction: ltr}
+            introduced_tokens: [бабушка, дедушка]
+            example:
+              - {text: "Это моя бабушка.", language_code: ru, direction: ltr}
+              - {text: "Это мой дедушка.", language_code: ru, direction: ltr}
+          - content_key: ru.a1.unit06.lesson02.teach.muzh_zhena
+            kind: vocabulary
+            target: {text: "муж, жена", language_code: ru, direction: ltr}
+            introduced_tokens: [муж, жена]
+            example:
+              - {text: "Это мой муж.", language_code: ru, direction: ltr}
+              - {text: "Это моя жена.", language_code: ru, direction: ltr}
+          - content_key: ru.a1.unit06.lesson02.teach.syn_doch
+            kind: vocabulary
+            target: {text: "сын, дочь", language_code: ru, direction: ltr}
+            introduced_tokens: [сын, дочь, и]
+            example:
+              - {text: "У меня есть сын и дочь.", language_code: ru, direction: ltr}
+          - {content_key: ru.a1.unit06.lesson02.teach.deti, kind: vocabulary, target: {text: "дети", language_code: ru, direction: ltr}, introduced_tokens: [дети], example: {text: "У вас есть дети?", language_code: ru, direction: ltr}}
+          - {content_key: ru.a1.unit06.lesson02.teach.u_vas_est, kind: phrase, target: {text: "У вас есть ...?", language_code: ru, direction: ltr}, introduced_tokens: [У, вас, есть]}
+        exercises:
+          - content_key: ru.a1.unit06.lesson02.exercise01.recognize_babushka
+            type: multiple_choice
+            tested_text: "бабушка"
+            prompt: {target_blocks: [{text: "grandmother", language_code: en, direction: ltr}]}
+          - content_key: ru.a1.unit06.lesson02.exercise02.recognize_deti
+            type: multiple_choice
+            tested_text: "дети"
+            prompt: {target_blocks: [{text: "children", language_code: en, direction: ltr}]}
+          - content_key: ru.a1.unit06.lesson02.exercise03.listen_select_babushka
+            type: listen_select
+            tested_text: "Это моя бабушка"
+            media_asset_key: ru.a1.audio.moya_babushka.neutral.01
+            prompt: {target_blocks: [{text: "Who is being introduced?", language_code: en, direction: ltr}]}
+          - content_key: ru.a1.unit06.lesson02.exercise04.match_extended_family
+            type: matching_pairs
+            tested_text: "бабушка дедушка муж жена сын дочь"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "бабушка", right: "grandmother"}
+              - {left: "дедушка", right: "grandfather"}
+              - {left: "муж", right: "husband"}
+              - {left: "жена", right: "wife"}
+              - {left: "сын", right: "son"}
+              - {left: "дочь", right: "daughter"}
+          - content_key: ru.a1.unit06.lesson02.exercise05.order_this_my_wife
+            type: word_order
+            tested_text: "Это моя жена"
+            prompt: {target_blocks: []}
+            word_bank: ["жена", "моя", "Это"]
+          - content_key: ru.a1.unit06.lesson02.exercise06.listen_order_son_and_daughter
+            type: listen_order
+            tested_text: "У меня есть сын и дочь"
+            media_asset_key: ru.a1.audio.u_menya_est_syn_i_doch.neutral.01
+            prompt: {target_blocks: []}
+            word_bank: ["дочь", "и", "сын", "есть", "У", "меня"]
+          - content_key: ru.a1.unit06.lesson02.exercise07.complete_children_question
+            type: fill_in_blank
+            tested_text: "У вас есть дети"
+            prompt: {target_blocks: [{text: "У вас ___ дети? (есть)", language_code: ru, direction: ltr}]}
+          - content_key: ru.a1.unit06.lesson02.exercise08.listen_type_children_question
+            type: listen_type
+            tested_text: "У вас есть дети"
+            media_asset_key: ru.a1.audio.u_vas_est_deti.formal.01
+            prompt: {target_blocks: []}
+
+      - content_key: ru.a1.unit06.lesson03.semeynoe_foto
+        title: "Семейное фото"
+        spine_outcome_id: universal.a1.family.describe_relationships
+        teaching:
+          - {content_key: ru.a1.unit06.lesson03.teach.kto_eto, kind: phrase, target: {text: "Кто это?", language_code: ru, direction: ltr}, introduced_tokens: [Кто, это]}
+          - {content_key: ru.a1.unit06.lesson03.teach.eyo_zovut, kind: phrase, target: {text: "Её зовут Анна.", language_code: ru, direction: ltr}, introduced_tokens: [Её, зовут, Анна]}
+          - {content_key: ru.a1.unit06.lesson03.teach.maksim_kto_eto, kind: dialogue, target: {text: "Максим: Кто это на фото?", language_code: ru, direction: ltr}, introduced_tokens: [Максим, на, фото]}
+          - {content_key: ru.a1.unit06.lesson03.teach.olga_moya_semya, kind: dialogue, target: {text: "Ольга: Это моя семья.", language_code: ru, direction: ltr}, introduced_tokens: [Ольга, семья]}
+          - {content_key: ru.a1.unit06.lesson03.teach.olga_vot_otets, kind: dialogue, target: {text: "Ольга: Вот мой отец, моя мать и мой брат.", language_code: ru, direction: ltr}, introduced_tokens: [Вот, и]}
+          - {content_key: ru.a1.unit06.lesson03.teach.maksim_a_kto_devochka, kind: dialogue, target: {text: "Максим: А кто эта девочка?", language_code: ru, direction: ltr}, introduced_tokens: [эта, девочка]}
+          - {content_key: ru.a1.unit06.lesson03.teach.olga_eto_moya_doch, kind: dialogue, target: {text: "Ольга: Это моя дочь. Её зовут Анна.", language_code: ru, direction: ltr}, introduced_tokens: [моя, дочь]}
+        exercises:
+          - content_key: ru.a1.unit06.lesson03.exercise01.choose_ask_who
+            type: multiple_choice
+            tested_text: "Кто это"
+            prompt: {target_blocks: [{text: "You want to ask who someone in a photo is.", language_code: en, direction: ltr}]}
+          - content_key: ru.a1.unit06.lesson03.exercise02.listen_select_daughter_name
+            type: listen_select
+            tested_text: "Её зовут Анна"
+            media_asset_key: ru.a1.audio.eyo_zovut_anna.neutral.01
+            prompt: {target_blocks: [{text: "What is the daughter's name?", language_code: en, direction: ltr}]}
+          - content_key: ru.a1.unit06.lesson03.exercise03.dialogue_comprehension_family_photo
+            type: dialogue_comprehension
+            tested_text: "отец мать брат дочь Анна"
+            media_asset_key: ru.a1.audio.dialogue.family_photo.01
+            prompt: {target_blocks: []}
+          - content_key: ru.a1.unit06.lesson03.exercise04.match_photo_people
+            type: matching_pairs
+            tested_text: "отец мать брат дочь"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "мой отец", right: "my father"}
+              - {left: "моя мать", right: "my mother"}
+              - {left: "мой брат", right: "my brother"}
+              - {left: "моя дочь", right: "my daughter"}
+          - content_key: ru.a1.unit06.lesson03.exercise05.order_this_my_family
+            type: word_order
+            tested_text: "Это моя семья"
+            prompt: {target_blocks: []}
+            word_bank: ["семья", "моя", "Это"]
+          - content_key: ru.a1.unit06.lesson03.exercise06.reply_who_is_this
+            type: dialogue_response
+            tested_text: "Это моя дочь"
+            prompt: {target_blocks: [{text: "Кто это на фото?", language_code: ru, direction: ltr}]}
+          - content_key: ru.a1.unit06.lesson03.exercise07.complete_daughter_name
+            tested_text: "Её зовут Анна"
+            type: fill_in_blank
+            prompt: {target_blocks: [{text: "Это моя дочь. ___ зовут Анна. (Her)", language_code: ru, direction: ltr}]}
+          - content_key: ru.a1.unit06.lesson03.exercise08.write_family_intro
+            type: writing_prompt
+            tested_text: "Это моя семья мой отец моя мать"
+            prompt: {target_blocks: [{text: "Write two or three sentences introducing your family in a photo (parents and a sibling).", language_code: en, direction: ltr}]}
