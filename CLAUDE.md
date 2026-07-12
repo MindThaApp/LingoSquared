@@ -258,6 +258,45 @@ node "/Users/raminazizi/.claude/plugins/cache/openai-codex/codex/1.0.5/scripts/c
   when a prior dispatch might still be mid-flight** and this one must not
   collide. Detail: BUILD_LOG.
 
+### Codex dispatch footguns (learned 2026-07-12 — don't repeat these)
+
+- **Pass the prompt via `--prompt-file`, never inline in a shell string.**
+  Backticks in an inline prompt are executed by the shell as command
+  substitution and silently deleted from the prompt — a dispatch went out
+  with `tested_text` and `prompt.target_blocks` stripped out of it (the
+  shell printed `command not found: tested_text` and Codex started anyway
+  with a mangled task). The prompt file also survives quoting hell.
+- **`gpt-5.6` is STILL not available on the ChatGPT-account Codex** —
+  re-tested 2026-07-12, identical `400 invalid_request_error`. `gpt-5.5`
+  is the ceiling. Don't burn a round re-testing it.
+- **Effort routing:** `high` ONLY for compiler/grading-critical surgery
+  (a subtle defect there costs far more than the tokens saved); `medium`/
+  `low` for routine round-trips. Ramin's standing preference is the
+  cheaper option wherever quality isn't compromised.
+- **A "failed" Codex task may still have done most of the work.** One task
+  reported failed after ~20 min (ran out mid-turn) but had left four
+  complete validators in the working tree. ALWAYS `git status` + `git
+  diff --stat` before discarding or re-dispatching — and verify the
+  partial work yourself rather than assuming it's junk.
+- **Never accept a Codex validator without running it on the full corpus
+  yourself.** Codex shipped a validator that emitted **360 false
+  positives** (it tokenized English gloss text and even content-key
+  fragments like `lesson01` as untaught target-language words) while its
+  three sibling validators were genuinely good. Make "zero false
+  positives on the current corpus" an explicit acceptance criterion in the
+  prompt, then re-run it yourself. A noisy hard-error validator is worse
+  than none — it trains everyone to ignore the validator.
+- **Codex writes tests against the WRONG error envelope.** It asserted
+  FastAPI's default `{"detail": ...}`; this app reshapes every
+  HTTPException to `{"error": {code, message}}` in `main.py`. Its
+  *endpoint* was correct and its *test* was wrong — only running pytest
+  reveals which. Codex has no Docker: **running the suite is always the
+  coordinator's job.**
+- **Codex runs UNISOLATED in the main working tree.** Two concurrent Codex
+  tasks are safe only on disjoint files (backend/ vs scripts/ is fine);
+  their edits interleave in one dirty tree, so **always commit with
+  explicit pathspecs** and `git show --stat` the result.
+
 ## Tiered review policy (Ramin's call, 2026-07-11)
 
 Review effort must shrink as a lane proves itself; blanket 100% review is

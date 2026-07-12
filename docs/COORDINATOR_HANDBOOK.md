@@ -159,5 +159,38 @@ cleverness. The failures that actually cost time today were all
    full logs (no tail pipes); grep logs for `"-> 401"` and `Traceback`.
 8. **Budget routing:** Codex for authoring/backend/compiler surgery,
    Sonnet for scoped fixes/frontend, Opus ONLY for fresh-context review
-   and precision judgment. it/ru lanes are 1-in-3 sampling eligible;
-   launch-gate lanes stay full review until launch, no exceptions.
+   and precision judgment. Launch-gate lanes stay full review until
+   launch, no exceptions. **Sampling was tried on it/ru 2026-07-12 and
+   REVERSED** — see heuristic 10.
+
+9. **Prevention is cheaper than detection — spend on the prompt, not the
+   reviewer.** 2026-07-12: three Sonnet-authored waves produced 23 defects,
+   and every one was a class the dispatch prompt did NOT mention. The one
+   class quoted VERBATIM in those same prompts came back with ZERO findings
+   in two independent reviews (it had needed 5 fixes the wave before).
+   Sonnet's capability was never the binding constraint — the prompt was.
+   So: paste `docs/content/AUTHORING_PREFLIGHT.md` verbatim into every
+   authoring dispatch, and make the author self-report per item.
+   Cost order, cheapest first: **validator → checklist → review.** A
+   validator costs tokens once and catches its class forever (three new
+   ones found 3 real bugs on their first corpus run, one of them in a unit
+   Opus had already "reviewed"); an Opus review costs 160–216k tokens
+   EVERY wave. Reserve review for what neither can reach — character canon,
+   "is this answerable by a human," genuine judgment. Review's real job is
+   discovering NEW classes (it found 4 that day → 4 permanent validators),
+   not re-finding known ones.
+
+10. **"Mature lane" is per-RECIPE, not per-language.** A lane does not stay
+    mature when it moves to new TOPICS. it/ru were sampled 1-in-3 on the
+    strength of zero-defect A1 13-15 reviews; Italian 16-18 was set to merge
+    on validators alone and turned out to carry **10 compiler-invisible
+    defects** (it validated at 0 errors), three of which graded a CORRECT
+    learner answer as WRONG. Both lanes reset to full review.
+
+11. **Live-play the app — the compiler cannot see UI-logic bugs.** The worst
+    bug of 2026-07-12 (`MatchingPairs.tsx` keyed option tiles by TEXT VALUE,
+    so an exercise mapping many lefts onto one right disabled every matching
+    tile on the first pick → Check never enabled → **the lesson was
+    impossible to complete**, in the en-nl launch pair) compiled clean,
+    validated at 0 errors, and was found ONLY by playing the lesson. Reading
+    a diff is not verification.
