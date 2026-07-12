@@ -99,6 +99,10 @@ SPEAKER_LABEL_RE = re.compile(
     r"^[ \t]*(?P<label>[^\n:]{1,40}?)[ \t]*:",
     re.MULTILINE,
 )
+DIALOGUE_TURN_RE = re.compile(
+    r"(?P<prefix>^|(?<=[.!?؟])\s+)(?P<label>[^:\n.!?؟]{1,40}?)[ \t]*:",
+    re.UNICODE,
+)
 ACCEPTED_VARIANT_STATUSES = {"correct", "acceptable_with_note"}
 PRACTICE_EXERCISE_TYPES = {
     "multiple_choice",
@@ -119,6 +123,72 @@ SLOT_NAME_RE = re.compile(r"^[a-z][a-z0-9_]*$")
 SLOT_PLACEHOLDER_RE = re.compile(r"\{([a-z][a-z0-9_]*)\}")
 _MISSING = object()
 MIN_MATCHING_PAIR_COUNT = 6
+PRODUCTION_EXERCISE_TYPES = {
+    "writing_prompt",
+    "dialogue_response",
+    "speak_response",
+}
+NUMBER_WORDS = {
+    "a": 1,
+    "an": 1,
+    "one": 1,
+    "un": 1,
+    "una": 1,
+    "uno": 1,
+    "two": 2,
+    "due": 2,
+    "three": 3,
+    "tre": 3,
+    "four": 4,
+    "quattro": 4,
+    "five": 5,
+    "cinque": 5,
+    "six": 6,
+    "sei": 6,
+    "seven": 7,
+    "sette": 7,
+    "eight": 8,
+    "otto": 8,
+    "nine": 9,
+    "nove": 9,
+    "ten": 10,
+    "dieci": 10,
+    "eleven": 11,
+    "undici": 11,
+    "twelve": 12,
+    "dodici": 12,
+}
+WORD_COUNT_RE = re.compile(
+    r"\b(?P<count>\d+|"
+    + "|".join(
+        sorted(
+            (re.escape(word) for word in NUMBER_WORDS),
+            key=len,
+            reverse=True,
+        )
+    )
+    + r")(?:\s+|-)(?:words?|parole?|palabras?|mots?|wörter|woerter|cuvinte)\b",
+    re.IGNORECASE,
+)
+WORD_COUNT_FUZZY_PREFIX_RE = re.compile(
+    r"(?:at least|up to|no more than|about|around|approximately|"
+    r"almeno|circa)\s+$",
+    re.IGNORECASE,
+)
+MODEL_ANSWER_SPAN_RE = re.compile(r"\*([^*\n]{1,240})\*")
+BLANK_MARKER_RE = re.compile(r"_{2,}|\{[a-z][a-z0-9_]*\}")
+CONTENT_KEY_FRAGMENT_RE = re.compile(
+    r"\b[a-z]{2,3}(?:\.[a-z0-9_]+){2,}\b",
+    re.IGNORECASE,
+)
+ENGLISH_HINT_RE = re.compile(
+    r"\([^)]*[A-Za-z][^)]*\)|(?:^|\s)--\s*[A-Za-z]",
+    re.UNICODE,
+)
+PROMPT_TARGET_EXERCISE_TYPES = {
+    "dialogue_response",
+    "fill_in_blank",
+}
 
 
 class Report:
@@ -880,6 +950,45 @@ def validate_matching_pairs_minimum_scale(
                     )
 
 
+def normalize_matching_pair_value(value: str) -> str:
+    return " ".join(value.casefold().split())
+
+
+def validate_matching_pairs_confusable_lefts(
+    realization: dict[str, Any],
+    report: Report,
+):
+    for unit in realization.get("units", []):
+        for lesson in unit.get("lessons", []):
+            for exercise in lesson.get("exercises", []):
+                if exercise.get("type") != "matching_pairs":
+                    continue
+
+                key = exercise.get("content_key", "<unknown>")
+                pairs = exercise.get("pairs")
+                if not isinstance(pairs, list):
+                    continue
+
+                lefts: dict[str, list[str]] = {}
+                for pair in pairs:
+                    pair_tuple = _matching_pair_tuple(pair)
+                    if pair_tuple is None:
+                        continue
+                    left, _ = pair_tuple
+                    lefts.setdefault(normalize_matching_pair_value(left), []).append(
+                        left
+                    )
+
+                for normalized_left, values in sorted(lefts.items()):
+                    if len(values) < 2:
+                        continue
+                    report.error(
+                        f"realization.exercises.{key}.pairs",
+                        "matching_pairs has duplicate left item "
+                        f"{normalized_left!r}: {values!r}",
+                    )
+
+
 def _matching_pair_tuple(value: Any) -> tuple[str, str] | None:
     if not isinstance(value, dict):
         return None
@@ -1004,6 +1113,148 @@ def validate_matching_pairs_overlay_mirror(
                     )
 
 
+def _single_correct_answer_values(
+    exercise_overlay: dict[str, Any],
+) -> list[tuple[str, str]]:
+    answers: list[tuple[str, str]] = []
+
+    if "correct_response" in exercise_overlay:
+        value = exercise_overlay["correct_response"]
+        if isinstance(value, str):
+            answers.append(("correct_response", value))
+        return answers
+
+    variants = exercise_overlay.get("accepted_answers", [])
+    if not isinstance(variants, list):
+        return answers
+
+    for index, variant in enumerate(variants):
+        value = variant.get("value") if isinstance(variant, dict) else variant
+        if isinstance(value, str):
+            answers.append((f"accepted_answers[{index}]", value))
+    return answers
+
+
+def _explicit_word_count(value: Any) -> int | None:
+    if not isinstance(value, str):
+        return None
+    if re.search(r"\bor\s+(expressions?|phrases?)\b", value, re.IGNORECASE):
+        return None
+    for match in WORD_COUNT_RE.finditer(value):
+        prefix = value[max(0, match.start() - 40) : match.start()]
+        if WORD_COUNT_FUZZY_PREFIX_RE.search(prefix):
+            continue
+        raw = match.group("count").casefold()
+        if raw.isdigit():
+            return int(raw)
+        return NUMBER_WORDS.get(raw)
+    return None
+
+
+def _word_count(value: str) -> int:
+    return len([token for token in TOKEN_RE.findall(value) if token.strip()])
+
+
+def _comma_item_count(value: str) -> int | None:
+    if "," not in value:
+        return None
+    items = [item.strip() for item in value.split(",") if item.strip()]
+    return len(items) or None
+
+
+def _extract_emphasized_strings(value: Any) -> list[str]:
+    if not isinstance(value, str):
+        return []
+    return [
+        match.strip()
+        for match in MODEL_ANSWER_SPAN_RE.findall(value)
+        if match.strip()
+    ]
+
+
+def validate_underdetermined_production_prompts(
+    realization: dict[str, Any],
+    overlay: dict[str, Any],
+    report: Report,
+):
+    exercise_overlays = overlay.get("exercises", {})
+    if not isinstance(exercise_overlays, dict):
+        exercise_overlays = {}
+
+    for unit in realization.get("units", []):
+        for lesson in unit.get("lessons", []):
+            for exercise in lesson.get("exercises", []):
+                exercise_type = exercise.get("type")
+                if exercise_type not in PRODUCTION_EXERCISE_TYPES:
+                    continue
+
+                key = exercise.get("content_key", "<unknown>")
+                exercise_overlay = exercise_overlays.get(key, {})
+                if not isinstance(exercise_overlay, dict):
+                    continue
+
+                answers = _single_correct_answer_values(exercise_overlay)
+                if not answers:
+                    continue
+
+                instruction = exercise_overlay.get("instruction")
+                expected_count = _explicit_word_count(instruction)
+                if expected_count is not None:
+                    if any(
+                        _comma_item_count(answer) == expected_count
+                        for _, answer in answers
+                    ):
+                        continue
+                    for answer_location, answer in answers:
+                        actual_count = _word_count(answer)
+                        if actual_count == expected_count:
+                            continue
+                        report.error(
+                            f"overlay.exercises.{key}.{answer_location}",
+                            "production prompt instruction states "
+                            f"{expected_count} word(s) but accepted answer "
+                            f"{answer!r} has {actual_count}",
+                        )
+
+                normalized_answers = {
+                    normalized
+                    for _, answer in answers
+                    for normalized in [normalize_audio_text(answer)]
+                    if normalized
+                }
+                if len(normalized_answers) != 1:
+                    continue
+
+                _, answer = answers[0]
+                normalized_answer = normalize_audio_text(answer)
+                if not normalized_answer:
+                    continue
+
+                feedback = exercise_overlay.get("feedback")
+                examples = _extract_emphasized_strings(feedback)
+                if len(examples) != 1:
+                    continue
+                example = examples[0]
+                normalized_example = normalize_audio_text(example)
+                if (
+                    not normalized_example
+                    or normalized_example == normalized_answer
+                    or normalized_example in normalized_answer
+                    or normalized_answer in normalized_example
+                ):
+                    continue
+                answer_words = _word_count(answer)
+                example_words = _word_count(example)
+                if answer_words > 1 and example_words < max(2, answer_words - 1):
+                    continue
+                report.error(
+                    f"overlay.exercises.{key}.feedback",
+                    "single-answer production prompt feedback shows "
+                    f"{example!r}, which differs from accepted answer "
+                    f"{answer!r}",
+                )
+
+
 def _text_values(value: Any) -> list[str]:
     if isinstance(value, str):
         return [value]
@@ -1059,6 +1310,214 @@ def _media_assets_by_key(
         if key:
             assets[key] = item
     return assets
+
+
+def normalize_speaker(value: Any) -> str | None:
+    if not isinstance(value, str):
+        return None
+    normalized = " ".join(value.casefold().split())
+    for article in ("the ", "de ", "het "):
+        if normalized.startswith(article):
+            normalized = normalized[len(article) :]
+    return normalized or None
+
+
+def _speaker_labelled_turns(
+    text: Any,
+    *,
+    content_key: Any,
+    structured_speaker: str | None = None,
+) -> list[dict[str, Any]]:
+    if not isinstance(text, str):
+        return []
+
+    if structured_speaker:
+        turn = _dialogue_turn(
+            structured_speaker,
+            text,
+            structured_speaker=True,
+            content_key=content_key,
+        )
+        return [turn] if turn else []
+
+    matches = list(DIALOGUE_TURN_RE.finditer(text))
+    if not matches:
+        return []
+
+    turns = []
+    for index, match in enumerate(matches):
+        start = match.end()
+        end = matches[index + 1].start() if index + 1 < len(matches) else len(text)
+        line = text[start:end].strip()
+        line = re.sub(r"^\([^)]{1,40}\)\s*", "", line)
+        speaker = match.group("label").strip()
+        turn = _dialogue_turn(
+            speaker,
+            line,
+            structured_speaker=False,
+            content_key=content_key,
+        )
+        if turn:
+            turns.append(turn)
+    return turns
+
+
+def _speaker_labelled_turns_for_speakers(
+    text: Any,
+    *,
+    content_key: Any,
+    speakers: set[str],
+) -> list[dict[str, Any]]:
+    if not isinstance(text, str) or not speakers:
+        return []
+
+    labels = sorted((speaker for speaker in speakers if speaker), key=len, reverse=True)
+    pattern = re.compile(
+        r"(?P<prefix>^|(?<=[\s.!?؟]))(?P<label>"
+        + "|".join(re.escape(label) for label in labels)
+        + r")[ \t]*:",
+        re.UNICODE,
+    )
+    matches = list(pattern.finditer(text))
+    if not matches:
+        return []
+
+    turns = []
+    for index, match in enumerate(matches):
+        start = match.end()
+        end = matches[index + 1].start() if index + 1 < len(matches) else len(text)
+        line = text[start:end].strip()
+        turn = _dialogue_turn(
+            match.group("label").strip(),
+            line,
+            structured_speaker=False,
+            content_key=content_key,
+        )
+        if turn:
+            turns.append(turn)
+    return turns
+
+
+def _lesson_dialogue_teaching_turns(
+    lesson: dict[str, Any],
+) -> list[dict[str, Any]]:
+    turns = []
+    for item in lesson.get("teaching", []):
+        if not isinstance(item, dict) or item.get("kind") != "dialogue":
+            continue
+        target = item.get("target")
+        if not isinstance(target, dict):
+            continue
+        speaker = target.get("speaker")
+        text = target.get("text")
+        content_key = item.get("content_key", "<unknown>")
+        if isinstance(speaker, str) and speaker.strip():
+            turns.extend(
+                _speaker_labelled_turns(
+                    text,
+                    content_key=content_key,
+                    structured_speaker=speaker.strip(),
+                )
+            )
+        else:
+            turns.extend(_speaker_labelled_turns(text, content_key=content_key))
+    return turns
+
+
+def _lesson_dialogue_media_keys(lesson: dict[str, Any]) -> list[Any]:
+    media_keys = []
+    for exercise in lesson.get("exercises", []):
+        if not isinstance(exercise, dict):
+            continue
+        media_key = exercise.get("media_asset_key")
+        if _is_dialogue_audio_key(media_key) and media_key not in media_keys:
+            media_keys.append(media_key)
+    return media_keys
+
+
+def validate_dialogue_audio_teaching_cards(
+    realization: dict[str, Any],
+    report: Report,
+):
+    if realization.get("target_language") != "ru":
+        return
+
+    assets = _media_assets_by_key(realization)
+
+    for unit in realization.get("units", []):
+        for lesson in unit.get("lessons", []):
+            if not isinstance(lesson, dict):
+                continue
+
+            teaching_turns = _lesson_dialogue_teaching_turns(lesson)
+            if not teaching_turns:
+                continue
+            if not all(turn.get("structured_speaker") for turn in teaching_turns):
+                continue
+
+            media_keys = _lesson_dialogue_media_keys(lesson)
+            if not media_keys:
+                continue
+
+            teaching_by_text: dict[str, list[dict[str, Any]]] = {}
+            for turn in teaching_turns:
+                teaching_by_text.setdefault(turn["target_norm"], []).append(turn)
+            speakers = {
+                speaker
+                for speaker in (turn.get("speaker") for turn in teaching_turns)
+                if isinstance(speaker, str) and speaker.strip()
+            }
+
+            for media_key in media_keys:
+                asset = assets.get(media_key)
+                if not isinstance(asset, dict):
+                    continue
+                audio_turns = _speaker_labelled_turns_for_speakers(
+                    _media_asset_text(asset),
+                    content_key=media_key,
+                    speakers=speakers,
+                )
+                if not audio_turns:
+                    continue
+
+                for audio_turn in audio_turns:
+                    matching_teaching_turns = teaching_by_text.get(
+                        audio_turn["target_norm"],
+                        [],
+                    )
+                    if not matching_teaching_turns:
+                        if len(audio_turns) != len(teaching_turns):
+                            continue
+                        report.error(
+                            f"realization.media_assets.{media_key}",
+                            "dialogue audio turn is not covered by a "
+                            "dialogue teaching card: "
+                            f"{audio_turn.get('speaker')!r}: "
+                            f"{audio_turn.get('target_text')!r}",
+                        )
+                        continue
+
+                    audio_speaker = normalize_speaker(audio_turn.get("speaker"))
+                    if not audio_speaker:
+                        continue
+                    for teaching_turn in matching_teaching_turns:
+                        teaching_speaker = normalize_speaker(
+                            teaching_turn.get("speaker")
+                        )
+                        if teaching_speaker == audio_speaker:
+                            break
+                    else:
+                        report.error(
+                            f"realization.media_assets.{media_key}",
+                            "dialogue teaching card attributes audio line "
+                            "to a different speaker: audio has "
+                            f"{audio_turn.get('speaker')!r} for "
+                            f"{audio_turn.get('target_text')!r}; "
+                            "teaching card(s) "
+                            f"{[turn['content_key'] for turn in matching_teaching_turns]} "
+                            "use "
+                            f"{[turn.get('speaker') for turn in matching_teaching_turns]}",
+                        )
 
 
 def _normalized_contains(haystack: str, needle: str) -> bool:
@@ -1669,13 +2128,120 @@ def compile_practice_packs(
     }
 
 
+def _target_language_prompt_texts(
+    exercise: dict[str, Any],
+    target_language: Any,
+    source_language: Any,
+) -> list[tuple[str, str]]:
+    exercise_type = exercise.get("type")
+    if exercise_type not in PROMPT_TARGET_EXERCISE_TYPES:
+        return []
+    if not isinstance(target_language, str):
+        return []
+    prompt = exercise.get("prompt")
+    if not isinstance(prompt, dict):
+        return []
+    target_blocks = prompt.get("target_blocks")
+    if not isinstance(target_blocks, list):
+        return []
+
+    texts = []
+    for location, value in walk(target_blocks, "prompt.target_blocks"):
+        if not isinstance(value, dict):
+            continue
+        language_code = value.get("language_code")
+        direction = value.get("direction")
+        if not isinstance(language_code, str) or not isinstance(direction, str):
+            continue
+        if language_code != target_language:
+            continue
+        text = value.get("text")
+        if not isinstance(text, str):
+            continue
+        if _carries_source_language_hint(
+            text,
+            source_language,
+            target_language,
+        ):
+            continue
+        if exercise_type == "fill_in_blank" and not BLANK_MARKER_RE.search(text):
+            continue
+        texts.append((location, text))
+    return texts
+
+
+def _carries_source_language_hint(
+    text: str,
+    source_language: Any,
+    target_language: str,
+) -> bool:
+    if not isinstance(source_language, str) or source_language == target_language:
+        return False
+    if source_language == "en" and target_language != "en":
+        return bool(ENGLISH_HINT_RE.search(text))
+    return False
+
+
+def _untaught_prompt_tokens(value: str) -> set[str]:
+    value = CONTENT_KEY_FRAGMENT_RE.sub(" ", value)
+    value = BLANK_MARKER_RE.sub(" ", value)
+    return {
+        token
+        for token in tokenize(value)
+        if "_" not in token and not any(character.isdigit() for character in token)
+    }
+
+
+def _lesson_introduced_tokens(lesson: dict[str, Any]) -> set[str]:
+    introduced_tokens: set[str] = set()
+    for item in lesson.get("teaching", []):
+        introduced = item.get("introduced_tokens", [])
+        if not isinstance(introduced, list):
+            continue
+        for token in introduced:
+            if isinstance(token, str):
+                introduced_tokens.update(tokenize(token))
+    return introduced_tokens
+
+
+def _future_introduced_tokens_by_lesson(
+    units: list[Any],
+) -> dict[tuple[int, int], set[str]]:
+    lessons: list[tuple[int, int, set[str]]] = []
+    for unit_index, unit in enumerate(units):
+        if not isinstance(unit, dict):
+            continue
+        for lesson_index, lesson in enumerate(unit.get("lessons", [])):
+            if not isinstance(lesson, dict):
+                continue
+            lessons.append(
+                (
+                    unit_index,
+                    lesson_index,
+                    _lesson_introduced_tokens(lesson),
+                )
+            )
+
+    future_by_lesson: dict[tuple[int, int], set[str]] = {}
+    future: set[str] = set()
+    for unit_index, lesson_index, introduced in reversed(lessons):
+        future_by_lesson[(unit_index, lesson_index)] = set(future)
+        future.update(introduced)
+    return future_by_lesson
+
+
 def validate_untaught_vocabulary(
     realization: dict[str, Any],
     report: Report,
+    taught: set[str] | None = None,
+    source_language: Any = None,
 ):
-    taught: set[str] = set()
+    if taught is None:
+        taught = set()
 
     units = realization.get("units", [])
+    future_by_lesson = _future_introduced_tokens_by_lesson(units)
+    target_language = realization.get("target_language")
     for unit_index, unit in enumerate(units):
         for lesson_index, lesson in enumerate(unit.get("lessons", [])):
             lesson_location = (
@@ -1723,6 +2289,46 @@ def validate_untaught_vocabulary(
                         "tests tokens not introduced in this or an earlier "
                         f"lesson: {', '.join(missing)}",
                     )
+
+                for prompt_location, prompt_text in _target_language_prompt_texts(
+                    exercise,
+                    target_language,
+                    source_language,
+                ):
+                    prompt_tokens = _untaught_prompt_tokens(prompt_text)
+                    missing = sorted(prompt_tokens - taught)
+                    exercise_type = exercise.get("type")
+                    if exercise_type == "fill_in_blank":
+                        tested_tokens = (
+                            tokenize(tested_text)
+                            if isinstance(tested_text, str)
+                            else set()
+                        )
+                        missing = [
+                            token for token in missing if token in tested_tokens
+                        ]
+                    elif exercise_type == "dialogue_response":
+                        future_tokens = future_by_lesson.get(
+                            (unit_index, lesson_index),
+                            set(),
+                        )
+                        missing = [
+                            token for token in missing if token in future_tokens
+                        ]
+                    if missing:
+                        location = (
+                            f"{lesson_location}.exercises[{exercise_index}]"
+                            f".{prompt_location}"
+                        )
+                        message = (
+                            "shows target-language prompt tokens not "
+                            "introduced in this or an earlier lesson: "
+                            f"{', '.join(missing)}"
+                        )
+                        if exercise_type == "dialogue_response":
+                            report.warn(location, message)
+                        else:
+                            report.error(location, message)
 
 
 # AUTHORING_GUIDE.md #19: every `kind: vocabulary` teaching card must carry
@@ -2497,6 +3103,7 @@ def validate_documents(
     spine: dict[str, Any],
     realization: dict[str, Any],
     overlay: dict[str, Any],
+    taught_tokens: set[str] | None = None,
 ) -> Report:
     report = Report()
 
@@ -2529,9 +3136,17 @@ def validate_documents(
     validate_same_speaker_dialogue_distractors(realization, overlay, report)
     validate_order_word_bank_answers(realization, overlay, report)
     validate_matching_pairs_minimum_scale(realization, report)
+    validate_matching_pairs_confusable_lefts(realization, report)
     validate_matching_pairs_overlay_mirror(realization, overlay, report)
-    validate_untaught_vocabulary(realization, report)
+    validate_untaught_vocabulary(
+        realization,
+        report,
+        taught_tokens,
+        overlay.get("source_language"),
+    )
     validate_vocabulary_examples(realization, overlay, report)
+    validate_underdetermined_production_prompts(realization, overlay, report)
+    validate_dialogue_audio_teaching_cards(realization, report)
     validate_listen_select_same_speaker_audio_options(realization, overlay, report)
     validate_listen_audio_contains_tested_text(realization, report)
     validate_audio_references(realization, report)
@@ -2644,6 +3259,7 @@ def main():
         return 2
 
     report = Report()
+    taught_tokens: set[str] = set()
 
     for (
         realization_path,
@@ -2656,6 +3272,7 @@ def main():
             spine,
             realization,
             overlay,
+            taught_tokens,
         )
         merge_pair_report(
             report,
