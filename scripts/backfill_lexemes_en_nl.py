@@ -144,12 +144,13 @@ if str(BACKEND_ROOT) not in sys.path:
 # en-nl line (still the same "Dutch A1" course, not a level change; see each
 # realization file's own review.notes for why the file numbering jumps).
 # Units 24-28 are NOT included here -- those are the SEPARATE "Dutch A2"
-# course, handled below by UNIT_FILES_A2. Units 34+ are not yet covered by
-# this pass and intentionally excluded from the filter below.
+# course, handled below by UNIT_FILES_A2. Extended 2026-07-12 to include
+# the next reviewed A1 Endless Practice coverage batch, units 43-48.
 UNIT_FILES = tuple(sorted(
     p for p in (REPO_ROOT / "docs/content/realizations/nl").glob("a1_unit*_*.yaml")
     if 1 <= int(p.name[len("a1_unit"):len("a1_unit")+2]) <= 23
     or 29 <= int(p.name[len("a1_unit"):len("a1_unit")+2]) <= 33
+    or 43 <= int(p.name[len("a1_unit"):len("a1_unit")+2]) <= 48
 ))
 
 # A2 units (24-28: bureaucracy, opinions, banking, health, housing) live in a
@@ -962,6 +963,43 @@ NL_GLOSSES.update({
     "verhaal": "the story", "grappig": "funny",
 })
 
+# A1 units 43-48 (seasons, emergencies, lost items, appointments, library
+# borrowing, waste sorting), added 2026-07-12 alongside UNIT_FILES' extended
+# range above.
+NL_GLOSSES.update({
+    "seizoen": "the season", "lente": "spring", "zomer": "summer",
+    "herfst": "autumn; fall", "winter": "winter",
+    "eigenschap": "the characteristic; property", "schaatsen": "to ice-skate",
+    "tulpen": "tulips", "seizoenen": "seasons",
+    "allemaal": "all; everyone", "Vier": "four",
+    "favorieten": "favorites",
+    "brand": "fire", "alarmnummer": "emergency number",
+    "nooduitgang": "emergency exit", "politie": "police",
+    "ambulance": "ambulance", "brandweer": "fire brigade",
+    "Politie": "police", "iedereen": "everyone", "Rustig": "calm",
+    "Iedereen": "everyone", "112": "112",
+    "kwijt": "missing; lost", "gevonden": "found",
+    "portemonnee": "wallet", "Telefoon": "phone",
+    "spannend": "exciting; tense", "genoeg": "enough",
+    "Woensdag": "Wednesday", "computerhulp": "computer help",
+    "Voor": "for", "Waarvoor": "for what; what for",
+    "bevestigd": "confirmed", "help": "help (with ik)",
+    "herinneren": "to remind",
+    "lenen": "to borrow", "bibliotheekpas": "library card",
+    "28": "28", "weken": "weeks", "leenbon": "loan receipt",
+    "Leenbon": "loan receipt", "leent": "borrows",
+    "geleend": "borrowed", "leen": "borrow (with ik)",
+    "afval": "waste; trash", "scheiden": "to sort; to separate",
+    "GFT": "organic waste", "bak": "bin", "Restafval": "residual waste",
+    "grijze": "grey", "Papier": "paper", "container": "container",
+    "glasbak": "glass recycling container", "glas": "glass",
+    "papier": "paper", "ophaaldag": "collection day",
+    "Maandag": "Monday", "Afvalkalender": "waste collection calendar",
+    "Donderdag": "Thursday", "restafval": "residual waste",
+    "gescheiden": "sorted; separated", "bakken": "bins",
+    "regels": "rules",
+})
+
 # Case variants are tokens in their own right because provenance preserves the
 # realization spelling. Their gloss is the explicit lexical gloss above.
 for _token in (
@@ -971,10 +1009,10 @@ for _token in (
     if _token not in NL_GLOSSES:
         NL_GLOSSES[_token] = NL_GLOSSES[_token.casefold()]
 
-for _number in "0 00 06 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 18 19 20 21 22 24 25 29 30 31 32 40 42 43 45 48 50 65 75 87 90 99 2024 2026".split():
+for _number in "0 00 06 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 18 19 20 21 22 24 25 28 29 30 31 32 40 42 43 45 48 50 65 75 87 90 99 112 2024 2026".split():
     NL_GLOSSES[_number] = _number
 
-SYMBOLS = set("'s 0 00 06 07 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 24 25 29 30 31 32 40 42 43 45 48 50 65 75 87 90 99 500 2024 2026".split())
+SYMBOLS = set("'s 0 00 06 07 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 24 25 28 29 30 31 32 40 42 43 45 48 50 65 75 87 90 99 112 500 2024 2026".split())
 PROPER_NOUNS = {"België", "Duitsland", "Egypte", "Lotte", "Nederland", "Noor", "Omar",
                 "Rotterdam", "Sander", "Fenna", "Jan", "Marieke", "Utrecht", "Amsterdam",
                 "Bergsport", "Schoudertas", "Stad", "Centraal", "M"}
@@ -1143,6 +1181,31 @@ NOUNS.update({
     "onbekende", "centrum", "Fietsen",
 })
 
+# Units 43-48 (seasons, emergencies, lost items, appointments, library
+# borrowing, waste sorting), added 2026-07-12 alongside UNIT_FILES' extended
+# range above.
+PROPER_NOUNS.update({"GFT"})
+PRONOUNS.update({"iedereen", "Iedereen"})
+PREPOSITIONS.update({"Voor"})
+ADJECTIVES.update({
+    "kwijt", "gevonden", "spannend", "grijze", "Rustig", "gescheiden",
+})
+ADVERBS.update({"allemaal", "genoeg"})
+VERBS.update({
+    "schaatsen", "help", "herinneren", "lenen", "leent", "geleend", "leen",
+    "scheiden",
+})
+NOUNS.update({
+    "seizoen", "lente", "zomer", "herfst", "winter", "eigenschap",
+    "tulpen", "seizoenen", "Vier", "favorieten", "brand", "alarmnummer",
+    "nooduitgang", "politie", "Politie", "ambulance", "brandweer",
+    "portemonnee", "Telefoon", "Woensdag", "computerhulp", "Waarvoor",
+    "bevestigd", "bibliotheekpas", "weken", "leenbon", "Leenbon",
+    "afval", "bak", "Restafval", "Papier", "container", "glasbak",
+    "glas", "papier", "ophaaldag", "Maandag", "Afvalkalender",
+    "Donderdag", "restafval", "bakken", "regels",
+})
+
 
 # B1 units 01-11, added 2026-07-11. Grouped by unit for traceability, same
 # convention as every prior round's POS-set additions. Case-dup/homograph
@@ -1296,7 +1359,7 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         "voltooide_tijd": "past_tense_intro", "met_hebben": "hebben_perfect",
         "met_zijn": "zijn_perfect", "wanneer_gebeurde_het": "past_event_time",
         "een_kort_verslag_lezen": "past_reading", "lotte_en_omar_gisteren": "past_dialogue",
-        "eten_en_drinken": "taste_preference", "activiteiten": "activity_preference",
+        "eten_en_drinken": "taste_preference", "activiteiten": "activity_lesson",
         "houden_van": "strong_preference", "kiezen": "preference_choice",
         "voorkeur_lezen": "preference_reading", "lotte_en_omar_kiezen": "preference_dialogue",
         "grootte_vergelijken": "size_comparison", "prijzen_vergelijken": "price_comparison",
@@ -1381,7 +1444,7 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         "de_verwarming_werkt_niet": "heating_problem",
         "wanneer_komt_de_monteur": "technician_scheduling",
         "een_melding_doen": "issue_report",
-        "bevestiging_lezen": "report_confirmation_reading",
+        "bevestiging_lezen": "confirmation_reading",
         "verwarming_melden": "housing_report_dialogue",
         # Unit 29 (hobbies), added 2026-07-09.
         "lezen_sporten_koken": "hobby_verbs_set1",
@@ -1425,6 +1488,44 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         "taalcafe_fenna_omar": "transport_dialogue",
         "wie_reist_hoe": "transport_reading",
         "taalcafe_samen_fietsen": "transport_wrapup_dialogue",
+        # Unit 43 (seasons), added 2026-07-12.
+        "lente_en_zomer": "season_noun_lesson",
+        "herfst_en_winter": "season_noun_lesson",
+        "gesprek_bij_het_taalcafe": "season_dialogue",
+        "lezen_seizoenen": "season_reading",
+        "sander_komt_erbij": "season_wrapup_dialogue",
+        # Unit 44 (emergencies), added 2026-07-12.
+        "hulp_en_brand": "emergency_help",
+        "alarmnummer_en_nooduitgang": "emergency_safety_noun_lesson",
+        "politie_ambulance_brandweer": "emergency_service_noun_lesson",
+        "brand_bij_het_taalcafe": "emergency_dialogue",
+        "lezen_over_de_brand": "emergency_reading",
+        "sander_komt_aan": "emergency_wrapup_dialogue",
+        # Unit 45 (lost items), added 2026-07-12.
+        "kwijt_en_gevonden": "lost_found_status",
+        "telefoon_rugzak_portemonnee": "lost_item_noun_lesson",
+        "nina_vraagt_bij_de_balie": "lost_item_dialogue",
+        "bericht_gevonden_telefoon": "lost_item_reading",
+        "sander_checkt_zijn_portemonnee": "lost_item_wrapup_dialogue",
+        # Unit 46 (appointments), added 2026-07-12.
+        "afspraak_maken": "appointment_scheduling",
+        "tijd_beschikbaar": "appointment_time_availability",
+        "computerhulp": "appointment_purpose",
+        "omar_helpt_herinneren": "appointment_wrapup_dialogue",
+        # Unit 47 (library borrowing), added 2026-07-12.
+        "lenen_en_terugbrengen": "library_borrow_return",
+        "bibliotheekpas": "library_card",
+        "inleverdatum": "due_date",
+        "balie_lenen": "library_borrow_dialogue",
+        "leenbon_lezen": "library_receipt_reading",
+        "terug_bij_taalcafe": "library_wrapup_dialogue",
+        # Unit 48 (waste sorting), added 2026-07-12.
+        "afval_scheiden": "waste_sorting",
+        "de_bakken": "waste_bin_lesson",
+        "papier_en_glas": "recyclable_material_lesson",
+        "omar_helpt_nina": "waste_sorting_dialogue",
+        "afvalkalender_lezen": "waste_calendar_reading",
+        "lotte_hoort_het": "waste_sorting_wrapup_dialogue",
         # A2 unit 73 (sollicitatiegesprek/job interview), added 2026-07-10.
         "ik_wil_solliciteren": "job_application_interest",
         "ik_bel_over_de_vacature": "job_interview_appointment",
