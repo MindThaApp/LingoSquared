@@ -10,7 +10,7 @@ review:
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [greeting, time_period, farewell, wellbeing_question, wellbeing_answer, politeness, identity, person_name, dialogue_word]
+    semantic: [greeting, time_period, farewell, wellbeing_question, wellbeing_answer, politeness, identity, person_name, dialogue_word, extended_family]
     person: [first, second, third]
     register: [formal, informal]
 slot_presets:
@@ -25,6 +25,9 @@ slot_presets:
   wellbeing_question: &wellbeing_question {language_code: en, part_of_speech: adverb, agreement_tags: {semantic: wellbeing_question}}
   farewell: &farewell {language_code: en, part_of_speech: [noun, verb, adverb], agreement_tags: {semantic: farewell}}
   farewell_word: &farewell_word {language_code: en, part_of_speech: [noun, adverb], agreement_tags: {semantic: farewell}}
+  dialogue_noun: &dialogue_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: dialogue_word}}
+  extended_family: &extended_family {language_code: en, part_of_speech: noun, agreement_tags: {semantic: extended_family}}
+  practice_word: &practice_word {language_code: en, part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase], agreement_tags: {}}
 templates:
   # Lesson 1: everyday greetings and farewells.
   - content_key: practice.nl-en.en.a1.unit01.lesson01.greeting_meaning.001
@@ -157,3 +160,51 @@ templates:
     slots: {farewell: *farewell}
     answer_derivation: {kind: slot_gloss, slot: farewell}
     feedback_frame: {text: "Je hoorde {farewell}.", language_code: nl, direction: ltr}
+
+  # Cross-lesson fallback: keeps low-mastery practice from collapsing into
+  # bare single-word recognition when a later lexeme lacks a narrower frame.
+  - content_key: practice.nl-en.en.a1.unit01.lesson01.variety_time_order.900
+    lesson_content_key: en.a1.unit01.lesson01.everyday_greetings
+    type: word_order
+    frame: {text: "Good {item}", language_code: en, direction: ltr}
+    slots: {item: *time_period}
+    answer_derivation: {kind: render_frame, frame: {text: "Good {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "De juiste volgorde is Good {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit01.lesson03.variety_wellbeing_order.901
+    lesson_content_key: en.a1.unit01.lesson03.wellbeing
+    type: word_order
+    frame: {text: "I'm {item}", language_code: en, direction: ltr}
+    slots: {item: *wellbeing_answer}
+    answer_derivation: {kind: render_frame, frame: {text: "I'm {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "De juiste volgorde is I'm {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit01.lesson03.variety_politeness_pair.902
+    lesson_content_key: en.a1.unit01.lesson03.wellbeing
+    type: matching_pairs
+    frame: {text: "Koppel beleefde Engelse woorden aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
+    slots: {word_one: *politeness, word_two: *politeness, word_three: *politeness, word_four: *politeness, word_five: *politeness, word_six: *politeness}
+    slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}]
+    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}
+    feedback_frame: {text: "Je hebt de beleefde woorden gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit01.lesson01.variety_dialogue_pair.903
+    lesson_content_key: en.a1.unit01.lesson01.everyday_greetings
+    type: matching_pairs
+    frame: {text: "Koppel elk Engels woord uit de dialoog aan zijn Nederlandse betekenis.", language_code: nl, direction: ltr}
+    slots: {word_one: *dialogue_noun, word_two: *dialogue_noun, word_three: *dialogue_noun, word_four: *dialogue_noun, word_five: *dialogue_noun, word_six: *dialogue_noun}
+    slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}]
+    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}
+    feedback_frame: {text: "Je hebt de dialoogwoorden gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit01.lesson01.variety_family_pair.904
+    lesson_content_key: en.a1.unit01.lesson01.everyday_greetings
+    type: matching_pairs
+    frame: {text: "Koppel familieleden aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
+    slots: {word_one: *extended_family, word_two: *extended_family, word_three: *extended_family, word_four: *extended_family, word_five: *extended_family}
+    slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five]}]
+    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five]}
+    feedback_frame: {text: "Je hebt de familiewoorden gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit01.lesson01.practice_translate.905
+    lesson_content_key: en.a1.unit01.lesson01.everyday_greetings
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *practice_word}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}

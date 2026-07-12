@@ -23,6 +23,7 @@ slot_presets:
   politeness: &politeness {language_code: prs, part_of_speech: [noun, verb], agreement_tags: {semantic: politeness}}
   identity: &identity {language_code: prs, part_of_speech: [pronoun, verb, noun], agreement_tags: {semantic: identity}}
   dialogue_word: &dialogue_word {language_code: prs, part_of_speech: [noun, adjective], agreement_tags: {semantic: dialogue_word}}
+  practice_word: &practice_word {language_code: prs, part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase], agreement_tags: {}}
 templates:
   # Lesson 1: script recognition. No listen_select anywhere in this pack --
   # Dari has zero TTS voice coverage project-wide, a hard exclusion, not a
@@ -111,3 +112,13 @@ templates:
     slots: {dialogue_word: *dialogue_word}
     answer_derivation: {kind: slot_text, slot: dialogue_word}
     feedback_frame: {text: "{dialogue_word} appears in the taught workplace dialogue.", language_code: en, direction: ltr}
+
+  # Cross-lesson fallback: keeps low-mastery practice from collapsing into
+  # bare single-word recognition when a later lexeme lacks a narrower frame.
+  - content_key: practice.en-prs.prs.a1.unit01.lesson01.practice_translate.901
+    lesson_content_key: prs.a1.unit01.lesson01.script_ramp
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *practice_word}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} is the Dari item for this prompt.", language_code: en, direction: ltr}
