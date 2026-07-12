@@ -119,3 +119,51 @@ ramin-azizi/LingoSquared).
   compute what's computable, hand Ramin a paste-ready command for the
   rest. He knows the drill and prefers speed — minimize such asks by
   designing around them.
+
+---
+
+## Overnight session log (2026-07-12 ~04:15–10:00, autonomous coordinator)
+
+All queued wave items landed; everything below is merged, reviewed
+(fresh-context, full), validated, and pushed:
+
+- **Feedback attachments frontend** shipped + live-browser-verified
+  (upload→submit→DB row confirmed; RTL fa pass; Persian-digit counter).
+  Production rebuild + rsync to 192.168.4.4 HELD for Ramin (deploy rule).
+- **X→en B1 closed at 11 units** in all three launch directions
+  (Codex-authored 07-11, Opus-reviewed: nl-en 0 defects, prs-en 0,
+  fa-en 1 same-speaker distractor). Manifest wired, dev DB synced.
+- **Two new compiler validators** (Codex): overlay matching_pairs
+  accepted_answers must mirror realization pairs; listen audio must
+  contain tested_text. Zero false positives corpus-wide; caught 4 real
+  bugs (en-nl, en-ro ×3) — all fixed same session.
+- **Italian + Russian launched as courses**: 12 fully-reviewed A1 units
+  each (realizations + en-it/en-ru overlays), manifest-wired, imported
+  to dev DB. Sources: FSI Italian FAST Vol 1, FSI Russian FAST (PD).
+- **Practice packs**: +90 templates (en-nl 43-48, en-fa 31-36, X-en
+  43-48) + backfill lexeme coverage; three Codex fix rounds were needed
+  for lesson_categories/gloss gaps — the five-module iter_specs harness
+  (see registry) is now the acceptance test for any backfill extension.
+- **fa/prs UI locale register normalization** (fa: 102 values → formal
+  شما; prs: 2 Dari fixes).
+- **Local-model experiment done** (qwen3:14b): verdict in
+  COORDINATOR_HANDBOOK — barred from learner-facing content.
+
+### Depth measurement (scripts/measure_content_depth.py, teaching half)
+- en→X teaching: en-nl 11.25h, en-fa 13.8h, en-prs 15.3h — all ≥10h OK.
+- X→en teaching: nl-en / fa-en / prs-en ≈ 6.78h each (shared English
+  realization). **QUESTION FOR RAMIN:** is the ≥10hr teaching bar
+  per-direction or per-pair? Per-pair, every launch pair passes
+  (18h/20.6h/22h); per-direction, X→en needs ~10 more English units
+  (they'd be shared by all three directions — one authoring effort).
+- Practice half: measured after the final sync (see registry/log below).
+
+### New footguns learned tonight
+- sync_dev_db.sh's admin token can expire mid-run (30-min access token,
+  long sync) → later imports 401. Re-run works; a token-refresh in the
+  script is Codex backlog.
+- Never run sync while a merge is mid-conflict (it read conflict-marker
+  YAML from the main tree once — harmless, but sequence syncs after
+  merges complete).
+- Codex self-reported acceptance ("spec counts OK") missed full-iteration
+  failures twice — always run the exact harness yourself before commit.
