@@ -1126,3 +1126,22 @@ u13's 3×"lekker"/3×"leuk" exercise disabled all matching tiles on the
 first pick → Check never enabled → **lesson impossible to complete** in the
 en-nl launch pair. Fixed to index-keying (`ba804a7`), verified live.
 Affected 5 exercises across nl u11/u12/u13 and it u01.
+
+### 2026-07-12 (night) — nl-en/fa-en/prs-en B1 overlays 12-14 (fresh-context reviews, Claude Opus ×3)
+Bug classes found: nl-en: none — 0 defects (72 exercises). fa-en: 2 (one
+ambiguous MC distractor — a second option also satisfied the stated
+criterion, §1 answerability class; one garbled Persian instruction,
+doubled verb). prs-en: 1 (same ambiguous defining-clause MC distractor
+class — TWO distractors also satisfied "defining clause, no commas").
+New bug class discovered: no (ambiguous-MC-distractor is the known
+answerability class; note it recurred INDEPENDENTLY in two lanes on the
+same realization exercise — en.b1.unit13.lesson02.exercise01 invites it
+because overlay authors must invent distractors for a grammar-form
+question; distractor sets for form-identification MCs are a recurring
+weak point that no validator checks).
+Instance count: 3 across 9 files. All fixed by coordinator (reviewer-
+specified single-field edits), re-validated 0 errors, merged.
+Preflight-checklist note: first wave with AUTHORING_PREFLIGHT.md pasted
+verbatim — yield fell from 23 (previous wave, 3 lanes) to 3, and zero
+findings in every class the checklist names except item 1 edge case
+above.
