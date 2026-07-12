@@ -1,0 +1,146 @@
+schema_version: "1.1"
+realization_version: "2026.1-draft.1"
+target_language: "de"
+cefr_level: "A1"
+status: "complete_draft"
+generation_provenance:
+  method: "ai_generated"
+  authoring_system: "claude"
+  human_reviewed: false
+review:
+  status: "unreviewed"
+  required_next_reviewer: "codex"
+  notes: >-
+    Tenth German unit, continuing the Anna/Felix storyline (still on
+    the formal Sie register from units 01-09). Authored from the start
+    in the AUTHORING_GUIDE §19 format (schema_version 1.1) -- the one
+    kind:vocabulary card (Ecke) carries a real example: sentence from
+    first draft. Scoped to exactly one spine outcome
+    (universal.a1.directions.ask_follow_basic_directions) across all 4
+    lessons per §1; prerequisite
+    universal.a1.places.locate_common_places is satisfied by unit09.
+
+    The single trickiest real grammar point in this unit: German's
+    formal (Sie) imperative puts the conjugated verb FIRST, the
+    subject "Sie" second, and any separable verb prefix moves all the
+    way to the END of the clause -- "Biegen Sie links ab" (Turn left),
+    from the separable verb "abbiegen" (ab + biegen), not "Sie biegen
+    ab links" or any other word order a direct English-to-German
+    mapping might suggest. Every direction-giving phrase in this file
+    uses this construction correctly (Biegen Sie ... ab, Halten Sie
+    ... an), not derived as an explicit rule here (out of scope for a
+    vocabulary/directions unit, matching this project's established
+    pattern of teaching complex grammar as correct fixed phrases rather
+    than deriving rules prematurely).
+
+    "Wie komme ich zur Bank?" uses "zur" (zu + der, dative feminine
+    contraction, die Bank) -- the same contraction pattern as unit09's
+    "vom" (von + dem). lesson01's matching_pairs was widened to 10
+    pairs mirroring the shared en realization's own 10-pair set,
+    comfortably clearing AUTHORING_GUIDE §16's 6-12 floor. No
+    fill_in_blank exercises. Applied the hardcoded-English-
+    target_blocks lesson from the start: every target_blocks in this
+    file is empty or genuine German content only. Compiled and
+    validated against the real compiler to confirm every exercise's
+    tested_text is fully covered by this file's own cumulative
+    introduced_tokens. Pending fresh-context review.
+
+course:
+  realization_key: "de.a1"
+  target_language_first: true
+  dialect: "de_DE_standard"
+  register_policy: "Teach clear Standard German (Hochdeutsch). Direction-giving uses the formal (Sie) imperative with separable verbs (Biegen Sie links ab, Halten Sie hier an) rather than informal or written-instruction forms. Anna and Felix continue on the formal Sie register from units 01-09."
+
+media_assets:
+  - {content_key: "de.a1.audio.richtungen.grundlagen.01", language: "de", text: "Biegen Sie links ab. Biegen Sie rechts ab. Gehen Sie geradeaus. Halten Sie hier an.", voice_hint: "neutral_adult", status: "pending_generation"}
+  - {content_key: "de.a1.audio.richtungen.frage.01", language: "de", text: "Wie komme ich zur Bank?", voice_hint: "neutral_adult", status: "pending_generation"}
+  - {content_key: "de.a1.audio.richtungen.antwort.01", language: "de", text: "Gehen Sie geradeaus, dann biegen Sie an der Ecke links ab.", voice_hint: "neutral_adult", status: "pending_generation"}
+  - content_key: "de.a1.audio.dialog.wegbeschreibung_geben.01"
+    language: "de"
+    text: "Felix: Entschuldigung, wie komme ich zur Bank? Anna: Gehen Sie geradeaus, dann biegen Sie an der Ecke links ab. Felix: An der Ecke links abbiegen, gut. Ist es weit? Anna: Nein, es ist nur zwei Minuten von hier. Das können Sie nicht verfehlen."
+    voice_hint: "two_adults_neutral_friendly"
+    status: "pending_generation"
+
+units:
+  - content_key: "de.a1.unit10.wegbeschreibungen"
+    title: "Nach dem Weg fragen und ihn befolgen"
+    section: "reading_writing"
+    spine_outcome_ids:
+      - "universal.a1.directions.ask_follow_basic_directions"
+    planned_lesson_count: 4
+    lessons:
+      - content_key: "de.a1.unit10.lesson01.grundlegende_richtungswoerter"
+        title: "Grundlegende Richtungswörter"
+        spine_outcome_id: "universal.a1.directions.ask_follow_basic_directions"
+        teaching:
+          - {content_key: "de.a1.unit10.lesson01.teach.links_abbiegen", kind: "phrase", target: {text: "Biegen Sie links ab.", language_code: "de", direction: "ltr"}, introduced_tokens: ["Biegen", "Sie", "links", "ab"]}
+          - {content_key: "de.a1.unit10.lesson01.teach.rechts_abbiegen", kind: "phrase", target: {text: "Biegen Sie rechts ab.", language_code: "de", direction: "ltr"}, introduced_tokens: ["rechts"]}
+          - {content_key: "de.a1.unit10.lesson01.teach.geradeaus_gehen", kind: "phrase", target: {text: "Gehen Sie geradeaus.", language_code: "de", direction: "ltr"}, introduced_tokens: ["Gehen", "geradeaus"]}
+          - {content_key: "de.a1.unit10.lesson01.teach.hier_anhalten", kind: "phrase", target: {text: "Halten Sie hier an.", language_code: "de", direction: "ltr"}, introduced_tokens: ["Halten", "hier", "an"]}
+          - {content_key: "de.a1.unit10.lesson01.teach.ecke", kind: "vocabulary", target: {text: "Ecke", language_code: "de", direction: "ltr"}, introduced_tokens: ["Ecke"], example: {text: "Biegen Sie an der Ecke links ab.", language_code: "de", direction: "ltr"}}
+        exercises:
+          - {content_key: "de.a1.unit10.lesson01.exercise01.listen_richtung", type: "listen_select", tested_text: "Biegen Sie links ab", media_asset_key: "de.a1.audio.richtungen.grundlagen.01", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit10.lesson01.exercise02.choose_rechts", type: "multiple_choice", tested_text: "Biegen Sie rechts ab.", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit10.lesson01.exercise03.choose_geradeaus", type: "multiple_choice", tested_text: "Gehen Sie geradeaus.", prompt: {target_blocks: []}}
+          - content_key: "de.a1.unit10.lesson01.exercise04.match_richtungen"
+            type: "matching_pairs"
+            tested_text: "links rechts geradeaus hier Ecke"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "Biegen Sie links ab.", right: "Gegenteil von rechts"}
+              - {left: "Biegen Sie rechts ab.", right: "Gegenteil von links"}
+              - {left: "Gehen Sie geradeaus.", right: "weitergehen, nicht abbiegen"}
+              - {left: "Halten Sie hier an.", right: "genau hier anhalten"}
+              - {left: "Ecke", right: "wo zwei Straßen zusammentreffen"}
+              - {left: "Nehmen Sie die erste Straße links.", right: "die erste Abzweigung, auf der linken Seite"}
+              - {left: "Nehmen Sie die zweite Straße rechts.", right: "die zweite Abzweigung, auf der rechten Seite"}
+              - {left: "Ist es weit?", right: "fragt, ob der Ort weit weg ist"}
+              - {left: "Es ist nur zwei Minuten von hier.", right: "sehr nah, ein kurzer Spaziergang"}
+              - {left: "Das können Sie nicht verfehlen.", right: "sehr leicht zu finden"}
+          - {content_key: "de.a1.unit10.lesson01.exercise05.write_ecke", type: "writing_prompt", tested_text: "Ecke", prompt: {target_blocks: []}}
+
+      - content_key: "de.a1.unit10.lesson02.fragen_wie_man_hinkommt"
+        title: "Fragen, wie man irgendwohin kommt"
+        spine_outcome_id: "universal.a1.directions.ask_follow_basic_directions"
+        teaching:
+          - {content_key: "de.a1.unit10.lesson02.teach.wie_komme_ich_zur_bank", kind: "phrase", target: {text: "Wie komme ich zur Bank?", language_code: "de", direction: "ltr"}, introduced_tokens: ["Wie", "komme", "ich", "zur", "Bank"]}
+          - {content_key: "de.a1.unit10.lesson02.teach.geradeaus_dann_links", kind: "phrase", target: {text: "Gehen Sie geradeaus, dann biegen Sie an der Ecke links ab.", language_code: "de", direction: "ltr"}, introduced_tokens: ["dann", "an", "der"]}
+          - {content_key: "de.a1.unit10.lesson02.teach.ist_es_weit", kind: "phrase", target: {text: "Ist es weit?", language_code: "de", direction: "ltr"}, introduced_tokens: ["Ist", "es", "weit"]}
+          - {content_key: "de.a1.unit10.lesson02.teach.zwei_minuten", kind: "phrase", target: {text: "Es ist nur zwei Minuten von hier.", language_code: "de", direction: "ltr"}, introduced_tokens: ["Es", "nur", "zwei", "Minuten", "von", "hier"]}
+          - {content_key: "de.a1.unit10.lesson02.teach.nicht_verfehlen", kind: "phrase", target: {text: "Das können Sie nicht verfehlen.", language_code: "de", direction: "ltr"}, introduced_tokens: ["Das", "können", "nicht", "verfehlen"]}
+        exercises:
+          - {content_key: "de.a1.unit10.lesson02.exercise01.listen_wie_komme_ich", type: "listen_select", tested_text: "Wie komme ich zur Bank", media_asset_key: "de.a1.audio.richtungen.frage.01", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit10.lesson02.exercise02.listen_route_antwort", type: "listen_select", tested_text: "Gehen Sie geradeaus, dann biegen Sie an der Ecke links ab", media_asset_key: "de.a1.audio.richtungen.antwort.01", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit10.lesson02.exercise03.order_wie_komme_ich", type: "word_order", tested_text: "Wie komme ich zur Bank", prompt: {target_blocks: []}, word_bank: ["komme", "ich", "zur", "Bank", "Wie"]}
+          - {content_key: "de.a1.unit10.lesson02.exercise04.choose_nicht_verfehlen", type: "multiple_choice", tested_text: "Das können Sie nicht verfehlen.", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit10.lesson02.exercise05.write_zwei_minuten", type: "writing_prompt", tested_text: "Es ist nur zwei Minuten von hier", prompt: {target_blocks: []}}
+
+      - content_key: "de.a1.unit10.lesson03.eine_route_lesen"
+        title: "Eine einfache Wegbeschreibung lesen"
+        spine_outcome_id: "universal.a1.directions.ask_follow_basic_directions"
+        teaching:
+          - {content_key: "de.a1.unit10.lesson03.teach.erste_strasse", kind: "phrase", target: {text: "Nehmen Sie die erste Straße links.", language_code: "de", direction: "ltr"}, introduced_tokens: ["Nehmen", "die", "erste", "Straße"]}
+          - {content_key: "de.a1.unit10.lesson03.teach.zweite_strasse", kind: "phrase", target: {text: "Nehmen Sie die zweite Straße rechts.", language_code: "de", direction: "ltr"}, introduced_tokens: ["zweite"]}
+          - {content_key: "de.a1.unit10.lesson03.teach.route_text", kind: "reading", target: {text: "Wegbeschreibung zur Apotheke: Gehen Sie geradeaus. Nehmen Sie die erste Straße links. Die Apotheke ist rechts.", language_code: "de", direction: "ltr"}, introduced_tokens: ["Wegbeschreibung", "ist"]}
+        exercises:
+          - {content_key: "de.a1.unit10.lesson03.exercise01.read_erster_schritt", type: "reading_comprehension", tested_text: "Gehen Sie geradeaus", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit10.lesson03.exercise02.read_abzweigung", type: "reading_comprehension", tested_text: "Nehmen Sie die erste Straße links", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit10.lesson03.exercise03.choose_apotheke_seite", type: "multiple_choice", tested_text: "rechts", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit10.lesson03.exercise04.order_zweite_strasse", type: "word_order", tested_text: "Nehmen Sie die zweite Straße rechts", prompt: {target_blocks: []}, word_bank: ["die", "zweite", "Straße", "rechts", "Nehmen", "Sie"]}
+          - {content_key: "de.a1.unit10.lesson03.exercise05.write_route_schritt", type: "writing_prompt", tested_text: "Nehmen Sie die erste Straße links", prompt: {target_blocks: []}}
+
+      - content_key: "de.a1.unit10.lesson04.wegbeschreibung_geben_dialog"
+        title: "Einem Fremden den Weg beschreiben"
+        spine_outcome_id: "universal.a1.directions.ask_follow_basic_directions"
+        teaching:
+          - {content_key: "de.a1.unit10.lesson04.teach.line01", kind: "dialogue", target: {text: "Entschuldigung, wie komme ich zur Bank?", language_code: "de", direction: "ltr", speaker: "Felix"}, introduced_tokens: []}
+          - {content_key: "de.a1.unit10.lesson04.teach.line02", kind: "dialogue", target: {text: "Gehen Sie geradeaus, dann biegen Sie an der Ecke links ab.", language_code: "de", direction: "ltr", speaker: "Anna"}, introduced_tokens: []}
+          - {content_key: "de.a1.unit10.lesson04.teach.line03", kind: "dialogue", target: {text: "An der Ecke links abbiegen, gut. Ist es weit?", language_code: "de", direction: "ltr", speaker: "Felix"}, introduced_tokens: ["abbiegen", "gut"]}
+          - {content_key: "de.a1.unit10.lesson04.teach.line04", kind: "dialogue", target: {text: "Nein, es ist nur zwei Minuten von hier. Das können Sie nicht verfehlen.", language_code: "de", direction: "ltr", speaker: "Anna"}, introduced_tokens: ["Nein"]}
+        exercises:
+          - {content_key: "de.a1.unit10.lesson04.exercise01.listen_route_gegeben", type: "dialogue_comprehension", tested_text: "Gehen Sie geradeaus, dann biegen Sie an der Ecke links ab", media_asset_key: "de.a1.audio.dialog.wegbeschreibung_geben.01", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit10.lesson04.exercise02.listen_nah_dran", type: "listen_select", tested_text: "Es ist nur zwei Minuten von hier", media_asset_key: "de.a1.audio.dialog.wegbeschreibung_geben.01", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit10.lesson04.exercise03.choose_bestaetigung", type: "multiple_choice", tested_text: "An der Ecke links abbiegen, gut.", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit10.lesson04.exercise04.order_wie_komme_ich_bank", type: "word_order", tested_text: "Wie komme ich zur Bank", prompt: {target_blocks: []}, word_bank: ["ich", "zur", "Bank", "komme", "Wie"]}
+          - {content_key: "de.a1.unit10.lesson04.exercise05.reply_als_anna", type: "dialogue_response", tested_text: "Gehen Sie geradeaus, dann biegen Sie an der Ecke links ab. Nein, es ist nur zwei Minuten von hier. Das können Sie nicht verfehlen.", prompt: {target_blocks: [{text: "Entschuldigung, wie komme ich zur Bank? Ist es weit?", language_code: "de", direction: "ltr"}]}}
+          - {content_key: "de.a1.unit10.lesson04.exercise06.speak_wegbeschreibung_dialog", type: "speak_response", tested_text: "Gehen Sie geradeaus dann biegen Sie an der Ecke links ab Nein es ist nur zwei Minuten von hier Das können Sie nicht verfehlen", prompt: {target_blocks: [{text: "Entschuldigung, wie komme ich zur Bank? Ist es weit?", language_code: "de", direction: "ltr"}]}}
