@@ -8,6 +8,7 @@ from sqlalchemy import func, select, text
 from sqlalchemy.orm import Session
 
 from app.models import (
+    ContentItem,
     Course,
     Lesson,
     LessonProgress,
@@ -520,6 +521,12 @@ def _prompt_signature(prompt: dict[str, Any]) -> tuple:
     # (visible text blocks, options, word bank, audio cue) so two prompts
     # that LOOK the same to the learner are always treated as a repeat,
     # regardless of what's hidden underneath.
+    if prompt.get("current_node") and prompt.get("nodes"):
+        node = prompt.get("current_node") or {}
+        app_turn = node.get("app_turn") or {}
+        accepted = tuple(sorted(node.get("accepted_variants") or ()))
+        return ("conversation", app_turn.get("text", ""), accepted)
+
     texts = tuple(block.get("text", "") for block in prompt.get("text_blocks") or ())
     options = tuple(sorted(prompt.get("options") or ()))
     word_bank = tuple(sorted(prompt.get("word_bank") or ()))
@@ -980,6 +987,252 @@ def _speaking_prompt(
     }
 
 
+def _dedup_conversation_blocks(
+    blocks: list[dict[str, str]],
+) -> list[dict[str, str]]:
+    seen: set[tuple[str, str]] = set()
+    deduped: list[dict[str, str]] = []
+    for block in blocks:
+        text_value = str(block.get("text") or "").strip()
+        language_code = str(block.get("language_code") or "")
+        if not text_value or not language_code:
+            continue
+        key = (language_code, text_value.casefold())
+        if key in seen:
+            continue
+        seen.add(key)
+        deduped.append(
+            {
+                "text": text_value,
+                "language_code": language_code,
+                "direction": block.get("direction")
+                or _language_direction(language_code),
+            }
+        )
+    return deduped
+
+
+def _conversation_material(
+    db: Session,
+    course: Course,
+    completed_lesson_ids: list[str],
+    lexemes: list[Lexeme],
+) -> list[dict[str, str]]:
+    blocks: list[dict[str, str]] = []
+    teaching_items = list(
+        db.scalars(
+            select(ContentItem)
+            .where(
+                ContentItem.course_id == course.id,
+                ContentItem.lesson_id.in_(completed_lesson_ids),
+                ContentItem.kind.in_(("dialogue", "phrase")),
+            )
+            .order_by(ContentItem.teaching_order, ContentItem.id)
+        )
+    )
+    for item in teaching_items:
+        for block in (item.content or {}).get("text_blocks") or []:
+            if block.get("language_code") == course.target_language:
+                blocks.append(block)
+
+    for lexeme in lexemes:
+        if lexeme.language_code != course.target_language:
+            continue
+        blocks.append(
+            {
+                "text": lexeme.token,
+                "language_code": lexeme.language_code,
+                "direction": _language_direction(lexeme.language_code),
+            }
+        )
+
+    return _dedup_conversation_blocks(blocks)
+
+
+def _conversation_public_node(node: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "id": node["id"],
+        "app_turn": node["app_turn"],
+        "accepted_variants": node["accepted_variants"],
+        "answer_language_code": node["answer_language_code"],
+        "terminal": node["terminal"],
+    }
+
+
+def _conversation_pick(
+    material: list[dict[str, str]],
+    offset: int,
+) -> dict[str, str]:
+    return material[offset % len(material)]
+
+
+def _conversation_variants(
+    material: list[dict[str, str]],
+    offset: int,
+    count: int = 2,
+) -> list[str]:
+    variants: list[str] = []
+    index = offset
+    while len(variants) < count and index < offset + len(material) * 2:
+        text_value = _conversation_pick(material, index)["text"]
+        if text_value not in variants:
+            variants.append(text_value)
+        index += 1
+    return variants
+
+
+def _conversation_node(
+    *,
+    node_id: str,
+    app_turn: dict[str, str],
+    accepted_variants: list[str],
+    answer_language_code: str,
+    terminal: bool,
+    branches: list[dict[str, str]] | None = None,
+    fallback_node_id: str | None = None,
+) -> dict[str, Any]:
+    return {
+        "id": node_id,
+        "app_turn": app_turn,
+        "accepted_variants": accepted_variants,
+        "branches": branches or [],
+        "fallback_node_id": fallback_node_id,
+        "answer_language_code": answer_language_code,
+        "terminal": terminal,
+    }
+
+
+def _conversation_prompt(
+    course: Course,
+    material: list[dict[str, str]],
+    generated_index: int,
+    rng: random.Random,
+) -> dict[str, Any]:
+    offset = generated_index * 7
+    offset += rng.randrange(len(material))
+    start_variants = _conversation_variants(material, offset + 1)
+    branch_a_variants = _conversation_variants(material, offset + 4)
+    branch_b_variants = _conversation_variants(material, offset + 7)
+    answer_language_code = course.target_language
+
+    node_0 = _conversation_node(
+        node_id="node_0",
+        app_turn=_conversation_pick(material, offset),
+        accepted_variants=start_variants,
+        answer_language_code=answer_language_code,
+        terminal=False,
+        branches=[
+            {"variant": start_variants[0], "next_node_id": "node_1"},
+            {
+                "variant": start_variants[-1],
+                "next_node_id": "node_2",
+            },
+        ],
+        fallback_node_id="node_retry_0",
+    )
+    retry_0 = _conversation_node(
+        node_id="node_retry_0",
+        app_turn=node_0["app_turn"],
+        accepted_variants=start_variants,
+        answer_language_code=answer_language_code,
+        terminal=False,
+        branches=node_0["branches"],
+        fallback_node_id="node_retry_0",
+    )
+    node_1 = _conversation_node(
+        node_id="node_1",
+        app_turn=_conversation_pick(material, offset + 3),
+        accepted_variants=branch_a_variants,
+        answer_language_code=answer_language_code,
+        terminal=True,
+        fallback_node_id="node_retry_1",
+    )
+    retry_1 = _conversation_node(
+        node_id="node_retry_1",
+        app_turn=node_1["app_turn"],
+        accepted_variants=branch_a_variants,
+        answer_language_code=answer_language_code,
+        terminal=True,
+        fallback_node_id="node_retry_1",
+    )
+    node_2 = _conversation_node(
+        node_id="node_2",
+        app_turn=_conversation_pick(material, offset + 6),
+        accepted_variants=branch_b_variants,
+        answer_language_code=answer_language_code,
+        terminal=True,
+        fallback_node_id="node_retry_2",
+    )
+    retry_2 = _conversation_node(
+        node_id="node_retry_2",
+        app_turn=node_2["app_turn"],
+        accepted_variants=branch_b_variants,
+        answer_language_code=answer_language_code,
+        terminal=True,
+        fallback_node_id="node_retry_2",
+    )
+    nodes = [node_0, retry_0, node_1, retry_1, node_2, retry_2]
+    return {
+        "start_node_id": "node_0",
+        "current_node": _conversation_public_node(node_0),
+        "nodes": nodes,
+    }
+
+
+def _generate_conversation_item(
+    db: Session,
+    *,
+    user_id: str,
+    course: Course,
+    target: Lexeme,
+    templates: list[PracticeTemplate],
+    material: list[dict[str, str]],
+    rng: random.Random,
+    generated_index: int,
+    signatures: set[tuple],
+    allow_existing_signature: bool = False,
+) -> PracticeItem | None:
+    template = _speaking_template(target, templates)
+    prompt = _conversation_prompt(course, material, generated_index, rng)
+    accepted = sorted(
+        {
+            variant
+            for node in prompt["nodes"]
+            for variant in node["accepted_variants"]
+        }
+    )
+    stored_slots = {
+        "_generated_type": "conversation",
+        "start": prompt["current_node"]["app_turn"]["text"],
+    }
+    signature = _signature(template.id, stored_slots)
+    visible = _prompt_signature(prompt)
+    if (
+        (signature in signatures or visible in signatures)
+        and not allow_existing_signature
+    ):
+        return None
+
+    item = PracticeItem(
+        user_id=user_id,
+        course_id=course.id,
+        template_id=template.id,
+        filled_slots=stored_slots,
+        prompt=prompt,
+        correct_response=accepted,
+        xp_value=PRACTICE_XP,
+        source="practice",
+        session_id=None,
+        target_lexeme_id=target.id,
+        expires_at=datetime.now(timezone.utc) + timedelta(hours=24),
+    )
+    db.add(item)
+    db.flush()
+    signatures.add(signature)
+    signatures.add(visible)
+    return item
+
+
 def _generate_speaking_item(
     db: Session,
     *,
@@ -1070,6 +1323,66 @@ def generate_speaking_batch(
             course=course,
             target=target,
             templates=templates,
+            generated_index=len(generated),
+            signatures=signatures,
+            allow_existing_signature=attempts > len(targets) * 2,
+        )
+        if item is not None:
+            generated.append(item)
+
+    return False, generated
+
+
+def generate_conversation_batch(
+    db: Session,
+    user_id: str,
+    course: Course,
+    size: int,
+    is_admin: bool = False,
+) -> tuple[bool, list[PracticeItem]]:
+    completed = _completed_lesson_ids(db, user_id, course.id)
+    if not completed:
+        if not is_admin:
+            return True, []
+        completed = _course_lesson_ids(db, course.id)
+
+    templates, lexemes = _material(db, course, completed)
+    if not templates or not lexemes:
+        return False, []
+
+    material = _conversation_material(db, course, completed, lexemes)
+    if not material:
+        return False, []
+
+    srs_rows = list(
+        db.scalars(
+            select(UserLexemeSRS).where(
+                UserLexemeSRS.user_id == user_id,
+                UserLexemeSRS.course_id == course.id,
+                UserLexemeSRS.suspended.is_(False),
+            )
+        )
+    )
+    rng = _batch_rng(db, user_id, course.id, "practice-conversation-batch")
+    targets = _speaking_targets(lexemes, srs_rows, rng)
+    if not targets:
+        return False, []
+
+    signatures = _recent_signatures(db, user_id, course.id)
+    generated: list[PracticeItem] = []
+    attempts = 0
+    max_attempts = max(size * 50, len(targets) * 10)
+    while len(generated) < size and attempts < max_attempts:
+        target = targets[attempts % len(targets)]
+        attempts += 1
+        item = _generate_conversation_item(
+            db,
+            user_id=user_id,
+            course=course,
+            target=target,
+            templates=templates,
+            material=material,
+            rng=rng,
             generated_index=len(generated),
             signatures=signatures,
             allow_existing_signature=attempts > len(targets) * 2,

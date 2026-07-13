@@ -759,6 +759,13 @@ available, falls back to completed-lesson lexemes otherwise, and never uses
 lexemes from uncompleted lessons. It is fully deterministic through the same
 practice batch seeding path and performs zero runtime LLM calls.
 
+Added 2026-07-13: `mode: "conversation"` is an additive branching-dialogue
+practice filter that returns only generated `conversation` items, using
+course material from lessons the learner has completed. A conversation item
+is generated from already-taught dialogue/phrase/lexeme material and performs
+zero runtime LLM calls. It is deterministic through the same practice batch
+seeding path and never uses lexemes from uncompleted lessons.
+
 Response shape is unchanged:
 
 ```json
@@ -773,6 +780,94 @@ Response shape is unchanged:
 Speaking feed items are answered through
 `POST /practice/items/{item_id}/answer` with the transcript string in the
 same `{ "response": "..." }` shape as lesson `speak_*` exercises.
+
+Conversation feed item prompt shape:
+
+```json
+{
+  "locked": false,
+  "items": [
+    {
+      "id": "uuid",
+      "type": "conversation",
+      "prompt": {
+        "start_node_id": "node_0",
+        "current_node": {
+          "id": "node_0",
+          "app_turn": {
+            "text": "Buenas tardes",
+            "language_code": "es",
+            "direction": "ltr"
+          },
+          "accepted_variants": ["Buenos días", "Buenas tardes"],
+          "answer_language_code": "es",
+          "terminal": false
+        },
+        "nodes": [
+          {
+            "id": "node_0",
+            "app_turn": {
+              "text": "Buenas tardes",
+              "language_code": "es",
+              "direction": "ltr"
+            },
+            "accepted_variants": ["Buenos días", "Buenas tardes"],
+            "branches": [
+              { "variant": "Buenos días", "next_node_id": "node_1" },
+              { "variant": "Buenas tardes", "next_node_id": "node_2" }
+            ],
+            "fallback_node_id": "node_retry",
+            "answer_language_code": "es",
+            "terminal": false
+          }
+        ]
+      }
+    }
+  ]
+}
+```
+
+The client renders `current_node.app_turn` as the app's spoken/dialogue turn
+(using existing TTS where available) and accepts the learner's typed answer
+or speech transcript. To submit a conversation reply, call
+`POST /practice/items/{item_id}/answer` with:
+
+```json
+{
+  "response": {
+    "node_id": "node_0",
+    "response": "Buenas tardes"
+  }
+}
+```
+
+The answer response keeps the existing fields and, for conversation items
+only, adds `next_node` when the conversation should continue:
+
+```json
+{
+  "correct": true,
+  "result": "correct",
+  "correct_response": ["Buenos días", "Buenas tardes"],
+  "xp_awarded": 0,
+  "next_node": {
+    "id": "node_2",
+    "app_turn": {
+      "text": "Buenas noches",
+      "language_code": "es",
+      "direction": "ltr"
+    },
+    "accepted_variants": ["Buenas noches"],
+    "answer_language_code": "es",
+    "terminal": false
+  }
+}
+```
+
+If no accepted variant matches, the server returns `result: "incorrect"` and
+selects the node's `fallback_node_id`, so an unrecognized reply never
+dead-ends. `xp_awarded` is `0` until a terminal conversation node is reached;
+terminal replies are recorded as the completed practice attempt.
 
 ### Lexeme review flow
 

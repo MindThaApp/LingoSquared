@@ -1017,6 +1017,14 @@ def practice_item_answers(item_ids):
     return [by_id[item_id] for item_id in item_ids]
 
 
+def conversation_prompt_texts(prompt):
+    texts = []
+    for node in prompt["nodes"]:
+        texts.append(node["app_turn"]["text"])
+        texts.extend(node["accepted_variants"])
+    return texts
+
+
 def test_speaking_practice_batch_uses_only_completed_lesson_vocabulary(
     client, admin, auth
 ):
@@ -1059,6 +1067,148 @@ def test_speaking_practice_batch_uses_only_completed_lesson_vocabulary(
     )
     assert answered.status_code == 200, answered.text
     assert answered.json()["result"] == "correct"
+
+
+def test_conversation_practice_batch_uses_only_completed_lesson_vocabulary(
+    client, admin, auth
+):
+    course_id, lesson_id = create_course_with_lexemes(target="es")
+    import_templates(client, admin, course_id, artifact(include_listen=False))
+    complete_via_api(client, auth, lesson_id)
+    add_uncompleted_lesson_lexeme(course_id, target="es")
+
+    response = client.post(
+        f"/practice/{course_id}/batch",
+        headers=auth,
+        json={"size": 4, "mode": "conversation"},
+    )
+
+    assert response.status_code == 200, response.text
+    payload = response.json()
+    assert payload["locked"] is False
+    items = payload["items"]
+    assert len(items) == 4
+    assert {item["type"] for item in items} == {"conversation"}
+    for item in items:
+        texts = conversation_prompt_texts(item["prompt"])
+        assert "secreto" not in texts
+        assert set(texts) <= {
+            "uno",
+            "dos",
+            "tres",
+            "cuatro",
+            "derecha",
+            "buenos días",
+            "buenas tardes",
+            "buenas noches",
+        }
+
+
+def test_conversation_practice_branch_selection_picks_matching_next_node(
+    client, admin, auth
+):
+    course_id, lesson_id = create_course_with_lexemes(target="es")
+    import_templates(client, admin, course_id, artifact(include_listen=False))
+    complete_via_api(client, auth, lesson_id)
+
+    response = client.post(
+        f"/practice/{course_id}/batch",
+        headers=auth,
+        json={"size": 1, "mode": "conversation"},
+    )
+    assert response.status_code == 200, response.text
+    item = response.json()["items"][0]
+    start = item["prompt"]["current_node"]
+    full_start = next(
+        node for node in item["prompt"]["nodes"] if node["id"] == start["id"]
+    )
+    variant = full_start["accepted_variants"][0]
+    expected_next = next(
+        branch["next_node_id"]
+        for branch in full_start["branches"]
+        if branch["variant"] == variant
+    )
+
+    answered = client.post(
+        f"/practice/items/{item['id']}/answer",
+        headers=auth,
+        json={"response": {"node_id": start["id"], "response": variant}},
+    )
+
+    assert answered.status_code == 200, answered.text
+    payload = answered.json()
+    assert payload["correct"] is True
+    assert payload["result"] == "correct"
+    assert payload["xp_awarded"] == 0
+    assert payload["next_node"]["id"] == expected_next
+
+
+def test_conversation_practice_unrecognized_reply_does_not_dead_end(
+    client, admin, auth
+):
+    course_id, lesson_id = create_course_with_lexemes(target="es")
+    import_templates(client, admin, course_id, artifact(include_listen=False))
+    complete_via_api(client, auth, lesson_id)
+
+    response = client.post(
+        f"/practice/{course_id}/batch",
+        headers=auth,
+        json={"size": 1, "mode": "conversation"},
+    )
+    assert response.status_code == 200, response.text
+    item = response.json()["items"][0]
+    start = item["prompt"]["current_node"]
+    full_start = next(
+        node for node in item["prompt"]["nodes"] if node["id"] == start["id"]
+    )
+
+    answered = client.post(
+        f"/practice/items/{item['id']}/answer",
+        headers=auth,
+        json={"response": {"node_id": start["id"], "response": "not taught"}},
+    )
+
+    assert answered.status_code == 200, answered.text
+    payload = answered.json()
+    assert payload["correct"] is False
+    assert payload["result"] == "incorrect"
+    assert payload["xp_awarded"] == 0
+    assert payload["next_node"]["id"] == full_start["fallback_node_id"]
+
+
+def test_conversation_practice_batch_is_seed_repeatable_for_same_state(
+    client, admin, auth
+):
+    course_id, lesson_id = create_course_with_lexemes(target="es")
+    import_templates(client, admin, course_id, artifact(include_listen=False))
+    complete_lesson(auth, lesson_id)
+    uid = user_id(auth)
+
+    first = client.post(
+        f"/practice/{course_id}/batch",
+        headers=auth,
+        json={"size": 3, "mode": "conversation"},
+    )
+    assert first.status_code == 200, first.text
+    first_prompts = [item["prompt"] for item in first.json()["items"]]
+
+    with SessionLocal() as db:
+        db.execute(
+            delete(PracticeItem).where(
+                PracticeItem.user_id == uid,
+                PracticeItem.course_id == course_id,
+            )
+        )
+        db.commit()
+
+    second = client.post(
+        f"/practice/{course_id}/batch",
+        headers=auth,
+        json={"size": 3, "mode": "conversation"},
+    )
+    assert second.status_code == 200, second.text
+
+    assert [item["prompt"] for item in second.json()["items"]] == first_prompts
 
 
 def test_speaking_practice_prefers_weakest_tracked_lexeme_first(
