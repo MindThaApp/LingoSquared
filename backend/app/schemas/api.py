@@ -223,8 +223,8 @@ class CourseImport(BaseModel):
 class ImportRequest(BaseModel): courses:list[CourseImport]
 class ValidateRequest(BaseModel): content:ImportRequest
 PracticeTemplateExerciseType=Literal["multiple_choice","fill_in_blank","word_order","translation","matching_pairs","listen_select"]
-PracticeItemExerciseType=Literal["multiple_choice","fill_in_blank","word_order","translation","matching_pairs","listen_select","speak_repeat","speak_response"]
-PracticeBatchMode=Literal["mixed","speaking"]
+PracticeItemExerciseType=Literal["multiple_choice","fill_in_blank","word_order","translation","matching_pairs","listen_select","speak_repeat","speak_response","conversation"]
+PracticeBatchMode=Literal["mixed","speaking","conversation"]
 class PracticeTemplateImport(BaseModel):
     content_key:str=Field(min_length=1,max_length=255)
     lesson_content_key:str=Field(min_length=1,max_length=255)
@@ -249,7 +249,7 @@ class PracticeImportOut(BaseModel): imported_templates:int; updated_templates:in
 class PracticeBatchIn(BaseModel): size:int=Field(default=10,ge=1,le=20); mode:PracticeBatchMode="mixed"
 class PracticeItemOut(BaseModel): id:str; type:PracticeItemExerciseType; prompt:dict[str,Any]
 class PracticeBatchOut(BaseModel): locked:bool; items:list[PracticeItemOut]
-class PracticeAnswerOut(BaseModel): correct:bool; result:Literal["correct","almost","incorrect"]="correct"; correct_response:Any; xp_awarded:int
+class PracticeAnswerOut(BaseModel): correct:bool; result:Literal["correct","almost","incorrect"]="correct"; correct_response:Any; xp_awarded:int; next_node:dict[str,Any]|None=None
 class ReviewDueCourseOut(BaseModel):
     course_id: str
     due_count: int

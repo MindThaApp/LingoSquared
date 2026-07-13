@@ -8,7 +8,7 @@ import re
 import secrets
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from typing import Literal
+from typing import Any, Literal
 from uuid import uuid4
 from fastapi import APIRouter, Depends, File, Form, Query, Request, Response, UploadFile
 from fastapi.responses import FileResponse, JSONResponse
@@ -136,6 +136,7 @@ from app.services import feedback_attachments as feedback_attachment_service
 from app.practice.service import (
     generate_batch,
     generate_checkpoint,
+    generate_conversation_batch,
     generate_review_batch,
     generate_review_retry,
     generate_speaking_batch,
@@ -151,7 +152,7 @@ logger = logging.getLogger(__name__)
 
 router=APIRouter()
 
-GENERATED_PRACTICE_TYPES = {"speak_repeat", "speak_response"}
+GENERATED_PRACTICE_TYPES = {"speak_repeat", "speak_response", "conversation"}
 
 
 def practice_item_type(item: PracticeItem, template: PracticeTemplate) -> str:
@@ -163,6 +164,63 @@ def practice_item_type(item: PracticeItem, template: PracticeTemplate) -> str:
     if generated_type in GENERATED_PRACTICE_TYPES:
         return generated_type
     return template.type
+
+
+def conversation_public_node(node: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "id": node["id"],
+        "app_turn": node["app_turn"],
+        "accepted_variants": node["accepted_variants"],
+        "answer_language_code": node["answer_language_code"],
+        "terminal": node["terminal"],
+    }
+
+
+def conversation_nodes(prompt: dict[str, Any]) -> dict[str, dict[str, Any]]:
+    return {
+        node["id"]: node
+        for node in prompt.get("nodes") or []
+        if isinstance(node, dict) and node.get("id")
+    }
+
+
+def conversation_reply_result(
+    *,
+    node: dict[str, Any],
+    response: Any,
+    script,
+) -> tuple[str, str | None]:
+    best_result = "incorrect"
+    best_variant = None
+    for variant in node.get("accepted_variants") or []:
+        result = grade(
+            response,
+            variant,
+            "speak_response",
+            script=script,
+        )
+        if result == "correct":
+            return result, variant
+        if result == "almost" and best_result == "incorrect":
+            best_result = result
+            best_variant = variant
+    return best_result, best_variant
+
+
+def conversation_next_node(
+    *,
+    node: dict[str, Any],
+    matched_variant: str | None,
+    nodes: dict[str, dict[str, Any]],
+) -> dict[str, Any] | None:
+    if matched_variant is not None:
+        for branch in node.get("branches") or []:
+            if branch.get("variant") == matched_variant:
+                return nodes.get(branch.get("next_node_id"))
+        if node.get("terminal"):
+            return None
+    fallback_id = node.get("fallback_node_id")
+    return nodes.get(fallback_id) if fallback_id else None
 
 # Rate limiting: per-IP for the unauthenticated auth endpoints (brute-force
 # login protection, registration-abuse prevention), per-account for the
@@ -1824,7 +1882,12 @@ def practice_batch(
     enforce_rate_limit(GENERATION_RATE_LIMIT,user.id,"generation_rate_limited","Too many generation requests too quickly. Please slow down.")
     course=db.get(Course,course_id)
     if not course: fail(404,"course_not_found","Course not found")
-    generator = generate_speaking_batch if (body and body.mode == "speaking") else generate_batch
+    if body and body.mode == "speaking":
+        generator = generate_speaking_batch
+    elif body and body.mode == "conversation":
+        generator = generate_conversation_batch
+    else:
+        generator = generate_batch
     locked,items=generator(
         db,
         user.id,
@@ -1850,6 +1913,7 @@ def practice_batch(
 @router.post(
     "/practice/items/{item_id}/answer",
     response_model=PracticeAnswerOut,
+    response_model_exclude_none=True,
 )
 def practice_answer(
     item_id: str,
@@ -1865,13 +1929,6 @@ def practice_answer(
     )
     if not item or item.user_id != user.id:
         fail(404, "practice_item_not_found", "Practice item not found")
-    if item.answered_at is not None:
-        fail(
-            409,
-            "practice_item_answered",
-            "Practice item was already answered",
-        )
-
     now = datetime.now(timezone.utc)
     if item.expires_at <= now:
         fail(
@@ -1882,6 +1939,125 @@ def practice_answer(
 
     template = db.get(PracticeTemplate, item.template_id)
     item_type = practice_item_type(item, template)
+    if item.answered_at is not None:
+        fail(
+            409,
+            "practice_item_answered",
+            "Practice item was already answered",
+        )
+
+    if item_type == "conversation":
+        if not isinstance(body.response, dict):
+            fail(
+                422,
+                "invalid_conversation_response",
+                "Conversation response must include node_id and response",
+            )
+        node_id = body.response.get("node_id")
+        learner_response = body.response.get("response")
+        if not isinstance(node_id, str) or learner_response is None:
+            fail(
+                422,
+                "invalid_conversation_response",
+                "Conversation response must include node_id and response",
+            )
+        nodes = conversation_nodes(item.prompt)
+        node = nodes.get(node_id)
+        if node is None:
+            fail(
+                422,
+                "invalid_conversation_node",
+                "Conversation node not found",
+            )
+        script = resolve_script(db, node.get("answer_language_code"))
+        result, matched_variant = conversation_reply_result(
+            node=node,
+            response=learner_response,
+            script=script,
+        )
+        correct = result != "incorrect"
+        next_node = conversation_next_node(
+            node=node,
+            matched_variant=matched_variant,
+            nodes=nodes,
+        )
+        xp_awarded = 0
+        if not correct or next_node is not None:
+            db.commit()
+            return {
+                "correct": correct,
+                "result": result,
+                "correct_response": node.get("accepted_variants") or [],
+                "xp_awarded": 0,
+                "next_node": (
+                    conversation_public_node(next_node)
+                    if next_node is not None
+                    else None
+                ),
+            }
+
+        day_start, day_end = activity_day_bounds(user.timezone)
+        correct_today = db.scalar(
+            select(func.count(PracticeAttempt.id)).where(
+                PracticeAttempt.user_id == user.id,
+                PracticeAttempt.correct.is_(True),
+                PracticeAttempt.created_at >= day_start,
+                PracticeAttempt.created_at < day_end,
+            )
+        ) or 0
+        xp_awarded = item.xp_value if correct_today < 20 else 1
+
+        srs = None
+        if item.target_lexeme_id:
+            srs = db.scalar(
+                select(UserLexemeSRS)
+                .where(
+                    UserLexemeSRS.user_id == user.id,
+                    UserLexemeSRS.lexeme_id == item.target_lexeme_id,
+                )
+                .with_for_update()
+            )
+        if srs is not None:
+            day_start, day_end = activity_day_bounds(user.timezone)
+            attempts_today = db.scalar(
+                select(func.count(PracticeAttempt.id))
+                .join(
+                    PracticeItem,
+                    PracticeItem.id
+                    == PracticeAttempt.practice_item_id,
+                )
+                .where(
+                    PracticeAttempt.user_id == user.id,
+                    PracticeItem.source == "practice",
+                    PracticeItem.target_lexeme_id
+                    == item.target_lexeme_id,
+                    PracticeAttempt.created_at >= day_start,
+                    PracticeAttempt.created_at < day_end,
+                )
+            ) or 0
+            if attempts_today == 0:
+                schedule(srs, result)
+            srs.last_reviewed_at = now
+
+        db.add(
+            PracticeAttempt(
+                user_id=user.id,
+                practice_item_id=item.id,
+                response=body.response,
+                correct=True,
+                xp_awarded=xp_awarded,
+            )
+        )
+        item.answered_at = now
+        record_activity(db, user.id, xp_awarded, user.timezone)
+        db.commit()
+        return {
+            "correct": True,
+            "result": result,
+            "correct_response": node.get("accepted_variants") or [],
+            "xp_awarded": xp_awarded,
+        }
+
     script = resolve_script(db, item.prompt.get("answer_language_code"))
     result = grade(
         body.response,
