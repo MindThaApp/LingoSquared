@@ -1,0 +1,48 @@
+name: Android APK
+
+# Builds the Capacitor Android shell around the real web frontend
+# (production.lan mode -> API http://192.168.4.4:8010). Debug-signed APK,
+# installable for beta side-loading; artifact is downloaded by the
+# coordinator and rsynced to the LAN server (GitHub runners cannot reach
+# the LAN). Manual or on pushes touching the shell/frontend.
+on:
+  workflow_dispatch:
+  push:
+    branches: [master]
+    paths:
+      - "android-shell/**"
+      - ".github/workflows/android-apk.yml"
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - name: Install workspace deps
+        run: npm ci
+      - name: Build web frontend (LAN production mode)
+        run: npm run build -w frontend -- --mode production.lan
+      - name: Install shell deps
+        working-directory: android-shell
+        run: npm install
+      - name: Copy web bundle into shell
+        run: rm -rf android-shell/www && cp -R frontend/dist android-shell/www
+      - name: Capacitor sync
+        working-directory: android-shell
+        run: npx cap sync android
+      - name: Build APK
+        working-directory: android-shell/android
+        run: ./gradlew assembleDebug --no-daemon
+      - name: Rename artifact
+        run: cp android-shell/android/app/build/outputs/apk/debug/app-debug.apk lingo.apk
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lingo-apk
+          path: lingo.apk
