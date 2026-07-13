@@ -139,13 +139,13 @@ review.
   as of 2026-07-13** — two independent Codex enumerations (en-hi and
   all other courses) found 0 failing answer-shape instances; the old
   "~226 known failing" note reflected pre-2026-07-11 state before the
-  mass grading repairs. (Historical class list, for context only (real learner-facing ungradeable exercises: 159 en-hi
-  comprehension `correct_response`=Hindi-source bug, ~60 en-nl
+  mass grading repairs. Historical class list, context only: 159 en-hi
+  comprehension `correct_response`=Hindi-source, ~60 en-nl
   `matching_pairs` missing-right-entry, ~6 phrasing mismatches, 1 en-fa
-  `grammar_check`, 1 en-fr `reading_comprehension`). **Do not "fix" this
-  by weakening the test** — fix the content (this lane). (How to actually
-  run the test — the repo-mount invocation — is in `backend/CLAUDE.md`.)
-  Detail: BUILD_LOG 2026-07-10.
+  `grammar_check`, 1 en-fr `reading_comprehension`. **If it ever fails
+  again, never "fix" it by weakening the test** — fix the content (this
+  lane). (How to run the test — the repo-mount invocation — is in
+  `backend/CLAUDE.md`.) Detail: BUILD_LOG 2026-07-10.
 - **The spine outcome count moves fast — re-grep
   `docs/content/universal_spine.yaml` before trusting any number.** Grew
   19→24→26→28 across 2026-07-05/06. The English realization (all X→en
