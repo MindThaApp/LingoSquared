@@ -135,9 +135,11 @@ review.
 
 ## Known content limitations
 
-- **`backend/tests/test_content_answer_shapes.py`, when run with the
-  corpus reachable, shows ~226 known FAILING cases — expected, not a
-  regression** (real learner-facing ungradeable exercises: 159 en-hi
+- **`backend/tests/test_content_answer_shapes.py`: the corpus is CLEAN
+  as of 2026-07-13** — two independent Codex enumerations (en-hi and
+  all other courses) found 0 failing answer-shape instances; the old
+  "~226 known failing" note reflected pre-2026-07-11 state before the
+  mass grading repairs. (Historical class list, for context only (real learner-facing ungradeable exercises: 159 en-hi
   comprehension `correct_response`=Hindi-source bug, ~60 en-nl
   `matching_pairs` missing-right-entry, ~6 phrasing mismatches, 1 en-fa
   `grammar_check`, 1 en-fr `reading_comprehension`). **Do not "fix" this
