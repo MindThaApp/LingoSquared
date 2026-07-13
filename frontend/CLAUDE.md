@@ -71,6 +71,28 @@ non-negotiable verification bar.
   word-form `accepted_answers` — accepted caveat, don't chase with digit
   tables. fa/prs UI strings for voice-answer not yet translated. Detail: BUILD_LOG 2026-07-06.
 
+## Speaking features (2026-07-13)
+
+- **`conversation` is deliberately NOT in `ExerciseType`.** It is a
+  practice-feed-only, MULTI-TURN item (`mode=conversation`) whose prompt
+  carries a node graph, rendered by `ConversationRunner.tsx` — `PracticeCard`
+  branches on `item.type === "conversation"`, bypassing the one-shot
+  `ExerciseRenderer`. It lives in `PracticeItemType = ExerciseType |
+  "conversation"`; `asExerciseType()` narrows (and throws) for the review/
+  checkpoint/lesson runners, which can never receive one. **Adding it to
+  `ExerciseType` breaks the exhaustive exercise-type-registration check —
+  that guard exists because six unregistered types once shipped and only
+  crashed in a real lesson. Do not "simplify" this.**
+- **Pronunciation feedback is a CLARITY signal, never an accent score.**
+  `POST /stt/transcribe` with `detail=words` returns per-word
+  `probability` (the model's confidence it heard that word). Low confidence
+  means the word was unclear — it does NOT mean the learner is wrong, and the
+  UI must never label it "wrong pronunciation" (`PronunciationFeedback.tsx`).
+- **Only the SERVER STT path returns word confidences** — the client WASM
+  Whisper model does not expose token probabilities. So absent feedback means
+  "no signal", NEVER "you were perfect": the component renders nothing at all
+  rather than an all-clear it can't justify.
+
 ## Per-device `localStorage` preference patterns
 
 Several user preferences are per-device `localStorage` values (not
