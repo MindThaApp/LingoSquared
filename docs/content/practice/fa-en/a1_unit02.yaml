@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: '1.0'
 pack_key: practice.fa-en.a1.unit02
 source_language: fa
 target_language: en
@@ -6,85 +6,290 @@ unit_content_key: en.a1.unit02.introductions
 review:
   status: reviewed
   fresh_context: true
-  notes: "Fresh-context Codex review (2026-07-05, dispatched by Session 3): removed ungrammatical filler frames (e.g. 'How are you? bad, thanks.', 'I am a engineer.'), narrowed overly broad greeting/farewell/role slots, fixed a matching template referencing not-yet-taught vocabulary, fixed a multiple_choice template with fewer than 3 unique options, replaced misleading Farsi feedback, added a safe word-order exercise. Independently re-verified by Session 3: compiler 0/0, no jargon leaks, no forbidden Arabic-range codepoints, no self-referential English glosses. Second fresh-context review (2026-07-06, separate session, zero access to the above authoring reasoning): confirmed lesson_content_key values against docs/content/realizations/en/a1_unit02_introductions.yaml (lesson01/02/03 all match); standalone harness confirms every multiple_choice/matching_pairs slot has >=3 distinct candidates (identity=9, dialogue_word/dialogue_noun=6-8) and every other slot has >=1. name_order.001's word_order frame ('is {person_name} name My' -> 'My name is {person_name}') checked against both person_name candidates (Daniel, Leila) -- both grammatical, no self-reference risk. All remaining templates are bare-word recognition/matching/translation (identity, dialogue_word) with no sentence-embedding risk regardless of pool breadth. No self-reference, unbounded-number, non-interchangeable-synonym, or article-agreement issues found. Upgraded to reviewed. Retrofit 2026-07-06 (AUTHORING_GUIDE.md §16): widened both matching_pairs templates from 2 to 6 pairs each per the retrofit table (identity_pair.002: identity/pronoun, table cap 6 -- note the identity preset here is actually [pronoun, verb] and this note's own earlier harness run found 9 real candidates for that broader POS set, but 6 was used per the explicit retrofit table, a safe subset of the true pool; name_person_pair.002: dialogue_word/noun via dialogue_noun preset, real course-wide pool=6) -- both now well past the old 2-pair minimum, no padding with untaught words. **Real bug found and fixed, live-QA pass on fa, 2026-07-06/07**: the second review above ('name_order.001's word_order frame ... checked against both person_name candidates') verified the ANSWER but missed that `template.frame` ('is {person_name} name My') is independently rendered verbatim as the learner-visible hint by build_prompt()'s word_order branch (backend/app/practice/service.py) -- a real generated item showed a scrambled, ungrammatical hint instead of 'My name is {person_name}' (word_bank is separately shuffled regardless of template.frame's own order, so template.frame never needed to differ from the correct order). Confirmed live against a genuinely fresh isolated stack; same bug found and fixed alongside this one in fa-en/a1_unit01.yaml (farewell_order.003) -- see that pack's notes for the full root-cause writeup and a list of other directions' packs (nl-en, prs-en) with the identical pattern, out of this pass's scope to fix. Fixed by making template.frame match answer_derivation.frame exactly ('My name is {person_name}')."
+  notes: 'Fresh-context Codex review (2026-07-05, dispatched by Session 3): removed ungrammatical filler frames (e.g. ''How
+    are you? bad, thanks.'', ''I am a engineer.''), narrowed overly broad greeting/farewell/role slots, fixed a matching template
+    referencing not-yet-taught vocabulary, fixed a multiple_choice template with fewer than 3 unique options, replaced misleading
+    Farsi feedback, added a safe word-order exercise. Independently re-verified by Session 3: compiler 0/0, no jargon leaks,
+    no forbidden Arabic-range codepoints, no self-referential English glosses. Second fresh-context review (2026-07-06, separate
+    session, zero access to the above authoring reasoning): confirmed lesson_content_key values against docs/content/realizations/en/a1_unit02_introductions.yaml
+    (lesson01/02/03 all match); standalone harness confirms every multiple_choice/matching_pairs slot has >=3 distinct candidates
+    (identity=9, dialogue_word/dialogue_noun=6-8) and every other slot has >=1. name_order.001''s word_order frame (''is {person_name}
+    name My'' -> ''My name is {person_name}'') checked against both person_name candidates (Daniel, Leila) -- both grammatical,
+    no self-reference risk. All remaining templates are bare-word recognition/matching/translation (identity, dialogue_word)
+    with no sentence-embedding risk regardless of pool breadth. No self-reference, unbounded-number, non-interchangeable-synonym,
+    or article-agreement issues found. Upgraded to reviewed. Retrofit 2026-07-06 (AUTHORING_GUIDE.md §16): widened both matching_pairs
+    templates from 2 to 6 pairs each per the retrofit table (identity_pair.002: identity/pronoun, table cap 6 -- note the
+    identity preset here is actually [pronoun, verb] and this note''s own earlier harness run found 9 real candidates for
+    that broader POS set, but 6 was used per the explicit retrofit table, a safe subset of the true pool; name_person_pair.002:
+    dialogue_word/noun via dialogue_noun preset, real course-wide pool=6) -- both now well past the old 2-pair minimum, no
+    padding with untaught words. **Real bug found and fixed, live-QA pass on fa, 2026-07-06/07**: the second review above
+    (''name_order.001''s word_order frame ... checked against both person_name candidates'') verified the ANSWER but missed
+    that `template.frame` (''is {person_name} name My'') is independently rendered verbatim as the learner-visible hint by
+    build_prompt()''s word_order branch (backend/app/practice/service.py) -- a real generated item showed a scrambled, ungrammatical
+    hint instead of ''My name is {person_name}'' (word_bank is separately shuffled regardless of template.frame''s own order,
+    so template.frame never needed to differ from the correct order). Confirmed live against a genuinely fresh isolated stack;
+    same bug found and fixed alongside this one in fa-en/a1_unit01.yaml (farewell_order.003) -- see that pack''s notes for
+    the full root-cause writeup and a list of other directions'' packs (nl-en, prs-en) with the identical pattern, out of
+    this pass''s scope to fix. Fixed by making template.frame match answer_derivation.frame exactly (''My name is {person_name}'').'
 tag_schema:
-  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
   agreement_tags:
-    semantic: [identity, person_name, dialogue_word]
-    person: [first, second, third]
+    semantic:
+    - identity
+    - person_name
+    - dialogue_word
+    - volume_fa_en_a1_unit02_person_name_07_single
+    person:
+    - first
+    - second
+    - third
 slot_presets:
-  identity: &identity {language_code: en, part_of_speech: [pronoun, verb], agreement_tags: {semantic: identity}}
-  person_name: &person_name {language_code: en, part_of_speech: proper_noun, agreement_tags: {semantic: person_name}}
-  dialogue_word: &dialogue_word {language_code: en, part_of_speech: [noun, verb, adjective], agreement_tags: {semantic: dialogue_word}}
-  dialogue_noun: &dialogue_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: dialogue_word}}
+  identity: &id002
+    language_code: en
+    part_of_speech:
+    - pronoun
+    - verb
+    agreement_tags:
+      semantic: identity
+  person_name: &id001
+    language_code: en
+    part_of_speech: proper_noun
+    agreement_tags:
+      semantic: person_name
+  dialogue_word: &id004
+    language_code: en
+    part_of_speech:
+    - noun
+    - verb
+    - adjective
+    agreement_tags:
+      semantic: dialogue_word
+  dialogue_noun: &id003
+    language_code: en
+    part_of_speech: noun
+    agreement_tags:
+      semantic: dialogue_word
 templates:
-  # Lesson 1: names.
-  - content_key: practice.fa-en.en.a1.unit02.lesson01.name_order.001
-    lesson_content_key: en.a1.unit02.lesson01.exchange_names
-    type: word_order
-    frame: {text: "My name is {person_name}", language_code: en, direction: ltr}
-    slots: {person_name: *person_name}
-    answer_derivation: {kind: render_frame, frame: {text: "My name is {person_name}", language_code: en, direction: ltr}}
-    feedback_frame: {text: "ترتیب درست My name is {person_name} است.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit02.lesson01.identity_pair.002
-    lesson_content_key: en.a1.unit02.lesson01.exchange_names
-    type: matching_pairs
-    frame: {text: "{identity_one} — {identity_two}", language_code: en, direction: ltr}
-    slots: {identity_one: *identity, identity_two: *identity, identity_three: *identity, identity_four: *identity, identity_five: *identity, identity_six: *identity}
-    slot_relations: [{kind: distinct, slots: [identity_one, identity_two, identity_three, identity_four, identity_five, identity_six]}]
-    answer_derivation: {kind: matching_pairs, slots: [identity_one, identity_two, identity_three, identity_four, identity_five, identity_six]}
-    feedback_frame: {text: "هر واژه را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit02.lesson01.identity_translate.003
-    lesson_content_key: en.a1.unit02.lesson01.exchange_names
-    type: translation
-    frame: {text: "{identity}", language_code: fa, direction: rtl, slot_rendering: {identity: english_gloss}}
-    slots: {identity: *identity}
-    answer_derivation: {kind: slot_text, slot: identity}
-    feedback_frame: {text: "پاسخ درست، معادل انگلیسی واژهٔ فارسی است.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit02.lesson01.identity_meaning.004
-    lesson_content_key: en.a1.unit02.lesson01.exchange_names
-    type: multiple_choice
-    frame: {text: "{identity}", language_code: en, direction: ltr}
-    slots: {identity: *identity}
-    answer_derivation: {kind: slot_gloss, slot: identity}
-    feedback_frame: {text: "معنی فارسی {identity} را انتخاب کنید.", language_code: fa, direction: rtl}
-
-  # Lesson 2: roles and membership.
-  - content_key: practice.fa-en.en.a1.unit02.lesson02.role_meaning.001
-    lesson_content_key: en.a1.unit02.lesson02.exchange_roles
-    type: multiple_choice
-    frame: {text: "{dialogue_word}", language_code: en, direction: ltr}
-    slots: {dialogue_word: *dialogue_noun}
-    answer_derivation: {kind: slot_gloss, slot: dialogue_word}
-    feedback_frame: {text: "معنی فارسی {dialogue_word} را انتخاب کنید.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit02.lesson02.role_translate.003
-    lesson_content_key: en.a1.unit02.lesson02.exchange_roles
-    type: translation
-    frame: {text: "{dialogue_word}", language_code: fa, direction: rtl, slot_rendering: {dialogue_word: english_gloss}}
-    slots: {dialogue_word: *dialogue_noun}
-    answer_derivation: {kind: slot_text, slot: dialogue_word}
-    feedback_frame: {text: "پاسخ درست، معادل انگلیسی اسم فارسی است.", language_code: fa, direction: rtl}
-
-  # Lesson 3: library dialogue.
-  - content_key: practice.fa-en.en.a1.unit02.lesson03.library_meaning.001
-    lesson_content_key: en.a1.unit02.lesson03.library_dialogue
-    type: multiple_choice
-    frame: {text: "{dialogue_word}", language_code: en, direction: ltr}
-    slots: {dialogue_word: *dialogue_word}
-    answer_derivation: {kind: slot_gloss, slot: dialogue_word}
-    feedback_frame: {text: "معنی فارسی {dialogue_word} را انتخاب کنید.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit02.lesson03.name_person_pair.002
-    lesson_content_key: en.a1.unit02.lesson03.library_dialogue
-    type: matching_pairs
-    frame: {text: "{dialogue_one} — {dialogue_two}", language_code: en, direction: ltr}
-    slots: {dialogue_one: *dialogue_noun, dialogue_two: *dialogue_noun, dialogue_three: *dialogue_noun, dialogue_four: *dialogue_noun, dialogue_five: *dialogue_noun, dialogue_six: *dialogue_noun}
-    slot_relations: [{kind: distinct, slots: [dialogue_one, dialogue_two, dialogue_three, dialogue_four, dialogue_five, dialogue_six]}]
-    answer_derivation: {kind: matching_pairs, slots: [dialogue_one, dialogue_two, dialogue_three, dialogue_four, dialogue_five, dialogue_six]}
-    feedback_frame: {text: "هر اسم را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit02.lesson03.dialogue_translate.003
-    lesson_content_key: en.a1.unit02.lesson03.library_dialogue
-    type: translation
-    frame: {text: "{dialogue_word}", language_code: fa, direction: rtl, slot_rendering: {dialogue_word: english_gloss}}
-    slots: {dialogue_word: *dialogue_word}
-    answer_derivation: {kind: slot_text, slot: dialogue_word}
-    feedback_frame: {text: "پاسخ درست، معادل انگلیسی واژهٔ فارسی است.", language_code: fa, direction: rtl}
+- content_key: practice.fa-en.en.a1.unit02.lesson01.name_order.001
+  lesson_content_key: en.a1.unit02.lesson01.exchange_names
+  type: word_order
+  frame:
+    text: My name is {person_name}
+    language_code: en
+    direction: ltr
+  slots:
+    person_name: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: My name is {person_name}
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: ترتیب درست My name is {person_name} است.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit02.lesson01.identity_pair.002
+  lesson_content_key: en.a1.unit02.lesson01.exchange_names
+  type: matching_pairs
+  frame:
+    text: '{identity_one} — {identity_two}'
+    language_code: en
+    direction: ltr
+  slots:
+    identity_one: *id002
+    identity_two: *id002
+    identity_three: *id002
+    identity_four: *id002
+    identity_five: *id002
+    identity_six: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - identity_one
+    - identity_two
+    - identity_three
+    - identity_four
+    - identity_five
+    - identity_six
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - identity_one
+    - identity_two
+    - identity_three
+    - identity_four
+    - identity_five
+    - identity_six
+  feedback_frame:
+    text: هر واژه را به معنی فارسی خودش وصل کنید.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit02.lesson01.identity_translate.003
+  lesson_content_key: en.a1.unit02.lesson01.exchange_names
+  type: translation
+  frame:
+    text: '{identity}'
+    language_code: fa
+    direction: rtl
+    slot_rendering:
+      identity: english_gloss
+  slots:
+    identity: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: identity
+  feedback_frame:
+    text: پاسخ درست، معادل انگلیسی واژهٔ فارسی است.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit02.lesson01.identity_meaning.004
+  lesson_content_key: en.a1.unit02.lesson01.exchange_names
+  type: multiple_choice
+  frame:
+    text: '{identity}'
+    language_code: en
+    direction: ltr
+  slots:
+    identity: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: identity
+  feedback_frame:
+    text: معنی فارسی {identity} را انتخاب کنید.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit02.lesson02.role_meaning.001
+  lesson_content_key: en.a1.unit02.lesson02.exchange_roles
+  type: multiple_choice
+  frame:
+    text: '{dialogue_word}'
+    language_code: en
+    direction: ltr
+  slots:
+    dialogue_word: *id003
+  answer_derivation:
+    kind: slot_gloss
+    slot: dialogue_word
+  feedback_frame:
+    text: معنی فارسی {dialogue_word} را انتخاب کنید.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit02.lesson02.role_translate.003
+  lesson_content_key: en.a1.unit02.lesson02.exchange_roles
+  type: translation
+  frame:
+    text: '{dialogue_word}'
+    language_code: fa
+    direction: rtl
+    slot_rendering:
+      dialogue_word: english_gloss
+  slots:
+    dialogue_word: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: dialogue_word
+  feedback_frame:
+    text: پاسخ درست، معادل انگلیسی اسم فارسی است.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit02.lesson03.library_meaning.001
+  lesson_content_key: en.a1.unit02.lesson03.library_dialogue
+  type: multiple_choice
+  frame:
+    text: '{dialogue_word}'
+    language_code: en
+    direction: ltr
+  slots:
+    dialogue_word: *id004
+  answer_derivation:
+    kind: slot_gloss
+    slot: dialogue_word
+  feedback_frame:
+    text: معنی فارسی {dialogue_word} را انتخاب کنید.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit02.lesson03.name_person_pair.002
+  lesson_content_key: en.a1.unit02.lesson03.library_dialogue
+  type: matching_pairs
+  frame:
+    text: '{dialogue_one} — {dialogue_two}'
+    language_code: en
+    direction: ltr
+  slots:
+    dialogue_one: *id003
+    dialogue_two: *id003
+    dialogue_three: *id003
+    dialogue_four: *id003
+    dialogue_five: *id003
+    dialogue_six: *id003
+  slot_relations:
+  - kind: distinct
+    slots:
+    - dialogue_one
+    - dialogue_two
+    - dialogue_three
+    - dialogue_four
+    - dialogue_five
+    - dialogue_six
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - dialogue_one
+    - dialogue_two
+    - dialogue_three
+    - dialogue_four
+    - dialogue_five
+    - dialogue_six
+  feedback_frame:
+    text: هر اسم را به معنی فارسی خودش وصل کنید.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit02.lesson03.dialogue_translate.003
+  lesson_content_key: en.a1.unit02.lesson03.library_dialogue
+  type: translation
+  frame:
+    text: '{dialogue_word}'
+    language_code: fa
+    direction: rtl
+    slot_rendering:
+      dialogue_word: english_gloss
+  slots:
+    dialogue_word: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: dialogue_word
+  feedback_frame:
+    text: پاسخ درست، معادل انگلیسی واژهٔ فارسی است.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit02.lesson01.name_order.001.volume_fill.007
+  lesson_content_key: en.a1.unit02.lesson01.exchange_names
+  type: fill_in_blank
+  frame:
+    text: My name is {person_name}
+    language_code: en
+    direction: ltr
+  slots:
+    person_name:
+      language_code: en
+      part_of_speech: proper_noun
+      agreement_tags:
+        semantic: volume_fa_en_a1_unit02_person_name_07_single
+  answer_derivation:
+    kind: slot_text
+    slot: person_name
+  feedback_frame:
+    text: '{person_name}'
+    language_code: en
+    direction: ltr

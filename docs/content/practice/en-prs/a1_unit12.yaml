@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: '1.0'
 pack_key: practice.en-prs.a1.unit12
 source_language: en
 target_language: prs
@@ -6,180 +6,453 @@ unit_content_key: prs.a1.unit12.routines
 review:
   status: unreviewed
   fresh_context: false
-  notes: >-
-    Authored 2026-07-07 for the new A1 unit12 (routines) realization,
-    same night the real en-prs A1 realization grew 8->15 units. A
-    parallel session authored units 09-11's practice pool separately;
-    this pack (and its 13/14/15 siblings) only touches units 12-15,
-    both in scripts/backfill_lexemes_en_prs.py (UNIT_FILES tuple,
-    PRS_GLOSSES/PRS_POS entries, prs_agreement_tags additions -- all
-    re-read fresh immediately before editing to avoid clobbering the
-    parallel session's own unit09-11 additions) and here.
+  notes: 'Authored 2026-07-07 for the new A1 unit12 (routines) realization, same night the real en-prs A1 realization grew
+    8->15 units. A parallel session authored units 09-11''s practice pool separately; this pack (and its 13/14/15 siblings)
+    only touches units 12-15, both in scripts/backfill_lexemes_en_prs.py (UNIT_FILES tuple, PRS_GLOSSES/PRS_POS entries, prs_agreement_tags
+    additions -- all re-read fresh immediately before editing to avoid clobbering the parallel session''s own unit09-11 additions)
+    and here.
 
-    Six groups, all real vocabulary from this unit's own realization:
-    routine_verb (بیدار می‌شوم/صبحانه می‌خورم/به دفتر می‌روم/شب می‌خوابم's
-    verb heads plus their 2nd/3rd-person forms, 6 members -- می‌شود's
-    third-person "he/she wakes up" sense required a homograph
-    special-case in _classify(), since the bare string می‌شود is ALSO
-    A2 unit09's unrelated "would it be possible" idiom; verified via
-    iter_specs() that the two stay separate Lexeme specs with distinct
-    glosses), routine_word (خواب/صبحانه/دفتر/شب, 4 members, pools with
-    the existing time_period group for one matching_pairs template),
-    every_word and early_word (هر/زود, 1 member each -- real
-    single-candidate groups, matching this bundle's turn_verb
-    precedent from unit06), and person_name (زرمینه/همایون, reusing
-    the course-wide 12-member pool -- fixed a real pre-existing gap
-    while extending prs_agreement_tags: زرمینه was already glossed
-    from unit05 as a passerby character but never tagged person_name
-    until now, since this is her first real practice-pool dialogue
-    use).
+    Six groups, all real vocabulary from this unit''s own realization: routine_verb (بیدار می‌شوم/صبحانه می‌خورم/به دفتر می‌روم/شب
+    می‌خوابم''s verb heads plus their 2nd/3rd-person forms, 6 members -- می‌شود''s third-person "he/she wakes up" sense required
+    a homograph special-case in _classify(), since the bare string می‌شود is ALSO A2 unit09''s unrelated "would it be possible"
+    idiom; verified via iter_specs() that the two stay separate Lexeme specs with distinct glosses), routine_word (خواب/صبحانه/دفتر/شب,
+    4 members, pools with the existing time_period group for one matching_pairs template), every_word and early_word (هر/زود,
+    1 member each -- real single-candidate groups, matching this bundle''s turn_verb precedent from unit06), and person_name
+    (زرمینه/همایون, reusing the course-wide 12-member pool -- fixed a real pre-existing gap while extending prs_agreement_tags:
+    زرمینه was already glossed from unit05 as a passerby character but never tagged person_name until now, since this is her
+    first real practice-pool dialogue use).
 
-    Both fill_in_blank templates (every_word, early_word) are
-    single-project-wide-candidate groups verified via
-    scripts/_fill_in_blank_ambiguity_check.py -- not just candidate-
-    count-sufficient but genuinely unambiguous, since the constraint
-    itself can never match more than one lexeme. No listen_select/
-    listen_type anywhere (en-prs has no TTS voices). No bare unquoted
-    yes/no/true/false anywhere.
+    Both fill_in_blank templates (every_word, early_word) are single-project-wide-candidate groups verified via scripts/_fill_in_blank_ambiguity_check.py
+    -- not just candidate- count-sufficient but genuinely unambiguous, since the constraint itself can never match more than
+    one lexeme. No listen_select/ listen_type anywhere (en-prs has no TTS voices). No bare unquoted yes/no/true/false anywhere.
 
-    Verified with scripts/_practice_slot_check.py (reusing
-    backfill_lexemes_en_prs.py's real iter_specs() output) -- every
-    slot has enough distinct candidates. scripts/compile_content.py
-    practice-validate for the full en-prs pack -- 0 errors/0 warnings.
-    Needs the standard fresh-context review before import; no
-    backfill_lexemes_en_prs.py run has happened against a real
-    database yet in this pass.
+    Verified with scripts/_practice_slot_check.py (reusing backfill_lexemes_en_prs.py''s real iter_specs() output) -- every
+    slot has enough distinct candidates. scripts/compile_content.py practice-validate for the full en-prs pack -- 0 errors/0
+    warnings. Needs the standard fresh-context review before import; no backfill_lexemes_en_prs.py run has happened against
+    a real database yet in this pass.'
 tag_schema:
-  part_of_speech: [noun, adjective, adverb, verb, proper_noun]
+  part_of_speech:
+  - noun
+  - adjective
+  - adverb
+  - verb
+  - proper_noun
   agreement_tags:
-    semantic: [routine_verb, routine_word, time_period, every_word, early_word, person_name, ones_number]
+    semantic:
+    - routine_verb
+    - routine_word
+    - time_period
+    - every_word
+    - early_word
+    - person_name
+    - ones_number
 slot_presets:
-  routine_verb: &routine_verb {language_code: prs, part_of_speech: verb, agreement_tags: {semantic: routine_verb}}
-  routine_word: &routine_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: routine_word}}
-  # routine_word (4) pools with the existing time_period group (also
-  # nouns, صبح/روز/عصر/شب/ظهر) for the matching_pairs template below --
-  # 8 distinct real tokens (شب is shared by both tags, deduped by the
-  # backend's own distinct-token count).
-  routine_and_time_word: &routine_and_time_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: [routine_word, time_period]}}
-  time_period: &time_period {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: time_period}}
-  every_word: &every_word {language_code: prs, part_of_speech: adverb, agreement_tags: {semantic: every_word}}
-  early_word: &early_word {language_code: prs, part_of_speech: adverb, agreement_tags: {semantic: early_word}}
-  person_name: &person_name {language_code: prs, part_of_speech: proper_noun, agreement_tags: {semantic: person_name}}
-  ones_number: &ones_number {language_code: prs, part_of_speech: adjective, agreement_tags: {semantic: ones_number}}
+  routine_verb: &id001
+    language_code: prs
+    part_of_speech: verb
+    agreement_tags:
+      semantic: routine_verb
+  routine_word: &id002
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: routine_word
+  routine_and_time_word: &id006
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - routine_word
+      - time_period
+  time_period: &id005
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: time_period
+  every_word: &id004
+    language_code: prs
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: every_word
+  early_word: &id007
+    language_code: prs
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: early_word
+  person_name: &id008
+    language_code: prs
+    part_of_speech: proper_noun
+    agreement_tags:
+      semantic: person_name
+  ones_number: &id003
+    language_code: prs
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: ones_number
 templates:
-  # Lesson 1: routine verbs and their related nouns.
-  - content_key: practice.en-prs.prs.a1.unit12.lesson01.routine_verb_gloss.001
-    lesson_content_key: prs.a1.unit12.lesson01.routine_verbs
-    type: multiple_choice
-    frame: {text: "{routine_verb}", language_code: prs, direction: rtl}
-    slots: {routine_verb: *routine_verb}
-    answer_derivation: {kind: slot_gloss, slot: routine_verb}
-    feedback_frame: {text: "{routine_verb} is one of this unit's routine verb forms.", language_code: en, direction: ltr}
-  - content_key: practice.en-prs.prs.a1.unit12.lesson01.routine_verb_translate.002
-    lesson_content_key: prs.a1.unit12.lesson01.routine_verbs
-    type: translation
-    frame: {text: "{routine_verb}", language_code: en, direction: ltr, slot_rendering: {routine_verb: english_gloss}}
-    slots: {routine_verb: *routine_verb}
-    answer_derivation: {kind: slot_text, slot: routine_verb}
-    feedback_frame: {text: "{routine_verb} is the Dari word for this.", language_code: en, direction: ltr}
-  - content_key: practice.en-prs.prs.a1.unit12.lesson01.routine_verb_pair.003
-    lesson_content_key: prs.a1.unit12.lesson01.routine_verbs
-    type: matching_pairs
-    frame: {text: "{routine_verb_one} — {routine_verb_two} — {routine_verb_three} — {routine_verb_four} — {routine_verb_five} — {routine_verb_six}", language_code: prs, direction: rtl}
-    slots: {routine_verb_one: *routine_verb, routine_verb_two: *routine_verb, routine_verb_three: *routine_verb, routine_verb_four: *routine_verb, routine_verb_five: *routine_verb, routine_verb_six: *routine_verb}
-    slot_relations: [{kind: distinct, slots: [routine_verb_one, routine_verb_two, routine_verb_three, routine_verb_four, routine_verb_five, routine_verb_six]}]
-    answer_derivation: {kind: matching_pairs, slots: [routine_verb_one, routine_verb_two, routine_verb_three, routine_verb_four, routine_verb_five, routine_verb_six]}
-    feedback_frame: {text: "Match each verb form to its English meaning.", language_code: en, direction: ltr}
-  - content_key: practice.en-prs.prs.a1.unit12.lesson01.routine_word_gloss.004
-    lesson_content_key: prs.a1.unit12.lesson01.routine_verbs
-    type: multiple_choice
-    frame: {text: "{routine_word}", language_code: prs, direction: rtl}
-    slots: {routine_word: *routine_word}
-    answer_derivation: {kind: slot_gloss, slot: routine_word}
-    feedback_frame: {text: "{routine_word} names a part of a daily routine.", language_code: en, direction: ltr}
-  - content_key: practice.en-prs.prs.a1.unit12.lesson01.routine_word_translate.005
-    lesson_content_key: prs.a1.unit12.lesson01.routine_verbs
-    type: translation
-    frame: {text: "{routine_word}", language_code: en, direction: ltr, slot_rendering: {routine_word: english_gloss}}
-    slots: {routine_word: *routine_word}
-    answer_derivation: {kind: slot_text, slot: routine_word}
-    feedback_frame: {text: "{routine_word} is the Dari word for this.", language_code: en, direction: ltr}
-
-  # Lesson 2: describing a routine with times.
-  - content_key: practice.en-prs.prs.a1.unit12.lesson02.wake_time_order.001
-    lesson_content_key: prs.a1.unit12.lesson02.describing_a_routine_with_times
-    type: word_order
-    frame: {text: "ساعت {ones_number} بیدار می‌شوم", language_code: prs, direction: rtl}
-    slots: {ones_number: *ones_number}
-    answer_derivation: {kind: render_frame, frame: {text: "ساعت {ones_number} بیدار می‌شوم", language_code: prs, direction: rtl}}
-    feedback_frame: {text: "Word order: ساعت [number] بیدار می‌شوم (I wake up at [number] o'clock).", language_code: en, direction: ltr}
-
-  # Lesson 3: parts of the day (review) and "every day."
-  - content_key: practice.en-prs.prs.a1.unit12.lesson03.every_word_fill.001
-    lesson_content_key: prs.a1.unit12.lesson03.parts_of_the_day_review
-    type: fill_in_blank
-    frame: {text: "{every_word} روز صبحانه می‌خورم.", language_code: prs, direction: rtl}
-    slots: {every_word: *every_word}
-    answer_derivation: {kind: slot_text, slot: every_word}
-    feedback_frame: {text: "{every_word} روز means 'every day.'", language_code: en, direction: ltr}
-  - content_key: practice.en-prs.prs.a1.unit12.lesson03.every_word_translate.002
-    lesson_content_key: prs.a1.unit12.lesson03.parts_of_the_day_review
-    type: translation
-    frame: {text: "{every_word}", language_code: en, direction: ltr, slot_rendering: {every_word: english_gloss}}
-    slots: {every_word: *every_word}
-    answer_derivation: {kind: slot_text, slot: every_word}
-    feedback_frame: {text: "{every_word} is the Dari word for this.", language_code: en, direction: ltr}
-  - content_key: practice.en-prs.prs.a1.unit12.lesson03.time_period_gloss.003
-    lesson_content_key: prs.a1.unit12.lesson03.parts_of_the_day_review
-    type: multiple_choice
-    frame: {text: "{time_period}", language_code: prs, direction: rtl}
-    slots: {time_period: *time_period}
-    answer_derivation: {kind: slot_gloss, slot: time_period}
-    feedback_frame: {text: "{time_period} names a part of the day.", language_code: en, direction: ltr}
-  - content_key: practice.en-prs.prs.a1.unit12.lesson03.routine_and_time_pair.004
-    lesson_content_key: prs.a1.unit12.lesson03.parts_of_the_day_review
-    type: matching_pairs
-    # Pools this lesson's time-of-day review words with lesson01's
-    # routine_word group (routine_and_time_word preset above) -- 8
-    # distinct real tokens, AUTHORING_GUIDE.md #16.
-    frame: {text: "{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six} — {word_seven} — {word_eight}", language_code: prs, direction: rtl}
-    slots: {word_one: *routine_and_time_word, word_two: *routine_and_time_word, word_three: *routine_and_time_word, word_four: *routine_and_time_word, word_five: *routine_and_time_word, word_six: *routine_and_time_word, word_seven: *routine_and_time_word, word_eight: *routine_and_time_word}
-    slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five, word_six, word_seven, word_eight]}]
-    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five, word_six, word_seven, word_eight]}
-    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
-
-  # Lesson 5: writing your own routine ("early").
-  - content_key: practice.en-prs.prs.a1.unit12.lesson05.early_word_fill.001
-    lesson_content_key: prs.a1.unit12.lesson05.writing_your_own_routine
-    type: fill_in_blank
-    frame: {text: "به دفتر {early_word} می‌روم.", language_code: prs, direction: rtl}
-    slots: {early_word: *early_word}
-    answer_derivation: {kind: slot_text, slot: early_word}
-    feedback_frame: {text: "{early_word} completes 'I go to the office early.'", language_code: en, direction: ltr}
-  - content_key: practice.en-prs.prs.a1.unit12.lesson05.early_word_translate.002
-    lesson_content_key: prs.a1.unit12.lesson05.writing_your_own_routine
-    type: translation
-    frame: {text: "{early_word}", language_code: en, direction: ltr, slot_rendering: {early_word: english_gloss}}
-    slots: {early_word: *early_word}
-    answer_derivation: {kind: slot_text, slot: early_word}
-    feedback_frame: {text: "{early_word} is the Dari word for this.", language_code: en, direction: ltr}
-
-  # Lesson 6: comparing routines (Zarmina and Homayoun's dialogue).
-  - content_key: practice.en-prs.prs.a1.unit12.lesson06.person_name_gloss.001
-    lesson_content_key: prs.a1.unit12.lesson06.comparing_routines_dialogue
-    type: multiple_choice
-    frame: {text: "{person_name}", language_code: prs, direction: rtl}
-    slots: {person_name: *person_name}
-    answer_derivation: {kind: slot_gloss, slot: person_name}
-    feedback_frame: {text: "{person_name} is a name used in this course.", language_code: en, direction: ltr}
-  - content_key: practice.en-prs.prs.a1.unit12.lesson06.person_name_pair.002
-    lesson_content_key: prs.a1.unit12.lesson06.comparing_routines_dialogue
-    type: matching_pairs
-    # Full course-wide person_name pool, 12 distinct real candidates
-    # (verified via scripts/_practice_slot_check.py) -- Zarmina and
-    # Homayoun are this lesson's own two speakers.
-    frame: {text: "{person_name_one} — {person_name_two} — {person_name_three} — {person_name_four} — {person_name_five} — {person_name_six} — {person_name_seven} — {person_name_eight} — {person_name_nine} — {person_name_ten} — {person_name_eleven} — {person_name_twelve}", language_code: prs, direction: rtl}
-    slots: {person_name_one: *person_name, person_name_two: *person_name, person_name_three: *person_name, person_name_four: *person_name, person_name_five: *person_name, person_name_six: *person_name, person_name_seven: *person_name, person_name_eight: *person_name, person_name_nine: *person_name, person_name_ten: *person_name, person_name_eleven: *person_name, person_name_twelve: *person_name}
-    slot_relations: [{kind: distinct, slots: [person_name_one, person_name_two, person_name_three, person_name_four, person_name_five, person_name_six, person_name_seven, person_name_eight, person_name_nine, person_name_ten, person_name_eleven, person_name_twelve]}]
-    answer_derivation: {kind: matching_pairs, slots: [person_name_one, person_name_two, person_name_three, person_name_four, person_name_five, person_name_six, person_name_seven, person_name_eight, person_name_nine, person_name_ten, person_name_eleven, person_name_twelve]}
-    feedback_frame: {text: "Match each name to its English label.", language_code: en, direction: ltr}
+- content_key: practice.en-prs.prs.a1.unit12.lesson01.routine_verb_gloss.001
+  lesson_content_key: prs.a1.unit12.lesson01.routine_verbs
+  type: multiple_choice
+  frame:
+    text: '{routine_verb}'
+    language_code: prs
+    direction: rtl
+  slots:
+    routine_verb: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: routine_verb
+  feedback_frame:
+    text: '{routine_verb} is one of this unit''s routine verb forms.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit12.lesson01.routine_verb_translate.002
+  lesson_content_key: prs.a1.unit12.lesson01.routine_verbs
+  type: translation
+  frame:
+    text: '{routine_verb}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      routine_verb: english_gloss
+  slots:
+    routine_verb: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: routine_verb
+  feedback_frame:
+    text: '{routine_verb} is the Dari word for this.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit12.lesson01.routine_verb_pair.003
+  lesson_content_key: prs.a1.unit12.lesson01.routine_verbs
+  type: matching_pairs
+  frame:
+    text: '{routine_verb_one} — {routine_verb_two} — {routine_verb_three} — {routine_verb_four} — {routine_verb_five} — {routine_verb_six}'
+    language_code: prs
+    direction: rtl
+  slots:
+    routine_verb_one: *id001
+    routine_verb_two: *id001
+    routine_verb_three: *id001
+    routine_verb_four: *id001
+    routine_verb_five: *id001
+    routine_verb_six: *id001
+  slot_relations:
+  - kind: distinct
+    slots:
+    - routine_verb_one
+    - routine_verb_two
+    - routine_verb_three
+    - routine_verb_four
+    - routine_verb_five
+    - routine_verb_six
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - routine_verb_one
+    - routine_verb_two
+    - routine_verb_three
+    - routine_verb_four
+    - routine_verb_five
+    - routine_verb_six
+  feedback_frame:
+    text: Match each verb form to its English meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit12.lesson01.routine_word_gloss.004
+  lesson_content_key: prs.a1.unit12.lesson01.routine_verbs
+  type: multiple_choice
+  frame:
+    text: '{routine_word}'
+    language_code: prs
+    direction: rtl
+  slots:
+    routine_word: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: routine_word
+  feedback_frame:
+    text: '{routine_word} names a part of a daily routine.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit12.lesson01.routine_word_translate.005
+  lesson_content_key: prs.a1.unit12.lesson01.routine_verbs
+  type: translation
+  frame:
+    text: '{routine_word}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      routine_word: english_gloss
+  slots:
+    routine_word: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: routine_word
+  feedback_frame:
+    text: '{routine_word} is the Dari word for this.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit12.lesson02.wake_time_order.001
+  lesson_content_key: prs.a1.unit12.lesson02.describing_a_routine_with_times
+  type: word_order
+  frame:
+    text: ساعت {ones_number} بیدار می‌شوم
+    language_code: prs
+    direction: rtl
+  slots:
+    ones_number: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: ساعت {ones_number} بیدار می‌شوم
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'Word order: ساعت [number] بیدار می‌شوم (I wake up at [number] o''clock).'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit12.lesson03.every_word_fill.001
+  lesson_content_key: prs.a1.unit12.lesson03.parts_of_the_day_review
+  type: fill_in_blank
+  frame:
+    text: '{every_word} روز صبحانه می‌خورم.'
+    language_code: prs
+    direction: rtl
+  slots:
+    every_word: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: every_word
+  feedback_frame:
+    text: '{every_word} روز means ''every day.'''
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit12.lesson03.every_word_translate.002
+  lesson_content_key: prs.a1.unit12.lesson03.parts_of_the_day_review
+  type: translation
+  frame:
+    text: '{every_word}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      every_word: english_gloss
+  slots:
+    every_word: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: every_word
+  feedback_frame:
+    text: '{every_word} is the Dari word for this.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit12.lesson03.time_period_gloss.003
+  lesson_content_key: prs.a1.unit12.lesson03.parts_of_the_day_review
+  type: multiple_choice
+  frame:
+    text: '{time_period}'
+    language_code: prs
+    direction: rtl
+  slots:
+    time_period: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: time_period
+  feedback_frame:
+    text: '{time_period} names a part of the day.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit12.lesson03.routine_and_time_pair.004
+  lesson_content_key: prs.a1.unit12.lesson03.parts_of_the_day_review
+  type: matching_pairs
+  frame:
+    text: '{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six} — {word_seven} — {word_eight}'
+    language_code: prs
+    direction: rtl
+  slots:
+    word_one: *id006
+    word_two: *id006
+    word_three: *id006
+    word_four: *id006
+    word_five: *id006
+    word_six: *id006
+    word_seven: *id006
+    word_eight: *id006
+  slot_relations:
+  - kind: distinct
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+    - word_five
+    - word_six
+    - word_seven
+    - word_eight
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+    - word_five
+    - word_six
+    - word_seven
+    - word_eight
+  feedback_frame:
+    text: Match each word to its English meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit12.lesson05.early_word_fill.001
+  lesson_content_key: prs.a1.unit12.lesson05.writing_your_own_routine
+  type: fill_in_blank
+  frame:
+    text: به دفتر {early_word} می‌روم.
+    language_code: prs
+    direction: rtl
+  slots:
+    early_word: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: early_word
+  feedback_frame:
+    text: '{early_word} completes ''I go to the office early.'''
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit12.lesson05.early_word_translate.002
+  lesson_content_key: prs.a1.unit12.lesson05.writing_your_own_routine
+  type: translation
+  frame:
+    text: '{early_word}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      early_word: english_gloss
+  slots:
+    early_word: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: early_word
+  feedback_frame:
+    text: '{early_word} is the Dari word for this.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit12.lesson06.person_name_gloss.001
+  lesson_content_key: prs.a1.unit12.lesson06.comparing_routines_dialogue
+  type: multiple_choice
+  frame:
+    text: '{person_name}'
+    language_code: prs
+    direction: rtl
+  slots:
+    person_name: *id008
+  answer_derivation:
+    kind: slot_gloss
+    slot: person_name
+  feedback_frame:
+    text: '{person_name} is a name used in this course.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit12.lesson06.person_name_pair.002
+  lesson_content_key: prs.a1.unit12.lesson06.comparing_routines_dialogue
+  type: matching_pairs
+  frame:
+    text: '{person_name_one} — {person_name_two} — {person_name_three} — {person_name_four} — {person_name_five} — {person_name_six}
+      — {person_name_seven} — {person_name_eight} — {person_name_nine} — {person_name_ten} — {person_name_eleven} — {person_name_twelve}'
+    language_code: prs
+    direction: rtl
+  slots:
+    person_name_one: *id008
+    person_name_two: *id008
+    person_name_three: *id008
+    person_name_four: *id008
+    person_name_five: *id008
+    person_name_six: *id008
+    person_name_seven: *id008
+    person_name_eight: *id008
+    person_name_nine: *id008
+    person_name_ten: *id008
+    person_name_eleven: *id008
+    person_name_twelve: *id008
+  slot_relations:
+  - kind: distinct
+    slots:
+    - person_name_one
+    - person_name_two
+    - person_name_three
+    - person_name_four
+    - person_name_five
+    - person_name_six
+    - person_name_seven
+    - person_name_eight
+    - person_name_nine
+    - person_name_ten
+    - person_name_eleven
+    - person_name_twelve
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - person_name_one
+    - person_name_two
+    - person_name_three
+    - person_name_four
+    - person_name_five
+    - person_name_six
+    - person_name_seven
+    - person_name_eight
+    - person_name_nine
+    - person_name_ten
+    - person_name_eleven
+    - person_name_twelve
+  feedback_frame:
+    text: Match each name to its English label.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit12.lesson03.every_word_fill.001.volume_order.008
+  lesson_content_key: prs.a1.unit12.lesson03.parts_of_the_day_review
+  type: word_order
+  frame:
+    text: '{every_word} روز صبحانه می‌خورم.'
+    language_code: prs
+    direction: rtl
+  slots:
+    every_word:
+      language_code: prs
+      part_of_speech: adverb
+      agreement_tags:
+        semantic: every_word
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{every_word} روز صبحانه می‌خورم.'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: '{every_word} روز صبحانه می‌خورم.'
+    language_code: prs
+    direction: rtl
+- content_key: practice.en-prs.prs.a1.unit12.lesson05.early_word_fill.001.volume_order.009
+  lesson_content_key: prs.a1.unit12.lesson05.writing_your_own_routine
+  type: word_order
+  frame:
+    text: به دفتر {early_word} می‌روم.
+    language_code: prs
+    direction: rtl
+  slots:
+    early_word:
+      language_code: prs
+      part_of_speech: adverb
+      agreement_tags:
+        semantic: early_word
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: به دفتر {early_word} می‌روم.
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: به دفتر {early_word} می‌روم.
+    language_code: prs
+    direction: rtl

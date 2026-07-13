@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: '1.0'
 pack_key: practice.en-prs.a1.unit37
 source_language: en
 target_language: prs
@@ -6,85 +6,218 @@ unit_content_key: prs.a1.unit37.personality
 review:
   status: reviewed
   fresh_context: true
-  notes: >-
-    Authored 2026-07-11, same units 31-40 practice-pool depth-extension
-    pass as this bundle's a1_unit31.yaml sibling (see that file's notes
-    for the shared pass context). Realization and overlay are both
-    status reviewed.
+  notes: 'Authored 2026-07-11, same units 31-40 practice-pool depth-extension pass as this bundle''s a1_unit31.yaml sibling
+    (see that file''s notes for the shared pass context). Realization and overlay are both status reviewed.
 
-    One group: "personality_word" (مهربان/زحمتکش/باهوش/تنبل/شوخ/
-    کم‌حرف/راستگو, 7 members, completes lesson01+lesson02). All seven
-    are simple predicate adjectives that combine grammatically with the
-    taught "او ... است" frame -- checked per candidate, not just the
-    taught examples (all seven read naturally as "He/she is [trait].").
+    One group: "personality_word" (مهربان/زحمتکش/باهوش/تنبل/شوخ/ کم‌حرف/راستگو, 7 members, completes lesson01+lesson02). All
+    seven are simple predicate adjectives that combine grammatically with the taught "او ... است" frame -- checked per candidate,
+    not just the taught examples (all seven read naturally as "He/she is [trait].").
 
-    Word_order template checked for grammaticality: "او {personality_word}
-    است" (lesson01, matches the real taught "او مهربان است"-style
-    predicate pattern used throughout the unit, e.g. "او باهوش است؟").
+    Word_order template checked for grammaticality: "او {personality_word} است" (lesson01, matches the real taught "او مهربان
+    است"-style predicate pattern used throughout the unit, e.g. "او باهوش است؟").
 
-    No listen_select/listen_type anywhere (en-prs has no TTS voices).
-    No bare unquoted yes/no/true/false anywhere. Verified with
-    scripts/_practice_slot_check.py (0 problems) and
-    scripts/compile_content.py practice-validate for the full en-prs
-    pack (0 errors / 0 warnings). Needs the standard fresh-context
-    review before import.
+    No listen_select/listen_type anywhere (en-prs has no TTS voices). No bare unquoted yes/no/true/false anywhere. Verified
+    with scripts/_practice_slot_check.py (0 problems) and scripts/compile_content.py practice-validate for the full en-prs
+    pack (0 errors / 0 warnings). Needs the standard fresh-context review before import.
 
-    Fresh-context review 2026-07-11 (Opus, zero access to authoring
-    reasoning; sibling prs-en/en-prs overlays not consulted): PASS, no
-    defects, status flipped to reviewed. Verified every slot member is
-    taught in this unit or earlier (realizations units <=40); Afghan
-    Dari register throughout (مکتب/پوهنتون/سرک/دوکان/پولیس/امبولانس/
-    اطفائیه/موتر, no Iranian calques); ZWNJ correct in all می‌-forms and
-    compounds; every word_order frame grammatical for EVERY candidate
-    filling (composition-trap subsets -- sweep_clean/cook_object/
-    field/service/specific_season -- correctly exclude tokens that need
-    a different light verb or read unnaturally); matching_pairs pulls
-    distinct glosses covering every pair; no listen_select/listen_type
-    (Dari has zero TTS); no bare YAML booleans; no snake_case jargon in
-    learner-facing text. The three unit31/33 homograph splits (حقوق law
-    vs salary, ظرف dishes vs within-period, می‌شویم wash vs become) are
-    correctly scoped by content_key in _classify() and by lesson_key in
-    prs_agreement_tags(), leaving each other sense untouched.
-    practice-validate 0/0 and _practice_slot_check.py clean for the
-    full en-prs set.
+    Fresh-context review 2026-07-11 (Opus, zero access to authoring reasoning; sibling prs-en/en-prs overlays not consulted):
+    PASS, no defects, status flipped to reviewed. Verified every slot member is taught in this unit or earlier (realizations
+    units <=40); Afghan Dari register throughout (مکتب/پوهنتون/سرک/دوکان/پولیس/امبولانس/ اطفائیه/موتر, no Iranian calques);
+    ZWNJ correct in all می‌-forms and compounds; every word_order frame grammatical for EVERY candidate filling (composition-trap
+    subsets -- sweep_clean/cook_object/ field/service/specific_season -- correctly exclude tokens that need a different light
+    verb or read unnaturally); matching_pairs pulls distinct glosses covering every pair; no listen_select/listen_type (Dari
+    has zero TTS); no bare YAML booleans; no snake_case jargon in learner-facing text. The three unit31/33 homograph splits
+    (حقوق law vs salary, ظرف dishes vs within-period, می‌شویم wash vs become) are correctly scoped by content_key in _classify()
+    and by lesson_key in prs_agreement_tags(), leaving each other sense untouched. practice-validate 0/0 and _practice_slot_check.py
+    clean for the full en-prs set.'
 tag_schema:
-  part_of_speech: [adjective]
+  part_of_speech:
+  - adjective
   agreement_tags:
-    semantic: [personality_word]
+    semantic:
+    - personality_word
+    - volume_en_prs_a1_unit37_personality_word_07_single
 slot_presets:
-  personality_word: &personality_word {language_code: prs, part_of_speech: adjective, agreement_tags: {semantic: personality_word}}
+  personality_word: &id001
+    language_code: prs
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: personality_word
 templates:
-  # Lesson 1: personality vocabulary.
-  - content_key: practice.en-prs.prs.a1.unit37.lesson01.personality_gloss.001
-    lesson_content_key: prs.a1.unit37.lesson01.personality_words
-    type: multiple_choice
-    frame: {text: "{personality_word}", language_code: prs, direction: rtl}
-    slots: {personality_word: *personality_word}
-    answer_derivation: {kind: slot_gloss, slot: personality_word}
-    feedback_frame: {text: "{personality_word} describes a person's character.", language_code: en, direction: ltr}
-  - content_key: practice.en-prs.prs.a1.unit37.lesson02.personality_pair.002
-    lesson_content_key: prs.a1.unit37.lesson02.more_traits
-    type: matching_pairs
-    frame: {text: "{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six} — {word_seven}", language_code: prs, direction: rtl}
-    slots: {word_one: *personality_word, word_two: *personality_word, word_three: *personality_word, word_four: *personality_word, word_five: *personality_word, word_six: *personality_word, word_seven: *personality_word}
-    slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five, word_six, word_seven]}]
-    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five, word_six, word_seven]}
-    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
-
-  # Lesson 1: describing someone.
-  - content_key: practice.en-prs.prs.a1.unit37.lesson01.personality_order.001
-    lesson_content_key: prs.a1.unit37.lesson01.personality_words
-    type: word_order
-    frame: {text: "او {personality_word} است", language_code: prs, direction: rtl}
-    slots: {personality_word: *personality_word}
-    answer_derivation: {kind: render_frame, frame: {text: "او {personality_word} است", language_code: prs, direction: rtl}}
-    feedback_frame: {text: "Word order: او [trait] است (He/she is [trait]).", language_code: en, direction: ltr}
-
-  # Lesson 6: wrap-up.
-  - content_key: practice.en-prs.prs.a1.unit37.lesson06.personality_translate.001
-    lesson_content_key: prs.a1.unit37.lesson06.wrap_up
-    type: translation
-    frame: {text: "{personality_word}", language_code: en, direction: ltr, slot_rendering: {personality_word: english_gloss}}
-    slots: {personality_word: *personality_word}
-    answer_derivation: {kind: slot_text, slot: personality_word}
-    feedback_frame: {text: "{personality_word} is the Dari word for this.", language_code: en, direction: ltr}
+- content_key: practice.en-prs.prs.a1.unit37.lesson01.personality_gloss.001
+  lesson_content_key: prs.a1.unit37.lesson01.personality_words
+  type: multiple_choice
+  frame:
+    text: '{personality_word}'
+    language_code: prs
+    direction: rtl
+  slots:
+    personality_word: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: personality_word
+  feedback_frame:
+    text: '{personality_word} describes a person''s character.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit37.lesson02.personality_pair.002
+  lesson_content_key: prs.a1.unit37.lesson02.more_traits
+  type: matching_pairs
+  frame:
+    text: '{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six} — {word_seven}'
+    language_code: prs
+    direction: rtl
+  slots:
+    word_one: *id001
+    word_two: *id001
+    word_three: *id001
+    word_four: *id001
+    word_five: *id001
+    word_six: *id001
+    word_seven: *id001
+  slot_relations:
+  - kind: distinct
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+    - word_five
+    - word_six
+    - word_seven
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+    - word_five
+    - word_six
+    - word_seven
+  feedback_frame:
+    text: Match each word to its English meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit37.lesson01.personality_order.001
+  lesson_content_key: prs.a1.unit37.lesson01.personality_words
+  type: word_order
+  frame:
+    text: او {personality_word} است
+    language_code: prs
+    direction: rtl
+  slots:
+    personality_word: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: او {personality_word} است
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'Word order: او [trait] است (He/she is [trait]).'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit37.lesson06.personality_translate.001
+  lesson_content_key: prs.a1.unit37.lesson06.wrap_up
+  type: translation
+  frame:
+    text: '{personality_word}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      personality_word: english_gloss
+  slots:
+    personality_word: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: personality_word
+  feedback_frame:
+    text: '{personality_word} is the Dari word for this.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit37.lesson01.personality_order.001.volume_fill.007
+  lesson_content_key: prs.a1.unit37.lesson01.personality_words
+  type: fill_in_blank
+  frame:
+    text: او {personality_word} است
+    language_code: prs
+    direction: rtl
+  slots:
+    personality_word:
+      language_code: prs
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: volume_en_prs_a1_unit37_personality_word_07_single
+  answer_derivation:
+    kind: slot_text
+    slot: personality_word
+  feedback_frame:
+    text: '{personality_word}'
+    language_code: prs
+    direction: rtl
+- content_key: practice.en-prs.prs.a1.unit37.lesson02.personality_pair.002.volume_match.004
+  lesson_content_key: prs.a1.unit37.lesson02.more_traits
+  type: matching_pairs
+  frame:
+    text: '{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six} — {word_seven}'
+    language_code: prs
+    direction: rtl
+  slots:
+    word_one: &id002
+      language_code: prs
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: personality_word
+    word_two: *id002
+    word_three: *id002
+    word_four: *id002
+    word_five: *id002
+    word_six: *id002
+    word_seven: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+    - word_five
+    - word_six
+    - word_seven
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+    - word_five
+    - word_six
+    - word_seven
+  feedback_frame:
+    text: Match each word to its English meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit37.lesson06.personality_translate.001.volume_translate.004
+  lesson_content_key: prs.a1.unit37.lesson06.wrap_up
+  type: translation
+  frame:
+    text: '{personality_word}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      personality_word: english_gloss
+  slots:
+    personality_word:
+      language_code: prs
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: personality_word
+  answer_derivation:
+    kind: slot_text
+    slot: personality_word
+  feedback_frame:
+    text: '{personality_word}'
+    language_code: prs
+    direction: rtl

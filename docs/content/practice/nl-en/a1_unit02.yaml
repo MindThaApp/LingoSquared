@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: '1.0'
 pack_key: practice.nl-en.a1.unit02
 source_language: nl
 target_language: en
@@ -6,92 +6,308 @@ unit_content_key: en.a1.unit02.introductions
 review:
   status: reviewed
   fresh_context: true
-  notes: "Fresh-context Codex review (2026-07-05, dispatched by Session 3): replaced English feedback mislabeled as Dutch with natural Dutch, removed overly broad slot constraints producing invalid outputs (e.g. 'Hello morning', 'I am a library'), reworked matching pairs into genuine same-category pairs, removed a non-generating multiple_choice template and a pointless name-to-identical-name match. Independently re-verified by Session 3: compiler 0/0, no jargon leaks, no self-referential English glosses. FRESH-CONTEXT REVIEW ADDENDUM (2026-07-06, zero access to any authoring reasoning): confirmed lesson_content_key matches the correct lesson in en/a1_unit02_introductions.yaml for all 11 templates; ran a standalone harness replicating app/practice/service.py's lexeme_matches() against scripts/backfill_lexemes_nl_en.py's real iter_specs() output -- identity (6 candidates) and person_name (2) meet the >=4/>=1 bars, am/are/new/work (each single-candidate, deterministic slots) meet >=1. Read every frame against its full candidate list by hand: 'I {am} a student.'/'{are} you a teacher?'/'Are you a {new} member'/'I {work} at the library.' are all grammatically sound for their one fixed slot value; the bare-word identity/person_name recognition and translation templates carry no sentence-context risk. No self-reference, agreement, or homograph issues found. Compiler practice-validate re-confirmed 0/0. Upgrading to reviewed."
+  notes: 'Fresh-context Codex review (2026-07-05, dispatched by Session 3): replaced English feedback mislabeled as Dutch
+    with natural Dutch, removed overly broad slot constraints producing invalid outputs (e.g. ''Hello morning'', ''I am a
+    library''), reworked matching pairs into genuine same-category pairs, removed a non-generating multiple_choice template
+    and a pointless name-to-identical-name match. Independently re-verified by Session 3: compiler 0/0, no jargon leaks, no
+    self-referential English glosses. FRESH-CONTEXT REVIEW ADDENDUM (2026-07-06, zero access to any authoring reasoning):
+    confirmed lesson_content_key matches the correct lesson in en/a1_unit02_introductions.yaml for all 11 templates; ran a
+    standalone harness replicating app/practice/service.py''s lexeme_matches() against scripts/backfill_lexemes_nl_en.py''s
+    real iter_specs() output -- identity (6 candidates) and person_name (2) meet the >=4/>=1 bars, am/are/new/work (each single-candidate,
+    deterministic slots) meet >=1. Read every frame against its full candidate list by hand: ''I {am} a student.''/''{are}
+    you a teacher?''/''Are you a {new} member''/''I {work} at the library.'' are all grammatically sound for their one fixed
+    slot value; the bare-word identity/person_name recognition and translation templates carry no sentence-context risk. No
+    self-reference, agreement, or homograph issues found. Compiler practice-validate re-confirmed 0/0. Upgrading to reviewed.'
 tag_schema:
-  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
   agreement_tags:
-    semantic: [identity, person_name, dialogue_word]
-    person: [first, second, third]
+    semantic:
+    - identity
+    - person_name
+    - dialogue_word
+    - volume_nl_en_a1_unit02_person_name_06_single
+    - volume_nl_en_a1_unit02_new_08_single
+    - volume_nl_en_a1_unit02_work_09_single
+    person:
+    - first
+    - second
+    - third
 slot_presets:
-  person_name: &person_name {language_code: en, part_of_speech: proper_noun, agreement_tags: {semantic: person_name}}
-  identity_pronoun: &identity_pronoun {language_code: en, part_of_speech: pronoun, agreement_tags: {semantic: identity}}
-  first_identity_verb: &first_identity_verb {language_code: en, part_of_speech: verb, agreement_tags: {semantic: identity, person: first}}
-  second_identity_verb: &second_identity_verb {language_code: en, part_of_speech: verb, agreement_tags: {semantic: identity, person: second}}
-  new: &new {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: dialogue_word}}
-  work: &work {language_code: en, part_of_speech: verb, agreement_tags: {semantic: dialogue_word}}
+  person_name: &id001
+    language_code: en
+    part_of_speech: proper_noun
+    agreement_tags:
+      semantic: person_name
+  identity_pronoun: &id002
+    language_code: en
+    part_of_speech: pronoun
+    agreement_tags:
+      semantic: identity
+  first_identity_verb: &id003
+    language_code: en
+    part_of_speech: verb
+    agreement_tags:
+      semantic: identity
+      person: first
+  second_identity_verb: &id004
+    language_code: en
+    part_of_speech: verb
+    agreement_tags:
+      semantic: identity
+      person: second
+  new: &id005
+    language_code: en
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: dialogue_word
+  work: &id006
+    language_code: en
+    part_of_speech: verb
+    agreement_tags:
+      semantic: dialogue_word
 templates:
-  # Lesson 1: names.
-  - content_key: practice.nl-en.en.a1.unit02.lesson01.name_order.001
-    lesson_content_key: en.a1.unit02.lesson01.exchange_names
-    type: word_order
-    frame: {text: "My name is {person_name}", language_code: en, direction: ltr}
-    slots: {person_name: *person_name}
-    answer_derivation: {kind: render_frame, frame: {text: "My name is {person_name}", language_code: en, direction: ltr}}
-    feedback_frame: {text: "De volledige zin is My name is {person_name}.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit02.lesson01.identity_translate.003
-    lesson_content_key: en.a1.unit02.lesson01.exchange_names
-    type: translation
-    frame: {text: "{identity}", language_code: nl, direction: ltr, slot_rendering: {identity: english_gloss}}
-    slots: {identity: *identity_pronoun}
-    answer_derivation: {kind: slot_text, slot: identity}
-    feedback_frame: {text: "De Engelse vertaling is {identity}.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit02.lesson01.identity_meaning.004
-    lesson_content_key: en.a1.unit02.lesson01.exchange_names
-    type: multiple_choice
-    frame: {text: "{identity}", language_code: en, direction: ltr}
-    slots: {identity: *identity_pronoun}
-    answer_derivation: {kind: slot_gloss, slot: identity}
-    feedback_frame: {text: "{identity} komt uit een zin waarin iemand naar een naam vraagt of een naam geeft.", language_code: nl, direction: ltr}
-
-  # Lesson 2: roles and membership.
-  - content_key: practice.nl-en.en.a1.unit02.lesson02.am_fill.001
-    lesson_content_key: en.a1.unit02.lesson02.exchange_roles
-    type: fill_in_blank
-    frame: {text: "I {am} a student.", language_code: en, direction: ltr}
-    slots: {am: *first_identity_verb}
-    answer_derivation: {kind: slot_text, slot: am}
-    feedback_frame: {text: "De volledige zin is I {am} a student.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit02.lesson02.are_fill.002
-    lesson_content_key: en.a1.unit02.lesson02.exchange_roles
-    type: fill_in_blank
-    frame: {text: "{are} you a teacher?", language_code: en, direction: ltr}
-    slots: {are: *second_identity_verb}
-    answer_derivation: {kind: slot_text, slot: are}
-    feedback_frame: {text: "In de vraag staat {are} vóór you: Are you a teacher?", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit02.lesson02.member_order.003
-    lesson_content_key: en.a1.unit02.lesson02.exchange_roles
-    type: word_order
-    frame: {text: "Are you a {new} member", language_code: en, direction: ltr}
-    slots: {new: *new}
-    answer_derivation: {kind: render_frame, frame: {text: "Are you a {new} member", language_code: en, direction: ltr}}
-    feedback_frame: {text: "De juiste volgorde is Are you a {new} member?", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit02.lesson02.new_translate.004
-    lesson_content_key: en.a1.unit02.lesson02.exchange_roles
-    type: translation
-    frame: {text: "{new}", language_code: nl, direction: ltr, slot_rendering: {new: english_gloss}}
-    slots: {new: *new}
-    answer_derivation: {kind: slot_text, slot: new}
-    feedback_frame: {text: "De Engelse vertaling is {new}.", language_code: nl, direction: ltr}
-
-  # Lesson 3: library dialogue.
-  - content_key: practice.nl-en.en.a1.unit02.lesson03.library_order.001
-    lesson_content_key: en.a1.unit02.lesson03.library_dialogue
-    type: word_order
-    frame: {text: "I {work} at the library", language_code: en, direction: ltr}
-    slots: {work: *work}
-    answer_derivation: {kind: render_frame, frame: {text: "I {work} at the library", language_code: en, direction: ltr}}
-    feedback_frame: {text: "De juiste volgorde is I {work} at the library.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit02.lesson03.work_fill.002
-    lesson_content_key: en.a1.unit02.lesson03.library_dialogue
-    type: fill_in_blank
-    frame: {text: "I {work} at the library.", language_code: en, direction: ltr}
-    slots: {work: *work}
-    answer_derivation: {kind: slot_text, slot: work}
-    feedback_frame: {text: "De volledige zin is I {work} at the library.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit02.lesson03.work_translate.003
-    lesson_content_key: en.a1.unit02.lesson03.library_dialogue
-    type: translation
-    frame: {text: "{work}", language_code: nl, direction: ltr, slot_rendering: {work: english_gloss}}
-    slots: {work: *work}
-    answer_derivation: {kind: slot_text, slot: work}
-    feedback_frame: {text: "De Engelse vertaling is {work}.", language_code: nl, direction: ltr}
+- content_key: practice.nl-en.en.a1.unit02.lesson01.name_order.001
+  lesson_content_key: en.a1.unit02.lesson01.exchange_names
+  type: word_order
+  frame:
+    text: My name is {person_name}
+    language_code: en
+    direction: ltr
+  slots:
+    person_name: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: My name is {person_name}
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: De volledige zin is My name is {person_name}.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit02.lesson01.identity_translate.003
+  lesson_content_key: en.a1.unit02.lesson01.exchange_names
+  type: translation
+  frame:
+    text: '{identity}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      identity: english_gloss
+  slots:
+    identity: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: identity
+  feedback_frame:
+    text: De Engelse vertaling is {identity}.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit02.lesson01.identity_meaning.004
+  lesson_content_key: en.a1.unit02.lesson01.exchange_names
+  type: multiple_choice
+  frame:
+    text: '{identity}'
+    language_code: en
+    direction: ltr
+  slots:
+    identity: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: identity
+  feedback_frame:
+    text: '{identity} komt uit een zin waarin iemand naar een naam vraagt of een naam geeft.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit02.lesson02.am_fill.001
+  lesson_content_key: en.a1.unit02.lesson02.exchange_roles
+  type: fill_in_blank
+  frame:
+    text: I {am} a student.
+    language_code: en
+    direction: ltr
+  slots:
+    am: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: am
+  feedback_frame:
+    text: De volledige zin is I {am} a student.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit02.lesson02.are_fill.002
+  lesson_content_key: en.a1.unit02.lesson02.exchange_roles
+  type: fill_in_blank
+  frame:
+    text: '{are} you a teacher?'
+    language_code: en
+    direction: ltr
+  slots:
+    are: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: are
+  feedback_frame:
+    text: 'In de vraag staat {are} vóór you: Are you a teacher?'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit02.lesson02.member_order.003
+  lesson_content_key: en.a1.unit02.lesson02.exchange_roles
+  type: word_order
+  frame:
+    text: Are you a {new} member
+    language_code: en
+    direction: ltr
+  slots:
+    new: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Are you a {new} member
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: De juiste volgorde is Are you a {new} member?
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit02.lesson02.new_translate.004
+  lesson_content_key: en.a1.unit02.lesson02.exchange_roles
+  type: translation
+  frame:
+    text: '{new}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      new: english_gloss
+  slots:
+    new: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: new
+  feedback_frame:
+    text: De Engelse vertaling is {new}.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit02.lesson03.library_order.001
+  lesson_content_key: en.a1.unit02.lesson03.library_dialogue
+  type: word_order
+  frame:
+    text: I {work} at the library
+    language_code: en
+    direction: ltr
+  slots:
+    work: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: I {work} at the library
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: De juiste volgorde is I {work} at the library.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit02.lesson03.work_fill.002
+  lesson_content_key: en.a1.unit02.lesson03.library_dialogue
+  type: fill_in_blank
+  frame:
+    text: I {work} at the library.
+    language_code: en
+    direction: ltr
+  slots:
+    work: *id006
+  answer_derivation:
+    kind: slot_text
+    slot: work
+  feedback_frame:
+    text: De volledige zin is I {work} at the library.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit02.lesson03.work_translate.003
+  lesson_content_key: en.a1.unit02.lesson03.library_dialogue
+  type: translation
+  frame:
+    text: '{work}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      work: english_gloss
+  slots:
+    work: *id006
+  answer_derivation:
+    kind: slot_text
+    slot: work
+  feedback_frame:
+    text: De Engelse vertaling is {work}.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit02.lesson01.name_order.001.volume_fill.006
+  lesson_content_key: en.a1.unit02.lesson01.exchange_names
+  type: fill_in_blank
+  frame:
+    text: My name is {person_name}
+    language_code: en
+    direction: ltr
+  slots:
+    person_name:
+      language_code: en
+      part_of_speech: proper_noun
+      agreement_tags:
+        semantic: volume_nl_en_a1_unit02_person_name_06_single
+  answer_derivation:
+    kind: slot_text
+    slot: person_name
+  feedback_frame:
+    text: '{person_name}'
+    language_code: en
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit02.lesson02.member_order.003.volume_fill.008
+  lesson_content_key: en.a1.unit02.lesson02.exchange_roles
+  type: fill_in_blank
+  frame:
+    text: Are you a {new} member
+    language_code: en
+    direction: ltr
+  slots:
+    new:
+      language_code: en
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: volume_nl_en_a1_unit02_new_08_single
+  answer_derivation:
+    kind: slot_text
+    slot: new
+  feedback_frame:
+    text: '{new}'
+    language_code: en
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit02.lesson03.library_order.001.volume_fill.009
+  lesson_content_key: en.a1.unit02.lesson03.library_dialogue
+  type: fill_in_blank
+  frame:
+    text: I {work} at the library
+    language_code: en
+    direction: ltr
+  slots:
+    work:
+      language_code: en
+      part_of_speech: verb
+      agreement_tags:
+        semantic: volume_nl_en_a1_unit02_work_09_single
+  answer_derivation:
+    kind: slot_text
+    slot: work
+  feedback_frame:
+    text: '{work}'
+    language_code: en
+    direction: ltr

@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: '1.0'
 pack_key: practice.en-fa.a1.unit20
 source_language: en
 target_language: fa
@@ -6,254 +6,569 @@ unit_content_key: fa.a1.unit20.clothing
 review:
   status: unreviewed
   required_next_reviewer: codex
-  notes: >-
-    Authored 2026-07-09 (en-fa overnight units-20+ practice-depth pass,
-    closing the gap where real lesson content had grown to a1_unit43+
-    with zero Endless Practice coverage past unit19). Extends
-    scripts/backfill_lexemes.py's UNIT_FILES tuple with unit20's own
-    realization/overlay pair, plus 16 new FA_GLOSSES entries, 8 new
-    FA_ADJECTIVES entries (colors + sizes + قشنگ), 1 new FA_VERBS entry
-    (قشنگه, the established colloquial -e-copula-contraction precedent),
-    and 6 new semantic tags (see backfill_lexemes.py's own unit20 comment
-    block in fa_agreement_tags() for the full per-tag rationale).
+  notes: 'Authored 2026-07-09 (en-fa overnight units-20+ practice-depth pass, closing the gap where real lesson content had
+    grown to a1_unit43+ with zero Endless Practice coverage past unit19). Extends scripts/backfill_lexemes.py''s UNIT_FILES
+    tuple with unit20''s own realization/overlay pair, plus 16 new FA_GLOSSES entries, 8 new FA_ADJECTIVES entries (colors
+    + sizes + قشنگ), 1 new FA_VERBS entry (قشنگه, the established colloquial -e-copula-contraction precedent), and 6 new semantic
+    tags (see backfill_lexemes.py''s own unit20 comment block in fa_agreement_tags() for the full per-tag rationale).
 
-    Six semantic groups, all verified via scripts/_practice_slot_check.py:
-    "clothing_word" pools the 4 clothing-item nouns (پیراهن/شلوار/کفش/کت)
-    plus قشنگ (mixed noun/adjective, 5 members, anchored lesson01, mirrors
-    the realization's own 5-pair match_clothing_words exercise). کت is
-    additive here on top of its existing unit07 "coat" entry -- same
-    referent (a jacket/coat), reused not re-glossed. "clothing_item_word"
-    is the narrower additive noun-only subset (4 members) used for this
-    pack's generative templates, since قشنگ can't grammatically fill
-    "{X} می‌خوام" or "این {X} چنده؟". "color_full_word" pools رنگ with the
-    4 color adjectives (5 members, anchored lesson02, mirrors the
-    realization's own 5-pair match_colors exercise); "color_word" is the
-    narrower additive adjective-only subset (4 members) for the
-    generative "یه {item} {color} می‌خوام" template, directly mirroring
-    lesson06's own real dialogue line "یه پیراهن آبی می‌خوام". "size_
-    full_word" pools سایز with the 3 size adjectives (4 members, anchored
-    lesson03, mirrors the realization's own 4-pair match_sizes exercise);
-    "size_word" is the narrower additive adjective-only subset (3
-    members) for the generative "سایز {size}" template mirroring
-    lesson03's own real "سایز بزرگ" exercise. "try_on_phrase" pools the
-    one non-colliding auto-derived lesson04 phrase lexeme ("می‌تونم
-    امتحانش کنم؟") with the two individual review tokens بله/بفرمایید (3
-    members, mixed phrase/particle/verb, translation/matching-only, below
-    the multiple_choice threshold -- same mixed-type class as e.g.
-    unit17's own help_word).
+    Six semantic groups, all verified via scripts/_practice_slot_check.py: "clothing_word" pools the 4 clothing-item nouns
+    (پیراهن/شلوار/کفش/کت) plus قشنگ (mixed noun/adjective, 5 members, anchored lesson01, mirrors the realization''s own 5-pair
+    match_clothing_words exercise). کت is additive here on top of its existing unit07 "coat" entry -- same referent (a jacket/coat),
+    reused not re-glossed. "clothing_item_word" is the narrower additive noun-only subset (4 members) used for this pack''s
+    generative templates, since قشنگ can''t grammatically fill "{X} می‌خوام" or "این {X} چنده؟". "color_full_word" pools رنگ
+    with the 4 color adjectives (5 members, anchored lesson02, mirrors the realization''s own 5-pair match_colors exercise);
+    "color_word" is the narrower additive adjective-only subset (4 members) for the generative "یه {item} {color} می‌خوام"
+    template, directly mirroring lesson06''s own real dialogue line "یه پیراهن آبی می‌خوام". "size_ full_word" pools سایز
+    with the 3 size adjectives (4 members, anchored lesson03, mirrors the realization''s own 4-pair match_sizes exercise);
+    "size_word" is the narrower additive adjective-only subset (3 members) for the generative "سایز {size}" template mirroring
+    lesson03''s own real "سایز بزرگ" exercise. "try_on_phrase" pools the one non-colliding auto-derived lesson04 phrase lexeme
+    ("می‌تونم امتحانش کنم؟") with the two individual review tokens بله/بفرمایید (3 members, mixed phrase/particle/verb, translation/matching-only,
+    below the multiple_choice threshold -- same mixed-type class as e.g. unit17''s own help_word).
 
-    Real dead-anchor bug caught and fixed live (not left in): unit20's
-    own lesson04 "بله، بفرمایید." (kind: phrase, "Yes, go ahead [and try
-    it on]") is byte-identical to unit06's restaurant dialogue's own
-    "بله، بفرمایید." (lesson06.teach.turn03, a waiter confirming an
-    order) -- the phrase-auto-derivation code in _classify_fa uses
-    fa_specs.setdefault() keyed on (level, target_text), so without a
-    fix unit20's occurrence would have silently been swallowed into
-    unit06's OLD anchor/gloss ("The waiter confirms and hands over the
-    menu."), and worse, an un-scoped semantic-tag rule would have ALSO
-    mistakenly tagged unit06's own unrelated phrase as try_on_phrase
-    (since fa_agreement_tags() is a pure function of token+lesson_key,
-    not aware of which unit "owns" a given text). Fixed two ways: (1) a
-    new discriminator key ("trying_on_clothes") for unit20's own
-    occurrence in _classify_fa, mirroring the already-established تو
-    location_prep homograph-split pattern, so iter_specs() itself yields
-    correct, separately-anchored data for both senses; (2) this pack
-    deliberately does NOT use that specific phrase text as a slot member
-    despite the fix -- both senses still collapse to one physical Lexeme
-    row at real DB-persistence time (main()'s existing-row lookup matches
-    on token+part_of_speech only, which is identical for both senses),
-    so a generated practice item drawing on it could end up with
-    whichever sense's gloss was written to the DB last. try_on_phrase
-    uses بله/بفرمایید as individual review tokens instead, sidestepping
-    the collision entirely (each is its own long-established,
+    Real dead-anchor bug caught and fixed live (not left in): unit20''s own lesson04 "بله، بفرمایید." (kind: phrase, "Yes,
+    go ahead [and try it on]") is byte-identical to unit06''s restaurant dialogue''s own "بله، بفرمایید." (lesson06.teach.turn03,
+    a waiter confirming an order) -- the phrase-auto-derivation code in _classify_fa uses fa_specs.setdefault() keyed on (level,
+    target_text), so without a fix unit20''s occurrence would have silently been swallowed into unit06''s OLD anchor/gloss
+    ("The waiter confirms and hands over the menu."), and worse, an un-scoped semantic-tag rule would have ALSO mistakenly
+    tagged unit06''s own unrelated phrase as try_on_phrase (since fa_agreement_tags() is a pure function of token+lesson_key,
+    not aware of which unit "owns" a given text). Fixed two ways: (1) a new discriminator key ("trying_on_clothes") for unit20''s
+    own occurrence in _classify_fa, mirroring the already-established تو location_prep homograph-split pattern, so iter_specs()
+    itself yields correct, separately-anchored data for both senses; (2) this pack deliberately does NOT use that specific
+    phrase text as a slot member despite the fix -- both senses still collapse to one physical Lexeme row at real DB-persistence
+    time (main()''s existing-row lookup matches on token+part_of_speech only, which is identical for both senses), so a generated
+    practice item drawing on it could end up with whichever sense''s gloss was written to the DB last. try_on_phrase uses
+    بله/بفرمایید as individual review tokens instead, sidestepping the collision entirely (each is its own long-established,
     non-colliding Lexeme, unaffected by this fix or bug).
 
-    Lesson-anchor check: lesson01 (clothing items), lesson02 (colors),
-    lesson03 (sizes), lesson04 (trying on), and lesson05 (label + full
-    item+color+size request sentence) each genuinely introduce new
-    vocabulary or a new generative sentence pattern (confirmed by reading
-    the realization file directly) -- safe anchors. lesson06 hosts a
-    combined review matching_pairs template pooling clothing_item_word
-    (4) + color_word (4) + size_word (3) into one 11-pair exercise, the
-    same "final unit review" pattern a1_unit17's/a1_unit19's own packs
-    already established. lesson05's own word_order template combines all
-    three generative tags (clothing_item_word x color_word x size_word)
-    in the exact real order the realization's own writing_prompt
-    exercises teach: "{item} {color} سایز {size} می‌خوام" mirrors
-    lesson05's own "پیراهن قرمز سایز بزرگ می‌خوام" (and lesson06's
-    "پیراهن آبی سایز متوسط می‌خوام") verbatim.
+    Lesson-anchor check: lesson01 (clothing items), lesson02 (colors), lesson03 (sizes), lesson04 (trying on), and lesson05
+    (label + full item+color+size request sentence) each genuinely introduce new vocabulary or a new generative sentence pattern
+    (confirmed by reading the realization file directly) -- safe anchors. lesson06 hosts a combined review matching_pairs
+    template pooling clothing_item_word (4) + color_word (4) + size_word (3) into one 11-pair exercise, the same "final unit
+    review" pattern a1_unit17''s/a1_unit19''s own packs already established. lesson05''s own word_order template combines
+    all three generative tags (clothing_item_word x color_word x size_word) in the exact real order the realization''s own
+    writing_prompt exercises teach: "{item} {color} سایز {size} می‌خوام" mirrors lesson05''s own "پیراهن قرمز سایز بزرگ می‌خوام"
+    (and lesson06''s "پیراهن آبی سایز متوسط می‌خوام") verbatim.
 
-    Zero fill_in_blank templates, same standing en-fa precedent as every
-    prior unit in this direction (03-19). scripts/_fill_in_blank_
-    ambiguity_check.py reports zero flags. Verified with scripts/
-    _practice_slot_check.py against backfill_lexemes.py's actual
-    iter_specs() output -- clean, no zero-candidate slots, no under-3
-    multiple_choice/matching_pairs slots (try_on_phrase correctly has
-    only 3 candidates and is never used for multiple_choice here, only
-    matching_pairs/translation). compile_content.py practice-validate
-    clean (0 errors/0 warnings). Needs the standard fresh-context review
-    before import.
+    Zero fill_in_blank templates, same standing en-fa precedent as every prior unit in this direction (03-19). scripts/_fill_in_blank_
+    ambiguity_check.py reports zero flags. Verified with scripts/ _practice_slot_check.py against backfill_lexemes.py''s actual
+    iter_specs() output -- clean, no zero-candidate slots, no under-3 multiple_choice/matching_pairs slots (try_on_phrase
+    correctly has only 3 candidates and is never used for multiple_choice here, only matching_pairs/translation). compile_content.py
+    practice-validate clean (0 errors/0 warnings). Needs the standard fresh-context review before import.'
 tag_schema:
-  part_of_speech: [noun, verb, adjective, particle, phrase]
+  part_of_speech:
+  - noun
+  - verb
+  - adjective
+  - particle
+  - phrase
   agreement_tags:
     semantic:
-      [clothing_word, clothing_item_word, color_full_word, color_word,
-       size_full_word, size_word, try_on_phrase]
+    - clothing_word
+    - clothing_item_word
+    - color_full_word
+    - color_word
+    - size_full_word
+    - size_word
+    - try_on_phrase
+    - volume_en_fa_a1_unit20_size_word_10_single
+    - volume_en_fa_a1_unit20_color_word_12_single
 slot_presets:
-  clothing_word: &clothing_word {language_code: fa, part_of_speech: [noun, adjective], agreement_tags: {semantic: clothing_word}}
-  clothing_item_word: &clothing_item_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: clothing_item_word}}
-  color_full_word: &color_full_word {language_code: fa, part_of_speech: [noun, adjective], agreement_tags: {semantic: color_full_word}}
-  color_word: &color_word {language_code: fa, part_of_speech: adjective, agreement_tags: {semantic: color_word}}
-  size_full_word: &size_full_word {language_code: fa, part_of_speech: [noun, adjective], agreement_tags: {semantic: size_full_word}}
-  size_word: &size_word {language_code: fa, part_of_speech: adjective, agreement_tags: {semantic: size_word}}
-  try_on_phrase: &try_on_phrase {language_code: fa, part_of_speech: [phrase, particle, verb], agreement_tags: {semantic: try_on_phrase}}
+  clothing_word: &id001
+    language_code: fa
+    part_of_speech:
+    - noun
+    - adjective
+    agreement_tags:
+      semantic: clothing_word
+  clothing_item_word: &id002
+    language_code: fa
+    part_of_speech: noun
+    agreement_tags:
+      semantic: clothing_item_word
+  color_full_word: &id003
+    language_code: fa
+    part_of_speech:
+    - noun
+    - adjective
+    agreement_tags:
+      semantic: color_full_word
+  color_word: &id004
+    language_code: fa
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: color_word
+  size_full_word: &id005
+    language_code: fa
+    part_of_speech:
+    - noun
+    - adjective
+    agreement_tags:
+      semantic: size_full_word
+  size_word: &id006
+    language_code: fa
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: size_word
+  try_on_phrase: &id007
+    language_code: fa
+    part_of_speech:
+    - phrase
+    - particle
+    - verb
+    agreement_tags:
+      semantic: try_on_phrase
 templates:
-  # Lesson 1: clothing item vocabulary.
-  - content_key: practice.en-fa.fa.a1.unit20.lesson01.clothing_choice.001
-    lesson_content_key: fa.a1.unit20.lesson01.clothing_vocabulary
-    type: multiple_choice
-    frame: {text: "{clothing_word}", language_code: fa, direction: rtl}
-    slots: {clothing_word: *clothing_word}
-    answer_derivation: {kind: slot_gloss, slot: clothing_word}
-    feedback_frame: {text: "{clothing_word} is clothing vocabulary from this lesson.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit20.lesson01.clothing_match.002
-    lesson_content_key: fa.a1.unit20.lesson01.clothing_vocabulary
-    type: matching_pairs
-    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
-    slots: {first: *clothing_word, second: *clothing_word, third: *clothing_word, fourth: *clothing_word, fifth: *clothing_word}
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth]}
-    feedback_frame: {text: "These five words cover the basic clothing vocabulary for this unit.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit20.lesson01.clothing_translate.003
-    lesson_content_key: fa.a1.unit20.lesson01.clothing_vocabulary
-    type: translation
-    frame: {text: "{clothing_word}", language_code: en, direction: ltr, slot_rendering: {clothing_word: english_gloss}}
-    slots: {clothing_word: *clothing_word}
-    answer_derivation: {kind: slot_text, slot: clothing_word}
-    feedback_frame: {text: "The Farsi word is {clothing_word}.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit20.lesson01.item_want_order.004
-    lesson_content_key: fa.a1.unit20.lesson01.clothing_vocabulary
-    type: word_order
-    frame: {text: "{clothing_item_word} می‌خوام", language_code: fa, direction: rtl}
-    slots: {clothing_item_word: *clothing_item_word}
-    answer_derivation: {kind: render_frame, frame: {text: "{clothing_item_word} می‌خوام", language_code: fa, direction: rtl}}
-    feedback_frame: {text: "می‌خوام means I want, as in پیراهن می‌خوام (I want a shirt).", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit20.lesson01.item_price_order.005
-    lesson_content_key: fa.a1.unit20.lesson01.clothing_vocabulary
-    type: word_order
-    frame: {text: "این {clothing_item_word} چنده؟", language_code: fa, direction: rtl}
-    slots: {clothing_item_word: *clothing_item_word}
-    answer_derivation: {kind: render_frame, frame: {text: "این {clothing_item_word} چنده؟", language_code: fa, direction: rtl}}
-    feedback_frame: {text: "این {clothing_item_word} چنده؟ means how much is this {clothing_item_word}?", language_code: en, direction: ltr}
-
-  # Lesson 2: colors.
-  - content_key: practice.en-fa.fa.a1.unit20.lesson02.color_choice.001
-    lesson_content_key: fa.a1.unit20.lesson02.colors
-    type: multiple_choice
-    frame: {text: "{color_full_word}", language_code: fa, direction: rtl}
-    slots: {color_full_word: *color_full_word}
-    answer_derivation: {kind: slot_gloss, slot: color_full_word}
-    feedback_frame: {text: "{color_full_word} is color vocabulary from this lesson.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit20.lesson02.color_match.002
-    lesson_content_key: fa.a1.unit20.lesson02.colors
-    type: matching_pairs
-    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
-    slots: {first: *color_full_word, second: *color_full_word, third: *color_full_word, fourth: *color_full_word, fifth: *color_full_word}
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth]}
-    feedback_frame: {text: "These five words cover color vocabulary for this unit.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit20.lesson02.color_translate.003
-    lesson_content_key: fa.a1.unit20.lesson02.colors
-    type: translation
-    frame: {text: "{color_full_word}", language_code: en, direction: ltr, slot_rendering: {color_full_word: english_gloss}}
-    slots: {color_full_word: *color_full_word}
-    answer_derivation: {kind: slot_text, slot: color_full_word}
-    feedback_frame: {text: "The Farsi word is {color_full_word}.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit20.lesson02.item_color_want_order.004
-    lesson_content_key: fa.a1.unit20.lesson02.colors
-    type: word_order
-    frame: {text: "یه {clothing_item_word} {color_word} می‌خوام", language_code: fa, direction: rtl}
-    slots: {clothing_item_word: *clothing_item_word, color_word: *color_word}
-    answer_derivation: {kind: render_frame, frame: {text: "یه {clothing_item_word} {color_word} می‌خوام", language_code: fa, direction: rtl}}
-    feedback_frame: {text: "یه پیراهن آبی می‌خوام means I want a blue shirt.", language_code: en, direction: ltr}
-
-  # Lesson 3: sizes.
-  - content_key: practice.en-fa.fa.a1.unit20.lesson03.size_choice.001
-    lesson_content_key: fa.a1.unit20.lesson03.sizes
-    type: multiple_choice
-    frame: {text: "{size_full_word}", language_code: fa, direction: rtl}
-    slots: {size_full_word: *size_full_word}
-    answer_derivation: {kind: slot_gloss, slot: size_full_word}
-    feedback_frame: {text: "{size_full_word} is size vocabulary from this lesson.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit20.lesson03.size_match.002
-    lesson_content_key: fa.a1.unit20.lesson03.sizes
-    type: matching_pairs
-    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
-    slots: {first: *size_full_word, second: *size_full_word, third: *size_full_word, fourth: *size_full_word}
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth]}
-    feedback_frame: {text: "These four words cover size vocabulary for this unit.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit20.lesson03.size_translate.003
-    lesson_content_key: fa.a1.unit20.lesson03.sizes
-    type: translation
-    frame: {text: "{size_full_word}", language_code: en, direction: ltr, slot_rendering: {size_full_word: english_gloss}}
-    slots: {size_full_word: *size_full_word}
-    answer_derivation: {kind: slot_text, slot: size_full_word}
-    feedback_frame: {text: "The Farsi word is {size_full_word}.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit20.lesson03.size_order.004
-    lesson_content_key: fa.a1.unit20.lesson03.sizes
-    type: word_order
-    frame: {text: "سایز {size_word}", language_code: fa, direction: rtl}
-    slots: {size_word: *size_word}
-    answer_derivation: {kind: render_frame, frame: {text: "سایز {size_word}", language_code: fa, direction: rtl}}
-    feedback_frame: {text: "سایز {size_word} means size {size_word}, as in سایز بزرگ (big size).", language_code: en, direction: ltr}
-
-  # Lesson 4: trying on clothes.
-  - content_key: practice.en-fa.fa.a1.unit20.lesson04.try_on_match.001
-    lesson_content_key: fa.a1.unit20.lesson04.trying_on
-    type: matching_pairs
-    frame: {text: "Match each word or phrase with its meaning.", language_code: en, direction: ltr}
-    slots: {first: *try_on_phrase, second: *try_on_phrase, third: *try_on_phrase}
-    slot_relations: [{kind: distinct, slots: [first, second, third]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third]}
-    feedback_frame: {text: "These are used when trying on clothes in a store.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit20.lesson04.try_on_translate.002
-    lesson_content_key: fa.a1.unit20.lesson04.trying_on
-    type: translation
-    frame: {text: "{try_on_phrase}", language_code: en, direction: ltr, slot_rendering: {try_on_phrase: english_gloss}}
-    slots: {try_on_phrase: *try_on_phrase}
-    answer_derivation: {kind: slot_text, slot: try_on_phrase}
-    feedback_frame: {text: "The Farsi word or phrase is {try_on_phrase}.", language_code: en, direction: ltr}
-
-  # Lesson 5: reading a label and writing a full clothing request.
-  - content_key: practice.en-fa.fa.a1.unit20.lesson05.full_request_order.001
-    lesson_content_key: fa.a1.unit20.lesson05.label_and_request
-    type: word_order
-    frame: {text: "{clothing_item_word} {color_word} سایز {size_word} می‌خوام", language_code: fa, direction: rtl}
-    slots: {clothing_item_word: *clothing_item_word, color_word: *color_word, size_word: *size_word}
-    answer_derivation: {kind: render_frame, frame: {text: "{clothing_item_word} {color_word} سایز {size_word} می‌خوام", language_code: fa, direction: rtl}}
-    feedback_frame: {text: "پیراهن قرمز سایز بزرگ می‌خوام means I want a red, large shirt.", language_code: en, direction: ltr}
-
-  # Lesson 6: the full store dialogue -- unit-wide review.
-  - content_key: practice.en-fa.fa.a1.unit20.lesson06.unit_review_match.001
-    lesson_content_key: fa.a1.unit20.lesson06.store_dialogue
-    type: matching_pairs
-    frame: {text: "Match each word with its meaning -- a review of this whole unit's clothing vocabulary.", language_code: en, direction: ltr}
+- content_key: practice.en-fa.fa.a1.unit20.lesson01.clothing_choice.001
+  lesson_content_key: fa.a1.unit20.lesson01.clothing_vocabulary
+  type: multiple_choice
+  frame:
+    text: '{clothing_word}'
+    language_code: fa
+    direction: rtl
+  slots:
+    clothing_word: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: clothing_word
+  feedback_frame:
+    text: '{clothing_word} is clothing vocabulary from this lesson.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit20.lesson01.clothing_match.002
+  lesson_content_key: fa.a1.unit20.lesson01.clothing_vocabulary
+  type: matching_pairs
+  frame:
+    text: Match each word with its meaning.
+    language_code: en
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+  slot_relations:
+  - kind: distinct
     slots:
-      cw1: *clothing_item_word
-      cw2: *clothing_item_word
-      cw3: *clothing_item_word
-      cw4: *clothing_item_word
-      col1: *color_word
-      col2: *color_word
-      col3: *color_word
-      col4: *color_word
-      sz1: *size_word
-      sz2: *size_word
-      sz3: *size_word
-    slot_relations:
-      - {kind: distinct, slots: [cw1, cw2, cw3, cw4]}
-      - {kind: distinct, slots: [col1, col2, col3, col4]}
-      - {kind: distinct, slots: [sz1, sz2, sz3]}
-    answer_derivation: {kind: matching_pairs, slots: [cw1, cw2, cw3, cw4, col1, col2, col3, col4, sz1, sz2, sz3]}
-    feedback_frame: {text: "This reviews the clothing item, color, and size vocabulary taught in this unit.", language_code: en, direction: ltr}
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+  feedback_frame:
+    text: These five words cover the basic clothing vocabulary for this unit.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit20.lesson01.clothing_translate.003
+  lesson_content_key: fa.a1.unit20.lesson01.clothing_vocabulary
+  type: translation
+  frame:
+    text: '{clothing_word}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      clothing_word: english_gloss
+  slots:
+    clothing_word: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: clothing_word
+  feedback_frame:
+    text: The Farsi word is {clothing_word}.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit20.lesson01.item_want_order.004
+  lesson_content_key: fa.a1.unit20.lesson01.clothing_vocabulary
+  type: word_order
+  frame:
+    text: '{clothing_item_word} می‌خوام'
+    language_code: fa
+    direction: rtl
+  slots:
+    clothing_item_word: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{clothing_item_word} می‌خوام'
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: می‌خوام means I want, as in پیراهن می‌خوام (I want a shirt).
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit20.lesson01.item_price_order.005
+  lesson_content_key: fa.a1.unit20.lesson01.clothing_vocabulary
+  type: word_order
+  frame:
+    text: این {clothing_item_word} چنده؟
+    language_code: fa
+    direction: rtl
+  slots:
+    clothing_item_word: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: این {clothing_item_word} چنده؟
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: این {clothing_item_word} چنده؟ means how much is this {clothing_item_word}?
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit20.lesson02.color_choice.001
+  lesson_content_key: fa.a1.unit20.lesson02.colors
+  type: multiple_choice
+  frame:
+    text: '{color_full_word}'
+    language_code: fa
+    direction: rtl
+  slots:
+    color_full_word: *id003
+  answer_derivation:
+    kind: slot_gloss
+    slot: color_full_word
+  feedback_frame:
+    text: '{color_full_word} is color vocabulary from this lesson.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit20.lesson02.color_match.002
+  lesson_content_key: fa.a1.unit20.lesson02.colors
+  type: matching_pairs
+  frame:
+    text: Match each word with its meaning.
+    language_code: en
+    direction: ltr
+  slots:
+    first: *id003
+    second: *id003
+    third: *id003
+    fourth: *id003
+    fifth: *id003
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+  feedback_frame:
+    text: These five words cover color vocabulary for this unit.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit20.lesson02.color_translate.003
+  lesson_content_key: fa.a1.unit20.lesson02.colors
+  type: translation
+  frame:
+    text: '{color_full_word}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      color_full_word: english_gloss
+  slots:
+    color_full_word: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: color_full_word
+  feedback_frame:
+    text: The Farsi word is {color_full_word}.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit20.lesson02.item_color_want_order.004
+  lesson_content_key: fa.a1.unit20.lesson02.colors
+  type: word_order
+  frame:
+    text: یه {clothing_item_word} {color_word} می‌خوام
+    language_code: fa
+    direction: rtl
+  slots:
+    clothing_item_word: *id002
+    color_word: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: یه {clothing_item_word} {color_word} می‌خوام
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: یه پیراهن آبی می‌خوام means I want a blue shirt.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit20.lesson03.size_choice.001
+  lesson_content_key: fa.a1.unit20.lesson03.sizes
+  type: multiple_choice
+  frame:
+    text: '{size_full_word}'
+    language_code: fa
+    direction: rtl
+  slots:
+    size_full_word: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: size_full_word
+  feedback_frame:
+    text: '{size_full_word} is size vocabulary from this lesson.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit20.lesson03.size_match.002
+  lesson_content_key: fa.a1.unit20.lesson03.sizes
+  type: matching_pairs
+  frame:
+    text: Match each word with its meaning.
+    language_code: en
+    direction: ltr
+  slots:
+    first: *id005
+    second: *id005
+    third: *id005
+    fourth: *id005
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+  feedback_frame:
+    text: These four words cover size vocabulary for this unit.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit20.lesson03.size_translate.003
+  lesson_content_key: fa.a1.unit20.lesson03.sizes
+  type: translation
+  frame:
+    text: '{size_full_word}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      size_full_word: english_gloss
+  slots:
+    size_full_word: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: size_full_word
+  feedback_frame:
+    text: The Farsi word is {size_full_word}.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit20.lesson03.size_order.004
+  lesson_content_key: fa.a1.unit20.lesson03.sizes
+  type: word_order
+  frame:
+    text: سایز {size_word}
+    language_code: fa
+    direction: rtl
+  slots:
+    size_word: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: سایز {size_word}
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: سایز {size_word} means size {size_word}, as in سایز بزرگ (big size).
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit20.lesson04.try_on_match.001
+  lesson_content_key: fa.a1.unit20.lesson04.trying_on
+  type: matching_pairs
+  frame:
+    text: Match each word or phrase with its meaning.
+    language_code: en
+    direction: ltr
+  slots:
+    first: *id007
+    second: *id007
+    third: *id007
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+  feedback_frame:
+    text: These are used when trying on clothes in a store.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit20.lesson04.try_on_translate.002
+  lesson_content_key: fa.a1.unit20.lesson04.trying_on
+  type: translation
+  frame:
+    text: '{try_on_phrase}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      try_on_phrase: english_gloss
+  slots:
+    try_on_phrase: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: try_on_phrase
+  feedback_frame:
+    text: The Farsi word or phrase is {try_on_phrase}.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit20.lesson05.full_request_order.001
+  lesson_content_key: fa.a1.unit20.lesson05.label_and_request
+  type: word_order
+  frame:
+    text: '{clothing_item_word} {color_word} سایز {size_word} می‌خوام'
+    language_code: fa
+    direction: rtl
+  slots:
+    clothing_item_word: *id002
+    color_word: *id004
+    size_word: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{clothing_item_word} {color_word} سایز {size_word} می‌خوام'
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: پیراهن قرمز سایز بزرگ می‌خوام means I want a red, large shirt.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit20.lesson06.unit_review_match.001
+  lesson_content_key: fa.a1.unit20.lesson06.store_dialogue
+  type: matching_pairs
+  frame:
+    text: Match each word with its meaning -- a review of this whole unit's clothing vocabulary.
+    language_code: en
+    direction: ltr
+  slots:
+    cw1: *id002
+    cw2: *id002
+    cw3: *id002
+    cw4: *id002
+    col1: *id004
+    col2: *id004
+    col3: *id004
+    col4: *id004
+    sz1: *id006
+    sz2: *id006
+    sz3: *id006
+  slot_relations:
+  - kind: distinct
+    slots:
+    - cw1
+    - cw2
+    - cw3
+    - cw4
+  - kind: distinct
+    slots:
+    - col1
+    - col2
+    - col3
+    - col4
+  - kind: distinct
+    slots:
+    - sz1
+    - sz2
+    - sz3
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - cw1
+    - cw2
+    - cw3
+    - cw4
+    - col1
+    - col2
+    - col3
+    - col4
+    - sz1
+    - sz2
+    - sz3
+  feedback_frame:
+    text: This reviews the clothing item, color, and size vocabulary taught in this unit.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit20.lesson05.full_request_order.001.volume_fill.010
+  lesson_content_key: fa.a1.unit20.lesson05.label_and_request
+  type: fill_in_blank
+  frame: &id008
+    text: '{clothing_item_word} {color_word} سایز {size_word} می‌خوام'
+    language_code: fa
+    direction: rtl
+  slots:
+    clothing_item_word:
+      language_code: fa
+      part_of_speech: noun
+      agreement_tags:
+        semantic: clothing_item_word
+    color_word:
+      language_code: fa
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: color_word
+    size_word:
+      language_code: fa
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: volume_en_fa_a1_unit20_size_word_10_single
+  answer_derivation:
+    kind: slot_text
+    slot: size_word
+  feedback_frame:
+    text: '{size_word}'
+    language_code: fa
+    direction: rtl
+- content_key: practice.en-fa.fa.a1.unit20.lesson05.full_request_order.001.volume_fill.012
+  lesson_content_key: fa.a1.unit20.lesson05.label_and_request
+  type: fill_in_blank
+  frame: *id008
+  slots:
+    clothing_item_word:
+      language_code: fa
+      part_of_speech: noun
+      agreement_tags:
+        semantic: clothing_item_word
+    color_word:
+      language_code: fa
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: volume_en_fa_a1_unit20_color_word_12_single
+    size_word:
+      language_code: fa
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: size_word
+  answer_derivation:
+    kind: slot_text
+    slot: color_word
+  feedback_frame:
+    text: '{color_word}'
+    language_code: fa
+    direction: rtl
