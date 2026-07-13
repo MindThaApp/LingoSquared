@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: '1.0'
 pack_key: practice.prs-en.a1.unit20
 source_language: prs
 target_language: en
@@ -6,130 +6,294 @@ unit_content_key: en.a1.unit20.comparisons
 review:
   status: unreviewed
   fresh_context: false
-  notes: >-
-    Authored 2026-07-06 by the prs-en practice-pool-sync lane extending
-    coverage to units 15-20, mirroring the sibling fa-en/a1_unit20.yaml
-    pack's structure (12 templates). Reuses the already-established
-    5-member comparative_adj tag (bigger/smaller/cheaper/faster/nicer)
-    -- verified interchangeable one-word "-er" comparatives that take
-    "than" in a "This bag is {item} than that bag." frame. Deliberately
-    does NOT fold in "more expensive" (a two-word phrase that doesn't
-    fit a single-token slot) or "cheapest" (a superlative that does NOT
-    take "than" -- mixing degrees would generate "This bag is cheapest
-    than that bag."); "cheapest" instead gets its own single-member
-    superlative_adj tag, used only in fill_in_blank/translation
-    templates (which don't need the >=4 candidates multiple_choice/
-    listen_select require). A 2-member color tag (red/white) is
-    likewise only used in the word_order slot for the same reason. All
-    POS/semantic-tag classification was already present in scripts/
-    _en_target_lexeme_common.py before this pass -- only scripts/
-    backfill_lexemes_prs_en.py's own Dari gloss dict needed extending
-    (bigger/smaller/cheaper/expensive/faster/than/nicer/cheapest/red/
-    car/white), cross-checked against docs/content/overlays/prs-en/
-    a1_unit20.yaml's own real Dari phrasing (e.g. cheapest="ارزان‌ترین",
-    that overlay's own review note having already fixed a stray
-    non-Dari word in the comparative explanation). Verified with
-    scripts/_practice_slot_check.py that every slot has >=1 real
-    candidate lexeme and every multiple_choice/listen_select slot has
-    >=4 distinct candidate values (comparative_adj has 5). The
-    underlying en realization unit20 is UNREVIEWED (Codex was usage-
-    limited at authoring time); the prs-en overlay is already reviewed
-    -- the realization needs the standard fresh-context review before
-    import.
+  notes: 'Authored 2026-07-06 by the prs-en practice-pool-sync lane extending coverage to units 15-20, mirroring the sibling
+    fa-en/a1_unit20.yaml pack''s structure (12 templates). Reuses the already-established 5-member comparative_adj tag (bigger/smaller/cheaper/faster/nicer)
+    -- verified interchangeable one-word "-er" comparatives that take "than" in a "This bag is {item} than that bag." frame.
+    Deliberately does NOT fold in "more expensive" (a two-word phrase that doesn''t fit a single-token slot) or "cheapest"
+    (a superlative that does NOT take "than" -- mixing degrees would generate "This bag is cheapest than that bag."); "cheapest"
+    instead gets its own single-member superlative_adj tag, used only in fill_in_blank/translation templates (which don''t
+    need the >=4 candidates multiple_choice/ listen_select require). A 2-member color tag (red/white) is likewise only used
+    in the word_order slot for the same reason. All POS/semantic-tag classification was already present in scripts/ _en_target_lexeme_common.py
+    before this pass -- only scripts/ backfill_lexemes_prs_en.py''s own Dari gloss dict needed extending (bigger/smaller/cheaper/expensive/faster/than/nicer/cheapest/red/
+    car/white), cross-checked against docs/content/overlays/prs-en/ a1_unit20.yaml''s own real Dari phrasing (e.g. cheapest="ارزان‌ترین",
+    that overlay''s own review note having already fixed a stray non-Dari word in the comparative explanation). Verified with
+    scripts/_practice_slot_check.py that every slot has >=1 real candidate lexeme and every multiple_choice/listen_select
+    slot has >=4 distinct candidate values (comparative_adj has 5). The underlying en realization unit20 is UNREVIEWED (Codex
+    was usage- limited at authoring time); the prs-en overlay is already reviewed -- the realization needs the standard fresh-context
+    review before import.
 
-    matching_pairs widening retrofit (2026-07-06, AUTHORING_GUIDE.md #16):
-    the matching_pairs template widened from 2 to 5 slots (the full
-    course-wide comparative_adj pool: bigger/smaller/cheaper/faster/
-    nicer), per the pre-computed retrofit table.
+    matching_pairs widening retrofit (2026-07-06, AUTHORING_GUIDE.md #16): the matching_pairs template widened from 2 to 5
+    slots (the full course-wide comparative_adj pool: bigger/smaller/cheaper/faster/ nicer), per the pre-computed retrofit
+    table.'
 tag_schema:
-  part_of_speech: [adjective]
+  part_of_speech:
+  - adjective
   agreement_tags:
-    semantic: [comparative_adj, superlative_adj, color]
+    semantic:
+    - comparative_adj
+    - superlative_adj
+    - color
 slot_presets:
-  comparative_adj: &comparative_adj {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: comparative_adj}}
-  superlative_adj: &superlative_adj {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: superlative_adj}}
-  color: &color {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: color}}
+  comparative_adj: &id001
+    language_code: en
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: comparative_adj
+  superlative_adj: &id002
+    language_code: en
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: superlative_adj
+  color: &id003
+    language_code: en
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: color
 templates:
-  - content_key: practice.prs-en.en.a1.unit20.lesson01.choose.001
-    lesson_content_key: en.a1.unit20.lesson01.comparative_adjectives
-    type: multiple_choice
-    frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *comparative_adj}
-    answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} یکی از صفت‌های مقایسوی همی درس است.", language_code: prs, direction: rtl}
-  - content_key: practice.prs-en.en.a1.unit20.lesson01.listen.002
-    lesson_content_key: en.a1.unit20.lesson01.comparative_adjectives
-    type: listen_select
-    frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *comparative_adj}
-    answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} واژه‌ای است که شنیدین.", language_code: prs, direction: rtl}
-  - content_key: practice.prs-en.en.a1.unit20.lesson01.match.003
-    lesson_content_key: en.a1.unit20.lesson01.comparative_adjectives
-    type: matching_pairs
-    frame: {text: "{first} — {second}", language_code: en, direction: ltr}
-    slots: {first: *comparative_adj, second: *comparative_adj, third: *comparative_adj, fourth: *comparative_adj, fifth: *comparative_adj}
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth]}
-    feedback_frame: {text: "هر صفت مقایسوی را به معنای دری آن وصل کنین.", language_code: prs, direction: rtl}
-  - content_key: practice.prs-en.en.a1.unit20.lesson01.translate.004
-    lesson_content_key: en.a1.unit20.lesson01.comparative_adjectives
-    type: translation
-    frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
-    slots: {item: *comparative_adj}
-    answer_derivation: {kind: slot_text, slot: item}
-    feedback_frame: {text: "{item} معادل انگلیسی این صفت دری است.", language_code: prs, direction: rtl}
-  - content_key: practice.prs-en.en.a1.unit20.lesson02.order.001
-    lesson_content_key: en.a1.unit20.lesson02.comparing_with_than
-    type: word_order
-    frame: {text: "This bag is {item} than that bag", language_code: en, direction: ltr}
-    slots: {item: *comparative_adj}
-    answer_derivation: {kind: render_frame, frame: {text: "This bag is {item} than that bag", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} صفت همی مقایسه است.", language_code: prs, direction: rtl}
-  - content_key: practice.prs-en.en.a1.unit20.lesson02.translate.003
-    lesson_content_key: en.a1.unit20.lesson02.comparing_with_than
-    type: translation
-    frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
-    slots: {item: *comparative_adj}
-    answer_derivation: {kind: slot_text, slot: item}
-    feedback_frame: {text: "{item} معادل انگلیسی این صفت دری است.", language_code: prs, direction: rtl}
-  - content_key: practice.prs-en.en.a1.unit20.lesson03.complete.001
-    lesson_content_key: en.a1.unit20.lesson03.reading_a_comparison
-    type: fill_in_blank
+- content_key: practice.prs-en.en.a1.unit20.lesson01.choose.001
+  lesson_content_key: en.a1.unit20.lesson01.comparative_adjectives
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} یکی از صفت‌های مقایسوی همی درس است.'
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a1.unit20.lesson01.listen.002
+  lesson_content_key: en.a1.unit20.lesson01.comparative_adjectives
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} واژه‌ای است که شنیدین.'
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a1.unit20.lesson01.match.003
+  lesson_content_key: en.a1.unit20.lesson01.comparative_adjectives
+  type: matching_pairs
+  frame:
+    text: '{first} — {second}'
+    language_code: en
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+  feedback_frame:
+    text: هر صفت مقایسوی را به معنای دری آن وصل کنین.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a1.unit20.lesson01.translate.004
+  lesson_content_key: en.a1.unit20.lesson01.comparative_adjectives
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} معادل انگلیسی این صفت دری است.'
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a1.unit20.lesson02.order.001
+  lesson_content_key: en.a1.unit20.lesson02.comparing_with_than
+  type: word_order
+  frame:
+    text: This bag is {item} than that bag
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
     frame:
-      text: "The white car is the {item} of the three."
+      text: This bag is {item} than that bag
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: '{item} صفت همی مقایسه است.'
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a1.unit20.lesson02.translate.003
+  lesson_content_key: en.a1.unit20.lesson02.comparing_with_than
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} معادل انگلیسی این صفت دری است.'
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a1.unit20.lesson03.complete.001
+  lesson_content_key: en.a1.unit20.lesson03.reading_a_comparison
+  type: fill_in_blank
+  frame:
+    text: The white car is the {item} of the three.
+    language_code: en
+    direction: ltr
+    text_blocks:
+    - text: جملهٔ انگلیسی را تکمیل کنین.
+      language_code: prs
+      direction: rtl
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} صفت عالی همی جمله است.'
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a1.unit20.lesson03.order.002
+  lesson_content_key: en.a1.unit20.lesson03.reading_a_comparison
+  type: word_order
+  frame:
+    text: The {item} car is faster
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: The {item} car is faster
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: '{item} رنگِ همی جمله است.'
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a1.unit20.lesson03.translate.003
+  lesson_content_key: en.a1.unit20.lesson03.reading_a_comparison
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} معادل انگلیسی این صفت دری است.'
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a1.unit20.lesson04.order.001
+  lesson_content_key: en.a1.unit20.lesson04.comparison_dialogue
+  type: word_order
+  frame:
+    text: This bag is {item} than that bag
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: This bag is {item} than that bag
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: '{item} صفت همی مقایسه است.'
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a1.unit20.lesson04.listen.002
+  lesson_content_key: en.a1.unit20.lesson04.comparison_dialogue
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} واژه‌ای است که در همی گفتگو شنیدین.'
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a1.unit20.lesson03.complete.001.volume_order.003
+  lesson_content_key: en.a1.unit20.lesson03.reading_a_comparison
+  type: word_order
+  frame:
+    text: The white car is the {item} of the three.
+    language_code: en
+    direction: ltr
+    text_blocks:
+    - text: جملهٔ انگلیسی را تکمیل کنین.
+      language_code: prs
+      direction: rtl
+  slots:
+    item:
+      language_code: en
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: superlative_adj
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: The white car is the {item} of the three.
       language_code: en
       direction: ltr
       text_blocks:
-        - {text: "جملهٔ انگلیسی را تکمیل کنین.", language_code: prs, direction: rtl}
-    slots: {item: *superlative_adj}
-    answer_derivation: {kind: slot_text, slot: item}
-    feedback_frame: {text: "{item} صفت عالی همی جمله است.", language_code: prs, direction: rtl}
-  - content_key: practice.prs-en.en.a1.unit20.lesson03.order.002
-    lesson_content_key: en.a1.unit20.lesson03.reading_a_comparison
-    type: word_order
-    frame: {text: "The {item} car is faster", language_code: en, direction: ltr}
-    slots: {item: *color}
-    answer_derivation: {kind: render_frame, frame: {text: "The {item} car is faster", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} رنگِ همی جمله است.", language_code: prs, direction: rtl}
-  - content_key: practice.prs-en.en.a1.unit20.lesson03.translate.003
-    lesson_content_key: en.a1.unit20.lesson03.reading_a_comparison
-    type: translation
-    frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
-    slots: {item: *superlative_adj}
-    answer_derivation: {kind: slot_text, slot: item}
-    feedback_frame: {text: "{item} معادل انگلیسی این صفت دری است.", language_code: prs, direction: rtl}
-  - content_key: practice.prs-en.en.a1.unit20.lesson04.order.001
-    lesson_content_key: en.a1.unit20.lesson04.comparison_dialogue
-    type: word_order
-    frame: {text: "This bag is {item} than that bag", language_code: en, direction: ltr}
-    slots: {item: *comparative_adj}
-    answer_derivation: {kind: render_frame, frame: {text: "This bag is {item} than that bag", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} صفت همی مقایسه است.", language_code: prs, direction: rtl}
-  - content_key: practice.prs-en.en.a1.unit20.lesson04.listen.002
-    lesson_content_key: en.a1.unit20.lesson04.comparison_dialogue
-    type: listen_select
-    frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *comparative_adj}
-    answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} واژه‌ای است که در همی گفتگو شنیدین.", language_code: prs, direction: rtl}
+      - text: جملهٔ انگلیسی را تکمیل کنین.
+        language_code: prs
+        direction: rtl
+  feedback_frame:
+    text: The white car is the {item} of the three.
+    language_code: en
+    direction: ltr
+    text_blocks:
+    - text: جملهٔ انگلیسی را تکمیل کنین.
+      language_code: prs
+      direction: rtl

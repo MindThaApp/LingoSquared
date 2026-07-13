@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: '1.0'
 pack_key: practice.en-fa.a1.unit02
 source_language: en
 target_language: fa
@@ -6,320 +6,1026 @@ unit_content_key: fa.a1.unit02.introductions
 review:
   status: reviewed
   fresh_context: true
-  notes: "Fresh review found and resolved name morphology, country coupling, letter gloss, dialogue-slot, and answer-derivation defects. A targeted post-review fix removed leaked review-process language from learner-facing feedback; this was not a new full fresh-context review. Second targeted post-review fix, 2026-07-06: scripts/_practice_slot_check.py surfaced that 2 multiple_choice templates (name_word, origin_marker) each had only 1 real distinct lexeme candidate against the >=3 multiple_choice/matching_pairs threshold. Converted both to fill_in_blank (same slot, needs only >=1 candidate). Re-verified via compile_content.py practice-validate (0/0) and _practice_slot_check.py (both now pass). The iran_pair.003/england_pair.004/france_pair.005 single-country templates mentioned as open at the time of that note no longer exist in this file (removed by a later pass, superseded by lesson04's country_pair.006, which pairs each country with its own nationality via a same_tag relation across 3 country/nationality pairs). Third targeted post-review fix, 2026-07-07: the 2 matching_pairs problems _practice_slot_check.py still flagged (name_pair.005's 'name_word' slot, origin_pair.006's 'origin_marker' slot) are now fixed, without inventing vocabulary -- verified by hand against backfill_lexemes.py's iter_specs() (A1-only) that 'name_word' (اسم, the word 'name' itself) and 'origin_marker' (اهل, the 'from'-marking preposition) are each genuinely single-candidate at this course's real vocabulary depth, and both are already tested elsewhere (name_word via its own fill_in_blank per the fix above; origin_marker via origin_fill.001). Since matching_pairs needs every participating slot to itself have real headroom (>=2 distinct candidates) and neither of these two singletons can ever supply that, both were simply dropped from their respective templates rather than paired against an unrelated tag: name_pair.005 keeps its existing 7-way person_name pool unchanged (already fine on its own), origin_pair.006 keeps its existing 3-way country pool unchanged. Re-verified via _practice_slot_check.py (0 problems in this file) and compile_content.py practice-validate (0/0)."
+  notes: 'Fresh review found and resolved name morphology, country coupling, letter gloss, dialogue-slot, and answer-derivation
+    defects. A targeted post-review fix removed leaked review-process language from learner-facing feedback; this was not
+    a new full fresh-context review. Second targeted post-review fix, 2026-07-06: scripts/_practice_slot_check.py surfaced
+    that 2 multiple_choice templates (name_word, origin_marker) each had only 1 real distinct lexeme candidate against the
+    >=3 multiple_choice/matching_pairs threshold. Converted both to fill_in_blank (same slot, needs only >=1 candidate). Re-verified
+    via compile_content.py practice-validate (0/0) and _practice_slot_check.py (both now pass). The iran_pair.003/england_pair.004/france_pair.005
+    single-country templates mentioned as open at the time of that note no longer exist in this file (removed by a later pass,
+    superseded by lesson04''s country_pair.006, which pairs each country with its own nationality via a same_tag relation
+    across 3 country/nationality pairs). Third targeted post-review fix, 2026-07-07: the 2 matching_pairs problems _practice_slot_check.py
+    still flagged (name_pair.005''s ''name_word'' slot, origin_pair.006''s ''origin_marker'' slot) are now fixed, without
+    inventing vocabulary -- verified by hand against backfill_lexemes.py''s iter_specs() (A1-only) that ''name_word'' (اسم,
+    the word ''name'' itself) and ''origin_marker'' (اهل, the ''from''-marking preposition) are each genuinely single-candidate
+    at this course''s real vocabulary depth, and both are already tested elsewhere (name_word via its own fill_in_blank per
+    the fix above; origin_marker via origin_fill.001). Since matching_pairs needs every participating slot to itself have
+    real headroom (>=2 distinct candidates) and neither of these two singletons can ever supply that, both were simply dropped
+    from their respective templates rather than paired against an unrelated tag: name_pair.005 keeps its existing 7-way person_name
+    pool unchanged (already fine on its own), origin_pair.006 keeps its existing 3-way country pool unchanged. Re-verified
+    via _practice_slot_check.py (0 problems in this file) and compile_content.py practice-validate (0/0).'
 tag_schema:
-  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
   agreement_tags:
-    semantic: [letter, person_name, name_word, pronoun, copula, country, nationality, origin_marker, place_question, politeness, class_word, dialogue_word, reviewed_phrase]
-    register: [neutral, polite, informal, formal, spoken, written]
-    person: [first, second, third]
-    country_key: [iran, england, france]
-    number: [singular, polite_or_plural]
+    semantic:
+    - letter
+    - person_name
+    - name_word
+    - pronoun
+    - copula
+    - country
+    - nationality
+    - origin_marker
+    - place_question
+    - politeness
+    - class_word
+    - dialogue_word
+    - reviewed_phrase
+    register:
+    - neutral
+    - polite
+    - informal
+    - formal
+    - spoken
+    - written
+    person:
+    - first
+    - second
+    - third
+    country_key:
+    - iran
+    - england
+    - france
+    number:
+    - singular
+    - polite_or_plural
 slot_presets:
-  letter: &letter {language_code: fa, part_of_speech: symbol, agreement_tags: {semantic: letter}}
-  person_name: &person_name {language_code: fa, part_of_speech: proper_noun, agreement_tags: {semantic: person_name}}
-  name_word: &name_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: name_word}}
-  pronoun: &pronoun {language_code: fa, part_of_speech: pronoun, agreement_tags: {semantic: pronoun}}
-  copula: &copula {language_code: fa, part_of_speech: verb, agreement_tags: {semantic: copula}}
-  country: &country {language_code: fa, part_of_speech: proper_noun, agreement_tags: {semantic: country}}
-  nationality: &nationality {language_code: fa, part_of_speech: adjective, agreement_tags: {semantic: nationality}}
-  origin_marker: &origin_marker {language_code: fa, part_of_speech: [noun, preposition], agreement_tags: {semantic: origin_marker}}
-  place_question: &place_question {language_code: fa, part_of_speech: adverb, agreement_tags: {semantic: place_question, register: neutral}}
-  politeness: &politeness {language_code: fa, part_of_speech: [noun, verb, phrase], agreement_tags: {semantic: politeness}}
-  class_word: &class_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: class_word}}
-  dialogue_word: &dialogue_word {language_code: fa, part_of_speech: [noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase], agreement_tags: {semantic: dialogue_word}}
+  letter: &id001
+    language_code: fa
+    part_of_speech: symbol
+    agreement_tags:
+      semantic: letter
+  person_name: &id003
+    language_code: fa
+    part_of_speech: proper_noun
+    agreement_tags:
+      semantic: person_name
+  name_word: &id002
+    language_code: fa
+    part_of_speech: noun
+    agreement_tags:
+      semantic: name_word
+  pronoun: &id005
+    language_code: fa
+    part_of_speech: pronoun
+    agreement_tags:
+      semantic: pronoun
+  copula: &id004
+    language_code: fa
+    part_of_speech: verb
+    agreement_tags:
+      semantic: copula
+  country: &id006
+    language_code: fa
+    part_of_speech: proper_noun
+    agreement_tags:
+      semantic: country
+  nationality: &id007
+    language_code: fa
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: nationality
+  origin_marker: &id008
+    language_code: fa
+    part_of_speech:
+    - noun
+    - preposition
+    agreement_tags:
+      semantic: origin_marker
+  place_question: &id009
+    language_code: fa
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: place_question
+      register: neutral
+  politeness: &id012
+    language_code: fa
+    part_of_speech:
+    - noun
+    - verb
+    - phrase
+    agreement_tags:
+      semantic: politeness
+  class_word: &id010
+    language_code: fa
+    part_of_speech: noun
+    agreement_tags:
+      semantic: class_word
+  dialogue_word: &id011
+    language_code: fa
+    part_of_speech:
+    - noun
+    - proper_noun
+    - pronoun
+    - verb
+    - adjective
+    - adverb
+    - preposition
+    - particle
+    - phrase
+    agreement_tags:
+      semantic: dialogue_word
 templates:
-  # Lesson 1: letters newly required for introduction vocabulary.
-  - content_key: practice.en-fa.fa.a1.unit02.lesson01.letter_gloss.001
-    lesson_content_key: fa.a1.unit02.lesson01.script_ramp
-    type: multiple_choice
-    frame: {text: "{letter}", language_code: fa, direction: rtl}
-    slots: {letter: *letter}
-    answer_derivation: {kind: slot_gloss, slot: letter}
-    feedback_frame: {text: "{letter} has this sound value.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit02.lesson01.letter_translation.003
-    lesson_content_key: fa.a1.unit02.lesson01.script_ramp
-    type: translation
-    frame: {text: "{letter}", language_code: en, direction: ltr, slot_rendering: {letter: english_gloss}}
-    slots: {letter: *letter}
-    answer_derivation: {kind: slot_text, slot: letter}
-    feedback_frame: {text: "{letter} maps to this Latin sound label.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit02.lesson01.letter_pair.004
-    lesson_content_key: fa.a1.unit02.lesson01.script_ramp
-    type: matching_pairs
-    frame: {text: "Match each letter with its sound label.", language_code: en, direction: ltr}
+- content_key: practice.en-fa.fa.a1.unit02.lesson01.letter_gloss.001
+  lesson_content_key: fa.a1.unit02.lesson01.script_ramp
+  type: multiple_choice
+  frame:
+    text: '{letter}'
+    language_code: fa
+    direction: rtl
+  slots:
+    letter: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: letter
+  feedback_frame:
+    text: '{letter} has this sound value.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit02.lesson01.letter_translation.003
+  lesson_content_key: fa.a1.unit02.lesson01.script_ramp
+  type: translation
+  frame:
+    text: '{letter}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      letter: english_gloss
+  slots:
+    letter: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: letter
+  feedback_frame:
+    text: '{letter} maps to this Latin sound label.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit02.lesson01.letter_pair.004
+  lesson_content_key: fa.a1.unit02.lesson01.script_ramp
+  type: matching_pairs
+  frame:
+    text: Match each letter with its sound label.
+    language_code: en
+    direction: ltr
+  slots:
+    letter_one: *id001
+    letter_two: *id001
+    letter_three: *id001
+    letter_four: *id001
+    letter_five: *id001
+    letter_six: *id001
+    letter_seven: *id001
+    letter_eight: *id001
+    letter_nine: *id001
+    letter_ten: *id001
+    letter_eleven: *id001
+    letter_twelve: *id001
+  answer_derivation:
+    kind: matching_pairs
     slots:
-      letter_one: *letter
-      letter_two: *letter
-      letter_three: *letter
-      letter_four: *letter
-      letter_five: *letter
-      letter_six: *letter
-      letter_seven: *letter
-      letter_eight: *letter
-      letter_nine: *letter
-      letter_ten: *letter
-      letter_eleven: *letter
-      letter_twelve: *letter
-    answer_derivation: {kind: matching_pairs, slots: [letter_one, letter_two, letter_three, letter_four, letter_five, letter_six, letter_seven, letter_eight, letter_nine, letter_ten, letter_eleven, letter_twelve]}
-    slot_relations: [{kind: distinct, slots: [letter_one, letter_two, letter_three, letter_four, letter_five, letter_six, letter_seven, letter_eight, letter_nine, letter_ten, letter_eleven, letter_twelve]}]
-    feedback_frame: {text: "Match each letter to its sound label.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit02.lesson01.letter_order.005
-    lesson_content_key: fa.a1.unit02.lesson01.script_ramp
-    type: word_order
-    frame: {text: "{letter_one} {letter_two}", language_code: fa, direction: rtl}
-    slots: {letter_one: *letter, letter_two: *letter}
-    answer_derivation: {kind: ordered_slot_texts, slots: [letter_one, letter_two]}
-    slot_relations: [{kind: distinct, slots: [letter_one, letter_two]}]
-    feedback_frame: {text: "Keep {letter_one} before {letter_two}.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit02.lesson01.three_letter_match.006
-    lesson_content_key: fa.a1.unit02.lesson01.script_ramp
-    type: matching_pairs
-    frame: {text: "Match each letter with its sound label.", language_code: en, direction: ltr}
+    - letter_one
+    - letter_two
+    - letter_three
+    - letter_four
+    - letter_five
+    - letter_six
+    - letter_seven
+    - letter_eight
+    - letter_nine
+    - letter_ten
+    - letter_eleven
+    - letter_twelve
+  slot_relations:
+  - kind: distinct
     slots:
-      letter_one: *letter
-      letter_two: *letter
-      letter_three: *letter
-      letter_four: *letter
-      letter_five: *letter
-      letter_six: *letter
-      letter_seven: *letter
-      letter_eight: *letter
-    answer_derivation: {kind: matching_pairs, slots: [letter_one, letter_two, letter_three, letter_four, letter_five, letter_six, letter_seven, letter_eight]}
-    slot_relations: [{kind: distinct, slots: [letter_one, letter_two, letter_three, letter_four, letter_five, letter_six, letter_seven, letter_eight]}]
-    feedback_frame: {text: "All of these letters use sound labels taught in this script lesson.", language_code: en, direction: ltr}
-
-  # Lesson 2: names and self-introduction.
-  - content_key: practice.en-fa.fa.a1.unit02.lesson02.name_fill.001
-    lesson_content_key: fa.a1.unit02.lesson02.names
-    type: fill_in_blank
+    - letter_one
+    - letter_two
+    - letter_three
+    - letter_four
+    - letter_five
+    - letter_six
+    - letter_seven
+    - letter_eight
+    - letter_nine
+    - letter_ten
+    - letter_eleven
+    - letter_twelve
+  feedback_frame:
+    text: Match each letter to its sound label.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit02.lesson01.letter_order.005
+  lesson_content_key: fa.a1.unit02.lesson01.script_ramp
+  type: word_order
+  frame:
+    text: '{letter_one} {letter_two}'
+    language_code: fa
+    direction: rtl
+  slots:
+    letter_one: *id001
+    letter_two: *id001
+  answer_derivation:
+    kind: ordered_slot_texts
+    slots:
+    - letter_one
+    - letter_two
+  slot_relations:
+  - kind: distinct
+    slots:
+    - letter_one
+    - letter_two
+  feedback_frame:
+    text: Keep {letter_one} before {letter_two}.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit02.lesson01.three_letter_match.006
+  lesson_content_key: fa.a1.unit02.lesson01.script_ramp
+  type: matching_pairs
+  frame:
+    text: Match each letter with its sound label.
+    language_code: en
+    direction: ltr
+  slots:
+    letter_one: *id001
+    letter_two: *id001
+    letter_three: *id001
+    letter_four: *id001
+    letter_five: *id001
+    letter_six: *id001
+    letter_seven: *id001
+    letter_eight: *id001
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - letter_one
+    - letter_two
+    - letter_three
+    - letter_four
+    - letter_five
+    - letter_six
+    - letter_seven
+    - letter_eight
+  slot_relations:
+  - kind: distinct
+    slots:
+    - letter_one
+    - letter_two
+    - letter_three
+    - letter_four
+    - letter_five
+    - letter_six
+    - letter_seven
+    - letter_eight
+  feedback_frame:
+    text: All of these letters use sound labels taught in this script lesson.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit02.lesson02.name_fill.001
+  lesson_content_key: fa.a1.unit02.lesson02.names
+  type: fill_in_blank
+  frame:
+    text: '{name_word}'
+    language_code: fa
+    direction: rtl
+    text_blocks:
+    - text: Complete the word for 'name.'
+      language_code: en
+      direction: ltr
+  slots:
+    name_word: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: name_word
+  feedback_frame:
+    text: '{name_word} means ''name.'''
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit02.lesson02.formal_name.002
+  lesson_content_key: fa.a1.unit02.lesson02.names
+  type: word_order
+  frame:
+    text: اسم من {person_name} است
+    language_code: fa
+    direction: rtl
+  slots:
+    person_name: *id003
+  answer_derivation:
+    kind: render_frame
     frame:
-      text: "{name_word}"
+      text: اسم من {person_name} است
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: اسم من … است is the formal-written pattern for giving a name.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit02.lesson02.name_translation.004
+  lesson_content_key: fa.a1.unit02.lesson02.names
+  type: translation
+  frame:
+    text: My name is {person_name}.
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      person_name: english_gloss
+  slots:
+    person_name: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: اسم من {person_name} است
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: The sentence identifies the speaker as {person_name}.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit02.lesson02.name_pair.005
+  lesson_content_key: fa.a1.unit02.lesson02.names
+  type: matching_pairs
+  frame:
+    text: Match each word with its meaning.
+    language_code: en
+    direction: ltr
+  slots:
+    person_name_one: *id003
+    person_name_two: *id003
+    person_name_three: *id003
+    person_name_four: *id003
+    person_name_five: *id003
+    person_name_six: *id003
+    person_name_seven: *id003
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - person_name_one
+    - person_name_two
+    - person_name_three
+    - person_name_four
+    - person_name_five
+    - person_name_six
+    - person_name_seven
+  slot_relations:
+  - kind: distinct
+    slots:
+    - person_name_one
+    - person_name_two
+    - person_name_three
+    - person_name_four
+    - person_name_five
+    - person_name_six
+    - person_name_seven
+  feedback_frame:
+    text: Match each name and 'name' word to its English label.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit02.lesson03.pronoun_gloss.001
+  lesson_content_key: fa.a1.unit02.lesson03.pronouns_and_boodan
+  type: multiple_choice
+  frame:
+    text: '{pronoun}'
+    language_code: fa
+    direction: rtl
+  slots:
+    pronoun:
+      language_code: fa
+      part_of_speech: pronoun
+      agreement_tags:
+        semantic: pronoun
+        number: singular
+  answer_derivation:
+    kind: slot_gloss
+    slot: pronoun
+  feedback_frame:
+    text: '{pronoun} is a singular pronoun.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit02.lesson03.copula_gloss.002
+  lesson_content_key: fa.a1.unit02.lesson03.pronouns_and_boodan
+  type: translation
+  frame:
+    text: '{copula}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      copula: english_gloss
+  slots:
+    copula: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: copula
+  feedback_frame:
+    text: '{copula} is a form of the verb ‘to be.’'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit02.lesson03.first_person.003
+  lesson_content_key: fa.a1.unit02.lesson03.pronouns_and_boodan
+  type: word_order
+  frame:
+    text: من هستم
+    language_code: fa
+    direction: rtl
+  slots:
+    pronoun: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: من هستم
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: من pairs with the first-person form هستم.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit02.lesson03.pronoun_pair.006
+  lesson_content_key: fa.a1.unit02.lesson03.pronouns_and_boodan
+  type: matching_pairs
+  frame:
+    text: Match each word with its meaning.
+    language_code: en
+    direction: ltr
+  slots:
+    pronoun_one: *id005
+    pronoun_two: *id005
+    pronoun_three: *id005
+    pronoun_four: *id005
+    pronoun_five: *id005
+    pronoun_six: *id005
+    copula_one: *id004
+    copula_two: *id004
+    copula_three: *id004
+    copula_four: *id004
+    copula_five: *id004
+    copula_six: *id004
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - pronoun_one
+    - pronoun_two
+    - pronoun_three
+    - pronoun_four
+    - pronoun_five
+    - pronoun_six
+    - copula_one
+    - copula_two
+    - copula_three
+    - copula_four
+    - copula_five
+    - copula_six
+  slot_relations:
+  - kind: distinct
+    slots:
+    - pronoun_one
+    - pronoun_two
+    - pronoun_three
+    - pronoun_four
+    - pronoun_five
+    - pronoun_six
+  - kind: distinct
+    slots:
+    - copula_one
+    - copula_two
+    - copula_three
+    - copula_four
+    - copula_five
+    - copula_six
+  feedback_frame:
+    text: Match each form to its English meaning; person agreement is shown separately.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit02.lesson04.country_gloss.001
+  lesson_content_key: fa.a1.unit02.lesson04.countries_nationalities
+  type: multiple_choice
+  frame:
+    text: '{country}'
+    language_code: fa
+    direction: rtl
+  slots:
+    country: *id006
+  answer_derivation:
+    kind: slot_gloss
+    slot: country
+  feedback_frame:
+    text: '{country} is a country name.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit02.lesson04.nationality_gloss.002
+  lesson_content_key: fa.a1.unit02.lesson04.countries_nationalities
+  type: translation
+  frame:
+    text: '{nationality}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      nationality: english_gloss
+  slots:
+    nationality: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: nationality
+  feedback_frame:
+    text: '{nationality} is the corresponding nationality word.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit02.lesson04.country_pair.006
+  lesson_content_key: fa.a1.unit02.lesson04.countries_nationalities
+  type: matching_pairs
+  frame:
+    text: Match each country and nationality with its meaning.
+    language_code: en
+    direction: ltr
+  slots:
+    country_one: *id006
+    nationality_one: *id007
+    country_two: *id006
+    nationality_two: *id007
+    country_three: *id006
+    nationality_three: *id007
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - country_one
+    - nationality_one
+    - country_two
+    - nationality_two
+    - country_three
+    - nationality_three
+  slot_relations:
+  - kind: same_tag
+    tag: country_key
+    slots:
+    - country_one
+    - nationality_one
+  - kind: same_tag
+    tag: country_key
+    slots:
+    - country_two
+    - nationality_two
+  - kind: same_tag
+    tag: country_key
+    slots:
+    - country_three
+    - nationality_three
+  - kind: distinct
+    slots:
+    - country_one
+    - country_two
+    - country_three
+  feedback_frame:
+    text: Each country pairs with its own nationality.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit02.lesson05.origin_fill.001
+  lesson_content_key: fa.a1.unit02.lesson05.origin
+  type: fill_in_blank
+  frame:
+    text: '{origin_marker}'
+    language_code: fa
+    direction: rtl
+    text_blocks:
+    - text: Complete the word that links a person to their place of origin.
+      language_code: en
+      direction: ltr
+  slots:
+    origin_marker: *id008
+  answer_derivation:
+    kind: slot_text
+    slot: origin_marker
+  feedback_frame:
+    text: '{origin_marker} links a person to a place of origin.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit02.lesson05.origin_question.002
+  lesson_content_key: fa.a1.unit02.lesson05.origin
+  type: word_order
+  frame:
+    text: اهل کجا هستید؟
+    language_code: fa
+    direction: rtl
+  slots:
+    place_question: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: اهل کجا هستید؟
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: اهل کجا هستید؟ is the polite standard way to ask where someone is from.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit02.lesson05.origin_answer.003
+  lesson_content_key: fa.a1.unit02.lesson05.origin
+  type: word_order
+  frame:
+    text: من اهل {country} هستم
+    language_code: fa
+    direction: rtl
+  slots:
+    country: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: من اهل {country} هستم
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: The frame states that the speaker is from {country}.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit02.lesson05.origin_translation.004
+  lesson_content_key: fa.a1.unit02.lesson05.origin
+  type: translation
+  frame:
+    text: I am from {country}.
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      country: english_gloss
+  slots:
+    country: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: من اهل {country} هستم
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: اهل marks {country} as the place of origin.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit02.lesson05.question_fill.005
+  lesson_content_key: fa.a1.unit02.lesson05.origin
+  type: fill_in_blank
+  frame:
+    text: اهل {place_question} هستین؟
+    language_code: fa
+    direction: rtl
+  slots:
+    place_question: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: place_question
+  feedback_frame:
+    text: '{place_question} asks for a place.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit02.lesson05.origin_pair.006
+  lesson_content_key: fa.a1.unit02.lesson05.origin
+  type: matching_pairs
+  frame:
+    text: Match each country with its meaning.
+    language_code: en
+    direction: ltr
+  slots:
+    country_one: *id006
+    country_two: *id006
+    country_three: *id006
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - country_one
+    - country_two
+    - country_three
+  slot_relations:
+  - kind: distinct
+    slots:
+    - country_one
+    - country_two
+    - country_three
+  feedback_frame:
+    text: Match the origin marker and each country to its English gloss.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit02.lesson06.class_question.001
+  lesson_content_key: fa.a1.unit02.lesson06.language_class_dialogue
+  type: fill_in_blank
+  frame:
+    text: ببخشید، اینجا {class_word} فارسیه؟
+    language_code: fa
+    direction: rtl
+  slots:
+    class_word: *id010
+  answer_derivation:
+    kind: slot_text
+    slot: class_word
+  feedback_frame:
+    text: '{class_word} completes the question about this location.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit02.lesson06.name_reply.002
+  lesson_content_key: fa.a1.unit02.lesson06.language_class_dialogue
+  type: word_order
+  frame:
+    text: اسم من {person_name} است
+    language_code: fa
+    direction: rtl
+  slots:
+    person_name: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: اسم من {person_name} است
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: The speaker gives the name {person_name}.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit02.lesson06.origin_reply.003
+  lesson_content_key: fa.a1.unit02.lesson06.language_class_dialogue
+  type: word_order
+  frame:
+    text: من اهل {country} هستم
+    language_code: fa
+    direction: rtl
+  slots:
+    country: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: من اهل {country} هستم
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: This answer says the speaker is from {country}.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit02.lesson06.dialogue_gloss.004
+  lesson_content_key: fa.a1.unit02.lesson06.language_class_dialogue
+  type: translation
+  frame:
+    text: '{dialogue_word}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      dialogue_word: english_gloss
+  slots:
+    dialogue_word: *id011
+  answer_derivation:
+    kind: slot_text
+    slot: dialogue_word
+  feedback_frame:
+    text: '{dialogue_word} appears in the class dialogue.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit02.lesson06.dialogue_pair.005
+  lesson_content_key: fa.a1.unit02.lesson06.language_class_dialogue
+  type: matching_pairs
+  frame:
+    text: کلمات را به معنی انگلیسی‌شان وصل کنید.
+    language_code: fa
+    direction: rtl
+  slots:
+    person_name_1: *id003
+    person_name_2: *id003
+    person_name_3: *id003
+    person_name_4: *id003
+    dialogue_word_1: *id011
+    dialogue_word_2: *id011
+    dialogue_word_3: *id011
+    dialogue_word_4: *id011
+    dialogue_word_5: *id011
+    dialogue_word_6: *id011
+    dialogue_word_7: *id011
+    dialogue_word_8: *id011
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - person_name_1
+    - person_name_2
+    - person_name_3
+    - person_name_4
+    - dialogue_word_1
+    - dialogue_word_2
+    - dialogue_word_3
+    - dialogue_word_4
+    - dialogue_word_5
+    - dialogue_word_6
+    - dialogue_word_7
+    - dialogue_word_8
+  slot_relations:
+  - kind: distinct
+    slots:
+    - person_name_1
+    - person_name_2
+    - person_name_3
+    - person_name_4
+  - kind: distinct
+    slots:
+    - dialogue_word_1
+    - dialogue_word_2
+    - dialogue_word_3
+    - dialogue_word_4
+    - dialogue_word_5
+    - dialogue_word_6
+    - dialogue_word_7
+    - dialogue_word_8
+  feedback_frame:
+    text: Match each dialogue item to its English meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit02.lesson06.polite_close.006
+  lesson_content_key: fa.a1.unit02.lesson06.language_class_dialogue
+  type: word_order
+  frame:
+    text: از آشنایی با شما خوشوقتم
+    language_code: fa
+    direction: rtl
+  slots:
+    politeness: *id012
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: از آشنایی با شما خوشوقتم
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: This phrase politely acknowledges the introduction.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit02.lesson02.name_fill.001.volume_order.001
+  lesson_content_key: fa.a1.unit02.lesson02.names
+  type: word_order
+  frame:
+    text: '{name_word}'
+    language_code: fa
+    direction: rtl
+    text_blocks:
+    - text: Complete the word for 'name.'
+      language_code: en
+      direction: ltr
+  slots:
+    name_word:
+      language_code: fa
+      part_of_speech: noun
+      agreement_tags:
+        semantic: name_word
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{name_word}'
       language_code: fa
       direction: rtl
       text_blocks:
-        - {text: "Complete the word for 'name.'", language_code: en, direction: ltr}
-    slots: {name_word: *name_word}
-    answer_derivation: {kind: slot_text, slot: name_word}
-    feedback_frame: {text: "{name_word} means 'name.'", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit02.lesson02.formal_name.002
-    lesson_content_key: fa.a1.unit02.lesson02.names
-    type: word_order
-    frame: {text: "اسم من {person_name} است", language_code: fa, direction: rtl}
-    slots: {person_name: *person_name}
-    answer_derivation: {kind: render_frame, frame: {text: "اسم من {person_name} است", language_code: fa, direction: rtl}}
-    feedback_frame: {text: "اسم من … است is the formal-written pattern for giving a name.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit02.lesson02.name_translation.004
-    lesson_content_key: fa.a1.unit02.lesson02.names
-    type: translation
-    frame: {text: "My name is {person_name}.", language_code: en, direction: ltr, slot_rendering: {person_name: english_gloss}}
-    slots: {person_name: *person_name}
-    answer_derivation: {kind: render_frame, frame: {text: "اسم من {person_name} است", language_code: fa, direction: rtl}}
-    feedback_frame: {text: "The sentence identifies the speaker as {person_name}.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit02.lesson02.name_pair.005
-    lesson_content_key: fa.a1.unit02.lesson02.names
-    type: matching_pairs
-    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
-    slots:
-      person_name_one: *person_name
-      person_name_two: *person_name
-      person_name_three: *person_name
-      person_name_four: *person_name
-      person_name_five: *person_name
-      person_name_six: *person_name
-      person_name_seven: *person_name
-    answer_derivation: {kind: matching_pairs, slots: [person_name_one, person_name_two, person_name_three, person_name_four, person_name_five, person_name_six, person_name_seven]}
-    slot_relations: [{kind: distinct, slots: [person_name_one, person_name_two, person_name_three, person_name_four, person_name_five, person_name_six, person_name_seven]}]
-    feedback_frame: {text: "Match each name and 'name' word to its English label.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit02.lesson03.pronoun_gloss.001
-    lesson_content_key: fa.a1.unit02.lesson03.pronouns_and_boodan
-    type: multiple_choice
-    frame: {text: "{pronoun}", language_code: fa, direction: rtl}
-    slots: {pronoun: {language_code: fa, part_of_speech: pronoun, agreement_tags: {semantic: pronoun, number: singular}}}
-    answer_derivation: {kind: slot_gloss, slot: pronoun}
-    feedback_frame: {text: "{pronoun} is a singular pronoun.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit02.lesson03.copula_gloss.002
-    lesson_content_key: fa.a1.unit02.lesson03.pronouns_and_boodan
-    type: translation
-    frame: {text: "{copula}", language_code: en, direction: ltr, slot_rendering: {copula: english_gloss}}
-    slots: {copula: *copula}
-    answer_derivation: {kind: slot_text, slot: copula}
-    feedback_frame: {text: "{copula} is a form of the verb ‘to be.’", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit02.lesson03.first_person.003
-    lesson_content_key: fa.a1.unit02.lesson03.pronouns_and_boodan
-    type: word_order
-    frame: {text: "من هستم", language_code: fa, direction: rtl}
-    slots: {pronoun: *pronoun}
-    answer_derivation: {kind: render_frame, frame: {text: "من هستم", language_code: fa, direction: rtl}}
-    feedback_frame: {text: "من pairs with the first-person form هستم.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit02.lesson03.pronoun_pair.006
-    lesson_content_key: fa.a1.unit02.lesson03.pronouns_and_boodan
-    type: matching_pairs
-    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
-    slots:
-      pronoun_one: *pronoun
-      pronoun_two: *pronoun
-      pronoun_three: *pronoun
-      pronoun_four: *pronoun
-      pronoun_five: *pronoun
-      pronoun_six: *pronoun
-      copula_one: *copula
-      copula_two: *copula
-      copula_three: *copula
-      copula_four: *copula
-      copula_five: *copula
-      copula_six: *copula
-    answer_derivation: {kind: matching_pairs, slots: [pronoun_one, pronoun_two, pronoun_three, pronoun_four, pronoun_five, pronoun_six, copula_one, copula_two, copula_three, copula_four, copula_five, copula_six]}
-    slot_relations:
-      - {kind: distinct, slots: [pronoun_one, pronoun_two, pronoun_three, pronoun_four, pronoun_five, pronoun_six]}
-      - {kind: distinct, slots: [copula_one, copula_two, copula_three, copula_four, copula_five, copula_six]}
-    feedback_frame: {text: "Match each form to its English meaning; person agreement is shown separately.", language_code: en, direction: ltr}
-
-  # Lesson 4: country and nationality vocabulary. Pair-specific templates
-  # constrain both slots to a shared country_key to prevent false pairings.
-  - content_key: practice.en-fa.fa.a1.unit02.lesson04.country_gloss.001
-    lesson_content_key: fa.a1.unit02.lesson04.countries_nationalities
-    type: multiple_choice
-    frame: {text: "{country}", language_code: fa, direction: rtl}
-    slots: {country: *country}
-    answer_derivation: {kind: slot_gloss, slot: country}
-    feedback_frame: {text: "{country} is a country name.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit02.lesson04.nationality_gloss.002
-    lesson_content_key: fa.a1.unit02.lesson04.countries_nationalities
-    type: translation
-    frame: {text: "{nationality}", language_code: en, direction: ltr, slot_rendering: {nationality: english_gloss}}
-    slots: {nationality: *nationality}
-    answer_derivation: {kind: slot_text, slot: nationality}
-    feedback_frame: {text: "{nationality} is the corresponding nationality word.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit02.lesson04.country_pair.006
-    lesson_content_key: fa.a1.unit02.lesson04.countries_nationalities
-    type: matching_pairs
-    frame: {text: "Match each country and nationality with its meaning.", language_code: en, direction: ltr}
-    slots:
-      country_one: *country
-      nationality_one: *nationality
-      country_two: *country
-      nationality_two: *nationality
-      country_three: *country
-      nationality_three: *nationality
-    answer_derivation: {kind: matching_pairs, slots: [country_one, nationality_one, country_two, nationality_two, country_three, nationality_three]}
-    slot_relations:
-      - {kind: same_tag, tag: country_key, slots: [country_one, nationality_one]}
-      - {kind: same_tag, tag: country_key, slots: [country_two, nationality_two]}
-      - {kind: same_tag, tag: country_key, slots: [country_three, nationality_three]}
-      - {kind: distinct, slots: [country_one, country_two, country_three]}
-    feedback_frame: {text: "Each country pairs with its own nationality.", language_code: en, direction: ltr}
-
-  # Lesson 5: asking and answering about origin.
-  - content_key: practice.en-fa.fa.a1.unit02.lesson05.origin_fill.001
-    lesson_content_key: fa.a1.unit02.lesson05.origin
-    type: fill_in_blank
+      - text: Complete the word for 'name.'
+        language_code: en
+        direction: ltr
+  feedback_frame:
+    text: '{name_word}'
+    language_code: fa
+    direction: rtl
+    text_blocks:
+    - text: Complete the word for 'name.'
+      language_code: en
+      direction: ltr
+- content_key: practice.en-fa.fa.a1.unit02.lesson02.name_translation.004.volume_order.002
+  lesson_content_key: fa.a1.unit02.lesson02.names
+  type: word_order
+  frame:
+    text: اسم من {person_name} است
+    language_code: fa
+    direction: rtl
+  slots:
+    person_name:
+      language_code: fa
+      part_of_speech: proper_noun
+      agreement_tags:
+        semantic: person_name
+  answer_derivation:
+    kind: render_frame
     frame:
-      text: "{origin_marker}"
+      text: اسم من {person_name} است
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: اسم من {person_name} است
+    language_code: fa
+    direction: rtl
+- content_key: practice.en-fa.fa.a1.unit02.lesson05.origin_fill.001.volume_order.003
+  lesson_content_key: fa.a1.unit02.lesson05.origin
+  type: word_order
+  frame:
+    text: '{origin_marker}'
+    language_code: fa
+    direction: rtl
+    text_blocks:
+    - text: Complete the word that links a person to their place of origin.
+      language_code: en
+      direction: ltr
+  slots:
+    origin_marker:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - preposition
+      agreement_tags:
+        semantic: origin_marker
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{origin_marker}'
       language_code: fa
       direction: rtl
       text_blocks:
-        - {text: "Complete the word that links a person to their place of origin.", language_code: en, direction: ltr}
-    slots: {origin_marker: *origin_marker}
-    answer_derivation: {kind: slot_text, slot: origin_marker}
-    feedback_frame: {text: "{origin_marker} links a person to a place of origin.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit02.lesson05.origin_question.002
-    lesson_content_key: fa.a1.unit02.lesson05.origin
-    type: word_order
-    frame: {text: "اهل کجا هستید؟", language_code: fa, direction: rtl}
-    slots: {place_question: *place_question}
-    answer_derivation: {kind: render_frame, frame: {text: "اهل کجا هستید؟", language_code: fa, direction: rtl}}
-    feedback_frame: {text: "اهل کجا هستید؟ is the polite standard way to ask where someone is from.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit02.lesson05.origin_answer.003
-    lesson_content_key: fa.a1.unit02.lesson05.origin
-    type: word_order
-    frame: {text: "من اهل {country} هستم", language_code: fa, direction: rtl}
-    slots: {country: *country}
-    answer_derivation: {kind: render_frame, frame: {text: "من اهل {country} هستم", language_code: fa, direction: rtl}}
-    feedback_frame: {text: "The frame states that the speaker is from {country}.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit02.lesson05.origin_translation.004
-    lesson_content_key: fa.a1.unit02.lesson05.origin
-    type: translation
-    frame: {text: "I am from {country}.", language_code: en, direction: ltr, slot_rendering: {country: english_gloss}}
-    slots: {country: *country}
-    answer_derivation: {kind: render_frame, frame: {text: "من اهل {country} هستم", language_code: fa, direction: rtl}}
-    feedback_frame: {text: "اهل marks {country} as the place of origin.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit02.lesson05.question_fill.005
-    lesson_content_key: fa.a1.unit02.lesson05.origin
-    type: fill_in_blank
-    frame: {text: "اهل {place_question} هستین؟", language_code: fa, direction: rtl}
-    slots: {place_question: *place_question}
-    answer_derivation: {kind: slot_text, slot: place_question}
-    feedback_frame: {text: "{place_question} asks for a place.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit02.lesson05.origin_pair.006
-    lesson_content_key: fa.a1.unit02.lesson05.origin
-    type: matching_pairs
-    frame: {text: "Match each country with its meaning.", language_code: en, direction: ltr}
-    slots:
-      country_one: *country
-      country_two: *country
-      country_three: *country
-    answer_derivation: {kind: matching_pairs, slots: [country_one, country_two, country_three]}
-    slot_relations: [{kind: distinct, slots: [country_one, country_two, country_three]}]
-    feedback_frame: {text: "Match the origin marker and each country to its English gloss.", language_code: en, direction: ltr}
-
-  # Lesson 6: practical language-class introduction dialogue.
-  - content_key: practice.en-fa.fa.a1.unit02.lesson06.class_question.001
-    lesson_content_key: fa.a1.unit02.lesson06.language_class_dialogue
-    type: fill_in_blank
-    frame: {text: "ببخشید، اینجا {class_word} فارسیه؟", language_code: fa, direction: rtl}
-    slots: {class_word: *class_word}
-    answer_derivation: {kind: slot_text, slot: class_word}
-    feedback_frame: {text: "{class_word} completes the question about this location.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit02.lesson06.name_reply.002
-    lesson_content_key: fa.a1.unit02.lesson06.language_class_dialogue
-    type: word_order
-    frame: {text: "اسم من {person_name} است", language_code: fa, direction: rtl}
-    slots: {person_name: *person_name}
-    answer_derivation: {kind: render_frame, frame: {text: "اسم من {person_name} است", language_code: fa, direction: rtl}}
-    feedback_frame: {text: "The speaker gives the name {person_name}.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit02.lesson06.origin_reply.003
-    lesson_content_key: fa.a1.unit02.lesson06.language_class_dialogue
-    type: word_order
-    frame: {text: "من اهل {country} هستم", language_code: fa, direction: rtl}
-    slots: {country: *country}
-    answer_derivation: {kind: render_frame, frame: {text: "من اهل {country} هستم", language_code: fa, direction: rtl}}
-    feedback_frame: {text: "This answer says the speaker is from {country}.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit02.lesson06.dialogue_gloss.004
-    lesson_content_key: fa.a1.unit02.lesson06.language_class_dialogue
-    type: translation
-    frame: {text: "{dialogue_word}", language_code: en, direction: ltr, slot_rendering: {dialogue_word: english_gloss}}
-    slots: {dialogue_word: *dialogue_word}
-    answer_derivation: {kind: slot_text, slot: dialogue_word}
-    feedback_frame: {text: "{dialogue_word} appears in the class dialogue.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit02.lesson06.dialogue_pair.005
-    lesson_content_key: fa.a1.unit02.lesson06.language_class_dialogue
-    type: matching_pairs
-    frame: {text: "کلمات را به معنی انگلیسی‌شان وصل کنید.", language_code: fa, direction: rtl}
-    slots:
-      person_name_1: *person_name
-      person_name_2: *person_name
-      person_name_3: *person_name
-      person_name_4: *person_name
-      dialogue_word_1: *dialogue_word
-      dialogue_word_2: *dialogue_word
-      dialogue_word_3: *dialogue_word
-      dialogue_word_4: *dialogue_word
-      dialogue_word_5: *dialogue_word
-      dialogue_word_6: *dialogue_word
-      dialogue_word_7: *dialogue_word
-      dialogue_word_8: *dialogue_word
-    answer_derivation:
-      kind: matching_pairs
-      slots: [person_name_1, person_name_2, person_name_3, person_name_4, dialogue_word_1, dialogue_word_2, dialogue_word_3, dialogue_word_4, dialogue_word_5, dialogue_word_6, dialogue_word_7, dialogue_word_8]
-    slot_relations:
-      - {kind: distinct, slots: [person_name_1, person_name_2, person_name_3, person_name_4]}
-      - {kind: distinct, slots: [dialogue_word_1, dialogue_word_2, dialogue_word_3, dialogue_word_4, dialogue_word_5, dialogue_word_6, dialogue_word_7, dialogue_word_8]}
-    feedback_frame: {text: "Match each dialogue item to its English meaning.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit02.lesson06.polite_close.006
-    lesson_content_key: fa.a1.unit02.lesson06.language_class_dialogue
-    type: word_order
-    frame: {text: "از آشنایی با شما خوشوقتم", language_code: fa, direction: rtl}
-    slots: {politeness: *politeness}
-    answer_derivation: {kind: render_frame, frame: {text: "از آشنایی با شما خوشوقتم", language_code: fa, direction: rtl}}
-    feedback_frame: {text: "This phrase politely acknowledges the introduction.", language_code: en, direction: ltr}
+      - text: Complete the word that links a person to their place of origin.
+        language_code: en
+        direction: ltr
+  feedback_frame:
+    text: '{origin_marker}'
+    language_code: fa
+    direction: rtl
+    text_blocks:
+    - text: Complete the word that links a person to their place of origin.
+      language_code: en
+      direction: ltr
+- content_key: practice.en-fa.fa.a1.unit02.lesson05.origin_translation.004.volume_order.004
+  lesson_content_key: fa.a1.unit02.lesson05.origin
+  type: word_order
+  frame:
+    text: من اهل {country} هستم
+    language_code: fa
+    direction: rtl
+  slots:
+    country:
+      language_code: fa
+      part_of_speech: proper_noun
+      agreement_tags:
+        semantic: country
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: من اهل {country} هستم
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: من اهل {country} هستم
+    language_code: fa
+    direction: rtl
+- content_key: practice.en-fa.fa.a1.unit02.lesson05.question_fill.005.volume_order.005
+  lesson_content_key: fa.a1.unit02.lesson05.origin
+  type: word_order
+  frame:
+    text: اهل {place_question} هستین؟
+    language_code: fa
+    direction: rtl
+  slots:
+    place_question:
+      language_code: fa
+      part_of_speech: adverb
+      agreement_tags:
+        semantic: place_question
+        register: neutral
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: اهل {place_question} هستین؟
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: اهل {place_question} هستین؟
+    language_code: fa
+    direction: rtl
+- content_key: practice.en-fa.fa.a1.unit02.lesson06.class_question.001.volume_order.006
+  lesson_content_key: fa.a1.unit02.lesson06.language_class_dialogue
+  type: word_order
+  frame:
+    text: ببخشید، اینجا {class_word} فارسیه؟
+    language_code: fa
+    direction: rtl
+  slots:
+    class_word:
+      language_code: fa
+      part_of_speech: noun
+      agreement_tags:
+        semantic: class_word
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: ببخشید، اینجا {class_word} فارسیه؟
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: ببخشید، اینجا {class_word} فارسیه؟
+    language_code: fa
+    direction: rtl

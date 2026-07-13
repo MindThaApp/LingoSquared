@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: '1.0'
 pack_key: practice.fa-en.a1.unit36
 source_language: fa
 target_language: en
@@ -6,65 +6,178 @@ unit_content_key: en.a1.unit36.education
 review:
   status: reviewed
   fresh_context: true
-  notes: >-
-    Authored 2026-07-11, fa-en depth-audit lane (unit 7 of the 30-42
-    batch, see unit30's pack notes for the full batch rationale).
+  notes: 'Authored 2026-07-11, fa-en depth-audit lane (unit 7 of the 30-42 batch, see unit30''s pack notes for the full batch
+    rationale).
 
-    One semantic tag: 'class_noun' (class/course/test from lesson01,
-    the 3-member subset of this unit's education nouns genuinely safe
-    in "I have a {item}." -- "homework"/"subject" are deliberately
-    excluded: homework is uncountable ("I have a homework" is
-    ungrammatical) and "I have a subject" isn't a natural claim either).
-    Only 3 members -- matching_pairs skipped as too thin (same call as
-    unit31's eye_color), covered instead by a full-sentence translate
-    variant for added depth.
+    One semantic tag: ''class_noun'' (class/course/test from lesson01, the 3-member subset of this unit''s education nouns
+    genuinely safe in "I have a {item}." -- "homework"/"subject" are deliberately excluded: homework is uncountable ("I have
+    a homework" is ungrammatical) and "I have a subject" isn''t a natural claim either). Only 3 members -- matching_pairs
+    skipped as too thin (same call as unit31''s eye_color), covered instead by a full-sentence translate variant for added
+    depth.
 
-    Anchoring check: lesson01 introduces class/course/test as real new
-    lexemes, verified via iter_specs(). Slot candidate count verified
-    with scripts/_practice_slot_check.py and compile_content.py
-    practice-validate. Needs the standard fresh-context review before
-    import.
+    Anchoring check: lesson01 introduces class/course/test as real new lexemes, verified via iter_specs(). Slot candidate
+    count verified with scripts/_practice_slot_check.py and compile_content.py practice-validate. Needs the standard fresh-context
+    review before import.
 
-    Fresh-context review 2026-07-11 (zero access to authoring reasoning): verified every slot member is taught in this unit's realization, every generative frame is grammatical for all fillings, Farsi feedback/instruction text reads as natural Iranian Farsi with correct RTL/ZWNJ, answer shapes (word_order list-shaped, matching_pairs covers every pair) are sound, listen_select distractors are distinct single vocabulary words, and no bare YAML booleans or snake_case jargon leak. compile_content.py practice-validate, scripts/_practice_slot_check.py, and backfill_lexemes_fa_en.py --dry-run all clean. No defects found; upgraded to reviewed.
+    Fresh-context review 2026-07-11 (zero access to authoring reasoning): verified every slot member is taught in this unit''s
+    realization, every generative frame is grammatical for all fillings, Farsi feedback/instruction text reads as natural
+    Iranian Farsi with correct RTL/ZWNJ, answer shapes (word_order list-shaped, matching_pairs covers every pair) are sound,
+    listen_select distractors are distinct single vocabulary words, and no bare YAML booleans or snake_case jargon leak. compile_content.py
+    practice-validate, scripts/_practice_slot_check.py, and backfill_lexemes_fa_en.py --dry-run all clean. No defects found;
+    upgraded to reviewed.'
 tag_schema:
-  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
   agreement_tags:
-    semantic: [class_noun]
+    semantic:
+    - class_noun
+    - volume_fa_en_a1_unit36_item_08_single
 slot_presets:
-  class_noun: &class_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: class_noun}}
+  class_noun: &id001
+    language_code: en
+    part_of_speech: noun
+    agreement_tags:
+      semantic: class_noun
 templates:
-  - content_key: practice.fa-en.en.a1.unit36.lesson01.choose.001
-    lesson_content_key: en.a1.unit36.lesson01.education_vocabulary
-    type: multiple_choice
-    frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *class_noun}
-    answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit36.lesson01.listen.002
-    lesson_content_key: en.a1.unit36.lesson01.education_vocabulary
-    type: listen_select
-    frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *class_noun}
-    answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "واژه‌ای که شنیدید {item} بود.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit36.lesson01.translate.003
-    lesson_content_key: en.a1.unit36.lesson01.education_vocabulary
-    type: translation
-    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
-    slots: {item: *class_noun}
-    answer_derivation: {kind: slot_text, slot: item}
-    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit36.lesson01.order.004
-    lesson_content_key: en.a1.unit36.lesson01.education_vocabulary
-    type: word_order
-    frame: {text: "I have a {item}", language_code: en, direction: ltr}
-    slots: {item: *class_noun}
-    answer_derivation: {kind: render_frame, frame: {text: "I have a {item}", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} چیزی است که ذکر شد.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit36.lesson01.translate_sentence.005
-    lesson_content_key: en.a1.unit36.lesson01.education_vocabulary
-    type: translation
-    frame: {text: "من یه {item} دارم.", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
-    slots: {item: *class_noun}
-    answer_derivation: {kind: render_frame, frame: {text: "I have a {item}", language_code: en, direction: ltr}}
-    feedback_frame: {text: "I have a {item}. یعنی من یه {item} دارم.", language_code: fa, direction: rtl}
+- content_key: practice.fa-en.en.a1.unit36.lesson01.choose.001
+  lesson_content_key: en.a1.unit36.lesson01.education_vocabulary
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: معنی فارسی {item} را انتخاب کنید.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit36.lesson01.listen.002
+  lesson_content_key: en.a1.unit36.lesson01.education_vocabulary
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: واژه‌ای که شنیدید {item} بود.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit36.lesson01.translate.003
+  lesson_content_key: en.a1.unit36.lesson01.education_vocabulary
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: پاسخ درست، معادل انگلیسی این واژه است.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit36.lesson01.order.004
+  lesson_content_key: en.a1.unit36.lesson01.education_vocabulary
+  type: word_order
+  frame:
+    text: I have a {item}
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: I have a {item}
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: '{item} چیزی است که ذکر شد.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit36.lesson01.translate_sentence.005
+  lesson_content_key: en.a1.unit36.lesson01.education_vocabulary
+  type: translation
+  frame:
+    text: من یه {item} دارم.
+    language_code: fa
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: I have a {item}
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: I have a {item}. یعنی من یه {item} دارم.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit36.lesson01.translate_sentence.005.volume_fill.008
+  lesson_content_key: en.a1.unit36.lesson01.education_vocabulary
+  type: fill_in_blank
+  frame:
+    text: I have a {item}
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: noun
+      agreement_tags:
+        semantic: volume_fa_en_a1_unit36_item_08_single
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+- content_key: practice.fa-en.en.a1.unit36.lesson01.translate_sentence.005.volume_order.002
+  lesson_content_key: en.a1.unit36.lesson01.education_vocabulary
+  type: word_order
+  frame:
+    text: I have a {item}
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: noun
+      agreement_tags:
+        semantic: class_noun
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: I have a {item}
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: I have a {item}
+    language_code: en
+    direction: ltr

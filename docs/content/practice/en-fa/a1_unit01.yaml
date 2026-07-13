@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: '1.0'
 pack_key: practice.en-fa.a1.unit01
 source_language: en
 target_language: fa
@@ -6,320 +6,1099 @@ unit_content_key: fa.a1.unit01.greetings
 review:
   status: reviewed
   fresh_context: true
-  notes: "Fresh review found and resolved translation-direction, phrase-gloss, recombination, and feedback metadata defects. A targeted post-review fix removed leaked review-process language from learner-facing feedback; this was not a new full fresh-context review. Second targeted post-review fix, 2026-07-06: scripts/_practice_slot_check.py surfaced that 3 multiple_choice templates (greeting_meaning, farewell_choice, question_meaning) each had only 1-2 real distinct lexeme candidates against the >=3 multiple_choice/matching_pairs threshold -- these unit01/unit02-era tags were simply never extended with more vocabulary, so build_prompt() was silently rejecting these generated-item shapes every time since the pack shipped. Converted all 3 to fill_in_blank (same slot, needs only >=1 candidate, matching this file's own letter_fill.002/farewell_fill.003 precedent) rather than inventing new tagged vocabulary. Re-verified via compile_content.py practice-validate (0/0) and _practice_slot_check.py (all 3 now pass). Third targeted post-review fix, 2026-07-07: the 3 matching_pairs templates left open above (greeting_pair.006, question_pair.004, offer_pair.006) are now fixed too, without inventing any vocabulary -- verified by hand against backfill_lexemes.py's iter_specs() (A1-only, no cross-level pooling risk: en-fa's a2_unit09/10 don't touch this vocabulary at all) that 'greeting' (سلام) and 'offered_item' (چای) are each genuinely single-candidate at this course's real vocabulary depth (سلام is the only single-token greeting; صبح/عصر بخیر are correctly modeled as separate time_period+good_wish tokens, already tested via time_greeting.002; taarof's lesson literally only teaches one offered item), and 'wellbeing_question_phrase' likewise has only 1 real candidate (حالتون چطوره؟, already tested via question_fill.001/return_question.006). Rather than pairing a 1-candidate tag against a fine one (structurally unsatisfiable -- matching_pairs needs >=N distinct candidates for N slots on a tag, and 1 can never fill >=2), each was rebuilt as a matching_pairs pooling ONLY tags with real headroom, several using each lesson's own already-tested-elsewhere vocabulary per AUTHORING_GUIDE §16: greeting_pair.006 -> closing_pair.006 (farewell x2 + politeness x4 = 6 pairs), question_pair.004 -> answer_pair.004 (wellbeing_answer x3 + politeness x4 = 7 pairs, politeness newly recapped into lesson04 from lesson02), offer_pair.006 -> politeness_pair.006 (politeness x4 alone, offered_item dropped since it's already covered by offer_order.001/offer_meaning.002). Re-verified via _practice_slot_check.py (0 problems in this file) and compile_content.py practice-validate (0/0)."
+  notes: 'Fresh review found and resolved translation-direction, phrase-gloss, recombination, and feedback metadata defects.
+    A targeted post-review fix removed leaked review-process language from learner-facing feedback; this was not a new full
+    fresh-context review. Second targeted post-review fix, 2026-07-06: scripts/_practice_slot_check.py surfaced that 3 multiple_choice
+    templates (greeting_meaning, farewell_choice, question_meaning) each had only 1-2 real distinct lexeme candidates against
+    the >=3 multiple_choice/matching_pairs threshold -- these unit01/unit02-era tags were simply never extended with more
+    vocabulary, so build_prompt() was silently rejecting these generated-item shapes every time since the pack shipped. Converted
+    all 3 to fill_in_blank (same slot, needs only >=1 candidate, matching this file''s own letter_fill.002/farewell_fill.003
+    precedent) rather than inventing new tagged vocabulary. Re-verified via compile_content.py practice-validate (0/0) and
+    _practice_slot_check.py (all 3 now pass). Third targeted post-review fix, 2026-07-07: the 3 matching_pairs templates left
+    open above (greeting_pair.006, question_pair.004, offer_pair.006) are now fixed too, without inventing any vocabulary
+    -- verified by hand against backfill_lexemes.py''s iter_specs() (A1-only, no cross-level pooling risk: en-fa''s a2_unit09/10
+    don''t touch this vocabulary at all) that ''greeting'' (سلام) and ''offered_item'' (چای) are each genuinely single-candidate
+    at this course''s real vocabulary depth (سلام is the only single-token greeting; صبح/عصر بخیر are correctly modeled as
+    separate time_period+good_wish tokens, already tested via time_greeting.002; taarof''s lesson literally only teaches one
+    offered item), and ''wellbeing_question_phrase'' likewise has only 1 real candidate (حالتون چطوره؟, already tested via
+    question_fill.001/return_question.006). Rather than pairing a 1-candidate tag against a fine one (structurally unsatisfiable
+    -- matching_pairs needs >=N distinct candidates for N slots on a tag, and 1 can never fill >=2), each was rebuilt as a
+    matching_pairs pooling ONLY tags with real headroom, several using each lesson''s own already-tested-elsewhere vocabulary
+    per AUTHORING_GUIDE §16: greeting_pair.006 -> closing_pair.006 (farewell x2 + politeness x4 = 6 pairs), question_pair.004
+    -> answer_pair.004 (wellbeing_answer x3 + politeness x4 = 7 pairs, politeness newly recapped into lesson04 from lesson02),
+    offer_pair.006 -> politeness_pair.006 (politeness x4 alone, offered_item dropped since it''s already covered by offer_order.001/offer_meaning.002).
+    Re-verified via _practice_slot_check.py (0 problems in this file) and compile_content.py practice-validate (0/0).'
 tag_schema:
-  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
   agreement_tags:
-    semantic: [letter, greeting, time_period, good_wish, farewell, wellbeing_question, wellbeing_question_phrase, wellbeing_answer, wellbeing_answer_phrase, politeness, politeness_phrase, offered_item, person_name, identity, dialogue_word, reviewed_phrase]
-    register: [neutral, polite, informal, formal]
-    person: [first, second, third]
+    semantic:
+    - letter
+    - greeting
+    - time_period
+    - good_wish
+    - farewell
+    - wellbeing_question
+    - wellbeing_question_phrase
+    - wellbeing_answer
+    - wellbeing_answer_phrase
+    - politeness
+    - politeness_phrase
+    - offered_item
+    - person_name
+    - identity
+    - dialogue_word
+    - reviewed_phrase
+    - volume_en_fa_a1_unit01_time_period_02_single
+    - volume_en_fa_a1_unit01_good_wish_04_single
+    - volume_en_fa_a1_unit01_offered_item_08_single
+    - volume_en_fa_a1_unit01_person_name_11_single
+    register:
+    - neutral
+    - polite
+    - informal
+    - formal
+    person:
+    - first
+    - second
+    - third
 slot_presets:
-  letter: &letter {language_code: fa, part_of_speech: symbol, agreement_tags: {semantic: letter}}
-  greeting: &greeting {language_code: fa, part_of_speech: [noun, phrase], agreement_tags: {semantic: greeting}}
-  time_period: &time_period {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: time_period}}
-  good_wish: &good_wish {language_code: fa, part_of_speech: [adjective, phrase], agreement_tags: {semantic: good_wish}}
-  farewell: &farewell {language_code: fa, part_of_speech: [noun, adverb, phrase], agreement_tags: {semantic: farewell}}
-  wellbeing_question: &wellbeing_question {language_code: fa, part_of_speech: phrase, agreement_tags: {semantic: wellbeing_question_phrase}}
-  wellbeing_answer: &wellbeing_answer {language_code: fa, part_of_speech: [verb, phrase], agreement_tags: {semantic: wellbeing_answer_phrase}}
-  politeness: &politeness {language_code: fa, part_of_speech: phrase, agreement_tags: {semantic: politeness_phrase}}
-  offered_item: &offered_item {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: offered_item}}
-  person_name: &person_name {language_code: fa, part_of_speech: proper_noun, agreement_tags: {semantic: person_name}}
-  identity: &identity {language_code: fa, part_of_speech: [pronoun, verb, phrase], agreement_tags: {semantic: identity}}
-  dialogue_word: &dialogue_word {language_code: fa, part_of_speech: [noun, pronoun, verb, adjective, adverb, preposition, particle, phrase], agreement_tags: {semantic: dialogue_word}}
+  letter: &id001
+    language_code: fa
+    part_of_speech: symbol
+    agreement_tags:
+      semantic: letter
+  greeting: &id002
+    language_code: fa
+    part_of_speech:
+    - noun
+    - phrase
+    agreement_tags:
+      semantic: greeting
+  time_period: &id003
+    language_code: fa
+    part_of_speech: noun
+    agreement_tags:
+      semantic: time_period
+  good_wish: &id004
+    language_code: fa
+    part_of_speech:
+    - adjective
+    - phrase
+    agreement_tags:
+      semantic: good_wish
+  farewell: &id005
+    language_code: fa
+    part_of_speech:
+    - noun
+    - adverb
+    - phrase
+    agreement_tags:
+      semantic: farewell
+  wellbeing_question: &id007
+    language_code: fa
+    part_of_speech: phrase
+    agreement_tags:
+      semantic: wellbeing_question_phrase
+  wellbeing_answer: &id008
+    language_code: fa
+    part_of_speech:
+    - verb
+    - phrase
+    agreement_tags:
+      semantic: wellbeing_answer_phrase
+  politeness: &id006
+    language_code: fa
+    part_of_speech: phrase
+    agreement_tags:
+      semantic: politeness_phrase
+  offered_item: &id009
+    language_code: fa
+    part_of_speech: noun
+    agreement_tags:
+      semantic: offered_item
+  person_name: &id010
+    language_code: fa
+    part_of_speech: proper_noun
+    agreement_tags:
+      semantic: person_name
+  identity:
+    language_code: fa
+    part_of_speech:
+    - pronoun
+    - verb
+    - phrase
+    agreement_tags:
+      semantic: identity
+  dialogue_word: &id011
+    language_code: fa
+    part_of_speech:
+    - noun
+    - pronoun
+    - verb
+    - adjective
+    - adverb
+    - preposition
+    - particle
+    - phrase
+    agreement_tags:
+      semantic: dialogue_word
 templates:
-  # Lesson 1: script recognition. Single-letter slots deliberately avoid
-  # pretending that arbitrary letters form valid Persian words.
-  - content_key: practice.en-fa.fa.a1.unit01.lesson01.letter_gloss.001
-    lesson_content_key: fa.a1.unit01.lesson01.script_ramp
-    type: multiple_choice
-    frame: {text: "{letter}", language_code: fa, direction: rtl}
-    slots: {letter: *letter}
-    answer_derivation: {kind: slot_gloss, slot: letter}
-    feedback_frame: {text: "{letter} has this sound value.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit01.lesson01.letter_translation.003
-    lesson_content_key: fa.a1.unit01.lesson01.script_ramp
-    type: translation
-    frame: {text: "{letter}", language_code: en, direction: ltr, slot_rendering: {letter: english_gloss}}
-    slots: {letter: *letter}
-    answer_derivation: {kind: slot_text, slot: letter}
-    feedback_frame: {text: "{letter} maps to this Latin sound label.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit01.lesson01.letter_pair.004
-    lesson_content_key: fa.a1.unit01.lesson01.script_ramp
-    type: matching_pairs
-    frame: {text: "Match each letter with its sound label.", language_code: en, direction: ltr}
+- content_key: practice.en-fa.fa.a1.unit01.lesson01.letter_gloss.001
+  lesson_content_key: fa.a1.unit01.lesson01.script_ramp
+  type: multiple_choice
+  frame:
+    text: '{letter}'
+    language_code: fa
+    direction: rtl
+  slots:
+    letter: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: letter
+  feedback_frame:
+    text: '{letter} has this sound value.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit01.lesson01.letter_translation.003
+  lesson_content_key: fa.a1.unit01.lesson01.script_ramp
+  type: translation
+  frame:
+    text: '{letter}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      letter: english_gloss
+  slots:
+    letter: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: letter
+  feedback_frame:
+    text: '{letter} maps to this Latin sound label.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit01.lesson01.letter_pair.004
+  lesson_content_key: fa.a1.unit01.lesson01.script_ramp
+  type: matching_pairs
+  frame:
+    text: Match each letter with its sound label.
+    language_code: en
+    direction: ltr
+  slots:
+    letter_one: *id001
+    letter_two: *id001
+    letter_three: *id001
+    letter_four: *id001
+    letter_five: *id001
+    letter_six: *id001
+    letter_seven: *id001
+    letter_eight: *id001
+    letter_nine: *id001
+    letter_ten: *id001
+    letter_eleven: *id001
+    letter_twelve: *id001
+  answer_derivation:
+    kind: matching_pairs
     slots:
-      letter_one: *letter
-      letter_two: *letter
-      letter_three: *letter
-      letter_four: *letter
-      letter_five: *letter
-      letter_six: *letter
-      letter_seven: *letter
-      letter_eight: *letter
-      letter_nine: *letter
-      letter_ten: *letter
-      letter_eleven: *letter
-      letter_twelve: *letter
-    answer_derivation: {kind: matching_pairs, slots: [letter_one, letter_two, letter_three, letter_four, letter_five, letter_six, letter_seven, letter_eight, letter_nine, letter_ten, letter_eleven, letter_twelve]}
-    slot_relations: [{kind: distinct, slots: [letter_one, letter_two, letter_three, letter_four, letter_five, letter_six, letter_seven, letter_eight, letter_nine, letter_ten, letter_eleven, letter_twelve]}]
-    feedback_frame: {text: "Match each letter to its sound label.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit01.lesson01.salam_order.005
-    lesson_content_key: fa.a1.unit01.lesson01.script_ramp
-    type: word_order
-    frame: {text: "س ل ا م", language_code: fa, direction: rtl}
-    slots: {letter: *letter}
-    answer_derivation: {kind: render_frame, frame: {text: "سلام", language_code: fa, direction: rtl}}
-    feedback_frame: {text: "These letters join to form سلام.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit01.lesson01.salam_meaning.006
-    lesson_content_key: fa.a1.unit01.lesson01.script_ramp
-    type: multiple_choice
-    frame: {text: "{greeting}", language_code: fa, direction: rtl}
-    slots: {greeting: *greeting}
-    answer_derivation: {kind: render_frame, frame: {text: "hello", language_code: en, direction: ltr}}
-    feedback_frame: {text: "سلام is the greeting introduced with these letters.", language_code: en, direction: ltr}
-
-  # Lesson 2: everyday greetings.
-  - content_key: practice.en-fa.fa.a1.unit01.lesson02.greeting_fill.001
-    lesson_content_key: fa.a1.unit01.lesson02.everyday_greetings
-    type: fill_in_blank
+    - letter_one
+    - letter_two
+    - letter_three
+    - letter_four
+    - letter_five
+    - letter_six
+    - letter_seven
+    - letter_eight
+    - letter_nine
+    - letter_ten
+    - letter_eleven
+    - letter_twelve
+  slot_relations:
+  - kind: distinct
+    slots:
+    - letter_one
+    - letter_two
+    - letter_three
+    - letter_four
+    - letter_five
+    - letter_six
+    - letter_seven
+    - letter_eight
+    - letter_nine
+    - letter_ten
+    - letter_eleven
+    - letter_twelve
+  feedback_frame:
+    text: Match each letter to its sound label.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit01.lesson01.salam_order.005
+  lesson_content_key: fa.a1.unit01.lesson01.script_ramp
+  type: word_order
+  frame:
+    text: س ل ا م
+    language_code: fa
+    direction: rtl
+  slots:
+    letter: *id001
+  answer_derivation:
+    kind: render_frame
     frame:
-      text: "{greeting}"
+      text: سلام
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: These letters join to form سلام.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit01.lesson01.salam_meaning.006
+  lesson_content_key: fa.a1.unit01.lesson01.script_ramp
+  type: multiple_choice
+  frame:
+    text: '{greeting}'
+    language_code: fa
+    direction: rtl
+  slots:
+    greeting: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: hello
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: سلام is the greeting introduced with these letters.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit01.lesson02.greeting_fill.001
+  lesson_content_key: fa.a1.unit01.lesson02.everyday_greetings
+  type: fill_in_blank
+  frame:
+    text: '{greeting}'
+    language_code: fa
+    direction: rtl
+    text_blocks:
+    - text: Complete the everyday greeting.
+      language_code: en
+      direction: ltr
+  slots:
+    greeting: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: greeting
+  feedback_frame:
+    text: '{greeting} is an everyday greeting.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit01.lesson02.time_greeting.002
+  lesson_content_key: fa.a1.unit01.lesson02.everyday_greetings
+  type: word_order
+  frame:
+    text: '{time_period} {good_wish}'
+    language_code: fa
+    direction: rtl
+  slots:
+    time_period: *id003
+    good_wish: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{time_period} {good_wish}'
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: The time expression comes before the good-wish expression.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit01.lesson02.farewell_gloss.003
+  lesson_content_key: fa.a1.unit01.lesson02.everyday_greetings
+  type: translation
+  frame:
+    text: '{farewell}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      farewell: english_gloss
+  slots:
+    farewell: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: farewell
+  feedback_frame:
+    text: '{farewell} is a way to close an exchange.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit01.lesson02.politeness_meaning.005
+  lesson_content_key: fa.a1.unit01.lesson02.everyday_greetings
+  type: multiple_choice
+  frame:
+    text: '{politeness}'
+    language_code: fa
+    direction: rtl
+  slots:
+    politeness: *id006
+  answer_derivation:
+    kind: slot_gloss
+    slot: politeness
+  feedback_frame:
+    text: '{politeness} is used in this polite exchange.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit01.lesson02.closing_pair.006
+  lesson_content_key: fa.a1.unit01.lesson02.everyday_greetings
+  type: matching_pairs
+  frame:
+    text: Match each word or phrase with its meaning.
+    language_code: en
+    direction: ltr
+  slots:
+    farewell_one: *id005
+    farewell_two: *id005
+    politeness_one: *id006
+    politeness_two: *id006
+    politeness_three: *id006
+    politeness_four: *id006
+  slot_relations:
+  - kind: distinct
+    slots:
+    - farewell_one
+    - farewell_two
+    - politeness_one
+    - politeness_two
+    - politeness_three
+    - politeness_four
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - farewell_one
+    - farewell_two
+    - politeness_one
+    - politeness_two
+    - politeness_three
+    - politeness_four
+  feedback_frame:
+    text: Match each closing/politeness word or phrase to its meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit01.lesson03.time_wish.001
+  lesson_content_key: fa.a1.unit01.lesson03.time_and_farewells
+  type: word_order
+  frame:
+    text: '{time_period} {good_wish}'
+    language_code: fa
+    direction: rtl
+  slots:
+    time_period: *id003
+    good_wish: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{time_period} {good_wish}'
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: The time expression comes before {good_wish}.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit01.lesson03.time_pair.004
+  lesson_content_key: fa.a1.unit01.lesson03.time_and_farewells
+  type: matching_pairs
+  frame:
+    text: Match each word with its meaning.
+    language_code: en
+    direction: ltr
+  slots:
+    time_period_one: *id003
+    time_period_two: *id003
+    time_period_three: *id003
+    time_period_four: *id003
+    farewell_one: *id005
+    farewell_two: *id005
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - time_period_one
+    - time_period_two
+    - time_period_three
+    - time_period_four
+    - farewell_one
+    - farewell_two
+  slot_relations:
+  - kind: distinct
+    slots:
+    - time_period_one
+    - time_period_two
+    - time_period_three
+    - time_period_four
+  - kind: distinct
+    slots:
+    - farewell_one
+    - farewell_two
+  feedback_frame:
+    text: Match each time expression and farewell to its meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit01.lesson03.good_day.005
+  lesson_content_key: fa.a1.unit01.lesson03.time_and_farewells
+  type: word_order
+  frame:
+    text: روز خوبی داشته باشید
+    language_code: fa
+    direction: rtl
+  slots:
+    good_wish: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: روز خوبی داشته باشید
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: روز خوبی داشته باشید wishes someone a good day.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit01.lesson03.welcome_meaning.006
+  lesson_content_key: fa.a1.unit01.lesson03.time_and_farewells
+  type: multiple_choice
+  frame:
+    text: خوش آمدید
+    language_code: fa
+    direction: rtl
+  slots:
+    good_wish: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: welcome
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: خوش آمدید welcomes someone politely.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit01.lesson04.question_fill.001
+  lesson_content_key: fa.a1.unit01.lesson04.formal_informal_wellbeing
+  type: fill_in_blank
+  frame:
+    text: '{wellbeing_question}'
+    language_code: fa
+    direction: rtl
+    text_blocks:
+    - text: Complete the wellbeing question.
+      language_code: en
+      direction: ltr
+  slots:
+    wellbeing_question: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: wellbeing_question
+  feedback_frame:
+    text: '{wellbeing_question} asks how someone is.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit01.lesson04.answer_meaning.002
+  lesson_content_key: fa.a1.unit01.lesson04.formal_informal_wellbeing
+  type: translation
+  frame:
+    text: '{wellbeing_answer}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      wellbeing_answer: english_gloss
+  slots:
+    wellbeing_answer: *id008
+  answer_derivation:
+    kind: slot_text
+    slot: wellbeing_answer
+  feedback_frame:
+    text: '{wellbeing_answer} is a natural response to a wellbeing question.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit01.lesson04.answer_pair.004
+  lesson_content_key: fa.a1.unit01.lesson04.formal_informal_wellbeing
+  type: matching_pairs
+  frame:
+    text: Match each word or phrase with its meaning.
+    language_code: en
+    direction: ltr
+  slots:
+    wellbeing_answer_one: *id008
+    wellbeing_answer_two: *id008
+    wellbeing_answer_three: *id008
+    politeness_one: *id006
+    politeness_two: *id006
+    politeness_three: *id006
+    politeness_four: *id006
+  slot_relations:
+  - kind: distinct
+    slots:
+    - wellbeing_answer_one
+    - wellbeing_answer_two
+    - wellbeing_answer_three
+    - politeness_one
+    - politeness_two
+    - politeness_three
+    - politeness_four
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - wellbeing_answer_one
+    - wellbeing_answer_two
+    - wellbeing_answer_three
+    - politeness_one
+    - politeness_two
+    - politeness_three
+    - politeness_four
+  feedback_frame:
+    text: Match each wellbeing-answer/politeness word or phrase to its meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit01.lesson04.answer_order.005
+  lesson_content_key: fa.a1.unit01.lesson04.formal_informal_wellbeing
+  type: word_order
+  frame:
+    text: خیلی خوبم
+    language_code: fa
+    direction: rtl
+  slots:
+    wellbeing_answer: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: خیلی خوبم
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: خیلی comes before خوبم to mean ‘I’m very well.’
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit01.lesson04.return_question.006
+  lesson_content_key: fa.a1.unit01.lesson04.formal_informal_wellbeing
+  type: fill_in_blank
+  frame:
+    text: خوبم، ممنون. {wellbeing_question}
+    language_code: fa
+    direction: rtl
+  slots:
+    wellbeing_question: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: wellbeing_question
+  feedback_frame:
+    text: '{wellbeing_question} returns the wellbeing question.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit01.lesson05.offer_order.001
+  lesson_content_key: fa.a1.unit01.lesson05.taarof_basics
+  type: word_order
+  frame:
+    text: '{offered_item} بفرمایید'
+    language_code: fa
+    direction: rtl
+  slots:
+    offered_item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{offered_item} بفرمایید'
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: بفرمایید makes the offer of {offered_item} polite.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit01.lesson05.offer_meaning.002
+  lesson_content_key: fa.a1.unit01.lesson05.taarof_basics
+  type: translation
+  frame:
+    text: Please have some {offered_item}.
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      offered_item: english_gloss
+  slots:
+    offered_item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{offered_item} بفرمایید'
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: بفرمایید makes the offer of {offered_item} polite.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit01.lesson05.politeness_gloss.003
+  lesson_content_key: fa.a1.unit01.lesson05.taarof_basics
+  type: multiple_choice
+  frame:
+    text: '{politeness}'
+    language_code: fa
+    direction: rtl
+  slots:
+    politeness: *id006
+  answer_derivation:
+    kind: slot_gloss
+    slot: politeness
+  feedback_frame:
+    text: '{politeness} is used in this taarof exchange.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit01.lesson05.decline_fill.004
+  lesson_content_key: fa.a1.unit01.lesson05.taarof_basics
+  type: translation
+  frame:
+    text: '{politeness}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      politeness: english_gloss
+  slots:
+    politeness: *id006
+  answer_derivation:
+    kind: slot_text
+    slot: politeness
+  feedback_frame:
+    text: '{politeness} is the Persian politeness phrase for this meaning.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit01.lesson05.kindness_order.005
+  lesson_content_key: fa.a1.unit01.lesson05.taarof_basics
+  type: word_order
+  frame:
+    text: ممنون از لطف شما
+    language_code: fa
+    direction: rtl
+  slots:
+    politeness: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: ممنون از لطف شما
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: ممنون از لطف شما thanks someone for their kindness.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit01.lesson05.politeness_pair.006
+  lesson_content_key: fa.a1.unit01.lesson05.taarof_basics
+  type: matching_pairs
+  frame:
+    text: Match each polite expression with its meaning.
+    language_code: en
+    direction: ltr
+  slots:
+    politeness_one: *id006
+    politeness_two: *id006
+    politeness_three: *id006
+    politeness_four: *id006
+  slot_relations:
+  - kind: distinct
+    slots:
+    - politeness_one
+    - politeness_two
+    - politeness_three
+    - politeness_four
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - politeness_one
+    - politeness_two
+    - politeness_three
+    - politeness_four
+  feedback_frame:
+    text: Match each taarof politeness expression to its meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit01.lesson06.name_greeting.001
+  lesson_content_key: fa.a1.unit01.lesson06.first_meeting_dialogue
+  type: fill_in_blank
+  frame:
+    text: '{person_name}: {greeting}'
+    language_code: fa
+    direction: rtl
+  slots:
+    person_name: *id010
+    greeting: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: greeting
+  feedback_frame:
+    text: '{person_name} uses the greeting {greeting}.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit01.lesson06.identity_order.002
+  lesson_content_key: fa.a1.unit01.lesson06.first_meeting_dialogue
+  type: word_order
+  frame:
+    text: من {person_name} هستم
+    language_code: fa
+    direction: rtl
+  slots:
+    person_name: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: من {person_name} هستم
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: من … هستم states the speaker's name.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit01.lesson06.name_meaning.003
+  lesson_content_key: fa.a1.unit01.lesson06.first_meeting_dialogue
+  type: multiple_choice
+  frame:
+    text: '{person_name}'
+    language_code: fa
+    direction: rtl
+  slots:
+    person_name: *id010
+  answer_derivation:
+    kind: slot_gloss
+    slot: person_name
+  feedback_frame:
+    text: '{person_name} is one of the people in the dialogue.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit01.lesson06.dialogue_gloss.004
+  lesson_content_key: fa.a1.unit01.lesson06.first_meeting_dialogue
+  type: translation
+  frame:
+    text: '{dialogue_word}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      dialogue_word: english_gloss
+  slots:
+    dialogue_word: *id011
+  answer_derivation:
+    kind: slot_text
+    slot: dialogue_word
+  feedback_frame:
+    text: '{dialogue_word} appears in the first-meeting dialogue.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit01.lesson06.dialogue_pair.005
+  lesson_content_key: fa.a1.unit01.lesson06.first_meeting_dialogue
+  type: matching_pairs
+  frame:
+    text: Match each word with its meaning.
+    language_code: en
+    direction: ltr
+  slots:
+    person_name_one: *id010
+    person_name_two: *id010
+    person_name_three: *id010
+    person_name_four: *id010
+    dialogue_word_one: *id011
+    dialogue_word_two: *id011
+    dialogue_word_three: *id011
+    dialogue_word_four: *id011
+    dialogue_word_five: *id011
+    dialogue_word_six: *id011
+    dialogue_word_seven: *id011
+    dialogue_word_eight: *id011
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - person_name_one
+    - person_name_two
+    - person_name_three
+    - person_name_four
+    - dialogue_word_one
+    - dialogue_word_two
+    - dialogue_word_three
+    - dialogue_word_four
+    - dialogue_word_five
+    - dialogue_word_six
+    - dialogue_word_seven
+    - dialogue_word_eight
+  slot_relations:
+  - kind: distinct
+    slots:
+    - person_name_one
+    - person_name_two
+    - person_name_three
+    - person_name_four
+  - kind: distinct
+    slots:
+    - dialogue_word_one
+    - dialogue_word_two
+    - dialogue_word_three
+    - dialogue_word_four
+    - dialogue_word_five
+    - dialogue_word_six
+    - dialogue_word_seven
+    - dialogue_word_eight
+  feedback_frame:
+    text: Match each dialogue item to its English meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit01.lesson06.closing_order.006
+  lesson_content_key: fa.a1.unit01.lesson06.first_meeting_dialogue
+  type: word_order
+  frame:
+    text: به امید دیدار
+    language_code: fa
+    direction: rtl
+  slots:
+    farewell: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: به امید دیدار
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: Ali says به امید دیدار before the final خداحافظ.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit01.lesson02.time_greeting.002.volume_fill.002
+  lesson_content_key: fa.a1.unit01.lesson02.everyday_greetings
+  type: fill_in_blank
+  frame: &id012
+    text: '{time_period} {good_wish}'
+    language_code: fa
+    direction: rtl
+  slots:
+    time_period:
+      language_code: fa
+      part_of_speech: noun
+      agreement_tags:
+        semantic: volume_en_fa_a1_unit01_time_period_02_single
+    good_wish:
+      language_code: fa
+      part_of_speech:
+      - adjective
+      - phrase
+      agreement_tags:
+        semantic: good_wish
+  answer_derivation:
+    kind: slot_text
+    slot: time_period
+  feedback_frame:
+    text: '{time_period}'
+    language_code: fa
+    direction: rtl
+- content_key: practice.en-fa.fa.a1.unit01.lesson02.time_greeting.002.volume_fill.004
+  lesson_content_key: fa.a1.unit01.lesson02.everyday_greetings
+  type: fill_in_blank
+  frame: *id012
+  slots:
+    time_period:
+      language_code: fa
+      part_of_speech: noun
+      agreement_tags:
+        semantic: time_period
+    good_wish:
+      language_code: fa
+      part_of_speech: phrase
+      agreement_tags:
+        semantic: volume_en_fa_a1_unit01_good_wish_04_single
+  answer_derivation:
+    kind: slot_text
+    slot: good_wish
+  feedback_frame:
+    text: '{good_wish}'
+    language_code: fa
+    direction: rtl
+- content_key: practice.en-fa.fa.a1.unit01.lesson05.offer_order.001.volume_fill.008
+  lesson_content_key: fa.a1.unit01.lesson05.taarof_basics
+  type: fill_in_blank
+  frame:
+    text: '{offered_item} بفرمایید'
+    language_code: fa
+    direction: rtl
+  slots:
+    offered_item:
+      language_code: fa
+      part_of_speech: noun
+      agreement_tags:
+        semantic: volume_en_fa_a1_unit01_offered_item_08_single
+  answer_derivation:
+    kind: slot_text
+    slot: offered_item
+  feedback_frame:
+    text: '{offered_item}'
+    language_code: fa
+    direction: rtl
+- content_key: practice.en-fa.fa.a1.unit01.lesson06.identity_order.002.volume_fill.011
+  lesson_content_key: fa.a1.unit01.lesson06.first_meeting_dialogue
+  type: fill_in_blank
+  frame:
+    text: من {person_name} هستم
+    language_code: fa
+    direction: rtl
+  slots:
+    person_name:
+      language_code: fa
+      part_of_speech: proper_noun
+      agreement_tags:
+        semantic: volume_en_fa_a1_unit01_person_name_11_single
+  answer_derivation:
+    kind: slot_text
+    slot: person_name
+  feedback_frame:
+    text: '{person_name}'
+    language_code: fa
+    direction: rtl
+- content_key: practice.en-fa.fa.a1.unit01.lesson02.greeting_fill.001.volume_order.007
+  lesson_content_key: fa.a1.unit01.lesson02.everyday_greetings
+  type: word_order
+  frame:
+    text: '{greeting}'
+    language_code: fa
+    direction: rtl
+    text_blocks:
+    - text: Complete the everyday greeting.
+      language_code: en
+      direction: ltr
+  slots:
+    greeting:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - phrase
+      agreement_tags:
+        semantic: greeting
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{greeting}'
       language_code: fa
       direction: rtl
       text_blocks:
-        - {text: "Complete the everyday greeting.", language_code: en, direction: ltr}
-    slots: {greeting: *greeting}
-    answer_derivation: {kind: slot_text, slot: greeting}
-    feedback_frame: {text: "{greeting} is an everyday greeting.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit01.lesson02.time_greeting.002
-    lesson_content_key: fa.a1.unit01.lesson02.everyday_greetings
-    type: word_order
-    frame: {text: "{time_period} {good_wish}", language_code: fa, direction: rtl}
-    slots: {time_period: *time_period, good_wish: *good_wish}
-    answer_derivation: {kind: render_frame, frame: {text: "{time_period} {good_wish}", language_code: fa, direction: rtl}}
-    feedback_frame: {text: "The time expression comes before the good-wish expression.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit01.lesson02.farewell_gloss.003
-    lesson_content_key: fa.a1.unit01.lesson02.everyday_greetings
-    type: translation
-    frame: {text: "{farewell}", language_code: en, direction: ltr, slot_rendering: {farewell: english_gloss}}
-    slots: {farewell: *farewell}
-    answer_derivation: {kind: slot_text, slot: farewell}
-    feedback_frame: {text: "{farewell} is a way to close an exchange.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit01.lesson02.politeness_meaning.005
-    lesson_content_key: fa.a1.unit01.lesson02.everyday_greetings
-    type: multiple_choice
-    frame: {text: "{politeness}", language_code: fa, direction: rtl}
-    slots: {politeness: *politeness}
-    answer_derivation: {kind: slot_gloss, slot: politeness}
-    feedback_frame: {text: "{politeness} is used in this polite exchange.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit01.lesson02.closing_pair.006
-    lesson_content_key: fa.a1.unit01.lesson02.everyday_greetings
-    type: matching_pairs
-    frame: {text: "Match each word or phrase with its meaning.", language_code: en, direction: ltr}
-    slots:
-      farewell_one: *farewell
-      farewell_two: *farewell
-      politeness_one: *politeness
-      politeness_two: *politeness
-      politeness_three: *politeness
-      politeness_four: *politeness
-    slot_relations: [{kind: distinct, slots: [farewell_one, farewell_two, politeness_one, politeness_two, politeness_three, politeness_four]}]
-    answer_derivation: {kind: matching_pairs, slots: [farewell_one, farewell_two, politeness_one, politeness_two, politeness_three, politeness_four]}
-    feedback_frame: {text: "Match each closing/politeness word or phrase to its meaning.", language_code: en, direction: ltr}
-
-  # Lesson 3: time-specific greetings and farewells.
-  - content_key: practice.en-fa.fa.a1.unit01.lesson03.time_wish.001
-    lesson_content_key: fa.a1.unit01.lesson03.time_and_farewells
-    type: word_order
-    frame: {text: "{time_period} {good_wish}", language_code: fa, direction: rtl}
-    slots: {time_period: *time_period, good_wish: *good_wish}
-    answer_derivation: {kind: render_frame, frame: {text: "{time_period} {good_wish}", language_code: fa, direction: rtl}}
-    feedback_frame: {text: "The time expression comes before {good_wish}.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit01.lesson03.time_pair.004
-    lesson_content_key: fa.a1.unit01.lesson03.time_and_farewells
-    type: matching_pairs
-    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
-    slots:
-      time_period_one: *time_period
-      time_period_two: *time_period
-      time_period_three: *time_period
-      time_period_four: *time_period
-      farewell_one: *farewell
-      farewell_two: *farewell
-    answer_derivation: {kind: matching_pairs, slots: [time_period_one, time_period_two, time_period_three, time_period_four, farewell_one, farewell_two]}
-    slot_relations:
-      - {kind: distinct, slots: [time_period_one, time_period_two, time_period_three, time_period_four]}
-      - {kind: distinct, slots: [farewell_one, farewell_two]}
-    feedback_frame: {text: "Match each time expression and farewell to its meaning.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit01.lesson03.good_day.005
-    lesson_content_key: fa.a1.unit01.lesson03.time_and_farewells
-    type: word_order
-    frame: {text: "روز خوبی داشته باشید", language_code: fa, direction: rtl}
-    slots: {good_wish: *good_wish}
-    answer_derivation: {kind: render_frame, frame: {text: "روز خوبی داشته باشید", language_code: fa, direction: rtl}}
-    feedback_frame: {text: "روز خوبی داشته باشید wishes someone a good day.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit01.lesson03.welcome_meaning.006
-    lesson_content_key: fa.a1.unit01.lesson03.time_and_farewells
-    type: multiple_choice
-    frame: {text: "خوش آمدید", language_code: fa, direction: rtl}
-    slots: {good_wish: *good_wish}
-    answer_derivation: {kind: render_frame, frame: {text: "welcome", language_code: en, direction: ltr}}
-    feedback_frame: {text: "خوش آمدید welcomes someone politely.", language_code: en, direction: ltr}
-
-  # Lesson 4: register-sensitive wellbeing exchanges.
-  - content_key: practice.en-fa.fa.a1.unit01.lesson04.question_fill.001
-    lesson_content_key: fa.a1.unit01.lesson04.formal_informal_wellbeing
-    type: fill_in_blank
+      - text: Complete the everyday greeting.
+        language_code: en
+        direction: ltr
+  feedback_frame:
+    text: '{greeting}'
+    language_code: fa
+    direction: rtl
+    text_blocks:
+    - text: Complete the everyday greeting.
+      language_code: en
+      direction: ltr
+- content_key: practice.en-fa.fa.a1.unit01.lesson04.question_fill.001.volume_order.008
+  lesson_content_key: fa.a1.unit01.lesson04.formal_informal_wellbeing
+  type: word_order
+  frame:
+    text: '{wellbeing_question}'
+    language_code: fa
+    direction: rtl
+    text_blocks:
+    - text: Complete the wellbeing question.
+      language_code: en
+      direction: ltr
+  slots:
+    wellbeing_question:
+      language_code: fa
+      part_of_speech: phrase
+      agreement_tags:
+        semantic: wellbeing_question_phrase
+  answer_derivation:
+    kind: render_frame
     frame:
-      text: "{wellbeing_question}"
+      text: '{wellbeing_question}'
       language_code: fa
       direction: rtl
       text_blocks:
-        - {text: "Complete the wellbeing question.", language_code: en, direction: ltr}
-    slots: {wellbeing_question: *wellbeing_question}
-    answer_derivation: {kind: slot_text, slot: wellbeing_question}
-    feedback_frame: {text: "{wellbeing_question} asks how someone is.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit01.lesson04.answer_meaning.002
-    lesson_content_key: fa.a1.unit01.lesson04.formal_informal_wellbeing
-    type: translation
-    frame: {text: "{wellbeing_answer}", language_code: en, direction: ltr, slot_rendering: {wellbeing_answer: english_gloss}}
-    slots: {wellbeing_answer: *wellbeing_answer}
-    answer_derivation: {kind: slot_text, slot: wellbeing_answer}
-    feedback_frame: {text: "{wellbeing_answer} is a natural response to a wellbeing question.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit01.lesson04.answer_pair.004
-    lesson_content_key: fa.a1.unit01.lesson04.formal_informal_wellbeing
-    type: matching_pairs
-    frame: {text: "Match each word or phrase with its meaning.", language_code: en, direction: ltr}
-    slots:
-      wellbeing_answer_one: *wellbeing_answer
-      wellbeing_answer_two: *wellbeing_answer
-      wellbeing_answer_three: *wellbeing_answer
-      politeness_one: *politeness
-      politeness_two: *politeness
-      politeness_three: *politeness
-      politeness_four: *politeness
-    slot_relations: [{kind: distinct, slots: [wellbeing_answer_one, wellbeing_answer_two, wellbeing_answer_three, politeness_one, politeness_two, politeness_three, politeness_four]}]
-    answer_derivation: {kind: matching_pairs, slots: [wellbeing_answer_one, wellbeing_answer_two, wellbeing_answer_three, politeness_one, politeness_two, politeness_three, politeness_four]}
-    feedback_frame: {text: "Match each wellbeing-answer/politeness word or phrase to its meaning.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit01.lesson04.answer_order.005
-    lesson_content_key: fa.a1.unit01.lesson04.formal_informal_wellbeing
-    type: word_order
-    frame: {text: "خیلی خوبم", language_code: fa, direction: rtl}
-    slots: {wellbeing_answer: *wellbeing_answer}
-    answer_derivation: {kind: render_frame, frame: {text: "خیلی خوبم", language_code: fa, direction: rtl}}
-    feedback_frame: {text: "خیلی comes before خوبم to mean ‘I’m very well.’", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit01.lesson04.return_question.006
-    lesson_content_key: fa.a1.unit01.lesson04.formal_informal_wellbeing
-    type: fill_in_blank
-    frame: {text: "خوبم، ممنون. {wellbeing_question}", language_code: fa, direction: rtl}
-    slots: {wellbeing_question: *wellbeing_question}
-    answer_derivation: {kind: slot_text, slot: wellbeing_question}
-    feedback_frame: {text: "{wellbeing_question} returns the wellbeing question.", language_code: en, direction: ltr}
-
-  # Lesson 5: a constrained taarof offer; arbitrary recombination is avoided.
-  - content_key: practice.en-fa.fa.a1.unit01.lesson05.offer_order.001
-    lesson_content_key: fa.a1.unit01.lesson05.taarof_basics
-    type: word_order
-    frame: {text: "{offered_item} بفرمایید", language_code: fa, direction: rtl}
-    slots: {offered_item: *offered_item}
-    answer_derivation: {kind: render_frame, frame: {text: "{offered_item} بفرمایید", language_code: fa, direction: rtl}}
-    feedback_frame: {text: "بفرمایید makes the offer of {offered_item} polite.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit01.lesson05.offer_meaning.002
-    lesson_content_key: fa.a1.unit01.lesson05.taarof_basics
-    type: translation
-    frame: {text: "Please have some {offered_item}.", language_code: en, direction: ltr, slot_rendering: {offered_item: english_gloss}}
-    slots: {offered_item: *offered_item}
-    answer_derivation: {kind: render_frame, frame: {text: "{offered_item} بفرمایید", language_code: fa, direction: rtl}}
-    feedback_frame: {text: "بفرمایید makes the offer of {offered_item} polite.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit01.lesson05.politeness_gloss.003
-    lesson_content_key: fa.a1.unit01.lesson05.taarof_basics
-    type: multiple_choice
-    frame: {text: "{politeness}", language_code: fa, direction: rtl}
-    slots: {politeness: *politeness}
-    answer_derivation: {kind: slot_gloss, slot: politeness}
-    feedback_frame: {text: "{politeness} is used in this taarof exchange.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit01.lesson05.decline_fill.004
-    lesson_content_key: fa.a1.unit01.lesson05.taarof_basics
-    type: translation
-    frame: {text: "{politeness}", language_code: en, direction: ltr, slot_rendering: {politeness: english_gloss}}
-    slots: {politeness: *politeness}
-    answer_derivation: {kind: slot_text, slot: politeness}
-    feedback_frame: {text: "{politeness} is the Persian politeness phrase for this meaning.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit01.lesson05.kindness_order.005
-    lesson_content_key: fa.a1.unit01.lesson05.taarof_basics
-    type: word_order
-    frame: {text: "ممنون از لطف شما", language_code: fa, direction: rtl}
-    slots: {politeness: *politeness}
-    answer_derivation: {kind: render_frame, frame: {text: "ممنون از لطف شما", language_code: fa, direction: rtl}}
-    feedback_frame: {text: "ممنون از لطف شما thanks someone for their kindness.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit01.lesson05.politeness_pair.006
-    lesson_content_key: fa.a1.unit01.lesson05.taarof_basics
-    type: matching_pairs
-    frame: {text: "Match each polite expression with its meaning.", language_code: en, direction: ltr}
-    slots:
-      politeness_one: *politeness
-      politeness_two: *politeness
-      politeness_three: *politeness
-      politeness_four: *politeness
-    slot_relations: [{kind: distinct, slots: [politeness_one, politeness_two, politeness_three, politeness_four]}]
-    answer_derivation: {kind: matching_pairs, slots: [politeness_one, politeness_two, politeness_three, politeness_four]}
-    feedback_frame: {text: "Match each taarof politeness expression to its meaning.", language_code: en, direction: ltr}
-
-  # Lesson 6: reviewed first-meeting dialogue language.
-  - content_key: practice.en-fa.fa.a1.unit01.lesson06.name_greeting.001
-    lesson_content_key: fa.a1.unit01.lesson06.first_meeting_dialogue
-    type: fill_in_blank
-    frame: {text: "{person_name}: {greeting}", language_code: fa, direction: rtl}
-    slots: {person_name: *person_name, greeting: *greeting}
-    answer_derivation: {kind: slot_text, slot: greeting}
-    feedback_frame: {text: "{person_name} uses the greeting {greeting}.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit01.lesson06.identity_order.002
-    lesson_content_key: fa.a1.unit01.lesson06.first_meeting_dialogue
-    type: word_order
-    frame: {text: "من {person_name} هستم", language_code: fa, direction: rtl}
-    slots: {person_name: *person_name}
-    answer_derivation: {kind: render_frame, frame: {text: "من {person_name} هستم", language_code: fa, direction: rtl}}
-    feedback_frame: {text: "من … هستم states the speaker's name.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit01.lesson06.name_meaning.003
-    lesson_content_key: fa.a1.unit01.lesson06.first_meeting_dialogue
-    type: multiple_choice
-    frame: {text: "{person_name}", language_code: fa, direction: rtl}
-    slots: {person_name: *person_name}
-    answer_derivation: {kind: slot_gloss, slot: person_name}
-    feedback_frame: {text: "{person_name} is one of the people in the dialogue.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit01.lesson06.dialogue_gloss.004
-    lesson_content_key: fa.a1.unit01.lesson06.first_meeting_dialogue
-    type: translation
-    frame: {text: "{dialogue_word}", language_code: en, direction: ltr, slot_rendering: {dialogue_word: english_gloss}}
-    slots: {dialogue_word: *dialogue_word}
-    answer_derivation: {kind: slot_text, slot: dialogue_word}
-    feedback_frame: {text: "{dialogue_word} appears in the first-meeting dialogue.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit01.lesson06.dialogue_pair.005
-    lesson_content_key: fa.a1.unit01.lesson06.first_meeting_dialogue
-    type: matching_pairs
-    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
-    slots:
-      person_name_one: *person_name
-      person_name_two: *person_name
-      person_name_three: *person_name
-      person_name_four: *person_name
-      dialogue_word_one: *dialogue_word
-      dialogue_word_two: *dialogue_word
-      dialogue_word_three: *dialogue_word
-      dialogue_word_four: *dialogue_word
-      dialogue_word_five: *dialogue_word
-      dialogue_word_six: *dialogue_word
-      dialogue_word_seven: *dialogue_word
-      dialogue_word_eight: *dialogue_word
-    answer_derivation: {kind: matching_pairs, slots: [person_name_one, person_name_two, person_name_three, person_name_four, dialogue_word_one, dialogue_word_two, dialogue_word_three, dialogue_word_four, dialogue_word_five, dialogue_word_six, dialogue_word_seven, dialogue_word_eight]}
-    slot_relations:
-      - {kind: distinct, slots: [person_name_one, person_name_two, person_name_three, person_name_four]}
-      - {kind: distinct, slots: [dialogue_word_one, dialogue_word_two, dialogue_word_three, dialogue_word_four, dialogue_word_five, dialogue_word_six, dialogue_word_seven, dialogue_word_eight]}
-    feedback_frame: {text: "Match each dialogue item to its English meaning.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit01.lesson06.closing_order.006
-    lesson_content_key: fa.a1.unit01.lesson06.first_meeting_dialogue
-    type: word_order
-    frame: {text: "به امید دیدار", language_code: fa, direction: rtl}
-    slots: {farewell: *farewell}
-    answer_derivation: {kind: render_frame, frame: {text: "به امید دیدار", language_code: fa, direction: rtl}}
-    feedback_frame: {text: "Ali says به امید دیدار before the final خداحافظ.", language_code: en, direction: ltr}
+      - text: Complete the wellbeing question.
+        language_code: en
+        direction: ltr
+  feedback_frame:
+    text: '{wellbeing_question}'
+    language_code: fa
+    direction: rtl
+    text_blocks:
+    - text: Complete the wellbeing question.
+      language_code: en
+      direction: ltr
+- content_key: practice.en-fa.fa.a1.unit01.lesson04.return_question.006.volume_order.009
+  lesson_content_key: fa.a1.unit01.lesson04.formal_informal_wellbeing
+  type: word_order
+  frame:
+    text: خوبم، ممنون. {wellbeing_question}
+    language_code: fa
+    direction: rtl
+  slots:
+    wellbeing_question:
+      language_code: fa
+      part_of_speech: phrase
+      agreement_tags:
+        semantic: wellbeing_question_phrase
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: خوبم، ممنون. {wellbeing_question}
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: خوبم، ممنون. {wellbeing_question}
+    language_code: fa
+    direction: rtl
+- content_key: practice.en-fa.fa.a1.unit01.lesson05.offer_meaning.002.volume_order.010
+  lesson_content_key: fa.a1.unit01.lesson05.taarof_basics
+  type: word_order
+  frame:
+    text: '{offered_item} بفرمایید'
+    language_code: fa
+    direction: rtl
+  slots:
+    offered_item:
+      language_code: fa
+      part_of_speech: noun
+      agreement_tags:
+        semantic: offered_item
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{offered_item} بفرمایید'
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: '{offered_item} بفرمایید'
+    language_code: fa
+    direction: rtl
+- content_key: practice.en-fa.fa.a1.unit01.lesson06.name_greeting.001.volume_order.011
+  lesson_content_key: fa.a1.unit01.lesson06.first_meeting_dialogue
+  type: word_order
+  frame:
+    text: '{person_name}: {greeting}'
+    language_code: fa
+    direction: rtl
+  slots:
+    person_name:
+      language_code: fa
+      part_of_speech: proper_noun
+      agreement_tags:
+        semantic: person_name
+    greeting:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - phrase
+      agreement_tags:
+        semantic: greeting
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{person_name}: {greeting}'
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: '{person_name}: {greeting}'
+    language_code: fa
+    direction: rtl

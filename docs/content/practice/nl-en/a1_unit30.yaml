@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: '1.0'
 pack_key: practice.nl-en.a1.unit30
 source_language: nl
 target_language: en
@@ -6,89 +6,187 @@ unit_content_key: en.a1.unit30.hobbies
 review:
   status: reviewed
   fresh_context: true
-  notes: "Authored 2026-07-11 as part of the nl-en depth-completion sprint
-    (units 30-58's overlays were fresh-context reviewed and merged the same
-    day -- this pack targets unit30, hobbies/free-time activities, the
-    first of 13 new units 30-42 authored in this pass to close the nl-en
-    Endless Practice gap the project's own depth audit found: only units
-    1-29 had packs against 69 authored units). 4-member 'hobby_activity'
-    tag (reading/cooking/painting/running -- all gerund-noun free-time
-    activities, verified to share part_of_speech noun in
-    scripts/_en_target_lexeme_common.py) -- deliberately excludes the
-    unit's 5th lesson01 item, 'video games', a two-word compound that
-    doesn't fit a single-token slot (same discipline as unit24's
-    exclusion of 'living room'). Verified 'I like {item}.' is grammatical
-    for every member (real content already teaches this exact pattern in
-    lesson03.teach.i_like_pattern: 'I like reading.'). Extended
-    scripts/_en_target_lexeme_common.py/scripts/backfill_lexemes_nl_en.py
-    with every introduced_token this unit's realization actually uses
-    (not just the 4 tagged words) -- the backfill script's own classify
-    step raises on ANY unclassified introduced_token across the whole
-    unit, so this required full-unit coverage, not just the tagged slot.
-    Every slot's real candidate count verified with
-    scripts/_practice_slot_check.py (4 distinct candidates, above the
-    >=3 floor for multiple_choice/listen_select). Needs the standard
-    fresh-context review before import.
-    FRESH-CONTEXT REVIEW ADDENDUM (2026-07-11, zero access to authoring
-    reasoning): both lesson_content_keys resolve to real lessons in
-    en/a1_unit30_hobbies.yaml (lesson01.free_time_activities,
-    lesson03.dialogue_free_time). hobby_activity's 4 members
-    (reading/cooking/painting/running) are real introduced_tokens with
-    accurate, natural, mutually-distinct Dutch glosses
-    (lezen/koken/schilderen/hardlopen), so matching_pairs is answerable.
-    Frame 'I like {item}' is grammatical for every gerund-noun member and
-    matches lesson03.teach.i_like_pattern ('I like reading.'). No bare YAML
-    booleans, no snake_case learner-facing leaks. Validation: compiler
-    practice-validate 0/0 across the full 42-pack nl-en set,
-    scripts/_practice_slot_check.py OK, backfill_lexemes_nl_en.py --dry-run
-    clean. Upgrading to reviewed."
+  notes: 'Authored 2026-07-11 as part of the nl-en depth-completion sprint (units 30-58''s overlays were fresh-context reviewed
+    and merged the same day -- this pack targets unit30, hobbies/free-time activities, the first of 13 new units 30-42 authored
+    in this pass to close the nl-en Endless Practice gap the project''s own depth audit found: only units 1-29 had packs against
+    69 authored units). 4-member ''hobby_activity'' tag (reading/cooking/painting/running -- all gerund-noun free-time activities,
+    verified to share part_of_speech noun in scripts/_en_target_lexeme_common.py) -- deliberately excludes the unit''s 5th
+    lesson01 item, ''video games'', a two-word compound that doesn''t fit a single-token slot (same discipline as unit24''s
+    exclusion of ''living room''). Verified ''I like {item}.'' is grammatical for every member (real content already teaches
+    this exact pattern in lesson03.teach.i_like_pattern: ''I like reading.''). Extended scripts/_en_target_lexeme_common.py/scripts/backfill_lexemes_nl_en.py
+    with every introduced_token this unit''s realization actually uses (not just the 4 tagged words) -- the backfill script''s
+    own classify step raises on ANY unclassified introduced_token across the whole unit, so this required full-unit coverage,
+    not just the tagged slot. Every slot''s real candidate count verified with scripts/_practice_slot_check.py (4 distinct
+    candidates, above the >=3 floor for multiple_choice/listen_select). Needs the standard fresh-context review before import.
+    FRESH-CONTEXT REVIEW ADDENDUM (2026-07-11, zero access to authoring reasoning): both lesson_content_keys resolve to real
+    lessons in en/a1_unit30_hobbies.yaml (lesson01.free_time_activities, lesson03.dialogue_free_time). hobby_activity''s 4
+    members (reading/cooking/painting/running) are real introduced_tokens with accurate, natural, mutually-distinct Dutch
+    glosses (lezen/koken/schilderen/hardlopen), so matching_pairs is answerable. Frame ''I like {item}'' is grammatical for
+    every gerund-noun member and matches lesson03.teach.i_like_pattern (''I like reading.''). No bare YAML booleans, no snake_case
+    learner-facing leaks. Validation: compiler practice-validate 0/0 across the full 42-pack nl-en set, scripts/_practice_slot_check.py
+    OK, backfill_lexemes_nl_en.py --dry-run clean. Upgrading to reviewed.'
 tag_schema:
-  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
   agreement_tags:
-    semantic: [hobby_activity]
+    semantic:
+    - hobby_activity
 slot_presets:
-  hobby_activity: &hobby_activity {language_code: en, part_of_speech: noun, agreement_tags: {semantic: hobby_activity}}
+  hobby_activity: &id001
+    language_code: en
+    part_of_speech: noun
+    agreement_tags:
+      semantic: hobby_activity
 templates:
-  - content_key: practice.nl-en.en.a1.unit30.lesson01.choose.001
-    lesson_content_key: en.a1.unit30.lesson01.free_time_activities
-    type: multiple_choice
-    frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *hobby_activity}
-    answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is een hobby uit deze les.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit30.lesson01.listen.002
-    lesson_content_key: en.a1.unit30.lesson01.free_time_activities
-    type: listen_select
-    frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *hobby_activity}
-    answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is het woord dat je hoorde.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit30.lesson01.match.003
-    lesson_content_key: en.a1.unit30.lesson01.free_time_activities
-    type: matching_pairs
-    frame: {text: "{first} · {second}", language_code: en, direction: ltr}
-    slots: {first: *hobby_activity, second: *hobby_activity, third: *hobby_activity, fourth: *hobby_activity}
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth]}
-    feedback_frame: {text: "Verbind elke hobby met de Nederlandse betekenis.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit30.lesson01.translate.004
-    lesson_content_key: en.a1.unit30.lesson01.free_time_activities
-    type: translation
-    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
-    slots: {item: *hobby_activity}
-    answer_derivation: {kind: slot_text, slot: item}
-    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit30.lesson03.order.001
-    lesson_content_key: en.a1.unit30.lesson03.dialogue_free_time
-    type: word_order
-    frame: {text: "I like {item}", language_code: en, direction: ltr}
-    slots: {item: *hobby_activity}
-    answer_derivation: {kind: render_frame, frame: {text: "I like {item}", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} is de genoemde hobby.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit30.lesson03.translate.002
-    lesson_content_key: en.a1.unit30.lesson03.dialogue_free_time
-    type: translation
-    frame: {text: "Ik hou van {item}.", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
-    slots: {item: *hobby_activity}
-    answer_derivation: {kind: render_frame, frame: {text: "I like {item}", language_code: en, direction: ltr}}
-    feedback_frame: {text: "I like {item} betekent Ik hou van {item}.", language_code: nl, direction: ltr}
+- content_key: practice.nl-en.en.a1.unit30.lesson01.choose.001
+  lesson_content_key: en.a1.unit30.lesson01.free_time_activities
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is een hobby uit deze les.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit30.lesson01.listen.002
+  lesson_content_key: en.a1.unit30.lesson01.free_time_activities
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is het woord dat je hoorde.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit30.lesson01.match.003
+  lesson_content_key: en.a1.unit30.lesson01.free_time_activities
+  type: matching_pairs
+  frame:
+    text: '{first} · {second}'
+    language_code: en
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+  feedback_frame:
+    text: Verbind elke hobby met de Nederlandse betekenis.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit30.lesson01.translate.004
+  lesson_content_key: en.a1.unit30.lesson01.free_time_activities
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: De Engelse vertaling is {item}.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit30.lesson03.order.001
+  lesson_content_key: en.a1.unit30.lesson03.dialogue_free_time
+  type: word_order
+  frame:
+    text: I like {item}
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: I like {item}
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: '{item} is de genoemde hobby.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit30.lesson03.translate.002
+  lesson_content_key: en.a1.unit30.lesson03.dialogue_free_time
+  type: translation
+  frame:
+    text: Ik hou van {item}.
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: I like {item}
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: I like {item} betekent Ik hou van {item}.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit30.lesson03.translate.002.volume_order.006
+  lesson_content_key: en.a1.unit30.lesson03.dialogue_free_time
+  type: word_order
+  frame:
+    text: I like {item}
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: noun
+      agreement_tags:
+        semantic: hobby_activity
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: I like {item}
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: I like {item}
+    language_code: en
+    direction: ltr
