@@ -69,7 +69,15 @@ are standing rules, not history:
   weakest-SRS-lexeme-first `speak_*` items) and **endless conversation
   practice** (`mode=conversation`, branching node graph, re-prompts instead of
   dead-ending). All zero-runtime-LLM. *Invariant:* `conversation` stays OUT of
-  `ExerciseType` (see frontend/CLAUDE.md). **Not yet live-played.**
+  `ExerciseType` (see frontend/CLAUDE.md). **Live-played 2026-07-14** on
+  en→nl with a fresh account (typed path): speaking batch renders + grades,
+  conversation advances/re-prompts/terminates, server STT `detail=words`
+  verified with real TTS audio. Live-play also found the modes were
+  UNREACHABLE (no UI ever sent `mode`) — fixed: the practice feed now has a
+  Mixed/Speaking/Conversation selector (per-device preference), plus a
+  `speak_response` instruction fix ("Say it in Dutch." over the English cue).
+  Still not verified: real-mic capture + `PronunciationFeedback` rendering
+  in-browser (needs a human with a microphone — Ramin, with the APK test).
 - **Android APK (2026-07-13)** — `android-shell/` (Capacitor wrapper around the
   real web build) + `.github/workflows/android-apk.yml`. Debug-signed, LAN-only,
   deployed to `/home/ramin/shared/lingo.apk`. **Not yet installed/played.**
