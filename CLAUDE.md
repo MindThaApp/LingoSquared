@@ -140,6 +140,17 @@ are standing rules, not history:
   frontend/CLAUDE.md). *Open:* a live-tab slider click-through was never
   done — visual close-out next live browser session.
 
+- **Speaking suite (2026-07-13)** — pronunciation feedback (`/stt/transcribe`
+  `detail=words` → per-word confidence; clarity heuristic, NOT accent scoring;
+  server path only), **endless pronunciation practice** (`mode=speaking`,
+  weakest-SRS-lexeme-first `speak_*` items) and **endless conversation
+  practice** (`mode=conversation`, branching node graph, re-prompts instead of
+  dead-ending). All zero-runtime-LLM. *Invariant:* `conversation` stays OUT of
+  `ExerciseType` (see frontend/CLAUDE.md). **Not yet live-played.**
+- **Android APK (2026-07-13)** — `android-shell/` (Capacitor wrapper around the
+  real web build) + `.github/workflows/android-apk.yml`. Debug-signed, LAN-only,
+  deployed to `/home/ramin/shared/lingo.apk`. **Not yet installed/played.**
+
 *Still remaining from the upgrade program:* D2's dialogue-content
 re-authoring and C1's feedback_by_option content pass (both CONTENT
 lane). The mechanism is fully built across every phase; the real
@@ -308,15 +319,14 @@ not the standing default anymore:
    guide/CLAUDE.md note. Known validator backlog: the listen_select
    same-speaker-distractor rule and the title/gloss boolean-coercion gap
    (both Codex lane).
-2. **Sample mature lanes.** A lane = same content type + same recipe +
-   same authoring model. After ~3 consecutive zero-defect fresh-context
-   reviews in a lane, drop to reviewing 1 in 3 deliverables (chosen by
-   the reviewer, not the author). If ANY review then finds a genuinely
-   new bug class: add the validator/rule AND reset that lane to full review.
+2. **Sampling was TRIED and REVERSED — do not re-run that experiment.**
+   (1-in-3 sampling on a "mature" lane shipped 10 compiler-invisible defects;
+   see §4.) Full review is the standing default.
 3. **Full review always stays for:** new bug-class territory (a new
-   exercise type, a new language, the first batches of any new recipe),
-   anything that changes grading behavior, and ALL launch-gate content
-   (en-nl/en-fa/en-prs) until launch.
+   exercise type, a new language, a new CEFR tier, the first batches of any
+   new recipe), anything that changes grading behavior, and ALL launch-gate
+   content (en-nl/en-fa/en-prs) until launch. **Route review to CODEX when
+   Claude budget is tight** — it found 9 real defects in the de-en B1 wave.
 4. **"Mature lane" is per-RECIPE, not per-language — a lane does NOT stay
    mature when it moves to new TOPICS.** Learned the hard way 2026-07-12:
    it/ru were sampled 1-in-3 on the strength of zero-defect A1 13-15
