@@ -1452,8 +1452,15 @@ PRS_POS: dict[str, str] = {
 }
 
 
+# BEGIN volume practice singleton tags (generated 2026-07-13)
+VOLUME_PRACTICE_SINGLETON_TAGS = {'آبی': ['volume_en_prs_a1_unit38_color_word_05_single'], 'آرزو': ['volume_en_prs_a1_unit02_person_name_04_single'], 'بانک': ['volume_en_prs_a1_unit05_city_place_06_single'], 'بهار': ['volume_en_prs_a1_unit39_specific_season_word_03_single'], 'جمعه': ['volume_en_prs_a1_unit09_weekday_name_10_single'], 'دور': ['volume_en_prs_a1_unit05_location_word_08_single'], 'سند': ['volume_en_prs_a2_unit09_office_word_12_single'], 'شریف': ['volume_en_prs_a1_unit02_city_name_02_single'], 'شوخ': ['volume_en_prs_a1_unit37_personality_word_07_single'], 'غذا': ['volume_en_prs_a1_unit36_cook_object_word_09_single'], 'نامه': ['volume_en_prs_a1_unit35_sendable_item_word_11_single'], 'پولیس': ['volume_en_prs_a1_unit40_emergency_service_word_01_single']}
+# END volume practice singleton tags
+
 def prs_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     semantics: list[str] = []
+
+    for semantic in VOLUME_PRACTICE_SINGLETON_TAGS.get(token, ()):
+        semantics.append(semantic)
     letters = set("ابتدرزسشصجچحخعغفقکگلمنوهی")
     # "letter" tags every occurrence of these 25 characters unconditionally
     # -- harmless for the other 24 (no competing standalone-word meaning),

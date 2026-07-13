@@ -1318,9 +1318,15 @@ def nl_part_of_speech(token: str) -> str:
     raise ValueError(f"missing explicit Dutch part of speech for {token!r}")
 
 
+# BEGIN volume practice singleton tags (generated 2026-07-13)
+VOLUME_PRACTICE_SINGLETON_TAGS = {'België': ['volume_en_nl_a1_unit01_item_10_single'], 'Hoi': ['volume_en_nl_a1_unit01_item_05_single'], 'Jan': ['volume_en_nl_a1_unit01_item_07_single'], 'Je': ['volume_en_nl_a1_unit01_item_02_single', 'volume_en_nl_a1_unit01_item_12_single'], 'Retourbeleid': ['volume_en_nl_a2_unit77_item_03_single'], 'agenda': ['volume_en_nl_a2_unit76_item_11_single'], 'koptelefoon': ['volume_en_nl_a2_unit77_item_06_single', 'volume_en_nl_a2_unit77_item_08_single'], 'ruilen': ['volume_en_nl_a2_unit77_item_04_single'], 'terugkrijgen': ['volume_en_nl_a2_unit77_item_01_single'], 'volgorde': ['volume_en_nl_a2_unit76_item_09_single']}
+# END volume practice singleton tags
+
 def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     t = token.casefold()
     semantic: list[str] = []
+    for tag in VOLUME_PRACTICE_SINGLETON_TAGS.get(token, ()):
+        semantic.append(tag)
     unit_lesson = lesson_key.split(".")[-1]
     lesson_categories = {
         "jij_je_en_u": "register_language", "groeten_en_welzijn": "wellbeing",
