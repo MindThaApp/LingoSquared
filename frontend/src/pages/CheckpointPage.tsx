@@ -9,6 +9,7 @@ import { QuitConfirm } from "../components/QuitConfirm";
 import { formatCorrectResponse } from "@lingo/shared/lib/formatAnswer";
 import { resultStatus } from "@lingo/shared/lib/gradingResult";
 import type { AnswerResponse, CheckpointResult, PracticeAnswerResult, PracticeItem } from "@lingo/shared/api/types";
+import { asExerciseType } from "@lingo/shared/api/types";
 
 type Phase =
   | "loading"
@@ -223,7 +224,7 @@ export function CheckpointPage() {
       </div>
       <ExerciseRenderer
         key={current.id}
-        exercise={{ id: current.id, type: current.type, order: 0, prompt: current.prompt }}
+        exercise={{ id: current.id, type: asExerciseType(current.type), order: 0, prompt: current.prompt }}
         onAnswer={handleAnswer}
         disabled={submitting || Boolean(result) || submitError}
         gradedResult={
