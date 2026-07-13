@@ -48,9 +48,18 @@ Read this + `docs/COORDINATOR_HANDBOOK.md` + root `CLAUDE.md` to resume.
   app speaks a turn, learner replies (voice or typed), the matched variant
   selects the next node; unrecognized reply re-prompts instead of dead-ending.
   Node graph rides on the item (no migration) (`f894bce`).
-- **NOT DONE: the conversation RUNNER UI.** The backend is live but a learner
-  cannot use conversation mode yet. **This is the next frontend task** (Claude
-  lane). Pronunciation UI is done; conversation UI is not.
+- **Conversation runner UI DONE** (`e151f17`) — `ConversationRunner.tsx`.
+  Multi-turn, so it does NOT go through `ExerciseRenderer` (which is one-shot):
+  `PracticeCard` branches on `item.type === "conversation"`. Voice or typed
+  replies, RTL + virtual keyboard, transcript history, never dead-ends.
+  **Design note that matters:** `conversation` is deliberately NOT in
+  `ExerciseType` — it's in a new `PracticeItemType = ExerciseType |
+  "conversation"`, because adding it to `ExerciseType` would have broken the
+  exhaustive exercise-type-registration test (the guard that exists precisely
+  to stop unrendered types shipping). `asExerciseType()` narrows for the
+  review/checkpoint/lesson runners, which can never receive one.
+- **Both speaking features are now end-to-end usable. NEITHER HAS BEEN
+  LIVE-PLAYED** — that is the outstanding verification (see §6).
 
 **Content:**
 - **B1 units 15-19 complete** across en + nl-en/fa-en/prs-en: 5 spine outcomes
@@ -144,14 +153,22 @@ expert work, and does not want workflow-interrupting questions.
 
 ## 6. NEXT ACTIONS (in order)
 
-1. **Conversation runner UI** (frontend, Claude lane) — `mode=conversation` is
-   live on the backend and unusable without it.
-2. **B2 English units 01-03** → Codex, against the new B2 spine. Then X→en
-   overlays. Full review (new tier = new territory, per the tiered-review policy).
+1. **LIVE-PLAY the two new speaking features.** Both are code-complete and
+   BUILD-green but nobody has played them. Per this project's own bar, that is
+   not verification. Specifically: does a `mode=speaking` practice batch render;
+   does the mic capture -> transcript -> grading path still work; does the
+   per-word clarity highlighting appear (SERVER STT path only — the client WASM
+   path returns no word confidences, so test with the client path disabled);
+   does a conversation advance node-to-node and terminate. Do this BEFORE
+   building anything else on top of them.
+2. **B2 English units 01-03** → Codex, against the new B2 spine (`0258a3f`).
+   Then X→en overlays. FULL review — a new CEFR tier is new territory, and B2's
+   hedging/register/nuance content is exactly where a Sonnet/Codex author and a
+   validator have the least traction. Expect review yield to CLIMB again.
 3. **Grind the shallow paths toward B1 on Codex** (es/fr/it/ru/de/pl/ro/hi/ar
    are 3-32 units vs the launch pairs' ~90).
-4. Ramin should install the APK and play a lesson — the ONE verification nobody
-   has done.
+4. Ramin should install `/home/ramin/shared/lingo.apk` and play a lesson — the
+   ONE verification nobody has done.
 
 ## 7. OPEN, NON-BLOCKING
 
