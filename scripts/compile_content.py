@@ -806,6 +806,20 @@ def sentence_order_tokens_from_word_bank(
     return ordered
 
 
+def order_sequence_tokens(
+    value: Any,
+    *,
+    case_sensitive: bool = False,
+) -> list[Any] | None:
+    tokens = canonical_order_answer_tokens(value, case_sensitive=case_sensitive)
+    if tokens is None:
+        return None
+    return [
+        order_sequence_key(token, case_sensitive=case_sensitive)
+        for token in tokens
+    ]
+
+
 def _order_answer_values(exercise_overlay: dict[str, Any]) -> list[tuple[str, Any]]:
     if "correct_response" in exercise_overlay:
         return [("correct_response", exercise_overlay["correct_response"])]
@@ -858,11 +872,24 @@ def validate_order_word_bank_answers(
                     normalize_order_token(item, case_sensitive=case_sensitive)
                     for item in word_bank
                 ]
+                tile_sequence_tokens = [
+                    order_sequence_key(token, case_sensitive=case_sensitive)
+                    for token in tile_tokens
+                ]
                 tile_counts = Counter(tile_tokens)
                 expected_tokens = sentence_order_tokens_from_word_bank(
                     exercise.get("tested_text"),
                     word_bank,
                     case_sensitive=case_sensitive,
+                )
+                tested_sequence_tokens = order_sequence_tokens(
+                    exercise.get("tested_text"),
+                    case_sensitive=case_sensitive,
+                )
+                tested_sequence_counts = (
+                    Counter(tested_sequence_tokens)
+                    if tested_sequence_tokens is not None
+                    else None
                 )
 
                 for answer_location, answer_value in _order_answer_values(
@@ -888,19 +915,36 @@ def validate_order_word_bank_answers(
                         )
                         continue
 
+                    answer_sequence_tokens = [
+                        order_sequence_key(token, case_sensitive=case_sensitive)
+                        for token in answer_tokens
+                    ]
+
                     if (
                         expected_tokens is None
-                        or answer_tokens == expected_tokens
-                        or answer_tokens != tile_tokens
+                        or tested_sequence_tokens is None
+                        or tested_sequence_counts != Counter(answer_sequence_tokens)
+                        or answer_sequence_tokens == tested_sequence_tokens
                     ):
                         continue
 
-                    report.error(
+                    if answer_sequence_tokens == tile_sequence_tokens:
+                        message = (
+                            "order-answer tokens match the displayed word_bank "
+                            "order instead of tested_text sentence order"
+                        )
+                    else:
+                        message = (
+                            "order-answer tokens are a scrambled permutation "
+                            "of tested_text sentence order"
+                        )
+
+                    report.warn(
                         f"overlay.exercises.{key}.{answer_location}",
-                        "order-answer tokens match the displayed word_bank "
-                        "order instead of tested_text sentence order: "
-                        f"expected {expected_tokens!r}; "
-                        f"got {answer_tokens!r}",
+                        f"{message}: "
+                        f"value {answer_value!r}; "
+                        f"expected {tested_sequence_tokens!r}; "
+                        f"got {answer_sequence_tokens!r}",
                     )
 
 
