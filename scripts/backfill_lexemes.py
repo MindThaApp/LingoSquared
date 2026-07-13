@@ -1534,8 +1534,15 @@ def en_part_of_speech(token: str) -> str:
     return "noun"
 
 
+# BEGIN volume practice singleton tags (generated 2026-07-13)
+VOLUME_PRACTICE_SINGLETON_TAGS = {'آبی': ['volume_en_fa_a1_unit20_color_word_12_single'], 'آرش': ['volume_en_fa_a1_unit01_person_name_11_single'], 'بخیر': ['volume_en_fa_a1_unit01_good_wish_04_single'], 'بزرگ': ['volume_en_fa_a1_unit20_size_word_10_single'], 'خسته': ['volume_en_fa_a1_unit23_feeling_a_03_single', 'volume_en_fa_a1_unit23_feeling_b_01_single'], 'ده': ['volume_en_fa_a1_unit21_number_word_07_single', 'volume_en_fa_a1_unit21_number_word_09_single'], 'شب': ['volume_en_fa_a1_unit01_time_period_02_single'], 'صدا': ['volume_en_fa_a1_unit22_phone_word_a_06_single', 'volume_en_fa_a1_unit22_phone_word_b_05_single'], 'چای': ['volume_en_fa_a1_unit01_offered_item_08_single']}
+# END volume practice singleton tags
+
 def fa_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     semantics: list[str] = []
+
+    for semantic in VOLUME_PRACTICE_SINGLETON_TAGS.get(token, ()):
+        semantics.append(semantic)
     if token in FA_SYMBOLS:
         semantics.append("letter")
     if token == "سلام":
