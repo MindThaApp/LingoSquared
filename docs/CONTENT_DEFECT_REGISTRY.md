@@ -1200,3 +1200,15 @@ Instance count: 3 fixed + 1 strengthening across 6 files.
 First corpus compile of units 18-19 found 1 realization defect
 ("months" untaught, fixed 181af98) — the second time the first overlay
 compile caught a realization token gap (see "leading", 9ff6886).
+
+### 2026-07-13 — media_asset_key validator first corpus sweep (Codex validator + Codex triage)
+Bug classes found: 6 genuine wrong media references (class 1.20) — 4 in
+en-fr A1 (salade/matin/gare/dimanche cards playing a different clip),
+2 in en-nl A1 (u32 Fenna, u33 Sander listen_selects playing a related
+but different sentence → unanswerable by listening). All fixed by
+pointing at (or adding) the correct asset. 32 other warnings judged
+heuristic false alarms (paraphrase/summary/contraction) — warning level
+is correct; do not escalate to errors.
+New bug class discovered: no (1.20 was a known unprevented class; it is
+now validator-covered: dangling refs hard-error, mismatches warn).
+Instance count: 6 fixed across 6 files.
