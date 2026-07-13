@@ -228,3 +228,6 @@ built for the automatable ones, but AUTHORS must not reproduce them:
   surface from course-content overlays; normalized 2026-07-12.
 - **prs-en overlay lane: colloquial Dari** (می‌تانین/استه style).
 - **nl-en overlay lane: informal jij-register.**
+- **de-en overlay lane: formal Sie in learner-facing instructions, informal
+  du inside casual character dialogue/example glosses** (norm observed in
+  the A1 lane, pinned 2026-07-13 with the first B1 wave).
