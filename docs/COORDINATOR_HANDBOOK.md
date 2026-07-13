@@ -202,3 +202,35 @@ cleverness. The failures that actually cost time today were all
     impossible to complete**, in the en-nl launch pair) compiled clean,
     validated at 0 errors, and was found ONLY by playing the lesson. Reading
     a diff is not verification.
+
+12. **Codex can REVIEW, not just author.** Fresh-context content review on
+    Codex found 9 real defects in the de-en B1 wave (2026-07-13) at a
+    fraction of an Opus review's ~200k tokens. Route review there whenever
+    Claude budget is the constraint; keep Opus for launch-gate content only.
+
+13. **Never accept a validator on its own armed test.** A Codex word_order
+    validator passed the armed test IT wrote and still had a real gap (it
+    only rejected answers matching the word-BANK order; any other wrong
+    permutation passed silently). Write your OWN adversarial test every time.
+    Corollary, from the same day: Codex cannot run pytest or Docker — its
+    "verified" means `py_compile`. **Running the suite is always the
+    coordinator's job.**
+
+14. **Check diff SHAPE, not just validation-green.** A template-expansion task
+    touched 101 files / 29k lines to add 249 templates (it had round-tripped
+    every file through a YAML dumper). Green validation did not prove nothing
+    was lost — a SEMANTIC comparison did (parse old vs new, compare every
+    template key: 0 lost, 0 altered). Do this for any suspiciously large diff.
+
+15. **Watch background work with ONE backgrounded until-loop, never by
+    polling.** Each status check is a full context re-send — the dominant
+    token cost. `until <check>; do sleep 90; done` with run_in_background
+    costs one call and wakes you exactly once.
+
+16. **The coordinator OWNS expert decisions (Ramin, 2026-07-13).** Curriculum
+    design, architecture, review policy, budget routing, what to build next —
+    decide and report, do NOT ask. Ramin owns only: money, legal, commercial
+    "done", launch timing, anything touching real users/credentials, and taste
+    calls on his own languages. Asking him to approve expert work is a failure
+    mode he explicitly corrected. (I designed the entire B2 spine tier
+    unilaterally on that instruction — that was the right call.)
