@@ -1488,6 +1488,28 @@ threw). Response:
 ```json
 { "transcript": "zeven" }
 ```
+
+**Pronunciation-feedback extension (S1, 2026-07-13, contract-first — not
+yet implemented):** `POST /stt/transcribe` accepts an optional
+`detail=words` form field. When present, the response adds a `words` array
+from faster-whisper's word-level output; without it the response is
+byte-identical to today (fully backwards-compatible):
+```json
+{
+  "transcript": "it will probably take two months",
+  "words": [
+    { "word": "it", "start": 0.12, "end": 0.24, "probability": 0.97 },
+    { "word": "probably", "start": 0.61, "end": 1.02, "probability": 0.41 }
+  ]
+}
+```
+`probability` is the model's per-word confidence (0-1), the v1
+pronunciation signal: the frontend maps it to per-word feedback
+(e.g. <0.55 = "unclear — try again", highlighting the word). This is a
+CLARITY heuristic, not phoneme-level scoring — no claim of accent
+assessment. The client-side WASM path may synthesize an equivalent `words`
+array locally when its model exposes token probabilities; the shape above
+is the shared contract either way.
 Errors are the standard error shape (`docs/CONTRACT.md`'s Error shape
 section) with `code` one of `empty_audio` (413/422 — zero-byte upload),
 `audio_too_large` (413 — over 5 MB, same cap as `/admin/media/upload`; a
