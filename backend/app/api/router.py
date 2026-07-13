@@ -138,6 +138,7 @@ from app.practice.service import (
     generate_checkpoint,
     generate_review_batch,
     generate_review_retry,
+    generate_speaking_batch,
 )
 from app.content.service import (
     export_content,
@@ -149,6 +150,19 @@ from app.content.service import (
 logger = logging.getLogger(__name__)
 
 router=APIRouter()
+
+GENERATED_PRACTICE_TYPES = {"speak_repeat", "speak_response"}
+
+
+def practice_item_type(item: PracticeItem, template: PracticeTemplate) -> str:
+    generated_type = (
+        item.filled_slots.get("_generated_type")
+        if isinstance(item.filled_slots, dict)
+        else None
+    )
+    if generated_type in GENERATED_PRACTICE_TYPES:
+        return generated_type
+    return template.type
 
 # Rate limiting: per-IP for the unauthenticated auth endpoints (brute-force
 # login protection, registration-abuse prevention), per-account for the
@@ -1810,7 +1824,8 @@ def practice_batch(
     enforce_rate_limit(GENERATION_RATE_LIMIT,user.id,"generation_rate_limited","Too many generation requests too quickly. Please slow down.")
     course=db.get(Course,course_id)
     if not course: fail(404,"course_not_found","Course not found")
-    locked,items=generate_batch(
+    generator = generate_speaking_batch if (body and body.mode == "speaking") else generate_batch
+    locked,items=generator(
         db,
         user.id,
         course,
@@ -1821,7 +1836,14 @@ def practice_batch(
     return {
         "locked":locked,
         "items":[
-            {"id":item.id,"type":db.get(PracticeTemplate,item.template_id).type,"prompt":item.prompt}
+            {
+                "id":item.id,
+                "type":practice_item_type(
+                    item,
+                    db.get(PracticeTemplate,item.template_id),
+                ),
+                "prompt":item.prompt,
+            }
             for item in items
         ],
     }
@@ -1859,11 +1881,12 @@ def practice_answer(
         )
 
     template = db.get(PracticeTemplate, item.template_id)
+    item_type = practice_item_type(item, template)
     script = resolve_script(db, item.prompt.get("answer_language_code"))
     result = grade(
         body.response,
         item.correct_response,
-        template.type,
+        item_type,
         script=script,
         orthography_strict=(
             True if item.source == "checkpoint" else None

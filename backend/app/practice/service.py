@@ -45,6 +45,7 @@ SLOT_RE = re.compile(r"\{([a-z][a-z0-9_]*)\}")
 RECOGNITION_TYPES = ("multiple_choice", "listen_select")
 STRUCTURED_TYPES = ("word_order", "matching_pairs", "fill_in_blank")
 PRODUCTION_TYPES = ("translation",)
+SPEAKING_TYPES = ("speak_repeat", "speak_response")
 CHECKPOINT_MASTERY_BANDS = (0.0, 0.5, 0.8)
 
 
@@ -259,6 +260,10 @@ def _instruction_block(course: Course, text_value: str) -> dict[str, str]:
             "rtl" if course.source_language in {"ar", "fa", "prs"} else "ltr"
         ),
     }
+
+
+def _language_direction(language_code: str) -> str:
+    return "rtl" if language_code in {"ar", "fa", "prs"} else "ltr"
 
 
 def _answer_language(
@@ -894,6 +899,185 @@ def _generate_prioritized(
             generated.append(item)
 
     return generated
+
+
+def _speaking_targets(
+    lexemes: list[Lexeme],
+    srs_rows: list[UserLexemeSRS],
+    rng: random.Random,
+) -> list[Lexeme]:
+    lexeme_by_id = {lexeme.id: lexeme for lexeme in lexemes}
+    eligible_rows = [
+        row for row in srs_rows if row.lexeme_id in lexeme_by_id
+    ]
+    ordered_rows = sorted(
+        eligible_rows,
+        key=lambda row: (row.mastery, row.due_at, row.lexeme_id),
+    )
+    seen = {row.lexeme_id for row in ordered_rows}
+    fallback = [lexeme for lexeme in lexemes if lexeme.id not in seen]
+    fallback.sort(key=lambda lexeme: lexeme.id)
+    rng.shuffle(fallback)
+    return [
+        *[lexeme_by_id[row.lexeme_id] for row in ordered_rows],
+        *fallback,
+    ]
+
+
+def _speaking_template(
+    target: Lexeme,
+    templates: list[PracticeTemplate],
+) -> PracticeTemplate:
+    return next(
+        (
+            template
+            for template in templates
+            if template.provenance_lesson_id == target.provenance_lesson_id
+        ),
+        templates[0],
+    )
+
+
+def _speaking_kind(
+    course: Course,
+    index: int,
+) -> str:
+    if course.target_language == "en":
+        return "speak_repeat"
+    return SPEAKING_TYPES[index % len(SPEAKING_TYPES)]
+
+
+def _speaking_prompt(
+    course: Course,
+    target: Lexeme,
+    kind: str,
+) -> dict[str, Any]:
+    target_block = {
+        "text": target.token,
+        "language_code": target.language_code,
+        "direction": _language_direction(target.language_code),
+    }
+    if kind == "speak_response":
+        return {
+            "text_blocks": [
+                _instruction_block(course, "Say this aloud."),
+                {
+                    "text": target.english_gloss,
+                    "language_code": "en",
+                    "direction": "ltr",
+                },
+            ],
+            "answer_language_code": target.language_code,
+        }
+    return {
+        "text_blocks": [
+            _instruction_block(course, "Repeat this aloud."),
+            target_block,
+        ],
+        "audio_text": target.token,
+        "audio_language_code": target.language_code,
+        "answer_language_code": target.language_code,
+    }
+
+
+def _generate_speaking_item(
+    db: Session,
+    *,
+    user_id: str,
+    course: Course,
+    target: Lexeme,
+    templates: list[PracticeTemplate],
+    generated_index: int,
+    signatures: set[tuple],
+    allow_existing_signature: bool = False,
+) -> PracticeItem | None:
+    template = _speaking_template(target, templates)
+    kind = _speaking_kind(course, generated_index)
+    prompt = _speaking_prompt(course, target, kind)
+    stored_slots = {
+        "word": target.token,
+        "_generated_type": kind,
+    }
+    signature = _signature(template.id, stored_slots)
+    visible = _prompt_signature(prompt)
+    if (
+        (signature in signatures or visible in signatures)
+        and not allow_existing_signature
+    ):
+        return None
+
+    item = PracticeItem(
+        user_id=user_id,
+        course_id=course.id,
+        template_id=template.id,
+        filled_slots=stored_slots,
+        prompt=prompt,
+        correct_response=target.token,
+        xp_value=PRACTICE_XP,
+        source="practice",
+        session_id=None,
+        target_lexeme_id=target.id,
+        expires_at=datetime.now(timezone.utc) + timedelta(hours=24),
+    )
+    db.add(item)
+    db.flush()
+    signatures.add(signature)
+    signatures.add(visible)
+    return item
+
+
+def generate_speaking_batch(
+    db: Session,
+    user_id: str,
+    course: Course,
+    size: int,
+    is_admin: bool = False,
+) -> tuple[bool, list[PracticeItem]]:
+    completed = _completed_lesson_ids(db, user_id, course.id)
+    if not completed:
+        if not is_admin:
+            return True, []
+        completed = _course_lesson_ids(db, course.id)
+
+    templates, lexemes = _material(db, course, completed)
+    if not templates or not lexemes:
+        return False, []
+
+    srs_rows = list(
+        db.scalars(
+            select(UserLexemeSRS).where(
+                UserLexemeSRS.user_id == user_id,
+                UserLexemeSRS.course_id == course.id,
+                UserLexemeSRS.suspended.is_(False),
+            )
+        )
+    )
+    rng = _batch_rng(db, user_id, course.id, "practice-speaking-batch")
+    targets = _speaking_targets(lexemes, srs_rows, rng)
+    if not targets:
+        return False, []
+
+    signatures = _recent_signatures(db, user_id, course.id)
+    generated: list[PracticeItem] = []
+    attempts = 0
+    max_attempts = max(size * 50, len(targets) * 10)
+    while len(generated) < size and attempts < max_attempts:
+        target = targets[attempts % len(targets)]
+        attempts += 1
+        item = _generate_speaking_item(
+            db,
+            user_id=user_id,
+            course=course,
+            target=target,
+            templates=templates,
+            generated_index=len(generated),
+            signatures=signatures,
+            allow_existing_signature=attempts > len(targets) * 2,
+        )
+        if item is not None:
+            generated.append(item)
+
+    return False, generated
 
 
 def generate_batch(

@@ -222,11 +222,13 @@ class CourseImport(BaseModel):
         return self
 class ImportRequest(BaseModel): courses:list[CourseImport]
 class ValidateRequest(BaseModel): content:ImportRequest
-PracticeExerciseType=Literal["multiple_choice","fill_in_blank","word_order","translation","matching_pairs","listen_select"]
+PracticeTemplateExerciseType=Literal["multiple_choice","fill_in_blank","word_order","translation","matching_pairs","listen_select"]
+PracticeItemExerciseType=Literal["multiple_choice","fill_in_blank","word_order","translation","matching_pairs","listen_select","speak_repeat","speak_response"]
+PracticeBatchMode=Literal["mixed","speaking"]
 class PracticeTemplateImport(BaseModel):
     content_key:str=Field(min_length=1,max_length=255)
     lesson_content_key:str=Field(min_length=1,max_length=255)
-    type:PracticeExerciseType
+    type:PracticeTemplateExerciseType
     frame:dict[str,Any]
     slots:dict[str,Any]
     slot_relations:list[dict[str,Any]]=Field(default_factory=list)
@@ -244,8 +246,8 @@ class PracticeArtifactImport(BaseModel):
     target_language:str
     packs:list[PracticePackImport]
 class PracticeImportOut(BaseModel): imported_templates:int; updated_templates:int
-class PracticeBatchIn(BaseModel): size:int=Field(default=10,ge=1,le=20)
-class PracticeItemOut(BaseModel): id:str; type:PracticeExerciseType; prompt:dict[str,Any]
+class PracticeBatchIn(BaseModel): size:int=Field(default=10,ge=1,le=20); mode:PracticeBatchMode="mixed"
+class PracticeItemOut(BaseModel): id:str; type:PracticeItemExerciseType; prompt:dict[str,Any]
 class PracticeBatchOut(BaseModel): locked:bool; items:list[PracticeItemOut]
 class PracticeAnswerOut(BaseModel): correct:bool; result:Literal["correct","almost","incorrect"]="correct"; correct_response:Any; xp_awarded:int
 class ReviewDueCourseOut(BaseModel):
