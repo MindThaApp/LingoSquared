@@ -2421,9 +2421,10 @@ def tts(request:Request,body:TTSIn,user=Depends(current_user),db:Session=Depends
         return JSONResponse({"use_browser_tts":True,"reason":"provider_error"})
     return Response(content=audio,media_type="audio/mpeg")
 
-@router.post("/stt/transcribe",response_model=STTOut)
+@router.post("/stt/transcribe",response_model=STTOut,response_model_exclude_none=True)
 async def stt_transcribe(
     language_code: str = Form(...),
+    detail: str | None = Form(default=None),
     audio: UploadFile = File(...),
     user=Depends(current_user),
 ):
@@ -2444,11 +2445,20 @@ async def stt_transcribe(
         fail(422, "empty_audio", "Recording must not be empty")
     audio_bytes = b"".join(chunks)
     try:
-        transcript = await run_in_threadpool(
-            stt_service.transcribe_audio,
-            audio_bytes,
-            language_code,
-        )
+        if detail == "words":
+            result = await run_in_threadpool(
+                stt_service.transcribe_audio_with_words,
+                audio_bytes,
+                language_code,
+            )
+        else:
+            result = {
+                "transcript": await run_in_threadpool(
+                    stt_service.transcribe_audio,
+                    audio_bytes,
+                    language_code,
+                )
+            }
     except Exception:
         fail(500, "transcription_failed", "Speech-to-text transcription failed")
     finally:
@@ -2456,4 +2466,4 @@ async def stt_transcribe(
         # — never written to disk, never logged, not retained beyond this
         # request's stack frame.
         del audio_bytes, chunks
-    return {"transcript": transcript}
+    return result

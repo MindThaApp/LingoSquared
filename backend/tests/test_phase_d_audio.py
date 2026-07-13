@@ -1,3 +1,5 @@
+from types import SimpleNamespace
+
 import app.api.router as api_router
 
 # Compiler tests for this phase (dialogue single-block validator) live in
@@ -146,3 +148,90 @@ def test_upload_rejects_oversized_audio(
     assert response.status_code == 413
     assert response.json()["error"]["code"] == "media_asset_too_large"
     assert list(tmp_path.iterdir()) == []
+
+
+def test_stt_transcribe_default_shape_unchanged(client, auth, monkeypatch):
+    from app.services import stt as stt_service
+
+    def fake_transcribe(audio_bytes, language_code):
+        assert audio_bytes == b"webm-bytes"
+        assert language_code == "en"
+        return "it will probably take two months"
+
+    def fail_word_detail(*_args, **_kwargs):
+        raise AssertionError("word-detail STT path should not run by default")
+
+    monkeypatch.setattr(stt_service, "transcribe_audio", fake_transcribe)
+    monkeypatch.setattr(stt_service, "transcribe_audio_with_words", fail_word_detail)
+
+    response = client.post(
+        "/stt/transcribe",
+        headers=auth,
+        data={"language_code": "en"},
+        files={"audio": ("answer.webm", b"webm-bytes", "audio/webm")},
+    )
+
+    assert response.status_code == 200
+    assert response.content == b'{"transcript":"it will probably take two months"}'
+
+
+def test_stt_transcribe_detail_words_returns_word_array(client, auth, monkeypatch):
+    from app.services import stt as stt_service
+
+    captured = {}
+
+    class FakeModel:
+        def transcribe(self, audio_file, **kwargs):
+            captured["audio_bytes"] = audio_file.read()
+            captured["kwargs"] = kwargs
+            return [
+                SimpleNamespace(
+                    text=" it will",
+                    words=[
+                        SimpleNamespace(
+                            word=" it",
+                            start=0.12,
+                            end=0.24,
+                            probability=0.97,
+                        ),
+                        SimpleNamespace(
+                            word=" will",
+                            start=0.25,
+                            end=0.44,
+                            probability=0.91,
+                        ),
+                    ],
+                ),
+                SimpleNamespace(
+                    text=" probably",
+                    words=[
+                        SimpleNamespace(
+                            word=" probably",
+                            start=0.61,
+                            end=1.02,
+                            probability=0.41,
+                        ),
+                    ],
+                ),
+            ], SimpleNamespace()
+
+    monkeypatch.setattr(stt_service, "get_model", lambda: FakeModel())
+
+    response = client.post(
+        "/stt/transcribe",
+        headers=auth,
+        data={"language_code": "en", "detail": "words"},
+        files={"audio": ("answer.webm", b"webm-bytes", "audio/webm")},
+    )
+
+    assert response.status_code == 200
+    assert captured["audio_bytes"] == b"webm-bytes"
+    assert captured["kwargs"]["word_timestamps"] is True
+    assert response.json() == {
+        "transcript": "it will probably",
+        "words": [
+            {"word": "it", "start": 0.12, "end": 0.24, "probability": 0.97},
+            {"word": "will", "start": 0.25, "end": 0.44, "probability": 0.91},
+            {"word": "probably", "start": 0.61, "end": 1.02, "probability": 0.41},
+        ],
+    }
