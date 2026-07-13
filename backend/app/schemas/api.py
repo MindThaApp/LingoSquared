@@ -311,7 +311,8 @@ class CheckpointResultOut(BaseModel):
     checkpoint_passed: bool
 class TTSIn(BaseModel): text:str=Field(min_length=1,max_length=5000); language_code:str; speaking_rate:float|None=Field(default=None,ge=0.25,le=2.0)
 class TTSFallback(BaseModel): use_browser_tts:Literal[True]=True; reason:Literal["unsupported_language","quota_exceeded","provider_error"]
-class STTOut(BaseModel): transcript:str
+class STTWordOut(BaseModel): word:str; start:float; end:float; probability:float
+class STTOut(BaseModel): transcript:str; words:list[STTWordOut]|None=None
 class STTError(BaseModel): error:Literal["empty_audio","audio_too_large","transcription_failed"]
 class PushSubscriptionKeysIn(BaseModel): p256dh:str=Field(min_length=1); auth:str=Field(min_length=1)
 class PushSubscribeIn(BaseModel): endpoint:str=Field(min_length=1,max_length=1024); keys:PushSubscriptionKeysIn
