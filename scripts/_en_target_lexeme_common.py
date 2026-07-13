@@ -434,8 +434,15 @@ EN_POS.update({
     "teaching": "noun", "reminded": "verb",
 })
 
+# BEGIN volume practice singleton tags (generated 2026-07-13)
+VOLUME_PRACTICE_SINGLETON_TAGS = {'3rd': ['volume_fa_en_a1_unit04_day_ordinal_12_single'], 'bad': ['volume_fa_en_a1_unit01_item_05_single', 'volume_nl_en_a1_unit01_item_05_single', 'volume_prs_en_a1_unit01_item_06_single'], 'boil': ['volume_fa_en_a1_unit41_item_04_single'], 'cat': ['volume_nl_en_a1_unit32_item_10_single'], 'chop': ['volume_prs_en_a1_unit41_item_03_single'], 'day': ['volume_fa_en_a1_unit01_item_03_single', 'volume_nl_en_a1_unit01_item_03_single', 'volume_prs_en_a1_unit01_time_period_02_single'], 'friday': ['volume_fa_en_a1_unit04_weekday_09_single', 'volume_prs_en_a1_unit04_weekday_10_single'], 'hi': ['volume_prs_en_a1_unit01_item_04_single'], 'july': ['volume_fa_en_a1_unit04_month_10_single', 'volume_prs_en_a1_unit04_month_12_single'], 'leila': ['volume_fa_en_a1_unit02_person_name_07_single', 'volume_nl_en_a1_unit02_person_name_06_single', 'volume_prs_en_a1_unit02_person_name_08_single'], 'letter': ['volume_prs_en_a1_unit40_item_05_single'], 'new': ['volume_nl_en_a1_unit02_new_08_single'], 'noisy': ['volume_prs_en_a1_unit39_item_07_single'], 'one': ['volume_nl_en_a1_unit03_item_11_single', 'volume_nl_en_a1_unit03_item_12_single'], 'park': ['volume_fa_en_a1_unit39_item_06_single'], 'party': ['volume_prs_en_a1_unit37_item_11_single'], 'phone': ['volume_fa_en_a1_unit35_item_11_single', 'volume_nl_en_a1_unit35_item_04_single'], 'see': ['volume_fa_en_a1_unit01_farewell_verb_02_single', 'volume_nl_en_a1_unit01_see_02_single'], 'shy': ['volume_fa_en_a1_unit42_item_01_single', 'volume_nl_en_a1_unit42_item_01_single', 'volume_prs_en_a1_unit42_item_01_single'], 'soccer': ['volume_nl_en_a1_unit34_item_07_single'], 'test': ['volume_fa_en_a1_unit36_item_08_single'], 'trash': ['volume_prs_en_a1_unit38_item_09_single'], 'work': ['volume_nl_en_a1_unit02_work_09_single']}
+# END volume practice singleton tags
+
 def en_agreement_tags(token: str) -> dict[str, object]:
     semantics: list[str] = []
+
+    for semantic in VOLUME_PRACTICE_SINGLETON_TAGS.get(token, ()):
+        semantics.append(semantic)
     if token in {"hello", "hi", "goodbye", "bye", "welcome"}:
         semantics.append("greeting")
     if token in {"morning", "afternoon", "evening", "day", "night"}:
