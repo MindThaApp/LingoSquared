@@ -740,6 +740,40 @@ the Debian server, and the frontend was updated to match them.
 `POST /reviews/{id}/answer` — same response shape as the exercise-answer
 endpoint, plus `next_due_at`.
 
+### Endless Practice feed
+
+`POST /practice/{course_id}/batch` returns freshly generated
+`PracticeItem`-backed feed items for the current learner:
+
+```json
+{ "size": 10, "mode": "mixed" }
+```
+
+`size` is optional and must be between 1 and 20. `mode` is optional and
+defaults to `"mixed"` for the existing adaptive template mix. Added
+2026-07-13: `mode: "speaking"` is an additive pronunciation-practice filter
+that returns only generated `speak_repeat` / `speak_response` items, using
+course material from lessons the learner has completed. The speaking
+generator prefers the learner's tracked SRS lexemes weakest/due-first when
+available, falls back to completed-lesson lexemes otherwise, and never uses
+lexemes from uncompleted lessons. It is fully deterministic through the same
+practice batch seeding path and performs zero runtime LLM calls.
+
+Response shape is unchanged:
+
+```json
+{
+  "locked": false,
+  "items": [
+    { "id": "uuid", "type": "speak_repeat", "prompt": {} }
+  ]
+}
+```
+
+Speaking feed items are answered through
+`POST /practice/items/{item_id}/answer` with the transcript string in the
+same `{ "response": "..." }` shape as lesson `speak_*` exercises.
+
 ### Lexeme review flow
 
 `GET /me/reviews/due` returns the current user's unsuspended lexeme reviews
