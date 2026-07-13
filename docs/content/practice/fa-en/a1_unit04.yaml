@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: '1.0'
 pack_key: practice.fa-en.a1.unit04
 source_language: fa
 target_language: en
@@ -6,120 +6,382 @@ unit_content_key: en.a1.unit04.dates
 review:
   status: unreviewed
   fresh_context: false
-  notes: >-
-    Authored 2026-07-06 by a fork of the practice-pool-sync lane, picking
-    up the en-fa/fa-en/en-prs gap this same session's coordinator split
-    off into a separate lane. This unit's English-side POS/agreement-tag
-    classification (weekday/month/day_ordinal) was already added to the
-    shared scripts/_en_target_lexeme_common.py module by the nl-en lane
-    for its own unit04 pack -- only a Farsi gloss dict extension was
-    needed in scripts/backfill_lexemes_fa_en.py, no new classification
-    work. The 3-slot "It's {weekday}, {month} {day_ordinal}." frame
-    (lesson03) was checked for self-reference/agreement risk and is
-    safe: it's a generic date-announcement pattern where any weekday +
-    any month + any of the 3 introduced ordinals (7th/3rd/9th) combine
-    grammatically. Verified with scripts/_practice_slot_check.py
-    (no DB needed) that every slot has >=1 candidate and every
-    multiple_choice/matching_pairs slot has >=3 distinct candidate
-    values, per this lane's established threshold (mirrors
-    build_prompt()'s real `len(options) < 3` reject).
+  notes: 'Authored 2026-07-06 by a fork of the practice-pool-sync lane, picking up the en-fa/fa-en/en-prs gap this same session''s
+    coordinator split off into a separate lane. This unit''s English-side POS/agreement-tag classification (weekday/month/day_ordinal)
+    was already added to the shared scripts/_en_target_lexeme_common.py module by the nl-en lane for its own unit04 pack --
+    only a Farsi gloss dict extension was needed in scripts/backfill_lexemes_fa_en.py, no new classification work. The 3-slot
+    "It''s {weekday}, {month} {day_ordinal}." frame (lesson03) was checked for self-reference/agreement risk and is safe:
+    it''s a generic date-announcement pattern where any weekday + any month + any of the 3 introduced ordinals (7th/3rd/9th)
+    combine grammatically. Verified with scripts/_practice_slot_check.py (no DB needed) that every slot has >=1 candidate
+    and every multiple_choice/matching_pairs slot has >=3 distinct candidate values, per this lane''s established threshold
+    (mirrors build_prompt()''s real `len(options) < 3` reject).
 
-    Retrofit 2026-07-06 (AUTHORING_GUIDE.md §16): widened both
-    matching_pairs templates from 2 to their full real course-wide pools
-    per the retrofit table -- weekday_pair.003 (weekday/noun, pool=7) and
-    month_pair.003 (month/noun, pool=5). Neither pads with untaught words.
+    Retrofit 2026-07-06 (AUTHORING_GUIDE.md §16): widened both matching_pairs templates from 2 to their full real course-wide
+    pools per the retrofit table -- weekday_pair.003 (weekday/noun, pool=7) and month_pair.003 (month/noun, pool=5). Neither
+    pads with untaught words.'
 tag_schema:
-  part_of_speech: [noun, adjective, adverb, pronoun, verb, particle, symbol]
+  part_of_speech:
+  - noun
+  - adjective
+  - adverb
+  - pronoun
+  - verb
+  - particle
+  - symbol
   agreement_tags:
-    semantic: [weekday, month, day_ordinal]
+    semantic:
+    - weekday
+    - month
+    - day_ordinal
+    - volume_fa_en_a1_unit04_weekday_09_single
+    - volume_fa_en_a1_unit04_month_10_single
+    - volume_fa_en_a1_unit04_day_ordinal_12_single
 slot_presets:
-  weekday: &weekday {language_code: en, part_of_speech: noun, agreement_tags: {semantic: weekday}}
-  month: &month {language_code: en, part_of_speech: noun, agreement_tags: {semantic: month}}
-  day_ordinal: &day_ordinal {language_code: en, part_of_speech: noun, agreement_tags: {semantic: day_ordinal}}
+  weekday: &id001
+    language_code: en
+    part_of_speech: noun
+    agreement_tags:
+      semantic: weekday
+  month: &id002
+    language_code: en
+    part_of_speech: noun
+    agreement_tags:
+      semantic: month
+  day_ordinal: &id003
+    language_code: en
+    part_of_speech: noun
+    agreement_tags:
+      semantic: day_ordinal
 templates:
-  - content_key: practice.fa-en.en.a1.unit04.lesson01.weekday_gloss.001
-    lesson_content_key: en.a1.unit04.lesson01.weekdays
-    type: multiple_choice
-    frame: {text: "{weekday}", language_code: en, direction: ltr}
-    slots: {weekday: *weekday}
-    answer_derivation: {kind: slot_gloss, slot: weekday}
-    feedback_frame: {text: "معنی فارسی {weekday} را انتخاب کنید.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit04.lesson01.weekday_listen.002
-    lesson_content_key: en.a1.unit04.lesson01.weekdays
-    type: listen_select
-    frame: {text: "{weekday}", language_code: en, direction: ltr}
-    slots: {weekday: *weekday}
-    answer_derivation: {kind: slot_gloss, slot: weekday}
-    feedback_frame: {text: "روزی که شنیدید {weekday} بود.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit04.lesson01.weekday_pair.003
-    lesson_content_key: en.a1.unit04.lesson01.weekdays
-    type: matching_pairs
-    frame: {text: "{weekday_one} — {weekday_two}", language_code: en, direction: ltr}
-    slots: {weekday_one: *weekday, weekday_two: *weekday, weekday_three: *weekday, weekday_four: *weekday, weekday_five: *weekday, weekday_six: *weekday, weekday_seven: *weekday}
-    slot_relations: [{kind: distinct, slots: [weekday_one, weekday_two, weekday_three, weekday_four, weekday_five, weekday_six, weekday_seven]}]
-    answer_derivation: {kind: matching_pairs, slots: [weekday_one, weekday_two, weekday_three, weekday_four, weekday_five, weekday_six, weekday_seven]}
-    feedback_frame: {text: "هر روز هفته را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit04.lesson01.weekday_translate.004
-    lesson_content_key: en.a1.unit04.lesson01.weekdays
-    type: translation
-    frame: {text: "{weekday}", language_code: fa, direction: rtl, slot_rendering: {weekday: english_gloss}}
-    slots: {weekday: *weekday}
-    answer_derivation: {kind: slot_text, slot: weekday}
-    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این روز فارسی است.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit04.lesson02.month_gloss.001
-    lesson_content_key: en.a1.unit04.lesson02.months
-    type: multiple_choice
-    frame: {text: "{month}", language_code: en, direction: ltr}
-    slots: {month: *month}
-    answer_derivation: {kind: slot_gloss, slot: month}
-    feedback_frame: {text: "معنی فارسی {month} را انتخاب کنید.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit04.lesson02.month_listen.002
-    lesson_content_key: en.a1.unit04.lesson02.months
-    type: listen_select
-    frame: {text: "{month}", language_code: en, direction: ltr}
-    slots: {month: *month}
-    answer_derivation: {kind: slot_gloss, slot: month}
-    feedback_frame: {text: "ماهی که شنیدید {month} بود.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit04.lesson02.month_pair.003
-    lesson_content_key: en.a1.unit04.lesson02.months
-    type: matching_pairs
-    frame: {text: "{month_one} — {month_two}", language_code: en, direction: ltr}
-    slots: {month_one: *month, month_two: *month, month_three: *month, month_four: *month, month_five: *month}
-    slot_relations: [{kind: distinct, slots: [month_one, month_two, month_three, month_four, month_five]}]
-    answer_derivation: {kind: matching_pairs, slots: [month_one, month_two, month_three, month_four, month_five]}
-    feedback_frame: {text: "هر ماه را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit04.lesson02.month_translate.004
-    lesson_content_key: en.a1.unit04.lesson02.months
-    type: translation
-    frame: {text: "{month}", language_code: fa, direction: rtl, slot_rendering: {month: english_gloss}}
-    slots: {month: *month}
-    answer_derivation: {kind: slot_text, slot: month}
-    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این ماه فارسی است.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit04.lesson03.date_order.001
-    lesson_content_key: en.a1.unit04.lesson03.calendar_dates
-    type: word_order
-    frame: {text: "It's {weekday}, {month} {day_ordinal}", language_code: en, direction: ltr}
-    slots: {weekday: *weekday, month: *month, day_ordinal: *day_ordinal}
-    answer_derivation: {kind: render_frame, frame: {text: "It's {weekday}, {month} {day_ordinal}", language_code: en, direction: ltr}}
-    feedback_frame: {text: "این جمله تاریخ را با روز هفته، ماه و عدد ترتیبی بیان می‌کند.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit04.lesson03.ordinal_translate.003
-    lesson_content_key: en.a1.unit04.lesson03.calendar_dates
-    type: translation
-    frame: {text: "{day_ordinal}", language_code: fa, direction: rtl, slot_rendering: {day_ordinal: english_gloss}}
-    slots: {day_ordinal: *day_ordinal}
-    answer_derivation: {kind: slot_text, slot: day_ordinal}
-    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این عدد ترتیبی فارسی است.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit04.lesson04.weekday_listen.001
-    lesson_content_key: en.a1.unit04.lesson04.appointment_dialogue
-    type: listen_select
-    frame: {text: "{weekday}", language_code: en, direction: ltr}
-    slots: {weekday: *weekday}
-    answer_derivation: {kind: slot_gloss, slot: weekday}
-    feedback_frame: {text: "روزی که در این گفتگو شنیدید {weekday} بود.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit04.lesson04.date_order.002
-    lesson_content_key: en.a1.unit04.lesson04.appointment_dialogue
-    type: word_order
-    frame: {text: "It's {weekday}, {month} {day_ordinal}", language_code: en, direction: ltr}
-    slots: {weekday: *weekday, month: *month, day_ordinal: *day_ordinal}
-    answer_derivation: {kind: render_frame, frame: {text: "It's {weekday}, {month} {day_ordinal}", language_code: en, direction: ltr}}
-    feedback_frame: {text: "این جمله تاریخ قرار ملاقات را بیان می‌کند.", language_code: fa, direction: rtl}
+- content_key: practice.fa-en.en.a1.unit04.lesson01.weekday_gloss.001
+  lesson_content_key: en.a1.unit04.lesson01.weekdays
+  type: multiple_choice
+  frame:
+    text: '{weekday}'
+    language_code: en
+    direction: ltr
+  slots:
+    weekday: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: weekday
+  feedback_frame:
+    text: معنی فارسی {weekday} را انتخاب کنید.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit04.lesson01.weekday_listen.002
+  lesson_content_key: en.a1.unit04.lesson01.weekdays
+  type: listen_select
+  frame:
+    text: '{weekday}'
+    language_code: en
+    direction: ltr
+  slots:
+    weekday: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: weekday
+  feedback_frame:
+    text: روزی که شنیدید {weekday} بود.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit04.lesson01.weekday_pair.003
+  lesson_content_key: en.a1.unit04.lesson01.weekdays
+  type: matching_pairs
+  frame:
+    text: '{weekday_one} — {weekday_two}'
+    language_code: en
+    direction: ltr
+  slots:
+    weekday_one: *id001
+    weekday_two: *id001
+    weekday_three: *id001
+    weekday_four: *id001
+    weekday_five: *id001
+    weekday_six: *id001
+    weekday_seven: *id001
+  slot_relations:
+  - kind: distinct
+    slots:
+    - weekday_one
+    - weekday_two
+    - weekday_three
+    - weekday_four
+    - weekday_five
+    - weekday_six
+    - weekday_seven
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - weekday_one
+    - weekday_two
+    - weekday_three
+    - weekday_four
+    - weekday_five
+    - weekday_six
+    - weekday_seven
+  feedback_frame:
+    text: هر روز هفته را به معنی فارسی خودش وصل کنید.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit04.lesson01.weekday_translate.004
+  lesson_content_key: en.a1.unit04.lesson01.weekdays
+  type: translation
+  frame:
+    text: '{weekday}'
+    language_code: fa
+    direction: rtl
+    slot_rendering:
+      weekday: english_gloss
+  slots:
+    weekday: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: weekday
+  feedback_frame:
+    text: پاسخ درست، معادل انگلیسی این روز فارسی است.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit04.lesson02.month_gloss.001
+  lesson_content_key: en.a1.unit04.lesson02.months
+  type: multiple_choice
+  frame:
+    text: '{month}'
+    language_code: en
+    direction: ltr
+  slots:
+    month: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: month
+  feedback_frame:
+    text: معنی فارسی {month} را انتخاب کنید.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit04.lesson02.month_listen.002
+  lesson_content_key: en.a1.unit04.lesson02.months
+  type: listen_select
+  frame:
+    text: '{month}'
+    language_code: en
+    direction: ltr
+  slots:
+    month: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: month
+  feedback_frame:
+    text: ماهی که شنیدید {month} بود.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit04.lesson02.month_pair.003
+  lesson_content_key: en.a1.unit04.lesson02.months
+  type: matching_pairs
+  frame:
+    text: '{month_one} — {month_two}'
+    language_code: en
+    direction: ltr
+  slots:
+    month_one: *id002
+    month_two: *id002
+    month_three: *id002
+    month_four: *id002
+    month_five: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - month_one
+    - month_two
+    - month_three
+    - month_four
+    - month_five
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - month_one
+    - month_two
+    - month_three
+    - month_four
+    - month_five
+  feedback_frame:
+    text: هر ماه را به معنی فارسی خودش وصل کنید.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit04.lesson02.month_translate.004
+  lesson_content_key: en.a1.unit04.lesson02.months
+  type: translation
+  frame:
+    text: '{month}'
+    language_code: fa
+    direction: rtl
+    slot_rendering:
+      month: english_gloss
+  slots:
+    month: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: month
+  feedback_frame:
+    text: پاسخ درست، معادل انگلیسی این ماه فارسی است.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit04.lesson03.date_order.001
+  lesson_content_key: en.a1.unit04.lesson03.calendar_dates
+  type: word_order
+  frame:
+    text: It's {weekday}, {month} {day_ordinal}
+    language_code: en
+    direction: ltr
+  slots:
+    weekday: *id001
+    month: *id002
+    day_ordinal: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: It's {weekday}, {month} {day_ordinal}
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: این جمله تاریخ را با روز هفته، ماه و عدد ترتیبی بیان می‌کند.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit04.lesson03.ordinal_translate.003
+  lesson_content_key: en.a1.unit04.lesson03.calendar_dates
+  type: translation
+  frame:
+    text: '{day_ordinal}'
+    language_code: fa
+    direction: rtl
+    slot_rendering:
+      day_ordinal: english_gloss
+  slots:
+    day_ordinal: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: day_ordinal
+  feedback_frame:
+    text: پاسخ درست، معادل انگلیسی این عدد ترتیبی فارسی است.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit04.lesson04.weekday_listen.001
+  lesson_content_key: en.a1.unit04.lesson04.appointment_dialogue
+  type: listen_select
+  frame:
+    text: '{weekday}'
+    language_code: en
+    direction: ltr
+  slots:
+    weekday: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: weekday
+  feedback_frame:
+    text: روزی که در این گفتگو شنیدید {weekday} بود.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit04.lesson04.date_order.002
+  lesson_content_key: en.a1.unit04.lesson04.appointment_dialogue
+  type: word_order
+  frame:
+    text: It's {weekday}, {month} {day_ordinal}
+    language_code: en
+    direction: ltr
+  slots:
+    weekday: *id001
+    month: *id002
+    day_ordinal: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: It's {weekday}, {month} {day_ordinal}
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: این جمله تاریخ قرار ملاقات را بیان می‌کند.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit04.lesson03.date_order.001.volume_fill.009
+  lesson_content_key: en.a1.unit04.lesson03.calendar_dates
+  type: fill_in_blank
+  frame: &id004
+    text: It's {weekday}, {month} {day_ordinal}
+    language_code: en
+    direction: ltr
+  slots:
+    weekday:
+      language_code: en
+      part_of_speech: noun
+      agreement_tags:
+        semantic: volume_fa_en_a1_unit04_weekday_09_single
+    month:
+      language_code: en
+      part_of_speech: noun
+      agreement_tags:
+        semantic: month
+    day_ordinal:
+      language_code: en
+      part_of_speech: noun
+      agreement_tags:
+        semantic: day_ordinal
+  answer_derivation:
+    kind: slot_text
+    slot: weekday
+  feedback_frame:
+    text: '{weekday}'
+    language_code: en
+    direction: ltr
+- content_key: practice.fa-en.en.a1.unit04.lesson03.date_order.001.volume_fill.010
+  lesson_content_key: en.a1.unit04.lesson03.calendar_dates
+  type: fill_in_blank
+  frame: *id004
+  slots:
+    weekday:
+      language_code: en
+      part_of_speech: noun
+      agreement_tags:
+        semantic: weekday
+    month:
+      language_code: en
+      part_of_speech: noun
+      agreement_tags:
+        semantic: volume_fa_en_a1_unit04_month_10_single
+    day_ordinal:
+      language_code: en
+      part_of_speech: noun
+      agreement_tags:
+        semantic: day_ordinal
+  answer_derivation:
+    kind: slot_text
+    slot: month
+  feedback_frame:
+    text: '{month}'
+    language_code: en
+    direction: ltr
+- content_key: practice.fa-en.en.a1.unit04.lesson03.date_order.001.volume_fill.012
+  lesson_content_key: en.a1.unit04.lesson03.calendar_dates
+  type: fill_in_blank
+  frame: *id004
+  slots:
+    weekday:
+      language_code: en
+      part_of_speech: noun
+      agreement_tags:
+        semantic: weekday
+    month:
+      language_code: en
+      part_of_speech: noun
+      agreement_tags:
+        semantic: month
+    day_ordinal:
+      language_code: en
+      part_of_speech: noun
+      agreement_tags:
+        semantic: volume_fa_en_a1_unit04_day_ordinal_12_single
+  answer_derivation:
+    kind: slot_text
+    slot: day_ordinal
+  feedback_frame:
+    text: '{day_ordinal}'
+    language_code: en
+    direction: ltr

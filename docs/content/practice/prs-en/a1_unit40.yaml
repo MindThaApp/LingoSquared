@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: '1.0'
 pack_key: practice.prs-en.a1.unit40
 source_language: prs
 target_language: en
@@ -6,81 +6,203 @@ unit_content_key: en.a1.unit40.post
 review:
   status: reviewed
   fresh_context: true
-  notes: >-
-    Authored 2026-07-11 by the prs-en depth-extension worker, same pass
-    as unit30-39. Two tags: 5-member 'post_noun' (letter/package/
-    stamp/envelope/mailbox), bare-word recognition only (matching_pairs
-    uses the first 4: letter/package/stamp/envelope). Narrower 2-member
-    'sendable_noun' (letter/package) for the generative "I need to send
-    a {item}." frame -- "send a stamp"/"send an envelope"/"send a
-    mailbox" are not real phrases, so those three are excluded.
-    EN_POS/en_agreement_tags added to scripts/_en_target_lexeme_common.py
-    as part of this pass. Anchoring check: lesson01 introduces new
-    lexemes, safe as an anchor. Every slot's real candidate count
-    verified with scripts/_practice_slot_check.py. Needs the standard
-    fresh-context review before import.
+  notes: 'Authored 2026-07-11 by the prs-en depth-extension worker, same pass as unit30-39. Two tags: 5-member ''post_noun''
+    (letter/package/ stamp/envelope/mailbox), bare-word recognition only (matching_pairs uses the first 4: letter/package/stamp/envelope).
+    Narrower 2-member ''sendable_noun'' (letter/package) for the generative "I need to send a {item}." frame -- "send a stamp"/"send
+    an envelope"/"send a mailbox" are not real phrases, so those three are excluded. EN_POS/en_agreement_tags added to scripts/_en_target_lexeme_common.py
+    as part of this pass. Anchoring check: lesson01 introduces new lexemes, safe as an anchor. Every slot''s real candidate
+    count verified with scripts/_practice_slot_check.py. Needs the standard fresh-context review before import.
 
-    Fresh-context review, 2026-07-11 (separate worker, zero access to
-    the authoring reasoning above): compile_content.py practice-validate
-    (0 errors/0 warnings), scripts/_practice_slot_check.py (every slot
-    >=1 candidate; every multiple_choice/listen_select/matching_pairs
-    slot enough distinct values), and backfill_lexemes_prs_en.py
-    --dry-run all clean. Verified every tag member is a real
-    introduced_token in this unit's en realization or earlier; every
-    lesson_content_key anchor exists and introduces >=1 new lexeme;
-    word_order uses render_frame (string answer, grade() canonicalizes
-    both shapes); matching_pairs correct_response = {token: gloss}
-    across all distinct slots. Dari feedback text spot-checked as
-    genuine Afghan register (کنین/شنیدین/می‌ته/کدن, صنف/مضمون/موتر/بس/
-    بایسکل/پیشک/بی‌بی), no Iranian Farsi calques, ZWNJ correct. Noted
-    (not a defect): scripts/_en_target_lexeme_common.py now carries
-    three additive unit30-42 tag blocks (prs-en/fa-en/nl-en workers);
-    no prs-en generative frame is widened ungrammatically -- the one
-    cross-block union effect (celebration_noun gains 'cake' from a
-    sibling block) is harmless, since 'cake' is genuinely taught in en
-    unit37 and has a Dari gloss, so it is only ever a valid recognition
-    candidate. Upgraded to reviewed: genuinely clean.
+    Fresh-context review, 2026-07-11 (separate worker, zero access to the authoring reasoning above): compile_content.py practice-validate
+    (0 errors/0 warnings), scripts/_practice_slot_check.py (every slot >=1 candidate; every multiple_choice/listen_select/matching_pairs
+    slot enough distinct values), and backfill_lexemes_prs_en.py --dry-run all clean. Verified every tag member is a real
+    introduced_token in this unit''s en realization or earlier; every lesson_content_key anchor exists and introduces >=1
+    new lexeme; word_order uses render_frame (string answer, grade() canonicalizes both shapes); matching_pairs correct_response
+    = {token: gloss} across all distinct slots. Dari feedback text spot-checked as genuine Afghan register (کنین/شنیدین/می‌ته/کدن,
+    صنف/مضمون/موتر/بس/ بایسکل/پیشک/بی‌بی), no Iranian Farsi calques, ZWNJ correct. Noted (not a defect): scripts/_en_target_lexeme_common.py
+    now carries three additive unit30-42 tag blocks (prs-en/fa-en/nl-en workers); no prs-en generative frame is widened ungrammatically
+    -- the one cross-block union effect (celebration_noun gains ''cake'' from a sibling block) is harmless, since ''cake''
+    is genuinely taught in en unit37 and has a Dari gloss, so it is only ever a valid recognition candidate. Upgraded to reviewed:
+    genuinely clean.'
 tag_schema:
-  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
   agreement_tags:
-    semantic: [post_noun, sendable_noun]
+    semantic:
+    - post_noun
+    - sendable_noun
+    - volume_prs_en_a1_unit40_item_05_single
 slot_presets:
-  post_noun: &post_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: post_noun}}
-  sendable_noun: &sendable_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: sendable_noun}}
+  post_noun: &id001
+    language_code: en
+    part_of_speech: noun
+    agreement_tags:
+      semantic: post_noun
+  sendable_noun: &id002
+    language_code: en
+    part_of_speech: noun
+    agreement_tags:
+      semantic: sendable_noun
 templates:
-  - content_key: practice.prs-en.en.a1.unit40.lesson01.choose.001
-    lesson_content_key: en.a1.unit40.lesson01.post_office_vocabulary
-    type: multiple_choice
-    frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *post_noun}
-    answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "معنی دری {item} را انتخاب کنین.", language_code: prs, direction: rtl}
-  - content_key: practice.prs-en.en.a1.unit40.lesson01.listen.002
-    lesson_content_key: en.a1.unit40.lesson01.post_office_vocabulary
-    type: listen_select
-    frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *post_noun}
-    answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "واژه‌ای که شنیدین {item} بود.", language_code: prs, direction: rtl}
-  - content_key: practice.prs-en.en.a1.unit40.lesson01.match.003
-    lesson_content_key: en.a1.unit40.lesson01.post_office_vocabulary
-    type: matching_pairs
-    frame: {text: "{first} — {second}", language_code: en, direction: ltr}
-    slots: {first: *post_noun, second: *post_noun, third: *post_noun, fourth: *post_noun}
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth]}
-    feedback_frame: {text: "هر واژهٔ پوستخانه را به معنی دری خودش وصل کنین.", language_code: prs, direction: rtl}
-  - content_key: practice.prs-en.en.a1.unit40.lesson01.translate.004
-    lesson_content_key: en.a1.unit40.lesson01.post_office_vocabulary
-    type: translation
-    frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
-    slots: {item: *post_noun}
-    answer_derivation: {kind: slot_text, slot: item}
-    feedback_frame: {text: "معادل انگلیسی همی واژهٔ پوستخانه {item} است.", language_code: prs, direction: rtl}
-  - content_key: practice.prs-en.en.a1.unit40.lesson01.order.005
-    lesson_content_key: en.a1.unit40.lesson01.post_office_vocabulary
-    type: word_order
-    frame: {text: "I need to send a {item}", language_code: en, direction: ltr}
-    slots: {item: *sendable_noun}
-    answer_derivation: {kind: render_frame, frame: {text: "I need to send a {item}", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} چیزی است که می‌خواین بفرستین.", language_code: prs, direction: rtl}
+- content_key: practice.prs-en.en.a1.unit40.lesson01.choose.001
+  lesson_content_key: en.a1.unit40.lesson01.post_office_vocabulary
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: معنی دری {item} را انتخاب کنین.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a1.unit40.lesson01.listen.002
+  lesson_content_key: en.a1.unit40.lesson01.post_office_vocabulary
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: واژه‌ای که شنیدین {item} بود.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a1.unit40.lesson01.match.003
+  lesson_content_key: en.a1.unit40.lesson01.post_office_vocabulary
+  type: matching_pairs
+  frame:
+    text: '{first} — {second}'
+    language_code: en
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+  feedback_frame:
+    text: هر واژهٔ پوستخانه را به معنی دری خودش وصل کنین.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a1.unit40.lesson01.translate.004
+  lesson_content_key: en.a1.unit40.lesson01.post_office_vocabulary
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: معادل انگلیسی همی واژهٔ پوستخانه {item} است.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a1.unit40.lesson01.order.005
+  lesson_content_key: en.a1.unit40.lesson01.post_office_vocabulary
+  type: word_order
+  frame:
+    text: I need to send a {item}
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: I need to send a {item}
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: '{item} چیزی است که می‌خواین بفرستین.'
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a1.unit40.lesson01.order.005.volume_fill.005
+  lesson_content_key: en.a1.unit40.lesson01.post_office_vocabulary
+  type: fill_in_blank
+  frame:
+    text: I need to send a {item}
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: noun
+      agreement_tags:
+        semantic: volume_prs_en_a1_unit40_item_05_single
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+- content_key: practice.prs-en.en.a1.unit40.lesson01.match.003.volume_match.008
+  lesson_content_key: en.a1.unit40.lesson01.post_office_vocabulary
+  type: matching_pairs
+  frame:
+    text: '{first} — {second}'
+    language_code: en
+    direction: ltr
+  slots:
+    first: &id003
+      language_code: en
+      part_of_speech: noun
+      agreement_tags:
+        semantic: post_noun
+    second: *id003
+    third: *id003
+    fourth: *id003
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+  feedback_frame:
+    text: هر واژهٔ پوستخانه را به معنی دری خودش وصل کنین.
+    language_code: prs
+    direction: rtl

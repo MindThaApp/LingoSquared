@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: '1.0'
 pack_key: practice.nl-en.a1.unit01
 source_language: nl
 target_language: en
@@ -6,205 +6,718 @@ unit_content_key: en.a1.unit01.greetings
 review:
   status: reviewed
   fresh_context: true
-  notes: "Fresh-context review (2026-07-06, zero access to any authoring reasoning for this pack). Verified: every lesson_content_key matches the correct lesson in en/a1_unit01_greetings.yaml (not just any key anywhere in content root); ran a standalone harness importing scripts/backfill_lexemes_nl_en.py's iter_specs() and replicating app/practice/service.py's exact lexeme_matches()/_requested_matches() logic against every slot in every template -- all pools now meet or knowingly fall short of the >=4 (multiple_choice/listen_select) / >=1 (other types) bar; read every template's frame text against its full candidate list by hand for self-reference, agreement, and non-interchangeable-synonym risks (the bug classes this project has repeatedly caught). Found and fixed two real bugs the compiler's practice-validate cannot catch (it never touches real lexeme data or frame-text shape): (1) lesson01's greeting_fill.002 and lesson03's wellbeing_fill.002 both authored frame.text as nothing but the slot placeholder itself ('{greeting}'/'{wellbeing_answer}') with zero surrounding text -- per AUTHORING_GUIDE.md#13, masking a bare-slot frame leaves only '___', and build_prompt()'s fill_in_blank branch explicitly rejects any instance where the blanked text has nothing left, so both templates could never generate a single real exercise, 100% of the time. Fixed by converting greeting_fill.002 to listen_select (renamed greeting_listen.002; greeting_word pool has exactly the required 4 candidates: bye/goodbye/hello/hi) and wellbeing_fill.002 to translation (renamed wellbeing_translate.002, mirroring the existing greeting_translate/farewell_translate pattern; needs only >=1 candidate). One known, verified, accepted limitation left as-is rather than force-fixed: lesson03's wellbeing_meaning.001 (multiple_choice) has only 3 real candidates (bad/fine/okay) against this project's usual >=4 convention for recognition types -- this is A1 unit01's genuine full vocabulary for this semantic category (the only other candidate, 'good' from 'I'm good, thanks.', carries no wellbeing_answer tag in the shared scripts/_en_target_lexeme_common.py classifier, and broadening the pack-side tag request to compensate would pull in semantically wrong distractors like 'nice' with false feedback text) -- confirmed via the harness that all 3 glosses are distinct so the real engine's actual >=3 minimum (options dedup check in build_prompt) is met and the exercise generates correctly every time, just with less distractor variety than the norm; fixing the root cause needs a classifier-level tag change outside this review's scope (docs/content/practice/nl-en/, docs/BUILD_LOG.md, scripts/practice_manifest.txt only). No self-reference, capitalization-leak, homograph, or agreement issues found elsewhere in this pack. Re-ran compile_content.py practice-validate (0/0) and the standalone harness after both fixes to confirm. 2026-07-06 matching_pairs widening (AUTHORING_GUIDE.md #16): expanded the greeting (noun) matching_pairs template from 2 to 4 pairs. Depth pass, 2026-07-07 (density audit: nl-en unit01 was the shallowest pack in the direction at 9 templates, mirroring the same-night fa-en/prs-en unit01 depth passes which used the identical shared English-target realization/classifier -- fa-en unit01 went 8->17). Added 8 new templates (9->17), all real vocabulary already present in scripts/_en_target_lexeme_common.py's shared classifier, glossed for Dutch in scripts/backfill_lexemes_nl_en.py's existing EN_TARGET_TO_NL_GLOSS (every token needed -- morning/afternoon/evening/day/night, thanks/thank/nice/welcome/yes/no, my/your/what/what's/i'm/i/am/is/are, goodbye/bye/see/later/then -- was already present; zero new Dutch glosses needed). New slot_presets added, mirroring fa-en's a1_unit01.yaml exactly (same underlying English realization/tag_schema, only the gloss/feedback language differs): time_period ({morning,afternoon,evening,day,night}, POS noun, 5 candidates, glosses ochtend/middag/avond/dag/nacht -- all distinct), politeness ({thanks,thank,nice,welcome,yes,no}, POS [noun,verb,adjective,particle], 6 candidates, glosses bedankt/danken/leuk/welkom/ja/nee -- all distinct), identity ({my,your,what,what's,i'm,i,am,is,are}, POS [pronoun,verb] -- deliberately excludes 'name' (noun), 9 candidates, glosses mijn/jouw-of-uw/wat/wat is/ik ben/ik/ben/is/bent -- all distinct), wellbeing_question (POS adverb, exactly 1 real A1 candidate 'how' -- the blank in wellbeing_question_fill is unambiguous by construction, confirmed with scripts/_fill_in_blank_ambiguity_check.py: 0 AMBIGUOUS flags), farewell ({goodbye,bye,see,later,then}, POS [noun,verb,adverb], 5 candidates) and farewell_word (same set minus verb 'see', POS [noun,adverb], 4 candidates -- used only in the new matching_pairs template, mirroring fa-en's farewell/farewell_word split exactly). lesson01 gained time_period_gloss (multiple_choice, previously declared in this pack's own tag_schema but never used by any template). lesson03 gained politeness_gloss (multiple_choice) and politeness_listen (listen_select) on the broader politeness preset (the pre-existing politeness_translate.003, scoped only to the narrower 'thanks' preset, was left untouched); identity_choose (multiple_choice, new preset); and wellbeing_question_fill (fill_in_blank, '{item} are you?', this pack's first fill_in_blank). Checked for the exact fine/okay Dutch-gloss-collision bug class the fa-en/prs-en depth passes explicitly flagged: unlike Farsi/Dari, Dutch does NOT collapse fine/okay/bad to the same gloss (goed/oke/slecht -- all three distinct), so no rework was needed on this pack's existing wellbeing_meaning.001 (3 candidates, already reviewed and accepted) for that reason. lesson05 gained farewell_meaning (multiple_choice), farewell_pair (matching_pairs, 4 pairs on farewell_word, per AUTHORING_GUIDE.md#16), and farewell_listen (listen_select) on the broader farewell preset -- the pre-existing farewell_order.001 (word_order on 'see' alone) and farewell_translate.003 (translation on 'later' alone) were left untouched since they're already narrowly and correctly scoped. Verified with scripts/_practice_slot_check.py (all touched slots at or above the relevant floor), scripts/_fill_in_blank_ambiguity_check.py (0 new AMBIGUOUS flags), and compile_content.py practice-validate, 0 errors/0 warnings. Still carries this pack's own prior fresh-context review status -- a fresh re-review of specifically these 8 new templates has not happened yet."
+  notes: 'Fresh-context review (2026-07-06, zero access to any authoring reasoning for this pack). Verified: every lesson_content_key
+    matches the correct lesson in en/a1_unit01_greetings.yaml (not just any key anywhere in content root); ran a standalone
+    harness importing scripts/backfill_lexemes_nl_en.py''s iter_specs() and replicating app/practice/service.py''s exact lexeme_matches()/_requested_matches()
+    logic against every slot in every template -- all pools now meet or knowingly fall short of the >=4 (multiple_choice/listen_select)
+    / >=1 (other types) bar; read every template''s frame text against its full candidate list by hand for self-reference,
+    agreement, and non-interchangeable-synonym risks (the bug classes this project has repeatedly caught). Found and fixed
+    two real bugs the compiler''s practice-validate cannot catch (it never touches real lexeme data or frame-text shape):
+    (1) lesson01''s greeting_fill.002 and lesson03''s wellbeing_fill.002 both authored frame.text as nothing but the slot
+    placeholder itself (''{greeting}''/''{wellbeing_answer}'') with zero surrounding text -- per AUTHORING_GUIDE.md#13, masking
+    a bare-slot frame leaves only ''___'', and build_prompt()''s fill_in_blank branch explicitly rejects any instance where
+    the blanked text has nothing left, so both templates could never generate a single real exercise, 100% of the time. Fixed
+    by converting greeting_fill.002 to listen_select (renamed greeting_listen.002; greeting_word pool has exactly the required
+    4 candidates: bye/goodbye/hello/hi) and wellbeing_fill.002 to translation (renamed wellbeing_translate.002, mirroring
+    the existing greeting_translate/farewell_translate pattern; needs only >=1 candidate). One known, verified, accepted limitation
+    left as-is rather than force-fixed: lesson03''s wellbeing_meaning.001 (multiple_choice) has only 3 real candidates (bad/fine/okay)
+    against this project''s usual >=4 convention for recognition types -- this is A1 unit01''s genuine full vocabulary for
+    this semantic category (the only other candidate, ''good'' from ''I''m good, thanks.'', carries no wellbeing_answer tag
+    in the shared scripts/_en_target_lexeme_common.py classifier, and broadening the pack-side tag request to compensate would
+    pull in semantically wrong distractors like ''nice'' with false feedback text) -- confirmed via the harness that all 3
+    glosses are distinct so the real engine''s actual >=3 minimum (options dedup check in build_prompt) is met and the exercise
+    generates correctly every time, just with less distractor variety than the norm; fixing the root cause needs a classifier-level
+    tag change outside this review''s scope (docs/content/practice/nl-en/, docs/BUILD_LOG.md, scripts/practice_manifest.txt
+    only). No self-reference, capitalization-leak, homograph, or agreement issues found elsewhere in this pack. Re-ran compile_content.py
+    practice-validate (0/0) and the standalone harness after both fixes to confirm. 2026-07-06 matching_pairs widening (AUTHORING_GUIDE.md
+    #16): expanded the greeting (noun) matching_pairs template from 2 to 4 pairs. Depth pass, 2026-07-07 (density audit: nl-en
+    unit01 was the shallowest pack in the direction at 9 templates, mirroring the same-night fa-en/prs-en unit01 depth passes
+    which used the identical shared English-target realization/classifier -- fa-en unit01 went 8->17). Added 8 new templates
+    (9->17), all real vocabulary already present in scripts/_en_target_lexeme_common.py''s shared classifier, glossed for
+    Dutch in scripts/backfill_lexemes_nl_en.py''s existing EN_TARGET_TO_NL_GLOSS (every token needed -- morning/afternoon/evening/day/night,
+    thanks/thank/nice/welcome/yes/no, my/your/what/what''s/i''m/i/am/is/are, goodbye/bye/see/later/then -- was already present;
+    zero new Dutch glosses needed). New slot_presets added, mirroring fa-en''s a1_unit01.yaml exactly (same underlying English
+    realization/tag_schema, only the gloss/feedback language differs): time_period ({morning,afternoon,evening,day,night},
+    POS noun, 5 candidates, glosses ochtend/middag/avond/dag/nacht -- all distinct), politeness ({thanks,thank,nice,welcome,yes,no},
+    POS [noun,verb,adjective,particle], 6 candidates, glosses bedankt/danken/leuk/welkom/ja/nee -- all distinct), identity
+    ({my,your,what,what''s,i''m,i,am,is,are}, POS [pronoun,verb] -- deliberately excludes ''name'' (noun), 9 candidates, glosses
+    mijn/jouw-of-uw/wat/wat is/ik ben/ik/ben/is/bent -- all distinct), wellbeing_question (POS adverb, exactly 1 real A1 candidate
+    ''how'' -- the blank in wellbeing_question_fill is unambiguous by construction, confirmed with scripts/_fill_in_blank_ambiguity_check.py:
+    0 AMBIGUOUS flags), farewell ({goodbye,bye,see,later,then}, POS [noun,verb,adverb], 5 candidates) and farewell_word (same
+    set minus verb ''see'', POS [noun,adverb], 4 candidates -- used only in the new matching_pairs template, mirroring fa-en''s
+    farewell/farewell_word split exactly). lesson01 gained time_period_gloss (multiple_choice, previously declared in this
+    pack''s own tag_schema but never used by any template). lesson03 gained politeness_gloss (multiple_choice) and politeness_listen
+    (listen_select) on the broader politeness preset (the pre-existing politeness_translate.003, scoped only to the narrower
+    ''thanks'' preset, was left untouched); identity_choose (multiple_choice, new preset); and wellbeing_question_fill (fill_in_blank,
+    ''{item} are you?'', this pack''s first fill_in_blank). Checked for the exact fine/okay Dutch-gloss-collision bug class
+    the fa-en/prs-en depth passes explicitly flagged: unlike Farsi/Dari, Dutch does NOT collapse fine/okay/bad to the same
+    gloss (goed/oke/slecht -- all three distinct), so no rework was needed on this pack''s existing wellbeing_meaning.001
+    (3 candidates, already reviewed and accepted) for that reason. lesson05 gained farewell_meaning (multiple_choice), farewell_pair
+    (matching_pairs, 4 pairs on farewell_word, per AUTHORING_GUIDE.md#16), and farewell_listen (listen_select) on the broader
+    farewell preset -- the pre-existing farewell_order.001 (word_order on ''see'' alone) and farewell_translate.003 (translation
+    on ''later'' alone) were left untouched since they''re already narrowly and correctly scoped. Verified with scripts/_practice_slot_check.py
+    (all touched slots at or above the relevant floor), scripts/_fill_in_blank_ambiguity_check.py (0 new AMBIGUOUS flags),
+    and compile_content.py practice-validate, 0 errors/0 warnings. Still carries this pack''s own prior fresh-context review
+    status -- a fresh re-review of specifically these 8 new templates has not happened yet.'
 tag_schema:
-  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
   agreement_tags:
-    semantic: [greeting, time_period, farewell, wellbeing_question, wellbeing_answer, politeness, identity, person_name, dialogue_word, extended_family]
-    person: [first, second, third]
-    register: [formal, informal]
+    semantic:
+    - greeting
+    - time_period
+    - farewell
+    - wellbeing_question
+    - wellbeing_answer
+    - politeness
+    - identity
+    - person_name
+    - dialogue_word
+    - extended_family
+    - volume_nl_en_a1_unit01_see_02_single
+    - volume_nl_en_a1_unit01_item_03_single
+    - volume_nl_en_a1_unit01_item_05_single
+    person:
+    - first
+    - second
+    - third
+    register:
+    - formal
+    - informal
 slot_presets:
-  greeting_word: &greeting_word {language_code: en, part_of_speech: noun, agreement_tags: {semantic: greeting}}
-  wellbeing_answer: &wellbeing_answer {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: wellbeing_answer}}
-  thanks: &thanks {language_code: en, part_of_speech: noun, agreement_tags: {semantic: politeness}}
-  see: &see {language_code: en, part_of_speech: verb, agreement_tags: {semantic: farewell}}
-  later: &later {language_code: en, part_of_speech: adverb, agreement_tags: {semantic: farewell}}
-  time_period: &time_period {language_code: en, part_of_speech: noun, agreement_tags: {semantic: time_period}}
-  politeness: &politeness {language_code: en, part_of_speech: [noun, verb, adjective, particle], agreement_tags: {semantic: politeness}}
-  identity: &identity {language_code: en, part_of_speech: [pronoun, verb], agreement_tags: {semantic: identity}}
-  wellbeing_question: &wellbeing_question {language_code: en, part_of_speech: adverb, agreement_tags: {semantic: wellbeing_question}}
-  farewell: &farewell {language_code: en, part_of_speech: [noun, verb, adverb], agreement_tags: {semantic: farewell}}
-  farewell_word: &farewell_word {language_code: en, part_of_speech: [noun, adverb], agreement_tags: {semantic: farewell}}
-  dialogue_noun: &dialogue_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: dialogue_word}}
-  extended_family: &extended_family {language_code: en, part_of_speech: noun, agreement_tags: {semantic: extended_family}}
-  practice_word: &practice_word {language_code: en, part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase], agreement_tags: {}}
+  greeting_word: &id001
+    language_code: en
+    part_of_speech: noun
+    agreement_tags:
+      semantic: greeting
+  wellbeing_answer: &id003
+    language_code: en
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: wellbeing_answer
+  thanks: &id004
+    language_code: en
+    part_of_speech: noun
+    agreement_tags:
+      semantic: politeness
+  see: &id008
+    language_code: en
+    part_of_speech: verb
+    agreement_tags:
+      semantic: farewell
+  later: &id009
+    language_code: en
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: farewell
+  time_period: &id002
+    language_code: en
+    part_of_speech: noun
+    agreement_tags:
+      semantic: time_period
+  politeness: &id005
+    language_code: en
+    part_of_speech:
+    - noun
+    - verb
+    - adjective
+    - particle
+    agreement_tags:
+      semantic: politeness
+  identity: &id006
+    language_code: en
+    part_of_speech:
+    - pronoun
+    - verb
+    agreement_tags:
+      semantic: identity
+  wellbeing_question: &id007
+    language_code: en
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: wellbeing_question
+  farewell: &id010
+    language_code: en
+    part_of_speech:
+    - noun
+    - verb
+    - adverb
+    agreement_tags:
+      semantic: farewell
+  farewell_word: &id011
+    language_code: en
+    part_of_speech:
+    - noun
+    - adverb
+    agreement_tags:
+      semantic: farewell
+  dialogue_noun: &id012
+    language_code: en
+    part_of_speech: noun
+    agreement_tags:
+      semantic: dialogue_word
+  extended_family: &id013
+    language_code: en
+    part_of_speech: noun
+    agreement_tags:
+      semantic: extended_family
+  practice_word: &id014
+    language_code: en
+    part_of_speech:
+    - symbol
+    - noun
+    - proper_noun
+    - pronoun
+    - verb
+    - adjective
+    - adverb
+    - preposition
+    - particle
+    - phrase
+    agreement_tags: {}
 templates:
-  # Lesson 1: everyday greetings and farewells.
-  - content_key: practice.nl-en.en.a1.unit01.lesson01.greeting_meaning.001
-    lesson_content_key: en.a1.unit01.lesson01.everyday_greetings
-    type: multiple_choice
-    frame: {text: "{greeting}", language_code: en, direction: ltr}
-    slots: {greeting: *greeting_word}
-    answer_derivation: {kind: slot_gloss, slot: greeting}
-    feedback_frame: {text: "{greeting} is een begroeting of een afscheid.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit01.lesson01.greeting_listen.002
-    lesson_content_key: en.a1.unit01.lesson01.everyday_greetings
-    type: listen_select
-    frame: {text: "{greeting}", language_code: en, direction: ltr}
-    slots: {greeting: *greeting_word}
-    answer_derivation: {kind: slot_gloss, slot: greeting}
-    feedback_frame: {text: "{greeting} is een begroeting of een afscheid.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit01.lesson01.greeting_translate.003
-    lesson_content_key: en.a1.unit01.lesson01.everyday_greetings
-    type: translation
-    frame: {text: "{greeting}", language_code: nl, direction: ltr, slot_rendering: {greeting: english_gloss}}
-    slots: {greeting: *greeting_word}
-    answer_derivation: {kind: slot_text, slot: greeting}
-    feedback_frame: {text: "De Engelse vertaling is {greeting}.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit01.lesson01.greeting_pair.004
-    lesson_content_key: en.a1.unit01.lesson01.everyday_greetings
-    type: matching_pairs
-    frame: {text: "Koppel de Engelse woorden aan de Nederlandse betekenissen.", language_code: nl, direction: ltr}
-    slots: {first_greeting: *greeting_word, second_greeting: *greeting_word, third_greeting: *greeting_word, fourth_greeting: *greeting_word}
-    slot_relations: [{kind: distinct, slots: [first_greeting, second_greeting, third_greeting, fourth_greeting]}]
-    answer_derivation: {kind: matching_pairs, slots: [first_greeting, second_greeting, third_greeting, fourth_greeting]}
-    feedback_frame: {text: "Je hebt twee begroetingen of afscheidswoorden gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit01.lesson01.time_period_gloss.005
-    lesson_content_key: en.a1.unit01.lesson01.everyday_greetings
-    type: multiple_choice
-    frame: {text: "{time_period}", language_code: en, direction: ltr}
-    slots: {time_period: *time_period}
-    answer_derivation: {kind: slot_gloss, slot: time_period}
-    feedback_frame: {text: "Kies de Nederlandse betekenis van {time_period}.", language_code: nl, direction: ltr}
-
-  # Lesson 3: wellbeing exchange.
-  - content_key: practice.nl-en.en.a1.unit01.lesson03.wellbeing_meaning.001
-    lesson_content_key: en.a1.unit01.lesson03.wellbeing
-    type: multiple_choice
-    frame: {text: "{wellbeing_answer}", language_code: en, direction: ltr}
-    slots: {wellbeing_answer: *wellbeing_answer}
-    answer_derivation: {kind: slot_gloss, slot: wellbeing_answer}
-    feedback_frame: {text: "{wellbeing_answer} komt voor in een antwoord op de vraag hoe het gaat.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit01.lesson03.wellbeing_translate.002
-    lesson_content_key: en.a1.unit01.lesson03.wellbeing
-    type: translation
-    frame: {text: "{wellbeing_answer}", language_code: nl, direction: ltr, slot_rendering: {wellbeing_answer: english_gloss}}
-    slots: {wellbeing_answer: *wellbeing_answer}
-    answer_derivation: {kind: slot_text, slot: wellbeing_answer}
-    feedback_frame: {text: "De Engelse vertaling is {wellbeing_answer}.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit01.lesson03.politeness_translate.003
-    lesson_content_key: en.a1.unit01.lesson03.wellbeing
-    type: translation
-    frame: {text: "{thanks}", language_code: nl, direction: ltr, slot_rendering: {thanks: english_gloss}}
-    slots: {thanks: *thanks}
-    answer_derivation: {kind: slot_text, slot: thanks}
-    feedback_frame: {text: "Met {thanks} bedank je iemand.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit01.lesson03.politeness_gloss.004
-    lesson_content_key: en.a1.unit01.lesson03.wellbeing
-    type: multiple_choice
-    frame: {text: "{politeness}", language_code: en, direction: ltr}
-    slots: {politeness: *politeness}
-    answer_derivation: {kind: slot_gloss, slot: politeness}
-    feedback_frame: {text: "Kies de Nederlandse betekenis van {politeness}.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit01.lesson03.politeness_listen.005
-    lesson_content_key: en.a1.unit01.lesson03.wellbeing
-    type: listen_select
-    frame: {text: "{politeness}", language_code: en, direction: ltr}
-    slots: {politeness: *politeness}
-    answer_derivation: {kind: slot_gloss, slot: politeness}
-    feedback_frame: {text: "Je hoorde {politeness}.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit01.lesson03.identity_choose.006
-    lesson_content_key: en.a1.unit01.lesson03.wellbeing
-    type: multiple_choice
-    frame: {text: "{identity}", language_code: en, direction: ltr}
-    slots: {identity: *identity}
-    answer_derivation: {kind: slot_gloss, slot: identity}
-    feedback_frame: {text: "Kies de Nederlandse betekenis van {identity}.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit01.lesson03.wellbeing_question_fill.007
-    lesson_content_key: en.a1.unit01.lesson03.wellbeing
-    type: fill_in_blank
+- content_key: practice.nl-en.en.a1.unit01.lesson01.greeting_meaning.001
+  lesson_content_key: en.a1.unit01.lesson01.everyday_greetings
+  type: multiple_choice
+  frame:
+    text: '{greeting}'
+    language_code: en
+    direction: ltr
+  slots:
+    greeting: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: greeting
+  feedback_frame:
+    text: '{greeting} is een begroeting of een afscheid.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit01.lesson01.greeting_listen.002
+  lesson_content_key: en.a1.unit01.lesson01.everyday_greetings
+  type: listen_select
+  frame:
+    text: '{greeting}'
+    language_code: en
+    direction: ltr
+  slots:
+    greeting: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: greeting
+  feedback_frame:
+    text: '{greeting} is een begroeting of een afscheid.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit01.lesson01.greeting_translate.003
+  lesson_content_key: en.a1.unit01.lesson01.everyday_greetings
+  type: translation
+  frame:
+    text: '{greeting}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      greeting: english_gloss
+  slots:
+    greeting: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: greeting
+  feedback_frame:
+    text: De Engelse vertaling is {greeting}.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit01.lesson01.greeting_pair.004
+  lesson_content_key: en.a1.unit01.lesson01.everyday_greetings
+  type: matching_pairs
+  frame:
+    text: Koppel de Engelse woorden aan de Nederlandse betekenissen.
+    language_code: nl
+    direction: ltr
+  slots:
+    first_greeting: *id001
+    second_greeting: *id001
+    third_greeting: *id001
+    fourth_greeting: *id001
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first_greeting
+    - second_greeting
+    - third_greeting
+    - fourth_greeting
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first_greeting
+    - second_greeting
+    - third_greeting
+    - fourth_greeting
+  feedback_frame:
+    text: Je hebt twee begroetingen of afscheidswoorden gekoppeld aan hun Nederlandse betekenis.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit01.lesson01.time_period_gloss.005
+  lesson_content_key: en.a1.unit01.lesson01.everyday_greetings
+  type: multiple_choice
+  frame:
+    text: '{time_period}'
+    language_code: en
+    direction: ltr
+  slots:
+    time_period: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: time_period
+  feedback_frame:
+    text: Kies de Nederlandse betekenis van {time_period}.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit01.lesson03.wellbeing_meaning.001
+  lesson_content_key: en.a1.unit01.lesson03.wellbeing
+  type: multiple_choice
+  frame:
+    text: '{wellbeing_answer}'
+    language_code: en
+    direction: ltr
+  slots:
+    wellbeing_answer: *id003
+  answer_derivation:
+    kind: slot_gloss
+    slot: wellbeing_answer
+  feedback_frame:
+    text: '{wellbeing_answer} komt voor in een antwoord op de vraag hoe het gaat.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit01.lesson03.wellbeing_translate.002
+  lesson_content_key: en.a1.unit01.lesson03.wellbeing
+  type: translation
+  frame:
+    text: '{wellbeing_answer}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      wellbeing_answer: english_gloss
+  slots:
+    wellbeing_answer: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: wellbeing_answer
+  feedback_frame:
+    text: De Engelse vertaling is {wellbeing_answer}.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit01.lesson03.politeness_translate.003
+  lesson_content_key: en.a1.unit01.lesson03.wellbeing
+  type: translation
+  frame:
+    text: '{thanks}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      thanks: english_gloss
+  slots:
+    thanks: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: thanks
+  feedback_frame:
+    text: Met {thanks} bedank je iemand.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit01.lesson03.politeness_gloss.004
+  lesson_content_key: en.a1.unit01.lesson03.wellbeing
+  type: multiple_choice
+  frame:
+    text: '{politeness}'
+    language_code: en
+    direction: ltr
+  slots:
+    politeness: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: politeness
+  feedback_frame:
+    text: Kies de Nederlandse betekenis van {politeness}.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit01.lesson03.politeness_listen.005
+  lesson_content_key: en.a1.unit01.lesson03.wellbeing
+  type: listen_select
+  frame:
+    text: '{politeness}'
+    language_code: en
+    direction: ltr
+  slots:
+    politeness: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: politeness
+  feedback_frame:
+    text: Je hoorde {politeness}.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit01.lesson03.identity_choose.006
+  lesson_content_key: en.a1.unit01.lesson03.wellbeing
+  type: multiple_choice
+  frame:
+    text: '{identity}'
+    language_code: en
+    direction: ltr
+  slots:
+    identity: *id006
+  answer_derivation:
+    kind: slot_gloss
+    slot: identity
+  feedback_frame:
+    text: Kies de Nederlandse betekenis van {identity}.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit01.lesson03.wellbeing_question_fill.007
+  lesson_content_key: en.a1.unit01.lesson03.wellbeing
+  type: fill_in_blank
+  frame:
+    text: '{item} are you?'
+    language_code: en
+    direction: ltr
+    text_blocks:
+    - text: Maak de Engelse zin af.
+      language_code: nl
+      direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} is het vraagwoord in deze zin.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit01.lesson05.farewell_order.001
+  lesson_content_key: en.a1.unit01.lesson05.noun_phrases_and_closings
+  type: word_order
+  frame:
+    text: '{see} you later'
+    language_code: en
+    direction: ltr
+  slots:
+    see: *id008
+  answer_derivation:
+    kind: render_frame
     frame:
-      text: "{item} are you?"
+      text: '{see} you later'
       language_code: en
       direction: ltr
-      text_blocks:
-        - {text: "Maak de Engelse zin af.", language_code: nl, direction: ltr}
-    slots: {item: *wellbeing_question}
-    answer_derivation: {kind: slot_text, slot: item}
-    feedback_frame: {text: "{item} is het vraagwoord in deze zin.", language_code: nl, direction: ltr}
-
-  # Lesson 5: friendly closings.
-  - content_key: practice.nl-en.en.a1.unit01.lesson05.farewell_order.001
-    lesson_content_key: en.a1.unit01.lesson05.noun_phrases_and_closings
-    type: word_order
-    frame: {text: "{see} you later", language_code: en, direction: ltr}
-    slots: {see: *see}
-    answer_derivation: {kind: render_frame, frame: {text: "{see} you later", language_code: en, direction: ltr}}
-    feedback_frame: {text: "De juiste volgorde is {see} you later.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit01.lesson05.farewell_translate.003
-    lesson_content_key: en.a1.unit01.lesson05.noun_phrases_and_closings
-    type: translation
-    frame: {text: "{later}", language_code: nl, direction: ltr, slot_rendering: {later: english_gloss}}
-    slots: {later: *later}
-    answer_derivation: {kind: slot_text, slot: later}
-    feedback_frame: {text: "De Engelse vertaling is {later}.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit01.lesson05.farewell_meaning.004
-    lesson_content_key: en.a1.unit01.lesson05.noun_phrases_and_closings
-    type: multiple_choice
-    frame: {text: "{farewell}", language_code: en, direction: ltr}
-    slots: {farewell: *farewell}
-    answer_derivation: {kind: slot_gloss, slot: farewell}
-    feedback_frame: {text: "{farewell} is een woord om afscheid te nemen.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit01.lesson05.farewell_pair.005
-    lesson_content_key: en.a1.unit01.lesson05.noun_phrases_and_closings
-    type: matching_pairs
-    frame: {text: "Koppel de Engelse afscheidswoorden aan de Nederlandse betekenis.", language_code: nl, direction: ltr}
-    slots: {first_farewell: *farewell_word, second_farewell: *farewell_word, third_farewell: *farewell_word, fourth_farewell: *farewell_word}
-    slot_relations: [{kind: distinct, slots: [first_farewell, second_farewell, third_farewell, fourth_farewell]}]
-    answer_derivation: {kind: matching_pairs, slots: [first_farewell, second_farewell, third_farewell, fourth_farewell]}
-    feedback_frame: {text: "Je hebt vier afscheidswoorden gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit01.lesson05.farewell_listen.006
-    lesson_content_key: en.a1.unit01.lesson05.noun_phrases_and_closings
-    type: listen_select
-    frame: {text: "{farewell}", language_code: en, direction: ltr}
-    slots: {farewell: *farewell}
-    answer_derivation: {kind: slot_gloss, slot: farewell}
-    feedback_frame: {text: "Je hoorde {farewell}.", language_code: nl, direction: ltr}
-
-  # Cross-lesson fallback: keeps low-mastery practice from collapsing into
-  # bare single-word recognition when a later lexeme lacks a narrower frame.
-  - content_key: practice.nl-en.en.a1.unit01.lesson01.variety_time_order.900
-    lesson_content_key: en.a1.unit01.lesson01.everyday_greetings
-    type: word_order
-    frame: {text: "Good {item}", language_code: en, direction: ltr}
-    slots: {item: *time_period}
-    answer_derivation: {kind: render_frame, frame: {text: "Good {item}", language_code: en, direction: ltr}}
-    feedback_frame: {text: "De juiste volgorde is Good {item}.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit01.lesson03.variety_wellbeing_order.901
-    lesson_content_key: en.a1.unit01.lesson03.wellbeing
-    type: word_order
-    frame: {text: "I'm {item}", language_code: en, direction: ltr}
-    slots: {item: *wellbeing_answer}
-    answer_derivation: {kind: render_frame, frame: {text: "I'm {item}", language_code: en, direction: ltr}}
-    feedback_frame: {text: "De juiste volgorde is I'm {item}.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit01.lesson03.variety_politeness_pair.902
-    lesson_content_key: en.a1.unit01.lesson03.wellbeing
-    type: matching_pairs
-    frame: {text: "Koppel beleefde Engelse woorden aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
-    slots: {word_one: *politeness, word_two: *politeness, word_three: *politeness, word_four: *politeness, word_five: *politeness, word_six: *politeness}
-    slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}]
-    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}
-    feedback_frame: {text: "Je hebt de beleefde woorden gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit01.lesson01.variety_dialogue_pair.903
-    lesson_content_key: en.a1.unit01.lesson01.everyday_greetings
-    type: matching_pairs
-    frame: {text: "Koppel elk Engels woord uit de dialoog aan zijn Nederlandse betekenis.", language_code: nl, direction: ltr}
-    slots: {word_one: *dialogue_noun, word_two: *dialogue_noun, word_three: *dialogue_noun, word_four: *dialogue_noun, word_five: *dialogue_noun, word_six: *dialogue_noun}
-    slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}]
-    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}
-    feedback_frame: {text: "Je hebt de dialoogwoorden gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit01.lesson01.variety_family_pair.904
-    lesson_content_key: en.a1.unit01.lesson01.everyday_greetings
-    type: matching_pairs
-    frame: {text: "Koppel familieleden aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
-    slots: {word_one: *extended_family, word_two: *extended_family, word_three: *extended_family, word_four: *extended_family, word_five: *extended_family}
-    slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five]}]
-    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five]}
-    feedback_frame: {text: "Je hebt de familiewoorden gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit01.lesson01.practice_translate.905
-    lesson_content_key: en.a1.unit01.lesson01.everyday_greetings
-    type: translation
-    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
-    slots: {item: *practice_word}
-    answer_derivation: {kind: slot_text, slot: item}
-    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  feedback_frame:
+    text: De juiste volgorde is {see} you later.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit01.lesson05.farewell_translate.003
+  lesson_content_key: en.a1.unit01.lesson05.noun_phrases_and_closings
+  type: translation
+  frame:
+    text: '{later}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      later: english_gloss
+  slots:
+    later: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: later
+  feedback_frame:
+    text: De Engelse vertaling is {later}.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit01.lesson05.farewell_meaning.004
+  lesson_content_key: en.a1.unit01.lesson05.noun_phrases_and_closings
+  type: multiple_choice
+  frame:
+    text: '{farewell}'
+    language_code: en
+    direction: ltr
+  slots:
+    farewell: *id010
+  answer_derivation:
+    kind: slot_gloss
+    slot: farewell
+  feedback_frame:
+    text: '{farewell} is een woord om afscheid te nemen.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit01.lesson05.farewell_pair.005
+  lesson_content_key: en.a1.unit01.lesson05.noun_phrases_and_closings
+  type: matching_pairs
+  frame:
+    text: Koppel de Engelse afscheidswoorden aan de Nederlandse betekenis.
+    language_code: nl
+    direction: ltr
+  slots:
+    first_farewell: *id011
+    second_farewell: *id011
+    third_farewell: *id011
+    fourth_farewell: *id011
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first_farewell
+    - second_farewell
+    - third_farewell
+    - fourth_farewell
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first_farewell
+    - second_farewell
+    - third_farewell
+    - fourth_farewell
+  feedback_frame:
+    text: Je hebt vier afscheidswoorden gekoppeld aan hun Nederlandse betekenis.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit01.lesson05.farewell_listen.006
+  lesson_content_key: en.a1.unit01.lesson05.noun_phrases_and_closings
+  type: listen_select
+  frame:
+    text: '{farewell}'
+    language_code: en
+    direction: ltr
+  slots:
+    farewell: *id010
+  answer_derivation:
+    kind: slot_gloss
+    slot: farewell
+  feedback_frame:
+    text: Je hoorde {farewell}.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit01.lesson01.variety_time_order.900
+  lesson_content_key: en.a1.unit01.lesson01.everyday_greetings
+  type: word_order
+  frame:
+    text: Good {item}
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Good {item}
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: De juiste volgorde is Good {item}.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit01.lesson03.variety_wellbeing_order.901
+  lesson_content_key: en.a1.unit01.lesson03.wellbeing
+  type: word_order
+  frame:
+    text: I'm {item}
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: I'm {item}
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: De juiste volgorde is I'm {item}.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit01.lesson03.variety_politeness_pair.902
+  lesson_content_key: en.a1.unit01.lesson03.wellbeing
+  type: matching_pairs
+  frame:
+    text: Koppel beleefde Engelse woorden aan hun Nederlandse betekenis.
+    language_code: nl
+    direction: ltr
+  slots:
+    word_one: *id005
+    word_two: *id005
+    word_three: *id005
+    word_four: *id005
+    word_five: *id005
+    word_six: *id005
+  slot_relations:
+  - kind: distinct
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+    - word_five
+    - word_six
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+    - word_five
+    - word_six
+  feedback_frame:
+    text: Je hebt de beleefde woorden gekoppeld aan hun Nederlandse betekenis.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit01.lesson01.variety_dialogue_pair.903
+  lesson_content_key: en.a1.unit01.lesson01.everyday_greetings
+  type: matching_pairs
+  frame:
+    text: Koppel elk Engels woord uit de dialoog aan zijn Nederlandse betekenis.
+    language_code: nl
+    direction: ltr
+  slots:
+    word_one: *id012
+    word_two: *id012
+    word_three: *id012
+    word_four: *id012
+    word_five: *id012
+    word_six: *id012
+  slot_relations:
+  - kind: distinct
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+    - word_five
+    - word_six
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+    - word_five
+    - word_six
+  feedback_frame:
+    text: Je hebt de dialoogwoorden gekoppeld aan hun Nederlandse betekenis.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit01.lesson01.variety_family_pair.904
+  lesson_content_key: en.a1.unit01.lesson01.everyday_greetings
+  type: matching_pairs
+  frame:
+    text: Koppel familieleden aan hun Nederlandse betekenis.
+    language_code: nl
+    direction: ltr
+  slots:
+    word_one: *id013
+    word_two: *id013
+    word_three: *id013
+    word_four: *id013
+    word_five: *id013
+  slot_relations:
+  - kind: distinct
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+    - word_five
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+    - word_five
+  feedback_frame:
+    text: Je hebt de familiewoorden gekoppeld aan hun Nederlandse betekenis.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit01.lesson01.practice_translate.905
+  lesson_content_key: en.a1.unit01.lesson01.everyday_greetings
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id014
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: De Engelse vertaling is {item}.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit01.lesson05.farewell_order.001.volume_fill.002
+  lesson_content_key: en.a1.unit01.lesson05.noun_phrases_and_closings
+  type: fill_in_blank
+  frame:
+    text: '{see} you later'
+    language_code: en
+    direction: ltr
+  slots:
+    see:
+      language_code: en
+      part_of_speech: verb
+      agreement_tags:
+        semantic: volume_nl_en_a1_unit01_see_02_single
+  answer_derivation:
+    kind: slot_text
+    slot: see
+  feedback_frame:
+    text: '{see}'
+    language_code: en
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit01.lesson01.variety_time_order.900.volume_fill.003
+  lesson_content_key: en.a1.unit01.lesson01.everyday_greetings
+  type: fill_in_blank
+  frame:
+    text: Good {item}
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: noun
+      agreement_tags:
+        semantic: volume_nl_en_a1_unit01_item_03_single
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit01.lesson03.variety_wellbeing_order.901.volume_fill.005
+  lesson_content_key: en.a1.unit01.lesson03.wellbeing
+  type: fill_in_blank
+  frame:
+    text: I'm {item}
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: volume_nl_en_a1_unit01_item_05_single
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr

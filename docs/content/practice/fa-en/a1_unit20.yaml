@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: '1.0'
 pack_key: practice.fa-en.a1.unit20
 source_language: fa
 target_language: en
@@ -6,143 +6,301 @@ unit_content_key: en.a1.unit20.comparisons
 review:
   status: unreviewed
   fresh_context: false
-  notes: >-
-    Authored 2026-07-06 by the practice-pool-sync lane extending fa-en
-    coverage to units 15-20, mirroring nl-en's already-reviewed
-    a1_unit20.yaml. Reuses the already-established 5-member comparative_adj
-    tag (bigger/smaller/cheaper/faster/nicer) -- verified interchangeable
-    one-word "-er" comparatives that take "than" in a "This bag is {item}
-    than that bag." frame. Deliberately does NOT fold in "more expensive"
-    (a two-word phrase that doesn't fit a single-token slot) or "cheapest"
-    (a superlative that does NOT take "than" -- mixing degrees would
-    generate "This bag is cheapest than that bag."); "cheapest" instead
-    gets its own single-member superlative_adj tag, used only in fill_in_
-    blank/translation templates (which don't need the >=4 candidates
-    multiple_choice/listen_select require). A 2-member color tag (red/
-    white) is likewise only used in the word_order slot for the same
-    reason. All POS/semantic-tag classification was already present in
-    scripts/_en_target_lexeme_common.py before this pass -- only scripts/
-    backfill_lexemes_fa_en.py's own Farsi gloss dict needed extending
-    (bigger/smaller/cheaper/more/expensive/faster/than/nicer/cheapest/red/
-    car/blue/white; "small"/"big"/"but"/"by"/"i'll"/"get" reuse their
-    existing senses unchanged). Verified with scripts/_practice_slot_check.py
-    that every slot has >=1 real candidate lexeme and every multiple_choice/
-    listen_select slot has >=4 distinct candidate values (comparative_adj
-    has 5). The underlying en realization unit20 is UNREVIEWED (Codex was
-    usage-limited at authoring time), same as the fa-en overlay's
-    realization dependency -- needs the standard fresh-context review
-    before import.
+  notes: 'Authored 2026-07-06 by the practice-pool-sync lane extending fa-en coverage to units 15-20, mirroring nl-en''s already-reviewed
+    a1_unit20.yaml. Reuses the already-established 5-member comparative_adj tag (bigger/smaller/cheaper/faster/nicer) -- verified
+    interchangeable one-word "-er" comparatives that take "than" in a "This bag is {item} than that bag." frame. Deliberately
+    does NOT fold in "more expensive" (a two-word phrase that doesn''t fit a single-token slot) or "cheapest" (a superlative
+    that does NOT take "than" -- mixing degrees would generate "This bag is cheapest than that bag."); "cheapest" instead
+    gets its own single-member superlative_adj tag, used only in fill_in_ blank/translation templates (which don''t need the
+    >=4 candidates multiple_choice/listen_select require). A 2-member color tag (red/ white) is likewise only used in the
+    word_order slot for the same reason. All POS/semantic-tag classification was already present in scripts/_en_target_lexeme_common.py
+    before this pass -- only scripts/ backfill_lexemes_fa_en.py''s own Farsi gloss dict needed extending (bigger/smaller/cheaper/more/expensive/faster/than/nicer/cheapest/red/
+    car/blue/white; "small"/"big"/"but"/"by"/"i''ll"/"get" reuse their existing senses unchanged). Verified with scripts/_practice_slot_check.py
+    that every slot has >=1 real candidate lexeme and every multiple_choice/ listen_select slot has >=4 distinct candidate
+    values (comparative_adj has 5). The underlying en realization unit20 is UNREVIEWED (Codex was usage-limited at authoring
+    time), same as the fa-en overlay''s realization dependency -- needs the standard fresh-context review before import.
 
-    Retrofit 2026-07-06 (AUTHORING_GUIDE.md §16): widened match.003 from
-    2 to 5 pairs (comparative_adj/adjective, real course-wide pool=5 --
-    bigger/cheaper/faster/nicer/smaller), no padding with untaught words.
+    Retrofit 2026-07-06 (AUTHORING_GUIDE.md §16): widened match.003 from 2 to 5 pairs (comparative_adj/adjective, real course-wide
+    pool=5 -- bigger/cheaper/faster/nicer/smaller), no padding with untaught words.
 
-    **Real bug found and fixed, live-QA pass on fa, 2026-07-06/07**: the
-    two lesson04 templates (order.001, listen.002) originally anchored
-    `lesson_content_key` to `en.a1.unit20.lesson04.comparison_dialogue`,
-    the unit's closing review dialogue -- it introduces no new
-    comparative_adj vocabulary of its own ("How"/"much"/"by"/"five"/
-    "dollars"/"do"/"you"/"like"/"one"/"ten"/"and"/"fifteen"/"Okay"/"I'll"/
-    "get" only), so no `Lexeme` row is ever created with that lesson as
-    `provenance_lesson_content_key` and `_practice_lesson_id()` can never
-    resolve it (same bug class as a1_unit10.yaml/a1_unit15.yaml, all
-    three found and fixed together; confirmed live -- `POST /admin/
-    courses/{id}/practice/import` rejected the whole 24-unit fa-en A1
-    pack). Fixed by repointing both templates to
-    `en.a1.unit20.lesson01.comparative_adjectives`, the actual
-    first-taught anchor for bigger/smaller/cheaper/faster/nicer -- a
-    safe, no-forward-reference anchor. Re-verified: `compile_content.py
-    practice-validate` still 0/0, full 24-unit fa-en A1 practice import
-    now succeeds end-to-end against a fresh isolated stack.
+    **Real bug found and fixed, live-QA pass on fa, 2026-07-06/07**: the two lesson04 templates (order.001, listen.002) originally
+    anchored `lesson_content_key` to `en.a1.unit20.lesson04.comparison_dialogue`, the unit''s closing review dialogue -- it
+    introduces no new comparative_adj vocabulary of its own ("How"/"much"/"by"/"five"/ "dollars"/"do"/"you"/"like"/"one"/"ten"/"and"/"fifteen"/"Okay"/"I''ll"/
+    "get" only), so no `Lexeme` row is ever created with that lesson as `provenance_lesson_content_key` and `_practice_lesson_id()`
+    can never resolve it (same bug class as a1_unit10.yaml/a1_unit15.yaml, all three found and fixed together; confirmed live
+    -- `POST /admin/ courses/{id}/practice/import` rejected the whole 24-unit fa-en A1 pack). Fixed by repointing both templates
+    to `en.a1.unit20.lesson01.comparative_adjectives`, the actual first-taught anchor for bigger/smaller/cheaper/faster/nicer
+    -- a safe, no-forward-reference anchor. Re-verified: `compile_content.py practice-validate` still 0/0, full 24-unit fa-en
+    A1 practice import now succeeds end-to-end against a fresh isolated stack.'
 tag_schema:
-  part_of_speech: [adjective]
+  part_of_speech:
+  - adjective
   agreement_tags:
-    semantic: [comparative_adj, superlative_adj, color]
+    semantic:
+    - comparative_adj
+    - superlative_adj
+    - color
 slot_presets:
-  comparative_adj: &comparative_adj {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: comparative_adj}}
-  superlative_adj: &superlative_adj {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: superlative_adj}}
-  color: &color {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: color}}
+  comparative_adj: &id001
+    language_code: en
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: comparative_adj
+  superlative_adj: &id002
+    language_code: en
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: superlative_adj
+  color: &id003
+    language_code: en
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: color
 templates:
-  - content_key: practice.fa-en.en.a1.unit20.lesson01.choose.001
-    lesson_content_key: en.a1.unit20.lesson01.comparative_adjectives
-    type: multiple_choice
-    frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *comparative_adj}
-    answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} یکی از صفت‌های تفضیلی این درس است.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit20.lesson01.listen.002
-    lesson_content_key: en.a1.unit20.lesson01.comparative_adjectives
-    type: listen_select
-    frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *comparative_adj}
-    answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} واژه‌ای است که شنیدید.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit20.lesson01.match.003
-    lesson_content_key: en.a1.unit20.lesson01.comparative_adjectives
-    type: matching_pairs
-    frame: {text: "{first} — {second}", language_code: en, direction: ltr}
-    slots: {first: *comparative_adj, second: *comparative_adj, third: *comparative_adj, fourth: *comparative_adj, fifth: *comparative_adj}
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth]}
-    feedback_frame: {text: "هر صفت تفضیلی را به معنای فارسی آن وصل کنید.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit20.lesson01.translate.004
-    lesson_content_key: en.a1.unit20.lesson01.comparative_adjectives
-    type: translation
-    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
-    slots: {item: *comparative_adj}
-    answer_derivation: {kind: slot_text, slot: item}
-    feedback_frame: {text: "معادل انگلیسی {item} است.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit20.lesson02.order.001
-    lesson_content_key: en.a1.unit20.lesson02.comparing_with_than
-    type: word_order
-    frame: {text: "This bag is {item} than that bag", language_code: en, direction: ltr}
-    slots: {item: *comparative_adj}
-    answer_derivation: {kind: render_frame, frame: {text: "This bag is {item} than that bag", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} صفت این مقایسه است.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit20.lesson02.translate.003
-    lesson_content_key: en.a1.unit20.lesson02.comparing_with_than
-    type: translation
-    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
-    slots: {item: *comparative_adj}
-    answer_derivation: {kind: slot_text, slot: item}
-    feedback_frame: {text: "معادل انگلیسی {item} است.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit20.lesson03.complete.001
-    lesson_content_key: en.a1.unit20.lesson03.reading_a_comparison
-    type: fill_in_blank
+- content_key: practice.fa-en.en.a1.unit20.lesson01.choose.001
+  lesson_content_key: en.a1.unit20.lesson01.comparative_adjectives
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} یکی از صفت‌های تفضیلی این درس است.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit20.lesson01.listen.002
+  lesson_content_key: en.a1.unit20.lesson01.comparative_adjectives
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} واژه‌ای است که شنیدید.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit20.lesson01.match.003
+  lesson_content_key: en.a1.unit20.lesson01.comparative_adjectives
+  type: matching_pairs
+  frame:
+    text: '{first} — {second}'
+    language_code: en
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+  feedback_frame:
+    text: هر صفت تفضیلی را به معنای فارسی آن وصل کنید.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit20.lesson01.translate.004
+  lesson_content_key: en.a1.unit20.lesson01.comparative_adjectives
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: معادل انگلیسی {item} است.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit20.lesson02.order.001
+  lesson_content_key: en.a1.unit20.lesson02.comparing_with_than
+  type: word_order
+  frame:
+    text: This bag is {item} than that bag
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
     frame:
-      text: "The white car is the {item} of the three."
+      text: This bag is {item} than that bag
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: '{item} صفت این مقایسه است.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit20.lesson02.translate.003
+  lesson_content_key: en.a1.unit20.lesson02.comparing_with_than
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: معادل انگلیسی {item} است.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit20.lesson03.complete.001
+  lesson_content_key: en.a1.unit20.lesson03.reading_a_comparison
+  type: fill_in_blank
+  frame:
+    text: The white car is the {item} of the three.
+    language_code: en
+    direction: ltr
+    text_blocks:
+    - text: جملهٔ انگلیسی را کامل کنید.
+      language_code: fa
+      direction: rtl
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} صفت عالی این جمله است.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit20.lesson03.order.002
+  lesson_content_key: en.a1.unit20.lesson03.reading_a_comparison
+  type: word_order
+  frame:
+    text: The {item} car is faster
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: The {item} car is faster
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: '{item} رنگ این جمله است.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit20.lesson03.translate.003
+  lesson_content_key: en.a1.unit20.lesson03.reading_a_comparison
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: معادل انگلیسی {item} است.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit20.lesson04.order.001
+  lesson_content_key: en.a1.unit20.lesson01.comparative_adjectives
+  type: word_order
+  frame:
+    text: This bag is {item} than that bag
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: This bag is {item} than that bag
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: '{item} صفت این مقایسه است.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit20.lesson04.listen.002
+  lesson_content_key: en.a1.unit20.lesson01.comparative_adjectives
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} واژه‌ای است که در این گفتگو شنیدید.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit20.lesson03.complete.001.volume_order.008
+  lesson_content_key: en.a1.unit20.lesson03.reading_a_comparison
+  type: word_order
+  frame:
+    text: The white car is the {item} of the three.
+    language_code: en
+    direction: ltr
+    text_blocks:
+    - text: جملهٔ انگلیسی را کامل کنید.
+      language_code: fa
+      direction: rtl
+  slots:
+    item:
+      language_code: en
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: superlative_adj
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: The white car is the {item} of the three.
       language_code: en
       direction: ltr
       text_blocks:
-        - {text: "جملهٔ انگلیسی را کامل کنید.", language_code: fa, direction: rtl}
-    slots: {item: *superlative_adj}
-    answer_derivation: {kind: slot_text, slot: item}
-    feedback_frame: {text: "{item} صفت عالی این جمله است.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit20.lesson03.order.002
-    lesson_content_key: en.a1.unit20.lesson03.reading_a_comparison
-    type: word_order
-    frame: {text: "The {item} car is faster", language_code: en, direction: ltr}
-    slots: {item: *color}
-    answer_derivation: {kind: render_frame, frame: {text: "The {item} car is faster", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} رنگ این جمله است.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit20.lesson03.translate.003
-    lesson_content_key: en.a1.unit20.lesson03.reading_a_comparison
-    type: translation
-    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
-    slots: {item: *superlative_adj}
-    answer_derivation: {kind: slot_text, slot: item}
-    feedback_frame: {text: "معادل انگلیسی {item} است.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit20.lesson04.order.001
-    lesson_content_key: en.a1.unit20.lesson01.comparative_adjectives
-    type: word_order
-    frame: {text: "This bag is {item} than that bag", language_code: en, direction: ltr}
-    slots: {item: *comparative_adj}
-    answer_derivation: {kind: render_frame, frame: {text: "This bag is {item} than that bag", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} صفت این مقایسه است.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit20.lesson04.listen.002
-    lesson_content_key: en.a1.unit20.lesson01.comparative_adjectives
-    type: listen_select
-    frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *comparative_adj}
-    answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} واژه‌ای است که در این گفتگو شنیدید.", language_code: fa, direction: rtl}
+      - text: جملهٔ انگلیسی را کامل کنید.
+        language_code: fa
+        direction: rtl
+  feedback_frame:
+    text: The white car is the {item} of the three.
+    language_code: en
+    direction: ltr
+    text_blocks:
+    - text: جملهٔ انگلیسی را کامل کنید.
+      language_code: fa
+      direction: rtl

@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: '1.0'
 pack_key: practice.en-prs.a1.unit16
 source_language: en
 target_language: prs
@@ -6,213 +6,512 @@ unit_content_key: prs.a1.unit16.travel
 review:
   status: unreviewed
   fresh_context: false
-  notes: >-
-    Authored 2026-07-07 for the new A1 unit16 (travel) realization, the
-    same night prs's real A1 realization grew 15->17 units (unit16
-    travel, unit17 health). This pack (and its unit17 sibling) extends
-    scripts/backfill_lexemes_en_prs.py's UNIT_FILES tuple, PRS_GLOSSES/
-    PRS_POS entries, and prs_agreement_tags() -- re-read fresh
-    immediately before editing.
+  notes: 'Authored 2026-07-07 for the new A1 unit16 (travel) realization, the same night prs''s real A1 realization grew 15->17
+    units (unit16 travel, unit17 health). This pack (and its unit17 sibling) extends scripts/backfill_lexemes_en_prs.py''s
+    UNIT_FILES tuple, PRS_GLOSSES/ PRS_POS entries, and prs_agreement_tags() -- re-read fresh immediately before editing.
 
-    New groups, all real vocabulary from this unit's own realization:
-    travel_noun_core (بلیط/قطار/بس, 3 members -- this unit's lesson01
-    core nouns), travel_noun (adds سکو once lesson03 introduces it, 4
-    members, used for a later-lesson review multiple_choice),
-    depart_noun (حرکت alone, a real single-candidate group used for
-    fill_in_blank), want_verb (می‌خواهم alone -- a single Lexeme
-    project-wide regardless of how many units reuse the same string,
-    genuinely single-candidate), city_name (reuses the existing
-    course-wide 4-member group: کابل/هرات/مزار/شریف), platform_ezafe
-    (سکوی alone, the ezafe-marked form, distinct token from سکو),
-    confirmation_word (بسیار/خوب, 2 members), tomorrow_word (فردا alone,
-    single-candidate, used for a second fill_in_blank), and
-    travel_farewell_word (تشکر/زیاد/قابلی/نداره/سفر/خوش, 6 members --
-    this unit's closing polite phrases, already established Afghan Dari
-    forms reused from unit05/unit06). The final review matching_pairs
-    pools travel_farewell_word with travel_noun (10 distinct tokens),
-    the same plan_pool-style pooling pattern as a1_unit13.yaml.
+    New groups, all real vocabulary from this unit''s own realization: travel_noun_core (بلیط/قطار/بس, 3 members -- this unit''s
+    lesson01 core nouns), travel_noun (adds سکو once lesson03 introduces it, 4 members, used for a later-lesson review multiple_choice),
+    depart_noun (حرکت alone, a real single-candidate group used for fill_in_blank), want_verb (می‌خواهم alone -- a single
+    Lexeme project-wide regardless of how many units reuse the same string, genuinely single-candidate), city_name (reuses
+    the existing course-wide 4-member group: کابل/هرات/مزار/شریف), platform_ezafe (سکوی alone, the ezafe-marked form, distinct
+    token from سکو), confirmation_word (بسیار/خوب, 2 members), tomorrow_word (فردا alone, single-candidate, used for a second
+    fill_in_blank), and travel_farewell_word (تشکر/زیاد/قابلی/نداره/سفر/خوش, 6 members -- this unit''s closing polite phrases,
+    already established Afghan Dari forms reused from unit05/unit06). The final review matching_pairs pools travel_farewell_word
+    with travel_noun (10 distinct tokens), the same plan_pool-style pooling pattern as a1_unit13.yaml.
 
-    Fixed a real homograph gap while extending the classifier: "کی" is
-    genuinely two different lexemes -- unit07's interrogative pronoun
-    ("who") versus this unit's interrogative adverb ("when," قطار کی
-    حرکت می‌کند؟). Given its own part_of_speech ("adverb" vs. the
-    existing "pronoun") and a content_key-scoped override in
-    _classify(), mirroring the existing و/می‌شود homograph guards --
-    verified the two senses resolve to separate Lexeme rows via the dry
-    run. Also fixed two missing glosses caught by the classifier's own
-    hard-fail (مسافر "traveler," فروشنده "seller," the dialogue's two
-    speakers) -- both real, newly-introduced nouns, not previously
-    covered by any earlier unit.
+    Fixed a real homograph gap while extending the classifier: "کی" is genuinely two different lexemes -- unit07''s interrogative
+    pronoun ("who") versus this unit''s interrogative adverb ("when," قطار کی حرکت می‌کند؟). Given its own part_of_speech
+    ("adverb" vs. the existing "pronoun") and a content_key-scoped override in _classify(), mirroring the existing و/می‌شود
+    homograph guards -- verified the two senses resolve to separate Lexeme rows via the dry run. Also fixed two missing glosses
+    caught by the classifier''s own hard-fail (مسافر "traveler," فروشنده "seller," the dialogue''s two speakers) -- both real,
+    newly-introduced nouns, not previously covered by any earlier unit.
 
-    Three fill_in_blank templates (depart_noun, when_word, tomorrow_word),
-    each verified via scripts/_fill_in_blank_ambiguity_check.py as a
-    real single-project-wide-candidate group -- not just candidate-count
-    sufficient but genuinely unambiguous: depart_noun and tomorrow_word
-    are the only Lexeme with that exact tag anywhere in the course, and
-    when_word's tag is lesson_key-scoped to only this unit's "when"
-    sense of کی (the unit07 "who" sense never gets this tag). No
-    listen_select/listen_type anywhere (en-prs has no TTS voices). No
-    bare unquoted yes/no/true/false anywhere.
+    Three fill_in_blank templates (depart_noun, when_word, tomorrow_word), each verified via scripts/_fill_in_blank_ambiguity_check.py
+    as a real single-project-wide-candidate group -- not just candidate-count sufficient but genuinely unambiguous: depart_noun
+    and tomorrow_word are the only Lexeme with that exact tag anywhere in the course, and when_word''s tag is lesson_key-scoped
+    to only this unit''s "when" sense of کی (the unit07 "who" sense never gets this tag). No listen_select/listen_type anywhere
+    (en-prs has no TTS voices). No bare unquoted yes/no/true/false anywhere.
 
-    Verified with scripts/_practice_slot_check.py (reusing
-    backfill_lexemes_en_prs.py's real iter_specs() output) -- every
-    slot has enough distinct candidates. scripts/compile_content.py
-    practice-validate for the full en-prs pack -- 0 errors/0 warnings.
-    scripts/_fill_in_blank_ambiguity_check.py -- zero AMBIGUOUS flags.
-    Needs the standard fresh-context review before import; no
-    backfill_lexemes_en_prs.py run has happened against a real database
-    yet in this pass.
+    Verified with scripts/_practice_slot_check.py (reusing backfill_lexemes_en_prs.py''s real iter_specs() output) -- every
+    slot has enough distinct candidates. scripts/compile_content.py practice-validate for the full en-prs pack -- 0 errors/0
+    warnings. scripts/_fill_in_blank_ambiguity_check.py -- zero AMBIGUOUS flags. Needs the standard fresh-context review before
+    import; no backfill_lexemes_en_prs.py run has happened against a real database yet in this pass.'
 tag_schema:
-  part_of_speech: [noun, verb, adjective, adverb, proper_noun]
+  part_of_speech:
+  - noun
+  - verb
+  - adjective
+  - adverb
+  - proper_noun
   agreement_tags:
-    semantic: [travel_noun_core, travel_noun, depart_noun, want_verb, city_name, when_word, platform_ezafe, confirmation_word, tomorrow_word, travel_farewell_word, ones_number]
+    semantic:
+    - travel_noun_core
+    - travel_noun
+    - depart_noun
+    - want_verb
+    - city_name
+    - when_word
+    - platform_ezafe
+    - confirmation_word
+    - tomorrow_word
+    - travel_farewell_word
+    - ones_number
 slot_presets:
-  travel_noun_core: &travel_noun_core {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: travel_noun_core}}
-  travel_noun: &travel_noun {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: travel_noun}}
-  depart_noun: &depart_noun {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: depart_noun}}
-  want_verb: &want_verb {language_code: prs, part_of_speech: verb, agreement_tags: {semantic: want_verb}}
-  # Reuses the existing course-wide city_name group (کابل/هرات/مزار/شریف).
-  city_name: &city_name {language_code: prs, part_of_speech: proper_noun, agreement_tags: {semantic: city_name}}
-  when_word: &when_word {language_code: prs, part_of_speech: adverb, agreement_tags: {semantic: when_word}}
-  platform_ezafe: &platform_ezafe {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: platform_ezafe}}
-  confirmation_word: &confirmation_word {language_code: prs, part_of_speech: [adverb, adjective], agreement_tags: {semantic: confirmation_word}}
-  tomorrow_word: &tomorrow_word {language_code: prs, part_of_speech: adverb, agreement_tags: {semantic: tomorrow_word}}
-  travel_farewell_word: &travel_farewell_word {language_code: prs, part_of_speech: [noun, adjective, verb], agreement_tags: {semantic: travel_farewell_word}}
-  # Reuses the existing course-wide ones_number group (یک..ده).
-  ones_number: &ones_number {language_code: prs, part_of_speech: adjective, agreement_tags: {semantic: ones_number}}
-  # Pools travel_farewell_word (6) with travel_noun (4) for the final
-  # review matching_pairs -- 10 distinct real tokens, AUTHORING_GUIDE.md
-  # #16, same plan_pool-style OR-pooling as a1_unit13.yaml.
-  travel_review_pool: &travel_review_pool {language_code: prs, part_of_speech: [noun, adjective, verb], agreement_tags: {semantic: [travel_farewell_word, travel_noun]}}
+  travel_noun_core: &id001
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: travel_noun_core
+  travel_noun: &id006
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: travel_noun
+  depart_noun: &id004
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: depart_noun
+  want_verb: &id002
+    language_code: prs
+    part_of_speech: verb
+    agreement_tags:
+      semantic: want_verb
+  city_name: &id003
+    language_code: prs
+    part_of_speech: proper_noun
+    agreement_tags:
+      semantic: city_name
+  when_word: &id005
+    language_code: prs
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: when_word
+  platform_ezafe: &id007
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: platform_ezafe
+  confirmation_word: &id009
+    language_code: prs
+    part_of_speech:
+    - adverb
+    - adjective
+    agreement_tags:
+      semantic: confirmation_word
+  tomorrow_word: &id010
+    language_code: prs
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: tomorrow_word
+  travel_farewell_word: &id011
+    language_code: prs
+    part_of_speech:
+    - noun
+    - adjective
+    - verb
+    agreement_tags:
+      semantic: travel_farewell_word
+  ones_number: &id008
+    language_code: prs
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: ones_number
+  travel_review_pool: &id012
+    language_code: prs
+    part_of_speech:
+    - noun
+    - adjective
+    - verb
+    agreement_tags:
+      semantic:
+      - travel_farewell_word
+      - travel_noun
 templates:
-  # Lesson 1: basic travel vocabulary (ticket/train/bus).
-  - content_key: practice.en-prs.prs.a1.unit16.lesson01.travel_noun_core_gloss.001
-    lesson_content_key: prs.a1.unit16.lesson01.basic_travel_vocab
-    type: multiple_choice
-    frame: {text: "{travel_noun_core}", language_code: prs, direction: rtl}
-    slots: {travel_noun_core: *travel_noun_core}
-    answer_derivation: {kind: slot_gloss, slot: travel_noun_core}
-    feedback_frame: {text: "{travel_noun_core} is one of this unit's basic travel words.", language_code: en, direction: ltr}
-  - content_key: practice.en-prs.prs.a1.unit16.lesson01.travel_noun_core_translate.002
-    lesson_content_key: prs.a1.unit16.lesson01.basic_travel_vocab
-    type: translation
-    frame: {text: "{travel_noun_core}", language_code: en, direction: ltr, slot_rendering: {travel_noun_core: english_gloss}}
-    slots: {travel_noun_core: *travel_noun_core}
-    answer_derivation: {kind: slot_text, slot: travel_noun_core}
-    feedback_frame: {text: "{travel_noun_core} is the Dari word for this.", language_code: en, direction: ltr}
-  - content_key: practice.en-prs.prs.a1.unit16.lesson01.travel_noun_core_pair.003
-    lesson_content_key: prs.a1.unit16.lesson01.basic_travel_vocab
-    type: matching_pairs
-    # Genuine 3-pair ceiling -- بلیط/قطار/بس are this lesson's only
-    # standalone new nouns (میدان/هوایی are taught as a fixed two-word
-    # compound, not individually slot-fillable, per a1_unit05.yaml's own
-    # documented convention).
-    frame: {text: "{word_one} — {word_two} — {word_three}", language_code: prs, direction: rtl}
-    slots: {word_one: *travel_noun_core, word_two: *travel_noun_core, word_three: *travel_noun_core}
-    slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three]}]
-    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three]}
-    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
-
-  # Lesson 2: buying a ticket.
-  - content_key: practice.en-prs.prs.a1.unit16.lesson02.want_verb_translate.001
-    lesson_content_key: prs.a1.unit16.lesson02.buying_a_ticket
-    type: translation
-    frame: {text: "{want_verb}", language_code: en, direction: ltr, slot_rendering: {want_verb: english_gloss}}
-    slots: {want_verb: *want_verb}
-    answer_derivation: {kind: slot_text, slot: want_verb}
-    feedback_frame: {text: "{want_verb} is the Dari word for this.", language_code: en, direction: ltr}
-  - content_key: practice.en-prs.prs.a1.unit16.lesson02.city_name_gloss.002
-    lesson_content_key: prs.a1.unit16.lesson02.buying_a_ticket
-    type: multiple_choice
-    frame: {text: "{city_name}", language_code: prs, direction: rtl}
-    slots: {city_name: *city_name}
-    answer_derivation: {kind: slot_gloss, slot: city_name}
-    feedback_frame: {text: "{city_name} is a city name used in this course.", language_code: en, direction: ltr}
-  - content_key: practice.en-prs.prs.a1.unit16.lesson02.ticket_request_order.003
-    lesson_content_key: prs.a1.unit16.lesson02.buying_a_ticket
-    type: word_order
-    frame: {text: "یک بلیط به {city_name} می‌خواهم", language_code: prs, direction: rtl}
-    slots: {city_name: *city_name}
-    answer_derivation: {kind: render_frame, frame: {text: "یک بلیط به {city_name} می‌خواهم", language_code: prs, direction: rtl}}
-    feedback_frame: {text: "Word order: یک بلیط به [city] می‌خواهم (I want a ticket to [city]).", language_code: en, direction: ltr}
-
-  # Lesson 3: asking about departure time and platform.
-  - content_key: practice.en-prs.prs.a1.unit16.lesson03.depart_noun_fill.001
-    lesson_content_key: prs.a1.unit16.lesson03.asking_departure_details
-    type: fill_in_blank
-    frame: {text: "قطار {depart_noun} می‌کند", language_code: prs, direction: rtl}
-    slots: {depart_noun: *depart_noun}
-    answer_derivation: {kind: slot_text, slot: depart_noun}
-    feedback_frame: {text: "حرکت می‌کند means it departs.", language_code: en, direction: ltr}
-  - content_key: practice.en-prs.prs.a1.unit16.lesson03.when_word_fill.002
-    lesson_content_key: prs.a1.unit16.lesson03.asking_departure_details
-    type: fill_in_blank
-    frame: {text: "قطار {when_word} حرکت می‌کند؟", language_code: prs, direction: rtl}
-    slots: {when_word: *when_word}
-    answer_derivation: {kind: slot_text, slot: when_word}
-    feedback_frame: {text: "کی means when.", language_code: en, direction: ltr}
-  - content_key: practice.en-prs.prs.a1.unit16.lesson03.travel_noun_gloss.003
-    lesson_content_key: prs.a1.unit16.lesson03.asking_departure_details
-    type: multiple_choice
-    frame: {text: "{travel_noun}", language_code: prs, direction: rtl}
-    slots: {travel_noun: *travel_noun}
-    answer_derivation: {kind: slot_gloss, slot: travel_noun}
-    feedback_frame: {text: "{travel_noun} is one of this unit's travel words.", language_code: en, direction: ltr}
-
-  # Lesson 4: reading a departure schedule.
-  - content_key: practice.en-prs.prs.a1.unit16.lesson04.platform_ezafe_order.001
-    lesson_content_key: prs.a1.unit16.lesson04.reading_a_schedule
-    type: word_order
-    frame: {text: "قطار از {platform_ezafe} دو حرکت می‌کند", language_code: prs, direction: rtl}
-    slots: {platform_ezafe: *platform_ezafe}
-    answer_derivation: {kind: render_frame, frame: {text: "قطار از {platform_ezafe} دو حرکت می‌کند", language_code: prs, direction: rtl}}
-    feedback_frame: {text: "Word order: قطار از سکوی دو حرکت می‌کند (the train departs from platform two).", language_code: en, direction: ltr}
-  - content_key: practice.en-prs.prs.a1.unit16.lesson04.schedule_number_order.002
-    lesson_content_key: prs.a1.unit16.lesson04.reading_a_schedule
-    type: word_order
-    frame: {text: "قطار ساعت {ones_number} حرکت می‌کند", language_code: prs, direction: rtl}
-    slots: {ones_number: *ones_number}
-    answer_derivation: {kind: render_frame, frame: {text: "قطار ساعت {ones_number} حرکت می‌کند", language_code: prs, direction: rtl}}
-    feedback_frame: {text: "Word order: قطار ساعت [number] حرکت می‌کند (the train departs at [number] o'clock).", language_code: en, direction: ltr}
-
-  # Lesson 5: a dialogue at the ticket counter.
-  - content_key: practice.en-prs.prs.a1.unit16.lesson05.confirmation_word_translate.001
-    lesson_content_key: prs.a1.unit16.lesson05.ticket_counter_dialogue
-    type: translation
-    frame: {text: "{confirmation_word}", language_code: en, direction: ltr, slot_rendering: {confirmation_word: english_gloss}}
-    slots: {confirmation_word: *confirmation_word}
-    answer_derivation: {kind: slot_text, slot: confirmation_word}
-    feedback_frame: {text: "{confirmation_word} is the Dari word for this.", language_code: en, direction: ltr}
-  - content_key: practice.en-prs.prs.a1.unit16.lesson05.tomorrow_word_fill.002
-    lesson_content_key: prs.a1.unit16.lesson05.ticket_counter_dialogue
-    type: fill_in_blank
-    frame: {text: "{tomorrow_word} صبح", language_code: prs, direction: rtl}
-    slots: {tomorrow_word: *tomorrow_word}
-    answer_derivation: {kind: slot_text, slot: tomorrow_word}
-    feedback_frame: {text: "فردا صبح means tomorrow morning.", language_code: en, direction: ltr}
-
-  # Lesson 6: confirming travel plans.
-  - content_key: practice.en-prs.prs.a1.unit16.lesson06.travel_farewell_gloss.001
-    lesson_content_key: prs.a1.unit16.lesson06.confirming_travel_plans
-    type: multiple_choice
-    frame: {text: "{travel_farewell_word}", language_code: prs, direction: rtl}
-    slots: {travel_farewell_word: *travel_farewell_word}
-    answer_derivation: {kind: slot_gloss, slot: travel_farewell_word}
-    feedback_frame: {text: "{travel_farewell_word} is one of this unit's polite travel phrases.", language_code: en, direction: ltr}
-  - content_key: practice.en-prs.prs.a1.unit16.lesson06.travel_farewell_translate.002
-    lesson_content_key: prs.a1.unit16.lesson06.confirming_travel_plans
-    type: translation
-    frame: {text: "{travel_farewell_word}", language_code: en, direction: ltr, slot_rendering: {travel_farewell_word: english_gloss}}
-    slots: {travel_farewell_word: *travel_farewell_word}
-    answer_derivation: {kind: slot_text, slot: travel_farewell_word}
-    feedback_frame: {text: "{travel_farewell_word} is the Dari word for this.", language_code: en, direction: ltr}
-  - content_key: practice.en-prs.prs.a1.unit16.lesson06.travel_review_pair.003
-    lesson_content_key: prs.a1.unit16.lesson06.confirming_travel_plans
-    type: matching_pairs
-    # Pools travel_farewell_word (6) + travel_noun (4) -- 10 distinct
-    # real tokens, AUTHORING_GUIDE.md #16.
-    frame: {text: "{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six} — {word_seven} — {word_eight} — {word_nine} — {word_ten}", language_code: prs, direction: rtl}
-    slots: {word_one: *travel_review_pool, word_two: *travel_review_pool, word_three: *travel_review_pool, word_four: *travel_review_pool, word_five: *travel_review_pool, word_six: *travel_review_pool, word_seven: *travel_review_pool, word_eight: *travel_review_pool, word_nine: *travel_review_pool, word_ten: *travel_review_pool}
-    slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five, word_six, word_seven, word_eight, word_nine, word_ten]}]
-    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five, word_six, word_seven, word_eight, word_nine, word_ten]}
-    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+- content_key: practice.en-prs.prs.a1.unit16.lesson01.travel_noun_core_gloss.001
+  lesson_content_key: prs.a1.unit16.lesson01.basic_travel_vocab
+  type: multiple_choice
+  frame:
+    text: '{travel_noun_core}'
+    language_code: prs
+    direction: rtl
+  slots:
+    travel_noun_core: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: travel_noun_core
+  feedback_frame:
+    text: '{travel_noun_core} is one of this unit''s basic travel words.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit16.lesson01.travel_noun_core_translate.002
+  lesson_content_key: prs.a1.unit16.lesson01.basic_travel_vocab
+  type: translation
+  frame:
+    text: '{travel_noun_core}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      travel_noun_core: english_gloss
+  slots:
+    travel_noun_core: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: travel_noun_core
+  feedback_frame:
+    text: '{travel_noun_core} is the Dari word for this.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit16.lesson01.travel_noun_core_pair.003
+  lesson_content_key: prs.a1.unit16.lesson01.basic_travel_vocab
+  type: matching_pairs
+  frame:
+    text: '{word_one} — {word_two} — {word_three}'
+    language_code: prs
+    direction: rtl
+  slots:
+    word_one: *id001
+    word_two: *id001
+    word_three: *id001
+  slot_relations:
+  - kind: distinct
+    slots:
+    - word_one
+    - word_two
+    - word_three
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - word_one
+    - word_two
+    - word_three
+  feedback_frame:
+    text: Match each word to its English meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit16.lesson02.want_verb_translate.001
+  lesson_content_key: prs.a1.unit16.lesson02.buying_a_ticket
+  type: translation
+  frame:
+    text: '{want_verb}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      want_verb: english_gloss
+  slots:
+    want_verb: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: want_verb
+  feedback_frame:
+    text: '{want_verb} is the Dari word for this.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit16.lesson02.city_name_gloss.002
+  lesson_content_key: prs.a1.unit16.lesson02.buying_a_ticket
+  type: multiple_choice
+  frame:
+    text: '{city_name}'
+    language_code: prs
+    direction: rtl
+  slots:
+    city_name: *id003
+  answer_derivation:
+    kind: slot_gloss
+    slot: city_name
+  feedback_frame:
+    text: '{city_name} is a city name used in this course.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit16.lesson02.ticket_request_order.003
+  lesson_content_key: prs.a1.unit16.lesson02.buying_a_ticket
+  type: word_order
+  frame:
+    text: یک بلیط به {city_name} می‌خواهم
+    language_code: prs
+    direction: rtl
+  slots:
+    city_name: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: یک بلیط به {city_name} می‌خواهم
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'Word order: یک بلیط به [city] می‌خواهم (I want a ticket to [city]).'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit16.lesson03.depart_noun_fill.001
+  lesson_content_key: prs.a1.unit16.lesson03.asking_departure_details
+  type: fill_in_blank
+  frame:
+    text: قطار {depart_noun} می‌کند
+    language_code: prs
+    direction: rtl
+  slots:
+    depart_noun: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: depart_noun
+  feedback_frame:
+    text: حرکت می‌کند means it departs.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit16.lesson03.when_word_fill.002
+  lesson_content_key: prs.a1.unit16.lesson03.asking_departure_details
+  type: fill_in_blank
+  frame:
+    text: قطار {when_word} حرکت می‌کند؟
+    language_code: prs
+    direction: rtl
+  slots:
+    when_word: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: when_word
+  feedback_frame:
+    text: کی means when.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit16.lesson03.travel_noun_gloss.003
+  lesson_content_key: prs.a1.unit16.lesson03.asking_departure_details
+  type: multiple_choice
+  frame:
+    text: '{travel_noun}'
+    language_code: prs
+    direction: rtl
+  slots:
+    travel_noun: *id006
+  answer_derivation:
+    kind: slot_gloss
+    slot: travel_noun
+  feedback_frame:
+    text: '{travel_noun} is one of this unit''s travel words.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit16.lesson04.platform_ezafe_order.001
+  lesson_content_key: prs.a1.unit16.lesson04.reading_a_schedule
+  type: word_order
+  frame:
+    text: قطار از {platform_ezafe} دو حرکت می‌کند
+    language_code: prs
+    direction: rtl
+  slots:
+    platform_ezafe: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: قطار از {platform_ezafe} دو حرکت می‌کند
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'Word order: قطار از سکوی دو حرکت می‌کند (the train departs from platform two).'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit16.lesson04.schedule_number_order.002
+  lesson_content_key: prs.a1.unit16.lesson04.reading_a_schedule
+  type: word_order
+  frame:
+    text: قطار ساعت {ones_number} حرکت می‌کند
+    language_code: prs
+    direction: rtl
+  slots:
+    ones_number: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: قطار ساعت {ones_number} حرکت می‌کند
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'Word order: قطار ساعت [number] حرکت می‌کند (the train departs at [number] o''clock).'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit16.lesson05.confirmation_word_translate.001
+  lesson_content_key: prs.a1.unit16.lesson05.ticket_counter_dialogue
+  type: translation
+  frame:
+    text: '{confirmation_word}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      confirmation_word: english_gloss
+  slots:
+    confirmation_word: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: confirmation_word
+  feedback_frame:
+    text: '{confirmation_word} is the Dari word for this.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit16.lesson05.tomorrow_word_fill.002
+  lesson_content_key: prs.a1.unit16.lesson05.ticket_counter_dialogue
+  type: fill_in_blank
+  frame:
+    text: '{tomorrow_word} صبح'
+    language_code: prs
+    direction: rtl
+  slots:
+    tomorrow_word: *id010
+  answer_derivation:
+    kind: slot_text
+    slot: tomorrow_word
+  feedback_frame:
+    text: فردا صبح means tomorrow morning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit16.lesson06.travel_farewell_gloss.001
+  lesson_content_key: prs.a1.unit16.lesson06.confirming_travel_plans
+  type: multiple_choice
+  frame:
+    text: '{travel_farewell_word}'
+    language_code: prs
+    direction: rtl
+  slots:
+    travel_farewell_word: *id011
+  answer_derivation:
+    kind: slot_gloss
+    slot: travel_farewell_word
+  feedback_frame:
+    text: '{travel_farewell_word} is one of this unit''s polite travel phrases.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit16.lesson06.travel_farewell_translate.002
+  lesson_content_key: prs.a1.unit16.lesson06.confirming_travel_plans
+  type: translation
+  frame:
+    text: '{travel_farewell_word}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      travel_farewell_word: english_gloss
+  slots:
+    travel_farewell_word: *id011
+  answer_derivation:
+    kind: slot_text
+    slot: travel_farewell_word
+  feedback_frame:
+    text: '{travel_farewell_word} is the Dari word for this.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit16.lesson06.travel_review_pair.003
+  lesson_content_key: prs.a1.unit16.lesson06.confirming_travel_plans
+  type: matching_pairs
+  frame:
+    text: '{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six} — {word_seven} — {word_eight} —
+      {word_nine} — {word_ten}'
+    language_code: prs
+    direction: rtl
+  slots:
+    word_one: *id012
+    word_two: *id012
+    word_three: *id012
+    word_four: *id012
+    word_five: *id012
+    word_six: *id012
+    word_seven: *id012
+    word_eight: *id012
+    word_nine: *id012
+    word_ten: *id012
+  slot_relations:
+  - kind: distinct
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+    - word_five
+    - word_six
+    - word_seven
+    - word_eight
+    - word_nine
+    - word_ten
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+    - word_five
+    - word_six
+    - word_seven
+    - word_eight
+    - word_nine
+    - word_ten
+  feedback_frame:
+    text: Match each word to its English meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit16.lesson03.depart_noun_fill.001.volume_order.003
+  lesson_content_key: prs.a1.unit16.lesson03.asking_departure_details
+  type: word_order
+  frame:
+    text: قطار {depart_noun} می‌کند
+    language_code: prs
+    direction: rtl
+  slots:
+    depart_noun:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: depart_noun
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: قطار {depart_noun} می‌کند
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: قطار {depart_noun} می‌کند
+    language_code: prs
+    direction: rtl
+- content_key: practice.en-prs.prs.a1.unit16.lesson03.when_word_fill.002.volume_order.004
+  lesson_content_key: prs.a1.unit16.lesson03.asking_departure_details
+  type: word_order
+  frame:
+    text: قطار {when_word} حرکت می‌کند؟
+    language_code: prs
+    direction: rtl
+  slots:
+    when_word:
+      language_code: prs
+      part_of_speech: adverb
+      agreement_tags:
+        semantic: when_word
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: قطار {when_word} حرکت می‌کند؟
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: قطار {when_word} حرکت می‌کند؟
+    language_code: prs
+    direction: rtl
+- content_key: practice.en-prs.prs.a1.unit16.lesson05.tomorrow_word_fill.002.volume_order.005
+  lesson_content_key: prs.a1.unit16.lesson05.ticket_counter_dialogue
+  type: word_order
+  frame:
+    text: '{tomorrow_word} صبح'
+    language_code: prs
+    direction: rtl
+  slots:
+    tomorrow_word:
+      language_code: prs
+      part_of_speech: adverb
+      agreement_tags:
+        semantic: tomorrow_word
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{tomorrow_word} صبح'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: '{tomorrow_word} صبح'
+    language_code: prs
+    direction: rtl

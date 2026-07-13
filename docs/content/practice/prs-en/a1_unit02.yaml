@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: '1.0'
 pack_key: practice.prs-en.a1.unit02
 source_language: prs
 target_language: en
@@ -6,84 +6,264 @@ unit_content_key: en.a1.unit02.introductions
 review:
   status: reviewed
   fresh_context: true
-  notes: "Fresh-context Codex review (2026-07-05, dispatched by Session 3): removed ungrammatical filler frames (e.g. 'How are you? bad, thanks.', 'I am a library/engineer'), fixed an unrelated word-order slot, rebuilt mixed-category matching exercises as genuine same-category pairs, replaced unusable multiple_choice pools and tautological feedback, verified Dari terminology and Persian-range ک/ی codepoints independently (not derived from Farsi). Independently re-verified by Session 3: compiler 0/0, no jargon leaks, no forbidden Arabic-range codepoints. -- Fresh-context review, 2026-07-06 (separate session, zero access to the above authoring/verification reasoning): confirmed all 3 lesson_content_key values match real en.a1.unit02.introductions lessons; re-scanned this pack, the sibling overlay, and backfill_lexemes_prs_en.py for Pashto-only letters (ډ ڼ ږ څ) and Pashto number words -- none found; hand-rendered every possible sentence for every template's slot candidates (person_name/identity/dialogue_word pools, including the 8x8 dialogue_word matching_pairs and the word_order 'My name is {person_name}' frame) -- all grammatical, no self-reference, no non-interchangeable synonyms sharing a tag. Upgraded to reviewed: genuinely clean. -- matching_pairs widening retrofit (2026-07-06, AUTHORING_GUIDE.md #16): lesson03's name_person_pair template (dialogue_word) widened from 2 to 6 slots (library/assistant/member/student/teacher/engineer -- the noun-tagged subset of the course-wide dialogue_word pool, per the pre-computed retrofit table; work/new are verb/adjective and excluded). lesson01's name_pair template (person_name) intentionally LEFT at 2 slots -- the only two proper-noun person names taught course-wide are Leila and Daniel, so widening would require inventing untaught names, which the new rule forbids."
+  notes: 'Fresh-context Codex review (2026-07-05, dispatched by Session 3): removed ungrammatical filler frames (e.g. ''How
+    are you? bad, thanks.'', ''I am a library/engineer''), fixed an unrelated word-order slot, rebuilt mixed-category matching
+    exercises as genuine same-category pairs, replaced unusable multiple_choice pools and tautological feedback, verified
+    Dari terminology and Persian-range ک/ی codepoints independently (not derived from Farsi). Independently re-verified by
+    Session 3: compiler 0/0, no jargon leaks, no forbidden Arabic-range codepoints. -- Fresh-context review, 2026-07-06 (separate
+    session, zero access to the above authoring/verification reasoning): confirmed all 3 lesson_content_key values match real
+    en.a1.unit02.introductions lessons; re-scanned this pack, the sibling overlay, and backfill_lexemes_prs_en.py for Pashto-only
+    letters (ډ ڼ ږ څ) and Pashto number words -- none found; hand-rendered every possible sentence for every template''s slot
+    candidates (person_name/identity/dialogue_word pools, including the 8x8 dialogue_word matching_pairs and the word_order
+    ''My name is {person_name}'' frame) -- all grammatical, no self-reference, no non-interchangeable synonyms sharing a tag.
+    Upgraded to reviewed: genuinely clean. -- matching_pairs widening retrofit (2026-07-06, AUTHORING_GUIDE.md #16): lesson03''s
+    name_person_pair template (dialogue_word) widened from 2 to 6 slots (library/assistant/member/student/teacher/engineer
+    -- the noun-tagged subset of the course-wide dialogue_word pool, per the pre-computed retrofit table; work/new are verb/adjective
+    and excluded). lesson01''s name_pair template (person_name) intentionally LEFT at 2 slots -- the only two proper-noun
+    person names taught course-wide are Leila and Daniel, so widening would require inventing untaught names, which the new
+    rule forbids.'
 tag_schema:
-  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
   agreement_tags:
-    semantic: [identity, person_name, dialogue_word]
-    person: [first, second, third]
+    semantic:
+    - identity
+    - person_name
+    - dialogue_word
+    - volume_prs_en_a1_unit02_person_name_08_single
+    person:
+    - first
+    - second
+    - third
 slot_presets:
-  identity: &identity {language_code: en, part_of_speech: [pronoun, verb], agreement_tags: {semantic: identity}}
-  person_name: &person_name {language_code: en, part_of_speech: proper_noun, agreement_tags: {semantic: person_name}}
-  dialogue_word: &dialogue_word {language_code: en, part_of_speech: [noun, verb, adjective], agreement_tags: {semantic: dialogue_word}}
+  identity: &id002
+    language_code: en
+    part_of_speech:
+    - pronoun
+    - verb
+    agreement_tags:
+      semantic: identity
+  person_name: &id001
+    language_code: en
+    part_of_speech: proper_noun
+    agreement_tags:
+      semantic: person_name
+  dialogue_word: &id003
+    language_code: en
+    part_of_speech:
+    - noun
+    - verb
+    - adjective
+    agreement_tags:
+      semantic: dialogue_word
 templates:
-  # Lesson 1: names.
-  - content_key: practice.prs-en.en.a1.unit02.lesson01.name_order.001
-    lesson_content_key: en.a1.unit02.lesson01.exchange_names
-    type: word_order
-    frame: {text: "My name is {person_name}", language_code: en, direction: ltr}
-    slots: {person_name: *person_name}
-    answer_derivation: {kind: render_frame, frame: {text: "My name is {person_name}", language_code: en, direction: ltr}}
-    feedback_frame: {text: "My name is... راه روشن گفتن نام است.", language_code: prs, direction: rtl}
-  - content_key: practice.prs-en.en.a1.unit02.lesson01.name_pair.002
-    lesson_content_key: en.a1.unit02.lesson01.exchange_names
-    type: matching_pairs
-    frame: {text: "{person_name_one} — {person_name_two}", language_code: en, direction: ltr}
-    slots: {person_name_one: *person_name, person_name_two: *person_name}
-    slot_relations: [{kind: distinct, slots: [person_name_one, person_name_two]}]
-    answer_derivation: {kind: matching_pairs, slots: [person_name_one, person_name_two]}
-    feedback_frame: {text: "{person_name_one} و {person_name_two} را به نام‌های نوشته‌شده به دری وصل کنین.", language_code: prs, direction: rtl}
-  - content_key: practice.prs-en.en.a1.unit02.lesson01.identity_translate.003
-    lesson_content_key: en.a1.unit02.lesson01.exchange_names
-    type: translation
-    frame: {text: "{identity}", language_code: prs, direction: rtl, slot_rendering: {identity: english_gloss}}
-    slots: {identity: *identity}
-    answer_derivation: {kind: slot_text, slot: identity}
-    feedback_frame: {text: "{identity} معادل انگلیسی عبارت داده‌شده است.", language_code: prs, direction: rtl}
-  - content_key: practice.prs-en.en.a1.unit02.lesson01.identity_meaning.004
-    lesson_content_key: en.a1.unit02.lesson01.exchange_names
-    type: multiple_choice
-    frame: {text: "{identity}", language_code: en, direction: ltr}
-    slots: {identity: *identity}
-    answer_derivation: {kind: slot_gloss, slot: identity}
-    feedback_frame: {text: "معنای دری {identity} را انتخاب کردین.", language_code: prs, direction: rtl}
-
-  # Lesson 2: roles and membership.
-  - content_key: practice.prs-en.en.a1.unit02.lesson02.role_meaning.001
-    lesson_content_key: en.a1.unit02.lesson02.exchange_roles
-    type: multiple_choice
-    frame: {text: "{dialogue_word}", language_code: en, direction: ltr}
-    slots: {dialogue_word: *dialogue_word}
-    answer_derivation: {kind: slot_gloss, slot: dialogue_word}
-    feedback_frame: {text: "معنای دری {dialogue_word} را انتخاب کردین.", language_code: prs, direction: rtl}
-  - content_key: practice.prs-en.en.a1.unit02.lesson02.role_translate.003
-    lesson_content_key: en.a1.unit02.lesson02.exchange_roles
-    type: translation
-    frame: {text: "{dialogue_word}", language_code: prs, direction: rtl, slot_rendering: {dialogue_word: english_gloss}}
-    slots: {dialogue_word: *dialogue_word}
-    answer_derivation: {kind: slot_text, slot: dialogue_word}
-    feedback_frame: {text: "{dialogue_word} معادل انگلیسی واژهٔ داده‌شده است.", language_code: prs, direction: rtl}
-
-  # Lesson 3: library dialogue.
-  - content_key: practice.prs-en.en.a1.unit02.lesson03.library_meaning.001
-    lesson_content_key: en.a1.unit02.lesson03.library_dialogue
-    type: multiple_choice
-    frame: {text: "{dialogue_word}", language_code: en, direction: ltr}
-    slots: {dialogue_word: *dialogue_word}
-    answer_derivation: {kind: slot_gloss, slot: dialogue_word}
-    feedback_frame: {text: "معنای دری {dialogue_word} را انتخاب کردین.", language_code: prs, direction: rtl}
-  - content_key: practice.prs-en.en.a1.unit02.lesson03.name_person_pair.002
-    lesson_content_key: en.a1.unit02.lesson03.library_dialogue
-    type: matching_pairs
-    frame: {text: "{dialogue_word_one} — {dialogue_word_two}", language_code: en, direction: ltr}
-    slots: {dialogue_word_one: *dialogue_word, dialogue_word_two: *dialogue_word, dialogue_word_three: *dialogue_word, dialogue_word_four: *dialogue_word, dialogue_word_five: *dialogue_word, dialogue_word_six: *dialogue_word}
-    slot_relations: [{kind: distinct, slots: [dialogue_word_one, dialogue_word_two, dialogue_word_three, dialogue_word_four, dialogue_word_five, dialogue_word_six]}]
-    answer_derivation: {kind: matching_pairs, slots: [dialogue_word_one, dialogue_word_two, dialogue_word_three, dialogue_word_four, dialogue_word_five, dialogue_word_six]}
-    feedback_frame: {text: "{dialogue_word_one} و {dialogue_word_two} را به معنای دری آن‌ها وصل کنین.", language_code: prs, direction: rtl}
-  - content_key: practice.prs-en.en.a1.unit02.lesson03.dialogue_translate.003
-    lesson_content_key: en.a1.unit02.lesson03.library_dialogue
-    type: translation
-    frame: {text: "{dialogue_word}", language_code: prs, direction: rtl, slot_rendering: {dialogue_word: english_gloss}}
-    slots: {dialogue_word: *dialogue_word}
-    answer_derivation: {kind: slot_text, slot: dialogue_word}
-    feedback_frame: {text: "{dialogue_word} معادل انگلیسی واژهٔ داده‌شده است.", language_code: prs, direction: rtl}
+- content_key: practice.prs-en.en.a1.unit02.lesson01.name_order.001
+  lesson_content_key: en.a1.unit02.lesson01.exchange_names
+  type: word_order
+  frame:
+    text: My name is {person_name}
+    language_code: en
+    direction: ltr
+  slots:
+    person_name: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: My name is {person_name}
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: My name is... راه روشن گفتن نام است.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a1.unit02.lesson01.name_pair.002
+  lesson_content_key: en.a1.unit02.lesson01.exchange_names
+  type: matching_pairs
+  frame:
+    text: '{person_name_one} — {person_name_two}'
+    language_code: en
+    direction: ltr
+  slots:
+    person_name_one: *id001
+    person_name_two: *id001
+  slot_relations:
+  - kind: distinct
+    slots:
+    - person_name_one
+    - person_name_two
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - person_name_one
+    - person_name_two
+  feedback_frame:
+    text: '{person_name_one} و {person_name_two} را به نام‌های نوشته‌شده به دری وصل کنین.'
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a1.unit02.lesson01.identity_translate.003
+  lesson_content_key: en.a1.unit02.lesson01.exchange_names
+  type: translation
+  frame:
+    text: '{identity}'
+    language_code: prs
+    direction: rtl
+    slot_rendering:
+      identity: english_gloss
+  slots:
+    identity: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: identity
+  feedback_frame:
+    text: '{identity} معادل انگلیسی عبارت داده‌شده است.'
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a1.unit02.lesson01.identity_meaning.004
+  lesson_content_key: en.a1.unit02.lesson01.exchange_names
+  type: multiple_choice
+  frame:
+    text: '{identity}'
+    language_code: en
+    direction: ltr
+  slots:
+    identity: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: identity
+  feedback_frame:
+    text: معنای دری {identity} را انتخاب کردین.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a1.unit02.lesson02.role_meaning.001
+  lesson_content_key: en.a1.unit02.lesson02.exchange_roles
+  type: multiple_choice
+  frame:
+    text: '{dialogue_word}'
+    language_code: en
+    direction: ltr
+  slots:
+    dialogue_word: *id003
+  answer_derivation:
+    kind: slot_gloss
+    slot: dialogue_word
+  feedback_frame:
+    text: معنای دری {dialogue_word} را انتخاب کردین.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a1.unit02.lesson02.role_translate.003
+  lesson_content_key: en.a1.unit02.lesson02.exchange_roles
+  type: translation
+  frame:
+    text: '{dialogue_word}'
+    language_code: prs
+    direction: rtl
+    slot_rendering:
+      dialogue_word: english_gloss
+  slots:
+    dialogue_word: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: dialogue_word
+  feedback_frame:
+    text: '{dialogue_word} معادل انگلیسی واژهٔ داده‌شده است.'
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a1.unit02.lesson03.library_meaning.001
+  lesson_content_key: en.a1.unit02.lesson03.library_dialogue
+  type: multiple_choice
+  frame:
+    text: '{dialogue_word}'
+    language_code: en
+    direction: ltr
+  slots:
+    dialogue_word: *id003
+  answer_derivation:
+    kind: slot_gloss
+    slot: dialogue_word
+  feedback_frame:
+    text: معنای دری {dialogue_word} را انتخاب کردین.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a1.unit02.lesson03.name_person_pair.002
+  lesson_content_key: en.a1.unit02.lesson03.library_dialogue
+  type: matching_pairs
+  frame:
+    text: '{dialogue_word_one} — {dialogue_word_two}'
+    language_code: en
+    direction: ltr
+  slots:
+    dialogue_word_one: *id003
+    dialogue_word_two: *id003
+    dialogue_word_three: *id003
+    dialogue_word_four: *id003
+    dialogue_word_five: *id003
+    dialogue_word_six: *id003
+  slot_relations:
+  - kind: distinct
+    slots:
+    - dialogue_word_one
+    - dialogue_word_two
+    - dialogue_word_three
+    - dialogue_word_four
+    - dialogue_word_five
+    - dialogue_word_six
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - dialogue_word_one
+    - dialogue_word_two
+    - dialogue_word_three
+    - dialogue_word_four
+    - dialogue_word_five
+    - dialogue_word_six
+  feedback_frame:
+    text: '{dialogue_word_one} و {dialogue_word_two} را به معنای دری آن‌ها وصل کنین.'
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a1.unit02.lesson03.dialogue_translate.003
+  lesson_content_key: en.a1.unit02.lesson03.library_dialogue
+  type: translation
+  frame:
+    text: '{dialogue_word}'
+    language_code: prs
+    direction: rtl
+    slot_rendering:
+      dialogue_word: english_gloss
+  slots:
+    dialogue_word: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: dialogue_word
+  feedback_frame:
+    text: '{dialogue_word} معادل انگلیسی واژهٔ داده‌شده است.'
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a1.unit02.lesson01.name_order.001.volume_fill.008
+  lesson_content_key: en.a1.unit02.lesson01.exchange_names
+  type: fill_in_blank
+  frame:
+    text: My name is {person_name}
+    language_code: en
+    direction: ltr
+  slots:
+    person_name:
+      language_code: en
+      part_of_speech: proper_noun
+      agreement_tags:
+        semantic: volume_prs_en_a1_unit02_person_name_08_single
+  answer_derivation:
+    kind: slot_text
+    slot: person_name
+  feedback_frame:
+    text: '{person_name}'
+    language_code: en
+    direction: ltr

@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: '1.0'
 pack_key: practice.nl-en.a1.unit31
 source_language: nl
 target_language: en
@@ -6,79 +6,191 @@ unit_content_key: en.a1.unit31.appearance
 review:
   status: reviewed
   fresh_context: true
-  notes: "Authored 2026-07-11, nl-en depth-completion sprint (see
-    a1_unit30.yaml's notes for the sprint context). Two tags: 'trait_adj'
-    (4 members -- tall/short/blond/curly, all adjectives) for bare-word
-    recognition only -- deliberately EXCLUDES 'hair' from this tag despite
-    it appearing alongside the others in the lesson's own matching
-    exercise, since 'hair' is a noun (part_of_speech must be uniform
-    within one slot preset for scripts/backfill_lexemes_nl_en.py's
-    lexeme_matches() filter to work -- mixing adjective+noun in one tag
-    would silently exclude half the members from every generated item).
-    'eye_color' (3 members -- blue/brown/green, adjectives) IS used in a
-    real generative frame, 'Her eyes are {item}.', verified grammatical
-    for all three and directly matching the unit's own taught sentence
-    (lesson02.exercise04.order_eyes_sentence's tested_text is literally
-    'Her eyes are blue.'). Extended
-    scripts/_en_target_lexeme_common.py/scripts/backfill_lexemes_nl_en.py
-    with every introduced_token this unit's realization uses. Every
-    slot's real candidate count verified with
-    scripts/_practice_slot_check.py (trait_adj: 4, eye_color: 3, both
-    above the >=3 floor). Needs the standard fresh-context review before
-    import.
-    FRESH-CONTEXT REVIEW ADDENDUM (2026-07-11, zero access to authoring
-    reasoning): lesson_content_keys (lesson01.height_and_hair, lesson02.eyes_and_description) resolve to real lessons in en/a1_unit31_appearance.yaml. trait_adj (tall/short/blond/curly = lang/kort/blond/krullend) is recognition-only and correctly excludes the noun 'hair'; eye_color (blue/brown/green = blauw/bruin/groen) drives frame 'Her eyes are {item}', grammatical for all 3 and matching the unit's own 'Her eyes are blue.'. All glosses accurate and mutually distinct. No bare YAML booleans, no snake_case learner-facing
-    leaks. Validation: compiler practice-validate 0/0 across the full
-    42-pack nl-en set, scripts/_practice_slot_check.py OK,
-    backfill_lexemes_nl_en.py --dry-run clean. Upgrading to reviewed."
+  notes: 'Authored 2026-07-11, nl-en depth-completion sprint (see a1_unit30.yaml''s notes for the sprint context). Two tags:
+    ''trait_adj'' (4 members -- tall/short/blond/curly, all adjectives) for bare-word recognition only -- deliberately EXCLUDES
+    ''hair'' from this tag despite it appearing alongside the others in the lesson''s own matching exercise, since ''hair''
+    is a noun (part_of_speech must be uniform within one slot preset for scripts/backfill_lexemes_nl_en.py''s lexeme_matches()
+    filter to work -- mixing adjective+noun in one tag would silently exclude half the members from every generated item).
+    ''eye_color'' (3 members -- blue/brown/green, adjectives) IS used in a real generative frame, ''Her eyes are {item}.'',
+    verified grammatical for all three and directly matching the unit''s own taught sentence (lesson02.exercise04.order_eyes_sentence''s
+    tested_text is literally ''Her eyes are blue.''). Extended scripts/_en_target_lexeme_common.py/scripts/backfill_lexemes_nl_en.py
+    with every introduced_token this unit''s realization uses. Every slot''s real candidate count verified with scripts/_practice_slot_check.py
+    (trait_adj: 4, eye_color: 3, both above the >=3 floor). Needs the standard fresh-context review before import. FRESH-CONTEXT
+    REVIEW ADDENDUM (2026-07-11, zero access to authoring reasoning): lesson_content_keys (lesson01.height_and_hair, lesson02.eyes_and_description)
+    resolve to real lessons in en/a1_unit31_appearance.yaml. trait_adj (tall/short/blond/curly = lang/kort/blond/krullend)
+    is recognition-only and correctly excludes the noun ''hair''; eye_color (blue/brown/green = blauw/bruin/groen) drives
+    frame ''Her eyes are {item}'', grammatical for all 3 and matching the unit''s own ''Her eyes are blue.''. All glosses
+    accurate and mutually distinct. No bare YAML booleans, no snake_case learner-facing leaks. Validation: compiler practice-validate
+    0/0 across the full 42-pack nl-en set, scripts/_practice_slot_check.py OK, backfill_lexemes_nl_en.py --dry-run clean.
+    Upgrading to reviewed.'
 tag_schema:
-  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
   agreement_tags:
-    semantic: [trait_adj, eye_color]
+    semantic:
+    - trait_adj
+    - eye_color
 slot_presets:
-  trait_adj: &trait_adj {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: trait_adj}}
-  eye_color: &eye_color {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: eye_color}}
+  trait_adj: &id001
+    language_code: en
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: trait_adj
+  eye_color: &id002
+    language_code: en
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: eye_color
 templates:
-  - content_key: practice.nl-en.en.a1.unit31.lesson01.choose.001
-    lesson_content_key: en.a1.unit31.lesson01.height_and_hair
-    type: multiple_choice
-    frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *trait_adj}
-    answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is een kenmerk uit deze les.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit31.lesson01.listen.002
-    lesson_content_key: en.a1.unit31.lesson01.height_and_hair
-    type: listen_select
-    frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *trait_adj}
-    answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is het woord dat je hoorde.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit31.lesson01.match.003
-    lesson_content_key: en.a1.unit31.lesson01.height_and_hair
-    type: matching_pairs
-    frame: {text: "{first} · {second}", language_code: en, direction: ltr}
-    slots: {first: *trait_adj, second: *trait_adj, third: *trait_adj, fourth: *trait_adj}
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth]}
-    feedback_frame: {text: "Verbind elk kenmerk met de Nederlandse betekenis.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit31.lesson01.translate.004
-    lesson_content_key: en.a1.unit31.lesson01.height_and_hair
-    type: translation
-    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
-    slots: {item: *trait_adj}
-    answer_derivation: {kind: slot_text, slot: item}
-    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit31.lesson02.order.001
-    lesson_content_key: en.a1.unit31.lesson02.eyes_and_description
-    type: word_order
-    frame: {text: "Her eyes are {item}", language_code: en, direction: ltr}
-    slots: {item: *eye_color}
-    answer_derivation: {kind: render_frame, frame: {text: "Her eyes are {item}", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} is de genoemde oogkleur.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit31.lesson02.translate.002
-    lesson_content_key: en.a1.unit31.lesson02.eyes_and_description
-    type: translation
-    frame: {text: "Haar ogen zijn {item}.", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
-    slots: {item: *eye_color}
-    answer_derivation: {kind: render_frame, frame: {text: "Her eyes are {item}", language_code: en, direction: ltr}}
-    feedback_frame: {text: "Her eyes are {item}. betekent Haar ogen zijn {item}.", language_code: nl, direction: ltr}
+- content_key: practice.nl-en.en.a1.unit31.lesson01.choose.001
+  lesson_content_key: en.a1.unit31.lesson01.height_and_hair
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is een kenmerk uit deze les.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit31.lesson01.listen.002
+  lesson_content_key: en.a1.unit31.lesson01.height_and_hair
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is het woord dat je hoorde.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit31.lesson01.match.003
+  lesson_content_key: en.a1.unit31.lesson01.height_and_hair
+  type: matching_pairs
+  frame:
+    text: '{first} · {second}'
+    language_code: en
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+  feedback_frame:
+    text: Verbind elk kenmerk met de Nederlandse betekenis.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit31.lesson01.translate.004
+  lesson_content_key: en.a1.unit31.lesson01.height_and_hair
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: De Engelse vertaling is {item}.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit31.lesson02.order.001
+  lesson_content_key: en.a1.unit31.lesson02.eyes_and_description
+  type: word_order
+  frame:
+    text: Her eyes are {item}
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Her eyes are {item}
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: '{item} is de genoemde oogkleur.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit31.lesson02.translate.002
+  lesson_content_key: en.a1.unit31.lesson02.eyes_and_description
+  type: translation
+  frame:
+    text: Haar ogen zijn {item}.
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Her eyes are {item}
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: Her eyes are {item}. betekent Haar ogen zijn {item}.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit31.lesson02.translate.002.volume_order.005
+  lesson_content_key: en.a1.unit31.lesson02.eyes_and_description
+  type: word_order
+  frame:
+    text: Her eyes are {item}
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: eye_color
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Her eyes are {item}
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: Her eyes are {item}
+    language_code: en
+    direction: ltr

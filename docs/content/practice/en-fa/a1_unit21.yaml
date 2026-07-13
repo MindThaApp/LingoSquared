@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: '1.0'
 pack_key: practice.en-fa.a1.unit21
 source_language: en
 target_language: fa
@@ -6,225 +6,540 @@ unit_content_key: fa.a1.unit21.money
 review:
   status: unreviewed
   required_next_reviewer: codex
-  notes: >-
-    Authored 2026-07-09 (en-fa overnight units-20+ practice-depth pass,
-    same batch as a1_unit20.yaml -- see that file's own notes for the
-    shared UNIT_FILES-extension pattern and this pass's headline
-    dead-anchor bug catch). Extends scripts/backfill_lexemes.py with 11
-    new FA_GLOSSES entries, 1 new FA_PRONOUNS entry (چقدر), 1 new
-    FA_ADJECTIVES entry (خرد), 1 new FA_NUMBERS entry (صد), 2 new
-    FA_VERBS entries (بردارم/کنید), and 5 new semantic tags. تومن/هزار
-    were already established (unit03/unit08, "price" semantic) -- reused
-    verbatim, not reclassified.
+  notes: 'Authored 2026-07-09 (en-fa overnight units-20+ practice-depth pass, same batch as a1_unit20.yaml -- see that file''s
+    own notes for the shared UNIT_FILES-extension pattern and this pass''s headline dead-anchor bug catch). Extends scripts/backfill_lexemes.py
+    with 11 new FA_GLOSSES entries, 1 new FA_PRONOUNS entry (چقدر), 1 new FA_ADJECTIVES entry (خرد), 1 new FA_NUMBERS entry
+    (صد), 2 new FA_VERBS entries (بردارم/کنید), and 5 new semantic tags. تومن/هزار were already established (unit03/unit08,
+    "price" semantic) -- reused verbatim, not reclassified.
 
-    Five semantic groups, all verified via scripts/_practice_slot_check.py:
-    "money_word" pools the 4 core nouns (پول/بانک/دلار/تبدیل, anchored
-    lesson01, mirrors the realization's own 4-pair match_money_words
-    exercise). "exchange_word" pools the 4 review/new words lesson02
-    teaches alongside its two dialogue-request phrases (به/تومن/چقدر/
-    دارید, mixed preposition/noun/pronoun/verb, anchored lesson02,
-    mirrors match_exchange_phrases' own word-level pairs -- scoped by
-    lesson_key so this tag doesn't also pick up دارید's later lesson06
-    reuse). "atm_word" pools خودپرداز with از/بردارم (mixed noun/
-    preposition/verb, 3 members, anchored lesson03, mirrors
-    match_atm_phrases). "change_word" pools خرد with بفرمایید (mixed
-    adjective/verb, 2 members, translation/matching-only, below the
-    multiple_choice floor, same class as other units' narrow pairs --
-    بفرمایید additive on top of its long-established unit01 entry).
-    "rate_word" pools نرخ with هر (mixed noun/adjective, 2 members,
-    translation/matching-only, anchored lesson05). Two generative
-    templates reuse the existing course-wide "number" tag (established
-    since unit03, 35 members as of this unit) rather than inventing new
-    price vocabulary: "{number} دلار" mirrors lesson06's own real "صد
-    دلار" (a hundred dollars); "هر دلار {number} تومنه" mirrors
-    lesson05's/lesson06's own real "هر دلار سی تومنه" (each dollar is 30
-    toman) -- both grammatical for any number, not just the one taught
-    value.
+    Five semantic groups, all verified via scripts/_practice_slot_check.py: "money_word" pools the 4 core nouns (پول/بانک/دلار/تبدیل,
+    anchored lesson01, mirrors the realization''s own 4-pair match_money_words exercise). "exchange_word" pools the 4 review/new
+    words lesson02 teaches alongside its two dialogue-request phrases (به/تومن/چقدر/ دارید, mixed preposition/noun/pronoun/verb,
+    anchored lesson02, mirrors match_exchange_phrases'' own word-level pairs -- scoped by lesson_key so this tag doesn''t
+    also pick up دارید''s later lesson06 reuse). "atm_word" pools خودپرداز with از/بردارم (mixed noun/ preposition/verb, 3
+    members, anchored lesson03, mirrors match_atm_phrases). "change_word" pools خرد with بفرمایید (mixed adjective/verb, 2
+    members, translation/matching-only, below the multiple_choice floor, same class as other units'' narrow pairs -- بفرمایید
+    additive on top of its long-established unit01 entry). "rate_word" pools نرخ with هر (mixed noun/adjective, 2 members,
+    translation/matching-only, anchored lesson05). Two generative templates reuse the existing course-wide "number" tag (established
+    since unit03, 35 members as of this unit) rather than inventing new price vocabulary: "{number} دلار" mirrors lesson06''s
+    own real "صد دلار" (a hundred dollars); "هر دلار {number} تومنه" mirrors lesson05''s/lesson06''s own real "هر دلار سی
+    تومنه" (each dollar is 30 toman) -- both grammatical for any number, not just the one taught value.
 
-    Real dead-anchor risk checked and confirmed clear: unit21's own
-    lesson06 dialogue reuses "بله، بفرمایید." (turn08) -- the exact
-    phrase already given a discriminator key in _classify_fa for
-    unit20's own occurrence (see that pack's notes). Confirmed via a
-    direct iter_specs() dump that unit21's occurrence collapses into
-    unit06's ORIGINAL restaurant-dialogue anchor (fa_specs.setdefault()
-    keeps the first-seen entry, and unit21 introduces no NEW tokens in
-    that exact phrase, so no third discriminator was needed) -- this
-    pack does not reference that phrase as a slot member at all, so the
-    collision has zero effect on anything generated from this file.
+    Real dead-anchor risk checked and confirmed clear: unit21''s own lesson06 dialogue reuses "بله، بفرمایید." (turn08) --
+    the exact phrase already given a discriminator key in _classify_fa for unit20''s own occurrence (see that pack''s notes).
+    Confirmed via a direct iter_specs() dump that unit21''s occurrence collapses into unit06''s ORIGINAL restaurant-dialogue
+    anchor (fa_specs.setdefault() keeps the first-seen entry, and unit21 introduces no NEW tokens in that exact phrase, so
+    no third discriminator was needed) -- this pack does not reference that phrase as a slot member at all, so the collision
+    has zero effect on anything generated from this file.
 
-    Lesson-anchor check: lesson01 (money vocabulary), lesson02 (exchange
-    request), lesson03 (ATM withdrawal), lesson04 (asking for change),
-    and lesson05 (asking the rate) each genuinely introduce new
-    vocabulary (confirmed by reading the realization file directly) --
-    safe anchors. lesson06 hosts a combined review matching_pairs
-    template pooling money_word (4) + exchange_word (4) + atm_word (3)
-    into one 11-pair exercise, the same "final unit review" pattern
-    established by a1_unit17/19/20's own packs.
+    Lesson-anchor check: lesson01 (money vocabulary), lesson02 (exchange request), lesson03 (ATM withdrawal), lesson04 (asking
+    for change), and lesson05 (asking the rate) each genuinely introduce new vocabulary (confirmed by reading the realization
+    file directly) -- safe anchors. lesson06 hosts a combined review matching_pairs template pooling money_word (4) + exchange_word
+    (4) + atm_word (3) into one 11-pair exercise, the same "final unit review" pattern established by a1_unit17/19/20''s own
+    packs.
 
-    Zero fill_in_blank templates, same standing en-fa precedent as every
-    prior unit in this direction. scripts/_fill_in_blank_ambiguity_
-    check.py reports zero flags. Verified with scripts/
-    _practice_slot_check.py against backfill_lexemes.py's actual
-    iter_specs() output -- clean, no zero-candidate slots, no under-3
-    multiple_choice/matching_pairs slots (change_word/rate_word
-    correctly have only 2 candidates each and are never used for
-    multiple_choice here, only matching_pairs/translation).
-    compile_content.py practice-validate clean (0 errors/0 warnings).
-    Needs the standard fresh-context review before import.
+    Zero fill_in_blank templates, same standing en-fa precedent as every prior unit in this direction. scripts/_fill_in_blank_ambiguity_
+    check.py reports zero flags. Verified with scripts/ _practice_slot_check.py against backfill_lexemes.py''s actual iter_specs()
+    output -- clean, no zero-candidate slots, no under-3 multiple_choice/matching_pairs slots (change_word/rate_word correctly
+    have only 2 candidates each and are never used for multiple_choice here, only matching_pairs/translation). compile_content.py
+    practice-validate clean (0 errors/0 warnings). Needs the standard fresh-context review before import.'
 tag_schema:
-  part_of_speech: [noun, verb, preposition, pronoun, adjective]
+  part_of_speech:
+  - noun
+  - verb
+  - preposition
+  - pronoun
+  - adjective
   agreement_tags:
     semantic:
-      [money_word, exchange_word, atm_word, change_word, rate_word, number]
+    - money_word
+    - exchange_word
+    - atm_word
+    - change_word
+    - rate_word
+    - number
+    - volume_en_fa_a1_unit21_number_word_07_single
+    - volume_en_fa_a1_unit21_number_word_09_single
 slot_presets:
-  money_word: &money_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: money_word}}
-  exchange_word: &exchange_word {language_code: fa, part_of_speech: [preposition, noun, pronoun, verb], agreement_tags: {semantic: exchange_word}}
-  atm_word: &atm_word {language_code: fa, part_of_speech: [noun, preposition, verb], agreement_tags: {semantic: atm_word}}
-  change_word: &change_word {language_code: fa, part_of_speech: [adjective, verb], agreement_tags: {semantic: change_word}}
-  rate_word: &rate_word {language_code: fa, part_of_speech: [noun, adjective], agreement_tags: {semantic: rate_word}}
-  # Reuses the existing course-wide "number" tag (established since unit03).
-  number_word: &number_word {language_code: fa, part_of_speech: adjective, agreement_tags: {semantic: number}}
+  money_word: &id001
+    language_code: fa
+    part_of_speech: noun
+    agreement_tags:
+      semantic: money_word
+  exchange_word: &id003
+    language_code: fa
+    part_of_speech:
+    - preposition
+    - noun
+    - pronoun
+    - verb
+    agreement_tags:
+      semantic: exchange_word
+  atm_word: &id004
+    language_code: fa
+    part_of_speech:
+    - noun
+    - preposition
+    - verb
+    agreement_tags:
+      semantic: atm_word
+  change_word: &id005
+    language_code: fa
+    part_of_speech:
+    - adjective
+    - verb
+    agreement_tags:
+      semantic: change_word
+  rate_word: &id006
+    language_code: fa
+    part_of_speech:
+    - noun
+    - adjective
+    agreement_tags:
+      semantic: rate_word
+  number_word: &id002
+    language_code: fa
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: number
 templates:
-  # Lesson 1: money vocabulary.
-  - content_key: practice.en-fa.fa.a1.unit21.lesson01.money_choice.001
-    lesson_content_key: fa.a1.unit21.lesson01.money_vocabulary
-    type: multiple_choice
-    frame: {text: "{money_word}", language_code: fa, direction: rtl}
-    slots: {money_word: *money_word}
-    answer_derivation: {kind: slot_gloss, slot: money_word}
-    feedback_frame: {text: "{money_word} is money/banking vocabulary from this lesson.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit21.lesson01.money_match.002
-    lesson_content_key: fa.a1.unit21.lesson01.money_vocabulary
-    type: matching_pairs
-    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
-    slots: {first: *money_word, second: *money_word, third: *money_word, fourth: *money_word}
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth]}
-    feedback_frame: {text: "These four words cover the basic money vocabulary for this unit.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit21.lesson01.money_translate.003
-    lesson_content_key: fa.a1.unit21.lesson01.money_vocabulary
-    type: translation
-    frame: {text: "{money_word}", language_code: en, direction: ltr, slot_rendering: {money_word: english_gloss}}
-    slots: {money_word: *money_word}
-    answer_derivation: {kind: slot_text, slot: money_word}
-    feedback_frame: {text: "The Farsi word is {money_word}.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit21.lesson01.dollar_amount_order.004
-    lesson_content_key: fa.a1.unit21.lesson01.money_vocabulary
-    type: word_order
-    frame: {text: "{number_word} دلار", language_code: fa, direction: rtl}
-    slots: {number_word: *number_word}
-    answer_derivation: {kind: render_frame, frame: {text: "{number_word} دلار", language_code: fa, direction: rtl}}
-    feedback_frame: {text: "{number_word} دلار means {number_word} dollars.", language_code: en, direction: ltr}
-
-  # Lesson 2: requesting a currency exchange.
-  - content_key: practice.en-fa.fa.a1.unit21.lesson02.exchange_choice.001
-    lesson_content_key: fa.a1.unit21.lesson02.exchanging_currency
-    type: multiple_choice
-    frame: {text: "{exchange_word}", language_code: fa, direction: rtl}
-    slots: {exchange_word: *exchange_word}
-    answer_derivation: {kind: slot_gloss, slot: exchange_word}
-    feedback_frame: {text: "{exchange_word} is used when asking to exchange currency.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit21.lesson02.exchange_match.002
-    lesson_content_key: fa.a1.unit21.lesson02.exchanging_currency
-    type: matching_pairs
-    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
-    slots: {first: *exchange_word, second: *exchange_word, third: *exchange_word, fourth: *exchange_word}
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth]}
-    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit21.lesson02.exchange_translate.003
-    lesson_content_key: fa.a1.unit21.lesson02.exchanging_currency
-    type: translation
-    frame: {text: "{exchange_word}", language_code: en, direction: ltr, slot_rendering: {exchange_word: english_gloss}}
-    slots: {exchange_word: *exchange_word}
-    answer_derivation: {kind: slot_text, slot: exchange_word}
-    feedback_frame: {text: "The Farsi word is {exchange_word}.", language_code: en, direction: ltr}
-
-  # Lesson 3: ATM withdrawal.
-  - content_key: practice.en-fa.fa.a1.unit21.lesson03.atm_choice.001
-    lesson_content_key: fa.a1.unit21.lesson03.atm_withdrawal
-    type: multiple_choice
-    frame: {text: "{atm_word}", language_code: fa, direction: rtl}
-    slots: {atm_word: *atm_word}
-    answer_derivation: {kind: slot_gloss, slot: atm_word}
-    feedback_frame: {text: "{atm_word} is used when withdrawing money from an ATM.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit21.lesson03.atm_match.002
-    lesson_content_key: fa.a1.unit21.lesson03.atm_withdrawal
-    type: matching_pairs
-    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
-    slots: {first: *atm_word, second: *atm_word, third: *atm_word}
-    slot_relations: [{kind: distinct, slots: [first, second, third]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third]}
-    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit21.lesson03.atm_translate.003
-    lesson_content_key: fa.a1.unit21.lesson03.atm_withdrawal
-    type: translation
-    frame: {text: "{atm_word}", language_code: en, direction: ltr, slot_rendering: {atm_word: english_gloss}}
-    slots: {atm_word: *atm_word}
-    answer_derivation: {kind: slot_text, slot: atm_word}
-    feedback_frame: {text: "The Farsi word is {atm_word}.", language_code: en, direction: ltr}
-
-  # Lesson 4: asking for change.
-  - content_key: practice.en-fa.fa.a1.unit21.lesson04.change_match.001
-    lesson_content_key: fa.a1.unit21.lesson04.asking_for_change
-    type: matching_pairs
-    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
-    slots: {first: *change_word, second: *change_word}
-    slot_relations: [{kind: distinct, slots: [first, second]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second]}
-    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit21.lesson04.change_translate.002
-    lesson_content_key: fa.a1.unit21.lesson04.asking_for_change
-    type: translation
-    frame: {text: "{change_word}", language_code: en, direction: ltr, slot_rendering: {change_word: english_gloss}}
-    slots: {change_word: *change_word}
-    answer_derivation: {kind: slot_text, slot: change_word}
-    feedback_frame: {text: "The Farsi word is {change_word}.", language_code: en, direction: ltr}
-
-  # Lesson 5: asking the exchange rate.
-  - content_key: practice.en-fa.fa.a1.unit21.lesson05.rate_match.001
-    lesson_content_key: fa.a1.unit21.lesson05.asking_the_rate
-    type: matching_pairs
-    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
-    slots: {first: *rate_word, second: *rate_word}
-    slot_relations: [{kind: distinct, slots: [first, second]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second]}
-    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit21.lesson05.rate_translate.002
-    lesson_content_key: fa.a1.unit21.lesson05.asking_the_rate
-    type: translation
-    frame: {text: "{rate_word}", language_code: en, direction: ltr, slot_rendering: {rate_word: english_gloss}}
-    slots: {rate_word: *rate_word}
-    answer_derivation: {kind: slot_text, slot: rate_word}
-    feedback_frame: {text: "The Farsi word is {rate_word}.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit21.lesson05.rate_amount_order.003
-    lesson_content_key: fa.a1.unit21.lesson05.asking_the_rate
-    type: word_order
-    frame: {text: "هر دلار {number_word} تومنه", language_code: fa, direction: rtl}
-    slots: {number_word: *number_word}
-    answer_derivation: {kind: render_frame, frame: {text: "هر دلار {number_word} تومنه", language_code: fa, direction: rtl}}
-    feedback_frame: {text: "هر دلار {number_word} تومنه means each dollar is {number_word} toman.", language_code: en, direction: ltr}
-
-  # Lesson 6: the full bank dialogue -- unit-wide review.
-  - content_key: practice.en-fa.fa.a1.unit21.lesson06.unit_review_match.001
-    lesson_content_key: fa.a1.unit21.lesson06.bank_dialogue
-    type: matching_pairs
-    frame: {text: "Match each word with its meaning -- a review of this whole unit's money vocabulary.", language_code: en, direction: ltr}
+- content_key: practice.en-fa.fa.a1.unit21.lesson01.money_choice.001
+  lesson_content_key: fa.a1.unit21.lesson01.money_vocabulary
+  type: multiple_choice
+  frame:
+    text: '{money_word}'
+    language_code: fa
+    direction: rtl
+  slots:
+    money_word: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: money_word
+  feedback_frame:
+    text: '{money_word} is money/banking vocabulary from this lesson.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit21.lesson01.money_match.002
+  lesson_content_key: fa.a1.unit21.lesson01.money_vocabulary
+  type: matching_pairs
+  frame:
+    text: Match each word with its meaning.
+    language_code: en
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+  slot_relations:
+  - kind: distinct
     slots:
-      mw1: *money_word
-      mw2: *money_word
-      mw3: *money_word
-      mw4: *money_word
-      ew1: *exchange_word
-      ew2: *exchange_word
-      ew3: *exchange_word
-      ew4: *exchange_word
-      aw1: *atm_word
-      aw2: *atm_word
-      aw3: *atm_word
-    slot_relations:
-      - {kind: distinct, slots: [mw1, mw2, mw3, mw4]}
-      - {kind: distinct, slots: [ew1, ew2, ew3, ew4]}
-      - {kind: distinct, slots: [aw1, aw2, aw3]}
-    answer_derivation: {kind: matching_pairs, slots: [mw1, mw2, mw3, mw4, ew1, ew2, ew3, ew4, aw1, aw2, aw3]}
-    feedback_frame: {text: "This reviews the money, exchange, and ATM vocabulary taught in this unit.", language_code: en, direction: ltr}
+    - first
+    - second
+    - third
+    - fourth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+  feedback_frame:
+    text: These four words cover the basic money vocabulary for this unit.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit21.lesson01.money_translate.003
+  lesson_content_key: fa.a1.unit21.lesson01.money_vocabulary
+  type: translation
+  frame:
+    text: '{money_word}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      money_word: english_gloss
+  slots:
+    money_word: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: money_word
+  feedback_frame:
+    text: The Farsi word is {money_word}.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit21.lesson01.dollar_amount_order.004
+  lesson_content_key: fa.a1.unit21.lesson01.money_vocabulary
+  type: word_order
+  frame:
+    text: '{number_word} دلار'
+    language_code: fa
+    direction: rtl
+  slots:
+    number_word: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{number_word} دلار'
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: '{number_word} دلار means {number_word} dollars.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit21.lesson02.exchange_choice.001
+  lesson_content_key: fa.a1.unit21.lesson02.exchanging_currency
+  type: multiple_choice
+  frame:
+    text: '{exchange_word}'
+    language_code: fa
+    direction: rtl
+  slots:
+    exchange_word: *id003
+  answer_derivation:
+    kind: slot_gloss
+    slot: exchange_word
+  feedback_frame:
+    text: '{exchange_word} is used when asking to exchange currency.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit21.lesson02.exchange_match.002
+  lesson_content_key: fa.a1.unit21.lesson02.exchanging_currency
+  type: matching_pairs
+  frame:
+    text: Match each word with its meaning.
+    language_code: en
+    direction: ltr
+  slots:
+    first: *id003
+    second: *id003
+    third: *id003
+    fourth: *id003
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+  feedback_frame:
+    text: Match each word to its English meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit21.lesson02.exchange_translate.003
+  lesson_content_key: fa.a1.unit21.lesson02.exchanging_currency
+  type: translation
+  frame:
+    text: '{exchange_word}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      exchange_word: english_gloss
+  slots:
+    exchange_word: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: exchange_word
+  feedback_frame:
+    text: The Farsi word is {exchange_word}.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit21.lesson03.atm_choice.001
+  lesson_content_key: fa.a1.unit21.lesson03.atm_withdrawal
+  type: multiple_choice
+  frame:
+    text: '{atm_word}'
+    language_code: fa
+    direction: rtl
+  slots:
+    atm_word: *id004
+  answer_derivation:
+    kind: slot_gloss
+    slot: atm_word
+  feedback_frame:
+    text: '{atm_word} is used when withdrawing money from an ATM.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit21.lesson03.atm_match.002
+  lesson_content_key: fa.a1.unit21.lesson03.atm_withdrawal
+  type: matching_pairs
+  frame:
+    text: Match each word with its meaning.
+    language_code: en
+    direction: ltr
+  slots:
+    first: *id004
+    second: *id004
+    third: *id004
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+  feedback_frame:
+    text: Match each word to its English meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit21.lesson03.atm_translate.003
+  lesson_content_key: fa.a1.unit21.lesson03.atm_withdrawal
+  type: translation
+  frame:
+    text: '{atm_word}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      atm_word: english_gloss
+  slots:
+    atm_word: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: atm_word
+  feedback_frame:
+    text: The Farsi word is {atm_word}.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit21.lesson04.change_match.001
+  lesson_content_key: fa.a1.unit21.lesson04.asking_for_change
+  type: matching_pairs
+  frame:
+    text: Match each word with its meaning.
+    language_code: en
+    direction: ltr
+  slots:
+    first: *id005
+    second: *id005
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+  feedback_frame:
+    text: Match each word to its English meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit21.lesson04.change_translate.002
+  lesson_content_key: fa.a1.unit21.lesson04.asking_for_change
+  type: translation
+  frame:
+    text: '{change_word}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      change_word: english_gloss
+  slots:
+    change_word: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: change_word
+  feedback_frame:
+    text: The Farsi word is {change_word}.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit21.lesson05.rate_match.001
+  lesson_content_key: fa.a1.unit21.lesson05.asking_the_rate
+  type: matching_pairs
+  frame:
+    text: Match each word with its meaning.
+    language_code: en
+    direction: ltr
+  slots:
+    first: *id006
+    second: *id006
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+  feedback_frame:
+    text: Match each word to its English meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit21.lesson05.rate_translate.002
+  lesson_content_key: fa.a1.unit21.lesson05.asking_the_rate
+  type: translation
+  frame:
+    text: '{rate_word}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      rate_word: english_gloss
+  slots:
+    rate_word: *id006
+  answer_derivation:
+    kind: slot_text
+    slot: rate_word
+  feedback_frame:
+    text: The Farsi word is {rate_word}.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit21.lesson05.rate_amount_order.003
+  lesson_content_key: fa.a1.unit21.lesson05.asking_the_rate
+  type: word_order
+  frame:
+    text: هر دلار {number_word} تومنه
+    language_code: fa
+    direction: rtl
+  slots:
+    number_word: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: هر دلار {number_word} تومنه
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: هر دلار {number_word} تومنه means each dollar is {number_word} toman.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit21.lesson06.unit_review_match.001
+  lesson_content_key: fa.a1.unit21.lesson06.bank_dialogue
+  type: matching_pairs
+  frame:
+    text: Match each word with its meaning -- a review of this whole unit's money vocabulary.
+    language_code: en
+    direction: ltr
+  slots:
+    mw1: *id001
+    mw2: *id001
+    mw3: *id001
+    mw4: *id001
+    ew1: *id003
+    ew2: *id003
+    ew3: *id003
+    ew4: *id003
+    aw1: *id004
+    aw2: *id004
+    aw3: *id004
+  slot_relations:
+  - kind: distinct
+    slots:
+    - mw1
+    - mw2
+    - mw3
+    - mw4
+  - kind: distinct
+    slots:
+    - ew1
+    - ew2
+    - ew3
+    - ew4
+  - kind: distinct
+    slots:
+    - aw1
+    - aw2
+    - aw3
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - mw1
+    - mw2
+    - mw3
+    - mw4
+    - ew1
+    - ew2
+    - ew3
+    - ew4
+    - aw1
+    - aw2
+    - aw3
+  feedback_frame:
+    text: This reviews the money, exchange, and ATM vocabulary taught in this unit.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit21.lesson05.rate_amount_order.003.volume_fill.007
+  lesson_content_key: fa.a1.unit21.lesson05.asking_the_rate
+  type: fill_in_blank
+  frame:
+    text: هر دلار {number_word} تومنه
+    language_code: fa
+    direction: rtl
+  slots:
+    number_word:
+      language_code: fa
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: volume_en_fa_a1_unit21_number_word_07_single
+  answer_derivation:
+    kind: slot_text
+    slot: number_word
+  feedback_frame:
+    text: '{number_word}'
+    language_code: fa
+    direction: rtl
+- content_key: practice.en-fa.fa.a1.unit21.lesson01.dollar_amount_order.004.volume_fill.009
+  lesson_content_key: fa.a1.unit21.lesson01.money_vocabulary
+  type: fill_in_blank
+  frame:
+    text: '{number_word} دلار'
+    language_code: fa
+    direction: rtl
+  slots:
+    number_word:
+      language_code: fa
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: volume_en_fa_a1_unit21_number_word_09_single
+  answer_derivation:
+    kind: slot_text
+    slot: number_word
+  feedback_frame:
+    text: '{number_word}'
+    language_code: fa
+    direction: rtl
+- content_key: practice.en-fa.fa.a1.unit21.lesson01.money_match.002.volume_match.010
+  lesson_content_key: fa.a1.unit21.lesson01.money_vocabulary
+  type: matching_pairs
+  frame:
+    text: Match each word with its meaning.
+    language_code: en
+    direction: ltr
+  slots:
+    first: &id007
+      language_code: fa
+      part_of_speech: noun
+      agreement_tags:
+        semantic: money_word
+    second: *id007
+    third: *id007
+    fourth: *id007
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+  feedback_frame:
+    text: These four words cover the basic money vocabulary for this unit.
+    language_code: en
+    direction: ltr

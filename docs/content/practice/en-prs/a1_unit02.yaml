@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: '1.0'
 pack_key: practice.en-prs.a1.unit02
 source_language: en
 target_language: prs
@@ -6,238 +6,574 @@ unit_content_key: prs.a1.unit02.introductions
 review:
   status: unreviewed
   fresh_context: false
-  notes: >-
-    Authored by the practice-pool-sync lane (fa/prs bundle), 2026-07-05,
-    closing the gap where en-prs's practice pool only covered unit01
-    despite the realization/overlay already having units 1-7 (units 2-6
-    reviewed and stable, unit07 unreviewed/mid-edit -- correctly left
-    alone). Extended scripts/backfill_lexemes_en_prs.py's UNIT_FILES to
-    cover unit02 (previously unit01 only), hand-classifying all 28
-    genuinely new introduced_tokens directly from
-    docs/content/realizations/prs/a1_unit02_introductions.yaml (checked
-    against the existing unit01 token set first so no already-reviewed
-    gloss/POS entry was silently overwritten).
+  notes: 'Authored by the practice-pool-sync lane (fa/prs bundle), 2026-07-05, closing the gap where en-prs''s practice pool
+    only covered unit01 despite the realization/overlay already having units 1-7 (units 2-6 reviewed and stable, unit07 unreviewed/mid-edit
+    -- correctly left alone). Extended scripts/backfill_lexemes_en_prs.py''s UNIT_FILES to cover unit02 (previously unit01
+    only), hand-classifying all 28 genuinely new introduced_tokens directly from docs/content/realizations/prs/a1_unit02_introductions.yaml
+    (checked against the existing unit01 token set first so no already-reviewed gloss/POS entry was silently overwritten).
 
-    Found and fixed a real pre-existing bug while extending the
-    classifier: "کابل" (Kabul, a city) was incorrectly tagged
-    semantic=person_name in the ORIGINAL unit01-era code (grouped with
-    real person names حامد/نجیب) -- moved it to a proper city_name tag
-    (now shared with unit02's هرات/مزار/شریف) instead.
+    Found and fixed a real pre-existing bug while extending the classifier: "کابل" (Kabul, a city) was incorrectly tagged
+    semantic=person_name in the ORIGINAL unit01-era code (grouped with real person names حامد/نجیب) -- moved it to a proper
+    city_name tag (now shared with unit02''s هرات/مزار/شریف) instead.
 
-    No listen_select anywhere in this pack, matching the existing
-    a1_unit01.yaml pack's own stated rule: Dari has zero TTS voice
-    coverage project-wide, a hard exclusion, not a style choice.
+    No listen_select anywhere in this pack, matching the existing a1_unit01.yaml pack''s own stated rule: Dari has zero TTS
+    voice coverage project-wide, a hard exclusion, not a style choice.
 
-    Deliberately did NOT pair the "title" slot (جناب/خانم, 2 candidates)
-    with any specific person_name in a single frame -- جناب is
-    male-specific and خانم is female-specific, but this course's lexeme
-    model has no gender agreement tag on either titles or names yet, so
-    a randomly-filled "{title} فریدون"-shaped frame would render the
-    ungrammatical "خانم فریدون" (Ms. Faridun) roughly half the time.
-    Same class of bug as the nl-en lane's زیjn/homograph caution and this
-    lane's own en-fa/en-fa unit03/04 "quantity"/title-pairing avoidances --
-    verified via scripts/_practice_slot_check.py that no template below
-    combines two independently-slotted values that could disagree on an
-    untracked grammatical feature. "title" is tested standalone
+    Deliberately did NOT pair the "title" slot (جناب/خانم, 2 candidates) with any specific person_name in a single frame --
+    جناب is male-specific and خانم is female-specific, but this course''s lexeme model has no gender agreement tag on either
+    titles or names yet, so a randomly-filled "{title} فریدون"-shaped frame would render the ungrammatical "خانم فریدون" (Ms.
+    Faridun) roughly half the time. Same class of bug as the nl-en lane''s زیjn/homograph caution and this lane''s own en-fa/en-fa
+    unit03/04 "quantity"/title-pairing avoidances -- verified via scripts/_practice_slot_check.py that no template below combines
+    two independently-slotted values that could disagree on an untracked grammatical feature. "title" is tested standalone
     (multiple_choice/translation/a name-free fill_in_blank frame) instead.
 
-    "title" (2 candidates) and "name_word" (3 candidates: نام/نام‌تان/نامت)
-    are at or near the minimum for multiple_choice; "title" specifically
-    is never used in multiple_choice here (2 < 3), only fill_in_blank/
-    translation. Not yet compiler-validated or DB-verified as of this
-    writing (left for the end-of-session scripts/verify.sh run); status
-    left unreviewed pending a real fresh-context review -- this lane does
-    not self-certify review status, and human native-speaker review is
-    still recommended before Dari content ships, per standing project
-    policy.
+    "title" (2 candidates) and "name_word" (3 candidates: نام/نام‌تان/نامت) are at or near the minimum for multiple_choice;
+    "title" specifically is never used in multiple_choice here (2 < 3), only fill_in_blank/ translation. Not yet compiler-validated
+    or DB-verified as of this writing (left for the end-of-session scripts/verify.sh run); status left unreviewed pending
+    a real fresh-context review -- this lane does not self-certify review status, and human native-speaker review is still
+    recommended before Dari content ships, per standing project policy.'
 tag_schema:
-  part_of_speech: [noun, proper_noun, verb, adjective, adverb]
+  part_of_speech:
+  - noun
+  - proper_noun
+  - verb
+  - adjective
+  - adverb
   agreement_tags:
-    semantic: [name_word, person_name, city_name, country, city_word, occupation, title, relationship_word, politeness, dialogue_word]
+    semantic:
+    - name_word
+    - person_name
+    - city_name
+    - country
+    - city_word
+    - occupation
+    - title
+    - relationship_word
+    - politeness
+    - dialogue_word
+    - volume_en_prs_a1_unit02_city_name_02_single
+    - volume_en_prs_a1_unit02_person_name_04_single
 slot_presets:
-  name_word: &name_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: name_word}}
-  person_name: &person_name {language_code: prs, part_of_speech: proper_noun, agreement_tags: {semantic: person_name}}
-  city_name: &city_name {language_code: prs, part_of_speech: proper_noun, agreement_tags: {semantic: city_name}}
-  country: &country {language_code: prs, part_of_speech: proper_noun, agreement_tags: {semantic: country}}
-  # city_name alone only has 4 distinct candidates course-wide; matching_pairs
-  # needs more density (AUTHORING_GUIDE.md #16), so city_pair below pools in
-  # the one taught country name too (both are place-name proper nouns, same
-  # "where someone is from" theme) -- kept as its own preset so it doesn't
-  # change the single-slot city_name exercises above.
-  city_or_country: &city_or_country {language_code: prs, part_of_speech: proper_noun, agreement_tags: {semantic: [city_name, country]}}
-  occupation: &occupation {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: occupation}}
-  title: &title {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: title}}
-  relationship_word: &relationship_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: relationship_word}}
-  politeness_word: &politeness_word {language_code: prs, part_of_speech: [noun, verb, adverb, adjective], agreement_tags: {semantic: politeness}}
-  dialogue_word: &dialogue_word {language_code: prs, part_of_speech: [noun, proper_noun, verb, adjective, adverb], agreement_tags: {semantic: dialogue_word}}
+  name_word: &id001
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: name_word
+  person_name: &id002
+    language_code: prs
+    part_of_speech: proper_noun
+    agreement_tags:
+      semantic: person_name
+  city_name: &id003
+    language_code: prs
+    part_of_speech: proper_noun
+    agreement_tags:
+      semantic: city_name
+  country: &id005
+    language_code: prs
+    part_of_speech: proper_noun
+    agreement_tags:
+      semantic: country
+  city_or_country: &id004
+    language_code: prs
+    part_of_speech: proper_noun
+    agreement_tags:
+      semantic:
+      - city_name
+      - country
+  occupation: &id006
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: occupation
+  title: &id008
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: title
+  relationship_word: &id007
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: relationship_word
+  politeness_word: &id009
+    language_code: prs
+    part_of_speech:
+    - noun
+    - verb
+    - adverb
+    - adjective
+    agreement_tags:
+      semantic: politeness
+  dialogue_word: &id010
+    language_code: prs
+    part_of_speech:
+    - noun
+    - proper_noun
+    - verb
+    - adjective
+    - adverb
+    agreement_tags:
+      semantic: dialogue_word
 templates:
-  # Lesson 1: name exchange.
-  - content_key: practice.en-prs.prs.a1.unit02.lesson01.name_gloss.001
-    lesson_content_key: prs.a1.unit02.lesson01.name_exchange
-    type: multiple_choice
-    frame: {text: "{name_word}", language_code: prs, direction: rtl}
-    slots: {name_word: *name_word}
-    answer_derivation: {kind: slot_gloss, slot: name_word}
-    feedback_frame: {text: "{name_word} is used to ask or give a name.", language_code: en, direction: ltr}
-  - content_key: practice.en-prs.prs.a1.unit02.lesson01.name_translate.003
-    lesson_content_key: prs.a1.unit02.lesson01.name_exchange
-    type: translation
-    frame: {text: "{name_word}", language_code: en, direction: ltr, slot_rendering: {name_word: english_gloss}}
-    slots: {name_word: *name_word}
-    answer_derivation: {kind: slot_text, slot: name_word}
-    feedback_frame: {text: "{name_word} is the Dari word for this.", language_code: en, direction: ltr}
-  - content_key: practice.en-prs.prs.a1.unit02.lesson01.person_pair.004
-    lesson_content_key: prs.a1.unit02.lesson01.name_exchange
-    type: matching_pairs
-    # Expanded 2->10 pairs 2026-07-06 (AUTHORING_GUIDE.md #16 retrofit) --
-    # verified via scripts/_practice_slot_check.py: 10 distinct person_name
-    # candidates backfilled course-wide, exactly enough for 10 slots.
-    frame: {text: "{person_name_one}، {person_name_two}، {person_name_three}، {person_name_four}، {person_name_five}، {person_name_six}، {person_name_seven}، {person_name_eight}، {person_name_nine}، {person_name_ten}", language_code: prs, direction: rtl}
-    slots: {person_name_one: *person_name, person_name_two: *person_name, person_name_three: *person_name, person_name_four: *person_name, person_name_five: *person_name, person_name_six: *person_name, person_name_seven: *person_name, person_name_eight: *person_name, person_name_nine: *person_name, person_name_ten: *person_name}
-    slot_relations: [{kind: distinct, slots: [person_name_one, person_name_two, person_name_three, person_name_four, person_name_five, person_name_six, person_name_seven, person_name_eight, person_name_nine, person_name_ten]}]
-    answer_derivation: {kind: matching_pairs, slots: [person_name_one, person_name_two, person_name_three, person_name_four, person_name_five, person_name_six, person_name_seven, person_name_eight, person_name_nine, person_name_ten]}
-    feedback_frame: {text: "Match each name to its English label.", language_code: en, direction: ltr}
-
-  # Lesson 2: origin and hometown.
-  - content_key: practice.en-prs.prs.a1.unit02.lesson02.city_gloss.001
-    lesson_content_key: prs.a1.unit02.lesson02.origin_and_hometown
-    type: multiple_choice
-    frame: {text: "{city_name}", language_code: prs, direction: rtl}
-    slots: {city_name: *city_name}
-    answer_derivation: {kind: slot_gloss, slot: city_name}
-    feedback_frame: {text: "{city_name} is a place name used with از (from).", language_code: en, direction: ltr}
-  - content_key: practice.en-prs.prs.a1.unit02.lesson02.city_order.003
-    lesson_content_key: prs.a1.unit02.lesson02.origin_and_hometown
-    type: word_order
-    frame: {text: "من از {city_name} استم", language_code: prs, direction: rtl}
-    slots: {city_name: *city_name}
-    answer_derivation: {kind: render_frame, frame: {text: "من از {city_name} استم", language_code: prs, direction: rtl}}
-    feedback_frame: {text: "Word order: من از [city] استم.", language_code: en, direction: ltr}
-  - content_key: practice.en-prs.prs.a1.unit02.lesson02.city_pair.004
-    lesson_content_key: prs.a1.unit02.lesson02.origin_and_hometown
-    type: matching_pairs
-    # Expanded 2->5 pairs 2026-07-06 (AUTHORING_GUIDE.md #16 retrofit).
-    # city_name alone only has 4 distinct real candidates; pooled in the
-    # one taught country name (city_or_country preset above) to reach 5 --
-    # verified via scripts/_practice_slot_check.py. Real vocabulary ceiling,
-    # not padded with untaught words.
-    frame: {text: "{city_name_one} — {city_name_two} — {city_name_three} — {city_name_four} — {city_name_five}", language_code: prs, direction: rtl}
-    slots: {city_name_one: *city_or_country, city_name_two: *city_or_country, city_name_three: *city_or_country, city_name_four: *city_or_country, city_name_five: *city_or_country}
-    slot_relations: [{kind: distinct, slots: [city_name_one, city_name_two, city_name_three, city_name_four, city_name_five]}]
-    answer_derivation: {kind: matching_pairs, slots: [city_name_one, city_name_two, city_name_three, city_name_four, city_name_five]}
-    feedback_frame: {text: "Match each place name to its English label.", language_code: en, direction: ltr}
-  - content_key: practice.en-prs.prs.a1.unit02.lesson02.country_translate.005
-    lesson_content_key: prs.a1.unit02.lesson02.origin_and_hometown
-    type: translation
-    frame: {text: "{country}", language_code: en, direction: ltr, slot_rendering: {country: english_gloss}}
-    slots: {country: *country}
-    answer_derivation: {kind: slot_text, slot: country}
-    feedback_frame: {text: "{country} is the country name taught in this lesson.", language_code: en, direction: ltr}
-
-  # Lesson 3: occupation.
-  - content_key: practice.en-prs.prs.a1.unit02.lesson03.occupation_gloss.001
-    lesson_content_key: prs.a1.unit02.lesson03.occupation
-    type: multiple_choice
-    frame: {text: "{occupation}", language_code: prs, direction: rtl}
-    slots: {occupation: *occupation}
-    answer_derivation: {kind: slot_gloss, slot: occupation}
-    feedback_frame: {text: "{occupation} names a job.", language_code: en, direction: ltr}
-  - content_key: practice.en-prs.prs.a1.unit02.lesson03.occupation_translate.003
-    lesson_content_key: prs.a1.unit02.lesson03.occupation
-    type: translation
-    frame: {text: "{occupation}", language_code: en, direction: ltr, slot_rendering: {occupation: english_gloss}}
-    slots: {occupation: *occupation}
-    answer_derivation: {kind: slot_text, slot: occupation}
-    feedback_frame: {text: "{occupation} is the Dari word for this job.", language_code: en, direction: ltr}
-  - content_key: practice.en-prs.prs.a1.unit02.lesson03.occupation_pair.004
-    lesson_content_key: prs.a1.unit02.lesson03.occupation
-    type: matching_pairs
-    # Expanded 2->4 pairs 2026-07-06 (AUTHORING_GUIDE.md #16 retrofit).
-    # Real vocabulary ceiling: only 4 occupation nouns taught course-wide
-    # (verified via scripts/_practice_slot_check.py). Deliberately NOT
-    # pooled with unit06's role_word (دکاندار "shopkeeper") -- that token
-    # is a near-duplicate spelling of this lesson's own دوکاندار
-    # (also "shopkeeper"); combining them would violate the no-ambiguous/
-    # confusable-near-duplicate rule (AUTHORING_GUIDE.md #3), and the
-    # spelling divergence itself is flagged separately for the content lane
-    # that owns units 02/06 to reconcile.
-    frame: {text: "{occupation_one} — {occupation_two} — {occupation_three} — {occupation_four}", language_code: prs, direction: rtl}
-    slots: {occupation_one: *occupation, occupation_two: *occupation, occupation_three: *occupation, occupation_four: *occupation}
-    slot_relations: [{kind: distinct, slots: [occupation_one, occupation_two, occupation_three, occupation_four]}]
-    answer_derivation: {kind: matching_pairs, slots: [occupation_one, occupation_two, occupation_three, occupation_four]}
-    feedback_frame: {text: "Match each job to its English label.", language_code: en, direction: ltr}
-
-  # Lesson 4: introducing a third person.
-  - content_key: practice.en-prs.prs.a1.unit02.lesson04.relationship_gloss.001
-    lesson_content_key: prs.a1.unit02.lesson04.introducing_others
-    type: multiple_choice
-    frame: {text: "{relationship_word}", language_code: prs, direction: rtl}
-    slots: {relationship_word: *relationship_word}
-    answer_derivation: {kind: slot_gloss, slot: relationship_word}
-    feedback_frame: {text: "{relationship_word} names a person you know.", language_code: en, direction: ltr}
-  - content_key: practice.en-prs.prs.a1.unit02.lesson04.this_is_person_order.003
-    lesson_content_key: prs.a1.unit02.lesson04.introducing_others
-    type: word_order
-    frame: {text: "این {person_name} است", language_code: prs, direction: rtl}
-    slots: {person_name: *person_name}
-    answer_derivation: {kind: render_frame, frame: {text: "این {person_name} است", language_code: prs, direction: rtl}}
-    feedback_frame: {text: "این [name] است names who is being introduced.", language_code: en, direction: ltr}
-  - content_key: practice.en-prs.prs.a1.unit02.lesson04.relationship_translate.004
-    lesson_content_key: prs.a1.unit02.lesson04.introducing_others
-    type: translation
-    frame: {text: "{relationship_word}", language_code: en, direction: ltr, slot_rendering: {relationship_word: english_gloss}}
-    slots: {relationship_word: *relationship_word}
-    answer_derivation: {kind: slot_text, slot: relationship_word}
-    feedback_frame: {text: "{relationship_word} is the Dari word for this.", language_code: en, direction: ltr}
-
-  # Lesson 5: polite titles and register. "title" is deliberately never
-  # paired with a specific person_name in one frame -- see the pack-level
-  # review notes on why (جناب/خانم gender mismatch risk).
-  - content_key: practice.en-prs.prs.a1.unit02.lesson05.title_translate.002
-    lesson_content_key: prs.a1.unit02.lesson05.polite_titles_and_register
-    type: translation
-    frame: {text: "{title}", language_code: en, direction: ltr, slot_rendering: {title: english_gloss}}
-    slots: {title: *title}
-    answer_derivation: {kind: slot_text, slot: title}
-    feedback_frame: {text: "{title} is the Dari word for this polite title.", language_code: en, direction: ltr}
-  - content_key: practice.en-prs.prs.a1.unit02.lesson05.politeness_gloss.003
-    lesson_content_key: prs.a1.unit02.lesson05.polite_titles_and_register
-    type: multiple_choice
-    frame: {text: "{politeness_word}", language_code: prs, direction: rtl}
-    slots: {politeness_word: *politeness_word}
-    answer_derivation: {kind: slot_gloss, slot: politeness_word}
-    feedback_frame: {text: "{politeness_word} is used in polite speech.", language_code: en, direction: ltr}
-  - content_key: practice.en-prs.prs.a1.unit02.lesson05.politeness_translate.004
-    lesson_content_key: prs.a1.unit02.lesson05.polite_titles_and_register
-    type: translation
-    frame: {text: "{politeness_word}", language_code: en, direction: ltr, slot_rendering: {politeness_word: english_gloss}}
-    slots: {politeness_word: *politeness_word}
-    answer_derivation: {kind: slot_text, slot: politeness_word}
-    feedback_frame: {text: "{politeness_word} is the Dari word for this.", language_code: en, direction: ltr}
-
-  # Lesson 6: a gathering (dialogue).
-  - content_key: practice.en-prs.prs.a1.unit02.lesson06.dialogue_gloss.001
-    lesson_content_key: prs.a1.unit02.lesson06.gathering_dialogue
-    type: multiple_choice
-    frame: {text: "{dialogue_word}", language_code: prs, direction: rtl}
-    slots: {dialogue_word: *dialogue_word}
-    answer_derivation: {kind: slot_gloss, slot: dialogue_word}
-    feedback_frame: {text: "{dialogue_word} appears in the gathering dialogue.", language_code: en, direction: ltr}
-  - content_key: practice.en-prs.prs.a1.unit02.lesson06.dialogue_translate.002
-    lesson_content_key: prs.a1.unit02.lesson06.gathering_dialogue
-    type: translation
-    frame: {text: "{dialogue_word}", language_code: en, direction: ltr, slot_rendering: {dialogue_word: english_gloss}}
-    slots: {dialogue_word: *dialogue_word}
-    answer_derivation: {kind: slot_text, slot: dialogue_word}
-    feedback_frame: {text: "{dialogue_word} is the Dari word for this.", language_code: en, direction: ltr}
-  - content_key: practice.en-prs.prs.a1.unit02.lesson06.dialogue_pair.003
-    lesson_content_key: prs.a1.unit02.lesson06.gathering_dialogue
-    type: matching_pairs
-    # Expanded 2->10 pairs 2026-07-06 (AUTHORING_GUIDE.md #16 retrofit) --
-    # verified via scripts/_practice_slot_check.py: 50 distinct dialogue_word
-    # candidates backfilled course-wide, comfortably supports 10 slots.
-    frame: {text: "{dialogue_word_one} — {dialogue_word_two} — {dialogue_word_three} — {dialogue_word_four} — {dialogue_word_five} — {dialogue_word_six} — {dialogue_word_seven} — {dialogue_word_eight} — {dialogue_word_nine} — {dialogue_word_ten}", language_code: prs, direction: rtl}
-    slots: {dialogue_word_one: *dialogue_word, dialogue_word_two: *dialogue_word, dialogue_word_three: *dialogue_word, dialogue_word_four: *dialogue_word, dialogue_word_five: *dialogue_word, dialogue_word_six: *dialogue_word, dialogue_word_seven: *dialogue_word, dialogue_word_eight: *dialogue_word, dialogue_word_nine: *dialogue_word, dialogue_word_ten: *dialogue_word}
-    slot_relations: [{kind: distinct, slots: [dialogue_word_one, dialogue_word_two, dialogue_word_three, dialogue_word_four, dialogue_word_five, dialogue_word_six, dialogue_word_seven, dialogue_word_eight, dialogue_word_nine, dialogue_word_ten]}]
-    answer_derivation: {kind: matching_pairs, slots: [dialogue_word_one, dialogue_word_two, dialogue_word_three, dialogue_word_four, dialogue_word_five, dialogue_word_six, dialogue_word_seven, dialogue_word_eight, dialogue_word_nine, dialogue_word_ten]}
-    feedback_frame: {text: "Match each dialogue word to its English label.", language_code: en, direction: ltr}
+- content_key: practice.en-prs.prs.a1.unit02.lesson01.name_gloss.001
+  lesson_content_key: prs.a1.unit02.lesson01.name_exchange
+  type: multiple_choice
+  frame:
+    text: '{name_word}'
+    language_code: prs
+    direction: rtl
+  slots:
+    name_word: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: name_word
+  feedback_frame:
+    text: '{name_word} is used to ask or give a name.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit02.lesson01.name_translate.003
+  lesson_content_key: prs.a1.unit02.lesson01.name_exchange
+  type: translation
+  frame:
+    text: '{name_word}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      name_word: english_gloss
+  slots:
+    name_word: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: name_word
+  feedback_frame:
+    text: '{name_word} is the Dari word for this.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit02.lesson01.person_pair.004
+  lesson_content_key: prs.a1.unit02.lesson01.name_exchange
+  type: matching_pairs
+  frame:
+    text: '{person_name_one}، {person_name_two}، {person_name_three}، {person_name_four}، {person_name_five}، {person_name_six}،
+      {person_name_seven}، {person_name_eight}، {person_name_nine}، {person_name_ten}'
+    language_code: prs
+    direction: rtl
+  slots:
+    person_name_one: *id002
+    person_name_two: *id002
+    person_name_three: *id002
+    person_name_four: *id002
+    person_name_five: *id002
+    person_name_six: *id002
+    person_name_seven: *id002
+    person_name_eight: *id002
+    person_name_nine: *id002
+    person_name_ten: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - person_name_one
+    - person_name_two
+    - person_name_three
+    - person_name_four
+    - person_name_five
+    - person_name_six
+    - person_name_seven
+    - person_name_eight
+    - person_name_nine
+    - person_name_ten
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - person_name_one
+    - person_name_two
+    - person_name_three
+    - person_name_four
+    - person_name_five
+    - person_name_six
+    - person_name_seven
+    - person_name_eight
+    - person_name_nine
+    - person_name_ten
+  feedback_frame:
+    text: Match each name to its English label.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit02.lesson02.city_gloss.001
+  lesson_content_key: prs.a1.unit02.lesson02.origin_and_hometown
+  type: multiple_choice
+  frame:
+    text: '{city_name}'
+    language_code: prs
+    direction: rtl
+  slots:
+    city_name: *id003
+  answer_derivation:
+    kind: slot_gloss
+    slot: city_name
+  feedback_frame:
+    text: '{city_name} is a place name used with از (from).'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit02.lesson02.city_order.003
+  lesson_content_key: prs.a1.unit02.lesson02.origin_and_hometown
+  type: word_order
+  frame:
+    text: من از {city_name} استم
+    language_code: prs
+    direction: rtl
+  slots:
+    city_name: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: من از {city_name} استم
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'Word order: من از [city] استم.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit02.lesson02.city_pair.004
+  lesson_content_key: prs.a1.unit02.lesson02.origin_and_hometown
+  type: matching_pairs
+  frame:
+    text: '{city_name_one} — {city_name_two} — {city_name_three} — {city_name_four} — {city_name_five}'
+    language_code: prs
+    direction: rtl
+  slots:
+    city_name_one: *id004
+    city_name_two: *id004
+    city_name_three: *id004
+    city_name_four: *id004
+    city_name_five: *id004
+  slot_relations:
+  - kind: distinct
+    slots:
+    - city_name_one
+    - city_name_two
+    - city_name_three
+    - city_name_four
+    - city_name_five
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - city_name_one
+    - city_name_two
+    - city_name_three
+    - city_name_four
+    - city_name_five
+  feedback_frame:
+    text: Match each place name to its English label.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit02.lesson02.country_translate.005
+  lesson_content_key: prs.a1.unit02.lesson02.origin_and_hometown
+  type: translation
+  frame:
+    text: '{country}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      country: english_gloss
+  slots:
+    country: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: country
+  feedback_frame:
+    text: '{country} is the country name taught in this lesson.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit02.lesson03.occupation_gloss.001
+  lesson_content_key: prs.a1.unit02.lesson03.occupation
+  type: multiple_choice
+  frame:
+    text: '{occupation}'
+    language_code: prs
+    direction: rtl
+  slots:
+    occupation: *id006
+  answer_derivation:
+    kind: slot_gloss
+    slot: occupation
+  feedback_frame:
+    text: '{occupation} names a job.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit02.lesson03.occupation_translate.003
+  lesson_content_key: prs.a1.unit02.lesson03.occupation
+  type: translation
+  frame:
+    text: '{occupation}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      occupation: english_gloss
+  slots:
+    occupation: *id006
+  answer_derivation:
+    kind: slot_text
+    slot: occupation
+  feedback_frame:
+    text: '{occupation} is the Dari word for this job.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit02.lesson03.occupation_pair.004
+  lesson_content_key: prs.a1.unit02.lesson03.occupation
+  type: matching_pairs
+  frame:
+    text: '{occupation_one} — {occupation_two} — {occupation_three} — {occupation_four}'
+    language_code: prs
+    direction: rtl
+  slots:
+    occupation_one: *id006
+    occupation_two: *id006
+    occupation_three: *id006
+    occupation_four: *id006
+  slot_relations:
+  - kind: distinct
+    slots:
+    - occupation_one
+    - occupation_two
+    - occupation_three
+    - occupation_four
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - occupation_one
+    - occupation_two
+    - occupation_three
+    - occupation_four
+  feedback_frame:
+    text: Match each job to its English label.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit02.lesson04.relationship_gloss.001
+  lesson_content_key: prs.a1.unit02.lesson04.introducing_others
+  type: multiple_choice
+  frame:
+    text: '{relationship_word}'
+    language_code: prs
+    direction: rtl
+  slots:
+    relationship_word: *id007
+  answer_derivation:
+    kind: slot_gloss
+    slot: relationship_word
+  feedback_frame:
+    text: '{relationship_word} names a person you know.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit02.lesson04.this_is_person_order.003
+  lesson_content_key: prs.a1.unit02.lesson04.introducing_others
+  type: word_order
+  frame:
+    text: این {person_name} است
+    language_code: prs
+    direction: rtl
+  slots:
+    person_name: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: این {person_name} است
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: این [name] است names who is being introduced.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit02.lesson04.relationship_translate.004
+  lesson_content_key: prs.a1.unit02.lesson04.introducing_others
+  type: translation
+  frame:
+    text: '{relationship_word}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      relationship_word: english_gloss
+  slots:
+    relationship_word: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: relationship_word
+  feedback_frame:
+    text: '{relationship_word} is the Dari word for this.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit02.lesson05.title_translate.002
+  lesson_content_key: prs.a1.unit02.lesson05.polite_titles_and_register
+  type: translation
+  frame:
+    text: '{title}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      title: english_gloss
+  slots:
+    title: *id008
+  answer_derivation:
+    kind: slot_text
+    slot: title
+  feedback_frame:
+    text: '{title} is the Dari word for this polite title.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit02.lesson05.politeness_gloss.003
+  lesson_content_key: prs.a1.unit02.lesson05.polite_titles_and_register
+  type: multiple_choice
+  frame:
+    text: '{politeness_word}'
+    language_code: prs
+    direction: rtl
+  slots:
+    politeness_word: *id009
+  answer_derivation:
+    kind: slot_gloss
+    slot: politeness_word
+  feedback_frame:
+    text: '{politeness_word} is used in polite speech.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit02.lesson05.politeness_translate.004
+  lesson_content_key: prs.a1.unit02.lesson05.polite_titles_and_register
+  type: translation
+  frame:
+    text: '{politeness_word}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      politeness_word: english_gloss
+  slots:
+    politeness_word: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: politeness_word
+  feedback_frame:
+    text: '{politeness_word} is the Dari word for this.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit02.lesson06.dialogue_gloss.001
+  lesson_content_key: prs.a1.unit02.lesson06.gathering_dialogue
+  type: multiple_choice
+  frame:
+    text: '{dialogue_word}'
+    language_code: prs
+    direction: rtl
+  slots:
+    dialogue_word: *id010
+  answer_derivation:
+    kind: slot_gloss
+    slot: dialogue_word
+  feedback_frame:
+    text: '{dialogue_word} appears in the gathering dialogue.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit02.lesson06.dialogue_translate.002
+  lesson_content_key: prs.a1.unit02.lesson06.gathering_dialogue
+  type: translation
+  frame:
+    text: '{dialogue_word}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      dialogue_word: english_gloss
+  slots:
+    dialogue_word: *id010
+  answer_derivation:
+    kind: slot_text
+    slot: dialogue_word
+  feedback_frame:
+    text: '{dialogue_word} is the Dari word for this.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit02.lesson06.dialogue_pair.003
+  lesson_content_key: prs.a1.unit02.lesson06.gathering_dialogue
+  type: matching_pairs
+  frame:
+    text: '{dialogue_word_one} — {dialogue_word_two} — {dialogue_word_three} — {dialogue_word_four} — {dialogue_word_five}
+      — {dialogue_word_six} — {dialogue_word_seven} — {dialogue_word_eight} — {dialogue_word_nine} — {dialogue_word_ten}'
+    language_code: prs
+    direction: rtl
+  slots:
+    dialogue_word_one: *id010
+    dialogue_word_two: *id010
+    dialogue_word_three: *id010
+    dialogue_word_four: *id010
+    dialogue_word_five: *id010
+    dialogue_word_six: *id010
+    dialogue_word_seven: *id010
+    dialogue_word_eight: *id010
+    dialogue_word_nine: *id010
+    dialogue_word_ten: *id010
+  slot_relations:
+  - kind: distinct
+    slots:
+    - dialogue_word_one
+    - dialogue_word_two
+    - dialogue_word_three
+    - dialogue_word_four
+    - dialogue_word_five
+    - dialogue_word_six
+    - dialogue_word_seven
+    - dialogue_word_eight
+    - dialogue_word_nine
+    - dialogue_word_ten
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - dialogue_word_one
+    - dialogue_word_two
+    - dialogue_word_three
+    - dialogue_word_four
+    - dialogue_word_five
+    - dialogue_word_six
+    - dialogue_word_seven
+    - dialogue_word_eight
+    - dialogue_word_nine
+    - dialogue_word_ten
+  feedback_frame:
+    text: Match each dialogue word to its English label.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit02.lesson02.city_order.003.volume_fill.002
+  lesson_content_key: prs.a1.unit02.lesson02.origin_and_hometown
+  type: fill_in_blank
+  frame:
+    text: من از {city_name} استم
+    language_code: prs
+    direction: rtl
+  slots:
+    city_name:
+      language_code: prs
+      part_of_speech: proper_noun
+      agreement_tags:
+        semantic: volume_en_prs_a1_unit02_city_name_02_single
+  answer_derivation:
+    kind: slot_text
+    slot: city_name
+  feedback_frame:
+    text: '{city_name}'
+    language_code: prs
+    direction: rtl
+- content_key: practice.en-prs.prs.a1.unit02.lesson04.this_is_person_order.003.volume_fill.004
+  lesson_content_key: prs.a1.unit02.lesson04.introducing_others
+  type: fill_in_blank
+  frame:
+    text: این {person_name} است
+    language_code: prs
+    direction: rtl
+  slots:
+    person_name:
+      language_code: prs
+      part_of_speech: proper_noun
+      agreement_tags:
+        semantic: volume_en_prs_a1_unit02_person_name_04_single
+  answer_derivation:
+    kind: slot_text
+    slot: person_name
+  feedback_frame:
+    text: '{person_name}'
+    language_code: prs
+    direction: rtl

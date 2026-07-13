@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: '1.0'
 pack_key: practice.nl-en.a1.unit42
 source_language: nl
 target_language: en
@@ -6,77 +6,251 @@ unit_content_key: en.a1.unit42.personality
 review:
   status: reviewed
   fresh_context: true
-  notes: "Authored 2026-07-11, nl-en depth-completion sprint (see
-    a1_unit30.yaml's notes for the sprint context). 6-member
-    'personality_adj' tag (all 6 lesson01 vocabulary items --
-    friendly/funny/hardworking/shy/calm/talkative, all adjectives) used
-    both for bare-word recognition/matching AND a real generative
-    frame, 'She is {item}.' -- verified grammatical for every member as
-    a predicate adjective (the unit's own examples already use each one
-    this way: 'My neighbor is very friendly.'/'My brother is really
-    funny.'/'She is a hardworking employee.'/'He's a little shy at
-    first.'/'My mother is very calm.'/'My sister is very talkative.').
-    Extended
-    scripts/_en_target_lexeme_common.py/scripts/backfill_lexemes_nl_en.py
-    with every introduced_token this unit's realization uses --
-    including a real cross-unit homograph: 'friendly' was already
-    classified adjective for unit32 (pets) and unit39 (neighborhood);
-    reused unchanged here (same POS, same word), not redeclared. Every
-    slot's real candidate count verified with
-    scripts/_practice_slot_check.py (6 distinct, above the >=3 floor).
-    Needs the standard fresh-context review before import.
-    FRESH-CONTEXT REVIEW ADDENDUM (2026-07-11, zero access to authoring
-    reasoning): lesson_content_keys (lesson01.personality_vocabulary, lesson02.talking_about_someones_character) resolve to real lessons in en/a1_unit42_personality.yaml. personality_adj (6 members = vriendelijk/grappig/hardwerkend/verlegen/kalm/praatgraag, all distinct) drives frame 'She is {item}', grammatical for every predicate adjective and matching the unit's own examples; the cross-unit 'friendly' homograph is reused unchanged (same adjective POS across units 32/39/42). No bare YAML booleans, no snake_case learner-facing
-    leaks. Validation: compiler practice-validate 0/0 across the full
-    42-pack nl-en set, scripts/_practice_slot_check.py OK,
-    backfill_lexemes_nl_en.py --dry-run clean. Upgrading to reviewed."
+  notes: 'Authored 2026-07-11, nl-en depth-completion sprint (see a1_unit30.yaml''s notes for the sprint context). 6-member
+    ''personality_adj'' tag (all 6 lesson01 vocabulary items -- friendly/funny/hardworking/shy/calm/talkative, all adjectives)
+    used both for bare-word recognition/matching AND a real generative frame, ''She is {item}.'' -- verified grammatical for
+    every member as a predicate adjective (the unit''s own examples already use each one this way: ''My neighbor is very friendly.''/''My
+    brother is really funny.''/''She is a hardworking employee.''/''He''s a little shy at first.''/''My mother is very calm.''/''My
+    sister is very talkative.''). Extended scripts/_en_target_lexeme_common.py/scripts/backfill_lexemes_nl_en.py with every
+    introduced_token this unit''s realization uses -- including a real cross-unit homograph: ''friendly'' was already classified
+    adjective for unit32 (pets) and unit39 (neighborhood); reused unchanged here (same POS, same word), not redeclared. Every
+    slot''s real candidate count verified with scripts/_practice_slot_check.py (6 distinct, above the >=3 floor). Needs the
+    standard fresh-context review before import. FRESH-CONTEXT REVIEW ADDENDUM (2026-07-11, zero access to authoring reasoning):
+    lesson_content_keys (lesson01.personality_vocabulary, lesson02.talking_about_someones_character) resolve to real lessons
+    in en/a1_unit42_personality.yaml. personality_adj (6 members = vriendelijk/grappig/hardwerkend/verlegen/kalm/praatgraag,
+    all distinct) drives frame ''She is {item}'', grammatical for every predicate adjective and matching the unit''s own examples;
+    the cross-unit ''friendly'' homograph is reused unchanged (same adjective POS across units 32/39/42). No bare YAML booleans,
+    no snake_case learner-facing leaks. Validation: compiler practice-validate 0/0 across the full 42-pack nl-en set, scripts/_practice_slot_check.py
+    OK, backfill_lexemes_nl_en.py --dry-run clean. Upgrading to reviewed.'
 tag_schema:
-  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
   agreement_tags:
-    semantic: [personality_adj]
+    semantic:
+    - personality_adj
+    - volume_nl_en_a1_unit42_item_01_single
 slot_presets:
-  personality_adj: &personality_adj {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: personality_adj}}
+  personality_adj: &id001
+    language_code: en
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: personality_adj
 templates:
-  - content_key: practice.nl-en.en.a1.unit42.lesson01.choose.001
-    lesson_content_key: en.a1.unit42.lesson01.personality_vocabulary
-    type: multiple_choice
-    frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *personality_adj}
-    answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is een woord uit deze les.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit42.lesson01.listen.002
-    lesson_content_key: en.a1.unit42.lesson01.personality_vocabulary
-    type: listen_select
-    frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *personality_adj}
-    answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is het woord dat je hoorde.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit42.lesson01.match.003
-    lesson_content_key: en.a1.unit42.lesson01.personality_vocabulary
-    type: matching_pairs
-    frame: {text: "{first} · {second}", language_code: en, direction: ltr}
-    slots: {first: *personality_adj, second: *personality_adj, third: *personality_adj, fourth: *personality_adj, fifth: *personality_adj, sixth: *personality_adj}
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
-    feedback_frame: {text: "Verbind elk woord met de Nederlandse betekenis.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit42.lesson01.translate.004
-    lesson_content_key: en.a1.unit42.lesson01.personality_vocabulary
-    type: translation
-    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
-    slots: {item: *personality_adj}
-    answer_derivation: {kind: slot_text, slot: item}
-    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit42.lesson01.order.005
-    lesson_content_key: en.a1.unit42.lesson01.personality_vocabulary
-    type: word_order
-    frame: {text: "She is {item}", language_code: en, direction: ltr}
-    slots: {item: *personality_adj}
-    answer_derivation: {kind: render_frame, frame: {text: "She is {item}", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} is de genoemde eigenschap.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit42.lesson02.translate.001
-    lesson_content_key: en.a1.unit42.lesson02.talking_about_someones_character
-    type: translation
-    frame: {text: "Ze is {item}.", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
-    slots: {item: *personality_adj}
-    answer_derivation: {kind: render_frame, frame: {text: "She is {item}", language_code: en, direction: ltr}}
-    feedback_frame: {text: "She is {item}. betekent Ze is {item}.", language_code: nl, direction: ltr}
+- content_key: practice.nl-en.en.a1.unit42.lesson01.choose.001
+  lesson_content_key: en.a1.unit42.lesson01.personality_vocabulary
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is een woord uit deze les.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit42.lesson01.listen.002
+  lesson_content_key: en.a1.unit42.lesson01.personality_vocabulary
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is het woord dat je hoorde.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit42.lesson01.match.003
+  lesson_content_key: en.a1.unit42.lesson01.personality_vocabulary
+  type: matching_pairs
+  frame:
+    text: '{first} · {second}'
+    language_code: en
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Verbind elk woord met de Nederlandse betekenis.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit42.lesson01.translate.004
+  lesson_content_key: en.a1.unit42.lesson01.personality_vocabulary
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: De Engelse vertaling is {item}.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit42.lesson01.order.005
+  lesson_content_key: en.a1.unit42.lesson01.personality_vocabulary
+  type: word_order
+  frame:
+    text: She is {item}
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: She is {item}
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: '{item} is de genoemde eigenschap.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit42.lesson02.translate.001
+  lesson_content_key: en.a1.unit42.lesson02.talking_about_someones_character
+  type: translation
+  frame:
+    text: Ze is {item}.
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: She is {item}
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: She is {item}. betekent Ze is {item}.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit42.lesson02.translate.001.volume_fill.001
+  lesson_content_key: en.a1.unit42.lesson02.talking_about_someones_character
+  type: fill_in_blank
+  frame:
+    text: She is {item}
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: volume_nl_en_a1_unit42_item_01_single
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit42.lesson02.translate.001.volume_order.001
+  lesson_content_key: en.a1.unit42.lesson02.talking_about_someones_character
+  type: word_order
+  frame:
+    text: She is {item}
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: personality_adj
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: She is {item}
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: She is {item}
+    language_code: en
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit42.lesson01.match.003.volume_match.007
+  lesson_content_key: en.a1.unit42.lesson01.personality_vocabulary
+  type: matching_pairs
+  frame:
+    text: '{first} · {second}'
+    language_code: en
+    direction: ltr
+  slots:
+    first: &id002
+      language_code: en
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: personality_adj
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Verbind elk woord met de Nederlandse betekenis.
+    language_code: nl
+    direction: ltr

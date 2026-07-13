@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: '1.0'
 pack_key: practice.fa-en.a1.unit42
 source_language: fa
 target_language: en
@@ -6,74 +6,254 @@ unit_content_key: en.a1.unit42.personality
 review:
   status: reviewed
   fresh_context: true
-  notes: >-
-    Authored 2026-07-11, fa-en depth-audit lane (unit 13, final unit of
-    the 30-42 batch, see unit30's pack notes for the full batch
-    rationale).
+  notes: 'Authored 2026-07-11, fa-en depth-audit lane (unit 13, final unit of the 30-42 batch, see unit30''s pack notes for
+    the full batch rationale).
 
-    One semantic tag: 'personality_adjective' (friendly/funny/
-    hardworking/shy/calm/talkative from lesson01, six genuine
-    personality adjectives, all gradable with "very" and all safe in
-    "My neighbor is very {item}.").
+    One semantic tag: ''personality_adjective'' (friendly/funny/ hardworking/shy/calm/talkative from lesson01, six genuine
+    personality adjectives, all gradable with "very" and all safe in "My neighbor is very {item}.").
 
-    Anchoring check: lesson01 introduces all six personality adjectives
-    as real new lexemes, verified via iter_specs(). Slot candidate count
-    verified with scripts/_practice_slot_check.py and compile_content.py
-    practice-validate. Needs the standard fresh-context review before
-    import.
+    Anchoring check: lesson01 introduces all six personality adjectives as real new lexemes, verified via iter_specs(). Slot
+    candidate count verified with scripts/_practice_slot_check.py and compile_content.py practice-validate. Needs the standard
+    fresh-context review before import.
 
-    This closes out the 13-unit fa-en depth-audit batch (units 30-42) --
-    scripts/practice_manifest.txt's fa-en line extended with all 13 new
-    pack paths, and only that line.
+    This closes out the 13-unit fa-en depth-audit batch (units 30-42) -- scripts/practice_manifest.txt''s fa-en line extended
+    with all 13 new pack paths, and only that line.
 
-    Fresh-context review 2026-07-11 (zero access to authoring reasoning): found and fixed an inaccurate Farsi gloss in the shared backfill (scripts/backfill_lexemes_fa_en.py) -- 'friendly' was glossed "دوست‌داشتنی (حیوان اهلی)" ("lovable (pet animal)"), the wrong sense with an irrelevant pet parenthetical that leaked into this unit's personality_adjective exercises; corrected to "مهربان". All slot members taught, the generative "My neighbor is very {item}" frame grammatical for all six adjectives, answer shapes and feedback sound. compile_content.py practice-validate, scripts/_practice_slot_check.py, and backfill_lexemes_fa_en.py --dry-run all clean. Upgraded to reviewed.
+    Fresh-context review 2026-07-11 (zero access to authoring reasoning): found and fixed an inaccurate Farsi gloss in the
+    shared backfill (scripts/backfill_lexemes_fa_en.py) -- ''friendly'' was glossed "دوست‌داشتنی (حیوان اهلی)" ("lovable (pet
+    animal)"), the wrong sense with an irrelevant pet parenthetical that leaked into this unit''s personality_adjective exercises;
+    corrected to "مهربان". All slot members taught, the generative "My neighbor is very {item}" frame grammatical for all
+    six adjectives, answer shapes and feedback sound. compile_content.py practice-validate, scripts/_practice_slot_check.py,
+    and backfill_lexemes_fa_en.py --dry-run all clean. Upgraded to reviewed.'
 tag_schema:
-  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
   agreement_tags:
-    semantic: [personality_adjective]
+    semantic:
+    - personality_adjective
+    - volume_fa_en_a1_unit42_item_01_single
 slot_presets:
-  personality_adjective: &personality_adjective {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: personality_adjective}}
+  personality_adjective: &id001
+    language_code: en
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: personality_adjective
 templates:
-  - content_key: practice.fa-en.en.a1.unit42.lesson01.choose.001
-    lesson_content_key: en.a1.unit42.lesson01.personality_vocabulary
-    type: multiple_choice
-    frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *personality_adjective}
-    answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit42.lesson01.listen.002
-    lesson_content_key: en.a1.unit42.lesson01.personality_vocabulary
-    type: listen_select
-    frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *personality_adjective}
-    answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "واژه‌ای که شنیدید {item} بود.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit42.lesson01.match.003
-    lesson_content_key: en.a1.unit42.lesson01.personality_vocabulary
-    type: matching_pairs
-    frame: {text: "{first} — {second}", language_code: en, direction: ltr}
-    slots: {first: *personality_adjective, second: *personality_adjective, third: *personality_adjective, fourth: *personality_adjective, fifth: *personality_adjective, sixth: *personality_adjective}
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
-    feedback_frame: {text: "هر صفت را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit42.lesson01.translate.004
-    lesson_content_key: en.a1.unit42.lesson01.personality_vocabulary
-    type: translation
-    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
-    slots: {item: *personality_adjective}
-    answer_derivation: {kind: slot_text, slot: item}
-    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این صفت است.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit42.lesson01.order.005
-    lesson_content_key: en.a1.unit42.lesson01.personality_vocabulary
-    type: word_order
-    frame: {text: "My neighbor is very {item}", language_code: en, direction: ltr}
-    slots: {item: *personality_adjective}
-    answer_derivation: {kind: render_frame, frame: {text: "My neighbor is very {item}", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} صفتی است که ذکر شد.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit42.lesson01.translate_sentence.006
-    lesson_content_key: en.a1.unit42.lesson01.personality_vocabulary
-    type: translation
-    frame: {text: "همسایه‌م خیلی {item}ه.", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
-    slots: {item: *personality_adjective}
-    answer_derivation: {kind: render_frame, frame: {text: "My neighbor is very {item}", language_code: en, direction: ltr}}
-    feedback_frame: {text: "My neighbor is very {item}. یعنی همسایه‌م خیلی {item}ه.", language_code: fa, direction: rtl}
+- content_key: practice.fa-en.en.a1.unit42.lesson01.choose.001
+  lesson_content_key: en.a1.unit42.lesson01.personality_vocabulary
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: معنی فارسی {item} را انتخاب کنید.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit42.lesson01.listen.002
+  lesson_content_key: en.a1.unit42.lesson01.personality_vocabulary
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: واژه‌ای که شنیدید {item} بود.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit42.lesson01.match.003
+  lesson_content_key: en.a1.unit42.lesson01.personality_vocabulary
+  type: matching_pairs
+  frame:
+    text: '{first} — {second}'
+    language_code: en
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: هر صفت را به معنی فارسی خودش وصل کنید.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit42.lesson01.translate.004
+  lesson_content_key: en.a1.unit42.lesson01.personality_vocabulary
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: پاسخ درست، معادل انگلیسی این صفت است.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit42.lesson01.order.005
+  lesson_content_key: en.a1.unit42.lesson01.personality_vocabulary
+  type: word_order
+  frame:
+    text: My neighbor is very {item}
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: My neighbor is very {item}
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: '{item} صفتی است که ذکر شد.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit42.lesson01.translate_sentence.006
+  lesson_content_key: en.a1.unit42.lesson01.personality_vocabulary
+  type: translation
+  frame:
+    text: همسایه‌م خیلی {item}ه.
+    language_code: fa
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: My neighbor is very {item}
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: My neighbor is very {item}. یعنی همسایه‌م خیلی {item}ه.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit42.lesson01.translate_sentence.006.volume_fill.001
+  lesson_content_key: en.a1.unit42.lesson01.personality_vocabulary
+  type: fill_in_blank
+  frame:
+    text: My neighbor is very {item}
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: volume_fa_en_a1_unit42_item_01_single
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+- content_key: practice.fa-en.en.a1.unit42.lesson01.translate_sentence.006.volume_order.001
+  lesson_content_key: en.a1.unit42.lesson01.personality_vocabulary
+  type: word_order
+  frame:
+    text: My neighbor is very {item}
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: personality_adjective
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: My neighbor is very {item}
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: My neighbor is very {item}
+    language_code: en
+    direction: ltr
+- content_key: practice.fa-en.en.a1.unit42.lesson01.match.003.volume_match.007
+  lesson_content_key: en.a1.unit42.lesson01.personality_vocabulary
+  type: matching_pairs
+  frame:
+    text: '{first} — {second}'
+    language_code: en
+    direction: ltr
+  slots:
+    first: &id002
+      language_code: en
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: personality_adjective
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: هر صفت را به معنی فارسی خودش وصل کنید.
+    language_code: fa
+    direction: rtl
