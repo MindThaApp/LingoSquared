@@ -1245,3 +1245,17 @@ to status: reviewed.
 New bug class discovered: no.
 Instance count: 10 fixed across 3 files. Lane yield trajectory for the
 first B2 wave: ~17 -> 10 -> 0 outstanding.
+
+### 2026-07-14 — nl-en B2 overlays u01-03 fresh-context review + fix (Codex both)
+Bug classes found: 9 — 3 stale accepted_answers (overlay authored against a
+realization sentence the coordinator subsequently fixed — sequencing
+artifact, not an authoring defect class; lesson: re-sync overlays after ANY
+realization edit), 3 two-correct-answer multiple_choice (distractor also
+satisfied the instruction; fixed by narrowing the Dutch instruction to name
+the exact modal/form — the right fix at B2 where near-synonymous forms are
+the teaching point), 3 calqued/drifted Dutch glosses (incl. "betrokkenheid"
+for stance-commitment → "stelligheid"). Reviewer confirmed genuine
+interference-error work (not a translation layer) in all three files.
+New bug class discovered: no (all known classes or sequencing artifacts).
+Instance count: 9 fixed across 3 files; compiler 0 errors; wired as
+nl-en-b2 manifest course; verify.sh --content-only PASS on full corpus.
