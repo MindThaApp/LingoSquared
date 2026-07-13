@@ -1233,3 +1233,15 @@ authoring preflight for B1+ tiers rather than a validator (judgment
 call, not rule-shaped).
 Instance count: fixes dispatched to Codex same session; re-review
 required before status: reviewed.
+
+### 2026-07-14 — B2 en units 01-03 RE-review + second fix round (Codex both)
+Bug classes found: 10 residual findings, all in the two known classes —
+untaught-vocabulary-in-example-sentences (6) and underdetermined
+production prompts (4). Structural checks (spine alignment, pacing,
+dialogue attribution, character canon, register, boolean coercion) came
+back clean. All 10 fixed via the reviewer's own suggested wording;
+coordinator diff-verified each against the finding list. Units flipped
+to status: reviewed.
+New bug class discovered: no.
+Instance count: 10 fixed across 3 files. Lane yield trajectory for the
+first B2 wave: ~17 -> 10 -> 0 outstanding.
