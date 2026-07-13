@@ -7,6 +7,21 @@ Division of labor). Root `CLAUDE.md` still governs cross-cutting footguns
 (git/worktree/agent, the DB-isolation-for-concurrent-workers rule) and
 the non-negotiable verification bar.
 
+## Standing invariants (these used to live in root's shipped-phases list —
+## they are RULES, so they live here now, where they auto-load for you)
+
+- **Every migration after 0001 must be fresh-migrate-safe** — a fresh
+  `alembic upgrade head` on an empty DB must succeed, not just an incremental
+  upgrade from the previous revision.
+- **Grading success is `quality >= 3`, NEVER a truthiness check on `correct`.**
+  Since Phase C, `correct` can be the STRING `"incorrect"` — which is truthy.
+  Any `if correct:` in a grading/SRS path is a live bug.
+- **`content_key` is unique PER COURSE, never globally** (migration 0015):
+  fa-en/nl-en/prs-en share one English realization, so content_keys repeat
+  across courses. A global unique index 500s the second course's import.
+- **Phase F checkpoints must never touch per-item SRS**, force
+  `orthography_strict = True`, and stay idempotent.
+
 ## Migrations
 
 - **Every migration after 0001 must defensively check existence before
