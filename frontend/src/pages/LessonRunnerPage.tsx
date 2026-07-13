@@ -21,6 +21,7 @@ import type {
   PracticeItem,
   TeachingCard,
 } from "@lingo/shared/api/types";
+import { asExerciseType } from "@lingo/shared/api/types";
 
 interface QueueItem {
   exercise: Exercise;
@@ -346,7 +347,7 @@ export function LessonRunnerPage() {
         </div>
         <ExerciseRenderer
           key={item.id}
-          exercise={{ id: item.id, type: item.type, order: 0, prompt: item.prompt }}
+          exercise={{ id: item.id, type: asExerciseType(item.type), order: 0, prompt: item.prompt }}
           onAnswer={handleReviewAnswer}
           disabled={reviewSubmitting || Boolean(reviewResult)}
           gradedResult={

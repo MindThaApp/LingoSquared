@@ -227,10 +227,27 @@ export interface Streak {
   active_today: boolean;
 }
 
+// "conversation" is a practice-feed-only, multi-turn item (mode=conversation):
+// its prompt carries a node graph, not an ExercisePrompt, and it is rendered by
+// ConversationRunner, NOT by ExerciseRenderer. It is deliberately kept OUT of
+// ExerciseType so the exhaustive exercise-type registration check keeps working.
+export type PracticeItemType = ExerciseType | "conversation";
+
 export interface PracticeItem {
   id: string;
-  type: ExerciseType;
+  type: PracticeItemType;
   prompt: ExercisePrompt;
+}
+
+// Review, checkpoint and lesson runners share PracticeItem but can never
+// receive a conversation item (only the practice feed's mode=conversation
+// emits them). This narrows for those callers and fails loudly rather than
+// silently rendering a broken card if that assumption is ever violated.
+export function asExerciseType(type: PracticeItemType): ExerciseType {
+  if (type === "conversation") {
+    throw new Error("conversation items are only renderable by ConversationRunner");
+  }
+  return type;
 }
 
 export interface PracticeBatchResult {

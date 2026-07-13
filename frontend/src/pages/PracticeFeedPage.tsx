@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { CatalogApi, PracticeApi, ProgressApi } from "@lingo/shared/api/endpoints";
 import { ExerciseRenderer } from "../components/exercises/ExerciseRenderer";
+import { ConversationRunner, type ConversationPrompt } from "../components/ConversationRunner";
 import { ReportIssueButton } from "../components/ReportIssueButton";
 import { ApiError } from "@lingo/shared/api/client";
 import { formatCorrectResponse } from "@lingo/shared/lib/formatAnswer";
@@ -77,6 +78,25 @@ function PracticeCard({
 
   function handleRetryAnswer() {
     if (lastResponse) handleAnswer(lastResponse);
+  }
+
+  // Conversation items are multi-turn: the runner owns its own submit loop and
+  // node advancement, so it bypasses the one-shot ExerciseRenderer/result path.
+  if (item.type === "conversation") {
+    return (
+      <div className="card practice-card">
+        <ConversationRunner
+          itemId={item.id}
+          prompt={item.prompt as unknown as ConversationPrompt}
+          onAnswered={onAnswered}
+        />
+        <ReportIssueButton
+          onSubmit={(category, description, response) =>
+            PracticeApi.reportIssue(item.id, category, description, response)
+          }
+        />
+      </div>
+    );
   }
 
   return (
