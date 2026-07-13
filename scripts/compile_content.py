@@ -1563,6 +1563,24 @@ def _normalized_contains(haystack: str, needle: str) -> bool:
     return normalized_needle in normalized_haystack
 
 
+def _normalized_token_subset(haystack: str, needle: str) -> bool:
+    normalized_haystack = normalize_audio_text(haystack)
+    normalized_needle = normalize_audio_text(needle)
+    if not normalized_haystack or not normalized_needle:
+        return False
+
+    haystack_tokens = set(normalized_haystack.split())
+    needle_tokens = set(normalized_needle.split())
+    return bool(needle_tokens) and needle_tokens <= haystack_tokens
+
+
+def _media_asset_text_matches_reference(asset_text: str, reference_text: str) -> bool:
+    return (
+        _normalized_contains(asset_text, reference_text)
+        or _normalized_token_subset(asset_text, reference_text)
+    )
+
+
 def normalize_audio_text(value: Any) -> str | None:
     if not isinstance(value, str):
         return None
@@ -2560,22 +2578,63 @@ def validate_audio_references(
     realization: dict[str, Any],
     report: Report,
 ):
-    declared = {
-        item.get("content_key")
-        for item in realization.get("media_assets", [])
-        if isinstance(item, dict) and item.get("content_key")
-    }
+    assets = _media_assets_by_key(realization)
+
+    def reference_text(value: dict[str, Any]) -> str | None:
+        tested_text = value.get("tested_text")
+        if isinstance(tested_text, str) and tested_text.strip():
+            return tested_text
+
+        target = value.get("target")
+        if isinstance(target, dict):
+            target_text = target.get("text")
+            if isinstance(target_text, str) and target_text.strip():
+                return target_text
+
+        return None
+
+    def media_key_location(location: str, value: dict[str, Any]) -> str:
+        content_key = value.get("content_key")
+        if isinstance(content_key, str) and content_key.strip():
+            if "tested_text" in value or "type" in value:
+                return f"realization.exercises.{content_key}.media_asset_key"
+            if "target" in value or "kind" in value:
+                return f"realization.teaching.{content_key}.media_asset_key"
+        return f"{location}.media_asset_key"
 
     for location, value in walk(realization, "realization"):
         if not isinstance(value, dict):
             continue
         media_key = value.get("media_asset_key")
-        if media_key and media_key not in declared:
-            report.warn(
-                location,
-                f"media asset {media_key!r} is not declared yet; "
-                "audio generation is deferred",
+        if not media_key:
+            continue
+
+        field_location = media_key_location(location, value)
+        asset = assets.get(media_key)
+        if not isinstance(asset, dict):
+            report.error(
+                field_location,
+                f"media asset {media_key!r} is not declared in "
+                "realization.media_assets",
             )
+            continue
+
+        text = reference_text(value)
+        if text is None:
+            continue
+
+        asset_text = _media_asset_text(asset)
+        if not asset_text:
+            continue
+
+        if _media_asset_text_matches_reference(asset_text, text):
+            continue
+
+        report.warn(
+            field_location,
+            f"media asset {media_key!r} text/script does not appear to "
+            f"match referenced text {text!r}",
+        )
 
     if realization.get("omitted_lessons"):
         report.warn(
