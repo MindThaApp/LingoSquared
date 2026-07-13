@@ -2,7 +2,7 @@ import { useCallback, useState } from "react";
 import { getAnswerInputMode, setAnswerInputMode, type AnswerInputMode } from "@lingo/shared/lib/answerInputMode";
 import { micRecordingSupported, useMicRecorder } from "./useMicRecorder";
 import { clientTranscriptionSupported, transcribeClientSide } from "./whisperClient";
-import { transcribeViaServer } from "../api/stt";
+import { transcribeViaServerDetailed, type SpokenWord } from "../api/stt";
 
 export type SpeechAnswerStatus = "idle" | "recording" | "transcribing" | "error";
 
@@ -24,6 +24,11 @@ export function useSpeechAnswer(languageCode: string, onTranscript: (text: strin
   const [mode, setModeState] = useState<AnswerInputMode>(() => getAnswerInputMode());
   const [status, setStatus] = useState<SpeechAnswerStatus>("idle");
   const [error, setError] = useState<SpeechAnswerErrorCode | null>(null);
+  // Per-word confidence for pronunciation feedback. Only the server path
+  // returns it (the WASM model doesn't expose token probabilities), so it
+  // stays null on the client path — the UI must treat it as optional, never
+  // as "no feedback means perfect".
+  const [words, setWords] = useState<SpokenWord[] | null>(null);
   const recorder = useMicRecorder();
 
   const setMode = useCallback((next: AnswerInputMode) => {
@@ -58,13 +63,16 @@ export function useSpeechAnswer(languageCode: string, onTranscript: (text: strin
       return;
     }
     setStatus("transcribing");
+    setWords(null);
     try {
       let transcript: string;
       try {
         if (!clientTranscriptionSupported()) throw new Error("client_transcription_unsupported");
         transcript = await transcribeClientSide(blob, languageCode);
       } catch {
-        transcript = await transcribeViaServer(blob, languageCode);
+        const detailed = await transcribeViaServerDetailed(blob, languageCode);
+        transcript = detailed.transcript;
+        setWords(detailed.words ?? null);
       }
       const trimmed = transcript.trim();
       if (!trimmed) {
@@ -84,6 +92,7 @@ export function useSpeechAnswer(languageCode: string, onTranscript: (text: strin
     recorder.cancel();
     setStatus("idle");
     setError(null);
+    setWords(null);
   }, [recorder]);
 
   return {
@@ -91,6 +100,7 @@ export function useSpeechAnswer(languageCode: string, onTranscript: (text: strin
     setMode,
     status,
     error,
+    words,
     beginRecording,
     finishRecording,
     cancelRecording,

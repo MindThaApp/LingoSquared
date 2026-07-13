@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { micRecordingSupported } from "../lib/useMicRecorder";
 import { useSpeechAnswer } from "../lib/useSpeechAnswer";
+import { PronunciationFeedback } from "./PronunciationFeedback";
 import type { AnswerInputMode } from "@lingo/shared/lib/answerInputMode";
 
 // Shared mic/keyboard toggle + record/transcribe UI for speak_response and
@@ -18,7 +19,7 @@ export function VoiceCaptureControls({
   disabled: boolean;
 }) {
   const { t } = useTranslation();
-  const { mode, setMode, status, error, beginRecording, finishRecording, cancelRecording } =
+  const { mode, setMode, status, error, words, beginRecording, finishRecording, cancelRecording } =
     useSpeechAnswer(languageCode, onTranscript);
 
   if (!micRecordingSupported()) {
@@ -80,6 +81,10 @@ export function VoiceCaptureControls({
           {t(`voice_answer.error_${error}`)}
         </p>
       )}
+      {/* Only the server STT path returns word confidences, so this is absent
+          on the client-side WASM path. Absent means "no signal", never "your
+          pronunciation was perfect" — the component renders nothing at all. */}
+      <PronunciationFeedback words={words} />
     </div>
   );
 }
