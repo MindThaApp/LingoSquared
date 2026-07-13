@@ -267,6 +267,18 @@ def _language_direction(language_code: str) -> str:
     return "rtl" if language_code in {"ar", "fa", "prs"} else "ltr"
 
 
+def _language_english_name(language_code: str) -> str:
+    # Mirrors content/seed.py's LANGUAGES English names; falls back to the
+    # bare code so a new language degrades to odd wording, never a crash.
+    names = {
+        "en": "English", "nl": "Dutch", "fr": "French", "de": "German",
+        "it": "Italian", "es": "Spanish", "ru": "Russian", "zh": "Chinese",
+        "ar": "Arabic", "fa": "Farsi", "prs": "Dari", "ko": "Korean",
+        "ja": "Japanese", "pl": "Polish", "ro": "Romanian", "hi": "Hindi",
+    }
+    return names.get(language_code, language_code)
+
+
 def _answer_language(
     template: PracticeTemplate,
     course: Course | None,
@@ -965,9 +977,15 @@ def _speaking_prompt(
         "direction": _language_direction(target.language_code),
     }
     if kind == "speak_response":
+        # The cue shown is the ENGLISH gloss but the graded answer is the
+        # target-language form — "Say this aloud." read as "say the English
+        # cue", so a learner who obeyed it literally was marked wrong.
         return {
             "text_blocks": [
-                _instruction_block(course, "Say this aloud."),
+                _instruction_block(
+                    course,
+                    f"Say it in {_language_english_name(target.language_code)}.",
+                ),
                 {
                     "text": target.english_gloss,
                     "language_code": "en",
