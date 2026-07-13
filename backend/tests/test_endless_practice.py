@@ -2,7 +2,7 @@ from collections import Counter
 from datetime import datetime, timedelta, timezone
 from uuid import uuid4
 
-from sqlalchemy import func, select
+from sqlalchemy import delete, func, select
 
 from app.core.security import decode_token
 from app.db.session import SessionLocal
@@ -16,6 +16,7 @@ from app.models import (
     PracticeTemplate,
     ReviewItem,
     Unit,
+    UserLexemeSRS,
 )
 from app.schemas.api import ImportRequest
 from app.content.service import import_content
@@ -976,3 +977,165 @@ def test_word_order_prompt_includes_a_gloss_hint_not_just_the_instruction(
             "*three* ahora",
             "*four* ahora",
         }
+
+
+def add_uncompleted_lesson_lexeme(course_id, target="es"):
+    with SessionLocal() as db:
+        unit = db.scalar(select(Unit).where(Unit.course_id == course_id))
+        lesson = Lesson(
+            unit_id=unit.id,
+            title="Uncompleted lesson",
+            order=2,
+            content_key="test.practice.lesson.untaught",
+        )
+        db.add(lesson)
+        db.flush()
+        db.add(
+            Lexeme(
+                course_id=course_id,
+                token="secreto",
+                language_code=target,
+                part_of_speech="noun",
+                english_gloss="secret",
+                agreement_tags={"semantic": "word"},
+                provenance_lesson_id=lesson.id,
+                provenance_lesson_content_key="test.practice.lesson.untaught",
+                provenance_content_key="test.lexeme.untaught",
+            )
+        )
+        db.commit()
+
+
+def practice_item_answers(item_ids):
+    with SessionLocal() as db:
+        rows = db.execute(
+            select(PracticeItem.id, PracticeItem.correct_response)
+            .where(PracticeItem.id.in_(item_ids))
+            .order_by(PracticeItem.created_at, PracticeItem.id)
+        ).all()
+    by_id = {item_id: answer for item_id, answer in rows}
+    return [by_id[item_id] for item_id in item_ids]
+
+
+def test_speaking_practice_batch_uses_only_completed_lesson_vocabulary(
+    client, admin, auth
+):
+    course_id, lesson_id = create_course_with_lexemes(target="es")
+    import_templates(client, admin, course_id, artifact(include_listen=False))
+    complete_via_api(client, auth, lesson_id)
+    add_uncompleted_lesson_lexeme(course_id, target="es")
+
+    response = client.post(
+        f"/practice/{course_id}/batch",
+        headers=auth,
+        json={"size": 6, "mode": "speaking"},
+    )
+
+    assert response.status_code == 200, response.text
+    payload = response.json()
+    assert payload["locked"] is False
+    items = payload["items"]
+    assert len(items) == 6
+    assert {item["type"] for item in items} == {"speak_repeat", "speak_response"}
+
+    answers = practice_item_answers([item["id"] for item in items])
+    assert "secreto" not in answers
+    assert set(answers) <= {
+        "uno",
+        "dos",
+        "tres",
+        "cuatro",
+        "derecha",
+        "buenos días",
+        "buenas tardes",
+        "buenas noches",
+    }
+
+    first_answer = answers[0]
+    answered = client.post(
+        f"/practice/items/{items[0]['id']}/answer",
+        headers=auth,
+        json={"response": first_answer},
+    )
+    assert answered.status_code == 200, answered.text
+    assert answered.json()["result"] == "correct"
+
+
+def test_speaking_practice_prefers_weakest_tracked_lexeme_first(
+    client, admin, auth
+):
+    course_id, lesson_id = create_course_with_lexemes(target="es")
+    import_templates(client, admin, course_id, artifact(include_listen=False))
+    complete_via_api(client, auth, lesson_id)
+    uid = user_id(auth)
+    now = datetime.now(timezone.utc)
+
+    with SessionLocal() as db:
+        rows = list(
+            db.execute(
+                select(UserLexemeSRS, Lexeme)
+                .join(Lexeme, Lexeme.id == UserLexemeSRS.lexeme_id)
+                .where(
+                    UserLexemeSRS.user_id == uid,
+                    UserLexemeSRS.course_id == course_id,
+                )
+            )
+        )
+        for srs, lexeme in rows:
+            srs.mastery = 0.9
+            srs.due_at = now + timedelta(days=10)
+            if lexeme.token == "dos":
+                srs.mastery = 0.05
+                srs.due_at = now + timedelta(days=3)
+        db.commit()
+
+    response = client.post(
+        f"/practice/{course_id}/batch",
+        headers=auth,
+        json={"size": 1, "mode": "speaking"},
+    )
+
+    assert response.status_code == 200, response.text
+    items = response.json()["items"]
+    assert len(items) == 1
+    assert items[0]["type"] == "speak_repeat"
+    assert practice_item_answers([items[0]["id"]]) == ["dos"]
+
+
+def test_speaking_practice_batch_is_seed_repeatable_for_same_state(
+    client, admin, auth
+):
+    course_id, lesson_id = create_course_with_lexemes(target="es")
+    import_templates(client, admin, course_id, artifact(include_listen=False))
+    complete_lesson(auth, lesson_id)
+    uid = user_id(auth)
+
+    first = client.post(
+        f"/practice/{course_id}/batch",
+        headers=auth,
+        json={"size": 5, "mode": "speaking"},
+    )
+    assert first.status_code == 200, first.text
+    first_items = first.json()["items"]
+    first_answers = practice_item_answers([item["id"] for item in first_items])
+    first_types = [item["type"] for item in first_items]
+
+    with SessionLocal() as db:
+        db.execute(
+            delete(PracticeItem).where(
+                PracticeItem.user_id == uid,
+                PracticeItem.course_id == course_id,
+            )
+        )
+        db.commit()
+
+    second = client.post(
+        f"/practice/{course_id}/batch",
+        headers=auth,
+        json={"size": 5, "mode": "speaking"},
+    )
+    assert second.status_code == 200, second.text
+    second_items = second.json()["items"]
+
+    assert [item["type"] for item in second_items] == first_types
+    assert practice_item_answers([item["id"] for item in second_items]) == first_answers
