@@ -1212,3 +1212,24 @@ is correct; do not escalate to errors.
 New bug class discovered: no (1.20 was a known unprevented class; it is
 now validator-covered: dangling refs hard-error, mismatches warn).
 Instance count: 6 fixed across 6 files.
+
+### 2026-07-14 — B2 en units 01-03 fresh-context review (Codex review of Codex-authored first-ever B2 wave)
+Bug classes found: ~17 findings across all three files, high yield as
+predicted for a NEW CEFR tier. Dominant classes: (a) underdetermined
+production prompts (known class, at least 7 instances — B2's nuance
+makes it structurally worse: hedged instructions admit many defensible
+answers); (b) NEW class: unit under-covers its own spine outcome's
+production requirement (all 3 units drill components but never require
+the full sustained argument/speculation/modulation the outcome names);
+(c) vocabulary-example sentences using unit-specific terms before they
+are taught (multiple per file); (d) media_assets dialogue text baking
+speaker names inline ("Mia: ..."), cross-file; (e) may-vs-might
+matching lefts too close to discriminate; (f) meta/coursebook-stilted
+dialogue ("What are you hedging?") — register defect at a tier where
+naturalness IS the content.
+New bug class discovered: yes — outcome-production under-coverage (b);
+consider a spine-outcome production-requirement checklist line in the
+authoring preflight for B1+ tiers rather than a validator (judgment
+call, not rule-shaped).
+Instance count: fixes dispatched to Codex same session; re-review
+required before status: reviewed.
