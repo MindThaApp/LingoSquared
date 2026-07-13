@@ -61,7 +61,17 @@ this block into the dispatch prompt itself — do not link to it.
 - Before writing any dialogue: grep the established profile of every character
   you use, and state in your report what you found.
 
-### 7. Register
+### 7. The unit must DELIVER its spine outcome's production requirement
+- Read the outcome's own description in `universal_spine.yaml` literally. If
+  it names a production act ("write a short argumentative paragraph",
+  "speculate about present AND past causes", "deliver the same content
+  tentatively, neutrally, and emphatically"), the unit must contain a
+  culminating exercise that actually requires it — drilling the component
+  vocabulary and single sentences is NOT covering the outcome. Found on the
+  first B2 wave (2026-07-14): all three units taught the pieces and never
+  asked for the whole. Matters most at B1+ where outcomes are compound.
+
+### 8. Register
 - Quote the lane's register pin (docs/content/CLAUDE.md) and follow it exactly.
 - Keep register internally consistent within a unit, and correctly conjugated.
 
@@ -69,7 +79,7 @@ this block into the dispatch prompt itself — do not link to it.
 
 ## REQUIRED SELF-REPORT
 
-Before you claim the task is done, walk items 1–7 and state, per item, what you
+Before you claim the task is done, walk items 1–8 and state, per item, what you
 checked and what you found. "Followed the guide" is not a self-report. If you
 found nothing for an item, say so explicitly — a false "clean" is worse than a
 flagged uncertainty, and the reviewer WILL check.
