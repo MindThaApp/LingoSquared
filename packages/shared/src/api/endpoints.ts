@@ -36,6 +36,7 @@ import type {
   LexemeSummary,
   MistakeLexemeListResult,
   PracticeAnswerResult,
+  PracticeBatchMode,
   PracticeBatchResult,
   Progress,
   PushSubscribeIn,
@@ -247,10 +248,12 @@ export const CheckpointApi = {
 };
 
 export const PracticeApi = {
-  batch: (courseId: string, size?: number) =>
+  batch: (courseId: string, size?: number, mode?: PracticeBatchMode) =>
     post<PracticeBatchResult>(
       `/practice/${courseId}/batch`,
-      size ? { size } : undefined,
+      size || (mode && mode !== "mixed")
+        ? { ...(size ? { size } : {}), ...(mode && mode !== "mixed" ? { mode } : {}) }
+        : undefined,
     ),
   answer: (itemId: string, response: AnswerResponse) =>
     post<PracticeAnswerResult>(`/practice/items/${itemId}/answer`, { response }),

@@ -12,8 +12,15 @@ import type {
   AnswerResponse,
   CourseDetail,
   PracticeAnswerResult,
+  PracticeBatchMode,
   PracticeItem,
 } from "@lingo/shared/api/types";
+import {
+  getPracticeModePreference,
+  setPracticeModePreference,
+} from "../lib/practiceModePreference";
+
+const PRACTICE_MODES: PracticeBatchMode[] = ["mixed", "speaking", "conversation"];
 
 const BATCH_SIZE = 10;
 const PREFETCH_THRESHOLD = 3;
@@ -167,6 +174,7 @@ export function PracticeFeedPage() {
   const [loadingEligibility, setLoadingEligibility] = useState(true);
   const [eligibleCourses, setEligibleCourses] = useState<EligibleCourse[]>([]);
   const [courseId, setCourseId] = useState<string | null>(null);
+  const [mode, setMode] = useState<PracticeBatchMode>(() => getPracticeModePreference());
   const [items, setItems] = useState<PracticeItem[]>([]);
   const [locked, setLocked] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -212,7 +220,7 @@ export function PracticeFeedPage() {
     loadingMoreRef.current = true;
     setLoadingMore(true);
     try {
-      const res = await PracticeApi.batch(courseId, BATCH_SIZE);
+      const res = await PracticeApi.batch(courseId, BATCH_SIZE, mode);
       setLocked(res.locked);
       if (res.items.length === 0) {
         setExhausted(true);
@@ -223,12 +231,24 @@ export function PracticeFeedPage() {
       loadingMoreRef.current = false;
       setLoadingMore(false);
     }
-  }, [courseId, exhausted]);
+  }, [courseId, exhausted, mode]);
 
   useEffect(() => {
     if (courseId) loadMore();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [courseId]);
+  }, [courseId, mode]);
+
+  // Switching mode restarts the feed: already-loaded items belong to the
+  // previous mode, and "exhausted" in one mode says nothing about another.
+  function handleModeChange(next: PracticeBatchMode) {
+    if (next === mode) return;
+    setPracticeModePreference(next);
+    setItems([]);
+    setExhausted(false);
+    setLocked(false);
+    cardRefs.current.clear();
+    setMode(next);
+  }
 
   useEffect(() => {
     if (!SUPPORTS_INTERSECTION_OBSERVER) return;
@@ -293,6 +313,23 @@ export function PracticeFeedPage() {
         {combo > 1 && (
           <span className="badge practice-combo">{t("practice.combo", { count: combo })}</span>
         )}
+      </div>
+
+      <div
+        role="group"
+        aria-label={t("practice.mode_label")}
+        style={{ display: "flex", gap: 8, marginBottom: 16, flexWrap: "wrap" }}
+      >
+        {PRACTICE_MODES.map((m) => (
+          <button
+            key={m}
+            className={`btn ${m === mode ? "" : "btn-secondary"}`}
+            aria-pressed={m === mode}
+            onClick={() => handleModeChange(m)}
+          >
+            {t(`practice.mode_${m}`)}
+          </button>
+        ))}
       </div>
 
       {locked && items.length === 0 && (

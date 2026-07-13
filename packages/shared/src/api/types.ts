@@ -250,6 +250,10 @@ export function asExerciseType(type: PracticeItemType): ExerciseType {
   return type;
 }
 
+// Server default is "mixed"; "speaking" and "conversation" are additive
+// filters (see docs/CONTRACT.md, POST /practice/{course_id}/batch).
+export type PracticeBatchMode = "mixed" | "speaking" | "conversation";
+
 export interface PracticeBatchResult {
   locked: boolean;
   items: PracticeItem[];
