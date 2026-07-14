@@ -201,3 +201,113 @@ def test_compiler_accepts_split_dialogue_turns_with_speakers():
         },
         "es.a1.lesson01.teach.dialogue",
     )
+
+
+def audio_distractor_realization():
+    return {
+        "target_language": "en",
+        "media_assets": [
+            {
+                "content_key": "en.test.audio.dialogue.01",
+                "text": (
+                    "Mia: I booked the early train. Daniel: Great, I will "
+                    "bring the tickets. Mia: Please meet me at platform two."
+                ),
+            }
+        ],
+        "units": [
+            {
+                "lessons": [
+                    {
+                        "exercises": [
+                            {
+                                "content_key": "en.test.exercise.listen_train",
+                                "type": "listen_select",
+                                "tested_text": "Please meet me at platform two",
+                                "media_asset_key": "en.test.audio.dialogue.01",
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+    }
+
+
+def test_audio_distractor_validator_rejects_tested_speaker_line():
+    compiler = load_content_compiler()
+    report = compiler.Report()
+
+    compiler.validate_audio_distractors_not_heard_by_tested_speaker(
+        audio_distractor_realization(),
+        {
+            "exercises": {
+                "en.test.exercise.listen_train": {
+                    "correct_option": "Please meet me at platform two",
+                    "distractors": [
+                        "I booked the early train",
+                        "The train leaves late",
+                    ],
+                }
+            }
+        },
+        report,
+    )
+
+    assert any(
+        "I booked the early train" in error
+        and "tested speaker says anywhere in that audio" in error
+        for error in report.errors
+    )
+
+
+def test_audio_distractor_validator_accepts_unheard_fixed_distractor():
+    compiler = load_content_compiler()
+    report = compiler.Report()
+
+    compiler.validate_audio_distractors_not_heard_by_tested_speaker(
+        audio_distractor_realization(),
+        {
+            "exercises": {
+                "en.test.exercise.listen_train": {
+                    "correct_option": "Please meet me at platform two",
+                    "distractors": [
+                        "The train leaves late",
+                        "The station is closed",
+                    ],
+                }
+            }
+        },
+        report,
+    )
+
+    assert report.errors == []
+    assert report.warnings == []
+
+
+def test_audio_distractor_validator_warns_on_different_speaker_line():
+    compiler = load_content_compiler()
+    report = compiler.Report()
+    realization = audio_distractor_realization()
+    realization["units"][0]["lessons"][0]["exercises"][0][
+        "type"
+    ] = "dialogue_response"
+
+    compiler.validate_audio_distractors_not_heard_by_tested_speaker(
+        realization,
+        {
+            "exercises": {
+                "en.test.exercise.listen_train": {
+                    "correct_option": "Please meet me at platform two",
+                    "distractors": ["Great, I will bring the tickets"],
+                }
+            }
+        },
+        report,
+    )
+
+    assert report.errors == []
+    assert any(
+        "different speaker from the tested speaker" in warning
+        for warning in report.warnings
+    )
