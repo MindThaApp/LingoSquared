@@ -1316,3 +1316,15 @@ All fixed with reviewer wording, coordinator diff-verified, flipped
 reviewed; nl-en-b2 manifest course extended 3 -> 8 units; corpus PASS.
 New bug class discovered: no.
 Instance count: ~9 fixed across 5 files.
+
+### 2026-07-14 — fa-en + prs-en B2 overlays u04-08 review + fix (Codex both)
+Bug classes found: all register/gloss-nuance wording (Persian register
+cleanup across units, one real polysemy defect: در اصل glossing
+"in principle" can read "actually/originally"; Dari spelling notes).
+Zero structural/answerability defects — same pattern as the nl-en
+04-08 wave: validator + prompt-side prevention hold. All fixed with
+reviewer wording, coordinator-verified (compiles 0 errors, script
+purity clean, no disagreements); flipped reviewed; fa-en-b2 and
+prs-en-b2 manifest courses extended 3 -> 8 units; corpus PASS.
+New bug class discovered: no.
+Instance count: ~20 wording fixes across 10 files.
