@@ -142,7 +142,13 @@ worker — see the DB-isolation footgun in root `CLAUDE.md`.)
   `192.168.4.8` is a DIFFERENT machine (SMB-only NAS) — don't confuse them.
 - **Backend's `CORS_ORIGINS` (`.env`) must list whatever port the
   frontend is actually running on.** (Frontend dev-server ports: see
-  `frontend/CLAUDE.md`.)
+  `frontend/CLAUDE.md`.) **AND `https://localhost` — the Android APK's
+  Capacitor WebView origin (`androidScheme: "https"`) — on any backend
+  the APK targets.** Found live 2026-07-14: the deployed server rejected
+  the APK's preflights, so every API call inside the APK failed before
+  it started ("can't start a guest session" was just the first symptom).
+  The web frontend is same-origin and masks this gap — probe with an
+  OPTIONS request with `Origin: https://localhost` after every deploy.
 - Local stack: `colima start`; `cd backend && docker compose up -d`
   (isolated `backend/.env`, random JWT secret, never committed). **Never
   touch the live server (192.168.4.4) unattended — deploys happen with
