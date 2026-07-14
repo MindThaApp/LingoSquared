@@ -1302,3 +1302,17 @@ it, probably not validator-worthy yet). All fixed and coordinator
 diff-verified; all five units flipped to reviewed.
 New bug class discovered: dialect-consistency (minor).
 Instance count: 4 fixed across 3 files.
+
+### 2026-07-14 — nl-en B2 overlays u04-08 review + fix (Codex both)
+Bug classes found: ~9, ALL natural-Dutch wording/grammar class ("duwde
+terug" calque, singular/plural agreement around "het hoofdprobleem",
+"in Engels" -> "in het Engels" article slips). Zero exercise-level or
+answerability defects — the heard-distractor validator plus the
+enumerated-answers rule in the dispatch prompt appear to have prevented
+the structural classes entirely. Reviewer confirmed genuine
+interference work per unit (perfectum-vs-simple-past, register-as-
+phrasing-not-pronouns, directness softening, linker discipline).
+All fixed with reviewer wording, coordinator diff-verified, flipped
+reviewed; nl-en-b2 manifest course extended 3 -> 8 units; corpus PASS.
+New bug class discovered: no.
+Instance count: ~9 fixed across 5 files.
