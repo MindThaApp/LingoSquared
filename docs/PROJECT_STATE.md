@@ -80,7 +80,15 @@ are standing rules, not history:
   in-browser (needs a human with a microphone — Ramin, with the APK test).
 - **Android APK (2026-07-13)** — `android-shell/` (Capacitor wrapper around the
   real web build) + `.github/workflows/android-apk.yml`. Debug-signed, LAN-only,
-  deployed to `/home/ramin/shared/lingo.apk`. **Not yet installed/played.**
+  deployed to `/home/ramin/shared/lingo.apk`. **Installed and working
+  2026-07-14** after two stacked fixes found by Ramin's first real install:
+  live `CORS_ORIGINS` needed the WebView origin `https://localhost`
+  (server-side env fix + `--force-recreate`, no rebuild), and the
+  https-origin WebView blocked mixed-content calls to the http:// LAN API
+  (`allowMixedContent: true`, rebuilt + redeployed, checksum-verified;
+  flagged as a release-gate item — a store build needs real TLS instead).
+  Guest session confirmed working by Ramin. Full lesson + real-mic
+  speaking play-through still pending.
 
 *Still remaining from the upgrade program:* D2's dialogue-content
 re-authoring and C1's feedback_by_option content pass (both CONTENT
