@@ -700,6 +700,15 @@ def _audio_distractor_values(
     return wrong_options
 
 
+def _audio_surface_contains_option(surface_norms: set[str], option_norm: str) -> bool:
+    for surface_norm in surface_norms:
+        if option_norm == surface_norm:
+            return True
+        if option_norm in surface_norm:
+            return True
+    return False
+
+
 def _tested_audio_speaker(
     turns: list[dict[str, Any]],
     references: set[str],
@@ -731,7 +740,11 @@ def validate_audio_distractors_not_heard_by_tested_speaker(
             for exercise in lesson.get("exercises", []):
                 if not isinstance(exercise, dict):
                     continue
-                if exercise.get("type") not in {"listen_select", "dialogue_response"}:
+                if exercise.get("type") not in {
+                    "listen_select",
+                    "dialogue_comprehension",
+                    "dialogue_response",
+                }:
                     continue
 
                 media_key = exercise.get("media_asset_key")
@@ -755,6 +768,22 @@ def validate_audio_distractors_not_heard_by_tested_speaker(
                     content_key=media_key,
                 )
                 if not turns:
+                    surface_norms = _script_audio_units(_media_asset_text(asset))
+                    for location, option, option_norm in wrong_options:
+                        if not _audio_surface_contains_option(
+                            surface_norms,
+                            option_norm,
+                        ):
+                            continue
+                        report.error(
+                            location,
+                            "wrong option "
+                            f"{option!r} is heard in unlabelled media asset "
+                            f"{media_key!r}; listen_select/"
+                            "dialogue_comprehension/dialogue_response "
+                            "distractors must not be spoken in single-voice "
+                            "or unlabelled audio",
+                        )
                     continue
 
                 reference_norms = _exercise_reference_norms(exercise, exercise_overlay)
@@ -777,7 +806,8 @@ def validate_audio_distractors_not_heard_by_tested_speaker(
                             "wrong option "
                             f"{option!r} matches audio spoken by "
                             f"{matching_turn.get('speaker')!r} in media asset "
-                            f"{media_key!r}; listen_select/dialogue_response "
+                            f"{media_key!r}; listen_select/"
+                            "dialogue_comprehension/dialogue_response "
                             "distractors must not be anything the tested "
                             "speaker says anywhere in that audio"
                         )
@@ -791,6 +821,89 @@ def validate_audio_distractors_not_heard_by_tested_speaker(
                                 "speaker, so this is confusable but may be "
                                 "intentional)",
                             )
+
+
+FREE_TEXT_ACCEPTED_ANSWER_EXERCISE_TYPES = {
+    "dialogue_response",
+    "translation",
+    "writing_prompt",
+}
+
+
+def validate_option_accepted_answers_are_displayed(
+    realization: dict[str, Any],
+    overlay: dict[str, Any],
+    report: Report,
+):
+    exercise_overlays = overlay.get("exercises", {})
+    if not isinstance(exercise_overlays, dict):
+        exercise_overlays = {}
+
+    for unit in realization.get("units", []):
+        for lesson in unit.get("lessons", []):
+            for exercise in lesson.get("exercises", []):
+                if not isinstance(exercise, dict):
+                    continue
+                if exercise.get("type") in FREE_TEXT_ACCEPTED_ANSWER_EXERCISE_TYPES:
+                    continue
+
+                key = exercise.get("content_key", "<unknown>")
+                exercise_overlay = exercise_overlays.get(key, {})
+                if not isinstance(exercise_overlay, dict):
+                    continue
+                if (
+                    "correct_option" not in exercise_overlay
+                    or "distractors" not in exercise_overlay
+                ):
+                    continue
+
+                allowed_norms = {
+                    normalize_dialogue_option(exercise_overlay.get("correct_option"))
+                }
+                for field in ("distractors", "options"):
+                    allowed_norms.update(
+                        normalize_dialogue_option(option)
+                        for option in _option_values(exercise_overlay.get(field))
+                    )
+                allowed_norms.discard(None)
+                if not allowed_norms:
+                    continue
+
+                variants = exercise_overlay.get("accepted_answers", [])
+                if not isinstance(variants, list):
+                    continue
+                accepted_norms = {
+                    normalize_dialogue_option(
+                        variant.get("value") if isinstance(variant, dict) else variant
+                    )
+                    for variant in variants
+                }
+                accepted_norms.discard(None)
+                if accepted_norms & allowed_norms:
+                    continue
+                for index, variant in enumerate(variants):
+                    value = variant.get("value") if isinstance(variant, dict) else variant
+                    normalized = normalize_dialogue_option(value)
+                    location = (
+                        f"overlay.exercises.{key}.accepted_answers[{index}]"
+                    )
+                    if not normalized:
+                        report.error(
+                            location,
+                            "accepted_answers value for an option-based "
+                            "exercise must be a non-empty string matching a "
+                            "displayed option",
+                        )
+                        continue
+                    if normalized not in allowed_norms:
+                        report.error(
+                            location,
+                            "accepted_answers value "
+                            f"{value!r} does not match the displayed "
+                            "correct_option or any displayed option; learners "
+                            "selecting the visible correct option would be "
+                            "graded incorrectly",
+                        )
 
 
 def validate_same_speaker_dialogue_distractors(
@@ -3398,6 +3511,7 @@ def validate_documents(
         overlay,
         report,
     )
+    validate_option_accepted_answers_are_displayed(realization, overlay, report)
     validate_same_speaker_dialogue_distractors(realization, overlay, report)
     validate_order_word_bank_answers(realization, overlay, report)
     validate_matching_pairs_minimum_scale(realization, report)
