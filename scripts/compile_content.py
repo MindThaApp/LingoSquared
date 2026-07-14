@@ -621,6 +621,178 @@ def _matching_tested_turns(
     return matches
 
 
+SCRIPT_CLAUSE_SPLIT_RE = re.compile(r"[.!?؟,،;؛]+", re.UNICODE)
+
+
+def _script_audio_units(value: Any) -> set[str]:
+    if not isinstance(value, str):
+        return set()
+
+    values = {value}
+    values.update(part for part in SCRIPT_CLAUSE_SPLIT_RE.split(value) if part.strip())
+    return {
+        normalized
+        for normalized in (normalize_dialogue_option(part) for part in values)
+        if normalized
+    }
+
+
+def _script_turn_units(turn: dict[str, Any]) -> set[str]:
+    return _script_audio_units(turn.get("target_text"))
+
+
+def _script_turn_contains_reference(turn: dict[str, Any], reference_norm: str) -> bool:
+    if not reference_norm:
+        return False
+    for unit_norm in _script_turn_units(turn):
+        if reference_norm == unit_norm:
+            return True
+        if reference_norm in unit_norm or unit_norm in reference_norm:
+            return True
+    return False
+
+
+def _exercise_reference_norms(
+    exercise: dict[str, Any],
+    exercise_overlay: dict[str, Any],
+) -> set[str]:
+    values = [
+        exercise.get("tested_text"),
+        exercise_overlay.get("correct_option"),
+        exercise_overlay.get("correct_response"),
+    ]
+    for variant in exercise_overlay.get("accepted_answers", []):
+        values.append(variant.get("value") if isinstance(variant, dict) else variant)
+
+    return {
+        normalized
+        for normalized in (normalize_dialogue_option(value) for value in values)
+        if normalized
+    }
+
+
+def _audio_distractor_values(
+    exercise: dict[str, Any],
+    exercise_overlay: dict[str, Any],
+) -> list[tuple[str, Any, str]]:
+    wrong_options = []
+    seen = set()
+    correct_values = _exercise_reference_norms(exercise, exercise_overlay)
+    key = exercise.get("content_key", "<unknown>")
+
+    for prefix, container in (
+        ("realization", exercise),
+        ("overlay", exercise_overlay),
+    ):
+        for field in ("distractors", "options"):
+            for value in _option_values(container.get(field)):
+                normalized = normalize_dialogue_option(value)
+                if not normalized or normalized in correct_values:
+                    continue
+                identity = (prefix, field, normalized)
+                if identity in seen:
+                    continue
+                seen.add(identity)
+                wrong_options.append(
+                    (f"{prefix}.exercises.{key}.{field}", value, normalized)
+                )
+
+    return wrong_options
+
+
+def _tested_audio_speaker(
+    turns: list[dict[str, Any]],
+    references: set[str],
+) -> str | None:
+    speakers = {
+        normalize_speaker(turn.get("speaker"))
+        for turn in turns
+        for reference_norm in references
+        if _script_turn_contains_reference(turn, reference_norm)
+    }
+    speakers.discard(None)
+    if len(speakers) != 1:
+        return None
+    return next(iter(speakers))
+
+
+def validate_audio_distractors_not_heard_by_tested_speaker(
+    realization: dict[str, Any],
+    overlay: dict[str, Any],
+    report: Report,
+):
+    assets = _media_assets_by_key(realization)
+    exercise_overlays = overlay.get("exercises", {})
+    if not isinstance(exercise_overlays, dict):
+        exercise_overlays = {}
+
+    for unit in realization.get("units", []):
+        for lesson in unit.get("lessons", []):
+            for exercise in lesson.get("exercises", []):
+                if not isinstance(exercise, dict):
+                    continue
+                if exercise.get("type") not in {"listen_select", "dialogue_response"}:
+                    continue
+
+                media_key = exercise.get("media_asset_key")
+                if not media_key:
+                    continue
+                asset = assets.get(media_key)
+                if not isinstance(asset, dict):
+                    continue
+
+                key = exercise.get("content_key", "<unknown>")
+                exercise_overlay = exercise_overlays.get(key, {})
+                if not isinstance(exercise_overlay, dict):
+                    exercise_overlay = {}
+
+                wrong_options = _audio_distractor_values(exercise, exercise_overlay)
+                if not wrong_options:
+                    continue
+
+                turns = _speaker_labelled_turns(
+                    _media_asset_text(asset),
+                    content_key=media_key,
+                )
+                if not turns:
+                    continue
+
+                reference_norms = _exercise_reference_norms(exercise, exercise_overlay)
+                tested_speaker = _tested_audio_speaker(turns, reference_norms)
+                if not tested_speaker:
+                    continue
+
+                spoken_units_by_option: dict[str, list[dict[str, Any]]] = {}
+                for turn in turns:
+                    for unit_norm in _script_turn_units(turn):
+                        spoken_units_by_option.setdefault(unit_norm, []).append(turn)
+
+                for location, option, option_norm in wrong_options:
+                    matching_turns = spoken_units_by_option.get(option_norm, [])
+                    if not matching_turns:
+                        continue
+                    for matching_turn in matching_turns:
+                        speaker = normalize_speaker(matching_turn.get("speaker"))
+                        message = (
+                            "wrong option "
+                            f"{option!r} matches audio spoken by "
+                            f"{matching_turn.get('speaker')!r} in media asset "
+                            f"{media_key!r}; listen_select/dialogue_response "
+                            "distractors must not be anything the tested "
+                            "speaker says anywhere in that audio"
+                        )
+                        if speaker == tested_speaker:
+                            report.error(location, message)
+                        elif exercise.get("type") == "dialogue_response":
+                            report.warn(
+                                location,
+                                message
+                                + " (different speaker from the tested "
+                                "speaker, so this is confusable but may be "
+                                "intentional)",
+                            )
+
+
 def validate_same_speaker_dialogue_distractors(
     realization: dict[str, Any],
     overlay: dict[str, Any],
@@ -3221,6 +3393,11 @@ def validate_documents(
     validate_text_block_directions(overlay, "overlay", report)
     validate_overlay_references(realization, overlay, report)
     validate_no_stray_yaml_booleans(realization, overlay, report)
+    validate_audio_distractors_not_heard_by_tested_speaker(
+        realization,
+        overlay,
+        report,
+    )
     validate_same_speaker_dialogue_distractors(realization, overlay, report)
     validate_order_word_bank_answers(realization, overlay, report)
     validate_matching_pairs_minimum_scale(realization, report)
