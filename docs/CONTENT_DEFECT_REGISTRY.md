@@ -1259,3 +1259,19 @@ interference-error work (not a translation layer) in all three files.
 New bug class discovered: no (all known classes or sequencing artifacts).
 Instance count: 9 fixed across 3 files; compiler 0 errors; wired as
 nl-en-b2 manifest course; verify.sh --content-only PASS on full corpus.
+
+### 2026-07-14 — fa-en + prs-en B2 overlays u01-03 review + fix (Codex, sibling-isolated)
+Bug classes found: fa-en 15 (gloss naturalness/fidelity majority; 1
+exercise-level: listen_select with ALL distractors heard in the audio —
+the known class 1.x same-speaker/heard-distractor rule, still validator
+backlog; fixed with not-heard wrong options), prs-en 8 (natural-Dari
+wording — میعادها→مهلت‌ها class calques; 1 thin-interference note fixed
+with a contrastive article/word-order gloss). fa-en got a second
+fresh-context pass (because of the exercise-level bug): CLEAN, flipped
+reviewed. prs-en closed on coordinator diff-verification (wording-only
+findings). Both wired as fa-en-b2 / prs-en-b2 manifest courses;
+verify.sh --content-only PASS on full corpus.
+New bug class discovered: no. Reminder: the heard-distractor validator
+(listen_select) remains the top validator-backlog item — it caught a
+real instance again.
+Instance count: 23 fixed across 6 files.
