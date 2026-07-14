@@ -1288,3 +1288,17 @@ all repaired (distractors replaced with not-heard options), corpus PASS.
 The validator backlog from the tiered-review policy is now EMPTY again.
 Instance count: 8 fixed across 10 files (three a1_21 overlays share one
 English audio).
+
+### 2026-07-14 — B2 en units 04-08 fresh-context review + fix (Codex both)
+Bug classes found: 4 total across 5 units (vs 17 in the units 01-03
+wave — the preflight item-7 production-requirement rule and the wave-1
+lesson list in the dispatch prompt measurably worked; units 04 and 07
+came back CLEAN on first review). Findings: register-naturalness
+("To whom it may concern" too stiff for the scenario; unquoted embedded
+written sentences in dialogue), one introduced_tokens wiring mismatch
+(qualify vs qualification), one dialect slip (UK "judgement" in an
+en_US_neutral course — NEW small class: dialect-consistency; watch for
+it, probably not validator-worthy yet). All fixed and coordinator
+diff-verified; all five units flipped to reviewed.
+New bug class discovered: dialect-consistency (minor).
+Instance count: 4 fixed across 3 files.
