@@ -1275,3 +1275,16 @@ New bug class discovered: no. Reminder: the heard-distractor validator
 (listen_select) remains the top validator-backlog item — it caught a
 real instance again.
 Instance count: 23 fixed across 6 files.
+
+### 2026-07-14 — heard-distractor validator lands (class closed) + 8 corpus repairs
+The long-backlogged listen_select/dialogue_response rule ("a distractor
+must never be something the tested speaker says anywhere in that audio")
+is now a compiler validator: same-speaker match = hard error,
+other-speaker match = warning, full-turn/sentence granularity (no
+substring over-triggering). 11/11 unit tests incl. armed test;
+coordinator-verified. First corpus sweep found 8 REAL pre-existing
+defects across nl/fa/prs-en a1_21, en-de u06/08, de-en u06/08/10/11/12 —
+all repaired (distractors replaced with not-heard options), corpus PASS.
+The validator backlog from the tiered-review policy is now EMPTY again.
+Instance count: 8 fixed across 10 files (three a1_21 overlays share one
+English audio).
