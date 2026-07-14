@@ -311,3 +311,129 @@ def test_audio_distractor_validator_warns_on_different_speaker_line():
         "different speaker from the tested speaker" in warning
         for warning in report.warnings
     )
+
+
+def test_audio_distractor_validator_rejects_unlabelled_heard_words():
+    compiler = load_content_compiler()
+    report = compiler.Report()
+
+    realization = {
+        "target_language": "de",
+        "media_assets": [
+            {
+                "content_key": "de.test.audio.word_list",
+                "text": "aufstehen, frühstücken, arbeiten, lernen, schlafen",
+            }
+        ],
+        "units": [
+            {
+                "lessons": [
+                    {
+                        "exercises": [
+                            {
+                                "content_key": "de.test.exercise.listen_activities",
+                                "type": "listen_select",
+                                "tested_text": "arbeiten",
+                                "media_asset_key": "de.test.audio.word_list",
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+    }
+
+    compiler.validate_audio_distractors_not_heard_by_tested_speaker(
+        realization,
+        {
+            "exercises": {
+                "de.test.exercise.listen_activities": {
+                    "correct_option": "arbeiten",
+                    "distractors": ["aufstehen", "lernen"],
+                }
+            }
+        },
+        report,
+    )
+
+    assert any(
+        "aufstehen" in error and "unlabelled media asset" in error
+        for error in report.errors
+    )
+
+
+def test_audio_distractor_validator_rejects_dialogue_comprehension_speaker_line():
+    compiler = load_content_compiler()
+    report = compiler.Report()
+    realization = audio_distractor_realization()
+    realization["units"][0]["lessons"][0]["exercises"][0][
+        "type"
+    ] = "dialogue_comprehension"
+
+    compiler.validate_audio_distractors_not_heard_by_tested_speaker(
+        realization,
+        {
+            "exercises": {
+                "en.test.exercise.listen_train": {
+                    "correct_option": "Please meet me at platform two",
+                    "distractors": [
+                        "I booked the early train",
+                        "The train leaves late",
+                    ],
+                }
+            }
+        },
+        report,
+    )
+
+    assert any(
+        "I booked the early train" in error
+        and "dialogue_comprehension" in error
+        and "tested speaker says anywhere in that audio" in error
+        for error in report.errors
+    )
+
+
+def test_option_accepted_answers_must_match_displayed_option():
+    compiler = load_content_compiler()
+    report = compiler.Report()
+
+    realization = {
+        "target_language": "de",
+        "units": [
+            {
+                "lessons": [
+                    {
+                        "exercises": [
+                            {
+                                "content_key": "de.test.exercise.listen_time",
+                                "type": "dialogue_comprehension",
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+    }
+
+    compiler.validate_option_accepted_answers_are_displayed(
+        realization,
+        {
+            "exercises": {
+                "de.test.exercise.listen_time": {
+                    "correct_option": "um sieben Uhr",
+                    "distractors": ["um zehn Uhr", "am Nachmittag"],
+                    "accepted_answers": [
+                        {"value": "Ich stehe um sieben Uhr auf"},
+                    ],
+                }
+            }
+        },
+        report,
+    )
+
+    assert any(
+        "Ich stehe um sieben Uhr auf" in error
+        and "does not match the displayed correct_option" in error
+        for error in report.errors
+    )
