@@ -1473,3 +1473,23 @@ internal-timeline class, retargeted to a past exam) + 2 flags.
 Manifest: en-es-b1/en-fr-b1/en-it-b1/en-ru-b1 -> 19u (B1 COMPLETE),
 en-de-b1 -> 10u, NEW en-ar-b1 (3u). Corpus PASS.
 Instance count: ~9 real + flags; 3 coordinator-direct fix rounds.
+
+### 2026-07-15 — wave 9 (Claude pipeline, 4th wave): de B1 -> 14u, ar B1 -> 6u, pl/ro/hi B1 lanes REOPENED (+3u each)
+Yields: de 0, ar 1 (speaker/gender deixis self-contradiction — a feminine-
+addressed question attributed to the woman being addressed), pl 13, ro 5,
+hi 9. The reopened lanes ran ~9x hotter than the practiced ones — per-
+recipe maturity holds across ENGINES, not just languages: a lane's first
+Claude wave is new territory even when the recipe is proven elsewhere.
+WORST FINDING OF THE SESSION (hi u09, HI-7): the author invented a wrong
+agreement rule ("hota agrees with the speaker") for the ergative
+construction, wrote it into the answer policy AND feedback, and accepted
+two UNGRAMMATICAL किया-होती strings as correct answers — a false
+"feminine-variant" self-certification (the pl u08 author made the
+opposite false claim: said variants were included, they weren't). Both
+caught only by fresh-context review. NEW pl classes: grammar_check items
+presenting CORRECT Polish as broken (3x); English text inside
+language_code: pl blocks; quote-vs-report deixis on reply exercises (3x).
+All fixed (Sonnet fix agent, 140 tool calls), verified, flipped.
+Manifests: en-de-b1 14u, en-ar-b1 6u, en-pl-b1 8u, en-ro-b1 9u,
+en-hi-b1 9u. Corpus PASS.
+Instance count: 28 findings.
