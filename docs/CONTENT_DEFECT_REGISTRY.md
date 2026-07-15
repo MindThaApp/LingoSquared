@@ -1391,3 +1391,17 @@ fixed directly by coordinator. All flipped reviewed; manifests: en-it-a2
 & en-ru-a2 -> 10u (tier complete), en-de -> 24u (A1 complete), en-ar-a1
 -> 21u, NEW en-es-b1 (3u) + en-fr-b1 (3u). Corpus PASS.
 Instance count: ~25 findings.
+
+### 2026-07-15 — wave 4: es/fr B1 +3u, it/ru B1 opened, de A2 opened, ar A1 core-24 complete (Codex both)
+Yield: es+fr ~6, it+ru ~6, de+ar ~10 (42 files). All tier chains compiled
+0 errors first pass again. Dominant: compound-outcome delivery at B1,
+naturalness in new-construction units (it regret construction "Sarebbe
+bisognato" was UNGRAMMATICAL — caught by fix-verification after the fix
+task SILENTLY SKIPPED it), ar dialogue-card/audio turn mismatches.
+PROCESS FINDING: a fix task can report done while skipping findings —
+the separate fix-verification stage caught 5 skipped it/ru items; a
+scoped round-2 fix closed them. Keep fix-verification mandatory for
+new-tier waves. es/fr/de/ar ALL RESOLVED first verification.
+Manifests: en-es-b1/en-fr-b1 -> 6u, en-ar-a1 -> 24u (core-24 COMPLETE),
+NEW en-de-a2 (6u), NEW en-it-b1 + en-ru-b1 (3u each). Corpus PASS.
+Instance count: ~22 findings + 5 round-2 items.
