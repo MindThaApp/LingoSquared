@@ -1417,3 +1417,25 @@ verification checks each finding" prompt line worked: ALL SIX languages
 came back ALL RESOLVED on the FIRST verification (vs wave-4's 5 skipped
 items). Manifests: en-es-b1 & en-fr-b1 -> 8u, en-de-a2 ->
 10u (A2 COMPLETE), en-it-b1/en-ru-b1 -> 6u, NEW en-ar-a2 (3u). Corpus PASS.
+
+### 2026-07-15 — wave 6: FIRST CLAUDE-SUBAGENT WAVE (Sonnet author / Opus review / Sonnet fix; Codex exhausted until Jul 21)
+es B1 34-37, fr B1 33-36, it B1 41-44, ru B1 41-44, de B1 OPENED (35-37,
+Konjunktiv II), ar A2 28-30. All 6 chains compiled 0 errors (es needed a
+coordinator 2-token boolean rescue after its author died on a connection
+error mid-report — partial work was complete on disk).
+Yields: es 2 (incl. a reported-speech DEIXIS error in the culminating —
+tienes/tengo — the subtlest grading-wrong-answer class yet), fr 4 (TWO
+character-canon violations: apprentice Inès cast as bakery owner and as
+Mathieu's trainer; two compound-outcome gaps), it 0, ru 0 hard + 2
+native-flags (coordinator resolved: Коллега register -> вы; instrumental
+хорошей variants added to accepted answers), de 2 (1 coherence: regret
+attributed to the wrong character), ar 4 (single-variant culminating
+grading, calqued gloss, borderline distractor echoes).
+OBSERVATION: Opus reviewers catch subtler language classes (deixis,
+cross-unit canon, predicate-case grading coverage) than the Codex
+reviewers did; Sonnet authors' grammar was clean (Konjunktiv II, ли,
+чтобы+past, MSA agreement all correct first pass). Fix agents applied
+ALL findings first pass (no skips) with quoted-diff reports.
+Manifests: en-es-b1/en-fr-b1 -> 12u, en-it-b1/en-ru-b1 -> 10u, NEW
+en-de-b1 (3u), en-ar-a2 -> 6u. Corpus PASS.
+Instance count: ~14 findings, 2 coordinator-resolved flags.
