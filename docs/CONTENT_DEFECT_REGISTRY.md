@@ -1406,11 +1406,14 @@ Manifests: en-es-b1/en-fr-b1 -> 6u, en-ar-a1 -> 24u (core-24 COMPLETE),
 NEW en-de-a2 (6u), NEW en-it-b1 + en-ru-b1 (3u each). Corpus PASS.
 Instance count: ~22 findings + 5 round-2 items.
 
-### 2026-07-15 — wave 5: es/fr B1 tiers COMPLETE (8u), it/ru B1 +3u, de A2 tier COMPLETE (10u), ar A2 opened (Codex both)
+### 2026-07-15 — wave 5: es/fr B1 -> 8u, it/ru B1 +3u, de A2 tier COMPLETE (10u), ar A2 opened (Codex both)
+CORRECTION (same day): "B1 complete" was wrong — the canonical en B1 tier has
+19 outcomes, not 8 (coordinator sliced the spine grep with head -8). es/fr
+are at 8/19, it/ru 6/19. Wave 6+ continues the B1 grind.
 Yield: es+fr small (wording/gloss/mood), it+ru moderate (narrator
 attribution, aspect glosses), de+ar largest (ar A2 opening). All chains
 compiled 0 errors first pass (5th consecutive wave). The "do not skip —
 verification checks each finding" prompt line worked: ALL SIX languages
 came back ALL RESOLVED on the FIRST verification (vs wave-4's 5 skipped
-items). Manifests: en-es-b1 & en-fr-b1 -> 8u (B1 COMPLETE), en-de-a2 ->
+items). Manifests: en-es-b1 & en-fr-b1 -> 8u, en-de-a2 ->
 10u (A2 COMPLETE), en-it-b1/en-ru-b1 -> 6u, NEW en-ar-a2 (3u). Corpus PASS.
