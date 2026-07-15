@@ -1354,3 +1354,23 @@ ungated on the full corpus yourself.
 Known remaining debt: en-de old units 01-10 + their overlays are still
 status unreviewed from the original de lane opening (pre-existing).
 Instance count: 47 review findings + 938 validator-driven repairs.
+
+### 2026-07-15 — wave 2: es/fr A2 completion, it/ru A2 tier opened, de A1 17-22, ar A1 10-15 (Codex both)
+Yield per lane: es 13, fr 7, ar 7, de 10, it-A2 12, ru-A2 15 (~64).
+ZERO listen-audio/answerability defects in ANY lane — first wave authored
+with the new validator rules quoted in the dispatch prompt; prevention
+confirmed again. Dominant classes: underdetermined exact-string production
+prompts (all lanes), untaught-in-tier tokens on the two NEW A2 tiers
+(it 16 / ru 54 compile errors pre-review — the A2-course-validates-
+STANDALONE rule; both repaired via refresher cards), dialogue-card/audio
+discipline (es u22), wording/idiom.
+Fix rounds verified by separate fresh-context verification tasks: fr/ar/de
+ALL RESOLVED; es 1 residual accepted by coordinator judgment (re-shuffled
+sequence distractors are listening-distinguishable, validator-compliant);
+it 3 + ru 2 residuals fixed directly by coordinator. All 64 files flipped
+reviewed; manifests: en-es-a2 -> 10u, en-fr-a2 -> 10u, en-de -> 22u,
+en-ar-a1 -> 15u, NEW courses en-it-a2 (6u) + en-ru-a2 (6u). Corpus PASS.
+New bug class discovered: untaught-in-tier tokens at tier opening (process
+fix: tier-opening dispatch prompts must state the standalone-tier rule and
+use tier-only acceptance commands).
+Instance count: ~64 review findings + 70 tier-token compile errors.
