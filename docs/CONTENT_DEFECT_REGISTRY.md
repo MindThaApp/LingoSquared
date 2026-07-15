@@ -1439,3 +1439,21 @@ ALL findings first pass (no skips) with quoted-diff reports.
 Manifests: en-es-b1/en-fr-b1 -> 12u, en-it-b1/en-ru-b1 -> 10u, NEW
 en-de-b1 (3u), en-ar-a2 -> 6u. Corpus PASS.
 Instance count: ~14 findings, 2 coordinator-resolved flags.
+
+### 2026-07-15 — wave 7 (Claude pipeline, 2nd wave): es/fr B1 -> 16u, it/ru B1 -> 14u, de B1 -> 6u, ar A2 tier COMPLETE (10u)
+60 files; all 6 chains 0 errors first pass (es 32 pre-existing pool-size
+warns). Yields: it 1 real + 3 flags, ru 1 real + 4 flags (coordinator
+resolutions: FEMININE past-tense variants added to free-text answers —
+new fairness class; ungrammatical distractor replaced; тебе стоит pair),
+es 1 (passage misattributed to Mateo — person/canon deixis class again),
+fr 2 real (pervasive third-person self-address "Même si Mathieu a raison"
+-> "tu as raison" — naturalness deixis; untaught matching pair) + 2 minor,
+de 1 minor (instruction parenthetical contradicted its own deixis rule)
++ flags, ar 1 medium (weekday-activity distractors audible in clip —
+swapped for unmentioned activities) + minors (fixed directly).
+PATTERN: the recurring Claude-wave defect class is PERSON DEIXIS /
+self-address naturalness (3 waves running) — added to prompts; also
+gender-variant acceptance for first-person past Russian is now standing
+practice. Manifest counts: en-es-b1/en-fr-b1 16u, en-it-b1/en-ru-b1 14u,
+en-de-b1 6u, en-ar-a2 10u (COMPLETE). Corpus PASS.
+Instance count: ~7 real + ~12 flags/minors.
