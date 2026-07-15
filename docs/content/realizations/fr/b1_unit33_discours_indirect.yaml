@@ -1,0 +1,237 @@
+schema_version: "1.1"
+realization_version: "2026.1-draft.1"
+target_language: fr
+cefr_level: B1
+status: complete_draft
+generation_provenance:
+  method: ai_generated
+  authoring_system: claude
+  human_reviewed: false
+  source_material:
+    - name: "Established French lane conventions"
+      license: n/a
+      usage: >-
+        Authored from the existing French lane's Inès/Mathieu bakery/café
+        storyline and standard contemporary French. No other language's
+        unit was opened.
+review:
+  status: unreviewed
+  required_next_reviewer: fresh_context
+  notes: >-
+    B1 reported-speech unit. Lesson 1 teaches present-tense reporting
+    (dire que / demander si + indicatif présent, no backshift needed
+    since the reporting verb is present). Lesson 2 teaches concordance
+    des temps explicitly: a past reporting verb (a dit que / a demandé
+    si) backshifts the reported present to imparfait (est -> était,
+    il faut -> il fallait). The culminating exercise requires one
+    present-tense report and one past-tense backshifted report in the
+    same message.
+
+course:
+  realization_key: fr.b1
+  target_language_first: true
+  dialect: fr_FR_standard_metropolitan
+  register_policy: >-
+    Standard metropolitan French. Inès and Mathieu use informal tu with
+    each other in peer dialogue.
+
+media_assets:
+  - content_key: fr.b1.unit33.audio.report_present.neutral.01
+    language: fr
+    text: "Le chef dit que la livraison arrive à midi."
+    voice_hint: young_woman_neutral
+    status: pending_generation
+  - content_key: fr.b1.unit33.audio.dialogue.discours.01
+    language: fr
+    text: "Mathieu : Qu'est-ce que le chef a dit ce matin ?\nInès : Il a dit qu'il fallait finir les commandes avant midi.\nMathieu : Et il n'a rien demandé d'autre ?\nInès : Si, il a demandé si la salle était prête.\nMathieu : Et maintenant, qu'est-ce qu'il dit ?\nInès : Maintenant il dit que la livraison arrive à midi."
+    voice_hint: young_woman_and_young_man
+    status: pending_generation
+
+units:
+  - content_key: fr.b1.unit33.discours_indirect
+    title: "Le discours indirect"
+    section: speaking
+    spine_outcome_ids:
+      - universal.b1.reported_speech.report_what_someone_said
+    planned_lesson_count: 2
+
+    lessons:
+      - content_key: fr.b1.unit33.lesson01.discours_present
+        title: "Le chef dit que..."
+        spine_outcome_id: universal.b1.reported_speech.report_what_someone_said
+        teaching:
+          - content_key: fr.b1.unit33.lesson01.teach.dire_que
+            kind: vocabulary
+            target: {text: "dit que", language_code: fr, direction: ltr}
+            introduced_tokens: ["Le", "chef", "dit", "que", "la", "livraison", "arrive", "à", "midi"]
+            example: {text: "Le chef dit que la livraison arrive à midi.", language_code: fr, direction: ltr}
+          - content_key: fr.b1.unit33.lesson01.teach.demander_si
+            kind: vocabulary
+            target: {text: "demande si", language_code: fr, direction: ltr}
+            introduced_tokens: ["Le", "chef", "demande", "si", "la", "salle", "est", "prête"]
+            example: {text: "Le chef demande si la salle est prête.", language_code: fr, direction: ltr}
+          - content_key: fr.b1.unit33.lesson01.teach.livraison
+            kind: vocabulary
+            target: {text: "la livraison", language_code: fr, direction: ltr}
+            introduced_tokens: ["la", "livraison", "arrive", "à", "midi"]
+            example: {text: "La livraison arrive à midi.", language_code: fr, direction: ltr}
+          - content_key: fr.b1.unit33.lesson01.teach.salle
+            kind: vocabulary
+            target: {text: "la salle", language_code: fr, direction: ltr}
+            introduced_tokens: ["la", "salle", "est", "prête"]
+            example: {text: "La salle est prête.", language_code: fr, direction: ltr}
+          - content_key: fr.b1.unit33.lesson01.teach.pattern
+            kind: grammar_note
+            target: {text: "dire que + indicatif présent", language_code: fr, direction: ltr}
+            introduced_tokens: ["dire", "que", "demander", "si", "indicatif", "présent", "rapporter"]
+        exercises:
+          - content_key: fr.b1.unit33.lesson01.exercise01.select_reported_content
+            type: multiple_choice
+            tested_text: "Le chef dit que la livraison arrive à midi"
+            prompt:
+              target_blocks:
+                - {text: "Le chef dit que la livraison arrive à midi.", language_code: fr, direction: ltr}
+          - content_key: fr.b1.unit33.lesson01.exercise02.listen_report_present
+            type: listen_select
+            tested_text: "Le chef dit que la livraison arrive à midi."
+            media_asset_key: fr.b1.unit33.audio.report_present.neutral.01
+            prompt: {target_blocks: []}
+          - content_key: fr.b1.unit33.lesson01.exercise03.match_report_present
+            type: matching_pairs
+            tested_text: "dit que la livraison arrive à midi demande si la salle est prête"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "dit que", right: "says that"}
+              - {left: "la livraison", right: "the delivery"}
+              - {left: "arrive à midi", right: "arrives at noon"}
+              - {left: "demande si", right: "asks whether"}
+              - {left: "la salle", right: "the room"}
+              - {left: "est prête", right: "is ready"}
+          - content_key: fr.b1.unit33.lesson01.exercise04.order_report_present
+            type: word_order
+            tested_text: "Le chef dit que la livraison arrive à midi"
+            prompt: {target_blocks: []}
+            word_bank: ["Le", "chef", "dit", "que", "la", "livraison", "arrive", "à", "midi"]
+          - content_key: fr.b1.unit33.lesson01.exercise05.write_report_present
+            type: writing_prompt
+            tested_text: "Le chef dit que la livraison arrive à midi"
+            prompt:
+              target_blocks:
+                - {text: "Écris exactement cette phrase de discours indirect au présent avec dire que plus indicatif présent, sans changement de temps : Le chef dit que la livraison arrive à midi.", language_code: fr, direction: ltr}
+
+      - content_key: fr.b1.unit33.lesson02.discours_passe_concordance
+        title: "Il a dit qu'il fallait..."
+        spine_outcome_id: universal.b1.reported_speech.report_what_someone_said
+        teaching:
+          - content_key: fr.b1.unit33.lesson02.teach.a_dit_que
+            kind: vocabulary
+            target: {text: "a dit que", language_code: fr, direction: ltr}
+            introduced_tokens: ["Le", "chef", "a", "dit", "qu'il", "fallait", "finir", "les", "commandes", "avant", "midi"]
+            example: {text: "Le chef a dit qu'il fallait finir les commandes avant midi.", language_code: fr, direction: ltr}
+          - content_key: fr.b1.unit33.lesson02.teach.il_fallait
+            kind: vocabulary
+            target: {text: "il fallait", language_code: fr, direction: ltr}
+            introduced_tokens: ["il", "fallait", "finir", "avant", "midi"]
+            example: {text: "Il fallait finir avant midi.", language_code: fr, direction: ltr}
+          - content_key: fr.b1.unit33.lesson02.teach.a_demande_si
+            kind: vocabulary
+            target: {text: "a demandé si", language_code: fr, direction: ltr}
+            introduced_tokens: ["Le", "chef", "a", "demandé", "si", "la", "salle", "était", "prête"]
+            example: {text: "Le chef a demandé si la salle était prête.", language_code: fr, direction: ltr}
+          - content_key: fr.b1.unit33.lesson02.teach.etait_prete
+            kind: vocabulary
+            target: {text: "était prête", language_code: fr, direction: ltr}
+            introduced_tokens: ["la", "salle", "était", "prête"]
+            example: {text: "La salle était prête.", language_code: fr, direction: ltr}
+          - content_key: fr.b1.unit33.lesson02.teach.concordance
+            kind: grammar_note
+            target: {text: "concordance des temps : présent -> imparfait", language_code: fr, direction: ltr}
+            introduced_tokens: ["concordance", "des", "temps", "présent", "imparfait", "verbe", "d'introduction", "au", "passé"]
+          - content_key: fr.b1.unit33.lesson02.teach.dialogue_line01
+            kind: dialogue
+            target:
+              text: "Qu'est-ce que le chef a dit ce matin ?"
+              language_code: fr
+              direction: ltr
+              speaker: Mathieu
+            introduced_tokens: ["Qu'est-ce", "que", "le", "chef", "a", "dit", "ce", "matin"]
+          - content_key: fr.b1.unit33.lesson02.teach.dialogue_line02
+            kind: dialogue
+            target:
+              text: "Il a dit qu'il fallait finir les commandes avant midi."
+              language_code: fr
+              direction: ltr
+              speaker: Inès
+            introduced_tokens: ["Il", "a", "dit", "qu'il", "fallait", "finir", "les", "commandes", "avant", "midi"]
+          - content_key: fr.b1.unit33.lesson02.teach.dialogue_line03
+            kind: dialogue
+            target:
+              text: "Et il n'a rien demandé d'autre ?"
+              language_code: fr
+              direction: ltr
+              speaker: Mathieu
+            introduced_tokens: ["Et", "il", "n'a", "rien", "demandé", "d'autre"]
+          - content_key: fr.b1.unit33.lesson02.teach.dialogue_line04
+            kind: dialogue
+            target:
+              text: "Si, il a demandé si la salle était prête."
+              language_code: fr
+              direction: ltr
+              speaker: Inès
+            introduced_tokens: ["Si", "il", "a", "demandé", "si", "la", "salle", "était", "prête"]
+          - content_key: fr.b1.unit33.lesson02.teach.dialogue_line05
+            kind: dialogue
+            target:
+              text: "Et maintenant, qu'est-ce qu'il dit ?"
+              language_code: fr
+              direction: ltr
+              speaker: Mathieu
+            introduced_tokens: ["Et", "maintenant", "qu'est-ce", "qu'il", "dit"]
+          - content_key: fr.b1.unit33.lesson02.teach.dialogue_line06
+            kind: dialogue
+            target:
+              text: "Maintenant il dit que la livraison arrive à midi."
+              language_code: fr
+              direction: ltr
+              speaker: Inès
+            introduced_tokens: ["Maintenant", "il", "dit", "que", "la", "livraison", "arrive", "à", "midi"]
+        exercises:
+          - content_key: fr.b1.unit33.lesson02.exercise01.select_reported_past
+            type: multiple_choice
+            tested_text: "Le chef a dit qu'il fallait finir les commandes avant midi"
+            prompt:
+              target_blocks:
+                - {text: "Le chef a dit qu'il fallait finir les commandes avant midi.", language_code: fr, direction: ltr}
+          - content_key: fr.b1.unit33.lesson02.exercise02.comprehend_dialogue
+            type: dialogue_comprehension
+            tested_text: "qu'est-ce que le chef a dit ce matin il a dit qu'il fallait finir les commandes avant midi il a demandé si la salle était prête maintenant il dit que la livraison arrive à midi"
+            media_asset_key: fr.b1.unit33.audio.dialogue.discours.01
+            prompt: {target_blocks: []}
+          - content_key: fr.b1.unit33.lesson02.exercise03.match_report_past
+            type: matching_pairs
+            tested_text: "a dit que il fallait a demandé si la salle était prête maintenant"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "a dit que", right: "said that"}
+              - {left: "il fallait", right: "it was necessary to"}
+              - {left: "a demandé si", right: "asked whether"}
+              - {left: "la salle était prête", right: "the room was ready"}
+              - {left: "maintenant", right: "now"}
+              - {left: "ce matin", right: "this morning"}
+          - content_key: fr.b1.unit33.lesson02.exercise04.order_report_past
+            type: word_order
+            tested_text: "Le chef a dit qu'il fallait finir les commandes avant midi"
+            prompt: {target_blocks: []}
+            word_bank: ["Le", "chef", "a", "dit", "qu'il", "fallait", "finir", "les", "commandes", "avant", "midi"]
+          - content_key: fr.b1.unit33.lesson02.exercise05.speak_report_past
+            type: dialogue_response
+            tested_text: "Il a dit qu'il fallait finir les commandes avant midi"
+            prompt:
+              target_blocks:
+                - {text: "Mathieu demande ce que le chef a dit ce matin. Réponds avec cette phrase passée exacte avec la concordance des temps (présent devenu imparfait) : Il a dit qu'il fallait finir les commandes avant midi.", language_code: fr, direction: ltr}
+          - content_key: fr.b1.unit33.lesson02.exercise06.write_culminating
+            type: writing_prompt
+            tested_text: "Le chef dit que la livraison arrive à midi Il a dit qu'il fallait finir les commandes avant midi"
+            prompt:
+              target_blocks:
+                - {text: "Écris exactement ce message avec deux rapports : une phrase au discours indirect présent avec dire que plus indicatif présent, sans changement de temps, et une phrase au discours indirect passé avec un verbe d'introduction au passé qui applique la concordance des temps (présent devenu imparfait) : Le chef dit que la livraison arrive à midi. Il a dit qu'il fallait finir les commandes avant midi.", language_code: fr, direction: ltr}
