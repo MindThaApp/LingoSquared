@@ -1374,3 +1374,20 @@ New bug class discovered: untaught-in-tier tokens at tier opening (process
 fix: tier-opening dispatch prompts must state the standalone-tier rule and
 use tier-only acceptance commands).
 Instance count: ~64 review findings + 70 tier-token compile errors.
+
+### 2026-07-15 — wave 3: it/ru A2 complete (10u tiers), de A1 complete (24u), ar A1 16-21, es/fr B1 tiers opened (Codex both)
+Yield: it+ru 9, de+ar ~8, es+fr B1 8 (~25 across 44 files — roughly a
+third of wave-2's per-file rate). ZERO standalone-tier compile errors
+(wave-2's process fix — tier rule + tier-only acceptance commands in the
+dispatch prompt — eliminated that class entirely; es/fr B1 openings
+compiled clean first pass). Dominant classes: compound-outcome
+under-coverage in culminating productions at B1 (preflight item 7 at new
+depth), underdetermined exact-string prompts, naturalness (ar عندي صداع
+framing, MSA suggestion forms). NEW REVIEW-ONLY CLASS: cross-language
+audible distractor (English comprehension option semantically matching
+Arabic audio — string-matching validators cannot catch this; reviews
+must). Fix-verifications: it/de/es/fr ALL RESOLVED; ru 1 + ar 1 residuals
+fixed directly by coordinator. All flipped reviewed; manifests: en-it-a2
+& en-ru-a2 -> 10u (tier complete), en-de -> 24u (A1 complete), en-ar-a1
+-> 21u, NEW en-es-b1 (3u) + en-fr-b1 (3u). Corpus PASS.
+Instance count: ~25 findings.
