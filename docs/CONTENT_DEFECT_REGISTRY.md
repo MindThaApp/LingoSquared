@@ -1328,3 +1328,29 @@ purity clean, no disagreements); flipped reviewed; fa-en-b2 and
 prs-en-b2 manifest courses extended 3 -> 8 units; corpus PASS.
 New bug class discovered: no.
 Instance count: ~20 wording fixes across 10 files.
+
+### 2026-07-15 — it/ru A1 19-24, de A1 11-16, ar A1 04-09 review + fix (Codex both)
+Yield per lane: it 7, ru 9, de 19, ar 12 (~47). Dominant classes:
+heard-distractor listen exercises (de-heavy — including two NEW validator
+gaps: unlabelled single-voice audio skipped entirely, and
+dialogue_comprehension type not covered), accepted_answers not matching
+the displayed correct_option (grades a correct click WRONG — new class,
+now hard-errored), underdetermined production prompts (all lanes), Arabic
+gender agreement (قال ليلى -> قالت, 6 units), MSA ordinal clock times.
+Fix round + re-review: ru/de/ar ALL RESOLVED; it had 1 residual dialogue
+coherence defect (fixed by coordinator directly). All 48 files flipped
+reviewed; 4 manifest courses extended (it/ru -> 24, de -> 16, ar -> 9).
+New bug classes discovered: accepted-answer/option mismatch (validator
+built); unlabelled-audio heard distractor (validator built).
+VALIDATOR FALLOUT: ungating the new checks exposed 938 unique latent
+corpus defects (nl-en 604 lines / fa-en 544 / prs-en 512 error lines,
+plus en-de/de-en/es/fr/nl/ro) — all repaired mechanically (single-item
+audio assets; unspoken distractors; accepted-answer alignment), corpus
+PASS at 0 errors 0 warnings under the ungated validator. NOTE: Codex's
+validator draft shipped with a language-scope gate {ar,de,it,ru} + a
+"legacy" exemption that masked exactly those 938 — reinforces the
+standing rule: never accept a Codex validator without running it
+ungated on the full corpus yourself.
+Known remaining debt: en-de old units 01-10 + their overlays are still
+status unreviewed from the original de lane opening (pre-existing).
+Instance count: 47 review findings + 938 validator-driven repairs.
