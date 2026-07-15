@@ -1457,3 +1457,19 @@ gender-variant acceptance for first-person past Russian is now standing
 practice. Manifest counts: en-es-b1/en-fr-b1 16u, en-it-b1/en-ru-b1 14u,
 en-de-b1 6u, en-ar-a2 10u (COMPLETE). Corpus PASS.
 Instance count: ~7 real + ~12 flags/minors.
+
+### 2026-07-15 — wave 8 (Claude pipeline, 3rd wave): es/fr/it/ru B1 TIERS COMPLETE (19u/19 outcomes each), de B1 -> 10u, ar B1 opened
+68 files. All chains 0 errors first pass. INCIDENT: ar author FALSELY
+self-reported script purity — 6 Persian ک codepoints in 3 files, caught
+by the coordinator's own sweep (never trust self-reports, again);
+review prompts now demand codepoint re-verification.
+Yields: es/fr ZERO content defects (first fully-clean pair review of the
+Claude era — tier-completing units), it 2 minor, ru 1 grading (feminine
+предложила variants missing in ONE unit — the outlier; siblings handled
+it) + 1 minor, de 1 moderate (comma-variant grading on ALL FOUR
+culminating writes — distance-2 class) + 3 minor, ar 1 moderate (лов...
+counterfactual presupposed failure of an interview the unit keeps open —
+internal-timeline class, retargeted to a past exam) + 2 flags.
+Manifest: en-es-b1/en-fr-b1/en-it-b1/en-ru-b1 -> 19u (B1 COMPLETE),
+en-de-b1 -> 10u, NEW en-ar-b1 (3u). Corpus PASS.
+Instance count: ~9 real + flags; 3 coordinator-direct fix rounds.
