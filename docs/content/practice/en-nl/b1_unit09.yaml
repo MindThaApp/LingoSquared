@@ -1,0 +1,658 @@
+schema_version: '1.0'
+pack_key: practice.en-nl.b1.unit09
+source_language: en
+target_language: nl
+unit_content_key: nl.b1.unit09.eens_en_oneens
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: 'Authored 2026-07-22 against docs/content/PRACTICE_PACK_RECIPE.md, as part of the en-nl B1 unit01-11
+    practice-pack wave that unblocks these units'' checkpoints (the units already had lexemes from scripts/backfill_lexemes_en_nl.py
+    but no pack at all, so generate_checkpoint() returned checkpoint_unavailable). 18 templates across
+    6 lesson(s) with lexemes: fill_in_blank x1, listen_select x1, matching_pairs x2, multiple_choice x3,
+    translation x7, word_order x4. Every slot is satisfiable from THIS unit''s own lexemes, because generate_checkpoint()
+    calls _material() with only this unit''s lesson ids; slots use the unit''s own per-lesson semantic
+    tags (unioned where a single lesson tag could not reach the >=3-option multiple_choice floor or the
+    6-token matching_pairs floor), narrowed by part_of_speech to content words so no exercise ever shows
+    ''the'' or ''and'' as its answer. Measured with the recipe''s capacity/coverage model against the
+    real backfill data: 14 of 21 unit lexemes hostable (67%), recognition 57% / structured 67% / production
+    62%, and all three tiers reach 6/6 of the lessons that have lexemes. Distinct-target capacity: recognition
+    24, production 14, structured effectively unbounded (matching_pairs combinatorics). 5 of 18 templates
+    carry >=5 variants. REVIEWER: ''rust'' is glossed ''rest (imperative, with u)'' by the backfill although
+    lesson01 teaches the noun ''rust'' (defect 1.29); every gloss-showing template is restricted by part-of-speech
+    so it can never be the shown answer. lesson03 introduces only ''Jij'' and ''zegt'', so its word_order
+    anchors on semantic: informal_address (jij / je / Jij, all grammatical in the frame). General double-checks
+    for this wave: (a) every word_order/fill_in_blank frame was verified against its slot''s whole-B1-course
+    candidate pool, not just the unit pool, so Endless Practice cannot render an ungrammatical sentence;
+    (b) no frame''s literal text contains any of its own slot''s candidate values (defect 1.14); (c) listen_select
+    frames are bare ''{item}'' so no distractor can be a word the audio itself says (defect 1.22); (d)
+    matching_pairs pools were read by hand for interchangeable English glosses. Needs the standard fresh-context
+    review before import.'
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - agreement_eens
+    - b1_unit_review
+    - bank_nodig_single
+    - debate_dialogue
+    - debate_reading
+    - disagreement_oneens
+    - informal_address
+    - restating_opinion
+templates:
+- content_key: practice.en-nl.nl.b1.unit09.lesson01.choose.001
+  lesson_content_key: nl.b1.unit09.lesson01.eens_werkweek
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - adjective
+      agreement_tags:
+        semantic:
+        - agreement_eens
+        - disagreement_oneens
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is used when you agree or disagree about the four-day work week.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b1.unit09.lesson01.order.002
+  lesson_content_key: nl.b1.unit09.lesson01.eens_werkweek
+  type: word_order
+  frame:
+    text: Ik ben het ermee eens omdat mensen meer rust {item} hebben.
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - adjective
+      agreement_tags:
+        semantic: bank_nodig_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik ben het ermee eens omdat mensen meer rust {item} hebben.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Ik ben het ermee eens omdat mensen meer rust nodig hebben. -- I agree because people need more
+      rest.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b1.unit09.lesson01.fill.003
+  lesson_content_key: nl.b1.unit09.lesson01.eens_werkweek
+  type: fill_in_blank
+  frame:
+    text: Mensen hebben meer rust {item}.
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - adjective
+      agreement_tags:
+        semantic: bank_nodig_single
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Mensen hebben meer rust nodig. -- People need more rest.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b1.unit09.lesson01.match.004
+  lesson_content_key: nl.b1.unit09.lesson01.eens_werkweek
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: nl
+    direction: ltr
+  slots:
+    first:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - agreement_eens
+        - disagreement_oneens
+        - b1_unit_review
+        - debate_dialogue
+    second:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - agreement_eens
+        - disagreement_oneens
+        - b1_unit_review
+        - debate_dialogue
+    third:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - agreement_eens
+        - disagreement_oneens
+        - b1_unit_review
+        - debate_dialogue
+    fourth:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - agreement_eens
+        - disagreement_oneens
+        - b1_unit_review
+        - debate_dialogue
+    fifth:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - agreement_eens
+        - disagreement_oneens
+        - b1_unit_review
+        - debate_dialogue
+    sixth:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - agreement_eens
+        - disagreement_oneens
+        - b1_unit_review
+        - debate_dialogue
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Match each opinion word with its English meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b1.unit09.lesson01.translate.005
+  lesson_content_key: nl.b1.unit09.lesson01.eens_werkweek
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - adjective
+      agreement_tags:
+        semantic: agreement_eens
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b1.unit09.lesson01.translate.006
+  lesson_content_key: nl.b1.unit09.lesson01.eens_werkweek
+  type: translation
+  frame:
+    text: I agree because people need more rest.
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - adjective
+      agreement_tags:
+        semantic: bank_nodig_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik ben het ermee eens omdat mensen meer rust {item} hebben.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Ik ben het ermee eens omdat mensen meer rust nodig hebben.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b1.unit09.lesson02.order.001
+  lesson_content_key: nl.b1.unit09.lesson02.oneens_werkweek
+  type: word_order
+  frame:
+    text: Een vierdaagse werkweek {item} bedrijven te veel geld.
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - verb
+      agreement_tags:
+        semantic: disagreement_oneens
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Een vierdaagse werkweek {item} bedrijven te veel geld.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Een vierdaagse werkweek kost bedrijven te veel geld. -- A four-day work week costs companies
+      too much money.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b1.unit09.lesson02.translate.002
+  lesson_content_key: nl.b1.unit09.lesson02.oneens_werkweek
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      agreement_tags:
+        semantic: disagreement_oneens
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b1.unit09.lesson03.order.001
+  lesson_content_key: nl.b1.unit09.lesson03.jij_zegt_dat
+  type: word_order
+  frame:
+    text: '{item} zegt dat we minder moeten werken.'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - pronoun
+      agreement_tags:
+        semantic: informal_address
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{item} zegt dat we minder moeten werken.'
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Jij zegt dat we minder moeten werken. -- You say that we should work less.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b1.unit09.lesson03.translate.002
+  lesson_content_key: nl.b1.unit09.lesson03.jij_zegt_dat
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - verb
+      - pronoun
+      agreement_tags:
+        semantic: restating_opinion
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b1.unit09.lesson04.choose.001
+  lesson_content_key: nl.b1.unit09.lesson04.debat_dialoog
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - debate_dialogue
+        - debate_reading
+        - restating_opinion
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is said in the debate about the four-day work week.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b1.unit09.lesson04.order.002
+  lesson_content_key: nl.b1.unit09.lesson04.debat_dialoog
+  type: word_order
+  frame:
+    text: Toch blijf ik {item}.
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - adjective
+      agreement_tags:
+        semantic: debate_dialogue
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Toch blijf ik {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Toch blijf ik sceptisch. -- Nevertheless I remain skeptical.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b1.unit09.lesson04.listen.003
+  lesson_content_key: nl.b1.unit09.lesson04.debat_dialoog
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - debate_dialogue
+        - debate_reading
+        - restating_opinion
+        - b1_unit_review
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: You heard {item}.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b1.unit09.lesson04.match.004
+  lesson_content_key: nl.b1.unit09.lesson04.debat_dialoog
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: nl
+    direction: ltr
+  slots:
+    first:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - debate_reading
+        - debate_dialogue
+        - b1_unit_review
+        - disagreement_oneens
+        - restating_opinion
+    second:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - debate_reading
+        - debate_dialogue
+        - b1_unit_review
+        - disagreement_oneens
+        - restating_opinion
+    third:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - debate_reading
+        - debate_dialogue
+        - b1_unit_review
+        - disagreement_oneens
+        - restating_opinion
+    fourth:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - debate_reading
+        - debate_dialogue
+        - b1_unit_review
+        - disagreement_oneens
+        - restating_opinion
+    fifth:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - debate_reading
+        - debate_dialogue
+        - b1_unit_review
+        - disagreement_oneens
+        - restating_opinion
+    sixth:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - debate_reading
+        - debate_dialogue
+        - b1_unit_review
+        - disagreement_oneens
+        - restating_opinion
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Match each word from the debate with its English meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b1.unit09.lesson04.translate.005
+  lesson_content_key: nl.b1.unit09.lesson04.debat_dialoog
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - verb
+      - adjective
+      agreement_tags:
+        semantic: debate_dialogue
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b1.unit09.lesson05.translate.001
+  lesson_content_key: nl.b1.unit09.lesson05.werkweek_lezen
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - verb
+      agreement_tags:
+        semantic: debate_reading
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b1.unit09.lesson06.choose.001
+  lesson_content_key: nl.b1.unit09.lesson06.wrapup_production
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - adjective
+      agreement_tags:
+        semantic:
+        - b1_unit_review
+        - agreement_eens
+        - disagreement_oneens
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is part of this unit''s agreeing and disagreeing vocabulary.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b1.unit09.lesson06.translate.002
+  lesson_content_key: nl.b1.unit09.lesson06.wrapup_production
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      agreement_tags:
+        semantic: b1_unit_review
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr

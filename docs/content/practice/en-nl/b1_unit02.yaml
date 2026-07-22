@@ -1,0 +1,719 @@
+schema_version: '1.0'
+pack_key: practice.en-nl.b1.unit02
+source_language: en
+target_language: nl
+unit_content_key: nl.b1.unit02.mening_en_nuance
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: 'Authored 2026-07-22 against docs/content/PRACTICE_PACK_RECIPE.md, as part of the en-nl B1 unit01-11
+    practice-pack wave that unblocks these units'' checkpoints (the units already had lexemes from scripts/backfill_lexemes_en_nl.py
+    but no pack at all, so generate_checkpoint() returned checkpoint_unavailable). 19 templates across
+    6 lesson(s) with lexemes: listen_select x1, matching_pairs x3, multiple_choice x5, translation x7,
+    word_order x3. Every slot is satisfiable from THIS unit''s own lexemes, because generate_checkpoint()
+    calls _material() with only this unit''s lesson ids; slots use the unit''s own per-lesson semantic
+    tags (unioned where a single lesson tag could not reach the >=3-option multiple_choice floor or the
+    6-token matching_pairs floor), narrowed by part_of_speech to content words so no exercise ever shows
+    ''the'' or ''and'' as its answer. Measured with the recipe''s capacity/coverage model against the
+    real backfill data: 34 of 45 unit lexemes hostable (76%), recognition 76% / structured 73% / production
+    73%, and all three tiers reach 6/6 of the lessons that have lexemes. Distinct-target capacity: recognition
+    62, production 34, structured effectively unbounded (matching_pairs combinatorics). 13 of 19 templates
+    carry >=5 variants. REVIEWER: Every gloss-showing template that could reach ''waar'' as an ANSWER
+    is restricted to POS noun/verb/adjective, because the backfill glosses lesson04''s ''waar'' (''Dat
+    is waar'' = that is true) as ''where'' - correct for unit04 lesson03, wrong here (defect 1.29). General
+    double-checks for this wave: (a) every word_order/fill_in_blank frame was verified against its slot''s
+    whole-B1-course candidate pool, not just the unit pool, so Endless Practice cannot render an ungrammatical
+    sentence; (b) no frame''s literal text contains any of its own slot''s candidate values (defect 1.14);
+    (c) listen_select frames are bare ''{item}'' so no distractor can be a word the audio itself says
+    (defect 1.22); (d) matching_pairs pools were read by hand for interchangeable English glosses. Needs
+    the standard fresh-context review before import.'
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - b1_unit_review
+    - concession_hoewel
+    - concession_ondanks_dat
+    - contrast_toch_echter
+    - opinion_article_reading
+    - opinion_dialogue_meat
+templates:
+- content_key: practice.en-nl.nl.b1.unit02.lesson01.choose.001
+  lesson_content_key: nl.b1.unit02.lesson01.hoewel
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic: concession_hoewel
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} appears in the "Hoewel..." sentence pattern.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b1.unit02.lesson01.order.002
+  lesson_content_key: nl.b1.unit02.lesson01.hoewel
+  type: word_order
+  frame:
+    text: Hoewel vlees lekker is, eet ik {item} vlees.
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - adverb
+      agreement_tags:
+        semantic: concession_hoewel
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Hoewel vlees lekker is, eet ik {item} vlees.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Hoewel vlees lekker is, eet ik minder vlees. -- Although meat is tasty, I eat less meat.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b1.unit02.lesson01.translate.003
+  lesson_content_key: nl.b1.unit02.lesson01.hoewel
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic: concession_hoewel
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b1.unit02.lesson01.match.004
+  lesson_content_key: nl.b1.unit02.lesson01.hoewel
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: nl
+    direction: ltr
+  slots:
+    first:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - concession_hoewel
+        - concession_ondanks_dat
+        - contrast_toch_echter
+    second:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - concession_hoewel
+        - concession_ondanks_dat
+        - contrast_toch_echter
+    third:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - concession_hoewel
+        - concession_ondanks_dat
+        - contrast_toch_echter
+    fourth:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - concession_hoewel
+        - concession_ondanks_dat
+        - contrast_toch_echter
+    fifth:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - concession_hoewel
+        - concession_ondanks_dat
+        - contrast_toch_echter
+    sixth:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - concession_hoewel
+        - concession_ondanks_dat
+        - contrast_toch_echter
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Match each contrast word with its English meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b1.unit02.lesson02.order.001
+  lesson_content_key: nl.b1.unit02.lesson02.ondanks_dat
+  type: word_order
+  frame:
+    text: Het is beter voor het {item}.
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      agreement_tags:
+        semantic: concession_ondanks_dat
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Het is beter voor het {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Het is beter voor het milieu. -- It is better for the environment.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b1.unit02.lesson02.translate.002
+  lesson_content_key: nl.b1.unit02.lesson02.ondanks_dat
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - adjective
+      agreement_tags:
+        semantic: concession_ondanks_dat
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b1.unit02.lesson02.listen.003
+  lesson_content_key: nl.b1.unit02.lesson02.ondanks_dat
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - concession_hoewel
+        - concession_ondanks_dat
+        - contrast_toch_echter
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: You heard {item}.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b1.unit02.lesson03.choose.001
+  lesson_content_key: nl.b1.unit02.lesson03.toch_echter
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic: contrast_toch_echter
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is one of this lesson''s contrast words.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b1.unit02.lesson03.order.002
+  lesson_content_key: nl.b1.unit02.lesson03.toch_echter
+  type: word_order
+  frame:
+    text: Sommige {item} eten geen vlees.
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      agreement_tags:
+        semantic: contrast_toch_echter
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Sommige {item} eten geen vlees.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Sommige mensen eten geen vlees. -- Some people do not eat meat.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b1.unit02.lesson03.translate.003
+  lesson_content_key: nl.b1.unit02.lesson03.toch_echter
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic: contrast_toch_echter
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b1.unit02.lesson04.choose.001
+  lesson_content_key: nl.b1.unit02.lesson04.gesprek_vlees
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      agreement_tags:
+        semantic: opinion_dialogue_meat
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is said in the conversation about eating less meat.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b1.unit02.lesson04.match.002
+  lesson_content_key: nl.b1.unit02.lesson04.gesprek_vlees
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: nl
+    direction: ltr
+  slots:
+    first:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      agreement_tags:
+        semantic: opinion_dialogue_meat
+    second:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      agreement_tags:
+        semantic: opinion_dialogue_meat
+    third:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      agreement_tags:
+        semantic: opinion_dialogue_meat
+    fourth:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      agreement_tags:
+        semantic: opinion_dialogue_meat
+    fifth:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      agreement_tags:
+        semantic: opinion_dialogue_meat
+    sixth:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      agreement_tags:
+        semantic: opinion_dialogue_meat
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Match each word from the conversation with its English meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b1.unit02.lesson04.translate.003
+  lesson_content_key: nl.b1.unit02.lesson04.gesprek_vlees
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      agreement_tags:
+        semantic: opinion_dialogue_meat
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b1.unit02.lesson05.choose.001
+  lesson_content_key: nl.b1.unit02.lesson05.artikel_minder_vlees
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adverb
+      agreement_tags:
+        semantic: opinion_article_reading
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} appears in the article about eating less meat.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b1.unit02.lesson05.match.002
+  lesson_content_key: nl.b1.unit02.lesson05.artikel_minder_vlees
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: nl
+    direction: ltr
+  slots:
+    first:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - opinion_article_reading
+        - b1_unit_review
+    second:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - opinion_article_reading
+        - b1_unit_review
+    third:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - opinion_article_reading
+        - b1_unit_review
+    fourth:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - opinion_article_reading
+        - b1_unit_review
+    fifth:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - opinion_article_reading
+        - b1_unit_review
+    sixth:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - opinion_article_reading
+        - b1_unit_review
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Match each word from the article with its English meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b1.unit02.lesson05.translate.003
+  lesson_content_key: nl.b1.unit02.lesson05.artikel_minder_vlees
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adverb
+      agreement_tags:
+        semantic: opinion_article_reading
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b1.unit02.lesson06.choose.001
+  lesson_content_key: nl.b1.unit02.lesson06.wrapup_production
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - b1_unit_review
+        - opinion_dialogue_meat
+        - opinion_article_reading
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is part of this unit''s opinion vocabulary.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b1.unit02.lesson06.translate.002
+  lesson_content_key: nl.b1.unit02.lesson06.wrapup_production
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - adverb
+      agreement_tags:
+        semantic: b1_unit_review
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b1.unit02.lesson06.translate.003
+  lesson_content_key: nl.b1.unit02.lesson06.wrapup_production
+  type: translation
+  frame:
+    text: Although meat is tasty, I eat less meat.
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - adverb
+      agreement_tags:
+        semantic: concession_hoewel
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Hoewel vlees lekker is, eet ik {item} vlees.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Hoewel vlees lekker is, eet ik minder vlees.
+    language_code: en
+    direction: ltr

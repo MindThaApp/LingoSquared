@@ -1,0 +1,593 @@
+schema_version: '1.0'
+pack_key: practice.en-fa.a2.unit17
+source_language: en
+target_language: fa
+unit_content_key: fa.a2.unit17.weekly_schedule
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    Authored 2026-07-22 against docs/content/PRACTICE_PACK_RECIPE.md to unblock this
+    unit's checkpoint (the unit had lexemes in scripts/backfill_lexemes.py but no
+    practice pack at all, so generate_checkpoint() returned checkpoint_unavailable).
+
+
+    15 templates across all 4 lessons: multiple_choice x5, matching_pairs x3,
+    word_order x2, translation x5 -- 5 per difficulty tier, so all three
+    CHECKPOINT_MASTERY_BANDS (0.0/0.5/0.8) have real depth. Every slot is
+    satisfiable from THIS unit's own lessons, because generate_checkpoint() calls
+    _material() with only this unit's lesson ids.
+
+
+    SLOT CONSTRAINTS ARE PART-OF-SPEECH ONLY, DELIBERATELY. scripts/backfill_lexemes.py
+    never gave fa A2 units 11-18 any unit-specific semantic tags (unlike a2_unit10's
+    curated opinion_word/opinion_phrase, or en-nl unit73's job_interview_vocab_pure).
+    The only semantic tags reaching these units are course-wide singletons plus the
+    auto-derived "reviewed_phrase", none of which isolate this unit. Editing the
+    backfill script is out of scope for this pass (recipe DO-NOT #16), so every slot
+    is constrained by language_code + part_of_speech. That is exactly unit-scoped at
+    checkpoint time; in Endless Practice the same slots pool the whole A2 course, which
+    is the known, accepted cost -- see the reviewer notes below.
+
+
+    NO listen_select (AZURE_SPEECH_KEY is unset, so tts_actually_configured('fa') is
+    false and _material() would delete those templates -- recipe DO-NOT #3). NO
+    fill_in_blank: the AUTHORING_GUIDE #17 ambiguity check pools candidates across the
+    whole en/fa pair, and with no single-member semantic tag available in this unit no
+    part-of-speech-only slot can ever have exactly one course-wide candidate. NO
+    part_of_speech: phrase anywhere -- four fa A2 "phrase" lexemes carry an English
+    parenthetical inside the TOKEN itself ("باز کردن (to open, light verb)" unit11,
+    "به خاطر (because of + noun)" unit15, "وقت تلف کردن (to waste time, light verb)"
+    unit16, "پس دادن (to return an item, light verb)" unit18) and many phrase glosses are
+    third-person narration ("سارا says hello, my bathroom pipe is leaking") rather than
+    translations -- both would leak straight into learner-facing options/answers. NO
+    proper_noun (self-glossing) and NO symbol/particle/preposition/pronoun in any slot.
+
+
+    REVIEWER MUST DOUBLE-CHECK:
+    (1) Endless Practice pools the whole A2 course for these part-of-speech-only slots.
+    The measured course-wide gloss-collision density for the sets actually used is low
+    ([noun] 11 near-collisions in 171; [noun, adverb] 14 in 195) but two EXACT duplicate
+    glosses exist in fa A2 and are a genuine underdetermined-production risk for the
+    typed translation templates: بیایید (unit12) / بیاید (unit13), both glossed
+    "come (polite imperative)", and خوب (unit16) / خوبی (unit17), both glossed "good".
+    Neither pair can co-occur inside a single unit checkpoint. The real fix is a gloss
+    disambiguation in scripts/backfill_lexemes.py, which this pass may not touch.
+    (2) Homograph check (defect 1.29): the only fa A2 surface-form homograph is تو
+    (pronoun "you" in unit09/unit14-adjacent lessons vs preposition "in/inside/within"
+    in unit14). Both senses carry separate part_of_speech values and neither
+    part_of_speech is used by any slot in this pack, so no slot here can confuse them.
+    (3) Grading now normalizes ZWNJ (U+200C) and harakat (backend/app/review/grading.py),
+    so natural correctly-spelled Persian with ZWNJ is used throughout and no ZWNJ-free
+    accepted-answer variants are needed.
+
+
+    Iranian Persian only; the prs (Dari) lane was not opened or consulted at any point
+    (defect class 1.28). Persian-script codepoint purity: no Arabic Yeh U+064A and no
+    Arabic Kaf U+0643 -- every fa block is direction: rtl and every en block ltr.
+    Needs the standard fresh-context review before import.
+
+
+    MEASURED (recipe #9 step 4, this unit): 36 target-language (fa) lexemes across
+    all 4 lessons. Target coverage ALL 83%, recognition 83%, structured 78%,
+    production 83% -- and all three tiers host >=1 lexeme in EVERY one of the 4
+    lessons (4/4 in each tier). Coverage is quoted against the fa denominator on
+    purpose: this unit's lexeme table also holds 24 English "source_gloss" rows
+    whose token IS their english_gloss, so they are structurally unhostable in an
+    en->fa pack (any slot serving them would render a self-glossing question); they
+    inflate the raw denominator to 60 and cost only wasted generation attempts,
+    which the checkpoint's max_attempts budget absorbs. No template has a
+    zero-candidate slot, no multiple_choice/matching_pairs slot falls under its
+    minimum, and no template is thin (every one has >=4 unit-scoped variants; the
+    matching_pairs templates are combinatorial). A faithful offline port of
+    generate_checkpoint() returns 15/15 DISTINCT items on 5 different RNG seeds,
+    with a real 5 recognition / 5 structured / 5 production format mix every time.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+templates:
+
+- content_key: practice.en-fa.fa.a2.unit17.lesson01.choose.001
+  lesson_content_key: fa.a2.unit17.lesson01.weekly_schedule_vocabulary
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - noun
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is one of the nouns taught in the weekly-schedule word list.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a2.unit17.lesson01.match.002
+  lesson_content_key: fa.a2.unit17.lesson01.weekly_schedule_vocabulary
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: fa
+    direction: rtl
+  slots:
+    first:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - adverb
+    second:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - adverb
+    third:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - adverb
+    fourth:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - adverb
+    fifth:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - adverb
+    sixth:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - adverb
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: 'Match each Farsi word from this unit''s weekly-schedule vocabulary with its English meaning.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a2.unit17.lesson01.order.003
+  lesson_content_key: fa.a2.unit17.lesson01.weekly_schedule_vocabulary
+  type: word_order
+  frame:
+    text: '{first} و {second}'
+    language_code: fa
+    direction: rtl
+  slots:
+    first:
+      language_code: fa
+      part_of_speech:
+      - noun
+    second:
+      language_code: fa
+      part_of_speech:
+      - noun
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{first} و {second}'
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: 'The word و ("and") joins two items in a list.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a2.unit17.lesson01.translate.004
+  lesson_content_key: fa.a2.unit17.lesson01.weekly_schedule_vocabulary
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - noun
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'The Farsi word is {item}.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a2.unit17.lesson02.choose.001
+  lesson_content_key: fa.a2.unit17.lesson02.sequencing_your_week
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - adjective
+      - adverb
+      - verb
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is used in this unit when sequencing your week.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a2.unit17.lesson02.order.002
+  lesson_content_key: fa.a2.unit17.lesson02.sequencing_your_week
+  type: word_order
+  frame:
+    text: '{first}، {second} و {third}'
+    language_code: fa
+    direction: rtl
+  slots:
+    first:
+      language_code: fa
+      part_of_speech:
+      - noun
+    second:
+      language_code: fa
+      part_of_speech:
+      - noun
+    third:
+      language_code: fa
+      part_of_speech:
+      - noun
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{first}، {second} و {third}'
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: 'In a Farsi list the last item is joined with و; the earlier items are separated by the comma ،.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a2.unit17.lesson02.translate.003
+  lesson_content_key: fa.a2.unit17.lesson02.sequencing_your_week
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - adjective
+      - adverb
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'The Farsi word is {item}.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a2.unit17.lesson03.choose.001
+  lesson_content_key: fa.a2.unit17.lesson03.reading_a_weekly_schedule
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - adjective
+      - adverb
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} appears in the written weekly schedule.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a2.unit17.lesson03.match.002
+  lesson_content_key: fa.a2.unit17.lesson03.reading_a_weekly_schedule
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: fa
+    direction: rtl
+  slots:
+    first:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - adverb
+    second:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - adverb
+    third:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - adverb
+    fourth:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - adverb
+    fifth:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - adverb
+    sixth:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - adverb
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: 'Match each Farsi word from this unit''s weekly-schedule vocabulary with its English meaning.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a2.unit17.lesson03.translate.003
+  lesson_content_key: fa.a2.unit17.lesson03.reading_a_weekly_schedule
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - adjective
+      - adverb
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'The Farsi word is {item}.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a2.unit17.lesson04.choose.001
+  lesson_content_key: fa.a2.unit17.lesson04.weekly_schedule_conversation
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - adjective
+      - adverb
+      - verb
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is said in the conversation about the week.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a2.unit17.lesson04.choose.002
+  lesson_content_key: fa.a2.unit17.lesson04.weekly_schedule_conversation
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - verb
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is a verb form this unit teaches.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a2.unit17.lesson04.match.003
+  lesson_content_key: fa.a2.unit17.lesson04.weekly_schedule_conversation
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth} · {seventh} · {eighth}'
+    language_code: fa
+    direction: rtl
+  slots:
+    first:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - adverb
+      - verb
+    second:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - adverb
+      - verb
+    third:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - adverb
+      - verb
+    fourth:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - adverb
+      - verb
+    fifth:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - adverb
+      - verb
+    sixth:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - adverb
+      - verb
+    seventh:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - adverb
+      - verb
+    eighth:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - adverb
+      - verb
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+    - seventh
+    - eighth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+    - seventh
+    - eighth
+  feedback_frame:
+    text: 'Match each Farsi word or verb form from this unit''s weekly-schedule material with its English meaning.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a2.unit17.lesson04.translate.004
+  lesson_content_key: fa.a2.unit17.lesson04.weekly_schedule_conversation
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - verb
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'The Farsi verb form is {item}.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a2.unit17.lesson04.translate.005
+  lesson_content_key: fa.a2.unit17.lesson04.weekly_schedule_conversation
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - noun
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'The Farsi word is {item}.'
+    language_code: en
+    direction: ltr
