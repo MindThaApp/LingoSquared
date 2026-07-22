@@ -1,0 +1,556 @@
+schema_version: '1.0'
+pack_key: practice.en-prs.b1.unit03
+source_language: en
+target_language: prs
+unit_content_key: prs.b1.unit03.conditions
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    Authored 2026-07-22 against docs/content/PRACTICE_PACK_RECIPE.md. en-prs B1
+    unit03 (اگر / real conditionals with داشته باشم + a present result clause)
+    had a full realization + overlay and 38 classified lexemes across all 6
+    lessons, but no practice pack, so its unit checkpoint returned
+    checkpoint_unavailable.
+
+
+    15 templates: multiple_choice x4, matching_pairs x2, word_order x3,
+    fill_in_blank x2, translation x4. ZERO listen_select --
+    tts_actually_configured('prs') is false, so _material() would delete them
+    (recipe section 6.2 / DO-NOT 3); recognition tier is multiple_choice only.
+
+
+    IMPORTANT reviewer note: آنجا is deliberately EXCLUDED from every slot in
+    this pack. Its english_gloss in backfill_lexemes_en_prs.py is "there
+    (spelling variant of آن‌جا, no ZWNJ)" -- an authoring annotation, not a
+    learner-facing gloss. Any multiple_choice option, matching_pairs right or
+    bare-word translation prompt built from it would leak the internal term
+    "ZWNJ" into the learner UI (defect class 1.5). Its tag location_word is
+    therefore never used here; fixing the gloss is a backfill-script change and
+    belongs to whoever owns that script.
+
+
+    lesson06 introduces exactly one lexeme (هوا, weather_noun, module-wide
+    unique), so it is hosted in all three tiers via choose.001/translate.002 on
+    the weather-and-place noun pool, fill.003, and the fixed-sentence
+    translate.004 -- all four ride that single lexeme, which is the only way
+    lesson06 can appear in a checkpoint at all. باشد / باشند / می‌آید / ما /
+    دیگر / خوبی / داشته carry no semantic tag in the backfill script and stay
+    unhosted; هوا aside, the two fill_in_blank slots (weekday single -> جمعه,
+    weather_noun -> هوا) each have exactly ONE distinct MODULE-wide candidate
+    (AUTHORING_GUIDE section 17).
+
+
+    Register: unit03's own register_policy pins the standard د/ید/ند paradigm
+    for NEW verbs while keeping the already-established Afghan باشین (this file
+    was normalized باشید -> باشین on 2026-07-11); every frame here is lifted
+    from the realization's own tested_text, so no new form is introduced. Needs
+    the standard fresh-context review before import.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - subjunctive_be_verb
+    - come_verb_present
+    - meeting_verb
+    - go_verb_plural
+    - go_verb_present
+    - routine_verb
+    - stay_verb
+    - drink_verb_plural
+    - past_verb_plural_third
+    - rain_verb
+    - know_verb
+    - dialogue_word
+    - weather_precip_noun
+    - weather_descriptor
+    - weather_noun
+    - plan_noun
+    - sport_place_word
+    - weekday_name
+    - volume_en_prs_a1_unit09_weekday_name_10_single
+    - food_item
+    - preference_topic
+    - time_period
+    - politeness
+templates:
+
+# ---------------------------------------------------------------------------
+# lesson01 -- اگر وقت داشته باشم (1st/2nd person conditions)
+# ---------------------------------------------------------------------------
+- content_key: practice.en-prs.prs.b1.unit03.lesson01.choose.001
+  lesson_content_key: prs.b1.unit03.lesson01.present_condition_1st2nd
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: verb
+      agreement_tags:
+        semantic: subjunctive_be_verb
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is the subjunctive بودن form that closes an اگر ... داشته clause.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-prs.prs.b1.unit03.lesson01.order.002
+  lesson_content_key: prs.b1.unit03.lesson01.present_condition_1st2nd
+  type: word_order
+  frame:
+    text: 'اگر وقت داشته {item}، می‌آیم.'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: verb
+      agreement_tags:
+        semantic: subjunctive_be_verb
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: 'اگر وقت داشته {item}، می‌آیم.'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'اگر وقت داشته باشم، می‌آیم. -- If I have time, I''ll come.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-prs.prs.b1.unit03.lesson01.match.003
+  lesson_content_key: prs.b1.unit03.lesson01.present_condition_1st2nd
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: prs
+    direction: rtl
+  slots:
+    first: &condition_verb
+      language_code: prs
+      part_of_speech: verb
+      agreement_tags:
+        semantic:
+        - subjunctive_be_verb
+        - come_verb_present
+        - meeting_verb
+        - go_verb_plural
+        - go_verb_present
+        - routine_verb
+        - stay_verb
+        - drink_verb_plural
+        - past_verb_plural_third
+        - rain_verb
+        - know_verb
+    second: *condition_verb
+    third: *condition_verb
+    fourth: *condition_verb
+    fifth: *condition_verb
+    sixth: *condition_verb
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Match each Dari verb form with the person and tense it expresses.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-prs.prs.b1.unit03.lesson01.translate.004
+  lesson_content_key: prs.b1.unit03.lesson01.present_condition_1st2nd
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: verb
+      agreement_tags:
+        semantic:
+        - subjunctive_be_verb
+        - come_verb_present
+        - meeting_verb
+        - go_verb_plural
+        - go_verb_present
+        - routine_verb
+        - stay_verb
+        - drink_verb_plural
+        - past_verb_plural_third
+        - rain_verb
+        - know_verb
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dari form is {item}.
+    language_code: en
+    direction: ltr
+
+# ---------------------------------------------------------------------------
+# lesson02 -- همه صیغه‌ها (all persons)
+# ---------------------------------------------------------------------------
+- content_key: practice.en-prs.prs.b1.unit03.lesson02.choose.001
+  lesson_content_key: prs.b1.unit03.lesson02.present_condition_all_persons
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: verb
+      agreement_tags:
+        semantic:
+        - come_verb_present
+        - meeting_verb
+        - go_verb_plural
+        - go_verb_present
+        - routine_verb
+        - stay_verb
+        - drink_verb_plural
+        - past_verb_plural_third
+        - rain_verb
+        - know_verb
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is the result-clause verb -- it keeps the ordinary present or past ending.'
+    language_code: en
+    direction: ltr
+
+# ---------------------------------------------------------------------------
+# lesson03 -- negation and weather conditions
+# ---------------------------------------------------------------------------
+- content_key: practice.en-prs.prs.b1.unit03.lesson03.order.001
+  lesson_content_key: prs.b1.unit03.lesson03.negative_and_weather_condition
+  type: word_order
+  frame:
+    text: 'اگر باران {item}، در خانه می‌مانیم.'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: verb
+      agreement_tags:
+        semantic: rain_verb
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: 'اگر باران {item}، در خانه می‌مانیم.'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'اگر باران ببارد، در خانه می‌مانیم. -- If it rains, we stay at home.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-prs.prs.b1.unit03.lesson03.choose.002
+  lesson_content_key: prs.b1.unit03.lesson03.negative_and_weather_condition
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech:
+      - noun
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - weather_precip_noun
+        - weather_descriptor
+        - weather_noun
+        - plan_noun
+        - sport_place_word
+        - weekday_name
+        - food_item
+        - preference_topic
+        - time_period
+        - politeness
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} belongs to this unit''s weather-and-weekend-plans vocabulary.'
+    language_code: en
+    direction: ltr
+
+# ---------------------------------------------------------------------------
+# lesson04 -- جمعه (Friday plan dialogue)
+# ---------------------------------------------------------------------------
+- content_key: practice.en-prs.prs.b1.unit03.lesson04.fill.001
+  lesson_content_key: prs.b1.unit03.lesson04.dialogue_friday_plan
+  type: fill_in_blank
+  frame:
+    text: '{item} چه کار می‌کنی؟'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: volume_en_prs_a1_unit09_weekday_name_10_single
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'جمعه چه کار می‌کنی؟ -- What are you doing on Friday?'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-prs.prs.b1.unit03.lesson04.order.002
+  lesson_content_key: prs.b1.unit03.lesson04.dialogue_friday_plan
+  type: word_order
+  frame:
+    text: 'اگر باران ببارد، در خانه می‌مانیم و {item} می‌نوشیم.'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: preference_topic
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: 'اگر باران ببارد، در خانه می‌مانیم و {item} می‌نوشیم.'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'اگر باران ببارد، در خانه می‌مانیم و چای می‌نوشیم. -- If it rains, we stay home and drink tea.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-prs.prs.b1.unit03.lesson04.choose.003
+  lesson_content_key: prs.b1.unit03.lesson04.dialogue_friday_plan
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic: dialogue_word
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is said in the Friday-plans conversation between Zarmina and Homayoun.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-prs.prs.b1.unit03.lesson04.translate.004
+  lesson_content_key: prs.b1.unit03.lesson04.dialogue_friday_plan
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: prs
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic: dialogue_word
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dari word is {item}.
+    language_code: en
+    direction: ltr
+
+# ---------------------------------------------------------------------------
+# lesson05 -- reading: that Friday
+# ---------------------------------------------------------------------------
+- content_key: practice.en-prs.prs.b1.unit03.lesson05.match.001
+  lesson_content_key: prs.b1.unit03.lesson05.reading_friday
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: prs
+    direction: rtl
+  slots:
+    first: &weather_word
+      language_code: prs
+      part_of_speech:
+      - noun
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - weather_precip_noun
+        - weather_descriptor
+        - weather_noun
+        - plan_noun
+        - sport_place_word
+        - weekday_name
+        - food_item
+        - preference_topic
+        - time_period
+        - politeness
+    second: *weather_word
+    third: *weather_word
+    fourth: *weather_word
+    fifth: *weather_word
+    sixth: *weather_word
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Match each Dari word from this unit with its English meaning.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-prs.prs.b1.unit03.lesson05.translate.002
+  lesson_content_key: prs.b1.unit03.lesson05.reading_friday
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: prs
+      part_of_speech:
+      - noun
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - weather_precip_noun
+        - weather_descriptor
+        - weather_noun
+        - plan_noun
+        - sport_place_word
+        - weekday_name
+        - food_item
+        - preference_topic
+        - time_period
+        - politeness
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dari word is {item}.
+    language_code: en
+    direction: ltr
+
+# ---------------------------------------------------------------------------
+# lesson06 -- wrap-up production
+# ---------------------------------------------------------------------------
+- content_key: practice.en-prs.prs.b1.unit03.lesson06.fill.001
+  lesson_content_key: prs.b1.unit03.lesson06.wrapup_production
+  type: fill_in_blank
+  frame:
+    text: 'امروز {item} آفتابی است.'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: weather_noun
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'امروز هوا آفتابی است. -- Today the weather is sunny.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-prs.prs.b1.unit03.lesson06.translate.002
+  lesson_content_key: prs.b1.unit03.lesson06.wrapup_production
+  type: translation
+  frame:
+    text: Today the weather is sunny.
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: weather_noun
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: 'امروز {item} آفتابی است.'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'امروز هوا آفتابی است.'
+    language_code: en
+    direction: ltr

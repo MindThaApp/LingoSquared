@@ -1,0 +1,586 @@
+schema_version: '1.0'
+pack_key: practice.en-prs.b1.unit04
+source_language: en
+target_language: prs
+unit_content_key: prs.b1.unit04.sequencing
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    Authored 2026-07-22 against docs/content/PRACTICE_PACK_RECIPE.md. en-prs B1
+    unit04 (وقتی که / temporal clauses and sequencing, present and past) had a
+    full realization + overlay and 25 classified lexemes across lessons 01-05,
+    but no practice pack, so its unit checkpoint returned
+    checkpoint_unavailable.
+
+
+    17 templates: multiple_choice x4, matching_pairs x2, word_order x3,
+    fill_in_blank x3, translation x5. ZERO listen_select --
+    tts_actually_configured('prs') is false, so _material() would delete them
+    (recipe section 6.2 / DO-NOT 3); recognition tier is multiple_choice only.
+
+
+    lesson06 (wrapup_production) exists in the realization but contributes ZERO
+    lexemes, so it cannot appear in a checkpoint; the 5 lessons that DO have
+    lexemes are each hosted in all three tiers. This is a small unit (25
+    lexemes), so the paradigm tags are pooled generously: the present set
+    (routine_verb / become_verb_plural / work_verb_form / plan_verb, 8 members)
+    and the past set (past_verb_first_b1 / _second_b1 / _second / _third /
+    _third_b1, 8 members) each stand alone for recognition and are combined for
+    matching_pairs.
+
+
+    Reviewer note on رسید: it is a homograph (defect 1.29). In THIS unit it is
+    taught as "he/she arrived" and that is its english_gloss, but the backfill
+    script also tags it paperwork_word/receipt_word from an A2 unit where it
+    means "receipt". Because A1/A2/B1 are separate Course rows, the B1 pool for
+    those two tags contains only رسید, so the tag is safe here -- but do not
+    reuse receipt_word in an A2 pack expecting the same member.
+
+
+    Reviewer note on past_verb_second_b1: it is NOT single-member at B1-course
+    scope -- خریدی (b1 unit10) shares it with رسیدی. lesson03's word_order was
+    therefore rebuilt onto past_verb_first_b1 with the frame "وقتی که کار تمام
+    شد، {item}." which is grammatical for BOTH رسیدم and پختم, and lesson03's
+    production template is a bare-word translation over the whole past set
+    instead of a fixed English sentence, because a fixed sentence over a
+    two-member slot is the underdetermined-production-prompt defect.
+
+
+    All three fill_in_blank slots (household_object_word -> تلویزیون,
+    completion_word -> تمام, tired_word -> خسته) have exactly ONE distinct
+    MODULE-wide candidate (AUTHORING_GUIDE section 17). No typed-answer pool has
+    a duplicate English gloss at B1-course scope, and every word_order frame was
+    rendered with every B1-course candidate and hand-checked for grammaticality
+    (including tired_word/emotion_word -> خسته/نگران/خوشحال in lesson01). Every
+    frame is lifted from the realization's own tested_text. Needs the standard
+    fresh-context review before import.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - routine_verb
+    - become_verb_plural
+    - work_verb_form
+    - plan_verb
+    - past_verb_first_b1
+    - past_verb_second_b1
+    - past_verb_second
+    - past_verb_third
+    - past_verb_third_b1
+    - tired_word
+    - emotion_word
+    - household_object_word
+    - completion_word
+    - receipt_word
+    - dialogue_word
+templates:
+
+# ---------------------------------------------------------------------------
+# lesson01 -- وقتی که کار می‌کنم (1st/2nd person time clauses)
+# ---------------------------------------------------------------------------
+- content_key: practice.en-prs.prs.b1.unit04.lesson01.choose.001
+  lesson_content_key: prs.b1.unit04.lesson01.present_time_clause_1st2nd
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: verb
+      agreement_tags:
+        semantic:
+        - routine_verb
+        - become_verb_plural
+        - work_verb_form
+        - plan_verb
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is a present-tense form -- the ending tells you who the وقتی که clause is about.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-prs.prs.b1.unit04.lesson01.order.002
+  lesson_content_key: prs.b1.unit04.lesson01.present_time_clause_1st2nd
+  type: word_order
+  frame:
+    text: 'وقتی که کار می‌کنم، {item} می‌شوم.'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: adjective
+      agreement_tags:
+        semantic:
+        - tired_word
+        - emotion_word
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: 'وقتی که کار می‌کنم، {item} می‌شوم.'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'وقتی که کار می‌کنم، خسته می‌شوم. -- When I work, I get tired.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-prs.prs.b1.unit04.lesson01.fill.003
+  lesson_content_key: prs.b1.unit04.lesson01.present_time_clause_1st2nd
+  type: fill_in_blank
+  frame:
+    text: 'وقتی که کار می‌کنی، {item} می‌شوی؟'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: tired_word
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'وقتی که کار می‌کنی، خسته می‌شوی؟ -- When you work, do you get tired?'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-prs.prs.b1.unit04.lesson01.translate.004
+  lesson_content_key: prs.b1.unit04.lesson01.present_time_clause_1st2nd
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: verb
+      agreement_tags:
+        semantic:
+        - routine_verb
+        - become_verb_plural
+        - work_verb_form
+        - plan_verb
+        - past_verb_first_b1
+        - past_verb_second_b1
+        - past_verb_second
+        - past_verb_third
+        - past_verb_third_b1
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dari form is {item}.
+    language_code: en
+    direction: ltr
+
+# ---------------------------------------------------------------------------
+# lesson02 -- همه صیغه‌ها (all persons)
+# ---------------------------------------------------------------------------
+- content_key: practice.en-prs.prs.b1.unit04.lesson02.match.001
+  lesson_content_key: prs.b1.unit04.lesson02.present_time_clause_all_persons
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: prs
+    direction: rtl
+  slots:
+    first: &present_verb
+      language_code: prs
+      part_of_speech: verb
+      agreement_tags:
+        semantic:
+        - routine_verb
+        - become_verb_plural
+        - work_verb_form
+        - plan_verb
+    second: *present_verb
+    third: *present_verb
+    fourth: *present_verb
+    fifth: *present_verb
+    sixth: *present_verb
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Match each present-tense Dari verb with the person it expresses.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-prs.prs.b1.unit04.lesson02.match.002
+  lesson_content_key: prs.b1.unit04.lesson02.present_time_clause_all_persons
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: prs
+    direction: rtl
+  slots:
+    first: &any_verb
+      language_code: prs
+      part_of_speech: verb
+      agreement_tags:
+        semantic:
+        - routine_verb
+        - become_verb_plural
+        - work_verb_form
+        - plan_verb
+        - past_verb_first_b1
+        - past_verb_second_b1
+        - past_verb_second
+        - past_verb_third
+        - past_verb_third_b1
+    second: *any_verb
+    third: *any_verb
+    fourth: *any_verb
+    fifth: *any_verb
+    sixth: *any_verb
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Match each Dari verb with the person and tense it expresses.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-prs.prs.b1.unit04.lesson02.translate.003
+  lesson_content_key: prs.b1.unit04.lesson02.present_time_clause_all_persons
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: verb
+      agreement_tags:
+        semantic:
+        - routine_verb
+        - become_verb_plural
+        - work_verb_form
+        - plan_verb
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dari present-tense form is {item}.
+    language_code: en
+    direction: ltr
+
+# ---------------------------------------------------------------------------
+# lesson03 -- past time clauses
+# ---------------------------------------------------------------------------
+- content_key: practice.en-prs.prs.b1.unit04.lesson03.choose.001
+  lesson_content_key: prs.b1.unit04.lesson03.past_time_clause
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: verb
+      agreement_tags:
+        semantic:
+        - past_verb_first_b1
+        - past_verb_second_b1
+        - past_verb_second
+        - past_verb_third
+        - past_verb_third_b1
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is a simple-past form -- these follow وقتی که when the sequence already happened.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-prs.prs.b1.unit04.lesson03.order.002
+  lesson_content_key: prs.b1.unit04.lesson03.past_time_clause
+  type: word_order
+  frame:
+    text: 'وقتی که کار تمام شد، {item}.'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: verb
+      agreement_tags:
+        semantic: past_verb_first_b1
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: 'وقتی که کار تمام شد، {item}.'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'وقتی که کار تمام شد، رسیدم. -- When the work was finished, I arrived.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-prs.prs.b1.unit04.lesson03.translate.003
+  lesson_content_key: prs.b1.unit04.lesson03.past_time_clause
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: verb
+      agreement_tags:
+        semantic:
+        - past_verb_first_b1
+        - past_verb_second_b1
+        - past_verb_second
+        - past_verb_third
+        - past_verb_third_b1
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dari past-tense form is {item}.
+    language_code: en
+    direction: ltr
+
+# ---------------------------------------------------------------------------
+# lesson04 -- بعد از کار (after-work dialogue)
+# ---------------------------------------------------------------------------
+- content_key: practice.en-prs.prs.b1.unit04.lesson04.choose.001
+  lesson_content_key: prs.b1.unit04.lesson04.dialogue_after_work
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic: dialogue_word
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is said in the after-work conversation between Zarmina and Homayoun.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-prs.prs.b1.unit04.lesson04.fill.002
+  lesson_content_key: prs.b1.unit04.lesson04.dialogue_after_work
+  type: fill_in_blank
+  frame:
+    text: 'بعد غذا می‌خورم و {item} می‌بینم.'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: household_object_word
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'بعد غذا می‌خورم و تلویزیون می‌بینم. -- Then I eat and watch television.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-prs.prs.b1.unit04.lesson04.translate.003
+  lesson_content_key: prs.b1.unit04.lesson04.dialogue_after_work
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: prs
+      part_of_speech:
+      - noun
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - tired_word
+        - emotion_word
+        - household_object_word
+        - completion_word
+        - dialogue_word
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dari word is {item}.
+    language_code: en
+    direction: ltr
+
+# ---------------------------------------------------------------------------
+# lesson05 -- reading: Homayoun's day
+# ---------------------------------------------------------------------------
+- content_key: practice.en-prs.prs.b1.unit04.lesson05.choose.001
+  lesson_content_key: prs.b1.unit04.lesson05.reading_homayouns_day
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech:
+      - noun
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - tired_word
+        - emotion_word
+        - household_object_word
+        - completion_word
+        - dialogue_word
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is one of the describing words this unit uses to narrate a day.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-prs.prs.b1.unit04.lesson05.order.002
+  lesson_content_key: prs.b1.unit04.lesson05.reading_homayouns_day
+  type: word_order
+  frame:
+    text: 'همایون دیروز به خانه {item} و خسته بود.'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: verb
+      agreement_tags:
+        semantic: receipt_word
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: 'همایون دیروز به خانه {item} و خسته بود.'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'همایون دیروز به خانه رسید و خسته بود. -- Yesterday Homayoun got home and was tired.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-prs.prs.b1.unit04.lesson05.fill.003
+  lesson_content_key: prs.b1.unit04.lesson05.reading_homayouns_day
+  type: fill_in_blank
+  frame:
+    text: 'کار او {item} شد.'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: completion_word
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'کار او تمام شد. -- His work was finished.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-prs.prs.b1.unit04.lesson05.translate.004
+  lesson_content_key: prs.b1.unit04.lesson05.reading_homayouns_day
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: prs
+      part_of_speech:
+      - verb
+      - adjective
+      agreement_tags:
+        semantic:
+        - past_verb_third
+        - past_verb_third_b1
+        - receipt_word
+        - completion_word
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dari word is {item}.
+    language_code: en
+    direction: ltr

@@ -1,0 +1,549 @@
+schema_version: '1.0'
+pack_key: practice.en-prs.b1.unit05
+source_language: en
+target_language: prs
+unit_content_key: prs.b1.unit05.reported_speech
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    Authored 2026-07-22 against docs/content/PRACTICE_PACK_RECIPE.md. en-prs B1
+    unit05 (گفت که / reported statements and reported questions) had a full
+    realization + overlay and 16 classified lexemes across lessons 01-05, but no
+    practice pack, so its unit checkpoint returned checkpoint_unavailable.
+
+
+    THINNEST of the six B1 units by a wide margin -- 16 lexemes, and lessons 01,
+    03 and 05 contribute only two each. 16 templates: multiple_choice x4,
+    matching_pairs x3, word_order x3, fill_in_blank x2, translation x4. ZERO
+    listen_select -- tts_actually_configured('prs') is false, so _material()
+    would delete them (recipe section 6.2 / DO-NOT 3); recognition tier is
+    multiple_choice only. lesson06 (wrapup_production) exists in the realization
+    but contributes ZERO lexemes and therefore cannot appear in a checkpoint.
+
+
+    Because the unit is thin, breadth comes from combining the two report-verb
+    tags: report_verb_say (6 members, exactly the matching_pairs floor) and
+    report_verb_ask (3 members, exactly the multiple_choice floor) are drilled
+    both separately and as one 9-member pool. The remaining seven content words
+    (مدیر / مهم / چیزی / صبح / بیایم / پرسیدی / شنید) form the second pool.
+
+
+    Reviewer note on گفتید: this is the Iranian-looking -ید 2pl ending, and it is
+    CORRECT here. b1_unit05_reported_speech.yaml's own 2026-07-11 register note
+    records that a corpus-wide grep found no Afghan -ین counterpart for ANY
+    simple-past 2nd-plural verb anywhere in this corpus, so گفتید was left
+    unchanged as a deliberate, evidence-based exception. This pack therefore
+    accepts گفتید as the typed answer, matching the realization's own
+    tested_text. scripts/check_dari_register.py does not flag it.
+
+
+    Reviewer note on workplace_person_word: it looks single-member inside this
+    unit (مدیر) but is NOT -- کارمندان (b1 unit09) shares the tag, so at
+    B1-course scope it has two candidates. An earlier draft blanked مدیر with it
+    in a fill_in_blank and the compiler's AUTHORING_GUIDE section 17 ambiguity
+    check correctly hard-failed; both that template and the fixed-sentence
+    translation that used it were rebuilt (lesson04 now carries a word_order over
+    report_verb_ask, "چیزی {item}؟", grammatical for all four forms, and a
+    fixed-sentence translation over important_word instead). مدیر itself is still
+    reachable through lesson04's multiple_choice / matching_pairs and lesson05's
+    bare-word translation.
+
+
+    Both remaining fill_in_blank slots (important_word -> مهم, hear_verb -> شنید)
+    have exactly ONE distinct MODULE-wide candidate (AUTHORING_GUIDE section 17).
+    No typed-answer pool has a duplicate English gloss at B1-course scope, and
+    every word_order frame was rendered with every B1-course candidate and
+    hand-checked for grammaticality. صحبت carries no semantic tag in the backfill
+    script and is the only unhosted lexeme in the unit (15/16 hosted). Every
+    frame is lifted from the realization's own tested_text. Needs the standard
+    fresh-context review before import.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - report_verb_say
+    - report_verb_ask
+    - workplace_person_word
+    - important_word
+    - time_period
+    - time_of_day
+    - dialogue_word
+    - hear_verb
+templates:
+
+# ---------------------------------------------------------------------------
+# lesson01 -- گفتم که (reported speech, 1st/2nd person)
+# ---------------------------------------------------------------------------
+- content_key: practice.en-prs.prs.b1.unit05.lesson01.choose.001
+  lesson_content_key: prs.b1.unit05.lesson01.present_report_1st2nd
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: verb
+      agreement_tags:
+        semantic: report_verb_say
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is one person of گفتن -- the reporting verb that introduces که.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-prs.prs.b1.unit05.lesson01.order.002
+  lesson_content_key: prs.b1.unit05.lesson01.present_report_1st2nd
+  type: word_order
+  frame:
+    text: '{item} که فردا می‌آیم.'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: verb
+      agreement_tags:
+        semantic: report_verb_say
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{item} که فردا می‌آیم.'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'گفتم که فردا می‌آیم. -- I said that I''m coming tomorrow. The reported clause keeps its own tense.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-prs.prs.b1.unit05.lesson01.match.003
+  lesson_content_key: prs.b1.unit05.lesson01.present_report_1st2nd
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: prs
+    direction: rtl
+  slots:
+    first: &say_verb
+      language_code: prs
+      part_of_speech: verb
+      agreement_tags:
+        semantic: report_verb_say
+    second: *say_verb
+    third: *say_verb
+    fourth: *say_verb
+    fifth: *say_verb
+    sixth: *say_verb
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Match each form of گفتن with the person who said it.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-prs.prs.b1.unit05.lesson01.translate.004
+  lesson_content_key: prs.b1.unit05.lesson01.present_report_1st2nd
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: verb
+      agreement_tags:
+        semantic:
+        - report_verb_say
+        - report_verb_ask
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dari form is {item}.
+    language_code: en
+    direction: ltr
+
+# ---------------------------------------------------------------------------
+# lesson02 -- همه صیغه‌ها (all persons)
+# ---------------------------------------------------------------------------
+- content_key: practice.en-prs.prs.b1.unit05.lesson02.choose.001
+  lesson_content_key: prs.b1.unit05.lesson02.present_report_all_persons
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: verb
+      agreement_tags:
+        semantic:
+        - report_verb_say
+        - report_verb_ask
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is a reporting verb -- گفتن reports a statement, پرسیدن reports a question.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-prs.prs.b1.unit05.lesson02.match.002
+  lesson_content_key: prs.b1.unit05.lesson02.present_report_all_persons
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: prs
+    direction: rtl
+  slots:
+    first: &report_verb
+      language_code: prs
+      part_of_speech: verb
+      agreement_tags:
+        semantic:
+        - report_verb_say
+        - report_verb_ask
+    second: *report_verb
+    third: *report_verb
+    fourth: *report_verb
+    fifth: *report_verb
+    sixth: *report_verb
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Match each reporting verb with the person and the kind of report it makes.
+    language_code: en
+    direction: ltr
+
+# ---------------------------------------------------------------------------
+# lesson03 -- reported questions
+# ---------------------------------------------------------------------------
+- content_key: practice.en-prs.prs.b1.unit05.lesson03.choose.001
+  lesson_content_key: prs.b1.unit05.lesson03.reported_questions
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: verb
+      agreement_tags:
+        semantic: report_verb_ask
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is a form of پرسیدن -- use it to report a question, not a statement.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-prs.prs.b1.unit05.lesson03.order.002
+  lesson_content_key: prs.b1.unit05.lesson03.reported_questions
+  type: word_order
+  frame:
+    text: '{item} که چه وقت می‌آید؟'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: verb
+      agreement_tags:
+        semantic: report_verb_ask
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{item} که چه وقت می‌آید؟'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'پرسیدم که چه وقت می‌آید؟ -- I asked when he is coming. A reported question keeps question word order after که.'
+    language_code: en
+    direction: ltr
+
+# ---------------------------------------------------------------------------
+# lesson04 -- خبر مدیر (the manager's news dialogue)
+# ---------------------------------------------------------------------------
+- content_key: practice.en-prs.prs.b1.unit05.lesson04.choose.001
+  lesson_content_key: prs.b1.unit05.lesson04.dialogue_manager_news
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - pronoun
+      agreement_tags:
+        semantic:
+        - workplace_person_word
+        - important_word
+        - time_period
+        - time_of_day
+        - dialogue_word
+        - hear_verb
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} comes from the conversation about the manager''s news.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-prs.prs.b1.unit05.lesson04.order.002
+  lesson_content_key: prs.b1.unit05.lesson04.dialogue_manager_news
+  type: word_order
+  frame:
+    text: 'چیزی {item}؟'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: verb
+      agreement_tags:
+        semantic: report_verb_ask
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: 'چیزی {item}؟'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'چیزی پرسیدی؟ -- Did you ask anything?'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-prs.prs.b1.unit05.lesson04.fill.003
+  lesson_content_key: prs.b1.unit05.lesson04.dialogue_manager_news
+  type: fill_in_blank
+  frame:
+    text: 'گفت که فردا یک مهمان {item} می‌آید.'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: important_word
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'گفت که فردا یک مهمان مهم می‌آید. -- He said that an important guest is coming tomorrow.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-prs.prs.b1.unit05.lesson04.match.004
+  lesson_content_key: prs.b1.unit05.lesson04.dialogue_manager_news
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: prs
+    direction: rtl
+  slots:
+    first: &news_word
+      language_code: prs
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - pronoun
+      agreement_tags:
+        semantic:
+        - workplace_person_word
+        - important_word
+        - time_period
+        - time_of_day
+        - dialogue_word
+        - hear_verb
+    second: *news_word
+    third: *news_word
+    fourth: *news_word
+    fifth: *news_word
+    sixth: *news_word
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Match each Dari word from this unit with its English meaning.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-prs.prs.b1.unit05.lesson04.translate.005
+  lesson_content_key: prs.b1.unit05.lesson04.dialogue_manager_news
+  type: translation
+  frame:
+    text: He said that an important guest is coming tomorrow.
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: important_word
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: 'گفت که فردا یک مهمان {item} می‌آید.'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'گفت که فردا یک مهمان مهم می‌آید.'
+    language_code: en
+    direction: ltr
+
+# ---------------------------------------------------------------------------
+# lesson05 -- reading: the manager's news
+# ---------------------------------------------------------------------------
+- content_key: practice.en-prs.prs.b1.unit05.lesson05.fill.001
+  lesson_content_key: prs.b1.unit05.lesson05.reading_manager_news
+  type: fill_in_blank
+  frame:
+    text: 'دیروز مدیر با همایون صحبت کرد و زرمینه هم {item}.'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: verb
+      agreement_tags:
+        semantic: hear_verb
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'زرمینه هم شنید. -- Zarmina heard it too.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-prs.prs.b1.unit05.lesson05.translate.002
+  lesson_content_key: prs.b1.unit05.lesson05.reading_manager_news
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: prs
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - pronoun
+      agreement_tags:
+        semantic:
+        - workplace_person_word
+        - important_word
+        - time_period
+        - time_of_day
+        - dialogue_word
+        - hear_verb
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dari word is {item}.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-prs.prs.b1.unit05.lesson05.translate.003
+  lesson_content_key: prs.b1.unit05.lesson05.reading_manager_news
+  type: translation
+  frame:
+    text: Zarmina heard it too.
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: verb
+      agreement_tags:
+        semantic: hear_verb
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: 'زرمینه هم {item}.'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'زرمینه هم شنید.'
+    language_code: en
+    direction: ltr
