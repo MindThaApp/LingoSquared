@@ -1,0 +1,493 @@
+schema_version: '1.0'
+pack_key: practice.en-fa.b1.unit11
+source_language: en
+target_language: fa
+unit_content_key: fa.b1.unit11.reported_speech
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: 'Five lessons with lexemes, 25 fa lexemes. Drills reported yes/no and wh-questions, pronoun shift,
+    and plural goftan.
+
+
+    Authored 2026-07-22 against docs/content/PRACTICE_PACK_RECIPE.md to unblock this unit''s
+
+    checkpoint: the unit had lexemes but no practice pack, so generate_checkpoint() returned
+
+    checkpoint_unavailable. ZERO listen_select is authored - AZURE_SPEECH_KEY is unset, so
+
+    tts_actually_configured(''fa'') is false and _material() would delete those templates.
+
+    Every slot is satisfiable from THIS unit''s own lexemes, because generate_checkpoint()
+
+    calls _material() with only this unit''s lesson ids.
+
+
+    The en-fa B1 lexeme classification carries almost no usable semantic tags (290 of 382 fa
+
+    B1 lexemes are untagged), so the broad recognition / production / matching slots are
+
+    constrained by language_code + part_of_speech only; the few semantic tags that do exist
+
+    are used for the narrow, grammatically safe word_order / fill_in_blank / fixed-sentence
+
+    slots. Every such tag was checked against the real backfill_lexemes.py data: each
+
+    fill_in_blank anchor has exactly ONE distinct COURSE-WIDE candidate (AUTHORING_GUIDE #17
+
+    hard-fail), and for every word_order frame each candidate in the whole B1 course pool is
+
+    grammatical in that frame.
+
+
+    proper_noun is deliberately excluded from multiple_choice and matching_pairs (the gloss is
+
+    a transliteration, so those items are near-trivial) and is reachable only through a
+
+    dedicated bare-word translation, which is a genuine script-production drill.
+
+
+    Reviewer must double-check: (a) the Persian in every word_order / fill_in_blank frame reads
+
+    as natural colloquial Iranian Persian and uses only vocabulary already taught in this course;
+
+    (b) glosses that embed the Persian token in a parenthetical example (a backfill gloss-style
+
+    artifact) partly give away the answer in multiple_choice - flagged, not fixable in a pack.
+
+
+    Template mix: matching_pairs x3, multiple_choice x3, translation x4, word_order x2 (12 total) anchored
+    across the 5 lessons that introduce tokens.'
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - possession_verb
+    - routine_connector
+templates:
+- content_key: practice.en-fa.fa.b1.unit11.lesson01.choose.001
+  lesson_content_key: fa.b1.unit11.lesson01.reported_yes_no_question
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - verb
+      - pronoun
+      - adverb
+      - noun
+      - preposition
+      - phrase
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is a word introduced in this unit.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b1.unit11.lesson01.order.002
+  lesson_content_key: fa.b1.unit11.lesson01.reported_yes_no_question
+  type: word_order
+  frame:
+    text: سارا پرسید که آیا وقت {item}.
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - verb
+      agreement_tags:
+        semantic: possession_verb
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: سارا پرسید که آیا وقت {item}.
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: A reported yes/no question keeps statement order after ke aayaa.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b1.unit11.lesson01.translate.003
+  lesson_content_key: fa.b1.unit11.lesson01.reported_yes_no_question
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - verb
+      - pronoun
+      - adverb
+      - noun
+      - preposition
+      - phrase
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Persian word is {item}.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b1.unit11.lesson02.choose.001
+  lesson_content_key: fa.b1.unit11.lesson02.reported_wh_question
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - verb
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is a reporting or motion verb from this unit.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b1.unit11.lesson02.match.002
+  lesson_content_key: fa.b1.unit11.lesson02.reported_wh_question
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: fa
+    direction: rtl
+  slots:
+    first:
+      language_code: fa
+      part_of_speech:
+      - verb
+    second:
+      language_code: fa
+      part_of_speech:
+      - verb
+    third:
+      language_code: fa
+      part_of_speech:
+      - verb
+    fourth:
+      language_code: fa
+      part_of_speech:
+      - verb
+    fifth:
+      language_code: fa
+      part_of_speech:
+      - verb
+    sixth:
+      language_code: fa
+      part_of_speech:
+      - verb
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Match each Persian verb form with the person and tense it expresses.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b1.unit11.lesson03.match.001
+  lesson_content_key: fa.b1.unit11.lesson03.pronoun_shift_and_plural_goftan
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: fa
+    direction: rtl
+  slots:
+    first:
+      language_code: fa
+      part_of_speech:
+      - verb
+      - pronoun
+      - adverb
+      - noun
+      - preposition
+      - phrase
+    second:
+      language_code: fa
+      part_of_speech:
+      - verb
+      - pronoun
+      - adverb
+      - noun
+      - preposition
+      - phrase
+    third:
+      language_code: fa
+      part_of_speech:
+      - verb
+      - pronoun
+      - adverb
+      - noun
+      - preposition
+      - phrase
+    fourth:
+      language_code: fa
+      part_of_speech:
+      - verb
+      - pronoun
+      - adverb
+      - noun
+      - preposition
+      - phrase
+    fifth:
+      language_code: fa
+      part_of_speech:
+      - verb
+      - pronoun
+      - adverb
+      - noun
+      - preposition
+      - phrase
+    sixth:
+      language_code: fa
+      part_of_speech:
+      - verb
+      - pronoun
+      - adverb
+      - noun
+      - preposition
+      - phrase
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Match each Persian word from this unit with its English meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b1.unit11.lesson03.translate.002
+  lesson_content_key: fa.b1.unit11.lesson03.pronoun_shift_and_plural_goftan
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - verb
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Persian word is {item}.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b1.unit11.lesson04.order.001
+  lesson_content_key: fa.b1.unit11.lesson04.dialogue_reporting_sara
+  type: word_order
+  frame:
+    text: '{item} سارا بهم زنگ زد.'
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - adverb
+      agreement_tags:
+        semantic: routine_connector
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{item} سارا بهم زنگ زد.'
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: The time connector opens the sentence and zang zad closes it.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b1.unit11.lesson04.translate.002
+  lesson_content_key: fa.b1.unit11.lesson04.dialogue_reporting_sara
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - verb
+      - pronoun
+      - adverb
+      - noun
+      - preposition
+      - phrase
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Persian word is {item}.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b1.unit11.lesson05.choose.001
+  lesson_content_key: fa.b1.unit11.lesson05.reading_the_reported_conversation
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - pronoun
+      - adverb
+      - noun
+      - preposition
+      - phrase
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is a word from this unit that is not a verb.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b1.unit11.lesson05.match.002
+  lesson_content_key: fa.b1.unit11.lesson05.reading_the_reported_conversation
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth} · {seventh} · {eighth}'
+    language_code: fa
+    direction: rtl
+  slots:
+    first:
+      language_code: fa
+      part_of_speech:
+      - verb
+    second:
+      language_code: fa
+      part_of_speech:
+      - verb
+    third:
+      language_code: fa
+      part_of_speech:
+      - verb
+    fourth:
+      language_code: fa
+      part_of_speech:
+      - verb
+    fifth:
+      language_code: fa
+      part_of_speech:
+      - verb
+    sixth:
+      language_code: fa
+      part_of_speech:
+      - verb
+    seventh:
+      language_code: fa
+      part_of_speech:
+      - verb
+    eighth:
+      language_code: fa
+      part_of_speech:
+      - verb
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+    - seventh
+    - eighth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+    - seventh
+    - eighth
+  feedback_frame:
+    text: Match all eight Persian verb forms with their English meanings.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b1.unit11.lesson05.translate.003
+  lesson_content_key: fa.b1.unit11.lesson05.reading_the_reported_conversation
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - pronoun
+      - adverb
+      - noun
+      - preposition
+      - phrase
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Persian word is {item}.
+    language_code: en
+    direction: ltr
