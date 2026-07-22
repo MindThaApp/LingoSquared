@@ -23,6 +23,32 @@ export function HomePage() {
   // this on every Home load is safe and never double-pays.
   const questsQuery = useQuery({ queryKey: ["quests"], queryFn: ProgressApi.quests });
 
+  // Every number on this page comes from its own request, and each one
+  // `?? `-falls-back to 0/— . Without an explicit failure signal a fully-down
+  // backend rendered a completely plausible "0 XP, 0-day streak, nothing due"
+  // home screen — silently LYING rather than obviously failing, which is
+  // worse than any blank state. So: one honest banner whenever any of the six
+  // failed, and every individual stat shows "—" (unknown) instead of a
+  // fabricated 0 when ITS OWN query is the one that failed. A genuine zero
+  // from a brand-new account still renders as a real 0 — a legitimate zero is
+  // never turned into an error.
+  const loadFailed =
+    streakQuery.isError ||
+    xpQuery.isError ||
+    progressQuery.isError ||
+    dueQuery.isError ||
+    achievementsQuery.isError ||
+    questsQuery.isError;
+
+  function retryFailedQueries() {
+    if (streakQuery.isError) void streakQuery.refetch();
+    if (xpQuery.isError) void xpQuery.refetch();
+    if (progressQuery.isError) void progressQuery.refetch();
+    if (dueQuery.isError) void dueQuery.refetch();
+    if (achievementsQuery.isError) void achievementsQuery.refetch();
+    if (questsQuery.isError) void questsQuery.refetch();
+  }
+
   const streak = streakQuery.data;
   const xp = xpQuery.data;
   const progress = progressQuery.data;
@@ -64,6 +90,14 @@ export function HomePage() {
 
   return (
     <div>
+      {loadFailed && (
+        <div className="feedback-banner error" role="alert" style={{ marginBottom: 12 }}>
+          <p style={{ margin: "0 0 10px" }}>{t("home.data_fetch_error")}</p>
+          <button className="btn btn-block" onClick={retryFailedQueries}>
+            {t("common.retry")}
+          </button>
+        </div>
+      )}
       {streakAtRisk && (
         <div
           className="card continue-card"
@@ -99,42 +133,53 @@ export function HomePage() {
       )}
       <div className="home-hero">
         <h1>{heroTitle}</h1>
-        <div style={{ maxWidth: 360 }}>
-          <span
-            className="muted"
-            style={{ fontSize: "0.9rem", display: "flex", alignItems: "center", gap: 6 }}
-          >
-            {goalMet ? (
-              <>
-                <CheckCircle
-                  size={16}
-                  style={{ color: "var(--correct)", flexShrink: 0 }}
-                  aria-hidden
-                />
-                {t("home.daily_goal_done", { earned: xpToday })}
-              </>
-            ) : (
-              t("home.daily_goal_progress", { earned: xpToday, goal: dailyGoal })
-            )}
-          </span>
-          <div
-            className="progress-track"
-            style={{ marginTop: 6 }}
-            role="progressbar"
-            aria-valuemin={0}
-            aria-valuemax={dailyGoal}
-            aria-valuenow={Math.min(xpToday, dailyGoal)}
-            aria-label={t("home.daily_goal_progress", { earned: xpToday, goal: dailyGoal })}
-          >
-            <div
-              className="progress-fill"
-              style={{
-                width: `${goalPct}%`,
-                ...(goalMet ? { background: "var(--correct)" } : {}),
-              }}
-            />
+        {/* A failed XP fetch would otherwise render "Daily goal: 0 / 20 XP"
+            with an empty bar — indistinguishable from a real day with no XP
+            yet, and demoralising to someone who has actually earned it. */}
+        {xpQuery.isError ? (
+          <div style={{ maxWidth: 360 }}>
+            <span className="muted" style={{ fontSize: "0.9rem" }}>
+              {t("home.daily_goal_unavailable")}
+            </span>
           </div>
-        </div>
+        ) : (
+          <div style={{ maxWidth: 360 }}>
+            <span
+              className="muted"
+              style={{ fontSize: "0.9rem", display: "flex", alignItems: "center", gap: 6 }}
+            >
+              {goalMet ? (
+                <>
+                  <CheckCircle
+                    size={16}
+                    style={{ color: "var(--correct)", flexShrink: 0 }}
+                    aria-hidden
+                  />
+                  {t("home.daily_goal_done", { earned: xpToday })}
+                </>
+              ) : (
+                t("home.daily_goal_progress", { earned: xpToday, goal: dailyGoal })
+              )}
+            </span>
+            <div
+              className="progress-track"
+              style={{ marginTop: 6 }}
+              role="progressbar"
+              aria-valuemin={0}
+              aria-valuemax={dailyGoal}
+              aria-valuenow={Math.min(xpToday, dailyGoal)}
+              aria-label={t("home.daily_goal_progress", { earned: xpToday, goal: dailyGoal })}
+            >
+              <div
+                className="progress-fill"
+                style={{
+                  width: `${goalPct}%`,
+                  ...(goalMet ? { background: "var(--correct)" } : {}),
+                }}
+              />
+            </div>
+          </div>
+        )}
       </div>
 
       <PushPrompt />
@@ -163,13 +208,14 @@ export function HomePage() {
         <div className="stat-card">
           <span className="stat-value">
             <CheckCircle size={20} style={{ color: "var(--correct)", verticalAlign: -3 }} />{" "}
-            {lessonsCompleted}
+            {progressQuery.isError ? "—" : lessonsCompleted}
           </span>
           <span className="stat-label">{t("home.lessons_completed")}</span>
         </div>
         <div className="stat-card">
           <span className="stat-value">
-            <Medal size={20} style={{ color: "var(--gold)", verticalAlign: -3 }} /> {achievements.length}
+            <Medal size={20} style={{ color: "var(--gold)", verticalAlign: -3 }} />{" "}
+            {achievementsQuery.isError ? "—" : achievements.length}
           </span>
           <span className="stat-label">{t("home.achievements")}</span>
         </div>

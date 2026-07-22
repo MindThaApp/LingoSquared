@@ -323,6 +323,26 @@ export function LessonRunnerPage() {
     );
   }
 
+  // Must be checked BEFORE the loading branch (isLoading goes false on error)
+  // and before the phase branches below: without it a failed GET /lessons/{id}
+  // fell all the way through to "No exercises in this lesson." — a dead end
+  // with neither an explanation, a retry, nor a way back out.
+  if (lessonQuery.isError) {
+    return (
+      <div className="card" style={{ textAlign: "center" }}>
+        <p className="muted">{t("lesson_runner.load_error")}</p>
+        <div style={{ display: "flex", gap: 8, justifyContent: "center" }}>
+          <button className="btn" onClick={() => lessonQuery.refetch()}>
+            {t("common.retry")}
+          </button>
+          <button className="btn btn-secondary" onClick={() => navigate(-1)}>
+            {t("lesson_runner.go_back")}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   if (lessonQuery.isLoading || reviewItems === null) {
     return <div className="page-loading">{t("lesson_runner.loading")}</div>;
   }

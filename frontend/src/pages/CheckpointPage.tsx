@@ -20,9 +20,15 @@ type Phase =
   | "scoring_error"
   | "done";
 
-function formatRetryAfter(seconds: number): string {
-  const minutes = Math.ceil(seconds / 60);
-  return minutes <= 1 ? "1 minute" : `${minutes} minutes`;
+// The minute count is rendered through i18next's own plural machinery
+// (`checkpoint.retry_minutes_one` / `_other`) rather than an English
+// "1 minute"/"N minutes" ternary -- the previous hardcoded ternary was the
+// only English left on this screen for fa/prs/nl learners. Every locale
+// defines BOTH suffixes even where the language has no singular/plural
+// distinction (fa/prs), because i18next picks the suffix from
+// Intl.PluralRules and falls back to English if the chosen suffix is absent.
+function retryAfterMinutes(seconds: number): number {
+  return Math.max(1, Math.ceil(seconds / 60));
 }
 
 export function CheckpointPage() {
@@ -137,7 +143,9 @@ export function CheckpointPage() {
         <h2>{t("checkpoint.blocked_title")}</h2>
         <p className="muted">
           {retryAfterSeconds !== null
-            ? t("checkpoint.blocked_body_with_time", { time: formatRetryAfter(retryAfterSeconds) })
+            ? t("checkpoint.blocked_body_with_time", {
+                time: t("checkpoint.retry_minutes", { count: retryAfterMinutes(retryAfterSeconds) }),
+              })
             : t("checkpoint.blocked_body")}
         </p>
         <button className="btn" onClick={() => navigate(-1)}>
