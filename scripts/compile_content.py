@@ -249,6 +249,75 @@ def tokenize(text: str) -> set[str]:
 
 VALID_UNIT_SECTIONS = {"reading_writing", "speaking"}
 
+# MIRRORS A BACKEND CONSTRAINT — keep in sync with:
+#   backend/app/schemas/api.py:88   TeachingCard.kind        (Literal[...])
+#   backend/app/schemas/api.py:209  ContentItemImport.kind   (Literal[...])
+# `TeachingImport(TeachingCard)` (backend/app/schemas/api.py:206) is what
+# raises the 422 on import, and `ContentItem.kind` is additionally DB-capped
+# at String(30) (backend/app/models/entities.py:329). Also documented in
+# docs/CONTRACT.md:460 (the `GET /lessons/{lesson_id}` "Lessons" payload).
+# Added 2026-07-22 after 25 `kind: grammar` cards in the ru B1 realizations
+# validated at 0 errors and then 422'd on import, leaving en-ru-b1
+# unimportable for days.
+VALID_TEACHING_KINDS = {
+    "vocabulary",
+    "phrase",
+    "grammar_note",
+    "dialogue",
+    "pronunciation_note",
+    "cultural_note",
+    "reading",
+}
+
+# MIRRORS A BACKEND CONSTRAINT — keep in sync with:
+#   backend/app/models/entities.py:34-52  class ExerciseType(str, enum.Enum)
+# consumed by `ExerciseImport.type` (backend/app/schemas/api.py:205) and
+# persisted through the `ck_exercises_type` check constraint
+# (backend/app/models/entities.py:285). A typo'd course exercise `type`
+# produces the same class of import-time 422 as an invalid teaching kind.
+# NOTE: this is the COURSE-content whitelist. Practice packs deliberately
+# accept only the narrower PRACTICE_EXERCISE_TYPES subset above.
+VALID_EXERCISE_TYPES = {
+    "multiple_choice",
+    "translation",
+    "reverse_translation",
+    "fill_in_blank",
+    "word_order",
+    "matching_pairs",
+    "listening_placeholder",
+    "speaking_placeholder",
+    "dialogue_response",
+    "grammar_check",
+    "flashcard",
+    "reading_comprehension",
+    "writing_prompt",
+    "listen_select",
+    "listen_type",
+    "listen_order",
+    "dialogue_comprehension",
+    "speak_repeat",
+    "speak_response",
+}
+
+# MIRRORS A BACKEND CONSTRAINT — keep in sync with the VARCHAR widths in
+# backend/app/models/entities.py:
+#   Course.title       String(200)  (entities.py:190)
+#   Unit.title         String(200)  (entities.py:217)
+#   Lesson.title       String(200)  (entities.py:253)
+#   ContentItem.title  String(200)  (entities.py:331)  <- teaching-card title
+#   Unit/Lesson/Exercise/ContentItem.content_key String(255)
+#     (entities.py:235 / :257 / :301 / :338; migration
+#      backend/alembic/versions/0013_content_keys.py:34)
+# These are the only String(n) columns the compiled import payload fills
+# verbatim from authored content; every other content-fed column is Text
+# (Course.description, Exercise.feedback) or JSON (prompts, text_blocks).
+# Over-length values are NOT caught by pydantic (neither `title` nor
+# `content_key` declares a max_length) — they reach Postgres and 500 the
+# request. Added 2026-07-22 after en-ro-b1's dev-DB sync 500'd on 9
+# over-length teaching-card titles, one of which was already live.
+MAX_CONTENT_TITLE_LENGTH = 200
+MAX_CONTENT_KEY_LENGTH = 255
+
 
 def validate_unit_sections(realization: dict[str, Any], report: Report):
     for unit_index, unit in enumerate(realization.get("units", [])):
@@ -259,6 +328,263 @@ def validate_unit_sections(realization: dict[str, Any], report: Report):
                 f"{section!r} is not a valid unit section; must be one of "
                 f"{sorted(VALID_UNIT_SECTIONS)}",
             )
+
+
+def validate_teaching_kinds(realization: dict[str, Any], report: Report):
+    """Reject teaching-card `kind` values the backend import schema rejects.
+
+    See VALID_TEACHING_KINDS above for the mirrored backend constraint.
+    `kind` is copied verbatim into the import payload by
+    compile_teaching_item(), so anything the Literal doesn't accept is a
+    guaranteed 422 at import time — a hard error here, never a warning.
+    """
+    for unit_index, unit in enumerate(realization.get("units", [])):
+        if not isinstance(unit, dict):
+            continue
+        for lesson_index, lesson in enumerate(unit.get("lessons", []) or []):
+            if not isinstance(lesson, dict):
+                continue
+            for teaching_index, item in enumerate(
+                lesson.get("teaching", []) or []
+            ):
+                if not isinstance(item, dict):
+                    continue
+                location = (
+                    f"realization.units[{unit_index}]"
+                    f".lessons[{lesson_index}].teaching[{teaching_index}]"
+                    ".kind"
+                )
+                kind = item.get("kind", _MISSING)
+                if kind is _MISSING:
+                    report.error(
+                        location,
+                        "teaching card has no kind; must be one of "
+                        f"{sorted(VALID_TEACHING_KINDS)}",
+                    )
+                    continue
+                if not isinstance(kind, str):
+                    report.error(
+                        location,
+                        f"teaching card kind {kind!r} must be a string; "
+                        f"must be one of {sorted(VALID_TEACHING_KINDS)}",
+                    )
+                    continue
+                if kind not in VALID_TEACHING_KINDS:
+                    report.error(
+                        location,
+                        f"{kind!r} is not a valid teaching card kind; must "
+                        f"be one of {sorted(VALID_TEACHING_KINDS)} "
+                        "(backend/app/schemas/api.py TeachingCard.kind)",
+                    )
+
+
+def validate_exercise_types(realization: dict[str, Any], report: Report):
+    """Reject course exercise `type` values the backend import schema rejects.
+
+    See VALID_EXERCISE_TYPES above for the mirrored backend constraint.
+    `type` is copied verbatim into the import payload by compile_exercise(),
+    so an unknown value is a guaranteed 422 at import time.
+    """
+    for unit_index, unit in enumerate(realization.get("units", [])):
+        if not isinstance(unit, dict):
+            continue
+        for lesson_index, lesson in enumerate(unit.get("lessons", []) or []):
+            if not isinstance(lesson, dict):
+                continue
+            for exercise_index, exercise in enumerate(
+                lesson.get("exercises", []) or []
+            ):
+                if not isinstance(exercise, dict):
+                    continue
+                location = (
+                    f"realization.units[{unit_index}]"
+                    f".lessons[{lesson_index}].exercises[{exercise_index}]"
+                    ".type"
+                )
+                exercise_type = exercise.get("type", _MISSING)
+                if exercise_type is _MISSING:
+                    report.error(
+                        location,
+                        "exercise has no type; must be one of "
+                        f"{sorted(VALID_EXERCISE_TYPES)}",
+                    )
+                    continue
+                if not isinstance(exercise_type, str):
+                    report.error(
+                        location,
+                        f"exercise type {exercise_type!r} must be a string; "
+                        f"must be one of {sorted(VALID_EXERCISE_TYPES)}",
+                    )
+                    continue
+                if exercise_type not in VALID_EXERCISE_TYPES:
+                    report.error(
+                        location,
+                        f"{exercise_type!r} is not a valid exercise type; "
+                        f"must be one of {sorted(VALID_EXERCISE_TYPES)} "
+                        "(backend/app/models/entities.py ExerciseType)",
+                    )
+
+
+def _report_over_length(
+    report: Report,
+    location: str,
+    value: Any,
+    limit: int,
+    column: str,
+):
+    if not isinstance(value, str):
+        return
+    if len(value) <= limit:
+        return
+    report.error(
+        location,
+        f"is {len(value)} characters; {column} is VARCHAR({limit}) in "
+        "backend/app/models/entities.py, so importing this 500s at the "
+        f"database layer (shorten to <= {limit}): {value[:60]!r}...",
+    )
+
+
+def _overlay_entry(overlays: dict[str, Any], key: Any) -> dict[str, Any]:
+    # Guard on `str`: a malformed content_key can be an unhashable list/dict
+    # (validate_content_keys reports that separately) and dict.get() would
+    # raise TypeError, turning a content defect into a compiler crash.
+    if not isinstance(key, str):
+        return {}
+    entry = overlays.get(key)
+    return entry if isinstance(entry, dict) else {}
+
+
+def validate_content_field_lengths(
+    realization: dict[str, Any],
+    overlay: dict[str, Any],
+    report: Report,
+):
+    """Reject titles/content_keys wider than their VARCHAR columns.
+
+    See MAX_CONTENT_TITLE_LENGTH / MAX_CONTENT_KEY_LENGTH above for the
+    mirrored backend column widths. Titles are checked on the EFFECTIVE
+    value the compiler would emit (overlay title, else realization title,
+    else the content_key fallback) so an over-long realization title that
+    an overlay already replaces is not reported.
+    """
+    course_overlay = overlay.get("course")
+    if isinstance(course_overlay, dict):
+        _report_over_length(
+            report,
+            "overlay.course.title",
+            course_overlay.get("title"),
+            MAX_CONTENT_TITLE_LENGTH,
+            "Course.title",
+        )
+
+    unit_overlays = overlay.get("units")
+    if not isinstance(unit_overlays, dict):
+        unit_overlays = {}
+    lesson_overlays = overlay.get("lessons")
+    if not isinstance(lesson_overlays, dict):
+        lesson_overlays = {}
+    teaching_overlays = overlay.get("teaching")
+    if not isinstance(teaching_overlays, dict):
+        teaching_overlays = {}
+
+    for unit_index, unit in enumerate(realization.get("units", [])):
+        if not isinstance(unit, dict):
+            continue
+        unit_key = unit.get("content_key")
+        unit_location = f"realization.units[{unit_index}]"
+        _report_over_length(
+            report,
+            f"{unit_location}.content_key",
+            unit_key,
+            MAX_CONTENT_KEY_LENGTH,
+            "Unit.content_key",
+        )
+
+        unit_overlay = _overlay_entry(unit_overlays, unit_key)
+        if "title" in unit_overlay:
+            _report_over_length(
+                report,
+                f"overlay.units.{unit_key}.title",
+                unit_overlay["title"],
+                MAX_CONTENT_TITLE_LENGTH,
+                "Unit.title",
+            )
+        else:
+            _report_over_length(
+                report,
+                f"{unit_location}.title",
+                unit.get("title", unit_key),
+                MAX_CONTENT_TITLE_LENGTH,
+                "Unit.title",
+            )
+
+        for lesson_index, lesson in enumerate(unit.get("lessons", []) or []):
+            if not isinstance(lesson, dict):
+                continue
+            lesson_key = lesson.get("content_key")
+            lesson_location = f"{unit_location}.lessons[{lesson_index}]"
+            _report_over_length(
+                report,
+                f"{lesson_location}.content_key",
+                lesson_key,
+                MAX_CONTENT_KEY_LENGTH,
+                "Lesson.content_key",
+            )
+
+            lesson_overlay = _overlay_entry(lesson_overlays, lesson_key)
+            if "title" in lesson_overlay:
+                _report_over_length(
+                    report,
+                    f"overlay.lessons.{lesson_key}.title",
+                    lesson_overlay["title"],
+                    MAX_CONTENT_TITLE_LENGTH,
+                    "Lesson.title",
+                )
+            else:
+                _report_over_length(
+                    report,
+                    f"{lesson_location}.title",
+                    lesson.get("title", lesson_key),
+                    MAX_CONTENT_TITLE_LENGTH,
+                    "Lesson.title",
+                )
+
+            for teaching_index, item in enumerate(
+                lesson.get("teaching", []) or []
+            ):
+                if not isinstance(item, dict):
+                    continue
+                item_key = item.get("content_key")
+                _report_over_length(
+                    report,
+                    f"{lesson_location}.teaching[{teaching_index}]"
+                    ".content_key",
+                    item_key,
+                    MAX_CONTENT_KEY_LENGTH,
+                    "ContentItem.content_key",
+                )
+                item_overlay = _overlay_entry(teaching_overlays, item_key)
+                _report_over_length(
+                    report,
+                    f"overlay.teaching.{item_key}.title",
+                    item_overlay.get("title"),
+                    MAX_CONTENT_TITLE_LENGTH,
+                    "ContentItem.title",
+                )
+
+            for exercise_index, exercise in enumerate(
+                lesson.get("exercises", []) or []
+            ):
+                if not isinstance(exercise, dict):
+                    continue
+                _report_over_length(
+                    report,
+                    f"{lesson_location}.exercises[{exercise_index}]"
+                    ".content_key",
+                    exercise.get("content_key"),
+                    MAX_CONTENT_KEY_LENGTH,
+                    "Exercise.content_key",
+                )
 
 
 def validate_content_keys(realization: dict[str, Any], report: Report):
@@ -3489,6 +3815,9 @@ def validate_documents(
 
     validate_content_keys(realization, report)
     validate_unit_sections(realization, report)
+    validate_teaching_kinds(realization, report)
+    validate_exercise_types(realization, report)
+    validate_content_field_lengths(realization, overlay, report)
     validate_spine_references(spine, realization, report)
     validate_script_purity(
         realization,
