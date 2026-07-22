@@ -1,0 +1,574 @@
+schema_version: '1.0'
+pack_key: practice.en-nl.a2.unit73
+source_language: en
+target_language: nl
+unit_content_key: nl.a2.unit73.sollicitatiegesprek
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    Authored 2026-07-22 as the PILOT pack proving docs/content/PRACTICE_PACK_RECIPE.md.
+    en-nl A2 unit73 (sollicitatiegesprek / job application at Kantoor Bloem) had a full
+    realization + overlay + a complete lexeme classification in
+    scripts/backfill_lexemes_en_nl.py (41 lexemes across all 6 lessons, including the
+    fine-grained job_interview_vocab_pure / job_beschikbaar_single / job_klantcontact_single
+    tags that were added in 2026-07-11 explicitly "alongside that future practice-template
+    pass") but no practice pack at all, so its unit checkpoint returned
+    checkpoint_unavailable.
+
+
+    18 templates across all 6 lessons: multiple_choice x4, listen_select x1,
+    matching_pairs x3, word_order x2, fill_in_blank x2, translation x6 (a2_unit77 was used
+    as the shape reference). Deliberately built to the recipe's CHECKPOINT-SCOPED bar, not
+    just the Endless-Practice bar: every slot constraint is satisfiable by lexemes this
+    unit's OWN lessons introduce, because generate_checkpoint() calls _material() with only
+    this unit's lesson ids. Measured with the recipe's capacity/coverage model:
+    35 of 41 unit lexemes hostable (85% vs. a 33% corpus median), all 6 lessons host >=1
+    lexeme in EVERY difficulty tier (recognition 83%, structured 61%, production 54%), and
+    distinct-item capacity is recognition 49 / structured 40726 / production 33 -- all
+    three CHECKPOINT_MASTERY_BANDS tiers clear the >=12 bar with no repeats. A faithful
+    offline port of generate_checkpoint() returns 15/15 distinct items on 5 different
+    seeds, with a real format mix (MC 3-9, translation 3-6, matching 2-4, plus
+    listen_select/word_order).
+
+
+    Both fill_in_blank slots (job_beschikbaar_single, job_klantcontact_single) have exactly
+    ONE distinct course-wide candidate by construction, so AUTHORING_GUIDE.md #17 /
+    compile_content.py's ambiguity hard-fail is satisfied. No typed-answer slot
+    (translation / fill_in_blank) can ever sample a sentence-initial capitalized form
+    (Kan / Typen / Vertelt / Van / Zij / Daar / Mooi / Ervaring / Werktijden) -- those are
+    reachable only through option-rendering types, because grading is case-sensitive.
+    Needs the standard fresh-context review before import.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - job_application_interest
+    - job_interview_vocab_pure
+    - job_interview_appointment
+    - experience_and_skills
+    - availability_and_hours
+    - job_beschikbaar_single
+    - job_klantcontact_single
+    - job_interview_dialogue
+    - weekday_pure
+templates:
+
+# ---------------------------------------------------------------------------
+# lesson01 -- Ik wil solliciteren
+# ---------------------------------------------------------------------------
+- content_key: practice.en-nl.nl.a2.unit73.lesson01.choose.001
+  lesson_content_key: nl.a2.unit73.lesson01.ik_wil_solliciteren
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      agreement_tags:
+        semantic: job_application_interest
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} belongs to this unit''s job-application vocabulary.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a2.unit73.lesson01.order.002
+  lesson_content_key: nl.a2.unit73.lesson01.ik_wil_solliciteren
+  type: word_order
+  frame:
+    text: Ik wil graag {item} voor deze vacature.
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: verb
+      agreement_tags:
+        semantic: job_interview_vocab_pure
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik wil graag {item} voor deze vacature.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Ik wil graag solliciteren voor deze vacature. -- I would like to apply for this vacancy.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a2.unit73.lesson01.translate.003
+  lesson_content_key: nl.a2.unit73.lesson01.ik_wil_solliciteren
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      agreement_tags:
+        semantic: job_application_interest
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a2.unit73.lesson01.match.004
+  lesson_content_key: nl.a2.unit73.lesson01.ik_wil_solliciteren
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: nl
+    direction: ltr
+  slots:
+    first: &application_word
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      agreement_tags:
+        semantic: job_application_interest
+    second: *application_word
+    third: *application_word
+    fourth: *application_word
+    fifth: *application_word
+    sixth: *application_word
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Match each word from the job advert with its English meaning.
+    language_code: en
+    direction: ltr
+
+# ---------------------------------------------------------------------------
+# lesson02 -- Ik bel over de vacature
+# ---------------------------------------------------------------------------
+- content_key: practice.en-nl.nl.a2.unit73.lesson02.choose.001
+  lesson_content_key: nl.a2.unit73.lesson02.ik_bel_over_de_vacature
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      agreement_tags:
+        semantic: job_interview_appointment
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is used when you arrange the interview appointment.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a2.unit73.lesson02.order.002
+  lesson_content_key: nl.a2.unit73.lesson02.ik_bel_over_de_vacature
+  type: word_order
+  frame:
+    text: Kunt u {item} om tien uur langskomen?
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: noun
+      agreement_tags:
+        semantic: weekday_pure
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Kunt u {item} om tien uur langskomen?
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Kunt u dinsdag om tien uur langskomen? -- Can you come by on Tuesday at ten o'clock?
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a2.unit73.lesson02.translate.003
+  lesson_content_key: nl.a2.unit73.lesson02.ik_bel_over_de_vacature
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: noun
+      agreement_tags:
+        semantic: job_interview_appointment
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+
+# ---------------------------------------------------------------------------
+# lesson03 -- Mijn ervaring en vaardigheden
+# ---------------------------------------------------------------------------
+- content_key: practice.en-nl.nl.a2.unit73.lesson03.match.001
+  lesson_content_key: nl.a2.unit73.lesson03.mijn_ervaring_en_vaardigheden
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: nl
+    direction: ltr
+  slots:
+    first: &job_noun
+      language_code: nl
+      part_of_speech: noun
+      agreement_tags:
+        semantic: job_interview_vocab_pure
+    second: *job_noun
+    third: *job_noun
+    fourth: *job_noun
+    fifth: *job_noun
+    sixth: *job_noun
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Match each Dutch job-application word with its English meaning.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a2.unit73.lesson03.choose.002
+  lesson_content_key: nl.a2.unit73.lesson03.mijn_ervaring_en_vaardigheden
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      agreement_tags:
+        semantic: experience_and_skills
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is part of talking about your experience and skills.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a2.unit73.lesson03.translate.003
+  lesson_content_key: nl.a2.unit73.lesson03.mijn_ervaring_en_vaardigheden
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - adjective
+      agreement_tags:
+        semantic: experience_and_skills
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+
+# ---------------------------------------------------------------------------
+# lesson04 -- Ben ik beschikbaar?
+# ---------------------------------------------------------------------------
+- content_key: practice.en-nl.nl.a2.unit73.lesson04.fill.001
+  lesson_content_key: nl.a2.unit73.lesson04.ben_ik_beschikbaar
+  type: fill_in_blank
+  frame:
+    text: Ik ben {item} op maandag, woensdag en vrijdag.
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: job_beschikbaar_single
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Ik ben beschikbaar op maandag, woensdag en vrijdag. -- I am available on Monday, Wednesday and Friday.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a2.unit73.lesson04.listen.002
+  lesson_content_key: nl.a2.unit73.lesson04.ben_ik_beschikbaar
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      agreement_tags:
+        semantic: job_interview_vocab_pure
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: You heard {item}.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a2.unit73.lesson04.translate.003
+  lesson_content_key: nl.a2.unit73.lesson04.ben_ik_beschikbaar
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - adjective
+      - preposition
+      agreement_tags:
+        semantic: availability_and_hours
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+
+# ---------------------------------------------------------------------------
+# lesson05 -- Een vacature lezen
+# ---------------------------------------------------------------------------
+- content_key: practice.en-nl.nl.a2.unit73.lesson05.fill.001
+  lesson_content_key: nl.a2.unit73.lesson05.een_vacature_lezen
+  type: fill_in_blank
+  frame:
+    text: Ik heb ervaring met {item}.
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: noun
+      agreement_tags:
+        semantic: job_klantcontact_single
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Ik heb ervaring met klantcontact. -- I have experience with customer contact.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a2.unit73.lesson05.translate.002
+  lesson_content_key: nl.a2.unit73.lesson05.een_vacature_lezen
+  type: translation
+  frame:
+    text: I have experience with customer contact.
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: noun
+      agreement_tags:
+        semantic: job_klantcontact_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik heb ervaring met {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Ik heb ervaring met klantcontact.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a2.unit73.lesson05.translate.003
+  lesson_content_key: nl.a2.unit73.lesson05.een_vacature_lezen
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      agreement_tags:
+        semantic: job_interview_vocab_pure
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+
+# ---------------------------------------------------------------------------
+# lesson06 -- Het sollicitatiegesprek
+# ---------------------------------------------------------------------------
+- content_key: practice.en-nl.nl.a2.unit73.lesson06.choose.001
+  lesson_content_key: nl.a2.unit73.lesson06.het_sollicitatiegesprek
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      - preposition
+      - pronoun
+      agreement_tags:
+        semantic: job_interview_dialogue
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is said during the job interview.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a2.unit73.lesson06.match.002
+  lesson_content_key: nl.a2.unit73.lesson06.het_sollicitatiegesprek
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: nl
+    direction: ltr
+  slots:
+    first: &dialogue_word
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      agreement_tags:
+        semantic: job_interview_dialogue
+    second: *dialogue_word
+    third: *dialogue_word
+    fourth: *dialogue_word
+    fifth: *dialogue_word
+    sixth: *dialogue_word
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Match each Dutch word from the interview with its English meaning.
+    language_code: en
+    direction: ltr
