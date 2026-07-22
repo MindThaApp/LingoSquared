@@ -110,6 +110,39 @@ for `advertentie_lezen`/`bonnetje_lezen`/`een_kaartje_kopen` elsewhere in
 this file (all 11 lessons really are the same kind of generic unit-review
 wrapup, so one shared descriptive tag is correct, not a bug).
 
+**Extended 2026-07-22** to the last 33 unclassified A1 units -- 34-42
+(technology, education, birthdays, chores, neighbourhood, post, cooking,
+personality, colours) and 49-72 (the errand/outing service-encounter arc).
+Before this, ``UNIT_FILES`` globbed only 1-23 / 29-33 / 43-48, so those 33
+units produced ZERO lexemes and their unit checkpoints could never generate
+(``generate_checkpoint()`` needs lexemes AND templates scoped to the unit's
+own lessons, and hard-fails ``checkpoint_unavailable`` under 12 items). A1
+lexemes go 1073 -> 1406. Full rationale, the three deliberate departures from
+how earlier rounds did this (sentence-initial capitals are FOLDED rather than
+registered; de/het gender and singular/plural are recorded; per-unit slot tags
+are provided up front rather than deferred), and the hand-checked homograph
+merges are all documented in the big block comment above
+``NL_CITATION_FORMS``. A2 and B1 output is byte-identical to before this
+change (verified spec-by-spec); for A1 the change is purely additive -- no
+gloss, part of speech or semantic tag was removed from any pre-existing
+lexeme.
+
+**The same change fixed a live data-corruption bug.** ``_classify_nl()``
+derives ``unit_order`` from the file's POSITION in ``UNIT_FILES``, which
+``main()`` then matches against the imported course's ``Unit.order`` -- and
+``Unit.order`` comes from scripts/content_manifest.txt, which lists every a1
+file. Skipping units the manifest imports therefore silently shifted every
+later unit's provenance: a1_unit43 sat at position 29 while DB unit.order 29
+was a1_unit34, so 79 lexemes claiming units 43-48 were written onto units
+34-39's lesson rows -- the clean 9-unit offset (= the 9 skipped files 34-42)
+reported the same day. See the INVARIANT note on ``UNIT_FILES``. NOTE FOR
+WHOEVER RUNS THE BACKFILL NEXT: re-running this script does NOT repair
+already-misattached rows. ``main()``'s update branch only rewrites
+``english_gloss`` and ``agreement_tags`` on an existing ``Lexeme``; it never
+touches ``provenance_lesson_id`` / ``provenance_lesson_content_key``. The 79
+bad rows need an explicit DB fix (or a delete-and-reimport of the en-nl A1
+lexemes) -- fixing the script is necessary but not sufficient.
+
 Known limitation surfaced while extending this (units 5-6): this script keys
 its in-memory `specs` dict by bare token string, and `nl_part_of_speech()` is
 a pure function of the token with no context -- so a genuine homograph across
@@ -146,11 +179,37 @@ if str(BACKEND_ROOT) not in sys.path:
 # Units 24-28 are NOT included here -- those are the SEPARATE "Dutch A2"
 # course, handled below by UNIT_FILES_A2. Extended 2026-07-12 to include
 # the next reviewed A1 Endless Practice coverage batch, units 43-48.
+#
+# **Extended 2026-07-22 to 29-72 (i.e. every a1_unit*_*.yaml on disk), and
+# this was ALSO the fix for a live data-corruption bug -- read this before
+# ever narrowing the range again.**
+#
+# `_classify_nl()` derives `unit_order` from `enumerate(unit_files, 1)`, i.e.
+# the POSITION of the file inside this tuple, and `main()` then looks that
+# number up against the imported course's real `Unit.order`. `Unit.order` is
+# assigned from scripts/content_manifest.txt's en-nl line, which lists EVERY
+# a1 file on disk. So the moment this glob SKIPS a unit that the manifest
+# imports, every later unit's position silently drifts and its lexemes get
+# attached to the WRONG lesson rows -- with no error anywhere, because the
+# lookup still finds *a* lesson.
+#
+# That is exactly what happened: with the old 1-23 / 29-33 / 43-48 filter,
+# a1_unit43 sat at position 29 while the DB's unit.order 29 was a1_unit34
+# (units 34-42 were on disk and imported, but skipped here). Result: 79
+# en-nl A1 lexemes claiming units 43-48 were written onto units 34-39's
+# lesson rows -- the clean 9-unit offset (exactly the 9 skipped files
+# 34-42) reported 2026-07-22. Including 34-42 and 49-72 below restores
+# position == unit.order for the whole course.
+#
+# INVARIANT: this tuple must stay a CONTIGUOUS prefix-matching mirror of the
+# en-nl line in scripts/content_manifest.txt. Never skip a unit the manifest
+# imports. (A1 numbering legitimately jumps 23 -> 29 because 24-28 are the
+# separate "Dutch A2" course and are absent from the A1 manifest line too,
+# so that gap does NOT desynchronise the positions.)
 UNIT_FILES = tuple(sorted(
     p for p in (REPO_ROOT / "docs/content/realizations/nl").glob("a1_unit*_*.yaml")
     if 1 <= int(p.name[len("a1_unit"):len("a1_unit")+2]) <= 23
-    or 29 <= int(p.name[len("a1_unit"):len("a1_unit")+2]) <= 33
-    or 43 <= int(p.name[len("a1_unit"):len("a1_unit")+2]) <= 48
+    or 29 <= int(p.name[len("a1_unit"):len("a1_unit")+2]) <= 72
 ))
 
 # A2 units (24-28: bureaucracy, opinions, banking, health, housing) live in a
@@ -1307,6 +1366,663 @@ ADVERBS.update({"Uiteindelijk"})
 NOUNS.update({"verhaal"})
 
 
+# ---------------------------------------------------------------------------
+# A1 volume batch: units 34-42 and 49-72, added 2026-07-22.
+#
+# 33 previously-unclassified A1 units (34-42: technology, education,
+# birthdays, household chores, the neighbourhood, post, cooking, personality,
+# colours; 49-72: the "errand + outing" service-encounter arc from booking a
+# room through the pet shop). Every gloss below was read off that unit's OWN
+# en-nl overlay `gloss`/`example_gloss` field -- none is guessed, and no
+# vocabulary the units do not teach was invented.
+#
+# THREE deliberate departures from how earlier rounds in this file did it:
+#
+# 1. SENTENCE-INITIAL CAPITALS ARE FOLDED, NOT REGISTERED (defect 1.25).
+#    Earlier rounds registered the capitalized variant as its own lexeme
+#    ("Kan", "Typen", "Vertelt", "Van", "Zij", "Ervaring", "Werktijden",
+#    "Medewerker", ...). Typed answers are graded by exact string match and a
+#    case-only mismatch is hard-blocked to `incorrect` (never "almost"), so a
+#    learner who correctly types the lowercase citation form of such a lexeme
+#    is marked wrong. `NL_CITATION_FORMS` below maps every token these 33
+#    units capitalize only because of sentence/sign-line position onto its
+#    lowercase citation form, and `_classify_nl()` applies it BEFORE the gloss
+#    lookup, so no capitalized-by-position lexeme is created at all. Genuine
+#    proper nouns (people, cities, business/venue names, the language name
+#    "Spaans") are deliberately NOT folded -- Dutch capitalizes those
+#    mid-sentence too, so their capital IS the citation form.
+#    The map is keyed on tokens introduced ONLY by these 33 units, so it
+#    cannot retroactively change any already-shipped lexeme.
+#
+# 2. GENDER AND NUMBER ARE RECORDED. Dutch de/het gender is not recoverable
+#    from an English gloss, and a practice-pack author cannot pick a
+#    grammatical frame without it. `NL_A1_VOLUME_ARTICLES` /
+#    `NL_A1_VOLUME_PLURALS` surface it as `agreement_tags["article"]` /
+#    `["number"]`. Every value was cross-checked against the article the
+#    unit's own Dutch text actually uses ("de aap", "het internet"); the
+#    handful of nouns the corpus never shows with an article are marked from
+#    standard Dutch (all diminutives -> het, per the -je/-tje rule).
+#
+# 3. SEMANTIC SLOT TAGS ARE PROVIDED UP FRONT, not deferred. The A2 74-77 and
+#    B1 rounds deliberately deferred fine-grained tags until a practice pack
+#    existed. That is reversed here on purpose: unit checkpoints are a
+#    publish gate and `generate_checkpoint()` needs BOTH templates and
+#    lexemes scoped to the unit's own lessons, so these units are blocked on
+#    tags existing first. Each unit gets a broad `<slug>_vocab` (content
+#    words: noun/verb/adjective/adverb/phrase, never function words or proper
+#    nouns, so no self-glossing distractor and no snake_case leak), a
+#    `<slug>_noun` for matching_pairs pools, and exactly one single-member
+#    `<slug>_<token>_single` anchor for a fixed-frame fill_in_blank /
+#    render_frame slot (single by construction -- an exact `t == "..."`
+#    test).
+#
+# Known homograph merges, checked by hand and accepted (same class as the
+# "zijn" (are/his) limitation in this module's docstring -- this file keys
+# specs by bare token, so one spelling gets exactly one classification):
+#   Nodig  (u36, imperative of uitnodigen) -> existing adjective "nodig" = needed
+#   Regel  (u54 sign, "Rule:")             -> existing verb "regel" = arrange
+#   Duur   (u63/u64 sign, "Duration:")     -> existing adjective "duur" = expensive
+#   Begin  (u64 sign, "Start:")            -> existing verb "begin" = start (ik)
+#   Was    (u55-58, past of zijn)          -> existing verb "was" = do the dishes (ik)
+# In each case folding is still strictly better than the alternative: a
+# capitalized second lexeme would be a live typed-answer grading trap, while
+# the merged sense is merely absent (and is never a slot candidate, because
+# these tokens are excluded from the `_vocab`/`_noun` tags below).
+#
+# One genuine CONTENT defect surfaced and is worked around here rather than
+# silently propagated: nl.a1.unit35.lesson06.teach.sander_interessant_zullen_we
+# lists `taalcafe` in `introduced_tokens` while its own Dutch text says
+# `taalcafé`. Registering the unaccented spelling would create a lexeme whose
+# token is not the Dutch word, and (as a typed answer) an unwinnable item. It
+# is folded onto the existing `taalcafé` lexeme; the realization's
+# introduced_tokens entry should be corrected by the content lane.
+# ---------------------------------------------------------------------------
+
+# Unit 34 (technologie/technology and devices).
+NL_GLOSSES.update({
+    "boodschap": "the message", "computer": "the computer",
+    "internet": "the internet", "opzoeken": "to look up (separable: zoekt ... op)",
+    "stuurt": "sends (with hij/zij/u)", "zwem": "swim (with ik)",
+})
+NOUNS.update({"boodschap", "computer", "internet"})
+VERBS.update({"opzoeken", "stuurt", "zwem"})
+
+# Unit 35 (opleiding/study and courses).
+NL_GLOSSES.update({
+    "algemeen": "general", "gezondheidszorg": "healthcare",
+    "hogeschool": "the college; university of applied sciences",
+    "leert": "learns (with hij/zij)", "leren": "to learn",
+    "nieuws": "new (in 'iets nieuws' = something new)", "oefenen": "to practise",
+    "opleiding": "the study programme", "school": "the school",
+    "Spaans": "Spanish", "specifiek": "specific",
+    "studeer": "study (with ik)", "studeert": "studies (with hij/zij)",
+    "volg": "take (a course) (with ik)", "volgen": "to take (a course)",
+    "volgt": "takes (a course) (with hij/zij)",
+    "volksuniversiteit": "the community college",
+})
+NOUNS.update({"gezondheidszorg", "hogeschool", "opleiding", "school",
+              "volksuniversiteit"})
+VERBS.update({"leert", "leren", "oefenen", "studeer", "studeert", "volg",
+              "volgen", "volgt"})
+ADJECTIVES.update({"algemeen", "nieuws", "Spaans", "specifiek"})
+
+# Unit 36 (verjaardag/birthdays and parties).
+NL_GLOSSES.update({
+    "gefeliciteerd": "congratulations", "laten": "let (in 'laten we' = let's)",
+    "nodigt": "invites (with hij/zij, part of uitnodigen)",
+    "uitnodigen": "to invite (separable: nodigt ... uit)",
+    "verjaardag": "the birthday", "vieren": "to celebrate",
+    "viert": "celebrates (with hij/zij)",
+})
+NOUNS.update({"verjaardag"})
+VERBS.update({"laten", "nodigt", "uitnodigen", "vieren", "viert"})
+PHRASES.update({"gefeliciteerd"})
+
+# Unit 37 (huishouden/household chores).
+NL_GLOSSES.update({
+    "huishouden": "the household chores", "rommel": "the mess",
+    "ruim": "tidy up (with ik, part of opruimen)",
+    "ruimen": "tidy up (with wij, part of opruimen)",
+    "ruimt": "tidies up (with hij/zij, part of opruimen)",
+    "stofzuig": "vacuum (with ik)", "stofzuigen": "to vacuum",
+    "stofzuigt": "vacuums (with hij/zij)",
+})
+NOUNS.update({"huishouden", "rommel"})
+VERBS.update({"ruim", "ruimen", "ruimt", "stofzuig", "stofzuigen", "stofzuigt"})
+
+# Unit 38 (buurt/the neighbourhood and neighbours).
+NL_GLOSSES.update({
+    "Anna": "Anna", "buur": "the neighbour", "buurman": "the (male) neighbour",
+    "buurvrouw": "the (female) neighbour", "groeten": "to greet",
+    "kennen": "to know (a person)", "leuke": "nice (inflected)", "Peter": "Peter",
+})
+PROPER_NOUNS.update({"Anna", "Peter"})
+NOUNS.update({"buur", "buurman", "buurvrouw"})
+VERBS.update({"groeten", "kennen"})
+ADJECTIVES.update({"leuke"})
+
+# Unit 39 (post/sending letters and packages).
+NL_GLOSSES.update({
+    "aankomen": "to arrive (separable: komt ... aan)", "brief": "the letter",
+    "duren": "to take (time); to last", "pakket": "the package",
+    "postzegel": "the stamp", "schrijft": "writes (with hij/zij)",
+})
+NOUNS.update({"brief", "pakket", "postzegel"})
+VERBS.update({"aankomen", "duren", "schrijft"})
+
+# Unit 40 (koken/cooking together).
+NL_GLOSSES.update({
+    "bakt": "fries (with hij/zij)", "klaarmaken": "to prepare (separable: maakt ... klaar)",
+    "pan": "the pan", "proef": "taste (with ik; also the imperative)",
+    "proeft": "tastes (with hij/zij)", "proeven": "to taste",
+    "smakelijk": "tasty (in 'eet smakelijk' = enjoy your meal)",
+    "snijd": "cut (with ik)", "snijden": "to cut",
+    "snijdt": "cuts (with hij/zij)", "tomaat": "the tomato", "ui": "the onion",
+})
+NOUNS.update({"pan", "tomaat", "ui"})
+VERBS.update({"bakt", "klaarmaken", "proef", "proeft", "proeven", "snijd",
+              "snijden", "snijdt"})
+ADJECTIVES.update({"smakelijk"})
+
+# Unit 41 (persoonlijkheid/describing people's character).
+NL_GLOSSES.update({
+    "anderen": "the others", "elkaar": "each other", "geduldig": "patient",
+    "iemand": "someone", "nieuwsgierig": "curious", "persoon": "the person",
+    "verlegen": "shy", "vertelt": "tells (with hij/zij)",
+})
+PRONOUNS.update({"anderen", "elkaar", "iemand"})
+NOUNS.update({"persoon"})
+VERBS.update({"vertelt"})
+ADJECTIVES.update({"geduldig", "nieuwsgierig", "verlegen"})
+
+# Unit 42 (kleuren/colours).
+NL_GLOSSES.update({
+    "bloemenmarkt": "the flower market", "geel": "yellow", "oranje": "orange",
+    "paars": "purple", "rood": "red", "roze": "pink", "wit": "white",
+})
+NOUNS.update({"bloemenmarkt"})
+ADJECTIVES.update({"geel", "oranje", "paars", "rood", "roze", "wit"})
+
+# Unit 49 (accommodatie/checking in to a room).
+NL_GLOSSES.update({
+    "bevestiging": "the confirmation",
+    "gereserveerd": "reserved (past participle of reserveren)",
+    "hadden": "had (with wij/zij, past of hebben)", "heerlijk": "delicious",
+    "inbegrepen": "included", "inchecken": "to check in", "Maastricht": "Maastricht",
+    "mooie": "beautiful (inflected)", "nachten": "nights",
+    "receptionist": "the receptionist", "reservering": "the reservation",
+    "sleutel": "the key", "uitchecken": "to check out",
+    "vanmiddag": "this afternoon", "wifiwachtwoord": "the wifi password",
+})
+PROPER_NOUNS.update({"Maastricht"})
+NOUNS.update({"bevestiging", "nachten", "receptionist", "reservering", "sleutel",
+              "wifiwachtwoord"})
+VERBS.update({"gereserveerd", "hadden", "inchecken", "uitchecken"})
+ADJECTIVES.update({"heerlijk", "inbegrepen", "mooie"})
+ADVERBS.update({"vanmiddag"})
+
+# Unit 50 (apotheek/at the pharmacy).
+NL_GLOSSES.update({
+    "apotheker": "the pharmacist",
+    "daartegen": "for that (in 'iets daartegen' = something for it)",
+    "doos": "the box", "dosering": "the dosage", "etiket": "the label",
+    "medicijn": "the medicine", "paracetamol": "paracetamol",
+    "pijnstiller": "the painkiller", "pijnstillers": "painkillers",
+    "tabletten": "tablets", "uitrusten": "to rest (separable: rust ... uit)",
+})
+NOUNS.update({"apotheker", "doos", "dosering", "etiket", "medicijn",
+              "paracetamol", "pijnstiller", "pijnstillers", "tabletten"})
+VERBS.update({"uitrusten"})
+ADVERBS.update({"daartegen"})
+
+# Unit 51 (kapper/at the hairdresser).
+NL_GLOSSES.update({
+    "betaal": "pay (with ik)", "geweest": "been (past participle of zijn)",
+    "hetzelfde": "the same", "hé": "hey", "kapper": "the hairdresser",
+    "kapsel": "the hairstyle", "knipbeurt": "the haircut (service)",
+    "knippen": "to cut (hair)", "korter": "shorter", "prijslijst": "the price list",
+})
+NOUNS.update({"kapper", "kapsel", "knipbeurt", "prijslijst"})
+VERBS.update({"betaal", "geweest", "knippen"})
+ADJECTIVES.update({"korter"})
+PRONOUNS.update({"hetzelfde"})
+PHRASES.update({"hé"})
+
+# Unit 52 (fiets_huren/renting a bike).
+NL_GLOSSES.update({
+    "borg": "the deposit", "breng": "bring (with ik, part of terugbrengen)",
+    "Daan": "Daan", "elektrische": "electric (inflected)",
+    "fietsenwinkel": "the bike shop", "huren": "to rent", "huur": "rent (with ik)",
+    "huurprijs": "the rental price", "huurprijzen": "rental prices",
+})
+PROPER_NOUNS.update({"Daan"})
+NOUNS.update({"borg", "fietsenwinkel", "huurprijs", "huurprijzen"})
+VERBS.update({"breng", "huren", "huur"})
+ADJECTIVES.update({"elektrische"})
+
+# Unit 53 (wasserette/at the launderette).
+NL_GLOSSES["60"] = "60"
+SYMBOLS.add("60")
+NL_GLOSSES.update({
+    "draag": "carry (with ik)", "droger": "the dryer", "graden": "degrees",
+    "haal": "pick up (with ik, part of ophalen)", "kies": "choose (with ik)",
+    "kleren": "clothes", "munten": "coins", "Sanne": "Sanne",
+    "wasbeurt": "the wash (service)", "wasmand": "the laundry basket",
+    "wasprogramma": "the wash programme", "wassen": "to wash",
+    "wasserette": "the launderette", "zwaar": "heavy",
+})
+PROPER_NOUNS.update({"Sanne"})
+NOUNS.update({"droger", "graden", "kleren", "munten", "wasbeurt", "wasmand",
+              "wasprogramma", "wasserette"})
+VERBS.update({"draag", "haal", "kies", "wassen"})
+ADJECTIVES.update({"zwaar"})
+
+# Unit 54 (zwembad/at the swimming pool).
+NL_GLOSSES.update({
+    "douche": "shower (with ik)", "douchen": "to shower", "Femke": "Femke",
+    "kluisje": "the locker", "openingstijden": "the opening hours",
+    "sluit": "closes (with hij/zij)", "zwembad": "the swimming pool",
+    "zwemtas": "the swim bag",
+})
+PROPER_NOUNS.update({"Femke"})
+NOUNS.update({"kluisje", "openingstijden", "zwembad", "zwemtas"})
+VERBS.update({"douche", "douchen", "sluit"})
+
+# Unit 55 (restaurant/ordering a meal).
+NL_GLOSSES.update({
+    "bestellen": "to order", "bioscoop": "the cinema", "Bram": "Bram",
+    "dagmenu": "the day menu", "dranken": "the drinks",
+    "gekozen": "chosen (past participle of kiezen)", "menukaart": "the menu",
+    "soep": "the soup",
+})
+PROPER_NOUNS.update({"Bram"})
+NOUNS.update({"bioscoop", "dagmenu", "dranken", "menukaart", "soep"})
+VERBS.update({"bestellen", "gekozen"})
+
+# Unit 56 (bioscoop/at the cinema).
+NL_GLOSSES.update({
+    "Iris": "Iris", "kindervoorstelling": "the children's showing",
+    "museum": "the museum", "popcorn": "the popcorn",
+    "programma": "the programme; schedule", "voorstelling": "the show; screening",
+})
+PROPER_NOUNS.update({"Iris"})
+NOUNS.update({"kindervoorstelling", "museum", "popcorn", "programma",
+              "voorstelling"})
+
+# Unit 57 (museum/at the museum).
+NL_GLOSSES.update({
+    "concert": "the concert", "gids": "the guide", "schilderij": "the painting",
+    "schilderijen": "paintings", "sluiten": "to close",
+    "tentoonstelling": "the exhibition", "Tessa": "Tessa",
+})
+PROPER_NOUNS.update({"Tessa"})
+NOUNS.update({"concert", "gids", "schilderij", "schilderijen", "tentoonstelling"})
+VERBS.update({"sluiten"})
+
+# Unit 58 (concert/at a concert).
+NL_GLOSSES.update({
+    "band": "the band", "podium": "the stage", "publiek": "the audience",
+    "Sven": "Sven", "Wandelaars": "the Wanderers (band name)",
+})
+PROPER_NOUNS.update({"Sven", "Wandelaars"})
+NOUNS.update({"band", "podium", "publiek"})
+
+# Unit 59 (park/an afternoon in the park).
+NL_GLOSSES.update({
+    "bankje": "the bench", "boom": "the tree", "eend": "the duck",
+    "eenden": "ducks", "fruit": "the fruit", "gras": "the grass",
+    "lijn": "the leash", "onder": "under", "picknick": "the picnic",
+    "Zonnehof": "Zonnehof (park name)",
+})
+PROPER_NOUNS.update({"Zonnehof"})
+NOUNS.update({"bankje", "boom", "eend", "eenden", "fruit", "gras", "lijn",
+              "picknick"})
+PREPOSITIONS.update({"onder"})
+
+# Unit 60 (sportschool/at the gym).
+NL_GLOSSES.update({
+    "abonnement": "the membership", "dagpas": "the day pass",
+    "FitNL": "FitNL (gym name)", "gewichten": "the weights",
+    "instructeur": "the instructor", "loopband": "the treadmill",
+    "ren": "run (with ik)", "sportschool": "the gym", "strand": "the beach",
+    "til": "lift (with ik)", "yogales": "the yoga class",
+})
+PROPER_NOUNS.update({"FitNL"})
+NOUNS.update({"abonnement", "dagpas", "gewichten", "instructeur", "loopband",
+              "sportschool", "strand", "yogales"})
+VERBS.update({"ren", "til"})
+
+# Unit 61 (strand/a day at the beach).
+NL_GLOSSES.update({
+    "dierentuin": "the zoo", "Duinzicht": "Duinzicht (beach name)",
+    "golf": "the wave", "parasol": "the beach umbrella",
+    "parasols": "beach umbrellas", "zand": "the sand", "zee": "the sea",
+})
+PROPER_NOUNS.update({"Duinzicht"})
+NOUNS.update({"dierentuin", "golf", "parasol", "parasols", "zand", "zee"})
+
+# Unit 62 (dierentuin/at the zoo).
+NL_GLOSSES.update({
+    "aap": "the monkey", "giraffe": "the giraffe", "kaartjes": "tickets",
+    "leeuw": "the lion", "leeuwen": "lions",
+    "leeuwenverblijf": "the lion enclosure", "olifant": "the elephant",
+    "rondvaart": "the boat tour", "voederen": "the feeding",
+    "waren": "were (with wij/zij, past of zijn)", "Wildpark": "Wildpark (zoo name)",
+})
+PROPER_NOUNS.update({"Wildpark"})
+NOUNS.update({"aap", "giraffe", "kaartjes", "leeuw", "leeuwen",
+              "leeuwenverblijf", "olifant", "rondvaart", "voederen"})
+VERBS.update({"waren"})
+
+# Unit 63 (rondvaart/a canal boat tour).
+NL_GLOSSES.update({
+    "boot": "the boat", "brug": "the bridge", "gracht": "the canal",
+    "steiger": "the pier", "Watertocht": "Watertocht (boat-tour company name)",
+    "wedstrijd": "the match",
+})
+PROPER_NOUNS.update({"Watertocht"})
+NOUNS.update({"boot", "brug", "gracht", "steiger", "wedstrijd"})
+
+# Unit 64 (voetbalwedstrijd/at a football match).
+NL_GLOSSES.update({
+    "doelpunt": "the goal", "pretpark": "the amusement park",
+    "scorebord": "the scoreboard", "speler": "the player",
+    "stadion": "the stadium", "stand": "the score", "supporter": "the fan",
+    "team": "the team", "thuisteam": "the home team", "uitteam": "the away team",
+    "winnaar": "the winner",
+})
+NOUNS.update({"doelpunt", "pretpark", "scorebord", "speler", "stadion", "stand",
+              "supporter", "team", "thuisteam", "uitteam", "winnaar"})
+
+# Unit 65 (pretpark/at the amusement park).
+NL_GLOSSES.update({
+    "achtbaan": "the roller coaster", "attractie": "the ride",
+    "hoog": "high; tall", "kassa": "the ticket counter",
+    "lengte": "the height", "meter": "metre", "minimale": "minimum (inflected)",
+    "plattegrond": "the map", "reuzenrad": "the Ferris wheel", "rij": "the queue",
+    "theater": "the theatre", "Zonneland": "Zonneland (amusement-park name)",
+})
+PROPER_NOUNS.update({"Zonneland"})
+NOUNS.update({"achtbaan", "attractie", "kassa", "lengte", "meter",
+              "plattegrond", "reuzenrad", "rij", "theater"})
+ADJECTIVES.update({"hoog", "minimale"})
+
+# Unit 66 (theater/at the theatre).
+NL_GLOSSES.update({
+    "acteurs": "the actors", "gordijn": "the curtain", "populair": "popular",
+    "Ster": "Ster (theatre name)", "stoel": "the seat", "tevreden": "satisfied",
+    "toneelstuk": "the play",
+})
+PROPER_NOUNS.update({"Ster"})
+NOUNS.update({"acteurs", "gordijn", "stoel", "toneelstuk"})
+ADJECTIVES.update({"populair", "tevreden"})
+
+# Unit 67 (markt/at the market).
+NL_GLOSSES.update({
+    "bakker": "the bakery", "Jansen": "Jansen (business name)",
+    "marktkoopman": "the market vendor", "vers": "fresh",
+})
+PROPER_NOUNS.update({"Jansen"})
+NOUNS.update({"bakker", "marktkoopman"})
+ADJECTIVES.update({"vers"})
+
+# Unit 68 (bakker/at the bakery).
+NL_GLOSSES.update({
+    "bakkerij": "the bakery (shop)", "croissant": "the croissant",
+    "croissants": "croissants", "gebak": "the pastry",
+    "gebakken": "baked (past participle of bakken)",
+    "ijssalon": "the ice cream parlour", "Peters": "Peters (business name)",
+    "toonbank": "the counter", "zak": "the bag", "zoet": "sweet",
+})
+PROPER_NOUNS.update({"Peters"})
+NOUNS.update({"bakkerij", "croissant", "croissants", "gebak", "ijssalon",
+              "toonbank", "zak"})
+VERBS.update({"gebakken"})
+ADJECTIVES.update({"zoet"})
+
+# Unit 69 (ijssalon/at the ice cream parlour).
+NL_GLOSSES.update({
+    "bakje": "the cup (of ice cream)", "bloemist": "the flower shop",
+    "bolletje": "the scoop", "bolletjes": "scoops", "hoorntje": "the cone",
+    "ijs": "the ice cream", "smaken": "flavours", "Smit": "Smit (business name)",
+    "verse": "fresh (inflected)", "vitrine": "the display case",
+})
+PROPER_NOUNS.update({"Smit"})
+NOUNS.update({"bakje", "bloemist", "bolletje", "bolletjes", "hoorntje", "ijs",
+              "smaken", "vitrine"})
+ADJECTIVES.update({"verse"})
+
+# Unit 70 (bloemist/at the flower shop).
+NL_GLOSSES.update({
+    "bloem": "the flower", "bloemen": "flowers", "boeket": "the bouquet",
+    "boekwinkel": "the bookshop", "lint": "the ribbon", "roos": "the rose",
+    "rozen": "roses", "tulp": "the tulip",
+})
+NOUNS.update({"bloem", "bloemen", "boeket", "boekwinkel", "lint", "roos",
+              "rozen", "tulp"})
+
+# Unit 71 (boekwinkel/at the bookshop).
+NL_GLOSSES.update({
+    "bekend": "well-known", "bladwijzer": "the bookmark",
+    "dierenwinkel": "the pet shop", "kinderboek": "the children's book",
+    "kinderboeken": "children's books", "roman": "the novel",
+    "schrijver": "the author", "titel": "the title",
+})
+NOUNS.update({"bladwijzer", "dierenwinkel", "kinderboek", "kinderboeken",
+              "roman", "schrijver", "titel"})
+ADJECTIVES.update({"bekend"})
+
+# Unit 72 (dierenwinkel/at the pet shop).
+NL_GLOSSES.update({
+    "mand": "the basket", "riem": "the leash", "slaapt": "sleeps (with hij/zij)",
+    "speeltje": "the toy", "voer": "the pet food", "vogelvoer": "the bird food",
+    "Vrolik": "Vrolik (business name)",
+})
+PROPER_NOUNS.update({"Vrolik"})
+NOUNS.update({"mand", "riem", "speeltje", "voer", "vogelvoer"})
+VERBS.update({"slaapt"})
+
+
+# Sentence-initial / sign-line capitals folded onto their lowercase citation
+# form -- see departure (1) in the block comment above. Applied in
+# `_classify_nl()` BEFORE the gloss lookup, so the capitalized spelling never
+# becomes a Lexeme.token and can never be handed to a learner as a typed
+# answer. Keys are tokens introduced ONLY by units 34-42/49-72 (verified: all
+# 116 were absent from NL_GLOSSES before this round), so this cannot alter any
+# lexeme that already shipped.
+NL_CITATION_FORMS = {
+    # Sentence-initial in dialogue or a grammar note.
+    "Aankomen": "aankomen", "Beiden": "beiden", "Begin": "begin",
+    "Begint": "begint", "Breng": "breng", "Eet": "eet", "Eén": "één",
+    "Gefeliciteerd": "gefeliciteerd", "Hebben": "hebben", "Hebt": "hebt",
+    "Heel": "heel", "Hé": "hé", "Interessant": "interessant",
+    "Jullie": "jullie", "Klaarmaken": "klaarmaken", "Lees": "lees",
+    "Lekker": "lekker", "Leren": "leren", "Neemt": "neemt", "Nodig": "nodig",
+    "Nieuwe": "nieuwe", "Open": "open", "Opruimen": "opruimen",
+    "Opzoeken": "opzoeken", "Proef": "proef", "Uitchecken": "uitchecken",
+    "Uitnodigen": "uitnodigen", "Vieren": "vieren", "Voederen": "voederen",
+    "Was": "was", "Wassen": "wassen", "Wie": "wie", "Zestig": "zestig",
+    # Speaker labels in a dialogue transcript ("Apotheker: ...").
+    "Apotheker": "apotheker", "Kapper": "kapper", "Receptionist": "receptionist",
+    # First word of a sign, price list, menu or notice.
+    "Bakkerij": "bakkerij", "Band": "band", "Bloemist": "bloemist",
+    "Boekwinkel": "boekwinkel", "Bolletje": "bolletje", "Brood": "brood",
+    "Concert": "concert", "Croissants": "croissants", "Dagmenu": "dagmenu",
+    "Dagpas": "dagpas", "Dierentuin": "dierentuin", "Dierenwinkel": "dierenwinkel",
+    "Droger": "droger", "Duur": "duur", "Elektrische": "elektrische",
+    "Etiket": "etiket", "Fiets": "fiets", "Film": "film", "Honden": "honden",
+    "Hoorntje": "hoorntje", "Huurprijzen": "huurprijzen", "IJssalon": "ijssalon",
+    "Kamer": "kamer", "Kinderboek": "kinderboek",
+    "Kindervoorstelling": "kindervoorstelling", "Knipbeurt": "knipbeurt",
+    "Kraam": "kraam", "Minimale": "minimale", "Museum": "museum",
+    "Openingstijden": "openingstijden", "Paracetamol": "paracetamol",
+    "Parasols": "parasols", "Park": "park", "Popcorn": "popcorn",
+    "Pretpark": "pretpark", "Prijslijst": "prijslijst", "Programma": "programma",
+    "Regel": "regel", "Reis": "reis", "Roman": "roman", "Rondvaart": "rondvaart",
+    "Roos": "roos", "Soep": "soep", "Sportschool": "sportschool",
+    "Strand": "strand", "Tentoonstelling": "tentoonstelling", "Theater": "theater",
+    "Thuisteam": "thuisteam", "Toneelstuk": "toneelstuk", "Tulp": "tulp",
+    "Uitteam": "uitteam", "Voer": "voer", "Vogelvoer": "vogelvoer",
+    "Voorstelling": "voorstelling", "Wasbeurt": "wasbeurt", "Wedstrijd": "wedstrijd",
+    "Yogales": "yogales",
+    # Already glossed by an earlier round (as A2/B1 case variants) but never
+    # yet an A1 lexeme, because the only A1 units introducing them are in
+    # this batch: unit51 "Kunt", unit49 "Volgende", unit50 "Moet". Folding
+    # them here is therefore still a no-op for shipped data and keeps the
+    # batch free of capitalized-by-position typed answers.
+    "Kunt": "kunt", "Volgende": "volgende", "Moet": "moet",
+    # DELIBERATELY NOT FOLDED, even though they are the same defect class:
+    # "Nu" (a1_unit44/48) and "Iedereen" (a1_unit44) are ALSO introduced by
+    # already-backfilled units, so folding them would silently rewrite
+    # lexemes that have already shipped. Left for a separate, deliberate
+    # data-migration decision rather than smuggled into this batch.
+    # Not a capitalization fix: nl.a1.unit35.lesson06's introduced_tokens
+    # spells the word without its accent while its own Dutch text writes
+    # "taalcafé". Folded onto the real word rather than shipping a lexeme
+    # whose token is a misspelling. Content-lane fix pending.
+    "taalcafe": "taalcafé",
+}
+
+# de/het gender for every noun these 33 units introduce -- see departure (2).
+# Cross-checked against the article each unit's own Dutch text uses; the
+# entries the corpus never shows with an article are marked from standard
+# Dutch (diminutives in -je/-tje are always het).
+NL_A1_VOLUME_ARTICLES = {
+    "boodschap": "de", "computer": "de", "internet": "het",
+    "gezondheidszorg": "de", "hogeschool": "de", "opleiding": "de",
+    "school": "de", "volksuniversiteit": "de", "verjaardag": "de",
+    "huishouden": "het", "rommel": "de", "buur": "de", "buurman": "de",
+    "buurvrouw": "de", "brief": "de", "pakket": "het", "postzegel": "de",
+    "pan": "de", "tomaat": "de", "ui": "de", "persoon": "de",
+    "bloemenmarkt": "de", "bevestiging": "de", "receptionist": "de",
+    "reservering": "de", "sleutel": "de", "wifiwachtwoord": "het",
+    "apotheker": "de", "doos": "de", "dosering": "de", "etiket": "het",
+    "medicijn": "het", "paracetamol": "de", "pijnstiller": "de",
+    "kapper": "de", "kapsel": "het", "knipbeurt": "de", "prijslijst": "de",
+    "borg": "de", "fietsenwinkel": "de", "huurprijs": "de", "droger": "de",
+    "wasbeurt": "de", "wasmand": "de", "wasprogramma": "het",
+    "wasserette": "de", "kluisje": "het", "zwembad": "het", "zwemtas": "de",
+    "bioscoop": "de", "dagmenu": "het", "menukaart": "de", "soep": "de",
+    "kindervoorstelling": "de", "museum": "het", "popcorn": "de",
+    "programma": "het", "voorstelling": "de", "concert": "het", "gids": "de",
+    "schilderij": "het", "tentoonstelling": "de", "band": "de",
+    "podium": "het", "publiek": "het", "bankje": "het", "boom": "de",
+    "eend": "de", "fruit": "het", "gras": "het", "lijn": "de",
+    "picknick": "de", "abonnement": "het", "dagpas": "de",
+    "instructeur": "de", "loopband": "de", "sportschool": "de",
+    "strand": "het", "yogales": "de", "dierentuin": "de", "golf": "de",
+    "parasol": "de", "zand": "het", "zee": "de", "aap": "de",
+    "giraffe": "de", "leeuw": "de", "leeuwenverblijf": "het",
+    "olifant": "de", "rondvaart": "de", "voederen": "het", "boot": "de",
+    "brug": "de", "gracht": "de", "steiger": "de", "wedstrijd": "de",
+    "doelpunt": "het", "pretpark": "het", "scorebord": "het", "speler": "de",
+    "stadion": "het", "stand": "de", "supporter": "de", "team": "het",
+    "thuisteam": "het", "uitteam": "het", "winnaar": "de", "achtbaan": "de",
+    "attractie": "de", "kassa": "de", "lengte": "de", "meter": "de",
+    "plattegrond": "de", "reuzenrad": "het", "rij": "de", "theater": "het",
+    "gordijn": "het", "stoel": "de", "toneelstuk": "het", "bakker": "de",
+    "marktkoopman": "de", "bakkerij": "de", "croissant": "de", "gebak": "het",
+    "ijssalon": "het", "toonbank": "de", "zak": "de", "bakje": "het",
+    "bloemist": "de", "bolletje": "het", "hoorntje": "het", "ijs": "het",
+    "vitrine": "de", "bloem": "de", "boeket": "het", "boekwinkel": "de",
+    "lint": "het", "roos": "de", "tulp": "de", "bladwijzer": "de",
+    "dierenwinkel": "de", "kinderboek": "het", "roman": "de",
+    "schrijver": "de", "titel": "de", "mand": "de", "riem": "de",
+    "speeltje": "het", "voer": "het", "vogelvoer": "het",
+}
+
+# Plural nouns these units introduce (all Dutch plurals take "de"). Kept
+# separate so a practice slot can require a singular -- pairing e.g.
+# "de roos"/"de rozen" in one matching_pairs set is a legitimate
+# singular/plural discrimination, but a fixed singular frame must not sample
+# the plural.
+NL_A1_VOLUME_PLURALS = {
+    "nachten", "pijnstillers", "tabletten", "huurprijzen", "graden", "kleren",
+    "munten", "openingstijden", "dranken", "schilderijen", "parasols",
+    "kaartjes", "leeuwen", "eenden", "gewichten", "acteurs", "croissants",
+    "bolletjes", "smaken", "bloemen", "rozen", "kinderboeken",
+}
+
+# Per-unit slot-preset tag prefixes, keyed by "<level>.<unit>" so an A1 unit
+# number can never collide with the B1 course's own unit01-11 -- see
+# departure (3). The slug is the realization filename's own topic slug.
+NL_A1_VOLUME_UNIT_SLUGS = {
+    "a1.unit34": "technologie", "a1.unit35": "opleiding",
+    "a1.unit36": "verjaardag", "a1.unit37": "huishouden",
+    "a1.unit38": "buurt", "a1.unit39": "post", "a1.unit40": "koken",
+    "a1.unit41": "persoonlijkheid", "a1.unit42": "kleuren",
+    "a1.unit49": "accommodatie", "a1.unit50": "apotheek",
+    "a1.unit51": "kapper", "a1.unit52": "fietshuren",
+    "a1.unit53": "wasserette", "a1.unit54": "zwembad",
+    "a1.unit55": "restaurant", "a1.unit56": "bioscoop",
+    "a1.unit57": "museum", "a1.unit58": "concert", "a1.unit59": "park",
+    "a1.unit60": "sportschool", "a1.unit61": "strand",
+    "a1.unit62": "dierentuin", "a1.unit63": "rondvaart",
+    "a1.unit64": "voetbalwedstrijd", "a1.unit65": "pretpark",
+    "a1.unit66": "theater", "a1.unit67": "markt", "a1.unit68": "bakker",
+    "a1.unit69": "ijssalon", "a1.unit70": "bloemist",
+    "a1.unit71": "boekwinkel", "a1.unit72": "dierenwinkel",
+}
+
+# One single-member fill_in_blank / render_frame anchor per unit. Single by
+# construction (an exact token test), which is what makes it safe inside a
+# fixed multi-word frame without the §17 multi-candidate ambiguity check.
+# Each token was checked to have no capitalized sibling that casefolding could
+# pull in -- guaranteed here anyway, since NL_CITATION_FORMS folds every
+# sentence-initial variant these units contain into the same single lexeme.
+NL_A1_VOLUME_SINGLE_ANCHORS = {
+    "internet": "technologie", "hogeschool": "opleiding",
+    "verjaardag": "verjaardag", "huishouden": "huishouden",
+    "buurman": "buurt", "postzegel": "post", "tomaat": "koken",
+    "persoon": "persoonlijkheid", "bloemenmarkt": "kleuren",
+    "bevestiging": "accommodatie", "dosering": "apotheek",
+    "kapsel": "kapper", "borg": "fietshuren", "wasserette": "wasserette",
+    "kluisje": "zwembad", "dagmenu": "restaurant", "popcorn": "bioscoop",
+    "tentoonstelling": "museum", "podium": "concert", "picknick": "park",
+    "loopband": "sportschool", "parasol": "strand",
+    "leeuwenverblijf": "dierentuin", "steiger": "rondvaart",
+    "scorebord": "voetbalwedstrijd", "reuzenrad": "pretpark",
+    "gordijn": "theater", "marktkoopman": "markt", "toonbank": "bakker",
+    "vitrine": "ijssalon", "boeket": "bloemist", "bladwijzer": "boekwinkel",
+    "speeltje": "dierenwinkel",
+}
+
+# Content parts of speech eligible for a `<slug>_vocab` slot. Function words
+# (particles/prepositions/pronouns), bare numerals and proper nouns are
+# excluded on purpose: proper nouns self-gloss ("Smit" -> "Smit"), which makes
+# a nonsense multiple_choice item, and function words are not testable
+# vocabulary.
+NL_A1_VOLUME_VOCAB_POS = frozenset({"noun", "verb", "adjective", "adverb", "phrase"})
+
+# Capitalized tokens that may still enter a `<slug>_vocab` pool, because the
+# capital is the real Dutch citation form rather than a sentence position.
+# Everything else starting with a capital is kept OUT of these pools even when
+# its part of speech qualifies -- `Nu` (unit35) and `Iedereen` (unit36) are
+# sentence-initial variants that could not be folded away (they are ALSO
+# introduced by already-backfilled units 44/48, see NL_CITATION_FORMS), and a
+# typed answer sampled from them would be graded `incorrect` for a learner who
+# correctly types the lowercase form.
+NL_A1_VOLUME_ALWAYS_CAPITALIZED = frozenset({"Spaans"})
+
+# Tokens whose ONE course-wide classification carries a different unit's sense
+# (this file keys specs by bare token, so a homograph gets a single gloss --
+# see the "zijn" note in the module docstring). They are kept out of the
+# affected unit's slot pools so no pack can build an item whose answer gloss
+# contradicts the unit it is testing. Checked by reading each unit's pool by
+# hand, not guessed:
+#   koken/bak + bakken   -> classified as the unit48 waste bins ("bin"/"bins"),
+#                           not unit40's bakken = "to fry"
+#   post/schrijven       -> classified as unit03's "part of inschrijven, to
+#                           register", not unit39's schrijven = "to write"
+#   zwembad/regel        -> classified as the verb "arrange (part of regelen)",
+#                           not unit54's sign heading "Regel:" = "Rule:"
+NL_A1_VOLUME_TAG_EXCLUSIONS = {
+    ("koken", "bak"), ("koken", "bakken"),
+    ("post", "schrijven"),
+    ("zwembad", "regel"),
+}
+
+
 def nl_part_of_speech(token: str) -> str:
     for pos, members in (
         ("symbol", SYMBOLS), ("proper_noun", PROPER_NOUNS), ("pronoun", PRONOUNS),
@@ -1655,6 +2371,238 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         # of generic unit-review production wrapup, so one shared
         # descriptive value is correct, not a missing-entry bug.
         "wrapup_production": "b1_unit_review",
+        # ------------------------------------------------------------------
+        # A1 volume batch: units 34-42 and 49-72, added 2026-07-22.
+        # 198 lessons, 190 new keys. THREE bare suffixes already exist in
+        # this dict and are deliberately NOT re-added -- a repeated key in a
+        # Python dict literal silently keeps only the last value and would
+        # corrupt the earlier unit's mapping (same trap already documented
+        # for "advertentie_lezen" above):
+        #   unit49.lesson05 "bevestiging_lezen"  -> reuses a2 unit74's
+        #       "confirmation_reading" (both are read-a-confirmation lessons)
+        #   unit50.lesson04 "bij_de_apotheek"    -> reuses a1 unit16's
+        #       "pharmacy_visit" (both are a pharmacy counter visit)
+        #   unit51.lesson03 "een_afspraak_maken" -> reuses a2 unit24's
+        #       "appointment_scheduling" (both are booking an appointment)
+        # FIVE more suffixes repeat WITHIN this batch and get one shared,
+        # honestly generic value each (all really are the same lesson kind):
+        # "de_prijslijst_lezen" (u51/u53), "het_programma_lezen" (u56/u58),
+        # "ik_wil_een_kaartje_kopen" (u57/u58), "het_bord_bij_de_ingang"
+        # (u59/u64/u65).
+        # ------------------------------------------------------------------
+        # Unit 34 (technologie).
+        "telefoon_computer_internet": "device_vocabulary",
+        "de_app_bericht": "app_message", "iets_opzoeken": "looking_something_up",
+        "taalcafe_lotte_bericht": "tech_message_dialogue",
+        "wie_gebruikt_wat": "tech_habits_reading",
+        "taalcafe_tot_zaterdag": "tech_plan_dialogue",
+        # Unit 35 (opleiding).
+        "studeren_opleiding": "study_programme", "cursus_leren": "course_learning",
+        "universiteit_hogeschool": "education_institution",
+        "taalcafe_sander_cursus": "study_dialogue",
+        "wie_studeert_wat": "study_profile_reading",
+        "taalcafe_spaans_oefenen": "study_plan_dialogue",
+        # Unit 36 (verjaardag).
+        "de_verjaardag": "birthday_date", "vieren_feest": "party_celebration",
+        "uitnodigen": "invitation_verb",
+        "taalcafe_planning": "party_planning_dialogue",
+        "wie_doet_wat_feest": "party_reading", "taalcafe_feest": "party_dialogue",
+        # Unit 37 (huishouden).
+        "opruimen": "tidying_up", "rommel_stofzuigen": "cleaning_task",
+        "kun_je_helpen": "chore_help_request",
+        "zondag_huishouden": "chores_dialogue",
+        "wie_doet_wat_huishouden": "chores_reading",
+        "appartement_klaar": "chores_wrapup_dialogue",
+        # Unit 38 (buurt).
+        "de_buurt": "neighbourhood_place", "buurman_buurvrouw": "neighbour_person",
+        "vriendelijk_groeten": "greeting_neighbours",
+        "lotte_ontmoet_peter": "neighbour_dialogue",
+        "wie_is_wie_in_de_buurt": "neighbour_reading",
+        "koffie_met_de_buren": "neighbour_wrapup_dialogue",
+        # Unit 39 (post).
+        "de_brief_het_pakket": "mail_item",
+        "postzegel_adres_schrijven": "stamp_and_address",
+        "aankomen_duren": "delivery_time",
+        "bij_het_postkantoor": "post_office_dialogue",
+        "lotte_stuurt_pakket": "mail_reading",
+        "naar_huis": "mail_wrapup_dialogue",
+        # Unit 40 (koken).
+        "de_ui_de_tomaat_snijden": "ingredient_cutting",
+        "de_pan_bakken": "frying_pan", "klaarmaken_proeven": "preparing_tasting",
+        "in_de_keuken_bij_omar": "cooking_dialogue",
+        "lotte_omar_koken_samen": "cooking_reading",
+        "sander_komt_eten": "meal_wrapup_dialogue",
+        # Unit 41 (persoonlijkheid).
+        "aardig_en_grappig": "trait_kind_funny",
+        "rustig_en_geduldig": "trait_calm_patient",
+        "nieuwsgierig_verlegen": "trait_curious_shy",
+        "nina_vraagt_bij_taalcafe": "personality_dialogue",
+        "nina_hoort_over_iedereen": "personality_reading",
+        "nina_beschrijft_zichzelf": "self_description_dialogue",
+        # Unit 42 (kleuren).
+        "rood_en_geel": "colour_red_yellow", "wit_en_oranje": "colour_white_orange",
+        "roze_en_paars": "colour_pink_purple",
+        "nina_en_lotte_bloemenmarkt": "colour_dialogue",
+        "nina_en_lotte_kopen_tulpen": "colour_reading",
+        "tulpen_voor_het_taalcafe": "colour_wrapup_dialogue",
+        # Unit 49 (accommodatie). lesson05 reuses "bevestiging_lezen".
+        "kamer_boeken": "room_booking", "ontbijt_inbegrepen": "breakfast_included",
+        "sleutel_wifi": "key_and_wifi", "inchecken_bij_de_balie": "checkin_dialogue",
+        "lotte_belt": "accommodation_wrapup_dialogue",
+        # Unit 50 (apotheek). lesson04 reuses "bij_de_apotheek".
+        "ik_heb_hoofdpijn": "symptom_statement",
+        "een_tablet_innemen": "taking_medicine",
+        "de_dosering_lezen": "dosage_instruction",
+        "het_etiket_lezen": "medicine_label_reading",
+        "omar_vraagt_hoe_het_gaat": "pharmacy_wrapup_dialogue",
+        # Unit 51 (kapper). lesson03 reuses "een_afspraak_maken".
+        "mijn_haar_is_te_lang": "haircut_need",
+        "kunt_u_mijn_haar_knippen": "haircut_request",
+        "bij_de_kapper": "hairdresser_dialogue",
+        "de_prijslijst_lezen": "price_list_reading",
+        "lotte_ziet_het_nieuwe_kapsel": "haircut_wrapup_dialogue",
+        # Unit 52 (fiets huren).
+        "ik_wil_een_fiets_huren": "bike_rental_request",
+        "hoeveel_kost_het_per_dag": "daily_rate_question",
+        "ik_wil_de_fiets_voor_het_weekend": "rental_duration",
+        "bij_de_fietsenwinkel": "bike_rental_dialogue",
+        "de_huurprijzen_lezen": "rental_price_reading",
+        "omar_ziet_de_nieuwe_fiets": "bike_rental_wrapup_dialogue",
+        # Unit 53 (wasserette). lesson05 reuses "de_prijslijst_lezen".
+        "ik_wil_mijn_kleren_wassen": "laundry_request",
+        "hoeveel_kost_een_wasbeurt": "wash_price_question",
+        "wanneer_is_de_was_klaar": "laundry_ready_time",
+        "bij_de_wasserette": "launderette_dialogue",
+        "lotte_bij_de_wasserette": "laundry_wrapup_dialogue",
+        # Unit 54 (zwembad).
+        "ik_wil_naar_het_zwembad": "pool_visit_request",
+        "hoeveel_kost_een_kaartje": "ticket_price_question",
+        "hoe_laat_gaat_het_zwembad_open": "pool_opening_time_question",
+        "bij_het_zwembad": "pool_dialogue",
+        "de_openingstijden_lezen": "opening_hours_reading",
+        "omar_bij_het_zwembad": "pool_wrapup_dialogue",
+        # Unit 55 (restaurant).
+        "ik_wil_naar_het_restaurant": "restaurant_visit_request",
+        "wat_wilt_u_eten": "food_order_question",
+        "mag_ik_de_rekening": "bill_request",
+        "bij_het_restaurant": "restaurant_dialogue",
+        "het_dagmenu_lezen": "day_menu_reading",
+        "lotte_bij_het_restaurant": "restaurant_wrapup_dialogue",
+        # Unit 56 (bioscoop).
+        "ik_wil_een_film_kijken": "cinema_visit_request",
+        "welke_film_wilt_u_zien": "film_choice_question",
+        "hoe_laat_begint_de_voorstelling": "showtime_question",
+        "bij_de_bioscoop": "cinema_dialogue",
+        "het_programma_lezen": "programme_reading",
+        "omar_bij_de_bioscoop": "cinema_wrapup_dialogue",
+        # Unit 57 (museum).
+        "ik_wil_naar_het_museum": "museum_visit_request",
+        "ik_wil_een_kaartje_kopen": "ticket_purchase_request",
+        "hoe_laat_sluit_het_museum": "closing_time_question",
+        "bij_het_museum": "museum_dialogue",
+        "het_informatiebord_lezen": "information_board_reading",
+        "omar_nina_en_lotte_bij_het_museum": "museum_wrapup_dialogue",
+        # Unit 58 (concert). lesson02/05 reuse unit57/unit56's keys.
+        "ik_wil_naar_het_concert": "concert_visit_request",
+        "hoe_laat_begint_het_concert": "concert_start_question",
+        "bij_de_kassa": "box_office_dialogue",
+        "omar_nina_en_lotte_bij_het_concert": "concert_wrapup_dialogue",
+        # Unit 59 (park).
+        "zullen_we_naar_het_park_gaan": "park_outing_proposal",
+        "de_bomen_en_het_gras": "park_nature_vocabulary",
+        "de_eenden_bij_het_water": "park_animals",
+        "het_bord_bij_de_ingang": "entrance_sign_reading",
+        "een_picknick_in_het_park": "park_picnic_dialogue",
+        "omar_nina_en_lotte_na_het_park": "park_wrapup_dialogue",
+        # Unit 60 (sportschool).
+        "zullen_we_naar_de_sportschool_gaan": "gym_outing_proposal",
+        "de_apparaten_in_de_sportschool": "gym_equipment",
+        "de_yogales": "yoga_class",
+        "het_rooster_bij_de_balie": "gym_schedule_reading",
+        "bij_de_balie_van_de_sportschool": "gym_desk_dialogue",
+        "omar_en_nina_na_de_sportschool": "gym_wrapup_dialogue",
+        # Unit 61 (strand).
+        "zullen_we_naar_het_strand_gaan": "beach_outing_proposal",
+        "het_zand_en_de_golven": "beach_nature_vocabulary",
+        "zwemmen_in_de_zee": "sea_swimming",
+        "het_bord_bij_het_strand": "beach_sign_reading",
+        "een_middag_op_het_strand": "beach_dialogue",
+        "omar_en_lotte_na_het_strand": "beach_wrapup_dialogue",
+        # Unit 62 (dierentuin).
+        "zullen_we_naar_de_dierentuin_gaan": "zoo_outing_proposal",
+        "de_leeuw_en_de_olifant": "zoo_animal_lion_elephant",
+        "de_aap_en_de_giraffe": "zoo_animal_monkey_giraffe",
+        "het_bord_bij_de_dierentuin": "zoo_sign_reading",
+        "bij_de_kassa_van_de_dierentuin": "zoo_ticket_dialogue",
+        "nina_en_omar_na_de_dierentuin": "zoo_wrapup_dialogue",
+        # Unit 63 (rondvaart).
+        "zullen_we_vandaag_een_rondvaart_maken": "boat_tour_proposal",
+        "de_gracht_en_de_brug": "canal_scenery",
+        "de_steiger_en_de_gids": "pier_and_guide",
+        "het_bord_bij_de_rondvaart": "boat_tour_sign_reading",
+        "bij_de_kassa_van_de_rondvaart": "boat_tour_ticket_dialogue",
+        "omar_en_lotte_na_de_rondvaart": "boat_tour_wrapup_dialogue",
+        # Unit 64 (voetbalwedstrijd). lesson04 reuses unit59's key.
+        "zullen_we_vanavond_naar_de_wedstrijd_gaan": "match_outing_proposal",
+        "het_team_en_de_speler": "football_people",
+        "het_doelpunt_en_de_stand": "football_score",
+        "bij_de_kassa_van_het_stadion": "stadium_ticket_dialogue",
+        "omar_en_nina_na_de_wedstrijd": "match_wrapup_dialogue",
+        # Unit 65 (pretpark). lesson04 reuses unit59's key.
+        "zullen_we_vandaag_naar_het_pretpark_gaan": "amusement_park_proposal",
+        "de_achtbaan_en_de_rij": "ride_and_queue",
+        "het_reuzenrad_en_de_kassa": "ferris_wheel_and_counter",
+        "bij_de_kassa_van_het_pretpark": "amusement_park_ticket_dialogue",
+        "lotte_hoort_over_het_pretpark": "amusement_park_wrapup_dialogue",
+        # Unit 66 (theater).
+        "zullen_we_vandaag_naar_het_theater_gaan": "theatre_outing_proposal",
+        "het_podium_en_het_gordijn": "stage_and_curtain",
+        "de_acteurs_en_de_kassa": "actors_and_counter",
+        "het_programma_van_de_voorstelling": "theatre_programme_reading",
+        "bij_de_kassa_van_het_theater": "theatre_ticket_dialogue",
+        "nina_hoort_over_het_theater": "theatre_wrapup_dialogue",
+        # Unit 67 (markt).
+        "zullen_we_naar_de_markt_gaan": "market_outing_proposal",
+        "de_groente_en_het_fruit": "market_produce",
+        "de_appels_en_de_marktkoopman": "market_vendor",
+        "de_prijzen_op_de_markt": "market_price_reading",
+        "bij_de_kraam_op_de_markt": "market_stall_dialogue",
+        "lotte_hoort_over_de_markt": "market_wrapup_dialogue",
+        # Unit 68 (bakker).
+        "zullen_we_naar_de_bakker_gaan": "bakery_outing_proposal",
+        "het_brood_en_het_gebak": "bakery_product",
+        "de_croissant_en_de_medewerker": "bakery_counter_staff",
+        "de_prijzen_bij_de_bakker": "bakery_price_reading",
+        "bij_de_toonbank_bij_de_bakker": "bakery_counter_dialogue",
+        "nina_hoort_over_de_bakker": "bakery_wrapup_dialogue",
+        # Unit 69 (ijssalon).
+        "zullen_we_naar_het_ijssalon_gaan": "ice_cream_outing_proposal",
+        "het_ijs_en_de_smaak": "ice_cream_flavour",
+        "het_bolletje_en_de_medewerker": "ice_cream_serving",
+        "de_prijzen_in_het_ijssalon": "ice_cream_price_reading",
+        "bij_de_vitrine_in_het_ijssalon": "ice_cream_counter_dialogue",
+        "lotte_hoort_over_het_ijssalon": "ice_cream_wrapup_dialogue",
+        # Unit 70 (bloemist).
+        "zullen_we_naar_de_bloemist_gaan": "florist_outing_proposal",
+        "het_boeket_en_de_kleur": "bouquet_and_colour",
+        "de_roos_en_de_medewerker": "florist_counter_staff",
+        "de_prijzen_bij_de_bloemist": "florist_price_reading",
+        "bij_de_toonbank_bij_de_bloemist": "florist_counter_dialogue",
+        "nina_hoort_over_de_bloemist": "florist_wrapup_dialogue",
+        # Unit 71 (boekwinkel).
+        "zullen_we_naar_de_boekwinkel_gaan": "bookshop_outing_proposal",
+        "de_roman_en_de_titel": "book_and_title",
+        "de_schrijver_en_de_medewerker": "bookshop_counter_staff",
+        "de_prijzen_in_de_boekwinkel": "bookshop_price_reading",
+        "bij_de_toonbank_in_de_boekwinkel": "bookshop_counter_dialogue",
+        "lotte_hoort_over_de_boekwinkel": "bookshop_wrapup_dialogue",
+        # Unit 72 (dierenwinkel).
+        "zullen_we_naar_de_dierenwinkel_gaan": "pet_shop_outing_proposal",
+        "het_voer_en_de_riem": "pet_supplies",
+        "de_medewerker_en_de_mand": "pet_shop_counter_staff",
+        "de_prijzen_in_de_dierenwinkel": "pet_shop_price_reading",
+        "bij_de_toonbank_in_de_dierenwinkel": "pet_shop_counter_dialogue",
+        "nina_hoort_over_de_dierenwinkel": "pet_shop_wrapup_dialogue",
     }
     semantic.append(lesson_categories[unit_lesson])
     if t in {"jij", "je"}: semantic.append("informal_address")
@@ -2421,9 +3369,43 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     if t == "artikel": semantic.append("terugbrengen_artikel_single")
     if t == "terugkrijgen": semantic.append("terugbrengen_terugkrijgen_single")
 
+    # A1 volume batch (units 34-42 / 49-72), added 2026-07-22. Unlike the
+    # per-token `if t == ...` blocks above, these are derived from the
+    # lesson_key + part of speech, because 33 units x ~25 content words is
+    # far past the point where hand-listing every token stays reviewable --
+    # and the pools these produce are exactly "the content words THIS unit
+    # introduces", which is the one scope `generate_checkpoint()` can use
+    # (it calls `_material()` with only the unit's own lesson ids).
+    # Proper nouns, numerals and function words are excluded by
+    # NL_A1_VOLUME_VOCAB_POS; sentence-initial capitals cannot appear at all,
+    # because NL_CITATION_FORMS folds them away before classification.
+    volume_slug = NL_A1_VOLUME_UNIT_SLUGS.get(".".join(lesson_key.split(".")[1:3]))
+    if (
+        volume_slug is not None
+        and (volume_slug, token) not in NL_A1_VOLUME_TAG_EXCLUSIONS
+        and (not token[:1].isupper() or token in NL_A1_VOLUME_ALWAYS_CAPITALIZED)
+    ):
+        volume_pos = nl_part_of_speech(token)
+        if volume_pos in NL_A1_VOLUME_VOCAB_POS:
+            semantic.append(f"{volume_slug}_vocab")
+        if volume_pos == "noun":
+            semantic.append(f"{volume_slug}_noun")
+    anchor_slug = NL_A1_VOLUME_SINGLE_ANCHORS.get(token)
+    if anchor_slug is not None:
+        semantic.append(f"{anchor_slug}_{token}_single")
+
     tags: dict[str, object] = {"semantic": list(dict.fromkeys(semantic))}
     if t in {"jij", "je"}: tags["register"] = "informal"
     elif t == "u": tags["register"] = "polite"
+    # de/het gender and singular/plural for the A1 volume batch's nouns --
+    # not recoverable from the English gloss, and required before a pack
+    # author can write a grammatical frame around a slot.
+    if token in NL_A1_VOLUME_ARTICLES:
+        tags["article"] = NL_A1_VOLUME_ARTICLES[token]
+        tags["number"] = "singular"
+    elif token in NL_A1_VOLUME_PLURALS:
+        tags["article"] = "de"
+        tags["number"] = "plural"
     return tags
 
 
@@ -2435,11 +3417,30 @@ def _classify_nl(unit_files, level):
     specs: dict[str, dict] = {}
     for unit_order, realization_path in enumerate(unit_files, 1):
         realization = yaml.safe_load(realization_path.read_text(encoding="utf-8"))
+        # NL_CITATION_FORMS is applied ONLY to the 2026-07-22 A1 volume batch
+        # (units 34-42 / 49-72). Scoping it to those lessons is load-bearing,
+        # not cosmetic: a few of its keys ("Kunt", "Volgende", "Moet") are ALSO
+        # introduced by already-backfilled A2 units, and folding them there
+        # would silently delete three shipped A2 lexemes that A2 practice packs
+        # may already resolve against. Fixing those is a separate, deliberate
+        # data-migration decision -- it does not get smuggled in here.
+        in_volume_batch = (
+            ".".join(realization["units"][0]["content_key"].split(".")[1:3])
+            in NL_A1_VOLUME_UNIT_SLUGS
+        )
         for lesson_order, lesson in enumerate(realization["units"][0]["lessons"], 1):
             lesson_key = lesson["content_key"]
             for item in lesson["teaching"]:
                 for token in item.get("introduced_tokens", []):
                     token = str(token)
+                    # Fold sentence-initial / sign-line capitals onto their
+                    # lowercase citation form BEFORE anything else, so a
+                    # capitalized-by-position spelling never becomes a
+                    # Lexeme.token (defect 1.25 -- typed answers are graded
+                    # by exact string match and a case-only mismatch is
+                    # hard-blocked to `incorrect`).
+                    if in_volume_batch:
+                        token = NL_CITATION_FORMS.get(token, token)
                     if token not in NL_GLOSSES:
                         raise ValueError(f"missing explicit Dutch gloss for {token!r}")
                     tags = nl_agreement_tags(token, lesson_key)

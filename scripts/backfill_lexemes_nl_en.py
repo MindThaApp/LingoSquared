@@ -29,6 +29,23 @@ and backfill each level against its own course. Also closes a real
 coverage gap found while fixing this: unit27 (banking) existed on disk but
 this script never classified it at all -- added alongside the fix.
 
+**Coverage extension 2026-07-22 (unit-checkpoint publish gate)**: this
+script previously stopped at A1 unit48 / A2 unit29, so 52 nl-en units --
+`en.a1.unit49`-`unit68`, `en.a2.unit30`-`unit34`, all 19 B1 units and all 8
+B2 units -- had ZERO lexemes. `generate_checkpoint()`
+(`backend/app/practice/service.py`) needs BOTH practice templates AND
+lexemes on a unit's own lessons via `_material()` and hard-fails
+`checkpoint_unavailable` below 12 items, so those units could never produce
+a checkpoint no matter how many practice packs were authored. All 52 are
+classified here now (+3374 specs), including two ENTIRELY NEW course rows,
+"Engels B1" and "Engels B2" (`UNIT_FILES_B1`/`UNIT_FILES_B2`, same
+separate-course pattern as `UNIT_FILES_A2`). Consequence for deploys: the
+nl-en B1/B2 content must be imported before this script runs, or it exits 1
+with "ERROR: nl-en 'Engels B1' course must be imported first" -- the four
+tuples below are kept in the exact file order of `scripts/content_manifest.txt`'s
+`nl-en`/`nl-en-a2`/`nl-en-b1`/`nl-en-b2` lines, because `unit_order` here is
+positional and must line up with the imported `Unit.order`.
+
 Needs both the app's DB settings/imports (in backend/) and this repo's
 docs/content/ (at the repo root). Run via docker compose from backend/,
 mounting the full repo on top of the existing image/network/env:
@@ -603,6 +620,92 @@ UNIT_FILES = (
         REPO_ROOT / "docs/content/realizations/en/a1_unit48_library.yaml",
         REPO_ROOT / "docs/content/overlays/nl-en/a1_unit48.yaml",
     ),
+    # Units 49-68, added 2026-07-22 for the unit-checkpoint publish gate:
+    # `generate_checkpoint()` needs BOTH practice templates AND lexemes on a
+    # unit's own lessons, and these twenty units had ZERO lexemes (they were
+    # simply never listed here), so no practice pack could ever unblock them.
+    # Overlay filenames match their realization's own unit number from unit31
+    # onward, so no unit30-style irregularity applies here.
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit49_waste_disposal.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/a1_unit49.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit50_accommodation.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/a1_unit50.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit51_pharmacy.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/a1_unit51.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit52_personal_care.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/a1_unit52.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit53_bike_rental.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/a1_unit53.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit54_laundry.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/a1_unit54.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit55_swimming_pool.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/a1_unit55.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit56_restaurant.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/a1_unit56.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit57_cinema.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/a1_unit57.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit58_museum.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/a1_unit58.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit59_banking_basics.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/a1_unit59.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit60_invitations.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/a1_unit60.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit61_apologies_excuses.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/a1_unit61.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit62_phone_calls.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/a1_unit62.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit63_asking_for_help.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/a1_unit63.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit64_compliments.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/a1_unit64.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit65_returns_exchanges.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/a1_unit65.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit66_pharmacy_symptoms.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/a1_unit66.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit67_family_news.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/a1_unit67.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit68_borrowing_lending.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/a1_unit68.yaml",
+    ),
 )
 
 # A2 units (25-27: bureaucracy, opinions, banking) live in a SEPARATE course
@@ -657,6 +760,150 @@ UNIT_FILES_A2 = (
     (
         REPO_ROOT / "docs/content/realizations/en/a2_unit29_maintenance.yaml",
         REPO_ROOT / "docs/content/overlays/nl-en/a2_unit29.yaml",
+    ),
+    # Units 30-34, added 2026-07-22 alongside the A1 49-68 / B1 / B2 batch --
+    # same checkpoint-unblocking reason (zero lexemes before this change).
+    (
+        REPO_ROOT / "docs/content/realizations/en/a2_unit30_job_interview.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/a2_unit30.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a2_unit31_travel_disruption.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/a2_unit31.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a2_unit32_online_habits.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/a2_unit32.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a2_unit33_weekly_schedule.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/a2_unit33.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a2_unit34_shopping_complaint.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/a2_unit34.yaml",
+    ),
+)
+
+# B1 units (01-19) and B2 units (01-08) are AGAIN separate course rows
+# ("Engels B1"/"Engels B2" -- every b1_/b2_ overlay declares its own
+# `course.title`), so they get their own tuples with LOCAL 1-based ordering,
+# exactly like UNIT_FILES_A2. Added 2026-07-22: both courses had zero lexemes,
+# which made a unit checkpoint impossible for all 27 of their units regardless
+# of how many practice packs were authored (`generate_checkpoint()` needs
+# lexemes on the unit's own lessons and hard-fails `checkpoint_unavailable`
+# below 12 items).
+UNIT_FILES_B1 = (
+    (
+        REPO_ROOT / "docs/content/realizations/en/b1_unit01_necessity.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/b1_unit01.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/b1_unit02_abilities.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/b1_unit02.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/b1_unit03_hypotheticals.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/b1_unit03.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/b1_unit04_debate.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/b1_unit04.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/b1_unit05_workplace.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/b1_unit05.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/b1_unit06_narrative.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/b1_unit06.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/b1_unit07_conditions.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/b1_unit07.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/b1_unit08_sequencing.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/b1_unit08.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/b1_unit09_reported_speech.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/b1_unit09.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/b1_unit10_purpose.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/b1_unit10.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/b1_unit11_unreal_hypotheticals.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/b1_unit11.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/b1_unit12_concession.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/b1_unit12.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/b1_unit13_relative_clauses.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/b1_unit13.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/b1_unit14_professional_communication.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/b1_unit14.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/b1_unit15_complaints.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/b1_unit15.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/b1_unit16_advice.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/b1_unit16.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/b1_unit17_regret.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/b1_unit17.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/b1_unit18_future_plans.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/b1_unit18.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/b1_unit19_summarizing.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/b1_unit19.yaml",
+    ),
+)
+
+UNIT_FILES_B2 = (
+    (
+        REPO_ROOT / "docs/content/realizations/en/b2_unit01_argumentation.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/b2_unit01.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/b2_unit02_speculation.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/b2_unit02.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/b2_unit03_hedging_emphasis.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/b2_unit03.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/b2_unit04_narrative_time.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/b2_unit04.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/b2_unit05_register.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/b2_unit05.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/b2_unit06_abstraction.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/b2_unit06.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/b2_unit07_negotiation.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/b2_unit07.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/b2_unit08_synthesis.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/b2_unit08.yaml",
     ),
 )
 
@@ -1433,6 +1680,1102 @@ NL_GLOSSES.update({
 })
 
 
+# --------------------------------------------------------------------------
+# Coverage extension 2026-07-22: A1 units 49-68, A2 units 30-34, and the
+# entirely new B1 (units 01-19) and B2 (units 01-08) courses.
+#
+# `_en_target_lexeme_common.EN_POS` is SHARED with backfill_lexemes_fa_en.py
+# and backfill_lexemes_prs_en.py and is not this script's file to edit
+# (concurrent agents own the sibling scripts), so the English tokens these 52
+# units introduce are classified here in a LOCAL supplement. The merge order
+# in EN_POS_ALL below deliberately lets the shared file WIN wherever it also
+# knows a token: if a sibling agent later lifts the same token into
+# _en_target_lexeme_common.py, all three X->en scripts keep agreeing on its
+# part of speech, and this supplement silently becomes a no-op for it.
+#
+# Each entry is (part_of_speech, Dutch gloss). The part of speech is the
+# shared/target-side classification (identical across nl-en/fa-en/prs-en); the
+# Dutch gloss is nl-en's own, exactly like EN_TARGET_TO_NL_GLOSS above.
+# Where one surface form is genuinely used in two senses across the corpus
+# (e.g. "waste" the noun in a1_unit49 and "waste time" in a2_unit32) the
+# gloss names both senses, because Lexeme identity is
+# (course, language, token, part_of_speech) -- one row per form per course.
+EN_EXTRA: dict[str, tuple[str, str]] = {
+    # A1 unit49 -- sorting household waste.
+    "sort": ("verb", "sorteren"), "waste": ("noun", "afval; (waste time) verspillen"),
+    "bin": ("noun", "de bak; de container"), "recycle": ("verb", "recyclen"),
+    "glass": ("noun", "glas"), "paper": ("noun", "papier"),
+    "collection": ("noun", "het ophalen (in ophaaldag)"),
+    "recycling": ("noun", "recycling- (in recyclingbak)"),
+    "food": ("noun", "voedsel- (in gft-afval)"), "jar": ("noun", "de pot"),
+    "bins": ("noun", "de bakken"), "tuesdays": ("noun", "op dinsdag"),
+    "fridays": ("noun", "op vrijdag"), "correctly": ("adverb", "goed; correct"),
+    "buildings": ("noun", "de gebouwen"), "kinds": ("noun", "de soorten"),
+    "practicing": ("verb", "oefenend"), "afterward": ("adverb", "daarna; achteraf"),
+    "stopped": ("verb", "stopte"), "showed": ("verb", "liet zien"),
+    "sorts": ("verb", "sorteert"), "explained": ("verb", "legde uit"),
+    # A1 unit50 -- staying in accommodation.
+    "hotel": ("noun", "het hotel"), "staying": ("verb", "verblijvend; logerend"),
+    "beds": ("noun", "de bedden"), "reservation": ("noun", "de reservering"),
+    "included": ("adjective", "inbegrepen"), "check-out": ("noun", "het uitchecken"),
+    "key": ("noun", "de sleutel"), "under": ("preposition", "onder; op naam van"),
+    "downstairs": ("adverb", "beneden"), "guesthouse": ("noun", "het gastenhuis"),
+    "mountains": ("noun", "de bergen"), "november": ("noun", "november"),
+    "14th": ("symbol", "14e"), "16th": ("symbol", "16e"),
+    "picture": ("noun", "het schilderij; de foto"), "view": ("noun", "het uitzicht; de visie"),
+    "window": ("noun", "het raam"), "stayed": ("verb", "verbleef; bleef"),
+    "cooked": ("verb", "kookte"), "himself": ("pronoun", "zichzelf"),
+    "loved": ("verb", "vond prachtig"),
+    # A1 unit51 -- at the pharmacy.
+    "pharmacist": ("noun", "de apotheker"), "syrup": ("noun", "de siroop"),
+    "runny": ("adjective", "loop- (in loopneus)"), "nose": ("noun", "de neus"),
+    "hours": ("noun", "de uren"), "tablets": ("noun", "de tabletten"),
+    "felt": ("verb", "voelde"), "walked": ("verb", "liep"),
+    "listened": ("verb", "luisterde"), "symptoms": ("noun", "de klachten"),
+    "recommended": ("verb", "raadde aan"), "box": ("noun", "de doos"),
+    "tissues": ("noun", "de tissues"),
+    # A1 unit52 -- personal care / the hairdresser.
+    "haircut": ("noun", "de knipbeurt"), "hairdresser": ("noun", "de kapper"),
+    "trim": ("verb", "bijknippen"), "shorter": ("adjective", "korter"),
+    "style": ("noun", "de stijl; het kapsel"), "visit": ("verb", "bezoeken; het bezoek"),
+    "salon": ("noun", "de salon"), "washed": ("verb", "waste"),
+    "looked": ("verb", "zag eruit"), "met": ("verb", "ontmoette"),
+    # A1 unit53 -- renting a bike.
+    "rent": ("verb", "huren; de huur"), "hour": ("noun", "het uur"),
+    "costs": ("verb", "kost"), "helmet": ("noun", "de helm"),
+    "we'd": ("pronoun", "wij zouden"), "bikes": ("noun", "de fietsen"),
+    "river": ("noun", "de rivier"), "invited": ("verb", "nodigde uit"),
+    "neither": ("pronoun", "geen van beiden"), "owned": ("verb", "bezat"),
+    "rental": ("noun", "de verhuur"), "needed": ("verb", "had nodig"),
+    "enjoying": ("verb", "genietend van"), "join": ("verb", "meedoen; meegaan"),
+    # A1 unit54 -- the laundromat.
+    "laundromat": ("noun", "de wasserette"), "machine": ("noun", "de machine"),
+    "broken": ("adjective", "kapot"), "dryer": ("noun", "de droger"),
+    "clothes": ("noun", "de kleren"),
+    "quarters": ("noun", "kwartjes (munten van 25 cent)"),
+    "machines": ("noun", "de machines"), "detergent": ("noun", "het wasmiddel"),
+    "load": ("noun", "het wasje; de lading"), "cycle": ("noun", "de wascyclus"),
+    "pick": ("verb", "ophalen (in pick up)"), "broke": ("verb", "ging kapot"),
+    "down": ("particle", "kapot (in broke down)"), "attendant": ("noun", "de medewerker"),
+    "talked": ("verb", "praatte"), "kept": ("verb", "hield"),
+    "probably": ("adverb", "waarschijnlijk"), "fixed": ("verb", "repareerde; vast"),
+    # A1 unit55 -- the swimming pool.
+    "enter": ("verb", "binnengaan; invoeren"), "locker": ("noun", "het kluisje"),
+    "swim": ("verb", "zwemmen"), "cap": ("noun", "de muts"),
+    "wear": ("verb", "dragen"), "rules": ("noun", "de regels"),
+    "read": ("verb", "lezen; las"), "lifeguard": ("noun", "de badmeester"),
+    "watches": ("verb", "houdt in de gaten"), "lockers": ("noun", "de kluisjes"),
+    "tickets": ("noun", "de kaartjes"), "caps": ("noun", "de badmutsen"),
+    "required": ("adjective", "verplicht"), "entrance": ("noun", "de ingang"),
+    "dollar": ("noun", "dollar- (in dollarmunt)"), "coin": ("noun", "de munt"),
+    "cool": ("verb", "afkoelen"), "sign": ("noun", "het bord; (sign up) zich inschrijven"),
+    "listed": ("verb", "vermeldde"), "bags": ("noun", "de tassen"),
+    "swam": ("verb", "zwom"), "try": ("verb", "proberen"),
+    "diving": ("noun", "duik- (in duikplank)"), "board": ("noun", "de plank"),
+    # A1 unit56 -- ordering in a restaurant.
+    "waiter": ("noun", "de ober"), "table": ("noun", "de tafel"),
+    "order": ("verb", "bestellen; de volgorde"), "chicken": ("noun", "de kip"),
+    "meal": ("noun", "de maaltijd"), "sit": ("verb", "gaan zitten"),
+    "nineteen": ("noun", "negentien"), "pizza": ("noun", "de pizza"),
+    "juice": ("noun", "het sap"), "brought": ("verb", "bracht"),
+    "ordered": ("verb", "bestelde"), "excellent": ("adjective", "uitstekend"),
+    # A1 unit57 -- going to the cinema.
+    "cinema": ("noun", "de bioscoop"), "popular": ("adjective", "populair"),
+    "showtime": ("noun", "de aanvangstijd"), "film": ("noun", "de film"),
+    "seat": ("noun", "de stoel; de plaats"), "screen": ("noun", "het scherm"),
+    "popcorn": ("noun", "popcorn"), "start": ("verb", "beginnen; de start"),
+    "liked": ("verb", "vond leuk"), "sixteen": ("noun", "zestien"),
+    "schedule": ("noun", "het schema; het rooster"),
+    "star": ("proper_noun", "Star (in de filmtitel Star Journey)"),
+    "journey": ("proper_noun", "Journey (in de filmtitel Star Journey)"),
+    "7:00": ("symbol", "7.00 uur"), "$8": ("symbol", "8 dollar"),
+    "race": ("proper_noun", "Race (in de filmtitel The Great Race)"),
+    "5:00": ("symbol", "5.00 uur"), "$10": ("symbol", "10 dollar"),
+    "9:00": ("symbol", "9.00 uur"), "$6": ("symbol", "6 dollar"),
+    "cashier": ("noun", "de kassamedewerker"),
+    "explorers": ("noun", "de ruimtevaarders"),
+    # A1 unit58 -- visiting a museum.
+    "museum": ("noun", "het museum"), "exhibition": ("noun", "de tentoonstelling"),
+    "sculpture": ("noun", "het beeld"), "guide": ("noun", "de gids"),
+    "enjoyed": ("verb", "genoot van"), "paintings": ("noun", "de schilderijen"),
+    "city": ("noun", "de stad"), "adult": ("noun", "volwassenen- (in volwassenenkaartje)"),
+    "current": ("adjective", "huidige"), "town": ("noun", "de stad; het stadje"),
+    "square": ("noun", "het plein"), "sunset": ("noun", "de zonsondergang"),
+    # A1 unit59 -- basic banking / the ATM.
+    "atm": ("noun", "de geldautomaat"), "pin": ("noun", "de pincode"),
+    "4:00": ("symbol", "4.00 uur"), "limit": ("noun", "de limiet"),
+    "$100": ("symbol", "100 dollar"), "accepted": ("adjective", "geaccepteerd"),
+    "quick": ("adjective", "kort; snel"), "entered": ("verb", "voerde in"),
+    # A1 unit60 -- invitations.
+    "invitation": ("noun", "de uitnodiging"), "picnic": ("noun", "de picknick"),
+    "6:00": ("symbol", "6.00 uur"), "18": ("symbol", "18"),
+    "wrote": ("verb", "schreef"),
+    # A1 unit61 -- apologies and excuses.
+    "traffic": ("noun", "het verkeer"), "mistake": ("noun", "de fout"),
+    "starts": ("verb", "begint"), "waiting": ("verb", "het wachten"),
+    "note": ("noun", "het briefje; de notitie"), "3:00": ("symbol", "3.00 uur"),
+    "apology": ("noun", "het excuus"), "classroom": ("noun", "het klaslokaal"),
+    # A1 unit62 -- phone calls and voicemail.
+    "voicemail": ("noun", "de voicemail"), "sound": ("noun", "het geluid; klinken"),
+    "clear": ("adjective", "duidelijk"),
+    # A1 unit63 -- asking for help.
+    "carry": ("verb", "dragen"), "heavy": ("adjective", "zwaar"),
+    "shelf": ("noun", "de plank"), "carried": ("verb", "droeg"),
+    # A1 unit64 -- compliments.
+    "lovely": ("adjective", "prachtig; heel mooi"), "kind": ("adjective", "aardig"),
+    "smile": ("noun", "de glimlach"), "being": ("verb", "het zijn (in being kind)"),
+    "compliment": ("noun", "het compliment"),
+    # A1 unit65 -- returns and exchanges.
+    "exchange": ("verb", "ruilen"), "larger": ("adjective", "groter"),
+    "refund": ("noun", "de terugbetaling"), "offered": ("verb", "bood aan"),
+    "exchanged": ("verb", "ruilde"),
+    # A1 unit66 -- describing symptoms at the pharmacy.
+    "symptom": ("noun", "de klacht; het symptoom"), "hurts": ("verb", "doet pijn"),
+    # A1 unit67 -- family news.
+    "news": ("noun", "het nieuws"), "baby": ("noun", "de baby"),
+    "proud": ("adjective", "trots"), "must": ("verb", "moeten (sterke verplichting)"),
+    "shared": ("verb", "deelde; gedeeld"),
+    # A1 unit68 -- borrowing and lending.
+    "lend": ("verb", "uitlenen"), "charger": ("noun", "de oplader"),
+    "lending": ("verb", "het uitlenen"), "leila's": ("proper_noun", "Leila's"),
+    "share": ("verb", "delen"), "lent": ("verb", "leende uit"),
+    "remember": ("verb", "onthouden"),
+    # A2 unit30 -- the job interview.
+    "experience": ("noun", "de ervaring"), "position": ("noun", "de functie; het standpunt"),
+    "availability": ("noun", "de beschikbaarheid"), "strength": ("noun", "het sterke punt"),
+    "requirement": ("noun", "de vereiste"), "social": ("adjective", "social (in social media)"),
+    "media": ("noun", "media"), "marketing": ("noun", "marketing"),
+    "strengths": ("noun", "de sterke punten"), "resume": ("noun", "het cv"),
+    "deadline": ("noun", "de deadline"),
+    "path": ("proper_noun", "Path (in de bedrijfsnaam Bright Path Marketing)"),
+    "looking": ("verb", "zoekend (in looking for)"),
+    "coordinator": ("noun", "de coördinator"), "requirements": ("noun", "de vereisten"),
+    "writing": ("noun", "het schrijven"), "immediately": ("adverb", "direct"),
+    "interview": ("noun", "het gesprek"), "deadlines": ("noun", "de deadlines"),
+    "managed": ("verb", "stuurde aan; slaagde erin"), "questions": ("noun", "de vragen"),
+    "role": ("noun", "de functie; de rol"), "typical": ("adjective", "typisch"),
+    # A2 unit31 -- travel disruption.
+    "delay": ("noun", "de vertraging"), "cancelled": ("adjective", "geannuleerd"),
+    "alternative": ("noun", "het alternatief"), "signal": ("noun", "sein- (in seinstoring)"),
+    "delayed": ("adjective", "vertraagd"), "5:15": ("symbol", "5.15 uur"),
+    "5:30": ("symbol", "5.30 uur"), "station": ("noun", "het station"),
+    "tracks": ("noun", "het spoor"),
+    # A2 unit32 -- online habits.
+    "messaging": ("noun", "berichten- (in berichten-app)"),
+    "notification": ("noun", "de melding"), "useful": ("adjective", "nuttig"),
+    "touch": ("noun", "contact (in stay in touch)"),
+    "notifications": ("noun", "de meldingen"), "sharing": ("verb", "het delen"),
+    "spend": ("verb", "doorbrengen"), "thing": ("noun", "het ding; iets"),
+    # A2 unit33 -- the weekly schedule.
+    "weekday": ("noun", "de doordeweekse dag"), "weekdays": ("noun", "doordeweekse dagen"),
+    "email": ("noun", "de e-mail"), "online": ("adjective", "online"),
+    "mondays": ("noun", "op maandag"), "wednesdays": ("noun", "op woensdag"),
+    # A2 unit34 -- a shopping complaint.
+    "policy": ("noun", "het beleid"), "defective": ("adjective", "defect"),
+    "blender": ("noun", "de blender"), "working": ("verb", "werkend"),
+    "30": ("symbol", "30"), "refunded": ("verb", "terugbetaald"),
+    "thirty-five": ("noun", "vijfendertig"),
+    # B1 unit01 -- necessity and obligation.
+    "task": ("noun", "de taak"), "finish": ("verb", "afmaken"),
+    "earlier": ("adverb", "eerder"), "forgot": ("verb", "vergat"),
+    "renew": ("verb", "verlengen"), "membership": ("noun", "het abonnement"),
+    "set": ("verb", "instellen"), "reminder": ("noun", "de herinnering"),
+    "done": ("verb", "gedaan"),
+    # B1 unit02 -- abilities.
+    "able": ("adjective", "in staat"), "manage": ("verb", "erin slagen"),
+    "license": ("noun", "het rijbewijs"), "person": ("noun", "de persoon (in in person)"),
+    "system": ("noun", "het systeem"), "licenses": ("noun", "de rijbewijzen"),
+    "changed": ("verb", "veranderd"), "hers": ("pronoun", "het hare"),
+    "wasn't": ("verb", "was niet"), "save": ("verb", "besparen; sparen"),
+    # B1 unit03 -- hypotheticals.
+    "rains": ("verb", "regent"), "known": ("verb", "geweten"),
+    "signed": ("verb", "schreef zich in"), "checks": ("verb", "controleert; de controles"),
+    # B1 unit04 -- debate.
+    "disagree": ("verb", "het oneens zijn"), "believe": ("verb", "geloven"),
+    "reason": ("noun", "de reden"), "focus": ("verb", "je concentreren"),
+    "respect": ("verb", "respecteren"), "easily": ("adverb", "makkelijk"),
+    "disagrees": ("verb", "is het oneens"), "believes": ("verb", "gelooft"),
+    "seeing": ("verb", "het zien"), "each": ("pronoun", "elkaars (in each other's)"),
+    "other's": ("pronoun", "elkaars"), "important": ("adjective", "belangrijk"),
+    "saves": ("verb", "bespaart"),
+    # B1 unit05 -- workplace updates.
+    "responsible": ("adjective", "verantwoordelijk"), "technical": ("adjective", "technisch"),
+    "sales": ("noun", "verkoop- (in verkooprapport)"), "gives": ("verb", "geeft"),
+    "expects": ("verb", "verwacht"), "tells": ("verb", "vertelt"),
+    "truth": ("noun", "de waarheid"), "delays": ("noun", "de vertragingen"),
+    "review": ("verb", "nakijken"), "numbers": ("noun", "de cijfers"),
+    "correct": ("adjective", "juist; kloppend"), "notes": ("noun", "de notities"),
+    "appreciate": ("verb", "waarderen"),
+    # B1 unit06 -- narrative past.
+    "flat": ("adjective", "lek"), "tire": ("noun", "de band"),
+    "pull": ("verb", "aan de kant gaan (in pull over)"),
+    "stranger": ("noun", "de vreemdeling"), "mechanic": ("noun", "de monteur"),
+    "driving": ("verb", "rijdend"), "pulled": ("verb", "ging aan de kant"),
+    "helped": ("verb", "hielp"), "word": ("noun", "het woord"),
+    "suddenly": ("adverb", "plotseling"), "happened": ("verb", "gebeurde"),
+    # B1 unit07 -- real conditions.
+    "unless": ("particle", "tenzij"), "condition": ("noun", "de voorwaarde"),
+    "result": ("noun", "het resultaat"),
+    "present": ("adjective", "tegenwoordige (in present tense)"),
+    "tense": ("noun", "de werkwoordstijd"), "real": ("adjective", "echt"),
+    "future": ("noun", "de toekomst"), "backup": ("noun", "reserve- (in reserveplan)"),
+    "plan": ("noun", "het plan"), "conference": ("noun", "vergader- (in vergaderruimte)"),
+    "joins": ("verb", "sluit aan"), "cannot": ("verb", "kan niet"),
+    # B1 unit08 -- future time clauses.
+    "lock": ("verb", "op slot doen"), "clause": ("noun", "de bijzin"),
+    "locks": ("verb", "doet op slot"), "careful": ("adjective", "zorgvuldig"),
+    "routine": ("noun", "de routine"), "hands": ("noun", "de handen"),
+    "clears": ("verb", "ruimt af"),
+    # B1 unit09 -- reported speech.
+    "speech": ("noun", "de spraak (in reported speech)"),
+    "reported": ("adjective", "gerapporteerd; indirect"),
+    "summary": ("noun", "de samenvatting"), "enough": ("adjective", "genoeg"),
+    "full": ("adjective", "volledig"), "reply": ("verb", "reageren"),
+    # B1 unit10 -- purpose.
+    "goal": ("noun", "het doel"), "design": ("noun", "design-; ontwerp-"),
+    "improve": ("verb", "verbeteren"), "money": ("noun", "het geld"),
+    "prepare": ("verb", "voorbereiden"), "english": ("noun", "Engels"),
+    "vocabulary": ("noun", "de woordenschat"), "verb": ("noun", "het werkwoord"),
+    "goals": ("noun", "de doelen"), "practices": ("verb", "oefent"),
+    "updates": ("noun", "de updates"), "descriptions": ("noun", "de beschrijvingen"),
+    "program": ("noun", "het programma"), "saving": ("verb", "sparend"),
+    # B1 unit11 -- unreal hypotheticals.
+    "rather": ("adverb", "liever"), "opportunity": ("noun", "de gelegenheid"),
+    "regret": ("noun", "de spijt"), "chance": ("noun", "de kans"),
+    "situation": ("noun", "de situatie"), "unreal": ("adjective", "onwerkelijk"),
+    "sooner": ("adverb", "eerder"), "confident": ("adjective", "zelfverzekerd"),
+    "joined": ("verb", "deed mee"), "timing": ("noun", "de timing"),
+    "saved": ("verb", "spaarde"),
+    # B1 unit12 -- concession.
+    "although": ("particle", "hoewel"), "despite": ("preposition", "ondanks"),
+    "distractions": ("noun", "de afleiding"), "however": ("adverb", "echter"),
+    "valid": ("adjective", "goed; geldig"), "convince": ("verb", "overtuigen"),
+    "followed": ("verb", "gevolgd"), "noun": ("noun", "het zelfstandig naamwoord"),
+    "sentence": ("noun", "de zin"), "period": ("noun", "de punt (leesteken); de periode"),
+    "semicolon": ("noun", "de puntkomma"), "flexibility": ("noun", "de flexibiliteit"),
+    "teamwork": ("noun", "het teamwerk"), "builds": ("verb", "bouwt op"),
+    "misses": ("verb", "mist"), "colleagues": ("noun", "de collega's"),
+    "during": ("preposition", "tijdens"), "breaks": ("noun", "de pauzes"),
+    "noise": ("noun", "het lawaai"), "alone": ("adverb", "alleen"),
+    "matters": ("verb", "doet ertoe"), "preferences": ("noun", "de voorkeuren"),
+    # B1 unit13 -- relative clauses.
+    "whose": ("pronoun", "wiens; wier"), "approved": ("verb", "goedgekeurd"),
+    "colleague": ("noun", "de collega"), "sits": ("verb", "zit"),
+    "leads": ("verb", "leidt"), "projects": ("noun", "de projecten"),
+    "defining": ("adjective", "bepalend"), "relative": ("adjective", "betrekkelijk"),
+    "commas": ("noun", "de komma's"), "exactly": ("adverb", "precies"),
+    "mean": ("verb", "bedoelen"), "non-defining": ("adjective", "niet-bepalend"),
+    "extra": ("adjective", "extra"), "information": ("noun", "de informatie"),
+    "identified": ("verb", "geïdentificeerd"), "approve": ("verb", "goedkeuren"),
+    "easier": ("adjective", "makkelijker"), "fifth": ("adjective", "vijfde"),
+    "floor": ("noun", "de verdieping"), "eats": ("verb", "eet"),
+    "finishing": ("verb", "het afmaken"), "has already": ("verb", "heeft al"),
+    "woman": ("noun", "de vrouw"), "designer": ("noun", "de ontwerper"),
+    "logo": ("noun", "het logo"), "won": ("verb", "won"),
+    "award": ("noun", "de prijs"), "ours": ("pronoun", "het onze"),
+    "explains": ("verb", "verklaart"),
+    # B1 unit14 -- professional communication.
+    "possibly": ("adverb", "misschien"), "agenda": ("noun", "de agenda"),
+    "formal": ("adjective", "formeel"), "workplace": ("noun", "de werkvloer"),
+    "requests": ("noun", "de verzoeken"), "softened": ("adjective", "verzacht"),
+    "conditional": ("adjective", "voorwaardelijk"), "command": ("noun", "het bevel"),
+    "forms": ("noun", "de vormen"), "polite": ("adjective", "beleefd"),
+    "budget": ("noun", "het budget"), "hope": ("verb", "hopen"),
+    "tomorrow's": ("adjective", "van morgen"), "latest": ("adjective", "laatste"),
+    "client": ("noun", "de klant"), "best": ("noun", "het best"),
+    "advance": ("noun", "vooraf (in in advance)"), "request": ("noun", "het verzoek"),
+    "updated": ("adjective", "bijgewerkt"),
+    # B1 unit15 -- written complaints.
+    "complain": ("verb", "klagen"), "damaged": ("adjective", "beschadigd"),
+    "replacement": ("noun", "de vervanging"), "resolve": ("verb", "oplossen"),
+    "issue": ("noun", "het probleem"), "product": ("noun", "het product"),
+    "written": ("adjective", "schriftelijk"), "complaint": ("noun", "de klacht"),
+    "parts": ("noun", "de delen"), "specific": ("adjective", "specifiek"),
+    "resolution": ("noun", "de oplossing"), "chair": ("noun", "de stoel"),
+    "dear": ("adjective", "beste (aanhef)"), "wheel": ("noun", "het wieltje"),
+    "proceed": ("verb", "verder gaan"), "calling": ("verb", "bellend"),
+    # B1 unit16 -- giving advice.
+    "advice": ("noun", "het advies"), "overwhelmed": ("adjective", "overweldigd"),
+    "prioritize": ("verb", "prioriteit geven"), "workload": ("noun", "de werklast"),
+    "decline": ("verb", "afwijzen"), "closer": ("adjective", "kortere (in closer deadline)"),
+    "asking": ("verb", "het vragen"), "suggestions": ("noun", "de suggesties"),
+    "hypothetical": ("noun", "de hypothese"), "recommendation": ("noun", "de aanbeveling"),
+    "softer": ("adjective", "zachter"), "suggestion": ("noun", "de suggestie"),
+    "stronger": ("adjective", "sterker"), "depending": ("verb", "afhankelijk"),
+    "top": ("noun", "bovenop (in on top of)"), "leading": ("verb", "leidend"),
+    "seem": ("verb", "lijken"), "handle": ("verb", "aankunnen"),
+    "solid": ("adjective", "solide"),
+    # B1 unit17 -- regret.
+    "hindsight": ("noun", "achteraf gezien"), "procrastinate": ("verb", "uitstellen"),
+    "participle": ("noun", "het deelwoord"), "happen": ("verb", "gebeuren"),
+    "missed": ("verb", "miste"), "true": ("adjective", "waar"),
+    "end": ("noun", "het eind"),
+    # B1 unit18 -- future plans.
+    "arrangement": ("noun", "de afspraak"), "intention": ("noun", "de intentie"),
+    "prediction": ("noun", "de voorspelling"), "months": ("noun", "de maanden"),
+    "continuous": ("adjective", "doorlopend"), "agreed": ("verb", "afgesproken"),
+    "decision": ("noun", "de beslissing"), "steps": ("noun", "de stappen"),
+    "completely": ("adverb", "helemaal"), "predicts": ("verb", "voorspelt"),
+    "agrees": ("verb", "stemt toe"), "exciting": ("adjective", "spannend"),
+    # B1 unit19 -- summarizing.
+    "detail": ("noun", "het detail"), "words": ("noun", "de woorden"),
+    "covered": ("verb", "behandelde"), "phrase": ("noun", "de uitdrukking"),
+    "points": ("noun", "de punten"), "keeping": ("verb", "houdend"),
+    "highlight": ("verb", "benadrukken"), "single": ("adjective", "enige"),
+    "separately": ("adverb", "apart"), "condensed": ("adjective", "verkort"),
+    "original": ("adjective", "oorspronkelijk"), "article": ("noun", "het artikel"),
+    "communication": ("noun", "de communicatie"), "examples": ("noun", "de voorbeelden"),
+    "background": ("noun", "de achtergrond"), "messages": ("noun", "de berichten"),
+    "guessing": ("verb", "het gokken"), "ideas": ("noun", "de ideeën"),
+    # B2 unit01 -- argumentation.
+    "claim": ("noun", "het standpunt; de bewering"), "evidence": ("noun", "het bewijs"),
+    "counterargument": ("noun", "het tegenargument"), "rebut": ("verb", "weerleggen"),
+    "concede": ("verb", "toegeven"), "outweigh": ("verb", "zwaarder wegen dan"),
+    "risks": ("noun", "de risico's"), "supports": ("verb", "ondersteunt"),
+    "moving": ("verb", "het doorgaan"), "forward": ("adverb", "vooruit"),
+    "strongest": ("adjective", "sterkste"), "survey": ("noun", "de enquête"),
+    "results": ("noun", "de resultaten"), "consistent": ("adjective", "consistent"),
+    "concern": ("noun", "de zorg"), "data": ("noun", "de data"),
+    "direction": ("noun", "de richting"), "defended": ("verb", "verdedigd"),
+    "moves": ("verb", "verloopt"), "state": ("verb", "noemen"),
+    "acknowledge": ("verb", "erkennen"), "opposing": ("adjective", "tegengesteld"),
+    "phrases": ("noun", "de zinnen; de uitdrukkingen"),
+    "reasonable": ("adjective", "redelijk"), "conceding": ("verb", "het toegeven"),
+    "retention": ("noun", "het behoud van medewerkers"),
+    "collaboration": ("noun", "de samenwerking"), "argues": ("verb", "betoogt"),
+    "hybrid": ("adjective", "hybride"), "improves": ("verb", "verbetert"),
+    "lowering": ("verb", "het verlagen"), "performance": ("noun", "de prestaties"),
+    "employees": ("noun", "de medewerkers"), "teams": ("noun", "de teams"),
+    "less": ("adverb", "minder"), "likely": ("adjective", "waarschijnlijk"),
+    "may": ("verb", "kan mogelijk"), "suffer": ("verb", "eronder lijden"),
+    "acknowledges": ("verb", "erkent"), "delivered": ("verb", "leverden"),
+    "scores": ("noun", "de scores"), "slightly": ("adverb", "iets"),
+    "higher": ("adjective", "hoger"), "concludes": ("verb", "concludeert"),
+    "benefits": ("noun", "de voordelen"), "managers": ("noun", "de managers"),
+    "weaker": ("adjective", "zwakker"), "support": ("verb", "ondersteunen"),
+    "routines": ("noun", "de routines"), "abandon": ("verb", "afschaffen"),
+    # B2 unit02 -- speculation and deduction.
+    "deduction": ("noun", "de conclusie"), "guesswork": ("noun", "het giswerk"),
+    "overlap": ("verb", "overlappen"), "explanation": ("noun", "de verklaring"),
+    "tentative": ("adjective", "voorzichtig"), "server": ("noun", "de server"),
+    "gone": ("verb", "uitgevallen (in gone down)"), "overnight": ("adverb", "'s nachts"),
+    "generated": ("verb", "gegenereerd"), "failed": ("verb", "mislukt"),
+    "permission": ("noun", "rechten- (in rechtenprobleem)"),
+    "possibility": ("noun", "de mogelijkheid"), "uncertain": ("adjective", "onzeker"),
+    "outage": ("noun", "de storing"), "consequence": ("noun", "het gevolg"),
+    "monitoring": ("noun", "monitoring- (in monitoringpagina)"),
+    "page": ("noun", "de pagina"), "blank": ("adjective", "leeg"),
+    "suggests": ("verb", "suggereert"), "explain": ("verb", "verklaren"),
+    "finance": ("noun", "finance- (in financeteam)"), "missing": ("verb", "mist"),
+    "dashboard": ("noun", "het dashboard"), "rebuilt": ("verb", "opgebouwd"),
+    "certain": ("adjective", "zeker"), "pure": ("adjective", "puur"),
+    "none": ("pronoun", "geen"), "consequences": ("noun", "de gevolgen"),
+    "expect": ("verb", "verwachten"), "guess": ("noun", "de gok"),
+    "limited": ("adjective", "beperkt"),
+    # B2 unit03 -- hedging and emphasis.
+    "hedge": ("verb", "voorzichtiger formuleren"), "qualify": ("verb", "nuanceren"),
+    "emphasize": ("verb", "benadrukken"), "extent": ("noun", "de mate"),
+    "broadly": ("adverb", "in grote lijnen"), "provided": ("particle", "mits"),
+    "create": ("verb", "zorgen voor"), "worries": ("verb", "zorgen baren"),
+    "timeline": ("noun", "de planning"), "adjusted": ("adjective", "aangepast"),
+    "overall": ("adverb", "over het geheel genomen"), "feedback": ("noun", "de feedback"),
+    "positive": ("adjective", "positief"), "carefully": ("adverb", "zorgvuldig"),
+    "qualified": ("adjective", "genuanceerd"), "avoids": ("verb", "voorkomt"),
+    "sounding": ("verb", "het klinken"), "absolute": ("adjective", "absoluut"),
+    "limits": ("verb", "beperkt"), "accepting": ("verb", "het accepteren"),
+    "construction": ("noun", "de constructie"), "speakers": ("noun", "de sprekers"),
+    "principle": ("noun", "het principe"), "language": ("noun", "de taal"),
+    "shows": ("verb", "laat zien"), "levels": ("noun", "de niveaus"),
+    "commitment": ("noun", "de stelligheid"), "cautious": ("adjective", "voorzichtig"),
+    "saying": ("verb", "het zeggen"), "fully": ("adverb", "helemaal"),
+    "workable": ("adjective", "werkbaar"), "clearer": ("adjective", "duidelijker"),
+    "quality": ("noun", "de kwaliteit"), "adds": ("verb", "voegt toe"),
+    "approval": ("noun", "goedkeurings- (in goedkeuringsstap)"),
+    "step": ("noun", "de stap"), "conditions": ("noun", "de voorwaarden"),
+    "creates": ("verb", "zorgt voor"), "attention": ("noun", "de aandacht"),
+    # B2 unit04 -- narrative time layers.
+    "foreground": ("noun", "de hoofdgebeurtenis"), "prior": ("adjective", "voorafgaand"),
+    "interrupt": ("verb", "onderbreken"), "interrupted": ("verb", "onderbrak"),
+    "ongoing": ("adjective", "bezig"), "chronology": ("noun", "de chronologie"),
+    "equipment": ("noun", "de apparatuur"), "power": ("noun", "de stroom"),
+    "volunteers": ("noun", "de vrijwilligers"), "setting": ("verb", "klaarzettend"),
+    "chairs": ("noun", "de stoelen"), "simple": ("adjective", "eenvoudig (in simple past)"),
+    "events": ("noun", "de gebeurtenissen"), "moment": ("noun", "het moment"),
+    "venue": ("noun", "de locatie"), "simon": ("proper_noun", "Simon"),
+    "strict": ("adjective", "strikt"), "chronological": ("adjective", "chronologisch"),
+    "expected": ("verb", "werd verwacht"), "crew": ("noun", "de ploeg"),
+    "lights": ("noun", "de lichten"),
+    "through": ("preposition", "door (in walk me through)"),
+    "event": ("noun", "het evenement"),
+    # B2 unit05 -- register.
+    "register": ("noun", "het register"), "casual": ("adjective", "informeel"),
+    "audience": ("noun", "de doelgroep"), "institution": ("noun", "de instelling"),
+    "grateful": ("adjective", "dankbaar"), "scheduling": ("noun", "planning- (in planningsteam)"),
+    "content": ("noun", "de inhoud"), "shift": ("noun", "de verschuiving"),
+    "stiff": ("adjective", "stijf"), "appropriate": ("adjective", "passend"),
+    "nina": ("proper_noun", "Nina"), "clinic": ("noun", "de kliniek"),
+    "texts": ("verb", "appt; schrijft"), "stays": ("verb", "blijft"),
+    "level": ("noun", "de mate"), "formality": ("noun", "de formaliteit"),
+    # B2 unit06 -- abstract values.
+    "value": ("noun", "de waarde"), "public": ("adjective", "openbaar"),
+    "spaces": ("noun", "de ruimtes"), "fairness": ("noun", "de eerlijkheid"),
+    "convenience": ("noun", "het gemak"), "qualification": ("noun", "de nuancering"),
+    "weight": ("noun", "het gewicht"), "arguing": ("verb", "pleitend"),
+    "silence": ("noun", "de stilte"), "businesses": ("noun", "de bedrijven"),
+    "response": ("noun", "de reactie"), "directly": ("adverb", "direct"),
+    "person's": ("noun", "van de ander"), "transparent": ("adjective", "transparant"),
+    "commercial": ("adjective", "commercieel"), "amara": ("proper_noun", "Amara"),
+    "protected": ("verb", "beschermd"), "activity": ("noun", "de activiteit"),
+    "accepts": ("verb", "accepteert"), "leo's": ("proper_noun", "Leo's"),
+    "harder": ("adjective", "moeilijker"), "survive": ("verb", "overleven"),
+    "belongs": ("verb", "hoort"), "stance": ("noun", "het standpunt"),
+    "unlimited": ("adjective", "onbeperkt"), "restrictions": ("noun", "de beperkingen"),
+    "protect": ("verb", "beschermen"), "shaped": ("verb", "gevormd"),
+    "profit": ("noun", "de winst"), "comfort": ("noun", "het comfort"),
+    # B2 unit07 -- negotiation.
+    "term": ("noun", "de voorwaarde"), "agreement": ("noun", "het akkoord"),
+    "proposal": ("noun", "het voorstel"), "refusal": ("noun", "de weigering"),
+    "concession": ("noun", "de toegeving"), "scope": ("noun", "de scope; de omvang"),
+    "reduced": ("verb", "verminderd"), "appendix": ("noun", "de appendix"),
+    "follows": ("verb", "volgt"), "push": ("verb", "terugduwen"),
+    "clearly": ("adverb", "duidelijk"), "offer": ("verb", "bieden"),
+    "executive": ("adjective", "management- (in managementsamenvatting)"),
+    "charts": ("noun", "de grafieken"), "priya": ("proper_noun", "Priya"),
+    "proposed": ("verb", "stelde voor"), "marcus": ("proper_noun", "Marcus"),
+    "outcome": ("noun", "de uitkomst"), "deliver": ("verb", "leveren"),
+    "planned": ("adjective", "gepland"), "risk": ("verb", "in gevaar brengen"),
+    # B2 unit08 -- synthesizing sources.
+    "source": ("noun", "de bron"), "synthesize": ("verb", "samenbrengen"),
+    "evaluate": ("verb", "beoordelen"), "conflict": ("noun", "de tegenstrijdigheid"),
+    "judgment": ("noun", "het oordeel"), "sources": ("noun", "de bronnen"),
+    "demand": ("noun", "de vraag"), "increased": ("verb", "toenam"),
+    "cause": ("noun", "de oorzaak"), "operator": ("noun", "de vervoerder"),
+    "includes": ("verb", "bevat"), "staffing": ("noun", "personeels- (in personeelsgegevens)"),
+    "records": ("noun", "de gegevens"), "supported": ("adjective", "onderbouwd"),
+    "passenger": ("noun", "passagiers- (in passagiersenquete)"),
+    "buses": ("noun", "de bussen"), "became": ("verb", "werd"),
+    "common": ("adjective", "vaak voorkomend"), "opened": ("verb", "opende"),
+    "passengers": ("noun", "de passagiers"), "route": ("noun", "de route"),
+    "crowded": ("adjective", "druk"), "b": ("symbol", "B (bronaanduiding)"),
+    "identifies": ("verb", "noemt"), "shortages": ("noun", "de tekorten"),
+    "caused": ("verb", "veroorzaakte"), "tessa": ("proper_noun", "Tessa"),
+    "accounts": ("noun", "de verslagen"), "comments": ("noun", "de opmerkingen"),
+    "showing": ("verb", "het laten zien"),
+}
+
+# Dutch (source-side) classification for the same 52 units. Entries are
+# (part_of_speech, English gloss), harvested from these units' own nl-en
+# overlay `gloss:` text exactly like NL_POS/NL_GLOSSES above.
+NL_EXTRA: dict[str, tuple[str, str]] = {
+    "aanbeveling": ("noun", "recommendation"), "aandacht": ("noun", "attention"),
+    "aangegaan": ("verb", "come back on"), "aangekomen": ("verb", "arrived"),
+    "aangepast": ("adjective", "adjusted"), "aangestuurd": ("verb", "managed"),
+    "aankan": ("verb", "can handle"), "aankomt": ("verb", "arrives"),
+    "aankwamen": ("verb", "arrived"), "aannemen": ("verb", "to accept"),
+    "aansluit": ("verb", "joins"), "aansluiten": ("verb", "to join"),
+    "aanvangstijd": ("noun", "showtime"), "aardig": ("adjective", "kind; nice"),
+    "absoluut": ("adverb", "absolutely"), "abstracte": ("adjective", "abstract"),
+    "accepteerde": ("verb", "accepted"), "achteraf": ("adverb", "afterward; in hindsight"),
+    "achtergrond": ("noun", "background"), "achtergrondactie": ("noun", "background action"),
+    "achtergrondinformatie": ("noun", "background information"),
+    "activiteit": ("noun", "activity"), "advies": ("noun", "advice"),
+    "afgemaakt": ("verb", "finished"), "afgerond": ("verb", "completed"),
+    "afgesproken": ("verb", "agreed; arranged"), "afgewogen": ("adjective", "balanced"),
+    "afhankelijk": ("adjective", "depending"), "afleiding": ("noun", "distraction"),
+    "afmaken": ("verb", "to finish"), "afschaffen": ("verb", "to abandon"),
+    "afsluiten": ("verb", "to lock up"), "afwijzen": ("verb", "to decline"),
+    "afwijzing": ("noun", "refusal"), "agenda": ("noun", "agenda"),
+    "akkoord": ("noun", "agreement"), "algemeen": ("adjective", "general"),
+    "alsof": ("particle", "as if"), "alternatief": ("noun", "alternative"),
+    "amara": ("proper_noun", "Amara (name)"), "amerikaanse": ("adjective", "American"),
+    "apart": ("adverb", "separately"), "apotheeknotitie": ("noun", "pharmacy note"),
+    "apotheker": ("noun", "pharmacist"), "apparatuur": ("noun", "equipment"),
+    "appartementsgebouwen": ("noun", "apartment buildings"),
+    "appendix": ("noun", "appendix"), "artikel": ("noun", "article; item"),
+    "artikelen": ("noun", "items"), "avondcursus": ("noun", "evening class"),
+    "avondroutine": ("noun", "evening routine"), "baby": ("noun", "baby"),
+    "badmeester": ("noun", "lifeguard"), "badmuts": ("noun", "swim cap"),
+    "badmutsen": ("noun", "swim caps"), "bak": ("noun", "bin"),
+    "bakken": ("noun", "bins"), "bankbericht": ("noun", "bank notice"),
+    "basis": ("noun", "basis"), "bedden": ("noun", "beds"),
+    "bedoel": ("verb", "mean"), "bedrijven": ("noun", "businesses"),
+    "beeld": ("noun", "sculpture"), "beeldentoonstelling": ("noun", "sculpture exhibition"),
+    "beginnen": ("verb", "to start"), "begint": ("verb", "starts"),
+    "begon": ("verb", "started"), "begrepen": ("verb", "understood"),
+    "begrijpen": ("verb", "to understand"), "behandelde": ("verb", "covered"),
+    "behoud": ("noun", "retention"), "behulpzame": ("adjective", "helpful"),
+    "beide": ("pronoun", "both"), "bekend": ("adjective", "known"),
+    "bekijk": ("verb", "check; look at"), "belangrijk": ("adjective", "important"),
+    "belangrijke": ("adjective", "important"), "belangrijkst": ("adjective", "most important"),
+    "belangrijkste": ("adjective", "most important"), "beleefd": ("adjective", "polite"),
+    "beleefde": ("adjective", "polite"), "beleefder": ("adjective", "more polite"),
+    "beleid": ("noun", "policy"), "benadrukken": ("verb", "to emphasize"),
+    "benadrukt": ("verb", "emphasizes"), "beneden": ("adverb", "downstairs"),
+    "benoem": ("verb", "name; state"), "beoordelen": ("verb", "to evaluate"),
+    "beoordeling": ("noun", "judgement"), "beoordelingsscores": ("noun", "review scores"),
+    "bepalend": ("adjective", "defining"), "bepalende": ("adjective", "defining"),
+    "beperken": ("verb", "to limit"), "beperkingen": ("noun", "restrictions"),
+    "beperkt": ("adjective", "limited"), "beperkte": ("adjective", "limited"),
+    "beperkter": ("adjective", "more limited"), "bergen": ("noun", "mountains"),
+    "berichten": ("noun", "messages"), "berichten-app": ("noun", "messaging app"),
+    "berichten-apps": ("noun", "messaging apps"), "beschadigd": ("adjective", "damaged"),
+    "beschermd": ("verb", "protected"), "beschermen": ("verb", "to protect"),
+    "beschikbaarheid": ("noun", "availability"), "beschikbare": ("adjective", "available"),
+    "beschrijven": ("verb", "to describe"), "beslissing": ("noun", "decision"),
+    "besloten": ("verb", "decided"), "bespaart": ("verb", "saves"),
+    "besparen": ("verb", "to save"), "bespreking": ("noun", "review; discussion"),
+    "best": ("noun", "best"), "beste": ("adjective", "dear (salutation); best"),
+    "besteld": ("verb", "ordered"), "bestelde": ("verb", "ordered"),
+    "bestellen": ("verb", "to order"), "betalen": ("verb", "to pay"),
+    "betoogt": ("verb", "argues"), "bevat": ("verb", "includes"),
+    "bevel": ("noun", "command"), "bewering": ("noun", "claim"),
+    "bezet": ("adjective", "busy; occupied"), "bezig": ("adjective", "ongoing"),
+    "bezochten": ("verb", "visited"), "bezoeken": ("verb", "to visit"),
+    "bieden": ("verb", "to offer"), "bijgewerkte": ("adjective", "updated"),
+    "bijknippen": ("verb", "to trim"), "bijzin": ("noun", "clause"),
+    "binnenkwamen": ("verb", "came in"), "bioscoop": ("noun", "cinema"),
+    "bioscoopschema": ("noun", "cinema schedule"), "bleef": ("verb", "stayed"),
+    "blender": ("noun", "blender"), "blijft": ("verb", "stays"),
+    "boete": ("noun", "late fee"), "bon": ("noun", "receipt"),
+    "bood": ("verb", "offered"), "boodschap": ("noun", "message"),
+    "bord": ("noun", "sign"), "borg": ("noun", "deposit"),
+    "botsen": ("verb", "to conflict"), "boven": ("adverb", "upstairs; above"),
+    "bovenop": ("adverb", "on top of that"), "brachten": ("verb", "brought"),
+    "briefje": ("noun", "note"),
+    "bright": ("proper_noun", "Bright (in the company name Bright Path Marketing)"),
+    "bron": ("noun", "source"), "bronnen": ("noun", "sources"),
+    "bruikbaarheid": ("noun", "usefulness"), "budget": ("noun", "budget"),
+    "budgetupdate": ("noun", "budget update"), "buitenaf": ("adverb", "from outside"),
+    "bureau": ("noun", "desk"), "bureaustoel": ("noun", "desk chair"),
+    "busdienst": ("noun", "bus service"), "bussen": ("noun", "buses"),
+    "buurtzwembad": ("noun", "neighborhood pool"), "cent": ("noun", "cent"),
+    "chauffeurstekorten": ("noun", "driver shortages"), "check": ("verb", "check"),
+    "chronologie": ("noun", "chronology"), "chronologisch": ("adjective", "chronological"),
+    "cijfers": ("noun", "numbers"),
+    "city": ("proper_noun", "City (in the exhibition title Colors of the City)"),
+    "colors": ("proper_noun", "Colors (in the exhibition title Colors of the City)"),
+    "comfort": ("noun", "comfort"), "comfortabel": ("adjective", "comfortable"),
+    "commercieel": ("adjective", "commercial"), "commerciele": ("adjective", "commercial"),
+    "communicatie": ("noun", "communication"), "compliment": ("noun", "compliment"),
+    "concentratie": ("noun", "focus"), "concentreren": ("verb", "to focus"),
+    "concludeert": ("verb", "concludes"), "conclusie": ("noun", "deduction"),
+    "conflict": ("noun", "conflict"), "consistent": ("adjective", "consistent"),
+    "contact": ("noun", "touch; contact"), "container": ("noun", "bin; container"),
+    "controleer": ("verb", "check"), "controleerde": ("verb", "checked"),
+    "controleerden": ("verb", "checked"), "controleert": ("verb", "checks"),
+    "controleren": ("verb", "to check"), "coordinator": ("noun", "coordinator"),
+    "cursusbeschrijvingen": ("noun", "course descriptions"), "cv": ("noun", "resume"),
+    "daarentegen": ("adverb", "by contrast"), "daarmee": ("adverb", "with that"),
+    "daarvan": ("adverb", "of that; instead"), "data": ("noun", "data"),
+    "deadline": ("noun", "deadline"), "deadlines": ("noun", "deadlines"),
+    "deed": ("verb", "did"), "deelde": ("verb", "shared"),
+    "deelwoord": ("noun", "participle"), "defect": ("adjective", "defective"),
+    "defecte": ("adjective", "defective"), "delen": ("verb", "to share; parts"),
+    "designcursus": ("noun", "design course"), "designervaring": ("noun", "design experience"),
+    "designteam": ("noun", "design team"), "detail": ("noun", "detail"),
+    "dezelfde": ("adjective", "the same"), "diagrammen": ("noun", "charts"),
+    "dingen": ("noun", "things"), "direct": ("adverb", "direct; immediately"),
+    "directe": ("adjective", "direct"), "docent": ("noun", "teacher"),
+    "doel": ("noun", "goal"), "doelen": ("noun", "goals"),
+    "doelgroep": ("noun", "audience"), "dollarmunt": ("noun", "dollar coin"),
+    "donderdagochtend": ("noun", "Thursday morning"), "doordeweekse": ("adjective", "weekday"),
+    "doos": ("noun", "box"), "draaiden": ("verb", "ran"),
+    "dragen": ("verb", "to carry"), "drankje": ("noun", "drink"),
+    "droeg": ("verb", "carried"), "droger": ("noun", "dryer"),
+    "dronken": ("verb", "drank"), "drukken": ("verb", "to express"),
+    "duidelijk": ("adjective", "clear"), "duidelijke": ("adjective", "clear"),
+    "duidelijkere": ("adjective", "clearer"), "duikplank": ("noun", "diving board"),
+    "duren": ("verb", "to take (time)"), "duur": ("adjective", "expensive"),
+    "duwen": ("verb", "to push"), "e-mail": ("noun", "email"),
+    "echte": ("adjective", "real"), "echter": ("adverb", "however"),
+    "eerdere": ("adjective", "earlier"), "eerlijk": ("adjective", "fair"),
+    "eerlijkheid": ("noun", "fairness"), "eet": ("verb", "eats"),
+    "eigenlijk": ("adverb", "actually"), "elkaars": ("pronoun", "each other's"),
+    "engels": ("noun", "English"), "enige": ("adjective", "only; single"),
+    "enquete": ("noun", "survey"), "enqueteresultaten": ("noun", "survey results"),
+    "erge": ("adjective", "bad; severe"), "erken": ("verb", "acknowledge"),
+    "erkennen": ("verb", "to concede"), "erkent": ("verb", "acknowledges"),
+    "eronder": ("adverb", "under it"), "ertoe": ("adverb", "to it (ertoe doen: to matter)"),
+    "eruitziet": ("verb", "looks like"), "ervaring": ("noun", "experience"),
+    "even": ("adverb", "just; briefly"), "evenement": ("noun", "event"),
+    "excuus": ("noun", "apology"), "extra": ("adjective", "extra"),
+    "familienieuws": ("noun", "family news"), "familienotitie": ("noun", "family note"),
+    "family": ("proper_noun", "Family (in the film title Funny Family)"),
+    "feedback": ("noun", "feedback"), "fietsen": ("noun", "bikes"),
+    "financeteam": ("noun", "finance team"), "flatgebouw": ("noun", "apartment building"),
+    "flexibiliteit": ("noun", "flexibility"), "focusconstructie": ("noun", "focus construction"),
+    "formaliteit": ("noun", "formality"), "formeel": ("adjective", "formal"),
+    "formele": ("adjective", "formal"), "formuleren": ("verb", "to phrase"),
+    "fout": ("noun", "mistake"), "functie": ("noun", "position"),
+    "funny": ("proper_noun", "Funny (in the film title Funny Family)"),
+    "gasten": ("noun", "guests"), "gastenhuis": ("noun", "guesthouse"),
+    "geaccepteerd": ("adjective", "accepted"), "geannuleerd": ("adjective", "cancelled"),
+    "gebeld": ("verb", "called"), "gebeurd": ("verb", "happened"),
+    "gebouwbeheerder": ("noun", "building manager"), "gebruikte": ("verb", "used"),
+    "gedachten": ("noun", "mind; thoughts"), "gedeelde": ("adjective", "shared"),
+    "gegenereerd": ("verb", "generated"), "gehad": ("verb", "had"),
+    "geheel": ("noun", "whole (over het geheel genomen: overall)"),
+    "geknipt": ("verb", "cut (hair)"), "gekocht": ("verb", "bought"),
+    "gekomen": ("verb", "come"), "geldautomaat": ("noun", "ATM"),
+    "gelegenheid": ("noun", "opportunity"), "gelezen": ("verb", "read"),
+    "gelooft": ("verb", "believes"), "geloven": ("verb", "to believe"),
+    "geluid": ("noun", "sound"), "geluidssysteem": ("noun", "sound system"),
+    "gemist": ("verb", "missed"), "gemiste": ("adjective", "missed"),
+    "genoeg": ("adverb", "enough"), "genomen": ("verb", "taken"),
+    "genoten": ("verb", "enjoyed"), "genuanceerd": ("adjective", "qualified"),
+    "gepland": ("adjective", "planned"), "gerapporteerd": ("adjective", "reported"),
+    "gereageerd": ("verb", "replied"), "gerepareerd": ("verb", "fixed"),
+    "geretourneerd": ("verb", "returned"), "geruild": ("verb", "exchanged"),
+    "geschikt": ("adjective", "appropriate"), "geschreven": ("adjective", "written"),
+    "gespaard": ("verb", "saved"), "gevaar": ("noun", "risk"),
+    "gevolg": ("noun", "consequence"), "gevolgd": ("verb", "followed"),
+    "gevolgen": ("noun", "consequences"), "gevormd": ("verb", "shaped"),
+    "gevraagd": ("verb", "asked"), "geweest": ("verb", "been"),
+    "geweten": ("verb", "known"), "gezelschap": ("noun", "company"),
+    "gft-afval": ("noun", "food waste"), "gids": ("noun", "guide"),
+    "gingen": ("verb", "went"), "gisterochtend": ("adverb", "yesterday morning"),
+    "giswerk": ("noun", "guesswork"), "glas": ("noun", "glass"),
+    "glazen": ("adjective", "glass"), "glimlach": ("noun", "smile"),
+    "goedgekeurd": ("verb", "approved"), "goedkeuren": ("verb", "to approve"),
+    "goedkeuringsstap": ("noun", "approval step"),
+    "goeds": ("adjective", "good (iets goeds: a good thing)"),
+    "gok": ("noun", "guess"), "gokken": ("verb", "to guess"),
+    "gooien": ("verb", "to throw"), "grafieken": ("noun", "charts"),
+    "great": ("proper_noun", "Great (in the film title The Great Race)"),
+    "greendesk-team": ("proper_noun", "GreenDesk team"), "grotere": ("adjective", "larger"),
+    "haal": ("verb", "pick up"), "haalt": ("verb", "meets (a deadline)"),
+    "hadden": ("verb", "had"), "halen": ("verb", "to pick up"),
+    "handen": ("noun", "hands"), "handig": ("adjective", "useful; handy"),
+    "hare": ("pronoun", "hers"), "harper": ("proper_noun", "Harper (name)"),
+    "helemaal": ("adverb", "completely"), "helm": ("noun", "helmet"),
+    "herhaal": ("verb", "repeat"), "herinner": ("verb", "remember"),
+    "herinnering": ("noun", "reminder"), "hete": ("adjective", "hot"),
+    "hield": ("verb", "kept"), "hielp": ("verb", "helped"),
+    "hoestsiroop": ("noun", "cough syrup"), "hoestte": ("verb", "coughed"),
+    "hoewel": ("particle", "although"), "hoger": ("adjective", "higher"),
+    "hogere": ("adjective", "higher"), "hoofdgebeurtenis": ("noun", "foreground event"),
+    "hoofdgebeurtenissen": ("noun", "foreground events"),
+    "hoofdoorzaak": ("noun", "main cause"), "hoofdprobleem": ("noun", "main problem"),
+    "hoofdpunt": ("noun", "main point"), "hoofdpunten": ("noun", "main points"),
+    "hoofdstandpunt": ("noun", "main claim"), "hoofdwerkwoord": ("noun", "main verb"),
+    "hoogte": ("noun", "extent (tot op zekere hoogte: to some extent)"),
+    "hoop": ("verb", "hope"), "hoort": ("verb", "belongs"),
+    "hotel": ("noun", "hotel"), "houd": ("verb", "keep"),
+    "huidige": ("adjective", "current"), "hulpbriefje": ("noun", "help note"),
+    "huren": ("verb", "to rent"), "huur": ("noun", "rent"),
+    "hybride": ("adjective", "hybrid"), "hypothese": ("noun", "hypothetical"),
+    "hè": ("particle", "right? (tag question)"), "ideeën": ("noun", "ideas"),
+    "inbegrepen": ("adjective", "included"), "indien": ("particle", "if"),
+    "informatie": ("noun", "information"), "informeel": ("adjective", "casual"),
+    "ing-vorm": ("noun", "-ing form"), "ingang": ("noun", "entrance"),
+    "ingeschreven": ("verb", "signed up"), "inhoud": ("noun", "content"),
+    "innemen": ("verb", "to take (medicine)"), "inschrijven": ("verb", "to sign up"),
+    "instellen": ("verb", "to set"), "instelling": ("noun", "institution"),
+    "intentie": ("noun", "intention"), "interviewer": ("noun", "interviewer"),
+    "jammer": ("adjective", "a shame"),
+    "journey": ("proper_noun", "Journey (in the film title Star Journey)"),
+    "juiste": ("adjective", "right; correct"), "jullie": ("pronoun", "you (plural)"),
+    "kaartjes": ("noun", "tickets"), "kans": ("noun", "chance; opportunity"),
+    "kapot": ("adjective", "broken"), "kapper": ("noun", "hairdresser"),
+    "kapsel": ("noun", "hairstyle"), "kassamedewerker": ("noun", "cashier"),
+    "keek": ("verb", "looked"), "keel": ("noun", "throat"),
+    "keken": ("verb", "watched"), "kijk": ("verb", "check; look"),
+    "kip": ("noun", "chicken"), "klaarzetten": ("verb", "to set up"),
+    "klacht": ("noun", "complaint; symptom"), "klachten": ("noun", "symptoms"),
+    "klagen": ("verb", "to complain"), "klant": ("noun", "client"),
+    "klantafspraak": ("noun", "client meeting"), "klantdashboard": ("noun", "client dashboard"),
+    "klaslokaal": ("noun", "classroom"), "kleinere": ("adjective", "smaller"),
+    "kleren": ("noun", "clothes"), "kliniek": ("noun", "clinic"),
+    "klinken": ("verb", "to sound"), "kloppen": ("verb", "to be correct"),
+    "kluisje": ("noun", "locker"), "kluisjes": ("noun", "lockers"),
+    "knipbeurt": ("noun", "haircut"), "knippen": ("verb", "to cut (hair)"),
+    "kocht": ("verb", "bought"), "kochten": ("verb", "bought"),
+    "koelen": ("verb", "to cool off"), "komma's": ("noun", "commas"),
+    "konden": ("verb", "could"), "kook-app": ("noun", "cooking app"),
+    "kopje": ("noun", "cup"), "korte": ("adjective", "short"),
+    "korter": ("adjective", "shorter"), "kortere": ("adjective", "shorter"),
+    "kortom": ("adverb", "in short"), "kortste": ("adjective", "closest; shortest"),
+    "kostte": ("verb", "cost"), "kregen": ("verb", "got"),
+    "krijgt": ("verb", "gets"), "kwaliteit": ("noun", "quality"),
+    "kwaliteitscontroles": ("noun", "quality checks"), "kwartaal": ("noun", "quarter"),
+    "kwartjes": ("noun", "quarters (coins)"), "lading": ("noun", "load"),
+    "langzaam": ("adverb", "slowly"), "las": ("verb", "read"),
+    "late": ("adjective", "late"), "lawaai": ("noun", "noise"),
+    "lazen": ("verb", "read"), "leeg": ("adjective", "blank"),
+    "leenbriefje": ("noun", "borrowing note"), "leest": ("verb", "reads"),
+    "leg": ("verb", "put"), "legde": ("verb", "put; explained"),
+    "lege": ("adjective", "blank"), "leid": ("verb", "lead"),
+    "leidt": ("verb", "leads"), "lek": ("adjective", "flat (tire)"),
+    "lekke": ("adjective", "flat (tire)"), "leo": ("proper_noun", "Leo (name)"),
+    "leo's": ("proper_noun", "Leo's"), "lesbericht": ("noun", "class note"),
+    "leverden": ("verb", "delivered"), "leveren": ("verb", "to deliver"),
+    "lichten": ("noun", "lights"), "liep": ("verb", "walked"),
+    "liet": ("verb", "showed; let"), "lieten": ("verb", "showed; let"),
+    "lijden": ("verb", "to suffer"), "lijken": ("verb", "to seem"),
+    "lijnen": ("noun", "lines (in grote lijnen: broadly)"), "limiet": ("noun", "limit"),
+    "locatie": ("noun", "venue"), "logoproject": ("noun", "logo project"),
+    "loop": ("verb", "run (ik loop achter: I am behind)"),
+    "loopneus": ("noun", "runny nose"), "loopt": ("verb", "runs"),
+    "los": ("adjective", "casual; loose"), "lossen": ("verb", "to resolve"),
+    "luisterde": ("verb", "listened"), "lukte": ("verb", "managed"),
+    "maakten": ("verb", "made"), "maanden": ("noun", "months"),
+    "machine": ("noun", "machine"), "machines": ("noun", "machines"),
+    "makkelijker": ("adjective", "easier"),
+    "managementsamenvatting": ("noun", "executive summary"),
+    "manager": ("noun", "manager"), "managers": ("noun", "managers"),
+    "marcus": ("proper_noun", "Marcus (name)"), "marketing": ("noun", "marketing"),
+    "marketingcoördinator": ("noun", "marketing coordinator"),
+    "mate": ("noun", "extent; level"), "medewerkers": ("noun", "employees"),
+    "media": ("noun", "media"), "meedeed": ("verb", "joined"),
+    "meedoen": ("verb", "to join"), "meervoud": ("noun", "plural"),
+    "melding": ("noun", "notification"), "meldingen": ("noun", "notifications"),
+    "menukaart": ("noun", "menu"), "mislukt": ("verb", "failed"),
+    "mist": ("verb", "misses"), "mits": ("particle", "provided that"),
+    "moeilijker": ("adjective", "harder"), "moest": ("verb", "had to"),
+    "moesten": ("verb", "had to"), "mogelijke": ("adjective", "possible"),
+    "mogelijkheid": ("noun", "possibility"), "mogen": ("verb", "may"),
+    "moment": ("noun", "moment"), "monitoringpagina": ("noun", "monitoring page"),
+    "monteur": ("noun", "mechanic"), "mooie": ("adjective", "beautiful"),
+    "munten": ("noun", "coins"), "museum": ("noun", "museum"),
+    "naamwoord": ("noun", "noun (zelfstandig naamwoord)"),
+    "nachtelijke": ("adjective", "overnight"), "nachten": ("noun", "nights"),
+    "nachts": ("adverb", "at night"), "nakijken": ("verb", "to review"),
+    "nam": ("verb", "took"), "negentien": ("noun", "nineteen"),
+    "niet-bepalende": ("adjective", "non-defining"), "nina": ("proper_noun", "Nina (name)"),
+    "niveaus": ("noun", "levels"), "nodigde": ("verb", "invited"),
+    "noem": ("verb", "state; name"), "noemen": ("verb", "to name"),
+    "noemt": ("verb", "identifies"), "notitie": ("noun", "note"),
+    "notities": ("noun", "notes"), "nou": ("particle", "well"),
+    "november": ("noun", "November"), "nuanceert": ("verb", "qualifies"),
+    "nuanceren": ("verb", "to qualify"), "nuttig": ("adjective", "useful"),
+    "nuttige": ("adjective", "useful"), "ober": ("noun", "waiter"),
+    "ochtendcijfers": ("noun", "morning numbers"), "ochtenden": ("noun", "mornings"),
+    "oefent": ("verb", "practices"), "omvang": ("noun", "scope"),
+    "onbekende": ("noun", "stranger"), "onbeperkte": ("adjective", "unlimited"),
+    "ondanks": ("preposition", "despite"), "onder": ("preposition", "under"),
+    "onderbouwd": ("adjective", "supported"), "onderbouwing": ("noun", "evidence"),
+    "onderbreken": ("verb", "to interrupt"), "onderdeel": ("noun", "term; part"),
+    "ondersteunen": ("verb", "to support"), "onderzoek": ("noun", "survey; research"),
+    "oneens": ("adjective", "in disagreement"), "online": ("adjective", "online"),
+    "onmogelijk": ("adjective", "impossible"), "ons": ("pronoun", "ours; us"),
+    "onthouden": ("verb", "to remember"), "ontmoette": ("verb", "met"),
+    "ontspan": ("verb", "relax"), "ontvanger": ("noun", "recipient"),
+    "ontwerp": ("noun", "design"), "ontwerpcursus": ("noun", "design course"),
+    "ontwerper": ("noun", "designer"), "onwerkelijke": ("adjective", "unreal"),
+    "oordeel": ("noun", "judgement"), "oorspronkelijke": ("adjective", "original"),
+    "oorzaak": ("noun", "cause"), "openbare": ("adjective", "public"),
+    "opende": ("verb", "opened"), "operatorrapport": ("noun", "operator report"),
+    "opgebouwd": ("verb", "rebuilt"), "opgehaald": ("verb", "collected"),
+    "opgelost": ("verb", "resolved"), "ophaaldag": ("noun", "collection day"),
+    "oplader": ("noun", "charger"), "oplevert": ("verb", "produces"),
+    "oplossen": ("verb", "to resolve"), "oplossing": ("noun", "resolution"),
+    "opmerkingen": ("noun", "comments"), "opnemen": ("verb", "to withdraw"),
+    "opvolgen": ("verb", "to follow up"), "organisatie": ("noun", "organization"),
+    "oscar": ("proper_noun", "Oscar (name)"), "overeenkomen": ("verb", "to agree"),
+    "overeenkomst": ("noun", "agreement"), "overlappen": ("verb", "to overlap"),
+    "overleven": ("verb", "to survive"), "overtuigen": ("verb", "to convince"),
+    "overweldigd": ("adjective", "overwhelmed"), "papier": ("noun", "paper"),
+    "pas": ("noun", "card"), "passagiers": ("noun", "passengers"),
+    "passagiersenquete": ("noun", "passenger survey"),
+    "passagierservaring": ("noun", "passenger experience"), "passen": ("noun", "cards"),
+    "passend": ("adjective", "appropriate"),
+    "path": ("proper_noun", "Path (in the company name Bright Path Marketing)"),
+    "pauzes": ("noun", "breaks"), "perfecte": ("adjective", "perfect"),
+    "periode": ("noun", "period"), "personeelsenquete": ("noun", "staff survey"),
+    "personeelsgegevens": ("noun", "staffing records"), "personen": ("noun", "people"),
+    "persoon": ("noun", "person"), "persoonlijk": ("adjective", "personal; in person"),
+    "persoonlijke": ("adjective", "personal"), "picknick": ("noun", "picnic"),
+    "pijn": ("noun", "pain"), "pijnlijk": ("adjective", "sore"),
+    "pil": ("noun", "tablet"), "pincode": ("noun", "PIN"),
+    "pizza": ("noun", "pizza"), "plan": ("noun", "plan"),
+    "plank": ("noun", "shelf"), "planning": ("noun", "timeline"),
+    "planningsteam": ("noun", "scheduling team"), "pleit": ("verb", "argues"),
+    "plek": ("noun", "place"), "plotseling": ("adverb", "suddenly"),
+    "popcorn": ("noun", "popcorn"), "positief": ("adjective", "positive"),
+    "pot": ("noun", "jar"), "praatten": ("verb", "talked"),
+    "prachtig": ("adjective", "lovely"), "prachtige": ("adjective", "lovely"),
+    "praktische": ("adjective", "practical"), "prestaties": ("noun", "performance"),
+    "principe": ("noun", "principle"), "prioriteit": ("noun", "priority"),
+    "priya": ("proper_noun", "Priya (name)"), "probeer": ("verb", "try"),
+    "proberen": ("verb", "to try"), "product": ("noun", "product"),
+    "professioneler": ("adjective", "more professional"), "programma": ("noun", "program"),
+    "projectdata": ("noun", "project data"), "projecten": ("noun", "projects"),
+    "punt": ("noun", "point"), "punten": ("noun", "points"),
+    "puntkomma": ("noun", "semicolon"), "puur": ("adjective", "pure"),
+    "raadde": ("verb", "recommended"), "raam": ("noun", "window"),
+    "race": ("proper_noun", "Race (in the film title The Great Race)"),
+    "rapport": ("noun", "report"), "rapportprobleem": ("noun", "report problem"),
+    "reageert": ("verb", "responds"), "rechtenprobleem": ("noun", "permission issue"),
+    "recyclen": ("verb", "to recycle"), "recyclingbak": ("noun", "recycling bin"),
+    "recyclingbakken": ("noun", "recycling bins"), "reddingzwemmer": ("noun", "lifeguard"),
+    "redelijk": ("adjective", "reasonable"), "redelijkheid": ("noun", "fairness"),
+    "reden": ("noun", "reason"), "reed": ("verb", "drove"),
+    "regels": ("noun", "rules"), "regende": ("verb", "rained"),
+    "register": ("noun", "register"), "reisje": ("noun", "trip"),
+    "rennen": ("verb", "to run"), "reparatieploeg": ("noun", "repair crew"),
+    "reserveplan": ("noun", "backup plan"), "reservering": ("noun", "reservation"),
+    "respecteren": ("verb", "to respect"), "restaurantmenu": ("noun", "restaurant menu"),
+    "resultaat": ("noun", "result"), "retentie": ("noun", "retention"),
+    "retourbeleid": ("noun", "return policy"), "retourneren": ("verb", "to return"),
+    "retournotitie": ("noun", "return note"), "reviewbeleid": ("noun", "review policy"),
+    "richten": ("verb", "to focus"), "rijbewijs": ("noun", "driving license"),
+    "risico's": ("noun", "risks"), "rivier": ("noun", "river"),
+    "rooster": ("noun", "schedule"), "rowan": ("proper_noun", "Rowan (name)"),
+    "ruilde": ("verb", "exchanged"), "ruilen": ("verb", "to exchange"),
+    "ruimt": ("verb", "clears"), "ruimte": ("noun", "space"),
+    "ruimtes": ("noun", "spaces"), "ruimtevaarders": ("noun", "explorers (space)"),
+    "rust": ("noun", "quiet"), "saldo": ("noun", "balance"),
+    "salon": ("noun", "salon"), "samenbrengen": ("verb", "to synthesize"),
+    "samenvattend": ("adverb", "in summary"), "samenvatting": ("noun", "summary"),
+    "samenwerking": ("noun", "collaboration"), "sap": ("noun", "juice"),
+    "schema": ("noun", "schedule"), "scherm": ("noun", "screen"),
+    "schermtijd": ("noun", "screen time"), "schilderde": ("verb", "painted"),
+    "schilderij": ("noun", "picture; painting"), "schilderijen": ("noun", "paintings"),
+    "schilderles": ("noun", "painting class"), "schreef": ("verb", "wrote"),
+    "schreven": ("verb", "wrote"), "schriftelijke": ("adjective", "written"),
+    "schrijfvaardigheden": ("noun", "writing skills"), "scope": ("noun", "scope"),
+    "seinstoring": ("noun", "signal problem"), "server": ("noun", "server"),
+    "service": ("noun", "service"), "simon": ("proper_noun", "Simon (name)"),
+    "slaagde": ("verb", "managed"), "slagen": ("verb", "to manage"),
+    "slapengaan": ("noun", "bedtime"), "slechter": ("adjective", "worse"),
+    "sleutel": ("noun", "key"), "slot": ("noun", "lock"),
+    "sluit": ("verb", "closes; locks"), "sluiten": ("verb", "to close"),
+    "smakelijk": ("adjective", "tasty (eet smakelijk: enjoy your meal)"),
+    "social": ("adjective", "social (in social media)"), "sociale": ("adjective", "social"),
+    "solide": ("adjective", "solid"), "sommige": ("adjective", "some"),
+    "soorten": ("noun", "kinds"), "sorteert": ("verb", "sorts"),
+    "sorteren": ("verb", "to sort"), "spaar": ("verb", "save"),
+    "spaart": ("verb", "saves"), "spannend": ("adjective", "exciting"),
+    "sparen": ("verb", "to save"), "specifieke": ("adjective", "specific"),
+    "speet": ("verb", "was sorry"), "spijt": ("noun", "regret"),
+    "spoor": ("noun", "track"), "sportschoolabonnement": ("noun", "gym membership"),
+    "spreek": ("verb", "speak"), "sprekers": ("noun", "speakers"),
+    "staan": ("verb", "to stand (aan de kant staan: to pull over)"),
+    "staat": ("verb", "stands; is"), "stad": ("noun", "city"),
+    "stadsmuseum": ("noun", "city museum"), "stadsplein": ("noun", "town square"),
+    "standpunt": ("noun", "position; claim"), "stap": ("noun", "step"),
+    "stappen": ("noun", "steps"),
+    "star": ("proper_noun", "Star (in the film title Star Journey)"),
+    "start": ("noun", "start"), "starten": ("verb", "to start"),
+    "station": ("noun", "station"), "stelde": ("verb", "proposed"),
+    "stelden": ("verb", "postponed"), "stellen": ("verb", "to put"),
+    "stelligheid": ("noun", "commitment"), "stelling": ("noun", "claim"),
+    "sterke": ("adjective", "strong"), "sterkere": ("adjective", "stronger"),
+    "sterkste": ("adjective", "strongest"), "steun": ("noun", "support"),
+    "steunen": ("verb", "to support"), "steunt": ("verb", "supports"),
+    "stijf": ("adjective", "stiff"), "stijl": ("noun", "style"),
+    "stilte": ("noun", "silence"), "stoel": ("noun", "seat; chair"),
+    "stoelen": ("noun", "chairs"), "stond": ("verb", "stood; said"),
+    "stopte": ("verb", "stopped"), "stopten": ("verb", "stopped"),
+    "storing": ("noun", "outage"),
+    "street": ("proper_noun", "Street (in the address Park Street)"),
+    "strikt": ("adverb", "strictly"), "stroom": ("noun", "power"),
+    "suggereert": ("verb", "suggests"), "suggestie": ("noun", "suggestion"),
+    "suggesties": ("noun", "suggestions"), "symptoom": ("noun", "symptom"),
+    "synthese": ("noun", "synthesis"), "synthetiseren": ("verb", "to synthesize"),
+    "systeem": ("noun", "system"), "systeemstoring": ("noun", "system outage"),
+    "taal": ("noun", "language"), "tabletten": ("noun", "tablets"),
+    "tafel": ("noun", "table"), "tassen": ("noun", "bags"),
+    "teams": ("noun", "teams"), "teamvergadering": ("noun", "team meeting"),
+    "teamwerk": ("noun", "teamwork"), "technisch": ("adjective", "technical"),
+    "tegenargument": ("noun", "counterargument"), "tegengas": ("noun", "pushback"),
+    "tegengestelde": ("adjective", "opposing"), "tegenpunt": ("noun", "counterpoint"),
+    "tegenstelling": ("noun", "contrast"), "tegenstrijdigheid": ("noun", "conflict"),
+    "teksten": ("noun", "texts"), "telefoonbericht": ("noun", "phone note"),
+    "telefoongesprek": ("noun", "phone call"), "tentoonstelling": ("noun", "exhibition"),
+    "tenzij": ("particle", "unless"), "terechte": ("adjective", "fair"),
+    "termijn": ("noun", "deadline; term"), "terugbetaald": ("verb", "refunded"),
+    "terugbetaling": ("noun", "refund"), "teruggeven": ("verb", "to return"),
+    "terugkijkend": ("adverb", "looking back"), "terugkrijgen": ("verb", "to get back"),
+    "terugkwamen": ("verb", "came back"), "terugweg": ("noun", "way back"),
+    "tessa": ("proper_noun", "Tessa (name)"), "thuisblijven": ("verb", "to stay home"),
+    "thuiskantoor": ("noun", "home office"), "thuiskomt": ("verb", "comes home"),
+    "thuiswerken": ("verb", "working from home"), "tijdstip": ("noun", "time"),
+    "timing": ("noun", "timing"), "tissues": ("noun", "tissues"),
+    "tocht": ("noun", "ride; trip"), "toegangsbewijs": ("noun", "ticket"),
+    "toegeven": ("verb", "to concede"), "toegeving": ("noun", "concession"),
+    "toenam": ("verb", "increased"), "toestemt": ("verb", "agrees"),
+    "tonen": ("verb", "to show"), "totdat": ("particle", "until"),
+    "transparant": ("adjective", "transparent"), "transparante": ("adjective", "transparent"),
+    "troffen": ("verb", "met"), "trots": ("adjective", "proud"),
+    "typische": ("adjective", "typical"), "uitchecken": ("verb", "to check out"),
+    "uitdrukking": ("noun", "phrase"), "uiteindelijk": ("adverb", "in the end"),
+    "uiterste": ("adjective", "final (uiterste termijn: deadline)"),
+    "uitgesteld": ("adjective", "delayed"), "uitgevallen": ("verb", "gone down"),
+    "uitkomst": ("noun", "outcome"), "uitleent": ("verb", "lends"),
+    "uitlegde": ("verb", "explained"), "uitlenen": ("verb", "to lend"),
+    "uitlieten": ("verb", "walked (the dog)"), "uitnodiging": ("noun", "invitation"),
+    "uitsluit": ("verb", "rules out"), "uitspraak": ("noun", "claim; statement"),
+    "uitstekend": ("adjective", "excellent"), "uitstellen": ("verb", "to procrastinate"),
+    "uitval": ("noun", "outage"), "uitzag": ("verb", "looked"),
+    "uitzicht": ("noun", "view"), "update": ("noun", "update"),
+    "updates": ("noun", "updates"), "vaker": ("adverb", "more often"),
+    "vanmiddag": ("adverb", "this afternoon"), "vanuit": ("preposition", "from"),
+    "vanwege": ("preposition", "because of"), "vaste": ("adjective", "fixed"),
+    "veranderd": ("verb", "changed"), "veranderen": ("verb", "to change"),
+    "verantwoordelijk": ("adjective", "responsible"), "verbeteren": ("verb", "to improve"),
+    "verbetert": ("verb", "improves"), "verbod": ("noun", "prohibition"),
+    "verder": ("adverb", "further"), "verderop": ("adverb", "down the street"),
+    "verdieping": ("noun", "floor"), "vereiste": ("noun", "requirement"),
+    "vereisten": ("noun", "requirements"), "vergadering": ("noun", "meeting"),
+    "vergaderroutines": ("noun", "meeting routines"), "vergaderruimte": ("noun", "conference room"),
+    "vergat": ("verb", "forgot"), "vergeten": ("verb", "to forget"),
+    "verhuurder": ("noun", "rental clerk"), "verhuurwinkel": ("noun", "rental shop"),
+    "verkeer": ("noun", "traffic"), "verklaart": ("verb", "explains"),
+    "verklaren": ("verb", "to explain"), "verklaring": ("noun", "explanation"),
+    "verkooprapport": ("noun", "sales report"), "verkort": ("adjective", "condensed"),
+    "verkorte": ("adjective", "condensed"), "verkouden": ("adjective", "having a cold"),
+    "verlagen": ("verb", "to lower"), "verlengd": ("verb", "renewed"),
+    "verlengen": ("verb", "to renew"), "verminderd": ("verb", "reduced"),
+    "veroorzaken": ("verb", "to cause"), "verplaatsen": ("verb", "to move"),
+    "verplaatst": ("verb", "moved"), "verplicht": ("adjective", "required"),
+    "verplichting": ("noun", "obligation"), "verslag": ("noun", "account; report"),
+    "verslagen": ("noun", "accounts"), "verspillen": ("verb", "to waste"),
+    "verstuur": ("verb", "send"), "verteld": ("verb", "told"),
+    "vertelden": ("verb", "told"), "vertraagd": ("adjective", "delayed"),
+    "vertraging": ("noun", "delay"), "vertragingen": ("noun", "delays"),
+    "vertrektijd": ("noun", "departure time"), "vervanging": ("noun", "replacement"),
+    "vervelend": ("adjective", "annoying"), "verwacht": ("verb", "expects"),
+    "verwachten": ("verb", "to expect"), "verzachte": ("adjective", "softened"),
+    "verzoek": ("noun", "request"), "viel": ("verb", "went out (viel uit)"),
+    "vijfde": ("adjective", "fifth"), "vijfendertig": ("noun", "thirty-five"),
+    "visie": ("noun", "view"), "voegde": ("verb", "added"),
+    "voegen": ("verb", "to add"), "voegt": ("verb", "adds"),
+    "voelde": ("verb", "felt"), "voelen": ("verb", "to feel"),
+    "voer": ("verb", "enter"), "voerde": ("verb", "entered"),
+    "voicemail": ("noun", "voicemail"), "volgend": ("adjective", "next"),
+    "volgens": ("preposition", "according to"), "volgorde": ("noun", "order"),
+    "volledig": ("adjective", "full"), "volledige": ("adjective", "full"),
+    "voltooid": ("adjective", "past (voltooid deelwoord: past participle)"),
+    "volwassenenkaartje": ("noun", "adult ticket"), "vooraf": ("adverb", "in advance"),
+    "voorafgaand": ("adjective", "prior"), "voorbeelden": ("noun", "examples"),
+    "voorbereiden": ("verb", "to prepare"), "voordelen": ("noun", "benefits"),
+    "voordeur": ("noun", "front door"), "voorkeuren": ("noun", "preferences"),
+    "voorkomt": ("verb", "avoids"), "voorkwamen": ("verb", "occurred"),
+    "voorrang": ("noun", "priority"), "voorspelling": ("noun", "prediction"),
+    "voorspelt": ("verb", "predicts"), "voorstel": ("noun", "proposal"),
+    "voorstellen": ("noun", "suggestions"), "voorstelling": ("noun", "show"),
+    "voorwaarde": ("noun", "condition"), "voorwaardelijke": ("adjective", "conditional"),
+    "voorwaarden": ("noun", "conditions"), "voorzichtig": ("adjective", "cautious"),
+    "voorzichtiger": ("adjective", "more cautious"), "vorm": ("noun", "form"),
+    "vormen": ("noun", "forms"), "vreemdeling": ("noun", "stranger"),
+    "vriendin": ("noun", "friend (female)"), "vrijdagochtend": ("noun", "Friday morning"),
+    "vrijwilligers": ("noun", "volunteers"), "vroegen": ("verb", "asked"),
+    "vrouw": ("noun", "woman"), "vóór": ("preposition", "before"),
+    "waarde": ("noun", "value"), "waardeer": ("verb", "appreciate"),
+    "waarderen": ("verb", "to appreciate"), "waarheid": ("noun", "truth"),
+    "waarmee": ("adverb", "with which"), "waarschijnlijk": ("adverb", "probably"),
+    "wagen": ("verb", "to take (a chance)"), "warme": ("adjective", "warm"),
+    "wasbeurt": ("noun", "wash"), "wascyclus": ("noun", "cycle"),
+    "wasje": ("noun", "load of laundry"), "wasmachine": ("noun", "washing machine"),
+    "wasmiddel": ("noun", "detergent"), "wassen": ("verb", "to wash"),
+    "wasserette": ("noun", "laundromat"), "wast": ("verb", "washes"),
+    "waste": ("verb", "washed"), "wasten": ("verb", "washed"),
+    "weekendcursus": ("noun", "weekend course"), "weergave": ("noun", "account"),
+    "weerleg": ("verb", "rebut"), "weerleggen": ("verb", "to rebut"),
+    "weerlegt": ("verb", "rebuts"), "wegen": ("verb", "to weigh"),
+    "weggingen": ("verb", "left"), "weigerde": ("verb", "refused"),
+    "weigering": ("noun", "refusal"), "welk": ("pronoun", "which"),
+    "wens": ("noun", "wish"), "werd": ("verb", "became"),
+    "werkbaar": ("adjective", "workable"), "werklast": ("noun", "workload"),
+    "werkten": ("verb", "worked"), "werkverzoeken": ("noun", "workplace requests"),
+    "werkvloer": ("noun", "workplace"), "weten": ("verb", "to know"),
+    "wieltje": ("noun", "wheel"), "wiens": ("pronoun", "whose"),
+    "wier": ("pronoun", "whose"), "wij": ("pronoun", "we"),
+    "wijst": ("verb", "points"), "wijzen": ("verb", "to point"),
+    "winst": ("noun", "profit"), "wisselgeld": ("noun", "change (money)"),
+    "won": ("verb", "won"), "woord": ("noun", "word"),
+    "woorden": ("noun", "words"), "woordenschat": ("noun", "vocabulary"),
+    "wou": ("verb", "wished"), "zaal": ("noun", "room; hall"),
+    "zachtere": ("adjective", "softer"), "zagen": ("verb", "saw"),
+    "zakelijk": ("adjective", "professional"), "zal": ("verb", "will"),
+    "zaterdagmiddag": ("noun", "Saturday afternoon"),
+    "zekere": ("adjective", "certain (tot op zekere hoogte)"), "zelfs": ("adverb", "even"),
+    "zelfstandig": ("adjective", "independent (zelfstandig naamwoord: noun)"),
+    "zelfverzekerd": ("adjective", "confident"), "zelfverzekerder": ("adjective", "more confident"),
+    "zestien": ("noun", "sixteen"), "zichzelf": ("pronoun", "himself; herself"),
+    "zinnen": ("noun", "sentences; phrases"), "zitten": ("verb", "to sit; to be"),
+    "zochten": ("verb", "were looking"), "zoekt": ("verb", "is looking for"),
+    "zomaar": ("adverb", "just"), "zonnige": ("adjective", "sunny"),
+    "zonsondergang": ("noun", "sunset"), "zorg": ("noun", "concern"),
+    "zorgden": ("verb", "made sure"), "zorgt": ("verb", "creates"),
+    "zorgvuldig": ("adverb", "carefully"), "zorgvuldige": ("adjective", "careful"),
+    "zouden": ("verb", "would"), "zwaar": ("adjective", "heavy"),
+    "zwaarder": ("adjective", "heavier"), "zwakker": ("adjective", "weaker"),
+    "zware": ("adjective", "heavy"), "zwembadregels": ("noun", "pool rules"),
+    "zwommen": ("verb", "swam"),
+}
+
+# The shared file wins on any token it already classifies, so all three X->en
+# scripts keep agreeing; EN_EXTRA only fills the gap it leaves.
+EN_POS_ALL: dict[str, str] = {
+    **{token: pos for token, (pos, _gloss) in EN_EXTRA.items()},
+    **EN_POS,
+}
+for _token, (_pos, _nl_gloss) in EN_EXTRA.items():
+    EN_TARGET_TO_NL_GLOSS.setdefault(_token, _nl_gloss)
+
+for _token, (_pos, _en_gloss) in NL_EXTRA.items():
+    NL_POS.setdefault(_token, _pos)
+    NL_GLOSSES.setdefault(_token, _en_gloss)
+
+# B1/B2 (and a few A1/A2) explanation cards QUOTE English example sentences
+# inside their Dutch gloss text -- "Although the office is quiet, Mia prefers
+# home.", "I would be grateful if you could...", "How about + -ing...?".
+# Tokenising those quotes produces `language_code: nl` lexemes for English
+# function words and inflected verbs ("the", "his", "would", "finishes"),
+# which is pure pollution: a Dutch-side practice slot could sample them and
+# gloss them as Dutch. They are listed here EXPLICITLY, one by one, so the
+# "missing explicit Dutch gloss" hard-fail below keeps its full force for
+# every genuinely Dutch word -- this is a hand-classification, not a bypass.
+# Words that are BOTH quoted English and real Dutch (even, direct, extra,
+# check, data, media, plan, start, register, scope, server, station, update,
+# best, moment, waste) are deliberately NOT listed: they stay Dutch lexemes.
+# Proper names that appear as names inside the Dutch running text (character
+# names, the Bright Path company, the Star Journey / The Great Race / Funny
+# Family film titles, Colors of the City) are likewise NOT listed -- they are
+# classified as `proper_noun` in NL_EXTRA, matching how mia/max/lopez are
+# already handled above.
+NL_QUOTED_ENGLISH: frozenset[str] = frozenset({
+    "a", "about", "agree", "already", "although", "am", "appointment", "arrived",
+    "asked", "b", "be", "been", "broadly", "can", "cannot", "colleague",
+    "complain", "concern", "condition", "confirm", "continuous", "could",
+    "damaged", "despite", "distractions", "do", "does", "extent", "fair",
+    "finished", "finishes", "for", "friday", "going", "grateful", "have", "his",
+    "home", "how", "however", "i", "i'm", "if", "ing", "it", "joined", "leads",
+    "like", "main", "march", "matters", "may", "meeting", "might", "move",
+    "moved", "must", "my", "new", "next", "office", "on", "organized", "point",
+    "possible", "prefers", "present", "projects", "quiet", "refund",
+    "replacement", "report", "review", "seems", "short", "should", "simple",
+    "sits", "some", "still", "stopped", "summary", "talked", "that", "the",
+    "though", "to", "two", "were", "what", "whether", "who", "wish",
+    "wondering", "working", "works", "worries", "would", "writing", "you",
+})
+
+# Per-unit and per-lesson semantic tags, applied ONLY to the units added on
+# 2026-07-22 (A1 49-68, A2 30-34, all of B1 and B2). Existing units keep
+# exactly the tag set they had, so no shipped practice pack's candidate pool
+# changes. Without these, a pack for a new unit could only constrain a slot by
+# part_of_speech, which is workable at checkpoint scope (`_material()` is
+# already restricted to the unit's own lessons) but gives Endless Practice a
+# course-wide pool and gives a pack author no way to anchor a slot to one
+# lesson -- and the recipe's bar is "at least one hostable lexeme in EVERY
+# lesson, in EVERY tier". Tag names are derived from the realization filename
+# stem, e.g. `a1_unit49_waste_disposal` plus `a1_unit49_waste_disposal_lesson03`.
+_AUTO_TAGGED_PREFIXES = (
+    ("b1_unit", "b2_unit")
+    + tuple(f"a1_unit{number}" for number in range(49, 69))
+    + tuple(f"a2_unit{number}" for number in range(30, 35))
+)
+AUTO_TAGGED_UNIT_STEMS: frozenset[str] = frozenset(
+    realization.stem
+    for realization, _overlay in (
+        UNIT_FILES + UNIT_FILES_A2 + UNIT_FILES_B1 + UNIT_FILES_B2
+    )
+    if realization.stem.startswith(_AUTO_TAGGED_PREFIXES)
+)
+
+
 def nl_agreement_tags(token: str) -> dict[str, object]:
     semantics: list[str] = []
     if token in {"hallo", "hoi", "goedemorgen", "goedemiddag", "goedenavond", "welkom"}:
@@ -1499,28 +2842,43 @@ def _classify_unit_files(unit_files, level):
         realization = yaml.safe_load(realization_path.read_text(encoding="utf-8"))
         overlay = yaml.safe_load(overlay_path.read_text(encoding="utf-8"))
         teaching_overlays = overlay["teaching"]
+        unit_stem = realization_path.stem
+        auto_tagged = unit_stem in AUTO_TAGGED_UNIT_STEMS
         for lesson_order, lesson in enumerate(realization["units"][0]["lessons"], 1):
             lesson_key = lesson["content_key"]
+            # Only ever applied on FIRST sight of a token (the `existing is
+            # None` branches below): a token first taught in an earlier unit
+            # keeps that unit's provenance lesson, so tagging it with a later
+            # unit's tag would only ever widen an Endless Practice pool
+            # misleadingly -- it can never help the checkpoint, which scopes
+            # `_material()` to the unit's own lesson ids.
+            auto_semantics = (
+                [unit_stem, f"{unit_stem}_lesson{lesson_order:02d}"] if auto_tagged else []
+            )
             for item in lesson["teaching"]:
                 content_key = item["content_key"]
                 gloss = teaching_overlays.get(content_key, {}).get("gloss", "")
 
                 for token in item.get("introduced_tokens", []):
                     token = token.casefold().replace("’", "'")
-                    if token not in EN_POS:
+                    if token not in EN_POS_ALL:
                         raise ValueError(
                             f"missing English classification for {token!r} "
-                            f"in _en_target_lexeme_common.py (lesson {lesson_key})"
+                            f"in _en_target_lexeme_common.py or this script's "
+                            f"EN_EXTRA (lesson {lesson_key})"
                         )
                     existing = en_specs.get(token)
                     tags = en_agreement_tags(token)
                     if existing is None:
+                        if auto_semantics:
+                            semantics = tags.setdefault("semantic", [])
+                            semantics.extend(t for t in auto_semantics if t not in semantics)
                         en_specs[token] = {
                             "level": level,
                             "unit_order": unit_order, "lesson_order": lesson_order,
                             "lesson_content_key": lesson_key, "content_key": content_key,
                             "token": token, "language_code": "en",
-                            "part_of_speech": EN_POS[token],
+                            "part_of_speech": EN_POS_ALL[token],
                             "english_gloss": EN_TARGET_TO_NL_GLOSS[token], "agreement_tags": tags,
                         }
                     else:
@@ -1533,6 +2891,8 @@ def _classify_unit_files(unit_files, level):
 
                 for match in NL_TOKEN_RE.findall(gloss):
                     token = match.casefold()
+                    if token in NL_QUOTED_ENGLISH:
+                        continue
                     if token not in NL_POS:
                         raise ValueError(
                             f"missing explicit Dutch gloss for {token!r} "
@@ -1541,6 +2901,9 @@ def _classify_unit_files(unit_files, level):
                     tags = nl_agreement_tags(token)
                     existing = nl_specs.get(token)
                     if existing is None:
+                        if auto_semantics:
+                            semantics = tags.setdefault("semantic", [])
+                            semantics.extend(t for t in auto_semantics if t not in semantics)
                         nl_specs[token] = {
                             "level": level,
                             "unit_order": unit_order, "lesson_order": lesson_order,
@@ -1563,6 +2926,8 @@ def _classify_unit_files(unit_files, level):
 def iter_specs():
     yield from _classify_unit_files(UNIT_FILES, "a1")
     yield from _classify_unit_files(UNIT_FILES_A2, "a2")
+    yield from _classify_unit_files(UNIT_FILES_B1, "b1")
+    yield from _classify_unit_files(UNIT_FILES_B2, "b2")
 
 
 def main() -> int:
@@ -1575,9 +2940,20 @@ def main() -> int:
     if args.dry_run:
         en_count = sum(spec["language_code"] == "en" for spec in specs)
         nl_count = sum(spec["language_code"] == "nl" for spec in specs)
-        a1_count = sum(spec["level"] == "a1" for spec in specs)
-        a2_count = sum(spec["level"] == "a2" for spec in specs)
-        print(f"Lexeme backfill dry run: {en_count} en, {nl_count} nl ({a1_count} a1, {a2_count} a2).")
+        per_level = " ".join(
+            f"{sum(spec['level'] == level for spec in specs)} {level}"
+            for level in ("a1", "a2", "b1", "b2")
+        )
+        identities = {
+            (spec["level"], spec["language_code"], spec["token"], spec["part_of_speech"])
+            for spec in specs
+        }
+        print(f"Lexeme backfill dry run: {en_count} en, {nl_count} nl ({per_level}).")
+        print(f"  {len(identities)} distinct (course, language, token, pos) identities "
+              f"out of {len(specs)} specs.")
+        if len(identities) != len(specs):
+            print("ERROR: duplicate lexeme identities in specs", file=sys.stderr)
+            return 1
         return 0
 
     from sqlalchemy import select
@@ -1587,7 +2963,12 @@ def main() -> int:
 
     with SessionLocal() as db:
         courses_by_level = {}
-        for level, title in (("a1", "Engels A1"), ("a2", "Engels A2")):
+        for level, title in (
+            ("a1", "Engels A1"),
+            ("a2", "Engels A2"),
+            ("b1", "Engels B1"),
+            ("b2", "Engels B2"),
+        ):
             needed = any(spec["level"] == level for spec in specs)
             course = db.scalar(
                 select(Course).where(
