@@ -32,6 +32,7 @@ export function ReviewPage() {
   const [submitError, setSubmitError] = useState(false);
   const [showQuitConfirm, setShowQuitConfirm] = useState(false);
   const [sessionError, setSessionError] = useState(false);
+  const [retryError, setRetryError] = useState(false);
 
   const dueQuery = useQuery({
     queryKey: ["reviews-due"],
@@ -112,6 +113,7 @@ export function ReviewPage() {
   async function handleRetry() {
     if (!current) return;
     setSubmitting(true);
+    setRetryError(false);
     try {
       const res = await ReviewApi.retry(current.id);
       const fresh = res.items[0];
@@ -123,6 +125,12 @@ export function ReviewPage() {
       });
       setResult(null);
       setLastResponse(undefined);
+    } catch {
+      // Without this the "Try again" button silently did nothing on a network
+      // error. The result banner (and its Try again button) stays mounted
+      // because setResult(null) is never reached, so this message sits right
+      // next to the button that failed and the same button is the retry.
+      setRetryError(true);
     } finally {
       setSubmitting(false);
     }
@@ -131,6 +139,7 @@ export function ReviewPage() {
   function handleContinue() {
     setResult(null);
     setLastResponse(undefined);
+    setRetryError(false);
     setReviewedCount((n) => n + 1);
     setIndex((i) => i + 1);
   }
@@ -162,20 +171,34 @@ export function ReviewPage() {
     return (
       <div>
         <h1>{t("review.pick_course_title")}</h1>
-        {titlesQuery.data?.map((c) => (
-          <button
-            key={c.courseId}
-            className="card continue-card"
-            style={{ width: "100%", textAlign: "start", marginBottom: 12, cursor: "pointer" }}
-            onClick={() => setCourseId(c.courseId)}
-          >
-            <div className="continue-info">
-              <h3 style={{ margin: "0 0 4px" }}>{c.title}</h3>
-              <span className="muted">{t("review.due_count", { count: c.dueCount })}</span>
-            </div>
-            <span className="btn btn-secondary">{t("review.start")}</span>
-          </button>
-        ))}
+        {/* One failing CatalogApi.course() rejects the whole Promise.all, so
+            without this branch the heading rendered above ZERO buttons — a
+            dead screen offering the learner nothing at all. */}
+        {titlesQuery.isError ? (
+          <div className="feedback-banner error" role="alert">
+            <p style={{ margin: "0 0 10px" }}>{t("review.titles_fetch_error")}</p>
+            <button className="btn btn-block" onClick={() => titlesQuery.refetch()}>
+              {t("common.retry")}
+            </button>
+          </div>
+        ) : titlesQuery.data === undefined ? (
+          <p className="muted">{t("review.loading")}</p>
+        ) : (
+          titlesQuery.data.map((c) => (
+            <button
+              key={c.courseId}
+              className="card continue-card"
+              style={{ width: "100%", textAlign: "start", marginBottom: 12, cursor: "pointer" }}
+              onClick={() => setCourseId(c.courseId)}
+            >
+              <div className="continue-info">
+                <h3 style={{ margin: "0 0 4px" }}>{c.title}</h3>
+                <span className="muted">{t("review.due_count", { count: c.dueCount })}</span>
+              </div>
+              <span className="btn btn-secondary">{t("review.start")}</span>
+            </button>
+          ))
+        )}
       </div>
     );
   }
@@ -266,6 +289,11 @@ export function ReviewPage() {
                 {t("review.continue")}
               </button>
             </div>
+            {retryError && (
+              <p role="alert" style={{ margin: "10px 0 0", fontWeight: 400 }}>
+                {t("review.retry_error")}
+              </p>
+            )}
           </div>
         );
       })()}

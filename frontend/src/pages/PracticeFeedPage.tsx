@@ -172,19 +172,28 @@ export function PracticeFeedPage() {
   // these words"), same threading pattern as CourseUnitsPage -> UnitLessonsPage.
   const requestedCourseId = (location.state as { courseId?: string } | null)?.courseId;
   const [loadingEligibility, setLoadingEligibility] = useState(true);
+  const [eligibilityError, setEligibilityError] = useState(false);
   const [eligibleCourses, setEligibleCourses] = useState<EligibleCourse[]>([]);
   const [courseId, setCourseId] = useState<string | null>(null);
   const [mode, setMode] = useState<PracticeBatchMode>(() => getPracticeModePreference());
   const [items, setItems] = useState<PracticeItem[]>([]);
   const [locked, setLocked] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
+  const [feedError, setFeedError] = useState(false);
   const [exhausted, setExhausted] = useState(false);
   const [combo, setCombo] = useState(0);
   const [xpToast, setXpToast] = useState<number | null>(null);
   const cardRefs = useRef<Map<number, HTMLDivElement>>(new Map());
   const loadingMoreRef = useRef(false);
 
-  useEffect(() => {
+  // MUST stay caught: the inner Promise.all means a single failing
+  // CatalogApi.course() rejects the whole chain, leaving eligibleCourses
+  // empty — which the render below is otherwise unable to tell apart from
+  // "this learner has completed no lessons", so it told learners who HAVE
+  // completed lessons that practice is locked (and rejected unhandled).
+  const loadEligibility = useCallback(() => {
+    setLoadingEligibility(true);
+    setEligibilityError(false);
     ProgressApi.progress()
       .then(async (progress) => {
         const withProgress = progress.skill_progress.filter(
@@ -208,7 +217,12 @@ export function PracticeFeedPage() {
           setCourseId(courses[0].id);
         }
       })
+      .catch(() => setEligibilityError(true))
       .finally(() => setLoadingEligibility(false));
+  }, [requestedCourseId]);
+
+  useEffect(() => {
+    loadEligibility();
     // Mount-only on purpose: route state is read once when the page is
     // entered; re-running on in-place state changes would re-append a new
     // course's items onto an already-populated feed.
@@ -219,6 +233,7 @@ export function PracticeFeedPage() {
     if (!courseId || loadingMoreRef.current || exhausted) return;
     loadingMoreRef.current = true;
     setLoadingMore(true);
+    setFeedError(false);
     try {
       const res = await PracticeApi.batch(courseId, BATCH_SIZE, mode);
       setLocked(res.locked);
@@ -227,6 +242,12 @@ export function PracticeFeedPage() {
       } else {
         setItems((prev) => [...prev, ...res.items]);
       }
+    } catch {
+      // Without this the failure left items=[], exhausted=false,
+      // loadingMore=false — a completely blank feed with no message and no
+      // way to retry. `exhausted` deliberately stays false so the "you've
+      // practiced everything" copy can never stand in for a network error.
+      setFeedError(true);
     } finally {
       loadingMoreRef.current = false;
       setLoadingMore(false);
@@ -246,12 +267,17 @@ export function PracticeFeedPage() {
     setItems([]);
     setExhausted(false);
     setLocked(false);
+    setFeedError(false);
     cardRefs.current.clear();
     setMode(next);
   }
 
   useEffect(() => {
     if (!SUPPORTS_INTERSECTION_OBSERVER) return;
+    // Never auto-retry a failed batch on scroll — that would hammer a down
+    // backend and hide the error banner behind a permanent spinner. The
+    // learner's explicit Retry button is the only way back in.
+    if (feedError) return;
     const targetIndex = items.length - PREFETCH_THRESHOLD;
     const target = targetIndex >= 0 ? cardRefs.current.get(targetIndex) : null;
     if (!target) return;
@@ -263,7 +289,7 @@ export function PracticeFeedPage() {
     );
     observer.observe(target);
     return () => observer.disconnect();
-  }, [items.length, loadMore]);
+  }, [items.length, loadMore, feedError]);
 
   function handleAnswered(correct: boolean, xp: number) {
     setCombo((c) => (correct ? c + 1 : 0));
@@ -275,6 +301,20 @@ export function PracticeFeedPage() {
 
   if (loadingEligibility) {
     return <div className="page-loading">{t("common.loading")}</div>;
+  }
+
+  // Must come BEFORE the locked/empty branch: an unknown eligibility list is
+  // not an empty one, and "complete a lesson first" would be a flat lie to a
+  // learner who has completed several.
+  if (eligibilityError) {
+    return (
+      <div className="feedback-banner error" role="alert">
+        <p style={{ margin: "0 0 10px" }}>{t("practice.eligibility_fetch_error")}</p>
+        <button className="btn btn-block" onClick={loadEligibility}>
+          {t("common.retry")}
+        </button>
+      </div>
+    );
   }
 
   if (eligibleCourses.length === 0) {
@@ -356,7 +396,20 @@ export function PracticeFeedPage() {
 
       {loadingMore && <div className="page-loading">{t("common.loading")}</div>}
 
-      {!SUPPORTS_INTERSECTION_OBSERVER && !exhausted && !loadingMore && items.length > 0 && (
+      {feedError && !loadingMore && (
+        <div className="feedback-banner error" role="alert">
+          <p style={{ margin: "0 0 10px" }}>
+            {items.length > 0
+              ? t("practice.load_more_error")
+              : t("practice.feed_fetch_error")}
+          </p>
+          <button className="btn btn-block" onClick={() => loadMore()}>
+            {t("common.retry")}
+          </button>
+        </div>
+      )}
+
+      {!SUPPORTS_INTERSECTION_OBSERVER && !exhausted && !feedError && !loadingMore && items.length > 0 && (
         <button className="btn btn-block" onClick={() => loadMore()}>
           {t("practice.load_more")}
         </button>

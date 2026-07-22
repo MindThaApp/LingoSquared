@@ -1,10 +1,12 @@
 import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { TextBlockList } from "../TextBlock";
 import { SpeakButton } from "../SpeakButton";
 import { answerDirectionForExercise } from "@lingo/shared/lib/scripts";
 import type { ExerciseComponentProps } from "./types";
 
 export function MatchingPairs({ exercise, onAnswer, disabled }: ExerciseComponentProps) {
+  const { t } = useTranslation();
   const pairs = exercise.prompt.pairs ?? [];
   const answerLanguageCode = exercise.prompt.answer_language_code;
   // The left column is the answer-language side (same answer_language_code
@@ -102,7 +104,7 @@ export function MatchingPairs({ exercise, onAnswer, disabled }: ExerciseComponen
           onAnswer(pairs.map((p) => ({ left: p.left, right: matchedRightFor(p.left) as string })))
         }
       >
-        Check
+        {t("common.check")}
       </button>
     </div>
   );
