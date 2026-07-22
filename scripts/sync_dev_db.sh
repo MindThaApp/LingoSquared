@@ -14,7 +14,25 @@ set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 DEFAULT_PORT="$(grep -m1 '^API_PORT=' "$REPO_ROOT/backend/.env" 2>/dev/null | cut -d= -f2)"
-API="${1:-http://localhost:${DEFAULT_PORT:-8000}}"
+# Phase selection. Default: all three, in the order the runbook mandates
+# (content -> lexemes -> practice). Individual phases are opt-in-able so a
+# long sync can be resumed without redoing the ~25min content import.
+DO_CONTENT=1; DO_LEXEMES=1; DO_PRACTICE=1
+ARGS=()
+for a in "$@"; do
+  case "$a" in
+    --content-only)  DO_CONTENT=1; DO_LEXEMES=0; DO_PRACTICE=0 ;;
+    --lexemes-only)  DO_CONTENT=0; DO_LEXEMES=1; DO_PRACTICE=0 ;;
+    --practice-only) DO_CONTENT=0; DO_LEXEMES=0; DO_PRACTICE=1 ;;
+    --skip-content)  DO_CONTENT=0 ;;
+    --skip-lexemes)  DO_LEXEMES=0 ;;
+    -h|--help)
+      echo "usage: $0 [API_BASE] [--content-only|--lexemes-only|--practice-only|--skip-content|--skip-lexemes]"
+      exit 0 ;;
+    *) ARGS+=("$a") ;;
+  esac
+done
+API="${ARGS[0]:-http://localhost:${DEFAULT_PORT:-8000}}"
 PY="$REPO_ROOT/.content-venv/bin/python"
 [ -x "$PY" ] || PY=python3
 
@@ -84,6 +102,7 @@ login || { echo "login failed"; exit 1; }
 
 TMPDIR_SYNC=$(mktemp -d)
 
+if [ "$DO_CONTENT" = 1 ]; then
 echo "== 1/3 content import =="
 while IFS='|' read -r COURSE REALS OVERLAYS; do
   echo "-- $COURSE"
@@ -111,6 +130,9 @@ while IFS='|' read -r COURSE REALS OVERLAYS; do
   "$PY" -c 'import json,sys; d=json.load(open(sys.argv[1])); print("   ", {k:v for k,v in d.items() if k!="warnings"}); w=d.get("warnings") or []; [print("    warn:", x) for x in w[:5]]' "$TMPDIR_SYNC/resp.json"
 done < <(grep -v '^\s*#' "$REPO_ROOT/scripts/content_manifest.txt" | grep -v '^\s*$')
 
+fi  # DO_CONTENT
+
+if [ "$DO_LEXEMES" = 1 ]; then
 echo "== 2/3 lexeme backfills (docker, full-repo mount) =="
 # When syncing a REMOTE deployment, set LINGO_BACKFILL_SSH (e.g.
 # ramin@192.168.4.4) and LINGO_REMOTE_REPO (default /home/ramin/LingoSquared):
@@ -133,6 +155,9 @@ else
   cd "$REPO_ROOT"
 fi
 
+fi  # DO_LEXEMES
+
+if [ "$DO_PRACTICE" = 1 ]; then
 echo "== 3/3 practice import =="
 COURSES_JSON="$TMPDIR_SYNC/courses.json"
 HTTP=$(api_request "$COURSES_JSON" "$API/courses")
@@ -177,5 +202,7 @@ if matches:
     echo "   $LEVEL -> course $CID -> $HTTP: $(head -c 200 "$TMPDIR_SYNC/presp.json")"
   done
 done < <(grep -v '^\s*#' "$REPO_ROOT/scripts/practice_manifest.txt" | grep -v '^\s*$')
+
+fi  # DO_PRACTICE
 
 echo "== done =="
