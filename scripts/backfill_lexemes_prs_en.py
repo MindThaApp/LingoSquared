@@ -1,6 +1,25 @@
 #!/usr/bin/env python3
-"""Idempotently backfill reviewed prs-en A1 lexemes (English target) from
-the shared en realization units 1 and 2.
+"""Idempotently backfill prs-en lexemes (English target) from the shared en
+realization, across all four prs-en course rows (A1/A2/B1/B2).
+
+Scope as of 2026-07-22: A1 units 01-24 + 30-68, A2 units 25-34, B1 units
+01-19, B2 units 01-08 -- i.e. every unit in scripts/content_manifest.txt's
+four `prs-en*` lines. The 52 units a1 49-68 / a2 30-34 / b1 01-19 / b2 01-08
+were added on 2026-07-22 to unblock unit checkpoints: `generate_checkpoint()`
+needs BOTH practice templates AND lexemes and hard-fails below 12 items, so
+those 52 units could not produce the checkpoint the publish gate requires.
+
+REGISTER (2026-07-22): every Dari gloss in this file is colloquial Dari per
+this lane's register pin in docs/content/CLAUDE.md, and was audited against
+scripts/check_dari_register.py's marker inventory. That checker deliberately
+scopes .py files out (see its "NOT COVERED" section, which names this file),
+so the audit was run by importing its DIALECT_MARKERS/AUDIT_MARKERS/
+FORMAL_3SG/IRANIAN_COPULA/METALANGUAGE tables and applying them to
+EN_TARGET_TO_PRS_GLOSS's values directly. 21 pre-existing Iranian-Persian
+glosses were repaired in that pass (آموزگار->معلم, بیایید->بیایین,
+هستی->استی, formal است->استه x15, می‌شود->می‌شه x2, می‌کند->می‌کنه) --
+these were the SRS-surface twin of registry class 1.28, and would have kept
+showing Farsi-register words even after the overlays were repaired.
 
 Written directly (not via Codex -- Codex was rate-limited at authoring
 time) mirroring scripts/backfill_lexemes.py's structure and rigor.
@@ -262,6 +281,96 @@ UNIT_FILES = (
         REPO_ROOT / "docs/content/realizations/en/a1_unit48_library.yaml",
         REPO_ROOT / "docs/content/overlays/prs-en/a1_unit48.yaml",
     ),
+    # Units 49-68 (waste disposal ... borrowing/lending), added 2026-07-22 by
+    # the checkpoint-coverage pass. WHY: `generate_checkpoint()`
+    # (backend/app/practice/service.py) hard-fails below 12 items and needs
+    # BOTH practice templates AND lexemes -- prs-en had ZERO lexemes for 52
+    # units (a1 49-68, a2 30-34, b1 01-19, b2 01-08), so none of them could
+    # generate the unit checkpoint that the publish gate requires. Appended in
+    # the SAME order as scripts/content_manifest.txt's `prs-en` line
+    # (...a1_unit48 a1_unit49 ... a1_unit68), so this tuple's positional index
+    # keeps matching the imported course's unit_order (the A1 course's units
+    # are 1-24 then 30-68, contiguous by IMPORT order, not by on-disk number).
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit49_waste_disposal.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a1_unit49.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit50_accommodation.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a1_unit50.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit51_pharmacy.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a1_unit51.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit52_personal_care.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a1_unit52.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit53_bike_rental.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a1_unit53.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit54_laundry.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a1_unit54.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit55_swimming_pool.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a1_unit55.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit56_restaurant.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a1_unit56.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit57_cinema.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a1_unit57.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit58_museum.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a1_unit58.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit59_banking_basics.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a1_unit59.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit60_invitations.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a1_unit60.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit61_apologies_excuses.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a1_unit61.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit62_phone_calls.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a1_unit62.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit63_asking_for_help.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a1_unit63.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit64_compliments.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a1_unit64.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit65_returns_exchanges.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a1_unit65.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit66_pharmacy_symptoms.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a1_unit66.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit67_family_news.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a1_unit67.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a1_unit68_borrowing_lending.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a1_unit68.yaml",
+    ),
 )
 
 # A2 units live in a SEPARATE course row ("انگلیسی A2", not "انگلیسی
@@ -335,6 +444,151 @@ UNIT_FILES_A2 = (
         REPO_ROOT / "docs/content/realizations/en/a2_unit29_maintenance.yaml",
         REPO_ROOT / "docs/content/overlays/prs-en/a2_unit29.yaml",
     ),
+    # Units 30-34 (job interview / travel disruption / online habits / weekly
+    # schedule / shopping complaint), added 2026-07-22 by the same
+    # checkpoint-coverage pass as a1 units 49-68 above. Order matches
+    # scripts/content_manifest.txt's `prs-en-a2` line exactly.
+    (
+        REPO_ROOT / "docs/content/realizations/en/a2_unit30_job_interview.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a2_unit30.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a2_unit31_travel_disruption.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a2_unit31.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a2_unit32_online_habits.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a2_unit32.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a2_unit33_weekly_schedule.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a2_unit33.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a2_unit34_shopping_complaint.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a2_unit34.yaml",
+    ),
+)
+
+# B1 and B2 each live in their OWN course row again ("انگلیسی B1" /
+# "انگلیسی B2" -- the overlays declare those titles, and
+# `POST /admin/content/import` matches/creates courses by
+# (source_language, target_language, title)). Same LOCAL 1-based ordering
+# discipline as UNIT_FILES_A2: these indices are looked up against their own
+# course in main(), never mixed with another tuple's. Order matches
+# scripts/content_manifest.txt's `prs-en-b1` / `prs-en-b2` lines.
+UNIT_FILES_B1 = (
+    (
+        REPO_ROOT / "docs/content/realizations/en/b1_unit01_necessity.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/b1_unit01.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/b1_unit02_abilities.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/b1_unit02.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/b1_unit03_hypotheticals.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/b1_unit03.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/b1_unit04_debate.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/b1_unit04.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/b1_unit05_workplace.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/b1_unit05.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/b1_unit06_narrative.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/b1_unit06.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/b1_unit07_conditions.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/b1_unit07.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/b1_unit08_sequencing.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/b1_unit08.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/b1_unit09_reported_speech.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/b1_unit09.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/b1_unit10_purpose.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/b1_unit10.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/b1_unit11_unreal_hypotheticals.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/b1_unit11.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/b1_unit12_concession.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/b1_unit12.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/b1_unit13_relative_clauses.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/b1_unit13.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/b1_unit14_professional_communication.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/b1_unit14.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/b1_unit15_complaints.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/b1_unit15.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/b1_unit16_advice.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/b1_unit16.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/b1_unit17_regret.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/b1_unit17.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/b1_unit18_future_plans.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/b1_unit18.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/b1_unit19_summarizing.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/b1_unit19.yaml",
+    ),
+)
+
+UNIT_FILES_B2 = (
+    (
+        REPO_ROOT / "docs/content/realizations/en/b2_unit01_argumentation.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/b2_unit01.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/b2_unit02_speculation.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/b2_unit02.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/b2_unit03_hedging_emphasis.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/b2_unit03.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/b2_unit04_narrative_time.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/b2_unit04.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/b2_unit05_register.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/b2_unit05.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/b2_unit06_abstraction.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/b2_unit06.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/b2_unit07_negotiation.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/b2_unit07.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/b2_unit08_synthesis.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/b2_unit08.yaml",
+    ),
 )
 
 # Dari gloss for each shared English target token -- hand-written for
@@ -351,7 +605,7 @@ EN_TARGET_TO_PRS_GLOSS: dict[str, str] = {
     "not": "نی", "bad": "بد", "and": "و", "okay": "خوب",
     "nice": "خوش", "to": "به", "meet": "آشنا شدن", "too": "هم",
     "see": "دیدن", "later": "بعداً", "have": "داشتن", "a": "(حرف تعریف نامعین)",
-    "day": "روز", "what": "چه", "is": "است", "what's": "چیست",
+    "day": "روز", "what": "چه", "is": "استه", "what's": "چیست",
     # "your"/"my" were previously glossed as bare Dari possessive SUFFIX
     # morphemes ("تان"/"م" -- how Dari actually attaches possession to
     # the noun, e.g. نظرم "opinion-my"), not standalone words. Real bug
@@ -367,7 +621,7 @@ EN_TARGET_TO_PRS_GLOSS: dict[str, str] = {
     # "her": "مالِ او (مؤنث)" a few lines below) -- a natural standalone
     # explanatory phrase, not the bound suffix.
     "your": "مالِ شما", "name": "نام", "my": "مالِ من", "leila": "لیلا",
-    "i": "من", "am": "استم", "student": "محصل", "teacher": "آموزگار",
+    "i": "من", "am": "استم", "student": "محصل", "teacher": "معلم",
     "yes": "بلی", "no": "نخیر", "new": "جدید", "member": "عضو",
     "he": "او (مذکر)", "she": "او (مؤنث)", "an": "(حرف تعریف نامعین)",
     "engineer": "انجنیر", "library": "کتابخانه", "assistant": "دستیار",
@@ -384,10 +638,10 @@ EN_TARGET_TO_PRS_GLOSS: dict[str, str] = {
     "twenty-one": "بیست و یک", "thirty": "سی", "forty": "چهل",
     "fifty": "پنجاه", "hundred": "صد", "twenty-five": "بیست و پنج",
     "old": "سال قدمت‌داشتن (در بیان سن)", "years": "سال (جمع)",
-    "it's": "این ... است (مخفف it is)", "dollars": "دالر (جمع)",
+    "it's": "این ... استه (مخفف it is)", "dollars": "دالر (جمع)",
     "phone": "تیلفون", "number": "نمبر", "market": "بازار",
     "apples": "سیب‌ها", "they're": "دوی ... استند (مخفف they are)",
-    "ok": "خیر است؛ باشه", "this": "این", "shop": "دکان",
+    "ok": "خیر استه؛ باشه", "this": "این", "shop": "دکان",
     "much": "چقدر (در how much)",
     # Unit 4 (days/months/calendar dates), added 2026-07-06. POS/tags
     # already shared from _en_target_lexeme_common.py (nl-en's own unit04
@@ -402,9 +656,9 @@ EN_TARGET_TO_PRS_GLOSS: dict[str, str] = {
     "december": "دسمبر", "which": "کدام", "month": "ماه",
     "today's": "امروزِ ... (مالکیت)", "date": "تاریخ", "7th": "هفتم",
     "can": "می‌تانم؛ می‌تانه (تانستن، فعل کمکی دری)", "also": "هم",
-    "write": "نوشتن", "as": "به حیث", "when's": "کی است (مخفف when is)",
+    "write": "نوشتن", "as": "به حیث", "when's": "کی استه (مخفف when is)",
     "birthday": "سالگره", "3rd": "سوم", "opens": "باز می‌شه", "again": "دوباره",
-    "open": "باز", "on": "در؛ روی", "9th": "نهم", "great": "خوب است",
+    "open": "باز", "on": "در؛ روی", "9th": "نهم", "great": "خوب استه",
     "then": "بعد",
     # Unit 5 (telling the time), added 2026-07-06.
     "time": "وخت", "o'clock": "بجه (ساعتِ تمام)", "half": "نیم",
@@ -417,7 +671,7 @@ EN_TARGET_TO_PRS_GLOSS: dict[str, str] = {
     "grandmother": "بی‌بی", "grandfather": "بابه", "aunt": "عمه؛ خاله",
     "uncle": "کاکا؛ ماما", "cousin": "پسرکاکا؛ دخترکاکا (و مشابه)",
     "his": "مالِ او (مذکر)", "her": "مالِ او (مؤنث)",
-    "she's": "او ... است (مخفف she is)", "brothers": "برادران",
+    "she's": "او ... استه (مخفف she is)", "brothers": "برادران",
     "do": "(فعل کمکی پرسشی)", "any": "هیچ", "don't": "(منفیِ فعل کمکی do)",
     "only": "فقط", "child": "بچه", "photo": "عکس", "family": "فامیل",
     "who": "کیا", "just": "فقط؛ همینحالا",
@@ -426,7 +680,7 @@ EN_TARGET_TO_PRS_GLOSS: dict[str, str] = {
     "soup": "شوروا", "salad": "سالاد", "sandwich": "ساندویچ",
     "i'd": "من می‌خواهم (مخفف I would)", "like": "خواستن؛ خوش داشتن (این معنای دوم در Unit 19 استعمال می‌شه)",
     "please": "لطفاً", "anything": "چیزی", "else": "دیگه",
-    "that's": "دا ... است (مخفف that is)", "all": "بس", "for": "به خاطر",
+    "that's": "دا ... استه (مخفف that is)", "all": "بس", "for": "به خاطر",
     "here": "اینجا", "or": "یا", "go": "رفتن؛ بردن (بیرون‌بر)",
     "menu": "مینو", "price": "قیمت", "cafe": "کیفی", "3": "سه",
     "2": "دو", "5": "پنج", "6": "شش", "sure": "البته",
@@ -462,7 +716,7 @@ EN_TARGET_TO_PRS_GLOSS: dict[str, str] = {
     "hot": "گرم", "windy": "بادی", "weather": "هوا", "warm": "گرم",
     "raining": "باران باریدن", "should": "باید", "umbrella": "چتر",
     "tomorrow": "فردا", "will": "(نشانهٔ فعل آینده)", "be": "بودن",
-    "rain": "باران", "saturday": "شنبه", "let's": "بیایید (پیشنهاد مشترک)",
+    "rain": "باران", "saturday": "شنبه", "let's": "بیایین (پیشنهاد مشترک)",
     "idea": "فکر؛ نظر", "but": "اما", "going": "می‌خواهد (آیندهٔ نزدیک)",
     "so": "پس",
     # Unit 12 (clothing: sizes and colors), added 2026-07-06.
@@ -566,7 +820,7 @@ EN_TARGET_TO_PRS_GLOSS: dict[str, str] = {
     "living": "نشیمن (در living room)", "room": "اتاق",
     "garden": "باغچه", "many": "چند (در how many)", "rooms": "اتاق‌ها",
     "there": "آنجا (در there is/there are: موجود بودن)",
-    "there's": "... هست (مخفف there is)", "apartment": "آپارتمان",
+    "there's": "... استه (مخفف there is)", "apartment": "آپارتمان",
     "has": "داره", "bedrooms": "اتاق‌خواب‌ها", "favorite": "پسندیده",
     "tell": "گفتن", "isn't": "نیست (مخفف is not)", "balcony": "بالکن",
     "upstairs": "منزل بالا", "near": "نزدیک", "easy": "آسان",
@@ -627,7 +881,7 @@ EN_TARGET_TO_PRS_GLOSS: dict[str, str] = {
     "worse": "خرابتر", "insurance": "بیمه",
     "i've": "... دارم (مخفف I have، همرنگ سه ورز می‌شه که ... دارم)",
     "had": "داشتم (زمان گذشتهٔ have)", "early": "زودتر",
-    "confirmed": "تأیید شده (است)", "3pm": "ساعت سه بعد از چاشت",
+    "confirmed": "تأیید شده (استه)", "3pm": "ساعت سه بعد از چاشت",
     "7724": "۷۷۲۴", "twice": "دو مرتبه",
     "plenty": "زیاد (در plenty of water: آب زیاد)",
     "back": "باز (در come back: باز آمدن)",
@@ -647,8 +901,8 @@ EN_TARGET_TO_PRS_GLOSS: dict[str, str] = {
     "problem": "مشکل", "been": "بوده (در ساختار ماضی نقلی)",
     "someone": "یک کس؛ کسی", "fix": "ترمیم کدن",
     "2pm": "ساعت ۲ بعد از چاشت", "4pm": "ساعت ۴ بعد از چاشت",
-    "received": "دریافت شده (است)", "6180": "۶۱۸۰", "send": "فرستادن",
-    "home": "خانه", "here's": "همینه (این است، در معرفی چیزی)",
+    "received": "دریافت شده (استه)", "6180": "۶۱۸۰", "send": "فرستادن",
+    "home": "خانه", "here's": "همینه (این استه، در معرفی چیزی)",
     # Units 30-42 (hobbies through personality), added 2026-07-11 by
     # the prs-en depth-extension worker. Atomic per-token glosses --
     # authored fresh in Afghan Dari register for each unit's real
@@ -693,7 +947,7 @@ EN_TARGET_TO_PRS_GLOSS: dict[str, str] = {
     # Unit 33
     "bus": "بس", "drive": "موتر راندن", "bike": "بایسکل", "ride": "سوار شدن",
     "work?": "کار؟", "takes": "طول می‌کشه (سوم‌شخص مفرد take)",
-    "late": "دیر", "daniel?": "دنیل؟", "it?": "آن؟", "okay,": "خیر است،",
+    "late": "دیر", "daniel?": "دنیل؟", "it?": "آن؟", "okay,": "خیر استه،",
     "parking": "پارکینگ", "difficult.": "مشکل.",
     "drives": "موتر می‌رانه (سوم‌شخص مفرد)", "office.": "دفتر.",
     "worry": "پریشان بودن",
@@ -808,7 +1062,7 @@ EN_TARGET_TO_PRS_GLOSS: dict[str, str] = {
     "makes": "می‌سازه (سوم‌شخص مفرد)", "using": "استفاده کدن",
     "mother's": "مالِ مادر", "taught": "یاد داد (زمان گذشتهٔ teach)",
     "without": "بدون", "cutting": "بریدن", "fingers": "انگشت‌ها",
-    "yet": "هنوز", "he's": "او ... است (مخفف he is)",
+    "yet": "هنوز", "he's": "او ... استه (مخفف he is)",
     "chopped": "خرد کرد (زمان گذشته)", "while": "در حالی که",
     "boiled": "جوش داد (زمان گذشته)", "made": "ساخت (زمان گذشتهٔ make)",
     "tasted": "چشید (زمان گذشته)",
@@ -830,12 +1084,12 @@ EN_TARGET_TO_PRS_GLOSS: dict[str, str] = {
 
 EN_TARGET_TO_PRS_GLOSS.update({
     "sky": "آسمان", "grass": "چمن", "yellow": "زرد", "sun": "آفتاب",
-    "dark": "تاریک", "wearing": "پوشیده است", "light": "روشن",
+    "dark": "تاریک", "wearing": "پوشیده استه", "light": "روشن",
     "painted": "رنگ‌شده", "bright": "روشن؛ درخشان", "fun": "جالب",
     "our": "از ما", "presentation": "ارائه", "choose": "انتخاب کردن",
-    "colors": "رنگ‌ها", "looks": "معلوم می‌شود", "professional": "مسلکی",
+    "colors": "رنگ‌ها", "looks": "معلوم می‌شه", "professional": "مسلکی",
     "choice": "انتخاب", "everything": "همه‌چیز", "gardens": "باغ‌ها",
-    "especially": "به‌خصوص", "beautiful": "مقبول؛ زیبا", "reminds": "یادآوری می‌کند",
+    "especially": "به‌خصوص", "beautiful": "مقبول؛ زیبا", "reminds": "یادآوری می‌کنه",
     "everyday": "روزمره", "conversations": "گپ‌ها؛ گفت‌وگوها",
     "spring": "بهار", "flowers": "گل‌ها", "bloom": "شکوفه کردن",
     "summer": "تابستان", "beach": "ساحل", "fall": "خزان",
@@ -855,14 +1109,14 @@ EN_TARGET_TO_PRS_GLOSS.update({
     "hurt": "زخمی؛ آسیب‌دیده", "lost": "گم‌شده", "keys": "کلیدها",
     "wallet": "بکس پول", "backpack": "بکس پشتی", "seen": "دیده",
     "anyone": "کسی", "strap": "بند", "where's": "کجاست",
-    "fountain": "فواره", "you're": "تو/شما هستی", "inside": "داخل",
-    "ask": "پرسیدن", "holding": "گرفته است", "desk": "میز پذیرش",
+    "fountain": "فواره", "you're": "تو/شما استی", "inside": "داخل",
+    "ask": "پرسیدن", "holding": "گرفته استه", "desk": "میز پذیرش",
     "lose": "گم کردن", "item": "چیز؛ وسیله", "main": "اصلی", "gate": "دروازه",
     "describe": "توصیف کردن", "its": "از آن", "special": "خاص",
     "details": "جزئیات", "staff": "کارمندان", "called": "زنگ زد؛ صدا کرد",
     "told": "گفت", "whole": "تمام", "story": "قصه", "track": "رد؛ پیگیری",
     "things": "چیزها", "available": "دسترس؛ موجود", "confirm": "تأیید کردن",
-    "reschedule": "وقت را تغییر دادن", "max": "مکس", "seems": "معلوم می‌شود",
+    "reschedule": "وقت را تغییر دادن", "max": "مکس", "seems": "معلوم می‌شه",
     "lately": "این اواخر", "due": "وقتش رسیده", "yearly": "سالانه",
     "checkup": "معاینه", "vet": "داکتر حیوانات", "dog's": "از سگ",
     "max's": "از مکس", "dentist": "داکتر دندان", "service": "خدمات",
@@ -879,6 +1133,763 @@ EN_TARGET_TO_PRS_GLOSS.update({
 })
 
 
+# Dari glosses for the 52 newly-covered units (a1 49-68, a2 30-34, b1 01-19,
+# b2 01-08), added 2026-07-22. Two sources, both Dari-register by
+# construction:
+#   * where the unit's prs-en overlay has a single-word vocabulary teaching
+#     card for exactly this token, the overlay's OWN `gloss` string is reused
+#     verbatim (that text is the Dari a learner already sees for this word --
+#     any other wording here would teach two different translations of one
+#     word in one course);
+#   * everything else is written here against the token's real sentence in
+#     docs/content/realizations/en/, in the colloquial-Dari register this lane
+#     is pinned to (docs/content/CLAUDE.md: "prs-en overlay lane: colloquial
+#     Dari, می‌تانین/استه style") -- استه/استم/استین for the copula, the -ه 3sg
+#     clitic (می‌کنه/می‌شه/می‌ته), 2pl -ین, and Afghan lexis (دالر، بس، سرک،
+#     دوکان، فلم، معلم، کلکین، چوکی، تکت، چوک) rather than the Iranian
+#     equivalents. scripts/check_dari_register.py's marker inventory was run
+#     over every value below (it deliberately scopes out .py files, so the
+#     check was applied to this dict directly): zero tier-1 markers, zero
+#     tier-2 formal 3sg, zero Iranian copula, zero Iranian metalanguage.
+EN_TARGET_TO_PRS_GLOSS.update({
+    # -- a1 unit49 (sorting household waste)
+    "sort": "دسته‌بندی کردن", "bin": "سطل", "recycle": "بازیافت کردن",
+    "waste": "زباله", "glass": "شیشه", "paper": "کاغذ",
+    "collection": "جمع‌آوری", "recycling": "بازیافت", "food": "غذا",
+    "jar": "مرتبان", "bins": "سطل‌ها", "tuesdays": "سه‌شنبه‌ها",
+    "fridays": "جمعه‌ها", "correctly": "به‌شکل درست",
+    "buildings": "تعمیرها", "kinds": "قسم‌ها",
+    "practicing": "تمرین کرده (شکل ing فعل practice)",
+    "afterward": "بعد از آن", "stopped": "جلوش را گرفت",
+    "showed": "نشان داد", "sorts": "دسته‌بندی می‌کنه",
+    "explained": "توضیح داد",
+    # -- a1 unit50 (staying in accommodation)
+    "hotel": "هوتل", "reservation": "رزرو", "check-out": "خروج (تخلیهٔ اتاق)",
+    "staying": "ماندن (شکل ing فعل stay)", "beds": "بسترها",
+    "included": "شامل (در قیمت)", "key": "کلید",
+    "under": "زیر؛ به نام (در under my name)", "downstairs": "در منزل پایین",
+    "guesthouse": "مهمان‌خانه", "mountains": "کوه‌ها", "november": "نومبر",
+    "14th": "چهاردهم", "16th": "شانزدهم", "picture": "تصویر",
+    "view": "منظره", "window": "کلکین", "stayed": "ماند", "cooked": "پخت",
+    "himself": "خودش (مذکر)", "loved": "بسیار خوشش آمد",
+    # -- a1 unit51 (at the pharmacy)
+    "pharmacist": "دواساز", "syrup": "شربت (دوای سرفه)",
+    "runny": "آب‌ریزشی (بینی)", "nose": "بینی", "hours": "ساعت‌ها",
+    "tablets": "گولی‌ها", "felt": "احساس کرد", "walked": "پیاده رفت",
+    "listened": "گوش داد", "symptoms": "علامت‌ها", "recommended": "سفارش کرد",
+    "box": "قطی", "tissues": "دستمال کاغذی",
+    # -- a1 unit52 (personal care / the hairdresser)
+    "haircut": "اصلاح", "hairdresser": "آرایشگر", "trim": "کمی کوتاه کردن",
+    "shorter": "کوتاه‌تر", "style": "مدل", "visit": "به دیدن آمدن",
+    "salon": "سالون آرایش", "washed": "شست",
+    "looked": "معلوم می‌شد (در looked great)", "met": "ملاقات کرد",
+    # -- a1 unit53 (renting a bike)
+    "rent": "کرایه گرفتن", "hour": "ساعت", "helmet": "کلاه ایمنی",
+    "costs": "قیمتش می‌شه", "we'd": "ما می‌خواهیم (مخفف we would)",
+    "bikes": "بایسکل‌ها", "river": "دریا", "invited": "دعوت کرد",
+    "neither": "هیچ‌کدام (از دو نفر)", "owned": "صاحبش بود",
+    "rental": "کرایه‌دهی", "needed": "ضرورت داشت",
+    "enjoying": "لذت بردن (شکل ing فعل enjoy)", "join": "یکجا شدن",
+    # -- a1 unit54 (the laundromat)
+    "laundromat": "رخت‌شویی", "dryer": "خشک‌کن",
+    "quarters": "سکهٔ بیست‌وپنج‌سنتی", "detergent": "پودر رخت‌شویی",
+    "load": "نوبت", "machine": "ماشین (رخت‌شویی)", "broken": "خراب",
+    "clothes": "کالی‌ها", "machines": "ماشین‌ها", "cycle": "دور (شستشو)",
+    "pick": "گرفتن (در pick up: پس گرفتن)", "broke": "خراب شد",
+    "down": "پایین‌تر (در امتداد سرک)", "attendant": "مسئول دوکان",
+    "talked": "گپ زد", "kept": "نگه کرد (در kept her company: همراهی کرد)",
+    "probably": "احتمالاً", "fixed": "درست شد",
+    # -- a1 unit55 (the swimming pool)
+    "locker": "کمد", "rules": "قوانین", "lifeguard": "نجات‌غریق",
+    "enter": "داخل شدن", "swim": "آب‌بازی کردن", "cap": "کلاه (آب‌بازی)",
+    "wear": "پوشیدن", "read": "خواندن", "watches": "نگاه می‌کنه",
+    "lockers": "کمدها", "tickets": "تکت‌ها", "caps": "کلاه‌ها",
+    "required": "ضروری", "entrance": "دروازهٔ ورودی", "dollar": "دالر",
+    "coin": "سکه", "cool": "خنک شدن (در cool off)", "sign": "لوحه",
+    "listed": "فهرست کرده بود", "bags": "بکس‌ها", "swam": "آب‌بازی کرد",
+    "try": "کوشش کردن", "diving": "شیرجه", "board": "تخته (شیرجه)",
+    # -- a1 unit56 (ordering in a restaurant)
+    "waiter": "گارسون", "table": "میز", "order": "فرمایش دادن",
+    "chicken": "گوشت مرغ", "meal": "غذا (وعدهٔ غذا)", "sit": "نشستن",
+    "nineteen": "نزده", "pizza": "پیتزا", "juice": "شربت میوه",
+    "brought": "آورد", "ordered": "فرمایش داد", "excellent": "بسیار عالی",
+    # -- a1 unit57 (at the cinema)
+    "cinema": "سینما", "showtime": "وخت نمایش", "seat": "چوکی",
+    "screen": "پرده", "popcorn": "پاپ‌کورن", "popular": "مشهور",
+    "film": "فلم", "start": "شروع شدن", "liked": "خوش داشت",
+    "sixteen": "شانزده", "schedule": "جدول وخت",
+    "star": "ستاره (بخشی از نام فلم Star Journey)",
+    "journey": "سفر (بخشی از نام فلم Star Journey)",
+    "7:00": "ساعت هفت", "$8": "هشت دالر",
+    "race": "مسابقه (بخشی از نام فلم The Great Race)",
+    "5:00": "ساعت پنج", "$10": "ده دالر", "9:00": "ساعت نه", "$6": "شش دالر",
+    "cashier": "کارمند صندوق", "explorers": "کاشفان",
+    # -- a1 unit58 (visiting a museum)
+    "museum": "موزیم", "exhibition": "نمایشگاه", "sculpture": "مجسمه",
+    "guide": "راهنما", "enjoyed": "لذت برد", "paintings": "نقاشی‌ها",
+    "city": "شهر", "adult": "کلان‌سال (تکت کلان‌سالان)", "current": "فعلی",
+    "town": "شهر قدیمی", "square": "چوک", "sunset": "غروب آفتاب",
+    # -- a1 unit59 (basic banking / the ATM)
+    "atm": "ای‌تی‌ام", "pin": "پین (کود رمز)", "4:00": "ساعت چهار",
+    "limit": "حد؛ محدودیت", "$100": "یکصد دالر", "accepted": "قبول می‌شه",
+    "quick": "کوتاه؛ سریع", "entered": "داخل کرد (پین را)",
+    # -- a1 unit60 (invitations)
+    "invitation": "دعوت", "picnic": "پیک‌نیک", "6:00": "ساعت شش",
+    "18": "هجده (نمبر خانه)", "wrote": "نوشت",
+    # -- a1 unit61 (apologies and excuses)
+    "traffic": "ترافیک", "mistake": "اشتباه", "starts": "شروع می‌شه",
+    "waiting": "انتظار کشیدن (شکل ing فعل wait)", "note": "یادداشت",
+    "3:00": "ساعت سه", "apology": "معذرت‌خواهی", "classroom": "صنف",
+    # -- a1 unit62 (phone calls)
+    "voicemail": "پیام صوتی", "sound": "آواز", "clear": "واضح",
+    # -- a1 unit63 (asking for help)
+    "carry": "بردن / حمل کردن", "heavy": "سنگین", "shelf": "رف",
+    "carried": "برد؛ حمل کرد",
+    # -- a1 unit64 (compliments)
+    "lovely": "بسیار مقبول / دل‌پسند", "kind": "مهربان", "smile": "لبخند",
+    "being": "بودن (شکل ing فعل be)", "compliment": "تعریف؛ گپ خوش",
+    # -- a1 unit65 (returns and exchanges)
+    "exchange": "بدل کردن", "refund": "پس‌گرفتن پول", "larger": "کلان‌تر",
+    "offered": "پیشنهاد کرد", "exchanged": "بدل کرد",
+    # -- a1 unit66 (describing symptoms)
+    "symptom": "علامت", "hurts": "درد می‌کنه",
+    # -- a1 unit67 (family news)
+    "news": "خبر", "baby": "طفل نوزاد", "proud": "افتخارکننده",
+    "must": "باید (در must be: حتماً)", "shared": "شریک ساخت",
+    # -- a1 unit68 (borrowing and lending)
+    "lend": "امانت دادن", "charger": "چارجر",
+    "lending": "امانت دادن (شکل ing فعل lend)", "leila's": "مالِ لیلا",
+    "share": "شریک ساختن", "lent": "امانت داد", "remember": "به یاد داشتن",
+    # -- a2 unit30 (a job interview)
+    "experience": "تجربه", "position": "پُست", "availability": "آمادگی وقت",
+    "strength": "نقطهٔ قوت", "requirement": "شرط", "resume": "خلاصهٔ سوانح",
+    "deadline": "میعاد", "social": "اجتماعی", "media": "رسانه",
+    "marketing": "مارکیتنگ", "strengths": "نقطه‌های قوت",
+    "path": "پَث (بخشی از نام شرکت Bright Path)",
+    "looking": "در جستجو (در looking for)", "coordinator": "هماهنگ‌کننده",
+    "requirements": "شرط‌ها", "writing": "نوشتن (مهارت نوشتن)",
+    "immediately": "فوراً", "interview": "مصاحبه", "deadlines": "میعادها",
+    "managed": "اداره کرد", "questions": "سوال‌ها", "role": "وظیفه؛ نقش کاری",
+    "typical": "معمولی",
+    # -- a2 unit31 (a travel disruption)
+    "delay": "تأخیر", "cancelled": "لغو شده", "alternative": "بدیل",
+    "signal": "سگنال (علامت خط ریل)", "delayed": "به تأخیر افتاده",
+    "5:15": "ساعت پنج و ربع", "5:30": "ساعت پنج و نیم", "station": "ایستگاه",
+    "tracks": "خط‌های ریل",
+    # -- a2 unit32 (online habits)
+    "notification": "اطلاعیهٔ اپ", "messaging": "پیام‌رسان (اپ پیام‌رسان)",
+    "useful": "مفید", "touch": "تماس (در in touch)",
+    "notifications": "اطلاعیه‌ها", "sharing": "شریک ساختن (شکل ing)",
+    "spend": "صرف کردن (وخت)", "thing": "چیز",
+    # -- a2 unit33 (a weekly schedule)
+    "weekday": "روز کاری", "weekdays": "روزهای کاری", "email": "ایمیل",
+    "online": "آنلاین", "mondays": "دوشنبه‌ها", "wednesdays": "چهارشنبه‌ها",
+    # -- a2 unit34 (a shopping complaint)
+    "defective": "خراب", "policy": "پالیسی؛ قاعده", "blender": "بلندر",
+    "working": "کار کردن (شکل ing فعل work)", "30": "سی",
+    "refunded": "پولش پس داده شد", "thirty-five": "سی‌وپنج",
+    # -- b1 unit01 (necessity and obligation)
+    "task": "کار، وظیفه", "finish": "تمام کردن", "earlier": "زودتر",
+    "forgot": "فراموش کرد", "renew": "تمدید کردن", "membership": "عضویت",
+    "set": "گذاشتن (در set a reminder)", "reminder": "یادآور",
+    "done": "کرده (شکل سوم فعل do)",
+    # -- b1 unit02 (past and present ability)
+    "license": "جواز", "system": "سیستم",
+    "able": "توانا (در be able to: توانستن)",
+    "manage": "موفق شدن (در manage to)", "person": "شخص (در in person)",
+    "licenses": "جوازها", "changed": "تغییر کرد", "hers": "مالِ او (مؤنث)",
+    "wasn't": "نبود (مخفف was not)", "save": "صرفه‌جویی کردن",
+    # -- b1 unit03 (real and past hypotheticals)
+    "rains": "باران می‌باره", "known": "دانسته (شکل سوم فعل know)",
+    "signed": "نام‌نویسی کرد (در sign up)", "checks": "سر می‌زنه",
+    # -- b1 unit04 (agreeing and disagreeing)
+    "disagree": "مخالف بودن", "believe": "باور داشتن", "reason": "دلیل",
+    "focus": "تمرکز کدن", "respect": "احترام گذاشتن", "easily": "به‌آسانی",
+    "disagrees": "مخالفت می‌کنه", "believes": "باور داره",
+    "seeing": "دیدن (شکل ing فعل see)", "each": "هر (در each other)",
+    "other's": "مالِ همدیگر", "important": "مهم",
+    "saves": "صرفه‌جویی می‌کنه",
+    # -- b1 unit05 (workplace updates)
+    "responsible": "مسئول", "technical": "تخنیکی", "sales": "فروشات",
+    "gives": "می‌ته", "expects": "توقع داره", "tells": "می‌گه",
+    "truth": "راستی؛ حقیقت", "delays": "تأخیرها", "review": "بازبینی کردن",
+    "numbers": "ارقام", "correct": "درست", "notes": "یادداشت‌ها",
+    "appreciate": "قدردانی کردن",
+    # -- b1 unit06 (telling a past story)
+    "stranger": "یک کس ناشناس", "mechanic": "میخانیک", "flat": "پنچر (تایر)",
+    "tire": "تایر", "pull": "کنار کردن (در pull over)",
+    "driving": "موتر راندن (شکل ing فعل drive)",
+    "pulled": "کنار سرک ایستاد کرد", "helped": "کمک کرد",
+    "word": "گپ (در kept his word: به گپش وفا کرد)", "suddenly": "ناگهان",
+    "happened": "اتفاق افتاد",
+    # -- b1 unit07 (real future conditions)
+    "unless": "مگر این‌که، اگه نه", "condition": "شرط، حالت لازم",
+    "result": "نتیجه", "present": "حال (زمان حال)", "tense": "زمان (دستوری)",
+    "real": "واقعی", "future": "آینده", "backup": "بدیل (پلان بدیل)",
+    "plan": "پلان", "conference": "کنفرانس (اتاق جلسه)",
+    "joins": "یکجا می‌شه", "cannot": "نمی‌تانه (مخفف can not)",
+    # -- b1 unit08 (sequencing future events)
+    "lock": "قفل کردن (در lock up)", "clause": "جملهٔ فرعی",
+    "locks": "قفل می‌کنه", "careful": "با دقت", "routine": "روال روزمره",
+    "hands": "دست‌ها", "clears": "میز را جمع می‌کنه",
+    # -- b1 unit09 (reported speech)
+    "speech": "گفتار (نقل قول)", "reported": "نقل‌شده (نقل قول غیرمستقیم)",
+    "summary": "خلاصه", "enough": "کافی", "full": "مکمل",
+    "reply": "جواب دادن",
+    # -- b1 unit10 (expressing purpose)
+    "goal": "هدف", "improve": "بهتر ساختن، بهتر شدن",
+    "prepare": "آماده شدن، آماده کدن", "design": "دیزاین", "money": "پیسه",
+    "english": "انگلیسی (زبان)", "vocabulary": "ذخیرهٔ کلمه‌ها",
+    "verb": "فعل", "goals": "هدف‌ها", "practices": "تمرین می‌کنه",
+    "updates": "گزارش‌های کوتاه", "descriptions": "توضیح‌های کورس",
+    "program": "برنامهٔ تحصیلی", "saving": "پس‌انداز کردن (شکل ing)",
+    # -- b1 unit11 (unreal hypotheticals and regret)
+    "opportunity": "فرصت", "regret": "پشیمانی", "sooner": "زودتر",
+    "confident": "بااعتمادبه‌نفس، مطمئن",
+    "rather": "ترجیحاً (در would rather: بهتر می‌دانم)",
+    "chance": "ریسک (در take a chance)", "unreal": "غیرواقعی",
+    "situation": "حالت؛ وضعیت", "joined": "یکجا می‌شد", "timing": "وخت‌بندی",
+    "saved": "پس‌انداز می‌کد",
+    # -- b1 unit12 (concession)
+    "although": "گرچه، با اینکه (با یک جملهٔ کامل)",
+    "despite": "باوجود (+ اسم یا شکل -ing)",
+    "however": "اما، بازهم (در آغاز یک جملهٔ جدا)",
+    "convince": "قناعت دادن، راضی کدن", "flexibility": "انعطاف‌پذیری",
+    "teamwork": "کارِ تیمی", "distractions": "چیزهای حواس‌پرت‌کن",
+    "valid": "معتبر؛ درست", "followed": "دنبال می‌شه (در followed by)",
+    "noun": "اسم", "sentence": "جمله", "period": "نقطه (علامت)",
+    "semicolon": "نقطه‌ویرگول", "builds": "می‌سازه", "misses": "دلش تنگ می‌شه",
+    "colleagues": "همکاران", "during": "در جریان", "breaks": "وقفه‌ها",
+    "noise": "سروصدا", "alone": "تنها", "matters": "مهم استه",
+    "preferences": "ترجیح‌ها",
+    # -- b1 unit13 (relative clauses)
+    "whose": "که مالِ او (نشان‌دهندهٔ مالکیت)", "approve": "تأیید کدن",
+    "approved": "تأیید کرد", "colleague": "همکار", "sits": "می‌شینه",
+    "leads": "رهبری می‌کنه", "projects": "پروژه‌ها",
+    "defining": "تعیین‌کننده (جملهٔ وصفی تعیین‌کننده)",
+    "relative": "وصفی (جملهٔ وصفی)", "commas": "کامه‌ها", "exactly": "دقیقاً",
+    "mean": "منظور داشتن", "non-defining": "غیرتعیین‌کننده",
+    "extra": "اضافی", "information": "معلومات", "identified": "معرفی‌شده",
+    "easier": "آسان‌تر", "fifth": "پنجم", "floor": "منزل", "eats": "می‌خوره",
+    "finishing": "تمام کردن (شکل ing فعل finish)",
+    "has already": "قبلاً ... کرده (زمان حال کامل با already)", "woman": "زن",
+    "designer": "دیزاینر", "logo": "لوگو", "won": "برنده شد",
+    "award": "جایزه", "ours": "مالِ ما", "explains": "توضیح می‌ته",
+    # -- b1 unit14 (professional communication)
+    "agenda": "اجندا", "possibly": "احتمالاً (در درخواست مؤدبانه)",
+    "formal": "رسمی", "workplace": "محل کار", "requests": "درخواست‌ها",
+    "softened": "نرم‌شده", "conditional": "شرطی", "command": "امر",
+    "forms": "شکل‌ها", "polite": "مؤدبانه", "budget": "بودجه",
+    "hope": "امید داشتن", "tomorrow's": "مالِ فردا", "latest": "تازه‌ترین",
+    "client": "مشتری", "best": "بهترین کوشش (در do my best)",
+    "advance": "پیش (در in advance: از پیش)", "request": "درخواست",
+    "updated": "تازه‌شده",
+    # -- b1 unit15 (making a complaint)
+    "complain": "شکایت کدن", "damaged": "خراب، آسیب‌دیده",
+    "replacement": "تعویض (چیزِ نو به‌جای خراب)", "resolve": "حل کدن",
+    "issue": "مشکل", "product": "جنس؛ محصول", "written": "نوشتاری",
+    "complaint": "شکایت", "parts": "بخش‌ها", "specific": "مشخص",
+    "resolution": "راه حل", "chair": "چوکی",
+    "dear": "محترم (در آغاز نامه)", "wheel": "چرخ",
+    "proceed": "پیش رفتن؛ اقدام کردن",
+    "calling": "زنگ زدن (شکل ing فعل call)",
+    # -- b1 unit16 (giving advice)
+    "advice": "نصیحت، مشوره",
+    "overwhelmed": "خسته و تحتِ فشار", "prioritize": "اولویت بتن",
+    "workload": "مقدارِ کار", "decline": "به شکل مؤدبانه رد کدن",
+    "closer": "نزدیک‌تر", "asking": "خواستن (شکل ing فعل ask)",
+    "suggestions": "پیشنهادها", "hypothetical": "حالت فرضی",
+    "recommendation": "سفارش", "softer": "نرم‌تر", "suggestion": "پیشنهاد",
+    "stronger": "قوی‌تر", "depending": "بسته به (در depending on)",
+    "top": "بالا (در on top of that: علاوه بر آن)",
+    "leading": "رهبری کردن (شکل ing فعل lead)", "seem": "معلوم شدن",
+    "handle": "از عهده برآمدن", "solid": "محکم؛ پخته",
+    # -- b1 unit17 (expressing regret)
+    "hindsight": "درکِ بعد از واقع شدن",
+    "procrastinate": "به تعویق انداختن", "participle": "اسم مفعول",
+    "happen": "اتفاق افتادن", "missed": "از دست داد",
+    "end": "آخر (در in the end)", "true": "راست",
+    # -- b1 unit18 (future plans)
+    "arrangement": "قرارِ از پیش تعیین‌شده", "intention": "نیت",
+    "prediction": "پیش‌بینی", "months": "ماه‌ها", "continuous": "استمراری",
+    "agreed": "توافق‌شده", "decision": "تصمیم", "steps": "قدم‌ها",
+    "completely": "کاملاً", "predicts": "پیش‌بینی می‌کنه",
+    "agrees": "موافقت می‌کنه", "exciting": "دلچسپ",
+    # -- b1 unit19 (summarizing)
+    "detail": "جزئیات", "condensed": "فشرده", "words": "کلمه‌ها",
+    "covered": "شامل بود", "phrase": "عبارت", "points": "نکته‌ها",
+    "keeping": "نگه داشتن (شکل ing فعل keep)", "highlight": "برجسته ساختن",
+    "single": "یگانه", "separately": "جداگانه", "original": "اصلی",
+    "article": "مقاله", "communication": "ارتباط", "examples": "مثال‌ها",
+    "background": "پس‌زمینه", "messages": "پیام‌ها",
+    "guessing": "حدس زدن (شکل ing فعل guess)", "ideas": "فکرها؛ نظرها",
+    # -- b2 unit01 (argumentation)
+    "claim": "ادعا، موقفی که دفاع می‌کنین",
+    "evidence": "شواهد، دلیل قابل دید", "counterargument": "دلیل مخالف",
+    "rebut": "جواب دادن به دلیل مخالف",
+    "concede": "قبول کدن یک بخش از گپ مخالف",
+    "outweigh": "سنگین‌تر بودن، مهم‌تر بودن",
+    "retention": "ماندن کارمندان، نگهداشت", "collaboration": "همکاری",
+    "risks": "خطرها", "supports": "پشتیبانی می‌کنه",
+    "moving": "پیش رفتن (شکل ing فعل move)", "forward": "به پیش",
+    "strongest": "قوی‌ترین", "survey": "سروی", "results": "نتیجه‌ها",
+    "consistent": "یکسان", "concern": "نگرانی", "data": "معلومات",
+    "direction": "جهت", "defended": "دفاع‌شده", "moves": "حرکت‌ها",
+    "state": "بیان کردن", "acknowledge": "قبول کردن (یک نگرانی)",
+    "opposing": "مخالف", "phrases": "عبارت‌ها", "reasonable": "معقول",
+    "conceding": "واگذار کردن (شکل ing فعل concede)",
+    "argues": "استدلال می‌کنه", "hybrid": "ترکیبی", "improves": "بهتر می‌سازه",
+    "lowering": "پایین آوردن (شکل ing فعل lower)", "performance": "کارکرد",
+    "employees": "کارمندان", "teams": "تیم‌ها", "less": "کمتر",
+    "likely": "محتمل", "may": "شاید (فعل کمکی احتمال)", "suffer": "آسیب دیدن",
+    "acknowledges": "قبول می‌کنه", "delivered": "تحویل داد",
+    "scores": "نمره‌ها", "slightly": "کمی", "higher": "بلندتر",
+    "concludes": "نتیجه می‌گیره", "benefits": "فایده‌ها", "managers": "مدیران",
+    "weaker": "ضعیف‌تر", "support": "پشتیبانی کردن",
+    "routines": "روش‌های همیشگی", "abandon": "رها کردن",
+    # -- b2 unit02 (speculation and deduction)
+    "deduction": "نتیجه‌گیری از شواهد", "guesswork": "حدس بی‌پایه",
+    "outage": "از کار افتادن سیستم، قطعی", "consequence": "نتیجه، پیامد",
+    "overlap": "هم‌پوشانی داشتن", "explanation": "توضیح",
+    "tentative": "احتیاطی؛ غیرقطعی", "server": "سرور",
+    "gone": "رفته (شکل سوم فعل go؛ در gone down: از کار افتاده)",
+    "overnight": "در جریان شب", "generated": "تولید شد", "failed": "ناکام شد",
+    "permission": "اجازه (دسترسی)", "possibility": "احتمال",
+    "uncertain": "نامطمئن", "monitoring": "نظارتی (صفحهٔ نظارت)",
+    "page": "صفحه", "blank": "خالی", "suggests": "می‌گه؛ پیشنهاد می‌کنه",
+    "explain": "توضیح دادن", "finance": "مالی (تیم مالی)",
+    "missing": "نداشتن (شکل ing فعل miss)", "dashboard": "داشبورد",
+    "rebuilt": "از نو ساخته شد", "certain": "مطمئن",
+    "pure": "محض (در pure guesswork)", "none": "هیچ‌کدام",
+    "consequences": "پیامدها", "expect": "توقع داشتن", "guess": "حدس",
+    "limited": "محدود",
+    # -- b2 unit03 (hedging and emphasis)
+    "hedge": "نرم ساختن ادعا", "qualify": "محدود یا شرط‌دار ساختن",
+    "emphasize": "تاکید کدن، برجسته ساختن", "broadly": "در کل، به طور عمومی",
+    "provided": "به شرط این‌که", "overall": "در کل",
+    "extent": "اندازه (در to some extent: تا اندازه‌ای)",
+    "create": "ایجاد کردن", "worries": "نگران می‌سازه", "timeline": "جدول زمانی",
+    "adjusted": "تنظیم شد", "attention": "توجه", "feedback": "بازخورد",
+    "positive": "مثبت", "carefully": "با احتیاط", "qualified": "شرط‌دار",
+    "avoids": "خودداری می‌کنه", "sounding": "معلوم شدن (شکل ing فعل sound)",
+    "absolute": "قطعی", "limits": "محدود می‌سازه",
+    "accepting": "قبول کردن (شکل ing فعل accept)", "construction": "ساختار جمله",
+    "speakers": "گوینده‌ها", "principle": "اصل (در in principle)",
+    "language": "زبان", "shows": "نشان می‌ته", "levels": "سطح‌ها",
+    "commitment": "تعهد", "cautious": "محتاط",
+    "saying": "گفتن (شکل ing فعل say)", "fully": "به‌طور مکمل",
+    "workable": "قابل اجرا", "clearer": "واضح‌تر", "quality": "کیفیت",
+    "adds": "علاوه می‌کنه", "approval": "تأیید", "step": "مرحله",
+    "conditions": "شرط‌ها", "creates": "ایجاد می‌کنه",
+    # -- b2 unit04 (narrative time)
+    "foreground": "رویداد اصلی که قصه به طرفش می‌ره",
+    "prior": "قبلی، پیش از یک لحظهٔ گذشته",
+    "interrupt": "قطع کدن یک کار در جریان", "ongoing": "در جریان، ادامه‌دار",
+    "chronology": "ترتیب واقعی اتفاق‌ها", "venue": "محل برگزاری برنامه",
+    "interrupted": "قطع کرد", "equipment": "وسایل", "power": "برق",
+    "volunteers": "داوطلبان", "setting": "آماده کردن (در setting up)",
+    "chairs": "چوکی‌ها", "simple": "ساده (گذشتهٔ ساده)", "events": "رویدادها",
+    "moment": "لحظه", "simon": "سایمن", "strict": "دقیق؛ سخت‌گیرانه",
+    "chronological": "به ترتیب زمانی", "expected": "توقع داشت",
+    "crew": "گروه کاری", "lights": "چراغ‌ها",
+    "through": "از میان (در walk me through: قدم‌به‌قدم توضیح دادن)",
+    "event": "برنامه؛ رویداد",
+    # -- b2 unit05 (register)
+    "register": "درجهٔ رسمی یا خودمانی بودن گپ",
+    "casual": "خودمانی، مناسب دوست نزدیک",
+    # NOTE: the overlay's own card for `audience` glosses it with مخاطب. That
+    # word is on check_dari_register.py's Iranian-instructional-metalanguage
+    # list (this lane's norm is طرف مقابل), so it is rewritten here rather
+    # than harvested verbatim -- the only harvested gloss in this whole block
+    # that was NOT taken as-is. Flagged for the overlay lane to fix at source.
+    "audience": "شنونده یا خواننده، کسی که پیام را می‌گیره",
+    "institution": "نهاد یا اداره مثل کلینیک، بانک، پوهنتون",
+    "stiff": "خشک و بیش از حد رسمی", "appropriate": "مناسب برای موقعیت",
+    "grateful": "سپاسگزار", "scheduling": "وقت‌بندی (تیم وقت‌بندی)",
+    "content": "محتوا", "shift": "تغییر دادن", "nina": "نینا",
+    "clinic": "کلینیک", "texts": "متن‌ها", "stays": "همان می‌مانه",
+    "level": "سطح", "formality": "رسمی بودن",
+    # -- b2 unit06 (abstract opinions and values)
+    "value": "ارزش یا اصل مهم",
+    "fairness": "انصاف، برخورد معقول با مردم",
+    "convenience": "آسانی و عملی بودن",
+    "transparent": "شفاف، قابل فهم برای همه",
+    "commercial": "وابسته به کاروبار و فروش", "public": "عمومی",
+    "spaces": "فضاها", "qualification": "شرط‌گذاری بر ادعا",
+    "weight": "وزن (در carry more weight: مهم‌تر بودن)",
+    "arguing": "استدلال کردن (شکل ing فعل argue)", "silence": "خاموشی",
+    "businesses": "کاروبارها", "response": "جواب (به نظر مقابل)",
+    "directly": "مستقیماً", "person's": "مالِ یک نفر", "amara": "امارا",
+    "protected": "محافظت شود", "activity": "فعالیت", "accepts": "قبول می‌کنه",
+    "leo's": "مالِ لیو", "harder": "سخت‌تر", "survive": "دوام آوردن",
+    "belongs": "تعلق داره", "stance": "موقف", "unlimited": "بی‌حد",
+    "restrictions": "محدودیت‌ها", "protect": "محافظت کردن",
+    "shaped": "شکل‌گرفته", "profit": "مفاد", "comfort": "راحتی",
+    # -- b2 unit07 (negotiation)
+    "term": "یک بند یا بخش توافق", "proposal": "پیشنهاد شرط‌های ممکن",
+    "refusal": "رد کردن یک شرط",
+    "concession": "امتیاز دادن، کوتاه آمدن از یک بخش موقف",
+    "scope": "حجم یا محدودهٔ کار شامل‌شده",
+    "charts": "چارت‌ها، نمایش تصویری معلومات", "agreement": "توافق",
+    "reduced": "کم شد", "appendix": "ضمیمه", "follows": "بعداً می‌آیه",
+    "push": "پس زدن (در push back: مخالفت کردن)", "clearly": "به‌روشنی",
+    "offer": "پیشنهاد کردن", "executive": "اجرایی (خلاصهٔ اجرایی)",
+    "priya": "پریا", "proposed": "پیشنهاد کرد", "marcus": "مارکوس",
+    "outcome": "نتیجهٔ نهایی", "deliver": "تحویل دادن", "planned": "پلان شده",
+    "risk": "به خطر انداختن",
+    # -- b2 unit08 (synthesizing sources)
+    "source": "منبع معلومات",
+    "synthesize": "معلومات چند منبع را یکجا ساختن",
+    "evaluate": "ارزیابی کدن، قوت چیزی را سنجیدن",
+    "conflict": "تضاد یا اختلاف بین منبع‌ها",
+    "judgment": "قضاوت دلیل‌دار دربارهٔ پشتوانه", "sources": "منبع‌ها",
+    "demand": "تقاضا", "increased": "زیاد شد", "cause": "سبب",
+    "operator": "شرکت ترانسپورتی", "includes": "شامل می‌کنه",
+    "staffing": "کارمندیابی (کمبود کارمند)", "records": "سوابق",
+    "supported": "پشتیبانی‌شده", "passenger": "مسافر (سروی مسافران)",
+    "buses": "بس‌ها", "became": "شد", "common": "عام", "opened": "باز شد",
+    "passengers": "مسافران", "route": "مسیر", "crowded": "پُر ازدحام",
+    "b": "ب (نام منبع B)", "identifies": "مشخص می‌کنه",
+    "shortages": "کمبودها", "caused": "سبب شد", "tessa": "تسا",
+    "accounts": "روایت‌ها", "comments": "نظرها",
+    "showing": "نشان دادن (شکل ing فعل show)",
+})
+
+
+# Local English POS classification for the 765 tokens the 52 newly-covered
+# units introduce (a1 49-68, a2 30-34, b1 01-19, b2 01-08).
+#
+# WHY THIS IS HERE AND NOT IN _en_target_lexeme_common.py: that module is the
+# SHARED classification surface for nl-en/fa-en/prs-en and is owned by the
+# concurrent sibling lanes -- this pass was scoped to this file only, so the
+# entries live here as a FALLBACK. `_classify()` below resolves the shared
+# EN_POS FIRST and only consults this dict for tokens the shared module does
+# not know yet, so the moment the shared module gains a token, its
+# classification wins and the two can never diverge in the DB (`Lexeme`'s
+# natural key is (course, language_code, token, part_of_speech) -- two
+# different POS values for one token would create a duplicate row, which is
+# exactly what deferring to the shared module prevents).
+#
+# The token SET is not a judgement call: it is exactly the union of
+# `introduced_tokens` across the 52 realization files, so it is identical to
+# what the nl-en/fa-en lanes must cover for the same shared English units.
+# Only the Dari gloss below is this lane's own.
+EN_POS_EXTRA: dict[str, str] = {
+    # -- a1 unit49 (sorting household waste)
+    "waste": "noun", "glass": "noun", "paper": "noun", "collection": "noun",
+    "recycling": "noun", "food": "noun", "jar": "noun", "bins": "noun",
+    "tuesdays": "noun", "fridays": "noun", "correctly": "adverb",
+    "buildings": "noun", "kinds": "noun", "practicing": "verb",
+    "afterward": "adverb", "stopped": "verb", "showed": "verb",
+    "sorts": "verb", "explained": "verb",
+    # -- a1 unit50 (staying in accommodation)
+    "staying": "verb", "beds": "noun", "included": "adjective", "key": "noun",
+    "under": "preposition", "downstairs": "adverb", "guesthouse": "noun",
+    "mountains": "noun", "november": "noun", "14th": "adjective",
+    "16th": "adjective", "picture": "noun", "view": "noun", "window": "noun",
+    "stayed": "verb", "cooked": "verb", "himself": "pronoun", "loved": "verb",
+    # -- a1 unit51 (at the pharmacy)
+    "syrup": "noun", "runny": "adjective", "nose": "noun", "hours": "noun",
+    "tablets": "noun", "felt": "verb", "walked": "verb", "listened": "verb",
+    "symptoms": "noun", "recommended": "verb", "box": "noun",
+    "tissues": "noun",
+    # -- a1 unit52 (personal care / the hairdresser)
+    "visit": "verb", "salon": "noun", "washed": "verb", "looked": "verb",
+    "met": "verb",
+    # -- a1 unit53 (renting a bike)
+    "costs": "verb", "we'd": "pronoun", "bikes": "noun", "river": "noun",
+    "invited": "verb", "neither": "pronoun", "owned": "verb",
+    "rental": "noun", "needed": "verb", "enjoying": "verb", "join": "verb",
+    # -- a1 unit54 (the laundromat)
+    "machine": "noun", "broken": "adjective", "clothes": "noun",
+    "machines": "noun", "cycle": "noun", "pick": "verb", "broke": "verb",
+    "down": "particle", "attendant": "noun", "talked": "verb", "kept": "verb",
+    "probably": "adverb", "fixed": "verb",
+    # -- a1 unit55 (the swimming pool)
+    "enter": "verb", "swim": "verb", "cap": "noun", "wear": "verb",
+    "read": "verb", "watches": "verb", "lockers": "noun", "tickets": "noun",
+    "caps": "noun", "required": "adjective", "entrance": "noun",
+    "dollar": "noun", "coin": "noun", "cool": "verb", "sign": "noun",
+    "listed": "verb", "bags": "noun", "swam": "verb", "try": "verb",
+    "diving": "noun", "board": "noun",
+    # -- a1 unit56 (ordering in a restaurant)
+    "chicken": "noun", "meal": "noun", "sit": "verb", "nineteen": "noun",
+    "pizza": "noun", "juice": "noun", "brought": "verb", "ordered": "verb",
+    "excellent": "adjective",
+    # -- a1 unit57 (at the cinema)
+    "popular": "adjective", "film": "noun", "start": "verb", "liked": "verb",
+    "sixteen": "noun", "schedule": "noun", "star": "noun",
+    "journey": "noun", "7:00": "symbol", "$8": "symbol", "race": "noun",
+    "5:00": "symbol", "$10": "symbol", "9:00": "symbol", "$6": "symbol",
+    "cashier": "noun", "explorers": "noun",
+    # -- a1 unit58 (visiting a museum)
+    "enjoyed": "verb", "paintings": "noun", "city": "noun",
+    "adult": "adjective", "current": "adjective", "town": "noun",
+    "square": "noun", "sunset": "noun",
+    # -- a1 unit59 (basic banking / the ATM)
+    "pin": "noun", "4:00": "symbol", "limit": "noun", "$100": "symbol",
+    "accepted": "verb", "quick": "adjective", "entered": "verb",
+    # -- a1 unit60 (invitations)
+    "6:00": "symbol", "18": "symbol", "wrote": "verb",
+    # -- a1 unit61 (apologies and excuses)
+    "starts": "verb", "waiting": "verb", "note": "noun", "3:00": "symbol",
+    "apology": "noun", "classroom": "noun",
+    # -- a1 unit62 (phone calls)
+    "sound": "noun", "clear": "adjective",
+    # -- a1 unit63 (asking for help)
+    "carried": "verb",
+    # -- a1 unit64 (compliments)
+    "being": "verb", "compliment": "noun",
+    # -- a1 unit65 (returns and exchanges)
+    "larger": "adjective", "offered": "verb", "exchanged": "verb",
+    # -- a1 unit66 (describing symptoms)
+    "hurts": "verb",
+    # -- a1 unit67 (family news)
+    "must": "verb", "shared": "verb",
+    # -- a1 unit68 (borrowing and lending)
+    "lending": "noun", "leila's": "pronoun", "share": "verb", "lent": "verb",
+    "remember": "verb",
+    # -- a2 unit30 (a job interview)
+    "social": "adjective", "media": "noun", "marketing": "noun",
+    "strengths": "noun", "path": "proper_noun", "looking": "verb",
+    "coordinator": "noun", "requirements": "noun", "writing": "noun",
+    "immediately": "adverb", "interview": "noun", "deadlines": "noun",
+    "managed": "verb", "questions": "noun", "role": "noun",
+    "typical": "adjective",
+    # -- a2 unit31 (a travel disruption)
+    "signal": "noun", "delayed": "adjective", "5:15": "symbol",
+    "5:30": "symbol", "station": "noun", "tracks": "noun",
+    # -- a2 unit32 (online habits)
+    "messaging": "adjective", "useful": "adjective", "touch": "noun",
+    "notifications": "noun", "sharing": "verb", "spend": "verb",
+    "thing": "noun",
+    # -- a2 unit33 (a weekly schedule)
+    "weekdays": "noun", "email": "noun", "online": "adjective",
+    "mondays": "noun", "wednesdays": "noun",
+    # -- a2 unit34 (a shopping complaint)
+    "policy": "noun", "blender": "noun", "working": "verb", "30": "symbol",
+    "refunded": "verb", "thirty-five": "noun",
+    # -- b1 unit01 (necessity and obligation)
+    "finish": "verb", "earlier": "adverb", "forgot": "verb", "renew": "verb",
+    "membership": "noun", "set": "verb", "reminder": "noun", "done": "verb",
+    # -- b1 unit02 (past and present ability)
+    "able": "adjective", "manage": "verb", "person": "noun",
+    "licenses": "noun", "changed": "verb", "hers": "pronoun",
+    "wasn't": "verb", "save": "verb",
+    # -- b1 unit03 (real and past hypotheticals)
+    "rains": "verb", "known": "verb", "signed": "verb", "checks": "verb",
+    # -- b1 unit04 (agreeing and disagreeing)
+    "easily": "adverb", "disagrees": "verb", "believes": "verb",
+    "seeing": "verb", "each": "adjective", "other's": "pronoun",
+    "important": "adjective", "saves": "verb",
+    # -- b1 unit05 (workplace updates)
+    "responsible": "adjective", "technical": "adjective", "sales": "noun",
+    "gives": "verb", "expects": "verb", "tells": "verb", "truth": "noun",
+    "delays": "noun", "review": "verb", "numbers": "noun",
+    "correct": "adjective", "notes": "noun", "appreciate": "verb",
+    # -- b1 unit06 (telling a past story)
+    "flat": "adjective", "tire": "noun", "pull": "verb", "driving": "verb",
+    "pulled": "verb", "helped": "verb", "word": "noun", "suddenly": "adverb",
+    "happened": "verb",
+    # -- b1 unit07 (real future conditions)
+    "present": "adjective", "tense": "noun", "real": "adjective",
+    "future": "noun", "backup": "adjective", "plan": "noun",
+    "conference": "noun", "joins": "verb", "cannot": "verb",
+    # -- b1 unit08 (sequencing future events)
+    "lock": "verb", "clause": "noun", "locks": "verb",
+    "careful": "adjective", "routine": "noun", "hands": "noun",
+    "clears": "verb",
+    # -- b1 unit09 (reported speech)
+    "speech": "noun", "reported": "adjective", "summary": "noun",
+    "enough": "adjective", "full": "adjective", "reply": "verb",
+    # -- b1 unit10 (expressing purpose)
+    "design": "noun", "money": "noun", "english": "noun",
+    "vocabulary": "noun", "verb": "noun", "goals": "noun",
+    "practices": "verb", "updates": "noun", "descriptions": "noun",
+    "program": "noun", "saving": "verb",
+    # -- b1 unit11 (unreal hypotheticals and regret)
+    "rather": "adverb", "chance": "noun", "unreal": "adjective",
+    "situation": "noun", "joined": "verb", "timing": "noun", "saved": "verb",
+    # -- b1 unit12 (concession)
+    "distractions": "noun", "valid": "adjective", "followed": "verb",
+    "noun": "noun", "sentence": "noun", "period": "noun",
+    "semicolon": "noun", "builds": "verb", "misses": "verb",
+    "colleagues": "noun", "during": "preposition", "breaks": "noun",
+    "noise": "noun", "alone": "adverb", "matters": "verb",
+    "preferences": "noun",
+    # -- b1 unit13 (relative clauses)
+    "approved": "verb", "colleague": "noun", "sits": "verb", "leads": "verb",
+    "projects": "noun", "defining": "adjective", "relative": "adjective",
+    "commas": "noun", "exactly": "adverb", "mean": "verb",
+    "non-defining": "adjective", "extra": "adjective", "information": "noun",
+    "identified": "verb", "easier": "adjective", "fifth": "adjective",
+    "floor": "noun", "eats": "verb", "finishing": "verb",
+    "has already": "verb", "woman": "noun", "designer": "noun",
+    "logo": "noun", "won": "verb", "award": "noun", "ours": "pronoun",
+    "explains": "verb",
+    # -- b1 unit14 (professional communication)
+    "possibly": "adverb", "formal": "adjective", "workplace": "noun",
+    "requests": "noun", "softened": "adjective", "conditional": "adjective",
+    "command": "noun", "forms": "noun", "polite": "adjective",
+    "budget": "noun", "hope": "verb", "tomorrow's": "pronoun",
+    "latest": "adjective", "client": "noun", "best": "noun",
+    "advance": "noun", "request": "noun", "updated": "adjective",
+    # -- b1 unit15 (making a complaint)
+    "product": "noun", "written": "adjective", "complaint": "noun",
+    "parts": "noun", "specific": "adjective", "resolution": "noun",
+    "chair": "noun", "dear": "adjective", "wheel": "noun", "proceed": "verb",
+    "calling": "verb",
+    # -- b1 unit16 (giving advice)
+    "closer": "adjective", "asking": "verb", "suggestions": "noun",
+    "hypothetical": "noun", "recommendation": "noun", "softer": "adjective",
+    "suggestion": "noun", "stronger": "adjective", "depending": "verb",
+    "top": "noun", "leading": "verb", "seem": "verb", "handle": "verb",
+    "solid": "adjective",
+    # -- b1 unit17 (expressing regret)
+    "participle": "noun", "happen": "verb", "missed": "verb", "end": "noun",
+    "true": "adjective",
+    # -- b1 unit18 (future plans)
+    "months": "noun", "continuous": "adjective", "agreed": "adjective",
+    "decision": "noun", "steps": "noun", "completely": "adverb",
+    "predicts": "verb", "agrees": "verb", "exciting": "adjective",
+    # -- b1 unit19 (summarizing)
+    "words": "noun", "covered": "verb", "phrase": "noun", "points": "noun",
+    "keeping": "verb", "highlight": "verb", "single": "adjective",
+    "separately": "adverb", "original": "adjective", "article": "noun",
+    "communication": "noun", "examples": "noun", "background": "noun",
+    "messages": "noun", "guessing": "verb", "ideas": "noun",
+    # -- b2 unit01 (argumentation)
+    "risks": "noun", "supports": "verb", "moving": "verb",
+    "forward": "adverb", "strongest": "adjective", "survey": "noun",
+    "results": "noun", "consistent": "adjective", "concern": "noun",
+    "data": "noun", "direction": "noun", "defended": "adjective",
+    "moves": "noun", "state": "verb", "acknowledge": "verb",
+    "opposing": "adjective", "phrases": "noun", "reasonable": "adjective",
+    "conceding": "verb", "argues": "verb", "hybrid": "adjective",
+    "improves": "verb", "lowering": "verb", "performance": "noun",
+    "employees": "noun", "teams": "noun", "less": "adverb",
+    "likely": "adjective", "may": "verb", "suffer": "verb",
+    "acknowledges": "verb", "delivered": "verb", "scores": "noun",
+    "slightly": "adverb", "higher": "adjective", "concludes": "verb",
+    "benefits": "noun", "managers": "noun", "weaker": "adjective",
+    "support": "verb", "routines": "noun", "abandon": "verb",
+    # -- b2 unit02 (speculation and deduction)
+    "overlap": "verb", "explanation": "noun", "tentative": "adjective",
+    "server": "noun", "gone": "verb", "overnight": "adverb",
+    "generated": "verb", "failed": "verb", "permission": "noun",
+    "possibility": "noun", "uncertain": "adjective",
+    "monitoring": "adjective", "page": "noun", "blank": "adjective",
+    "suggests": "verb", "explain": "verb", "finance": "noun",
+    "missing": "verb", "dashboard": "noun", "rebuilt": "verb",
+    "certain": "adjective", "pure": "adjective", "none": "pronoun",
+    "consequences": "noun", "expect": "verb", "guess": "noun",
+    "limited": "adjective",
+    # -- b2 unit03 (hedging and emphasis)
+    "extent": "noun", "create": "verb", "worries": "verb",
+    "timeline": "noun", "adjusted": "verb", "attention": "noun",
+    "feedback": "noun", "positive": "adjective", "carefully": "adverb",
+    "qualified": "adjective", "avoids": "verb", "sounding": "verb",
+    "absolute": "adjective", "limits": "verb", "accepting": "verb",
+    "construction": "noun", "speakers": "noun", "principle": "noun",
+    "language": "noun", "shows": "verb", "levels": "noun",
+    "commitment": "noun", "cautious": "adjective", "saying": "verb",
+    "fully": "adverb", "workable": "adjective", "clearer": "adjective",
+    "quality": "noun", "adds": "verb", "approval": "noun", "step": "noun",
+    "conditions": "noun", "creates": "verb",
+    # -- b2 unit04 (narrative time)
+    "interrupted": "verb", "equipment": "noun", "power": "noun",
+    "volunteers": "noun", "setting": "verb", "chairs": "noun",
+    "simple": "adjective", "events": "noun", "moment": "noun",
+    "simon": "proper_noun", "strict": "adjective",
+    "chronological": "adjective", "expected": "verb", "crew": "noun",
+    "lights": "noun", "through": "preposition", "event": "noun",
+    # -- b2 unit05 (register)
+    "grateful": "adjective", "scheduling": "adjective", "content": "noun",
+    "shift": "verb", "nina": "proper_noun", "clinic": "noun",
+    "texts": "noun", "stays": "verb", "level": "noun", "formality": "noun",
+    # -- b2 unit06 (abstract opinions and values)
+    "public": "adjective", "spaces": "noun", "qualification": "noun",
+    "weight": "noun", "arguing": "verb", "silence": "noun",
+    "businesses": "noun", "response": "noun", "directly": "adverb",
+    "person's": "pronoun", "amara": "proper_noun", "protected": "verb",
+    "activity": "noun", "accepts": "verb", "leo's": "pronoun",
+    "harder": "adjective", "survive": "verb", "belongs": "verb",
+    "stance": "noun", "unlimited": "adjective", "restrictions": "noun",
+    "protect": "verb", "shaped": "verb", "profit": "noun",
+    "comfort": "noun",
+    # -- b2 unit07 (negotiation)
+    "agreement": "noun", "reduced": "verb", "appendix": "noun",
+    "follows": "verb", "push": "verb", "clearly": "adverb", "offer": "verb",
+    "executive": "adjective", "priya": "proper_noun", "proposed": "verb",
+    "marcus": "proper_noun", "outcome": "noun", "deliver": "verb",
+    "planned": "verb", "risk": "verb",
+    # -- b2 unit08 (synthesizing sources)
+    "sources": "noun", "demand": "noun", "increased": "verb",
+    "cause": "noun", "operator": "noun", "includes": "verb",
+    "staffing": "noun", "records": "noun", "supported": "adjective",
+    "passenger": "adjective", "buses": "noun", "became": "verb",
+    "common": "adjective", "opened": "verb", "passengers": "noun",
+    "route": "noun", "crowded": "adjective", "b": "symbol",
+    "identifies": "verb", "shortages": "noun", "caused": "verb",
+    "tessa": "proper_noun", "accounts": "noun", "comments": "noun",
+    "showing": "verb",
+    # -- vocabulary teaching cards whose Dari gloss was harvested verbatim from
+    # the prs-en overlay's own `teaching.<key>.gloss` (see the gloss block
+    # below); their POS still has to be classified here.
+    "sort": "verb", "bin": "noun", "recycle": "verb", "hotel": "noun",
+    "reservation": "noun", "check-out": "noun", "pharmacist": "noun",
+    "haircut": "noun", "hairdresser": "noun", "trim": "verb",
+    "shorter": "adjective", "style": "noun", "rent": "verb", "hour": "noun",
+    "helmet": "noun", "laundromat": "noun", "dryer": "noun",
+    "quarters": "noun", "detergent": "noun", "load": "noun",
+    "locker": "noun", "rules": "noun", "lifeguard": "noun",
+    "waiter": "noun", "table": "noun", "order": "verb", "cinema": "noun",
+    "showtime": "noun", "seat": "noun", "screen": "noun", "popcorn": "noun",
+    "museum": "noun", "exhibition": "noun", "sculpture": "noun",
+    "guide": "noun", "atm": "noun", "invitation": "noun", "picnic": "noun",
+    "traffic": "noun", "mistake": "noun", "voicemail": "noun",
+    "carry": "verb", "heavy": "adjective", "shelf": "noun",
+    "lovely": "adjective", "kind": "adjective", "smile": "noun",
+    "exchange": "verb", "refund": "noun", "symptom": "noun", "news": "noun",
+    "baby": "noun", "proud": "adjective", "lend": "verb", "charger": "noun",
+    "experience": "noun", "position": "noun", "availability": "noun",
+    "strength": "noun", "requirement": "noun", "resume": "noun",
+    "deadline": "noun", "delay": "noun", "cancelled": "adjective",
+    "alternative": "noun", "notification": "noun", "weekday": "noun",
+    "defective": "adjective", "task": "noun", "license": "noun",
+    "system": "noun", "disagree": "verb", "believe": "verb",
+    "reason": "noun", "focus": "verb", "respect": "verb",
+    "stranger": "noun", "mechanic": "noun", "unless": "particle",
+    "condition": "noun", "result": "noun", "goal": "noun",
+    "improve": "verb", "prepare": "verb", "opportunity": "noun",
+    "regret": "noun", "sooner": "adverb", "confident": "adjective",
+    "although": "particle", "despite": "preposition", "however": "adverb",
+    "convince": "verb", "flexibility": "noun", "teamwork": "noun",
+    "whose": "pronoun", "approve": "verb", "agenda": "noun",
+    "complain": "verb", "damaged": "adjective", "replacement": "noun",
+    "resolve": "verb", "issue": "noun", "advice": "noun",
+    "overwhelmed": "adjective", "prioritize": "verb", "workload": "noun",
+    "decline": "verb", "hindsight": "noun", "procrastinate": "verb",
+    "arrangement": "noun", "intention": "noun", "prediction": "noun",
+    "detail": "noun", "condensed": "adjective", "claim": "noun",
+    "evidence": "noun", "counterargument": "noun", "rebut": "verb",
+    "concede": "verb", "outweigh": "verb", "retention": "noun",
+    "collaboration": "noun", "deduction": "noun", "guesswork": "noun",
+    "outage": "noun", "consequence": "noun", "hedge": "verb",
+    "qualify": "verb", "emphasize": "verb", "broadly": "adverb",
+    "provided": "particle", "overall": "adverb", "foreground": "noun",
+    "prior": "adjective", "interrupt": "verb", "ongoing": "adjective",
+    "chronology": "noun", "venue": "noun", "register": "noun",
+    "casual": "adjective", "audience": "noun", "institution": "noun",
+    "stiff": "adjective", "appropriate": "adjective", "value": "noun",
+    "fairness": "noun", "convenience": "noun", "transparent": "adjective",
+    "commercial": "adjective", "term": "noun", "proposal": "noun",
+    "refusal": "noun", "concession": "noun", "scope": "noun",
+    "charts": "noun", "source": "noun", "synthesize": "verb",
+    "evaluate": "verb", "conflict": "noun", "judgment": "noun",
+}
+
+
 def _classify(files, level, specs):
     for unit_order, (realization_path, _overlay_path) in enumerate(files, 1):
         realization = yaml.safe_load(realization_path.read_text(encoding="utf-8"))
@@ -888,10 +1899,19 @@ def _classify(files, level, specs):
                 content_key = item["content_key"]
                 for token in item.get("introduced_tokens", []):
                     token = token.casefold().replace("’", "'")
-                    if token not in EN_POS:
+                    # Shared classification WINS; EN_POS_EXTRA is only the
+                    # local fallback for tokens the shared module has not
+                    # taken over yet (see its comment above). Never the other
+                    # way around: a token classified in both must resolve to
+                    # ONE part_of_speech, or the (course, language_code,
+                    # token, part_of_speech) lookup in main() misses and
+                    # writes a duplicate Lexeme row.
+                    part_of_speech = EN_POS.get(token) or EN_POS_EXTRA.get(token)
+                    if part_of_speech is None:
                         raise ValueError(
                             f"missing English classification for {token!r} "
-                            f"in _en_target_lexeme_common.py (lesson {lesson_key})"
+                            f"in _en_target_lexeme_common.py or EN_POS_EXTRA "
+                            f"(lesson {lesson_key})"
                         )
                     tags = en_agreement_tags(token)
                     # Keyed by (level, token) -- A1 and A2 are separate
@@ -905,7 +1925,7 @@ def _classify(files, level, specs):
                             "unit_order": unit_order, "lesson_order": lesson_order,
                             "lesson_content_key": lesson_key, "content_key": content_key,
                             "token": token, "language_code": "en",
-                            "part_of_speech": EN_POS[token],
+                            "part_of_speech": part_of_speech,
                             "english_gloss": EN_TARGET_TO_PRS_GLOSS[token],
                             "agreement_tags": tags,
                         }
@@ -922,6 +1942,8 @@ def iter_specs():
     specs: dict[tuple[str, str], dict] = {}
     _classify(UNIT_FILES, "a1", specs)
     _classify(UNIT_FILES_A2, "a2", specs)
+    _classify(UNIT_FILES_B1, "b1", specs)
+    _classify(UNIT_FILES_B2, "b2", specs)
     yield from specs.values()
 
 
@@ -943,7 +1965,12 @@ def main() -> int:
 
     with SessionLocal() as db:
         courses_by_level = {}
-        for level, title in (("a1", "انگلیسی A1"), ("a2", "انگلیسی A2")):
+        for level, title in (
+            ("a1", "انگلیسی A1"),
+            ("a2", "انگلیسی A2"),
+            ("b1", "انگلیسی B1"),
+            ("b2", "انگلیسی B2"),
+        ):
             needed = any(spec["level"] == level for spec in specs)
             course = db.scalar(
                 select(Course).where(
