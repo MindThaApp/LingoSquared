@@ -25,6 +25,26 @@ see UNIT_FILES_A2/UNIT_FILES_B1's own header comments for why each is
 kept as a separate, locally-1-based-ordered tuple rather than appended
 to UNIT_FILES.
 
+Extended 2026-07-22 (unit-checkpoint unblock pass) to cover the last 26
+uncovered en-prs units: A1 units 41-61 and B1 units 07-11. A read-only
+query of the dev DB measured the real gap first -- those 26 units had
+EXACTLY 0 lexemes each (`Dari A1` 40/61 units covered, `Dari B1` 6/11),
+so `generate_checkpoint()` returned `checkpoint_unavailable` for every
+one of them no matter what a practice pack did (it needs BOTH templates
+and lexemes scoped to the unit's own lessons -- see
+docs/content/PRACTICE_PACK_RECIPE.md section 0).
+
+Scope note for whoever authors those units' practice packs: because
+_classify()'s dedup key is (level, token), a lexeme belongs to the unit
+that FIRST introduced it, and `generate_checkpoint()` only sees lexemes
+whose provenance_lesson_id is in the unit's OWN lessons. These late A1
+units deliberately recombine earlier vocabulary, so a unit's real
+checkpoint pool is only its genuinely-new tokens (3-14 per unit here,
+listed per unit below), NOT its full introduced_tokens list. Semantic
+tags added below therefore tag each unit's OWN new tokens; additively
+tagging a reused earlier-unit token would do nothing for that unit's
+checkpoint.
+
 Run via docker compose from backend/, mounting the full repo:
     cd backend
     docker compose run --rm \
@@ -242,6 +262,100 @@ UNIT_FILES = (
         REPO_ROOT / "docs/content/realizations/prs/a1_unit40_emergencies.yaml",
         REPO_ROOT / "docs/content/overlays/en-prs/a1_unit40.yaml",
     ),
+    # Units 41-61 (A1: lost items, appointments, library, waste disposal,
+    # accommodation, pharmacy, personal care, bike rental, laundry,
+    # swimming pool, restaurant, cinema, museum, concert, park, gym,
+    # beach, zoo, boat tour, sports event, amusement park), added
+    # 2026-07-22 -- the unit-checkpoint unblock pass. All 21 exist on
+    # disk and are imported into the "Dari A1" course (verified against
+    # the DB: unit.order 41-61, 6 lessons each) but had ZERO lexemes, so
+    # every one of them was permanently `checkpoint_unavailable`.
+    # Appended in unit order so enumerate()'s 1-based index lands each
+    # file on its real unit.order (40 entries precede them).
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a1_unit41_lost_items.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a1_unit41.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a1_unit42_appointments.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a1_unit42.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a1_unit43_library.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a1_unit43.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a1_unit44_waste_disposal.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a1_unit44.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a1_unit45_accommodation.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a1_unit45.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a1_unit46_pharmacy.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a1_unit46.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a1_unit47_personal_care.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a1_unit47.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a1_unit48_bike_rental.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a1_unit48.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a1_unit49_laundry.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a1_unit49.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a1_unit50_swimming_pool.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a1_unit50.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a1_unit51_restaurant.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a1_unit51.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a1_unit52_cinema.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a1_unit52.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a1_unit53_museum.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a1_unit53.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a1_unit54_concert.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a1_unit54.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a1_unit55_park.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a1_unit55.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a1_unit56_gym.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a1_unit56.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a1_unit57_beach.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a1_unit57.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a1_unit58_zoo.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a1_unit58.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a1_unit59_boat_tour.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a1_unit59.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a1_unit60_sports_event.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a1_unit60.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a1_unit61_amusement_park.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a1_unit61.yaml",
+    ),
 )
 
 # A2 units live in a SEPARATE course row ("Dari A2", not "Dari A1") --
@@ -351,6 +465,35 @@ UNIT_FILES_B1 = (
     (
         REPO_ROOT / "docs/content/realizations/prs/b1_unit06_purpose.yaml",
         REPO_ROOT / "docs/content/overlays/en-prs/b1_unit06.yaml",
+    ),
+    # Units 07-11 (hypotheticals, opinions/concession, workplace
+    # suggestions, relative-clause descriptions, reported communication),
+    # added 2026-07-22 in the same unit-checkpoint unblock pass as A1
+    # units 41-61 above. All five exist on disk and are imported into the
+    # "Dari B1" course (verified against the DB: unit.order 7-11, 6
+    # lessons each) but had ZERO lexemes. Appended to THIS tuple (not a
+    # new one) because they are the same "Dari B1" course and units
+    # 01-06 already occupy local positions 1-6, so a plain append lands
+    # them at 7-11 -- exactly their real unit.order.
+    (
+        REPO_ROOT / "docs/content/realizations/prs/b1_unit07_hypotheticals.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/b1_unit07.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/b1_unit08_opinions.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/b1_unit08.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/b1_unit09_workplace.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/b1_unit09.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/b1_unit10_descriptions.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/b1_unit10.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/b1_unit11_communication.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/b1_unit11.yaml",
     ),
 )
 
@@ -1083,6 +1226,168 @@ PRS_GLOSSES: dict[str, str] = {
     "زنگ بزنین": "call! (polite imperative)",
     "زخمی": "injured", "خون‌ریزی": "bleeding",
     "زنگ می‌زنم": "I call (by phone)", "تشکر زیاد": "thanks a lot",
+    # Unit 41 (lost items), added 2026-07-22. یک/سیاه/است/را/دارد/شما/بلی/
+    # دفتر/همایون/زرمینه/خواهش/می‌کنم are REUSED existing lexemes.
+    # اینجا is the no-ZWNJ spelling variant of این‌جا (unit05), the
+    # same genuine-variant situation آنجا/آن‌جا already has.
+    "خریطه": "bag", "کیف پول": "wallet", "کلید": "key", "گم شده": "is lost",
+    "خریطه‌ام": "my bag", "کیف پولم": "my wallet", "دیدین": "you saw (polite)",
+    "پیدا شده": "is found; has been found", "کلیدم": "my key",
+    "اینجا": "here (spelling variant of این‌جا, no ZWNJ)",
+    "خواهش می‌کنم": "you're welcome", "دیدم": "I saw",
+    "خریطه‌اش": "his/her bag", "می‌بیند": "he/she sees",
+    # Unit 42 (appointments), added 2026-07-22. قرار/داکتر/وقت/ساعت/
+    # فردا/می‌خواهم/دارین/است and the rest are REUSED lexemes; only
+    # two tokens in this unit are genuinely new.
+    "دندان": "tooth", "منشی": "receptionist",
+    # Unit 43 (library), added 2026-07-22. کتاب/پس/روز/می‌تانم/می‌خواهم
+    # are REUSED. دادن is taught inside the phrase پس دادن (give back).
+    "کتابخانه": "library", "کتابدار": "librarian",
+    "دادن": "to give; to give back (پس دادن)", "قرض": "loan",
+    # Unit 44 (waste disposal), added 2026-07-22. در/را/می‌اندازم/این/
+    # است/کدام are REUSED; the انداختن paradigm's other persons and
+    # the negative are new here.
+    "سطل": "bin", "زباله": "waste; trash", "پلاستیک": "plastic",
+    "کاغذ": "paper", "شیشه": "glass",
+    "نمی‌اندازم": "I don't put; I don't throw",
+    "می‌اندازد": "he/she puts; he/she throws", "جمع‌آوری": "collection",
+    "می‌اندازین": "you put; you throw (polite)",
+    # Unit 45 (accommodation), added 2026-07-22. اتاق/شب/نمبر/ناشتا/
+    # نام‌تان/خوش آمدین/چیست/است are REUSED.
+    "هوتل": "hotel", "رزرو": "reservation", "می‌مانین": "you stay (polite)",
+    "شامل": "included", "وای‌فای": "wifi", "کارمند هوتل": "hotel clerk",
+    "می‌ماند": "he/she stays", "خروج": "check-out; exit",
+    # Unit 46 (pharmacy), added 2026-07-22. دواخانه/دوا/سردرد/صبح/
+    # شب/دو/سه/است are REUSED (دواخانه since unit05).
+    "دواساز": "pharmacist", "دندان‌درد": "toothache", "قرص": "tablet; pill",
+    "شربت": "syrup", "دانه": "piece; dose", "نسخه‌تان": "your prescription",
+    # Unit 47 (personal care), added 2026-07-22. موی/ریش/کوتاه/اما/
+    # قرار/می‌خواهم/لطفاً are REUSED.
+    "سلمانی": "barbershop", "دلاک": "barber", "کوتاه‌تر": "shorter",
+    "اصلاح": "trim; haircut", "می‌تراشم": "I shave",
+    "قرارتان": "your appointment",
+    # Unit 48 (bike rental), added 2026-07-22. بایسکل/کرایه/تذکره/کی/
+    # فردا/را/پس دادن (unit43)/پس می‌دهم/می‌خواهین are REUSED --
+    # only three tokens here are genuinely new.
+    "پس می‌دهین": "you give back (polite)", "بسیار خوب": "very good",
+    "کرایه‌تان": "your rental fee",
+    # Unit 49 (laundry), added 2026-07-22. لباس/کیلو/چند/افغانی/
+    # می‌خواهم/را/فردا are REUSED.
+    "لباس شویی": "laundry; laundry shop", "بشویم": "(so that) I wash",
+    "لباس‌ها": "the clothes (plural of لباس)", "اتو": "iron; ironing",
+    "تیار": "ready", "لباس شویی‌تان": "your laundry",
+    # Unit 50 (swimming pool), added 2026-07-22. بلیط/نمبر/سه/ساعت/
+    # باز/بسته/افغانی/او are REUSED.
+    "حوض آببازی": "swimming pool", "کمد": "locker", "کمد‌تان": "your locker",
+    "کمدش": "his/her locker", "بلیط‌تان": "your ticket",
+    # Unit 51 (restaurant), added 2026-07-22. غذا/چای/نان/چند/افغانی/
+    # می‌خواهم/لطفاً/حساب are REUSED (this unit revisits unit08's
+    # restaurant material at a service-encounter level).
+    "رستوران": "restaurant", "پیشخدمت": "waiter", "مینو": "menu",
+    "کباب": "kabob", "فرمایش": "order; request", "کبابش": "his/her kabob",
+    "فرمایش‌تان": "your order",
+    # Unit 52 (cinema), added 2026-07-22. فلم/بلیط/ساعت/جالب/است are
+    # REUSED. آسمان is taught as the NAME of the film on the schedule.
+    "سینما": "cinema",
+    "آسمان": "sky (also the film title on this unit's schedule)",
+    "بلیطش": "its ticket",
+    # Unit 53 (museum), added 2026-07-22. بلیط/ساعت/باز/بسته/رفت/
+    # بود are REUSED. دید is the 3rd-person simple past of دیدن.
+    "موزیم": "museum", "نمایشگاه": "exhibition", "دید": "he/she saw",
+    # Unit 54 (concert), added 2026-07-22. موسیقی/بلیط/ساعت/است are
+    # REUSED. سیما is a new character name (the singer on the poster).
+    "کنسرت": "concert", "خواننده": "singer", "سیما": "Sima (name)",
+    # Unit 55 (park), added 2026-07-22. پارک/برویم/نزدیک/خانه/زیباست
+    # are REUSED. میله is the Afghan word for a picnic/outing.
+    "درخت": "tree", "گل": "flower", "میله": "picnic; outing",
+    "می‌خواهی": "do you want (informal)", "خانه‌تان": "your house",
+    # Unit 56 (gym), added 2026-07-22. ورزش/کارت/روزانه/صد/افغانی/
+    # بفرمایین/تشکر زیاد are REUSED. الماری is glossed
+    # "locker; cupboard" rather than bare "locker" so it stays
+    # distinguishable from unit50's کمد in a translation slot.
+    "عضویت": "membership", "وسایل": "equipment; things",
+    "کورس": "class; course", "الماری": "locker; cupboard",
+    "روز خوش": "have a good day", "کارمند باشگاه": "gym staff member",
+    "عضویت‌تان": "your membership",
+    # Unit 57 (beach), added 2026-07-22. آب/گرم/آفتابی/کجاست are REUSED.
+    # چتر is deliberately kept (it is what this unit teaches; see
+    # scripts/check_dari_register.py's own note that چتر is a taught
+    # target-language word in realizations/prs and therefore not a marker).
+    "ساحل": "beach; shore", "ریگ": "sand", "موج": "wave", "چتر": "umbrella",
+    "چتر آفتابی‌تان": "your beach umbrella",
+    # Unit 58 (zoo), added 2026-07-22. حیوان/بزرگ/کوچک/کدام/محبوب/
+    # دید (unit53) are REUSED. باغ and وحش are taught as the two
+    # halves of باغ وحش (zoo). شیر is the lion sense; the unit's own
+    # overlay note records that it is a genuine lion/milk homograph and
+    # that this course only ever uses it in zoo/animal contexts.
+    "باغ": "garden (in باغ وحش: zoo)", "وحش": "wild animals (in باغ وحش: zoo)",
+    "شیر": "lion", "فیل": "elephant", "میمون": "monkey",
+    "محبوب‌تان": "your favourite",
+    # Unit 59 (boat tour), added 2026-07-22. بلیط/دقیقه/چند/است are
+    # REUSED.
+    "قایق": "boat", "دریاچه": "lake", "گشت": "tour; excursion",
+    "زیبا": "beautiful", "گشت‌تان": "your tour",
+    # Unit 60 (sports event), added 2026-07-22. ورزش/بلیط/کی/
+    # شروع می‌شود are REUSED. برد is the 3rd-person simple past of
+    # بردن in its "won (a match)" sense.
+    "مسابقه": "match; game", "تیم": "team", "برد": "he/she/it won",
+    "مسابقه‌تان": "your match",
+    # Unit 61 (amusement park), added 2026-07-22. قد/بلیط/چند/است/
+    # می‌تانین are REUSED. This is the last A1 unit on disk.
+    "شهربازی": "amusement park", "سانتی‌متر": "centimetre",
+    "قدتان": "your height",
+    # B1 unit 07 (hypotheticals), added 2026-07-22. اگر/پول/موتر/می‌خریدم
+    # (unit02)/را/به are REUSED. This unit's paradigm is the past
+    # (imperfect) used as an IRREALIS: "اگر ... داشتم" = "if I had".
+    "داشتم": "I had (irrealis)", "داشتی": "you had (irrealis, informal)",
+    "می‌کردی": "you would do", "می‌رفتم": "I would go",
+    "می‌خرید": "he/she would buy", "داشتیم": "we had (irrealis)",
+    "داشتین": "you (plural/polite) had (irrealis)",
+    "داشتند": "they had (irrealis)", "می‌رفتیم": "we would go",
+    "می‌آمدند": "they would come", "نمی‌خریدم": "I would not buy",
+    "می‌شد": "could it be; would it work", "تمرین": "practice",
+    "می‌کردم": "I would do",
+    # B1 unit 08 (opinions/concession), added 2026-07-22. موتر/گران/
+    # می‌خرم/اما/من/شما are REUSED. حال is taught only inside the
+    # fixed concessive با این حال; the gloss records that.
+    "هرچند": "although", "تیل": "petrol; fuel", "می‌خری": "you buy (informal)",
+    "می‌خرد": "he/she buys",
+    "حال": "state; case (in با این حال: nevertheless)",
+    "موافق": "in agreement (موافق استم: I agree)",
+    "مخالف": "opposed (مخالف استم: I disagree)", "می‌فهمم": "I understand",
+    "اگرچه": "although; even though", "ضرورت": "need (ضرورت دارم: I need it)",
+    "عجله": "haste; hurry", "نکنیم": "(let us) not do",
+    "بحث": "discussion; debate", "کردند": "they did",
+    "موافقت": "agreement (موافقت کردند: they agreed)",
+    "دربارهٔ": "about; concerning", "بخرند": "(that) they buy",
+    # B1 unit 09 (workplace suggestions), added 2026-07-22. جلسه/مدیر/
+    # دفتر/بهتر/می‌تانین are REUSED. خبر is taught only inside
+    # خبر کنین (notify, polite).
+    "می‌بود": "it would be (irrealis)", "پیشنهاد": "suggestion; proposal",
+    "هفته‌وار": "weekly", "جلسه‌های": "meetings (of)", "ایمیل": "email",
+    "امتحان": "trial; try (امتحان کنیم: let us try)",
+    "پذیرفت": "he/she accepted", "نیستند": "they are not",
+    "کارمندان": "employees", "خبر": "word; notice (خبر کنین: notify, polite)",
+    # B1 unit 10 (relative-clause descriptions), added 2026-07-22. که/
+    # موتر/کار/مدیر/دفتر/خانه/خوشحال are REUSED. The new tokens
+    # here are the INDEFINITE -ی forms that head a که-relative clause --
+    # genuinely distinct surface forms from their bare head nouns, which is
+    # exactly what this unit teaches.
+    "همکاری": "a colleague (that…) [همکار + indefinite -ی]",
+    "موتری": "a car (that…) [موتر + indefinite -ی]",
+    "کاری": "a job (that…) [کار + indefinite -ی]",
+    "مدیری": "a manager (that…) [مدیر + indefinite -ی]",
+    "دفتری": "an office (that…) [دفتر + indefinite -ی]",
+    "خوشحالم": "I am glad (that…)", "استیم": "we are",
+    "خریدی": "you bought (informal)",
+    "خانه‌ای": "a house (that…) [خانه + indefinite -ای]",
+    # B1 unit 11 (reported communication), added 2026-07-22. Almost every
+    # token is REUSED from units 05/07-10 (گفت/پرسید/که/آیا/وقت/
+    # دارم/مدیر/زرمینه). پرسیدید keeps -ید, NOT -ین: the unit's own
+    # fresh-context review (2026-07-11) adjudicated this explicitly --
+    # SIMPLE-PAST 2pl keeps -ید in this corpus (cf. the existing گفتید),
+    # while present/subjunctive/imperative 2pl correctly use -ین.
+    "پرسیدید": "you (plural/polite) asked",
 }
 
 PRS_POS: dict[str, str] = {
@@ -1449,6 +1754,87 @@ PRS_POS: dict[str, str] = {
     "اطفائیه": "noun", "مه ره": "phrase", "زنگ بزنین": "phrase",
     "زخمی": "adjective", "خون‌ریزی": "noun", "زنگ می‌زنم": "phrase",
     "تشکر زیاد": "phrase",
+    # Unit 41 (lost items), added 2026-07-22.
+    "خریطه": "noun", "کیف پول": "noun", "کلید": "noun", "گم شده": "verb",
+    "خریطه‌ام": "noun", "کیف پولم": "noun", "دیدین": "verb",
+    "پیدا شده": "verb", "کلیدم": "noun", "اینجا": "adverb",
+    "خواهش می‌کنم": "phrase", "دیدم": "verb", "خریطه‌اش": "noun",
+    "می‌بیند": "verb",
+    # Unit 42 (appointments), added 2026-07-22.
+    "دندان": "noun", "منشی": "noun",
+    # Unit 43 (library), added 2026-07-22.
+    "کتابخانه": "noun", "کتابدار": "noun", "دادن": "noun", "قرض": "noun",
+    # Unit 44 (waste disposal), added 2026-07-22.
+    "سطل": "noun", "زباله": "noun", "پلاستیک": "noun", "کاغذ": "noun",
+    "شیشه": "noun", "نمی‌اندازم": "verb", "می‌اندازد": "verb",
+    "جمع‌آوری": "noun", "می‌اندازین": "verb",
+    # Unit 45 (accommodation), added 2026-07-22.
+    "هوتل": "noun", "رزرو": "noun", "می‌مانین": "verb", "شامل": "adjective",
+    "وای‌فای": "noun", "کارمند هوتل": "noun", "می‌ماند": "verb",
+    "خروج": "noun",
+    # Unit 46 (pharmacy), added 2026-07-22.
+    "دواساز": "noun", "دندان‌درد": "noun", "قرص": "noun", "شربت": "noun",
+    "دانه": "noun", "نسخه‌تان": "noun",
+    # Unit 47 (personal care), added 2026-07-22.
+    "سلمانی": "noun", "دلاک": "noun", "کوتاه‌تر": "adjective", "اصلاح": "noun",
+    "می‌تراشم": "verb", "قرارتان": "noun",
+    # Unit 48 (bike rental), added 2026-07-22.
+    "پس می‌دهین": "phrase", "بسیار خوب": "phrase", "کرایه‌تان": "noun",
+    # Unit 49 (laundry), added 2026-07-22.
+    "لباس شویی": "noun", "بشویم": "verb", "لباس‌ها": "noun", "اتو": "noun",
+    "تیار": "adjective", "لباس شویی‌تان": "noun",
+    # Unit 50 (swimming pool), added 2026-07-22.
+    "حوض آببازی": "noun", "کمد": "noun", "کمد‌تان": "noun", "کمدش": "noun",
+    "بلیط‌تان": "noun",
+    # Unit 51 (restaurant), added 2026-07-22.
+    "رستوران": "noun", "پیشخدمت": "noun", "مینو": "noun", "کباب": "noun",
+    "فرمایش": "noun", "کبابش": "noun", "فرمایش‌تان": "noun",
+    # Unit 52 (cinema), added 2026-07-22.
+    "سینما": "noun", "آسمان": "noun", "بلیطش": "noun",
+    # Unit 53 (museum), added 2026-07-22.
+    "موزیم": "noun", "نمایشگاه": "noun", "دید": "verb",
+    # Unit 54 (concert), added 2026-07-22.
+    "کنسرت": "noun", "خواننده": "noun", "سیما": "proper_noun",
+    # Unit 55 (park), added 2026-07-22.
+    "درخت": "noun", "گل": "noun", "میله": "noun", "می‌خواهی": "verb",
+    "خانه‌تان": "noun",
+    # Unit 56 (gym), added 2026-07-22.
+    "عضویت": "noun", "وسایل": "noun", "کورس": "noun", "الماری": "noun",
+    "روز خوش": "phrase", "کارمند باشگاه": "noun", "عضویت‌تان": "noun",
+    # Unit 57 (beach), added 2026-07-22.
+    "ساحل": "noun", "ریگ": "noun", "موج": "noun", "چتر": "noun",
+    "چتر آفتابی‌تان": "noun",
+    # Unit 58 (zoo), added 2026-07-22.
+    "باغ": "noun", "وحش": "noun", "شیر": "noun", "فیل": "noun",
+    "میمون": "noun", "محبوب‌تان": "adjective",
+    # Unit 59 (boat tour), added 2026-07-22.
+    "قایق": "noun", "دریاچه": "noun", "گشت": "noun", "زیبا": "adjective",
+    "گشت‌تان": "noun",
+    # Unit 60 (sports event), added 2026-07-22.
+    "مسابقه": "noun", "تیم": "noun", "برد": "verb", "مسابقه‌تان": "noun",
+    # Unit 61 (amusement park), added 2026-07-22.
+    "شهربازی": "noun", "سانتی‌متر": "noun", "قدتان": "noun",
+    # B1 unit 07 (hypotheticals), added 2026-07-22.
+    "داشتم": "verb", "داشتی": "verb", "می‌کردی": "verb", "می‌رفتم": "verb",
+    "می‌خرید": "verb", "داشتیم": "verb", "داشتین": "verb", "داشتند": "verb",
+    "می‌رفتیم": "verb", "می‌آمدند": "verb", "نمی‌خریدم": "verb",
+    "می‌شد": "verb", "تمرین": "noun", "می‌کردم": "verb",
+    # B1 unit 08 (opinions/concession), added 2026-07-22.
+    "هرچند": "particle", "تیل": "noun", "می‌خری": "verb", "می‌خرد": "verb",
+    "حال": "noun", "موافق": "adjective", "مخالف": "adjective",
+    "می‌فهمم": "verb", "اگرچه": "particle", "ضرورت": "noun", "عجله": "noun",
+    "نکنیم": "verb", "بحث": "noun", "کردند": "verb", "موافقت": "noun",
+    "دربارهٔ": "preposition", "بخرند": "verb",
+    # B1 unit 09 (workplace suggestions), added 2026-07-22.
+    "می‌بود": "verb", "پیشنهاد": "noun", "هفته‌وار": "adjective",
+    "جلسه‌های": "noun", "ایمیل": "noun", "امتحان": "noun", "پذیرفت": "verb",
+    "نیستند": "verb", "کارمندان": "noun", "خبر": "noun",
+    # B1 unit 10 (relative-clause descriptions), added 2026-07-22.
+    "همکاری": "noun", "موتری": "noun", "کاری": "noun", "مدیری": "noun",
+    "دفتری": "noun", "خوشحالم": "verb", "استیم": "verb", "خریدی": "verb",
+    "خانه‌ای": "noun",
+    # B1 unit 11 (reported communication), added 2026-07-22.
+    "پرسیدید": "verb",
 }
 
 
@@ -2565,6 +2951,277 @@ def prs_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     if lesson_key.endswith("lesson04.dialogue_goals"):
         semantics.append("dialogue_word")
 
+
+    # ---------------------------------------------------------------
+    # A1 units 41-61 semantic tags, added 2026-07-22 (unit-checkpoint
+    # unblock pass). IMPORTANT for whoever writes these units' practice
+    # packs: generate_checkpoint() scopes lexemes to the unit's OWN
+    # lessons, and a lexeme belongs to the unit that FIRST introduced its
+    # token -- so only a unit's own new tokens are tagged below.
+    # Additively tagging a reused earlier-unit token (the pattern units
+    # 01-40 use freely) would help Endless Practice but do nothing for
+    # THIS unit's checkpoint. Cross-unit tags below (service_person_word,
+    # formal_possessive_word, third_person_possessive_word, see_verb,
+    # give_back_verb) are deliberately pooled for Endless Practice while
+    # each still contributing >=1 candidate per unit at checkpoint scope.
+
+    # Unit 41 (lost items).
+    if token in {"خریطه", "کیف پول", "کلید"}:
+        semantics.append("lost_item_word")
+    if token in {"خریطه‌ام", "کیف پولم", "کلیدم", "خریطه‌اش"}:
+        semantics.append("lost_item_possessive")
+    if token in {"گم شده", "پیدا شده"}:
+        semantics.append("lost_found_state")
+    # "see_verb" and "give_back_verb" pool across units 41/53 and 43/48
+    # respectively -- genuinely the same verb, and each unit still
+    # contributes its own candidate at checkpoint scope.
+    if token in {"دیدین", "دیدم", "می‌بیند", "دید"}:
+        semantics.append("see_verb")
+    if token in {"دادن", "پس می‌دهین"}:
+        semantics.append("give_back_verb")
+    # "service_person_word" pools every counter-staff role taught across
+    # units 42-56 (one per unit at checkpoint scope, a real 8-member pool
+    # for Endless Practice).
+    if token in {"منشی", "کتابدار", "دواساز", "دلاک", "کارمند هوتل",
+        "پیشخدمت", "کارمند باشگاه", "خواننده"}:
+        semantics.append("service_person_word")
+    # "formal_possessive_word" is the -تان formal-possessive pattern these
+    # units drill once each; "third_person_possessive_word" is the -ش
+    # counterpart. Both are morphological, not topical, so they generalise
+    # cleanly across the band.
+    if token in {"نسخه‌تان", "قرارتان", "کرایه‌تان", "لباس شویی‌تان",
+        "کمد‌تان", "بلیط‌تان", "فرمایش‌تان", "خانه‌تان", "عضویت‌تان",
+        "چتر آفتابی‌تان", "محبوب‌تان", "گشت‌تان", "مسابقه‌تان", "قدتان"}:
+        semantics.append("formal_possessive_word")
+    if token in {"خریطه‌اش", "کمدش", "کبابش", "بلیطش"}:
+        semantics.append("third_person_possessive_word")
+    # Unit 42 (appointments) / 43 (library) / 44 (waste disposal).
+    if token == "دندان":
+        semantics.append("body_part_word")
+    if token in {"کتابخانه", "کتابدار", "قرض"}:
+        semantics.append("library_word")
+    if token in {"سطل", "زباله", "جمع‌آوری"}:
+        semantics.append("waste_word")
+    if token in {"پلاستیک", "کاغذ", "شیشه"}:
+        semantics.append("waste_material_word")
+    if token in {"نمی‌اندازم", "می‌اندازد", "می‌اندازین"}:
+        semantics.append("throw_verb")
+    # Unit 45 (accommodation) / 46 (pharmacy) / 47 (personal care).
+    # "stay_verb" and "symptom_word" are additive extensions of the
+    # existing A1 tags of the same name (same semantic role).
+    if token in {"هوتل", "رزرو", "خروج", "وای‌فای"}:
+        semantics.append("hotel_word")
+    if token in {"می‌مانین", "می‌ماند"}:
+        semantics.append("stay_verb")
+    if token == "شامل":
+        semantics.append("inclusion_word")
+    if token in {"قرص", "شربت", "دانه"}:
+        semantics.append("medicine_form_word")
+    if token == "دندان‌درد":
+        semantics.append("symptom_word")
+    if token in {"سلمانی", "دلاک", "اصلاح"}:
+        semantics.append("barbershop_word")
+    if token == "کوتاه‌تر":
+        semantics.append("comparative_adjective")
+    if token == "می‌تراشم":
+        semantics.append("grooming_verb")
+    # Unit 48 (bike rental) / 49 (laundry) / 50 (swimming pool).
+    if token == "بسیار خوب":
+        semantics.append("politeness")
+    if token in {"لباس شویی", "اتو", "لباس‌ها"}:
+        semantics.append("laundry_word")
+    if token == "بشویم":
+        semantics.append("wash_verb")
+    if token == "تیار":
+        semantics.append("ready_word")
+    if token in {"حوض آببازی", "کمد"}:
+        semantics.append("pool_word")
+    # Unit 51 (restaurant) / 52 (cinema) / 53 (museum) / 54 (concert).
+    # "food_item", "film_word", "person_name" and "past_verb_third" are
+    # additive extensions of the existing A1 tags of the same name.
+    if token in {"رستوران", "پیشخدمت", "مینو", "کباب", "فرمایش"}:
+        semantics.append("restaurant_word")
+    if token == "کباب":
+        semantics.append("food_item")
+    if token == "سینما":
+        semantics.append("cinema_word")
+    if token == "آسمان":
+        semantics.append("film_word")
+    if token in {"موزیم", "نمایشگاه"}:
+        semantics.append("museum_word")
+    if token in {"دید", "برد"}:
+        semantics.append("past_verb_third")
+    if token in {"کنسرت", "خواننده"}:
+        semantics.append("concert_word")
+    if token == "سیما":
+        semantics.append("person_name")
+    # Unit 55 (park) / 56 (gym) / 57 (beach). "want_verb" and
+    # "good_wish" are additive extensions of the existing tags.
+    if token in {"درخت", "گل"}:
+        semantics.append("nature_word")
+    if token == "میله":
+        semantics.append("outing_word")
+    if token == "می‌خواهی":
+        semantics.append("want_verb")
+    if token in {"عضویت", "وسایل", "کورس", "الماری"}:
+        semantics.append("gym_word")
+    if token == "روز خوش":
+        semantics.append("good_wish")
+    if token in {"ساحل", "ریگ", "موج"}:
+        semantics.append("beach_word")
+    if token == "چتر":
+        semantics.append("weather_gear_word")
+    # Unit 58 (zoo) / 59 (boat tour) / 60 (sports event) / 61 (amusement
+    # park). "animal_word", "description_adjective" and "height_word" are
+    # additive extensions of the existing tags.
+    if token in {"باغ", "وحش"}:
+        semantics.append("zoo_word")
+    if token in {"شیر", "فیل", "میمون"}:
+        semantics.append("animal_word")
+    if token in {"قایق", "دریاچه", "گشت"}:
+        semantics.append("boat_tour_word")
+    if token == "زیبا":
+        semantics.append("description_adjective")
+    if token in {"مسابقه", "تیم"}:
+        semantics.append("match_word")
+    if token == "شهربازی":
+        semantics.append("amusement_park_word")
+    if token == "سانتی‌متر":
+        semantics.append("measure_unit_word")
+    if token == "قدتان":
+        semantics.append("height_word")
+
+    # B1 unit 07 (hypotheticals) semantic tags, added 2026-07-22. The
+    # paradigm this unit teaches is the past/imperfect used as an
+    # IRREALIS after اگر, so the tags name that function, not "past".
+    if token in {"داشتم", "داشتی", "داشتیم", "داشتین", "داشتند"}:
+        semantics.append("irrealis_have_verb")
+    if token in {"می‌کردی", "می‌رفتم", "می‌خرید", "می‌رفتیم", "می‌آمدند",
+        "می‌کردم", "می‌شد"}:
+        semantics.append("irrealis_verb")
+    if token == "نمی‌خریدم":
+        semantics.append("irrealis_negative_verb")
+    if token == "تمرین":
+        semantics.append("practice_word")
+    # B1 unit 08 (opinions/concession) semantic tags, added 2026-07-22.
+    # "buy_verb" is an additive extension of the existing tag.
+    if token in {"هرچند", "اگرچه", "حال"}:
+        semantics.append("concession_connector")
+    if token in {"موافق", "مخالف"}:
+        semantics.append("opinion_stance_word")
+    if token in {"می‌خری", "می‌خرد", "بخرند"}:
+        semantics.append("buy_verb")
+    if token in {"بحث", "موافقت", "ضرورت", "عجله"}:
+        semantics.append("debate_word")
+    if token == "می‌فهمم":
+        semantics.append("understand_verb")
+    if token == "کردند":
+        semantics.append("past_verb_plural_third")
+    if token == "نکنیم":
+        semantics.append("subjunctive_negative_verb")
+    if token == "تیل":
+        semantics.append("fuel_word")
+    if token == "دربارهٔ":
+        semantics.append("about_preposition")
+    # B1 unit 09 (workplace suggestions) semantic tags, added 2026-07-22.
+    # "workplace_person_word" is an additive extension of unit05's tag.
+    if token in {"پیشنهاد", "می‌بود", "امتحان"}:
+        semantics.append("suggestion_word")
+    if token in {"جلسه‌های", "کارمندان", "ایمیل", "هفته‌وار"}:
+        semantics.append("workplace_word")
+    if token == "کارمندان":
+        semantics.append("workplace_person_word")
+    if token == "پذیرفت":
+        semantics.append("accept_verb")
+    if token == "نیستند":
+        semantics.append("negative_copula_verb")
+    if token == "خبر":
+        semantics.append("notify_word")
+    # B1 unit 10 (relative-clause descriptions) semantic tags, added
+    # 2026-07-22. "relative_head_noun" is the whole point of the unit: the
+    # indefinite -ی/-ای form that heads a که-clause.
+    # B1 unit 11 needs no new tag set -- its one new token joins unit05's
+    # existing report_verb_ask paradigm.
+    if token in {"همکاری", "موتری", "کاری", "مدیری", "دفتری", "خانه‌ای"}:
+        semantics.append("relative_head_noun")
+    if token in {"خوشحالم", "استیم"}:
+        semantics.append("glad_predicate")
+    if token == "خریدی":
+        semantics.append("past_verb_second_b1")
+    if token == "پرسیدید":
+        semantics.append("report_verb_ask")
+    # dialogue_word for every new unit's dialogue lesson, listed as exact
+    # lesson keys rather than a suffix match: units 59/60/61 all reuse the
+    # lesson name "ticket_counter_dialogue", which A1 unit16 also uses.
+    if lesson_key in {
+        "prs.a1.unit41.lesson04.lost_bag_dialogue",
+        "prs.a1.unit42.lesson04.dentist_appointment_dialogue",
+        "prs.a1.unit43.lesson04.library_dialogue",
+        "prs.a1.unit44.lesson04.waste_sorting_dialogue",
+        "prs.a1.unit45.lesson04.hotel_checkin_dialogue",
+        "prs.a1.unit46.lesson04.pharmacy_dialogue",
+        "prs.a1.unit47.lesson04.barbershop_dialogue",
+        "prs.a1.unit48.lesson04.bike_rental_dialogue",
+        "prs.a1.unit49.lesson04.laundry_shop_dialogue",
+        "prs.a1.unit50.lesson04.pool_visit_dialogue",
+        "prs.a1.unit51.lesson04.restaurant_dialogue",
+        "prs.a1.unit52.lesson04.cinema_dialogue",
+        "prs.a1.unit53.lesson04.museum_dialogue",
+        "prs.a1.unit54.lesson04.concert_ticket_dialogue",
+        "prs.a1.unit56.lesson04.gym_reception_dialogue",
+        "prs.a1.unit57.lesson04.beach_dialogue",
+        "prs.a1.unit58.lesson04.zoo_dialogue",
+        "prs.a1.unit59.lesson04.ticket_counter_dialogue",
+        "prs.a1.unit60.lesson04.ticket_counter_dialogue",
+        "prs.a1.unit61.lesson04.ticket_counter_dialogue",
+        "prs.b1.unit07.lesson04.dialogue_wishes",
+        "prs.b1.unit08.lesson04.dialogue_debate",
+        "prs.b1.unit09.lesson04.dialogue_meeting",
+        "prs.b1.unit10.lesson04.dialogue_new_car_job",
+        "prs.b1.unit11.lesson04.dialogue_doctor_visit",
+    }:
+        semantics.append("dialogue_word")
+
+
+    # Tokens whose FIRST introduction inside A1 41-61 / B1 07-11 is also
+    # their first spec at that level, but which an earlier level had already
+    # glossed -- so none of the per-unit rules above matched them and they
+    # would otherwise reach their unit's checkpoint pool untagged. Every tag
+    # here is an existing tag name (additive, same semantic role) except
+    # time_comparative_word / reported_question_particle /
+    # negative_present_verb, which name roles this band is the first to
+    # teach. Added 2026-07-22.
+    if token == "اینجا":
+        semantics.append("location_word")
+    if token == "بدهم":
+        semantics.append("give_back_verb")
+    if token == "می‌مانم":
+        semantics.append("stay_verb")
+    if token == "نسخه":
+        semantics.append("paperwork_word")
+    if token == "می‌خواهد":
+        semantics.append("want_verb")
+    if token == "زودتر":
+        semantics.append("time_comparative_word")
+    if token == "هنوز":
+        semantics.append("time_reference")
+    if token == "کافی":
+        semantics.append("state_adjective")
+    if token == "خرید":
+        semantics.append("past_verb_third_b1")
+    if token == "شروع":
+        semantics.append("workplace_word")
+    if token in {"می‌شود", "بفرستین"}:
+        semantics.append("polite_request_verb")
+    if token == "لطفاً":
+        semantics.append("politeness")
+    if token == "زندگی":
+        semantics.append("home_description_word")
+    if token == "آیا":
+        semantics.append("reported_question_particle")
+    if token == "نمی‌کنم":
+        semantics.append("negative_present_verb")
+
     tags: dict[str, object] = {}
     if semantics:
         tags["semantic"] = list(dict.fromkeys(semantics))
@@ -2784,6 +3441,32 @@ def _classify(files, level, specs, derive_phrases=False):
                         key = (level, token, "wash_first_person")
                         part_of_speech = "verb"
                         english_gloss = "I wash"
+                    # "می‌شود" gets a FIFTH sense, found while backfilling
+                    # B1 units 07-11 on 2026-07-22. b1_unit09.lesson03
+                    # re-teaches the POLITE-REQUEST idiom head ("would it
+                    # be possible...?", می‌شود که + subjunctive -- the same
+                    # sense A2 unit09 teaches) inside the "Dari B1" course,
+                    # which already carries b1_unit04's plain "becomes"
+                    # sense under its own split key. Without this split BOTH
+                    # b1 specs land on the identical DB identity
+                    # (course_id, language_code, token, part_of_speech) --
+                    # main()'s `existing` lookup would then UPDATE
+                    # b1_unit04's row instead of inserting, silently
+                    # overwriting its gloss AND replacing its agreement_tags
+                    # wholesale. part_of_speech "phrase" (this file's
+                    # established POS for fixed expressions) is what makes
+                    # the identity distinct, and it correctly keeps a fixed
+                    # politeness idiom out of any verb-conjugation slot.
+                    if (
+                        token == "می‌شود"
+                        and lesson_key == "prs.b1.unit09.lesson03.polite_request"
+                    ):
+                        key = (level, token, "polite_request_b1")
+                        part_of_speech = "phrase"
+                        english_gloss = (
+                            "would it be possible...? (polite request, "
+                            "می‌شود که + subjunctive)"
+                        )
                     existing = specs.get(key)
                     if existing is None:
                         specs[key] = {
