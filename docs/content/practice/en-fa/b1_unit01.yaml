@@ -1,0 +1,594 @@
+schema_version: '1.0'
+pack_key: practice.en-fa.b1.unit01
+source_language: en
+target_language: fa
+unit_content_key: fa.b1.unit01.necessity
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: 'Six lessons, 61 fa lexemes (the richest B1 unit). Drills baayad + subjunctive across every person,
+    past obligation with the imperfect, and negation.
+
+
+    Authored 2026-07-22 against docs/content/PRACTICE_PACK_RECIPE.md to unblock this unit''s
+
+    checkpoint: the unit had lexemes but no practice pack, so generate_checkpoint() returned
+
+    checkpoint_unavailable. ZERO listen_select is authored - AZURE_SPEECH_KEY is unset, so
+
+    tts_actually_configured(''fa'') is false and _material() would delete those templates.
+
+    Every slot is satisfiable from THIS unit''s own lexemes, because generate_checkpoint()
+
+    calls _material() with only this unit''s lesson ids.
+
+
+    The en-fa B1 lexeme classification carries almost no usable semantic tags (290 of 382 fa
+
+    B1 lexemes are untagged), so the broad recognition / production / matching slots are
+
+    constrained by language_code + part_of_speech only; the few semantic tags that do exist
+
+    are used for the narrow, grammatically safe word_order / fill_in_blank / fixed-sentence
+
+    slots. Every such tag was checked against the real backfill_lexemes.py data: each
+
+    fill_in_blank anchor has exactly ONE distinct COURSE-WIDE candidate (AUTHORING_GUIDE #17
+
+    hard-fail), and for every word_order frame each candidate in the whole B1 course pool is
+
+    grammatical in that frame.
+
+
+    proper_noun is deliberately excluded from multiple_choice and matching_pairs (the gloss is
+
+    a transliteration, so those items are near-trivial) and is reachable only through a
+
+    dedicated bare-word translation, which is a genuine script-production drill.
+
+
+    Reviewer must double-check: (a) the Persian in every word_order / fill_in_blank frame reads
+
+    as natural colloquial Iranian Persian and uses only vocabulary already taught in this course;
+
+    (b) glosses that embed the Persian token in a parenthetical example (a backfill gloss-style
+
+    artifact) partly give away the answer in multiple_choice - flagged, not fixable in a pack.
+
+
+    Template mix: fill_in_blank x1, matching_pairs x3, multiple_choice x4, translation x5, word_order
+    x3 (16 total) anchored across the 6 lessons that introduce tokens.'
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - advice_word
+    - asking_word
+    - help_word
+    - person_name
+    - room_word
+templates:
+- content_key: practice.en-fa.fa.b1.unit01.lesson01.choose.001
+  lesson_content_key: fa.b1.unit01.lesson01.present_necessity_1st2nd
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - verb
+      - adverb
+      - pronoun
+      - particle
+      - adjective
+      - symbol
+      - preposition
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is a word introduced in this unit.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b1.unit01.lesson01.order.002
+  lesson_content_key: fa.b1.unit01.lesson01.present_necessity_1st2nd
+  type: word_order
+  frame:
+    text: باید برم {item}.
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - noun
+      agreement_tags:
+        semantic: room_word
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: باید برم {item}.
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: 'Persian puts the destination after the subjunctive verb: baayad beram + place.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b1.unit01.lesson01.translate.003
+  lesson_content_key: fa.b1.unit01.lesson01.present_necessity_1st2nd
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - verb
+      - adverb
+      - pronoun
+      - particle
+      - adjective
+      - symbol
+      - preposition
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Persian word is {item}.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b1.unit01.lesson02.choose.001
+  lesson_content_key: fa.b1.unit01.lesson02.present_necessity_all_persons
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - verb
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is a verb form from this unit.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b1.unit01.lesson02.match.002
+  lesson_content_key: fa.b1.unit01.lesson02.present_necessity_all_persons
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: fa
+    direction: rtl
+  slots:
+    first:
+      language_code: fa
+      part_of_speech:
+      - verb
+    second:
+      language_code: fa
+      part_of_speech:
+      - verb
+    third:
+      language_code: fa
+      part_of_speech:
+      - verb
+    fourth:
+      language_code: fa
+      part_of_speech:
+      - verb
+    fifth:
+      language_code: fa
+      part_of_speech:
+      - verb
+    sixth:
+      language_code: fa
+      part_of_speech:
+      - verb
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Match each Persian verb form with the person it refers to.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b1.unit01.lesson02.order.003
+  lesson_content_key: fa.b1.unit01.lesson02.present_necessity_all_persons
+  type: word_order
+  frame:
+    text: '{item} باید بره خونه.'
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - proper_noun
+      agreement_tags:
+        semantic: person_name
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{item} باید بره خونه.'
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: Subject first, then baayad, then the third-person subjunctive.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b1.unit01.lesson02.translate.004
+  lesson_content_key: fa.b1.unit01.lesson02.present_necessity_all_persons
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - proper_noun
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Persian word is {item}.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b1.unit01.lesson03.choose.001
+  lesson_content_key: fa.b1.unit01.lesson03.past_necessity_and_negation
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - adjective
+      - adverb
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is a content word from this unit.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b1.unit01.lesson03.order.002
+  lesson_content_key: fa.b1.unit01.lesson03.past_necessity_and_negation
+  type: word_order
+  frame:
+    text: دیروز باید می‌رفتم {item}.
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - noun
+      agreement_tags:
+        semantic: advice_word
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: دیروز باید می‌رفتم {item}.
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: 'Past obligation: the time word comes first, then baayad + the imperfect past.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b1.unit01.lesson04.choose.001
+  lesson_content_key: fa.b1.unit01.lesson04.dialogue_deadline
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - pronoun
+      - particle
+      - preposition
+      - symbol
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is a function word from this unit.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b1.unit01.lesson04.match.002
+  lesson_content_key: fa.b1.unit01.lesson04.dialogue_deadline
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: fa
+    direction: rtl
+  slots:
+    first:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - verb
+      - adverb
+      - pronoun
+      - particle
+      - adjective
+      - symbol
+      - preposition
+    second:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - verb
+      - adverb
+      - pronoun
+      - particle
+      - adjective
+      - symbol
+      - preposition
+    third:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - verb
+      - adverb
+      - pronoun
+      - particle
+      - adjective
+      - symbol
+      - preposition
+    fourth:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - verb
+      - adverb
+      - pronoun
+      - particle
+      - adjective
+      - symbol
+      - preposition
+    fifth:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - verb
+      - adverb
+      - pronoun
+      - particle
+      - adjective
+      - symbol
+      - preposition
+    sixth:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - verb
+      - adverb
+      - pronoun
+      - particle
+      - adjective
+      - symbol
+      - preposition
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Match each Persian word from this unit with its English meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b1.unit01.lesson04.fill.003
+  lesson_content_key: fa.b1.unit01.lesson04.dialogue_deadline
+  type: fill_in_blank
+  frame:
+    text: نرگس امروز به سارا {item} می‌کنه.
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - noun
+      agreement_tags:
+        semantic: help_word
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The missing noun combines with mikone to mean 'helps'.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b1.unit01.lesson05.match.001
+  lesson_content_key: fa.b1.unit01.lesson05.reading_two_obligations
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: fa
+    direction: rtl
+  slots:
+    first:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - adjective
+      - adverb
+    second:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - adjective
+      - adverb
+    third:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - adjective
+      - adverb
+    fourth:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - adjective
+      - adverb
+    fifth:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - adjective
+      - adverb
+    sixth:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - adjective
+      - adverb
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Match each Persian content word with its English meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b1.unit01.lesson05.translate.002
+  lesson_content_key: fa.b1.unit01.lesson05.reading_two_obligations
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - adjective
+      - adverb
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Persian word is {item}.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b1.unit01.lesson05.translate.003
+  lesson_content_key: fa.b1.unit01.lesson05.reading_two_obligations
+  type: translation
+  frame:
+    text: I have to rest more.
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - adverb
+      agreement_tags:
+        semantic: asking_word
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: باید {item} استراحت کنم.
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: 'Obligation about yourself: baayad + the comparative adverb + the subjunctive verb.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b1.unit01.lesson06.translate.001
+  lesson_content_key: fa.b1.unit01.lesson06.wrapup_production
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - verb
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Persian word is {item}.
+    language_code: en
+    direction: ltr
