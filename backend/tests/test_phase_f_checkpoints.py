@@ -694,3 +694,927 @@ def test_checkpoint_format_mix_is_consistent_regardless_of_mastery(
     # only for per-attempt generation retries, not a skewed test).
     for counts in (weak_counts, strong_counts):
         assert all(count >= 4 for count in counts.values()), counts
+
+
+# --- Checkpoint lexeme SCOPE (2026-07-22 fix) ------------------------------
+#
+# generate_checkpoint() passed ONLY the unit's own lesson ids to _material(),
+# which filters both templates AND lexemes by provenance_lesson_id -- while
+# generate_batch() passes every completed lesson. A unit template whose
+# supporting slot is constrained to vocabulary taught in an EARLIER unit
+# therefore had zero candidates for that slot at checkpoint scope, so
+# fill_slots() returned None for every target and the unit could not reach
+# the 12-item floor -- even though the identical template works in Endless
+# Practice. Measured over the six launch directions, only ~48% of units
+# could generate a checkpoint.
+#
+# The fix widens the pool ONLY as a fallback, and never lets the widening
+# change what is actually being tested:
+#   * templates stay unit-scoped, targets stay unit lexemes;
+#   * pass 1 uses unit vocabulary alone (unchanged behavior);
+#   * pass 2 widens to the course prefix purely to fill supporting slots,
+#     and requires each item's GRADED answer to touch unit material;
+#   * repeats are never used to reach 12 within one checkpoint.
+# The tests below pin all four.
+
+SCOPE_PRIOR_LESSON_KEY = "test.ckpt.scope.prior.lesson"
+SCOPE_UNIT_LESSON_KEY = "test.ckpt.scope.unit.lesson"
+
+SCOPE_WORD_SLOT = {
+    "language_code": "es",
+    "part_of_speech": "noun",
+    "agreement_tags": {"semantic": "word"},
+}
+SCOPE_PLACE_SLOT = {
+    "language_code": "es",
+    "part_of_speech": "adverb",
+    "agreement_tags": {"semantic": "place"},
+}
+
+
+def create_two_unit_course(unit_nouns=8, prior_adverbs=4, unit_tags=None):
+    """Unit 2 is the unit under test; unit 1 holds the PRIOR vocabulary.
+
+    Unit 2's own lexemes are all nouns tagged semantic=word; the adverbs
+    tagged semantic=place exist ONLY in unit 1. A unit-2 template with a
+    `place` slot is therefore unbuildable from unit-2 material alone --
+    exactly the shape that used to make a checkpoint impossible.
+    """
+    title = f"Checkpoint scope test {uuid4()}"
+    exercise = {
+        "type": "translation",
+        "order": 1,
+        "prompt": {
+            "text_blocks": [
+                {"text": "test", "language_code": "en", "direction": "ltr"}
+            ]
+        },
+        "correct_response": "test",
+    }
+    payload = {
+        "courses": [
+            {
+                "source_language": "en",
+                "target_language": "es",
+                "title": title,
+                "units": [
+                    {
+                        "title": "Prior unit",
+                        "order": 1,
+                        "lessons": [
+                            {
+                                "title": "Prior lesson",
+                                "order": 1,
+                                "exercises": [exercise],
+                            }
+                        ],
+                    },
+                    {
+                        "title": "Unit under test",
+                        "order": 2,
+                        "lessons": [
+                            {
+                                "title": "Unit lesson",
+                                "order": 1,
+                                "exercises": [exercise],
+                            }
+                        ],
+                    },
+                ],
+            }
+        ]
+    }
+    with SessionLocal() as db:
+        count, errors, _ = import_content(
+            db, ImportRequest.model_validate(payload)
+        )
+        assert count == 1 and not errors
+        course = db.scalar(select(Course).where(Course.title == title))
+        units = list(
+            db.scalars(
+                select(Unit)
+                .where(Unit.course_id == course.id)
+                .order_by(Unit.order)
+            )
+        )
+        assert len(units) == 2
+        prior_unit, unit = units
+        prior_lesson_id = db.scalar(
+            select(Lesson.id).where(Lesson.unit_id == prior_unit.id)
+        )
+        unit_lesson_id = db.scalar(
+            select(Lesson.id).where(Lesson.unit_id == unit.id)
+        )
+        marker = uuid4().hex[:8]
+        for index in range(prior_adverbs):
+            db.add(
+                Lexeme(
+                    course_id=course.id,
+                    token=f"lugar{index}",
+                    language_code="es",
+                    part_of_speech="adverb",
+                    english_gloss=f"place{index}",
+                    agreement_tags={"semantic": "place"},
+                    provenance_lesson_id=prior_lesson_id,
+                    provenance_lesson_content_key=SCOPE_PRIOR_LESSON_KEY,
+                    provenance_content_key=(
+                        f"test.ckpt.scope.prior.{marker}.{index}"
+                    ),
+                )
+            )
+        for index in range(unit_nouns):
+            db.add(
+                Lexeme(
+                    course_id=course.id,
+                    token=f"cosa{index}",
+                    language_code="es",
+                    part_of_speech="noun",
+                    english_gloss=f"thing{index}",
+                    agreement_tags=(
+                        {"semantic": "word"} if unit_tags is None else unit_tags
+                    ),
+                    provenance_lesson_id=unit_lesson_id,
+                    provenance_lesson_content_key=SCOPE_UNIT_LESSON_KEY,
+                    provenance_content_key=(
+                        f"test.ckpt.scope.unit.{marker}.{index}"
+                    ),
+                )
+            )
+        db.commit()
+        return {
+            "course_id": course.id,
+            "unit_id": unit.id,
+            "prior_unit_id": prior_unit.id,
+            "unit_lesson_id": unit_lesson_id,
+            "prior_lesson_id": prior_lesson_id,
+        }
+
+
+def scope_artifact(templates):
+    return {
+        "artifact_type": "lingosquared.practice_templates",
+        "artifact_version": 1,
+        "source_language": "en",
+        "target_language": "es",
+        "packs": [
+            {
+                "pack_key": f"test.ckpt.scope.pack.{uuid4().hex[:8]}",
+                "unit_content_key": "test.ckpt.scope.unit",
+                "tag_schema": {},
+                "templates": templates,
+            }
+        ],
+    }
+
+
+def cross_unit_templates():
+    """Unit-2 templates that all reference unit-1 vocabulary in a slot.
+
+    Every answer derivation is anchored on `word` (a unit-2 noun); the
+    `place` slot is supporting context only.
+    """
+    es_frame = {
+        "text": "{word} {place}",
+        "language_code": "es",
+        "direction": "ltr",
+    }
+    return [
+        {
+            "content_key": "test.ckpt.scope.multiple_choice",
+            "lesson_content_key": SCOPE_UNIT_LESSON_KEY,
+            "type": "multiple_choice",
+            "frame": dict(es_frame),
+            "slots": {"word": SCOPE_WORD_SLOT, "place": SCOPE_PLACE_SLOT},
+            "answer_derivation": {"kind": "slot_gloss", "slot": "word"},
+            "feedback_frame": {
+                "text": "Correct.",
+                "language_code": "en",
+                "direction": "ltr",
+            },
+        },
+        {
+            "content_key": "test.ckpt.scope.fill_in_blank",
+            "lesson_content_key": SCOPE_UNIT_LESSON_KEY,
+            "type": "fill_in_blank",
+            "frame": {
+                "text": "aqui {place} {word}",
+                "language_code": "es",
+                "direction": "ltr",
+            },
+            "slots": {"word": SCOPE_WORD_SLOT, "place": SCOPE_PLACE_SLOT},
+            "answer_derivation": {"kind": "slot_text", "slot": "word"},
+            "feedback_frame": {
+                "text": "Correct.",
+                "language_code": "en",
+                "direction": "ltr",
+            },
+        },
+        {
+            "content_key": "test.ckpt.scope.word_order",
+            "lesson_content_key": SCOPE_UNIT_LESSON_KEY,
+            "type": "word_order",
+            "frame": dict(es_frame),
+            "slots": {"word": SCOPE_WORD_SLOT, "place": SCOPE_PLACE_SLOT},
+            "answer_derivation": {
+                "kind": "render_frame",
+                "frame": dict(es_frame),
+            },
+            "feedback_frame": {
+                "text": "Correct.",
+                "language_code": "en",
+                "direction": "ltr",
+            },
+        },
+        {
+            "content_key": "test.ckpt.scope.translation",
+            "lesson_content_key": SCOPE_UNIT_LESSON_KEY,
+            "type": "translation",
+            "frame": {
+                "text": "{word} {place}",
+                "language_code": "en",
+                "direction": "ltr",
+                "slot_rendering": {
+                    "word": "english_gloss",
+                    "place": "english_gloss",
+                },
+            },
+            "slots": {"word": SCOPE_WORD_SLOT, "place": SCOPE_PLACE_SLOT},
+            "answer_derivation": {
+                "kind": "render_frame",
+                "frame": dict(es_frame),
+            },
+            "feedback_frame": {
+                "text": "Correct.",
+                "language_code": "en",
+                "direction": "ltr",
+            },
+        },
+    ]
+
+
+def frame_teaching_templates():
+    """The real fa-en `en.a1.unit14.communication` shape.
+
+    A unit-2 template whose ONLY slot is constrained to unit-1
+    vocabulary: the unit's own contribution is the frame text, and the
+    slot recycles earlier-taught words. Reproduced here because that is
+    the shape behind every one of the seven guaranteed-409 packs.
+    """
+    es_frame = {
+        "text": "vamos {place}",
+        "language_code": "es",
+        "direction": "ltr",
+    }
+    return [
+        {
+            "content_key": "test.ckpt.scope.frame.word_order",
+            "lesson_content_key": SCOPE_UNIT_LESSON_KEY,
+            "type": "word_order",
+            "frame": dict(es_frame),
+            "slots": {"place": SCOPE_PLACE_SLOT},
+            "answer_derivation": {
+                "kind": "render_frame",
+                "frame": dict(es_frame),
+            },
+            "feedback_frame": {
+                "text": "Correct.",
+                "language_code": "en",
+                "direction": "ltr",
+            },
+        },
+        {
+            "content_key": "test.ckpt.scope.frame.translation",
+            "lesson_content_key": SCOPE_UNIT_LESSON_KEY,
+            "type": "translation",
+            "frame": {
+                "text": "we go {place}",
+                "language_code": "en",
+                "direction": "ltr",
+                "slot_rendering": {"place": "english_gloss"},
+            },
+            "slots": {"place": SCOPE_PLACE_SLOT},
+            "answer_derivation": {
+                "kind": "render_frame",
+                "frame": dict(es_frame),
+            },
+            "feedback_frame": {
+                "text": "Correct.",
+                "language_code": "en",
+                "direction": "ltr",
+            },
+        },
+        {
+            "content_key": "test.ckpt.scope.frame.multiple_choice",
+            "lesson_content_key": SCOPE_UNIT_LESSON_KEY,
+            "type": "multiple_choice",
+            "frame": dict(es_frame),
+            "slots": {"place": SCOPE_PLACE_SLOT},
+            "answer_derivation": {"kind": "slot_gloss", "slot": "place"},
+            "feedback_frame": {
+                "text": "Correct.",
+                "language_code": "en",
+                "direction": "ltr",
+            },
+        },
+    ]
+
+
+def prior_answer_templates():
+    """Unit templates whose GRADED answer is prior vocabulary.
+
+    A unit-2 noun can be forced into the `word` slot, so the item could
+    claim to "target" unit material -- but the learner is graded purely
+    on a unit-1 adverb. These must never be attributed to a unit lexeme.
+    """
+    es_frame = {
+        "text": "{word} {place}",
+        "language_code": "es",
+        "direction": "ltr",
+    }
+    return [
+        {
+            "content_key": "test.ckpt.scope.prior_answer.multiple_choice",
+            "lesson_content_key": SCOPE_UNIT_LESSON_KEY,
+            "type": "multiple_choice",
+            "frame": dict(es_frame),
+            "slots": {"word": SCOPE_WORD_SLOT, "place": SCOPE_PLACE_SLOT},
+            "answer_derivation": {"kind": "slot_gloss", "slot": "place"},
+            "feedback_frame": {
+                "text": "Correct.",
+                "language_code": "en",
+                "direction": "ltr",
+            },
+        },
+        {
+            "content_key": "test.ckpt.scope.prior_answer.fill_in_blank",
+            "lesson_content_key": SCOPE_UNIT_LESSON_KEY,
+            "type": "fill_in_blank",
+            "frame": {
+                "text": "aqui {word} {place}",
+                "language_code": "es",
+                "direction": "ltr",
+            },
+            "slots": {"word": SCOPE_WORD_SLOT, "place": SCOPE_PLACE_SLOT},
+            "answer_derivation": {"kind": "slot_text", "slot": "place"},
+            "feedback_frame": {
+                "text": "Correct.",
+                "language_code": "en",
+                "direction": "ltr",
+            },
+        },
+    ]
+
+
+def scope_setup(client, admin, templates, **kwargs):
+    ids = create_two_unit_course(**kwargs)
+    import_templates(
+        client,
+        admin,
+        ids["course_id"],
+        scope_artifact(templates),
+    )
+    return ids
+
+
+def unit_lexeme_ids(unit_id):
+    with SessionLocal() as db:
+        return set(
+            db.scalars(
+                select(Lexeme.id)
+                .join(Lesson, Lesson.id == Lexeme.provenance_lesson_id)
+                .where(Lesson.unit_id == unit_id)
+            )
+        )
+
+
+def error_code(response):
+    # app/main.py reshapes every HTTPException to {"error": {code, ...}}.
+    return response.json()["error"]["code"]
+
+
+def test_checkpoint_builds_when_template_needs_prior_unit_vocabulary(
+    client,
+    admin,
+    auth,
+):
+    ids = scope_setup(client, admin, cross_unit_templates())
+    unit_id = ids["unit_id"]
+
+    # Precondition: unit-2 material ALONE cannot satisfy these templates.
+    # Every `place` candidate lives in unit 1, so _base_slot_candidates()
+    # is empty for that slot at the old unit-only scope -- this is the
+    # exact 409 the fix targets.
+    from app.practice.service import _base_slot_candidates
+
+    with SessionLocal() as db:
+        own_lexemes = list(
+            db.scalars(
+                select(Lexeme)
+                .join(Lesson, Lesson.id == Lexeme.provenance_lesson_id)
+                .where(Lesson.unit_id == unit_id)
+            )
+        )
+        for template in db.scalars(
+            select(PracticeTemplate).where(
+                PracticeTemplate.course_id == ids["course_id"]
+            )
+        ):
+            candidates = _base_slot_candidates(template, own_lexemes)
+            assert not candidates["place"], template.content_key
+
+    response = client.post(f"/units/{unit_id}/checkpoint", headers=auth)
+    assert response.status_code == 200, response.text
+    items = response.json()["items"]
+    assert 12 <= len(items) <= 15
+
+    own_ids = unit_lexeme_ids(unit_id)
+    prior_ids = unit_lexeme_ids(ids["prior_unit_id"])
+    assert own_ids and prior_ids and not (own_ids & prior_ids)
+
+    with SessionLocal() as db:
+        rows = [db.get(PracticeItem, item["id"]) for item in items]
+        # Every item is TARGETED on the unit under test, never on the
+        # earlier unit's vocabulary.
+        assert all(row.target_lexeme_id in own_ids for row in rows)
+        # ...and the earlier unit's vocabulary really was used, only as
+        # supporting slot fill (otherwise this test would pass even with
+        # the bug still present).
+        prior_tokens = set(
+            db.scalars(
+                select(Lexeme.token).where(Lexeme.id.in_(prior_ids))
+            )
+        )
+        assert any(
+            set(row.filled_slots.values()) & prior_tokens for row in rows
+        )
+        assert all(row.source == "checkpoint" for row in rows)
+        assert len({row.session_id for row in rows}) == 1
+
+
+def test_checkpoint_target_attribution_implies_unit_material_in_answer(
+    client,
+    admin,
+    auth,
+):
+    """The invariant the answer-scope guard buys.
+
+    An item may only CLAIM a unit lexeme as its target_lexeme_id if that
+    lexeme reaches the graded answer -- checkpoint_result() turns
+    target_lexeme_id into SRS consolidation credit and into
+    weak_outcomes, so attributing an item to a word the learner was never
+    asked to produce would both mis-credit and mis-blame.
+    """
+    ids = scope_setup(client, admin, cross_unit_templates())
+    response = client.post(
+        f"/units/{ids['unit_id']}/checkpoint", headers=auth
+    )
+    assert response.status_code == 200, response.text
+    items = response.json()["items"]
+
+    from app.practice.service import _answer_slot_names
+
+    own_ids = unit_lexeme_ids(ids["unit_id"])
+    with SessionLocal() as db:
+        own_tokens = set(
+            db.scalars(select(Lexeme.token).where(Lexeme.id.in_(own_ids)))
+        )
+        attributed = 0
+        for output_item in items:
+            item = db.get(PracticeItem, output_item["id"])
+            if item.target_lexeme_id is None:
+                continue
+            attributed += 1
+            assert item.target_lexeme_id in own_ids
+            template = db.get(PracticeTemplate, item.template_id)
+            graded_tokens = {
+                item.filled_slots[name]
+                for name in _answer_slot_names(template)
+                if name in item.filled_slots
+            }
+            assert graded_tokens & own_tokens, (
+                template.content_key,
+                item.filled_slots,
+            )
+    assert attributed == len(items)
+
+
+def test_checkpoint_prefers_templates_that_grade_unit_material(
+    client,
+    admin,
+    auth,
+):
+    # Both template families are the unit's own and both are buildable
+    # once the pool is widened, but only one grades the learner on unit-2
+    # vocabulary. The unit-material pass runs first, so the whole
+    # checkpoint should come from that family and none from the family
+    # that would grade a unit-1 adverb.
+    ids = scope_setup(
+        client,
+        admin,
+        cross_unit_templates() + prior_answer_templates(),
+    )
+    response = client.post(
+        f"/units/{ids['unit_id']}/checkpoint", headers=auth
+    )
+    assert response.status_code == 200, response.text
+    items = response.json()["items"]
+    assert 12 <= len(items) <= 15
+
+    with SessionLocal() as db:
+        used = {
+            db.get(
+                PracticeTemplate,
+                db.get(PracticeItem, item["id"]).template_id,
+            ).content_key
+            for item in items
+        }
+    assert used
+    assert not any("prior_answer" in key for key in used), used
+
+
+def test_frame_teaching_unit_generates_with_unattributed_targets(
+    client,
+    admin,
+    auth,
+):
+    """The seven guaranteed-409 packs' actual shape.
+
+    fa-en/prs-en/nl-en `en.a1.unit14.communication` (and unit17, and
+    fa-en unit39) teach sentence frames; every slot in their unit-authored
+    templates is constrained to a semantic tag whose vocabulary came from
+    an earlier unit, and their own lexemes carry no agreement tags at all,
+    so they match no slot and cannot even be generation targets. A
+    checkpoint must still be possible -- the unit's own templates are what
+    is being tested -- but nothing prior may be credited to the unit, so
+    every such item stores a NULL target_lexeme_id.
+    """
+    ids = create_two_unit_course(unit_nouns=6, prior_adverbs=6, unit_tags={})
+    import_templates(
+        client,
+        admin,
+        ids["course_id"],
+        scope_artifact(frame_teaching_templates()),
+    )
+    unit_id = ids["unit_id"]
+
+    own_ids = unit_lexeme_ids(unit_id)
+    with SessionLocal() as db:
+        # Precondition: no unit lexeme matches any slot of any of the
+        # unit's own templates, so it cannot be a target at all.
+        from app.practice.service import lexeme_matches
+
+        own = list(
+            db.scalars(select(Lexeme).where(Lexeme.id.in_(own_ids)))
+        )
+        templates = list(
+            db.scalars(
+                select(PracticeTemplate).where(
+                    PracticeTemplate.course_id == ids["course_id"]
+                )
+            )
+        )
+        assert own and templates
+        assert not any(
+            lexeme_matches(lexeme, constraints)
+            for lexeme in own
+            for template in templates
+            for constraints in template.slots.values()
+        )
+
+    response = client.post(f"/units/{unit_id}/checkpoint", headers=auth)
+    assert response.status_code == 200, response.text
+    items = response.json()["items"]
+    assert 12 <= len(items) <= 15
+
+    with SessionLocal() as db:
+        rows = [db.get(PracticeItem, item["id"]) for item in items]
+        # Nothing prior is credited to this unit.
+        assert all(row.target_lexeme_id is None for row in rows)
+        # ...and every item is still built from the UNIT's own templates,
+        # which is what makes it a test of this unit.
+        unit_template_ids = set(
+            db.scalars(
+                select(PracticeTemplate.id)
+                .join(
+                    Lesson,
+                    Lesson.id == PracticeTemplate.provenance_lesson_id,
+                )
+                .where(Lesson.unit_id == unit_id)
+            )
+        )
+        assert unit_template_ids
+        assert all(row.template_id in unit_template_ids for row in rows)
+
+
+def test_frame_teaching_checkpoint_can_still_be_passed_and_scored(
+    client,
+    admin,
+    auth,
+):
+    # A NULL target_lexeme_id must not break scoring or consolidation:
+    # the pass still records, and every unit lexeme is seeded as
+    # "uncovered" rather than credited as directly tested.
+    ids = create_two_unit_course(unit_nouns=6, prior_adverbs=6, unit_tags={})
+    import_templates(
+        client,
+        admin,
+        ids["course_id"],
+        scope_artifact(frame_teaching_templates()),
+    )
+    unit_id = ids["unit_id"]
+    uid = user_id(auth)
+
+    response = client.post(f"/units/{unit_id}/checkpoint", headers=auth)
+    assert response.status_code == 200, response.text
+    items = response.json()["items"]
+    answer_all(client, auth, items, math.ceil(len(items) * 0.8))
+
+    result = client.get(
+        f"/units/{unit_id}/checkpoint/result", headers=auth
+    )
+    assert result.status_code == 200, result.text
+    body = result.json()
+    assert body["status"] == "complete"
+    assert body["passed"] is True
+    assert body["checkpoint_passed"] is True
+
+    own_ids = unit_lexeme_ids(unit_id)
+    prior_ids = unit_lexeme_ids(ids["prior_unit_id"])
+    with SessionLocal() as db:
+        rows = list(
+            db.scalars(
+                select(UserLexemeSRS).where(UserLexemeSRS.user_id == uid)
+            )
+        )
+        seeded = {row.lexeme_id for row in rows}
+        assert seeded == own_ids
+        # Nothing from the earlier unit was credited by passing this one.
+        assert not (seeded & prior_ids)
+        assert all(row.mastery == 0.3 for row in rows)
+
+
+def test_checkpoint_refuses_a_unit_whose_material_is_unusable(
+    client,
+    admin,
+    auth,
+):
+    # Templates exist and are the unit's own, but NO lexeme anywhere in
+    # the course prefix satisfies their slot: nothing can be built, and
+    # the endpoint must fail cleanly rather than emit a short checkpoint.
+    ids = create_two_unit_course(unit_nouns=4, prior_adverbs=0)
+    import_templates(
+        client,
+        admin,
+        ids["course_id"],
+        scope_artifact(frame_teaching_templates()),
+    )
+    response = client.post(
+        f"/units/{ids['unit_id']}/checkpoint", headers=auth
+    )
+    assert response.status_code == 409, response.text
+    assert error_code(response) == "checkpoint_unavailable"
+
+    uid = user_id(auth)
+    with SessionLocal() as db:
+        # Clean failure: the rolled-back attempt leaves nothing behind.
+        assert (
+            db.scalar(
+                select(func.count(CheckpointAttempt.id)).where(
+                    CheckpointAttempt.user_id == uid,
+                    CheckpointAttempt.unit_id == ids["unit_id"],
+                )
+            )
+            == 0
+        )
+        assert (
+            db.scalar(
+                select(func.count(PracticeItem.id)).where(
+                    PracticeItem.user_id == uid,
+                    PracticeItem.course_id == ids["course_id"],
+                )
+            )
+            == 0
+        )
+
+
+def test_checkpoint_refuses_a_unit_with_no_material_at_all(
+    client,
+    admin,
+    auth,
+):
+    # No practice templates imported for this course whatsoever.
+    ids = create_two_unit_course()
+    response = client.post(
+        f"/units/{ids['unit_id']}/checkpoint", headers=auth
+    )
+    assert response.status_code == 409, response.text
+    assert error_code(response) == "checkpoint_unavailable"
+
+
+def test_checkpoint_does_not_pad_a_thin_unit_with_duplicates(
+    client,
+    admin,
+    auth,
+):
+    # Two unit nouns and one buildable single-slot template: at most two
+    # genuinely distinct items exist. multiple_choice needs >=3 options so
+    # it cannot build at all here, leaving fill_in_blank's two fillings.
+    # The old per-attempt escape hatch padded that to twelve visible
+    # duplicates and passed the 409 gate; a 12-item floor met by repeating
+    # the same two questions six times is not a gate at all.
+    ids = create_two_unit_course(unit_nouns=2, prior_adverbs=2)
+    import_templates(
+        client,
+        admin,
+        ids["course_id"],
+        scope_artifact(cross_unit_templates()[:2]),
+    )
+    response = client.post(
+        f"/units/{ids['unit_id']}/checkpoint", headers=auth
+    )
+    assert response.status_code == 409, response.text
+    assert error_code(response) == "checkpoint_unavailable"
+
+
+def test_checkpoint_items_are_all_distinct(client, admin, auth):
+    ids = scope_setup(client, admin, cross_unit_templates())
+    response = client.post(
+        f"/units/{ids['unit_id']}/checkpoint", headers=auth
+    )
+    assert response.status_code == 200, response.text
+    items = response.json()["items"]
+
+    from app.practice.service import _prompt_signature, _signature
+
+    with SessionLocal() as db:
+        rows = [db.get(PracticeItem, item["id"]) for item in items]
+        slot_signatures = {
+            _signature(row.template_id, row.filled_slots) for row in rows
+        }
+        visible_signatures = {
+            _prompt_signature(row.prompt) for row in rows
+        }
+    assert len(slot_signatures) == len(items)
+    assert len(visible_signatures) == len(items)
+
+
+def test_widened_checkpoint_keeps_phase_f_invariants(
+    client,
+    admin,
+    auth,
+):
+    """SRS untouched per item, strict orthography, idempotent attempt."""
+    ids = scope_setup(client, admin, cross_unit_templates())
+    course_id = ids["course_id"]
+    unit_id = ids["unit_id"]
+    uid = user_id(auth)
+
+    response = client.post(f"/units/{unit_id}/checkpoint", headers=auth)
+    assert response.status_code == 200, response.text
+    items = response.json()["items"]
+
+    with SessionLocal() as db:
+        assert (
+            db.scalar(
+                select(func.count(UserLexemeSRS.id)).where(
+                    UserLexemeSRS.user_id == uid,
+                    UserLexemeSRS.course_id == course_id,
+                )
+            )
+            == 0
+        )
+
+    # Invariant 1: answering a checkpoint item never touches per-item SRS.
+    answer_item(client, auth, items[0]["id"], correct=True)
+    with SessionLocal() as db:
+        assert (
+            db.scalar(
+                select(func.count(UserLexemeSRS.id)).where(
+                    UserLexemeSRS.user_id == uid,
+                    UserLexemeSRS.course_id == course_id,
+                )
+            )
+            == 0
+        )
+
+    # Invariant 2: orthography_strict is forced, so a near-miss that
+    # grade_answer() would call "almost" is still scored incorrect.
+    selected = None
+    with SessionLocal() as db:
+        for output_item in items[1:]:
+            item = db.get(PracticeItem, output_item["id"])
+            template = db.get(PracticeTemplate, item.template_id)
+            if (
+                template.type in FREE_TEXT_EXERCISE_TYPES
+                and isinstance(item.correct_response, str)
+                and len(item.correct_response.strip())
+                >= MIN_ANSWER_LENGTH_FOR_TYPO_TOLERANCE
+            ):
+                selected = (item.id, template.type, item.correct_response)
+                break
+    assert selected is not None
+    item_id, exercise_type, correct_response = selected
+    typo = correct_response[1] + correct_response[0] + correct_response[2:]
+    assert typo != correct_response
+    assert (
+        grade_answer(
+            typo,
+            correct_response,
+            exercise_type=exercise_type,
+            script="latin",
+        )
+        == "almost"
+    )
+    strict = client.post(
+        f"/practice/items/{item_id}/answer",
+        headers=auth,
+        json={"response": typo},
+    )
+    assert strict.status_code == 200, strict.text
+    assert strict.json()["correct"] is False
+    assert strict.json()["result"] == "incorrect"
+
+    # Invariant 3: idempotent -- a second POST while the first attempt is
+    # unscored returns the SAME attempt's items, never a second attempt
+    # row, and a scored attempt is rate-limited instead of re-rolled.
+    answered = {items[0]["id"], item_id}
+    answer_all(
+        client,
+        auth,
+        [item for item in items if item["id"] not in answered],
+        correct_count=0,
+    )
+    result = client.get(
+        f"/units/{unit_id}/checkpoint/result", headers=auth
+    )
+    assert result.status_code == 200, result.text
+    again = client.post(f"/units/{unit_id}/checkpoint", headers=auth)
+    assert again.status_code == 429, again.text
+    assert error_code(again) == "checkpoint_retake_delayed"
+    with SessionLocal() as db:
+        assert (
+            db.scalar(
+                select(func.count(CheckpointAttempt.id)).where(
+                    CheckpointAttempt.user_id == uid,
+                    CheckpointAttempt.unit_id == unit_id,
+                )
+            )
+            == 1
+        )
+
+
+def test_widened_checkpoint_retake_still_reaches_the_floor(
+    client,
+    admin,
+    auth,
+):
+    # The recent-signature window holds the previous attempt's items, so
+    # the "fresh material" passes come up short on a retake. The late
+    # passes drop that history (but never allow a duplicate WITHIN one
+    # checkpoint), which is what keeps a retake at full length.
+    ids = scope_setup(
+        client, admin, cross_unit_templates(), unit_nouns=4, prior_adverbs=2
+    )
+    unit_id = ids["unit_id"]
+
+    first = client.post(f"/units/{unit_id}/checkpoint", headers=auth)
+    assert first.status_code == 200, first.text
+    answer_all(client, auth, first.json()["items"], correct_count=0)
+    assert (
+        client.get(
+            f"/units/{unit_id}/checkpoint/result", headers=auth
+        ).status_code
+        == 200
+    )
+
+    with SessionLocal() as db:
+        latest = db.scalar(
+            select(CheckpointAttempt)
+            .where(
+                CheckpointAttempt.user_id == user_id(auth),
+                CheckpointAttempt.unit_id == unit_id,
+            )
+            .order_by(
+                CheckpointAttempt.created_at.desc(),
+                CheckpointAttempt.id.desc(),
+            )
+            .limit(1)
+        )
+        latest.created_at = datetime.now(timezone.utc) - timedelta(
+            hours=1, seconds=1
+        )
+        db.commit()
+
+    retake = client.post(f"/units/{unit_id}/checkpoint", headers=auth)
+    assert retake.status_code == 200, retake.text
+    retake_items = retake.json()["items"]
+    assert 12 <= len(retake_items) <= 15
+
+    from app.practice.service import _prompt_signature
+
+    with SessionLocal() as db:
+        signatures = {
+            _prompt_signature(db.get(PracticeItem, item["id"]).prompt)
+            for item in retake_items
+        }
+    assert len(signatures) == len(retake_items)
