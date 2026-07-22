@@ -1,5 +1,16 @@
 # Lingo² — project state (read this first)
 
+> ## ⚠️ ACTIVE HANDOVER — read `docs/HANDOVER.md` NOW, before anything else
+>
+> The repo moved machines on 2026-07-22 and there is a pending setup +
+> next-actions procedure written FOR YOU in `docs/HANDOVER.md`. It is
+> self-contained: environment setup, the secrets you must ask Ramin for,
+> verification, and the prioritised work board. Do not start work, and do
+> not ask Ramin what to do, until you have read it.
+>
+> **Delete this banner once the handover is complete and the board in
+> Part 2 has been picked up.**
+
 Local-first language-learning app, Duolingo/Babbel-caliber, 24 directed
 en↔X learning paths (nl, fr, de, it, es, ru, zh, fa, prs, ar, ko, ja —
 ar approved 2026-07-11 with first content live; ko/ja approved
