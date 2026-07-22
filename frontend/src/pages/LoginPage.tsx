@@ -2,6 +2,7 @@ import { useEffect, useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../auth/AuthContext";
+import { SessionUnavailableScreen } from "../components/layout/ProtectedRoute";
 import { ApiError } from "@lingo/shared/api/client";
 import {
   clearAccountDeletedNotice,
@@ -10,7 +11,7 @@ import {
 
 export function LoginPage() {
   const { t } = useTranslation();
-  const { login, continueAsGuest } = useAuth();
+  const { login, continueAsGuest, status } = useAuth();
   const navigate = useNavigate();
   // One-time confirmation after account deletion (set by ProfilePage's
   // delete flow via sessionStorage — see accountDeletedNotice.ts for why
@@ -58,6 +59,19 @@ export function LoginPage() {
       setGuestSubmitting(false);
     }
   }
+
+  // Both early returns must stay BELOW every hook above.
+  //
+  // This page is reachable directly (bookmark, back button, an old
+  // redirect), so the guard can't live only in ProtectedRoute. A user who
+  // holds a session we merely couldn't VERIFY must never be shown the
+  // "continue as guest" button: that click registers a second account and
+  // overwrites the tokens of the first, which for a guest account is
+  // permanent data loss (its generated password was never shown to
+  // anyone). Same reason for the loading gate — a slow/hanging /auth/me
+  // must not flash the guest button at someone who is signed in.
+  if (status === "unverified") return <SessionUnavailableScreen />;
+  if (status === "loading") return <div className="page-loading">{t("common.loading")}</div>;
 
   return (
     <div className="auth-page">

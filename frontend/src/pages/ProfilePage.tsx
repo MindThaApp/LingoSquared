@@ -17,6 +17,12 @@ export function ProfilePage() {
   const navigate = useNavigate();
   const isGuest = isGuestUser(user);
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+  // Guest-only: logging out of a guest account is as destructive as
+  // deleting it (clearSession() wipes both tokens and the cached user, and
+  // the generated guest password was never shown to the user — see
+  // AuthContext.continueAsGuest), so it gets the same kind of explicit
+  // confirmation gate. A real account keeps the one-tap logout.
+  const [logoutConfirmOpen, setLogoutConfirmOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState<string | null>(null);
   const [exporting, setExporting] = useState(false);
@@ -174,7 +180,11 @@ export function ProfilePage() {
       <SpeechSpeedSettings />
       <VoiceSettings />
 
-      <button className="btn btn-secondary btn-block" onClick={logout} style={{ marginTop: 8 }}>
+      <button
+        className="btn btn-secondary btn-block"
+        onClick={() => (isGuest ? setLogoutConfirmOpen(true) : logout())}
+        style={{ marginTop: 8 }}
+      >
         {t("profile.logout")}
       </button>
 
@@ -209,6 +219,37 @@ export function ProfilePage() {
           {t("profile.delete_account")}
         </button>
       </div>
+
+      {/* Same overlay markup/classes as DeleteAccountConfirm (and
+          QuitConfirm) on purpose — deliberately not a new modal style.
+          Kept inline rather than extracted into a component because,
+          unlike deletion, there is no async state, no error branch and no
+          typed gate: the gate is a second explicit click, exactly as it is
+          for a guest in DeleteAccountConfirm (a generated guest email
+          can't reasonably be retyped). */}
+      {logoutConfirmOpen && (
+        <div className="confirm-overlay" role="dialog" aria-modal="true">
+          <div className="confirm-overlay-card">
+            <h2 style={{ marginTop: 0 }}>{t("profile.logout_confirm_title")}</h2>
+            <p style={{ margin: "0 0 8px" }}>{t("profile.logout_confirm_body_guest")}</p>
+            <p className="muted" style={{ margin: "0 0 16px" }}>
+              {t("profile.logout_confirm_export_hint")}
+            </p>
+            <div className="confirm-overlay-actions">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={() => setLogoutConfirmOpen(false)}
+              >
+                {t("common.cancel")}
+              </button>
+              <button type="button" className="btn btn-danger" onClick={logout}>
+                {t("profile.logout_confirm_button")}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {deleteConfirmOpen && user && (
         <DeleteAccountConfirm
