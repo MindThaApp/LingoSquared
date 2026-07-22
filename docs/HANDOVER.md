@@ -79,18 +79,46 @@ start without them. Ask him to move them across by **AirDrop, `scp`, or a
 password manager — NOT through the repo, a gist, or a chat message.**
 `backend/.env` contains a live Google service-account private key.
 
+**Essential — nothing runs without these two:**
+
 | File | Contains |
 |---|---|
 | `backend/.env` | DB URL + password, JWT secret, `ADMIN_EMAILS`, `CORS_ORIGINS`, Google Cloud TTS service-account JSON |
-| `frontend/.env` | `VITE_API_BASE_URL` etc. |
-| `frontend/.env.faqa` | QA-variant frontend config |
+| `frontend/.env` | `VITE_API_BASE_URL` |
+
+**Outside the repo — also essential:**
+
+| File | Contains |
+|---|---|
 | `~/.lingo_admin_pw` | admin password for `sync_dev_db.sh` non-interactive mode |
-| `~/.ssh/id_ed25519` | SSH key for the live server `ramin@192.168.4.4` |
+| `~/.ssh/id_ed25519` (+ `.pub`) | SSH key for the live server `ramin@192.168.4.4` |
+
+**Optional QA/test variants** — copy only if you need those workflows; the
+core dev loop does not:
+
+`backend/.env.e2e` · `backend/.env.qa` · `backend/.env.faqa` ·
+`backend/.env.fib` · `backend/.env.play` · `frontend/.env.e2e.local` ·
+`frontend/.env.faqa` · `frontend/.env.backup-live-server`
+
+**Do NOT hand-carry these — they are tracked and arrive with the clone:**
+`backend/.env.example`, `frontend/.env.example`,
+`frontend/.env.production.lan`, `frontend/.env.qa`.
+
+Verify the untracked set yourself rather than trusting this list — it is
+generated, not curated:
+
+```bash
+find . -name ".env*" -not -path "./node_modules/*" -not -path "*/node_modules/*" \
+     -not -path "./.git/*" | sort | while read f; do f="${f#./}"
+  git ls-files --error-unmatch "$f" >/dev/null 2>&1 \
+    || echo "MUST hand-carry: $f"; done
+```
 
 Then:
 
 ```bash
 chmod 600 ~/.lingo_admin_pw ~/.ssh/id_ed25519 ~/dev/LingoSquared/backend/.env
+chmod 700 ~/.ssh
 ```
 
 `backend/.env.example` documents every variable if regenerating is easier
