@@ -11,6 +11,45 @@ Proven by a real pilot: **`docs/content/practice/en-nl/a2_unit73.yaml`** — aut
 against this recipe, 0 compiler errors, and a faithful offline port of
 `generate_checkpoint()` returns 15/15 distinct items on 5 different RNG seeds.
 
+> ### CORRECTIONS — 2026-07-22 (read this if you already read an earlier version)
+>
+> Eight defects were found by the first agent to author a full wave against this
+> recipe, and each was re-verified against the code before being written in here.
+> If you already started a pack on the earlier text, re-check these:
+>
+> 1. **§6.6 / DO-NOT #9 REVERSED. The case-sensitivity ban was factually wrong.**
+>    Practice and checkpoint answers **are** casefolded — a sentence-initial
+>    capitalized lexeme is a **safe** typed answer. Lowercase citation forms are
+>    still preferred, but for DATA-QUALITY reasons only. See §6.6.
+> 2. **§0 and §9 step 4 diagnostics had a unit-number collision bug.** They filtered
+>    on `f'.{UNIT}.'`, which matches the same unit number at *every* CEFR level (for
+>    en-nl `unit01` that reported 154 lexemes instead of 79). Both snippets now
+>    filter on `f'.{LEVEL}.{UNIT}.'`. **Re-run any capacity measurement you took
+>    with the old snippet.**
+> 3. **§8 gained a grammar-unit section (§8.1).** The "one broad template per lesson,
+>    using that lesson's own tag" pattern is a *vocabulary-unit* recipe; applied
+>    literally to a B1 grammar unit it puts 27 of 65 en-nl B1 lessons under the
+>    3-option `multiple_choice` floor and 47 of 65 under the 6-pair
+>    `matching_pairs` floor.
+> 4. **§3.1 is new: semantic-tag UNIONS and untagged slots.** `semantic: [a, b, c]`
+>    is OR-matched and a slot may legally omit `semantic` entirely. This is the
+>    single most important technique for reaching the floors in a thin unit, and
+>    the only way to *exclude* one bad lexeme from a pool.
+> 5. **§1.1 is new: unit scope vs course scope.** Satisfiability is unit-scoped;
+>    self-reference and "every pool member must be grammatical in the frame" are
+>    COURSE-scoped. Three word_order frames passed at unit scope and were
+>    ungrammatical at course scope.
+> 6. **§0 gained a mandatory gloss-reading step.** Mis-glossed lexemes are not an
+>    fa/prs-only problem (old §7 framing) — en-nl B1 alone has five whose gloss
+>    would be *shown to the learner as the correct answer* while meaning something
+>    else. Read every gloss; do not just count tokens.
+> 7. **§9: `practice-validate` costs ~55 s per invocation** regardless of pack
+>    count. Pass **all** your packs to a single `--pack` (it is `nargs='+'`).
+> 8. **§9 step 2's acceptance test was impractical.** The integrity check prints
+>    ~44 lines of pre-existing flags; pipe it through `grep <yourfile>` and expect
+>    empty. **Also new:** both corpus checks glob `a*_unit*.yaml`, so they silently
+>    skip every `b1_`/`b2_` pack — see §9.
+
 ---
 
 ## 0. STOP. Do the prerequisite check before you write a single line.
@@ -27,13 +66,17 @@ Run this first (from the repo root). It prints the unit's real lexeme pool:
 .content-venv/bin/python - <<'EOF'
 import sys, collections; sys.path.insert(0, 'scripts')
 DIRECTION = 'en-nl'     # <-- your direction
+LEVEL     = 'a2'        # <-- your CEFR level: a1 | a2 | b1 | b2
 UNIT      = 'unit73'    # <-- your unit, e.g. 'unit05'
 MODULES = {'en-fa':'backfill_lexemes','fa-en':'backfill_lexemes_fa_en',
            'en-prs':'backfill_lexemes_en_prs','prs-en':'backfill_lexemes_prs_en',
            'en-nl':'backfill_lexemes_en_nl','nl-en':'backfill_lexemes_nl_en'}
+# NOTE the '.{LEVEL}.{UNIT}.' filter: unit numbers RESTART at every CEFR level,
+# so the old '.{UNIT}.' form merged A1+A2+B1 (en-nl 'unit01' -> 154 lexemes
+# instead of the real 79) and every capacity number downstream was wrong.
 specs = [s for s in __import__(MODULES[DIRECTION]).iter_specs()
-         if f'.{UNIT}.' in s['lesson_content_key']]
-print(f'{len(specs)} lexemes for {DIRECTION} {UNIT}')
+         if f'.{LEVEL}.{UNIT}.' in s['lesson_content_key']]
+print(f'{len(specs)} lexemes for {DIRECTION} {LEVEL} {UNIT}')
 by = collections.defaultdict(list)
 for s in specs: by[s['lesson_content_key']].append(s)
 for k, v in by.items():
@@ -52,6 +95,32 @@ EOF
 * **≥1 lexeme in ≥1 lesson → proceed.** Note which lessons have lexemes; a lesson
   with zero lexemes cannot be represented in the checkpoint no matter what you do.
 
+### 0.1 READ every gloss in that dump. Do not just count tokens.
+
+The dump above is not only a capacity measurement — it is the **only** place a
+mis-glossed lexeme is visible to you. `backfill_lexemes*.py` keys glosses by **bare
+token**, one entry per token for the whole direction, so a token your unit
+re-introduces in a *new sense* still carries whichever sense some earlier unit
+registered. `slot_gloss` and `matching_pairs` then show that wrong gloss to the
+learner **as the correct answer**.
+
+This is not an fa/prs homograph problem (defect 1.29 is written up that way in §7
+because that is where it was first found). en-nl B1 alone, measured 2026-07-22:
+
+| Token | Gloss the lexeme carries | What the B1 unit actually teaches |
+|---|---|---|
+| `was` (b1 unit01) | "do the dishes (with ik)" | *was* — `Als ik rijk was, …` |
+| `waar` (b1 unit02) | "where" | *true* — the unit's own pair is `waar → "true"` |
+| `vroeg` (b1 unit05) | "early" | *asked* — `Hij vroeg of …` |
+| `rust` (b1 unit09) | "rest (imperative, with u)" | the **noun** *rest* — `meer rust nodig hebben` |
+| `regel` (b1 unit06) | "arrange (with ik, part of regelen)" | *de regel* = the rule |
+
+**Rule: read every gloss in the pool of every slot you author, in every direction,
+and check it against what the unit's realization file actually teaches.** A wrong
+gloss cannot be caught by any validator, by a green compile, or by the capacity
+script. Keep the mis-glossed token out of your pools (§3.1 shows how to exclude one)
+and list it in your `review.notes` so the coordinator can route a backfill fix.
+
 **Measured 2026-07-22 across the 6 launch directions:** of the 292 units missing a
 pack, only **45** currently have lexemes (en-nl 12, en-fa 19, en-prs 14). The other
 **247** are backfill-blocked. fa-en / nl-en / prs-en have **zero** ready units — every
@@ -68,7 +137,7 @@ classification.
 | Function | What it does | Consequence for you |
 |---|---|---|
 | `_material(db, course, lesson_ids)` | selects `PracticeTemplate` rows whose `provenance_lesson_id` ∈ `lesson_ids` **and** `Lexeme` rows whose `provenance_lesson_id` ∈ `lesson_ids` | your template only exists for a checkpoint if its `lesson_content_key` names a lesson **of that unit** |
-| `generate_checkpoint()` (:1455) | calls `_material()` with **only the unit's own lesson ids** | **THE load-bearing rule: every slot must be satisfiable by lexemes THIS UNIT introduces.** A slot tagged with vocabulary taught in an earlier unit has ZERO candidates at checkpoint scope and can never generate. |
+| `generate_checkpoint()` (:1557) | calls `_material()` with **only the unit's own lesson ids** | **THE load-bearing rule: every slot must be satisfiable by lexemes THIS UNIT introduces.** A slot tagged with vocabulary taught in an earlier unit has ZERO candidates at checkpoint scope and can never generate. |
 | `generate_batch()` / `generate_review_batch()` | calls `_material()` with **every completed lesson** in the course | the same template CAN legitimately draw on earlier units in Endless Practice — that is why so many existing packs look fine there and still fail the checkpoint |
 | `_material()` TTS filter | drops **all `listen_select` templates** when `tts_actually_configured(target_language)` is false | see §6.6 — `listen_select` is dead weight for `en-fa` and `en-prs` today |
 | `_generate_target_item()` | picks a **target lexeme** first, then forces it into a slot it matches | a template can only ever serve targets that match one of its slots. Narrow single-member slots serve exactly 1 lexeme. **Target coverage matters as much as template count.** |
@@ -78,6 +147,42 @@ classification.
 
 `fill_slots()` returns `None` immediately if **any** declared slot has zero
 candidates — one dead slot kills the whole template, not just that slot.
+
+### 1.1 Every rule below has a SCOPE. Check which one, every time.
+
+Your template is executed against **two different lexeme pools**, and a rule that is
+safe in one is not automatically safe in the other. Three shipped `word_order` frames
+were fine at unit scope and ungrammatical at course scope purely because this was
+left implicit.
+
+| Scope | Pool | Which calls use it |
+|---|---|---|
+| **UNIT** | only the lexemes the unit's own lessons introduce | `generate_checkpoint()` |
+| **COURSE** | every lexeme in every lesson of this `Course` the learner has completed. A `Course` is **one CEFR level** — A1/A2/B1 never mix. | `generate_batch()` (Endless Practice), `generate_review_batch()` |
+
+Rule-by-rule:
+
+* **Satisfiability (every slot has ≥1 candidate; MC/listen_select ≥3; matching_pairs
+  ≥ slot count) — UNIT-scoped.** These are the bars that decide whether the
+  checkpoint reaches 12 items. Measure them on the unit's lexemes only (§9 step 4).
+* **Self-reference, defect 1.14 (the frame's literal text must not contain one of its
+  own slot's candidate values) — COURSE-scoped.** A word that is not a candidate in
+  your unit becomes one in Endless Practice.
+  `scripts/_practice_content_integrity_check.py` already checks it at that scope
+  (it loads the direction's **entire** `iter_specs()` pool).
+* **"Every pool member must be grammatical / sensible in the frame" (§6.4
+  `word_order`, §6.6(b) fixed-sentence `translation`) — COURSE-scoped.** This is the
+  one that bites. `Kunt u {weekday} om tien uur langskomen?` is safe only if every
+  *course-wide* member of the slot's pool is a weekday. Concretely, for en-nl B1: a
+  slot with a single lesson tag pools ~2–20 lexemes at unit scope; the same slot with
+  a 6-tag union pools 21 at unit scope but **44 at course scope**; and a slot with no
+  `semantic:` constraint at all pools **293** course-wide content words. Widen the
+  slot, then re-read the frame against the *widened* pool.
+* **`fill_in_blank` single-candidate ambiguity (§6.5) — checked even wider than
+  course scope:** the compiler pools every level of the direction at once. It is
+  deliberately stricter than runtime; satisfy it as written.
+* **TTS availability, RTL/`direction`, script purity, register — pack-wide.** They
+  do not depend on which pool is loaded.
 
 ---
 
@@ -204,6 +309,66 @@ practice.<direction>.<target_lang>.<level>.unit<NN>.lesson<NN>.<verb>.<seq>
 * `lesson_content_key` is copied **verbatim** from the realization's
   `units[0].lessons[].content_key`. Do not invent it; typos here produce a template
   that silently never imports.
+
+### 3.1 Slot constraints: unions, untagged slots, single-member anchors
+
+Everything above shows a slot with **one scalar** `semantic:` tag. That is the
+*narrowest* of three legal forms, and it is why thin units look impossible. All three
+matter; the union is the most important technique in this file.
+
+`lexeme_matches()` (`service.py:64`) is the whole contract, and the compiler states
+it explicitly at `compile_content.py:2381`: *"a requested list is an OR query"*.
+
+**(a) A semantic tag may be a LIST, and it is OR-matched.**
+
+```yaml
+    item:
+      language_code: nl
+      part_of_speech: [noun, verb, adjective]
+      agreement_tags:
+        semantic: [reported_speech_statement, reported_speech_question,
+                   reported_speech_dialogue, reported_speech_reading]
+```
+
+A lexeme matches if it carries **any one** of those values. This is how a unit whose
+individual lessons hold 2–3 content words each reaches the `multiple_choice` 3-option
+floor and the `matching_pairs` 6-pair floor: **union the unit's lesson tags.** In
+en-nl B1, the per-lesson tag alone leaves 27 of 65 lessons under the MC floor and 47
+under the matching_pairs floor; the union of a unit's own lesson tags yields 12–54
+distinct content tokens per unit — every unit clears both floors.
+
+Every value you list must appear in `tag_schema.agreement_tags.semantic` or the
+compiler hard-fails.
+
+**(b) Union is also how you EXCLUDE one lexeme.** There is no "not" operator. To keep
+a mis-glossed token (§0.1), a proper noun, or a case-duplicate out of a pool, **union
+the sibling lesson tags and simply omit the tag that carries it.** Narrowing
+`part_of_speech` is the other exclusion lever (it is what keeps `proper_noun` out of
+`multiple_choice` pools).
+
+**(c) A slot may declare NO `semantic:` tag at all** — `agreement_tags` defaults to
+`{}` and `all()` over an empty mapping is `True`, so `language_code` +
+`part_of_speech` alone is a legal, fully-supported constraint. Use it deliberately,
+not casually:
+
+* **Safe** for `word_order` / bare-word `translation` where the prompt varies with the
+  answer and the frame imposes no semantic requirement.
+* **Dangerous** for any frame with literal text, because at COURSE scope (§1.1) it
+  matches every content word in the level — 293 of them in en-nl B1. Every one of
+  them must be grammatical in your frame.
+* Never combine it with a fixed-English-sentence `translation` (§6.6(b)).
+
+**(d) A narrow lexical tag is a single-member ANCHOR — for `word_order` too, not just
+`fill_in_blank`.** The `*_single` / `*_pure` tags exist to pin a slot to exactly one
+token. That makes a multi-word frame deterministic and therefore safe: the hero
+sentence renders one way, forever. `fill_in_blank` *requires* this (§6.5); `word_order`
+and fixed-sentence `translation` merely benefit from it. Single-member anchors serve
+exactly one target lexeme each, so keep them a minority of your templates (§8).
+
+**Combining the four:** a healthy pack usually has broad union-tagged slots for the
+recognition and production tiers (volume + target coverage) and single-member anchors
+for the structured tier (precision), with `part_of_speech` doing the fine filtering in
+both.
 
 ---
 
@@ -346,12 +511,17 @@ Same shape as `multiple_choice`, `type: listen_select`. The rendered frame becom
   target language and every slot becomes English.**
 * **No candidate floor** — `word_order` and `translation` are the two safe types when
   a tag crosses the A1/A2 boundary (AUTHORING_GUIDE §18).
-* **Every pool member must be grammatical in the frame.** `Kunt u {weekday} om tien
-  uur langskomen?` is safe because every weekday fits; `afspraak voor een {any noun}?`
-  is not.
+* **Every pool member must be grammatical in the frame — judged at COURSE scope, not
+  unit scope (§1.1).** `Kunt u {weekday} om tien uur langskomen?` is safe because
+  every weekday fits; `afspraak voor een {any noun}?` is not. Three shipped frames
+  were checked at unit scope only and turned out ungrammatical once Endless Practice
+  widened the pool to the whole course. If you widened a slot with a tag union
+  (§3.1a), re-read the frame against the **widened** pool, then again at course scope.
 * **Defect 1.14 (self-reference):** the frame's literal text must not contain any of
   its own slot's candidate values ("It's ten past {item}" where `ten` is a candidate).
-  `scripts/_practice_content_integrity_check.py` detects this — run it (§9).
+  Also COURSE-scoped. `scripts/_practice_content_integrity_check.py` detects this —
+  run it (§9), **but it skips `b1_`/`b2_` packs entirely** (§9 step 2), so on a B1/B2
+  pack you must do this check by hand.
 * Defect 1.11: RTL tile assembly — see §7.
 
 ### 6.5 `fill_in_blank` — structured
@@ -405,17 +575,50 @@ because the prompt varies with the answer.
 fixed English prompt says "volunteer" while the answer may render "employee" —
 that is the *underdetermined production prompt* defect (marks correct learners wrong).
 
-* **Typed answers are graded by exact string match** (Phase C adds distance-1 typo
-  tolerance for some languages; fa/prs grade STRICT). Therefore:
-  * **Never let a typed-answer slot sample a sentence-initial capitalized form.**
-    `Kan`, `Typen`, `Vertelt`, `Van`, `Zij`, `Daar`, `Mooi`, `Ervaring`, `Werktijden`
-    are all real lexemes in one en-nl unit whose only capital comes from sentence
-    position. A learner typing the lowercase form is marked wrong (defect 1.25 —
-    case-sensitivity is not modelled). Narrow with `part_of_speech`, or use a `*_pure`
-    tag, or check the pool by hand — **course-wide, not just unit-scoped**, because
-    Endless Practice uses the whole course pool.
-  * Defect 1.30 (fa/prs harakat): never make a diacritic-bearing form the canonical
-    typed answer.
+* **Typed answers are graded by exact string match after normalization** (Phase C adds
+  distance-1 typo tolerance for some languages; fa/prs grade STRICT). Therefore:
+  * **CORRECTED 2026-07-22 — this REVERSES the previous instruction. Capitalization
+    is NOT a grading hazard in a practice pack.** The old rule said a typed-answer
+    slot must never sample a sentence-initial capitalized form because a learner
+    typing the lowercase form would be marked wrong. **That is false for practice and
+    checkpoint items.** Verified in the code:
+    * `grade()` (`backend/app/review/grading.py:612`) takes `case_sensitive=False` by
+      default, and `_normalize()` (`:158`) casefolds both sides unless it is True.
+    * The practice/checkpoint submit path (`backend/app/api/router.py:2062`) passes
+      only `script` and `orthography_strict` — it **never passes `case_sensitive`**.
+      Practice and checkpoint answers are therefore always casefolded.
+    * `Stel`, `Soms`, `Toch`, `Beste`, `Graag`, `Kun`, `Natuurlijk` and the other
+      capitalized-by-position en-nl B1 lexemes are **safe** typed answers. The old
+      rule excluded them for no reason and made several thin units look unauthorable.
+  * **Still prefer a lowercase citation form — for DATA QUALITY, not for grading.**
+    A capitalized citation form displays wrong wherever the token is *shown* rather
+    than typed: as a `matching_pairs` left, in the post-answer "correct answer" line,
+    and in any frame that renders it mid-sentence. The `backfill_lexemes*.py` scripts
+    now fold sentence-initial capitals onto their lowercase citation form
+    (`NL_CITATION_FORMS` and its siblings), so in a well-backfilled unit the question
+    mostly does not arise. Where a capitalized token *does* survive in your pool,
+    check whether the capital is real (proper nouns, `Spaans`, German nouns) — if it
+    is, keep it; if it is only sentence position, prefer a `*_pure` tag or a
+    `part_of_speech` narrowing, and note it in `review.notes` so the coordinator can
+    route a backfill fold. **Do not drop an otherwise-good lexeme over this.**
+  * **Known quirk, worth knowing:** `case_sensitive` is a real per-exercise flag, set
+    by authors via `feedback_meta` and honoured on the *lesson* exercise paths
+    (`router.py:399`, `:912` — it exists for German's `Sie`/`sie`). It is simply not
+    wired into the practice path. So the same word can grade case-sensitively in a
+    lesson and case-insensitively in Endless Practice. Nothing for you to author
+    around; just don't infer practice behaviour from a lesson exercise.
+  * **Defect 1.30 (fa/prs harakat) — same correction, found while verifying the
+    above.** The old wording said "normalization does not strip short-vowel
+    diacritics". It does: `ARABIC_DIACRITIC_CHARS` (U+064B–U+0652 plus superscript
+    alef) is in `STRIPPED_FORMATTING_CHARS` (`grading.py:130-139`) and
+    `is_invisible_formatting_only_difference()` runs **ahead of every strictness
+    branch**, so a harakat-only difference grades `correct` even on an
+    `orthography_strict` checkpoint item. Tatweel and the bidi/zero-width marks are
+    stripped the same way; ZWNJ is separately allowed to match a space or nothing.
+    **Still avoid a diacritized canonical form** — it displays wrong wherever it is
+    shown, and Arabic/Persian look-alike letters (ي/ی, ك/ک, ة/ه, ۀ/ه, ى/ی) are
+    deliberately *not* forgiven (`is_script_confusion()`), so §7's codepoint-purity
+    rules remain hard requirements.
 * Defect 1.21 / AUTHORING_GUIDE §12 — multi-clause phrasing variants — does not apply
   to generated packs (there is exactly one derived answer), which is precisely why
   sentence translations must be deterministic.
@@ -440,12 +643,18 @@ that is the *underdetermined production prompt* defect (marks correct learners w
   (می‌شه/می‌کنه/اینجاست, polite شما to the learner). `prs-en` = colloquial Dari
   (می‌تانین/استه). `nl-en` = informal jij. Match the lane you are authoring in.
 * **`listen_select`: do not author any for `en-fa` or `en-prs`** (§6.2).
-* **Defect 1.30 (harakat):** fa/prs grade strict and normalization does not strip
-  short-vowel diacritics. Never make a diacritized form (کِی) the typed answer.
-* **Defect 1.29 (homograph collision):** a token with two senses (تو = "you" /
-  "in") carries one flat classifier entry, so its tags/gloss leak into unrelated
-  frames. Before using a tag whose pool contains a known homograph, read the actual
-  glosses in the §0 dump.
+* **Defect 1.30 (harakat) — CORRECTED 2026-07-22.** The old text said normalization
+  does not strip short-vowel diacritics; it does (§6.6), so a harakat-only difference
+  grades `correct` even under `orthography_strict`. Avoid a diacritized canonical form
+  (کِی) anyway — it displays wrong wherever the token is *shown*. What is genuinely
+  unforgiving is the letter set: the Arabic/Persian look-alike pairs above are never
+  forgiven, so the codepoint-purity rules are hard requirements.
+* **Defect 1.29 (homograph collision) — NOT an fa/prs-only problem.** A token with two
+  senses (تو = "you" / "in") carries one flat classifier entry, so its tags/gloss leak
+  into unrelated frames. The identical failure exists in Latin-script directions
+  (en-nl B1 has five, listed in §0.1). **§0.1's rule — read every gloss in the pool —
+  is the general form and applies to every direction.** This bullet is only the
+  Persian-script instance of it.
 * Defect 1.11: RTL word-order tiles — the frontend handles direction; just make sure
   `direction: rtl` is set so it can.
 
@@ -470,11 +679,64 @@ measurement of all 262 existing packs (2026-07-22).
 The pilot (`en-nl/a2_unit73.yaml`) hits: 18 templates, 6/6 lessons in all three
 tiers, 85% target coverage, capacity R49 / S40726 / P33.
 
-**How to get breadth cheaply:** one broad recognition template + one broad bare-word
-translation per lesson, using that lesson's own semantic tag, plus 2–3
-`matching_pairs` over a curated content-word tag. That alone reaches ~12 templates,
-high coverage, and both the recognition and production tiers. Add `word_order` /
-`fill_in_blank` on the unit's hero sentences for the structured tier.
+**How to get breadth cheaply — VOCABULARY units:** one broad recognition template +
+one broad bare-word translation per lesson, using that lesson's own semantic tag, plus
+2–3 `matching_pairs` over a curated content-word tag. That alone reaches ~12
+templates, high coverage, and both the recognition and production tiers. Add
+`word_order` / `fill_in_blank` on the unit's hero sentences for the structured tier.
+
+**This is a VOCABULARY-unit pattern. It does not survive contact with a grammar
+unit — see §8.1 before you apply it.**
+
+### 8.1 Grammar units (most of B1/B2): the per-lesson-tag pattern DOES NOT WORK
+
+A vocabulary unit's lesson teaches ~10–20 content words that share one semantic tag. A
+grammar unit's lesson teaches a *structure*, so its per-lesson tag is dominated by
+function words (`de`, `een`, `het`, `dat`, `niet`, `als`, `zou`) and carries only 1–3
+content words. Measured across all 65 en-nl B1 lessons, 2026-07-22, using the lesson's
+own dominant tag with `part_of_speech: [noun, verb, adjective, adverb, phrase]`:
+
+* **27 of 65 lessons yield fewer than 3 distinct glosses** → `build_prompt()` silently
+  rejects every `multiple_choice` / `listen_select` instance.
+* **47 of 65 yield fewer than 6 distinct tokens** → no `matching_pairs` can generate.
+* The `wrapup_production` lesson that closes most B1 units has **1–5 lexemes total**.
+* Worst cases are single-lexeme lessons (`past_ability_kon`, `real_conditional`,
+  `unreal_present_conditional`, `past_narrative_toen`, `sequencing_eerst_later`).
+
+**None of that is a blocked unit. It is a slot-design problem.** Do this instead:
+
+1. **Union the unit's lesson tags for every recognition and production template**
+   (§3.1a). The union of a unit's own lesson tags gives 12–54 distinct content tokens
+   for every en-nl B1 unit — comfortably over both floors. Keep the template's
+   `lesson_content_key` anchored to a single lesson (that is what the checkpoint's
+   lesson stratification round-robins over); it is only the SLOT that widens.
+2. **Anchor templates per lesson, pool across the unit.** One template per lesson,
+   each `lesson_content_key`-anchored to its own lesson, each with the same
+   union-tagged slot. Every lesson stays represented and every slot clears its floor.
+3. **Put the grammar itself in the frame, not in the pool.** The point of a grammar
+   unit is the structure, so `word_order` and `fill_in_blank` earn their keep here:
+   frame the unit's hero construction literally (`Als ik rijk {item}, zou ik een huis
+   kopen.`) and let a single-member anchor tag fill the one variable position (§3.1d).
+   These two types have **no candidate floor**, so a 1–2 lexeme lesson can still carry
+   a real structured-tier template.
+4. **`matching_pairs` goes over the unit-wide union, not a lesson tag.** Six pairs is
+   the floor; almost no grammar lesson has six content words of its own. Anchor it to
+   the richest lesson (the dialogue/reading lesson — those consistently hold 8–20
+   lexemes) and pool the union.
+5. **Exclude function words with `part_of_speech`, not by hand.** `pronoun`,
+   `particle`, `preposition` and `proper_noun` are the noise in a grammar unit's pool;
+   `[noun, verb, adjective, adverb, phrase]` is the working content set. Then re-read
+   the survivors' glosses (§0.1) — grammar units re-introduce known tokens in new
+   senses more often than vocabulary units do, which is exactly how the five en-nl B1
+   mis-glosses arose.
+6. **Re-check every frame against the WIDENED pool (§1.1).** Unioning tags is what
+   makes a frame's grammaticality requirement bite, and Endless Practice widens it
+   again to course scope. This is the step the three broken `word_order` frames
+   skipped.
+
+Expect a grammar-unit pack to lean structured-heavy and to use more single-member
+anchors than the §11 vocabulary pilot does. That is correct, not a shortfall — as long
+as each of the three tiers still clears its own bar in the table above.
 
 ---
 
@@ -483,27 +745,54 @@ high coverage, and both the recognition and production tiers. Add `word_order` /
 From the repo root (`.content-venv/` has PyYAML):
 
 **1. Compiler validation — must be `0 error(s)`. This is the gate.**
+
+**`--pack` is `nargs='+'`. Pass EVERY pack you authored in ONE invocation.** A single
+run costs **~55 s** no matter how many packs you give it (measured 2026-07-22: 53 s
+for one pack, 62 s for four) because it re-globs and re-parses the whole realization
+tree every time. Eleven sequential runs is ten wasted minutes.
+
 ```bash
 .content-venv/bin/python scripts/compile_content.py practice-validate \
-  --pack docs/content/practice/en-nl/a2_unit73.yaml \
+  --pack docs/content/practice/en-nl/b1_unit01.yaml \
+         docs/content/practice/en-nl/b1_unit02.yaml \
+         docs/content/practice/en-nl/b1_unit03.yaml \
   --content-root docs/content/realizations
 ```
-This also runs the AUTHORING_GUIDE §17 `fill_in_blank` ambiguity hard-fail against
-the real backfill lexeme data. Warnings are not fatal but must be explained in your
-report.
 
-**2. Content-integrity sweep — your file must not appear in the output.**
+* **All packs in one invocation must be the SAME direction.** Mixing them fails with
+  `language pair ('en', 'fa') does not match ('en', 'nl')`. One run per direction.
+* This also runs the AUTHORING_GUIDE §17 `fill_in_blank` ambiguity hard-fail against
+  the real backfill lexeme data. Warnings are not fatal but must be explained in your
+  report.
+
+**2. Content-integrity sweep — `grep` for your own file and expect EMPTY output.**
+
+The script prints ~44 lines, most of them pre-existing flags in other packs, so "your
+file must not appear" is not something you can eyeball. Pipe it:
+
 ```bash
-.content-venv/bin/python scripts/_practice_content_integrity_check.py
+.content-venv/bin/python scripts/_practice_content_integrity_check.py \
+  | grep b1_unit01.yaml          # <-- your file(s); expect NO output
 ```
-Catches defect 1.14 (self-reference) and 1.15 (anchor lesson with zero
-`introduced_tokens`). It globs the whole practice corpus, so ignore pre-existing
-flags in other files; only your own file matters.
+It takes ~2¼ minutes (it loads all six directions' lexeme pools), so run it once at
+the end over all your packs rather than per pack. Catches defect 1.14 (self-reference,
+at COURSE scope — see §1.1) and 1.15 (anchor lesson with zero `introduced_tokens`).
+
+* **KNOWN GAP — it globs `a*_unit*.yaml`, so it never reads a `b1_`/`b2_` pack.**
+  Confirmed 2026-07-22: 28 B1 packs are already in the corpus and none has ever been
+  checked. If your pack is B1/B2 **an empty grep proves nothing** — the file was
+  skipped. Until the glob is fixed (not your lane; report it), check defect 1.14 by
+  hand: for every `word_order` / fixed-sentence `translation`, list the literal words
+  of the frame and confirm none of them is a course-wide candidate value of one of
+  that same frame's slots.
 
 **3. `fill_in_blank` ambiguity audit (corpus-wide second opinion).**
 ```bash
 .content-venv/bin/python scripts/_fill_in_blank_ambiguity_check.py
 ```
+Same `a*_unit*.yaml` glob and therefore the same B1/B2 blind spot. The compiler's own
+§17 hard-fail in step 1 *does* run on your pack whatever its level, so this step is a
+second opinion, not the gate.
 
 **4. Capacity + coverage — the check nothing else does.** `practice-validate` is
 *purely static YAML checking*; it never touches a lexeme, so a pack can validate
@@ -515,6 +804,7 @@ report the numbers:
 import sys, re, random, collections, yaml; sys.path.insert(0, 'scripts')
 PACK = 'docs/content/practice/en-nl/a2_unit73.yaml'   # <-- your pack
 MODULE = 'backfill_lexemes_en_nl'                     # <-- your direction's backfill
+LEVEL = 'a2'                                          # <-- your CEFR level
 UNIT = 'unit73'                                       # <-- your unit
 TTS = True   # True for target nl/en; False for target fa/prs
 R=('multiple_choice','listen_select'); S=('word_order','matching_pairs','fill_in_blank'); P=('translation',)
@@ -524,7 +814,9 @@ def lm(l,c):
     if not (av(c.get('part_of_speech'))&av(l['part_of_speech'])): return False
     at=l.get('agreement_tags') or {}
     return all(t in at and (av(r)&av(at[t])) for t,r in (c.get('agreement_tags') or {}).items())
-lex=[s for s in __import__(MODULE).iter_specs() if f'.{UNIT}.' in s['lesson_content_key']]
+# '.{LEVEL}.{UNIT}.', NOT '.{UNIT}.' -- unit numbers repeat at every CEFR level and
+# the loose filter silently merges them (en-nl unit01: 154 lexemes instead of 79).
+lex=[s for s in __import__(MODULE).iter_specs() if f'.{LEVEL}.{UNIT}.' in s['lesson_content_key']]
 pack=yaml.safe_load(open(PACK)); T=[t for t in pack['templates'] if TTS or t['type']!='listen_select']
 lessons={s['lesson_content_key'] for s in lex}
 print(f'{len(T)} live templates, {len(lex)} unit lexemes, {len(lessons)} lessons with lexemes')
@@ -545,6 +837,14 @@ Acceptance: **no `!!` lines**, `ALL` coverage **≥60%**, each of
 recognition/structured/production **≥40%**, and **every tier covering every lesson
 that has lexemes** (the `lessons N/N` column). The pilot scores ALL 85% /
 recognition 83% / structured 61% / production 54%, 6/6 lessons in every tier.
+
+**5. Course-scope frame re-read — by hand, nothing automates it.** This script
+measures UNIT scope only, which is the right scope for the floors but the wrong one
+for grammaticality (§1.1). For every `word_order` frame and every fixed-sentence
+`translation`, drop the `f'.{LEVEL}.{UNIT}.'` filter from the `lex=` line above (keep
+`.{LEVEL}.`, so you stay inside the one `Course`), re-list that slot's candidates, and
+confirm **every** one of them is grammatical in the frame and is not a literal word of
+the frame. Report the course-scope candidate count per sentence frame.
 
 **Do NOT run `scripts/verify.sh` and do NOT edit `scripts/practice_manifest.txt`** —
 `verify.sh` reads the manifest, and the manifest belongs to the coordinator.
@@ -570,29 +870,44 @@ recognition 83% / structured 61% / production 54%, 6/6 lessons in every tier.
 6. **DO NOT** author a `fill_in_blank` whose slot has >1 course-wide candidate without
    `interchangeable: true` (compiler hard-fail), and never `frame: {text: '{item}'}` —
    masking leaves a bare `___`. (1.16, 1.17, §13)
-7. **DO NOT** put a slot's own candidate value in the literal text of the same frame.
-   ("It's ten past {item}" with `ten` in the pool.) (1.14)
+7. **DO NOT** put a slot's own candidate value in the literal text of the same frame,
+   **judged at COURSE scope, not unit scope** ("It's ten past {item}" with `ten` in
+   the pool). Same for "every pool member must be grammatical in the frame". (1.14,
+   §1.1)
 8. **DO NOT** anchor `lesson_content_key` to a lesson with zero `introduced_tokens`.
    (1.15)
-9. **DO NOT** let a typed-answer slot (`translation` `slot_text`, `fill_in_blank`)
-   sample a sentence-initial capitalized form, or a fa/prs form carrying harakat.
-   (1.25, 1.30)
-10. **DO NOT** write a fixed-English-sentence `translation` over a multi-member slot —
+9. ~~DO NOT let a typed-answer slot sample a sentence-initial capitalized form.~~
+   **WITHDRAWN 2026-07-22 — this rule was factually wrong.** Practice and checkpoint
+   answers are casefolded (`grade()` defaults `case_sensitive=False`; the practice
+   submit path never passes it), and harakat/tatweel/bidi marks are stripped from both
+   sides before comparison. A capitalized or diacritized form is a **safe** typed
+   answer. Prefer the lowercase, undiacritized citation form for DISPLAY quality, and
+   never drop an otherwise-good lexeme over it. What *is* still unforgiving: the
+   Arabic/Persian look-alike letters (§7). (§6.6)
+10. **DO NOT** author a slot pool without reading every member's `english_gloss`
+    against what the unit actually teaches. A stale gloss is shown to the learner as
+    the correct answer and no validator can see it. (1.29 generalized, §0.1)
+11. **DO NOT** write a fixed-English-sentence `translation` over a multi-member slot —
     that is the underdetermined-production-prompt defect that marks correct learners
     wrong.
-11. **DO NOT** reuse a tag across the A1/A2/B1 course boundary for
+12. **DO NOT** reuse a tag across the A1/A2/B1 course boundary for
     `multiple_choice`/`listen_select`. Separate `Course` rows; the pool is smaller than
     it looks. `word_order`/`translation` are floor-free and safe. (1.18, §18)
-12. **DO NOT** leak internal snake_case tokens (`null_subject`, `both_speakers`) or
+13. **DO NOT** leak internal snake_case tokens (`null_subject`, `both_speakers`) or
     the word "reviewed" into any learner-facing string. (1.5)
-13. **DO NOT** write bare `yes`/`no`/`true`/`false` as a YAML string value. (1.12)
-14. **DO NOT** mismatch `direction` and `language_code`, or use Arabic Yeh/Kaf in
+14. **DO NOT** write bare `yes`/`no`/`true`/`false` as a YAML string value. (1.12)
+15. **DO NOT** mismatch `direction` and `language_code`, or use Arabic Yeh/Kaf in
     fa/prs. (§7)
-15. **DO NOT** mix Iranian and Afghan verb endings inside one `prs` pack. (1.28)
-16. **DO NOT** edit `scripts/practice_manifest.txt`, `scripts/backfill_lexemes*.py`,
+16. **DO NOT** mix Iranian and Afghan verb endings inside one `prs` pack. (1.28)
+17. **DO NOT** edit `scripts/practice_manifest.txt`, `scripts/backfill_lexemes*.py`,
     or any file outside your own pack. Many agents are running concurrently.
-17. **DO NOT** declare a decorative slot the frame never uses just to inflate target
+18. **DO NOT** declare a decorative slot the frame never uses just to inflate target
     coverage — the item then credits the wrong lexeme in the learner's SRS.
+19. **DO NOT** measure a unit's lexeme pool with a bare `f'.{UNIT}.'` filter — unit
+    numbers repeat at every CEFR level and the loose form merges them. Always
+    `f'.{LEVEL}.{UNIT}.'`. (§0, §9)
+20. **DO NOT** apply §8's per-lesson-tag breadth pattern to a grammar unit. Union the
+    unit's lesson tags instead. (§3.1, §8.1)
 
 ---
 
@@ -600,7 +915,9 @@ recognition 83% / structured 61% / production 54%, 6/6 lessons in every tier.
 
 The complete pilot pack is **`docs/content/practice/en-nl/a2_unit73.yaml`** (18
 templates, all 6 lessons, every type, 0 compiler errors). Read it as the canonical
-example. Its structure:
+example — but note it is a **vocabulary** unit (a job-application topic with 41
+lexemes across 6 lessons), so every slot below uses a single scalar semantic tag. A
+grammar unit cannot be authored this way; see §8.1 and §3.1. Its structure:
 
 | Lesson | Templates |
 |---|---|
@@ -639,7 +956,11 @@ templates:
     item:
       language_code: <tgt>
       part_of_speech: [noun, verb, adjective]
-      agreement_tags: {semantic: <a broad lesson/unit tag>}
+      # Vocabulary unit: one broad lesson tag. Grammar unit: a LIST unioning the
+      # unit's lesson tags (OR-matched) -- see §3.1/§8.1. Omitting `semantic:`
+      # entirely is also legal, but pools the whole course at Endless-Practice
+      # scope (§1.1) -- only for frames with no literal text.
+      agreement_tags: {semantic: <a broad lesson/unit tag, or a list of them>}
   answer_derivation: {kind: slot_gloss, slot: item}
   feedback_frame:
     text: '{item} is from this lesson.'
@@ -651,14 +972,21 @@ templates:
 
 ## 12. What to report back to the coordinator
 
-1. The pack path.
-2. The exact `practice-validate` output (must be `0 error(s)`).
+1. The pack path(s).
+2. The exact `practice-validate` output (must be `0 error(s)`) — one invocation
+   covering all your packs (§9 step 1).
 3. The capacity/coverage numbers from §9 step 4 (templates per tier, coverage per
-   tier, lessons covered).
-4. Confirmation that `_practice_content_integrity_check.py` did **not** flag your
-   file.
-5. **The manifest line the coordinator must add** — the pack path appended to the
+   tier, lessons covered). Confirm you used the `f'.{LEVEL}.{UNIT}.'` filter.
+4. The `grep`-ed `_practice_content_integrity_check.py` result (§9 step 2) — and, if
+   your pack is `b1_`/`b2_`, an explicit statement that the script's `a*_unit*.yaml`
+   glob **skipped** your file plus your by-hand defect-1.14 check.
+5. The §9 step 5 course-scope frame re-read: per sentence frame, the course-scope
+   candidate count and your confirmation that every candidate is grammatical.
+6. **Any mis-glossed lexeme you found (§0.1)** — token, the gloss it carries, the
+   sense the unit actually teaches, and whether you excluded it or worked around it.
+   The coordinator routes these to the backfill lane.
+7. **The manifest line the coordinator must add** — the pack path appended to the
    existing `<direction>|…` line in `scripts/practice_manifest.txt`. Do not edit it
    yourself.
-6. Anything you had to leave undone (e.g. a lesson with no usable tag, a unit that
+8. Anything you had to leave undone (e.g. a lesson with no usable tag, a unit that
    turned out to be backfill-blocked).

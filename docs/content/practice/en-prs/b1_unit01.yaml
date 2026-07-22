@@ -1,0 +1,666 @@
+schema_version: '1.0'
+pack_key: practice.en-prs.b1.unit01
+source_language: en
+target_language: prs
+unit_content_key: prs.b1.unit01.abilities
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    Authored 2026-07-22 against docs/content/PRACTICE_PACK_RECIPE.md. en-prs B1
+    unit01 (توانایی / ability with an embedded که-clause) had a full realization
+    + overlay and 62 classified lexemes across all 6 lessons in
+    scripts/backfill_lexemes_en_prs.py, but no practice pack at all, so its unit
+    checkpoint returned checkpoint_unavailable.
+
+
+    20 templates across all 6 lessons: multiple_choice x6, matching_pairs x4,
+    word_order x3, fill_in_blank x2, translation x5. ZERO listen_select --
+    tts_actually_configured('prs') is false (no provider at all for Dari), so
+    _material() would delete them and they would steal recognition-tier budget
+    (recipe section 6.2 / DO-NOT 3). Recognition tier is therefore
+    multiple_choice only, and is built out to 6 templates to compensate.
+
+
+    Every slot constraint is satisfiable by lexemes THIS unit's own lessons
+    introduce, because generate_checkpoint() calls _material() with only this
+    unit's lesson ids (recipe section 1). Deliberate slot-pool separations a
+    reviewer should re-check: (a) وقت "appointment / time" and ملاقات
+    "appointment" are never in the same pool -- they are confusable both as
+    multiple_choice options and as a typed-translation prompt, so
+    office_word/errand_place_word/city_place/correspondence_word (set A) and
+    appointment_word/occupation/time_unit/occupation_question (set B) are always
+    separate templates; (b) ببره and بگیره share the gloss "(that) he/she take",
+    which dedupes harmlessly inside a multiple_choice option list and is a legal
+    many-to-one matching_pairs right, but both are kept OUT of every typed-answer
+    (translation slot_text) template -- the ke_clause_subjunctive pool is
+    recognition/structured only.
+
+
+    lesson06 introduces only two lexemes (با, بکنم) and neither carries a
+    semantic tag, so it is reached through part-of-speech-only slots over
+    preposition/pronoun (choose.001, match.002) plus the bare-word preposition
+    translation in lesson03, all of which host با. Those two slots deliberately
+    EXCLUDE particle even though that would add six more unit01 lexemes
+    (که/را/بلی/ولی/چون/اگر) to the pool: at B1-COURSE scope (what Endless
+    Practice uses) the particle pool also pulls in اما "but" next to ولی "but"
+    and هرچند "although" next to اگرچه "although; even though" from unit08,
+    which are confusable options / confusable matching rights. Trading ~10% unit
+    coverage for a pool that can never be ambiguous at any scope. بکنم, بروم,
+    برویم, است, دارم, می‌خواستم, سه, همایون and زرمینه stay unhosted for the same
+    reason: hosting them would need a part_of_speech-only verb slot, whose pool
+    contains the ببره/بگیره duplicate gloss, which is exactly the
+    underdetermined-production-prompt defect.
+
+
+    No harakat anywhere in this unit's lexeme tokens and Dari has no letter case,
+    so defects 1.25/1.30 cannot fire on the typed-answer slots. Both
+    fill_in_blank slots (errand_place_word -> پسته خانه, tomorrow_word -> فردا)
+    have exactly ONE distinct MODULE-wide candidate, satisfying AUTHORING_GUIDE
+    section 17. Register: unit01's own register_policy pins the colloquial
+    ه/ین/ن paradigm for تانستن, and every frame here is lifted verbatim (or
+    minimally re-slotted) from the realization's own tested_text, so no new verb
+    form is invented. Needs the standard fresh-context review before import.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - ability_verb_present
+    - past_ability_verb
+    - past_negative_verb
+    - ke_clause_subjunctive
+    - correspondence_word
+    - office_word
+    - errand_place_word
+    - city_place
+    - appointment_word
+    - occupation
+    - time_unit
+    - occupation_question
+    - time_reference
+    - early_word
+    - tomorrow_word
+    - byway_particle
+templates:
+
+# ---------------------------------------------------------------------------
+# lesson01 -- می‌تانم که (present ability, 1st/2nd person)
+# ---------------------------------------------------------------------------
+- content_key: practice.en-prs.prs.b1.unit01.lesson01.choose.001
+  lesson_content_key: prs.b1.unit01.lesson01.present_ability_1st2nd
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: verb
+      agreement_tags:
+        semantic: ability_verb_present
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is one form of می‌تانم "can" -- the person ending tells you who is able to do it.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-prs.prs.b1.unit01.lesson01.order.002
+  lesson_content_key: prs.b1.unit01.lesson01.present_ability_1st2nd
+  type: word_order
+  frame:
+    text: 'می‌تانم که این {item} را بفرستم.'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: correspondence_word
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: 'می‌تانم که این {item} را بفرستم.'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'می‌تانم که این نامه را بفرستم. -- I can send this letter. The که-clause verb stays subjunctive.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-prs.prs.b1.unit01.lesson01.match.003
+  lesson_content_key: prs.b1.unit01.lesson01.present_ability_1st2nd
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: prs
+    direction: rtl
+  slots:
+    first: &ability_verb
+      language_code: prs
+      part_of_speech: verb
+      agreement_tags:
+        semantic:
+        - ability_verb_present
+        - past_ability_verb
+    second: *ability_verb
+    third: *ability_verb
+    fourth: *ability_verb
+    fifth: *ability_verb
+    sixth: *ability_verb
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Match each form of می‌تانم / می‌تانستم with the person and tense it expresses.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-prs.prs.b1.unit01.lesson01.translate.004
+  lesson_content_key: prs.b1.unit01.lesson01.present_ability_1st2nd
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: verb
+      agreement_tags:
+        semantic:
+        - ability_verb_present
+        - past_ability_verb
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dari form is {item}.
+    language_code: en
+    direction: ltr
+
+# ---------------------------------------------------------------------------
+# lesson02 -- همه صیغه‌ها (present ability, all persons)
+# ---------------------------------------------------------------------------
+- content_key: practice.en-prs.prs.b1.unit01.lesson02.choose.001
+  lesson_content_key: prs.b1.unit01.lesson02.present_ability_all_persons
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: verb
+      agreement_tags:
+        semantic: ke_clause_subjunctive
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is the subjunctive verb that follows که after می‌تانم.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-prs.prs.b1.unit01.lesson02.order.002
+  lesson_content_key: prs.b1.unit01.lesson02.present_ability_all_persons
+  type: word_order
+  frame:
+    text: 'آنها می‌تانن که {item} بیایند.'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: adverb
+      agreement_tags:
+        semantic:
+        - early_word
+        - tomorrow_word
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: 'آنها می‌تانن که {item} بیایند.'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'آنها می‌تانن که زود بیایند. -- They can come early.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-prs.prs.b1.unit01.lesson02.fill.003
+  lesson_content_key: prs.b1.unit01.lesson02.present_ability_all_persons
+  type: fill_in_blank
+  frame:
+    text: '{item} می‌تانم که بروم.'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: adverb
+      agreement_tags:
+        semantic: tomorrow_word
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'فردا می‌تانم که بروم. -- Tomorrow I can go.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-prs.prs.b1.unit01.lesson02.translate.004
+  lesson_content_key: prs.b1.unit01.lesson02.present_ability_all_persons
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: adverb
+      agreement_tags:
+        semantic:
+        - time_reference
+        - early_word
+        - byway_particle
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dari word is {item}.
+    language_code: en
+    direction: ltr
+
+# ---------------------------------------------------------------------------
+# lesson03 -- می‌تانستم که (past ability)
+# ---------------------------------------------------------------------------
+- content_key: practice.en-prs.prs.b1.unit01.lesson03.choose.001
+  lesson_content_key: prs.b1.unit01.lesson03.past_ability
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: verb
+      agreement_tags:
+        semantic:
+        - past_ability_verb
+        - past_negative_verb
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is a past-tense form -- watch the نـ prefix, which makes it negative.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-prs.prs.b1.unit01.lesson03.order.002
+  lesson_content_key: prs.b1.unit01.lesson03.past_ability
+  type: word_order
+  frame:
+    text: 'دیروز نتانستم که به {item} بروم.'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: city_place
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: 'دیروز نتانستم که به {item} بروم.'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'دیروز نتانستم که به دفتر بروم. -- Yesterday I could not go to the office.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-prs.prs.b1.unit01.lesson03.translate.003
+  lesson_content_key: prs.b1.unit01.lesson03.past_ability
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: preposition
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dari preposition is {item}.
+    language_code: en
+    direction: ltr
+
+# ---------------------------------------------------------------------------
+# lesson04 -- کارها (errands dialogue)
+# ---------------------------------------------------------------------------
+- content_key: practice.en-prs.prs.b1.unit01.lesson04.choose.001
+  lesson_content_key: prs.b1.unit01.lesson04.dialogue_errands
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic:
+        - errand_place_word
+        - office_word
+        - city_place
+        - correspondence_word
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is one of the places and papers Zarmina and Homayoun deal with in this dialogue.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-prs.prs.b1.unit01.lesson04.fill.002
+  lesson_content_key: prs.b1.unit01.lesson04.dialogue_errands
+  type: fill_in_blank
+  frame:
+    text: 'می‌تانی که این نامه را به {item} ببری؟'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: errand_place_word
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'می‌تانی که این نامه را به پسته خانه ببری؟ -- Can you take this letter to the post office?'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-prs.prs.b1.unit01.lesson04.match.003
+  lesson_content_key: prs.b1.unit01.lesson04.dialogue_errands
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: prs
+    direction: rtl
+  slots:
+    first: &unit_noun
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic:
+        - correspondence_word
+        - office_word
+        - errand_place_word
+        - city_place
+        - occupation
+        - time_unit
+        - occupation_question
+    second: *unit_noun
+    third: *unit_noun
+    fourth: *unit_noun
+    fifth: *unit_noun
+    sixth: *unit_noun
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Match each Dari noun from this unit with its English meaning.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-prs.prs.b1.unit01.lesson04.translate.004
+  lesson_content_key: prs.b1.unit01.lesson04.dialogue_errands
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic:
+        - errand_place_word
+        - office_word
+        - city_place
+        - correspondence_word
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dari word is {item}.
+    language_code: en
+    direction: ltr
+
+# ---------------------------------------------------------------------------
+# lesson05 -- reading: the appointment
+# ---------------------------------------------------------------------------
+- content_key: practice.en-prs.prs.b1.unit01.lesson05.choose.001
+  lesson_content_key: prs.b1.unit01.lesson05.reading_appointment
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic:
+        - appointment_word
+        - occupation
+        - time_unit
+        - occupation_question
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} comes from the reading about Zarmina''s doctor appointment.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-prs.prs.b1.unit01.lesson05.match.002
+  lesson_content_key: prs.b1.unit01.lesson05.reading_appointment
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: prs
+    direction: rtl
+  slots:
+    first: &time_adverb
+      language_code: prs
+      part_of_speech: adverb
+      agreement_tags:
+        semantic:
+        - time_reference
+        - early_word
+        - byway_particle
+    second: *time_adverb
+    third: *time_adverb
+    fourth: *time_adverb
+    fifth: *time_adverb
+    sixth: *time_adverb
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Match each Dari time word with its English meaning.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-prs.prs.b1.unit01.lesson05.translate.003
+  lesson_content_key: prs.b1.unit01.lesson05.reading_appointment
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic:
+        - appointment_word
+        - occupation
+        - time_unit
+        - occupation_question
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dari word is {item}.
+    language_code: en
+    direction: ltr
+
+# ---------------------------------------------------------------------------
+# lesson06 -- wrap-up production
+# ---------------------------------------------------------------------------
+- content_key: practice.en-prs.prs.b1.unit01.lesson06.choose.001
+  lesson_content_key: prs.b1.unit01.lesson06.wrapup_production
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech:
+      - preposition
+      - pronoun
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is one of the small function words that hold a که-clause sentence together.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-prs.prs.b1.unit01.lesson06.match.002
+  lesson_content_key: prs.b1.unit01.lesson06.wrapup_production
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: prs
+    direction: rtl
+  slots:
+    first: &function_word
+      language_code: prs
+      part_of_speech:
+      - preposition
+      - pronoun
+    second: *function_word
+    third: *function_word
+    fourth: *function_word
+    fifth: *function_word
+    sixth: *function_word
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Match each Dari function word with its English meaning.
+    language_code: en
+    direction: ltr
