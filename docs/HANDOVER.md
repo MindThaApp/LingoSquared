@@ -11,8 +11,8 @@ Written 2026-07-22. Last commit at handover: **`46e0187f`** on
 **Read root `CLAUDE.md` before any work.** It always loads and it overrides
 this file wherever they disagree.
 
-The ONE thing you must ask Ramin for is the secret files in step 4 — you
-cannot obtain them yourself. Everything else, do autonomously.
+Almost everything here you do autonomously. The only things you must ask
+Ramin for are two files in step 4b — and even those can be deferred.
 
 ---
 
@@ -74,24 +74,46 @@ runs fine on 3.9), Node **26**, Postgres 16 + nginx via Docker.
 
 ## Step 4. ⚠️ ASK RAMIN FOR THE SECRETS — this is the only thing you cannot do yourself
 
-A clone brings all code and content but **none of these**. The app will not
-start without them. Ask him to move them across by **AirDrop, `scp`, or a
-password manager — NOT through the repo, a gist, or a chat message.**
-`backend/.env` contains a live Google service-account private key.
+A clone brings all code and content but **no secrets** — they are gitignored.
+Most of them, however, you can get yourself.
 
-**Essential — nothing runs without these two:**
+### 4a. Copy these from the old iCloud folder — NO transfer needed
+
+`backend/.env` and `frontend/.env` live INSIDE the repo, which was in iCloud,
+so **this Mac already has them.** Just copy them into the new location:
+
+```bash
+OLD=~/Library/Mobile\ Documents/com~apple~CloudDocs/dev/LingoSquared
+cp "$OLD/backend/.env"  ~/dev/LingoSquared/backend/.env
+cp "$OLD/frontend/.env" ~/dev/LingoSquared/frontend/.env
+```
+
+If they are missing or zero-length, iCloud has not finished materializing —
+wait for it, then retry. Do NOT ask Ramin for them until you have tried this.
 
 | File | Contains |
 |---|---|
 | `backend/.env` | DB URL + password, JWT secret, `ADMIN_EMAILS`, `CORS_ORIGINS`, Google Cloud TTS service-account JSON |
 | `frontend/.env` | `VITE_API_BASE_URL` |
 
-**Outside the repo — also essential:**
+### 4b. ASK RAMIN for these two — they are NOT in iCloud
+
+They sit at the home-directory root, which iCloud does not sync (only
+`~/Desktop` and `~/Documents` are symlinked into iCloud Drive).
 
 | File | Contains |
 |---|---|
 | `~/.lingo_admin_pw` | admin password for `sync_dev_db.sh` non-interactive mode |
 | `~/.ssh/id_ed25519` (+ `.pub`) | SSH key for the live server `ramin@192.168.4.4` |
+
+Ask him to move them by **AirDrop or `scp`**. Do not suggest routing an SSH
+private key through iCloud Desktop, a gist, or a chat message.
+
+**You can defer both.** `~/.lingo_admin_pw` only gates the non-interactive
+dev-DB sync — `sync_dev_db.sh` will prompt for the password interactively
+without it. The SSH key is only needed to reach the live server, which is
+not required for any local work. So do steps 5 and 6 first and unblock
+yourself.
 
 **Optional QA/test variants** — copy only if you need those workflows; the
 core dev loop does not:
