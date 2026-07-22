@@ -6,7 +6,7 @@ it against the contract and backend design before either side commits to
 implementation.
 
 **Scope boundary:** only write inside
-`/Users/raminazizi/dev/LingoSquared/frontend/` (plus possibly proposing
+`"$LINGO_REPO"/frontend/` (plus possibly proposing
 edits to `docs/CONTRACT.md` if a genuine gap is found — flagged, not
 silent). Never touch `/Users/raminazizi/dev/portal`.
 
