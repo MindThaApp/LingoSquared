@@ -95,6 +95,32 @@ re-authoring and C1's feedback_by_option content pass (both CONTENT
 lane). The mechanism is fully built across every phase; the real
 remaining path to launch is full-depth content for en-nl/en-fa/en-prs.
 
+## Landed 2026-07-22 — NOT yet live-browser-verified
+
+Separate from the list above precisely because none of it has been played
+through in a live browser yet:
+
+- **Perso-Arabic formatting normalization in grading** — grading normalizes
+  ZWNJ (U+200C) and harakat before comparison, so an answer differing from the
+  expected string only in those grades `correct`, never `almost`.
+  Script-confusion (ي/ی, ك/ک, ة/ه, ۀ/ه, ى/ی) is still never forgiven.
+- **Demo courses are no longer seeded by default** — `python -m
+  app.content.seed` bootstraps languages + achievements only; the four demo
+  courses need `--with-demo-courses` (or `LINGO_SEED_DEMO_COURSES=1`). They
+  were shadowing the real launch courses in the picker.
+  `backend/scripts/remove_demo_courses.sql` removes the 4 already present in
+  the dev and live databases. In-process callers (`backend/tests/conftest.py`)
+  keep the old default, so no test/e2e fixture changed.
+- **`scripts/compile_content.py` hard-errors** on an invalid teaching-card
+  `kind`, an invalid exercise `type`, and over-length titles/`content_key`s
+  (previously accepted or warned).
+- **Auth has an explicit "backend unreachable" state** — a signed-in user is no
+  longer bounced to the login screen when the backend can't be reached. Guest
+  logout now requires an explicit confirmation.
+- **New docs/tooling** — `docs/content/PRACTICE_PACK_RECIPE.md` (practice-pack
+  authoring recipe) and `scripts/check_dari_register.py` (Dari-vs-Iranian-
+  Persian dialect/register checker, defect-registry class 1.28).
+
 ## Scope & publish-gate decisions (2026-07-05)
 
 - **End goal is genuine fluency (full CEFR A1→C2), but publish is a much
