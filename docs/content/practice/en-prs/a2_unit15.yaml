@@ -1,0 +1,423 @@
+schema_version: '1.0'
+pack_key: practice.en-prs.a2.unit15
+source_language: en
+target_language: prs
+unit_content_key: prs.a2.unit15.travel_disruption
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    Authored 2026-07-22 against docs/content/PRACTICE_PACK_RECIPE.md to unblock this
+    unit's checkpoint. en-prs A2 unit15 had a full realization + overlay and 37
+    backfilled lexemes across all 4 lessons but no practice pack at all, so
+    generate_checkpoint() returned checkpoint_unavailable.
+
+
+    13 templates -- multiple_choice x4, matching_pairs x2, word_order x2, fill_in_blank x1,
+    translation x4. Every slot constraint is satisfiable from THIS unit's own lessons,
+    because generate_checkpoint() calls _material() with only this unit's lesson ids.
+    Recognition / structured / production each carry at least three templates and each
+    reaches every lesson that has lexemes. Zero listen_select: Dari has no TTS from
+    either provider and _material() deletes those templates (recipe 6.2 / DO-NOT 3).
+
+
+    Slot design. The curated lesson01 pool (disruption_word + station_word + transport_mode_word + depart_noun) drives the
+    multiple_choice / matching_pairs / translation trio. Breadth, and the coverage bar,
+    come from part-of-speech-only slots: one noun slot, one adjective/adverb slot and
+    one verb/function-word slot in each tier. proper_noun and phrase are deliberately
+    excluded everywhere -- proper nouns self-gloss (Homayoun to "Homayoun (name)"), and
+    this unit's whole-sentence `phrase` lexemes carry narrative third-person glosses
+    ("He asks when he will get the PIN") that would make an underdetermined production
+    prompt and an unusable multiple_choice option. That caps achievable coverage at the
+    non-phrase, non-proper share of the unit.
+
+
+    matching_pairs uses six slots with a distinct relation (guide 16). The curated pool
+    was hand-checked for interchangeable English rights; the broad word-form pool
+    discriminates on person and mood, which are real taught contrasts. Both word_order
+    frames and the fill_in_blank frame are real sentences from this unit's own
+    realization, and no literal word of a frame is a candidate of that frame's own slot
+    (defect 1.14). The fill_in_blank slot has exactly one distinct course-wide candidate, so the AUTHORING_GUIDE 17 ambiguity hard-fail is satisfied by construction.
+
+
+    Dari register: every target-language string is taken from realizations/prs, Afghan
+    forms only (استه/استم/استین copula, -ین second-person plural, افغانی, بس). The fa
+    lane -- realizations/fa, overlays/*fa*, practice/en-fa -- was never opened while
+    authoring this pack. scripts/check_dari_register.py reports zero findings on it.
+    Needs the standard fresh-context review before import.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - depart_noun
+    - disruption_word
+    - station_word
+    - transport_mode_word
+templates:
+- content_key: practice.en-prs.prs.a2.unit15.lesson01.choose.001
+  lesson_content_key: prs.a2.unit15.lesson01.disruption_vocabulary
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech:
+      - noun
+      - adjective
+      agreement_tags:
+        semantic:
+        - disruption_word
+        - station_word
+        - transport_mode_word
+        - depart_noun
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: "{item} is part of this unit's travel-disruption vocabulary."
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-prs.prs.a2.unit15.lesson01.match.002
+  lesson_content_key: prs.a2.unit15.lesson01.disruption_vocabulary
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: prs
+    direction: rtl
+  slots:
+    first: &pool_core
+      language_code: prs
+      part_of_speech:
+      - noun
+      - adjective
+      agreement_tags:
+        semantic:
+        - disruption_word
+        - station_word
+        - transport_mode_word
+        - depart_noun
+    second: *pool_core
+    third: *pool_core
+    fourth: *pool_core
+    fifth: *pool_core
+    sixth: *pool_core
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: "Match each travel-disruption word with its English meaning."
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-prs.prs.a2.unit15.lesson01.translate.003
+  lesson_content_key: prs.a2.unit15.lesson01.disruption_vocabulary
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: prs
+      part_of_speech:
+      - noun
+      - adjective
+      agreement_tags:
+        semantic:
+        - disruption_word
+        - station_word
+        - transport_mode_word
+        - depart_noun
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: "The Dari word is {item}."
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-prs.prs.a2.unit15.lesson02.choose.001
+  lesson_content_key: prs.a2.unit15.lesson02.asking_about_alternatives
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech:
+      - noun
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: "{item} is one of the nouns this unit teaches."
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-prs.prs.a2.unit15.lesson02.translate.002
+  lesson_content_key: prs.a2.unit15.lesson02.asking_about_alternatives
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: prs
+      part_of_speech:
+      - noun
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: "The Dari word is {item}."
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-prs.prs.a2.unit15.lesson03.choose.001
+  lesson_content_key: prs.a2.unit15.lesson03.reading_a_station_notice
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech:
+      - adjective
+      - adverb
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: "{item} describes something in this unit."
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-prs.prs.a2.unit15.lesson03.translate.002
+  lesson_content_key: prs.a2.unit15.lesson03.reading_a_station_notice
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: prs
+      part_of_speech:
+      - adjective
+      - adverb
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: "The Dari word is {item}."
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-prs.prs.a2.unit15.lesson04.choose.001
+  lesson_content_key: prs.a2.unit15.lesson04.station_dialogue
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech:
+      - verb
+      - pronoun
+      - particle
+      - adverb
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: "{item} is one of the word forms this unit teaches."
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-prs.prs.a2.unit15.lesson04.match.002
+  lesson_content_key: prs.a2.unit15.lesson04.station_dialogue
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: prs
+    direction: rtl
+  slots:
+    first: &pool_forms
+      language_code: prs
+      part_of_speech:
+      - verb
+      - adjective
+      - adverb
+      - pronoun
+      - particle
+      - preposition
+    second: *pool_forms
+    third: *pool_forms
+    fourth: *pool_forms
+    fifth: *pool_forms
+    sixth: *pool_forms
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: "Match each Dari word form with its English meaning."
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-prs.prs.a2.unit15.lesson04.translate.003
+  lesson_content_key: prs.a2.unit15.lesson04.station_dialogue
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: prs
+      part_of_speech:
+      - verb
+      - pronoun
+      - particle
+      - preposition
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: "The Dari word is {item}."
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-prs.prs.a2.unit15.lesson02.order.003
+  lesson_content_key: prs.a2.unit15.lesson02.asking_about_alternatives
+  type: word_order
+  frame:
+    text: "این {item} است."
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech:
+      - noun
+      agreement_tags:
+        semantic:
+        - disruption_word
+        - transport_mode_word
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: "این {item} است."
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: "Word order: این [word] است (this is a ___)."
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-prs.prs.a2.unit15.lesson03.order.003
+  lesson_content_key: prs.a2.unit15.lesson03.reading_a_station_notice
+  type: word_order
+  frame:
+    text: "امروز {item} ساعت نه به مزار شریف لغو شده است."
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech:
+      - noun
+      agreement_tags:
+        semantic:
+        - transport_mode_word
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: "امروز {item} ساعت نه به مزار شریف لغو شده است."
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: "امروز بس ساعت نه به مزار شریف لغو شده است. (Today's nine o'clock bus to Mazar-i-Sharif has been cancelled)."
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-prs.prs.a2.unit15.lesson02.fill.004
+  lesson_content_key: prs.a2.unit15.lesson02.asking_about_alternatives
+  type: fill_in_blank
+  frame:
+    text: "بس فردا ساعت هشت صبح {item} می‌کند."
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech:
+      - noun
+      agreement_tags:
+        semantic:
+        - depart_noun
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: "بس فردا ساعت هشت صبح حرکت می‌کند. (The bus leaves tomorrow at eight in the morning)."
+    language_code: en
+    direction: ltr
