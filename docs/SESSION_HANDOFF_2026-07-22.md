@@ -15,6 +15,11 @@ lost commits, or refs pointing at objects that never synced.
 
 **Therefore: move this work between machines via `git`, NOT via iCloud.**
 
+**If you are setting up a new primary Mac, read
+`docs/NEW_MACHINE_SETUP.md` instead of the snippet below** — it is the
+complete procedure, including the secrets that are NOT in git and must be
+moved by hand, and how to retire the iCloud copy safely.
+
 Everything is pushed to `origin/master` at **`24229756`**. On the other Mac:
 
 ```bash
