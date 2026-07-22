@@ -172,11 +172,59 @@ UNIT_FILES = (
         REPO_ROOT / "docs/content/realizations/fa/a1_unit24_hobbies.yaml",
         REPO_ROOT / "docs/content/overlays/en-fa/a1_unit24.yaml",
     ),
+    # Units 25-30 (appearance / animals / sports / transportation /
+    # technology / education), added 2026-07-22. THESE ARE INSERTED AT
+    # THEIR REAL COURSE POSITIONS, NOT APPENDED -- read this before ever
+    # appending to this tuple again:
+    #
+    # main() maps a tuple ENTRY'S 1-BASED INDEX onto the imported course's
+    # `Unit.order`. The 2026-07-12 pass appended units 31-36 directly after
+    # unit24, so they occupied INDEXES 25-30 and every lexeme they created
+    # was written with `provenance_lesson_id` pointing at the real
+    # a1_unit25-30 (appearance/animals/sports/transportation/technology/
+    # education) lessons while its `provenance_lesson_content_key` string
+    # correctly said "fa.a1.unit31...."-"fa.a1.unit36....". This is the
+    # exact bug already documented for A2 units 09/10 in UNIT_FILES_A2
+    # below, repeated three tuples later. Confirmed against the dev DB
+    # 2026-07-22: Farsi A1 units 25-30 held 32-64 lexemes AND all 5-per-unit
+    # practice templates belonging to units 31-36 (the practice importer
+    # resolves its lesson via Lexeme.provenance_lesson_content_key, so the
+    # templates followed the lexemes onto the wrong lessons), while units
+    # 31-36 held zero of both -- i.e. unit checkpoints for 31-36 were dead
+    # (`checkpoint_unavailable`) and checkpoints for 25-30 silently tested
+    # the WRONG unit's vocabulary. Inserting 25-30 here restores the
+    # index<->Unit.order identity for every A1 unit at once; main()'s
+    # provenance refresh (see the comment there) repairs the already-written
+    # rows on the next run.
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a1_unit25_appearance.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a1_unit25.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a1_unit26_animals.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a1_unit26.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a1_unit27_sports.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a1_unit27.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a1_unit28_transportation.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a1_unit28.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a1_unit29_technology.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a1_unit29.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a1_unit30_education.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a1_unit30.yaml",
+    ),
     # Units 31-36 (celebrations / household / neighborhood / post /
     # cooking / personality), added 2026-07-12 for the Endless Practice
-    # coverage-extension batch. Units 25-30 are not in this tuple in the
-    # current practice manifest; this additive pass follows the requested
-    # en-fa units 31+ range and keeps A2/B1 course routing separate below.
+    # coverage-extension batch. (Originally appended straight after unit24
+    # -- see the units 25-30 block above for the index-misalignment bug that
+    # caused and how it was fixed.)
     (
         REPO_ROOT / "docs/content/realizations/fa/a1_unit31_celebrations.yaml",
         REPO_ROOT / "docs/content/overlays/en-fa/a1_unit31.yaml",
@@ -200,6 +248,103 @@ UNIT_FILES = (
     (
         REPO_ROOT / "docs/content/realizations/fa/a1_unit36_personality.yaml",
         REPO_ROOT / "docs/content/overlays/en-fa/a1_unit36.yaml",
+    ),
+    # Units 37-57 (colors / seasons / emergencies / lost items /
+    # appointments / library / waste disposal / accommodation / pharmacy /
+    # personal care / bike rental / laundry / swimming pool / restaurant /
+    # cinema / museum / concert / park / gym / beach / zoo), added
+    # 2026-07-22 by the en-fa checkpoint-coverage pass. These 21 units
+    # existed on disk and were already imported into the DB (Farsi A1 has 57
+    # real units) but had zero lexeme classifier coverage in this script at
+    # all, so `generate_checkpoint()` returned `checkpoint_unavailable` for
+    # every one of them regardless of practice packs. Appended in strict
+    # unit order immediately after unit36, keeping the tuple index ==
+    # Unit.order identity the units 25-30 block above restored -- re-read
+    # this tuple fresh before appending any further unit, per this file's
+    # own standing convention, and NEVER append out of unit order.
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a1_unit37_colors.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a1_unit37.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a1_unit38_seasons.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a1_unit38.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a1_unit39_emergencies.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a1_unit39.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a1_unit40_lost_items.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a1_unit40.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a1_unit41_appointments.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a1_unit41.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a1_unit42_library.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a1_unit42.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a1_unit43_waste_disposal.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a1_unit43.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a1_unit44_accommodation.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a1_unit44.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a1_unit45_pharmacy.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a1_unit45.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a1_unit46_personal_care.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a1_unit46.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a1_unit47_bike_rental.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a1_unit47.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a1_unit48_laundry.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a1_unit48.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a1_unit49_swimming_pool.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a1_unit49.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a1_unit50_restaurant.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a1_unit50.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a1_unit51_cinema.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a1_unit51.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a1_unit52_museum.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a1_unit52.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a1_unit53_concert.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a1_unit53.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a1_unit54_park.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a1_unit54.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a1_unit55_gym.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a1_unit55.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a1_unit56_beach.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a1_unit56.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a1_unit57_zoo.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a1_unit57.yaml",
     ),
 )
 
@@ -352,6 +497,32 @@ UNIT_FILES_B1 = (
     (
         REPO_ROOT / "docs/content/realizations/fa/b1_unit11_reported_speech.yaml",
         REPO_ROOT / "docs/content/overlays/en-fa/b1_unit11.yaml",
+    ),
+    # Units 12-16 (real conditions / time clauses / reported messages /
+    # purpose clauses / goals and plans), added 2026-07-22 by the en-fa
+    # checkpoint-coverage pass -- confirmed at zero lexemes against the dev
+    # DB (Farsi B1 units 12-16 held 0 rows), same root cause already
+    # documented for units 01-06 and 07-11 before THEY were added. Appended
+    # in strict unit order; the tuple index must stay == Unit.order.
+    (
+        REPO_ROOT / "docs/content/realizations/fa/b1_unit12_real_conditions.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/b1_unit12.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/b1_unit13_time_clauses.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/b1_unit13.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/b1_unit14_reported_messages.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/b1_unit14.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/b1_unit15_purpose_clauses.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/b1_unit15.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/b1_unit16_goals_and_plans.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/b1_unit16.yaml",
     ),
 )
 EN_TOKEN_RE = re.compile(r"[A-Za-z]+(?:['’/-][A-Za-z]+)*")
@@ -1038,6 +1209,188 @@ FA_GLOSSES = {
     "جمع‌های": "groups of / plural gatherings of",
     "حرف نمی‌زنه": "he/she doesn't talk", "فکر می‌کنم": "I think",
     "زحمت‌کشم": "I am hardworking", "شخصیتت": "your personality",
+    # ---------------------------------------------------------------
+    # A1 units 25-30 (appearance, animals, sports, transportation,
+    # technology, education), added 2026-07-22 by the en-fa
+    # checkpoint-coverage pass. Atomic word glosses only -- a teaching
+    # card's own phrase gloss is never copied onto its individual tokens.
+    # Unit 25 (appearance).
+    "قدش": "his/her height", "بلند": "tall", "بلنده": "is tall (spoken)",
+    "کوتاه": "short", "کوتاهه": "is short (spoken)", "مو": "hair",
+    "موی": "hair of (ezafe-linked form of مو)", "موهاش": "his/her hair",
+    "مشکی": "black (of hair/eyes)", "مشکیه": "is black (spoken)",
+    "بلوند": "blond", "بلونده": "is blond (spoken)",
+    "چشمای": "eyes of (ezafe-linked plural of چشم)", "چشماش": "his/her eyes",
+    "قهوه‌ای": "brown", "قهوه‌ایه": "is brown (spoken)", "سبز": "green",
+    "سبزه": "is green (spoken)", "آبیه": "is blue (spoken)",
+    "عینک": "glasses", "می‌زنه": "he/she wears (glasses); he/she hits",
+    "شکلیه": "does he/she look (in چه شکلیه؟, 'what does he/she look like?')",
+    "رنگیه": "is (what) color (in چه رنگیه؟, 'what color is it?')",
+    # Unit 26 (animals).
+    "حیوان": "animal", "خونگی": "domestic (in حیوان خونگی, 'pet')",
+    "سگ": "dog", "گربه": "cat", "پرنده": "bird", "ماهی": "fish",
+    "اسمش": "its/his/her name", "سگم": "my dog", "سفیده": "is white (spoken)",
+    "گربه‌ی": "cat of (ezafe-linked form of گربه)", "پشمک": "Pashmak (cat's name)",
+    "پشمکه": "is Pashmak (spoken)", "منه": "is mine (spoken)",
+    "سگمه": "is my dog (spoken)", "خوشگل": "cute; pretty",
+    "خوشگله": "is cute (spoken)",
+    # Unit 27 (sports).
+    "بسکتبال": "basketball", "والیبال": "volleyball", "شنا": "swimming",
+    "ورزشی": "a sport (indefinite form of ورزش, in چه ورزشی؟)",
+    "باشگاه": "gym", "استخر": "swimming pool",
+    "بار": "time(s); occurrence (in دو بار, 'twice')", "می‌ری": "you go (spoken)",
+    # Unit 28 (transportation).
+    "مترو": "metro; subway", "دوچرخه": "bicycle", "پیاده": "on foot",
+    "تاکسی": "taxi", "چقدره": "how much is it? (spoken)",
+    "ورزشه": "is exercise (spoken)",
+    # Unit 29 (technology).
+    "تکنولوژی": "technology", "گوشی": "mobile phone", "کامپیوتر": "computer",
+    "اینترنت": "internet", "دانلود": "download (in دانلود کردن)",
+    "گوشیت": "your phone (informal)",
+    # Unit 30 (education).
+    "دانشجو": "university student", "درس": "lesson; subject", "زبان": "language",
+    "ریاضی": "math", "رشته": "major; field of study",
+    "یاد": "learning (in یاد گرفتن, 'to learn')",
+    "می‌خونی": "you study / you read (spoken)",
+    "رشته‌ی": "major of (ezafe-linked form of رشته)",
+    "ریاضیه": "is math (spoken)",
+    # ---------------------------------------------------------------
+    # A1 units 37-57, added 2026-07-22, same pass.
+    # Unit 37 (colors).
+    "زرد": "yellow", "نارنجی": "orange (color)", "صورتی": "pink",
+    "سیاهه": "is black (spoken)", "قرمزه": "is red (spoken)", "موز": "banana",
+    "گربه‌ی من": "my cat", "پیراهنم": "my shirt", "زرده": "is yellow (spoken)",
+    "نارنجیه": "is orange (spoken)", "صورتیه": "is pink (spoken)",
+    "بنفش": "purple", "خاکستری": "gray", "کتابم": "my book",
+    "بنفشه": "is purple (spoken)", "خاکستریه": "is gray (spoken)",
+    "رنگش": "its color", "چه رنگیه": "what color is it?",
+    "کتابت": "your book (informal)", "ماشینت": "your car (informal)",
+    "دوست دارد": "he/she likes (formal)", "تو خونه": "in the house",
+    "اونجاست": "is there (spoken)", "چه رنگی": "what color",
+    # Unit 38 (seasons).
+    "فصل": "season", "بهار": "spring", "تابستان": "summer",
+    "چهار فصل": "four seasons", "پاییز": "autumn", "زمستان": "winter",
+    "برفیه": "is snowy (spoken)", "سرد نیست": "is not cold",
+    "اسکی": "skiing", "برف": "snow", "کدوم فصل": "which season",
+    "دوست داری": "you like (informal)", "تو چی؟": "what about you? (informal)",
+    # Unit 39 (emergencies).
+    "پلیس": "police", "آمبولانس": "ambulance", "آتش‌نشانی": "fire department",
+    "آتش": "fire", "خطر": "danger", "تصادف": "accident",
+    "اورژانس": "emergency; emergency room", "اورژانسه": "is an emergency (spoken)",
+    "بزنید": "call / hit (polite imperative, in زنگ بزنید, 'call!')",
+    # Unit 40 (lost items).
+    "کیف": "bag", "کلید": "key", "گم": "lost (in گم کردن, 'to lose')",
+    "گذرنامه": "passport", "پیدا": "found (in پیدا کردن, 'to find')",
+    "دیدید": "did you see? (polite)", "آقای": "Mr. (ezafe-linked form of آقا)",
+    "کریمی": "Karimi (surname)", "گمشده": "lost (item)", "پیداشده": "found (item)",
+    # Unit 41 (appointments).
+    "دندانپزشک": "dentist", "مطب": "doctor's office", "آزادم": "I am free",
+    "آزادید": "are you free? (polite)", "خانم": "Ms.; madam",
+    "احمدی": "Ahmadi (surname)", "رضایی": "Rezaei (surname)",
+    # Unit 42 (library).
+    "کتابخونه": "library", "امانت": "loan (in امانت گرفتن, 'to borrow')",
+    "صادقی": "Sadeghi (surname)",
+    # Unit 43 (waste disposal).
+    "زباله": "trash; garbage", "سطل": "bin; bucket", "کاغذ": "paper",
+    "پلاستیک": "plastic", "پلاستیکه": "is plastic (spoken)", "شیشه": "glass",
+    "بازیافت": "recycling", "بازیافته": "is for recycling (spoken)",
+    "می‌ندازم": "I put / I throw (in سطل می‌ندازم)",
+    "می‌ندازی": "you put / you throw (informal)", "جمع‌آوری": "collection; pickup",
+    "شنبه‌ست": "is Saturday (spoken)",
+    # Unit 44 (accommodation).
+    "رزرو": "reservation; booking", "صبحانه": "breakfast",
+    "صبحانه‌ست": "is breakfast (spoken)", "وای‌فای": "wifi",
+    "وای‌فایه": "is the wifi (spoken)", "خروج": "checkout; departure",
+    "رستمی": "Rostami (surname)", "ظهره": "is noon (spoken)", "مهمان": "guest",
+    "مهمانه": "is a guest (spoken)",
+    # Unit 45 (pharmacy).
+    "داروخانه": "pharmacy", "قرص": "pill; tablet",
+    "قبل": "before (in قبل از غذا, 'before food')", "صالحی": "Salehi (surname)",
+    # Unit 46 (personal care).
+    "سلمانی": "barbershop", "موهام": "my hair", "کوتاه‌تر": "shorter",
+    "مثل قبل": "like before", "نوری": "Nouri (surname)",
+    # Unit 47 (bike rental).
+    "کرایه": "rent; rental fee", "ودیعه": "deposit",
+    "کوچیک می‌خوای یا بزرگ؟": "Do you want small or big?",
+    "کی پس می‌دم؟": "When do I give it back?", "مرادی": "Moradi (surname)",
+    "دوچرخه‌ی": "bicycle of (ezafe-linked form of دوچرخه)",
+    # Unit 48 (laundry).
+    "خشکشویی": "dry cleaner's; laundry shop", "فوری": "express; urgent",
+    "فردا ظهر خوبه؟": "Is tomorrow noon good?",
+    "کِی می‌گیرم؟": "When do I pick it up?", "کاظمی": "Kazemi (surname)",
+    # Unit 49 (swimming pool).
+    "بازه": "is open (spoken)", "کمد": "locker",
+    "استخر بازه؟": "Is the pool open?", "جعفری": "Jafari (surname)",
+    # Unit 50 (restaurant).
+    "سفارش": "order (in سفارش دادن, 'to order')", "چلوکباب": "chelo kabab",
+    "دوغ": "doogh (yogurt drink)", "رحیمی": "Rahimi (surname)",
+    # Unit 51 (cinema).
+    "سانس": "showtime; screening", "موسوی": "Mousavi (surname)",
+    # Unit 52 (museum).
+    "موزه": "museum", "نمایشگاه": "exhibition", "قدیمی": "old; historic",
+    "فرهادی": "Farhadi (surname)",
+    # Unit 53 (concert).
+    "کنسرت": "concert", "چه ساعتی؟": "at what time?", "خواننده": "singer",
+    "حسینی": "Hosseini (surname)", "شاهین": "Shahin (singer's name)",
+    # Unit 54 (park).
+    "پیک‌نیک": "picnic", "قدم": "step (in قدم زدن, 'to stroll')",
+    "بزنیم": "let's take/hit (subjunctive, in قدم بزنیم, 'let's stroll')",
+    "درخت": "tree", "ملت": "Mellat (park name; lit. 'nation')",
+    # Unit 55 (gym).
+    "روزانه": "daily", "وزنه": "weight; weights", "شریفی": "Sharifi (surname)",
+    # Unit 56 (beach).
+    "ساحل": "beach; shore", "دریا": "sea", "ماسه": "sand",
+    "نور": "Noor (beach name; lit. 'light')",
+    # Unit 57 (zoo).
+    "باغ‌وحش": "zoo", "شیر": "lion", "فیل": "elephant",
+    "ارم": "Eram (zoo name)",
+    # ---------------------------------------------------------------
+    # B1 units 12-16 (real conditions, time clauses, reported messages,
+    # purpose clauses, goals and plans), added 2026-07-22, same pass.
+    # Unit 12 (real conditions).
+    "بارون": "rain (colloquial)", "بیاد": "(that) it come / fall (subjunctive)",
+    "داشتی": "you had (informal past)",
+    "بده": "give (informal imperative, in پیام بده, 'send a message')",
+    "نتونستی": "you couldn't (informal past)",
+    "بیای": "(that) you come (subjunctive, informal)", "می‌رن": "they go",
+    "می‌ریم": "we go", "پیامت": "your message (informal)",
+    "نتونه": "(that) he/she can't (subjunctive)", "دارن": "they have",
+    "پیامش": "his/her message", "بزن": "hit / call (informal imperative, in زنگ بزن)",
+    # Unit 13 (time clauses).
+    "بشه": "(that) it become / be done (subjunctive)", "رسیدم": "I arrived",
+    "دادم": "I gave (in پیام دادم, 'I sent a message')",
+    "زدید": "you (polite) called / hit (past, in زنگ زدید)",
+    "بدید": "give / let know (polite imperative, in خبر بدید)",
+    "زمان‌بندی": "timing; scheduling", "روشنه": "is clear (spoken)",
+    "بزنه": "(that) he/she call / hit (subjunctive, in زنگ بزنه)",
+    "ساکت": "quiet; silent",
+    # Unit 14 (reported messages).
+    "عقب": "behind (in عقب افتادن, 'to be delayed')",
+    "افتاده": "has fallen / has been (in عقب افتاده, 'has been delayed')",
+    "ازم": "from me (colloquial از+م)", "خواست": "he/she wanted / asked",
+    "بزنم": "(that) I call / hit (subjunctive, in زنگ بزنم)",
+    "بهش": "to him/her (colloquial به+ش)", "ازت": "from you (colloquial از+ت)",
+    "خلاصه": "summary", "پیامی": "a message (indefinite form of پیام)",
+    "منتقل": "passed on; transferred (in منتقل کردن)",
+    "خبری": "a piece of news (indefinite form of خبر)",
+    "داده": "has given (past participle, in خبر داده, 'has reported')",
+    "خواسته": "has asked (past participle)", "آخرش": "in the end; finally",
+    "پیام‌ها": "the messages (plural)", "ازش": "from him/her (colloquial از+ش)",
+    "فرداست": "is tomorrow (spoken)",
+    # Unit 15 (purpose clauses).
+    "فارسی‌ام": "my Farsi", "جمع": "gathering; saving (in جمع کردن, 'to save up')",
+    "بیرون": "outside; out (in بیرون غذا خوردن, 'to eat out')",
+    "اومد": "he/she came (spoken past)", "هدف": "goal; aim", "دوم": "second",
+    "یادداشت‌ها": "the notes (plural)",
+    "پولی": "financial (indefinite/adjectival form of پول)",
+    "اینه": "is this (spoken contraction of این است)", "فارسی‌اش": "his/her Farsi",
+    "می‌خوره": "he/she eats", "بتونه": "(that) he/she can (subjunctive)",
+    "بتونن": "(that) they can (subjunctive)", "راحت‌تر": "easier; more comfortably",
+    "بشم": "(that) I become (subjunctive, in قبول بشم, 'that I pass')",
+    # Unit 16 (goals and plans).
+    "بتونم": "(that) I can (subjunctive)", "خرج": "spending (in خرج کردن, 'to spend')",
+    "بتونیم": "(that) we can (subjunctive)",
+    "تقسیم": "division (in تقسیم کردن, 'to divide up')",
 }
 
 FA_SYMBOLS = set("س ل ا م ن ت ش چ ی ه ک گ ج د ر ف و ب خ ز".split())
@@ -1049,6 +1402,16 @@ FA_PROPER_NOUNS = set(
     # B1 unit05 (workplace), added 2026-07-11: حسین (Hossein), a colleague
     # named in the responsibility/status-update dialogue.
     + ["حسین"]
+    # A1 units 26/40-57, added 2026-07-22: the pet name پشمک, the surnames
+    # of the service-counter characters units 40-55 each introduce (Karimi,
+    # Ahmadi, Rezaei, Sadeghi, Rostami, Salehi, Nouri, Moradi, Kazemi,
+    # Jafari, Rahimi, Mousavi, Farhadi, Hosseini), the singer شاهین, and the
+    # three real Tehran place names used on this pack's signs (پارک ملت,
+    # ساحل نور, باغ‌وحش ارم). رضایی is the bare surname; the multi-word
+    # "دکتر رضایی" already above stays as its own established entry.
+    + ["پشمک", "کریمی", "احمدی", "رضایی", "صادقی", "رستمی", "صالحی",
+       "نوری", "مرادی", "کاظمی", "جعفری", "رحیمی", "موسوی", "فرهادی",
+       "حسینی", "شریفی", "شاهین", "ملت", "نور", "ارم"]
 )
 FA_PRONOUNS = set(
     "من تو شما او ما این همون چی چه کی همین کدوم اون چقدر".split()
@@ -1082,6 +1445,11 @@ FA_PREPOSITIONS = set(
     # them", colloquial pronoun-incorporated به, sibling of the already-
     # established بهت/بهتون).
     + ["درباره‌ی", "باهاش", "توش", "درباره‌ش", "باهاشون", "بهم", "بهشون"]
+    # B1 unit14 (reported messages), added 2026-07-22: ازم/ازت/ازش ("from
+    # me / from you / from him-her") and بهش ("to him/her") are the same
+    # colloquial pronoun-incorporated class as the already-established
+    # بهم/بهت/بهتون/باهاش above.
+    + ["ازم", "ازت", "ازش", "بهش"]
     # A1 unit31 (celebrations), added 2026-07-12: براش is the third-person
     # sibling of the already-established برات ("for you").
     + ["براش"]
@@ -1144,6 +1512,12 @@ FA_ADVERBS = set(
     + ["دیشب", "کمی", "تنها", "بعضی", "بازم", "بعضی وقتا", "همچنین", "واقعاً", "با هم", "همیشه"]
     # A1 units 34-36, added 2026-07-12.
     + ["زود", "تقریباً", "اصلاً", "هیچ‌وقت", "برای همین"]
+    # A1 units 28/45 and B1 units 14/15, added 2026-07-22: پیاده ("on
+    # foot", manner adverb), قبل ("before", same temporal class as the
+    # already-established بعد), عقب ("behind", in عقب افتادن), آخرش ("in
+    # the end", sentence adverb like the already-established بعدش) and
+    # بیرون ("outside/out", in بیرون غذا می‌خورم).
+    + ["پیاده", "قبل", "عقب", "آخرش", "بیرون"]
 )
 FA_ADJECTIVES = set(
     "خوبی بد ایرانی انگلیسی فرانسوی بزرگه کوچیکه متأهل مجرد برعکسه شلوغه "
@@ -1194,6 +1568,24 @@ FA_ADJECTIVES = set(
     # adjectives in bare attributive form. Their fused copula forms are
     # classified as verbs below, following the existing course precedent.
     + ["مبارک", "بامزه", "خجالتی", "جدی", "زرنگ", "تنبل", "زحمت‌کش", "صبور", "باحال"]
+    # A1 units 25-57 and B1 units 13-15, added 2026-07-22. Attributive/
+    # predicate adjectives: the appearance words (بلند/کوتاه/مشکی/بلوند/
+    # قهوه‌ای/سبز, unit25 -- same attributive class as unit20's own color
+    # adjectives) and unit37's five new colors (زرد/نارنجی/صورتی/بنفش/
+    # خاکستری); خونگی (in حیوان خونگی, 'pet') and خوشگل (unit26); گم/پیدا
+    # (participial adjectives completing گم کردن/پیدا کردن, same class as
+    # the already-established تموم) plus the sign forms گمشده/پیداشده
+    # (unit40); کوتاه‌تر (unit46) and راحت‌تر (B1 unit15), bare comparatives
+    # like the already-established سخت‌تر; فوری (unit48); قدیمی (unit52);
+    # روزانه (unit55, in کارت روزانه); دوم (B1 unit15) -- ordinal, same
+    # class as the already-established دهم/هشتم; ساکت (B1 unit13); منتقل
+    # (B1 unit14), participial like the already-established موکول; پولی
+    # (B1 unit15, in هدف پولی, 'a financial goal'). Their fused copula
+    # forms are classified as verbs below, following course precedent.
+    + ["بلند", "کوتاه", "مشکی", "بلوند", "قهوه‌ای", "سبز", "خونگی",
+       "خوشگل", "زرد", "نارنجی", "صورتی", "بنفش", "خاکستری", "گم",
+       "پیدا", "گمشده", "پیداشده", "کوتاه‌تر", "فوری", "قدیمی",
+       "روزانه", "ساکت", "منتقل", "پولی", "راحت‌تر", "دوم"]
 )
 FA_NUMBERS = set(
     "صفر یک دو سه چهار پنج شش هفت هشت نه ده یازده دوازده سیزده چهارده "
@@ -1381,8 +1773,51 @@ FA_VERBS = {
     "مهربونه", "بامزه‌ست", "خجالتیه", "جدیه", "تنبل نیست",
     "صبوره", "زحمت‌کشه", "چه جوریه", "زرنگه", "آشنا بشم",
     "باحاله", "حرف نمی‌زنه", "فکر می‌کنم", "زحمت‌کشم",
+    # A1 units 25-30, added 2026-07-22. Mostly colloquial -e/-ست copula
+    # contractions (بلنده/کوتاهه/مشکیه/بلونده/قهوه‌ایه/سبزه/آبیه/سفیده/
+    # پشمکه/منه/سگمه/خوشگله/ورزشه/ریاضیه/چقدره), same long-established
+    # precedent as آفتابیه/سرده/بارونیه/گرمه; the rest are ordinary
+    # conjugated forms.
+    "بلنده", "کوتاهه", "مشکیه", "بلونده", "قهوه‌ایه", "سبزه", "آبیه",
+    "می‌زنه", "شکلیه", "رنگیه", "سفیده", "پشمکه", "منه", "سگمه",
+    "خوشگله", "می‌ری", "چقدره", "ورزشه", "می‌خونی", "ریاضیه",
+    # A1 units 37-57, added 2026-07-22, same contraction precedent
+    # (سیاهه/قرمزه/زرده/نارنجیه/صورتیه/بنفشه/خاکستریه/اونجاست/برفیه/
+    # اورژانسه/پلاستیکه/بازیافته/شنبه‌ست/صبحانه‌ست/وای‌فایه/مهمانه/ظهره/
+    # بازه/آزادم/آزادید) plus ordinary verbs and the two multi-word light
+    # verbs دوست داری/دوست دارد (siblings of the established دوست دارم)
+    # and the negated predicate سرد نیست (sibling of تنبل نیست).
+    "سیاهه", "قرمزه", "زرده", "نارنجیه", "صورتیه", "بنفشه", "خاکستریه",
+    "دوست دارد", "دوست داری", "سرد نیست", "اونجاست", "برفیه",
+    "اورژانسه", "بزنید", "دیدید", "آزادم", "آزادید", "پلاستیکه",
+    "بازیافته", "می‌ندازم", "می‌ندازی", "شنبه‌ست", "صبحانه‌ست",
+    "وای‌فایه", "مهمانه", "ظهره", "بازه", "بزنیم",
+    # B1 units 12-16, added 2026-07-22: the conditional/temporal
+    # subjunctive paradigm (بیاد/بیای/بشه/بشم/بزنه/بزنم/نتونه/نتونستی/
+    # بتونم/بتونیم/بتونه/بتونن), colloquial imperatives (بده/بزن/بدید),
+    # ordinary past/present forms, and the copula contractions
+    # فرداست/اینه/روشنه (same precedent as ساراست/همونه).
+    "بیاد", "داشتی", "بده", "نتونستی", "بیای", "می‌رن", "می‌ریم",
+    "نتونه", "دارن", "بزن", "بشه", "رسیدم", "دادم", "زدید", "بدید",
+    "روشنه", "بزنه", "افتاده", "خواست", "بزنم", "داده", "خواسته",
+    "فرداست", "اومد", "اینه", "می‌خوره", "بتونه", "بتونن", "بشم",
+    "بتونم", "بتونیم",
 }
 FA_PHRASE_PARTS = {"بخیر", "خواهش"}
+# Multi-word tokens a realization introduces as ONE vocabulary item that
+# are not verb phrases (those go in FA_VERBS above, e.g. دوست دارم) --
+# question frames, noun phrases and whole set phrases. Classified "phrase"
+# so a word-level practice slot (noun/adjective/verb) can never draw a
+# whole sentence into a single-word frame. Added 2026-07-22 with A1 units
+# 25-57; earlier multi-word entries are deliberately left at their
+# established classification (changing one would orphan its existing DB
+# row, which main() matches on token+part_of_speech).
+FA_MULTIWORD_PHRASES = {
+    "گربه‌ی من", "چه رنگیه", "چه رنگی", "تو خونه", "چهار فصل",
+    "کدوم فصل", "تو چی؟", "مثل قبل", "کوچیک می‌خوای یا بزرگ؟",
+    "کی پس می‌دم؟", "فردا ظهر خوبه؟", "کِی می‌گیرم؟", "استخر بازه؟",
+    "چه ساعتی؟",
+}
 # B1 units 07-11 ("second wave"), added 2026-07-11: عین (only ever
 # appears here as part of در عین حال, "nevertheless" -- meaningless
 # alone in this corpus, same class as بخیر/خواهش) and من و (an
@@ -1439,6 +1874,92 @@ NO_NEGATION_LESSONS = {
     # level, but the fix is the same regardless of level since this set
     # isn't itself level-scoped.
     "fa.b1.unit04.lesson04.dialogue_remote_work",
+    # A1 units 10/33/36/45, added 2026-07-22 (en-fa checkpoint-coverage
+    # pass): four more occurrences of the same collision, three of them
+    # PRE-EXISTING (units 10/33/36 were already in UNIT_FILES and had been
+    # silently inheriting the "nine" gloss/POS/number-tag for a plain "no")
+    # and one in this pass's own new range (unit45's "نه، فقط ..." dosage
+    # answer, whose overlay gloss says "no" outright). None of the four
+    # lessons mentions the number nine; unit49/52/57's own "ساعت نه"
+    # ("nine o'clock") lessons are deliberately NOT listed here, so the
+    # number sense keeps its long-established a1_unit03 anchor.
+    "fa.a1.unit10.lesson06.meeting_date_dialogue",
+    "fa.a1.unit33.lesson04.neighborhood_dialogue",
+    "fa.a1.unit36.lesson04.personality_dialogue",
+    "fa.a1.unit45.lesson03.dosage_timing",
+}
+
+# چشم is a genuine homograph in this course, found 2026-07-22 while adding
+# A1 units 25-57: the polite acknowledgment "right away / certainly"
+# (FA_PARTICLES, established since a1_unit06's restaurant etiquette card
+# and reused in unit46/a2_unit12) versus the plain body-part NOUN "eye"
+# that a1_unit25 introduces and drills. Without this split, unit25's whole
+# eye-colour lesson would inherit "right away (polite acknowledgment)" as
+# its gloss and "particle" as its part of speech -- a learner flashcard
+# reading "چشم: right away" while the exercise is about eye colour. Given
+# its own key-tuple discriminator AND a distinct part_of_speech (so the two
+# senses land as separate Lexeme rows -- main() matches on
+# token+part_of_speech), same pattern as تو's location_prep split.
+CHESHM_EYE_LESSONS = {
+    "fa.a1.unit25.lesson03.eyes",
+}
+
+# پس is a genuine homograph too, same pass: the discourse particle "so;
+# then" (established since a1_unit04/unit07, e.g. "پس بریم پارک") versus
+# the "back" of پس دادن ("to give back / return an item"), which units
+# 42/47 introduce as a real vocabulary item in that sense. Classified
+# adverb there so the two senses land as separate Lexeme rows.
+# NOTE (not fixed here, flagged for the coordinator): a2_unit18's own
+# "پس دادن" note has the same "back" sense but its a2-level row already
+# exists with the discourse gloss; it is left untouched rather than
+# silently re-pointing an already-shipped A2 unit's lexeme.
+PAS_RETURN_LESSONS = {
+    "fa.a1.unit42.lesson03.when_giving_back",
+    "fa.a1.unit47.lesson03.size_and_return",
+}
+
+# تا is a genuine homograph too, same pass, with THREE senses in this
+# corpus: the counting classifier ("دو تا سیب", established a1_unit03 --
+# the sense the plain FA_GLOSSES/FA_PARTICLES entry covers), the
+# preposition "until / up to / by" (the opening-hours and deadline lessons
+# listed below), and B1's purpose conjunction "so that" (units 15/16).
+# The latter two are grouped here as one preposition-classified lexeme
+# ("until; up to; so that"), because they are the same non-classifier تا
+# and never contrast within a lesson. b1_unit09's own "تا فردا" ("by
+# tomorrow") is included deliberately: it is a PRE-EXISTING mis-gloss --
+# B1 teaches no counting classifier at all, so today the only b1 تا row
+# carries the classifier gloss.
+TA_UNTIL_LESSONS = {
+    "fa.a1.unit42.lesson03.when_giving_back",
+    "fa.a1.unit44.lesson04.checkin_dialogue",
+    "fa.a1.unit47.lesson03.size_and_return",
+    "fa.a1.unit49.lesson03.locker_and_hours",
+    "fa.a1.unit52.lesson02.new_museum_two",
+    "fa.a1.unit54.lesson05.reading_park_sign",
+    "fa.a1.unit55.lesson03.class_and_hours",
+    "fa.a1.unit56.lesson05.reading_beach_sign",
+    "fa.a1.unit57.lesson05.reading_zoo_sign",
+    "fa.b1.unit09.lesson04.dialogue_meeting",
+    "fa.b1.unit15.lesson02.saving_goal",
+    "fa.b1.unit15.lesson03.work_goal",
+    "fa.b1.unit15.lesson05.reading_goals",
+    "fa.b1.unit15.lesson06.wrapup_production",
+    "fa.b1.unit16.lesson01.study_goal",
+    "fa.b1.unit16.lesson02.saving_goal",
+    "fa.b1.unit16.lesson04.dialogue_goals",
+    "fa.b1.unit16.lesson05.reading_goals",
+    "fa.b1.unit16.lesson06.wrapup_production",
+}
+
+# جدی is a genuine homograph too, same pass: the personality ADJECTIVE
+# "serious" (a1_unit36) versus B1 unit14's conversational reaction
+# "really?!". Unlike چشم/پس/تا above no key-tuple or part_of_speech
+# discriminator is needed -- the two senses are in different courses
+# (a1 vs b1) so fa_specs's (level, token) key already separates them and
+# their DB rows have different course_id -- only the gloss needs
+# overriding, same as the باشه precedent.
+JADI_REALLY_LESSONS = {
+    "fa.b1.unit14.lesson04.dialogue_messages",
 }
 
 # باشه is a genuine homograph too, found while adding B1 unit03
@@ -1467,6 +1988,22 @@ BASHE_SUBJUNCTIVE_LESSONS = {
     # 3rd-person "(that it) be" completing a formal decision/suggestion
     # clause, not the informal "okay" affirmation.
     "fa.b1.unit09.lesson05.reading_the_professional_message",
+    # B1 units 12/15, added 2026-07-22: the same subjunctive-copula sense
+    # completes this pass's own conditional/purpose paradigms -- "اگه هوا
+    # خوب باشه" ("if the weather is good") and "تا جلسه آماده باشه" ("so
+    # that the meeting is ready"). Listing them also stops these lessons
+    # re-merging the unrelated A1 "okay" tags (accept_word/
+    # travel_confirmation_word) onto the b1 row.
+    # KNOWN LIMITATION, flagged rather than papered over: b1 unit12
+    # lesson04 contains BOTH senses (its dialogue opens with a plain
+    # "باشه." = "okay"), and the whole b1 level shares one باشه row, which
+    # carries the subjunctive gloss. Splitting it would need a
+    # content_key-level discriminator, not a lesson-level one.
+    "fa.b1.unit12.lesson04.dialogue_plan_b",
+    "fa.b1.unit12.lesson05.reading_plan",
+    "fa.b1.unit15.lesson03.work_goal",
+    "fa.b1.unit15.lesson05.reading_goals",
+    "fa.b1.unit15.lesson06.wrapup_production",
 }
 
 EN_PRONOUNS = {
@@ -1511,7 +2048,7 @@ def fa_part_of_speech(token: str) -> str:
         return "adjective"
     if token in FA_VERBS:
         return "verb"
-    if token in FA_PHRASE_PARTS:
+    if token in FA_PHRASE_PARTS or token in FA_MULTIWORD_PHRASES:
         return "phrase"
     return "noun"
 
@@ -1580,6 +2117,11 @@ def fa_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     # semantic grouping never sweeps in the b1-level conditional-
     # paradigm occurrence.
     is_bashe_subjunctive = token == "باشه" and lesson_key in BASHE_SUBJUNCTIVE_LESSONS
+    # تا's non-classifier sense ("until / up to / so that", see
+    # TA_UNTIL_LESSONS above) is excluded from the "quantity" tag below the
+    # same way -- an opening-hours "تا" must never be drawn into a
+    # counting-classifier practice slot. Added 2026-07-22.
+    is_ta_until = token == "تا" and lesson_key in TA_UNTIL_LESSONS
     if token in FA_PRONOUNS and not is_too_location:
         semantics.append("pronoun")
     if token in {"هستم", "هستی", "هست", "است", "هستید", "هستین", "ساراست", "ایرانیه", "ایرانی‌ام"}:
@@ -1615,7 +2157,7 @@ def fa_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         semantics.append("phone_number")
     if token in {"سال", "سالته", "سالمه"}:
         semantics.append("age")
-    if token in {"تا", "سیب", "کتاب"}:
+    if token in {"تا", "سیب", "کتاب"} and not is_ta_until:
         semantics.append("quantity")
     if token in {"قیمت", "تومن", "هزار", "تومنه"}:
         semantics.append("price")
@@ -2248,6 +2790,307 @@ def fa_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         semantics.append("closing_word")
     if lesson_key.endswith("lesson06.hobbies_dialogue"):
         semantics.append("dialogue_word")
+    # -----------------------------------------------------------------
+    # A1 units 25-30 and 37-57 + B1 units 12-16, added 2026-07-22 by the
+    # en-fa checkpoint-coverage pass.
+    #
+    # ONE RULE governs every group below and it is not obvious, so it is
+    # written out once here instead of per unit: `generate_checkpoint()`
+    # only sees lexemes whose provenance lesson belongs to THAT unit, and
+    # a lexeme's provenance is its FIRST introduction anywhere in the
+    # course (iter_specs keys on (level, token), first occurrence wins).
+    # So every group below contains only tokens this unit itself
+    # introduces first -- never a review word it merely reuses. Tagging a
+    # reused word here would attach the tag to the EARLIER unit's lexeme
+    # and silently contribute nothing to this unit's checkpoint. That is
+    # also why several of these groups are small: units 42/45/49-53/55-57
+    # and B1 unit16 are review-heavy by construction (see this pass's
+    # report for the per-unit hostable counts).
+    # Unit 25 (appearance).
+    if token in {"قدش", "بلند", "بلنده", "کوتاه", "کوتاهه"}:
+        semantics.append("height_word")
+    if token in {"مو", "موی", "موهاش", "مشکی", "مشکیه", "بلوند", "بلونده"}:
+        semantics.append("hair_word")
+    if token in {"چشمای", "چشماش", "قهوه‌ای", "قهوه‌ایه", "سبز", "سبزه", "آبیه"}:
+        semantics.append("eye_word")
+    if token == "چشم" and lesson_key in CHESHM_EYE_LESSONS:
+        semantics.append("eye_word")
+    if token in {"بلند", "کوتاه", "مشکی", "بلوند", "قهوه‌ای", "سبز"}:
+        semantics.append("appearance_adjective")
+    if token in {"عینک", "می‌زنه", "شکلیه", "رنگیه"}:
+        semantics.append("appearance_question_word")
+    # Unit 26 (animals).
+    if token in {"حیوان", "سگ", "گربه", "پرنده", "ماهی"}:
+        semantics.append("animal_word")
+    if token in {"خونگی", "حیوان"}:
+        semantics.append("pet_word")
+    if token in {"اسمش", "سگم", "پشمک", "پشمکه"}:
+        semantics.append("pet_name_word")
+    if token in {"سفیده", "گربه‌ی", "خوشگل", "خوشگله"}:
+        semantics.append("pet_description_word")
+    if token in {"منه", "سگمه"}:
+        semantics.append("ownership_word")
+    # Unit 27 (sports).
+    if token in {"بسکتبال", "والیبال", "شنا"}:
+        semantics.append("sport_name_word")
+    if token in {"باشگاه", "استخر"}:
+        semantics.append("sport_place_word")
+    if token in {"ورزشی", "می‌ری", "بار"}:
+        semantics.append("sport_question_word")
+    if token == "می‌ره" and lesson_key.startswith("fa.a1.unit27"):
+        semantics.append("sport_question_word")
+    # Unit 28 (transportation).
+    if token in {"مترو", "دوچرخه", "تاکسی", "پیاده"}:
+        semantics.append("transport_mode_word")
+    if token in {"چقدره", "ورزشه"}:
+        semantics.append("transport_comment_word")
+    # Unit 29 (technology).
+    if token in {"تکنولوژی", "گوشی", "کامپیوتر", "اینترنت"}:
+        semantics.append("device_word")
+    if token in {"دانلود", "گوشیت"}:
+        semantics.append("phone_use_word")
+    # Unit 30 (education).
+    if token in {"دانشجو", "درس", "زبان"}:
+        semantics.append("study_word")
+    if token in {"ریاضی", "رشته", "رشته‌ی", "ریاضیه"}:
+        semantics.append("subject_word")
+    if token in {"یاد", "می‌خونی"}:
+        semantics.append("learning_verb_word")
+    # Unit 37 (colors).
+    if token in {"زرد", "نارنجی", "صورتی", "بنفش", "خاکستری"}:
+        semantics.append("new_color_word")
+    if token in {
+        "زرده", "نارنجیه", "صورتیه", "بنفشه", "خاکستریه", "سیاهه", "قرمزه",
+    }:
+        semantics.append("color_state_verb")
+    if token in {"موز", "پیراهنم", "کتابم", "کتابت", "ماشینت", "گربه‌ی من"}:
+        semantics.append("colored_object_word")
+    if token in {"رنگش", "چه رنگیه", "چه رنگی"}:
+        semantics.append("color_question_word")
+    if token in {"تو خونه", "اونجاست", "دوست دارد"}:
+        semantics.append("color_reading_word")
+    # Unit 38 (seasons).
+    if token in {"بهار", "تابستان", "پاییز", "زمستان", "فصل", "چهار فصل"}:
+        semantics.append("season_word")
+    if token in {"اسکی", "برف"}:
+        semantics.append("season_activity_word")
+    if token in {"برفیه", "سرد نیست"}:
+        semantics.append("season_state_verb")
+    # "تو چی؟" is deliberately NOT a member: unit38 reuses it but it is
+    # first introduced (and therefore anchored) back in unit11, so tagging
+    # it here would only widen unit11's pool, never unit38's checkpoint.
+    if token in {"کدوم فصل", "دوست داری"} and lesson_key.startswith("fa.a1.unit38"):
+        semantics.append("season_choice_word")
+    # Unit 39 (emergencies).
+    if token in {"پلیس", "آمبولانس", "آتش‌نشانی"}:
+        semantics.append("emergency_service_word")
+    if token in {"آتش", "خطر", "تصادف"}:
+        semantics.append("danger_word")
+    if token in {"اورژانس", "اورژانسه", "بزنید"}:
+        semantics.append("emergency_call_word")
+    # Unit 40 (lost items).
+    if token in {"کیف", "کلید", "گذرنامه"}:
+        semantics.append("lost_item_word")
+    if token in {"گم", "پیدا", "دیدید"}:
+        semantics.append("lost_found_verb_word")
+    if token in {"گمشده", "پیداشده"}:
+        semantics.append("notice_status_word")
+    # Unit 41 (appointments).
+    if token in {"دندانپزشک", "مطب"}:
+        semantics.append("appointment_place_word")
+    if token in {"آزادم", "آزادید"}:
+        semantics.append("availability_word")
+    # Units 40/41 both introduce a courtesy title; grouped once so a
+    # title slot has two members course-wide while each row stays
+    # anchored in its own unit.
+    if token in {"آقای", "خانم"}:
+        semantics.append("courtesy_title_word")
+    # Unit 42 (library).
+    if token in {"کتابخونه", "امانت"}:
+        semantics.append("library_word")
+    # Unit 43 (waste disposal).
+    if token in {"زباله", "سطل", "کاغذ", "پلاستیک", "شیشه", "بازیافت"}:
+        semantics.append("waste_word")
+    if token in {"می‌ندازم", "می‌ندازی"}:
+        semantics.append("waste_verb_word")
+    if token in {"پلاستیکه", "بازیافته"}:
+        semantics.append("waste_state_verb")
+    if token in {"جمع‌آوری", "شنبه‌ست"}:
+        semantics.append("collection_word")
+    # Unit 44 (accommodation).
+    if token in {"رزرو", "صبحانه", "وای‌فای", "خروج", "مهمان"}:
+        semantics.append("hotel_word")
+    if token in {"صبحانه‌ست", "وای‌فایه", "مهمانه", "ظهره"}:
+        semantics.append("hotel_state_verb")
+    # Unit 45 (pharmacy).
+    if token in {"داروخانه", "قرص", "قبل"}:
+        semantics.append("pharmacy_word")
+    # Unit 46 (personal care).
+    if token in {"سلمانی", "موهام", "کوتاه‌تر", "مثل قبل"}:
+        semantics.append("salon_word")
+    # Unit 47 (bike rental).
+    if token in {"کرایه", "ودیعه", "دوچرخه‌ی"}:
+        semantics.append("rental_word")
+    if token in {"کوچیک می‌خوای یا بزرگ؟", "کی پس می‌دم؟"}:
+        semantics.append("rental_question_phrase")
+    if token == "پس" and lesson_key in PAS_RETURN_LESSONS:
+        semantics.append("return_word")
+    # Unit 48 (laundry).
+    if token in {"خشکشویی", "فوری"}:
+        semantics.append("laundry_word")
+    if token in {"فردا ظهر خوبه؟", "کِی می‌گیرم؟"}:
+        semantics.append("laundry_question_phrase")
+    # Unit 49 (swimming pool).
+    if token in {"کمد", "بازه", "استخر بازه؟"}:
+        semantics.append("pool_facility_word")
+    # Unit 50 (restaurant).
+    if token in {"سفارش", "چلوکباب", "دوغ"}:
+        semantics.append("restaurant_order_word")
+    # Unit 51 (cinema).
+    if token == "سانس":
+        semantics.append("cinema_word")
+    # Unit 52 (museum).
+    if token in {"موزه", "نمایشگاه", "قدیمی"}:
+        semantics.append("museum_word")
+    # Unit 53 (concert).
+    # "چه ساعتی؟" excluded for the same reason as unit38's "تو چی؟"
+    # above -- it is anchored in unit12.
+    if token in {"کنسرت", "خواننده"} and lesson_key.startswith("fa.a1.unit53"):
+        semantics.append("concert_word")
+    # Unit 54 (park).
+    if token in {"پیک‌نیک", "درخت", "قدم", "بزنیم"}:
+        semantics.append("park_word")
+    # Unit 55 (gym).
+    if token in {"روزانه", "وزنه"}:
+        semantics.append("gym_word")
+    # Unit 56 (beach).
+    if token in {"ساحل", "دریا", "ماسه"}:
+        semantics.append("beach_word")
+    # Unit 57 (zoo).
+    if token in {"باغ‌وحش", "شیر", "فیل"}:
+        semantics.append("zoo_word")
+    # Every surname/place name units 40-57 introduce joins the existing
+    # course-wide "person_name" pool (each anchored in its own unit, so a
+    # unit checkpoint still only ever sees its own).
+    if token in {
+        "کریمی", "احمدی", "رضایی", "صادقی", "رستمی", "صالحی", "نوری",
+        "مرادی", "کاظمی", "جعفری", "رحیمی", "موسوی", "فرهادی", "حسینی",
+        "شریفی", "شاهین",
+    }:
+        semantics.append("person_name")
+    if token in {"ملت", "نور", "ارم", "پشمک"}:
+        semantics.append("proper_name_word")
+    # B1 unit12 (real conditions).
+    if token in {"بیاد", "داشتی", "نتونستی", "بیای", "نتونه"}:
+        semantics.append("conditional_verb_word")
+    if token in {"بارون", "می‌رن", "می‌ریم", "پیامت", "پیامش", "دارن"}:
+        semantics.append("plan_b_word")
+    if token in {"بده", "بزن"}:
+        semantics.append("conditional_imperative_word")
+    # B1 unit13 (time clauses).
+    if token in {"بشه", "رسیدم", "دادم", "بزنه"}:
+        semantics.append("time_clause_verb")
+    if token in {"زمان‌بندی", "روشنه", "ساکت"}:
+        semantics.append("schedule_word")
+    if token in {"زدید", "بدید"}:
+        semantics.append("polite_request_verb")
+    # B1 unit14 (reported messages).
+    if token in {"خواست", "خواسته", "داده", "افتاده", "بزنم", "عقب"}:
+        semantics.append("reported_speech_verb")
+    if token in {"ازم", "ازت", "ازش", "بهش"}:
+        semantics.append("pronoun_incorporated_prep")
+    if token in {"خلاصه", "پیامی", "خبری", "پیام‌ها", "منتقل", "آخرش", "فرداست"}:
+        semantics.append("message_summary_word")
+    # B1 unit15 (purpose clauses).
+    if token in {"هدف", "دوم", "پولی", "اینه"}:
+        semantics.append("purpose_goal_word")
+    if token in {"جمع", "بیرون", "می‌خوره"}:
+        semantics.append("saving_action_word")
+    if token in {"بتونه", "بتونن", "بشم"}:
+        semantics.append("ability_subjunctive_verb")
+    if token in {"فارسی‌ام", "فارسی‌اش", "راحت‌تر", "اومد", "یادداشت‌ها"}:
+        semantics.append("personal_progress_word")
+    # B1 unit16 (goals and plans).
+    if token in {"بتونم", "بتونیم"}:
+        semantics.append("ability_purpose_verb")
+    if token in {"خرج", "تقسیم", "صحبت", "کارها"} and lesson_key.startswith(
+        "fa.b1.unit16"
+    ):
+        semantics.append("teamwork_word")
+    # Second sweep over the same 32 units: tokens these units introduce
+    # first but that no topical group above happened to name -- mostly
+    # review vocabulary reaching a NEW course level (a1 words appearing at
+    # b1 for the first time) and the conjugated siblings of a group's own
+    # verbs. Folded into the nearest existing group rather than left
+    # untagged, since an untagged lexeme is un-hostable by any semantic
+    # slot and therefore dead weight in its unit's checkpoint.
+    if token == "اپلیکیشن" and lesson_key.startswith("fa.a1.unit29"):
+        semantics.append("device_word")
+    if token in {"می‌فرستم", "می‌گیرم", "می‌گیره", "می‌فرسته"} and lesson_key.startswith(
+        "fa.a1.unit29"
+    ):
+        semantics.append("phone_use_word")
+    if token in {"غذا", "می‌ده"} and lesson_key.startswith("fa.a1.unit26"):
+        semantics.append("pet_food_word")
+    if token == "ماشین" and lesson_key.startswith("fa.a1.unit28"):
+        semantics.append("transport_mode_word")
+    if token == "دانشگاه" and lesson_key.startswith("fa.a1.unit30"):
+        semantics.append("study_word")
+    if token == "می‌خونم" and lesson_key.startswith("fa.a1.unit30"):
+        semantics.append("learning_verb_word")
+    if token in {"ماشینم", "روی"} and lesson_key.startswith("fa.a1.unit37"):
+        semantics.append("colored_object_word")
+    if token == "داریم" and lesson_key.startswith("fa.a1.unit38"):
+        semantics.append("season_state_verb")
+    if token == "لازمه" and lesson_key.startswith("fa.a1.unit39"):
+        semantics.append("emergency_call_word")
+    if token == "روزی" and lesson_key.startswith("fa.a1.unit45"):
+        semantics.append("pharmacy_word")
+    if token == "باز" and lesson_key.startswith("fa.a1.unit49"):
+        semantics.append("pool_facility_word")
+    if token == "شروع" and lesson_key.startswith("fa.a1.unit51"):
+        semantics.append("cinema_word")
+    if token == "ببینیم" and lesson_key.startswith("fa.a1.unit57"):
+        semantics.append("zoo_word")
+    if token in {"می‌کنیم", "خبر"} and lesson_key.startswith("fa.b1.unit12"):
+        semantics.append("plan_b_word")
+    if token in {"می‌زنم", "می‌شم"} and lesson_key.startswith("fa.b1.unit13"):
+        semantics.append("time_clause_verb")
+    if token == "شروع" and lesson_key.startswith("fa.b1.unit13"):
+        semantics.append("schedule_word")
+    if token in {"داد", "آماده‌ست"} and lesson_key.startswith("fa.b1.unit14"):
+        semantics.append("reported_speech_verb")
+    if token == "اول" and lesson_key.startswith("fa.b1.unit14"):
+        semantics.append("message_summary_word")
+    if token in {"تمرین", "غذا", "می‌خورم"} and lesson_key.startswith("fa.b1.unit15"):
+        semantics.append("saving_action_word")
+    if token in {"چند", "پیش", "می‌خونم"} and lesson_key.startswith("fa.b1.unit15"):
+        semantics.append("personal_progress_word")
+    # The remaining dialogue-lesson tokens, listed by TOKEN rather than
+    # swept up by a lesson-only "any dialogue lesson in this range" rule.
+    # That sweep was written first and reverted the same day: because
+    # _classify_fa MERGES semantic tags into a token's existing (earlier)
+    # spec, a lesson-only rule tags every review word the dialogue reuses
+    # -- it put "dialogue_word" on 73 lexemes anchored in units 01-24,
+    # silently widening those already-shipped units' own practice pools.
+    # Any tag added here must therefore be keyed on tokens THIS unit
+    # introduces first.
+    if token in {"سخته"} and lesson_key.startswith("fa.a1.unit30"):
+        semantics.append("learning_verb_word")
+    if token in {"باحاله!"} and lesson_key.startswith("fa.a1.unit37"):
+        semantics.append("color_reading_word")
+    if token in {"بیایید"} and lesson_key.startswith("fa.a1.unit39"):
+        semantics.append("emergency_call_word")
+    if token in {"هوا", "می‌کنن", "پارک", "کافه", "منتظر"} and lesson_key.startswith(
+        "fa.b1.unit12"
+    ):
+        semantics.append("plan_b_word")
+    if token in {"می‌فرسته", "می‌فرستم", "بهتون"} and lesson_key.startswith(
+        "fa.b1.unit13"
+    ):
+        semantics.append("polite_request_verb")
+    if token == "جدی" and lesson_key in JADI_REALLY_LESSONS:
+        semantics.append("message_summary_word")
     if semantics:
         tags["semantic"] = list(dict.fromkeys(semantics))
     person = {
@@ -2348,6 +3191,29 @@ def _classify_fa(files, level, fa_specs, seen_en):
                     # FA_VERBS membership, so no override needed there).
                     if token == "باشه" and lesson_key in BASHE_SUBJUNCTIVE_LESSONS:
                         english_gloss = "(if) he/she is / be (subjunctive copula)"
+                    # چشم / پس / تا: three more genuine homographs, split
+                    # 2026-07-22 -- see CHESHM_EYE_LESSONS,
+                    # PAS_RETURN_LESSONS and TA_UNTIL_LESSONS above for
+                    # each one's evidence. All three get BOTH a key-tuple
+                    # discriminator and a distinct part_of_speech, so the
+                    # two senses persist as separate Lexeme rows (main()'s
+                    # existing-row lookup matches on token+part_of_speech).
+                    if token == "چشم" and lesson_key in CHESHM_EYE_LESSONS:
+                        key = (level, token, "body_part")
+                        part_of_speech = "noun"
+                        english_gloss = "eye"
+                    if token == "پس" and lesson_key in PAS_RETURN_LESSONS:
+                        key = (level, token, "return_back")
+                        part_of_speech = "adverb"
+                        english_gloss = "back (in پس دادن, 'to give back')"
+                    if token == "تا" and lesson_key in TA_UNTIL_LESSONS:
+                        key = (level, token, "until_prep")
+                        part_of_speech = "preposition"
+                        english_gloss = "until; up to; so that (purpose)"
+                    # جدی: gloss-only override, same reasoning as باشه
+                    # above (a1 vs b1 already separates the two rows).
+                    if token == "جدی" and lesson_key in JADI_REALLY_LESSONS:
+                        english_gloss = "really?! (surprised reaction)"
                     existing = fa_specs.get(key)
                     if existing is None:
                         fa_specs[key] = {
@@ -2376,12 +3242,46 @@ def _classify_fa(files, level, fa_specs, seen_en):
                 # token is VARCHAR(255), and a newline-free reading passage
                 # slipped through here on 2026-07-11 and crashed the real
                 # backfill run with StringDataRightTruncation.
+                # The label-phrase guard was added 2026-07-22 with A1 units
+                # 25-30/37-57. Many of this pack's realizations use review
+                # cards whose target TEXT is an authoring LABEL rather than
+                # a Persian phrase -- e.g. "رنگ (color) / سفید (white) /
+                # ... -- already known from units 20 and 25", or "زندگی
+                # می‌کنم = I live". Those satisfy every other condition
+                # here and get persisted as real Persian "phrase" lexemes,
+                # so a practice item can show a learner a Persian prompt
+                # with English gloss text and an authoring note baked into
+                # it. A genuine Persian phrase never contains an ASCII
+                # letter, so the test rejects exactly that class.
+                #
+                # It is deliberately scoped to the units THIS pass adds
+                # (a1 25-30 and 37-57) instead of applying corpus-wide.
+                # 42 such rows are already persisted from earlier passes
+                # (units 06/13/16/18/19/23/31-36, a2 11/15/16/18), and
+                # _practice_lesson_id() in backend/app/content/service.py
+                # resolves a pack's lesson key through
+                # Lexeme.provenance_lesson_content_key -- so suppressing an
+                # already-written row leaves it stranded on its old lesson
+                # and the key then "maps to multiple lessons", which fails
+                # the whole practice import. Verified for real against an
+                # isolated copy of the dev DB (102 such errors on Farsi A1
+                # before this scoping). Cleaning those 42 rows up is a
+                # separate coordinator-side task; until then they keep
+                # being emitted so they stay re-pointable.
+                _guarded_unit = re.match(
+                    r"fa\.a1\.unit(\d\d)\.", lesson_key
+                )
+                _label_guarded = bool(_guarded_unit) and (
+                    25 <= int(_guarded_unit.group(1)) <= 30
+                    or 37 <= int(_guarded_unit.group(1)) <= 57
+                )
                 if (
                     len(introduced) > 1
                     and target_text
                     and "\n" not in target_text
                     and level != "b1"
                     and len(target_text) <= 255
+                    and not (_label_guarded and re.search(r"[A-Za-z]", target_text))
                 ):
                     tags = fa_agreement_tags(target_text, lesson_key)
                     phrase_key = (level, target_text)
@@ -2510,6 +3410,7 @@ def main() -> int:
         }
         created = 0
         updated = 0
+        repointed = 0
         for spec in specs:
             level = spec.pop("level")
             course = courses_by_level[level]
@@ -2532,10 +3433,28 @@ def main() -> int:
                 )
             )
             if existing:
-                # Preserve first-introduction provenance, but refresh reviewed
-                # lexical metadata so reruns safely repair earlier backfills.
+                # Refresh reviewed lexical metadata so reruns safely repair
+                # earlier backfills.
                 existing.english_gloss = spec["english_gloss"]
                 existing.agreement_tags = spec["agreement_tags"]
+                # Provenance is ALSO refreshed, added 2026-07-22. This used
+                # to be pinned ("preserve first-introduction provenance"),
+                # which is what a spec already carries anyway: iter_specs()
+                # keys fa_specs on (level, token[, sense]) and keeps the
+                # FIRST occurrence, so spec's lesson IS the first
+                # introduction. Pinning it therefore preserved nothing real
+                # -- it only made a wrong provenance permanent, and units
+                # 31-36 had exactly that (their rows were written against
+                # units 25-30's lessons; see the UNIT_FILES units 25-30
+                # comment). Since `generate_checkpoint()` buckets a unit's
+                # material strictly by provenance_lesson_id, a stale FK is
+                # a dead checkpoint. Idempotent: after one run the values
+                # already match and this is a no-op write.
+                if existing.provenance_lesson_id != lesson.id:
+                    repointed += 1
+                existing.provenance_lesson_id = lesson.id
+                existing.provenance_lesson_content_key = spec["lesson_content_key"]
+                existing.provenance_content_key = spec["content_key"]
                 updated += 1
                 continue
             db.add(
@@ -2549,7 +3468,10 @@ def main() -> int:
             )
             created += 1
         db.commit()
-    print(f"Lexeme backfill complete: {created} created, {updated} updated.")
+    print(
+        f"Lexeme backfill complete: {created} created, {updated} updated "
+        f"({repointed} re-pointed to their correct provenance lesson)."
+    )
     return 0
 
 
