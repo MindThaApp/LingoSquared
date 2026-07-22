@@ -30,7 +30,12 @@ cp .env.example .env
 docker compose build
 docker compose up -d db
 docker compose run --rm api alembic upgrade head
-docker compose run --rm api python -m app.content.seed
+# `seed` bootstraps languages + achievements ONLY. On a local dev box add
+# `--with-demo-courses`: the four demo courses are the fixtures `backend/tests/`
+# and the Playwright suite in `e2e/` assert against, so without them a fresh
+# stack has no courses at all and the e2e suite fails. Never pass the flag on a
+# real deployment — the demo courses shadow the real launch courses in the picker.
+docker compose run --rm api python -m app.content.seed --with-demo-courses
 docker compose up -d api
 docker compose ps
 docker compose logs -f api
@@ -55,7 +60,9 @@ From another LAN device, open `http://SERVER_LAN_IP:8000/docs`. Set `API_PORT` i
 # Apply new migrations
 docker compose run --rm api alembic upgrade head
 
-# Idempotently refresh the original seed course
+# Idempotently bootstrap the language and achievement reference rows
+# (create-missing-only; no courses). Add --with-demo-courses on a dev box to
+# also create the four demo courses the test/e2e fixtures expect.
 docker compose run --rm api python -m app.content.seed
 
 # Follow API logs
@@ -69,10 +76,16 @@ curl -X POST -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/jso
   --data @content.json http://localhost:8000/admin/content/import
 ```
 
-The seed contains all ten language records plus original en→fa, en→prs, and
-prs→en A1 example courses, plus an en→prs A2 example course. Every reseeded lesson has an ordered teaching
+The seed always creates the language and achievement reference rows. The four
+example courses — en→fa, en→prs and prs→en A1 plus an en→prs A2 — are dev/test
+fixtures only and are created **just** when `--with-demo-courses` (or
+`LINGO_SEED_DEMO_COURSES=1`) is passed; the command-line default creates no
+courses. Real course content is imported separately via
+`scripts/compile_content.py` → `POST /admin/content/import` (see
+`docs/PRE_DEPLOY_RUNBOOK.md`). Every seeded lesson has an ordered teaching
 phase before its exercises. The Dari courses use their own `prs` content and
-remain separate from Farsi.
+remain separate from Farsi. In-process callers (`backend/tests/conftest.py`)
+still get the demo courses by default — only the command-line default flipped.
 
 Lesson teaching cards reuse `content_items` with a lesson association and
 order. Admin imports accept `teaching` on each lesson; each card contains a
@@ -141,7 +154,7 @@ python3.12 -m venv .venv
 pip install -r requirements-dev.txt
 export DATABASE_URL=postgresql+psycopg://lingosquared:change-me@localhost:5432/lingosquared
 alembic upgrade head
-python -m app.content.seed
+python -m app.content.seed --with-demo-courses   # drop the flag for a bootstrap-only, course-free stack
 uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 pytest
 ```
