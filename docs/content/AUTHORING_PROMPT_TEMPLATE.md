@@ -5,7 +5,7 @@ standing rules from `AUTHORING_GUIDE.md` and the hard-won failure modes
 in `CLAUDE.md`/`docs/BUILD_LOG.md` by construction, instead of being
 reconstructed (and potentially weakened) by hand each time. Fill in the
 `{...}` placeholders and pass the result to `codex-companion.mjs` with
-`--cwd /Users/raminazizi/dev/LingoSquared`.
+`--cwd "$LINGO_REPO"`.
 
 Three templates: target-language realization, source-language overlay,
 and fresh-context review. Use exactly one per Codex dispatch — never
@@ -201,7 +201,7 @@ file is genuinely clean, say so explicitly and recommend
 
 ## Notes for whoever fills these in (Session 2 / CONTENT by default)
 
-- Always pass `--cwd /Users/raminazizi/dev/LingoSquared` to
+- Always pass `--cwd "$LINGO_REPO"` to
   `codex-companion.mjs` — see CLAUDE.md.
 - After Codex reports a review pass, still do your own independent
   sweep for the specific bug classes that have shipped before: bare

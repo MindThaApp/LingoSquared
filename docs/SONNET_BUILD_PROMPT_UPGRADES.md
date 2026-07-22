@@ -26,7 +26,7 @@ code (`backend/app/**`, alembic migrations, `scripts/compile_content.py`)
 and every word of language content. You own `frontend/src/**`,
 orchestration of Codex (extract → validate → apply), CONTRACT.md edits,
 and ALL verification. Delegate to Codex with explicit
-`--cwd /Users/raminazizi/dev/LingoSquared`; Codex has no Docker and no
+`--cwd "$LINGO_REPO"`; Codex has no Docker and no
 network — you verify everything it produces against the real local stack.
 
 **Working with the Codex plugin (mechanics + known failure modes):**
@@ -37,7 +37,7 @@ entirely — without this it cannot write files at all):
 
 ```bash
 node "/Users/raminazizi/.claude/plugins/cache/openai-codex/codex/1.0.5/scripts/codex-companion.mjs" task \
-  --cwd /Users/raminazizi/dev/LingoSquared --background --write --resume "…prompt…"
+  --cwd "$LINGO_REPO" --background --write --resume "…prompt…"
 # then: status <job-id> --cwd ... --json   /   result <job-id> --cwd ...
 ```
 

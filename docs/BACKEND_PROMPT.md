@@ -5,7 +5,7 @@ app. This is a from-scratch build — there is no prior backend implementation
 to review or merge. A frontend is being built in parallel by Claude under
 `frontend/` in this same repo; you do not need to touch it.
 
-**Scope boundary:** only write inside `/Users/raminazizi/dev/LingoSquared/`.
+**Scope boundary:** only write inside `"$LINGO_REPO"/`.
 Specifically `backend/` for code, and you may propose edits to
 `docs/CONTRACT.md` if you find a genuine gap (see "Contract" below) — but
 flag any such change explicitly rather than just changing it silently.
