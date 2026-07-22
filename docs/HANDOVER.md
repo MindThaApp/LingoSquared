@@ -5,7 +5,7 @@ Mac.** This file is written to YOU, not to Ramin. It is self-contained: do
 not ask him what to do next, and do not make him relay instructions. Work
 through Part 1 in order, then pick up Part 2.
 
-Written 2026-07-22. Last commit at handover: **`9cb32d4f`** on
+Written 2026-07-22, at the tip of `master` on
 `origin/master` (`github.com/ramin-azizi/LingoSquared`, **private**).
 
 **Read root `CLAUDE.md` before any work.** It always loads and it overrides
@@ -34,7 +34,7 @@ pwd && git log --oneline -1 2>/dev/null
 ```bash
 mkdir -p ~/dev
 git clone https://github.com/ramin-azizi/LingoSquared.git ~/dev/LingoSquared
-cd ~/dev/LingoSquared && git log --oneline -1     # expect 9cb32d4f or later
+cd ~/dev/LingoSquared && git log --oneline -1   # newest commit dated 2026-07-22 or later
 ```
 
 **Why cloning, not copying** — hosting this git repo in iCloud caused four
