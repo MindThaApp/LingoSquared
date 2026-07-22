@@ -1,6 +1,7 @@
 import hashlib
 import random
 import re
+import time
 from datetime import datetime, timedelta, timezone
 from typing import Any
 
@@ -48,6 +49,42 @@ STRUCTURED_TYPES = ("word_order", "matching_pairs", "fill_in_blank")
 PRODUCTION_TYPES = ("translation",)
 SPEAKING_TYPES = ("speak_repeat", "speak_response")
 CHECKPOINT_MASTERY_BANDS = (0.0, 0.5, 0.8)
+# Ceiling on slot assignments fill_slots() will try before giving up on a
+# template instance. fill_slots() is a smallest-domain-first backtracking
+# search, and proving a constraint set UNSATISFIABLE is exponential in the
+# slot count. Real content never gets near this -- almost every template
+# has 1-4 slots and finds an assignment in the first few steps -- but
+# `practice.en-prs.prs.a1.unit13.lesson06.person_name_pair.002` is a
+# matching_pairs template with TWELVE slots under one `distinct` relation
+# over a ~13-lexeme pool. Once the anti-repeat signature set has consumed
+# the few valid assignments, every subsequent call has to search the whole
+# 12-deep space to conclude "no", up to 24 times per template per attempt,
+# for up to 750 attempts. Measured 2026-07-22: generating that one unit's
+# checkpoint did not finish in over 20 minutes.
+#
+# Applied to EVERY caller, not just checkpoints: Endless Practice and
+# review run the same search over an even larger pool and have the same
+# blow-up. Exceeding the budget makes fill_slots() return None, which every
+# caller already handles as "this template can't be built right now" and
+# falls through to the next one -- a bounded, honest degradation instead of
+# a hung request.
+FILL_SLOTS_STEP_LIMIT = 20_000
+# Wall-clock ceiling on ONE checkpoint generation call, across all of its
+# passes. Not a tuning knob for quality -- it is a latency backstop for a
+# pathological content shape found 2026-07-22 while measuring checkpoint
+# coverage: `practice.en-prs.prs.a1.unit13.lesson06.person_name_pair.002`
+# is a matching_pairs template with TWELVE slots under one `distinct`
+# relation. Once the unit's ~13 lexemes are nearly exhausted against the
+# anti-repeat signature set, fill_slots()' smallest-domain-first
+# backtracking has to prove unsatisfiability over a 12-deep search, and it
+# does that up to `max(2, 12*2)` times per template per attempt for up to
+# 750 attempts. Measured: that single unit did not finish generating in
+# over 20 minutes. This is PRE-EXISTING (the single-pass generator has the
+# same blow-up), but a multi-pass generator must not multiply it, and an
+# HTTP endpoint must answer. Hitting the budget yields fewer than 12 items,
+# so the endpoint returns its normal, honest 409 instead of hanging.
+# Well-formed units finish in milliseconds and never observe this.
+CHECKPOINT_GENERATION_BUDGET_SECONDS = 20.0
 
 
 def _as_values(value: Any) -> set[Any]:
@@ -159,6 +196,10 @@ def fill_slots(
             return None
         rng.shuffle(target_slots)
 
+    # Budget shared across every forced_slot attempt, so one fill_slots()
+    # call is bounded as a whole. See FILL_SLOTS_STEP_LIMIT.
+    steps = 0
+
     for forced_slot in target_slots:
         candidates = {
             name: list(values) for name, values in base_candidates.items()
@@ -177,10 +218,20 @@ def fill_slots(
         filled: dict[str, Lexeme] = {}
 
         def assign(index: int) -> bool:
+            nonlocal steps
             if index == len(names):
                 return True
             name = names[index]
             for lexeme in candidates[name]:
+                steps += 1
+                if steps > FILL_SLOTS_STEP_LIMIT:
+                    # Budget blown -- unwind the whole search. Returning
+                    # False here (rather than raising) lets the recursion
+                    # collapse naturally; `steps` stays over the limit, so
+                    # the remaining forced_slot attempts also bail out at
+                    # once and fill_slots() returns None.
+                    filled.pop(name, None)
+                    return False
                 filled[name] = lexeme
                 if all(
                     _relation_holds(relation, filled)
@@ -513,6 +564,33 @@ def build_prompt(
     return prompt, answer
 
 
+def _answer_slot_names(template: PracticeTemplate) -> set[str]:
+    """Slots whose filled lexeme actually shows up in the GRADED answer.
+
+    Used only by checkpoint generation's prior-knowledge fill pass (see
+    generate_checkpoint()): when the lexeme pool is widened beyond the
+    unit under test, this is what keeps an item from silently becoming a
+    test of an EARLIER unit's vocabulary. The forced target lexeme is
+    always one of the unit's own, but `fill_slots()` may place it in a
+    slot that never reaches the answer (a frame-only slot), leaving the
+    learner graded purely on prior material. Requiring at least one
+    answer-bearing slot to hold unit material closes that hole.
+
+    Falls back to every slot for an unrecognized derivation kind, which
+    is the permissive direction -- derive_answer() itself raises on
+    unknown kinds, so an unknown kind can never actually reach grading.
+    """
+    derivation = template.answer_derivation
+    kind = derivation.get("kind")
+    if kind in {"slot_text", "slot_gloss"}:
+        return {derivation["slot"]}
+    if kind == "render_frame":
+        return set(SLOT_RE.findall(derivation["frame"]["text"]))
+    if kind in {"ordered_slot_texts", "matching_pairs"}:
+        return set(derivation["slots"])
+    return set(template.slots)
+
+
 def _signature(template_id: str, slots: dict[str, str]) -> tuple:
     return template_id, tuple(sorted(slots.items()))
 
@@ -590,6 +668,52 @@ def _course_lesson_ids(db: Session, course_id: str) -> list[str]:
             .join(Unit, Unit.id == Lesson.unit_id)
             .where(Unit.course_id == course_id)
             .order_by(Unit.order, Lesson.order, Lesson.id)
+        )
+    )
+
+
+def _unit_prefix_lesson_ids(
+    db: Session,
+    course_id: str,
+    unit_id: str,
+) -> list[str]:
+    """Lesson ids of this unit and every EARLIER unit in its course.
+
+    "Earlier" is by Unit.order, which is unique per course
+    (UniqueConstraint("course_id", "order")), so this prefix is
+    unambiguous. Used only as checkpoint generation's prior-knowledge
+    fill scope -- see generate_checkpoint().
+    """
+    unit = db.get(Unit, unit_id)
+    if unit is None:
+        return []
+    return list(
+        db.scalars(
+            select(Lesson.id)
+            .join(Unit, Unit.id == Lesson.unit_id)
+            .where(
+                Unit.course_id == course_id,
+                Unit.order <= unit.order,
+            )
+            .order_by(Unit.order, Lesson.order, Lesson.id)
+        )
+    )
+
+
+def _scope_lexemes(
+    db: Session,
+    course: Course,
+    lesson_ids: list[str],
+) -> list[Lexeme]:
+    """_material()'s lexeme half, without re-querying templates."""
+    return list(
+        db.scalars(
+            select(Lexeme)
+            .where(
+                Lexeme.course_id == course.id,
+                Lexeme.provenance_lesson_id.in_(lesson_ids),
+            )
+            .order_by(Lexeme.id)
         )
     )
 
@@ -696,7 +820,24 @@ def _generate_target_item(
     allow_existing_signature: bool = False,
     slot_candidate_cache: dict[str, dict[str, list]] | None = None,
     tier_rotation: int = 0,
+    answer_scope_lexeme_ids: set[str] | None = None,
+    record_target_lexeme: bool = True,
 ) -> PracticeItem | None:
+    # answer_scope_lexeme_ids: when set, reject any filling whose graded
+    # answer draws on NONE of these lexemes. Only checkpoint generation's
+    # prior-knowledge fill pass passes it (see generate_checkpoint());
+    # practice/review leave it None and behave exactly as before.
+    #
+    # record_target_lexeme=False stores the item with a NULL
+    # target_lexeme_id even though `target` drove slot filling. Only
+    # checkpoint generation's last-resort prior-vocabulary pass uses it,
+    # and it is load-bearing: checkpoint_result() treats every
+    # target_lexeme_id in the attempt as "covered by this unit" and
+    # INSERTs a UserLexemeSRS row for it, checking for an existing row
+    # only among the unit's own lexemes. A prior-unit target would
+    # therefore violate uq_user_lexeme_srs_user_lexeme for any learner
+    # who already has SRS on that word. Nulling it keeps consolidation
+    # and weak-outcome reporting strictly unit-scoped.
     for tier in _tier_order(mastery, tier_rotation):
         candidates = [
             template for template in templates if template.type in tier
@@ -722,6 +863,16 @@ def _generate_target_item(
                 )
                 if filled is None:
                     break
+
+                if answer_scope_lexeme_ids is not None and not any(
+                    filled[name].id in answer_scope_lexeme_ids
+                    for name in _answer_slot_names(template)
+                    if name in filled
+                ):
+                    # The forced target is in this item, but only in a slot
+                    # the learner is never graded on -- the answer itself is
+                    # entirely out-of-scope material. Try another filling.
+                    continue
 
                 stored_slots = {
                     name: lexeme.token for name, lexeme in filled.items()
@@ -761,7 +912,9 @@ def _generate_target_item(
                     xp_value=PRACTICE_XP,
                     source=source,
                     session_id=session_id,
-                    target_lexeme_id=target.id,
+                    target_lexeme_id=(
+                        target.id if record_target_lexeme else None
+                    ),
                     expires_at=(
                         datetime.now(timezone.utc) + timedelta(hours=24)
                     ),
@@ -1485,6 +1638,73 @@ def generate_checkpoint(
     #    EVERY item cycles those bands (0.0/0.5/0.8 -> a consistent
     #    recognition/structured/production mix) regardless of the
     #    learner's SRS state, which this function no longer reads at all.
+    #
+    # 3. (2026-07-22) Lexeme SCOPE. This function passed only the unit's
+    #    own lesson ids to _material(), which filters BOTH templates and
+    #    lexemes by provenance_lesson_id -- while generate_batch() passes
+    #    every completed lesson. So a legitimately-authored unit template
+    #    whose non-answer slot is constrained to vocabulary taught in an
+    #    EARLIER unit (e.g. a preposition or pronoun introduced in unit 3
+    #    reused by a unit 14 frame) had ZERO candidates for that slot at
+    #    checkpoint scope: fill_slots() returned None for every target, so
+    #    the whole template was unusable and the unit could not reach the
+    #    12-item floor -- even though the same template works fine in
+    #    Endless Practice. Measured across the 6 launch directions, only
+    #    ~48% of units could produce a checkpoint at all.
+    #
+    #    WHAT "TESTS THIS UNIT" ACTUALLY MEANS. The obvious fix -- widen
+    #    the pool and let earlier vocabulary fill the test -- looks like
+    #    it would turn a unit gate into a course-so-far quiz. Reading the
+    #    real corpus shows the opposite: the unit's contribution is
+    #    carried by its TEMPLATES, not by which lexeme lands in a slot.
+    #    fa-en `en.a1.unit14.communication` teaches phone/meeting phrases;
+    #    its ten unit-authored templates are frames like "Hello, this is
+    #    {item}", "Let's meet at the {item}", "How about 6pm at the
+    #    {item}", and EVERY one of those slots is constrained to a
+    #    semantic tag whose vocabulary was taught earlier ({semantic:
+    #    person_name} in unit02, {semantic: place} in unit09). The unit's
+    #    own 16 lexemes ('tonight', 'repeat', 'slowly', 'suggest', ...)
+    #    carry NO agreement tags at all, so lexeme_matches() rejects them
+    #    for every slot -- they are not merely unavailable as slot fill,
+    #    they are unusable as generation TARGETS too. That is the shape
+    #    that produced "zero hostable lexemes": nothing about it is a
+    #    content defect, and refusing it would gate-block correct content.
+    #
+    #    So the unit-under-test guarantee is enforced where it actually
+    #    lives, and lexeme scope becomes a strict priority ladder:
+    #      * TEMPLATES stay strictly unit-scoped (unchanged). 100% of a
+    #        checkpoint's items are always built from the unit's own
+    #        templates, i.e. the structures the unit itself taught.
+    #      * LEXEMES are prior knowledge, exactly as generate_batch()
+    #        treats them, but the unit's own are tried FIRST at every
+    #        step, so they dominate wherever the unit taught anything
+    #        hostable, and prior-unit material only ever fills what is
+    #        left over (see the pass ladder at the bottom of this
+    #        function).
+    #      * The widened-target pass additionally prefers items whose
+    #        GRADED answer draws on the unit's own lexemes
+    #        (answer_scope_lexeme_ids / _answer_slot_names()) before
+    #        accepting one where the unit lexeme sits only in a
+    #        decorative frame slot.
+    #      * The final prior-vocabulary pass stores target_lexeme_id as
+    #        NULL (record_target_lexeme=False), so SRS consolidation and
+    #        weak-outcome reporting in checkpoint_result() stay strictly
+    #        unit-scoped and a prior word can never be credited (or
+    #        duplicate-inserted) by passing this unit.
+    #
+    #    TRADEOFF, stated plainly: on a frame-teaching unit like the ones
+    #    above, the graded answer legitimately contains earlier-taught
+    #    words, so the checkpoint is a test of "can you produce this
+    #    unit's sentences using what you already know" rather than "can
+    #    you recall this unit's new word list". That is what the content
+    #    authors built and what Endless Practice already does; the
+    #    alternative is no checkpoint at all for those units. What is NOT
+    #    traded away: the templates are always the unit's, unit lexemes
+    #    always win the tie, and nothing prior gets SRS credit.
+    #
+    #    A unit with genuinely no buildable material still returns fewer
+    #    than 12 items and the endpoint still 409s -- the floor is not
+    #    lowered and the publish gate is not weakened.
     size = max(12, min(15, size))
     lesson_ids = list(
         db.scalars(
@@ -1529,46 +1749,167 @@ def generate_checkpoint(
             if round_index < len(bucket):
                 targets.append(bucket[round_index])
 
-    signatures = _recent_signatures(db, user_id, course.id)
-    slot_candidate_cache: dict[str, dict[str, list]] = {}
+    # Two signature sets, deliberately separate (2026-07-22).
+    #
+    # `historic` is the learner's recent-item window; `this_checkpoint` is
+    # what THIS call has already produced. Checkpoint generation used to
+    # collapse both into one set plus a per-attempt
+    # `allow_existing_signature = attempts > len(targets) * 2` escape
+    # hatch, which existed for a real reason (on a retake the previous
+    # attempt's 15 items are still in the recent window, and a fixed-size
+    # scored assessment must still reach 12) -- but it could not tell
+    # "this material was used an hour ago" apart from "this unit only has
+    # three buildable items", so a unit with three items padded to twelve
+    # visible duplicates and passed the 409 gate. Splitting the sets
+    # separates the two cases exactly: the late passes drop `historic`
+    # (retakes work) while `this_checkpoint` is ALWAYS enforced, so one
+    # checkpoint can never contain the same item twice and a genuinely
+    # thin unit still falls short and 409s.
+    historic_signatures = _recent_signatures(db, user_id, course.id)
+    this_checkpoint: set[tuple] = set()
     generated: list[PracticeItem] = []
-    attempts = 0
-    max_attempts = max(size * 50, len(targets) * 10)
-    while len(generated) < size and attempts < max_attempts:
-        target = targets[attempts % len(targets)]
-        attempts += 1
-        # Band indexed by items GENERATED (not attempts), so a failed
-        # attempt -- e.g. a target no template can host -- never skips a
-        # band: the final 12-15 items always carry the full fixed
-        # difficulty mix.
-        mastery = CHECKPOINT_MASTERY_BANDS[
-            len(generated) % len(CHECKPOINT_MASTERY_BANDS)
-        ]
-        item = _generate_target_item(
-            db,
-            user_id=user_id,
-            course=course,
-            target=target,
-            mastery=mastery,
-            templates=templates,
-            lexemes=lexemes,
-            rng=rng,
-            signatures=signatures,
-            source="checkpoint",
-            session_id=session_id,
-            # Same threshold-based escape hatch checkpoints had in
-            # _generate_prioritized()'s padding loop: a checkpoint is a
-            # fixed-size scored assessment that must reach its 12-item
-            # minimum even on a retake reusing the same unit's material
-            # (the recent-signature window still holds the previous
-            # attempt's items -- confirmed live by
-            # test_checkpoint_retake_delay_and_expiry). Returning fewer
-            # honest items is correct for open-ended practice, not here.
-            allow_existing_signature=attempts > len(targets) * 2,
-            slot_candidate_cache=slot_candidate_cache,
-        )
-        if item is not None:
-            generated.append(item)
+    # See CHECKPOINT_GENERATION_BUDGET_SECONDS: a latency backstop for
+    # pathological template shapes, never reached by well-formed units.
+    deadline = time.monotonic() + CHECKPOINT_GENERATION_BUDGET_SECONDS
+
+    def fill_pass(
+        pass_targets: list[Lexeme],
+        pool: list[Lexeme],
+        answer_scope_lexeme_ids: set[str] | None,
+        ignore_history: bool,
+        record_target_lexeme: bool = True,
+    ) -> None:
+        # Templates and difficulty bands are shared across passes; only
+        # the TARGET list, the SLOT-FILLING pool and the signature scope
+        # differ. A fresh slot-candidate cache per pass, since
+        # _base_slot_candidates() is a function of (template, pool).
+        if not pass_targets:
+            return
+        signatures = set(this_checkpoint)
+        if not ignore_history:
+            signatures |= historic_signatures
+        slot_candidate_cache: dict[str, dict[str, list]] = {}
+        attempts = 0
+        max_attempts = max(size * 50, len(pass_targets) * 10)
+        while len(generated) < size and attempts < max_attempts:
+            if time.monotonic() >= deadline:
+                return
+            target = pass_targets[attempts % len(pass_targets)]
+            attempts += 1
+            # Band indexed by items GENERATED (not attempts), so a failed
+            # attempt -- e.g. a target no template can host -- never skips a
+            # band: the final 12-15 items always carry the full fixed
+            # difficulty mix.
+            mastery = CHECKPOINT_MASTERY_BANDS[
+                len(generated) % len(CHECKPOINT_MASTERY_BANDS)
+            ]
+            item = _generate_target_item(
+                db,
+                user_id=user_id,
+                course=course,
+                target=target,
+                mastery=mastery,
+                templates=templates,
+                lexemes=pool,
+                rng=rng,
+                signatures=signatures,
+                source="checkpoint",
+                session_id=session_id,
+                # Never true for checkpoints any more: `signatures` above
+                # already encodes exactly which repeats are tolerable.
+                allow_existing_signature=False,
+                slot_candidate_cache=slot_candidate_cache,
+                answer_scope_lexeme_ids=answer_scope_lexeme_ids,
+                record_target_lexeme=record_target_lexeme,
+            )
+            if item is not None:
+                generated.append(item)
+                this_checkpoint.add(
+                    _signature(item.template_id, item.filled_slots)
+                )
+                this_checkpoint.add(_prompt_signature(item.prompt))
+
+    unit_lexeme_ids = {lexeme.id for lexeme in lexemes}
+    prefix_lesson_ids = _unit_prefix_lesson_ids(db, course.id, unit_id)
+    prefix_lexemes: list[Lexeme] | None = None
+    if len(prefix_lesson_ids) > len(lesson_ids):
+        candidate_pool = _scope_lexemes(db, course, prefix_lesson_ids)
+        if len(candidate_pool) > len(lexemes):
+            prefix_lexemes = candidate_pool
+
+    # Last-resort target list: prior-unit lexemes that at least one of
+    # THIS unit's templates can actually host, most recently taught first
+    # (prefix_lesson_ids is ordered by unit then lesson, so reversing it
+    # walks backwards from the unit under test), shuffled within a lesson.
+    # Pre-filtering by hostability keeps the fallback pass cheap and
+    # deterministic instead of cycling hundreds of unusable targets.
+    fallback_targets: list[Lexeme] = []
+    if prefix_lexemes is not None:
+        by_prior_lesson: dict[str, list[Lexeme]] = {}
+        for lexeme in prefix_lexemes:
+            if lexeme.id in unit_lexeme_ids:
+                continue
+            if not any(
+                lexeme_matches(lexeme, constraints)
+                for template in templates
+                for constraints in template.slots.values()
+            ):
+                continue
+            by_prior_lesson.setdefault(
+                lexeme.provenance_lesson_id, []
+            ).append(lexeme)
+        for lesson_id in reversed(prefix_lesson_ids):
+            bucket = by_prior_lesson.get(lesson_id)
+            if not bucket:
+                continue
+            rng.shuffle(bucket)
+            fallback_targets.extend(bucket)
+
+    # Ordered passes, each running only while the checkpoint is still
+    # short. The ordering IS the pedagogical policy: the unit's own
+    # lexemes beat prior units' at every step, and fresh material beats
+    # material the learner just saw.
+    #
+    #   1. unit targets,  unit pool    -- the pre-fix behavior exactly
+    #   2. unit targets,  prefix pool  -- prior vocabulary fills the
+    #      SUPPORTING slots only; the guard requires the unit's own
+    #      material to reach the graded answer
+    #   3. prior targets, prefix pool  -- last resort for a frame-teaching
+    #      unit whose own lexemes match no slot at all; target_lexeme_id
+    #      is NULLed because the item does not test a unit lexeme
+    # ...then 1-3 again with the learner's recent-item history ignored,
+    # which is what lets a retake refill without ever repeating an item
+    # inside one checkpoint.
+    #
+    # Invariant this ladder buys: whenever a checkpoint item CLAIMS a unit
+    # lexeme as its target, that lexeme is in the item's graded answer --
+    # trivially in pass 1 (the whole pool is unit material) and by the
+    # answer-scope guard in pass 2 -- so checkpoint_result()'s SRS
+    # consolidation and weak_outcomes can never credit or blame a word the
+    # learner was not actually asked to produce.
+    for ignore_history in (False, True):
+        if len(generated) >= size or time.monotonic() >= deadline:
+            break
+        if ignore_history and not historic_signatures:
+            # Nothing to ignore: the second round would compute the exact
+            # same signature set and re-derive the same failures. Skipping
+            # it halves the worst-case work on the common 409 path (a
+            # first-time learner on a unit that cannot be built).
+            break
+        fill_pass(targets, lexemes, None, ignore_history)
+        if len(generated) < size and prefix_lexemes is not None:
+            fill_pass(
+                targets, prefix_lexemes, unit_lexeme_ids, ignore_history
+            )
+        if len(generated) < size and prefix_lexemes is not None:
+            fill_pass(
+                fallback_targets,
+                prefix_lexemes,
+                None,
+                ignore_history,
+                record_target_lexeme=False,
+            )
+
     return generated
 
 
