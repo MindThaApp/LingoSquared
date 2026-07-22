@@ -140,11 +140,10 @@ correct step ordering and the pre/post steps above folded in.
 
 **Load-bearing correction vs. an earlier draft of this runbook**: `python
 -m app.content.seed` (step 4 below) is bootstrap-only — it creates the
-10 `Language` rows, 2 starter `Achievement`s, and 4 small hardcoded
-placeholder demo courses (`app/content/seed.py`'s `FARSI`/`EN_TO_DARI`/
-`DARI_TO_EN`/`DARI_A2` dicts). **It is NOT the real content pipeline
-and does NOT create the actual ~131-unit en-nl/en-fa/en-prs/etc.
-courses.** Confirmed by reading `scripts/backfill_lexemes*.py` directly:
+`Language` rows and the 2 starter `Achievement`s, and **as of 2026-07-22
+nothing else**. **It is NOT the real content pipeline and does NOT create
+the actual ~131-unit en-nl/en-fa/en-prs/etc. courses.** Confirmed by
+reading `scripts/backfill_lexemes*.py` directly:
 every backfill script queries the DB for the real `Course`/`Unit`/
 `Lesson` rows and hard-errors (`"ERROR: imported course is missing
 {lesson_content_key}"`) if they aren't there — so skipping the real
@@ -156,6 +155,35 @@ documented anywhere in `CLAUDE.md`/`BUILD_LOG.md` — it's a finding from
 reading `backend/app/content/seed.py` and the backfill scripts' own
 DB queries directly while assembling this runbook, not a synthesis of
 an existing landmine entry.
+
+**Demo courses are no longer seeded on deploy (launch blocker, fixed
+2026-07-22).** `app/content/seed.py` used to ALSO import 4 small hardcoded
+placeholder courses (`FARSI`/`EN_TO_DARI`/`DARI_TO_EN`/`DARI_A2` →
+"Farsi Foundations", "Dari Foundations", "Dari Elementary", "English
+Foundations for Dari Speakers"). On the live server those sat in the course
+picker *beside* the real launch courses, and because
+`api/router.py`'s `/courses` orders by `Course.level, Course.title`, the
+Latin-titled "English Foundations for Dari Speakers" sorted **before** the
+real Arabic-titled "انگلیسی A1" — so `CoursePickerPage.tsx`, which pins its
+"start here" hint to index 0, actively pointed a Dari speaker at a 2-lesson
+stub. Those courses are dev/test fixtures only (`backend/tests/conftest.py`,
+`test_backend.py`, and the `e2e/` Playwright suite assert on them).
+
+- **Command-line default is now OFF.** `python -m app.content.seed` seeds
+  languages + achievements ONLY. It prints
+  `Demo courses: SKIPPED (…)` so the deploy log proves it.
+- **Opt back in explicitly** (dev/CI only, never a real deployment):
+  `python -m app.content.seed --with-demo-courses`, or
+  `LINGO_SEED_DEMO_COURSES=1 python -m app.content.seed`.
+  `--no-demo-courses` forces them off even when the env var is set.
+- **In-process `main()` still defaults to demo-courses-ON** so the pytest
+  session fixture and e2e suite keep working unchanged — only the CLI
+  default flipped.
+- **This does not remove courses that already exist.** Seeding is
+  create-missing-only by design (an earlier delete-and-recreate version
+  cascade-wiped user progress — see `backend/CLAUDE.md`). The 4 demo
+  courses already present on live (and on the dev DB) need the one-off
+  cleanup script — see "Removing the already-seeded demo courses" below.
 
 **Also corrected**: `docker compose up -d api` must happen BEFORE the
 content-import/practice-import steps, not after — this is a
@@ -179,10 +207,12 @@ ssh ramin@192.168.4.4 "cd /home/ramin/LingoSquared/backend && docker compose bui
 #    stamp here first, THEN run upgrade head.
 ssh ramin@192.168.4.4 "cd /home/ramin/LingoSquared/backend && docker compose run --rm api alembic upgrade head"
 
-# 4. Bootstrap languages/achievements/placeholder demo courses (create-missing-
-#    only, safe to re-run — does NOT wipe existing user progress; this was a
-#    real bug fixed 2026-07-05, don't regress it). This does NOT create the
-#    real course content — see step 6.
+# 4. Bootstrap languages + achievements ONLY (create-missing-only, safe to
+#    re-run — does NOT wipe existing user progress; this was a real bug fixed
+#    2026-07-05, don't regress it). This does NOT create the real course
+#    content — see step 7. As of 2026-07-22 it also does NOT create the demo
+#    courses: NEVER add --with-demo-courses / LINGO_SEED_DEMO_COURSES on a
+#    real deployment. Expect the output to end with "Demo courses: SKIPPED".
 ssh ramin@192.168.4.4 "cd /home/ramin/LingoSquared/backend && docker compose run --rm api python -m app.content.seed"
 
 # 5. Bring the server up NOW, on the new image + migrated DB — required
@@ -252,6 +282,39 @@ ssh ramin@192.168.4.4 "cd /home/ramin/LingoSquared/backend && \
   docker compose exec -T db createdb -U lingosquared lingosquared_test && \
   docker compose run --rm api sh -c 'DATABASE_URL=\$(python3 -c \"import os,re; print(re.sub(r\\\"lingosquared\$\\\", \\\"lingosquared_test\\\", os.environ[\\\"DATABASE_URL\\\"]))\") python -m pytest -q'"
 ```
+
+## Removing the already-seeded demo courses (one-off, live + dev)
+
+Turning the seed default off (above) stops NEW demo courses appearing; it
+cannot remove the 4 that every prior deploy already created, because
+seeding is deliberately create-missing-only and **there is no
+delete-course endpoint**. The one-off cleanup is
+`backend/scripts/remove_demo_courses.sql`.
+
+**This is a destructive live-DB operation — it requires Ramin present
+(root `CLAUDE.md`, "Deploy authority"). Do not run it unattended.**
+
+The script is idempotent and ships **wrapped in a rolled-back
+transaction by default**: as written it prints before/after counts and
+then `ROLLBACK`s, so running it as-is is a dry run. Committing for real
+means editing the final `ROLLBACK;` to `COMMIT;` — a deliberate, visible
+two-character edit, never a flag.
+
+```bash
+# Dry run first — prints exactly what WOULD be deleted, then rolls back.
+ssh ramin@192.168.4.4 "cd /home/ramin/LingoSquared/backend && \
+  docker compose exec -T db psql -U lingosquared -d lingosquared -v ON_ERROR_STOP=1" \
+  < backend/scripts/remove_demo_courses.sql
+
+# Back up BEFORE the real run (scripts/backup_db.sh, or pg_dump directly).
+# Then edit the trailing ROLLBACK; -> COMMIT; and re-run the same command.
+```
+
+Reconcile the dry-run output against the known live IDs before committing:
+`683a90fe…` Farsi Foundations, `c9bacfb5…` Dari Foundations, `a2af2c0a…`
+Dari Elementary, `138e9b66…` English Foundations for Dari Speakers. If the
+"courses matched" count is not exactly 4, or the guard raises, **stop** —
+something differs from the audited state.
 
 ## Post-deploy verification
 
@@ -441,8 +504,8 @@ phone-testing, not a bug).
    change" skeleton (and an earlier draft of this file) treated `python
    -m app.content.seed` as if it were the content-seeding step. Reading
    `backend/app/content/seed.py` directly shows it only creates
-   `Language`/`Achievement` rows and 4 tiny hardcoded placeholder demo
-   courses — never the real ~131-unit courses. The real pipeline
+   `Language`/`Achievement` rows (plus, until 2026-07-22, 4 tiny hardcoded
+   placeholder demo courses) — never the real ~131-unit courses. The real pipeline
    (`scripts/compile_content.py` → `POST /admin/content/import`) was
    never in the deploy skeleton at all before this runbook. Worth
    double-checking on deploy day that this runbook's step 7 is actually

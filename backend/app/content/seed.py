@@ -1,3 +1,52 @@
+"""Bootstrap seeding for a fresh stack.
+
+This module has TWO deliberately separate responsibilities (split
+2026-07-22 — before that they were fused and every deploy shipped the
+demo courses):
+
+1. **REQUIRED bootstrap** — the ``languages`` and ``achievements``
+   reference rows (:func:`bootstrap`). Nothing works without them: every
+   Course/ContentItem/Lexeme row FKs to ``languages.code``, and the
+   achievements grid 500s on an empty table. This half MUST run on every
+   deploy.
+2. **OPTIONAL demo courses** — four tiny hand-written placeholder courses
+   (``FARSI``/``EN_TO_DARI``/``DARI_TO_EN``/``DARI_A2``, exported as
+   :data:`DEMO_COURSES`). These are **dev/test fixtures, not product**.
+   `backend/tests/conftest.py`, `backend/tests/test_backend.py` and the
+   Playwright suite in `e2e/` all assert against them, which is the only
+   reason they still exist. On a real deployment they are a launch
+   blocker: a 3-unit "Farsi Foundations" stub sits beside the real ~50-unit
+   "Farsi A1" in the picker, and for prs→en the Latin-titled
+   "English Foundations for Dari Speakers" sorts BEFORE the real Arabic-
+   titled "انگلیسی A1" (`api/router.py` orders by ``Course.level,
+   Course.title``), so `CoursePickerPage.tsx` pins its "start here" hint to
+   a 2-lesson stub.
+
+**Command line (the deploy step in `docs/PRE_DEPLOY_RUNBOOK.md`) now runs
+the bootstrap ONLY.** Demo courses require an explicit opt-in:
+
+    python -m app.content.seed                        # bootstrap only  (DEFAULT)
+    python -m app.content.seed --with-demo-courses    # + the 4 demo courses
+    LINGO_SEED_DEMO_COURSES=1 python -m app.content.seed   # same, via env
+
+**In-process callers keep the old behaviour on purpose**: ``main()``
+still defaults to ``include_demo_courses=True`` because
+`backend/tests/conftest.py` does ``from app.content.seed import main as
+seed`` and calls ``seed()`` as its session fixture, and
+`test_backend.py::test_dari_pair_returns_a1_and_a2_courses` asserts those
+courses exist. Only the COMMAND-LINE default flipped, so no test/e2e file
+had to change. (Unifying the two defaults means editing conftest +
+test_backend + e2e fixtures — a separate, test-lane change.)
+
+Everything here stays **create-missing-only**: it never updates or deletes
+existing rows (an early version delete-and-recreated content and
+cascade-wiped user progress every deploy — see `backend/CLAUDE.md`).
+"""
+from __future__ import annotations
+
+import argparse
+import os
+
 from sqlalchemy import select
 from app.db.session import SessionLocal
 from app.models import Language, Achievement
@@ -46,7 +95,15 @@ FARSI={
                 teach("dialogue","سلام! حال شما چطور است؟","fa","Hello! How are you?","en"),teach("dialogue","خوب هستم، ممنون","fa","I am well, thank you","en"),teach("pronunciation_note","سلام","fa","hello","en",note="The long â in salâm is sustained."),
             ],"exercises":[
                 {"type":"dialogue_response","order":1,"prompt":{"text_blocks":[block("سلام! حال شما چطور است؟","fa"),block("Use the reply you just learned.","en")]},"correct_response":"خوب هستم، ممنون","feedback":"خوب هستم، ممنون means I am well, thank you.","xp":10},
-                {"type":"speaking_placeholder","order":2,"prompt":{"text_blocks":[block("Say سلام aloud.","en")]},"correct_response":"سلام","feedback":"Speech recognition is coming soon.","xp":0},
+                # Was a `speaking_placeholder` until 2026-07-22. Placeholder.tsx's
+                # only control calls onAnswer(""), "" grades incorrect, and
+                # LessonRunnerPage's error-recycling then re-showed the card twice
+                # more — so a card that literally reads "coming soon" told the
+                # learner "Incorrect" three times and poisoned the completion
+                # screen's missedWords. Real speech capture exists now
+                # (VoiceCaptureControls + speak_repeat), so this is a real,
+                # gradeable exercise instead of a dead one.
+                {"type":"speak_repeat","order":2,"prompt":{"text_blocks":[block("سلام","fa"),block("Say this greeting aloud — or type it if you have no microphone.","en")],"answer_language_code":"fa"},"correct_response":"سلام","feedback":"سلام (salâm) is the everyday greeting.","xp":10},
             ]},
         ]},
     ],
@@ -124,16 +181,109 @@ DARI_A2={
     "content_items":[{"kind":"phrase","language_code":"prs","title":"Plans and requests","content":{"entries":[{"text":"امروز می‌خواهم به بازار بروم.","meaning":"Today I want to go to the market."},{"text":"آیا می‌توانید به من کمک کنید؟","meaning":"Can you help me?"}]}}],
 }
 
-COURSE={"courses":[FARSI,EN_TO_DARI,DARI_TO_EN,DARI_A2]}
+ACHIEVEMENTS=[("first_steps","First Steps","Earn your first XP.",1),("xp_100","Century","Earn 100 XP.",100)]
 
-def main():
+#: The four dev/test-only demo courses. NOT product content — see the module
+#: docstring. Never seeded by `python -m app.content.seed` unless opted in.
+DEMO_COURSES={"courses":[FARSI,EN_TO_DARI,DARI_TO_EN,DARI_A2]}
+
+#: Backwards-compatible alias for the pre-2026-07-22 name.
+COURSE=DEMO_COURSES
+
+#: Env-var opt-in for the demo courses on the command line.
+DEMO_COURSES_ENV_VAR="LINGO_SEED_DEMO_COURSES"
+
+_TRUTHY={"1","true","yes","on"}
+
+
+def bootstrap(db) -> tuple[int, int]:
+    """Create the reference rows the app cannot run without.
+
+    Create-missing-only: an existing Language/Achievement row is left
+    byte-for-byte alone. Returns ``(languages_created, achievements_created)``.
+    """
+    languages_created=0
+    for code,name,native,script,direction in LANGUAGES:
+        if not db.get(Language,code):
+            db.add(Language(code=code,name=name,native_name=native,script=script,direction=direction))
+            languages_created+=1
+    achievements_created=0
+    for code,title,description,threshold in ACHIEVEMENTS:
+        if not db.scalar(select(Achievement).where(Achievement.code==code)):
+            db.add(Achievement(code=code,title=title,description=description,threshold=threshold))
+            achievements_created+=1
+    db.commit()
+    return languages_created,achievements_created
+
+
+def seed_demo_courses(db) -> int:
+    """Import the four dev/test demo courses. Returns the number CREATED.
+
+    Goes through the same non-destructive `import_content()` path as the real
+    admin content import, so re-running it never wipes user progress.
+    """
+    count,errors,counters=import_content(db,ImportRequest.model_validate(DEMO_COURSES))
+    if errors and not counters: raise RuntimeError(errors)
+    return count
+
+
+def demo_courses_opted_in(env=None) -> bool:
+    """True only when the env var is explicitly set to a truthy value."""
+    source=os.environ if env is None else env
+    return source.get(DEMO_COURSES_ENV_VAR,"").strip().lower() in _TRUTHY
+
+
+def main(include_demo_courses: bool = True) -> None:
+    """Seed a stack.
+
+    ``include_demo_courses`` defaults to True ONLY for in-process callers
+    (`backend/tests/conftest.py`'s session fixture). The command-line
+    entry point :func:`cli` defaults it to False — see the module docstring.
+    """
     with SessionLocal() as db:
-        for code,name,native,script,direction in LANGUAGES:
-            if not db.get(Language,code): db.add(Language(code=code,name=name,native_name=native,script=script,direction=direction))
-        for code,title,description,threshold in [("first_steps","First Steps","Earn your first XP.",1),("xp_100","Century","Earn 100 XP.",100)]:
-            if not db.scalar(select(Achievement).where(Achievement.code==code)): db.add(Achievement(code=code,title=title,description=description,threshold=threshold))
-        db.commit(); count,errors,counters=import_content(db,ImportRequest.model_validate(COURSE))
-        if errors and not counters: raise RuntimeError(errors)
-        print(f"Seeded {len(LANGUAGES)} languages and {count} courses.")
+        languages_created,achievements_created=bootstrap(db)
+        summary=(
+            f"Bootstrapped {len(LANGUAGES)} languages "
+            f"({languages_created} newly created) and {len(ACHIEVEMENTS)} achievements "
+            f"({achievements_created} newly created)."
+        )
+        if include_demo_courses:
+            created=seed_demo_courses(db)
+            print(f"{summary} Demo courses: {created} created (of {len(DEMO_COURSES['courses'])}).")
+        else:
+            print(
+                f"{summary} Demo courses: SKIPPED (dev/test fixtures — opt in with "
+                f"--with-demo-courses or {DEMO_COURSES_ENV_VAR}=1)."
+            )
 
-if __name__=="__main__": main()
+
+def cli(argv=None) -> int:
+    parser=argparse.ArgumentParser(
+        prog="python -m app.content.seed",
+        description=(
+            "Bootstrap languages + achievements on a fresh stack. Does NOT import "
+            "the real course content — that is compile_content.py + "
+            "POST /admin/content/import, see docs/PRE_DEPLOY_RUNBOOK.md."
+        ),
+    )
+    group=parser.add_mutually_exclusive_group()
+    group.add_argument(
+        "--with-demo-courses",dest="demo",action="store_true",default=None,
+        help=(
+            "ALSO create the 4 dev/test demo courses (Farsi Foundations, Dari "
+            "Foundations, Dari Elementary, English Foundations for Dari Speakers). "
+            "Never pass this on a real deployment — they shadow the real launch "
+            "courses in the course picker."
+        ),
+    )
+    group.add_argument(
+        "--no-demo-courses",dest="demo",action="store_false",default=None,
+        help=f"Force the demo courses off even if {DEMO_COURSES_ENV_VAR} is set.",
+    )
+    args=parser.parse_args(argv)
+    include=args.demo if args.demo is not None else demo_courses_opted_in()
+    main(include_demo_courses=include)
+    return 0
+
+
+if __name__=="__main__": raise SystemExit(cli())
