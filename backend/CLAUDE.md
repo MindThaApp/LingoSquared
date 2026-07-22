@@ -183,8 +183,8 @@ Quick-reference skeleton (see runbook for the complete ordered version):
 
 ```bash
 rsync -az --exclude='.venv' --exclude='__pycache__' --exclude='*.pyc' --exclude='.env' \
-  /Users/raminazizi/dev/LingoSquared/backend/ ramin@192.168.4.4:/home/ramin/LingoSquared/backend/
-rsync -az /Users/raminazizi/dev/LingoSquared/docs/ ramin@192.168.4.4:/home/ramin/LingoSquared/docs/
+  "$LINGO_REPO"/backend/ ramin@192.168.4.4:/home/ramin/LingoSquared/backend/
+rsync -az "$LINGO_REPO"/docs/ ramin@192.168.4.4:/home/ramin/LingoSquared/docs/
 
 ssh ramin@192.168.4.4 "cd /home/ramin/LingoSquared/backend && docker compose build api"
 ssh ramin@192.168.4.4 "cd /home/ramin/LingoSquared/backend && docker compose run --rm api alembic upgrade head"

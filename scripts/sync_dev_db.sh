@@ -90,7 +90,11 @@ while IFS='|' read -r COURSE REALS OVERLAYS; do
   # A failing course must not abort the whole sync (e.g. another lane's
   # course with open validation errors) — skip it loudly and continue.
   # shellcheck disable=SC2086
-  if ! (cd "$REPO_ROOT" && $PY scripts/compile_content.py compile \
+  # ^ intentional ONLY for $REALS/$OVERLAYS, which must word-split into
+  # separate --realization/--overlay args. Everything else stays quoted:
+  # the repo path contains a space (iCloud 'Mobile Documents'), so an
+  # unquoted "$PY" silently split and skipped EVERY course.
+  if ! (cd "$REPO_ROOT" && "$PY" scripts/compile_content.py compile \
       --realization $REALS --overlay $OVERLAYS \
       --output "$TMPDIR_SYNC/content.json"); then
     echo "   COMPILE FAILED for $COURSE — SKIPPED (fix its validation errors separately)"
@@ -104,7 +108,7 @@ while IFS='|' read -r COURSE REALS OVERLAYS; do
     echo "   IMPORT FAILED ($HTTP) for $COURSE — SKIPPED: $(head -c 300 "$TMPDIR_SYNC/resp.json")"
     FAILED_COURSES="${FAILED_COURSES:-} $COURSE"; continue
   fi
-  $PY -c 'import json,sys; d=json.load(open(sys.argv[1])); print("   ", {k:v for k,v in d.items() if k!="warnings"}); w=d.get("warnings") or []; [print("    warn:", x) for x in w[:5]]' "$TMPDIR_SYNC/resp.json"
+  "$PY" -c 'import json,sys; d=json.load(open(sys.argv[1])); print("   ", {k:v for k,v in d.items() if k!="warnings"}); w=d.get("warnings") or []; [print("    warn:", x) for x in w[:5]]' "$TMPDIR_SYNC/resp.json"
 done < <(grep -v '^\s*#' "$REPO_ROOT/scripts/content_manifest.txt" | grep -v '^\s*$')
 
 echo "== 2/3 lexeme backfills (docker, full-repo mount) =="
@@ -149,7 +153,7 @@ while IFS='|' read -r DIRECTION PACKS; do
       case "$(basename "$P")" in "$LEVEL"_*) LEVEL_PACKS="$LEVEL_PACKS $P";; esac
     done
     [ -n "$LEVEL_PACKS" ] || continue
-    CID=$($PY -c '
+    CID=$("$PY" -c '
 import json,sys
 src,tgt,lvl=sys.argv[2],sys.argv[3],sys.argv[4].upper()
 data=json.load(open(sys.argv[1]))
@@ -163,7 +167,7 @@ if matches:
     print(max(matches, key=lambda c: c.get("unit_count") or 0)["id"])' "$COURSES_JSON" "$SRC" "$TGT" "$LEVEL")
     if [ -z "$CID" ]; then echo "   $LEVEL: no $DIRECTION course at this level -- skipping"; continue; fi
     # shellcheck disable=SC2086
-    (cd "$REPO_ROOT" && $PY scripts/compile_content.py practice-compile \
+    (cd "$REPO_ROOT" && "$PY" scripts/compile_content.py practice-compile \
         --pack $LEVEL_PACKS --content-root docs/content/realizations \
         --output "$TMPDIR_SYNC/practice.json")
     HTTP=$(api_request "$TMPDIR_SYNC/presp.json" \

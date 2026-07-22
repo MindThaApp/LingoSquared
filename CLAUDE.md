@@ -143,7 +143,7 @@ work safely. (This file stays rules-only for exactly that reason — see
 
 ```bash
 node "/Users/raminazizi/.claude/plugins/cache/openai-codex/codex/1.0.5/scripts/codex-companion.mjs" task \
-  --cwd /Users/raminazizi/dev/LingoSquared --background --write --resume "…prompt…"
+  --cwd "$LINGO_REPO" --background --write --resume "…prompt…"
 ```
 
   Status/result: `status <job-id> --cwd ... --json` / `result <job-id>

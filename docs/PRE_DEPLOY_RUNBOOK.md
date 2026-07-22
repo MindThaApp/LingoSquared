@@ -11,6 +11,32 @@ reference command skeleton; this file is the full checklist around it
 verification. Standing rule, unchanged: **deploys happen with Ramin
 present, never unattended.**
 
+## FIRST: set `$LINGO_REPO` (every command below depends on it)
+
+```bash
+export LINGO_REPO="$HOME/Library/Mobile Documents/com~apple~CloudDocs/dev/LingoSquared"
+[ -d "$LINGO_REPO/backend" ] || { echo "WRONG PATH — stop"; }
+```
+
+**Always quote it.** The repo lives in iCloud Drive, so its path contains a
+space (`Mobile Documents`). An unquoted `$LINGO_REPO` splits into two
+arguments and the command silently does the wrong thing.
+
+This bit for real on 2026-07-22: `scripts/sync_dev_db.sh` used an unquoted
+`$PY` (which embeds the repo root), so **every single course failed to
+compile and the dev-DB content import was a complete no-op** — while the
+script printed a plausible "COMPILE FAILED … fix its validation errors
+separately" for each one, which reads like a content problem and is not.
+Fixed by quoting; the `shellcheck disable=SC2086` there is narrow and
+applies ONLY to `$REALS`/`$OVERLAYS`, which must word-split.
+
+These commands previously hardcoded `/Users/raminazizi/dev/LingoSquared`.
+**That directory still exists but is an empty leftover** (it holds only
+`.claude/worktrees`) — so a deploy run against the old paths would fail,
+and the `rsync --delete` in the frontend step would be pointed at a source
+that does not contain the site. Re-verify `$LINGO_REPO` if the repo ever
+moves again.
+
 ## Load-bearing fact: the live server has never been deployed to
 
 Every mention of 192.168.4.4 in `docs/BUILD_LOG.md`'s entire history
@@ -196,8 +222,8 @@ or `/admin/courses/{id}/practice/import` does.
 ```bash
 # 1. Sync code (never syncs .env — never overwrites live secrets)
 rsync -az --exclude='.venv' --exclude='__pycache__' --exclude='*.pyc' --exclude='.env' \
-  /Users/raminazizi/dev/LingoSquared/backend/ ramin@192.168.4.4:/home/ramin/LingoSquared/backend/
-rsync -az /Users/raminazizi/dev/LingoSquared/docs/ ramin@192.168.4.4:/home/ramin/LingoSquared/docs/
+  "$LINGO_REPO"/backend/ ramin@192.168.4.4:/home/ramin/LingoSquared/backend/
+rsync -az "$LINGO_REPO"/docs/ ramin@192.168.4.4:/home/ramin/LingoSquared/docs/
 
 # 2. Build the new image
 ssh ramin@192.168.4.4 "cd /home/ramin/LingoSquared/backend && docker compose build api"
@@ -388,7 +414,7 @@ at build time — there is no runtime config for this, a rebuild +
 re-deploy is required if the API origin ever changes):
 
 ```bash
-cd /Users/raminazizi/dev/LingoSquared/frontend
+cd "$LINGO_REPO"/frontend
 npm install   # only if node_modules is missing/stale for this checkout
 npm run build -- --mode production.lan
 ```
@@ -404,15 +430,15 @@ build actually ran, not a stale copy.
 **Deploy the built bundle and bring the `web` service up:**
 
 ```bash
-rsync -az --delete /Users/raminazizi/dev/LingoSquared/frontend/dist/ \
+rsync -az --delete "$LINGO_REPO"/frontend/dist/ \
   ramin@192.168.4.4:/home/ramin/LingoSquared/backend/web_dist/
 
 # nginx.web.conf and docker-compose.yml's new `web` service are already
 # synced by the normal backend rsync step (step 1) above, if that step
 # already ran this deploy. If deploying the frontend on its own, sync
 # just those two files first:
-rsync -az /Users/raminazizi/dev/LingoSquared/backend/docker-compose.yml \
-  /Users/raminazizi/dev/LingoSquared/backend/nginx.web.conf \
+rsync -az "$LINGO_REPO"/backend/docker-compose.yml \
+  "$LINGO_REPO"/backend/nginx.web.conf \
   ramin@192.168.4.4:/home/ramin/LingoSquared/backend/
 
 ssh ramin@192.168.4.4 "cd /home/ramin/LingoSquared/backend && docker compose up -d web"
