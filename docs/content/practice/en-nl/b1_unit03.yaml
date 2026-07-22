@@ -1,0 +1,632 @@
+schema_version: '1.0'
+pack_key: practice.en-nl.b1.unit03
+source_language: en
+target_language: nl
+unit_content_key: nl.b1.unit03.werkoverleg
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: 'Authored 2026-07-22 against docs/content/PRACTICE_PACK_RECIPE.md, as part of the en-nl B1 unit01-11
+    practice-pack wave that unblocks these units'' checkpoints (the units already had lexemes from scripts/backfill_lexemes_en_nl.py
+    but no pack at all, so generate_checkpoint() returned checkpoint_unavailable). 17 templates across
+    6 lesson(s) with lexemes: listen_select x1, matching_pairs x3, multiple_choice x4, translation x7,
+    word_order x2. Every slot is satisfiable from THIS unit''s own lexemes, because generate_checkpoint()
+    calls _material() with only this unit''s lesson ids; slots use the unit''s own per-lesson semantic
+    tags (unioned where a single lesson tag could not reach the >=3-option multiple_choice floor or the
+    6-token matching_pairs floor), narrowed by part_of_speech to content words so no exercise ever shows
+    ''the'' or ''and'' as its answer. Measured with the recipe''s capacity/coverage model against the
+    real backfill data: 40 of 52 unit lexemes hostable (77%), recognition 69% / structured 65% / production
+    77%, and all three tiers reach 6/6 of the lessons that have lexemes. Distinct-target capacity: recognition
+    42, production 42, structured effectively unbounded (matching_pairs combinatorics). 12 of 17 templates
+    carry >=5 variants. REVIEWER: lesson02''s word_order anchors on semantic: reported_speech_future (POS
+    noun -> ''morgen'', the only B1 noun with that tag) as a single-member anchor. ''Met'' (glossed ''This
+    is'', from ''Met vriendelijke groet'') is excluded from every template by part-of-speech (it is a
+    preposition). General double-checks for this wave: (a) every word_order/fill_in_blank frame was verified
+    against its slot''s whole-B1-course candidate pool, not just the unit pool, so Endless Practice cannot
+    render an ungrammatical sentence; (b) no frame''s literal text contains any of its own slot''s candidate
+    values (defect 1.14); (c) listen_select frames are bare ''{item}'' so no distractor can be a word
+    the audio itself says (defect 1.22); (d) matching_pairs pools were read by hand for interchangeable
+    English glosses. Needs the standard fresh-context review before import.'
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - b1_unit_review
+    - meeting_agenda_question
+    - meeting_dialogue
+    - meeting_email_reading
+    - meeting_proposal
+    - polite_request_zou_u
+    - reported_speech_future
+templates:
+- content_key: practice.en-nl.nl.b1.unit03.lesson01.order.001
+  lesson_content_key: nl.b1.unit03.lesson01.zou_u
+  type: word_order
+  frame:
+    text: Zou u dit {item} kunnen nakijken?
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      agreement_tags:
+        semantic: polite_request_zou_u
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Zou u dit {item} kunnen nakijken?
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Zou u dit rapport kunnen nakijken? -- Could you review this report?
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b1.unit03.lesson01.translate.002
+  lesson_content_key: nl.b1.unit03.lesson01.zou_u
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      agreement_tags:
+        semantic: polite_request_zou_u
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b1.unit03.lesson01.listen.003
+  lesson_content_key: nl.b1.unit03.lesson01.zou_u
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      agreement_tags:
+        semantic:
+        - polite_request_zou_u
+        - meeting_proposal
+        - b1_unit_review
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: You heard {item}.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b1.unit03.lesson01.translate.004
+  lesson_content_key: nl.b1.unit03.lesson01.zou_u
+  type: translation
+  frame:
+    text: Could you review this report?
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      agreement_tags:
+        semantic: polite_request_zou_u
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Zou u dit {item} kunnen nakijken?
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Zou u dit rapport kunnen nakijken?
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b1.unit03.lesson02.choose.001
+  lesson_content_key: nl.b1.unit03.lesson02.voorstellen
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      agreement_tags:
+        semantic: meeting_proposal
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is used when you propose something in a meeting.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b1.unit03.lesson02.order.002
+  lesson_content_key: nl.b1.unit03.lesson02.voorstellen
+  type: word_order
+  frame:
+    text: Ik zou willen voorstellen dat we {item} beginnen.
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      agreement_tags:
+        semantic: reported_speech_future
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik zou willen voorstellen dat we {item} beginnen.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Ik zou willen voorstellen dat we morgen beginnen. -- I would like to propose that we start tomorrow.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b1.unit03.lesson02.translate.003
+  lesson_content_key: nl.b1.unit03.lesson02.voorstellen
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      agreement_tags:
+        semantic: meeting_proposal
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b1.unit03.lesson03.choose.001
+  lesson_content_key: nl.b1.unit03.lesson03.agenda_vragen
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      agreement_tags:
+        semantic: meeting_agenda_question
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} belongs to the agenda vocabulary of this lesson.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b1.unit03.lesson03.match.002
+  lesson_content_key: nl.b1.unit03.lesson03.agenda_vragen
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: nl
+    direction: ltr
+  slots:
+    first:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      agreement_tags:
+        semantic: meeting_agenda_question
+    second:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      agreement_tags:
+        semantic: meeting_agenda_question
+    third:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      agreement_tags:
+        semantic: meeting_agenda_question
+    fourth:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      agreement_tags:
+        semantic: meeting_agenda_question
+    fifth:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      agreement_tags:
+        semantic: meeting_agenda_question
+    sixth:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      agreement_tags:
+        semantic: meeting_agenda_question
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Match each agenda word with its English meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b1.unit03.lesson03.translate.003
+  lesson_content_key: nl.b1.unit03.lesson03.agenda_vragen
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      agreement_tags:
+        semantic: meeting_agenda_question
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b1.unit03.lesson04.choose.001
+  lesson_content_key: nl.b1.unit03.lesson04.overleg_met_bakker
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic: meeting_dialogue
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is said during the meeting with meneer Bakker.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b1.unit03.lesson04.match.002
+  lesson_content_key: nl.b1.unit03.lesson04.overleg_met_bakker
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: nl
+    direction: ltr
+  slots:
+    first:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic: meeting_dialogue
+    second:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic: meeting_dialogue
+    third:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic: meeting_dialogue
+    fourth:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic: meeting_dialogue
+    fifth:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic: meeting_dialogue
+    sixth:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic: meeting_dialogue
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Match each word from the meeting with its English meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b1.unit03.lesson04.translate.003
+  lesson_content_key: nl.b1.unit03.lesson04.overleg_met_bakker
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic: meeting_dialogue
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b1.unit03.lesson05.choose.001
+  lesson_content_key: nl.b1.unit03.lesson05.email_lezen
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      agreement_tags:
+        semantic: meeting_email_reading
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} appears in the work e-mail in this lesson.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b1.unit03.lesson05.match.002
+  lesson_content_key: nl.b1.unit03.lesson05.email_lezen
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: nl
+    direction: ltr
+  slots:
+    first:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      agreement_tags:
+        semantic:
+        - meeting_email_reading
+        - b1_unit_review
+    second:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      agreement_tags:
+        semantic:
+        - meeting_email_reading
+        - b1_unit_review
+    third:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      agreement_tags:
+        semantic:
+        - meeting_email_reading
+        - b1_unit_review
+    fourth:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      agreement_tags:
+        semantic:
+        - meeting_email_reading
+        - b1_unit_review
+    fifth:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      agreement_tags:
+        semantic:
+        - meeting_email_reading
+        - b1_unit_review
+    sixth:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      agreement_tags:
+        semantic:
+        - meeting_email_reading
+        - b1_unit_review
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Match each word from the e-mail with its English meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b1.unit03.lesson05.translate.003
+  lesson_content_key: nl.b1.unit03.lesson05.email_lezen
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic: meeting_email_reading
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b1.unit03.lesson06.translate.001
+  lesson_content_key: nl.b1.unit03.lesson06.wrapup_production
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - adjective
+      agreement_tags:
+        semantic: b1_unit_review
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
