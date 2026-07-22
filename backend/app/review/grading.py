@@ -72,6 +72,72 @@ ARABIC_PERSIAN_SCRIPT_PAIRS: frozenset[frozenset[str]] = frozenset(
 
 LATIN_RANGE_STARTS = (0x0041, 0x0061, 0x00C0, 0x0100)
 
+# ---------------------------------------------------------------------------
+# Invisible-formatting equivalence (2026-07-22)
+#
+# Persian/Dari orthography writes the imperfective prefix mi-, the plural
+# -ha, the ezafe -ye and most compounds with a ZERO-WIDTH NON-JOINER
+# (U+200C) rather than a space: می‌کنم, لباس‌ها, درباره‌ی. The character is
+# INVISIBLE - it changes letter shaping, never pronunciation or meaning -
+# and no mainstream input method types it by default: mobile Persian
+# keyboards, most desktop layouts, and every speech-to-text transcript
+# produce either the joined form (میکنم) or a plain space (می کنم).
+#
+# fa resolves to script='arabic', which means grade_answer() runs FULLY
+# STRICT (no distance-1 tolerance at all), so before this change a single
+# missing U+200C was graded exactly as wrong as a wrong word. A corpus
+# audit found 296 of 912 (32%) en-fa free-text exercises whose only
+# accepted answer carried a ZWNJ, including 49 speak_response items that
+# were therefore IMPOSSIBLE to pass (STT never emits U+200C).
+#
+# The same shape applies to Arabic diacritics (harakat U+064B-U+0652,
+# superscript alef U+0670) and the tatweel/kashida U+0640: they are
+# pronunciation/justification hints layered on top of the consonantal
+# skeleton, are optional in every modern register, and are essentially
+# never typed. The ar course states this explicitly in its own register
+# policy ("the unvocalized written forms used for grading are
+# gender-neutral by construction"), and defect class 1.30 in
+# docs/CONTENT_DEFECT_REGISTRY.md is the same bug found and hand-patched
+# per-instance before. This fixes it once, in grading, instead of in 296
+# content files.
+#
+# Deliberately NOT included here: the Arabic/Persian look-alike letters in
+# ARABIC_PERSIAN_SCRIPT_PAIRS (ي/ی, ك/ک, ة/ه, ۀ/ه, ى/ی). Those are VISIBLE,
+# meaning-bearing letters and frequently the thing being tested - they stay
+# unforgiven, see is_script_confusion(). Also not included: the combining
+# hamza U+0654 (خانهٔ is a real spelling variant of خانه‌ی, and stripping it
+# would collide with the ۀ/ه script pair) and Arabic-Indic digits.
+# ---------------------------------------------------------------------------
+
+ZWNJ = "‌"  # ZERO WIDTH NON-JOINER
+
+# Characters with no phonemic, semantic or orthographic content at all:
+# always removed from both sides before comparing, in any script.
+ALWAYS_INVISIBLE_CHARS: frozenset[str] = frozenset(
+    {
+        "​",  # ZERO WIDTH SPACE
+        "‍",  # ZERO WIDTH JOINER
+        "‎",  # LEFT-TO-RIGHT MARK
+        "‏",  # RIGHT-TO-LEFT MARK
+        "؜",  # ARABIC LETTER MARK
+        "﻿",  # ZERO WIDTH NO-BREAK SPACE / BOM
+        "ـ",  # ARABIC TATWEEL (kashida - pure justification filler)
+    }
+)
+
+# Arabic combining vowel/nunation/sukun/shadda marks + superscript alef.
+# Optional in every modern register of Arabic, Persian and Dari.
+ARABIC_DIACRITIC_CHARS: frozenset[str] = frozenset(
+    [chr(code) for code in range(0x064B, 0x0653)] + ["ٰ"]
+)
+
+# Everything stripped outright before comparison. ZWNJ is NOT in here: it
+# is handled separately because it may correspond to a SPACE on the other
+# side, not only to nothing (see is_invisible_formatting_only_difference).
+STRIPPED_FORMATTING_CHARS: frozenset[str] = (
+    ALWAYS_INVISIBLE_CHARS | ARABIC_DIACRITIC_CHARS
+)
+
 # Minimum length (of the normalized CORRECT answer) for distance-1 typo
 # tolerance to apply at all. Answers this short or shorter require an
 # exact match - see is_too_short_for_typo_tolerance() below for why.
@@ -161,14 +227,34 @@ def _single_substitution_pair(a: str, b: str) -> tuple[str, str] | None:
     return diffs[0]
 
 
-def is_script_confusion(a: str, b: str) -> bool:
-    """True if a and b differ by exactly one character that is an
-    Arabic/Persian script-purity pair - never a forgivable typo."""
+def _is_direct_script_confusion(a: str, b: str) -> bool:
     pair = _single_substitution_pair(a, b)
     if pair is None:
         return False
     candidate = frozenset(pair)
     return candidate in ARABIC_PERSIAN_SCRIPT_PAIRS
+
+
+def is_script_confusion(a: str, b: str) -> bool:
+    """True if a and b differ by exactly one character that is an
+    Arabic/Persian script-purity pair - never a forgivable typo.
+
+    Checked a second time with invisible formatting removed (2026-07-22):
+    _single_substitution_pair() requires equal lengths, so a ZWNJ or a
+    harakat present on only one side would otherwise HIDE a genuine
+    wrong-script letter behind the length mismatch (e.g. "میكنم" against
+    "می‌کنم" - Arabic kaf, no ZWNJ). Since grading now forgives those
+    characters, the script-purity check has to see through them too, or
+    the one thing that must never be forgiven could slip past on an
+    orthography_strict: False exercise.
+    """
+    if _is_direct_script_confusion(a, b):
+        return True
+    flat_a = strip_invisible_formatting(a).replace(ZWNJ, "")
+    flat_b = strip_invisible_formatting(b).replace(ZWNJ, "")
+    if flat_a == a and flat_b == b:
+        return False
+    return _is_direct_script_confusion(flat_a, flat_b)
 
 
 def is_case_only_difference(a: str, b: str) -> bool:
@@ -185,6 +271,113 @@ def is_case_only_difference(a: str, b: str) -> bool:
     of a fixed script-pair table, since ANY casing slip (not just a
     single character) is the exact thing case_sensitive exists to catch."""
     return a != b and a.casefold() == b.casefold()
+
+
+def strip_invisible_formatting(value: str) -> str:
+    """Remove every character in STRIPPED_FORMATTING_CHARS (bidi/zero-width
+    marks, tatweel, Arabic harakat). ZWNJ deliberately survives - it is
+    resolved by is_invisible_formatting_only_difference() below, which also
+    has to allow it to line up with a SPACE."""
+    if not any(ch in STRIPPED_FORMATTING_CHARS for ch in value):
+        return value
+    return "".join(ch for ch in value if ch not in STRIPPED_FORMATTING_CHARS)
+
+
+def _zwnj_flexible_match(a: str, b: str) -> bool:
+    """True if a and b line up when every ZWNJ is allowed to correspond to
+    nothing, to a space, or to a ZWNJ on the other side.
+
+    A plain SPACE is NOT deletable - only a ZWNJ may vanish. "کتاب ها" vs
+    "کتابها" (an authored word space the learner dropped) therefore stays
+    incorrect, exactly as before; only positions where one side actually
+    wrote a ZWNJ become flexible. The relation is symmetric by
+    construction, so it does not matter whether the ZWNJ is on the
+    authored side (the overwhelmingly common case) or the learner's.
+
+    Linear-DP reachability rather than a regex with optional groups: an
+    `[‌ ]?` per ZWNJ backtracks exponentially in the number of ZWNJs,
+    and the learner's side is attacker-controlled. Cost here is
+    O(len(a) * len(b)), the same order as damerau_levenshtein() already
+    accepts on the same bounded payload (see _MAX_PAYLOAD_JSON_CHARS in
+    app/schemas/api.py), and the caller gates it behind a cheap O(n)
+    necessary condition first.
+    """
+    len_a, len_b = len(a), len(b)
+    # reachable[j] == "prefix a[:i] can align with prefix b[:j]" for the
+    # row i currently being processed.
+    reachable = [False] * (len_b + 1)
+    reachable[0] = True
+    for i in range(len_a + 1):
+        nxt = [False] * (len_b + 1)
+        for j in range(len_b + 1):
+            if not reachable[j]:
+                continue
+            # drop a ZWNJ on b's side (same row, j ascending so the newly
+            # reachable cell is still visited by this loop)
+            if j < len_b and b[j] == ZWNJ:
+                reachable[j + 1] = True
+            # drop a ZWNJ on a's side
+            if i < len_a and a[i] == ZWNJ:
+                nxt[j] = True
+            # consume one character from each side: identical characters,
+            # or a ZWNJ facing the space a learner typed instead of it
+            if i < len_a and j < len_b:
+                x, y = a[i], b[j]
+                if x == y or {x, y} == {ZWNJ, " "}:
+                    nxt[j + 1] = True
+        if i < len_a:
+            reachable = nxt
+    return reachable[len_b]
+
+
+def is_invisible_formatting_only_difference(a: str, b: str) -> bool:
+    """True if a and b are the same answer once characters that carry no
+    pronunciation or meaning are disregarded - Persian ZWNJ, Arabic
+    harakat, tatweel, zero-width/bidi marks. See the block comment above
+    ZWNJ for why this is a correctness fix and not leniency.
+
+    Never forgives an ARABIC_PERSIAN_SCRIPT_PAIRS swap (ي/ی, ك/ک, ة/ه,
+    ۀ/ه, ى/ی): those are visible letters, and nothing here rewrites,
+    folds or deletes a letter - only the formatting characters listed in
+    STRIPPED_FORMATTING_CHARS are removed, and only a ZWNJ is allowed to
+    correspond to a space. Not script-gated, because it cannot fire
+    unless one of those characters is actually present (harakat/tatweel
+    are Arabic-block codepoints; a ZWNJ in Latin text is meaningless
+    formatting too) - so it works even on the call paths where the
+    caller has no Language.script value to pass in.
+    """
+    if a == b:
+        return True
+    stripped_a = strip_invisible_formatting(a)
+    stripped_b = strip_invisible_formatting(b)
+    if stripped_a == stripped_b:
+        return True
+    if ZWNJ not in stripped_a and ZWNJ not in stripped_b:
+        return False
+    # Cheap O(n) necessary condition before the O(n*m) matcher: a ZWNJ may
+    # only become nothing or a space, and a space stays a space, so the two
+    # sides must be identical once ZWNJs and spaces are removed from both.
+    if stripped_a.replace(ZWNJ, "").replace(" ", "") != stripped_b.replace(
+        ZWNJ, ""
+    ).replace(" ", ""):
+        return False
+    return _zwnj_flexible_match(stripped_a, stripped_b)
+
+
+def answers_equivalent(a, b) -> bool:
+    """Equality for two ALREADY-normalized answer values that ignores
+    invisible formatting. Recurses into lists so word_order/listen_order
+    token lists compare token-by-token; any other type (dict pair-mappings,
+    numbers) falls back to plain equality."""
+    if a == b:
+        return True
+    if isinstance(a, str) and isinstance(b, str):
+        return is_invisible_formatting_only_difference(a, b)
+    if isinstance(a, list) and isinstance(b, list):
+        return len(a) == len(b) and all(
+            answers_equivalent(x, y) for x, y in zip(a, b)
+        )
+    return False
 
 
 def is_too_short_for_typo_tolerance(correct: str) -> bool:
@@ -240,9 +433,19 @@ def grade_answer(
       caller has no script value handy.
     - orthography_strict, when not None, overrides the script-based
       default in either direction (author-set per exercise).
+    - Invisible formatting characters (Persian ZWNJ U+200C, Arabic harakat
+      U+064B-U+0652/U+0670, tatweel U+0640, zero-width/bidi marks) never
+      decide correct-vs-incorrect: an answer that differs only in those
+      grades "correct", ahead of every strictness branch, in every script.
+      A ZWNJ may correspond to nothing or to a space (می‌کنم = میکنم =
+      می کنم) because that is what real Persian keyboards and STT emit; a
+      plain word space is still required. See
+      is_invisible_formatting_only_difference().
     - A single-character substitution that crosses an Arabic/Persian
       script-purity boundary (e.g. Arabic kaf vs Persian keheh) is never
-      treated as an "almost" typo, regardless of strictness settings.
+      treated as an "almost" typo, regardless of strictness settings, and
+      is never absorbed by the invisible-formatting rule above either -
+      those are visible letters, frequently the thing being tested.
     - A correct answer shorter than MIN_ANSWER_LENGTH_FOR_TYPO_TOLERANCE
       (i.e. 3 characters or fewer after normalization) requires an exact
       match - never "almost", regardless of strictness settings, because
@@ -260,7 +463,18 @@ def grade_answer(
     normalized_response = _normalize(response, case_sensitive=case_sensitive)
     normalized_correct = _normalize(correct, case_sensitive=case_sensitive)
 
-    if normalized_response == normalized_correct:
+    # Invisible formatting (Persian ZWNJ, Arabic harakat, tatweel, bidi
+    # marks) is resolved HERE, on the fully-correct path, deliberately:
+    # "almost" would still deny full credit on some paths, and a missing
+    # U+200C is not a typo - it is the same answer, written the way every
+    # real Persian input method and every STT transcript writes it. Sits
+    # ahead of every strictness branch for the same reason, so a strict
+    # exercise (script='arabic', orthography_strict=True, a Phase F
+    # checkpoint) still can't fail a learner over a character they cannot
+    # see and their keyboard will not type.
+    if is_invisible_formatting_only_difference(
+        normalized_response, normalized_correct
+    ):
         return "correct"
 
     if exercise_type not in FREE_TEXT_EXERCISE_TYPES:
@@ -416,11 +630,17 @@ def grade(response,correct,exercise_type=None,*,script=None,orthography_strict=N
         if order_based:
             response_tokens = canonical_order_tokens(response,case_sensitive)
             is_ok = response_tokens is not None and any(
-                response_tokens == canonical_order_tokens(item,case_sensitive) for item in correct["accepted"]
+                answers_equivalent(response_tokens, canonical_order_tokens(item,case_sensitive)) for item in correct["accepted"]
             )
         else:
+            # answers_equivalent(), not ==: this branch never reaches
+            # grade_answer(), so without it a multi-accepted-answer Persian
+            # exercise would still fail on a missing ZWNJ / harakat even
+            # though the single-accepted-answer version of the same
+            # exercise passes. Same rule, same place in the flow (the
+            # fully-correct path).
             normalized_response=normalized(response,case_sensitive)
-            is_ok = any(normalized_response==normalized(item,case_sensitive) for item in correct["accepted"])
+            is_ok = any(answers_equivalent(normalized_response, normalized(item,case_sensitive)) for item in correct["accepted"])
         return "correct" if is_ok else "incorrect"
     free_text_eligible = (
         type_value in FREE_TEXT_EXERCISE_TYPES
@@ -450,5 +670,5 @@ def grade(response,correct,exercise_type=None,*,script=None,orthography_strict=N
         # only if canonicalization can't apply (neither string nor list).
         correct_tokens = canonical_order_tokens(correct,case_sensitive)
         if correct_tokens is not None:
-            return "correct" if canonical_order_tokens(response,case_sensitive) == correct_tokens else "incorrect"
-    return "correct" if normalized(response,case_sensitive)==normalized(correct,case_sensitive) else "incorrect"
+            return "correct" if answers_equivalent(canonical_order_tokens(response,case_sensitive), correct_tokens) else "incorrect"
+    return "correct" if answers_equivalent(normalized(response,case_sensitive), normalized(correct,case_sensitive)) else "incorrect"

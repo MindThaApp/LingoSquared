@@ -48,8 +48,13 @@ def test_grade_answer_explicit_script_param():
 
 
 def test_arabic_uses_arabic_script_strictness():
+    # The pair must differ by a real LETTER, not a diacritic: harakat are
+    # stripped before comparison (they are unreachable from a phone keyboard
+    # and never appear in an STT transcript), so a diacritic-only difference
+    # now grades "correct" by design. See grading.py's invisible-formatting
+    # block and test_grading_zwnj.py.
     assert (
-        grade_answer("مرحبا", "مرحباً", exercise_type="translation", script="arabic")
+        grade_answer("مرحبه", "مرحبا", exercise_type="translation", script="arabic")
         == "incorrect"
     )
 
