@@ -166,33 +166,27 @@ async function doRefresh(): Promise<RefreshOutcome> {
   return "refreshed";
 }
 
-export async function apiFetch<T>(
-  path: string,
-  options: RequestInit = {},
-): Promise<T> {
-  const { baseUrl, tokenStorage } = requireConfig();
-
-  // Re-reads the access token on every attempt so the post-refresh retry
-  // below picks up the NEW token, not the expired one it started with.
-  const send = (): Promise<Response> => {
-    const token = tokenStorage.get();
-    const headers = new Headers(options.headers);
-    headers.set("Content-Type", "application/json");
-    if (token) headers.set("Authorization", `Bearer ${token}`);
-    return fetch(`${baseUrl}${path}`, { ...options, headers });
-  };
-
+// ---- Shared authenticated-request core --------------------------------
+//
+// EVERY authenticated request goes through this, whatever it returns
+// (apiFetch's JSON, getFile's Blob, any future variant): a 401 means
+// "the 30-minute access token expired", which is the NORMAL state for a
+// returning user, so it must trigger refresh-and-retry -- never a
+// straight logout. getFile used to own a hand-rolled copy of this block
+// that skipped the refresh entirely, so "Export CSV" on a stale token
+// threw the user to the login screen; for a guest account (generated
+// password never shown -- see AuthContext.tsx) that is permanent,
+// unrecoverable loss of all progress. Keep the retry policy here and
+// here only, so the two paths can never drift apart again.
+//
+// `send` must build its headers (including Authorization) fresh on every
+// call: the post-refresh retry has to pick up the NEW access token, not
+// the expired one the first attempt used.
+async function sendWithAuthRetry(
+  send: () => Promise<Response>,
+  isAuthEndpoint = false,
+): Promise<Response> {
   let res = await send();
-
-  // Auth endpoints return 401 for ordinary "wrong password" cases, not an
-  // expired session — only treat 401 as session expiry for authenticated
-  // requests that had a token to begin with. /auth/refresh is listed
-  // defensively (it's only ever called via doRefresh's raw fetch today);
-  // /auth/logout is unauthenticated server-side and never 401s.
-  const isAuthEndpoint =
-    path.startsWith("/auth/login") ||
-    path.startsWith("/auth/register") ||
-    path.startsWith("/auth/refresh");
   if (res.status === 401 && !isAuthEndpoint) {
     const outcome = await refreshSession();
     if (outcome === "refreshed") {
@@ -205,7 +199,7 @@ export async function apiFetch<T>(
       if (outcome !== "unavailable") {
         // Refresh definitively failed (or the retried request still
         // 401ed on a brand-new token): the session is genuinely dead.
-        tokenStorage.clear();
+        requireConfig().tokenStorage.clear();
         onUnauthorized?.();
       }
       // "unavailable" (network/5xx during refresh) deliberately skips the
@@ -214,24 +208,57 @@ export async function apiFetch<T>(
       throw new ApiError(401, "unauthorized", "Session expired");
     }
   }
+  return res;
+}
 
-  if (!res.ok) {
-    let body: ApiErrorBody | null = null;
-    try {
-      body = await res.json();
-    } catch {
-      // non-JSON error body, fall through to generic message
-    }
-    const details: Record<string, unknown> = { ...(body?.error ?? {}) };
-    delete details.code;
-    delete details.message;
-    throw new ApiError(
-      res.status,
-      body?.error?.code ?? "unknown_error",
-      body?.error?.message ?? res.statusText,
-      details,
-    );
+// Shared error-envelope decoding for the non-ok responses of the
+// authenticated paths -- this app reshapes every HTTPException to
+// {"error": {code, message, ...details}} in main.py.
+async function throwApiError(res: Response): Promise<never> {
+  let body: ApiErrorBody | null = null;
+  try {
+    body = await res.json();
+  } catch {
+    // non-JSON error body, fall through to generic message
   }
+  const details: Record<string, unknown> = { ...(body?.error ?? {}) };
+  delete details.code;
+  delete details.message;
+  throw new ApiError(
+    res.status,
+    body?.error?.code ?? "unknown_error",
+    body?.error?.message ?? res.statusText,
+    details,
+  );
+}
+
+export async function apiFetch<T>(
+  path: string,
+  options: RequestInit = {},
+): Promise<T> {
+  const { baseUrl, tokenStorage } = requireConfig();
+
+  const send = (): Promise<Response> => {
+    const token = tokenStorage.get();
+    const headers = new Headers(options.headers);
+    headers.set("Content-Type", "application/json");
+    if (token) headers.set("Authorization", `Bearer ${token}`);
+    return fetch(`${baseUrl}${path}`, { ...options, headers });
+  };
+
+  // Auth endpoints return 401 for ordinary "wrong password" cases, not an
+  // expired session — only treat 401 as session expiry for authenticated
+  // requests that had a token to begin with. /auth/refresh is listed
+  // defensively (it's only ever called via doRefresh's raw fetch today);
+  // /auth/logout is unauthenticated server-side and never 401s.
+  const isAuthEndpoint =
+    path.startsWith("/auth/login") ||
+    path.startsWith("/auth/register") ||
+    path.startsWith("/auth/refresh");
+
+  const res = await sendWithAuthRetry(send, isAuthEndpoint);
+
+  if (!res.ok) await throwApiError(res);
 
   if (res.status === 204) return undefined as T;
   return res.json() as Promise<T>;
@@ -242,41 +269,28 @@ export function get<T>(path: string): Promise<T> {
 }
 
 // File-download variant of apiFetch: same base URL / bearer-token /
-// 401-means-session-expired / error-envelope handling, but returns the raw
-// body as a Blob (plus the server's suggested filename from
-// Content-Disposition) instead of parsing JSON -- apiFetch's unconditional
-// res.json() would corrupt a CSV/TSV body. Used by the vocabulary export.
+// 401-means-session-expired / error-envelope handling (all of it shared
+// via sendWithAuthRetry + throwApiError, never re-implemented here), but
+// returns the raw body as a Blob (plus the server's suggested filename
+// from Content-Disposition) instead of parsing JSON -- apiFetch's
+// unconditional res.json() would corrupt a CSV/TSV body. The only
+// deliberate difference from apiFetch is the absent Content-Type header:
+// this is a bodyless GET. Used by the vocabulary export.
 export async function getFile(
   path: string,
 ): Promise<{ blob: Blob; filename: string | null }> {
   const { baseUrl, tokenStorage } = requireConfig();
-  const token = tokenStorage.get();
-  const headers = new Headers();
-  if (token) headers.set("Authorization", `Bearer ${token}`);
 
-  const res = await fetch(`${baseUrl}${path}`, { method: "GET", headers });
+  const send = (): Promise<Response> => {
+    const token = tokenStorage.get();
+    const headers = new Headers();
+    if (token) headers.set("Authorization", `Bearer ${token}`);
+    return fetch(`${baseUrl}${path}`, { method: "GET", headers });
+  };
 
-  if (res.status === 401) {
-    onUnauthorized?.();
-    throw new ApiError(401, "unauthorized", "Session expired");
-  }
-  if (!res.ok) {
-    let body: ApiErrorBody | null = null;
-    try {
-      body = await res.json();
-    } catch {
-      // non-JSON error body, fall through to generic message
-    }
-    const details: Record<string, unknown> = { ...(body?.error ?? {}) };
-    delete details.code;
-    delete details.message;
-    throw new ApiError(
-      res.status,
-      body?.error?.code ?? "unknown_error",
-      body?.error?.message ?? res.statusText,
-      details,
-    );
-  }
+  const res = await sendWithAuthRetry(send);
+
+  if (!res.ok) await throwApiError(res);
 
   const disposition = res.headers.get("content-disposition");
   const filename = disposition?.match(/filename="([^"]+)"/)?.[1] ?? null;
