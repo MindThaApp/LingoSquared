@@ -5,7 +5,7 @@ Mac.** This file is written to YOU, not to Ramin. It is self-contained: do
 not ask him what to do next, and do not make him relay instructions. Work
 through Part 1 in order, then pick up Part 2.
 
-Written 2026-07-22. Last commit at handover: **`46e0187f`** on
+Written 2026-07-22. Last commit at handover: **`9cb32d4f`** on
 `origin/master` (`github.com/ramin-azizi/LingoSquared`, **private**).
 
 **Read root `CLAUDE.md` before any work.** It always loads and it overrides
@@ -34,7 +34,7 @@ pwd && git log --oneline -1 2>/dev/null
 ```bash
 mkdir -p ~/dev
 git clone https://github.com/ramin-azizi/LingoSquared.git ~/dev/LingoSquared
-cd ~/dev/LingoSquared && git log --oneline -1     # expect 46e0187f or later
+cd ~/dev/LingoSquared && git log --oneline -1     # expect 9cb32d4f or later
 ```
 
 **Why cloning, not copying** — hosting this git repo in iCloud caused four
@@ -72,7 +72,7 @@ What worked on the previous machine (not hard requirements): Python
 **3.9.6** from `/usr/bin/python3` (no Homebrew python — the content compiler
 runs fine on 3.9), Node **26**, Postgres 16 + nginx via Docker.
 
-## Step 4. ⚠️ ASK RAMIN FOR THE SECRETS — this is the only thing you cannot do yourself
+## Step 4. Secrets — get most of them yourself, ask for two
 
 A clone brings all code and content but **no secrets** — they are gitignored.
 Most of them, however, you can get yourself.
