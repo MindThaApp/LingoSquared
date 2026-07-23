@@ -59,10 +59,9 @@ mounting the full repo on top of the existing image/network/env:
 
 Add --dry-run to classify without touching the database.
 
-Dutch source-side words are extracted from the nl-en overlay's `gloss:`
-fields (the Dutch translation shown for each taught English item),
-mirroring exactly how the reference script extracts English words from
-the en-fa overlay's English gloss text.
+Only English target-side lexemes are emitted.  Overlay glosses supply the
+Dutch answer text for those lexemes; gloss prose is never tokenized into
+source-side pseudo-lexemes.
 """
 from __future__ import annotations
 
@@ -79,7 +78,11 @@ if str(BACKEND_ROOT) not in sys.path:
 if str(Path(__file__).resolve().parent) not in sys.path:
     sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from _en_target_lexeme_common import EN_POS, en_agreement_tags  # noqa: E402
+from _en_target_lexeme_common import (  # noqa: E402
+    EN_POS,
+    en_agreement_tags,
+    iter_taught_phrase_lexemes,
+)
 
 # Dutch gloss for each shared English target token -- this is
 # course-specific (source_language=nl), NOT shared with the fa-en/prs-en
@@ -2837,7 +2840,6 @@ def _classify_unit_files(unit_files, level):
     # re-taught in A2 needs its own A2-scoped Lexeme row rather than
     # silently reusing A1's.
     en_specs: dict[str, dict] = {}
-    nl_specs: dict[str, dict] = {}
     for unit_order, (realization_path, overlay_path) in enumerate(unit_files, 1):
         realization = yaml.safe_load(realization_path.read_text(encoding="utf-8"))
         overlay = yaml.safe_load(overlay_path.read_text(encoding="utf-8"))
@@ -2889,38 +2891,25 @@ def _classify_unit_files(unit_files, level):
                             else:
                                 existing["agreement_tags"].setdefault(key, value)
 
-                for match in NL_TOKEN_RE.findall(gloss):
-                    token = match.casefold()
-                    if token in NL_QUOTED_ENGLISH:
-                        continue
-                    if token not in NL_POS:
-                        raise ValueError(
-                            f"missing explicit Dutch gloss for {token!r} "
-                            f"(from gloss text {gloss!r}, lesson {lesson_key})"
-                        )
-                    tags = nl_agreement_tags(token)
-                    existing = nl_specs.get(token)
-                    if existing is None:
-                        if auto_semantics:
-                            semantics = tags.setdefault("semantic", [])
-                            semantics.extend(t for t in auto_semantics if t not in semantics)
-                        nl_specs[token] = {
-                            "level": level,
-                            "unit_order": unit_order, "lesson_order": lesson_order,
-                            "lesson_content_key": lesson_key, "content_key": content_key,
-                            "token": token, "language_code": "nl",
-                            "part_of_speech": NL_POS[token],
-                            "english_gloss": NL_GLOSSES[token], "agreement_tags": tags,
-                        }
-                    else:
-                        for key, value in tags.items():
-                            if key == "semantic":
-                                prior = existing["agreement_tags"].setdefault(key, [])
-                                prior.extend(v for v in value if v not in prior)
-                            else:
-                                existing["agreement_tags"].setdefault(key, value)
+            for content_key, token, gloss in iter_taught_phrase_lexemes(
+                unit_stem, lesson, teaching_overlays
+            ):
+                if token in en_specs:
+                    continue
+                tags = {"semantic": list(auto_semantics)} if auto_semantics else {}
+                en_specs[token] = {
+                    "level": level,
+                    "unit_order": unit_order,
+                    "lesson_order": lesson_order,
+                    "lesson_content_key": lesson_key,
+                    "content_key": content_key,
+                    "token": token,
+                    "language_code": "en",
+                    "part_of_speech": "phrase",
+                    "english_gloss": gloss,
+                    "agreement_tags": tags,
+                }
     yield from en_specs.values()
-    yield from nl_specs.values()
 
 
 def iter_specs():
@@ -2939,7 +2928,6 @@ def main() -> int:
     specs = list(iter_specs())
     if args.dry_run:
         en_count = sum(spec["language_code"] == "en" for spec in specs)
-        nl_count = sum(spec["language_code"] == "nl" for spec in specs)
         per_level = " ".join(
             f"{sum(spec['level'] == level for spec in specs)} {level}"
             for level in ("a1", "a2", "b1", "b2")
@@ -2948,7 +2936,7 @@ def main() -> int:
             (spec["level"], spec["language_code"], spec["token"], spec["part_of_speech"])
             for spec in specs
         }
-        print(f"Lexeme backfill dry run: {en_count} en, {nl_count} nl ({per_level}).")
+        print(f"Lexeme backfill dry run: {en_count} en ({per_level}).")
         print(f"  {len(identities)} distinct (course, language, token, pos) identities "
               f"out of {len(specs)} specs.")
         if len(identities) != len(specs):

@@ -61,7 +61,11 @@ if str(BACKEND_ROOT) not in sys.path:
 if str(Path(__file__).resolve().parent) not in sys.path:
     sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from _en_target_lexeme_common import EN_POS, en_agreement_tags  # noqa: E402
+from _en_target_lexeme_common import (  # noqa: E402
+    EN_POS,
+    en_agreement_tags,
+    iter_taught_phrase_lexemes,
+)
 
 UNIT_FILES = (
     (
@@ -1891,8 +1895,10 @@ EN_POS_EXTRA: dict[str, str] = {
 
 
 def _classify(files, level, specs):
-    for unit_order, (realization_path, _overlay_path) in enumerate(files, 1):
+    for unit_order, (realization_path, overlay_path) in enumerate(files, 1):
         realization = yaml.safe_load(realization_path.read_text(encoding="utf-8"))
+        overlay = yaml.safe_load(overlay_path.read_text(encoding="utf-8"))
+        teaching_overlays = overlay["teaching"]
         for lesson_order, lesson in enumerate(realization["units"][0]["lessons"], 1):
             lesson_key = lesson["content_key"]
             for item in lesson["teaching"]:
@@ -1936,6 +1942,24 @@ def _classify(files, level, specs):
                                 prior.extend(v for v in value if v not in prior)
                             else:
                                 existing["agreement_tags"].setdefault(tag_key, value)
+            for content_key, token, gloss in iter_taught_phrase_lexemes(
+                realization_path.stem, lesson, teaching_overlays
+            ):
+                key = (level, token)
+                if key in specs:
+                    continue
+                specs[key] = {
+                    "level": level,
+                    "unit_order": unit_order,
+                    "lesson_order": lesson_order,
+                    "lesson_content_key": lesson_key,
+                    "content_key": content_key,
+                    "token": token,
+                    "language_code": "en",
+                    "part_of_speech": "phrase",
+                    "english_gloss": gloss,
+                    "agreement_tags": {},
+                }
 
 
 def iter_specs():

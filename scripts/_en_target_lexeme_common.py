@@ -38,6 +38,44 @@ being taught.
 """
 from __future__ import annotations
 
+from collections.abc import Iterator
+
+EN_PHRASE_LEXEME_UNIT_STEMS = frozenset({
+    "a1_unit60_invitations",
+    "a1_unit62_phone_calls",
+    "a1_unit63_asking_for_help",
+    "a1_unit64_compliments",
+    "a1_unit65_returns_exchanges",
+    "a1_unit66_pharmacy_symptoms",
+    "a1_unit67_family_news",
+    "a1_unit68_borrowing_lending",
+})
+
+
+def iter_taught_phrase_lexemes(
+    realization_path_stem: str,
+    lesson: dict[str, object],
+    teaching_overlays: dict[str, dict[str, object]],
+) -> Iterator[tuple[str, str, str]]:
+    """Yield explicitly taught English chunks with their source glosses."""
+    if realization_path_stem not in EN_PHRASE_LEXEME_UNIT_STEMS:
+        return
+    for item in lesson.get("teaching", []):
+        if item.get("kind") not in {"phrase", "dialogue", "reading"}:
+            continue
+        content_key = item["content_key"]
+        token = (
+            item.get("target", {}).get("text", "").casefold().replace("’", "'").strip()
+        )
+        if " " not in token or len(token) > 255:
+            continue
+        gloss = str(teaching_overlays.get(content_key, {}).get("gloss", "")).strip()
+        if not gloss:
+            raise ValueError(f"missing source-language phrase gloss for {content_key!r}")
+        if len(gloss) <= 255:
+            yield content_key, token, gloss
+
+
 EN_POS: dict[str, str] = {
     "hello": "noun", "hi": "noun", "good": "adjective", "morning": "noun",
     "afternoon": "noun", "evening": "noun", "goodbye": "noun", "bye": "noun",
