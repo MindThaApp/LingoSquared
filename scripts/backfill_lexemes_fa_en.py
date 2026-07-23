@@ -59,7 +59,11 @@ if str(BACKEND_ROOT) not in sys.path:
 if str(Path(__file__).resolve().parent) not in sys.path:
     sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from _en_target_lexeme_common import EN_POS, en_agreement_tags  # noqa: E402
+from _en_target_lexeme_common import (  # noqa: E402
+    EN_POS,
+    en_agreement_tags,
+    iter_taught_phrase_lexemes,
+)
 
 UNIT_FILES = (
     (
@@ -2097,7 +2101,7 @@ METALANGUAGE_TOKENS = frozenset({
 # words and proper nouns are excluded: a `slot_gloss` multiple_choice over
 # proper nouns self-glosses ("Simon" -> "Simon"), and a matching_pairs over
 # particles/prepositions is not a vocabulary check.
-TAGGABLE_POS = frozenset({"noun", "verb", "adjective", "adverb"})
+TAGGABLE_POS = frozenset({"noun", "verb", "adjective", "adverb", "phrase"})
 
 
 def _lexeme_pos_and_gloss(level: str, token: str) -> tuple[str, str]:
@@ -2149,6 +2153,11 @@ def _unit_semantic_tags(unit_stem, lesson_order, token, part_of_speech):
     """
     if part_of_speech not in TAGGABLE_POS or token in METALANGUAGE_TOKENS:
         return []
+    if part_of_speech == "phrase":
+        return [
+            f"fa_en_{unit_stem}_words",
+            f"fa_en_{unit_stem}_lesson{lesson_order:02d}_words",
+        ]
     # Tokens carrying digits, currency marks, clock colons or attached
     # punctuation are real lexemes but make poor slot candidates.
     if not all(character.isalpha() or character in "-'" for character in token):
@@ -2159,8 +2168,10 @@ def _unit_semantic_tags(unit_stem, lesson_order, token, part_of_speech):
     ]
 
 def _classify(files, level, specs):
-    for unit_order, (realization_path, _overlay_path) in enumerate(files, 1):
+    for unit_order, (realization_path, overlay_path) in enumerate(files, 1):
         realization = yaml.safe_load(realization_path.read_text(encoding="utf-8"))
+        overlay = yaml.safe_load(overlay_path.read_text(encoding="utf-8"))
+        teaching_overlays = overlay["teaching"]
         # "a1_unit49_waste_disposal" -> "a1_unit49": the stable per-unit key
         # the generated semantic tags are named after (and the gate for
         # whether this unit gets them at all).
@@ -2212,6 +2223,27 @@ def _classify(files, level, specs):
                                 prior.extend(v for v in value if v not in prior)
                             else:
                                 existing["agreement_tags"].setdefault(tag_key, value)
+            for content_key, token, gloss in iter_taught_phrase_lexemes(
+                stem, lesson, teaching_overlays
+            ):
+                key = (level, token)
+                if key in specs:
+                    continue
+                semantic = _unit_semantic_tags(
+                    unit_stem, lesson_order, token, "phrase"
+                )
+                specs[key] = {
+                    "level": level,
+                    "unit_order": unit_order,
+                    "lesson_order": lesson_order,
+                    "lesson_content_key": lesson_key,
+                    "content_key": content_key,
+                    "token": token,
+                    "language_code": "en",
+                    "part_of_speech": "phrase",
+                    "english_gloss": gloss,
+                    "agreement_tags": {"semantic": semantic} if semantic else {},
+                }
 
 
 # Column widths on backend/app/models/entities.py::Lexeme. There is no
