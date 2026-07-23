@@ -1,0 +1,71 @@
+schema_version: "1.0"
+pack_key: practice.fa-en.b1.unit01
+source_language: fa
+target_language: en
+unit_content_key: en.b1.unit01.necessity
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    GRAMMAR UNIT (must/have to/should necessity + past regret "should have").
+    76 lexemes across all 4 lessons (7/19/28/22), but per the recipe's §8.1
+    grammar-unit pattern, most tokens are function words (pronouns,
+    articles, prepositions, auxiliaries with no semantic tag). Recognition/
+    production use each lesson's own tag narrowed to [noun, verb, adjective,
+    adverb], which mechanically strips the pronouns/particles/prepositions
+    (i/this/the/by/she/an/you/and/we/they/not/if/a/his/he/on/your/oh/no/
+    that/them/or/you'll/everything/but) without hand-curation. This yields
+    6/9/20/13 content candidates per lesson -- comfortably clearing the MC
+    3-option floor everywhere.
+
+    The unit's three modal verbs (must/have/should, lesson01) have
+    INCOMPATIBLE complementation ("must pay" vs "have to pay" vs "should
+    pay") and cannot be safely unioned into one word_order/fill_in_blank
+    frame -- verified by hand and deliberately NOT forced into a false
+    single-member anchor (this is exactly the trap AUTHORING_GUIDE/the
+    recipe warns about). They are tested via bare-word translation instead,
+    which is frame-free and therefore safe regardless of complementation.
+
+    Structured tier: two matching_pairs (6 pairs each) -- lesson03's tag
+    narrowed to noun-only gives 7 (yesterday/gym/membership/reminder/phone/
+    fee/month), 6 selected; a second pairs lesson01+lesson02+lesson04 nouns
+    unioned (task/rent/appointment/today/friday/week/right/dentist -- 8
+    distinct, no confusable glosses) anchored to lesson04, the richest
+    dialogue lesson, per the recipe's "anchor the union to the richest
+    lesson" guidance. One word_order uses lesson04's two adjectives
+    (last/organized) in "This was my {item} class." -- verified by hand
+    that both are grammatical in that frame (not a single-member anchor,
+    but a genuinely dual-safe broad pool, checked at course scope: this
+    lesson tag is unique to the unit). No mis-glossed lexeme found (five
+    en-nl-style mis-glosses were the trigger for the recipe's §0.1 rule;
+    checked every fa-en gloss here against this unit's own teaching and
+    found none). 15 templates, all 4 lessons represented in recognition and
+    production.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [fa_en_b1_unit01_lesson01_words, fa_en_b1_unit01_lesson02_words, fa_en_b1_unit01_lesson03_words, fa_en_b1_unit01_lesson04_words]
+slot_presets:
+  l1: &l1 {language_code: en, part_of_speech: [noun, verb, adjective, adverb], agreement_tags: {semantic: fa_en_b1_unit01_lesson01_words}}
+  l2: &l2 {language_code: en, part_of_speech: [noun, verb, adjective, adverb], agreement_tags: {semantic: fa_en_b1_unit01_lesson02_words}}
+  l3: &l3 {language_code: en, part_of_speech: [noun, verb, adjective, adverb], agreement_tags: {semantic: fa_en_b1_unit01_lesson03_words}}
+  l3m: &l3m {language_code: en, part_of_speech: noun, agreement_tags: {semantic: fa_en_b1_unit01_lesson03_words}}
+  l4: &l4 {language_code: en, part_of_speech: [noun, verb, adjective, adverb], agreement_tags: {semantic: fa_en_b1_unit01_lesson04_words}}
+  l4_adj: &l4_adj {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: fa_en_b1_unit01_lesson04_words}}
+  union_nouns: &union_nouns {language_code: en, part_of_speech: noun, agreement_tags: {semantic: [fa_en_b1_unit01_lesson01_words, fa_en_b1_unit01_lesson02_words, fa_en_b1_unit01_lesson04_words]}}
+templates:
+  - {content_key: practice.fa-en.en.b1.unit01.lesson01.choose.001, lesson_content_key: en.b1.unit01.lesson01.necessity_vocabulary, type: multiple_choice, frame: {text: "{item}", language_code: en, direction: ltr}, slots: {item: *l1}, answer_derivation: {kind: slot_gloss, slot: item}, feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}}
+  - {content_key: practice.fa-en.en.b1.unit01.lesson01.listen.002, lesson_content_key: en.b1.unit01.lesson01.necessity_vocabulary, type: listen_select, frame: {text: "{item}", language_code: en, direction: ltr}, slots: {item: *l1}, answer_derivation: {kind: slot_gloss, slot: item}, feedback_frame: {text: "واژه‌ای که شنیدید {item} بود.", language_code: fa, direction: rtl}}
+  - {content_key: practice.fa-en.en.b1.unit01.lesson01.translate.003, lesson_content_key: en.b1.unit01.lesson01.necessity_vocabulary, type: translation, frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}, slots: {item: *l1}, answer_derivation: {kind: slot_text, slot: item}, feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}}
+  - {content_key: practice.fa-en.en.b1.unit01.lesson02.choose.001, lesson_content_key: en.b1.unit01.lesson02.saying_what_you_must_do, type: multiple_choice, frame: {text: "{item}", language_code: en, direction: ltr}, slots: {item: *l2}, answer_derivation: {kind: slot_gloss, slot: item}, feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}}
+  - {content_key: practice.fa-en.en.b1.unit01.lesson02.listen.002, lesson_content_key: en.b1.unit01.lesson02.saying_what_you_must_do, type: listen_select, frame: {text: "{item}", language_code: en, direction: ltr}, slots: {item: *l2}, answer_derivation: {kind: slot_gloss, slot: item}, feedback_frame: {text: "واژه‌ای که شنیدید {item} بود.", language_code: fa, direction: rtl}}
+  - {content_key: practice.fa-en.en.b1.unit01.lesson02.translate.003, lesson_content_key: en.b1.unit01.lesson02.saying_what_you_must_do, type: translation, frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}, slots: {item: *l2}, answer_derivation: {kind: slot_text, slot: item}, feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}}
+  - {content_key: practice.fa-en.en.b1.unit01.lesson03.choose.001, lesson_content_key: en.b1.unit01.lesson03.past_regret_and_prohibition, type: multiple_choice, frame: {text: "{item}", language_code: en, direction: ltr}, slots: {item: *l3}, answer_derivation: {kind: slot_gloss, slot: item}, feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}}
+  - {content_key: practice.fa-en.en.b1.unit01.lesson03.listen.002, lesson_content_key: en.b1.unit01.lesson03.past_regret_and_prohibition, type: listen_select, frame: {text: "{item}", language_code: en, direction: ltr}, slots: {item: *l3}, answer_derivation: {kind: slot_gloss, slot: item}, feedback_frame: {text: "واژه‌ای که شنیدید {item} بود.", language_code: fa, direction: rtl}}
+  - {content_key: practice.fa-en.en.b1.unit01.lesson03.translate.003, lesson_content_key: en.b1.unit01.lesson03.past_regret_and_prohibition, type: translation, frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}, slots: {item: *l3}, answer_derivation: {kind: slot_text, slot: item}, feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}}
+  - {content_key: practice.fa-en.en.b1.unit01.lesson03.match.004, lesson_content_key: en.b1.unit01.lesson03.past_regret_and_prohibition, type: matching_pairs, frame: {text: "{first} — {second} — {third} — {fourth} — {fifth} — {sixth}", language_code: en, direction: ltr}, slots: {first: *l3m, second: *l3m, third: *l3m, fourth: *l3m, fifth: *l3m, sixth: *l3m}, slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}], answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}, feedback_frame: {text: "هر واژه را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}}
+  - {content_key: practice.fa-en.en.b1.unit01.lesson04.choose.001, lesson_content_key: en.b1.unit01.lesson04.the_gym_membership_dialogue, type: multiple_choice, frame: {text: "{item}", language_code: en, direction: ltr}, slots: {item: *l4}, answer_derivation: {kind: slot_gloss, slot: item}, feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}}
+  - {content_key: practice.fa-en.en.b1.unit01.lesson04.listen.002, lesson_content_key: en.b1.unit01.lesson04.the_gym_membership_dialogue, type: listen_select, frame: {text: "{item}", language_code: en, direction: ltr}, slots: {item: *l4}, answer_derivation: {kind: slot_gloss, slot: item}, feedback_frame: {text: "واژه‌ای که شنیدید {item} بود.", language_code: fa, direction: rtl}}
+  - {content_key: practice.fa-en.en.b1.unit01.lesson04.translate.003, lesson_content_key: en.b1.unit01.lesson04.the_gym_membership_dialogue, type: translation, frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}, slots: {item: *l4}, answer_derivation: {kind: slot_text, slot: item}, feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}}
+  - {content_key: practice.fa-en.en.b1.unit01.lesson04.match.004, lesson_content_key: en.b1.unit01.lesson04.the_gym_membership_dialogue, type: matching_pairs, frame: {text: "{first} — {second} — {third} — {fourth} — {fifth} — {sixth}", language_code: en, direction: ltr}, slots: {first: *union_nouns, second: *union_nouns, third: *union_nouns, fourth: *union_nouns, fifth: *union_nouns, sixth: *union_nouns}, slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}], answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}, feedback_frame: {text: "هر واژه را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}}
+  - {content_key: practice.fa-en.en.b1.unit01.lesson04.order.005, lesson_content_key: en.b1.unit01.lesson04.the_gym_membership_dialogue, type: word_order, frame: {text: "This was my {item} class", language_code: en, direction: ltr}, slots: {item: *l4_adj}, answer_derivation: {kind: render_frame, frame: {text: "This was my {item} class", language_code: en, direction: ltr}}, feedback_frame: {text: "{item} صفتی است که کلاس را توصیف می‌کند.", language_code: fa, direction: rtl}}

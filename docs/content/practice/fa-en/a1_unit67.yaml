@@ -1,0 +1,100 @@
+schema_version: "1.0"
+pack_key: practice.fa-en.a1.unit67
+source_language: fa
+target_language: en
+unit_content_key: en.a1.unit67.family_news
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    THIN UNIT: backfill_lexemes_fa_en.py registers only 5 lexemes (news/baby/
+    proud in lesson01, must in lesson03, shared in lesson04; lesson02/
+    lesson04's other exercises have no additional lexemes -- 3 of 4 lessons
+    have only 1-3 tokens). 9 templates at genuine capacity: MC/listen/
+    translation pool = unit-wide tag narrowed to [noun, adjective] (news,
+    baby, proud -- exactly the 3-option floor; "must" and "shared" excluded
+    as verbs, the recipe's exclusion-by-part_of_speech technique -- they
+    would otherwise make "I have good {item}" ungrammatical for baby/must/
+    shared). matching_pairs omitted (needs 6, only 5 exist). lesson01's tag
+    narrowed to adjective is already single (proud) -> "I am {item} of
+    her."; lesson03's and lesson04's tags are each already single-member
+    (must / shared) -> "You {item} be proud." and "She {item} the news.",
+    both grammatical and drawn from the realization's own dialogue lines.
+    Course-scope check: all three lesson-level tags are unique to this
+    unit, so course-wide membership == unit-scoped membership. No
+    mis-glossed lexeme found. FLAG FOR COORDINATOR: checkpoint will very
+    likely stay <12 items -- routing to backfill recommended for lesson02
+    and the other lesson04 exercises.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [fa_en_a1_unit67_words, fa_en_a1_unit67_lesson01_words, fa_en_a1_unit67_lesson03_words, fa_en_a1_unit67_lesson04_words]
+slot_presets:
+  unit_pool: &unit_pool {language_code: en, part_of_speech: [noun, adjective], agreement_tags: {semantic: fa_en_a1_unit67_words}}
+  lesson01_adj: &lesson01_adj {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: fa_en_a1_unit67_lesson01_words}}
+  lesson03_single: &lesson03_single {language_code: en, part_of_speech: verb, agreement_tags: {semantic: fa_en_a1_unit67_lesson03_words}}
+  lesson04_single: &lesson04_single {language_code: en, part_of_speech: verb, agreement_tags: {semantic: fa_en_a1_unit67_lesson04_words}}
+templates:
+  - content_key: practice.fa-en.en.a1.unit67.lesson01.choose.001
+    lesson_content_key: en.a1.unit67.lesson01.family_news_words
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *unit_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit67.lesson01.listen.002
+    lesson_content_key: en.a1.unit67.lesson01.family_news_words
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *unit_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "واژه‌ای که شنیدید {item} بود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit67.lesson01.translate.003
+    lesson_content_key: en.a1.unit67.lesson01.family_news_words
+    type: translation
+    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *unit_pool}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit67.lesson01.fill.004
+    lesson_content_key: en.a1.unit67.lesson01.family_news_words
+    type: fill_in_blank
+    frame: {text: "I am {item} of her.", language_code: en, direction: ltr}
+    slots: {item: *lesson01_adj}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} یعنی «مفتخر».", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit67.lesson03.choose.001
+    lesson_content_key: en.a1.unit67.lesson03.dialogue_sharing_family_news
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *unit_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit67.lesson03.translate.002
+    lesson_content_key: en.a1.unit67.lesson03.dialogue_sharing_family_news
+    type: translation
+    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *unit_pool}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit67.lesson03.order.003
+    lesson_content_key: en.a1.unit67.lesson03.dialogue_sharing_family_news
+    type: word_order
+    frame: {text: "You {item} be proud", language_code: en, direction: ltr}
+    slots: {item: *lesson03_single}
+    answer_derivation: {kind: render_frame, frame: {text: "You {item} be proud", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} یعنی «حتماً» (نتیجه‌گیری از شواهد).", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit67.lesson04.choose.001
+    lesson_content_key: en.a1.unit67.lesson04.family_message
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *unit_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit67.lesson04.order.002
+    lesson_content_key: en.a1.unit67.lesson04.family_message
+    type: word_order
+    frame: {text: "She {item} the news", language_code: en, direction: ltr}
+    slots: {item: *lesson04_single}
+    answer_derivation: {kind: render_frame, frame: {text: "She {item} the news", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} یعنی «به اشتراک گذاشت».", language_code: fa, direction: rtl}

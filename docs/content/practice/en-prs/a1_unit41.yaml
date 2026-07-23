@@ -1,0 +1,260 @@
+schema_version: '1.0'
+pack_key: practice.en-prs.a1.unit41
+source_language: en
+target_language: prs
+unit_content_key: prs.a1.unit41.lost_items
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    Pilot en-prs A1 practice pack (unit41 lost_items), authored 2026-07-22 against
+    docs/content/PRACTICE_PACK_RECIPE.md. 14 unit lexemes across 5 lessons (lesson06
+    has zero lexemes and is therefore unrepresentable). Tags used, all real
+    backfill_lexemes_en_prs semantic tags: lost_item_word (خریطه/کیف پول/کلید),
+    lost_item_possessive (خریطه‌ام/کیف پولم/کلیدم/خریطه‌اش), see_verb
+    (دیدین/دیدم/می‌بیند), location_word (اینجا, adverb), dialogue_word
+    (خواهش می‌کنم phrase / دیدم verb). No listen_select (en-prs has no TTS). No
+    fill_in_blank (no reliably single-member course-wide anchor tag exists for this
+    unit; structured tier is carried by word_order + matching_pairs). word_order
+    frames taken verbatim from the unit's taught sentences: "{lost_item_word} دارم"
+    (I have a bag/key/wallet -- taught "کلید دارم") and "{lost_item_possessive} گم
+    شده است" (taught "خریطه‌ام گم شده است"); every course-scope pool member is a
+    possessable object / a possessed item respectively, so both frames stay
+    grammatical. matching_pairs pools the union of lost_item_word +
+    lost_item_possessive (7 distinct tokens; bag / my bag / his bag are discriminable
+    possessive distinctions per recipe §6.3). Afghan Dari register throughout
+    (خریطه not کیف/ساک, دیدین not دیدید). No mis-glossed lexemes found in the pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - lost_item_word
+    - lost_item_possessive
+    - see_verb
+    - location_word
+    - dialogue_word
+slot_presets:
+  lost_item_word: &item_word
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: lost_item_word
+  lost_item_any: &item_any
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: [lost_item_word, lost_item_possessive]
+  possessive: &poss
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: lost_item_possessive
+  see_verb: &see
+    language_code: prs
+    part_of_speech: verb
+    agreement_tags:
+      semantic: see_verb
+templates:
+# ---- recognition ----
+- content_key: practice.en-prs.prs.a1.unit41.lesson01.choose.001
+  lesson_content_key: prs.a1.unit41.lesson01.lost_item_vocabulary
+  type: multiple_choice
+  frame: {text: '{item}', language_code: prs, direction: rtl}
+  slots:
+    item: *item_word
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} belongs to this unit''s lost-item vocabulary.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit41.lesson05.choose.001
+  lesson_content_key: prs.a1.unit41.lesson05.reading
+  type: multiple_choice
+  frame: {text: '{item}', language_code: prs, direction: rtl}
+  slots:
+    item: *item_any
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is a lost-item word from this unit.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit41.lesson02.choose.001
+  lesson_content_key: prs.a1.unit41.lesson02.asking_if_found
+  type: multiple_choice
+  frame: {text: '{verb}', language_code: prs, direction: rtl}
+  slots:
+    verb: *see
+  answer_derivation: {kind: slot_gloss, slot: verb}
+  feedback_frame:
+    text: '{verb} is a form of the "see" verb taught in this unit.'
+    language_code: en
+    direction: ltr
+# ---- structured ----
+- content_key: practice.en-prs.prs.a1.unit41.lesson01.order.001
+  lesson_content_key: prs.a1.unit41.lesson01.lost_item_vocabulary
+  type: word_order
+  frame: {text: '{item} دارم', language_code: prs, direction: rtl}
+  slots:
+    item: *item_word
+  answer_derivation:
+    kind: render_frame
+    frame: {text: '{item} دارم', language_code: prs, direction: rtl}
+  feedback_frame:
+    text: 'Word order: [item] دارم (I have the [item]).'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit41.lesson05.order.001
+  lesson_content_key: prs.a1.unit41.lesson05.reading
+  type: word_order
+  frame: {text: '{item} گم شده است', language_code: prs, direction: rtl}
+  slots:
+    item: *poss
+  answer_derivation:
+    kind: render_frame
+    frame: {text: '{item} گم شده است', language_code: prs, direction: rtl}
+  feedback_frame:
+    text: 'Word order: [my/his item] گم شده است ([my/his item] is lost).'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit41.lesson01.match.001
+  lesson_content_key: prs.a1.unit41.lesson01.lost_item_vocabulary
+  type: matching_pairs
+  frame:
+    text: '{a} — {b} — {c} — {d} — {e} — {f}'
+    language_code: prs
+    direction: rtl
+  slots:
+    a: *item_any
+    b: *item_any
+    c: *item_any
+    d: *item_any
+    e: *item_any
+    f: *item_any
+  slot_relations:
+  - kind: distinct
+    slots: [a, b, c, d, e, f]
+  answer_derivation:
+    kind: matching_pairs
+    slots: [a, b, c, d, e, f]
+  feedback_frame:
+    text: Match each word to its English meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit41.lesson05.match.001
+  lesson_content_key: prs.a1.unit41.lesson05.reading
+  type: matching_pairs
+  frame:
+    text: '{a} — {b} — {c} — {d} — {e} — {f}'
+    language_code: prs
+    direction: rtl
+  slots:
+    a: *item_any
+    b: *item_any
+    c: *item_any
+    d: *item_any
+    e: *item_any
+    f: *item_any
+  slot_relations:
+  - kind: distinct
+    slots: [a, b, c, d, e, f]
+  answer_derivation:
+    kind: matching_pairs
+    slots: [a, b, c, d, e, f]
+  feedback_frame:
+    text: Match each word to its English meaning.
+    language_code: en
+    direction: ltr
+# ---- production ----
+- content_key: practice.en-prs.prs.a1.unit41.lesson01.translate.001
+  lesson_content_key: prs.a1.unit41.lesson01.lost_item_vocabulary
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item: *item_word
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: '{item} is the Dari word for this.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit41.lesson02.translate.001
+  lesson_content_key: prs.a1.unit41.lesson02.asking_if_found
+  type: translation
+  frame:
+    text: '{verb}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {verb: english_gloss}
+  slots:
+    verb: *see
+  answer_derivation: {kind: slot_text, slot: verb}
+  feedback_frame:
+    text: '{verb} is the Dari form for this.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit41.lesson03.translate.001
+  lesson_content_key: prs.a1.unit41.lesson03.describing_the_item
+  type: translation
+  frame:
+    text: '{loc}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {loc: english_gloss}
+  slots:
+    loc:
+      language_code: prs
+      part_of_speech: adverb
+      agreement_tags:
+        semantic: location_word
+  answer_derivation: {kind: slot_text, slot: loc}
+  feedback_frame:
+    text: '{loc} is the Dari word for this.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit41.lesson04.translate.001
+  lesson_content_key: prs.a1.unit41.lesson04.lost_bag_dialogue
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: [phrase, verb]
+      agreement_tags:
+        semantic: dialogue_word
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: '{item} is from this unit''s dialogue.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit41.lesson05.translate.001
+  lesson_content_key: prs.a1.unit41.lesson05.reading
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item: *item_any
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: '{item} is the Dari word for this.'
+    language_code: en
+    direction: ltr

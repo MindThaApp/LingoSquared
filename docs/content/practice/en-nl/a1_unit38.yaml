@@ -1,0 +1,264 @@
+schema_version: '1.0'
+pack_key: practice.en-nl.a1.unit38
+source_language: en
+target_language: nl
+unit_content_key: nl.a1.unit38.buurt
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    Authored 2026-07-23 against docs/content/PRACTICE_PACK_RECIPE.md. en-nl A1
+    unit38 (buurt: neighbourhood/neighbours vocab) has 10 lexemes across the
+    4 lessons that carry lexemes (lesson01/02/03/06; lesson04/05 have zero
+    introduced lexemes). 8 of 10 carry the unit-wide `buurt_vocab` tag
+    (excluded: `Peter` and `Anna`, both proper nouns -- correctly kept out by
+    the `part_of_speech` filter, not just the tag union). Every
+    recognition/production slot unions `buurt_vocab` (8 distinct glosses,
+    over the 3-option MC floor / 6-pair matching floor). 12 templates:
+    multiple_choice x4, translation (bare-word) x4, listen_select x1 (nl
+    target has TTS), matching_pairs x1 (6 pairs over buurt_vocab), word_order
+    x1 ("Ik ken mijn {item} goed." anchored to the single-member
+    `buurt_buurman_single` tag = buurman only), fill_in_blank x1 ("Dat is
+    Peter, mijn {item}." same single-member anchor, reused deliberately --
+    it is the only *_single tag this unit has). Recognition 5 (4 MC + 1
+    listen), structured 3 (order/fill/match), production 4 -- all three tiers
+    clear the >=3 template bar. Course-scope check: both the word_order and
+    fill_in_blank frames use `buurt_buurman_single`, whose course-wide pool
+    is exactly 1 token (buurman) -- deterministic, no grammaticality risk.
+    Both frames keep the proper noun "Peter" as literal frame text (not a
+    slot candidate), so it is never at risk of self-reference. No mis-glossed
+    lexeme found; `leuke`/`goede` are inflected adjective forms ("nice",
+    "good") consistent with their teaching context. Needs the standard
+    fresh-context review before import.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - buurt_vocab
+    - buurt_buurman_single
+templates:
+
+# lesson01 -- de buurt
+- content_key: practice.en-nl.nl.a1.unit38.lesson01.choose.001
+  lesson_content_key: nl.a1.unit38.lesson01.de_buurt
+  type: multiple_choice
+  frame: {text: '{item}', language_code: nl, direction: ltr}
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, verb, adjective]
+      agreement_tags: {semantic: buurt_vocab}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} belongs to this unit''s neighbourhood vocabulary.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit38.lesson01.translate.002
+  lesson_content_key: nl.a1.unit38.lesson01.de_buurt
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, verb, adjective]
+      agreement_tags: {semantic: buurt_vocab}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit38.lesson01.order.003
+  lesson_content_key: nl.a1.unit38.lesson01.de_buurt
+  type: word_order
+  frame: {text: 'Ik ken mijn {item} goed.', language_code: nl, direction: ltr}
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: noun
+      agreement_tags: {semantic: buurt_buurman_single}
+  answer_derivation:
+    kind: render_frame
+    frame: {text: 'Ik ken mijn {item} goed.', language_code: nl, direction: ltr}
+  feedback_frame:
+    text: Ik ken mijn buurman goed. -- I know my (male) neighbour well.
+    language_code: en
+    direction: ltr
+
+# lesson02 -- buurman, buurvrouw
+- content_key: practice.en-nl.nl.a1.unit38.lesson02.choose.001
+  lesson_content_key: nl.a1.unit38.lesson02.buurman_buurvrouw
+  type: multiple_choice
+  frame: {text: '{item}', language_code: nl, direction: ltr}
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, verb, adjective]
+      agreement_tags: {semantic: buurt_vocab}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} belongs to this unit''s neighbourhood vocabulary.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit38.lesson02.translate.002
+  lesson_content_key: nl.a1.unit38.lesson02.buurman_buurvrouw
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, verb, adjective]
+      agreement_tags: {semantic: buurt_vocab}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit38.lesson02.fill.003
+  lesson_content_key: nl.a1.unit38.lesson02.buurman_buurvrouw
+  type: fill_in_blank
+  frame: {text: 'Dat is Peter, mijn {item}.', language_code: nl, direction: ltr}
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: noun
+      agreement_tags: {semantic: buurt_buurman_single}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: Dat is Peter, mijn buurman. -- That is Peter, my (male) neighbour.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit38.lesson02.listen.004
+  lesson_content_key: nl.a1.unit38.lesson02.buurman_buurvrouw
+  type: listen_select
+  frame: {text: '{item}', language_code: nl, direction: ltr}
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, verb, adjective]
+      agreement_tags: {semantic: buurt_vocab}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: You heard {item}.
+    language_code: en
+    direction: ltr
+
+# lesson03 -- vriendelijk groeten
+- content_key: practice.en-nl.nl.a1.unit38.lesson03.choose.001
+  lesson_content_key: nl.a1.unit38.lesson03.vriendelijk_groeten
+  type: multiple_choice
+  frame: {text: '{item}', language_code: nl, direction: ltr}
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, verb, adjective]
+      agreement_tags: {semantic: buurt_vocab}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} belongs to this unit''s neighbourhood vocabulary.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit38.lesson03.translate.002
+  lesson_content_key: nl.a1.unit38.lesson03.vriendelijk_groeten
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, verb, adjective]
+      agreement_tags: {semantic: buurt_vocab}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit38.lesson03.match.003
+  lesson_content_key: nl.a1.unit38.lesson03.vriendelijk_groeten
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: nl
+    direction: ltr
+  slots:
+    first: &buurt_word
+      language_code: nl
+      part_of_speech: [noun, verb, adjective]
+      agreement_tags: {semantic: buurt_vocab}
+    second: *buurt_word
+    third: *buurt_word
+    fourth: *buurt_word
+    fifth: *buurt_word
+    sixth: *buurt_word
+  slot_relations:
+  - kind: distinct
+    slots: [first, second, third, fourth, fifth, sixth]
+  answer_derivation:
+    kind: matching_pairs
+    slots: [first, second, third, fourth, fifth, sixth]
+  feedback_frame:
+    text: Match each Dutch neighbourhood word with its English meaning.
+    language_code: en
+    direction: ltr
+
+# lesson06 -- koffie met de buren
+- content_key: practice.en-nl.nl.a1.unit38.lesson06.choose.001
+  lesson_content_key: nl.a1.unit38.lesson06.koffie_met_de_buren
+  type: multiple_choice
+  frame: {text: '{item}', language_code: nl, direction: ltr}
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, verb, adjective]
+      agreement_tags: {semantic: buurt_vocab}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} belongs to this unit''s neighbourhood vocabulary.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit38.lesson06.translate.002
+  lesson_content_key: nl.a1.unit38.lesson06.koffie_met_de_buren
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, verb, adjective]
+      agreement_tags: {semantic: buurt_vocab}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr

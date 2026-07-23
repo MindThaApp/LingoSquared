@@ -1,0 +1,278 @@
+schema_version: '1.0'
+pack_key: practice.en-nl.a1.unit58
+source_language: en
+target_language: nl
+unit_content_key: nl.a1.unit58.concert
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    Authored 2026-07-23 against docs/content/PRACTICE_PACK_RECIPE.md. en-nl A1
+    unit58 (concert / "Naar het concert: een kaartje kopen") is a thin
+    vocabulary unit: only 6 lexemes total (backfill_lexemes_en_nl.py's
+    concert_vocab/concert_noun/concert_podium_single auto-tags), 2 of which are
+    proper nouns (Sven, Wandelaars) excluded from every pool via part_of_speech.
+    Lessons 02/03 have zero introduced_tokens and are correctly NOT anchored
+    (recipe DO-NOT #8); lessons 01/04/05/06 have lexemes and are all anchored.
+    Lesson04's only lexeme is the proper noun Sven, so its MC/translate
+    templates pool across the unit-wide concert_vocab tag per §8.1 step 2
+    ("anchor templates per lesson, pool across the unit") rather than a
+    lesson-only tag.
+
+    12 templates: multiple_choice x4 (one per anchor lesson, concert_vocab:
+    band/podium/publiek/geweldig, 4 distinct glosses), translation bare-word x4
+    (same tag/lessons), listen_select x1 (concert_vocab, anchored lesson05),
+    word_order x2 + fill_in_blank x1 (all on the single-member
+    concert_podium_single anchor -- podium is the unit's only *_single token,
+    so structured tier reuses it across 3 templates with 3 different sentences
+    taken from/modeled on the unit's own realization: "Het podium is groot."
+    (taught verbatim), "Ik zie de band op het podium.", "Vanaf het podium
+    zwaait de zangeres." -- all read grammatical with the single candidate).
+    No matching_pairs: concert_noun pool is only 3 distinct tokens
+    (band/podium/publiek), short of the 6-pair floor -- documented here rather
+    than padded with an ungrammatical filler pool. Checkpoint-thin per §12:
+    this unit sits at the 12-template floor exactly and its recognition/
+    production tiers are capped at ~4-5 distinct answer values by real
+    capacity, not authoring choice.
+
+    Read every gloss in the pool (§0.1): band/podium/publiek/geweldig all
+    match what the realization teaches; no mis-glosses found.
+
+    §9 step 5 course-scope check: concert_podium_single is generated only for
+    token "podium" (NL_A1_VOLUME_SINGLE_ANCHORS), a direction-wide-unique
+    anchor by construction, so it stays a single course-wide candidate in all
+    3 frames above. None of "Het", "is", "groot", "Ik", "zie", "de", "band",
+    "op", "Vanaf", "zwaait", "de", "zangeres" is ever a concert_podium_single
+    candidate (its only member is "podium" itself, which does not appear in
+    the literal frame text of any of the three sentences).
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - concert_vocab
+    - concert_podium_single
+templates:
+
+# ---------------------------------------------------------------------------
+# lesson01 -- Ik wil naar het concert
+# ---------------------------------------------------------------------------
+- content_key: practice.en-nl.nl.a1.unit58.lesson01.choose.001
+  lesson_content_key: nl.a1.unit58.lesson01.ik_wil_naar_het_concert
+  type: multiple_choice
+  frame: {text: '{item}', language_code: nl, direction: ltr}
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, verb, adjective, adverb, phrase]
+      agreement_tags: {semantic: concert_vocab}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} belongs to this unit''s concert vocabulary.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit58.lesson01.translate.002
+  lesson_content_key: nl.a1.unit58.lesson01.ik_wil_naar_het_concert
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, verb, adjective, adverb, phrase]
+      agreement_tags: {semantic: concert_vocab}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+
+# ---------------------------------------------------------------------------
+# lesson04 -- Bij de kassa (only lexeme is the proper noun Sven; pools the
+# unit-wide vocab tag per §8.1 step 2)
+# ---------------------------------------------------------------------------
+- content_key: practice.en-nl.nl.a1.unit58.lesson04.choose.001
+  lesson_content_key: nl.a1.unit58.lesson04.bij_de_kassa
+  type: multiple_choice
+  frame: {text: '{item}', language_code: nl, direction: ltr}
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, verb, adjective, adverb, phrase]
+      agreement_tags: {semantic: concert_vocab}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} belongs to this unit''s concert vocabulary.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit58.lesson04.translate.002
+  lesson_content_key: nl.a1.unit58.lesson04.bij_de_kassa
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, verb, adjective, adverb, phrase]
+      agreement_tags: {semantic: concert_vocab}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+
+# ---------------------------------------------------------------------------
+# lesson05 -- Het programma lezen (richest lesson: band/podium/publiek all
+# introduced here; also hosts the listen_select and the structured tier)
+# ---------------------------------------------------------------------------
+- content_key: practice.en-nl.nl.a1.unit58.lesson05.choose.001
+  lesson_content_key: nl.a1.unit58.lesson05.het_programma_lezen
+  type: multiple_choice
+  frame: {text: '{item}', language_code: nl, direction: ltr}
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, verb, adjective, adverb, phrase]
+      agreement_tags: {semantic: concert_vocab}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} belongs to this unit''s concert vocabulary.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit58.lesson05.translate.002
+  lesson_content_key: nl.a1.unit58.lesson05.het_programma_lezen
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, verb, adjective, adverb, phrase]
+      agreement_tags: {semantic: concert_vocab}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit58.lesson05.listen.003
+  lesson_content_key: nl.a1.unit58.lesson05.het_programma_lezen
+  type: listen_select
+  frame: {text: '{item}', language_code: nl, direction: ltr}
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, verb, adjective, adverb, phrase]
+      agreement_tags: {semantic: concert_vocab}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: You heard {item}.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit58.lesson05.order.004
+  lesson_content_key: nl.a1.unit58.lesson05.het_programma_lezen
+  type: word_order
+  frame: {text: 'Het {item} is groot.', language_code: nl, direction: ltr}
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: noun
+      agreement_tags: {semantic: concert_podium_single}
+  answer_derivation:
+    kind: render_frame
+    frame: {text: 'Het {item} is groot.', language_code: nl, direction: ltr}
+  feedback_frame:
+    text: Het podium is groot. -- The stage is big.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit58.lesson05.fill.005
+  lesson_content_key: nl.a1.unit58.lesson05.het_programma_lezen
+  type: fill_in_blank
+  frame: {text: 'Ik zie de band op het {item}.', language_code: nl, direction: ltr}
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: noun
+      agreement_tags: {semantic: concert_podium_single}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: Ik zie de band op het podium. -- I see the band on the stage.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit58.lesson05.order.006
+  lesson_content_key: nl.a1.unit58.lesson05.het_programma_lezen
+  type: word_order
+  frame: {text: 'Vanaf het {item} zwaait de zangeres.', language_code: nl, direction: ltr}
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: noun
+      agreement_tags: {semantic: concert_podium_single}
+  answer_derivation:
+    kind: render_frame
+    frame: {text: 'Vanaf het {item} zwaait de zangeres.', language_code: nl, direction: ltr}
+  feedback_frame:
+    text: Vanaf het podium zwaait de zangeres. -- From the stage the singer waves.
+    language_code: en
+    direction: ltr
+
+# ---------------------------------------------------------------------------
+# lesson06 -- Omar, Nina en Lotte bij het concert
+# ---------------------------------------------------------------------------
+- content_key: practice.en-nl.nl.a1.unit58.lesson06.choose.001
+  lesson_content_key: nl.a1.unit58.lesson06.omar_nina_en_lotte_bij_het_concert
+  type: multiple_choice
+  frame: {text: '{item}', language_code: nl, direction: ltr}
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, verb, adjective, adverb, phrase]
+      agreement_tags: {semantic: concert_vocab}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} belongs to this unit''s concert vocabulary.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit58.lesson06.translate.002
+  lesson_content_key: nl.a1.unit58.lesson06.omar_nina_en_lotte_bij_het_concert
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, verb, adjective, adverb, phrase]
+      agreement_tags: {semantic: concert_vocab}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr

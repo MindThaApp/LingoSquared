@@ -1,0 +1,220 @@
+schema_version: '1.0'
+pack_key: practice.en-fa.a1.unit50
+source_language: en
+target_language: fa
+unit_content_key: fa.a1.unit50.restaurant
+
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    THIN UNIT -- flagging per recipe §3 "capacity, don't pad". Restaurant has
+    only 5 distinct fa lexemes/phrases total per backfill_lexemes_en_fa
+    across all 4 lessons: restaurant_order_word 3 (سفارش "order" noun,
+    چلوکباب "chelo kabab" noun, دوغ "doogh (yogurt drink)" noun), 1
+    person_name (رحیمی), 1 additional reviewed_phrase (خانم رحیمی "Ms.
+    Rahimi"). Union of all 3 tags gives only 5 distinct tokens -- below the
+    6-pair matching_pairs floor, so no matching_pairs is authored (padding
+    with untaught vocabulary would violate the no-padding rule). 9 templates
+    total (below the 12 floor -- real capacity, not an authoring shortfall):
+    4 lessons x (multiple_choice + bare-word translation) over the full
+    5-token union, plus 1 word_order anchored lesson02 over
+    restaurant_order_word (frame "لطفاً یک {item} می‌خوام." / "I would like a
+    {item}, please.") -- re-read at course scope: restaurant_order_word is a
+    unit-specific coined tag with zero course-wide members outside this unit
+    (verified via full iter_specs() scan), so course scope == unit scope
+    here, and all 3 members (order, chelo kabab, doogh) read grammatically in
+    that frame. Structured tier is only 1 template (below the >=3 bar) for
+    the same reason -- fill_in_blank is not usable either (no tag in this
+    unit has exactly 1 course-wide candidate). No mis-glossed lexemes found.
+    No listen_select (Azure TTS key unset for fa).
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - restaurant_order_word
+    - person_name
+    - reviewed_phrase
+
+templates:
+# --- lesson01 (new_restaurant_one) ---
+- content_key: practice.en-fa.fa.a1.unit50.lesson01.choose.001
+  lesson_content_key: fa.a1.unit50.lesson01.new_restaurant_one
+  type: multiple_choice
+  frame: {text: '{item}', language_code: fa, direction: rtl}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, phrase, proper_noun]
+      agreement_tags:
+        semantic: [restaurant_order_word, person_name, reviewed_phrase]
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is restaurant vocabulary from this unit.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit50.lesson01.translate.002
+  lesson_content_key: fa.a1.unit50.lesson01.new_restaurant_one
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, phrase, proper_noun]
+      agreement_tags:
+        semantic: [restaurant_order_word, person_name, reviewed_phrase]
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Farsi word is {item}.
+    language_code: en
+    direction: ltr
+
+# --- lesson02 (new_restaurant_two) ---
+- content_key: practice.en-fa.fa.a1.unit50.lesson02.choose.001
+  lesson_content_key: fa.a1.unit50.lesson02.new_restaurant_two
+  type: multiple_choice
+  frame: {text: '{item}', language_code: fa, direction: rtl}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, phrase, proper_noun]
+      agreement_tags:
+        semantic: [restaurant_order_word, person_name, reviewed_phrase]
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is restaurant vocabulary from this unit.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit50.lesson02.translate.002
+  lesson_content_key: fa.a1.unit50.lesson02.new_restaurant_two
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, phrase, proper_noun]
+      agreement_tags:
+        semantic: [restaurant_order_word, person_name, reviewed_phrase]
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Farsi word is {item}.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit50.lesson02.order.003
+  lesson_content_key: fa.a1.unit50.lesson02.new_restaurant_two
+  type: word_order
+  frame:
+    text: لطفاً یک {item} می‌خوام.
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: noun
+      agreement_tags:
+        semantic: restaurant_order_word
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: لطفاً یک {item} می‌خوام.
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: لطفاً یک چلوکباب می‌خوام. -- I would like a chelo kabab, please.
+    language_code: en
+    direction: ltr
+
+# --- lesson03 (doogh_and_bill) ---
+- content_key: practice.en-fa.fa.a1.unit50.lesson03.choose.001
+  lesson_content_key: fa.a1.unit50.lesson03.doogh_and_bill
+  type: multiple_choice
+  frame: {text: '{item}', language_code: fa, direction: rtl}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, phrase, proper_noun]
+      agreement_tags:
+        semantic: [restaurant_order_word, person_name, reviewed_phrase]
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is restaurant vocabulary from this unit.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit50.lesson03.translate.002
+  lesson_content_key: fa.a1.unit50.lesson03.doogh_and_bill
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, phrase, proper_noun]
+      agreement_tags:
+        semantic: [restaurant_order_word, person_name, reviewed_phrase]
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Farsi word is {item}.
+    language_code: en
+    direction: ltr
+
+# --- lesson04 (restaurant_dialogue) ---
+- content_key: practice.en-fa.fa.a1.unit50.lesson04.choose.001
+  lesson_content_key: fa.a1.unit50.lesson04.restaurant_dialogue
+  type: multiple_choice
+  frame: {text: '{item}', language_code: fa, direction: rtl}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, phrase, proper_noun]
+      agreement_tags:
+        semantic: [restaurant_order_word, person_name, reviewed_phrase]
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is restaurant vocabulary from this unit.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit50.lesson04.translate.002
+  lesson_content_key: fa.a1.unit50.lesson04.restaurant_dialogue
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, phrase, proper_noun]
+      agreement_tags:
+        semantic: [restaurant_order_word, person_name, reviewed_phrase]
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Farsi word is {item}.
+    language_code: en
+    direction: ltr

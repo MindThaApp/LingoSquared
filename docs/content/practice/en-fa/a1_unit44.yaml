@@ -1,0 +1,309 @@
+schema_version: '1.0'
+pack_key: practice.en-fa.a1.unit44
+source_language: en
+target_language: fa
+unit_content_key: fa.a1.unit44.accommodation
+
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    Vocabulary unit (accommodation, 11 fa lexemes across all 5 lessons per
+    backfill_lexemes_en_fa: hotel_word 5 nouns رزرو/صبحانه/وای‌فای/خروج/مهمان,
+    hotel_state_verb 4 verbs صبحانه‌ست/وای‌فایه/مهمانه/ظهره, 1 person_name
+    رستمی, 1 reviewed_phrase "سلام، خوش اومدید. اتاق شما آماده‌ست."). Union of
+    all 4 tags gives 11 distinct fa tokens with 11 distinct English glosses.
+    13 templates: 5 lessons x (multiple_choice + bare-word translation, both
+    over the full unit-wide union), plus 3 matching_pairs over the same
+    11-token union anchored to lessons01/02/04. word_order skipped: hotel_word
+    mixes distinct real-world referents (a reservation, breakfast, wifi,
+    checkout, a guest) with no single grammatical carrier frame found quickly
+    within time budget; hotel_state_verb (the "is X" copula forms) is a
+    cleaner word_order candidate for a future pass but not attempted here.
+    Both tags are unit-specific coined tags with zero course-wide members
+    outside this unit (verified via full iter_specs() scan), so there is no
+    course-scope widening risk if a future word_order frame is added. No
+    mis-glossed lexemes found. No listen_select (Azure TTS key unset for fa).
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - hotel_word
+    - hotel_state_verb
+    - person_name
+    - reviewed_phrase
+
+templates:
+# --- lesson01 (new_hotel_one) ---
+- content_key: practice.en-fa.fa.a1.unit44.lesson01.choose.001
+  lesson_content_key: fa.a1.unit44.lesson01.new_hotel_one
+  type: multiple_choice
+  frame: {text: '{item}', language_code: fa, direction: rtl}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, verb, proper_noun, phrase]
+      agreement_tags:
+        semantic: [hotel_word, hotel_state_verb, person_name, reviewed_phrase]
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is accommodation vocabulary from this unit.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit44.lesson01.translate.002
+  lesson_content_key: fa.a1.unit44.lesson01.new_hotel_one
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, verb, proper_noun, phrase]
+      agreement_tags:
+        semantic: [hotel_word, hotel_state_verb, person_name, reviewed_phrase]
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Farsi word is {item}.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit44.lesson01.match.003
+  lesson_content_key: fa.a1.unit44.lesson01.new_hotel_one
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: fa
+    direction: rtl
+  slots:
+    first: &hotel_pool
+      language_code: fa
+      part_of_speech: [noun, verb, proper_noun, phrase]
+      agreement_tags:
+        semantic: [hotel_word, hotel_state_verb, person_name, reviewed_phrase]
+    second: *hotel_pool
+    third: *hotel_pool
+    fourth: *hotel_pool
+    fifth: *hotel_pool
+    sixth: *hotel_pool
+  slot_relations:
+  - kind: distinct
+    slots: [first, second, third, fourth, fifth, sixth]
+  answer_derivation:
+    kind: matching_pairs
+    slots: [first, second, third, fourth, fifth, sixth]
+  feedback_frame:
+    text: Match each Farsi word with its English meaning.
+    language_code: en
+    direction: ltr
+
+# --- lesson02 (new_hotel_two) ---
+- content_key: practice.en-fa.fa.a1.unit44.lesson02.choose.001
+  lesson_content_key: fa.a1.unit44.lesson02.new_hotel_two
+  type: multiple_choice
+  frame: {text: '{item}', language_code: fa, direction: rtl}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, verb, proper_noun, phrase]
+      agreement_tags:
+        semantic: [hotel_word, hotel_state_verb, person_name, reviewed_phrase]
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is accommodation vocabulary from this unit.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit44.lesson02.translate.002
+  lesson_content_key: fa.a1.unit44.lesson02.new_hotel_two
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, verb, proper_noun, phrase]
+      agreement_tags:
+        semantic: [hotel_word, hotel_state_verb, person_name, reviewed_phrase]
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Farsi word is {item}.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit44.lesson02.match.003
+  lesson_content_key: fa.a1.unit44.lesson02.new_hotel_two
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: fa
+    direction: rtl
+  slots:
+    first: *hotel_pool
+    second: *hotel_pool
+    third: *hotel_pool
+    fourth: *hotel_pool
+    fifth: *hotel_pool
+    sixth: *hotel_pool
+  slot_relations:
+  - kind: distinct
+    slots: [first, second, third, fourth, fifth, sixth]
+  answer_derivation:
+    kind: matching_pairs
+    slots: [first, second, third, fourth, fifth, sixth]
+  feedback_frame:
+    text: Match each Farsi word with its English meaning.
+    language_code: en
+    direction: ltr
+
+# --- lesson03 (booking_checkout) ---
+- content_key: practice.en-fa.fa.a1.unit44.lesson03.choose.001
+  lesson_content_key: fa.a1.unit44.lesson03.booking_checkout
+  type: multiple_choice
+  frame: {text: '{item}', language_code: fa, direction: rtl}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, verb, proper_noun, phrase]
+      agreement_tags:
+        semantic: [hotel_word, hotel_state_verb, person_name, reviewed_phrase]
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is accommodation vocabulary from this unit.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit44.lesson03.translate.002
+  lesson_content_key: fa.a1.unit44.lesson03.booking_checkout
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, verb, proper_noun, phrase]
+      agreement_tags:
+        semantic: [hotel_word, hotel_state_verb, person_name, reviewed_phrase]
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Farsi word is {item}.
+    language_code: en
+    direction: ltr
+
+# --- lesson04 (checkin_dialogue) ---
+- content_key: practice.en-fa.fa.a1.unit44.lesson04.choose.001
+  lesson_content_key: fa.a1.unit44.lesson04.checkin_dialogue
+  type: multiple_choice
+  frame: {text: '{item}', language_code: fa, direction: rtl}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, verb, proper_noun, phrase]
+      agreement_tags:
+        semantic: [hotel_word, hotel_state_verb, person_name, reviewed_phrase]
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is accommodation vocabulary from this unit.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit44.lesson04.translate.002
+  lesson_content_key: fa.a1.unit44.lesson04.checkin_dialogue
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, verb, proper_noun, phrase]
+      agreement_tags:
+        semantic: [hotel_word, hotel_state_verb, person_name, reviewed_phrase]
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Farsi word is {item}.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit44.lesson04.match.003
+  lesson_content_key: fa.a1.unit44.lesson04.checkin_dialogue
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: fa
+    direction: rtl
+  slots:
+    first: *hotel_pool
+    second: *hotel_pool
+    third: *hotel_pool
+    fourth: *hotel_pool
+    fifth: *hotel_pool
+    sixth: *hotel_pool
+  slot_relations:
+  - kind: distinct
+    slots: [first, second, third, fourth, fifth, sixth]
+  answer_derivation:
+    kind: matching_pairs
+    slots: [first, second, third, fourth, fifth, sixth]
+  feedback_frame:
+    text: Match each Farsi word with its English meaning.
+    language_code: en
+    direction: ltr
+
+# --- lesson05 (reading_booking_note) ---
+- content_key: practice.en-fa.fa.a1.unit44.lesson05.choose.001
+  lesson_content_key: fa.a1.unit44.lesson05.reading_booking_note
+  type: multiple_choice
+  frame: {text: '{item}', language_code: fa, direction: rtl}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, verb, proper_noun, phrase]
+      agreement_tags:
+        semantic: [hotel_word, hotel_state_verb, person_name, reviewed_phrase]
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is accommodation vocabulary from this unit.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit44.lesson05.translate.002
+  lesson_content_key: fa.a1.unit44.lesson05.reading_booking_note
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, verb, proper_noun, phrase]
+      agreement_tags:
+        semantic: [hotel_word, hotel_state_verb, person_name, reviewed_phrase]
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Farsi word is {item}.
+    language_code: en
+    direction: ltr

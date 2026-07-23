@@ -1,0 +1,482 @@
+schema_version: '1.0'
+pack_key: practice.en-nl.a1.unit71
+source_language: en
+target_language: nl
+unit_content_key: nl.a1.unit71.boekwinkel
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    Authored 2026-07-23 per docs/content/PRACTICE_PACK_RECIPE.md, en-nl batch
+    en-nl_05. Unit71 (boekwinkel / bookshop, A1 volume batch) is a THIN unit: 8
+    lexemes total (roman, titel, schrijver, bekend, kinderboek, kinderboeken,
+    bladwijzer, dierenwinkel), measured with the recipe's
+    f'.{LEVEL}.{UNIT}.' filter. **lesson01 (zullen_we_naar_de_boekwinkel_gaan)
+    has ZERO classified lexemes** in backfill_lexemes_en_nl for this unit (its
+    tokens "boekwinkel"/"boek" resolve to earlier-unit provenance) -- per DO-NOT
+    #8 it is NOT anchored by any template here. Lessons 02-06 all have >=1
+    lexeme and are anchored.
+
+
+    Same §8.1 grammar-unit pattern as unit70/72 in this batch: every
+    multiple_choice/listen_select/translation/matching_pairs slot uses the
+    unioned semantic:boekwinkel_vocab tag (noun/verb/adjective for
+    choose/listen/translate; noun-only for matching_pairs), anchored per-lesson
+    via lesson_content_key but pooling the unit's full 8-token vocabulary. Only
+    bare-item/bare-pair frames use this broad tag, so the tag's much wider
+    COURSE-scope pool (function words like "is"/"hebt" that also carry
+    boekwinkel_vocab from other units, since the checker showed the tag is not
+    exclusively unit-local at the semantic-value level even though the
+    UNIT-anchored Lexeme provenance is) never touches a literal-sentence
+    frame.
+
+
+    15 templates, 5/5 lexeme-bearing lessons, all 3 tiers (recognition 6 [5
+    choose + 1 listen_select], structured 4 [2 matching_pairs + 1 word_order +
+    1 fill_in_blank], production 5 [bare-word translation]). word_order and
+    fill_in_blank both use the single-member anchor tag
+    boekwinkel_bladwijzer_single (exactly 1 course-wide candidate:
+    "bladwijzer"), so both are course-scope-safe by construction; their
+    frames ("Ik gebruik een {item} in het boek." / "De {item} ligt in het
+    boek.") are original but grammatically straightforward NL sentences built
+    around the single anchor noun (de-word), not lifted verbatim from the
+    realization (which does not narrate a bladwijzer sentence directly, only
+    lists it in a matching_pairs card).
+
+
+    No mis-glossed lexeme found (all 8 glosses read correctly against the
+    realization; "bekend" = well-known matches the counter-staff description
+    context, not a stale sense). THIN UNIT flag: only 8 base tokens across 5
+    represented lessons -- authored to full pool capacity, not padded, per HARD
+    RULE #3. lesson01 is unrepresentable in the checkpoint regardless of
+    pack content; flagging for the coordinator to route a
+    backfill_lexemes_en_nl extension if lesson01 coverage is wanted.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - boekwinkel_vocab
+    - boekwinkel_bladwijzer_single
+templates:
+
+# ---------------------------------------------------------------------------
+# lesson02 -- De roman en de titel
+# ---------------------------------------------------------------------------
+- content_key: practice.en-nl.nl.a1.unit71.lesson02.choose.001
+  lesson_content_key: nl.a1.unit71.lesson02.de_roman_en_de_titel
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      agreement_tags:
+        semantic: boekwinkel_vocab
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} belongs to this unit''s bookshop vocabulary.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit71.lesson02.translate.002
+  lesson_content_key: nl.a1.unit71.lesson02.de_roman_en_de_titel
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      agreement_tags:
+        semantic: boekwinkel_vocab
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+
+# ---------------------------------------------------------------------------
+# lesson03 -- De schrijver en de medewerker
+# ---------------------------------------------------------------------------
+- content_key: practice.en-nl.nl.a1.unit71.lesson03.choose.001
+  lesson_content_key: nl.a1.unit71.lesson03.de_schrijver_en_de_medewerker
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      agreement_tags:
+        semantic: boekwinkel_vocab
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} belongs to this unit''s bookshop vocabulary.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit71.lesson03.translate.002
+  lesson_content_key: nl.a1.unit71.lesson03.de_schrijver_en_de_medewerker
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      agreement_tags:
+        semantic: boekwinkel_vocab
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+
+# ---------------------------------------------------------------------------
+# lesson04 -- De prijzen in de boekwinkel
+# ---------------------------------------------------------------------------
+- content_key: practice.en-nl.nl.a1.unit71.lesson04.choose.001
+  lesson_content_key: nl.a1.unit71.lesson04.de_prijzen_in_de_boekwinkel
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      agreement_tags:
+        semantic: boekwinkel_vocab
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} belongs to this unit''s bookshop vocabulary.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit71.lesson04.match.002
+  lesson_content_key: nl.a1.unit71.lesson04.de_prijzen_in_de_boekwinkel
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: nl
+    direction: ltr
+  slots:
+    first: &boekwinkel_noun_pool
+      language_code: nl
+      part_of_speech: noun
+      agreement_tags:
+        semantic: boekwinkel_vocab
+    second: *boekwinkel_noun_pool
+    third: *boekwinkel_noun_pool
+    fourth: *boekwinkel_noun_pool
+    fifth: *boekwinkel_noun_pool
+    sixth: *boekwinkel_noun_pool
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Match each Dutch bookshop word with its English meaning.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit71.lesson04.translate.003
+  lesson_content_key: nl.a1.unit71.lesson04.de_prijzen_in_de_boekwinkel
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      agreement_tags:
+        semantic: boekwinkel_vocab
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+
+# ---------------------------------------------------------------------------
+# lesson05 -- Bij de toonbank in de boekwinkel
+# ---------------------------------------------------------------------------
+- content_key: practice.en-nl.nl.a1.unit71.lesson05.choose.001
+  lesson_content_key: nl.a1.unit71.lesson05.bij_de_toonbank_in_de_boekwinkel
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      agreement_tags:
+        semantic: boekwinkel_vocab
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} belongs to this unit''s bookshop vocabulary.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit71.lesson05.translate.002
+  lesson_content_key: nl.a1.unit71.lesson05.bij_de_toonbank_in_de_boekwinkel
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      agreement_tags:
+        semantic: boekwinkel_vocab
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit71.lesson05.listen.003
+  lesson_content_key: nl.a1.unit71.lesson05.bij_de_toonbank_in_de_boekwinkel
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      agreement_tags:
+        semantic: boekwinkel_vocab
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: You heard {item}.
+    language_code: en
+    direction: ltr
+
+# ---------------------------------------------------------------------------
+# lesson06 -- Lotte hoort over de boekwinkel
+# ---------------------------------------------------------------------------
+- content_key: practice.en-nl.nl.a1.unit71.lesson06.choose.001
+  lesson_content_key: nl.a1.unit71.lesson06.lotte_hoort_over_de_boekwinkel
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      agreement_tags:
+        semantic: boekwinkel_vocab
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} belongs to this unit''s bookshop vocabulary.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit71.lesson06.order.002
+  lesson_content_key: nl.a1.unit71.lesson06.lotte_hoort_over_de_boekwinkel
+  type: word_order
+  frame:
+    text: Ik gebruik een {item} in het boek.
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: noun
+      agreement_tags:
+        semantic: boekwinkel_bladwijzer_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik gebruik een {item} in het boek.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Ik gebruik een bladwijzer in het boek. -- I use a bookmark in the book.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit71.lesson06.fill.003
+  lesson_content_key: nl.a1.unit71.lesson06.lotte_hoort_over_de_boekwinkel
+  type: fill_in_blank
+  frame:
+    text: De {item} ligt in het boek.
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: noun
+      agreement_tags:
+        semantic: boekwinkel_bladwijzer_single
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: De bladwijzer ligt in het boek. -- The bookmark lies in the book.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit71.lesson06.match.004
+  lesson_content_key: nl.a1.unit71.lesson06.lotte_hoort_over_de_boekwinkel
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: nl
+    direction: ltr
+  slots:
+    first: *boekwinkel_noun_pool
+    second: *boekwinkel_noun_pool
+    third: *boekwinkel_noun_pool
+    fourth: *boekwinkel_noun_pool
+    fifth: *boekwinkel_noun_pool
+    sixth: *boekwinkel_noun_pool
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Match each Dutch bookshop word with its English meaning.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit71.lesson06.translate.005
+  lesson_content_key: nl.a1.unit71.lesson06.lotte_hoort_over_de_boekwinkel
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      agreement_tags:
+        semantic: boekwinkel_vocab
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr

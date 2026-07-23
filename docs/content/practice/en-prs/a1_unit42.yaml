@@ -1,0 +1,125 @@
+schema_version: '1.0'
+pack_key: practice.en-prs.a1.unit42
+source_language: en
+target_language: prs
+unit_content_key: prs.a1.unit42.appointments
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    Pilot en-prs A1 practice pack (unit42 appointments), authored 2026-07-22.
+    SEVERELY UNDER-PROVISIONED: only 3 lexemes exist for this unit
+    (دندان=tooth/body_part_word, بگیرم="let me take"/dialogue_word+verb,
+    منشی=receptionist/service_person_word+dialogue_word), spread over just 3 of the
+    unit's 6 lessons (lesson01/03/04); lesson02/05/06 produce zero lexemes. This is
+    below every recipe §8 bar and the unit's checkpoint will almost certainly return
+    checkpoint_unavailable (a 12-item checkpoint cannot be drawn from 3 targets).
+    Authored what the pool supports rather than padding with untaught vocab, per the
+    dispatch. NO matching_pairs (needs 6 distinct tokens; only 3 exist). NO
+    listen_select (no TTS). RECOMMEND to coordinator: this unit needs a
+    backfill_lexemes_en_prs extension (its lessons teach قرار/آزاد/داکتر دندان/
+    روز-of-week vocabulary that is not being classified into lexemes) before it can
+    have a working checkpoint. NO structured tier at all: the only candidate frame
+    ("قرار می‌خواهم {verb}" over the sole unit verb بگیرم) is unsafe because بگیرم's
+    only tag, dialogue_word, pools 82 verbs at course scope (incl. می‌خواهم itself,
+    a self-reference the integrity check flags) and no narrow anchor tag exists.
+    Pack is recognition (1 MC) + production (3 translation) only. Afghan Dari
+    register. No mis-glossed lexemes found.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - body_part_word
+    - dialogue_word
+    - service_person_word
+templates:
+# ---- recognition (pool = all 3 unit lexemes, exactly the 3-option floor) ----
+- content_key: practice.en-prs.prs.a1.unit42.lesson04.choose.001
+  lesson_content_key: prs.a1.unit42.lesson04.dentist_appointment_dialogue
+  type: multiple_choice
+  frame: {text: '{item}', language_code: prs, direction: rtl}
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: [noun, verb]
+      agreement_tags:
+        semantic: [body_part_word, dialogue_word, service_person_word]
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is a word from this unit.'
+    language_code: en
+    direction: ltr
+# ---- structured: NONE. The only candidate frame ("قرار می‌خواهم {verb}" over
+#      the sole unit verb بگیرم) is UNSAFE: بگیرم's only tag is dialogue_word,
+#      which pools 82 verbs at course scope (incl. می‌خواهم itself -> flagged by
+#      _practice_content_integrity_check as a self-reference / ungrammatical frame).
+#      No narrow anchor tag exists, so no structured template can be authored.
+#      Structured tier is empty for this unit -- see review.notes.
+# ---- production (one per lesson that has a lexeme) ----
+- content_key: practice.en-prs.prs.a1.unit42.lesson01.translate.001
+  lesson_content_key: prs.a1.unit42.lesson01.appointment_vocabulary
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: body_part_word
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: '{item} is the Dari word for this.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit42.lesson03.translate.001
+  lesson_content_key: prs.a1.unit42.lesson03.making_the_appointment
+  type: translation
+  frame:
+    text: '{verb}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {verb: english_gloss}
+  slots:
+    verb:
+      language_code: prs
+      part_of_speech: verb
+      agreement_tags:
+        semantic: dialogue_word
+  answer_derivation: {kind: slot_text, slot: verb}
+  feedback_frame:
+    text: '{verb} is the Dari form for this.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit42.lesson04.translate.001
+  lesson_content_key: prs.a1.unit42.lesson04.dentist_appointment_dialogue
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: service_person_word
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: '{item} is the Dari word for this.'
+    language_code: en
+    direction: ltr

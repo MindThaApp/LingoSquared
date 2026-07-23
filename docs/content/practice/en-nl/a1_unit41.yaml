@@ -1,0 +1,343 @@
+schema_version: '1.0'
+pack_key: practice.en-nl.a1.unit41
+source_language: en
+target_language: nl
+unit_content_key: nl.a1.unit41.persoonlijkheid
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    Vocabulary unit (persoonlijkheid / personality traits), 15 unit lexemes
+    across lessons 01-05 per scripts/backfill_lexemes_en_nl.py; lesson06
+    (nina_beschrijft_zichzelf) has ZERO lexemes and is unhostable in any
+    slot -- flagging for the coordinator to route a backfill extension.
+    lesson01/lesson02 only had 2/1 own-tag tokens (trait_kind_funny,
+    trait_calm_patient), under the multiple_choice 3-distinct floor, so both
+    fall back to the union tag persoonlijkheid_vocab (S3.1a/S8.1) restricted
+    to part_of_speech:adjective (5 distinct). lesson03 (trait_curious_shy),
+    lesson04 (personality_dialogue), lesson05 (personality_reading) each had
+    >=3 of their own tokens and use their own union tag. word_order and
+    fill_in_blank both anchor on the single-member
+    persoonlijkheid_persoon_single tag (persoon), course-scope-safe by
+    construction. Capacity/coverage measured via RECIPE S9 step 4 (see
+    report).
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - persoonlijkheid_vocab
+    - trait_curious_shy
+    - personality_dialogue
+    - personality_reading
+    - persoonlijkheid_persoon_single
+
+templates:
+
+# -- lesson01: aardig_en_grappig ----------------------------------------------
+- content_key: practice.en-nl.nl.a1.unit41.lesson01.choose.001
+  lesson_content_key: nl.a1.unit41.lesson01.aardig_en_grappig
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: adjective
+      agreement_tags: {semantic: persoonlijkheid_vocab}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} describes a personality trait.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit41.lesson01.translate.002
+  lesson_content_key: nl.a1.unit41.lesson01.aardig_en_grappig
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: adjective
+      agreement_tags: {semantic: persoonlijkheid_vocab}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit41.lesson01.listen.003
+  lesson_content_key: nl.a1.unit41.lesson01.aardig_en_grappig
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: adjective
+      agreement_tags: {semantic: persoonlijkheid_vocab}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: You heard {item}.
+    language_code: en
+    direction: ltr
+
+# -- lesson02: rustig_en_geduldig ----------------------------------------------
+- content_key: practice.en-nl.nl.a1.unit41.lesson02.choose.001
+  lesson_content_key: nl.a1.unit41.lesson02.rustig_en_geduldig
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: adjective
+      agreement_tags: {semantic: persoonlijkheid_vocab}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} describes a personality trait.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit41.lesson02.translate.002
+  lesson_content_key: nl.a1.unit41.lesson02.rustig_en_geduldig
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: adjective
+      agreement_tags: {semantic: persoonlijkheid_vocab}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+
+# -- lesson03: nieuwsgierig_verlegen -------------------------------------------
+- content_key: practice.en-nl.nl.a1.unit41.lesson03.choose.001
+  lesson_content_key: nl.a1.unit41.lesson03.nieuwsgierig_verlegen
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, verb, adjective, pronoun]
+      agreement_tags: {semantic: trait_curious_shy}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is from the description of someone who is curious or shy.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit41.lesson03.translate.002
+  lesson_content_key: nl.a1.unit41.lesson03.nieuwsgierig_verlegen
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, verb, adjective, pronoun]
+      agreement_tags: {semantic: trait_curious_shy}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit41.lesson03.order.003
+  lesson_content_key: nl.a1.unit41.lesson03.nieuwsgierig_verlegen
+  type: word_order
+  frame:
+    text: Mijn zusje is heel {item}.
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: adjective
+      agreement_tags: {semantic: trait_curious_shy}
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Mijn zusje is heel {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Mijn zusje is heel nieuwsgierig. -- My little sister is very curious.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit41.lesson03.fill.004
+  lesson_content_key: nl.a1.unit41.lesson03.nieuwsgierig_verlegen
+  type: fill_in_blank
+  frame:
+    text: Nina is een aardige {item}.
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: noun
+      agreement_tags: {semantic: persoonlijkheid_persoon_single}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: Nina is een aardige persoon. -- Nina is a kind person.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit41.lesson03.match.005
+  lesson_content_key: nl.a1.unit41.lesson03.nieuwsgierig_verlegen
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: nl
+    direction: ltr
+  slots:
+    first: &trait_word
+      language_code: nl
+      part_of_speech: [noun, verb, adjective]
+      agreement_tags: {semantic: persoonlijkheid_vocab}
+    second: *trait_word
+    third: *trait_word
+    fourth: *trait_word
+    fifth: *trait_word
+    sixth: *trait_word
+  slot_relations:
+  - {kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}
+  answer_derivation:
+    kind: matching_pairs
+    slots: [first, second, third, fourth, fifth, sixth]
+  feedback_frame:
+    text: Match each personality word with its English meaning.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit41.lesson03.order.006
+  lesson_content_key: nl.a1.unit41.lesson03.nieuwsgierig_verlegen
+  type: word_order
+  frame:
+    text: Nina is een heel aardige {item}.
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: noun
+      agreement_tags: {semantic: persoonlijkheid_persoon_single}
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Nina is een heel aardige {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Nina is een heel aardige persoon. -- Nina is a very kind person.
+    language_code: en
+    direction: ltr
+
+# -- lesson04: nina_vraagt_bij_taalcafe -----------------------------------------
+- content_key: practice.en-nl.nl.a1.unit41.lesson04.choose.001
+  lesson_content_key: nl.a1.unit41.lesson04.nina_vraagt_bij_taalcafe
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [pronoun, adjective]
+      agreement_tags: {semantic: personality_dialogue}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} appears in the conversation at the language cafe.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit41.lesson04.translate.002
+  lesson_content_key: nl.a1.unit41.lesson04.nina_vraagt_bij_taalcafe
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [pronoun, adjective]
+      agreement_tags: {semantic: personality_dialogue}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+
+# -- lesson05: nina_hoort_over_iedereen ------------------------------------------
+- content_key: practice.en-nl.nl.a1.unit41.lesson05.choose.001
+  lesson_content_key: nl.a1.unit41.lesson05.nina_hoort_over_iedereen
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [verb, pronoun, adjective]
+      agreement_tags: {semantic: personality_reading}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} appears while Nina hears about everyone.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit41.lesson05.translate.002
+  lesson_content_key: nl.a1.unit41.lesson05.nina_hoort_over_iedereen
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [verb, pronoun, adjective]
+      agreement_tags: {semantic: personality_reading}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
