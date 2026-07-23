@@ -27,6 +27,19 @@ review:
     word_order over either would need a course-scope grammaticality re-read
     that was out of scope here. No mis-glossed lexemes found. No listen_select
     (Azure TTS key unset for fa).
+    UPDATED (defect sweep): removed proper_noun from every MC/translation/
+    matching_pairs slot's part_of_speech (was [..., proper_noun]), which
+    excludes نوری (proper_noun POS) from all pools -- self-gloss risk. Also
+    removed reviewed_phrase from the 5 bare-word translation slots only
+    (MC/matching keep it, safe there): the reviewed_phrase tag is a
+    course-wide catch-all (519 members) that gave every translation slot a
+    real cross-course duplicate-gloss exposure (e.g. "and you?"/"where are
+    you from?" phrased two ways each map to two different fa tokens with
+    the same english_gloss, so a learner typing the other valid phrasing
+    was marked wrong). translation has no candidate floor (recipe §5), so
+    narrowing to salon_word + person_name (now proper_noun-free, so
+    effectively just salon_word's 4 members) is safe -- verified zero
+    duplicate glosses remain in the narrowed pool.
 tag_schema:
   part_of_speech:
   - symbol
@@ -54,7 +67,7 @@ templates:
   slots:
     item:
       language_code: fa
-      part_of_speech: [noun, adjective, phrase, proper_noun]
+      part_of_speech: [noun, adjective, phrase]
       agreement_tags:
         semantic: [salon_word, person_name, reviewed_phrase]
   answer_derivation: {kind: slot_gloss, slot: item}
@@ -74,9 +87,9 @@ templates:
   slots:
     item:
       language_code: fa
-      part_of_speech: [noun, adjective, phrase, proper_noun]
+      part_of_speech: [noun, adjective, phrase]
       agreement_tags:
-        semantic: [salon_word, person_name, reviewed_phrase]
+        semantic: [salon_word, person_name]
   answer_derivation: {kind: slot_text, slot: item}
   feedback_frame:
     text: The Farsi word is {item}.
@@ -93,7 +106,7 @@ templates:
   slots:
     first: &salon_pool
       language_code: fa
-      part_of_speech: [noun, adjective, phrase, proper_noun]
+      part_of_speech: [noun, adjective, phrase]
       agreement_tags:
         semantic: [salon_word, person_name, reviewed_phrase]
     second: *salon_pool
@@ -120,7 +133,7 @@ templates:
   slots:
     item:
       language_code: fa
-      part_of_speech: [noun, adjective, phrase, proper_noun]
+      part_of_speech: [noun, adjective, phrase]
       agreement_tags:
         semantic: [salon_word, person_name, reviewed_phrase]
   answer_derivation: {kind: slot_gloss, slot: item}
@@ -140,9 +153,9 @@ templates:
   slots:
     item:
       language_code: fa
-      part_of_speech: [noun, adjective, phrase, proper_noun]
+      part_of_speech: [noun, adjective, phrase]
       agreement_tags:
-        semantic: [salon_word, person_name, reviewed_phrase]
+        semantic: [salon_word, person_name]
   answer_derivation: {kind: slot_text, slot: item}
   feedback_frame:
     text: The Farsi word is {item}.
@@ -157,7 +170,7 @@ templates:
   slots:
     item:
       language_code: fa
-      part_of_speech: [noun, adjective, phrase, proper_noun]
+      part_of_speech: [noun, adjective, phrase]
       agreement_tags:
         semantic: [salon_word, person_name, reviewed_phrase]
   answer_derivation: {kind: slot_gloss, slot: item}
@@ -177,9 +190,9 @@ templates:
   slots:
     item:
       language_code: fa
-      part_of_speech: [noun, adjective, phrase, proper_noun]
+      part_of_speech: [noun, adjective, phrase]
       agreement_tags:
-        semantic: [salon_word, person_name, reviewed_phrase]
+        semantic: [salon_word, person_name]
   answer_derivation: {kind: slot_text, slot: item}
   feedback_frame:
     text: The Farsi word is {item}.
@@ -219,7 +232,7 @@ templates:
   slots:
     item:
       language_code: fa
-      part_of_speech: [noun, adjective, phrase, proper_noun]
+      part_of_speech: [noun, adjective, phrase]
       agreement_tags:
         semantic: [salon_word, person_name, reviewed_phrase]
   answer_derivation: {kind: slot_gloss, slot: item}
@@ -239,9 +252,9 @@ templates:
   slots:
     item:
       language_code: fa
-      part_of_speech: [noun, adjective, phrase, proper_noun]
+      part_of_speech: [noun, adjective, phrase]
       agreement_tags:
-        semantic: [salon_word, person_name, reviewed_phrase]
+        semantic: [salon_word, person_name]
   answer_derivation: {kind: slot_text, slot: item}
   feedback_frame:
     text: The Farsi word is {item}.
@@ -256,7 +269,7 @@ templates:
   slots:
     item:
       language_code: fa
-      part_of_speech: [noun, adjective, phrase, proper_noun]
+      part_of_speech: [noun, adjective, phrase]
       agreement_tags:
         semantic: [salon_word, person_name, reviewed_phrase]
   answer_derivation: {kind: slot_gloss, slot: item}
@@ -276,9 +289,9 @@ templates:
   slots:
     item:
       language_code: fa
-      part_of_speech: [noun, adjective, phrase, proper_noun]
+      part_of_speech: [noun, adjective, phrase]
       agreement_tags:
-        semantic: [salon_word, person_name, reviewed_phrase]
+        semantic: [salon_word, person_name]
   answer_derivation: {kind: slot_text, slot: item}
   feedback_frame:
     text: The Farsi word is {item}.

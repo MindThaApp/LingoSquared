@@ -11,16 +11,18 @@ review:
     wrap_up). CAPACITY-THIN unit: far below the recipe's 40-distinct-item pack floor and 12-template floor
     by construction -- the realization itself introduces very few fa lexemes in this unit (a themed vocabulary
     unit with 1-4 content words per lesson plus proper names / a reading sign / a wrap-up sentence). Authored
-    what the pool supports; not padded with untaught vocabulary. matching_pairs anchored to concert_dialogue
-    (6 pairs), pooled over the unit-wide all (fallback, includes proper nouns -- see note below) distinct
-    tokens (6 available). Proper nouns (حسینی, شاهین) INCLUDED in the matching_pairs pool despite the
-    self-gloss-transliteration caveat -- the non-proper pool alone (4) is below the 6-pair floor, so this
-    unit's matching_pairs would not exist at all without them. Flagging for reviewer attention rather
-    than silently padding elsewhere. Also reached via the dedicated proper_noun translation drill(s).
-    Template mix: recognition(multiple_choice)=4, structured(matching_pairs)=1, production(translation)=5,
-    total=10. No listen_select authored (fa has no TTS configured -- AZURE_SPEECH_KEY unset -- _material()
-    deletes such templates). No mis-glossed lexemes found in this pool (every gloss checked against what
-    the unit realization teaches).
+    what the pool supports; not padded with untaught vocabulary. UPDATED (proper_noun self-gloss sweep):
+    the lesson04 matching_pairs pool's part_of_speech no longer includes proper_noun (removed حسینی/شاهین
+    from that slot's candidate set -- self-gloss risk, an MC/translation/matching option that is its own
+    answer) and the lesson04 translate.003 template (a proper_noun-only bare-word translation drill,
+    pool={حسینی, شاهین}) was DELETED outright rather than narrowed, since removing proper_noun from its
+    sole part_of_speech constraint would leave it with zero candidates -- lesson04 is still covered by
+    choose.001/translate.002/match.004. matching_pairs' remaining pool (no proper_noun, no semantic tag)
+    is course-wide over the listed parts of speech, well above the 6-pair floor.
+    Template mix (POST-FIX): recognition(multiple_choice)=4, structured(matching_pairs)=1,
+    production(translation)=4, total=9. No listen_select authored (fa has no TTS configured --
+    AZURE_SPEECH_KEY unset -- _material() deletes such templates). No mis-glossed lexemes found in this
+    pool (every gloss checked against what the unit realization teaches).
 tag_schema:
   part_of_speech:
   - symbol
@@ -190,27 +192,6 @@ templates:
     text: The Persian word is {item}.
     language_code: en
     direction: ltr
-- content_key: practice.en-fa.fa.a1.unit53.lesson04.translate.003
-  lesson_content_key: fa.a1.unit53.lesson04.concert_dialogue
-  type: translation
-  frame:
-    text: '{item}'
-    language_code: en
-    direction: ltr
-    slot_rendering:
-      item: english_gloss
-  slots:
-    item:
-      language_code: fa
-      part_of_speech:
-      - proper_noun
-  answer_derivation:
-    kind: slot_text
-    slot: item
-  feedback_frame:
-    text: The Persian word is {item}.
-    language_code: en
-    direction: ltr
 - content_key: practice.en-fa.fa.a1.unit53.lesson06.choose.001
   lesson_content_key: fa.a1.unit53.lesson06.wrap_up
   type: multiple_choice
@@ -281,7 +262,6 @@ templates:
       - preposition
       - particle
       - phrase
-      - proper_noun
     second:
       language_code: fa
       part_of_speech: *id001
