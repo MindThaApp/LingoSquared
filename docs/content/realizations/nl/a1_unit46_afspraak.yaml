@@ -8,6 +8,14 @@ review:
   status: reviewed
   required_next_reviewer: ramin_native_pass
   reviewer_notes: >-
+    SUPERSEDED 2026-07-23: the "RESOLVED... no user-facing contradiction"
+    call below turned out to rest on an assumed Tuesday-12-May booking call
+    that this file's own top-level `notes` field doesn't support (it states
+    the unit, including the booking call, is set "the next morning" =
+    Wednesday 13 May itself). See flagged_issues below for the actual fix
+    (standardized on "vandaag"/today throughout). Original 2026-07-11 text
+    retained for history:
+
     2026-07-11 independent fresh-context review (Opus, no access to the
     authoring session; realization+overlay read together, backend
     grading._normalize semantics applied before judging accepted_answers).
@@ -32,10 +40,34 @@ review:
     objective grading bug found.
   flagged_issues:
     - >-
-      2026-07-10 fresh-context review: same-speaker-distractor audit and
-      audio wiring checked clean across all of lesson01-06, but found one
-      genuine §11 fact-consistency issue that needs a judgment call, not
-      a mechanical fix. lesson05's reading card
+      FIXED 2026-07-23 (superseding both the 2026-07-10 flag below and the
+      2026-07-11 reviewer_notes' "no contradiction" reconciliation above --
+      that reconciliation depended on the booking call happening Tuesday 12
+      May, which is NOT what this file's own top-level `notes` state ["this
+      happens the next morning after unit44/unit45's Tuesday 12 May 2026...
+      2026-05-13 is Wednesday"], i.e. the whole unit, including the booking
+      call, is set on Wednesday 13 May itself -- so the two review notes
+      disagreed with each other and with the file's own story-continuity
+      notes, which is exactly the kind of ambiguity a real learner would
+      also trip on). Resolved by standardizing every reference to the
+      appointment's day on "vandaag" (today) instead of "morgen"
+      (tomorrow), keeping "woensdag 13 mei" as the single absolute-date
+      source of truth (lesson05's confirmation, and lesson02/04's offered/
+      accepted slot, both already said "Woensdag" and were left untouched).
+      Changed: lesson05.teach.morgen_afspraak + its listen_recap exercise,
+      lesson06.teach.omar_morgen + teach.morgen_heb_afspraak + their
+      exercises (comprehend_wanneer, match_slot, write_morgen_tien), the
+      afspraak_slot.01 media_asset script, and lesson02.exercise03's
+      matching_pairs vocabulary pair (morgen/tomorrow -> vandaag/today, so
+      it still reinforces a word actually used in the unit). The paired
+      en-nl overlay was updated identically in the same change. Content_key
+      names still containing "morgen" (e.g. teach.morgen_afspraak) were
+      left as-is -- cosmetic only, not learner-facing.
+
+      Original 2026-07-10 finding, retained for history: same-speaker-
+      distractor audit and audio wiring checked clean across all of
+      lesson01-06, but found one genuine §11 fact-consistency issue that
+      needs a judgment call, not a mechanical fix. lesson05's reading card
       (nl.a1.unit46.lesson05.teach.bevestiging) states the appointment is
       "woensdag 13 mei" (i.e. today, per this unit's own story date --
       the review notes below say the booking conversation itself happens
@@ -101,12 +133,12 @@ media_assets:
       tien uur is beschikbaar. Past dat? Nina: Dat past goed. Dank u wel.
     voice_hint: young_adult_and_staff_polite
     status: pending_generation
-  - {content_key: nl.a1.audio.afspraak.recap.01, language: nl, text: "Nina heeft morgen om tien uur een afspraak voor computerhulp.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - {content_key: nl.a1.audio.afspraak.recap.01, language: nl, text: "Nina heeft vandaag om tien uur een afspraak voor computerhulp.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
   - content_key: nl.a1.audio.dialogue.afspraak_slot.01
     language: nl
     text: >-
       Omar: Is de afspraak bevestigd? Nina: Ja, de afspraak is bevestigd.
-      Omar: Mooi. Morgen om tien uur help ik je herinneren. Nina: Dank je,
+      Omar: Mooi. Vandaag om tien uur help ik je herinneren. Nina: Dank je,
       Omar. Dat is fijn.
     voice_hint: two_young_adults_friendly
     status: pending_generation
@@ -163,7 +195,7 @@ units:
         exercises:
           - {content_key: nl.a1.unit46.lesson02.exercise01.choose_woensdag_tien, type: multiple_choice, tested_text: "Woensdag om tien uur is beschikbaar", prompt: {target_blocks: [{text: "Wednesday at ten o'clock is available.", language_code: en, direction: ltr}]}}
           - {content_key: nl.a1.unit46.lesson02.exercise02.listen_dat_past, type: listen_select, tested_text: "Dat past goed", media_asset_key: nl.a1.audio.afspraak.dat_past.01, prompt: {target_blocks: []}}
-          - {content_key: nl.a1.unit46.lesson02.exercise03.match_tijd, type: matching_pairs, tested_text: "woensdag tien uur beschikbaar past goed", prompt: {target_blocks: []}, pairs: [{left: woensdag, right: Wednesday}, {left: "tien uur", right: "ten o'clock"}, {left: beschikbaar, right: available}, {left: "Dat past goed.", right: "That works well."}, {left: "Woensdag om tien uur.", right: "Wednesday at ten o'clock."}, {left: morgen, right: tomorrow}]}
+          - {content_key: nl.a1.unit46.lesson02.exercise03.match_tijd, type: matching_pairs, tested_text: "woensdag tien uur beschikbaar past goed", prompt: {target_blocks: []}, pairs: [{left: woensdag, right: Wednesday}, {left: "tien uur", right: "ten o'clock"}, {left: beschikbaar, right: available}, {left: "Dat past goed.", right: "That works well."}, {left: "Woensdag om tien uur.", right: "Wednesday at ten o'clock."}, {left: vandaag, right: today}]}
           - {content_key: nl.a1.unit46.lesson02.exercise04.order_woensdag_tien, type: word_order, tested_text: "Woensdag om tien uur is beschikbaar", prompt: {target_blocks: []}, word_bank: [Woensdag, om, tien, uur, is, beschikbaar]}
           - {content_key: nl.a1.unit46.lesson02.exercise05.listen_order_dat_past, type: listen_order, tested_text: "Dat past goed", media_asset_key: nl.a1.audio.afspraak.dat_past.01, prompt: {target_blocks: []}, word_bank: [Dat, past, goed]}
           - {content_key: nl.a1.unit46.lesson02.exercise06.translate_beschikbaar, type: translation, tested_text: beschikbaar, prompt: {target_blocks: [{text: available, language_code: en, direction: ltr}]}}
@@ -231,13 +263,13 @@ units:
               language_code: nl
               direction: ltr
             introduced_tokens: [Bevestiging, Nina, heeft, woensdag, "13", mei, om, tien, uur, een, afspraak, voor, computerhulp, in, de, bibliotheek, De, is, bevestigd]
-          - {content_key: nl.a1.unit46.lesson05.teach.morgen_afspraak, kind: phrase, target: {text: "Nina heeft morgen om tien uur een afspraak voor computerhulp.", language_code: nl, direction: ltr}, introduced_tokens: [Nina, heeft, morgen, om, tien, uur, een, afspraak, voor, computerhulp]}
+          - {content_key: nl.a1.unit46.lesson05.teach.morgen_afspraak, kind: phrase, target: {text: "Nina heeft vandaag om tien uur een afspraak voor computerhulp.", language_code: nl, direction: ltr}, introduced_tokens: [Nina, heeft, vandaag, om, tien, uur, een, afspraak, voor, computerhulp]}
         exercises:
           - {content_key: nl.a1.unit46.lesson05.exercise01.read_wie, type: reading_comprehension, tested_text: Nina, prompt: {target_blocks: [{text: "According to the confirmation, who has the appointment?", language_code: en, direction: ltr}]}}
           - {content_key: nl.a1.unit46.lesson05.exercise02.read_wanneer, type: reading_comprehension, tested_text: "woensdag 13 mei om tien uur", prompt: {target_blocks: [{text: "According to the confirmation, when is the appointment?", language_code: en, direction: ltr}]}}
           - {content_key: nl.a1.unit46.lesson05.exercise03.read_waarvoor, type: reading_comprehension, tested_text: computerhulp, prompt: {target_blocks: [{text: "According to the confirmation, what is the appointment for?", language_code: en, direction: ltr}]}}
           - {content_key: nl.a1.unit46.lesson05.exercise04.match_bevestiging, type: matching_pairs, tested_text: "bevestiging afspraak computerhulp woensdag tien", prompt: {target_blocks: []}, pairs: [{left: Bevestiging, right: Confirmation}, {left: "De afspraak is bevestigd.", right: "The appointment is confirmed."}, {left: "woensdag 13 mei", right: "Wednesday, May 13"}, {left: "om tien uur", right: "at ten o'clock"}, {left: "voor computerhulp", right: "for computer help"}, {left: bibliotheek, right: library}]}
-          - {content_key: nl.a1.unit46.lesson05.exercise05.listen_recap, type: listen_select, tested_text: "Nina heeft morgen om tien uur een afspraak voor computerhulp", media_asset_key: nl.a1.audio.afspraak.recap.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit46.lesson05.exercise05.listen_recap, type: listen_select, tested_text: "Nina heeft vandaag om tien uur een afspraak voor computerhulp", media_asset_key: nl.a1.audio.afspraak.recap.01, prompt: {target_blocks: []}}
           - {content_key: nl.a1.unit46.lesson05.exercise06.write_bevestigd, type: writing_prompt, tested_text: "De afspraak is bevestigd", prompt: {target_blocks: [{text: "Write in Dutch: the appointment is confirmed.", language_code: en, direction: ltr}]}}
 
       - content_key: nl.a1.unit46.lesson06.omar_helpt_herinneren
@@ -246,15 +278,15 @@ units:
         teaching:
           - {content_key: nl.a1.unit46.lesson06.teach.omar_bevestigd, kind: dialogue, target: {text: "Omar: Is de afspraak bevestigd?", language_code: nl, direction: ltr}, introduced_tokens: [Omar, Is, de, afspraak, bevestigd]}
           - {content_key: nl.a1.unit46.lesson06.teach.nina_bevestigd, kind: dialogue, target: {text: "Nina: Ja, de afspraak is bevestigd.", language_code: nl, direction: ltr}, introduced_tokens: ["Ja", de, afspraak, is, bevestigd]}
-          - {content_key: nl.a1.unit46.lesson06.teach.omar_morgen, kind: dialogue, target: {text: "Omar: Mooi. Morgen om tien uur help ik je herinneren.", language_code: nl, direction: ltr}, introduced_tokens: [Omar, Mooi, Morgen, om, tien, uur, help, ik, je, herinneren]}
+          - {content_key: nl.a1.unit46.lesson06.teach.omar_morgen, kind: dialogue, target: {text: "Omar: Mooi. Vandaag om tien uur help ik je herinneren.", language_code: nl, direction: ltr}, introduced_tokens: [Omar, Mooi, Vandaag, om, tien, uur, help, ik, je, herinneren]}
           - {content_key: nl.a1.unit46.lesson06.teach.nina_fijn, kind: dialogue, target: {text: "Nina: Dank je, Omar. Dat is fijn.", language_code: nl, direction: ltr}, introduced_tokens: [Nina, Dank, je, Omar, Dat, is, fijn]}
-          - {content_key: nl.a1.unit46.lesson06.teach.morgen_heb_afspraak, kind: phrase, target: {text: "Morgen om tien uur heb ik een afspraak.", language_code: nl, direction: ltr}, introduced_tokens: [Morgen, om, tien, uur, heb, ik, een, afspraak]}
+          - {content_key: nl.a1.unit46.lesson06.teach.morgen_heb_afspraak, kind: phrase, target: {text: "Vandaag om tien uur heb ik een afspraak.", language_code: nl, direction: ltr}, introduced_tokens: [Vandaag, om, tien, uur, heb, ik, een, afspraak]}
         exercises:
           - {content_key: nl.a1.unit46.lesson06.exercise01.listen_bevestigd, type: listen_select, tested_text: "De afspraak is bevestigd", media_asset_key: nl.a1.audio.dialogue.afspraak_slot.01, prompt: {target_blocks: []}}
           - {content_key: nl.a1.unit46.lesson06.exercise02.comprehend_status, type: dialogue_comprehension, tested_text: "de afspraak is bevestigd", media_asset_key: nl.a1.audio.dialogue.afspraak_slot.01, prompt: {target_blocks: [{text: "What does Nina say about the appointment?", language_code: en, direction: ltr}]}}
-          - {content_key: nl.a1.unit46.lesson06.exercise03.comprehend_wanneer, type: dialogue_comprehension, tested_text: "morgen om tien uur", media_asset_key: nl.a1.audio.dialogue.afspraak_slot.01, prompt: {target_blocks: [{text: "When will Omar help Nina remember?", language_code: en, direction: ltr}]}}
-          - {content_key: nl.a1.unit46.lesson06.exercise04.match_slot, type: matching_pairs, tested_text: "afspraak bevestigd morgen herinneren fijn", prompt: {target_blocks: []}, pairs: [{left: "Is de afspraak bevestigd?", right: "Is the appointment confirmed?"}, {left: "De afspraak is bevestigd.", right: "The appointment is confirmed."}, {left: "morgen om tien uur", right: "tomorrow at ten o'clock"}, {left: herinneren, right: "to remind"}, {left: fijn, right: nice}, {left: "Dat is fijn.", right: "That is nice."}]}
+          - {content_key: nl.a1.unit46.lesson06.exercise03.comprehend_wanneer, type: dialogue_comprehension, tested_text: "vandaag om tien uur", media_asset_key: nl.a1.audio.dialogue.afspraak_slot.01, prompt: {target_blocks: [{text: "When will Omar help Nina remember?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit46.lesson06.exercise04.match_slot, type: matching_pairs, tested_text: "afspraak bevestigd vandaag herinneren fijn", prompt: {target_blocks: []}, pairs: [{left: "Is de afspraak bevestigd?", right: "Is the appointment confirmed?"}, {left: "De afspraak is bevestigd.", right: "The appointment is confirmed."}, {left: "vandaag om tien uur", right: "today at ten o'clock"}, {left: herinneren, right: "to remind"}, {left: fijn, right: nice}, {left: "Dat is fijn.", right: "That is nice."}]}
           - {content_key: nl.a1.unit46.lesson06.exercise05.order_afspraak_bevestigd, type: word_order, tested_text: "De afspraak is bevestigd", prompt: {target_blocks: []}, word_bank: [De, afspraak, is, bevestigd]}
           - {content_key: nl.a1.unit46.lesson06.exercise06.respond_bevestigd, type: dialogue_response, tested_text: "De afspraak is bevestigd", prompt: {target_blocks: [{text: "Is de afspraak bevestigd?", language_code: nl, direction: ltr}]}}
           - {content_key: nl.a1.unit46.lesson06.exercise07.listen_type_bevestigd, type: listen_type, tested_text: "De afspraak is bevestigd", media_asset_key: nl.a1.audio.afspraak.afspraak_bevestigd.01, prompt: {target_blocks: []}}
-          - {content_key: nl.a1.unit46.lesson06.exercise08.write_morgen_tien, type: writing_prompt, tested_text: "Morgen om tien uur heb ik een afspraak", prompt: {target_blocks: [{text: "Write in Dutch: tomorrow at ten o'clock I have an appointment.", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit46.lesson06.exercise08.write_morgen_tien, type: writing_prompt, tested_text: "Vandaag om tien uur heb ik een afspraak", prompt: {target_blocks: [{text: "Write in Dutch: today at ten o'clock I have an appointment.", language_code: en, direction: ltr}]}}
