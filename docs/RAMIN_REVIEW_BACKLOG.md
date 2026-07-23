@@ -74,6 +74,46 @@ Decision you may want to weigh in on (NOT blocking — I'll pick a default):
 char-name spelling — standardize on دانیل (matches the A2 units) across B1? I'll
 apply that unless you say otherwise.
 
+## Practice-pack wave (2026-07-23) — checkpoints 52.7% -> 91.9%
+
+Committed on branch `fix/launch-gate-content-review-wave1` (`6c5b284e`): ~246
+practice packs across all 6 launch directions, closing the only open
+publish-gate item. Measured against the REAL generate_checkpoint():
+
+| dir | working | dir | working |
+|---|---|---|---|
+| en-fa | 83/83 (100%) | fa-en | 91/106 (86%) |
+| en-nl | 88/88 (100%) | nl-en | 91/106 (86%) |
+| en-prs | 81/82 (99%) | prs-en | 91/106 (86%) |
+| **overall** | **525/571 = 91.9%** (was 52.7%) | | |
+
+Method: fan-out of ~30 fresh-context authoring workers, each pack compiler-
+validated (0 errors) + integrity-checked, registered centrally, imported, and
+the whole gate re-measured. Pipeline was proven on a 5-pack pilot first.
+
+**Two follow-ups this created (NOT blocking, but needed before ship):**
+1. **Packs are `status: unreviewed`.** They validate and move the gate, but
+   launch-gate content needs the standard fresh-context review before ship
+   (tiered-review policy). ~246 packs to review — the next big review fan-out.
+2. **The remaining X->en gap (~15 units/direction, all at 86%) is lexeme-thin
+   recombination units** (3-14 new tokens — a1_unit60, 62-68, etc.), which
+   cannot fill a 12-item checkpoint regardless of pack quality. This is a
+   `backfill_lexemes_{nl,fa,prs}_en.py` extension = **Codex lane**, not
+   authoring. Each affected pack's review.notes names its thin lessons. Also
+   the X->en backfills emit polluting English `source_gloss` pseudo-lexemes
+   (known handover bug) — worth cleaning in the same backfill pass.
+
+## Review wave 2 (non-launch ar/de/fr/it/ru) — findings logged, deferred
+
+~20 of 24 batches reviewed (read-only). All NON-LAUNCH, so deferred. Real
+classes found (for a future non-launch fix pass): matching_pairs/distractor
+forward-reference (corpus-wide, en-it/en-ru/fr — same class as the launch fix),
+untaught-in-production (ar a2_25 تأکید), a realization/overlay desync in the
+pre-existing en-de b2_54 files, wrong subjunctive glosses (en-it b1), and
+pervasive stale `status: reviewed` metadata (de b1). Several "critical" reports
+(`teach_` underscore, example_gloss shape) were VERIFIED as FALSE POSITIVES
+(compile clean / realization matches). Full log in coordinator scratchpad.
+
 ## Owner-reserved items still needing you (not blocking local work)
 
 - **`~/.ssh/id_ed25519` (+`.pub`)** — needed only to reach the live server
