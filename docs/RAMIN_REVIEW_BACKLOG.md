@@ -110,6 +110,31 @@ members (`nl-en a1_05` "ten past ten", `fa-en a1_07` "a bread", `fa-en a1_15` "o
 dollars", en-nl number pool `eenheid`/`tiental`, weekday `hoofdletter`); (6) thin +
 byte-identical duplicate-template padding (en-fa a1_31–36, en-nl/nl-en a1_43–48).
 
+**SECOND, separate defect family — cross-unit homograph gloss collisions (affects the
+CLEAN post-recipe b1/b2 packs too, so arguably higher-priority):** the backfill lexeme
+classifier assigns the WRONG sense's gloss to a homograph, and it ships as the correct
+answer. Confirmed in nl-en: `small`→"kleine maat" (should be plain klein), `manager`→"de
+beheerder" (should be boss), `express`→"spoedpost" (should be the verb "uiten"), `left`→
+"links" (should be "liet weg"/verb), `checking`→"betaal-" (banking sense leaked into a
+narrative unit), `texts`→"appt; schrijft" (garbled). This is a `backfill_lexemes_<dir>.py`
+classifier bug (recipe §0.1 / defect 1.29), invisible to the compiler AND every validator,
+and it very likely also affects fa-en/prs-en b1/b2 (same classifier approach). Fix = add
+homograph sense-disambiguation to the classifier (Codex lane) or narrow the affected packs'
+pools by POS/tag. These are actual wrong-answer mis-teaches in packs we'd otherwise ship.
+**Confirmed in prs-en (Dari) too** (short→"قد کوتاه", sound→"آواز", position→"پُست", run→
+"دویدن", past→a malformed placeholder shown as the answer), plus a related **confusable-
+distractor** sub-class (two English words sharing one gloss: coworker/colleague=همکار,
+employees/staff=کارمندان, from/of=از → matching-pairs ambiguity and a valid synonym graded
+wrong). **Scope warning:** the prs-en reviewer's gloss audit was a spot-check (~40 of ~900
+lexemes) with a **~1-in-3 hit rate** — so this is pervasive across the X-en whole-unit-pool
+packs, not a handful. Root: shared `scripts/_en_target_lexeme_common.py` flat gloss dict.
+(Also minor: 13 prs-en b1/b2 packs have an English matching_pairs feedback string that should
+be Dari — a one-string fix.) Separately, the post-recipe **fa-en b1/b2 packs** have two
+authoring-consistency quirks (not wrong-grading): `listen_select` uses `slot_text` (audio→spelling
+dictation) instead of `slot_gloss` (meaning-recognition) in ~13 packs, and ~12 packs use a
+content-free fill_in_blank carrier "Please remember this word: {item}." with no meaning hint —
+worth normalizing in the same pass.
+
 **My recommendation (your call — scoped project, NOT an emergency; the base
 realization/overlay content is fixed + committed, which matters more):**
 - **(a)** Re-author the ~pre-recipe packs (a1_01–24 × 6 dirs + a2_25–29/09–10) against
