@@ -1,0 +1,140 @@
+schema_version: '1.0'
+pack_key: practice.en-prs.a1.unit60
+source_language: en
+target_language: prs
+unit_content_key: prs.a1.unit60.sports_event
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    en-prs A1 practice pack (unit60 sports_event), authored 2026-07-23.
+    EXTREMELY THIN UNIT: only 4 lexemes total across 3 lessons with lexemes
+    (lesson01: مسابقه "match/game", تیم "team"; lesson05: برد "he/she/it won";
+    lesson06: مسابقه‌تان "your match"). lesson02/03/04 have ZERO lexemes.
+    unit_word_all union (match_word+past_verb_third+formal_possessive_word,
+    pos [noun,verb]) gives exactly 4 distinct glosses -- clears the MC >=3
+    floor but is far short of matching_pairs' 6-pair floor (only 4 unit
+    lexemes exist at all), so matching_pairs is DELIBERATELY OMITTED. Only
+    ONE structured template is possible: word_order over match_word
+    (course-wide 2: تیم team, مسابقه match) in the frame "{item} خوب است."
+    (the X is good) -- both team and match fit; checked at course scope.
+    past_verb_third (برد) is course-wide 5 members (برد,دید,رفت,شد,کرد --
+    won/saw/went/became/did) with very different subcategorisation, so it is
+    NOT used in a fixed-subject frame (several would be ungrammatical there)
+    -- kept to bare-word translation only, which is frame-safe regardless.
+    formal_possessive_word (مسابقه‌تان) is course-wide 14 nouns, also kept to
+    bare-word translation only. No single-member course-wide anchor exists
+    for fill_in_blank. 7 templates total, 1 structured -- capacity-limited,
+    not padded; this is the thinnest unit in the batch. No mis-glossed
+    lexemes found. No listen_select (no prs TTS).
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - match_word
+    - past_verb_third
+    - formal_possessive_word
+slot_presets:
+  unit_word_all: &uwa
+    language_code: prs
+    part_of_speech: [noun, verb]
+    agreement_tags:
+      semantic: [match_word, past_verb_third, formal_possessive_word]
+  match: &mw
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: match_word
+templates:
+# ---- recognition ----
+- content_key: practice.en-prs.prs.a1.unit60.lesson01.choose.001
+  lesson_content_key: prs.a1.unit60.lesson01.match_and_team_vocabulary
+  type: multiple_choice
+  frame: {text: '{item}', language_code: prs, direction: rtl}
+  slots:
+    item: *uwa
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is from this unit''s sports-event vocabulary.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit60.lesson05.choose.001
+  lesson_content_key: prs.a1.unit60.lesson05.reading
+  type: multiple_choice
+  frame: {text: '{item}', language_code: prs, direction: rtl}
+  slots:
+    item: *uwa
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is from this unit''s sports-event vocabulary.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit60.lesson06.choose.001
+  lesson_content_key: prs.a1.unit60.lesson06.wrap_up
+  type: multiple_choice
+  frame: {text: '{item}', language_code: prs, direction: rtl}
+  slots:
+    item: *uwa
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is from this unit''s sports-event vocabulary.'
+    language_code: en
+    direction: ltr
+# ---- structured ----
+- content_key: practice.en-prs.prs.a1.unit60.lesson01.order.001
+  lesson_content_key: prs.a1.unit60.lesson01.match_and_team_vocabulary
+  type: word_order
+  frame: {text: '{item} خوب است.', language_code: prs, direction: rtl}
+  slots:
+    item: *mw
+  answer_derivation:
+    kind: render_frame
+    frame: {text: '{item} خوب است.', language_code: prs, direction: rtl}
+  feedback_frame:
+    text: 'Word order: تیم خوب است. (The team is good.)'
+    language_code: en
+    direction: ltr
+# ---- production ----
+- content_key: practice.en-prs.prs.a1.unit60.lesson01.translate.001
+  lesson_content_key: prs.a1.unit60.lesson01.match_and_team_vocabulary
+  type: translation
+  frame: {text: '{item}', language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+  slots:
+    item: *uwa
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: 'Type the Dari word.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit60.lesson05.translate.001
+  lesson_content_key: prs.a1.unit60.lesson05.reading
+  type: translation
+  frame: {text: '{item}', language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+  slots:
+    item: *uwa
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: 'Type the Dari word.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit60.lesson06.translate.001
+  lesson_content_key: prs.a1.unit60.lesson06.wrap_up
+  type: translation
+  frame: {text: '{item}', language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+  slots:
+    item: *uwa
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: 'Type the Dari word.'
+    language_code: en
+    direction: ltr

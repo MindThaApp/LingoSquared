@@ -1,0 +1,385 @@
+schema_version: '1.0'
+pack_key: practice.fa-en.a1.unit52
+source_language: fa
+target_language: en
+unit_content_key: en.a1.unit52.personal_care
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: 'Generated per PRACTICE_PACK_RECIPE.md §8 vocabulary pattern, adapted with the §8.1 union technique:
+    multiple_choice/listen_select/bare-word translation slots use the unit-wide union tag `fa_en_a1_unit52_words`
+    (10 distinct content tokens, part_of_speech restricted to [noun, verb, adjective, adverb, phrase]
+    to exclude symbols/pronouns/prepositions/particles/proper nouns) so every lesson''s recognition/production
+    templates clear the 3-option floor even though individual lessons hold as few as 1-2 content words.
+    fill_in_blank/word_order anchors use per-lesson tags (`fa_en_a1_unit52_lessonNN_words`), which are
+    lesson-unique strings not reused anywhere else in the corpus, so their course-scope candidate pool
+    is identical to their unit-scope pool (§1.1) -- verified by construction, each anchor narrowed by
+    part_of_speech to exactly 1 course-wide candidate. matching_pairs anchored to the richest lessons,
+    drawn from the unit-wide tag (10 distinct tokens, well above the 6-pair floor). No mis-glossed lexemes
+    found on manual gloss read (§0.1); every content-POS token''s english_gloss field matches the sense
+    used in the realization file.'
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - fa_en_a1_unit52_lesson01_words
+    - fa_en_a1_unit52_words
+templates:
+- content_key: practice.fa-en.en.a1.unit52.lesson01.choose.001
+  lesson_content_key: en.a1.unit52.lesson01.personal_care_vocabulary
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: &id001
+      - noun
+      - verb
+      - adjective
+      - adverb
+      - phrase
+      agreement_tags:
+        semantic: fa_en_a1_unit52_words
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} یکی از واژه‌هایی است که در این درس آموزش داده شده است.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit52.lesson01.listen.002
+  lesson_content_key: en.a1.unit52.lesson01.personal_care_vocabulary
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: fa_en_a1_unit52_words
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: واژه‌ای که شنیدید {item} بود.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit52.lesson01.translate.003
+  lesson_content_key: en.a1.unit52.lesson01.personal_care_vocabulary
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: fa_en_a1_unit52_words
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: پاسخ درست، معادل انگلیسی عبارت فارسی نمایش داده‌شده است.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit52.lesson04.choose.001
+  lesson_content_key: en.a1.unit52.lesson04.a_trip_to_the_hairdresser
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: fa_en_a1_unit52_words
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} یکی از واژه‌هایی است که در این درس آموزش داده شده است.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit52.lesson04.listen.002
+  lesson_content_key: en.a1.unit52.lesson04.a_trip_to_the_hairdresser
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: fa_en_a1_unit52_words
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: واژه‌ای که شنیدید {item} بود.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit52.lesson04.translate.003
+  lesson_content_key: en.a1.unit52.lesson04.a_trip_to_the_hairdresser
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: fa_en_a1_unit52_words
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: پاسخ درست، معادل انگلیسی عبارت فارسی نمایش داده‌شده است.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit52.lesson01.match.004
+  lesson_content_key: en.a1.unit52.lesson01.personal_care_vocabulary
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: en
+    direction: ltr
+  slots:
+    first:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: fa_en_a1_unit52_words
+    second:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: fa_en_a1_unit52_words
+    third:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: fa_en_a1_unit52_words
+    fourth:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: fa_en_a1_unit52_words
+    fifth:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: fa_en_a1_unit52_words
+    sixth:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: fa_en_a1_unit52_words
+  slot_relations:
+  - kind: distinct
+    slots: &id002
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots: *id002
+  feedback_frame:
+    text: هر واژهٔ انگلیسی را به معنی فارسی خودش وصل کنید.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit52.lesson04.match.004
+  lesson_content_key: en.a1.unit52.lesson04.a_trip_to_the_hairdresser
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: en
+    direction: ltr
+  slots:
+    first:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: fa_en_a1_unit52_words
+    second:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: fa_en_a1_unit52_words
+    third:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: fa_en_a1_unit52_words
+    fourth:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: fa_en_a1_unit52_words
+    fifth:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: fa_en_a1_unit52_words
+    sixth:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: fa_en_a1_unit52_words
+  slot_relations:
+  - kind: distinct
+    slots: *id002
+  answer_derivation:
+    kind: matching_pairs
+    slots: *id002
+  feedback_frame:
+    text: هر واژهٔ انگلیسی را به معنی فارسی خودش وصل کنید.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit52.lesson04.choose.005
+  lesson_content_key: en.a1.unit52.lesson04.a_trip_to_the_hairdresser
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech:
+      - verb
+      - adjective
+      agreement_tags:
+        semantic: fa_en_a1_unit52_words
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} یکی از واژه‌هایی است که در این درس آموزش داده شده است.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit52.lesson01.listen.005
+  lesson_content_key: en.a1.unit52.lesson01.personal_care_vocabulary
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech:
+      - noun
+      agreement_tags:
+        semantic: fa_en_a1_unit52_words
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: واژه‌ای که شنیدید {item} بود.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit52.lesson04.match.006
+  lesson_content_key: en.a1.unit52.lesson04.a_trip_to_the_hairdresser
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: en
+    direction: ltr
+  slots:
+    first:
+      language_code: en
+      part_of_speech:
+      - noun
+      agreement_tags:
+        semantic: fa_en_a1_unit52_words
+    second:
+      language_code: en
+      part_of_speech:
+      - noun
+      agreement_tags:
+        semantic: fa_en_a1_unit52_words
+    third:
+      language_code: en
+      part_of_speech:
+      - noun
+      agreement_tags:
+        semantic: fa_en_a1_unit52_words
+    fourth:
+      language_code: en
+      part_of_speech:
+      - noun
+      agreement_tags:
+        semantic: fa_en_a1_unit52_words
+    fifth:
+      language_code: en
+      part_of_speech:
+      - noun
+      agreement_tags:
+        semantic: fa_en_a1_unit52_words
+    sixth:
+      language_code: en
+      part_of_speech:
+      - noun
+      agreement_tags:
+        semantic: fa_en_a1_unit52_words
+  slot_relations:
+  - kind: distinct
+    slots: *id002
+  answer_derivation:
+    kind: matching_pairs
+    slots: *id002
+  feedback_frame:
+    text: هر واژهٔ انگلیسی را به معنی فارسی خودش وصل کنید.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit52.lesson01.fill.006
+  lesson_content_key: en.a1.unit52.lesson01.personal_care_vocabulary
+  type: fill_in_blank
+  frame:
+    text: Could you cut the sides a little {item}, please?
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: fa_en_a1_unit52_lesson01_words
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: جای خالی را با واژهٔ انگلیسی درست پر کنید.
+    language_code: fa
+    direction: rtl

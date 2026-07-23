@@ -1,0 +1,49 @@
+schema_version: "1.0"
+pack_key: practice.fa-en.a2.unit32
+source_language: fa
+target_language: en
+unit_content_key: en.a2.unit32.online_habits
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    35 lexemes across all 4 lessons (5/15/12/3). Recognition/production use
+    each lesson's own tag narrowed to [noun, verb, adjective, adverb]. Two
+    matching_pairs (6 pairs each): lesson02's tag narrowed to noun-only gives
+    exactly 6 (evening/apps/family/cooking/touch/lot); lesson03's tag
+    narrowed to noun-only gives 8 (hi/phone/post/photos/notifications/times/
+    sharing/friends), 6 selected. No confusable/duplicate glosses in either
+    pool. lesson04 has only 3 lexemes; its verb ("spend") and noun ("thing")
+    are each already single-member once narrowed by part_of_speech, giving
+    two safe structured templates: word_order "How do you {item} your free
+    time?" (grounded in the realization's own dialogue topic) and
+    fill_in_blank "That is a useful {item}." No mis-glossed lexeme found.
+    14 templates, all 4 lessons represented in recognition and production.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [fa_en_a2_unit32_lesson01_words, fa_en_a2_unit32_lesson02_words, fa_en_a2_unit32_lesson03_words, fa_en_a2_unit32_lesson04_words]
+slot_presets:
+  l1: &l1 {language_code: en, part_of_speech: [noun, verb, adjective, adverb], agreement_tags: {semantic: fa_en_a2_unit32_lesson01_words}}
+  l2: &l2 {language_code: en, part_of_speech: [noun, verb, adjective, adverb], agreement_tags: {semantic: fa_en_a2_unit32_lesson02_words}}
+  l2m: &l2m {language_code: en, part_of_speech: noun, agreement_tags: {semantic: fa_en_a2_unit32_lesson02_words}}
+  l3: &l3 {language_code: en, part_of_speech: [noun, verb, adjective, adverb], agreement_tags: {semantic: fa_en_a2_unit32_lesson03_words}}
+  l3m: &l3m {language_code: en, part_of_speech: noun, agreement_tags: {semantic: fa_en_a2_unit32_lesson03_words}}
+  l4: &l4 {language_code: en, part_of_speech: [noun, verb, adjective, adverb], agreement_tags: {semantic: fa_en_a2_unit32_lesson04_words}}
+  l4_verb: &l4_verb {language_code: en, part_of_speech: verb, agreement_tags: {semantic: fa_en_a2_unit32_lesson04_words}}
+  l4_noun: &l4_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: fa_en_a2_unit32_lesson04_words}}
+templates:
+  - {content_key: practice.fa-en.en.a2.unit32.lesson01.choose.001, lesson_content_key: en.a2.unit32.lesson01.online_habits_vocabulary, type: multiple_choice, frame: {text: "{item}", language_code: en, direction: ltr}, slots: {item: *l1}, answer_derivation: {kind: slot_gloss, slot: item}, feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}}
+  - {content_key: practice.fa-en.en.a2.unit32.lesson01.listen.002, lesson_content_key: en.a2.unit32.lesson01.online_habits_vocabulary, type: listen_select, frame: {text: "{item}", language_code: en, direction: ltr}, slots: {item: *l1}, answer_derivation: {kind: slot_gloss, slot: item}, feedback_frame: {text: "واژه‌ای که شنیدید {item} بود.", language_code: fa, direction: rtl}}
+  - {content_key: practice.fa-en.en.a2.unit32.lesson01.translate.003, lesson_content_key: en.a2.unit32.lesson01.online_habits_vocabulary, type: translation, frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}, slots: {item: *l1}, answer_derivation: {kind: slot_text, slot: item}, feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}}
+  - {content_key: practice.fa-en.en.a2.unit32.lesson02.choose.001, lesson_content_key: en.a2.unit32.lesson02.describing_your_own_habits, type: multiple_choice, frame: {text: "{item}", language_code: en, direction: ltr}, slots: {item: *l2}, answer_derivation: {kind: slot_gloss, slot: item}, feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}}
+  - {content_key: practice.fa-en.en.a2.unit32.lesson02.translate.002, lesson_content_key: en.a2.unit32.lesson02.describing_your_own_habits, type: translation, frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}, slots: {item: *l2}, answer_derivation: {kind: slot_text, slot: item}, feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}}
+  - {content_key: practice.fa-en.en.a2.unit32.lesson02.match.003, lesson_content_key: en.a2.unit32.lesson02.describing_your_own_habits, type: matching_pairs, frame: {text: "{first} — {second} — {third} — {fourth} — {fifth} — {sixth}", language_code: en, direction: ltr}, slots: {first: *l2m, second: *l2m, third: *l2m, fourth: *l2m, fifth: *l2m, sixth: *l2m}, slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}], answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}, feedback_frame: {text: "هر واژه را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}}
+  - {content_key: practice.fa-en.en.a2.unit32.lesson03.choose.001, lesson_content_key: en.a2.unit32.lesson03.reading_about_online_habits, type: multiple_choice, frame: {text: "{item}", language_code: en, direction: ltr}, slots: {item: *l3}, answer_derivation: {kind: slot_gloss, slot: item}, feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}}
+  - {content_key: practice.fa-en.en.a2.unit32.lesson03.listen.002, lesson_content_key: en.a2.unit32.lesson03.reading_about_online_habits, type: listen_select, frame: {text: "{item}", language_code: en, direction: ltr}, slots: {item: *l3}, answer_derivation: {kind: slot_gloss, slot: item}, feedback_frame: {text: "واژه‌ای که شنیدید {item} بود.", language_code: fa, direction: rtl}}
+  - {content_key: practice.fa-en.en.a2.unit32.lesson03.translate.003, lesson_content_key: en.a2.unit32.lesson03.reading_about_online_habits, type: translation, frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}, slots: {item: *l3}, answer_derivation: {kind: slot_text, slot: item}, feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}}
+  - {content_key: practice.fa-en.en.a2.unit32.lesson03.match.004, lesson_content_key: en.a2.unit32.lesson03.reading_about_online_habits, type: matching_pairs, frame: {text: "{first} — {second} — {third} — {fourth} — {fifth} — {sixth}", language_code: en, direction: ltr}, slots: {first: *l3m, second: *l3m, third: *l3m, fourth: *l3m, fifth: *l3m, sixth: *l3m}, slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}], answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}, feedback_frame: {text: "هر واژه را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}}
+  - {content_key: practice.fa-en.en.a2.unit32.lesson04.choose.001, lesson_content_key: en.a2.unit32.lesson04.online_habits_dialogue, type: multiple_choice, frame: {text: "{item}", language_code: en, direction: ltr}, slots: {item: *l4}, answer_derivation: {kind: slot_gloss, slot: item}, feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}}
+  - {content_key: practice.fa-en.en.a2.unit32.lesson04.translate.002, lesson_content_key: en.a2.unit32.lesson04.online_habits_dialogue, type: translation, frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}, slots: {item: *l4_noun}, answer_derivation: {kind: slot_text, slot: item}, feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}}
+  - {content_key: practice.fa-en.en.a2.unit32.lesson04.order.003, lesson_content_key: en.a2.unit32.lesson04.online_habits_dialogue, type: word_order, frame: {text: "How do you {item} your free time", language_code: en, direction: ltr}, slots: {item: *l4_verb}, answer_derivation: {kind: render_frame, frame: {text: "How do you {item} your free time", language_code: en, direction: ltr}}, feedback_frame: {text: "{item} یعنی «صرف کردن وقت».", language_code: fa, direction: rtl}}
+  - {content_key: practice.fa-en.en.a2.unit32.lesson04.fill.004, lesson_content_key: en.a2.unit32.lesson04.online_habits_dialogue, type: fill_in_blank, frame: {text: "That is a useful {item}.", language_code: en, direction: ltr}, slots: {item: *l4_noun}, answer_derivation: {kind: slot_text, slot: item}, feedback_frame: {text: "{item} یعنی «چیز».", language_code: fa, direction: rtl}}

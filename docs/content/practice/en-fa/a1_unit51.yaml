@@ -1,0 +1,223 @@
+schema_version: '1.0'
+pack_key: practice.en-fa.a1.unit51
+source_language: en
+target_language: fa
+unit_content_key: fa.a1.unit51.cinema
+
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    THIN UNIT -- flagging per recipe §0/§3. Per backfill_lexemes_en_fa,
+    lesson03 (ticket_price) and lesson05 (reading_cinema_sign) have ZERO fa
+    lexemes (only English "eighty" / "film" source_gloss tokens, no target
+    Farsi lexeme) -- a structural gap, not an authoring omission; those two
+    lessons cannot be represented in the checkpoint no matter what is
+    authored. Only lessons01, 02, 04 and 06 have fa lexemes, totaling 5
+    distinct tokens/phrases: cinema_word 2 (سانس "showtime/screening" noun,
+    شروع "start/beginning" noun), 1 person_name (موسوی), 2 additional
+    reviewed_phrase (خانم موسوی "Ms. Mousavi", فیلم چطور بود؟ باحال بود!
+    "How was the movie? It was cool!"). Union of all 3 tags gives only 5
+    distinct tokens -- below the 6-pair matching_pairs floor, so no
+    matching_pairs is authored. 9 templates total (well below the 12 floor
+    -- real capacity limit): 4 lessons (01/02/04/06) x (multiple_choice +
+    bare-word translation) over the full 5-token union, plus 1 word_order
+    anchored lesson01 over cinema_word (frame "{item} امشب ساعت هشته." /
+    "The {item} tonight is at eight.") -- re-read at course scope:
+    cinema_word is a unit-specific coined tag with zero course-wide members
+    outside this unit (verified via full iter_specs() scan), so course scope
+    == unit scope here, and both members (showtime, start) read
+    grammatically in that frame. Structured tier is only 1 template (below
+    the >=3 bar) for the same reason -- fill_in_blank is not usable either
+    (no tag in this unit has exactly 1 course-wide candidate). No
+    mis-glossed lexemes found. No listen_select (Azure TTS key unset for fa).
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - cinema_word
+    - person_name
+    - reviewed_phrase
+
+templates:
+# --- lesson01 (new_cinema_one) ---
+- content_key: practice.en-fa.fa.a1.unit51.lesson01.choose.001
+  lesson_content_key: fa.a1.unit51.lesson01.new_cinema_one
+  type: multiple_choice
+  frame: {text: '{item}', language_code: fa, direction: rtl}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, phrase, proper_noun]
+      agreement_tags:
+        semantic: [cinema_word, person_name, reviewed_phrase]
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is cinema vocabulary from this unit.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit51.lesson01.translate.002
+  lesson_content_key: fa.a1.unit51.lesson01.new_cinema_one
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, phrase, proper_noun]
+      agreement_tags:
+        semantic: [cinema_word, person_name, reviewed_phrase]
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Farsi word is {item}.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit51.lesson01.order.003
+  lesson_content_key: fa.a1.unit51.lesson01.new_cinema_one
+  type: word_order
+  frame:
+    text: '{item} امشب ساعت هشته.'
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: noun
+      agreement_tags:
+        semantic: cinema_word
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{item} امشب ساعت هشته.'
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: سانس امشب ساعت هشته. -- The showtime tonight is at eight.
+    language_code: en
+    direction: ltr
+
+# --- lesson02 (new_cinema_two) ---
+- content_key: practice.en-fa.fa.a1.unit51.lesson02.choose.001
+  lesson_content_key: fa.a1.unit51.lesson02.new_cinema_two
+  type: multiple_choice
+  frame: {text: '{item}', language_code: fa, direction: rtl}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, phrase, proper_noun]
+      agreement_tags:
+        semantic: [cinema_word, person_name, reviewed_phrase]
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is cinema vocabulary from this unit.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit51.lesson02.translate.002
+  lesson_content_key: fa.a1.unit51.lesson02.new_cinema_two
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, phrase, proper_noun]
+      agreement_tags:
+        semantic: [cinema_word, person_name, reviewed_phrase]
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Farsi word is {item}.
+    language_code: en
+    direction: ltr
+
+# --- lesson04 (cinema_dialogue) ---
+- content_key: practice.en-fa.fa.a1.unit51.lesson04.choose.001
+  lesson_content_key: fa.a1.unit51.lesson04.cinema_dialogue
+  type: multiple_choice
+  frame: {text: '{item}', language_code: fa, direction: rtl}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, phrase, proper_noun]
+      agreement_tags:
+        semantic: [cinema_word, person_name, reviewed_phrase]
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is cinema vocabulary from this unit.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit51.lesson04.translate.002
+  lesson_content_key: fa.a1.unit51.lesson04.cinema_dialogue
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, phrase, proper_noun]
+      agreement_tags:
+        semantic: [cinema_word, person_name, reviewed_phrase]
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Farsi word is {item}.
+    language_code: en
+    direction: ltr
+
+# --- lesson06 (wrap_up) ---
+- content_key: practice.en-fa.fa.a1.unit51.lesson06.choose.001
+  lesson_content_key: fa.a1.unit51.lesson06.wrap_up
+  type: multiple_choice
+  frame: {text: '{item}', language_code: fa, direction: rtl}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, phrase, proper_noun]
+      agreement_tags:
+        semantic: [cinema_word, person_name, reviewed_phrase]
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is cinema vocabulary from this unit.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit51.lesson06.translate.002
+  lesson_content_key: fa.a1.unit51.lesson06.wrap_up
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, phrase, proper_noun]
+      agreement_tags:
+        semantic: [cinema_word, person_name, reviewed_phrase]
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Farsi word is {item}.
+    language_code: en
+    direction: ltr

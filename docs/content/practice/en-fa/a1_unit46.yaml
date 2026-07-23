@@ -1,0 +1,311 @@
+schema_version: '1.0'
+pack_key: practice.en-fa.a1.unit46
+source_language: en
+target_language: fa
+unit_content_key: fa.a1.unit46.personal_care
+
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    Vocabulary unit (personal_care/barbershop, 7 distinct fa lexemes/phrases
+    across all 5 lessons per backfill_lexemes_en_fa: salon_word 4
+    (سلمانی "barbershop" noun, موهام "my hair" noun, کوتاه‌تر "shorter"
+    adjective, مثل قبل "like before" phrase), 1 person_name (نوری), and 2
+    additional reviewed_phrase entries (آقای نوری "Mr. Nouri", سلمانی نوری:
+    کوتاه کردن مو، سه هزار تومن. "Nouri's barbershop: haircut, three thousand
+    toman."). Union of all 3 tags gives 7 distinct tokens with 7 distinct
+    English glosses -- clears both the multiple_choice floor (3) and the
+    matching_pairs floor (6) with only 1 to spare. 13 templates: 5 lessons x
+    (multiple_choice + bare-word translation, both over the full unit-wide
+    union), plus 3 matching_pairs over the same 7-token union anchored to
+    lessons01/03/05. word_order skipped: salon_word mixes a place noun, a
+    body-part noun, an adjective and a fixed phrase with no single
+    grammatical carrier frame found within time budget, and the two smaller
+    tags (person_name, reviewed_phrase) are broad course-wide (25 and 519
+    members respectively across the whole en-fa corpus) so a literal-frame
+    word_order over either would need a course-scope grammaticality re-read
+    that was out of scope here. No mis-glossed lexemes found. No listen_select
+    (Azure TTS key unset for fa).
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - salon_word
+    - person_name
+    - reviewed_phrase
+
+templates:
+# --- lesson01 (new_personal_care_one) ---
+- content_key: practice.en-fa.fa.a1.unit46.lesson01.choose.001
+  lesson_content_key: fa.a1.unit46.lesson01.new_personal_care_one
+  type: multiple_choice
+  frame: {text: '{item}', language_code: fa, direction: rtl}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, adjective, phrase, proper_noun]
+      agreement_tags:
+        semantic: [salon_word, person_name, reviewed_phrase]
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is personal-care vocabulary from this unit.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit46.lesson01.translate.002
+  lesson_content_key: fa.a1.unit46.lesson01.new_personal_care_one
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, adjective, phrase, proper_noun]
+      agreement_tags:
+        semantic: [salon_word, person_name, reviewed_phrase]
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Farsi word is {item}.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit46.lesson01.match.003
+  lesson_content_key: fa.a1.unit46.lesson01.new_personal_care_one
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: fa
+    direction: rtl
+  slots:
+    first: &salon_pool
+      language_code: fa
+      part_of_speech: [noun, adjective, phrase, proper_noun]
+      agreement_tags:
+        semantic: [salon_word, person_name, reviewed_phrase]
+    second: *salon_pool
+    third: *salon_pool
+    fourth: *salon_pool
+    fifth: *salon_pool
+    sixth: *salon_pool
+  slot_relations:
+  - kind: distinct
+    slots: [first, second, third, fourth, fifth, sixth]
+  answer_derivation:
+    kind: matching_pairs
+    slots: [first, second, third, fourth, fifth, sixth]
+  feedback_frame:
+    text: Match each Farsi word with its English meaning.
+    language_code: en
+    direction: ltr
+
+# --- lesson02 (new_personal_care_two) ---
+- content_key: practice.en-fa.fa.a1.unit46.lesson02.choose.001
+  lesson_content_key: fa.a1.unit46.lesson02.new_personal_care_two
+  type: multiple_choice
+  frame: {text: '{item}', language_code: fa, direction: rtl}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, adjective, phrase, proper_noun]
+      agreement_tags:
+        semantic: [salon_word, person_name, reviewed_phrase]
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is personal-care vocabulary from this unit.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit46.lesson02.translate.002
+  lesson_content_key: fa.a1.unit46.lesson02.new_personal_care_two
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, adjective, phrase, proper_noun]
+      agreement_tags:
+        semantic: [salon_word, person_name, reviewed_phrase]
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Farsi word is {item}.
+    language_code: en
+    direction: ltr
+
+# --- lesson03 (request_shorter) ---
+- content_key: practice.en-fa.fa.a1.unit46.lesson03.choose.001
+  lesson_content_key: fa.a1.unit46.lesson03.request_shorter
+  type: multiple_choice
+  frame: {text: '{item}', language_code: fa, direction: rtl}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, adjective, phrase, proper_noun]
+      agreement_tags:
+        semantic: [salon_word, person_name, reviewed_phrase]
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is personal-care vocabulary from this unit.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit46.lesson03.translate.002
+  lesson_content_key: fa.a1.unit46.lesson03.request_shorter
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, adjective, phrase, proper_noun]
+      agreement_tags:
+        semantic: [salon_word, person_name, reviewed_phrase]
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Farsi word is {item}.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit46.lesson03.match.003
+  lesson_content_key: fa.a1.unit46.lesson03.request_shorter
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: fa
+    direction: rtl
+  slots:
+    first: *salon_pool
+    second: *salon_pool
+    third: *salon_pool
+    fourth: *salon_pool
+    fifth: *salon_pool
+    sixth: *salon_pool
+  slot_relations:
+  - kind: distinct
+    slots: [first, second, third, fourth, fifth, sixth]
+  answer_derivation:
+    kind: matching_pairs
+    slots: [first, second, third, fourth, fifth, sixth]
+  feedback_frame:
+    text: Match each Farsi word with its English meaning.
+    language_code: en
+    direction: ltr
+
+# --- lesson04 (personal_care_dialogue) ---
+- content_key: practice.en-fa.fa.a1.unit46.lesson04.choose.001
+  lesson_content_key: fa.a1.unit46.lesson04.personal_care_dialogue
+  type: multiple_choice
+  frame: {text: '{item}', language_code: fa, direction: rtl}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, adjective, phrase, proper_noun]
+      agreement_tags:
+        semantic: [salon_word, person_name, reviewed_phrase]
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is personal-care vocabulary from this unit.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit46.lesson04.translate.002
+  lesson_content_key: fa.a1.unit46.lesson04.personal_care_dialogue
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, adjective, phrase, proper_noun]
+      agreement_tags:
+        semantic: [salon_word, person_name, reviewed_phrase]
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Farsi word is {item}.
+    language_code: en
+    direction: ltr
+
+# --- lesson05 (reading_salon_sign) ---
+- content_key: practice.en-fa.fa.a1.unit46.lesson05.choose.001
+  lesson_content_key: fa.a1.unit46.lesson05.reading_salon_sign
+  type: multiple_choice
+  frame: {text: '{item}', language_code: fa, direction: rtl}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, adjective, phrase, proper_noun]
+      agreement_tags:
+        semantic: [salon_word, person_name, reviewed_phrase]
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is personal-care vocabulary from this unit.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit46.lesson05.translate.002
+  lesson_content_key: fa.a1.unit46.lesson05.reading_salon_sign
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, adjective, phrase, proper_noun]
+      agreement_tags:
+        semantic: [salon_word, person_name, reviewed_phrase]
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Farsi word is {item}.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit46.lesson05.match.003
+  lesson_content_key: fa.a1.unit46.lesson05.reading_salon_sign
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: fa
+    direction: rtl
+  slots:
+    first: *salon_pool
+    second: *salon_pool
+    third: *salon_pool
+    fourth: *salon_pool
+    fifth: *salon_pool
+    sixth: *salon_pool
+  slot_relations:
+  - kind: distinct
+    slots: [first, second, third, fourth, fifth, sixth]
+  answer_derivation:
+    kind: matching_pairs
+    slots: [first, second, third, fourth, fifth, sixth]
+  feedback_frame:
+    text: Match each Farsi word with its English meaning.
+    language_code: en
+    direction: ltr

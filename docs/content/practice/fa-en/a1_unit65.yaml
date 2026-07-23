@@ -1,0 +1,101 @@
+schema_version: "1.0"
+pack_key: practice.fa-en.a1.unit65
+source_language: fa
+target_language: en
+unit_content_key: en.a1.unit65.returns_exchanges
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    THIN UNIT: backfill_lexemes_fa_en.py registers only 5 lexemes (exchange/
+    larger/refund in lesson01, offered/exchanged in lesson04; lesson02/
+    lesson03 have zero lexemes and are invisible to any checkpoint). 9
+    templates at genuine capacity: MC/listen/translation pool = unit-wide tag
+    (all 5 distinct). matching_pairs omitted (needs 6, only 5 exist).
+    lesson01's tag narrowed by part_of_speech gives three single-member
+    anchors (verb->exchange, adjective->larger, noun->refund), each framed
+    from the realization's own example sentences ("Can I exchange it?",
+    "I need a larger size.", "You can get a refund."). lesson04's two verbs
+    (offered/exchanged) cannot be narrowed to a single member by
+    part_of_speech, so its word_order frame ("Leila {item} it") was checked
+    by hand for BOTH candidates -- "Leila offered it" and "Leila exchanged
+    it" are both grammatical -- rather than treated as a false single-member
+    anchor. Course-scope check: all lesson-level tags are unique to this
+    unit, so course-wide membership == unit-scoped membership. No
+    mis-glossed lexeme found. FLAG FOR COORDINATOR: checkpoint will very
+    likely stay <12 items unless lessons 02/03 get lexeme coverage --
+    routing to backfill recommended.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [fa_en_a1_unit65_words, fa_en_a1_unit65_lesson01_words, fa_en_a1_unit65_lesson04_words]
+slot_presets:
+  unit_pool: &unit_pool {language_code: en, part_of_speech: [noun, verb, adjective], agreement_tags: {semantic: fa_en_a1_unit65_words}}
+  lesson01_verb: &lesson01_verb {language_code: en, part_of_speech: verb, agreement_tags: {semantic: fa_en_a1_unit65_lesson01_words}}
+  lesson01_adj: &lesson01_adj {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: fa_en_a1_unit65_lesson01_words}}
+  lesson01_noun: &lesson01_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: fa_en_a1_unit65_lesson01_words}}
+  lesson04_verb: &lesson04_verb {language_code: en, part_of_speech: verb, agreement_tags: {semantic: fa_en_a1_unit65_lesson04_words}}
+templates:
+  - content_key: practice.fa-en.en.a1.unit65.lesson01.choose.001
+    lesson_content_key: en.a1.unit65.lesson01.return_words
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *unit_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit65.lesson01.listen.002
+    lesson_content_key: en.a1.unit65.lesson01.return_words
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *unit_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "واژه‌ای که شنیدید {item} بود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit65.lesson01.translate.003
+    lesson_content_key: en.a1.unit65.lesson01.return_words
+    type: translation
+    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *unit_pool}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit65.lesson01.order.004
+    lesson_content_key: en.a1.unit65.lesson01.return_words
+    type: word_order
+    frame: {text: "Can I {item} it", language_code: en, direction: ltr}
+    slots: {item: *lesson01_verb}
+    answer_derivation: {kind: render_frame, frame: {text: "Can I {item} it", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} یعنی «تعویض کردن».", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit65.lesson01.fill.005
+    lesson_content_key: en.a1.unit65.lesson01.return_words
+    type: fill_in_blank
+    frame: {text: "I need a {item} size.", language_code: en, direction: ltr}
+    slots: {item: *lesson01_adj}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} یعنی «بزرگ‌تر».", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit65.lesson01.fill.006
+    lesson_content_key: en.a1.unit65.lesson01.return_words
+    type: fill_in_blank
+    frame: {text: "You can get a {item}.", language_code: en, direction: ltr}
+    slots: {item: *lesson01_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} یعنی «بازپرداخت».", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit65.lesson04.choose.001
+    lesson_content_key: en.a1.unit65.lesson04.a_return_receipt
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *unit_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit65.lesson04.translate.002
+    lesson_content_key: en.a1.unit65.lesson04.a_return_receipt
+    type: translation
+    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *unit_pool}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit65.lesson04.order.003
+    lesson_content_key: en.a1.unit65.lesson04.a_return_receipt
+    type: word_order
+    frame: {text: "Leila {item} it", language_code: en, direction: ltr}
+    slots: {item: *lesson04_verb}
+    answer_derivation: {kind: render_frame, frame: {text: "Leila {item} it", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} فعل گذشتهٔ ساده است.", language_code: fa, direction: rtl}

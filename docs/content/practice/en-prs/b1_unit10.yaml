@@ -1,0 +1,327 @@
+schema_version: '1.0'
+pack_key: practice.en-prs.b1.unit10
+source_language: en
+target_language: prs
+unit_content_key: prs.b1.unit10.descriptions
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    en-prs B1 practice pack (unit10 descriptions: subject/object/preposition
+    relative clauses with the indefinite -ی/-ای head noun), authored
+    2026-07-23. GRAMMAR UNIT (recipe SS8.1). All 6 lessons have lexemes (19
+    total). The unit's own grammar point IS a semantic tag:
+    relative_head_noun is carried by 6 distinct unit tokens spread across 4
+    lessons (همکاری lesson01, موتری/کاری lesson02, مدیری/دفتری lesson03,
+    خانه‌ای lesson06) and by NOTHING else in the whole direction (confirmed
+    via iter_specs()) -- so it is both the perfect word_order anchor (course
+    scope = unit scope = 6) and safe from any course-scope grammaticality
+    surprise.
+    Broad recognition/production/matching_pairs union (relative_head_noun,
+    personality_word, shop_word, location_word, clothing_size_adjective,
+    accept_decline_word, glad_predicate, past_verb_second_b1, work_past_verb,
+    see_verb, description_adjective, home_description_word, dialogue_word) --
+    dialogue_word is folded in here (unlike unit09) specifically because
+    خریدم "I bought" carries ONLY dialogue_word and no other semantic tag; it
+    would otherwise be uncoverable. Safe for the same reason as always: this
+    slot is only used where there is no literal frame text (bare-word
+    MC/matching_pairs/translation), so course-wide breadth is not a
+    grammaticality risk. Checked every other listed tag's whole-direction
+    size first (worst case personality_word=7, location_word=7); none huge
+    enough to worry about confusable-gloss collisions, and a hand check of
+    all 19 unit glosses found none.
+    word_order (x4, one per relative_head_noun lesson) uses frame "من {item}
+    دارم." (I have a/an [item].) -- checked all 6 course-wide candidates by
+    hand: "I have a colleague/car/job/manager/office/house (that...)" all
+    read as grammatical (if elliptical, matching the lexeme's own "(that…)"
+    gloss convention) Dari sentences with no self-reference (frame contains
+    none of the candidate tokens).
+    fill_in_blank uses the ONE genuinely single-candidate anchor found:
+    work_past_verb (کردم, exactly 1 whole-direction, confirmed live) --
+    "من دیروز این کار را {item}." (I did this task yesterday.)
+    lesson05 (می‌بیند, single unit lexeme, tag see_verb) has NO safe
+    structured-tier anchor: see_verb's other 3 whole-direction members
+    (دیدین/دیدم/دید) are different grammatical persons (you-polite/I/he-she)
+    that cannot share one fixed-subject frame -- exactly the trap SS1.1 warns
+    about -- so it was deliberately left to recognition + production only
+    and flagged here rather than risking a mixed-person frame.
+    18 templates: MC x6, word_order x4, fill_in_blank x1, matching_pairs x1
+    (6 pairs, anchored to lesson04, the richest at 7 lexemes), translation x6.
+    Structured=6, recognition=6, production=6 -- all three tiers clear the
+    floor with room. Every lesson represented in recognition/production;
+    lesson05 has no dedicated structured template (noted above). No
+    mis-glossed lexeme found. No listen_select (no prs TTS). Register:
+    2pl/plural forms (استیم, خریدی informal 2sg) verified against
+    b1_unit10_descriptions.yaml's own register_policy (-ین convention,
+    consistent with the rest of the corpus; no 2pl verb form appears in this
+    pool). Needs the standard fresh-context review before import.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - relative_head_noun
+    - personality_word
+    - shop_word
+    - location_word
+    - clothing_size_adjective
+    - accept_decline_word
+    - glad_predicate
+    - past_verb_second_b1
+    - work_past_verb
+    - see_verb
+    - description_adjective
+    - home_description_word
+    - dialogue_word
+slot_presets:
+  unit_word: &uw
+    language_code: prs
+    part_of_speech: [noun, verb, adjective]
+    agreement_tags:
+      semantic:
+      - relative_head_noun
+      - personality_word
+      - shop_word
+      - location_word
+      - clothing_size_adjective
+      - accept_decline_word
+      - glad_predicate
+      - past_verb_second_b1
+      - work_past_verb
+      - see_verb
+      - description_adjective
+      - home_description_word
+      - dialogue_word
+  relative_noun: &rel
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: relative_head_noun
+  work_past_single: &wp
+    language_code: prs
+    part_of_speech: verb
+    agreement_tags:
+      semantic: work_past_verb
+templates:
+# ---- recognition ----
+- content_key: practice.en-prs.prs.b1.unit10.lesson01.choose.001
+  lesson_content_key: prs.b1.unit10.lesson01.subject_relative_clause
+  type: multiple_choice
+  frame: {text: '{item}', language_code: prs, direction: rtl}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is from this unit''s descriptions vocabulary.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b1.unit10.lesson02.choose.001
+  lesson_content_key: prs.b1.unit10.lesson02.object_relative_clause
+  type: multiple_choice
+  frame: {text: '{item}', language_code: prs, direction: rtl}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is from this unit''s descriptions vocabulary.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b1.unit10.lesson03.choose.001
+  lesson_content_key: prs.b1.unit10.lesson03.preposition_relative_clause
+  type: multiple_choice
+  frame: {text: '{item}', language_code: prs, direction: rtl}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is from this unit''s descriptions vocabulary.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b1.unit10.lesson04.choose.001
+  lesson_content_key: prs.b1.unit10.lesson04.dialogue_new_car_job
+  type: multiple_choice
+  frame: {text: '{item}', language_code: prs, direction: rtl}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is from this unit''s descriptions vocabulary.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b1.unit10.lesson05.choose.001
+  lesson_content_key: prs.b1.unit10.lesson05.reading_two_stories
+  type: multiple_choice
+  frame: {text: '{item}', language_code: prs, direction: rtl}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is from this unit''s descriptions vocabulary.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b1.unit10.lesson06.choose.001
+  lesson_content_key: prs.b1.unit10.lesson06.wrapup_production
+  type: multiple_choice
+  frame: {text: '{item}', language_code: prs, direction: rtl}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is from this unit''s descriptions vocabulary.'
+    language_code: en
+    direction: ltr
+# ---- structured ----
+- content_key: practice.en-prs.prs.b1.unit10.lesson01.order.001
+  lesson_content_key: prs.b1.unit10.lesson01.subject_relative_clause
+  type: word_order
+  frame: {text: 'من {item} دارم.', language_code: prs, direction: rtl}
+  slots:
+    item: *rel
+  answer_derivation:
+    kind: render_frame
+    frame: {text: 'من {item} دارم.', language_code: prs, direction: rtl}
+  feedback_frame:
+    text: 'Word order: من همکاری دارم. (I have a colleague that...)'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b1.unit10.lesson02.order.001
+  lesson_content_key: prs.b1.unit10.lesson02.object_relative_clause
+  type: word_order
+  frame: {text: 'من {item} دارم.', language_code: prs, direction: rtl}
+  slots:
+    item: *rel
+  answer_derivation:
+    kind: render_frame
+    frame: {text: 'من {item} دارم.', language_code: prs, direction: rtl}
+  feedback_frame:
+    text: 'Word order: من موتری دارم. (I have a car that...)'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b1.unit10.lesson03.order.001
+  lesson_content_key: prs.b1.unit10.lesson03.preposition_relative_clause
+  type: word_order
+  frame: {text: 'من {item} دارم.', language_code: prs, direction: rtl}
+  slots:
+    item: *rel
+  answer_derivation:
+    kind: render_frame
+    frame: {text: 'من {item} دارم.', language_code: prs, direction: rtl}
+  feedback_frame:
+    text: 'Word order: من مدیری دارم. (I have a manager that...)'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b1.unit10.lesson06.order.001
+  lesson_content_key: prs.b1.unit10.lesson06.wrapup_production
+  type: word_order
+  frame: {text: 'من {item} دارم.', language_code: prs, direction: rtl}
+  slots:
+    item: *rel
+  answer_derivation:
+    kind: render_frame
+    frame: {text: 'من {item} دارم.', language_code: prs, direction: rtl}
+  feedback_frame:
+    text: 'Word order: من خانه‌ای دارم. (I have a house that...)'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b1.unit10.lesson04.fill.001
+  lesson_content_key: prs.b1.unit10.lesson04.dialogue_new_car_job
+  type: fill_in_blank
+  frame: {text: 'من دیروز این کار را {item}.', language_code: prs, direction: rtl}
+  slots:
+    item: *wp
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: 'من دیروز این کار را کردم. = I did this task yesterday.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b1.unit10.lesson04.match.001
+  lesson_content_key: prs.b1.unit10.lesson04.dialogue_new_car_job
+  type: matching_pairs
+  frame: {text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}', language_code: prs, direction: rtl}
+  slots: {first: *uw, second: *uw, third: *uw, fourth: *uw, fifth: *uw, sixth: *uw}
+  slot_relations:
+  - kind: distinct
+    slots: [first, second, third, fourth, fifth, sixth]
+  answer_derivation:
+    kind: matching_pairs
+    slots: [first, second, third, fourth, fifth, sixth]
+  feedback_frame:
+    text: 'Match each word to its meaning.'
+    language_code: en
+    direction: ltr
+# ---- production ----
+- content_key: practice.en-prs.prs.b1.unit10.lesson01.translate.001
+  lesson_content_key: prs.b1.unit10.lesson01.subject_relative_clause
+  type: translation
+  frame: {text: '{item}', language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: 'Type the Dari word.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b1.unit10.lesson02.translate.001
+  lesson_content_key: prs.b1.unit10.lesson02.object_relative_clause
+  type: translation
+  frame: {text: '{item}', language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: 'Type the Dari word.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b1.unit10.lesson03.translate.001
+  lesson_content_key: prs.b1.unit10.lesson03.preposition_relative_clause
+  type: translation
+  frame: {text: '{item}', language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: 'Type the Dari word.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b1.unit10.lesson04.translate.001
+  lesson_content_key: prs.b1.unit10.lesson04.dialogue_new_car_job
+  type: translation
+  frame: {text: '{item}', language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: 'Type the Dari word.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b1.unit10.lesson05.translate.001
+  lesson_content_key: prs.b1.unit10.lesson05.reading_two_stories
+  type: translation
+  frame: {text: '{item}', language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: 'Type the Dari word.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b1.unit10.lesson06.translate.001
+  lesson_content_key: prs.b1.unit10.lesson06.wrapup_production
+  type: translation
+  frame: {text: '{item}', language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: 'Type the Dari word.'
+    language_code: en
+    direction: ltr

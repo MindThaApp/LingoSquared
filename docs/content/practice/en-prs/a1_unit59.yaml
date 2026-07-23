@@ -1,0 +1,154 @@
+schema_version: '1.0'
+pack_key: practice.en-prs.a1.unit59
+source_language: en
+target_language: prs
+unit_content_key: prs.a1.unit59.boat_tour
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    en-prs A1 practice pack (unit59 boat_tour), authored 2026-07-23. VERY THIN
+    UNIT: only 5 lexemes total across 4 lessons with lexemes (lesson01: قایق
+    "boat", دریاچه "lake"; lesson02: گشت "tour"; lesson03: زیبا "beautiful";
+    lesson06: گشت‌تان "your tour"). lesson04/05 have ZERO lexemes.
+    unit_word union (boat_tour_word+description_adjective+formal_possessive_word,
+    pos [noun,adjective]) gives exactly 5 distinct glosses -- below the 6-pair
+    matching_pairs floor, so matching_pairs is DELIBERATELY OMITTED (never
+    padded to a fake 6th pair). word_order uses boat_tour_word (course-wide 3:
+    قایق boat, دریاچه lake, گشت tour) in the frame "{item} زیبا است." (the X is
+    beautiful) -- checked at course scope, all 3 are things that can plausibly
+    be called beautiful (lake/boat/tour), matching the unit's own authored
+    content ("این قایق زیبا است.", "دریاچه زیبا است."). description_adjective
+    (4 course-wide: جالب interesting, خوش‌مزه delicious, زیبا beautiful, گرم
+    warm) is NOT used in a fixed-subject frame -- "delicious" applied to a lake
+    would be ungrammatical -- so it is only used in bare-word translation,
+    which is frame-safe regardless of pool breadth. No single-member course-
+    wide anchor exists for fill_in_blank (checked: boat_tour_word=3,
+    formal_possessive_word=14, description_adjective=4 -- none is 1), so
+    fill_in_blank is omitted too. Only 8 templates, 2 structured (below the
+    ideal 3) -- capacity-limited, not padded. No mis-glossed lexemes found. No
+    listen_select (no prs TTS).
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - boat_tour_word
+    - description_adjective
+    - formal_possessive_word
+slot_presets:
+  unit_word: &uw
+    language_code: prs
+    part_of_speech: [noun, adjective]
+    agreement_tags:
+      semantic: [boat_tour_word, description_adjective, formal_possessive_word]
+  boat_tour: &bt
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: boat_tour_word
+templates:
+# ---- recognition ----
+- content_key: practice.en-prs.prs.a1.unit59.lesson01.choose.001
+  lesson_content_key: prs.a1.unit59.lesson01.boat_and_lake_vocabulary
+  type: multiple_choice
+  frame: {text: '{item}', language_code: prs, direction: rtl}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is from this unit''s boat-tour vocabulary.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit59.lesson02.choose.001
+  lesson_content_key: prs.a1.unit59.lesson02.boat_tour_sign
+  type: multiple_choice
+  frame: {text: '{item}', language_code: prs, direction: rtl}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is from this unit''s boat-tour vocabulary.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit59.lesson06.choose.001
+  lesson_content_key: prs.a1.unit59.lesson06.wrap_up
+  type: multiple_choice
+  frame: {text: '{item}', language_code: prs, direction: rtl}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is from this unit''s boat-tour vocabulary.'
+    language_code: en
+    direction: ltr
+# ---- structured ----
+- content_key: practice.en-prs.prs.a1.unit59.lesson01.order.001
+  lesson_content_key: prs.a1.unit59.lesson01.boat_and_lake_vocabulary
+  type: word_order
+  frame: {text: '{item} زیبا است.', language_code: prs, direction: rtl}
+  slots:
+    item: *bt
+  answer_derivation:
+    kind: render_frame
+    frame: {text: '{item} زیبا است.', language_code: prs, direction: rtl}
+  feedback_frame:
+    text: 'Word order: قایق زیبا است. (The boat is beautiful.)'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit59.lesson02.order.001
+  lesson_content_key: prs.a1.unit59.lesson02.boat_tour_sign
+  type: word_order
+  frame: {text: '{item} زیبا است.', language_code: prs, direction: rtl}
+  slots:
+    item: *bt
+  answer_derivation:
+    kind: render_frame
+    frame: {text: '{item} زیبا است.', language_code: prs, direction: rtl}
+  feedback_frame:
+    text: 'Word order: گشت زیبا است. (The tour is beautiful.)'
+    language_code: en
+    direction: ltr
+# ---- production ----
+- content_key: practice.en-prs.prs.a1.unit59.lesson01.translate.001
+  lesson_content_key: prs.a1.unit59.lesson01.boat_and_lake_vocabulary
+  type: translation
+  frame: {text: '{item}', language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: 'Type the Dari word.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit59.lesson03.translate.001
+  lesson_content_key: prs.a1.unit59.lesson03.beautiful_lake
+  type: translation
+  frame: {text: '{item}', language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: 'Type the Dari word.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit59.lesson06.translate.001
+  lesson_content_key: prs.a1.unit59.lesson06.wrap_up
+  type: translation
+  frame: {text: '{item}', language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: 'Type the Dari word.'
+    language_code: en
+    direction: ltr

@@ -1,0 +1,214 @@
+schema_version: '1.0'
+pack_key: practice.en-prs.b1.unit11
+source_language: en
+target_language: prs
+unit_content_key: prs.b1.unit11.communication
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    en-prs B1 practice pack (unit11 communication: reported yes/no questions),
+    authored 2026-07-23. GRAMMAR UNIT, VERY THIN: only 4 lexemes across 4 of
+    6 lessons (lesson01: آیا "(question particle)"; lesson03: نمی‌کنم "I
+    don't (do)"; lesson05: رفت "she/he went"; lesson06: پرسیدید "you
+    (plural/polite) asked"). lesson02/04 have ZERO lexemes and cannot be
+    represented in the checkpoint.
+    NO matching_pairs: only 4 unit lexemes total, below the hard 6-pair floor
+    (DO-NOT #5), and this unit has no more lexemes anywhere to widen the pool
+    with -- omitted rather than shipped under-floor.
+    fill_in_blank uses two whole-direction-unique single-candidate anchors,
+    confirmed live via iter_specs(): reported_question_particle (آیا, exactly
+    1 -- the whole reported-yes/no-question marker in the entire direction)
+    and negative_present_verb (نمی‌کنم, exactly 1).
+    word_order for lesson05 (رفت, tag past_verb_third) deliberately uses the
+    minimal bare frame "او {item}." (He/she [verb]ed.) rather than a
+    transitive frame with an object: past_verb_third's other 4 whole-direction
+    members (کرد "did", شد "became", دید "saw", برد "won/took") have
+    different valencies (شد needs a complement, برد can take "را") that do
+    not all fit one fixed object -- so the frame was deliberately kept
+    object-free (all 5 candidates stand alone as complete elliptical
+    sentences: "he went.", "he did.", "he became.", "he saw.", "he won.").
+    report_verb_ask (پرسیدید, lesson06) was NOT used in word_order or
+    fill_in_blank: its 3 other whole-direction members (پرسید/پرسیدم/پرسیدی)
+    are different grammatical persons (he/I/you-informal) that cannot share a
+    fixed-subject frame with پرسیدید (you-plural/polite) -- the same trap
+    flagged in the unit10 pack -- so lesson06 has no dedicated structured
+    template; it is still covered by recognition and production.
+    Register: پرسیدید correctly keeps -ید (not -ین), matching this
+    realization's own register_policy note that simple-past 2nd-plural has
+    no -ین counterpart anywhere in the corpus (b1_unit05's confirmed
+    exception, restated for unit11).
+    11 templates: MC x4, fill_in_blank x2, word_order x1, translation x4.
+    Structured=3 (floor met exactly), recognition=4, production=4. Below the
+    12-template floor -- flagging as checkpoint-thin, capacity-limited by the
+    unit's own 4 lexemes (the thinnest unit in this batch), not padded. All 4
+    lessons with lexemes are represented in recognition and production;
+    lesson06 has no structured anchor (see above). No mis-glossed lexeme
+    found. No listen_select (no prs TTS). Needs the standard fresh-context
+    review before import.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - reported_question_particle
+    - negative_present_verb
+    - past_verb_third
+    - report_verb_ask
+slot_presets:
+  unit_word: &uw
+    language_code: prs
+    part_of_speech: [particle, verb]
+    agreement_tags:
+      semantic: [reported_question_particle, negative_present_verb, past_verb_third, report_verb_ask]
+  question_particle_single: &qp
+    language_code: prs
+    part_of_speech: particle
+    agreement_tags:
+      semantic: reported_question_particle
+  negative_present_single: &np
+    language_code: prs
+    part_of_speech: verb
+    agreement_tags:
+      semantic: negative_present_verb
+  past_third: &pt
+    language_code: prs
+    part_of_speech: verb
+    agreement_tags:
+      semantic: past_verb_third
+templates:
+# ---- recognition ----
+- content_key: practice.en-prs.prs.b1.unit11.lesson01.choose.001
+  lesson_content_key: prs.b1.unit11.lesson01.reported_yes_no_question
+  type: multiple_choice
+  frame: {text: '{item}', language_code: prs, direction: rtl}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is from this unit''s communication vocabulary.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b1.unit11.lesson03.choose.001
+  lesson_content_key: prs.b1.unit11.lesson03.negative_reported_question
+  type: multiple_choice
+  frame: {text: '{item}', language_code: prs, direction: rtl}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is from this unit''s communication vocabulary.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b1.unit11.lesson05.choose.001
+  lesson_content_key: prs.b1.unit11.lesson05.reading_doctor_visit
+  type: multiple_choice
+  frame: {text: '{item}', language_code: prs, direction: rtl}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is from this unit''s communication vocabulary.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b1.unit11.lesson06.choose.001
+  lesson_content_key: prs.b1.unit11.lesson06.wrapup_production
+  type: multiple_choice
+  frame: {text: '{item}', language_code: prs, direction: rtl}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is from this unit''s communication vocabulary.'
+    language_code: en
+    direction: ltr
+# ---- structured ----
+- content_key: practice.en-prs.prs.b1.unit11.lesson01.fill.001
+  lesson_content_key: prs.b1.unit11.lesson01.reported_yes_no_question
+  type: fill_in_blank
+  frame: {text: 'او پرسید {item} من می‌آیم.', language_code: prs, direction: rtl}
+  slots:
+    item: *qp
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: 'او پرسید آیا من می‌آیم. = He/she asked whether I am coming.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b1.unit11.lesson03.fill.001
+  lesson_content_key: prs.b1.unit11.lesson03.negative_reported_question
+  type: fill_in_blank
+  frame: {text: 'او پرسید که چرا من این کار را {item}.', language_code: prs, direction: rtl}
+  slots:
+    item: *np
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: 'او پرسید که چرا من این کار را نمی‌کنم. = He/she asked why I don''t do this task.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b1.unit11.lesson05.order.001
+  lesson_content_key: prs.b1.unit11.lesson05.reading_doctor_visit
+  type: word_order
+  frame: {text: 'او {item}.', language_code: prs, direction: rtl}
+  slots:
+    item: *pt
+  answer_derivation:
+    kind: render_frame
+    frame: {text: 'او {item}.', language_code: prs, direction: rtl}
+  feedback_frame:
+    text: 'Word order: او رفت. (He/she went.)'
+    language_code: en
+    direction: ltr
+# ---- production ----
+- content_key: practice.en-prs.prs.b1.unit11.lesson01.translate.001
+  lesson_content_key: prs.b1.unit11.lesson01.reported_yes_no_question
+  type: translation
+  frame: {text: '{item}', language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: 'Type the Dari word.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b1.unit11.lesson03.translate.001
+  lesson_content_key: prs.b1.unit11.lesson03.negative_reported_question
+  type: translation
+  frame: {text: '{item}', language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: 'Type the Dari word.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b1.unit11.lesson05.translate.001
+  lesson_content_key: prs.b1.unit11.lesson05.reading_doctor_visit
+  type: translation
+  frame: {text: '{item}', language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: 'Type the Dari word.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b1.unit11.lesson06.translate.001
+  lesson_content_key: prs.b1.unit11.lesson06.wrapup_production
+  type: translation
+  frame: {text: '{item}', language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: 'Type the Dari word.'
+    language_code: en
+    direction: ltr

@@ -1,0 +1,295 @@
+schema_version: '1.0'
+pack_key: practice.en-fa.a1.unit52
+source_language: en
+target_language: fa
+unit_content_key: fa.a1.unit52.museum
+
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    Vocabulary unit (museum, 7 distinct fa lexemes/phrases per
+    backfill_lexemes_en_fa). Lesson03 (ticket_price) has ZERO fa lexemes
+    (only English "sixty" source_gloss token) -- a structural gap, not an
+    authoring omission; that lesson cannot be represented in the checkpoint.
+    Lessons01, 02, 04 and 06 have fa lexemes: museum_word 3 (موزه "museum"
+    noun, نمایشگاه "exhibition" noun, قدیمی "old/historic" adjective), 1
+    person_name (فرهادی), 2 additional reviewed_phrase (آقای فرهادی "Mr.
+    Farhadi", بله، از ساعت نه تا پنج بازه. "Yes, it's open from nine to
+    five.") plus 1 more reviewed_phrase from lesson06 (نمایشگاه چطور بود؟
+    باحال بود! "How was the exhibition? It was cool!"). Union of all 3 tags
+    gives 7 distinct tokens -- clears the multiple_choice floor (3) and the
+    matching_pairs floor (6) with 1 to spare. 12 templates: 4 lessons
+    (01/02/04/06) x (multiple_choice + bare-word translation, both over the
+    full 7-token union), 3 matching_pairs over the same union anchored to
+    lessons01/02/04, plus 1 extra bare-word translation over the narrower
+    museum_word pool anchored lesson01 to clear the 12-template floor.
+    word_order skipped: museum_word mixes a place noun, an event noun and an
+    adjective with no single grammatical carrier frame found within time
+    budget. No mis-glossed lexemes found. No listen_select (Azure TTS key
+    unset for fa).
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - museum_word
+    - person_name
+    - reviewed_phrase
+
+templates:
+# --- lesson01 (new_museum_one) ---
+- content_key: practice.en-fa.fa.a1.unit52.lesson01.choose.001
+  lesson_content_key: fa.a1.unit52.lesson01.new_museum_one
+  type: multiple_choice
+  frame: {text: '{item}', language_code: fa, direction: rtl}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, adjective, phrase, proper_noun]
+      agreement_tags:
+        semantic: [museum_word, person_name, reviewed_phrase]
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is museum vocabulary from this unit.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit52.lesson01.translate.002
+  lesson_content_key: fa.a1.unit52.lesson01.new_museum_one
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, adjective, phrase, proper_noun]
+      agreement_tags:
+        semantic: [museum_word, person_name, reviewed_phrase]
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Farsi word is {item}.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit52.lesson01.match.003
+  lesson_content_key: fa.a1.unit52.lesson01.new_museum_one
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: fa
+    direction: rtl
+  slots:
+    first: &museum_pool
+      language_code: fa
+      part_of_speech: [noun, adjective, phrase, proper_noun]
+      agreement_tags:
+        semantic: [museum_word, person_name, reviewed_phrase]
+    second: *museum_pool
+    third: *museum_pool
+    fourth: *museum_pool
+    fifth: *museum_pool
+    sixth: *museum_pool
+  slot_relations:
+  - kind: distinct
+    slots: [first, second, third, fourth, fifth, sixth]
+  answer_derivation:
+    kind: matching_pairs
+    slots: [first, second, third, fourth, fifth, sixth]
+  feedback_frame:
+    text: Match each Farsi word with its English meaning.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit52.lesson01.translate.004
+  lesson_content_key: fa.a1.unit52.lesson01.new_museum_one
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, adjective]
+      agreement_tags:
+        semantic: museum_word
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Farsi word is {item}.
+    language_code: en
+    direction: ltr
+
+# --- lesson02 (new_museum_two) ---
+- content_key: practice.en-fa.fa.a1.unit52.lesson02.choose.001
+  lesson_content_key: fa.a1.unit52.lesson02.new_museum_two
+  type: multiple_choice
+  frame: {text: '{item}', language_code: fa, direction: rtl}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, adjective, phrase, proper_noun]
+      agreement_tags:
+        semantic: [museum_word, person_name, reviewed_phrase]
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is museum vocabulary from this unit.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit52.lesson02.translate.002
+  lesson_content_key: fa.a1.unit52.lesson02.new_museum_two
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, adjective, phrase, proper_noun]
+      agreement_tags:
+        semantic: [museum_word, person_name, reviewed_phrase]
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Farsi word is {item}.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit52.lesson02.match.003
+  lesson_content_key: fa.a1.unit52.lesson02.new_museum_two
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: fa
+    direction: rtl
+  slots:
+    first: *museum_pool
+    second: *museum_pool
+    third: *museum_pool
+    fourth: *museum_pool
+    fifth: *museum_pool
+    sixth: *museum_pool
+  slot_relations:
+  - kind: distinct
+    slots: [first, second, third, fourth, fifth, sixth]
+  answer_derivation:
+    kind: matching_pairs
+    slots: [first, second, third, fourth, fifth, sixth]
+  feedback_frame:
+    text: Match each Farsi word with its English meaning.
+    language_code: en
+    direction: ltr
+
+# --- lesson04 (museum_dialogue) ---
+- content_key: practice.en-fa.fa.a1.unit52.lesson04.choose.001
+  lesson_content_key: fa.a1.unit52.lesson04.museum_dialogue
+  type: multiple_choice
+  frame: {text: '{item}', language_code: fa, direction: rtl}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, adjective, phrase, proper_noun]
+      agreement_tags:
+        semantic: [museum_word, person_name, reviewed_phrase]
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is museum vocabulary from this unit.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit52.lesson04.translate.002
+  lesson_content_key: fa.a1.unit52.lesson04.museum_dialogue
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, adjective, phrase, proper_noun]
+      agreement_tags:
+        semantic: [museum_word, person_name, reviewed_phrase]
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Farsi word is {item}.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit52.lesson04.match.003
+  lesson_content_key: fa.a1.unit52.lesson04.museum_dialogue
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: fa
+    direction: rtl
+  slots:
+    first: *museum_pool
+    second: *museum_pool
+    third: *museum_pool
+    fourth: *museum_pool
+    fifth: *museum_pool
+    sixth: *museum_pool
+  slot_relations:
+  - kind: distinct
+    slots: [first, second, third, fourth, fifth, sixth]
+  answer_derivation:
+    kind: matching_pairs
+    slots: [first, second, third, fourth, fifth, sixth]
+  feedback_frame:
+    text: Match each Farsi word with its English meaning.
+    language_code: en
+    direction: ltr
+
+# --- lesson06 (wrap_up) ---
+- content_key: practice.en-fa.fa.a1.unit52.lesson06.choose.001
+  lesson_content_key: fa.a1.unit52.lesson06.wrap_up
+  type: multiple_choice
+  frame: {text: '{item}', language_code: fa, direction: rtl}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, adjective, phrase, proper_noun]
+      agreement_tags:
+        semantic: [museum_word, person_name, reviewed_phrase]
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is museum vocabulary from this unit.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit52.lesson06.translate.002
+  lesson_content_key: fa.a1.unit52.lesson06.wrap_up
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, adjective, phrase, proper_noun]
+      agreement_tags:
+        semantic: [museum_word, person_name, reviewed_phrase]
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Farsi word is {item}.
+    language_code: en
+    direction: ltr

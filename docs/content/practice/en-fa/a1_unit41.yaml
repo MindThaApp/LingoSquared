@@ -1,0 +1,224 @@
+schema_version: '1.0'
+pack_key: practice.en-fa.a1.unit41
+source_language: en
+target_language: fa
+unit_content_key: fa.a1.unit41.appointments
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    Authored against docs/content/PRACTICE_PACK_RECIPE.md for the en-fa a1
+    appointments unit. §0 capacity is GENUINELY THIN: only 3 of 6 lessons
+    have any new fa lexeme at all (lesson01: 2, lesson02: 2, lesson04: 4);
+    lesson03 (which_day_what_time), lesson05 (reading_appointment_notice,
+    only an English "pm" source_gloss placeholder), and lesson06 (wrap_up)
+    have ZERO new fa lexemes -- unhostable no matter what (§0/§10 rule 1),
+    flagged for the coordinator rather than padded. Semantic tags used
+    (appointment_place_word 2, availability_word 2) are unit41-exclusive;
+    courtesy_title_word is shared with unit40's آقای (used only in the
+    lesson04 MC/translate, a frame-literal-safe type); person_name and
+    reviewed_phrase are course-wide, also used only in MC/translate. The
+    lesson01/lesson04 MC/translate slots union appointment_place_word,
+    availability_word, courtesy_title_word, and reviewed_phrase (with
+    part_of_speech widened to [noun, verb, phrase]) specifically because
+    a single lesson's own tag(s) fell short of the 3-distinct-candidate MC
+    floor at unit scope (caught by the §9 step-4 capacity script, not by
+    the compiler) -- re-run after the fix confirms both templates clear
+    the floor. §0.1: no mis-glosses found. Both word_order frames use single unit-exclusive
+    tags: "{item} کجاست؟" over appointment_place_word (2 members,
+    دندانپزشک/مطب, both grammatical as "Where is the dentist/doctor's
+    office?"); "پنجشنبه {item}" over availability_word (2 members,
+    آزادم/آزادید) as an elliptical day+status utterance matching the
+    unit's own hero sentence "پنجشنبه آزادم." Only 9 templates total (below
+    the ≥12 floor) and only 3/6 lessons covered -- this is a genuine
+    capacity ceiling, not an authoring shortfall: every tag available in
+    this unit's own lexemes was used, and no further template was
+    authorable without forcing an ungrammatical frame, an untaught word, or
+    a course-wide pool with no unit-scoped justification. FLAGGING AS
+    CHECKPOINT-THIN (<12 items) per the recipe's report requirement.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - appointment_place_word
+    - availability_word
+    - courtesy_title_word
+    - person_name
+    - reviewed_phrase
+
+templates:
+- content_key: practice.en-fa.fa.a1.unit41.lesson01.choose.001
+  lesson_content_key: fa.a1.unit41.lesson01.new_appointments_one
+  type: multiple_choice
+  frame: {text: '{item}', language_code: fa, direction: rtl}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, verb]
+      agreement_tags: {semantic: [appointment_place_word, availability_word]}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is an appointment-related word from this unit.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit41.lesson01.translate.002
+  lesson_content_key: fa.a1.unit41.lesson01.new_appointments_one
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, verb]
+      agreement_tags: {semantic: [appointment_place_word, availability_word]}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: '{item} is an appointment-related word from this unit.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit41.lesson01.match.003
+  lesson_content_key: fa.a1.unit41.lesson01.new_appointments_one
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth} · {seventh} · {eighth}'
+    language_code: fa
+    direction: rtl
+  slots:
+    first: &unit41_l1_match
+      language_code: fa
+      part_of_speech: [noun, verb, proper_noun, phrase]
+      agreement_tags: {semantic: [appointment_place_word, availability_word, courtesy_title_word, person_name, reviewed_phrase]}
+    second: *unit41_l1_match
+    third: *unit41_l1_match
+    fourth: *unit41_l1_match
+    fifth: *unit41_l1_match
+    sixth: *unit41_l1_match
+    seventh: *unit41_l1_match
+    eighth: *unit41_l1_match
+  slot_relations:
+  - kind: distinct
+    slots: [first, second, third, fourth, fifth, sixth, seventh, eighth]
+  answer_derivation:
+    kind: matching_pairs
+    slots: [first, second, third, fourth, fifth, sixth, seventh, eighth]
+  feedback_frame:
+    text: 'Places, availability phrases, and dialogue words from this unit.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit41.lesson01.order.004
+  lesson_content_key: fa.a1.unit41.lesson01.new_appointments_one
+  type: word_order
+  frame: {text: '{item} کجاست؟', language_code: fa, direction: rtl}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: noun
+      agreement_tags: {semantic: appointment_place_word}
+  answer_derivation:
+    kind: render_frame
+    frame: {text: '{item} کجاست؟', language_code: fa, direction: rtl}
+  feedback_frame:
+    text: 'X کجاست؟ means "Where is X?" -- grammatical for both the dentist and the doctor''s office.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit41.lesson02.choose.001
+  lesson_content_key: fa.a1.unit41.lesson02.new_appointments_two
+  type: multiple_choice
+  frame: {text: '{item}', language_code: fa, direction: rtl}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, verb]
+      agreement_tags: {semantic: [availability_word, appointment_place_word]}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is an appointment-related word from this unit.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit41.lesson02.translate.002
+  lesson_content_key: fa.a1.unit41.lesson02.new_appointments_two
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, verb]
+      agreement_tags: {semantic: [availability_word, appointment_place_word]}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: '{item} is an appointment-related word from this unit.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit41.lesson02.order.003
+  lesson_content_key: fa.a1.unit41.lesson02.new_appointments_two
+  type: word_order
+  frame: {text: 'پنجشنبه {item}', language_code: fa, direction: rtl}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: verb
+      agreement_tags: {semantic: availability_word}
+  answer_derivation:
+    kind: render_frame
+    frame: {text: 'پنجشنبه {item}', language_code: fa, direction: rtl}
+  feedback_frame:
+    text: 'پنجشنبه آزادم / پنجشنبه آزادید؟ -- "Thursday, I''m free" / "Thursday, are you free?"'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit41.lesson04.choose.001
+  lesson_content_key: fa.a1.unit41.lesson04.dentist_appointment_dialogue
+  type: multiple_choice
+  frame: {text: '{item}', language_code: fa, direction: rtl}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, verb, phrase]
+      agreement_tags: {semantic: [courtesy_title_word, reviewed_phrase, appointment_place_word, availability_word]}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} appears in this unit''s dentist-appointment dialogue.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit41.lesson04.translate.002
+  lesson_content_key: fa.a1.unit41.lesson04.dentist_appointment_dialogue
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, verb, phrase]
+      agreement_tags: {semantic: [courtesy_title_word, reviewed_phrase, appointment_place_word, availability_word]}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: '{item} appears in this unit''s dentist-appointment dialogue.'
+    language_code: en
+    direction: ltr

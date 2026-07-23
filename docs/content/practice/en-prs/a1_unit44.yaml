@@ -1,0 +1,182 @@
+schema_version: '1.0'
+pack_key: practice.en-prs.a1.unit44
+source_language: en
+target_language: prs
+unit_content_key: prs.a1.unit44.waste_disposal
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    Pilot en-prs A1 practice pack (unit44 waste_disposal), authored 2026-07-22.
+    9 unit lexemes across 5 lessons (lesson01/02/03/05/06; lesson04 has zero
+    lexemes). Tags: waste_word (سطل bin, زباله waste, جمع‌آوری collection),
+    waste_material_word (پلاستیک plastic, کاغذ paper, شیشه glass), throw_verb
+    (نمی‌اندازم "I don't throw", می‌اندازد "he/she throws", می‌اندازین "you throw").
+    matching_pairs pools the union waste_word + waste_material_word = exactly 6
+    distinct tokens (meets the 6-pair floor exactly). word_order uses the taught
+    frame "زباله را دور {verb}" over throw_verb -- all three person-forms
+    ("I/you/he don't/throw away the waste") are grammatical. NO listen_select
+    (no TTS). NO fill_in_blank (no reliable single-member course-wide anchor;
+    throw_verb has 3 members). Afghan Dari register (می‌اندازین 2pl, not می‌اندازید).
+    No mis-glossed lexemes found.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - waste_word
+    - waste_material_word
+    - throw_verb
+slot_presets:
+  waste_word: &ww
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: waste_word
+  waste_material: &wm
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: waste_material_word
+  waste_any: &wany
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: [waste_word, waste_material_word]
+  throw_verb: &tv
+    language_code: prs
+    part_of_speech: verb
+    agreement_tags:
+      semantic: throw_verb
+templates:
+# ---- recognition ----
+- content_key: practice.en-prs.prs.a1.unit44.lesson01.choose.001
+  lesson_content_key: prs.a1.unit44.lesson01.waste_bin_vocabulary
+  type: multiple_choice
+  frame: {text: '{item}', language_code: prs, direction: rtl}
+  slots:
+    item: *wany
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} belongs to this unit''s waste-disposal vocabulary.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit44.lesson02.choose.001
+  lesson_content_key: prs.a1.unit44.lesson02.paper_and_glass
+  type: multiple_choice
+  frame: {text: '{item}', language_code: prs, direction: rtl}
+  slots:
+    item: *wm
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is a recyclable-material word from this unit.'
+    language_code: en
+    direction: ltr
+# ---- structured ----
+- content_key: practice.en-prs.prs.a1.unit44.lesson03.order.001
+  lesson_content_key: prs.a1.unit44.lesson03.throwing_away_waste
+  type: word_order
+  frame: {text: 'زباله را دور {verb}', language_code: prs, direction: rtl}
+  slots:
+    verb: *tv
+  answer_derivation:
+    kind: render_frame
+    frame: {text: 'زباله را دور {verb}', language_code: prs, direction: rtl}
+  feedback_frame:
+    text: 'Word order: زباله را دور می‌اندازم (I throw the waste away).'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit44.lesson01.match.001
+  lesson_content_key: prs.a1.unit44.lesson01.waste_bin_vocabulary
+  type: matching_pairs
+  frame:
+    text: '{a} — {b} — {c} — {d} — {e} — {f}'
+    language_code: prs
+    direction: rtl
+  slots:
+    a: *wany
+    b: *wany
+    c: *wany
+    d: *wany
+    e: *wany
+    f: *wany
+  slot_relations:
+  - kind: distinct
+    slots: [a, b, c, d, e, f]
+  answer_derivation:
+    kind: matching_pairs
+    slots: [a, b, c, d, e, f]
+  feedback_frame:
+    text: Match each word to its English meaning.
+    language_code: en
+    direction: ltr
+# ---- production ----
+- content_key: practice.en-prs.prs.a1.unit44.lesson01.translate.001
+  lesson_content_key: prs.a1.unit44.lesson01.waste_bin_vocabulary
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item: *ww
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: '{item} is the Dari word for this.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit44.lesson02.translate.001
+  lesson_content_key: prs.a1.unit44.lesson02.paper_and_glass
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item: *wm
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: '{item} is the Dari word for this.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit44.lesson05.translate.001
+  lesson_content_key: prs.a1.unit44.lesson05.reading
+  type: translation
+  frame:
+    text: '{verb}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {verb: english_gloss}
+  slots:
+    verb: *tv
+  answer_derivation: {kind: slot_text, slot: verb}
+  feedback_frame:
+    text: '{verb} is the Dari form for this.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit44.lesson06.translate.001
+  lesson_content_key: prs.a1.unit44.lesson06.wrap_up
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item: *ww
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: '{item} is the Dari word for this.'
+    language_code: en
+    direction: ltr

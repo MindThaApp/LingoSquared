@@ -1,0 +1,222 @@
+schema_version: '1.0'
+pack_key: practice.en-fa.a1.unit45
+source_language: en
+target_language: fa
+unit_content_key: fa.a1.unit45.pharmacy
+
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    THIN UNIT -- flagging per recipe §0/§3 "capacity, don't pad". Pharmacy has
+    only 5 distinct fa lexemes total per backfill_lexemes_en_fa across all 4
+    lessons: pharmacy_word 4 (داروخانه "pharmacy" noun, قرص "pill/tablet"
+    noun, قبل "before" adverb, روزی "day"/dosage-frequency noun) + 1
+    person_name (صالحی, lesson04 only, no other content word in lesson04).
+    9 templates total (below the 12 floor -- this is real capacity, not an
+    authoring shortfall): 4 lessons x (multiple_choice + bare-word
+    translation) over the full 5-token union, plus 1 word_order anchored
+    lesson01 over pharmacy_word (frame "روی نسخه نوشته {item}." / "It says on
+    the prescription: {item}.") -- re-read at course scope: pharmacy_word is a
+    unit-specific coined tag with zero course-wide members outside this unit
+    (verified via full iter_specs() scan), so course scope == unit scope here,
+    and all 4 members (pharmacy, pill/tablet, before, day) read grammatically
+    in that frame (a pharmacy name, a medication, a timing instruction, or a
+    dosage frequency, all plausible things written on a prescription).
+    matching_pairs is NOT authorable: the unit's total distinct-token pool
+    (5) is below the 6-pair floor even after unioning every available tag
+    (pharmacy_word + person_name) -- there is no additional vocabulary to pad
+    with without violating the no-padding rule. No mis-glossed lexemes found.
+    No listen_select (Azure TTS key unset for fa). Structured tier is only 1
+    template (below the >=3 bar) for the same reason -- fill_in_blank is not
+    usable either, since no tag in this unit has exactly 1 course-wide
+    candidate (checked: pharmacy_word has 4, not 1).
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - pharmacy_word
+    - person_name
+
+templates:
+# --- lesson01 (new_pharmacy_one) ---
+- content_key: practice.en-fa.fa.a1.unit45.lesson01.choose.001
+  lesson_content_key: fa.a1.unit45.lesson01.new_pharmacy_one
+  type: multiple_choice
+  frame: {text: '{item}', language_code: fa, direction: rtl}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, adverb, proper_noun]
+      agreement_tags:
+        semantic: [pharmacy_word, person_name]
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is pharmacy vocabulary from this unit.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit45.lesson01.translate.002
+  lesson_content_key: fa.a1.unit45.lesson01.new_pharmacy_one
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, adverb, proper_noun]
+      agreement_tags:
+        semantic: [pharmacy_word, person_name]
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Farsi word is {item}.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit45.lesson01.order.003
+  lesson_content_key: fa.a1.unit45.lesson01.new_pharmacy_one
+  type: word_order
+  frame:
+    text: روی نسخه نوشته {item}.
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, adverb]
+      agreement_tags:
+        semantic: pharmacy_word
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: روی نسخه نوشته {item}.
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: 'روی نسخه نوشته قرص. -- It says on the prescription: pill.'
+    language_code: en
+    direction: ltr
+
+# --- lesson02 (new_pharmacy_two) ---
+- content_key: practice.en-fa.fa.a1.unit45.lesson02.choose.001
+  lesson_content_key: fa.a1.unit45.lesson02.new_pharmacy_two
+  type: multiple_choice
+  frame: {text: '{item}', language_code: fa, direction: rtl}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, adverb, proper_noun]
+      agreement_tags:
+        semantic: [pharmacy_word, person_name]
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is pharmacy vocabulary from this unit.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit45.lesson02.translate.002
+  lesson_content_key: fa.a1.unit45.lesson02.new_pharmacy_two
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, adverb, proper_noun]
+      agreement_tags:
+        semantic: [pharmacy_word, person_name]
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Farsi word is {item}.
+    language_code: en
+    direction: ltr
+
+# --- lesson03 (dosage_timing) ---
+- content_key: practice.en-fa.fa.a1.unit45.lesson03.choose.001
+  lesson_content_key: fa.a1.unit45.lesson03.dosage_timing
+  type: multiple_choice
+  frame: {text: '{item}', language_code: fa, direction: rtl}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, adverb, proper_noun]
+      agreement_tags:
+        semantic: [pharmacy_word, person_name]
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is pharmacy vocabulary from this unit.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit45.lesson03.translate.002
+  lesson_content_key: fa.a1.unit45.lesson03.dosage_timing
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, adverb, proper_noun]
+      agreement_tags:
+        semantic: [pharmacy_word, person_name]
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Farsi word is {item}.
+    language_code: en
+    direction: ltr
+
+# --- lesson04 (pharmacy_dialogue) ---
+- content_key: practice.en-fa.fa.a1.unit45.lesson04.choose.001
+  lesson_content_key: fa.a1.unit45.lesson04.pharmacy_dialogue
+  type: multiple_choice
+  frame: {text: '{item}', language_code: fa, direction: rtl}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, adverb, proper_noun]
+      agreement_tags:
+        semantic: [pharmacy_word, person_name]
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is pharmacy vocabulary from this unit.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit45.lesson04.translate.002
+  lesson_content_key: fa.a1.unit45.lesson04.pharmacy_dialogue
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, adverb, proper_noun]
+      agreement_tags:
+        semantic: [pharmacy_word, person_name]
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Farsi word is {item}.
+    language_code: en
+    direction: ltr

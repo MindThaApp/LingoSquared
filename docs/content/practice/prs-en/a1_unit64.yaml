@@ -1,0 +1,174 @@
+schema_version: '1.0'
+pack_key: practice.prs-en.a1.unit64
+source_language: prs
+target_language: en
+unit_content_key: en.a1.unit64.compliments
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: 'Authored 2026-07-23 against docs/content/PRACTICE_PACK_RECIPE.md. Unit lexeme pool measured
+    with the f".a1.unit64." filter (backfill_lexemes_prs_en.py): 5 unit lexemes across 2 lesson(s) with
+    lexemes; 5 of them survive the content-word filter (part_of_speech not in [''particle'', ''preposition'',
+    ''pronoun'', ''proper_noun'', ''symbol''], and excluding function/auxiliary tokens whose english_gloss
+    is a parenthetical grammar note rather than a clean translation: [''a'', ''an'', ''and'', ''by'',
+    ''did'', ''do'', ''does'', "don''t", ''has'', ''have'', ''if'', ''not'', ''on'', ''or'', ''that'',
+    ''the'', ''this'', ''to''] where present) with 5 distinct english_gloss values. No agreement_tags.semantic
+    exist on this direction''s lexemes for this unit (all None at classification time), so every slot
+    is intentionally UNTAGGED (agreement_tags omitted) and constrained only by language_code+part_of_speech
+    -- per recipe SS3.1(c) this is a legal constraint, and because generate_checkpoint() restricts _material()
+    to this unit''s own lesson ids before any slot filter runs, the untagged pool is unit-scoped at checkpoint
+    time (equivalent to unioning every lesson''s tokens) even though it widens to the whole A1 course
+    at Endless-Practice scope. word_order and fill_in_blank were deliberately NOT authored: without a
+    semantic tag there is no way to pin a single-member anchor or to hand-verify (recipe SS1.1/SS9 step
+    5) that every course-wide candidate of an untagged slot stays grammatical inside a literal sentence
+    frame, and getting that wrong is the recipe''s #1 flagged defect class. matching_pairs (no framing-grammaticality
+    requirement, only a >=6-distinct-token floor) was used for the structured tier instead, anchored to
+    the richest lesson(s). Recommend a follow-up backfill pass adding semantic tags to this unit so word_order/fill_in_blank
+    can be added safely. THIN UNIT: only 5 content-word lexemes total in this unit -- below the matching_pairs
+    floor (6), so no matching_pairs template was authored and no structured-tier template exists at all.
+    This unit cannot reach the recipe''s SS8 bars (>=12 templates, >=3 per tier) at its real lexeme capacity;
+    authoring more would mean padding with untaught/forward vocabulary, which the recipe forbids. Flagging
+    as checkpoint-thin for the coordinator to route to a lexeme-backfill task.'
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+templates:
+- content_key: practice.prs-en.en.a1.unit64.lesson01.choose.001
+  lesson_content_key: en.a1.unit64.lesson01.compliment_words
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech:
+      - adjective
+      - noun
+      - verb
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: معنی دری {item} را انتخاب کنین.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a1.unit64.lesson01.listen.001
+  lesson_content_key: en.a1.unit64.lesson01.compliment_words
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech:
+      - adjective
+      - noun
+      - verb
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: واژه‌ای که شنیدین {item} بود.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a1.unit64.lesson01.translate.001
+  lesson_content_key: en.a1.unit64.lesson01.compliment_words
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: en
+      part_of_speech:
+      - adjective
+      - noun
+      - verb
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: معادل انگلیسی همی کلمه {item} است.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a1.unit64.lesson04.choose.001
+  lesson_content_key: en.a1.unit64.lesson04.a_kind_message
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech:
+      - adjective
+      - noun
+      - verb
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: معنی دری {item} را انتخاب کنین.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a1.unit64.lesson04.listen.001
+  lesson_content_key: en.a1.unit64.lesson04.a_kind_message
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech:
+      - adjective
+      - noun
+      - verb
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: واژه‌ای که شنیدین {item} بود.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a1.unit64.lesson04.translate.001
+  lesson_content_key: en.a1.unit64.lesson04.a_kind_message
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: en
+      part_of_speech:
+      - adjective
+      - noun
+      - verb
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: معادل انگلیسی همی کلمه {item} است.
+    language_code: prs
+    direction: rtl

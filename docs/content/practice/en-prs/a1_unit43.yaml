@@ -1,0 +1,127 @@
+schema_version: '1.0'
+pack_key: practice.en-prs.a1.unit43
+source_language: en
+target_language: prs
+unit_content_key: prs.a1.unit43.library
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    Pilot en-prs A1 practice pack (unit43 library), authored 2026-07-22.
+    UNDER-PROVISIONED: only 5 lexemes across 3 of the unit's 6 lessons
+    (lesson01/02/03; lesson04/05/06 produce zero lexemes). library_word =
+    {کتابخانه library, کتابدار librarian, قرض loan}; give_back_verb = {دادن
+    "to give back" (tagged noun), بدهم "let me give" (verb)}. NO matching_pairs
+    (needs 6 distinct tokens; only 5 exist). NO listen_select (no TTS). NO
+    fill_in_blank (no reliable single-member course-wide anchor). Recognition MC
+    pools library_word (3 glosses, exactly the floor). Structured word_order uses
+    the single-member anchor give_back_verb ∩ verb = {بدهم} in the taught frame
+    "می‌خواهم کتاب را پس بدهم". RECOMMEND to coordinator: below §8 bars; unit needs
+    a backfill extension (its lessons teach کتاب/تاریخ پس دادن/روز vocabulary not
+    being classified) for a full-depth checkpoint. Afghan Dari register. No
+    mis-glossed lexemes found (note دادن is tagged part_of_speech=noun in backfill
+    despite being an infinitive verb form; it is only ever used here in a
+    give_back_verb bare-word translation slot, where that does not misgrade).
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - library_word
+    - give_back_verb
+slot_presets:
+  library_word: &lib
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: library_word
+templates:
+# ---- recognition ----
+- content_key: practice.en-prs.prs.a1.unit43.lesson01.choose.001
+  lesson_content_key: prs.a1.unit43.lesson01.library_vocabulary
+  type: multiple_choice
+  frame: {text: '{item}', language_code: prs, direction: rtl}
+  slots:
+    item: *lib
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} belongs to this unit''s library vocabulary.'
+    language_code: en
+    direction: ltr
+# ---- structured (single-member verb anchor) ----
+- content_key: practice.en-prs.prs.a1.unit43.lesson03.order.001
+  lesson_content_key: prs.a1.unit43.lesson03.borrowing_and_returning
+  type: word_order
+  frame: {text: 'می‌خواهم کتاب را پس {verb}', language_code: prs, direction: rtl}
+  slots:
+    verb:
+      language_code: prs
+      part_of_speech: verb
+      agreement_tags:
+        semantic: give_back_verb
+  answer_derivation:
+    kind: render_frame
+    frame: {text: 'می‌خواهم کتاب را پس {verb}', language_code: prs, direction: rtl}
+  feedback_frame:
+    text: 'Word order: می‌خواهم کتاب را پس بدهم (I want to return the book).'
+    language_code: en
+    direction: ltr
+# ---- production ----
+- content_key: practice.en-prs.prs.a1.unit43.lesson01.translate.001
+  lesson_content_key: prs.a1.unit43.lesson01.library_vocabulary
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item: *lib
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: '{item} is the Dari word for this.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit43.lesson02.translate.001
+  lesson_content_key: prs.a1.unit43.lesson02.asking_return_date
+  type: translation
+  frame:
+    text: '{verb}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {verb: english_gloss}
+  slots:
+    verb:
+      language_code: prs
+      part_of_speech: [noun, verb]
+      agreement_tags:
+        semantic: give_back_verb
+  answer_derivation: {kind: slot_text, slot: verb}
+  feedback_frame:
+    text: '{verb} is the Dari form for this.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit43.lesson03.translate.001
+  lesson_content_key: prs.a1.unit43.lesson03.borrowing_and_returning
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item: *lib
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: '{item} is the Dari word for this.'
+    language_code: en
+    direction: ltr
