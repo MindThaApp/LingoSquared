@@ -1,0 +1,90 @@
+schema_version: "1.0"
+pack_key: practice.fa-en.a1.unit66
+source_language: fa
+target_language: en
+unit_content_key: en.a1.unit66.pharmacy_symptoms
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    THIN UNIT: backfill_lexemes_fa_en.py registers only 3 lexemes (symptom/
+    hurts in lesson01, worse in lesson03; lesson02/lesson04 have zero
+    lexemes and are invisible to any checkpoint). 8 templates at genuine
+    capacity: MC/listen/translation pool = unit-wide tag (all 3 distinct,
+    exactly at the 3-option floor). matching_pairs omitted (needs 6, only 3
+    exist). lesson01's tag narrowed by part_of_speech gives two
+    single-member anchors (noun->symptom, verb->hurts), framed from the
+    realization's own example sentences ("This is a symptom.", "My throat
+    hurts."). lesson03's tag is already single-member (worse); frame "It is
+    getting {item}." reflects the pharmacy-dialogue condition_adjective
+    usage. Course-scope check: all lesson-level tags are unique to this
+    unit, so course-wide membership == unit-scoped membership. No
+    mis-glossed lexeme found. FLAG FOR COORDINATOR: checkpoint will very
+    likely stay <12 items unless lessons 02/04 get lexeme coverage --
+    routing to backfill recommended.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [fa_en_a1_unit66_words, fa_en_a1_unit66_lesson01_words, fa_en_a1_unit66_lesson03_words]
+slot_presets:
+  unit_pool: &unit_pool {language_code: en, part_of_speech: [noun, verb, adjective], agreement_tags: {semantic: fa_en_a1_unit66_words}}
+  lesson01_noun: &lesson01_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: fa_en_a1_unit66_lesson01_words}}
+  lesson01_verb: &lesson01_verb {language_code: en, part_of_speech: verb, agreement_tags: {semantic: fa_en_a1_unit66_lesson01_words}}
+  lesson03_single: &lesson03_single {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: fa_en_a1_unit66_lesson03_words}}
+templates:
+  - content_key: practice.fa-en.en.a1.unit66.lesson01.choose.001
+    lesson_content_key: en.a1.unit66.lesson01.symptom_words
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *unit_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit66.lesson01.listen.002
+    lesson_content_key: en.a1.unit66.lesson01.symptom_words
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *unit_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "واژه‌ای که شنیدید {item} بود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit66.lesson01.translate.003
+    lesson_content_key: en.a1.unit66.lesson01.symptom_words
+    type: translation
+    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *unit_pool}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit66.lesson01.order.004
+    lesson_content_key: en.a1.unit66.lesson01.symptom_words
+    type: word_order
+    frame: {text: "This is a {item}", language_code: en, direction: ltr}
+    slots: {item: *lesson01_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "This is a {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} یعنی «علامت بیماری».", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit66.lesson01.fill.005
+    lesson_content_key: en.a1.unit66.lesson01.symptom_words
+    type: fill_in_blank
+    frame: {text: "My throat {item}.", language_code: en, direction: ltr}
+    slots: {item: *lesson01_verb}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} یعنی «درد می‌کند».", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit66.lesson03.choose.001
+    lesson_content_key: en.a1.unit66.lesson03.dialogue_at_the_pharmacy
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *unit_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit66.lesson03.translate.002
+    lesson_content_key: en.a1.unit66.lesson03.dialogue_at_the_pharmacy
+    type: translation
+    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *unit_pool}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit66.lesson03.fill.003
+    lesson_content_key: en.a1.unit66.lesson03.dialogue_at_the_pharmacy
+    type: fill_in_blank
+    frame: {text: "It is getting {item}.", language_code: en, direction: ltr}
+    slots: {item: *lesson03_single}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} یعنی «بدتر».", language_code: fa, direction: rtl}

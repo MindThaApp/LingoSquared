@@ -1,0 +1,203 @@
+schema_version: '1.0'
+pack_key: practice.en-fa.a1.unit49
+source_language: en
+target_language: fa
+unit_content_key: fa.a1.unit49.swimming_pool
+
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    THIN UNIT -- flagging per recipe §0/§8. Per backfill_lexemes_en_fa,
+    lessons01 (new_pool_one) and lesson02 (new_pool_two) have ZERO fa
+    lexemes -- a structural gap, not an authoring omission; those two
+    lessons cannot be represented by any template no matter what is
+    authored (recipe §0: "a lesson with zero lexemes cannot be represented
+    in the checkpoint no matter what you do"). Only lesson03 (locker_and_hours)
+    and lesson04 (pool_dialogue) have fa lexemes: pool_facility_word 4 (باز
+    "open" adjective, بازه "is open (spoken)" verb, کمد "locker" noun,
+    استخر بازه؟ "Is the pool open?" phrase), 1 person_name (جعفری), 1
+    additional reviewed_phrase (آقای جعفری "Mr. Jafari"). Union of all 3 tags
+    gives EXACTLY 6 distinct tokens. 7 templates total (well below the 12
+    floor -- real capacity limit, not padded): lesson03 + lesson04 each get
+    (multiple_choice + bare-word translation) over the 6-token union, plus 3
+    matching_pairs over the same union anchored to lesson03/lesson04/lesson03.
+    word_order skipped: pool_facility_word mixes an adjective, a verb, a noun
+    and a full question with no single grammatical carrier frame found within
+    time budget. No mis-glossed lexemes found. No listen_select (Azure TTS
+    key unset for fa). Coordinator note: this unit's checkpoint will likely
+    still 409 checkpoint_unavailable or be severely repetitive even with this
+    pack, given only 6 total hostable lexemes across 2 of 4 lessons -- a
+    backfill_lexemes_en_fa extension for lessons01/02 would fix this at the
+    source.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - pool_facility_word
+    - person_name
+    - reviewed_phrase
+
+templates:
+# --- lesson03 (locker_and_hours) ---
+- content_key: practice.en-fa.fa.a1.unit49.lesson03.choose.001
+  lesson_content_key: fa.a1.unit49.lesson03.locker_and_hours
+  type: multiple_choice
+  frame: {text: '{item}', language_code: fa, direction: rtl}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, verb, adjective, phrase, proper_noun]
+      agreement_tags:
+        semantic: [pool_facility_word, person_name, reviewed_phrase]
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is swimming-pool vocabulary from this unit.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit49.lesson03.translate.002
+  lesson_content_key: fa.a1.unit49.lesson03.locker_and_hours
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, verb, adjective, phrase, proper_noun]
+      agreement_tags:
+        semantic: [pool_facility_word, person_name, reviewed_phrase]
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Farsi word is {item}.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit49.lesson03.match.003
+  lesson_content_key: fa.a1.unit49.lesson03.locker_and_hours
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: fa
+    direction: rtl
+  slots:
+    first: &pool_pool
+      language_code: fa
+      part_of_speech: [noun, verb, adjective, phrase, proper_noun]
+      agreement_tags:
+        semantic: [pool_facility_word, person_name, reviewed_phrase]
+    second: *pool_pool
+    third: *pool_pool
+    fourth: *pool_pool
+    fifth: *pool_pool
+    sixth: *pool_pool
+  slot_relations:
+  - kind: distinct
+    slots: [first, second, third, fourth, fifth, sixth]
+  answer_derivation:
+    kind: matching_pairs
+    slots: [first, second, third, fourth, fifth, sixth]
+  feedback_frame:
+    text: Match each Farsi word with its English meaning.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit49.lesson03.match.004
+  lesson_content_key: fa.a1.unit49.lesson03.locker_and_hours
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: fa
+    direction: rtl
+  slots:
+    first: *pool_pool
+    second: *pool_pool
+    third: *pool_pool
+    fourth: *pool_pool
+    fifth: *pool_pool
+    sixth: *pool_pool
+  slot_relations:
+  - kind: distinct
+    slots: [first, second, third, fourth, fifth, sixth]
+  answer_derivation:
+    kind: matching_pairs
+    slots: [first, second, third, fourth, fifth, sixth]
+  feedback_frame:
+    text: Match each Farsi word with its English meaning.
+    language_code: en
+    direction: ltr
+
+# --- lesson04 (pool_dialogue) ---
+- content_key: practice.en-fa.fa.a1.unit49.lesson04.choose.001
+  lesson_content_key: fa.a1.unit49.lesson04.pool_dialogue
+  type: multiple_choice
+  frame: {text: '{item}', language_code: fa, direction: rtl}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, verb, adjective, phrase, proper_noun]
+      agreement_tags:
+        semantic: [pool_facility_word, person_name, reviewed_phrase]
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is swimming-pool vocabulary from this unit.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit49.lesson04.translate.002
+  lesson_content_key: fa.a1.unit49.lesson04.pool_dialogue
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, verb, adjective, phrase, proper_noun]
+      agreement_tags:
+        semantic: [pool_facility_word, person_name, reviewed_phrase]
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Farsi word is {item}.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit49.lesson04.match.003
+  lesson_content_key: fa.a1.unit49.lesson04.pool_dialogue
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: fa
+    direction: rtl
+  slots:
+    first: *pool_pool
+    second: *pool_pool
+    third: *pool_pool
+    fourth: *pool_pool
+    fifth: *pool_pool
+    sixth: *pool_pool
+  slot_relations:
+  - kind: distinct
+    slots: [first, second, third, fourth, fifth, sixth]
+  answer_derivation:
+    kind: matching_pairs
+    slots: [first, second, third, fourth, fifth, sixth]
+  feedback_frame:
+    text: Match each Farsi word with its English meaning.
+    language_code: en
+    direction: ltr

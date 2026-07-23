@@ -1,0 +1,184 @@
+schema_version: '1.0'
+pack_key: practice.en-prs.a1.unit58
+source_language: en
+target_language: prs
+unit_content_key: prs.a1.unit58.zoo
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    en-prs A1 practice pack (unit58 zoo), authored 2026-07-23. VERY THIN UNIT:
+    only 6 lexemes across 3 lessons with any lexemes at all (lesson01: باغ
+    "garden(in zoo)", وحش "wild(in zoo)", شیر "lion"; lesson03: فیل "elephant",
+    میمون "monkey"; lesson06: محبوب‌تان "your favourite" -- the unit's ONLY
+    adjective, which makes it a course-wide-unique fill_in_blank/production
+    anchor even though its broader tag formal_possessive_word has 14 course-
+    wide (noun) members). lesson02/04/05 have ZERO lexemes and cannot be
+    represented in the checkpoint. unit_word union
+    (zoo_word+animal_word+formal_possessive_word, pos [noun,adjective]) gives
+    exactly 6 distinct glosses -- meets the matching_pairs 6-pair floor
+    exactly and the MC >=3 floor comfortably. animal_word (course-wide 7:
+    سگ dog, شیر lion, فیل elephant, ماهی fish, میمون monkey, پرنده bird,
+    پشک cat) is safe in the frame "{item} در باغ وحش است." (the X is at the
+    zoo) -- checked at course scope, all 7 animals fit. Only 10 templates
+    (below the 12 floor) and only 6 unit lexemes total (well below the 40
+    distinct-item / 60% coverage targets) -- capacity-limited, not padded;
+    flagging as checkpoint-thin per the recipe's explicit allowance. No
+    mis-glossed lexemes found. No listen_select (no prs TTS).
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - zoo_word
+    - animal_word
+    - formal_possessive_word
+slot_presets:
+  unit_word: &uw
+    language_code: prs
+    part_of_speech: [noun, adjective]
+    agreement_tags:
+      semantic: [zoo_word, animal_word, formal_possessive_word]
+  animal: &an
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: animal_word
+  possessive_single: &ps
+    language_code: prs
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: formal_possessive_word
+templates:
+# ---- recognition ----
+- content_key: practice.en-prs.prs.a1.unit58.lesson01.choose.001
+  lesson_content_key: prs.a1.unit58.lesson01.zoo_and_lion_vocabulary
+  type: multiple_choice
+  frame: {text: '{item}', language_code: prs, direction: rtl}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is from this unit''s zoo vocabulary.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit58.lesson03.choose.001
+  lesson_content_key: prs.a1.unit58.lesson03.elephant_and_monkey_vocabulary
+  type: multiple_choice
+  frame: {text: '{item}', language_code: prs, direction: rtl}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is from this unit''s zoo vocabulary.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit58.lesson06.choose.001
+  lesson_content_key: prs.a1.unit58.lesson06.wrap_up
+  type: multiple_choice
+  frame: {text: '{item}', language_code: prs, direction: rtl}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is from this unit''s zoo vocabulary.'
+    language_code: en
+    direction: ltr
+# ---- structured ----
+- content_key: practice.en-prs.prs.a1.unit58.lesson01.order.001
+  lesson_content_key: prs.a1.unit58.lesson01.zoo_and_lion_vocabulary
+  type: word_order
+  frame: {text: '{item} در باغ وحش است.', language_code: prs, direction: rtl}
+  slots:
+    item: *an
+  answer_derivation:
+    kind: render_frame
+    frame: {text: '{item} در باغ وحش است.', language_code: prs, direction: rtl}
+  feedback_frame:
+    text: 'Word order: شیر در باغ وحش است. (The lion is at the zoo.)'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit58.lesson03.order.001
+  lesson_content_key: prs.a1.unit58.lesson03.elephant_and_monkey_vocabulary
+  type: word_order
+  frame: {text: '{item} در باغ وحش است.', language_code: prs, direction: rtl}
+  slots:
+    item: *an
+  answer_derivation:
+    kind: render_frame
+    frame: {text: '{item} در باغ وحش است.', language_code: prs, direction: rtl}
+  feedback_frame:
+    text: 'Word order: فیل در باغ وحش است. (The elephant is at the zoo.)'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit58.lesson01.match.001
+  lesson_content_key: prs.a1.unit58.lesson01.zoo_and_lion_vocabulary
+  type: matching_pairs
+  frame: {text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}', language_code: prs, direction: rtl}
+  slots: {first: *uw, second: *uw, third: *uw, fourth: *uw, fifth: *uw, sixth: *uw}
+  slot_relations:
+  - kind: distinct
+    slots: [first, second, third, fourth, fifth, sixth]
+  answer_derivation:
+    kind: matching_pairs
+    slots: [first, second, third, fourth, fifth, sixth]
+  feedback_frame:
+    text: 'Match each zoo word to its meaning.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit58.lesson06.fill.001
+  lesson_content_key: prs.a1.unit58.lesson06.wrap_up
+  type: fill_in_blank
+  frame: {text: 'حیوان {item} کدام است؟', language_code: prs, direction: rtl}
+  slots:
+    item: *ps
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: 'حیوان محبوب‌تان کدام است؟ = Which is your favourite animal?'
+    language_code: en
+    direction: ltr
+# ---- production ----
+- content_key: practice.en-prs.prs.a1.unit58.lesson01.translate.001
+  lesson_content_key: prs.a1.unit58.lesson01.zoo_and_lion_vocabulary
+  type: translation
+  frame: {text: '{item}', language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: 'Type the Dari word.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit58.lesson03.translate.001
+  lesson_content_key: prs.a1.unit58.lesson03.elephant_and_monkey_vocabulary
+  type: translation
+  frame: {text: '{item}', language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: 'Type the Dari word.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit58.lesson06.translate.001
+  lesson_content_key: prs.a1.unit58.lesson06.wrap_up
+  type: translation
+  frame: {text: 'Which is your favourite animal?', language_code: en, direction: ltr}
+  slots:
+    item: *ps
+  answer_derivation:
+    kind: render_frame
+    frame: {text: 'حیوان {item} کدام است؟', language_code: prs, direction: rtl}
+  feedback_frame:
+    text: 'حیوان محبوب‌تان کدام است؟'
+    language_code: en
+    direction: ltr

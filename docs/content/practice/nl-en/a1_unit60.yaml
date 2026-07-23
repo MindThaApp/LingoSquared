@@ -1,0 +1,66 @@
+schema_version: "1.0"
+pack_key: practice.nl-en.a1.unit60
+source_language: nl
+target_language: en
+unit_content_key: en.a1.unit60.invitations
+review:
+  status: unreviewed
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-07-23 against docs/content/PRACTICE_PACK_RECIPE.md for the nl-en a1_unit60 vocabulary unit. Recognition (multiple_choice, listen_select) and production (translation bare-word) templates use the unit-wide semantic tag `a1_unit60_invitations` (all lessons unioned, POS-restricted to noun/verb/adjective/adverb, language_code en) anchored per lesson -- the recipe SS8.1 pattern -- so every recognition/production slot clears the >=3-distinct-value floor even where an individual lesson is thin; measured 5 distinct unit-wide content lexemes with zero duplicate english_gloss values (checked by hand against the real backfill_lexemes_nl_en.py output before writing). matching_pairs also draws on the unit-wide tag (6 pairs). Structured tier is carried primarily by matching_pairs (bare frame, no literal text, so no course-scope grammaticality risk per recipe SS1.1) plus one fill_in_blank single-member anchor per SS6.5 where the real lexeme dump yielded exactly one course-wide candidate for its lesson+part_of_speech combination (verified before writing the frame). word_order was used only where lesson01s own verb pool is uniformly a bare infinitive form (this units per-lesson tags cannot exclude a single mixed-conjugation member, recipe SS3.1b) and skipped elsewhere in this batch for that reason; the structured-tier floor is still met via matching_pairs alone. Lessons with zero en-language lexemes in the real backfill output are not anchored (recipe SS0: a lesson with no lexemes cannot be represented in the checkpoint regardless of pack content). THIN UNIT: only 5 distinct en content lexemes exist in the real backfill output for this unit (invitation, picnic, wrote, plus 2 date/time symbols), well below the recipe SS8 breadth target. matching_pairs was DROPPED ENTIRELY (the pool cannot reach the 6-distinct-token floor even including symbol-type tokens) rather than shipped with fewer than 6 pairs (rubric HARD RULE: never ship matching_pairs below 6). Total pack is 7 templates, checkpoint-thin (well under the 12-item floor); the coordinator should route this unit to a lexeme-backfill task rather than expect it to pass generate_checkpoint() on its own, per rubric rule 3 (author what the pool genuinely supports, do not pad with untaught vocabulary) and the recipe's explicit instruction to flag any unit that will still be checkpoint-thin.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [a1_unit60_invitations, a1_unit60_invitations_lesson01, a1_unit60_invitations_lesson04]
+slot_presets:
+  unit_pool: &unit_pool {language_code: en, part_of_speech: [noun, verb, adjective, adverb], agreement_tags: {semantic: a1_unit60_invitations}}
+templates:
+  - content_key: practice.nl-en.en.a1.unit60.lesson01.choose.001
+    lesson_content_key: en.a1.unit60.lesson01.invitation_words
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *unit_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is een woord uit deze les.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit60.lesson04.choose.001
+    lesson_content_key: en.a1.unit60.lesson04.dinner_invitation
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *unit_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is een woord uit deze les.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit60.lesson01.listen.001
+    lesson_content_key: en.a1.unit60.lesson01.invitation_words
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *unit_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is het woord dat je hoorde.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit60.lesson04.listen.001
+    lesson_content_key: en.a1.unit60.lesson04.dinner_invitation
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *unit_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is het woord dat je hoorde.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit60.lesson01.translate.001
+    lesson_content_key: en.a1.unit60.lesson01.invitation_words
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *unit_pool}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit60.lesson04.translate.001
+    lesson_content_key: en.a1.unit60.lesson04.dinner_invitation
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *unit_pool}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit60.lesson04.fill.001
+    lesson_content_key: en.a1.unit60.lesson04.dinner_invitation
+    type: fill_in_blank
+    frame: {text: "Yesterday I {item} the invitation.", language_code: en, direction: ltr}
+    slots: {item: {language_code: en, part_of_speech: verb, agreement_tags: {semantic: a1_unit60_invitations_lesson04}}}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} past in deze zin.", language_code: nl, direction: ltr}

@@ -1,0 +1,318 @@
+schema_version: '1.0'
+pack_key: practice.en-nl.a1.unit51
+source_language: en
+target_language: nl
+unit_content_key: nl.a1.unit51.kapper
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    Vocabulary unit (kapper / hairdresser), 11 unit lexemes across lessons
+    01,02,04,05,06 per scripts/backfill_lexemes_en_nl.py; lesson03
+    (een_afspraak_maken) has ZERO lexemes and is unhostable in any slot --
+    flagging for the coordinator to route a backfill extension. lesson01
+    (haircut_need, 1 token) and lesson02 (haircut_request, 2 tokens) are
+    under the multiple_choice floor on their own tag, so both fall back to
+    the unit-wide union kapper_vocab restricted by part_of_speech
+    (S3.1a/S8.1). lesson04 (hairdresser_dialogue), lesson05
+    (price_list_reading) and lesson06 (haircut_wrapup_dialogue) each had >=3
+    of their own tokens. word_order and fill_in_blank both anchor on the
+    single-member kapper_kapsel_single tag (kapsel). Capacity/coverage
+    measured via RECIPE S9 step 4 (see report).
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - kapper_vocab
+    - hairdresser_dialogue
+    - price_list_reading
+    - haircut_wrapup_dialogue
+    - kapper_kapsel_single
+
+templates:
+
+# -- lesson01: mijn_haar_is_te_lang -----------------------------------------------
+- content_key: practice.en-nl.nl.a1.unit51.lesson01.choose.001
+  lesson_content_key: nl.a1.unit51.lesson01.mijn_haar_is_te_lang
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: noun
+      agreement_tags: {semantic: kapper_vocab}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is hairdresser vocabulary from this unit.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit51.lesson01.translate.002
+  lesson_content_key: nl.a1.unit51.lesson01.mijn_haar_is_te_lang
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: noun
+      agreement_tags: {semantic: kapper_vocab}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit51.lesson01.listen.003
+  lesson_content_key: nl.a1.unit51.lesson01.mijn_haar_is_te_lang
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, verb]
+      agreement_tags: {semantic: kapper_vocab}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: You heard {item}.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit51.lesson01.match.004
+  lesson_content_key: nl.a1.unit51.lesson01.mijn_haar_is_te_lang
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: nl
+    direction: ltr
+  slots:
+    first: &kapper_word
+      language_code: nl
+      part_of_speech: [noun, verb, adjective, phrase]
+      agreement_tags: {semantic: kapper_vocab}
+    second: *kapper_word
+    third: *kapper_word
+    fourth: *kapper_word
+    fifth: *kapper_word
+    sixth: *kapper_word
+  slot_relations:
+  - {kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}
+  answer_derivation:
+    kind: matching_pairs
+    slots: [first, second, third, fourth, fifth, sixth]
+  feedback_frame:
+    text: Match each hairdresser word with its English meaning.
+    language_code: en
+    direction: ltr
+
+# -- lesson02: kunt_u_mijn_haar_knippen --------------------------------------------
+- content_key: practice.en-nl.nl.a1.unit51.lesson02.choose.001
+  lesson_content_key: nl.a1.unit51.lesson02.kunt_u_mijn_haar_knippen
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [verb, adjective]
+      agreement_tags: {semantic: kapper_vocab}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is hairdresser vocabulary from this unit.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit51.lesson02.translate.002
+  lesson_content_key: nl.a1.unit51.lesson02.kunt_u_mijn_haar_knippen
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [verb, adjective]
+      agreement_tags: {semantic: kapper_vocab}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+
+# -- lesson04: bij_de_kapper --------------------------------------------------------
+- content_key: practice.en-nl.nl.a1.unit51.lesson04.choose.001
+  lesson_content_key: nl.a1.unit51.lesson04.bij_de_kapper
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [pronoun, noun, adjective]
+      agreement_tags: {semantic: hairdresser_dialogue}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} appears in the conversation at the hairdresser.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit51.lesson04.translate.002
+  lesson_content_key: nl.a1.unit51.lesson04.bij_de_kapper
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [pronoun, noun, adjective]
+      agreement_tags: {semantic: hairdresser_dialogue}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit51.lesson04.order.003
+  lesson_content_key: nl.a1.unit51.lesson04.bij_de_kapper
+  type: word_order
+  frame:
+    text: Ik wil graag hetzelfde {item}.
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: noun
+      agreement_tags: {semantic: kapper_kapsel_single}
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik wil graag hetzelfde {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Ik wil graag hetzelfde kapsel. -- I would like the same hairstyle.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit51.lesson04.fill.004
+  lesson_content_key: nl.a1.unit51.lesson04.bij_de_kapper
+  type: fill_in_blank
+  frame:
+    text: Ik ben blij met mijn nieuwe {item}.
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: noun
+      agreement_tags: {semantic: kapper_kapsel_single}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: Ik ben blij met mijn nieuwe kapsel. -- I am happy with my new hairstyle.
+    language_code: en
+    direction: ltr
+
+# -- lesson05: de_prijslijst_lezen -----------------------------------------------------
+- content_key: practice.en-nl.nl.a1.unit51.lesson05.choose.001
+  lesson_content_key: nl.a1.unit51.lesson05.de_prijslijst_lezen
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [verb, noun]
+      agreement_tags: {semantic: price_list_reading}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} appears on the price list.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit51.lesson05.translate.002
+  lesson_content_key: nl.a1.unit51.lesson05.de_prijslijst_lezen
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [verb, noun]
+      agreement_tags: {semantic: price_list_reading}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+
+# -- lesson06: lotte_ziet_het_nieuwe_kapsel --------------------------------------------
+- content_key: practice.en-nl.nl.a1.unit51.lesson06.choose.001
+  lesson_content_key: nl.a1.unit51.lesson06.lotte_ziet_het_nieuwe_kapsel
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [verb, phrase, noun]
+      agreement_tags: {semantic: haircut_wrapup_dialogue}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is said when Lotte sees the new hairstyle.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit51.lesson06.translate.002
+  lesson_content_key: nl.a1.unit51.lesson06.lotte_ziet_het_nieuwe_kapsel
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [verb, phrase, noun]
+      agreement_tags: {semantic: haircut_wrapup_dialogue}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr

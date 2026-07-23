@@ -1,0 +1,51 @@
+schema_version: "1.0"
+pack_key: practice.fa-en.a2.unit31
+source_language: fa
+target_language: en
+unit_content_key: en.a2.unit31.travel_disruption
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    24 lexemes across all 4 lessons (5/6/9/4). Recognition/production use
+    each lesson's own tag narrowed to [noun, verb, adjective, adverb]
+    (excludes the three bare-symbol clock times 5:15/6:00/5:30 and the
+    untagged preposition "from"). Two matching_pairs (6 pairs each):
+    lesson02's tag narrowed to [noun, adjective, adverb] gives exactly 6
+    (why/train/delayed/another/way/tonight); lesson03's tag narrowed to
+    [noun, adverb] gives exactly 6 (departure/time/bus/station/outside/
+    instead) -- the three clock-time symbols are excluded by the
+    part_of_speech filter itself. No confusable/duplicate glosses in either
+    pool. lesson04 has only 4 lexemes and its single noun ("tracks") is
+    already a single-member anchor once narrowed by part_of_speech, so
+    fill_in_blank ("There is a problem on the {item}.") is safe and grounded
+    in the realization's own "signal problem on the tracks" line. No
+    mis-glossed lexeme found. 13 templates, all 4 lessons represented in
+    recognition and production; lesson04 additionally gets the structured-tier
+    fill_in_blank.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [fa_en_a2_unit31_lesson01_words, fa_en_a2_unit31_lesson02_words, fa_en_a2_unit31_lesson03_words, fa_en_a2_unit31_lesson04_words]
+slot_presets:
+  l1: &l1 {language_code: en, part_of_speech: [noun, verb, adjective, adverb], agreement_tags: {semantic: fa_en_a2_unit31_lesson01_words}}
+  l2: &l2 {language_code: en, part_of_speech: [noun, verb, adjective, adverb], agreement_tags: {semantic: fa_en_a2_unit31_lesson02_words}}
+  l2m: &l2m {language_code: en, part_of_speech: [noun, adjective, adverb], agreement_tags: {semantic: fa_en_a2_unit31_lesson02_words}}
+  l3: &l3 {language_code: en, part_of_speech: [noun, verb, adjective, adverb], agreement_tags: {semantic: fa_en_a2_unit31_lesson03_words}}
+  l3m: &l3m {language_code: en, part_of_speech: [noun, adverb], agreement_tags: {semantic: fa_en_a2_unit31_lesson03_words}}
+  l4: &l4 {language_code: en, part_of_speech: [noun, verb, adjective, adverb], agreement_tags: {semantic: fa_en_a2_unit31_lesson04_words}}
+  l4_tracks: &l4_tracks {language_code: en, part_of_speech: noun, agreement_tags: {semantic: fa_en_a2_unit31_lesson04_words}}
+templates:
+  - {content_key: practice.fa-en.en.a2.unit31.lesson01.choose.001, lesson_content_key: en.a2.unit31.lesson01.disruption_vocabulary, type: multiple_choice, frame: {text: "{item}", language_code: en, direction: ltr}, slots: {item: *l1}, answer_derivation: {kind: slot_gloss, slot: item}, feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}}
+  - {content_key: practice.fa-en.en.a2.unit31.lesson01.listen.002, lesson_content_key: en.a2.unit31.lesson01.disruption_vocabulary, type: listen_select, frame: {text: "{item}", language_code: en, direction: ltr}, slots: {item: *l1}, answer_derivation: {kind: slot_gloss, slot: item}, feedback_frame: {text: "واژه‌ای که شنیدید {item} بود.", language_code: fa, direction: rtl}}
+  - {content_key: practice.fa-en.en.a2.unit31.lesson01.translate.003, lesson_content_key: en.a2.unit31.lesson01.disruption_vocabulary, type: translation, frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}, slots: {item: *l1}, answer_derivation: {kind: slot_text, slot: item}, feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}}
+  - {content_key: practice.fa-en.en.a2.unit31.lesson02.choose.001, lesson_content_key: en.a2.unit31.lesson02.asking_about_alternatives, type: multiple_choice, frame: {text: "{item}", language_code: en, direction: ltr}, slots: {item: *l2}, answer_derivation: {kind: slot_gloss, slot: item}, feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}}
+  - {content_key: practice.fa-en.en.a2.unit31.lesson02.translate.002, lesson_content_key: en.a2.unit31.lesson02.asking_about_alternatives, type: translation, frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}, slots: {item: *l2}, answer_derivation: {kind: slot_text, slot: item}, feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}}
+  - {content_key: practice.fa-en.en.a2.unit31.lesson02.match.003, lesson_content_key: en.a2.unit31.lesson02.asking_about_alternatives, type: matching_pairs, frame: {text: "{first} — {second} — {third} — {fourth} — {fifth} — {sixth}", language_code: en, direction: ltr}, slots: {first: *l2m, second: *l2m, third: *l2m, fourth: *l2m, fifth: *l2m, sixth: *l2m}, slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}], answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}, feedback_frame: {text: "هر واژه را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}}
+  - {content_key: practice.fa-en.en.a2.unit31.lesson03.choose.001, lesson_content_key: en.a2.unit31.lesson03.reading_a_disruption_notice, type: multiple_choice, frame: {text: "{item}", language_code: en, direction: ltr}, slots: {item: *l3}, answer_derivation: {kind: slot_gloss, slot: item}, feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}}
+  - {content_key: practice.fa-en.en.a2.unit31.lesson03.listen.002, lesson_content_key: en.a2.unit31.lesson03.reading_a_disruption_notice, type: listen_select, frame: {text: "{item}", language_code: en, direction: ltr}, slots: {item: *l3}, answer_derivation: {kind: slot_gloss, slot: item}, feedback_frame: {text: "واژه‌ای که شنیدید {item} بود.", language_code: fa, direction: rtl}}
+  - {content_key: practice.fa-en.en.a2.unit31.lesson03.translate.003, lesson_content_key: en.a2.unit31.lesson03.reading_a_disruption_notice, type: translation, frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}, slots: {item: *l3}, answer_derivation: {kind: slot_text, slot: item}, feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}}
+  - {content_key: practice.fa-en.en.a2.unit31.lesson03.match.004, lesson_content_key: en.a2.unit31.lesson03.reading_a_disruption_notice, type: matching_pairs, frame: {text: "{first} — {second} — {third} — {fourth} — {fifth} — {sixth}", language_code: en, direction: ltr}, slots: {first: *l3m, second: *l3m, third: *l3m, fourth: *l3m, fifth: *l3m, sixth: *l3m}, slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}], answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}, feedback_frame: {text: "هر واژه را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}}
+  - {content_key: practice.fa-en.en.a2.unit31.lesson04.choose.001, lesson_content_key: en.a2.unit31.lesson04.station_dialogue, type: multiple_choice, frame: {text: "{item}", language_code: en, direction: ltr}, slots: {item: *l4}, answer_derivation: {kind: slot_gloss, slot: item}, feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}}
+  - {content_key: practice.fa-en.en.a2.unit31.lesson04.translate.002, lesson_content_key: en.a2.unit31.lesson04.station_dialogue, type: translation, frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}, slots: {item: *l4}, answer_derivation: {kind: slot_text, slot: item}, feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}}
+  - {content_key: practice.fa-en.en.a2.unit31.lesson04.fill.003, lesson_content_key: en.a2.unit31.lesson04.station_dialogue, type: fill_in_blank, frame: {text: "There is a problem on the {item}.", language_code: en, direction: ltr}, slots: {item: *l4_tracks}, answer_derivation: {kind: slot_text, slot: item}, feedback_frame: {text: "{item} یعنی «ریل‌ها».", language_code: fa, direction: rtl}}

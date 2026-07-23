@@ -1,0 +1,366 @@
+schema_version: '1.0'
+pack_key: practice.en-prs.b1.unit09
+source_language: en
+target_language: prs
+unit_content_key: prs.b1.unit09.workplace
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    en-prs B1 practice pack (unit09 workplace: suggestions/polite requests),
+    authored 2026-07-23. GRAMMAR UNIT (recipe SS8.1) -- all 6 lessons have
+    lexemes (22 total), so the per-lesson-tag pattern is not needed here, but
+    the pool is still grammar-flavoured (irrealis می‌بود, polite request
+    می‌شود/بفرستین, negative copula نیستند) rather than pure vocabulary.
+    Union tag list (suggestion_word, appointment_word, workplace_word,
+    polite_request_verb, politeness, relationship_word, time_period,
+    time_of_day, wellbeing_answer, phone_action_verb, accept_verb, see_verb,
+    past_verb_third, emotion_word, negative_copula_verb, notify_word,
+    workplace_person_word) deliberately EXCLUDES dialogue_word and
+    ones_number: dialogue_word is course-wide huge (used only for
+    recognition/production safety elsewhere, not needed here since every
+    lesson's content lexeme already carries a more specific tag) and
+    ones_number only tags نه "nine" (a number, not unit vocabulary -- excluded
+    per SS3.1(b) by simply omitting that one tag). Checked each of the 17
+    listed tags' whole-direction size before using them in the broad
+    recognition/production/matching_pairs slot -- max was politeness=11,
+    appointment_word=6, wellbeing_answer=6, none huge; safe because that slot
+    is only ever used in bare-word/gloss-option contexts (no literal frame
+    text, so course-scope breadth is not a grammaticality risk there).
+    unit-scope pool for the broad slot = 21 distinct tokens (all 22 lexemes
+    minus نه).
+    fill_in_blank uses 4 whole-direction-unique single-candidate anchors,
+    each confirmed via a live iter_specs() query before use: می‌بود
+    (suggestion_word+verb, 1), هفته‌وار (workplace_word+adjective, 1), می‌شود
+    (polite_request_verb+phrase, 1 -- NOTE: می‌شود is also a verb-tagged
+    homograph course-wide meaning "wakes up/becomes" in a1_unit12; narrowing
+    to part_of_speech: phrase excludes that sense, so this slot is safe and
+    the gloss shown matches what THIS unit teaches), خبر (notify_word, 1).
+    word_order uses two 4-5-member tags checked for course-scope
+    grammaticality by hand: time_of_day (4: صبح/عصر/شب/ظهر, all fit "جلسه
+    {item} است." -- the meeting is at [time]) and emotion_word (5: خوشحال/
+    خسته/ناراحت/عصبانی/نگران, all fit "مدیر {item} بود." -- the manager was
+    [emotion]). Deliberately did NOT use the 4-member past_verb_third or
+    4-member report/see_verb pools in a fixed-subject frame -- their
+    course-wide members mix persons (I/you/he-she) incompatibly with a single
+    subject, the exact "every pool member must be grammatical" trap SS1.1
+    warns about; skipped rather than risk it.
+    matching_pairs (6 pairs) anchored to lesson04 (richest lesson, 5 lexemes)
+    over the broad union slot (21 unit-scope candidates, no confusable-gloss
+    duplicates found on inspection).
+    19 templates: MC x6 (one per lesson), fill_in_blank x4, word_order x2,
+    matching_pairs x1, translation x6. Structured=7, recognition=6,
+    production=6 -- comfortably over all three tier floors. Every lesson
+    represented in recognition and production; structured anchors cover
+    lesson01/02/03/05/06 directly (fill_in_blank) and 04/05 (word_order);
+    every lesson has at least one structured-tier template except lesson04,
+    which is covered by matching_pairs instead. No mis-glossed lexeme found.
+    No listen_select (no prs TTS). 2pl forms verified against
+    b1_unit09_workplace.yaml's own register_policy (-ین, not -ید) --
+    بفرستین/می‌کنین pattern, matches. Needs the standard fresh-context review
+    before import.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - suggestion_word
+    - appointment_word
+    - workplace_word
+    - polite_request_verb
+    - politeness
+    - relationship_word
+    - time_period
+    - time_of_day
+    - wellbeing_answer
+    - phone_action_verb
+    - accept_verb
+    - see_verb
+    - past_verb_third
+    - emotion_word
+    - negative_copula_verb
+    - notify_word
+    - workplace_person_word
+slot_presets:
+  unit_word: &uw
+    language_code: prs
+    part_of_speech: [noun, verb, adjective, adverb, phrase]
+    agreement_tags:
+      semantic:
+      - suggestion_word
+      - appointment_word
+      - workplace_word
+      - polite_request_verb
+      - politeness
+      - relationship_word
+      - time_period
+      - time_of_day
+      - wellbeing_answer
+      - phone_action_verb
+      - accept_verb
+      - see_verb
+      - past_verb_third
+      - emotion_word
+      - negative_copula_verb
+      - notify_word
+      - workplace_person_word
+  suggestion_verb_single: &sv
+    language_code: prs
+    part_of_speech: verb
+    agreement_tags:
+      semantic: suggestion_word
+  workplace_adj_single: &wa
+    language_code: prs
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: workplace_word
+  polite_request_phrase_single: &prp
+    language_code: prs
+    part_of_speech: phrase
+    agreement_tags:
+      semantic: polite_request_verb
+  notify_single: &ns
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: notify_word
+  time_of_day_slot: &tod
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: time_of_day
+  emotion_slot: &em
+    language_code: prs
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: emotion_word
+templates:
+# ---- recognition ----
+- content_key: practice.en-prs.prs.b1.unit09.lesson01.choose.001
+  lesson_content_key: prs.b1.unit09.lesson01.formal_suggestion
+  type: multiple_choice
+  frame: {text: '{item}', language_code: prs, direction: rtl}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is from this unit''s workplace vocabulary.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b1.unit09.lesson02.choose.001
+  lesson_content_key: prs.b1.unit09.lesson02.making_a_suggestion
+  type: multiple_choice
+  frame: {text: '{item}', language_code: prs, direction: rtl}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is from this unit''s workplace vocabulary.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b1.unit09.lesson03.choose.001
+  lesson_content_key: prs.b1.unit09.lesson03.polite_request
+  type: multiple_choice
+  frame: {text: '{item}', language_code: prs, direction: rtl}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is from this unit''s workplace vocabulary.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b1.unit09.lesson04.choose.001
+  lesson_content_key: prs.b1.unit09.lesson04.dialogue_meeting
+  type: multiple_choice
+  frame: {text: '{item}', language_code: prs, direction: rtl}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is from this unit''s workplace vocabulary.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b1.unit09.lesson05.choose.001
+  lesson_content_key: prs.b1.unit09.lesson05.reading_meeting_note
+  type: multiple_choice
+  frame: {text: '{item}', language_code: prs, direction: rtl}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is from this unit''s workplace vocabulary.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b1.unit09.lesson06.choose.001
+  lesson_content_key: prs.b1.unit09.lesson06.wrapup_production
+  type: multiple_choice
+  frame: {text: '{item}', language_code: prs, direction: rtl}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is from this unit''s workplace vocabulary.'
+    language_code: en
+    direction: ltr
+# ---- structured ----
+- content_key: practice.en-prs.prs.b1.unit09.lesson01.fill.001
+  lesson_content_key: prs.b1.unit09.lesson01.formal_suggestion
+  type: fill_in_blank
+  frame: {text: 'خوب {item} اگر این تغییر را امتحان کنیم.', language_code: prs, direction: rtl}
+  slots:
+    item: *sv
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: 'خوب می‌بود اگر این تغییر را امتحان کنیم. = It would be good if we tried this change.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b1.unit09.lesson02.fill.001
+  lesson_content_key: prs.b1.unit09.lesson02.making_a_suggestion
+  type: fill_in_blank
+  frame: {text: 'گزارش {item} را برایم بفرستین.', language_code: prs, direction: rtl}
+  slots:
+    item: *wa
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: 'گزارش هفته‌وار را برایم بفرستین. = Send me the weekly report.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b1.unit09.lesson03.fill.001
+  lesson_content_key: prs.b1.unit09.lesson03.polite_request
+  type: fill_in_blank
+  frame: {text: '{item} که یک ایمیل بفرستین؟', language_code: prs, direction: rtl}
+  slots:
+    item: *prp
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: 'می‌شود که یک ایمیل بفرستین؟ = Would it be possible for you to send an email?'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b1.unit09.lesson06.fill.001
+  lesson_content_key: prs.b1.unit09.lesson06.wrapup_production
+  type: fill_in_blank
+  frame: {text: 'لطفاً این {item} را به مدیر بدین.', language_code: prs, direction: rtl}
+  slots:
+    item: *ns
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: 'لطفاً این خبر را به مدیر بدین. = Please give this notice to the manager.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b1.unit09.lesson04.order.001
+  lesson_content_key: prs.b1.unit09.lesson04.dialogue_meeting
+  type: word_order
+  frame: {text: 'جلسه {item} است.', language_code: prs, direction: rtl}
+  slots:
+    item: *tod
+  answer_derivation:
+    kind: render_frame
+    frame: {text: 'جلسه {item} است.', language_code: prs, direction: rtl}
+  feedback_frame:
+    text: 'Word order: جلسه ظهر است. (The meeting is at noon.)'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b1.unit09.lesson05.order.001
+  lesson_content_key: prs.b1.unit09.lesson05.reading_meeting_note
+  type: word_order
+  frame: {text: 'مدیر {item} بود.', language_code: prs, direction: rtl}
+  slots:
+    item: *em
+  answer_derivation:
+    kind: render_frame
+    frame: {text: 'مدیر {item} بود.', language_code: prs, direction: rtl}
+  feedback_frame:
+    text: 'Word order: مدیر خوشحال بود. (The manager was happy.)'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b1.unit09.lesson04.match.001
+  lesson_content_key: prs.b1.unit09.lesson04.dialogue_meeting
+  type: matching_pairs
+  frame: {text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}', language_code: prs, direction: rtl}
+  slots: {first: *uw, second: *uw, third: *uw, fourth: *uw, fifth: *uw, sixth: *uw}
+  slot_relations:
+  - kind: distinct
+    slots: [first, second, third, fourth, fifth, sixth]
+  answer_derivation:
+    kind: matching_pairs
+    slots: [first, second, third, fourth, fifth, sixth]
+  feedback_frame:
+    text: 'Match each workplace word to its meaning.'
+    language_code: en
+    direction: ltr
+# ---- production ----
+- content_key: practice.en-prs.prs.b1.unit09.lesson01.translate.001
+  lesson_content_key: prs.b1.unit09.lesson01.formal_suggestion
+  type: translation
+  frame: {text: '{item}', language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: 'Type the Dari word.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b1.unit09.lesson02.translate.001
+  lesson_content_key: prs.b1.unit09.lesson02.making_a_suggestion
+  type: translation
+  frame: {text: '{item}', language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: 'Type the Dari word.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b1.unit09.lesson03.translate.001
+  lesson_content_key: prs.b1.unit09.lesson03.polite_request
+  type: translation
+  frame: {text: '{item}', language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: 'Type the Dari word.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b1.unit09.lesson04.translate.001
+  lesson_content_key: prs.b1.unit09.lesson04.dialogue_meeting
+  type: translation
+  frame: {text: '{item}', language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: 'Type the Dari word.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b1.unit09.lesson05.translate.001
+  lesson_content_key: prs.b1.unit09.lesson05.reading_meeting_note
+  type: translation
+  frame: {text: '{item}', language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: 'Type the Dari word.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b1.unit09.lesson06.translate.001
+  lesson_content_key: prs.b1.unit09.lesson06.wrapup_production
+  type: translation
+  frame: {text: '{item}', language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: 'Type the Dari word.'
+    language_code: en
+    direction: ltr

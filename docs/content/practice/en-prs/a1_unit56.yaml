@@ -1,0 +1,225 @@
+schema_version: '1.0'
+pack_key: practice.en-prs.a1.unit56
+source_language: en
+target_language: prs
+unit_content_key: prs.a1.unit56.gym
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    en-prs A1 practice pack (unit56 gym), authored 2026-07-23 per
+    docs/content/PRACTICE_PACK_RECIPE.md. THIN UNIT: only 8 lexemes across 4 of
+    6 lessons (lesson01: عضویت "membership", وسایل "equipment;things; lesson03:
+    کورس "class;course", الماری "locker;cupboard"; lesson04: روز خوش "have a
+    good day", کارمند باشگاه "gym staff member"; lesson06: ماهانه "monthly",
+    عضویت‌تان "your membership"). lesson02/05 have ZERO lexemes and cannot be
+    represented in the checkpoint. unit_word union (gym_word + good_wish +
+    service_person_word + bank_notice_word + formal_possessive_word, pos
+    [noun, adjective, phrase]) gives exactly the 8 distinct unit glosses --
+    clears the matching_pairs 6-pair floor and the MC >=3 floor. Checked each
+    of those 5 semantic tags' whole-direction size before using them
+    (gym_word=4, good_wish=3, service_person_word=8, bank_notice_word=2,
+    formal_possessive_word=13) -- none is a course-wide-huge tag, so the
+    broad union is safe for MC/matching_pairs/bare-word translation (no
+    literal frame text, so course-scope breadth is not a grammaticality risk
+    there). Deliberately did NOT fold in dialogue_word (course-wide 209 at A1)
+    even though several of these lexemes carry it too -- unnecessary, since
+    the 5 narrower tags already capture every one of the unit's 8 lexemes,
+    and folding it in would have made the word_order slot's course-scope pool
+    unreviewable.
+    word_order narrows to gym_word alone (4 distinct: عضویت, وسایل, کورس,
+    الماری) -- checked whole-direction: gym_word appears ONLY in this unit, so
+    course scope = unit scope = 4, and all 4 fit "این {item} جدید است." (This
+    [item] is new.) grammatically. No fill_in_blank: no semantic
+    tag+part_of_speech combination in this unit's pool reduces to exactly one
+    course-wide candidate (bank_notice_word+adjective=2, formal_possessive_word
+    course-wide=13 with no narrower distinguishing tag available), so a
+    single-member anchor could not be constructed without
+    `interchangeable: true`, which would be false here -- omitted rather than
+    forced.
+    11 templates (MC x5, word_order x2, matching_pairs x1, translation x4) --
+    one short of the recipe's 12-template floor; flagging as checkpoint-thin,
+    capacity-limited by the unit's own lexeme count, not padded with
+    untaught/forward vocabulary. All 4 lessons that have lexemes are
+    represented in recognition and production; only lesson01/lesson03 (via
+    gym_word) get a structured-tier anchor -- lesson04/lesson06's lexemes
+    have no safe single-member or narrow-tag structured anchor, so they are
+    only reachable via matching_pairs (which pools the whole unit) and
+    recognition/production. No mis-glossed lexeme found: every gloss checked
+    against the realization/overlay matches what the lesson actually teaches.
+    No listen_select (no prs TTS -- AZURE_SPEECH_KEY unset, no Dari voice).
+    Needs the standard fresh-context review before import.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - gym_word
+    - good_wish
+    - service_person_word
+    - bank_notice_word
+    - formal_possessive_word
+slot_presets:
+  unit_word: &uw
+    language_code: prs
+    part_of_speech: [noun, adjective, phrase]
+    agreement_tags:
+      semantic: [gym_word, good_wish, service_person_word, bank_notice_word, formal_possessive_word]
+  gym_only: &gym
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: gym_word
+templates:
+# ---- recognition ----
+- content_key: practice.en-prs.prs.a1.unit56.lesson01.choose.001
+  lesson_content_key: prs.a1.unit56.lesson01.gym_and_equipment_vocabulary
+  type: multiple_choice
+  frame: {text: '{item}', language_code: prs, direction: rtl}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is from this unit''s gym vocabulary.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit56.lesson03.choose.001
+  lesson_content_key: prs.a1.unit56.lesson03.class_and_locker_vocabulary
+  type: multiple_choice
+  frame: {text: '{item}', language_code: prs, direction: rtl}
+  slots:
+    item: *gym
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is from this unit''s gym vocabulary.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit56.lesson04.choose.001
+  lesson_content_key: prs.a1.unit56.lesson04.gym_reception_dialogue
+  type: multiple_choice
+  frame: {text: '{item}', language_code: prs, direction: rtl}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is from this unit''s gym vocabulary.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit56.lesson06.choose.001
+  lesson_content_key: prs.a1.unit56.lesson06.wrap_up
+  type: multiple_choice
+  frame: {text: '{item}', language_code: prs, direction: rtl}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is from this unit''s gym vocabulary.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit56.lesson01.choose.002
+  lesson_content_key: prs.a1.unit56.lesson01.gym_and_equipment_vocabulary
+  type: multiple_choice
+  frame: {text: '{item}', language_code: prs, direction: rtl}
+  slots:
+    item: *gym
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is from this unit''s gym vocabulary.'
+    language_code: en
+    direction: ltr
+# ---- structured ----
+- content_key: practice.en-prs.prs.a1.unit56.lesson01.order.001
+  lesson_content_key: prs.a1.unit56.lesson01.gym_and_equipment_vocabulary
+  type: word_order
+  frame: {text: 'این {item} جدید است.', language_code: prs, direction: rtl}
+  slots:
+    item: *gym
+  answer_derivation:
+    kind: render_frame
+    frame: {text: 'این {item} جدید است.', language_code: prs, direction: rtl}
+  feedback_frame:
+    text: 'Word order: این عضویت جدید است. (This membership is new.)'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit56.lesson03.order.001
+  lesson_content_key: prs.a1.unit56.lesson03.class_and_locker_vocabulary
+  type: word_order
+  frame: {text: 'این {item} جدید است.', language_code: prs, direction: rtl}
+  slots:
+    item: *gym
+  answer_derivation:
+    kind: render_frame
+    frame: {text: 'این {item} جدید است.', language_code: prs, direction: rtl}
+  feedback_frame:
+    text: 'Word order: این الماری جدید است. (This locker is new.)'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit56.lesson04.match.001
+  lesson_content_key: prs.a1.unit56.lesson04.gym_reception_dialogue
+  type: matching_pairs
+  frame: {text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}', language_code: prs, direction: rtl}
+  slots: {first: *uw, second: *uw, third: *uw, fourth: *uw, fifth: *uw, sixth: *uw}
+  slot_relations:
+  - kind: distinct
+    slots: [first, second, third, fourth, fifth, sixth]
+  answer_derivation:
+    kind: matching_pairs
+    slots: [first, second, third, fourth, fifth, sixth]
+  feedback_frame:
+    text: 'Match each gym word to its meaning.'
+    language_code: en
+    direction: ltr
+# ---- production ----
+- content_key: practice.en-prs.prs.a1.unit56.lesson01.translate.001
+  lesson_content_key: prs.a1.unit56.lesson01.gym_and_equipment_vocabulary
+  type: translation
+  frame: {text: '{item}', language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: 'Type the Dari word.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit56.lesson03.translate.001
+  lesson_content_key: prs.a1.unit56.lesson03.class_and_locker_vocabulary
+  type: translation
+  frame: {text: '{item}', language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: 'Type the Dari word.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit56.lesson04.translate.001
+  lesson_content_key: prs.a1.unit56.lesson04.gym_reception_dialogue
+  type: translation
+  frame: {text: '{item}', language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: 'Type the Dari word.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit56.lesson06.translate.001
+  lesson_content_key: prs.a1.unit56.lesson06.wrap_up
+  type: translation
+  frame: {text: '{item}', language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: 'Type the Dari word.'
+    language_code: en
+    direction: ltr

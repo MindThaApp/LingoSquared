@@ -1,0 +1,355 @@
+schema_version: '1.0'
+pack_key: practice.en-nl.a1.unit50
+source_language: en
+target_language: nl
+unit_content_key: nl.a1.unit50.apotheek
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    Vocabulary unit (apotheek / pharmacy), 12 unit lexemes across all 6
+    lessons per scripts/backfill_lexemes_en_nl.py. lesson01
+    (symptom_statement, 1 token), lesson02 (taking_medicine, 2 tokens) and
+    lesson06 (pharmacy_wrapup_dialogue, 2 tokens) are under the
+    multiple_choice floor on their own tag, so all three fall back to the
+    unit-wide union apotheek_vocab restricted by part_of_speech (S3.1a/S8.1).
+    lesson03 (dosage_instruction), lesson04 (pharmacy_visit) and lesson05
+    (medicine_label_reading) each had >=3 of their own tokens. word_order and
+    fill_in_blank both anchor on the single-member apotheek_dosering_single
+    tag (dosering). Capacity/coverage measured via RECIPE S9 step 4 (see
+    report).
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - apotheek_vocab
+    - dosage_instruction
+    - pharmacy_visit
+    - medicine_label_reading
+    - apotheek_dosering_single
+
+templates:
+
+# -- lesson01: ik_heb_hoofdpijn --------------------------------------------------
+- content_key: practice.en-nl.nl.a1.unit50.lesson01.choose.001
+  lesson_content_key: nl.a1.unit50.lesson01.ik_heb_hoofdpijn
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: noun
+      agreement_tags: {semantic: apotheek_vocab}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is pharmacy vocabulary from this unit.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit50.lesson01.translate.002
+  lesson_content_key: nl.a1.unit50.lesson01.ik_heb_hoofdpijn
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: noun
+      agreement_tags: {semantic: apotheek_vocab}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit50.lesson01.listen.003
+  lesson_content_key: nl.a1.unit50.lesson01.ik_heb_hoofdpijn
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: noun
+      agreement_tags: {semantic: apotheek_vocab}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: You heard {item}.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit50.lesson01.match.004
+  lesson_content_key: nl.a1.unit50.lesson01.ik_heb_hoofdpijn
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: nl
+    direction: ltr
+  slots:
+    first: &apotheek_word
+      language_code: nl
+      part_of_speech: [noun, verb, adverb]
+      agreement_tags: {semantic: apotheek_vocab}
+    second: *apotheek_word
+    third: *apotheek_word
+    fourth: *apotheek_word
+    fifth: *apotheek_word
+    sixth: *apotheek_word
+  slot_relations:
+  - {kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}
+  answer_derivation:
+    kind: matching_pairs
+    slots: [first, second, third, fourth, fifth, sixth]
+  feedback_frame:
+    text: Match each pharmacy word with its English meaning.
+    language_code: en
+    direction: ltr
+
+# -- lesson02: een_tablet_innemen -----------------------------------------------
+- content_key: practice.en-nl.nl.a1.unit50.lesson02.choose.001
+  lesson_content_key: nl.a1.unit50.lesson02.een_tablet_innemen
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [verb, noun]
+      agreement_tags: {semantic: apotheek_vocab}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is pharmacy vocabulary from this unit.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit50.lesson02.translate.002
+  lesson_content_key: nl.a1.unit50.lesson02.een_tablet_innemen
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [verb, noun]
+      agreement_tags: {semantic: apotheek_vocab}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+
+# -- lesson03: de_dosering_lezen -------------------------------------------------
+- content_key: practice.en-nl.nl.a1.unit50.lesson03.choose.001
+  lesson_content_key: nl.a1.unit50.lesson03.de_dosering_lezen
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: noun
+      agreement_tags: {semantic: dosage_instruction}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} appears in the dosage instructions.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit50.lesson03.translate.002
+  lesson_content_key: nl.a1.unit50.lesson03.de_dosering_lezen
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: noun
+      agreement_tags: {semantic: dosage_instruction}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit50.lesson03.order.003
+  lesson_content_key: nl.a1.unit50.lesson03.de_dosering_lezen
+  type: word_order
+  frame:
+    text: Lees altijd de {item} op de verpakking.
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: noun
+      agreement_tags: {semantic: apotheek_dosering_single}
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Lees altijd de {item} op de verpakking.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Lees altijd de dosering op de verpakking. -- Always read the dosage on the packaging.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit50.lesson03.fill.004
+  lesson_content_key: nl.a1.unit50.lesson03.de_dosering_lezen
+  type: fill_in_blank
+  frame:
+    text: Volg de {item} precies op.
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: noun
+      agreement_tags: {semantic: apotheek_dosering_single}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: Volg de dosering precies op. -- Follow the dosage exactly.
+    language_code: en
+    direction: ltr
+
+# -- lesson04: bij_de_apotheek ---------------------------------------------------
+- content_key: practice.en-nl.nl.a1.unit50.lesson04.choose.001
+  lesson_content_key: nl.a1.unit50.lesson04.bij_de_apotheek
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, verb, adverb]
+      agreement_tags: {semantic: pharmacy_visit}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is used during a visit to the pharmacy.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit50.lesson04.translate.002
+  lesson_content_key: nl.a1.unit50.lesson04.bij_de_apotheek
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, verb, adverb]
+      agreement_tags: {semantic: pharmacy_visit}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+
+# -- lesson05: het_etiket_lezen ---------------------------------------------------
+- content_key: practice.en-nl.nl.a1.unit50.lesson05.choose.001
+  lesson_content_key: nl.a1.unit50.lesson05.het_etiket_lezen
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: noun
+      agreement_tags: {semantic: medicine_label_reading}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} appears on the medicine label.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit50.lesson05.translate.002
+  lesson_content_key: nl.a1.unit50.lesson05.het_etiket_lezen
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: noun
+      agreement_tags: {semantic: medicine_label_reading}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+
+# -- lesson06: omar_vraagt_hoe_het_gaat ---------------------------------------------
+- content_key: practice.en-nl.nl.a1.unit50.lesson06.choose.001
+  lesson_content_key: nl.a1.unit50.lesson06.omar_vraagt_hoe_het_gaat
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [verb, noun]
+      agreement_tags: {semantic: apotheek_vocab}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is pharmacy vocabulary from this unit.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit50.lesson06.translate.002
+  lesson_content_key: nl.a1.unit50.lesson06.omar_vraagt_hoe_het_gaat
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [verb, noun]
+      agreement_tags: {semantic: apotheek_vocab}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr

@@ -1,0 +1,290 @@
+schema_version: '1.0'
+pack_key: practice.en-fa.a1.unit30
+source_language: en
+target_language: fa
+unit_content_key: fa.a1.unit30.education
+
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    Vocabulary unit (29 fa lexemes; lessons05 reading_education and 06
+    wrap_up have ZERO fa lexemes per backfill_lexemes and are therefore
+    not represented by any template -- expected per recipe §0, not an
+    omission). study_word (lesson01: دانشگاه/دانشجو/درس/زبان, 4 distinct),
+    subject_word (lesson02: ریاضی/رشته/رشته‌ی/ریاضیه, 4 distinct) and
+    learning_verb_word (lessons01/02/04: می‌خونم/یاد/می‌خونی/سخته, up to 4
+    distinct) are the per-lesson recognition/production pools; two lessons
+    (02 and 04) additionally get a second MC+translation pair over a
+    wider cross-tag union for extra template count/coverage -- OR-match is
+    legal per §3.1a even though the tags aren't semantically identical
+    (study/subject/learning words mixed), flagging for reviewer attention
+    since the pairing is looser than a single-topic union. word_order
+    'این {item} خوبه.' (lesson01) was re-read against the full study_word
+    pool and all 4 members are grammatical. word_order 'رشته‌ی من
+    {item}.' (lesson02) anchors ریاضیه, the ONLY verb member of
+    subject_word course-wide -- a genuine single-member anchor, matching
+    the unit's own reviewed_phrase "رشته‌ی من ریاضیه..." verbatim.
+    Deliberately did NOT author a frame for سخته ("it's hard", lesson04):
+    its only grammatical frame ("ریاضی سخته.") requires excluding its two
+    co-tagged 1st/2nd-person siblings (می‌خونم/می‌خونی) from the same
+    slot, and no finer tag exists to isolate it -- so سخته is only
+    exercised via multiple_choice/translation, never inside a literal
+    sentence frame. matching_pairs unions study_word + subject_word + the
+    noun member of learning_verb_word (یاد) -- 8 distinct nouns -- for the
+    6-pair floor. No mis-glossed lexemes found. No listen_select (fa has
+    no TTS configured).
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - study_word
+    - subject_word
+    - learning_verb_word
+
+templates:
+# --- lesson01 (study vocabulary) ---
+- content_key: practice.en-fa.fa.a1.unit30.lesson01.choose.001
+  lesson_content_key: fa.a1.unit30.lesson01.study_vocabulary
+  type: multiple_choice
+  frame: {text: '{item}', language_code: fa, direction: rtl}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: noun
+      agreement_tags: {semantic: study_word}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is education vocabulary from this unit.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit30.lesson01.translate.002
+  lesson_content_key: fa.a1.unit30.lesson01.study_vocabulary
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: noun
+      agreement_tags: {semantic: study_word}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: 'Type the Farsi word for {item}.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit30.lesson01.order.003
+  lesson_content_key: fa.a1.unit30.lesson01.study_vocabulary
+  type: word_order
+  frame: {text: 'این {item} خوبه.', language_code: fa, direction: rtl}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: noun
+      agreement_tags: {semantic: study_word}
+  answer_derivation:
+    kind: render_frame
+    frame: {text: 'این {item} خوبه.', language_code: fa, direction: rtl}
+  feedback_frame:
+    text: '"این {item} خوبه." means "This {item} is good."'
+    language_code: en
+    direction: ltr
+
+# --- lesson02 (subjects) ---
+- content_key: practice.en-fa.fa.a1.unit30.lesson02.choose.001
+  lesson_content_key: fa.a1.unit30.lesson02.subjects
+  type: multiple_choice
+  frame: {text: '{item}', language_code: fa, direction: rtl}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, verb]
+      agreement_tags: {semantic: subject_word}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is used when talking about a field of study.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit30.lesson02.translate.002
+  lesson_content_key: fa.a1.unit30.lesson02.subjects
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, verb]
+      agreement_tags: {semantic: subject_word}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: 'Type the Farsi word for {item}.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit30.lesson02.order.003
+  lesson_content_key: fa.a1.unit30.lesson02.subjects
+  type: word_order
+  frame: {text: 'رشته‌ی من {item}.', language_code: fa, direction: rtl}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: verb
+      agreement_tags: {semantic: subject_word}
+  answer_derivation:
+    kind: render_frame
+    frame: {text: 'رشته‌ی من {item}.', language_code: fa, direction: rtl}
+  feedback_frame:
+    text: '"رشته‌ی من {item}." means "My major is math."'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit30.lesson02.choose.004
+  lesson_content_key: fa.a1.unit30.lesson02.subjects
+  type: multiple_choice
+  frame: {text: '{item}', language_code: fa, direction: rtl}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: noun
+      agreement_tags: {semantic: [subject_word, study_word]}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is education vocabulary from this unit.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit30.lesson02.translate.005
+  lesson_content_key: fa.a1.unit30.lesson02.subjects
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: noun
+      agreement_tags: {semantic: [subject_word, study_word]}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: 'Type the Farsi word for {item}.'
+    language_code: en
+    direction: ltr
+
+# --- lesson04 (study dialogue) ---
+- content_key: practice.en-fa.fa.a1.unit30.lesson04.choose.001
+  lesson_content_key: fa.a1.unit30.lesson04.study_dialogue
+  type: multiple_choice
+  frame: {text: '{item}', language_code: fa, direction: rtl}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: verb
+      agreement_tags: {semantic: learning_verb_word}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is used when talking about studying.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit30.lesson04.translate.002
+  lesson_content_key: fa.a1.unit30.lesson04.study_dialogue
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: verb
+      agreement_tags: {semantic: learning_verb_word}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: 'Type the Farsi word for {item}.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit30.lesson04.choose.003
+  lesson_content_key: fa.a1.unit30.lesson04.study_dialogue
+  type: multiple_choice
+  frame: {text: '{item}', language_code: fa, direction: rtl}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [verb, noun]
+      agreement_tags: {semantic: [learning_verb_word, subject_word]}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is education vocabulary from this unit.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit30.lesson04.translate.004
+  lesson_content_key: fa.a1.unit30.lesson04.study_dialogue
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [verb, noun]
+      agreement_tags: {semantic: [learning_verb_word, subject_word]}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: 'Type the Farsi word for {item}.'
+    language_code: en
+    direction: ltr
+
+# --- unit-wide matching_pairs over the noun union ---
+- content_key: practice.en-fa.fa.a1.unit30.lesson01.match.004
+  lesson_content_key: fa.a1.unit30.lesson01.study_vocabulary
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: fa
+    direction: rtl
+  slots:
+    first: &edu
+      language_code: fa
+      part_of_speech: noun
+      agreement_tags: {semantic: [study_word, subject_word, learning_verb_word]}
+    second: *edu
+    third: *edu
+    fourth: *edu
+    fifth: *edu
+    sixth: *edu
+  slot_relations:
+  - kind: distinct
+    slots: [first, second, third, fourth, fifth, sixth]
+  answer_derivation:
+    kind: matching_pairs
+    slots: [first, second, third, fourth, fifth, sixth]
+  feedback_frame:
+    text: 'These are the unit''s education/study words.'
+    language_code: en
+    direction: ltr

@@ -1,0 +1,95 @@
+schema_version: "1.0"
+pack_key: practice.fa-en.a1.unit62
+source_language: fa
+target_language: en
+unit_content_key: en.a1.unit62.phone_calls
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    THIN UNIT: backfill_lexemes_fa_en.py registers only 3 lexemes for this unit
+    (voicemail/sound/clear, lesson01 + lesson04 only -- lesson02/lesson03 have
+    zero lexemes and are therefore invisible to any checkpoint no matter what
+    a pack does). This cannot reach the recipe's 12-template / 40-distinct-item
+    bars honestly; padding with untaught vocab is explicitly forbidden, so this
+    pack is authored at genuine capacity: 8 templates, recognition pool exactly
+    at the 3-option MC floor (voicemail/sound/clear), matching_pairs omitted
+    (needs 6 distinct tokens, only 3 exist). word_order/fill_in_blank use
+    lesson-narrow single-member anchors (fa_en_a1_unit62_lesson01_words =
+    {voicemail} only; fa_en_a1_unit62_lesson04_words narrowed by
+    part_of_speech to {sound} or {clear}) built from the realization's own
+    teaching examples ("The voicemail is short.", "The sound was not clear.").
+    Course-scope check: both lesson-level tags are unit+lesson-specific
+    (fa_en_a1_unit62_lesson01_words / _lesson04_words) and used nowhere else in
+    the corpus, so their course-wide membership equals their unit-scoped
+    membership -- no additional candidates appear in Endless Practice. No
+    mis-glossed lexeme found (all 3 glosses match the unit's own teaching).
+    FLAG FOR COORDINATOR: checkpoint will very likely stay <12 items
+    (checkpoint_unavailable) unless lessons 02/03 get lexeme coverage from a
+    backfill_lexemes_fa_en.py extension -- routing recommended.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [fa_en_a1_unit62_words, fa_en_a1_unit62_lesson01_words, fa_en_a1_unit62_lesson04_words]
+slot_presets:
+  unit_pool: &unit_pool {language_code: en, part_of_speech: [noun, adjective], agreement_tags: {semantic: fa_en_a1_unit62_words}}
+  lesson01_single: &lesson01_single {language_code: en, part_of_speech: noun, agreement_tags: {semantic: fa_en_a1_unit62_lesson01_words}}
+  lesson04_noun: &lesson04_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: fa_en_a1_unit62_lesson04_words}}
+  lesson04_adj: &lesson04_adj {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: fa_en_a1_unit62_lesson04_words}}
+templates:
+  - content_key: practice.fa-en.en.a1.unit62.lesson01.choose.001
+    lesson_content_key: en.a1.unit62.lesson01.phone_words
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *unit_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit62.lesson01.listen.002
+    lesson_content_key: en.a1.unit62.lesson01.phone_words
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *unit_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "واژه‌ای که شنیدید {item} بود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit62.lesson01.translate.003
+    lesson_content_key: en.a1.unit62.lesson01.phone_words
+    type: translation
+    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *unit_pool}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit62.lesson01.order.004
+    lesson_content_key: en.a1.unit62.lesson01.phone_words
+    type: word_order
+    frame: {text: "The {item} is short", language_code: en, direction: ltr}
+    slots: {item: *lesson01_single}
+    answer_derivation: {kind: render_frame, frame: {text: "The {item} is short", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} یعنی «پیام صوتی».", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit62.lesson04.choose.001
+    lesson_content_key: en.a1.unit62.lesson04.phone_message
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *unit_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit62.lesson04.translate.002
+    lesson_content_key: en.a1.unit62.lesson04.phone_message
+    type: translation
+    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *unit_pool}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit62.lesson04.fill.003
+    lesson_content_key: en.a1.unit62.lesson04.phone_message
+    type: fill_in_blank
+    frame: {text: "The {item} was not clear.", language_code: en, direction: ltr}
+    slots: {item: *lesson04_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} یعنی «صدا».", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit62.lesson04.order.004
+    lesson_content_key: en.a1.unit62.lesson04.phone_message
+    type: word_order
+    frame: {text: "The sound was not {item}", language_code: en, direction: ltr}
+    slots: {item: *lesson04_adj}
+    answer_derivation: {kind: render_frame, frame: {text: "The sound was not {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} یعنی «واضح».", language_code: fa, direction: rtl}

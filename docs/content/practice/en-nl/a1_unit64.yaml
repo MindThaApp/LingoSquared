@@ -1,0 +1,403 @@
+schema_version: '1.0'
+pack_key: practice.en-nl.a1.unit64
+source_language: en
+target_language: nl
+unit_content_key: nl.a1.unit64.voetbalwedstrijd
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    Authored 2026-07-23 against docs/content/PRACTICE_PACK_RECIPE.md. THIN
+    vocabulary unit: only 12 lexemes total across the unit (lesson01 x3,
+    lesson02 x2, lesson03 x2, lesson04 x3, lesson06 x2); lesson05
+    (bij_de_kassa_van_het_stadion, a dialogue-only lesson) has ZERO
+    classified lexemes and therefore CANNOT be represented in the checkpoint
+    -- excluded, not an oversight. Used the union broad tag
+    `voetbalwedstrijd_vocab` (12 distinct tokens: stadion, supporter,
+    vanavond, team, speler, doelpunt, stand, scorebord, thuisteam, uitteam,
+    winnaar, pretpark -- all glosses read against the realization and
+    confirmed correct, no mis-glosses found) for every multiple_choice,
+    translation, listen_select and matching_pairs slot, anchored per-lesson
+    per §8's vocabulary-unit breadth pattern. Only single-member anchor
+    available is `voetbalwedstrijd_scorebord_single` (scorebord, lesson04),
+    used for both the fill_in_blank and the word_order template with two
+    different literal frames; both frames' literal words (Ik/lees/het/bij/de/
+    ingang) were checked and are not candidate values of the scorebord_single
+    slot at any scope. 15 templates, all 5 lexeme-bearing lessons covered by
+    both multiple_choice and translation; matching_pairs anchored to
+    lesson02 and lesson06 (broad tag, 6 pairs each, all distinct glosses,
+    no case-duplicates). Recognition 6 (5 MC + 1 listen_select), structured
+    4 (2 matching_pairs + 1 fill_in_blank + 1 word_order), production 5
+    (translation). Needs standard fresh-context review before import.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - voetbalwedstrijd_vocab
+    - voetbalwedstrijd_scorebord_single
+templates:
+
+# ---------------------------------------------------------------------------
+# lesson01 -- Zullen we vanavond naar de wedstrijd gaan?
+# ---------------------------------------------------------------------------
+- content_key: practice.en-nl.nl.a1.unit64.lesson01.choose.001
+  lesson_content_key: nl.a1.unit64.lesson01.zullen_we_vanavond_naar_de_wedstrijd_gaan
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, adverb]
+      agreement_tags:
+        semantic: voetbalwedstrijd_vocab
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} belongs to this unit''s football-match vocabulary.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit64.lesson01.translate.002
+  lesson_content_key: nl.a1.unit64.lesson01.zullen_we_vanavond_naar_de_wedstrijd_gaan
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, adverb]
+      agreement_tags:
+        semantic: voetbalwedstrijd_vocab
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit64.lesson01.listen.003
+  lesson_content_key: nl.a1.unit64.lesson01.zullen_we_vanavond_naar_de_wedstrijd_gaan
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, adverb]
+      agreement_tags:
+        semantic: voetbalwedstrijd_vocab
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: You heard {item}.
+    language_code: en
+    direction: ltr
+
+# ---------------------------------------------------------------------------
+# lesson02 -- Het team en de speler
+# ---------------------------------------------------------------------------
+- content_key: practice.en-nl.nl.a1.unit64.lesson02.choose.001
+  lesson_content_key: nl.a1.unit64.lesson02.het_team_en_de_speler
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, adverb]
+      agreement_tags:
+        semantic: voetbalwedstrijd_vocab
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} belongs to this unit''s football-match vocabulary.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit64.lesson02.translate.002
+  lesson_content_key: nl.a1.unit64.lesson02.het_team_en_de_speler
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, adverb]
+      agreement_tags:
+        semantic: voetbalwedstrijd_vocab
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit64.lesson02.match.003
+  lesson_content_key: nl.a1.unit64.lesson02.het_team_en_de_speler
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: nl
+    direction: ltr
+  slots:
+    first: &voetbal_word
+      language_code: nl
+      part_of_speech: [noun, adverb]
+      agreement_tags:
+        semantic: voetbalwedstrijd_vocab
+    second: *voetbal_word
+    third: *voetbal_word
+    fourth: *voetbal_word
+    fifth: *voetbal_word
+    sixth: *voetbal_word
+  slot_relations:
+  - kind: distinct
+    slots: [first, second, third, fourth, fifth, sixth]
+  answer_derivation:
+    kind: matching_pairs
+    slots: [first, second, third, fourth, fifth, sixth]
+  feedback_frame:
+    text: Match each word from the football match with its English meaning.
+    language_code: en
+    direction: ltr
+
+# ---------------------------------------------------------------------------
+# lesson03 -- Het doelpunt en de stand
+# ---------------------------------------------------------------------------
+- content_key: practice.en-nl.nl.a1.unit64.lesson03.choose.001
+  lesson_content_key: nl.a1.unit64.lesson03.het_doelpunt_en_de_stand
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, adverb]
+      agreement_tags:
+        semantic: voetbalwedstrijd_vocab
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} belongs to this unit''s football-match vocabulary.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit64.lesson03.translate.002
+  lesson_content_key: nl.a1.unit64.lesson03.het_doelpunt_en_de_stand
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, adverb]
+      agreement_tags:
+        semantic: voetbalwedstrijd_vocab
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+
+# ---------------------------------------------------------------------------
+# lesson04 -- Het bord bij de ingang
+# ---------------------------------------------------------------------------
+- content_key: practice.en-nl.nl.a1.unit64.lesson04.choose.001
+  lesson_content_key: nl.a1.unit64.lesson04.het_bord_bij_de_ingang
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, adverb]
+      agreement_tags:
+        semantic: voetbalwedstrijd_vocab
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} belongs to this unit''s football-match vocabulary.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit64.lesson04.translate.002
+  lesson_content_key: nl.a1.unit64.lesson04.het_bord_bij_de_ingang
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, adverb]
+      agreement_tags:
+        semantic: voetbalwedstrijd_vocab
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit64.lesson04.fill.003
+  lesson_content_key: nl.a1.unit64.lesson04.het_bord_bij_de_ingang
+  type: fill_in_blank
+  frame:
+    text: Ik lees het {item}.
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: noun
+      agreement_tags:
+        semantic: voetbalwedstrijd_scorebord_single
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Ik lees het scorebord. -- I read the scoreboard.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit64.lesson04.order.004
+  lesson_content_key: nl.a1.unit64.lesson04.het_bord_bij_de_ingang
+  type: word_order
+  frame:
+    text: Ik lees het {item} bij de ingang.
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: noun
+      agreement_tags:
+        semantic: voetbalwedstrijd_scorebord_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik lees het {item} bij de ingang.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Ik lees het scorebord bij de ingang. -- I read the scoreboard near the entrance.
+    language_code: en
+    direction: ltr
+
+# ---------------------------------------------------------------------------
+# lesson06 -- Omar en Nina na de wedstrijd
+# ---------------------------------------------------------------------------
+- content_key: practice.en-nl.nl.a1.unit64.lesson06.choose.001
+  lesson_content_key: nl.a1.unit64.lesson06.omar_en_nina_na_de_wedstrijd
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, adverb]
+      agreement_tags:
+        semantic: voetbalwedstrijd_vocab
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} belongs to this unit''s football-match vocabulary.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit64.lesson06.translate.002
+  lesson_content_key: nl.a1.unit64.lesson06.omar_en_nina_na_de_wedstrijd
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, adverb]
+      agreement_tags:
+        semantic: voetbalwedstrijd_vocab
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit64.lesson06.match.003
+  lesson_content_key: nl.a1.unit64.lesson06.omar_en_nina_na_de_wedstrijd
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: nl
+    direction: ltr
+  slots:
+    first: *voetbal_word
+    second: *voetbal_word
+    third: *voetbal_word
+    fourth: *voetbal_word
+    fifth: *voetbal_word
+    sixth: *voetbal_word
+  slot_relations:
+  - kind: distinct
+    slots: [first, second, third, fourth, fifth, sixth]
+  answer_derivation:
+    kind: matching_pairs
+    slots: [first, second, third, fourth, fifth, sixth]
+  feedback_frame:
+    text: Match each word from the football match with its English meaning.
+    language_code: en
+    direction: ltr

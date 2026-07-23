@@ -1,0 +1,56 @@
+schema_version: "1.0"
+pack_key: practice.fa-en.a2.unit30
+source_language: fa
+target_language: en
+unit_content_key: en.a2.unit30.job_interview
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    43 lexemes across all 4 lessons (5/13/17/8) -- a healthy vocabulary unit.
+    Recognition/production use each lesson's OWN tag (unit-scoped, per the
+    checkpoint-scoped bar) narrowed to [noun, verb, adjective, adverb]
+    (excludes bare pronouns like "i'm" that have no semantic tag). Two
+    matching_pairs (6 pairs each) drawn from lesson02's and lesson03's own
+    tags narrowed to [noun, adjective] -- lesson02 yields 9 candidates
+    (years/media/marketing/strengths/monday/social/organized/available/
+    next), lesson03 yields 12 (resume/deadline/bright/path/coordinator/
+    requirements/strong/writing/skills/interview/deadlines/team); no
+    confusable/duplicate glosses in either pool. One word_order uses the
+    course-wide `weekday` tag (only "monday" is taught in this unit, but the
+    tag pools every weekday taught anywhere in the corpus) for "I can start
+    on {item}." -- verified grammatical for every weekday, per the recipe's
+    course-scope rule for this specific safe pattern. No single-member
+    lesson-level tag existed for a safe fill_in_blank (every lesson mixes
+    several nouns of the same part_of_speech with no finer sub-tag), so
+    fill_in_blank was not forced -- structured tier is covered by the two
+    matching_pairs plus the word_order. No mis-glossed lexeme found; every
+    gloss matches this unit's own teaching. 14 templates, all 4 lessons
+    represented in recognition and production.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [fa_en_a2_unit30_lesson01_words, fa_en_a2_unit30_lesson02_words, fa_en_a2_unit30_lesson03_words, fa_en_a2_unit30_lesson04_words, weekday]
+slot_presets:
+  l1: &l1 {language_code: en, part_of_speech: [noun, verb, adjective, adverb], agreement_tags: {semantic: fa_en_a2_unit30_lesson01_words}}
+  l2: &l2 {language_code: en, part_of_speech: [noun, verb, adjective, adverb], agreement_tags: {semantic: fa_en_a2_unit30_lesson02_words}}
+  l2np: &l2np {language_code: en, part_of_speech: [noun, adjective], agreement_tags: {semantic: fa_en_a2_unit30_lesson02_words}}
+  l3: &l3 {language_code: en, part_of_speech: [noun, verb, adjective, adverb], agreement_tags: {semantic: fa_en_a2_unit30_lesson03_words}}
+  l3np: &l3np {language_code: en, part_of_speech: [noun, adjective], agreement_tags: {semantic: fa_en_a2_unit30_lesson03_words}}
+  l4: &l4 {language_code: en, part_of_speech: [noun, verb, adjective, adverb], agreement_tags: {semantic: fa_en_a2_unit30_lesson04_words}}
+  weekday: &weekday {language_code: en, part_of_speech: noun, agreement_tags: {semantic: weekday}}
+templates:
+  - {content_key: practice.fa-en.en.a2.unit30.lesson01.choose.001, lesson_content_key: en.a2.unit30.lesson01.interview_vocabulary, type: multiple_choice, frame: {text: "{item}", language_code: en, direction: ltr}, slots: {item: *l1}, answer_derivation: {kind: slot_gloss, slot: item}, feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}}
+  - {content_key: practice.fa-en.en.a2.unit30.lesson01.listen.002, lesson_content_key: en.a2.unit30.lesson01.interview_vocabulary, type: listen_select, frame: {text: "{item}", language_code: en, direction: ltr}, slots: {item: *l1}, answer_derivation: {kind: slot_gloss, slot: item}, feedback_frame: {text: "واژه‌ای که شنیدید {item} بود.", language_code: fa, direction: rtl}}
+  - {content_key: practice.fa-en.en.a2.unit30.lesson01.translate.003, lesson_content_key: en.a2.unit30.lesson01.interview_vocabulary, type: translation, frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}, slots: {item: *l1}, answer_derivation: {kind: slot_text, slot: item}, feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}}
+  - {content_key: practice.fa-en.en.a2.unit30.lesson02.choose.001, lesson_content_key: en.a2.unit30.lesson02.talking_about_experience_and_availability, type: multiple_choice, frame: {text: "{item}", language_code: en, direction: ltr}, slots: {item: *l2}, answer_derivation: {kind: slot_gloss, slot: item}, feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}}
+  - {content_key: practice.fa-en.en.a2.unit30.lesson02.translate.002, lesson_content_key: en.a2.unit30.lesson02.talking_about_experience_and_availability, type: translation, frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}, slots: {item: *l2}, answer_derivation: {kind: slot_text, slot: item}, feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}}
+  - {content_key: practice.fa-en.en.a2.unit30.lesson02.match.003, lesson_content_key: en.a2.unit30.lesson02.talking_about_experience_and_availability, type: matching_pairs, frame: {text: "{first} — {second} — {third} — {fourth} — {fifth} — {sixth}", language_code: en, direction: ltr}, slots: {first: *l2np, second: *l2np, third: *l2np, fourth: *l2np, fifth: *l2np, sixth: *l2np}, slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}], answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}, feedback_frame: {text: "هر واژه را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}}
+  - {content_key: practice.fa-en.en.a2.unit30.lesson02.order.004, lesson_content_key: en.a2.unit30.lesson02.talking_about_experience_and_availability, type: word_order, frame: {text: "I can start on {item}", language_code: en, direction: ltr}, slots: {item: *weekday}, answer_derivation: {kind: render_frame, frame: {text: "I can start on {item}", language_code: en, direction: ltr}}, feedback_frame: {text: "{item} نام یکی از روزهای هفته است.", language_code: fa, direction: rtl}}
+  - {content_key: practice.fa-en.en.a2.unit30.lesson03.choose.001, lesson_content_key: en.a2.unit30.lesson03.reading_a_job_posting, type: multiple_choice, frame: {text: "{item}", language_code: en, direction: ltr}, slots: {item: *l3}, answer_derivation: {kind: slot_gloss, slot: item}, feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}}
+  - {content_key: practice.fa-en.en.a2.unit30.lesson03.listen.002, lesson_content_key: en.a2.unit30.lesson03.reading_a_job_posting, type: listen_select, frame: {text: "{item}", language_code: en, direction: ltr}, slots: {item: *l3}, answer_derivation: {kind: slot_gloss, slot: item}, feedback_frame: {text: "واژه‌ای که شنیدید {item} بود.", language_code: fa, direction: rtl}}
+  - {content_key: practice.fa-en.en.a2.unit30.lesson03.translate.003, lesson_content_key: en.a2.unit30.lesson03.reading_a_job_posting, type: translation, frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}, slots: {item: *l3}, answer_derivation: {kind: slot_text, slot: item}, feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}}
+  - {content_key: practice.fa-en.en.a2.unit30.lesson03.match.004, lesson_content_key: en.a2.unit30.lesson03.reading_a_job_posting, type: matching_pairs, frame: {text: "{first} — {second} — {third} — {fourth} — {fifth} — {sixth}", language_code: en, direction: ltr}, slots: {first: *l3np, second: *l3np, third: *l3np, fourth: *l3np, fifth: *l3np, sixth: *l3np}, slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}], answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}, feedback_frame: {text: "هر واژه را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}}
+  - {content_key: practice.fa-en.en.a2.unit30.lesson04.choose.001, lesson_content_key: en.a2.unit30.lesson04.interview_dialogue, type: multiple_choice, frame: {text: "{item}", language_code: en, direction: ltr}, slots: {item: *l4}, answer_derivation: {kind: slot_gloss, slot: item}, feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}}
+  - {content_key: practice.fa-en.en.a2.unit30.lesson04.listen.002, lesson_content_key: en.a2.unit30.lesson04.interview_dialogue, type: listen_select, frame: {text: "{item}", language_code: en, direction: ltr}, slots: {item: *l4}, answer_derivation: {kind: slot_gloss, slot: item}, feedback_frame: {text: "واژه‌ای که شنیدید {item} بود.", language_code: fa, direction: rtl}}
+  - {content_key: practice.fa-en.en.a2.unit30.lesson04.translate.003, lesson_content_key: en.a2.unit30.lesson04.interview_dialogue, type: translation, frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}, slots: {item: *l4}, answer_derivation: {kind: slot_text, slot: item}, feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}}

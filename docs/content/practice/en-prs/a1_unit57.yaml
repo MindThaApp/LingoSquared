@@ -1,0 +1,191 @@
+schema_version: '1.0'
+pack_key: practice.en-prs.a1.unit57
+source_language: en
+target_language: prs
+unit_content_key: prs.a1.unit57.beach
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    en-prs A1 practice pack (unit57 beach), authored 2026-07-23. VERY THIN
+    UNIT: only 5 lexemes across 3 of 6 lessons (lesson01: ساحل "beach;shore",
+    ریگ "sand"; lesson03: موج "wave"; lesson06: چتر "umbrella", چتر
+    آفتابی‌تان "your beach umbrella"). lesson02/04/05 have ZERO lexemes and
+    cannot be represented in the checkpoint. unit_word union
+    (beach_word + weather_gear_word + formal_possessive_word, pos [noun])
+    gives exactly the 5 distinct unit glosses -- below the matching_pairs
+    6-pair floor, so NO matching_pairs was authored (DO-NOT #5 is a hard
+    floor; 5 candidates cannot support it, and this unit has no more lexemes
+    anywhere to widen the pool with). Checked beach_word whole-direction: 3
+    distinct, appears ONLY in this unit (ساحل, ریگ, موج), so course scope =
+    unit scope for the word_order frame. weather_gear_word is a genuine
+    whole-direction single-candidate anchor (چتر "umbrella" -- confirmed via
+    `.content-venv/bin/python scripts/... iter_specs()`, exactly 1 token in
+    the whole en-prs direction), used for fill_in_blank.
+    word_order frame '"امروز ما {item} را دیدیم."' (Today we saw the [item].)
+    over beach_word (ساحل/ریگ/موج) -- avoided the self-reference trap
+    (defect 1.14): the frame does NOT contain the literal word "ساحل" (it
+    says "امروز ما ... را دیدیم", not "در ساحل"), so ساحل is safe as a
+    candidate even though it is also the unit's beach word. All 3 candidates
+    (beach, sand, wave) are grammatical objects of "دیدیم" (we saw).
+    fill_in_blank frame '"امروز {item} را با خود آوردم."' (Today I brought the
+    umbrella with me.) over the single-candidate weather_gear_word anchor.
+    10 templates (MC x3, word_order x2, fill_in_blank x1, translation x4) --
+    below the 12-template floor; flagging as checkpoint-thin, capacity-limited
+    by the unit's own 5 lexemes, not padded. All 3 lessons with lexemes are
+    represented in every tier (recognition, structured via word_order/fill,
+    production). No mis-glossed lexeme found. No listen_select (no prs TTS).
+    Needs the standard fresh-context review before import.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - beach_word
+    - weather_gear_word
+    - formal_possessive_word
+slot_presets:
+  unit_word: &uw
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: [beach_word, weather_gear_word, formal_possessive_word]
+  beach_only: &bo
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: beach_word
+  umbrella_single: &um
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: weather_gear_word
+templates:
+# ---- recognition ----
+- content_key: practice.en-prs.prs.a1.unit57.lesson01.choose.001
+  lesson_content_key: prs.a1.unit57.lesson01.beach_and_sand_vocabulary
+  type: multiple_choice
+  frame: {text: '{item}', language_code: prs, direction: rtl}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is from this unit''s beach vocabulary.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit57.lesson03.choose.001
+  lesson_content_key: prs.a1.unit57.lesson03.swimming_and_wave_vocabulary
+  type: multiple_choice
+  frame: {text: '{item}', language_code: prs, direction: rtl}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is from this unit''s beach vocabulary.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit57.lesson06.choose.001
+  lesson_content_key: prs.a1.unit57.lesson06.wrap_up
+  type: multiple_choice
+  frame: {text: '{item}', language_code: prs, direction: rtl}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is from this unit''s beach vocabulary.'
+    language_code: en
+    direction: ltr
+# ---- structured ----
+- content_key: practice.en-prs.prs.a1.unit57.lesson01.order.001
+  lesson_content_key: prs.a1.unit57.lesson01.beach_and_sand_vocabulary
+  type: word_order
+  frame: {text: 'امروز ما {item} را دیدیم.', language_code: prs, direction: rtl}
+  slots:
+    item: *bo
+  answer_derivation:
+    kind: render_frame
+    frame: {text: 'امروز ما {item} را دیدیم.', language_code: prs, direction: rtl}
+  feedback_frame:
+    text: 'Word order: امروز ما ساحل را دیدیم. (Today we saw the beach.)'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit57.lesson03.order.001
+  lesson_content_key: prs.a1.unit57.lesson03.swimming_and_wave_vocabulary
+  type: word_order
+  frame: {text: 'امروز ما {item} را دیدیم.', language_code: prs, direction: rtl}
+  slots:
+    item: *bo
+  answer_derivation:
+    kind: render_frame
+    frame: {text: 'امروز ما {item} را دیدیم.', language_code: prs, direction: rtl}
+  feedback_frame:
+    text: 'Word order: امروز ما موج را دیدیم. (Today we saw the wave.)'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit57.lesson06.fill.001
+  lesson_content_key: prs.a1.unit57.lesson06.wrap_up
+  type: fill_in_blank
+  frame: {text: 'امروز {item} را با خود آوردم.', language_code: prs, direction: rtl}
+  slots:
+    item: *um
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: 'امروز چتر را با خود آوردم. = Today I brought the umbrella with me.'
+    language_code: en
+    direction: ltr
+# ---- production ----
+- content_key: practice.en-prs.prs.a1.unit57.lesson01.translate.001
+  lesson_content_key: prs.a1.unit57.lesson01.beach_and_sand_vocabulary
+  type: translation
+  frame: {text: '{item}', language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: 'Type the Dari word.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit57.lesson03.translate.001
+  lesson_content_key: prs.a1.unit57.lesson03.swimming_and_wave_vocabulary
+  type: translation
+  frame: {text: '{item}', language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: 'Type the Dari word.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit57.lesson06.translate.001
+  lesson_content_key: prs.a1.unit57.lesson06.wrap_up
+  type: translation
+  frame: {text: '{item}', language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: 'Type the Dari word.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit57.lesson06.translate.002
+  lesson_content_key: prs.a1.unit57.lesson06.wrap_up
+  type: translation
+  frame: {text: 'I brought the umbrella with me today.', language_code: en, direction: ltr}
+  slots:
+    item: *um
+  answer_derivation:
+    kind: render_frame
+    frame: {text: 'امروز {item} را با خود آوردم.', language_code: prs, direction: rtl}
+  feedback_frame:
+    text: 'امروز چتر را با خود آوردم.'
+    language_code: en
+    direction: ltr

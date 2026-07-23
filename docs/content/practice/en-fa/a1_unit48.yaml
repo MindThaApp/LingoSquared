@@ -1,0 +1,293 @@
+schema_version: '1.0'
+pack_key: practice.en-fa.a1.unit48
+source_language: en
+target_language: fa
+unit_content_key: fa.a1.unit48.laundry
+
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    THIN UNIT -- flagging per recipe §3 "capacity, don't pad". Laundry has
+    only 6 distinct fa lexemes/phrases total per backfill_lexemes_en_fa
+    across all 4 lessons: laundry_word 2 (خشکشویی "dry cleaner's/laundry
+    shop" noun, فوری "express/urgent" adjective), laundry_question_phrase 2
+    (فردا ظهر خوبه؟ "Is tomorrow noon good?", کِی می‌گیرم؟ "When do I pick it
+    up?"), 1 person_name (کاظمی), 1 additional reviewed_phrase (خانم کاظمی
+    "Ms. Kazemi"). Union of all 4 tags gives EXACTLY 6 distinct tokens --
+    clears the matching_pairs 6-pair floor with zero slack (every pool member
+    is used in every matching_pairs instance). 12 templates: 4 lessons x
+    (multiple_choice + bare-word translation, both over the full 6-token
+    union), 3 matching_pairs over the same 6-token union anchored to
+    lessons01/02/04, plus 1 extra bare-word translation over the narrower
+    laundry_word pair anchored lesson01 to clear the 12-template floor.
+    word_order skipped: laundry_word's 2 members (a place noun, an adjective)
+    have no shared grammatical carrier frame, and laundry_question_phrase is
+    two full fixed questions, unsuitable for a slot inside another frame. No
+    mis-glossed lexemes found. No listen_select (Azure TTS key unset for fa).
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - laundry_word
+    - laundry_question_phrase
+    - person_name
+    - reviewed_phrase
+
+templates:
+# --- lesson01 (new_laundry_one) ---
+- content_key: practice.en-fa.fa.a1.unit48.lesson01.choose.001
+  lesson_content_key: fa.a1.unit48.lesson01.new_laundry_one
+  type: multiple_choice
+  frame: {text: '{item}', language_code: fa, direction: rtl}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, adjective, phrase, proper_noun]
+      agreement_tags:
+        semantic: [laundry_word, laundry_question_phrase, person_name, reviewed_phrase]
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is laundry vocabulary from this unit.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit48.lesson01.translate.002
+  lesson_content_key: fa.a1.unit48.lesson01.new_laundry_one
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, adjective, phrase, proper_noun]
+      agreement_tags:
+        semantic: [laundry_word, laundry_question_phrase, person_name, reviewed_phrase]
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Farsi word is {item}.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit48.lesson01.match.003
+  lesson_content_key: fa.a1.unit48.lesson01.new_laundry_one
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: fa
+    direction: rtl
+  slots:
+    first: &laundry_pool
+      language_code: fa
+      part_of_speech: [noun, adjective, phrase, proper_noun]
+      agreement_tags:
+        semantic: [laundry_word, laundry_question_phrase, person_name, reviewed_phrase]
+    second: *laundry_pool
+    third: *laundry_pool
+    fourth: *laundry_pool
+    fifth: *laundry_pool
+    sixth: *laundry_pool
+  slot_relations:
+  - kind: distinct
+    slots: [first, second, third, fourth, fifth, sixth]
+  answer_derivation:
+    kind: matching_pairs
+    slots: [first, second, third, fourth, fifth, sixth]
+  feedback_frame:
+    text: Match each Farsi word with its English meaning.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit48.lesson01.translate.004
+  lesson_content_key: fa.a1.unit48.lesson01.new_laundry_one
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, adjective]
+      agreement_tags:
+        semantic: laundry_word
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Farsi word is {item}.
+    language_code: en
+    direction: ltr
+
+# --- lesson02 (new_laundry_two) ---
+- content_key: practice.en-fa.fa.a1.unit48.lesson02.choose.001
+  lesson_content_key: fa.a1.unit48.lesson02.new_laundry_two
+  type: multiple_choice
+  frame: {text: '{item}', language_code: fa, direction: rtl}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, adjective, phrase, proper_noun]
+      agreement_tags:
+        semantic: [laundry_word, laundry_question_phrase, person_name, reviewed_phrase]
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is laundry vocabulary from this unit.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit48.lesson02.translate.002
+  lesson_content_key: fa.a1.unit48.lesson02.new_laundry_two
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, adjective, phrase, proper_noun]
+      agreement_tags:
+        semantic: [laundry_word, laundry_question_phrase, person_name, reviewed_phrase]
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Farsi word is {item}.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit48.lesson02.match.003
+  lesson_content_key: fa.a1.unit48.lesson02.new_laundry_two
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: fa
+    direction: rtl
+  slots:
+    first: *laundry_pool
+    second: *laundry_pool
+    third: *laundry_pool
+    fourth: *laundry_pool
+    fifth: *laundry_pool
+    sixth: *laundry_pool
+  slot_relations:
+  - kind: distinct
+    slots: [first, second, third, fourth, fifth, sixth]
+  answer_derivation:
+    kind: matching_pairs
+    slots: [first, second, third, fourth, fifth, sixth]
+  feedback_frame:
+    text: Match each Farsi word with its English meaning.
+    language_code: en
+    direction: ltr
+
+# --- lesson03 (ready_and_pickup) ---
+- content_key: practice.en-fa.fa.a1.unit48.lesson03.choose.001
+  lesson_content_key: fa.a1.unit48.lesson03.ready_and_pickup
+  type: multiple_choice
+  frame: {text: '{item}', language_code: fa, direction: rtl}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, adjective, phrase, proper_noun]
+      agreement_tags:
+        semantic: [laundry_word, laundry_question_phrase, person_name, reviewed_phrase]
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is laundry vocabulary from this unit.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit48.lesson03.translate.002
+  lesson_content_key: fa.a1.unit48.lesson03.ready_and_pickup
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, adjective, phrase, proper_noun]
+      agreement_tags:
+        semantic: [laundry_word, laundry_question_phrase, person_name, reviewed_phrase]
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Farsi word is {item}.
+    language_code: en
+    direction: ltr
+
+# --- lesson04 (laundry_dialogue) ---
+- content_key: practice.en-fa.fa.a1.unit48.lesson04.choose.001
+  lesson_content_key: fa.a1.unit48.lesson04.laundry_dialogue
+  type: multiple_choice
+  frame: {text: '{item}', language_code: fa, direction: rtl}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, adjective, phrase, proper_noun]
+      agreement_tags:
+        semantic: [laundry_word, laundry_question_phrase, person_name, reviewed_phrase]
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is laundry vocabulary from this unit.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit48.lesson04.translate.002
+  lesson_content_key: fa.a1.unit48.lesson04.laundry_dialogue
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, adjective, phrase, proper_noun]
+      agreement_tags:
+        semantic: [laundry_word, laundry_question_phrase, person_name, reviewed_phrase]
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Farsi word is {item}.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit48.lesson04.match.003
+  lesson_content_key: fa.a1.unit48.lesson04.laundry_dialogue
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: fa
+    direction: rtl
+  slots:
+    first: *laundry_pool
+    second: *laundry_pool
+    third: *laundry_pool
+    fourth: *laundry_pool
+    fifth: *laundry_pool
+    sixth: *laundry_pool
+  slot_relations:
+  - kind: distinct
+    slots: [first, second, third, fourth, fifth, sixth]
+  answer_derivation:
+    kind: matching_pairs
+    slots: [first, second, third, fourth, fifth, sixth]
+  feedback_frame:
+    text: Match each Farsi word with its English meaning.
+    language_code: en
+    direction: ltr

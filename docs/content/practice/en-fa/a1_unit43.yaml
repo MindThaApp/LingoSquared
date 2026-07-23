@@ -1,0 +1,298 @@
+schema_version: '1.0'
+pack_key: practice.en-fa.a1.unit43
+source_language: en
+target_language: fa
+unit_content_key: fa.a1.unit43.waste_disposal
+
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    Vocabulary unit (waste_disposal, 13 fa lexemes across all 4 lessons per
+    backfill_lexemes_en_fa: waste_word 6 nouns زباله/سطل/کاغذ/پلاستیک/شیشه/بازیافت,
+    waste_state_verb 2 verbs پلاستیکه/بازیافته, waste_verb_word 2 verbs
+    می‌ندازم/می‌ندازی, collection_word 1 noun+1 verb جمع‌آوری/شنبه‌ست, plus one
+    reviewed_phrase "داخل سطل آبیه. برای بازیافته." All 4 lessons have >=1
+    lexeme). Union of all 5 tags gives 13 distinct fa tokens/phrases with 13
+    distinct English glosses, well over the multiple_choice/matching_pairs
+    floors. 12 templates: 4 lessons x (multiple_choice + bare-word translation,
+    both over the full unit-wide union so every lesson clears recognition and
+    production), 3 matching_pairs over the same 13-token union anchored to
+    lessons01/02/04, and 1 extra bare-word translation over the narrower
+    collection_word pair (جمع‌آوری/شنبه‌ست) anchored lesson04 to clear the 12
+    template floor. word_order skipped: the two candidate tags (waste_word,
+    waste_verb_word) are unit-specific coined tags with zero course-wide
+    members outside this unit (verified via full iter_specs() scan), so no
+    course-scope widening risk exists for either -- omitted anyway in favour of
+    the safer, floor-guaranteed matching_pairs x3 given time budget; if added
+    later, "این {item} رو کجا بذارم؟" (Where should I put this {item}?) is
+    grammatical for all 6 waste_word members. No mis-glossed lexemes found (all
+    6 waste_word glosses match the unit's own vocabulary lessons). No
+    listen_select (Azure TTS key unset for fa).
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - waste_word
+    - waste_state_verb
+    - waste_verb_word
+    - collection_word
+    - reviewed_phrase
+
+templates:
+# --- lesson01 (new_waste_one) ---
+- content_key: practice.en-fa.fa.a1.unit43.lesson01.choose.001
+  lesson_content_key: fa.a1.unit43.lesson01.new_waste_one
+  type: multiple_choice
+  frame: {text: '{item}', language_code: fa, direction: rtl}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, verb, phrase]
+      agreement_tags:
+        semantic: [waste_word, waste_state_verb, waste_verb_word, collection_word, reviewed_phrase]
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is waste-disposal vocabulary from this unit.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit43.lesson01.translate.002
+  lesson_content_key: fa.a1.unit43.lesson01.new_waste_one
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, verb, phrase]
+      agreement_tags:
+        semantic: [waste_word, waste_state_verb, waste_verb_word, collection_word, reviewed_phrase]
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Farsi word is {item}.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit43.lesson01.match.003
+  lesson_content_key: fa.a1.unit43.lesson01.new_waste_one
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: fa
+    direction: rtl
+  slots:
+    first: &waste_pool_1
+      language_code: fa
+      part_of_speech: [noun, verb, phrase]
+      agreement_tags:
+        semantic: [waste_word, waste_state_verb, waste_verb_word, collection_word, reviewed_phrase]
+    second: *waste_pool_1
+    third: *waste_pool_1
+    fourth: *waste_pool_1
+    fifth: *waste_pool_1
+    sixth: *waste_pool_1
+  slot_relations:
+  - kind: distinct
+    slots: [first, second, third, fourth, fifth, sixth]
+  answer_derivation:
+    kind: matching_pairs
+    slots: [first, second, third, fourth, fifth, sixth]
+  feedback_frame:
+    text: Match each Farsi word with its English meaning.
+    language_code: en
+    direction: ltr
+
+# --- lesson02 (new_waste_two) ---
+- content_key: practice.en-fa.fa.a1.unit43.lesson02.choose.001
+  lesson_content_key: fa.a1.unit43.lesson02.new_waste_two
+  type: multiple_choice
+  frame: {text: '{item}', language_code: fa, direction: rtl}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, verb, phrase]
+      agreement_tags:
+        semantic: [waste_word, waste_state_verb, waste_verb_word, collection_word, reviewed_phrase]
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is waste-disposal vocabulary from this unit.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit43.lesson02.translate.002
+  lesson_content_key: fa.a1.unit43.lesson02.new_waste_two
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, verb, phrase]
+      agreement_tags:
+        semantic: [waste_word, waste_state_verb, waste_verb_word, collection_word, reviewed_phrase]
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Farsi word is {item}.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit43.lesson02.match.003
+  lesson_content_key: fa.a1.unit43.lesson02.new_waste_two
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: fa
+    direction: rtl
+  slots:
+    first: *waste_pool_1
+    second: *waste_pool_1
+    third: *waste_pool_1
+    fourth: *waste_pool_1
+    fifth: *waste_pool_1
+    sixth: *waste_pool_1
+  slot_relations:
+  - kind: distinct
+    slots: [first, second, third, fourth, fifth, sixth]
+  answer_derivation:
+    kind: matching_pairs
+    slots: [first, second, third, fourth, fifth, sixth]
+  feedback_frame:
+    text: Match each Farsi word with its English meaning.
+    language_code: en
+    direction: ltr
+
+# --- lesson03 (which_bin) ---
+- content_key: practice.en-fa.fa.a1.unit43.lesson03.choose.001
+  lesson_content_key: fa.a1.unit43.lesson03.which_bin
+  type: multiple_choice
+  frame: {text: '{item}', language_code: fa, direction: rtl}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, verb, phrase]
+      agreement_tags:
+        semantic: [waste_word, waste_state_verb, waste_verb_word, collection_word, reviewed_phrase]
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is waste-disposal vocabulary from this unit.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit43.lesson03.translate.002
+  lesson_content_key: fa.a1.unit43.lesson03.which_bin
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, verb, phrase]
+      agreement_tags:
+        semantic: [waste_word, waste_state_verb, waste_verb_word, collection_word, reviewed_phrase]
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Farsi word is {item}.
+    language_code: en
+    direction: ltr
+
+# --- lesson04 (sorting_dialogue) ---
+- content_key: practice.en-fa.fa.a1.unit43.lesson04.choose.001
+  lesson_content_key: fa.a1.unit43.lesson04.sorting_dialogue
+  type: multiple_choice
+  frame: {text: '{item}', language_code: fa, direction: rtl}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, verb, phrase]
+      agreement_tags:
+        semantic: [waste_word, waste_state_verb, waste_verb_word, collection_word, reviewed_phrase]
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is waste-disposal vocabulary from this unit.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit43.lesson04.translate.002
+  lesson_content_key: fa.a1.unit43.lesson04.sorting_dialogue
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, verb, phrase]
+      agreement_tags:
+        semantic: [waste_word, waste_state_verb, waste_verb_word, collection_word, reviewed_phrase]
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Farsi word is {item}.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit43.lesson04.match.003
+  lesson_content_key: fa.a1.unit43.lesson04.sorting_dialogue
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: fa
+    direction: rtl
+  slots:
+    first: *waste_pool_1
+    second: *waste_pool_1
+    third: *waste_pool_1
+    fourth: *waste_pool_1
+    fifth: *waste_pool_1
+    sixth: *waste_pool_1
+  slot_relations:
+  - kind: distinct
+    slots: [first, second, third, fourth, fifth, sixth]
+  answer_derivation:
+    kind: matching_pairs
+    slots: [first, second, third, fourth, fifth, sixth]
+  feedback_frame:
+    text: Match each Farsi word with its English meaning.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit43.lesson04.translate.004
+  lesson_content_key: fa.a1.unit43.lesson04.sorting_dialogue
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, verb]
+      agreement_tags:
+        semantic: collection_word
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Farsi word is {item}.
+    language_code: en
+    direction: ltr

@@ -1,0 +1,287 @@
+schema_version: '1.0'
+pack_key: practice.en-nl.a1.unit42
+source_language: en
+target_language: nl
+unit_content_key: nl.a1.unit42.kleuren
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    Vocabulary unit (kleuren / colours) -- the THINNEST of this batch: only 8
+    unit lexemes total (per scripts/backfill_lexemes_en_nl.py), and lessons04
+    (nina_en_lotte_bloemenmarkt) and lesson06 (tulpen_voor_het_taalcafe) have
+    ZERO lexemes and are unhostable in any slot -- flagging both for the
+    coordinator to route a backfill extension. lesson02
+    (colour_white_orange, 2 tokens) and lesson03 (colour_pink_purple, 2
+    tokens) are both under the multiple_choice 3-distinct floor on their own
+    tag, so both fall back to the unit-wide union kleuren_vocab restricted to
+    part_of_speech:adjective (6 distinct colour adjectives). word_order uses
+    a predicative frame ("Deze tulp is {item}.") over the same 6-adjective
+    union -- predicative Dutch adjectives do not inflect, so every member is
+    grammatical; checked at course scope (S9 step 5, see report; the
+    colour_* tags are unit-specific and do not recur elsewhere in the a1
+    course). fill_in_blank anchors on the single-member
+    kleuren_bloemenmarkt_single tag (bloemenmarkt). PACK IS CHECKPOINT-THIN:
+    12 templates (the floor), and target-lexeme coverage / distinct-item
+    counts will likely sit below the recipe's 40%/60% guidance because the
+    unit itself only has 8 lexemes to work with -- this is a capacity
+    ceiling, not a design shortfall; see the S9 step 4 numbers in the report.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - colour_red_yellow
+    - kleuren_vocab
+    - colour_white_orange
+    - colour_pink_purple
+    - kleuren_bloemenmarkt_single
+
+templates:
+
+# -- lesson01: rood_en_geel -----------------------------------------------------
+- content_key: practice.en-nl.nl.a1.unit42.lesson01.choose.001
+  lesson_content_key: nl.a1.unit42.lesson01.rood_en_geel
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, adjective]
+      agreement_tags: {semantic: colour_red_yellow}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is a colour word from this lesson.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit42.lesson01.translate.002
+  lesson_content_key: nl.a1.unit42.lesson01.rood_en_geel
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, adjective]
+      agreement_tags: {semantic: colour_red_yellow}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit42.lesson01.order.003
+  lesson_content_key: nl.a1.unit42.lesson01.rood_en_geel
+  type: word_order
+  frame:
+    text: Deze tulp is {item}.
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: adjective
+      agreement_tags: {semantic: [colour_red_yellow, colour_white_orange, colour_pink_purple]}
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Deze tulp is {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Deze tulp is rood. -- This tulip is red.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit42.lesson01.listen.004
+  lesson_content_key: nl.a1.unit42.lesson01.rood_en_geel
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, adjective]
+      agreement_tags: {semantic: kleuren_vocab}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: You heard {item}.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit42.lesson01.match.005
+  lesson_content_key: nl.a1.unit42.lesson01.rood_en_geel
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: nl
+    direction: ltr
+  slots:
+    first: &colour_word
+      language_code: nl
+      part_of_speech: [noun, adjective]
+      agreement_tags: {semantic: kleuren_vocab}
+    second: *colour_word
+    third: *colour_word
+    fourth: *colour_word
+    fifth: *colour_word
+    sixth: *colour_word
+  slot_relations:
+  - {kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}
+  answer_derivation:
+    kind: matching_pairs
+    slots: [first, second, third, fourth, fifth, sixth]
+  feedback_frame:
+    text: Match each colour word with its English meaning.
+    language_code: en
+    direction: ltr
+
+# -- lesson02: wit_en_oranje -----------------------------------------------------
+- content_key: practice.en-nl.nl.a1.unit42.lesson02.choose.001
+  lesson_content_key: nl.a1.unit42.lesson02.wit_en_oranje
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: adjective
+      agreement_tags: {semantic: kleuren_vocab}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is a colour word.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit42.lesson02.translate.002
+  lesson_content_key: nl.a1.unit42.lesson02.wit_en_oranje
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: adjective
+      agreement_tags: {semantic: kleuren_vocab}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+
+# -- lesson03: roze_en_paars -----------------------------------------------------
+- content_key: practice.en-nl.nl.a1.unit42.lesson03.choose.001
+  lesson_content_key: nl.a1.unit42.lesson03.roze_en_paars
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: adjective
+      agreement_tags: {semantic: kleuren_vocab}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is a colour word.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit42.lesson03.translate.002
+  lesson_content_key: nl.a1.unit42.lesson03.roze_en_paars
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: adjective
+      agreement_tags: {semantic: kleuren_vocab}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+
+# -- lesson05: nina_en_lotte_kopen_tulpen -------------------------------------
+- content_key: practice.en-nl.nl.a1.unit42.lesson05.choose.001
+  lesson_content_key: nl.a1.unit42.lesson05.nina_en_lotte_kopen_tulpen
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, adjective]
+      agreement_tags: {semantic: kleuren_vocab}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is colour vocabulary from this unit.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit42.lesson05.translate.002
+  lesson_content_key: nl.a1.unit42.lesson05.nina_en_lotte_kopen_tulpen
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, adjective]
+      agreement_tags: {semantic: kleuren_vocab}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit42.lesson05.fill.003
+  lesson_content_key: nl.a1.unit42.lesson05.nina_en_lotte_kopen_tulpen
+  type: fill_in_blank
+  frame:
+    text: We kopen tulpen op de {item}.
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: noun
+      agreement_tags: {semantic: kleuren_bloemenmarkt_single}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: We kopen tulpen op de bloemenmarkt. -- We buy tulips at the flower market.
+    language_code: en
+    direction: ltr

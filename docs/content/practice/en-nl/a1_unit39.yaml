@@ -1,0 +1,267 @@
+schema_version: '1.0'
+pack_key: practice.en-nl.a1.unit39
+source_language: en
+target_language: nl
+unit_content_key: nl.a1.unit39.post
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    Authored 2026-07-23 against docs/content/PRACTICE_PACK_RECIPE.md. en-nl A1
+    unit39 (post: letter/package/stamp/address vocab) has 10 lexemes across
+    the 4 lessons that carry lexemes (lesson01/02/03/05; lesson04/06 have zero
+    introduced lexemes). 9 of 10 carry the unit-wide `post_vocab` tag
+    (excluded: `schrijven` "write (part of 'inschrijven', to register)",
+    which carries only the lesson-local `stamp_and_address` tag, not
+    `post_vocab` -- correctly kept out of the union pool). Every
+    recognition/production slot unions `post_vocab` (9 distinct glosses, over
+    the 3-option MC floor / 6-pair matching floor). 12 templates:
+    multiple_choice x4, translation (bare-word) x4, listen_select x1 (nl
+    target has TTS), matching_pairs x1 (6 pairs over post_vocab), word_order
+    x1 ("Ik koop een {item}." anchored to the single-member
+    `post_postzegel_single` tag = postzegel only), fill_in_blank x1 ("Heeft u
+    een {item}?" same single-member anchor, reused deliberately -- it is the
+    only *_single tag this unit has). Recognition 5 (4 MC + 1 listen),
+    structured 3 (order/fill/match), production 4 -- all three tiers clear
+    the >=3 template bar. Course-scope check: both the word_order and
+    fill_in_blank frames use `post_postzegel_single`, whose course-wide pool
+    is exactly 1 token (postzegel) -- deterministic, no grammaticality risk.
+    Possible mis-gloss flagged for the backfill lane: `schrijf` carries the
+    compound gloss "prescribe; write (with ik)" -- "prescribe" is not a sense
+    this unit teaches (it is a stamp/address/writing-the-address context);
+    kept in the pool because "write" is also present in the same gloss
+    string and the token itself is correct, but the coordinator should route
+    a cleaner single-sense gloss for it. Needs the standard fresh-context
+    review before import.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - post_vocab
+    - post_postzegel_single
+templates:
+
+# lesson01 -- de brief, het pakket
+- content_key: practice.en-nl.nl.a1.unit39.lesson01.choose.001
+  lesson_content_key: nl.a1.unit39.lesson01.de_brief_het_pakket
+  type: multiple_choice
+  frame: {text: '{item}', language_code: nl, direction: ltr}
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, verb]
+      agreement_tags: {semantic: post_vocab}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} belongs to this unit''s post-office vocabulary.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit39.lesson01.translate.002
+  lesson_content_key: nl.a1.unit39.lesson01.de_brief_het_pakket
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, verb]
+      agreement_tags: {semantic: post_vocab}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit39.lesson01.order.003
+  lesson_content_key: nl.a1.unit39.lesson01.de_brief_het_pakket
+  type: word_order
+  frame: {text: 'Ik koop een {item}.', language_code: nl, direction: ltr}
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: noun
+      agreement_tags: {semantic: post_postzegel_single}
+  answer_derivation:
+    kind: render_frame
+    frame: {text: 'Ik koop een {item}.', language_code: nl, direction: ltr}
+  feedback_frame:
+    text: Ik koop een postzegel. -- I buy a stamp.
+    language_code: en
+    direction: ltr
+
+# lesson02 -- postzegel, adres, schrijven
+- content_key: practice.en-nl.nl.a1.unit39.lesson02.choose.001
+  lesson_content_key: nl.a1.unit39.lesson02.postzegel_adres_schrijven
+  type: multiple_choice
+  frame: {text: '{item}', language_code: nl, direction: ltr}
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, verb]
+      agreement_tags: {semantic: post_vocab}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} belongs to this unit''s post-office vocabulary.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit39.lesson02.translate.002
+  lesson_content_key: nl.a1.unit39.lesson02.postzegel_adres_schrijven
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, verb]
+      agreement_tags: {semantic: post_vocab}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit39.lesson02.fill.003
+  lesson_content_key: nl.a1.unit39.lesson02.postzegel_adres_schrijven
+  type: fill_in_blank
+  frame: {text: 'Heeft u een {item}?', language_code: nl, direction: ltr}
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: noun
+      agreement_tags: {semantic: post_postzegel_single}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: Heeft u een postzegel? -- Do you have a stamp?
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit39.lesson02.listen.004
+  lesson_content_key: nl.a1.unit39.lesson02.postzegel_adres_schrijven
+  type: listen_select
+  frame: {text: '{item}', language_code: nl, direction: ltr}
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, verb]
+      agreement_tags: {semantic: post_vocab}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: You heard {item}.
+    language_code: en
+    direction: ltr
+
+# lesson03 -- aankomen, duren
+- content_key: practice.en-nl.nl.a1.unit39.lesson03.choose.001
+  lesson_content_key: nl.a1.unit39.lesson03.aankomen_duren
+  type: multiple_choice
+  frame: {text: '{item}', language_code: nl, direction: ltr}
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, verb]
+      agreement_tags: {semantic: post_vocab}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} belongs to this unit''s post-office vocabulary.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit39.lesson03.translate.002
+  lesson_content_key: nl.a1.unit39.lesson03.aankomen_duren
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, verb]
+      agreement_tags: {semantic: post_vocab}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit39.lesson03.match.003
+  lesson_content_key: nl.a1.unit39.lesson03.aankomen_duren
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: nl
+    direction: ltr
+  slots:
+    first: &post_word
+      language_code: nl
+      part_of_speech: [noun, verb]
+      agreement_tags: {semantic: post_vocab}
+    second: *post_word
+    third: *post_word
+    fourth: *post_word
+    fifth: *post_word
+    sixth: *post_word
+  slot_relations:
+  - kind: distinct
+    slots: [first, second, third, fourth, fifth, sixth]
+  answer_derivation:
+    kind: matching_pairs
+    slots: [first, second, third, fourth, fifth, sixth]
+  feedback_frame:
+    text: Match each Dutch post-office word with its English meaning.
+    language_code: en
+    direction: ltr
+
+# lesson05 -- lotte stuurt pakket
+- content_key: practice.en-nl.nl.a1.unit39.lesson05.choose.001
+  lesson_content_key: nl.a1.unit39.lesson05.lotte_stuurt_pakket
+  type: multiple_choice
+  frame: {text: '{item}', language_code: nl, direction: ltr}
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, verb]
+      agreement_tags: {semantic: post_vocab}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} belongs to this unit''s post-office vocabulary.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a1.unit39.lesson05.translate.002
+  lesson_content_key: nl.a1.unit39.lesson05.lotte_stuurt_pakket
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, verb]
+      agreement_tags: {semantic: post_vocab}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr

@@ -1,0 +1,324 @@
+schema_version: '1.0'
+pack_key: practice.en-fa.a1.unit39
+source_language: en
+target_language: fa
+unit_content_key: fa.a1.unit39.emergencies
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    Authored against docs/content/PRACTICE_PACK_RECIPE.md for the en-fa a1
+    emergencies unit. §0 capacity: 27 lexemes; lesson05
+    (reading_emergency_notice) has ZERO new fa lexemes (its four spec rows
+    are English source_gloss placeholders only), so it is unhostable no
+    matter what (§0/§10 rule 1) and no template is anchored to it -- flagged
+    for the coordinator. Semantic tags used (emergency_call_word 5,
+    emergency_service_word 3, danger_word 3) are all unit39-exclusive
+    (confirmed via corpus grep before authoring), so course scope == unit
+    scope for the two word_order frames. lesson04's own reviewed_phrase
+    members ("زود بیایید!", "زنگ بزنید!", the full emergency line) were used
+    ONLY in the matching_pairs pool (safe -- matching_pairs has no
+    frame-literal grammaticality constraint), never in a word_order/
+    fixed-translation frame, since reviewed_phrase is course-wide (519
+    members). §0.1: no mis-glosses found. The lesson01.order.004 frame "{item}
+    لازمه!" was re-read against every emergency_service_word member
+    (پلیس/آمبولانس/آتش‌نشانی) -- "Police/Ambulance/Fire department is
+    needed!" is grammatical for all three. The lesson03.order.003 frame
+    narrows emergency_call_word to part_of_speech: noun, which happens to
+    isolate the single member اورژانس -- a single-member anchor, not a
+    union. 14 templates across 4/5 hostable lessons (lesson05 blocked);
+    tiers: 4 recognition / 6 structured / 4 production.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - emergency_call_word
+    - emergency_service_word
+    - danger_word
+    - reviewed_phrase
+
+templates:
+- content_key: practice.en-fa.fa.a1.unit39.lesson01.choose.001
+  lesson_content_key: fa.a1.unit39.lesson01.new_emergencies_one
+  type: multiple_choice
+  frame: {text: '{item}', language_code: fa, direction: rtl}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, verb]
+      agreement_tags: {semantic: [emergency_service_word, emergency_call_word]}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is an emergency-call word from this unit.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit39.lesson01.translate.002
+  lesson_content_key: fa.a1.unit39.lesson01.new_emergencies_one
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, verb]
+      agreement_tags: {semantic: [emergency_service_word, emergency_call_word]}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: '{item} is an emergency-call word from this unit.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit39.lesson01.match.003
+  lesson_content_key: fa.a1.unit39.lesson01.new_emergencies_one
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth} · {seventh} · {eighth}'
+    language_code: fa
+    direction: rtl
+  slots:
+    first: &unit39_l1_match
+      language_code: fa
+      part_of_speech: [noun, verb]
+      agreement_tags: {semantic: [emergency_call_word, emergency_service_word, danger_word]}
+    second: *unit39_l1_match
+    third: *unit39_l1_match
+    fourth: *unit39_l1_match
+    fifth: *unit39_l1_match
+    sixth: *unit39_l1_match
+    seventh: *unit39_l1_match
+    eighth: *unit39_l1_match
+  slot_relations:
+  - kind: distinct
+    slots: [first, second, third, fourth, fifth, sixth, seventh, eighth]
+  answer_derivation:
+    kind: matching_pairs
+    slots: [first, second, third, fourth, fifth, sixth, seventh, eighth]
+  feedback_frame:
+    text: 'Emergency-call, emergency-service, and danger words taught in this unit.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit39.lesson01.order.004
+  lesson_content_key: fa.a1.unit39.lesson01.new_emergencies_one
+  type: word_order
+  frame: {text: '{item} لازمه!', language_code: fa, direction: rtl}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: noun
+      agreement_tags: {semantic: emergency_service_word}
+  answer_derivation:
+    kind: render_frame
+    frame: {text: '{item} لازمه!', language_code: fa, direction: rtl}
+  feedback_frame:
+    text: 'X لازمه! means "X is needed!" -- grammatical for police, ambulance, or fire department.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit39.lesson02.choose.001
+  lesson_content_key: fa.a1.unit39.lesson02.new_emergencies_two
+  type: multiple_choice
+  frame: {text: '{item}', language_code: fa, direction: rtl}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: noun
+      agreement_tags: {semantic: danger_word}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is a danger-related word from this unit.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit39.lesson02.translate.002
+  lesson_content_key: fa.a1.unit39.lesson02.new_emergencies_two
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: noun
+      agreement_tags: {semantic: danger_word}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: '{item} is a danger-related word from this unit.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit39.lesson02.order.003
+  lesson_content_key: fa.a1.unit39.lesson02.new_emergencies_two
+  type: word_order
+  frame: {text: 'این {item} هست.', language_code: fa, direction: rtl}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: noun
+      agreement_tags: {semantic: danger_word}
+  answer_derivation:
+    kind: render_frame
+    frame: {text: 'این {item} هست.', language_code: fa, direction: rtl}
+  feedback_frame:
+    text: 'این X هست means "This is X" -- grammatical for fire, danger, or accident.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit39.lesson02.match.004
+  lesson_content_key: fa.a1.unit39.lesson02.new_emergencies_two
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: fa
+    direction: rtl
+  slots:
+    first: &unit39_l2_match
+      language_code: fa
+      part_of_speech: noun
+      agreement_tags: {semantic: [emergency_service_word, danger_word]}
+    second: *unit39_l2_match
+    third: *unit39_l2_match
+    fourth: *unit39_l2_match
+    fifth: *unit39_l2_match
+    sixth: *unit39_l2_match
+  slot_relations:
+  - kind: distinct
+    slots: [first, second, third, fourth, fifth, sixth]
+  answer_derivation:
+    kind: matching_pairs
+    slots: [first, second, third, fourth, fifth, sixth]
+  feedback_frame:
+    text: 'Emergency-service and danger words taught in this unit.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit39.lesson03.choose.001
+  lesson_content_key: fa.a1.unit39.lesson03.asking_for_help
+  type: multiple_choice
+  frame: {text: '{item}', language_code: fa, direction: rtl}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, verb]
+      agreement_tags: {semantic: [danger_word, emergency_call_word]}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is used when asking for emergency help in this unit.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit39.lesson03.translate.002
+  lesson_content_key: fa.a1.unit39.lesson03.asking_for_help
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, verb]
+      agreement_tags: {semantic: [danger_word, emergency_call_word]}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: '{item} is used when asking for emergency help in this unit.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit39.lesson03.order.003
+  lesson_content_key: fa.a1.unit39.lesson03.asking_for_help
+  type: word_order
+  frame: {text: 'این {item} هست.', language_code: fa, direction: rtl}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: noun
+      agreement_tags: {semantic: emergency_call_word}
+  answer_derivation:
+    kind: render_frame
+    frame: {text: 'این {item} هست.', language_code: fa, direction: rtl}
+  feedback_frame:
+    text: 'این اورژانسه هست means "This is an emergency" -- اورژانس is the only noun in this unit''s emergency_call_word set.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit39.lesson04.choose.001
+  lesson_content_key: fa.a1.unit39.lesson04.emergency_call
+  type: multiple_choice
+  frame: {text: '{item}', language_code: fa, direction: rtl}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: verb
+      agreement_tags: {semantic: emergency_call_word}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is an emergency-call imperative from this unit.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit39.lesson04.translate.002
+  lesson_content_key: fa.a1.unit39.lesson04.emergency_call
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: verb
+      agreement_tags: {semantic: emergency_call_word}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: '{item} is an emergency-call imperative from this unit.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit39.lesson04.match.003
+  lesson_content_key: fa.a1.unit39.lesson04.emergency_call
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth} · {seventh} · {eighth}'
+    language_code: fa
+    direction: rtl
+  slots:
+    first: &unit39_l4_match
+      language_code: fa
+      part_of_speech: [noun, verb, phrase]
+      agreement_tags: {semantic: [emergency_call_word, emergency_service_word, reviewed_phrase]}
+    second: *unit39_l4_match
+    third: *unit39_l4_match
+    fourth: *unit39_l4_match
+    fifth: *unit39_l4_match
+    sixth: *unit39_l4_match
+    seventh: *unit39_l4_match
+    eighth: *unit39_l4_match
+  slot_relations:
+  - kind: distinct
+    slots: [first, second, third, fourth, fifth, sixth, seventh, eighth]
+  answer_derivation:
+    kind: matching_pairs
+    slots: [first, second, third, fourth, fifth, sixth, seventh, eighth]
+  feedback_frame:
+    text: 'Emergency-call words and phrases from this unit''s dialogue.'
+    language_code: en
+    direction: ltr

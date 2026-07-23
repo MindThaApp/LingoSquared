@@ -1,0 +1,127 @@
+schema_version: "1.0"
+pack_key: practice.fa-en.a1.unit68
+source_language: fa
+target_language: en
+unit_content_key: en.a1.unit68.borrowing_lending
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    THINNEST unit of the batch but the richest of the a1_unit62-68 group:
+    backfill_lexemes_fa_en.py registers 7 lexemes (lend/charger in lesson01,
+    lending in lesson02, leila's/share/lent/remember in lesson04). "leila's"
+    is an untagged possessive pronoun and is excluded from every slot via
+    part_of_speech: [noun, verb], leaving exactly 6 distinct content tokens
+    -- enough to clear the matching_pairs 6-pair floor for the first time in
+    this batch. 12 templates (meets the template-count bar; distinct-item
+    volume is still thin because the underlying vocabulary is thin).
+    lesson01's tag narrowed by part_of_speech gives two single-member
+    anchors (noun->charger, verb->lend); lesson02's tag is already single
+    (lending). lesson04's three verbs (share/lent/remember) cannot be
+    narrowed to one by part_of_speech, so instead of a false single-member
+    anchor its word_order frame ("I {item} it.") was checked by hand against
+    all three -- "I share it.", "I lent it.", "I remember it." are all
+    grammatical, so the broad pool is legitimate per the recipe's
+    every-pool-member-must-be-grammatical rule (checked at course scope:
+    the lesson04 tag is unique to this unit, so course-wide membership ==
+    unit-scoped membership). No mis-glossed lexeme found. FLAG FOR
+    COORDINATOR: distinct-item volume will likely still leave the
+    checkpoint <12 generatable items given only 6 content tokens exist --
+    lesson03 has zero lexemes entirely and is invisible to the checkpoint;
+    routing to backfill recommended.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [fa_en_a1_unit68_words, fa_en_a1_unit68_lesson01_words, fa_en_a1_unit68_lesson02_words, fa_en_a1_unit68_lesson04_words]
+slot_presets:
+  unit_pool: &unit_pool {language_code: en, part_of_speech: [noun, verb], agreement_tags: {semantic: fa_en_a1_unit68_words}}
+  lesson01_noun: &lesson01_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: fa_en_a1_unit68_lesson01_words}}
+  lesson01_verb: &lesson01_verb {language_code: en, part_of_speech: verb, agreement_tags: {semantic: fa_en_a1_unit68_lesson01_words}}
+  lesson02_single: &lesson02_single {language_code: en, part_of_speech: noun, agreement_tags: {semantic: fa_en_a1_unit68_lesson02_words}}
+  lesson04_pool: &lesson04_pool {language_code: en, part_of_speech: verb, agreement_tags: {semantic: fa_en_a1_unit68_lesson04_words}}
+templates:
+  - content_key: practice.fa-en.en.a1.unit68.lesson01.choose.001
+    lesson_content_key: en.a1.unit68.lesson01.borrowing_words
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *unit_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit68.lesson01.listen.002
+    lesson_content_key: en.a1.unit68.lesson01.borrowing_words
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *unit_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "واژه‌ای که شنیدید {item} بود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit68.lesson01.translate.003
+    lesson_content_key: en.a1.unit68.lesson01.borrowing_words
+    type: translation
+    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *unit_pool}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit68.lesson01.fill.004
+    lesson_content_key: en.a1.unit68.lesson01.borrowing_words
+    type: fill_in_blank
+    frame: {text: "I need a {item}.", language_code: en, direction: ltr}
+    slots: {item: *lesson01_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} یعنی «شارژر».", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit68.lesson01.order.005
+    lesson_content_key: en.a1.unit68.lesson01.borrowing_words
+    type: word_order
+    frame: {text: "Can you {item} me a charger", language_code: en, direction: ltr}
+    slots: {item: *lesson01_verb}
+    answer_derivation: {kind: render_frame, frame: {text: "Can you {item} me a charger", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} یعنی «قرض دادن».", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit68.lesson02.choose.001
+    lesson_content_key: en.a1.unit68.lesson02.borrowing_phrases
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *unit_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit68.lesson02.translate.002
+    lesson_content_key: en.a1.unit68.lesson02.borrowing_phrases
+    type: translation
+    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *unit_pool}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit68.lesson02.fill.003
+    lesson_content_key: en.a1.unit68.lesson02.borrowing_phrases
+    type: fill_in_blank
+    frame: {text: "Thank you for the {item}.", language_code: en, direction: ltr}
+    slots: {item: *lesson02_single}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} یعنی «قرض‌دهی».", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit68.lesson04.choose.001
+    lesson_content_key: en.a1.unit68.lesson04.borrowing_note
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *unit_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit68.lesson04.translate.002
+    lesson_content_key: en.a1.unit68.lesson04.borrowing_note
+    type: translation
+    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *unit_pool}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit68.lesson04.order.003
+    lesson_content_key: en.a1.unit68.lesson04.borrowing_note
+    type: word_order
+    frame: {text: "I {item} it", language_code: en, direction: ltr}
+    slots: {item: *lesson04_pool}
+    answer_derivation: {kind: render_frame, frame: {text: "I {item} it", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} فعل گذشتهٔ ساده یا فعل ساده است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit68.lesson01.match.006
+    lesson_content_key: en.a1.unit68.lesson01.borrowing_words
+    type: matching_pairs
+    frame: {text: "{first} — {second} — {third} — {fourth} — {fifth} — {sixth}", language_code: en, direction: ltr}
+    slots: {first: *unit_pool, second: *unit_pool, third: *unit_pool, fourth: *unit_pool, fifth: *unit_pool, sixth: *unit_pool}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "هر واژه را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}

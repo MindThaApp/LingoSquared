@@ -1,0 +1,99 @@
+schema_version: "1.0"
+pack_key: practice.fa-en.a1.unit63
+source_language: fa
+target_language: en
+unit_content_key: en.a1.unit63.asking_for_help
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    THIN UNIT: backfill_lexemes_fa_en.py registers only 4 lexemes (carry/
+    heavy/shelf in lesson01, carried in lesson04; lesson02/lesson03 have zero
+    lexemes and are invisible to any checkpoint). 9 templates authored at
+    genuine capacity: MC/listen pool = unit-wide tag (4 distinct: carry,
+    heavy, shelf, carried), clears the 3-option floor. matching_pairs omitted
+    (needs 6 distinct tokens, only 4 exist). word_order/fill_in_blank use
+    lesson01's own tag narrowed by part_of_speech to a single member (verb ->
+    carry; adjective -> heavy; noun -> shelf) and lesson04's tag (already
+    single: carried), built from the realization's own example sentences
+    ("I can carry it.", "This bag is heavy.", "Put it on the shelf.",
+    a lesson04 reading line). Course-scope check: both lesson tags
+    (fa_en_a1_unit63_lesson01_words / _lesson04_words) are unique to this
+    unit and used nowhere else, so course-wide membership == unit-scoped
+    membership. No mis-glossed lexeme found. FLAG FOR COORDINATOR:
+    checkpoint will very likely stay <12 items unless lessons 02/03 get
+    lexeme coverage -- routing to backfill recommended.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [fa_en_a1_unit63_words, fa_en_a1_unit63_lesson01_words, fa_en_a1_unit63_lesson04_words]
+slot_presets:
+  unit_pool: &unit_pool {language_code: en, part_of_speech: [noun, verb, adjective], agreement_tags: {semantic: fa_en_a1_unit63_words}}
+  lesson01_verb: &lesson01_verb {language_code: en, part_of_speech: verb, agreement_tags: {semantic: fa_en_a1_unit63_lesson01_words}}
+  lesson01_adj: &lesson01_adj {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: fa_en_a1_unit63_lesson01_words}}
+  lesson01_noun: &lesson01_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: fa_en_a1_unit63_lesson01_words}}
+  lesson04_single: &lesson04_single {language_code: en, part_of_speech: verb, agreement_tags: {semantic: fa_en_a1_unit63_lesson04_words}}
+templates:
+  - content_key: practice.fa-en.en.a1.unit63.lesson01.choose.001
+    lesson_content_key: en.a1.unit63.lesson01.help_words
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *unit_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit63.lesson01.listen.002
+    lesson_content_key: en.a1.unit63.lesson01.help_words
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *unit_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "واژه‌ای که شنیدید {item} بود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit63.lesson01.translate.003
+    lesson_content_key: en.a1.unit63.lesson01.help_words
+    type: translation
+    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *unit_pool}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit63.lesson01.order.004
+    lesson_content_key: en.a1.unit63.lesson01.help_words
+    type: word_order
+    frame: {text: "I can {item} it", language_code: en, direction: ltr}
+    slots: {item: *lesson01_verb}
+    answer_derivation: {kind: render_frame, frame: {text: "I can {item} it", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} یعنی «حمل کردن».", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit63.lesson01.fill.005
+    lesson_content_key: en.a1.unit63.lesson01.help_words
+    type: fill_in_blank
+    frame: {text: "This bag is {item}.", language_code: en, direction: ltr}
+    slots: {item: *lesson01_adj}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} یعنی «سنگین».", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit63.lesson01.fill.006
+    lesson_content_key: en.a1.unit63.lesson01.help_words
+    type: fill_in_blank
+    frame: {text: "Put it on the {item}.", language_code: en, direction: ltr}
+    slots: {item: *lesson01_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} یعنی «قفسه».", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit63.lesson04.choose.001
+    lesson_content_key: en.a1.unit63.lesson04.a_helpful_neighbor
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *unit_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit63.lesson04.translate.002
+    lesson_content_key: en.a1.unit63.lesson04.a_helpful_neighbor
+    type: translation
+    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *unit_pool}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit63.lesson04.order.003
+    lesson_content_key: en.a1.unit63.lesson04.a_helpful_neighbor
+    type: word_order
+    frame: {text: "I {item} the bag", language_code: en, direction: ltr}
+    slots: {item: *lesson04_single}
+    answer_derivation: {kind: render_frame, frame: {text: "I {item} the bag", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} یعنی «حمل کرد» (زمان گذشته).", language_code: fa, direction: rtl}

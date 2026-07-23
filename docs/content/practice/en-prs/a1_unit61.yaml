@@ -1,0 +1,158 @@
+schema_version: '1.0'
+pack_key: practice.en-prs.a1.unit61
+source_language: en
+target_language: prs
+unit_content_key: prs.a1.unit61.amusement_park
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    en-prs A1 practice pack (unit61 amusement_park), authored 2026-07-23. VERY
+    THIN UNIT: only 4 lexemes total across 3 lessons with lexemes (lesson01:
+    شهربازی "amusement park"; lesson02: سانتی‌متر "centimetre", حداقل
+    "minimum"; lesson06: قدتان "your height"). lesson03/04/05 have ZERO
+    lexemes. unit_word union (amusement_park_word+measure_unit_word+
+    bank_notice_word+formal_possessive_word, pos noun) gives exactly 4
+    distinct glosses -- clears MC >=3 but is short of the 6-pair
+    matching_pairs floor, so matching_pairs is DELIBERATELY OMITTED.
+    amusement_park_word (شهربازی) and measure_unit_word (سانتی‌متر) are BOTH
+    course-wide single-member tags -- verified via the direction's a1-level
+    lexeme dump -- so this unit (unlike 59/60) supports one real
+    fill_in_blank and one real word_order, both deterministic single-
+    candidate anchors reusing the unit's own authored sentences
+    ("شهربازی از ساعت ده صبح تا نه شب باز است." / "حداقل قد صد و ده سانتی‌متر
+    است."). bank_notice_word (حداقل) is course-wide 2 (حداقل, ماهانه --
+    minimum/monthly, not interchangeable) and formal_possessive_word (قدتان)
+    is course-wide 14 nouns -- neither is single, so both stay in
+    bare-word translation only. 8 templates total (2 structured via real
+    single-member anchors, plus 3 recognition + 3 production) --
+    capacity-limited, not padded. No mis-glossed lexemes found. No
+    listen_select (no prs TTS).
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - amusement_park_word
+    - measure_unit_word
+    - bank_notice_word
+    - formal_possessive_word
+slot_presets:
+  unit_word: &uw
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: [amusement_park_word, measure_unit_word, bank_notice_word, formal_possessive_word]
+  park_single: &pk
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: amusement_park_word
+  measure_single: &ms
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: measure_unit_word
+templates:
+# ---- recognition ----
+- content_key: practice.en-prs.prs.a1.unit61.lesson01.choose.001
+  lesson_content_key: prs.a1.unit61.lesson01.amusement_park_vocabulary
+  type: multiple_choice
+  frame: {text: '{item}', language_code: prs, direction: rtl}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is from this unit''s amusement-park vocabulary.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit61.lesson02.choose.001
+  lesson_content_key: prs.a1.unit61.lesson02.amusement_park_sign
+  type: multiple_choice
+  frame: {text: '{item}', language_code: prs, direction: rtl}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is from this unit''s amusement-park vocabulary.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit61.lesson06.choose.001
+  lesson_content_key: prs.a1.unit61.lesson06.wrap_up
+  type: multiple_choice
+  frame: {text: '{item}', language_code: prs, direction: rtl}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is from this unit''s amusement-park vocabulary.'
+    language_code: en
+    direction: ltr
+# ---- structured ----
+- content_key: practice.en-prs.prs.a1.unit61.lesson01.fill.001
+  lesson_content_key: prs.a1.unit61.lesson01.amusement_park_vocabulary
+  type: fill_in_blank
+  frame: {text: '{item} از ساعت ده صبح تا نه شب باز است.', language_code: prs, direction: rtl}
+  slots:
+    item: *pk
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: 'شهربازی از ساعت ده صبح تا نه شب باز است. = The amusement park is open from 10am to 9pm.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit61.lesson02.order.001
+  lesson_content_key: prs.a1.unit61.lesson02.amusement_park_sign
+  type: word_order
+  frame: {text: 'حداقل قد صد و ده {item} است.', language_code: prs, direction: rtl}
+  slots:
+    item: *ms
+  answer_derivation:
+    kind: render_frame
+    frame: {text: 'حداقل قد صد و ده {item} است.', language_code: prs, direction: rtl}
+  feedback_frame:
+    text: 'Word order: حداقل قد صد و ده سانتی‌متر است. (Minimum height is 110 centimetres.)'
+    language_code: en
+    direction: ltr
+# ---- production ----
+- content_key: practice.en-prs.prs.a1.unit61.lesson01.translate.001
+  lesson_content_key: prs.a1.unit61.lesson01.amusement_park_vocabulary
+  type: translation
+  frame: {text: '{item}', language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: 'Type the Dari word.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit61.lesson02.translate.001
+  lesson_content_key: prs.a1.unit61.lesson02.amusement_park_sign
+  type: translation
+  frame: {text: '{item}', language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: 'Type the Dari word.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit61.lesson06.translate.001
+  lesson_content_key: prs.a1.unit61.lesson06.wrap_up
+  type: translation
+  frame: {text: '{item}', language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+  slots:
+    item: *uw
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: 'Type the Dari word.'
+    language_code: en
+    direction: ltr

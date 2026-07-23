@@ -1,0 +1,196 @@
+schema_version: '1.0'
+pack_key: practice.en-prs.a1.unit45
+source_language: en
+target_language: prs
+unit_content_key: prs.a1.unit45.accommodation
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    Pilot en-prs A1 practice pack (unit45 accommodation), authored 2026-07-22.
+    9 unit lexemes across ALL 6 lessons. Tags: hotel_word (هوتل hotel, رزرو
+    reservation, وای‌فای wifi, خروج check-out), stay_verb (می‌مانم "I stay",
+    می‌مانین "you stay", می‌ماند "he/she stays"), dialogue_word (شامل included,
+    وای‌فای wifi, کارمند هوتل hotel clerk). matching_pairs pools the union
+    hotel_word + stay_verb = 7 distinct tokens (6-pair floor met). word_order uses
+    the taught frame "دو شب {verb}" over stay_verb -- all three person-forms
+    grammatical ("I/you/he stay two nights"). MC over dialogue_word gives 3 glosses.
+    NO listen_select (no TTS). NO fill_in_blank (no reliable single-member
+    course-wide anchor). Afghan Dari register (هوتل not هتل; می‌مانین 2pl, not
+    می‌مانید). No mis-glossed lexemes found.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - hotel_word
+    - stay_verb
+    - dialogue_word
+slot_presets:
+  hotel_word: &hw
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: hotel_word
+  stay_verb: &sv
+    language_code: prs
+    part_of_speech: verb
+    agreement_tags:
+      semantic: stay_verb
+  hotel_or_stay: &hs
+    language_code: prs
+    part_of_speech: [noun, verb]
+    agreement_tags:
+      semantic: [hotel_word, stay_verb]
+  dialogue_word: &dw
+    language_code: prs
+    part_of_speech: [noun, adjective]
+    agreement_tags:
+      semantic: dialogue_word
+templates:
+# ---- recognition ----
+- content_key: practice.en-prs.prs.a1.unit45.lesson01.choose.001
+  lesson_content_key: prs.a1.unit45.lesson01.hotel_room_key_vocabulary
+  type: multiple_choice
+  frame: {text: '{item}', language_code: prs, direction: rtl}
+  slots:
+    item: *hw
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} belongs to this unit''s accommodation vocabulary.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit45.lesson04.choose.001
+  lesson_content_key: prs.a1.unit45.lesson04.hotel_checkin_dialogue
+  type: multiple_choice
+  frame: {text: '{item}', language_code: prs, direction: rtl}
+  slots:
+    item: *dw
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is a word from this unit''s check-in dialogue.'
+    language_code: en
+    direction: ltr
+# ---- structured ----
+- content_key: practice.en-prs.prs.a1.unit45.lesson03.order.001
+  lesson_content_key: prs.a1.unit45.lesson03.room_number_and_nights
+  type: word_order
+  frame: {text: 'دو شب {verb}', language_code: prs, direction: rtl}
+  slots:
+    verb: *sv
+  answer_derivation:
+    kind: render_frame
+    frame: {text: 'دو شب {verb}', language_code: prs, direction: rtl}
+  feedback_frame:
+    text: 'Word order: دو شب می‌مانم (I stay two nights).'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit45.lesson04.match.001
+  lesson_content_key: prs.a1.unit45.lesson04.hotel_checkin_dialogue
+  type: matching_pairs
+  frame:
+    text: '{a} — {b} — {c} — {d} — {e} — {f}'
+    language_code: prs
+    direction: rtl
+  slots:
+    a: *hs
+    b: *hs
+    c: *hs
+    d: *hs
+    e: *hs
+    f: *hs
+  slot_relations:
+  - kind: distinct
+    slots: [a, b, c, d, e, f]
+  answer_derivation:
+    kind: matching_pairs
+    slots: [a, b, c, d, e, f]
+  feedback_frame:
+    text: Match each word to its English meaning.
+    language_code: en
+    direction: ltr
+# ---- production ----
+- content_key: practice.en-prs.prs.a1.unit45.lesson01.translate.001
+  lesson_content_key: prs.a1.unit45.lesson01.hotel_room_key_vocabulary
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item: *hw
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: '{item} is the Dari word for this.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit45.lesson02.translate.001
+  lesson_content_key: prs.a1.unit45.lesson02.bathroom_and_reservation
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item: *hw
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: '{item} is the Dari word for this.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit45.lesson03.translate.001
+  lesson_content_key: prs.a1.unit45.lesson03.room_number_and_nights
+  type: translation
+  frame:
+    text: '{verb}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {verb: english_gloss}
+  slots:
+    verb: *sv
+  answer_derivation: {kind: slot_text, slot: verb}
+  feedback_frame:
+    text: '{verb} is the Dari form for this.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit45.lesson05.translate.001
+  lesson_content_key: prs.a1.unit45.lesson05.reading
+  type: translation
+  frame:
+    text: '{verb}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {verb: english_gloss}
+  slots:
+    verb: *sv
+  answer_derivation: {kind: slot_text, slot: verb}
+  feedback_frame:
+    text: '{verb} is the Dari form for this.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit45.lesson06.translate.001
+  lesson_content_key: prs.a1.unit45.lesson06.wrap_up
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item: *hw
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: '{item} is the Dari word for this.'
+    language_code: en
+    direction: ltr
