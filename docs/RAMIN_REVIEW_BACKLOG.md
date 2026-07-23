@@ -11,6 +11,130 @@ or owner-reserved decisions interrupt Ramin. Everything else lands here.
 
 ---
 
+## ⭐ Overnight deep-review + fix waves (2026-07-23 night) — READ THIS FIRST
+
+**Headline / ship-readiness verdict:** the checkpoint publish-gate only ever
+tested checkpoint *availability* (are there ≥12 items?), never grading
+*correctness*. A fresh-context adversarial re-review of **every launch
+realization + overlay** (14 reviewers, q_01..q_14) found the launch content had
+**multiple systemic, compiler-invisible defect classes** — real mis-grading a
+learner would hit. **Conclusion: the launch content was NOT ship-ready as it
+stood.** Most of it is now fixed + committed; a few classes are deferred (need
+your call or a careful paired pass). I recommend a **content-correctness gate**
+(not just the availability gate) before any beta invite.
+
+**Committed tonight on `fix/launch-gate-content-review-wave1` (unpushed, yours to review/merge):**
+- **`ae9e0253` — launch fix wave (147 files).** All 21 launch manifest groups
+  validate AND compile clean (0 errors).
+- **`10465892` — non-launch fix wave (239 files, de/fr/ru/ar/es/ro/pl/hi).** All
+  25 non-launch groups clean. (`it` lane commits separately once its worker ends.)
+
+**Defect classes found + FIXED (verified real, each checked against the paired
+overlay/grading before editing):**
+1. **Prompt-shows-answer** — recognize_*/choose_* items displayed the target word
+   in the prompt AND as the only correct option. en-fa a1 (18), en-prs a1 (23);
+   detector-swept the rest of a1 → 0 remaining.
+2. **Missing overlay teaching glosses** (compiler-invisible — learner saw target
+   script with no translation): a systematic authoring gap. Scan found 20 launch
+   files / 209 entries; all filled (fa-en a1_50-57+a2_26, nl-en/prs-en a2_26,
+   en-fa b1, en-prs a1_20/23/37/38). Non-launch pl(14)+hi(29) too.
+3. **§12 two-clause grading gap** — a correct period-separated / and-joined answer
+   graded WRONG (only comma-join accepted). Additive variants added: en-prs
+   a1_36-61, prs-en b1_01-06 + b2_01-08.
+4. **prs-en Dari formal-register leak** (Iranian/formal endings in colloquial-Dari
+   learner text) a1_62-68 + a2_35-38.
+5. **ze/zij** interchangeable-pronoun mis-grade (en-nl a2_73-77).
+6. **dinner→چاشت** mistranslation (prs-en a1_16) — 3rd recurrence of this class.
+7. Fact contradictions, trait-reassignment (Leila eyes green→blue, graded),
+   phantom introduced_tokens, register (خونه), prices, fabricated distractors,
+   and **false review metadata** (status:reviewed while the file's own notes say
+   the review never ran) across many files.
+
+**A reviewer false-positive I caught + did NOT act on:** q_05 flagged en-prs a1_36
+هستم as an "Iranian" register bug. It is NOT — DARI_REGISTER_REPAIR.md scopes the
+هستم→استم fix to the *prs-en colloquial* lane; **en-prs is formal written Dari
+where است/هستم is correct** (doc's own carve-out + CONTENT_DEFECT_REGISTRY §1.28).
+Left unchanged. Flagging so the repair-doc scope stays clear.
+
+**DEFERRED — need your call or a dedicated careful pass (NOT done tonight):**
+- **matching_pairs lesson01 forward-reference** in the *shared* `realizations/en`
+  (units ~02-24) → fans to fa-en/nl-en/prs-en/de-en overlays. Low severity (both
+  sides shown in a match), but the fix is the realization + all-3-overlay mirror
+  cascade that bit us before (the fwdfix revert). Wants one careful paired pass.
+- a2_25-35 matching_pairs padding + "sequencing" jargon (same shared-corpus cascade).
+- **Residual register** in prs-en a1_62-68/a2_35-38 `example_gloss`/`grammar_note`/
+  dialogue-card fields (P1 fixed the reading/instruction/feedback fields; these
+  lower-severity same-pattern fields need a field-extension sweep). + en-prs
+  b1_01/06-11 overlay metadata still stale (minor).
+- **PRODUCT decisions (yours):** (a) char-name romanization vs native-script in
+  en-prs A2 English-facing fields (deliberate A2 convention? — corpus-wide);
+  (b) b1_01-06 "reply in role" instructions give zero content guidance → currently
+  rote-recall only; (c) the ~8% structurally-thin checkpoint units (unchanged from
+  the prior gate ceiling item below).
+
+---
+
+## ⭐ Practice-pack quality (2026-07-23 night) — SYSTEMIC pre-recipe defect (needs your call on scope)
+
+A fresh-context review of the practice packs (fan-out over ~450 of the 553) found a
+clean, consistent, **date-driven quality split** that is invisible to the compiler:
+
+- **Pre-recipe packs = DEFECTIVE.** Everything authored **2026-07-05→09** (roughly
+  `a1_unit01–24` in ALL 6 launch directions, plus `fa/nl/prs-en a2_unit25–29` and
+  `en-fa/en-prs a2_unit09–10`) is riddled with structural defects.
+- **Post-recipe packs = CLEAN.** Everything authored **2026-07-22+** (after
+  `PRACTICE_PACK_RECIPE.md` was written — `a1_unit25–72`, `a2_unit11–18/30–40`,
+  all `b1_*`/`b2_*`) is clean or honestly self-flagged thin.
+
+**Root cause (multiple independent reviewers agree):** the early lane verified slot
+capacity at **course scope** (all units/levels pooled) but `generate_checkpoint()`
+uses **unit scope** (only that unit's own lexemes). So a template whose slot reuses
+a tag whose vocabulary was first taught in an *earlier* unit has **zero** unit-scoped
+candidates → it silently never generates at checkpoint time (recipe §1.1 / DO-NOT #2).
+The self-check the early packs cite (`scripts/_practice_slot_check.py`) checks the
+whole-direction pool, not unit scope — which is why they all self-certified "verified"
+while being dead. **This means the earlier "~92% checkpoint availability" gate number is
+OPTIMISTIC for the pre-recipe units** — several are fully/mostly checkpoint-DEAD
+(`fa-en a1_unit14 & a1_unit17` are already named in the recipe's own DO-NOT #2 as
+guaranteed-409; `nl-en a1_05/16`, `en-prs a1_18`, `fa-en a1_05/14/17` generate ~0–2
+live templates).
+
+**Defect classes (all compiler-invisible):** (1) dead templates (earlier-unit vocab —
+the big one); (2) matching_pairs below the 6-pair floor / more slots than pool; (3)
+**invariant-answer templates** (en-fa a1_03/04) — frame has no `{slot}` placeholder, so
+every render is identical and the learner is credited toward a lexeme never shown (an
+actual SRS mis-grade); (4) **narration-gloss** (en-fa a2_10, en-prs a2_09/10) — a
+`translation` shows a 3rd-person narrated gloss but requires the 1st/2nd-person direct
+answer → a faithful translation grades WRONG; (5) self-reference / ungrammatical pool
+members (`nl-en a1_05` "ten past ten", `fa-en a1_07` "a bread", `fa-en a1_15` "one
+dollars", en-nl number pool `eenheid`/`tiental`, weekday `hoofdletter`); (6) thin +
+byte-identical duplicate-template padding (en-fa a1_31–36, en-nl/nl-en a1_43–48).
+
+**My recommendation (your call — scoped project, NOT an emergency; the base
+realization/overlay content is fixed + committed, which matters more):**
+- **(a)** Re-author the ~pre-recipe packs (a1_01–24 × 6 dirs + a2_25–29/09–10) against
+  the current recipe (post-recipe packs are the proven-clean template). ~150 packs; wants
+  a careful per-unit capacity pass, so I did NOT blast it autonomously — greenlight the scale.
+- **(b) Highest-leverage tooling fix:** add a validator that checks **unit-scope**
+  satisfiability (the one missing check) so this class can't ship again, and fix
+  `_practice_slot_check.py` to report unit scope. (validator/Codex lane.)
+- **(c)** I fixed one urgent blocker tonight (below).
+
+**Fixed tonight (committing separately):** `scripts/backfill_lexemes.py` was missing a
+`FA_GLOSSES` entry for `خونه‌اش` ("his house") — a token that IS introduced+glossed in
+`realizations/fa/a1_unit33`. Its absence raised `ValueError` inside `iter_specs()`, which
+crashed `_practice_content_integrity_check.py` for the entire fa direction, silently
+downgraded the fill_in_blank ambiguity HARD-gate to a soft warning, and would block any
+fa lexeme backfill run. Added the gloss (sibling of خونه‌ی/خونه‌ت); verified the checker
+now runs to completion (iter_specs loads 3838 fa specs) instead of crashing.
+
+**Codex** is re-doing the phantom-introduced_tokens validator (first cut = 597 findings,
+~all false positives — 'the'/'with'/names — REJECTED per the zero-FP bar; not committed).
+
+Full per-pack findings: coordinator scratchpad `pack_findings.md`.
+
+---
+
 ## Decisions taken autonomously (FYI — reverse if you disagree)
 
 - **2026-07-23 — Repo moved out of iCloud by `mv`, not the `git clone` the

@@ -791,6 +791,12 @@ FA_GLOSSES = {
     "آشپزخانه‌س": "it's the kitchen (colloquial contraction of آشپزخانه است)",
     "خونه‌ی": "house of / my house (ezafe form of خونه)",
     "خونه‌ت": "your house (colloquial)",
+    # Added 2026-07-23: introduced+glossed "his house" in
+    # realizations/fa/a1_unit33_neighborhood.yaml (teach card, introduced_tokens)
+    # but was missing here, which raised ValueError in _classify_fa and crashed
+    # _practice_content_integrity_check.py / the fill_in_blank ambiguity gate for
+    # the entire fa direction. Sibling of خونه‌ی/خونه‌ت above.
+    "خونه‌اش": "his house (colloquial)",
     # Unit 20 (A1: clothing), added 2026-07-09 (en-fa units-20+ overnight
     # practice-depth pass, closing the gap where real lesson content ran
     # ahead of Endless Practice coverage). کت/می‌تونم/کنم already existed
