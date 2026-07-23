@@ -103,6 +103,27 @@ the whole gate re-measured. Pipeline was proven on a 5-pack pilot first.
    the X->en backfills emit polluting English `source_gloss` pseudo-lexemes
    (known handover bug) — worth cleaning in the same backfill pass.
 
+## Checkpoint gate is effectively MAXED at ~92% — needs a PRODUCT decision to go higher
+
+Final measured gate: **526/571 = 92.1%** (en-fa 83/83, en-nl 88/88, en-prs 81/82;
+fa-en 92/106, nl-en 91/106, prs-en 91/106). The Codex lexeme-backfill attempt to
+unblock the thin X→en units **failed to move the number** (created 0 new lexemes,
+only updated existing). Root cause, now definitive: the ~45 still-unavailable
+units are late-A1 **recombination units** that by design introduce FEWER THAN 12
+genuinely-new tokens, and the backfill dedup key `(level, token)` assigns a
+recombined token to its FIRST unit, not the recombination unit — so no backfill
+can give them 12 own-unit checkpoint items.
+
+**This is a content-design reality, not a fixable bug.** To push past ~92% you'd
+need one of these PRODUCT/PEDAGOGY decisions (your call):
+- (a) let a recombination unit's checkpoint draw on CUMULATIVE (through-this-unit)
+  vocabulary instead of only its own new tokens;
+- (b) exempt recombination units from the checkpoint requirement;
+- (c) lower the 12-item floor for units with <12 new tokens.
+The Codex backfill (`scripts/backfill_lexemes_*.py`) is uncommitted in the tree —
+it did usefully remove the known nl-en English-`source_gloss` pollution and caused
+no regression, so it's worth keeping, but it did NOT achieve the thin-unit unblock.
+
 ## Review wave 2 (non-launch ar/de/fr/it/ru) — findings logged, deferred
 
 ~20 of 24 batches reviewed (read-only). All NON-LAUNCH, so deferred. Real
@@ -145,3 +166,18 @@ pervasive stale `status: reviewed` metadata (de b1). Several "critical" reports
 ## Deferred / parked
 
 _(none yet)_
+
+## Systemic: bare-word translation over UNTAGGED (course-wide) pools — design decision
+
+Pack-fix sweep found the duplicate-gloss mis-grading has two layers:
+1. Concrete, fixed: proper_noun in slot pools (prs-en a1_43-61, 19 files, fixed);
+   a few nl-en broad-union same-gloss pairs (also/too, paint/painting, etc.).
+2. SYSTEMIC (needs your call): the prs-en/en-prs packs (no semantic tags in their
+   backfill) use "whole-vocabulary review" templates whose translation/matching
+   slots pool the ENTIRE course vocabulary with only a part_of_speech filter. That
+   pool inevitably contains many same-gloss English tokens (good/fine/okay→خوب),
+   so a bare-word translation can mis-grade at scale. This can't be fixed by
+   narrowing one tag — it's how the untagged-direction recipe works. Options:
+   (a) scope these templates to lesson-taught vocab only; (b) add semantic tags to
+   the prs-en/en-prs backfills so slots can be narrowed; (c) accept it (matching
+   shows both sides; only bare-word translation is exposed). Your design decision.
