@@ -91,7 +91,14 @@ def check_pack(pack_path: Path, all_specs: list[dict]) -> list[tuple[str, str]]:
         return []
     unit_lexemes = [s for s in all_specs if unit_key in s["lesson_content_key"]]
     problems: list[tuple[str, str]] = []
-    pack = yaml.safe_load(pack_path.read_text(encoding="utf-8"))
+    try:
+        pack = yaml.safe_load(pack_path.read_text(encoding="utf-8"))
+    except (yaml.YAMLError, OSError) as exc:
+        # A pack being mid-written by a concurrent editor can parse-fail
+        # transiently; skip it rather than crash the whole run.
+        return [("SKIP", f"{pack_path.name}: could not parse ({exc.__class__.__name__}) -- skipped")]
+    if not isinstance(pack, dict):
+        return [("SKIP", f"{pack_path.name}: not a mapping -- skipped")]
     for template in pack.get("templates", []):
         key = template.get("content_key", "<no content_key>")
         ttype = template.get("type")
@@ -157,16 +164,20 @@ def main() -> int:
             problems = check_pack(pack_path, specs)
             dead = [m for sev, m in problems if sev == "DEAD"]
             floor = [m for sev, m in problems if sev == "FLOOR"]
+            skip = [m for sev, m in problems if sev == "SKIP"]
             if dead:
                 dead_packs[label] = dead_packs.get(label, 0) + 1
             total_dead += len(dead)
             total_floor += len(floor)
             if problems:
-                print(f"  {pack_path.name}: {len(dead)} DEAD, {len(floor)} below-floor")
+                print(f"  {pack_path.name}: {len(dead)} DEAD, {len(floor)} below-floor"
+                      + (", SKIPPED" if skip else ""))
                 for m in dead:
                     print(f"      DEAD  {m}")
                 for m in floor:
                     print(f"      FLOOR {m}")
+                for m in skip:
+                    print(f"      SKIP  {m}")
     print()
     print(f"TOTAL: {total_dead} DEAD template-slots, {total_floor} below-floor "
           f"({sum(dead_packs.values())} packs with >=1 dead template: "
