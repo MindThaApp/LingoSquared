@@ -8,6 +8,29 @@ review:
   status: reviewed
   required_next_reviewer: ramin_native_pass
   reviewer_notes: >-
+    FIXED 2026-07-23: the dosage inconsistency flagged 2026-07-11 (below)
+    is resolved. Chose "make the pharmacist's advice match the label"
+    direction, applied to the SMALLER side: lesson05's label/phrase card
+    now reads "Twee tabletten per dag, met water." (dropping the "drie
+    keer"/three-times tripling) instead of changing lessons 03/04, since
+    "twee tabletten per dag" is the foundational vocabulary point of
+    lessons 03 AND 04 (both the dosering vocab card and the actual
+    booking-desk dialogue), while lesson05's "drie keer" was the newer,
+    single-lesson outlier. Updated in lockstep:
+    lesson05.teach.label_tekst, teach.twee_tabletten_drie_keer (text only,
+    content_key left as-is), its media_asset script, and exercises
+    read_keer_per_dag (repurposed to ask what to take the tablets with,
+    since "how many times per day" no longer has a distinct answer from
+    "per day"), match_etiket's two affected pairs, listen_ and
+    write_twee_tabletten_drie_keer. Overlay updated identically in the
+    same change. Everything else below (mechanical sweeps, same-speaker-
+    distractor re-verification, register) still holds and was not
+    re-checked in this pass. Still open, untouched, out of this fix's
+    scope: the already-flagged bare 'medicijn genomen' (lesson06)
+    native-naturalness call.
+
+    Original 2026-07-11 text, retained for history:
+
     2026-07-11 independent fresh-context review (Opus, no access to the
     authoring session; realization+overlay read together, backend
     grading._normalize semantics applied before judging accepted_answers).
@@ -126,7 +149,7 @@ media_assets:
     voice_hint: two_young_adults_and_staff_neutral
     status: pending_generation
   - {content_key: nl.a1.audio.apotheek.pijnstillers_advies.01, language: nl, text: "Deze pijnstillers zijn goed. Neem twee tabletten per dag.", voice_hint: neutral_adult_clear, status: pending_generation}
-  - {content_key: nl.a1.audio.apotheek.twee_tabletten_drie_keer.01, language: nl, text: "Ik neem twee tabletten, drie keer per dag.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
+  - {content_key: nl.a1.audio.apotheek.twee_tabletten_drie_keer.01, language: nl, text: "Ik neem twee tabletten per dag, met water.", voice_hint: neutral_young_adult_friendly, status: pending_generation}
   - content_key: nl.a1.audio.dialogue.apotheek_slot.01
     language: nl
     text: >-
@@ -247,18 +270,18 @@ units:
           - content_key: nl.a1.unit50.lesson05.teach.label_tekst
             kind: reading
             target:
-              text: "Etiket: Paracetamol. Twee tabletten, drie keer per dag, met water."
+              text: "Etiket: Paracetamol. Twee tabletten per dag, met water."
               language_code: nl
               direction: ltr
-            introduced_tokens: [Etiket, Paracetamol, Twee, tabletten, drie, keer, per, dag, met, water]
-          - {content_key: nl.a1.unit50.lesson05.teach.twee_tabletten_drie_keer, kind: phrase, target: {text: "Ik neem twee tabletten, drie keer per dag.", language_code: nl, direction: ltr}, introduced_tokens: [Ik, neem, twee, tabletten, drie, keer, per, dag]}
+            introduced_tokens: [Etiket, Paracetamol, Twee, tabletten, per, dag, met, water]
+          - {content_key: nl.a1.unit50.lesson05.teach.twee_tabletten_drie_keer, kind: phrase, target: {text: "Ik neem twee tabletten per dag, met water.", language_code: nl, direction: ltr}, introduced_tokens: [Ik, neem, twee, tabletten, per, dag, met, water]}
         exercises:
           - {content_key: nl.a1.unit50.lesson05.exercise01.read_medicijn, type: reading_comprehension, tested_text: Paracetamol, prompt: {target_blocks: [{text: "According to the label, which medicine is this?", language_code: en, direction: ltr}]}}
           - {content_key: nl.a1.unit50.lesson05.exercise02.read_aantal_tabletten, type: reading_comprehension, tested_text: "Twee tabletten", prompt: {target_blocks: [{text: "According to the label, how many tablets should you take?", language_code: en, direction: ltr}]}}
-          - {content_key: nl.a1.unit50.lesson05.exercise03.read_keer_per_dag, type: reading_comprehension, tested_text: "drie keer per dag", prompt: {target_blocks: [{text: "According to the label, how many times per day?", language_code: en, direction: ltr}]}}
-          - {content_key: nl.a1.unit50.lesson05.exercise04.match_etiket, type: matching_pairs, tested_text: "etiket paracetamol tabletten dag water", prompt: {target_blocks: []}, pairs: [{left: Etiket, right: Label}, {left: "Etiket: Paracetamol.", right: "Label: Paracetamol."}, {left: "Twee tabletten, drie keer per dag, met water.", right: "Two tablets, three times per day, with water."}, {left: "Ik lees het etiket.", right: "I'm reading the label."}, {left: water, right: water}, {left: "Ik neem twee tabletten, drie keer per dag.", right: "I take two tablets, three times per day."}]}
-          - {content_key: nl.a1.unit50.lesson05.exercise05.listen_twee_tabletten_drie_keer, type: listen_select, tested_text: "Ik neem twee tabletten, drie keer per dag", media_asset_key: nl.a1.audio.apotheek.twee_tabletten_drie_keer.01, prompt: {target_blocks: []}}
-          - {content_key: nl.a1.unit50.lesson05.exercise06.write_twee_tabletten_drie_keer, type: writing_prompt, tested_text: "Ik neem twee tabletten, drie keer per dag", prompt: {target_blocks: [{text: "Write in Dutch: I take two tablets, three times per day.", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit50.lesson05.exercise03.read_keer_per_dag, type: reading_comprehension, tested_text: water, prompt: {target_blocks: [{text: "According to the label, what should you take the tablets with?", language_code: en, direction: ltr}]}}
+          - {content_key: nl.a1.unit50.lesson05.exercise04.match_etiket, type: matching_pairs, tested_text: "etiket paracetamol tabletten dag water", prompt: {target_blocks: []}, pairs: [{left: Etiket, right: Label}, {left: "Etiket: Paracetamol.", right: "Label: Paracetamol."}, {left: "Twee tabletten per dag, met water.", right: "Two tablets per day, with water."}, {left: "Ik lees het etiket.", right: "I'm reading the label."}, {left: water, right: water}, {left: "Ik neem twee tabletten per dag, met water.", right: "I take two tablets per day, with water."}]}
+          - {content_key: nl.a1.unit50.lesson05.exercise05.listen_twee_tabletten_drie_keer, type: listen_select, tested_text: "Ik neem twee tabletten per dag, met water", media_asset_key: nl.a1.audio.apotheek.twee_tabletten_drie_keer.01, prompt: {target_blocks: []}}
+          - {content_key: nl.a1.unit50.lesson05.exercise06.write_twee_tabletten_drie_keer, type: writing_prompt, tested_text: "Ik neem twee tabletten per dag, met water", prompt: {target_blocks: [{text: "Write in Dutch: I take two tablets per day, with water.", language_code: en, direction: ltr}]}}
 
       - content_key: nl.a1.unit50.lesson06.omar_vraagt_hoe_het_gaat
         title: "Omar vraagt hoe het gaat"
