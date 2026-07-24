@@ -41,6 +41,14 @@ if str(SCRIPTS_DIR) not in sys.path:
 
 MIN_MULTI_OPTION_CANDIDATES = 3      # build_prompt() rejects < 3 options
 MATCHING_PAIRS_FLOOR = 6             # AUTHORING_GUIDE SS16 / recipe DO-NOT #5
+MIN_TEMPLATES_PER_TIER = 3           # recipe SS8: >=3 live templates per tier
+
+# template type -> tier (mirrors backend/app/practice/service.py:47-49)
+_TIER_OF = {
+    "multiple_choice": "recognition", "listen_select": "recognition",
+    "word_order": "structured", "matching_pairs": "structured", "fill_in_blank": "structured",
+    "translation": "production",
+}
 
 _UNIT_RE = re.compile(r"(a1|a2|b1|b2)_unit(\d+)")
 
@@ -99,6 +107,7 @@ def check_pack(pack_path: Path, all_specs: list[dict]) -> list[tuple[str, str]]:
         return [("SKIP", f"{pack_path.name}: could not parse ({exc.__class__.__name__}) -- skipped")]
     if not isinstance(pack, dict):
         return [("SKIP", f"{pack_path.name}: not a mapping -- skipped")]
+    live_by_tier = {"recognition": 0, "structured": 0, "production": 0}
     for template in pack.get("templates", []):
         key = template.get("content_key", "<no content_key>")
         ttype = template.get("type")
@@ -109,41 +118,45 @@ def check_pack(pack_path: Path, all_specs: list[dict]) -> list[tuple[str, str]]:
             if not candidates:
                 problems.append(("DEAD", f"{key}: slot {slot_name!r} has 0 unit-scoped candidates -> template never generates at checkpoint"))
                 dead = True
-        if dead:
-            continue  # already can't generate; floor checks are moot
-        # floor checks (template can generate at least one item)
-        if ttype in {"multiple_choice", "listen_select"}:
-            deriv = template.get("answer_derivation", {})
-            if deriv.get("kind") in {"slot_gloss", "slot_text"}:
-                slot_name = deriv.get("slot")
-                constraints = slots.get(slot_name, {})
-                cands = [lx for lx in unit_lexemes if lexeme_matches(lx, constraints)]
-                field = "english_gloss" if deriv["kind"] == "slot_gloss" else "token"
-                distinct = len({lx[field] for lx in cands})
-                if distinct < MIN_MULTI_OPTION_CANDIDATES:
-                    problems.append(("FLOOR", f"{key}: {ttype} has only {distinct} distinct unit-scoped answer value(s) (<{MIN_MULTI_OPTION_CANDIDATES})"))
-        if ttype == "matching_pairs":
-            # Check each `distinct`-relation GROUP independently against ITS OWN
-            # slots' pools. Heterogeneous two-category matches (e.g. hair-color
-            # slots + eye-color slots) declare separate distinct relations;
-            # estimating the whole template from one slot's pool false-positives.
-            relations = [r for r in (template.get("slot_relations") or [])
-                         if r.get("kind") == "distinct"]
-            groups = [r.get("slots", []) for r in relations] or [list(slots.keys())]
-            group_dead = False
-            for grp in groups:
-                need = len(grp)
-                if need == 0:
-                    continue
-                pool = {lx["token"] for sn in grp for lx in unit_lexemes
-                        if lexeme_matches(lx, slots.get(sn, {}))}
-                if len(pool) < need:
-                    problems.append(("DEAD", f"{key}: matching_pairs group {grp} needs {need} distinct fills but unit-scoped pool has {len(pool)} -> never generates"))
-                    group_dead = True
-            # The >=6-pair floor is on TOTAL pairs (all groups), not per group.
-            total_pairs = len(slots)
-            if not group_dead and total_pairs < MATCHING_PAIRS_FLOOR:
-                problems.append(("FLOOR", f"{key}: matching_pairs has only {total_pairs} pairs (<{MATCHING_PAIRS_FLOOR}-pair floor)"))
+        if not dead:
+            # floor checks (template can generate at least one item)
+            if ttype in {"multiple_choice", "listen_select"}:
+                deriv = template.get("answer_derivation", {})
+                if deriv.get("kind") in {"slot_gloss", "slot_text"}:
+                    slot_name = deriv.get("slot")
+                    constraints = slots.get(slot_name, {})
+                    cands = [lx for lx in unit_lexemes if lexeme_matches(lx, constraints)]
+                    field = "english_gloss" if deriv["kind"] == "slot_gloss" else "token"
+                    distinct = len({lx[field] for lx in cands})
+                    if distinct < MIN_MULTI_OPTION_CANDIDATES:
+                        problems.append(("FLOOR", f"{key}: {ttype} has only {distinct} distinct unit-scoped answer value(s) (<{MIN_MULTI_OPTION_CANDIDATES})"))
+            if ttype == "matching_pairs":
+                # Check each `distinct`-relation GROUP independently against ITS
+                # OWN slots' pools. Heterogeneous two-category matches declare
+                # separate distinct relations; one-slot estimation false-positives.
+                relations = [r for r in (template.get("slot_relations") or [])
+                             if r.get("kind") == "distinct"]
+                groups = [r.get("slots", []) for r in relations] or [list(slots.keys())]
+                for grp in groups:
+                    need = len(grp)
+                    if need == 0:
+                        continue
+                    pool = {lx["token"] for sn in grp for lx in unit_lexemes
+                            if lexeme_matches(lx, slots.get(sn, {}))}
+                    if len(pool) < need:
+                        problems.append(("DEAD", f"{key}: matching_pairs group {grp} needs {need} distinct fills but unit-scoped pool has {len(pool)} -> never generates"))
+                        dead = True
+                total_pairs = len(slots)
+                if not dead and total_pairs < MATCHING_PAIRS_FLOOR:
+                    problems.append(("FLOOR", f"{key}: matching_pairs has only {total_pairs} pairs (<{MATCHING_PAIRS_FLOOR}-pair floor)"))
+        tier = _TIER_OF.get(ttype)
+        if tier and not dead:
+            live_by_tier[tier] += 1
+    # recipe SS8: >=3 LIVE templates per tier (a missing tier silently degrades
+    # the checkpoint into whichever tier has depth).
+    for tier, n in live_by_tier.items():
+        if n < MIN_TEMPLATES_PER_TIER:
+            problems.append(("TIER", f"{pack_path.name}: only {n} live {tier}-tier template(s) (<{MIN_TEMPLATES_PER_TIER})"))
     return problems
 
 
