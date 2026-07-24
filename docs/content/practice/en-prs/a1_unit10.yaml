@@ -65,19 +65,53 @@ review:
     verification report accompanying this pack). Needs the standard
     fresh-context review before import; no backfill_lexemes_en_prs.py
     run has actually happened against a real database yet in this pass.
+
+    REAUTH 2026-07-24 (unit-scope DEAD-template repair,
+    docs/content/PRACTICE_PACK_RECIPE.md §0/§1.1/§9): re-checked this
+    unit's real backfilled lexemes directly (the iter_specs filter in
+    REAUTH_TASK.md) and the "polite_request_verb (می‌تانین/بدهین, 2
+    members, lesson05)" and "polite_and_request" groups this pack's
+    original notes describe DO NOT EXIST as unit10 vocabulary: بفرمایین
+    is unit01 lesson05's, بدهین is unit02 lesson04's, می‌تانین is unit02
+    lesson05's -- all three genuinely EARLIER units (recipe DO-NOT #2).
+    lesson05 (`bargaining_for_a_discount`) itself introduces ZERO new
+    lexemes per the real backfill -- confirmed with the same filter,
+    0 specs for that lesson_content_key. All three of that lesson's
+    templates (polite_request_translate.001, polite_gloss.002,
+    polite_pair.003) were DEAD at checkpoint scope. PACK-ONLY, so no new
+    lesson05 vocabulary can be introduced here, and re-anchoring them to
+    draw from this unit's other lessons would only duplicate
+    shop_word/food_item/counting_word content already hosted by real
+    templates below -- DROPPED all three (recipe fix option 3): the
+    pack stays viable and in fact becomes perfectly tier-balanced
+    without them -- recognition (shop_gloss, food_gloss, counting_gloss),
+    structured (shop_pair, label_order, quantity_order), production
+    (shop_translate, food_translate, counting_translate), 3 live
+    templates per tier. Also fixed the two below-floor multiple_choice
+    templates the same unit-scoped check flagged: food_item alone has
+    only 2 unit-scoped candidates (سیب/سیب‌ها) and counting_word alone
+    only 1 (کیلو) -- both below the 3-option floor. Widened both
+    food_gloss.001 and counting_gloss.003 to a shared food_and_counting
+    union (سیب, سیب‌ها, کیلو -- 3 distinct; the دی/ها pair is a
+    legitimate singular/plural discrimination, not a paraphrase, per
+    recipe §16). Both templates necessarily draw the identical 3-item
+    pool -- this unit genuinely has no more real, unit-scoped content
+    words than that; noted here rather than padded with untaught or
+    other-unit vocabulary. shop_word (6 distinct, lesson01/02) is
+    untouched and remains this unit's richest, non-redundant pool.
 tag_schema:
   part_of_speech: [noun, adjective, verb, particle]
   agreement_tags:
-    semantic: [shop_word, food_item, counting_word, polite_request_verb, politeness]
+    semantic: [shop_word, food_item, counting_word]
 slot_presets:
   shop_word: &shop_word {language_code: prs, part_of_speech: [noun, adjective], agreement_tags: {semantic: shop_word}}
   food_item: &food_item {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: food_item}}
   counting_word: &counting_word {language_code: prs, part_of_speech: [noun, particle], agreement_tags: {semantic: counting_word}}
-  polite_request_verb: &polite_request_verb {language_code: prs, part_of_speech: verb, agreement_tags: {semantic: polite_request_verb}}
-  # polite_request_verb (2) pooled with the politeness group (now 6
-  # members after this unit's بفرمایین addition) for one matching_pairs/
-  # multiple_choice pair at 8 distinct -- coherent "polite speech" theme.
-  polite_and_request: &polite_and_request {language_code: prs, part_of_speech: [noun, verb], agreement_tags: {semantic: [politeness, polite_request_verb]}}
+  # REAUTH 2026-07-24: food_item alone (2: سیب/سیب‌ها) and counting_word
+  # alone (1: کیلو) each sit below the 3-option MC floor -- see
+  # review.notes. Union reaches 3 distinct, the most this genuinely thin
+  # unit has.
+  food_and_counting: &food_and_counting {language_code: prs, part_of_speech: [noun, particle], agreement_tags: {semantic: [food_item, counting_word]}}
 templates:
   # Lesson 1: shop and price vocabulary.
   - content_key: practice.en-prs.prs.a1.unit10.lesson01.shop_gloss.001
@@ -106,11 +140,13 @@ templates:
   # Lesson 3: reading a price label (apples, kilos).
   - content_key: practice.en-prs.prs.a1.unit10.lesson03.food_gloss.001
     lesson_content_key: prs.a1.unit10.lesson03.reading_a_price_label
+    # REAUTH 2026-07-24: widened from food_item alone (2 distinct, below
+    # the 3-option floor) to food_and_counting -- see review.notes.
     type: multiple_choice
-    frame: {text: "{food_item}", language_code: prs, direction: rtl}
-    slots: {food_item: *food_item}
-    answer_derivation: {kind: slot_gloss, slot: food_item}
-    feedback_frame: {text: "{food_item} names a food or drink item.", language_code: en, direction: ltr}
+    frame: {text: "{item}", language_code: prs, direction: rtl}
+    slots: {item: *food_and_counting}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} names a food, drink, or quantity word.", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a1.unit10.lesson03.food_translate.002
     lesson_content_key: prs.a1.unit10.lesson03.reading_a_price_label
     type: translation
@@ -120,11 +156,15 @@ templates:
     feedback_frame: {text: "{food_item} is the Dari word for this.", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a1.unit10.lesson03.counting_gloss.003
     lesson_content_key: prs.a1.unit10.lesson03.reading_a_price_label
+    # REAUTH 2026-07-24: widened from counting_word alone (1 distinct,
+    # below the 3-option floor) to food_and_counting -- see
+    # review.notes. Necessarily the same 3-item pool as food_gloss.001
+    # above; this unit has no more real unit-scoped content words.
     type: multiple_choice
-    frame: {text: "{counting_word}", language_code: prs, direction: rtl}
-    slots: {counting_word: *counting_word}
-    answer_derivation: {kind: slot_gloss, slot: counting_word}
-    feedback_frame: {text: "{counting_word} is used to count or measure something.", language_code: en, direction: ltr}
+    frame: {text: "{item}", language_code: prs, direction: rtl}
+    slots: {item: *food_and_counting}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is used to count, measure, or name a food item.", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a1.unit10.lesson03.counting_translate.004
     lesson_content_key: prs.a1.unit10.lesson03.reading_a_price_label
     type: translation
@@ -154,28 +194,15 @@ templates:
     answer_derivation: {kind: render_frame, frame: {text: "یک کیلو {food_item} می‌خواهم", language_code: prs, direction: rtl}}
     feedback_frame: {text: "Word order: یک کیلو [item] می‌خواهم (I'd like a kilo of [item]).", language_code: en, direction: ltr}
 
-  # Lesson 5: bargaining for a discount.
-  - content_key: practice.en-prs.prs.a1.unit10.lesson05.polite_request_translate.001
-    lesson_content_key: prs.a1.unit10.lesson05.bargaining_for_a_discount
-    type: translation
-    frame: {text: "{polite_request_verb}", language_code: en, direction: ltr, slot_rendering: {polite_request_verb: english_gloss}}
-    slots: {polite_request_verb: *polite_request_verb}
-    answer_derivation: {kind: slot_text, slot: polite_request_verb}
-    feedback_frame: {text: "{polite_request_verb} is the Dari word for this.", language_code: en, direction: ltr}
-  - content_key: practice.en-prs.prs.a1.unit10.lesson05.polite_gloss.002
-    lesson_content_key: prs.a1.unit10.lesson05.bargaining_for_a_discount
-    # Pools polite_request_verb with the (now بفرمایین-extended)
-    # politeness group -- 8 distinct, a coherent "polite speech" theme.
-    type: multiple_choice
-    frame: {text: "{polite_and_request}", language_code: prs, direction: rtl}
-    slots: {polite_and_request: *polite_and_request}
-    answer_derivation: {kind: slot_gloss, slot: polite_and_request}
-    feedback_frame: {text: "{polite_and_request} is used in polite speech.", language_code: en, direction: ltr}
-  - content_key: practice.en-prs.prs.a1.unit10.lesson05.polite_pair.003
-    lesson_content_key: prs.a1.unit10.lesson05.bargaining_for_a_discount
-    type: matching_pairs
-    frame: {text: "{polite_and_request_one} — {polite_and_request_two} — {polite_and_request_three} — {polite_and_request_four} — {polite_and_request_five} — {polite_and_request_six} — {polite_and_request_seven} — {polite_and_request_eight}", language_code: prs, direction: rtl}
-    slots: {polite_and_request_one: *polite_and_request, polite_and_request_two: *polite_and_request, polite_and_request_three: *polite_and_request, polite_and_request_four: *polite_and_request, polite_and_request_five: *polite_and_request, polite_and_request_six: *polite_and_request, polite_and_request_seven: *polite_and_request, polite_and_request_eight: *polite_and_request}
-    slot_relations: [{kind: distinct, slots: [polite_and_request_one, polite_and_request_two, polite_and_request_three, polite_and_request_four, polite_and_request_five, polite_and_request_six, polite_and_request_seven, polite_and_request_eight]}]
-    answer_derivation: {kind: matching_pairs, slots: [polite_and_request_one, polite_and_request_two, polite_and_request_three, polite_and_request_four, polite_and_request_five, polite_and_request_six, polite_and_request_seven, polite_and_request_eight]}
-    feedback_frame: {text: "Match each word or phrase to its English meaning.", language_code: en, direction: ltr}
+  # REAUTH 2026-07-24: lesson05 (bargaining_for_a_discount) originally
+  # had three templates here (polite_request_translate.001,
+  # polite_gloss.002, polite_pair.003) built on
+  # polite_request_verb/polite_and_request -- vocabulary this pack's
+  # notes claimed unit10 introduced but which actually belongs entirely
+  # to unit01/unit02 (بفرمایین/بدهین/می‌تانین). lesson05 itself
+  # introduces ZERO new lexemes per the real backfill (confirmed via the
+  # REAUTH_TASK.md iter_specs filter) -- all three templates were DEAD
+  # at checkpoint scope and PACK-ONLY means no new lesson05 vocabulary
+  # can be introduced here. DROPPED (recipe fix option 3); see
+  # review.notes for the tier-balance check that confirms the pack stays
+  # viable (3 live templates per tier) without them.

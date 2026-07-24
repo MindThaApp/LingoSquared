@@ -36,23 +36,53 @@ review:
     warnings. Needs the standard fresh-context review before import; no
     backfill_lexemes_en_prs.py run has actually happened against a real
     database yet in this pass.
+
+    REAUTH PASS 2026-07-24 (unit-scope DEAD/FLOOR fix,
+    scripts/_practice_unit_scope_check.py): "ones_number (یک..ده, 10
+    members)" above measured the WHOLE-DIRECTION pool, not this unit's
+    own. generate_checkpoint() only loads a unit's own lexemes, and 5 of
+    those 10 digits (یک/دو/چهار/پنج/شش) were actually first introduced in
+    unit03's family_size lesson (counting family members) -- this unit's
+    OWN ones_number pool is only 5 (سه/هفت/هشت/نه/ده). That left
+    ones_pair.004 DEAD (declared 10 slots, could never fill from unit04
+    alone). Likewise phone_pair.004 pooled in unit07's phone_opening/
+    message_word tokens to reach its declared 6 slots -- also DEAD at
+    checkpoint scope, since those tokens aren't unit04 lexemes either.
+    Fixed pack-only, no backfill/realization/overlay edits, no new
+    vocabulary: (1) ones_pair.004 widened via a new ones_and_phone preset
+    (ones_number UNION phone_word, both genuinely unit04-native) to 8
+    distinct. (2) phone_pair.004 REMOVED -- with phone_word now used by
+    ones_pair.004 and no other unit04-native tag left for it to pool with
+    honestly, this unit cannot support a second 6-distinct phone-only
+    matching_pairs template without either re-declaring an earlier-unit
+    dependency or fully duplicating ones_pair.004's own pool; per the
+    recipe's option 3 it was dropped (phone_gloss.001/phone_translate.003
+    still cover phone_word, and its tokens remain hostable via the
+    widened ones_pair.004). Structured tier for this pack is now 3 live
+    matching_pairs templates (ones_pair, teens_pair, tens_pair), meeting
+    the recipe's >=3-structured floor. Re-verified 0 DEAD / 0 below-floor
+    via scripts/_practice_unit_scope_check.py and 0 errors via
+    scripts/compile_content.py practice-validate (see coordinator report
+    for the exact invocation/output).
 tag_schema:
   part_of_speech: [noun, adjective, particle]
   agreement_tags:
-    # phone_opening/message_word declared here too (not this pack's own
-    # tags) because phone_pair pools them in from units 07 to reach 6
-    # candidates -- see the phone_and_message preset below.
-    semantic: [ones_number, teens_number, tens_number, phone_word, phone_opening, message_word]
+    semantic: [ones_number, teens_number, tens_number, phone_word]
 slot_presets:
   ones_number: &ones_number {language_code: prs, part_of_speech: adjective, agreement_tags: {semantic: ones_number}}
   teens_number: &teens_number {language_code: prs, part_of_speech: adjective, agreement_tags: {semantic: teens_number}}
   tens_number: &tens_number {language_code: prs, part_of_speech: adjective, agreement_tags: {semantic: tens_number}}
   phone_word: &phone_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: phone_word}}
-  # phone_word alone only has 3 distinct candidates; pooled with unit07's
-  # phone_opening (الو) and message_word (پیام/کوتاه) for the
-  # matching_pairs template below to reach 6 (AUTHORING_GUIDE.md #16) --
-  # coherent "phone & messaging" theme, real vocabulary only.
-  phone_and_message: &phone_and_message {language_code: prs, part_of_speech: [noun, particle, adjective], agreement_tags: {semantic: [phone_word, phone_opening, message_word]}}
+  # REAUTH 2026-07-24 (unit-scope DEAD/FLOOR fix, see review.notes below):
+  # ones_number's real unit-scoped pool is only 5 (سه/هفت/هشت/نه/ده -- یک/
+  # دو/چهار/پنج/شش were already introduced in unit03's family_size lesson
+  # and don't recount here). Widened with this unit's own phone_word (3:
+  # نمبر/تلفن/تلفنم) to reach 8 -- "numbers and phone words" is a coherent
+  # pairing for a numbers-then-phone-numbers unit, and it's real
+  # unit04-native vocabulary only (no cross-unit borrow, unlike the old
+  # phone_and_message preset this replaces -- see phone_pair.004's removal
+  # note below).
+  ones_and_phone: &ones_and_phone {language_code: prs, part_of_speech: [adjective, noun], agreement_tags: {semantic: [ones_number, phone_word]}}
 templates:
   # Lesson 1: numbers one to ten.
   - content_key: practice.en-prs.prs.a1.unit04.lesson01.ones_gloss.001
@@ -72,14 +102,17 @@ templates:
   - content_key: practice.en-prs.prs.a1.unit04.lesson01.ones_pair.004
     lesson_content_key: prs.a1.unit04.lesson01.numbers_one_to_ten
     type: matching_pairs
-    # Expanded 2->10 pairs 2026-07-06 (AUTHORING_GUIDE.md #16 retrofit) --
-    # verified via scripts/_practice_slot_check.py: exactly 10 ones_number
-    # candidates (1-10), all taught, used fully.
-    frame: {text: "{ones_number_one} — {ones_number_two} — {ones_number_three} — {ones_number_four} — {ones_number_five} — {ones_number_six} — {ones_number_seven} — {ones_number_eight} — {ones_number_nine} — {ones_number_ten}", language_code: prs, direction: rtl}
-    slots: {ones_number_one: *ones_number, ones_number_two: *ones_number, ones_number_three: *ones_number, ones_number_four: *ones_number, ones_number_five: *ones_number, ones_number_six: *ones_number, ones_number_seven: *ones_number, ones_number_eight: *ones_number, ones_number_nine: *ones_number, ones_number_ten: *ones_number}
-    slot_relations: [{kind: distinct, slots: [ones_number_one, ones_number_two, ones_number_three, ones_number_four, ones_number_five, ones_number_six, ones_number_seven, ones_number_eight, ones_number_nine, ones_number_ten]}]
-    answer_derivation: {kind: matching_pairs, slots: [ones_number_one, ones_number_two, ones_number_three, ones_number_four, ones_number_five, ones_number_six, ones_number_seven, ones_number_eight, ones_number_nine, ones_number_ten]}
-    feedback_frame: {text: "Match each Dari number word to its digit.", language_code: en, direction: ltr}
+    # REAUTH 2026-07-24: was DEAD (declared 10 slots but this unit only
+    # introduces 5 of the 10 ones-digits itself -- 1/2/4/5/6 were already
+    # taught in unit03's family_size lesson and don't recount at
+    # checkpoint scope). Widened via ones_and_phone (see preset above) to
+    # 8 distinct: سه/هفت/هشت/نه/ده (this unit's own 5 digits) + نمبر/تلفن/
+    # تلفنم (phone_word, this unit's own lesson05 vocabulary).
+    frame: {text: "{item_one} — {item_two} — {item_three} — {item_four} — {item_five} — {item_six} — {item_seven} — {item_eight}", language_code: prs, direction: rtl}
+    slots: {item_one: *ones_and_phone, item_two: *ones_and_phone, item_three: *ones_and_phone, item_four: *ones_and_phone, item_five: *ones_and_phone, item_six: *ones_and_phone, item_seven: *ones_and_phone, item_eight: *ones_and_phone}
+    slot_relations: [{kind: distinct, slots: [item_one, item_two, item_three, item_four, item_five, item_six, item_seven, item_eight]}]
+    answer_derivation: {kind: matching_pairs, slots: [item_one, item_two, item_three, item_four, item_five, item_six, item_seven, item_eight]}
+    feedback_frame: {text: "Match each Dari number or phone word to its meaning.", language_code: en, direction: ltr}
 
   # Lesson 2: numbers eleven to twenty.
   - content_key: practice.en-prs.prs.a1.unit04.lesson02.teens_gloss.001
@@ -150,15 +183,16 @@ templates:
     slots: {phone_word: *phone_word}
     answer_derivation: {kind: slot_text, slot: phone_word}
     feedback_frame: {text: "{phone_word} is the Dari word for this.", language_code: en, direction: ltr}
-  - content_key: practice.en-prs.prs.a1.unit04.lesson05.phone_pair.004
-    lesson_content_key: prs.a1.unit04.lesson05.phone_numbers
-    type: matching_pairs
-    # Expanded 2->6 pairs 2026-07-06 (AUTHORING_GUIDE.md #16 retrofit),
-    # pooling phone_word with unit07's phone_opening/message_word
-    # (phone_and_message preset above) -- verified via
-    # scripts/_practice_slot_check.py.
-    frame: {text: "{phone_word_one} — {phone_word_two} — {phone_word_three} — {phone_word_four} — {phone_word_five} — {phone_word_six}", language_code: prs, direction: rtl}
-    slots: {phone_word_one: *phone_and_message, phone_word_two: *phone_and_message, phone_word_three: *phone_and_message, phone_word_four: *phone_and_message, phone_word_five: *phone_and_message, phone_word_six: *phone_and_message}
-    slot_relations: [{kind: distinct, slots: [phone_word_one, phone_word_two, phone_word_three, phone_word_four, phone_word_five, phone_word_six]}]
-    answer_derivation: {kind: matching_pairs, slots: [phone_word_one, phone_word_two, phone_word_three, phone_word_four, phone_word_five, phone_word_six]}
-    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+  # phone_pair.004 REMOVED 2026-07-24 (REAUTH pass, see review.notes below):
+  # was DEAD (declared 6 slots pooling in unit07's phone_opening/
+  # message_word tokens, which don't exist in unit04's own checkpoint-
+  # scoped lexeme pool -- generate_checkpoint() only loads THIS unit's
+  # lexemes). phone_word's real unit04-scoped pool is 3, and every other
+  # unit04-native tag is already spoken for (ones_and_phone above already
+  # claims phone_word itself); the unit genuinely can't reach 6 distinct
+  # phone-specific pairs of its own, so per the recipe's option 3 this
+  # template was dropped rather than re-anchored to borrowed vocabulary.
+  # phone_gloss.001 and phone_translate.003 below still cover phone_word
+  # (both floor-free / already at the 3-candidate floor), and phone_word's
+  # tokens remain hostable via the widened ones_pair.004 matching_pairs
+  # template above, so lesson05 stays represented in the checkpoint.

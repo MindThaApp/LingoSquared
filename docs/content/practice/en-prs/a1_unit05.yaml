@@ -38,18 +38,36 @@ review:
     out of scope for a practice-pack-only pass. Both new word_order frames reuse real sentence patterns already taught verbatim
     elsewhere in this unit ([place] این‌جا است from lesson04.exercise07; میدان هوایی [location_word] است from lesson04.teach.airport_far),
     confirmed grammatical for every candidate in each pool, not invented. Re-verified: scripts/_practice_slot_check.py 0 problems
-    across the whole en-prs pack; scripts/compile_content.py practice-validate for the full pack -- 0 errors/0 warnings.'
+    across the whole en-prs pack; scripts/compile_content.py practice-validate for the full pack -- 0 errors/0 warnings.
+
+    REAUTH PASS 2026-07-24 (unit-scope DEAD/FLOOR fix, scripts/_practice_unit_scope_check.py): the whole-direction
+    checks above only prove a slot has candidates SOMEWHERE in en-prs; generate_checkpoint() scopes candidates to
+    THIS unit''s own lexemes only. دفتر (this pack''s assumed 8th city_place member) was actually introduced in
+    unit01, and نزدیک (the assumed 4th location_word member) was actually introduced in unit02 -- neither recounts
+    at unit05''s checkpoint scope. That left place_pair.004 DEAD (8 slots declared, real ceiling 7) and
+    location_pair.004 DEAD (4 slots declared, real ceiling 3). Fixed pack-only, no backfill/realization/overlay
+    edits, no new vocabulary: (1) place_pair.004 reduced to 7 slots, matching its honest unit-scoped city_place
+    pool exactly -- still clears the 6-pair floor, no widening needed. (2) location_pair.004 widened via a new
+    location_review preset (location_word UNION direction_word UNION sequence_word UNION home_description_word =
+    3+1+1+1 = 6 distinct: دور/این‌جا/آن‌جا/مستقیم/بعد/مقابل), all genuinely introduced by this unit''s own lesson04/
+    lesson06, and disjoint from place_pair.004''s city_place pool. Re-verified 0 DEAD / 0 below-floor for this pack
+    via scripts/_practice_unit_scope_check.py and 0 errors via scripts/compile_content.py practice-validate (see
+    coordinator report for the exact invocation/output).'
 tag_schema:
   part_of_speech:
   - noun
   - adjective
   - adverb
+  - preposition
   agreement_tags:
     semantic:
     - city_place
     - location_word
     - volume_en_prs_a1_unit05_city_place_06_single
     - volume_en_prs_a1_unit05_location_word_08_single
+    - direction_word
+    - sequence_word
+    - home_description_word
 slot_presets:
   city_place: &id001
     language_code: prs
@@ -63,6 +81,27 @@ slot_presets:
     - adverb
     agreement_tags:
       semantic: location_word
+  # REAUTH 2026-07-24 (unit-scope DEAD/FLOOR fix, see review.notes below):
+  # location_word alone has only 3 unit-scoped candidates (دور/این‌جا/
+  # آن‌جا -- نزدیک, the pack's original assumed 4th member, was actually
+  # introduced in unit02). Widened with the OTHER small "spatial /
+  # sequential description" tags this unit's own lesson06 dialogue
+  # genuinely introduces (direction_word: مستقیم; sequence_word: بعد;
+  # home_description_word: مقابل) to reach 6 distinct without touching
+  # city_place (kept fully disjoint from place_pair.004's pool below).
+  location_review: &location_review
+    language_code: prs
+    part_of_speech:
+    - adjective
+    - adverb
+    - noun
+    - preposition
+    agreement_tags:
+      semantic:
+      - location_word
+      - direction_word
+      - sequence_word
+      - home_description_word
 templates:
 - content_key: practice.en-prs.prs.a1.unit05.lesson01.place_gloss.001
   lesson_content_key: prs.a1.unit05.lesson01.everyday_places
@@ -101,9 +140,14 @@ templates:
 - content_key: practice.en-prs.prs.a1.unit05.lesson01.place_pair.004
   lesson_content_key: prs.a1.unit05.lesson01.everyday_places
   type: matching_pairs
+  # REAUTH 2026-07-24: was DEAD (declared 8 slots; دفتر, the assumed 8th
+  # city_place member, was actually introduced in unit01, not this unit).
+  # Reduced to 7, this unit's real unit-scoped city_place ceiling
+  # (بازار/بانک/مسجد/شفاخانه/مکتب/دواخانه/سفارت) -- still clears the
+  # 6-pair floor with no widening needed.
   frame:
     text: '{city_place_one} — {city_place_two} — {city_place_three} — {city_place_four} — {city_place_five} — {city_place_six}
-      — {city_place_seven} — {city_place_eight}'
+      — {city_place_seven}'
     language_code: prs
     direction: rtl
   slots:
@@ -114,7 +158,6 @@ templates:
     city_place_five: *id001
     city_place_six: *id001
     city_place_seven: *id001
-    city_place_eight: *id001
   slot_relations:
   - kind: distinct
     slots:
@@ -125,7 +168,6 @@ templates:
     - city_place_five
     - city_place_six
     - city_place_seven
-    - city_place_eight
   answer_derivation:
     kind: matching_pairs
     slots:
@@ -136,7 +178,6 @@ templates:
     - city_place_five
     - city_place_six
     - city_place_seven
-    - city_place_eight
   feedback_frame:
     text: Match each place with its English meaning.
     language_code: en
@@ -197,29 +238,41 @@ templates:
 - content_key: practice.en-prs.prs.a1.unit05.lesson04.location_pair.004
   lesson_content_key: prs.a1.unit05.lesson04.simple_location_answers
   type: matching_pairs
+  # REAUTH 2026-07-24: was DEAD (declared 4 slots; نزدیک, the assumed 4th
+  # location_word member, was actually introduced in unit02). Widened via
+  # location_review (see preset above) to 6 distinct: دور/این‌جا/آن‌جا
+  # (location_word) + مستقیم (direction_word) + بعد (sequence_word) +
+  # مقابل (home_description_word) -- all genuinely unit05-native, and
+  # disjoint from place_pair.004's city_place pool above.
   frame:
-    text: '{location_word_one} — {location_word_two} — {location_word_three} — {location_word_four}'
+    text: '{item_one} — {item_two} — {item_three} — {item_four} — {item_five} — {item_six}'
     language_code: prs
     direction: rtl
   slots:
-    location_word_one: *id002
-    location_word_two: *id002
-    location_word_three: *id002
-    location_word_four: *id002
+    item_one: *location_review
+    item_two: *location_review
+    item_three: *location_review
+    item_four: *location_review
+    item_five: *location_review
+    item_six: *location_review
   slot_relations:
   - kind: distinct
     slots:
-    - location_word_one
-    - location_word_two
-    - location_word_three
-    - location_word_four
+    - item_one
+    - item_two
+    - item_three
+    - item_four
+    - item_five
+    - item_six
   answer_derivation:
     kind: matching_pairs
     slots:
-    - location_word_one
-    - location_word_two
-    - location_word_three
-    - location_word_four
+    - item_one
+    - item_two
+    - item_three
+    - item_four
+    - item_five
+    - item_six
   feedback_frame:
     text: Match each word to its English meaning.
     language_code: en
