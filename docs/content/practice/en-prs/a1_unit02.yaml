@@ -215,12 +215,24 @@ templates:
     language_code: prs
     direction: rtl
   slots:
-    name_word: *id011
+    # NOT *id011: with the person_name union, 3 of 4 options were
+    # "(name)" transliteration glosses (§6.1 proper_noun self-gloss).
+    # This noun-only union of the unit's person words keeps the pool
+    # >=3 distinct real glosses; names stay in translation-only
+    # (name_translate.003).
+    name_word:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic:
+        - name_word
+        - relationship_word
+        - title
   answer_derivation:
     kind: slot_gloss
     slot: name_word
   feedback_frame:
-    text: '{name_word} is a name or a name-related word.'
+    text: '{name_word} is a word used when meeting or addressing people.'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit02.lesson01.name_translate.003
