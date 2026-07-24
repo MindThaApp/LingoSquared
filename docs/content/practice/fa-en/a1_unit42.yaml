@@ -24,7 +24,42 @@ review:
     animal)"), the wrong sense with an irrelevant pet parenthetical that leaked into this unit''s personality_adjective exercises;
     corrected to "مهربان". All slot members taught, the generative "My neighbor is very {item}" frame grammatical for all
     six adjectives, answer shapes and feedback sound. compile_content.py practice-validate, scripts/_practice_slot_check.py,
-    and backfill_lexemes_fa_en.py --dry-run all clean. Upgraded to reviewed.'
+    and backfill_lexemes_fa_en.py --dry-run all clean. Upgraded to reviewed.
+
+
+    Unit-scope reauth (2026-07-24, PACK-ONLY, per docs/content/PRACTICE_PACK_RECIPE.md): scripts/_practice_unit_scope_check.py
+    found match.003 and match.003.volume_match.007 DEAD -- both matching_pairs declared 6 distinct-fill slots against the
+    `personality_adjective` tag, but that tag''s real UNIT-SCOPED pool (checkpoint scope, not the whole-direction pool the
+    old slot check used) is only 5 (funny/hardworking/shy/calm/talkative from lesson01; "friendly" also carries this tag
+    but is introduced by unit32, invisible to unit42''s own checkpoint -- recipe DO-NOT #2). Fixed via recipe SS3.1(c)/SS8''s
+    preferred technique, but scoped NARROWLY to just the two dead matching_pairs templates: added a SEPARATE
+    `personality_adjective_wide` preset (`&id_wide`, `language_code: en, part_of_speech: adjective`, no semantic
+    constraint) used ONLY by match.003 and match.003.volume_match.007, leaving the shared `id001` anchor (still used by
+    choose.001/listen.002/translate.004/order.005/translate_sentence.006 -- none of which were dead) untouched at its
+    original `semantic: personality_adjective` constraint. This distinction matters: matching_pairs'' frame
+    (`{first} — {second}`) has no literal text, so widening its pool to every unit-scoped adjective is safe regardless
+    of what Endless Practice draws course-wide (SS3.1(c)) -- but order.005/translate_sentence.006 render a FIXED
+    sentence ("My neighbor is very {item}"), which SS1.1/SS6.4 require to stay grammatical for every COURSE-scoped
+    (whole-A1) candidate, and bare `part_of_speech: adjective` at A1 course scope would pull in the entire A1
+    curriculum''s adjectives (color/price/size words like "expensive" that are NOT grammatical as "My neighbor is very
+    expensive") -- an early draft of this fix broadened `id001` itself and would have introduced exactly that defect;
+    caught before finalizing and reverted to the two-preset design above. Verified via iter_specs() that this unit''s
+    own lesson02-04 additionally introduce 7 more untagged adjectives (comfortable/relaxed lesson03; creative/upset/
+    outgoing/organized/patient lesson04) that this backfill module never gave a semantic tag -- adding a tag would be
+    a backfill edit, out of PACK-ONLY scope, so the wide, matching_pairs-only preset is the correct lever. Unit-scoped
+    POS-only pool for `id_wide` is 12 distinct adjectives (well over the 6-pair floor), safe here specifically because
+    this unit IS a personality-description unit (lesson02 "talking_about_someones_character", lesson03
+    "dialogue_what_is_daniel_like", lesson04 "three_friends_three_personalities") and matching_pairs never renders a
+    sentence, only a token + its gloss. One near-duplicate-gloss pair flagged for the coordinator:
+    "calm" (آرام) and "relaxed" (آرام (احساس)) are close but not identical Farsi glosses (the parenthetical "(احساس)"
+    = "(feeling)" is the real backfill-authored disambiguator, not something this pack added) -- judged an acceptable
+    discrimination (comparable to a singular/plural pair), not a true interchangeable duplicate, but worth a human
+    second look. Also as a side benefit this repurposing gives lesson02-04''s otherwise template-invisible vocabulary
+    real target-lexeme coverage for the first time. Before: 2 DEAD (both matching_pairs). After:
+    scripts/_practice_unit_scope_check.py reports 0 DEAD, 0 FLOOR for this pack. Re-validated with
+    compile_content.py practice-validate (0 errors) after the change. review.status left at "reviewed" from the prior
+    pass since this is a scoped slot-constraint fix on top of already-reviewed content, not a fresh unreviewed author --
+    the coordinator should still confirm the near-duplicate calm/relaxed gloss call above.'
 tag_schema:
   part_of_speech:
   - symbol
@@ -47,6 +82,9 @@ slot_presets:
     part_of_speech: adjective
     agreement_tags:
       semantic: personality_adjective
+  personality_adjective_wide: &id_wide
+    language_code: en
+    part_of_speech: adjective
 templates:
 - content_key: practice.fa-en.en.a1.unit42.lesson01.choose.001
   lesson_content_key: en.a1.unit42.lesson01.personality_vocabulary
@@ -88,12 +126,12 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    first: *id001
-    second: *id001
-    third: *id001
-    fourth: *id001
-    fifth: *id001
-    sixth: *id001
+    first: *id_wide
+    second: *id_wide
+    third: *id_wide
+    fourth: *id_wide
+    fifth: *id_wide
+    sixth: *id_wide
   slot_relations:
   - kind: distinct
     slots:
@@ -225,16 +263,12 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    first: &id002
-      language_code: en
-      part_of_speech: adjective
-      agreement_tags:
-        semantic: personality_adjective
-    second: *id002
-    third: *id002
-    fourth: *id002
-    fifth: *id002
-    sixth: *id002
+    first: *id_wide
+    second: *id_wide
+    third: *id_wide
+    fourth: *id_wide
+    fifth: *id_wide
+    sixth: *id_wide
   slot_relations:
   - kind: distinct
     slots:

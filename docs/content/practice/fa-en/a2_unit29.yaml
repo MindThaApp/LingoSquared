@@ -99,16 +99,51 @@ review:
     fa-en pack-path list) and compile_content.py practice-validate, 0
     errors/0 warnings -- see the commit message for the exact run output.
     Still needs the standard fresh-context review before import.
+
+
+    Unit-scope reauth (2026-07-24, PACK-ONLY, per docs/content/PRACTICE_PACK_RECIPE.md): scripts/_practice_unit_scope_check.py
+    found 6 DEAD template-slots: this pack's own "hand math done by hand, not trusted to the pooled check" note above
+    still measured COURSE scope (reuse anywhere in the A2 course), not the stricter UNIT scope generate_checkpoint()
+    actually uses (recipe SS1.1) -- the same gap found across this batch's sibling units. `possessive` (my/your/his/her)
+    has zero a2.unit29-introduced members via iter_specs() (its only A2 members belong to unit25), despite this pack's
+    own claim that lesson02/03 "reintroduce" my/your -- the realization TEXT does reuse those words, but the shared
+    backfill's lexeme classification only records a token's first introduction, so no new a2.unit29 lexeme entry exists
+    for either. `bureaucracy_noun` (appointment/document/form/confirmation) is the same story (zero a2.unit29 members).
+    So lesson02.possessive_order.002, lesson03.possessive_order.002, lesson03.possessive_translate_bare.003,
+    lesson04.match.001 (needed 7 fills from the maintenance_noun+bureaucracy_noun union, had only the 3 native
+    maintenance_noun members), lesson04.bureaucracy_listen.002, and lesson04.bureaucracy_translate_bare.003 were all
+    DEAD at checkpoint scope. Neither `possessive` nor `bureaucracy_noun` has a unit-native substitute for their
+    specific frames, so the two possessive templates and the two bureaucracy_noun-only templates (listen/translate)
+    were DROPPED outright -- production tier survives unaffected (translate.003, room_translate_bare.004,
+    maintenance_translate.004 -- still 3). match.001 was RE-ANCHORED rather than dropped: widened from the dead
+    maintenance_noun+bureaucracy_noun union to a bare `part_of_speech: noun` slot (no semantic constraint, recipe
+    SS3.1(c)) and reduced from 7 declared pairs to 6 to match the real pool -- this unit's own lessons introduce 12
+    distinct nouns (sink/building/manager/plumber/repair/kitchen/apartment/bathroom/problem/morning/tomorrow/home),
+    comfortably clearing 6; safe because matching_pairs' frame has no literal text (course-scope grammaticality is
+    moot), and hand-checked for confusable Farsi glosses across the 12 -- none found. Dropping the two possessive
+    templates left the structured tier at 0 (this pack had no other word_order and match.001 was independently dead
+    before its own fix), well under the recipe's >=3-per-tier bar even after fixing match.001 (only 1), so two
+    replacement word_order templates were added, both anchored to lesson01 and both verified grammatical for their
+    A2-course-wide pools (each tag is exclusive to this unit at A2 scope, so unit-scope and course-scope are
+    identical): (1) lesson01.maintenance_order.005, "I called about the {item}" over `maintenance_noun`
+    (sink/plumber/repair) -- "I called about the sink/plumber/repair" all hold, chosen over an earlier "I need to call
+    a {item}" draft that broke for "sink" (you don't call a sink) and "repair" (you call ABOUT a repair, not "call a
+    repair"). (2) lesson01.room_order.006, "The problem is in the {item}" over `room_noun` (kitchen/bathroom) -- both
+    hold and it fits the unit's own reported-problem theme. Structured tier is now 3 (maintenance_order.005,
+    room_order.006, match.001). tag_schema's semantic list updated: `bureaucracy_noun`/`possessive` removed (no
+    longer referenced), no new semantic tags needed (match.001's fix uses bare part_of_speech, not a new tag). Net:
+    15 -> 12 templates (5 dropped [2 possessive + 2 bureaucracy_noun-only + none else], 2 added, match.001 re-anchored
+    in place). Before: 6 DEAD. After: scripts/_practice_unit_scope_check.py reports 0 DEAD, 0 FLOOR. Re-validated
+    with compile_content.py practice-validate (0 errors). review.status left as unreviewed pending a fresh-context
+    pass over this reauth.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [maintenance_noun, bureaucracy_noun, possessive, room_noun]
+    semantic: [maintenance_noun, room_noun]
 slot_presets:
   maintenance_noun: &maintenance_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: maintenance_noun}}
-  bureaucracy_noun: &bureaucracy_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: bureaucracy_noun}}
-  possessive: &possessive {language_code: en, part_of_speech: pronoun, agreement_tags: {semantic: possessive}}
   room_noun: &room_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: room_noun}}
-  maintenance_bureaucracy_combined: &maintenance_bureaucracy_combined {language_code: en, part_of_speech: noun, agreement_tags: {semantic: [maintenance_noun, bureaucracy_noun]}}
+  unit29_noun: &unit29_noun {language_code: en, part_of_speech: noun}
 templates:
   - content_key: practice.fa-en.en.a2.unit29.lesson01.choose.001
     lesson_content_key: en.a2.unit29.lesson01.repair_vocabulary
@@ -145,13 +180,20 @@ templates:
     slots: {item: *maintenance_noun}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a2.unit29.lesson02.possessive_order.002
-    lesson_content_key: en.a2.unit29.lesson02.calling_to_report_a_problem
+  - content_key: practice.fa-en.en.a2.unit29.lesson01.maintenance_order.005
+    lesson_content_key: en.a2.unit29.lesson01.repair_vocabulary
     type: word_order
-    frame: {text: "I'd like to report a problem with {item} kitchen sink", language_code: en, direction: ltr}
-    slots: {item: *possessive}
-    answer_derivation: {kind: render_frame, frame: {text: "I'd like to report a problem with {item} kitchen sink", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} ضمیر ملکی این جمله است.", language_code: fa, direction: rtl}
+    frame: {text: "I called about the {item}", language_code: en, direction: ltr}
+    slots: {item: *maintenance_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "I called about the {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} واژه‌ای است که در این جمله به کار رفته است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a2.unit29.lesson01.room_order.006
+    lesson_content_key: en.a2.unit29.lesson01.repair_vocabulary
+    type: word_order
+    frame: {text: "The problem is in the {item}", language_code: en, direction: ltr}
+    slots: {item: *room_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "The problem is in the {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} واژه‌ای است که در این جمله به کار رفته است.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a2.unit29.lesson02.listen.003
     lesson_content_key: en.a2.unit29.lesson02.calling_to_report_a_problem
     type: listen_select
@@ -166,20 +208,6 @@ templates:
     slots: {item: *maintenance_noun}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a2.unit29.lesson03.possessive_order.002
-    lesson_content_key: en.a2.unit29.lesson03.reading_a_repair_notice
-    type: word_order
-    frame: {text: "{item} report of a leaking kitchen sink has been received", language_code: en, direction: ltr}
-    slots: {item: *possessive}
-    answer_derivation: {kind: render_frame, frame: {text: "{item} report of a leaking kitchen sink has been received", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} ضمیر ملکی این جمله است.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a2.unit29.lesson03.possessive_translate_bare.003
-    lesson_content_key: en.a2.unit29.lesson03.reading_a_repair_notice
-    type: translation
-    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
-    slots: {item: *possessive}
-    answer_derivation: {kind: slot_text, slot: item}
-    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a2.unit29.lesson03.listen.004
     lesson_content_key: en.a2.unit29.lesson03.reading_a_repair_notice
     type: listen_select
@@ -190,25 +218,11 @@ templates:
   - content_key: practice.fa-en.en.a2.unit29.lesson04.match.001
     lesson_content_key: en.a2.unit29.lesson04.maintenance_dialogue
     type: matching_pairs
-    frame: {text: "{first} — {second}", language_code: en, direction: ltr}
-    slots: {first: *maintenance_bureaucracy_combined, second: *maintenance_bureaucracy_combined, third: *maintenance_bureaucracy_combined, fourth: *maintenance_bureaucracy_combined, fifth: *maintenance_bureaucracy_combined, sixth: *maintenance_bureaucracy_combined, seventh: *maintenance_bureaucracy_combined}
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth, seventh]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth, seventh]}
+    frame: {text: "{first} — {second} — {third} — {fourth} — {fifth} — {sixth}", language_code: en, direction: ltr}
+    slots: {first: *unit29_noun, second: *unit29_noun, third: *unit29_noun, fourth: *unit29_noun, fifth: *unit29_noun, sixth: *unit29_noun}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
     feedback_frame: {text: "هر واژه را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a2.unit29.lesson04.bureaucracy_listen.002
-    lesson_content_key: en.a2.unit29.lesson04.maintenance_dialogue
-    type: listen_select
-    frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *bureaucracy_noun}
-    answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "واژه‌ای که در این گفتگو شنیدید {item} بود.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a2.unit29.lesson04.bureaucracy_translate_bare.003
-    lesson_content_key: en.a2.unit29.lesson04.maintenance_dialogue
-    type: translation
-    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
-    slots: {item: *bureaucracy_noun}
-    answer_derivation: {kind: slot_text, slot: item}
-    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a2.unit29.lesson04.maintenance_translate.004
     lesson_content_key: en.a2.unit29.lesson04.maintenance_dialogue
     type: translation

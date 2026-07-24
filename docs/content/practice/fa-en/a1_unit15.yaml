@@ -57,14 +57,58 @@ review:
     `compile_content.py practice-validate` still 0/0, full 24-unit fa-en
     A1 practice import now succeeds end-to-end against a fresh isolated
     stack.
+
+    Re-authored 2026-07-24 (unit-scope DEAD-template pass, docs/content/
+    PRACTICE_PACK_RECIPE.md): scripts/_practice_unit_scope_check.py found
+    total_order.002/total_translate.004/its_order.002/its_translate.004
+    DEAD (0 unit-scoped candidates) and payment_pair.003 below the
+    6-pair matching_pairs floor (only 4 unit-scoped payment_method
+    members). "number_no_hundred" is established by unit03, an EARLIER
+    unit -- recipe DO-NOT #2; generate_checkpoint() only loads unit15's
+    own lexemes, so this slot has always had zero candidates at
+    checkpoint scope despite passing the whole-direction slot check
+    referenced in the notes above. unit15's OWN numeric lexemes are the
+    literal digit tokens "1"/"10" (introduced fresh by this unit's own
+    lesson03, no semantic tag at all -- unlike the spelled-out
+    number words unit03 tags "number"/"number_no_hundred", digit-form
+    tokens never get a semantic tag from en_agreement_tags()), so
+    re-anchoring the SAME sentence frame to a native tag is not possible
+    without a backfill change (out of scope, PACK-ONLY). Checked
+    part_of_speech: symbol course-wide as an alternative: it also
+    contains times ("11:30"), prices ("$10"), phone/reference numbers
+    ("4471", "911") and a bare letter ("b") -- nowhere near safe for a
+    literal "The total is {item} dollars"/"It's {item} dollars" frame at
+    course scope, so word_order is DROPPED for this slot rather than
+    re-anchored (recipe SS3.1(c)/SS1.1). payment_method/card_type
+    (native, unchanged: cash/card/credit/debit and credit/debit
+    respectively) and their existing templates (payment_meaning.001,
+    payment_listen.002, payment_translate.004, take_cards_order.001,
+    card_type_translate.003, payment_meaning.004, payment_meaning.001
+    lesson03, payment_listen.001) are untouched -- none were DEAD or
+    below floor. Fixes applied: (1) payment_pair.003 widened by dropping
+    the payment_method tag and constraining by part_of_speech only
+    ([noun, verb, symbol], no semantic tag) -- unit-wide this pool is
+    cash/card/credit/debit/total/cards/pay/tax/1/10, 10 distinct tokens
+    with 10 distinct glosses, safe at any scope because matching_pairs
+    has no literal frame text; widened from 4 to 6 pairs. (2) The 4 dead
+    templates are replaced, not re-anchored, by 3 new templates on the
+    same untagged 10-token pool, anchored to lesson03 (the real-vocab
+    lesson the 4 dead ones already delegated to): a matching_pairs, a
+    bare-word translation, and (anchored lesson02, for tier depth) a
+    multiple_choice. Read every gloss in the pool against unit15's own
+    realization -- no mis-glosses found. Net: 13 templates (4 DEAD, 1
+    below-floor) -> 12 templates (all live, all floors clear): 6
+    recognition, 3 structured, 3 production. Verified with
+    scripts/_practice_unit_scope_check.py: 0 DEAD, 0 below-floor for
+    this file.
 tag_schema:
-  part_of_speech: [noun]
+  part_of_speech: [noun, verb, symbol]
   agreement_tags:
-    semantic: [payment_method, card_type, number_no_hundred]
+    semantic: [payment_method, card_type]
 slot_presets:
   payment_method: &payment_method {language_code: en, part_of_speech: noun, agreement_tags: {semantic: payment_method}}
   card_type: &card_type {language_code: en, part_of_speech: noun, agreement_tags: {semantic: card_type}}
-  number_no_hundred: &number_no_hundred {language_code: en, part_of_speech: noun, agreement_tags: {semantic: number_no_hundred}}
+  content_word: &content_word {language_code: en, part_of_speech: [noun, verb, symbol]}
 templates:
   - content_key: practice.fa-en.en.a1.unit15.lesson01.payment_meaning.001
     lesson_content_key: en.a1.unit15.lesson01.payment_words
@@ -83,10 +127,10 @@ templates:
   - content_key: practice.fa-en.en.a1.unit15.lesson01.payment_pair.003
     lesson_content_key: en.a1.unit15.lesson01.payment_words
     type: matching_pairs
-    frame: {text: "{first_word} — {second_word}", language_code: en, direction: ltr}
-    slots: {first_word: *payment_method, second_word: *payment_method, third_word: *payment_method, fourth_word: *payment_method}
-    slot_relations: [{kind: distinct, slots: [first_word, second_word, third_word, fourth_word]}]
-    answer_derivation: {kind: matching_pairs, slots: [first_word, second_word, third_word, fourth_word]}
+    frame: {text: "{first_word} — {second_word} — {third_word} — {fourth_word} — {fifth_word} — {sixth_word}", language_code: en, direction: ltr}
+    slots: {first_word: *content_word, second_word: *content_word, third_word: *content_word, fourth_word: *content_word, fifth_word: *content_word, sixth_word: *content_word}
+    slot_relations: [{kind: distinct, slots: [first_word, second_word, third_word, fourth_word, fifth_word, sixth_word]}]
+    answer_derivation: {kind: matching_pairs, slots: [first_word, second_word, third_word, fourth_word, fifth_word, sixth_word]}
     feedback_frame: {text: "دو واژهٔ پرداخت را به معنای فارسی آن‌ها وصل کردید.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit15.lesson01.payment_translate.004
     lesson_content_key: en.a1.unit15.lesson01.payment_words
@@ -116,6 +160,13 @@ templates:
     slots: {item: *payment_method}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} یکی از واژه‌های پرداخت است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit15.lesson02.content_choose.005
+    lesson_content_key: en.a1.unit15.lesson02.asking_about_payment
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *content_word}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit15.lesson03.payment_meaning.001
     lesson_content_key: en.a1.unit15.lesson03.reading_a_receipt
     type: multiple_choice
@@ -123,20 +174,21 @@ templates:
     slots: {item: *payment_method}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} یکی از واژه‌های پرداخت است.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit15.lesson03.total_order.002
+  - content_key: practice.fa-en.en.a1.unit15.lesson03.content_match.005
     lesson_content_key: en.a1.unit15.lesson03.reading_a_receipt
-    type: word_order
-    frame: {text: "The total is {item} dollars", language_code: en, direction: ltr}
-    slots: {item: *number_no_hundred}
-    answer_derivation: {kind: render_frame, frame: {text: "The total is {item} dollars", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} مبلغ جمع کل روی رسید است.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit15.lesson03.total_translate.004
+    type: matching_pairs
+    frame: {text: "{first} — {second} — {third} — {fourth} — {fifth} — {sixth}", language_code: en, direction: ltr}
+    slots: {first: *content_word, second: *content_word, third: *content_word, fourth: *content_word, fifth: *content_word, sixth: *content_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "هر واژه را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit15.lesson03.content_translate.006
     lesson_content_key: en.a1.unit15.lesson03.reading_a_receipt
     type: translation
-    frame: {text: "جمع کل {item} دلار است.", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
-    slots: {item: *number_no_hundred}
-    answer_derivation: {kind: render_frame, frame: {text: "The total is {item} dollars", language_code: en, direction: ltr}}
-    feedback_frame: {text: "The total is {item} dollars یعنی جمع کل {item} دلار است.", language_code: fa, direction: rtl}
+    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *content_word}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "معادل انگلیسی {item} است.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit15.lesson04.payment_listen.001
     lesson_content_key: en.a1.unit15.lesson01.payment_words
     type: listen_select
@@ -144,17 +196,3 @@ templates:
     slots: {item: *payment_method}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} واژه‌ای است که شنیدید.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit15.lesson04.its_order.002
-    lesson_content_key: en.a1.unit15.lesson03.reading_a_receipt
-    type: word_order
-    frame: {text: "It's {item} dollars", language_code: en, direction: ltr}
-    slots: {item: *number_no_hundred}
-    answer_derivation: {kind: render_frame, frame: {text: "It's {item} dollars", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} مبلغی است که در این پاسخ آمده.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit15.lesson04.its_translate.004
-    lesson_content_key: en.a1.unit15.lesson03.reading_a_receipt
-    type: translation
-    frame: {text: "{item} دلار است.", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
-    slots: {item: *number_no_hundred}
-    answer_derivation: {kind: render_frame, frame: {text: "It's {item} dollars", language_code: en, direction: ltr}}
-    feedback_frame: {text: "It's {item} dollars یعنی {item} دلار است.", language_code: fa, direction: rtl}

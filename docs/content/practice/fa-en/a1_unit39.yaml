@@ -4,8 +4,8 @@ source_language: fa
 target_language: en
 unit_content_key: en.a1.unit39.neighborhood
 review:
-  status: reviewed
-  fresh_context: true
+  status: unreviewed
+  fresh_context: 'false'
   notes: 'Authored 2026-07-11, fa-en depth-audit lane (unit 10 of the 30-42 batch, see unit30''s pack notes for the full batch
     rationale).
 
@@ -26,7 +26,62 @@ review:
     Iranian Farsi with correct RTL/ZWNJ, answer shapes (word_order list-shaped, matching_pairs covers every pair) are sound,
     listen_select distractors are distinct single vocabulary words, and no bare YAML booleans or snake_case jargon leak. compile_content.py
     practice-validate, scripts/_practice_slot_check.py, and backfill_lexemes_fa_en.py --dry-run all clean. No defects found;
-    upgraded to reviewed.'
+    upgraded to reviewed.
+
+
+    Re-anchor fix 2026-07-24 (unit-scope DEAD-template pass, docs/content/PRACTICE_PACK_RECIPE.md §1.1/DO-NOT
+    #2): this pack is the exact case the recipe''s own DO-NOT #2 names as guaranteed-dead ("fa-en a1_unit39").
+    The 2026-07-11 authoring note''s "AUTHORING_GUIDE.md #18''s same-course-level reuse allowance" reasoning
+    does not apply to MC/listen_select/matching_pairs -- DO-NOT #12 explicitly reserves same-course-level tag
+    reuse for word_order/translation (floor-free types) only, and generate_checkpoint() scopes EVERY type,
+    including MC/listen/matching_pairs, to the unit''s own lessons regardless of what''s legal course-wide.
+    scripts/_practice_unit_scope_check.py confirmed all 4 tag members of neighborhood_noun (neighbor, park,
+    store, street) belong to EARLIER units at CHECKPOINT scope: "neighbor" itself was already classified in
+    unit34 (this unit''s own "teach.neighbor" re-teaches the same token, so the dedup-by-token spec in
+    backfill_lexemes_fa_en.py attributes it to unit34, not here -- exactly the same defect class the
+    authoring note thought it had avoided by "verifying `neighbor` is genuinely new," but that verification
+    was wrong), and park/store/street were already unit09/05/10 as the note itself says. Net: 0 unit-scoped
+    candidates for all 4 members -- every one of the 6 original templates (choose.001, listen.002, match.003,
+    translate.004, order.005, and order.005''s volume_fill.006 fill_in_blank) was DEAD, and the checkpoint for
+    this unit has never generated a single item.
+
+    Re-anchored choose.001/listen.002/match.003/translate.004 from neighborhood_noun to a plain
+    `part_of_speech: noun` constraint (no semantic tag, recipe §3.1(c) -- these are all bare-word
+    recognition/matching/translation frames with no literal text beyond the placeholder, so there is no
+    frame-literal-text grammaticality concern to re-check). Verified via iter_specs() filtered to
+    `.a1.unit39.`: this unit natively introduces 10 distinct nouns across its 4 lessons -- neighborhood,
+    neighbors, grocery, building, mr, plants (lesson01/02/03) plus neighborhoods, restaurants, shops, hallway
+    (lesson04) -- all distinct Farsi glosses, no confusable/case-duplicate pairs. ("mr" is a clean token here
+    -- this unit''s own realization already tokenizes "Mr. Lopez" as introduced_tokens ["neighbor", "Mr",
+    "Lopez", ...], stripping the period upstream, unlike unit33''s messier tokens -- see that pack''s notes.)
+    match.003 widened from the original 4 declared slots to the recipe''s standard 6 (pool of 10 comfortably
+    covers it).
+
+    order.005 could not be fixed the same way: its frame ("There''s a {item} nearby") needs every noun
+    candidate grammatical in that exact slot, and the unit-wide noun pool is mostly plurals (neighbors,
+    plants, neighborhoods, restaurants, shops -- all ungrammatical after "a") or a title fragment ("mr") --
+    genuinely unsafe to drop the semantic tag here. Instead re-anchored order.005 to the OTHER existing,
+    already-unit39-native tag `neighborhood_adj` ({quiet, noisy} at unit scope; "friendly" is unit32''s, not
+    native here, matching the tag''s own code comment) and changed the frame to "My neighbors are very
+    {item}." -- verified grammatical for both unit-scoped candidates AND for the full course-wide
+    neighborhood_adj pool ({quiet, noisy, friendly}, all fit), and confirmed no self-reference (frame''s
+    literal words My/neighbors/are/very are not members of the slot''s own pool). Added `neighborhood_adj` to
+    tag_schema (it was already defined in scripts/_en_target_lexeme_common.py, just not previously declared
+    in this pack).
+
+    Dropped order.005.volume_fill.006 (fill_in_blank, keyed to volume_fa_en_a1_unit39_item_06_single, which
+    the shared VOLUME_PRACTICE_SINGLETON_TAGS table defines on "park" -- itself one of the 4 already-dead
+    neighborhood_noun members, so 0 unit-scoped candidates independent of the main defect). No unit-native
+    single-course-wide-candidate tag exists to re-anchor a fill_in_blank onto (recipe §6.5); the pack is
+    clearly viable without it (5 live templates now span all 3 tiers: recognition 2, structured 2, production
+    1). LOG for the coordinator: a genuinely unit39-native single-member tag (e.g. on "building" or "hallway")
+    would let a future pass re-add a working fill_in_blank here -- needs a backfill change, out of this
+    pass''s pack-only scope. Also LOG: the "neighbor"/unit34 token-dedup collision above is a real instance of
+    the recipe''s own §0.1 warning generalized to token PROVENANCE, not just gloss -- worth the coordinator
+    flagging near unit34''s pack too, since anything anchored there assuming "neighbor" is unit34-exclusive
+    should already account for unit39 re-teaching the same word (checked: unit34''s own pack does not
+    currently reference a neighbor-based tag, so no live conflict, but future edits near unit34 should be
+    aware unit39''s lesson01 also teaches this token).'
 tag_schema:
   part_of_speech:
   - symbol
@@ -41,14 +96,7 @@ tag_schema:
   - phrase
   agreement_tags:
     semantic:
-    - neighborhood_noun
-    - volume_fa_en_a1_unit39_item_06_single
-slot_presets:
-  neighborhood_noun: &id001
-    language_code: en
-    part_of_speech: noun
-    agreement_tags:
-      semantic: neighborhood_noun
+    - neighborhood_adj
 templates:
 - content_key: practice.fa-en.en.a1.unit39.lesson01.choose.001
   lesson_content_key: en.a1.unit39.lesson01.neighborhood_vocabulary
@@ -58,7 +106,7 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    item: *id001
+    item: &unit39_noun {language_code: en, part_of_speech: noun}
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -74,7 +122,7 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    item: *id001
+    item: *unit39_noun
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -90,10 +138,12 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    first: *id001
-    second: *id001
-    third: *id001
-    fourth: *id001
+    first: *unit39_noun
+    second: *unit39_noun
+    third: *unit39_noun
+    fourth: *unit39_noun
+    fifth: *unit39_noun
+    sixth: *unit39_noun
   slot_relations:
   - kind: distinct
     slots:
@@ -101,6 +151,8 @@ templates:
     - second
     - third
     - fourth
+    - fifth
+    - sixth
   answer_derivation:
     kind: matching_pairs
     slots:
@@ -108,6 +160,8 @@ templates:
     - second
     - third
     - fourth
+    - fifth
+    - sixth
   feedback_frame:
     text: هر واژه را به معنی فارسی خودش وصل کنید.
     language_code: fa
@@ -122,7 +176,7 @@ templates:
     slot_rendering:
       item: english_gloss
   slots:
-    item: *id001
+    item: *unit39_noun
   answer_derivation:
     kind: slot_text
     slot: item
@@ -134,38 +188,18 @@ templates:
   lesson_content_key: en.a1.unit39.lesson01.neighborhood_vocabulary
   type: word_order
   frame:
-    text: There's a {item} nearby
+    text: My neighbors are very {item}
     language_code: en
     direction: ltr
   slots:
-    item: *id001
+    item: {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: neighborhood_adj}}
   answer_derivation:
     kind: render_frame
     frame:
-      text: There's a {item} nearby
+      text: My neighbors are very {item}
       language_code: en
       direction: ltr
   feedback_frame:
-    text: '{item} چیزی است که این نزدیکی‌ها هست.'
+    text: '{item} صفتی است که همسایه‌ها را توصیف می‌کند.'
     language_code: fa
     direction: rtl
-- content_key: practice.fa-en.en.a1.unit39.lesson01.order.005.volume_fill.006
-  lesson_content_key: en.a1.unit39.lesson01.neighborhood_vocabulary
-  type: fill_in_blank
-  frame:
-    text: There's a {item} nearby
-    language_code: en
-    direction: ltr
-  slots:
-    item:
-      language_code: en
-      part_of_speech: noun
-      agreement_tags:
-        semantic: volume_fa_en_a1_unit39_item_06_single
-  answer_derivation:
-    kind: slot_text
-    slot: item
-  feedback_frame:
-    text: '{item}'
-    language_code: en
-    direction: ltr

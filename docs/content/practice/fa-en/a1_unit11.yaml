@@ -35,14 +35,50 @@ review:
     from 2 to 6 pairs (weather_condition/adjective, real course-wide
     pool=6 -- cloudy/cold/hot/rainy/sunny/windy), no padding with
     untaught words.
+
+    Unit-scope DEAD/FLOOR fix pass (2026-07-24, PACK-ONLY re-authoring
+    lane): scripts/_practice_unit_scope_check.py found 3 DEAD template-
+    slots. weekday_listen.004 (lesson03, semantic:weekday) and
+    suggest_order.001/place_translate.003 (lesson04, semantic:place)
+    all reused tags introduced by EARLIER units -- iter_specs() confirms
+    weekday is unit04's own tag and place is unit09's, neither ever
+    taught by unit11 (a DO-NOT #2 cross-unit reuse the pack's own note
+    above did not catch, since it correctly verified >=3 course-wide
+    candidates but not unit-scoped ones). unit11's own vocabulary is 20
+    lexemes across 4 lessons, of which only lesson01's 6
+    weather_condition adjectives carry any semantic tag at all --
+    lessons02-04 (weather/warm/raining/should/umbrella/tomorrow/will/be/
+    rain/let's/idea/but/going/so) are entirely untagged. Fixed
+    weekday_listen.004 and place_translate.003 (both bare '{item}'
+    frames with no other literal text, so re-anchoring carries zero
+    grammaticality risk per SS3.1c) by dropping the semantic constraint
+    and widening to part_of_speech:[noun,adjective] with no semantic tag
+    -- unit-scoped pool becomes the unit's own 10 distinct content words
+    (weather/umbrella/tomorrow/idea plus the 6 weather_condition
+    adjectives), well above the 3-distinct floor. suggest_order.001
+    ("Let's go to the {item}", word_order) could NOT be safely
+    re-anchored the same way: none of unit11's own nouns fit that frame
+    grammatically ("Let's go to the umbrella" / "...the idea" / "...the
+    tomorrow" are all nonsense), and the concept itself (suggesting a
+    place to go) is simply not taught by this unit -- DROPPED per fix
+    option 3 rather than forced. Verified this does not threaten
+    viability: after the drop the pack still has 11 live templates
+    (was 12) spanning recognition=4 / structured=3 (weather_pair +
+    today_order + tomorrow_order, all untouched and already healthy) /
+    production=4 (weather_translate + today_translate + tomorrow_translate
+    + the now-fixed place_translate.003), every lesson still carries
+    >=1 live template. tag_schema's now-unused weekday/place entries
+    removed. Verified: scripts/_practice_unit_scope_check.py now reports
+    0 DEAD, 0 FLOOR for a1_unit11.yaml; compile_content.py
+    practice-validate 0 errors (see coordinator report for the exact
+    fa-en batch invocation).
 tag_schema:
   part_of_speech: [noun, adjective, adverb, pronoun, verb, particle, symbol]
   agreement_tags:
-    semantic: [weather_condition, weekday, place]
+    semantic: [weather_condition]
 slot_presets:
   weather_condition: &weather_condition {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: weather_condition}}
-  weekday: &weekday {language_code: en, part_of_speech: noun, agreement_tags: {semantic: weekday}}
-  place: &place {language_code: en, part_of_speech: noun, agreement_tags: {semantic: place}}
+  unit_vocab: &unit_vocab {language_code: en, part_of_speech: [noun, adjective]}
 templates:
   - content_key: practice.fa-en.en.a1.unit11.lesson01.weather_meaning.001
     lesson_content_key: en.a1.unit11.lesson01.weather_words
@@ -105,23 +141,16 @@ templates:
     lesson_content_key: en.a1.unit11.lesson03.reading_a_forecast
     type: listen_select
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *weekday}
+    slots: {item: *unit_vocab}
     answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "روزی که شنیدید {item} بود.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit11.lesson04.suggest_order.001
-    lesson_content_key: en.a1.unit11.lesson04.weather_plan_dialogue
-    type: word_order
-    frame: {text: "Let's go to the {item}", language_code: en, direction: ltr}
-    slots: {item: *place}
-    answer_derivation: {kind: render_frame, frame: {text: "Let's go to the {item}", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} مکانی است که پیشنهاد می‌شود.", language_code: fa, direction: rtl}
+    feedback_frame: {text: "واژه‌ای که شنیدید {item} بود.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit11.lesson04.place_translate.003
     lesson_content_key: en.a1.unit11.lesson04.weather_plan_dialogue
     type: translation
     frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
-    slots: {item: *place}
+    slots: {item: *unit_vocab}
     answer_derivation: {kind: slot_text, slot: item}
-    feedback_frame: {text: "معادل انگلیسی این مکان {item} است.", language_code: fa, direction: rtl}
+    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژهٔ فارسی است.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit11.lesson04.weather_meaning.004
     lesson_content_key: en.a1.unit11.lesson04.weather_plan_dialogue
     type: multiple_choice
