@@ -666,7 +666,7 @@ EN_TARGET_TO_PRS_GLOSS: dict[str, str] = {
     "then": "بعد",
     # Unit 5 (telling the time), added 2026-07-06.
     "time": "وخت", "o'clock": "بجه (ساعتِ تمام)", "half": "نیم",
-    "past": "و ... (در بیان وخت)", "quarter": "ربع", "night": "شب",
+    "past": "گذشته", "quarter": "ربع", "night": "شب",
     "store": "دکان", "in": "در", "closes": "بند می‌شه",
     "does": "(فعل کمکی پرسشی)", "close": "بند کردن",
     # Unit 6 (family members and relationships), added 2026-07-06.
@@ -689,7 +689,7 @@ EN_TARGET_TO_PRS_GLOSS: dict[str, str] = {
     "menu": "مینو", "price": "قیمت", "cafe": "کیفی", "3": "سه",
     "2": "دو", "5": "پنج", "6": "شش", "sure": "البته",
     # Unit 8 (shopping: prices and quantities), added 2026-07-06.
-    "pound": "پوند (واحد وزن)", "of": "از", "dozen": "درجن",
+    "pound": "پوند (واحد وزن)", "of": "ازِ/متعلق به", "dozen": "درجن",
     "eggs": "تخم‌ها", "bottle": "بوتل", "bag": "کیسه", "rice": "برنج",
     "kilo": "کیلو", "tomatoes": "بادنجان رومی‌ها", "pounds": "پوندها",
     "fresh": "تازه", "per": "هر",
@@ -701,7 +701,7 @@ EN_TARGET_TO_PRS_GLOSS: dict[str, str] = {
     # from Farsi's بیمارستان/داروخانه).
     "bank": "بانک", "hospital": "شفاخانه", "pharmacy": "دواخانه",
     "park": "پارک", "restaurant": "رستورانت", "next": "پهلوی (در next to)",
-    "across": "مقابل (در across from)", "from": "از",
+    "across": "مقابل (در across from)", "from": "از مبدأ",
     "between": "بین", "behind": "عقب", "front": "پیشروی (در in front of)",
     "where": "کجا", "far": "دور", "excuse": "ببخشین (در excuse me)",
     "me": "مره (من را)",
@@ -935,7 +935,7 @@ EN_TARGET_TO_PRS_GLOSS: dict[str, str] = {
     "tall": "قد بلند", "short": "قد کوتاه", "hair": "موی سر", "long": "دراز",
     "blond": "موی طلایی", "curly": "چوقی (موی)", "eyes": "چشم‌ها",
     "brown": "قهوه‌یی", "green": "سبز", "glasses": "عینک",
-    "wears": "می‌پوشه (سوم‌شخص مفرد wear)", "coworker": "همکار",
+    "wears": "می‌پوشه (سوم‌شخص مفرد wear)", "coworker": "همکارِ هم‌دفتر",
     "starting": "شروع کدن", "mia": "میا (اسم)",
     "does.": "(فعل کمکی، سوم‌شخص مفرد do)", "door": "دروازه", "now": "حالا",
     "same": "همرنگ؛ یکسان", "laugh": "خندیدن", "lot": "خیلی (در a lot)",
@@ -1044,7 +1044,7 @@ EN_TARGET_TO_PRS_GLOSS: dict[str, str] = {
     "post office": "پوستخانه", "letters": "خط‌ها (نامه‌ها)",
     "letter": "خط (نامه)", "package": "پارسل", "stamp": "تمبر",
     "envelope": "پاکت خط", "put": "گذاشتن", "mailbox": "صندوق پستی",
-    "postcard": "کارت پستال", "express": "عاجل", "mail": "پُست (خط و پارسل)",
+    "postcard": "کارت پستال", "express": "بیان کردن", "mail": "پُست (خط و پارسل)",
     "regular": "معمولی", "cost": "قیمت داشتن", "chicago": "شیکاگو",
     "receipt": "رسید", "around": "دور و بر", "post": "پُست کردن",
     "sent": "فرستاد (زمان گذشتهٔ send)",
@@ -1115,9 +1115,9 @@ EN_TARGET_TO_PRS_GLOSS.update({
     "anyone": "کسی", "strap": "بند", "where's": "کجاست",
     "fountain": "فواره", "you're": "تو/شما استی", "inside": "داخل",
     "ask": "پرسیدن", "holding": "گرفته استه", "desk": "میز پذیرش",
-    "lose": "گم کردن", "item": "چیز؛ وسیله", "main": "اصلی", "gate": "دروازه",
+    "lose": "گم کردن", "item": "چیز؛ وسیله", "main": "عمده/اساسی", "gate": "دروازه",
     "describe": "توصیف کردن", "its": "از آن", "special": "خاص",
-    "details": "جزئیات", "staff": "کارمندان", "called": "زنگ زد؛ صدا کرد",
+    "details": "جزئیات", "staff": "کارمندان اداره", "called": "زنگ زد؛ صدا کرد",
     "told": "گفت", "whole": "تمام", "story": "قصه", "track": "رد؛ پیگیری",
     "things": "چیزها", "available": "دسترس؛ موجود", "confirm": "تأیید کردن",
     "reschedule": "وقت را تغییر دادن", "max": "مکس", "seems": "معلوم می‌شه",
@@ -1254,7 +1254,7 @@ EN_TARGET_TO_PRS_GLOSS.update({
     "being": "بودن (شکل ing فعل be)", "compliment": "تعریف؛ گپ خوش",
     # -- a1 unit65 (returns and exchanges)
     "exchange": "بدل کردن", "refund": "پس‌گرفتن پول", "larger": "کلان‌تر",
-    "offered": "پیشنهاد کرد", "exchanged": "بدل کرد",
+    "offered": "عرضه کرد", "exchanged": "بدل کرد",
     # -- a1 unit66 (describing symptoms)
     "symptom": "علامت", "hurts": "درد می‌کنه",
     # -- a1 unit67 (family news)
@@ -1368,7 +1368,7 @@ EN_TARGET_TO_PRS_GLOSS.update({
     "preferences": "ترجیح‌ها",
     # -- b1 unit13 (relative clauses)
     "whose": "که مالِ او (نشان‌دهندهٔ مالکیت)", "approve": "تأیید کدن",
-    "approved": "تأیید کرد", "colleague": "همکار", "sits": "می‌شینه",
+    "approved": "تأیید کرد", "colleague": "همکارِ کاری", "sits": "می‌شینه",
     "leads": "رهبری می‌کنه", "projects": "پروژه‌ها",
     "defining": "تعیین‌کننده (جملهٔ وصفی تعیین‌کننده)",
     "relative": "وصفی (جملهٔ وصفی)", "commas": "کامه‌ها", "exactly": "دقیقاً",
@@ -1391,7 +1391,7 @@ EN_TARGET_TO_PRS_GLOSS.update({
     # -- b1 unit15 (making a complaint)
     "complain": "شکایت کدن", "damaged": "خراب، آسیب‌دیده",
     "replacement": "تعویض (چیزِ نو به‌جای خراب)", "resolve": "حل کدن",
-    "issue": "مشکل", "product": "جنس؛ محصول", "written": "نوشتاری",
+    "issue": "موضوع/ایراد", "product": "جنس؛ محصول", "written": "نوشتاری",
     "complaint": "شکایت", "parts": "بخش‌ها", "specific": "مشخص",
     "resolution": "راه حل", "chair": "چوکی",
     "dear": "محترم (در آغاز نامه)", "wheel": "چرخ",
@@ -1423,7 +1423,7 @@ EN_TARGET_TO_PRS_GLOSS.update({
     "detail": "جزئیات", "condensed": "فشرده", "words": "کلمه‌ها",
     "covered": "شامل بود", "phrase": "عبارت", "points": "نکته‌ها",
     "keeping": "نگه داشتن (شکل ing فعل keep)", "highlight": "برجسته ساختن",
-    "single": "یگانه", "separately": "جداگانه", "original": "اصلی",
+    "single": "یگانه", "separately": "جداگانه", "original": "نسخهٔ اصلی",
     "article": "مقاله", "communication": "ارتباط", "examples": "مثال‌ها",
     "background": "پس‌زمینه", "messages": "پیام‌ها",
     "guessing": "حدس زدن (شکل ing فعل guess)", "ideas": "فکرها؛ نظرها",
@@ -1444,7 +1444,7 @@ EN_TARGET_TO_PRS_GLOSS.update({
     "conceding": "واگذار کردن (شکل ing فعل concede)",
     "argues": "استدلال می‌کنه", "hybrid": "ترکیبی", "improves": "بهتر می‌سازه",
     "lowering": "پایین آوردن (شکل ing فعل lower)", "performance": "کارکرد",
-    "employees": "کارمندان", "teams": "تیم‌ها", "less": "کمتر",
+    "employees": "کارمندان شرکت", "teams": "تیم‌ها", "less": "کمتر",
     "likely": "محتمل", "may": "شاید (فعل کمکی احتمال)", "suffer": "آسیب دیدن",
     "acknowledges": "قبول می‌کنه", "delivered": "تحویل داد",
     "scores": "نمره‌ها", "slightly": "کمی", "higher": "بلندتر",
@@ -1538,7 +1538,7 @@ EN_TARGET_TO_PRS_GLOSS.update({
     "reduced": "کم شد", "appendix": "ضمیمه", "follows": "بعداً می‌آیه",
     "push": "پس زدن (در push back: مخالفت کردن)", "clearly": "به‌روشنی",
     "offer": "پیشنهاد کردن", "executive": "اجرایی (خلاصهٔ اجرایی)",
-    "priya": "پریا", "proposed": "پیشنهاد کرد", "marcus": "مارکوس",
+    "priya": "پریا", "proposed": "طرح کرد", "marcus": "مارکوس",
     "outcome": "نتیجهٔ نهایی", "deliver": "تحویل دادن", "planned": "پلان شده",
     "risk": "به خطر انداختن",
     # -- b2 unit08 (synthesizing sources)
@@ -1894,6 +1894,29 @@ EN_POS_EXTRA: dict[str, str] = {
 }
 
 
+PRS_UNIT_GLOSS_OVERRIDES: dict[tuple[str, str], str] = {
+    ("b1_unit05_workplace", "short"): "کوتاه/خلاصه",
+    ("b1_unit10_purpose", "sound"): "نمودن/معلوم شدن",
+    ("b1_unit10_purpose", "order"): "ترتیب",
+    ("b2_unit01_argumentation", "sound"): "نمودن/معلوم شدن",
+    ("b2_unit01_argumentation", "position"): "موقف",
+    ("b2_unit01_argumentation", "like"): "مثل",
+    ("b2_unit02_speculation", "run"): "اجرا شدن",
+    ("b2_unit03_hedging_emphasis", "as"): "طوری که",
+    ("b2_unit04_narrative_time", "order"): "ترتیب",
+    ("b2_unit06_abstraction", "view"): "نظر",
+    ("b2_unit08_synthesis", "period"): "مدت",
+}
+
+PRS_UNIT_POS_OVERRIDES: dict[tuple[str, str], str] = {
+    ("b1_unit10_purpose", "sound"): "verb",
+    ("b1_unit10_purpose", "order"): "noun",
+    ("b2_unit01_argumentation", "sound"): "verb",
+    ("b2_unit01_argumentation", "like"): "preposition",
+    ("b2_unit04_narrative_time", "order"): "noun",
+}
+
+
 def _classify(files, level, specs):
     for unit_order, (realization_path, overlay_path) in enumerate(files, 1):
         realization = yaml.safe_load(realization_path.read_text(encoding="utf-8"))
@@ -1931,8 +1954,13 @@ def _classify(files, level, specs):
                             "unit_order": unit_order, "lesson_order": lesson_order,
                             "lesson_content_key": lesson_key, "content_key": content_key,
                             "token": token, "language_code": "en",
-                            "part_of_speech": part_of_speech,
-                            "english_gloss": EN_TARGET_TO_PRS_GLOSS[token],
+                            "part_of_speech": PRS_UNIT_POS_OVERRIDES.get(
+                                (realization_path.stem, token), part_of_speech
+                            ),
+                            "english_gloss": PRS_UNIT_GLOSS_OVERRIDES.get(
+                                (realization_path.stem, token),
+                                EN_TARGET_TO_PRS_GLOSS[token],
+                            ),
                             "agreement_tags": tags,
                         }
                     else:
