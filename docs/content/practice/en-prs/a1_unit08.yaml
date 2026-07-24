@@ -19,14 +19,32 @@ review:
     directly against the realization file), so no equivalent bug here.
 
     Three groups: food_item (نان/پلو/قورمه/چای/آب, 5 members) from
-    lesson01, role_word (دکاندار/مشتری, 2 members -- matching_pairs/
-    translation only) from lesson06's dialogue, and counting_word
-    (بشقاب/تا, 2 members -- matching_pairs/translation only) from
-    lesson04. Deliberately skipped بل/تازه/لطفاً/خیلی/خوش‌مزه as slot
-    fillers -- each is a genuine single-candidate token on its own
-    semantic point, matching this bundle's standing precedent of
-    leaving single-candidate vocabulary as taught-but-not-drilled
-    rather than forcing an artificial shared tag.
+    lesson01, role_word (مشتری, 1 member -- translation only) from
+    lesson06's dialogue, and counting_word (بشقاب/تا, 2 members --
+    matching_pairs/translation only) from lesson04. Deliberately
+    skipped تازه/لطفاً/خیلی/خوش‌مزه as slot fillers -- each is a genuine
+    single-candidate token on its own semantic point, matching this
+    bundle's standing precedent of leaving single-candidate vocabulary
+    as taught-but-not-drilled rather than forcing an artificial shared
+    tag.
+
+    REAUTH 2026-07-24 (unit-scope DEAD-template repair,
+    docs/content/PRACTICE_PACK_RECIPE.md §1.1/§3.1): the original note
+    above claimed role_word had 2 members here (دکاندار/مشتری) -- that
+    was wrong; دکاندار is unit06's lesson06 (giving_directions_dialogue),
+    a genuinely EARLIER unit (recipe DO-NOT #2), and unit08 itself
+    introduces only مشتری. role_pair.003 declared a 2-slot
+    matching_pairs against that non-existent 2nd candidate -> DEAD at
+    checkpoint scope (unit-scoped pool of 1). Re-anchored role_pair.003
+    to a new role_and_dialogue preset unioning this unit's own
+    role_word + dialogue_word + food_item tags (§3.1a): مشتری, چای, بل,
+    افغانی, نان, پلو, قورمه, آب -- 8 distinct unit-scoped tokens, all
+    noun, no confusable glosses, comfortably over the 6-pair floor.
+    Standard 6 slots used (2 of 8 left unsampled at random each
+    generation). role_word (مشتری) still also hosted by
+    role_translate.002 (bare-word translation, no candidate floor),
+    unaffected. food_item/counting_word's own food_and_counting preset
+    (food_pair.004, counting_pair.003) is untouched.
 
     Every fill_in_blank frame embeds the slot in a real Dari sentence
     with visible surrounding context (guide §13). No listen_select/
@@ -43,7 +61,7 @@ review:
 tag_schema:
   part_of_speech: [noun, particle]
   agreement_tags:
-    semantic: [food_item, role_word, counting_word]
+    semantic: [food_item, role_word, counting_word, dialogue_word]
 slot_presets:
   food_item: &food_item {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: food_item}}
   role_word: &role_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: role_word}}
@@ -53,6 +71,11 @@ slot_presets:
   # matching_pairs templates below to reach 7 (AUTHORING_GUIDE.md #16) --
   # real vocabulary only.
   food_and_counting: &food_and_counting {language_code: prs, part_of_speech: [noun, particle], agreement_tags: {semantic: [food_item, counting_word]}}
+  # REAUTH 2026-07-24: role_word alone has only 1 unit-scoped candidate
+  # (مشتری) -- see review.notes. Unions this unit's own role_word +
+  # dialogue_word + food_item tags to reach 8 distinct unit-scoped
+  # tokens for role_pair.003 below.
+  role_and_dialogue: &role_and_dialogue {language_code: prs, part_of_speech: [noun], agreement_tags: {semantic: [role_word, dialogue_word, food_item]}}
 templates:
   # Lesson 1: food and drink vocabulary.
   - content_key: practice.en-prs.prs.a1.unit08.lesson01.food_gloss.001
@@ -112,17 +135,13 @@ templates:
   - content_key: practice.en-prs.prs.a1.unit08.lesson06.role_pair.003
     lesson_content_key: prs.a1.unit08.lesson06.restaurant_dialogue
     type: matching_pairs
-    # NOT expanded 2026-07-06 (AUTHORING_GUIDE.md #16 retrofit pass) --
-    # role_word has only 2 real distinct candidates course-wide
-    # (دکاندار/مشتری). The obvious pooling candidate, unit02's
-    # occupation (دوکاندار "shopkeeper"), is a near-duplicate spelling of
-    # this lesson's دکاندار (same word, two spellings) -- combining them
-    # would violate the no-ambiguous/confusable-near-duplicate rule
-    # (AUTHORING_GUIDE.md #3) rather than genuinely growing the pool.
-    # Left at 2; the spelling divergence itself is flagged separately for
-    # whichever lane owns units 02/06 to reconcile.
-    frame: {text: "{role_word_one} — {role_word_two}", language_code: prs, direction: rtl}
-    slots: {role_word_one: *role_word, role_word_two: *role_word}
-    slot_relations: [{kind: distinct, slots: [role_word_one, role_word_two]}]
-    answer_derivation: {kind: matching_pairs, slots: [role_word_one, role_word_two]}
-    feedback_frame: {text: "Match each role to its English meaning.", language_code: en, direction: ltr}
+    # REAUTH 2026-07-24: re-anchored to role_and_dialogue (8 distinct
+    # unit-scoped tokens: مشتری, چای, بل, افغانی, نان, پلو, قورمه, آب) --
+    # the old role_word-only pool had 1 unit-scoped candidate (دکاندار
+    # is unit06's, not unit08's), DEAD at checkpoint scope. See
+    # review.notes. Standard 6 slots.
+    frame: {text: "{item_one} — {item_two} — {item_three} — {item_four} — {item_five} — {item_six}", language_code: prs, direction: rtl}
+    slots: {item_one: *role_and_dialogue, item_two: *role_and_dialogue, item_three: *role_and_dialogue, item_four: *role_and_dialogue, item_five: *role_and_dialogue, item_six: *role_and_dialogue}
+    slot_relations: [{kind: distinct, slots: [item_one, item_two, item_three, item_four, item_five, item_six]}]
+    answer_derivation: {kind: matching_pairs, slots: [item_one, item_two, item_three, item_four, item_five, item_six]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
