@@ -7,6 +7,29 @@ review:
   status: unreviewed
   fresh_context: false
   notes: >-
+    UNIT-SCOPE REPAIR 2026-07-24 (pack-only): _practice_unit_scope_check.py found
+    14 DEAD templates (12 of them the 12 individually-listed slots of
+    person_name_pair.001) + 1 below-floor. person_name_gloss.002 (lesson03 MC) and
+    person_name_pair.001 (matching, needed 12, had 0) both relied on `person_name` --
+    ZERO unit15-scoped candidates, despite this file's own pre-existing comment
+    insisting کریم/نگار are "this lesson's own reading-text subjects" found and fixed
+    in an earlier sweep. iter_specs() shows no person_name Lexeme anchored to unit15 --
+    کریم/نگار are reused strings already registered to a1 unit14/unit13 respectively
+    (the classifier keeps a token's very first registration; a later unit reusing the
+    same string gets no fresh row). LOGGED for the coordinator; re-anchored both
+    templates to a new comparative_and_height union (comparative_adjective +
+    height_word, 9 distinct, on-theme for "comparing people"), person_name_pair.001's
+    slots reduced 12->8. connector_word_gloss.001 (lesson04 MC) had only 1 distinct
+    (اما) at unit15 scope, below the floor -- widened to connector_and_comparative
+    (+ comparative_adjective, 9 distinct). demonstrative_and_comparative_pair.001
+    (lesson06 matching_pairs) declared 10 slots but its own comment's "2-member
+    demonstrative_word" was wrong -- only آن is unit15-scoped (این is a1 unit01's),
+    so the real pool was 9, one short -- slots reduced 10->8. Post-fix:
+    _practice_unit_scope_check.py reports 0 DEAD, 0 below-floor (13 templates,
+    unchanged count -- every fix was a re-anchor/resize, nothing dropped);
+    practice-validate 0 errors (see coordinator report). Pre-existing authoring
+    notes below, retained for provenance.
+
     Authored 2026-07-07 for the new A1 unit15 (comparisons)
     realization, same pass as this bundle's a1_unit12/13/14.yaml
     siblings (see a1_unit12.yaml's notes for the full extension
@@ -57,6 +80,22 @@ slot_presets:
   demonstrative_word: &demonstrative_word {language_code: prs, part_of_speech: pronoun, agreement_tags: {semantic: demonstrative_word}}
   height_word: &height_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: height_word}}
   person_name: &person_name {language_code: prs, part_of_speech: proper_noun, agreement_tags: {semantic: person_name}}
+  # UNIT-SCOPE REPAIR 2026-07-24: `person_name` has ZERO unit15-scoped
+  # candidates (despite this file's own comment above person_name_pair.001
+  # claiming کریم/نگار are "this lesson's own reading-text subjects" --
+  # iter_specs() shows no person_name lexeme anchored to unit15 at all;
+  # LOGGED for the coordinator). Both person_name_gloss.002 and
+  # person_name_pair.001 are anchored to lesson03 (comparing_people), so
+  # re-anchored to this unit's own comparative_adjective + height_word
+  # union (9 distinct: بزرگ‌تر/کوچک‌تر/گران‌تر/ارزان‌تر/بلندتر/جوان‌تر/
+  # بهتر/بدتر + قد) -- on-theme for a "comparing people (height, age)"
+  # lesson.
+  comparative_and_height: &comparative_and_height {language_code: prs, part_of_speech: [adjective, noun], agreement_tags: {semantic: [comparative_adjective, height_word]}}
+  # UNIT-SCOPE REPAIR 2026-07-24: connector_word alone is only 1 distinct
+  # (اما) at unit15 scope, below the MC floor. Widened with
+  # comparative_adjective (this lesson04's own giving-reasons pairing, as
+  # reason_order.003 already does structurally) to reach 9 distinct.
+  connector_and_comparative: &connector_and_comparative {language_code: prs, part_of_speech: [particle, adjective], agreement_tags: {semantic: [connector_word, comparative_adjective]}}
 templates:
   # Lesson 1: basic comparatives (this/that, bigger/smaller).
   - content_key: practice.en-prs.prs.a1.unit15.lesson01.comparative_gloss.001
@@ -104,20 +143,26 @@ templates:
     slots: {height_word: *height_word}
     answer_derivation: {kind: slot_text, slot: height_word}
     feedback_frame: {text: "{height_word} is the Dari word for this.", language_code: en, direction: ltr}
+  # UNIT-SCOPE REPAIR 2026-07-24: person_name has ZERO unit15-scoped
+  # candidates -- see comparative_and_height's definition note above.
+  # Re-anchored to comparative_and_height (9 distinct).
   - content_key: practice.en-prs.prs.a1.unit15.lesson03.person_name_gloss.002
     lesson_content_key: prs.a1.unit15.lesson03.comparing_people
     type: multiple_choice
     frame: {text: "{person_name}", language_code: prs, direction: rtl}
-    slots: {person_name: *person_name}
+    slots: {person_name: *comparative_and_height}
     answer_derivation: {kind: slot_gloss, slot: person_name}
-    feedback_frame: {text: "{person_name} is a name used in this course.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{person_name} is a word used when comparing people or things.", language_code: en, direction: ltr}
 
   # Lesson 4: giving a reason for a comparison.
+  # UNIT-SCOPE REPAIR 2026-07-24: connector_word alone is only 1 distinct
+  # (اما) at unit15 scope, below the MC floor. Widened to
+  # connector_and_comparative (9 distinct).
   - content_key: practice.en-prs.prs.a1.unit15.lesson04.connector_word_gloss.001
     lesson_content_key: prs.a1.unit15.lesson04.giving_reasons
     type: multiple_choice
     frame: {text: "{connector_word}", language_code: prs, direction: rtl}
-    slots: {connector_word: *connector_word}
+    slots: {connector_word: *connector_and_comparative}
     answer_derivation: {kind: slot_gloss, slot: connector_word}
     feedback_frame: {text: "{connector_word} joins two clauses or ideas together.", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a1.unit15.lesson04.connector_word_translate.002
@@ -136,36 +181,36 @@ templates:
     answer_derivation: {kind: render_frame, frame: {text: "این از آن {comparative_adjective_one} است چون {comparative_adjective_two} است", language_code: prs, direction: rtl}}
     feedback_frame: {text: "Word order: این از آن [adjective] است چون [reason] است (this is [adjective]-er because it's [reason]).", language_code: en, direction: ltr}
 
-  # Lesson 3: Karim and Negar (person names) are introduced here, not in
-  # lesson05 -- lesson05 ("reading a comparison") is a pure review/reading
-  # lesson that introduces zero new vocabulary (introduced_tokens: [] on
-  # both its teaching cards, confirmed against docs/content/realizations/
-  # prs/a1_unit15_comparisons.yaml), so a template anchored there could
-  # never resolve at runtime (the same bug class as fa-en's unit23
-  # what_do_you_do finding). Re-anchored to lesson03.comparing_people,
-  # which genuinely introduces کریم/نگار (introduced_tokens: [کریم, نگار])
-  # and is already this file's own anchor for the sibling
-  # person_name_gloss.002 template above -- found and fixed during the
-  # 2026-07-07 corpus-wide self-reference/zero-vocabulary sweep.
+  # UNIT-SCOPE REPAIR 2026-07-24: `person_name` has ZERO unit15-scoped
+  # candidates. The comment below (pre-existing) claims کریم/نگار are
+  # "this lesson's own reading-text subjects" and were "found and fixed"
+  # during an earlier sweep, but iter_specs() shows no person_name Lexeme
+  # anchored to unit15 at all -- کریم/نگار are reused strings already
+  # registered to a1 unit14/unit13 respectively, so the classifier never
+  # emits a fresh unit15-anchored row for them (same defect class as this
+  # file's connector_word/person_name_gloss.002 fixes). LOGGED for the
+  # coordinator; a pack-only fix cannot add a unit15-anchored Lexeme.
+  # Re-anchored to comparative_and_height (9 distinct, same pool as
+  # person_name_gloss.002 above), slots reduced 12->8 (9 >= 8, keeps some
+  # combinatorial variety: C(9,8)=9).
   - content_key: practice.en-prs.prs.a1.unit15.lesson05.person_name_pair.001
     lesson_content_key: prs.a1.unit15.lesson03.comparing_people
     type: matching_pairs
-    # Full course-wide person_name pool, 12 distinct real candidates
-    # (verified via scripts/_practice_slot_check.py) -- Karim and Negar
-    # are this lesson's own reading-text subjects.
-    frame: {text: "{person_name_one} — {person_name_two} — {person_name_three} — {person_name_four} — {person_name_five} — {person_name_six} — {person_name_seven} — {person_name_eight} — {person_name_nine} — {person_name_ten} — {person_name_eleven} — {person_name_twelve}", language_code: prs, direction: rtl}
-    slots: {person_name_one: *person_name, person_name_two: *person_name, person_name_three: *person_name, person_name_four: *person_name, person_name_five: *person_name, person_name_six: *person_name, person_name_seven: *person_name, person_name_eight: *person_name, person_name_nine: *person_name, person_name_ten: *person_name, person_name_eleven: *person_name, person_name_twelve: *person_name}
-    slot_relations: [{kind: distinct, slots: [person_name_one, person_name_two, person_name_three, person_name_four, person_name_five, person_name_six, person_name_seven, person_name_eight, person_name_nine, person_name_ten, person_name_eleven, person_name_twelve]}]
-    answer_derivation: {kind: matching_pairs, slots: [person_name_one, person_name_two, person_name_three, person_name_four, person_name_five, person_name_six, person_name_seven, person_name_eight, person_name_nine, person_name_ten, person_name_eleven, person_name_twelve]}
-    feedback_frame: {text: "Match each name to its English label.", language_code: en, direction: ltr}
+    frame: {text: "{person_name_one} — {person_name_two} — {person_name_three} — {person_name_four} — {person_name_five} — {person_name_six} — {person_name_seven} — {person_name_eight}", language_code: prs, direction: rtl}
+    slots: {person_name_one: *comparative_and_height, person_name_two: *comparative_and_height, person_name_three: *comparative_and_height, person_name_four: *comparative_and_height, person_name_five: *comparative_and_height, person_name_six: *comparative_and_height, person_name_seven: *comparative_and_height, person_name_eight: *comparative_and_height}
+    slot_relations: [{kind: distinct, slots: [person_name_one, person_name_two, person_name_three, person_name_four, person_name_five, person_name_six, person_name_seven, person_name_eight]}]
+    answer_derivation: {kind: matching_pairs, slots: [person_name_one, person_name_two, person_name_three, person_name_four, person_name_five, person_name_six, person_name_seven, person_name_eight]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
 
   # Lesson 6: a dialogue comparing two things while shopping.
+  # UNIT-SCOPE REPAIR 2026-07-24: demonstrative_word is only 1 distinct at
+  # unit15 scope (آن -- این is registered to a1 unit01, not unit15,
+  # despite the comment below claiming 2). Union pool is really 9
+  # (1+8), one short of the declared 10 -> was DEAD. Slots reduced 10->8.
   - content_key: practice.en-prs.prs.a1.unit15.lesson06.demonstrative_and_comparative_pair.001
     lesson_content_key: prs.a1.unit15.lesson06.comparisons_dialogue
     type: matching_pairs
-    # Pools demonstrative_word (2) with comparative_adjective (8) -- 10
-    # distinct real tokens, AUTHORING_GUIDE.md #16.
-    frame: {text: "{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six} — {word_seven} — {word_eight} — {word_nine} — {word_ten}", language_code: prs, direction: rtl}
+    frame: {text: "{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six} — {word_seven} — {word_eight}", language_code: prs, direction: rtl}
     slots:
       word_one: {language_code: prs, part_of_speech: [pronoun, adjective], agreement_tags: {semantic: [demonstrative_word, comparative_adjective]}}
       word_two: {language_code: prs, part_of_speech: [pronoun, adjective], agreement_tags: {semantic: [demonstrative_word, comparative_adjective]}}
@@ -175,10 +220,8 @@ templates:
       word_six: {language_code: prs, part_of_speech: [pronoun, adjective], agreement_tags: {semantic: [demonstrative_word, comparative_adjective]}}
       word_seven: {language_code: prs, part_of_speech: [pronoun, adjective], agreement_tags: {semantic: [demonstrative_word, comparative_adjective]}}
       word_eight: {language_code: prs, part_of_speech: [pronoun, adjective], agreement_tags: {semantic: [demonstrative_word, comparative_adjective]}}
-      word_nine: {language_code: prs, part_of_speech: [pronoun, adjective], agreement_tags: {semantic: [demonstrative_word, comparative_adjective]}}
-      word_ten: {language_code: prs, part_of_speech: [pronoun, adjective], agreement_tags: {semantic: [demonstrative_word, comparative_adjective]}}
-    slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five, word_six, word_seven, word_eight, word_nine, word_ten]}]
-    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five, word_six, word_seven, word_eight, word_nine, word_ten]}
+    slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five, word_six, word_seven, word_eight]}]
+    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five, word_six, word_seven, word_eight]}
     feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a1.unit15.lesson06.agree_order.002
     lesson_content_key: prs.a1.unit15.lesson06.comparisons_dialogue

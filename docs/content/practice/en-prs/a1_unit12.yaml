@@ -6,7 +6,33 @@ unit_content_key: prs.a1.unit12.routines
 review:
   status: unreviewed
   fresh_context: false
-  notes: 'Authored 2026-07-07 for the new A1 unit12 (routines) realization, same night the real en-prs A1 realization grew
+  notes: 'UNIT-SCOPE REPAIR 2026-07-24 (pack-only): _practice_unit_scope_check.py found
+    16 DEAD templates + 1 below-floor. Fixed all 17: wake_time_order.001 (lesson02
+    word_order) relied on `ones_number` (introduced a1 unit03/unit04, earlier than
+    this unit -- DO-NOT #2) -- DROPPED (no in-unit numeric-time vocab and routine_verb''s
+    6 members differ in grammatical person so no single word_order frame could host
+    the union) and REPLACED with a multiple_choice at the same lesson02 anchor reusing
+    the routine_verb pool. time_period_gloss.003 and routine_and_time_pair.004 relied
+    on `time_period` (a1 unit01/unit11, earlier -- same defect class) -- re-anchored
+    to a union of this unit''s OWN tags (day_word_pool = routine_word+every_word+early_word,
+    4 distinct; routine_and_time_word widened to routine_verb+routine_word+every_word+early_word,
+    10 distinct, matching_pairs slots reduced 8->6). person_name_gloss.001 and person_name_pair.002
+    relied on `person_name`, which has ZERO unit12-scoped lexemes despite this file''s
+    original notes claiming زرمینه/همایون were tagged for it -- LOG FOR COORDINATOR:
+    no person_name Lexeme is anchored to unit12 in backfill_lexemes_en_prs.py (verified
+    via iter_specs()); a pack-only fix cannot add one. Re-anchored both templates to
+    routine_verb / the same 10-token union instead (matching_pairs slots reduced 12->6).
+    routine_word_gloss.004 (only 2 distinct glosses, below the 3-option MC floor) widened
+    to the same day_word_pool (4 distinct). NOTE: routine_and_time_pair.004 (lesson03)
+    and person_name_pair.002 (lesson06) now share the identical 10-token pool -- this
+    unit genuinely has only 12 total lexemes across 5 lessons (lesson04 has none), so
+    real pool differentiation across 3 matching_pairs anchors is not possible; this
+    mirrors the recipe''s SS8.1(2) "anchor per lesson, pool across the unit" pattern
+    and is documented here rather than hidden. Post-fix: _practice_unit_scope_check.py
+    reports 0 DEAD, 0 below-floor for this pack; practice-validate 0 errors (see coordinator
+    report). Pre-existing authoring notes below, retained for provenance.
+
+    Authored 2026-07-07 for the new A1 unit12 (routines) realization, same night the real en-prs A1 realization grew
     8->15 units. A parallel session authored units 09-11''s practice pool separately; this pack (and its 13/14/15 siblings)
     only touches units 12-15, both in scripts/backfill_lexemes_en_prs.py (UNIT_FILES tuple, PRS_GLOSSES/PRS_POS entries, prs_agreement_tags
     additions -- all re-read fresh immediately before editing to avoid clobbering the parallel session''s own unit09-11 additions)
@@ -57,13 +83,45 @@ slot_presets:
     part_of_speech: noun
     agreement_tags:
       semantic: routine_word
-  routine_and_time_word: &id006
+  # UNIT-SCOPE REPAIR 2026-07-24: `time_period` has zero unit12-scoped
+  # lexemes (it's introduced by a1 unit01/unit11, both earlier than
+  # unit12) so any slot constrained to it alone is DEAD at checkpoint
+  # scope. Re-anchored to a union of this unit's OWN noun+adverb content
+  # tags instead (routine_word + every_word + early_word = 4 distinct:
+  # خواب/صبحانه/هر/زود) -- the recipe's SS8.1(1) "union the unit's lesson
+  # tags" pattern. Reused by both routine_word_gloss.004 (was: 2 distinct,
+  # below the 3-option floor) and time_period_gloss.003 (was: DEAD).
+  day_word_pool: &id009
     language_code: prs
-    part_of_speech: noun
+    part_of_speech:
+    - noun
+    - adverb
     agreement_tags:
       semantic:
       - routine_word
-      - time_period
+      - every_word
+      - early_word
+  # UNIT-SCOPE REPAIR 2026-07-24: was `routine_word` union'd with
+  # `time_period` (a1 unit01/unit11 tag, absent from unit12 -> DEAD).
+  # Now the full union of this unit's own content tags (routine_verb +
+  # routine_word + every_word + early_word = 10 distinct tokens: the 6
+  # می‌شوم/می‌خورم/می‌روم/می‌خوابم/می‌شوی/می‌شود routine_verb forms plus
+  # خواب/صبحانه/هر/زود). Reused by routine_and_time_pair.004 (originally
+  # 8 slots, reduced to 6 -- the pool of 2 could never fill 8) and
+  # person_name_pair.002 (originally 12 slots over the DEAD person_name
+  # tag, reduced to 6).
+  routine_and_time_word: &id006
+    language_code: prs
+    part_of_speech:
+    - verb
+    - noun
+    - adverb
+    agreement_tags:
+      semantic:
+      - routine_verb
+      - routine_word
+      - every_word
+      - early_word
   time_period: &id005
     language_code: prs
     part_of_speech: noun
@@ -163,17 +221,21 @@ templates:
 - content_key: practice.en-prs.prs.a1.unit12.lesson01.routine_word_gloss.004
   lesson_content_key: prs.a1.unit12.lesson01.routine_verbs
   type: multiple_choice
+  # UNIT-SCOPE REPAIR 2026-07-24: routine_word alone is only 2 distinct
+  # glosses (خواب/صبحانه) at unit12 scope, below the 3-option floor.
+  # Widened to day_word_pool (routine_word + every_word + early_word,
+  # 4 distinct: sleep/breakfast/every/early).
   frame:
     text: '{routine_word}'
     language_code: prs
     direction: rtl
   slots:
-    routine_word: *id002
+    routine_word: *id009
   answer_derivation:
     kind: slot_gloss
     slot: routine_word
   feedback_frame:
-    text: '{routine_word} names a part of a daily routine.'
+    text: '{routine_word} is a word this unit uses to talk about daily routines.'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit12.lesson01.routine_word_translate.005
@@ -194,23 +256,34 @@ templates:
     text: '{routine_word} is the Dari word for this.'
     language_code: en
     direction: ltr
-- content_key: practice.en-prs.prs.a1.unit12.lesson02.wake_time_order.001
+- content_key: practice.en-prs.prs.a1.unit12.lesson02.routine_verb_gloss.010
   lesson_content_key: prs.a1.unit12.lesson02.describing_a_routine_with_times
-  type: word_order
+  # UNIT-SCOPE REPAIR 2026-07-24: DROPPED the original wake_time_order.001
+  # (word_order) here -- its `ones_number` slot is 0-candidate at unit12
+  # scope (ones_number is introduced by a1 unit03/unit04, both earlier
+  # than unit12; this is the canonical DO-NOT #2 defect). No in-unit
+  # substitute exists for a numeric time-telling frame, and routine_verb's
+  # 6 members differ in grammatical person (I/you-informal/he-she), so no
+  # single frame can host the whole union grammatically either -- there is
+  # no lesson-appropriate word_order replacement available pack-only.
+  # Replaced with a multiple_choice anchored to this same lesson02 (whose
+  # own new token, می‌شوی "you wake up (informal)", is already a
+  # routine_verb member) so lesson02 keeps recognition-tier
+  # representation and the checkpoint's lesson stratification isn't blind
+  # to it. Reuses the routine_verb pool already proven live by
+  # lesson01.routine_verb_gloss.001 (6 distinct glosses).
+  type: multiple_choice
   frame:
-    text: ساعت {ones_number} بیدار می‌شوم
+    text: '{routine_verb}'
     language_code: prs
     direction: rtl
   slots:
-    ones_number: *id003
+    routine_verb: *id001
   answer_derivation:
-    kind: render_frame
-    frame:
-      text: ساعت {ones_number} بیدار می‌شوم
-      language_code: prs
-      direction: rtl
+    kind: slot_gloss
+    slot: routine_verb
   feedback_frame:
-    text: 'Word order: ساعت [number] بیدار می‌شوم (I wake up at [number] o''clock).'
+    text: '{routine_verb} is one of this unit''s routine verb forms.'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit12.lesson03.every_word_fill.001
@@ -249,25 +322,35 @@ templates:
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit12.lesson03.time_period_gloss.003
   lesson_content_key: prs.a1.unit12.lesson03.parts_of_the_day_review
+  # UNIT-SCOPE REPAIR 2026-07-24: `time_period` is 0-candidate at unit12
+  # scope (introduced by a1 unit01/unit11, both earlier -- DO-NOT #2).
+  # Widened to day_word_pool (4 distinct: sleep/breakfast/every/early),
+  # this unit's own noun+adverb content words.
   type: multiple_choice
   frame:
     text: '{time_period}'
     language_code: prs
     direction: rtl
   slots:
-    time_period: *id005
+    time_period: *id009
   answer_derivation:
     kind: slot_gloss
     slot: time_period
   feedback_frame:
-    text: '{time_period} names a part of the day.'
+    text: '{time_period} is a word this unit uses to talk about daily routines.'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit12.lesson03.routine_and_time_pair.004
   lesson_content_key: prs.a1.unit12.lesson03.parts_of_the_day_review
+  # UNIT-SCOPE REPAIR 2026-07-24: was routine_word union'd with the
+  # 0-candidate `time_period` tag (pool=2, needed 8 -> DEAD). Preset
+  # `routine_and_time_word` (id006) now unions this unit's own
+  # routine_verb+routine_word+every_word+early_word tags (10 distinct);
+  # declared slots reduced 8->6 (AUTHORING_GUIDE SS16 standard, and gives
+  # real combinatorial variety: C(10,6)=210).
   type: matching_pairs
   frame:
-    text: '{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six} — {word_seven} — {word_eight}'
+    text: '{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six}'
     language_code: prs
     direction: rtl
   slots:
@@ -277,8 +360,6 @@ templates:
     word_four: *id006
     word_five: *id006
     word_six: *id006
-    word_seven: *id006
-    word_eight: *id006
   slot_relations:
   - kind: distinct
     slots:
@@ -288,8 +369,6 @@ templates:
     - word_four
     - word_five
     - word_six
-    - word_seven
-    - word_eight
   answer_derivation:
     kind: matching_pairs
     slots:
@@ -299,8 +378,6 @@ templates:
     - word_four
     - word_five
     - word_six
-    - word_seven
-    - word_eight
   feedback_frame:
     text: Match each word to its English meaning.
     language_code: en
@@ -341,41 +418,46 @@ templates:
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit12.lesson06.person_name_gloss.001
   lesson_content_key: prs.a1.unit12.lesson06.comparing_routines_dialogue
+  # UNIT-SCOPE REPAIR 2026-07-24: `person_name` has ZERO unit12-scoped
+  # candidates -- despite this pack's original notes claiming زرمینه/
+  # همایون were tagged for this unit, iter_specs() shows no person_name
+  # lexeme anchored to unit12 (that tag lives at units 01/02/04/05/07/13/
+  # 14/31/54 instead). Cannot fix pack-only (would need a new backfill
+  # tag on a unit12 lexeme) -- LOGGED for the coordinator. Re-anchored to
+  # routine_verb instead (6 distinct), which this lesson's own new token
+  # می‌شود ("he/she wakes up") already belongs to.
   type: multiple_choice
   frame:
     text: '{person_name}'
     language_code: prs
     direction: rtl
   slots:
-    person_name: *id008
+    person_name: *id001
   answer_derivation:
     kind: slot_gloss
     slot: person_name
   feedback_frame:
-    text: '{person_name} is a name used in this course.'
+    text: '{person_name} is one of this unit''s routine verb forms.'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit12.lesson06.person_name_pair.002
   lesson_content_key: prs.a1.unit12.lesson06.comparing_routines_dialogue
+  # UNIT-SCOPE REPAIR 2026-07-24: same person_name 0-candidate defect
+  # (LOGGED above) -- needed 12 distinct fills, pool was 0. Re-anchored to
+  # the same unit-wide union as routine_and_time_pair.004 (id006, 10
+  # distinct), slots reduced 12->6.
   type: matching_pairs
   frame:
-    text: '{person_name_one} — {person_name_two} — {person_name_three} — {person_name_four} — {person_name_five} — {person_name_six}
-      — {person_name_seven} — {person_name_eight} — {person_name_nine} — {person_name_ten} — {person_name_eleven} — {person_name_twelve}'
+    text: '{person_name_one} — {person_name_two} — {person_name_three} — {person_name_four} — {person_name_five} — {person_name_six}'
     language_code: prs
     direction: rtl
   slots:
-    person_name_one: *id008
-    person_name_two: *id008
-    person_name_three: *id008
-    person_name_four: *id008
-    person_name_five: *id008
-    person_name_six: *id008
-    person_name_seven: *id008
-    person_name_eight: *id008
-    person_name_nine: *id008
-    person_name_ten: *id008
-    person_name_eleven: *id008
-    person_name_twelve: *id008
+    person_name_one: *id006
+    person_name_two: *id006
+    person_name_three: *id006
+    person_name_four: *id006
+    person_name_five: *id006
+    person_name_six: *id006
   slot_relations:
   - kind: distinct
     slots:
@@ -385,12 +467,6 @@ templates:
     - person_name_four
     - person_name_five
     - person_name_six
-    - person_name_seven
-    - person_name_eight
-    - person_name_nine
-    - person_name_ten
-    - person_name_eleven
-    - person_name_twelve
   answer_derivation:
     kind: matching_pairs
     slots:
@@ -400,14 +476,8 @@ templates:
     - person_name_four
     - person_name_five
     - person_name_six
-    - person_name_seven
-    - person_name_eight
-    - person_name_nine
-    - person_name_ten
-    - person_name_eleven
-    - person_name_twelve
   feedback_frame:
-    text: Match each name to its English label.
+    text: Match each word to its English meaning.
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit12.lesson03.every_word_fill.001.volume_order.008
