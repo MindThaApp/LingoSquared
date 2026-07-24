@@ -650,15 +650,24 @@ templates:
   lesson_content_key: fa.a1.unit01.lesson04.formal_informal_wellbeing
   type: word_order
   frame:
-    text: خیلی خوبم
+    text: خیلی {wellbeing_answer}
     language_code: fa
     direction: rtl
   slots:
-    wellbeing_answer: *id008
+    # Narrower than the shared &id008 pool on purpose: only the bare verb
+    # خوبم completes "خیلی ..." grammatically (the pool's two full phrases
+    # would nest a phrase inside the frame). The slot must appear in the
+    # frame so the reviewed lexeme is genuinely part of the graded answer
+    # (invariant-answer fix, recipe defect 1.14).
+    wellbeing_answer:
+      language_code: fa
+      part_of_speech: verb
+      agreement_tags:
+        semantic: wellbeing_answer_phrase
   answer_derivation:
     kind: render_frame
     frame:
-      text: خیلی خوبم
+      text: خیلی {wellbeing_answer}
       language_code: fa
       direction: rtl
   feedback_frame:

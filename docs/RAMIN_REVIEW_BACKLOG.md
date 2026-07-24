@@ -119,11 +119,17 @@ was flipped to `review.status: unreviewed` — they need a fresh-context native 
   (e.g. en-prs a1_25 emotion_pair → 163 off-theme tokens). Not a grading/checkpoint defect (the
   launch gate is fine); Endless-Practice coherence only. Follow-up: narrow those matching pools
   to a real semantic union (keep POS-only for word_order / bare-translation, its stated safe case).
-- **Invariant-answer frames (pre-recipe):** en-fa a1_01–04 word_order frames with no `{slot}`
-  placeholder (self-ref scanner flags them) — SRS mis-attribution; give a real placeholder.
+- ~~**Invariant-answer frames (pre-recipe):** en-fa a1_01–04 word_order frames with no `{slot}`
+  placeholder (self-ref scanner flags them) — SRS mis-attribution; give a real placeholder.~~
+  **FIXED 2026-07-24:** all 5 scanner hits (the 4 en-fa + nl-en b1_08 order.001 "as soon as"
+  self-reference) re-slotted so the placeholder is real and every pool candidate is grammatical;
+  a1_04 is now genuinely variable (بزرگه/شلوغه/کوچیکه). New single-member `confirm_word` tag on
+  درسته in `backfill_lexemes.py` anchors a1_03 (needs the usual lexeme re-backfill on deploy).
+  Scanner now reports 0 hits; en-fa + nl-en practice-validate clean; scope check still 0 DEAD.
 - **Backfill bugs the agents logged (route to a backfill pass):** tokens with trailing
-  punctuation baked in (nl-en/prs-en/fa-en unit33: `work?`,`office.`), `hand`→idiom-fragment
-  gloss (nl-en), `گوش`/`هستم` off-theme in some prs pools.
+  punctuation baked in (nl-en/prs-en/fa-en unit33: `work?`,`office.`) — DONE 2026-07-24 (earlier
+  session); `hand`→idiom-fragment gloss (nl-en) + `گوش` gloss — DONE 2026-07-24 (Codex gloss2,
+  commit 1bbe5f11); `هستم` off-theme in some prs pools still open.
 
 **DEFERRED — the real root cause, needs your call (a big change):** the backfill classifier
 keys a lexeme to the FIRST unit that teaches a token, so a token re-taught in a later unit

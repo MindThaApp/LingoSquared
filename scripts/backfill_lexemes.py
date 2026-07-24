@@ -2183,6 +2183,14 @@ def fa_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         semantics.append("marital_status")
     if token in {"خانواده‌ی", "بزرگه", "کوچیکه", "نفرن", "نفریم", "شلوغه"}:
         semantics.append("family_description")
+    # "confirm_word" (درسته alone, added 2026-07-24): anchors a1_unit03's
+    # confirm_order.002 word_order slot "آره {dialogue_word}" to the one
+    # word that grammatically completes the confirmation. آره stays out on
+    # purpose -- it is the frame's own literal, and including it would put
+    # a duplicate tile in the word bank. Single-member tag precedent:
+    # نیما's "person_name" (unit 11).
+    if token in {"درسته"}:
+        semantics.append("confirm_word")
     if lesson_key.endswith("lesson06.dialogue_phone_numbers") or lesson_key.endswith("lesson06.family_photo_dialogue"):
         semantics.append("dialogue_word")
     # Unit 5 (places and directions): 3-member bare-word recognition tags,

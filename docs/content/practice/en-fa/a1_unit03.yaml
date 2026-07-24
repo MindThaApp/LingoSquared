@@ -44,7 +44,7 @@ review:
 tag_schema:
   part_of_speech: [noun, adjective, verb, particle, proper_noun, pronoun, adverb, preposition]
   agreement_tags:
-    semantic: [number, phone_number, price, dialogue_word]
+    semantic: [number, phone_number, price, dialogue_word, confirm_word]
 slot_presets:
   number: &number {language_code: fa, part_of_speech: adjective, agreement_tags: {semantic: number}}
   phone_number_word: &phone_number_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: phone_number}}
@@ -188,9 +188,12 @@ templates:
   - content_key: practice.en-fa.fa.a1.unit03.lesson06.confirm_order.002
     lesson_content_key: fa.a1.unit03.lesson06.dialogue_phone_numbers
     type: word_order
-    frame: {text: "آره درسته", language_code: fa, direction: rtl}
-    slots: {dialogue_word: *dialogue_word}
-    answer_derivation: {kind: render_frame, frame: {text: "آره درسته", language_code: fa, direction: rtl}}
+    frame: {text: "آره {dialogue_word}", language_code: fa, direction: rtl}
+    # confirm_word tags only درسته (backfill_lexemes.py), the one word that
+    # completes the confirmation -- the broad *dialogue_word pool left the
+    # frame invariant with an unused slot (SRS mis-attribution, defect 1.14).
+    slots: {dialogue_word: {language_code: fa, part_of_speech: verb, agreement_tags: {semantic: confirm_word}}}
+    answer_derivation: {kind: render_frame, frame: {text: "آره {dialogue_word}", language_code: fa, direction: rtl}}
     feedback_frame: {text: "آره درسته casually confirms something you just heard.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit03.lesson06.dialogue_pair.003
     lesson_content_key: fa.a1.unit03.lesson06.dialogue_phone_numbers
