@@ -5,8 +5,44 @@ target_language: prs
 unit_content_key: prs.a2.unit10.opinions
 review:
   status: unreviewed
-  fresh_context: false
+  fresh_context: 'false'
   notes: >-
+    UNIT-SCOPE DEAD-TEMPLATE FIX 2026-07-24: scripts/_practice_unit_scope_check.py
+    flagged this pack (1 DEAD, 3 below-floor), all four stemming from the same
+    root cause the prior authoring notes below actually documented as a
+    justification rather than recognizing as the defect it is: person_name
+    and family_message_word/opinion_word templates were sized to a COURSE-WIDE
+    or aspirational candidate count, but generate_checkpoint() scopes every
+    slot to THIS unit's own lexemes only (recipe DO-NOT #2 / SS1.1). Dropped
+    four templates that cannot be pack-only re-anchored to reach their floor
+    (no unit-native way to widen without a scripts/backfill_lexemes_en_prs.py
+    change -- LOGGED for the coordinator, see each drop's inline note for the
+    specific gap): lesson01.opinion_pair.004 (matching_pairs, needed 6,
+    unit ceiling is 5), lesson04.name_pair.003 (matching_pairs, needed 10
+    slots declared but unit ceiling is 2 -- this one was DEAD, not just
+    below-floor), lesson04.name_gloss.004 (multiple_choice, needed 3, unit
+    ceiling is 2), lesson03.family_message_pair.001 (matching_pairs, needed
+    6, unit ceiling is 2). Every dropped template's tag still has at least
+    one other LIVE template covering the same lesson (word_order and/or
+    translation, both floor-free), so no lesson/tier was left uncovered --
+    verified via scripts/_practice_unit_scope_check.py (0 DEAD / 0 below-floor
+    remaining for this file after the fix), scripts/compile_content.py
+    practice-validate (0 errors), and scripts/check_dari_register.py (0
+    findings for this file). Net: 13 -> 9 templates, all genuinely live;
+    tier counts after the fix: recognition 2 (opinion_gloss.001,
+    opinion_phrase_choice.006), structured 3 (opinion_order.005,
+    name_order.005, opinion_phrase_pair.007 [7 pairs, unaffected]),
+    production 4 (opinion_translate.003, name_translate.002,
+    family_message_translate.002, opinion_phrase_translate.008). Capacity
+    comfortably clears the 12-item checkpoint floor across the surviving
+    templates (opinion_word alone hosts 5+5+5=15 target-lexeme item
+    possibilities across its three live templates; opinion_phrase adds a
+    further 7+7=14). Prior authoring history retained below UNCHANGED --
+    read the person_name/family_message_word/opinion_word paragraphs below
+    with the understanding that "tags aren't unit-scoped, so sharing the tag
+    string is fine" was the bug, not a mitigation: it is true for Endless
+    Practice and false for the unit checkpoint.
+
     Authored by the practice-pool-sync lane (fa/prs bundle), 2026-07-06,
     same pass as this bundle's a1_unit03.yaml sibling (see that file's
     notes for the full extension rationale and verification method) --
@@ -123,17 +159,20 @@ templates:
     slots: {opinion_word: *opinion_word}
     answer_derivation: {kind: slot_text, slot: opinion_word}
     feedback_frame: {text: "{opinion_word} is the Dari word for this.", language_code: en, direction: ltr}
-  - content_key: practice.en-prs.prs.a2.unit10.lesson01.opinion_pair.004
-    lesson_content_key: prs.a2.unit10.lesson01.opinions_vocabulary
-    type: matching_pairs
-    # Expanded 2->5 pairs 2026-07-06 (AUTHORING_GUIDE.md #16 retrofit).
-    # Real vocabulary ceiling: 5 distinct opinion_word candidates taught
-    # (verified via scripts/_practice_slot_check.py).
-    frame: {text: "{opinion_word_one} — {opinion_word_two} — {opinion_word_three} — {opinion_word_four} — {opinion_word_five}", language_code: prs, direction: rtl}
-    slots: {opinion_word_one: *opinion_word, opinion_word_two: *opinion_word, opinion_word_three: *opinion_word, opinion_word_four: *opinion_word, opinion_word_five: *opinion_word}
-    slot_relations: [{kind: distinct, slots: [opinion_word_one, opinion_word_two, opinion_word_three, opinion_word_four, opinion_word_five]}]
-    answer_derivation: {kind: matching_pairs, slots: [opinion_word_one, opinion_word_two, opinion_word_three, opinion_word_four, opinion_word_five]}
-    feedback_frame: {text: "Match each word with its English meaning.", language_code: en, direction: ltr}
+  # DROPPED 2026-07-24 (unit-scope DEAD-template fix): opinion_pair.004
+  # (matching_pairs, 5 slots over opinion_word) was FLOOR-flagged by
+  # scripts/_practice_unit_scope_check.py -- 5 unit-scoped candidates is
+  # this unit's genuine ceiling for opinion_word (نظر/دلیل/تحصیل/خارج/وطن,
+  # verified via iter_specs()), below the 6-pair floor, and there is no
+  # unit-native way to reach 6 distinct nouns without either a new
+  # backfill_lexemes_en_prs.py tag or dropping the semantic constraint
+  # entirely (which at course scope would pull in inflected/construct
+  # forms like پوهنتون‌های/تجربهٔ/وطنم that are not safe matching_pairs
+  # display candidates -- a data-quality regression, not a fix). Dropped
+  # rather than padded; opinion_word's structured tier still has a live
+  # template (opinion_order.005, word_order, no candidate floor) so the
+  # tier survives. LOGGED for the coordinator: a real fix needs one more
+  # backfill-recognized opinion_word noun in this unit.
   - content_key: practice.en-prs.prs.a2.unit10.lesson01.opinion_order.005
     lesson_content_key: prs.a2.unit10.lesson01.opinions_vocabulary
     # Added 2026-07-06 (practice-pool-sync depth pass): opinion_word's
@@ -156,34 +195,26 @@ templates:
     slots: {person_name: *person_name}
     answer_derivation: {kind: slot_text, slot: person_name}
     feedback_frame: {text: "{person_name} is this speaker's name in Dari.", language_code: en, direction: ltr}
-  - content_key: practice.en-prs.prs.a2.unit10.lesson04.name_pair.003
-    lesson_content_key: prs.a2.unit10.lesson04.study_debate_dialogue
-    type: matching_pairs
-    # Expanded 2->10 pairs 2026-07-06 (AUTHORING_GUIDE.md #16 retrofit) --
-    # verified via scripts/_practice_slot_check.py: 10 distinct
-    # person_name candidates backfilled course-wide (this tag isn't
-    # unit-scoped, per this pack's own review notes).
-    frame: {text: "{person_name_one} — {person_name_two} — {person_name_three} — {person_name_four} — {person_name_five} — {person_name_six} — {person_name_seven} — {person_name_eight} — {person_name_nine} — {person_name_ten}", language_code: prs, direction: rtl}
-    slots: {person_name_one: *person_name, person_name_two: *person_name, person_name_three: *person_name, person_name_four: *person_name, person_name_five: *person_name, person_name_six: *person_name, person_name_seven: *person_name, person_name_eight: *person_name, person_name_nine: *person_name, person_name_ten: *person_name}
-    slot_relations: [{kind: distinct, slots: [person_name_one, person_name_two, person_name_three, person_name_four, person_name_five, person_name_six, person_name_seven, person_name_eight, person_name_nine, person_name_ten]}]
-    answer_derivation: {kind: matching_pairs, slots: [person_name_one, person_name_two, person_name_three, person_name_four, person_name_five, person_name_six, person_name_seven, person_name_eight, person_name_nine, person_name_ten]}
-    feedback_frame: {text: "Match each name to its English label.", language_code: en, direction: ltr}
-  - content_key: practice.en-prs.prs.a2.unit10.lesson04.name_gloss.004
-    lesson_content_key: prs.a2.unit10.lesson04.study_debate_dialogue
-    # Added 2026-07-06 (practice-pool-sync depth pass): person_name alone
-    # only has 2 distinct candidates within this unit (پروین/احمد), below
-    # the >=3 threshold for multiple_choice -- but the *person_name preset
-    # is already unscoped (semantic tags aren't unit-scoped), so it draws
-    # the same real 10-candidate course-wide pool the name_pair template
-    # above already uses. Exactly mirrors the multiple_choice template
-    # a1_unit07.yaml's practice pack already has for this same person_name
-    # tag (same frame/derivation), just anchored to this unit's own
-    # lesson. No invented vocabulary.
-    type: multiple_choice
-    frame: {text: "{person_name}", language_code: prs, direction: rtl}
-    slots: {person_name: *person_name}
-    answer_derivation: {kind: slot_gloss, slot: person_name}
-    feedback_frame: {text: "{person_name} is a speaker in this unit's debate dialogue.", language_code: en, direction: ltr}
+  # DROPPED 2026-07-24 (unit-scope DEAD-template fix): name_pair.003
+  # (matching_pairs, 10 slots over person_name) was DEAD per
+  # scripts/_practice_unit_scope_check.py -- generate_checkpoint() scopes
+  # candidates to THIS unit's own lexemes only, and this unit's own
+  # person_name pool is پروین/احمد (2), not the 10-member course-wide
+  # pool the prior notes cited. "This tag isn't unit-scoped" was the bug,
+  # not a justification (recipe DO-NOT #2 / SS1.1): it works in Endless
+  # Practice and is invisible to the checkpoint. Also dropped
+  # name_gloss.004 (multiple_choice over the same tag) for the same
+  # reason -- 2 unit-scoped candidates is below the >=3 MC floor. No
+  # unit-native way to reach 3+ names: this unit's own dialogue
+  # (lesson04.study_debate_dialogue) introduces exactly پروین and احمد,
+  # a genuine ceiling. person_name still has two live templates covering
+  # lesson04 (name_translate.002, translation; name_order.005,
+  # word_order -- no candidate floor), so both the production and
+  # structured tiers keep real lesson04 coverage; only the DEAD/FLOOR
+  # matching_pairs and multiple_choice were dropped. LOGGED for the
+  # coordinator: reaching a real recognition/matching_pairs template for
+  # person_name here needs this unit's own dialogue to introduce a third
+  # named character, or a backfill change -- not fixable pack-only.
   - content_key: practice.en-prs.prs.a2.unit10.lesson04.name_order.005
     lesson_content_key: prs.a2.unit10.lesson04.study_debate_dialogue
     # Added 2026-07-06, same pass: person_name's remaining
@@ -198,14 +229,22 @@ templates:
     feedback_frame: {text: "Word order: این [name] است (this is ___).", language_code: en, direction: ltr}
 
   # Lesson 3: reading a written opinion (پیام/فامیل, added 2026-07-07).
-  - content_key: practice.en-prs.prs.a2.unit10.lesson03.family_message_pair.001
-    lesson_content_key: prs.a2.unit10.lesson03.reading_an_opinion_message
-    type: matching_pairs
-    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
-    slots: {first: *family_message_word, second: *family_message_word}
-    slot_relations: [{kind: distinct, slots: [first, second]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second]}
-    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+  # DROPPED 2026-07-24 (unit-scope DEAD-template fix): family_message_pair.001
+  # (matching_pairs, 2 slots) was FLOOR-flagged -- family_message_word's
+  # unit-scoped ceiling is پیام/فامیل (2), far below the 6-pair floor
+  # (AUTHORING_GUIDE #16), and it always was (this template pre-dates the
+  # floor requirement; it was never going to generate). No unit-native way
+  # to reach 6: lesson03's own untagged nouns (خیلی/تجربهٔ/کسب) are
+  # inflected/construct forms, not clean matching_pairs display
+  # candidates, and widening the semantic constraint would need a
+  # backfill change. Dropped rather than padded; family_message_word keeps
+  # a live production-tier template below (family_message_translate.002,
+  # translation -- no candidate floor) so lesson03 is not left with zero
+  # coverage. LOGGED for the coordinator: no structured-tier template is
+  # possible for lesson03 without either a new backfill tag/lexeme or a
+  # word_order hero-sentence frame authored around پیام/فامیل specifically
+  # (out of scope for this pack-only pass since it would need its own
+  # single-member anchor tags).
   - content_key: practice.en-prs.prs.a2.unit10.lesson03.family_message_translate.002
     lesson_content_key: prs.a2.unit10.lesson03.reading_an_opinion_message
     type: translation

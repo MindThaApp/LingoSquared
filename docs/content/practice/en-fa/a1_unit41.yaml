@@ -36,6 +36,13 @@ review:
     authorable without forcing an ungrammatical frame, an untaught word, or
     a course-wide pool with no unit-scoped justification. FLAGGING AS
     CHECKPOINT-THIN (<12 items) per the recipe's report requirement.
+    REAUTH FIX 2026-07-24: lesson01.match.003 declared 8 matching_pairs
+    slots but its part_of_speech: [noun, verb, phrase] constraint excludes
+    the two proper_noun person_name members (احمدی/رضایی), leaving only 6
+    unit-scoped distinct fills -- DEAD at checkpoint scope per
+    _practice_unit_scope_check.py. Trimmed to 6 slots (exactly the
+    recipe's 6-pair floor) rather than widening part_of_speech to
+    proper_noun.
 tag_schema:
   part_of_speech:
   - symbol
@@ -95,7 +102,7 @@ templates:
   lesson_content_key: fa.a1.unit41.lesson01.new_appointments_one
   type: matching_pairs
   frame:
-    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth} · {seventh} · {eighth}'
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
     language_code: fa
     direction: rtl
   slots:
@@ -108,14 +115,12 @@ templates:
     fourth: *unit41_l1_match
     fifth: *unit41_l1_match
     sixth: *unit41_l1_match
-    seventh: *unit41_l1_match
-    eighth: *unit41_l1_match
   slot_relations:
   - kind: distinct
-    slots: [first, second, third, fourth, fifth, sixth, seventh, eighth]
+    slots: [first, second, third, fourth, fifth, sixth]
   answer_derivation:
     kind: matching_pairs
-    slots: [first, second, third, fourth, fifth, sixth, seventh, eighth]
+    slots: [first, second, third, fourth, fifth, sixth]
   feedback_frame:
     text: 'Places, availability phrases, and dialogue words from this unit.'
     language_code: en
