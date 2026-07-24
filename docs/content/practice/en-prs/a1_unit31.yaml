@@ -4,9 +4,25 @@ source_language: en
 target_language: prs
 unit_content_key: prs.a1.unit31.education
 review:
-  status: reviewed
-  fresh_context: true
-  notes: 'Authored 2026-07-11, second practice-pool depth-extension pass for en-prs (units 31-40, continuing directly from
+  status: unreviewed
+  fresh_context: 'false'
+  notes: 'UNIT-SCOPE DEAD-TEMPLATE FIX 2026-07-24 (checkpoint re-authoring pass): both lesson01.study_pair.002 and
+    lesson01.study_pair.002.volume_match.010 (matching_pairs, 6 slots) were DEAD. The original notes below counted
+    مکتب/محصل (and درس, which the tag_schema/slot never actually referenced beyond the prose) as part of a 6-member
+    study_vocab_word pool, but all three -- محصل (unit03), مکتب (unit05), درس (unit18) -- are additive tags on
+    EARLIER-unit lexemes; generate_checkpoint() scopes candidates to this unit''s own lexemes only, so the real
+    unit-scoped study_vocab_word pool is just 3 (تحصیل/پوهنتون/رشته), half the 6-pair floor. RE-ANCHORED (did not
+    drop): added a matching_pairs-only preset `study_pair_word` that unions study_vocab_word with this same unit''s
+    own field_word tag (طب/حقوق/اقتصاد/ادبیات, all 4 genuinely native to lesson02, already used cleanly by the
+    lesson02 MC/word_order templates) -- both tags were already declared in tag_schema. That yields 7 distinct
+    unit-scoped tokens/glosses (study/education, university, field of study, medicine, law, economics, literature),
+    comfortably over the floor, thematically coherent (both halves are this unit''s own education vocabulary), and
+    with no confusable pairs. The lesson01 MC and lesson06 translation templates keep the original narrower
+    study_vocab_word preset (3 nouns, exactly at the >=3 MC floor already) untouched since they were not broken.
+    Re-verified with scripts/_practice_unit_scope_check.py (0 DEAD for this file) and scripts/compile_content.py
+    practice-validate.
+
+    Authored 2026-07-11, second practice-pool depth-extension pass for en-prs (units 31-40, continuing directly from
     the units 25-30 pass the same day) -- extends both scripts/backfill_lexemes_en_prs.py (UNIT_FILES 31-40, new glosses/POS/semantic
     tags, and three genuine homograph overrides in _classify()) and the en-prs pack set past its previous unit30 cap. Realization
     and overlay are both status reviewed.
@@ -53,6 +69,11 @@ slot_presets:
     part_of_speech: noun
     agreement_tags:
       semantic: field_word
+  study_pair_word: &study_pair_word
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: [study_vocab_word, field_word]
 templates:
 - content_key: practice.en-prs.prs.a1.unit31.lesson01.study_gloss.001
   lesson_content_key: prs.a1.unit31.lesson01.study_vocabulary
@@ -78,12 +99,12 @@ templates:
     language_code: prs
     direction: rtl
   slots:
-    word_one: *id001
-    word_two: *id001
-    word_three: *id001
-    word_four: *id001
-    word_five: *id001
-    word_six: *id001
+    word_one: *study_pair_word
+    word_two: *study_pair_word
+    word_three: *study_pair_word
+    word_four: *study_pair_word
+    word_five: *study_pair_word
+    word_six: *study_pair_word
   slot_relations:
   - kind: distinct
     slots:
@@ -167,16 +188,12 @@ templates:
     language_code: prs
     direction: rtl
   slots:
-    word_one: &id003
-      language_code: prs
-      part_of_speech: noun
-      agreement_tags:
-        semantic: study_vocab_word
-    word_two: *id003
-    word_three: *id003
-    word_four: *id003
-    word_five: *id003
-    word_six: *id003
+    word_one: *study_pair_word
+    word_two: *study_pair_word
+    word_three: *study_pair_word
+    word_four: *study_pair_word
+    word_five: *study_pair_word
+    word_six: *study_pair_word
   slot_relations:
   - kind: distinct
     slots:

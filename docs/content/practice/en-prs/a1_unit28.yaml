@@ -4,8 +4,8 @@ source_language: en
 target_language: prs
 unit_content_key: prs.a1.unit28.animals
 review:
-  status: reviewed
-  fresh_context: true
+  status: unreviewed
+  fresh_context: 'false'
   notes: >-
     Authored 2026-07-11, same A1 units 25-30 practice-pool
     depth-extension pass as this bundle's a1_unit25.yaml sibling (see
@@ -47,14 +47,63 @@ review:
     unique glosses; word_order answers list-shaped; no listen_select/
     listen_type, no bare YAML booleans, no jargon leaks. practice-validate
     0/0 and scripts/_practice_slot_check.py clean for the full en-prs set.
+
+    UNIT-SCOPE DEAD-TEMPLATE + FLOOR FIX 2026-07-24 (checkpoint
+    re-authoring pass), two defects:
+
+    (1) lesson03.pet_color_order.001 (word_order) was DEAD: pet_color_word
+    (سیاه/سفید) turned out to be entirely REUSED from unit21.lesson02 --
+    zero unit-scoped candidates, contradicting the 2026-07-11 review's
+    "8 combinations" claim, which was never checked at unit (checkpoint)
+    scope. Checked lesson03's whole teaching block for a genuinely fresh
+    unit28 lexeme to re-anchor onto instead: none exists -- سیاه/سفید/
+    کوچک/بزرگ/رنگ are ALL reused from earlier units (21/19/21/21/21), and
+    the one truly fresh lesson01 token (خانگی, "domestic/household") has
+    no semantic tag in the backfill script, so it can only be reached by
+    dropping `semantic` to bare part_of_speech -- unsafe here because the
+    old frame has literal Dari text ("{animal_word} من {pet_color_word}
+    است") that must stay grammatical at COURSE scope (§1.1), and an
+    untagged adjective slot would pool every a1 adjective course-wide.
+    This needs a backfill tag that doesn't exist -- can't add one here
+    (pack-only) -- so DROPPED the color/size slot and REPLACED the
+    template (renamed pet_ownership_order.001, same type/tier, same
+    lesson03 anchor) with a frame built from the pack's own already-vetted
+    animal_word tag (4 unit-native members, course-scope-safe: shیر/فیل/
+    میمون from unit58 are the only other members, already accepted for
+    this exact tag by lesson02's sibling frame): "{animal_word} حیوان
+    خانگی من است" ("[animal] is my pet") -- grammatically parallel to the
+    unit's own taught example (lesson01: "سگ حیوان خانگی من است."), no
+    self-reference (animal_word excludes the literal حیوان token used in
+    the frame's fixed text).
+
+    (2) lesson01.animal_pair.002 (matching_pairs) was below the 6-pair
+    floor: only 5 slots declared, and animal_topic_word only has 5
+    unit-scoped members anyway (حیوان/سگ/پشک/پرنده/ماهی) so widening that
+    same tag wouldn't have helped. Added a 6th slot. Rather than reuse
+    the shared animal_topic_word preset (which also backs the still-fine
+    MC and translation templates -- left untouched), added a
+    matching_pairs-only preset `pet_vocab_word` that drops the semantic
+    tag entirely and constrains by part_of_speech: [noun, adjective] only
+    (the recipe's preferred technique for a frame with no literal
+    semantic requirement -- matching_pairs' frame is pure placeholders).
+    At unit (checkpoint) scope this yields exactly the unit's own 7
+    nominal tokens (the prior 5 plus خانگی "domestic/household" and غذا
+    "food", both genuinely introduced in this unit's lesson01/lesson04) --
+    all animal/pet-themed, no confusable or duplicate glosses. Re-verified
+    with scripts/_practice_unit_scope_check.py (0 DEAD, 0 below-floor for
+    this file) and scripts/compile_content.py practice-validate.
 tag_schema:
   part_of_speech: [noun, adjective]
   agreement_tags:
-    semantic: [animal_topic_word, animal_word, pet_color_word]
+    semantic: [animal_topic_word, animal_word]
 slot_presets:
   animal_topic_word: &animal_topic_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: animal_topic_word}}
   animal_word: &animal_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: animal_word}}
-  pet_color_word: &pet_color_word {language_code: prs, part_of_speech: adjective, agreement_tags: {semantic: pet_color_word}}
+  # No semantic tag: matching_pairs' frame is pure placeholders (no literal
+  # grammatical requirement), so this is the recipe's sanctioned untagged
+  # part_of_speech-only pool. At unit (checkpoint) scope it resolves to
+  # exactly this unit's own 7 nominal tokens (see review.notes).
+  pet_vocab_word: &pet_vocab_word {language_code: prs, part_of_speech: [noun, adjective]}
 templates:
   # Lesson 1: animal vocabulary.
   - content_key: practice.en-prs.prs.a1.unit28.lesson01.animal_gloss.001
@@ -67,10 +116,10 @@ templates:
   - content_key: practice.en-prs.prs.a1.unit28.lesson01.animal_pair.002
     lesson_content_key: prs.a1.unit28.lesson01.animal_vocabulary
     type: matching_pairs
-    frame: {text: "{word_one} — {word_two} — {word_three} — {word_four} — {word_five}", language_code: prs, direction: rtl}
-    slots: {word_one: *animal_topic_word, word_two: *animal_topic_word, word_three: *animal_topic_word, word_four: *animal_topic_word, word_five: *animal_topic_word}
-    slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five]}]
-    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five]}
+    frame: {text: "{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six}", language_code: prs, direction: rtl}
+    slots: {word_one: *pet_vocab_word, word_two: *pet_vocab_word, word_three: *pet_vocab_word, word_four: *pet_vocab_word, word_five: *pet_vocab_word, word_six: *pet_vocab_word}
+    slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}]
+    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}
     feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
 
   # Lesson 2: do you have a pet?
@@ -83,13 +132,13 @@ templates:
     feedback_frame: {text: "Word order: یک [animal] دارم (I have a [animal]).", language_code: en, direction: ltr}
 
   # Lesson 3: describing a pet.
-  - content_key: practice.en-prs.prs.a1.unit28.lesson03.pet_color_order.001
+  - content_key: practice.en-prs.prs.a1.unit28.lesson03.pet_ownership_order.001
     lesson_content_key: prs.a1.unit28.lesson03.describe_pet
     type: word_order
-    frame: {text: "{animal_word} من {pet_color_word} است", language_code: prs, direction: rtl}
-    slots: {animal_word: *animal_word, pet_color_word: *pet_color_word}
-    answer_derivation: {kind: render_frame, frame: {text: "{animal_word} من {pet_color_word} است", language_code: prs, direction: rtl}}
-    feedback_frame: {text: "Word order: [animal] من [color] است (my [animal] is [color]).", language_code: en, direction: ltr}
+    frame: {text: "{animal_word} حیوان خانگی من است", language_code: prs, direction: rtl}
+    slots: {animal_word: *animal_word}
+    answer_derivation: {kind: render_frame, frame: {text: "{animal_word} حیوان خانگی من است", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: [animal] حیوان خانگی من است ([animal] is my pet).", language_code: en, direction: ltr}
 
   # Lesson 6: wrap-up.
   - content_key: practice.en-prs.prs.a1.unit28.lesson06.animal_translate.001

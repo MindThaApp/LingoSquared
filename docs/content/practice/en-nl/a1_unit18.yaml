@@ -50,11 +50,47 @@ review:
     untaught vocabulary). Needs the standard fresh-context review before
     import. Same blocking dependency as every earlier en-nl pack:
     backfill_lexemes_en_nl.py has not actually been run against a real
-    database yet."
+    database yet.
+
+    2026-07-24 unit-scope re-authoring pass (checkpoint-viability fix,
+    PACK-ONLY, see docs/content/PRACTICE_PACK_RECIPE.md): the original
+    lesson02 pair (order.001 'Ik heb {item} slaapkamers.' and
+    translate.002) constrained `item` with the broad, dozens-of-members
+    'number' tag -- but generate_checkpoint() only loads THIS unit's own
+    lexemes, and none of 'number's real members are introduced in
+    unit18 (they're unit02/unit14 vocabulary), so both templates had 0
+    unit-scoped candidates and could never generate at the checkpoint
+    (recipe DO-NOT #2). Fix: lesson02's own real lexemes are exactly
+    'kamers'/'slaapkamers' (both tagged 'room_count_question', unit18-
+    native). translate.002 is re-anchored to a bare-word translation
+    over that tag (safe with any pool size, no frame-grammaticality
+    exposure -- §6.6(a)); a bare-word translation has no self-reference
+    risk either. order.001 is DROPPED rather than force-fit: at unit
+    scope 'room_count_question' also pulls in 'appartement' (correct --
+    it's genuinely reintroduced in this lesson's own taught phrase 'Het
+    appartement heeft drie kamers.'), but at COURSE scope (Endless
+    Practice) the same tag pulls in 'twee'/'drie' too (both classified
+    noun, both reintroduced as tokens inside this lesson's phrases) --
+    a word_order frame built around this tag would render nonsense like
+    'Ik heb {twee}.' for a subset of course-wide candidates, exactly the
+    §1.1 course-scope grammaticality trap. There is no second unit18-
+    native tag to isolate a safe single-member anchor instead, so rather
+    than ship a template that's fine at the checkpoint and broken in
+    Endless Practice, order.001 is dropped; lesson02 keeps translate.002
+    (production) and its untouched choose.002/listen.003 (recognition).
+    Pack-wide structured-tier count after the drop: 4 (lesson01 order +
+    match, lesson04 order, lesson05 match) -- still clears the >=3 bar.
+    Also widened lesson05.match.002 from the 5-member 'room_word_pure'
+    tag to the 7-member 'housing_vocab_pure' union (adds balkon/tuin,
+    both already unit18-native and already used at lesson01.match.004)
+    and declared a 6th slot, clearing the AUTHORING_GUIDE §16 6-pair
+    floor (was FLOOR at 5). Verified via
+    scripts/_practice_unit_scope_check.py: 0 DEAD, 0 below-floor after
+    this pass (was 2 DEAD, 1 below-floor)."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [room_word, room_word_pure, housing_vocab, housing_vocab_pure, home_adjective, number]
+    semantic: [room_word, room_word_pure, housing_vocab, housing_vocab_pure, home_adjective, room_count_question]
 slot_presets:
   room_word: &room_word {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: room_word}}
   # room_word_pure: exact-case (no capitalized "Appartement" duplicate),
@@ -65,7 +101,12 @@ slot_presets:
   housing_vocab: &housing_vocab {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: housing_vocab}}
   housing_vocab_pure: &housing_vocab_pure {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: housing_vocab_pure}}
   home_adjective: &home_adjective {language_code: nl, part_of_speech: adjective, agreement_tags: {semantic: home_adjective}}
-  number: &number {language_code: nl, part_of_speech: [symbol, noun], agreement_tags: {semantic: number}}
+  # room_count_question: unit18's OWN lesson02 nouns ('kamers'/'slaapkamers'),
+  # not the cross-unit 'number' tag the original pack used -- see
+  # review.notes' 2026-07-24 entry for why 'number' was dead at checkpoint
+  # scope and why this tag is only safe for a bare-word translation, not a
+  # sentence frame (course-scope leaks 'twee'/'drie').
+  room_count_question: &room_count_question {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: room_count_question}}
 templates:
   - content_key: practice.en-nl.nl.a1.unit18.lesson01.order.001
     lesson_content_key: nl.a1.unit18.lesson01.mijn_appartement
@@ -101,26 +142,19 @@ templates:
     slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
     answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
     feedback_frame: {text: "Match each home-related word with its English meaning.", language_code: en, direction: ltr}
-  - content_key: practice.en-nl.nl.a1.unit18.lesson02.order.001
-    lesson_content_key: nl.a1.unit18.lesson02.hoeveel_kamers
-    type: word_order
-    frame: {text: "Ik heb {item} slaapkamers.", language_code: nl, direction: ltr}
-    slots: {item: *number}
-    answer_derivation: {kind: render_frame, frame: {text: "Ik heb {item} slaapkamers.", language_code: nl, direction: ltr}}
-    feedback_frame: {text: "{item} states how many bedrooms.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit18.lesson02.translate.002
     lesson_content_key: nl.a1.unit18.lesson02.hoeveel_kamers
     type: translation
     frame:
-      text: "I have {item} bedrooms."
+      text: "{item}"
       language_code: en
       direction: ltr
       slot_rendering: {item: english_gloss}
       text_blocks:
         - {text: "Translate into Dutch.", language_code: en, direction: ltr}
-    slots: {item: *number}
-    answer_derivation: {kind: render_frame, frame: {text: "Ik heb {item} slaapkamers.", language_code: nl, direction: ltr}}
-    feedback_frame: {text: "Ik heb {item} slaapkamers.", language_code: en, direction: ltr}
+    slots: {item: *room_count_question}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The Dutch word is {item}.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit18.lesson03.choose.001
     lesson_content_key: nl.a1.unit18.lesson03.balkon_en_tuin
     type: multiple_choice
@@ -182,11 +216,11 @@ templates:
   - content_key: practice.en-nl.nl.a1.unit18.lesson05.match.002
     lesson_content_key: nl.a1.unit18.lesson05.advertentie_lezen
     type: matching_pairs
-    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth}", language_code: nl, direction: ltr}
-    slots: {first: *room_word_pure, second: *room_word_pure, third: *room_word_pure, fourth: *room_word_pure, fifth: *room_word_pure}
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth]}
-    feedback_frame: {text: "Match each room word with its English meaning.", language_code: en, direction: ltr}
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: nl, direction: ltr}
+    slots: {first: *housing_vocab_pure, second: *housing_vocab_pure, third: *housing_vocab_pure, fourth: *housing_vocab_pure, fifth: *housing_vocab_pure, sixth: *housing_vocab_pure}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Match each home-related word with its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit18.lesson06.listen.001
     lesson_content_key: nl.a1.unit18.lesson06.nieuw_appartement
     type: listen_select

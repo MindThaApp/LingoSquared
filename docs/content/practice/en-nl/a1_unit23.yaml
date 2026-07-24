@@ -30,7 +30,33 @@ review:
     against this script's actual output before writing these templates.
     Needs the standard fresh-context review before import. Same blocking
     dependency as every earlier en-nl pack: backfill_lexemes_en_nl.py has
-    not actually been run against a real database yet."
+    not actually been run against a real database yet.
+
+    2026-07-24 unit-scope re-authoring pass (checkpoint-viability fix,
+    PACK-ONLY, see docs/content/PRACTICE_PACK_RECIPE.md): lesson02's
+    match.003 declared 5 slots over 'payment_verb', but the real
+    backfilled pool for that tag is only 4 unit-native distinct tokens
+    (betalen, delen, afrekenen, vragen -- 'pinnen' is not actually
+    present as a classified lexeme in the current backfill despite this
+    note's original claim; not something a pack-only pass can fix) --
+    5 needed > 4 available, so the template never generated (recipe
+    DO-NOT #5). Widened to the union 'payment_verb' + 'number' (both
+    already declared in this file) at 6 slots: adds 'vijfentwintig'/
+    'vijfendertig' (both unit23-native, lessons 01/05). Deliberately did
+    NOT widen with 'payment_noun' instead, even though it looks like the
+    more thematic choice: that tag's unit-native pool has a real
+    case-duplicate trap -- 'rekening'/'Rekening' and 'totaal'/'Totaal'
+    are the same word reintroduced with a capital in the lesson05
+    receipt-reading card, both still carrying 'payment_noun', which
+    would put two effectively identical cards in the same matching
+    exercise (the defect class the recipe's §6.3 flags from
+    a2_unit77). The verb+number union has no such duplicate.
+    feedback_frame is left as the generic 'Match each payment word with
+    its English meaning.', which is now slightly loose (2 of 6 cards are
+    numbers, not payment words) but not inaccurate enough to warrant a
+    learner-facing rewrite; flagging for the reviewer. Verified via
+    scripts/_practice_unit_scope_check.py: 0 DEAD, 0 below-floor after
+    this pass (was 1 DEAD, 0 below-floor)."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -94,11 +120,17 @@ templates:
   - content_key: practice.en-nl.nl.a1.unit23.lesson02.match.003
     lesson_content_key: nl.a1.unit23.lesson02.pinnen_of_contant
     type: matching_pairs
-    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth}", language_code: nl, direction: ltr}
-    slots: {first: *payment_verb, second: *payment_verb, third: *payment_verb, fourth: *payment_verb, fifth: *payment_verb}
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth]}
-    feedback_frame: {text: "Match each payment word with its English meaning.", language_code: en, direction: ltr}
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: nl, direction: ltr}
+    slots:
+      first: {language_code: nl, part_of_speech: [verb, noun], agreement_tags: {semantic: [payment_verb, number]}}
+      second: {language_code: nl, part_of_speech: [verb, noun], agreement_tags: {semantic: [payment_verb, number]}}
+      third: {language_code: nl, part_of_speech: [verb, noun], agreement_tags: {semantic: [payment_verb, number]}}
+      fourth: {language_code: nl, part_of_speech: [verb, noun], agreement_tags: {semantic: [payment_verb, number]}}
+      fifth: {language_code: nl, part_of_speech: [verb, noun], agreement_tags: {semantic: [payment_verb, number]}}
+      sixth: {language_code: nl, part_of_speech: [verb, noun], agreement_tags: {semantic: [payment_verb, number]}}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Match each word with its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit23.lesson03.choose.001
     lesson_content_key: nl.a1.unit23.lesson03.de_rekening_delen
     type: multiple_choice

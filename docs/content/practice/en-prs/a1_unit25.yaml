@@ -4,9 +4,32 @@ source_language: en
 target_language: prs
 unit_content_key: prs.a1.unit25.emotions
 review:
-  status: reviewed
-  fresh_context: true
+  status: unreviewed
+  fresh_context: 'false'
   notes: >-
+    RE-AUTH PASS 2026-07-24 (scripts/_practice_unit_scope_check.py DEAD-
+    template fix, PACK-ONLY): lesson01.emotion_pair.002 slotted emotion_word
+    alone (5 slots), but this unit's OWN emotion_word pool is only 3
+    unit-scoped tokens (خوشحال/خسته are REUSED from earlier units, out of
+    this unit's checkpoint scope) -- DEAD at checkpoint scope, never caught
+    by the earlier fresh-context review below because that review checked
+    whole-direction/course-scope satisfiability, not generate_checkpoint()'s
+    stricter unit-only scope. Re-anchored to a new unit_word_pool preset
+    (part_of_speech-only, no semantic tag -- SS3.1(c)) unioning every
+    adjective/adverb this unit's own lessons introduce (7 unit-scoped
+    distinct tokens: emotion_word's 3 + complaint_word's 1 + three
+    previously-untagged adverbs چرا/کمی/گاهی, all genuinely distinct
+    glosses). This unit is honestly thin -- 7 total content words across
+    its 4 populated lessons is everything it has; lessons 05/06 introduce
+    no new tagged vocabulary of their own (lesson06's translate template
+    reuses emotion_word). No backfill/realization/overlay edits. Status
+    reset to unreviewed because the fix changes generated-checkpoint
+    behavior; needs a fresh-context re-review. Post-fix:
+    scripts/_practice_unit_scope_check.py reports 0 DEAD, 0 below-floor for
+    this pack.
+
+    --- prior authoring notes (2026-07-11), kept for context ---
+
     Authored 2026-07-11, practice-pool depth-extension pass for A1 units
     25-30 (this bundle's a1_unit26.yaml through a1_unit30.yaml siblings
     are the same pass) -- extends both scripts/backfill_lexemes_en_prs.py
@@ -48,11 +71,22 @@ review:
     no bare YAML booleans, no jargon leaks. practice-validate 0/0 and
     scripts/_practice_slot_check.py clean for the full en-prs set.
 tag_schema:
-  part_of_speech: [adjective]
+  part_of_speech: [adjective, adverb]
   agreement_tags:
     semantic: [emotion_word]
 slot_presets:
   emotion_word: &emotion_word {language_code: prs, part_of_speech: adjective, agreement_tags: {semantic: emotion_word}}
+  # Re-anchor fix (2026-07-24): emotion_word alone is only 3 unit-scoped
+  # tokens (خوشحال/خسته are REUSED from earlier units, out of this unit's
+  # checkpoint scope) -- 5 slots over 3 real tokens was DEAD. This unit is
+  # genuinely thin: its only OTHER content words are complaint_word
+  # (خراب, 1) plus three untagged adverbs (چرا/کمی/گاهی). Per recipe SS3.1(c)
+  # a slot may omit `semantic:` entirely -- constraining by part_of_speech
+  # alone pools every one of this unit's OWN adjectives/adverbs (7 distinct
+  # unit-scoped tokens: sad/angry/worried/broken/why/a little; a bit/
+  # sometimes, all genuinely distinct glosses, no case duplicates) without
+  # reaching into any other unit's vocabulary.
+  unit_word_pool: &unit_word_pool {language_code: prs, part_of_speech: [adjective, adverb]}
 templates:
   # Lesson 1: feelings vocabulary.
   - content_key: practice.en-prs.prs.a1.unit25.lesson01.emotion_gloss.001
@@ -64,12 +98,15 @@ templates:
     feedback_frame: {text: "{emotion_word} names a feeling.", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a1.unit25.lesson01.emotion_pair.002
     lesson_content_key: prs.a1.unit25.lesson01.feelings_vocabulary
+    # Re-anchored (2026-07-24) to unit_word_pool: emotion_word alone is only
+    # 3 unit-scoped tokens (was declared 5 slots -- DEAD). Widened to this
+    # unit's full 7-token content-word pool (see preset comment above).
     type: matching_pairs
-    frame: {text: "{word_one} — {word_two} — {word_three} — {word_four} — {word_five}", language_code: prs, direction: rtl}
-    slots: {word_one: *emotion_word, word_two: *emotion_word, word_three: *emotion_word, word_four: *emotion_word, word_five: *emotion_word}
-    slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five]}]
-    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five]}
-    feedback_frame: {text: "Match each feeling word to its English meaning.", language_code: en, direction: ltr}
+    frame: {text: "{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six} — {word_seven}", language_code: prs, direction: rtl}
+    slots: {word_one: *unit_word_pool, word_two: *unit_word_pool, word_three: *unit_word_pool, word_four: *unit_word_pool, word_five: *unit_word_pool, word_six: *unit_word_pool, word_seven: *unit_word_pool}
+    slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five, word_six, word_seven]}]
+    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five, word_six, word_seven]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
 
   # Lesson 2: why and because.
   - content_key: practice.en-prs.prs.a1.unit25.lesson02.why_feeling_order.001

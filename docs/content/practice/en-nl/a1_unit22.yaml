@@ -28,35 +28,105 @@ review:
     output before writing these templates. Needs the standard
     fresh-context review before import. Same blocking dependency as every
     earlier en-nl pack: backfill_lexemes_en_nl.py has not actually been
-    run against a real database yet."
+    run against a real database yet.
+
+    2026-07-24 unit-scope re-authoring pass (checkpoint-viability fix,
+    PACK-ONLY, see docs/content/PRACTICE_PACK_RECIPE.md): 5 templates
+    were DEAD at checkpoint scope, all built around 'Hallo, met {item}.'
+    with `item` constrained to the global 'person_name' tag (Lotte/Noor/
+    Omar/Sander/Fenna/Jan/Marieke). generate_checkpoint() only loads
+    THIS unit's own lexemes, and unit22 introduces zero new person
+    names (they're all earlier-unit vocabulary reused via the real
+    Dutch dialogue text) -- every one of these slots had 0 unit-scoped
+    candidates (recipe DO-NOT #2). Re-anchored each to unit22's own
+    real per-lesson verbs instead:
+      - lesson01.order.001 -> 'Ik {item} je.' over the verb-only
+        'text_message' tag ({bel, stuur} at unit scope) -- 'Ik bel je.'
+        is the lesson's own exact taught phrase; 'Ik stuur je.' is a
+        normal elliptical Dutch sentence (send-you, object implied).
+      - lesson01.translate.002 -> converted from a fixed-English-
+        sentence shape (unsafe: person_name is multi-member, the
+        underdetermined-production-prompt defect) to a bare-word
+        translation over 'communication_word' ({bellen, sms, vertellen,
+        horen} at unit scope) -- safe with any pool size (§6.6(a)).
+      - lesson04.translate.001 -> same bare-word conversion, over the
+        verb+noun 'text_message' tag ({bel, stuur, sms}).
+      - lesson06.order.002 -> 'Ik moet {item}.' over the verb-only
+        'communication_word' tag ({bellen, vertellen, horen}) --
+        'moeten + infinitive' is a fully general modal construction, so
+        every candidate is grammatical regardless of which infinitive
+        fills it (no semantic restriction, unlike the original frame).
+      - lesson02.order.001 -> DROPPED, not re-anchored. Unit22's only
+        native lesson02 tag is 'phone_identity' ('Met'/'wie'/'U'/
+        'spreekt'), and every candidate requires a DIFFERENT subject-verb
+        agreement ('U spreekt' vs 'ik spreek' vs a question-only 'wie'),
+        so no single declarative frame is grammatical for the whole
+        course-scope pool (verified: dropping the unit filter down to
+        '.a1.' still widens 'phone_identity'+verb to {spreek, spreekt},
+        and 'Ik spreekt...'/'U spreek...' are both wrong). There is no
+        second unit22-native tag to build a safe single-member anchor
+        from instead, so per the recipe's DROP criterion this template
+        is honestly dropped rather than shipped broken in Endless
+        Practice; lesson02 keeps its listen.002 (recognition) template.
+        Structured-tier count after the drop: lesson01.order.001 (fixed)
+        + lesson01.match.005 (fixed, see below) + lesson06.order.002
+        (fixed) = 3, still clears the recipe's >=3 bar.
+      - lesson01.match.005 (FLOOR: declared only 4 slots, and the
+        underlying 'communication_word' tag only has 4 unit-native
+        distinct tokens anyway) widened to 6 slots over a new union tag
+        (communication_word ∪ phone_identity ∪ phone_clarification,
+        POS [noun, verb, pronoun, preposition]) -- 10 distinct unit-
+        native tokens, comfortably clearing the 6-pair floor. No
+        case-duplicate pairs in the pool; 'bellen'/'horen' (infinitives)
+        alongside 'bel'-family conjugated forms read as distinct,
+        distinguishable glosses, same precedent as the recipe's
+        singular/plural discrimination allowance.
+    'person_name' is now unused in this file (left out of tag_schema).
+    Also ADDED lesson06.translate.003 (bare-word translation, same
+    'communication_word' tag): after fixing the 5 DEAD templates,
+    production tier stood at only 2 live templates (both fixed, but
+    still under the recipe's >=3-per-tier bar), and lesson06 had no
+    production-tier template at all. Verified via
+    scripts/_practice_unit_scope_check.py: 0 DEAD, 0 below-floor after
+    this pass (was 5 DEAD, 1 below-floor)."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [communication_word, person_name]
+    semantic: [communication_word, text_message, phone_identity, phone_clarification]
 slot_presets:
   communication_word: &communication_word {language_code: nl, part_of_speech: [noun, verb], agreement_tags: {semantic: communication_word}}
-  person_name: &person_name {language_code: nl, part_of_speech: proper_noun, agreement_tags: {semantic: person_name}}
+  # verb-only narrowing of communication_word -- safe inside a generative
+  # frame ('Ik moet {item}.') where the noun member ('sms') wouldn't fit.
+  communication_word_verb: &communication_word_verb {language_code: nl, part_of_speech: verb, agreement_tags: {semantic: communication_word}}
+  text_message: &text_message {language_code: nl, part_of_speech: [verb, noun], agreement_tags: {semantic: text_message}}
+  # verb-only narrowing of text_message -- for 'Ik {item} je.', where the
+  # noun member ('sms') doesn't conjugate into that slot.
+  text_message_verb: &text_message_verb {language_code: nl, part_of_speech: verb, agreement_tags: {semantic: text_message}}
+  # Union of this unit's own lesson tags (see review.notes' 2026-07-24
+  # entry) -- widens lesson01.match.005's pool to the 6-pair floor with
+  # real unit22-native vocabulary, not padding.
+  match_union: &match_union {language_code: nl, part_of_speech: [noun, verb, pronoun, preposition], agreement_tags: {semantic: [communication_word, phone_identity, phone_clarification]}}
 templates:
   - content_key: practice.en-nl.nl.a1.unit22.lesson01.order.001
     lesson_content_key: nl.a1.unit22.lesson01.ik_bel_je
     type: word_order
-    frame: {text: "Hallo, met {item}.", language_code: nl, direction: ltr}
-    slots: {item: *person_name}
-    answer_derivation: {kind: render_frame, frame: {text: "Hallo, met {item}.", language_code: nl, direction: ltr}}
-    feedback_frame: {text: "{item} is who is speaking.", language_code: en, direction: ltr}
+    frame: {text: "Ik {item} je.", language_code: nl, direction: ltr}
+    slots: {item: *text_message_verb}
+    answer_derivation: {kind: render_frame, frame: {text: "Ik {item} je.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} is what you are doing to reach them.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit22.lesson01.translate.002
     lesson_content_key: nl.a1.unit22.lesson01.ik_bel_je
     type: translation
     frame:
-      text: "Hello, this is {item}."
+      text: "{item}"
       language_code: en
       direction: ltr
       slot_rendering: {item: english_gloss}
       text_blocks:
         - {text: "Translate into Dutch.", language_code: en, direction: ltr}
-    slots: {item: *person_name}
-    answer_derivation: {kind: render_frame, frame: {text: "Hallo, met {item}.", language_code: nl, direction: ltr}}
-    feedback_frame: {text: "Hallo, met {item}.", language_code: en, direction: ltr}
+    slots: {item: *communication_word}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The Dutch word is {item}.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit22.lesson01.choose.003
     lesson_content_key: nl.a1.unit22.lesson01.ik_bel_je
     type: multiple_choice
@@ -79,18 +149,11 @@ templates:
   - content_key: practice.en-nl.nl.a1.unit22.lesson01.match.005
     lesson_content_key: nl.a1.unit22.lesson01.ik_bel_je
     type: matching_pairs
-    frame: {text: "{first} · {second} · {third} · {fourth}", language_code: nl, direction: ltr}
-    slots: {first: *communication_word, second: *communication_word, third: *communication_word, fourth: *communication_word}
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth]}
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: nl, direction: ltr}
+    slots: {first: *match_union, second: *match_union, third: *match_union, fourth: *match_union, fifth: *match_union, sixth: *match_union}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
     feedback_frame: {text: "Match each word with its English meaning.", language_code: en, direction: ltr}
-  - content_key: practice.en-nl.nl.a1.unit22.lesson02.order.001
-    lesson_content_key: nl.a1.unit22.lesson02.met_wie_spreek_ik
-    type: word_order
-    frame: {text: "Hallo, met {item}.", language_code: nl, direction: ltr}
-    slots: {item: *person_name}
-    answer_derivation: {kind: render_frame, frame: {text: "Hallo, met {item}.", language_code: nl, direction: ltr}}
-    feedback_frame: {text: "{item} is who is speaking.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit22.lesson02.listen.002
     lesson_content_key: nl.a1.unit22.lesson02.met_wie_spreek_ik
     type: listen_select
@@ -121,15 +184,15 @@ templates:
     lesson_content_key: nl.a1.unit22.lesson04.een_sms_sturen
     type: translation
     frame:
-      text: "Hello, this is {item}."
+      text: "{item}"
       language_code: en
       direction: ltr
       slot_rendering: {item: english_gloss}
       text_blocks:
         - {text: "Translate into Dutch.", language_code: en, direction: ltr}
-    slots: {item: *person_name}
-    answer_derivation: {kind: render_frame, frame: {text: "Hallo, met {item}.", language_code: nl, direction: ltr}}
-    feedback_frame: {text: "Hallo, met {item}.", language_code: en, direction: ltr}
+    slots: {item: *text_message}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The Dutch word is {item}.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit22.lesson04.listen.002
     lesson_content_key: nl.a1.unit22.lesson04.een_sms_sturen
     type: listen_select
@@ -159,7 +222,20 @@ templates:
   - content_key: practice.en-nl.nl.a1.unit22.lesson06.order.002
     lesson_content_key: nl.a1.unit22.lesson06.telefoontje_na_dienst
     type: word_order
-    frame: {text: "Hallo, met {item}.", language_code: nl, direction: ltr}
-    slots: {item: *person_name}
-    answer_derivation: {kind: render_frame, frame: {text: "Hallo, met {item}.", language_code: nl, direction: ltr}}
-    feedback_frame: {text: "{item} is who is speaking.", language_code: en, direction: ltr}
+    frame: {text: "Ik moet {item}.", language_code: nl, direction: ltr}
+    slots: {item: *communication_word_verb}
+    answer_derivation: {kind: render_frame, frame: {text: "Ik moet {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} is what you need to do.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit22.lesson06.translate.003
+    lesson_content_key: nl.a1.unit22.lesson06.telefoontje_na_dienst
+    type: translation
+    frame:
+      text: "{item}"
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *communication_word}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The Dutch word is {item}.", language_code: en, direction: ltr}
