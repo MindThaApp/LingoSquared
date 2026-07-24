@@ -74,6 +74,66 @@ Left unchanged. Flagging so the repair-doc scope stays clear.
 
 ---
 
+## ⭐⭐ Practice-pack RE-AUTHORING done (2026-07-24) — dead-template family fixed (692 → 1)
+
+Followed up the diagnosis below by actually **fixing the pre-recipe dead-template defect**.
+A fan-out re-authored every pack that had a checkpoint-scope-dead template, each agent
+self-verifying with a new unit-scope validator, and I gate+committed per direction.
+
+**Result (measured by `scripts/_practice_unit_scope_check.py`): 692 dead template-slots → 1.**
+~130 packs across all 6 launch directions re-authored. Fix pattern: re-anchor each dead
+slot to the unit's OWN vocabulary (a unit-native semantic tag or POS-only pool), drop only
+the genuinely-unfillable (keeping the checkpoint viable), widen below-floor matching_pairs.
+All committed on `fix/launch-gate-content-review-wave1` (unpushed). Every re-authored pack
+was flipped to `review.status: unreviewed` — they need a fresh-context native pass before ship.
+
+**New tooling committed (all zero-false-positive, gate-able):**
+- `scripts/_practice_unit_scope_check.py` — the missing DO-NOT #2 check: dead templates
+  (per distinct-relation group), MC/matching floors, AND ≥3-live-templates-per-tier (§8).
+- `scripts/_phantom_introduced_tokens_check.py` — untaught-in-production tokens.
+- `scripts/_practice_self_reference_check.py` — "ten past {ten}" / invariant-answer frames.
+- `scripts/backfill_lexemes*.py` — Codex fixed the cross-unit homograph GLOSS collisions
+  (Family-2): unambiguous ones corrected in-place, polysemous ones given per-(unit,token)
+  overrides; verified functionally (small→klein, manager→leidinggevende, must→باید, …).
+
+**Residual follow-ups (NOT blocking; the dead-template family is fixed):**
+- **1 dead template left:** en-nl a1_29 lesson05.match.001 — a heterogeneous matching whose
+  2nd group (freq_adverb) has 2 unit-native members for 4 slots. Non-breaking (pack still
+  generates from its other live templates); needs a 4→2 slot trim.
+- **Tier-thinness (335 tier-short lines, mostly PRE-EXISTING):** many packs — especially the
+  pre-recipe en-prs/prs-en a1_26–37 range — have <3 live templates in a tier. Predates the
+  re-auth (accepted at each pack's original review); the re-auth made a few acute (en-prs a1_34
+  recycles the same 3 words across all tiers). Now gate-able via the validator's tier check.
+- **Duplicate `volume_match`/`volume_translate` templates (units 31–40, all directions):** the
+  2026-07-11 authoring pass emitted literal-duplicate matching/translation templates (and a
+  degraded bare-`{word}` feedback_frame on the translation ones). Systemic; wants one cleanup pass.
+- **`proper_noun` self-gloss (§6.1):** en-prs a1_02 name_gloss now has 3/4 name-gloss options
+  after a re-auth widening ("spot the non-name" instead of translation). Narrow that one slot.
+- **Course-scope grammaticality:** en-prs a1_28 pet-frame `{animal_word}` is fine at checkpoint
+  (unit pool = cat/dog/fish/bird) but at Endless-Practice course scope pulls zoo animals →
+  "the lion is my pet." Reframe or subset the tag.
+- **POS-only matching_pairs at course scope (systemic re-auth trade-off):** many re-authored
+  matching_pairs were fixed by dropping the semantic tag to a bare `part_of_speech` pool. That's
+  correct at CHECKPOINT scope (unit pool = the intended few tokens), but Endless Practice serves
+  matching at COURSE scope, where POS-only matches the whole level's adjectives/adverbs/nouns
+  (e.g. en-prs a1_25 emotion_pair → 163 off-theme tokens). Not a grading/checkpoint defect (the
+  launch gate is fine); Endless-Practice coherence only. Follow-up: narrow those matching pools
+  to a real semantic union (keep POS-only for word_order / bare-translation, its stated safe case).
+- **Invariant-answer frames (pre-recipe):** en-fa a1_01–04 word_order frames with no `{slot}`
+  placeholder (self-ref scanner flags them) — SRS mis-attribution; give a real placeholder.
+- **Backfill bugs the agents logged (route to a backfill pass):** tokens with trailing
+  punctuation baked in (nl-en/prs-en/fa-en unit33: `work?`,`office.`), `hand`→idiom-fragment
+  gloss (nl-en), `گوش`/`هستم` off-theme in some prs pools.
+
+**DEFERRED — the real root cause, needs your call (a big change):** the backfill classifier
+keys a lexeme to the FIRST unit that teaches a token, so a token re-taught in a later unit
+contributes 0 to that unit's checkpoint pool (that's WHY the templates were dead). The re-auth
+works around it pack-side. The permanent fix — register a unit-scoped lexeme in EACH teaching
+unit — would balloon lexeme counts and shift every checkpoint pool + DB import, so I did NOT
+do it autonomously. If done, the dropped templates could be restored. Your scope call.
+
+---
+
 ## ⭐ Practice-pack quality (2026-07-23 night) — SYSTEMIC pre-recipe defect (needs your call on scope)
 
 A fresh-context review of the practice packs (fan-out over ~450 of the 553) found a
